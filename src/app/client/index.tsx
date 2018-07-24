@@ -1,4 +1,5 @@
 import * as React from 'react';
 import {render} from 'react-dom';
+import Home from './home';
 
-render(<h1>THE APP WILL BE HERE!!!!!</h1>, document.getElementById("app"));
+render(<Home/>, document.getElementById("app"));

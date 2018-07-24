@@ -10,14 +10,6 @@
     "watch:client": "webpack --config webpack.client.js --watch",
     "watch": "parallelshell \"webpack --config webpack.client.js --watch\" \"webpack --config webpack.server.js --watch\" \"nodemon ./dist/server.js\""
   },
-  "scripts_old": {
-    "build:server": "tsc",
-    "build:client": "echo 'todo'",
-    "start:server": "node ./build/index.js",
-    "watch:server": "parallelshell \"tsc -w\" \"nodemon ./build/index.js\"",
-    "watch:client": "echo 'todo'",
-    "watch": "echo 'todo'"
-  },
   "author": "",
   "license": "ISC",
   "dependencies": {

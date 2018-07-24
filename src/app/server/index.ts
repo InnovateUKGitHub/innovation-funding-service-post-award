@@ -12,7 +12,7 @@ app.use(bodyParser.json());
 
 //only allow access to specific build assets
 const assetsToReturn = ['client.js', 'client.js.map'];
-assetsToReturn.map(asset => app.use('/dist/' + asset, (req, res) => res.sendFile(asset, { root: "dist/"})));
+assetsToReturn.forEach(asset => app.use('/dist/' + asset, (req, res) => res.sendFile(asset, { root: "dist/"})));
 
 //anything in the public folder can be returned
 app.use(express.static('public'));

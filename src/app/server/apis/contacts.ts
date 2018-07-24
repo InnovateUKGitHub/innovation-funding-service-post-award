@@ -3,7 +3,7 @@ import range from '../../shared/range';
 
 var apiRouter = express.Router();
 
-var result = range(8).map((id) => ({ id, name: "Item " + id}));
+var result = range(5).map((id) => ({ id, name: "Item " + id}));
 
 apiRouter.route('/contacts')
     .get((req, res) => {
