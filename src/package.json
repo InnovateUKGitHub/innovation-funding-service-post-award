@@ -1,0 +1,53 @@
+{
+  "name": "acc-ui",
+  "version": "1.0.0",
+  "description": "External frontend for innovate uk acc system",
+  "scripts": {
+    "build:server": "webpack --config webpack.server.js",
+    "start:server": "node ./dist/server.js",
+    "watch:server": "parallelshell \"webpack --config webpack.server.js --watch\" \"nodemon ./dist/server.js\"",
+    "build:client": "webpack --config webpack.client.js",
+    "watch:client": "webpack --config webpack.client.js --watch",
+    "watch": "parallelshell \"webpack --config webpack.client.js --watch\" \"webpack --config webpack.server.js --watch\" \"nodemon ./dist/server.js\""
+  },
+  "scripts_old": {
+    "build:server": "tsc",
+    "build:client": "echo 'todo'",
+    "start:server": "node ./build/index.js",
+    "watch:server": "parallelshell \"tsc -w\" \"nodemon ./build/index.js\"",
+    "watch:client": "echo 'todo'",
+    "watch": "echo 'todo'"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-passer": "^1.0.0",
+    "cors": "^2.8.4",
+    "express": "^4.16.3",
+    "react": "^16.4.1",
+    "react-dom": "^16.4.1",
+    "react-redux": "^5.0.7",
+    "react-router5": "^6.1.0",
+    "redux": "^4.0.0",
+    "redux-router5": "^6.0.2",
+    "redux-thunk": "^2.3.0",
+    "router5": "^6.3.0"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.4",
+    "@types/express": "^4.16.0",
+    "@types/react": "^16.4.7",
+    "@types/react-dom": "^16.0.6",
+    "@types/react-redux": "^6.0.5",
+    "@types/redux": "^3.6.0",
+    "@types/redux-thunk": "^2.1.0",
+    "@types/router5": "^5.0.0",
+    "nodemon": "^1.18.3",
+    "parallelshell": "^3.0.2",
+    "ts-loader": "^4.4.2",
+    "typescript": "^2.9.2",
+    "webpack": "^4.16.2",
+    "webpack-command": "^0.4.1",
+    "webpack-node-externals": "^1.7.2"
+  }
+}
