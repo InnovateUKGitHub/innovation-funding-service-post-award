@@ -1,4 +1,5 @@
-import { IQuery, IContext, SalesforceContact } from '../common/context'
+import { IQuery, IContext } from '../common/context'
+import { SalesforceContact } from '../../repositories/contactsRepository';
 
 export interface ResultDto {
     id: string;
@@ -32,24 +33,8 @@ const mapItem = (input: SalesforceContact) : ResultDto => {
     }
 }
 
-export default class GetAllQuery implements IQuery<ResultDto[]> {
+export class GetAllQuery implements IQuery<ResultDto[]> {
     public async Run(context:IContext){
         return (await context.repositories.contacts.getAll()).map(y => mapItem(y));
-    }
-}
-
-export class GetByIdQuery implements IQuery<ResultDto> {
-    
-    private _id : string = "";
-    public get id() : string {
-        return this._id;
-    }
-    public set id(v : string) {
-        this._id = v;
-    }
-    
-    public async Run(context:IContext){
-        let item = (await context.repositories.contacts.getById(this.id));
-        return mapItem(item);
     }
 }

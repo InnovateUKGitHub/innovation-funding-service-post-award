@@ -1,4 +1,5 @@
-import { SalesforceContact, IQuery, IContext } from "../common/context";
+import { IQuery, IContext } from "../common/context";
+import { SalesforceContact } from "../../repositories/contactsRepository";
 
 export interface ResultDto {
     id: string;
@@ -13,7 +14,6 @@ export interface ResultDto {
         postcode: string;
     }
 }
-
 
 const mapItem = (input: SalesforceContact) : ResultDto => {
     if(!input) throw new Error("NULL");
@@ -33,8 +33,9 @@ const mapItem = (input: SalesforceContact) : ResultDto => {
 }
 
 export class GetByIdQuery implements IQuery<ResultDto> {
+    constructor(public readonly id: string){
+    }
     
-    public id : string = "";
     public async Run(context:IContext){
         let item = (await context.repositories.contacts.getById(this.id));
         return mapItem(item);
