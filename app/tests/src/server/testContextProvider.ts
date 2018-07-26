@@ -1,5 +1,5 @@
-import { IContext, IQuery, ICommand, IRepositories } from "../../../app/server/features/common/context";
-import { SalesforceContact, IContactsRepository } from "../../../app/server/repositories/contactsRepository";
+import { IContext, IQuery, ICommand, IRepositories } from "../../../src/server/features/common/context";
+import { SalesforceContact, IContactsRepository } from "../../../src/server/repositories/contactsRepository";
 
 export abstract class TestRepository<T>
 {

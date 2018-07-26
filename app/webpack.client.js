@@ -1,7 +1,7 @@
 module.exports = [
     {
       entry: {
-        client: './app/client/index.tsx',
+        client: './src/client/index.tsx',
       },
       output: {
         path: __dirname + '/dist',
