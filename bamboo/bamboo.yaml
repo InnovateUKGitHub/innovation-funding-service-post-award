@@ -1,0 +1,13 @@
+project:
+  key: ACC IFS
+  plan:
+    key: acc-ui
+    name: IUK ACC External UI 
+stages:
+  - jobs:
+      - scripts:
+          - echo 'ACC IUK Bamboo Example'
+        testParsers:
+           - type: mocha
+             testResults:
+              - report.json
