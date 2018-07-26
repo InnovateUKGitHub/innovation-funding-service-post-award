@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { GetAllQuery } from '../../../../../app/server/features/contacts/getAllQuery';
+import { GetAllQuery } from '../../../../../src/server/features/contacts/getAllQuery';
 import {TestContext} from '../../testContextProvider';
 
 describe('getAllQuery', () => {

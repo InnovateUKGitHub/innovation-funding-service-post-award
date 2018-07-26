@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { GetByIdQuery } from '../../../../../app/server/features/contacts/getByIdQuery';
+import { GetByIdQuery } from '../../../../../src/server/features/contacts/getByIdQuery';
 import {TestContext} from '../../testContextProvider';
 
 describe('getByIdQuery', () => {
