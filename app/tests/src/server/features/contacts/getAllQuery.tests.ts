@@ -1,4 +1,3 @@
-import { expect } from 'chai';
 import { GetAllQuery } from '../../../../../src/server/features/contacts/getAllQuery';
 import {TestContext} from '../../testContextProvider';
 
@@ -13,7 +12,9 @@ describe('getAllQuery', () => {
         
         let result = await context.runQuery(query);
 
-        expect(result).to.not.be.null;
-        expect(result.map(x => x.id)).to.eql(data.map(x => x.Id));
+        expect(result).not.toBe(null)
+        expect(result.map(x => x.id)).toMatchObject(data.map(x => x.Id));
     })
 });
+
+
