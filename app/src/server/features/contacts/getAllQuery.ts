@@ -1,40 +1,10 @@
 import { IQuery, IContext } from '../common/context'
-import { SalesforceContact } from '../../repositories/contactsRepository';
+import { Contact } from '../../../models';
+import { mapItem } from "./mapItem";
 
-export interface ResultDto {
-    id: string;
-    title: string;
-    firstName: string;
-    lastName: string;
-    email: string;
-    address: {
-        street: string;
-        city: string;
-        county: string;
-        postcode: string;
-    }
-}
-
-
-const mapItem = (input: SalesforceContact) : ResultDto => {
-    if(!input) throw new Error("NULL");
-    return {
-        id: input.Id, 
-        title: input.Salutation,
-        firstName: input.FirstName,
-        lastName: input.LastName,
-        email: input.Email,
-        address: {
-            street: input.MailingStreet,
-            city: input.MailingCity,
-            county: input.MailingState,
-            postcode: input.MailingPostalCode,
-        }
-    }
-}
-
-export class GetAllQuery implements IQuery<ResultDto[]> {
-    public async Run(context:IContext){
-        return (await context.repositories.contacts.getAll()).map(y => mapItem(y));
-    }
+export class GetAllQuery implements IQuery<Contact[]> {
+  public async Run(context: IContext) {
+    const contacts = await context.repositories.contacts.getAll();
+    return contacts.map(y => mapItem(y));
+  }
 }

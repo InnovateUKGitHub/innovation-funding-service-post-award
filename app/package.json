@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "External frontend for innovate uk acc system",
   "scripts": {
+    "clean": "rimraf ./dist",
     "build:server": "webpack --config webpack.server.js",
     "start:server": "node ./dist/server.js",
     "watch:server": "parallelshell \"webpack --config webpack.server.js --watch\" \"nodemon ./dist/server.js\"",
@@ -24,8 +25,8 @@
     "react": "^16.4.1",
     "react-dom": "^16.4.1",
     "react-redux": "^5.0.7",
-    "react-router5": "^6.1.0",
     "redux": "^4.0.0",
+    "react-router5": "^6.1.0",
     "redux-router5": "^6.0.2",
     "redux-thunk": "^2.3.0",
     "router5": "^6.3.0"

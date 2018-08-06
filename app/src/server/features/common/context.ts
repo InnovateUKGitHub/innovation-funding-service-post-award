@@ -14,7 +14,6 @@ export interface IRepositories{
 }
 
 export interface IContext {
-
     runQuery<TResult>(cmd: IQuery<TResult>): Promise<TResult>;
     runCommand<TResult>(cmd: ICommand<TResult>): Promise<TResult>;
     repositories: IRepositories;
