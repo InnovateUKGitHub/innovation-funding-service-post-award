@@ -1,28 +1,18 @@
 import express from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser';
-import { apiRoutes } from './apis';
+import { router } from "./router";
 
-const app = express();
+const app  = express();
 const port = process.env.PORT || 8080;
 
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-
-//only allow access to specific build assets
-const assetsToReturn = ['client.js', 'client.js.map'];
-assetsToReturn.forEach(asset => app.use('/dist/' + asset, (req, res) => res.sendFile(asset, { root: "dist/"})));
-
-//anything in the public folder can be returned
+// serve the public folder contents
 app.use(express.static('public'));
-
-app.use('/api', apiRoutes);
-
-app.use('/', (req, res) => res.send("<html><body><div id=\"app\"></div><script src=\"/dist/client.js\"></script></body></html>"));
-
-
-app.get('*', (req, res) => res.status(404).send("Not found"));
+// all our defined routes
+app.use(router);
 
 app.listen(port);
 
