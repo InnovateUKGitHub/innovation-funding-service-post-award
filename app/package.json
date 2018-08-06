@@ -75,10 +75,13 @@
     "moduleFileExtensions": [
       "ts",
       "tsx",
-      "js",
-      "jsx",
-      "json",
-      "node"
+      "js"
+    ],
+    "collectCoverageFrom": [
+      "src/**/*.tsx?"
+    ],
+    "coveragePathIgnorePatterns": [
+      "/node_modules/"
     ]
   }
 }

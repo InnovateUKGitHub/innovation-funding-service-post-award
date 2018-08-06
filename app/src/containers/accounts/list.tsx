@@ -1,7 +1,6 @@
-import * as React from 'react';
-import { connect } from 'react-redux';
-import { Link } from 'react-router5';
-
+import * as React from "react";
+import { connect } from "react-redux";
+import { Link } from "react-router5";
 import { Breadcrumbs, Title } from "../../components";
 // import * as Tables from '../../tables';
 // import * as Actions from '../../../actions';
@@ -12,13 +11,13 @@ class List extends React.Component {
   }
 
   render() {
-    let data = null;//this.props.data;
-    data = data || [];
-    let columns = [
+    // let data = null; // this.props.data;
+    // data = data || [];
+    // let columns = [
       // Tables.stringColumn("Id", x => x.id),
       // Tables.stringColumn("Name", x => x.name),
       // Tables.linkColumn("example_details", (x) => { return { id: x.id } }, "Details")
-    ];
+    // ];
     return (
       <div>
         <Breadcrumbs links={[{routeName:"home", text: "Home"}]}>Accounts</Breadcrumbs>
@@ -36,6 +35,7 @@ function mapStateToProps(state: any) {
   };
 }
 
+// tslint:disable:no-identical-functions
 function mapDispachToProps(dispatch: any) {
   return {
     // onLoad: () => dispatch(Actions.loadAccounts())

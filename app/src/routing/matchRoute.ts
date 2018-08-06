@@ -1,12 +1,12 @@
 import { State } from "router5";
-import { routeConfig, AsyncRoute } from "./routeConfig";
+import { IAsyncRoute, routeConfig } from "./routeConfig";
 import { Home } from "../containers";
 
-export function matchRoute(route: State | undefined): AsyncRoute {
+export function matchRoute(route: State | undefined): IAsyncRoute {
   const name  = !route ? "error" : route.name;
   const match = routeConfig.find(x => x.name === name);
 
-  return !!match ? match : { 
+  return !!match ? match : {
     name: 'home',
     path: '/',
     component: Home,

@@ -1,17 +1,18 @@
-import React from 'react';
-import { connect } from 'react-redux';
-import { createRouteNodeSelector } from 'redux-router5';
+import React from "react";
+import { connect } from "react-redux";
+import { createRouteNodeSelector } from "redux-router5";
 
-import { matchRoute } from '../routing';
-import { Header, Footer, PhaseBanner } from "../components";
+import { matchRoute } from "../routing";
+import { Footer, Header, PhaseBanner } from "../components";
+
 // import * as Examples from './containers/examples';
 
-interface AppProps {
+interface IAppProps {
   route: any;
   serverSide: boolean;
 }
 
-const AppComponent = (props: AppProps) => {
+const AppComponent = (props: IAppProps) => {
   const route = matchRoute(props.route);
 
   return (

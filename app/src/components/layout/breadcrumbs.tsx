@@ -1,15 +1,16 @@
-import React from 'react';
-import { Link } from 'react-router5';
+import React from "react";
+import { Link } from "react-router5";
 
 export const Breadcrumbs = (props: any) => {
   const renderLink = (linkProps: any, i: number) => {
-    let { text, routeName, routeParams } = linkProps;
+    const { text, routeName, routeParams } = linkProps;
+
     return (
       <li key={`breadcrumb${i}`} className="govuk-breadcrumbs__list-item">
         <Link routeName={routeName} routeParams={routeParams}>{text}</Link>
       </li>
     );
-  }
+  };
 
   const renderLastLink = () => (
     <li key={`breadcrumb-current`} className="govuk-breadcrumbs__list-item" aria-current="page">
@@ -27,4 +28,4 @@ export const Breadcrumbs = (props: any) => {
       </ol>
     </div>
   );
-}
+};

@@ -1,13 +1,35 @@
 {
-    "defaultSeverity": "error",
-    "extends": [
-        "tslint:recommended",
-        "tslint-sonarts"
-    ],
-    "jsRules": {},
-    "rules": {
-        // override rules here
-        "arrow-parens": false
-    },
-    "rulesDirectory": []
+  "defaultSeverity": "error",
+  "extends": [
+    "tslint:recommended",
+    "tslint-sonarts",
+    "tslint-react"
+  ],
+  "jsRules": {},
+  "rules": {
+    // override rules here
+    "arrow-parens": false,
+    "whitespace": true,
+    "indent": [true, "spaces", 2],
+    "member-access": [true, "no-public"],
+    "no-commented-code": false,
+    "trailing-comma": false,
+    "ordered-imports": [true, {
+      "import-sources-order": "any",
+      "named-imports-order": "case-insensitive"
+    }],
+    "object-literal-sort-keys": false,
+    "one-line": [true, "check-open-brace", "check-whitespace"],
+    "use-type-alias": true,
+
+    // react styling
+    "jsx-curly-spacing": true,
+
+    // TBD
+    "quotemark": false,
+    "no-console": false,
+    "no-hardcoded-credentials": false,
+    "max-line-length": false
+  },
+  "rulesDirectory": []
 }

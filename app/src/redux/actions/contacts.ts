@@ -16,6 +16,6 @@ export function loadContact(id: number) {
   );
 }
 
-export function updateContact() {
+// export function updateContact() {
 
-}
+// }

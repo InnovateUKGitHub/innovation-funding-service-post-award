@@ -6,10 +6,6 @@ export const Home: React.StatelessComponent = () => (
   <div>
     <Title>Home Page</Title>
     <div className="govuk-grid-row">
-      {/* <div className="govuk-grid-column-one-third">
-        <h2><Link routeName="examples" className="govuk-link">Examples</Link></h2>
-        <p>Some example screens</p>
-      </div> */}
       <div className="govuk-grid-column-one-third">
         <h2><Link routeName="accounts" className="govuk-link">Accounts</Link></h2>
         <p>Some accounts from salesforce</p>

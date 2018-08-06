@@ -1,11 +1,13 @@
-import { SalesforceContact } from "../../repositories/contactsRepository";
-import { Contact } from "../../../models";
+import { ISalesforceContact } from "../../repositories/contactsRepository";
+import { IContact } from "../../../models";
 
-export const mapItem = (input: SalesforceContact): Contact => {
-  if(!input) throw new Error("NULL");
-  
+export function mapItem(input: ISalesforceContact): IContact {
+  if(!input) {
+    throw new Error("NULL");
+  }
+
   return {
-    id: input.Id, 
+    id: input.Id,
     title: input.Salutation,
     firstName: input.FirstName,
     lastName: input.LastName,
@@ -16,5 +18,5 @@ export const mapItem = (input: SalesforceContact): Contact => {
       county: input.MailingState,
       postcode: input.MailingPostalCode,
     }
-  }
+  };
 }

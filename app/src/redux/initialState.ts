@@ -1,7 +1,7 @@
 import { State } from "router5";
-import { IStore } from "./store";
+import { RootState } from "./reducers";
 
-export function setupInitialState(route: State | undefined): IStore {
+export function setupInitialState(route: State | undefined): RootState {
   if(!route) {
     route = {
       name: "error",
@@ -11,6 +11,9 @@ export function setupInitialState(route: State | undefined): IStore {
   }
 
   return {
-    router: { route }
-  }
+    router: { route },
+    data: {
+      contacts: {}
+    }
+  } as any;
 }

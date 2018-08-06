@@ -1,12 +1,12 @@
-import { IQuery, IContext } from "../common/context";
+import { IContext, IQuery } from "../common/context";
+import { IContact } from "../../../models";
 import { mapItem } from "./mapItem";
-import { Contact } from "../../../models";
 
-export class GetByIdQuery implements IQuery<Contact> {
-  constructor(public readonly id: string) {}
+export class GetByIdQuery implements IQuery<IContact> {
+  constructor(readonly id: string) {}
 
-  public async Run(context: IContext){
-      let item = (await context.repositories.contacts.getById(this.id));
-      return mapItem(item);
+  async Run(context: IContext) {
+    const item = await context.repositories.contacts.getById(this.id);
+    return mapItem(item);
   }
 }

@@ -1,6 +1,6 @@
-import * as React from 'react';
-import { connect } from 'react-redux';
-import { Link } from 'react-router5';
+import * as React from "react";
+import { connect } from "react-redux";
+import { Link } from "react-router5";
 import { Breadcrumbs, Title } from "../../components/layout";
 // import * as Tables from '../../tables';
 // import * as Actions from '../../../actions';
@@ -31,12 +31,12 @@ class ListComponent extends React.Component {
     );
   }
 
-  renderAddress(address: any){
-    let items = [address.street, address.city, address.county, address.postcode].filter(x => !!x);
-    if(!items.length) {
-      return "";
-    }
-    return items.map((x,i) => [<span key={`address${i}`}>{x}<br/></span>, ]);
+  renderAddress(address: any) {
+    const items = [address.street, address.city, address.county, address.postcode].filter(x => !!x);
+
+    return (!items.length)
+      ? ""
+      : items.map((x,i) => [<span key={`address${i}`}>{x}<br/></span>, ]);
   }
 }
 
@@ -52,4 +52,4 @@ function mapDispachToProps(dispatch: any) {
   };
 }
 
-export const ContactList = connect(mapStateToProps, mapDispachToProps)(ListComponent); 
+export const ContactList = connect(mapStateToProps, mapDispachToProps)(ListComponent);

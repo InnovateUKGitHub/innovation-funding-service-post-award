@@ -1,27 +1,27 @@
 import { DataLoadAction } from "../actions/dataLoad";
-import { Contact } from "../../models";
+import { IContact } from "../../models";
 
-export interface DataStore<T> {
+export interface IDataStore<T> {
   status: string;
   data: T;
   error: any;
 }
 
 const initialState = {
-  contacts: {} as { [k: string]: DataStore<Contact> }
+  contacts: {} as { [k: string]: IDataStore<IContact> }
 };
 
 export type DataState     = typeof initialState;
 export type DataKeys      = keyof DataState;
-export type CommonReducer = ReturnType<typeof CommonReducer>
+export type CommonReducer = ReturnType<typeof CommonReducer>;
 
 export function CommonReducer(state: DataState = initialState, action: DataLoadAction): DataState {
   if(action.type === "DATA_LOAD") {
-    let id = action.payload.id;
-    let store = state[action.payload.store];
-    let existing = store && store[id];
+    const id       = action.payload.id;
+    const store    = state[action.payload.store];
+    const existing = store && store[id];
 
-    let pending: any = {
+    const pending: any = {
       status: action.payload.status,
       data: action.payload.data,
       error: action.payload.error
@@ -31,14 +31,14 @@ export function CommonReducer(state: DataState = initialState, action: DataLoadA
       pending.data = existing.data;
     }
 
-    let result: any = Object.assign({}, state);
+    const result: any = Object.assign({}, state);
     result[action.payload.store] = result[action.payload.store] || {};
     result[action.payload.store][id] = pending;
-    
+
     return result;
   }
 
-  // if(action.type =="@@router5/TRANSITION_START") {   
+  // if(action.type =="@@router5/TRANSITION_START") {
   //     let result = Object.assign({}, state);
   //     Object.keys(result).forEach(store => Object.keys(result[store]).forEach(key => {
   //         let pending = result[store][key];
@@ -50,7 +50,6 @@ export function CommonReducer(state: DataState = initialState, action: DataLoadA
   //     console.log("making stores stale", state, result);
   //     return result;
   // }
-  
 
   return state;
 }

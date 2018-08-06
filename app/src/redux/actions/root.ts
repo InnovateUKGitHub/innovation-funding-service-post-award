@@ -9,3 +9,4 @@ type RouterActions = ActionsUnion<typeof actions>;
 export type RootActions =
   RouterActions  |
   DataLoadAction
+;

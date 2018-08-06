@@ -7,4 +7,4 @@ export function setupMiddleware(router: any) {
     thunk,
     router5Middleware(router)
   );
-} 
+}

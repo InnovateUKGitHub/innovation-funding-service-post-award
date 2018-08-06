@@ -1,21 +1,24 @@
-import { IContext, IQuery, ICommand, IRepositories } from "../../../src/server/features/common/context";
-import { SalesforceContact, IContactsRepository } from "../../../src/server/repositories/contactsRepository";
+import { ICommand, IContext, IQuery } from "../../../src/server/features/common/context";
+import { IContactsRepository, ISalesforceContact } from "../../../src/server/repositories/contactsRepository";
 
-export abstract class TestRepository<T>
-{
-    public Items: T[] = []
+export abstract class TestRepository<T> {
+    Items: T[] = []
 
     protected getOne(conditional: (item:T) => boolean) : Promise<T> {
         return new Promise<T>((resolve, reject) => {
-            let found = this.Items.find(x => conditional(x));
-            if(found) resolve(found);
-            else reject(Error("NOT FOUND"));
+            const found = this.Items.find(x => conditional(x));
+            if(found) {
+              resolve(found);
+            }
+            else {
+              reject(Error("NOT FOUND"));
+            }
         });
     }
 
     protected getWhere(conditional: (item:T) => boolean) : Promise<T[]> {
         return new Promise<T[]>((resolve) => {
-            let found = this.Items.filter(x => conditional(x));
+            const found = this.Items.filter(x => conditional(x));
             resolve(found);
         });
     }
@@ -25,12 +28,12 @@ export abstract class TestRepository<T>
     }
 }
 
-export class ContactsRepository extends TestRepository<SalesforceContact> implements IContactsRepository {
-    getById(id: String): Promise<SalesforceContact> {
+export class ContactsRepository extends TestRepository<ISalesforceContact> implements IContactsRepository {
+    getById(id: String): Promise<ISalesforceContact> {
         return super.getOne(x => x.Id == id);
-    }    
+    }
     
-    getAll(): Promise<SalesforceContact[]> {
+    getAll(): Promise<ISalesforceContact[]> {
         return super.getAll();
     }
 }
@@ -53,7 +56,7 @@ export class TestContext implements IContext {
         range: <T> (no: number, create: (seed:number, index: number) => T) => {
             return Array.from({length: no}, (_,i) => create(i+1, i));
         },
-        createContact: (update?: (item:SalesforceContact) => void) => {
+        createContact: (update?: (item:ISalesforceContact) => void) => {
             let seed = this.repositories.contacts.Items.length + 1;
 
             let newItem = {
@@ -66,7 +69,7 @@ export class TestContext implements IContext {
                 MailingCity: "",
                 MailingState: "",
                 MailingPostalCode: "",
-            } as SalesforceContact;
+            } as ISalesforceContact;
 
             update && update(newItem);
 

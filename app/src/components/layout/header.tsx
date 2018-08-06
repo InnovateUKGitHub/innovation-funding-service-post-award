@@ -17,7 +17,7 @@ export const Header = () => (
               height="32"
               width="36"
             >
-              <path fill="currentColor" fillRule="evenodd" d={logoPath}></path>
+              <path fill="currentColor" fillRule="evenodd" d={logoPath} />
               <img src="/assets/images/govuk-logotype-crown.png" className="govuk-header__logotype-crown-fallback-image" />
             </svg>
             <span className="govuk-header__logotype-text" style={{ paddingLeft: "10px"}}>GOV.UK</span>

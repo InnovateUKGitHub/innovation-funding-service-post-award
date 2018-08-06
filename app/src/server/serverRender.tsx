@@ -13,17 +13,17 @@ import { App } from "../containers";
 export function serverRender(req: Request, res: Response) {
   const router = configureRouter();
 
-  router.start(req.originalUrl, (error, route) => {
+  router.start(req.originalUrl, (routeError, route) => {
     // handle for route not found?
-    // if(error) {
-    //   return res.status(500).send(error);
+    // if(routeError) {
+    //   return res.status(500).send(routeError);
     // }
 
     const intitalState = setupInitialState(route);
     const middleware   = setupMiddleware(router);
     const store        = createStore(rootReducer, intitalState, middleware);
     const loader       = matchRouteLoader(route);
-    
+
     loader(store.dispatch, store.getState).then(() => {
       const html = renderToString(
         <Provider store={store}>
