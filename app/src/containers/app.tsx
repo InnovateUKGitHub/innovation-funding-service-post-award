@@ -9,7 +9,7 @@ import { Footer, Header, PhaseBanner } from "../components";
 
 interface IAppProps {
   route: any;
-  serverSide: boolean;
+  serverSide?: boolean;
 }
 
 const AppComponent = (props: IAppProps) => {

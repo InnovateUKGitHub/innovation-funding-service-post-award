@@ -19,9 +19,9 @@ export function serverRender(req: Request, res: Response) {
     //   return res.status(500).send(routeError);
     // }
 
-    const intitalState = setupInitialState(route);
+    const initialState = setupInitialState(route);
     const middleware   = setupMiddleware(router);
-    const store        = createStore(rootReducer, intitalState, middleware);
+    const store        = createStore(rootReducer, initialState, middleware);
     const loader       = matchRouteLoader(route);
 
     loader(store.dispatch, store.getState).then(() => {
