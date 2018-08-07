@@ -1,6 +1,7 @@
 node_modules/
 dist/
-public/
+public/client.js
+public/client.js.map
 coverage/
 reports/
 
