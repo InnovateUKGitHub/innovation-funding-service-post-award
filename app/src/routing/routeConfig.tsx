@@ -9,8 +9,8 @@ export interface IAsyncRoute extends Route {
 
 export const routeConfig: IAsyncRoute[] = [
   {
-    name: 'home',
-    path: '/',
+    name: "home",
+    path: "/",
     component: Containers.Home,
     loadData: () => Promise.resolve({})
   },
@@ -21,8 +21,8 @@ export const routeConfig: IAsyncRoute[] = [
   //   loadData: (dispatch) => dispatch(Actions.loadAccounts())
   // },
   {
-    name: 'contacts',
-    path: '/contacts',
+    name: "contacts",
+    path: "/contacts",
     component: Containers.ContactList,
     // loadData: (dispatch) => dispatch(Actions.loadContacts())
     loadData: () => Promise.resolve({})

@@ -29,6 +29,6 @@ router.start((err: any, state: any) => {
             <App />
         </RouterProvider>
     </Provider>),
-    document.getElementById('root')
+    document.getElementById("root")
   );
 });

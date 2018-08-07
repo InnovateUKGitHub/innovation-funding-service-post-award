@@ -32,7 +32,7 @@ export function renderHtml(html: string, preloadedState: any = {}) {
           <a href="#main-content" class="govuk-skip-link">Skip to main content</a>
           <div id="root">${html}</div>
           <script>
-              window.__PRELOADED_STATE__ = ${JSON.stringify(preloadedState).replace(/</g, '\\u003c')}
+              window.__PRELOADED_STATE__ = ${JSON.stringify(preloadedState).replace(/</g, "\\u003c")}
           </script>
           <script src="/govuk-frontend-1.2.0.min.js"></script>
           <script src="/bundle.js"></script>

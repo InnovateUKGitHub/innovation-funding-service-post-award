@@ -1,5 +1,5 @@
-import React from 'react';
-import { Link } from 'react-router5';
+import React from "react";
+import { Link } from "react-router5";
 import { Title } from "../components";
 
 export const Home: React.StatelessComponent = () => (
