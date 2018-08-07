@@ -1,2 +1,7 @@
-dist
-node_modules
+node_modules/
+dist/
+public/
+coverage/
+reports/
+
+test-report.html
