@@ -1,7 +1,7 @@
 module.exports = [
     {
       entry: {
-        client: './src/client/index.tsx',
+        bundle: './src/client/client.tsx',
       },
       output: {
         path: __dirname + '/public',

@@ -1,6 +1,5 @@
 import { AsyncThunk, createAction } from "./common";
-import { DataKeys, IDataStore } from "../reducers/common";
-import { RootState } from "../reducers";
+import { DataKeys, IDataStore, RootState } from "../reducers";
 
 type DataLoadThunk = ReturnType<typeof createLoadAction>;
 export type DataLoadAction = ReturnType<DataLoadThunk>;
