@@ -7,7 +7,7 @@ import { RouterProvider } from "react-router5";
 
 import { renderHtml } from "./html";
 import { rootReducer, setupInitialState, setupMiddleware } from "../redux";
-import { configureRouter, matchRouteLoader } from '../routing';
+import { configureRouter, matchRouteLoader } from "../routing";
 import { App } from "../containers";
 
 export function serverRender(req: Request, res: Response) {

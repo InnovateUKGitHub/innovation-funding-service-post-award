@@ -1,4 +1,4 @@
-import salesforceConnection from './salesforceConnection';
+import salesforceConnection from "./salesforceConnection";
 
 export default abstract class SalesforceBase<T> {
   protected constructor(

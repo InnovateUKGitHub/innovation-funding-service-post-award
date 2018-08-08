@@ -4,21 +4,21 @@ import * as React from "react";
 const path = "M421.5 142.8V.1l-50.7 32.3v161.1h112.4v-50.7zm-122.3-9.6A47.12 47.12 0 0 1 221 97.8c0-26 21.1-47.1 47.1-47.1 16.7 0 31.4 8.7 39.7 21.8l42.7-27.2A97.63 97.63 0 0 0 268.1 0c-36.5 0-68.3 20.1-85.1 49.7A98 98 0 0 0 97.8 0C43.9 0 0 43.9 0 97.8s43.9 97.8 97.8 97.8c36.5 0 68.3-20.1 85.1-49.7a97.76 97.76 0 0 0 149.6 25.4l19.4 22.2h3v-87.8h-80l24.3 27.5zM97.8 145c-26 0-47.1-21.1-47.1-47.1s21.1-47.1 47.1-47.1 47.2 21 47.2 47S123.8 145 97.8 145";
 
 const links = [
-  { link: 'https://www.gov.uk/government/organisations/innovate-uk', text: 'Innovate UK' },
-  { link: 'https://www.gov.uk/guidance/innovation-apply-for-a-funding-award', text: 'Innovation funding advice' },
-  { link: 'https://www.gov.uk/guidance/innovation-get-support-and-advice', text: 'Connect to innovation experts' },
-  { link: 'https://connect.innovateuk.org/events', text: 'Events' },
-  { link: 'https://innovateuk.blog.gov.uk/', text: 'Innovate UK blog' },
-  { link: 'https://www.gov.uk/help/accessibility', text: 'GOV.UK accessibility' },
+  { link: "https://www.gov.uk/government/organisations/innovate-uk', text: 'Innovate UK" },
+  { link: "https://www.gov.uk/guidance/innovation-apply-for-a-funding-award', text: 'Innovation funding advice" },
+  { link: "https://www.gov.uk/guidance/innovation-get-support-and-advice', text: 'Connect to innovation experts" },
+  { link: "https://connect.innovateuk.org/events', text: 'Events" },
+  { link: "https://innovateuk.blog.gov.uk/', text: 'Innovate UK blog" },
+  { link: "https://www.gov.uk/help/accessibility', text: 'GOV.UK accessibility" },
   {
-    link: 'https://apply-for-innovation-funding.service.gov.uk/info/terms-and-conditions',
-    text: 'Terms and conditions'
+    link: "https://apply-for-innovation-funding.service.gov.uk/info/terms-and-conditions",
+    text: "Terms and conditions"
   },
-  { link: 'https://apply-for-innovation-funding.service.gov.uk/info/contact', text: 'Contact us' },
-  { link: 'http://info.innovateuk.org/emailpref', text: 'Sign up for competition updates' },
+  { link: "https://apply-for-innovation-funding.service.gov.uk/info/contact', text: 'Contact us" },
+  { link: "http://info.innovateuk.org/emailpref', text: 'Sign up for competition updates" },
   {
-    link: 'https://apply-for-innovation-funding.service.gov.uk/competition/search',
-    text: 'Latest funding opportunities'
+    link: "https://apply-for-innovation-funding.service.gov.uk/competition/search",
+    text: "Latest funding opportunities"
   }
 ];
 

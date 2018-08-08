@@ -7,8 +7,8 @@ export function matchRoute(route: State | undefined): IAsyncRoute {
   const match = routeConfig.find(x => x.name === name);
 
   return !!match ? match : {
-    name: 'home',
-    path: '/',
+    name: "home",
+    path: "/",
     component: Home,
     loadData: () => Promise.resolve({})
   };

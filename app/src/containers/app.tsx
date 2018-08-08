@@ -29,4 +29,4 @@ const AppComponent = (props: IAppProps) => {
   );
 };
 
-export const App = connect(createRouteNodeSelector(''))(AppComponent);
+export const App = connect(createRouteNodeSelector(""))(AppComponent);
