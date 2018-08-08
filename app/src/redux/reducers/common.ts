@@ -1,19 +1,21 @@
 import { DataLoadAction } from "../actions/dataLoad";
 import { IContact } from "../../models";
 
+export type DataStoreStatus = "PRELOAD" | "STALE" | "LOADING" | "LOADED";
+
 export interface IDataStore<T> {
-  status: string;
+  status: DataStoreStatus;
   data: T;
   error: any;
 }
 
-const initialState = {
-  contacts: {} as { [k: string]: IDataStore<IContact> }
-};
-
 export type DataState     = typeof initialState;
 export type DataKeys      = keyof DataState;
 export type CommonReducer = ReturnType<typeof CommonReducer>;
+
+const initialState = {
+  contacts: {} as { [k: string]: IDataStore<IContact> }
+};
 
 export function CommonReducer(state: DataState = initialState, action: DataLoadAction): DataState {
   if(action.type === "DATA_LOAD") {

@@ -1,12 +1,12 @@
 import { AsyncThunk, createAction } from "./common";
-import { DataKeys, IDataStore, RootState } from "../reducers";
+import { DataKeys, DataStoreStatus, IDataStore, RootState } from "../reducers";
 
-type DataLoadThunk = ReturnType<typeof createLoadAction>;
+type DataLoadThunk         = ReturnType<typeof createLoadAction>;
 export type DataLoadAction = ReturnType<DataLoadThunk>;
-export type DataLoadKeys = "all" | number;
+export type DataLoadKeys   = "all" | number;
 
 export function createLoadAction(id: DataLoadKeys, store: DataKeys) {
-  return (status: string, data: any, error?: any) => {
+  return (status: DataStoreStatus, data: any, error?: any) => {
     const payload = { id, store, status, data, error };
     return createAction("DATA_LOAD", payload);
   };
@@ -23,7 +23,7 @@ export function conditionalLoad<T>(
     const state    = getState();
     const existing = selector(state);
 
-    if(!existing || existing.status === "PRELOAD" || existing.status === "STALE") {
+    if(!existing || existing.status === "LOADED" || existing.status === "STALE") {
       dispatch(action("LOADING", existing && existing.data));
 
       return load()

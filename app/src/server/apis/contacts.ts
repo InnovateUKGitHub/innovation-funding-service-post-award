@@ -8,10 +8,10 @@ const apiRouter = express.Router();
 apiRouter.route("/contacts")
     .get(async (req, res, next) => {
         try {
-            const context = contextProvider.start();
-            const query = new GetAllQuery();
-            const result = await context.runQuery(query);
-            res.status(200).json(result);
+          const query   = new GetAllQuery();
+          const context = contextProvider.start();
+          const result  = await context.runQuery(query);
+          return res.status(200).json(result);
         }
         catch (e) {
             next(e);
@@ -21,10 +21,10 @@ apiRouter.route("/contacts")
 apiRouter.route("/contacts/:id")
     .get(async (req, res, next) => {
         try {
-            const context = contextProvider.start();
-            const query = new GetByIdQuery(req.params.id);
-            const result = await context.runQuery(query);
-            res.status(200).json(result);
+          const query   = new GetByIdQuery(req.params.id);
+          const context = contextProvider.start();
+          const result  = await context.runQuery(query);
+          return res.status(200).json(result);
         }
         catch (e) {
             next(e);
