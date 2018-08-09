@@ -14,7 +14,7 @@ export function dataLoadAction(
 ) {
   const payload = { id, store, status, data, error };
   return createAction("DATA_LOAD", payload);
-};
+}
 
 export function conditionalLoad<T>(
   idSelector: (state: RootState) => DataStoreId,
@@ -25,7 +25,7 @@ export function conditionalLoad<T>(
   return (dispatch, getState) => {
     const state    = getState();
     const id       = idSelector(state);
-    const store    = storeSelector(state); 
+    const store    = storeSelector(state);
     const existing = existingSelector(state);
 
     if(!existing || existing.status === "LOADED" || existing.status === "STALE") {
