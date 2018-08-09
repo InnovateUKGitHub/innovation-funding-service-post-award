@@ -1,4 +1,9 @@
+const webpack = require("webpack");
 const nodeExternals = require('webpack-node-externals');
+
+const flags = new webpack.DefinePlugin({
+  __SERVER_ENV__: true
+});
 
 module.exports = [{
     entry: {
@@ -19,5 +24,6 @@ module.exports = [{
     },
     target: 'node',
     externals: [nodeExternals()],
-}
+    plugins: [flags],
+  }
 ];

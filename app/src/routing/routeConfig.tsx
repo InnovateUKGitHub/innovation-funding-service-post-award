@@ -1,11 +1,15 @@
 import React from "react";
 import { Route } from "router5";
+import { AsyncThunk } from "../redux/actions";
 import * as Containers from "../containers";
+import { loadContacts } from "../redux/actions/contacts";
 
 export interface IAsyncRoute extends Route {
-  component: React.ComponentType;
-  loadData: any;
+  component: React.ComponentType<any>;
+  loadData: AsyncThunk<any>;
 }
+
+// TODO - update to be associative array
 
 export const routeConfig: IAsyncRoute[] = [
   {
@@ -15,17 +19,17 @@ export const routeConfig: IAsyncRoute[] = [
     loadData: () => Promise.resolve({})
   },
   // {
-  //   name: 'accounts',
-  //   path: '/accounts',
-  //   render: (props) => <Accounts.List {...props}/>,
-  //   loadData: (dispatch) => dispatch(Actions.loadAccounts())
-  // },
+    //   name: 'accounts',
+    //   path: '/accounts',
+    //   render: (props) => <Accounts.List {...props}/>,
+    //   loadData: (dispatch) => dispatch(Actions.loadAccounts())
+    // },
   {
     name: "contacts",
     path: "/contacts",
     component: Containers.ContactList,
-    // loadData: (dispatch) => dispatch(Actions.loadContacts())
-    loadData: () => Promise.resolve({})
+    loadData: loadContacts()
+    // loadData: () => Promise.resolve({})
   },
   // {
   //   name: 'contact_details',

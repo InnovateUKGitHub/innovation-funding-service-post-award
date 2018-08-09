@@ -1,18 +1,22 @@
-import { conditionalLoad, createLoadAction } from "./dataLoad";
+import { conditionalLoad } from "./dataLoad";
+import { Api } from "../../api";
+import { RootState } from "../reducers";
 
 export function loadContacts() {
   return conditionalLoad(
+    () => "all",
+    () => "contacts",
     (state) => state.data.contacts.all,
-    createLoadAction("all", "contacts"),
-    () => fetch("http://localhost:8080/api/contacts") as any
+    () => Api.contacts.getAll() as any
   );
 }
 
-export function loadContact(id: number) {
+export function loadContact(id: any) {
   return conditionalLoad(
+    (state) => !!state.router.route ? state.router.route.params.id : null,
+    () => "contacts",
     (state) => state.data.contacts[id],
-    createLoadAction(id, "contacts"),
-    () => fetch(`http://localhost:8080/api/contact/${id}`) as any
+    () => Api.contacts.get(id)
   );
 }
 
