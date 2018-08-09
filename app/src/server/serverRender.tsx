@@ -7,7 +7,7 @@ import { RouterProvider } from "react-router5";
 
 import { renderHtml } from "./html";
 import { rootReducer, setupInitialState, setupMiddleware } from "../redux";
-import { configureRouter, matchRouteLoader } from "../routing";
+import { configureRouter, matchRoute, matchRouteLoader } from "../routing";
 import { App } from "../containers";
 
 export function serverRender(req: Request, res: Response) {
@@ -24,7 +24,7 @@ export function serverRender(req: Request, res: Response) {
     const store        = createStore(rootReducer, initialState, middleware);
     const loader       = matchRouteLoader(route);
 
-    loader(store.dispatch, store.getState).then(() => {
+    loader(store.dispatch, store.getState, null).then(() => {
       const html = renderToString(
         <Provider store={store}>
           <RouterProvider router={router}>

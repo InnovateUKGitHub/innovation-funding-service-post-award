@@ -2,12 +2,17 @@ import * as React from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router5";
 import { Breadcrumbs, Title } from "../../components/layout";
+import { matchRoute } from "../../routing/matchRoute";
 // import * as Tables from '../../tables';
 // import * as Actions from '../../../actions';
 
-class ListComponent extends React.Component {
+interface IProps {
+  onLoad: any;
+}
+
+class ListComponent extends React.Component<IProps> {
   componentDidMount() {
-    // this.props.onLoad();
+    this.props.onLoad();
   }
 
   render() {
@@ -46,10 +51,25 @@ function mapStateToProps(state: any) {
   };
 }
 
-function mapDispachToProps(dispatch: any) {
-  return {
-    // onLoad: () => dispatch(Actions.loadContacts())
+function routeConnect(
+  routeName: string,
+  component: React.ComponentType<any>,
+  mapState?: any,
+  mapDispatch?: any
+) {
+  const mapLoadData = (dispatch: any) => {
+    const props = typeof mapDispatch === "undefined" ? {} : mapDispatch(dispatch);
+    const route = matchRoute({ name: routeName } as any);
+
+    if(!!route && route.loadData) {
+      props.onLoad = () => dispatch(route.loadData);
+    }
+
+    return props;
   };
+
+  return connect(mapState, mapLoadData)(component);
 }
 
-export const ContactList = connect(mapStateToProps, mapDispachToProps)(ListComponent);
+export const ContactList = routeConnect("contacts", ListComponent, mapStateToProps);
+// export const ContactList = connect(mapStateToProps, mapDispachToProps)(ListComponent);
