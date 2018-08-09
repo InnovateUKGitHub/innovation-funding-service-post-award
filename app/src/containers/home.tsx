@@ -14,6 +14,10 @@ export const Home: React.StatelessComponent = () => (
         <h2><Link routeName="contacts" className="govuk-link">Contacts</Link></h2>
         <p>Some contacts from salesforce</p>
       </div>
+        <div className="govuk-grid-column-one-third">
+            <h2><Link routeName="projectDetails" className="govuk-link">Details</Link></h2>
+            <p>Projectstuff</p>
+        </div>
     </div>
   </div>
 );

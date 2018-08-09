@@ -18,6 +18,12 @@ export const routeConfig: IAsyncRoute[] = [
     component: Containers.Home,
     loadData: () => Promise.resolve({})
   },
+  {
+    name: "projectDetails",
+    path: "details",
+    component: Containers.ProjectDetails,
+    loadData: () => Promise.resolve({})
+  },
   // {
     //   name: 'accounts',
     //   path: '/accounts',

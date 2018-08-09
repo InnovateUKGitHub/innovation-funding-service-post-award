@@ -8,7 +8,7 @@ import { RouterProvider } from "react-router5";
 import { renderHtml } from "./html";
 import { rootReducer, setupInitialState, setupMiddleware } from "../redux";
 import { configureRouter, matchRoute, matchRouteLoader } from "../routing";
-import { App } from "../containers";
+import { App } from "../containers/app";
 
 export function serverRender(req: Request, res: Response) {
   const router = configureRouter();
@@ -28,7 +28,7 @@ export function serverRender(req: Request, res: Response) {
       const html = renderToString(
         <Provider store={store}>
           <RouterProvider router={router}>
-            <App serverSide={true} />
+            <App />
           </RouterProvider>
         </Provider>
       );
