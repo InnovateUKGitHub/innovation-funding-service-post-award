@@ -12,7 +12,7 @@ interface IAppProps {
   serverSide?: boolean;
 }
 
-const AppComponent = (props: IAppProps) => {
+const AppComponent: React.SFC<IAppProps> = (props) => {
   const route = matchRoute(props.route);
 
   return (

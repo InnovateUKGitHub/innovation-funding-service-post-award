@@ -8,7 +8,6 @@ import { rootReducer, setupMiddleware } from "../redux";
 import { App } from "../containers";
 
 const serverState = (window as any).__PRELOADED_STATE__;
-console.log("serverState", serverState);
 
 // const logger = (store) => (next) => (action) => {
 //   console.log("logging", action, next);
@@ -22,7 +21,7 @@ const store      = createStore(rootReducer, serverState, middleware);
 // window["router"] = router;
 // window["store"] = store;
 
-router.start((err: any, state: any) => {
+router.start(() => {
   hydrate((
     <Provider store={store}>
         <RouterProvider router={router}>
