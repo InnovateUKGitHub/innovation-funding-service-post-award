@@ -144,8 +144,8 @@ class ProjectDetailsComponent extends ContainerBase<Data, Callbacks> {
 
     private renderProjectMembers() {
         return (
-            <div>
-                <h2 className="govuk-heading-m govuk-!-margin-bottom-7">Project members</h2>
+            <div className="govuk-!-margin-bottom-9">
+                <h2 className="govuk-heading-m govuk-!-margin-bottom-9">Project members</h2>
                 {projectMembers.map(this.renderProjectMember)}
             </div>
         );
@@ -153,7 +153,7 @@ class ProjectDetailsComponent extends ContainerBase<Data, Callbacks> {
 
     private renderProjectMember(member: Members) {
         return (
-            <div className="govuk-!-margin-bottom-8">
+            <div className="govuk-!-margin-bottom-9">
                 <h3 className="govuk-heading-s govuk-!-margin-bottom-0">{member.role}</h3>
                 <p className="govuk-body govuk-!-margin-bottom-0">{member.name}</p>
                 <a href="" className="govuk-link">{member.email}</a>
@@ -196,7 +196,7 @@ class ProjectDetailsComponent extends ContainerBase<Data, Callbacks> {
 
     private renderProjectInfo() {
         return (
-            <div className="govuk-!-margin-bottom-9">
+            <div className="govuk-!-margin-bottom-9 govuk-!-margin-top-9">
                 <h2 className="govuk-heading-m govuk-!-margin-bottom-9">Project information</h2>
                 {projectInfo.map(this.renderInfoContent)}
             </div>
@@ -205,7 +205,7 @@ class ProjectDetailsComponent extends ContainerBase<Data, Callbacks> {
 
     private renderInfoContent(info: Info) {
         return (
-            <div className="govuk-grid-row">
+            <div className="govuk-grid-row govuk-!-margin-top-4">
                 <div className="govuk-grid-column-one-quarter">
                     <h4 className="govuk-heading-s">{info.key}</h4>
                 </div>
@@ -219,7 +219,7 @@ class ProjectDetailsComponent extends ContainerBase<Data, Callbacks> {
     private renderApplicationInfo() {
         return (
             <div>
-                <h2 className="govuk-heading-m govuk-!-margin-bottom-7">Application information</h2>
+                <h2 className="govuk-heading-m govuk-!-margin-bottom-8">Application information</h2>
                 <div className="govuk-!-padding-bottom-4"><a href="" className="govuk-link">View original application</a></div>
                 <div className="govuk-!-padding-bottom-4"><a href="" className="govuk-link">View original grant offer letter</a></div>
             </div>
