@@ -19,6 +19,53 @@ const projectMembers = [
 
 const tabListArray = ["Claims", "Project change request", "Forecasts", "Project details"];
 
+const tableHeadings = ["Partner", "Partner type", "Finance contact", "Email"];
+
+const tableBody = [
+    [
+        "Ooba (Lead)",
+        "Industrial",
+        "Ralph Young",
+        "ralph.young@ooba.example.com"
+    ],
+    [
+        "Jabbertype",
+        "Industrial",
+        "Antonio Jenkins",
+        "antonio.jenkins@jabbertype.example.com"
+    ],
+    [
+        "Wordpedia",
+        "Academic",
+        "Tina Taylor",
+        "tina.taylor@wordpedia.example.com"
+    ],
+    [
+        "Gabtype",
+        "Industrial",
+        "Marian Stokes",
+        "worth.email.test+marian@gmail.com"
+    ]
+];
+
+const projectInfo = [
+    {
+        key: "Project start date",
+        value: "1 February 2017",
+    },
+    {
+        key: "Project end date",
+        value: "28 February 2019"
+    },
+    {
+        key: "Project summary",
+        value: "The project aims to identify, isolate and correct an issue that has hindered progress in this field for a number of years.\n" +
+        "Identification will involve the university testing conditions to determine the exact circumstance of the issue.\n" +
+        "Once identification has been assured we will work to isolate the issue but replicating the circumstances in which it occurs within a laboratory environment.\n" +
+        "After this we will work with our prototyping partner to create a tool to correct the issue.  Once tested and certified this will be rolled out to mass production.\n"
+    }
+];
+
 export interface ProjectDetailsDto {
     id: string;
     name: string;
@@ -38,6 +85,11 @@ interface Members {
     email: string;
 }
 
+interface Info {
+    key: string;
+    value: string;
+}
+
 class ProjectDetailsComponent extends ContainerBase<Data, Callbacks> {
     render() {
         return (
@@ -45,9 +97,10 @@ class ProjectDetailsComponent extends ContainerBase<Data, Callbacks> {
                 {this.renderBackLink()}
                 {this.renderTitle()}
                 {this.renderTabs(tabListArray)}
-                <h2 className="govuk-heading-m govuk-!-margin-bottom-7">Project members</h2>
-                {projectMembers.map(member => this.renderProjectMember(member))}
+                {this.renderProjectMembers()}
                 <div className="govuk-!-margin-top-9 govuk-!-margin-bottom-9">{this.renderTable()}</div>
+                {this.renderProjectInfo()}
+                {this.renderApplicationInfo()}
             </div>
         );
     }
@@ -64,7 +117,7 @@ class ProjectDetailsComponent extends ContainerBase<Data, Callbacks> {
                 <span className="govuk-caption-xl">
                     123: High speed rail and its effects on air quality
                 </span>
-                <h1 className="govuk-heading-xl">
+                <h1 className="govuk-heading-xl govuk-!-margin-bottom-9">
                     View project
                 </h1>
             </div>
@@ -73,9 +126,9 @@ class ProjectDetailsComponent extends ContainerBase<Data, Callbacks> {
 
     private renderTabs(tabList: string[]) {
         return (
-            <div id="uniqueTabId" className="govuk-tabs" data-module="tabs">
+            <div id="uniqueTabId" className="govuk-tabs govuk-!-margin-bottom-9" data-module="tabs">
                 <ul className="govuk-tabs__list">
-                    {tabList.map(tab => this.renderTab(tab))}
+                    {tabList.map(this.renderTab)}
                 </ul>
             </div>
         );
@@ -89,9 +142,18 @@ class ProjectDetailsComponent extends ContainerBase<Data, Callbacks> {
         );
     }
 
+    private renderProjectMembers() {
+        return (
+            <div>
+                <h2 className="govuk-heading-m govuk-!-margin-bottom-7">Project members</h2>
+                {projectMembers.map(this.renderProjectMember)}
+            </div>
+        );
+    }
+
     private renderProjectMember(member: Members) {
         return (
-            <div className="govuk-!-margin-bottom-4">
+            <div className="govuk-!-margin-bottom-8">
                 <h3 className="govuk-heading-s govuk-!-margin-bottom-0">{member.role}</h3>
                 <p className="govuk-body govuk-!-margin-bottom-0">{member.name}</p>
                 <a href="" className="govuk-link">{member.email}</a>
@@ -104,27 +166,63 @@ class ProjectDetailsComponent extends ContainerBase<Data, Callbacks> {
             <table className="govuk-table">
                 <thead className="govuk-table__head">
                 <tr className="govuk-table__row">
-                    <th className="govuk-table__header" scope="col">Partner</th>
-                    <th className="govuk-table__header" scope="col">Partner type</th>
-                    <th className="govuk-table__header" scope="col">Finance contact</th>
-                    <th className="govuk-table__header" scope="col">Email</th>
+                    {tableHeadings.map(this.renderTableHeadings)}
                 </tr>
                 </thead>
                 <tbody className="govuk-table__body">
-                <tr className="govuk-table__row">
-                    <th className="govuk-table__cell" scope="row">First 6 weeks</th>
-                    <td className="govuk-table__cell ">£109.80 per week</td>
-                </tr>
-                <tr className="govuk-table__row">
-                    <th className="govuk-table__cell" scope="row">Next 33 weeks</th>
-                    <td className="govuk-table__cell ">£109.80 per week</td>
-                </tr>
-                <tr className="govuk-table__row">
-                    <th className="govuk-table__cell" scope="row">Total estimated pay</th>
-                    <td className="govuk-table__cell ">£4,282.20</td>
-                </tr>
+                    {tableBody.map(this.renderRow)}
                 </tbody>
             </table>
+        );
+    }
+
+    // Called by renderTable
+    private renderTableHeadings(heading: string) {
+        return (
+            <th className="govuk-table__header" scope="col">{heading}</th>
+        );
+    }
+
+    // Called by renderTableHeadings
+    private renderRow(entries: string[]) {
+        return (
+            <tr className="govuk-table__row">
+                {entries.map(entry => (
+                    <td className="govuk-table__cell" scope="row">{entry}</td>
+                ))}
+            </tr>
+        );
+    }
+
+    private renderProjectInfo() {
+        return (
+            <div className="govuk-!-margin-bottom-9">
+                <h2 className="govuk-heading-m govuk-!-margin-bottom-9">Project information</h2>
+                {projectInfo.map(this.renderInfoContent)}
+            </div>
+        );
+    }
+
+    private renderInfoContent(info: Info) {
+        return (
+            <div className="govuk-grid-row">
+                <div className="govuk-grid-column-one-quarter">
+                    <h4 className="govuk-heading-s">{info.key}</h4>
+                </div>
+                <div className="govuk-grid-column-two-thirds">
+                    <span className="govuk-body">{info.value}</span>
+                </div>
+            </div>
+        );
+    }
+
+    private renderApplicationInfo() {
+        return (
+            <div>
+                <h2 className="govuk-heading-m govuk-!-margin-bottom-7">Application information</h2>
+                <div className="govuk-!-padding-bottom-4"><a href="" className="govuk-link">View original application</a></div>
+                <div className="govuk-!-padding-bottom-4"><a href="" className="govuk-link">View original grant offer letter</a></div>
+            </div>
         );
     }
 }
