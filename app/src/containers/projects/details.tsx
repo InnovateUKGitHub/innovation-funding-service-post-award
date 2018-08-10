@@ -156,7 +156,7 @@ class ProjectDetailsComponent extends ContainerBase<Data, Callbacks> {
             <div className="govuk-!-margin-bottom-9">
                 <h3 className="govuk-heading-s govuk-!-margin-bottom-0">{member.role}</h3>
                 <p className="govuk-body govuk-!-margin-bottom-0">{member.name}</p>
-                <a href="" className="govuk-link">{member.email}</a>
+                <a href="" className="govuk-link govuk-!-font-size-19">{member.email}</a>
             </div>
         );
     }
@@ -220,8 +220,8 @@ class ProjectDetailsComponent extends ContainerBase<Data, Callbacks> {
         return (
             <div>
                 <h2 className="govuk-heading-m govuk-!-margin-bottom-8">Application information</h2>
-                <div className="govuk-!-padding-bottom-4"><a href="" className="govuk-link">View original application</a></div>
-                <div className="govuk-!-padding-bottom-4"><a href="" className="govuk-link">View original grant offer letter</a></div>
+                <div className="govuk-!-padding-bottom-4"><a href="" className="govuk-link govuk-!-font-size-19">View original application</a></div>
+                <div className="govuk-!-padding-bottom-4"><a href="" className="govuk-link govuk-!-font-size-19">View original grant offer letter</a></div>
             </div>
         );
     }
