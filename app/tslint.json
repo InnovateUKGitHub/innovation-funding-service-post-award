@@ -28,7 +28,8 @@
     // TBD
     "no-console": false,
     "no-hardcoded-credentials": false,
-    "max-line-length": false
+    "max-line-length": false,
+    "interface-name": false
   },
   "rulesDirectory": []
 }

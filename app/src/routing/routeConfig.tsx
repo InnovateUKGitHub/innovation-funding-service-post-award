@@ -6,7 +6,7 @@ import { loadContacts } from "../redux/actions/contacts";
 
 export interface IAsyncRoute extends Route {
   component: React.ComponentType<any>;
-  loadData: AsyncThunk<any>;
+  loadData?: AsyncThunk<any>;
 }
 
 // TODO - update to be associative array
@@ -20,9 +20,8 @@ export const routeConfig: IAsyncRoute[] = [
   },
   {
     name: "projectDetails",
-    path: "details",
-    component: Containers.ProjectDetails,
-    loadData: () => Promise.resolve({})
+    path: "/project/details",
+    component: Containers.ProjectDetails
   },
   // {
     //   name: 'accounts',
