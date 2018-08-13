@@ -2,11 +2,11 @@ import React from "react";
 
 interface Props {
     tableHeadings: string[];
-    tableBody: string[][];
+    tableBody: JSX.Element[][];
 }
 
 export const Table: React.SFC<Props> = (props: Props) => {
-    const renderRow = (entries: string[]) => {
+    const renderRow = (entries: JSX.Element[]) => {
         return (
             <tr className="govuk-table__row">
                 {entries.map(entry => (

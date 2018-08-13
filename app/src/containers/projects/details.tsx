@@ -23,28 +23,28 @@ const tableHeadings = ["Partner", "Partner type", "Finance contact", "Email"];
 
 const tableBody = [
     [
-        "Ooba (Lead)",
-        "Industrial",
-        "Ralph Young",
-        "ralph.young@ooba.example.com"
+        <span key="partner" className="govuk-body">Ooba (Lead)</span>,
+        <span key="partnerType" className="govuk-body">Industrial</span>,
+        <span key="financeContact" className="govuk-body">Ralph Young</span>,
+        <a key="email" href="" className="govuk-link">ralph.young@ooba.example.com</a>
     ],
     [
-        "Jabbertype",
-        "Industrial",
-        "Antonio Jenkins",
-        "antonio.jenkins@jabbertype.example.com"
+        <span key="partner" className="govuk-body">Gabtype</span>,
+        <span key="partnerType" className="govuk-body">Industrial</span>,
+        <span key="financeContact" className="govuk-body">Marian Stokes</span>,
+        <a key="email" href="" className="govuk-link">worth.email.test+marian@gmail.com</a>
     ],
     [
-        "Wordpedia",
-        "Academic",
-        "Tina Taylor",
-        "tina.taylor@wordpedia.example.com"
+        <span key="partner" className="govuk-body">Jabbertype</span>,
+        <span key="partnerType" className="govuk-body">Industrial</span>,
+        <span key="financeContact" className="govuk-body">Antonio Jenkins</span>,
+        <a key="email" href="" className="govuk-link">antonio.jenkins@jabbertype.example.com</a>
     ],
     [
-        "Gabtype",
-        "Industrial",
-        "Marian Stokes",
-        "worth.email.test+marian@gmail.com"
+        <span key="partner" className="govuk-body">Wordpedia</span>,
+        <span key="partnerType" className="govuk-body">Academic</span>,
+        <span key="financeContact" className="govuk-body">Ralph Young</span>,
+        <a key="email" href="" className="govuk-link">tina.taylor@wordpedia.example.com</a>
     ]
 ];
 
