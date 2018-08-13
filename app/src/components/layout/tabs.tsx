@@ -8,7 +8,7 @@ export const Tabs: React.SFC<TabProps> = (props: TabProps) => {
     const renderTab = (tab: string) => {
         return (
             <li className="govuk-tabs__list-item">
-                <a href="#" className="govuk-tabs__tab" aria-selected={tab === "Project details"}>{tab}</a>
+                <a href="" className="govuk-tabs__tab" aria-selected={tab === "Project details"}>{tab}</a>
             </li>
         );
     };
@@ -18,4 +18,4 @@ export const Tabs: React.SFC<TabProps> = (props: TabProps) => {
             {props.tabList.map(renderTab)}
         </ul>
     );
-}
+};

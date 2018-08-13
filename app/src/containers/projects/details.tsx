@@ -4,6 +4,7 @@ import { ContainerBase, ReduxContainer } from "../containerBase";
 import { RootState } from "../../redux/reducers/rootReducer";
 import { Dispatch } from "redux";
 import { Backlink, Caption, Table, Tabs, Title } from "../../components/layout";
+import { routeConfig } from "../../routing";
 const projectMembers = [
     {
         role: "Monitoring officer",
@@ -107,7 +108,7 @@ class ProjectDetailsComponent extends ContainerBase<Data, Callbacks> {
 
     private renderBackLink() {
         return (
-            <Backlink id="backlink" path="/">Main dashboard</Backlink>
+            <Backlink path="/">Main dashboard</Backlink>
         );
     }
 
@@ -197,7 +198,7 @@ function mapData(store: RootState) {
     };
 }
 
-function mapCallbacks(dispach: Dispatch){
+function mapCallbacks(dispach: Dispatch) {
     return {
         loadDetails: (id: string) => dispach({type : "TEST LOAD", payload: id})
     };
