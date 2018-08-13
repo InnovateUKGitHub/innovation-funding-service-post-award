@@ -29,7 +29,8 @@
     "no-console": false,
     "no-hardcoded-credentials": false,
     "max-line-length": false,
-    "interface-name": false
+    "interface-name": false,
+    "jsx-no-multiline-js": false
   },
   "rulesDirectory": []
 }
