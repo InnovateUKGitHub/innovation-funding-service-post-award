@@ -3,7 +3,7 @@ import React from "react";
 import { ContainerBase, ReduxContainer } from "../containerBase";
 import { RootState } from "../../redux/reducers/rootReducer";
 import { Dispatch } from "redux";
-
+import { Backlink, Caption, Table, Tabs, Title } from "../../components/layout";
 const projectMembers = [
     {
         role: "Monitoring officer",
@@ -98,7 +98,7 @@ class ProjectDetailsComponent extends ContainerBase<Data, Callbacks> {
                 {this.renderTitle()}
                 {this.renderTabs(tabListArray)}
                 {this.renderProjectMembers()}
-                <div className="govuk-!-margin-top-9 govuk-!-margin-bottom-9">{this.renderTable()}</div>
+                {this.renderTable()}
                 {this.renderProjectInfo()}
                 {this.renderApplicationInfo()}
             </div>
@@ -107,19 +107,15 @@ class ProjectDetailsComponent extends ContainerBase<Data, Callbacks> {
 
     private renderBackLink() {
         return (
-            <a href="/" className="govuk-back-link">Main dashboard</a>
+            <Backlink id="backlink" path="/">Main dashboard</Backlink>
         );
     }
 
     private renderTitle() {
         return (
-            <div className="app-content_header">
-                <span className="govuk-caption-xl">
-                    123: High speed rail and its effects on air quality
-                </span>
-                <h1 className="govuk-heading-xl govuk-!-margin-bottom-9">
-                    View project
-                </h1>
+            <div>
+                <Caption>123: High speed rail and its effects on air quality</Caption>
+                <Title>View project</Title>
             </div>
         );
     }
@@ -127,24 +123,13 @@ class ProjectDetailsComponent extends ContainerBase<Data, Callbacks> {
     private renderTabs(tabList: string[]) {
         return (
             <div id="uniqueTabId" className="govuk-tabs govuk-!-margin-bottom-9" data-module="tabs">
-                <ul className="govuk-tabs__list">
-                    {tabList.map(this.renderTab)}
-                </ul>
+                <Tabs tabList={tabList} />
             </div>
         );
     }
-
-    private renderTab(tab: string) {
-        return (
-            <li className="govuk-tabs__list-item">
-                <a href="" className="govuk-tabs__tab">{tab}</a>
-            </li>
-        );
-    }
-
     private renderProjectMembers() {
         return (
-            <div className="govuk-!-margin-bottom-9">
+            <div className="govuk-!-margin-bottom-9" id="projectMembers">
                 <h2 className="govuk-heading-m govuk-!-margin-bottom-9">Project members</h2>
                 {projectMembers.map(this.renderProjectMember)}
             </div>
@@ -163,34 +148,9 @@ class ProjectDetailsComponent extends ContainerBase<Data, Callbacks> {
 
     private renderTable() {
         return (
-            <table className="govuk-table">
-                <thead className="govuk-table__head">
-                <tr className="govuk-table__row">
-                    {tableHeadings.map(this.renderTableHeadings)}
-                </tr>
-                </thead>
-                <tbody className="govuk-table__body">
-                    {tableBody.map(this.renderRow)}
-                </tbody>
-            </table>
-        );
-    }
-
-    // Called by renderTable
-    private renderTableHeadings(heading: string) {
-        return (
-            <th className="govuk-table__header" scope="col">{heading}</th>
-        );
-    }
-
-    // Called by renderTableHeadings
-    private renderRow(entries: string[]) {
-        return (
-            <tr className="govuk-table__row">
-                {entries.map(entry => (
-                    <td className="govuk-table__cell" scope="row">{entry}</td>
-                ))}
-            </tr>
+        <div className="govuk-!-margin-top-9 govuk-!-margin-bottom-9">
+            <Table tableBody={tableBody} tableHeadings={tableHeadings} />
+        </div>
         );
     }
 
@@ -204,13 +164,14 @@ class ProjectDetailsComponent extends ContainerBase<Data, Callbacks> {
     }
 
     private renderInfoContent(info: Info) {
+        const lineSplits = info.key === "Project summary" ? info.value.split("\n") : info.value;
         return (
             <div className="govuk-grid-row govuk-!-margin-top-4">
                 <div className="govuk-grid-column-one-quarter">
                     <h4 className="govuk-heading-s">{info.key}</h4>
                 </div>
                 <div className="govuk-grid-column-two-thirds">
-                    <span className="govuk-body">{info.value}</span>
+                    <p className="govuk-body">{Array.isArray(lineSplits) ? lineSplits.map((text) => (<p className="govuk-body">{text}</p>)) : info.value}</p>
                 </div>
             </div>
         );

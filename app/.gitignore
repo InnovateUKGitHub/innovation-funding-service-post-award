@@ -3,5 +3,6 @@ dist/
 public/
 coverage/
 reports/
+build/
 
 test-report.html
