@@ -4,7 +4,7 @@ import { ContainerBase, ReduxContainer } from "../containerBase";
 import { RootState } from "../../redux/reducers/rootReducer";
 import { Dispatch } from "redux";
 import { Backlink, Caption, Table, Tabs, Title } from "../../components/layout";
-import { routeConfig } from "../../routing";
+
 const projectMembers = [
     {
         role: "Monitoring officer",
