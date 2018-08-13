@@ -2,6 +2,8 @@ import React from "react";
 
 interface TabProps {
     tabList: string[];
+    id: string;
+    spacing?: string;
 }
 
 export const Tabs: React.SFC<TabProps> = (props: TabProps) => {
@@ -14,8 +16,10 @@ export const Tabs: React.SFC<TabProps> = (props: TabProps) => {
     };
 
     return (
-        <ul className="govuk-tabs__list">
-            {props.tabList.map(renderTab)}
-        </ul>
+        <div id={props.id} className={`govuk-tabs ${props.spacing}`} data-module="tabs" >
+            <ul className="govuk-tabs__list">
+                {props.tabList.map(renderTab)}
+            </ul>
+        </div>
     );
 };

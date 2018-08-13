@@ -4,7 +4,7 @@ import { Title } from "../components";
 
 export const Home: React.StatelessComponent = () => (
   <div>
-    <Title>Home Page</Title>
+    <Title title="Home Page" />
     <div className="govuk-grid-row">
       <div className="govuk-grid-column-one-third">
         <h2><Link routeName="accounts" className="govuk-link">Accounts</Link></h2>

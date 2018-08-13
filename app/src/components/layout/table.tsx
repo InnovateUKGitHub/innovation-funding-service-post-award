@@ -3,6 +3,7 @@ import React from "react";
 interface Props {
     tableHeadings: string[];
     tableBody: JSX.Element[][];
+    spacing: string;
 }
 
 export const Table: React.SFC<Props> = (props: Props) => {
@@ -21,15 +22,17 @@ export const Table: React.SFC<Props> = (props: Props) => {
     );
 
     return (
-        <table className="govuk-table">
-            <thead className="govuk-table__head">
-                <tr className="govuk-table__row">
-                    {props.tableHeadings.map(renderTableHeadings)}
-                </tr>
-            </thead>
-            <tbody className="govuk-table__body">
-                {props.tableBody.map(renderRow)}
-            </tbody>
-        </table>
+        <div className={props.spacing} >
+            <table className="govuk-table">
+                <thead className="govuk-table__head">
+                    <tr className="govuk-table__row">
+                        {props.tableHeadings.map(renderTableHeadings)}
+                    </tr>
+                </thead>
+                <tbody className="govuk-table__body">
+                    {props.tableBody.map(renderRow)}
+                </tbody>
+            </table>
+        </div>
     );
 };

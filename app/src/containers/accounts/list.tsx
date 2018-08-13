@@ -21,7 +21,7 @@ class List extends React.Component {
     return (
       <div>
         <Breadcrumbs links={[{routeName:"home", text: "Home"}]}>Accounts</Breadcrumbs>
-        <Title>Accounts</Title>
+        <Title title="Accounts" />
         {/* <Tables.Table key="table" data={data} caption="Some Accounts from salesforce" columns={columns} /> */}
         <Link className="govuk-back-link" routeName="home">Home</Link>
       </div>

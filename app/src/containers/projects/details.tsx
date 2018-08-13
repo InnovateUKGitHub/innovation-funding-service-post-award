@@ -3,7 +3,8 @@ import React from "react";
 import { ContainerBase, ReduxContainer } from "../containerBase";
 import { RootState } from "../../redux/reducers/rootReducer";
 import { Dispatch } from "redux";
-import { Backlink, Caption, Table, Tabs, Title } from "../../components/layout";
+import { Backlink, Table, Tabs, Title } from "../../components/layout";
+import { ProjectMember } from "../../components";
 
 const projectMembers = [
     {
@@ -80,12 +81,6 @@ export interface Callbacks {
     loadDetails: (id: string) => void;
 }
 
-interface Members {
-    role: string;
-    name: string;
-    email: string;
-}
-
 interface Info {
     key: string;
     value: string;
@@ -113,51 +108,34 @@ class ProjectDetailsComponent extends ContainerBase<Data, Callbacks> {
     }
 
     private renderTitle() {
+        const title = "View project";
+        const caption = "123: High speed rail and its effects on air quality";
+
         return (
-            <div>
-                <Caption>123: High speed rail and its effects on air quality</Caption>
-                <Title>View project</Title>
-            </div>
+            <Title caption={caption} title={title} />
         );
     }
 
     private renderTabs(tabList: string[]) {
         return (
-            <div id="uniqueTabId" className="govuk-tabs govuk-!-margin-bottom-9" data-module="tabs">
-                <Tabs tabList={tabList} />
-            </div>
+            <Tabs tabList={tabList} id="projectDetailsTabs" spacing="govuk-!-margin-bottom-9"/>
         );
     }
     private renderProjectMembers() {
         return (
-            <div className="govuk-!-margin-bottom-9" id="projectMembers">
-                <h2 className="govuk-heading-m govuk-!-margin-bottom-9">Project members</h2>
-                {projectMembers.map(this.renderProjectMember)}
-            </div>
-        );
-    }
-
-    private renderProjectMember(member: Members) {
-        return (
-            <div className="govuk-!-margin-bottom-9">
-                <h3 className="govuk-heading-s govuk-!-margin-bottom-0">{member.role}</h3>
-                <p className="govuk-body govuk-!-margin-bottom-0">{member.name}</p>
-                <a href="" className="govuk-link govuk-!-font-size-19">{member.email}</a>
-            </div>
+            <ProjectMember projectMembers={projectMembers} spacing="govuk-!-margin-bottom-9" heading="Project members" />
         );
     }
 
     private renderTable() {
         return (
-        <div className="govuk-!-margin-top-9 govuk-!-margin-bottom-9">
-            <Table tableBody={tableBody} tableHeadings={tableHeadings} />
-        </div>
+            <Table tableBody={tableBody} tableHeadings={tableHeadings} spacing="govuk-!-margin-bottom-9" />
         );
     }
 
     private renderProjectInfo() {
         return (
-            <div className="govuk-!-margin-bottom-9 govuk-!-margin-top-9">
+            <div className="govuk-!-margin-bottom-9">
                 <h2 className="govuk-heading-m govuk-!-margin-bottom-9">Project information</h2>
                 {projectInfo.map(this.renderInfoContent)}
             </div>
