@@ -1,4 +1,4 @@
-import { Context, IContext } from "./context";
+import { IContext, Context } from "./context";
 
 class ContextProvider {
   start(): IContext {

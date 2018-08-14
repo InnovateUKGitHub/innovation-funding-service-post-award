@@ -9,7 +9,7 @@ export interface IDataStore<T> {
   error: any;
 }
 
-export type DataStoreState = typeof initialState;
+export type DataStoreState = typeof initialState | {[storeName:string]:{[paramsKey:string]:IDataStore<{}>}};
 export type DataStoreKeys  = keyof DataStoreState;
 export type CommonReducer  = ReturnType<typeof CommonReducer>;
 
