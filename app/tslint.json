@@ -26,7 +26,6 @@
     "jsx-curly-spacing": true,
 
     // TBD
-    "quotemark": false,
     "no-console": false,
     "no-hardcoded-credentials": false,
     "max-line-length": false

@@ -9,10 +9,10 @@ import { Footer, Header, PhaseBanner } from "../components";
 
 interface IAppProps {
   route: any;
-  serverSide: boolean;
+  serverSide?: boolean;
 }
 
-const AppComponent = (props: IAppProps) => {
+const AppComponent: React.SFC<IAppProps> = (props) => {
   const route = matchRoute(props.route);
 
   return (
@@ -29,4 +29,4 @@ const AppComponent = (props: IAppProps) => {
   );
 };
 
-export const App = connect(createRouteNodeSelector(''))(AppComponent);
+export const App = connect(createRouteNodeSelector(""))(AppComponent);

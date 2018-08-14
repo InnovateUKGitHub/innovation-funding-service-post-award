@@ -1,4 +1,4 @@
-import jsforce from 'jsforce';
+import jsforce from "jsforce";
 
 // This will need revisting once SSO with Salesforce has been resolved
 
@@ -12,7 +12,7 @@ const password2 = "86S@lhJVSXRtsX81";
 
 export default () => {
   const connection = new jsforce.Connection({
-    loginUrl : 'https://test.salesforce.com'
+    loginUrl : "https://test.salesforce.com"
   });
 
   return new Promise<jsforce.Connection>((resolve, reject) => {

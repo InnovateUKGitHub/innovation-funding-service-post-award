@@ -1,34 +1,18 @@
-import express from 'express';
-import contextProvider from '../features/common/contextProvider';
-import { GetAllQuery } from '../features/contacts/getAllQuery';
-import { GetByIdQuery } from '../features/contacts/getByIdQuery';
+// import express from "express";
+import contextProvider from "../features/common/contextProvider";
+import { GetAllQuery } from "../features/contacts/getAllQuery";
+import { GetByIdQuery } from "../features/contacts/getByIdQuery";
 
-const apiRouter = express.Router();
+// const apiRouter = express.Router();
 
-apiRouter.route('/contacts')
-    .get(async (req, res, next) => {
-        try {
-            const context = contextProvider.start();
-            const query = new GetAllQuery();
-            const result = await context.runQuery(query);
-            res.status(200).json(result);
-        }
-        catch (e) {
-            next(e);
-        }
-    });
+export async function getAll() {
+  const query   = new GetAllQuery();
+  const context = contextProvider.start();
+  return await context.runQuery(query);
+}
 
-apiRouter.route('/contacts/:id')
-    .get(async (req, res, next) => {
-        try {
-            const context = contextProvider.start();
-            const query = new GetByIdQuery(req.params.id);
-            const result = await context.runQuery(query);
-            res.status(200).json(result);
-        }
-        catch (e) {
-            next(e);
-        }
-    });
-
-export default apiRouter;
+export async function get(id: string) {
+  const query   = new GetByIdQuery(id);
+  const context = contextProvider.start();
+  return await context.runQuery(query);
+}

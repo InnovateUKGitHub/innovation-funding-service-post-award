@@ -1,6 +1,6 @@
 import { combineReducers } from "redux";
 import { router5Reducer } from "redux-router5";
-import { CommonReducer } from "./reducers/common";
+import { CommonReducer } from "./common";
 
 export type RootState = ReturnType<typeof rootReducer>;
 
