@@ -1,17 +1,23 @@
 import { IApi } from "../../api";
 import * as contacts from "./contacts";
 import * as projects from "./projects";
-import express, {Request, Response, NextFunction} from "express";
+import * as partners from "./partners";
+import * as projectContacts from "./projectContacts";
+
+import express from "express";
 import { ControllerBase } from "./controllerBase";
 
 export const api: IApi = {
   contacts : contacts.controller,
-  projects : projects.controller
+  projects : projects.controller,
+  partners: partners.controller
 };
 
 const apiRoutes: ControllerBase<{}>[] = [
   contacts.controller,
   projects.controller,
+  partners.controller,
+  projectContacts.controller
 ];
 
 export const router = express.Router();

@@ -1,5 +1,7 @@
 import { ContactsRepository, IContactsRepository } from "../../repositories/contactsRepository";
 import { IProjectRepository, ProjectRepository } from "../../repositories/projectsRepository";
+import { IPartnerRepository, PartnerRepository } from "../../repositories/partnersRepository";
+import { IProjectContactsRepository, ProjectContactsRepository } from "../../repositories/projectContactsRepository";
 
 export interface IQuery<T> {
   Run: (context: IContext) => Promise<T>;
@@ -12,6 +14,8 @@ export interface ICommand<T> {
 export interface IRepositories {
   contacts: IContactsRepository;
   projects: IProjectRepository;
+  partners: IPartnerRepository;
+  projectContacts: IProjectContactsRepository;
 }
 
 export interface IContext {
@@ -23,7 +27,9 @@ export interface IContext {
 export class Context implements IContext {
   repositories = {
     contacts: new ContactsRepository(),
-    projects: new ProjectRepository()
+    projects: new ProjectRepository(),
+    partners: new PartnerRepository(),
+    projectContacts: new ProjectContactsRepository()
   };
 
   runQuery<TResult>(query: IQuery<TResult>): Promise<TResult> {

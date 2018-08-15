@@ -1,5 +1,6 @@
 // tslint:disable:no-var-requires
 import { IContact, ProjectDto } from "./models";
+import { PartnerDto } from "./models/partnerDto";
 // webpack declared variable
 declare const __SERVER_ENV__: boolean;
 
@@ -10,6 +11,9 @@ export interface IApi {
   },
   projects: {
     get: (id: string) => Promise<ProjectDto>;
+  }
+  partners:{
+    getAllByProjectId: (projectId: string) => Promise<PartnerDto[]>
   };
 }
 

@@ -1,6 +1,8 @@
 import { ICommand, IContext, IQuery } from "../../../src/server/features/common/context";
 import { IContactsRepository, ISalesforceContact } from "../../../src/server/repositories/contactsRepository";
 import { IProjectRepository, ISalesforceProject } from "../../../src/server/repositories/projectsRepository";
+import { ISalesforcePartner, IPartnerRepository } from "../../../src/server/repositories/partnersRepository";
+import { ISalesforceProjectContact, IProjectContactsRepository } from "../../../src/server/repositories/projectContactsRepository";
 
 export abstract class TestRepository<T> {
     Items: T[] = []
@@ -45,11 +47,27 @@ export class ProjectsRepository extends TestRepository<ISalesforceProject> imple
     }
 }
 
+export class PartnerRepository extends TestRepository<ISalesforcePartner> implements IPartnerRepository {
+    getAllByProjectId(projectId: string): Promise<ISalesforcePartner[]> {
+        return super.getWhere(x => x.ProjectId__c == projectId);
+    }
+
+}
+
+
+export class ProjectContactRepository extends TestRepository<ISalesforceProjectContact> implements IProjectContactsRepository {
+    getAllByProjectId(projectId: string): Promise<ISalesforceProjectContact[]> {
+        return super.getWhere(x => x.ProjectId == projectId);
+    }
+}
+
 export class TestContext implements IContext {
 
     public repositories = {
         contacts: new ContactsRepository(),
-        projects: new ProjectsRepository()
+        projects: new ProjectsRepository(),
+        partners: new PartnerRepository(),
+        projectContacts: new ProjectContactRepository()
     };
 
     public runQuery<TResult>(query: IQuery<TResult>): Promise<TResult> {

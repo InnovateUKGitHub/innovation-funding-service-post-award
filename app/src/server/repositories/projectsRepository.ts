@@ -1,6 +1,4 @@
 import SalesforceBase from "./salesforceBase";
-import { resolve } from "path";
-
 
 export interface ISalesforceProject {
     CreatedById: string,
@@ -47,7 +45,7 @@ export interface IProjectRepository {
 
 export class ProjectRepository extends SalesforceBase<ISalesforceProject> implements IProjectRepository {
     constructor() {
-        super("Contact", ["TODO"]);
+        super("Project__c", ["TODO"]);
     }
 
     getById(id: string) {

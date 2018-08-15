@@ -1,9 +1,9 @@
 import { GetByIdQuery } from "../features/projects/getDetailsByIdQuery";
-import { ProjectDetailsDto } from "../../containers/projects/details";
 import { ControllerBase } from "./controllerBase";
 import contextProvider from "../features/common/contextProvider";
+import { ProjectDto } from "../../models/projectDto";
 
-class Controller extends ControllerBase<ProjectDetailsDto>
+class Controller extends ControllerBase<ProjectDto>
 {
     constructor() {
         super("projects");
