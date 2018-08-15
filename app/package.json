@@ -67,7 +67,7 @@
         }]
     ],
     "collectCoverage": true,
-    "collectCoverageFrom": ["src/**/*.{js,jsx}"],
+    "collectCoverageFrom": ["src/**/*.{ts,tsx}"],
     "coverageReporters": ["text", "html"],
     "transform": {
       "^.+\\.tsx?$": "ts-jest"
