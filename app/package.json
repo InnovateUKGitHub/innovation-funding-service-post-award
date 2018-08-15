@@ -62,13 +62,13 @@
     "testURL": "http://localhost",
     "reporters": [
       "default",
-      [
-        "./node_modules/jest-html-reporter",
-        {
+        ["./node_modules/jest-html-reporter", {
           "pageTitle": "IUK ACC Unit test report"
-        }
-      ]
+        }]
     ],
+    "collectCoverage": true,
+    "collectCoverageFrom": ["src/**/*.{ts,tsx}"],
+    "coverageReporters": ["text", "html"],
     "transform": {
       "^.+\\.tsx?$": "ts-jest"
     },
