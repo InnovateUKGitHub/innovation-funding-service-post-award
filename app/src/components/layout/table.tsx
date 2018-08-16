@@ -1,38 +1,79 @@
+// tslint:disable:max-classes-per-file
+
 import React from "react";
 
-interface Props {
-    tableHeadings: string[];
-    tableBody: JSX.Element[][];
-    spacing: string;
+interface TableChildProps<T, ReturnT> {
+  header: React.ReactNode;
+  value: (data: T) => ReturnT;
+  data?: T;
 }
 
-export const Table: React.SFC<Props> = (props: Props) => {
-    const renderRow = (entries: JSX.Element[]) => {
-        return (
-            <tr className="govuk-table__row">
-                {entries.map(entry => (
-                    <td className="govuk-table__cell" scope="row">{entry}</td>
-                ))}
-            </tr>
-        );
-    };
+type TableChild<T> = React.ReactElement<TableChildProps<T, any>>;
 
-    const renderTableHeadings = (heading: string) => (
-            <th className="govuk-table__header" scope="col">{heading}</th>
-    );
+interface TableProps<T> {
+  children: TableChild<T> | Array<TableChild<T>>;
+  className?: string;
+}
 
-    return (
-        <div className={props.spacing} >
-            <table className="govuk-table">
-                <thead className="govuk-table__head">
-                    <tr className="govuk-table__row">
-                        {props.tableHeadings.map(renderTableHeadings)}
-                    </tr>
-                </thead>
-                <tbody className="govuk-table__body">
-                    {props.tableBody.map(renderRow)}
-                </tbody>
-            </table>
-        </div>
-    );
+const renderNode = (node: React.ReactNode) => (
+  <td className="govuk-table__cell" scope="row">{node}</td>
+);
+
+const renderRow = (row: React.ReactNode[]) => (
+  <tr className="govuk-table__row">{row.map(renderNode)}</tr>
+);
+
+const renderTableHeadings = (heading: React.ReactNode) => (
+  <th className="govuk-table__header" scope="col">{heading}</th>
+);
+
+const TableComponent = <T extends {}>(data: T[]) => (props: TableProps<T>) => {
+  const iter = Array.isArray(props.children) ? props.children : [props.children];
+  const tableBody: React.ReactNode[][] = [];
+  const tableHeaders: React.ReactNode[] = iter.map(x => x.props.header);
+
+  data.forEach(x => {
+    const rows: React.ReactNode[] = iter.map(i => React.cloneElement(i, { data: x }));
+    tableBody.push(rows);
+  });
+
+  return (
+    <div className={props.className}>
+      <table className="govuk-table">
+        <thead className="govuk-table__head">
+          <tr className="govuk-table__row">
+            {tableHeaders.map(renderTableHeadings)}
+          </tr>
+        </thead>
+        <tbody className="govuk-table__body">
+          {tableBody.map(renderRow)}
+        </tbody>
+      </table>
+    </div>
+  );
 };
+
+const renderColumn = <T extends {}>(render: (x: T) => React.ReactNode, data?: T) =>
+  typeof data === "undefined" ? null : <span>{render(data)}</span>;
+
+const CustomColumn = <T extends {}>(): React.SFC<TableChildProps<T, React.ReactNode>> =>
+  (props) => renderColumn(props.value, props.data);
+
+const StringColumn = <T extends {}>(): React.SFC<TableChildProps<T, string>> =>
+  (props) => renderColumn(props.value, props.data);
+
+const NumberColumn = <T extends {}>(): React.SFC<TableChildProps<T, number>> =>
+  (props) => renderColumn(props.value, props.data);
+
+const DateColumn = <T extends {}>(): React.SFC<TableChildProps<T, Date>> =>
+  (props) => typeof props.data === "undefined" ? null : <span>{props.value(props.data).toISOString()}</span>;
+
+export function forData<T>(data: T[]) {
+  return {
+    Table: TableComponent(data),
+    Custom: CustomColumn<T>(),
+    String: StringColumn<T>(),
+    Number: NumberColumn<T>(),
+    Date: DateColumn<T>()
+  };
+}

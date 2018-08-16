@@ -1,10 +1,8 @@
 import React from "react";
-
-import { ContainerBase, ReduxContainer } from "../containerBase";
-import { RootState } from "../../redux/reducers/rootReducer";
 import { Dispatch } from "redux";
-import { Backlink, Table, Tabs, Title } from "../../components/layout";
-import { ProjectMember } from "../../components";
+import { ContainerBase, ReduxContainer } from "../containerBase";
+import { RootState } from "../../redux";
+import { Backlink, forData, ProjectMembers, Tabs, Title } from "../../components";
 
 const projectMembers = [
     {
@@ -21,7 +19,6 @@ const projectMembers = [
 
 const tabListArray = ["Claims", "Project change request", "Forecasts", "Project details"];
 
-const tableHeadings = ["Partner", "Partner type", "Finance contact", "Email"];
 
 const tableBody = [
     [
@@ -87,51 +84,34 @@ interface Info {
 }
 
 class ProjectDetailsComponent extends ContainerBase<Data, Callbacks> {
-    render() {
-        return (
-            <div>
-                {this.renderBackLink()}
-                {this.renderTitle()}
-                {this.renderTabs(tabListArray)}
-                {this.renderProjectMembers()}
-                {this.renderTable()}
-                {this.renderProjectInfo()}
-                {this.renderApplicationInfo()}
-            </div>
-        );
-    }
+  render() {
+    const tableData = [
+      { partner: "123", partnerType: 233, financeContact: "233", email: 233 },
+      { partner: "1", partnerType: 233, financeContact: "ASD", email: 233 },
+      { partner: "3", partnerType: 233, financeContact: "233", email: 233 },
+    ];
 
-    private renderBackLink() {
-        return (
-            <Backlink path="/">Main dashboard</Backlink>
-        );
-    }
+    const Table = forData(tableData);
 
-    private renderTitle() {
-        const title = "View project";
-        const caption = "123: High speed rail and its effects on air quality";
+    return (
+      <div>
+        <Backlink path="/">Main dashboard</Backlink>
+        <Title title="View project" caption="123: High speed rail and its effects on air quality" />
+        <Tabs tabList={tabListArray} selected="Project details" className="govuk-!-margin-bottom-9"/>
+        <ProjectMembers projectMembers={projectMembers} className="govuk-!-margin-bottom-9" />
 
-        return (
-            <Title caption={caption} title={title} />
-        );
-    }
+        <Table.Table>
+          <Table.String header="Partner" value={x => x.partner} />
+          <Table.Number header="Partner Type" value={x => x.partnerType} />
+          <Table.String header="Finance Contact" value={x => x.financeContact} />
+          <Table.Number header="Email" value={x => x.email} />
+        </Table.Table>
 
-    private renderTabs(tabList: string[]) {
-        return (
-            <Tabs tabList={tabList} id="projectDetailsTabs" spacing="govuk-!-margin-bottom-9"/>
-        );
-    }
-    private renderProjectMembers() {
-        return (
-            <ProjectMember projectMembers={projectMembers} spacing="govuk-!-margin-bottom-9" heading="Project members" />
-        );
-    }
-
-    private renderTable() {
-        return (
-            <Table tableBody={tableBody} tableHeadings={tableHeadings} spacing="govuk-!-margin-bottom-9" />
-        );
-    }
+        {this.renderProjectInfo()}
+        {this.renderApplicationInfo()}
+      </div>
+    );
+  }
 
     private renderProjectInfo() {
         return (
@@ -176,13 +156,18 @@ function mapData(store: RootState) {
     };
 }
 
-function mapCallbacks(dispach: Dispatch) {
+function mapCallbacks(dispatch: Dispatch) {
     return {
-        loadDetails: (id: string) => dispach({type : "TEST LOAD", payload: id})
+        loadDetails: (id: string) => dispatch({type : "TEST LOAD", payload: id})
     };
 }
 
 export const ProjectDetails = ReduxContainer.for<Data, Callbacks>(ProjectDetailsComponent)
-    .withData(mapData)
+    .withData(state => ({
+      projectDetails: {
+        id: "123",
+        name: "test123"
+      }
+    }))
     .withCallbacks(mapCallbacks)
     .connect();

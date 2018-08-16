@@ -25,6 +25,7 @@
     // react styling
     "jsx-curly-spacing": true,
 
+    "jsx-no-lambda": false,
     // TBD
     "no-console": false,
     "no-hardcoded-credentials": false,

@@ -5,9 +5,13 @@ interface Props {
     title: string;
 }
 
-export const Title: React.SFC<Props> = (props: Props) => (
+export const Title: React.SFC<Props> = (props: Props) => {
+  const renderCaption = () => props.caption ? <span className="govuk-caption-xl">{props.caption}</span> : null;
+
+  return (
     <div>
-        <span className="govuk-caption-xl">{props.caption}</span>
-        <h1 className="govuk-heading-xl clearFix">{props.title}</h1>
+      {renderCaption()}
+      <h1 className="govuk-heading-xl clearFix">{props.title}</h1>
     </div>
-);
+  );
+}
