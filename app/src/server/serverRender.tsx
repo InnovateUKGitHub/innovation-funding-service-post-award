@@ -33,7 +33,7 @@ export function serverRender(req: Request, res: Response) {
         </Provider>
       );
 
-      return res.send(renderHtml(html));
+      return res.send(renderHtml(html, store.getState()));
     })
     .catch((error: any) => {
       console.log("error", error);

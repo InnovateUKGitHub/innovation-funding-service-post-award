@@ -1,9 +1,9 @@
-import { IApi } from "../../api";
+import { IApiClient } from "../../shared/apiClient";
 import * as contacts from "./contacts";
 import * as projects from "./projects";
 import * as partners from "./projects";
 
-export const api: IApi = {
+export const api: IApiClient = {
   contacts,
   projects,
   partners: {
