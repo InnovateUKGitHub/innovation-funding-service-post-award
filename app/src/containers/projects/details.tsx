@@ -4,6 +4,7 @@ import { ContainerBase, ReduxContainer } from "../containerBase";
 import { RootState } from "../../redux";
 import { Backlink, forData, ProjectMembers, Tabs, Title } from "../../components";
 import { routeConfig } from "../../routing";
+import Details from "../../components/details";
 
 const projectMembers = [
     {
@@ -115,11 +116,25 @@ class ProjectDetailsComponent extends ContainerBase<Data, Callbacks> {
   }
 
     private renderProjectInfo() {
+        const data = {
+            startDate : new Date("2019/12/1"),
+            endDate: new Date("2019/12/2"),
+            summary:"The project aims to identify, isolate and correct an issue that has hindered progress in this field for a number of years.\n" +
+            "Identification will involve the university testing conditions to determine the exact circumstance of the issue.\n" +
+            "Once identification has been assured we will work to isolate the issue but replicating the circumstances in which it occurs within a laboratory environment.\n" +
+            "After this we will work with our prototyping partner to create a tool to correct the issue.  Once tested and certified this will be rolled out to mass production.\n"
+        };
+        
+        const ProjectDetails = Details.forData(data);
+
         return (
-            <div className="govuk-!-margin-bottom-9">
-                <h2 className="govuk-heading-m govuk-!-margin-bottom-9">Project information</h2>
-                {projectInfo.map(this.renderInfoContent)}
-            </div>
+            <Section title="Project information">
+                <ProjectDetails.Details data={data}>
+                    <ProjectDetails.Date data={data} label="Project start date" value={x => x.startDate} />
+                    <ProjectDetails.Date data={data} label="Project end date" value={x => x.endDate} />
+                    <ProjectDetails.MulilineString data={data} label="Project summary" value={x => x.summary} />
+                </ProjectDetails.Details>
+            </Section>
         );
     }
 
