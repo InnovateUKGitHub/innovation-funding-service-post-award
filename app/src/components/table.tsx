@@ -55,7 +55,7 @@ export const TableComponent = <T extends {}>(data: T[]) => (props: TableProps<T>
 };
 
 export const renderColumn = <T extends {}>(render: (x: T) => React.ReactNode, data?: T) =>
-  typeof data === "undefined" || data === null ? null : <span>{render(data)}</span>;
+  typeof data === "undefined" || data === null ? null : <React.Fragment>{render(data)}</React.Fragment>;
 
 export const CustomColumn = <T extends {}>(): React.SFC<TableChildProps<T, React.ReactNode>> =>
   (props) => renderColumn(props.value, props.data);
@@ -69,12 +69,12 @@ export const NumberColumn = <T extends {}>(): React.SFC<TableChildProps<T, numbe
 export const DateColumn = <T extends {}>(): React.SFC<TableChildProps<T, Date>> =>
   (props) => typeof props.data === "undefined" ? null : <span>{props.value(props.data).toISOString()}</span>;
 
-export function forData<T>(data: T[]) {
-  return {
+export const Table = {
+  forData: <T extends {}>(data: T[]) => ({
     Table: TableComponent(data),
     Custom: CustomColumn<T>(),
     String: StringColumn<T>(),
     Number: NumberColumn<T>(),
     Date: DateColumn<T>()
-  };
+  })
 }

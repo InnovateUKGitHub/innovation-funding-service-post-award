@@ -2,11 +2,7 @@ import React from "react";
 import { Dispatch } from "redux";
 import { ContainerBase, ReduxContainer } from "../containerBase";
 import { RootState } from "../../redux";
-import { Backlink, forData, ProjectMembers, Tabs, Title } from "../../components";
-import { routeConfig } from "../../routing";
-import Details from "../../components/details";
-import { Section } from "../../components/layout/section";
-import { Page } from "../../components/layout/page";
+import * as ACC from "../../components";
 
 const projectMembers = [
     {
@@ -47,10 +43,10 @@ const projectMembers = [
 ];
 
 const partners = [
-    {name: "Ooba", isLead: true, type: "Industrial"},
-    {name: "Gabtype", isLead: false, type: "Industrial"},
-    {name: "Jabbertype", isLead: false, type: "Industrial"},
-    {name: "Wordpedia", isLead: false, type: "Academic"}
+    { name: "Ooba", isLead: true, type: "Industrial" },
+    { name: "Gabtype", isLead: false, type: "Industrial" },
+    { name: "Jabbertype", isLead: false, type: "Industrial" },
+    { name: "Wordpedia", isLead: false, type: "Academic" }
 ];
 
 const projectInfo = {
@@ -60,7 +56,10 @@ const projectInfo = {
     summary: "The project aims to identify, isolate and correct an issue that has hindered progress in this field for a number of years.\n" +
         "Identification will involve the university testing conditions to determine the exact circumstance of the issue.\n" +
         "Once identification has been assured we will work to isolate the issue but replicating the circumstances in which it occurs within a laboratory environment.\n" +
-        "After this we will work with our prototyping partner to create a tool to correct the issue.  Once tested and certified this will be rolled out to mass production.\n"
+        "After this we will work with our prototyping partner to create a tool to correct the issue.  Once tested and certified this will be rolled out to mass production.\n",
+    applicationUrl: "#",
+    grantOfferLetterUrl: "#"
+
 };
 
 export interface ProjectDetailsDto {
@@ -76,53 +75,56 @@ export interface Callbacks {
     loadDetails: (id: string) => void;
 }
 
-interface Info {
-    key: string;
-    value: string;
-}
-
 class ProjectDetailsComponent extends ContainerBase<Data, Callbacks> {
 
-    private tabListArray = ["Claims", "Project change request", "Forecasts", "Project details"];
+    //ultimatly will come from navigation
+    private tabListArray = ["Claims", "Project change requests", "Forecasts", "Project details"];
     private selectedTab = this.tabListArray[3];
 
     render() {
-        const tableData = partners.map(partner => ({partner, financeContact: projectMembers.find(x => x.organisation === partner.name )}));
+        const partnersAndContactsData = partners.map(partner => ({ partner, financeContact: projectMembers.find(x => x.organisation === partner.name) }));
 
-        const Table = forData(tableData);
-        const ProjectDetails = Details.forData(projectInfo);
+        const PartnersTable = ACC.Table.forData(partnersAndContactsData);
+        const ProjectDetails = ACC.Details.forData(projectInfo);
         const monitoringOfficer = projectMembers.find(x => x.role === "Monitoring officer");
         const projectManager = projectMembers.find(x => x.role === "Project manager");
 
+        const links = [
+            { text: "View original application", url: projectInfo.applicationUrl },
+            { text: "View original grant offer letter", url: projectInfo.grantOfferLetterUrl }
+        ];
+
         return (
-            <Page>
-                <Backlink route={routeConfig.home}>Main dashboard</Backlink>
-                <Title title="View project" caption={projectInfo.title} />
-                
-                <Tabs tabList={this.tabListArray} selected={this.selectedTab} />
+            <ACC.Page>
+                <ACC.Backlink path="/">Main dashboard</ACC.Backlink>
+                <ACC.Title title="View project" caption={projectInfo.title} />
 
-                <Section title="Project Members">
-                    <ProjectMember member={monitoringOfficer}/>
-                    <ProjectMember member={projectManager}/>
+                <ACC.Tabs tabList={this.tabListArray} selected={this.selectedTab} />
 
-                    <Table.Table>
-                        <Table.String header="Partner" value={x => x.partner.name} />
-                        <Table.String header="Partner Type" value={x => x.partner.type} />
-                        <Table.String header="Finance Contact" value={x => x.financeContact && x.financeContact.name || ""} />
-                        <Table.String header="Email" value={x => x.financeContact && x.financeContact.email || ""} />
-                    </Table.Table>
-                </Section>
+                <ACC.Section title="Project Members">
+                    <ACC.ProjectMember member={monitoringOfficer} />
+                    <ACC.ProjectMember member={projectManager} />
 
-                <Section title="Project information">
-                    <ProjectDetails.Details data={projectInfo}>
-                        <ProjectDetails.Date data={projectInfo} label="Project start date" value={x => x.startDate} />
-                        <ProjectDetails.Date data={projectInfo} label="Project end date" value={x => x.endDate} />
-                        <ProjectDetails.MulilineString data={projectInfo} label="Project summary" value={x => x.summary} />
+                    <PartnersTable.Table>
+                        <PartnersTable.String header="Partner" value={x => x.partner.name} />
+                        <PartnersTable.String header="Partner Type" value={x => x.partner.type} />
+                        <PartnersTable.String header="Finance Contact" value={x => x.financeContact && x.financeContact.name || ""} />
+                        <PartnersTable.String header="Email" value={x => x.financeContact && x.financeContact.email || ""} />
+                    </PartnersTable.Table>
+                </ACC.Section>
+
+                <ACC.Section title="Project information">
+                    <ProjectDetails.Details>
+                        <ProjectDetails.Date label="Project start date" value={x => x.startDate} />
+                        <ProjectDetails.Date label="Project end date" value={x => x.endDate} />
+                        <ProjectDetails.MulilineString label="Project summary" value={x => x.summary} />
                     </ProjectDetails.Details>
-                </Section>
+                </ACC.Section>
 
-                {this.renderApplicationInfo()}
-            </Page>
+                <ACC.Section title="Application information">
+                    <ACC.LinksList links={links}/>
+                </ACC.Section>
+            </ACC.Page>
         );
     }
 
@@ -130,8 +132,6 @@ class ProjectDetailsComponent extends ContainerBase<Data, Callbacks> {
         return (
             <div>
                 <h2 className="govuk-heading-m govuk-!-margin-bottom-8">Application information</h2>
-                <div className="govuk-!-padding-bottom-4"><a href="" className="govuk-link govuk-!-font-size-19">View original application</a></div>
-                <div className="govuk-!-padding-bottom-4"><a href="" className="govuk-link govuk-!-font-size-19">View original grant offer letter</a></div>
             </div>
         );
     }

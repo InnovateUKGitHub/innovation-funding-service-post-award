@@ -1,5 +1,9 @@
 import * as React from 'react';
 
+interface DetailsProps {
+
+}
+
 interface Props<T> {
     data: T;
 }
@@ -7,57 +11,51 @@ interface Props<T> {
 interface ItemProps<T, TField> {
     label: React.ReactNode;
     value: (item: T) => TField;
-    data: T;
 }
 
-class Details<T> extends React.Component<Props<T>, {}> {
-    render() {
-        return this.props.children;
-    }
+const DetailsComponent = <T extends {}>(data: T): React.SFC<DetailsProps> => (props) => {
+    return (
+        <React.Fragment>
+            {
+                React.Children.map(props.children, (x,i) =>
+                    <div className="govuk-grid-row govuk-!-margin-top-4" key={`details-row-${i}`}>{x}</div>
+                )
+            }
+        </React.Fragment>
+    );
 }
 
-abstract class DetailsItem<T, TField> extends React.Component<ItemProps<T, TField>, {}> {
-    render() {
-        return (
-            <div className="govuk-grid-row govuk-!-margin-top-4">
-                <div className="govuk-grid-column-one-quarter">
-                    <h4 className="govuk-heading-s">{this.props.label}</h4>
-                </div>
-                <div className="govuk-grid-column-three-quarters">
-                    {this.renderContent(this.props.value(this.props.data))}
-                </div>
+const renderField = <T extends {}>(label: React.ReactNode, value: T, render: (item: T) => React.ReactNode) => {
+    return (
+        <React.Fragment>
+            <div className="govuk-grid-column-one-quarter">
+                <h4 className="govuk-heading-s">{label}</h4>
             </div>
-        );
-    }
-
-    protected abstract renderContent(item: TField): React.ReactNode;
-
+            <div className="govuk-grid-column-three-quarters">
+                {render(value)}
+            </div>
+        </React.Fragment>
+    );
 }
 
-class StringItem<T> extends DetailsItem<T, string> {
-    protected renderContent(item: string) {
-        return <p className="govuk-body">{item}</p>;
-    }
-}
+const DetailsString = <T extends {}>(data: T): React.SFC<ItemProps<T, string>> => (props) => {
+    return renderField(props.label, props.value(data), (x) => <p className="govuk-body">{x}</p>);
+};
 
-class MulilineStringItem<T> extends DetailsItem<T, string> {
-    protected renderContent(item: string) {
-        if(!item) return <p className="govuk-body"></p>;
-        return item.split("\n").map(v => <p className="govuk-body">{v}</p>);
-    }
-}
 
-class DateItem<T> extends DetailsItem<T, Date> {
-    protected renderContent(item: Date) {
-        return <p className="govuk-body">{item && item.toDateString()}</p>;
-    }
-}
+const DetailsMultilineString = <T extends {}>(data: T): React.SFC<ItemProps<T, string>> => (props) => {
+    return renderField(props.label, props.value(data), (x) => (x || "").split("\n").filter(x => !!x).map(line => <p className="govuk-body">{line}</p>));
+};
 
-export default {
+const DetailsDate = <T extends {}>(data: T): React.SFC<ItemProps<T, Date>> => (props) => {
+    return renderField(props.label, props.value(data), (y) => <p className="govuk-body">{y.toDateString()}</p>);
+};
+
+export const Details = {
     forData: <T extends {}>(data: T) => ({
-        Details: Details as { new(): Details<T> },
-        String: StringItem as { new(): StringItem<T> },
-        MulilineString: MulilineStringItem as { new(): MulilineStringItem<T> },
-        Date: DateItem as { new(): DateItem<T> }
+        Details: DetailsComponent(data),
+        String: DetailsString(data),
+        MulilineString: DetailsMultilineString(data),
+        Date: DetailsDate(data),
     })
 }

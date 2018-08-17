@@ -19,7 +19,6 @@ export abstract class ControllerBase<T>
     protected getItem<TParams>(path:string, getParams: (params:any, query:any) => TParams, run: (params: TParams) => Promise<T>){
         return this.getCustom<TParams, T>(path, getParams, run);    
     }
-
     
     protected getItems<TParams>(path:string, getParams: (params:any, query:any) => TParams, run: (params: TParams) => Promise<T[]>){
         return this.getCustom<TParams, T[]>(path, getParams, run);    
