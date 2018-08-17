@@ -3,7 +3,6 @@ import React from "react";
 interface TabProps {
     tabList: string[];
     selected?: string;
-    className?: string;
 }
 
 export const Tabs: React.SFC<TabProps> = (props: TabProps) => {
@@ -16,7 +15,7 @@ export const Tabs: React.SFC<TabProps> = (props: TabProps) => {
     };
 
     return (
-        <div className={`govuk-tabs ${props.className}`} data-module="tabs" >
+        <div className={`govuk-tabs govuk-!-margin-bottom-9`} data-module="tabs" >
             <ul className="govuk-tabs__list">
                 {props.tabList.map(renderTab)}
             </ul>
