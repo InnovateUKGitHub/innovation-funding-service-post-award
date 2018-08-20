@@ -50,7 +50,9 @@ class ProjectDetailsComponent extends ContainerBase<Data, Callbacks> {
 
         return (
             <ACC.Page>
-                <ACC.BackLink route={routeConfig.home}>Main dashboard</ACC.BackLink>
+                <ACC.Section>
+                    <ACC.BackLink route={routeConfig.home}>Main dashboard</ACC.BackLink>
+                </ACC.Section>
                 <ACC.Title title="View project" caption={project.title} />
 
                 <ACC.Tabs tabList={this.tabListArray} selected={this.selectedTab} />
