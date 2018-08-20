@@ -12,7 +12,7 @@ interface TableChildProps<T, ReturnT> {
 type TableChild<T> = React.ReactElement<TableChildProps<T, {}>>;
 
 interface TableProps<T> {
-  children: TableChild<T> | Array<TableChild<T>>;
+  children: TableChild<T> | TableChild<T>[];
   className?: string;
   qa?: string;
 }
@@ -78,4 +78,4 @@ export const Table = {
     Number: NumberColumn<T>(),
     Date: DateColumn<T>()
   })
-}
+};

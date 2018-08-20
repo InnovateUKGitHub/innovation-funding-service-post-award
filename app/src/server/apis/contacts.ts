@@ -6,12 +6,12 @@ import { IContact } from "../../models";
 import { ControllerBase } from "./controllerBase";
 import { IContext } from "../features/common/context";
 
-class Controller extends ControllerBase<IContact>{
+class Controller extends ControllerBase<IContact> {
   constructor() {
     super("contacts");
 
     this.getItems("/", p => ({}), (p) => this.getAll());
-    this.getItem("/:id", p => ({id: p.id}), (p) => this.get(p.id));
+    this.getItem("/:id", p => ({ id: p.id }), (p) => this.get(p.id));
   }
 
   public async getAll() {

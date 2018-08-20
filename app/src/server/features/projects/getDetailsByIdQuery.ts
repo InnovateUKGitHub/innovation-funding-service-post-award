@@ -7,7 +7,6 @@ export class GetByIdQuery implements IQuery<ProjectDto> {
 
   async Run(context: IContext) {
     const item = await context.repositories.projects.getById(this.id);
-    let mapped = await context.runCommand(new MapToProjectDtoCommand(item));
-    return mapped;
+    return await context.runCommand(new MapToProjectDtoCommand(item));
   }
 }

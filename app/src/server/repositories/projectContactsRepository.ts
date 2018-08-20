@@ -1,7 +1,8 @@
+// tslint:disable
 import SalesforceBase from "./salesforceBase";
 
 export interface ISalesforceProjectContact {
-    Id: string,
+    Id: string;
     ProjectId: string;
     AccountId?: string;
     Role__c: string;
@@ -13,24 +14,13 @@ export interface IProjectContactsRepository {
     getAllByProjectId(projectId: string): Promise<ISalesforceProjectContact[]>;
 }
 
-function createProjectContact(seed: number, projectId: string): ISalesforceProjectContact {
-    return {
-        Id: "Contact " + seed,
-        AccountId: "Account " + seed,
-        EmailOfSFContact__c: "contact" + seed + "@test.com",
-        ProjectId: projectId,
-        Name: "Contact " + seed + " for proj " + projectId,
-        Role__c: ["Monitoring Officer","Innovation Lead", "Project Lead"][seed % 3] 
-    };
-}
-
 export class ProjectContactsRepository extends SalesforceBase<ISalesforceProjectContact> implements IProjectContactsRepository {
-    constructor(){
-        super("ProjectContactLink__c", ["TODO"])
+    constructor() {
+        super("ProjectContactLink__c", ["TODO"]);
     }
-    
+
     getAllByProjectId(projectId: string): Promise<ISalesforceProjectContact[]> {
-        let hardCoded : ISalesforceProjectContact[] = [
+        const hardCoded: ISalesforceProjectContact[] = [
             {
                 Id: "Contact1",
                 ProjectId: projectId,
@@ -77,7 +67,7 @@ export class ProjectContactsRepository extends SalesforceBase<ISalesforceProject
                 Name: "Tina Taylor",
                 EmailOfSFContact__c: "tina.taylor@wordpedia.example.com",
                 AccountId: "Wordpedia"
-            }        
+            }
         ];
 
         return Promise.resolve<ISalesforceProjectContact[]>(hardCoded);

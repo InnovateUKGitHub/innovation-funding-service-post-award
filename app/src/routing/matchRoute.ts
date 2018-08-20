@@ -13,15 +13,13 @@ function defaultRoute(): AsyncRoute {
 
 export function matchRoute(route: State | undefined): AsyncRoute {
   const name = route && route.name as RouteKeys;
-  const match = name && routeConfig[name] || routeConfig.error;
-
-  return match;
+  return name && routeConfig[name] || routeConfig.error;
 }
 
 export function matchRouteLoader(route: State | undefined) {
   const match = matchRoute(route) || defaultRoute();
   if (!match.loadData) {
-    match.loadData = () => []
+    match.loadData = () => [];
   }
   return match.loadData;
 }

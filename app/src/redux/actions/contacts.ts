@@ -37,7 +37,6 @@ export function loadPatnersForProject(projectId: string) {
   );
 }
 
-
 export function loadContactsForProject(projectId: string) {
   return conditionalLoad(
     projectId,

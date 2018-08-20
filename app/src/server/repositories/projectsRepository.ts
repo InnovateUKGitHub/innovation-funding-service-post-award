@@ -1,29 +1,29 @@
 import SalesforceBase from "./salesforceBase";
 
 export interface ISalesforceProject {
-    Id: string,
-    ProjectTitle__c: string,
-    ProjectSummary__c: string,
-    PublicDescripton__c: string,
-    OfferLetterDate__c: Date,
-    StartDate__c: Date,
-    EndDate__c: Date,
-    ClaimFrequency__c: "Month" | "Qtr" | "Year",
-    ProjectSource__c: "IFS" | "Migration" | "Other",
-    Duration__c: number,
-    GolTotalCostAwarded__c: number,
-    ProjectStatus__c: "Active" | "Not Active",
-    Competetion__c: string,
-    EstimatedFinaltotal__c: number,
-    ForecastUnderspendFromGOLTotal__c: number,
-    GolTotalCostsAwarded__c: number,
-    TotalAwaitingPayment__c: number,
-    TotalCostsClaimedPriorPeriod__c: number,
-    TotalCurrentAndFuturePeriodForecast__c: number,
-    TotalCurrentClaimPeriodForecast__c: number,
-    TotalFuturePeriodForecast_c: number,
-    TotalInitialForecast__c: number,
-    UnderspendFromInitialForecast__c: number,
+    Id: string;
+    ProjectTitle__c: string;
+    ProjectSummary__c: string;
+    PublicDescripton__c: string;
+    OfferLetterDate__c: Date;
+    StartDate__c: Date;
+    EndDate__c: Date;
+    ClaimFrequency__c: "Month" | "Qtr" | "Year";
+    ProjectSource__c: "IFS" | "Migration" | "Other";
+    Duration__c: number;
+    GolTotalCostAwarded__c: number;
+    ProjectStatus__c: "Active" | "Not Active";
+    Competetion__c: string;
+    EstimatedFinaltotal__c: number;
+    ForecastUnderspendFromGOLTotal__c: number;
+    GolTotalCostsAwarded__c: number;
+    TotalAwaitingPayment__c: number;
+    TotalCostsClaimedPriorPeriod__c: number;
+    TotalCurrentAndFuturePeriodForecast__c: number;
+    TotalCurrentClaimPeriodForecast__c: number;
+    TotalFuturePeriodForecast_c: number;
+    TotalInitialForecast__c: number;
+    UnderspendFromInitialForecast__c: number;
 }
 
 export interface IProjectRepository {
@@ -36,7 +36,7 @@ export class ProjectRepository extends SalesforceBase<ISalesforceProject> implem
     }
 
     getById(id: string) {
-        //return super.retrieve(id);
+        // return super.retrieve(id);
         const hardCoded = {
             Id: id,
             ProjectTitle__c: "123: High speed rail and its effects on air quality",

@@ -1,13 +1,7 @@
-import * as React from 'react';
-import { FullDate } from './renderers/date';
+import * as React from "react";
+import { FullDate } from "./renderers/date";
 
-interface DetailsProps {
-
-}
-
-interface Props<T> {
-    data: T;
-}
+interface DetailsProps {}
 
 interface ItemProps<T, TField> {
     label: React.ReactNode;
@@ -24,7 +18,7 @@ const DetailsComponent = <T extends {}>(data: T): React.SFC<DetailsProps> => (pr
             }
         </React.Fragment>
     );
-}
+};
 
 const renderField = <T extends {}>(label: React.ReactNode, value: T, render: (item: T) => React.ReactNode) => {
     return (
@@ -37,19 +31,18 @@ const renderField = <T extends {}>(label: React.ReactNode, value: T, render: (it
             </div>
         </React.Fragment>
     );
-}
-
-const DetailsString = <T extends {}>(data: T): React.SFC<ItemProps<T, string>> => (props) => {
-    return renderField(props.label, props.value(data), (x) => <p className="govuk-body">{x}</p>);
 };
 
+const DetailsString = <T extends {}>(data: T): React.SFC<ItemProps<T, string>> => (props) => {
+    return renderField(props.label, props.value(data), (value) => <p className="govuk-body">{value}</p>);
+};
 
 const DetailsMultilineString = <T extends {}>(data: T): React.SFC<ItemProps<T, string>> => (props) => {
-    return renderField(props.label, props.value(data), (x) => (x || "").split("\n").filter(x => !!x).map((line, i) => <p className="govuk-body" key={`multiline-string-${i}`}>{line}</p>));
+    return renderField(props.label, props.value(data), (value) => (value || "").split("\n").filter(x => !!x).map((line, i) => <p className="govuk-body" key={`multiline-string-${i}`}>{line}</p>));
 };
 
 const DetailsDate = <T extends {}>(data: T): React.SFC<ItemProps<T, Date>> => (props) => {
-    return renderField(props.label, props.value(data), (y) => <p className="govuk-body"><FullDate value={y}/> </p>);
+    return renderField(props.label, props.value(data), (value) => <p className="govuk-body"><FullDate value={value}/> </p>);
 };
 
 export const Details = {
@@ -59,4 +52,4 @@ export const Details = {
         MulilineString: DetailsMultilineString(data),
         Date: DetailsDate(data),
     })
-}
+};

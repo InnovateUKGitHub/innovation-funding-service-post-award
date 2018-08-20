@@ -22,7 +22,7 @@ const projectDetailsRoute: AsyncRoute = {
   path: "/project/details",
   component: Containers.ProjectDetails,
   loadData: () => {
-      let projectId = "ToDo";
+      const projectId = "ToDo";
       return [
         Actions.loadProject(projectId),
         Actions.loadContactsForProject(projectId),

@@ -14,16 +14,11 @@ export function serverRender(req: Request, res: Response) {
   const router = configureRouter();
 
   router.start(req.originalUrl, (routeError, route) => {
-    // handle for route not found?
-    // if(routeError) {
-    //   return res.status(500).send(routeError);
-    // }
-
     const initialState = setupInitialState(route);
     const middleware = setupMiddleware(router);
     const store = createStore(rootReducer, initialState, middleware);
     const loader = matchRouteLoader(route);
-    
+
     Promise.all(loader().map(action => action(store.dispatch, store.getState, null)))
       .then(() => {
         const html = renderToString(

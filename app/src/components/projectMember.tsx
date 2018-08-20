@@ -8,14 +8,14 @@ interface ProjectMember {
 }
 
 interface Props {
-    member: ProjectMember|null|undefined;
+    member: ProjectMember | null | undefined;
 }
 
-export const  ProjectMember: React.SFC<Props> = (props) => {
-    let {member} = props;
-    if(!member) return null;
+export const ProjectMember: React.SFC<Props> = (props) => {
+    const { member } = props;
+    if (!member) { return null; }
 
-    let displayRole = member.organisation ? `${member.role} - ${member.organisation}` : member.role;
+    const displayRole = member.organisation ? `${member.role} - ${member.organisation}` : member.role;
 
     return (
         <div className="govuk-heading-m govuk-!-margin-bottom-9">
@@ -24,4 +24,4 @@ export const  ProjectMember: React.SFC<Props> = (props) => {
             <a href="" className="govuk-link govuk-!-font-size-19">{member.email}</a>
         </div>
     );
-}
+};

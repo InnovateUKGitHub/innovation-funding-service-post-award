@@ -2,16 +2,13 @@ import { ControllerBase } from "./controllerBase";
 import contextProvider from "../features/common/contextProvider";
 import { GetAllForProjectQuery } from "../features/projectContacts/getAllForProjectQuery";
 
-interface ProjectContactDto{
+interface ProjectContactDto { }
 
-}
-
-class Controller extends ControllerBase<ProjectContactDto>
-{
-    constructor(){
+class Controller extends ControllerBase<ProjectContactDto> {
+    constructor() {
         super("projectcontacts");
 
-        this.getItems("/", (p,q) => ({projectId: q.projectId}), p => this.getAllByProjectId(p.projectId));
+        this.getItems("/", (p, q) => ({ projectId: q.projectId }), p => this.getAllByProjectId(p.projectId));
     }
 
     public async getAllByProjectId(projectId: string) {

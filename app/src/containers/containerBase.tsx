@@ -1,3 +1,4 @@
+// tslint: disable
 import React, { ComponentType, TdHTMLAttributes } from "react";
 import { connect as reduxConnect } from "react-redux";
 import { RootState } from "../redux/reducers/rootReducer";
@@ -16,8 +17,8 @@ export abstract class ContainerBase<TData, TCallbacks> extends React.Component<T
 class ReduxContainerMapBoth<TData, TCallbacks> {
     constructor(
       private component: ContainerBaseClass<TData, TCallbacks>,
-      private withData: { (state: RootState): TData},
-      private withCallbacks: { (dispatch: Dispatch): TCallbacks }
+      private withData: (state: RootState) => TData,
+      private withCallbacks: (dispatch: Dispatch) => TCallbacks
     ) {}
 
     public connect = () => reduxConnect<TData, TCallbacks, TData & TCallbacks, RootState>(this.withData, this.withCallbacks)(this.component);
@@ -26,10 +27,10 @@ class ReduxContainerMapBoth<TData, TCallbacks> {
 class ReduxContainerMapDispach<TData, TCallbacks> {
     constructor(
       private component: ContainerBaseClass<TData, TCallbacks>,
-      private withData: { (state: RootState): TData }
+      private withData: (state: RootState) => TData
     ) {}
 
-    public withCallbacks(mapping: { (dispatch: Dispatch): TCallbacks }) {
+    public withCallbacks(mapping: (dispatch: Dispatch) => TCallbacks) {
         return new ReduxContainerMapBoth<TData, TCallbacks>(this.component, this.withData, mapping);
     }
 }
@@ -38,7 +39,7 @@ class ReduxContainerMapProps<TData, TCallbacks> {
     constructor(private component: ContainerBaseClass<TData, TCallbacks>) {
     }
 
-    public withData(mapping: { (state: RootState): TData }) {
+    public withData(mapping: (state: RootState) => TData) {
         return new ReduxContainerMapDispach<TData, TCallbacks>(this.component, mapping);
     }
 }

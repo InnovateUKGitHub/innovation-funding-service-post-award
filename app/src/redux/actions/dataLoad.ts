@@ -25,12 +25,13 @@ export function conditionalLoad<T>(
     const state = getState();
     const id = idSelector;
     const store = storeSelector;
-    const existing = ((state as any).data[store] as any)[id] as IDataStore<T>;
+    // tslint:disable-next-line
+    const existing = ((state.data as any)[store] as any)[id] as IDataStore<T>;
 
     if (!existing || existing.status === "LOADED" || existing.status === "STALE") {
       dispatch(dataLoadAction(id, store, "LOADING", existing && existing.data));
       return load()
-        .catch(err  => {
+        .catch(err => {
           dispatch(dataLoadAction(id, store, "ERROR", null, err));
           return;
         })
@@ -39,7 +40,7 @@ export function conditionalLoad<T>(
           return;
         });
     }
-    else{
+    else {
       return Promise.resolve();
     }
   };

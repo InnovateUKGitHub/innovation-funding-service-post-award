@@ -20,18 +20,17 @@ interface Callbacks {
 }
 
 class ProjectDetailsComponent extends ContainerBase<Data, Callbacks> {
-
     // ultimatly will come from navigation
     private tabListArray = ["Claims", "Project change requests", "Forecasts", "Project details"];
     private selectedTab = this.tabListArray[3];
 
-    componentDidMount(){
+    componentDidMount() {
         this.props.loadDetails(this.props.id);
     }
 
     render() {
-        let combined = Pending.combine(this.props.projectDetails, this.props.partners, this.props.contacts, (projectDetails, partners, contacts) => ({ projectDetails, partners, contacts }));
-        let Loading = ACC.Loading.forData(combined);
+        const combined = Pending.combine(this.props.projectDetails, this.props.partners, this.props.contacts, (projectDetails, partners, contacts) => ({ projectDetails, partners, contacts }));
+        const Loading = ACC.Loading.forData(combined);
         return <Loading.Loader render={x => this.renderContents(x.projectDetails, x.partners, x.contacts)} />;
     }
 
@@ -39,7 +38,8 @@ class ProjectDetailsComponent extends ContainerBase<Data, Callbacks> {
         const partnersAndContactsData = partners.map(partner => ({ partner, financeContact: contacts.find(x => x.organisationId === partner.name) }));
 
         const PartnersTable = ACC.Table.forData(partnersAndContactsData);
-        const ProjectDetails = ACC.Details.forData(project);
+        const DetailsSection = ACC.Details.forData(project);
+
         const monitoringOfficer = contacts.find(x => x.role === "Monitoring officer");
         const projectManager = contacts.find(x => x.role === "Project manager");
 
@@ -68,11 +68,11 @@ class ProjectDetailsComponent extends ContainerBase<Data, Callbacks> {
                 </ACC.Section>
 
                 <ACC.Section title="Project information">
-                    <ProjectDetails.Details>
-                        <ProjectDetails.Date label="Project start date" value={x => x.startDate} />
-                        <ProjectDetails.Date label="Project end date" value={x => x.endDate} />
-                        <ProjectDetails.MulilineString label="Project summary" value={x => x.summary} />
-                    </ProjectDetails.Details>
+                    <DetailsSection.Details>
+                        <DetailsSection.Date label="Project start date" value={x => x.startDate} />
+                        <DetailsSection.Date label="Project end date" value={x => x.endDate} />
+                        <DetailsSection.MulilineString label="Project summary" value={x => x.summary} />
+                    </DetailsSection.Details>
                 </ACC.Section>
 
                 <ACC.Section title="Application information">
@@ -84,7 +84,7 @@ class ProjectDetailsComponent extends ContainerBase<Data, Callbacks> {
 }
 
 function mapData(state: RootState): Data {
-    const id = "ToDo"; //get from url
+    const id = "ToDo"; // get from url
     return {
         id,
         contacts: Pending.create(state.data.projectContacts[id]),

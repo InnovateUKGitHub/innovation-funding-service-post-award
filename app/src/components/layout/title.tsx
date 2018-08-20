@@ -14,4 +14,4 @@ export const Title: React.SFC<Props> = (props: Props) => {
       <h1 className="govuk-heading-xl clearFix">{props.title}</h1>
     </div>
   );
-}
+};

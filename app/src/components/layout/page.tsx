@@ -1,5 +1,5 @@
-import * as React from 'react';
+import * as React from "react";
 
-export const Page : React.SFC<{}> = (props) => {
+export const Page: React.SFC<{}> = (props) => {
     return <div>{props.children}</div>;
-}
+};
