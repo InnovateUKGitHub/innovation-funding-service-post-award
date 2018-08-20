@@ -20,8 +20,8 @@ const AppComponent: React.SFC<IAppProps> = (props) => {
       <Header />
       <div className="govuk-width-container">
         <PhaseBanner />
-        <main className="govuk-main-wrapper " id="main-content" role="main">
-          <route.component {...props as any}  />
+        <main className="govuk-main-wrapper" id="main-content" role="main">
+          <route.component {...props}  />
         </main>
       </div>
       <Footer />

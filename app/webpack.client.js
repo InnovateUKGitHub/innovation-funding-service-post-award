@@ -1,5 +1,9 @@
 module.exports = [
     {
+      node: {
+        fs: 'empty',
+        net: 'empty'
+      },
       entry: {
         bundle: './src/client/client.tsx',
       },

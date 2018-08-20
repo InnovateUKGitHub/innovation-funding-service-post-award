@@ -1,5 +1,7 @@
-import { GetByIdQuery } from '../../../../../src/server/features/contacts/getByIdQuery';
+import { GetByIdQuery } from '../../../../src/server/features/contacts/getByIdQuery';
 import {TestContext} from '../../testContextProvider';
+import { IQuery, IContext } from '../../../../src/server/features/common/context';
+import { IContact } from '../../../../src/models';
 
 describe('getByIdQuery', () => {
     it('when valid id then correct object', async () => {

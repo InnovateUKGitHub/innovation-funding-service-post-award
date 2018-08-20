@@ -29,7 +29,7 @@ class ListComponent extends React.Component<IProps> {
     return (
       <div>
         <Breadcrumbs links={[{routeName:"home", text: "Home"}]}>Contacts</Breadcrumbs>
-        <Title>Contacts</Title>
+        <Title title="Contacts" />
         {/* <Tables.Table key="table" data={data} caption="Some Contacts from salesforce" columns={columns} /> */}
         <Link className="govuk-back-link" routeName="home">Home</Link>
       </div>

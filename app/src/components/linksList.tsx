@@ -1,0 +1,22 @@
+import * as React from "react";
+
+interface Props {
+    url: string | undefined;
+    text: string;
+}
+
+export const LinksList: React.SFC<{ links: Props[] }> = (props) => {
+    const { links = [] } = props;
+
+    return (
+        <React.Fragment>
+            {
+                links.filter(x => !!x.url).map((x, i) => (
+                    <div className="govuk-!-padding-bottom-4" key={`link-${i}`}>
+                        <a href={x.url} className="govuk-link govuk-!-font-size-19">{x.text}</a>
+                    </div>
+                ))
+            }
+        </React.Fragment>
+    );
+};

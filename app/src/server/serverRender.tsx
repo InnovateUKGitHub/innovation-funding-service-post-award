@@ -7,37 +7,33 @@ import { RouterProvider } from "react-router5";
 
 import { renderHtml } from "./html";
 import { rootReducer, setupInitialState, setupMiddleware } from "../redux";
-import { configureRouter, matchRoute, matchRouteLoader } from "../routing";
-import { App } from "../containers";
+import { configureRouter, matchRouteLoader } from "../routing";
+import { App } from "../containers/app";
 
 export function serverRender(req: Request, res: Response) {
   const router = configureRouter();
 
   router.start(req.originalUrl, (routeError, route) => {
-    // handle for route not found?
-    // if(routeError) {
-    //   return res.status(500).send(routeError);
-    // }
-
     const initialState = setupInitialState(route);
-    const middleware   = setupMiddleware(router);
-    const store        = createStore(rootReducer, initialState, middleware);
-    const loader       = matchRouteLoader(route);
+    const middleware = setupMiddleware(router);
+    const store = createStore(rootReducer, initialState, middleware);
+    const loader = matchRouteLoader(route);
 
-    loader(store.dispatch, store.getState, null).then(() => {
-      const html = renderToString(
-        <Provider store={store}>
-          <RouterProvider router={router}>
-            <App serverSide={true} />
-          </RouterProvider>
-        </Provider>
-      );
+    Promise.all(loader().map(action => action(store.dispatch, store.getState, null)))
+      .then(() => {
+        const html = renderToString(
+          <Provider store={store}>
+            <RouterProvider router={router}>
+              <App />
+            </RouterProvider>
+          </Provider>
+        );
 
-      return res.send(renderHtml(html));
-    })
-    .catch((error: any) => {
-      console.log("error", error);
-      res.status(500).send(error);
-    });
+        return res.send(renderHtml(html, store.getState()));
+      })
+      .catch((error: any) => {
+        console.log("server render error", error);
+        res.status(500).send(error);
+      });
   });
 }

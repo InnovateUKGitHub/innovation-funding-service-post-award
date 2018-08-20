@@ -1,13 +1,13 @@
 import { AsyncThunk, createAction } from "./common";
-import { DataStoreKeys, DataStoreStatus, IDataStore, RootState } from "../reducers";
+import { DataStoreStatus, IDataStore, RootState } from "../reducers";
 
-type DataLoadThunk         = typeof dataLoadAction;
-export type DataStoreId    = "all" | number;
+type DataLoadThunk = typeof dataLoadAction;
+export type DataStoreId = "all" | number;
 export type DataLoadAction = ReturnType<DataLoadThunk>;
 
 export function dataLoadAction(
-  id: DataStoreId,
-  store: DataStoreKeys,
+  id: string,
+  store: string,
   status: DataStoreStatus,
   data: any,
   error?: any
@@ -17,30 +17,31 @@ export function dataLoadAction(
 }
 
 export function conditionalLoad<T>(
-  idSelector: (state: RootState) => DataStoreId,
-  storeSelector: (state: RootState) => DataStoreKeys,
-  existingSelector: (state: RootState) => IDataStore<T>,
+  idSelector: string,
+  storeSelector: string,
   load: () => Promise<T>
-): AsyncThunk<T, DataLoadAction> {
+): AsyncThunk<void, DataLoadAction> {
   return (dispatch, getState) => {
-    const state    = getState();
-    const id       = idSelector(state);
-    const store    = storeSelector(state);
-    const existing = existingSelector(state);
+    const state = getState();
+    const id = idSelector;
+    const store = storeSelector;
+    // tslint:disable-next-line
+    const existing = ((state.data as any)[store] as any)[id] as IDataStore<T>;
 
-    if(!existing || existing.status === "LOADED" || existing.status === "STALE") {
+    if (!existing || existing.status === "LOADED" || existing.status === "STALE") {
       dispatch(dataLoadAction(id, store, "LOADING", existing && existing.data));
-
       return load()
-        .then((result: any) => !!result.json ? result.json() : result)
-        // .then((result: any) => result.json())
-        .catch((r: any) => { console.log("API ERROR", r); })
-        .then((result: T) => {
+        .catch(err => {
+          dispatch(dataLoadAction(id, store, "ERROR", null, err));
+          return;
+        })
+        .then((result) => {
           dispatch(dataLoadAction(id, store, "LOADED", result));
-          return result;
+          return;
         });
     }
-
-    return Promise.reject();
+    else {
+      return Promise.resolve();
+    }
   };
 }

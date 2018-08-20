@@ -5,10 +5,11 @@ import { createStore } from "redux";
 import { RouterProvider } from "react-router5";
 import { configureRouter } from "../routing";
 import { rootReducer, setupMiddleware } from "../redux";
-import { App } from "../containers";
+import { App } from "../containers/app";
 
 const serverState = (window as any).__PRELOADED_STATE__;
 
+console.log("initial state", serverState);
 // const logger = (store) => (next) => (action) => {
 //   console.log("logging", action, next);
 //   return next(action);

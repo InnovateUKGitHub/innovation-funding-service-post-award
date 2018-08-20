@@ -1,20 +1,25 @@
 import { State } from "router5";
-import { IAsyncRoute, routeConfig } from "./routeConfig";
+import { AsyncRoute, routeConfig, RouteKeys } from "./routeConfig";
 import { Home } from "../containers";
+import { promises } from "fs";
 
-export function matchRoute(route: State | undefined): IAsyncRoute {
-  const name  = !route ? "error" : route.name;
-  const match = routeConfig.find(x => x.name === name);
-
-  return !!match ? match : {
+function defaultRoute(): AsyncRoute {
+  return {
     name: "home",
     path: "/",
     component: Home,
-    loadData: () => Promise.resolve({})
   };
 }
 
+export function matchRoute(route: State | undefined): AsyncRoute {
+  const name = route && route.name as RouteKeys;
+  return name && routeConfig[name] || routeConfig.error;
+}
+
 export function matchRouteLoader(route: State | undefined) {
-  const match = matchRoute(route);
-  return !!match.loadData ? match.loadData : () => Promise.resolve({});
+  const match = matchRoute(route) || defaultRoute();
+  if (!match.loadData) {
+    match.loadData = () => [];
+  }
+  return match.loadData;
 }

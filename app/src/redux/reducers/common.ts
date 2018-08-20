@@ -1,7 +1,8 @@
 import { DataLoadAction } from "../actions/dataLoad";
-import { IContact } from "../../models";
+import * as Dtos from "../../models";
+import { combineReducers } from "redux";
 
-export type DataStoreStatus = "PRELOAD" | "STALE" | "LOADING" | "LOADED";
+export type DataStoreStatus = "PRELOAD" | "STALE" | "LOADING" | "LOADED" | "ERROR";
 
 export interface IDataStore<T> {
   status: DataStoreStatus;
@@ -9,49 +10,39 @@ export interface IDataStore<T> {
   error: any;
 }
 
-export type DataStoreState = typeof initialState;
-export type DataStoreKeys  = keyof DataStoreState;
-export type CommonReducer  = ReturnType<typeof CommonReducer>;
+export const dataStoreReducer = <TData extends {}, TKey>(key: (key: TKey) => string, storeKey: string) => (state: { [key: string]: IDataStore<TData> } = {}, action: DataLoadAction) => {
+  if (action.type === "DATA_LOAD" && action.payload.store === storeKey) {
 
-const initialState = {
-  contacts: {} as { [k: string]: IDataStore<IContact> }
-};
+    const existing = state[action.payload.id];
 
-export function CommonReducer(state: DataStoreState = initialState, action: DataLoadAction): DataStoreState {
-  if(action.type === "DATA_LOAD") {
-    const id       = action.payload.id;
-    const store    = state[action.payload.store];
-    const existing = store && store[id];
-
-    const pending: IDataStore<any> = {
+    const pending: IDataStore<TData> = {
       status: action.payload.status,
-      data: action.payload.data,
+      data: action.payload.data || (existing && existing.data),
       error: action.payload.error
     };
 
-    if(!pending.data && existing && existing.data) {
-      pending.data = existing.data;
-    }
-
-    const result: any = Object.assign({}, state);
-    result[action.payload.store] = result[action.payload.store] || {};
-    result[action.payload.store][id] = pending;
-
+    const result = Object.assign({}, state);
+    result[action.payload.id] = pending;
     return result;
   }
 
-  // if(action.type =="@@router5/TRANSITION_START") {
-  //     let result = Object.assign({}, state);
-  //     Object.keys(result).forEach(store => Object.keys(result[store]).forEach(key => {
-  //         let pending = result[store][key];
-  //         if(pending.status && pending.status !== "STALE"){
-  //             console.log("making stores stale", store, key, pending);
-  //             result[store][key] = { status: "STALE", data: pending.data, error: pending.error};
-  //         }
-  //     }))
-  //     console.log("making stores stale", state, result);
-  //     return result;
-  // }
-
+  if ((action as any).type === "@@router5/TRANSITION_START") {
+    const result = Object.assign({}, state);
+    Object.keys(result).forEach(itemKey => {
+      const pending = result[itemKey];
+      if (pending.status === "LOADED" || pending.status === "ERROR") {
+        result[itemKey] = { status: "STALE", data: pending.data, error: pending.error };
+      }
+    });
+    return result;
+  }
   return state;
-}
+};
+
+export const dataReducer = combineReducers({
+  contacts: dataStoreReducer<Dtos.IContact[], string>(x => x, "contacts"),
+  contact: dataStoreReducer<Dtos.IContact, string>(x => x, "contact"),
+  partners: dataStoreReducer<Dtos.PartnerDto[], string>(x => x, "partners"),
+  project: dataStoreReducer<Dtos.ProjectDto, string>(x => x, "project"),
+  projectContacts: dataStoreReducer<Dtos.ProjectContactDto[], string>(x => x, "projectContacts")
+});
