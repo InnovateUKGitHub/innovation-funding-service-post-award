@@ -17,16 +17,16 @@ interface TableProps<T> {
   qa?: string;
 }
 
-export const renderNode = (node: React.ReactNode, key: number = 1) => (
+export const renderNode = (node: React.ReactNode, key: number) => (
   <td className="govuk-table__cell" scope="row" key={key}>{node}</td>
 );
 
-export const renderRow = (row: React.ReactNode[]) => (
-  <tr className="govuk-table__row">{row.map(renderNode)}</tr>
+export const renderRow = (row: React.ReactNode[], key: number) => (
+  <tr className="govuk-table__row" key={key}>{row.map(renderNode)}</tr>
 );
 
-export const renderTableHeading = (heading: React.ReactNode) => (
-  <th className="govuk-table__header" scope="col">{heading}</th>
+export const renderTableHeading = (heading: React.ReactNode, key: number) => (
+  <th className="govuk-table__header" scope="col" key={key}>{heading}</th>
 );
 
 export const TableComponent = <T extends {}>(data: T[]) => (props: TableProps<T>) => {
