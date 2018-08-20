@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { FullDate } from './renderers/date';
 
 interface DetailsProps {
 
@@ -44,11 +45,11 @@ const DetailsString = <T extends {}>(data: T): React.SFC<ItemProps<T, string>> =
 
 
 const DetailsMultilineString = <T extends {}>(data: T): React.SFC<ItemProps<T, string>> => (props) => {
-    return renderField(props.label, props.value(data), (x) => (x || "").split("\n").filter(x => !!x).map(line => <p className="govuk-body">{line}</p>));
+    return renderField(props.label, props.value(data), (x) => (x || "").split("\n").filter(x => !!x).map((line, i) => <p className="govuk-body" key={`multiline-string-${i}`}>{line}</p>));
 };
 
 const DetailsDate = <T extends {}>(data: T): React.SFC<ItemProps<T, Date>> => (props) => {
-    return renderField(props.label, props.value(data), (y) => <p className="govuk-body">{y.toDateString()}</p>);
+    return renderField(props.label, props.value(data), (y) => <p className="govuk-body"><FullDate value={y}/> </p>);
 };
 
 export const Details = {

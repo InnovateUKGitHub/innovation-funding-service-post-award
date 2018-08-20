@@ -12,7 +12,8 @@ export class GetAllForProjectQuery implements IQuery<ProjectContactDto[]>{
             id: x.Id,
             name: x.Name,
             role: x.Role__c,
-            email: x.EmailOfSFContact__c
+            email: x.EmailOfSFContact__c,
+            organisationId: x.AccountId
          }));
     }
 }

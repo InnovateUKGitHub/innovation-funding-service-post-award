@@ -8,9 +8,9 @@ export interface ISalesforcePartner {
     ParticipantType__c: string;
     ParticipantSize__c: string;
     ProjectRole__c: string;
-    AuditReportFrequency__c: string;
-    ParticipantStatus__c: string;
-    ProjectId__c: string;
+    //AuditReportFrequency__c: string;
+    //ParticipantStatus__c: string;
+    //ProjectId__c: string;
 }
 
 
@@ -24,10 +24,40 @@ export class PartnerRepository extends SalesforceBase<ISalesforcePartner> implem
     }
 
     getAllByProjectId(projectId: string): Promise<ISalesforcePartner[]> {
-        return Promise.resolve(range(5).map((seed) => ({ 
-            Id: "Partner" + seed,
-            ParticipantName__c: "Partner Name " + seed + " for " + projectId,
-            ParticipantType__c: "Type " + seed
-          } as ISalesforcePartner )));
+        const hardCoded :ISalesforcePartner[] = [
+            { 
+                Id: "Partner1",
+                AccountId: "Ooba",
+                ParticipantName__c: "Ooba",
+                ParticipantType__c: "Industrial",
+                ProjectRole__c: "Lead", 
+                ParticipantSize__c: "Small"
+            },
+            { 
+                Id: "Partner2",
+                AccountId: "Gabtype",
+                ParticipantName__c: "Gabtype", 
+                ParticipantType__c: "Industrial",
+                ProjectRole__c: "Not Lead", 
+                ParticipantSize__c: "Small" 
+            },
+            { 
+                Id: "Partner3",
+                AccountId: "Jabbertype",
+                ParticipantName__c: "Jabbertype", 
+                ParticipantType__c: "Industrial",
+                ProjectRole__c: "Not Lead", 
+                ParticipantSize__c: "Small" 
+            },
+            { 
+                Id: "Partner4",
+                AccountId: "Wordpedia",
+                ParticipantName__c: "Wordpedia", 
+                ParticipantType__c: "Academic",
+                ProjectRole__c: "Not Lead", 
+                ParticipantSize__c: "Small" 
+            }
+        ]; 
+        return Promise.resolve(hardCoded);
     }
 }

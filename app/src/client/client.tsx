@@ -9,6 +9,7 @@ import { App } from "../containers/app";
 
 const serverState = (window as any).__PRELOADED_STATE__;
 
+console.log("initial state", serverState);
 // const logger = (store) => (next) => (action) => {
 //   console.log("logging", action, next);
 //   return next(action);

@@ -1,5 +1,5 @@
 import { ControllerBase } from "./controllerBase";
-import { PartnerDto } from "../../models/partnerDto";
+import { PartnerDto } from "../../models/PartnerDto";
 import contextProvider from "../features/common/contextProvider";
 import { GetAllForProjectQuery } from "../features/partners/getAllForProjectQuery";
 

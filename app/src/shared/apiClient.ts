@@ -10,6 +10,9 @@ export interface IApiClient {
   projects: {
     get: (id: string) => Promise<Dtos.ProjectDto>;
   }
+  projectContacts:{
+    getAllByProjectId: (projectId: string) => Promise<Dtos.ProjectContactDto[]>
+  };
   partners:{
     getAllByProjectId: (projectId: string) => Promise<Dtos.PartnerDto[]>
   };

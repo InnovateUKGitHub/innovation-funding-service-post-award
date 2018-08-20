@@ -3,101 +3,55 @@ import { Dispatch } from "redux";
 import { ContainerBase, ReduxContainer } from "../containerBase";
 import { RootState } from "../../redux";
 import * as ACC from "../../components";
+import * as Dtos from "../../models";
+import { Pending } from "../../shared/pending";
+import * as Actions from "../../redux/actions/contacts";
+import { routeConfig } from "../../routing";
 
-const projectMembers = [
-    {
-        role: "Monitoring officer",
-        name: "Thomas Filton",
-        email: "thomas.filton@isee.example.com",
-    },
-    {
-        role: "Project manager",
-        name: "Steve Smith",
-        email: "steve.smith@isee.example.com",
-        organisation: "Ooba"
-    },
-    {
-        role: "Finance contact",
-        name: "Ralph Young",
-        email: "ralph.young@ooba.example.com",
-        organisation: "Ooba"
-    },
-    {
-        role: "Finance contact",
-        name: "Marian Stokes",
-        email: "worth.email.test+marian@gmail.com",
-        organisation: "Gabtype"
-    },
-    {
-        role: "Finance contact",
-        name: "Antonio Jenkins",
-        email: "antonio.jenkins@jabbertype.example.com",
-        organisation: "Jabbertype"
-    },
-    {
-        role: "Finance contact",
-        name: "Tina Taylor",
-        email: "tina.taylor@wordpedia.example.com",
-        organisation: "Wordpedia"
-    }
-];
-
-const partners = [
-    { name: "Ooba", isLead: true, type: "Industrial" },
-    { name: "Gabtype", isLead: false, type: "Industrial" },
-    { name: "Jabbertype", isLead: false, type: "Industrial" },
-    { name: "Wordpedia", isLead: false, type: "Academic" }
-];
-
-const projectInfo = {
-    title: "123: High speed rail and its effects on air quality",
-    startDate: new Date("2019/12/1"),
-    endDate: new Date("2019/12/2"),
-    summary: "The project aims to identify, isolate and correct an issue that has hindered progress in this field for a number of years.\n" +
-        "Identification will involve the university testing conditions to determine the exact circumstance of the issue.\n" +
-        "Once identification has been assured we will work to isolate the issue but replicating the circumstances in which it occurs within a laboratory environment.\n" +
-        "After this we will work with our prototyping partner to create a tool to correct the issue.  Once tested and certified this will be rolled out to mass production.\n",
-    applicationUrl: "#",
-    grantOfferLetterUrl: "#"
-
-};
-
-export interface ProjectDetailsDto {
+interface Data {
     id: string;
-    name: string;
+    projectDetails: Pending<Dtos.ProjectDto>;
+    partners: Pending<Dtos.PartnerDto[]>;
+    contacts: Pending<Dtos.ProjectContactDto[]>;
 }
 
-export interface Data {
-    projectDetails: ProjectDetailsDto;
-}
-
-export interface Callbacks {
+interface Callbacks {
     loadDetails: (id: string) => void;
 }
 
 class ProjectDetailsComponent extends ContainerBase<Data, Callbacks> {
-
-    //ultimatly will come from navigation
+    
+    // ultimatly will come from navigation
     private tabListArray = ["Claims", "Project change requests", "Forecasts", "Project details"];
     private selectedTab = this.tabListArray[3];
 
+    componentDidMount(){
+        this.props.loadDetails(this.props.id);
+    }
+
     render() {
-        const partnersAndContactsData = partners.map(partner => ({ partner, financeContact: projectMembers.find(x => x.organisation === partner.name) }));
+        let combined = Pending.combine(this.props.projectDetails, this.props.partners, this.props.contacts, (projectDetails, partners, contacts) => ({ projectDetails, partners, contacts }));
+        let Loading = ACC.Loading.forData(combined);
+        return <Loading.Loader render={x => this.renderContents(x.projectDetails, x.partners, x.contacts)} />;
+    }
+
+    private renderContents(project: Dtos.ProjectDto, partners: Dtos.PartnerDto[], contacts: Dtos.ProjectContactDto[]) {
+        const partnersAndContactsData = partners.map(partner => ({ partner, financeContact: contacts.find(x => x.organisationId === partner.name) }));
 
         const PartnersTable = ACC.Table.forData(partnersAndContactsData);
-        const ProjectDetails = ACC.Details.forData(projectInfo);
-        const monitoringOfficer = projectMembers.find(x => x.role === "Monitoring officer");
-        const projectManager = projectMembers.find(x => x.role === "Project manager");
+        const ProjectDetails = ACC.Details.forData(project);
+        const monitoringOfficer = contacts.find(x => x.role === "Monitoring officer");
+        const projectManager = contacts.find(x => x.role === "Project manager");
 
         const links = [
-            { text: "View original application", url: projectInfo.applicationUrl },
-            { text: "View original grant offer letter", url: projectInfo.grantOfferLetterUrl }
+            { text: "View original application", url: project.applicationUrl },
+            { text: "View original grant offer letter", url: project.grantOfferLetterUrl }
         ];
 
         return (
             <ACC.Page>
-                <ACC.Backlink path="/">Main dashboard</ACC.Backlink>
-                <ACC.Title title="View project" caption={projectInfo.title} />
+                <ACC.Backlink route={routeConfig.home}>Main dashboard</ACC.Backlink>
+                <ACC.Title title="View project" caption={project.title} />
 
                 <ACC.Tabs tabList={this.tabListArray} selected={this.selectedTab} />
 
@@ -106,7 +60,7 @@ class ProjectDetailsComponent extends ContainerBase<Data, Callbacks> {
                     <ACC.ProjectMember member={projectManager} />
 
                     <PartnersTable.Table>
-                        <PartnersTable.String header="Partner" value={x => x.partner.name} />
+                        <PartnersTable.String header="Partner" value={x => x.partner.isLead ? `${x.partner.name} (Lead)` : x.partner.name} />
                         <PartnersTable.String header="Partner Type" value={x => x.partner.type} />
                         <PartnersTable.String header="Finance Contact" value={x => x.financeContact && x.financeContact.name || ""} />
                         <PartnersTable.String header="Email" value={x => x.financeContact && x.financeContact.email || ""} />
@@ -122,42 +76,34 @@ class ProjectDetailsComponent extends ContainerBase<Data, Callbacks> {
                 </ACC.Section>
 
                 <ACC.Section title="Application information">
-                    <ACC.LinksList links={links}/>
+                    <ACC.LinksList links={links} />
                 </ACC.Section>
             </ACC.Page>
         );
     }
-
-    private renderApplicationInfo() {
-        return (
-            <div>
-                <h2 className="govuk-heading-m govuk-!-margin-bottom-8">Application information</h2>
-            </div>
-        );
-    }
 }
 
-function mapData(store: RootState) {
+function mapData(state: RootState): Data {
+    const id = "ToDo"; //get from url
     return {
-        projectDetails: {
-            id: "test id",
-            name: "test name"
-        }
+        id,
+        contacts: Pending.create(state.data.projectContacts[id]),
+        partners: Pending.create(state.data.partners[id]),
+        projectDetails: Pending.create(state.data.project[id]),
     };
 }
 
-function mapCallbacks(dispatch: Dispatch) {
+function mapCallbacks(dispatch: Dispatch): Callbacks {
     return {
-        loadDetails: (id: string) => dispatch({ type: "TEST LOAD", payload: id })
+        loadDetails: (id: string) => {
+            dispatch(Actions.loadProject(id) as any);
+            dispatch(Actions.loadContactsForProject(id) as any);
+            dispatch(Actions.loadPatnersForProject(id) as any);
+        }
     };
 }
 
 export const ProjectDetails = ReduxContainer.for<Data, Callbacks>(ProjectDetailsComponent)
-    .withData(state => ({
-        projectDetails: {
-            id: "123",
-            name: "test123"
-        }
-    }))
+    .withData(mapData)
     .withCallbacks(mapCallbacks)
     .connect();

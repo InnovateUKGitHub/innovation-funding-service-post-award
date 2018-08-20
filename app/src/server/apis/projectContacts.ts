@@ -11,10 +11,10 @@ class Controller extends ControllerBase<ProjectContactDto>
     constructor(){
         super("projectcontacts");
 
-        this.getItems("/", (p,q) => ({projectId: q.projectId}), p => this.getAllByProjectID(p.projectId));
+        this.getItems("/", (p,q) => ({projectId: q.projectId}), p => this.getAllByProjectId(p.projectId));
     }
 
-    public async getAllByProjectID(projectId: string) {
+    public async getAllByProjectId(projectId: string) {
         const query = new GetAllForProjectQuery(projectId);
         return await contextProvider.start().runQuery(query);
     }

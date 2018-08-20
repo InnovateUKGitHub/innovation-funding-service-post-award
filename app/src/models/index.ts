@@ -1,3 +1,4 @@
 export * from "./contact";
 export * from "./projectDto";
-export * from "./PartnerDto";
+export * from "./partnerDto";
+export * from "./projectContactDto";

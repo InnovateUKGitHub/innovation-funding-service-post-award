@@ -1,5 +1,5 @@
 import { IQuery, IContext } from "../common/context";
-import { PartnerDto } from "../../../models/partnerDto";
+import { PartnerDto } from "../../../models/PartnerDto";
 
 export class GetAllForProjectQuery implements IQuery<PartnerDto[]>{
     
@@ -12,6 +12,7 @@ export class GetAllForProjectQuery implements IQuery<PartnerDto[]>{
             id: x.Id,
             name: x.ParticipantName__c,
             type: x.ParticipantType__c,
+            isLead: x.ProjectRole__c === "Lead"
          } as PartnerDto));
     }
 }

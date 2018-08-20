@@ -1,6 +1,7 @@
 // tslint:disable:max-classes-per-file
 
 import React from "react";
+import { FullDate } from "./renderers/date";
 
 interface TableChildProps<T, ReturnT> {
   header: React.ReactNode;
@@ -66,8 +67,8 @@ export const StringColumn = <T extends {}>(): React.SFC<TableChildProps<T, strin
 export const NumberColumn = <T extends {}>(): React.SFC<TableChildProps<T, number>> =>
   (props) => renderColumn(props.value, props.data);
 
-export const DateColumn = <T extends {}>(): React.SFC<TableChildProps<T, Date>> =>
-  (props) => typeof props.data === "undefined" ? null : <span>{props.value(props.data).toISOString()}</span>;
+const DateColumn = <T extends {}>(): React.SFC<TableChildProps<T, Date>> =>
+  (props) => <FullDate value={props.value(props.data!)}/>;
 
 export const Table = {
   forData: <T extends {}>(data: T[]) => ({
