@@ -10,7 +10,7 @@ export interface ISalesforcePartner {
     ProjectRole__c: string;
     //AuditReportFrequency__c: string;
     //ParticipantStatus__c: string;
-    //ProjectId__c: string;
+    ProjectId__c: string;
 }
 
 
@@ -31,7 +31,8 @@ export class PartnerRepository extends SalesforceBase<ISalesforcePartner> implem
                 ParticipantName__c: "Ooba",
                 ParticipantType__c: "Industrial",
                 ProjectRole__c: "Lead", 
-                ParticipantSize__c: "Small"
+                ParticipantSize__c: "Small",
+                ProjectId__c: projectId,
             },
             { 
                 Id: "Partner2",
@@ -39,7 +40,8 @@ export class PartnerRepository extends SalesforceBase<ISalesforcePartner> implem
                 ParticipantName__c: "Gabtype", 
                 ParticipantType__c: "Industrial",
                 ProjectRole__c: "Not Lead", 
-                ParticipantSize__c: "Small" 
+                ParticipantSize__c: "Small",
+                ProjectId__c: projectId,
             },
             { 
                 Id: "Partner3",
@@ -47,7 +49,8 @@ export class PartnerRepository extends SalesforceBase<ISalesforcePartner> implem
                 ParticipantName__c: "Jabbertype", 
                 ParticipantType__c: "Industrial",
                 ProjectRole__c: "Not Lead", 
-                ParticipantSize__c: "Small" 
+                ParticipantSize__c: "Small",
+                ProjectId__c: projectId, 
             },
             { 
                 Id: "Partner4",
@@ -55,7 +58,8 @@ export class PartnerRepository extends SalesforceBase<ISalesforcePartner> implem
                 ParticipantName__c: "Wordpedia", 
                 ParticipantType__c: "Academic",
                 ProjectRole__c: "Not Lead", 
-                ParticipantSize__c: "Small" 
+                ParticipantSize__c: "Small",
+                ProjectId__c: projectId,
             }
         ]; 
         return Promise.resolve(hardCoded);

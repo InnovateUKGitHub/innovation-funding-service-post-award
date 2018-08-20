@@ -1,8 +1,8 @@
-import { ICommand, IContext, IQuery } from "../../../src/server/features/common/context";
-import { IContactsRepository, ISalesforceContact } from "../../../src/server/repositories/contactsRepository";
-import { IProjectRepository, ISalesforceProject } from "../../../src/server/repositories/projectsRepository";
-import { ISalesforcePartner, IPartnerRepository } from "../../../src/server/repositories/partnersRepository";
-import { ISalesforceProjectContact, IProjectContactsRepository } from "../../../src/server/repositories/projectContactsRepository";
+import { ICommand, IContext, IQuery } from "../../src/server/features/common/context";
+import { IContactsRepository, ISalesforceContact } from "../../src/server/repositories/contactsRepository";
+import { IProjectRepository, ISalesforceProject } from "../../src/server/repositories/projectsRepository";
+import { ISalesforcePartner, IPartnerRepository } from "../../src/server/repositories/partnersRepository";
+import { ISalesforceProjectContact, IProjectContactsRepository } from "../../src/server/repositories/projectContactsRepository";
 
 export abstract class TestRepository<T> {
     Items: T[] = []
@@ -108,7 +108,7 @@ export class TestContext implements IContext {
 
             let newItem = {
                 Id: "Project" + seed,
-                Name: "Project " + seed
+                ProjectTitle__c: "Project " + seed
             } as ISalesforceProject;
 
             update && update(newItem);

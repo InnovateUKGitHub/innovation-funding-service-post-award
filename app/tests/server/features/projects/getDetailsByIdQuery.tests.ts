@@ -1,5 +1,5 @@
 import {TestContext} from "../../testContextProvider";
-import { GetByIdQuery } from "../../../../../src/server/features/projects/getDetailsByIdQuery";
+import { GetByIdQuery } from "../../../../src/server/features/projects/getDetailsByIdQuery";
 
 describe("GetDetailsByIdQuery", () => {
     it("when exists expect item", async () => {
@@ -10,13 +10,13 @@ describe("GetDetailsByIdQuery", () => {
 
         let project = context.testData.createProject(x => {
             x.Id = expectedId,
-            x.Name = expectedName
+            x.ProjectTitle__c = expectedName
         });
 
         let result = await context.runQuery(new GetByIdQuery(project.Id));
 
         expect(result.id).toBe(expectedId);
-        expect(result.name).toBe(expectedName);
+        expect(result.title).toBe(expectedName);
     });
 
     it("when mutiple returns expected item", async () => {
@@ -28,7 +28,7 @@ describe("GetDetailsByIdQuery", () => {
         let result = await context.runQuery(new GetByIdQuery(project2.Id));
 
         expect(result.id).toBe(project2.Id);
-        expect(result.name).toBe(project2.Name);
+        expect(result.title).toBe(project2.ProjectTitle__c);
     });
 
     it("when not exists expect exception", async () => {
