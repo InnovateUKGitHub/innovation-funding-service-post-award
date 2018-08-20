@@ -3,6 +3,7 @@ import { Dispatch } from "redux";
 import { ContainerBase, ReduxContainer } from "../containerBase";
 import { RootState } from "../../redux";
 import { Backlink, forData, ProjectMembers, Tabs, Title } from "../../components";
+import { routeConfig } from "../../routing";
 
 const projectMembers = [
     {
@@ -95,7 +96,7 @@ class ProjectDetailsComponent extends ContainerBase<Data, Callbacks> {
 
     return (
       <div>
-        <Backlink path="/">Main dashboard</Backlink>
+        <Backlink route={routeConfig.home}>Main dashboard</Backlink>
         <Title title="View project" caption="123: High speed rail and its effects on air quality" />
         <Tabs tabList={tabListArray} selected="Project details" className="govuk-!-margin-bottom-9"/>
         <ProjectMembers projectMembers={projectMembers} className="govuk-!-margin-bottom-9" />

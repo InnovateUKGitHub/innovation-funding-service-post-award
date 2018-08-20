@@ -22,10 +22,9 @@ export function conditionalLoad<T>(
   load: () => Promise<T>
 ): AsyncThunk<T, DataLoadAction> {
   return (dispatch, getState) => {
-    
-    const state = getState();
-    const id = idSelector(state);
-    const store = storeSelector(state);
+    const state    = getState();
+    const id       = idSelector(state);
+    const store    = storeSelector(state);
     const existing = ((state as any).data[store] as any)[id] as IDataStore<T>;
 
     if (!existing || existing.status === "LOADED" || existing.status === "STALE") {

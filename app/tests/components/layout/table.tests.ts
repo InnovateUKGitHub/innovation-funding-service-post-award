@@ -3,7 +3,6 @@ import "jest";
 import * as Table from "../../../src/components/layout/table";
 import Enzyme, { shallow } from "enzyme";
 import Adapter from "enzyme-adapter-react-16";
-import { render } from "../../../node_modules/@types/enzyme";
 
 Enzyme.configure({ adapter: new Adapter() });
 

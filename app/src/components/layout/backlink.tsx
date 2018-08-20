@@ -1,8 +1,8 @@
 import React from "react";
+import { AsyncRoute } from "../../routing";
 
 interface Props {
-    path: string;
-    children: any;
+  route: AsyncRoute;
 }
 
-export const Backlink: React.SFC<Props> = (props: Props) =>  <a href={props.path} className="govuk-back-link govuk-!-margin-bottom-9">{props.children}</a>;
+export const Backlink: React.SFC<Props> = (props) => <a href={props.route.path} className="govuk-back-link govuk-!-margin-bottom-9">{props.children}</a>;
