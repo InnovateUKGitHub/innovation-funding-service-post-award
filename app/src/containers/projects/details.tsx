@@ -20,7 +20,7 @@ interface Callbacks {
 }
 
 class ProjectDetailsComponent extends ContainerBase<Data, Callbacks> {
-    
+
     // ultimatly will come from navigation
     private tabListArray = ["Claims", "Project change requests", "Forecasts", "Project details"];
     private selectedTab = this.tabListArray[3];
@@ -50,7 +50,7 @@ class ProjectDetailsComponent extends ContainerBase<Data, Callbacks> {
 
         return (
             <ACC.Page>
-                <ACC.Backlink route={routeConfig.home}>Main dashboard</ACC.Backlink>
+                <ACC.BackLink route={routeConfig.home}>Main dashboard</ACC.BackLink>
                 <ACC.Title title="View project" caption={project.title} />
 
                 <ACC.Tabs tabList={this.tabListArray} selected={this.selectedTab} />
