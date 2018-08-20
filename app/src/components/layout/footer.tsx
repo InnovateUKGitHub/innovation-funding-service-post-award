@@ -42,6 +42,8 @@ export const Footer = () => {
             <ul className="govuk-footer__inline-list">
               <li className="govuk-footer__inline-list-item">
                 GOV.UK uses cookies to make the site simpler.
+              </li>
+              <li className="govuk-footer__inline-list-item">
                 <a className="govuk-footer__link" href="https://apply-for-innovation-funding.service.gov.uk/info/cookies">
                   Find out more about cookies
                 </a>.
