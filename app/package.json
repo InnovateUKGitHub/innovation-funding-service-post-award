@@ -72,7 +72,10 @@
         }]
     ],
     "collectCoverage": true,
-    "collectCoverageFrom": ["src/**/*.{ts,tsx}"],
+    "collectCoverageFrom": [
+      "src/**/*.{ts,tsx}",
+      "!src/**/index.ts"
+    ],
     "coverageReporters": ["text", "html"],
     "transform": {
       "^.+\\.tsx?$": "ts-jest"
@@ -82,9 +85,6 @@
       "ts",
       "tsx",
       "js"
-    ],
-    "collectCoverageFrom": [
-      "src/**/*.tsx?"
     ],
     "coveragePathIgnorePatterns": [
       "/node_modules/"
