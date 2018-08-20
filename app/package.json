@@ -11,7 +11,8 @@
     "watch:client": "webpack --config webpack.client.js --watch",
     "watch": "parallelshell \"webpack --config webpack.client.js --watch\" \"webpack --config webpack.server.js --watch\" \"nodemon ./dist/server.js\"",
     "build": "npm run build:server && npm run build:client",
-    "tests": "jest",
+    "tests": "npm run test",
+    "test": "jest",
     "lint": "tslint --project tsconfig.json src/**/*.ts{,x}",
     "lint:report": "node tslint-report.js"
   },
