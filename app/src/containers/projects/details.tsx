@@ -35,7 +35,7 @@ class ProjectDetailsComponent extends ContainerBase<Data, Callbacks> {
     }
 
     private renderContents(project: Dtos.ProjectDto, partners: Dtos.PartnerDto[], contacts: Dtos.ProjectContactDto[]) {
-        const partnersAndContactsData = partners.map(partner => ({ partner, financeContact: contacts.find(x => x.organisationId === partner.name) }));
+        const partnersAndContactsData = partners.map(partner => ({ partner, financeContact: contacts.find(x => x.partnerId === partner.id) }));
 
         const PartnersTable = ACC.Table.forData(partnersAndContactsData);
         const DetailsSection = ACC.Details.forData(project);
