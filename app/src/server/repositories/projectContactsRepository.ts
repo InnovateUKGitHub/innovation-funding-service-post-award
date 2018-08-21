@@ -5,7 +5,7 @@ export interface ISalesforceProjectContact {
     Id: string;
     ProjectId: string;
     AccountId?: string;
-    Role__c: string;
+    Role__c: "Monitoring officer" | "Project manager" | "Finance contact";
     Name: string;
     EmailOfSFContact__c: string;
 }
