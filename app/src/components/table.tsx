@@ -81,6 +81,6 @@ export const Table = {
     String: StringColumn<T>(),
     Number: NumberColumn<T>(),
     Date: DateColumn<T>(),
-    Email: EmailColumn<T>(),
+    Email: EmailColumn<T>()
   })
 };
