@@ -116,6 +116,48 @@ export class TestContext implements IContext {
             this.repositories.projects.Items.push(newItem);
 
             return newItem;
+        },
+        createPartner: (project?: ISalesforceProject, update?: (item:ISalesforcePartner) => void) => {
+            let seed = this.repositories.partners.Items.length + 1;
+            project = project || this.testData.createProject();
+
+            let newItem: ISalesforcePartner = {
+                Id: `Partner${seed}`,
+                AccountId: `Account${seed}`,
+                ParticipantName__c: `Participant Name ${seed}`,
+                ParticipantSize__c: "Large",
+                ParticipantType__c: "Accedemic",
+                ProjectRole__c: "Lead",
+                ProjectId__c: project.Id
+            };
+            
+            update && update(newItem);
+
+            this.repositories.partners.Items.push(newItem);
+
+            return newItem;
+        },
+        createProjectContact: (project?: ISalesforceProject, partner?: ISalesforcePartner, update?: (item: ISalesforceProjectContact) => void) => {
+            
+            project = project || this.testData.createProject();
+            partner= partner || this.testData.createPartner(project);
+
+            let seed = this.repositories.projectContacts.Items.length + 1;
+
+            let newItem: ISalesforceProjectContact = {
+                Id: `ProjectContact${seed}`,
+                ProjectId: project.Id,
+                AccountId: partner.AccountId,
+                EmailOfSFContact__c: `projectcontact${seed}@text.com`,
+                Name: `Ms Contact ${seed}`,
+                Role__c: "Monitoring officer"
+            };
+
+            update && update(newItem);
+
+            this.repositories.projectContacts.Items.push(newItem);
+
+            return newItem;
         }
     };
 }
