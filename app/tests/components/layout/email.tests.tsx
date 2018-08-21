@@ -13,4 +13,10 @@ describe("Email", () => {
        const expectedRender =  <a href="mailto:tedtester@example.com" className="govuk-link govuk-!-font-size-19">tedtester@example.com</a>;
        expect(wrapper.equals(expectedRender));
    });
+
+   it("should render an empty link", () => {
+       const wrapper = shallow(<Email value="" />);
+       const expectedRender =  <a href="" className="govuk-link govuk-!-font-size-19" />;
+       expect(wrapper.equals(expectedRender));
+   });
 });
