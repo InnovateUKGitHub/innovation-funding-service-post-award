@@ -17,7 +17,7 @@ describe("getAllForProjectQuery", () => {
         expect(result[0].email).toBe(projectContact.EmailOfSFContact__c);
         expect(result[0].name).toBe(projectContact.Name);
         expect(result[0].role).toBe(projectContact.Role__c);
-        expect(result[0].organisationId).toBe(partner.AccountId);
+        expect(result[0].partnerId).toBe(partner.Id);
 
     });
 

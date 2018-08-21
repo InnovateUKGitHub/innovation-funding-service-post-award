@@ -147,7 +147,7 @@ export class TestContext implements IContext {
             let newItem: ISalesforceProjectContact = {
                 Id: `ProjectContact${seed}`,
                 ProjectId: project.Id,
-                AccountId: partner.AccountId,
+                AccountId: partner.Id,
                 EmailOfSFContact__c: `projectcontact${seed}@text.com`,
                 Name: `Ms Contact ${seed}`,
                 Role__c: "Monitoring officer"
