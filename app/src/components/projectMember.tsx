@@ -1,4 +1,5 @@
 import React from "react";
+import { Email } from "./layout/email";
 
 interface ProjectMember {
     role: string;
@@ -21,7 +22,7 @@ export const ProjectMember: React.SFC<Props> = (props) => {
         <div className="govuk-heading-m govuk-!-margin-bottom-9">
             <h3 className="govuk-heading-s govuk-!-margin-bottom-0">{displayRole}</h3>
             <p className="govuk-body govuk-!-margin-bottom-0">{member.name}</p>
-            <a href="" className="govuk-link govuk-!-font-size-19">{member.email}</a>
+            <Email value={member.email} />
         </div>
     );
 };

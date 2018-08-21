@@ -6,3 +6,4 @@ export * from "./phaseBanner";
 export * from "./section";
 export * from "./tabs";
 export * from "./title";
+export * from "./email";
