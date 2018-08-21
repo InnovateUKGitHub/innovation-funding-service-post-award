@@ -11,8 +11,9 @@
     "watch:client": "webpack --config webpack.client.js --watch",
     "watch": "parallelshell \"webpack --config webpack.client.js --watch\" \"webpack --config webpack.server.js --watch\" \"nodemon ./dist/server.js\"",
     "build": "npm run build:server && npm run build:client",
-    "tests": "npm run test",
     "test": "jest",
+    "tests": "npm run test",
+    "tests:coverage": "npm run test -- --coverage",
     "lint": "tslint --project tsconfig.json src/**/*.ts{,x}",
     "lint:report": "node tslint-report.js"
   },
@@ -71,7 +72,6 @@
           "pageTitle": "IUK ACC Unit test report"
         }]
     ],
-    "collectCoverage": true,
     "collectCoverageFrom": [
       "src/**/*.{ts,tsx}",
       "!src/**/index.ts"
