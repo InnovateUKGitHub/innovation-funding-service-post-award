@@ -86,3 +86,10 @@ Routes are objects that inherit from `AsyncRoute<T>` and provide the following p
 - `loadData` - method that returns actions that are dispatched when the component first load 
 
 
+### Containers
+
+Containers are the page level react components and use Redux connect via a wrapper `ReduxContainer.for<TData, TDispach>(Container).withData().withCallBacks().connect()`. This strongly types the mapStateToProps and mapDispatchToProps from standard Redux.
+
+### Components
+
+Reusable React components. No redux dependencies.
