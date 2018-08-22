@@ -2,3 +2,4 @@ node_modules/
 dist/
 /.vscode/
 /**/test-report.json
+/**/test-report.html
