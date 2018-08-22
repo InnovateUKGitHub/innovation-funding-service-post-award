@@ -7,7 +7,7 @@ import Adapter from "enzyme-adapter-react-16";
 
 Enzyme.configure({ adapter: new Adapter() });
 
-describe("Section", () => {
+describe("Page", () => {
     it("should render child element", () => {
         const wrapper = shallow(<Page><div>a test child</div></Page>);
         expect(wrapper
