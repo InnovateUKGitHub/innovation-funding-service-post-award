@@ -1,17 +1,26 @@
+import express from "express";
+
+import { ControllerBase } from "./controllerBase";
+
 import * as contacts from "./contacts";
 import * as projects from "./projects";
 import * as partners from "./partners";
 import * as projectContacts from "./projectContacts";
 
-import express from "express";
-import { ControllerBase } from "./controllerBase";
 
-const apiRoutes: ControllerBase<{}>[] = [
-  contacts.controller,
-  projects.controller,
-  partners.controller,
-  projectContacts.controller
-];
+export interface IApiClient {
+  contacts: contacts.IContactsApi;
+  projects: projects.IProjectsApi;
+  projectContacts: projectContacts.IProjectContactsApi;
+  partners: partners.IPartnersApi;
+}
+
+export const serverApis: IApiClient & { [key: string]: ControllerBase<{}> } = {
+  contacts: contacts.controller,
+  partners: partners.controller,
+  projects: projects.controller,
+  projectContacts: projectContacts.controller,
+}
 
 export const router = express.Router();
 
@@ -19,10 +28,8 @@ function handleError(err: any, req: express.Request, res: express.Response, next
   res.status(500).json({ message: "An unexpected Error has occoured", details: { ...err } });
 }
 
-apiRoutes.forEach(item => {
-  if (item) {
-    router.use("/" + item.path, [item.router, handleError]);
-  }
-});
+Object.keys(serverApis)
+  .map(key => ({ path: key, controller: serverApis[key] }))
+  .forEach(item => router.use("/" + item.path, [item.controller.router, handleError]));
 
 router.all("*", (req, res, next) => res.status(404).send());

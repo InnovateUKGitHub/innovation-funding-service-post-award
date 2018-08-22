@@ -4,16 +4,16 @@ export default abstract class SalesforceBase<T> {
   protected constructor(
     private objectName: string,
     private columns: string[]
-  ) {}
+  ) { }
 
   protected async retrieve(id: string): Promise<T> {
-    const conn   = await salesforceConnection();
+    const conn = await salesforceConnection();
     const result = await conn.sobject(this.objectName).retrieve(id);
     return result as T;
   }
 
   protected async all(): Promise<T[]> {
-    const conn   = await salesforceConnection();
+    const conn = await salesforceConnection();
     const result = await conn.sobject(this.objectName)
       .select(this.columns.join(", "))
       .execute();
@@ -21,7 +21,7 @@ export default abstract class SalesforceBase<T> {
   }
 
   protected async whereString(filter: string): Promise<T[]> {
-    const conn   = await salesforceConnection();
+    const conn = await salesforceConnection();
     const result = await conn.sobject(this.objectName)
       .select(this.columns.join(", "))
       .where(filter)
@@ -34,7 +34,7 @@ export default abstract class SalesforceBase<T> {
     const jsonFilter = {} as T;
     filter(jsonFilter);
 
-    const conn   = await salesforceConnection();
+    const conn = await salesforceConnection();
     const result = await conn.sobject(this.objectName)
       .select(this.columns.join(", "))
       .where(jsonFilter)
