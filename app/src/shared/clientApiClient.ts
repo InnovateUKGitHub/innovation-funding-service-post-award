@@ -1,4 +1,4 @@
-import { IApiClient } from "./apiClient";
+import { IApiClient } from "../server/apis";
 
 const clientApi: IApiClient = {
     contacts:{

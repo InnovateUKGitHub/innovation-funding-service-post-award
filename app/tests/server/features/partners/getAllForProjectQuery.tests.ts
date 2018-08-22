@@ -2,7 +2,7 @@ import { TestContext } from "../../testContextProvider";
 import { GetAllForProjectQuery } from '../../../../src/server/features/partners/getAllForProjectQuery';
 
 describe("getAllForProjectQuery", () => {
-    it("when project contanct exists expect item returned", async () => {
+    it("when project has partner expect item returned", async () => {
         let context = new TestContext();
         
         let project = context.testData.createProject();

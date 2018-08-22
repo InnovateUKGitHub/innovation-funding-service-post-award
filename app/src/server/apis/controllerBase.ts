@@ -4,7 +4,7 @@ import express, { NextFunction, Request, Response } from "express";
 export abstract class ControllerBase<T> {
     public readonly router: Router;
 
-    constructor(public readonly path: string) {
+    constructor() {
         this.router = express.Router();
     }
 

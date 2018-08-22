@@ -3,11 +3,15 @@ import { PartnerDto } from "../../models/PartnerDto";
 import contextProvider from "../features/common/contextProvider";
 import { GetAllForProjectQuery } from "../features/partners/getAllForProjectQuery";
 
-class Controller extends ControllerBase<PartnerDto> {
-    constructor() {
-        super("partners");
+export interface IPartnersApi {
+    getAllByProjectId: (projectId: string) => Promise<PartnerDto[]>
+}
 
-        this.getItems("/?", (p,q) => ({projectId: q.projectId}), (p) => this.getAllByProjectId(p.projectId));
+class Controller extends ControllerBase<PartnerDto> implements IPartnersApi {
+    constructor() {
+        super();
+
+        this.getItems("/?", (p, q) => ({ projectId: q.projectId }), (p) => this.getAllByProjectId(p.projectId));
     }
 
     public async getAllByProjectId(projectId: string) {

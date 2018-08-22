@@ -3,9 +3,13 @@ import { ControllerBase } from "./controllerBase";
 import contextProvider from "../features/common/contextProvider";
 import { ProjectDto } from "../../models/projectDto";
 
-class Controller extends ControllerBase<ProjectDto> {
+export interface IProjectsApi {
+    get: (id: string) => Promise<ProjectDto>;
+}
+
+class Controller extends ControllerBase<ProjectDto> implements IProjectsApi {
     constructor() {
-        super("projects");
+        super();
 
         this.getItem("/:id", p => ({ id: p.id }), (p) => this.get(p.id));
     }

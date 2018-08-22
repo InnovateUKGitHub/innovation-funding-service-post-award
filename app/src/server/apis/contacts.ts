@@ -4,11 +4,15 @@ import { GetAllQuery } from "../features/contacts/getAllQuery";
 import { GetByIdQuery } from "../features/contacts/getByIdQuery";
 import { IContact } from "../../models";
 import { ControllerBase } from "./controllerBase";
-import { IContext } from "../features/common/context";
 
-class Controller extends ControllerBase<IContact> {
+export interface IContactsApi {
+  get: (id: string) => Promise<IContact>;
+  getAll: () => Promise<IContact[]>;
+}
+
+class Controller extends ControllerBase<IContact> implements IContactsApi {
   constructor() {
-    super("contacts");
+    super();
 
     this.getItems("/", p => ({}), (p) => this.getAll());
     this.getItem("/:id", p => ({ id: p.id }), (p) => this.get(p.id));
