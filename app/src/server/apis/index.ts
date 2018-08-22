@@ -24,12 +24,8 @@ export const serverApis: IApiClient & { [key: string]: ControllerBase<{}> } = {
 
 export const router = express.Router();
 
-function handleError(err: any, req: express.Request, res: express.Response, next: express.NextFunction) {
-  res.status(500).json({ message: "An unexpected Error has occoured", details: { ...err } });
-}
-
 Object.keys(serverApis)
   .map(key => ({ path: key, controller: serverApis[key] }))
-  .forEach(item => router.use("/" + item.path, [item.controller.router, handleError]));
+  .forEach(item => router.use("/" + item.path, item.controller.router));
 
 router.all("*", (req, res, next) => res.status(404).send());

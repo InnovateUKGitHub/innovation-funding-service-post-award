@@ -39,7 +39,8 @@ export abstract class ControllerBase<T> {
                 resp.status(successStatus).send(result);
             }
             catch (e) {
-                next(e);
+                console.log("Error in controller", e);
+                resp.status(500).json({ message: "An unexpected Error has occoured.....", details: e.message });
             }
         };
     }

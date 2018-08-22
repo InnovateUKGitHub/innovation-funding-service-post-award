@@ -36,7 +36,7 @@ export class ProjectRepository extends SalesforceBase<ISalesforceProject> implem
     }
 
     getById(id: string) {
-        // return super.retrieve(id);
+        return super.retrieve(id);
         const hardCoded = {
             Id: id,
             ProjectTitle__c: "123: High speed rail and its effects on air quality",
