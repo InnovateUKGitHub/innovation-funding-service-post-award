@@ -2,6 +2,7 @@
 
 import React from "react";
 import { FullDate } from "./renderers/date";
+import { Email } from "./layout/email";
 
 interface TableChildProps<T, ReturnT> {
   header: React.ReactNode;
@@ -70,12 +71,16 @@ export const NumberColumn = <T extends {}>(): React.SFC<TableChildProps<T, numbe
 const DateColumn = <T extends {}>(): React.SFC<TableChildProps<T, Date>> =>
   (props) => <FullDate value={props.value(props.data!)}/>;
 
+const EmailColumn = <T extends {}>(): React.SFC<TableChildProps<T, string>> =>
+  (props) => <Email value={props.value(props.data!)}/>;
+
 export const Table = {
   forData: <T extends {}>(data: T[]) => ({
     Table: TableComponent(data),
     Custom: CustomColumn<T>(),
     String: StringColumn<T>(),
     Number: NumberColumn<T>(),
-    Date: DateColumn<T>()
+    Date: DateColumn<T>(),
+    Email: EmailColumn<T>()
   })
 };
