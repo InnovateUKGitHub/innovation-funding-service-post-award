@@ -13,7 +13,7 @@ export interface ISalesforceContact {
 }
 
 export interface IContactsRepository {
-  getById(id: string): Promise<ISalesforceContact>;
+  getById(id: string): Promise<ISalesforceContact|null>;
   getAll(): Promise<ISalesforceContact[]>;
 }
 

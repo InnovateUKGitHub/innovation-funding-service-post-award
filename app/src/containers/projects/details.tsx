@@ -86,7 +86,7 @@ class ProjectDetailsComponent extends ContainerBase<Data, Callbacks> {
 }
 
 function mapData(state: RootState): Data {
-    const id = "ToDo"; // get from url
+    const id = state.router.route && state.router.route.params.id; // get from url
     return {
         id,
         contacts: Pending.create(state.data.projectContacts[id]),

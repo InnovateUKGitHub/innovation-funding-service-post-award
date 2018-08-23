@@ -6,7 +6,7 @@ import { IContact } from "../../models";
 import { ControllerBase } from "./controllerBase";
 
 export interface IContactsApi {
-  get: (id: string) => Promise<IContact>;
+  get: (id: string) => Promise<IContact|null>;
   getAll: () => Promise<IContact[]>;
 }
 

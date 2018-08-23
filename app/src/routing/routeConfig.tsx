@@ -6,7 +6,7 @@ import * as Actions from "../redux/actions/contacts";
 
 export interface AsyncRoute extends Route {
   component: React.ComponentType<any>;
-  loadData?: () => AsyncThunk<any>[];
+  loadData?: (route?: any) => AsyncThunk<any>[];
 }
 
 export type RouteKeys = keyof typeof routeConfig;
@@ -19,10 +19,11 @@ const homeRoute: AsyncRoute = {
 
 const projectDetailsRoute: AsyncRoute = {
   name: "projectDetails",
-  path: "/project/details",
+  path: "/project/details/:id",
   component: Containers.ProjectDetails,
-  loadData: () => {
-      const projectId = "ToDo";
+  loadData: (route) => {
+    console.log("Getting data for route", route);
+      const projectId = route.params && route.params.id;
       return [
         Actions.loadProject(projectId),
         Actions.loadContactsForProject(projectId),

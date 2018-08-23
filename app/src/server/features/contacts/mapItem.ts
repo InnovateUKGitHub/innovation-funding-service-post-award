@@ -2,10 +2,6 @@ import { ISalesforceContact } from "../../repositories/contactsRepository";
 import { IContact } from "../../../models";
 
 export function mapItem(input: ISalesforceContact): IContact {
-  if(!input) {
-    throw new Error("NULL");
-  }
-
   return {
     id: input.Id,
     title: input.Salutation,

@@ -6,12 +6,22 @@ export default abstract class SalesforceBase<T> {
     private columns: string[]
   ) { }
 
-  protected async retrieve(id: string): Promise<T> {
-    console.log("connecting");
-    const conn = await salesforceConnection();
-    console.log("connected");
-    const result = await conn.sobject(this.objectName).retrieve(id);
-    return result as T;
+  protected async retrieve(id: string): Promise<T|null> {
+    try
+    {
+      const conn = await salesforceConnection();
+      const result = await conn.sobject(this.objectName).retrieve(id);
+      return result as T;
+    }
+    catch(e) {
+      if (e.errorCode === "NOT_FOUND") {
+        return null;
+      }
+      else{
+        throw e;
+      }
+
+    }
   }
 
   protected async all(): Promise<T[]> {
