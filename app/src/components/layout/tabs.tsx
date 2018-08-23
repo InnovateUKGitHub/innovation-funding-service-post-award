@@ -13,12 +13,14 @@ export const Tabs: React.SFC<TabProps> = (props: TabProps) => {
             </li>
         );
     };
-
-    return (
-        <div className={`govuk-tabs govuk-!-margin-bottom-9`} >
-            <ul className="govuk-tabs__list">
-                {props.tabList.map((x, i) => renderTab(x, `#`, i))}
-            </ul>
-        </div>
-    );
+    if (props.tabList !== null && props.tabList.length) {
+        return (
+            <div className={`govuk-tabs govuk-!-margin-bottom-9`} >
+                <ul className="govuk-tabs__list">
+                    {props.tabList.map((x, i) => renderTab(x, `#`, i))}
+                </ul>
+            </div>
+        );
+    }
+    return null;
 };
