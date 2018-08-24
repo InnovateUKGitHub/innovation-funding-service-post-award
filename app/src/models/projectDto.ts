@@ -7,4 +7,5 @@ export interface ProjectDto {
     summary: string;
     applicationUrl?: string;
     grantOfferLetterUrl?: string;
+    projectNumber:string;
 }
