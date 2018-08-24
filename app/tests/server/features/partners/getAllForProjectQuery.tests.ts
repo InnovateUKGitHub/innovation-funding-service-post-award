@@ -14,8 +14,8 @@ describe("getAllForProjectQuery", () => {
         expect(result.length).toBe(1);
         expect(result[0].id).toBe(partner.Id);
         expect(result[0].isLead).toBe(true);
-        expect(result[0].name).toBe(partner.ParticipantName__c);
-        expect(result[0].type).toBe(partner.ParticipantType__c);
+        expect(result[0].name).toBe(partner.Acc_AccountId__r.Name);
+        expect(result[0].type).toBe(partner.Acc_ParticipantType__c);
 
     });
 
@@ -32,12 +32,12 @@ describe("getAllForProjectQuery", () => {
         expect(result.length).toBe(0);
     });
 
-    it("when role is Lead expect isLead true", async () => {
+    it("when role is 'Project Lead' expect isLead true", async () => {
         let context = new TestContext();
         
         let project = context.testData.createProject();
-        let notLeadPartner = context.testData.createPartner(project, (x) => x.ProjectRole__c = "Other");
-        let leadPartner = context.testData.createPartner(project, (x) => x.ProjectRole__c = "Lead");
+        let notLeadPartner = context.testData.createPartner(project, (x) => x.Acc_ProjectRole__c = "Other");
+        let leadPartner = context.testData.createPartner(project, (x) => x.Acc_ProjectRole__c = "Project Lead");
 
         let result = await context.runQuery(new GetAllForProjectQuery(project.Id));
 

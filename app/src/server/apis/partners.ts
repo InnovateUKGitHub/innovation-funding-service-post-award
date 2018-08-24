@@ -11,7 +11,7 @@ class Controller extends ControllerBase<PartnerDto> implements IPartnersApi {
     constructor() {
         super();
 
-        this.getItems("/?", (p, q) => ({ projectId: q.projectId }), (p) => this.getAllByProjectId(p.projectId));
+        this.getItems("/", (p, q) => ({ projectId: q.projectId as string }), (p) => this.getAllByProjectId(p.projectId));
     }
 
     public async getAllByProjectId(projectId: string) {

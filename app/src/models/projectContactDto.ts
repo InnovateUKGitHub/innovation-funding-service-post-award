@@ -3,5 +3,6 @@ export interface ProjectContactDto {
     name: string;
     role: string;
     email: string;
-    partnerId?: string;
+    accountId?: string;
+    projectId: string;
 }

@@ -17,7 +17,8 @@ export class GetAllForProjectQuery implements IQuery<ProjectContactDto[]> {
             name: x.Acc_ContactId__r.Name,
             role: x.Acc_Role__c,
             email: x.Acc_EmailOfSFContact__c,
-            partnerId: x.Acc_AccountId__c
+            accountId: x.Acc_AccountId__c,
+            projectId: x.Acc_ProjectId__c
         });
     }
 }

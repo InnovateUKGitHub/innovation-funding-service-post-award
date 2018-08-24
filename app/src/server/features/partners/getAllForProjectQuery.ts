@@ -9,9 +9,11 @@ export class GetAllForProjectQuery implements IQuery<PartnerDto[]> {
         const results = await context.repositories.partners.getAllByProjectId(this.projectId);
         return results.map(x => ({
             id: x.Id,
-            name: x.ParticipantName__c,
-            type: x.ParticipantType__c,
-            isLead: x.ProjectRole__c === "Lead"
+            name: x.Acc_AccountId__r.Name,
+            accountId: x.Acc_AccountId__r.Id,
+            type: x.Acc_ParticipantType__c,
+            isLead: x.Acc_ProjectRole__c === "Project Lead",
+            projectId: x.Acc_ProjectId__c
         } as PartnerDto));
     }
 }

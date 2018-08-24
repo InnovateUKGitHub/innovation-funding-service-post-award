@@ -53,7 +53,7 @@ export class ProjectsRepository extends TestRepository<ISalesforceProject> imple
 
 export class PartnerRepository extends TestRepository<ISalesforcePartner> implements IPartnerRepository {
     getAllByProjectId(projectId: string): Promise<ISalesforcePartner[]> {
-        return super.getWhere(x => x.ProjectId__c == projectId);
+        return super.getWhere(x => x.Acc_ProjectId__c === projectId);
     }
 
 }
@@ -61,7 +61,7 @@ export class PartnerRepository extends TestRepository<ISalesforcePartner> implem
 
 export class ProjectContactRepository extends TestRepository<ISalesforceProjectContact> implements IProjectContactsRepository {
     getAllByProjectId(projectId: string): Promise<ISalesforceProjectContact[]> {
-        return super.getWhere(x => x.Acc_ProjectId__c == projectId);
+        return super.getWhere(x => x.Acc_ProjectId__c === projectId);
     }
 }
 
@@ -127,12 +127,14 @@ export class TestContext implements IContext {
 
             let newItem: ISalesforcePartner = {
                 Id: `Partner${seed}`,
-                AccountId: `Account${seed}`,
-                ParticipantName__c: `Participant Name ${seed}`,
-                ParticipantSize__c: "Large",
-                ParticipantType__c: "Accedemic",
-                ProjectRole__c: "Lead",
-                ProjectId__c: project.Id
+                Acc_AccountId__r: {
+                    Id: `AccountId${seed}`,
+                    Name: `Participant Name ${seed}` 
+                },
+                Acc_ParticipantSize__c: "Large",
+                Acc_ParticipantType__c: "Accedemic",
+                Acc_ProjectRole__c : "Project Lead",
+                Acc_ProjectId__c : project.Id
             };
             
             update && update(newItem);
@@ -151,13 +153,13 @@ export class TestContext implements IContext {
             let newItem: ISalesforceProjectContact = {
                 Id: `ProjectContact${seed}`,
                 Acc_ProjectId__c: project.Id,
-                Acc_AccountId__c: partner.Id,
+                Acc_AccountId__c: partner && partner.Acc_AccountId__r && partner.Acc_AccountId__r.Id,
                 Acc_EmailOfSFContact__c: `projectcontact${seed}@text.com`,
                 Acc_ContactId__r:{
                     Id: "Contact" + seed,
                     Name: `Ms Contact ${seed}`,
                 },
-                Acc_Role__c: "Monitoring officer",
+                Acc_Role__c: "Finance officer",
             };
 
             update && update(newItem);

@@ -35,15 +35,13 @@ class ProjectDetailsComponent extends ContainerBase<Data, Callbacks> {
     }
 
     private renderContents(project: Dtos.ProjectDto, partners: Dtos.PartnerDto[], contacts: Dtos.ProjectContactDto[]) {
-        const partnersAndContactsData = partners.map(partner => ({ partner, financeContact: contacts.find(x => x.partnerId === partner.id && x.role === "Finance contact") }));
+        const partnersAndContactsData = partners.map(partner => ({ partner, financeContact: contacts.find(x => x.accountId === partner.accountId && x.role === "Finance contact") }));
 
         const PartnersTable = ACC.Table.forData(partnersAndContactsData);
         const DetailsSection = ACC.Details.forData(project);
 
         const monitoringOfficer = contacts.find(x => x.role === "Monitoring Officer");
         const projectManager = contacts.find(x => x.role === "Project Manager");
-
-        const nonFinanceMembers = contacts.filter(x => x.role !== "Finance contact");
 
         const links = [
             { text: "View original application", url: project.applicationUrl },
@@ -60,9 +58,8 @@ class ProjectDetailsComponent extends ContainerBase<Data, Callbacks> {
                 <ACC.Tabs tabList={this.tabListArray} selected={this.selectedTab} />
 
                 <ACC.Section title="Project Members">
-                    {nonFinanceMembers.map(x => <ACC.ProjectMember member={x} />)}
-                    {/* <ACC.ProjectMember member={monitoringOfficer} />
-                    <ACC.ProjectMember member={projectManager} /> */}
+                    <ACC.ProjectMember member={monitoringOfficer} />
+                    <ACC.ProjectMember member={projectManager} />
 
                     <PartnersTable.Table>
                         <PartnersTable.String header="Partner" value={x => x.partner.isLead ? `${x.partner.name} (Lead)` : x.partner.name} />
