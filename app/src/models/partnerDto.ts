@@ -3,6 +3,6 @@ export interface PartnerDto {
     type: string;
     isLead: boolean;
     projectId: string;
-    accountId:string;
+    accountId: string;
     name: string;
 }
