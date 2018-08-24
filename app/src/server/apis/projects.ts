@@ -1,4 +1,4 @@
-import { GetByIdQuery } from "../features/projects/getDetailsByIdQuery";
+import { GetAllQuery, GetByIdQuery } from "../features/projects/";
 import { ControllerBase } from "./controllerBase";
 import contextProvider from "../features/common/contextProvider";
 import { ProjectDto } from "../../models/projectDto";
@@ -20,8 +20,9 @@ class Controller extends ControllerBase<ProjectDto> implements IProjectsApi {
         return await contextProvider.start().runQuery(query);
     }
 
-    public async getAll(){
-        return await contextProvider.start().repositories.projects.getAll();
+    public async getAll() {
+        const query = new GetAllQuery();
+        return await contextProvider.start().runQuery(query);
     }
 }
 
