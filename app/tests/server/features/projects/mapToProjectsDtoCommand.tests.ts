@@ -13,7 +13,8 @@ describe("MapToProjectDtoCommand", () => {
             title: "Expected title",
             startDate: new Date("2008/12/12"),
             endDate: new Date("2010/12/12"),
-            summary: "Expected summary"
+            summary: "Expected summary",
+            projectNumber: "Expected project number"
         };
 
         let salesforce = context.testData.createProject(x => {
@@ -23,6 +24,7 @@ describe("MapToProjectDtoCommand", () => {
             x.Acc_ProjectTitle__c = expected.title;
             x.Acc_StartDate__c = expected.startDate.toLocaleDateString();
             x.Acc_EndDate__c = expected.endDate.toLocaleDateString();
+            x.Acc_ProjectNumber__c = expected.projectNumber
         });
 
         let result = await context.runCommand(new MapToProjectDtoCommand(salesforce));

@@ -3,9 +3,9 @@ import { range } from "../../shared/range";
 
 export interface ISalesforcePartner {
     Id: string;
-    Acc_AccountId__r:{
-        Id:string;
-        Name:string;
+    Acc_AccountId__r: {
+        Id: string;
+        Name: string;
     };
     Acc_ParticipantType__c: string;
     Acc_ParticipantSize__c: string;
