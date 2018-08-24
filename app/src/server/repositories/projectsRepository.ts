@@ -65,5 +65,4 @@ export class ProjectRepository extends SalesforceBase<ISalesforceProject> implem
     getAll() {
         return super.all();
     }
-
 }

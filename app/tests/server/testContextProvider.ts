@@ -42,8 +42,12 @@ export class ContactsRepository extends TestRepository<ISalesforceContact> imple
 }
 
 export class ProjectsRepository extends TestRepository<ISalesforceProject> implements IProjectRepository {
-    getById(id: String): Promise<ISalesforceProject> {
+    getById(id: String) {
         return super.getOne(x => x.Id == id);
+    }
+
+    getAll() {
+        return super.getAll();
     }
 }
 
@@ -57,7 +61,7 @@ export class PartnerRepository extends TestRepository<ISalesforcePartner> implem
 
 export class ProjectContactRepository extends TestRepository<ISalesforceProjectContact> implements IProjectContactsRepository {
     getAllByProjectId(projectId: string): Promise<ISalesforceProjectContact[]> {
-        return super.getWhere(x => x.ProjectId == projectId);
+        return super.getWhere(x => x.Acc_ProjectId__c == projectId);
     }
 }
 
@@ -108,7 +112,7 @@ export class TestContext implements IContext {
 
             let newItem = {
                 Id: "Project" + seed,
-                ProjectTitle__c: "Project " + seed
+                Acc_ProjectTitle__c: "Project " + seed
             } as ISalesforceProject;
 
             update && update(newItem);
@@ -146,11 +150,14 @@ export class TestContext implements IContext {
 
             let newItem: ISalesforceProjectContact = {
                 Id: `ProjectContact${seed}`,
-                ProjectId: project.Id,
-                AccountId: partner.Id,
-                EmailOfSFContact__c: `projectcontact${seed}@text.com`,
-                Name: `Ms Contact ${seed}`,
-                Role__c: "Monitoring officer"
+                Acc_ProjectId__c: project.Id,
+                Acc_AccountId__c: partner.Id,
+                Acc_EmailOfSFContact__c: `projectcontact${seed}@text.com`,
+                Acc_ContactId__r:{
+                    Id: "Contact" + seed,
+                    Name: `Ms Contact ${seed}`,
+                },
+                Acc_Role__c: "Monitoring officer",
             };
 
             update && update(newItem);

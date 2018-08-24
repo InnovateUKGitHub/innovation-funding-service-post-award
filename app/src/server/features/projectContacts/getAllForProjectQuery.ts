@@ -14,10 +14,10 @@ export class GetAllForProjectQuery implements IQuery<ProjectContactDto[]> {
     private map(x: ISalesforceProjectContact) : ProjectContactDto{
         return ({
             id: x.Id,
-            name: x.Name,
-            role: x.Role__c,
-            email: x.EmailOfSFContact__c,
-            partnerId: x.AccountId
+            name: x.Acc_ContactId__r.Name,
+            role: x.Acc_Role__c,
+            email: x.Acc_EmailOfSFContact__c,
+            partnerId: x.Acc_AccountId__c
         });
     }
 }
