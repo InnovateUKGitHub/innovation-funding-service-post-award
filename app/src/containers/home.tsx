@@ -3,9 +3,7 @@ import { Link } from "react-router5";
 import { Title } from "../components";
 
 const ids = [
-  "a051w000000GE7PAAW",
-  "a051w000000GE7YAAW",
-  "a051w000000GE7UAAW"
+  "a051w000000GE7RAAW"
 ];
 
 export const Home: React.StatelessComponent = () => (

@@ -40,7 +40,7 @@ class ProjectDetailsComponent extends ContainerBase<Data, Callbacks> {
         const PartnersTable = ACC.Table.forData(partnersAndContactsData);
         const DetailsSection = ACC.Details.forData(project);
 
-        const monitoringOfficer = contacts.find(x => x.role === "Monitoring Officer");
+        const monitoringOfficer = contacts.find(x => x.role === "Monitoring officer");
         const projectManager = contacts.find(x => x.role === "Project Manager");
 
         const links = [
@@ -53,7 +53,7 @@ class ProjectDetailsComponent extends ContainerBase<Data, Callbacks> {
                 <ACC.Section>
                     <ACC.BackLink route={routeConfig.home}>Main dashboard</ACC.BackLink>
                 </ACC.Section>
-                <ACC.Title title="View project" caption={project.title} />
+                <ACC.Title title="View project" caption={`${project.projectNumber}:${project.title}`} />
 
                 <ACC.Tabs tabList={this.tabListArray} selected={this.selectedTab} />
 

@@ -13,8 +13,9 @@ export class MapToProjectDtoCommand implements IQuery<ProjectDto> {
       competition: this.item.Acc_CompetitionId__c,
       startDate: new Date(this.item.Acc_StartDate__c),
       endDate: new Date(this.item.Acc_EndDate__c),
-      applicationUrl: "#",
-      grantOfferLetterUrl: "#"
+      projectNumber: this.item.Acc_ProjectNumber__c,
+      applicationUrl: this.item.Acc_ProjectSource__c === "IFS" ? "#" : undefined,
+      grantOfferLetterUrl: this.item.Acc_ProjectSource__c === "IFS" ? "#" : undefined,
     });
   }
 }
