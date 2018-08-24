@@ -17,6 +17,13 @@ const homeRoute: AsyncRoute = {
   component: Containers.Home
 };
 
+const projectDashboardRoute: AsyncRoute = {
+  name: "projectDashboard",
+  path: "/project/dashboard",
+  component: Containers.ProjectDashboard,
+
+}
+
 const projectDetailsRoute: AsyncRoute = {
   name: "projectDetails",
   path: "/project/details/:id",
@@ -46,6 +53,7 @@ const errorRoute: AsyncRoute = {
 
 export const routeConfig = {
   home: homeRoute,
+  projectDashboard: projectDashboardRoute,
   projectDetails: projectDetailsRoute,
   contacts: contactsRoute,
   error: errorRoute,
