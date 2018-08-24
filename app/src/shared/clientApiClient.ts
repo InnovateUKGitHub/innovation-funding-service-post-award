@@ -6,7 +6,8 @@ const clientApi: IApiClient = {
         get: (id: string) => fetch(`http://localhost:8080/api/contact/${id}`).then(x => x.json())
     },
     projects:{
-        get: (id: string) => fetch(`http://localhost:8080/api/projects/${id}`).then(x => x.json())
+        get: (id: string) => fetch(`http://localhost:8080/api/projects/${id}`).then(x => x.json()),
+        getAll: () => fetch ("http://localhost:8080/api/projects").then(x => x.json())
     },
     projectContacts: {
         getAllByProjectId: (projectId: string) => fetch(`http://localhost:8080/api/projectContacts?projectId=${projectId}`).then(x => x.json())

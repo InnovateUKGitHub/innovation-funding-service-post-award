@@ -7,7 +7,6 @@ import * as projects from "./projects";
 import * as partners from "./partners";
 import * as projectContacts from "./projectContacts";
 
-
 export interface IApiClient {
   contacts: contacts.IContactsApi;
   projects: projects.IProjectsApi;
@@ -20,7 +19,7 @@ export const serverApis: IApiClient & { [key: string]: ControllerBase<{}> } = {
   partners: partners.controller,
   projects: projects.controller,
   projectContacts: projectContacts.controller,
-}
+};
 
 export const router = express.Router();
 

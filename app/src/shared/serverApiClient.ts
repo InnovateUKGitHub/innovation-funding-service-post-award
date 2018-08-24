@@ -1,2 +1,2 @@
-import { serverApis } from "../server/apis"
+import { serverApis } from "../server/apis";
 export default serverApis;

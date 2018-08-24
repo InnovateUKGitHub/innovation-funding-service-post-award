@@ -5,6 +5,7 @@ import { ProjectDto } from "../../models/projectDto";
 
 export interface IProjectsApi {
     get: (id: string) => Promise<ProjectDto|null>;
+    getAll: () => Promise<ProjectDto[]>;
 }
 
 class Controller extends ControllerBase<ProjectDto> implements IProjectsApi {

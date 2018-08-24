@@ -24,4 +24,3 @@ export const LinksList: React.SFC<Props> = (props) => {
         </React.Fragment>
     );
 };
-

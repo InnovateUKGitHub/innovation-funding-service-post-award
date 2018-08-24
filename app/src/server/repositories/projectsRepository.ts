@@ -1,27 +1,27 @@
 import SalesforceBase from "./salesforceBase";
 
 export interface ISalesforceProject {
-    Id: string,
-    Name: string,
-    Acc_ClaimFrequency__c: string,
-    Acc_CompetitionId__c: string,
-    Acc_CompetitionCode__c: string,
-    Acc_Duration__c: number,
-    Acc_EndDate__c: string,//Date,
-    Acc_GOLTotalCostAwarded__c: number,
-    Acc_IFSApplicationId__c: number,
-    Acc_LegacyID__c: string,
-    Acc_MonitoringLevel__c: string,
-    Acc_MonitoringReportSchedule__c: string,
-    Acc_OfferLetterDate__c: string,
-    Acc_ProjectActivityCode__c: string,
-    Acc_ProjectNumber__c: string,
-    Acc_ProjectSource__c: string,
-    Acc_ProjectStatus__c: string,
-    Acc_ProjectSummary__c: string,
-    Acc_ProjectTitle__c: string,
-    Acc_PublicDescription__c: string,
-    Acc_StartDate__c: string,//Date,
+    Id: string;
+    Name: string;
+    Acc_ClaimFrequency__c: string;
+    Acc_CompetitionId__c: string;
+    Acc_CompetitionCode__c: string;
+    Acc_Duration__c: number;
+    Acc_EndDate__c: string;// Date,
+    Acc_GOLTotalCostAwarded__c: number;
+    Acc_IFSApplicationId__c: number;
+    Acc_LegacyID__c: string;
+    Acc_MonitoringLevel__c: string;
+    Acc_MonitoringReportSchedule__c: string;
+    Acc_OfferLetterDate__c: string;
+    Acc_ProjectActivityCode__c: string;
+    Acc_ProjectNumber__c: string;
+    Acc_ProjectSource__c: string;
+    Acc_ProjectStatus__c: string;
+    Acc_ProjectSummary__c: string;
+    Acc_ProjectTitle__c: string;
+    Acc_PublicDescription__c: string;
+    Acc_StartDate__c: string;// Date,
 }
 
 const fields = [

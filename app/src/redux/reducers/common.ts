@@ -44,5 +44,6 @@ export const dataReducer = combineReducers({
   contact: dataStoreReducer<Dtos.IContact, string>(x => x, "contact"),
   partners: dataStoreReducer<Dtos.PartnerDto[], string>(x => x, "partners"),
   project: dataStoreReducer<Dtos.ProjectDto, string>(x => x, "project"),
+  projects: dataStoreReducer<Dtos.ProjectDto[], string>(x => x, "projects"),
   projectContacts: dataStoreReducer<Dtos.ProjectContactDto[], string>(x => x, "projectContacts")
 });

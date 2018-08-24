@@ -4,7 +4,7 @@ import { GetAllForProjectQuery } from "../features/projectContacts/getAllForProj
 import { ProjectContactDto } from "../../models";
 
 export interface IProjectContactsApi {
-    getAllByProjectId: (projectId: string) => Promise<ProjectContactDto[]>    
+    getAllByProjectId: (projectId: string) => Promise<ProjectContactDto[]>;
 }
 
 class Controller extends ControllerBase<ProjectContactDto> implements IProjectContactsApi {

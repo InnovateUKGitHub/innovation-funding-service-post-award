@@ -11,7 +11,7 @@ export class GetAllForProjectQuery implements IQuery<ProjectContactDto[]> {
         return results.map(this.map);
     }
 
-    private map(x: ISalesforceProjectContact) : ProjectContactDto{
+    private map(x: ISalesforceProjectContact): ProjectContactDto {
         return ({
             id: x.Id,
             name: x.Acc_ContactId__r.Name,
