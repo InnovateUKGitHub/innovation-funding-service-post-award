@@ -36,10 +36,10 @@ export abstract class ControllerBase<T> {
             try {
                 const p = getParams(req.params || {}, req.query || {});
                 const result = await run(p);
-                if(result !== null || allowNulls === true){
+                if(result !== null || allowNulls === true) {
                     resp.status(successStatus).send(result);
                 }
-                else{
+                else {
                     resp.status(404).send();
                 }
             }

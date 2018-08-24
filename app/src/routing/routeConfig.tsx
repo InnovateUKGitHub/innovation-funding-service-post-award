@@ -22,7 +22,6 @@ const projectDetailsRoute: AsyncRoute = {
   path: "/project/details/:id",
   component: Containers.ProjectDetails,
   loadData: (route) => {
-    console.log("Getting data for route", route);
       const projectId = route.params && route.params.id;
       return [
         Actions.loadProject(projectId),

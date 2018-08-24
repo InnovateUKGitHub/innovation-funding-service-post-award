@@ -4,7 +4,7 @@ import contextProvider from "../features/common/contextProvider";
 import { GetAllForProjectQuery } from "../features/partners/getAllForProjectQuery";
 
 export interface IPartnersApi {
-    getAllByProjectId: (projectId: string) => Promise<PartnerDto[]>
+    getAllByProjectId: (projectId: string) => Promise<PartnerDto[]>;
 }
 
 class Controller extends ControllerBase<PartnerDto> implements IPartnersApi {

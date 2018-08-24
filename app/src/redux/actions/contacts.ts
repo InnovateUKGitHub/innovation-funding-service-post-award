@@ -29,6 +29,14 @@ export function loadProject(id: string) {
   );
 }
 
+export function loadProjects() {
+  return conditionalLoad(
+    "all",
+    "projects",
+    () => ApiClient.projects.getAll()
+  );
+}
+
 export function loadPatnersForProject(projectId: string) {
   return conditionalLoad(
     projectId,

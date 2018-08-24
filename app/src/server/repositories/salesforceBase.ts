@@ -31,7 +31,7 @@ export default abstract class SalesforceBase<T> {
       .select(this.columns.join(", "))
       .execute()
       .then(x => this.asArray(x));
-    
+
     return result as T[];
   }
 
@@ -42,7 +42,7 @@ export default abstract class SalesforceBase<T> {
       .where(filter)
       .execute()
       .then(x => this.asArray(x));
-    
+
     return result as T[];
   }
 
@@ -56,7 +56,6 @@ export default abstract class SalesforceBase<T> {
       .where(jsonFilter)
       .execute()
       .then(x => this.asArray(x));
-    
 
     return result as T[];
   }

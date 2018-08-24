@@ -1,7 +1,7 @@
 import {TestContext} from "../../testContextProvider";
 import { GetByIdQuery } from "../../../../src/server/features/projects/getDetailsByIdQuery";
 
-describe("GetDetailsByIdQuery", () => {
+describe("ProjectsGetDetailsByIdQuery", () => {
     it("when exists expect item", async () => {
         let context = new TestContext();
 
