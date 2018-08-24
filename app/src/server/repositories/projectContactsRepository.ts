@@ -3,11 +3,14 @@ import SalesforceBase from "./salesforceBase";
 
 export interface ISalesforceProjectContact {
     Id: string;
-    ProjectId: string;
-    AccountId?: string;
-    Role__c: "Monitoring officer" | "Project manager" | "Finance contact";
-    Name: string;
-    EmailOfSFContact__c: string;
+    Acc_AccountId__c: string;
+    Acc_ProjectId__c: string;
+    Acc_EmailOfSFContact__c: string;
+    Acc_Role__c: string;
+    Acc_ContactId__r: {
+        Id: string;
+        Name: string;
+    };
 }
 
 export interface IProjectContactsRepository {
@@ -16,11 +19,12 @@ export interface IProjectContactsRepository {
 
 export class ProjectContactsRepository extends SalesforceBase<ISalesforceProjectContact> implements IProjectContactsRepository {
     constructor() {
-        super("ProjectContactLink__c", ["TODO"]);
+        super("Acc_ProjectContactLink__c", ["Id", "Acc_AccountId__c", "Acc_ProjectId__c", "Acc_EmailOfSFContact__c", "Acc_Role__c", "Acc_ContactId__r.Id", "Acc_ContactId__r.Name"]);
     }
 
     getAllByProjectId(projectId: string): Promise<ISalesforceProjectContact[]> {
-        const hardCoded: ISalesforceProjectContact[] = [
+        return this.whereFilter(x => x.Acc_ProjectId__c === projectId);
+        /*const hardCoded: ISalesforceProjectContact[] = [
             {
                 Id: "Contact1",
                 ProjectId: projectId,
@@ -70,6 +74,6 @@ export class ProjectContactsRepository extends SalesforceBase<ISalesforceProject
             }
         ];
 
-        return Promise.resolve<ISalesforceProjectContact[]>(hardCoded);
+        return Promise.resolve<ISalesforceProjectContact[]>(hardCoded);*/
     }
 }

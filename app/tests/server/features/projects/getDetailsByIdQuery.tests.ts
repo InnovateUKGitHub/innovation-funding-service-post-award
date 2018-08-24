@@ -10,7 +10,7 @@ describe("GetDetailsByIdQuery", () => {
 
         let project = context.testData.createProject(x => {
             x.Id = expectedId,
-            x.ProjectTitle__c = expectedName
+            x.Acc_ProjectTitle__c = expectedName
         });
 
         let result = await context.runQuery(new GetByIdQuery(project.Id));
@@ -28,7 +28,7 @@ describe("GetDetailsByIdQuery", () => {
         let result = await context.runQuery(new GetByIdQuery(project2.Id));
 
         expect(result.id).toBe(project2.Id);
-        expect(result.title).toBe(project2.ProjectTitle__c);
+        expect(result.title).toBe(project2.Acc_ProjectTitle__c);
     });
 
     it("when not exists expect exception", async () => {

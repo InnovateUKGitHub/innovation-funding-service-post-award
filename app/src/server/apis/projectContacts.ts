@@ -18,7 +18,6 @@ class Controller extends ControllerBase<ProjectContactDto> implements IProjectCo
         const query = new GetAllForProjectQuery(projectId);
         return await contextProvider.start().runQuery(query);
     }
-
 }
 
 export const controller = new Controller();

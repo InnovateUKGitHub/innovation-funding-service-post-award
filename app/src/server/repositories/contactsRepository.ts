@@ -13,7 +13,7 @@ export interface ISalesforceContact {
 }
 
 export interface IContactsRepository {
-  getById(id: string): Promise<ISalesforceContact>;
+  getById(id: string): Promise<ISalesforceContact|null>;
   getAll(): Promise<ISalesforceContact[]>;
 }
 
@@ -27,6 +27,7 @@ export class ContactsRepository extends SalesforceBase<ISalesforceContact> imple
   }
 
   getAll() {
+    console.log("getting all");
     return super.all();
   }
 }

@@ -25,7 +25,7 @@ export class PartnerRepository extends SalesforceBase<ISalesforcePartner> implem
     getAllByProjectId(projectId: string): Promise<ISalesforcePartner[]> {
         const hardCoded: ISalesforcePartner[] = [
             {
-                Id: "Partner1",
+                Id: "0011w0000031Y07AAE",
                 AccountId: "Ooba",
                 ParticipantName__c: "Ooba",
                 ParticipantType__c: "Industrial",
@@ -34,7 +34,7 @@ export class PartnerRepository extends SalesforceBase<ISalesforcePartner> implem
                 ProjectId__c: projectId,
             },
             {
-                Id: "Partner2",
+                Id: "0011w0000031Y08AAE",
                 AccountId: "Gabtype",
                 ParticipantName__c: "Gabtype",
                 ParticipantType__c: "Industrial",
@@ -43,7 +43,7 @@ export class PartnerRepository extends SalesforceBase<ISalesforcePartner> implem
                 ProjectId__c: projectId,
             },
             {
-                Id: "Partner3",
+                Id: "0011w0000031Y17AAE",
                 AccountId: "Jabbertype",
                 ParticipantName__c: "Jabbertype",
                 ParticipantType__c: "Industrial",
@@ -52,7 +52,7 @@ export class PartnerRepository extends SalesforceBase<ISalesforcePartner> implem
                 ProjectId__c: projectId,
             },
             {
-                Id: "Partner4",
+                Id: "0011w0000031Y10AAE",
                 AccountId: "Wordpedia",
                 ParticipantName__c: "Wordpedia",
                 ParticipantType__c: "Academic",

@@ -18,11 +18,11 @@ describe("MapToProjectDtoCommand", () => {
 
         let salesforce = context.testData.createProject(x => {
             x.Id = expected.id;
-            x.Competetion__c = expected.competition;
-            x.ProjectSummary__c = expected.summary;
-            x.ProjectTitle__c = expected.title;
-            x.StartDate__c = expected.startDate;
-            x.EndDate__c = expected.endDate;
+            x.Acc_CompetitionId__c = expected.competition;
+            x.Acc_ProjectSummary__c = expected.summary;
+            x.Acc_ProjectTitle__c = expected.title;
+            x.Acc_StartDate__c = expected.startDate.toLocaleDateString();
+            x.Acc_EndDate__c = expected.endDate.toLocaleDateString();
         });
 
         let result = await context.runCommand(new MapToProjectDtoCommand(salesforce));

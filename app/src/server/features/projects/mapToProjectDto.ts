@@ -3,18 +3,18 @@ import { ProjectDto } from "../../../models";
 import { ISalesforceProject } from "../../repositories/projectsRepository";
 
 export class MapToProjectDtoCommand implements IQuery<ProjectDto> {
-  constructor(readonly item: ISalesforceProject) {}
+  constructor(readonly item: ISalesforceProject) { }
 
   async Run(context: IContext) {
-      return Promise.resolve({
-        id: this.item.Id,
-        title: this.item.ProjectTitle__c,
-        summary: this.item.ProjectSummary__c,
-        competition: this.item.Competetion__c,
-        startDate: this.item.StartDate__c,
-        endDate: this.item.EndDate__c,
-        applicationUrl: "#",
-        grantOfferLetterUrl: "#"
+    return Promise.resolve({
+      id: this.item.Id,
+      title: this.item.Acc_ProjectTitle__c,
+      summary: this.item.Acc_ProjectSummary__c,
+      competition: this.item.Acc_CompetitionId__c,
+      startDate: new Date(this.item.Acc_StartDate__c),
+      endDate: new Date(this.item.Acc_EndDate__c),
+      applicationUrl: "#",
+      grantOfferLetterUrl: "#"
     });
   }
 }
