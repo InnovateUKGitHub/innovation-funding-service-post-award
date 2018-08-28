@@ -6,6 +6,7 @@ const flags = new webpack.DefinePlugin({
 });
 
 module.exports = [{
+  mode: "development",
     entry: {
         server: './src/server/index.ts',
     },
