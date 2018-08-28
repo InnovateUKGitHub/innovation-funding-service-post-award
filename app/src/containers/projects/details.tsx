@@ -58,8 +58,8 @@ class ProjectDetailsComponent extends ContainerBase<Data, Callbacks> {
                 <ACC.Tabs tabList={this.tabListArray} selected={this.selectedTab} />
 
                 <ACC.Section title="Project Members">
-                    <ACC.ProjectMember member={monitoringOfficer} />
-                    <ACC.ProjectMember member={projectManager} />
+                    <ACC.ProjectMember member={monitoringOfficer} qa="monitoring-officer" />
+                    <ACC.ProjectMember member={projectManager} qa="project-manager" />
 
                     <PartnersTable.Table>
                         <PartnersTable.String header="Partner" value={x => x.partner.isLead ? `${x.partner.name} (Lead)` : x.partner.name} />
