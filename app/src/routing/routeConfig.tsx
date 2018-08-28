@@ -22,7 +22,7 @@ const projectDashboardRoute: AsyncRoute = {
   path: "/project/dashboard",
   component: Containers.ProjectDashboard,
 
-}
+};
 
 const projectDetailsRoute: AsyncRoute = {
   name: "projectDetails",

@@ -1,4 +1,4 @@
-import { GetAllQuery, GetByIdQuery } from "../features/projects/";
+import { GetAllQuery, GetByIdQuery } from "../features/projects";
 import { ControllerBase } from "./controllerBase";
 import contextProvider from "../features/common/contextProvider";
 import { ProjectDto } from "../../models/projectDto";

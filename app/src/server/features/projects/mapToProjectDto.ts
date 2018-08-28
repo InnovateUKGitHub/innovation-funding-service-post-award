@@ -2,11 +2,17 @@ import { IContext, IQuery } from "../common/context";
 import { ProjectDto } from "../../../models";
 import { ISalesforceProject } from "../../repositories/projectsRepository";
 
+export enum ClaimFrequency {
+  "Unknown",
+  "Quarterly",
+  "Monthly"
+}
+
 export class MapToProjectDtoCommand implements IQuery<ProjectDto> {
   constructor(readonly item: ISalesforceProject) { }
 
   async Run(context: IContext) {
-    return Promise.resolve({
+    const dto: ProjectDto = {
       id: this.item.Id,
       title: this.item.Acc_ProjectTitle__c,
       summary: this.item.Acc_ProjectSummary__c,
@@ -16,7 +22,35 @@ export class MapToProjectDtoCommand implements IQuery<ProjectDto> {
       projectNumber: this.item.Acc_ProjectNumber__c,
       applicationUrl: this.getIFSUrl(this.item, context.config.ifsApplicationUrl),
       grantOfferLetterUrl: this.getIFSUrl(this.item, context.config.ifsGrantLetterUrl),
-    });
+      claimFrequency: this.mapFrequencyToEnum(this.item.Acc_ClaimFrequency__c),
+      period: NaN,
+    };
+
+    dto.period = this.calcPeriod(dto);
+
+    return Promise.resolve(dto);
+  }
+
+  mapFrequencyToEnum(freq: string): ClaimFrequency {
+    switch(freq) {
+      case "Quarterly": return ClaimFrequency.Quarterly;
+      case "Monthly":   return ClaimFrequency.Monthly;
+      default:          return ClaimFrequency.Unknown;
+    }
+  }
+
+  calcPeriod(dto: ProjectDto): number {
+    const today        = new Date();
+    const currentMonth = today.getUTCMonth();
+    const startMonth   = dto.startDate.getUTCMonth();
+    const frequency    = dto.claimFrequency;
+
+    // add 1 to increment index from 0-11 to 1-12
+    const periodMonth  = 1 + ((currentMonth - startMonth) + 12) % 12;
+
+    return frequency === ClaimFrequency.Quarterly
+      ? Math.ceil(periodMonth / 3)
+      : periodMonth;
   }
 
   private getIFSUrl(project: ISalesforceProject, ifsUrl: string): string | null {

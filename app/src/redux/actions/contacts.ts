@@ -1,7 +1,5 @@
 import { conditionalLoad } from "./dataLoad";
 import { ApiClient } from "../../shared/apiClient";
-import { RootState } from "../reducers";
-import { IContact } from "../../models";
 
 export function loadContacts() {
   return conditionalLoad(

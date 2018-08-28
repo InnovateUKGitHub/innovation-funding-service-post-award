@@ -1,20 +1,24 @@
 import React from "react";
 import { ContainerBase, ReduxContainer } from "../containerBase";
-import { RootState } from "../../redux";
 import * as ACC from "../../components";
 import { ProjectDto } from "../../models";
 import { Pending } from "../../shared/pending";
 import { routeConfig } from "../../routing";
+import * as Actions from "../../redux/actions/contacts";
 
 interface Data {
   projects: Pending<ProjectDto[]>;
 }
 
 interface Callbacks {
-
+  loadProjects: () => void;
 }
 
 class ProjectDashboardComponent extends ContainerBase<Data, Callbacks> {
+  componentDidMount() {
+    this.props.loadProjects();
+  }
+
   render() {
     const Loading = ACC.Loading.forData(this.props.projects);
 
@@ -36,15 +40,15 @@ class ProjectDashboardComponent extends ContainerBase<Data, Callbacks> {
 
     return (
       <React.Fragment>
-        <ACC.SubSection title="Projects with open claims">
+        <ACC.ListSection title="Projects with open claims">
           {this.renderProjects(open, "You currently do not have any projects with open claims.")}
-        </ACC.SubSection>
-        <ACC.SubSection title="Projects awaiting the next claim period">
+        </ACC.ListSection>
+        <ACC.ListSection title="Projects awaiting the next claim period">
           {this.renderProjects(awaiting, "You currently do not have any projects awaiting the next claim period.")}
-        </ACC.SubSection>
-        <ACC.SubSection title="Archived projects">
+        </ACC.ListSection>
+        <ACC.ListSection title="Archived projects">
           {this.renderProjects(archived, "You currently do not have any archived projects.")}
-        </ACC.SubSection>
+        </ACC.ListSection>
       </React.Fragment>
     );
   }
@@ -52,12 +56,12 @@ class ProjectDashboardComponent extends ContainerBase<Data, Callbacks> {
   renderProjects(projects: ProjectDto[], emptyMessage: string) {
     return projects.length > 0
       ? projects.map((x, i) => <ACC.ProjectItem key={i} project={x} />)
-      : <p className="govuk-body">{emptyMessage}</p>;
+      : <ACC.ListItem><p className="govuk-body">{emptyMessage}</p></ACC.ListItem>;
   }
 }
 
 export const ProjectDashboard = ReduxContainer.for<Data, Callbacks>(ProjectDashboardComponent)
 // TODO - key below
-  .withData(state => ({ projects: Pending.create(state.data.projects.todo) }))
-  .withCallbacks(() => ({}))
+  .withData(state => ({ projects: Pending.create(state.data.projects.all) }))
+  .withCallbacks(dispatch => ({ loadProjects: () => dispatch(Actions.loadProjects()) }))
   .connect();
