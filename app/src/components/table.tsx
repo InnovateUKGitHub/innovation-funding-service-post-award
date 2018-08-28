@@ -8,6 +8,7 @@ interface TableChildProps<T, ReturnT> {
   header: React.ReactNode;
   value: (data: T) => ReturnT;
   data?: T;
+  qa: string;
 }
 
 type TableChild<T> = React.ReactElement<TableChildProps<T, {}>>;
@@ -15,7 +16,7 @@ type TableChild<T> = React.ReactElement<TableChildProps<T, {}>>;
 interface TableProps<T> {
   children: TableChild<T> | TableChild<T>[];
   className?: string;
-  qa?: string;
+  qa: string;
 }
 
 export const renderNode = (node: React.ReactNode, key: number) => (
@@ -23,7 +24,7 @@ export const renderNode = (node: React.ReactNode, key: number) => (
 );
 
 export const renderRow = (row: React.ReactNode[], key: number) => (
-  <tr className="govuk-table__row" key={key}>{row.map(renderNode)}</tr>
+  <tr className="govuk-table__row" key={key} data-qa-group="partner-row">{row.map(renderNode)}</tr>
 );
 
 export const renderTableHeading = (heading: React.ReactNode, key: number) => (
@@ -56,17 +57,17 @@ export const TableComponent = <T extends {}>(data: T[]) => (props: TableProps<T>
   );
 };
 
-export const renderColumn = <T extends {}>(render: (x: T) => React.ReactNode, data?: T) =>
-  typeof data === "undefined" || data === null ? null : <React.Fragment>{render(data)}</React.Fragment>;
+export const renderColumn = <T extends {}>(render: (x: T) => React.ReactNode, qa: string, data?: T) =>
+  typeof data === "undefined" || data === null ? null : <React.Fragment data-qa={qa}>{render(data)}</React.Fragment>;
 
 export const CustomColumn = <T extends {}>(): React.SFC<TableChildProps<T, React.ReactNode>> =>
-  (props) => renderColumn(props.value, props.data);
+  (props) => renderColumn(props.value, props.qa, props.data);
 
 export const StringColumn = <T extends {}>(): React.SFC<TableChildProps<T, string>> =>
-  (props) => renderColumn(props.value, props.data);
+  (props) => renderColumn(props.value, props.qa, props.data);
 
 export const NumberColumn = <T extends {}>(): React.SFC<TableChildProps<T, number>> =>
-  (props) => renderColumn(props.value, props.data);
+  (props) => renderColumn(props.value, props.qa, props.data);
 
 const DateColumn = <T extends {}>(): React.SFC<TableChildProps<T, Date>> =>
   (props) => <FullDate value={props.value(props.data!)}/>;

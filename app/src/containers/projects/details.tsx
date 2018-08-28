@@ -61,11 +61,11 @@ class ProjectDetailsComponent extends ContainerBase<Data, Callbacks> {
                     <ACC.ProjectMember member={monitoringOfficer} qa="monitoring-officer" />
                     <ACC.ProjectMember member={projectManager} qa="project-manager" />
 
-                    <PartnersTable.Table>
-                        <PartnersTable.String header="Partner" value={x => x.partner.isLead ? `${x.partner.name} (Lead)` : x.partner.name} />
-                        <PartnersTable.String header="Partner Type" value={x => x.partner.type} />
-                        <PartnersTable.String header="Finance Contact" value={x => x.financeContact && x.financeContact.name || ""} />
-                        <PartnersTable.Email header="Email" value={x => x.financeContact && x.financeContact.email || ""} />
+                    <PartnersTable.Table qa="project-details-table">
+                        <PartnersTable.String header="Partner" value={x => x.partner.isLead ? `${x.partner.name} (Lead)` : x.partner.name} qa="partner-column"/>
+                        <PartnersTable.String header="Partner Type" value={x => x.partner.type} qa="partner-type-column"/>
+                        <PartnersTable.String header="Finance Contact" value={x => x.financeContact && x.financeContact.name || ""} qa="fc-column" />
+                        <PartnersTable.Email header="Email" value={x => x.financeContact && x.financeContact.email || ""} qa="email-column" />
                     </PartnersTable.Table>
                 </ACC.Section>
 
