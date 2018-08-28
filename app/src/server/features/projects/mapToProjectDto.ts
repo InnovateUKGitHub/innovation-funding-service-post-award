@@ -14,8 +14,18 @@ export class MapToProjectDtoCommand implements IQuery<ProjectDto> {
       startDate: new Date(this.item.Acc_StartDate__c),
       endDate: new Date(this.item.Acc_EndDate__c),
       projectNumber: this.item.Acc_ProjectNumber__c,
-      applicationUrl: this.item.Acc_ProjectSource__c === "IFS" ? "#" : undefined,
-      grantOfferLetterUrl: this.item.Acc_ProjectSource__c === "IFS" ? "#" : undefined,
+      applicationUrl: this.getIFSUrl(this.item, context.config.ifsApplicationUrl),
+      grantOfferLetterUrl: this.getIFSUrl(this.item, context.config.ifsGrantLetterUrl),
     });
+  }
+
+  private getIFSUrl(project: ISalesforceProject, ifsUrl: string): string | null {
+    if (ifsUrl && project.Acc_ProjectSource__c === "IFS") {
+      /// foreach prop in project build regex replacing <<PROP_NAME>> with value and then replace the expected value in string
+      return Object.keys(project)
+        .map(key => ({ regEx: new RegExp(`<<${key}>>`, "g"), val: (project as any)[key] }))
+        .reduce((url, item) => url.replace(item.regEx, item.val), ifsUrl);
+    }
+    return null;
   }
 }

@@ -32,4 +32,33 @@ describe("MapToProjectDtoCommand", () => {
         expect(result).toMatchObject(expected);
     });
 
+    it("when ifs application url configured expect full url", async () => {
+        let context = new TestContext();
+        context.config.ifsApplicationUrl = "https://ifs.application.url/application/competition/<<Acc_CompetitionId__c>>/project/<<Acc_IFSApplicationId__c>>";
+
+        let salesforce = context.testData.createProject(x => {
+            x.Acc_ProjectSource__c = "IFS";
+            x.Acc_IFSApplicationId__c = 1;
+            x.Acc_CompetitionId__c = "c1";
+        });
+
+        let result = await context.runCommand(new MapToProjectDtoCommand(salesforce));
+
+        expect(result.applicationUrl).toBe("https://ifs.application.url/application/competition/c1/project/1")
+    });
+
+    it("when ifs grant letter url configured expect full url", async () => {
+        let context = new TestContext();
+        context.config.ifsGrantLetterUrl = "https://ifs.application.url/grantletter/competition/<<Acc_CompetitionId__c>>/project/<<Acc_IFSApplicationId__c>>";
+
+        let salesforce = context.testData.createProject(x => {
+            x.Acc_ProjectSource__c = "IFS";
+            x.Acc_IFSApplicationId__c = 1;
+            x.Acc_CompetitionId__c = "c1";
+        });
+
+        let result = await context.runCommand(new MapToProjectDtoCommand(salesforce));
+
+        expect(result.grantOfferLetterUrl).toBe("https://ifs.application.url/grantletter/competition/c1/project/1")
+    });
 });

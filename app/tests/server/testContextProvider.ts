@@ -74,6 +74,11 @@ export class TestContext implements IContext {
         projectContacts: new ProjectContactRepository()
     };
 
+    public config = {
+        ifsApplicationUrl: "",
+        ifsGrantLetterUrl: ""
+    };
+
     public runQuery<TResult>(query: IQuery<TResult>): Promise<TResult> {
         return query.Run(this as IContext);
     }
@@ -121,7 +126,7 @@ export class TestContext implements IContext {
 
             return newItem;
         },
-        createPartner: (project?: ISalesforceProject, update?: (item:ISalesforcePartner) => void) => {
+        createPartner: (project?: ISalesforceProject, update?: (item: ISalesforcePartner) => void) => {
             let seed = this.repositories.partners.Items.length + 1;
             project = project || this.testData.createProject();
 
@@ -129,14 +134,14 @@ export class TestContext implements IContext {
                 Id: `Partner${seed}`,
                 Acc_AccountId__r: {
                     Id: `AccountId${seed}`,
-                    Name: `Participant Name ${seed}` 
+                    Name: `Participant Name ${seed}`
                 },
                 Acc_ParticipantSize__c: "Large",
                 Acc_ParticipantType__c: "Accedemic",
-                Acc_ProjectRole__c : "Project Lead",
-                Acc_ProjectId__c : project.Id
+                Acc_ProjectRole__c: "Project Lead",
+                Acc_ProjectId__c: project.Id
             };
-            
+
             update && update(newItem);
 
             this.repositories.partners.Items.push(newItem);
@@ -144,9 +149,9 @@ export class TestContext implements IContext {
             return newItem;
         },
         createProjectContact: (project?: ISalesforceProject, partner?: ISalesforcePartner, update?: (item: ISalesforceProjectContact) => void) => {
-            
+
             project = project || this.testData.createProject();
-            partner= partner || this.testData.createPartner(project);
+            partner = partner || this.testData.createPartner(project);
 
             let seed = this.repositories.projectContacts.Items.length + 1;
 
@@ -155,7 +160,7 @@ export class TestContext implements IContext {
                 Acc_ProjectId__c: project.Id,
                 Acc_AccountId__c: partner && partner.Acc_AccountId__r && partner.Acc_AccountId__r.Id,
                 Acc_EmailOfSFContact__c: `projectcontact${seed}@text.com`,
-                Acc_ContactId__r:{
+                Acc_ContactId__r: {
                     Id: "Contact" + seed,
                     Name: `Ms Contact ${seed}`,
                 },
