@@ -5,7 +5,7 @@ export interface ProjectDto {
     startDate: Date;
     endDate: Date;
     summary: string;
-    applicationUrl?: string;
-    grantOfferLetterUrl?: string;
+    applicationUrl?: string|null;
+    grantOfferLetterUrl?: string|null;
     projectNumber: string;
 }
