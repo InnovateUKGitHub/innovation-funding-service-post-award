@@ -28,7 +28,7 @@ export const renderRow = (row: React.ReactNode[], key: number) => (
 );
 
 export const renderTableHeading = (heading: React.ReactNode, key: number) => (
-  <th className="govuk-table__header" scope="col" key={key}>{heading}</th>
+  <th className="govuk-table__header" scope="col" key={key} data-qa={`${heading}-column-heading`}>{heading}</th>
 );
 
 export const TableComponent = <T extends {}>(data: T[]) => (props: TableProps<T>) => {
