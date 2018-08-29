@@ -5,6 +5,7 @@ import { ProjectDto } from "../../models";
 import { Pending } from "../../shared/pending";
 import { routeConfig } from "../../routing";
 import * as Actions from "../../redux/actions/contacts";
+import { ClaimFrequency } from "../../server/features/projects";
 
 interface Data {
   projects: Pending<ProjectDto[]>;
@@ -34,9 +35,51 @@ class ProjectDashboardComponent extends ContainerBase<Data, Callbacks> {
   }
 
   renderSubSections(projects: ProjectDto[]) {
-    const open     = projects.filter(x => true);
-    const awaiting = projects.filter(x => false);
-    const archived = projects.filter(x => false);
+    const open: JSX.Element[]     = [];
+    const awaiting: JSX.Element[] = [];
+    const archived: JSX.Element[] = [];
+
+    projects.forEach(x => {
+      const quarterly  = x.claimFrequency === ClaimFrequency.Quarterly;
+      const frequency  = quarterly ? 4 : 12;
+      const periodText = quarterly ? "Quarter" : "Period";
+      const today      = new Date();
+      // needs last claim date to work out latest period for claim deadline
+      const end        = new Date(x.startDate);
+      const endMonth   = x.period * (quarterly ? 4 : 1);
+      end.setMonth(end.getMonth() + endMonth);
+      end.setDate(0);
+      const timeRemaining = end.getTime() - today.getTime();
+      const daysRemaining = Math.floor(timeRemaining / (60 * 60 * 24 * 1000));
+
+      if(daysRemaining <= 30) {
+        open.push((
+          <ACC.OpenProjectItem
+            project={x}
+            daysRemaining={daysRemaining}
+            endDate={end}
+            frequency={frequency}
+            periodText={periodText}
+            warning={true}
+          />
+        ));
+      }
+      else {
+        const nextStart = new Date(end);
+        nextStart.setDate(1);
+
+        awaiting.push((
+          <ACC.AwaitingProjectItem
+            project={x}
+            frequency={frequency}
+            periodText={periodText}
+            warning={false}
+            periodStart={nextStart}
+            periodEnd={end}
+          />
+        ));
+      }
+    });
 
     return (
       <React.Fragment>
@@ -44,7 +87,7 @@ class ProjectDashboardComponent extends ContainerBase<Data, Callbacks> {
           {this.renderProjects(open, "You currently do not have any projects with open claims.")}
         </ACC.ListSection>
         <ACC.ListSection title="Projects awaiting the next claim period">
-          {this.renderProjects(awaiting, "You currently do not have any projects awaiting the next claim period.")}
+          {this.renderProjects(awaiting, "You currently do not have any projects outside of the claims period.")}
         </ACC.ListSection>
         <ACC.ListSection title="Archived projects">
           {this.renderProjects(archived, "You currently do not have any archived projects.")}
@@ -53,10 +96,10 @@ class ProjectDashboardComponent extends ContainerBase<Data, Callbacks> {
     );
   }
 
-  renderProjects(projects: ProjectDto[], emptyMessage: string) {
+  renderProjects(projects: JSX.Element[], emptyMessage: string) {
     return projects.length > 0
-      ? projects.map((x, i) => <ACC.ProjectItem key={i} project={x} />)
-      : <ACC.ListItem><p className="govuk-body">{emptyMessage}</p></ACC.ListItem>;
+      ? projects
+      : <ACC.ListItem><p className="govuk-body govuk-!-margin-0">{emptyMessage}</p></ACC.ListItem>;
   }
 }
 

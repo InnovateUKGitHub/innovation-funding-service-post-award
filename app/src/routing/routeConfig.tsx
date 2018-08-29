@@ -21,7 +21,7 @@ const projectDashboardRoute: AsyncRoute = {
   name: "projectDashboard",
   path: "/project/dashboard",
   component: Containers.ProjectDashboard,
-
+  loadData: () => [Actions.loadProjects()]
 };
 
 const projectDetailsRoute: AsyncRoute = {
