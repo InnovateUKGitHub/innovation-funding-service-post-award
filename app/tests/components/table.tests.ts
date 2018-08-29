@@ -26,7 +26,7 @@ describe("Table", () => {
       const rows    = [];
       const result  = Table.renderRow(rows);
       const wrapper = shallow(result);
-      expect(wrapper.html()).toEqual(`<tr class="govuk-table__row"></tr>`);
+      expect(wrapper.html()).toEqual(`<tr class="govuk-table__row" data-qa-group="partner-row"></tr>`);
     });
 
     it("should render <tr> with number nodes", () => {
@@ -43,7 +43,7 @@ describe("Table", () => {
     it("should render th with given number", () => {
       const result  = Table.renderTableHeading(1);
       const wrapper = shallow(result);
-      expect(wrapper.html()).toEqual(`<th class="govuk-table__header" scope="col">1</th>`);
+      expect(wrapper.html()).toEqual(`<th class="govuk-table__header" scope="col" data-qa="1-column-heading">1</th>`);
     });
   });
 

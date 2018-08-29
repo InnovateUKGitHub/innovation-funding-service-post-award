@@ -7,4 +7,5 @@ export * from "./linksList";
 export * from "./projectMember";
 export * from "./table";
 export * from "./loading";
+export * from "./partnersTable";
 export { Renderers };
