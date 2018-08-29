@@ -3,6 +3,7 @@ import { IProjectRepository, ProjectRepository } from "../../repositories/projec
 import { IPartnerRepository, PartnerRepository } from "../../repositories/partnersRepository";
 import { IProjectContactsRepository, ProjectContactsRepository } from "../../repositories/projectContactsRepository";
 import { Configuration, IConfig } from "./config";
+import { Clock, IClock } from "./clock";
 
 export interface IQuery<T> {
   Run: (context: IContext) => Promise<T>;
@@ -24,6 +25,7 @@ export interface IContext {
   config: IConfig;
   runQuery<TResult>(cmd: IQuery<TResult>): Promise<TResult>;
   runCommand<TResult>(cmd: ICommand<TResult>): Promise<TResult>;
+  clock(): IClock;
 }
 
 export class Context implements IContext {
@@ -43,5 +45,9 @@ export class Context implements IContext {
 
   public runCommand<TResult>(query: ICommand<TResult>): Promise<TResult> {
     return query.Run(this);
+  }
+
+  public clock(): IClock {
+    return new Clock();
   }
 }

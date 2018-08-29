@@ -17,8 +17,8 @@ export class MapToProjectDtoCommand implements IQuery<ProjectDto> {
       title: this.item.Acc_ProjectTitle__c,
       summary: this.item.Acc_ProjectSummary__c,
       competition: this.item.Acc_CompetitionId__c,
-      startDate: new Date(this.item.Acc_StartDate__c),
-      endDate: new Date(this.item.Acc_EndDate__c),
+      startDate: context.clock().parse(this.item.Acc_StartDate__c),
+      endDate: context.clock().parse(this.item.Acc_EndDate__c),
       projectNumber: this.item.Acc_ProjectNumber__c,
       applicationUrl: this.getIFSUrl(this.item, context.config.ifsApplicationUrl),
       grantOfferLetterUrl: this.getIFSUrl(this.item, context.config.ifsGrantLetterUrl),
@@ -26,7 +26,7 @@ export class MapToProjectDtoCommand implements IQuery<ProjectDto> {
       period: NaN,
     };
 
-    dto.period = this.calcPeriod(dto);
+    dto.period = this.calcPeriod(context, dto);
 
     return Promise.resolve(dto);
   }
@@ -39,8 +39,8 @@ export class MapToProjectDtoCommand implements IQuery<ProjectDto> {
     }
   }
 
-  calcPeriod(dto: ProjectDto): number {
-    const today        = new Date();
+  calcPeriod(context: IContext, dto: ProjectDto): number {
+    const today        = context.clock().today();
     const currentMonth = today.getUTCMonth();
     const startMonth   = dto.startDate.getUTCMonth();
     const frequency    = dto.claimFrequency;

@@ -1,6 +1,6 @@
+import "jest";
 import { TestContext } from "../../testContextProvider";
-import { MapToProjectDtoCommand } from "../../../../src/server/features/projects/mapToProjectDto";
-import { ISalesforceProject } from "../../../../src/server/repositories/projectsRepository";
+import { ClaimFrequency, MapToProjectDtoCommand } from "../../../../src/server/features/projects/mapToProjectDto";
 import { ProjectDto } from "../../../../src/models/projectDto";
 
 describe("MapToProjectDtoCommand", () => {
@@ -60,5 +60,74 @@ describe("MapToProjectDtoCommand", () => {
         let result = await context.runCommand(new MapToProjectDtoCommand(salesforce));
 
         expect(result.grantOfferLetterUrl).toBe("https://ifs.application.url/grantletter/competition/c1/project/1")
+    });
+
+    it("ClaimFrequency should map correct - Quarterly", async () => {
+      const context    = new TestContext();
+      const salesforce = context.testData.createProject(x => { x.Acc_ClaimFrequency__c = "Quarterly"; });
+      const result     = await context.runCommand(new MapToProjectDtoCommand(salesforce));
+      expect(result.claimFrequency).toBe(ClaimFrequency.Quarterly);
+    });
+
+    it("ClaimFrequency should map correct - Monthly", async () => {
+      const context    = new TestContext();
+      const salesforce = context.testData.createProject(x => { x.Acc_ClaimFrequency__c = "Monthly"; });
+      const result     = await context.runCommand(new MapToProjectDtoCommand(salesforce));
+      expect(result.claimFrequency).toBe(ClaimFrequency.Monthly);
+    });
+
+    it("ClaimFrequency should map correct - Unknown", async () => {
+      const context    = new TestContext();
+      const salesforce = context.testData.createProject(x => { x.Acc_ClaimFrequency__c = "asd"; });
+      const result     = await context.runCommand(new MapToProjectDtoCommand(salesforce));
+      expect(result.claimFrequency).toBe(ClaimFrequency.Unknown);
+    });
+
+    it("Period should calculate correct - Quarterly", async () => {
+      const context    = new TestContext();
+      const salesforce = context.testData.createProject(x => {
+        x.Acc_ClaimFrequency__c = "Quarterly";
+        x.Acc_StartDate__c = "2018/01/01";
+      });
+
+      for(let i=1; i<=12; i++) {
+        const month = i < 10 ? `0${i}` : i;
+        context.testData.setClock(`2018/${month}/01`);
+        const result = await context.runCommand(new MapToProjectDtoCommand(salesforce));
+        const expected = Math.ceil(i / 3);
+        expect(result.period).toBe(expected);
+      }
+    });
+
+    it("Period should calculate correct - Monthly", async () => {
+      const context    = new TestContext();
+      const salesforce = context.testData.createProject(x => {
+        x.Acc_ClaimFrequency__c = "Monthly";
+        x.Acc_StartDate__c = "2018/01/01";
+      });
+
+      for(let i=1; i<=12; i++) {
+        const month = i < 10 ? `0${i}` : i;
+        context.testData.setClock(`2018/${month}/01`);
+        const result = await context.runCommand(new MapToProjectDtoCommand(salesforce));
+        const expected = Math.ceil(i);
+        expect(result.period).toBe(expected);
+      }
+    });
+
+    it("Period should default when Unknown", async () => {
+      const context    = new TestContext();
+      const salesforce = context.testData.createProject(x => {
+        x.Acc_ClaimFrequency__c = "Monthly";
+        x.Acc_StartDate__c = "2018/01/01";
+      });
+
+      for(let i=1; i<=12; i++) {
+        const month = i < 10 ? `0${i}` : i;
+        context.testData.setClock(`2018/${month}/01`);
+        const result = await context.runCommand(new MapToProjectDtoCommand(salesforce));
+        const expected = Math.ceil(i);
+        expect(result.period).toBe(expected);
+      }
     });
 });
