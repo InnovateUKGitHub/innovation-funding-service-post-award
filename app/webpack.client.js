@@ -6,6 +6,7 @@ module.exports = [
       },
       entry: {
         bundle: './src/client/client.tsx',
+        componentsGuide: './src/client/componentsGuide.tsx',
       },
       output: {
         path: __dirname + '/public',
