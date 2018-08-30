@@ -34,9 +34,6 @@ export const ProjectDescription: React.SFC<Props> = (props) => (
       </Link>
     </h2>
     <p className="govuk-body govuk-!-margin-bottom-2">{props.periodText} {props.project.period} of {props.frequency}</p>
-    <p className="govuk-body govuk-!-margin-bottom-2">
-      { props.warning ? "You need to submit your Q2 claim" : "Your Q1 claim is submitted" }
-    </p>
   </div>
 );
 
@@ -45,10 +42,10 @@ interface OpenProps {
   endDate: Date;
 }
 export const OpenClaimPeriod: React.SFC<OpenProps> = (props) => (
-  <div className="govuk-grid-column-one-third">
-    <h3 className="govuk-heading-s">{props.daysRemaining}</h3>
-    <p className="govuk-body govuk-!-margin-bottom-1">Days left of claim period</p>
-    <p className="govuk-body govuk-!-margin-bottom-1">deadline <FullDate value={props.endDate} /></p>
+  <div className="govuk-grid-column-one-third govuk-!-margin-top-2" style={{ textAlign: "center" }}>
+    <h3 className="govuk-heading-m govuk-!-margin-bottom-2">{props.daysRemaining}</h3>
+    <p className="govuk-heading-s govuk-!-margin-bottom-1 govuk-!-font-size-16">Days left of claim period</p>
+    <p className="govuk-heading-s govuk-!-margin-bottom-1 govuk-!-font-size-16">deadline <FullDate value={props.endDate} /></p>
   </div>
 );
 
@@ -57,9 +54,9 @@ interface NextProps {
   periodEnd: Date;
 }
 export const NextClaimPeriod: React.SFC<NextProps> = (props) => (
-  <div className="govuk-grid-column-one-third">
-    <h3 className="gouk-heading-s">Next claim period</h3>
-    <p className="govuk-body govuk-!-margin-bottom-1">Begins <FullDate value={props.periodStart} /></p>
-    <p className="govuk-body govuk-!-margin-bottom-1">Ends <FullDate value={props.periodEnd} /></p>
+  <div className="govuk-grid-column-one-third govuk-!-margin-top-2">
+    <h3 className="govuk-heading-s govuk-!-margin-bottom-2">Next claim period</h3>
+    <p className="govuk-body govuk-!-margin-bottom-1"><strong>Begins</strong> <FullDate value={props.periodStart} /></p>
+    <p className="govuk-body govuk-!-margin-bottom-1"><strong>Ends</strong> <FullDate value={props.periodEnd} /></p>
   </div>
 );

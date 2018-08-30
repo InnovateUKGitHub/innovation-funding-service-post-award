@@ -1,4 +1,4 @@
-import { ClaimFrequency } from "../server/features/projects";
+import { ClaimFrequency } from "./claimFrequency";
 
 export interface ProjectDto {
     id: string;

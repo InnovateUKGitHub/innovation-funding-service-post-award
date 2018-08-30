@@ -1,12 +1,6 @@
 import { IContext, IQuery } from "../common/context";
-import { ProjectDto } from "../../../models";
+import { ClaimFrequency, ProjectDto } from "../../../models";
 import { ISalesforceProject } from "../../repositories/projectsRepository";
-
-export enum ClaimFrequency {
-  "Unknown",
-  "Quarterly",
-  "Monthly"
-}
 
 export class MapToProjectDtoCommand implements IQuery<ProjectDto> {
   constructor(readonly item: ISalesforceProject) { }
