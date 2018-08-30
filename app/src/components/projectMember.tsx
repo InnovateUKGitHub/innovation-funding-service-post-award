@@ -1,5 +1,5 @@
 import React from "react";
-import { Email } from "./layout/email";
+import { Email } from "./renderers/email";
 
 interface ProjectMember {
     role: string;
