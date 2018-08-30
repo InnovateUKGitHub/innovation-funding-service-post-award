@@ -1,7 +1,7 @@
 import "jest";
 import { TestContext } from "../../testContextProvider";
-import { ClaimFrequency, MapToProjectDtoCommand } from "../../../../src/server/features/projects/mapToProjectDto";
-import { ProjectDto } from "../../../../src/models/projectDto";
+import { MapToProjectDtoCommand } from "../../../../src/server/features/projects/mapToProjectDto";
+import { ClaimFrequency, ProjectDto } from "../../../../src/models";
 
 describe("MapToProjectDtoCommand", () => {
     it("when valid expect mapping", async () => {
@@ -24,7 +24,7 @@ describe("MapToProjectDtoCommand", () => {
             x.Acc_ProjectTitle__c = expected.title;
             x.Acc_StartDate__c = expected.startDate.toLocaleDateString();
             x.Acc_EndDate__c = expected.endDate.toLocaleDateString();
-            x.Acc_ProjectNumber__c = expected.projectNumber
+            x.Acc_ProjectNumber__c = expected.projectNumber;
         });
 
         let result = await context.runCommand(new MapToProjectDtoCommand(salesforce));

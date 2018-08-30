@@ -6,7 +6,6 @@ import { Pending } from "../../shared/pending";
 import { routeConfig } from "../../routing";
 import * as Actions from "../../redux/actions/contacts";
 
-
 interface Data {
   projects: Pending<ProjectDto[]>;
 }
