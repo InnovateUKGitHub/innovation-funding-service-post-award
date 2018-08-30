@@ -76,7 +76,7 @@ const DateColumn = <T extends {}>(): React.SFC<TableChildProps<T, Date>> =>
   (props) => <FullDate value={props.value(props.data!)}/>;
 
 const EmailColumn = <T extends {}>(): React.SFC<TableChildProps<T, string>> =>
-  (props) => <Email value={props.value(props.data!)} qa={props.qa}/>;
+  (props) => <Email value={props.value(props.data!)} />;
 
 export const Table = {
   forData: <T extends {}>(data: T[]) => ({
