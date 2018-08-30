@@ -44,6 +44,9 @@ export const TableComponent = <T extends {}>(data: T[]) => (props: TableProps<T>
   return (
     <div className={props.className} data-qa={props.qa}>
       <table className="govuk-table">
+        <colgroup>
+          {iter.map((x,i) => <col key={x.props.qa} data-qa={`col-${x.props.qa || i.toString()}`}/>)}
+        </colgroup>
         <thead className="govuk-table__head">
           <tr className="govuk-table__row">
             {tableHeaders.map(renderTableHeading)}
@@ -58,7 +61,7 @@ export const TableComponent = <T extends {}>(data: T[]) => (props: TableProps<T>
 };
 
 export const renderColumn = <T extends {}>(render: (x: T) => React.ReactNode, qa: string, data?: T) =>
-  typeof data === "undefined" || data === null ? null : <React.Fragment data-qa={qa}>{render(data)}</React.Fragment>;
+  typeof data === "undefined" || data === null ? null : <React.Fragment>{render(data)}</React.Fragment>;
 
 export const CustomColumn = <T extends {}>(): React.SFC<TableChildProps<T, React.ReactNode>> =>
   (props) => renderColumn(props.value, props.qa, props.data);
@@ -73,7 +76,7 @@ const DateColumn = <T extends {}>(): React.SFC<TableChildProps<T, Date>> =>
   (props) => <FullDate value={props.value(props.data!)}/>;
 
 const EmailColumn = <T extends {}>(): React.SFC<TableChildProps<T, string>> =>
-  (props) => <Email value={props.value(props.data!)} qa="email-column"/>;
+  (props) => <Email value={props.value(props.data!)} qa={props.qa}/>;
 
 export const Table = {
   forData: <T extends {}>(data: T[]) => ({
