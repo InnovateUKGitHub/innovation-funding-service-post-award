@@ -7,4 +7,3 @@ export * from "./section";
 export * from "./listSection";
 export * from "./tabs";
 export * from "./title";
-export * from "./email";
