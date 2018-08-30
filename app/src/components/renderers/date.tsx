@@ -5,10 +5,7 @@ const months = ["January", "Feburary", "March", "April", "May", "June", "July", 
 export const FullDate: React.SFC<{ value: Date | string }> = (props) => {
     let dateValue: Date | null = null;
 
-    if (!!props.value && typeof (props.value) === "string") {
-        dateValue = new Date(props.value);
-    }
-    else if (!!props.value && props.value instanceof Date) {
+    if (!!props.value && props.value instanceof Date) {
         dateValue = props.value;
     }
 
