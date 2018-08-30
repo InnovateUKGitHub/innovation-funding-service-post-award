@@ -1,61 +1,43 @@
 import * as React from "react";
+import { DateTime } from "luxon";
 
-const months = ["January", "Feburary", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-
-const getValueAsDate = (value: Date | string) => {
-    let dateValue: Date | null = null;
+const getValueAsDateTime = (value: Date | string) => {
+    let dateValue: DateTime | null = null;
 
     if (!!value && typeof (value) === "string") {
-        dateValue = new Date(value);
+        dateValue = DateTime.fromISO(value);
     }
     else if (!!value && value instanceof Date) {
-        dateValue = value;
+        dateValue = DateTime.fromJSDate(value);
     }
 
     return dateValue;
 };
 
-export const FullDate: React.SFC<{ value: Date | string }> = (props) => {
-    const dateValue = getValueAsDate(props.value);
-
-    if (dateValue && !isNaN(dateValue.getDate())) {
-        return <span>{`${dateValue.getDate()} ${months[dateValue.getMonth()]} ${dateValue.getFullYear()}`}</span>;
+const renderDate = (value: Date | string, format:string) => {
+    const dateValue = getValueAsDateTime(value);
+    if (dateValue && dateValue.isValid) {
+        return <span>{dateValue.toFormat(format)}</span>;
     }
     return null;
+}
+
+export const FullDate: React.SFC<{ value: Date | string }> = (props) => {
+    return renderDate(props.value, "d MMM yyyy");
 };
 
 export const FullDateTime: React.SFC<{ value: Date | string }> = (props) => {
-    const dateValue = getValueAsDate(props.value);
-
-    if (dateValue && !isNaN(dateValue.getDate())) {
-        return <span>{`${dateValue.getDate()} ${months[dateValue.getMonth()]} ${dateValue.getFullYear().toString()} ${dateValue.getHours()}:${dateValue.getMinutes()}`}</span>;
-    }
-    return null;
+    return renderDate(props.value, "d MMM yyyy HH:mm");
 };
 
 export const FullDateTimeWithSeconds: React.SFC<{ value: Date | string }> = (props) => {
-    const dateValue = getValueAsDate(props.value);
-
-    if (dateValue && !isNaN(dateValue.getDate())) {
-        return <span>{`${dateValue.getDate()} ${months[dateValue.getMonth()]} ${dateValue.getFullYear().toString()} ${dateValue.getHours()}:${dateValue.getMinutes()}:${dateValue.getSeconds()}`}</span>;
-    }
-    return null;
+    return renderDate(props.value, "d MMM yyyy HH:mm:ss");
 };
 
 export const ShortDate: React.SFC<{ value: Date | string }> = (props) => {
-    const dateValue = getValueAsDate(props.value);
-
-    if (dateValue && !isNaN(dateValue.getDate())) {
-        return <span>{`${dateValue.getDate()}/${dateValue.getMonth() + 1}/${dateValue.getFullYear().toString()}`}</span>;
-    }
-    return null;
+    return renderDate(props.value, "dd/MM/yyyy");
 };
 
 export const ShortDateTime: React.SFC<{ value: Date | string }> = (props) => {
-    const dateValue = getValueAsDate(props.value);
-
-    if (dateValue && !isNaN(dateValue.getDate())) {
-        return <span>{`${dateValue.getDate()}/${dateValue.getMonth() + 1}/${dateValue.getFullYear().toString()} ${dateValue.getHours()}:${dateValue.getMinutes()}`}</span>;
-    }
-    return null;
+    return renderDate(props.value, "dd/MM/yyyy HH:mm");
 };
