@@ -1,5 +1,5 @@
 import React from "react";
-import { Email } from "../components/layout";
+import { Email } from "../components/renderers";
 
 export const emailGuide: IGuide = {
     name: "Email",

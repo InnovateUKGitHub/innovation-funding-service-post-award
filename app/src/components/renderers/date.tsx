@@ -10,21 +10,21 @@ const renderDate = (value: Date | null, format: string) => {
 };
 
 export const FullDate: React.SFC<{ value: Date | null }> = (props) => {
-    return renderDate(props.value, "d MMM yyyy");
+    return renderDate(props.value, "d MMMM yyyy");
 };
 
 export const FullDateTime: React.SFC<{ value: Date | null }> = (props) => {
-    return renderDate(props.value, "d MMM yyyy HH:mm");
+    return renderDate(props.value, "d MMMM yyyy HH:mm");
 };
 
 export const FullDateTimeWithSeconds: React.SFC<{ value: Date | null }> = (props) => {
-    return renderDate(props.value, "d MMM yyyy HH:mm:ss");
+    return renderDate(props.value, "d MMMM yyyy HH:mm:ss");
 };
 
 export const ShortDate: React.SFC<{ value: Date | null }> = (props) => {
-    return renderDate(props.value, "dd/MM/yyyy");
+    return renderDate(props.value, "d MMM yyyy");
 };
 
 export const ShortDateTime: React.SFC<{ value: Date | null }> = (props) => {
-    return renderDate(props.value, "dd/MM/yyyy HH:mm");
+    return renderDate(props.value, "d MMM yyyy HH:mm");
 };
