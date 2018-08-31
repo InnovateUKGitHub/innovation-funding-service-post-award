@@ -1,11 +1,11 @@
-import { ICommand, IContext, IQuery } from "../../src/server/features/common/context";
+import { ICommand, IContext, IQuery, IClock } from "../../src/server/features/common/context";
 import { IContactsRepository, ISalesforceContact } from "../../src/server/repositories/contactsRepository";
 import { IProjectRepository, ISalesforceProject } from "../../src/server/repositories/projectsRepository";
 import { ISalesforcePartner, IPartnerRepository } from "../../src/server/repositories/partnersRepository";
 import { ISalesforceProjectContact, IProjectContactsRepository } from "../../src/server/repositories/projectContactsRepository";
 
 export abstract class TestRepository<T> {
-    Items: T[] = []
+    Items: T[] = [];
 
     protected getOne(conditional: (item: T) => boolean): Promise<T> {
         return new Promise<T>((resolve, reject) => {
@@ -66,6 +66,7 @@ export class ProjectContactRepository extends TestRepository<ISalesforceProjectC
 }
 
 export class TestContext implements IContext {
+    private testClock: Date = new Date();
 
     public repositories = {
         contacts: new ContactsRepository(),
@@ -172,6 +173,21 @@ export class TestContext implements IContext {
             this.repositories.projectContacts.Items.push(newItem);
 
             return newItem;
+        },
+        setClock: (value: string) => {
+          const bits = value.split("/") as any[];
+          const date = new Date(value);
+          date.setHours(12);
+          date.setFullYear(bits[0], bits[1] - 1, bits[2]);
+          this.testClock = new Date(date);
         }
     };
+
+    public clock(): IClock {
+      const clock: IClock = {
+        today: () => this.testClock,
+        parse: (value: string) => new Date(value)
+      };
+      return clock;
+    }
 }

@@ -1,8 +1,10 @@
 // tslint: disable
-import React, { ComponentType, TdHTMLAttributes } from "react";
+import React from "react";
+import { Dispatch } from "redux";
+import { ThunkDispatch } from "redux-thunk";
 import { connect as reduxConnect } from "react-redux";
 import { RootState } from "../redux/reducers/rootReducer";
-import { Dispatch } from "redux";
+import { RootActions } from "../redux/actions/root";
 
 interface ContainerBaseClass<TData, TCallbacks> {
     new (props: TData & TCallbacks, context?: any): ContainerBase<TData, TCallbacks>;
@@ -30,7 +32,7 @@ class ReduxContainerMapDispach<TData, TCallbacks> {
       private withData: (state: RootState) => TData
     ) {}
 
-    public withCallbacks(mapping: (dispatch: Dispatch) => TCallbacks) {
+    public withCallbacks(mapping: (dispatch: ThunkDispatch<RootState, void, RootActions>) => TCallbacks) {
         return new ReduxContainerMapBoth<TData, TCallbacks>(this.component, this.withData, mapping);
     }
 }

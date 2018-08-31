@@ -1,5 +1,5 @@
 import { AsyncThunk, createAction } from "./common";
-import { DataStoreStatus, IDataStore, RootState } from "../reducers";
+import { DataStoreStatus, IDataStore } from "../reducers";
 
 type DataLoadThunk = typeof dataLoadAction;
 export type DataStoreId = "all" | number;
@@ -28,7 +28,7 @@ export function conditionalLoad<T>(
     // tslint:disable-next-line
     const existing = ((state.data as any)[store] as any)[id] as IDataStore<T>;
 
-    if (!existing || existing.status === "LOADED" || existing.status === "STALE") {
+    if (!existing || existing.status === "PRELOAD" || existing.status === "STALE") {
       dispatch(dataLoadAction(id, store, "LOADING", existing && existing.data));
       return load()
         .catch(err => {
