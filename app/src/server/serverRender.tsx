@@ -18,8 +18,9 @@ export function serverRender(req: Request, res: Response) {
     const middleware = setupMiddleware(router);
     const store = createStore(rootReducer, initialState, middleware);
     const loader = matchRouteLoader(route);
-
-    Promise.all(loader(route).map(action => action(store.dispatch, store.getState, null)))
+    const actions = loader(route) || [];
+    
+    Promise.all(actions.map(action => action(store.dispatch, store.getState, null)))
       .then(() => {
         const html = renderToString(
           <Provider store={store}>

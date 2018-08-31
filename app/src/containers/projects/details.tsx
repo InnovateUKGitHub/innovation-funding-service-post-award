@@ -1,12 +1,11 @@
 import React from "react";
-import { Dispatch } from "redux";
 import { ContainerBase, ReduxContainer } from "../containerBase";
 import { RootState } from "../../redux";
 import * as ACC from "../../components";
 import * as Dtos from "../../models";
 import { Pending } from "../../shared/pending";
-import * as Actions from "../../redux/actions/contacts";
 import { routeConfig } from "../../routing";
+import * as Actions from "../../redux/actions/contacts"
 
 interface Data {
     id: string;
@@ -16,7 +15,6 @@ interface Data {
 }
 
 interface Callbacks {
-    loadDetails: (id: string) => void;
 }
 
 class ProjectDetailsComponent extends ContainerBase<Data, Callbacks> {
@@ -24,9 +22,14 @@ class ProjectDetailsComponent extends ContainerBase<Data, Callbacks> {
     private tabListArray = ["Claims", "Project change requests", "Forecasts", "Project details"];
     private selectedTab = this.tabListArray[3];
 
-    componentDidMount() {
-        this.props.loadDetails(this.props.id);
-    }
+    public static loadData(route: any) {
+        const projectId = route.params && route.params.id;
+        return [
+          Actions.loadProject(projectId),
+          Actions.loadContactsForProject(projectId),
+          Actions.loadPatnersForProject(projectId),
+        ];
+      }
 
     render() {
         const combined = Pending.combine(this.props.projectDetails, this.props.partners, this.props.contacts, (projectDetails, partners, contacts) => ({ projectDetails, partners, contacts }));
@@ -53,6 +56,7 @@ class ProjectDetailsComponent extends ContainerBase<Data, Callbacks> {
                 <ACC.Section>
                     <ACC.BackLink route={routeConfig.projectDashboard}>Main dashboard</ACC.BackLink>
                 </ACC.Section>
+
                 <ACC.Title title="View project" caption={`${project.projectNumber}:${project.title}`} />
 
                 <ACC.Tabs tabList={this.tabListArray} selected={this.selectedTab} />
@@ -86,26 +90,15 @@ class ProjectDetailsComponent extends ContainerBase<Data, Callbacks> {
 }
 
 function mapData(state: RootState): Data {
-    const id = state.router.route && state.router.route.params.id; // get from url
+    const id = state.router.route && state.router.route.params.id;
     return {
         id,
         contacts: Pending.create(state.data.projectContacts[id]),
         partners: Pending.create(state.data.partners[id]),
-        projectDetails: Pending.create(state.data.project[id]),
-    };
-}
-
-function mapCallbacks(dispatch: Dispatch): Callbacks {
-    return {
-        loadDetails: (id: string) => {
-            dispatch(Actions.loadProject(id) as any);
-            dispatch(Actions.loadContactsForProject(id) as any);
-            dispatch(Actions.loadPatnersForProject(id) as any);
-        }
+        projectDetails: Pending.create(state.data.project[id])
     };
 }
 
 export const ProjectDetails = ReduxContainer.for<Data, Callbacks>(ProjectDetailsComponent)
     .withData(mapData)
-    .withCallbacks(mapCallbacks)
     .connect();

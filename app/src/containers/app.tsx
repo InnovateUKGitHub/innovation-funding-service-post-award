@@ -9,24 +9,46 @@ import { Footer, Header, PhaseBanner } from "../components";
 
 interface IAppProps {
   route: any;
+  dispatch: any;
   serverSide?: boolean;
 }
 
-const AppComponent: React.SFC<IAppProps> = (props) => {
-  const route = matchRoute(props.route);
+class AppComponent extends React.Component<IAppProps, {}>  {
+  public componentDidMount() {
+    this.loadData();
+  }
 
-  return (
-    <div>
-      <Header />
-      <div className="govuk-width-container">
-        <PhaseBanner />
-        <main className="govuk-main-wrapper" id="main-content" role="main">
-          <route.component {...props}  />
-        </main>
+  public componentDidUpdate(prevProps: Readonly<IAppProps>) {
+    if(prevProps.route !== this.props.route)
+    {
+      this.loadData();
+    }
+  }
+
+  private loadData() {
+    let route = matchRoute(this.props.route);
+    if(route.component.loadData){
+      let actions = route.component.loadData(this.props.route);
+      actions && actions.forEach(a => this.props.dispatch(a));
+    }
+  }
+
+  public render() {
+    const route = matchRoute(this.props.route);
+
+    return (
+      <div>
+        <Header />
+        <div className="govuk-width-container">
+          <PhaseBanner />
+          <main className="govuk-main-wrapper" id="main-content" role="main">
+            <route.component {...this.props} />
+          </main>
+        </div>
+        <Footer />
       </div>
-      <Footer />
-    </div>
-  );
+    );
+  }
 };
 
 export const App = connect(createRouteNodeSelector(""))(AppComponent);

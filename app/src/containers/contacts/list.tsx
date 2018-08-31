@@ -1,42 +1,45 @@
 import * as React from "react";
-import { connect } from "react-redux";
 import { Link } from "react-router5";
 import { Breadcrumbs, Title } from "../../components/layout";
-import { matchRoute } from "../../routing/matchRoute";
-// import * as Tables from '../../tables';
-// import * as Actions from '../../../actions';
+import * as Actions from "../../redux/actions/contacts";
+import { ReduxContainer, ContainerBase } from "../containerBase";
+import { Pending } from "../../shared/pending";
+import * as Dtos from "../../models";
+import * as Acc from "../../components";
 
-interface IProps {
-  onLoad: any;
+interface Props {
+  contacts: Pending<Dtos.IContact[]>;
 }
 
-class ListComponent extends React.Component<IProps> {
-  componentDidMount() {
-    this.props.onLoad();
+class ListComponent extends ContainerBase<Props, {}> {
+  static loadData(){
+    return [Actions.loadContacts()];
   }
 
   render() {
-    // let data = this.props.data;
-    // data = data || [];
-    // let columns = [
-    //   Tables.stringColumn("Id", x => x.id),
-    //   Tables.stringColumn("Name", x => x.title + " " + x.firstName + " " + x.lastName),
-    //   Tables.stringColumn("Email", x => x.email),
-    //   Tables.stringColumn("Address", x => this.renderAddress(x.address)),
-    //   Tables.linkColumn("contact_details", (x) => { return { id: x.id } }, "Details")
-    // ];
+    const Loading = Acc.Loading.forData(this.props.contacts);
 
     return (
       <div>
         <Breadcrumbs links={[{routeName:"home", text: "Home"}]}>Contacts</Breadcrumbs>
         <Title title="Contacts" />
-        {/* <Tables.Table key="table" data={data} caption="Some Contacts from salesforce" columns={columns} /> */}
+        <Loading.Loader render={contacts => this.renderTable(contacts)} />
         <Link className="govuk-back-link" routeName="home">Home</Link>
       </div>
     );
   }
 
-  renderAddress(address: any) {
+  private renderTable(contacts: Dtos.IContact[]) {
+    const Table = Acc.Table.forData(contacts);
+    return <Table.Table>
+      <Table.String header="Id" value={x => x.id}/>
+      <Table.String header="Name" value={x => `${x.firstName} ${x.lastName}`.trim() }/>
+      <Table.Email header="Email" value={x => x.email}/>
+      <Table.Custom header="Address" value={x => this.renderAddress(x.address)}/>
+    </Table.Table>;
+  }
+
+  renderAddress(address: Dtos.IContactAddress) {
     const items = [address.street, address.city, address.county, address.postcode].filter(x => !!x);
 
     return (!items.length)
@@ -51,25 +54,7 @@ function mapStateToProps(state: any) {
   };
 }
 
-function routeConnect(
-  routeName: string,
-  component: React.ComponentType<any>,
-  mapState?: any,
-  mapDispatch?: any
-) {
-  const mapLoadData = (dispatch: any) => {
-    const props = typeof mapDispatch === "undefined" ? {} : mapDispatch(dispatch);
-    const route = matchRoute({ name: routeName } as any);
-
-    if(!!route && route.loadData) {
-      props.onLoad = () => dispatch(route.loadData);
-    }
-
-    return props;
-  };
-
-  return connect(mapState, mapLoadData)(component);
-}
-
-export const ContactList = routeConnect("contacts", ListComponent, mapStateToProps);
-// export const ContactList = connect(mapStateToProps, mapDispachToProps)(ListComponent);
+export const ContactList = ReduxContainer.for<Props, {}>(ListComponent)
+    .withData((store) => ({contacts: Pending.create(store.data.contacts.all)}))
+    .connect()
+    ;

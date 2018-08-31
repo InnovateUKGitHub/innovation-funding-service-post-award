@@ -39,7 +39,7 @@ export class Context implements IContext {
   public config = Configuration;
 
   public runQuery<TResult>(query: IQuery<TResult>): Promise<TResult> {
-    console.log("Running query", query.constructor && query.constructor.name, query);
+    //console.log("Running query", query.constructor && query.constructor.name, query);
     return query.Run(this);
   }
 

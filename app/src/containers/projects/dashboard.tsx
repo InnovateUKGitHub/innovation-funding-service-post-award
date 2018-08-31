@@ -11,12 +11,12 @@ interface Data {
 }
 
 interface Callbacks {
-  loadProjects: () => void;
 }
 
 class ProjectDashboardComponent extends ContainerBase<Data, Callbacks> {
-  componentDidMount() {
-    this.props.loadProjects();
+  
+  static loadData(){
+    return [Actions.loadProjects()];
   }
 
   render() {
@@ -105,5 +105,5 @@ class ProjectDashboardComponent extends ContainerBase<Data, Callbacks> {
 export const ProjectDashboard = ReduxContainer.for<Data, Callbacks>(ProjectDashboardComponent)
 // TODO - key below
   .withData(state => ({ projects: Pending.create(state.data.projects.all) }))
-  .withCallbacks(dispatch => ({ loadProjects: () => dispatch(Actions.loadProjects()) }))
-  .connect();
+  .connect()
+  ;
