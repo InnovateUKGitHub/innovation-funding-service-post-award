@@ -5,7 +5,7 @@ import * as ACC from "../../components";
 import * as Dtos from "../../models";
 import { Pending } from "../../shared/pending";
 import { routeConfig } from "../../routing";
-import * as Actions from "../../redux/actions/contacts"
+import * as Actions from "../../redux/actions/contacts";
 
 interface Data {
     id: string;
@@ -14,10 +14,7 @@ interface Data {
     contacts: Pending<Dtos.ProjectContactDto[]>;
 }
 
-interface Callbacks {
-}
-
-class ProjectDetailsComponent extends ContainerBase<Data, Callbacks> {
+class ProjectDetailsComponent extends ContainerBase<Data, {}> {
     // ultimatly will come from navigation
     private tabListArray = ["Claims", "Project change requests", "Forecasts", "Project details"];
     private selectedTab = this.tabListArray[3];
@@ -25,11 +22,11 @@ class ProjectDetailsComponent extends ContainerBase<Data, Callbacks> {
     public static loadData(route: any) {
         const projectId = route.params && route.params.id;
         return [
-          Actions.loadProject(projectId),
-          Actions.loadContactsForProject(projectId),
-          Actions.loadPatnersForProject(projectId),
+            Actions.loadProject(projectId),
+            Actions.loadContactsForProject(projectId),
+            Actions.loadPatnersForProject(projectId),
         ];
-      }
+    }
 
     render() {
         const combined = Pending.combine(this.props.projectDetails, this.props.partners, this.props.contacts, (projectDetails, partners, contacts) => ({ projectDetails, partners, contacts }));
@@ -99,6 +96,6 @@ function mapData(state: RootState): Data {
     };
 }
 
-export const ProjectDetails = ReduxContainer.for<Data, Callbacks>(ProjectDetailsComponent)
+export const ProjectDetails = ReduxContainer.for<Data, {}>(ProjectDetailsComponent)
     .withData(mapData)
     .connect();

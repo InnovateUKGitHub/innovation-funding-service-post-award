@@ -14,8 +14,8 @@ interface Callbacks {
 }
 
 class ProjectDashboardComponent extends ContainerBase<Data, Callbacks> {
-  
-  static loadData(){
+
+  static loadData() {
     return [Actions.loadProjects()];
   }
 

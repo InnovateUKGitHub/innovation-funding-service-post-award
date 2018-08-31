@@ -1,11 +1,8 @@
 import React from "react";
 import { connect } from "react-redux";
 import { createRouteNodeSelector } from "redux-router5";
-
 import { matchRoute } from "../routing";
 import { Footer, Header, PhaseBanner } from "../components";
-
-// import * as Examples from './containers/examples';
 
 interface IAppProps {
   route: any;
@@ -13,23 +10,22 @@ interface IAppProps {
   serverSide?: boolean;
 }
 
-class AppComponent extends React.Component<IAppProps, {}>  {
+class AppComponent extends React.Component<IAppProps, {}> {
   public componentDidMount() {
     this.loadData();
   }
 
   public componentDidUpdate(prevProps: Readonly<IAppProps>) {
-    if(prevProps.route !== this.props.route)
-    {
+    if(prevProps.route !== this.props.route) {
       this.loadData();
     }
   }
 
   private loadData() {
-    let route = matchRoute(this.props.route);
-    if(route.component.loadData){
-      let actions = route.component.loadData(this.props.route);
-      actions && actions.forEach(a => this.props.dispatch(a));
+    const route = matchRoute(this.props.route);
+    if(route.component.loadData) {
+      const actions = route.component.loadData(this.props.route) || [];
+      actions.forEach(a => this.props.dispatch(a));
     }
   }
 
@@ -49,6 +45,6 @@ class AppComponent extends React.Component<IAppProps, {}>  {
       </div>
     );
   }
-};
+}
 
 export const App = connect(createRouteNodeSelector(""))(AppComponent);

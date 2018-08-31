@@ -2,7 +2,7 @@ import * as React from "react";
 import { Link } from "react-router5";
 import { Breadcrumbs, Title } from "../../components/layout";
 import * as Actions from "../../redux/actions/contacts";
-import { ReduxContainer, ContainerBase } from "../containerBase";
+import { ContainerBase, ReduxContainer } from "../containerBase";
 import { Pending } from "../../shared/pending";
 import * as Dtos from "../../models";
 import * as Acc from "../../components";
@@ -12,7 +12,7 @@ interface Props {
 }
 
 class ListComponent extends ContainerBase<Props, {}> {
-  static loadData(){
+  static loadData() {
     return [Actions.loadContacts()];
   }
 
@@ -21,7 +21,7 @@ class ListComponent extends ContainerBase<Props, {}> {
 
     return (
       <div>
-        <Breadcrumbs links={[{routeName:"home", text: "Home"}]}>Contacts</Breadcrumbs>
+        <Breadcrumbs links={[{ routeName: "home", text: "Home" }]}>Contacts</Breadcrumbs>
         <Title title="Contacts" />
         <Loading.Loader render={contacts => this.renderTable(contacts)} />
         <Link className="govuk-back-link" routeName="home">Home</Link>
@@ -31,12 +31,14 @@ class ListComponent extends ContainerBase<Props, {}> {
 
   private renderTable(contacts: Dtos.IContact[]) {
     const Table = Acc.Table.forData(contacts);
-    return <Table.Table>
-      <Table.String header="Id" value={x => x.id}/>
-      <Table.String header="Name" value={x => `${x.firstName} ${x.lastName}`.trim() }/>
-      <Table.Email header="Email" value={x => x.email}/>
-      <Table.Custom header="Address" value={x => this.renderAddress(x.address)}/>
-    </Table.Table>;
+    return (
+      <Table.Table>
+        <Table.String header="Id" value={x => x.id} />
+        <Table.String header="Name" value={x => `${x.firstName} ${x.lastName}`.trim()} />
+        <Table.Email header="Email" value={x => x.email} />
+        <Table.Custom header="Address" value={x => this.renderAddress(x.address)} />
+      </Table.Table>
+    );
   }
 
   renderAddress(address: Dtos.IContactAddress) {
@@ -44,7 +46,7 @@ class ListComponent extends ContainerBase<Props, {}> {
 
     return (!items.length)
       ? ""
-      : items.map((x,i) => [<span key={`address${i}`}>{x}<br/></span>, ]);
+      : items.map((x, i) => [<span key={`address${i}`}>{x}<br /></span>,]);
   }
 }
 
@@ -55,6 +57,6 @@ function mapStateToProps(state: any) {
 }
 
 export const ContactList = ReduxContainer.for<Props, {}>(ListComponent)
-    .withData((store) => ({contacts: Pending.create(store.data.contacts.all)}))
-    .connect()
-    ;
+  .withData((store) => ({ contacts: Pending.create(store.data.contacts.all) }))
+  .connect()
+  ;
