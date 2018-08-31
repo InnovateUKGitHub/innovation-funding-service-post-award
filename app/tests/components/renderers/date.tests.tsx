@@ -18,13 +18,7 @@ describe("FullDate", () => {
         const wrapper = shallow(<FullDate value={null} />);
         expect(wrapper.html()).toBeNull();
     });
-
-    it("should return null when an invalid string is passed in", () => {
-        const wrapper = shallow(<FullDate value="some string" />);
-        expect(wrapper.html()).toBeNull();
-    });
 });
-
 
 describe("FullDateTime", () => {
     it("should render the date as 7 Jan 1993 09:02 09:02", () => {
@@ -34,11 +28,6 @@ describe("FullDateTime", () => {
 
     it("should return null when a null prop is passed in", () => {
         const wrapper = shallow(<FullDateTime value={null} />);
-        expect(wrapper.html()).toBeNull();
-    });
-
-    it("should return null when an invalid string is passed in", () => {
-        const wrapper = shallow(<FullDateTime value="some string" />);
         expect(wrapper.html()).toBeNull();
     });
 });
@@ -53,11 +42,6 @@ describe("FullDateTimeWithSeconds", () => {
         const wrapper = shallow(<FullDateTimeWithSeconds value={null} />);
         expect(wrapper.html()).toBeNull();
     });
-
-    it("should return null when an invalid string is passed in", () => {
-        const wrapper = shallow(<FullDateTimeWithSeconds value="some string" />);
-        expect(wrapper.html()).toBeNull();
-    });
 });
 
 describe("ShortDate", () => {
@@ -70,11 +54,6 @@ describe("ShortDate", () => {
         const wrapper = shallow(<ShortDate value={null} />);
         expect(wrapper.html()).toBeNull();
     });
-
-    it("should return null when an invalid string is passed in", () => {
-        const wrapper = shallow(<ShortDate value="some string" />);
-        expect(wrapper.html()).toBeNull();
-    });
 });
 
 describe("ShortDateTime", () => {
@@ -85,11 +64,6 @@ describe("ShortDateTime", () => {
 
     it("should return null when a null prop is passed in", () => {
         const wrapper = shallow(<ShortDateTime value={null} />);
-        expect(wrapper.html()).toBeNull();
-    });
-
-    it("should return null when an invalid string is passed in", () => {
-        const wrapper = shallow(<ShortDateTime value="some string" />);
         expect(wrapper.html()).toBeNull();
     });
 });
