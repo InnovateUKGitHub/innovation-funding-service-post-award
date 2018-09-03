@@ -2,7 +2,7 @@
 
 import React from "react";
 import { FullDate } from "./renderers/date";
-import { Email } from "./layout/email";
+import { Email } from "./renderers/email";
 
 interface TableChildProps<T, ReturnT> {
   header: React.ReactNode;

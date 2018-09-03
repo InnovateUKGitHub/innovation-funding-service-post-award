@@ -1,11 +1,11 @@
-import { ICommand, IContext, IQuery } from "../../src/server/features/common/context";
+import { ICommand, IContext, IQuery, IClock } from "../../src/server/features/common/context";
 import { IContactsRepository, ISalesforceContact } from "../../src/server/repositories/contactsRepository";
 import { IProjectRepository, ISalesforceProject } from "../../src/server/repositories/projectsRepository";
 import { ISalesforcePartner, IPartnerRepository } from "../../src/server/repositories/partnersRepository";
 import { ISalesforceProjectContact, IProjectContactsRepository } from "../../src/server/repositories/projectContactsRepository";
 
 export abstract class TestRepository<T> {
-    Items: T[] = []
+    Items: T[] = [];
 
     protected getOne(conditional: (item: T) => boolean): Promise<T> {
         return new Promise<T>((resolve, reject) => {
@@ -66,12 +66,18 @@ export class ProjectContactRepository extends TestRepository<ISalesforceProjectC
 }
 
 export class TestContext implements IContext {
+    private testClock: Date = new Date();
 
     public repositories = {
         contacts: new ContactsRepository(),
         projects: new ProjectsRepository(),
         partners: new PartnerRepository(),
         projectContacts: new ProjectContactRepository()
+    };
+
+    public config = {
+        ifsApplicationUrl: "",
+        ifsGrantLetterUrl: ""
     };
 
     public runQuery<TResult>(query: IQuery<TResult>): Promise<TResult> {
@@ -121,7 +127,7 @@ export class TestContext implements IContext {
 
             return newItem;
         },
-        createPartner: (project?: ISalesforceProject, update?: (item:ISalesforcePartner) => void) => {
+        createPartner: (project?: ISalesforceProject, update?: (item: ISalesforcePartner) => void) => {
             let seed = this.repositories.partners.Items.length + 1;
             project = project || this.testData.createProject();
 
@@ -129,14 +135,14 @@ export class TestContext implements IContext {
                 Id: `Partner${seed}`,
                 Acc_AccountId__r: {
                     Id: `AccountId${seed}`,
-                    Name: `Participant Name ${seed}` 
+                    Name: `Participant Name ${seed}`
                 },
                 Acc_ParticipantSize__c: "Large",
                 Acc_ParticipantType__c: "Accedemic",
-                Acc_ProjectRole__c : "Project Lead",
-                Acc_ProjectId__c : project.Id
+                Acc_ProjectRole__c: "Project Lead",
+                Acc_ProjectId__c: project.Id
             };
-            
+
             update && update(newItem);
 
             this.repositories.partners.Items.push(newItem);
@@ -144,9 +150,9 @@ export class TestContext implements IContext {
             return newItem;
         },
         createProjectContact: (project?: ISalesforceProject, partner?: ISalesforcePartner, update?: (item: ISalesforceProjectContact) => void) => {
-            
+
             project = project || this.testData.createProject();
-            partner= partner || this.testData.createPartner(project);
+            partner = partner || this.testData.createPartner(project);
 
             let seed = this.repositories.projectContacts.Items.length + 1;
 
@@ -155,7 +161,7 @@ export class TestContext implements IContext {
                 Acc_ProjectId__c: project.Id,
                 Acc_AccountId__c: partner && partner.Acc_AccountId__r && partner.Acc_AccountId__r.Id,
                 Acc_EmailOfSFContact__c: `projectcontact${seed}@text.com`,
-                Acc_ContactId__r:{
+                Acc_ContactId__r: {
                     Id: "Contact" + seed,
                     Name: `Ms Contact ${seed}`,
                 },
@@ -167,6 +173,21 @@ export class TestContext implements IContext {
             this.repositories.projectContacts.Items.push(newItem);
 
             return newItem;
+        },
+        setClock: (value: string) => {
+          const bits = value.split("/") as any[];
+          const date = new Date(value);
+          date.setHours(12);
+          date.setFullYear(bits[0], bits[1] - 1, bits[2]);
+          this.testClock = new Date(date);
         }
     };
+
+    public clock(): IClock {
+      const clock: IClock = {
+        today: () => this.testClock,
+        parse: (value: string) => new Date(value)
+      };
+      return clock;
+    }
 }

@@ -1,19 +1,30 @@
 import * as React from "react";
+import { DateTime } from "luxon";
 
-const months = ["January", "Feburary", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-
-export const FullDate: React.SFC<{ value: Date | string }> = (props) => {
-    let dateValue: Date | null = null;
-
-    if (!!props.value && typeof (props.value) === "string") {
-        dateValue = new Date(props.value);
-    }
-    else if (!!props.value && props.value instanceof Date) {
-        dateValue = props.value;
-    }
-
-    if (dateValue) {
-        return <span>{`${dateValue.getDate()} ${months[dateValue.getMonth()]} ${dateValue.getFullYear()}`}</span>;
+const renderDate = (value: Date | null, format: string) => {
+    const dateValue = value && DateTime.fromJSDate(value);
+    if (dateValue && dateValue.isValid) {
+        return <span>{dateValue.toFormat(format)}</span>;
     }
     return null;
+};
+
+export const FullDate: React.SFC<{ value: Date | null }> = (props) => {
+    return renderDate(props.value, "d MMMM yyyy");
+};
+
+export const FullDateTime: React.SFC<{ value: Date | null }> = (props) => {
+    return renderDate(props.value, "d MMMM yyyy HH:mm");
+};
+
+export const FullDateTimeWithSeconds: React.SFC<{ value: Date | null }> = (props) => {
+    return renderDate(props.value, "d MMMM yyyy HH:mm:ss");
+};
+
+export const ShortDate: React.SFC<{ value: Date | null }> = (props) => {
+    return renderDate(props.value, "d MMM yyyy");
+};
+
+export const ShortDateTime: React.SFC<{ value: Date | null }> = (props) => {
+    return renderDate(props.value, "d MMM yyyy HH:mm");
 };

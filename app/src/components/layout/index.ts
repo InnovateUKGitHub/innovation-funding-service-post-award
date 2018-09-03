@@ -4,6 +4,6 @@ export * from "./header";
 export * from "./page";
 export * from "./phaseBanner";
 export * from "./section";
+export * from "./listSection";
 export * from "./tabs";
 export * from "./title";
-export * from "./email";

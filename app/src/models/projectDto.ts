@@ -1,3 +1,5 @@
+import { ClaimFrequency } from "./claimFrequency";
+
 export interface ProjectDto {
     id: string;
     title: string;
@@ -5,7 +7,10 @@ export interface ProjectDto {
     startDate: Date;
     endDate: Date;
     summary: string;
-    applicationUrl?: string;
-    grantOfferLetterUrl?: string;
+    applicationUrl?: string|null;
+    grantOfferLetterUrl?: string|null;
     projectNumber: string;
+
+    claimFrequency: ClaimFrequency;
+    period: number;
 }

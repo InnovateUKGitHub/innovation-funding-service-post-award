@@ -1,6 +1,7 @@
 import { DataLoadAction } from "../actions/dataLoad";
 import * as Dtos from "../../models";
 import { combineReducers } from "redux";
+import { ActionTransitionStart } from "redux-router5";
 
 export type DataStoreStatus = "PRELOAD" | "STALE" | "LOADING" | "LOADED" | "ERROR";
 
@@ -10,7 +11,8 @@ export interface IDataStore<T> {
   error: any;
 }
 
-export const dataStoreReducer = <TData extends {}, TKey>(key: (key: TKey) => string, storeKey: string) => (state: { [key: string]: IDataStore<TData> } = {}, action: DataLoadAction) => {
+export const dataStoreReducer = <TData extends {}, TKey>(key: (key: TKey) => string, storeKey: string) =>
+  (state: { [key: string]: IDataStore<TData> } = {}, action: DataLoadAction | ActionTransitionStart) => {
   if (action.type === "DATA_LOAD" && action.payload.store === storeKey) {
 
     const existing = state[action.payload.id];
@@ -26,7 +28,7 @@ export const dataStoreReducer = <TData extends {}, TKey>(key: (key: TKey) => str
     return result;
   }
 
-  if ((action as any).type === "@@router5/TRANSITION_START") {
+  if (action.type === "@@router5/TRANSITION_START" && action.payload.previousRoute !== null) {
     const result = Object.assign({}, state);
     Object.keys(result).forEach(itemKey => {
       const pending = result[itemKey];
