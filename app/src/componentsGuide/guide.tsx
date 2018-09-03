@@ -3,11 +3,19 @@ import { Header } from "../components";
 import { datesGuide } from "./datesGuide";
 import { projectMemberGuide } from "./projectMemberGuid";
 import { emailGuide } from "./emailGuide";
+import { sectionGuide } from "./sectionGuide";
+import { tabsGuide } from "./tabsGuide";
+import { titleGuide } from "./titleGuide";
+import { linksListGuide } from "./linksListGuide";
 
 const guides: IGuide[] = [
     datesGuide,
     emailGuide,
-    projectMemberGuide
+    projectMemberGuide,
+    sectionGuide,
+    tabsGuide,
+    titleGuide,
+    linksListGuide
 ];
 
 interface Props {
