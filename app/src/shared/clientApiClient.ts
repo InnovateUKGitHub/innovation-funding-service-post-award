@@ -21,7 +21,7 @@ const clientApi: IApiClient = {
 
 const processResponse = (response: any) => response.json().then((x: any) => processDto(x));
 
-const processDto: any = (data: any) => {
+export const processDto: any = (data: any) => {
     if(Array.isArray(data)) {
         return data.map((x: any) => processDto(x));
     }
