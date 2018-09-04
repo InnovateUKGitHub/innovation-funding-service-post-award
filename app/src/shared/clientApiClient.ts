@@ -4,18 +4,18 @@ const dateRegex = /\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d
 
 const clientApi: IApiClient = {
     contacts:{
-        getAll: () => fetch("http://localhost:8080/api/contacts").then(x => processResponse(x)),
-        get: (id: string) => fetch(`http://localhost:8080/api/contact/${id}`).then(x => processResponse(x)),
+        getAll: () => fetch("/api/contacts").then(x => processResponse(x)),
+        get: (id: string) => fetch(`/api/contact/${id}`).then(x => processResponse(x)),
     },
     projects:{
-        get: (id: string) => fetch(`http://localhost:8080/api/projects/${id}`).then(x => processResponse(x)),
-        getAll: () => fetch("http://localhost:8080/api/projects").then(x => processResponse(x)),
+        get: (id: string) => fetch(`/api/projects/${id}`).then(x => processResponse(x)),
+        getAll: () => fetch("/api/projects").then(x => processResponse(x)),
     },
     projectContacts: {
-        getAllByProjectId: (projectId: string) => fetch(`http://localhost:8080/api/projectContacts?projectId=${projectId}`).then(x => processResponse(x)),
+        getAllByProjectId: (projectId: string) => fetch(`/api/projectContacts?projectId=${projectId}`).then(x => processResponse(x)),
     },
     partners : {
-        getAllByProjectId: (projectId: string) => fetch(`http://localhost:8080/api/partners?projectId=${projectId}`).then(x => processResponse(x)),
+        getAllByProjectId: (projectId: string) => fetch(`/api/partners?projectId=${projectId}`).then(x => processResponse(x)),
     }
 };
 
