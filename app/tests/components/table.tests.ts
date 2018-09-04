@@ -9,13 +9,13 @@ Enzyme.configure({ adapter: new Adapter() });
 describe("Table", () => {
   describe("renderNode", () => {
     it("should render <td> with given number", () => {
-      const result  = Table.renderNode(1);
+      const result  = Table.renderNode(1, 1);
       const wrapper = shallow(result);
       expect(wrapper.html()).toEqual(`<td class="govuk-table__cell" scope="row">1</td>`);
     });
 
     it("should render <td> with given string", () => {
-      const result  = Table.renderNode("aBc");
+      const result  = Table.renderNode("aBc", 1);
       const wrapper = shallow(result);
       expect(wrapper.html()).toEqual(`<td class="govuk-table__cell" scope="row">aBc</td>`);
     });
@@ -24,14 +24,14 @@ describe("Table", () => {
   describe("renderRow", () => {
     it("should render <tr> with empty nodes", () => {
       const rows    = [];
-      const result  = Table.renderRow(rows);
+      const result  = Table.renderRow(rows, 1);
       const wrapper = shallow(result);
       expect(wrapper.html()).toEqual(`<tr class="govuk-table__row"></tr>`);
     });
 
     it("should render <tr> with number nodes", () => {
       const rows    = [1,2,3];
-      const result  = Table.renderRow(rows);
+      const result  = Table.renderRow(rows, 1);
       const wrapper = shallow(result);
       expect(wrapper.html()).toContain(`<td class="govuk-table__cell" scope="row">1</td>`);
       expect(wrapper.html()).toContain(`<td class="govuk-table__cell" scope="row">2</td>`);
@@ -41,7 +41,7 @@ describe("Table", () => {
 
   describe("renderTableHeading", () => {
     it("should render th with given number", () => {
-      const result  = Table.renderTableHeading(1);
+      const result  = Table.renderTableHeading(1, 1);
       const wrapper = shallow(result);
       expect(wrapper.html()).toEqual(`<th class="govuk-table__header" scope="col">1</th>`);
     });
