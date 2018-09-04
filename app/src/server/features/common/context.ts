@@ -42,19 +42,19 @@ export class Context implements IContext {
   public logger = new Logger();
 
   public runQuery<TResult>(query: IQuery<TResult>): Promise<TResult> {
-      this.logger.log("Running query", query.constructor.name);
+      this.logger.log("Running query", query);
 
       return query.Run(this).catch(e => {
-        this.logger.log("Failed query", query.constructor.name, query);
+        this.logger.log("Failed query", query);
         throw e;
       });
   }
 
   public runCommand<TResult>(query: ICommand<TResult>): Promise<TResult> {
-      this.logger.log("Running command", query.constructor.name, query);
+      this.logger.log("Running command", query);
 
       return query.Run(this).catch(e => {
-        this.logger.log("Failed command", query.constructor.name, query);
+        this.logger.log("Failed command", query);
         throw e;
     });
   }
