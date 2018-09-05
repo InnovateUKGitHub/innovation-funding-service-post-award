@@ -1,5 +1,5 @@
 // var BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
-
+var webpack = require("webpack");
 var env = process.env.NODE_ENV;
 
 module.exports = [
@@ -39,6 +39,7 @@ module.exports = [
       },
     },
     plugins: [
+      new webpack.NormalModuleReplacementPlugin(/serverApiClient\.ts/, './clientApiClient.ts'),
       // new BundleAnalyzerPlugin({ analyzerMode: 'static' })
     ]
 }
