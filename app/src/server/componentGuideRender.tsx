@@ -42,6 +42,7 @@ const renderGuide = (html: string) => {
             <a href="#main-content" class="govuk-skip-link">Skip to main content</a>
             <div id="root">${html}</div>
             <script src="/govuk-frontend-1.2.0.min.js"></script>
+            <script src="/vendor.js"></script>
             <script src="/componentsGuide.js"></script>
             <script>
                 window.GOVUKFrontend.initAll()
