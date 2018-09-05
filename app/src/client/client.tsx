@@ -6,10 +6,7 @@ import { RouterProvider } from "react-router5";
 import { configureRouter } from "../routing";
 import { rootReducer, setupMiddleware } from "../redux";
 import { App } from "../containers/app";
-import * as Luxon from "luxon";
 import { processDto } from "../shared/clientApiClient";
-
-(window as any).Luxon = Luxon;
 
 const serverState = processDto((window as any).__PRELOADED_STATE__);
 
