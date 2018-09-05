@@ -3,11 +3,19 @@ import { Header } from "../components";
 import { datesGuide } from "./datesGuide";
 import { projectMemberGuide } from "./projectMemberGuid";
 import { emailGuide } from "./emailGuide";
+import { sectionGuide } from "./sectionGuide";
+import { tabsGuide } from "./tabsGuide";
+import { titleGuide } from "./titleGuide";
+import { linksListGuide } from "./linksListGuide";
 
 const guides: IGuide[] = [
     datesGuide,
     emailGuide,
-    projectMemberGuide
+    projectMemberGuide,
+    sectionGuide,
+    tabsGuide,
+    titleGuide,
+    linksListGuide
 ];
 
 interface Props {
@@ -60,9 +68,9 @@ export class Guide extends React.Component<Props, {}> {
         return (
             <div className="govuk-!-margin-bottom-9" key={`component-option-${index}`}>
                 <h3 className="govuk-heading-s">{name}</h3>
-                <div style={{ background: "lightGrey", padding: "5px", border: "dashed grey 1px;" }}>
+                <div style={{ padding: "5px", border: "dashed grey 1px;" }}>
                     <p className="govuk-body"><i>{comments}</i></p>
-                    <p className="govuk-body"><pre>{example}</pre></p>
+                    <div style={{ backgroundColor: "lightGrey" }}><pre>{example}</pre></div>
                     <div style={{ background: "white" }}>
                         {render()}
                     </div>

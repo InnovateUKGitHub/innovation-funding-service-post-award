@@ -6,8 +6,9 @@ import { RouterProvider } from "react-router5";
 import { configureRouter } from "../routing";
 import { rootReducer, setupMiddleware } from "../redux";
 import { App } from "../containers/app";
+import { processDto } from "../shared/clientApiClient";
 
-const serverState = (window as any).__PRELOADED_STATE__;
+const serverState = processDto((window as any).__PRELOADED_STATE__);
 
 console.log("initial state", serverState);
 // const logger = (store) => (next) => (action) => {
