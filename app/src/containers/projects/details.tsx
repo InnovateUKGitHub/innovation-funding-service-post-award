@@ -6,6 +6,7 @@ import * as Dtos from "../../models";
 import { Pending } from "../../shared/pending";
 import { routeConfig } from "../../routing";
 import * as Actions from "../../redux/actions/contacts";
+import { State } from "router5";
 
 interface Data {
     id: string;
@@ -19,7 +20,8 @@ class ProjectDetailsComponent extends ContainerBase<Data, {}> {
     private tabListArray = ["Claims", "Project change requests", "Forecasts", "Project details"];
     private selectedTab = this.tabListArray[3];
 
-    public static loadData(route: any) {
+    public static getLoadDataActions(route: State) {
+        
         const projectId = route.params && route.params.id;
         return [
             Actions.loadProject(projectId),

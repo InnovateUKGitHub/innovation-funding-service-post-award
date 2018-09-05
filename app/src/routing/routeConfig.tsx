@@ -1,10 +1,11 @@
 import React from "react";
 import { Route } from "router5";
 import { AsyncThunk } from "../redux/actions";
+import { State } from "router5";
 import * as Containers from "../containers";
 
 export interface AsyncRoute extends Route {
-  component: React.ComponentType<any> & { loadData?: (route?: any) => AsyncThunk<any>[]};
+  component: React.ComponentType<any> & { getLoadDataActions?: (route: State) => AsyncThunk<any>[]};
 }
 
 export type RouteKeys = keyof typeof routeConfig;

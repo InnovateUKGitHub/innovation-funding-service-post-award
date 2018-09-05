@@ -12,15 +12,15 @@ function defaultRoute(): AsyncRoute {
   };
 }
 
-export function matchRoute(route: State | undefined): AsyncRoute {
+export function matchRoute(route: State | null | undefined): AsyncRoute {
   const name = route && route.name as RouteKeys;
   return name && routeConfig[name] || routeConfig.error;
 }
 
-export function matchRouteLoader(route: State | undefined): (route?: any) => AsyncThunk<any>[] {
+export function matchRouteLoader(route: State | undefined): (route: State) => AsyncThunk<any>[] {
   const match = matchRoute(route) || defaultRoute();
-  if(match.component.loadData) {
-    return match.component.loadData;
+  if(match.component.getLoadDataActions) {
+    return match.component.getLoadDataActions;
   }
   return () => [];
 }

@@ -1,11 +1,10 @@
 import React from "react";
 import { connect } from "react-redux";
-import { createRouteNodeSelector } from "redux-router5";
+import { createRouteNodeSelector, RouterState } from "redux-router5";
 import { matchRoute } from "../routing";
 import { Footer, Header, PhaseBanner } from "../components";
 
-interface IAppProps {
-  route: any;
+interface IAppProps extends RouterState {
   dispatch: any;
   serverSide?: boolean;
 }
@@ -23,8 +22,8 @@ class AppComponent extends React.Component<IAppProps, {}> {
 
   private loadData() {
     const route = matchRoute(this.props.route);
-    if(route.component.loadData) {
-      const actions = route.component.loadData(this.props.route) || [];
+    if(route.component.getLoadDataActions) {
+      const actions = route.component.getLoadDataActions(this.props.route!) || [];
       actions.forEach(a => this.props.dispatch(a));
     }
   }
