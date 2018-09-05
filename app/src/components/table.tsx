@@ -1,16 +1,28 @@
 // tslint:disable:max-classes-per-file
-
 import React from "react";
-import { FullDate } from "./renderers/date";
+import { FullDate, ShortDate } from "./renderers/date";
 import { Email } from "./renderers/email";
+import { Currency } from "./renderers/currency";
+import classNames from "classnames";
 
-interface TableChildProps<T, ReturnT> {
+interface InternalColumnProps<T> {
   header: React.ReactNode;
-  value: (data: T) => ReturnT;
-  data?: T;
+  dataItem?: T;
+  footer?: React.ReactNode;
+  classSuffix?: "numeric";
+  renderCell: (data: T, index: { column: number, row: number }) => React.ReactNode;
+  mode?: "cell" | "header" | "footer";
+  rowIndex?: number;
+  columnIndex?: number;
 }
 
-type TableChild<T> = React.ReactElement<TableChildProps<T, {}>>;
+interface ExternalColumnProps<T, TResult> {
+  header: React.ReactNode;
+  value: (item: T, index: { column: number, row: number }) => TResult;
+  footer?: React.ReactNode;
+}
+
+type TableChild<T> = React.ReactElement<ExternalColumnProps<T, {}>>;
 
 interface TableProps<T> {
   children: TableChild<T> | TableChild<T>[];
@@ -18,61 +30,94 @@ interface TableProps<T> {
   qa?: string;
 }
 
-export const renderNode = (node: React.ReactNode, key: number) => (
-  <td className="govuk-table__cell" scope="row" key={key}>{node}</td>
-);
+export class TableColumn<T> extends React.Component<InternalColumnProps<T>> {
+  render() {
+    switch (this.props.mode) {
+      case "cell":
+        return this.renderCell(this.props.dataItem!, this.props.columnIndex!, this.props.rowIndex!);
+      case "header":
+        return this.renderHeader(this.props.columnIndex!);
+      case "footer":
+        return this.renderFooter(this.props.columnIndex!);
+    }
+    return null;
+  }
 
-export const renderRow = (row: React.ReactNode[], key: number) => (
-  <tr className="govuk-table__row" key={key}>{row.map(renderNode)}</tr>
-);
+  renderHeader(column: number) {
+    const className = classNames("govuk-table__header", this.props.classSuffix ? "govuk-table__header--" + this.props.classSuffix : "");
+    return <th className={className} scope="col" key={column}>{this.props.header}</th>;
+  }
 
-export const renderTableHeading = (heading: React.ReactNode, key: number) => (
-  <th className="govuk-table__header" scope="col" key={key}>{heading}</th>
-);
+  renderFooter(column: number) {
+    const className = classNames("govuk-table__header", this.props.classSuffix ? "govuk-table__header--" + this.props.classSuffix : "");
+    return <td className={className} key={column}>{this.props.footer}</td>;
+  }
 
-export const TableComponent = <T extends {}>(data: T[]) => (props: TableProps<T>) => {
-  const iter = Array.isArray(props.children) ? props.children : [props.children];
-  const tableBody: React.ReactNode[][] = [];
-  const tableHeaders: React.ReactNode[] = iter.map(x => x.props.header);
+  renderCell(data: T, column: number, row: number) {
+    const className = classNames("govuk-table__cell", this.props.classSuffix ? "govuk-table__cell--" + this.props.classSuffix : "");
+    return <td className={className} key={column}>{this.props.renderCell(data, {column, row})}</td>;
+  }
+}
 
-  data.forEach(x => {
-    const rows: React.ReactNode[] = iter.map(i => React.cloneElement(i, { data: x }));
-    tableBody.push(rows);
-  });
+const TableComponent = <T extends {}>(data: T[]) => (props: TableProps<T>) => {
+  // loop through the colums cloning them and assigning the props required
+  const headers = React.Children.map(props.children, (column, columnIndex) => React.cloneElement(column as React.ReactElement<any>, { mode: "header", columnIndex }));
+  const contents = data.map((dataItem, rowIndex) => React.Children.map(props.children, (column, columnIndex) => React.cloneElement(column as React.ReactElement<any>, { mode: "cell", rowIndex, columnIndex, dataItem })));
+  const footers = React.Children.toArray(props.children).some((x: any) => x.props && x.props.footer) ? React.Children.map(props.children, (column, columnIndex) => React.cloneElement(column as React.ReactElement<any>, { mode: "footer", columnIndex })) : [];
 
   return (
     <div className={props.className} data-qa={props.qa}>
       <table className="govuk-table">
         <thead className="govuk-table__head">
           <tr className="govuk-table__row">
-            {tableHeaders.map(renderTableHeading)}
+            {headers}
           </tr>
         </thead>
         <tbody className="govuk-table__body">
-          {tableBody.map(renderRow)}
+          {
+            contents.map((row, rowIndex) => <tr className="govuk-table__row" key={rowIndex}>{row}</tr>)
+          }
         </tbody>
+        {footers.length ? <tfoot>{footers}</tfoot> : null}
       </table>
     </div>
   );
 };
 
-export const renderColumn = <T extends {}>(render: (x: T) => React.ReactNode, data?: T) =>
-  typeof data === "undefined" || data === null ? null : <React.Fragment>{render(data)}</React.Fragment>;
+const CustomColumn = <T extends {}>(): React.SFC<ExternalColumnProps<T, React.ReactNode>> => {
+  const TypedColumn = TableColumn as { new(): TableColumn<T> };
+  return (props) => <TypedColumn renderCell={(data, index) => props.value(data, index)} {...props} />;
+};
 
-export const CustomColumn = <T extends {}>(): React.SFC<TableChildProps<T, React.ReactNode>> =>
-  (props) => renderColumn(props.value, props.data);
+const StringColumn = <T extends {}>(): React.SFC<ExternalColumnProps<T, string>> => {
+  const TypedColumn = TableColumn as { new(): TableColumn<T> };
+  return (props) => <TypedColumn renderCell={(data, index) => props.value(data, index)} {...props} />;
+};
 
-export const StringColumn = <T extends {}>(): React.SFC<TableChildProps<T, string>> =>
-  (props) => renderColumn(props.value, props.data);
+const NumberColumn = <T extends {}>(): React.SFC<ExternalColumnProps<T, number>> => {
+  const TypedColumn = TableColumn as { new(): TableColumn<T> };
+  return (props) => <TypedColumn classSuffix="numeric" renderCell={(data, index) => props.value(data, index)} {...props} />;
+};
 
-export const NumberColumn = <T extends {}>(): React.SFC<TableChildProps<T, number>> =>
-  (props) => renderColumn(props.value, props.data);
+const FullDateColumn = <T extends {}>(): React.SFC<ExternalColumnProps<T, Date>> => {
+  const TypedColumn = TableColumn as { new(): TableColumn<T> };
+  return (props) => <TypedColumn renderCell={(data, index) => <FullDate value={props.value(data, index)} />} {...props} />;
+};
 
-const DateColumn = <T extends {}>(): React.SFC<TableChildProps<T, Date>> =>
-  (props) => <FullDate value={props.value(props.data!)}/>;
+const ShortDateColumn = <T extends {}>(): React.SFC<ExternalColumnProps<T, Date>> => {
+  const TypedColumn = TableColumn as { new(): TableColumn<T> };
+  return (props) => <TypedColumn renderCell={(data, index) => <ShortDate value={props.value(data, index)} />} {...props} />;
+};
 
-const EmailColumn = <T extends {}>(): React.SFC<TableChildProps<T, string>> =>
-  (props) => <Email value={props.value(props.data!)}/>;
+const EmailColumn = <T extends {}>(): React.SFC<ExternalColumnProps<T, string>> => {
+  const TypedColumn = TableColumn as { new(): TableColumn<T> };
+  return (props) => <TypedColumn renderCell={(data, index) => <Email value={props.value(data, index)} />} {...props} />;
+};
+
+const CurrencyColumn = <T extends {}>(): React.SFC<ExternalColumnProps<T, number>> => {
+  const TypedColumn = TableColumn as { new(): TableColumn<T> };
+  return (props) => <TypedColumn classSuffix="numeric" renderCell={(data, index) => <Currency value={props.value(data, index)} />} {...props} />;
+};
 
 export const Table = {
   forData: <T extends {}>(data: T[]) => ({
@@ -80,7 +125,9 @@ export const Table = {
     Custom: CustomColumn<T>(),
     String: StringColumn<T>(),
     Number: NumberColumn<T>(),
-    Date: DateColumn<T>(),
-    Email: EmailColumn<T>()
+    Currency: CurrencyColumn<T>(),
+    FullDate: FullDateColumn<T>(),
+    ShortDate: ShortDateColumn<T>(),
+    Email: EmailColumn<T>(),
   })
 };
