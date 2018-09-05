@@ -41,13 +41,13 @@ class ProjectDetailsComponent extends ContainerBase<Data, Callbacks> {
         const projectManager = contacts.find(x => x.role === "Project Manager");
 
         const links = [
-            { text: "View original application", url: project.applicationUrl },
-            { text: "View original grant offer letter", url: project.grantOfferLetterUrl }
+            { text: "View original application", url: project.applicationUrl, qa: "Original_application" },
+            { text: "View original grant offer letter", url: project.grantOfferLetterUrl, qa: "Original_grant_letter" }
         ];
 
         return (
             <ACC.Page>
-                <ACC.Section>
+                <ACC.Section qa="Project_members">
                     <ACC.BackLink route={routeConfig.projectDashboard}>Main dashboard</ACC.BackLink>
                 </ACC.Section>
                 <ACC.Title title="View project" caption={`${project.projectNumber}:${project.title}`} />
