@@ -21,7 +21,7 @@ class ProjectDetailsComponent extends ContainerBase<Data, {}> {
     private selectedTab = this.tabListArray[3];
 
     public static getLoadDataActions(route: State) {
-        
+
         const projectId = route.params && route.params.id;
         return [
             Actions.loadProject(projectId),
