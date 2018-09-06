@@ -61,7 +61,7 @@ class ProjectDetailsComponent extends ContainerBase<Data, {}> {
                     <ACC.ProjectMember member={monitoringOfficer} qa="monitoring-officer" />
                     <ACC.ProjectMember member={projectManager} qa="project-manager" />
 
-                    <ACC.PartnersTable contacts={contacts} partners={partners} />
+                    <ACC.PartnersAndFinanceContacts contacts={contacts} partners={partners} />
 
                 </ACC.Section>
 

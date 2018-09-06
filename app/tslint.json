@@ -35,8 +35,7 @@
     "no-hardcoded-credentials": false,
     "max-line-length": false,
     "interface-name": false,
-    "jsx-no-multiline-js": false,
-    "no-shadowed-variable": false
+    "jsx-no-multiline-js": false
   },
   "rulesDirectory": []
 }

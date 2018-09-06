@@ -2,7 +2,7 @@ import "jest";
 import React from "react";
 import Enzyme, { mount } from "enzyme";
 import Adapter from "enzyme-adapter-react-16";
-import { PartnersTable } from "../../src/components";
+import { PartnersAndFinanceContacts } from "../../src/components";
 import { getColumnValues } from "./helpers/tableHelpers";
 import * as Dtos from "../../src/models";
 
@@ -72,7 +72,7 @@ const testContactData: Dtos.ProjectContactDto[] = [
 
 describe("Partners Table", () => {
   const testForCorrectTableEntries = (expectedA: string, expectedB: string, expectedC: string, columnQA: string) => {
-    const wrapper = mount(<PartnersTable partners={testPartnerData} contacts={testContactData} />);
+    const wrapper = mount(<PartnersAndFinanceContacts partners={testPartnerData} contacts={testContactData} />);
     const columnValues = getColumnValues(wrapper, "project-details-table", columnQA).map(x => x.text());
     expect(columnValues[0]).toBe(expectedA);
     expect(columnValues[1]).toBe(expectedB);

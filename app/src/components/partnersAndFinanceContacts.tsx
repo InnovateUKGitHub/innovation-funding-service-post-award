@@ -7,7 +7,7 @@ interface Props {
   contacts: Dtos.ProjectContactDto[];
 }
 
-export const PartnersTable: React.SFC<Props> = (props) => {
+export const PartnersAndFinanceContacts: React.SFC<Props> = (props) => {
   const partnersAndContactsData = props.partners.map(partner => ({ partner, financeContact: props.contacts.find(x => x.accountId === partner.accountId && x.role === "Finance contact") }));
   const PartnersTable = ACC.Table.forData(partnersAndContactsData);
 
