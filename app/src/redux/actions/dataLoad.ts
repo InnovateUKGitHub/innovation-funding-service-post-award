@@ -1,5 +1,6 @@
 import { AsyncThunk, createAction } from "./common";
-import { DataStoreStatus, IDataStore } from "../reducers";
+import { IDataStore } from "../reducers";
+import { LoadingStatus } from "../../shared/pending";
 
 type DataLoadThunk = typeof dataLoadAction;
 export type DataStoreId = "all" | number;
@@ -8,7 +9,7 @@ export type DataLoadAction = ReturnType<DataLoadThunk>;
 export function dataLoadAction(
   id: string,
   store: string,
-  status: DataStoreStatus,
+  status: LoadingStatus,
   data: any,
   error?: any
 ) {
@@ -28,15 +29,15 @@ export function conditionalLoad<T>(
     // tslint:disable-next-line
     const existing = ((state.data as any)[store] as any)[id] as IDataStore<T>;
 
-    if (!existing || existing.status === "PRELOAD" || existing.status === "STALE") {
-      dispatch(dataLoadAction(id, store, "LOADING", existing && existing.data));
+    if (!existing || existing.status === LoadingStatus.Preload || existing.status === LoadingStatus.Stale) {
+      dispatch(dataLoadAction(id, store, LoadingStatus.Loading, existing && existing.data));
       return load()
-        .catch(err => {
-          dispatch(dataLoadAction(id, store, "ERROR", null, err));
+        .then((result) => {
+          dispatch(dataLoadAction(id, store, LoadingStatus.Done, result));
           return;
         })
-        .then((result) => {
-          dispatch(dataLoadAction(id, store, "LOADED", result));
+        .catch(err => {
+          dispatch(dataLoadAction(id, store, LoadingStatus.Failed, null, err));
           return;
         });
     }

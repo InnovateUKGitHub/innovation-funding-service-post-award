@@ -6,7 +6,7 @@ import { RouterProvider } from "react-router5";
 import { configureRouter } from "../routing";
 import { rootReducer, setupMiddleware } from "../redux";
 import { App } from "../containers/app";
-import { processDto } from "../shared/clientApiClient";
+import { processDto } from "../shared/processResponse";
 
 const serverState = processDto((window as any).__PRELOADED_STATE__);
 
