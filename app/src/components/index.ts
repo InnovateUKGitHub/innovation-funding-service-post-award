@@ -8,5 +8,5 @@ export * from "./projectItem";
 export * from "./projectMember";
 export * from "./table";
 export * from "./loading";
-export * from "./PartnersAndFinanceContacts";
+export * from "./partnersAndFinanceContacts";
 export { Renderers };
