@@ -5,9 +5,8 @@
   "scripts": {
     "clean": "rimraf ./dist",
     "start:server": "node ./dist/server.js",
-    "build:server": "webpack --config webpack.server.js",
-    "start:server": "node ./dist/server.js",
     "start:dev": "nodemon ./dist/server.js --watch ./dist/server.js",
+    "build:server": "webpack --config webpack.server.js",
     "watch:server": "webpack --config webpack.server.js --watch",
     "build:client": "webpack --config webpack.client.js",
     "watch:client": "webpack --config webpack.client.js --watch",
@@ -24,6 +23,7 @@
   "license": "ISC",
   "dependencies": {
     "body-passer": "^1.0.0",
+    "classnames": "^2.2.6",
     "cors": "^2.8.4",
     "express": "^4.16.3",
     "jsforce": "^1.9.0",
@@ -39,6 +39,7 @@
     "typescript": "^3.0.1"
   },
   "devDependencies": {
+    "@types/classnames": "^2.2.6",
     "@types/cors": "^2.8.4",
     "@types/enzyme": "^3.1.13",
     "@types/enzyme-adapter-react-16": "^1.0.3",
