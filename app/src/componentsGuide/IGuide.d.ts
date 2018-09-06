@@ -5,7 +5,7 @@ interface IGuide {
 
 interface IGuideOption {
     name: string;
-    comments: string;
-    example: string;
+    comments: JSX.Element|string;
+    example: JSX.Element|string;
     render: () => JSX.Element;
 }
