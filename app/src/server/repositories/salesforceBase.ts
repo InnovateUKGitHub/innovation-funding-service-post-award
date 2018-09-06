@@ -62,14 +62,14 @@ export default abstract class SalesforceBase<T> {
 
   private asArray(result: Partial<{}>[]): T[] {
     if(this.log) {
-      console.log("Retrived array", result);
+      console.log("Retrieved array", result);
     }
     return result as T[];
   }
 
   private asItem(result: { Id?: SalesforceId }): T {
     if(this.log) {
-      console.log("Retrived item", result);
+      console.log("Retrieved item", result);
     }
     return result as any as T;
   }
