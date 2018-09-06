@@ -2,7 +2,7 @@ import salesforceConnection from "./salesforceConnection";
 import { SalesforceId } from "jsforce";
 
 export default abstract class SalesforceBase<T> {
-  private log = true;
+  private log = false;
 
   protected constructor(
     private objectName: string,
@@ -61,14 +61,14 @@ export default abstract class SalesforceBase<T> {
 
   private asArray(result: Partial<{}>[]): T[] {
     if(this.log) {
-      console.log("Retrived array", result);
+      console.log("Retrieved array", result);
     }
     return result as T[];
   }
 
   private asItem(result: { Id?: SalesforceId }): T {
     if(this.log) {
-      console.log("Retrived item", result);
+      console.log("Retrieved item", result);
     }
     return result as any as T;
   }
