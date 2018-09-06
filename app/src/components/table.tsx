@@ -5,21 +5,24 @@ import { Email } from "./renderers/email";
 import { Currency } from "./renderers/currency";
 import classNames from "classnames";
 
+type columnMode = "cell" | "header" | "footer" | "col";
 interface InternalColumnProps<T> {
   header: React.ReactNode;
   dataItem?: T;
   footer?: React.ReactNode;
   classSuffix?: "numeric";
   renderCell: (data: T, index: { column: number, row: number }) => React.ReactNode;
-  mode?: "cell" | "header" | "footer";
+  mode?: columnMode;
   rowIndex?: number;
   columnIndex?: number;
+  qa: string;
 }
 
 interface ExternalColumnProps<T, TResult> {
   header: React.ReactNode;
   value: (item: T, index: { column: number, row: number }) => TResult;
   footer?: React.ReactNode;
+  qa: string;
 }
 
 type TableChild<T> = React.ReactElement<ExternalColumnProps<T, {}>>;
@@ -39,6 +42,8 @@ export class TableColumn<T> extends React.Component<InternalColumnProps<T>> {
         return this.renderHeader(this.props.columnIndex!);
       case "footer":
         return this.renderFooter(this.props.columnIndex!);
+      case "col":
+        return this.renderCol(this.props.columnIndex!);
     }
     return null;
   }
@@ -55,19 +60,27 @@ export class TableColumn<T> extends React.Component<InternalColumnProps<T>> {
 
   renderCell(data: T, column: number, row: number) {
     const className = classNames("govuk-table__cell", this.props.classSuffix ? "govuk-table__cell--" + this.props.classSuffix : "");
-    return <td className={className} key={column}>{this.props.renderCell(data, {column, row})}</td>;
+    return <td className={className} key={column}>{this.props.renderCell(data, { column, row })}</td>;
+  }
+
+  renderCol(column: number) {
+    return <col key={column} data-qa={`col-${this.props.qa || column.toString()}`} />;
   }
 }
 
 const TableComponent = <T extends {}>(data: T[]) => (props: TableProps<T>) => {
   // loop through the colums cloning them and assigning the props required
   const headers = React.Children.map(props.children, (column, columnIndex) => React.cloneElement(column as React.ReactElement<any>, { mode: "header", columnIndex }));
+  const cols = React.Children.map(props.children, (column, columnIndex) => React.cloneElement(column as React.ReactElement<any>, { mode: "col", columnIndex }));
   const contents = data.map((dataItem, rowIndex) => React.Children.map(props.children, (column, columnIndex) => React.cloneElement(column as React.ReactElement<any>, { mode: "cell", rowIndex, columnIndex, dataItem })));
   const footers = React.Children.toArray(props.children).some((x: any) => x.props && x.props.footer) ? React.Children.map(props.children, (column, columnIndex) => React.cloneElement(column as React.ReactElement<any>, { mode: "footer", columnIndex })) : [];
 
   return (
     <div className={props.className} data-qa={props.qa}>
       <table className="govuk-table">
+        <colgroup>
+          {cols}
+        </colgroup>
         <thead className="govuk-table__head">
           <tr className="govuk-table__row">
             {headers}

@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Header } from "../components";
 import { datesGuide } from "./datesGuide";
-import { projectMemberGuide } from "./projectMemberGuid";
+import { projectMemberGuide } from "./projectMemberGuide";
 import { emailGuide } from "./emailGuide";
 import { sectionGuide } from "./sectionGuide";
 import { tabsGuide } from "./tabsGuide";

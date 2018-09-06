@@ -15,7 +15,7 @@ export function serverRender(req: Request, res: Response) {
 
   router.start(req.originalUrl, (routeError, route) => {
     const initialState = setupInitialState(route);
-    const middleware = setupMiddleware(router);
+    const middleware = setupMiddleware(router, false);
     const store = createStore(rootReducer, initialState, middleware);
     const loader = matchRouteLoader(route);
     const actions = loader(route!) || [];

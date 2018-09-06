@@ -17,8 +17,10 @@ console.log("initial state", serverState);
 // }
 
 const router     = configureRouter();
-const middleware = setupMiddleware(router);
+const middleware = setupMiddleware(router, true);
 const store      = createStore(rootReducer, serverState, middleware);
+
+(window as any).Store = store;
 
 // window["router"] = router;
 // window["store"] = store;
