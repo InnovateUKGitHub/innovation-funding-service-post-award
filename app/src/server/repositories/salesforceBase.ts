@@ -2,7 +2,7 @@ import salesforceConnection from "./salesforceConnection";
 import { SalesforceId } from "jsforce";
 
 export default abstract class SalesforceBase<T> {
-  private log = true;
+  private log = false;
 
   protected constructor(
     private objectName: string,

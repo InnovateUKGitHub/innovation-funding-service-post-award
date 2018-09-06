@@ -35,6 +35,9 @@ class ReduxContainerMapDispach<TData, TCallbacks> {
     public withCallbacks(mapping: (dispatch: ThunkDispatch<RootState, void, RootActions>) => TCallbacks) {
         return new ReduxContainerMapBoth<TData, TCallbacks>(this.component, this.withData, mapping);
     }
+
+    public connect = () => reduxConnect<TData, TCallbacks, TData & TCallbacks, RootState>(this.withData, () => ({} as TCallbacks))(this.component);
+
 }
 
 class ReduxContainerMapProps<TData, TCallbacks> {

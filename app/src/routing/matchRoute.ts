@@ -2,6 +2,7 @@ import { State } from "router5";
 import { AsyncRoute, routeConfig, RouteKeys } from "./routeConfig";
 import { Home } from "../containers";
 import { promises } from "fs";
+import { AsyncThunk } from "../redux/actions";
 
 function defaultRoute(): AsyncRoute {
   return {
@@ -11,15 +12,15 @@ function defaultRoute(): AsyncRoute {
   };
 }
 
-export function matchRoute(route: State | undefined): AsyncRoute {
+export function matchRoute(route: State | null | undefined): AsyncRoute {
   const name = route && route.name as RouteKeys;
   return name && routeConfig[name] || routeConfig.error;
 }
 
-export function matchRouteLoader(route: State | undefined) {
+export function matchRouteLoader(route: State | undefined): (route: State) => AsyncThunk<any>[] {
   const match = matchRoute(route) || defaultRoute();
-  if (!match.loadData) {
-    match.loadData = () => [];
+  if(match.component.getLoadDataActions) {
+    return match.component.getLoadDataActions;
   }
-  return match.loadData;
+  return () => [];
 }
