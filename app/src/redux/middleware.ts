@@ -1,11 +1,15 @@
 import thunk from "redux-thunk";
-import { applyMiddleware } from "redux";
+import { applyMiddleware, Dispatch, AnyAction } from "redux";
 import { router5Middleware } from "redux-router5";
 import { Router } from "router5";
+import { loadStatusMiddleware } from "./middleware/loadStatusMiddleware";
 
-export function setupMiddleware(router: Router) {
+const noopMiddleware = () => (next:Dispatch) => (action:AnyAction) => next(action);
+
+export function setupMiddleware(router: Router, isClient: boolean) {
   return applyMiddleware(
     thunk,
-    router5Middleware(router)
+    router5Middleware(router),
+    isClient ? loadStatusMiddleware : noopMiddleware
   );
 }
