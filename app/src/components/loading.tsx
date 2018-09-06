@@ -7,7 +7,7 @@ interface Props<T> {
 
 const LoadingComponent = <T extends {}>(pending: Pending<T>): React.SFC<Props<T>> => (props) => {
     if (pending.state === LoadingStatus.Failed) {
-        return (<div>An error has occoured</div>);
+        return (<div>An error has occurred</div>);
     }
     else if (!!pending.data || pending.state === LoadingStatus.Done || pending.state === LoadingStatus.Stale) {
         return <div>{props.render(pending.data!)}</div>;

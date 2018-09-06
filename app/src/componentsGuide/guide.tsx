@@ -1,12 +1,13 @@
 import * as React from "react";
 import { Header } from "../components";
 import { datesGuide } from "./datesGuide";
-import { projectMemberGuide } from "./projectMemberGuid";
+import { projectMemberGuide } from "./projectMemberGuide";
 import { emailGuide } from "./emailGuide";
 import { sectionGuide } from "./sectionGuide";
 import { tabsGuide } from "./tabsGuide";
 import { titleGuide } from "./titleGuide";
 import { linksListGuide } from "./linksListGuide";
+import { tableGuide } from "./tableGuide";
 
 const guides: IGuide[] = [
     datesGuide,
@@ -15,7 +16,8 @@ const guides: IGuide[] = [
     sectionGuide,
     tabsGuide,
     titleGuide,
-    linksListGuide
+    linksListGuide,
+    tableGuide,
 ];
 
 interface Props {
@@ -54,25 +56,25 @@ export class Guide extends React.Component<Props, {}> {
         return guidesToRender.map(guide => this.renderGuide(guide));
     }
 
-    private renderGuide(guide: { name: string, options: { name: string, example: string, comments: string, render: () => JSX.Element }[] }) {
+    private renderGuide(guide: IGuide) {
         return (
             <div>
                 <h2 className="govuk-heading-m">{guide.name}</h2>
-                {guide.options.map((option, index) => this.renderOptions(option.name, index, option.example, option.comments, option.render))}
+                {guide.options.map((option, index) => this.renderOptions(option, index))}
             </div>
 
         );
     }
 
-    private renderOptions(name: string, index: number, example: string, comments: string, render: () => JSX.Element) {
+    private renderOptions(guideOption: IGuideOption, index: number) {
         return (
             <div className="govuk-!-margin-bottom-9" key={`component-option-${index}`}>
-                <h3 className="govuk-heading-s">{name}</h3>
+                <h3 className="govuk-heading-s">{guideOption.name}</h3>
                 <div style={{ padding: "5px", border: "dashed grey 1px;" }}>
-                    <p className="govuk-body"><i>{comments}</i></p>
-                    <div style={{ backgroundColor: "lightGrey" }}><pre>{example}</pre></div>
+                    <p className="govuk-body"><i>{guideOption.comments}</i></p>
+                    <div style={{ backgroundColor: "lightGrey" }}><pre>{guideOption.example}</pre></div>
                     <div style={{ background: "white" }}>
-                        {render()}
+                        {guideOption.render()}
                     </div>
                 </div>
             </div>

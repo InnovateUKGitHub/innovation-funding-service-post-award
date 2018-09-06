@@ -33,10 +33,10 @@ class ListComponent extends ContainerBase<Props, {}> {
     const Table = Acc.Table.forData(contacts);
     return (
       <Table.Table>
-        <Table.String header="Id" value={x => x.id} />
-        <Table.String header="Name" value={x => `${x.firstName} ${x.lastName}`.trim()} />
-        <Table.Email header="Email" value={x => x.email} />
-        <Table.Custom header="Address" value={x => this.renderAddress(x.address)} />
+        <Table.String header="Id" qa="id" value={x => x.id} />
+        <Table.String header="Name" qa="name" value={x => `${x.firstName} ${x.lastName}`.trim()} />
+        <Table.Email header="Email" qa="email" value={x => x.email} />
+        <Table.Custom header="Address" qa="address" value={x => this.renderAddress(x.address)} />
       </Table.Table>
     );
   }
