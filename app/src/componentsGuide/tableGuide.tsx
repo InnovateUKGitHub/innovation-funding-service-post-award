@@ -49,11 +49,11 @@ export const tableGuide: IGuide = {
                 const ExampleTable = Table.forData(exampleData);
                 return (
                     <ExampleTable.Table>
-                        <ExampleTable.String header="Id" value={(x) => x.id} />
-                        <ExampleTable.String header="Name" value={(x) => x.name} />
-                        <ExampleTable.Currency header="Cost" value={(x) => x.cost} />
-                        <ExampleTable.ShortDate header="Created (Short)" value={(x) => x.created} />
-                        <ExampleTable.FullDate header="Created (Full)" value={(x) => x.created} />
+                        <ExampleTable.String header="Id" qa="id" value={(x) => x.id} />
+                        <ExampleTable.String header="Name" qa="name" value={(x) => x.name} />
+                        <ExampleTable.Currency header="Cost" qa="cost" value={(x) => x.cost} />
+                        <ExampleTable.ShortDate header="Created (Short)" qa="created-short" value={(x) => x.created} />
+                        <ExampleTable.FullDate header="Created (Full)" qa="created-long" value={(x) => x.created} />
                     </ExampleTable.Table>
                 );
             }
@@ -78,9 +78,10 @@ export const tableGuide: IGuide = {
                 const ExampleTable = Table.forData(exampleData);
                 return (
                     <ExampleTable.Table>
-                        <ExampleTable.String header="Id" value={(x) => x.id} />
+                        <ExampleTable.String header="Id" qa="id" value={(x) => x.id} />
                         <ExampleTable.Custom
                             header="The custom column"
+                            qa="custom" 
                             value={(x) => <span>This is the custom column with tags: <i>{x.name}</i> on <FullDateTimeWithSeconds value={x.created} /></span>}
                         />
                     </ExampleTable.Table>
@@ -112,8 +113,8 @@ export const tableGuide: IGuide = {
                 const ExampleTable = Table.forData(exampleData);
                 return (
                     <ExampleTable.Table>
-                        <ExampleTable.String footer="Total costs" header="Id" value={(x) => x.id} />
-                        <ExampleTable.Currency footer={<Currency value={exampleData.reduce((t, i) => t + i.cost, 0)} />} header="Cost" value={(x) => x.cost} />
+                        <ExampleTable.String footer="Total costs" header="Id" qa="id" value={(x) => x.id} />
+                        <ExampleTable.Currency footer={<Currency value={exampleData.reduce((t, i) => t + i.cost, 0)} />} header="Cost" qa="cost"  value={(x) => x.cost} />
                     </ExampleTable.Table>
                 );
             }

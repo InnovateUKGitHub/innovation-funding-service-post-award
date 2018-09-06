@@ -5,13 +5,14 @@ import { Email } from "./renderers/email";
 import { Currency } from "./renderers/currency";
 import classNames from "classnames";
 
+type columnMode = "cell" | "header" | "footer" | "col";
 interface InternalColumnProps<T> {
   header: React.ReactNode;
   dataItem?: T;
   footer?: React.ReactNode;
   classSuffix?: "numeric";
   renderCell: (data: T, index: { column: number, row: number }) => React.ReactNode;
-  mode?: "cell" | "header" | "footer";
+  mode?: columnMode;
   rowIndex?: number;
   columnIndex?: number;
   qa: string;
@@ -59,11 +60,11 @@ export class TableColumn<T> extends React.Component<InternalColumnProps<T>> {
 
   renderCell(data: T, column: number, row: number) {
     const className = classNames("govuk-table__cell", this.props.classSuffix ? "govuk-table__cell--" + this.props.classSuffix : "");
-    return <td className={className} key={column}>{this.props.renderCell(data, {column, row})}</td>;
+    return <td className={className} key={column}>{this.props.renderCell(data, { column, row })}</td>;
   }
 
-  renderCol(column: number){
-    return <col key={column} data-qa={`col-${this.props.qa || column.toString()}`}/>
+  renderCol(column: number) {
+    return <col key={column} data-qa={`col-${this.props.qa || column.toString()}`} />;
   }
 }
 
