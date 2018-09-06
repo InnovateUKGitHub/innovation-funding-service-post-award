@@ -38,6 +38,7 @@ export const dataStoreReducer = <TData extends {}, TKey>(key: (key: TKey) => str
     });
     return result;
   }
+
   return state;
 };
 

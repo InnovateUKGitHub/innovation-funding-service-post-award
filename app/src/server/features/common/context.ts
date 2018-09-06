@@ -4,6 +4,7 @@ import { IPartnerRepository, PartnerRepository } from "../../repositories/partne
 import { IProjectContactsRepository, ProjectContactsRepository } from "../../repositories/projectContactsRepository";
 import { Configuration, IConfig } from "./config";
 import { Clock, IClock } from "./clock";
+import { ILogger, Logger } from "./logger";
 
 export interface IQuery<T> {
   Run: (context: IContext) => Promise<T>;
@@ -26,6 +27,7 @@ export interface IContext {
   runQuery<TResult>(cmd: IQuery<TResult>): Promise<TResult>;
   runCommand<TResult>(cmd: ICommand<TResult>): Promise<TResult>;
   clock(): IClock;
+  logger: ILogger;
 }
 
 export class Context implements IContext {
@@ -37,14 +39,24 @@ export class Context implements IContext {
   };
 
   public config = Configuration;
+  public logger = new Logger();
 
   public runQuery<TResult>(query: IQuery<TResult>): Promise<TResult> {
-    console.log("Running query", query.constructor && query.constructor.name, query);
-    return query.Run(this);
+      this.logger.log("Running query", query);
+
+      return query.Run(this).catch(e => {
+        this.logger.log("Failed query", query);
+        throw e;
+      });
   }
 
   public runCommand<TResult>(query: ICommand<TResult>): Promise<TResult> {
-    return query.Run(this);
+      this.logger.log("Running command", query);
+
+      return query.Run(this).catch(e => {
+        this.logger.log("Failed command", query, e);
+        throw e;
+    });
   }
 
   public clock(): IClock {

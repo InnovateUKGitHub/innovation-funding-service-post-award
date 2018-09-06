@@ -4,7 +4,7 @@ Starting at the back
 
 ### Repositories
 
-`./server/repositoires/`
+`./server/repositories/`
 
 These make the relevant api calls to data stores
 - Salesforce - inherit from `SalesforceRepositoryBase<T>` where T is the `ISalesforceXXX` definition of the fields
@@ -34,7 +34,7 @@ A command updates some state for example in Salesforce and can either return an 
 
 `./server/features/common`
 
-This is a unit of work patten against which commands and queries are executed. It also acts as a composable dependency (i.e. you can access the dependencies of the CQRS layer e.g. salesforce repoistories and sharepoint file store)
+This is a unit of work pattern against which commands and queries are executed. It also acts as a composable dependency (i.e. you can access the dependencies of the CQRS layer e.g. salesforce repositories and sharepoint file store)
 
 It is constructed using a `contextProvider`
 
@@ -44,7 +44,7 @@ It is constructed using a `contextProvider`
 
 This is where rest endpoints are exposed. Defined as a class and exported as `controller`. Each api should generally return a single type of dto or maybe a summary dto and a full dto. They inherit from `ControllerBase<TDto>` or `ControllerBaseSummary<TFullDto, TSummaryDto>` *(todo when first required)*. 
 
-In order to support the isomorphic rendering it is important define an interface which is also implimented by the `apiclient` that runs on the client side using `fetch` (see below). 
+In order to support the isomorphic rendering it is important to define an interface which is also implimented by the `apiclient` that runs on the client side using `fetch` (see below). 
 
 In the constructor these methods which match the interface are bound to express using protected methods in the base that separate extracting and typing parameters from the url and calling on to the methods in the class.
 
@@ -80,10 +80,10 @@ Routes are objects that inherit from `AsyncRoute<T>` and provide the following p
  
 - `name` - used by router5 to identify route
 - `path` - used by router5 to match the route and define params
-- `fromPrams<T>` - used to extract strongly types params from the route
+- `fromPrams<T>` - used to extract strongly typed params from the route
 - `component` - used to define the container to render
 - `title` - method to get the title
-- `loadData` - method that returns actions that are dispatched when the component first load 
+- `loadData` - method that returns actions that are dispatched when the component first loads 
 
 
 ### Containers
