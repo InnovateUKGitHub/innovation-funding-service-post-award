@@ -24,15 +24,12 @@ export const Home: React.StatelessComponent = () => (
         <h2><Link route={routes.projectDashboard} className="govuk-link">Projects</Link></h2>
         <p>Projects Dashboard</p>
       </div>
-      <div className="govuk-grid-column-one-third">
-        <h2><Link route={routes.claimsDashboard} className="govuk-link">Claims</Link></h2>
-        <p>Some claims from salesforce</p>
-      </div>
     </div>
     <div className="govuk-grid-row">
       {ids.map((id, key) =>
         <div className="govuk-grid-column-one-third" key={key}>
           <h2><Link route={routes.projectDetails} routeParams={{ id }} className="govuk-link">Details for Project {id}</Link></h2>
+          <h2><Link route={routes.projectClaims} routeParams={{ id }} className="govuk-link">Claims for Project {id}</Link></h2>
           <p>Project {id}</p>
         </div>
       )}

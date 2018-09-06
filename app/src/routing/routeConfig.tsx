@@ -46,10 +46,16 @@ const contactsRoute: AsyncRoute = {
 };
 
 const claimsDashboardRoute: AsyncRoute = {
-  name: "claimsDashboard",
-  path: "/claims/dashboard",
+  name: "projectClaims",
+  path: "/project/claims/:id",
   component: Containers.ClaimsDashboard,
-  loadData: () => []
+  loadData: (route) => {
+      console.log(1);
+      const projectId = route.params && route.params.id;
+      return [
+          Actions.loadProject(projectId)
+      ];
+  }
 };
 
 const errorRoute: AsyncRoute = {
@@ -63,6 +69,6 @@ export const routeConfig = {
   projectDashboard: projectDashboardRoute,
   projectDetails: projectDetailsRoute,
   contacts: contactsRoute,
-  claimsDashboard: claimsDashboardRoute,
+  projectClaims: claimsDashboardRoute,
   error: errorRoute,
 };

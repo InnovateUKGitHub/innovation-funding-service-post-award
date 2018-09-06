@@ -6,7 +6,7 @@ import * as ACC from "../../components";
 import * as Dtos from "../../models";
 import { Pending } from "../../shared/pending";
 import * as Actions from "../../redux/actions/contacts";
-import { routeConfig } from "../../routing";
+import {ProjectOverviewPage, tabListArray} from "../../components/projectOverview";
 
 interface Data {
     id: string;
@@ -21,8 +21,7 @@ interface Callbacks {
 
 class ProjectDetailsComponent extends ContainerBase<Data, Callbacks> {
     // ultimatly will come from navigation
-    private tabListArray = ["Claims", "Project change requests", "Forecasts", "Project details"];
-    private selectedTab = this.tabListArray[3];
+    private selectedTab = tabListArray[3];
 
     componentDidMount() {
         this.props.loadDetails(this.props.id);
@@ -49,14 +48,7 @@ class ProjectDetailsComponent extends ContainerBase<Data, Callbacks> {
         ];
 
         return (
-            <ACC.Page>
-                <ACC.Section>
-                    <ACC.BackLink route={routeConfig.projectDashboard}>Main dashboard</ACC.BackLink>
-                </ACC.Section>
-                <ACC.Title title="View project" caption={`${project.projectNumber}:${project.title}`} />
-
-                <ACC.Tabs tabList={this.tabListArray} selected={this.selectedTab} />
-
+            <ProjectOverviewPage selectedTab={this.selectedTab} project={project}>
                 <ACC.Section title="Project Members">
                     <ACC.ProjectMember member={monitoringOfficer} />
                     <ACC.ProjectMember member={projectManager} />
@@ -80,7 +72,7 @@ class ProjectDetailsComponent extends ContainerBase<Data, Callbacks> {
                 <ACC.Section title="Application information">
                     <ACC.LinksList links={links} />
                 </ACC.Section>
-            </ACC.Page>
+            </ProjectOverviewPage>
         );
     }
 }
