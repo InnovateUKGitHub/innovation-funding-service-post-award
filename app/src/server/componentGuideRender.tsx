@@ -5,7 +5,6 @@ import { Guide } from "../componentsGuide/guide";
 import { Header } from "../components";
 
 export function componentGuideRender(req: Request, res: Response) {
-    console.log("RENDEIONG GUIDE", req.query.guide);
     res.send(renderGuide(renderToString(<Guide source="server" filter={req.query.guide}/>)));
 }
 

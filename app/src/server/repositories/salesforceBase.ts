@@ -15,7 +15,6 @@ export default abstract class SalesforceBase<T> {
       return await conn.sobject(this.objectName).retrieve(id).then(x => this.asItem(x));
     }
     catch (e) {
-      console.log("Errorcode", e);
       if (e.errorCode === "MALFORMED_ID" || e.errorCode === "NOT_FOUND") {
         return null;
       }

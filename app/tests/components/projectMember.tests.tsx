@@ -7,37 +7,36 @@ import Enzyme, { mount, shallow } from "enzyme";
 Enzyme.configure({ adapter: new Adapter() });
 
 describe("ProjectMember", () => {
-    const aProjectMember = { role: "aTestRole", name: "aTestName", email: "testemail@email.com", organisation: "aTestOrganisation" };
+    const aProjectMemberWithOrg = { role: "aTestRole", name: "aTestName", email: "testemail@email.com", organisation: "aTestOrganisation" };
+    const aProjectMemberWithoutOrg = { role: "aTestRole", name: "aTestName", email: "testemail@email.com", organisation: null };
+    
     it("should render organisation if present", () => {
-        const wrapper = shallow(<ProjectMember member={aProjectMember} />);
-        const expectedRender = <h3 className="govuk-heading-s govuk-!-margin-bottom-0">aTestRole - aTestOrganisation</h3>;
-        expect(wrapper.equals(expectedRender));
+        const wrapper = shallow(<ProjectMember member={aProjectMemberWithOrg} qa="member-a" />);
+        expect(wrapper.html()).toContain(`<h3 class=\"govuk-heading-s govuk-!-margin-bottom-0\">aTestRole - aTestOrganisation</h3>`);
     });
 
     it("should only render role if organisation is not present", () => {
-        const wrapper = shallow(<ProjectMember member={aProjectMember} />);
-        const expectedRender = <h3 className="govuk-heading-s govuk-!-margin-bottom-0">aTestRole</h3>;
-        expect(wrapper.equals(expectedRender));
+        const wrapper = shallow(<ProjectMember member={aProjectMemberWithoutOrg} qa="member-a"/>);
+        expect(wrapper.html()).toContain(`<h3 class="govuk-heading-s govuk-!-margin-bottom-0">aTestRole</h3>`);
     });
 
     it("should return null if aProjectMember is null", () => {
-        const result = ProjectMember({ member: null });
-        expect(result).toBeNull();
+        const result = shallow(<ProjectMember member={null} qa="member-a"/>);
+        expect(result.html()).toBeNull();
     });
 
     it("should return null if aProjectMember is undefined", () => {
-        const result = ProjectMember({ member: undefined });
-        expect(result).toBeNull();
+        const result = shallow(<ProjectMember member={undefined} qa="member-a"/>);
+        expect(result.html()).toBeNull();
     });
 
     it("should render member\'s name ", () => {
-        const wrapper = shallow(<ProjectMember member={aProjectMember} />);
-        const expectedRender = <p className="govuk-body govuk-!-margin-bottom-0">aTestName</p>;
-        expect(wrapper.equals(expectedRender));
+        const wrapper = shallow(<ProjectMember member={aProjectMemberWithOrg} qa="member-a"/>);
+        expect(wrapper.html()).toContain(`<p class=\"govuk-body govuk-!-margin-bottom-0\" data-qa=\"member-a-name\">aTestName</p>`);
     });
 
     it("should render member\'s email ", () => {
-        const wrapper = mount(<ProjectMember member={aProjectMember} />);
+        const wrapper = mount(<ProjectMember member={aProjectMemberWithOrg} qa="member-a"/>);
         const html = wrapper.html();
         expect(html).toContain("testemail@email.com");
         expect(wrapper
