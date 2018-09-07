@@ -1,42 +1,12 @@
 import * as React from "react";
 import * as Renderers from "./renderers";
 import { copyFileSync } from "fs";
+import { range } from "../../shared/range";
+import { Currency } from "./renderers/currency";
 
 interface DetailsProps {
     layout?: "Single" | "Double";
 }
-
-interface ItemProps<T, TField> {
-    label: React.ReactNode;
-    value: (item: T) => TField;
-}
-
-const DetailsComponent = <T extends {}>(data: T): React.SFC<DetailsProps> => (props) => {
-    let noCols = props.layout === "Double" ? 2 : 1;
-
-    let cols: React.ReactNode[][] = props.layout === "Double" ? [[], []] : [[]];
-
-    //distribute children accross array adding props
-    React.Children.toArray(props.children).forEach((field, index) => {
-        let newProps = {
-            data: data,
-            labelClass: "govuk-grid-column-one-quarter",
-            valueClass: noCols === 2 ? "govuk-grid-column-one-quarter" : "govuk-grid-column-three-quarters",
-        }
-        let cloned = React.cloneElement(field as React.ReactElement<any>, newProps);
-        cols[index % noCols].push(cloned);
-    });
-
-    return (
-        <React.Fragment>
-            {
-                cols.map((x, i) =>
-                    <div className="govuk-grid-row govuk-!-margin-top-4" key={`details-row-${i}`}>{x}</div>
-                )
-            }
-        </React.Fragment>
-    );
-};
 
 interface InternalFieldProps<T> {
     label: React.ReactNode;
@@ -50,6 +20,31 @@ interface ExternalFieldProps<T, TValue> {
     label: React.ReactNode;
     value: (item: T) => TValue;
 }
+
+const DetailsComponent = <T extends {}>(data: T): React.SFC<DetailsProps> => (props) => {
+    const noCols = props.layout === "Double" ? 2 : 1;
+    const cols: React.ReactNode[][] = range(noCols).map(x => []);
+
+    // distribute children accross array adding props
+    React.Children.toArray(props.children).forEach((field, index) => {
+        const newProps = {
+            data,
+            labelClass: "govuk-grid-column-one-quarter",
+            valueClass: noCols === 2 ? "govuk-grid-column-one-quarter" : "govuk-grid-column-three-quarters",
+        };
+        cols[index % noCols].push(React.cloneElement(field as React.ReactElement<any>, newProps));
+    });
+
+    return (
+        <React.Fragment>
+            {
+                cols[0].map((x, i) =>
+                    <div className="govuk-grid-row govuk-!-margin-top-4" key={`details-row-${i}`}>{x}{cols[1] && cols[1][i]}</div>
+                )
+            }
+        </React.Fragment>
+    );
+};
 
 class FieldComponent<T> extends React.Component<InternalFieldProps<T>, {}> {
     render() {
@@ -80,31 +75,41 @@ const renderField = <T extends {}>(label: React.ReactNode, value: T, render: (it
 };
 
 const CustomField = <T extends {}>(): React.SFC<ExternalFieldProps<T, React.ReactNode>> => {
-    const TypedField = FieldComponent as { new(): FieldComponent<T> }
-    return (props) =>  <TypedField {...props} render={(item) => props.value(item)}/>;
+    const TypedField = FieldComponent as { new(): FieldComponent<T> };
+    return (props) => <TypedField {...props} render={(item) => props.value(item)} />;
 };
 
 const StringField = <T extends {}>(): React.SFC<ExternalFieldProps<T, string>> => {
-    const TypedField = FieldComponent as { new(): FieldComponent<T> }
-    return (props) =>  <TypedField {...props} render={(item) => <p className="govuk-body">{props.value(item)}</p>}/>;
+    const TypedField = FieldComponent as { new(): FieldComponent<T> };
+    return (props) => <TypedField {...props} render={(item) => <p className="govuk-body">{props.value(item)}</p>} />;
 };
 
 const MultilineStringField = <T extends {}>(): React.SFC<ExternalFieldProps<T, string>> => {
-    const TypedField = FieldComponent as { new(): FieldComponent<T> }
+    const TypedField = FieldComponent as { new(): FieldComponent<T> };
     const splitString = (v: string) => {
-        return (v||"").split("\n").filter(x => !!x);
-    }
-    return (props) =>  <TypedField {...props} render={(item) => splitString(props.value(item)).map((line, index) => <p className="govuk-body" key={`multiline-string-${index}`}>{line}</p>)}/>;
+        return (v || "").split("\n").filter(x => !!x);
+    };
+    return (props) => <TypedField {...props} render={(item) => splitString(props.value(item)).map((line, index) => <p className="govuk-body" key={`multiline-string-${index}`}>{line}</p>)} />;
 };
 
 const DateField = <T extends {}>(): React.SFC<ExternalFieldProps<T, Date>> => {
-    const TypedField = FieldComponent as { new(): FieldComponent<T> }
-    return (props) => <TypedField {...props} render={(item) => <p className="govuk-body"><Renderers.FullDate value={props.value(item)} /> </p>}/>;
+    const TypedField = FieldComponent as { new(): FieldComponent<T> };
+    return (props) => <TypedField {...props} render={(item) => <p className="govuk-body"><Renderers.FullDate value={props.value(item)} /></p>} />;
 };
 
-const DateTimeField = <T extends {}>(): React.SFC<ExternalFieldProps<T, Date>> =>  {
-    const TypedField = FieldComponent as { new(): FieldComponent<T> }
-    return (props) => <TypedField {...props} render={(item) => <p className="govuk-body"><Renderers.FullDateTime value={props.value(item)} /> </p>}/>;
+const DateTimeField = <T extends {}>(): React.SFC<ExternalFieldProps<T, Date>> => {
+    const TypedField = FieldComponent as { new(): FieldComponent<T> };
+    return (props) => <TypedField {...props} render={(item) => <p className="govuk-body"><Renderers.FullDateTime value={props.value(item)} /></p>} />;
+};
+
+const NumberField = <T extends {}>(): React.SFC<ExternalFieldProps<T, number>> => {
+    const TypedField = FieldComponent as { new(): FieldComponent<T> };
+    return (props) => <TypedField {...props} render={(item) =>  <p className="govuk-body">{props.value(item)}</p>} />;
+};
+
+const CurrencyField = <T extends {}>(): React.SFC<ExternalFieldProps<T, number>> => {
+    const TypedField = FieldComponent as { new(): FieldComponent<T> };
+    return (props) => <TypedField {...props} render={(item) =>  <p className="govuk-body"><Currency value={props.value(item)}/></p>} />;
 };
 
 export const Details = {
@@ -114,6 +119,8 @@ export const Details = {
         MulilineString: MultilineStringField<T>(),
         Date: DateField<T>(),
         DateTime: DateTimeField<T>(),
+        Number: NumberField<T>(),
+        Currency: CurrencyField<T>(),
         Custom: CustomField<T>(),
     })
 };
