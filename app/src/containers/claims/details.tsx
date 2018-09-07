@@ -15,10 +15,6 @@ interface Data {
     projectDetails: Pending<Dtos.ProjectDto>;
 }
 
-interface Callbacks {
-    loadDetails: (id: string) => void;
-}
-
 export class ClaimsDashboardComponent extends ContainerBase<Data, {}> {
 
     // ultimatly will come from navigation
