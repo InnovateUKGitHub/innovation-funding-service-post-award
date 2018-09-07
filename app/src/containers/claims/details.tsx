@@ -8,6 +8,7 @@ import * as Actions from "../../redux/actions/contacts";
 import * as Dtos from "../../models";
 import * as ACC from "../../components";
 import {ProjectDto} from "../../models";
+import {State} from "router5/create-router";
 
 interface Data {
     id: string;
@@ -18,13 +19,17 @@ interface Callbacks {
     loadDetails: (id: string) => void;
 }
 
-export class ClaimsDashboardComponent extends ContainerBase<Data, Callbacks> {
+export class ClaimsDashboardComponent extends ContainerBase<Data, {}> {
 
     // ultimatly will come from navigation
     private selectedTab = tabListArray[0];
 
-    componentDidMount() {
-        this.props.loadDetails(this.props.id);
+    public static getLoadDataActions(route: State) {
+
+        const projectId = route.params && route.params.id;
+        return [
+            Actions.loadProject(projectId)
+        ];
     }
 
     render() {
@@ -49,15 +54,6 @@ function mapData(state: RootState): Data {
     };
 }
 
-function mapCallbacks(dispatch: Dispatch): Callbacks {
-    return {
-        loadDetails: (id: string) => {
-            dispatch(Actions.loadProject(id) as any);
-        }
-    };
-}
-
-export const ClaimsDashboard = ReduxContainer.for<Data, Callbacks>(ClaimsDashboardComponent)
+export const ClaimsDashboard = ReduxContainer.for<Data, {}>(ClaimsDashboardComponent)
     .withData(mapData)
-    .withCallbacks(mapCallbacks)
     .connect();
