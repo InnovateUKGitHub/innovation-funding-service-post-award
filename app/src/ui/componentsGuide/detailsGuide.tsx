@@ -1,6 +1,5 @@
 import React from "react";
 import { Details } from "../components/details";
-import { render } from "enzyme";
 
 export const detailsGuide: IGuide = {
     name: "Details",
