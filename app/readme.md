@@ -93,3 +93,7 @@ Containers are the page level react components and use Redux connect via a wrapp
 ### Components
 
 Reusable React components. No redux dependencies.
+
+### Debugging `server` in Visual Studio Code
+
+Ensure that `app` directory is at the top level of VS Studio workspace and the project is built. Then press `F5` or `Debug -> Start Debugging`
