@@ -2,7 +2,7 @@ import "jest";
 import React from "react";
 import Enzyme, { mount, shallow } from "enzyme";
 import Adapter from "enzyme-adapter-react-16";
-import { LinksList } from "../../src/components";
+import { LinksList } from "../../src/ui/components";
 
 Enzyme.configure({ adapter: new Adapter() });
 

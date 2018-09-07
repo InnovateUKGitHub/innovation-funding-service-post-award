@@ -1,6 +1,6 @@
 import "jest";
 import React from "react";
-import { FullDate, FullDateTime, FullDateTimeWithSeconds, ShortDate, ShortDateTime } from "../../../src/components/renderers/date";
+import { FullDate, FullDateTime, FullDateTimeWithSeconds, ShortDate, ShortDateTime } from "../../../src/ui/components/renderers/date";
 import Adapter from "enzyme-adapter-react-16";
 import Enzyme, { shallow } from "enzyme";
 

@@ -2,9 +2,9 @@ import "jest";
 import React from "react";
 import Enzyme, { mount } from "enzyme";
 import Adapter from "enzyme-adapter-react-16";
-import { PartnersAndFinanceContacts } from "../../src/components";
+import { PartnersAndFinanceContacts } from "../../src/ui/components";
 import { getColumnValues } from "./helpers/tableHelpers";
-import * as Dtos from "../../src/models";
+import * as Dtos from "../../src/ui/models";
 
 Enzyme.configure({ adapter: new Adapter() });
 

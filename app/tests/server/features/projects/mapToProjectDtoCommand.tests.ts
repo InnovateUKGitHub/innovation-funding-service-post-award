@@ -1,7 +1,7 @@
 import "jest";
 import { TestContext } from "../../testContextProvider";
 import { MapToProjectDtoCommand } from "../../../../src/server/features/projects/mapToProjectDto";
-import { ClaimFrequency, ProjectDto } from "../../../../src/models";
+import { ClaimFrequency, ProjectDto } from "../../../../src/ui/models";
 
 describe("MapToProjectDtoCommand", () => {
     it("when valid expect mapping", async () => {

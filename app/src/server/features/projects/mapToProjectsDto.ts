@@ -1,5 +1,5 @@
 import { IContext, IQuery } from "../common/context";
-import { ProjectDto } from "../../../models";
+import { ProjectDto } from "../../../ui/models";
 import { ISalesforceProject } from "../../repositories/projectsRepository";
 import { MapToProjectDtoCommand } from "./mapToProjectDto";
 

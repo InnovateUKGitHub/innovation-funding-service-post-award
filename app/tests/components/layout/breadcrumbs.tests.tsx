@@ -1,6 +1,6 @@
 import "jest";
 import React from "react";
-import { Breadcrumbs } from "../../../src/components/layout/breadcrumbs";
+import { Breadcrumbs } from "../../../src/ui/components/layout/breadcrumbs";
 import { createRouter } from "router5";
 import { RouterProvider } from "react-router5";
 import Enzyme, { mount } from "enzyme";

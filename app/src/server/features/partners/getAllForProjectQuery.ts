@@ -1,5 +1,5 @@
 import { IContext, IQuery } from "../common/context";
-import { PartnerDto } from "../../../models/partnerDto";
+import { PartnerDto } from "../../../ui/models/partnerDto";
 
 export class GetAllForProjectQuery implements IQuery<PartnerDto[]> {
     constructor(private projectId: string) {

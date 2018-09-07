@@ -1,6 +1,6 @@
 import "jest";
 import React from "react";
-import * as Links from "../../src/components/links";
+import * as Links from "../../src/ui/components/links";
 import Enzyme, { mount } from "enzyme";
 import Adapter from "enzyme-adapter-react-16";
 import { RouterProvider } from "react-router5";

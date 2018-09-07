@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDom from "react-dom";
-import { Guide } from "../componentsGuide/guide";
+import { Guide } from "../ui/componentsGuide/guide";
 
 function getGuide(): string {
     let query = window.location.search;

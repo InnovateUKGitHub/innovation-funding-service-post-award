@@ -6,9 +6,9 @@ import { Provider } from "react-redux";
 import { RouterProvider } from "react-router5";
 
 import { renderHtml } from "./html";
-import { rootReducer, setupInitialState, setupMiddleware } from "../redux";
-import { configureRouter, matchRouteLoader } from "../routing";
-import { App } from "../containers/app";
+import { rootReducer, setupInitialState, setupMiddleware } from "../ui/redux";
+import { configureRouter, matchRouteLoader } from "../ui/routing";
+import { App } from "../ui/containers/app";
 
 export function serverRender(req: Request, res: Response) {
   const router = configureRouter();
