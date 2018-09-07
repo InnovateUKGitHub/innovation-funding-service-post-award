@@ -1,25 +1,46 @@
+// var BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+var webpack = require("webpack");
+var env = process.env.NODE_ENV;
+
 module.exports = [
-    {
-      node: {
-        fs: 'empty',
-        net: 'empty'
+  {
+    mode: env || "development",
+    entry: {
+      bundle: './src/client/client.tsx',
+      componentsGuide: './src/client/componentsGuide.tsx',
+      vendor: ["react"],
+    },
+    node: {
+      fs: 'empty',
+      net: 'empty'
+    },
+    output: {
+      path: __dirname + '/public',
+      filename: '[name].js',
+    },
+    resolve: {
+      extensions: ['.ts', '.tsx', '.js', '.jsx'],
+    },
+    devtool: 'cheap-module-eval-source-map',
+    module: {
+      rules: [
+        { test: /\.tsx?$/, loader: 'ts-loader' },
+      ],
+    },
+    optimization: {
+      splitChunks: {
+        cacheGroups: {
+          vendor: {
+            chunks: "all",
+            name: "vendor",
+            test: /[\\/]node_modules[\\/]/,
+          },
+        },
       },
-      entry: {
-        bundle: './src/client/client.tsx',
-        componentsGuide: './src/client/componentsGuide.tsx',
-      },
-      output: {
-        path: __dirname + '/public',
-        filename: '[name].js',
-      },
-      resolve: {
-        extensions: ['.ts', '.tsx', '.js', '.jsx'],
-      },
-      devtool: 'source-map',
-      module: {
-        rules: [
-          { test: /\.tsx?$/, loader: 'ts-loader' },
-        ],
-      }
-  }
+    },
+    plugins: [
+      new webpack.NormalModuleReplacementPlugin(/serverApiClient\.ts/, './clientApiClient.ts'),
+      // new BundleAnalyzerPlugin({ analyzerMode: 'static' })
+    ]
+}
 ];

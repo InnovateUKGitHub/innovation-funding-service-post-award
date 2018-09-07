@@ -1,4 +1,4 @@
-import { DataStoreStatus } from "../redux/reducers";
+import { IDataStore } from "../redux";
 
 export enum LoadingStatus {
     Preload = 1, // State before a request is made to the server, may have partial data.
@@ -138,23 +138,18 @@ export class Pending<T> {
         return new Pending<T[]>(state, data, error);
     }
 
-    static create<T>(stored: { status: DataStoreStatus, data: T, error: {} }): Pending<T> {
-        let pendingStatus = LoadingStatus.Preload;
-        switch (stored && stored.status) {
-            case "LOADING":
-                pendingStatus = LoadingStatus.Loading;
-                break;
-            case "LOADED":
-                pendingStatus = LoadingStatus.Done;
-                break;
-            case "STALE":
-                pendingStatus = LoadingStatus.Stale;
-                break;
-            case "ERROR":
-                pendingStatus = LoadingStatus.Failed;
-                break;
-        }
-        return new Pending<T>(pendingStatus, stored && stored.data, stored && stored.error);
+    static create<T>(stored: IDataStore<T> | null): Pending<T> {
+      let status = LoadingStatus.Preload;
+      let data   = null;
+      let error  = null;
+
+      if(!!stored) {
+        status = stored.status;
+        data   = stored.data;
+        error  = stored.error;
+      }
+
+      return new Pending<T>(status, data, error);
     }
 }
 

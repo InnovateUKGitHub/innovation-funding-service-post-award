@@ -5,7 +5,6 @@ import { Guide } from "../componentsGuide/guide";
 import { Header } from "../components";
 
 export function componentGuideRender(req: Request, res: Response) {
-    console.log("RENDEIONG GUIDE", req.query.guide);
     res.send(renderGuide(renderToString(<Guide source="server" filter={req.query.guide}/>)));
 }
 
@@ -42,6 +41,7 @@ const renderGuide = (html: string) => {
             <a href="#main-content" class="govuk-skip-link">Skip to main content</a>
             <div id="root">${html}</div>
             <script src="/govuk-frontend-1.2.0.min.js"></script>
+            <script src="/vendor.js"></script>
             <script src="/componentsGuide.js"></script>
             <script>
                 window.GOVUKFrontend.initAll()

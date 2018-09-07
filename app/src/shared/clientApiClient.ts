@@ -1,41 +1,51 @@
 import { IApiClient } from "../server/apis";
-
-const dateRegex = /\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z)/;
+import { processResponse } from "./processResponse";
 
 const clientApi: IApiClient = {
     contacts:{
-        getAll: () => fetch("/api/contacts").then(x => processResponse(x)),
-        get: (id: string) => fetch(`/api/contact/${id}`).then(x => processResponse(x)),
+      getAll: () => ajaxJson("/api/contacts"),
+      get: (id: string) => ajaxJson(`/api/contact/${id}`),
     },
     projects:{
-        get: (id: string) => fetch(`/api/projects/${id}`).then(x => processResponse(x)),
-        getAll: () => fetch("/api/projects").then(x => processResponse(x)),
+      get: (id: string) => ajaxJson(`/api/projects/${id}`),
+      getAll: () => ajaxJson("/api/projects"),
     },
     projectContacts: {
-        getAllByProjectId: (projectId: string) => fetch(`/api/projectContacts?projectId=${projectId}`).then(x => processResponse(x)),
+      getAllByProjectId: (projectId: string) => ajaxJson(`/api/projectContacts?projectId=${projectId}`),
     },
     partners : {
-        getAllByProjectId: (projectId: string) => fetch(`/api/partners?projectId=${projectId}`).then(x => processResponse(x)),
+      getAllByProjectId: (projectId: string) => ajaxJson(`/api/partners?projectId=${projectId}`),
     }
 };
 
-const processResponse = (response: any) => response.json().then((x: any) => processDto(x));
+const getHeaders = () => {
+  const headers = new Headers();
+  headers.append("Content-Type", "application/json");
+  return headers;
+};
 
-export const processDto: any = (data: any) => {
-    if(Array.isArray(data)) {
-        return data.map((x: any) => processDto(x));
+const ajaxJson = <T>(url: string, opts?: {}): Promise<T> => {
+  // TODO - ENV.URL?
+  const base    = "";
+  const headers = getHeaders();
+  const options = Object.assign({ headers }, opts);
+
+  return fetch(base + url, options).then(response => {
+    if(response.status === 200) {
+      return processResponse(response);
     }
-    if(data && data.constructor.prototype === Object.prototype) {
-        const newObj: {[key: string]: any} = {};
-        Object.keys(data).forEach(key => {
-            newObj[key] = processDto(data[key]);
-        });
-        return newObj;
-    }
-    if (typeof(data) === "string" && dateRegex.test(data)) {
-        return new Date(data);
-    }
-    return data;
+
+    return Promise.reject(response.statusText);
+  });
+};
+
+const ajaxPost = <T>(url: string, body: {} = {}, opts?: {}) => {
+  const options = Object.assign({
+    method: "POST",
+    body: JSON.stringify(body)
+  }, opts);
+
+  return ajaxJson<T>(url, options);
 };
 
 export default clientApi;

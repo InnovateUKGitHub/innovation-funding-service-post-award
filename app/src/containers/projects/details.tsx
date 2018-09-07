@@ -36,31 +36,24 @@ class ProjectDetailsComponent extends ContainerBase<Data, {}> {
     }
 
     private renderContents(project: Dtos.ProjectDto, partners: Dtos.PartnerDto[], contacts: Dtos.ProjectContactDto[]) {
-        const partnersAndContactsData = partners.map(partner => ({ partner, financeContact: contacts.find(x => x.accountId === partner.accountId && x.role === "Finance contact") }));
-
-        const PartnersTable = ACC.Table.forData(partnersAndContactsData);
         const DetailsSection = ACC.Details.forData(project);
 
         const monitoringOfficer = contacts.find(x => x.role === "Monitoring officer");
         const projectManager = contacts.find(x => x.role === "Project Manager");
 
         const links = [
-            { text: "View original application", url: project.applicationUrl },
-            { text: "View original grant offer letter", url: project.grantOfferLetterUrl }
+            { text: "View original application", url: project.applicationUrl, qa: "Original_application" },
+            { text: "View original grant offer letter", url: project.grantOfferLetterUrl, qa: "Original_grant_letter" }
         ];
 
         return (
             <ProjectOverviewPage selectedTab={this.selectedTab} project={project}>
                 <ACC.Section title="Project Members">
-                    <ACC.ProjectMember member={monitoringOfficer} />
-                    <ACC.ProjectMember member={projectManager} />
+                    <ACC.ProjectMember member={monitoringOfficer} qa="monitoring-officer" />
+                    <ACC.ProjectMember member={projectManager} qa="project-manager" />
 
-                    <PartnersTable.Table>
-                        <PartnersTable.String header="Partner" value={x => x.partner.isLead ? `${x.partner.name} (Lead)` : x.partner.name} />
-                        <PartnersTable.String header="Partner Type" value={x => x.partner.type} />
-                        <PartnersTable.String header="Finance Contact" value={x => x.financeContact && x.financeContact.name || ""} />
-                        <PartnersTable.Email header="Email" value={x => x.financeContact && x.financeContact.email || ""} />
-                    </PartnersTable.Table>
+                    <ACC.PartnersAndFinanceContacts contacts={contacts} partners={partners} />
+
                 </ACC.Section>
 
                 <ACC.Section title="Project information">

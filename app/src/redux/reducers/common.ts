@@ -2,11 +2,10 @@ import { DataLoadAction } from "../actions/dataLoad";
 import * as Dtos from "../../models";
 import { combineReducers } from "redux";
 import { ActionTransitionStart } from "redux-router5";
-
-export type DataStoreStatus = "PRELOAD" | "STALE" | "LOADING" | "LOADED" | "ERROR";
+import { LoadingStatus } from "../../shared/pending";
 
 export interface IDataStore<T> {
-  status: DataStoreStatus;
+  status: LoadingStatus;
   data: T;
   error: any;
 }
@@ -32,8 +31,8 @@ export const dataStoreReducer = <TData extends {}, TKey>(key: (key: TKey) => str
     const result = Object.assign({}, state);
     Object.keys(result).forEach(itemKey => {
       const pending = result[itemKey];
-      if (pending.status === "LOADED" || pending.status === "ERROR") {
-        result[itemKey] = { status: "STALE", data: pending.data, error: pending.error };
+      if (pending.status === LoadingStatus.Done || pending.status === LoadingStatus.Failed) {
+        result[itemKey] = { status: LoadingStatus.Stale, data: pending.data, error: pending.error };
       }
     });
     return result;

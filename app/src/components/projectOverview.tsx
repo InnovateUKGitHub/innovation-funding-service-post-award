@@ -13,7 +13,7 @@ export const tabListArray = ["Claims", "Project change requests", "Forecasts", "
 
 export const ProjectOverviewPage: React.SFC<Props> = ({project, selectedTab, children}) => (
             <ACC.Page>
-                <ACC.Section>
+                <ACC.Section qa="Project_members">
                     <ACC.BackLink route={routeConfig.projectDashboard}>Main dashboard</ACC.BackLink>
                 </ACC.Section>
                 <ACC.Title title="View project" caption={`${project.projectNumber}:${project.title}`} />
