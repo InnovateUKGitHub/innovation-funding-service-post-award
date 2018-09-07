@@ -26,8 +26,7 @@ export function conditionalLoad<T>(
     const state = getState();
     const id = idSelector;
     const store = storeSelector;
-    // tslint:disable-next-line
-    const existing = ((state.data as any)[store] as any)[id] as IDataStore<T>;
+    const existing = (state.data as any)[store][id] as IDataStore<T>;
 
     if (!existing || existing.status === LoadingStatus.Preload || existing.status === LoadingStatus.Stale) {
       dispatch(dataLoadAction(id, store, LoadingStatus.Loading, existing && existing.data));

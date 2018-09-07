@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Link } from "react-router5";
 import { Breadcrumbs, Title } from "../../components/layout";
-import * as Actions from "../../redux/actions/contacts";
+import * as Actions from "../../redux/actions/thunks";
 import { ContainerBase, ReduxContainer } from "../containerBase";
 import { Pending } from "../../../shared/pending";
 import * as Dtos from "../../models";
