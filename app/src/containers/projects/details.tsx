@@ -1,10 +1,10 @@
 import React from "react";
-import { Dispatch } from "redux";
 import { ContainerBase, ReduxContainer } from "../containerBase";
 import { RootState } from "../../redux";
 import * as ACC from "../../components";
 import * as Dtos from "../../models";
 import { Pending } from "../../shared/pending";
+import { State } from "router5";
 import * as Actions from "../../redux/actions/contacts";
 import {ProjectOverviewPage, tabListArray} from "../../components/projectOverview";
 
@@ -15,16 +15,18 @@ interface Data {
     contacts: Pending<Dtos.ProjectContactDto[]>;
 }
 
-interface Callbacks {
-    loadDetails: (id: string) => void;
-}
-
-class ProjectDetailsComponent extends ContainerBase<Data, Callbacks> {
+class ProjectDetailsComponent extends ContainerBase<Data, {}> {
     // ultimatly will come from navigation
     private selectedTab = tabListArray[3];
 
-    componentDidMount() {
-        this.props.loadDetails(this.props.id);
+    public static getLoadDataActions(route: State) {
+
+        const projectId = route.params && route.params.id;
+        return [
+            Actions.loadProject(projectId),
+            Actions.loadContactsForProject(projectId),
+            Actions.loadPatnersForProject(projectId),
+        ];
     }
 
     render() {
@@ -78,26 +80,15 @@ class ProjectDetailsComponent extends ContainerBase<Data, Callbacks> {
 }
 
 function mapData(state: RootState): Data {
-    const id = state.router.route && state.router.route.params.id; // get from url
+    const id = state.router.route && state.router.route.params.id;
     return {
         id,
         contacts: Pending.create(state.data.projectContacts[id]),
         partners: Pending.create(state.data.partners[id]),
-        projectDetails: Pending.create(state.data.project[id]),
+        projectDetails: Pending.create(state.data.project[id])
     };
 }
 
-function mapCallbacks(dispatch: Dispatch): Callbacks {
-    return {
-        loadDetails: (id: string) => {
-            dispatch(Actions.loadProject(id) as any);
-            dispatch(Actions.loadContactsForProject(id) as any);
-            dispatch(Actions.loadPatnersForProject(id) as any);
-        }
-    };
-}
-
-export const ProjectDetails = ReduxContainer.for<Data, Callbacks>(ProjectDetailsComponent)
+export const ProjectDetails = ReduxContainer.for<Data, {}>(ProjectDetailsComponent)
     .withData(mapData)
-    .withCallbacks(mapCallbacks)
     .connect();

@@ -11,24 +11,21 @@ export const Home: React.StatelessComponent = () => (
     <Title title="Home Page" />
     <div className="govuk-grid-row">
       <div className="govuk-grid-column-one-third">
-        <h2><Link route={routes.error} className="govuk-link">Accounts</Link></h2>
-        <p>Some accounts from salesforce</p>
+        <h2><Link route={routes.projectDashboard} className="govuk-link">Projects</Link></h2>
+        <p>Projects Dashboard</p>
       </div>
+      <div className="govuk-grid-column-one-third">
+          <h2><Link route={routes.projectDetails} routeParams={{ id: "a051w000000GE7RAAW" }} className="govuk-link">Example Project</Link></h2>
+          <p>Project with data</p>
+        </div>
       <div className="govuk-grid-column-one-third">
         <h2><Link route={routes.contacts} className="govuk-link">Contacts</Link></h2>
         <p>Some contacts from salesforce</p>
       </div>
     </div>
     <div className="govuk-grid-row">
-      <div className="govuk-grid-column-one-third">
-        <h2><Link route={routes.projectDashboard} className="govuk-link">Projects</Link></h2>
-        <p>Projects Dashboard</p>
-      </div>
-    </div>
-    <div className="govuk-grid-row">
       {ids.map((id, key) =>
         <div className="govuk-grid-column-one-third" key={key}>
-          <h2><Link route={routes.projectDetails} routeParams={{ id }} className="govuk-link">Details for Project {id}</Link></h2>
           <h2><Link route={routes.projectClaims} routeParams={{ id }} className="govuk-link">Claims for Project {id}</Link></h2>
           <p>Project {id}</p>
         </div>
