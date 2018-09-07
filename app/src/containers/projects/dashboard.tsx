@@ -4,7 +4,7 @@ import * as ACC from "../../components";
 import { ClaimFrequency, ProjectDto } from "../../models";
 import { Pending } from "../../shared/pending";
 import { routeConfig } from "../../routing";
-import * as Actions from "../../redux/actions/contacts";
+import * as Actions from "../../redux/actions/thunks";
 
 interface Data {
   projects: Pending<ProjectDto[]>;

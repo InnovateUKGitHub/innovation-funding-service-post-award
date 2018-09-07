@@ -5,7 +5,7 @@ import * as ACC from "../../components";
 import * as Dtos from "../../models";
 import { Pending } from "../../shared/pending";
 import { State } from "router5";
-import * as Actions from "../../redux/actions/contacts";
+import * as Actions from "../../redux/actions/thunks";
 import {ProjectOverviewPage, tabListArray} from "../../components/projectOverview";
 
 interface Data {
