@@ -4,9 +4,9 @@ import { RootState } from "../../redux";
 import * as ACC from "../../components";
 import * as Dtos from "../../models";
 import { Pending } from "../../shared/pending";
-import { routeConfig } from "../../routing";
-import * as Actions from "../../redux/actions/contacts";
 import { State } from "router5";
+import * as Actions from "../../redux/actions/contacts";
+import {ProjectOverviewPage, tabListArray} from "../../components/projectOverview";
 
 interface Data {
     id: string;
@@ -17,8 +17,7 @@ interface Data {
 
 class ProjectDetailsComponent extends ContainerBase<Data, {}> {
     // ultimatly will come from navigation
-    private tabListArray = ["Claims", "Project change requests", "Forecasts", "Project details"];
-    private selectedTab = this.tabListArray[3];
+    private selectedTab = tabListArray[3];
 
     public static getLoadDataActions(route: State) {
 
@@ -48,15 +47,7 @@ class ProjectDetailsComponent extends ContainerBase<Data, {}> {
         ];
 
         return (
-            <ACC.Page>
-                <ACC.Section qa="Project_members">
-                    <ACC.BackLink route={routeConfig.projectDashboard}>Main dashboard</ACC.BackLink>
-                </ACC.Section>
-
-                <ACC.Title title="View project" caption={`${project.projectNumber}:${project.title}`} />
-
-                <ACC.Tabs tabList={this.tabListArray} selected={this.selectedTab} />
-
+            <ProjectOverviewPage selectedTab={this.selectedTab} project={project}>
                 <ACC.Section title="Project Members">
                     <ACC.ProjectMember member={monitoringOfficer} qa="monitoring-officer" />
                     <ACC.ProjectMember member={projectManager} qa="project-manager" />
@@ -76,7 +67,7 @@ class ProjectDetailsComponent extends ContainerBase<Data, {}> {
                 <ACC.Section title="Application information">
                     <ACC.LinksList links={links} />
                 </ACC.Section>
-            </ACC.Page>
+            </ProjectOverviewPage>
         );
     }
 }

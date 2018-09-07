@@ -34,6 +34,12 @@ const contactsRoute: AsyncRoute = {
   component: Containers.ContactList,
 };
 
+const claimsDashboardRoute: AsyncRoute = {
+  name: "projectClaims",
+  path: "/project/claims/:id",
+  component: Containers.ClaimsDashboard
+};
+
 const errorRoute: AsyncRoute = {
   name: "error",
   path: "/error",
@@ -45,5 +51,6 @@ export const routeConfig = {
   projectDashboard: projectDashboardRoute,
   projectDetails: projectDetailsRoute,
   contacts: contactsRoute,
-  error: errorRoute,
+  projectClaims: claimsDashboardRoute,
+  error: errorRoute
 };

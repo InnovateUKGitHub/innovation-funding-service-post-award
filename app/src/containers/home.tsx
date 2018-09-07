@@ -2,6 +2,10 @@ import React from "react";
 import { routeConfig as routes } from "../routing";
 import { Link, Title } from "../components";
 
+const ids = [
+  "a051w000000GE7RAAW"
+];
+
 export const Home: React.StatelessComponent = () => (
   <div>
     <Title title="Home Page" />
@@ -18,6 +22,14 @@ export const Home: React.StatelessComponent = () => (
         <h2><Link route={routes.contacts} className="govuk-link">Contacts</Link></h2>
         <p>Some contacts from salesforce</p>
       </div>
+    </div>
+    <div className="govuk-grid-row">
+      {ids.map((id, key) =>
+        <div className="govuk-grid-column-one-third" key={key}>
+          <h2><Link route={routes.projectClaims} routeParams={{ id }} className="govuk-link">Claims for Project {id}</Link></h2>
+          <p>Project {id}</p>
+        </div>
+      )}
     </div>
   </div>
 );
