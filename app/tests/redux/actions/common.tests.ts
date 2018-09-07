@@ -1,5 +1,5 @@
 import "jest";
-import { createAction } from "../../../src/redux/actions/common";
+import { createAction } from "../../../src/ui/redux/actions/common";
 
 describe("createAction", () => {
   it("should create action with only type param", () => {
