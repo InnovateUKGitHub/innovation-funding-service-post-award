@@ -3,9 +3,11 @@ import { DateTime } from "luxon";
 
 const renderDate = (value: Date | null, format: string) => {
     const dateValue = value && DateTime.fromJSDate(value);
+
     if (dateValue && dateValue.isValid) {
         return <span>{dateValue.toFormat(format)}</span>;
     }
+
     return null;
 };
 

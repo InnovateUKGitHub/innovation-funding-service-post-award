@@ -6,7 +6,7 @@ import { RouterProvider } from "react-router5";
 import { configureRouter } from "../routing";
 import { rootReducer, setupMiddleware } from "../redux";
 import { App } from "../containers/app";
-import { processDto } from "../shared/clientApiClient";
+import { processDto } from "../shared/processResponse";
 
 const serverState = processDto((window as any).__PRELOADED_STATE__);
 
@@ -17,8 +17,10 @@ console.log("initial state", serverState);
 // }
 
 const router     = configureRouter();
-const middleware = setupMiddleware(router);
+const middleware = setupMiddleware(router, true);
 const store      = createStore(rootReducer, serverState, middleware);
+
+(window as any).Store = store;
 
 // window["router"] = router;
 // window["store"] = store;
