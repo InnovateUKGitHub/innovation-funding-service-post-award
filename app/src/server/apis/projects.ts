@@ -1,7 +1,7 @@
 import { GetAllQuery, GetByIdQuery } from "../features/projects";
 import { ControllerBase } from "./controllerBase";
 import contextProvider from "../features/common/contextProvider";
-import { ProjectDto } from "../../models/projectDto";
+import { ProjectDto } from "../../ui/models/projectDto";
 
 export interface IProjectsApi {
     get: (id: string) => Promise<ProjectDto|null>;

@@ -1,6 +1,6 @@
 import "jest";
 import React from "react";
-import { Table } from "../../src/components/table";
+import { Table } from "../../src/ui/components/table";
 import Enzyme, { shallow } from "enzyme";
 import Adapter from "enzyme-adapter-react-16";
 

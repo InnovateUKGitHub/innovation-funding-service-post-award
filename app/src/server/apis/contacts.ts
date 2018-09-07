@@ -2,7 +2,7 @@
 import contextProvider from "../features/common/contextProvider";
 import { GetAllQuery } from "../features/contacts/getAllQuery";
 import { GetByIdQuery } from "../features/contacts/getByIdQuery";
-import { IContact } from "../../models";
+import { IContact } from "../../ui/models";
 import { ControllerBase } from "./controllerBase";
 
 export interface IContactsApi {

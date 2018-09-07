@@ -1,5 +1,5 @@
 import "jest";
-import { dataLoadAction } from "../../../src/redux/actions/dataLoad";
+import { dataLoadAction } from "../../../src/ui/redux/actions/dataLoad";
 
 describe("dataLoadAction", () => {
   it("should create dataLoadAction", () => {

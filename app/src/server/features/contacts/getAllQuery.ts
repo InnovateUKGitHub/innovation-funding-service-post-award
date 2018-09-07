@@ -1,4 +1,4 @@
-import { IContact } from "../../../models";
+import { IContact } from "../../../ui/models";
 import { mapItem } from "./mapItem";
 import { IContext, IQuery } from "../common/context";
 

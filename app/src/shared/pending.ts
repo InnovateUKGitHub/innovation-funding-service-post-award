@@ -1,4 +1,4 @@
-import { IDataStore } from "../redux";
+import { IDataStore } from "../ui/redux";
 
 export enum LoadingStatus {
     Preload = 1, // State before a request is made to the server, may have partial data.

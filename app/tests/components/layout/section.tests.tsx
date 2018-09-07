@@ -1,6 +1,6 @@
 import "jest";
 import React from "react";
-import { Section } from "../../../src/components/layout/section";
+import { Section } from "../../../src/ui/components/layout/section";
 
 import Enzyme, { shallow } from "enzyme";
 import Adapter from "enzyme-adapter-react-16";
