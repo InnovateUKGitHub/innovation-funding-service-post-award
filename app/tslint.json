@@ -10,7 +10,7 @@
     // override rules here
     "arrow-parens": false,
     "whitespace": true,
-    "indent": [true, "spaces", 2],
+    "indent": [true, "spaces"],
     "member-access": false,
     "no-commented-code": false,
     "trailing-comma": false,
