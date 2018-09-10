@@ -61,19 +61,6 @@ class FieldComponent<T> extends React.Component<InternalFieldProps<T>, {}> {
     }
 }
 
-const renderField = <T extends {}>(label: React.ReactNode, value: T, render: (item: T) => React.ReactNode) => {
-    return (
-        <React.Fragment>
-            <div className="govuk-grid-column-one-quarter">
-                <h4 className="govuk-heading-s">{label}</h4>
-            </div>
-            <div className="govuk-grid-column-three-quarters">
-                {render(value)}
-            </div>
-        </React.Fragment>
-    );
-};
-
 const CustomField = <T extends {}>(): React.SFC<ExternalFieldProps<T, React.ReactNode>> => {
     const TypedField = FieldComponent as { new(): FieldComponent<T> };
     return (props) => <TypedField {...props} render={(item) => props.value(item)} />;
