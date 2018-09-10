@@ -1,5 +1,5 @@
 import { ISalesforceContact } from "../../repositories/contactsRepository";
-import { IContact } from "../../../models";
+import { IContact } from "../../../ui/models";
 
 export function mapItem(input: ISalesforceContact): IContact {
   return {

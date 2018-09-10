@@ -1,6 +1,6 @@
 import "jest";
 import React from "react";
-import { PhaseBanner } from "../../../src/components/layout/phaseBanner";
+import { PhaseBanner } from "../../../src/ui/components/layout/phaseBanner";
 
 import Enzyme, { shallow } from "enzyme";
 import Adapter from "enzyme-adapter-react-16";

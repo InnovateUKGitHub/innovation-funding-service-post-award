@@ -1,6 +1,6 @@
 import "jest";
 import React from "react";
-import { Footer } from "../../../src/components/layout/footer";
+import { Footer } from "../../../src/ui/components/layout/footer";
 
 import Enzyme, { shallow } from "enzyme";
 import Adapter from "enzyme-adapter-react-16";

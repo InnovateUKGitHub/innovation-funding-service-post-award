@@ -1,8 +1,8 @@
 import * as React from "react";
 import { Request, Response } from "express";
 import { renderToString } from "react-dom/server";
-import { Guide } from "../componentsGuide/guide";
-import { Header } from "../components";
+import { Guide } from "../ui/componentsGuide/guide";
+import { Header } from "../ui/components";
 
 export function componentGuideRender(req: Request, res: Response) {
     res.send(renderGuide(renderToString(<Guide source="server" filter={req.query.guide}/>)));

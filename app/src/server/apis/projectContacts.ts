@@ -1,7 +1,7 @@
 import { ControllerBase } from "./controllerBase";
 import contextProvider from "../features/common/contextProvider";
 import { GetAllForProjectQuery } from "../features/projectContacts/getAllForProjectQuery";
-import { ProjectContactDto } from "../../models";
+import { ProjectContactDto } from "../../ui/models";
 
 export interface IProjectContactsApi {
     getAllByProjectId: (projectId: string) => Promise<ProjectContactDto[]>;

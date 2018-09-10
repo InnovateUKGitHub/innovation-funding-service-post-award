@@ -1,6 +1,6 @@
 import "jest";
 import React from "react";
-import { Tabs } from "../../../src/components/layout/tabs";
+import { Tabs } from "../../../src/ui/components/layout/tabs";
 
 import Enzyme, { shallow } from "enzyme";
 import Adapter from "enzyme-adapter-react-16";
