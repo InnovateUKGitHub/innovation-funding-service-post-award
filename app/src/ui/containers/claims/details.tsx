@@ -11,7 +11,6 @@ import {State} from "router5/create-router";
 
 interface Data {
     projectId: string;
-    partnerId: string;
     projectDetails: Pending<Dtos.ProjectDto>;
 }
 
@@ -22,7 +21,7 @@ export class ClaimsDashboardComponent extends ContainerBase<Data, {}> {
 
     public static getLoadDataActions(route: State) {
 
-        const projectId = route.params && route.params.id;
+        const projectId = route.params && route.params.projectId;
         return [
             Actions.loadProject(projectId)
         ];
@@ -44,11 +43,9 @@ export class ClaimsDashboardComponent extends ContainerBase<Data, {}> {
 
 function mapData(state: RootState): Data {
     const projectId = state.router.route && state.router.route.params.projectId; // get from url
-    const partnerId = state.router.route && state.router.route.params.partnerId;
     return {
         projectId,
-        partnerId,
-        projectDetails: Pending.create(state.data.project[partnerId]),
+        projectDetails: Pending.create(state.data.project[projectId]),
     };
 }
 

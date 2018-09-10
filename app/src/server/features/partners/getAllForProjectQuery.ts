@@ -1,5 +1,6 @@
 import { IContext, IQuery } from "../common/context";
 import { PartnerDto } from "../../../ui/models/partnerDto";
+import {MapToPartnersDtoCommand} from "./mapToPartnersDto";
 
 export class GetAllForProjectQuery implements IQuery<PartnerDto[]> {
     constructor(private projectId: string) {
@@ -7,15 +8,7 @@ export class GetAllForProjectQuery implements IQuery<PartnerDto[]> {
 
     public async Run(context: IContext) {
         const results = await context.repositories.partners.getAllByProjectId(this.projectId);
-
-        const mapped = results.map(x => ({
-            id: x.Id,
-            name: x.Acc_AccountId__r.Name,
-            accountId: x.Acc_AccountId__r.Id,
-            type: x.Acc_ParticipantType__c,
-            isLead: x.Acc_ProjectRole__c === "Project Lead",
-            projectId: x.Acc_ProjectId__c
-        } as PartnerDto));
+        const mapped = await context.runCommand(new MapToPartnersDtoCommand(results));
 
         return mapped.sort((x, y) => {
             // if x is not lead but y is lead then y is bigger

@@ -24,10 +24,10 @@ export const Home: React.StatelessComponent = () => (
       </div>
     </div>
     <div className="govuk-grid-row">
-      {ids.map((id, key) =>
+      {ids.map((projectId, key) =>
         <div className="govuk-grid-column-one-third" key={key}>
-          <h2><Link route={routes.projectClaims} routeParams={{ id }} className="govuk-link">Claims for Project {id}</Link></h2>
-          <p>Project {id}</p>
+          <h2><Link route={routes.projectClaims} routeParams={{ projectId }} className="govuk-link">Claims for Project {projectId}</Link></h2>
+          <p>Project {projectId}</p>
         </div>
       )}
     </div>
