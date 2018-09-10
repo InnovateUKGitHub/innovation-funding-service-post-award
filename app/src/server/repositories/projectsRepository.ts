@@ -22,6 +22,8 @@ export interface ISalesforceProject {
     Acc_ProjectTitle__c: string;
     Acc_PublicDescription__c: string;
     Acc_StartDate__c: string;// Date,
+    Acc_TotalProjectCosts__c: number;
+    // TODO percentage claimed to date : number;
 }
 
 const fields = [

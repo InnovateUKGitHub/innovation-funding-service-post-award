@@ -10,6 +10,12 @@ export interface ISalesforcePartner {
     Acc_ParticipantSize__c: string;
     Acc_ProjectRole__c: string;
     Acc_ProjectId__c: string;
+    Acc_TotalParticipantGrant__c: number;
+    Acc_TotalParticipantCosts__c: number;
+    Acc_TotalParticipantCostsPaid__c: number;
+    Acc_PercentageParticipantCosts__c: number;
+    Acc_CapLimit__c: number;
+    Acc_AwardRate__c: number;
 }
 
 const fields = [
