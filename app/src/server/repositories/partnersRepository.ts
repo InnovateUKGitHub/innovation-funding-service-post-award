@@ -1,5 +1,4 @@
 import SalesforceBase from "./salesforceBase";
-import { range } from "../../shared/range";
 
 export interface ISalesforcePartner {
     Id: string;
@@ -19,12 +18,18 @@ const fields = [
     "Acc_AccountId__r.Name",
     "Acc_ParticipantType__c",
     "Acc_ParticipantSize__c",
+    // TODO "Acc_TotalParticipantGrant__c",
+    // TODO "Acc_TotalParticipantCosts__c",
+    // TODO "Acc_CapLimit__c",
+    // TODO "Acc_AwardRate__c",
+    // TODO "Acc_TotalProjectCosts__c",
     "Acc_ProjectRole__c",
     "Acc_ProjectId__c",
 ];
 
 export interface IPartnerRepository {
     getAllByProjectId(projectId: string): Promise<ISalesforcePartner[]>;
+    getById(partnerId: string): Promise<ISalesforcePartner | null>;
 }
 
 export class PartnerRepository extends SalesforceBase<ISalesforcePartner> implements IPartnerRepository {
@@ -34,5 +39,9 @@ export class PartnerRepository extends SalesforceBase<ISalesforcePartner> implem
 
     getAllByProjectId(projectId: string): Promise<ISalesforcePartner[]> {
         return super.whereFilter(x => x.Acc_ProjectId__c = projectId);
+    }
+
+    getById(partnerId: string): Promise<ISalesforcePartner | null> {
+        return super.filterOne(x => x.Id = partnerId);
     }
 }
