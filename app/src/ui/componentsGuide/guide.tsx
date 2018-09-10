@@ -8,9 +8,11 @@ import { tabsGuide } from "./tabsGuide";
 import { titleGuide } from "./titleGuide";
 import { linksListGuide } from "./linksListGuide";
 import { tableGuide } from "./tableGuide";
+import { detailsGuide } from "./detailsGuide";
 
 const guides: IGuide[] = [
     datesGuide,
+    detailsGuide,
     emailGuide,
     projectMemberGuide,
     sectionGuide,

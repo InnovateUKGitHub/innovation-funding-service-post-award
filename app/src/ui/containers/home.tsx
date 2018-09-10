@@ -2,9 +2,7 @@ import React from "react";
 import { routeConfig as routes } from "../routing";
 import { Link, Title } from "../components";
 
-const ids = [
-  "a051w000000GE7RAAW"
-];
+const exampleProjectId = "a051w000000GE7RAAW";
 
 export const Home: React.StatelessComponent = () => (
   <div>
@@ -24,12 +22,14 @@ export const Home: React.StatelessComponent = () => (
       </div>
     </div>
     <div className="govuk-grid-row">
-      {ids.map((id, key) =>
-        <div className="govuk-grid-column-one-third" key={key}>
-          <h2><Link route={routes.projectClaims} routeParams={{ id }} className="govuk-link">Claims for Project {id}</Link></h2>
-          <p>Project {id}</p>
-        </div>
-      )}
+      <div className="govuk-grid-column-one-third">
+        <h2><Link route={routes.projectDetails} routeParams={{ id: exampleProjectId }} className="govuk-link">Project Details</Link></h2>
+        <p>Project {exampleProjectId}</p>
+      </div>
+      <div className="govuk-grid-column-one-third">
+        <h2><Link route={routes.projectClaims} routeParams={{ id: exampleProjectId }} className="govuk-link">Claims for Partner</Link></h2>
+        <p>Partner {exampleProjectId}</p>
+      </div>
     </div>
   </div>
 );
