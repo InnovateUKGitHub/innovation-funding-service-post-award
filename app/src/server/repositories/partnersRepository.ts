@@ -38,16 +38,33 @@ export interface IPartnerRepository {
     getById(partnerId: string): Promise<ISalesforcePartner | null>;
 }
 
+// TODO delete once Salesforce fields are available
+const extendData = (data: any): ISalesforcePartner => {
+    return data && {
+        ...data,
+        Acc_TotalParticipantGrant__c: 100000,
+        Acc_TotalParticipantCosts__c: 50000,
+        Acc_TotalParticipantCostsPaid__c: 30000,
+        Acc_PercentageParticipantCosts__c: 50,
+        Acc_CapLimit__c: 85,
+        Acc_AwardRate__c: 50,
+    };
+};
+
 export class PartnerRepository extends SalesforceBase<ISalesforcePartner> implements IPartnerRepository {
     constructor() {
         super("Acc_ProjectParticipant__c", fields);
     }
 
     getAllByProjectId(projectId: string): Promise<ISalesforcePartner[]> {
-        return super.whereFilter(x => x.Acc_ProjectId__c = projectId);
+        return super.whereFilter(x => x.Acc_ProjectId__c = projectId)
+            // TODO delete once Salesforce fields are available
+            .then(results => results.map(extendData));
     }
 
     getById(partnerId: string): Promise<ISalesforcePartner | null> {
-        return super.filterOne(x => x.Id = partnerId);
+        return super.filterOne(x => x.Id = partnerId)
+            // TODO delete once Salesforce fields are available
+            .then(extendData);
     }
 }
