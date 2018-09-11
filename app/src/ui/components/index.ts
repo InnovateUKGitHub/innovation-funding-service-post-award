@@ -9,4 +9,5 @@ export * from "./projectMember";
 export * from "./table";
 export * from "./loading";
 export * from "./partnersAndFinanceContacts";
+export * from "./panel";
 export { Renderers };
