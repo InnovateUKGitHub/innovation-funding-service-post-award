@@ -2,11 +2,12 @@ import * as React from "react";
 
 interface Props {
   title: React.ReactNode;
+  qa?: string;
 }
 
 export const ListSection: React.SFC<Props> = (props) => {
   return (
-    <div className="govuk-!-padding-5 govuk-!-margin-bottom-9" style={{ backgroundColor: "#dee0e2" }}>
+    <div className="govuk-!-padding-5 govuk-!-margin-bottom-9" style={{ backgroundColor: "#dee0e2" }} data-qa={props.qa}>
       <h3 className="govuk-heading-m">{props.title}</h3>
       {props.children}
     </div>
