@@ -48,6 +48,18 @@ export class PartnerRepository extends SalesforceBase<ISalesforcePartner> implem
     }
 
     getById(partnerId: string): Promise<ISalesforcePartner | null> {
-        return super.filterOne(x => x.Id = partnerId);
+        return super.filterOne(x => x.Id = partnerId)
+            // TODO delete once Salesforce fields are available
+            .then((result) => {
+                return result && {
+                    ...result,
+                    Acc_TotalParticipantGrant__c: 100000,
+                    Acc_TotalParticipantCosts__c: 50000,
+                    Acc_TotalParticipantCostsPaid__c: 30000,
+                    Acc_PercentageParticipantCosts__c: 50,
+                    Acc_CapLimit__c: 85,
+                    Acc_AwardRate__c: 50,
+                };
+        });
     }
 }
