@@ -20,12 +20,12 @@ export const Header: React.SFC<{}> = () => (
               <path fill="currentColor" fillRule="evenodd" d={logoPath} />
               {/* <img src="/assets/images/govuk-logotype-crown.png" className="govuk-header__logotype-crown-fallback-image" /> */}
             </svg>
-            <span className="govuk-header__logotype-text" style={{ paddingLeft: "10px"}}>GOV.UK</span>
+            <span className="govuk-header__logotype-text" data-qa="gov-uk-logo-text" style={{ paddingLeft: "10px"}}>GOV.UK</span>
           </span>
         </a>
       </div>
       <div className="govuk-header__content">
-        <a href="#" className="govuk-header__link govuk-header__link--service-name">Innovation Funding Service</a>
+        <a href="#" className="govuk-header__link govuk-header__link--service-name" data-qa="service-name">Innovation Funding Service</a>
       </div>
     </div>
   </header>
