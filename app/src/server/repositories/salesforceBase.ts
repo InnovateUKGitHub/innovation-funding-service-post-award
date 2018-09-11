@@ -59,6 +59,26 @@ export default abstract class SalesforceBase<T> {
     return result as T[];
   }
 
+  protected async filterOne(filter: (item: T) => void): Promise<T | null> {
+    const jsonFilter = {} as T;
+    filter(jsonFilter);
+    try {
+        const conn = await salesforceConnection();
+        const result = await conn.sobject(this.objectName)
+            .select(this.columns.join(", "))
+            .where(jsonFilter)
+            .limit(1)
+            .execute()
+            .then(x => this.asArray(x).pop());
+        return result as T;
+    } catch (e) {
+      if (e.errorCode === "INVALID_QUERY_FILTER_OPERATOR") {
+        return null;
+      }
+      throw e;
+    }
+  }
+
   private asArray(result: Partial<{}>[]): T[] {
     if(this.log) {
       console.log("Retrieved array", result);
