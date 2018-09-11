@@ -27,6 +27,16 @@ export function loadProject(id: string) {
   );
 }
 
+export function loadPartner(id: string) {
+  return conditionalLoad(
+    id,
+    "partners",
+    () => {
+      return ApiClient.partners.get(id);
+    }
+  );
+}
+
 export function loadProjects() {
   return conditionalLoad(
     "all",

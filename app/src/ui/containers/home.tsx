@@ -27,7 +27,7 @@ export const Home: React.StatelessComponent = () => (
         <p>Project {exampleProjectId}</p>
       </div>
       <div className="govuk-grid-column-one-third">
-        <h2><Link route={routes.projectClaims} routeParams={{ id: exampleProjectId }} className="govuk-link">Claims for Partner</Link></h2>
+        <h2><Link route={routes.projectClaims} routeParams={{ projectId: exampleProjectId }} className="govuk-link">Claims for Partner</Link></h2>
         <p>Partner {exampleProjectId}</p>
       </div>
     </div>

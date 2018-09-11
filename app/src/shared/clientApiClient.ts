@@ -14,6 +14,7 @@ const clientApi: IApiClient = {
       getAllByProjectId: (projectId: string) => ajaxJson(`/api/projectContacts?projectId=${projectId}`),
     },
     partners : {
+      get: (id: string) => ajaxJson(`/api/partners/${id}`),
       getAllByProjectId: (projectId: string) => ajaxJson(`/api/partners?projectId=${projectId}`),
     }
 };
