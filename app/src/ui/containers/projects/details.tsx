@@ -1,12 +1,10 @@
 import React from "react";
 import { ContainerBase, ReduxContainer } from "../containerBase";
-import { RootState } from "../../redux";
 import * as ACC from "../../components";
 import * as Dtos from "../../models";
 import { Pending } from "../../../shared/pending";
-import { State } from "router5";
 import * as Actions from "../../redux/actions/thunks";
-import {ProjectOverviewPage, tabListArray} from "../../components/projectOverview";
+import { ProjectOverviewPage, tabListArray } from "../../components/projectOverview";
 
 interface Data {
     id: string;
@@ -15,19 +13,16 @@ interface Data {
     contacts: Pending<Dtos.ProjectContactDto[]>;
 }
 
-class ProjectDetailsComponent extends ContainerBase<Data, {}> {
+interface Params {
+    id: string;
+}
+
+interface Callbacks {
+}
+
+class ProjectDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
     // ultimatly will come from navigation
     private selectedTab = tabListArray[3];
-
-    public static getLoadDataActions(route: State) {
-
-        const projectId = route.params && route.params.id;
-        return [
-            Actions.loadProject(projectId),
-            Actions.loadContactsForProject(projectId),
-            Actions.loadPatnersForProject(projectId),
-        ];
-    }
 
     render() {
         const combined = Pending.combine(this.props.projectDetails, this.props.partners, this.props.contacts, (projectDetails, partners, contacts) => ({ projectDetails, partners, contacts }));
@@ -72,16 +67,27 @@ class ProjectDetailsComponent extends ContainerBase<Data, {}> {
     }
 }
 
-function mapData(state: RootState): Data {
-    const id = state.router.route && state.router.route.params.id;
-    return {
-        id,
-        contacts: Pending.create(state.data.projectContacts[id]),
-        partners: Pending.create(state.data.partners[id]),
-        projectDetails: Pending.create(state.data.project[id])
-    };
-}
+const containerDefinition = ReduxContainer.for<Params, Data, Callbacks>(ProjectDetailsComponent);
 
-export const ProjectDetails = ReduxContainer.for<Data, {}>(ProjectDetailsComponent)
-    .withData(mapData)
-    .connect();
+export const ProjectDetails = containerDefinition.connect({
+    withData: (state, params) => ({
+        id: params.id,
+        contacts: Pending.create(state.data.projectContacts[params.id]),
+        partners: Pending.create(state.data.partners[params.id]),
+        projectDetails: Pending.create(state.data.project[params.id])
+    }),
+    withCallbacks: (dispach) => ({
+    })
+});
+
+export const ProjectDetailsRoute = containerDefinition.route({
+    routeName: "project-details",
+    routePath: "/project/details/:id",
+    getParams: (r) => ({ id: r.params.id }),
+    getLoadDataActions: (params) => [
+        Actions.loadProject(params.id),
+        Actions.loadContactsForProject(params.id),
+        Actions.loadPatnersForProject(params.id),
+    ],
+    container: ProjectDetails
+});

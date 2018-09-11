@@ -22,8 +22,9 @@ class AppComponent extends React.Component<IAppProps, {}> {
 
   private loadData() {
     const route = matchRoute(this.props.route);
-    if(route.component.getLoadDataActions) {
-      const actions = route.component.getLoadDataActions(this.props.route!) || [];
+    const params = route.getParams(this.props.route!);
+    if(route.getLoadDataActions) {
+      const actions = route.getLoadDataActions(params) || [];
       actions.forEach(a => this.props.dispatch(a));
     }
   }
@@ -37,7 +38,7 @@ class AppComponent extends React.Component<IAppProps, {}> {
         <div className="govuk-width-container">
           <PhaseBanner />
           <main className="govuk-main-wrapper" id="main-content" role="main">
-            <route.component {...this.props} />
+            <route.container {...this.props} />
           </main>
         </div>
         <Footer />
