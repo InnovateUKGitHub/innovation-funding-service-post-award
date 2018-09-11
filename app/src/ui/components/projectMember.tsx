@@ -9,7 +9,7 @@ interface ProjectMember {
 }
 
 interface Props {
-    member: ProjectMember | null | undefined;
+    member?: ProjectMember | null ;
     qa: string;
 }
 
