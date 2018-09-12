@@ -3,6 +3,7 @@ import { routeConfig as routes } from "../routing";
 import { Link, Title } from "../components";
 
 const exampleProjectId = "a051w000000GE7RAAW";
+const examplePartnerId = "a071w000000LOXWAA4";
 
 export const Home: React.StatelessComponent = () => (
   <div>
@@ -27,7 +28,7 @@ export const Home: React.StatelessComponent = () => (
         <p>Project {exampleProjectId}</p>
       </div>
       <div className="govuk-grid-column-one-third">
-        <h2><Link route={routes.projectClaims} routeParams={{ projectId: exampleProjectId }} className="govuk-link">Claims for Partner</Link></h2>
+        <h2><Link route={routes.projectClaims} routeParams={{ projectId: exampleProjectId, partnerId: examplePartnerId }} className="govuk-link">Claims for Partner</Link></h2>
         <p>Partner {exampleProjectId}</p>
       </div>
     </div>

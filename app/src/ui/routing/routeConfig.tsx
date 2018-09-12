@@ -36,7 +36,7 @@ const contactsRoute: AsyncRoute = {
 
 const claimsDashboardRoute: AsyncRoute = {
   name: "projectClaims",
-  path: "/project/claims/:projectId",
+  path: "/project/:projectId/claims/?partnerId",
   component: Containers.ClaimsDashboard
 };
 

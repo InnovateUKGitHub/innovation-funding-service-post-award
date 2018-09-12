@@ -13,7 +13,7 @@ export const Panel: React.SFC<Props> = (props) => {
     };
     return (
         <div className="govuk-!-padding-3" data-qa={qa} style={style} >
-            {title ? <h2 className="govuk-heading-m govuk-!-margin-bottom-9">{title}</h2> : null}
+            {title ? <h2 className="govuk-heading-m govuk-!-margin-bottom-6">{title}</h2> : null}
             {children}
         </div>
     );
