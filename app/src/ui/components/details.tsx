@@ -1,9 +1,10 @@
 import * as React from "react";
-import { range } from "../../shared/range";
+import classnames from "classnames";
 import { Currency, FullDate, FullDateTime, Percentage } from "./renderers";
 
 interface DetailsProps {
     layout?: "Single" | "Double";
+    qa?: string;
 }
 
 interface InternalFieldProps<T> {
@@ -19,28 +20,46 @@ interface ExternalFieldProps<T, TValue> {
     value: (item: T) => TValue;
 }
 
-const DetailsComponent = <T extends {}>(data: T): React.SFC<DetailsProps> => (props) => {
-    const noCols = props.layout === "Double" ? 2 : 1;
-    const cols: React.ReactNode[][] = range(noCols).map(x => []);
+interface DualDetailsProps {
+    children: React.ReactNode;
+}
 
+const DetailsComponent = <T extends {}>(data: T): React.SFC<DetailsProps> => ({ children, layout="Single", qa }) => {
     // distribute children accross array adding props
-    React.Children.toArray(props.children).forEach((field, index) => {
+    const rows = React.Children.toArray(children).map((field) => {
         const newProps = {
             data,
-            labelClass: "govuk-grid-column-one-quarter",
-            valueClass: noCols === 2 ? "govuk-grid-column-one-quarter" : "govuk-grid-column-three-quarters",
+            labelClass: layout === "Single" ? "govuk-grid-column-one-quarter" : "govuk-grid-column-one-half",
+            valueClass: layout === "Single" ? "govuk-grid-column-three-quarters" : "govuk-grid-column-one-half",
         };
-        cols[index % noCols].push(React.cloneElement(field as React.ReactElement<any>, newProps));
+        return React.cloneElement(field as React.ReactElement<any>, newProps);
     });
 
+    const rowClasses = classnames({
+        "govuk-grid-row": true,
+        "govuk-!-margin-top-4": layout === "Single"
+    });
     return (
         <React.Fragment>
             {
-                cols[0].map((x, i) =>
-                    <div className="govuk-grid-row govuk-!-margin-top-4" key={`details-row-${i}`}>{x}{cols[1] && cols[1][i]}</div>
-                )
+                rows.map((x, i) => <div data-qa={`details-row-${i}-${qa}`} className={rowClasses} key={`details-row-${i}`}>{x}</div>)
             }
         </React.Fragment>
+    );
+};
+
+export const DualDetails: React.SFC<DualDetailsProps> = ({ children }) => {
+    const columns = React.Children.toArray(children).map((field) => {
+        const newProps = {
+            layout: "Double"
+        };
+        return React.cloneElement(field as React.ReactElement<any>, newProps);
+    });
+
+    return (
+        <div className="govuk-grid-row" >
+            {columns.map((column, i) => (<div key={`dual-details-row-${i}`} className="govuk-grid-column-one-half">{column}</div>))}
+        </div>
     );
 };
 

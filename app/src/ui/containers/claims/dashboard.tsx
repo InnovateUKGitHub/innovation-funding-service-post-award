@@ -6,8 +6,7 @@ import {Pending} from "../../../shared/pending";
 import * as Actions from "../../redux/actions/thunks";
 import {PartnerDto, ProjectDto} from "../../models";
 import {State} from "router5/create-router";
-import {FieldComponent, Loading, Panel, Section} from "../../components";
-import {Currency, Percentage} from "../../components/renderers";
+import {Details, DualDetails, Loading, Panel, Section} from "../../components";
 
 interface Data {
     projectId: string;
@@ -54,36 +53,22 @@ export class ClaimsDashboardComponent extends ContainerBase<Data, {}> {
 interface ClaimsHistoryProps {
     partner: PartnerDto;
 }
+
 const ProjectClaimsHistory: React.SFC<ClaimsHistoryProps> = ({partner}) => {
-
-    const renderCurrency = (val: any) => (<p className="govuk-body"><Currency value={val}/></p>);
-    const renderPercentage = (val: any) => (<p className="govuk-body"><Percentage value={val}/></p>);
-    const fieldClasses = { labelClass:"govuk-grid-column-one-half", valueClass:"govuk-grid-column-one-half" };
-
-    // TODO Generalise this
+    const { Details: Column, Currency, Percentage } = Details.forData(partner);
     return (
         <Panel title="Project claims history">
-            <div className="govuk-grid-row" >
-                <div className="govuk-grid-column-one-half">
-                    <div className="govuk-grid-row" >
-                        <FieldComponent {...fieldClasses} label="Grant offer letter costs" data={partner.totalParticipantGrant} render={renderCurrency}/>
-                    </div>
-                    <div className="govuk-grid-row" >
-                        <FieldComponent {...fieldClasses} label="Costs claimed to date" data={partner.totalParticipantCostsClaimed} render={renderCurrency}/>
-                    </div>
-                    <div className="govuk-grid-row" >
-                        <FieldComponent {...fieldClasses} label="Award offer rate" data={partner.awardRate} render={renderPercentage}/>
-                    </div>
-                </div>
-                <div className="govuk-grid-column-one-half" >
-                    <div className="govuk-grid-row" >
-                        <FieldComponent {...fieldClasses} label="Percentage claimed to date" data={partner.percentageParticipantCostsClaimed} render={renderPercentage}/>
-                    </div>
-                    <div className="govuk-grid-row" >
-                        <FieldComponent {...fieldClasses} label="Cap limit" data={partner.capLimit} render={renderPercentage}/>
-                    </div>
-                </div>
-            </div>
+            <DualDetails>
+                <Column qa="claims-history-col-0">
+                    <Currency label="Grant offer letter costs" value={x => x.totalParticipantGrant}/>
+                    <Currency label="Costs claimed to date" value={x => x.totalParticipantCostsClaimed}/>
+                    <Percentage label="Award offer rate" value={x => x.awardRate}/>
+                </Column>
+                <Column qa="claims-history-col-1">
+                    <Percentage label="Percentage claimed to date" value={x => x.percentageParticipantCostsClaimed}/>
+                    <Percentage label="Cap limit" value={x => x.capLimit}/>
+                </Column>
+            </DualDetails>
         </Panel>
     );
 };

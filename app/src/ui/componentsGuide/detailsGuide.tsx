@@ -1,5 +1,5 @@
 import React from "react";
-import { Details } from "../components/details";
+import {Details, DualDetails} from "../components/details";
 
 export const detailsGuide: IGuide = {
     name: "Details",
@@ -32,23 +32,31 @@ export const detailsGuide: IGuide = {
             name: "Double layout",
             comments: "Laying out two columns of details",
             example: (
-                "const ItemDetails = Details.forData(data);\n"+
-                "return (\n"+
-                "    <ItemDetails.Details>\n"+
-                "        <ItemDetails.String label=\"Id\" value={x => x.id}/>\n"+
-                "        <ItemDetails.String label=\"Name\" value={x => x.name}/>\n"+
-                "        <ItemDetails.Date label=\"Started\" value={x => x.created}/>\n"+
-                "    </ItemDetails.Details>\n"+
-                ");"
+                `const ItemDetails = Details.forData(data);
+                return (
+                    <DualDetails>
+                        <ItemDetails.Details>
+                            <ItemDetails.String label="Id" value={x => x.id}/>
+                            <ItemDetails.String label="Name" value={x => x.name}/>
+                        </ItemDetails.Details>
+                        <ItemDetails.Details>
+                            <ItemDetails.DateTime label="Started" value={x => x.created}/>
+                        </ItemDetails.Details>
+                    </DualDetails>
+                );`
             ),
             render: () => {
                 const ItemDetails = Details.forData({ id: "Example 1", name: "The Example", created: new Date() });
                 return (
-                    <ItemDetails.Details layout="Double">
-                        <ItemDetails.String label="Id" value={x => x.id}/>
-                        <ItemDetails.String label="Name" value={x => x.name}/>
-                        <ItemDetails.DateTime label="Started" value={x => x.created}/>
-                    </ItemDetails.Details>
+                    <DualDetails>
+                        <ItemDetails.Details>
+                            <ItemDetails.String label="Id" value={x => x.id}/>
+                            <ItemDetails.String label="Name" value={x => x.name}/>
+                        </ItemDetails.Details>
+                        <ItemDetails.Details>
+                            <ItemDetails.DateTime label="Started" value={x => x.created}/>
+                        </ItemDetails.Details>
+                    </DualDetails>
                 );
             }
         }
