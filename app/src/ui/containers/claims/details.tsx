@@ -1,9 +1,9 @@
 import React from "react";
 import { ContainerBase, ReduxContainer } from "../containerBase";
-import * as ACC from "../../components";
 import { Pending } from "../../../shared/pending";
+import * as Actions from "../../redux/actions/thunks";
 import * as Dtos from "../../models";
-import * as Actions from "../../redux/actions/index";
+import * as ACC from "../../components";
 import { routeConfig } from "../../routing";
 
 interface Params {
@@ -11,11 +11,12 @@ interface Params {
     claimId: string;
 }
 
-interface DataProps {
+interface Data {
+    id: string;
     projectDetails: Pending<Dtos.ProjectDto>;
 }
 
-class Component extends ContainerBase<Params, DataProps, {}> {
+export class ClaimsDetailsComponent extends ContainerBase<Params, Data, {}> {
 
     public render() {
         const Loading = ACC.Loading.forData(this.props.projectDetails);
@@ -35,20 +36,20 @@ class Component extends ContainerBase<Params, DataProps, {}> {
     }
 }
 
-const definition = ReduxContainer.for<Params, DataProps, {}>(Component);
+const definition = ReduxContainer.for<Params, Data, {}>(ClaimsDetailsComponent);
 
 export const ClaimsDetails = definition.connect({
-    withData: (state, params) => ({ projectDetails: Pending.create(state.data.project[params.projectId]) }),
+    withData: (store, params) => ({
+        id: params.projectId,
+        projectDetails: Pending.create(store.data.project[params.projectId])
+    }),
     withCallbacks: () => ({})
 });
 
 export const ClaimsDetailsRoute = definition.route({
-    routeName: "claimDetails",
+    routeName: "claimDashboard",
     routePath: "/project/:projectId/claims/:claimId",
-    getParams: (route) => ({
-        projectId: route.params.projectId,
-        claimId: route.params.claimId
-    }),
+    getParams: (route) => ({projectId: route.params.projectId, claimId: route.params.claimId}),
     getLoadDataActions: (params) => [
         Actions.loadProject(params.projectId)
     ],

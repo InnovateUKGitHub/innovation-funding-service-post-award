@@ -82,13 +82,13 @@ class ProjectDashboardComponent extends ContainerBase<{}, Data, Callbacks> {
 
     return (
       <React.Fragment>
-        <ACC.ListSection title="Projects with open claims">
+        <ACC.ListSection title="Projects with open claims" qa="Projects-with-open-claims">
           {this.renderProjects(open, "You currently do not have any projects with open claims.")}
         </ACC.ListSection>
-        <ACC.ListSection title="Projects awaiting the next claim period">
+        <ACC.ListSection title="Projects awaiting the next claim period" qa="Projects-awaiting-next-claims-period">
           {this.renderProjects(awaiting, "You currently do not have any projects outside of the claims period.")}
         </ACC.ListSection>
-        <ACC.ListSection title="Archived projects">
+        <ACC.ListSection title="Archived projects" qa="Archived-projects">
           {this.renderProjects(archived, "You currently do not have any archived projects.")}
         </ACC.ListSection>
       </React.Fragment>

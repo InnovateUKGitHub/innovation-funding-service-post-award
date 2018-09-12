@@ -1,7 +1,7 @@
 import * as React from "react";
 
 interface Link {
-    url: string | undefined | null;
+    url?: string | null;
     text: string;
     qa?: string;
 }
