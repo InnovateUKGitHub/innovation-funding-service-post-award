@@ -24,7 +24,7 @@ class Component extends ContainerBase<Params, Data, {}> {
 
     public renderContents(project: Dtos.ProjectDto) {
         return (
-            <ProjectOverviewPage title="Claims" selectedTab={routeConfig.claimsDashboard.routeName} project={project}>
+            <ProjectOverviewPage selectedTab={routeConfig.claimsDashboard.routeName} project={project}>
                 Sections go here
             </ProjectOverviewPage>
         );

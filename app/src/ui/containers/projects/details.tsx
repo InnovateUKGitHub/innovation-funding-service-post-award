@@ -40,7 +40,7 @@ class ProjectDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
         ];
 
         return (
-            <ProjectOverviewPage title="Project details" selectedTab={routeConfig.projectDetails.routeName} project={project}>
+            <ProjectOverviewPage selectedTab={routeConfig.projectDetails.routeName} project={project}>
                 <ACC.Section title="Project Members">
                     <ACC.ProjectMember member={monitoringOfficer} qa="monitoring-officer" />
                     <ACC.ProjectMember member={projectManager} qa="project-manager" />

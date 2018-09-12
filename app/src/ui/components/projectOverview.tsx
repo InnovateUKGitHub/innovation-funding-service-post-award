@@ -7,16 +7,15 @@ interface Props {
     project: ProjectDto;
     selectedTab: string;
     children: ReactNode;
-    title: string;
 }
 
 
-export const ProjectOverviewPage: React.SFC<Props> = ({project, selectedTab, title, children}) => (
+export const ProjectOverviewPage: React.SFC<Props> = ({project, selectedTab, children}) => (
         <ACC.Page>
             <ACC.Section>
                 <ACC.BackLink route={routeConfig.projectDashboard.getLink({})}>Main dashboard</ACC.BackLink>
             </ACC.Section>
-            <ACC.Projects.Title pageTitle={title} project={project} />
+            <ACC.Projects.Title pageTitle="View project" project={project} />
             <ACC.Projects.ProjectNavigation project={project} currentRoute={selectedTab} />
             {children}
         </ACC.Page>
