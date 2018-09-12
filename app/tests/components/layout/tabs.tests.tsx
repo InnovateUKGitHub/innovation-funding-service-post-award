@@ -1,56 +1,44 @@
 import "jest";
 import React from "react";
-import { Tabs } from "../../../src/ui/components/layout/tabs";
+import { Tabs, TabItem } from "../../../src/ui/components/layout/tabs";
 
-import Enzyme, { shallow } from "enzyme";
+import Enzyme from "enzyme";
 import Adapter from "enzyme-adapter-react-16";
 
 Enzyme.configure({ adapter: new Adapter() });
 
 describe("Tabs", () => {
-    const aTabList = ["Claims", "Project change requests"];
-    const aSelectedTab = aTabList[1];
+    const aTabList: TabItem[] = [
+        { text: "Claims", url: "#" },
+        { text: "Project change requests", url: "#", selected: true }
+    ];
+
+    it("should render the list of tabs", () => {
+        const wrapper = Enzyme.mount(<Tabs tabList={aTabList} />);
+        const items = wrapper.find("li");
+        expect(items.length).toBe(2);
+        items.forEach(item => {
+            expect(item.props().className).toContain("govuk-tabs__list-item");
+            expect(item.props().role).toBe("presentation");
+        });
+    });
+
     it("should render the selected tab", () => {
-        const result = Tabs({ tabList: aTabList, selected: aSelectedTab });
-        const wrapper = shallow(result);
-        expect(wrapper
-            .containsMatchingElement(<a href="#" className="govuk-tabs__tab" aria-selected={true}>Project change requests</a>))
-            .toBeTruthy();
+        const wrapper = Enzyme.shallow(<Tabs tabList={aTabList} />);
+        expect(wrapper.html()).toContain(`<a href="#" class="govuk-tabs__tab" aria-selected="true">Project change requests</a>`);
     });
+
     it("should render the unselected tab", () => {
-        const result = Tabs({ tabList: aTabList, selected: aSelectedTab });
-        const wrapper = shallow(result);
-        expect(wrapper
-            .containsMatchingElement(<a href="#" className="govuk-tabs__tab" aria-selected={false}>Claims</a>))
-            .toBeTruthy();
+        const wrapper = Enzyme.shallow(<Tabs tabList={aTabList} />);
+        expect(wrapper.html()).toContain(`<a href="#" class="govuk-tabs__tab">Claims</a>`);
     });
+
     it("should not render tabs if passed an empty tab list", () => {
-        const anEmptyTabList = [];
-        const result = Tabs({ tabList: anEmptyTabList, selected: aSelectedTab });
-        expect(result).toBeNull();
+        const wrapper = Enzyme.shallow(<Tabs tabList={[]}/>);
+        expect(wrapper.html()).toBeNull();
     });
     it("should not render tabs if passed null tab list", () => {
-        const result = Tabs({ tabList: null, selected: aSelectedTab });
-        expect(result).toBeNull();
-    });
-    it("should render both tabs and set aria-selected=false if selected is null", () => {
-        const result = Tabs({ tabList: aTabList, selected: null });
-        const wrapper = shallow(result);
-        expect(wrapper
-            .containsMatchingElement(<a href="#" className="govuk-tabs__tab" aria-selected={false}>Project change requests</a>))
-            .toBeTruthy();
-        expect(wrapper
-            .containsMatchingElement(<a href="#" className="govuk-tabs__tab" aria-selected={false}>Claims</a>))
-            .toBeTruthy();
-    });
-    it("should render both tabs and set aria-selected=false if selected is not in tabs list", () => {
-        const result = Tabs({ tabList: aTabList, selected: "a test selected tab" });
-        const wrapper = shallow(result);
-        expect(wrapper
-            .containsMatchingElement(<a href="#" className="govuk-tabs__tab" aria-selected={false}>Project change requests</a>))
-            .toBeTruthy();
-        expect(wrapper
-            .containsMatchingElement(<a href="#" className="govuk-tabs__tab" aria-selected={false}>Claims</a>))
-            .toBeTruthy();
+        const wrapper = Enzyme.shallow(<Tabs tabList={null}/>);
+        expect(wrapper.html()).toBeNull();
     });
 });

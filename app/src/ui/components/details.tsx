@@ -18,6 +18,7 @@ interface InternalFieldProps<T> {
 interface ExternalFieldProps<T, TValue> {
     label: React.ReactNode;
     value: (item: T) => TValue;
+    fractionDigits?: number;
 }
 
 interface DualDetailsProps {
@@ -113,7 +114,7 @@ const NumberField = <T extends {}>(): React.SFC<ExternalFieldProps<T, number>> =
 
 const CurrencyField = <T extends {}>(): React.SFC<ExternalFieldProps<T, number>> => {
     const TypedField = FieldComponent as { new(): FieldComponent<T> };
-    return (props) => <TypedField {...props} render={(item) =>  <p className="govuk-body"><Currency value={props.value(item)}/></p>} />;
+    return (props) => <TypedField {...props} render={(item) =>  <p className="govuk-body"><Currency fractionDigits={props.fractionDigits} value={props.value(item)}/></p>} />;
 };
 
 const PercentageField = <T extends {}>(): React.SFC<ExternalFieldProps<T, number>> => {

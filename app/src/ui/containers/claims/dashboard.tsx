@@ -1,34 +1,23 @@
 import React from "react";
-import {ContainerBase, ReduxContainer} from "../containerBase";
-import {ProjectOverviewPage, tabListArray} from "../../components/projectOverview";
-import {RootState} from "../../redux/reducers";
-import {Pending} from "../../../shared/pending";
-import * as Actions from "../../redux/actions/thunks";
+import { ContainerBase, ReduxContainer } from "../containerBase";
+import { Pending } from "../../../shared/pending";
+import * as Actions from "../../redux/actions/index";
+import { routeConfig } from "../../routing";
+import {ProjectOverviewPage} from "../../components/projectOverview";
 import {PartnerDto, ProjectDto} from "../../models";
-import {State} from "router5/create-router";
 import {Details, DualDetails, Loading, Panel, Section} from "../../components";
 
-interface Data {
+interface Params {
     projectId: string;
+    partnerId: string;
+}
+
+interface Data {
     projectDetails: Pending<ProjectDto>;
     partnerDetails: Pending<PartnerDto>;
 }
 
-export class ClaimsDashboardComponent extends ContainerBase<Data, {}> {
-
-    // ultimatly will come from navigation
-    private selectedTab = tabListArray[0];
-
-    public static getLoadDataActions(route: State) {
-
-        const projectId = route.params && route.params.projectId;
-        const partnerId = route.params && route.params.partnerId;
-        return [
-            Actions.loadProject(projectId),
-            Actions.loadPartner(partnerId)
-        ];
-    }
-
+class Component extends ContainerBase<Params, Data, {}> {
     render() {
         const combined = Pending.combine(
             this.props.projectDetails,
@@ -41,7 +30,7 @@ export class ClaimsDashboardComponent extends ContainerBase<Data, {}> {
 
     renderContents = (project: ProjectDto, partner: PartnerDto) => {
         return (
-            <ProjectOverviewPage selectedTab={this.selectedTab} project={project}>
+            <ProjectOverviewPage selectedTab={routeConfig.claimsDashboard.routeName} project={project} partnerId={partner.id}>
                 <Section>
                     <ProjectClaimsHistory partner={partner}/>
                 </Section>
@@ -49,6 +38,7 @@ export class ClaimsDashboardComponent extends ContainerBase<Data, {}> {
         );
     }
 }
+
 
 interface ClaimsHistoryProps {
     partner: PartnerDto;
@@ -73,16 +63,26 @@ const ProjectClaimsHistory: React.SFC<ClaimsHistoryProps> = ({partner}) => {
     );
 };
 
-function mapData(state: RootState): Data {
-    const projectId = state.router.route && state.router.route.params.projectId; // get from url
-    const partnerId = state.router.route && state.router.route.params.partnerId; // get from url
-    return {
-        projectId,
-        projectDetails: Pending.create(state.data.project[projectId]),
-        partnerDetails: Pending.create(state.data.partner[partnerId]),
-    };
-}
+const definition = ReduxContainer.for<Params, Data, {}>(Component);
 
-export const ClaimsDashboard = ReduxContainer.for<Data, {}>(ClaimsDashboardComponent)
-    .withData(mapData)
-    .connect();
+export const ClaimsDashboard = definition.connect({
+    withData: (state, params) => ({
+        projectDetails: Pending.create(state.data.project[params.projectId]),
+        partnerDetails: Pending.create(state.data.partner[params.partnerId])
+    }),
+    withCallbacks: () => ({})
+});
+
+export const ClaimsDashboardRoute = definition.route({
+    routeName: "claimDetails",
+    routePath: "/project/:projectId/claims/?partnerId",
+    getParams: (route) => ({
+        projectId: route.params.projectId,
+        partnerId: route.params.partnerId,
+    }),
+    getLoadDataActions: (params) => [
+        Actions.loadProject(params.projectId),
+        Actions.loadPartner(params.partnerId)
+    ],
+    container: ClaimsDashboard
+});

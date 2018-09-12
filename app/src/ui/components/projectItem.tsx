@@ -29,7 +29,7 @@ export const AwaitingProjectItem: React.SFC<Props & NextProps> = (props) => (
 export const ProjectDescription: React.SFC<Props> = (props) => (
   <div className="govuk-grid-column-two-thirds">
     <h2 className="govuk-heading-s govuk-!-margin-bottom-2">
-      <Link route={routeConfig.projectDetails} routeParams={{ id: props.project.id }}>
+      <Link route={routeConfig.projectDetails.getLink({id: props.project.id})}>
         {props.project.projectNumber}: {props.project.title}
       </Link>
     </h2>

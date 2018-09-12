@@ -1,6 +1,6 @@
 import "jest";
 import React from "react";
-import { Details } from "../../src/ui/components/details";
+import {Details, DualDetails} from "../../src/ui/components/details";
 import Enzyme, { shallow, mount } from "enzyme";
 import Adapter from "enzyme-adapter-react-16";
 
@@ -53,7 +53,7 @@ describe("Details", () => {
 
     it("Currency values render expected content", () => {
       const DTest = Details.forData({ cost: 12.22 });
-      const output = shallow(<DTest.Details><DTest.Currency label="Cost" value={x => x.cost} /></DTest.Details>).html();
+      const output = shallow(<DTest.Details><DTest.Currency fractionDigits={2} label="Cost" value={x => x.cost} /></DTest.Details>).html();
       expect(output).toContain(`<h4 class="govuk-heading-s">Cost</h4>`);
       expect(output).toContain(`<p class="govuk-body"><span>£ 12.22</span></p>`);
     });
@@ -84,15 +84,26 @@ describe("Details", () => {
   describe("Double Column", () => {
     const DTest = Details.forData({ id:1, name: "example", cost: 100 });
     const wrapper = mount(
-      <DTest.Details layout="Double">
-        <DTest.Number label="Id" value={x => x.id} />
-        <DTest.String label="Name" value={x => x.name} />
-        <DTest.Currency label="Cost" value={x => x.cost} />
-      </DTest.Details>
+        <DualDetails>
+            <DTest.Details>
+                <DTest.Number label="Id" value={x => x.id} />
+                <DTest.String label="Name" value={x => x.name} />
+            </DTest.Details>
+            <DTest.Details>
+                <DTest.Currency label="Cost" value={x => x.cost} />
+            </DTest.Details>
+        </DualDetails>
         );
 
-    expect(wrapper.find("div.govuk-grid-row").length).toBe(2);
-    expect(wrapper.find("div.govuk-grid-row").at(0).find("div.govuk-grid-column-one-quarter").length).toBe(4);
-    expect(wrapper.find("div.govuk-grid-row").at(1).find("div.govuk-grid-column-one-quarter").length).toBe(2);
+    expect(wrapper.find("div.govuk-grid-row").length).toBe(4);
+    expect(wrapper
+        .find("div.govuk-grid-row").at(0)
+        .find("div.govuk-grid-column-one-half")
+        .length).toBe(8);
+    expect(wrapper
+        .find("div.govuk-grid-row").at(0)
+        .find("div.govuk-grid-column-one-half").at(0)
+        .find("div.govuk-grid-row")
+        .length).toBe(2);
   });
 });

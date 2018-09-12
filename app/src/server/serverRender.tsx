@@ -7,22 +7,25 @@ import { RouterProvider } from "react-router5";
 
 import { renderHtml } from "./html";
 import { rootReducer, setupInitialState, setupMiddleware } from "../ui/redux";
-import { configureRouter, matchRouteLoader } from "../ui/routing";
+import { configureRouter, matchRoute } from "../ui/routing";
 import { App } from "../ui/containers/app";
 
 export function serverRender(req: Request, res: Response) {
   const router = configureRouter();
 
   router.start(req.originalUrl, (routeError, route) => {
+
     if (routeError) {
       console.log("router start error", routeError);
       return res.status(500).send(routeError);
     }
+
     const initialState = setupInitialState(route);
     const middleware = setupMiddleware(router, false);
     const store = createStore(rootReducer, initialState, middleware);
-    const loader = matchRouteLoader(route);
-    const actions = loader(route!) || [];
+    const matched = matchRoute(route);
+    const params = matched && matched.getParams && matched.getParams(route!) || {};
+    const actions = matched && matched.getLoadDataActions && matched.getLoadDataActions(params) || [];
 
     Promise.all(actions.map(action => action(store.dispatch, store.getState, null)))
       .then(() => {

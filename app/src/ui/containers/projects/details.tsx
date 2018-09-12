@@ -1,12 +1,11 @@
 import React from "react";
 import { ContainerBase, ReduxContainer } from "../containerBase";
-import { RootState } from "../../redux";
 import * as ACC from "../../components";
 import * as Dtos from "../../models";
 import { Pending } from "../../../shared/pending";
-import { State } from "router5";
 import * as Actions from "../../redux/actions/thunks";
-import {ProjectOverviewPage, tabListArray} from "../../components/projectOverview";
+import { ProjectOverviewPage } from "../../components/projectOverview";
+import { routeConfig } from "../../routing";
 
 interface Data {
     id: string;
@@ -15,20 +14,14 @@ interface Data {
     contacts: Pending<Dtos.ProjectContactDto[]>;
 }
 
-class ProjectDetailsComponent extends ContainerBase<Data, {}> {
-    // ultimatly will come from navigation
-    private selectedTab = tabListArray[3];
+interface Params {
+    id: string;
+}
 
-    public static getLoadDataActions(route: State) {
+interface Callbacks {
+}
 
-        const projectId = route.params && route.params.id;
-        return [
-            Actions.loadProject(projectId),
-            Actions.loadContactsForProject(projectId),
-            Actions.loadPatnersForProject(projectId),
-        ];
-    }
-
+class ProjectDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
     render() {
         const combined = Pending.combine(this.props.projectDetails, this.props.partners, this.props.contacts, (projectDetails, partners, contacts) => ({ projectDetails, partners, contacts }));
         const Loading = ACC.Loading.forData(combined);
@@ -47,7 +40,7 @@ class ProjectDetailsComponent extends ContainerBase<Data, {}> {
         ];
 
         return (
-            <ProjectOverviewPage selectedTab={this.selectedTab} project={project}>
+            <ProjectOverviewPage selectedTab={routeConfig.projectDetails.routeName} project={project}>
                 <ACC.Section title="Project Members">
                     <ACC.ProjectMember member={monitoringOfficer} qa="monitoring-officer" />
                     <ACC.ProjectMember member={projectManager} qa="project-manager" />
@@ -72,16 +65,26 @@ class ProjectDetailsComponent extends ContainerBase<Data, {}> {
     }
 }
 
-function mapData(state: RootState): Data {
-    const id = state.router.route && state.router.route.params.id;
-    return {
-        id,
-        contacts: Pending.create(state.data.projectContacts[id]),
-        partners: Pending.create(state.data.partners[id]),
-        projectDetails: Pending.create(state.data.project[id])
-    };
-}
+const containerDefinition = ReduxContainer.for<Params, Data, Callbacks>(ProjectDetailsComponent);
 
-export const ProjectDetails = ReduxContainer.for<Data, {}>(ProjectDetailsComponent)
-    .withData(mapData)
-    .connect();
+export const ProjectDetails = containerDefinition.connect({
+    withData: (state, params) => ({
+        id: params.id,
+        contacts: Pending.create(state.data.projectContacts[params.id]),
+        partners: Pending.create(state.data.partners[params.id]),
+        projectDetails: Pending.create(state.data.project[params.id])
+    }),
+    withCallbacks: () => ({})
+});
+
+export const ProjectDetailsRoute = containerDefinition.route({
+    routeName: "project-details",
+    routePath: "/projects/:id/details",
+    getParams: (r) => ({ id: r.params.id }),
+    getLoadDataActions: (params) => [
+        Actions.loadProject(params.id),
+        Actions.loadContactsForProject(params.id),
+        Actions.loadPatnersForProject(params.id),
+    ],
+    container: ProjectDetails
+});
