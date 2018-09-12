@@ -7,6 +7,6 @@ interface Props {
     pageTitle: string;
 }
 
-export const Title : React.SFC<Props> = ({pageTitle, project}) => {
+export const Title: React.SFC<Props> = ({pageTitle, project}) => {
     return <ACC.Title title={pageTitle} caption={`${project.projectNumber || ""} : ${project.title || ""}`} />;
-}
+};

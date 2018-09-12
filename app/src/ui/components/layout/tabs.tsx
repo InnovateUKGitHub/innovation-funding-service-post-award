@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "../links";
 
 export interface TabItem {
-    text: string,
+    text: string;
     route?: ILinkInfo;
     url?: string;
     selected?: boolean;
@@ -38,13 +38,13 @@ export class Tabs extends React.PureComponent<TabProps, {}> {
 
     private renderTab(item: TabItem) {
         if (item.route) {
-            return <Link className="govuk-tabs__tab" route={item.route} selected={item.selected}>{item.text}</Link>
+            return <Link className="govuk-tabs__tab" route={item.route} selected={item.selected}>{item.text}</Link>;
         }
-    
+
         if (item.url) {
-            return <a href={item.url} className="govuk-tabs__tab" aria-selected={item.selected}>{item.text}</a>
+            return <a href={item.url} className="govuk-tabs__tab" aria-selected={item.selected}>{item.text}</a>;
         }
-    
+
         return <span className="govuk-tabs__tab">item.text</span>;
     }
 }

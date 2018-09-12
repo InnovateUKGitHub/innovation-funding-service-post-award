@@ -14,7 +14,7 @@ export function serverRender(req: Request, res: Response) {
   const router = configureRouter();
 
   router.start(req.originalUrl, (routeError, route) => {
-    
+
     if (routeError) {
       console.log("router start error", routeError);
       return res.status(500).send(routeError);

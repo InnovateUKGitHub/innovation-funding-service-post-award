@@ -8,7 +8,6 @@ interface Props {
     currentRouteName: string;
 }
 
-
 export const Navigation: React.SFC<Props> = (props) => {
     const detialsLink =  routeConfig.claimDetails.getLink({ claimId: props.claimId, projectId: props.projectId });
     const tabs: ACC.TabItem[] = [
@@ -18,4 +17,4 @@ export const Navigation: React.SFC<Props> = (props) => {
     ];
 
     return <ACC.Tabs tabList={tabs} />;
-}
+};
