@@ -4,6 +4,7 @@ import * as ACC from "../../components";
 import { Pending } from "../../../shared/pending";
 import * as Dtos from "../../models";
 import * as Actions from "../../redux/actions/index";
+import { routeConfig } from "../../routing";
 
 interface Params {
     projectId: string;
@@ -14,20 +15,21 @@ interface DataProps {
     projectDetails: Pending<Dtos.ProjectDto>;
 }
 
-const tabListArray = ["Claims", "Project change requests", "Forecasts", "Project details"];
-
 class Component extends ContainerBase<Params, DataProps, {}> {
 
     public render() {
         const Loading = ACC.Loading.forData(this.props.projectDetails);
-        return <Loading.Loader render={(project) => this.renderContents(project)} />;
+        return <Loading.Loader render={(project) => this.renderContents(project, this.props.claimId)} />;
     }
 
-    private renderContents(project: Dtos.ProjectDto) {
+    private renderContents(project: Dtos.ProjectDto, claimId: string) {
         return (
             <ACC.Page>
-                <ACC.Title title="Claim" caption={`${project.projectNumber}:${project.title}`} />
-                <ACC.Tabs tabList={tabListArray} selected={"Claims"} />
+                <ACC.Section>
+                    <ACC.BackLink route={routeConfig.claimsDashboard.getLink({projectId: project.id})}>Claims dashboard</ACC.BackLink>
+                </ACC.Section>
+                <ACC.Projects.Title pageTitle="Claim" project={project}/>
+                <ACC.Claims.Navigation projectId={project.id} claimId={claimId} currentRouteName={routeConfig.claimDetails.routeName} />
             </ACC.Page>
         );
     }

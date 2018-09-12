@@ -111,7 +111,7 @@ export const ProjectDashboard = definition.connect({
 
 export const ProjectDashboardRoute = definition.route({
   routeName: "projectDashboard",
-  routePath: "/project/dashboard",
+  routePath: "/projects/dashboard",
   getParams: () => ({}),
   getLoadDataActions: (dispach) => [Actions.loadProjects()],
   container: ProjectDashboard

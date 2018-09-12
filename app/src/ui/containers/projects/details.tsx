@@ -4,7 +4,8 @@ import * as ACC from "../../components";
 import * as Dtos from "../../models";
 import { Pending } from "../../../shared/pending";
 import * as Actions from "../../redux/actions/thunks";
-import { ProjectOverviewPage, tabListArray } from "../../components/projectOverview";
+import { ProjectOverviewPage } from "../../components/projectOverview";
+import { routeConfig } from "../../routing";
 
 interface Data {
     id: string;
@@ -21,9 +22,6 @@ interface Callbacks {
 }
 
 class ProjectDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
-    // ultimatly will come from navigation
-    private selectedTab = tabListArray[3];
-
     render() {
         const combined = Pending.combine(this.props.projectDetails, this.props.partners, this.props.contacts, (projectDetails, partners, contacts) => ({ projectDetails, partners, contacts }));
         const Loading = ACC.Loading.forData(combined);
@@ -42,7 +40,7 @@ class ProjectDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
         ];
 
         return (
-            <ProjectOverviewPage selectedTab={this.selectedTab} project={project}>
+            <ProjectOverviewPage title="Project details" selectedTab={routeConfig.projectDetails.routeName} project={project}>
                 <ACC.Section title="Project Members">
                     <ACC.ProjectMember member={monitoringOfficer} qa="monitoring-officer" />
                     <ACC.ProjectMember member={projectManager} qa="project-manager" />
@@ -76,13 +74,12 @@ export const ProjectDetails = containerDefinition.connect({
         partners: Pending.create(state.data.partners[params.id]),
         projectDetails: Pending.create(state.data.project[params.id])
     }),
-    withCallbacks: (dispach) => ({
-    })
+    withCallbacks: () => ({})
 });
 
 export const ProjectDetailsRoute = containerDefinition.route({
     routeName: "project-details",
-    routePath: "/project/details/:id",
+    routePath: "/projects/:id/details",
     getParams: (r) => ({ id: r.params.id }),
     getLoadDataActions: (params) => [
         Actions.loadProject(params.id),
