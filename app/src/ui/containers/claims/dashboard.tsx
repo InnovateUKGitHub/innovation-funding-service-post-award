@@ -39,7 +39,6 @@ class Component extends ContainerBase<Params, Data, {}> {
     }
 }
 
-
 interface ClaimsHistoryProps {
     partner: PartnerDto;
 }
