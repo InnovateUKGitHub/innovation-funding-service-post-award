@@ -9,8 +9,9 @@ import browserPluginFactory from "router5/plugins/browser";
 
 Enzyme.configure({ adapter: new Adapter() });
 
-const route  = { name: "test", path: "/test" } as any;
-const router = createRouter([route]).usePlugin(browserPluginFactory({ useHash: false }));
+const route = { routeName: "test", routeParams: { id : "exampleId"}};
+const router = createRouter([{name: route.routeName, path: "/test/:id" }]).usePlugin(browserPluginFactory({ useHash: false }));
+const expectedPath = "/test/exampleId";
 
 describe("Links", () => {
   describe("Link", () => {
@@ -23,7 +24,7 @@ describe("Links", () => {
       );
       const wrapper = mount(result);
       const html = wrapper.html();
-      expect(html).toContain(route.path);
+      expect(html).toContain("/test/exampleId");
     });
 
     it("should render a link with correct class", () => {
@@ -61,7 +62,7 @@ describe("Links", () => {
       );
       const wrapper = mount(result);
       const html = wrapper.html();
-      expect(html).toContain(route.path);
+      expect(html).toContain(expectedPath);
     });
 
     it("should render a link with correct class", () => {
