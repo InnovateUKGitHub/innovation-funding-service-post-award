@@ -1,7 +1,7 @@
-import React, {ReactNode} from "react";
+import React, { ReactNode } from "react";
 import * as ACC from "./index";
 import { routeConfig } from "../routing/index";
-import {ProjectDto} from "../models/index";
+import { ProjectDto } from "../models/index";
 
 interface Props {
     project: ProjectDto;
@@ -9,15 +9,13 @@ interface Props {
     children: ReactNode;
 }
 
-export const tabListArray = ["Claims", "Project change requests", "Forecasts", "Project details"];
-
-export const ProjectOverviewPage: React.SFC<Props> = ({project, selectedTab, children}) => (
-            <ACC.Page>
-                <ACC.Section qa="Project_members">
-                    <ACC.BackLink route={routeConfig.projectDashboard}>Main dashboard</ACC.BackLink>
-                </ACC.Section>
-                <ACC.Title title="View project" caption={`${project.projectNumber}:${project.title}`} />
-                <ACC.Tabs tabList={tabListArray} selected={selectedTab} />
-                {children}
-            </ACC.Page>
-        );
+export const ProjectOverviewPage: React.SFC<Props> = ({ project, selectedTab, children }) => (
+    <ACC.Page>
+        <ACC.Section>
+            <ACC.BackLink route={routeConfig.projectDashboard.getLink({})}>Main dashboard</ACC.BackLink>
+        </ACC.Section>
+        <ACC.Projects.Title pageTitle="View project" project={project} />
+        <ACC.Projects.ProjectNavigation project={project} currentRoute={selectedTab} />
+        {children}
+    </ACC.Page>
+);

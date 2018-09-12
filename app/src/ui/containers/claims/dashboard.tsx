@@ -1,54 +1,51 @@
 import React from "react";
-import {ContainerBase, ReduxContainer} from "../containerBase";
-import {ProjectOverviewPage, tabListArray} from "../../components/projectOverview";
-import {RootState} from "../../redux/reducers";
-import {Pending} from "../../../shared/pending";
-import * as Actions from "../../redux/actions/thunks";
-import * as Dtos from "../../models";
+import { ContainerBase, ReduxContainer } from "../containerBase";
 import * as ACC from "../../components";
-import {ProjectDto} from "../../models";
-import {State} from "router5/create-router";
+import { Pending } from "../../../shared/pending";
+import * as Dtos from "../../models";
+import * as Actions from "../../redux/actions/index";
+import { routeConfig } from "../../routing";
+import { ProjectOverviewPage } from "../../components/projectOverview";
+
+interface Params {
+    projectId: string;
+}
 
 interface Data {
-    projectId: string;
     projectDetails: Pending<Dtos.ProjectDto>;
 }
 
-export class ClaimsDashboardComponent extends ContainerBase<Data, {}> {
+class Component extends ContainerBase<Params, Data, {}> {
 
-    // ultimatly will come from navigation
-    private selectedTab = tabListArray[0];
-
-    public static getLoadDataActions(route: State) {
-
-        const projectId = route.params && route.params.projectId;
-        return [
-            Actions.loadProject(projectId)
-        ];
-    }
-
-    render() {
+    public render() {
         const Loading = ACC.Loading.forData(this.props.projectDetails);
-        return <Loading.Loader render={(x) => this.renderContents(x)}/>;
+        return <Loading.Loader render={(x) => this.renderContents(x)} />;
     }
 
-    renderContents(project: ProjectDto) {
+    public renderContents(project: Dtos.ProjectDto) {
         return (
-            <ProjectOverviewPage selectedTab={this.selectedTab} project={project}>
+            <ProjectOverviewPage selectedTab={routeConfig.claimsDashboard.routeName} project={project}>
                 Sections go here
             </ProjectOverviewPage>
         );
     }
 }
 
-function mapData(state: RootState): Data {
-    const projectId = state.router.route && state.router.route.params.projectId; // get from url
-    return {
-        projectId,
-        projectDetails: Pending.create(state.data.project[projectId]),
-    };
-}
+const definition = ReduxContainer.for<Params, Data, {}>(Component);
 
-export const ClaimsDashboard = ReduxContainer.for<Data, {}>(ClaimsDashboardComponent)
-    .withData(mapData)
-    .connect();
+export const ClaimsDashboard = definition.connect({
+    withData: (state, params) => ({ projectDetails: Pending.create(state.data.project[params.projectId]) }),
+    withCallbacks: () => ({})
+});
+
+export const ClaimsDashboardRoute = definition.route({
+    routeName: "claimDetails",
+    routePath: "/project/:projectId/claims",
+    getParams: (route) => ({
+        projectId: route.params.projectId,
+    }),
+    getLoadDataActions: (params) => [
+        Actions.loadProject(params.projectId)
+    ],
+    container: ClaimsDashboard
+});

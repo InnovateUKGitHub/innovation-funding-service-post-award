@@ -13,7 +13,7 @@ interface Data {
 interface Callbacks {
 }
 
-class ProjectDashboardComponent extends ContainerBase<Data, Callbacks> {
+class ProjectDashboardComponent extends ContainerBase<{}, Data, Callbacks> {
 
   static getLoadDataActions() {
     return [Actions.loadProjects()];
@@ -25,7 +25,7 @@ class ProjectDashboardComponent extends ContainerBase<Data, Callbacks> {
     return (
       <ACC.Page>
         <ACC.Section>
-          <ACC.BackLink route={routeConfig.home}>Back</ACC.BackLink>
+          <ACC.BackLink route={routeConfig.home.getLink({})}>Back</ACC.BackLink>
         </ACC.Section>
         <ACC.Title title="Projects Dashboard" />
         <Loading.Loader render={x => this.renderSubSections(x)} />
@@ -34,24 +34,24 @@ class ProjectDashboardComponent extends ContainerBase<Data, Callbacks> {
   }
 
   renderSubSections(projects: ProjectDto[]) {
-    const open: JSX.Element[]     = [];
+    const open: JSX.Element[] = [];
     const awaiting: JSX.Element[] = [];
     const archived: JSX.Element[] = [];
 
     projects.forEach(x => {
-      const quarterly  = x.claimFrequency === ClaimFrequency.Quarterly;
-      const frequency  = quarterly ? 4 : 12;
+      const quarterly = x.claimFrequency === ClaimFrequency.Quarterly;
+      const frequency = quarterly ? 4 : 12;
       const periodText = quarterly ? "Quarter" : "Period";
-      const today      = new Date();
+      const today = new Date();
       // needs last claim date to work out latest period for claim deadline
-      const end        = new Date(x.startDate);
-      const endMonth   = x.period * (quarterly ? 4 : 1);
+      const end = new Date(x.startDate);
+      const endMonth = x.period * (quarterly ? 4 : 1);
       end.setMonth(end.getMonth() + endMonth);
       end.setDate(0);
       const timeRemaining = end.getTime() - today.getTime();
       const daysRemaining = Math.floor(timeRemaining / (60 * 60 * 24 * 1000));
 
-      if(daysRemaining <= 30) {
+      if (daysRemaining <= 30) {
         open.push((
           <ACC.OpenProjectItem
             project={x}
@@ -102,8 +102,17 @@ class ProjectDashboardComponent extends ContainerBase<Data, Callbacks> {
   }
 }
 
-export const ProjectDashboard = ReduxContainer.for<Data, Callbacks>(ProjectDashboardComponent)
-// TODO - key below
-  .withData(state => ({ projects: Pending.create(state.data.projects.all) }))
-  .connect()
-  ;
+const definition = ReduxContainer.for<{}, Data, Callbacks>(ProjectDashboardComponent);
+
+export const ProjectDashboard = definition.connect({
+  withData: (state, params) => ({projects: Pending.create(state.data.projects.all) }),
+  withCallbacks: () => ({})
+});
+
+export const ProjectDashboardRoute = definition.route({
+  routeName: "projectDashboard",
+  routePath: "/projects/dashboard",
+  getParams: () => ({}),
+  getLoadDataActions: (dispach) => [Actions.loadProjects()],
+  container: ProjectDashboard
+});
