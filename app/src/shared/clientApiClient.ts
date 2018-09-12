@@ -6,6 +6,9 @@ const clientApi: IApiClient = {
       getAll: () => ajaxJson("/api/contacts"),
       get: (id: string) => ajaxJson(`/api/contact/${id}`),
     },
+    costCategories: {
+      getAll: () => ajaxJson("/api/costcategories"),
+    },
     projects:{
       get: (id: string) => ajaxJson(`/api/projects/${id}`),
       getAll: () => ajaxJson("/api/projects"),

@@ -44,6 +44,7 @@ export const dataStoreReducer = <TData extends {}, TKey>(key: (key: TKey) => str
 export const dataReducer = combineReducers({
   contacts: dataStoreReducer<Dtos.IContact[], string>(x => x, "contacts"),
   contact: dataStoreReducer<Dtos.IContact, string>(x => x, "contact"),
+  costCategories:dataStoreReducer<Dtos.CostCategoryDto[], string>(x => x, "costCategories"),
   partners: dataStoreReducer<Dtos.PartnerDto[], string>(x => x, "partners"),
   project: dataStoreReducer<Dtos.ProjectDto, string>(x => x, "project"),
   projects: dataStoreReducer<Dtos.ProjectDto[], string>(x => x, "projects"),

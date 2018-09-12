@@ -60,3 +60,12 @@ export function loadContactsForProject(projectId: string) {
     () => ApiClient.projectContacts.getAllByProjectId(projectId)
   );
 }
+
+export function loadCostCategories() {
+  return conditionalLoad(
+    "all",
+    "costCategories",
+    () => ApiClient.costCategories.getAll()
+  );
+}
+
