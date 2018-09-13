@@ -7,6 +7,7 @@ export interface ISalesforceClaim {
 
 const fields = [
   "Id",
+  "Acc_ProjectParticipant__c"
 ];
 
 export interface IClaimRepository {
@@ -35,6 +36,6 @@ export class ClaimRepository extends SalesforceBase<ISalesforceClaim> implements
     return super.whereFilter(x => x.Acc_ProjectParticipant__c
       = partnerId)
     // TODO delete once Salesforce fields are available
-      .then(results => results.map(extendData));
+      // .then(results => results.map(extendData));
   }
 }
