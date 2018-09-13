@@ -2,11 +2,10 @@ import * as React from "react";
 
 interface Props {
     title?: React.ReactNode;
-    withBorder?: boolean;
     qa?: string;
 }
 
-export const Panel: React.SFC<Props> = (props) => {
+export const SectionPanel: React.SFC<Props> = (props) => {
     const { qa, title, children } = props;
     const style = {
         border: "1px solid #bfc1c3"

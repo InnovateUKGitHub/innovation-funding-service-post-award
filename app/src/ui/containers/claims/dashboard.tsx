@@ -5,7 +5,7 @@ import * as Actions from "../../redux/actions/index";
 import { routeConfig } from "../../routing";
 import {ProjectOverviewPage} from "../../components/projectOverview";
 import {PartnerDto, ProjectDto} from "../../models";
-import {Details, DualDetails, Loading, Panel, Section} from "../../components";
+import {Details, DualDetails, Loading, SectionPanel, Section} from "../../components";
 
 interface Params {
     projectId: string;
@@ -46,8 +46,8 @@ interface ClaimsHistoryProps {
 const ProjectClaimsHistory: React.SFC<ClaimsHistoryProps> = ({partner}) => {
     const { Details: Column, Currency, Percentage } = Details.forData(partner);
     return (
-        <Panel title="Project claims history">
-            <DualDetails>
+        <SectionPanel title="Project claims history">
+            <DualDetails displayDensity="Compact">
                 <Column qa="claims-history-col-0">
                     <Currency label="Grant offer letter costs" value={x => x.totalParticipantGrant}/>
                     <Currency label="Costs claimed to date" value={x => x.totalParticipantCostsClaimed}/>
@@ -58,7 +58,7 @@ const ProjectClaimsHistory: React.SFC<ClaimsHistoryProps> = ({partner}) => {
                     <Percentage label="Cap limit" value={x => x.capLimit}/>
                 </Column>
             </DualDetails>
-        </Panel>
+        </SectionPanel>
     );
 };
 

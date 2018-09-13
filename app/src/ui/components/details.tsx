@@ -3,7 +3,8 @@ import classnames from "classnames";
 import { Currency, FullDate, FullDateTime, Percentage } from "./renderers";
 
 interface DetailsProps {
-    layout?: "Single" | "Double";
+    displayDensity?: "Compact" | "Comfortable";
+    labelWidth?: "Wide" | "Narrow";
     qa?: string;
 }
 
@@ -21,24 +22,29 @@ interface ExternalFieldProps<T, TValue> {
     fractionDigits?: number;
 }
 
-interface DualDetailsProps {
-    children: React.ReactNode;
-}
-
-const DetailsComponent = <T extends {}>(data: T): React.SFC<DetailsProps> => ({ children, layout="Single", qa }) => {
+const DetailsComponent = <T extends {}>(data: T): React.SFC<DetailsProps> => ({ children, displayDensity="Comfortable", qa, labelWidth }) => {
     // distribute children accross array adding props
+
     const rows = React.Children.toArray(children).map((field) => {
         const newProps = {
             data,
-            labelClass: layout === "Single" ? "govuk-grid-column-one-quarter" : "govuk-grid-column-one-half",
-            valueClass: layout === "Single" ? "govuk-grid-column-three-quarters" : "govuk-grid-column-one-half",
+            labelClass: classnames({
+                "govuk-grid-column-one-quarter": labelWidth === "Narrow",
+                "govuk-grid-column-three-quarters": labelWidth === "Wide",
+                "govuk-grid-column-one-half": !labelWidth,
+            }),
+            valueClass: classnames({
+                "govuk-grid-column-one-quarter": labelWidth === "Wide",
+                "govuk-grid-column-three-quarters": labelWidth === "Narrow",
+                "govuk-grid-column-one-half": !labelWidth,
+            })
         };
         return React.cloneElement(field as React.ReactElement<any>, newProps);
     });
 
     const rowClasses = classnames({
         "govuk-grid-row": true,
-        "govuk-!-margin-top-4": layout === "Single"
+        "govuk-!-margin-top-4": displayDensity === "Comfortable"
     });
     return (
         <React.Fragment>
@@ -49,12 +55,9 @@ const DetailsComponent = <T extends {}>(data: T): React.SFC<DetailsProps> => ({ 
     );
 };
 
-export const DualDetails: React.SFC<DualDetailsProps> = ({ children }) => {
+export const DualDetails: React.SFC<DetailsProps> = ({ children, ...rest }) => {
     const columns = React.Children.toArray(children).map((field) => {
-        const newProps = {
-            layout: "Double"
-        };
-        return React.cloneElement(field as React.ReactElement<any>, newProps);
+        return React.cloneElement(field as React.ReactElement<any>, rest);
     });
 
     return (

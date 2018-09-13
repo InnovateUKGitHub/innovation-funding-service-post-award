@@ -4,7 +4,7 @@ import { datesGuide } from "./datesGuide";
 import { projectMemberGuide } from "./projectMemberGuide";
 import { emailGuide } from "./emailGuide";
 import { sectionGuide } from "./sectionGuide";
-import { panelGuide } from "./panelGuide";
+import { sectionPanelGuide } from "./sectionPanelGuide";
 import { tabsGuide } from "./tabsGuide";
 import { titleGuide } from "./titleGuide";
 import { linksListGuide } from "./linksListGuide";
@@ -17,7 +17,7 @@ const guides: IGuide[] = [
     emailGuide,
     projectMemberGuide,
     sectionGuide,
-    panelGuide,
+    sectionPanelGuide,
     tabsGuide,
     titleGuide,
     linksListGuide,

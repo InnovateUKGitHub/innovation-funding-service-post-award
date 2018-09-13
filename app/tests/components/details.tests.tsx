@@ -62,7 +62,7 @@ describe("Details", () => {
   describe("Single Column", () => {
     const DTest = Details.forData({ id:1, name: "example", cost: 100 });
     const wrapper = mount(
-      <DTest.Details>
+      <DTest.Details labelWidth="Narrow">
         <DTest.Number label="Id" value={x => x.id} />
         <DTest.String label="Name" value={x => x.name} />
         <DTest.Currency label="Cost" value={x => x.cost} />
