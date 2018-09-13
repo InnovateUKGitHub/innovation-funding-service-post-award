@@ -18,7 +18,7 @@ interface Data {
 }
 
 class Component extends ContainerBase<Params, Data, {}> {
-    render() {
+    public render() {
         const combined = Pending.combine(
             this.props.projectDetails,
             this.props.partnerDetails,
@@ -28,7 +28,7 @@ class Component extends ContainerBase<Params, Data, {}> {
         return <Loader render={(x) => this.renderContents(x.projectDetails, x.partnerDetails)}/>;
     }
 
-    renderContents = (project: ProjectDto, partner: PartnerDto) => {
+    private renderContents = (project: ProjectDto, partner: PartnerDto) => {
         return (
             <ProjectOverviewPage selectedTab={routeConfig.claimsDashboard.routeName} project={project} partnerId={partner.id}>
                 <Section>
