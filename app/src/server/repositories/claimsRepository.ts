@@ -33,8 +33,7 @@ export class ClaimRepository extends SalesforceBase<ISalesforceClaim> implements
   }
 
   getAllByPartnerId(partnerId: string): Promise<ISalesforceClaim[]> {
-    return super.whereFilter(x => x.Acc_ProjectParticipant__c
-      = partnerId)
+    return super.whereFilter(x => x.Acc_ProjectParticipant__c = partnerId);
     // TODO delete once Salesforce fields are available
       // .then(results => results.map(extendData));
   }
