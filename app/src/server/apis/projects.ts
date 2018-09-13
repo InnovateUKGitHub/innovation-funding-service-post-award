@@ -12,8 +12,9 @@ class Controller extends ControllerBase<ProjectDto> implements IProjectsApi {
     constructor() {
         super();
 
-        this.getItem("/:id", p => ({ id: p.id }), (p) => this.get(p.id));
-        this.getCustom("/", p => ({ }), (p) => this.getAll());
+        super.getItem("/:id", p => ({ id: p.id }), (p) => this.get(p.id));
+        super.getItems("/", p => ({ }), (p) => this.getAll());
+        super.getCustom("/:id/custom", p => ({ id: p.id }), (p) => contextProvider.start().repositories.projects.getById(p.id));
     }
 
     public async get(id: string) {

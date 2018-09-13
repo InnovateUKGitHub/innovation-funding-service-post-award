@@ -3,6 +3,7 @@ import {DateTime, Duration} from "luxon";
 
 export interface ISalesforceClaimCost {
     Id: string;
+    ACC_Claim_Id__c: string;
     Acc_PeriodStartDate_c : string;
     Acc_PeriodEndDate__c : string;
     Acc_PeriodID__c : number,
@@ -41,12 +42,13 @@ export class ClaimCostRepository extends SalesforceBase<ISalesforceClaimCost> im
     private end: DateTime;
 
     public getAllForClaim(claimId: string): Promise<ISalesforceClaimCost[]> {
-        return Promise.resolve(fakeCCNames.map((name, index) => this.fakeCost(name, index + 1)));
+        return Promise.resolve(fakeCCNames.map((name, index) => this.fakeCost(name, claimId, index + 1)));
     }
 
-    private fakeCost(category:string, seed: number ) : ISalesforceClaimCost {
+    private fakeCost(category:string, claimId: string, seed: number ) : ISalesforceClaimCost {
         return {
             Id: `ClaimCost${seed}`,
+            ACC_Claim_Id__c: claimId,
             Acc_CostCategoryID__c: seed,
             Acc_PeriodStartDate_c : this.start.toFormat("DD/MM/YYYY"),
             Acc_PeriodEndDate__c : this.end.toFormat("DD/MM/YYYY"),

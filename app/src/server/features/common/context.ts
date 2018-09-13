@@ -25,7 +25,7 @@ export interface IContext {
   config: IConfig;
   runQuery<TResult>(cmd: IQuery<TResult>): Promise<TResult>;
   runCommand<TResult>(cmd: ICommand<TResult>): Promise<TResult>;
-  clock(): IClock;
+  clock: IClock;
   logger: ILogger;
 }
 
@@ -60,7 +60,5 @@ export class Context implements IContext {
     });
   }
 
-  public clock(): IClock {
-    return new Clock();
-  }
+  public clock = new Clock();
 }
