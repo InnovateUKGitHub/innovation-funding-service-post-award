@@ -1,5 +1,4 @@
 import SalesforceBase from "./salesforceBase";
-import { range } from "../../shared/range";
 
 export interface ISalesforceCostCategory {
     Id: string;

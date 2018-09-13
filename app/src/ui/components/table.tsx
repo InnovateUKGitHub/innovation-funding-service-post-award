@@ -1,5 +1,5 @@
 // tslint:disable:max-classes-per-file
-import React from "react";
+import React, { ReactElement } from "react";
 import { FullDate, ShortDate } from "./renderers/date";
 import { Email } from "./renderers/email";
 import { Currency } from "./renderers/currency";
@@ -11,6 +11,7 @@ interface InternalColumnProps<T> {
   dataItem?: T;
   footer?: React.ReactNode;
   classSuffix?: "numeric";
+  cellClassName?: (data: T, index: { column: number, row: number }) => string|null|undefined;
   renderCell: (data: T, index: { column: number, row: number }) => React.ReactNode;
   mode?: columnMode;
   rowIndex?: number;
@@ -21,6 +22,7 @@ interface InternalColumnProps<T> {
 interface ExternalColumnProps<T, TResult> {
   header: React.ReactNode;
   value: (item: T, index: { column: number, row: number }) => TResult;
+  cellClassName?: (data: T, index: { column: number, row: number }) => string|null|undefined;
   footer?: React.ReactNode;
   qa: string;
 }
@@ -31,6 +33,7 @@ interface TableProps<T> {
   children: TableChild<T> | TableChild<T>[];
   className?: string;
   qa?: string;
+  footers?: JSX.Element[]
 }
 
 export class TableColumn<T> extends React.Component<InternalColumnProps<T>> {
@@ -59,7 +62,7 @@ export class TableColumn<T> extends React.Component<InternalColumnProps<T>> {
   }
 
   renderCell(data: T, column: number, row: number) {
-    const className = classNames("govuk-table__cell", this.props.classSuffix ? "govuk-table__cell--" + this.props.classSuffix : "");
+    const className = classNames("govuk-table__cell", this.props.classSuffix ? "govuk-table__cell--" + this.props.classSuffix : "", this.props.cellClassName && this.props.cellClassName(data, { column, row }));
     return <td className={className} key={column}>{this.props.renderCell(data, { column, row })}</td>;
   }
 
@@ -74,6 +77,7 @@ const TableComponent = <T extends {}>(data: T[]) => (props: TableProps<T>) => {
   const cols = React.Children.map(props.children, (column, columnIndex) => React.cloneElement(column as React.ReactElement<any>, { mode: "col", columnIndex }));
   const contents = data.map((dataItem, rowIndex) => React.Children.map(props.children, (column, columnIndex) => React.cloneElement(column as React.ReactElement<any>, { mode: "cell", rowIndex, columnIndex, dataItem })));
   const footers = React.Children.toArray(props.children).some((x: any) => x.props && x.props.footer) ? React.Children.map(props.children, (column, columnIndex) => React.cloneElement(column as React.ReactElement<any>, { mode: "footer", columnIndex })) : [];
+  (props.footers || []).forEach(customFooter => footers.push(customFooter));
 
   return (
     <div className={props.className} data-qa={props.qa}>

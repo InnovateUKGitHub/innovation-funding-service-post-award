@@ -1,8 +1,4 @@
-import { ContactsRepository, IContactsRepository } from "../../repositories/contactsRepository";
-import { IProjectRepository, ProjectRepository } from "../../repositories/projectsRepository";
-import { IPartnerRepository, PartnerRepository } from "../../repositories/partnersRepository";
-import { IProjectContactsRepository, ProjectContactsRepository } from "../../repositories/projectContactsRepository";
-import { ICostCategoryRepository, CostCategoryRepository } from "../../repositories/costCategoriesRepository";
+import * as Repsoitories from "../../repositories";
 import { Configuration, IConfig } from "./config";
 import { Clock, IClock } from "./clock";
 import { ILogger, Logger } from "./logger";
@@ -16,11 +12,12 @@ export interface ICommand<T> {
 }
 
 export interface IRepositories {
-  contacts: Readonly<IContactsRepository>;
-  costCategories: Readonly<ICostCategoryRepository>;
-  projects: Readonly<IProjectRepository>;
-  partners: Readonly<IPartnerRepository>;
-  projectContacts: Readonly<IProjectContactsRepository>;
+  claimCosts: Readonly<Repsoitories.IClaimCostRepository>;
+  contacts: Readonly<Repsoitories.IContactsRepository>;
+  costCategories: Readonly<Repsoitories.ICostCategoryRepository>;
+  projects: Readonly<Repsoitories.IProjectRepository>;
+  partners: Readonly<Repsoitories.IPartnerRepository>;
+  projectContacts: Readonly<Repsoitories.IProjectContactsRepository>;
 }
 
 export interface IContext {
@@ -34,11 +31,12 @@ export interface IContext {
 
 export class Context implements IContext {
   public repositories = {
-    contacts: new ContactsRepository(),
-    costCategories: new CostCategoryRepository(),
-    projects: new ProjectRepository(),
-    partners: new PartnerRepository(),
-    projectContacts: new ProjectContactsRepository()
+    claimCosts: new Repsoitories.ClaimCostRepository(),
+    contacts: new Repsoitories.ContactsRepository(),
+    costCategories: new Repsoitories.CostCategoryRepository(),
+    projects: new Repsoitories.ProjectRepository(),
+    partners: new Repsoitories.PartnerRepository(),
+    projectContacts: new Repsoitories.ProjectContactsRepository()
   };
 
   public config = Configuration;

@@ -69,3 +69,12 @@ export function loadCostCategories() {
   );
 }
 
+export function loadClaimCosts(claimId:string) {
+  console.log("Loading claim cost", claimId)
+  return conditionalLoad(
+    claimId,
+    "claimCosts",
+    () => ApiClient.claimCosts.getAllForClaim(claimId)
+  );
+}
+
