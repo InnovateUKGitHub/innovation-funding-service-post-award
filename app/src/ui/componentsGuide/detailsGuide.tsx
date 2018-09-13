@@ -18,7 +18,7 @@ export const detailsGuide: IGuide = {
                 ");"
             ),
             render: () => {
-                const ItemDetails = Details.forData({ id: "Example 1", name: "The Example", created: new Date() });
+                const ItemDetails = Details.forData({ id: "Example 1", name: "Simple Example", created: new Date() });
                 return (
                     <ItemDetails.Details labelWidth="Narrow">
                         <ItemDetails.String label="Id" value={x => x.id}/>
@@ -41,7 +41,7 @@ export const detailsGuide: IGuide = {
                 ");"
             ),
             render: () => {
-                const ItemDetails = Details.forData({ id: "Example 1", name: "The Example", created: new Date() });
+                const ItemDetails = Details.forData({ id: "Example 1", name: "Compact Example", created: new Date() });
                 return (
                     <ItemDetails.Details displayDensity="Compact" labelWidth="Narrow">
                         <ItemDetails.String label="Id" value={x => x.id}/>
@@ -69,7 +69,7 @@ export const detailsGuide: IGuide = {
                 );`
             ),
             render: () => {
-                const ItemDetails = Details.forData({ id: "Example 1", name: "The Example", created: new Date() });
+                const ItemDetails = Details.forData({ id: "Example 1", name: "Dual Example", created: new Date() });
                 return (
                     <DualDetails>
                         <ItemDetails.Details>

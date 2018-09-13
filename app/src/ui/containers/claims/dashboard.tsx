@@ -5,7 +5,7 @@ import * as Actions from "../../redux/actions/index";
 import { routeConfig } from "../../routing";
 import {ProjectOverviewPage} from "../../components/projectOverview";
 import {PartnerDto, ProjectDto} from "../../models";
-import {Details, DualDetails, Loading, SectionPanel, Section} from "../../components";
+import {Details, DualDetails, Loading, Section, SectionPanel} from "../../components";
 
 interface Params {
     projectId: string;

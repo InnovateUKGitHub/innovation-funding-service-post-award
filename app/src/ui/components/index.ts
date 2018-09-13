@@ -10,6 +10,5 @@ export * from "./projectItem";
 export * from "./projectMember";
 export * from "./table";
 export * from "./loading";
-export * from "./layout/sectionPanel";
 export * from "./partnersAndFinanceContacts";
 export { Renderers, Projects, Claims };
