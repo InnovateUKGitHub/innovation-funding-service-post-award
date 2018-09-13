@@ -68,7 +68,7 @@ export class ClaimsDetailsComponent extends ContainerBase<Params, Data, {}> {
                 </ACC.Section>
                 <ACC.Projects.Title pageTitle="Claim" project={project} />
                 <ACC.Claims.Navigation projectId={project.id} claimId={claimId} currentRouteName={routeConfig.claimDetails.routeName} />
-                <ACC.Section title="Jabbertype claim for Q3 August to October 2017">
+                <ACC.Section title={`${partner.name} claim for Q3 August to October 2017`}>
                     <CostCategoriesTable.Table footers={this.renderFooters(project, partner, claimsCosts)}>
                         <CostCategoriesTable.Custom header="Costs category" qa="category" value={x => !x.isCalculated ? <a href="#" className="govuk-link">{x.category.name}</a> : x.category.name} cellClassName={x => x.isTotal ? "govuk-!-font-weight-bold" : null} />
                         <CostCategoriesTable.Currency header="Grant offer letter costs" qa="offerCosts" value={x => x.cost.offerCosts} />
