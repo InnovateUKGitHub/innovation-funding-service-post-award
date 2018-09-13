@@ -24,10 +24,11 @@ export class ClaimsDetailsComponent extends ContainerBase<Params, Data, {}> {
     }
 
     private renderContents(project: Dtos.ProjectDto, claimId: string) {
+        // TODO remove hardcoded partnerId
         return (
             <ACC.Page>
                 <ACC.Section>
-                    <ACC.BackLink route={routeConfig.claimsDashboard.getLink({projectId: project.id})}>Claims dashboard</ACC.BackLink>
+                    <ACC.BackLink route={routeConfig.claimsDashboard.getLink({projectId: project.id, partnerId: "a071w000000LOXWAA4"})}>Claims dashboard</ACC.BackLink>
                 </ACC.Section>
                 <ACC.Projects.Title pageTitle="Claim" project={project}/>
                 <ACC.Claims.Navigation projectId={project.id} claimId={claimId} currentRouteName={routeConfig.claimDetails.routeName} />

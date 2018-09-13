@@ -1,16 +1,19 @@
 import React from "react";
-import * as ACC from "..";
 import * as Dtos from "../../models";
 import { routeConfig } from "../../routing";
 import { TabItem, Tabs } from "../layout";
 
 interface Props {
     project: Dtos.ProjectDto;
+    partnerId?: string;
     currentRoute: string;
 }
 
-export const ProjectNavigation: React.SFC<Props> = ({ project, currentRoute }) => {
-    const claimsLink = routeConfig.claimsDashboard.getLink({ projectId: project.id });
+// TODO STOP using this
+const tempPartnerId = "a071w000000LOXWAA4";
+
+export const ProjectNavigation: React.SFC<Props> = ({ project, currentRoute, partnerId = tempPartnerId}) => {
+    const claimsLink = routeConfig.claimsDashboard.getLink({ projectId: project.id, partnerId });
     const detailsLink = routeConfig.projectDetails.getLink({ id: project.id });
 
     const navigationTabs: TabItem[] = [
