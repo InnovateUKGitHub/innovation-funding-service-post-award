@@ -2,6 +2,7 @@ import * as Repsoitories from "../../repositories";
 import { Configuration, IConfig } from "./config";
 import { Clock, IClock } from "./clock";
 import { ILogger, Logger } from "./logger";
+import {ClaimRepository, IClaimRepository} from "../../repositories/claimsRepository";
 
 export interface IQuery<T> {
   Run: (context: IContext) => Promise<T>;
@@ -12,6 +13,7 @@ export interface ICommand<T> {
 }
 
 export interface IRepositories {
+  claims: Readonly<Repsoitories.IClaimRepository>;
   claimCosts: Readonly<Repsoitories.IClaimCostRepository>;
   contacts: Readonly<Repsoitories.IContactsRepository>;
   costCategories: Readonly<Repsoitories.ICostCategoryRepository>;
@@ -31,6 +33,7 @@ export interface IContext {
 
 export class Context implements IContext {
   public repositories = {
+    claims: new Repsoitories.ClaimRepository(),
     claimCosts: new Repsoitories.ClaimCostRepository(),
     contacts: new Repsoitories.ContactsRepository(),
     costCategories: new Repsoitories.CostCategoryRepository(),

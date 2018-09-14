@@ -4,4 +4,5 @@ export * from "./contact";
 export * from "./costCategoryDto";
 export * from "./projectDto";
 export * from "./partnerDto";
+export * from "./claimDto";
 export * from "./projectContactDto";

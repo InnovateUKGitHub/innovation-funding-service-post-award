@@ -30,7 +30,7 @@ export function loadProject(id: string) {
 export function loadPartner(id: string) {
   return conditionalLoad(
     id,
-    "partners",
+    "partner",
     () => {
       return ApiClient.partners.get(id);
     }

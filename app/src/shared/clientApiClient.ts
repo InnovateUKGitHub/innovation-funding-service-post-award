@@ -5,6 +5,9 @@ const clientApi: IApiClient = {
   claimCosts: {
     getAllForClaim: (claimId: string) => ajaxJson(`/api/claimcosts?claimId=${claimId}`)
   },
+  claims : {
+    getAllByPartnerId: (partnerId: string) => ajaxJson(`/api/claims?partnerId=${partnerId}`),
+  },
   contacts: {
     getAll: () => ajaxJson("/api/contacts"),
     get: (id: string) => ajaxJson(`/api/contact/${id}`),
@@ -22,7 +25,7 @@ const clientApi: IApiClient = {
   partners: {
     get: (id: string) => ajaxJson(`/api/partners/${id}`),
     getAllByProjectId: (projectId: string) => ajaxJson(`/api/partners?projectId=${projectId}`),
-  }
+  },
 };
 
 const getHeaders = () => {
