@@ -1,7 +1,7 @@
 import { ControllerBase } from "./controllerBase";
 import { PartnerDto } from "../../ui/models/partnerDto";
 import contextProvider from "../features/common/contextProvider";
-import { GetAllForProjectQuery, GetByIdQuery } from "../features/partners/";
+import { GetAllForProjectQuery, GetByIdQuery } from "../features/partners";
 
 export interface IPartnersApi {
     getAllByProjectId: (projectId: string) => Promise<PartnerDto[]>;
