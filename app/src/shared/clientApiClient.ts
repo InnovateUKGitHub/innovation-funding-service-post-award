@@ -7,6 +7,7 @@ const clientApi: IApiClient = {
   },
   claims : {
     getAllByPartnerId: (partnerId: string) => ajaxJson(`/api/claims?partnerId=${partnerId}`),
+    getById: (claimId: string) => ajaxJson(`/api/claims/${claimId}`),
   },
   contacts: {
     getAll: () => ajaxJson("/api/contacts"),
