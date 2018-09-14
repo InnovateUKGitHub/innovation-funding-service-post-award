@@ -51,7 +51,25 @@ class CostCategoriesTestRepository extends TestRepository<Repositories.ISalesfor
     }
 }
 
-export const createTestRepositories = () => ({
+class ClaimsTestRepository extends TestRepository<Repositories.ISalesforceClaim> implements Repositories.IClaimRepository{
+    getAllByPartnerId(partnerId: string) {
+        return super.getWhere(x => x.Acc_ProjectParticipant__c === partnerId);
+    }
+
+}
+
+export interface ITestRepositories extends IRepositories {
+    claims: ClaimsTestRepository
+    claimCosts: ClaimCostTestRepository
+    costCategories: CostCategoriesTestRepository
+    contacts: ContactsTestRepository
+    projects: ProjectsTestRepository
+    partners: PartnerTestRepository
+    projectContacts: ProjectContactTestRepository
+}
+
+export const createTestRepositories = () : ITestRepositories => ({
+    claims: new ClaimsTestRepository(),
     claimCosts: new ClaimCostTestRepository(),
     costCategories: new CostCategoriesTestRepository(),
     contacts: new ContactsTestRepository(),
@@ -59,5 +77,3 @@ export const createTestRepositories = () => ({
     partners: new PartnerTestRepository(),
     projectContacts: new ProjectContactTestRepository()
 });
-
-export type ITestRepositories = ReturnType<typeof createTestRepositories>;

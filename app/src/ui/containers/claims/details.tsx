@@ -64,7 +64,7 @@ export class ClaimsDetailsComponent extends ContainerBase<Params, Data, {}> {
         return (
             <ACC.Page>
                 <ACC.Section>
-                    <ACC.BackLink route={routeConfig.claimsDashboard.getLink({ projectId: project.id })}>Claims dashboard</ACC.BackLink>
+                    <ACC.BackLink route={routeConfig.claimsDashboard.getLink({ projectId: project.id, partnerId: "" })}>Claims dashboard</ACC.BackLink>
                 </ACC.Section>
                 <ACC.Projects.Title pageTitle="Claim" project={project} />
                 <ACC.Claims.Navigation projectId={project.id} claimId={claimId} currentRouteName={routeConfig.claimDetails.routeName} />

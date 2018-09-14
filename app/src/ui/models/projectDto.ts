@@ -2,14 +2,14 @@ import { ClaimFrequency } from "./claimFrequency";
 
 export interface ProjectDto {
     id: string;
-    title: string|null;
-    competition: string|null;
-    startDate: Date|null;
-    endDate: Date|null;
-    summary: string|null;
+    title: string;
+    competition: string;
+    startDate: Date;
+    endDate: Date;
+    summary: string;
     applicationUrl?: string|null;
     grantOfferLetterUrl?: string|null;
-    projectNumber: string|null;
+    projectNumber: string;
 
     claimFrequency: ClaimFrequency;
     period: number;

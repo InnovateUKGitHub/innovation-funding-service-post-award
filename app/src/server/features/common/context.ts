@@ -2,7 +2,6 @@ import * as Repsoitories from "../../repositories";
 import { Configuration, IConfig } from "./config";
 import { Clock, IClock } from "./clock";
 import { ILogger, Logger } from "./logger";
-import {ClaimRepository, IClaimRepository} from "../../repositories/claimsRepository";
 
 export interface IQuery<T> {
   Run: (context: IContext) => Promise<T>;
