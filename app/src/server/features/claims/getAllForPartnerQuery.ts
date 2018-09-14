@@ -8,6 +8,6 @@ export class GetAllForPartnerQuery implements IQuery<ClaimDto[]> {
 
     public async Run(context: IContext) {
         const results = await context.repositories.claims.getAllByPartnerId(this.partnerId);
-        return results && results.map(mapClaim);
+        return results && results.map(mapClaim(context));
     }
 }
