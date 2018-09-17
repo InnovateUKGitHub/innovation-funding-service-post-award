@@ -162,7 +162,7 @@ export const ClaimsDashboard = definition.connect({
 
 export const ClaimsDashboardRoute = definition.route({
   routeName: "claimDashboard",
-  routePath: "/project/:projectId/claims/?partnerId",
+  routePath: "/projects/:projectId/claims/?partnerId",
   getParams: (route) => ({
     projectId: route.params.projectId,
     partnerId: route.params.partnerId
