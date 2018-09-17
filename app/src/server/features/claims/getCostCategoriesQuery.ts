@@ -7,7 +7,7 @@ export class GetCostCategoriesQuery implements IQuery<CostCategoryDto[]> {
         
         data.sort((a,b) => a.Acc_DisplayOrder__c - b.Acc_DisplayOrder__c);
         
-        return (data || []).map<CostCategoryDto>(x => ({
+        return data.map<CostCategoryDto>(x => ({
             id: x.Acc_CostCategoryID__c,
             name: x.Acc_CostCategoryName__c
         }));

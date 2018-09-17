@@ -46,6 +46,7 @@ export class ClaimCostRepository extends SalesforceBase<ISalesforceClaimCost> im
     }
 
     private fakeCost(category:string, claimId: string, seed: number ) : ISalesforceClaimCost {
+        const isOverheads = category === "Overheads";
         return {
             Id: `ClaimCost${seed}`,
             ACC_Claim_Id__c: claimId,
@@ -56,13 +57,13 @@ export class ClaimCostRepository extends SalesforceBase<ISalesforceClaimCost> im
             Acc_ProjectPeriodLongName__c : `P1 ${this.start.toFormat("d MMM")} to ${this.end.toFormat("d MMM YYYY")}`,
             RecordType : "",
             Acc_ProjectParticipantID__c : "",
-            Acc_ForecastInitialValue__c : seed * 120,
-            Acc_ForecastLatestValue__c : seed * 150,
-            Acc_GolValue__c : seed * 250,
-            Acc_TotalCostCategoryValue__c : seed * 124,
-            Acc_TotalValue__c : seed * 502,
-            Acc_TotalGolvalue__c : seed * 683,
-            Acc_TotalFutureCostCategoryValue__C: seed * 124,
+            Acc_ForecastInitialValue__c : seed,
+            Acc_ForecastLatestValue__c : seed,
+            Acc_GolValue__c : isOverheads ? seed * 250 : seed * 1000,
+            Acc_TotalCostCategoryValue__c : seed,
+            Acc_TotalValue__c : isOverheads ? seed * 25 : seed * 100,
+            Acc_TotalGolvalue__c : isOverheads ? seed * 12.5 : seed * 50,
+            Acc_TotalFutureCostCategoryValue__C: isOverheads ? (seed * 250) - (seed * 25) - (seed * 12.5) : (seed * 1000) - (seed * 100) - (seed * 50),
         };
     }
 }
