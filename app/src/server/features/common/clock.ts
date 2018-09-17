@@ -11,7 +11,10 @@ export class Clock implements IClock {
   }
 
   parse(value: string, format: string) {
-    if(!value) return null;
+    if(!value) {
+      return null;
+    }
+    
     let result = DateTime.fromFormat(value, format);
     return result.toLocal().toJSDate();
   }

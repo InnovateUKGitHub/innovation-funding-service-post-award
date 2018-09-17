@@ -22,6 +22,7 @@ export class CostCategoryRepository extends SalesforceBase<ISalesforceCostCatego
     }
 
     getAll(): Promise<ISalesforceCostCategory[]> {
+        // ToDo: talk to salesforce
         return Promise.resolve(fakeCCNames.map((name, index) => this.createDummyCostCategory(index + 1, name)));
     }
 
