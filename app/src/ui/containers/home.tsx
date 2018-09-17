@@ -2,8 +2,7 @@ import React from "react";
 import { routeConfig as routes } from "../routing";
 import { Link, Title } from "../components";
 import { ContainerBase, ReduxContainer } from "./containerBase";
-import { Pending } from "../../shared/pending";
-
+const partnerId = "a071w000000LOXWAA4";
 const projectId = "a051w000000GE7RAAW";
 const claimId = "a051w000000GE7RAAW";
 
@@ -31,6 +30,10 @@ class Component extends ContainerBase<{}, {}, {}> {
             <h2><Link route={routes.projectDetails.getLink({ id: projectId })}>Project Details</Link></h2>
             <p>Project {projectId}</p>
           </div>
+            <div className="govuk-grid-column-one-third">
+                <h2><Link route={routes.claimsDashboard.getLink({ projectId, partnerId })}>Claims for Partner</Link></h2>
+                <p>Partner {partnerId} (Project {projectId})</p>
+            </div>
           <div className="govuk-grid-column-one-third">
             <h2><Link route={routes.claimDetails.getLink({ projectId, claimId })}>Claims Deails</Link></h2>
             <p>Project {projectId} Claim {claimId}</p>

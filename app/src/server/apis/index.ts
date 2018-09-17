@@ -5,6 +5,7 @@ import { ControllerBase } from "./controllerBase";
 import * as contacts from "./contacts";
 import * as projects from "./projects";
 import * as partners from "./partners";
+import * as claims from "./claims";
 import * as projectContacts from "./projectContacts";
 
 export interface IApiClient {
@@ -12,6 +13,7 @@ export interface IApiClient {
   projects: projects.IProjectsApi;
   projectContacts: projectContacts.IProjectContactsApi;
   partners: partners.IPartnersApi;
+  claims: claims.IClaimsApi;
 }
 
 export const serverApis: IApiClient & { [key: string]: ControllerBase<{}> } = {
@@ -19,6 +21,7 @@ export const serverApis: IApiClient & { [key: string]: ControllerBase<{}> } = {
   partners: partners.controller,
   projects: projects.controller,
   projectContacts: projectContacts.controller,
+  claims: claims.controller
 };
 
 export const router = express.Router();
