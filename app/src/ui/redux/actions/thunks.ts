@@ -92,4 +92,3 @@ export function loadClaim(claimId: string) {
     () => ApiClient.claims.getById(claimId)
   );
 }
-

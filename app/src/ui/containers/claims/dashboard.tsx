@@ -2,7 +2,7 @@ import React from "react";
 import {ContainerBase, ReduxContainer} from "../containerBase";
 import {Pending} from "../../../shared/pending";
 import * as Actions from "../../redux/actions/index";
-import {routeConfig as routes, routeConfig} from "../../routing";
+import {routeConfig as routes} from "../../routing";
 import {ProjectOverviewPage} from "../../components/projectOverview";
 import {ClaimDto, PartnerDto, ProjectDto} from "../../models";
 import {Details, DualDetails, Link, Loading, Section, SectionPanel, Table} from "../../components";
@@ -34,7 +34,7 @@ class Component extends ContainerBase<Params, Data, {}> {
   private renderContents = (project: ProjectDto, partner: PartnerDto, claims: ClaimDto[]) => {
     const [currentClaim, ...previousClaims] = claims;
     return (
-      <ProjectOverviewPage selectedTab={routeConfig.claimsDashboard.routeName} project={project} partnerId={partner.id}>
+      <ProjectOverviewPage selectedTab={routes.claimsDashboard.routeName} project={project} partnerId={partner.id}>
         <ProjectClaimsHistory partner={partner}/>
         <CurrentClaimSummary claim={currentClaim} projectId={project.id}/>
         <PastClaimsSummary claims={previousClaims} projectId={project.id}/>
