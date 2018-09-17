@@ -10,7 +10,7 @@ interface Props {
 export const Currency: React.SFC<Props> = ({ value, fractionDigits = 0 }) => {
     if (isNumber(value)) {
         const valToRender = value.toFixed(fractionDigits);
-        return <span>£ {valToRender}</span>;
+        return <span>£&nbsp;{valToRender}</span>;
     }
     return null;
 };

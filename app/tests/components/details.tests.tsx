@@ -55,7 +55,7 @@ describe("Details", () => {
       const DTest = Details.forData({ cost: 12.22 });
       const output = shallow(<DTest.Details><DTest.Currency fractionDigits={2} label="Cost" value={x => x.cost} /></DTest.Details>).html();
       expect(output).toContain(`<h4 class="govuk-heading-s">Cost</h4>`);
-      expect(output).toContain(`<p class="govuk-body"><span>£ 12.22</span></p>`);
+      expect(output).toContain(`<p class="govuk-body"><span>£\u00a012.22</span></p>`);
     });
   });
 

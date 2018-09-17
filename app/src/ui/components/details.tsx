@@ -19,10 +19,9 @@ interface InternalFieldProps<T> {
 interface ExternalFieldProps<T, TValue> {
     label: React.ReactNode;
     value: (item: T) => TValue;
-    fractionDigits?: number;
 }
 
-const DetailsComponent = <T extends {}>(data: T): React.SFC<DetailsProps> => ({ children, displayDensity="Comfortable", qa, labelWidth }) => {
+const DetailsComponent = <T extends {}>(data: T): React.SFC<DetailsProps> => ({ children, displayDensity = "Comfortable", qa, labelWidth }) => {
     // distribute children accross array adding props
 
     const rows = React.Children.toArray(children).map((field) => {
@@ -92,37 +91,37 @@ const StringField = <T extends {}>(): React.SFC<ExternalFieldProps<T, string>> =
     return (props) => <TypedField {...props} render={(item) => <p className="govuk-body">{props.value(item)}</p>} />;
 };
 
-const MultilineStringField = <T extends {}>(): React.SFC<ExternalFieldProps<T, string>> => {
+const MultilineStringField = <T extends {}>(): React.SFC<ExternalFieldProps<T, string|null>> => {
     const TypedField = FieldComponent as { new(): FieldComponent<T> };
     const splitString = (v: string) => {
         return (v || "").split("\n").filter(x => !!x);
     };
-    return (props) => <TypedField {...props} render={(item) => splitString(props.value(item)).map((line, index) => <p className="govuk-body" key={`multiline-string-${index}`}>{line}</p>)} />;
+    return (props) => <TypedField {...props} render={(item) => splitString(props.value(item) || "").map((line, index) => <p className="govuk-body" key={`multiline-string-${index}`}>{line}</p>)} />;
 };
 
-const DateField = <T extends {}>(): React.SFC<ExternalFieldProps<T, Date>> => {
+const DateField = <T extends {}>(): React.SFC<ExternalFieldProps<T, Date | null>> => {
     const TypedField = FieldComponent as { new(): FieldComponent<T> };
     return (props) => <TypedField {...props} render={(item) => <p className="govuk-body"><FullDate value={props.value(item)} /></p>} />;
 };
 
-const DateTimeField = <T extends {}>(): React.SFC<ExternalFieldProps<T, Date>> => {
+const DateTimeField = <T extends {}>(): React.SFC<ExternalFieldProps<T, Date | null>> => {
     const TypedField = FieldComponent as { new(): FieldComponent<T> };
     return (props) => <TypedField {...props} render={(item) => <p className="govuk-body"><FullDateTime value={props.value(item)} /></p>} />;
 };
 
-const NumberField = <T extends {}>(): React.SFC<ExternalFieldProps<T, number>> => {
+const NumberField = <T extends {}>(): React.SFC<ExternalFieldProps<T, number | null>> => {
     const TypedField = FieldComponent as { new(): FieldComponent<T> };
-    return (props) => <TypedField {...props} render={(item) =>  <p className="govuk-body">{props.value(item)}</p>} />;
+    return (props) => <TypedField {...props} render={(item) => <p className="govuk-body">{props.value(item)}</p>} />;
 };
 
-const CurrencyField = <T extends {}>(): React.SFC<ExternalFieldProps<T, number>> => {
+const CurrencyField = <T extends {}>(): React.SFC<ExternalFieldProps<T, number> & { fractionDigits?: number}> => {
     const TypedField = FieldComponent as { new(): FieldComponent<T> };
-    return (props) => <TypedField {...props} render={(item) =>  <p className="govuk-body"><Currency fractionDigits={props.fractionDigits} value={props.value(item)}/></p>} />;
+    return (props) => <TypedField {...props} render={(item) => <p className="govuk-body"><Currency fractionDigits={props.fractionDigits} value={props.value(item)} /></p>} />;
 };
 
 const PercentageField = <T extends {}>(): React.SFC<ExternalFieldProps<T, number>> => {
     const TypedField = FieldComponent as { new(): FieldComponent<T> };
-    return (props) => <TypedField {...props} render={(item) =>  <p className="govuk-body"><Percentage value={props.value(item)}/></p>} />;
+    return (props) => <TypedField {...props} render={(item) => <p className="govuk-body"><Percentage value={props.value(item)} /></p>} />;
 };
 
 export const Details = {
