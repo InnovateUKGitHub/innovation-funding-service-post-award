@@ -60,3 +60,28 @@ export function loadContactsForProject(projectId: string) {
     () => ApiClient.projectContacts.getAllByProjectId(projectId)
   );
 }
+
+export function loadCostCategories() {
+  return conditionalLoad(
+    "all",
+    "costCategories",
+    () => ApiClient.costCategories.getAll()
+  );
+}
+
+export function loadClaimCosts(claimId:string) {
+  return conditionalLoad(
+    claimId,
+    "claimCosts",
+    () => ApiClient.claimCosts.getAllForClaim(claimId)
+  );
+}
+
+export function loadClaim(claimId:string) {
+  return conditionalLoad(
+    claimId,
+    "claims",
+    () => ApiClient.claims.getById(claimId)
+  );
+}
+

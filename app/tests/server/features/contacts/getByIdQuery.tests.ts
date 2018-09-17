@@ -1,5 +1,5 @@
 import { GetByIdQuery } from '../../../../src/server/features/contacts/getByIdQuery';
-import {TestContext} from '../../testContextProvider';
+import { TestContext } from '../../testContextProvider';
 import { IQuery, IContext } from '../../../../src/server/features/common/context';
 import { IContact } from '../../../../src/ui/models';
 
@@ -12,7 +12,7 @@ describe('getByIdQuery', () => {
         let expected = data[5];
 
         let query = new GetByIdQuery(expected.Id);
-        
+
         let result = await context.runQuery(query);
 
         expect(result).not.toBe(null);

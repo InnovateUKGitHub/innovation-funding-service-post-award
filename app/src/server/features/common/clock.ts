@@ -1,7 +1,8 @@
+import { DateTime } from "luxon";
 
 export interface IClock {
   today(): Date;
-  parse(value: string): Date;
+  parse(value: string, format: string): Date|null;
 }
 
 export class Clock implements IClock {
@@ -9,7 +10,12 @@ export class Clock implements IClock {
     return new Date();
   }
 
-  parse(value: string) {
-    return new Date(value);
+  parse(value: string, format: string) {
+    if(!value) {
+      return null;
+    }
+    
+    let result = DateTime.fromFormat(value, format);
+    return result.toLocal().toJSDate();
   }
 }

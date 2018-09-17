@@ -8,7 +8,7 @@ interface Props {
 export const Percentage: React.SFC<Props> = (props) => {
     if (isNumber(props.value)) {
         const valToRender = props.value.toFixed(0);
-        return <span>{valToRender}%</span>;
+        return <span>{valToRender}&nbsp;%</span>;
     }
     return null;
 };
