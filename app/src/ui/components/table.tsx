@@ -4,6 +4,7 @@ import { FullDate, ShortDate } from "./renderers/date";
 import { Email } from "./renderers/email";
 import { Currency } from "./renderers/currency";
 import classNames from "classnames";
+import { Percentage } from "./renderers/percentage";
 
 type columnMode = "cell" | "header" | "footer" | "col";
 interface InternalColumnProps<T> {
@@ -132,6 +133,11 @@ const CurrencyColumn = <T extends {}>(): React.SFC<ExternalColumnProps<T, number
   return (props) => <TypedColumn classSuffix="numeric" renderCell={(data, index) => <Currency value={props.value(data, index)} />} {...props} />;
 };
 
+const PercentageColumn = <T extends {}>(): React.SFC<ExternalColumnProps<T, number>> => {
+  const TypedColumn = TableColumn as { new(): TableColumn<T> };
+  return (props) => <TypedColumn classSuffix="numeric" renderCell={(data, index) => <Percentage value={props.value(data, index)} />} {...props} />;
+};
+
 export const Table = {
   forData: <T extends {}>(data: T[]) => ({
     Table: TableComponent(data),
@@ -139,6 +145,7 @@ export const Table = {
     String: StringColumn<T>(),
     Number: NumberColumn<T>(),
     Currency: CurrencyColumn<T>(),
+    Percentage: PercentageColumn<T>(),
     FullDate: FullDateColumn<T>(),
     ShortDate: ShortDateColumn<T>(),
     Email: EmailColumn<T>(),
