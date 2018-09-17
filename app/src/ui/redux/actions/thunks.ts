@@ -17,6 +17,14 @@ export function loadContact(id: string) {
   );
 }
 
+export function loadClaimsForPartner(partnerId: string) {
+  return conditionalLoad(
+    partnerId,
+    "claims",
+    () => ApiClient.claims.getAllByPartnerId(partnerId)
+  );
+}
+
 export function loadProject(id: string) {
   return conditionalLoad(
     id,

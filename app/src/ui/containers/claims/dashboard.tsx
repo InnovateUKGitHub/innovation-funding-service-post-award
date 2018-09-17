@@ -1,87 +1,174 @@
 import React from "react";
-import { ContainerBase, ReduxContainer } from "../containerBase";
-import { Pending } from "../../../shared/pending";
+import {ContainerBase, ReduxContainer} from "../containerBase";
+import {Pending} from "../../../shared/pending";
 import * as Actions from "../../redux/actions/index";
-import { routeConfig } from "../../routing";
+import {routeConfig} from "../../routing";
 import {ProjectOverviewPage} from "../../components/projectOverview";
-import {PartnerDto, ProjectDto} from "../../models";
-import {Details, DualDetails, Loading, Section, SectionPanel} from "../../components";
+import {ClaimDto, PartnerDto, ProjectDto} from "../../models";
+import {Details, DualDetails, Loading, Section, SectionPanel, Table} from "../../components";
+import {DayAndLongMonth, FullDate, LongYear, ShortMonth} from "../../components/renderers";
 
 interface Params {
-    projectId: string;
-    partnerId: string;
+  projectId: string;
+  partnerId: string;
 }
 
 interface Data {
-    projectDetails: Pending<ProjectDto>;
-    partnerDetails: Pending<PartnerDto>;
+  projectDetails: Pending<ProjectDto>;
+  partnerDetails: Pending<PartnerDto>;
+  claims: Pending<ClaimDto[]>;
 }
 
 class Component extends ContainerBase<Params, Data, {}> {
-    public render() {
-        const combined = Pending.combine(
-            this.props.projectDetails,
-            this.props.partnerDetails,
-            (projectDetails, partnerDetails) => ({ projectDetails, partnerDetails })
-        );
-        const Loader = Loading.forData(combined).Loader;
-        return <Loader render={(x) => this.renderContents(x.projectDetails, x.partnerDetails)}/>;
-    }
+  public render() {
+    const combined = Pending.combine(
+      this.props.projectDetails,
+      this.props.partnerDetails,
+      this.props.claims,
+      (projectDetails, partnerDetails, claims) => ({projectDetails, partnerDetails, claims})
+    );
+    const Loader = Loading.forData(combined).Loader;
+    return <Loader render={(x) => this.renderContents(x.projectDetails, x.partnerDetails, x.claims)}/>;
+  }
 
-    private renderContents = (project: ProjectDto, partner: PartnerDto) => {
-        return (
-            <ProjectOverviewPage selectedTab={routeConfig.claimsDashboard.routeName} project={project} partnerId={partner.id}>
-                <Section>
-                    <ProjectClaimsHistory partner={partner}/>
-                </Section>
-            </ProjectOverviewPage>
-        );
-    }
+  private renderContents = (project: ProjectDto, partner: PartnerDto, claims: ClaimDto[]) => {
+    const [currentClaim, ...previousClaims] = claims;
+    return (
+      <ProjectOverviewPage selectedTab={routeConfig.claimsDashboard.routeName} project={project} partnerId={partner.id}>
+        <ProjectClaimsHistory partner={partner}/>
+        <CurrentClaimSummary claim={currentClaim}/>
+        <PastClaimsSummary claims={previousClaims}/>
+      </ProjectOverviewPage>
+    );
+  }
 }
 
 interface ClaimsHistoryProps {
-    partner: PartnerDto;
+  partner: PartnerDto;
 }
 
 const ProjectClaimsHistory: React.SFC<ClaimsHistoryProps> = ({partner}) => {
-    const { Details: Column, Currency, Percentage } = Details.forData(partner);
-    return (
-        <SectionPanel title="Project claims history">
-            <DualDetails displayDensity="Compact">
-                <Column qa="claims-history-col-0">
-                    <Currency label="Grant offer letter costs" value={x => x.totalParticipantGrant}/>
-                    <Currency label="Costs claimed to date" value={x => x.totalParticipantCostsClaimed}/>
-                    <Percentage label="Award offer rate" value={x => x.awardRate}/>
-                </Column>
-                <Column qa="claims-history-col-1">
-                    <Percentage label="Percentage claimed to date" value={x => x.percentageParticipantCostsClaimed}/>
-                    <Percentage label="Cap limit" value={x => x.capLimit}/>
-                </Column>
-            </DualDetails>
-        </SectionPanel>
-    );
+  const {Details: Column, Currency, Percentage} = Details.forData(partner);
+  return (
+    <Section>
+      <SectionPanel title="Project claims history">
+        <DualDetails displayDensity="Compact">
+          <Column qa="claims-history-col-0">
+            <Currency label="Grant offer letter costs" value={x => x.totalParticipantGrant}/>
+            <Currency label="Costs claimed to date" value={x => x.totalParticipantCostsClaimed}/>
+            <Percentage label="Award offer rate" value={x => x.awardRate}/>
+          </Column>
+          <Column qa="claims-history-col-1">
+            <Percentage label="Percentage claimed to date" value={x => x.percentageParticipantCostsClaimed}/>
+            <Percentage label="Cap limit" value={x => x.capLimit}/>
+          </Column>
+        </DualDetails>
+      </SectionPanel>
+    </Section>
+  );
 };
 
+interface CurrentClaimSummaryProps {
+  claim: ClaimDto | null;
+}
+
+const CurrentClaimSummary: React.SFC<CurrentClaimSummaryProps> = ({claim}) => {
+  if (!claim) {
+    return (
+    <Section title="...">
+      <p className="govuk-body">The next open claim period will be...</p>
+    </Section>);
+  }
+
+  const sectionTitle = (
+    <React.Fragment>Claim for {claim.periodId} - <DayAndLongMonth value={claim.periodStartDate}/> to <FullDate value={claim.periodEndDate}/></React.Fragment>
+  );
+  const ClaimTable = Table.forData([claim]);
+  return (
+    <Section title={sectionTitle}>
+      <ClaimTable.Table>
+        <ClaimTable.Currency header="Forecast costs for period" qa="forecast-cost" value={(x) => x.forecastCost}/>
+        <ClaimTable.Currency header="Actual costs for period" qa="actual-cost" value={(x) => x.totalCost}/>
+        <ClaimTable.Currency header="Difference" qa="diff" value={(x) => x.forecastCost - x.totalCost}/>
+        <ClaimTable.String header="Status" qa="status" value={(x) => x.status}/>
+        <ClaimTable.ShortDate header="Date of last update" qa="last-update" value={(x) => x.lastModifiedDate}/>
+        <ClaimTable.Custom
+          header="Period"
+          qa="period"
+          value={(x) => (<a href="#">View Claim</a>)}
+        />
+      </ClaimTable.Table>
+    </Section>
+  );
+};
+
+interface PastClaimsSummaryProps {
+  claims: ClaimDto[];
+}
+
+const PastClaimsSummary: React.SFC<PastClaimsSummaryProps> = ({claims}) => {
+  if ( claims.length === 0 ) {
+    return (
+      <Section title="Previous Claims">
+        <p className="govuk-body">You do not have any previous claims for this project</p>
+      </Section>);
+  }
+  const ClaimTable = Table.forData(claims);
+  return (
+    <Section title="Previous Claims">
+      <ClaimTable.Table>
+        <ClaimTable.Custom
+          header="Period"
+          qa="period"
+          value={(x) => (
+            <span>{x.periodId}<br/>
+              <ShortMonth value={x.periodStartDate}/> to <ShortMonth value={x.periodEndDate}/> <LongYear value={x.periodEndDate} />
+            </span>)}
+        />
+        <ClaimTable.Currency header="Forecast costs for period" qa="forecast-cost" value={(x) => x.forecastCost}/>
+        <ClaimTable.Currency header="Actual costs for period" qa="actual-cost" value={(x) => x.totalCost}/>
+        <ClaimTable.Currency header="Difference" qa="diff" value={(x) => x.forecastCost - x.totalCost}/>
+        <ClaimTable.Custom
+          header="Status and date"
+          qa="status"
+          value={(x) => (
+            <span>
+              Claim {x.status}
+              <br/>
+              <FullDate value={(x.paidDate || x.approvedDate || x.lastModifiedDate)}/>
+            </span>)}
+        />
+        <ClaimTable.Custom
+          header="Period"
+          qa="period"
+          value={(x) => (<a href="#">View Claim</a>)}
+        />
+      </ClaimTable.Table>
+    </Section>
+  );
+};
 const definition = ReduxContainer.for<Params, Data, {}>(Component);
 
 export const ClaimsDashboard = definition.connect({
-    withData: (state, params) => ({
-        projectDetails: Pending.create(state.data.project[params.projectId]),
-        partnerDetails: Pending.create(state.data.partner[params.partnerId])
-    }),
-    withCallbacks: () => ({})
+  withData: (state, params) => ({
+    projectDetails: Pending.create(state.data.project[params.projectId]),
+    partnerDetails: Pending.create(state.data.partner[params.partnerId]),
+    claims: Pending.create(state.data.claims[params.partnerId])
+  }),
+  withCallbacks: () => ({})
 });
 
 export const ClaimsDashboardRoute = definition.route({
-    routeName: "claimDetails",
-    routePath: "/project/:projectId/claims/?partnerId",
-    getParams: (route) => ({
-        projectId: route.params.projectId,
-        partnerId: route.params.partnerId,
-    }),
-    getLoadDataActions: (params) => [
-        Actions.loadProject(params.projectId),
-        Actions.loadPartner(params.partnerId)
-    ],
-    container: ClaimsDashboard
+  routeName: "claimDetails",
+  routePath: "/project/:projectId/claims/?partnerId",
+  getParams: (route) => ({
+    projectId: route.params.projectId,
+    partnerId: route.params.partnerId
+  }),
+  getLoadDataActions: (params) => [
+    Actions.loadProject(params.projectId),
+    Actions.loadPartner(params.partnerId),
+    Actions.loadClaimsForPartner(params.partnerId)
+  ],
+  container: ClaimsDashboard
 });

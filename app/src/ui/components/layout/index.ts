@@ -8,3 +8,4 @@ export * from "./sectionPanel";
 export * from "./listSection";
 export * from "./tabs";
 export * from "./title";
+export * from "./sectionTitle";
