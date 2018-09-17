@@ -117,14 +117,14 @@ export const ClaimsDetails = definition.connect({
         project: Pending.create(store.data.project[params.projectId]),
         partner: Pending.create(store.data.partners[params.projectId]).then(x => x![0]),
         costCategories: Pending.create(store.data.costCategories.all),
-        claim: Pending.create(store.data.claims[params.claimId]),
+        claim: Pending.create(store.data.claim[params.claimId]),
         claimCosts: Pending.create(store.data.claimCosts[params.claimId])
     }),
     withCallbacks: () => ({})
 });
 
 export const ClaimsDetailsRoute = definition.route({
-    routeName: "claimDashboard",
+    routeName: "claimDetails",
     routePath: "/project/:projectId/claims/:claimId",
     getParams: (route) => ({ projectId: route.params.projectId, claimId: route.params.claimId }),
     getLoadDataActions: (params) => [

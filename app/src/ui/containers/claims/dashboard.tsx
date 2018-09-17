@@ -2,10 +2,10 @@ import React from "react";
 import {ContainerBase, ReduxContainer} from "../containerBase";
 import {Pending} from "../../../shared/pending";
 import * as Actions from "../../redux/actions/index";
-import {routeConfig} from "../../routing";
+import {routeConfig as routes, routeConfig} from "../../routing";
 import {ProjectOverviewPage} from "../../components/projectOverview";
 import {ClaimDto, PartnerDto, ProjectDto} from "../../models";
-import {Details, DualDetails, Loading, Section, SectionPanel, Table} from "../../components";
+import {Details, DualDetails, Link, Loading, Section, SectionPanel, Table} from "../../components";
 import {DayAndLongMonth, FullDate, LongYear, ShortMonth} from "../../components/renderers";
 
 interface Params {
@@ -36,8 +36,8 @@ class Component extends ContainerBase<Params, Data, {}> {
     return (
       <ProjectOverviewPage selectedTab={routeConfig.claimsDashboard.routeName} project={project} partnerId={partner.id}>
         <ProjectClaimsHistory partner={partner}/>
-        <CurrentClaimSummary claim={currentClaim}/>
-        <PastClaimsSummary claims={previousClaims}/>
+        <CurrentClaimSummary claim={currentClaim} projectId={project.id}/>
+        <PastClaimsSummary claims={previousClaims} projectId={project.id}/>
       </ProjectOverviewPage>
     );
   }
@@ -70,9 +70,10 @@ const ProjectClaimsHistory: React.SFC<ClaimsHistoryProps> = ({partner}) => {
 
 interface CurrentClaimSummaryProps {
   claim: ClaimDto | null;
+  projectId: string;
 }
 
-const CurrentClaimSummary: React.SFC<CurrentClaimSummaryProps> = ({claim}) => {
+const CurrentClaimSummary: React.SFC<CurrentClaimSummaryProps> = ({claim, projectId}) => {
   if (!claim) {
     return (
     <Section title="...">
@@ -95,7 +96,7 @@ const CurrentClaimSummary: React.SFC<CurrentClaimSummaryProps> = ({claim}) => {
         <ClaimTable.Custom
           header="Period"
           qa="period"
-          value={(x) => (<a href="#">View Claim</a>)}
+          value={(x) => (<Link route={routes.claimDetails.getLink({ projectId, claimId: x.id })}>View Claim</Link>)}
         />
       </ClaimTable.Table>
     </Section>
@@ -104,9 +105,10 @@ const CurrentClaimSummary: React.SFC<CurrentClaimSummaryProps> = ({claim}) => {
 
 interface PastClaimsSummaryProps {
   claims: ClaimDto[];
+  projectId: string;
 }
 
-const PastClaimsSummary: React.SFC<PastClaimsSummaryProps> = ({claims}) => {
+const PastClaimsSummary: React.SFC<PastClaimsSummaryProps> = ({claims, projectId}) => {
   if ( claims.length === 0 ) {
     return (
       <Section title="Previous Claims">
@@ -139,9 +141,9 @@ const PastClaimsSummary: React.SFC<PastClaimsSummaryProps> = ({claims}) => {
             </span>)}
         />
         <ClaimTable.Custom
-          header="Period"
-          qa="period"
-          value={(x) => (<a href="#">View Claim</a>)}
+          header=""
+          qa="link"
+          value={(x) => (<Link route={routes.claimDetails.getLink({ projectId, claimId: x.id })}>View Claim</Link>)}
         />
       </ClaimTable.Table>
     </Section>
@@ -159,7 +161,7 @@ export const ClaimsDashboard = definition.connect({
 });
 
 export const ClaimsDashboardRoute = definition.route({
-  routeName: "claimDetails",
+  routeName: "claimDashboard",
   routePath: "/project/:projectId/claims/?partnerId",
   getParams: (route) => ({
     projectId: route.params.projectId,

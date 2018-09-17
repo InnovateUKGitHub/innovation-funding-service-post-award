@@ -77,7 +77,7 @@ export function loadCostCategories() {
   );
 }
 
-export function loadClaimCosts(claimId:string) {
+export function loadClaimCosts(claimId: string) {
   return conditionalLoad(
     claimId,
     "claimCosts",
@@ -85,10 +85,10 @@ export function loadClaimCosts(claimId:string) {
   );
 }
 
-export function loadClaim(claimId:string) {
+export function loadClaim(claimId: string) {
   return conditionalLoad(
     claimId,
-    "claims",
+    "claim",
     () => ApiClient.claims.getById(claimId)
   );
 }
