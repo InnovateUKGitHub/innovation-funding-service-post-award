@@ -88,7 +88,7 @@ const CurrentClaimSummary: React.SFC<CurrentClaimSummaryProps> = ({claim, projec
   const ClaimTable = Table.forData([claim]);
   return (
     <Section title={sectionTitle}>
-      <ClaimTable.Table>
+      <ClaimTable.Table qa="current-claim-summary-table">
         <ClaimTable.Currency header="Forecast costs for period" qa="forecast-cost" value={(x) => x.forecastCost}/>
         <ClaimTable.Currency header="Actual costs for period" qa="actual-cost" value={(x) => x.totalCost}/>
         <ClaimTable.Currency header="Difference" qa="diff" value={(x) => x.forecastCost - x.totalCost}/>
@@ -119,7 +119,7 @@ const PastClaimsSummary: React.SFC<PastClaimsSummaryProps> = ({claims, projectId
   const ClaimTable = Table.forData(claims);
   return (
     <Section title="Previous Claims">
-      <ClaimTable.Table>
+      <ClaimTable.Table qa="previous-claims-summary-table">
         <ClaimTable.Custom
           header="Period"
           qa="period"
