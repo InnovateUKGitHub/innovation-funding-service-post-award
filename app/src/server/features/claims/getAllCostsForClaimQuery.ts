@@ -1,7 +1,7 @@
 import { IContext, IQuery } from "../common/context";
 import { ClaimCostDto } from "../../../ui/models/claimCostDto";
 
-export class GetAllCostsForClaimQuery implements IQuery<ClaimCostDto[]>{
+export class GetAllCostsForClaimQuery implements IQuery<ClaimCostDto[]> {
     constructor(public claimId: string) {
     }
 

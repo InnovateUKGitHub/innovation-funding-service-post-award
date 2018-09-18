@@ -17,7 +17,7 @@ export interface ICostCategoryRepository {
 const fakeCCNames = ["Labour", "Overheads", "Materials", "Capital usage", "Subcontracting", "Travel and subsistence", "Other costs" ];
 
 export class CostCategoryRepository extends SalesforceBase<ISalesforceCostCategory> implements ICostCategoryRepository {
-    constructor(){
+    constructor() {
         super("TODO", fieldNames);
     }
 
@@ -35,5 +35,4 @@ export class CostCategoryRepository extends SalesforceBase<ISalesforceCostCatego
             Acc_CostCategoryDescption__c: `The description for Cost Category ${seed}:${name}`
         };
     }
-    
 }

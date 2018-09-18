@@ -37,6 +37,13 @@ export class ClaimsDetailsComponent extends ContainerBase<Params, Data, {}> {
         return <Loading.Loader render={(data) => this.renderContents(data)} />;
     }
 
+      private getClaimPeriodTitle(data: any) {
+        if (data.project.claimFrequency === Dtos.ClaimFrequency.Monthly) {
+          return `${data.partner.name} claim for ${data.claim.periodId} ${DateTime.fromJSDate(data.claim.periodStartDate).toFormat("MMMM yyyy")}`;
+        }
+        return `${data.partner.name} claim for ${data.claim.periodId} ${DateTime.fromJSDate(data.claim.periodStartDate).toFormat("MMMM")} to ${DateTime.fromJSDate(data.claim.periodEndDate).toFormat("MMMM yyyy")}`;
+      }
+
     private renderContents(data: { project: Dtos.ProjectDto, partner: Dtos.PartnerDto, costCategories: Dtos.CostCategoryDto[], claim: Dtos.ClaimDto, claimCosts: Dtos.ClaimCostDto[] }) {
 
         const combinedData = data.costCategories.map(x => ({
@@ -62,14 +69,7 @@ export class ClaimsDetailsComponent extends ContainerBase<Params, Data, {}> {
             isTotal: true
         });
 
-        let title = ``;
-        switch (data.project.claimFrequency) {
-            case Dtos.ClaimFrequency.Monthly:
-                title = `${data.partner.name} claim for ${data.claim.periodId} ${DateTime.fromJSDate(data.claim.periodStartDate).toFormat("MMMM yyyy")}`;
-            default:
-                title = `${data.partner.name} claim for ${data.claim.periodId} ${DateTime.fromJSDate(data.claim.periodStartDate).toFormat("MMMM")} to ${DateTime.fromJSDate(data.claim.periodEndDate).toFormat("MMMM yyyy")}`;
-
-        }
+        const title = this.getClaimPeriodTitle(data);
 
         const CostCategoriesTable = ACC.Table.forData(combinedData);
 
@@ -95,16 +95,20 @@ export class ClaimsDetailsComponent extends ContainerBase<Params, Data, {}> {
 
     private renderFooters(project: Dtos.ProjectDto, partner: Dtos.PartnerDto, claimsCosts: Dtos.ClaimCostDto[]) {
         return [
-            <tr className="govuk-table__row">
+          (
+            <tr key="1" className="govuk-table__row">
                 <th className="govuk-table__cell govuk-table__cell--numeric govuk-!-font-weight-bold" colSpan={3}>Award offer rate</th>
                 <td className="govuk-table__cell govuk-table__cell--numeric" colSpan={1}><ACC.Renderers.Percentage value={partner.awardRate} /></td>
                 <td className="govuk-table__cell" colSpan={1} />
-            </tr>,
-            <tr className="govuk-table__row">
+            </tr>
+          ),
+          (
+            <tr key="2" className="govuk-table__row">
                 <th className="govuk-table__cell govuk-table__cell--numeric govuk-!-font-weight-bold" colSpan={3}>Costs to be paid this quarter</th>
                 <td className="govuk-table__cell govuk-table__cell--numeric" colSpan={1}><ACC.Renderers.Currency value={claimsCosts.reduce((total, item) => total + item.costsClaimedThisPeriod, 0) * partner.awardRate / 100} /></td>
                 <td className="govuk-table__cell" colSpan={1} />
             </tr>
+          )
         ];
     }
 }
@@ -117,15 +121,15 @@ export const ClaimsDetails = definition.connect({
         project: Pending.create(store.data.project[params.projectId]),
         partner: Pending.create(store.data.partners[params.projectId]).then(x => x![0]),
         costCategories: Pending.create(store.data.costCategories.all),
-        claim: Pending.create(store.data.claims[params.claimId]),
+        claim: Pending.create(store.data.claim[params.claimId]),
         claimCosts: Pending.create(store.data.claimCosts[params.claimId])
     }),
     withCallbacks: () => ({})
 });
 
 export const ClaimsDetailsRoute = definition.route({
-    routeName: "claimDashboard",
-    routePath: "/project/:projectId/claims/:claimId",
+    routeName: "claimDetails",
+    routePath: "/projects/:projectId/claims/:claimId",
     getParams: (route) => ({ projectId: route.params.projectId, claimId: route.params.claimId }),
     getLoadDataActions: (params) => [
         Actions.loadProject(params.projectId),

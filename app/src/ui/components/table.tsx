@@ -34,7 +34,7 @@ interface TableProps<T> {
   children: TableChild<T> | TableChild<T>[];
   className?: string;
   qa?: string;
-  footers?: JSX.Element[]
+  footers?: JSX.Element[];
 }
 
 export class TableColumn<T> extends React.Component<InternalColumnProps<T>> {

@@ -6,6 +6,7 @@ interface Props {
     fractionDigits?: number;
 }
 
+// TODO format currency with comma separator and minus in right place -£2,100 vs £-2100
 export const Currency: React.SFC<Props> = ({ value, fractionDigits = 0 }) => {
     if (isNumber(value)) {
         const valToRender = value.toFixed(fractionDigits);
