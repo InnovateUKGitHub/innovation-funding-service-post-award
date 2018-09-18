@@ -57,10 +57,10 @@ const ProjectClaimsHistory: React.SFC<ClaimsHistoryProps> = ({partner}) => {
           <Column qa="claims-history-col-0">
             <Currency label="Grant offer letter costs" value={x => x.totalParticipantGrant}/>
             <Currency label="Costs claimed to date" value={x => x.totalParticipantCostsClaimed}/>
-            <Percentage label="Award offer rate" value={x => x.awardRate}/>
+            <Percentage label="Percentage claimed to date" value={x => x.percentageParticipantCostsClaimed}/>
           </Column>
           <Column qa="claims-history-col-1">
-            <Percentage label="Percentage claimed to date" value={x => x.percentageParticipantCostsClaimed}/>
+            <Percentage label="Award offer rate" value={x => x.awardRate}/>
             <Percentage label="Cap limit" value={x => x.capLimit}/>
           </Column>
         </DualDetails>
@@ -95,8 +95,8 @@ const CurrentClaimSummary: React.SFC<CurrentClaimSummaryProps> = ({claim, projec
         <ClaimTable.String header="Status" qa="status" value={(x) => x.status}/>
         <ClaimTable.ShortDate header="Date of last update" qa="last-update" value={(x) => x.lastModifiedDate}/>
         <ClaimTable.Custom
-          header="Period"
-          qa="period"
+          header=""
+          qa="link"
           value={(x) => (<Link route={routes.claimDetails.getLink({ projectId, claimId: x.id })}>View Claim</Link>)}
         />
       </ClaimTable.Table>
