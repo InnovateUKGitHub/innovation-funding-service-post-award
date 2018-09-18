@@ -8,7 +8,7 @@ import * as claims from "./claims";
 import * as projectContacts from "./projectContacts";
 
 export interface IApiClient {
-  claimCosts: claimCosts.IClaimCostsApi,
+  claimCosts: claimCosts.IClaimCostsApi;
   contacts: contacts.IContactsApi;
   costCategories: costCategories.ICostCategoriesApi;
   projects: projects.IProjectsApi;

@@ -17,6 +17,14 @@ export function loadContact(id: string) {
   );
 }
 
+export function loadClaimsForPartner(partnerId: string) {
+  return conditionalLoad(
+    partnerId,
+    "claims",
+    () => ApiClient.claims.getAllByPartnerId(partnerId)
+  );
+}
+
 export function loadProject(id: string) {
   return conditionalLoad(
     id,
@@ -69,7 +77,7 @@ export function loadCostCategories() {
   );
 }
 
-export function loadClaimCosts(claimId:string) {
+export function loadClaimCosts(claimId: string) {
   return conditionalLoad(
     claimId,
     "claimCosts",
@@ -77,11 +85,10 @@ export function loadClaimCosts(claimId:string) {
   );
 }
 
-export function loadClaim(claimId:string) {
+export function loadClaim(claimId: string) {
   return conditionalLoad(
     claimId,
-    "claims",
+    "claim",
     () => ApiClient.claims.getById(claimId)
   );
 }
-

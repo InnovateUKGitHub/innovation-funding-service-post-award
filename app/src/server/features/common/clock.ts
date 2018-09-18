@@ -14,8 +14,8 @@ export class Clock implements IClock {
     if(!value) {
       return null;
     }
-    
-    let result = DateTime.fromFormat(value, format);
+
+    const result = DateTime.fromFormat(value, format);
     return result.toLocal().toJSDate();
   }
 }

@@ -34,7 +34,7 @@ export class MapToProjectDtoCommand implements IQuery<ProjectDto> {
   }
 
   calcPeriod(context: IContext, dto: ProjectDto): number {
-    if(!dto.startDate || dto.claimFrequency === ClaimFrequency.Unknown){
+    if(!dto.startDate || dto.claimFrequency === ClaimFrequency.Unknown) {
       return 0;
     }
     const today        = context.clock.today();
