@@ -76,7 +76,7 @@ export class ClaimsDetailsComponent extends ContainerBase<Params, Data, {}> {
         return (
             <ACC.Page>
                 <ACC.Section>
-                    <ACC.BackLink route={routeConfig.claimsDashboard.getLink({ projectId: data.project.id, partnerId: "" })}>Claims dashboard</ACC.BackLink>
+                    <ACC.BackLink route={routeConfig.claimsDashboard.getLink({ projectId: data.project.id, partnerId: data.partner.id })}>Claims dashboard</ACC.BackLink>
                 </ACC.Section>
                 <ACC.Projects.Title pageTitle="Claim" project={data.project} />
                 <ACC.Claims.Navigation projectId={data.project.id} claimId={data.claim.id} currentRouteName={routeConfig.claimDetails.routeName} />
@@ -119,6 +119,7 @@ export const ClaimsDetails = definition.connect({
     withData: (store, params) => ({
         id: params.projectId,
         project: Pending.create(store.data.project[params.projectId]),
+        // todo: fix to be partner for the claim rather than fist partner in project
         partner: Pending.create(store.data.partners[params.projectId]).then(x => x![0]),
         costCategories: Pending.create(store.data.costCategories.all),
         claim: Pending.create(store.data.claim[params.claimId]),

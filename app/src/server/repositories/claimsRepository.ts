@@ -87,6 +87,6 @@ export class ClaimRepository extends SalesforceBase<ISalesforceClaim> implements
 
   public getById(claimId: string) {
     // Todo: talk to salesforce
-    return this.getAllByPartnerId(claimId).then(x => x[2]);
+    return this.getAllByPartnerId("a071w000000LOXWAA4").then(x => x[2]);
   }
 }
