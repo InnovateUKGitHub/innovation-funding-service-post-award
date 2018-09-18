@@ -81,7 +81,7 @@ export class ClaimsDetailsComponent extends ContainerBase<Params, Data, {}> {
                 <ACC.Projects.Title pageTitle="Claim" project={data.project} />
                 <ACC.Claims.Navigation projectId={data.project.id} claimId={data.claim.id} currentRouteName={routeConfig.claimDetails.routeName} />
                 <ACC.Section title={title}>
-                    <CostCategoriesTable.Table footers={this.renderFooters(data.project, data.partner, data.claimCosts)}>
+                    <CostCategoriesTable.Table qa="cost-cat" footers={this.renderFooters(data.project, data.partner, data.claimCosts)}>
                         <CostCategoriesTable.Custom header="Costs category" qa="category" value={x => !x.isCalculated ? <a href="#" className="govuk-link">{x.category.name}</a> : x.category.name} cellClassName={x => x.isTotal ? "govuk-!-font-weight-bold" : null} />
                         <CostCategoriesTable.Currency header="Grant offer letter costs" qa="offerCosts" value={x => x.cost.offerCosts} />
                         <CostCategoriesTable.Currency header="Costs claimed to date" qa="claimedToDate" value={x => x.cost.costsClaimedToDate} />
@@ -95,16 +95,20 @@ export class ClaimsDetailsComponent extends ContainerBase<Params, Data, {}> {
 
     private renderFooters(project: Dtos.ProjectDto, partner: Dtos.PartnerDto, claimsCosts: Dtos.ClaimCostDto[]) {
         return [
-            <tr className="govuk-table__row">
-                <th className="govuk-table__cell govuk-table__cell--numeric govuk-!-font-weight-bold" colSpan={3}>Award offer rate</th>
-                <td className="govuk-table__cell govuk-table__cell--numeric" colSpan={1}><ACC.Renderers.Percentage value={partner.awardRate} /></td>
-                <td className="govuk-table__cell" colSpan={1} />
-            </tr>,
-            <tr className="govuk-table__row">
-                <th className="govuk-table__cell govuk-table__cell--numeric govuk-!-font-weight-bold" colSpan={3}>Costs to be paid this quarter</th>
-                <td className="govuk-table__cell govuk-table__cell--numeric" colSpan={1}><ACC.Renderers.Currency value={claimsCosts.reduce((total, item) => total + item.costsClaimedThisPeriod, 0) * partner.awardRate / 100} /></td>
-                <td className="govuk-table__cell" colSpan={1} />
-            </tr>
+            (
+                <tr key="custFooter1" className="govuk-table__row">
+                    <th className="govuk-table__cell govuk-table__cell--numeric govuk-!-font-weight-bold" colSpan={3}>Award offer rate</th>
+                    <td className="govuk-table__cell govuk-table__cell--numeric" colSpan={1}><ACC.Renderers.Percentage value={partner.awardRate} /></td>
+                    <td className="govuk-table__cell" colSpan={1} />
+                </tr>
+            ),
+            (
+                <tr key="custFooter2" className="govuk-table__row">
+                    <th className="govuk-table__cell govuk-table__cell--numeric govuk-!-font-weight-bold" colSpan={3}>Costs to be paid this quarter</th>
+                    <td className="govuk-table__cell govuk-table__cell--numeric" colSpan={1}><ACC.Renderers.Currency value={claimsCosts.reduce((total, item) => total + item.costsClaimedThisPeriod, 0) * partner.awardRate / 100} /></td>
+                    <td className="govuk-table__cell" colSpan={1} />
+                </tr>
+            )
         ];
     }
 }
