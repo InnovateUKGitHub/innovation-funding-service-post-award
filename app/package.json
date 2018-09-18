@@ -7,7 +7,7 @@
     "start:server": "node ./dist/server/index.js",
     "start:dev": "nodemon ./dist/server/index.js",
     "build:server": "rimraf dist/ && tsc",
-    "watch:server": "parallelshell \"tsc --watch\" \"npm run start:server\" ",
+    "watch:server": "tsc --watch",
     "build:client": "webpack --config webpack.client.js",
     "watch:client": "npm run build:client -- --watch",
     "watch": "parallelshell \"npm run watch:client\" \"npm run watch:server\" ",

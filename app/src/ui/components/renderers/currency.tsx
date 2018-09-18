@@ -1,13 +1,21 @@
 import React from "react";
+import {isNumber} from "../../../util/NumberHelper";
 
 interface Props {
-    value: number | null;
+  value: number | null;
+  fractionDigits?: number;
 }
 
-export const Currency: React.SFC<Props> = (props) => {
-    if (props.value || props.value === 0) {
-        const valToRender = props.value.toFixed(2);
-        return <span>£ {valToRender}</span>;
-    }
+export const Currency: React.SFC<Props> = ({value, fractionDigits = 0}) => {
+  if (!isNumber(value)) {
     return null;
+  }
+  const options = {
+    style: "currency",
+    currency: "GBP",
+    minimumFractionDigits: fractionDigits,
+    maximumFractionDigits: fractionDigits
+  };
+  const valToRender = new Intl.NumberFormat("en-GB", options).format(value);
+  return <span>{valToRender}</span>;
 };

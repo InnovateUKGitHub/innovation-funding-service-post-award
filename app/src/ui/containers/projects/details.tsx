@@ -1,12 +1,11 @@
 import React from "react";
 import { ContainerBase, ReduxContainer } from "../containerBase";
-import { RootState } from "../../redux";
 import * as ACC from "../../components";
 import * as Dtos from "../../models";
 import { Pending } from "../../../shared/pending";
-import { State } from "router5";
 import * as Actions from "../../redux/actions/thunks";
-import {ProjectOverviewPage, tabListArray} from "../../components/projectOverview";
+import { ProjectOverviewPage } from "../../components/projectOverview";
+import { routeConfig } from "../../routing";
 
 interface Data {
     id: string;
@@ -15,20 +14,14 @@ interface Data {
     contacts: Pending<Dtos.ProjectContactDto[]>;
 }
 
-class ProjectDetailsComponent extends ContainerBase<Data, {}> {
-    // ultimatly will come from navigation
-    private selectedTab = tabListArray[3];
+interface Params {
+    id: string;
+}
 
-    public static getLoadDataActions(route: State) {
+interface Callbacks {
+}
 
-        const projectId = route.params && route.params.id;
-        return [
-            Actions.loadProject(projectId),
-            Actions.loadContactsForProject(projectId),
-            Actions.loadPatnersForProject(projectId),
-        ];
-    }
-
+class ProjectDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
     render() {
         const combined = Pending.combine(this.props.projectDetails, this.props.partners, this.props.contacts, (projectDetails, partners, contacts) => ({ projectDetails, partners, contacts }));
         const Loading = ACC.Loading.forData(combined);
@@ -47,7 +40,8 @@ class ProjectDetailsComponent extends ContainerBase<Data, {}> {
         ];
 
         return (
-            <ProjectOverviewPage selectedTab={this.selectedTab} project={project}>
+            <ProjectOverviewPage selectedTab={routeConfig.projectDetails.routeName} project={project}>
+                {this.renderPartnersCosts(partners)}
                 <ACC.Section title="Project Members">
                     <ACC.ProjectMember member={monitoringOfficer} qa="monitoring-officer" />
                     <ACC.ProjectMember member={projectManager} qa="project-manager" />
@@ -57,7 +51,7 @@ class ProjectDetailsComponent extends ContainerBase<Data, {}> {
                 </ACC.Section>
 
                 <ACC.Section title="Project information">
-                    <DetailsSection.Details>
+                    <DetailsSection.Details labelWidth="Narrow">
                         <DetailsSection.Date label="Project start date" value={x => x.startDate} />
                         <DetailsSection.Date label="Project end date" value={x => x.endDate} />
                         <DetailsSection.MulilineString label="Project summary" value={x => x.summary} />
@@ -70,18 +64,47 @@ class ProjectDetailsComponent extends ContainerBase<Data, {}> {
             </ProjectOverviewPage>
         );
     }
+
+    private renderPartnersCosts(partners: Dtos.PartnerDto[]) {
+        const PartnersTable = ACC.Table.forData(partners);
+        const totalEligibleCosts = partners.reduce((val, partner) => val += partner.totalParticipantGrant, 0);
+        const totalClaimed = partners.reduce((val, partner) => val += partner.totalParticipantCostsClaimed, 0);
+        const percentageClaimed = totalClaimed > 0 ? 100 * totalClaimed/totalEligibleCosts : null;
+
+        return (
+            <ACC.Section title="Cost claimed status">
+                <PartnersTable.Table>
+                    <PartnersTable.String header="Partner" qa="partner" value={x => x.isLead ? `${x.name} (Lead)` : x.name} footer="Total"/>
+                    <PartnersTable.Currency header="Total eligible costs" qa="total-costs" value={x => x.totalParticipantGrant} footer={<ACC.Renderers.Currency value={totalEligibleCosts}/>} />
+                    <PartnersTable.Currency header="Costs claimed to date" qa="costs-claimed" value={x => x.totalParticipantCostsClaimed} footer={<ACC.Renderers.Currency value={totalClaimed} />}/>
+                    <PartnersTable.Percentage header="Percentage claimed" qa="percentage-claimed" value={x => x.percentageParticipantCostsClaimed} footer={<ACC.Renderers.Percentage value={percentageClaimed} />}/>
+                    <PartnersTable.Percentage header="Cap limit" qa="cap-limit" value={x => x.capLimit} />
+                </PartnersTable.Table>
+            </ACC.Section>
+        );
+    }
 }
 
-function mapData(state: RootState): Data {
-    const id = state.router.route && state.router.route.params.id;
-    return {
-        id,
-        contacts: Pending.create(state.data.projectContacts[id]),
-        partners: Pending.create(state.data.partners[id]),
-        projectDetails: Pending.create(state.data.project[id])
-    };
-}
+const containerDefinition = ReduxContainer.for<Params, Data, Callbacks>(ProjectDetailsComponent);
 
-export const ProjectDetails = ReduxContainer.for<Data, {}>(ProjectDetailsComponent)
-    .withData(mapData)
-    .connect();
+export const ProjectDetails = containerDefinition.connect({
+    withData: (state, params) => ({
+        id: params.id,
+        contacts: Pending.create(state.data.projectContacts[params.id]),
+        partners: Pending.create(state.data.partners[params.id]),
+        projectDetails: Pending.create(state.data.project[params.id])
+    }),
+    withCallbacks: () => ({})
+});
+
+export const ProjectDetailsRoute = containerDefinition.route({
+    routeName: "project-details",
+    routePath: "/projects/:id/details",
+    getParams: (r) => ({ id: r.params.id }),
+    getLoadDataActions: (params) => [
+        Actions.loadProject(params.id),
+        Actions.loadContactsForProject(params.id),
+        Actions.loadPatnersForProject(params.id),
+    ],
+    container: ProjectDetails
+});

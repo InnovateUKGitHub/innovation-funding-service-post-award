@@ -26,7 +26,7 @@ export class Pending<T> {
      * @param noData - a function to use when no data present to return data T2
      * @return Pending<T2>
      */
-    map<T2>(map: (data: T | null | undefined, state: LoadingStatus, error: any) => T2, noData?: () => T2) {
+    then<T2>(map: (data: T | null | undefined, state?: LoadingStatus, error?: any) => T2, noData?: () => T2) {
         let newData: T2 | null | undefined = null;
         if (this.data || (this.data as any as number) === 0) {
             newData = map(this.data, this.state, this.error);

@@ -11,7 +11,7 @@ interface Props {
   contacts: Pending<Dtos.IContact[]>;
 }
 
-class ListComponent extends ContainerBase<Props, {}> {
+class ListComponent extends ContainerBase<{}, Props, {}> {
   static loadData() {
     return [Actions.loadContacts()];
   }
@@ -56,7 +56,17 @@ function mapStateToProps(state: any) {
   };
 }
 
-export const ContactList = ReduxContainer.for<Props, {}>(ListComponent)
-  .withData((store) => ({ contacts: Pending.create(store.data.contacts.all) }))
-  .connect()
-  ;
+const definition = ReduxContainer.for<{}, Props, {}>(ListComponent);
+
+export const ContactList = definition.connect({
+  withData: (store) => ({ contacts: Pending.create(store.data.contacts.all) }),
+  withCallbacks: () => ({})
+});
+
+export const ContactListRoute = definition.route({
+  routeName: "contacts",
+  routePath: "/contacts",
+  getParams: () => ({}),
+  getLoadDataActions: () => [Actions.loadContacts()],
+  container: ContactList
+});

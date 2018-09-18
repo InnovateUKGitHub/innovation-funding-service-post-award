@@ -1,24 +1,30 @@
-import express from "express";
-
-import { ControllerBase } from "./controllerBase";
-
+import express, { Router } from "express";
+import * as claimCosts from "./claimCosts";
 import * as contacts from "./contacts";
+import * as costCategories from "./costCategories";
 import * as projects from "./projects";
 import * as partners from "./partners";
+import * as claims from "./claims";
 import * as projectContacts from "./projectContacts";
 
 export interface IApiClient {
+  claimCosts: claimCosts.IClaimCostsApi;
   contacts: contacts.IContactsApi;
+  costCategories: costCategories.ICostCategoriesApi;
   projects: projects.IProjectsApi;
   projectContacts: projectContacts.IProjectContactsApi;
   partners: partners.IPartnersApi;
+  claims: claims.IClaimsApi;
 }
 
-export const serverApis: IApiClient & { [key: string]: ControllerBase<{}> } = {
+export const serverApis: IApiClient & { [key: string]: { router: Router } } = {
+  claimCosts: claimCosts.controller,
   contacts: contacts.controller,
+  costCategories: costCategories.controller,
   partners: partners.controller,
   projects: projects.controller,
   projectContacts: projectContacts.controller,
+  claims: claims.controller
 };
 
 export const router = express.Router();

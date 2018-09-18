@@ -13,7 +13,7 @@ export function setupInitialState(route: State | undefined): RootState {
   return {
     router: { route },
     data: {
-      contacts: {}
-    }
-  } as any;
+    },
+    loadStatus: 0
+  } as RootState;
 }
