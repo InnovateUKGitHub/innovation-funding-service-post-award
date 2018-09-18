@@ -7,15 +7,15 @@ interface Props {
 }
 
 export const Currency: React.SFC<Props> = ({value, fractionDigits = 0}) => {
-  if (isNumber(value)) {
-    const options = {
-      style: "currency",
-      currency: "GBP",
-      minimumFractionDigits: fractionDigits,
-      maximumFractionDigits: fractionDigits
-    };
-    const valToRender = new Intl.NumberFormat("en-GB", options).format(value);
-    return <span>{valToRender}</span>;
+  if (!isNumber(value)) {
+    return null;
   }
-  return null;
+  const options = {
+    style: "currency",
+    currency: "GBP",
+    minimumFractionDigits: fractionDigits,
+    maximumFractionDigits: fractionDigits
+  };
+  const valToRender = new Intl.NumberFormat("en-GB", options).format(value);
+  return <span>{valToRender}</span>;
 };
