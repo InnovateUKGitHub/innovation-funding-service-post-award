@@ -32,7 +32,8 @@ class Component extends ContainerBase<Params, Data, {}> {
   }
 
   private renderContents = (project: ProjectDto, partner: PartnerDto, claims: ClaimDto[]) => {
-    const [currentClaim, ...previousClaims] = claims;
+    const currentClaim = claims.find(claim => !claim.approvedDate);
+    const previousClaims = currentClaim ? claims.filter(claim => claim.id !== currentClaim.id) : claims;
     return (
       <ProjectOverviewPage selectedTab={routes.claimsDashboard.routeName} project={project} partnerId={partner.id}>
         <ProjectClaimsHistory partner={partner}/>
@@ -69,7 +70,7 @@ const ProjectClaimsHistory: React.SFC<ClaimsHistoryProps> = ({partner}) => {
 };
 
 interface CurrentClaimSummaryProps {
-  claim: ClaimDto | null;
+  claim?: ClaimDto;
   projectId: string;
 }
 
