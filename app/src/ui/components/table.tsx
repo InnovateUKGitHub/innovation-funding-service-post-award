@@ -73,8 +73,8 @@ export class TableColumn<T> extends React.Component<InternalColumnProps<T>> {
 }
 
 const hasFooter = (x: any) => x.props && x.props.footer;
-const cloneFooterCell = (column: any, columnIndex: any) => React.cloneElement(column as React.ReactElement<any>, { mode: "footer", columnIndex });
-const createFooterRow = (cell: any) => <tr key="columnsFooter">{React.Children.map(cell, cloneFooterCell)}</tr>;
+const cloneFooterElement = (column: any, columnIndex: any) => React.cloneElement(column as React.ReactElement<any>, { mode: "footer", columnIndex });
+const createFooterRow = (elements: any) => <tr key="columnsFooter">{React.Children.map(elements, cloneFooterElement)}</tr>;
 
 const TableComponent = <T extends {}>(data: T[]) => (props: TableProps<T>) => {
   // loop through the colums cloning them and assigning the props required
