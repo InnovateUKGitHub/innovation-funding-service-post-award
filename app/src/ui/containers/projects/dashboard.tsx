@@ -54,6 +54,7 @@ class ProjectDashboardComponent extends ContainerBase<{}, Data, Callbacks> {
       if (daysRemaining <= 30) {
         open.push((
           <ACC.OpenProjectItem
+            key={x.id}
             project={x}
             daysRemaining={daysRemaining}
             endDate={end}
@@ -69,6 +70,7 @@ class ProjectDashboardComponent extends ContainerBase<{}, Data, Callbacks> {
 
         awaiting.push((
           <ACC.AwaitingProjectItem
+            key={x.id}
             project={x}
             frequency={frequency}
             periodText={periodText}

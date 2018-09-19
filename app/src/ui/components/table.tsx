@@ -72,12 +72,16 @@ export class TableColumn<T> extends React.Component<InternalColumnProps<T>> {
   }
 }
 
+const hasFooter = (x: any) => x.props && x.props.footer;
+const cloneFooterCell = (column: any, columnIndex: any) => React.cloneElement(column as React.ReactElement<any>, { mode: "footer", columnIndex });
+const createFooterRow = (cell: any) => <tr key="columnsFooter">{React.Children.map(cell, cloneFooterCell)}</tr>;
+
 const TableComponent = <T extends {}>(data: T[]) => (props: TableProps<T>) => {
   // loop through the colums cloning them and assigning the props required
   const headers = React.Children.map(props.children, (column, columnIndex) => React.cloneElement(column as React.ReactElement<any>, { mode: "header", columnIndex }));
   const cols = React.Children.map(props.children, (column, columnIndex) => React.cloneElement(column as React.ReactElement<any>, { mode: "col", columnIndex }));
   const contents = data.map((dataItem, rowIndex) => React.Children.map(props.children, (column, columnIndex) => React.cloneElement(column as React.ReactElement<any>, { mode: "cell", rowIndex, columnIndex, dataItem })));
-  const footers = React.Children.toArray(props.children).some((x: any) => x.props && x.props.footer) ? React.Children.map(props.children, (column, columnIndex) => React.cloneElement(column as React.ReactElement<any>, { mode: "footer", columnIndex })) : [];
+  const footers = React.Children.toArray(props.children).some(hasFooter) ? [ createFooterRow(props.children) ] : [];
   (props.footers || []).forEach(customFooter => footers.push(customFooter));
 
   return (
