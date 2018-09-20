@@ -81,7 +81,7 @@ export class ClaimsDetailsComponent extends ContainerBase<Params, Data, {}> {
                 <ACC.Projects.Title pageTitle="Claim" project={data.project} />
                 <ACC.Claims.Navigation projectId={data.project.id} claimId={data.claim.id} currentRouteName={routeConfig.claimDetails.routeName} />
                 <ACC.Section title={title}>
-                    <CostCategoriesTable.Table footers={this.renderFooters(data.project, data.partner, data.claimCosts)}>
+                    <CostCategoriesTable.Table qa="cost-cat" footers={this.renderFooters(data.project, data.partner, data.claimCosts)}>
                         <CostCategoriesTable.Custom
                           header="Costs category"
                           qa="category"
