@@ -17,7 +17,7 @@ interface Data {
   project: Pending<Dtos.ProjectDto>;
 }
 
-export class ClaimFormComponent extends ContainerBase<Params, Data, {}> {
+export class ClaimCostFormComponent extends ContainerBase<Params, Data, {}> {
 
   public render() {
     const Loading = ACC.Loading.forData(this.props.project);
@@ -38,9 +38,9 @@ export class ClaimFormComponent extends ContainerBase<Params, Data, {}> {
   }
 }
 
-const definition = ReduxContainer.for<Params, Data, {}>(ClaimFormComponent);
+const definition = ReduxContainer.for<Params, Data, {}>(ClaimCostFormComponent);
 
-export const ClaimForm = definition.connect({
+export const ClaimCostForm = definition.connect({
   withData: (store, params) => ({
     project: Pending.create(store.data.project[params.projectId]),
     claimId: params.claimId
@@ -48,8 +48,8 @@ export const ClaimForm = definition.connect({
   withCallbacks: () => ({})
 });
 
-export const ClaimFormRoute = definition.route({
-  routeName: "claimForm",
+export const ClaimCostFormRoute = definition.route({
+  routeName: "claimCostForm",
   routePath: "/projects/:projectId/claims/:claimId/costs/:costCategoryId",
   getParams: (route) => ({
     projectId: route.params.projectId,
@@ -59,5 +59,5 @@ export const ClaimFormRoute = definition.route({
   getLoadDataActions: (params) => [
     Actions.loadProject(params.projectId)
   ],
-  container: ClaimForm
+  container: ClaimCostForm
 });

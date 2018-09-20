@@ -87,7 +87,7 @@ export class ClaimsDetailsComponent extends ContainerBase<Params, Data, {}> {
                           qa="category"
                           cellClassName={x => x.isTotal ? "govuk-!-font-weight-bold" : null}
                           value={x => !x.isCalculated
-                            ? <ACC.Link route={routeConfig.claimForm.getLink({ projectId: data.project.id, claimId: data.claim.id, costCategoryId: x.category.id })}>{x.category.name}</ACC.Link>
+                            ? <ACC.Link route={routeConfig.claimCostForm.getLink({ projectId: data.project.id, claimId: data.claim.id, costCategoryId: x.category.id })}>{x.category.name}</ACC.Link>
                             : x.category.name}
                         />
                         <CostCategoriesTable.Currency header="Grant offer letter costs" qa="offerCosts" value={x => x.cost.offerCosts} />
