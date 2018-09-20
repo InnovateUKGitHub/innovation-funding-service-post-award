@@ -161,12 +161,11 @@ const orderedStates = [
 ];
 
 function lowestState(states: LoadingStatus[]) {
-
-    for (const i of orderedStates) {
-        if (states.find(x => orderedStates[i] === x)) {
-            return orderedStates[i];
+    let result = LoadingStatus.Done;
+    orderedStates.forEach(state => {
+        if(result === LoadingStatus.Done && states.indexOf(state) >= 0){
+            result = state;
         }
-    }
-
-    return LoadingStatus.Done;
+    });
+    return result;
 }
