@@ -4,8 +4,9 @@ import { Pending } from "../../../shared/pending";
 import * as Actions from "../../redux/actions/thunks";
 import * as Dtos from "../../models";
 import * as ACC from "../../components";
-import { routeConfig } from "../../routing";
+import {routeConfig as routes, routeConfig} from "../../routing";
 import { DateTime } from "luxon";
+import {Link} from "../../components";
 
 interface Params {
     projectId: string;
@@ -82,7 +83,14 @@ export class ClaimsDetailsComponent extends ContainerBase<Params, Data, {}> {
                 <ACC.Claims.Navigation projectId={data.project.id} claimId={data.claim.id} currentRouteName={routeConfig.claimDetails.routeName} />
                 <ACC.Section title={title}>
                     <CostCategoriesTable.Table footers={this.renderFooters(data.project, data.partner, data.claimCosts)}>
-                        <CostCategoriesTable.Custom header="Costs category" qa="category" value={x => !x.isCalculated ? <a href="#" className="govuk-link">{x.category.name}</a> : x.category.name} cellClassName={x => x.isTotal ? "govuk-!-font-weight-bold" : null} />
+                        <CostCategoriesTable.Custom
+                          header="Costs category"
+                          qa="category"
+                          cellClassName={x => x.isTotal ? "govuk-!-font-weight-bold" : null}
+                          value={x => !x.isCalculated
+                            ? <Link route={routes.claimForm.getLink({ projectId: data.project.id, claimId: data.claim.id, costCategoryId: x.category.id })}>{x.category.name}</Link>
+                            : x.category.name}
+                        />
                         <CostCategoriesTable.Currency header="Grant offer letter costs" qa="offerCosts" value={x => x.cost.offerCosts} />
                         <CostCategoriesTable.Currency header="Costs claimed to date" qa="claimedToDate" value={x => x.cost.costsClaimedToDate} />
                         <CostCategoriesTable.Currency header="Costs this period" qa="periodCosts" value={x => x.cost.costsClaimedThisPeriod} cellClassName={x => x.isTotal ? "govuk-!-font-weight-bold" : null} />
