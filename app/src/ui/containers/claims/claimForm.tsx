@@ -30,7 +30,7 @@ export class ClaimFormComponent extends ContainerBase<Params, Data, {}> {
         <ACC.Section>
           <ACC.BackLink
             route={routeConfig.claimDetails.getLink({projectId: data.project.id, claimId: data.claimId})}
-          >Claim
+          >Back
           </ACC.BackLink>
         </ACC.Section>
       </ACC.Page>
