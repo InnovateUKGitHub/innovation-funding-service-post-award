@@ -1,12 +1,11 @@
 import React from "react";
+import { DateTime } from "luxon";
 import { ContainerBase, ReduxContainer } from "../containerBase";
 import { Pending } from "../../../shared/pending";
 import * as Actions from "../../redux/actions/thunks";
 import * as Dtos from "../../models";
 import * as ACC from "../../components";
-import {routeConfig as routes, routeConfig} from "../../routing";
-import { DateTime } from "luxon";
-import {Link} from "../../components";
+import { routeConfig } from "../../routing";
 
 interface Params {
     projectId: string;
@@ -88,7 +87,7 @@ export class ClaimsDetailsComponent extends ContainerBase<Params, Data, {}> {
                           qa="category"
                           cellClassName={x => x.isTotal ? "govuk-!-font-weight-bold" : null}
                           value={x => !x.isCalculated
-                            ? <Link route={routes.claimForm.getLink({ projectId: data.project.id, claimId: data.claim.id, costCategoryId: x.category.id })}>{x.category.name}</Link>
+                            ? <ACC.Link route={routeConfig.claimForm.getLink({ projectId: data.project.id, claimId: data.claim.id, costCategoryId: x.category.id })}>{x.category.name}</ACC.Link>
                             : x.category.name}
                         />
                         <CostCategoriesTable.Currency header="Grant offer letter costs" qa="offerCosts" value={x => x.cost.offerCosts} />
