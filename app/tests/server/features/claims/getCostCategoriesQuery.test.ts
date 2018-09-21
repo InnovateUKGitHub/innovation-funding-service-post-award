@@ -1,5 +1,5 @@
 import { TestContext } from "../../testContextProvider";
-import { GetCostCategoriesQuery } from "../../../../src/server/features/claims/getCostCategoriesQuery";
+import { GetCostCategoriesQuery } from "../../../../src/server/features/claims";
 
 describe('GetCostCategoriesQuery', () => {
     it('when valid then returns all categories', async () => {
@@ -15,5 +15,3 @@ describe('GetCostCategoriesQuery', () => {
         expect(result.length).toBe(5)
     })
 });
-
-

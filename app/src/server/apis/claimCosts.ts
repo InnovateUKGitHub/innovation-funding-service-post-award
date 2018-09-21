@@ -1,7 +1,7 @@
 import contextProvider from "../features/common/contextProvider";
 import { ControllerBase } from "./controllerBase";
 import { ClaimCostDto } from "../../ui/models/claimCostDto";
-import { GetAllCostsForClaimQuery } from "../features/claims/getAllCostsForClaimQuery";
+import { GetAllCostsForClaimQuery } from "../features/claims";
 
 export interface IClaimCostsApi {
     getAllForClaim: (claimId: string) => Promise<ClaimCostDto[]>;
