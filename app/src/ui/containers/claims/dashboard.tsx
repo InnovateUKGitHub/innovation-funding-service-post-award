@@ -2,11 +2,12 @@ import React from "react";
 import {ContainerBase, ReduxContainer} from "../containerBase";
 import {Pending} from "../../../shared/pending";
 import * as Actions from "../../redux/actions/index";
-import {routeConfig as routes} from "../../routing";
 import {ProjectOverviewPage} from "../../components/projectOverview";
 import {ClaimDto, PartnerDto, ProjectDto} from "../../models";
 import {Details, DualDetails, Link, Loading, Section, SectionPanel, Table} from "../../components";
 import {DayAndLongMonth, FullDate, LongYear, ShortMonth} from "../../components/renderers";
+import { PrepareClaimRoute } from "./prepare";
+import { ClaimsDetailsRoute } from "./details";
 
 interface Params {
   projectId: string;
@@ -35,7 +36,7 @@ class Component extends ContainerBase<Params, Data, {}> {
     const currentClaim = claims.find(claim => !claim.approvedDate);
     const previousClaims = currentClaim ? claims.filter(claim => claim.id !== currentClaim.id) : claims;
     return (
-      <ProjectOverviewPage selectedTab={routes.claimsDashboard.routeName} project={project} partnerId={partner.id}>
+      <ProjectOverviewPage selectedTab={ClaimsDashboardRoute.routeName} project={project} partnerId={partner.id} partners={[partner]}>
         <ProjectClaimsHistory partner={partner}/>
         <CurrentClaimSummary claim={currentClaim} projectId={project.id}/>
         <PastClaimsSummary claims={previousClaims} projectId={project.id}/>
@@ -97,7 +98,7 @@ const CurrentClaimSummary: React.SFC<CurrentClaimSummaryProps> = ({claim, projec
         <ClaimTable.Custom
           header=""
           qa="link"
-          value={(x) => (<Link route={routes.claimDetails.getLink({ projectId, claimId: x.id })}>View Claim</Link>)}
+          value={(x) => (<Link route={PrepareClaimRoute.getLink({ projectId, claimId: x.id })}>Edit claim</Link>)}
         />
       </ClaimTable.Table>
     </Section>
@@ -144,7 +145,7 @@ const PastClaimsSummary: React.SFC<PastClaimsSummaryProps> = ({claims, projectId
         <ClaimTable.Custom
           header=""
           qa="link"
-          value={(x) => (<Link route={routes.claimDetails.getLink({ projectId, claimId: x.id })}>View Claim</Link>)}
+          value={(x) => (<Link route={ClaimsDetailsRoute.getLink({ projectId, claimId: x.id })}>View claim</Link>)}
         />
       </ClaimTable.Table>
     </Section>
