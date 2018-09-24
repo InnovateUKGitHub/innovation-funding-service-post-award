@@ -32,6 +32,7 @@ const fields = [
 
 export interface IClaimRepository {
   getAllByPartnerId(partnerId: string): Promise<ISalesforceClaim[]>;
+  getById(claimId: string): Promise<ISalesforceClaim>;
 }
 
 export class ClaimRepository extends SalesforceBase<ISalesforceClaim> implements IClaimRepository {
@@ -82,5 +83,10 @@ export class ClaimRepository extends SalesforceBase<ISalesforceClaim> implements
         Acc_PaidDate__c: "2018-05-25"
       }
     ]);
+  }
+
+  public getById(claimId: string) {
+    // Todo: talk to salesforce
+    return this.getAllByPartnerId("a071w000000LOXWAA4").then(x => x[2]);
   }
 }
