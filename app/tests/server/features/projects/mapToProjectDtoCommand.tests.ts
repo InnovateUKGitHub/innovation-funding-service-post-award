@@ -2,6 +2,7 @@ import "jest";
 import { TestContext } from "../../testContextProvider";
 import { MapToProjectDtoCommand } from "../../../../src/server/features/projects/mapToProjectDto";
 import { ClaimFrequency, ProjectDto } from "../../../../src/ui/models";
+import { DateTime } from "luxon";
 
 describe("MapToProjectDtoCommand", () => {
     it("when valid expect mapping", async () => {
@@ -14,7 +15,9 @@ describe("MapToProjectDtoCommand", () => {
             startDate: new Date("2008/12/12"),
             endDate: new Date("2010/12/12"),
             summary: "Expected summary",
-            projectNumber: "Expected project number"
+            projectNumber: "Expected project number",
+            claimFrequency: ClaimFrequency.Quarterly,
+            period: 4          
         };
 
         let salesforce = context.testData.createProject(x => {
@@ -22,9 +25,10 @@ describe("MapToProjectDtoCommand", () => {
             x.Acc_CompetitionId__c = expected.competition;
             x.Acc_ProjectSummary__c = expected.summary;
             x.Acc_ProjectTitle__c = expected.title;
-            x.Acc_StartDate__c = expected.startDate.toLocaleDateString();
-            x.Acc_EndDate__c = expected.endDate.toLocaleDateString();
+            x.Acc_StartDate__c = DateTime.fromJSDate(expected.startDate).toFormat("yyyy-MM-dd");
+            x.Acc_EndDate__c = DateTime.fromJSDate(expected.endDate).toFormat("yyyy-MM-dd");
             x.Acc_ProjectNumber__c = expected.projectNumber;
+            x.Acc_ClaimFrequency__c = "Quarterly";
         });
 
         let result = await context.runCommand(new MapToProjectDtoCommand(salesforce));
@@ -87,14 +91,15 @@ describe("MapToProjectDtoCommand", () => {
       const context    = new TestContext();
       const salesforce = context.testData.createProject(x => {
         x.Acc_ClaimFrequency__c = "Quarterly";
-        x.Acc_StartDate__c = "2018/01/01";
+        x.Acc_StartDate__c = "2018-01-01";
       });
 
       for(let i=1; i<=12; i++) {
         const month = i < 10 ? `0${i}` : i;
-        context.testData.setClock(`2018/${month}/01`);
+        context.clock.setDate(`2018/${month}/01`);
         const result = await context.runCommand(new MapToProjectDtoCommand(salesforce));
         const expected = Math.ceil(i / 3);
+        console.log("testing quertly", context.clock.today(), result.period, expected);
         expect(result.period).toBe(expected);
       }
     });
@@ -103,12 +108,12 @@ describe("MapToProjectDtoCommand", () => {
       const context    = new TestContext();
       const salesforce = context.testData.createProject(x => {
         x.Acc_ClaimFrequency__c = "Monthly";
-        x.Acc_StartDate__c = "2018/01/01";
+        x.Acc_StartDate__c = "2018-01-01";
       });
 
       for(let i=1; i<=12; i++) {
         const month = i < 10 ? `0${i}` : i;
-        context.testData.setClock(`2018/${month}/01`);
+        context.clock.setDate(`2018/${month}/01`);
         const result = await context.runCommand(new MapToProjectDtoCommand(salesforce));
         const expected = Math.ceil(i);
         expect(result.period).toBe(expected);
@@ -119,12 +124,12 @@ describe("MapToProjectDtoCommand", () => {
       const context    = new TestContext();
       const salesforce = context.testData.createProject(x => {
         x.Acc_ClaimFrequency__c = "Monthly";
-        x.Acc_StartDate__c = "2018/01/01";
+        x.Acc_StartDate__c = "2018-01-01";
       });
 
       for(let i=1; i<=12; i++) {
         const month = i < 10 ? `0${i}` : i;
-        context.testData.setClock(`2018/${month}/01`);
+        context.clock.setDate(`2018/${month}/01`);
         const result = await context.runCommand(new MapToProjectDtoCommand(salesforce));
         const expected = Math.ceil(i);
         expect(result.period).toBe(expected);
