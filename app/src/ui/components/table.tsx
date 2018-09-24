@@ -138,7 +138,7 @@ const CurrencyColumn = <T extends {}>(): React.SFC<ExternalColumnProps<T, number
   return (props) => <TypedColumn classSuffix="numeric" renderCell={(data, index) => <Currency value={props.value(data, index)} />} {...props} />;
 };
 
-const PercentageColumn = <T extends {}>(): React.SFC<ExternalColumnProps<T, number>> => {
+const PercentageColumn = <T extends {}>(): React.SFC<ExternalColumnProps<T, number|null>> => {
   const TypedColumn = TableColumn as { new(): TableColumn<T> };
   return (props) => <TypedColumn classSuffix="numeric" renderCell={(data, index) => <Percentage value={props.value(data, index)} />} {...props} />;
 };
