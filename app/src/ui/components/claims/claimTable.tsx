@@ -13,6 +13,7 @@ interface Props {
 
 export const ClaimTable: React.SFC<Props> = (data) => {
 
+    // todo: Hopfully this isCaluclated will come from salesforce for now its hardcoded for Overheads (2)
     const combinedData = data.costCategories.map(x => ({
         category: x,
         cost: data.claimCosts.find(y => y.costCategoryId === x.id) || {} as Dtos.ClaimCostDto,
@@ -20,13 +21,14 @@ export const ClaimTable: React.SFC<Props> = (data) => {
         isTotal: false
     }));
 
+    // add total row (dosnt have a cost cat so use 0)
     combinedData.push({
         category: {
             name: "Total",
             id: 0,
         },
         cost: {
-            costCategoryId: 8,
+            costCategoryId: 0,
             remainingOfferCosts: data.claimCosts.reduce((total, item) => total + item.remainingOfferCosts, 0),
             costsClaimedThisPeriod: data.claimCosts.reduce((total, item) => total + item.costsClaimedThisPeriod, 0),
             costsClaimedToDate: data.claimCosts.reduce((total, item) => total + item.costsClaimedToDate, 0),
