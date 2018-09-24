@@ -9,10 +9,12 @@ export interface IClaimLineItemApi {
 
 class Controller extends ControllerBase<ClaimLineItemDto> implements IClaimLineItemApi {
 
+  public path = "claims";
+
   constructor() {
     super();
     this.getItems(
-      "/",
+      "/:claimId/lineitems?:costCategoryId",
       (p, q) => ({ claimId: p.claimId, costCategoryId: parseInt(q.costCategoryId, 10)}),
       (p) => this.getAllForClaimByCategoryId(p.claimId, p.costCategoryId)
     );

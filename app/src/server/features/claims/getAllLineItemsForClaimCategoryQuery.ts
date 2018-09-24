@@ -10,8 +10,8 @@ export class GetAllLineItemsForClaimByCategoryQuery implements IQuery<ClaimLineI
 
     return data.map<ClaimLineItemDto>(item => ({
       id: item.Id,
-      claimId: item.Acc_ClaimId__r,
-      costCategoryId: item.Acc_CostCategoryId__c,
+      claimId: item.Acc_Claim__c,
+      costCategoryId: item.Acc_LineItemCostCategory__c,
       description: item.Acc_LineItemDesc__c,
       value: item.Acc_LineItemValue__c
     }));
