@@ -48,7 +48,7 @@ export const tableGuide: IGuide = {
             render: () => {
                 const ExampleTable = Table.forData(exampleData);
                 return (
-                    <ExampleTable.Table>
+                    <ExampleTable.Table qa="example">
                         <ExampleTable.String header="Id" qa="id" value={(x) => x.id} />
                         <ExampleTable.String header="Name" qa="name" value={(x) => x.name} />
                         <ExampleTable.Currency header="Cost" qa="cost" value={(x) => x.cost} />
@@ -77,7 +77,7 @@ export const tableGuide: IGuide = {
             render: () => {
                 const ExampleTable = Table.forData(exampleData);
                 return (
-                    <ExampleTable.Table>
+                    <ExampleTable.Table qa="example">
                         <ExampleTable.String header="Id" qa="id" value={(x) => x.id} />
                         <ExampleTable.Custom
                             header="The custom column"
@@ -112,7 +112,7 @@ export const tableGuide: IGuide = {
             render: () => {
                 const ExampleTable = Table.forData(exampleData);
                 return (
-                    <ExampleTable.Table>
+                    <ExampleTable.Table qa="example">
                         <ExampleTable.String footer="Total costs" header="Id" qa="id" value={(x) => x.id} />
                         <ExampleTable.Currency footer={<Currency value={exampleData.reduce((t, i) => t + i.cost, 0)} />} header="Cost" qa="cost"  value={(x) => x.cost} />
                     </ExampleTable.Table>

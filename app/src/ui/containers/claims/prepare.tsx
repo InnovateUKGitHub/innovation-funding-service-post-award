@@ -21,7 +21,7 @@ interface Data {
     claimCosts: Pending<Dtos.ClaimCostDto[]>;
 }
 
-export class ClaimsDetailsComponent extends ContainerBase<Params, Data, {}> {
+export class PrepareComponent extends ContainerBase<Params, Data, {}> {
 
     public render() {
         const combined = Pending.combine(
@@ -63,9 +63,9 @@ export class ClaimsDetailsComponent extends ContainerBase<Params, Data, {}> {
     }
 }
 
-const definition = ReduxContainer.for<Params, Data, {}>(ClaimsDetailsComponent);
+const definition = ReduxContainer.for<Params, Data, {}>(PrepareComponent);
 
-export const ClaimsDetails = definition.connect({
+export const PrepareClaim = definition.connect({
     withData: (store, params) => ({
         id: params.projectId,
         project: Pending.create(store.data.project[params.projectId]),
@@ -78,9 +78,9 @@ export const ClaimsDetails = definition.connect({
     withCallbacks: () => ({})
 });
 
-export const ClaimsDetailsRoute = definition.route({
-    routeName: "claimDetails",
-    routePath: "/projects/:projectId/claims/:claimId",
+export const PrepareClaimRoute = definition.route({
+    routeName: "prepare-claim",
+    routePath: "/projects/:projectId/claims/:claimId/prepare",
     getParams: (route) => ({ projectId: route.params.projectId, claimId: route.params.claimId }),
     getLoadDataActions: (params) => [
         Actions.loadProject(params.projectId),
@@ -89,5 +89,5 @@ export const ClaimsDetailsRoute = definition.route({
         Actions.loadClaim(params.claimId),
         Actions.loadClaimCosts(params.claimId)
     ],
-    container: ClaimsDetails
+    container: PrepareClaim
 });

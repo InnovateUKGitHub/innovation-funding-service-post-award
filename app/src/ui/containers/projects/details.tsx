@@ -40,7 +40,7 @@ class ProjectDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
         ];
 
         return (
-            <ProjectOverviewPage selectedTab={routeConfig.projectDetails.routeName} project={project}>
+            <ProjectOverviewPage selectedTab={routeConfig.projectDetails.routeName} project={project} partners={partners}>
                 {this.renderPartnersCosts(partners)}
                 <ACC.Section title="Project Members">
                     <ACC.ProjectMember member={monitoringOfficer} qa="monitoring-officer" />
@@ -73,7 +73,7 @@ class ProjectDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
 
         return (
             <ACC.Section title="Cost claimed status">
-                <PartnersTable.Table>
+                <PartnersTable.Table qa="cost-claimed">
                     <PartnersTable.String header="Partner" qa="partner" value={x => x.isLead ? `${x.name} (Lead)` : x.name} footer="Total"/>
                     <PartnersTable.Currency header="Total eligible costs" qa="total-costs" value={x => x.totalParticipantGrant} footer={<ACC.Renderers.Currency value={totalEligibleCosts}/>} />
                     <PartnersTable.Currency header="Costs claimed to date" qa="costs-claimed" value={x => x.totalParticipantCostsClaimed} footer={<ACC.Renderers.Currency value={totalClaimed} />}/>
