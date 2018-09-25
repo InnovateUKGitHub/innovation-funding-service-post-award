@@ -21,11 +21,18 @@ interface Params {
 interface Callbacks {
 }
 
+interface CombinedData {
+    projectDetails: Dtos.ProjectDto;
+    partners: Dtos.PartnerDto[];
+    contacts: Dtos.ProjectContactDto[];
+}
+
+const Loader = ACC.TypedLoader<CombinedData>();
+
 class ProjectDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
     render() {
         const combined = Pending.combine(this.props.projectDetails, this.props.partners, this.props.contacts, (projectDetails, partners, contacts) => ({ projectDetails, partners, contacts }));
-        const Loading = ACC.Loading.forData(combined);
-        return <Loading.Loader render={x => this.renderContents(x.projectDetails, x.partners, x.contacts)} />;
+        return <Loader pending={combined} render={x => this.renderContents(x.projectDetails, x.partners, x.contacts)} />;
     }
 
     private renderContents(project: Dtos.ProjectDto, partners: Dtos.PartnerDto[], contacts: Dtos.ProjectContactDto[]) {
@@ -69,15 +76,15 @@ class ProjectDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
         const PartnersTable = ACC.Table.forData(partners);
         const totalEligibleCosts = partners.reduce((val, partner) => val += partner.totalParticipantGrant, 0);
         const totalClaimed = partners.reduce((val, partner) => val += partner.totalParticipantCostsClaimed, 0);
-        const percentageClaimed = totalClaimed > 0 ? 100 * totalClaimed/totalEligibleCosts : null;
+        const percentageClaimed = totalClaimed > 0 ? 100 * totalClaimed / totalEligibleCosts : null;
 
         return (
             <ACC.Section title="Cost claimed status">
                 <PartnersTable.Table qa="cost-claimed">
-                    <PartnersTable.String header="Partner" qa="partner" value={x => x.isLead ? `${x.name} (Lead)` : x.name} footer="Total"/>
-                    <PartnersTable.Currency header="Total eligible costs" qa="total-costs" value={x => x.totalParticipantGrant} footer={<ACC.Renderers.Currency value={totalEligibleCosts}/>} />
-                    <PartnersTable.Currency header="Costs claimed to date" qa="costs-claimed" value={x => x.totalParticipantCostsClaimed} footer={<ACC.Renderers.Currency value={totalClaimed} />}/>
-                    <PartnersTable.Percentage header="Percentage claimed" qa="percentage-claimed" value={x => x.percentageParticipantCostsClaimed} footer={<ACC.Renderers.Percentage value={percentageClaimed} />}/>
+                    <PartnersTable.String header="Partner" qa="partner" value={x => x.isLead ? `${x.name} (Lead)` : x.name} footer="Total" />
+                    <PartnersTable.Currency header="Total eligible costs" qa="total-costs" value={x => x.totalParticipantGrant} footer={<ACC.Renderers.Currency value={totalEligibleCosts} />} />
+                    <PartnersTable.Currency header="Costs claimed to date" qa="costs-claimed" value={x => x.totalParticipantCostsClaimed} footer={<ACC.Renderers.Currency value={totalClaimed} />} />
+                    <PartnersTable.Percentage header="Percentage claimed" qa="percentage-claimed" value={x => x.percentageParticipantCostsClaimed} footer={<ACC.Renderers.Percentage value={percentageClaimed} />} />
                     <PartnersTable.Percentage header="Cap limit" qa="cap-limit" value={x => x.capLimit} />
                 </PartnersTable.Table>
             </ACC.Section>

@@ -21,6 +21,16 @@ interface Data {
     claimCosts: Pending<Dtos.ClaimCostDto[]>;
 }
 
+interface CombinedData {
+    project: Dtos.ProjectDto;
+    partner: Dtos.PartnerDto;
+    costCategories: Dtos.CostCategoryDto[];
+    claim: Dtos.ClaimDto;
+    claimCosts: Dtos.ClaimCostDto[];
+}
+
+const Loader = ACC.TypedLoader<CombinedData>();
+
 export class PrepareComponent extends ContainerBase<Params, Data, {}> {
 
     public render() {
@@ -33,16 +43,15 @@ export class PrepareComponent extends ContainerBase<Params, Data, {}> {
             (project, partner, costCategories, claim, claimCosts) => ({ project, partner, costCategories, claim, claimCosts })
         );
 
-        const Loading = ACC.Loading.forData(combined);
-        return <Loading.Loader render={(data) => this.renderContents(data)} />;
+        return <Loader pending={combined} render={(data) => this.renderContents(data)} />;
     }
 
-      private getClaimPeriodTitle(data: any) {
+    private getClaimPeriodTitle(data: any) {
         if (data.project.claimFrequency === Dtos.ClaimFrequency.Monthly) {
-          return `${data.partner.name} claim for ${data.claim.periodId} ${DateTime.fromJSDate(data.claim.periodStartDate).toFormat("MMMM yyyy")}`;
+            return `${data.partner.name} claim for ${data.claim.periodId} ${DateTime.fromJSDate(data.claim.periodStartDate).toFormat("MMMM yyyy")}`;
         }
         return `${data.partner.name} claim for ${data.claim.periodId} ${DateTime.fromJSDate(data.claim.periodStartDate).toFormat("MMMM")} to ${DateTime.fromJSDate(data.claim.periodEndDate).toFormat("MMMM yyyy")}`;
-      }
+    }
 
     private renderContents(data: { project: Dtos.ProjectDto, partner: Dtos.PartnerDto, costCategories: Dtos.CostCategoryDto[], claim: Dtos.ClaimDto, claimCosts: Dtos.ClaimCostDto[] }) {
 
