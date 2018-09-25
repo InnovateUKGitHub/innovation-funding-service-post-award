@@ -20,7 +20,7 @@ interface Data {
   costCategories: Pending<Dtos.CostCategoryDto[]>;
 }
 
-export class ClaimCostFormComponent extends ContainerBase<Params, Data, {}> {
+export class ClaimLineItemsComponent extends ContainerBase<Params, Data, {}> {
 
   public render() {
     const combined = Pending.combine(
@@ -83,9 +83,9 @@ const ClaimLineItemsTable: React.SFC<{ lineItems: Dtos.ClaimLineItemDto[] }> = (
   );
 };
 
-const definition = ReduxContainer.for<Params, Data, {}>(ClaimCostFormComponent);
+const definition = ReduxContainer.for<Params, Data, {}>(ClaimLineItemsComponent);
 
-export const ClaimCostForm = definition.connect({
+export const ClaimLineItems = definition.connect({
   withData: (store, params) => ({
     project: Pending.create(store.data.project[params.projectId]),
     lineItems: Pending.create(store.data.claimLineItems[params.claimId]),
@@ -95,7 +95,7 @@ export const ClaimCostForm = definition.connect({
   withCallbacks: () => ({})
 });
 
-export const ClaimCostFormRoute = definition.route({
+export const ClaimLineItemsRoute = definition.route({
   routeName: "claimCostForm",
   routePath: "/projects/:projectId/claims/:claimId/costs/:costCategoryId",
   getParams: (route) => ({
@@ -108,5 +108,5 @@ export const ClaimCostFormRoute = definition.route({
     Actions.loadCostCategories(),
     Actions.loadClaimLineItemsForCategory(params.claimId, params.costCategoryId)
   ],
-  container: ClaimCostForm
+  container: ClaimLineItems
 });

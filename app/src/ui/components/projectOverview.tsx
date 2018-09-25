@@ -1,7 +1,7 @@
 import React, { ReactNode } from "react";
 import * as ACC from "./index";
 import { routeConfig } from "../routing/index";
-import { ProjectDto, PartnerDto } from "../models/index";
+import { PartnerDto, ProjectDto } from "../models/index";
 
 interface Props {
     project: ProjectDto;
