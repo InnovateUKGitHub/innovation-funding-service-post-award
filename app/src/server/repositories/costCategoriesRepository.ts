@@ -18,7 +18,7 @@ const fakeCCNames = ["Labour", "Overheads", "Materials", "Capital usage", "Subco
 
 export class CostCategoryRepository extends SalesforceBase<ISalesforceCostCategory> implements ICostCategoryRepository {
     constructor() {
-        super("TODO", fieldNames);
+        super("Acc_CostCategory__c", fieldNames);
     }
 
     getAll(): Promise<ISalesforceCostCategory[]> {

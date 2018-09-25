@@ -9,7 +9,7 @@ export default (context: IContext) => (claim: ISalesforceClaim): ClaimDto => ({
   partnerId: claim.Acc_ProjectParticipant__c,
   lastModifiedDate: context.clock.parse(claim.LastModifiedDate, SALESFORCE_DATE_FORMAT)!,
   status: claim.Acc_ClaimStatus__c,
-  periodStartDate: context.clock.parse(claim.Acc_ProjectPeriodStartDate_c, SALESFORCE_DATE_FORMAT)!,
+  periodStartDate: context.clock.parse(claim.Acc_ProjectPeriodStartDate__c, SALESFORCE_DATE_FORMAT)!,
   periodEndDate: context.clock.parse(claim.Acc_ProjectPeriodEndDate__c,SALESFORCE_DATE_FORMAT)!,
   periodId: claim.Acc_ProjectPeriodID__c,
   totalCost: claim.Acc_TotalCost__c,

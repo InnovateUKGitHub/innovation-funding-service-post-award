@@ -12,7 +12,7 @@ export interface ISalesforcePartner {
     Acc_ProjectId__c: string;
     Acc_TotalParticipantGrant__c: number;
     Acc_TotalParticipantCosts__c: number;
-    // Acc_TotalParticipantCostsPaid__c: number;
+    Acc_TotalParticipantCostsPaid__c: number;
     // Acc_PercentageParticipantCosts__c: number;
     Acc_Cap_Limit__c: number;
     Acc_Award_Rate__c: number;
@@ -43,11 +43,19 @@ export class PartnerRepository extends SalesforceBase<ISalesforcePartner> implem
         super("Acc_ProjectParticipant__c", fields);
     }
 
+    extend(item: ISalesforcePartner | null) {
+        if (!item) {
+            return item;
+        }
+        item.Acc_TotalParticipantCostsPaid__c = 30000;
+        return item;
+    }
+
     getAllByProjectId(projectId: string): Promise<ISalesforcePartner[]> {
-        return super.whereFilter(x => x.Acc_ProjectId__c = projectId);
+        return super.whereFilter(x => x.Acc_ProjectId__c = projectId).then(x => x.map(y => this.extend(y)!));
     }
 
     getById(partnerId: string): Promise<ISalesforcePartner | null> {
-        return super.filterOne(x => x.Id = partnerId);
+        return super.filterOne(x => x.Id = partnerId).then(x => this.extend(x));
     }
 }

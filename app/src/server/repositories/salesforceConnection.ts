@@ -3,7 +3,7 @@ import jsforce from "jsforce";
 // This will need revisting once SSO with Salesforce has been resolved
 
 // user we have got working for now
-const username = "etlsalesforce@innovateuk.gov.uk.bjsspoc2";
+const username = "etlsalesforce@innovateuk.gov.uk.bjsspoc";
 const password = "pr0dETL2016";
 const token = "OWkKR7QYdHLgqz1s5HheCe86r";
 // user given to us but auth token required

@@ -5,7 +5,7 @@ import { GetAllForPartnerQuery, GetByIdQuery } from "../features/claims";
 
 export interface IClaimsApi {
     getAllByPartnerId: (projectId: string) => Promise<ClaimDto[]>;
-    getById: (claimId: string) => Promise<ClaimDto>;
+    getById: (claimId: string) => Promise<ClaimDto|null>;
 }
 
 class Controller extends ControllerBase<ClaimDto> implements IClaimsApi {

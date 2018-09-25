@@ -10,7 +10,7 @@ interface Props {
 }
 
 // TODO STOP using this
-const tempPartnerId = "a071w000000LOXWAA4";
+const tempPartnerId = "a0B1X000000DGyHUAW";
 
 export const ProjectNavigation: React.SFC<Props> = ({project, currentRoute, partnerId = tempPartnerId}) => {
   const claimsLink = routeConfig.claimsDashboard.getLink({projectId: project.id, partnerId});
