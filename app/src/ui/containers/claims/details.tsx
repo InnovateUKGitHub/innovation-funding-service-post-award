@@ -21,6 +21,16 @@ interface Data {
     claimCosts: Pending<Dtos.ClaimCostDto[]>;
 }
 
+interface CombinedData {
+    project: Dtos.ProjectDto;
+    partner: Dtos.PartnerDto;
+    costCategories: Dtos.CostCategoryDto[];
+    claim: Dtos.ClaimDto;
+    claimCosts: Dtos.ClaimCostDto[];
+}
+
+const Loader = ACC.TypedLoader<CombinedData>();
+
 export class ClaimsDetailsComponent extends ContainerBase<Params, Data, {}> {
 
     public render() {
@@ -33,8 +43,7 @@ export class ClaimsDetailsComponent extends ContainerBase<Params, Data, {}> {
             (project, partner, costCategories, claim, claimCosts) => ({ project, partner, costCategories, claim, claimCosts })
         );
 
-        const Loading = ACC.Loading.forData(combined);
-        return <Loading.Loader render={(data) => this.renderContents(data)} />;
+        return <Loader pending={combined} render={(data) => this.renderContents(data)} />;
     }
 
       private getClaimPeriodTitle(data: any) {

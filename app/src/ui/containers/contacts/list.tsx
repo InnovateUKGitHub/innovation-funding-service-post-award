@@ -11,19 +11,19 @@ interface Props {
   contacts: Pending<Dtos.IContact[]>;
 }
 
+const Loader = Acc.TypedLoader<Dtos.IContact[]>();
+
 class ListComponent extends ContainerBase<{}, Props, {}> {
   static loadData() {
     return [Actions.loadContacts()];
   }
 
   render() {
-    const Loading = Acc.Loading.forData(this.props.contacts);
-
     return (
       <div>
         <Breadcrumbs links={[{ routeName: "home", text: "Home" }]}>Contacts</Breadcrumbs>
         <Title title="Contacts" />
-        <Loading.Loader render={contacts => this.renderTable(contacts)} />
+        <Loader pending={this.props.contacts} render={contacts => this.renderTable(contacts)} />
         <Link className="govuk-back-link" routeName="home">Home</Link>
       </div>
     );

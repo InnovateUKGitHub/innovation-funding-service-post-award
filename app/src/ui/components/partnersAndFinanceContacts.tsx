@@ -1,6 +1,6 @@
 import React from "react";
-import * as ACC from "./index";
 import * as Dtos from "../models";
+import { Table } from "./table";
 
 interface Props {
   partners: Dtos.PartnerDto[];
@@ -9,7 +9,7 @@ interface Props {
 
 export const PartnersAndFinanceContacts: React.SFC<Props> = (props) => {
   const partnersAndContactsData = props.partners.map(partner => ({ partner, financeContact: props.contacts.find(x => x.accountId === partner.accountId && x.role === "Finance contact") }));
-  const PartnersTable = ACC.Table.forData(partnersAndContactsData);
+  const PartnersTable = Table.forData(partnersAndContactsData);
 
   return (
     <PartnersTable.Table qa="project-details-table">
