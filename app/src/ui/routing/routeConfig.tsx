@@ -9,7 +9,7 @@ export const routeConfig = {
   contacts: Containers.ContactListRoute,
   claimsDashboard: Containers.ClaimsDashboardRoute,
   claimDetails: Containers.ClaimsDetailsRoute,
-  claimCostForm: Containers.ClaimCostFormRoute,
+  claimCostForm: Containers.ClaimLineItemsRoute,
   prepareClaim: Containers.PrepareClaimRoute
   // error: errorRoute
 };

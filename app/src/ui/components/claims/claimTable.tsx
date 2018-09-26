@@ -1,7 +1,7 @@
 import React from "react";
 import * as Dtos from "../../models";
 import { Link, Renderers, Table } from "..";
-import { ClaimCostFormRoute } from "../../containers";
+import { ClaimLineItemsRoute } from "../../containers";
 
 interface Props {
     project: Dtos.ProjectDto;
@@ -47,7 +47,7 @@ export const ClaimTable: React.SFC<Props> = (data) => {
                 qa="category"
                 cellClassName={x => x.isTotal ? "govuk-!-font-weight-bold" : null}
                 value={x => !x.isCalculated
-                    ? <Link route={ClaimCostFormRoute.getLink({ projectId: data.project.id, claimId: data.claim.id, costCategoryId: x.category.id })}>{x.category.name}</Link>
+                    ? <Link route={ClaimLineItemsRoute.getLink({ projectId: data.project.id, claimId: data.claim.id, costCategoryId: x.category.id })}>{x.category.name}</Link>
                     : x.category.name}
             />
             <CostCategoriesTable.Currency header="Grant offer letter costs" qa="offerCosts" value={x => x.cost.offerCosts} />
