@@ -1,6 +1,6 @@
 import React from "react";
 import * as Dtos from "../../models";
-import { Table, Link, Renderers } from "..";
+import { Link, Renderers, Table } from "..";
 import { ClaimCostFormRoute } from "../../containers";
 
 interface Props {
@@ -56,7 +56,7 @@ export const ClaimTable: React.SFC<Props> = (data) => {
             <CostCategoriesTable.Currency header="Remaining grant offer letter costs" qa="remainingCosts" value={x => x.cost.remainingOfferCosts} />
         </CostCategoriesTable.Table>
     );
-}
+};
 
 const  renderFooters = (project: Dtos.ProjectDto, partner: Dtos.PartnerDto, claimsCosts: Dtos.ClaimCostDto[]) => {
     return [
@@ -75,4 +75,4 @@ const  renderFooters = (project: Dtos.ProjectDto, partner: Dtos.PartnerDto, clai
         </tr>
       )
     ];
-}
+};

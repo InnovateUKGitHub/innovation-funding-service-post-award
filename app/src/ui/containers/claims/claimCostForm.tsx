@@ -17,11 +17,12 @@ interface Data {
   project: Pending<Dtos.ProjectDto>;
 }
 
+const Loader = ACC.TypedLoader<Dtos.ProjectDto>();
+
 export class ClaimCostFormComponent extends ContainerBase<Params, Data, {}> {
 
   public render() {
-    const Loading = ACC.Loading.forData(this.props.project);
-    return <Loading.Loader render={(data) => this.renderContents({ project: data, claimId: this.props.claimId })}/>;
+    return <Loader pending={this.props.project} render={(data) => this.renderContents({ project: data, claimId: this.props.claimId })}/>;
   }
 
   private renderContents(data: { project: Dtos.ProjectDto, claimId: string }) {
