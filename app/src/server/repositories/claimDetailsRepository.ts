@@ -2,12 +2,12 @@ import SalesforceBase from "./salesforceBase";
 
 export interface ISalesforceClaimDetails {
     Id: string;
-    Acc_CostCategoryValue__c: number;
+    Acc_PeriodCostCategoryTotal__c: number;
 }
 
 const fields = [
     "Id",
-    "Acc_CostCategoryValue__c"
+    "Acc_PeriodCostCategoryTotal__c"
 ];
 
 export interface IClaimDetailsRepository {
@@ -22,7 +22,7 @@ export class ClaimDetailsRepository extends SalesforceBase<ISalesforceClaimDetai
     }
 
     getAllByPartnerId(partnerId: string, periodId: number): Promise<ISalesforceClaimDetails[]> {
-        const filter = `Acc_ProjectParticipant__c = '${partnerId}' AND RecordType.Name = ${this.recordType} AND Acc_ProjectPeriodId__c = ${periodId}`;
+        const filter = `Acc_ProjectParticipant__c = '${partnerId}' AND RecordType.Name = '${this.recordType}' AND Acc_ProjectPeriodId__c = ${periodId}`;
         return super.whereString(filter);
     }
 }

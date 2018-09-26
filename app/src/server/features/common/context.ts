@@ -35,7 +35,7 @@ export interface IContext {
 export class Context implements IContext {
   public repositories = {
     claims: new Repsoitories.ClaimRepository(),
-    claimsDetails: new Repsoitories.ClaimDetailsRepository(),
+    claimDetails: new Repsoitories.ClaimDetailsRepository(),
     claimCosts: new Repsoitories.ClaimCostRepository(),
     contacts: new Repsoitories.ContactsRepository(),
     costCategories: new Repsoitories.CostCategoryRepository(),

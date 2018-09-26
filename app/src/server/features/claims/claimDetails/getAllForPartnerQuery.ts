@@ -10,7 +10,7 @@ export class GetAllForPartnerQuery implements IQuery<ClaimDetailDto[]> {
         return results && results
             .map(x => ({
                 id: x.Id,
-                value: x.Acc_CostCategoryValue__c
+                value: x.Acc_PeriodCostCategoryTotal__c
             }));
     }
 }
