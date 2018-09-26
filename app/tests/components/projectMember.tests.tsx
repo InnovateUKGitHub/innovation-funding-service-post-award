@@ -1,6 +1,6 @@
 import "jest";
 import React from "react";
-import { ProjectMember } from "../../src/ui/components";
+import { ProjectMember } from "../../src/ui/components/projectMember";
 import Adapter from "enzyme-adapter-react-16";
 import Enzyme, { mount, shallow } from "enzyme";
 
