@@ -25,6 +25,14 @@ export function loadClaimsForPartner(partnerId: string) {
   );
 }
 
+export function loadClaimLineItemsForCategory(claimId: string, costCategoryId: number) {
+  return conditionalLoad(
+    claimId,
+    "claimLineItems",
+    () => ApiClient.claimLineItems.getAllForClaimByCategoryId(claimId, costCategoryId)
+  );
+}
+
 export function loadProject(id: string) {
   return conditionalLoad(
     id,
