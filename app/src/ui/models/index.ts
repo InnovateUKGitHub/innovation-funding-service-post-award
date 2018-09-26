@@ -7,3 +7,4 @@ export * from "./partnerDto";
 export * from "./claimDto";
 export * from "./projectContactDto";
 export * from "./claimLineItemDto";
+export * from "./claimDetailDto";
