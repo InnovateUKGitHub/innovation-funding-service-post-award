@@ -6,6 +6,7 @@ import * as Dtos from "../../models";
 import * as ACC from "../../components";
 import {routeConfig} from "../../routing";
 import {Currency, Percentage} from "../../components/renderers";
+import {TypedLoader} from "../../components";
 
 interface Params {
   projectId: string;
@@ -14,12 +15,18 @@ interface Params {
 }
 
 interface Data {
-  claimId: string;
   project: Pending<Dtos.ProjectDto>;
   lineItems: Pending<Dtos.ClaimLineItemDto[]>;
   costCategories: Pending<Dtos.CostCategoryDto[]>;
 }
 
+interface CombinedData {
+  project: Dtos.ProjectDto;
+  lineItems: Dtos.ClaimLineItemDto[];
+  costCategories: Dtos.CostCategoryDto[];
+}
+
+const Loader = TypedLoader<CombinedData>();
 export class ClaimLineItemsComponent extends ContainerBase<Params, Data, {}> {
 
   public render() {
@@ -29,8 +36,7 @@ export class ClaimLineItemsComponent extends ContainerBase<Params, Data, {}> {
       this.props.costCategories,
       (project, lineItems, costCategories) => ({project, lineItems, costCategories})
     );
-    const Loading = ACC.Loading.forData(combined);
-    return <Loading.Loader render={(data) => this.renderContents(data)}/>;
+    return <Loader pending={combined} render={(data) => this.renderContents(data)} />;
   }
 
   private renderContents(data: { project: Dtos.ProjectDto, lineItems: Dtos.ClaimLineItemDto[], costCategories: Dtos.CostCategoryDto[] }) {
