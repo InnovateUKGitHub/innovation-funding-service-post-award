@@ -11,19 +11,19 @@ class Component extends ContainerBase<{}, {}, {}> {
   render() {
     return (
       <div>
-        <Title title="Welcome to the Jungle" />
+        <Title title="Home Page" />
         <div className="govuk-grid-row">
           <div className="govuk-grid-column-one-third">
             <h2><Link route={routes.projectDashboard.getLink({})}>Projects</Link></h2>
-            <p>We got fun and games</p>
+            <p>Projects Dashboard</p>
           </div>
           <div className="govuk-grid-column-one-third">
             <h2><Link route={routes.projectDetails.getLink({ id: projectId })}>Example Project</Link></h2>
-            <p>If you want you're gonna bleed</p>
+            <p>Project with data</p>
           </div>
           <div className="govuk-grid-column-one-third">
             <h2><Link route={routes.contacts.getLink({})}>Contacts</Link></h2>
-            <p>But it's the price you pay</p>
+            <p>Some contacts from salesforce</p>
           </div>
         </div>
         <div className="govuk-grid-row">
