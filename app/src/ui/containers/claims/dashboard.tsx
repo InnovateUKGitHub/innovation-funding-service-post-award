@@ -26,8 +26,6 @@ interface CombinedData {
   claims: ClaimDto[];
 }
 
-const Loader = TypedLoader<CombinedData>();
-
 class Component extends ContainerBase<Params, Data, {}> {
   public render() {
     const combined = Pending.combine(
@@ -37,6 +35,7 @@ class Component extends ContainerBase<Params, Data, {}> {
       (projectDetails, partnerDetails, claims) => ({ projectDetails, partnerDetails, claims })
     );
 
+    const Loader = TypedLoader<CombinedData>();
     return <Loader pending={combined} render={(x) => this.renderContents(x.projectDetails, x.partnerDetails, x.claims)} />;
   }
 

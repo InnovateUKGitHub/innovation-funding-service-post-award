@@ -13,8 +13,6 @@ interface Data {
 interface Callbacks {
 }
 
-const Loader = ACC.TypedLoader<ProjectDto[]>();
-
 class ProjectDashboardComponent extends ContainerBase<{}, Data, Callbacks> {
 
   static getLoadDataActions() {
@@ -22,6 +20,7 @@ class ProjectDashboardComponent extends ContainerBase<{}, Data, Callbacks> {
   }
 
   render() {
+    const Loader = ACC.TypedLoader<ProjectDto[]>();
     return (
       <ACC.Page>
         <ACC.Section>

@@ -27,11 +27,10 @@ interface CombinedData {
     contacts: Dtos.ProjectContactDto[];
 }
 
-const Loader = ACC.TypedLoader<CombinedData>();
-
 class ProjectDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
     render() {
         const combined = Pending.combine(this.props.projectDetails, this.props.partners, this.props.contacts, (projectDetails, partners, contacts) => ({ projectDetails, partners, contacts }));
+        const Loader = ACC.TypedLoader<CombinedData>();
         return <Loader pending={combined} render={x => this.renderContents(x.projectDetails, x.partners, x.contacts)} />;
     }
 
@@ -42,7 +41,7 @@ class ProjectDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
         const projectManager = contacts.find(x => x.role === "Project Manager");
 
         const links = [
-            { text: "View original application", url: project.applicationUrl, qa: "Original_application" },
+            { text: "View orsteve.smith@empire.comiginal application", url: project.applicationUrl, qa: "Original_application" },
             { text: "View original grant offer letter", url: project.grantOfferLetterUrl, qa: "Original_grant_letter" }
         ];
 
