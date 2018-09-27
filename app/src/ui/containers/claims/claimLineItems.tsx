@@ -10,8 +10,9 @@ import {TypedLoader} from "../../components";
 
 interface Params {
   projectId: string;
-  claimId: string;
+  partnerId: string;
   costCategoryId: number;
+  periodId: number;
 }
 
 interface Data {
@@ -39,12 +40,13 @@ export class ClaimLineItemsComponent extends ContainerBase<Params, Data, {}> {
     return <Loader pending={combined} render={(data) => this.renderContents(data)} />;
   }
 
+  // TODO fix back link
   private renderContents(data: { project: Dtos.ProjectDto, lineItems: Dtos.ClaimLineItemDto[], costCategories: Dtos.CostCategoryDto[] }) {
     return (
       <ACC.Page>
         <ACC.Section>
           <ACC.BackLink
-            route={routeConfig.claimDetails.getLink({projectId: data.project.id, claimId: this.props.claimId})}
+            route={routeConfig.claimDetails.getLink({projectId: data.project.id, claimId: this.props.partnerId})}
           >Back
           </ACC.BackLink>
         </ACC.Section>
@@ -94,8 +96,8 @@ const definition = ReduxContainer.for<Params, Data, {}>(ClaimLineItemsComponent)
 export const ClaimLineItems = definition.connect({
   withData: (store, params) => ({
     project: Pending.create(store.data.project[params.projectId]),
-    lineItems: Pending.create(store.data.claimLineItems[params.claimId]),
-    claimId: params.claimId,
+    lineItems: Pending.create(store.data.claimLineItems[params.partnerId]),
+    partnerId: params.partnerId,
     costCategories: Pending.create(store.data.costCategories.all)
   }),
   withCallbacks: () => ({})
@@ -103,16 +105,17 @@ export const ClaimLineItems = definition.connect({
 
 export const ClaimLineItemsRoute = definition.route({
   routeName: "claimCostForm",
-  routePath: "/projects/:projectId/claims/:claimId/costs/:costCategoryId",
+  routePath: "/projects/:projectId/claims/:partnerId/costs/:costCategoryId?periodId",
   getParams: (route) => ({
     projectId: route.params.projectId,
-    claimId: route.params.claimId,
-    costCategoryId: parseInt(route.params.costCategoryId, 10)
+    partnerId: route.params.partnerId,
+    costCategoryId: console.log('route.params.costCategoryId', route.params.costCategoryId) || parseInt(route.params.costCategoryId, 10),
+    periodId: parseInt(route.params.periodId, 10)
   }),
   getLoadDataActions: (params) => [
     Actions.loadProject(params.projectId),
     Actions.loadCostCategories(),
-    Actions.loadClaimLineItemsForCategory(params.claimId, params.costCategoryId)
+    Actions.loadClaimLineItemsForCategory(params.partnerId, params.costCategoryId, params.periodId)
   ],
   container: ClaimLineItems
 });

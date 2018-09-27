@@ -42,7 +42,7 @@ class Component extends ContainerBase<{}, {}, {}> {
         </div>
         <div className="govuk-grid-row">
           <div className="govuk-grid-column-one-third">
-            <h2><Link route={routes.claimCostForm.getLink({ projectId, claimId, costCategoryId })}>Claim line items</Link></h2>
+            <h2><Link route={routes.claimCostForm.getLink({ projectId, partnerId, costCategoryId, periodId: 1 })}>Claim line items</Link></h2>
             <p>Project {projectId} Claim {claimId}</p>
           </div>
         </div>

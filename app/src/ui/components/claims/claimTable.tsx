@@ -39,7 +39,7 @@ export const ClaimTable: React.SFC<Props> = (data) => {
     });
 
     const CostCategoriesTable = Table.forData(combinedData);
-
+    // TODO stop hardcoding periodId
     return (
         <CostCategoriesTable.Table qa="cost-cat" footers={renderFooters(data.project, data.partner, data.claimCosts)}>
             <CostCategoriesTable.Custom
@@ -47,7 +47,7 @@ export const ClaimTable: React.SFC<Props> = (data) => {
                 qa="category"
                 cellClassName={x => x.isTotal ? "govuk-!-font-weight-bold" : null}
                 value={x => !x.isCalculated
-                    ? <Link route={ClaimLineItemsRoute.getLink({ projectId: data.project.id, claimId: data.claim.id, costCategoryId: x.category.id })}>{x.category.name}</Link>
+                    ? <Link route={ClaimLineItemsRoute.getLink({ projectId: data.project.id, partnerId: data.partner.id, costCategoryId: x.category.id, periodId: 1 })}>{x.category.name} {x.category.id}</Link>
                     : x.category.name}
             />
             <CostCategoriesTable.Currency header="Grant offer letter costs" qa="offerCosts" value={x => x.cost.offerCosts} />

@@ -6,7 +6,7 @@ const clientApi: IApiClient = {
     getAllForClaim: (claimId: string) => ajaxJson(`/api/claimcosts?claimId=${claimId}`)
   },
   claimLineItems: {
-    getAllForClaimByCategoryId: (claimId: string, costCategoryId: number) => ajaxJson(`/api/claims/:${claimId}/lineitems?costCategoryId=${costCategoryId}`)
+    getAllForCategory: (partnerId: string, costCategoryId: number, periodId: number) => ajaxJson(`/api/claims/${partnerId}/lineitems?costCategoryId=${costCategoryId}&periodId=${periodId}`)
   },
   claims : {
     getAllByPartnerId: (partnerId: string) => ajaxJson(`/api/claims?partnerId=${partnerId}`),
