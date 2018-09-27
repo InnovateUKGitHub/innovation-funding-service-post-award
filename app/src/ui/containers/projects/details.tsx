@@ -41,7 +41,7 @@ class ProjectDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
         const projectManager = contacts.find(x => x.role === "Project Manager");
 
         const links = [
-            { text: "View orsteve.smith@empire.comiginal application", url: project.applicationUrl, qa: "Original_application" },
+            { text: "View original application", url: project.applicationUrl, qa: "Original_application" },
             { text: "View original grant offer letter", url: project.grantOfferLetterUrl, qa: "Original_grant_letter" }
         ];
 
