@@ -4,7 +4,7 @@ import {GetAllLineItemsForClaimByCategoryQuery} from "../features/claims";
 import {ClaimLineItemDto} from "../../ui/models";
 
 export interface IClaimLineItemApi {
-  getAllForClaimByCategoryId: (claimId: string, costCategoryId: number) => Promise<ClaimLineItemDto[]>;
+  getAllForCategory: (partnerId: string, costCategoryId: number, periodId: number) => Promise<ClaimLineItemDto[]>;
 }
 
 class Controller extends ControllerBase<ClaimLineItemDto> implements IClaimLineItemApi {
@@ -14,14 +14,14 @@ class Controller extends ControllerBase<ClaimLineItemDto> implements IClaimLineI
   constructor() {
     super();
     this.getItems(
-      "/:claimId/lineitems?:costCategoryId",
-      (p, q) => ({ claimId: p.claimId, costCategoryId: parseInt(q.costCategoryId, 10)}),
-      (p) => this.getAllForClaimByCategoryId(p.claimId, p.costCategoryId)
+      "/:partnerId/lineitems",
+      (p, q) => ({ partnerId: p.partnerId, costCategoryId: parseInt(q.costCategoryId, 10), periodId: parseInt(q.periodId, 10)}),
+      (p) => this.getAllForCategory(p.partnerId, p.costCategoryId, p.periodId)
     );
   }
 
-  public getAllForClaimByCategoryId(claimId: string, costCategoryId: number) {
-    const query = new GetAllLineItemsForClaimByCategoryQuery(claimId, costCategoryId);
+  public getAllForCategory(partnerId: string, costCategoryId: number, periodId: number) {
+    const query = new GetAllLineItemsForClaimByCategoryQuery(partnerId, costCategoryId, periodId);
     return contextProvider.start().runQuery(query);
   }
 }

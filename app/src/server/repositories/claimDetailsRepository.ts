@@ -12,11 +12,10 @@ const fields = [
 
 export interface IClaimDetailsRepository {
     getAllByPartnerId(partnerId: string, periodId: number): Promise<ISalesforceClaimDetails[]>;
-    recordType: string;
 }
 
 export class ClaimDetailsRepository extends SalesforceBase<ISalesforceClaimDetails> implements IClaimDetailsRepository {
-    recordType: string = "Claims Detail";
+    private recordType: string = "Claims Detail";
     constructor() {
         super("Acc_Claims__c", fields);
     }

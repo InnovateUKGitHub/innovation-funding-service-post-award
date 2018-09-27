@@ -25,19 +25,19 @@ export function loadClaimsForPartner(partnerId: string) {
   );
 }
 
+export function loadClaimLineItemsForCategory(partnerId: string, costCategoryId: number, periodId: number) {
+  return conditionalLoad(
+    partnerId,
+    "claimLineItems",
+    () => ApiClient.claimLineItems.getAllForCategory(partnerId, costCategoryId, periodId)
+  );
+}
+
 export function loadClaimDetailsForPartner(partnerId: string, periodId: number) {
   return conditionalLoad(
     partnerId,
     "claimDetails",
     () => ApiClient.claimDetails.getAllByPartnerId(partnerId, periodId)
-  );
-}
-
-export function loadClaimLineItemsForCategory(claimId: string, costCategoryId: number) {
-  return conditionalLoad(
-    claimId,
-    "claimLineItems",
-    () => ApiClient.claimLineItems.getAllForClaimByCategoryId(claimId, costCategoryId)
   );
 }
 

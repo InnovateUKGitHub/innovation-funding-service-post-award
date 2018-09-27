@@ -23,6 +23,7 @@ export interface IApiClient {
 }
 
 export const serverApis: IApiClient & { [key: string]: ControllerBase<{}> } = {
+  claims: claims.controller,
   claimCosts: claimCosts.controller,
   claimLineItems: claimLineItems.controller,
   claimDetails: claimDetails.controller,
@@ -30,8 +31,7 @@ export const serverApis: IApiClient & { [key: string]: ControllerBase<{}> } = {
   costCategories: costCategories.controller,
   partners: partners.controller,
   projects: projects.controller,
-  projectContacts: projectContacts.controller,
-  claims: claims.controller
+  projectContacts: projectContacts.controller
 };
 
 export const router = express.Router();
