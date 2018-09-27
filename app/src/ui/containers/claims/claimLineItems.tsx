@@ -109,7 +109,7 @@ export const ClaimLineItemsRoute = definition.route({
   getParams: (route) => ({
     projectId: route.params.projectId,
     partnerId: route.params.partnerId,
-    costCategoryId: console.log('route.params.costCategoryId', route.params.costCategoryId) || parseInt(route.params.costCategoryId, 10),
+    costCategoryId: parseInt(route.params.costCategoryId, 10),
     periodId: parseInt(route.params.periodId, 10)
   }),
   getLoadDataActions: (params) => [
