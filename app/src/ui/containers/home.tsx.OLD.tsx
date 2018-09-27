@@ -11,7 +11,7 @@ class Component extends ContainerBase<{}, {}, {}> {
   render() {
     return (
       <div>
-        <Title title="LATEST Auto trigger set to Manual" />
+        <Title title="Home Page" />
         <div className="govuk-grid-row">
           <div className="govuk-grid-column-one-third">
             <h2><Link route={routes.projectDashboard.getLink({})}>Projects</Link></h2>
