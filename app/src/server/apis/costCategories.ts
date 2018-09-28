@@ -1,7 +1,7 @@
 import contextProvider from "../features/common/contextProvider";
 import { ControllerBase } from "./controllerBase";
 import { CostCategoryDto } from "../../ui/models/costCategoryDto";
-import { GetCostCategoriesQuery } from "../features/claims/getCostCategoriesQuery";
+import { GetCostCategoriesQuery } from "../features/claims";
 
 export interface ICostCategoriesApi {
     getAll: () => Promise<CostCategoryDto[]>;
@@ -10,7 +10,6 @@ export interface ICostCategoriesApi {
 class Controller extends ControllerBase<CostCategoryDto> implements ICostCategoriesApi {
     constructor() {
         super();
-
         this.getItems("/", p => ({}), (p) => this.getAll());
     }
 

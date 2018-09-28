@@ -1,5 +1,5 @@
 import { TestContext } from "../../testContextProvider";
-import { GetAllCostsForClaimQuery } from "../../../../src/server/features/claims/getAllCostsForClaimQuery";
+import { GetAllCostsForClaimQuery } from "../../../../src/server/features/claims";
 
 describe('getAllCostsForClaim', () => {
     it('when valid then returns all costs', async () => {

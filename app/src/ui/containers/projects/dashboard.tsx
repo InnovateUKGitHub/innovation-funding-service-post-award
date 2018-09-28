@@ -13,6 +13,8 @@ interface Data {
 interface Callbacks {
 }
 
+const Loader = ACC.TypedLoader<ProjectDto[]>();
+
 class ProjectDashboardComponent extends ContainerBase<{}, Data, Callbacks> {
 
   static getLoadDataActions() {
@@ -20,15 +22,13 @@ class ProjectDashboardComponent extends ContainerBase<{}, Data, Callbacks> {
   }
 
   render() {
-    const Loading = ACC.Loading.forData(this.props.projects);
-
     return (
       <ACC.Page>
         <ACC.Section>
           <ACC.BackLink route={routeConfig.home.getLink({})}>Back</ACC.BackLink>
         </ACC.Section>
         <ACC.Title title="Projects Dashboard" />
-        <Loading.Loader render={x => this.renderSubSections(x)} />
+        <Loader pending={this.props.projects} render={x => this.renderSubSections(x)} />
       </ACC.Page>
     );
   }

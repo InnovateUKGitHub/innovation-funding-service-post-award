@@ -3,8 +3,9 @@ import express, { NextFunction, Request, Response } from "express";
 
 export abstract class ControllerBase<T> {
     public readonly router: Router;
+    public path?: string;
 
-    constructor() {
+    protected constructor() {
         this.router = express.Router();
     }
 
