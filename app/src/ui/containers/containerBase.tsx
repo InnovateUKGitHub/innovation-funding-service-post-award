@@ -58,7 +58,7 @@ class ReduxContainerWrapper<TParams, TData, TCallbacks> {
         };
     }
 
-    public connect(options: { withData: (state: RootState, params: TParams) => TData, withCallbacks: (dispatch: ThunkDispatch<RootState, void, RootActions>, ) => TCallbacks }) {
+    public connect(options: { withData: (state: RootState, params: TParams) => TData, withCallbacks: (dispatch: ThunkDispatch<RootState, void, RootActions>) => TCallbacks }) {
         return new ConnectWrapper(this.component, options.withData, options.withCallbacks).connect();
     }
 }

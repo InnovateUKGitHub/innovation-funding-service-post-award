@@ -68,7 +68,7 @@ export class PrepareComponent extends ContainerBase<Params, Data, Callbacks> {
         const title = this.getClaimPeriodTitle(data);
         const Form = ACC.TypedForm<Dtos.ClaimDto>();
         const commentsLabel = "Additional information (optional)";
-        const commentsHint = "";
+        const commentsHint = "These comments will be seen by your Monitoring Officer when they review your claim.";
         return (
             <ACC.Page>
                 <ACC.Section>
@@ -82,7 +82,6 @@ export class PrepareComponent extends ContainerBase<Params, Data, Callbacks> {
                     <Form.Form data={editor.data} onChange={(dto) => this.props.onChange(this.props.claimId, dto)} onSubmit={() => this.onSave("normal")}>
                         <Form.Fieldset>
                             <Form.MultilineString label={commentsLabel} hint={commentsHint} name="comments" value={m => m.comments} update={(m, v) => m.comments = v} validation={editor.validator.comments} />
-                            <Form.String label={commentsLabel} hint={commentsHint} name="comments" value={m => m.comments} update={(m, v) => m.comments = v} validation={editor.validator.comments} />
                         </Form.Fieldset>
                         <Form.Fieldset>
                             <Form.Submit>Review forcasts</Form.Submit>

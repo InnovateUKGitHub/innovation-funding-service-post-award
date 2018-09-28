@@ -5,7 +5,6 @@ import { SyncThunk } from ".";
 import { ClaimDtoValidator } from "../../validators/claimDtoValidator";
 import { UpdateEditorAction, updateEditorAction } from "./editorActions";
 import { actions as routeActions } from "redux-router5";
-import { HomeRoute } from "../../containers";
 
 export function loadContacts() {
   return conditionalLoad(
@@ -132,6 +131,7 @@ export function saveClaim(id: string, dto: ClaimDto, onComplete: () => void): Sy
   return (dispach, getState) => {
     const validation = validateClaim(id, dto, true)(dispach, getState, null);
     if(validation.isValid()) {
+        // todo: api call to save
         onComplete();
     }
     return validation;
