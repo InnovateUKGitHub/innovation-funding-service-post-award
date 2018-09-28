@@ -11,14 +11,13 @@ interface Props {
   contacts: Pending<Dtos.IContact[]>;
 }
 
-const Loader = Acc.TypedLoader<Dtos.IContact[]>();
-
 class ListComponent extends ContainerBase<{}, Props, {}> {
   static loadData() {
     return [Actions.loadContacts()];
   }
 
   render() {
+    const Loader = Acc.TypedLoader<Dtos.IContact[]>();
     return (
       <div>
         <Breadcrumbs links={[{ routeName: "home", text: "Home" }]}>Contacts</Breadcrumbs>

@@ -27,7 +27,6 @@ interface CombinedData {
   costCategories: Dtos.CostCategoryDto[];
 }
 
-const Loader = TypedLoader<CombinedData>();
 export class ClaimLineItemsComponent extends ContainerBase<Params, Data, {}> {
 
   public render() {
@@ -37,6 +36,7 @@ export class ClaimLineItemsComponent extends ContainerBase<Params, Data, {}> {
       this.props.costCategories,
       (project, lineItems, costCategories) => ({project, lineItems, costCategories})
     );
+    const Loader = TypedLoader<CombinedData>();
     return <Loader pending={combined} render={(data) => this.renderContents(data)} />;
   }
 
