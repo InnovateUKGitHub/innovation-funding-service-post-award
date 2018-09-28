@@ -7,3 +7,4 @@ export * from "./projectContactsRepository";
 export * from "./projectsRepository";
 export * from "./claimLineItemRepository";
 export * from "./claimDetailsRepository";
+export * from "./claimTotalCostCategoryRepository";

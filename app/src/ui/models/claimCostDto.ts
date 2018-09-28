@@ -1,7 +1,7 @@
 export interface ClaimCostDto {
-    costCategoryId: number;
-    offerCosts: number;
+    costCategoryId: string;
+    // offerCosts: number;
     costsClaimedToDate: number;
     costsClaimedThisPeriod: number;
-    remainingOfferCosts: number;
+    // remainingOfferCosts: number;
 }

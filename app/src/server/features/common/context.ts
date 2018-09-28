@@ -21,6 +21,7 @@ export interface IRepositories {
   projectContacts: Readonly<Repsoitories.IProjectContactsRepository>;
   claimLineItems: Readonly<Repsoitories.IClaimLineItemRepository>;
   claimDetails: Readonly<Repsoitories.IClaimDetailsRepository>;
+  claimTotalCostCategory: Readonly<Repsoitories.IClaimTotalCostCategoryRepository>;
 }
 
 export interface IContext {
@@ -36,6 +37,7 @@ export class Context implements IContext {
   public repositories = {
     claims: new Repsoitories.ClaimRepository(),
     claimDetails: new Repsoitories.ClaimDetailsRepository(),
+    claimTotalCostCategory: new Repsoitories.ClaimTotalCostCategoryRepository(),
     claimCosts: new Repsoitories.ClaimCostRepository(),
     contacts: new Repsoitories.ContactsRepository(),
     costCategories: new Repsoitories.CostCategoryRepository(),

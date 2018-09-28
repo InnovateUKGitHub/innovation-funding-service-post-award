@@ -1,12 +1,12 @@
 import SalesforceBase from "./salesforceBase";
 
 export interface ISalesforceClaimDetails {
-    Id: string;
+    Acc_CostCategory__c: string;
     Acc_PeriodCostCategoryTotal__c: number;
 }
 
 const fields = [
-    "Id",
+    "Acc_CostCategory__c",
     "Acc_PeriodCostCategoryTotal__c"
 ];
 
