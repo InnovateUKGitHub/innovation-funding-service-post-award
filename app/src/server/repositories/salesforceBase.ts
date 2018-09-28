@@ -40,7 +40,11 @@ export default abstract class SalesforceBase<T> {
       .select(this.columns.join(", "))
       .where(filter)
       .execute()
-      .then(x => this.asArray(x));
+      .then(x => this.asArray(x))
+      .catch(e => {
+        console.log(e);
+        throw e;
+      });
 
     return result as T[];
   }

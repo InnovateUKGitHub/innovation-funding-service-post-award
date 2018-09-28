@@ -15,10 +15,10 @@ export class TestData {
 
         let newItem: Repositories.ISalesforceCostCategory = {
             Id : `CostCat${seed}`,
-            Acc_CostCategoryDescption__c : "",
-            Acc_CostCategoryID__c : seed,
             Acc_CostCategoryName__c : `Cost Category ${seed}`,
-            Acc_DisplayOrder__c : seed
+            Acc_DisplayOrder__c : seed,
+            Acc_CompetitionType__c : "Industrial",
+            Acc_OrganisationType__c : "Sector",
         };
 
         update && update(newItem);
@@ -41,7 +41,7 @@ export class TestData {
             Acc_PeriodID__c : seed,
             Acc_ProjectPeriodLongName__c : "",
             RecordType : "",
-            Acc_CostCategoryID__c : seed,
+            Acc_CostCategoryID__c : seed.toString(),
             Acc_ProjectParticipantID__c : "",
             Acc_ForecastInitialValue__c : seed,
             Acc_ForecastLatestValue__c : seed,
