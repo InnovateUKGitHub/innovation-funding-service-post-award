@@ -10,6 +10,7 @@ export const routeConfig = {
   claimsDashboard: Containers.ClaimsDashboardRoute,
   claimDetails: Containers.ClaimsDetailsRoute,
   claimCostForm: Containers.ClaimLineItemsRoute,
-  prepareClaim: Containers.PrepareClaimRoute
+  prepareClaim: Containers.PrepareClaimRoute,
+  claimForecast: Containers.ClaimForecastRoute,
   // error: errorRoute
 };
