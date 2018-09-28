@@ -15,7 +15,7 @@ const cloneChildrenWithData = <T extends {}>(formProps: FormProps<T>, children: 
 
 class FormComponent<T> extends React.Component<FormProps<T>, []> {
     render() {
-        const childrenWithData = cloneChildrenWithData(this.props, this.props.children, "form");// React.Children.map(this.props.children, child => React.cloneElement(child as any, {data: this.props.data}));
+        const childrenWithData = cloneChildrenWithData(this.props, this.props.children, "form");
         return (
             <form method="post" action="" onSubmit={(e) => this.onSubmit(e)}>
                 {childrenWithData}
@@ -24,8 +24,8 @@ class FormComponent<T> extends React.Component<FormProps<T>, []> {
     }
 
     private onSubmit(e: React.SyntheticEvent<HTMLFormElement>) {
-        this.props.onSubmit();
         e.preventDefault();
+        this.props.onSubmit();
     }
 }
 
@@ -75,9 +75,9 @@ class FieldComponent<T, TValue> extends React.Component<InternalFieldProps<T> & 
 }
 
 const handleSubmit = <TDto extends {}>(props: SubmitProps, e: React.SyntheticEvent<HTMLButtonElement>) => {
+    e.preventDefault();
     const formProps = props as any as FormProps<TDto>;
     formProps.onSubmit();
-    e.preventDefault();
 };
 
 const handleChange = <TDto extends {}, TValue extends {}>(props: ExternalFieldProps<TDto, TValue>, value: TValue) => {
