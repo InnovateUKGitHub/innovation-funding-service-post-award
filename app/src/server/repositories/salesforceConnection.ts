@@ -3,16 +3,17 @@ import jsforce from "jsforce";
 // This will need revisting once SSO with Salesforce has been resolved
 
 // user we have got working for now
-// let username = "oliver.armfelt@bjss.com.bjsspoc";
-// let password = "BjssBristol1";
-// let token    = "Wc2j67MQY6x0cXxYDKO2kddD";
+// const username = "etlsalesforce@innovateuk.gov.uk.bjsspoc2";
+// const password = "pr0dETL2016";
+// const token    = "OWkKR7QYdHLgqz1s5HheCe86r";
+
 // user given to us but auth token required
 // const username2 = "bjss.integration@innovateuk.gov.uk.bjss";
 // const password2 = "86S@lhJVSXRtsX81";
-
-let username = "etlsalesforce@innovateuk.gov.uk.bjsspoc";
-let password = "pr0dETL2016";
-let token = "OWkKR7QYdHLgqz1s5HheCe86r";
+//
+const username = "etlsalesforce@innovateuk.gov.uk.bjsspoc";
+const password = "pr0dETL2016";
+const token = "OWkKR7QYdHLgqz1s5HheCe86r";
 
 export default () => {
   const connection = new jsforce.Connection({
