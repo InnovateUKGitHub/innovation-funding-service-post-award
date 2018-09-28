@@ -1,7 +1,8 @@
 import React from "react";
-import { render } from "react-dom";
 import { TextInput } from "./inputs/textInput";
 import { TextAreaInput } from "./inputs/textAreaInput";
+import { Result as ValidationResult} from "../validators/common";
+import classNames from "classnames";
 
 interface FormProps<T> {
     data: T;
@@ -30,7 +31,7 @@ class FormComponent<T> extends React.Component<FormProps<T>, []> {
 }
 
 interface FieldsetProps<T> {
-    heading: (data: T) => React.ReactNode;
+    heading?: (data: T) => React.ReactNode;
 }
 
 class FieldsetComponent<T> extends React.Component<FieldsetProps<T>, []> {
@@ -40,7 +41,7 @@ class FieldsetComponent<T> extends React.Component<FieldsetProps<T>, []> {
         return (
             <fieldset className="govuk-fieldset">
                 <legend className="govuk-fieldset__legend govuk-fieldset__legend--xl">
-                    <h1 className="govuk-fieldset__heading">{this.props.heading(formProps.data)}</h1>
+                    {this.props.heading ? <h1 className="govuk-fieldset__heading">{this.props.heading(formProps.data)}</h1> : null}
                 </legend>
                 {childrenWithData}
             </fieldset>
@@ -57,17 +58,19 @@ interface ExternalFieldProps<TDto, TValue> {
     label: React.ReactNode;
     hint?: React.ReactNode;
     name: string;
-    value: (data: TDto) => TValue;
-    update: (data: TDto, value: TValue) => void;
+    value: (data: TDto) => TValue|null;
+    update: (data: TDto, value: TValue|null) => void;
+    validation?: ValidationResult;
 }
 
 class FieldComponent<T, TValue> extends React.Component<InternalFieldProps<T> & ExternalFieldProps<T, TValue>, {}> {
     render() {
-        const { hint, name, label, field, data } = this.props;
+        const { hint, name, label, field, data, validation } = this.props;
         return (
-            <div className="govuk-form-group">
+            <div className={classNames("govuk-form-group", {"govuk-form-group--error": validation && validation.showValidationErrors() && !validation.isValid()})}>
                 <label className="govuk-label" htmlFor={name}>{label}</label>
                 {hint ? <span id={`${name}-hint`} className="govuk-hint">{hint}</span> : null}
+                {validation && validation.showValidationErrors() && !validation.isValid() ? <span className="govuk-error-message">{validation.errorMessage}</span> : null}
                 {field(data!)}
             </div>
         );
@@ -80,7 +83,7 @@ const handleSubmit = <TDto extends {}>(props: SubmitProps, e: React.SyntheticEve
     e.preventDefault();
 };
 
-const handleChange = <TDto extends {}, TValue extends {}>(props: ExternalFieldProps<TDto, TValue>, value: TValue) => {
+const handleChange = <TDto extends {}, TValue extends {}>(props: ExternalFieldProps<TDto, TValue>, value: TValue|null) => {
     const formProps = props as any as FormProps<TDto>;
     const data = formProps.data;
     props.update(data, value);
@@ -112,10 +115,21 @@ const SubmitComponent: React.SFC<SubmitProps> = (props) => {
     return <button type="submit" className="govuk-button" onClick={(e) => handleSubmit(props, e)}>{props.children}</button>;
 };
 
+interface ButtonProps{
+    name:string;
+    onClick: () => void;
+}
+
+const ButtonComponent: React.SFC<ButtonProps> = (props) => {
+    return <button type="button" name={props.name} className="govuk-button" style={{background:"buttonface", color: "buttontext" }} onClick={(e) => props.onClick()}>{props.children}</button>;
+
+}
+
 export const TypedForm = <T extends {}>() => ({
     Form: FormComponent as { new(): FormComponent<T> },
     Fieldset: FieldsetComponent as { new(): FieldsetComponent<T> },
     String: StringField as React.SFC<ExternalFieldProps<T, string>>,
     MultilineString: MultiStringField as React.SFC<MultiStringFieldProps<T>>,
-    Submit: SubmitComponent
+    Submit: SubmitComponent,
+    Button: ButtonComponent
 });

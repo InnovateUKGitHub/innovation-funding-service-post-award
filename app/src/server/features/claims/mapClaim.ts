@@ -16,4 +16,5 @@ export default (context: IContext) => (claim: ISalesforceClaim): ClaimDto => ({
   forecastCost: claim.Acc_ForecastCost__c,
   approvedDate: claim.Acc_ApprovedDate__c === null ? null : context.clock.parse(claim.Acc_ApprovedDate__c, SALESFORCE_DATE_FORMAT),
   paidDate: claim.Acc_PaidDate__c === null ? null : context.clock.parse(claim.Acc_PaidDate__c, SALESFORCE_DATE_FORMAT),
+  comments: "This is an example"
 });

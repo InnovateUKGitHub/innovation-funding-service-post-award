@@ -10,4 +10,5 @@ export interface ClaimDto {
   forecastCost: number;
   approvedDate: Date|null;
   paidDate: Date|null;
+  comments: string|null;
 }
