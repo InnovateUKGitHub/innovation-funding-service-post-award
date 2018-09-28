@@ -27,7 +27,7 @@ export interface IClaimCostRepository {
 }
 
 const fakeCCNames = ["Labour", "Overheads", "Materials", "Capital usage", "Subcontracting", "Travel and subsistence", "Other costs"];
-const fakeCCIds = ["a071X000000HDajQAG", "a071X000000HDakQAG", "a071X000000HDalQAG", "a071X000000HDamQAG", "a071X000000HDanQAG", "a071X000000HDaoQAG", "a071X000000HDapQAG"];
+const fakeCCIds = ["a071X000000HE2cQAG", "a071X000000HE2dQAG", "a071X000000HE2eQAG", "a071X000000HE2fQAG", "a071X000000HE2gQAG", "a071X000000HE2hQAG", "a071X000000HE2iQAG"];
 
 export class ClaimCostRepository extends SalesforceBase<ISalesforceClaimCost> implements IClaimCostRepository {
 
