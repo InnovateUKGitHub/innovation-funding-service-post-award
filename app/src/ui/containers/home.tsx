@@ -5,7 +5,7 @@ import { ContainerBase, ReduxContainer } from "./containerBase";
 const partnerId = "a071w000000LOXWAA4";
 const projectId = "a0C1X000000CvzNUAS";
 const claimId = "a051w000000GE7RAAW";
-const costCategoryId = 1;
+const costCategoryId = "a071X000000HDajQAG";
 
 class Component extends ContainerBase<{}, {}, {}> {
   render() {

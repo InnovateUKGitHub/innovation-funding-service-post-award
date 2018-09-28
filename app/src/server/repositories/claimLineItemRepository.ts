@@ -13,7 +13,7 @@ const fields = [
 ];
 
 export interface IClaimLineItemRepository {
-  getAllForCategory(claimId: string, categoryId: number, periodId: number): Promise<ISalesforceClaimLineItem[]>;
+  getAllForCategory(claimId: string, categoryId: string, periodId: number): Promise<ISalesforceClaimLineItem[]>;
 }
 
 export class ClaimLineItemRepository extends SalesforceBase<ISalesforceClaimLineItem> implements IClaimLineItemRepository {
@@ -24,7 +24,7 @@ export class ClaimLineItemRepository extends SalesforceBase<ISalesforceClaimLine
     super("Acc_Claims__c", fields);
   }
 
-  getAllForCategory(partnerId: string, categoryId: number, periodId: number): Promise<ISalesforceClaimLineItem[]> {
+  getAllForCategory(partnerId: string, categoryId: string, periodId: number): Promise<ISalesforceClaimLineItem[]> {
     // TODO review which ID is used for cost category
     const filter = `
       Acc_ProjectParticipant__c = '${partnerId}'

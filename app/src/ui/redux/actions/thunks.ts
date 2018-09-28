@@ -25,7 +25,7 @@ export function loadClaimsForPartner(partnerId: string) {
   );
 }
 
-export function loadClaimLineItemsForCategory(partnerId: string, costCategoryId: number, periodId: number) {
+export function loadClaimLineItemsForCategory(partnerId: string, costCategoryId: string, periodId: number) {
   return conditionalLoad(
     partnerId,
     "claimLineItems",

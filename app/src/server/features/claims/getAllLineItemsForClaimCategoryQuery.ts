@@ -2,7 +2,7 @@ import {IContext, IQuery} from "../common/context";
 import {ClaimLineItemDto} from "../../../ui/models";
 
 export class GetAllLineItemsForClaimByCategoryQuery implements IQuery<ClaimLineItemDto[]> {
-  constructor(public partnerId: string, public costCategoryId: number, public periodId: number) {
+  constructor(public partnerId: string, public costCategoryId: string, public periodId: number) {
   }
 
   public async Run(context: IContext) {
