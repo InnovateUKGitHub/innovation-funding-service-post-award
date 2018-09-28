@@ -9,7 +9,7 @@ export interface ISalesforceClaimCost {
   Acc_PeriodID__c: number;
   Acc_ProjectPeriodLongName__c: string;
   RecordType: string;
-  Acc_CostCategoryID__c: number;
+  Acc_CostCategoryID__c: string;
   Acc_ProjectParticipantID__c: string;
   Acc_ForecastInitialValue__c: number;
   Acc_ForecastLatestValue__c: number;
@@ -27,6 +27,7 @@ export interface IClaimCostRepository {
 }
 
 const fakeCCNames = ["Labour", "Overheads", "Materials", "Capital usage", "Subcontracting", "Travel and subsistence", "Other costs"];
+const fakeCCIds = ["a071X000000HDajQAG", "a071X000000HDakQAG", "a071X000000HDalQAG", "a071X000000HDamQAG", "a071X000000HDanQAG", "a071X000000HDaoQAG", "a071X000000HDapQAG"];
 
 export class ClaimCostRepository extends SalesforceBase<ISalesforceClaimCost> implements IClaimCostRepository {
 
@@ -42,15 +43,15 @@ export class ClaimCostRepository extends SalesforceBase<ISalesforceClaimCost> im
   private end: DateTime;
 
   public getAllForClaim(claimId: string): Promise<ISalesforceClaimCost[]> {
-    return Promise.resolve(fakeCCNames.map((name, index) => this.fakeCost(name, claimId, index + 1)));
+    return Promise.resolve(fakeCCNames.map((name, index) => this.fakeCost(name, claimId, fakeCCIds[index], index + 1)));
   }
 
-  private fakeCost(category: string, claimId: string, seed: number): ISalesforceClaimCost {
+  private fakeCost(category: string, claimId: string, costId: string, seed: number): ISalesforceClaimCost {
     const isOverheads = category === "Overheads";
     return {
       Id: `ClaimCost${seed}`,
       ACC_Claim_Id__c: claimId,
-      Acc_CostCategoryID__c: seed,
+      Acc_CostCategoryID__c: costId,
       Acc_PeriodStartDate_c: this.start.toFormat("DD/MM/YYYY"),
       Acc_PeriodEndDate__c: this.end.toFormat("DD/MM/YYYY"),
       Acc_PeriodID__c: 1,

@@ -11,7 +11,7 @@ import {TypedLoader} from "../../components";
 interface Params {
   projectId: string;
   partnerId: string;
-  costCategoryId: number;
+  costCategoryId: string;
   periodId: number;
 }
 
@@ -109,7 +109,7 @@ export const ClaimLineItemsRoute = definition.route({
   getParams: (route) => ({
     projectId: route.params.projectId,
     partnerId: route.params.partnerId,
-    costCategoryId: parseInt(route.params.costCategoryId, 10),
+    costCategoryId: route.params.costCategoryId,
     periodId: parseInt(route.params.periodId, 10)
   }),
   getLoadDataActions: (params) => [
