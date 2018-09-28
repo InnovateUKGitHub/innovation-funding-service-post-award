@@ -19,4 +19,4 @@ export const ValidationMessage: React.SFC<Props> = ({ message, key }) => {
             </strong>
         </div>
     );
-}
+};

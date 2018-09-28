@@ -115,15 +115,15 @@ const SubmitComponent: React.SFC<SubmitProps> = (props) => {
     return <button type="submit" className="govuk-button" onClick={(e) => handleSubmit(props, e)}>{props.children}</button>;
 };
 
-interface ButtonProps{
-    name:string;
+interface ButtonProps {
+    name: string;
     onClick: () => void;
 }
 
 const ButtonComponent: React.SFC<ButtonProps> = (props) => {
     return <button type="button" name={props.name} className="govuk-button" style={{background:"buttonface", color: "buttontext" }} onClick={(e) => props.onClick()}>{props.children}</button>;
 
-}
+};
 
 export const TypedForm = <T extends {}>() => ({
     Form: FormComponent as { new(): FormComponent<T> },

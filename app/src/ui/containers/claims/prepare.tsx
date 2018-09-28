@@ -1,16 +1,16 @@
+import { routeConfig } from "../../routing";
 import React from "react";
-import { DateTime } from "luxon";
 import { ContainerBase, ReduxContainer } from "../containerBase";
 import { Pending } from "../../../shared/pending";
 import * as Actions from "../../redux/actions/thunks";
 import * as Dtos from "../../models";
 import * as ACC from "../../components";
-import { routeConfig } from "../../routing";
+import { DateTime } from "luxon";
 import { IEditorStore } from "../../redux/reducers/editorsReducer";
 import { ClaimDtoValidator } from "../../validators/claimDtoValidator";
 import { ClaimDto } from "../../models";
 import { updateEditorAction } from "../../redux/actions/editorActions";
-import { validateClaim, saveClaim, navigateTo } from "../../redux/actions/thunks";
+import { navigateTo, saveClaim, validateClaim } from "../../redux/actions/thunks";
 import { ClaimsDashboardRoute, ClaimsDetailsRoute } from ".";
 
 interface Params {
@@ -24,12 +24,12 @@ interface Data {
     costCategories: Pending<Dtos.CostCategoryDto[]>;
     claim: Pending<Dtos.ClaimDto>;
     claimCosts: Pending<Dtos.ClaimCostDto[]>;
-    editor: IEditorStore<Dtos.ClaimDto, ClaimDtoValidator>
+    editor: IEditorStore<Dtos.ClaimDto, ClaimDtoValidator>;
 }
 
 interface Callbacks {
     onChange: (claimId: string, dto: ClaimDto) => void;
-    onSave: (dto: ClaimDto, button: "normal" | "return", projectId : string, partnerId: string, claimId: string) => void;
+    onSave: (dto: ClaimDto, button: "normal" | "return", projectId: string, partnerId: string, claimId: string) => void;
 }
 
 interface CombinedData {
@@ -96,7 +96,7 @@ export class PrepareComponent extends ContainerBase<Params, Data, Callbacks> {
         );
     }
 
-    private onSave(button: "normal" | "return"){
+    private onSave(button: "normal" | "return") {
         this.props.onSave(this.props.editor.data, button, this.props.projectId, this.props.partner.data!.id, this.props.claimId);
     }
 }
@@ -105,19 +105,19 @@ const definition = ReduxContainer.for<Params, Data, Callbacks>(PrepareComponent)
 const getEditor = (claimId: string, editor: IEditorStore<Dtos.ClaimDto, ClaimDtoValidator>, original: Pending<Dtos.ClaimDto>) => {
     if (!editor) {
         console.log("Createing editor", claimId, original);
-        editor = original.then(x => ({ data: JSON.parse(JSON.stringify(x!)) as Dtos.ClaimDto, validator: new ClaimDtoValidator(x!, false), error: null })).data!
+        editor = original.then(x => ({ data: JSON.parse(JSON.stringify(x!)) as Dtos.ClaimDto, validator: new ClaimDtoValidator(x!, false), error: null })).data!;
     }
     return editor;
-}
+};
 
-const navigateOnSave = (dispach: any, button: "normal"|"return", projectId : string, partnerId: string, claimId: string) => {
-    if(button == "return"){
+const navigateOnSave = (dispach: any, button: "normal"|"return", projectId: string, partnerId: string, claimId: string) => {
+    if(button === "return") {
         dispach(navigateTo(ClaimsDashboardRoute.getLink({projectId, partnerId})));
     }
     else {
         dispach(navigateTo(ClaimsDetailsRoute.getLink({projectId, claimId})));
     }
-}
+};
 
 export const PrepareClaim = definition.connect({
     withData: (store, params) => ({

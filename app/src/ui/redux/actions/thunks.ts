@@ -4,7 +4,7 @@ import { ClaimDto } from "../../models";
 import { SyncThunk } from ".";
 import { ClaimDtoValidator } from "../../validators/claimDtoValidator";
 import { UpdateEditorAction, updateEditorAction } from "./editorActions";
-import { actions as routeActions } from 'redux-router5'
+import { actions as routeActions } from "redux-router5";
 import { HomeRoute } from "../../containers";
 
 export function loadContacts() {
@@ -115,15 +115,14 @@ export function loadClaim(claimId: string) {
   );
 }
 
-
 export function validateClaim(id: string, dto: ClaimDto, showErrors?: boolean): SyncThunk<ClaimDtoValidator, UpdateEditorAction> {
   return (dispach, getState) => {
-    let state = getState();
+    const state = getState();
     if (showErrors === null || showErrors === undefined) {
-      let current = state.editors.claim[id];
+      const current = state.editors.claim[id];
       showErrors = current && current.validator.showValidationErrors() || false;
     }
-    let validator = new ClaimDtoValidator(dto, showErrors!);
+    const validator = new ClaimDtoValidator(dto, showErrors);
     dispach(updateEditorAction(id, "claim", dto, validator));
     return validator;
   };
@@ -131,8 +130,8 @@ export function validateClaim(id: string, dto: ClaimDto, showErrors?: boolean): 
 
 export function saveClaim(id: string, dto: ClaimDto, onComplete: () => void): SyncThunk<ClaimDtoValidator, UpdateEditorAction> {
   return (dispach, getState) => {
-    let validation = validateClaim(id, dto, true)(dispach, getState, null);
-    if(validation.isValid()){
+    const validation = validateClaim(id, dto, true)(dispach, getState, null);
+    if(validation.isValid()) {
         onComplete();
     }
     return validation;
