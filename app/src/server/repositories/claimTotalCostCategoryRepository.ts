@@ -3,20 +3,22 @@ import SalesforceBase from "./salesforceBase";
 export interface ISalesforceClaimTotalCostCategory {
     Acc_CostCategory__c: string;
     Acc_CostCategoryTotal__c: number;
+    Acc_ProjectParticipant__c: string;
 }
 
 const fields = [
     "Acc_CostCategory__c",
-    "Acc_CostCategoryTotal__c"
+    "Acc_CostCategoryTotal__c",
+    "Acc_ProjectParticipant__c",
 ];
 
 export interface IClaimTotalCostCategoryRepository {
     getAllByPartnerId(partnerId: string): Promise<ISalesforceClaimTotalCostCategory[]>;
-    recordType: string;
 }
 
 export class ClaimTotalCostCategoryRepository extends SalesforceBase<ISalesforceClaimTotalCostCategory> implements IClaimTotalCostCategoryRepository {
-    recordType: string = "Total Cost Category";
+    private recordType: string = "Total Cost Category";
+
     constructor() {
         super("Acc_Claims__c", fields);
     }

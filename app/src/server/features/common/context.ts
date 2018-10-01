@@ -14,13 +14,13 @@ export interface ICommand<T> {
 export interface IRepositories {
   claims: Readonly<Repsoitories.IClaimRepository>;
   claimCosts: Readonly<Repsoitories.IClaimCostRepository>;
+  claimDetails: Readonly<Repsoitories.IClaimDetailsRepository>;
   contacts: Readonly<Repsoitories.IContactsRepository>;
   costCategories: Readonly<Repsoitories.ICostCategoryRepository>;
   projects: Readonly<Repsoitories.IProjectRepository>;
   partners: Readonly<Repsoitories.IPartnerRepository>;
   projectContacts: Readonly<Repsoitories.IProjectContactsRepository>;
   claimLineItems: Readonly<Repsoitories.IClaimLineItemRepository>;
-  claimDetails: Readonly<Repsoitories.IClaimDetailsRepository>;
   claimTotalCostCategory: Readonly<Repsoitories.IClaimTotalCostCategoryRepository>;
 }
 

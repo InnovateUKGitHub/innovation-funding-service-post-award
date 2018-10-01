@@ -9,7 +9,8 @@ import { routeConfig } from "../../routing";
 
 interface Params {
     projectId: string;
-    claimId: string;
+    partnerId: string;
+    periodId: number;
 }
 
 interface Data {
@@ -18,7 +19,7 @@ interface Data {
     partner: Pending<Dtos.PartnerDto>;
     costCategories: Pending<Dtos.CostCategoryDto[]>;
     claim: Pending<Dtos.ClaimDto>;
-    claimCosts: Pending<Dtos.ClaimCostDto[]>;
+    claimDetails: Pending<Dtos.ClaimCostDto[]>;
 }
 
 interface CombinedData {
@@ -26,7 +27,7 @@ interface CombinedData {
     partner: Dtos.PartnerDto;
     costCategories: Dtos.CostCategoryDto[];
     claim: Dtos.ClaimDto;
-    claimCosts: Dtos.ClaimCostDto[];
+    claimDetails: Dtos.ClaimCostDto[];
 }
 
 export class PrepareComponent extends ContainerBase<Params, Data, {}> {
@@ -37,8 +38,8 @@ export class PrepareComponent extends ContainerBase<Params, Data, {}> {
             this.props.partner,
             this.props.costCategories,
             this.props.claim,
-            this.props.claimCosts,
-            (project, partner, costCategories, claim, claimCosts) => ({ project, partner, costCategories, claim, claimCosts })
+            this.props.claimDetails,
+            (project, partner, costCategories, claim, claimDetails) => ({ project, partner, costCategories, claim, claimDetails })
         );
 
         const Loader = ACC.TypedLoader<CombinedData>();
@@ -52,7 +53,7 @@ export class PrepareComponent extends ContainerBase<Params, Data, {}> {
         return `${data.partner.name} claim for ${data.claim.periodId} ${DateTime.fromJSDate(data.claim.periodStartDate).toFormat("MMMM")} to ${DateTime.fromJSDate(data.claim.periodEndDate).toFormat("MMMM yyyy")}`;
     }
 
-    private renderContents(data: { project: Dtos.ProjectDto, partner: Dtos.PartnerDto, costCategories: Dtos.CostCategoryDto[], claim: Dtos.ClaimDto, claimCosts: Dtos.ClaimCostDto[] }) {
+    private renderContents(data: { project: Dtos.ProjectDto, partner: Dtos.PartnerDto, costCategories: Dtos.CostCategoryDto[], claim: Dtos.ClaimDto, claimDetails: Dtos.ClaimCostDto[] }) {
 
         const title = this.getClaimPeriodTitle(data);
 
@@ -62,7 +63,7 @@ export class PrepareComponent extends ContainerBase<Params, Data, {}> {
                     <ACC.BackLink route={routeConfig.claimsDashboard.getLink({ projectId: data.project.id, partnerId: data.partner.id })}>Claims dashboard</ACC.BackLink>
                 </ACC.Section>
                 <ACC.Projects.Title pageTitle="Claim" project={data.project} />
-                <ACC.Claims.Navigation projectId={data.project.id} claimId={data.claim.id} currentRouteName={routeConfig.claimDetails.routeName} />
+                <ACC.Claims.Navigation projectId={data.project.id} partnerId={data.partner.id} periodId={data.claim.periodId} currentRouteName={routeConfig.claimDetails.routeName} />
                 <ACC.Section title={title}>
                     <ACC.Claims.ClaimTable {...data} />
                 </ACC.Section>
@@ -80,22 +81,22 @@ export const PrepareClaim = definition.connect({
         // todo: fix to be partner for the claim rather than fist partner in project
         partner: Pending.create(store.data.partners[params.projectId]).then(x => x![0]),
         costCategories: Pending.create(store.data.costCategories.all),
-        claim: Pending.create(store.data.claim[params.claimId]),
-        claimCosts: Pending.create(store.data.claimCosts[params.claimId])
+        claim: Pending.create(store.data.claim[params.periodId.toString()]), // ToDo: wire up partner id and period id
+        claimDetails: Pending.create(store.data.claimDetails[params.partnerId + "_" + params.periodId])
     }),
     withCallbacks: () => ({})
 });
 
 export const PrepareClaimRoute = definition.route({
     routeName: "prepare-claim",
-    routePath: "/projects/:projectId/claims/:claimId/prepare",
-    getParams: (route) => ({ projectId: route.params.projectId, claimId: route.params.claimId }),
+    routePath: "/projects/:projectId/claims/:partnerId/prepare/:periodId",
+    getParams: (route) => ({ projectId: route.params.projectId, partnerId: route.params.partnerId, periodId: parseInt(route.params.periodId, 10) }),
     getLoadDataActions: (params) => [
         Actions.loadProject(params.projectId),
         Actions.loadPatnersForProject(params.projectId),
         Actions.loadCostCategories(),
-        Actions.loadClaim(params.claimId),
-        Actions.loadClaimCosts(params.claimId)
+        Actions.loadClaim(params.periodId.toString()), // ToDo: wire up to partner id, period id
+        Actions.loadClaimDetailsForPartner(params.partnerId, params.periodId)
     ],
     container: PrepareClaim
 });

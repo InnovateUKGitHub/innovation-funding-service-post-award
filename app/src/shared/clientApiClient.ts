@@ -2,9 +2,6 @@ import { IApiClient } from "../server/apis";
 import { processResponse } from "./processResponse";
 
 const clientApi: IApiClient = {
-  claimCosts: {
-    getAllForClaim: (claimId: string) => ajaxJson(`/api/claimcosts?claimId=${claimId}`)
-  },
   claimLineItems: {
     getAllForCategory: (partnerId: string, costCategoryId: string, periodId: number) => ajaxJson(`/api/claims/${partnerId}/lineitems?costCategoryId=${costCategoryId}&periodId=${periodId}`)
   },

@@ -7,7 +7,7 @@ export interface ISalesforceClaim {
   Acc_ClaimStatus__c: string;
   Acc_ProjectPeriodStartDate_c: string;
   Acc_ProjectPeriodEndDate__c: string;
-  Acc_ProjectPeriodID__c: string;
+  Acc_ProjectPeriodID__c: number;
   Acc_TotalCost__c: number;
   // TODO replace with value from costs object
   Acc_ForecastCost__c: number;
@@ -52,7 +52,7 @@ export class ClaimRepository extends SalesforceBase<ISalesforceClaim> implements
         Acc_ClaimStatus__c: "Submitted",
         Acc_ProjectPeriodStartDate_c: "2018-08-01",
         Acc_ProjectPeriodEndDate__c: "2018-11-30",
-        Acc_ProjectPeriodID__c: "P3",
+        Acc_ProjectPeriodID__c: 3,
         Acc_TotalCost__c: 82382,
         Acc_ForecastCost__c: 85012,
         Acc_ApprovedDate__c: null,
@@ -64,7 +64,7 @@ export class ClaimRepository extends SalesforceBase<ISalesforceClaim> implements
         Acc_ClaimStatus__c: "Approved",
         Acc_ProjectPeriodStartDate_c: "2018-05-01",
         Acc_ProjectPeriodEndDate__c: "2018-07-31",
-        Acc_ProjectPeriodID__c: "P2",
+        Acc_ProjectPeriodID__c: 2,
         Acc_TotalCost__c: 62100,
         Acc_ForecastCost__c: 60000,
         Acc_ApprovedDate__c: "2018-08-15",
@@ -76,7 +76,7 @@ export class ClaimRepository extends SalesforceBase<ISalesforceClaim> implements
         Acc_ClaimStatus__c: "Paid",
         Acc_ProjectPeriodStartDate_c: "2018-02-01",
         Acc_ProjectPeriodEndDate__c: "2018-04-30",
-        Acc_ProjectPeriodID__c: "P1",
+        Acc_ProjectPeriodID__c: 1,
         Acc_TotalCost__c: 104440,
         Acc_ForecastCost__c: 95000,
         Acc_ApprovedDate__c: "2018-05-15",
