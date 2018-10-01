@@ -52,7 +52,7 @@ export abstract class ControllerBase<T> {
         .catch((e: ApiError) => {
           console.log("Error in controller", e);
           if (e.errorCode && e.message) {
-            return resp.status(e.errorCode).json({message: "An error occurred...", details: e.message});
+            return resp.status(e.errorCode).json({message: "An error has occurred...", details: e.message});
           }
           resp.status(500).json({message: "An unexpected Error has occurred.....", details: e.message});
         });
