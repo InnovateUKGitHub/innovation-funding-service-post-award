@@ -46,7 +46,7 @@ export class ClaimLineItemsComponent extends ContainerBase<Params, Data, {}> {
       <ACC.Page>
         <ACC.Section>
           <ACC.BackLink
-            route={routeConfig.claimDetails.getLink({projectId: data.project.id, claimId: this.props.partnerId})}
+            route={routeConfig.claimDetails.getLink({projectId: data.project.id, partnerId: this.props.partnerId, periodId: this.props.periodId })}
           >Back
           </ACC.BackLink>
         </ACC.Section>
