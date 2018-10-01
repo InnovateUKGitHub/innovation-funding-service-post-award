@@ -27,11 +27,10 @@ interface CombinedData {
     contacts: Dtos.ProjectContactDto[];
 }
 
-const Loader = ACC.TypedLoader<CombinedData>();
-
 class ProjectDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
     render() {
         const combined = Pending.combine(this.props.projectDetails, this.props.partners, this.props.contacts, (projectDetails, partners, contacts) => ({ projectDetails, partners, contacts }));
+        const Loader = ACC.TypedLoader<CombinedData>();
         return <Loader pending={combined} render={x => this.renderContents(x.projectDetails, x.partners, x.contacts)} />;
     }
 

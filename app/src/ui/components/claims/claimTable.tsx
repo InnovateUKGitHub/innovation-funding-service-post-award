@@ -13,41 +13,44 @@ interface Props {
 
 export const ClaimTable: React.SFC<Props> = (data) => {
 
-    // todo: Hopfully this isCaluclated will come from salesforce for now its hardcoded for Overheads (2)
-    const combinedData = data.costCategories.map(x => ({
-        category: x,
-        cost: data.claimCosts.find(y => y.costCategoryId === x.id) || {} as Dtos.ClaimCostDto,
-        isCalculated: x.id === 2,
-        isTotal: false
-    }));
+    // Todo: filter the cost cats by the project type
+    const combinedData = data.costCategories
+        .filter(x => x.organistionType === "Industrial")
+        .map(x => ({
+            category: x,
+            cost: data.claimCosts.find(y => y.costCategoryId === x.id) || {} as Dtos.ClaimCostDto,
+            isTotal: false
+        }));
 
     // add total row (dosnt have a cost cat so use 0)
     combinedData.push({
         category: {
             name: "Total",
-            id: 0,
+            id: "",
+            isCalculated: true,
+            competitionType: "Unknown",
+            organistionType: "Unknown"
         },
         cost: {
-            costCategoryId: 0,
+            costCategoryId: "",
             remainingOfferCosts: data.claimCosts.reduce((total, item) => total + item.remainingOfferCosts, 0),
             costsClaimedThisPeriod: data.claimCosts.reduce((total, item) => total + item.costsClaimedThisPeriod, 0),
             costsClaimedToDate: data.claimCosts.reduce((total, item) => total + item.costsClaimedToDate, 0),
             offerCosts: data.claimCosts.reduce((total, item) => total + item.offerCosts, 0),
         },
-        isCalculated: true,
         isTotal: true
     });
 
     const CostCategoriesTable = Table.forData(combinedData);
-
+    // TODO stop hardcoding periodId
     return (
         <CostCategoriesTable.Table qa="cost-cat" footers={renderFooters(data.project, data.partner, data.claimCosts)}>
             <CostCategoriesTable.Custom
                 header="Costs category"
                 qa="category"
                 cellClassName={x => x.isTotal ? "govuk-!-font-weight-bold" : null}
-                value={x => !x.isCalculated
-                    ? <Link route={ClaimLineItemsRoute.getLink({ projectId: data.project.id, claimId: data.claim.id, costCategoryId: x.category.id })}>{x.category.name}</Link>
+                value={x => !x.category.isCalculated
+                    ? <Link route={ClaimLineItemsRoute.getLink({ projectId: data.project.id, partnerId: data.partner.id, costCategoryId: x.category.id, periodId: 1 })}>{x.category.name}</Link>
                     : x.category.name}
             />
             <CostCategoriesTable.Currency header="Grant offer letter costs" qa="offerCosts" value={x => x.cost.offerCosts} />

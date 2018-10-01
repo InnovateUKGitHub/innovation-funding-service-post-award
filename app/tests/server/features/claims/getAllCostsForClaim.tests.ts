@@ -16,6 +16,7 @@ describe('getAllCostsForClaim', () => {
 
         expect(result.length).toBe(5)
     })
+
 });
 
 

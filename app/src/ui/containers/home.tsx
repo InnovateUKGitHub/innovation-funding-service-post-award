@@ -5,7 +5,7 @@ import { ContainerBase, ReduxContainer } from "./containerBase";
 const partnerId = "a071w000000LOXWAA4";
 const projectId = "a0C1X000000CvzNUAS";
 const claimId = "a051w000000GE7RAAW";
-const costCategoryId = 1;
+const costCategoryId = "a071X000000HDajQAG";
 
 class Component extends ContainerBase<{}, {}, {}> {
   render() {
@@ -42,7 +42,7 @@ class Component extends ContainerBase<{}, {}, {}> {
         </div>
         <div className="govuk-grid-row">
           <div className="govuk-grid-column-one-third">
-            <h2><Link route={routes.claimCostForm.getLink({ projectId, claimId, costCategoryId })}>Claim line items</Link></h2>
+            <h2><Link route={routes.claimCostForm.getLink({ projectId, partnerId, costCategoryId, periodId: 1 })}>Claim line items</Link></h2>
             <p>Project {projectId} Claim {claimId}</p>
           </div>
         </div>
