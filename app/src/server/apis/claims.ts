@@ -23,6 +23,7 @@ interface IClaimBody {
   forecastCost: number;
   approvedDate: string | null;
   paidDate: string | null;
+  comments: string | null;
 }
 
 const mapBodyToDto = (body: IClaimBody): ClaimDto => {
@@ -37,7 +38,8 @@ const mapBodyToDto = (body: IClaimBody): ClaimDto => {
     totalCost: body.totalCost,
     forecastCost: body.forecastCost,
     approvedDate: body.approvedDate ? DateTime.fromISO(body.approvedDate).toLocal().toJSDate() : null,
-    paidDate: body.paidDate ? DateTime.fromISO(body.paidDate).toLocal().toJSDate() : null
+    paidDate: body.paidDate ? DateTime.fromISO(body.paidDate).toLocal().toJSDate() : null,
+    comments: body.comments
   };
 };
 
