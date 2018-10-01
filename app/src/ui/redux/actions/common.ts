@@ -19,7 +19,7 @@ export type ActionsUnion<T extends IActionCreatorsMapObject> = ReturnType<T[keyo
 // export type ModuleThunk<T, S, A extends Action<any>> = ThunkAction<Promise<T>, S, {}, A>;
 
 export type AsyncThunk<T, A extends RootActions = RootActions> = ThunkAction<Promise<T>, RootState, any, A>;
-// conditional async thunk?
+export type SyncThunk<T, A extends RootActions = RootActions> = ThunkAction<T, RootState, any, A>;
 
 export function createAction<T extends string>(type: T): IAction<T>;
 export function createAction<T extends string, P>(type: T, payload: P): IActionWithPayload<T, P>;

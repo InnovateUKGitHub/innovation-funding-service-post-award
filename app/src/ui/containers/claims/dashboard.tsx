@@ -107,7 +107,7 @@ const CurrentClaimSummary: React.SFC<CurrentClaimSummaryProps> = (props) => {
         <ClaimTable.Custom
           header=""
           qa="link"
-          value={(x) => (<Link route={PrepareClaimRoute.getLink({ projectId: props.projectId, partnerId: x.partnerId, periodId: x.periodId })}>Edit claim</Link>)}
+          value={(x) => (<Link route={PrepareClaimRoute.getLink({ projectId: props.projectId, partnerId: x.partnerId, periodId: x.periodId, claimId: "a0B1X000000DIy6UAG"})}>Edit claim</Link>)}
         />
       </ClaimTable.Table>
     </Section>

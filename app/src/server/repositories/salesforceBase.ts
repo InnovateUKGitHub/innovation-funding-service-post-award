@@ -83,6 +83,13 @@ export default abstract class SalesforceBase<T> {
     }
   }
 
+  protected async updateOne(updatedObj: Partial<T> & { Id: string }): Promise<boolean> {
+    const conn = await salesforceConnection();
+    return await conn.sobject(this.objectName)
+      .update(updatedObj)
+      .then((res) => res.success);
+  }
+
   private asArray(result: Partial<{}>[]): T[] {
     if(this.log) {
       console.log("Retrieved array", result);
