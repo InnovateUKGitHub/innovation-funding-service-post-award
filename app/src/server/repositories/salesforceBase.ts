@@ -83,11 +83,7 @@ export default abstract class SalesforceBase<T> {
     const conn = await salesforceConnection();
     return await conn.sobject(this.objectName)
       .update(updatedObj)
-      .then((res) => res.success)
-      .catch(e => {
-        console.log(e);
-        throw e;
-      });
+      .then((res) => res.success);
   }
 
   private asArray(result: Partial<{}>[]): T[] {
