@@ -8,10 +8,12 @@ export interface IClaimDetailsApi {
 }
 
 class Controller extends ControllerBase<ClaimCostDto> implements IClaimDetailsApi {
+    public path = "claims";
+
     constructor() {
         super();
 
-        this.getItems("/", (p, q) => ({ partnerId: q.partnerId, periodId: parseInt(q.periodId, 10)}), (p) => this.getAllByPartnerId(p.partnerId, p.periodId));
+        this.getItems("/:partnerId/:periodId/details", (p, q) => ({ partnerId: p.partnerId, periodId: parseInt(p.periodId, 10)}), (p) => this.getAllByPartnerId(p.partnerId, p.periodId));
     }
 
     public async getAllByPartnerId(partnerId: string, periodId: number) {

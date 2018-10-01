@@ -93,7 +93,7 @@ const CurrentClaimSummary: React.SFC<CurrentClaimSummaryProps> = (props) => {
   }
 
   const sectionTitle = (
-    <React.Fragment>Claim for {claim.periodId} - <DayAndLongMonth value={claim.periodStartDate} /> to <FullDate value={claim.periodEndDate} /></React.Fragment>
+    <React.Fragment>Claim for P{claim.periodId} - <DayAndLongMonth value={claim.periodStartDate} /> to <FullDate value={claim.periodEndDate} /></React.Fragment>
   );
   const ClaimTable = Table.forData([claim]);
   return (
@@ -104,11 +104,7 @@ const CurrentClaimSummary: React.SFC<CurrentClaimSummaryProps> = (props) => {
         <ClaimTable.Currency header="Difference" qa="diff" value={(x) => x.forecastCost - x.totalCost} />
         <ClaimTable.String header="Status" qa="status" value={(x) => x.status} />
         <ClaimTable.ShortDate header="Date of last update" qa="last-update" value={(x) => x.lastModifiedDate} />
-        <ClaimTable.Custom
-          header=""
-          qa="link"
-          value={(x) => (<Link route={PrepareClaimRoute.getLink({ projectId: props.projectId, partnerId: x.partnerId, periodId: x.periodId, claimId: "a0B1X000000DIy6UAG"})}>Edit claim</Link>)}
-        />
+        <ClaimTable.Link header="" qa="link" content="Edit claim" value={(x) => PrepareClaimRoute.getLink({ projectId: props.projectId, partnerId: x.partnerId, periodId: x.periodId})} />
       </ClaimTable.Table>
     </Section>
   );
@@ -134,7 +130,7 @@ const PastClaimsSummary: React.SFC<PastClaimsSummaryProps> = ({ claims, projectI
           header="Period"
           qa="period"
           value={(x) => (
-            <span>{x.periodId}<br />
+            <span>P{x.periodId}<br />
               <ShortMonth value={x.periodStartDate} /> to <ShortMonth value={x.periodEndDate} /> <LongYear value={x.periodEndDate} />
             </span>)}
         />

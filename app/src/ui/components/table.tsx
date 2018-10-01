@@ -5,6 +5,7 @@ import { Email } from "./renderers/email";
 import { Currency } from "./renderers/currency";
 import classNames from "classnames";
 import { Percentage } from "./renderers/percentage";
+import { Link } from ".";
 
 type columnMode = "cell" | "header" | "footer" | "col";
 interface InternalColumnProps<T> {
@@ -143,6 +144,16 @@ const PercentageColumn = <T extends {}>(): React.SFC<ExternalColumnProps<T, numb
   return (props) => <TypedColumn classSuffix="numeric" renderCell={(data, index) => <Percentage value={props.value(data, index)} />} {...props} />;
 };
 
+interface LinkColumnProps<T> extends ExternalColumnProps<T, ILinkInfo>{
+  content: React.ReactNode;
+}
+
+const LinkColumn = <T extends {}>(props: LinkColumnProps<T>) => {
+  console.log("Getting link column value", props);
+  const TypedColumn = TableColumn as { new(): TableColumn<T> };
+  return <TypedColumn classSuffix="numeric" renderCell={(data, index) => <Link route={props.value(data, index)} >{props.content}</Link>} {...props} />;
+}
+
 export const Table = {
   forData: <T extends {}>(data: T[]) => ({
     Table: TableComponent(data),
@@ -154,5 +165,6 @@ export const Table = {
     FullDate: FullDateColumn<T>(),
     ShortDate: ShortDateColumn<T>(),
     Email: EmailColumn<T>(),
+    Link: LinkColumn as React.SFC<LinkColumnProps<T>>
   })
 };

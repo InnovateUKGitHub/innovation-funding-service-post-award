@@ -17,9 +17,7 @@ export interface ISalesforceClaim {
   // TODO get real field names when available
   Acc_ApprovedDate__c: string | null;
   Acc_PaidDate__c: string | null;
-  RecordType: {
-    Name: string;
-  };
+  Acc_LineItemDescription__c: string | null;
 }
 
 const fields = [
@@ -33,16 +31,18 @@ const fields = [
   // "Acc_ForecastCost__c",
   "Acc_TotalCost__c",
   "Acc_ApprovedDate__c",
-  "Acc_PaidDate__c"
+  "Acc_PaidDate__c",
+  "Acc_LineItemDescription__c"
 ];
 
 export interface IClaimRepository {
   getAllByPartnerId(partnerId: string): Promise<ISalesforceClaim[]>;
-  getById(claimId: string): Promise<ISalesforceClaim|null>;
+  getByPartnerIdAndPeriodId(partnerId: string, periodId: number): Promise<ISalesforceClaim|null>;
   update(updatedClaim: Partial<ISalesforceClaim> & { Id: string }): Promise<boolean>;
 }
 
 export class ClaimRepository extends SalesforceBase<ISalesforceClaim> implements IClaimRepository {
+  private recordType = "Total Project Period";
   constructor() {
     super("Acc_Claims__c", fields);
   }
@@ -55,13 +55,44 @@ export class ClaimRepository extends SalesforceBase<ISalesforceClaim> implements
     return item;
   }
 
-  getAllByPartnerId(partnerId: string): Promise<ISalesforceClaim[]> {
-    const filter = `Acc_ProjectParticipant__c = '${partnerId}' AND RecordType.Name = 'Claims Header'`;
-    return super.whereString(filter).then(x => x.map(y => this.extend(y)!));
+  public async getAllByPartnerId(partnerId: string): Promise<ISalesforceClaim[]> {
+    const filter = `Acc_ProjectParticipant__c = '${partnerId}' AND RecordType.Name = '${this.recordType}'`;
+    const result = await super.whereString(filter).then(x => x.map(y => this.extend(y)!));
+    // todo remove fake
+    if(!result.length){
+      return [this.createFake(partnerId, 1)];
+    }
+    return result;
   }
 
-  public getById(claimId: string) {
-    return super.retrieve(claimId).then(x => this.extend(x));
+  public async getByPartnerIdAndPeriodId(partnerId: string, periodId: number) {
+    const filter = `Acc_ProjectParticipant__c = '${partnerId}' AND Acc_ProjectPeriodID__c = ${periodId} AND RecordType.Name = '${this.recordType}'`;
+    const result = await super.whereString(filter).then(x => x.map(y => this.extend(y)!)).then(x => x[0]);
+    // todo remove fake
+    if(!result){
+      return this.createFake(partnerId, periodId);
+    }
+    return result;
+  }
+
+  private createFake(partnerId: string, periodId: number): ISalesforceClaim {
+    return ({
+      Acc_ApprovedDate__c: null,
+      Acc_ClaimStatus__c: "Draft",
+      Acc_ForecastCost__c: 10000,
+      Acc_PaidDate__c: null,
+      Acc_ProjectParticipant__c: partnerId,
+      Acc_ProjectPeriodEndDate__c: "2108-09-30",
+      Acc_ProjectPeriodID__c: periodId,
+      Acc_ProjectPeriodStartDate__c: "2108-07-01",
+      Acc_TotalCost__c: 1000,
+      Acc_TotalCostsApproved__c: 1100,
+      Acc_TotalCostsSubmitted__c: 1200,
+      Acc_TotalGrantApproved__c: 1300,
+      Id: "xxxxxx",
+      LastModifiedDate: "2018-10-01T10:13:47.000+0000",
+      Acc_LineItemDescription__c: "An example that isnt in the store"
+    });
   }
 
   public update(updatedClaim: Partial<ISalesforceClaim> & { Id: string }) {

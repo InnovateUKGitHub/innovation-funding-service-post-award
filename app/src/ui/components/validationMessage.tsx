@@ -12,14 +12,17 @@ export const ValidationMessage: React.SFC<Props> = ({ message, key }) => {
     }
 
     const warningColour = "#b10e1e";
+    
     const backgroundStyle = {
-        "padding": "2% 4% 2% 1%",
-        "background": "rgb(248, 248, 248, 1)",
-        "border-left": `5px solid ${warningColour}`,
+        padding: "2% 4% 2% 1%",
+        background: "rgb(248, 248, 248, 1)",
+        borderLeft: `5px solid ${warningColour}`,
     };
+
     const textStyle = {
         margin: 0,
     };
+
     const iconStyle = {
         background: warningColour,
         border: warningColour,

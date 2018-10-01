@@ -1,11 +1,11 @@
-import {conditionalLoad, dataLoadAction, DataLoadAction} from "./dataLoad";
+import { conditionalLoad, dataLoadAction, DataLoadAction } from "./dataLoad";
 import { ApiClient } from "../../../shared/apiClient";
 import { ClaimDto } from "../../models";
-import {AsyncThunk, SyncThunk} from ".";
+import { AsyncThunk, SyncThunk } from ".";
 import { ClaimDtoValidator } from "../../validators/claimDtoValidator";
 import { UpdateEditorAction, updateEditorAction } from "./editorActions";
 import { actions as routeActions } from "redux-router5";
-import {LoadingStatus} from "../../../shared/pending";
+import { LoadingStatus } from "../../../shared/pending";
 
 export function loadContacts() {
   return conditionalLoad(
@@ -99,38 +99,42 @@ export function loadCostCategories() {
   );
 }
 
-export function loadClaim(claimId: string) {
+export function loadClaim(partnerId: string, periodId: number) {
+  const key = `${partnerId}_${periodId}`;
   return conditionalLoad(
-    claimId,
+    key,
     "claim",
-    () => ApiClient.claims.getById(claimId)
+    () => ApiClient.claims.getByPartnerAndPeriod(partnerId, periodId)
   );
 }
 
-export function validateClaim(id: string, dto: ClaimDto, showErrors?: boolean): SyncThunk<ClaimDtoValidator, UpdateEditorAction> {
+export function validateClaim(partnerId: string, periodId: number, dto: ClaimDto, showErrors?: boolean): SyncThunk<ClaimDtoValidator, UpdateEditorAction> {
   return (dispatch, getState) => {
+    const key = `${partnerId}_${periodId}`;
     const state = getState();
     if (showErrors === null || showErrors === undefined) {
-      const current = state.editors.claim[id];
+      const current = state.editors.claim[key];
       showErrors = current && current.validator.showValidationErrors() || false;
     }
     const validator = new ClaimDtoValidator(dto, showErrors);
-    dispatch(updateEditorAction(id, "claim", dto, validator));
+    dispatch(updateEditorAction(key, "claim", dto, validator));
     return validator;
   };
 }
 
-export function saveClaim(id: string, dto: ClaimDto, onComplete: () => void): AsyncThunk<void, DataLoadAction | UpdateEditorAction> {
+export function saveClaim(partnerId: string, periodId: number, dto: ClaimDto, onComplete: () => void): AsyncThunk<void, DataLoadAction | UpdateEditorAction> {
   return (dispatch, getState) => {
-    const validation = validateClaim(id, dto, true)(dispatch, getState, null);
+    const key = `${partnerId}_${periodId}`;
+    const validation = validateClaim(partnerId, periodId, dto, true)(dispatch, getState, null);
     if (!validation.isValid()) {
       return Promise.resolve();
     }
-    return ApiClient.claims.update(id, dto).then((result) => {
-      dispatch(dataLoadAction(id, "claim", LoadingStatus.Done, result));
+    return ApiClient.claims.update(partnerId, periodId, dto).then((result) => {
+      dispatch(dataLoadAction(key, "claim", LoadingStatus.Done, result));
       onComplete();
     }).catch((e) => {
-      dispatch(updateEditorAction(id, "claim", dto, validation, e));
+      console.log("Caught e", e);
+      dispatch(updateEditorAction(key, "claim", dto, validation, e));
     });
   };
 }
