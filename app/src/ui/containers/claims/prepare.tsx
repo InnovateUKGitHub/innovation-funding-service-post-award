@@ -9,9 +9,7 @@ import { DateTime } from "luxon";
 import { IEditorStore } from "../../redux/reducers/editorsReducer";
 import { ClaimDtoValidator } from "../../validators/claimDtoValidator";
 import { ClaimDto } from "../../models";
-import { updateEditorAction } from "../../redux/actions/editorActions";
-import { navigateTo, saveClaim, validateClaim } from "../../redux/actions/thunks";
-import {ClaimForecastRoute, ClaimsDashboardRoute, ClaimsDetailsRoute} from ".";
+import {ClaimForecastRoute, ClaimsDashboardRoute} from ".";
 
 interface Params {
     projectId: string;
@@ -29,7 +27,7 @@ interface Data {
 
 interface Callbacks {
     onChange: (claimId: string, dto: ClaimDto) => void;
-    saveAndProgress: (dto: ClaimDto, projectId: string, claimId: string) => void;
+    saveAndProgress: (dto: ClaimDto, projectId: string, partnerId: string, claimId: string) => void;
     saveAndReturn: (dto: ClaimDto, projectId: string, partnerId: string, claimId: string) => void;
 }
 
@@ -97,7 +95,7 @@ export class PrepareComponent extends ContainerBase<Params, Data, Callbacks> {
     }
 
     private saveAndProgress() {
-      this.props.saveAndProgress(this.props.editor.data, this.props.projectId, this.props.claimId);
+      this.props.saveAndProgress(this.props.editor.data, this.props.projectId, this.props.partner.data!.id, this.props.claimId);
     }
 
     private saveAndReturn() {
@@ -121,12 +119,12 @@ const getEditor = (claimId: string, editor: IEditorStore<Dtos.ClaimDto, ClaimDto
     }).data!;
 };
 
-const progress = (dispatch: any, projectId: string, claimId: string) => {
-  dispatch(navigateTo(ClaimForecastRoute.getLink({})));
+const progress = (dispatch: any, projectId: string, partnerId: string, claimId: string) => {
+  dispatch(Actions.navigateTo(ClaimForecastRoute.getLink({projectId, partnerId, claimId})));
 };
 
 const goBack = (dispatch: any, projectId: string, partnerId: string) => {
-  dispatch(navigateTo(ClaimsDashboardRoute.getLink({projectId, partnerId})));
+  dispatch(Actions.navigateTo(ClaimsDashboardRoute.getLink({projectId, partnerId})));
 };
 
 export const PrepareClaim = definition.connect({
@@ -140,9 +138,9 @@ export const PrepareClaim = definition.connect({
         editor: getEditor(params.claimId, store.editors.claim[params.claimId], Pending.create(store.data.claim[params.claimId]))
     }),
     withCallbacks: (dispach) => ({
-        onChange: (id, dto) => dispach(validateClaim(id, dto)),
-        saveAndProgress: (dto, projectId, claimId) => dispach(saveClaim(claimId, dto, () => progress(dispach, projectId, claimId))),
-        saveAndReturn: (dto, projectId, partnerId, claimId) => dispach(saveClaim(claimId, dto, () => goBack(dispach, projectId, partnerId)))
+        onChange: (id, dto) => dispach(Actions.validateClaim(id, dto)),
+        saveAndProgress: (dto, projectId, partnerId, claimId) => dispach(Actions.saveClaim(claimId, dto, () => progress(dispach, projectId, partnerId, claimId))),
+        saveAndReturn: (dto, projectId, partnerId, claimId) => dispach(Actions.saveClaim(claimId, dto, () => goBack(dispach, projectId, partnerId)))
     })
 });
 
