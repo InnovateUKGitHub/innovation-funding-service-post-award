@@ -9,15 +9,7 @@ export class GetAllForPartnerQuery implements IQuery<ClaimCostDto[]> {
     public async Run(context: IContext) {
         const claimDetailResults = await context.repositories.claimDetails.getAllByPartnerId(this.partnerId, this.periodId);
         const totalCostCategoryResults = await context.repositories.claimTotalCostCategory.getAllByPartnerId(this.partnerId);
-        const fakeCostCategories = [
-            { id: "1", name: "Labour" },
-            { id: "2", name: "Overheads" },
-            { id: "3", name: "Materials" },
-            { id: "4", name: "Capital usage" },
-            { id: "5", name: "Subcontracting" },
-            { id: "6", name: "Travel and subsistence" },
-            { id: "7", name: "Other costs" },
-        ];
+        const costCategiries = await context.repositories.costCategories.getAll();
 
         const claimDetailMap = claimDetailResults.reduce((result, claimDetail) => {
             result[claimDetail.Acc_CostCategory__c] = claimDetail;
@@ -29,10 +21,13 @@ export class GetAllForPartnerQuery implements IQuery<ClaimCostDto[]> {
             return result;
         }, {} as { [key: string]: ISalesforceClaimTotalCostCategory });
 
-        return fakeCostCategories && fakeCostCategories.map(x => ({
-            costCategoryId: x.id,
-            costsClaimedThisPeriod: claimDetailMap[x.id] && claimDetailMap[x.id].Acc_PeriodCostCategoryTotal__c,
-            costsClaimedToDate: totalCostCategoryMap[x.id] && totalCostCategoryMap[x.id].Acc_CostCategoryTotal__c
+        return costCategiries && costCategiries.sort((a, b) => a.Acc_DisplayOrder__c - b.Acc_DisplayOrder__c).map(x => ({
+            costCategoryId: x.Id,
+            offerCosts: claimDetailMap[x.Id].Acc_PeriodCostCategoryTotal__c * 10, // TODO: remove fake data
+            costsClaimedToDate: totalCostCategoryMap[x.Id] && totalCostCategoryMap[x.Id].Acc_CostCategoryTotal__c - claimDetailMap[x.Id].Acc_PeriodCostCategoryTotal__c,
+            costsClaimedThisPeriod: claimDetailMap[x.Id] && claimDetailMap[x.Id].Acc_PeriodCostCategoryTotal__c,
+            remainingOfferCosts: (claimDetailMap[x.Id].Acc_PeriodCostCategoryTotal__c * 10) - // TODO: remove fake data
+                ((totalCostCategoryMap[x.Id].Acc_CostCategoryTotal__c - claimDetailMap[x.Id].Acc_PeriodCostCategoryTotal__c) + claimDetailMap[x.Id].Acc_PeriodCostCategoryTotal__c)
         }));
     }
 }
