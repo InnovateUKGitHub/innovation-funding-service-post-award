@@ -11,12 +11,23 @@ export const ValidationMessage: React.SFC<Props> = ({ message, key }) => {
         return null;
     }
 
+    const backgroundStyle = {
+        "padding": "2% 4% 2% 1%",
+        "background": "rgb(248, 248, 248, 1)",
+        "border-left": "5px solid black",
+    };
+    const textStyle = {
+        margin: 0,
+    };
+
     return (
-        <div className="govuk-warning-text" key={key}>
-            <span className="govuk-warning-text__icon" aria-hidden="true">!</span>
-            <strong className="govuk-warning-text__text">
-                <span className="govuk-warning-text__assistive">Warning</span> {message.errorMessage}
-            </strong>
+        <div className="govuk-warning-text-background" style={backgroundStyle}>
+            <div className="govuk-warning-text" key={key} style={textStyle}>
+                <span className="govuk-warning-text__icon" aria-hidden="true" >!</span>
+                <strong className="govuk-warning-text__text">
+                    <span className="govuk-warning-text__assistive">Warning</span> {message.errorMessage}
+                </strong>
+            </div>
         </div>
     );
 };
