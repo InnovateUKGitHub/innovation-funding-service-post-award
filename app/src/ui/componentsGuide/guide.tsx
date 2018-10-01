@@ -10,18 +10,20 @@ import { titleGuide } from "./titleGuide";
 import { linksListGuide } from "./linksListGuide";
 import { tableGuide } from "./tableGuide";
 import { detailsGuide } from "./detailsGuide";
+import { formGuide } from "./formGuide";
 
 const guides: IGuide[] = [
     datesGuide,
     detailsGuide,
     emailGuide,
+    formGuide,
+    linksListGuide,
     projectMemberGuide,
     sectionGuide,
     sectionPanelGuide,
     tabsGuide,
-    titleGuide,
-    linksListGuide,
     tableGuide,
+    titleGuide,
 ];
 
 interface Props {

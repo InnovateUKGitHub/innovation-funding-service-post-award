@@ -29,8 +29,6 @@ interface CombinedData {
     claimCosts: Dtos.ClaimCostDto[];
 }
 
-const Loader = ACC.TypedLoader<CombinedData>();
-
 export class PrepareComponent extends ContainerBase<Params, Data, {}> {
 
     public render() {
@@ -43,6 +41,7 @@ export class PrepareComponent extends ContainerBase<Params, Data, {}> {
             (project, partner, costCategories, claim, claimCosts) => ({ project, partner, costCategories, claim, claimCosts })
         );
 
+        const Loader = ACC.TypedLoader<CombinedData>();
         return <Loader pending={combined} render={(data) => this.renderContents(data)} />;
     }
 
