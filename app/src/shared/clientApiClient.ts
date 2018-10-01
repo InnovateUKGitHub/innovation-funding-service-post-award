@@ -1,5 +1,6 @@
 import { IApiClient } from "../server/apis";
 import { processResponse } from "./processResponse";
+import {ClaimDto} from "../ui/models";
 
 const clientApi: IApiClient = {
   claimCosts: {
@@ -11,6 +12,7 @@ const clientApi: IApiClient = {
   claims : {
     getAllByPartnerId: (partnerId: string) => ajaxJson(`/api/claims?partnerId=${partnerId}`),
     getById: (claimId: string) => ajaxJson(`/api/claims/${claimId}`),
+    update: (claimId: string, claim: ClaimDto) => ajaxPut(`/api/claims/${claimId}`, claim)
   },
   claimDetails: {
     getAllByPartnerId: (partnerId: string, periodId: number) => ajaxJson(`/api/claimDetails?partnerId=${partnerId}&periodId=${periodId}`)
@@ -63,6 +65,13 @@ const ajaxPost = <T>(url: string, body: {} = {}, opts?: {}) => {
   }, opts);
 
   return ajaxJson<T>(url, options);
+};
+
+const ajaxPut = <T>(url: string, body: {} = {}, opts?: {}) => {
+  return ajaxPost<T>(url, body, {
+    ...opts,
+    method: "PUT",
+  });
 };
 
 export default clientApi;

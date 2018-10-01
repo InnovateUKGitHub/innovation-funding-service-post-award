@@ -11,7 +11,7 @@ import { ClaimDtoValidator } from "../../validators/claimDtoValidator";
 import { ClaimDto } from "../../models";
 import { updateEditorAction } from "../../redux/actions/editorActions";
 import { navigateTo, saveClaim, validateClaim } from "../../redux/actions/thunks";
-import { ClaimsDashboardRoute, ClaimsDetailsRoute } from ".";
+import {ClaimForecastRoute, ClaimsDashboardRoute, ClaimsDetailsRoute} from ".";
 
 interface Params {
     projectId: string;
@@ -29,7 +29,8 @@ interface Data {
 
 interface Callbacks {
     onChange: (claimId: string, dto: ClaimDto) => void;
-    onSave: (dto: ClaimDto, button: "normal" | "return", projectId: string, partnerId: string, claimId: string) => void;
+    saveAndProgress: (dto: ClaimDto, projectId: string, claimId: string) => void;
+    saveAndReturn: (dto: ClaimDto, projectId: string, partnerId: string, claimId: string) => void;
 }
 
 interface CombinedData {
@@ -79,7 +80,7 @@ export class PrepareComponent extends ContainerBase<Params, Data, Callbacks> {
                 <ACC.Section title={title}>
                     <ACC.ValidationMessage message={editor.validator.comments} />
                     <ACC.Claims.ClaimTable {...data} />
-                    <Form.Form data={editor.data} onChange={(dto) => this.props.onChange(this.props.claimId, dto)} onSubmit={() => this.onSave("normal")}>
+                    <Form.Form data={editor.data} onChange={(dto) => this.props.onChange(this.props.claimId, dto)} onSubmit={() => this.saveAndProgress()}>
                         <Form.Fieldset>
                             <Form.MultilineString label={commentsLabel} hint={commentsHint} name="comments" value={m => m.comments} update={(m, v) => m.comments = v} validation={editor.validator.comments} />
                         </Form.Fieldset>
@@ -87,7 +88,7 @@ export class PrepareComponent extends ContainerBase<Params, Data, Callbacks> {
                             <Form.Submit>Review forcasts</Form.Submit>
                         </Form.Fieldset>
                         <Form.Fieldset>
-                            <Form.Button name="return" onClick={() => this.onSave("return")}>Save and return to claim dashboard</Form.Button>
+                            <Form.Button name="return" onClick={() => this.saveAndReturn()}>Save and return to claim dashboard</Form.Button>
                         </Form.Fieldset>
                     </Form.Form>
                 </ACC.Section>
@@ -95,27 +96,37 @@ export class PrepareComponent extends ContainerBase<Params, Data, Callbacks> {
         );
     }
 
-    private onSave(button: "normal" | "return") {
-        this.props.onSave(this.props.editor.data, button, this.props.projectId, this.props.partner.data!.id, this.props.claimId);
+    private saveAndProgress() {
+      this.props.saveAndProgress(this.props.editor.data, this.props.projectId, this.props.claimId);
+    }
+
+    private saveAndReturn() {
+      this.props.saveAndReturn(this.props.editor.data, this.props.projectId, this.props.partner.data!.id, this.props.claimId);
     }
 }
 
 const definition = ReduxContainer.for<Params, Data, Callbacks>(PrepareComponent);
 const getEditor = (claimId: string, editor: IEditorStore<Dtos.ClaimDto, ClaimDtoValidator>, original: Pending<Dtos.ClaimDto>) => {
-    if (!editor) {
-        console.log("Createing editor", claimId, original);
-        editor = original.then(x => ({ data: JSON.parse(JSON.stringify(x!)) as Dtos.ClaimDto, validator: new ClaimDtoValidator(x!, false), error: null })).data!;
+    if (editor) {
+      return editor;
     }
-    return editor;
+    return original.then(x => {
+        const clone = JSON.parse(JSON.stringify(x!)) as Dtos.ClaimDto;
+        const updatedClaimDto = { ...clone, status: "Draft" };
+        return {
+          data: updatedClaimDto,
+          validator: new ClaimDtoValidator(x!, false),
+          error: null
+        };
+    }).data!;
 };
 
-const navigateOnSave = (dispach: any, button: "normal"|"return", projectId: string, partnerId: string, claimId: string) => {
-    if(button === "return") {
-        dispach(navigateTo(ClaimsDashboardRoute.getLink({projectId, partnerId})));
-    }
-    else {
-        dispach(navigateTo(ClaimsDetailsRoute.getLink({projectId, claimId})));
-    }
+const progress = (dispatch: any, projectId: string, claimId: string) => {
+  dispatch(navigateTo(ClaimForecastRoute.getLink({})));
+};
+
+const goBack = (dispatch: any, projectId: string, partnerId: string) => {
+  dispatch(navigateTo(ClaimsDashboardRoute.getLink({projectId, partnerId})));
 };
 
 export const PrepareClaim = definition.connect({
@@ -130,7 +141,8 @@ export const PrepareClaim = definition.connect({
     }),
     withCallbacks: (dispach) => ({
         onChange: (id, dto) => dispach(validateClaim(id, dto)),
-        onSave: (dto, button, projectId, partnerId, claimId) => dispach(saveClaim(claimId, dto, () => navigateOnSave(dispach, button, projectId, partnerId, claimId)))
+        saveAndProgress: (dto, projectId, claimId) => dispach(saveClaim(claimId, dto, () => progress(dispach, projectId, claimId))),
+        saveAndReturn: (dto, projectId, partnerId, claimId) => dispach(saveClaim(claimId, dto, () => goBack(dispach, projectId, partnerId)))
     })
 });
 

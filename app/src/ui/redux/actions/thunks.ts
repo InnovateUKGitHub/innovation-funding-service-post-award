@@ -1,10 +1,11 @@
-import { conditionalLoad } from "./dataLoad";
+import {conditionalLoad, dataLoadAction, DataLoadAction} from "./dataLoad";
 import { ApiClient } from "../../../shared/apiClient";
 import { ClaimDto } from "../../models";
-import { SyncThunk } from ".";
+import {AsyncThunk, SyncThunk} from ".";
 import { ClaimDtoValidator } from "../../validators/claimDtoValidator";
 import { UpdateEditorAction, updateEditorAction } from "./editorActions";
 import { actions as routeActions } from "redux-router5";
+import {LoadingStatus} from "../../../shared/pending";
 
 export function loadContacts() {
   return conditionalLoad(
@@ -115,26 +116,30 @@ export function loadClaim(claimId: string) {
 }
 
 export function validateClaim(id: string, dto: ClaimDto, showErrors?: boolean): SyncThunk<ClaimDtoValidator, UpdateEditorAction> {
-  return (dispach, getState) => {
+  return (dispatch, getState) => {
     const state = getState();
     if (showErrors === null || showErrors === undefined) {
       const current = state.editors.claim[id];
       showErrors = current && current.validator.showValidationErrors() || false;
     }
     const validator = new ClaimDtoValidator(dto, showErrors);
-    dispach(updateEditorAction(id, "claim", dto, validator));
+    dispatch(updateEditorAction(id, "claim", dto, validator));
     return validator;
   };
 }
 
-export function saveClaim(id: string, dto: ClaimDto, onComplete: () => void): SyncThunk<ClaimDtoValidator, UpdateEditorAction> {
-  return (dispach, getState) => {
-    const validation = validateClaim(id, dto, true)(dispach, getState, null);
-    if(validation.isValid()) {
-        // todo: api call to save
-        onComplete();
+export function saveClaim(id: string, dto: ClaimDto, onComplete: () => void): AsyncThunk<void, DataLoadAction | UpdateEditorAction> {
+  return (dispatch, getState) => {
+    const validation = validateClaim(id, dto, true)(dispatch, getState, null);
+    if (!validation.isValid()) {
+      return Promise.resolve();
     }
-    return validation;
+    return ApiClient.claims.update(id, dto).then((result) => {
+      dispatch(dataLoadAction(id, "claim", LoadingStatus.Done, result));
+      onComplete();
+    }).catch((e) => {
+      dispatch(updateEditorAction(id, "claim", dto, validation, e));
+    });
   };
 }
 
