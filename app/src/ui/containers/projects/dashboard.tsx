@@ -20,15 +20,14 @@ class ProjectDashboardComponent extends ContainerBase<{}, Data, Callbacks> {
   }
 
   render() {
-    const Loading = ACC.Loading.forData(this.props.projects);
-
+    const Loader = ACC.TypedLoader<ProjectDto[]>();
     return (
       <ACC.Page>
         <ACC.Section>
           <ACC.BackLink route={routeConfig.home.getLink({})}>Back</ACC.BackLink>
         </ACC.Section>
         <ACC.Title title="Projects Dashboard" />
-        <Loading.Loader render={x => this.renderSubSections(x)} />
+        <Loader pending={this.props.projects} render={x => this.renderSubSections(x)} />
       </ACC.Page>
     );
   }
@@ -54,6 +53,7 @@ class ProjectDashboardComponent extends ContainerBase<{}, Data, Callbacks> {
       if (daysRemaining <= 30) {
         open.push((
           <ACC.OpenProjectItem
+            key={x.id}
             project={x}
             daysRemaining={daysRemaining}
             endDate={end}
@@ -69,6 +69,7 @@ class ProjectDashboardComponent extends ContainerBase<{}, Data, Callbacks> {
 
         awaiting.push((
           <ACC.AwaitingProjectItem
+            key={x.id}
             project={x}
             frequency={frequency}
             periodText={periodText}

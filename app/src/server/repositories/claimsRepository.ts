@@ -39,6 +39,7 @@ const fields = [
 export interface IClaimRepository {
   getAllByPartnerId(partnerId: string): Promise<ISalesforceClaim[]>;
   getById(claimId: string): Promise<ISalesforceClaim|null>;
+  update(updatedClaim: Partial<ISalesforceClaim> & { Id: string }): Promise<boolean>;
 }
 
 export class ClaimRepository extends SalesforceBase<ISalesforceClaim> implements IClaimRepository {
@@ -61,5 +62,9 @@ export class ClaimRepository extends SalesforceBase<ISalesforceClaim> implements
 
   public getById(claimId: string) {
     return super.retrieve(claimId).then(x => this.extend(x));
+  }
+
+  public update(updatedClaim: Partial<ISalesforceClaim> & { Id: string }) {
+    return this.updateOne(updatedClaim);
   }
 }

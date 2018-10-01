@@ -26,7 +26,7 @@ const links: Link[] = [
 export const Footer: React.SFC<{}> = () => {
   const renderLinks = (l: Link, i: number) => (
     <li key={i} className="govuk-footer__inline-list-item">
-      <a className="govuk-footer__link" target="_blank" href={l.link}>{l.text}</a>
+      <a className="govuk-footer__link" target="_blank" data-qa={l.text.split(" ").join("-").toLocaleLowerCase()} href={l.link}>{l.text}</a>
     </li>
   );
 
@@ -40,11 +40,11 @@ export const Footer: React.SFC<{}> = () => {
               {links.map(renderLinks)}
             </ul>
             <ul className="govuk-footer__inline-list">
-              <li className="govuk-footer__inline-list-item">
+              <li className="govuk-footer__inline-list-item" data-qa="uses-cokies">
                 GOV.UK uses cookies to make the site simpler.
               </li>
               <li className="govuk-footer__inline-list-item">
-                <a className="govuk-footer__link" href="https://apply-for-innovation-funding.service.gov.uk/info/cookies">
+                <a className="govuk-footer__link" href="https://apply-for-innovation-funding.service.gov.uk/info/cookies" data-qa="more-about-cokies-text">
                   Find out more about cookies
                 </a>.
               </li>
@@ -52,7 +52,7 @@ export const Footer: React.SFC<{}> = () => {
             <svg role="presentation" focusable="false" className="govuk-footer__licence-logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 483.2 195.7" height="17" width="41">
               <path fill="currentColor" d={path} />
             </svg>
-            <span className="govuk-footer__licence-description">
+            <span className="govuk-footer__licence-description" data-qa="licence">
               All content is available under the <a className="govuk-footer__link" href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/" rel="license">Open Government Licence v3.0</a>, except where otherwise stated
             </span>
           </div>

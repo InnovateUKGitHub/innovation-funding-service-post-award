@@ -7,13 +7,11 @@ interface Props {
   project: Dtos.ProjectDto;
   partnerId?: string;
   currentRoute: string;
+  partners: Dtos.PartnerDto[];
 }
 
-// TODO STOP using this
-const tempPartnerId = "a0B1X000000DGyHUAW";
-
-export const ProjectNavigation: React.SFC<Props> = ({project, currentRoute, partnerId = tempPartnerId}) => {
-  const claimsLink = routeConfig.claimsDashboard.getLink({projectId: project.id, partnerId});
+export const ProjectNavigation: React.SFC<Props> = ({project, currentRoute, partnerId, partners}) => {
+  const claimsLink = routeConfig.claimsDashboard.getLink({projectId: project.id, partnerId: partnerId || partners.map(x => x.id)[0]});
   const detailsLink = routeConfig.projectDetails.getLink({id: project.id});
 
   const navigationTabs: TabItem[] = [

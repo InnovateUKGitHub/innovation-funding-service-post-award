@@ -40,7 +40,11 @@ export default abstract class SalesforceBase<T> {
       .select(this.columns.join(", "))
       .where(filter)
       .execute()
-      .then(x => this.asArray(x));
+      .then(x => this.asArray(x))
+      .catch(e => {
+        console.log(e);
+        throw e;
+      });
 
     return result as T[];
   }
@@ -77,6 +81,13 @@ export default abstract class SalesforceBase<T> {
       }
       throw e;
     }
+  }
+
+  protected async updateOne(updatedObj: Partial<T> & { Id: string }): Promise<boolean> {
+    const conn = await salesforceConnection();
+    return await conn.sobject(this.objectName)
+      .update(updatedObj)
+      .then((res) => res.success);
   }
 
   private asArray(result: Partial<{}>[]): T[] {

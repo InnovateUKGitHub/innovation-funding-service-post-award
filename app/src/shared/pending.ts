@@ -44,7 +44,7 @@ export class Pending<T> {
      * @param combineData - a function that takes both Pendings and returns the combined data
      * @return Pending<TR>
      */
-    and<T2, TR>(pending: Pending<T2>, combineData: (pending1: T, pending2: T2) => TR ): Pending<TR> {
+    and<T2, TR>(pending: Pending<T2>, combineData: (pending1: T, pending2: T2) => TR): Pending<TR> {
         return Pending.combine(this, pending, combineData);
     }
 
@@ -139,17 +139,17 @@ export class Pending<T> {
     }
 
     static create<T>(stored: IDataStore<T> | null): Pending<T> {
-      let status = LoadingStatus.Preload;
-      let data   = null;
-      let error  = null;
+        let status = LoadingStatus.Preload;
+        let data = null;
+        let error = null;
 
-      if(!!stored) {
-        status = stored.status;
-        data   = stored.data;
-        error  = stored.error;
-      }
+        if (!!stored) {
+            status = stored.status;
+            data = stored.data;
+            error = stored.error;
+        }
 
-      return new Pending<T>(status, data, error);
+        return new Pending<T>(status, data, error);
     }
 }
 
@@ -161,12 +161,11 @@ const orderedStates = [
 ];
 
 function lowestState(states: LoadingStatus[]) {
-
-    for (const i of orderedStates) {
-        if (states.find(x => orderedStates[i] === x)) {
-            return orderedStates[i];
+    let result = LoadingStatus.Done;
+    orderedStates.forEach(state => {
+        if (result === LoadingStatus.Done && states.indexOf(state) >= 0) {
+            result = state;
         }
-    }
-
-    return LoadingStatus.Done;
+    });
+    return result;
 }

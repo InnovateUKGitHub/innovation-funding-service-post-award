@@ -17,13 +17,12 @@ class ListComponent extends ContainerBase<{}, Props, {}> {
   }
 
   render() {
-    const Loading = Acc.Loading.forData(this.props.contacts);
-
+    const Loader = Acc.TypedLoader<Dtos.IContact[]>();
     return (
       <div>
         <Breadcrumbs links={[{ routeName: "home", text: "Home" }]}>Contacts</Breadcrumbs>
         <Title title="Contacts" />
-        <Loading.Loader render={contacts => this.renderTable(contacts)} />
+        <Loader pending={this.props.contacts} render={contacts => this.renderTable(contacts)} />
         <Link className="govuk-back-link" routeName="home">Home</Link>
       </div>
     );
