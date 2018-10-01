@@ -82,7 +82,9 @@ interface CurrentClaimSummaryProps {
   projectId: string;
 }
 
-const CurrentClaimSummary: React.SFC<CurrentClaimSummaryProps> = ({ claim, projectId }) => {
+const CurrentClaimSummary: React.SFC<CurrentClaimSummaryProps> = (props) => {
+  const { claim } = props;
+
   if (!claim) {
     return (
       <Section title="...">
@@ -105,7 +107,7 @@ const CurrentClaimSummary: React.SFC<CurrentClaimSummaryProps> = ({ claim, proje
         <ClaimTable.Custom
           header=""
           qa="link"
-          value={(x) => (<Link route={PrepareClaimRoute.getLink({ projectId, claimId: x.id })}>Edit claim</Link>)}
+          value={(x) => (<Link route={PrepareClaimRoute.getLink({ projectId: props.projectId, partnerId: x.partnerId, periodId: x.periodId, claimId: "a0B1X000000DIy6UAG"})}>Edit claim</Link>)}
         />
       </ClaimTable.Table>
     </Section>
@@ -152,7 +154,7 @@ const PastClaimsSummary: React.SFC<PastClaimsSummaryProps> = ({ claims, projectI
         <ClaimTable.Custom
           header=""
           qa="link"
-          value={(x) => (<Link route={ClaimsDetailsRoute.getLink({ projectId, claimId: x.id })}>View claim</Link>)}
+          value={(x) => (<Link route={ClaimsDetailsRoute.getLink({ projectId,  partnerId : x.partnerId, periodId: x.periodId })}>View claim</Link>)}
         />
       </ClaimTable.Table>
     </Section>

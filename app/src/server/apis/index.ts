@@ -1,5 +1,4 @@
 import express from "express";
-import * as claimCosts from "./claimCosts";
 import * as contacts from "./contacts";
 import * as costCategories from "./costCategories";
 import * as projects from "./projects";
@@ -11,9 +10,8 @@ import * as claimDetails from "./claimDetails";
 import {ControllerBase} from "./controllerBase";
 
 export interface IApiClient {
-  claimCosts: claimCosts.IClaimCostsApi;
-  claimLineItems: claimLineItems.IClaimLineItemApi;
   claimDetails: claimDetails.IClaimDetailsApi;
+  claimLineItems: claimLineItems.IClaimLineItemApi;
   contacts: contacts.IContactsApi;
   costCategories: costCategories.ICostCategoriesApi;
   projects: projects.IProjectsApi;
@@ -24,9 +22,8 @@ export interface IApiClient {
 
 export const serverApis: IApiClient & { [key: string]: ControllerBase<{}> } = {
   claims: claims.controller,
-  claimCosts: claimCosts.controller,
-  claimLineItems: claimLineItems.controller,
   claimDetails: claimDetails.controller,
+  claimLineItems: claimLineItems.controller,
   contacts: contacts.controller,
   costCategories: costCategories.controller,
   partners: partners.controller,
