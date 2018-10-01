@@ -37,7 +37,7 @@ const fields = [
 
 export interface IClaimRepository {
   getAllByPartnerId(partnerId: string): Promise<ISalesforceClaim[]>;
-  getByPartnerIdAndPeriodId(partnerId: string, periodId: number): Promise<ISalesforceClaim|null>;
+  getByPartnerIdAndPeriodId(partnerId: string, periodId: number): Promise<ISalesforceClaim | null>;
   update(updatedClaim: Partial<ISalesforceClaim> & { Id: string }): Promise<boolean>;
 }
 
@@ -47,8 +47,8 @@ export class ClaimRepository extends SalesforceBase<ISalesforceClaim> implements
     super("Acc_Claims__c", fields);
   }
 
-  extend(item: ISalesforceClaim|null) {
-    if(!item) {
+  extend(item: ISalesforceClaim | null) {
+    if (!item) {
       return item;
     }
     item.Acc_ForecastCost__c = 10000;
@@ -59,7 +59,7 @@ export class ClaimRepository extends SalesforceBase<ISalesforceClaim> implements
     const filter = `Acc_ProjectParticipant__c = '${partnerId}' AND RecordType.Name = '${this.recordType}'`;
     const result = await super.whereString(filter).then(x => x.map(y => this.extend(y)!));
     // todo remove fake
-    if(!result.length){
+    if (!result.length) {
       return [this.createFake(partnerId, 1)];
     }
     return result;
@@ -69,7 +69,7 @@ export class ClaimRepository extends SalesforceBase<ISalesforceClaim> implements
     const filter = `Acc_ProjectParticipant__c = '${partnerId}' AND Acc_ProjectPeriodID__c = ${periodId} AND RecordType.Name = '${this.recordType}'`;
     const result = await super.whereString(filter).then(x => x.map(y => this.extend(y)!)).then(x => x[0]);
     // todo remove fake
-    if(!result){
+    if (!result) {
       return this.createFake(partnerId, periodId);
     }
     return result;

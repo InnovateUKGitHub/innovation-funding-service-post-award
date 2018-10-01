@@ -1,19 +1,19 @@
-import {IContext, IQuery} from "../common/context";
-import {PartnerDto} from "../../../ui/models";
-import {ISalesforcePartner} from "../../repositories/partnersRepository";
+import { IContext, IQuery } from "../common/context";
+import { PartnerDto } from "../../../ui/models";
+import { ISalesforcePartner } from "../../repositories/partnersRepository";
 
 export class MapToPartnerDtoCommand implements IQuery<PartnerDto> {
     constructor(readonly item: ISalesforcePartner) { }
 
     calcPercentageClaimed(total: number, claimed: number) {
         // ToDo: Remove fake data
-        if(!total){
+        if (!total) {
             total = 1000000;
         }
-        if(!claimed){
+        if (!claimed) {
             claimed = 10000;
         }
-        return (total && claimed) ? Math.ceil((claimed/total) * 100) : null;
+        return (total && claimed) ? Math.ceil((claimed / total) * 100) : null;
     }
 
     async Run(context: IContext) {

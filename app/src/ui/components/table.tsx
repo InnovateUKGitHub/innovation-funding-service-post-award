@@ -13,7 +13,7 @@ interface InternalColumnProps<T> {
   dataItem?: T;
   footer?: React.ReactNode;
   classSuffix?: "numeric";
-  cellClassName?: (data: T, index: { column: number, row: number }) => string|null|undefined;
+  cellClassName?: (data: T, index: { column: number, row: number }) => string | null | undefined;
   renderCell: (data: T, index: { column: number, row: number }) => React.ReactNode;
   mode?: columnMode;
   rowIndex?: number;
@@ -24,7 +24,7 @@ interface InternalColumnProps<T> {
 interface ExternalColumnProps<T, TResult> {
   header: React.ReactNode;
   value: (item: T, index: { column: number, row: number }) => TResult;
-  cellClassName?: (data: T, index: { column: number, row: number }) => string|null|undefined;
+  cellClassName?: (data: T, index: { column: number, row: number }) => string | null | undefined;
   footer?: React.ReactNode;
   qa: string;
 }
@@ -139,12 +139,12 @@ const CurrencyColumn = <T extends {}>(): React.SFC<ExternalColumnProps<T, number
   return (props) => <TypedColumn classSuffix="numeric" renderCell={(data, index) => <Currency value={props.value(data, index)} />} {...props} />;
 };
 
-const PercentageColumn = <T extends {}>(): React.SFC<ExternalColumnProps<T, number|null>> => {
+const PercentageColumn = <T extends {}>(): React.SFC<ExternalColumnProps<T, number | null>> => {
   const TypedColumn = TableColumn as { new(): TableColumn<T> };
   return (props) => <TypedColumn classSuffix="numeric" renderCell={(data, index) => <Percentage value={props.value(data, index)} />} {...props} />;
 };
 
-interface LinkColumnProps<T> extends ExternalColumnProps<T, ILinkInfo>{
+interface LinkColumnProps<T> extends ExternalColumnProps<T, ILinkInfo> {
   content: React.ReactNode;
 }
 
@@ -152,7 +152,7 @@ const LinkColumn = <T extends {}>(props: LinkColumnProps<T>) => {
   console.log("Getting link column value", props);
   const TypedColumn = TableColumn as { new(): TableColumn<T> };
   return <TypedColumn classSuffix="numeric" renderCell={(data, index) => <Link route={props.value(data, index)} >{props.content}</Link>} {...props} />;
-}
+};
 
 export const Table = {
   forData: <T extends {}>(data: T[]) => ({
