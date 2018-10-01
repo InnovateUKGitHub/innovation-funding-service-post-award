@@ -23,8 +23,8 @@ export const formGuide: IGuide = {
 };
 
 interface ISimpleEditorDto {
-    name: string;
-    description: string;
+    name: string|null;
+    description: string|null;
 }
 
 class SimpleForm extends React.Component<{}, { original: ISimpleEditorDto, editor: ISimpleEditorDto }> {
