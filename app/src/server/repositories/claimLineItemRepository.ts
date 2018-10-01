@@ -29,7 +29,7 @@ export class ClaimLineItemRepository extends SalesforceBase<ISalesforceClaimLine
     const filter = `
       Acc_ProjectParticipant__c = '${partnerId}'
       AND Acc_ProjectPeriodId__c = ${periodId}
-      AND Acc_CostCategory__r.Acc_CostCategoryID__c = ${categoryId}
+      AND Acc_CostCategory__c = '${categoryId}'
       AND RecordType.Name = '${this.recordType}'
     `;
     return super.whereString(filter);
