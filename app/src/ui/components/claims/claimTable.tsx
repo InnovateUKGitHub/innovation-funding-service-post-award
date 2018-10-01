@@ -8,7 +8,7 @@ interface Props {
     partner: Dtos.PartnerDto;
     costCategories: Dtos.CostCategoryDto[];
     claim: Dtos.ClaimDto;
-    claimCosts: Dtos.ClaimCostDto[];
+    claimDetails: Dtos.ClaimCostDto[];
 }
 
 export const ClaimTable: React.SFC<Props> = (data) => {
@@ -18,7 +18,7 @@ export const ClaimTable: React.SFC<Props> = (data) => {
         .filter(x => x.organistionType === "Industrial")
         .map(x => ({
             category: x,
-            cost: data.claimCosts.find(y => y.costCategoryId === x.id) || {} as Dtos.ClaimCostDto,
+            cost: data.claimDetails.find(y => y.costCategoryId === x.id) || {} as Dtos.ClaimCostDto,
             isTotal: false
         }));
 
@@ -33,10 +33,10 @@ export const ClaimTable: React.SFC<Props> = (data) => {
         },
         cost: {
             costCategoryId: "",
-            remainingOfferCosts: data.claimCosts.reduce((total, item) => total + item.remainingOfferCosts, 0),
-            costsClaimedThisPeriod: data.claimCosts.reduce((total, item) => total + item.costsClaimedThisPeriod, 0),
-            costsClaimedToDate: data.claimCosts.reduce((total, item) => total + item.costsClaimedToDate, 0),
-            offerCosts: data.claimCosts.reduce((total, item) => total + item.offerCosts, 0),
+            remainingOfferCosts: data.claimDetails.reduce((total, item) => total + item.remainingOfferCosts, 0),
+            costsClaimedThisPeriod: data.claimDetails.reduce((total, item) => total + item.costsClaimedThisPeriod, 0),
+            costsClaimedToDate: data.claimDetails.reduce((total, item) => total + item.costsClaimedToDate, 0),
+            offerCosts: data.claimDetails.reduce((total, item) => total + item.offerCosts, 0),
         },
         isTotal: true
     });
@@ -44,7 +44,7 @@ export const ClaimTable: React.SFC<Props> = (data) => {
     const CostCategoriesTable = Table.forData(combinedData);
     // TODO stop hardcoding periodId
     return (
-        <CostCategoriesTable.Table qa="cost-cat" footers={renderFooters(data.project, data.partner, data.claimCosts)}>
+        <CostCategoriesTable.Table qa="cost-cat" footers={renderFooters(data.project, data.partner, data.claimDetails)}>
             <CostCategoriesTable.Custom
                 header="Costs category"
                 qa="category"

@@ -7,7 +7,7 @@ export interface ISalesforceClaim {
   Acc_ClaimStatus__c: string;
   Acc_ProjectPeriodStartDate__c: string;
   Acc_ProjectPeriodEndDate__c: string;
-  Acc_ProjectPeriodID__c: string;
+  Acc_ProjectPeriodID__c: number;
   Acc_TotalCost__c: number;
   Acc_TotalCostsApproved__c: number;
   Acc_TotalCostsSubmitted__c: number;

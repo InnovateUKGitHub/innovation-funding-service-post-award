@@ -1,6 +1,7 @@
 import { TestRepository } from "./testRepository";
 import * as Repositories from "../../src/server/repositories";
 import { IRepositories } from "../../src/server/features/common/context";
+import { ISalesforceClaimTotalCostCategory } from "../../src/server/repositories";
 
 class ContactsTestRepository extends TestRepository<Repositories.ISalesforceContact> implements Repositories.IContactsRepository {
     getById(id: string) {
@@ -55,25 +56,55 @@ class ClaimsTestRepository extends TestRepository<Repositories.ISalesforceClaim>
     getAllByPartnerId(partnerId: string) {
         return super.getWhere(x => x.Acc_ProjectParticipant__c === partnerId);
     }
+    getById(id: string) {
+        return super.getOne(x => x.Id === id);
+    }
+}
 
+class ClaimDetailsTestRepository extends TestRepository<Repositories.ISalesforceClaimDetails> implements Repositories.IClaimDetailsRepository{
+    getAllByPartnerId(partnerId: string, periodId: number): Promise<Repositories.ISalesforceClaimDetails[]> {
+        return super.getWhere(x => x.Acc_ProjectPartner_c === partnerId && x.Acc_PeriodId === periodId);
+    }
+
+    getAllPreviousByPartnerId(partnerId: string, periodId: number): Promise<Repositories.ISalesforceClaimDetails[]> {
+        return super.getWhere(x => x.Acc_ProjectPartner_c === partnerId && x.Acc_PeriodId < periodId);
+    }
+}
+
+class ClaimLineItemsTestRepository extends TestRepository<Repositories.ISalesforceClaimLineItem> implements Repositories.IClaimLineItemRepository{
+    getAllForCategory(partnerId: string, categoryId: string, periodId: number)  {
+        return super.getWhere(x => x.Acc_ProjectPeriodId__c === periodId && x.Acc_CostCategory__c === categoryId && x.Acc_ProjectParticipant__c === partnerId);
+    }
+}
+
+class ClaimTotalCostTestRepository extends TestRepository<ISalesforceClaimTotalCostCategory> implements Repositories.IClaimTotalCostCategoryRepository{
+    getAllByPartnerId(partnerId: string) {
+        return super.getWhere(x => x.Acc_ProjectParticipant__c === partnerId);
+    }
 }
 
 export interface ITestRepositories extends IRepositories {
-    claims: ClaimsTestRepository
-    claimCosts: ClaimCostTestRepository
-    costCategories: CostCategoriesTestRepository
-    contacts: ContactsTestRepository
-    projects: ProjectsTestRepository
-    partners: PartnerTestRepository
-    projectContacts: ProjectContactTestRepository
+    claims: ClaimsTestRepository;
+    claimDetails: ClaimDetailsTestRepository;
+    claimCosts: ClaimCostTestRepository;
+    claimLineItems: ClaimLineItemsTestRepository;
+    costCategories: CostCategoriesTestRepository;
+    contacts: ContactsTestRepository;
+    projects: ProjectsTestRepository;
+    partners: PartnerTestRepository;
+    projectContacts: ProjectContactTestRepository;
+    claimTotalCostCategory: ClaimTotalCostTestRepository;
 }
 
-export const createTestRepositories = () : ITestRepositories => ({
+export const createTestRepositories = (): ITestRepositories => ({
     claims: new ClaimsTestRepository(),
     claimCosts: new ClaimCostTestRepository(),
+    claimDetails: new ClaimDetailsTestRepository(),
+    claimLineItems: new ClaimLineItemsTestRepository(),
     costCategories: new CostCategoriesTestRepository(),
     contacts: new ContactsTestRepository(),
     projects: new ProjectsTestRepository(),
     partners: new PartnerTestRepository(),
-    projectContacts: new ProjectContactTestRepository()
+    projectContacts: new ProjectContactTestRepository(),
+    claimTotalCostCategory: new ClaimTotalCostTestRepository(),
 });

@@ -18,7 +18,7 @@ interface IClaimBody {
   status: string;
   periodStartDate: string;
   periodEndDate: string;
-  periodId: string;
+  periodId: number;
   totalCost: number;
   forecastCost: number;
   approvedDate: string | null;

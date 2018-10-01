@@ -14,13 +14,14 @@ export interface ICommand<T> {
 export interface IRepositories {
   claims: Readonly<Repsoitories.IClaimRepository>;
   claimCosts: Readonly<Repsoitories.IClaimCostRepository>;
+  claimDetails: Readonly<Repsoitories.IClaimDetailsRepository>;
   contacts: Readonly<Repsoitories.IContactsRepository>;
   costCategories: Readonly<Repsoitories.ICostCategoryRepository>;
   projects: Readonly<Repsoitories.IProjectRepository>;
   partners: Readonly<Repsoitories.IPartnerRepository>;
   projectContacts: Readonly<Repsoitories.IProjectContactsRepository>;
   claimLineItems: Readonly<Repsoitories.IClaimLineItemRepository>;
-  claimDetails: Readonly<Repsoitories.IClaimDetailsRepository>;
+  claimTotalCostCategory: Readonly<Repsoitories.IClaimTotalCostCategoryRepository>;
 }
 
 export interface IContext {
@@ -36,6 +37,7 @@ export class Context implements IContext {
   public repositories = {
     claims: new Repsoitories.ClaimRepository(),
     claimDetails: new Repsoitories.ClaimDetailsRepository(),
+    claimTotalCostCategory: new Repsoitories.ClaimTotalCostCategoryRepository(),
     claimCosts: new Repsoitories.ClaimCostRepository(),
     contacts: new Repsoitories.ContactsRepository(),
     costCategories: new Repsoitories.CostCategoryRepository(),

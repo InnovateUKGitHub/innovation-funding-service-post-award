@@ -15,6 +15,8 @@ import { ClaimsDashboardRoute, ClaimsDetailsRoute } from ".";
 
 interface Params {
     projectId: string;
+    partnerId: string;
+    periodId: number;
     claimId: string;
 }
 
@@ -23,13 +25,13 @@ interface Data {
     partner: Pending<Dtos.PartnerDto>;
     costCategories: Pending<Dtos.CostCategoryDto[]>;
     claim: Pending<Dtos.ClaimDto>;
-    claimCosts: Pending<Dtos.ClaimCostDto[]>;
+    claimDetails: Pending<Dtos.ClaimCostDto[]>;
     editor: IEditorStore<Dtos.ClaimDto, ClaimDtoValidator>;
 }
 
 interface Callbacks {
     onChange: (claimId: string, dto: ClaimDto) => void;
-    onSave: (dto: ClaimDto, button: "normal" | "return", projectId: string, partnerId: string, claimId: string) => void;
+    onSave: (dto: ClaimDto, button: "normal" | "return", projectId: string, partnerId: string, claimId: string, periodId: number) => void;
 }
 
 interface CombinedData {
@@ -37,7 +39,7 @@ interface CombinedData {
     partner: Dtos.PartnerDto;
     costCategories: Dtos.CostCategoryDto[];
     claim: Dtos.ClaimDto;
-    claimCosts: Dtos.ClaimCostDto[];
+    claimDetails: Dtos.ClaimCostDto[];
 }
 
 export class PrepareComponent extends ContainerBase<Params, Data, Callbacks> {
@@ -48,8 +50,8 @@ export class PrepareComponent extends ContainerBase<Params, Data, Callbacks> {
             this.props.partner,
             this.props.costCategories,
             this.props.claim,
-            this.props.claimCosts,
-            (project, partner, costCategories, claim, claimCosts) => ({ project, partner, costCategories, claim, claimCosts })
+            this.props.claimDetails,
+            (project, partner, costCategories, claim, claimDetails) => ({ project, partner, costCategories, claim, claimDetails })
         );
 
         const Loader = ACC.TypedLoader<CombinedData>();
@@ -63,7 +65,7 @@ export class PrepareComponent extends ContainerBase<Params, Data, Callbacks> {
         return `${data.partner.name} claim for ${data.claim.periodId} ${DateTime.fromJSDate(data.claim.periodStartDate).toFormat("MMMM")} to ${DateTime.fromJSDate(data.claim.periodEndDate).toFormat("MMMM yyyy")}`;
     }
 
-    private renderContents(data: { project: Dtos.ProjectDto, partner: Dtos.PartnerDto, costCategories: Dtos.CostCategoryDto[], claim: Dtos.ClaimDto, claimCosts: Dtos.ClaimCostDto[] }, editor: IEditorStore<ClaimDto, ClaimDtoValidator>) {
+    private renderContents(data: { project: Dtos.ProjectDto, partner: Dtos.PartnerDto, costCategories: Dtos.CostCategoryDto[], claim: Dtos.ClaimDto, claimDetails: Dtos.ClaimCostDto[] }, editor: IEditorStore<ClaimDto, ClaimDtoValidator>) {
 
         const title = this.getClaimPeriodTitle(data);
         const Form = ACC.TypedForm<Dtos.ClaimDto>();
@@ -75,7 +77,7 @@ export class PrepareComponent extends ContainerBase<Params, Data, Callbacks> {
                     <ACC.BackLink route={routeConfig.claimsDashboard.getLink({ projectId: data.project.id, partnerId: data.partner.id })}>Claims dashboard</ACC.BackLink>
                 </ACC.Section>
                 <ACC.Projects.Title pageTitle="Claim" project={data.project} />
-                <ACC.Claims.Navigation projectId={data.project.id} claimId={data.claim.id} currentRouteName={routeConfig.claimDetails.routeName} />
+                <ACC.Claims.Navigation projectId={data.project.id} partnerId={data.partner.id} periodId={data.claim.periodId} currentRouteName={routeConfig.claimDetails.routeName} />
                 <ACC.Section title={title}>
                     <ACC.ValidationMessage message={editor.validator.comments} />
                     <ACC.Claims.ClaimTable {...data} />
@@ -96,7 +98,7 @@ export class PrepareComponent extends ContainerBase<Params, Data, Callbacks> {
     }
 
     private onSave(button: "normal" | "return") {
-        this.props.onSave(this.props.editor.data, button, this.props.projectId, this.props.partner.data!.id, this.props.claimId);
+        this.props.onSave(this.props.editor.data, button, this.props.projectId, this.props.partner.data!.id, this.props.claimId, this.props.periodId);
     }
 }
 
@@ -109,12 +111,12 @@ const getEditor = (claimId: string, editor: IEditorStore<Dtos.ClaimDto, ClaimDto
     return editor;
 };
 
-const navigateOnSave = (dispach: any, button: "normal"|"return", projectId: string, partnerId: string, claimId: string) => {
+const navigateOnSave = (dispach: any, button: "normal"|"return", projectId: string, partnerId: string, claimId: string, periodId: number) => {
     if(button === "return") {
         dispach(navigateTo(ClaimsDashboardRoute.getLink({projectId, partnerId})));
     }
     else {
-        dispach(navigateTo(ClaimsDetailsRoute.getLink({projectId, claimId})));
+        dispach(navigateTo(ClaimsDetailsRoute.getLink({ projectId, partnerId, periodId})));
     }
 };
 
@@ -124,26 +126,26 @@ export const PrepareClaim = definition.connect({
         // todo: fix to be partner for the claim rather than fist partner in project
         partner: Pending.create(store.data.partners[params.projectId]).then(x => x![0]),
         costCategories: Pending.create(store.data.costCategories.all),
-        claim: Pending.create(store.data.claim[params.claimId]),
-        claimCosts: Pending.create(store.data.claimCosts[params.claimId]),
+        claim: Pending.create(store.data.claim[params.periodId.toString()]), // ToDo: wire up partner id and period id
+        claimDetails: Pending.create(store.data.claimDetails[params.partnerId + "_" + params.periodId]),
         editor: getEditor(params.claimId, store.editors.claim[params.claimId], Pending.create(store.data.claim[params.claimId]))
     }),
     withCallbacks: (dispach) => ({
         onChange: (id, dto) => dispach(validateClaim(id, dto)),
-        onSave: (dto, button, projectId, partnerId, claimId) => dispach(saveClaim(claimId, dto, () => navigateOnSave(dispach, button, projectId, partnerId, claimId)))
+        onSave: (dto, button, projectId, partnerId, claimId, periodId) => dispach(saveClaim(claimId, dto, () => navigateOnSave(dispach, button, projectId, partnerId, claimId, periodId)))
     })
 });
 
 export const PrepareClaimRoute = definition.route({
     routeName: "prepare-claim",
-    routePath: "/projects/:projectId/claims/:claimId/prepare",
-    getParams: (route) => ({ projectId: route.params.projectId, claimId: route.params.claimId }),
+    routePath: "/projects/:projectId/claims/:partnerId/prepare/:periodId",
+    getParams: (route) => ({ projectId: route.params.projectId, partnerId: route.params.partnerId, periodId: parseInt(route.params.periodId, 10), claimId: "a0B1X000000DIy6UAG" }),
     getLoadDataActions: (params) => [
         Actions.loadProject(params.projectId),
         Actions.loadPatnersForProject(params.projectId),
         Actions.loadCostCategories(),
-        Actions.loadClaim(params.claimId),
-        Actions.loadClaimCosts(params.claimId)
+        Actions.loadClaim(params.periodId.toString()), // ToDo: wire up to partner id, period id
+        Actions.loadClaimDetailsForPartner(params.partnerId, params.periodId)
     ],
     container: PrepareClaim
 });
