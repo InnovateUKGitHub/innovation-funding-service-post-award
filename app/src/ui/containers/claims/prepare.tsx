@@ -125,7 +125,7 @@ const getEditor = (editor: IEditorStore<Dtos.ClaimDto, ClaimDtoValidator>, origi
 };
 
 const progress = (dispatch: any, projectId: string, partnerId: string, periodId: number) => {
-    dispatch(navigateTo(ClaimForecastRoute.getLink({ projectId, partnerId })));
+    dispatch(navigateTo(ClaimForecastRoute.getLink({ projectId, partnerId, periodId })));
 };
 
 const goBack = (dispatch: any, projectId: string, partnerId: string, periodId: number) => {
