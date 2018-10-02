@@ -16,9 +16,6 @@ interface Params {
   periodId: number;
 }
 interface Data {
-  projectId: string;
-  partnerId: string;
-  periodId: number;
   project: Pending<Dtos.ProjectDto>;
   claim: Pending<Dtos.ClaimDto>;
   partner: Pending<Dtos.PartnerDto>;
@@ -99,9 +96,6 @@ const definition = ReduxContainer.for<Params, Data, Callbacks>(ClaimForecastComp
 
 export const ForecastClaim = definition.connect({
   withData: (store, params) => ({
-    projectId: params.projectId,
-    partnerId: params.partnerId,
-    periodId: params.periodId,
     project: Pending.create(store.data.project[params.projectId]),
     claim: Pending.create(store.data.claim[params.partnerId + "_" + params.periodId]),
     partner: Pending.create(store.data.partner[params.partnerId]),
