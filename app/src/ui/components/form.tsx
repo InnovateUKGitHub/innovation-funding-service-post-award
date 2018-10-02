@@ -40,7 +40,7 @@ class FieldsetComponent<T> extends React.Component<FieldsetProps<T>, []> {
         const childrenWithData = cloneChildrenWithData(formProps, this.props.children, "fieldset");// React.Children.map(this.props.children, child => React.cloneElement(child as any, {data: this.props.data}));
         return (
             <fieldset className="govuk-fieldset">
-                <legend className="govuk-fieldset__legend govuk-fieldset__legend--xl">
+                <legend className="govuk-fieldset__legend govuk-fieldset__legend--m">
                     {this.props.heading ? <h1 className="govuk-fieldset__heading">{this.props.heading(formProps.data)}</h1> : null}
                 </legend>
                 {childrenWithData}

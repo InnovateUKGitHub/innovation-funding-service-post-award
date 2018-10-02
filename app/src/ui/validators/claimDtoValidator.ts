@@ -1,7 +1,7 @@
 import { ClaimDto } from "../models";
 import * as Validation from "./common";
 
-const COMMENTS_LENGTH_MAX = 1000;
+const COMMENTS_LENGTH_MAX = 100;
 
 export class ClaimDtoValidator extends Validation.Results<ClaimDto>  {
 

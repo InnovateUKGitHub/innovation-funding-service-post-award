@@ -15,12 +15,11 @@ export class GetAllForPartnerQuery implements IQuery<ClaimDto[]> {
     }
 }
 
-export class GetByIdQuery implements IQuery<ClaimDto> {
-    constructor(private claimId: string) {
-    }
+export class GetByPartnerAndPeriodQuery implements IQuery<ClaimDto|null> {
+    constructor(private partnerId: string, private periodId: number) {}
 
     public async Run(context: IContext) {
-        const result = await context.repositories.claims.getById(this.claimId);
-        return mapClaim(context)(result);
+        const result = await context.repositories.claims.getByPartnerIdAndPeriodId(this.partnerId, this.periodId);
+        return result && mapClaim(context)(result);
     }
 }

@@ -2,10 +2,11 @@ import React from "react";
 import { routeConfig as routes } from "../routing";
 import { Link, Title } from "../components";
 import { ContainerBase, ReduxContainer } from "./containerBase";
-const partnerId = "a071w000000LOXWAA4";
-const projectId = "a0C1X000000CvzNUAS";
-const claimId = "a051w000000GE7RAAW";
-const costCategoryId = "a071X000000HDajQAG";
+
+const projectId = "a0C1X000000CxrLUAS";
+const partnerId = "a0B1X000000DIxtUAG";
+const periodId = 1;
+const costCategoryId = "a071X000000HESNQA4";
 
 class Component extends ContainerBase<{}, {}, {}> {
   render() {
@@ -36,14 +37,14 @@ class Component extends ContainerBase<{}, {}, {}> {
                 <p>Partner {partnerId} (Project {projectId})</p>
             </div>
           <div className="govuk-grid-column-one-third">
-            <h2><Link route={routes.claimDetails.getLink({ projectId, claimId })}>Claims Details</Link></h2>
-            <p>Project {projectId} Claim {claimId}</p>
+            <h2><Link route={routes.claimDetails.getLink({ projectId, partnerId, periodId })}>Claims Details</Link></h2>
+            <p>Project {projectId} Partner {partnerId} Period {periodId}</p>
           </div>
         </div>
         <div className="govuk-grid-row">
           <div className="govuk-grid-column-one-third">
-            <h2><Link route={routes.claimCostForm.getLink({ projectId, partnerId, costCategoryId, periodId: 1 })}>Claim line items</Link></h2>
-            <p>Project {projectId} Claim {claimId}</p>
+            <h2><Link route={routes.claimCostForm.getLink({ projectId, partnerId, costCategoryId, periodId })}>Claim line items</Link></h2>
+            <p>Project {projectId} Partner {partnerId} Period {periodId} Category {costCategoryId}</p>
           </div>
         </div>
       </div>

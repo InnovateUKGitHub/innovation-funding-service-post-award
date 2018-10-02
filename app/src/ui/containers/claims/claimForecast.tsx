@@ -13,14 +13,15 @@ import {ClaimDto} from "../../models";
 interface Params {
   projectId: string;
   partnerId: string;
-  claimId: string;
+  periodId: number;
 }
-
 interface Data {
   projectId: string;
+  partnerId: string;
+  periodId: number;
   project: Pending<Dtos.ProjectDto>;
-  partner: Pending<Dtos.PartnerDto>;
   claim: Pending<Dtos.ClaimDto>;
+  partner: Pending<Dtos.PartnerDto>;
   editor: IEditorStore<Dtos.ClaimDto, ClaimDtoValidator>;
 }
 
@@ -31,8 +32,8 @@ interface CombinedData {
 }
 
 interface Callbacks {
-  saveAndReturn: (dto: ClaimDto, projectId: string, partnerId: string, claimId: string) => void;
-  onChange: (dto: ClaimDto) => void;
+  saveAndReturn: (dto: ClaimDto, projectId: string, partnerId: string, periodId: number) => void;
+  onChange: (partnerId: string, periodId: number, dto: ClaimDto) => void;
 }
 
 export class ClaimForecastComponent extends ContainerBase<Params, Data, Callbacks> {
@@ -49,21 +50,21 @@ export class ClaimForecastComponent extends ContainerBase<Params, Data, Callback
     return <Loader pending={combined} render={(data) => this.renderContents(data)} />;
   }
 
-  public renderContents({ project, partner, claim }: CombinedData) {
-    const Form = ACC.TypedForm<Dtos.ClaimDto>();
+  private saveAndReturn() {
+    this.props.saveAndReturn(this.props.editor.data, this.props.projectId, this.props.partnerId, this.props.periodId);
+  }
 
-    const saveAndReturn = () => {
-      this.props.saveAndReturn(this.props.editor.data, project.id, partner.id, claim.id);
-    };
+  public renderContents({ project, partner }: CombinedData) {
+    const Form = ACC.TypedForm<Dtos.ClaimDto>();
 
     return (
       <ACC.Page>
         <ACC.Section>
-          <ACC.BackLink route={routeConfig.prepareClaim.getLink({ projectId: project.id, claimId: claim.id })}>Back</ACC.BackLink>
+          <ACC.BackLink route={routeConfig.prepareClaim.getLink({ projectId: project.id, partnerId: partner.id, periodId: this.props.periodId })}>Back</ACC.BackLink>
         </ACC.Section>
         <ACC.Projects.Title pageTitle="Claim" project={project} />
         <ACC.Section>
-          <Form.Form data={this.props.editor.data} onChange={(dto) => this.props.onChange(dto)} onSubmit={() => saveAndReturn()}>
+          <Form.Form data={this.props.editor.data} onChange={(dto) => this.props.onChange(this.props.partnerId, this.props.periodId, dto)} onSubmit={() => this.saveAndReturn()}>
             <Form.Fieldset>
               <Form.Submit>Submit claim and forecast changes</Form.Submit>
             </Form.Fieldset>
@@ -75,7 +76,7 @@ export class ClaimForecastComponent extends ContainerBase<Params, Data, Callback
 }
 
 // TODO extract shared function?
-const getEditor = (claimId: string, editor: IEditorStore<Dtos.ClaimDto, ClaimDtoValidator>, original: Pending<Dtos.ClaimDto>) => {
+const getEditor = (editor: IEditorStore<Dtos.ClaimDto, ClaimDtoValidator>, original: Pending<Dtos.ClaimDto>) => {
   if (editor) {
     return editor;
   }
@@ -99,25 +100,27 @@ const definition = ReduxContainer.for<Params, Data, Callbacks>(ClaimForecastComp
 export const ForecastClaim = definition.connect({
   withData: (store, params) => ({
     projectId: params.projectId,
+    partnerId: params.partnerId,
+    periodId: params.periodId,
     project: Pending.create(store.data.project[params.projectId]),
+    claim: Pending.create(store.data.claim[params.partnerId + "_" + params.periodId]),
     partner: Pending.create(store.data.partner[params.partnerId]),
-    claim: Pending.create(store.data.claim[params.claimId]),
-    editor: getEditor(params.claimId, store.editors.claim[params.claimId], Pending.create(store.data.claim[params.claimId]))
+    editor: getEditor(store.editors.claim[params.partnerId + "_" + params.periodId], Pending.create(store.data.claim[params.partnerId + "_" + params.periodId]))
   }),
-  withCallbacks: (dispach) => ({
-    onChange: (dto) => dispach(Actions.validateClaim(dto.id, dto)),
-    saveAndReturn: (dto, projectId, partnerId, claimId) => dispach(Actions.saveClaim(claimId, dto, () => goBack(dispach, projectId, partnerId)))
+  withCallbacks: (dispatch) => ({
+    onChange: (partnerId, periodId, dto) => dispatch(Actions.validateClaim(partnerId, periodId, dto)),
+    saveAndReturn: (dto, projectId, partnerId, periodId) => dispatch(Actions.saveClaim(partnerId, periodId, dto, () => goBack(dispatch, projectId, partnerId)))
   })
 });
 
 export const ClaimForecastRoute = definition.route({
   routeName: "claimForecast",
-  routePath: "/projects/:projectId/partners/:partnerId/claims/:claimId/forecast",
-  getParams: (route) => ({projectId: route.params.projectId, partnerId: route.params.partnerId, claimId: route.params.claimId}),
-  getLoadDataActions: ({ projectId, partnerId, claimId }) => [
+  routePath: "/projects/:projectId/claims/:partnerId/forecast/:periodId",
+  getParams: (route) => ({ projectId: route.params.projectId, partnerId: route.params.partnerId, periodId: parseInt(route.params.periodId, 10) }),
+  getLoadDataActions: ({ projectId, partnerId, periodId }) => [
     Actions.loadProject(projectId),
     Actions.loadPartner(partnerId),
-    Actions.loadClaim(claimId)
+    Actions.loadClaim(partnerId, periodId)
   ],
   container: ForecastClaim
 });

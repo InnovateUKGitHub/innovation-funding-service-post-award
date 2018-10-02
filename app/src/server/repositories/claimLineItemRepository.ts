@@ -4,16 +4,22 @@ export interface ISalesforceClaimLineItem {
   Id: string;
   Acc_LineItemDescription__c: string;
   Acc_LineItemCost__c: number;
+  Acc_CostCategory__c: string;
+  Acc_ProjectPeriodId__c: number;
+  Acc_ProjectParticipant__c: string;
 }
 
 const fields = [
   "Id",
   "Acc_LineItemDescription__c",
-  "Acc_LineItemCost__c"
+  "Acc_LineItemCost__c",
+  "Acc_CostCategory__c",
+  "Acc_ProjectPeriodId__c",
+  "Acc_ProjectParticipant__c"
 ];
 
 export interface IClaimLineItemRepository {
-  getAllForCategory(claimId: string, categoryId: string, periodId: number): Promise<ISalesforceClaimLineItem[]>;
+  getAllForCategory(partnerId: string, categoryId: string, periodId: number): Promise<ISalesforceClaimLineItem[]>;
 }
 
 export class ClaimLineItemRepository extends SalesforceBase<ISalesforceClaimLineItem> implements IClaimLineItemRepository {
