@@ -69,7 +69,7 @@ class FieldComponent<T, TValue> extends React.Component<InternalFieldProps<T> & 
     render() {
         const { hint, name, label, field, data, validation } = this.props;
         return (
-            <div className={classNames("govuk-form-group", {"govuk-form-group--error": validation && validation.showValidationErrors() && !validation.isValid()})}>
+            <div data-qa={`field-${name}`} className={classNames("govuk-form-group", {"govuk-form-group--error": validation && validation.showValidationErrors() && !validation.isValid()})}>
                 <label className="govuk-label" htmlFor={name}>{label}</label>
                 {hint ? <span id={`${name}-hint`} className="govuk-hint">{hint}</span> : null}
                 {validation && validation.showValidationErrors() && !validation.isValid() ? <span className="govuk-error-message">{validation.errorMessage}</span> : null}
@@ -107,7 +107,7 @@ interface MultiStringFieldProps<T> extends ExternalFieldProps<T, string> {
 const MultiStringField = <T extends {}>(props: MultiStringFieldProps<T>) => {
     const TypedFieldComponent = FieldComponent as { new(): FieldComponent<T, string> };
     return (
-        <TypedFieldComponent field={(data => <TextAreaInput value={props.value(data)} onChange={(val) => handleChange(props, val)} rows={props.rows} qa={props.qa} />)}  {...props} />
+        <TypedFieldComponent field={(data => <TextAreaInput name={props.name} value={props.value(data)} onChange={(val) => handleChange(props, val)} rows={props.rows} qa={props.qa} />)}  {...props} />
     );
 };
 
