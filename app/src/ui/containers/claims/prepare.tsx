@@ -96,7 +96,7 @@ export class PrepareComponent extends ContainerBase<Params, Data, Callbacks> {
                             <Form.MultilineString label="" hint={commentsHint} name="comments" value={m => m.comments} update={(m, v) => m.comments = v} validation={editor.validator.comments} qa="info-text-area"/>
                         </Form.Fieldset>
                         <Form.Fieldset >
-                            <Form.Submit qa="review-forecasts-button">Review forcasts</Form.Submit>
+                            <Form.Submit qa="review-forecasts-button">Review forecasts</Form.Submit>
                         </Form.Fieldset>
                         <Form.Fieldset>
                             <Form.Button name="return" onClick={() => saveAndReturn()} qa="save-button">Save and return to claim dashboard</Form.Button>
