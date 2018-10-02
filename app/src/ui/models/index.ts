@@ -1,4 +1,4 @@
-export * from "./claimCostDto";
+export * from "./claimDetailsDto";
 export * from "./claimFrequency";
 export * from "./contact";
 export * from "./costCategoryDto";

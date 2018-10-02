@@ -1,9 +1,9 @@
 import { IContext, IQuery } from "../../common/context";
-import { ClaimCostDto } from "../../../../ui/models";
+import { ClaimDetailsDto } from "../../../../ui/models";
 import { ISalesforceClaim, ISalesforceClaimDetails, ISalesforceClaimTotalCostCategory } from "../../../repositories";
 import { GetCostCategoriesQuery } from "../getCostCategoriesQuery";
 
-export class GetAllForPartnerQuery implements IQuery<ClaimCostDto[]> {
+export class GetAllForPartnerQuery implements IQuery<ClaimDetailsDto[]> {
     constructor(private partnerId: string, private periodId: number) {
     }
 
