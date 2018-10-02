@@ -95,7 +95,7 @@ export class PrepareComponent extends ContainerBase<Params, Data, Callbacks> {
                         <Form.Fieldset heading={() => commentsLabel} qa="additional-info-heading">
                             <Form.MultilineString label="" hint={commentsHint} name="comments" value={m => m.comments} update={(m, v) => m.comments = v} validation={editor.validator.comments} qa="info-text-area"/>
                         </Form.Fieldset>
-                        <Form.Fieldset >
+                        <Form.Fieldset>
                             <Form.Submit qa="review-forecasts-button">Review forecasts</Form.Submit>
                         </Form.Fieldset>
                         <Form.Fieldset>
