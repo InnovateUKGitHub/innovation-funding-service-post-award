@@ -3,10 +3,10 @@ import { routeConfig as routes } from "../routing";
 import { Link, Title } from "../components";
 import { ContainerBase, ReduxContainer } from "./containerBase";
 
-const projectId = "a0C1X000000CxrLUAS";
-const partnerId = "a0B1X000000DIxtUAG";
+const projectId = "a0C1X000000CxrFUAS";
+const partnerId = "a0B1X000000DIxmUAG";
 const periodId = 1;
-const costCategoryId = "a071X000000HESNQA4";
+const costCategoryId = "a071X000000HES6QAO";
 
 class Component extends ContainerBase<{}, {}, {}> {
   render() {
