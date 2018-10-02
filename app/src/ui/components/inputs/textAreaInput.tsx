@@ -4,6 +4,7 @@ import classNames from "classnames";
 interface TextAreaInputProps extends InputProps<string> {
     maxLength?: number;
     rows?: number;
+    qa?: string;
 }
 
 export class TextAreaInput extends React.Component<TextAreaInputProps, InputState> {
@@ -59,6 +60,7 @@ export class TextAreaInput extends React.Component<TextAreaInputProps, InputStat
                 disabled={!!this.props.disabled}
                 onChange={this.handleChange}
                 maxLength={this.props.maxLength}
+                data-qa={this.props.qa}
             />
         );
     }
