@@ -4,15 +4,15 @@ import {ClaimDto} from "../ui/models";
 
 const clientApi: IApiClient = {
   claimLineItems: {
-    getAllForCategory: (partnerId: string, costCategoryId: string, periodId: number) => ajaxJson(`/api/claims/${partnerId}/lineitems?costCategoryId=${costCategoryId}&periodId=${periodId}`)
+    getAllForCategory: (partnerId: string, costCategoryId: string, periodId: number) => ajaxJson(`/api/claims/${partnerId}/${periodId}/lineitems?costCategoryId=${costCategoryId}`)
   },
   claims : {
-    getAllByPartnerId: (partnerId: string) => ajaxJson(`/api/claims?partnerId=${partnerId}`),
-    getById: (claimId: string) => ajaxJson(`/api/claims/${claimId}`),
-    update: (claimId: string, claim: ClaimDto) => ajaxPut(`/api/claims/${claimId}`, claim)
+    getAllByPartnerId: (partnerId: string) => ajaxJson(`/api/claims/${partnerId}`),
+    getByPartnerAndPeriod: (partnerId: string, periodId: number) => ajaxJson(`/api/claims/${partnerId}/${periodId}`),
+    update: (partnerId: string, periodId: number, claim: ClaimDto) => ajaxPut(`/api/claims/${partnerId}/${periodId}`, claim)
   },
   claimDetails: {
-    getAllByPartnerId: (partnerId: string, periodId: number) => ajaxJson(`/api/claimDetails?partnerId=${partnerId}&periodId=${periodId}`)
+    getAllByPartnerId: (partnerId: string, periodId: number) => ajaxJson(`/api/claims/${partnerId}/${periodId}/details`)
   },
   contacts: {
     getAll: () => ajaxJson("/api/contacts"),
@@ -51,7 +51,9 @@ const ajaxJson = <T>(url: string, opts?: {}): Promise<T> => {
       return processResponse(response);
     }
 
-    return Promise.reject(response.statusText);
+    return response.json()
+      .catch(e => Promise.reject(response.statusText))
+      .then(errText => Promise.reject(errText));
   });
 };
 

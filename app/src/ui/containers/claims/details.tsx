@@ -46,12 +46,12 @@ export class ClaimsDetailsComponent extends ContainerBase<Params, Data, {}> {
         return <Loader pending={combined} render={(data) => this.renderContents(data)} />;
     }
 
-      private getClaimPeriodTitle(data: any) {
+    private getClaimPeriodTitle(data: any) {
         if (data.project.claimFrequency === Dtos.ClaimFrequency.Monthly) {
-          return `${data.partner.name} claim for ${data.claim.periodId} ${DateTime.fromJSDate(data.claim.periodStartDate).toFormat("MMMM yyyy")}`;
+            return `${data.partner.name} claim for P${data.claim.periodId} ${DateTime.fromJSDate(data.claim.periodStartDate).toFormat("MMMM yyyy")}`;
         }
-        return `${data.partner.name} claim for ${data.claim.periodId} ${DateTime.fromJSDate(data.claim.periodStartDate).toFormat("MMMM")} to ${DateTime.fromJSDate(data.claim.periodEndDate).toFormat("MMMM yyyy")}`;
-      }
+        return `${data.partner.name} claim for P${data.claim.periodId} ${DateTime.fromJSDate(data.claim.periodStartDate).toFormat("MMMM")} to ${DateTime.fromJSDate(data.claim.periodEndDate).toFormat("MMMM yyyy")}`;
+    }
 
     private renderContents(data: { project: Dtos.ProjectDto, partner: Dtos.PartnerDto, costCategories: Dtos.CostCategoryDto[], claim: Dtos.ClaimDto, claimDetails: Dtos.ClaimCostDto[] }) {
 
@@ -78,10 +78,9 @@ export const ClaimsDetails = definition.connect({
     withData: (store, params) => ({
         id: params.projectId,
         project: Pending.create(store.data.project[params.projectId]),
-        // todo: fix to be partner for the claim rather than fist partner in project
-        partner: Pending.create(store.data.partners[params.projectId]).then(x => x![0]),
+        partner: Pending.create(store.data.partner[params.partnerId]),
         costCategories: Pending.create(store.data.costCategories.all),
-        claim: Pending.create(store.data.claim[params.periodId.toString()]), // ToDo: wire up to partner id and period id
+        claim: Pending.create(store.data.claim[params.partnerId + "_" + params.periodId]),
         claimDetails: Pending.create(store.data.claimDetails[params.partnerId + "_" + params.periodId])
     }),
     withCallbacks: () => ({})
@@ -94,8 +93,9 @@ export const ClaimsDetailsRoute = definition.route({
     getLoadDataActions: (params) => [
         Actions.loadProject(params.projectId),
         Actions.loadPatnersForProject(params.projectId),
+        Actions.loadPartner(params.partnerId),
         Actions.loadCostCategories(),
-        Actions.loadClaim(params.periodId.toString()), // ToDo: wire up to partner id and period id
+        Actions.loadClaim(params.partnerId, params.periodId),
         Actions.loadClaimDetailsForPartner(params.partnerId, params.periodId)
     ],
     container: ClaimsDetails

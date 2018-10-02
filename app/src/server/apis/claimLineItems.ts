@@ -14,8 +14,8 @@ class Controller extends ControllerBase<ClaimLineItemDto> implements IClaimLineI
   constructor() {
     super();
     this.getItems(
-      "/:partnerId/lineitems",
-      (p, q) => ({ partnerId: p.partnerId, costCategoryId: q.costCategoryId, periodId: parseInt(q.periodId, 10)}),
+      "/:partnerId/:periodId/lineitems",
+      (p, q) => ({ partnerId: p.partnerId, periodId: parseInt(p.periodId, 10), costCategoryId: q.costCategoryId}),
       (p) => this.getAllForCategory(p.partnerId, p.costCategoryId, p.periodId)
     );
   }

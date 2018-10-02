@@ -9,6 +9,6 @@ export interface PartnerDto {
     totalParticipantCostsClaimed: number;
     awardRate: number;
     totalParticipantCostsPaid: number;
-    percentageParticipantCostsClaimed: number;
+    percentageParticipantCostsClaimed: number | null;
     capLimit: number;
 }
