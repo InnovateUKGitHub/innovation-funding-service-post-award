@@ -6,6 +6,7 @@ import * as Actions from "../../redux/actions/thunks";
 import * as Dtos from "../../models";
 import * as ACC from "../../components";
 import { routeConfig } from "../../routing";
+import { ClaimLineItemsRoute } from "./claimLineItems";
 
 interface Params {
     projectId: string;
@@ -65,7 +66,7 @@ export class ClaimsDetailsComponent extends ContainerBase<Params, Data, {}> {
                 <ACC.Projects.Title pageTitle="Claim" project={data.project} />
                 <ACC.Claims.Navigation projectId={data.project.id} partnerId={data.partner.id} periodId={data.claim.periodId} currentRouteName={routeConfig.claimDetails.routeName} />
                 <ACC.Section title={title}>
-                    <ACC.Claims.ClaimTable {...data} />
+                    <ACC.Claims.ClaimTable {...data} getLink={costCategoryId => ClaimLineItemsRoute.getLink({partnerId: this.props.partnerId, projectId: this.props.projectId, periodId: this.props.periodId, costCategoryId})} />
                 </ACC.Section>
             </ACC.Page>
         );

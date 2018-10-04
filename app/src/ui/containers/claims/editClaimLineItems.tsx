@@ -4,9 +4,9 @@ import {Pending} from "../../../shared/pending";
 import * as Actions from "../../redux/actions/thunks";
 import * as Dtos from "../../models";
 import * as ACC from "../../components";
-import {routeConfig} from "../../routing";
 import {Currency, Percentage} from "../../components/renderers";
 import {TypedLoader} from "../../components";
+import { PrepareClaimRoute } from ".";
 
 interface Params {
   projectId: string;
@@ -27,7 +27,7 @@ interface CombinedData {
   costCategories: Dtos.CostCategoryDto[];
 }
 
-export class ClaimLineItemsComponent extends ContainerBase<Params, Data, {}> {
+export class EditClaimLineItemsComponent extends ContainerBase<Params, Data, {}> {
 
   public render() {
     const combined = Pending.combine(
@@ -42,19 +42,20 @@ export class ClaimLineItemsComponent extends ContainerBase<Params, Data, {}> {
 
   // TODO fix back link
   private renderContents(data: { project: Dtos.ProjectDto, lineItems: Dtos.ClaimLineItemDto[], costCategories: Dtos.CostCategoryDto[] }) {
+    const back = PrepareClaimRoute.getLink({projectId: data.project.id, partnerId: this.props.partnerId, periodId: this.props.periodId });
+    
     return (
       <ACC.Page>
         <ACC.Section>
-          <ACC.BackLink
-            route={routeConfig.claimDetails.getLink({projectId: data.project.id, partnerId: this.props.partnerId, periodId: this.props.periodId })}
-          >Back
-          </ACC.BackLink>
+          <ACC.BackLink route={back}>Back</ACC.BackLink>
         </ACC.Section>
         <ACC.Section>
           <ACC.Projects.Title pageTitle={`Claim for ${data.costCategories.find(x => x.id === this.props.costCategoryId )!.name}`} project={data.project} />
         </ACC.Section>
         <ACC.Section>
-          <ClaimLineItemsTable lineItems={data.lineItems}/>
+            <ACC.SectionPanel title="Breakdown of costs">
+                <ClaimLineItemsTable lineItems={data.lineItems}/>
+            </ACC.SectionPanel>
         </ACC.Section>
       </ACC.Page>
     );
@@ -91,9 +92,9 @@ const ClaimLineItemsTable: React.SFC<{ lineItems: Dtos.ClaimLineItemDto[] }> = (
   );
 };
 
-const definition = ReduxContainer.for<Params, Data, {}>(ClaimLineItemsComponent);
+const definition = ReduxContainer.for<Params, Data, {}>(EditClaimLineItemsComponent);
 
-export const ClaimLineItems = definition.connect({
+export const EditClaimLineItems = definition.connect({
   withData: (store, params) => ({
     project: Pending.create(store.data.project[params.projectId]),
     lineItems: Pending.create(store.data.claimLineItems[params.partnerId]),
@@ -103,9 +104,9 @@ export const ClaimLineItems = definition.connect({
   withCallbacks: () => ({})
 });
 
-export const ClaimLineItemsRoute = definition.route({
-  routeName: "claim-costs-view",
-  routePath: "/projects/:projectId/claims/:partnerId/details/:periodId/costs/:costCategoryId",
+export const EditClaimLineItemsRoute = definition.route({
+  routeName: "claim-costs-edit",
+  routePath: "/projects/:projectId/claims/:partnerId/prepare/:periodId/costs/:costCategoryId",
   getParams: (route) => ({
     projectId: route.params.projectId,
     partnerId: route.params.partnerId,
@@ -117,5 +118,5 @@ export const ClaimLineItemsRoute = definition.route({
     Actions.loadCostCategories(),
     Actions.loadClaimLineItemsForCategory(params.partnerId, params.costCategoryId, params.periodId)
   ],
-  container: ClaimLineItems
+  container: EditClaimLineItems
 });
