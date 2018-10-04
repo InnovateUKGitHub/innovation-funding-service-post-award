@@ -27,10 +27,10 @@ export class TextAreaInput extends React.Component<TextAreaInputProps, InputStat
         }
     }
 
-    handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>, debounce: boolean) => {
         const value = e.currentTarget.value;
         this.setState({ value });
-        this.ownDebounce(value);
+        debounce ? this.ownDebounce(value) : this.changeNow(value);
     }
 
     private ownDebounce(value: string): void {
@@ -40,14 +40,22 @@ export class TextAreaInput extends React.Component<TextAreaInputProps, InputStat
             this.timeoutId = 0;
         }
 
-        this.timeoutId = window.setTimeout(() => {
-            if (this.props.onChange) {
-                this.props.onChange(value);
-            }
-            this.timeoutId = 0;
-        }, 250);
+        this.timeoutId = window.setTimeout(() => this.changeNow(value), 250);
 
     }
+
+    private changeNow(value: string) {
+        // Cancel the debounce timeout if it exists
+        if (this.timeoutId) {
+            window.clearTimeout(this.timeoutId);
+            this.timeoutId = 0;
+        }
+
+        if (this.props.onChange) {
+            this.props.onChange(value);
+        }
+    }
+
 
     render() {
         return (
@@ -57,7 +65,8 @@ export class TextAreaInput extends React.Component<TextAreaInputProps, InputStat
                 rows={this.props.rows || 5}
                 value={this.state.value}
                 disabled={!!this.props.disabled}
-                onChange={this.handleChange}
+                onChange={x => this.handleChange(x, true)}
+                onBlur={x => this.handleChange(x, false)}
                 maxLength={this.props.maxLength}
             />
         );

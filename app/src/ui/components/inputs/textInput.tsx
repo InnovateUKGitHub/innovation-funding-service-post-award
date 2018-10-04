@@ -51,7 +51,7 @@ export class TextInput extends React.Component<TextInputProps, InputState> {
             this.timeoutId = 0;
         }
 
-        this.timeoutId = window.setTimeout(() => this.changeNow(value), 2500);
+        this.timeoutId = window.setTimeout(() => this.changeNow(value), 250);
     }
 
     private changeNow(value: string) {
