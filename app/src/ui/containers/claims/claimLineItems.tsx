@@ -104,7 +104,7 @@ export const ClaimLineItems = definition.connect({
 });
 
 export const ClaimLineItemsRoute = definition.route({
-  routeName: "claim-costs-view",
+  routeName: "claim-line-items-view",
   routePath: "/projects/:projectId/claims/:partnerId/details/:periodId/costs/:costCategoryId",
   getParams: (route) => ({
     projectId: route.params.projectId,
