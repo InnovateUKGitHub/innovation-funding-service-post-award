@@ -1,7 +1,7 @@
 import React from "react";
 import { Link, Title } from "../components";
 import { ContainerBase, ReduxContainer } from "./containerBase";
-import { ClaimLineItemsRoute, ProjectDashboardRoute, ProjectDetailsRoute, ContactListRoute, ClaimsDashboardRoute, ClaimsDetailsRoute } from ".";
+import { ClaimLineItemsRoute, ClaimsDashboardRoute, ClaimsDetailsRoute, ContactListRoute, ProjectDashboardRoute, ProjectDetailsRoute } from ".";
 
 const projectId = "a0C1X000000CxrFUAS";
 const partnerId = "a0B1X000000DIxmUAG";

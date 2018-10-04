@@ -43,7 +43,7 @@ export class EditClaimLineItemsComponent extends ContainerBase<Params, Data, {}>
   // TODO fix back link
   private renderContents(data: { project: Dtos.ProjectDto, lineItems: Dtos.ClaimLineItemDto[], costCategories: Dtos.CostCategoryDto[] }) {
     const back = PrepareClaimRoute.getLink({projectId: data.project.id, partnerId: this.props.partnerId, periodId: this.props.periodId });
-    
+
     return (
       <ACC.Page>
         <ACC.Section>
