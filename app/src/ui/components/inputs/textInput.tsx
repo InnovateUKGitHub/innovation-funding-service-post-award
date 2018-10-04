@@ -38,10 +38,10 @@ export class TextInput extends React.Component<TextInputProps, InputState> {
         }
     }
 
-    handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    handleChange = (e: React.ChangeEvent<HTMLInputElement>, debounce: boolean) => {
         const value = e.currentTarget.value;
         this.setState({ value });
-        this.ownDebounce(value);
+        debounce ? this.ownDebounce(value): this.changeNow(value);
     }
 
     private ownDebounce(value: string): void {
@@ -51,13 +51,19 @@ export class TextInput extends React.Component<TextInputProps, InputState> {
             this.timeoutId = 0;
         }
 
-        this.timeoutId = window.setTimeout(() => {
-            if (this.props.onChange) {
-                this.props.onChange(value);
-            }
-            this.timeoutId = 0;
-        }, 250);
+        this.timeoutId = window.setTimeout(() => this.changeNow(value), 2500);
+    }
 
+    private changeNow(value: string) {
+        // Cancel the debounce timeout if it exists
+        if (this.timeoutId) {
+            window.clearTimeout(this.timeoutId);
+            this.timeoutId = 0;
+        }
+
+        if (this.props.onChange) {
+            this.props.onChange(value);
+        }
     }
 
     render() {
@@ -68,8 +74,9 @@ export class TextInput extends React.Component<TextInputProps, InputState> {
                 name={this.props.name}
                 value={this.state.value}
                 disabled={!!this.props.disabled}
-                onChange={this.handleChange}
+                onChange={e => this.handleChange(e, true)}
                 onKeyUp={(e) => this.keyTyped(e)}
+                onBlur={e => this.handleChange(e, false)}
                 maxLength={this.props.maxLength}
             />
         );

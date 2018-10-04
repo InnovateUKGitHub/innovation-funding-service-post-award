@@ -1,6 +1,7 @@
 import React from "react";
 import { TextInput } from "./inputs/textInput";
 import { TextAreaInput } from "./inputs/textAreaInput";
+import { NumberInput } from "./inputs/numberInput";
 import { Result as ValidationResult} from "../validators/common";
 import classNames from "classnames";
 
@@ -108,6 +109,13 @@ const MultiStringField = <T extends {}>(props: MultiStringFieldProps<T>) => {
     );
 };
 
+const NumericField = <T extends {}>(props: ExternalFieldProps<T, number>) => {
+    const TypedFieldComponent = FieldComponent as { new(): FieldComponent<T, number> };
+    return (
+        <TypedFieldComponent field={(data => <NumberInput value={props.value(data)} onChange={(val) => handleChange(props, val)} />)} {...props} />
+    );
+};
+
 interface SubmitProps {
 }
 
@@ -130,6 +138,7 @@ export const TypedForm = <T extends {}>() => ({
     Fieldset: FieldsetComponent as { new(): FieldsetComponent<T> },
     String: StringField as React.SFC<ExternalFieldProps<T, string>>,
     MultilineString: MultiStringField as React.SFC<MultiStringFieldProps<T>>,
+    Numeric: NumericField as React.SFC<ExternalFieldProps<T, number>>,
     Submit: SubmitComponent,
     Button: ButtonComponent
 });
