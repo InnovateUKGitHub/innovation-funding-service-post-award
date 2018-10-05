@@ -1,4 +1,4 @@
-export interface ClaimCostDto {
+export interface ClaimDetailsDto {
     costCategoryId: string;
     offerCosts: number;
     costsClaimedToDate: number;

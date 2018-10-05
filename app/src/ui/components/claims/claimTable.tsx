@@ -8,17 +8,18 @@ interface Props {
     partner: Dtos.PartnerDto;
     costCategories: Dtos.CostCategoryDto[];
     claim: Dtos.ClaimDto;
-    claimDetails: Dtos.ClaimCostDto[];
+    claimDetails: Dtos.ClaimDetailsDto[];
+    getLink: (costCategoryId: string) => ILinkInfo;
 }
 
-export const ClaimTable: React.SFC<Props> = (data) => {
+export const ClaimTable: React.SFC<Props> = (props) => {
 
     // Todo: filter the cost cats by the project type
-    const combinedData = data.costCategories
+    const combinedData = props.costCategories
         .filter(x => x.organistionType === "Industrial")
         .map(x => ({
             category: x,
-            cost: data.claimDetails.find(y => y.costCategoryId === x.id) || {} as Dtos.ClaimCostDto,
+            cost: props.claimDetails.find(y => y.costCategoryId === x.id) || {} as Dtos.ClaimDetailsDto,
             isTotal: false
         }));
 
@@ -33,24 +34,24 @@ export const ClaimTable: React.SFC<Props> = (data) => {
         },
         cost: {
             costCategoryId: "",
-            remainingOfferCosts: data.claimDetails.reduce((total, item) => total + item.remainingOfferCosts, 0),
-            costsClaimedThisPeriod: data.claimDetails.reduce((total, item) => total + item.costsClaimedThisPeriod, 0),
-            costsClaimedToDate: data.claimDetails.reduce((total, item) => total + item.costsClaimedToDate, 0),
-            offerCosts: data.claimDetails.reduce((total, item) => total + item.offerCosts, 0),
+            remainingOfferCosts: props.claimDetails.reduce((total, item) => total + item.remainingOfferCosts, 0),
+            costsClaimedThisPeriod: props.claimDetails.reduce((total, item) => total + item.costsClaimedThisPeriod, 0),
+            costsClaimedToDate: props.claimDetails.reduce((total, item) => total + item.costsClaimedToDate, 0),
+            offerCosts: props.claimDetails.reduce((total, item) => total + item.offerCosts, 0),
         },
         isTotal: true
     });
 
     const CostCategoriesTable = Table.forData(combinedData);
-    // TODO stop hardcoding periodId
+
     return (
-        <CostCategoriesTable.Table qa="cost-cat" footers={renderFooters(data.project, data.partner, data.claimDetails)}>
+        <CostCategoriesTable.Table qa="cost-cat" footers={renderFooters(props.project, props.partner, props.claimDetails)}>
             <CostCategoriesTable.Custom
                 header="Costs category"
                 qa="category"
                 cellClassName={x => x.isTotal ? "govuk-!-font-weight-bold" : null}
                 value={x => !x.category.isCalculated
-                    ? <Link route={ClaimLineItemsRoute.getLink({ projectId: data.project.id, partnerId: data.partner.id, costCategoryId: x.category.id, periodId: 1 })}>{x.category.name}</Link>
+                    ? <Link route={props.getLink(x.category.id)}>{x.category.name}</Link>
                     : x.category.name}
             />
             <CostCategoriesTable.Currency header="Grant offer letter costs" qa="offerCosts" value={x => x.cost.offerCosts} />
@@ -61,7 +62,7 @@ export const ClaimTable: React.SFC<Props> = (data) => {
     );
 };
 
-const  renderFooters = (project: Dtos.ProjectDto, partner: Dtos.PartnerDto, claimsCosts: Dtos.ClaimCostDto[]) => {
+const  renderFooters = (project: Dtos.ProjectDto, partner: Dtos.PartnerDto, claimsCosts: Dtos.ClaimDetailsDto[]) => {
     return [
       (
         <tr key="1" className="govuk-table__row">
