@@ -25,7 +25,7 @@ interface Data {
     partner: Pending<Dtos.PartnerDto>;
     costCategories: Pending<Dtos.CostCategoryDto[]>;
     claim: Pending<Dtos.ClaimDto>;
-    claimDetails: Pending<Dtos.ClaimDetailsSummaryDto[]>;
+    claimDetailsSummary: Pending<Dtos.ClaimDetailsSummaryDto[]>;
     editor: IEditorStore<Dtos.ClaimDto, ClaimDtoValidator>;
 }
 
@@ -51,7 +51,7 @@ export class PrepareComponent extends ContainerBase<Params, Data, Callbacks> {
             this.props.partner,
             this.props.costCategories,
             this.props.claim,
-            this.props.claimDetails,
+            this.props.claimDetailsSummary,
             (project, partner, costCategories, claim, claimDetails) => ({ project, partner, costCategories, claim, claimDetails })
         );
 
@@ -139,7 +139,7 @@ export const PrepareClaim = definition.connect({
         partner: Pending.create(store.data.partner[params.partnerId]),
         costCategories: Pending.create(store.data.costCategories.all),
         claim: Pending.create(store.data.claim[params.partnerId + "_" + params.periodId]),
-        claimDetails: Pending.create(store.data.claimDetails[params.partnerId + "_" + params.periodId]),
+        claimDetailsSummary: Pending.create(store.data.claimDetailsSummary[params.partnerId + "_" + params.periodId]),
         editor: getEditor(store.editors.claim[params.partnerId + "_" + params.periodId], Pending.create(store.data.claim[params.partnerId + "_" + params.periodId]))
     }),
     withCallbacks: (dispatch) => ({

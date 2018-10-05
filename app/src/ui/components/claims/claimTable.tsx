@@ -1,7 +1,6 @@
 import React from "react";
 import * as Dtos from "../../models";
 import { Link, Renderers, Table } from "..";
-import { ClaimLineItemsRoute } from "../../containers";
 
 interface Props {
     project: Dtos.ProjectDto;
