@@ -43,7 +43,15 @@ export function loadClaimDetailsForPartner(partnerId: string, periodId: number) 
   return conditionalLoad(
     partnerId + "_" + periodId,
     "claimDetails",
-    () => ApiClient.claimDetails.getAllByPartnerId(partnerId, periodId)
+    () => ApiClient.claimDetails.getAllByPartner(partnerId, periodId)
+  );
+}
+
+export function loadClaimDetailsSummaryForPartner(partnerId: string, periodId: number) {
+  return conditionalLoad(
+    partnerId + "_" + periodId,
+    "claimDetailsSummary",
+    () => ApiClient.claimDetailsSummary.getAllByPartnerIdForPeriod(partnerId, periodId)
   );
 }
 

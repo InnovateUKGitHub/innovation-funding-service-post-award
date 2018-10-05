@@ -5,7 +5,7 @@ export interface ISalesforceClaimLineItem {
   Acc_LineItemDescription__c: string;
   Acc_LineItemCost__c: number;
   Acc_CostCategory__c: string;
-  Acc_ProjectPeriodId__c: number;
+  Acc_ProjectPeriodNumber__c: number;
   Acc_ProjectParticipant__c: string;
 }
 
@@ -14,7 +14,7 @@ const fields = [
   "Acc_LineItemDescription__c",
   "Acc_LineItemCost__c",
   "Acc_CostCategory__c",
-  "Acc_ProjectPeriodId__c",
+  "Acc_ProjectPeriodNumber__c",
   "Acc_ProjectParticipant__c"
 ];
 
@@ -34,7 +34,7 @@ export class ClaimLineItemRepository extends SalesforceBase<ISalesforceClaimLine
     // TODO review which ID is used for cost category
     const filter = `
       Acc_ProjectParticipant__c = '${partnerId}'
-      AND Acc_ProjectPeriodId__c = ${periodId}
+      AND Acc_ProjectPeriodNumber__c = ${periodId}
       AND Acc_CostCategory__c = '${categoryId}'
       AND RecordType.Name = '${this.recordType}'
     `;

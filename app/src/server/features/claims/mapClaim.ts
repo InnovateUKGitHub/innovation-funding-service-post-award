@@ -12,7 +12,7 @@ export default (context: IContext) => (claim: ISalesforceClaim): ClaimDto => ({
   status: claim.Acc_ClaimStatus__c,
   periodStartDate: context.clock.parse(claim.Acc_ProjectPeriodStartDate__c, SALESFORCE_DATE_FORMAT)!,
   periodEndDate: context.clock.parse(claim.Acc_ProjectPeriodEndDate__c,SALESFORCE_DATE_FORMAT)!,
-  periodId: claim.Acc_ProjectPeriodID__c,
+  periodId: claim.Acc_ProjectPeriodNumber__c,
   totalCost: claim.Acc_TotalCost__c,
   forecastCost: claim.Acc_ForecastCost__c,
   approvedDate: claim.Acc_ApprovedDate__c === null ? null : context.clock.parse(claim.Acc_ApprovedDate__c, SALESFORCE_DATE_FORMAT),

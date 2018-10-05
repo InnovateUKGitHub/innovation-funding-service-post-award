@@ -1,4 +1,5 @@
 export * from "./claimDetailsDto";
+export * from "./claimDetailsDtoNew";
 export * from "./claimFrequency";
 export * from "./contact";
 export * from "./costCategoryDto";

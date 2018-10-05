@@ -11,8 +11,11 @@ const clientApi: IApiClient = {
     getByPartnerAndPeriod: (partnerId: string, periodId: number) => ajaxJson(`/api/claims/${partnerId}/${periodId}`),
     update: (partnerId: string, periodId: number, claim: ClaimDto) => ajaxPut(`/api/claims/${partnerId}/${periodId}`, claim)
   },
+  claimDetailsSummary: {
+    getAllByPartnerIdForPeriod: (partnerId: string, periodId: number) => ajaxJson(`/api/claimdetailssummary/${partnerId}/${periodId}`)
+  },
   claimDetails: {
-    getAllByPartnerId: (partnerId: string, periodId: number) => ajaxJson(`/api/claims/${partnerId}/${periodId}/details`)
+    getAllByPartner: (partnerId: string, periodId: number) => ajaxJson(`/api/claimdetails/period/${periodId}?partnerId=${partnerId}`)
   },
   contacts: {
     getAll: () => ajaxJson("/api/contacts"),
