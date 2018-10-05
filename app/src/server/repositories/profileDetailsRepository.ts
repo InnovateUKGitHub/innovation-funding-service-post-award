@@ -21,18 +21,18 @@ export interface IProfileDetailsRepository {
 
 export class ProfileDetailsRepository extends SalesforceBase<ISalesforceProfileDetails> implements IProfileDetailsRepository {
   // TODO - confirm recordType
-  private recordType: string = "Claims Detail";
+  // private recordType: string = "Claims Detail";
 
   constructor() {
     super("Acc_Profile__c", fields);
   }
 
   public async getAllByPartnerWithPeriodGt(partnerId: string, periodId: number): Promise<ISalesforceProfileDetails[]> {
-    const filter = `Acc_ProjectParticipant__c = '${partnerId}' AND RecordType.Name = '${this.recordType}' AND Acc_ProjectPeriodNumber__c > ${periodId}`;
-    const result = false;// await super.whereString(filter);
+    // const filter = `Acc_ProjectParticipant__c = '${partnerId}' AND RecordType.Name = '${this.recordType}' AND Acc_ProjectPeriodNumber__c > ${periodId}`;
+    // return await super.whereString(filter);
 
     // TODO - remove faker
-    return !result ? this.createFake(partnerId, periodId) : result;
+    return this.createFake(partnerId, periodId);
   }
 
   private createFake(partnerId: string, periodId: number): ISalesforceProfileDetails[] {
