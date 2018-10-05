@@ -8,7 +8,7 @@ interface Props {
     partner: Dtos.PartnerDto;
     costCategories: Dtos.CostCategoryDto[];
     claim: Dtos.ClaimDto;
-    claimDetails: Dtos.ClaimDetailsDto[];
+    claimDetails: Dtos.ClaimDetailsSummaryDto[];
     getLink: (costCategoryId: string) => ILinkInfo;
 }
 
@@ -19,7 +19,7 @@ export const ClaimTable: React.SFC<Props> = (props) => {
         .filter(x => x.organistionType === "Industrial")
         .map(x => ({
             category: x,
-            cost: props.claimDetails.find(y => y.costCategoryId === x.id) || {} as Dtos.ClaimDetailsDto,
+            cost: props.claimDetails.find(y => y.costCategoryId === x.id) || {} as Dtos.ClaimDetailsSummaryDto,
             isTotal: false
         }));
 
@@ -62,7 +62,7 @@ export const ClaimTable: React.SFC<Props> = (props) => {
     );
 };
 
-const  renderFooters = (project: Dtos.ProjectDto, partner: Dtos.PartnerDto, claimsCosts: Dtos.ClaimDetailsDto[]) => {
+const  renderFooters = (project: Dtos.ProjectDto, partner: Dtos.PartnerDto, claimsCosts: Dtos.ClaimDetailsSummaryDto[]) => {
     return [
       (
         <tr key="1" className="govuk-table__row">

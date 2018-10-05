@@ -1,7 +1,7 @@
 import {IContext, IQuery} from "../../common/context";
-import {ClaimDetailsDtoNew} from "../../../../ui/models";
+import {ClaimDetailsDto} from "../../../../ui/models";
 
-export class GetAllClaimDetailsByPartner implements IQuery<ClaimDetailsDtoNew[]> {
+export class GetAllClaimDetailsByPartner implements IQuery<ClaimDetailsDto[]> {
   constructor(private partnerId: string) {
   }
 

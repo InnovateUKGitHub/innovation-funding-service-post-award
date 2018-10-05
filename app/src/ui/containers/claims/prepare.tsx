@@ -25,7 +25,7 @@ interface Data {
     partner: Pending<Dtos.PartnerDto>;
     costCategories: Pending<Dtos.CostCategoryDto[]>;
     claim: Pending<Dtos.ClaimDto>;
-    claimDetails: Pending<Dtos.ClaimDetailsDto[]>;
+    claimDetails: Pending<Dtos.ClaimDetailsSummaryDto[]>;
     editor: IEditorStore<Dtos.ClaimDto, ClaimDtoValidator>;
 }
 
@@ -40,7 +40,7 @@ interface CombinedData {
     partner: Dtos.PartnerDto;
     costCategories: Dtos.CostCategoryDto[];
     claim: Dtos.ClaimDto;
-    claimDetails: Dtos.ClaimDetailsDto[];
+    claimDetails: Dtos.ClaimDetailsSummaryDto[];
 }
 
 export class PrepareComponent extends ContainerBase<Params, Data, Callbacks> {
@@ -66,7 +66,7 @@ export class PrepareComponent extends ContainerBase<Params, Data, Callbacks> {
         return `${data.partner.name} claim for P${data.claim.periodId} ${DateTime.fromJSDate(data.claim.periodStartDate).toFormat("MMMM")} to ${DateTime.fromJSDate(data.claim.periodEndDate).toFormat("MMMM yyyy")}`;
     }
 
-    private renderContents(data: { project: Dtos.ProjectDto, partner: Dtos.PartnerDto, costCategories: Dtos.CostCategoryDto[], claim: Dtos.ClaimDto, claimDetails: Dtos.ClaimDetailsDto[] }, editor: IEditorStore<ClaimDto, ClaimDtoValidator>) {
+    private renderContents(data: { project: Dtos.ProjectDto, partner: Dtos.PartnerDto, costCategories: Dtos.CostCategoryDto[], claim: Dtos.ClaimDto, claimDetails: Dtos.ClaimDetailsSummaryDto[] }, editor: IEditorStore<ClaimDto, ClaimDtoValidator>) {
 
         const title = this.getClaimPeriodTitle(data);
         const Form = ACC.TypedForm<Dtos.ClaimDto>();
@@ -159,7 +159,7 @@ export const PrepareClaimRoute = definition.route({
         Actions.loadPatnersForProject(params.projectId),
         Actions.loadCostCategories(),
         Actions.loadClaim(params.partnerId, params.periodId),
-        Actions.loadClaimDetailsForPartner(params.partnerId, params.periodId)
+        Actions.loadClaimDetailsSummaryForPartner(params.partnerId, params.periodId)
     ],
     container: PrepareClaim
 });

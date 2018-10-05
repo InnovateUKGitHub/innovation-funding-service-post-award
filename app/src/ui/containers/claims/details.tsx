@@ -20,7 +20,7 @@ interface Data {
     partner: Pending<Dtos.PartnerDto>;
     costCategories: Pending<Dtos.CostCategoryDto[]>;
     claim: Pending<Dtos.ClaimDto>;
-    claimDetails: Pending<Dtos.ClaimDetailsDto[]>;
+    claimDetails: Pending<Dtos.ClaimDetailsSummaryDto[]>;
 }
 
 interface CombinedData {
@@ -28,7 +28,7 @@ interface CombinedData {
     partner: Dtos.PartnerDto;
     costCategories: Dtos.CostCategoryDto[];
     claim: Dtos.ClaimDto;
-    claimDetails: Dtos.ClaimDetailsDto[];
+    claimDetails: Dtos.ClaimDetailsSummaryDto[];
 }
 
 export class ClaimsDetailsComponent extends ContainerBase<Params, Data, {}> {
@@ -54,7 +54,7 @@ export class ClaimsDetailsComponent extends ContainerBase<Params, Data, {}> {
         return `${data.partner.name} claim for P${data.claim.periodId} ${DateTime.fromJSDate(data.claim.periodStartDate).toFormat("MMMM")} to ${DateTime.fromJSDate(data.claim.periodEndDate).toFormat("MMMM yyyy")}`;
     }
 
-    private renderContents(data: { project: Dtos.ProjectDto, partner: Dtos.PartnerDto, costCategories: Dtos.CostCategoryDto[], claim: Dtos.ClaimDto, claimDetails: Dtos.ClaimDetailsDto[] }) {
+    private renderContents(data: { project: Dtos.ProjectDto, partner: Dtos.PartnerDto, costCategories: Dtos.CostCategoryDto[], claim: Dtos.ClaimDto, claimDetails: Dtos.ClaimDetailsSummaryDto[] }) {
 
         const title = this.getClaimPeriodTitle(data);
 
