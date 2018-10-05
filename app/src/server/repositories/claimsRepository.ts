@@ -7,8 +7,8 @@ export interface ISalesforceClaim {
   Acc_ClaimStatus__c: string;
   Acc_ProjectPeriodStartDate__c: string;
   Acc_ProjectPeriodEndDate__c: string;
-  Acc_ProjectPeriodID__c: number;
-  Acc_TotalCost__c: number;
+  Acc_ProjectPeriodNumber__c: number;
+  Acc_ProjectPeriodCost__c: number;
   Acc_TotalCostsApproved__c: number;
   Acc_TotalCostsSubmitted__c: number;
   Acc_TotalGrantApproved__c: number;
@@ -27,9 +27,9 @@ const fields = [
   "Acc_ClaimStatus__c",
   "Acc_ProjectPeriodStartDate__c",
   "Acc_ProjectPeriodEndDate__c",
-  "Acc_ProjectPeriodID__c",
+  "Acc_ProjectPeriodNumber__c",
   // "Acc_ForecastCost__c",
-  "Acc_TotalCost__c",
+  "Acc_ProjectPeriodCost__c",
   "Acc_ApprovedDate__c",
   "Acc_PaidDate__c",
   "Acc_LineItemDescription__c"
@@ -66,7 +66,7 @@ export class ClaimRepository extends SalesforceBase<ISalesforceClaim> implements
   }
 
   public async getByPartnerIdAndPeriodId(partnerId: string, periodId: number) {
-    const filter = `Acc_ProjectParticipant__c = '${partnerId}' AND Acc_ProjectPeriodID__c = ${periodId} AND RecordType.Name = '${this.recordType}'`;
+    const filter = `Acc_ProjectParticipant__c = '${partnerId}' AND Acc_ProjectPeriodNumber__c = ${periodId} AND RecordType.Name = '${this.recordType}'`;
     const result = await super.whereString(filter).then(x => x.map(y => this.extend(y)!)).then(x => x[0]);
     // todo remove fake
     if (!result) {
@@ -83,9 +83,9 @@ export class ClaimRepository extends SalesforceBase<ISalesforceClaim> implements
       Acc_PaidDate__c: null,
       Acc_ProjectParticipant__c: partnerId,
       Acc_ProjectPeriodEndDate__c: "2108-09-30",
-      Acc_ProjectPeriodID__c: periodId,
+      Acc_ProjectPeriodNumber__c: periodId,
       Acc_ProjectPeriodStartDate__c: "2108-07-01",
-      Acc_TotalCost__c: 1000,
+      Acc_ProjectPeriodCost__c: 1000,
       Acc_TotalCostsApproved__c: 1100,
       Acc_TotalCostsSubmitted__c: 1200,
       Acc_TotalGrantApproved__c: 1300,
