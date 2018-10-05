@@ -8,7 +8,7 @@ export interface ISalesforceClaim {
   Acc_ProjectPeriodStartDate__c: string;
   Acc_ProjectPeriodEndDate__c: string;
   Acc_ProjectPeriodNumber__c: number;
-  Acc_TotalCost__c: number;
+  Acc_ProjectPeriodCost__c: number;
   Acc_TotalCostsApproved__c: number;
   Acc_TotalCostsSubmitted__c: number;
   Acc_TotalGrantApproved__c: number;
@@ -29,7 +29,7 @@ const fields = [
   "Acc_ProjectPeriodEndDate__c",
   "Acc_ProjectPeriodNumber__c",
   // "Acc_ForecastCost__c",
-  "Acc_TotalCost__c",
+  "Acc_ProjectPeriodCost__c",
   "Acc_ApprovedDate__c",
   "Acc_PaidDate__c",
   "Acc_LineItemDescription__c"
@@ -85,7 +85,7 @@ export class ClaimRepository extends SalesforceBase<ISalesforceClaim> implements
       Acc_ProjectPeriodEndDate__c: "2108-09-30",
       Acc_ProjectPeriodNumber__c: periodId,
       Acc_ProjectPeriodStartDate__c: "2108-07-01",
-      Acc_TotalCost__c: 1000,
+      Acc_ProjectPeriodCost__c: 1000,
       Acc_TotalCostsApproved__c: 1100,
       Acc_TotalCostsSubmitted__c: 1200,
       Acc_TotalGrantApproved__c: 1300,

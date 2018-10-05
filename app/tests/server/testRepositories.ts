@@ -1,7 +1,6 @@
 import { TestRepository } from "./testRepository";
 import * as Repositories from "../../src/server/repositories";
 import { IRepositories } from "../../src/server/features/common/context";
-import { ISalesforceClaimTotalCostCategory } from "../../src/server/repositories";
 
 class ContactsTestRepository extends TestRepository<Repositories.ISalesforceContact> implements Repositories.IContactsRepository {
     getById(id: string) {
@@ -55,8 +54,13 @@ class ClaimsTestRepository extends TestRepository<Repositories.ISalesforceClaim>
     getAllByPartnerId(partnerId: string) {
         return super.getWhere(x => x.Acc_ProjectParticipant__c === partnerId);
     }
-    getById(id: string) {
-        return super.getOne(x => x.Id === id);
+
+    getByPartnerIdAndPeriodId(partnerId: string, periodId: number) {
+        return super.getOne(x => x.Acc_ProjectParticipant__c === partnerId && x.Acc_ProjectPeriodNumber__c === periodId);
+    }
+
+    update(updatedClaim: Partial<Repositories.ISalesforceClaim> & { Id: string }){
+        return Promise.resolve(true);
     }
 }
 
@@ -80,7 +84,7 @@ class ClaimLineItemsTestRepository extends TestRepository<Repositories.ISalesfor
     }
 }
 
-class ClaimTotalCostTestRepository extends TestRepository<ISalesforceClaimTotalCostCategory> implements Repositories.IClaimTotalCostCategoryRepository{
+class ClaimTotalCostTestRepository extends TestRepository<Repositories.ISalesforceClaimTotalCostCategory> implements Repositories.IClaimTotalCostCategoryRepository{
     getAllByPartnerId(partnerId: string) {
         return super.getWhere(x => x.Acc_ProjectParticipant__c === partnerId);
     }
