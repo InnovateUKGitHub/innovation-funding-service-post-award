@@ -12,6 +12,7 @@ import { ClaimDto } from "../../models";
 import { navigateTo, saveClaim, validateClaim } from "../../redux/actions/thunks";
 import { ClaimForecastRoute, ClaimsDashboardRoute } from ".";
 import { Result as ValidationResult } from "../../validators/common";
+import { EditClaimLineItemsRoute } from "./editClaimLineItems";
 
 interface Params {
     projectId: string;
@@ -90,15 +91,15 @@ export class PrepareComponent extends ContainerBase<Params, Data, Callbacks> {
                 <ACC.Section title={title}>
                     <ACC.ValidationMessage message={editor.validator.comments} />
                     {this.props.editor.error ? <ACC.ValidationMessage message={new ValidationResult(null, true, false, this.props.editor.error.details || this.props.editor.error, false)} /> : null}
-                    <ACC.Claims.ClaimTable {...data} />
+                    <ACC.Claims.ClaimTable {...data} getLink={costCategoryId => EditClaimLineItemsRoute.getLink({partnerId: this.props.partnerId, projectId: this.props.projectId, periodId: this.props.periodId, costCategoryId})} />
                     <Form.Form data={editor.data} onChange={(dto) => this.props.onChange(this.props.partnerId, this.props.periodId, dto)} onSubmit={() => saveAndProgress()}>
-                        <Form.Fieldset heading={() => commentsLabel}>
-                            <Form.MultilineString label="" hint={commentsHint} name="comments" value={m => m.comments} update={(m, v) => m.comments = v} validation={editor.validator.comments} />
+                        <Form.Fieldset heading={() => commentsLabel} qa="additional-info-form" headingQa="additional-info-heading">
+                            <Form.MultilineString label="" hint={commentsHint} name="comments" value={m => m.comments} update={(m, v) => m.comments = v} validation={editor.validator.comments} qa="info-text-area"/>
                         </Form.Fieldset>
-                        <Form.Fieldset>
-                            <Form.Submit>Review forcasts</Form.Submit>
+                        <Form.Fieldset qa="review-forecasts-button">
+                            <Form.Submit >Review forecasts</Form.Submit>
                         </Form.Fieldset>
-                        <Form.Fieldset>
+                        <Form.Fieldset qa="save-button">
                             <Form.Button name="return" onClick={() => saveAndReturn()}>Save and return to claim dashboard</Form.Button>
                         </Form.Fieldset>
                     </Form.Form>
