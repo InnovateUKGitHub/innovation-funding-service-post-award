@@ -20,7 +20,6 @@ describe("ProjectsGetAllQuery", () => {
       x.Acc_ProjectTitle__c = "Expected Name";
     });
 
-    console.log("set up project", context.repositories.projects.Items);
     const result = (await context.runQuery(new GetAllQuery()))[0];
 
     expect(result.id).toBe("Expected Id");
