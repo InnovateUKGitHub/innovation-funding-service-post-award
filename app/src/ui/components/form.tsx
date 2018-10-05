@@ -34,6 +34,7 @@ class FormComponent<T> extends React.Component<FormProps<T>, []> {
 interface FieldsetProps<T> {
     heading?: (data: T) => React.ReactNode;
     qa?: string;
+    headingQa?: string;
 }
 
 class FieldsetComponent<T> extends React.Component<FieldsetProps<T>, []> {
@@ -41,9 +42,9 @@ class FieldsetComponent<T> extends React.Component<FieldsetProps<T>, []> {
         const formProps = (this.props as any as FormProps<T>);
         const childrenWithData = cloneChildrenWithData(formProps, this.props.children, "fieldset");// React.Children.map(this.props.children, child => React.cloneElement(child as any, {data: this.props.data}));
         return (
-            <fieldset className="govuk-fieldset">
+            <fieldset className="govuk-fieldset" data-qa={this.props.qa}>
                 <legend className="govuk-fieldset__legend govuk-fieldset__legend--m">
-                    {this.props.heading ? <h1 className="govuk-fieldset__heading" data-qa={this.props.qa}>{this.props.heading(formProps.data)}</h1> : null}
+                    {this.props.heading ? <h1 className="govuk-fieldset__heading" data-qa={this.props.headingQa}>{this.props.heading(formProps.data)}</h1> : null}
                 </legend>
                 {childrenWithData}
             </fieldset>
@@ -116,7 +117,7 @@ interface SubmitProps {
 }
 
 const SubmitComponent: React.SFC<SubmitProps> = (props) => {
-    return <button type="submit" className="govuk-button" onClick={(e) => handleSubmit(props, e)} data-qa={props.qa}>{props.children}</button>;
+    return <button type="submit" className="govuk-button" onClick={(e) => handleSubmit(props, e)}>{props.children}</button>;
 };
 
 interface ButtonProps {
@@ -126,7 +127,7 @@ interface ButtonProps {
 }
 
 const ButtonComponent: React.SFC<ButtonProps> = (props) => {
-    return <button type="button" name={props.name} className="govuk-button" style={{background:"buttonface", color: "buttontext" }} onClick={(e) => props.onClick()} data-qa={props.qa}>{props.children}</button>;
+    return <button type="button" name={props.name} className="govuk-button" style={{background:"buttonface", color: "buttontext" }} onClick={(e) => props.onClick()}>{props.children}</button>;
 
 };
 
