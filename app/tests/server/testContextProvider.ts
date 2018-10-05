@@ -5,7 +5,7 @@ import { TestClock } from "./testClock";
 import { TestLogger } from "./testLogger";
 
 export class TestContext implements IContext {
-    constructor(){
+    constructor() {
         this.repositories = createTestRepositories();
         this.testData = new TestData(this.repositories);
     }

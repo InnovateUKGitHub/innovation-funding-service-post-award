@@ -151,7 +151,7 @@ export class TestData {
         const newItem: Repositories.ISalesforceProfileDetails = {
           Acc_CostCategory__c: costCategory.Id,
           Acc_ProjectParticipant__c: partner.Id,
-          Acc_ProjectPeriodId__c: periodId,
+          Acc_ProjectPeriodNumber__c: periodId,
           Acc_PeriodCostCategoryTotal__c: 1000
         };
 
