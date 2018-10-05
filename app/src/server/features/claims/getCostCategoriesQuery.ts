@@ -13,7 +13,9 @@ export class GetCostCategoriesQuery implements IQuery<CostCategoryDto[]> {
       name: x.Acc_CostCategoryName__c,
       competitionType: this.getCompetitionType(x),
       organistionType: this.getOrganisationType(x),
-      isCalculated: x.Acc_CostCategoryName__c === "Overheads"
+      isCalculated: x.Acc_CostCategoryName__c === "Overheads",
+      description: x.Acc_CostCategoryDescription__c,
+      hintText: x.Acc_HintText__c
     }));
   }
 

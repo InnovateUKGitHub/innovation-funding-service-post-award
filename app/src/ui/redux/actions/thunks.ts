@@ -1,11 +1,12 @@
 import { conditionalLoad, dataLoadAction, DataLoadAction } from "./dataLoad";
 import { ApiClient } from "../../../shared/apiClient";
-import { ClaimDto } from "../../models";
+import { ClaimDto, ClaimLineItemDto } from "../../models";
 import { AsyncThunk, SyncThunk } from ".";
 import { ClaimDtoValidator } from "../../validators/claimDtoValidator";
 import { UpdateEditorAction, updateEditorAction } from "./editorActions";
 import { actions as routeActions } from "redux-router5";
 import { LoadingStatus } from "../../../shared/pending";
+import { ClaimLineItemDtosValidator } from "../../validators/claimLineItemDtosValidator";
 
 export function loadContacts() {
   return conditionalLoad(
@@ -91,13 +92,7 @@ export function loadContactsForProject(projectId: string) {
   );
 }
 
-export function loadCostCategories() {
-  return conditionalLoad(
-    "all",
-    "costCategories",
-    () => ApiClient.costCategories.getAll()
-  );
-}
+export const loadCostCategories = () => conditionalLoad("all", "costCategories", () => ApiClient.costCategories.getAll());
 
 export function loadClaim(partnerId: string, periodId: number) {
   const key = `${partnerId}_${periodId}`;
@@ -114,7 +109,7 @@ export function validateClaim(partnerId: string, periodId: number, dto: ClaimDto
     const state = getState();
     if (showErrors === null || showErrors === undefined) {
       const current = state.editors.claim[key];
-      showErrors = current && current.validator.showValidationErrors() || false;
+      showErrors = current && current.validator.showValidationErrors || false;
     }
     const validator = new ClaimDtoValidator(dto, showErrors);
     dispatch(updateEditorAction(key, "claim", dto, validator));
@@ -141,4 +136,39 @@ export function saveClaim(partnerId: string, periodId: number, dto: ClaimDto, on
 
 export function navigateTo(routeInfo: ILinkInfo) {
   return routeActions.navigateTo(routeInfo.routeName, routeInfo.routeParams);
+}
+
+export function validateClaimLineItems(partnerId: string, periodId: number, costCategoryId: string, dto: ClaimLineItemDto[], showErrors?: boolean): SyncThunk<ClaimLineItemDtosValidator, UpdateEditorAction> {
+  return (dispatch, getState) => {
+    const key = `${partnerId}_${periodId}_${costCategoryId}`;
+    const state = getState();
+    if (showErrors === null || showErrors === undefined) {
+      const current = state.editors.claimLineItems[key];
+      showErrors = current && current.validator.showValidationErrors || false;
+    }
+    const validator = new ClaimLineItemDtosValidator(dto, showErrors);
+    dispatch(updateEditorAction(key, "claimLineItems", dto, validator));
+    return validator;
+  };
+}
+
+export function saveClaimLineItems(partnerId: string, periodId: number, costCategoryId: string, dto: ClaimLineItemDto[], onComplete: () => void): SyncThunk<void, UpdateEditorAction> {
+  return (dispatch, getState) => {
+    // const key = `${partnerId}_${periodId}_${costCategoryId}`;
+    const validation = validateClaimLineItems(partnerId, periodId, costCategoryId, dto, true)(dispatch, getState, null);
+    if (!validation.isValid()) {
+      return Promise.resolve();
+    }
+    // ToDo: Impliment api call
+    console.log("Will save", validation);
+    onComplete();
+    return Promise.resolve();
+    /*return ApiClient.claims.update(partnerId, periodId, dto).then((result) => {
+      dispatch(dataLoadAction(key, "claim", LoadingStatus.Done, result));
+      onComplete();
+    }).catch((e) => {
+      console.log("Caught e", e);
+      dispatch(updateEditorAction(key, "claim", dto, validation, e));
+    });*/
+  };
 }

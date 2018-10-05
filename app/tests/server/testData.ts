@@ -19,6 +19,8 @@ export class TestData {
             Acc_DisplayOrder__c : seed,
             Acc_CompetitionType__c : "Industrial",
             Acc_OrganisationType__c : "Sector",
+            Acc_CostCategoryDescription__c: `Cost Category description ${seed}`,
+            Acc_HintText__c: `Cost Category hint ${seed}`,
         };
 
         update && update(newItem);
@@ -156,9 +158,9 @@ export class TestData {
 
         const newItem: Repositories.ISalesforceClaimDetails = {
             Acc_CostCategory__c: costCategory.Id,
-            Acc_PeriodId: periodId,
-            Acc_ProjectPartner_c: partner.Id,
-            Acc_PeriodCostCategoryTotal__c: 1000
+            Acc_ProjectPeriodNumber__c: periodId,
+            Acc_ProjectParticipant__c: partner.Id,
+            Acc_PeriodCostCategoryTotal__c: 1000            
         };
 
         if (update) {

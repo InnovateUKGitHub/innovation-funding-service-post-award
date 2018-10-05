@@ -1,7 +1,6 @@
 import { TestRepository } from "./testRepository";
 import * as Repositories from "../../src/server/repositories";
 import { IRepositories } from "../../src/server/features/common/context";
-import { ISalesforceClaimTotalCostCategory } from "../../src/server/repositories";
 
 class ContactsTestRepository extends TestRepository<Repositories.ISalesforceContact> implements Repositories.IContactsRepository {
     getById(id: string) {
@@ -56,18 +55,26 @@ class ClaimsTestRepository extends TestRepository<Repositories.ISalesforceClaim>
     getAllByPartnerId(partnerId: string) {
         return super.getWhere(x => x.Acc_ProjectParticipant__c === partnerId);
     }
-    getById(id: string) {
-        return super.getOne(x => x.Id === id);
+    getByPartnerIdAndPeriodId(partnerId: string, periodId: number) {
+        return super.getOne(x => x.Acc_ProjectParticipant__c === partnerId && x.Acc_ProjectPeriodNumber__c === periodId);
+    }
+    update(item: Repositories.ISalesforceClaim) {
+        const index = super.Items.findIndex(x => x.Acc_ProjectParticipant__c === item.Acc_ProjectParticipant__c && x.Acc_ProjectPeriodNumber__c == item.Acc_ProjectPeriodNumber__c);
+        if(index >= 0){
+            super.Items[index] = item;
+            return Promise.resolve(true);
+        }
+        return Promise.resolve(false);
     }
 }
 
 class ClaimDetailsTestRepository extends TestRepository<Repositories.ISalesforceClaimDetails> implements Repositories.IClaimDetailsRepository{
     getAllByPartnerId(partnerId: string, periodId: number): Promise<Repositories.ISalesforceClaimDetails[]> {
-        return super.getWhere(x => x.Acc_ProjectPartner_c === partnerId && x.Acc_PeriodId === periodId);
+        return super.getWhere(x => x.Acc_ProjectParticipant__c === partnerId && x.Acc_ProjectPeriodNumber__c === periodId);
     }
 
     getAllPreviousByPartnerId(partnerId: string, periodId: number): Promise<Repositories.ISalesforceClaimDetails[]> {
-        return super.getWhere(x => x.Acc_ProjectPartner_c === partnerId && x.Acc_PeriodId < periodId);
+        return super.getWhere(x => x.Acc_ProjectParticipant__c === partnerId && x.Acc_ProjectPeriodNumber__c < periodId);
     }
 }
 
@@ -77,7 +84,7 @@ class ClaimLineItemsTestRepository extends TestRepository<Repositories.ISalesfor
     }
 }
 
-class ClaimTotalCostTestRepository extends TestRepository<ISalesforceClaimTotalCostCategory> implements Repositories.IClaimTotalCostCategoryRepository{
+class ClaimTotalCostTestRepository extends TestRepository<Repositories.ISalesforceClaimTotalCostCategory> implements Repositories.IClaimTotalCostCategoryRepository{
     getAllByPartnerId(partnerId: string) {
         return super.getWhere(x => x.Acc_ProjectParticipant__c === partnerId);
     }

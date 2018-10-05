@@ -4,12 +4,14 @@ export interface ISalesforceClaimDetails {
     Acc_CostCategory__c: string;
     Acc_PeriodCostCategoryTotal__c: number;
     Acc_ProjectParticipant__c: string;
+    Acc_ProjectPeriodNumber__c: number;
 }
 
 const fields = [
     "Acc_CostCategory__c",
     "Acc_PeriodCostCategoryTotal__c",
     "Acc_ProjectParticipant__c",
+    "Acc_ProjectPeriodNumber__c",
 ];
 
 export interface IClaimDetailsRepository {
@@ -24,12 +26,12 @@ export class ClaimDetailsRepository extends SalesforceBase<ISalesforceClaimDetai
     }
 
     getAllByPartnerId(partnerId: string, periodId: number): Promise<ISalesforceClaimDetails[]> {
-        const filter = `Acc_ProjectParticipant__c = '${partnerId}' AND RecordType.Name = '${this.recordType}' AND Acc_ProjectPeriodId__c = ${periodId}`;
+        const filter = `Acc_ProjectParticipant__c = '${partnerId}' AND RecordType.Name = '${this.recordType}' AND Acc_ProjectPeriodNumber__c = ${periodId}`;
         return super.whereString(filter);
     }
 
     getAllPreviousByPartnerId(partnerId: string, periodId: number): Promise<ISalesforceClaimDetails[]> {
-        const filter = `Acc_ProjectParticipant__c = '${partnerId}' AND RecordType.Name = '${this.recordType}' AND Acc_ProjectPeriodId__c < ${periodId}`;
+        const filter = `Acc_ProjectParticipant__c = '${partnerId}' AND RecordType.Name = '${this.recordType}' AND Acc_ProjectPeriodNumber__c < ${periodId}`;
         return super.whereString(filter);
     }
 }
