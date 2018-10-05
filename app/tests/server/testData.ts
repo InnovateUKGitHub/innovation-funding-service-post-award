@@ -157,7 +157,7 @@ export class TestData {
         const newItem: Repositories.ISalesforceClaimDetails = {
             Acc_CostCategory__c: costCategory.Id,
             Acc_PeriodId: periodId,
-            Acc_ProjectPartner_c: partner.Id,
+            Acc_ProjectParticipant__c: partner.Id,
             Acc_PeriodCostCategoryTotal__c: 1000
         };
 
@@ -168,6 +168,32 @@ export class TestData {
 
         return newItem;
 
+    }
+
+    public createProfileDetail(
+      costCategory?: Repositories.ISalesforceCostCategory,
+      partner?: Repositories.ISalesforcePartner,
+      periodId?: number,
+      update?: (item: Repositories.ISalesforceClaimDetails) => void
+    ): Repositories.ISalesforceClaimDetails {
+        costCategory = costCategory || this.createCostCategory();
+        partner      = partner || this.createPartner();
+        periodId     = periodId || 1;
+
+        const newItem: Repositories.ISalesforceProfileDetails = {
+          Acc_CostCategory__c: costCategory.Id,
+          Acc_ProjectParticipant__c: partner.Id,
+          Acc_ProjectPeriodId__c: periodId,
+          Acc_PeriodCostCategoryTotal__c: 1000
+        };
+
+        if(!!update){
+          update(newItem);
+        }
+
+        this.repositories.profileDetails.Items.push(newItem);
+
+        return newItem;
     }
 
 }
