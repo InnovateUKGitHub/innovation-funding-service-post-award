@@ -1,13 +1,7 @@
 import { IContext, IQuery } from "../common/context";
-// import { ClaimDetailsDto } from "../../../ui/models";
+import { ForecastDetailsDTO } from "../../../ui/models";
 
-interface ProfileDetailsDTO {
-  costCategoryId: string;
-  periodId: number;
-  value: number;
-}
-
-export class GetAllForecastsForPartnerQuery implements IQuery<ProfileDetailsDTO[]> {
+export class GetAllForecastsForPartnerQuery implements IQuery<ForecastDetailsDTO[]> {
   constructor(
     private partnerId: string,
     private periodId: number
