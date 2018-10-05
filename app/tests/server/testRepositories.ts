@@ -62,17 +62,17 @@ class ClaimsTestRepository extends TestRepository<Repositories.ISalesforceClaim>
 
 class ClaimDetailsTestRepository extends TestRepository<Repositories.ISalesforceClaimDetails> implements Repositories.IClaimDetailsRepository{
     getAllByPartnerForPeriod(partnerId: string, periodId: number): Promise<Repositories.ISalesforceClaimDetails[]> {
-        return super.getWhere(x => x.Acc_ProjectPartner_c === partnerId && x.Acc_PeriodId === periodId);
+        return super.getWhere(x => x.Acc_ProjectParticipant__c === partnerId && x.Acc_ProjectPeriodNumber__c === periodId);
     }
 
     getAllByPartnerWithPeriodLt(partnerId: string, periodId: number): Promise<Repositories.ISalesforceClaimDetails[]> {
-        return super.getWhere(x => x.Acc_ProjectPartner_c === partnerId && x.Acc_PeriodId < periodId);
+        return super.getWhere(x => x.Acc_ProjectParticipant__c === partnerId && x.Acc_ProjectPeriodNumber__c < periodId);
     }
 }
 
 class ClaimLineItemsTestRepository extends TestRepository<Repositories.ISalesforceClaimLineItem> implements Repositories.IClaimLineItemRepository{
     getAllForCategory(partnerId: string, categoryId: string, periodId: number)  {
-        return super.getWhere(x => x.Acc_ProjectPeriodId__c === periodId && x.Acc_CostCategory__c === categoryId && x.Acc_ProjectParticipant__c === partnerId);
+        return super.getWhere(x => x.Acc_ProjectPeriodNumber__c === periodId && x.Acc_CostCategory__c === categoryId && x.Acc_ProjectParticipant__c === partnerId);
     }
 }
 
