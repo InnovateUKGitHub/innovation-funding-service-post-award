@@ -61,6 +61,7 @@ export abstract class ControllerBase<T> {
             data.details = e.message;
           }
 
+          // TODO pass error code
           return resp.status(500).json(data);
         });
     };
