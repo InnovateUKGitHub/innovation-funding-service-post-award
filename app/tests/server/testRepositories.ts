@@ -82,12 +82,19 @@ class ClaimTotalCostTestRepository extends TestRepository<ISalesforceClaimTotalC
     }
 }
 
+class ProfileDetailsTestRepository extends TestRepository<Repositories.ISalesforceProfileDetails> implements Repositories.ProfileDetailsRepository {
+  getAllByPartnerWithPeriodGt(partnerId: string, periodId: number) {
+    return super.getWhere(x => x.Acc_ProjectParticipant__c === partnerId && x.Acc_ProjectPeriodNumber__c > periodId);
+  }
+}
+
 export interface ITestRepositories extends IRepositories {
     claims: ClaimsTestRepository;
     claimDetails: ClaimDetailsTestRepository;
     claimLineItems: ClaimLineItemsTestRepository;
     costCategories: CostCategoriesTestRepository;
     contacts: ContactsTestRepository;
+    profileDetails: ProfileDetailsTestRepository;
     projects: ProjectsTestRepository;
     partners: PartnerTestRepository;
     projectContacts: ProjectContactTestRepository;
@@ -100,6 +107,7 @@ export const createTestRepositories = (): ITestRepositories => ({
     claimLineItems: new ClaimLineItemsTestRepository(),
     costCategories: new CostCategoriesTestRepository(),
     contacts: new ContactsTestRepository(),
+    profileDetails: new ProfileDetailsTestRepository(),
     projects: new ProjectsTestRepository(),
     partners: new PartnerTestRepository(),
     projectContacts: new ProjectContactTestRepository(),
