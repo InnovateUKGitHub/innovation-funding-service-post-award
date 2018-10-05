@@ -13,7 +13,6 @@ export interface ICommand<T> {
 
 export interface IRepositories {
   claims: Readonly<Repsoitories.IClaimRepository>;
-  claimCosts: Readonly<Repsoitories.IClaimCostRepository>;
   claimDetails: Readonly<Repsoitories.IClaimDetailsRepository>;
   contacts: Readonly<Repsoitories.IContactsRepository>;
   costCategories: Readonly<Repsoitories.ICostCategoryRepository>;

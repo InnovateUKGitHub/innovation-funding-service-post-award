@@ -1,6 +1,6 @@
 import {ControllerBase} from "./controllerBase";
 import contextProvider from "../features/common/contextProvider";
-import {GetAllClaimDetailsByPartner} from "../features/claims/claimDetails/getAllByPartnerWithPeriodLte";
+import {GetAllClaimDetailsByPartner} from "../features/claims/claimDetails/getAllByPartnerQuery";
 import {ClaimDetailsDtoNew} from "../../ui/models";
 import {ApiError, ErrorCode} from "./ApiError";
 

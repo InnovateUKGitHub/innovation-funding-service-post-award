@@ -44,7 +44,6 @@ export const dataStoreReducer = <TData extends {}, TKey>(key: (key: TKey) => str
 export const dataReducer = combineReducers({
   claims: dataStoreReducer<Dtos.ClaimDto[], string>(x => x, "claims"),
   claim: dataStoreReducer<Dtos.ClaimDto, string>(x => x, "claim"),
-  claimCosts: dataStoreReducer<Dtos.ClaimDetailsDto[], string>(x => x || "empty", "claimCosts"),
   claimDetails: dataStoreReducer<Dtos.ClaimDetailsDto[], string>(x => x || "empty", "claimDetails"),
   claimLineItems: dataStoreReducer<Dtos.ClaimLineItemDto[], string>(x => x || "empty", "claimLineItems"),
   contacts: dataStoreReducer<Dtos.IContact[], string>(x => x, "contacts"),

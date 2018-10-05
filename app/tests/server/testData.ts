@@ -28,38 +28,6 @@ export class TestData {
         return newItem;
     }
 
-    public createClaimCosts(claimId: string, costCategory?: Repositories.ISalesforceCostCategory, update?: (item: Repositories.ISalesforceClaimCost) => void): Repositories.ISalesforceClaimCost {
-        costCategory = costCategory || this.createCostCategory();
-
-        let seed = this.repositories.costCategories.Items.length + 1;
-
-        let newItem = {
-            Id: "",
-            ACC_Claim_Id__c: claimId,
-            Acc_PeriodStartDate_c : "",
-            Acc_PeriodEndDate__c : "",
-            Acc_PeriodID__c : seed,
-            Acc_ProjectPeriodLongName__c : "",
-            RecordType : "",
-            Acc_CostCategoryID__c : seed.toString(),
-            Acc_ProjectParticipantID__c : "",
-            Acc_ForecastInitialValue__c : seed,
-            Acc_ForecastLatestValue__c : seed,
-            Acc_GolValue__c : seed,
-            Acc_TotalCostCategoryValue__c : seed,
-            Acc_TotalValue__c : seed,
-            Acc_TotalGolvalue__c : seed,
-            Acc_TotalFutureCostCategoryValue__C: seed,
-
-        } as Repositories.ISalesforceClaimCost;
-
-        update && update(newItem);
-
-        this.repositories.claimCosts.Items.push(newItem);
-
-        return newItem;
-    }
-
     public createContact(update?: (item: Repositories.ISalesforceContact) => void) {
         let seed = this.repositories.contacts.Items.length + 1;
 
@@ -156,8 +124,8 @@ export class TestData {
 
         const newItem: Repositories.ISalesforceClaimDetails = {
             Acc_CostCategory__c: costCategory.Id,
-            Acc_PeriodId: periodId,
-            Acc_ProjectPartner_c: partner.Id,
+            Acc_ProjectPeriodNumber__c: periodId,
+            Acc_ProjectParticipant__c: partner.Id,
             Acc_PeriodCostCategoryTotal__c: 1000
         };
 

@@ -2,7 +2,7 @@ import { IContext, IQuery } from "../../common/context";
 import { ClaimDetailsDto } from "../../../../ui/models";
 import { GetCostCategoriesQuery } from "../getCostCategoriesQuery";
 
-export class GetAllForPartnerQuery implements IQuery<ClaimDetailsDto[]> {
+export class GetClaimDetailsSummaryForPartnerQuery implements IQuery<ClaimDetailsDto[]> {
     constructor(private partnerId: string, private periodId: number) {
     }
 

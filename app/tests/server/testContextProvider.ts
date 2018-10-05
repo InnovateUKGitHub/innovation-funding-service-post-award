@@ -13,7 +13,7 @@ export class TestContext implements IContext {
     public clock = new TestClock();
     public logger = new TestLogger();
     public repositories: ITestRepositories;
-    
+
     public testData: TestData;
 
     public config = {

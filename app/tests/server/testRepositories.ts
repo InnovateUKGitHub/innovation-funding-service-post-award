@@ -33,7 +33,6 @@ class PartnerTestRepository extends TestRepository<Repositories.ISalesforcePartn
     }
 }
 
-
 class ProjectContactTestRepository extends TestRepository<Repositories.ISalesforceProjectContact> implements Repositories.IProjectContactsRepository {
     getAllByProjectId(projectId: string) {
         return super.getWhere(x => x.Acc_ProjectId__c === projectId);
@@ -66,7 +65,7 @@ class ClaimDetailsTestRepository extends TestRepository<Repositories.ISalesforce
         return super.getWhere(x => x.Acc_ProjectPartner_c === partnerId && x.Acc_PeriodId === periodId);
     }
 
-    getAllPreviousByPartnerId(partnerId: string, periodId: number): Promise<Repositories.ISalesforceClaimDetails[]> {
+    getAllByPartnerWithPeriodLt(partnerId: string, periodId: number): Promise<Repositories.ISalesforceClaimDetails[]> {
         return super.getWhere(x => x.Acc_ProjectPartner_c === partnerId && x.Acc_PeriodId < periodId);
     }
 }
@@ -86,7 +85,6 @@ class ClaimTotalCostTestRepository extends TestRepository<ISalesforceClaimTotalC
 export interface ITestRepositories extends IRepositories {
     claims: ClaimsTestRepository;
     claimDetails: ClaimDetailsTestRepository;
-    claimCosts: ClaimCostTestRepository;
     claimLineItems: ClaimLineItemsTestRepository;
     costCategories: CostCategoriesTestRepository;
     contacts: ContactsTestRepository;
@@ -98,7 +96,6 @@ export interface ITestRepositories extends IRepositories {
 
 export const createTestRepositories = (): ITestRepositories => ({
     claims: new ClaimsTestRepository(),
-    claimCosts: new ClaimCostTestRepository(),
     claimDetails: new ClaimDetailsTestRepository(),
     claimLineItems: new ClaimLineItemsTestRepository(),
     costCategories: new CostCategoriesTestRepository(),

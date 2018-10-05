@@ -1,7 +1,7 @@
 import {ControllerBase} from "./controllerBase";
 import {ClaimDetailsDto} from "../../ui/models/claimDetailsDto";
 import contextProvider from "../features/common/contextProvider";
-import {GetAllForPartnerQuery} from "../features/claims/claimDetails/getAllForPartnerQuery";
+import {GetClaimDetailsSummaryForPartnerQuery} from "../features/claims/claimDetails/getClaimDetailsSummaryForPartnerQuery";
 
 export interface IClaimDetailsSummaryApi {
   getAllByPartnerIdForPeriod: (partnerId: string, periodId: number) => Promise<ClaimDetailsDto[]>;
@@ -20,7 +20,7 @@ class Controller extends ControllerBase<ClaimDetailsDto> implements IClaimDetail
   }
 
   public async getAllByPartnerIdForPeriod(partnerId: string, periodId: number) {
-    const query = new GetAllForPartnerQuery(partnerId, periodId);
+    const query = new GetClaimDetailsSummaryForPartnerQuery(partnerId, periodId);
     return await contextProvider.start().runQuery(query);
   }
 }
