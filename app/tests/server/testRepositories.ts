@@ -63,11 +63,11 @@ class ClaimsTestRepository extends TestRepository<Repositories.ISalesforceClaim>
 
 class ClaimDetailsTestRepository extends TestRepository<Repositories.ISalesforceClaimDetails> implements Repositories.IClaimDetailsRepository{
     getAllByPartnerId(partnerId: string, periodId: number): Promise<Repositories.ISalesforceClaimDetails[]> {
-        return super.getWhere(x => x.Acc_ProjectPartner_c === partnerId && x.Acc_PeriodId === periodId);
+        return super.getWhere(x => x.Acc_ProjectParticipant__c === partnerId && x.Acc_PeriodId === periodId);
     }
 
     getAllPreviousByPartnerId(partnerId: string, periodId: number): Promise<Repositories.ISalesforceClaimDetails[]> {
-        return super.getWhere(x => x.Acc_ProjectPartner_c === partnerId && x.Acc_PeriodId < periodId);
+        return super.getWhere(x => x.Acc_ProjectParticipant__c === partnerId && x.Acc_PeriodId < periodId);
     }
 }
 
