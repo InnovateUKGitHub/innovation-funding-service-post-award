@@ -17,10 +17,10 @@ export class MapToProjectDtoCommand implements IQuery<ProjectDto> {
       applicationUrl: this.getIFSUrl(this.item, context.config.ifsApplicationUrl),
       grantOfferLetterUrl: this.getIFSUrl(this.item, context.config.ifsGrantLetterUrl),
       claimFrequency: this.mapFrequencyToEnum(this.item.Acc_ClaimFrequency__c),
-      period: NaN,
+      periodId: NaN,
     };
 
-    dto.period = this.calcPeriod(context, dto);
+    dto.periodId = this.calcPeriod(context, dto);
 
     return Promise.resolve(dto);
   }

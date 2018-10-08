@@ -25,7 +25,7 @@ interface Data {
     partner: Pending<Dtos.PartnerDto>;
     costCategories: Pending<Dtos.CostCategoryDto[]>;
     claim: Pending<Dtos.ClaimDto>;
-    claimDetails: Pending<Dtos.ClaimDetailsDto[]>;
+    claimDetailsSummary: Pending<Dtos.ClaimDetailsSummaryDto[]>;
     editor: IEditorStore<Dtos.ClaimDto, ClaimDtoValidator>;
 }
 
@@ -40,7 +40,7 @@ interface CombinedData {
     partner: Dtos.PartnerDto;
     costCategories: Dtos.CostCategoryDto[];
     claim: Dtos.ClaimDto;
-    claimDetails: Dtos.ClaimDetailsDto[];
+    claimDetails: Dtos.ClaimDetailsSummaryDto[];
 }
 
 export class PrepareComponent extends ContainerBase<Params, Data, Callbacks> {
@@ -51,7 +51,7 @@ export class PrepareComponent extends ContainerBase<Params, Data, Callbacks> {
             this.props.partner,
             this.props.costCategories,
             this.props.claim,
-            this.props.claimDetails,
+            this.props.claimDetailsSummary,
             (project, partner, costCategories, claim, claimDetails) => ({ project, partner, costCategories, claim, claimDetails })
         );
 
@@ -66,7 +66,7 @@ export class PrepareComponent extends ContainerBase<Params, Data, Callbacks> {
         return `${data.partner.name} claim for P${data.claim.periodId} ${DateTime.fromJSDate(data.claim.periodStartDate).toFormat("MMMM")} to ${DateTime.fromJSDate(data.claim.periodEndDate).toFormat("MMMM yyyy")}`;
     }
 
-    private renderContents(data: { project: Dtos.ProjectDto, partner: Dtos.PartnerDto, costCategories: Dtos.CostCategoryDto[], claim: Dtos.ClaimDto, claimDetails: Dtos.ClaimDetailsDto[] }, editor: IEditorStore<ClaimDto, ClaimDtoValidator>) {
+    private renderContents(data: { project: Dtos.ProjectDto, partner: Dtos.PartnerDto, costCategories: Dtos.CostCategoryDto[], claim: Dtos.ClaimDto, claimDetails: Dtos.ClaimDetailsSummaryDto[] }, editor: IEditorStore<ClaimDto, ClaimDtoValidator>) {
 
         const title = this.getClaimPeriodTitle(data);
         const Form = ACC.TypedForm<Dtos.ClaimDto>();
@@ -139,7 +139,7 @@ export const PrepareClaim = definition.connect({
         partner: Pending.create(store.data.partner[params.partnerId]),
         costCategories: Pending.create(store.data.costCategories.all),
         claim: Pending.create(store.data.claim[params.partnerId + "_" + params.periodId]),
-        claimDetails: Pending.create(store.data.claimDetails[params.partnerId + "_" + params.periodId]),
+        claimDetailsSummary: Pending.create(store.data.claimDetailsSummary[params.partnerId + "_" + params.periodId]),
         editor: getEditor(store.editors.claim[params.partnerId + "_" + params.periodId], Pending.create(store.data.claim[params.partnerId + "_" + params.periodId]))
     }),
     withCallbacks: (dispatch) => ({
@@ -159,7 +159,7 @@ export const PrepareClaimRoute = definition.route({
         Actions.loadPatnersForProject(params.projectId),
         Actions.loadCostCategories(),
         Actions.loadClaim(params.partnerId, params.periodId),
-        Actions.loadClaimDetailsForPartner(params.partnerId, params.periodId)
+        Actions.loadClaimDetailsSummaryForPartner(params.partnerId, params.periodId)
     ],
     container: PrepareClaim
 });

@@ -1,15 +1,14 @@
 import { IContext, IQuery } from "../../common/context";
-import { ClaimDetailsDto } from "../../../../ui/models";
-import { ISalesforceClaim, ISalesforceClaimDetails, ISalesforceClaimTotalCostCategory } from "../../../repositories";
+import { ClaimDetailsSummaryDto } from "../../../../ui/models";
 import { GetCostCategoriesQuery } from "../getCostCategoriesQuery";
 
-export class GetAllForPartnerQuery implements IQuery<ClaimDetailsDto[]> {
+export class GetClaimDetailsSummaryForPartnerQuery implements IQuery<ClaimDetailsSummaryDto[]> {
     constructor(private partnerId: string, private periodId: number) {
     }
 
     public async Run(context: IContext) {
-        const claimDetailResults = await context.repositories.claimDetails.getAllByPartnerId(this.partnerId, this.periodId);
-        const totalCostCategoryResults = await context.repositories.claimDetails.getAllPreviousByPartnerId(this.partnerId, this.periodId);
+        const claimDetailResults = await context.repositories.claimDetails.getAllByPartnerForPeriod(this.partnerId, this.periodId);
+        const totalCostCategoryResults = await context.repositories.claimDetails.getAllByPartnerWithPeriodLt(this.partnerId, this.periodId);
 
         const costCategories = await context.runQuery(new GetCostCategoriesQuery());
         const filteredCostCategories = costCategories.filter(x => x.organistionType === "Industrial"); // Todo: filter based on project

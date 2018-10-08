@@ -42,7 +42,7 @@ export default abstract class SalesforceBase<T> {
       .execute()
       .then(x => this.asArray(x))
       .catch(e => {
-        console.log(e);
+        console.log("Salesforce Error", e);
         throw e;
       });
 

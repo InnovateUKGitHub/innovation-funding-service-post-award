@@ -1,25 +1,39 @@
-import { ControllerBase } from "./controllerBase";
-import { ClaimDetailsDto } from "../../ui/models/claimDetailsDto";
+import {ControllerBase} from "./controllerBase";
 import contextProvider from "../features/common/contextProvider";
-import { GetAllForPartnerQuery } from "../features/claims/claimDetails/getAllForPartnerQuery";
+import {GetAllClaimDetailsByPartner} from "../features/claims/claimDetails/getAllByPartnerQuery";
+import {ClaimDetailsDto} from "../../ui/models";
+import {ApiError, ErrorCode} from "./ApiError";
 
 export interface IClaimDetailsApi {
-    getAllByPartnerId: (partnerId: string, periodId: number) => Promise<ClaimDetailsDto[]>;
+  getAllByPartner: (partnerId: string) => Promise<ClaimDetailsDto[]>;
+}
+
+export interface Params {
+  partnerId: string;
 }
 
 class Controller extends ControllerBase<ClaimDetailsDto> implements IClaimDetailsApi {
-    public path = "claims";
+  public path = "claimdetails";
 
-    constructor() {
-        super();
+  constructor() {
+    super();
 
-        this.getItems("/:partnerId/:periodId/details", (p, q) => ({ partnerId: p.partnerId, periodId: parseInt(p.periodId, 10)}), (p) => this.getAllByPartnerId(p.partnerId, p.periodId));
+    this.getItems("/", (p, q) => ({
+      partnerId: q.partnerId,
+    }),  p => this.delegateRequest(p));
+  }
+
+  private async delegateRequest(p: Params) {
+    if (!p.partnerId) {
+      throw new ApiError(ErrorCode.BAD_REQUEST, "Bad request");
     }
+    return this.getAllByPartner(p.partnerId);
+  }
 
-    public async getAllByPartnerId(partnerId: string, periodId: number) {
-        const query = new GetAllForPartnerQuery(partnerId, periodId);
-        return await contextProvider.start().runQuery(query);
-    }
+  public async getAllByPartner(partnerId: string) {
+    const query = new GetAllClaimDetailsByPartner(partnerId);
+    return await contextProvider.start().runQuery(query);
+  }
 }
 
 export const controller = new Controller();

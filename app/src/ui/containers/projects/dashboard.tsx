@@ -44,7 +44,7 @@ class ProjectDashboardComponent extends ContainerBase<{}, Data, Callbacks> {
       const today = new Date();
       // needs last claim date to work out latest period for claim deadline
       const end = new Date(x.startDate);
-      const endMonth = x.period * (quarterly ? 4 : 1);
+      const endMonth = x.periodId * (quarterly ? 4 : 1);
       end.setMonth(end.getMonth() + endMonth);
       end.setDate(0);
       const timeRemaining = end.getTime() - today.getTime();
