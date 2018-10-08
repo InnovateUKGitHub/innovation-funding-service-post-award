@@ -1,13 +1,13 @@
 import { ControllerBase } from "./controllerBase";
-import { ClaimCostDto } from "../../ui/models/claimCostDto";
+import { ClaimDetailsDto } from "../../ui/models/claimDetailsDto";
 import contextProvider from "../features/common/contextProvider";
 import { GetAllForPartnerQuery } from "../features/claims/claimDetails/getAllForPartnerQuery";
 
 export interface IClaimDetailsApi {
-    getAllByPartnerId: (partnerId: string, periodId: number) => Promise<ClaimCostDto[]>;
+    getAllByPartnerId: (partnerId: string, periodId: number) => Promise<ClaimDetailsDto[]>;
 }
 
-class Controller extends ControllerBase<ClaimCostDto> implements IClaimDetailsApi {
+class Controller extends ControllerBase<ClaimDetailsDto> implements IClaimDetailsApi {
     public path = "claims";
 
     constructor() {

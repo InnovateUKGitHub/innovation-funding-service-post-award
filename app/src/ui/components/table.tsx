@@ -149,7 +149,6 @@ interface LinkColumnProps<T> extends ExternalColumnProps<T, ILinkInfo> {
 }
 
 const LinkColumn = <T extends {}>(props: LinkColumnProps<T>) => {
-  console.log("Getting link column value", props);
   const TypedColumn = TableColumn as { new(): TableColumn<T> };
   return <TypedColumn classSuffix="numeric" renderCell={(data, index) => <Link route={props.value(data, index)} >{props.content}</Link>} {...props} />;
 };

@@ -156,8 +156,8 @@ export class TestData {
 
         const newItem: Repositories.ISalesforceClaimDetails = {
             Acc_CostCategory__c: costCategory.Id,
-            Acc_PeriodId: periodId,
-            Acc_ProjectPartner_c: partner.Id,
+            Acc_ProjectPeriodNumber__c: periodId,
+            Acc_ProjectParticipant__c: partner.Id,
             Acc_PeriodCostCategoryTotal__c: 1000
         };
 
