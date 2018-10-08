@@ -125,7 +125,7 @@ interface SubmitProps {
 }
 
 const SubmitComponent: React.SFC<SubmitProps> = (props) => {
-    return <button type="submit" className="govuk-button" onClick={(e) => handleSubmit(props, e)}>{props.children}</button>;
+    return <button type="submit" data-qa="default" className="govuk-button" onClick={(e) => handleSubmit(props, e)}>{props.children}</button>;
 };
 
 interface ButtonProps {
