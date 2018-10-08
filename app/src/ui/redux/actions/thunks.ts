@@ -112,7 +112,7 @@ export function loadClaim(partnerId: string, periodId: number) {
   return conditionalLoad(
     key,
     "claim",
-    () => ApiClient.claims.getByPartnerAndPeriod(partnerId, periodId)
+    () => ApiClient.claims.get(partnerId, periodId)
   );
 }
 
