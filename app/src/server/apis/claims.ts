@@ -1,7 +1,7 @@
 import {ControllerBase} from "./controllerBase";
 import {ClaimDto} from "../../ui/models/claimDto";
 import contextProvider from "../features/common/contextProvider";
-import {GetAllForPartnerQuery, GetByPartnerAndPeriodQuery} from "../features/claims";
+import {GetAllForPartnerQuery, GetClaim} from "../features/claims";
 import {UpdateClaimCommand} from "../features/claims/updateClaim";
 import {ApiError, ErrorCode} from "./ApiError";
 import {processDto} from "../../shared/processResponse";
@@ -28,7 +28,7 @@ class Controller extends ControllerBase<ClaimDto> implements IClaimsApi {
   }
 
   public async get(partnerId: string, periodId: number) {
-    const query = new GetByPartnerAndPeriodQuery(partnerId, periodId);
+    const query = new GetClaim(partnerId, periodId);
     return await contextProvider.start().runQuery(query);
   }
 
@@ -44,7 +44,7 @@ class Controller extends ControllerBase<ClaimDto> implements IClaimsApi {
       throw new ApiError(ErrorCode.INTERNAL_SERVER_ERROR, "Failed to update claim");
     });
 
-    const query = new GetByPartnerAndPeriodQuery(partnerId, periodId);
+    const query = new GetClaim(partnerId, periodId);
     return (await contextProvider.start().runQuery(query))!;
   }
 }
