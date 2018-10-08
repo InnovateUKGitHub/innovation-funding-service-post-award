@@ -54,10 +54,7 @@ describe("claimDetails/GetAllForPartnerQuery", () => {
 
         const result = await context.runQuery(query);
 
-        console.log("result", result);
-
         expect(result.length).toBe(2);
-
         expect(result[0].costCategoryId).toBe(costCategory1.Id);
         expect(result[0].costsClaimedThisPeriod).toBe(expectedCost1);
 
