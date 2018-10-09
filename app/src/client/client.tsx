@@ -11,7 +11,7 @@ import { processDto } from "../shared/processResponse";
 const serverState = processDto((window as any).__PRELOADED_STATE__);
 
 console.log("initial state", serverState);
-// const logger = (store) => (next) => (action) => {
+// const logger = (claimStore) => (next) => (action) => {
 //   console.log("logging", action, next);
 //   return next(action);
 // }
@@ -23,7 +23,7 @@ const store      = createStore(rootReducer, serverState, middleware);
 (window as any).Store = store;
 
 // window["router"] = router;
-// window["store"] = store;
+// window["claimStore"] = claimStore;
 
 router.start(() => {
   hydrate((

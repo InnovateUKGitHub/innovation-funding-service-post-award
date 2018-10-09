@@ -91,7 +91,7 @@ export class ClaimRepository extends SalesforceBase<ISalesforceClaim> implements
       Acc_TotalGrantApproved__c: 1300,
       Id: "xxxxxx",
       LastModifiedDate: "2018-10-01T10:13:47.000+0000",
-      Acc_LineItemDescription__c: "An example that isnt in the store"
+      Acc_LineItemDescription__c: "An example that isnt in the claimStore"
     });
   }
 

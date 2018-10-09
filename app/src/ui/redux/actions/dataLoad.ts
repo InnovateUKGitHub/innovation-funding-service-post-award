@@ -3,7 +3,6 @@ import { IDataStore } from "../reducers";
 import { LoadingStatus } from "../../../shared/pending";
 
 type DataLoadThunk = typeof dataLoadAction;
-export type DataStoreId = "all" | number;
 export type DataLoadAction = ReturnType<DataLoadThunk>;
 
 export function dataLoadAction(

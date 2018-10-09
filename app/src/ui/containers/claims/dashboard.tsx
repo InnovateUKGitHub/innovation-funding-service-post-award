@@ -1,7 +1,8 @@
 import React from "react";
 import { ContainerBase, ReduxContainer } from "../containerBase";
 import { Pending } from "../../../shared/pending";
-import * as Actions from "../../redux/actions/index";
+import * as Actions from "../../redux/actions";
+import * as Selectors from "../../redux/selectors";
 import { ProjectOverviewPage } from "../../components/projectOverview";
 import { ClaimDto, PartnerDto, ProjectDto } from "../../models";
 import { Details, DualDetails, Link, Section, SectionPanel, Table, TypedLoader } from "../../components";
@@ -160,9 +161,9 @@ const definition = ReduxContainer.for<Params, Data, {}>(Component);
 
 export const ClaimsDashboard = definition.connect({
   withData: (state, params) => ({
-    projectDetails: Pending.create(state.data.project[params.projectId]),
-    partnerDetails: Pending.create(state.data.partner[params.partnerId]),
-    claims: Pending.create(state.data.claims[params.partnerId])
+    projectDetails: Selectors.getProject(params.projectId).getPending(state),
+    partnerDetails: Selectors.getPartner(params.partnerId).getPending(state),
+    claims: Selectors.findClaimsByPartner(params.partnerId).getPending(state)
   }),
   withCallbacks: () => ({})
 });
