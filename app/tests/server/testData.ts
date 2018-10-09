@@ -101,18 +101,6 @@ export class TestData {
         let seed = this.repositories.partners.Items.length + 1;
         project = project || this.createProject();
 
-        // let newItem = {
-        //     Id: `Partner${seed}`,
-        //     Acc_AccountId__r: {
-        //         Id: `AccountId${seed}`,
-        //         Name: `Participant Name ${seed}`
-        //     },
-        //     Acc_ParticipantSize__c: "Large",
-        //     Acc_ParticipantType__c: "Accedemic",
-        //     Acc_ProjectRole__c: "Project Lead",
-        //     Acc_ProjectId__c: project.Id
-        // } as Repositories.ISalesforcePartner;
-
         const newItem = {
             Id: `Partner${seed}`,
             Acc_AccountId__r: {
