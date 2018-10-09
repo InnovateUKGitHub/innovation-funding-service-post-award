@@ -17,7 +17,6 @@ export class Result {
         public readonly isRequired: boolean
     ) {
 
-        console.log("creating result", isValid, errorMessage);
         // Cast so that the internal methods can be private on the public interface.
         const internalResults = (results as any) as ResultsInternal;
 
