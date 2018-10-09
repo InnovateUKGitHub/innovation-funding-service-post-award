@@ -99,7 +99,6 @@ describe("MapToProjectDtoCommand", () => {
         context.clock.setDate(`2018/${month}/01`);
         const result = await context.runCommand(new MapToProjectDtoCommand(salesforce));
         const expected = Math.ceil(i / 3);
-        console.log("testing quertly", context.clock.today(), result.periodId, expected);
         expect(result.periodId).toBe(expected);
       }
     });

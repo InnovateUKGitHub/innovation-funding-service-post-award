@@ -1,9 +1,8 @@
 import "jest";
 import React from "react";
-import { Tabs, TabItem } from "../../../src/ui/components/layout/tabs";
-
 import Enzyme from "enzyme";
 import Adapter from "enzyme-adapter-react-16";
+import { TabItem, Tabs } from "../../../src/ui/components/layout/tabs";
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -34,11 +33,13 @@ describe("Tabs", () => {
     });
 
     it("should not render tabs if passed an empty tab list", () => {
-        const wrapper = Enzyme.shallow(<Tabs tabList={[]}/>);
-        expect(wrapper.html()).toBeNull();
+      const tabList = [] as any;
+      const wrapper = Enzyme.shallow(<Tabs tabList={tabList}/>);
+      expect(wrapper.html()).toBeNull();
     });
     it("should not render tabs if passed null tab list", () => {
-        const wrapper = Enzyme.shallow(<Tabs tabList={null}/>);
-        expect(wrapper.html()).toBeNull();
+      const tabList = null as any;
+      const wrapper = Enzyme.shallow(<Tabs tabList={tabList}/>);
+      expect(wrapper.html()).toBeNull();
     });
 });

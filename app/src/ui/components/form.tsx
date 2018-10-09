@@ -2,8 +2,9 @@ import React from "react";
 import { TextInput } from "./inputs/textInput";
 import { TextAreaInput } from "./inputs/textAreaInput";
 import { NumberInput } from "./inputs/numberInput";
-import { Result as ValidationResult} from "../validators/common";
 import classNames from "classnames";
+import { Result } from "../validation/result";
+import { ValidationError } from "./validationError";
 
 interface FormProps<T> {
     data: T;
@@ -64,17 +65,17 @@ interface ExternalFieldProps<TDto, TValue> {
     name: string;
     value: (data: TDto) => TValue|null;
     update: (data: TDto, value: TValue|null) => void;
-    validation?: ValidationResult;
+    validation?: Result;
 }
 
 class FieldComponent<T, TValue> extends React.Component<InternalFieldProps<T> & ExternalFieldProps<T, TValue>, {}> {
     render() {
         const { hint, name, label, field, data, validation } = this.props;
         return (
-            <div data-qa={`field-${name}`} className={classNames("govuk-form-group", {"govuk-form-group--error": validation && validation.showValidationErrors() && !validation.isValid()})}>
+            <div data-qa={`field-${name}`} className={classNames("govuk-form-group", {"govuk-form-group--error": validation && validation.showValidationErrors && !validation.isValid})}>
                 <label className="govuk-label" htmlFor={name}>{label}</label>
                 {hint ? <span id={`${name}-hint`} className="govuk-hint">{hint}</span> : null}
-                {validation && validation.showValidationErrors() && !validation.isValid() ? <span className="govuk-error-message">{validation.errorMessage}</span> : null}
+                <ValidationError error={validation}/>
                 {field(data!)}
             </div>
         );

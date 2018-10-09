@@ -59,8 +59,13 @@ class ClaimsTestRepository extends TestRepository<Repositories.ISalesforceClaim>
         return super.getOne(x => x.Acc_ProjectParticipant__c === partnerId && x.Acc_ProjectPeriodNumber__c === periodId);
     }
 
-    update(updatedClaim: Partial<Repositories.ISalesforceClaim> & { Id: string }){
-        return Promise.resolve(true);
+    update(updatedClaim: Repositories.ISalesforceClaim){
+        const index = super.Items.findIndex(x => x.Acc_ProjectParticipant__c === updatedClaim.Acc_ProjectParticipant__c && x.Acc_ProjectPeriodNumber__c == updatedClaim.Acc_ProjectPeriodNumber__c);
+        if(index >= 0){
+            super.Items[index] = updatedClaim;
+            return Promise.resolve(true);
+        }
+        return Promise.resolve(false);
     }
 }
 
@@ -90,7 +95,7 @@ class ClaimTotalCostTestRepository extends TestRepository<Repositories.ISalesfor
     }
 }
 
-class ProfileDetailsTestRepository extends TestRepository<Repositories.ISalesforceProfileDetails> implements Repositories.ProfileDetailsRepository {
+class ProfileDetailsTestRepository extends TestRepository<Repositories.ISalesforceProfileDetails> implements Repositories.IProfileDetailsRepository {
   getAllByPartnerWithPeriodGt(partnerId: string, periodId: number) {
     return super.getWhere(x => x.Acc_ProjectParticipant__c === partnerId && x.Acc_ProjectPeriodNumber__c > periodId);
   }

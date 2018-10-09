@@ -25,6 +25,7 @@
     "array-type": [ true, "array"],
     "no-empty-interface": false,
     "max-classes-per-file": false,
+    "variable-name": [true, "ban-keywords", "check-format", "allow-leading-underscore", "allow-pascal-case"],
 
     // react styling
     "jsx-curly-spacing": true,

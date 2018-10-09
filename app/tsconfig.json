@@ -59,7 +59,7 @@
   },
   "exclude": [
     "node_modules",
-    "tests",
+    // "tests",
     "**/*.tests.ts"
   ]
 }
