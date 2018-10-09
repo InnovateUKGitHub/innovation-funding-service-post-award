@@ -78,7 +78,7 @@ class ProjectDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
         const percentageClaimed = totalEligibleCosts ? 100 * totalClaimed / totalEligibleCosts : null;
 
         return (
-            <ACC.Section title="Cost claimed status">
+            <ACC.Section title="Cost claimed status" qa="cost-claimed-status">
                 <PartnersTable.Table qa="cost-claimed">
                     <PartnersTable.String header="Partner" qa="partner" value={x => x.isLead ? `${x.name} (Lead)` : x.name} footer="Total" />
                     <PartnersTable.Currency header="Total eligible costs" qa="total-costs" value={x => x.totalParticipantGrant} footer={<ACC.Renderers.Currency value={totalEligibleCosts} />} />

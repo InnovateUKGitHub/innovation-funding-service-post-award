@@ -60,7 +60,7 @@ const ProjectClaimsHistory: React.SFC<ClaimsHistoryProps> = ({ partner }) => {
   const { Details: Column, Currency, Percentage } = Details.forData(partner);
   return (
     <Section>
-      <SectionPanel title="Project claims history">
+      <SectionPanel qa="claims-dashboard" title="Project claims history">
         <DualDetails displayDensity="Compact">
           <Column qa="claims-history-col-0">
             <Currency label="Grant offer letter costs" value={x => x.totalParticipantGrant} />
