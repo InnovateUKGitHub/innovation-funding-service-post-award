@@ -10,6 +10,7 @@ interface FormProps<T> {
     data: T;
     onChange: (data: T) => void;
     onSubmit: () => void;
+    qa?: string;
 }
 
 const cloneChildrenWithData = <T extends {}>(formProps: FormProps<T>, children: React.ReactNode, parentKey: string) => {
@@ -20,7 +21,7 @@ class FormComponent<T> extends React.Component<FormProps<T>, []> {
     render() {
         const childrenWithData = cloneChildrenWithData(this.props, this.props.children, "form");
         return (
-            <form method="post" action="" onSubmit={(e) => this.onSubmit(e)}>
+            <form method="post" action="" onSubmit={(e) => this.onSubmit(e)} data-qa={this.props.qa}>
                 {childrenWithData}
             </form>
         );
@@ -34,6 +35,8 @@ class FormComponent<T> extends React.Component<FormProps<T>, []> {
 
 interface FieldsetProps<T> {
     heading?: (data: T) => React.ReactNode;
+    qa?: string;
+    headingQa?: string;
 }
 
 class FieldsetComponent<T> extends React.Component<FieldsetProps<T>, []> {
@@ -41,9 +44,9 @@ class FieldsetComponent<T> extends React.Component<FieldsetProps<T>, []> {
         const formProps = (this.props as any as FormProps<T>);
         const childrenWithData = cloneChildrenWithData(formProps, this.props.children, "fieldset");// React.Children.map(this.props.children, child => React.cloneElement(child as any, {data: this.props.data}));
         return (
-            <fieldset className="govuk-fieldset">
+            <fieldset className="govuk-fieldset" data-qa={this.props.qa}>
                 <legend className="govuk-fieldset__legend govuk-fieldset__legend--m">
-                    {this.props.heading ? <h1 className="govuk-fieldset__heading">{this.props.heading(formProps.data)}</h1> : null}
+                    {this.props.heading ? <h1 className="govuk-fieldset__heading" data-qa={this.props.headingQa}>{this.props.heading(formProps.data)}</h1> : null}
                 </legend>
                 {childrenWithData}
             </fieldset>
@@ -69,7 +72,7 @@ class FieldComponent<T, TValue> extends React.Component<InternalFieldProps<T> & 
     render() {
         const { hint, name, label, field, data, validation } = this.props;
         return (
-            <div className={classNames("govuk-form-group", {"govuk-form-group--error": validation && validation.showValidationErrors && !validation.isValid})}>
+            <div data-qa={`field-${name}`} className={classNames("govuk-form-group", {"govuk-form-group--error": validation && validation.showValidationErrors && !validation.isValid})}>
                 <label className="govuk-label" htmlFor={name}>{label}</label>
                 {hint ? <span id={`${name}-hint`} className="govuk-hint">{hint}</span> : null}
                 <ValidationError error={validation}/>
@@ -101,12 +104,13 @@ const StringField = <T extends {}>(props: ExternalFieldProps<T, string>) => {
 
 interface MultiStringFieldProps<T> extends ExternalFieldProps<T, string> {
     rows?: number;
+    qa?: string;
 }
 
 const MultiStringField = <T extends {}>(props: MultiStringFieldProps<T>) => {
     const TypedFieldComponent = FieldComponent as { new(): FieldComponent<T, string> };
     return (
-        <TypedFieldComponent field={(data => <TextAreaInput value={props.value(data)} onChange={(val) => handleChange(props, val)} rows={props.rows} />)} {...props} />
+        <TypedFieldComponent field={(data => <TextAreaInput name={props.name} value={props.value(data)} onChange={(val) => handleChange(props, val)} rows={props.rows} qa={props.qa} />)}  {...props} />
     );
 };
 
@@ -118,6 +122,7 @@ const NumericField = <T extends {}>(props: ExternalFieldProps<T, number>) => {
 };
 
 interface SubmitProps {
+    qa?: string;
 }
 
 const SubmitComponent: React.SFC<SubmitProps> = (props) => {
@@ -127,6 +132,7 @@ const SubmitComponent: React.SFC<SubmitProps> = (props) => {
 interface ButtonProps {
     name: string;
     onClick: () => void;
+    qa?: string;
 }
 
 const ButtonComponent: React.SFC<ButtonProps> = (props) => {

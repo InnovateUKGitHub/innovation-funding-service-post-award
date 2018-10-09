@@ -17,7 +17,7 @@ describe("MapToProjectDtoCommand", () => {
             summary: "Expected summary",
             projectNumber: "Expected project number",
             claimFrequency: ClaimFrequency.Quarterly,
-            period: 4          
+            periodId: 4
         };
 
         let salesforce = context.testData.createProject(x => {
@@ -99,8 +99,7 @@ describe("MapToProjectDtoCommand", () => {
         context.clock.setDate(`2018/${month}/01`);
         const result = await context.runCommand(new MapToProjectDtoCommand(salesforce));
         const expected = Math.ceil(i / 3);
-        console.log("testing quertly", context.clock.today(), result.period, expected);
-        expect(result.period).toBe(expected);
+        expect(result.periodId).toBe(expected);
       }
     });
 
@@ -116,7 +115,7 @@ describe("MapToProjectDtoCommand", () => {
         context.clock.setDate(`2018/${month}/01`);
         const result = await context.runCommand(new MapToProjectDtoCommand(salesforce));
         const expected = Math.ceil(i);
-        expect(result.period).toBe(expected);
+        expect(result.periodId).toBe(expected);
       }
     });
 
@@ -132,7 +131,7 @@ describe("MapToProjectDtoCommand", () => {
         context.clock.setDate(`2018/${month}/01`);
         const result = await context.runCommand(new MapToProjectDtoCommand(salesforce));
         const expected = Math.ceil(i);
-        expect(result.period).toBe(expected);
+        expect(result.periodId).toBe(expected);
       }
     });
 });

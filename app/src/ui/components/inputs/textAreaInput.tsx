@@ -5,6 +5,7 @@ import { BaseInput } from "./baseInput";
 interface TextAreaInputProps extends InputProps<string> {
     maxLength?: number;
     rows?: number;
+    qa?: string;
 }
 
 export class TextAreaInput extends BaseInput<TextAreaInputProps, InputState> {
@@ -32,6 +33,7 @@ export class TextAreaInput extends BaseInput<TextAreaInputProps, InputState> {
                 onChange={x => this.handleChange(x, true)}
                 onBlur={x => this.handleChange(x, false)}
                 maxLength={this.props.maxLength}
+                data-qa={this.props.qa}
             />
         );
     }
