@@ -21,7 +21,7 @@ export function validateClaim(partnerId: string, periodId: number, dto: ClaimDto
     const state = getState();
     if (showErrors === null || showErrors === undefined) {
       const current = state.editors.claim[key];
-      showErrors = current && current.validator.showValidationErrors() || false;
+      showErrors = current && current.validator.showValidationErrors || false;
     }
     const validator = new ClaimDtoValidator(dto, showErrors);
     dispatch(updateEditorAction(key, claimStore, dto, validator));
