@@ -9,8 +9,10 @@ import { renderHtml } from "./html";
 import { rootReducer, setupInitialState, setupMiddleware } from "../ui/redux";
 import { configureRouter, matchRoute } from "../ui/routing";
 import { App } from "../ui/containers/app";
+import { Results } from "../ui/validation/results";
+import { updateEditorAction } from "../ui/redux/actions/editorActions";
 
-export function serverRender(req: Request, res: Response) {
+export function serverRender(req: Request, res: Response, validationError?: { key: string, store: string, dto: {}, result: Results<{}>, error: any }) {
   const router = configureRouter();
 
   router.start(req.originalUrl, (routeError, route) => {
@@ -26,6 +28,13 @@ export function serverRender(req: Request, res: Response) {
     const matched = matchRoute(route);
     const params = matched && matched.getParams && matched.getParams(route!) || {};
     const actions = matched && matched.getLoadDataActions && matched.getLoadDataActions(params) || [];
+    
+    if(validationError){
+      actions.push((dispatch, getState) => {
+        dispatch(updateEditorAction(validationError.key, validationError.store, validationError.dto, validationError.result, validationError.error));
+        return Promise.resolve();
+      });
+    }
 
     Promise.all(actions.map(action => action(store.dispatch, store.getState, null)))
       .then(() => {
@@ -44,4 +53,4 @@ export function serverRender(req: Request, res: Response) {
         res.status(500).send(error);
       });
   });
-}
+};

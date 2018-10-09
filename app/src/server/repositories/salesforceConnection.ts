@@ -10,7 +10,7 @@ import jsforce from "jsforce";
 // const username2 = "bjss.integration@innovateuk.gov.uk.bjss";
 // const password2 = "86S@lhJVSXRtsX81";
 
-const username = "etlsalesforce@innovateuk.gov.uk.bjsspoc";
+const username = "etlsalesforce@innovateuk.gov.uk.bjsspoc2";
 const password = "pr0dETL2016";
 const token = "OWkKR7QYdHLgqz1s5HheCe86r";
 
