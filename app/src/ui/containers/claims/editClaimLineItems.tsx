@@ -1,9 +1,10 @@
 import React from "react";
-import { Pending } from "../../../shared/pending";
-import * as Actions from "../../redux/actions/thunks";
+import {ContainerBase, ReduxContainer} from "../containerBase";
+import {Pending} from "../../../shared/pending";
+import * as Actions from "../../redux/actions";
+import * as Selectors from "../../redux/selectors";
 import * as Dtos from "../../models";
 import * as ACC from "../../components";
-import { ContainerBase, ReduxContainer } from "../containerBase";
 import { PrepareClaimRoute } from ".";
 import { IEditorStore } from "../../redux/reducers/editorsReducer";
 import { ClaimLineItemDtosValidator, ClaimLineItemDtoValidator } from "../../validators/claimLineItemDtosValidator";
@@ -187,13 +188,15 @@ const getEditor: (editor: IEditorStore<Dtos.ClaimLineItemDto[], ClaimLineItemDto
 };
 
 export const EditClaimLineItems = definition.connect({
-  withData: (store, params) => ({
-    project: Pending.create(store.data.project[params.projectId]),
-    lineItems: Pending.create(store.data.claimLineItems[params.partnerId]),
-    partnerId: params.partnerId,
-    costCategories: Pending.create(store.data.costCategories.all),
-    editor: getEditor(store.editors.claimLineItems[`${params.partnerId}_${params.periodId}_${params.costCategoryId}`], Pending.create(store.data.claimLineItems[params.partnerId]))
-  }),
+  withData: (state, props) => {
+    const lineItemsSelector = Selectors.findClaimLineItemsByPartnerCostCategoryAndPeriod(props.partnerId, props.costCategoryId, props.periodId);
+    return {
+      project: Selectors.getProject(props.projectId).getPending(state),
+      lineItems: lineItemsSelector.getPending(state),
+      costCategories: Selectors.getCostCategories().getPending(state),
+      editor: getEditor(state.editors.claimLineItems[lineItemsSelector.key], lineItemsSelector.getPending(state))
+    };
+  },
   withCallbacks: (dispatch) => ({
     validate: (partnerId: string, periodId: number, costCategoryId: string, dto: Dtos.ClaimLineItemDto[]) => dispatch(Actions.validateClaimLineItems(partnerId, periodId, costCategoryId, dto)),
     save: (projectId: string, partnerId: string, periodId: number, costCategoryId: string, dto: Dtos.ClaimLineItemDto[]) => dispatch(Actions.saveClaimLineItems(partnerId, periodId, costCategoryId, dto, () => afterSave(dispatch, projectId, partnerId, periodId))),

@@ -3,12 +3,12 @@ import { ContainerBase, ReduxContainer } from "../containerBase";
 import * as ACC from "../../components";
 import * as Dtos from "../../models";
 import { Pending } from "../../../shared/pending";
-import * as Actions from "../../redux/actions/thunks";
+import * as Actions from "../../redux/actions";
+import * as Selectors from "../../redux/selectors";
 import { ProjectOverviewPage } from "../../components/projectOverview";
 import { routeConfig } from "../../routing";
 
 interface Data {
-    id: string;
     projectDetails: Pending<Dtos.ProjectDto>;
     partners: Pending<Dtos.PartnerDto[]>;
     contacts: Pending<Dtos.ProjectContactDto[]>;
@@ -94,11 +94,10 @@ class ProjectDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
 const containerDefinition = ReduxContainer.for<Params, Data, Callbacks>(ProjectDetailsComponent);
 
 export const ProjectDetails = containerDefinition.connect({
-    withData: (state, params) => ({
-        id: params.id,
-        contacts: Pending.create(state.data.projectContacts[params.id]),
-        partners: Pending.create(state.data.partners[params.id]),
-        projectDetails: Pending.create(state.data.project[params.id])
+    withData: (state, props) => ({
+        contacts: Selectors.findContactsByProject(props.id).getPending(state),
+        partners: Selectors.findPartnersByProject(props.id).getPending(state),
+        projectDetails: Selectors.getProject(props.id).getPending(state)
     }),
     withCallbacks: () => ({})
 });
@@ -110,7 +109,7 @@ export const ProjectDetailsRoute = containerDefinition.route({
     getLoadDataActions: (params) => [
         Actions.loadProject(params.id),
         Actions.loadContactsForProject(params.id),
-        Actions.loadPatnersForProject(params.id),
+        Actions.loadPartnersForProject(params.id),
     ],
     container: ProjectDetails
 });

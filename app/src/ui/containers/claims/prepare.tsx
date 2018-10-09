@@ -2,14 +2,14 @@ import { routeConfig } from "../../routing";
 import React from "react";
 import { ContainerBase, ReduxContainer } from "../containerBase";
 import { Pending } from "../../../shared/pending";
-import * as Actions from "../../redux/actions/thunks";
+import * as Actions from "../../redux/actions";
 import * as Dtos from "../../models";
 import * as ACC from "../../components";
+import * as Selectors from "../../redux/selectors";
 import { DateTime } from "luxon";
 import { IEditorStore } from "../../redux/reducers/editorsReducer";
 import { ClaimDtoValidator } from "../../validators/claimDtoValidator";
 import { ClaimDto } from "../../models";
-import { navigateTo, saveClaim, validateClaim } from "../../redux/actions/thunks";
 import { ClaimForecastRoute, ClaimsDashboardRoute } from ".";
 import { EditClaimLineItemsRoute } from "./editClaimLineItems";
 import { Result } from "../../validation/result";
@@ -127,27 +127,27 @@ const getEditor = (editor: IEditorStore<Dtos.ClaimDto, ClaimDtoValidator>, origi
 };
 
 const progress = (dispatch: any, projectId: string, partnerId: string, periodId: number) => {
-    dispatch(navigateTo(ClaimForecastRoute.getLink({ projectId, partnerId, periodId })));
+    dispatch(Actions.navigateTo(ClaimForecastRoute.getLink({ projectId, partnerId, periodId })));
 };
 
 const goBack = (dispatch: any, projectId: string, partnerId: string, periodId: number) => {
-    dispatch(navigateTo(ClaimsDashboardRoute.getLink({ projectId, partnerId })));
+    dispatch(Actions.navigateTo(ClaimsDashboardRoute.getLink({ projectId, partnerId })));
 };
 
 export const PrepareClaim = definition.connect({
-    withData: (store, params) => ({
-        project: Pending.create(store.data.project[params.projectId]),
-        partner: Pending.create(store.data.partner[params.partnerId]),
-        costCategories: Pending.create(store.data.costCategories.all),
-        claim: Pending.create(store.data.claim[params.partnerId + "_" + params.periodId]),
-        claimDetailsSummary: Pending.create(store.data.claimDetailsSummary[params.partnerId + "_" + params.periodId]),
-        editor: getEditor(store.editors.claim[params.partnerId + "_" + params.periodId], Pending.create(store.data.claim[params.partnerId + "_" + params.periodId]))
-    }),
-    withCallbacks: (dispatch) => ({
-        onChange: (partnerId, periodId, dto) => dispatch(validateClaim(partnerId, periodId, dto)),
-        saveAndProgress: (dto, projectId, partnerId, periodId) => dispatch(saveClaim(partnerId, periodId, dto, () => progress(dispatch, projectId, partnerId, periodId))),
-        saveAndReturn: (dto, projectId, partnerId, periodId) => dispatch(saveClaim(partnerId, periodId, dto, () => goBack(dispatch, projectId, partnerId, periodId)))
-    })
+  withData: (state, props) => ({
+    project: Selectors.getProject(props.projectId).getPending(state),
+    partner: Selectors.getPartner(props.partnerId).getPending(state),
+    costCategories: Selectors.getCostCategories().getPending(state),
+    claim: Selectors.getClaim(props.partnerId, props.periodId).getPending(state),
+    claimDetailsSummary: Selectors.findClaimDetailsSummaryByPartnerAndPeriod(props.partnerId, props.periodId).getPending(state),
+    editor: getEditor(state.editors.claim[props.partnerId + "_" + props.periodId], Pending.create(state.data.claim[props.partnerId + "_" + props.periodId]))
+  }),
+  withCallbacks: (dispatch) => ({
+    onChange: (partnerId, periodId, dto) => dispatch(Actions.validateClaim(partnerId, periodId, dto)),
+    saveAndProgress: (dto, projectId, partnerId, periodId) => dispatch(Actions.saveClaim(partnerId, periodId, dto, () => progress(dispatch, projectId, partnerId, periodId))),
+    saveAndReturn: (dto, projectId, partnerId, periodId) => dispatch(Actions.saveClaim(partnerId, periodId, dto, () => goBack(dispatch, projectId, partnerId, periodId)))
+  })
 });
 
 export const PrepareClaimRoute = definition.route({
@@ -157,7 +157,7 @@ export const PrepareClaimRoute = definition.route({
     getLoadDataActions: (params) => [
         Actions.loadProject(params.projectId),
         Actions.loadPartner(params.partnerId),
-        Actions.loadPatnersForProject(params.projectId),
+        Actions.loadPartnersForProject(params.projectId),
         Actions.loadCostCategories(),
         Actions.loadClaim(params.partnerId, params.periodId),
         Actions.loadClaimDetailsSummaryForPartner(params.partnerId, params.periodId)

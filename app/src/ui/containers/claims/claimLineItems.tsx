@@ -1,7 +1,8 @@
 import React from "react";
 import {ContainerBase, ReduxContainer} from "../containerBase";
 import {Pending} from "../../../shared/pending";
-import * as Actions from "../../redux/actions/thunks";
+import * as Actions from "../../redux/actions";
+import * as Selectors from "../../redux/selectors";
 import * as Dtos from "../../models";
 import * as ACC from "../../components";
 import {routeConfig} from "../../routing";
@@ -94,11 +95,10 @@ const ClaimLineItemsTable: React.SFC<{ lineItems: Dtos.ClaimLineItemDto[] }> = (
 const definition = ReduxContainer.for<Params, Data, {}>(ClaimLineItemsComponent);
 
 export const ClaimLineItems = definition.connect({
-  withData: (store, params) => ({
-    project: Pending.create(store.data.project[params.projectId]),
-    lineItems: Pending.create(store.data.claimLineItems[params.partnerId]),
-    partnerId: params.partnerId,
-    costCategories: Pending.create(store.data.costCategories.all)
+  withData: (state, props) => ({
+    project: Selectors.getProject(props.projectId).getPending(state),
+    lineItems: Selectors.findClaimLineItemsByPartnerCostCategoryAndPeriod(props.partnerId, props.costCategoryId, props.periodId).getPending(state),
+    costCategories: Selectors.getCostCategories().getPending(state)
   }),
   withCallbacks: () => ({})
 });
