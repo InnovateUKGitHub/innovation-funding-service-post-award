@@ -11,8 +11,8 @@ import { ClaimDtoValidator } from "../../validators/claimDtoValidator";
 import { ClaimDto } from "../../models";
 import { navigateTo, saveClaim, validateClaim } from "../../redux/actions/thunks";
 import { ClaimForecastRoute, ClaimsDashboardRoute } from ".";
-import { Result as ValidationResult } from "../../validators/common";
 import { EditClaimLineItemsRoute } from "./editClaimLineItems";
+import { Result } from "../../validation/result";
 
 interface Params {
     projectId: string;
@@ -90,7 +90,8 @@ export class PrepareComponent extends ContainerBase<Params, Data, Callbacks> {
                 <ACC.Claims.Navigation projectId={data.project.id} partnerId={data.partner.id} periodId={data.claim.periodId} currentRouteName={routeConfig.claimDetails.routeName} />
                 <ACC.Section title={title}>
                     <ACC.ValidationMessage message={editor.validator.comments} />
-                    {this.props.editor.error ? <ACC.ValidationMessage message={new ValidationResult(null, true, false, this.props.editor.error.details || this.props.editor.error, false)} /> : null}
+                    {/* TODO: Fix error display */}
+                    {this.props.editor.error ? <ACC.ValidationMessage message={new Result(null, true, false, this.props.editor.error.details || this.props.editor.error, false)} /> : null}
                     <ACC.Claims.ClaimTable {...data} getLink={costCategoryId => EditClaimLineItemsRoute.getLink({partnerId: this.props.partnerId, projectId: this.props.projectId, periodId: this.props.periodId, costCategoryId})} />
                     <Form.Form data={editor.data} onChange={(dto) => this.props.onChange(this.props.partnerId, this.props.periodId, dto)} onSubmit={() => saveAndProgress()}>
                         <Form.Fieldset heading={() => commentsLabel} qa="additional-info-form" headingQa="additional-info-heading">

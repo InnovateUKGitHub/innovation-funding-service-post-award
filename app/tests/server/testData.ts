@@ -19,6 +19,8 @@ export class TestData {
             Acc_DisplayOrder__c : seed,
             Acc_CompetitionType__c : "Industrial",
             Acc_OrganisationType__c : "Sector",
+            Acc_CostCategoryDescription__c: `Cost Category description ${seed}`,
+            Acc_HintText__c: `Cost Category hint ${seed}`,
         };
 
         update && update(newItem);
