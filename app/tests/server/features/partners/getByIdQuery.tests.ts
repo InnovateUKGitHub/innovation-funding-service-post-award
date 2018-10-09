@@ -7,7 +7,13 @@ describe("getAllForProjectQuery", () => {
         const context = new TestContext();
 
         const project = context.testData.createProject();
-        const partner = context.testData.createPartner(project);
+        const partner = context.testData.createPartner(project, x => {
+            x.Acc_AccountId__r.Name = "Expected name";
+            x.Acc_TotalParticipantGrant__c = 125000;
+            x.Acc_TotalParticipantCosts__c = 17474;
+            x.Acc_Award_Rate__c = 50;
+            x.Acc_Cap_Limit__c = 50;
+        });
 
         const result = await context.runQuery(new GetByIdQuery(partner.Id));
 
@@ -15,7 +21,7 @@ describe("getAllForProjectQuery", () => {
 
         expect(result).toEqual({
             id: 'Partner1',
-            name: 'Participant Name 1',
+            name: 'Expected name',
             accountId: 'AccountId1',
             type: 'Accedemic',
             isLead: true,
@@ -27,6 +33,56 @@ describe("getAllForProjectQuery", () => {
             awardRate: 50,
             capLimit: 50
         });
+    });
+
+    it("calculated cost claimed percentage", async () => {
+        const context = new TestContext();
+
+        const project = context.testData.createProject();
+        const partner = context.testData.createPartner(project, x => {
+            x.Acc_AccountId__r.Name = "Expected name";
+            x.Acc_TotalParticipantGrant__c = 10000;
+            x.Acc_TotalParticipantCosts__c = 1000;
+            x.Acc_Award_Rate__c = 50;
+            x.Acc_Cap_Limit__c = 50;
+        });
+
+        const result = await context.runQuery(new GetByIdQuery(partner.Id));
+
+        expect(result.percentageParticipantCostsClaimed).toBe(10);
+    });
+
+    it("calculated cost claimed percentage is 0 when totalParticipantGrant is null", async () => {
+        const context = new TestContext();
+
+        const project = context.testData.createProject();
+        const partner = context.testData.createPartner(project, x => {
+            x.Acc_AccountId__r.Name = "Expected name";
+            x.Acc_TotalParticipantGrant__c = null;
+            x.Acc_TotalParticipantCosts__c = 1000;
+            x.Acc_Award_Rate__c = 50;
+            x.Acc_Cap_Limit__c = 50;
+        });
+
+        const result = await context.runQuery(new GetByIdQuery(partner.Id));
+
+        expect(result.percentageParticipantCostsClaimed).toBe(null);
+    });
+
+    it("calculated cost claimed percentage is 0 when totalParticipantGrant is null", async () => {
+        const context = new TestContext();
+
+        const project = context.testData.createProject();
+        const partner = context.testData.createPartner(project, x => {
+            x.Acc_AccountId__r.Name = "Expected name";
+            x.Acc_TotalParticipantGrant__c = 10000;
+            x.Acc_TotalParticipantCosts__c = null;
+            x.Acc_Award_Rate__c = 50;
+            x.Acc_Cap_Limit__c = 50;
+        });
+
+        const result = await context.runQuery(new GetByIdQuery(partner.Id));
+        expect(result.percentageParticipantCostsClaimed).toBe(null);
     });
 
     it("when partner doesn't exist", async () => {
