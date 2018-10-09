@@ -71,16 +71,21 @@ export class TestData {
         let seed = this.repositories.partners.Items.length + 1;
         project = project || this.createProject();
 
-        let newItem = {
+        const newItem = {
             Id: `Partner${seed}`,
             Acc_AccountId__r: {
                 Id: `AccountId${seed}`,
                 Name: `Participant Name ${seed}`
             },
-            Acc_ParticipantSize__c: "Large",
             Acc_ParticipantType__c: "Accedemic",
+            Acc_ParticipantSize__c: "Large",
             Acc_ProjectRole__c: "Project Lead",
-            Acc_ProjectId__c: project.Id
+            Acc_ProjectId__c: project.Id,
+            Acc_TotalParticipantGrant__c: 125000,
+            Acc_TotalParticipantCosts__c: 17474,
+            Acc_TotalParticipantCostsPaid__c: 50000,
+            Acc_Cap_Limit__c: 50,
+            Acc_Award_Rate__c: 50,
         } as Repositories.ISalesforcePartner;
 
         update && update(newItem);
