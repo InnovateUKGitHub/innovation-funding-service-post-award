@@ -40,7 +40,7 @@ export const serverApis: IApiClient & { [key: string]: ControllerBase<{}> } = {
 export const router = express.Router();
 
 Object.keys(serverApis)
-  .map(key => ({ path: serverApis[key].path || key, controller: serverApis[key] }))
+  .map(key => ({ path: serverApis[key].path, controller: serverApis[key] }))
   .forEach(item => router.use("/" + item.path, item.controller.router));
 
 router.all("*", (req, res, next) => res.status(404).send());

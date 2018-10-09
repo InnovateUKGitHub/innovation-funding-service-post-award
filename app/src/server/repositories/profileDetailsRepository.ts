@@ -37,7 +37,7 @@ export class ProfileDetailsRepository extends SalesforceBase<ISalesforceProfileD
 
   private createFake(partnerId: string, periodId: number): ISalesforceProfileDetails[] {
     return [{
-      Acc_CostCategory__c: "123",
+      Acc_CostCategory__c: "a071X000000HHZtQAO",
       Acc_PeriodCostCategoryTotal__c: 10000,
       Acc_ProjectParticipant__c: partnerId,
       Acc_ProjectPeriodNumber__c: periodId

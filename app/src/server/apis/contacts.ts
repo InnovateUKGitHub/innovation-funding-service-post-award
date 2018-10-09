@@ -11,8 +11,9 @@ export interface IContactsApi {
 }
 
 class Controller extends ControllerBase<IContact> implements IContactsApi {
+
   constructor() {
-    super();
+    super("contacts");
 
     this.getItems("/", p => ({}), (p) => this.getAll());
     this.getItem("/:id", p => ({ id: p.id }), (p) => this.get(p.id));
