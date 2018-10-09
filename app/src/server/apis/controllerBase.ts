@@ -4,9 +4,8 @@ import {ApiError} from "./ApiError";
 
 export abstract class ControllerBase<T> {
   public readonly router: Router;
-  public path?: string;
 
-  protected constructor() {
+  protected constructor(public path: string) {
     this.router = express.Router();
   }
 
@@ -37,24 +36,36 @@ export abstract class ControllerBase<T> {
     return this;
   }
 
+  private constructErrorResponse(e: ApiError) {
+    const data: any = { message: "An unexpected error has occurred..." };
+
+    if(!!e.errorCode) {
+      data.code = e.errorCode;
+    }
+
+    if(!!e.message) {
+      data.details = e.message;
+    }
+
+    const status = e.isApiError ? e.errorCode : 500;
+
+    return { status, data };
+  }
+
   private executeMethod<TParams, TResponse>(successStatus: number, getParams: (params: any, query: any, body?: any) => TParams, run: (params: TParams) => Promise<TResponse | null>, allowNulls: boolean) {
     return async (req: Request, resp: Response, next: NextFunction) => {
       const p = getParams(req.params || {}, req.query || {}, req.body || {});
       run(p)
         .then(result => {
-          if (result !== null || allowNulls === true) {
-            resp.status(successStatus).send(result);
+          if (result === null && allowNulls === false) {
+            return resp.status(404).send();
           }
-          else {
-            resp.status(404).send();
-          }
+          resp.status(successStatus).send(result);
         })
         .catch((e: ApiError) => {
           console.log("Error in controller", e);
-          if (e.errorCode && e.message) {
-            return resp.status(e.errorCode).json({message: "An error has occurred...", details: e.message});
-          }
-          resp.status(500).json({message: "An unexpected Error has occurred.....", details: e.message});
+          const { status, data } = this.constructErrorResponse(e);
+          return resp.status(status).json(data);
         });
     };
   }

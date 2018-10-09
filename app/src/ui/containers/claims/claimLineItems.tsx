@@ -75,7 +75,7 @@ const ClaimLineItemsTable: React.SFC<{ lineItems: Dtos.ClaimLineItemDto[] }> = (
       qa="current-claim-summary-table"
       footers={[
         renderFooterRow({ key: "1", title: "Total labour costs", value:
-            <Currency className={"govuk-!-font-weight-bold"} value={lineItems.reduce((total, item) => (total+item.value), 0)}/>
+            <Currency className={"govuk-!-font-weight-bold"} value={lineItems.reduce((total, item) => total + (item.value || 0), 0)}/>
         }),
         renderFooterRow({ key: "2", title: "Forecast costs", value:
             <Currency value={0}/>

@@ -1,7 +1,7 @@
 import React from "react";
 import { Email } from "./renderers/email";
 
-interface ProjectMember {
+export interface ProjectMember {
     role: string;
     name: string;
     email: string;

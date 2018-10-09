@@ -3,6 +3,7 @@ import classNames from "classnames";
 import { BaseInput } from "./baseInput";
 
 interface NumberInputProps extends InputProps<number> {
+    className?: string;
 }
 
 interface NumberInputState extends InputState {
@@ -28,7 +29,7 @@ export class NumberInput extends BaseInput<NumberInputProps, NumberInputState> {
         return (
             <input
                 type="text"
-                className={classNames("govuk-input", { "govuk-input--error": this.state.invalid })}
+                className={classNames("govuk-input", "govuk-table__cell--numeric", { "govuk-input--error": this.state.invalid }, this.props.className)}
                 name={this.props.name}
                 value={this.state.value}
                 disabled={!!this.props.disabled}

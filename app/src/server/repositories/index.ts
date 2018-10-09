@@ -4,6 +4,7 @@ export * from "./claimsRepository";
 export * from "./contactsRepository";
 export * from "./costCategoriesRepository";
 export * from "./partnersRepository";
+export * from "./profileDetailsRepository";
 export * from "./projectContactsRepository";
 export * from "./projectsRepository";
 export * from "./claimLineItemRepository";

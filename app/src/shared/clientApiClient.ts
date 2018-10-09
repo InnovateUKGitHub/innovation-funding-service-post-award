@@ -4,29 +4,35 @@ import {ClaimDto} from "../ui/models";
 
 const clientApi: IApiClient = {
   claimLineItems: {
-    getAllForCategory: (partnerId: string, costCategoryId: string, periodId: number) => ajaxJson(`/api/claims/${partnerId}/${periodId}/lineitems?costCategoryId=${costCategoryId}`)
+    getAllForCategory: (partnerId: string, costCategoryId: string, periodId: number) => ajaxJson(`/api/claim-line-items/?partnerId=${partnerId}&periodId=${periodId}&costCategoryId=${costCategoryId}`)
   },
   claims : {
-    getAllByPartnerId: (partnerId: string) => ajaxJson(`/api/claims/${partnerId}`),
-    getByPartnerAndPeriod: (partnerId: string, periodId: number) => ajaxJson(`/api/claims/${partnerId}/${periodId}`),
+    getAllByPartnerId: (partnerId: string) => ajaxJson(`/api/claims/?partnerId=${partnerId}`),
+    get: (partnerId: string, periodId: number) => ajaxJson(`/api/claims/${partnerId}/${periodId}`),
     update: (partnerId: string, periodId: number, claim: ClaimDto) => ajaxPut(`/api/claims/${partnerId}/${periodId}`, claim)
   },
+  claimDetailsSummary: {
+    getAllByPartnerIdForPeriod: (partnerId: string, periodId: number) => ajaxJson(`/api/claim-details-summary/${partnerId}/${periodId}`)
+  },
   claimDetails: {
-    getAllByPartnerId: (partnerId: string, periodId: number) => ajaxJson(`/api/claims/${partnerId}/${periodId}/details`)
+    getAllByPartner: (partnerId: string) => ajaxJson(`/api/claim-details/?partnerId=${partnerId}`)
   },
   contacts: {
     getAll: () => ajaxJson("/api/contacts"),
     get: (id: string) => ajaxJson(`/api/contact/${id}`),
   },
   costCategories: {
-    getAll: () => ajaxJson("/api/costcategories"),
+    getAll: () => ajaxJson("/api/cost-categories"),
+  },
+  forecastDetails: {
+    getAllByPartnerId: (partnerId: string, periodId: number) => ajaxJson(`/api/forecast-details/?partnerId=${partnerId}&periodId=${periodId}`)
   },
   projects: {
     get: (id: string) => ajaxJson(`/api/projects/${id}`),
     getAll: () => ajaxJson("/api/projects"),
   },
   projectContacts: {
-    getAllByProjectId: (projectId: string) => ajaxJson(`/api/projectContacts?projectId=${projectId}`),
+    getAllByProjectId: (projectId: string) => ajaxJson(`/api/project-contacts?projectId=${projectId}`),
   },
   partners: {
     get: (id: string) => ajaxJson(`/api/partners/${id}`),
