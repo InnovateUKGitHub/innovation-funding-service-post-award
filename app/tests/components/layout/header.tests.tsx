@@ -11,7 +11,7 @@ describe("Header", () => {
     describe("header contains the expected html tags", () => {
         it("should render 'Innovation Funding Service' <a>", () => {
             const result = Header({});
-            const wrapper = shallow(result);
+            const wrapper = shallow(result!);
             expect(wrapper
                 .containsMatchingElement(<a className="govuk-header__link govuk-header__link--service-name">Innovation Funding Service</a>))
                 .toBeTruthy();

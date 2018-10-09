@@ -4,4 +4,6 @@ export interface CostCategoryDto {
     organistionType: "Industrial" | "Academic" | "Unknown";
     competitionType: "Sector" | "Unknown";
     isCalculated: boolean;
+    description: string;
+    hintText: string;
 }

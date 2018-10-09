@@ -8,7 +8,7 @@ Enzyme.configure({ adapter: new Adapter() });
 
 describe("Links Lists", () => {
   it("should render a react fragment", () => {
-    const links   = [];
+    const links   = [] as any[];
     const result  = <LinksList links={links} />;
     const wrapper = Enzyme.shallow(result);
     expect(wrapper.getElement()).toMatchObject(<React.Fragment />);
@@ -35,7 +35,7 @@ describe("Links Lists", () => {
   });
 
   it("should not error for null props", () => {
-    const links   = null;
+    const links   = null as any;
     const result  = <LinksList links={links} />;
     const wrapper = Enzyme.shallow(result);
     expect(wrapper.getElement()).toMatchObject(<React.Fragment />);

@@ -13,7 +13,7 @@ export function getCellValues(wrapper: any, tableQA: string, columnQA: string, r
   const cols = wrapper.find(`[data-qa="project-details-table"] table colgroup col`);
   const row = wrapper.find(`[data-qa="project-details-table"] table tbody tr`).at(rowIndex);
 
-  const colIndex = cols.map(x => x.prop("data-qa")).indexOf(columnQA);
+  const colIndex = cols.map((x: any) => x.prop("data-qa")).indexOf(columnQA);
 
   return row.find("td").get(colIndex);
 }

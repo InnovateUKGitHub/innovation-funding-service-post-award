@@ -4,3 +4,4 @@ export * from "./email";
 export * from "./currency";
 export * from "./percentage";
 export * from "./simpleString";
+export * from "./json";
