@@ -99,8 +99,13 @@ export function loadContactsForProject(projectId: string) {
     () => ApiClient.projectContacts.getAllByProjectId(projectId)
   );
 }
-
-export const loadCostCategories = () => conditionalLoad("all", "costCategories", () => ApiClient.costCategories.getAll());
+export function loadCostCategories() {
+  return conditionalLoad(
+    "all",
+    "costCategories",
+    () => ApiClient.costCategories.getAll()
+  );
+}
 
 export function loadClaim(partnerId: string, periodId: number) {
   const key = `${partnerId}_${periodId}`;
