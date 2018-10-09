@@ -73,7 +73,7 @@ export class EditClaimLineItemsComponent extends ContainerBase<Params, Data, Cal
     const LineItemTable = ACC.TypedTable<Dtos.ClaimLineItemDto>();
 
     return (
-      <LineItemForm.Form data={editor.data} onChange={x => { }} onSubmit={() => this.props.save(this.props.projectId, this.props.partnerId, this.props.periodId, this.props.costCategoryId, this.props.editor.data)}>
+      <LineItemForm.Form data={editor.data} onChange={x => { /* Todo */ }} onSubmit={() => this.props.save(this.props.projectId, this.props.partnerId, this.props.periodId, this.props.costCategoryId, this.props.editor.data)}>
         <LineItemForm.Fieldset>
           <LineItemTable.Table qa="current-claim-summary-table" data={editor.data} validationResult={editor.validator.items} footers={this.renderFooters(editor)}>
             <LineItemTable.Custom header="Description of cost" qa="cost-description" value={(x, i) => this.renderDescription(x, i, editor.validator.items.results[i.row])} />
