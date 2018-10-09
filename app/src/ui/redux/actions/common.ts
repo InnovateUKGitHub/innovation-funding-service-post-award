@@ -34,6 +34,6 @@ export function createAction<T extends string, P>(type: T, payload?: P) {
 //   }
 // }
 
-// function _base(type: any, claimStore: any, status: any, identifier: any, payload: any, error: any) {
-//   return { type, claimStore, status, identifier, payload, error };
+// function _base(type: any, store: any, status: any, identifier: any, payload: any, error: any) {
+//   return { type, store, status, identifier, payload, error };
 // }
