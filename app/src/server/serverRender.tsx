@@ -28,8 +28,8 @@ export function serverRender(req: Request, res: Response, validationError?: { ke
     const matched = matchRoute(route);
     const params = matched && matched.getParams && matched.getParams(route!) || {};
     const actions = matched && matched.getLoadDataActions && matched.getLoadDataActions(params) || [];
-    
-    if(validationError){
+
+    if (validationError) {
       actions.push((dispatch, getState) => {
         dispatch(updateEditorAction(validationError.key, validationError.store, validationError.dto, validationError.result, validationError.error));
         return Promise.resolve();
@@ -53,4 +53,4 @@ export function serverRender(req: Request, res: Response, validationError?: { ke
         res.status(500).send(error);
       });
   });
-};
+}

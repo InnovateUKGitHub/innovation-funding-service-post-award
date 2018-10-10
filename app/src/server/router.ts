@@ -17,5 +17,4 @@ router.post("*", formRouter);
 
 router.get("*", (req, res) => serverRender(req, res));
 
-
 router.get("*", (req, res) => res.status(404).send("Not foundss"));
