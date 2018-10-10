@@ -7,6 +7,7 @@ export interface ISalesforceClaimLineItem {
   Acc_CostCategory__c: string;
   Acc_ProjectPeriodNumber__c: number;
   Acc_ProjectParticipant__c: string;
+  RecordTypeId: string;
 }
 
 const fields = [
@@ -15,11 +16,15 @@ const fields = [
   "Acc_LineItemCost__c",
   "Acc_CostCategory__c",
   "Acc_ProjectPeriodNumber__c",
-  "Acc_ProjectParticipant__c"
+  "Acc_ProjectParticipant__c",
+  "RecordTypeId"
 ];
 
 export interface IClaimLineItemRepository {
   getAllForCategory(partnerId: string, categoryId: string, periodId: number): Promise<ISalesforceClaimLineItem[]>;
+  delete(ids: [ string ]): Promise<void>;
+  update(lineItems: Partial<ISalesforceClaimLineItem>[]): Promise<void>;
+  insert(lineItems: Partial<ISalesforceClaimLineItem>[]): Promise<string[]>;
 }
 
 export class ClaimLineItemRepository extends SalesforceBase<ISalesforceClaimLineItem> implements IClaimLineItemRepository {
@@ -39,5 +44,17 @@ export class ClaimLineItemRepository extends SalesforceBase<ISalesforceClaimLine
       AND RecordType.Name = '${this.recordType}'
     `;
     return super.whereString(filter);
+  }
+
+  delete(ids: [ string ]): Promise<void>  {
+    return super.delete(ids);
+  }
+
+  update(lineItems: (Partial<ISalesforceClaimLineItem> & { Id: string })[]): Promise<void>  {
+    return super.update(lineItems);
+  }
+
+  insert(lineItems: Partial<ISalesforceClaimLineItem>[]): Promise<string[]>  {
+    return super.insert(lineItems);
   }
 }

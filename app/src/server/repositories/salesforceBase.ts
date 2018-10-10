@@ -1,5 +1,5 @@
 import salesforceConnection from "./salesforceConnection";
-import { SalesforceId } from "jsforce";
+import {SalesforceId, SuccessResult} from "jsforce";
 
 export default abstract class SalesforceBase<T> {
   private log = false;
@@ -88,6 +88,33 @@ export default abstract class SalesforceBase<T> {
     return await conn.sobject(this.objectName)
       .update(updatedObj)
       .then((res) => res.success);
+  }
+
+  protected async insert(insertList: Partial<T>[]): Promise<string[]> {
+    const conn = await salesforceConnection();
+    return await conn.sobject(this.objectName)
+      .insert(insertList).then(results => {
+        return (results as SuccessResult[]).map(r => r.id.toString());
+      });
+  }
+
+  protected async update(updateList: Partial<T>[]) {
+    const conn = await salesforceConnection();
+    await conn.sobject(this.objectName).update(updateList).then(res => {
+      return res.success;
+    });
+  }
+
+  protected async delete(ids: [string]): Promise<void> {
+    const conn = await salesforceConnection();
+    return new Promise<void>((resolve, reject) => {
+      conn.sobject(this.objectName).delete(ids, (err, res) => {
+        if (err) {
+          return reject(err);
+        }
+        resolve(res);
+      });
+    });
   }
 
   private asArray(result: Partial<{}>[]): T[] {
