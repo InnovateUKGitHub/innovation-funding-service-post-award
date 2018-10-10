@@ -1,6 +1,6 @@
 export * from "./common";
 export * from "./root";
-export * from "./thunks";
+export * from "./navigation";
 export * from "./claim";
 export * from "./claims";
 export * from "./claimDetails";
