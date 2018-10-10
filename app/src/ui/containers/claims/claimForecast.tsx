@@ -96,12 +96,15 @@ const goBack = (dispatch: any, projectId: string, partnerId: string) => {
 const definition = ReduxContainer.for<Params, Data, Callbacks>(ClaimForecastComponent);
 
 export const ForecastClaim = definition.connect({
-  withData: (state, props) => ({
-    project: Selectors.getProject(props.projectId).getPending(state),
-    claim: Selectors.getClaim(props.partnerId, props.periodId).getPending(state),
-    partner: Selectors.getPartner(props.partnerId).getPending(state),
-    editor: getEditor(state.editors.claim[props.partnerId + "_" + props.periodId], Pending.create(state.data.claim[props.partnerId + "_" + props.periodId]))
-  }),
+  withData: (state, props) => {
+    const claimSelector = Selectors.getClaim(props.partnerId, props.periodId);
+    return {
+      project: Selectors.getProject(props.projectId).getPending(state),
+      claim: claimSelector.getPending(state),
+      partner: Selectors.getPartner(props.partnerId).getPending(state),
+      editor: getEditor(state.editors.claim[claimSelector.key], claimSelector.getPending(state))
+    };
+  },
   withCallbacks: (dispatch) => ({
     onChange: (partnerId, periodId, dto) => dispatch(Actions.validateClaim(partnerId, periodId, dto)),
     saveAndReturn: (dto, projectId, partnerId, periodId) => dispatch(Actions.saveClaim(partnerId, periodId, dto, () => goBack(dispatch, projectId, partnerId)))
