@@ -59,9 +59,9 @@ class ClaimsTestRepository extends TestRepository<Repositories.ISalesforceClaim>
         return super.getOne(x => x.Acc_ProjectParticipant__c === partnerId && x.Acc_ProjectPeriodNumber__c === periodId);
     }
 
-    update(updatedClaim: Repositories.ISalesforceClaim){
+    updateOne(updatedClaim: Repositories.ISalesforceClaim){
         const index = super.Items.findIndex(x => x.Acc_ProjectParticipant__c === updatedClaim.Acc_ProjectParticipant__c && x.Acc_ProjectPeriodNumber__c == updatedClaim.Acc_ProjectPeriodNumber__c);
-        if(index >= 0){
+        if(index >= 0) {
             super.Items[index] = updatedClaim;
             return Promise.resolve(true);
         }
@@ -87,6 +87,9 @@ class ClaimLineItemsTestRepository extends TestRepository<Repositories.ISalesfor
     getAllForCategory(partnerId: string, categoryId: string, periodId: number)  {
         return super.getWhere(x => x.Acc_ProjectPeriodNumber__c === periodId && x.Acc_CostCategory__c === categoryId && x.Acc_ProjectParticipant__c === partnerId);
     }
+    delete() { return super.delete(); }
+    update() { return super.update(); }
+    insert() { return super.insert(); }
 }
 
 class ClaimTotalCostTestRepository extends TestRepository<Repositories.ISalesforceClaimTotalCostCategory> implements Repositories.IClaimTotalCostCategoryRepository{

@@ -23,4 +23,16 @@ export abstract class TestRepository<T> {
     protected getAll(): Promise<T[]> {
         return Promise.resolve(this.Items);
     }
+
+    protected delete(): Promise<void> {
+        return Promise.resolve();
+    }
+
+    protected insert(): Promise<string[]> {
+        return Promise.resolve([ "a", "b" ]);
+    }
+
+    protected update(): Promise<void> {
+        return Promise.resolve();
+    }
 }

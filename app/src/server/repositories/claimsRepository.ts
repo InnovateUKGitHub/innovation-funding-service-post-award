@@ -38,7 +38,7 @@ const fields = [
 export interface IClaimRepository {
   getAllByPartnerId(partnerId: string): Promise<ISalesforceClaim[]>;
   getByPartnerIdAndPeriodId(partnerId: string, periodId: number): Promise<ISalesforceClaim | null>;
-  updateClaim(updatedClaim: Partial<ISalesforceClaim> & { Id: string }): Promise<boolean>;
+  updateOne(updatedClaim: Partial<ISalesforceClaim> & { Id: string }): Promise<boolean>;
 }
 
 export class ClaimRepository extends SalesforceBase<ISalesforceClaim> implements IClaimRepository {
@@ -95,7 +95,7 @@ export class ClaimRepository extends SalesforceBase<ISalesforceClaim> implements
     });
   }
 
-  public updateClaim(updatedClaim: Partial<ISalesforceClaim> & { Id: string }) {
-    return this.updateOne(updatedClaim);
+  public updateOne(updatedClaim: Partial<ISalesforceClaim> & { Id: string }) {
+    return super.updateOne(updatedClaim);
   }
 }
