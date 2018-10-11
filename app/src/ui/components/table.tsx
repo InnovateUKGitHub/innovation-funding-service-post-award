@@ -65,7 +65,7 @@ export class TableColumn<T> extends React.Component<InternalColumnProps<T>> {
 
   renderCell(data: T, column: number, row: number) {
     const className = classNames("govuk-table__cell", this.props.classSuffix ? "govuk-table__cell--" + this.props.classSuffix : "", this.props.cellClassName && this.props.cellClassName(data, { column, row }));
-    return <td className={className} style={style} key={column}>{this.props.renderCell(data, { column, row })}</td>;
+    return <td className={className} key={column}>{this.props.renderCell(data, { column, row })}</td>;
   }
 
   renderCol(column: number) {
