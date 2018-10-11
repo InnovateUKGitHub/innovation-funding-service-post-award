@@ -92,7 +92,7 @@ const goBack = (dispatch: any, projectId: string, partnerId: string) => {
 const definition = ReduxContainer.for<Params, Data, Callbacks>(ClaimForecastComponent);
 
 export const ForecastClaim = definition.connect({
-  withData: (state: RootState, props: Params) => ({
+  withData: (state, props) => ({
     project: Selectors.getProject(props.projectId).getPending(state),
     claim: Selectors.getClaim(props.partnerId, props.periodId).getPending(state),
     costCategories: Selectors.getCostCategories().getPending(state),
