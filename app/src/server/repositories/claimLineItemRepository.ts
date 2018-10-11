@@ -1,5 +1,4 @@
 import SalesforceBase from "./salesforceBase";
-import {CostCategoryRepository} from "./costCategoriesRepository";
 import {RecordTypeRepository} from "./recordTypeRepository";
 
 export interface ISalesforceClaimLineItem {

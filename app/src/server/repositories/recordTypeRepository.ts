@@ -1,9 +1,9 @@
 import SalesforceBase from "./salesforceBase";
 
 export interface ISalesforceRecordType {
-    Id: string;
-    Name: string;
-    SobjectType: string;
+  Id: string;
+  Name: string;
+  SobjectType: string;
 }
 
 const fieldNames: string[] = [
@@ -13,15 +13,15 @@ const fieldNames: string[] = [
 ];
 
 export interface IRecordTypeRepository {
-    getAll(): Promise<ISalesforceRecordType[]>;
+  getAll(): Promise<ISalesforceRecordType[]>;
 }
 
 export class RecordTypeRepository extends SalesforceBase<ISalesforceRecordType> implements IRecordTypeRepository {
-    constructor() {
-        super("RecordType", fieldNames);
-    }
+  constructor() {
+    super("RecordType", fieldNames);
+  }
 
-    getAll(): Promise<ISalesforceRecordType[]> {
-        return super.all();
-    }
+  getAll(): Promise<ISalesforceRecordType[]> {
+    return super.all();
+  }
 }
