@@ -1,15 +1,15 @@
+import * as Selectors from "../../redux/selectors";
 import { routeConfig } from "../../routing";
-import React from "react";
 import { ContainerBase, ReduxContainer } from "../containerBase";
 import { Pending } from "../../../shared/pending";
 import * as Actions from "../../redux/actions";
 import * as Dtos from "../../models";
 import * as ACC from "../../components";
-import * as Selectors from "../../redux/selectors";
+import React from "react";
 import { DateTime } from "luxon";
 import { IEditorStore } from "../../redux/reducers/editorsReducer";
 import { ClaimDtoValidator } from "../../validators/claimDtoValidator";
-import { ClaimDto, ClaimDetailsSummaryDto } from "../../models";
+import { ClaimDetailsSummaryDto, ClaimDto } from "../../models";
 import { ClaimForecastRoute, ClaimsDashboardRoute } from ".";
 import { EditClaimLineItemsRoute } from "./editClaimLineItems";
 import { Result } from "../../validation/result";
@@ -70,13 +70,13 @@ export class PrepareComponent extends ContainerBase<Params, Data, Callbacks> {
 
     private saveAndProgress(dto: ClaimDto, details: ClaimDetailsSummaryDto[], costCategories: Dtos.CostCategoryDto[]) {
         this.props.saveAndProgress(this.props.projectId, this.props.partnerId, this.props.periodId, dto, details, costCategories);
-    };
+    }
 
     private saveAndReturn(dto: ClaimDto, details: ClaimDetailsSummaryDto[], costCategories: Dtos.CostCategoryDto[]) {
         this.props.saveAndReturn(this.props.projectId, this.props.partnerId, this.props.periodId, dto, details, costCategories);
-    };
+    }
 
-    private onChange(dto: ClaimDto, details: ClaimDetailsSummaryDto[], costCategories: Dtos.CostCategoryDto[]){
+    private onChange(dto: ClaimDto, details: ClaimDetailsSummaryDto[], costCategories: Dtos.CostCategoryDto[]) {
         this.props.onChange(this.props.partnerId, this.props.periodId, dto, details, costCategories);
     }
 
@@ -127,7 +127,7 @@ const goBack = (dispatch: any, projectId: string, partnerId: string, periodId: n
 const definition = ReduxContainer.for<Params, Data, Callbacks>(PrepareComponent);
 
 export const PrepareClaim = definition.connect({
-  withData: (state, props) : Data => ({
+  withData: (state, props): Data => ({
     project: Selectors.getProject(props.projectId).getPending(state),
     partner: Selectors.getPartner(props.partnerId).getPending(state),
     costCategories: Selectors.getCostCategories().getPending(state),

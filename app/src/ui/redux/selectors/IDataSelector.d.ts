@@ -1,4 +1,4 @@
-import {IDataStore, RootState, DataStateKeys} from "../reducers";
+import {DataStateKeys, IDataStore, RootState} from "../reducers";
 import {Pending} from "../../../shared/pending";
 
 interface IDataSelector<T> {

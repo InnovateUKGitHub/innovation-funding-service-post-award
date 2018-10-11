@@ -1,4 +1,4 @@
-import { ClaimDto, ClaimDetailsSummaryDto, CostCategoryDto } from "../models";
+import { ClaimDetailsSummaryDto, ClaimDto, CostCategoryDto } from "../models";
 import * as Validation from "./common";
 import { Results } from "../validation/results";
 
@@ -17,7 +17,7 @@ export class ClaimDtoValidator extends Results<ClaimDto>  {
 }
 
 export class ClaimDetailsValidator extends Results<ClaimDetailsSummaryDto> {
-    constructor(model: ClaimDetailsSummaryDto, private costCategory: CostCategoryDto|null|undefined, show: boolean){
+    constructor(model: ClaimDetailsSummaryDto, private costCategory: CostCategoryDto|null|undefined, show: boolean) {
         super(model, show);
     }
     costsClaimedThisPeriod = Validation.isFalse(this, this.model.offerCosts < (this.model.costsClaimedToDate + this.model.costsClaimedThisPeriod), this.costCategory ? `Your costs for ${this.costCategory.name} this period are more than your remaining grant offer letter costs. You must remove some costs before you can submit this claim.` : `Your costs for this period are more than your remaining grant offer letter costs. You must remove some costs before you can submit this claim.`);

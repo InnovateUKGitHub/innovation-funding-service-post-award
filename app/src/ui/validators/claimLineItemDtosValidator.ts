@@ -13,7 +13,7 @@ export class ClaimLineItemDtoValidator extends Results<ClaimLineItemDto> {
     public cost = Validation.all(this,
         () => Validation.required(this, this.model.value, "Enter a cost"),
         () => Validation.isCurrency(this, this.model.value, "Enter a valid amount"),
-        () => Validation.isTrue(this, this.model.value === undefined || this.model.value === null || this.model.value! > 0, "Enter a valid cost"),
+        () => Validation.isTrue(this, this.model.value === undefined || this.model.value === null || this.model.value > 0, "Enter a valid cost"),
     );
 
 }

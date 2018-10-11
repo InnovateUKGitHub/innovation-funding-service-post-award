@@ -63,16 +63,16 @@ export const ClaimTable: React.SFC<Props> = (props) => {
     );
 };
 
-const renderCostCategory = (category: Dtos.CostCategoryDto, getLink: (costCategoryId: string) => ILinkInfo, validation?:ClaimDetailsValidator) => {
-    if(category.isCalculated){
+const renderCostCategory = (category: Dtos.CostCategoryDto, getLink: (costCategoryId: string) => ILinkInfo, validation?: ClaimDetailsValidator) => {
+    if(category.isCalculated) {
         return category.name;
     }
-    const validationError = validation && validation.errors[0]; 
+    const validationError = validation && validation.errors[0];
     const id = validationError && validationError.key;
     return (
         <Link id={id} route={getLink(category.id)}>{category.name}</Link>
     );
-}
+};
 
 const  renderFooters = (project: Dtos.ProjectDto, partner: Dtos.PartnerDto, claimsCosts: Dtos.ClaimDetailsSummaryDto[]) => {
     return [

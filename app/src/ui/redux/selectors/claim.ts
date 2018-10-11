@@ -1,12 +1,11 @@
 import { ClaimDto } from "../../models";
-import { IDataStore, RootState, DataState, DataStateKeys, EditorState, EditorStateKeys } from "../reducers";
-import { getData } from "./data";
+import { DataState, DataStateKeys, EditorState, EditorStateKeys, IDataStore, RootState } from "../reducers";
 import { IDataSelector } from "./IDataSelector";
-import { Pending, LoadingStatus } from "../../../shared/pending";
+import { LoadingStatus, Pending } from "../../../shared/pending";
 import { IEditorStore } from "../reducers/editorsReducer";
 import { Results } from "../../validation/results";
 import { ClaimDtoValidator } from "../../validators/claimDtoValidator";
-import { findClaimDetailsSummaryByPartnerAndPeriod } from "./claimDetailsSummary"
+import { findClaimDetailsSummaryByPartnerAndPeriod } from "./claimDetailsSummary";
 import { getCostCategories } from "./costCategories";
 // const claimStore = "claim";
 
@@ -28,7 +27,7 @@ export const editClaim = (partnerId: string, periodId: number) => editorStoreHel
   (store) => createEditorDto(partnerId, periodId, store),
   (claim, store) => createValidator(partnerId, periodId, claim, store),
   `${partnerId}_${periodId}`
-)
+);
 
 const createEditorDto = (partnerId: string, periodId: number, store: RootState) => {
   return getClaim(partnerId, periodId).getPending(store);
@@ -41,35 +40,37 @@ const createValidator = (partnerId: string, periodId: number, claim: ClaimDto, s
     .then(data => new ClaimDtoValidator(claim, data!.details, data!.costCategories, false));
 };
 
-const dataStoreHelper = <T extends {}>(store: DataStateKeys, getDataStore: (state: DataState) => { [key: string]: IDataStore<T> }, key: string): IDataSelector<T> => {
+const dataStoreHelper = <T extends {}>(storeKey: DataStateKeys, getDataStore: (state: DataState) => { [key: string]: IDataStore<T> }, key: string): IDataSelector<T> => {
   return {
-    store: store,
-    key: key,
+    store: storeKey,
+    key,
     get: (store: RootState) => getDataStore(store.data)[key],
     getPending: (store: RootState) => Pending.create(getDataStore(store.data)[key]),
   };
-}
+};
 
 interface IEditorSelector<T, TVal extends Results<T>> {
-  store: EditorStateKeys,
-  key: string,
-  get: (store: RootState, initalise?: (dto: T) => void) => Pending<IEditorStore<T, TVal>>
+  store: EditorStateKeys;
+  key: string;
+  get: (store: RootState, initalise?: (dto: T) => void) => Pending<IEditorStore<T, TVal>>;
 }
 
-const editorStoreHelper = <T extends {}, TVal extends Results<T>>(store: EditorStateKeys, getEditorStore: (state: EditorState) => { [key: string]: IEditorStore<T, TVal> }, getData: (store: RootState) => Pending<T>, getValidator: (dto: T, store: RootState) => Pending<TVal>, key: string): IEditorSelector<T, TVal> => {
+const editorStoreHelper = <T extends {}, TVal extends Results<T>>(storeKey: EditorStateKeys, getEditorStore: (state: EditorState) => { [key: string]: IEditorStore<T, TVal> }, getData: (store: RootState) => Pending<T>, getValidator: (dto: T, store: RootState) => Pending<TVal>, key: string): IEditorSelector<T, TVal> => {
   return {
-    store,
+    store: storeKey,
     key,
     get: (store: RootState, initalise?: (dto: T) => void) => {
       const editor = getEditorStore(store.editors)[key];
-      
+
       if (editor) {
         return new Pending(LoadingStatus.Done, editor);
       }
 
       const pendingDto = getData(store).then(newData => {
         const clonedData = Object.assign({}, newData) as T;
-        initalise && initalise(clonedData);
+        if (initalise) {
+          initalise(clonedData);
+        }
         return clonedData;
       });
 
@@ -78,7 +79,7 @@ const editorStoreHelper = <T extends {}, TVal extends Results<T>>(store: EditorS
       const hasData = pendingDto.state === LoadingStatus.Done || pendingDto.state === LoadingStatus.Stale || (pendingDto.state === LoadingStatus.Loading && !!pendingDto.data);
       const pendingValidation = hasData ? getValidator(pendingDto.data!, store) : new Pending<TVal>();
 
-      return Pending.combine(pendingDto, pendingValidation, (data, validator) => ({ data, validator, error: null}));
+      return Pending.combine(pendingDto, pendingValidation, (data, validator) => ({ data, validator, error: null }));
     }
-  }
-}
+  };
+};

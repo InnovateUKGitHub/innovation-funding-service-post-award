@@ -123,7 +123,7 @@ const NumericField = <T extends {}>(props: ExternalFieldProps<T, number>) => {
 
 interface SubmitProps {
     qa?: string;
-    disabled?:boolean;
+    disabled?: boolean;
 }
 
 const SubmitComponent: React.SFC<SubmitProps> = (props) => {

@@ -1,15 +1,15 @@
+import * as Dtos from "../../models";
 import React from "react";
-import {ContainerBase, ReduxContainer} from "../containerBase";
 import * as ACC from "../../components";
 import * as Actions from "../../redux/actions";
 import * as Selectors from "../../redux/selectors";
 import {Pending} from "../../../shared/pending";
-import * as Dtos from "../../models";
+import {ContainerBase, ReduxContainer} from "../containerBase";
 import {routeConfig} from "../../routing";
 import {IEditorStore} from "../../redux/reducers/editorsReducer";
 import {ClaimDtoValidator} from "../../validators/claimDtoValidator";
 import {ClaimsDashboardRoute} from "./dashboard";
-import {ClaimDto, ClaimDetailsSummaryDto, CostCategoryDto} from "../../models";
+import {ClaimDetailsSummaryDto, ClaimDto, CostCategoryDto} from "../../models";
 import { RootState } from "../../redux";
 
 interface Params {
@@ -31,7 +31,7 @@ interface CombinedData {
   partner: Dtos.PartnerDto;
   claim: Dtos.ClaimDto;
   details: Dtos.ClaimDetailsSummaryDto[];
-  costCategories:Dtos.CostCategoryDto[];
+  costCategories: Dtos.CostCategoryDto[];
   editor: IEditorStore<Dtos.ClaimDto, ClaimDtoValidator>;
 }
 
@@ -57,7 +57,7 @@ export class ClaimForecastComponent extends ContainerBase<Params, Data, Callback
     return <Loader pending={combined} render={(data) => this.renderContents(data)} />;
   }
 
-  private onChange(dto: ClaimDto, details: ClaimDetailsSummaryDto[], costCategories: CostCategoryDto[]){
+  private onChange(dto: ClaimDto, details: ClaimDetailsSummaryDto[], costCategories: CostCategoryDto[]) {
     this.props.onChange(this.props.partnerId, this.props.periodId, dto, details, costCategories);
   }
 
@@ -98,7 +98,7 @@ export const ForecastClaim = definition.connect({
     costCategories: Selectors.getCostCategories().getPending(state),
     details: Selectors.findClaimDetailsSummaryByPartnerAndPeriod(props.partnerId, props.periodId).getPending(state),
     partner: Selectors.getPartner(props.partnerId).getPending(state),
-    editor: Selectors.editClaim(props.partnerId, props.periodId).get(state, x => {x.status = "Submitted"})
+    editor: Selectors.editClaim(props.partnerId, props.periodId).get(state, x => {x.status = "Submitted";})
   }),
   withCallbacks: (dispatch) => ({
     onChange: (partnerId, periodId, dto, details, costCategories) => dispatch(Actions.validateClaim(partnerId, periodId, dto, details, costCategories)),

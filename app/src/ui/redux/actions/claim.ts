@@ -1,14 +1,14 @@
 import {conditionalLoad, dataLoadAction, DataLoadAction} from "./dataLoad";
 import {ApiClient} from "../../../shared/apiClient";
-import { getClaim, editClaim } from "../selectors/claim";
-import {ClaimDto, ClaimDetailsSummaryDto, CostCategoryDto} from "../../models";
+import { editClaim, getClaim } from "../selectors/claim";
+import {ClaimDetailsSummaryDto, ClaimDto, CostCategoryDto} from "../../models";
 import {AsyncThunk, SyncThunk} from "./common";
 import {ClaimDtoValidator} from "../../validators/claimDtoValidator";
 import {updateEditorAction, UpdateEditorAction} from "./editorActions";
 import {LoadingStatus} from "../../../shared/pending";
 
 export function loadClaim(partnerId: string, periodId: number) {
-  const selector = getClaim(partnerId, periodId); 
+  const selector = getClaim(partnerId, periodId);
   return conditionalLoad(
     selector.key,
     selector.store!,
