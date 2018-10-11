@@ -9,6 +9,7 @@ import * as claimLineItems from "./claimLineItems";
 import * as claimDetails from "./claimDetails";
 import * as claimDetailsSummary from "./claimDetailsSummary";
 import * as forecastDetails from "./forecastDetails";
+import * as forecastGolCosts from "./forecastGolCost";
 import {ControllerBase} from "./controllerBase";
 
 export interface IApiClient {
@@ -18,6 +19,7 @@ export interface IApiClient {
   contacts: contacts.IContactsApi;
   costCategories: costCategories.ICostCategoriesApi;
   forecastDetails: forecastDetails.IForecastDetailsApi;
+  forecastGolCosts: forecastGolCosts.IForecastGolCostsApi;
   projects: projects.IProjectsApi;
   projectContacts: projectContacts.IProjectContactsApi;
   partners: partners.IPartnersApi;
@@ -32,6 +34,7 @@ export const serverApis: IApiClient & { [key: string]: ControllerBase<{}> } = {
   contacts: contacts.controller,
   costCategories: costCategories.controller,
   forecastDetails: forecastDetails.controller,
+  forecastGolCosts: forecastGolCosts.controller,
   partners: partners.controller,
   projects: projects.controller,
   projectContacts: projectContacts.controller
