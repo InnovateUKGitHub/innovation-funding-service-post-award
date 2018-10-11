@@ -55,12 +55,12 @@ export class TableColumn<T> extends React.Component<InternalColumnProps<T>> {
 
   renderHeader(column: number) {
     const className = classNames("govuk-table__header", this.props.classSuffix ? "govuk-table__header--" + this.props.classSuffix : "");
-    return <th className={className} scope="col" data-qa={`header-${this.props.qa}`} key={column}>{this.props.header}</th>;
+    return <th className={className} scope="col" key={column}>{this.props.header}</th>;
   }
 
   renderFooter(column: number) {
     const className = classNames("govuk-table__header", this.props.classSuffix ? "govuk-table__header--" + this.props.classSuffix : "");
-    return <td className={className} data-qa={`footer-${this.props.qa}`} key={column}>{this.props.footer}</td>;
+    return <td className={className} key={column}>{this.props.footer}</td>;
   }
 
   renderCell(data: T, column: number, row: number) {
