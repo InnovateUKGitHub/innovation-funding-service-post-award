@@ -28,7 +28,7 @@ export class ProfileDetailsRepository extends SalesforceBase<ISalesforceProfileD
   }
 
   public async getAllByPartnerWithPeriodGt(partnerId: string, periodId: number): Promise<ISalesforceProfileDetails[]> {
-    // const filter = `Acc_ProjectParticipant__c = '${partnerId}' AND RecordType.Name = '${this.recordType}' AND Acc_ProjectPeriodNumber__c > ${periodId}`;
+    // const filter = `Acc_ProjectParticipant__c = '${partnerId}' AND RecordType.Name = '${this.recordType}' AND Acc_ProjectPeriodNumber__c >= ${periodId}`;
     // return await super.whereString(filter);
 
     // TODO - remove faker
@@ -37,7 +37,7 @@ export class ProfileDetailsRepository extends SalesforceBase<ISalesforceProfileD
 
   private createFake(partnerId: string, periodId: number): ISalesforceProfileDetails[] {
     return [{
-      Acc_CostCategory__c: "123",
+      Acc_CostCategory__c: "a071X000000HHZtQAO",
       Acc_PeriodCostCategoryTotal__c: 10000,
       Acc_ProjectParticipant__c: partnerId,
       Acc_ProjectPeriodNumber__c: periodId

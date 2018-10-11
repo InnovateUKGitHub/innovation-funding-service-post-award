@@ -1,4 +1,5 @@
-import SalesforceBase from "./salesforceBase";
+import SalesforceBase, {Updatable} from "./salesforceBase";
+import {RecordTypeRepository} from "./recordTypeRepository";
 
 export interface ISalesforceClaimLineItem {
   Id: string;
@@ -7,6 +8,7 @@ export interface ISalesforceClaimLineItem {
   Acc_CostCategory__c: string;
   Acc_ProjectPeriodNumber__c: number;
   Acc_ProjectParticipant__c: string;
+  RecordTypeId: string;
 }
 
 const fields = [
@@ -20,6 +22,9 @@ const fields = [
 
 export interface IClaimLineItemRepository {
   getAllForCategory(partnerId: string, categoryId: string, periodId: number): Promise<ISalesforceClaimLineItem[]>;
+  delete(ids: string[] | string): Promise<void>;
+  update(update: Updatable<ISalesforceClaimLineItem>[] | Updatable<ISalesforceClaimLineItem>): Promise<boolean>;
+  insert(insert: Partial<ISalesforceClaimLineItem>[] | Partial<ISalesforceClaimLineItem>): Promise<string[]> | Promise<string>;
 }
 
 export class ClaimLineItemRepository extends SalesforceBase<ISalesforceClaimLineItem> implements IClaimLineItemRepository {
@@ -39,5 +44,27 @@ export class ClaimLineItemRepository extends SalesforceBase<ISalesforceClaimLine
       AND RecordType.Name = '${this.recordType}'
     `;
     return super.whereString(filter);
+  }
+
+  delete(ids: string[] | string): Promise<void>  {
+    return super.delete(ids);
+  }
+
+  update(lineItems: (Updatable<ISalesforceClaimLineItem>)[] | Updatable<ISalesforceClaimLineItem>): Promise<boolean>  {
+    return super.update(lineItems);
+  }
+
+  async insert(insert: Partial<ISalesforceClaimLineItem>): Promise<string>;
+  async insert(insert: Partial<ISalesforceClaimLineItem>[]): Promise<string[]>;
+  async insert(insert: Partial<ISalesforceClaimLineItem>[] | Partial<ISalesforceClaimLineItem>) {
+    const types = await new RecordTypeRepository().getAll();
+    const type = types.find(x => x.Name === this.recordType && x.SobjectType === this.objectName);
+    if (!type) {
+      throw Error("Failed to find claim line item record type");
+    }
+    if (insert instanceof Array) {
+      return super.insert(insert.map(item => ({...item, RecordTypeId: type.Id})));
+    }
+    return super.insert({...insert, RecordTypeId: type.Id});
   }
 }

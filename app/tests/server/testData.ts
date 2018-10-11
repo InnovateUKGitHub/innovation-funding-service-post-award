@@ -19,6 +19,8 @@ export class TestData {
             Acc_DisplayOrder__c : seed,
             Acc_CompetitionType__c : "Industrial",
             Acc_OrganisationType__c : "Sector",
+            Acc_CostCategoryDescription__c: `Cost Category description ${seed}`,
+            Acc_HintText__c: `Cost Category hint ${seed}`,
         };
 
         update && update(newItem);
@@ -69,16 +71,21 @@ export class TestData {
         let seed = this.repositories.partners.Items.length + 1;
         project = project || this.createProject();
 
-        let newItem = {
+        const newItem = {
             Id: `Partner${seed}`,
             Acc_AccountId__r: {
                 Id: `AccountId${seed}`,
                 Name: `Participant Name ${seed}`
             },
-            Acc_ParticipantSize__c: "Large",
             Acc_ParticipantType__c: "Accedemic",
+            Acc_ParticipantSize__c: "Large",
             Acc_ProjectRole__c: "Project Lead",
-            Acc_ProjectId__c: project.Id
+            Acc_ProjectId__c: project.Id,
+            Acc_TotalParticipantGrant__c: 125000,
+            Acc_TotalParticipantCosts__c: 17474,
+            Acc_TotalParticipantCostsPaid__c: 50000,
+            Acc_Cap_Limit__c: 50,
+            Acc_Award_Rate__c: 50,
         } as Repositories.ISalesforcePartner;
 
         update && update(newItem);
@@ -155,7 +162,7 @@ export class TestData {
           Acc_PeriodCostCategoryTotal__c: 1000
         };
 
-        if(!!update){
+        if(!!update) {
           update(newItem);
         }
 
@@ -164,4 +171,28 @@ export class TestData {
         return newItem;
     }
 
+    public createProfileTotalCostCategory(
+      costCategory?: Repositories.ISalesforceCostCategory,
+      partner?: Repositories.ISalesforcePartner,
+      golCost?: number,
+      update?: (item: Repositories.ISalesforceProfileTotalCostCategory) => void
+    ): Repositories.ISalesforceProfileTotalCostCategory {
+      costCategory = costCategory || this.createCostCategory();
+      partner      = partner || this.createPartner();
+      golCost      = golCost || 100;
+
+      const newItem: Repositories.ISalesforceProfileTotalCostCategory = {
+        Acc_CostCategory__c: costCategory.Id,
+        Acc_ProjectParticipant__c: partner.Id,
+        Acc_CostCategoryGOLCost__c: golCost,
+      };
+
+      if(!!update) {
+        update(newItem);
+      }
+
+      this.repositories.profileTotalCostCategory.Items.push(newItem);
+
+      return newItem;
+    }
 }

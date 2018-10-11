@@ -2,32 +2,16 @@ import {ControllerBase} from "./controllerBase";
 import contextProvider from "../features/common/contextProvider";
 import {GetAllClaimDetailsByPartner} from "../features/claims/claimDetails/getAllByPartnerQuery";
 import {ClaimDetailsDto} from "../../ui/models";
-import {ApiError, ErrorCode} from "./ApiError";
 
 export interface IClaimDetailsApi {
   getAllByPartner: (partnerId: string) => Promise<ClaimDetailsDto[]>;
 }
 
-export interface Params {
-  partnerId: string;
-}
-
 class Controller extends ControllerBase<ClaimDetailsDto> implements IClaimDetailsApi {
-  public path = "claimdetails";
-
   constructor() {
-    super();
+    super("claim-details");
 
-    this.getItems("/", (p, q) => ({
-      partnerId: q.partnerId,
-    }),  p => this.delegateRequest(p));
-  }
-
-  private async delegateRequest(p: Params) {
-    if (!p.partnerId) {
-      throw new ApiError(ErrorCode.BAD_REQUEST, "Bad request");
-    }
-    return this.getAllByPartner(p.partnerId);
+    this.getItems("/", (p, q) => ({ partnerId: q.partnerId, }), p => this.getAllByPartner(p.partnerId));
   }
 
   public async getAllByPartner(partnerId: string) {

@@ -8,14 +8,13 @@ export interface IForecastDetailsApi {
 }
 
 class Controller extends ControllerBase<ForecastDetailsDTO> implements IForecastDetailsApi {
-  public path = "forecasts";
 
   constructor() {
-    super();
+    super("forecast-details");
 
     this.getItems(
-      "/:partnerId/:periodId/details",
-      (p, q) => ({ partnerId: p.partnerId, periodId: parseInt(p.periodId, 10)}),
+      "/",
+      (p, q) => ({ partnerId: q.partnerId, periodId: parseInt(q.periodId, 10)}),
       (p) => this.getAllByPartnerId(p.partnerId, p.periodId)
     );
   }

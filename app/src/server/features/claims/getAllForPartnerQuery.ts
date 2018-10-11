@@ -14,12 +14,3 @@ export class GetAllForPartnerQuery implements IQuery<ClaimDto[]> {
           .sort((x, y) => dateComparator(y.periodEndDate, x.periodEndDate));
     }
 }
-
-export class GetByPartnerAndPeriodQuery implements IQuery<ClaimDto|null> {
-    constructor(private partnerId: string, private periodId: number) {}
-
-    public async Run(context: IContext) {
-        const result = await context.repositories.claims.getByPartnerIdAndPeriodId(this.partnerId, this.periodId);
-        return result && mapClaim(context)(result);
-    }
-}
