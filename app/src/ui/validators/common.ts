@@ -1,101 +1,20 @@
-
-interface ResultsInternal {
-    _showValidationErrors: boolean;
-    add(result: Result): void;
-}
-
-export class Results<T> {
-    /* internal */
-    // tslint:disable-next-line
-    private _showValidationErrors = true;
-    // tslint:disable-next-line
-    private _isRequired = false;
-
-    errors = new Array<Result>();
-
-    constructor(public model: T, showValidationErrors: boolean) {
-        this._showValidationErrors = showValidationErrors;
-    }
-
-    showValidationErrors() {
-        return this._showValidationErrors;
-    }
-
-    isValid() {
-        return this.errors.length === 0;
-    }
-
-    isRequired() {
-        return this._isRequired;
-    }
-
-    /* internal */
-    private add(result: Result) {
-        if (!result.isValid()) {
-            this.errors.push(result);
-        }
-        if (result.isRequired()) {
-            this._isRequired = true;
-        }
-    }
-}
-
-// A single validation result, typically for a single field
-export class Result {
-    // tslint:disable-next-line
-    private _isValid = true;
-    // tslint:disable-next-line
-    private _isRequired = false;
-    // tslint:disable-next-line
-    private _showValidationErrors = false;
-    errorMessage: string|null = null;
-
-    constructor(results: Results<{}>|null, showValidationErrors: boolean, isValid: boolean, errorMessage: string|null , isRequired: boolean) {
-
-        // Cast so that the internal methods can be private on the public interface.
-        const internalResults = (results as any) as ResultsInternal;
-
-        this._showValidationErrors = showValidationErrors;
-        this._isValid = isValid;
-        this._isRequired = isRequired;
-
-        this.errorMessage = errorMessage;
-
-        if (internalResults) {
-            internalResults.add(this);
-        }
-    }
-
-    combine(other: Result) {
-        return new Result(null, this.showValidationErrors() || other.showValidationErrors(), this.isValid() && other.isValid(), this.errorMessage || other.errorMessage || "", this.isRequired() || other.isRequired());
-    }
-
-    isValid() {
-        return this._isValid;
-    }
-
-    showValidationErrors() {
-        return this._showValidationErrors;
-    }
-
-    isRequired() {
-        return this._isRequired;
-    }
-}
+import { Results } from "../validation/results";
+import { Result } from "../validation/result";
+import { NestedResult } from "../validation/nestedResult";
 
 // A helper for creating validation rules
 function rule<T>(test: (value: T) => boolean, defaultMessage: string, isRequired?: boolean): (results: Results<{}>, value: T, message?: string) => Result {
     return (results: Results<{}>, value: T, message?: string) => {
-        return new Result(results, results.showValidationErrors(), test(value), message || defaultMessage, !!isRequired);
+        return new Result(results, results.showValidationErrors, test(value), message || defaultMessage, !!isRequired);
     };
 }
 
 export function valid(resultSet: Results<{}>, isRequired?: boolean) {
-    return new Result(resultSet, resultSet.showValidationErrors(), true, null, isRequired || false);
+    return new Result(resultSet, resultSet.showValidationErrors, true, null, isRequired || false);
 }
 
 export function inValid(resultSet: Results<{}>, message: string, isRequired?: boolean) {
-    return new Result(resultSet, resultSet.showValidationErrors(), false, message, isRequired || false);
+    return new Result(resultSet, resultSet.showValidationErrors, false, message, isRequired || false);
 }
 
 export let required = rule<any>((value) => {
@@ -135,8 +54,10 @@ export function email(results: Results<{}>, value: string, message?: string) {
     return isTrue(results, (!value) || regex.test(value), message || "Invalid email address");
 }
 
-export function nonZeroNumber(results: Results<{}>, value: number, message?: string) {
-    return isTrue(results, value !== null && value !== 0, message || "Non-zero numbers only");
+export function isCurrency(results: Results<{}>, value: number|null, message?: string) {
+    const regex = /^-?[0-9]+(\.[0-9]{2})?$/i;
+    if(value === null || value === undefined) { return valid(results); }
+    return isTrue(results, (!value) || regex.test(value.toString()), message || "Invalid amount");
 }
 
 // Accepts an array of delegates. Runs until it finds a failure. EG, Not empty, length < 100, no spaces. Will fail fast.
@@ -147,12 +68,24 @@ export function all(resultSet: Results<{}>, ...results: (() => Result)[]): Resul
         const result = results[i]();
         // this logic presumes that the is required is set as the first validation. If it sthe last one it wont be shown untill prev are valid
         // however it wouldnt make much sense for the required validation to not be the first one
-        if (result.isRequired()) {
+        if (result.isRequired) {
             isRequired = true;
         }
-        if (!result.isValid()) {
-            return inValid(resultSet, result.errorMessage!, isRequired);
+        if (!result.isValid) {
+            return result;
         }
     }
     return valid(resultSet, isRequired);
+}
+
+// Validating lists of things, but does fail if list is empty.
+export function requiredChild<T, U extends Results<{}>>(parentResults: Results<{}>, model: T[], validateModel: (model: T) => U, emptyMessage?: string, summaryMessage?: string) {
+    const childResults = model ? model.map(m => validateModel(m)) : [];
+    return new NestedResult(parentResults, childResults, true, emptyMessage || "At least one is required", summaryMessage);
+}
+
+// Validating lists of things, but don't care if list is empty.
+export function optionalChild<T, U extends Results<{}>>(parentResults: Results<{}>, model: T[], validateModel: (model: T) => U , summaryMessage?: string) {
+    const childResults = model ? model.map(m => validateModel(m)) : [];
+    return new NestedResult(parentResults, childResults, false, "", summaryMessage);
 }

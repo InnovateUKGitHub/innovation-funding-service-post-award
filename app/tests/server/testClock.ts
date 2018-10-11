@@ -1,9 +1,9 @@
-import { IClock, Clock } from "../../src/server/features/common/clock";
+import { Clock, IClock } from "../../src/server/features/common/clock";
 
 export class TestClock implements IClock {
-    
-    private _now : Date|null;
+    private _now: Date|null;
     private _inner: Clock;
+
     constructor() {
         this._now = null;
         this._inner = new Clock();
@@ -14,7 +14,6 @@ export class TestClock implements IClock {
     }
 
     public setDateTime(value: string, format: string = "yyyy/MM/dd hh:mm:ss") {
-        console.log("setting test clock", value, this.parse(value, format))
         return this._now = this.parse(value, format);
     }
 
@@ -25,5 +24,5 @@ export class TestClock implements IClock {
     parse(value: string, format: string) {
         return this._inner.parse(value, format);
     }
-    
+
 }

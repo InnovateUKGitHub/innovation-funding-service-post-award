@@ -1,5 +1,5 @@
 export interface ClaimLineItemDto {
     id: string;
     description: string;
-    value: number;
+    value: number|null;
 }

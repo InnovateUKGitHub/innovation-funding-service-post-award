@@ -1,7 +1,8 @@
 import React from "react";
 import {ContainerBase, ReduxContainer} from "../containerBase";
 import * as ACC from "../../components";
-import * as Actions from "../../redux/actions/thunks";
+import * as Actions from "../../redux/actions";
+import * as Selectors from "../../redux/selectors";
 import {Pending} from "../../../shared/pending";
 import * as Dtos from "../../models";
 import {routeConfig} from "../../routing";
@@ -95,12 +96,15 @@ const goBack = (dispatch: any, projectId: string, partnerId: string) => {
 const definition = ReduxContainer.for<Params, Data, Callbacks>(ClaimForecastComponent);
 
 export const ForecastClaim = definition.connect({
-  withData: (store, params) => ({
-    project: Pending.create(store.data.project[params.projectId]),
-    claim: Pending.create(store.data.claim[params.partnerId + "_" + params.periodId]),
-    partner: Pending.create(store.data.partner[params.partnerId]),
-    editor: getEditor(store.editors.claim[params.partnerId + "_" + params.periodId], Pending.create(store.data.claim[params.partnerId + "_" + params.periodId]))
-  }),
+  withData: (state, props) => {
+    const claimSelector = Selectors.getClaim(props.partnerId, props.periodId);
+    return {
+      project: Selectors.getProject(props.projectId).getPending(state),
+      claim: claimSelector.getPending(state),
+      partner: Selectors.getPartner(props.partnerId).getPending(state),
+      editor: getEditor(state.editors.claim[claimSelector.key], claimSelector.getPending(state))
+    };
+  },
   withCallbacks: (dispatch) => ({
     onChange: (partnerId, periodId, dto) => dispatch(Actions.validateClaim(partnerId, periodId, dto)),
     saveAndReturn: (dto, projectId, partnerId, periodId) => dispatch(Actions.saveClaim(partnerId, periodId, dto, () => goBack(dispatch, projectId, partnerId)))

@@ -1,23 +1,24 @@
 import {ControllerBase} from "./controllerBase";
 import {ClaimDto} from "../../ui/models/claimDto";
 import contextProvider from "../features/common/contextProvider";
-import {GetAllForPartnerQuery, GetByPartnerAndPeriodQuery} from "../features/claims";
+import {GetAllForPartnerQuery, GetClaim} from "../features/claims";
 import {UpdateClaimCommand} from "../features/claims/updateClaim";
 import {ApiError, ErrorCode} from "./ApiError";
 import {processDto} from "../../shared/processResponse";
 
 export interface IClaimsApi {
   getAllByPartnerId: (partnerId: string) => Promise<ClaimDto[]>;
-  getByPartnerAndPeriod: (partnerId: string, periodId: number) => Promise<ClaimDto|null>;
+  get: (partnerId: string, periodId: number) => Promise<ClaimDto|null>;
   update: (partnerId: string, periodId: number, claim: ClaimDto) => Promise<ClaimDto>;
 }
 
 class Controller extends ControllerBase<ClaimDto> implements IClaimsApi {
-  constructor() {
-    super();
 
-    this.getItems("/:partnerId", (p, q) => ({partnerId: p.partnerId as string}), (p) => this.getAllByPartnerId(p.partnerId));
-    this.getItem("/:partnerId/:periodId", (p) => ({partnerId: p.partnerId as string, periodId: parseInt(p.periodId, 10)}), (p) => this.getByPartnerAndPeriod(p.partnerId, p.periodId));
+  constructor() {
+    super("claims");
+
+    this.getItems("/", (p, q) => ({partnerId: q.partnerId}), (p) => this.getAllByPartnerId(p.partnerId));
+    this.getItem("/:partnerId/:periodId", (p) => ({partnerId: p.partnerId as string, periodId: parseInt(p.periodId, 10)}), (p) => this.get(p.partnerId, p.periodId));
     this.putItem("/:partnerId/:periodId", (p, q, b) => ({partnerId: p.partnerId as string, periodId: parseInt(p.periodId, 10), claim: processDto(b)}), (p) => this.update(p.partnerId, p.periodId, p.claim));
   }
 
@@ -26,8 +27,8 @@ class Controller extends ControllerBase<ClaimDto> implements IClaimsApi {
     return await contextProvider.start().runQuery(query);
   }
 
-  public async getByPartnerAndPeriod(partnerId: string, periodId: number) {
-    const query = new GetByPartnerAndPeriodQuery(partnerId, periodId);
+  public async get(partnerId: string, periodId: number) {
+    const query = new GetClaim(partnerId, periodId);
     return await contextProvider.start().runQuery(query);
   }
 
@@ -43,7 +44,7 @@ class Controller extends ControllerBase<ClaimDto> implements IClaimsApi {
       throw new ApiError(ErrorCode.INTERNAL_SERVER_ERROR, "Failed to update claim");
     });
 
-    const query = new GetByPartnerAndPeriodQuery(partnerId, periodId);
+    const query = new GetClaim(partnerId, periodId);
     return (await contextProvider.start().runQuery(query))!;
   }
 }
