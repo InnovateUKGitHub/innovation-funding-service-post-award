@@ -1,4 +1,6 @@
 import SalesforceBase from "./salesforceBase";
+import {CostCategoryRepository} from "./costCategoriesRepository";
+import {RecordTypeRepository} from "./recordTypeRepository";
 
 export interface ISalesforceClaimLineItem {
   Id: string;
@@ -7,7 +9,6 @@ export interface ISalesforceClaimLineItem {
   Acc_CostCategory__c: string;
   Acc_ProjectPeriodNumber__c: number;
   Acc_ProjectParticipant__c: string;
-  RecordTypeId: string;
 }
 
 const fields = [
@@ -16,8 +17,7 @@ const fields = [
   "Acc_LineItemCost__c",
   "Acc_CostCategory__c",
   "Acc_ProjectPeriodNumber__c",
-  "Acc_ProjectParticipant__c",
-  "RecordTypeId"
+  "Acc_ProjectParticipant__c"
 ];
 
 export interface IClaimLineItemRepository {
@@ -46,7 +46,7 @@ export class ClaimLineItemRepository extends SalesforceBase<ISalesforceClaimLine
     return super.whereString(filter);
   }
 
-  delete(ids: [ string ]): Promise<void>  {
+  delete(ids: string[]): Promise<void>  {
     return super.delete(ids);
   }
 
@@ -55,6 +55,15 @@ export class ClaimLineItemRepository extends SalesforceBase<ISalesforceClaimLine
   }
 
   insert(lineItems: Partial<ISalesforceClaimLineItem>[]): Promise<string[]>  {
-    return super.insert(lineItems);
+    return new RecordTypeRepository().getAll()
+      .then(types => {
+        const type = types.find(x => x.Name === this.recordType && x.SobjectType === this.objectName);
+        if (!type) {
+          throw Error("Failed to find claim line item record type");
+        }
+        return type.Id;
+      })
+      .then(typeId => lineItems.map(item => ({ ...item, RecordTypeId: typeId })))
+      .then(itemsToInsert => super.insert(itemsToInsert));
   }
 }

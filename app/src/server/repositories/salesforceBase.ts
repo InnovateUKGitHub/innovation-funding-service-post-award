@@ -5,7 +5,7 @@ export default abstract class SalesforceBase<T> {
   private log = false;
 
   protected constructor(
-    private objectName: string,
+    protected objectName: string,
     private columns: string[]
   ) { }
 
@@ -105,7 +105,7 @@ export default abstract class SalesforceBase<T> {
     });
   }
 
-  protected async delete(ids: [string]): Promise<void> {
+  protected async delete(ids: string[]): Promise<void> {
     const conn = await salesforceConnection();
     return new Promise<void>((resolve, reject) => {
       conn.sobject(this.objectName).delete(ids, (err, res) => {
