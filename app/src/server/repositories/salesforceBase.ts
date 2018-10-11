@@ -1,7 +1,7 @@
 import salesforceConnection from "./salesforceConnection";
 import {SalesforceId, SuccessResult} from "jsforce";
 
-export type Update<T> = Partial<T> & {
+export type Updatable<T> = Partial<T> & {
   Id: string
 };
 
@@ -87,21 +87,21 @@ export default abstract class SalesforceBase<T> {
     }
   }
 
-  protected async insert(insert: Partial<T>): Promise<string>;
-  protected async insert(insert: Partial<T>[]): Promise<string[]>;
-  protected async insert(insert: Partial<T> | Partial<T>[]): Promise<string | string[]> {
+  protected async insert(inserts: Partial<T>): Promise<string>;
+  protected async insert(inserts: Partial<T>[]): Promise<string[]>;
+  protected async insert(inserts: Partial<T> | Partial<T>[]): Promise<string | string[]> {
     const conn = await salesforceConnection();
     return await conn.sobject(this.objectName)
-      .insert(insert).then(results => {
+      .insert(inserts).then(results => {
         const ids = (results as SuccessResult[]).map(r => r.id.toString());
-        return insert instanceof Array ? ids : ids[0];
+        return inserts instanceof Array ? ids : ids[0];
       });
   }
 
-  protected async update(update: Update<T>[] | Update<T>): Promise<boolean> {
+  protected async update(updates: Updatable<T>[] | Updatable<T>): Promise<boolean> {
     const conn = await salesforceConnection();
     return await conn.sobject(this.objectName)
-      .update(update)
+      .update(updates)
       .then(() => true);
   }
 

@@ -1,7 +1,7 @@
 import { TestRepository } from "./testRepository";
 import * as Repositories from "../../src/server/repositories";
 import { IRepositories } from "../../src/server/features/common/context";
-import {Update} from "../../src/server/repositories/salesforceBase";
+import {Updatable} from "../../src/server/repositories/salesforceBase";
 
 class ContactsTestRepository extends TestRepository<Repositories.ISalesforceContact> implements Repositories.IContactsRepository {
     getById(id: string) {
@@ -89,7 +89,7 @@ class ClaimLineItemsTestRepository extends TestRepository<Repositories.ISalesfor
         return super.getWhere(x => x.Acc_ProjectPeriodNumber__c === periodId && x.Acc_CostCategory__c === categoryId && x.Acc_ProjectParticipant__c === partnerId);
     }
     delete() { return super.delete(); }
-    update(update: Update<Repositories.ISalesforceClaimLineItem>) { return super.update(update); }
+    update(update: Updatable<Repositories.ISalesforceClaimLineItem>) { return super.update(update); }
     insert() { return super.insert(); }
 }
 

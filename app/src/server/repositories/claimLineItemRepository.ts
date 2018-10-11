@@ -1,4 +1,4 @@
-import SalesforceBase, {Update} from "./salesforceBase";
+import SalesforceBase, {Updatable} from "./salesforceBase";
 import {RecordTypeRepository} from "./recordTypeRepository";
 
 export interface ISalesforceClaimLineItem {
@@ -22,8 +22,8 @@ const fields = [
 
 export interface IClaimLineItemRepository {
   getAllForCategory(partnerId: string, categoryId: string, periodId: number): Promise<ISalesforceClaimLineItem[]>;
-  delete(ids: [ string ]): Promise<void>;
-  update(update: Update<ISalesforceClaimLineItem>[] | Update<ISalesforceClaimLineItem>): Promise<boolean>;
+  delete(ids: string[] | string): Promise<void>;
+  update(update: Updatable<ISalesforceClaimLineItem>[] | Updatable<ISalesforceClaimLineItem>): Promise<boolean>;
   insert(insert: Partial<ISalesforceClaimLineItem>[] | Partial<ISalesforceClaimLineItem>): Promise<string[]> | Promise<string>;
 }
 
@@ -50,7 +50,7 @@ export class ClaimLineItemRepository extends SalesforceBase<ISalesforceClaimLine
     return super.delete(ids);
   }
 
-  update(lineItems: (Update<ISalesforceClaimLineItem>)[] | Update<ISalesforceClaimLineItem>): Promise<boolean>  {
+  update(lineItems: (Updatable<ISalesforceClaimLineItem>)[] | Updatable<ISalesforceClaimLineItem>): Promise<boolean>  {
     return super.update(lineItems);
   }
 

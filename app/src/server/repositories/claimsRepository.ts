@@ -1,4 +1,4 @@
-import SalesforceBase, {Update} from "./salesforceBase";
+import SalesforceBase, {Updatable} from "./salesforceBase";
 
 export interface ISalesforceClaim {
   Id: string;
@@ -95,7 +95,7 @@ export class ClaimRepository extends SalesforceBase<ISalesforceClaim> implements
     });
   }
 
-  public update(updatedClaim: Update<ISalesforceClaim>) {
+  public update(updatedClaim: Updatable<ISalesforceClaim>) {
     return super.update(updatedClaim);
   }
 }
