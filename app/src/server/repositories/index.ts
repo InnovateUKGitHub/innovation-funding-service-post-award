@@ -9,3 +9,4 @@ export * from "./projectContactsRepository";
 export * from "./projectsRepository";
 export * from "./claimLineItemRepository";
 export * from "./claimTotalCostCategoryRepository";
+export * from "./recordTypeRepository";

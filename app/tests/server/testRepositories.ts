@@ -1,6 +1,7 @@
 import { TestRepository } from "./testRepository";
 import * as Repositories from "../../src/server/repositories";
 import { IRepositories } from "../../src/server/features/common/context";
+import {Updatable} from "../../src/server/repositories/salesforceBase";
 
 class ContactsTestRepository extends TestRepository<Repositories.ISalesforceContact> implements Repositories.IContactsRepository {
     getById(id: string) {
@@ -61,7 +62,7 @@ class ClaimsTestRepository extends TestRepository<Repositories.ISalesforceClaim>
 
     update(updatedClaim: Repositories.ISalesforceClaim){
         const index = super.Items.findIndex(x => x.Acc_ProjectParticipant__c === updatedClaim.Acc_ProjectParticipant__c && x.Acc_ProjectPeriodNumber__c == updatedClaim.Acc_ProjectPeriodNumber__c);
-        if(index >= 0){
+        if(index >= 0) {
             super.Items[index] = updatedClaim;
             return Promise.resolve(true);
         }
@@ -87,6 +88,9 @@ class ClaimLineItemsTestRepository extends TestRepository<Repositories.ISalesfor
     getAllForCategory(partnerId: string, categoryId: string, periodId: number)  {
         return super.getWhere(x => x.Acc_ProjectPeriodNumber__c === periodId && x.Acc_CostCategory__c === categoryId && x.Acc_ProjectParticipant__c === partnerId);
     }
+    delete() { return super.delete(); }
+    update(update: Updatable<Repositories.ISalesforceClaimLineItem>) { return super.update(update); }
+    insert() { return super.insert(); }
 }
 
 class ClaimTotalCostTestRepository extends TestRepository<Repositories.ISalesforceClaimTotalCostCategory> implements Repositories.IClaimTotalCostCategoryRepository{
