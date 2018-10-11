@@ -9,7 +9,7 @@ import * as Selectors from "../../redux/selectors";
 import { DateTime } from "luxon";
 import { IEditorStore } from "../../redux/reducers/editorsReducer";
 import { ClaimDtoValidator } from "../../validators/claimDtoValidator";
-import { ClaimDto } from "../../models";
+import { ClaimDto, ClaimDetailsSummaryDto } from "../../models";
 import { ClaimForecastRoute, ClaimsDashboardRoute } from ".";
 import { EditClaimLineItemsRoute } from "./editClaimLineItems";
 import { Result } from "../../validation/result";
@@ -26,13 +26,13 @@ interface Data {
     costCategories: Pending<Dtos.CostCategoryDto[]>;
     claim: Pending<Dtos.ClaimDto>;
     claimDetailsSummary: Pending<Dtos.ClaimDetailsSummaryDto[]>;
-    editor: IEditorStore<Dtos.ClaimDto, ClaimDtoValidator>;
+    editor: Pending<IEditorStore<Dtos.ClaimDto, ClaimDtoValidator>>;
 }
 
 interface Callbacks {
-    onChange: (partnerId: string, periodId: number, dto: ClaimDto) => void;
-    saveAndProgress: (dto: ClaimDto, projectId: string, partnerId: string, periodId: number) => void;
-    saveAndReturn: (dto: ClaimDto, projectId: string, partnerId: string, periodId: number) => void;
+    onChange: (partnerId: string, periodId: number, dto: ClaimDto, details: ClaimDetailsSummaryDto[], costCategories: Dtos.CostCategoryDto[]) => void;
+    saveAndProgress: (projectId: string, partnerId: string, periodId: number, dto: ClaimDto, details: ClaimDetailsSummaryDto[], costCategories: Dtos.CostCategoryDto[]) => void;
+    saveAndReturn: (projectId: string, partnerId: string, periodId: number, dto: ClaimDto, details: ClaimDetailsSummaryDto[], costCategories: Dtos.CostCategoryDto[]) => void;
 }
 
 interface CombinedData {
@@ -41,6 +41,7 @@ interface CombinedData {
     costCategories: Dtos.CostCategoryDto[];
     claim: Dtos.ClaimDto;
     claimDetails: Dtos.ClaimDetailsSummaryDto[];
+    editor: IEditorStore<Dtos.ClaimDto, ClaimDtoValidator>;
 }
 
 export class PrepareComponent extends ContainerBase<Params, Data, Callbacks> {
@@ -52,11 +53,12 @@ export class PrepareComponent extends ContainerBase<Params, Data, Callbacks> {
             this.props.costCategories,
             this.props.claim,
             this.props.claimDetailsSummary,
-            (project, partner, costCategories, claim, claimDetails) => ({ project, partner, costCategories, claim, claimDetails })
+            this.props.editor,
+            (project, partner, costCategories, claim, claimDetails, editor) => ({ project, partner, costCategories, claim, claimDetails, editor })
         );
 
         const Loader = ACC.TypedLoader<CombinedData>();
-        return <Loader pending={combined} render={(data) => this.renderContents(data, this.props.editor)} />;
+        return <Loader pending={combined} render={(data) => this.renderContents(data)} />;
     }
 
     private getClaimPeriodTitle(data: any) {
@@ -66,42 +68,46 @@ export class PrepareComponent extends ContainerBase<Params, Data, Callbacks> {
         return `${data.partner.name} claim for P${data.claim.periodId} ${DateTime.fromJSDate(data.claim.periodStartDate).toFormat("MMMM")} to ${DateTime.fromJSDate(data.claim.periodEndDate).toFormat("MMMM yyyy")}`;
     }
 
-    private renderContents(data: { project: Dtos.ProjectDto, partner: Dtos.PartnerDto, costCategories: Dtos.CostCategoryDto[], claim: Dtos.ClaimDto, claimDetails: Dtos.ClaimDetailsSummaryDto[] }, editor: IEditorStore<ClaimDto, ClaimDtoValidator>) {
+    private saveAndProgress(dto: ClaimDto, details: ClaimDetailsSummaryDto[], costCategories: Dtos.CostCategoryDto[]) {
+        this.props.saveAndProgress(this.props.projectId, this.props.partnerId, this.props.periodId, dto, details, costCategories);
+    };
+
+    private saveAndReturn(dto: ClaimDto, details: ClaimDetailsSummaryDto[], costCategories: Dtos.CostCategoryDto[]) {
+        this.props.saveAndReturn(this.props.projectId, this.props.partnerId, this.props.periodId, dto, details, costCategories);
+    };
+
+    private onChange(dto: ClaimDto, details: ClaimDetailsSummaryDto[], costCategories: Dtos.CostCategoryDto[]){
+        this.props.onChange(this.props.partnerId, this.props.periodId, dto, details, costCategories);
+    }
+
+    private renderContents(data: CombinedData) {
 
         const title = this.getClaimPeriodTitle(data);
         const Form = ACC.TypedForm<Dtos.ClaimDto>();
         const commentsLabel = "Additional information (optional)";
         const commentsHint = "These comments will be seen by your Monitoring Officer when they review your claim.";
 
-        const saveAndProgress = () => {
-            this.props.saveAndProgress(this.props.editor.data, this.props.projectId, this.props.partnerId, this.props.periodId);
-        };
-
-        const saveAndReturn = () => {
-            this.props.saveAndReturn(this.props.editor.data, this.props.projectId, this.props.partnerId, this.props.periodId);
-        };
-
         return (
             <ACC.Page>
                 <ACC.Section>
                     <ACC.BackLink route={routeConfig.claimsDashboard.getLink({ projectId: data.project.id, partnerId: data.partner.id })}>Claims dashboard</ACC.BackLink>
                 </ACC.Section>
+                <ACC.ValidationSummary validation={data.editor.validator} compressed={false} />
                 <ACC.Projects.Title pageTitle="Claim" project={data.project} />
                 <ACC.Claims.Navigation projectId={data.project.id} partnerId={data.partner.id} periodId={data.claim.periodId} currentRouteName={routeConfig.claimDetails.routeName} />
                 <ACC.Section title={title}>
-                    <ACC.ValidationMessage message={editor.validator.comments} />
                     {/* TODO: Fix error display */}
-                    {this.props.editor.error ? <ACC.ValidationMessage message={new Result(null, true, false, this.props.editor.error.details || this.props.editor.error, false)} /> : null}
-                    <ACC.Claims.ClaimTable {...data} getLink={costCategoryId => EditClaimLineItemsRoute.getLink({partnerId: this.props.partnerId, projectId: this.props.projectId, periodId: this.props.periodId, costCategoryId})} />
-                    <Form.Form data={editor.data} onChange={(dto) => this.props.onChange(this.props.partnerId, this.props.periodId, dto)} onSubmit={() => saveAndProgress()}>
+                    {data.editor.error ? <ACC.ValidationMessage message={new Result(null, true, false, data.editor.error.details || data.editor.error, false)} /> : null}
+                    <ACC.Claims.ClaimTable {...data} validation={data.editor.validator.claimDetails.results} getLink={costCategoryId => EditClaimLineItemsRoute.getLink({partnerId: this.props.partnerId, projectId: this.props.projectId, periodId: this.props.periodId, costCategoryId})} />
+                    <Form.Form data={data.editor.data} onChange={(dto) => this.onChange(dto, data.claimDetails, data.costCategories)} onSubmit={() => this.saveAndProgress(data.editor.data, data.claimDetails, data.costCategories)}>
                         <Form.Fieldset heading={() => commentsLabel} qa="additional-info-form" headingQa="additional-info-heading">
-                            <Form.MultilineString label="" hint={commentsHint} name="comments" value={m => m.comments} update={(m, v) => m.comments = v} validation={editor.validator.comments} qa="info-text-area"/>
+                            <Form.MultilineString label="" hint={commentsHint} name="comments" value={m => m.comments} update={(m, v) => m.comments = v} validation={data.editor.validator.comments} qa="info-text-area"/>
                         </Form.Fieldset>
                         <Form.Fieldset qa="review-forecasts-button">
-                            <Form.Submit >Review forecasts</Form.Submit>
+                            <Form.Submit>Review forecasts</Form.Submit>
                         </Form.Fieldset>
                         <Form.Fieldset qa="save-button">
-                            <Form.Button name="return" onClick={() => saveAndReturn()}>Save and return to claim dashboard</Form.Button>
+                            <Form.Button name="return" onClick={() => this.saveAndReturn(data.editor.data, data.claimDetails, data.costCategories)}>Save and return to claim dashboard</Form.Button>
                         </Form.Fieldset>
                     </Form.Form>
                 </ACC.Section>
@@ -109,22 +115,6 @@ export class PrepareComponent extends ContainerBase<Params, Data, Callbacks> {
         );
     }
 }
-
-const definition = ReduxContainer.for<Params, Data, Callbacks>(PrepareComponent);
-const getEditor = (editor: IEditorStore<Dtos.ClaimDto, ClaimDtoValidator>, original: Pending<Dtos.ClaimDto>) => {
-    if (editor) {
-        return editor;
-    }
-    return original.then(x => {
-        const clone = JSON.parse(JSON.stringify(x!)) as Dtos.ClaimDto;
-        const updatedClaimDto = { ...clone, status: "Draft" };
-        return {
-            data: updatedClaimDto,
-            validator: new ClaimDtoValidator(x!, false),
-            error: null
-        };
-    }).data!;
-};
 
 const progress = (dispatch: any, projectId: string, partnerId: string, periodId: number) => {
     dispatch(Actions.navigateTo(ClaimForecastRoute.getLink({ projectId, partnerId, periodId })));
@@ -134,19 +124,21 @@ const goBack = (dispatch: any, projectId: string, partnerId: string, periodId: n
     dispatch(Actions.navigateTo(ClaimsDashboardRoute.getLink({ projectId, partnerId })));
 };
 
+const definition = ReduxContainer.for<Params, Data, Callbacks>(PrepareComponent);
+
 export const PrepareClaim = definition.connect({
-  withData: (state, props) => ({
+  withData: (state, props) : Data => ({
     project: Selectors.getProject(props.projectId).getPending(state),
     partner: Selectors.getPartner(props.partnerId).getPending(state),
     costCategories: Selectors.getCostCategories().getPending(state),
     claim: Selectors.getClaim(props.partnerId, props.periodId).getPending(state),
     claimDetailsSummary: Selectors.findClaimDetailsSummaryByPartnerAndPeriod(props.partnerId, props.periodId).getPending(state),
-    editor: getEditor(state.editors.claim[props.partnerId + "_" + props.periodId], Pending.create(state.data.claim[props.partnerId + "_" + props.periodId]))
-  }),
+    editor: Selectors.editClaim(props.partnerId, props.periodId).get(state, x => { x.status = "Draft"; })
+    }),
   withCallbacks: (dispatch) => ({
-    onChange: (partnerId, periodId, dto) => dispatch(Actions.validateClaim(partnerId, periodId, dto)),
-    saveAndProgress: (dto, projectId, partnerId, periodId) => dispatch(Actions.saveClaim(partnerId, periodId, dto, () => progress(dispatch, projectId, partnerId, periodId))),
-    saveAndReturn: (dto, projectId, partnerId, periodId) => dispatch(Actions.saveClaim(partnerId, periodId, dto, () => goBack(dispatch, projectId, partnerId, periodId)))
+    onChange: (partnerId, periodId, dto, details, costCategories) => dispatch(Actions.validateClaim(partnerId, periodId, dto, details, costCategories)),
+    saveAndProgress: (projectId, partnerId, periodId, dto, details, costCategories) => dispatch(Actions.saveClaim(partnerId, periodId, dto, details, costCategories, () => progress(dispatch, projectId, partnerId, periodId))),
+    saveAndReturn: (projectId, partnerId, periodId, dto, details, costCategories) => dispatch(Actions.saveClaim(partnerId, periodId, dto, details, costCategories, () => goBack(dispatch, projectId, partnerId, periodId)))
   })
 });
 

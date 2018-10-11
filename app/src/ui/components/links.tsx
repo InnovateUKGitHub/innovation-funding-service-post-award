@@ -2,14 +2,15 @@ import React from "react";
 import { Link as RouterLink } from "react-router5";
 
 interface Props {
+  id?: string;
   route: ILinkInfo;
   className?: string;
   selected?: boolean;
 }
 
-// TODO stop first render reloading the page
 export const Link: React.SFC<Props> = (props) => (
   <RouterLink
+    id={props.id}
     routeName={props.route.routeName}
     routeParams={props.route.routeParams}
     className={`govuk-link ${props.className}`}

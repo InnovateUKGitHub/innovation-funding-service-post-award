@@ -123,10 +123,11 @@ const NumericField = <T extends {}>(props: ExternalFieldProps<T, number>) => {
 
 interface SubmitProps {
     qa?: string;
+    disabled?:boolean;
 }
 
 const SubmitComponent: React.SFC<SubmitProps> = (props) => {
-    return <button type="submit" className="govuk-button" onClick={(e) => handleSubmit(props, e)}>{props.children}</button>;
+    return <button type="submit" disabled={props.disabled} className="govuk-button" onClick={(e) => handleSubmit(props, e)}>{props.children}</button>;
 };
 
 interface ButtonProps {
