@@ -4,6 +4,7 @@ export * from "./claimFrequency";
 export * from "./contact";
 export * from "./costCategoryDto";
 export * from "./forecastDetailsDto";
+export * from "./golCostDto";
 export * from "./projectDto";
 export * from "./partnerDto";
 export * from "./claimDto";

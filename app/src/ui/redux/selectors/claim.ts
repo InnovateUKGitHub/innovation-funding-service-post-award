@@ -7,6 +7,7 @@ import { Results } from "../../validation/results";
 import { ClaimDtoValidator } from "../../validators/claimDtoValidator";
 import { findClaimDetailsSummaryByPartnerAndPeriod } from "./claimDetailsSummary";
 import { getCostCategories } from "./costCategories";
+
 // const claimStore = "claim";
 
 // const getClaims = (state: RootState): { [key: string]: IDataStore<ClaimDto> } => (getData(state)[claimStore] || {});
@@ -34,7 +35,10 @@ const createEditorDto = (partnerId: string, periodId: number, store: RootState) 
 };
 
 const createValidator = (partnerId: string, periodId: number, claim: ClaimDto, store: RootState) => {
-  const pendingDetails = findClaimDetailsSummaryByPartnerAndPeriod(partnerId, periodId).getPending(store);
+  let pendingDetails = findClaimDetailsSummaryByPartnerAndPeriod(partnerId, periodId).getPending(store);
+  if(!pendingDetails.data){
+    pendingDetails = new Pending(LoadingStatus.Done, []);
+  }
   const pendingCostCategories = getCostCategories().getPending(store);
   return pendingDetails.and(pendingCostCategories, (details, costCategories) => ({ details, costCategories }))
     .then(data => new ClaimDtoValidator(claim, data!.details, data!.costCategories, false));

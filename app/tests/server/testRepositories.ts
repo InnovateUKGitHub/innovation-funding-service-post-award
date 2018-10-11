@@ -1,6 +1,7 @@
 import { TestRepository } from "./testRepository";
 import * as Repositories from "../../src/server/repositories";
 import { IRepositories } from "../../src/server/features/common/context";
+import {Updatable} from "../../src/server/repositories/salesforceBase";
 
 class ContactsTestRepository extends TestRepository<Repositories.ISalesforceContact> implements Repositories.IContactsRepository {
     getById(id: string) {
@@ -61,7 +62,7 @@ class ClaimsTestRepository extends TestRepository<Repositories.ISalesforceClaim>
 
     update(updatedClaim: Repositories.ISalesforceClaim){
         const index = super.Items.findIndex(x => x.Acc_ProjectParticipant__c === updatedClaim.Acc_ProjectParticipant__c && x.Acc_ProjectPeriodNumber__c == updatedClaim.Acc_ProjectPeriodNumber__c);
-        if(index >= 0){
+        if(index >= 0) {
             super.Items[index] = updatedClaim;
             return Promise.resolve(true);
         }
@@ -87,6 +88,9 @@ class ClaimLineItemsTestRepository extends TestRepository<Repositories.ISalesfor
     getAllForCategory(partnerId: string, categoryId: string, periodId: number)  {
         return super.getWhere(x => x.Acc_ProjectPeriodNumber__c === periodId && x.Acc_CostCategory__c === categoryId && x.Acc_ProjectParticipant__c === partnerId);
     }
+    delete() { return super.delete(); }
+    update(update: Updatable<Repositories.ISalesforceClaimLineItem>) { return super.update(update); }
+    insert() { return super.insert(); }
 }
 
 class ClaimTotalCostTestRepository extends TestRepository<Repositories.ISalesforceClaimTotalCostCategory> implements Repositories.IClaimTotalCostCategoryRepository{
@@ -101,6 +105,12 @@ class ProfileDetailsTestRepository extends TestRepository<Repositories.ISalesfor
   }
 }
 
+class ProfileTotalCostCategoryTestRepository extends TestRepository<Repositories.ISalesforceProfileTotalCostCategory> implements Repositories.IProfileTotalCostCategoryRepository {
+  getAllByPartnerId(partnerId: string) {
+    return super.getWhere(x => x.Acc_ProjectParticipant__c === partnerId);
+  }
+}
+
 export interface ITestRepositories extends IRepositories {
     claims: ClaimsTestRepository;
     claimDetails: ClaimDetailsTestRepository;
@@ -108,6 +118,7 @@ export interface ITestRepositories extends IRepositories {
     costCategories: CostCategoriesTestRepository;
     contacts: ContactsTestRepository;
     profileDetails: ProfileDetailsTestRepository;
+    profileTotalCostCategory: ProfileTotalCostCategoryTestRepository;
     projects: ProjectsTestRepository;
     partners: PartnerTestRepository;
     projectContacts: ProjectContactTestRepository;
@@ -121,6 +132,7 @@ export const createTestRepositories = (): ITestRepositories => ({
     costCategories: new CostCategoriesTestRepository(),
     contacts: new ContactsTestRepository(),
     profileDetails: new ProfileDetailsTestRepository(),
+    profileTotalCostCategory: new ProfileTotalCostCategoryTestRepository(),
     projects: new ProjectsTestRepository(),
     partners: new PartnerTestRepository(),
     projectContacts: new ProjectContactTestRepository(),

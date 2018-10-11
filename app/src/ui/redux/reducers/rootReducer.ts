@@ -1,6 +1,6 @@
 import { combineReducers } from "redux";
 import { router5Reducer } from "redux-router5";
-import { dataReducer } from "./common";
+import { dataReducer } from "./dataReducer";
 import { loadStatusReducer } from "./loadStatusReducer";
 import { editorReducer } from "./editorsReducer";
 

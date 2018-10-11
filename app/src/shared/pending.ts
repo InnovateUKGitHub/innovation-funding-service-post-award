@@ -86,6 +86,9 @@ export class Pending<T> {
     static combine<T1, T2, T3, T4, TR>(pending1: Pending<T1>, pending2: Pending<T2>, pending3: Pending<T3>, pending4: Pending<T4>, combineData: (pending1: T1, pending2: T2, pending3: T3, pending4: T4) => TR): Pending<TR>;
     static combine<T1, T2, T3, T4, T5, TR>(pending1: Pending<T1>, pending2: Pending<T2>, pending3: Pending<T3>, pending4: Pending<T4>, pending5: Pending<T5>, combineData: (pending1: T1, pending2: T2, pending3: T3, pending4: T4, pending5: T5) => TR): Pending<TR>;
     static combine<T1, T2, T3, T4, T5, T6, TR>(pending1: Pending<T1>, pending2: Pending<T2>, pending3: Pending<T3>, pending4: Pending<T4>, pending5: Pending<T5>, pending6: Pending<T6>, combineData: (pending1: T1, pending2: T2, pending3: T3, pending4: T4, pending5: T5, pending6: T6) => TR): Pending<TR>;
+    static combine<T1, T2, T3, T4, T5, T6, T7, TR>(pending1: Pending<T1>, pending2: Pending<T2>, pending3: Pending<T3>, pending4: Pending<T4>, pending5: Pending<T5>, pending6: Pending<T6>, pending7: Pending<T7>, combineData: (pending1: T1, pending2: T2, pending3: T3, pending4: T4, pending5: T5, pending6: T6, pending7: T7) => TR): Pending<TR>;
+    static combine<T1, T2, T3, T4, T5, T6, T7, T8, TR>(pending1: Pending<T1>, pending2: Pending<T2>, pending3: Pending<T3>, pending4: Pending<T4>, pending5: Pending<T5>, pending6: Pending<T6>, pending7: Pending<T7>, pending8: Pending<T8>, combineData: (pending1: T1, pending2: T2, pending3: T3, pending4: T4, pending5: T5, pending6: T6, pending7: T7, pending8: T8) => TR): Pending<TR>;
+
     static combine(...pendingsToCombine: any[]) {
         const pendingsCount = pendingsToCombine.length - 1;
         const pendings: any[] = [];

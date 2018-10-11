@@ -13,7 +13,7 @@ export class ClaimDtoValidator extends Results<ClaimDto>  {
 
     public claimDetails = Validation.optionalChild(this, this.details, (item) => new ClaimDetailsValidator(item, this.costCategories.find(x => x.id === item.costCategoryId), this.showValidationErrors), "Your costs for this period are more than your remaining grant offer letter costs in at least one cost category. You must remove some costs before you can submit this claim.");
 
-    public totalCost = Validation.isFalse(this, this.model.totalCost > this.model.forecastCost, "Total cost is bigger than the forcast cost");
+    public totalCost = Validation.valid(this);// Validation.isFalse(this, this.model.totalCost > this.model.forecastCost, "Total cost is bigger than the forcast cost");
 }
 
 export class ClaimDetailsValidator extends Results<ClaimDetailsSummaryDto> {
