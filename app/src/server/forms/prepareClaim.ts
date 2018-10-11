@@ -47,7 +47,7 @@ const PrepareClaimForm = async (req: express.Request, res: express.Response) => 
             return;
         }
         else {
-            serverRender(req, res, { key, store: "claim", dto: claim, result: new ClaimDtoValidator(claim, true), error: e });
+            serverRender(req, res, { key, store: "claim", dto: claim, result: new ClaimDtoValidator(claim, [], [], false), error: e });
             return;
         }
     }
@@ -79,7 +79,7 @@ const ForcastClaimForm = async (req: express.Request, res: express.Response) => 
             return;
         }
         else {
-            serverRender(req, res, { key, store: "claim", dto: claim, result: new ClaimDtoValidator(claim, true), error: e });
+            serverRender(req, res, { key, store: "claim", dto: claim, result: new ClaimDtoValidator(claim, [], [], false), error: e });
             return;
         }
     }
