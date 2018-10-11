@@ -11,6 +11,6 @@ export class UpdateClaimCommand implements ICommand<boolean> {
       Acc_ClaimStatus__c: this.claimDto.status,
       Acc_LineItemDescription__c: this.claimDto.comments,
     };
-    return await context.repositories.claims.updateOne(update);
+    return await context.repositories.claims.update(update);
   }
 }

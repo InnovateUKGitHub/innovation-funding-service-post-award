@@ -1,3 +1,5 @@
+import {Update} from "../../src/server/repositories/salesforceBase";
+
 export abstract class TestRepository<T> {
     Items: T[] = [];
 
@@ -32,7 +34,7 @@ export abstract class TestRepository<T> {
         return Promise.resolve([ "a", "b" ]);
     }
 
-    protected update(): Promise<void> {
-        return Promise.resolve();
+    protected update(update: Update<T>): Promise<boolean> {
+        return Promise.resolve(true);
     }
 }

@@ -1,6 +1,10 @@
 import salesforceConnection from "./salesforceConnection";
 import {SalesforceId, SuccessResult} from "jsforce";
 
+export type Update<T> = Partial<T> & {
+  Id: string
+};
+
 export default abstract class SalesforceBase<T> {
   private log = false;
 
@@ -83,29 +87,25 @@ export default abstract class SalesforceBase<T> {
     }
   }
 
-  protected async updateOne(updatedObj: Partial<T> & { Id: string }): Promise<boolean> {
+  protected async insert(insert: Partial<T>): Promise<string>;
+  protected async insert(insert: Partial<T>[]): Promise<string[]>;
+  protected async insert(insert: Partial<T> | Partial<T>[]): Promise<string | string[]> {
     const conn = await salesforceConnection();
     return await conn.sobject(this.objectName)
-      .update(updatedObj)
-      .then((res) => res.success);
-  }
-
-  protected async insert(insertList: Partial<T>[]): Promise<string[]> {
-    const conn = await salesforceConnection();
-    return await conn.sobject(this.objectName)
-      .insert(insertList).then(results => {
-        return (results as SuccessResult[]).map(r => r.id.toString());
+      .insert(insert).then(results => {
+        const ids = (results as SuccessResult[]).map(r => r.id.toString());
+        return insert instanceof Array ? ids : ids[0];
       });
   }
 
-  protected async update(updateList: Partial<T>[]) {
+  protected async update(update: Update<T>[] | Update<T>): Promise<boolean> {
     const conn = await salesforceConnection();
-    await conn.sobject(this.objectName).update(updateList).then(res => {
-      return res.success;
-    });
+    return await conn.sobject(this.objectName)
+      .update(update)
+      .then(() => true);
   }
 
-  protected async delete(ids: string[]): Promise<void> {
+  protected async delete(ids: string[] | string): Promise<void> {
     const conn = await salesforceConnection();
     return new Promise<void>((resolve, reject) => {
       conn.sobject(this.objectName).delete(ids, (err, res) => {
