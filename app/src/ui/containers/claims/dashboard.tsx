@@ -97,7 +97,7 @@ const CurrentClaimSummary: React.SFC<CurrentClaimSummaryProps> = (props) => {
   );
   const ClaimTable = Table.forData([claim]);
   return (
-    <Section title={sectionTitle}>
+    <Section qa="current-claim-summary-table-section" title={sectionTitle}>
       <ClaimTable.Table qa="current-claim-summary-table">
         <ClaimTable.Currency header="Forecast costs for period" qa="forecast-cost" value={(x) => x.forecastCost} />
         <ClaimTable.Currency header="Actual costs for period" qa="actual-cost" value={(x) => x.totalCost} />
@@ -124,7 +124,7 @@ const PastClaimsSummary: React.SFC<PastClaimsSummaryProps> = ({ claims, projectI
   }
   const ClaimTable = Table.forData(claims);
   return (
-    <Section title="Previous Claims">
+    <Section qa="previous-claims-summary-table-section" title="Previous Claims">
       <ClaimTable.Table qa="previous-claims-summary-table">
         <ClaimTable.Custom
           header="Period"

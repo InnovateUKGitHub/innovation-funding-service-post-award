@@ -55,17 +55,17 @@ export class TableColumn<T> extends React.Component<InternalColumnProps<T>> {
 
   renderHeader(column: number) {
     const className = classNames("govuk-table__header", this.props.classSuffix ? "govuk-table__header--" + this.props.classSuffix : "");
-    return <th className={className} scope="col" key={column}>{this.props.header}</th>;
+    return <th className={className} scope="col" data-qa={`header-${this.props.qa}`} key={column}>{this.props.header}</th>;
   }
 
   renderFooter(column: number) {
     const className = classNames("govuk-table__header", this.props.classSuffix ? "govuk-table__header--" + this.props.classSuffix : "");
-    return <td className={className} key={column}>{this.props.footer}</td>;
+    return <td className={className} data-qa={`footer-${this.props.qa}`} key={column}>{this.props.footer}</td>;
   }
 
   renderCell(data: T, column: number, row: number) {
     const className = classNames("govuk-table__cell", this.props.classSuffix ? "govuk-table__cell--" + this.props.classSuffix : "", this.props.cellClassName && this.props.cellClassName(data, { column, row }));
-    return <td className={className} key={column}>{this.props.renderCell(data, { column, row })}</td>;
+    return <td className={className} data-qa={`cell-${this.props.qa}-col${column}-row${row}`} key={column}>{this.props.renderCell(data, { column, row })}</td>;
   }
 
   renderCol(column: number) {
