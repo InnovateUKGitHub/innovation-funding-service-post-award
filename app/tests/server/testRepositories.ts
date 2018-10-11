@@ -103,6 +103,10 @@ class ProfileDetailsTestRepository extends TestRepository<Repositories.ISalesfor
   getAllByPartnerWithPeriodGt(partnerId: string, periodId: number) {
     return super.getWhere(x => x.Acc_ProjectParticipant__c === partnerId && x.Acc_ProjectPeriodNumber__c > periodId);
   }
+
+  getById(partnerId: string, periodId: number, costCategoryId: string) {
+    return super.getWhere(x => x.Acc_ProjectParticipant__c === partnerId && x.Acc_ProjectPeriodNumber__c === periodId && x.Acc_CostCategory__c === costCategoryId);
+  }
 }
 
 class ProfileTotalCostCategoryTestRepository extends TestRepository<Repositories.ISalesforceProfileTotalCostCategory> implements Repositories.IProfileTotalCostCategoryRepository {
