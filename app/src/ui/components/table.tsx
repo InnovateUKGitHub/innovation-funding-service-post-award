@@ -129,7 +129,7 @@ const TableComponent2 = <T extends {}>(props: TableProps<T> & { data: T[]; valid
 };
 
 const TableComponent = <T extends {}>(data: T[]) => (props: TableProps<T>) => {
-  return <TableComponent2 data={data} {...props} />;
+  return <TableComponent2 {...props} data={data} />;
 };
 
 const CustomColumn = <T extends {}>(props: ExternalColumnProps<T, React.ReactNode> & { classSuffix?: "numeric" }) => {

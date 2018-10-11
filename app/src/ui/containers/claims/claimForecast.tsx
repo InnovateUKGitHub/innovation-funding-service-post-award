@@ -9,8 +9,9 @@ import {routeConfig} from "../../routing";
 import {IEditorStore} from "../../redux/reducers/editorsReducer";
 import {ClaimDtoValidator} from "../../validators/claimDtoValidator";
 import {ClaimsDashboardRoute} from "./dashboard";
-import {Currency} from "../../components/renderers";
-import {ClaimDto} from "../../models";
+import {Currency, Percentage} from "../../components/renderers";
+import {ClaimDto, ClaimFrequency, ProjectDto} from "../../models";
+import { DateTime, Interval } from "luxon";
 
 interface Params {
   projectId: string;
@@ -66,7 +67,7 @@ export class ClaimForecastComponent extends ContainerBase<Params, Data, Callback
     );
 
     const Loader = ACC.TypedLoader<CombinedData>();
-    return <Loader pending={combined} render={(data) => this.renderContents(data)} />;
+    return <Loader pending={combined} render={data => this.renderContents(data)} />;
   }
 
   private saveAndReturn() {
@@ -74,9 +75,9 @@ export class ClaimForecastComponent extends ContainerBase<Params, Data, Callback
   }
 
   private parseClaimData(data: CombinedData) {
-    const tabular: TableRow[] = [];
+    const tableRows: TableRow[] = [];
 
-    data.costCategories.forEach(category => {
+    data.costCategories.filter(x => x.organistionType === "Industrial").forEach(category => {
       const currentPeriod = data.claim.periodId;
       const row: TableRow = {
         categoryName: category.name,
@@ -106,22 +107,46 @@ export class ClaimForecastComponent extends ContainerBase<Params, Data, Callback
 
       const gol = data.golCosts.find(x => x.costCategoryId === category.id);
       row.golCosts = !!gol ? gol.value : 0;
-      row.difference = Math.ceil(((row.golCosts - row.total) / row.golCosts) * 100);
+      row.difference = this.calculateDifference(row.golCosts, row.total);
 
-      tabular.push(row);
+      tableRows.push(row);
     });
 
-    return tabular;
+    return tableRows;
+  }
+
+  calculateDifference(a: number, b: number) {
+    return Math.ceil(((a - b) / Math.max(1, a)) * 100);
+  }
+
+  calculateClaimPeriods(project: ProjectDto) {
+    const frequency = project.claimFrequency === ClaimFrequency.Quarterly ? 3 : 1;
+    const start     = DateTime.fromJSDate(project.startDate);
+    const end       = DateTime.fromJSDate(project.endDate);
+    const duration  = Interval.fromDateTimes(start, end);
+    const count     = duration.count("months");
+    return duration.divideEqually(Math.ceil(count / frequency));
+  }
+
+  periodHeader(intervals: Interval[], index: string) {
+    const period = intervals[parseInt(index, 10) - 1];
+    const words  = [period.start.monthShort, "to", period.end.monthShort, period.end.year];
+
+    if(period.start.year !== period.end.year) {
+      words.splice(1, 0, period.start.year);
+    }
+
+    return words.join(" ");
   }
 
   public renderContents(data: CombinedData) {
-    const project = data.project;
-    const partner = data.partner;
-    const parsed  = this.parseClaimData(data);
-    const periods = Object.keys(parsed[0].periods);
-    const totals  = periods.map(p => parsed.reduce((total, item) => total + item.periods[p], 0));
-    const Table   = ACC.Table.forData(parsed);
-    const Form    = ACC.TypedForm<Dtos.ClaimDto>();
+    const project   = data.project;
+    const partner   = data.partner;
+    const parsed    = this.parseClaimData(data);
+    const Table     = ACC.Table.forData(parsed);
+    const Form      = ACC.TypedForm<Dtos.ClaimDto>();
+    const intervals = this.calculateClaimPeriods(project);
+    const periods   = Object.keys(parsed[0].periods);
 
     return (
       <ACC.Page>
@@ -134,10 +159,10 @@ export class ClaimForecastComponent extends ContainerBase<Params, Data, Callback
             <Table.Table
               qa="cost-category-table"
               headers={this.renderTableHeaders(periods, data.claim)}
-              footers={this.renderTableFooters(totals)}
+              footers={this.renderTableFooters(periods, parsed)}
             >
               <Table.String header="Month" value={x => x.categoryName} qa="category-name" />
-              {periods.map(p => <Table.Currency key={p} header={""} value={x => x.periods[p]} qa="category-period" />)}
+              {periods.map(p => <Table.Currency key={p} header={this.periodHeader(intervals, p)} value={x => x.periods[p]} qa="category-period" />)}
               <Table.Currency header="" value={x => x.total} qa="category-total" />
               <Table.Currency header="" value={x => x.golCosts} qa="category-gol-costs" />
               <Table.Percentage header="" value={x => x.difference} qa="category-difference" />
@@ -176,19 +201,23 @@ export class ClaimForecastComponent extends ContainerBase<Params, Data, Callback
     )];
   }
 
-  renderTableFooters(totals: number[]) {
-    return [this.renderTableFooterRow(1, "Total", totals.map(this.renderTableFooterCell))];
+  renderTableFooters(periods: string[], parsed: TableRow[]) {
+    const cells     = [];
+    const totals    = periods.map(p => parsed.reduce((total, item) => total + item.periods[p], 0));
+    const costTotal = parsed.reduce((total, item) => total + item.total, 0);
+    const golTotal  = parsed.reduce((total, item) => total + item.golCosts, 0);
+    totals.push(costTotal);
+    totals.push(golTotal);
+
+    cells.push(<th key="th" className="govuk-table__cell govuk-!-font-weight-bold">Total</th>);
+    cells.push(totals.map(this.renderTableFooterCell));
+    cells.push(<td key="total_diff" className="govuk-table__cell govuk-table__cell--numeric"><Percentage className="govuk-!-font-weight-bold" value={this.calculateDifference(golTotal, costTotal)} /></td>);
+
+    return [<tr key="footer1" className="govuk-table__row">{cells}</tr>];
   }
 
-  renderTableFooterRow = (key: number, title: string, value: React.ReactNode) => (
-    <tr key={key} className="govuk-table__row">
-      <th className="govuk-table__cell govuk-!-font-weight-bold">{title}</th>
-      {value}
-    </tr>
-  )
-
-  renderTableFooterCell = (total: number) => (
-    <td className="govuk-table__cell govuk-table__cell--numeric">
+  renderTableFooterCell = (total: number, key: number) => (
+    <td key={key} className="govuk-table__cell govuk-table__cell--numeric">
       <Currency className="govuk-!-font-weight-bold" value={total} />
     </td>
   )
@@ -220,15 +249,15 @@ export const ForecastClaim = definition.connect({
   withData: (state, props) => {
     const claimSelector = Selectors.getClaim(props.partnerId, props.periodId);
     return {
-      project: Selectors.getProject(props.projectId).getPending(state),
       claim: claimSelector.getPending(state),
+      project: Selectors.getProject(props.projectId).getPending(state),
       partner: Selectors.getPartner(props.partnerId).getPending(state),
       editor: getEditor(state.editors.claim[claimSelector.key], claimSelector.getPending(state)),
 
-      claimDetails: Pending.create(state.data.claimDetails[props.partnerId]),
-      forecastDetails: Pending.create(state.data.forecastDetails[props.partnerId + "_" + props.periodId]),
-      golCosts: Pending.create(state.data.forecastGolCosts[props.partnerId]),
-      costCategories: Pending.create(state.data.costCategories.all),
+      claimDetails: Selectors.findClaimDetailsByPartner(props.partnerId).getPending(state),
+      forecastDetails: Selectors.findForecastDetailsByPartner(props.partnerId, props.periodId).getPending(state),
+      golCosts: Selectors.findGolCostsByPartner(props.partnerId).getPending(state),
+      costCategories: Selectors.getCostCategories().getPending(state),
     };
   },
   withCallbacks: (dispatch) => ({

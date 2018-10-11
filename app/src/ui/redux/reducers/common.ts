@@ -4,7 +4,8 @@ import { combineReducers } from "redux";
 import { ActionTransitionStart } from "redux-router5";
 import { LoadingStatus } from "../../../shared/pending";
 
-export type DataStores = keyof ReturnType<typeof dataReducer>;
+export type DataState = ReturnType<typeof dataReducer>;
+export type DataStores = keyof DataState;
 
 export interface IDataStore<T> {
   status: LoadingStatus;

@@ -12,8 +12,8 @@ class Controller extends ControllerBase<GOLCostDto> implements IForecastGolCosts
     super("forecasts-gol-costs");
 
     this.getItems(
-      "/:partnerId",
-      (p, q) => ({ partnerId: p.partnerId }),
+      "/",
+      (p, q) => ({ partnerId: q.partnerId }),
       (p) => this.getAllByPartnerId(p.partnerId)
     );
   }

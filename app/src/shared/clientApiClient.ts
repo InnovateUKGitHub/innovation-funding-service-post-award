@@ -28,7 +28,7 @@ const clientApi: IApiClient = {
     getAllByPartnerId: (partnerId: string, periodId: number) => ajaxJson(`/api/forecast-details/?partnerId=${partnerId}&periodId=${periodId}`)
   },
   forecastGolCosts: {
-    getAllByPartnerId: (partnerId: string) => ajaxJson(`/api/forecast-gol-costs/${partnerId}`)
+    getAllByPartnerId: (partnerId: string) => ajaxJson(`/api/forecast-gol-costs/?partnerId=${partnerId}`)
   },
   projects: {
     get: (id: string) => ajaxJson(`/api/projects/${id}`),
