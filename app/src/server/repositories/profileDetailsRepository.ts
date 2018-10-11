@@ -28,7 +28,7 @@ export class ProfileDetailsRepository extends SalesforceBase<ISalesforceProfileD
   }
 
   public async getAllByPartnerWithPeriodGt(partnerId: string, periodId: number): Promise<ISalesforceProfileDetails[]> {
-    // const filter = `Acc_ProjectParticipant__c = '${partnerId}' AND RecordType.Name = '${this.recordType}' AND Acc_ProjectPeriodNumber__c > ${periodId}`;
+    // const filter = `Acc_ProjectParticipant__c = '${partnerId}' AND RecordType.Name = '${this.recordType}' AND Acc_ProjectPeriodNumber__c >= ${periodId}`;
     // return await super.whereString(filter);
 
     // TODO - remove faker

@@ -26,6 +26,7 @@
     "no-empty-interface": false,
     "max-classes-per-file": false,
     "variable-name": [true, "ban-keywords", "check-format", "allow-leading-underscore", "allow-pascal-case"],
+    "parameters-max-number": [true, 10],
 
     // react styling
     "jsx-curly-spacing": true,

@@ -38,10 +38,11 @@ interface ExternalColumnProps<T, TResult> {
 type TableChild<T> = React.ReactElement<ExternalColumnProps<T, {}>>;
 
 interface TableProps<T> {
-  children: TableChild<T> | TableChild<T>[];
+  children: TableChild<T> | (TableChild<T> | TableChild<T>[])[];
   className?: string;
   qa: string;
   footers?: JSX.Element[];
+  headers?: JSX.Element[];
 }
 
 export class TableColumn<T> extends React.Component<InternalColumnProps<T>> {
@@ -96,6 +97,7 @@ export class TableColumn<T> extends React.Component<InternalColumnProps<T>> {
 
 const TableComponent2 = <T extends {}>(props: TableProps<T> & { data: T[]; validationResult?: NestedResult<Results<{}>>; }) => {
   // loop through the colums cloning them and assigning the props required
+  const customHeaders = props.headers && props.headers.length ? props.headers : null;
   const headers = React.Children.map(props.children, (column, columnIndex) => React.cloneElement(column as React.ReactElement<any>, { mode: "header", columnIndex }));
   const cols = React.Children.map(props.children, (column, columnIndex) => React.cloneElement(column as React.ReactElement<any>, { mode: "col", columnIndex }));
   const contents = props.data.map((dataItem, rowIndex) => React.Children.map(props.children, (column, columnIndex) => React.cloneElement(column as React.ReactElement<any>, { mode: "cell", rowIndex, columnIndex, dataItem, validation: props.validationResult && props.validationResult.results && props.validationResult.results[rowIndex]  })));
@@ -110,6 +112,7 @@ const TableComponent2 = <T extends {}>(props: TableProps<T> & { data: T[]; valid
           {cols}
         </colgroup>
         <thead className="govuk-table__head">
+          {customHeaders}
           <tr className="govuk-table__row">
             {headers}
           </tr>
@@ -126,7 +129,7 @@ const TableComponent2 = <T extends {}>(props: TableProps<T> & { data: T[]; valid
 };
 
 const TableComponent = <T extends {}>(data: T[]) => (props: TableProps<T>) => {
-  return <TableComponent2 data={data} {...props} />;
+  return <TableComponent2 {...props} data={data} />;
 };
 
 const CustomColumn = <T extends {}>(props: ExternalColumnProps<T, React.ReactNode> & { classSuffix?: "numeric" }) => {

@@ -162,7 +162,7 @@ export class TestData {
           Acc_PeriodCostCategoryTotal__c: 1000
         };
 
-        if(!!update){
+        if(!!update) {
           update(newItem);
         }
 
@@ -171,4 +171,28 @@ export class TestData {
         return newItem;
     }
 
+    public createProfileTotalCostCategory(
+      costCategory?: Repositories.ISalesforceCostCategory,
+      partner?: Repositories.ISalesforcePartner,
+      golCost?: number,
+      update?: (item: Repositories.ISalesforceProfileTotalCostCategory) => void
+    ): Repositories.ISalesforceProfileTotalCostCategory {
+      costCategory = costCategory || this.createCostCategory();
+      partner      = partner || this.createPartner();
+      golCost      = golCost || 100;
+
+      const newItem: Repositories.ISalesforceProfileTotalCostCategory = {
+        Acc_CostCategory__c: costCategory.Id,
+        Acc_ProjectParticipant__c: partner.Id,
+        Acc_CostCategoryGOLCost__c: golCost,
+      };
+
+      if(!!update) {
+        update(newItem);
+      }
+
+      this.repositories.profileTotalCostCategory.Items.push(newItem);
+
+      return newItem;
+    }
 }

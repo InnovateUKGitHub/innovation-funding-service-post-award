@@ -105,6 +105,12 @@ class ProfileDetailsTestRepository extends TestRepository<Repositories.ISalesfor
   }
 }
 
+class ProfileTotalCostCategoryTestRepository extends TestRepository<Repositories.ISalesforceProfileTotalCostCategory> implements Repositories.IProfileTotalCostCategoryRepository {
+  getAllByPartnerId(partnerId: string) {
+    return super.getWhere(x => x.Acc_ProjectParticipant__c === partnerId);
+  }
+}
+
 export interface ITestRepositories extends IRepositories {
     claims: ClaimsTestRepository;
     claimDetails: ClaimDetailsTestRepository;
@@ -112,6 +118,7 @@ export interface ITestRepositories extends IRepositories {
     costCategories: CostCategoriesTestRepository;
     contacts: ContactsTestRepository;
     profileDetails: ProfileDetailsTestRepository;
+    profileTotalCostCategory: ProfileTotalCostCategoryTestRepository;
     projects: ProjectsTestRepository;
     partners: PartnerTestRepository;
     projectContacts: ProjectContactTestRepository;
@@ -125,6 +132,7 @@ export const createTestRepositories = (): ITestRepositories => ({
     costCategories: new CostCategoriesTestRepository(),
     contacts: new ContactsTestRepository(),
     profileDetails: new ProfileDetailsTestRepository(),
+    profileTotalCostCategory: new ProfileTotalCostCategoryTestRepository(),
     projects: new ProjectsTestRepository(),
     partners: new PartnerTestRepository(),
     projectContacts: new ProjectContactTestRepository(),
