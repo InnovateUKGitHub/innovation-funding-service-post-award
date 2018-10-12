@@ -1,6 +1,7 @@
 import * as Renderers from "./renderers";
 import * as Projects from "./projects";
 import * as Claims from "./claims";
+import * as Inputs from "./inputs";
 
 export * from "./details";
 export * from "./form";
@@ -12,6 +13,8 @@ export * from "./projectMember";
 export * from "./table";
 export * from "./loading";
 export * from "./partnersAndFinanceContacts";
+export * from "./validationError";
 export * from "./validationMessage";
+export * from "./validationSummary";
 
-export { Renderers, Projects, Claims };
+export { Renderers, Projects, Claims, Inputs };

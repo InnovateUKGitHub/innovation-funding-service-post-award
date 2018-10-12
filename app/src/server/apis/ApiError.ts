@@ -9,5 +9,5 @@ export interface IApiError {
 }
 
 export class ApiError implements IApiError {
-  constructor(public errorCode: number, public message: string) {}
+  constructor(public errorCode: ErrorCode, public message: string, public isApiError = true) {}
 }
