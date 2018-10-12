@@ -8,7 +8,7 @@ class ContactsTestRepository extends TestRepository<Repositories.ISalesforceCont
         return super.getOne(x => x.Id == id);
     }
 
-    getAll(){
+    getAll() {
         return super.getAll();
     }
 }
@@ -102,6 +102,12 @@ class ClaimTotalCostTestRepository extends TestRepository<Repositories.ISalesfor
 class ProfileDetailsTestRepository extends TestRepository<Repositories.ISalesforceProfileDetails> implements Repositories.IProfileDetailsRepository {
   getAllByPartnerWithPeriodGt(partnerId: string, periodId: number) {
     return super.getWhere(x => x.Acc_ProjectParticipant__c === partnerId && x.Acc_ProjectPeriodNumber__c > periodId);
+  }
+
+  getById(partnerId: string, periodId: number, costCategoryId: string) {
+    return super
+      .getWhere(x => x.Acc_ProjectParticipant__c === partnerId && x.Acc_ProjectPeriodNumber__c === periodId && x.Acc_CostCategory__c === costCategoryId)
+      .then(x => x[0]);
   }
 }
 
