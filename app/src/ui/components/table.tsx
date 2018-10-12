@@ -83,7 +83,7 @@ export class TableColumn<T> extends React.Component<InternalColumnProps<T>> {
     if(rowHasError) {
       style.verticalAlign = "bottom";
     }
-    return <td className={className} key={column}>{this.props.renderCell(data, { column, row })}</td>;
+    return <td className={className} style={style} key={column}>{this.props.renderCell(data, { column, row })}</td>;
   }
 
   renderCol(column: number) {
