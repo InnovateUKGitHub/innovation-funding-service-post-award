@@ -10,7 +10,6 @@ export class GetForecastDetail implements IQuery<ForecastDetailsDTO> {
 
   public async Run(context: IContext) {
     const result = await context.repositories.profileDetails.getById(this.partnerId, this.periodId, this.costCategoryId);
-    console.log('result', result);
     return result && mapForecastDetail(context)(result);
   }
 }
