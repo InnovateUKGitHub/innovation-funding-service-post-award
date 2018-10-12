@@ -2,7 +2,7 @@ import { ControllerBase } from "./controllerBase";
 import { ForecastDetailsDTO } from "../../ui/models";
 import { GetAllForecastsForPartnerQuery } from "../features/claims/getAllForecastsForPartnerQuery";
 import contextProvider from "../features/common/contextProvider";
-import {GetProfileDetail} from "../features/forecasts/getProfileDetailQuery";
+import {GetForecastDetail} from "../features/forecasts/getForecastDetailQuery";
 
 export interface IForecastDetailsApi {
   getAllByPartnerId: (partnerId: string, periodId: number) => Promise<ForecastDetailsDTO[]>;
@@ -33,7 +33,7 @@ class Controller extends ControllerBase<ForecastDetailsDTO> implements IForecast
   }
 
   public async get(partnerId: string, periodId: number, costCategoryId: string) {
-    const query = new GetProfileDetail(partnerId, periodId, costCategoryId);
+    const query = new GetForecastDetail(partnerId, periodId, costCategoryId);
     return await contextProvider.start().runQuery(query);
   }
 }
