@@ -161,7 +161,7 @@ export class TestData {
           Acc_CostCategory__c: costCategory.Id,
           Acc_ProjectParticipant__c: partner.Id,
           Acc_ProjectPeriodNumber__c: periodId,
-          Acc_PeriodCostCategoryTotal__c: 1000,
+          Acc_LatestForecastCost__c: 1000,
           Acc_ProjectPeriodStartDate__c: "2018-01-02",
           Acc_ProjectPeriodEndDate__c: "2018-03-04",
         };

@@ -57,7 +57,7 @@ export abstract class ControllerBase<T> {
       const p = getParams(req.params || {}, req.query || {}, req.body || {});
       run(p)
         .then(result => {
-          if (result === null && allowNulls === false) {
+          if ((result === null || result === undefined) && allowNulls === false) {
             return resp.status(404).send();
           }
           resp.status(successStatus).send(result);
