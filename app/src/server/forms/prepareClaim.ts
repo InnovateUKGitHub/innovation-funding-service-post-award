@@ -6,7 +6,7 @@ import { ClaimForecastRoute, ClaimsDashboardRoute, PrepareClaimRoute, } from "..
 import { configureRouter } from "../../ui/routing/configureRouter";
 import { serverRender } from "../serverRender";
 import { ClaimDtoValidator } from "../../ui/validators/claimDtoValidator";
-import { editClaim } from "../../ui/redux/selectors";
+import { getClaimEditor } from "../../ui/redux/selectors";
 
 export const formRouter = express.Router();
 
@@ -42,7 +42,7 @@ const PrepareClaimForm = async (req: express.Request, res: express.Response) => 
         return;
     }
     catch (e) {
-        const selector = editClaim(params.partnerId, params.periodId);
+        const selector = getClaimEditor(params.partnerId, params.periodId);
         if (e instanceof ValidationError) {
             serverRender(req, res, { key: selector.key, store: selector.store, dto: claim, result: e.validaionResult, error: null });
             return;
@@ -74,7 +74,7 @@ const ForcastClaimForm = async (req: express.Request, res: express.Response) => 
         return;
     }
     catch (e) {
-        const selector = editClaim(params.partnerId, params.periodId);
+        const selector = getClaimEditor(params.partnerId, params.periodId);
         if (e instanceof ValidationError) {
             serverRender(req, res, { key: selector.key, store: selector.store, dto: claim, result: e.validaionResult, error: null });
             return;

@@ -7,23 +7,15 @@ import { Results } from "../../validation/results";
 import { ClaimDtoValidator } from "../../validators/claimDtoValidator";
 import { findClaimDetailsSummaryByPartnerAndPeriod } from "./claimDetailsSummary";
 import { getCostCategories } from "./costCategories";
+import { getKey } from "../../../util/key";
+import { getDataStoreItem, dataStoreHelper } from "./data";
 
-// const claimStore = "claim";
+const claimStore = "claim";
 
-// const getClaims = (state: RootState): { [key: string]: IDataStore<ClaimDto> } => (getData(state)[claimStore] || {});
+export const getClaim = (partnerId: string, periodId: number) => dataStoreHelper(claimStore, getKey(partnerId, periodId)) as IDataSelector<ClaimDto>; 
 
-// // selectors
-// export const getClaim = (partnerId: string, periodId: number): IDataSelector<ClaimDto> => {
-//   const key = `${partnerId}_${periodId}`;
-//   const get = (state: RootState) => getClaims(state)[key];
-//   return { key, get, getPending: (state: RootState) => (Pending.create(get(state))) };
-// };
-
-// potential next step for common selectors for data.... up for discussion
-export const getClaim = (partnerId: string, periodId: number) => dataStoreHelper("claim", x => x.claim, `${partnerId}_${periodId}`);
-
-export const editClaim = (partnerId: string, periodId: number) => editorStoreHelper<ClaimDto, ClaimDtoValidator>(
-  "claim",
+export const getClaimEditor = (partnerId: string, periodId: number) => editorStoreHelper<ClaimDto, ClaimDtoValidator>(
+  claimStore,
   x => x.claim,
   (store) => createEditorDto(partnerId, periodId, store),
   (claim, store) => createValidator(partnerId, periodId, claim, store),
@@ -35,22 +27,9 @@ const createEditorDto = (partnerId: string, periodId: number, store: RootState) 
 };
 
 const createValidator = (partnerId: string, periodId: number, claim: ClaimDto, store: RootState) => {
-  let pendingDetails = findClaimDetailsSummaryByPartnerAndPeriod(partnerId, periodId).getPending(store);
-  if(!pendingDetails.data){
-    pendingDetails = new Pending(LoadingStatus.Done, []);
-  }
-  const pendingCostCategories = getCostCategories().getPending(store);
-  return pendingDetails.and(pendingCostCategories, (details, costCategories) => ({ details, costCategories }))
-    .then(data => new ClaimDtoValidator(claim, data!.details, data!.costCategories, false));
-};
-
-const dataStoreHelper = <T extends {}>(storeKey: DataStateKeys, getDataStore: (state: DataState) => { [key: string]: IDataStore<T> }, key: string): IDataSelector<T> => {
-  return {
-    store: storeKey,
-    key,
-    get: (store: RootState) => getDataStore(store.data)[key],
-    getPending: (store: RootState) => Pending.create(getDataStore(store.data)[key]),
-  };
+  let details = findClaimDetailsSummaryByPartnerAndPeriod(partnerId, periodId).getPending(store).data || [];
+  let costCategories = getCostCategories().getPending(store).data || [];
+  return new ClaimDtoValidator(claim, details, costCategories, false);
 };
 
 interface IEditorSelector<T, TVal extends Results<T>> {
@@ -59,31 +38,34 @@ interface IEditorSelector<T, TVal extends Results<T>> {
   get: (store: RootState, initalise?: (dto: T) => void) => Pending<IEditorStore<T, TVal>>;
 }
 
-const editorStoreHelper = <T extends {}, TVal extends Results<T>>(storeKey: EditorStateKeys, getEditorStore: (state: EditorState) => { [key: string]: IEditorStore<T, TVal> }, getData: (store: RootState) => Pending<T>, getValidator: (dto: T, store: RootState) => Pending<TVal>, key: string): IEditorSelector<T, TVal> => {
+const editorStoreHelper = <T extends {}, TVal extends Results<T>>(storeKey: EditorStateKeys, getEditorStore: (state: EditorState) => { [key: string]: IEditorStore<T, TVal> }, getData: (store: RootState) => Pending<T>, getValidator: (dto: T, store: RootState) => TVal, key: string): IEditorSelector<T, TVal> => {
   return {
     store: storeKey,
     key,
     get: (store: RootState, initalise?: (dto: T) => void) => {
       const editor = getEditorStore(store.editors)[key];
 
-      if (editor) {
-        return new Pending(LoadingStatus.Done, editor);
-      }
-
-      const pendingDto = getData(store).then(newData => {
-        const clonedData = Object.assign({}, newData) as T;
-        if (initalise) {
-          initalise(clonedData);
-        }
-        return clonedData;
-      });
-
-      // if the pendingdto has loaded or is stale or is loading but already has data (was stale) we can create an editor and validator
-      // if not use a pending in the preload status
-      const hasData = pendingDto.state === LoadingStatus.Done || pendingDto.state === LoadingStatus.Stale || (pendingDto.state === LoadingStatus.Loading && !!pendingDto.data);
-      const pendingValidation = hasData ? getValidator(pendingDto.data!, store) : new Pending<TVal>();
-
-      return Pending.combine(pendingDto, pendingValidation, (data, validator) => ({ data, validator, error: null }));
+      return editor ? new Pending(LoadingStatus.Done, editor) : getNewEditor(getData, getValidator, store, initalise);
     }
   };
 };
+
+const getNewEditor = <T extends {}, TVal extends Results<T>>(getData: (store: RootState) => Pending<T>, getValidator: (dto: T, store: RootState) => TVal, store: RootState, initalise?: (dto: T) => void): Pending<IEditorStore<T, TVal>> => {
+  //wrap thie inialise as might be undefined
+  const innerInit = (dto: T) => {
+    if (!!initalise) {
+      initalise(dto);
+    }
+    return dto;
+  };
+
+  return getData(store)
+    .then(newData => Object.assign({}, newData!) as T)
+    .then(clonedData => innerInit(clonedData!))
+    .then(cloned => ({
+      data: cloned!,
+      validator: getValidator(cloned!, store),
+      error: null
+    }));
+}
+

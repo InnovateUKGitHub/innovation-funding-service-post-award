@@ -243,7 +243,7 @@ export const ForecastClaim = definition.connect({
       forecastDetails: Selectors.findForecastDetailsByPartner(props.partnerId, props.periodId).getPending(state),
       golCosts: Selectors.findGolCostsByPartner(props.partnerId).getPending(state),
       costCategories: Selectors.getCostCategories().getPending(state),
-      editor: Selectors.editClaim(props.partnerId, props.periodId).get(state, x => {x.status = "Submitted";})
+      editor: Selectors.getClaimEditor(props.partnerId, props.periodId).get(state, x => {x.status = "Submitted";})
     };
   },
   withCallbacks: (dispatch) => ({

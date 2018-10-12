@@ -1,6 +1,6 @@
 import {conditionalLoad, dataLoadAction, DataLoadAction} from "./dataLoad";
 import {ApiClient} from "../../../shared/apiClient";
-import { editClaim, getClaim } from "../selectors/claim";
+import { getClaimEditor, getClaim } from "../selectors/claim";
 import {ClaimDetailsSummaryDto, ClaimDto, CostCategoryDto} from "../../models";
 import {AsyncThunk, SyncThunk} from "./common";
 import {ClaimDtoValidator} from "../../validators/claimDtoValidator";
@@ -18,7 +18,7 @@ export function loadClaim(partnerId: string, periodId: number) {
 
 export function validateClaim(partnerId: string, periodId: number, dto: ClaimDto, details: ClaimDetailsSummaryDto[], costCategories: CostCategoryDto[], showErrors?: boolean): SyncThunk<ClaimDtoValidator, UpdateEditorAction> {
   return (dispatch, getState) => {
-    const selector = editClaim(partnerId, periodId);
+    const selector = getClaimEditor(partnerId, periodId);
     const state = getState();
     if (showErrors === null || showErrors === undefined) {
       const current = state.editors[selector.store][selector.key];
@@ -32,7 +32,7 @@ export function validateClaim(partnerId: string, periodId: number, dto: ClaimDto
 
 export function saveClaim(partnerId: string, periodId: number, dto: ClaimDto, details: ClaimDetailsSummaryDto[], costCategories: CostCategoryDto[], onComplete: () => void): AsyncThunk<void, DataLoadAction | UpdateEditorAction> {
   return (dispatch, getState) => {
-    const selector = editClaim(partnerId, periodId);
+    const selector = getClaimEditor(partnerId, periodId);
     const validation = validateClaim(partnerId, periodId, dto, details, costCategories, true)(dispatch, getState, null);
 
     if (!validation.isValid()) {
