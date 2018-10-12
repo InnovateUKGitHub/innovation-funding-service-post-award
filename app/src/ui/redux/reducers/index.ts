@@ -1,2 +1,3 @@
-export * from "./common";
 export * from "./rootReducer";
+export * from "./dataReducer";
+export * from "./editorsReducer";

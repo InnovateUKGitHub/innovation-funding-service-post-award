@@ -38,10 +38,11 @@ interface ExternalColumnProps<T, TResult> {
 type TableChild<T> = React.ReactElement<ExternalColumnProps<T, {}>>;
 
 interface TableProps<T> {
-  children: TableChild<T> | TableChild<T>[];
+  children: TableChild<T> | (TableChild<T> | TableChild<T>[])[];
   className?: string;
   qa: string;
   footers?: JSX.Element[];
+  headers?: JSX.Element[];
 }
 
 export class TableColumn<T> extends React.Component<InternalColumnProps<T>> {
@@ -73,6 +74,7 @@ export class TableColumn<T> extends React.Component<InternalColumnProps<T>> {
     // if its the first column check for error
     const rowHasError = this.props.validation && this.props.validation.showValidationErrors && !this.props.validation.isValid();
     const className = classNames("govuk-table__cell", this.props.classSuffix ? "govuk-table__cell--" + this.props.classSuffix : "", this.props.cellClassName && this.props.cellClassName(data, { column, row }));
+
     const style: React.CSSProperties = {};
     if(column === 0 && rowHasError) {
       style.borderLeft = "10px #b10e1e solid";
@@ -94,11 +96,12 @@ export class TableColumn<T> extends React.Component<InternalColumnProps<T>> {
   }
 }
 
-const TableComponent2 = <T extends {}>(props: TableProps<T> & { data: T[]; validationResult?: NestedResult<Results<{}>>; }) => {
+const TableComponent2 = <T extends {}>(props: TableProps<T> & { data: T[]; validationResult?: Results<{}>[]; }) => {
   // loop through the colums cloning them and assigning the props required
+  const customHeaders = props.headers && props.headers.length ? props.headers : null;
   const headers = React.Children.map(props.children, (column, columnIndex) => React.cloneElement(column as React.ReactElement<any>, { mode: "header", columnIndex }));
   const cols = React.Children.map(props.children, (column, columnIndex) => React.cloneElement(column as React.ReactElement<any>, { mode: "col", columnIndex }));
-  const contents = props.data.map((dataItem, rowIndex) => React.Children.map(props.children, (column, columnIndex) => React.cloneElement(column as React.ReactElement<any>, { mode: "cell", rowIndex, columnIndex, dataItem, validation: props.validationResult && props.validationResult.results && props.validationResult.results[rowIndex]  })));
+  const contents = props.data.map((dataItem, rowIndex) => React.Children.map(props.children, (column, columnIndex) => React.cloneElement(column as React.ReactElement<any>, { mode: "cell", rowIndex, columnIndex, dataItem, validation: props.validationResult && props.validationResult[rowIndex]  })));
   const footerColumns = React.Children.toArray(props.children).some((x: any) => x.props && x.props.footer) ? React.Children.map(props.children, (column, columnIndex) => React.cloneElement(column as React.ReactElement<any>, { mode: "footer", columnIndex })) : [];
   const footers = footerColumns.length ? [<tr key="standardFooter" className="govuk-table__row">{footerColumns}</tr>] : [];
   (props.footers || []).forEach(customFooter => footers.push(customFooter));
@@ -110,6 +113,7 @@ const TableComponent2 = <T extends {}>(props: TableProps<T> & { data: T[]; valid
           {cols}
         </colgroup>
         <thead className="govuk-table__head">
+          {customHeaders}
           <tr className="govuk-table__row">
             {headers}
           </tr>
@@ -126,7 +130,7 @@ const TableComponent2 = <T extends {}>(props: TableProps<T> & { data: T[]; valid
 };
 
 const TableComponent = <T extends {}>(data: T[]) => (props: TableProps<T>) => {
-  return <TableComponent2 data={data} {...props} />;
+  return <TableComponent2 {...props} data={data} />;
 };
 
 const CustomColumn = <T extends {}>(props: ExternalColumnProps<T, React.ReactNode> & { classSuffix?: "numeric" }) => {
@@ -194,7 +198,7 @@ export const Table = {
 };
 
 export const TypedTable = <T extends {}>() => ({
-  Table: TableComponent2 as React.SFC<TableProps<T> & { data: T[]; validationResult?: NestedResult<Results<{}>>; }>,
+  Table: TableComponent2 as React.SFC<TableProps<T> & { data: T[]; validationResult?: Results<{}>[]; }>,
   Custom: CustomColumn as React.SFC<ExternalColumnProps<T, React.ReactNode> & { classSuffix?: "numeric" }>,
   String: StringColumn as React.SFC<ExternalColumnProps<T, string | null>>,
   Number: NumberColumn as React.SFC<ExternalColumnProps<T, number | null>>,

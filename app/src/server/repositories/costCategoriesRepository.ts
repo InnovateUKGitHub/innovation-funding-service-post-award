@@ -18,7 +18,7 @@ const fieldNames: string[] = [
     "Acc_CompetitionType__c",
     "Acc_CostCategoryDescription__c",
     // ToDo: currently missing on poc2 ... should be fixed soon
-    // "Acc_HintText__c"
+    "Acc_HintText__c"
 ];
 
 export interface ICostCategoryRepository {
