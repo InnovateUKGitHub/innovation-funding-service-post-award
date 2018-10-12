@@ -1,5 +1,5 @@
-import * as Dtos from "../../models";
 import React from "react";
+import * as Dtos from "../../models";
 import * as ACC from "../../components";
 import * as Actions from "../../redux/actions";
 import * as Selectors from "../../redux/selectors";
@@ -9,9 +9,9 @@ import {routeConfig} from "../../routing";
 import {IEditorStore} from "../../redux/reducers/editorsReducer";
 import {ClaimDtoValidator} from "../../validators/claimDtoValidator";
 import {ClaimsDashboardRoute} from "./dashboard";
-import {Currency, Percentage} from "../../components/renderers";
-import {ClaimDto, ClaimFrequency, ProjectDto} from "../../models";
-import { DateTime, Interval } from "luxon";
+import {Currency, DateRange, Percentage} from "../../components/renderers";
+import {ClaimDetailsDto, ClaimDto, ForecastDetailsDTO} from "../../models";
+import { Interval } from "luxon";
 
 interface Params {
   projectId: string;
@@ -125,17 +125,18 @@ export class ClaimForecastComponent extends ContainerBase<Params, Data, Callback
     return Math.ceil(((a - b) / Math.max(1, a)) * 100);
   }
 
-  calculateClaimPeriods(project: ProjectDto) {
-    const frequency = project.claimFrequency === ClaimFrequency.Quarterly ? 3 : 1;
-    const start     = DateTime.fromJSDate(project.startDate);
-    const end       = DateTime.fromJSDate(project.endDate);
-    const duration  = Interval.fromDateTimes(start, end);
-    const count     = duration.count("months");
-    return duration.divideEqually(Math.ceil(count / frequency));
+  calculateClaimPeriods(data: CombinedData) {
+    const periods: { [k: string]: React.ReactNode } = {};
+    data.claimDetails.forEach(x => periods[x.periodId] = this.renderDateRange(x));
+    data.forecastDetails.forEach(x => periods[x.periodId] = this.renderDateRange(x));
+    return periods;
   }
 
-  periodHeader(intervals: Interval[], index: string) {
-    const period = intervals[parseInt(index, 10) - 1];
+  renderDateRange(details: ClaimDetailsDto | ForecastDetailsDTO) {
+    return DateRange({ start: details.periodStart, end: details.periodEnd });
+  }
+
+  periodHeader(period: Interval) {
     const words  = [period.start.monthShort, "to", period.end.monthShort, period.end.year];
 
     if(period.start.year !== period.end.year) {
@@ -146,11 +147,10 @@ export class ClaimForecastComponent extends ContainerBase<Params, Data, Callback
   }
 
   public renderContents(data: CombinedData) {
-    const project   = data.project;
     const parsed    = this.parseClaimData(data);
     const Table     = ACC.Table.forData(parsed);
     const Form      = ACC.TypedForm<Dtos.ClaimDto>();
-    const intervals = this.calculateClaimPeriods(project);
+    const intervals = this.calculateClaimPeriods(data);
     const periods   = Object.keys(parsed[0].periods);
 
     return (
@@ -167,7 +167,7 @@ export class ClaimForecastComponent extends ContainerBase<Params, Data, Callback
               footers={this.renderTableFooters(periods, parsed)}
             >
               <Table.String header="Month" value={x => x.categoryName} qa="category-name" />
-              {periods.map(p => <Table.Currency key={p} header={this.periodHeader(intervals, p)} value={x => x.periods[p]} qa="category-period" />)}
+              {periods.map(p => <Table.Currency key={p} header={intervals[p]} value={x => x.periods[p]} qa="category-period" />)}
               <Table.Currency header="" value={x => x.total} qa="category-total" />
               <Table.Currency header="" value={x => x.golCosts} qa="category-gol-costs" />
               <Table.Percentage header="" value={x => x.difference} qa="category-difference" />

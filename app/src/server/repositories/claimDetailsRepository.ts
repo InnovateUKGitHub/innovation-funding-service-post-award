@@ -5,13 +5,19 @@ export interface ISalesforceClaimDetails {
   Acc_PeriodCostCategoryTotal__c: number;
   Acc_ProjectParticipant__c: string;
   Acc_ProjectPeriodNumber__c: number;
+  Acc_ProjectPeriodStartDate__c: string;
+  Acc_ProjectPeriodEndDate__c: string;
 }
 
-const fields = [
+type FieldNames = keyof ISalesforceClaimDetails;
+
+const fields: FieldNames[] = [
   "Acc_CostCategory__c",
   "Acc_PeriodCostCategoryTotal__c",
   "Acc_ProjectParticipant__c",
-  "Acc_ProjectPeriodNumber__c"
+  "Acc_ProjectPeriodNumber__c",
+  "Acc_ProjectPeriodStartDate__c",
+  "Acc_ProjectPeriodEndDate__c",
 ];
 
 export interface IClaimDetailsRepository {

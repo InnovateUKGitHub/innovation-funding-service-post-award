@@ -1,5 +1,5 @@
 import { ClaimDto } from "../../models";
-import { DataState, DataStateKeys, EditorState, EditorStateKeys, IDataStore, RootState } from "../reducers";
+import { EditorState, EditorStateKeys, RootState } from "../reducers";
 import { IDataSelector } from "./IDataSelector";
 import { LoadingStatus, Pending } from "../../../shared/pending";
 import { IEditorStore } from "../reducers/editorsReducer";
@@ -8,11 +8,11 @@ import { ClaimDtoValidator } from "../../validators/claimDtoValidator";
 import { findClaimDetailsSummaryByPartnerAndPeriod } from "./claimDetailsSummary";
 import { getCostCategories } from "./costCategories";
 import { getKey } from "../../../util/key";
-import { getDataStoreItem, dataStoreHelper } from "./data";
+import { dataStoreHelper } from "./data";
 
 const claimStore = "claim";
 
-export const getClaim = (partnerId: string, periodId: number) => dataStoreHelper(claimStore, getKey(partnerId, periodId)) as IDataSelector<ClaimDto>; 
+export const getClaim = (partnerId: string, periodId: number) => dataStoreHelper(claimStore, getKey(partnerId, periodId)) as IDataSelector<ClaimDto>;
 
 export const getClaimEditor = (partnerId: string, periodId: number) => editorStoreHelper<ClaimDto, ClaimDtoValidator>(
   claimStore,
@@ -27,8 +27,8 @@ const createEditorDto = (partnerId: string, periodId: number, store: RootState) 
 };
 
 const createValidator = (partnerId: string, periodId: number, claim: ClaimDto, store: RootState) => {
-  let details = findClaimDetailsSummaryByPartnerAndPeriod(partnerId, periodId).getPending(store).data || [];
-  let costCategories = getCostCategories().getPending(store).data || [];
+  const details = findClaimDetailsSummaryByPartnerAndPeriod(partnerId, periodId).getPending(store).data || [];
+  const costCategories = getCostCategories().getPending(store).data || [];
   return new ClaimDtoValidator(claim, details, costCategories, false);
 };
 
@@ -51,7 +51,7 @@ const editorStoreHelper = <T extends {}, TVal extends Results<T>>(storeKey: Edit
 };
 
 const getNewEditor = <T extends {}, TVal extends Results<T>>(getData: (store: RootState) => Pending<T>, getValidator: (dto: T, store: RootState) => TVal, store: RootState, initalise?: (dto: T) => void): Pending<IEditorStore<T, TVal>> => {
-  //wrap thie inialise as might be undefined
+  // wrap thie inialise as might be undefined
   const innerInit = (dto: T) => {
     if (!!initalise) {
       initalise(dto);
@@ -67,5 +67,4 @@ const getNewEditor = <T extends {}, TVal extends Results<T>>(getData: (store: Ro
       validator: getValidator(cloned!, store),
       error: null
     }));
-}
-
+};

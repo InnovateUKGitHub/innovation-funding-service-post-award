@@ -11,5 +11,5 @@ export const dataStoreHelper = <T extends DataStateKeys, K extends keyof DataSta
       key: key as string,
       get: (state: RootState) => getDataStoreItem(state, storeKey, key),
       getPending: (state: RootState) => Pending.create(getDataStoreItem(state, storeKey, key))
-    })
+    });
 };
