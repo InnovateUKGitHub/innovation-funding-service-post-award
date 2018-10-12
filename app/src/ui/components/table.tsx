@@ -74,6 +74,7 @@ export class TableColumn<T> extends React.Component<InternalColumnProps<T>> {
     // if its the first column check for error
     const rowHasError = this.props.validation && this.props.validation.showValidationErrors && !this.props.validation.isValid();
     const className = classNames("govuk-table__cell", this.props.classSuffix ? "govuk-table__cell--" + this.props.classSuffix : "", this.props.cellClassName && this.props.cellClassName(data, { column, row }));
+
     const style: React.CSSProperties = {};
     if(column === 0 && rowHasError) {
       style.borderLeft = "10px #b10e1e solid";

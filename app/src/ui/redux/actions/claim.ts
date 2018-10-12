@@ -1,6 +1,6 @@
 import {conditionalLoad, dataLoadAction, DataLoadAction} from "./dataLoad";
 import {ApiClient} from "../../../shared/apiClient";
-import { getClaimEditor, getClaim } from "../selectors/claim";
+import { getClaim, getClaimEditor } from "../selectors/claim";
 import {ClaimDetailsSummaryDto, ClaimDto, CostCategoryDto} from "../../models";
 import {AsyncThunk, SyncThunk} from "./common";
 import {ClaimDtoValidator} from "../../validators/claimDtoValidator";
