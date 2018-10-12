@@ -1,7 +1,7 @@
 import {IContext, IQuery} from "../common/context";
 import {ForecastDetailsDTO} from "../../../ui/models";
 
-export class GetProfileDetail implements IQuery<ForecastDetailsDTO> {
+export class GetForecastDetail implements IQuery<ForecastDetailsDTO> {
   constructor(private partnerId: string,
               private periodId: number,
               private costCategoryId: string,) {
@@ -12,7 +12,7 @@ export class GetProfileDetail implements IQuery<ForecastDetailsDTO> {
     return {
       costCategoryId: result.Acc_CostCategory__c,
       periodId: result.Acc_ProjectPeriodNumber__c,
-      value: result.Acc_PeriodCostCategoryTotal__c
+      value: result.Acc_LatestForecastCost__c
     };
   }
 }

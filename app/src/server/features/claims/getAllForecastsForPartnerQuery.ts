@@ -12,7 +12,7 @@ export class GetAllForecastsForPartnerQuery implements IQuery<ForecastDetailsDTO
     return results.map(x => ({
       costCategoryId: x.Acc_CostCategory__c,
       periodId: x.Acc_ProjectPeriodNumber__c,
-      value: x.Acc_PeriodCostCategoryTotal__c
+      value: x.Acc_LatestForecastCost__c
     }));
   }
 }

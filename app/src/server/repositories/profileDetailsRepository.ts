@@ -2,17 +2,17 @@ import SalesforceBase from "./salesforceBase";
 
 export interface ISalesforceProfileDetails {
   Acc_CostCategory__c: string;
-  Acc_PeriodCostCategoryTotal__c: number;
+  Acc_LatestForecastCost__c: number;
   Acc_ProjectParticipant__c: string;
   Acc_ProjectPeriodNumber__c: number;
 }
 
 const fields = [
-  "Acc_CostCategoryID__c",
+  "Acc_CostCategory__c",
   // "Acc_PeriodCostCategoryTotal__c",
-  "Acc_TotalCostCategoryValue__c",
+  "Acc_LatestForecastCost__c",
   "Acc_ProjectParticipant__c",
-  "Acc_PeriodID__c",
+  "Acc_ProjectPeriodNumber__c",
 ];
 
 export interface IProfileDetailsRepository {
@@ -43,7 +43,7 @@ export class ProfileDetailsRepository extends SalesforceBase<ISalesforceProfileD
   private createFake(partnerId: string, periodId: number): ISalesforceProfileDetails[] {
     return [{
       Acc_CostCategory__c: "a071X000000HHZtQAO",
-      Acc_PeriodCostCategoryTotal__c: 10000,
+      Acc_LatestForecastCost__c: 10000,
       Acc_ProjectParticipant__c: partnerId,
       Acc_ProjectPeriodNumber__c: periodId
     }];

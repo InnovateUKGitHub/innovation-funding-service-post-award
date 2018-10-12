@@ -149,8 +149,8 @@ export class TestData {
       costCategory?: Repositories.ISalesforceCostCategory,
       partner?: Repositories.ISalesforcePartner,
       periodId?: number,
-      update?: (item: Repositories.ISalesforceClaimDetails) => void
-    ): Repositories.ISalesforceClaimDetails {
+      update?: (item: Repositories.ISalesforceProfileDetails) => void
+    ): Repositories.ISalesforceProfileDetails {
         costCategory = costCategory || this.createCostCategory();
         partner      = partner || this.createPartner();
         periodId     = periodId || 1;
@@ -159,7 +159,7 @@ export class TestData {
           Acc_CostCategory__c: costCategory.Id,
           Acc_ProjectParticipant__c: partner.Id,
           Acc_ProjectPeriodNumber__c: periodId,
-          Acc_PeriodCostCategoryTotal__c: 1000
+          Acc_LatestForecastCost__c: 1000
         };
 
         if(!!update) {

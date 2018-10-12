@@ -21,12 +21,14 @@ interface Data {
   lineItems: Pending<Dtos.ClaimLineItemDto[]>;
   costCategories: Pending<Dtos.CostCategoryDto[]>;
   editor: IEditorStore<Dtos.ClaimLineItemDto[], ClaimLineItemDtosValidator>;
+  forecastDetail: Pending<Dtos.ForecastDetailsDTO>;
 }
 
 interface CombinedData {
   project: Dtos.ProjectDto;
   lineItems: Dtos.ClaimLineItemDto[];
   costCategories: Dtos.CostCategoryDto[];
+  forecastDetail: Dtos.ForecastDetailsDTO;
 }
 
 interface Callbacks {
@@ -41,14 +43,18 @@ export class EditClaimLineItemsComponent extends ContainerBase<Params, Data, Cal
       this.props.project,
       this.props.lineItems,
       this.props.costCategories,
-      (project, lineItems, costCategories) => ({ project, lineItems, costCategories })
+      this.props.forecastDetail,
+      (project, lineItems, costCategories, forecastDetail) => ({ project, lineItems, costCategories, forecastDetail })
     );
     const Loader = ACC.TypedLoader<CombinedData>();
     return <Loader pending={combined} render={(data) => this.renderContents(data, this.props.editor)} />;
   }
 
   // TODO fix back link
-  private renderContents(data: { project: Dtos.ProjectDto, lineItems: Dtos.ClaimLineItemDto[], costCategories: Dtos.CostCategoryDto[] }, editor: IEditorStore<Dtos.ClaimLineItemDto[], ClaimLineItemDtosValidator>) {
+  private renderContents(
+    data: { project: Dtos.ProjectDto, lineItems: Dtos.ClaimLineItemDto[], costCategories: Dtos.CostCategoryDto[], forecastDetail: Dtos.ForecastDetailsDTO },
+    editor: IEditorStore<Dtos.ClaimLineItemDto[], ClaimLineItemDtosValidator>
+  ) {
     const back = PrepareClaimRoute.getLink({ projectId: data.project.id, partnerId: this.props.partnerId, periodId: this.props.periodId });
     const costCategory = data.costCategories.find(x => x.id === this.props.costCategoryId)! || {};
 
@@ -63,20 +69,20 @@ export class EditClaimLineItemsComponent extends ContainerBase<Params, Data, Cal
         </ACC.Section>
         <ACC.Section title="Breakdown of costs">
           <ACC.InsetText text={costCategory.hintText} />
-          {this.renderTable(editor)}
+          {this.renderTable(editor, data.forecastDetail)}
         </ACC.Section>
       </ACC.Page>
     );
   }
 
-  private renderTable(editor: IEditorStore<Dtos.ClaimLineItemDto[], ClaimLineItemDtosValidator>) {
+  private renderTable(editor: IEditorStore<Dtos.ClaimLineItemDto[], ClaimLineItemDtosValidator>, forecastDetail: Dtos.ForecastDetailsDTO) {
     const LineItemForm = ACC.TypedForm<Dtos.ClaimLineItemDto[]>();
     const LineItemTable = ACC.TypedTable<Dtos.ClaimLineItemDto>();
 
     return (
       <LineItemForm.Form data={editor.data} onChange={x => { /* Todo */ }} onSubmit={() => this.props.save(this.props.projectId, this.props.partnerId, this.props.periodId, this.props.costCategoryId, this.props.editor.data)}>
         <LineItemForm.Fieldset>
-          <LineItemTable.Table qa="current-claim-summary-table" data={editor.data} validationResult={editor.validator.items} footers={this.renderFooters(editor)}>
+          <LineItemTable.Table qa="current-claim-summary-table" data={editor.data} validationResult={editor.validator.items} footers={this.renderFooters(editor, forecastDetail)}>
             <LineItemTable.Custom header="Description of cost" qa="cost-description" value={(x, i) => this.renderDescription(x, i, editor.validator.items.results[i.row])} />
             <LineItemTable.Custom header="Cost (£)" qa="cost-value" classSuffix="numeric" value={(x, i) => this.renderCost(x, i, editor.validator.items.results[i.row])} width={30} />
             <LineItemTable.Custom header="" qa="remove" value={(x, i) => <a href="#" onClick={e => this.removeItem(x, i, e)}>remove</a>} width={1} />
@@ -125,11 +131,11 @@ export class EditClaimLineItemsComponent extends ContainerBase<Params, Data, Cal
     this.props.validate(this.props.partnerId, this.props.periodId, this.props.costCategoryId, dto);
   }
 
-  private renderFooters(editor: IEditorStore<Dtos.ClaimLineItemDto[], ClaimLineItemDtosValidator>) {
+  private renderFooters(editor: IEditorStore<Dtos.ClaimLineItemDto[], ClaimLineItemDtosValidator>, forecastDetail: Dtos.ForecastDetailsDTO) {
     const total = editor.data.reduce((t, item) => t + (item.value || 0), 0);
-    // ToDo : get from data store
-    const forcast = 10000;
-    const diff = 100 * (total - forcast) / forcast;
+    // TODO remove multiply by 100
+    const forecast = forecastDetail.value;
+    const diff = 100 * (forecast - total) / forecast;
 
     return [
       (
@@ -147,7 +153,7 @@ export class EditClaimLineItemsComponent extends ContainerBase<Params, Data, Cal
       (
         <tr key={3} className="govuk-table__row">
           <th className="govuk-table__cell govuk-table__cell--numeric govuk-!-font-weight-bold">Forcast costs</th>
-          <td className="govuk-table__cell govuk-table__cell--numeric"><ACC.Renderers.Currency value={forcast} /></td>
+          <td className="govuk-table__cell govuk-table__cell--numeric"><ACC.Renderers.Currency value={forecast} /></td>
           <td className="govuk-table__cell" />
         </tr>
       ),
@@ -194,6 +200,7 @@ export const EditClaimLineItems = definition.connect({
       project: Selectors.getProject(props.projectId).getPending(state),
       lineItems: lineItemsSelector.getPending(state),
       costCategories: Selectors.getCostCategories().getPending(state),
+      forecastDetail: Selectors.getForecastDetail(props.partnerId, props.periodId, props.costCategoryId).getPending(state),
       editor: getEditor(state.editors.claimLineItems[lineItemsSelector.key], lineItemsSelector.getPending(state))
     };
   },
@@ -215,6 +222,7 @@ export const EditClaimLineItemsRoute = definition.route({
   getLoadDataActions: (params) => [
     Actions.loadProject(params.projectId),
     Actions.loadCostCategories(),
+    Actions.loadForecastDetail(params.partnerId, params.periodId, params.costCategoryId),
     Actions.loadClaimLineItemsForCategory(params.partnerId, params.costCategoryId, params.periodId)
   ],
   container: EditClaimLineItems
