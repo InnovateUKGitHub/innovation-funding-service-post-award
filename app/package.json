@@ -4,8 +4,8 @@
   "description": "External frontend for innovate uk acc system",
   "scripts": {
     "clean": "rimraf ./dist",
-    "start:server": "node ./dist/server/index.js",
-    "start:dev": "nodemon ./dist/server/index.js",
+    "start:server": "node ./dist/src/server/index.js",
+    "start:dev": "nodemon ./dist/src/server/index.js",
     "build:server": "rimraf dist/ && tsc",
     "watch:server": "tsc --watch",
     "build:client": "webpack --config webpack.client.js",

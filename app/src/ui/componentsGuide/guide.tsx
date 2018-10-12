@@ -11,7 +11,9 @@ import { linksListGuide } from "./linksListGuide";
 import { tableGuide } from "./tableGuide";
 import { detailsGuide } from "./detailsGuide";
 import { formGuide } from "./formGuide";
-import {validationMessageGuide} from "./validationMessageGuide";
+import { validationMessageGuide } from "./validationMessageGuide";
+import { validationErrorGuide } from "./validationErrorGuide";
+import { validationSummaryGuide } from "./validationSummaryGuide";
 
 const guides: IGuide[] = [
     datesGuide,
@@ -26,6 +28,8 @@ const guides: IGuide[] = [
     tableGuide,
     titleGuide,
     validationMessageGuide,
+    validationErrorGuide,
+    validationSummaryGuide
 ];
 
 interface Props {

@@ -2,8 +2,9 @@ import React from "react";
 import { TextInput } from "./inputs/textInput";
 import { TextAreaInput } from "./inputs/textAreaInput";
 import { NumberInput } from "./inputs/numberInput";
-import { Result as ValidationResult} from "../validators/common";
 import classNames from "classnames";
+import { Result } from "../validation/result";
+import { ValidationError } from "./validationError";
 
 interface FormProps<T> {
     data: T;
@@ -64,17 +65,17 @@ interface ExternalFieldProps<TDto, TValue> {
     name: string;
     value: (data: TDto) => TValue|null;
     update: (data: TDto, value: TValue|null) => void;
-    validation?: ValidationResult;
+    validation?: Result;
 }
 
 class FieldComponent<T, TValue> extends React.Component<InternalFieldProps<T> & ExternalFieldProps<T, TValue>, {}> {
     render() {
         const { hint, name, label, field, data, validation } = this.props;
         return (
-            <div data-qa={`field-${name}`} className={classNames("govuk-form-group", {"govuk-form-group--error": validation && validation.showValidationErrors() && !validation.isValid()})}>
+            <div data-qa={`field-${name}`} className={classNames("govuk-form-group", {"govuk-form-group--error": validation && validation.showValidationErrors && !validation.isValid})}>
                 <label className="govuk-label" htmlFor={name}>{label}</label>
                 {hint ? <span id={`${name}-hint`} className="govuk-hint">{hint}</span> : null}
-                {validation && validation.showValidationErrors() && !validation.isValid() ? <span className="govuk-error-message">{validation.errorMessage}</span> : null}
+                <ValidationError error={validation}/>
                 {field(data!)}
             </div>
         );
@@ -87,6 +88,11 @@ const handleSubmit = <TDto extends {}>(props: SubmitProps, e: React.SyntheticEve
     formProps.onSubmit();
 };
 
+const handleOtherButton = <TDto extends {}>(props: ButtonProps, e: React.SyntheticEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    props.onClick();
+};
+
 const handleChange = <TDto extends {}, TValue extends {}>(props: ExternalFieldProps<TDto, TValue>, value: TValue|null) => {
     const formProps = props as any as FormProps<TDto>;
     const data = formProps.data;
@@ -97,7 +103,7 @@ const handleChange = <TDto extends {}, TValue extends {}>(props: ExternalFieldPr
 const StringField = <T extends {}>(props: ExternalFieldProps<T, string>) => {
     const TypedFieldComponent = FieldComponent as { new(): FieldComponent<T, string> };
     return (
-        <TypedFieldComponent field={(data => <TextInput value={props.value(data)} onChange={(val) => handleChange(props, val)} />)} {...props} />
+        <TypedFieldComponent field={(data => <TextInput name={props.name} value={props.value(data)} onChange={(val) => handleChange(props, val)} />)} {...props} />
     );
 };
 
@@ -116,16 +122,17 @@ const MultiStringField = <T extends {}>(props: MultiStringFieldProps<T>) => {
 const NumericField = <T extends {}>(props: ExternalFieldProps<T, number>) => {
     const TypedFieldComponent = FieldComponent as { new(): FieldComponent<T, number> };
     return (
-        <TypedFieldComponent field={(data => <NumberInput value={props.value(data)} onChange={(val) => handleChange(props, val)} />)} {...props} />
+        <TypedFieldComponent field={(data => <NumberInput name={props.name} value={props.value(data)} onChange={(val) => handleChange(props, val)} />)} {...props} />
     );
 };
 
 interface SubmitProps {
     qa?: string;
+    disabled?: boolean;
 }
 
 const SubmitComponent: React.SFC<SubmitProps> = (props) => {
-    return <button type="submit" className="govuk-button" onClick={(e) => handleSubmit(props, e)}>{props.children}</button>;
+    return <button type="submit" name="button" value="default" disabled={props.disabled} className="govuk-button" onClick={(e) => handleSubmit(props, e)}>{props.children}</button>;
 };
 
 interface ButtonProps {
@@ -135,7 +142,7 @@ interface ButtonProps {
 }
 
 const ButtonComponent: React.SFC<ButtonProps> = (props) => {
-    return <button type="button" name={props.name} className="govuk-button" style={{background:"buttonface", color: "buttontext" }} onClick={(e) => props.onClick()}>{props.children}</button>;
+    return <button type="submit" name="button" value={props.name} className="govuk-button" style={{background:"buttonface", color: "buttontext" }} onClick={(e) => handleOtherButton(props, e)}>{props.children}</button>;
 
 };
 

@@ -1,5 +1,5 @@
 import React from "react";
-import { Result } from "../validators/common";
+import { Result } from "../validation/result";
 
 interface Props {
     message: Result;
@@ -7,7 +7,7 @@ interface Props {
 }
 
 export const ValidationMessage: React.SFC<Props> = ({ message, key }) => {
-    if (!message || !message.showValidationErrors() || message.isValid()) {
+    if (!message || !message.showValidationErrors || message.isValid) {
         return null;
     }
 

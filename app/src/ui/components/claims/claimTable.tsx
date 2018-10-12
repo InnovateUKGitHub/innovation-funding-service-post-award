@@ -1,14 +1,15 @@
 import React from "react";
 import * as Dtos from "../../models";
-import { Link, Renderers, Table } from "..";
-import { ClaimLineItemsRoute } from "../../containers";
+import { Link, Renderers, TypedTable } from "..";
+import { ClaimDetailsValidator } from "../../validators/claimDtoValidator";
 
 interface Props {
     project: Dtos.ProjectDto;
     partner: Dtos.PartnerDto;
     costCategories: Dtos.CostCategoryDto[];
     claim: Dtos.ClaimDto;
-    claimDetails: Dtos.ClaimDetailsDto[];
+    claimDetails: Dtos.ClaimDetailsSummaryDto[];
+    validation?: ClaimDetailsValidator[];
     getLink: (costCategoryId: string) => ILinkInfo;
 }
 
@@ -19,7 +20,7 @@ export const ClaimTable: React.SFC<Props> = (props) => {
         .filter(x => x.organistionType === "Industrial")
         .map(x => ({
             category: x,
-            cost: props.claimDetails.find(y => y.costCategoryId === x.id) || {} as Dtos.ClaimDetailsDto,
+            cost: props.claimDetails.find(y => y.costCategoryId === x.id) || {} as Dtos.ClaimDetailsSummaryDto,
             isTotal: false
         }));
 
@@ -30,7 +31,9 @@ export const ClaimTable: React.SFC<Props> = (props) => {
             id: "",
             isCalculated: true,
             competitionType: "Unknown",
-            organistionType: "Unknown"
+            organistionType: "Unknown",
+            description: "",
+            hintText: ""
         },
         cost: {
             costCategoryId: "",
@@ -42,17 +45,15 @@ export const ClaimTable: React.SFC<Props> = (props) => {
         isTotal: true
     });
 
-    const CostCategoriesTable = Table.forData(combinedData);
+    const CostCategoriesTable = TypedTable<typeof combinedData[0]>();
 
     return (
-        <CostCategoriesTable.Table qa="cost-cat" footers={renderFooters(props.project, props.partner, props.claimDetails)}>
+        <CostCategoriesTable.Table qa="cost-cat" data={combinedData} footers={renderFooters(props.project, props.partner, props.claimDetails)} validationResult={props.validation}>
             <CostCategoriesTable.Custom
                 header="Costs category"
                 qa="category"
                 cellClassName={x => x.isTotal ? "govuk-!-font-weight-bold" : null}
-                value={x => !x.category.isCalculated
-                    ? <Link route={props.getLink(x.category.id)}>{x.category.name}</Link>
-                    : x.category.name}
+                value={(x,i) => renderCostCategory(x.category, props.getLink, props.validation && props.validation[i.row])}
             />
             <CostCategoriesTable.Currency header="Grant offer letter costs" qa="offerCosts" value={x => x.cost.offerCosts} />
             <CostCategoriesTable.Currency header="Costs claimed to date" qa="claimedToDate" value={x => x.cost.costsClaimedToDate} />
@@ -62,20 +63,31 @@ export const ClaimTable: React.SFC<Props> = (props) => {
     );
 };
 
-const  renderFooters = (project: Dtos.ProjectDto, partner: Dtos.PartnerDto, claimsCosts: Dtos.ClaimDetailsDto[]) => {
+const renderCostCategory = (category: Dtos.CostCategoryDto, getLink: (costCategoryId: string) => ILinkInfo, validation?: ClaimDetailsValidator) => {
+    if(category.isCalculated) {
+        return category.name;
+    }
+    const validationError = validation && validation.errors[0];
+    const id = validationError && validationError.key;
+    return (
+        <Link id={id} route={getLink(category.id)}>{category.name}</Link>
+    );
+};
+
+const  renderFooters = (project: Dtos.ProjectDto, partner: Dtos.PartnerDto, claimsCosts: Dtos.ClaimDetailsSummaryDto[]) => {
     return [
       (
         <tr key="1" className="govuk-table__row">
             <th className="govuk-table__cell govuk-table__cell--numeric govuk-!-font-weight-bold" colSpan={3}>Award offer rate</th>
-            <td className="govuk-table__cell govuk-table__cell--numeric" colSpan={1}><Renderers.Percentage value={partner.awardRate} /></td>
-            <td className="govuk-table__cell" colSpan={1} />
+            <td className="govuk-table__cell govuk-table__cell--numeric"><Renderers.Percentage value={partner.awardRate} /></td>
+            <td className="govuk-table__cell" />
         </tr>
       ),
       (
         <tr key="2" className="govuk-table__row">
             <th className="govuk-table__cell govuk-table__cell--numeric govuk-!-font-weight-bold" colSpan={3}>Costs to be paid this quarter</th>
-            <td className="govuk-table__cell govuk-table__cell--numeric" colSpan={1}><Renderers.Currency value={claimsCosts.reduce((total, item) => total + item.costsClaimedThisPeriod, 0) * partner.awardRate / 100} /></td>
-            <td className="govuk-table__cell" colSpan={1} />
+            <td className="govuk-table__cell govuk-table__cell--numeric"><Renderers.Currency value={claimsCosts.reduce((total, item) => total + item.costsClaimedThisPeriod, 0) * partner.awardRate / 100} /></td>
+            <td className="govuk-table__cell" />
         </tr>
       )
     ];

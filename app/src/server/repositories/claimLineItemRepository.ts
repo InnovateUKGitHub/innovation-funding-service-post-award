@@ -1,12 +1,14 @@
-import SalesforceBase from "./salesforceBase";
+import SalesforceBase, {Updatable} from "./salesforceBase";
+import {RecordTypeRepository} from "./recordTypeRepository";
 
 export interface ISalesforceClaimLineItem {
   Id: string;
   Acc_LineItemDescription__c: string;
   Acc_LineItemCost__c: number;
   Acc_CostCategory__c: string;
-  Acc_ProjectPeriodId__c: number;
+  Acc_ProjectPeriodNumber__c: number;
   Acc_ProjectParticipant__c: string;
+  RecordTypeId: string;
 }
 
 const fields = [
@@ -14,12 +16,15 @@ const fields = [
   "Acc_LineItemDescription__c",
   "Acc_LineItemCost__c",
   "Acc_CostCategory__c",
-  "Acc_ProjectPeriodId__c",
+  "Acc_ProjectPeriodNumber__c",
   "Acc_ProjectParticipant__c"
 ];
 
 export interface IClaimLineItemRepository {
   getAllForCategory(partnerId: string, categoryId: string, periodId: number): Promise<ISalesforceClaimLineItem[]>;
+  delete(ids: string[] | string): Promise<void>;
+  update(update: Updatable<ISalesforceClaimLineItem>[] | Updatable<ISalesforceClaimLineItem>): Promise<boolean>;
+  insert(insert: Partial<ISalesforceClaimLineItem>[] | Partial<ISalesforceClaimLineItem>): Promise<string[]> | Promise<string>;
 }
 
 export class ClaimLineItemRepository extends SalesforceBase<ISalesforceClaimLineItem> implements IClaimLineItemRepository {
@@ -34,10 +39,32 @@ export class ClaimLineItemRepository extends SalesforceBase<ISalesforceClaimLine
     // TODO review which ID is used for cost category
     const filter = `
       Acc_ProjectParticipant__c = '${partnerId}'
-      AND Acc_ProjectPeriodId__c = ${periodId}
+      AND Acc_ProjectPeriodNumber__c = ${periodId}
       AND Acc_CostCategory__c = '${categoryId}'
       AND RecordType.Name = '${this.recordType}'
     `;
     return super.whereString(filter);
+  }
+
+  delete(ids: string[] | string): Promise<void>  {
+    return super.delete(ids);
+  }
+
+  update(lineItems: (Updatable<ISalesforceClaimLineItem>)[] | Updatable<ISalesforceClaimLineItem>): Promise<boolean>  {
+    return super.update(lineItems);
+  }
+
+  async insert(insert: Partial<ISalesforceClaimLineItem>): Promise<string>;
+  async insert(insert: Partial<ISalesforceClaimLineItem>[]): Promise<string[]>;
+  async insert(insert: Partial<ISalesforceClaimLineItem>[] | Partial<ISalesforceClaimLineItem>) {
+    const types = await new RecordTypeRepository().getAll();
+    const type = types.find(x => x.Name === this.recordType && x.SobjectType === this.objectName);
+    if (!type) {
+      throw Error("Failed to find claim line item record type");
+    }
+    if (insert instanceof Array) {
+      return super.insert(insert.map(item => ({...item, RecordTypeId: type.Id})));
+    }
+    return super.insert({...insert, RecordTypeId: type.Id});
   }
 }
