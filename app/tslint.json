@@ -27,6 +27,7 @@
     "max-classes-per-file": false,
     "variable-name": [true, "ban-keywords", "check-format", "allow-leading-underscore", "allow-pascal-case"],
     "parameters-max-number": [true, 10],
+    "max-union-size": false,
 
     // react styling
     "jsx-curly-spacing": true,
