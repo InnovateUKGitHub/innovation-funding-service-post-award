@@ -8,10 +8,8 @@ export interface IClaimDetailsSummaryApi {
 }
 
 class Controller extends ControllerBase<ClaimDetailsSummaryDto> implements IClaimDetailsSummaryApi {
-  public path = "claimdetailssummary";
-
   constructor() {
-    super();
+    super("claim-details-summary");
 
     this.getItems("/:partnerId/:periodId", (p, q) => ({
       partnerId: p.partnerId,

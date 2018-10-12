@@ -4,6 +4,9 @@ import { combineReducers } from "redux";
 import { ActionTransitionStart } from "redux-router5";
 import { LoadingStatus } from "../../../shared/pending";
 
+export type DataState = ReturnType<typeof dataReducer>;
+export type DataStores = keyof DataState;
+
 export interface IDataStore<T> {
   status: LoadingStatus;
   data: T;
@@ -50,6 +53,8 @@ export const dataReducer = combineReducers({
   contacts: dataStoreReducer<Dtos.IContact[], string>(x => x, "contacts"),
   contact: dataStoreReducer<Dtos.IContact, string>(x => x, "contact"),
   costCategories:dataStoreReducer<Dtos.CostCategoryDto[], string>(x => x, "costCategories"),
+  forecastDetails: dataStoreReducer<Dtos.ForecastDetailsDTO[], string>(x => x, "forecastDetails"),
+  forecastGolCosts: dataStoreReducer<Dtos.GOLCostDto[], string>(x => x, "forecastGolCosts"),
   partners: dataStoreReducer<Dtos.PartnerDto[], string>(x => x, "partners"),
   partner: dataStoreReducer<Dtos.PartnerDto, string>(x => x, "partner"),
   project: dataStoreReducer<Dtos.ProjectDto, string>(x => x, "project"),

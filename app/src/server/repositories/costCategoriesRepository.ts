@@ -6,6 +6,8 @@ export interface ISalesforceCostCategory {
     Acc_DisplayOrder__c: number;
     Acc_OrganisationType__c: string;
     Acc_CompetitionType__c: string;
+    Acc_CostCategoryDescription__c: string;
+    Acc_HintText__c: string;
 }
 
 const fieldNames: string[] = [
@@ -13,7 +15,10 @@ const fieldNames: string[] = [
     "Acc_CostCategoryName__c",
     "Acc_DisplayOrder__c",
     "Acc_OrganisationType__c",
-    "Acc_CompetitionType__c"
+    "Acc_CompetitionType__c",
+    "Acc_CostCategoryDescription__c",
+    // ToDo: currently missing on poc2 ... should be fixed soon
+    // "Acc_HintText__c"
 ];
 
 export interface ICostCategoryRepository {

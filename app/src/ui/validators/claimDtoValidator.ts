@@ -1,9 +1,10 @@
 import { ClaimDto } from "../models";
 import * as Validation from "./common";
+import { Results } from "../validation/results";
 
 const COMMENTS_LENGTH_MAX = 100;
 
-export class ClaimDtoValidator extends Validation.Results<ClaimDto>  {
+export class ClaimDtoValidator extends Results<ClaimDto>  {
 
     constructor(dto: ClaimDto, showErrors: boolean) {
         super(dto, showErrors);

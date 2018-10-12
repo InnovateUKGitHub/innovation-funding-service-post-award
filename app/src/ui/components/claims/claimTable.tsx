@@ -29,7 +29,9 @@ export const ClaimTable: React.SFC<Props> = (props) => {
             id: "",
             isCalculated: true,
             competitionType: "Unknown",
-            organistionType: "Unknown"
+            organistionType: "Unknown",
+            description: "",
+            hintText: ""
         },
         cost: {
             costCategoryId: "",
