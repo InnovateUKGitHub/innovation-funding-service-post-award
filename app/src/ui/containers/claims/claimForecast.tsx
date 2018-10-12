@@ -1,10 +1,10 @@
+import * as Dtos from "../../models";
 import React from "react";
-import {ContainerBase, ReduxContainer} from "../containerBase";
 import * as ACC from "../../components";
 import * as Actions from "../../redux/actions";
 import * as Selectors from "../../redux/selectors";
 import {Pending} from "../../../shared/pending";
-import * as Dtos from "../../models";
+import {ContainerBase, ReduxContainer} from "../containerBase";
 import {routeConfig} from "../../routing";
 import {IEditorStore} from "../../redux/reducers/editorsReducer";
 import {ClaimDtoValidator} from "../../validators/claimDtoValidator";
@@ -21,13 +21,13 @@ interface Params {
 
 interface Data {
   project: Pending<Dtos.ProjectDto>;
-  claim: Pending<Dtos.ClaimDto>;
   partner: Pending<Dtos.PartnerDto>;
+  claim: Pending<Dtos.ClaimDto>;
   claimDetails: Pending<Dtos.ClaimDetailsDto[]>;
   forecastDetails: Pending<Dtos.ForecastDetailsDTO[]>;
   golCosts: Pending<Dtos.GOLCostDto[]>;
   costCategories: Pending<Dtos.CostCategoryDto[]>;
-  editor: IEditorStore<Dtos.ClaimDto, ClaimDtoValidator>;
+  editor: Pending<IEditorStore<Dtos.ClaimDto, ClaimDtoValidator>>;
 }
 
 interface CombinedData {
@@ -35,9 +35,15 @@ interface CombinedData {
   partner: Dtos.PartnerDto;
   claim: Dtos.ClaimDto;
   claimDetails: Dtos.ClaimDetailsDto[];
-  costCategories: Dtos.CostCategoryDto[];
   forecastDetails: Dtos.ForecastDetailsDTO[];
   golCosts: Dtos.GOLCostDto[];
+  costCategories: Dtos.CostCategoryDto[];
+  editor: IEditorStore<Dtos.ClaimDto, ClaimDtoValidator>;
+}
+
+interface Callbacks {
+  saveAndReturn: (projectId: string, partnerId: string, periodId: number, dto: ClaimDto) => void;
+  onChange: (partnerId: string, periodId: number, dto: ClaimDto) => void;
 }
 
 interface TableRow {
@@ -48,11 +54,6 @@ interface TableRow {
   difference: number;
 }
 
-interface Callbacks {
-  saveAndReturn: (dto: Dtos.ClaimDto, projectId: string, partnerId: string, periodId: number) => void;
-  onChange: (partnerId: string, periodId: number, dto: Dtos.ClaimDto) => void;
-}
-
 export class ClaimForecastComponent extends ContainerBase<Params, Data, Callbacks> {
   public render() {
     const combined = Pending.combine(
@@ -61,17 +62,22 @@ export class ClaimForecastComponent extends ContainerBase<Params, Data, Callback
       this.props.claim,
       this.props.claimDetails,
       this.props.forecastDetails,
-      this.props.costCategories,
       this.props.golCosts,
-      (a, b, c, d, e, f, g) => ({ project: a, partner: b, claim: c, claimDetails: d, forecastDetails: e, costCategories: f, golCosts: g })
+      this.props.costCategories,
+      this.props.editor,
+      (a, b, c, d, e, f, g, h) => ({ project: a, partner: b, claim: c, claimDetails: d, forecastDetails: e, golCosts: f, costCategories: g, editor: h })
     );
 
     const Loader = ACC.TypedLoader<CombinedData>();
     return <Loader pending={combined} render={data => this.renderContents(data)} />;
   }
 
-  private saveAndReturn() {
-    this.props.saveAndReturn(this.props.editor.data, this.props.projectId, this.props.partnerId, this.props.periodId);
+  private onChange(dto: ClaimDto) {
+    this.props.onChange(this.props.partnerId, this.props.periodId, dto);
+  }
+
+  private saveAndReturn(dto: ClaimDto) {
+    this.props.saveAndReturn(this.props.projectId, this.props.partnerId, this.props.periodId, dto);
   }
 
   private parseClaimData(data: CombinedData) {
@@ -141,7 +147,6 @@ export class ClaimForecastComponent extends ContainerBase<Params, Data, Callback
 
   public renderContents(data: CombinedData) {
     const project   = data.project;
-    const partner   = data.partner;
     const parsed    = this.parseClaimData(data);
     const Table     = ACC.Table.forData(parsed);
     const Form      = ACC.TypedForm<Dtos.ClaimDto>();
@@ -151,11 +156,11 @@ export class ClaimForecastComponent extends ContainerBase<Params, Data, Callback
     return (
       <ACC.Page>
         <ACC.Section>
-          <ACC.BackLink route={routeConfig.prepareClaim.getLink({ projectId: project.id, partnerId: partner.id, periodId: this.props.periodId })}>Back</ACC.BackLink>
+          <ACC.BackLink route={routeConfig.prepareClaim.getLink({ projectId: this.props.projectId, partnerId: this.props.partnerId, periodId: this.props.periodId })}>Back</ACC.BackLink>
         </ACC.Section>
-        <ACC.Projects.Title pageTitle="Claim" project={project} />
+        <ACC.Projects.Title pageTitle="Claim" project={data.project} />
         <ACC.Section>
-          <Form.Form data={this.props.editor.data} onChange={(dto) => this.props.onChange(this.props.partnerId, this.props.periodId, dto)} onSubmit={() => this.saveAndReturn()}>
+          <Form.Form data={data.editor.data} onChange={(dto) => this.onChange(dto)} onSubmit={() => this.saveAndReturn(data.editor.data)}>
             <Table.Table
               qa="cost-category-table"
               headers={this.renderTableHeaders(periods, data.claim)}
@@ -167,7 +172,6 @@ export class ClaimForecastComponent extends ContainerBase<Params, Data, Callback
               <Table.Currency header="" value={x => x.golCosts} qa="category-gol-costs" />
               <Table.Percentage header="" value={x => x.difference} qa="category-difference" />
             </Table.Table>
-
             <Form.Fieldset>
               <Form.Submit>Submit claim and forecast changes</Form.Submit>
             </Form.Fieldset>
@@ -222,23 +226,6 @@ export class ClaimForecastComponent extends ContainerBase<Params, Data, Callback
     </td>
   )
 }
-
-// TODO extract shared function?
-const getEditor = (editor: IEditorStore<Dtos.ClaimDto, ClaimDtoValidator>, original: Pending<Dtos.ClaimDto>) => {
-  if (editor) {
-    return editor;
-  }
-  return original.then(x => {
-    const clone = JSON.parse(JSON.stringify(x!)) as Dtos.ClaimDto;
-    const updatedClaimDto = { ...clone, status: "Submitted" };
-    return {
-      data: updatedClaimDto,
-      validator: new ClaimDtoValidator(x!, false),
-      error: null
-    };
-  }).data!;
-};
-
 const goBack = (dispatch: any, projectId: string, partnerId: string) => {
   dispatch(Actions.navigateTo(ClaimsDashboardRoute.getLink({projectId, partnerId})));
 };
@@ -252,17 +239,16 @@ export const ForecastClaim = definition.connect({
       claim: claimSelector.getPending(state),
       project: Selectors.getProject(props.projectId).getPending(state),
       partner: Selectors.getPartner(props.partnerId).getPending(state),
-      editor: getEditor(state.editors.claim[claimSelector.key], claimSelector.getPending(state)),
-
       claimDetails: Selectors.findClaimDetailsByPartner(props.partnerId).getPending(state),
       forecastDetails: Selectors.findForecastDetailsByPartner(props.partnerId, props.periodId).getPending(state),
       golCosts: Selectors.findGolCostsByPartner(props.partnerId).getPending(state),
       costCategories: Selectors.getCostCategories().getPending(state),
+      editor: Selectors.getClaimEditor(props.partnerId, props.periodId).get(state, x => {x.status = "Submitted";})
     };
   },
   withCallbacks: (dispatch) => ({
-    onChange: (partnerId, periodId, dto) => dispatch(Actions.validateClaim(partnerId, periodId, dto)),
-    saveAndReturn: (dto, projectId, partnerId, periodId) => dispatch(Actions.saveClaim(partnerId, periodId, dto, () => goBack(dispatch, projectId, partnerId)))
+    onChange: (partnerId, periodId, dto) => dispatch(Actions.validateClaim(partnerId, periodId, dto, [], [])),
+    saveAndReturn: (projectId, partnerId, periodId, dto) => dispatch(Actions.saveClaim(partnerId, periodId, dto, [], [], () => goBack(dispatch, projectId, partnerId)))
   })
 });
 

@@ -14,7 +14,7 @@ export const ValidationSummary: React.SFC<Props> = ({ validation, compressed }) 
       validation.errors.forEach(x => {
         // nested results have collection of items that may have errored
         // if we are not compressed we want to show each of them
-        // need to fin d all invalid children and flatten them
+        // need to find all invalid children and flatten them
         if(x instanceof NestedResult && compressed !== true && x.results.length) {
             const childErrors = x.results.map(y => y as Results<{}>).filter(y => !y.isValid()).map(y => y.errors);
             const flattendErrors = childErrors.reduce((a, b) => a.concat(...b), []);

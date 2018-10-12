@@ -6,6 +6,7 @@ import { ClaimForecastRoute, ClaimsDashboardRoute, PrepareClaimRoute, } from "..
 import { configureRouter } from "../../ui/routing/configureRouter";
 import { serverRender } from "../serverRender";
 import { ClaimDtoValidator } from "../../ui/validators/claimDtoValidator";
+import { getClaimEditor } from "../../ui/redux/selectors";
 
 export const formRouter = express.Router();
 
@@ -41,13 +42,13 @@ const PrepareClaimForm = async (req: express.Request, res: express.Response) => 
         return;
     }
     catch (e) {
-        const key = `${params.partnerId}_${params.periodId}`;
+        const selector = getClaimEditor(params.partnerId, params.periodId);
         if (e instanceof ValidationError) {
-            serverRender(req, res, { key, store: "claim", dto: claim, result: e.validaionResult, error: null });
+            serverRender(req, res, { key: selector.key, store: selector.store, dto: claim, result: e.validaionResult, error: null });
             return;
         }
         else {
-            serverRender(req, res, { key, store: "claim", dto: claim, result: new ClaimDtoValidator(claim, true), error: e });
+            serverRender(req, res, { key: selector.key, store: selector.store, dto: claim, result: new ClaimDtoValidator(claim, [], [], false), error: e });
             return;
         }
     }
@@ -73,13 +74,13 @@ const ForcastClaimForm = async (req: express.Request, res: express.Response) => 
         return;
     }
     catch (e) {
-        const key = `${params.partnerId}_${params.periodId}`;
+        const selector = getClaimEditor(params.partnerId, params.periodId);
         if (e instanceof ValidationError) {
-            serverRender(req, res, { key, store: "claim", dto: claim, result: e.validaionResult, error: null });
+            serverRender(req, res, { key: selector.key, store: selector.store, dto: claim, result: e.validaionResult, error: null });
             return;
         }
         else {
-            serverRender(req, res, { key, store: "claim", dto: claim, result: new ClaimDtoValidator(claim, true), error: e });
+            serverRender(req, res, { key: selector.key, store: selector.store, dto: claim, result: new ClaimDtoValidator(claim, [], [], false), error: e });
             return;
         }
     }

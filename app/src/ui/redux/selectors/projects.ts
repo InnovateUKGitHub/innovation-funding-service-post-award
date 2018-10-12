@@ -1,5 +1,5 @@
 import {ProjectDto} from "../../models";
-import {IDataStore, RootState} from "../reducers";
+import { IDataStore, RootState} from "../reducers";
 import {getData} from "./data";
 import {IDataSelector} from "./IDataSelector";
 import {Pending} from "../../../shared/pending";

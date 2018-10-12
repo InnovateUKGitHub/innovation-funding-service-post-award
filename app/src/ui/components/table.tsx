@@ -95,12 +95,12 @@ export class TableColumn<T> extends React.Component<InternalColumnProps<T>> {
   }
 }
 
-const TableComponent2 = <T extends {}>(props: TableProps<T> & { data: T[]; validationResult?: NestedResult<Results<{}>>; }) => {
+const TableComponent2 = <T extends {}>(props: TableProps<T> & { data: T[]; validationResult?: Results<{}>[]; }) => {
   // loop through the colums cloning them and assigning the props required
   const customHeaders = props.headers && props.headers.length ? props.headers : null;
   const headers = React.Children.map(props.children, (column, columnIndex) => React.cloneElement(column as React.ReactElement<any>, { mode: "header", columnIndex }));
   const cols = React.Children.map(props.children, (column, columnIndex) => React.cloneElement(column as React.ReactElement<any>, { mode: "col", columnIndex }));
-  const contents = props.data.map((dataItem, rowIndex) => React.Children.map(props.children, (column, columnIndex) => React.cloneElement(column as React.ReactElement<any>, { mode: "cell", rowIndex, columnIndex, dataItem, validation: props.validationResult && props.validationResult.results && props.validationResult.results[rowIndex]  })));
+  const contents = props.data.map((dataItem, rowIndex) => React.Children.map(props.children, (column, columnIndex) => React.cloneElement(column as React.ReactElement<any>, { mode: "cell", rowIndex, columnIndex, dataItem, validation: props.validationResult && props.validationResult[rowIndex]  })));
   const footerColumns = React.Children.toArray(props.children).some((x: any) => x.props && x.props.footer) ? React.Children.map(props.children, (column, columnIndex) => React.cloneElement(column as React.ReactElement<any>, { mode: "footer", columnIndex })) : [];
   const footers = footerColumns.length ? [<tr key="standardFooter" className="govuk-table__row">{footerColumns}</tr>] : [];
   (props.footers || []).forEach(customFooter => footers.push(customFooter));
@@ -197,7 +197,7 @@ export const Table = {
 };
 
 export const TypedTable = <T extends {}>() => ({
-  Table: TableComponent2 as React.SFC<TableProps<T> & { data: T[]; validationResult?: NestedResult<Results<{}>>; }>,
+  Table: TableComponent2 as React.SFC<TableProps<T> & { data: T[]; validationResult?: Results<{}>[]; }>,
   Custom: CustomColumn as React.SFC<ExternalColumnProps<T, React.ReactNode> & { classSuffix?: "numeric" }>,
   String: StringColumn as React.SFC<ExternalColumnProps<T, string | null>>,
   Number: NumberColumn as React.SFC<ExternalColumnProps<T, number | null>>,

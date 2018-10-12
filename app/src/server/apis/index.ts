@@ -9,7 +9,7 @@ import * as claimLineItems from "./claimLineItems";
 import * as claimDetails from "./claimDetails";
 import * as claimDetailsSummary from "./claimDetailsSummary";
 import * as forecastDetails from "./forecastDetails";
-import * as forecastGolCosts from "./forecastGolCost";
+import * as forecastGolCosts from "./forecastGolCosts";
 import {ControllerBase} from "./controllerBase";
 
 export interface IApiClient {

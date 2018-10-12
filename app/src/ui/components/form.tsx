@@ -88,6 +88,11 @@ const handleSubmit = <TDto extends {}>(props: SubmitProps, e: React.SyntheticEve
     formProps.onSubmit();
 };
 
+const handleOtherButton = <TDto extends {}>(props: ButtonProps, e: React.SyntheticEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    props.onClick();
+};
+
 const handleChange = <TDto extends {}, TValue extends {}>(props: ExternalFieldProps<TDto, TValue>, value: TValue|null) => {
     const formProps = props as any as FormProps<TDto>;
     const data = formProps.data;
@@ -123,10 +128,11 @@ const NumericField = <T extends {}>(props: ExternalFieldProps<T, number>) => {
 
 interface SubmitProps {
     qa?: string;
+    disabled?: boolean;
 }
 
 const SubmitComponent: React.SFC<SubmitProps> = (props) => {
-    return <button type="submit" name="button" value="default" className="govuk-button" onClick={(e) => handleSubmit(props, e)}>{props.children}</button>;
+    return <button type="submit" name="button" value="default" disabled={props.disabled} className="govuk-button" onClick={(e) => handleSubmit(props, e)}>{props.children}</button>;
 };
 
 interface ButtonProps {
@@ -136,7 +142,7 @@ interface ButtonProps {
 }
 
 const ButtonComponent: React.SFC<ButtonProps> = (props) => {
-    return <button type="submit" name="button" value={props.name} className="govuk-button" style={{background:"buttonface", color: "buttontext" }} onClick={(e) => props.onClick()}>{props.children}</button>;
+    return <button type="submit" name="button" value={props.name} className="govuk-button" style={{background:"buttonface", color: "buttontext" }} onClick={(e) => handleOtherButton(props, e)}>{props.children}</button>;
 
 };
 

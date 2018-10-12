@@ -2,6 +2,8 @@ import { ICommand, IContext } from "../common/context";
 import { ClaimDto } from "../../../ui/models";
 import { ClaimDtoValidator } from "../../../ui/validators/claimDtoValidator";
 import { Results } from "../../../ui/validation/results";
+import { GetCostCategoriesQuery } from ".";
+import { GetClaimDetailsSummaryForPartnerQuery } from "./claimDetails/getClaimDetailsSummaryForPartnerQuery";
 
 export class ValidationError extends Error {
   constructor(public readonly validaionResult: Results<{}>) {
@@ -13,7 +15,10 @@ export class UpdateClaimCommand implements ICommand<boolean> {
   constructor(private claimDto: ClaimDto) { }
 
   public async Run(context: IContext) {
-    const result = new ClaimDtoValidator(this.claimDto, true);
+
+    const costCategories = await context.runQuery(new GetCostCategoriesQuery());
+    const details = await context.runQuery(new GetClaimDetailsSummaryForPartnerQuery(this.claimDto.partnerId, this.claimDto.periodId));
+    const result = new ClaimDtoValidator(this.claimDto, details, costCategories, true);
 
     if (!result.isValid()) {
       throw new ValidationError(result);
