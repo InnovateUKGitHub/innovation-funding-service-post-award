@@ -13,5 +13,6 @@ export const routeConfig = {
   prepareClaim: Containers.PrepareClaimRoute,
   prepareClaimLineItems: Containers.EditClaimLineItemsRoute,
   claimForecast: Containers.ClaimForecastRoute,
+  viewForecast: Containers.ViewForecastRoute,
   // error: errorRoute
 };
