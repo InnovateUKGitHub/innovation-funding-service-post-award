@@ -1,5 +1,6 @@
 import {IContext, IQuery} from "../common/context";
 import {ForecastDetailsDTO} from "../../../ui/models";
+import mapForecastDetail from "./mapForecastDetail";
 
 export class GetForecastDetail implements IQuery<ForecastDetailsDTO> {
   constructor(private partnerId: string,
@@ -9,10 +10,7 @@ export class GetForecastDetail implements IQuery<ForecastDetailsDTO> {
 
   public async Run(context: IContext) {
     const result = await context.repositories.profileDetails.getById(this.partnerId, this.periodId, this.costCategoryId);
-    return {
-      costCategoryId: result.Acc_CostCategory__c,
-      periodId: result.Acc_ProjectPeriodNumber__c,
-      value: result.Acc_LatestForecastCost__c
-    };
+    console.log('result', result);
+    return result && mapForecastDetail(context)(result);
   }
 }

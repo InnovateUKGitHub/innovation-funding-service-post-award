@@ -1,8 +1,7 @@
 import { ControllerBase } from "./controllerBase";
 import { ForecastDetailsDTO } from "../../ui/models";
-import { GetAllForecastsForPartnerQuery } from "../features/claims/getAllForecastsForPartnerQuery";
 import contextProvider from "../features/common/contextProvider";
-import {GetForecastDetail} from "../features/forecasts/getForecastDetailQuery";
+import {GetAllForecastsForPartnerQuery, GetForecastDetail} from "../features/forecastDetails";
 
 export interface IForecastDetailsApi {
   getAllByPartnerId: (partnerId: string, periodId: number) => Promise<ForecastDetailsDTO[]>;

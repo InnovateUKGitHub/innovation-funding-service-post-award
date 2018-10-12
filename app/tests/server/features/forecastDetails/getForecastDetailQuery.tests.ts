@@ -1,6 +1,6 @@
 import "jest";
 import { TestContext } from "../../testContextProvider";
-import {GetForecastDetail} from "../../../../src/server/features/forecasts/getForecastDetailQuery";
+import {GetForecastDetail} from "../../../../src/server/features/forecastDetails/getForecastDetailQuery";
 
 describe("GetForecastDetailQuery", () => {
   it("returns object of correct shape", async () => {
