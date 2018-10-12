@@ -64,8 +64,8 @@ export class ClaimLineItemsComponent extends ContainerBase<Params, Data, {}> {
 
 const ClaimLineItemsTable: React.SFC<{ lineItems: Dtos.ClaimLineItemDto[] }> = ({lineItems}) => {
   const LineItemTable = ACC.Table.forData(lineItems);
-  const renderFooterRow = (row: { key: string, title: string, value: React.ReactNode }) => (
-    <tr key={row.key} className="govuk-table__row">
+  const renderFooterRow = (row: { key: string, title: string, value: React.ReactNode, qa: string }) => (
+    <tr key={row.key} className="govuk-table__row" data-qa={row.qa}>
       <th className="govuk-table__cell govuk-table__cell--numeric govuk-!-font-weight-bold">{row.title}</th>
       <td className="govuk-table__cell govuk-table__cell--numeric">{row.value}</td>
     </tr>
@@ -75,13 +75,13 @@ const ClaimLineItemsTable: React.SFC<{ lineItems: Dtos.ClaimLineItemDto[] }> = (
     <LineItemTable.Table
       qa="current-claim-summary-table"
       footers={[
-        renderFooterRow({ key: "1", title: "Total labour costs", value:
+        renderFooterRow({ key: "1", title: "Total labour costs", qa:"footer-total-costs", value:
             <Currency className={"govuk-!-font-weight-bold"} value={lineItems.reduce((total, item) => total + (item.value || 0), 0)}/>
         }),
-        renderFooterRow({ key: "2", title: "Forecast costs", value:
+        renderFooterRow({ key: "2", title: "Forecast costs", qa:"footer-forecast-costs", value:
             <Currency value={0}/>
         }),
-        renderFooterRow({ key: "3", title: "Difference", value:
+        renderFooterRow({ key: "3", title: "Difference", qa:"footer-difference", value:
             <Percentage value={0}/>
         })
       ]}

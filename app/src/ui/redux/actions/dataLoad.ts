@@ -1,5 +1,5 @@
 import { AsyncThunk, createAction } from "./common";
-import { DataStores, IDataStore } from "../reducers";
+import { DataStateKeys, IDataStore } from "../reducers";
 import { LoadingStatus } from "../../../shared/pending";
 
 type DataLoadThunk = typeof dataLoadAction;
@@ -18,7 +18,7 @@ export function dataLoadAction(
 
 export function conditionalLoad<T>(
   idSelector: string,
-  storeSelector: DataStores,
+  storeSelector: DataStateKeys,
   load: () => Promise<T>
 ): AsyncThunk<void, DataLoadAction> {
   return (dispatch, getState) => {

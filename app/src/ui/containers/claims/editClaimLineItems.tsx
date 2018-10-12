@@ -76,7 +76,7 @@ export class EditClaimLineItemsComponent extends ContainerBase<Params, Data, Cal
     return (
       <LineItemForm.Form data={editor.data} onChange={x => { /* Todo */ }} onSubmit={() => this.props.save(this.props.projectId, this.props.partnerId, this.props.periodId, this.props.costCategoryId, this.props.editor.data)}>
         <LineItemForm.Fieldset>
-          <LineItemTable.Table qa="current-claim-summary-table" data={editor.data} validationResult={editor.validator.items} footers={this.renderFooters(editor)}>
+          <LineItemTable.Table qa="current-claim-summary-table" data={editor.data} validationResult={editor.validator.items.results} footers={this.renderFooters(editor)}>
             <LineItemTable.Custom header="Description of cost" qa="cost-description" value={(x, i) => this.renderDescription(x, i, editor.validator.items.results[i.row])} />
             <LineItemTable.Custom header="Cost (£)" qa="cost-value" classSuffix="numeric" value={(x, i) => this.renderCost(x, i, editor.validator.items.results[i.row])} width={30} />
             <LineItemTable.Custom header="" qa="remove" value={(x, i) => <a href="#" onClick={e => this.removeItem(x, i, e)}>remove</a>} width={1} />
