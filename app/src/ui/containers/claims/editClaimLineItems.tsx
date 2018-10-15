@@ -117,7 +117,6 @@ export class EditClaimLineItemsComponent extends ContainerBase<Params, Data, Cal
     const dto = this.props.editor.data;
     dto.push({} as Dtos.ClaimLineItemDto);
     this.props.validate(this.props.partnerId, this.props.periodId, this.props.costCategoryId, dto);
-    console.log("item added!!!");
   }
 
   updateItem(i: { column: number; row: number; }, update: (item: Dtos.ClaimLineItemDto) => void) {
@@ -129,8 +128,8 @@ export class EditClaimLineItemsComponent extends ContainerBase<Params, Data, Cal
   private renderFooters(editor: IEditorStore<Dtos.ClaimLineItemDto[], ClaimLineItemDtosValidator>) {
     const total = editor.data.reduce((t, item) => t + (item.value || 0), 0);
     // ToDo : get from data store
-    const forcast = 10000;
-    const diff = 100 * (total - forcast) / forcast;
+    const forecast = 10000;
+    const diff = 100 * (total - forecast) / forecast;
 
     return [
       (
@@ -148,7 +147,7 @@ export class EditClaimLineItemsComponent extends ContainerBase<Params, Data, Cal
       (
         <tr key={3} className="govuk-table__row">
           <th className="govuk-table__cell govuk-table__cell--numeric govuk-!-font-weight-bold">Forecast costs</th>
-          <td className="govuk-table__cell govuk-table__cell--numeric"><ACC.Renderers.Currency value={forcast} /></td>
+          <td className="govuk-table__cell govuk-table__cell--numeric"><ACC.Renderers.Currency value={forecast} /></td>
           <td className="govuk-table__cell" />
         </tr>
       ),
