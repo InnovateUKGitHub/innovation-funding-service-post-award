@@ -1,7 +1,7 @@
 export interface ClaimLineItemDto {
   id: string;
-  description: string | null;
-  value: number | null;
+  description: string;
+  value: number;
   partnerId: string;
   periodId: number;
   costCategoryId: string;
