@@ -1,14 +1,19 @@
 import {ICommand, IContext} from "../common/context";
 import {ClaimLineItemDto} from "../../../ui/models";
+import {ClaimLineItemDtosValidator} from "../../../ui/validators/claimLineItemDtosValidator";
+import {ValidationError} from "../../../shared/validation";
 
 export class SaveLineItemsCommand implements ICommand<boolean> {
   // TODO use updatable here but not working as expected
-  constructor(public partnerId: string, public costCategoryId: string, public periodId: number, private lineItems: Partial<ClaimLineItemDto>[]) {
+  constructor(public partnerId: string, public costCategoryId: string, public periodId: number, private lineItems: ClaimLineItemDto[]) {
   }
 
   public async Run(context: IContext) {
 
-    console.log("save", this.partnerId, this.costCategoryId, this.periodId, this.lineItems);
+    const validationResult = new ClaimLineItemDtosValidator(this.lineItems, true);
+    if (!validationResult.isValid()) {
+      throw new ValidationError(validationResult);
+    }
 
     const existing = (await context.repositories.claimLineItems.getAllForCategory(this.partnerId, this.costCategoryId, this.periodId) || []);
     const updateDtos = this.lineItems.filter(item => !!item.id);

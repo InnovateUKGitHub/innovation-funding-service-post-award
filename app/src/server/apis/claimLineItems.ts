@@ -1,14 +1,15 @@
 import contextProvider from "../features/common/contextProvider";
 import {ControllerBase} from "./controllerBase";
-import {GetAllLineItemsForClaimByCategoryQuery, GetClaim} from "../features/claims";
+import {GetAllLineItemsForClaimByCategoryQuery} from "../features/claims";
 import {ClaimLineItemDto} from "../../ui/models";
 import {ApiError, ErrorCode} from "./ApiError";
 import {SaveLineItemsCommand} from "../features/claimLineItems/saveLineItemsCommand";
 import {processDto} from "../../shared/processResponse";
+import {ValidationError} from "../../shared/validation";
 
 export interface IClaimLineItemApi {
   getAllForCategory: (partnerId: string, costCategoryId: string, periodId: number) => Promise<ClaimLineItemDto[]>;
-  saveLineItems: (partnerId: string, costCategoryId: string, periodId: number, lineItems: Partial<ClaimLineItemDto>[]) => Promise<ClaimLineItemDto[]>;
+  saveLineItems: (partnerId: string, costCategoryId: string, periodId: number, lineItems: ClaimLineItemDto[]) => Promise<ClaimLineItemDto[]>;
 }
 
 class Controller extends ControllerBase<ClaimLineItemDto> implements IClaimLineItemApi {
@@ -22,7 +23,12 @@ class Controller extends ControllerBase<ClaimLineItemDto> implements IClaimLineI
     );
     this.postItem(
       "/",
-      (p, q, b) => ({partnerId: q.partnerId, periodId: parseInt(q.periodId, 10), costCategoryId: q.costCategoryId, lineItems: b.map(processDto)}),
+      (p, q, b) => ({
+        partnerId: q.partnerId,
+        periodId: parseInt(q.periodId, 10),
+        costCategoryId: q.costCategoryId,
+        lineItems: processDto(b)
+      }),
       (p) => this.saveLineItems(p.partnerId, p.costCategoryId, p.periodId, p.lineItems)
     );
   }
@@ -32,12 +38,10 @@ class Controller extends ControllerBase<ClaimLineItemDto> implements IClaimLineI
     return contextProvider.start().runQuery(query);
   }
 
-  public async saveLineItems(partnerId: string, costCategoryId: string, periodId: number, lineItems: Partial<ClaimLineItemDto>[]) {
+  public async saveLineItems(partnerId: string, costCategoryId: string, periodId: number, lineItems: ClaimLineItemDto[]): Promise<ClaimLineItemDto[]> {
 
     const validRequest = partnerId && costCategoryId && periodId &&
-      lineItems.every(x => console.log(x.periodId, periodId, x.partnerId, partnerId, x.costCategoryId, costCategoryId) || x.periodId === periodId && x.partnerId === partnerId && x.costCategoryId === costCategoryId);
-
-    console.log(partnerId,costCategoryId, periodId, validRequest);
+      lineItems.every(x => x.periodId === periodId && x.partnerId === partnerId && x.costCategoryId === costCategoryId);
 
     if (!validRequest) {
       throw new ApiError(ErrorCode.BAD_REQUEST,"Request is missing required fields");
@@ -46,7 +50,9 @@ class Controller extends ControllerBase<ClaimLineItemDto> implements IClaimLineI
     const command = new SaveLineItemsCommand(partnerId, costCategoryId, periodId, lineItems);
 
     await contextProvider.start().runCommand(command).catch(e => {
-      console.log("Api Error: ", e);
+      if (e instanceof ValidationError) {
+        throw new ApiError(ErrorCode.BAD_REQUEST, e);
+      }
       throw new ApiError(ErrorCode.INTERNAL_SERVER_ERROR, "Failed to update claim line items");
     });
 

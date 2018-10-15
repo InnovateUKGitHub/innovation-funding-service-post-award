@@ -121,7 +121,11 @@ export class EditClaimLineItemsComponent extends ContainerBase<Params, Data, Cal
   addItem(e: React.SyntheticEvent<HTMLAnchorElement>) {
     e.preventDefault();
     const dto = this.props.editor.data;
-    dto.push({} as Dtos.ClaimLineItemDto);
+    dto.push({
+      partnerId: this.props.partnerId,
+      periodId: this.props.periodId,
+      costCategoryId: this.props.costCategoryId
+    } as Dtos.ClaimLineItemDto);
     this.props.validate(this.props.partnerId, this.props.periodId, this.props.costCategoryId, dto);
   }
 
@@ -134,7 +138,7 @@ export class EditClaimLineItemsComponent extends ContainerBase<Params, Data, Cal
   private renderFooters(editor: IEditorStore<Dtos.ClaimLineItemDto[], ClaimLineItemDtosValidator>, forecastDetail: Dtos.ForecastDetailsDTO) {
     const total = editor.data.reduce((t, item) => t + (item.value || 0), 0);
     // TODO remove multiply by 100
-    const forecast = forecastDetail.value;
+    const forecast = forecastDetail ? forecastDetail.value : 0;
     const diff = 100 * (forecast - total) / forecast;
 
     return [

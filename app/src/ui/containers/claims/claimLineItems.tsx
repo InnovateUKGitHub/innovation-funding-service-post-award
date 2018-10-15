@@ -75,7 +75,7 @@ const ClaimLineItemsTable: React.SFC<{ lineItems: Dtos.ClaimLineItemDto[], forec
   );
 
   const total = lineItems.reduce((count, item) => count + (item.value || 0), 0);
-  const forecast = forecastDetail.value;
+  const forecast = forecastDetail ? forecastDetail.value : 0;
 
   // TODO remove multiply by 100
   const diff = 100 * (forecast - total) / forecast;
@@ -88,7 +88,7 @@ const ClaimLineItemsTable: React.SFC<{ lineItems: Dtos.ClaimLineItemDto[], forec
             <Currency className={"govuk-!-font-weight-bold"} value={total}/>
         }),
         renderFooterRow({ key: "2", title: "Forecast costs", qa:"footer-forecast-costs", value:
-            <Currency value={forecastDetail.value}/>
+            <Currency value={forecast}/>
         }),
         renderFooterRow({ key: "3", title: "Difference", qa:"footer-difference", value:
             <Percentage value={diff}/>
