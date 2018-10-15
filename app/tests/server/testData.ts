@@ -134,7 +134,7 @@ export class TestData {
 
         while(this.repositories.claims.Items.some(x => x.Id === id)){
             seed++;
-            let id = `Claim_${seed}`;
+            id = `Claim_${seed}`;
         }
 
         const newItem: Repositories.ISalesforceClaim = {
