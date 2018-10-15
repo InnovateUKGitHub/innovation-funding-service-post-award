@@ -3,8 +3,8 @@ import {RecordTypeRepository} from "./recordTypeRepository";
 
 export interface ISalesforceClaimLineItem {
   Id: string;
-  Acc_LineItemDescription__c: string;
-  Acc_LineItemCost__c: number;
+  Acc_LineItemDescription__c: string | null;
+  Acc_LineItemCost__c: number | null;
   Acc_CostCategory__c: string;
   Acc_ProjectPeriodNumber__c: number;
   Acc_ProjectParticipant__c: string;

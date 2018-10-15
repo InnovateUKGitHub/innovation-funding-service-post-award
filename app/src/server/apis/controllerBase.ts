@@ -22,12 +22,21 @@ export abstract class ControllerBase<T> {
     return this.putCustom<TParams, T | null>(path, getParams, run);
   }
 
+  protected postItem<TParams>(path: string, getParams: (params: any, query: any, body: any) => TParams, run: (params: TParams) => Promise<T | null>) {
+    return this.postCustom<TParams, T | null>(path, getParams, run);
+  }
+
   protected getItems<TParams>(path: string, getParams: (params: any, query: any) => TParams, run: (params: TParams) => Promise<T[]>) {
     return this.getCustom<TParams, T[]>(path, getParams, run, false);
   }
 
   protected putCustom<TParams, TResponse>(path: string, getParams: (params: any, query: any, body?: any) => TParams, run: (params: TParams) => Promise<TResponse>) {
     this.router.put(path, this.executeMethod(200, getParams, run, false));
+    return this;
+  }
+
+  protected postCustom<TParams, TResponse>(path: string, getParams: (params: any, query: any, body?: any) => TParams, run: (params: TParams) => Promise<TResponse>) {
+    this.router.post(path, this.executeMethod(200, getParams, run, false));
     return this;
   }
 
