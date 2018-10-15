@@ -4,7 +4,6 @@ import {ClaimLineItemDtosValidator} from "../../../ui/validators/claimLineItemDt
 import {ValidationError} from "../../../shared/validation";
 
 export class SaveLineItemsCommand implements ICommand<boolean> {
-  // TODO use updatable here but not working as expected
   constructor(public partnerId: string, public costCategoryId: string, public periodId: number, private lineItems: ClaimLineItemDto[]) {
   }
 
@@ -39,6 +38,6 @@ export class SaveLineItemsCommand implements ICommand<boolean> {
       context.repositories.claimLineItems.update(updateItems),
       context.repositories.claimLineItems.insert(insertItems),
       context.repositories.claimLineItems.delete(deleteItems)
-    ]).then((resp) => console.log(resp) || true);
+    ]).then(() => true);
   }
 }
