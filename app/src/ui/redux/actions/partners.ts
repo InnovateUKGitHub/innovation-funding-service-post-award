@@ -1,0 +1,11 @@
+import {conditionalLoad} from "./dataLoad";
+import { findPartnersByProject, partnersStore } from "../selectors/partners";
+import {ApiClient} from "../../../shared/apiClient";
+
+export function loadPartnersForProject(projectId: string) {
+  return conditionalLoad(
+    findPartnersByProject(projectId).key,
+    partnersStore,
+    () => ApiClient.partners.getAllByProjectId(projectId)
+  );
+}

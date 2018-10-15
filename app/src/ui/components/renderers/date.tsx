@@ -11,6 +11,23 @@ const renderDate = (value: Date | null, format: string) => {
     return null;
 };
 
+export const DateRange: React.SFC<{ start: Date|null, end: Date|null }> = props => {
+  const start = props.start && DateTime.fromJSDate(props.start);
+  const end   = props.end && DateTime.fromJSDate(props.end);
+
+  if(!start || !start.isValid || !end || !end.isValid) {
+    return null;
+  }
+
+  const words  = [start.monthShort, "to", end.monthShort, end.year];
+
+  if(start.year !== end.year) {
+    words.splice(1, 0, start.year);
+  }
+
+  return <span>{words.join(" ")}</span>;
+};
+
 export const ShortMonth: React.SFC<{ value: Date | null }> = (props) => {
     return renderDate(props.value, "MMM");
 };

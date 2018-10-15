@@ -1,14 +1,14 @@
 import { TestRepository } from "./testRepository";
 import * as Repositories from "../../src/server/repositories";
 import { IRepositories } from "../../src/server/features/common/context";
-import { ISalesforceClaimTotalCostCategory } from "../../src/server/repositories";
+import {Updatable} from "../../src/server/repositories/salesforceBase";
 
 class ContactsTestRepository extends TestRepository<Repositories.ISalesforceContact> implements Repositories.IContactsRepository {
     getById(id: string) {
         return super.getOne(x => x.Id == id);
     }
 
-    getAll(){
+    getAll() {
         return super.getAll();
     }
 }
@@ -33,7 +33,6 @@ class PartnerTestRepository extends TestRepository<Repositories.ISalesforcePartn
     }
 }
 
-
 class ProjectContactTestRepository extends TestRepository<Repositories.ISalesforceProjectContact> implements Repositories.IProjectContactsRepository {
     getAllByProjectId(projectId: string) {
         return super.getWhere(x => x.Acc_ProjectId__c === projectId);
@@ -56,40 +55,76 @@ class ClaimsTestRepository extends TestRepository<Repositories.ISalesforceClaim>
     getAllByPartnerId(partnerId: string) {
         return super.getWhere(x => x.Acc_ProjectParticipant__c === partnerId);
     }
-    getById(id: string) {
-        return super.getOne(x => x.Id === id);
+
+    getByPartnerIdAndPeriodId(partnerId: string, periodId: number) {
+        return super.getOne(x => x.Acc_ProjectParticipant__c === partnerId && x.Acc_ProjectPeriodNumber__c === periodId);
+    }
+
+    update(updatedClaim: Repositories.ISalesforceClaim) {
+        const index = super.Items.findIndex(x => x.Acc_ProjectParticipant__c === updatedClaim.Acc_ProjectParticipant__c && x.Acc_ProjectPeriodNumber__c == updatedClaim.Acc_ProjectPeriodNumber__c);
+        if(index >= 0) {
+            super.Items[index] = updatedClaim;
+            return Promise.resolve(true);
+        }
+        return Promise.resolve(false);
     }
 }
 
 class ClaimDetailsTestRepository extends TestRepository<Repositories.ISalesforceClaimDetails> implements Repositories.IClaimDetailsRepository{
-    getAllByPartnerId(partnerId: string, periodId: number): Promise<Repositories.ISalesforceClaimDetails[]> {
-        return super.getWhere(x => x.Acc_ProjectPartner_c === partnerId && x.Acc_PeriodId === periodId);
+    getAllByPartnerForPeriod(partnerId: string, periodId: number): Promise<Repositories.ISalesforceClaimDetails[]> {
+        return super.getWhere(x => x.Acc_ProjectParticipant__c === partnerId && x.Acc_ProjectPeriodNumber__c === periodId);
     }
 
-    getAllPreviousByPartnerId(partnerId: string, periodId: number): Promise<Repositories.ISalesforceClaimDetails[]> {
-        return super.getWhere(x => x.Acc_ProjectPartner_c === partnerId && x.Acc_PeriodId < periodId);
+    getAllByPartnerWithPeriodLt(partnerId: string, periodId: number): Promise<Repositories.ISalesforceClaimDetails[]> {
+        return super.getWhere(x => x.Acc_ProjectParticipant__c === partnerId && x.Acc_ProjectPeriodNumber__c < periodId);
+    }
+
+    getAllByPartner(partnerId: string): Promise<Repositories.ISalesforceClaimDetails[]> {
+        return super.getWhere(x => x.Acc_ProjectParticipant__c === partnerId);
     }
 }
 
 class ClaimLineItemsTestRepository extends TestRepository<Repositories.ISalesforceClaimLineItem> implements Repositories.IClaimLineItemRepository{
     getAllForCategory(partnerId: string, categoryId: string, periodId: number)  {
-        return super.getWhere(x => x.Acc_ProjectPeriodId__c === periodId && x.Acc_CostCategory__c === categoryId && x.Acc_ProjectParticipant__c === partnerId);
+        return super.getWhere(x => x.Acc_ProjectPeriodNumber__c === periodId && x.Acc_CostCategory__c === categoryId && x.Acc_ProjectParticipant__c === partnerId);
     }
+    delete() { return super.delete(); }
+    update(update: Updatable<Repositories.ISalesforceClaimLineItem>) { return super.update(update); }
+    insert() { return super.insert(); }
 }
 
-class ClaimTotalCostTestRepository extends TestRepository<ISalesforceClaimTotalCostCategory> implements Repositories.IClaimTotalCostCategoryRepository{
+class ClaimTotalCostTestRepository extends TestRepository<Repositories.ISalesforceClaimTotalCostCategory> implements Repositories.IClaimTotalCostCategoryRepository{
     getAllByPartnerId(partnerId: string) {
         return super.getWhere(x => x.Acc_ProjectParticipant__c === partnerId);
     }
 }
 
+class ProfileDetailsTestRepository extends TestRepository<Repositories.ISalesforceProfileDetails> implements Repositories.IProfileDetailsRepository {
+  getAllByPartnerWithPeriodGt(partnerId: string, periodId: number) {
+    return super.getWhere(x => x.Acc_ProjectParticipant__c === partnerId && x.Acc_ProjectPeriodNumber__c > periodId);
+  }
+
+  getById(partnerId: string, periodId: number, costCategoryId: string) {
+    return super
+      .getWhere(x => x.Acc_ProjectParticipant__c === partnerId && x.Acc_ProjectPeriodNumber__c === periodId && x.Acc_CostCategory__c === costCategoryId)
+      .then(x => x[0]);
+  }
+}
+
+class ProfileTotalCostCategoryTestRepository extends TestRepository<Repositories.ISalesforceProfileTotalCostCategory> implements Repositories.IProfileTotalCostCategoryRepository {
+  getAllByPartnerId(partnerId: string) {
+    return super.getWhere(x => x.Acc_ProjectParticipant__c === partnerId);
+  }
+}
+
 export interface ITestRepositories extends IRepositories {
     claims: ClaimsTestRepository;
     claimDetails: ClaimDetailsTestRepository;
-    claimCosts: ClaimCostTestRepository;
     claimLineItems: ClaimLineItemsTestRepository;
     costCategories: CostCategoriesTestRepository;
     contacts: ContactsTestRepository;
+    profileDetails: ProfileDetailsTestRepository;
+    profileTotalCostCategory: ProfileTotalCostCategoryTestRepository;
     projects: ProjectsTestRepository;
     partners: PartnerTestRepository;
     projectContacts: ProjectContactTestRepository;
@@ -98,11 +133,12 @@ export interface ITestRepositories extends IRepositories {
 
 export const createTestRepositories = (): ITestRepositories => ({
     claims: new ClaimsTestRepository(),
-    claimCosts: new ClaimCostTestRepository(),
     claimDetails: new ClaimDetailsTestRepository(),
     claimLineItems: new ClaimLineItemsTestRepository(),
     costCategories: new CostCategoriesTestRepository(),
     contacts: new ContactsTestRepository(),
+    profileDetails: new ProfileDetailsTestRepository(),
+    profileTotalCostCategory: new ProfileTotalCostCategoryTestRepository(),
     projects: new ProjectsTestRepository(),
     partners: new PartnerTestRepository(),
     projectContacts: new ProjectContactTestRepository(),

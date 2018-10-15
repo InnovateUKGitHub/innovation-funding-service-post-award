@@ -33,7 +33,7 @@ export const ProjectDescription: React.SFC<Props> = (props) => (
         {props.project.projectNumber}: {props.project.title}
       </Link>
     </h2>
-    <p className="govuk-body govuk-!-margin-bottom-2">{props.periodText} {props.project.period} of {props.frequency}</p>
+    <p className="govuk-body govuk-!-margin-bottom-2">{props.periodText} {props.project.periodId} of {props.frequency}</p>
   </div>
 );
 

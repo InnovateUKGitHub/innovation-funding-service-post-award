@@ -1,7 +1,8 @@
 import * as React from "react";
 import { Link } from "react-router5";
 import { Breadcrumbs, Title } from "../../components/layout";
-import * as Actions from "../../redux/actions/thunks";
+import * as Actions from "../../redux/actions";
+import * as Selectors from "../../redux/selectors";
 import { ContainerBase, ReduxContainer } from "../containerBase";
 import { Pending } from "../../../shared/pending";
 import * as Dtos from "../../models";
@@ -49,16 +50,10 @@ class ListComponent extends ContainerBase<{}, Props, {}> {
   }
 }
 
-function mapStateToProps(state: any) {
-  return {
-    data: state && state.data && state.data.contacts && state.data.contacts.all && state.data.contacts.all.data
-  };
-}
-
 const definition = ReduxContainer.for<{}, Props, {}>(ListComponent);
 
 export const ContactList = definition.connect({
-  withData: (store) => ({ contacts: Pending.create(store.data.contacts.all) }),
+  withData: (state) => ({ contacts: Selectors.getContacts().getPending(state) }),
   withCallbacks: () => ({})
 });
 

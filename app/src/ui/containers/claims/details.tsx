@@ -2,7 +2,8 @@ import React from "react";
 import { DateTime } from "luxon";
 import { ContainerBase, ReduxContainer } from "../containerBase";
 import { Pending } from "../../../shared/pending";
-import * as Actions from "../../redux/actions/thunks";
+import * as Actions from "../../redux/actions";
+import * as Selectors from "../../redux/selectors";
 import * as Dtos from "../../models";
 import * as ACC from "../../components";
 import { routeConfig } from "../../routing";
@@ -20,7 +21,7 @@ interface Data {
     partner: Pending<Dtos.PartnerDto>;
     costCategories: Pending<Dtos.CostCategoryDto[]>;
     claim: Pending<Dtos.ClaimDto>;
-    claimDetails: Pending<Dtos.ClaimDetailsDto[]>;
+    claimDetailsSummary: Pending<Dtos.ClaimDetailsSummaryDto[]>;
 }
 
 interface CombinedData {
@@ -28,7 +29,7 @@ interface CombinedData {
     partner: Dtos.PartnerDto;
     costCategories: Dtos.CostCategoryDto[];
     claim: Dtos.ClaimDto;
-    claimDetails: Dtos.ClaimDetailsDto[];
+    claimDetails: Dtos.ClaimDetailsSummaryDto[];
 }
 
 export class ClaimsDetailsComponent extends ContainerBase<Params, Data, {}> {
@@ -39,7 +40,7 @@ export class ClaimsDetailsComponent extends ContainerBase<Params, Data, {}> {
             this.props.partner,
             this.props.costCategories,
             this.props.claim,
-            this.props.claimDetails,
+            this.props.claimDetailsSummary,
             (project, partner, costCategories, claim, claimDetails) => ({ project, partner, costCategories, claim, claimDetails })
         );
 
@@ -54,7 +55,7 @@ export class ClaimsDetailsComponent extends ContainerBase<Params, Data, {}> {
         return `${data.partner.name} claim for P${data.claim.periodId} ${DateTime.fromJSDate(data.claim.periodStartDate).toFormat("MMMM")} to ${DateTime.fromJSDate(data.claim.periodEndDate).toFormat("MMMM yyyy")}`;
     }
 
-    private renderContents(data: { project: Dtos.ProjectDto, partner: Dtos.PartnerDto, costCategories: Dtos.CostCategoryDto[], claim: Dtos.ClaimDto, claimDetails: Dtos.ClaimDetailsDto[] }) {
+    private renderContents(data: { project: Dtos.ProjectDto, partner: Dtos.PartnerDto, costCategories: Dtos.CostCategoryDto[], claim: Dtos.ClaimDto, claimDetails: Dtos.ClaimDetailsSummaryDto[] }) {
 
         const title = this.getClaimPeriodTitle(data);
 
@@ -76,13 +77,13 @@ export class ClaimsDetailsComponent extends ContainerBase<Params, Data, {}> {
 const definition = ReduxContainer.for<Params, Data, {}>(ClaimsDetailsComponent);
 
 export const ClaimsDetails = definition.connect({
-    withData: (store, params) => ({
-        id: params.projectId,
-        project: Pending.create(store.data.project[params.projectId]),
-        partner: Pending.create(store.data.partner[params.partnerId]),
-        costCategories: Pending.create(store.data.costCategories.all),
-        claim: Pending.create(store.data.claim[params.partnerId + "_" + params.periodId]),
-        claimDetails: Pending.create(store.data.claimDetails[params.partnerId + "_" + params.periodId])
+    withData: (state, props) => ({
+        id: props.projectId,
+        project: Selectors.getProject(props.projectId).getPending(state),
+        partner: Selectors.getPartner(props.partnerId).getPending(state),
+        costCategories: Selectors.getCostCategories().getPending(state),
+        claim: Selectors.getClaim(props.partnerId, props.periodId).getPending(state),
+        claimDetailsSummary: Selectors.findClaimDetailsSummaryByPartnerAndPeriod(props.partnerId, props.periodId).getPending(state)
     }),
     withCallbacks: () => ({})
 });
@@ -93,11 +94,11 @@ export const ClaimsDetailsRoute = definition.route({
     getParams: (route) => ({ projectId: route.params.projectId, partnerId: route.params.partnerId, periodId: parseInt(route.params.periodId, 10) }),
     getLoadDataActions: (params) => [
         Actions.loadProject(params.projectId),
-        Actions.loadPatnersForProject(params.projectId),
+        Actions.loadPartnersForProject(params.projectId),
         Actions.loadPartner(params.partnerId),
         Actions.loadCostCategories(),
         Actions.loadClaim(params.partnerId, params.periodId),
-        Actions.loadClaimDetailsForPartner(params.partnerId, params.periodId)
+        Actions.loadClaimDetailsSummaryForPartner(params.partnerId, params.periodId)
     ],
     container: ClaimsDetails
 });

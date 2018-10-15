@@ -4,7 +4,8 @@ import * as ACC from "../../components";
 import { ClaimFrequency, ProjectDto } from "../../models";
 import { Pending } from "../../../shared/pending";
 import { routeConfig } from "../../routing";
-import * as Actions from "../../redux/actions/thunks";
+import * as Actions from "../../redux/actions";
+import * as Selectors from "../../redux/selectors";
 
 interface Data {
   projects: Pending<ProjectDto[]>;
@@ -14,10 +15,6 @@ interface Callbacks {
 }
 
 class ProjectDashboardComponent extends ContainerBase<{}, Data, Callbacks> {
-
-  static getLoadDataActions() {
-    return [Actions.loadProjects()];
-  }
 
   render() {
     const Loader = ACC.TypedLoader<ProjectDto[]>();
@@ -44,7 +41,7 @@ class ProjectDashboardComponent extends ContainerBase<{}, Data, Callbacks> {
       const today = new Date();
       // needs last claim date to work out latest period for claim deadline
       const end = new Date(x.startDate);
-      const endMonth = x.period * (quarterly ? 4 : 1);
+      const endMonth = x.periodId * (quarterly ? 4 : 1);
       end.setMonth(end.getMonth() + endMonth);
       end.setDate(0);
       const timeRemaining = end.getTime() - today.getTime();
@@ -106,7 +103,7 @@ class ProjectDashboardComponent extends ContainerBase<{}, Data, Callbacks> {
 const definition = ReduxContainer.for<{}, Data, Callbacks>(ProjectDashboardComponent);
 
 export const ProjectDashboard = definition.connect({
-  withData: (state, params) => ({projects: Pending.create(state.data.projects.all) }),
+  withData: (state, props) => ({projects: Selectors.getProjects().getPending(state) }),
   withCallbacks: () => ({})
 });
 
@@ -114,6 +111,6 @@ export const ProjectDashboardRoute = definition.route({
   routeName: "projectDashboard",
   routePath: "/projects/dashboard",
   getParams: () => ({}),
-  getLoadDataActions: (dispach) => [Actions.loadProjects()],
+  getLoadDataActions: (params) => [Actions.loadProjects()],
   container: ProjectDashboard
 });
