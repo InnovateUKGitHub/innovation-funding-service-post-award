@@ -1,5 +1,6 @@
 import * as Repositories from "../../src/server/repositories";
 import { ITestRepositories } from "./testRepositories";
+import { DateTime } from "luxon";
 
 export class TestData {
     constructor(private repositories: ITestRepositories){
@@ -17,8 +18,8 @@ export class TestData {
             Id : `CostCat${seed}`,
             Acc_CostCategoryName__c : `Cost Category ${seed}`,
             Acc_DisplayOrder__c : seed,
-            Acc_CompetitionType__c : "Industrial",
-            Acc_OrganisationType__c : "Sector",
+            Acc_CompetitionType__c : "Sector",
+            Acc_OrganisationType__c : "Industrial",
             Acc_CostCategoryDescription__c: `Cost Category description ${seed}`,
             Acc_HintText__c: `Cost Category hint ${seed}`,
         };
@@ -121,6 +122,47 @@ export class TestData {
         this.repositories.projectContacts.Items.push(newItem);
 
         return newItem;
+    }
+
+    public createClaim(partner?: Repositories.ISalesforcePartner, periodId?: number, update?: (item: Repositories.ISalesforceClaim) => void): Repositories.ISalesforceClaim {
+
+        partner = partner || this.createPartner();
+        periodId = periodId || 1;
+
+        let seed = this.repositories.claims.Items.length;
+        let id = `Claim_${seed}`;
+
+        while(this.repositories.claims.Items.some(x => x.Id === id)){
+            seed++;
+            id = `Claim_${seed}`;
+        }
+
+        const newItem: Repositories.ISalesforceClaim = {
+            Id: id,
+            Acc_ProjectPeriodNumber__c: periodId,
+            Acc_ProjectParticipant__c: partner.Id,
+            Acc_ProjectPeriodStartDate__c: "2018-01-02",
+            Acc_ProjectPeriodEndDate__c: "2018-03-04",
+            Acc_ApprovedDate__c: null,
+            Acc_ClaimStatus__c: "New",
+            Acc_ForecastCost__c: 10000,
+            Acc_LineItemDescription__c: null,
+            Acc_ProjectPeriodCost__c : 100,
+            Acc_PaidDate__c: null,
+            Acc_TotalCostsApproved__c: 100,
+            Acc_TotalCostsSubmitted__c: 100,
+            Acc_TotalGrantApproved__c: 100,
+            LastModifiedDate: "2018-03-04T12:00:00.000+00"
+        };
+
+        if (update) {
+            update(newItem);
+        }
+
+        this.repositories.claims.Items.push(newItem);
+
+        return newItem;
+
     }
 
     public createClaimDetail(costCategory: Repositories.ISalesforceCostCategory, partner?: Repositories.ISalesforcePartner, periodId?: number, update?: (item: Repositories.ISalesforceClaimDetails) => void): Repositories.ISalesforceClaimDetails {
