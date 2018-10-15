@@ -166,12 +166,12 @@ export class ViewForecastComponent extends ContainerBase<Params, Data, Callbacks
     return [(
       <tr key="cHeader1" className="govuk-table__row">
         <th className="govuk-table__header" />
-        {previous > 0 ? <th className="govuk-table__header" colSpan={previous}>Previous Costs</th> : null}
-        {currentClaimPeriod > 1 ? <th className="govuk-table__header">Current claim period costs</th> : null}
-        {forecasts ? <th className="govuk-table__header" colSpan={periods.length - currentClaimPeriod}>Forecasts</th> : null}
-        <th className="govuk-table__header">Forecasts and costs total</th>
-        <th className="govuk-table__header">Grant offer letter costs</th>
-        <th className="govuk-table__header">Difference</th>
+        {previous > 0 ? <th className="govuk-table__header govuk-table__header--numeric" colSpan={previous}>Previous Costs</th> : null}
+        {currentClaimPeriod > 1 ? <th className="govuk-table__header govuk-table__header--numeric">Current claim period costs</th> : null}
+        {forecasts ? <th className="govuk-table__header govuk-table__header--numeric" colSpan={periods.length - currentClaimPeriod}>Forecasts</th> : null}
+        <th className="govuk-table__header govuk-table__header--numeric">Forecasts and costs total</th>
+        <th className="govuk-table__header govuk-table__header--numeric">Grant offer letter costs</th>
+        <th className="govuk-table__header govuk-table__header--numeric">Difference</th>
       </tr>
     ),
     (
