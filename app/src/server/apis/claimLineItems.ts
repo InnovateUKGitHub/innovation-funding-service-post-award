@@ -21,7 +21,7 @@ class Controller extends ControllerBase<ClaimLineItemDto> implements IClaimLineI
       (p, q) => ({ partnerId: q.partnerId, periodId: parseInt(q.periodId, 10), costCategoryId: q.costCategoryId}),
       (p) => this.getAllForCategory(p.partnerId, p.costCategoryId, p.periodId)
     );
-    this.postItem(
+    this.postItems(
       "/",
       (p, q, b) => ({
         partnerId: q.partnerId,
