@@ -117,6 +117,7 @@ export class EditClaimLineItemsComponent extends ContainerBase<Params, Data, Cal
     const dto = this.props.editor.data;
     dto.push({} as Dtos.ClaimLineItemDto);
     this.props.validate(this.props.partnerId, this.props.periodId, this.props.costCategoryId, dto);
+    console.log("item added!!!");
   }
 
   updateItem(i: { column: number; row: number; }, update: (item: Dtos.ClaimLineItemDto) => void) {
@@ -146,7 +147,7 @@ export class EditClaimLineItemsComponent extends ContainerBase<Params, Data, Cal
       ),
       (
         <tr key={3} className="govuk-table__row">
-          <th className="govuk-table__cell govuk-table__cell--numeric govuk-!-font-weight-bold">Forcast costs</th>
+          <th className="govuk-table__cell govuk-table__cell--numeric govuk-!-font-weight-bold">Forecast costs</th>
           <td className="govuk-table__cell govuk-table__cell--numeric"><ACC.Renderers.Currency value={forcast} /></td>
           <td className="govuk-table__cell" />
         </tr>
