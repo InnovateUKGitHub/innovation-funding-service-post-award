@@ -60,10 +60,10 @@ class ClaimsTestRepository extends TestRepository<Repositories.ISalesforceClaim>
         return super.getOne(x => x.Acc_ProjectParticipant__c === partnerId && x.Acc_ProjectPeriodNumber__c === periodId);
     }
 
-    update(updatedClaim: Repositories.ISalesforceClaim) {
-        const index = super.Items.findIndex(x => x.Acc_ProjectParticipant__c === updatedClaim.Acc_ProjectParticipant__c && x.Acc_ProjectPeriodNumber__c == updatedClaim.Acc_ProjectPeriodNumber__c);
+    update(updatedClaim: Repositories.ISalesforceClaim){
+        const index = this.Items.findIndex(x => x.Id === updatedClaim.Id);
         if(index >= 0) {
-            super.Items[index] = updatedClaim;
+            this.Items[index] = Object.assign(this.Items[index], updatedClaim);
             return Promise.resolve(true);
         }
         return Promise.resolve(false);
