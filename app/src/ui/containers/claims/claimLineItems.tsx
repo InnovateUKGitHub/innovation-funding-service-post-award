@@ -20,12 +20,14 @@ interface Data {
   project: Pending<Dtos.ProjectDto>;
   lineItems: Pending<Dtos.ClaimLineItemDto[]>;
   costCategories: Pending<Dtos.CostCategoryDto[]>;
+  forecastDetail: Pending<Dtos.ForecastDetailsDTO>;
 }
 
 interface CombinedData {
   project: Dtos.ProjectDto;
   lineItems: Dtos.ClaimLineItemDto[];
   costCategories: Dtos.CostCategoryDto[];
+  forecastDetail: Dtos.ForecastDetailsDTO;
 }
 
 export class ClaimLineItemsComponent extends ContainerBase<Params, Data, {}> {
@@ -35,14 +37,15 @@ export class ClaimLineItemsComponent extends ContainerBase<Params, Data, {}> {
       this.props.project,
       this.props.lineItems,
       this.props.costCategories,
-      (project, lineItems, costCategories) => ({project, lineItems, costCategories})
+      this.props.forecastDetail,
+      (project, lineItems, costCategories, forecastDetail) => ({project, lineItems, costCategories, forecastDetail})
     );
     const Loader = TypedLoader<CombinedData>();
     return <Loader pending={combined} render={(data) => this.renderContents(data)} />;
   }
 
   // TODO fix back link
-  private renderContents(data: { project: Dtos.ProjectDto, lineItems: Dtos.ClaimLineItemDto[], costCategories: Dtos.CostCategoryDto[] }) {
+  private renderContents(data: { project: Dtos.ProjectDto, lineItems: Dtos.ClaimLineItemDto[], costCategories: Dtos.CostCategoryDto[], forecastDetail: Dtos.ForecastDetailsDTO }) {
     return (
       <ACC.Page>
         <ACC.Section>
@@ -55,14 +58,14 @@ export class ClaimLineItemsComponent extends ContainerBase<Params, Data, {}> {
           <ACC.Projects.Title pageTitle={`Claim for ${data.costCategories.find(x => x.id === this.props.costCategoryId )!.name}`} project={data.project} />
         </ACC.Section>
         <ACC.Section>
-          <ClaimLineItemsTable lineItems={data.lineItems}/>
+          <ClaimLineItemsTable lineItems={data.lineItems} forecastDetail={data.forecastDetail} />
         </ACC.Section>
       </ACC.Page>
     );
   }
 }
 
-const ClaimLineItemsTable: React.SFC<{ lineItems: Dtos.ClaimLineItemDto[] }> = ({lineItems}) => {
+const ClaimLineItemsTable: React.SFC<{ lineItems: Dtos.ClaimLineItemDto[], forecastDetail: Dtos.ForecastDetailsDTO }> = ({lineItems, forecastDetail}) => {
   const LineItemTable = ACC.Table.forData(lineItems);
   const renderFooterRow = (row: { key: string, title: string, value: React.ReactNode, qa: string }) => (
     <tr key={row.key} className="govuk-table__row" data-qa={row.qa}>
@@ -70,19 +73,25 @@ const ClaimLineItemsTable: React.SFC<{ lineItems: Dtos.ClaimLineItemDto[] }> = (
       <td className="govuk-table__cell govuk-table__cell--numeric">{row.value}</td>
     </tr>
   );
-  // TODO get real value for forecast and difference
+
+  const total = lineItems.reduce((count, item) => count + (item.value || 0), 0);
+  const forecast = forecastDetail.value;
+
+  // TODO remove multiply by 100
+  const diff = 100 * (forecast - total) / forecast;
+
   return (
     <LineItemTable.Table
       qa="current-claim-summary-table"
       footers={[
         renderFooterRow({ key: "1", title: "Total labour costs", qa:"footer-total-costs", value:
-            <Currency className={"govuk-!-font-weight-bold"} value={lineItems.reduce((total, item) => total + (item.value || 0), 0)}/>
+            <Currency className={"govuk-!-font-weight-bold"} value={total}/>
         }),
         renderFooterRow({ key: "2", title: "Forecast costs", qa:"footer-forecast-costs", value:
-            <Currency value={0}/>
+            <Currency value={forecastDetail.value}/>
         }),
         renderFooterRow({ key: "3", title: "Difference", qa:"footer-difference", value:
-            <Percentage value={0}/>
+            <Percentage value={diff}/>
         })
       ]}
     >
@@ -98,7 +107,8 @@ export const ClaimLineItems = definition.connect({
   withData: (state, props) => ({
     project: Selectors.getProject(props.projectId).getPending(state),
     lineItems: Selectors.findClaimLineItemsByPartnerCostCategoryAndPeriod(props.partnerId, props.costCategoryId, props.periodId).getPending(state),
-    costCategories: Selectors.getCostCategories().getPending(state)
+    costCategories: Selectors.getCostCategories().getPending(state),
+    forecastDetail: Selectors.getForecastDetail(props.partnerId, props.periodId, props.costCategoryId).getPending(state)
   }),
   withCallbacks: () => ({})
 });
@@ -115,6 +125,7 @@ export const ClaimLineItemsRoute = definition.route({
   getLoadDataActions: (params) => [
     Actions.loadProject(params.projectId),
     Actions.loadCostCategories(),
+    Actions.loadForecastDetail(params.partnerId, params.periodId, params.costCategoryId),
     Actions.loadClaimLineItemsForCategory(params.partnerId, params.costCategoryId, params.periodId)
   ],
   container: ClaimLineItems

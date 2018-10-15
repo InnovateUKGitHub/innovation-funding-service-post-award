@@ -1,4 +1,3 @@
-export * from "./getAllForecastsForPartnerQuery";
 export * from "./getAllForecastGOLCostsQuery";
 export * from "./getAllForPartnerQuery";
 export * from "./getAllLineItemsForClaimCategoryQuery";

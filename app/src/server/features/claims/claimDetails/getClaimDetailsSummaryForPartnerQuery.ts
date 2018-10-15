@@ -18,7 +18,7 @@ export class GetClaimDetailsSummaryForPartnerQuery implements IQuery<ClaimDetail
 
             const totalCostCategory = totalCostCategoryResults.filter(y => y.Acc_CostCategory__c === x.id).map(y => y.Acc_PeriodCostCategoryTotal__c).reduce((t,c) => t + c, 0);
 
-            const offerCosts = 100000; // TODO: remove fake data
+            const offerCosts = 1000000; // TODO: remove fake data
             const costsClaimedThisPeriod = claimDetail;
             const costsClaimedToDate = totalCostCategory;
             const remainingOfferCosts = offerCosts - totalCostCategory - costsClaimedThisPeriod;
