@@ -78,14 +78,14 @@ const  renderFooters = (project: Dtos.ProjectDto, partner: Dtos.PartnerDto, clai
     return [
       (
         <tr key="1" className="govuk-table__row">
-            <th className="govuk-table__cell govuk-table__cell--numeric govuk-!-font-weight-bold" colSpan={3}>Award offer rate</th>
+            <td className="govuk-table__cell govuk-table__cell--numeric govuk-!-font-weight-bold" colSpan={3}>Award offer rate</td>
             <td className="govuk-table__cell govuk-table__cell--numeric"><Renderers.Percentage value={partner.awardRate} /></td>
             <td className="govuk-table__cell" />
         </tr>
       ),
       (
         <tr key="2" className="govuk-table__row">
-            <th className="govuk-table__cell govuk-table__cell--numeric govuk-!-font-weight-bold" colSpan={3}>Costs to be paid this quarter</th>
+            <td className="govuk-table__cell govuk-table__cell--numeric govuk-!-font-weight-bold" colSpan={3}>Costs to be paid this quarter</td>
             <td className="govuk-table__cell govuk-table__cell--numeric"><Renderers.Currency value={claimsCosts.reduce((total, item) => total + item.costsClaimedThisPeriod, 0) * partner.awardRate / 100} /></td>
             <td className="govuk-table__cell" />
         </tr>
