@@ -8,6 +8,7 @@ export class GetClaim implements IQuery<ClaimDto | null> {
 
   public async Run(context: IContext) {
     const result = await context.repositories.claims.getByPartnerIdAndPeriodId(this.partnerId, this.periodId);
-    return result && mapClaim(context)(result);
+    const forcast = await context.repositories.profileTotalPeriod.getAllByPartnerIdAndPeriodId(this.partnerId, this.periodId);
+    return result && mapClaim(context)(result, forcast);
   }
 }

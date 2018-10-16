@@ -58,7 +58,7 @@ export class ClaimsDetailsComponent extends ContainerBase<Params, Data, {}> {
     private renderContents(data: { project: Dtos.ProjectDto, partner: Dtos.PartnerDto, costCategories: Dtos.CostCategoryDto[], claim: Dtos.ClaimDto, claimDetails: Dtos.ClaimDetailsSummaryDto[] }) {
 
         const title = this.getClaimPeriodTitle(data);
-        const Details = ACC.TypedDetails<typeof data>();
+        // const Details = ACC.TypedDetails<typeof data>();
 
         return (
             <ACC.Page>
@@ -70,11 +70,11 @@ export class ClaimsDetailsComponent extends ContainerBase<Params, Data, {}> {
                 <ACC.Section title={title}>
                     <ACC.Claims.ClaimTable {...data} getLink={costCategoryId => ClaimLineItemsRoute.getLink({partnerId: this.props.partnerId, projectId: this.props.projectId, periodId: this.props.periodId, costCategoryId})} />
                 </ACC.Section>
-                {/* 
+                {/*
                 This was started but not required fot the story.... will be finished in a future story
                 <Details.Details data={data}>
                     <Details.MulilineString label="Addition information" value={x => x.claim.comments || "N/A"}/>
-                </Details.Details> 
+                </Details.Details>
                 */}
             </ACC.Page>
         );
