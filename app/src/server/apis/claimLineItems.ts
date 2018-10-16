@@ -48,7 +48,9 @@ class Controller extends ControllerBase<ClaimLineItemDto> implements IClaimLineI
 
     const command = new SaveLineItemsCommand(partnerId, costCategoryId, periodId, lineItems);
 
-    await contextProvider.start().runCommand(command).catch(e => {
+    const context = contextProvider.start();
+
+    await context.runCommand(command).catch(e => {
       if (e instanceof ValidationError) {
         throw new ApiError(ErrorCode.BAD_REQUEST, e);
       }
@@ -56,7 +58,7 @@ class Controller extends ControllerBase<ClaimLineItemDto> implements IClaimLineI
     });
 
     const query = new GetAllLineItemsForClaimByCategoryQuery(partnerId, costCategoryId, periodId);
-    return contextProvider.start().runQuery(query);
+    return context.runQuery(query);
   }
 }
 

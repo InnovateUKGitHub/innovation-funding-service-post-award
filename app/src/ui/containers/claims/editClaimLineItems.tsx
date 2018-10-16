@@ -138,7 +138,7 @@ export class EditClaimLineItemsComponent extends ContainerBase<Params, Data, Cal
   private renderFooters(editor: IEditorStore<Dtos.ClaimLineItemDto[], ClaimLineItemDtosValidator>, forecastDetail: Dtos.ForecastDetailsDTO) {
     const total = editor.data.reduce((t, item) => t + (item.value || 0), 0);
     // TODO remove multiply by 100
-    const forecast = forecastDetail ? forecastDetail.value : 0;
+    const forecast = forecastDetail.value;
     const diff = 100 * (forecast - total) / forecast;
 
     return [

@@ -19,7 +19,7 @@ export class SaveLineItemsCommand implements ICommand<boolean> {
     const insertDtos = this.lineItems.filter(item => !item.id);
     const persistedIds = updateDtos.map(x => x.id);
 
-    const deleteItems = existing.filter(x => persistedIds.indexOf(x.Id) < 0).map(x => x.Id);
+    const deleteItems = existing.filter(x => persistedIds.indexOf(x.Id) === -1).map(x => x.Id);
 
     const updateItems = updateDtos.map(x => ({
       Id: x.id!,
