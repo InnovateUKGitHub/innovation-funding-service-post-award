@@ -149,21 +149,21 @@ export class EditClaimLineItemsComponent extends ContainerBase<Params, Data, Cal
       ),
       (
         <tr key={2} className="govuk-table__row">
-          <th className="govuk-table__cell govuk-table__cell--numeric govuk-!-font-weight-bold">Total costs</th>
+          <td className="govuk-table__cell govuk-table__cell--numeric govuk-!-font-weight-bold">Total costs</td>
           <td className="govuk-table__cell govuk-table__cell--numeric"><ACC.Renderers.Currency value={total} /></td>
           <td className="govuk-table__cell" />
         </tr>
       ),
       (
         <tr key={3} className="govuk-table__row">
-          <th className="govuk-table__cell govuk-table__cell--numeric govuk-!-font-weight-bold">Forecast costs</th>
+          <td className="govuk-table__cell govuk-table__cell--numeric govuk-!-font-weight-bold">Forecast costs</td>
           <td className="govuk-table__cell govuk-table__cell--numeric"><ACC.Renderers.Currency value={forecast} /></td>
           <td className="govuk-table__cell" />
         </tr>
       ),
       (
         <tr key={4} className="govuk-table__row">
-          <th className="govuk-table__cell govuk-table__cell--numeric govuk-!-font-weight-bold">Difference</th>
+          <td className="govuk-table__cell govuk-table__cell--numeric govuk-!-font-weight-bold">Difference</td>
           <td className="govuk-table__cell govuk-table__cell--numeric"><ACC.Renderers.Percentage value={diff} /></td>
           <td className="govuk-table__cell" />
         </tr>
