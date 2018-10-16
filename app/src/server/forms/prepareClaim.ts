@@ -1,12 +1,13 @@
 import express from "express";
 import contextProvider from "../features/common/contextProvider";
 import { GetClaim } from "../features/claims";
-import { UpdateClaimCommand, ValidationError } from "../features/claims/updateClaim";
+import { UpdateClaimCommand} from "../features/claims/updateClaim";
 import { ClaimForecastRoute, ClaimsDashboardRoute, PrepareClaimRoute, } from "../../ui/containers";
 import { configureRouter } from "../../ui/routing/configureRouter";
 import { serverRender } from "../serverRender";
 import { ClaimDtoValidator } from "../../ui/validators/claimDtoValidator";
 import { getClaimEditor } from "../../ui/redux/selectors";
+import {ValidationError} from "../../shared/validation";
 
 export const formRouter = express.Router();
 
@@ -44,7 +45,7 @@ const PrepareClaimForm = async (req: express.Request, res: express.Response) => 
     catch (e) {
         const selector = getClaimEditor(params.partnerId, params.periodId);
         if (e instanceof ValidationError) {
-            serverRender(req, res, { key: selector.key, store: selector.store, dto: claim, result: e.validaionResult, error: null });
+            serverRender(req, res, { key: selector.key, store: selector.store, dto: claim, result: e.validationResult, error: null });
             return;
         }
         else {
@@ -76,7 +77,7 @@ const ForcastClaimForm = async (req: express.Request, res: express.Response) => 
     catch (e) {
         const selector = getClaimEditor(params.partnerId, params.periodId);
         if (e instanceof ValidationError) {
-            serverRender(req, res, { key: selector.key, store: selector.store, dto: claim, result: e.validaionResult, error: null });
+            serverRender(req, res, { key: selector.key, store: selector.store, dto: claim, result: e.validationResult, error: null });
             return;
         }
         else {

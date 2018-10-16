@@ -1,10 +1,11 @@
 import { IApiClient } from "../server/apis";
 import { processResponse } from "./processResponse";
-import {ClaimDto} from "../ui/models";
+import {ClaimDto, ClaimLineItemDto} from "../ui/models";
 
 const clientApi: IApiClient = {
   claimLineItems: {
-    getAllForCategory: (partnerId: string, costCategoryId: string, periodId: number) => ajaxJson(`/api/claim-line-items/?partnerId=${partnerId}&periodId=${periodId}&costCategoryId=${costCategoryId}`)
+    getAllForCategory: (partnerId: string, costCategoryId: string, periodId: number) => ajaxJson(`/api/claim-line-items/?partnerId=${partnerId}&periodId=${periodId}&costCategoryId=${costCategoryId}`),
+    saveLineItems: (partnerId: string, costCategoryId: string, periodId: number, lineItems: ClaimLineItemDto[]) => ajaxPost(`/api/claim-line-items/?partnerId=${partnerId}&periodId=${periodId}&costCategoryId=${costCategoryId}`, lineItems)
   },
   claims : {
     getAllByPartnerId: (partnerId: string) => ajaxJson(`/api/claims/?partnerId=${partnerId}`),

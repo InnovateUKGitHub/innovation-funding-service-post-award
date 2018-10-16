@@ -97,7 +97,7 @@ export class EditClaimLineItemsComponent extends ContainerBase<Params, Data, Cal
     return (
       <span>
         <ACC.ValidationError error={validation.cost} />
-        <ACC.Inputs.NumberInput name={`value${index.row}`} value={item.value} onChange={val => this.updateItem(index, dto => (dto.value = val))} />
+        <ACC.Inputs.NumberInput name={`value${index.row}`} value={item.value} onChange={val => this.updateItem(index, dto => (dto.value = val!))} />
       </span>
     );
   }
@@ -121,7 +121,11 @@ export class EditClaimLineItemsComponent extends ContainerBase<Params, Data, Cal
   addItem(e: React.SyntheticEvent<HTMLAnchorElement>) {
     e.preventDefault();
     const dto = this.props.editor.data;
-    dto.push({} as Dtos.ClaimLineItemDto);
+    dto.push({
+      partnerId: this.props.partnerId,
+      periodId: this.props.periodId,
+      costCategoryId: this.props.costCategoryId
+    } as Dtos.ClaimLineItemDto);
     this.props.validate(this.props.partnerId, this.props.periodId, this.props.costCategoryId, dto);
   }
 
