@@ -179,14 +179,14 @@ const afterSave = (dispatch: any, projectId: string, partnerId: string, periodId
 
 const definition = ReduxContainer.for<Params, Data, Callbacks>(EditClaimLineItemsComponent);
 
-const getEditor: (editor: IEditorStore<Dtos.ClaimLineItemDto[], ClaimLineItemDtosValidator>, original: Pending<Dtos.ClaimLineItemDto[]>) => IEditorStore<Dtos.ClaimLineItemDto[], ClaimLineItemDtosValidator> = (editor, original) => {
+const getEditor: (editor: IEditorStore<Dtos.ClaimLineItemDto[], ClaimLineItemDtosValidator>, partnerId: string, periodId: number, costCategoryId: string, original: Pending<Dtos.ClaimLineItemDto[]>) => IEditorStore<Dtos.ClaimLineItemDto[], ClaimLineItemDtosValidator> = (editor, partnerId, periodId, costCategoryId, original) => {
   if (editor) {
     return editor;
   }
 
   // default to a double item if empty
   return original
-    .then(x => x && x.length ? x : [{}, {}])
+    .then(x => x && x.length ? x : [{costCategoryId, partnerId, periodId}, {costCategoryId, partnerId, periodId}])
     .then(x => {
       const clone = JSON.parse(JSON.stringify(x)) as Dtos.ClaimLineItemDto[];
       return {
@@ -205,7 +205,7 @@ export const EditClaimLineItems = definition.connect({
       lineItems: lineItemsSelector.getPending(state),
       costCategories: Selectors.getCostCategories().getPending(state),
       forecastDetail: Selectors.getForecastDetail(props.partnerId, props.periodId, props.costCategoryId).getPending(state),
-      editor: getEditor(state.editors.claimLineItems[lineItemsSelector.key], lineItemsSelector.getPending(state))
+      editor: getEditor(state.editors.claimLineItems[lineItemsSelector.key], props.partnerId, props.periodId, props.costCategoryId, lineItemsSelector.getPending(state))
     };
   },
   withCallbacks: (dispatch) => ({
