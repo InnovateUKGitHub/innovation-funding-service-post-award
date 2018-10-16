@@ -34,7 +34,7 @@ const fields = [
 
 export interface IClaimRepository {
   getAllByPartnerId(partnerId: string): Promise<ISalesforceClaim[]>;
-  getByPartnerIdAndPeriodId(partnerId: string, periodId: number): Promise<ISalesforceClaim | null>;
+  get(partnerId: string, periodId: number): Promise<ISalesforceClaim | null>;
   update(updatedClaim: Partial<ISalesforceClaim> & { Id: string }): Promise<boolean>;
 }
 
@@ -49,7 +49,7 @@ export class ClaimRepository extends SalesforceBase<ISalesforceClaim> implements
     return await super.whereString(filter);
   }
 
-  public async getByPartnerIdAndPeriodId(partnerId: string, periodId: number) {
+  public async get(partnerId: string, periodId: number) {
     const filter = `Acc_ProjectParticipant__c = '${partnerId}' AND Acc_ProjectPeriodNumber__c = ${periodId} AND RecordType.Name = '${this.recordType}'`;
     return await super.whereString(filter).then(x => x[0]);
   }

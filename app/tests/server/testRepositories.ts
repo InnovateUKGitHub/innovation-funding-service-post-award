@@ -56,7 +56,7 @@ class ClaimsTestRepository extends TestRepository<Repositories.ISalesforceClaim>
         return super.getWhere(x => x.Acc_ProjectParticipant__c === partnerId);
     }
 
-    getByPartnerIdAndPeriodId(partnerId: string, periodId: number) {
+    get(partnerId: string, periodId: number) {
         return super.getOne(x => x.Acc_ProjectParticipant__c === partnerId && x.Acc_ProjectPeriodNumber__c === periodId);
     }
 
@@ -112,7 +112,7 @@ class ProfileDetailsTestRepository extends TestRepository<Repositories.ISalesfor
 }
 
 class ProfileTotalPeriodTestRepository extends TestRepository<Repositories.ISalesforceProfileTotalPeriod> implements Repositories.IProfileTotalPeriodRepository {
-    getAllByPartnerIdAndPeriodId(partnerId: string, periodId: number): Promise<Repositories.ISalesforceProfileTotalPeriod> {
+    get(partnerId: string, periodId: number): Promise<Repositories.ISalesforceProfileTotalPeriod> {
         return super
             .getOne(x => x.Acc_ProjectParticipant__c === partnerId && x.Acc_ProjectPeriodNumber__c === periodId);
     }

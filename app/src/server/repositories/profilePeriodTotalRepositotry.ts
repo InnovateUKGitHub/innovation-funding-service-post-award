@@ -16,7 +16,7 @@ const fields: FieldNames[] = [
 
 export interface IProfileTotalPeriodRepository {
   getAllByPartnerId(partnerId: string): Promise<ISalesforceProfileTotalPeriod[]>;
-  getAllByPartnerIdAndPeriodId(partnerId: string, periodId: number): Promise<ISalesforceProfileTotalPeriod>;
+  get(partnerId: string, periodId: number): Promise<ISalesforceProfileTotalPeriod>;
 }
 
 export class ProfileTotalPeriodRepository extends SalesforceBase<ISalesforceProfileTotalPeriod> implements IProfileTotalPeriodRepository {
@@ -31,7 +31,7 @@ export class ProfileTotalPeriodRepository extends SalesforceBase<ISalesforceProf
     return super.whereString(filter);
   }
 
-  getAllByPartnerIdAndPeriodId(partnerId: string, periodId: number) {
+  get(partnerId: string, periodId: number) {
     const filter = `Acc_ProjectParticipant__c = '${partnerId}' AND RecordType.Name = '${this.recordType}' AND Acc_ProjectPeriodNumber__c = ${periodId}`;
     return super.whereString(filter).then(x => x[0]);
   }
