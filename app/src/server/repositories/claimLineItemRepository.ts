@@ -36,7 +36,6 @@ export class ClaimLineItemRepository extends SalesforceBase<ISalesforceClaimLine
   }
 
   getAllForCategory(partnerId: string, categoryId: string, periodId: number): Promise<ISalesforceClaimLineItem[]> {
-    // TODO review which ID is used for cost category
     const filter = `
       Acc_ProjectParticipant__c = '${partnerId}'
       AND Acc_ProjectPeriodNumber__c = ${periodId}

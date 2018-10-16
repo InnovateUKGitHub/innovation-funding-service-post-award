@@ -3,7 +3,7 @@ import * as Validation from "./common";
 import { Results } from "../validation/results";
 
 export class ClaimLineItemDtosValidator extends Results<ClaimLineItemDto[]> {
-    public readonly items = Validation.requiredChild(this, this.model, x => new ClaimLineItemDtoValidator(x, this.showValidationErrors), "At least one cost must be entered", "There are invalid cost categories");
+    public readonly items = Validation.optionalChild(this, this.model, x => new ClaimLineItemDtoValidator(x, this.showValidationErrors), "There are invalid claim line items");
 }
 
 export class ClaimLineItemDtoValidator extends Results<ClaimLineItemDto> {
