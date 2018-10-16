@@ -39,6 +39,9 @@ export function saveClaim(partnerId: string, periodId: number, dto: ClaimDto, de
       return Promise.resolve();
     }
 
+    // send a loading action with undefined as it will just update the status
+    dispatch(dataLoadAction(selector.key, selector.store, LoadingStatus.Loading, undefined));
+
     return ApiClient.claims.update(partnerId, periodId, dto).then((result) => {
       dispatch(dataLoadAction(selector.key, selector.store, LoadingStatus.Done, result));
       onComplete();
