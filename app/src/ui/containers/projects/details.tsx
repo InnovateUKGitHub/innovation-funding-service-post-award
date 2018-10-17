@@ -72,14 +72,14 @@ class ProjectDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
     }
 
     private renderPartnersCosts(partners: Dtos.PartnerDto[]) {
-        const PartnersTable = ACC.Table.forData(partners);
+        const PartnersTable = ACC.TypedTable<Dtos.PartnerDto>();
         const totalEligibleCosts = partners.reduce((val, partner) => val += partner.totalParticipantGrant, 0) || null;
         const totalClaimed = partners.reduce((val, partner) => val += partner.totalParticipantCostsClaimed, 0);
         const percentageClaimed = totalEligibleCosts ? 100 * totalClaimed / totalEligibleCosts : null;
 
         return (
             <ACC.Section title="Cost claimed status" qa="cost-claimed-status">
-                <PartnersTable.Table qa="cost-claimed">
+                <PartnersTable.Table qa="cost-claimed" data={partners}>
                     <PartnersTable.String header="Partner" qa="partner" value={x => x.isLead ? `${x.name} (Lead)` : x.name} footer="Total" />
                     <PartnersTable.Currency header="Total eligible costs" qa="total-costs" value={x => x.totalParticipantGrant} footer={<ACC.Renderers.Currency value={totalEligibleCosts} />} />
                     <PartnersTable.Currency header="Costs claimed to date" qa="costs-claimed" value={x => x.totalParticipantCostsClaimed} footer={<ACC.Renderers.Currency value={totalClaimed} />} />

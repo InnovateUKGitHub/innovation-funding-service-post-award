@@ -43,6 +43,8 @@ interface TableProps<T> {
   qa: string;
   footers?: JSX.Element[];
   headers?: JSX.Element[];
+  data: T[]; 
+  validationResult?: Results<{}>[];
 }
 
 export class TableColumn<T> extends React.Component<InternalColumnProps<T>> {
@@ -96,7 +98,7 @@ export class TableColumn<T> extends React.Component<InternalColumnProps<T>> {
   }
 }
 
-const TableComponent2 = <T extends {}>(props: TableProps<T> & { data: T[]; validationResult?: Results<{}>[]; }) => {
+const TableComponent = <T extends {}>(props: TableProps<T> & { data: T[]; validationResult?: Results<{}>[]; }) => {
   // loop through the colums cloning them and assigning the props required
   const customHeaders = props.headers && props.headers.length ? props.headers : null;
   const headers = React.Children.map(props.children, (column, columnIndex) => React.cloneElement(column as React.ReactElement<any>, { mode: "header", columnIndex }));
@@ -127,10 +129,6 @@ const TableComponent2 = <T extends {}>(props: TableProps<T> & { data: T[]; valid
       </table>
     </div>
   );
-};
-
-const TableComponent = <T extends {}>(data: T[]) => (props: TableProps<T>) => {
-  return <TableComponent2 {...props} data={data} />;
 };
 
 const CustomColumn = <T extends {}>(props: ExternalColumnProps<T, React.ReactNode> & { classSuffix?: "numeric" }) => {
@@ -182,23 +180,8 @@ const LinkColumn = <T extends {}>(props: LinkColumnProps<T>) => {
   return <TypedColumn classSuffix="numeric" renderCell={(data, index) => <Link route={props.value(data, index)} >{props.content}</Link>} {...props} />;
 };
 
-export const Table = {
-  forData: <T extends {}>(data: T[]) => ({
-    Table: TableComponent(data),
-    Custom: CustomColumn as React.SFC<ExternalColumnProps<T, React.ReactNode>>,
-    String: StringColumn as React.SFC<ExternalColumnProps<T, string | null>>,
-    Number: NumberColumn as React.SFC<ExternalColumnProps<T, number | null>>,
-    Currency: CurrencyColumn as React.SFC<ExternalColumnProps<T, number | null>>,
-    Percentage: PercentageColumn as React.SFC<ExternalColumnProps<T, number | null>>,
-    FullDate: FullDateColumn as React.SFC<ExternalColumnProps<T, Date | null>>,
-    ShortDate: ShortDateColumn as React.SFC<ExternalColumnProps<T, Date | null>>,
-    Email: EmailColumn as React.SFC<ExternalColumnProps<T, string | null>>,
-    Link: LinkColumn as React.SFC<LinkColumnProps<T>>
-  })
-};
-
 export const TypedTable = <T extends {}>() => ({
-  Table: TableComponent2 as React.SFC<TableProps<T> & { data: T[]; validationResult?: Results<{}>[]; }>,
+  Table: TableComponent as React.SFC<TableProps<T>>,
   Custom: CustomColumn as React.SFC<ExternalColumnProps<T, React.ReactNode> & { classSuffix?: "numeric" }>,
   String: StringColumn as React.SFC<ExternalColumnProps<T, string | null>>,
   Number: NumberColumn as React.SFC<ExternalColumnProps<T, number | null>>,

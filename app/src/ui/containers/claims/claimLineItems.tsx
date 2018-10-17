@@ -7,7 +7,6 @@ import * as Dtos from "../../models";
 import * as ACC from "../../components";
 import {routeConfig} from "../../routing";
 import {Currency, Percentage} from "../../components/renderers";
-import {TypedLoader} from "../../components";
 
 interface Params {
   projectId: string;
@@ -40,7 +39,7 @@ export class ClaimLineItemsComponent extends ContainerBase<Params, Data, {}> {
       this.props.forecastDetail,
       (project, lineItems, costCategories, forecastDetail) => ({project, lineItems, costCategories, forecastDetail})
     );
-    const Loader = TypedLoader<CombinedData>();
+    const Loader = ACC.TypedLoader<CombinedData>();
     return <Loader pending={combined} render={(data) => this.renderContents(data)} />;
   }
 
@@ -66,7 +65,7 @@ export class ClaimLineItemsComponent extends ContainerBase<Params, Data, {}> {
 }
 
 const ClaimLineItemsTable: React.SFC<{ lineItems: Dtos.ClaimLineItemDto[], forecastDetail: Dtos.ForecastDetailsDTO }> = ({lineItems, forecastDetail}) => {
-  const LineItemTable = ACC.Table.forData(lineItems);
+  const LineItemTable = ACC.TypedTable<Dtos.ClaimLineItemDto>();
   const renderFooterRow = (row: { key: string, title: string, value: React.ReactNode, qa: string }) => (
     <tr key={row.key} className="govuk-table__row" data-qa={row.qa}>
       <th className="govuk-table__cell govuk-table__cell--numeric govuk-!-font-weight-bold">{row.title}</th>
@@ -81,7 +80,7 @@ const ClaimLineItemsTable: React.SFC<{ lineItems: Dtos.ClaimLineItemDto[], forec
   const diff = 100 * (forecast - total) / forecast;
 
   return (
-    <LineItemTable.Table
+    <LineItemTable.Table data={lineItems}
       qa="current-claim-summary-table"
       footers={[
         renderFooterRow({ key: "1", title: "Total labour costs", qa:"footer-total-costs", value:
