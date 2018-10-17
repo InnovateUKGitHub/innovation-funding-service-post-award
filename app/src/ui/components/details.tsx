@@ -21,12 +21,6 @@ interface ExternalFieldProps<T, TValue> {
     value: (item: T) => TValue|null;
 }
 
-// Todo remove
-const DetailsComponentWithData = <T extends {}>(data: T): React.SFC<DetailsProps> => (props: DetailsProps) => {
-    const TypedDetailsWithData = DetailsComponent as React.SFC<DetailsProps & {data: T}>;
-    return (<TypedDetailsWithData data={data} {...props}/>);
-};
-
 const DetailsComponent = <T extends {}>( props: DetailsProps & {data: T} & {children?: React.ReactNode} ) => {
     // distribute children accross array adding props
     const {displayDensity = "Comfortable", qa, labelWidth, data, children} = props;
@@ -130,20 +124,6 @@ const PercentageField = <T extends {}>(props: ExternalFieldProps<T, number>) => 
     const TypedField = FieldComponent as { new(): FieldComponent<T> };
     return <TypedField {...props} render={(item) => <p className="govuk-body"><Percentage value={props.value(item)} /></p>} />;
 };
-
-// export const Details = {
-//     forData: <T extends {}>(data: T) => ({
-//         Details: DetailsComponentWithData(data),
-//         String: StringField as React.SFC<ExternalFieldProps<T, string>>,
-//         MulilineString: MultilineStringField as React.SFC<ExternalFieldProps<T, string>>,
-//         Date: DateField as React.SFC<ExternalFieldProps<T, Date>>,
-//         DateTime: DateTimeField as React.SFC<ExternalFieldProps<T, Date>>,
-//         Number: NumberField as React.SFC<ExternalFieldProps<T, number>>,
-//         Currency: CurrencyField as React.SFC<ExternalFieldProps<T, number> & { fractionDigits?: number}>,
-//         Percentage: PercentageField as React.SFC<ExternalFieldProps<T, number>>,
-//         Custom: CustomField as React.SFC<ExternalFieldProps<T, React.ReactNode>>
-//     })
-// };
 
 export const TypedDetails = <T extends {}>() => ({
     Details: DetailsComponent as React.SFC<DetailsProps & {data: T}>,
