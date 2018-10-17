@@ -160,7 +160,7 @@ export class ClaimForecastComponent extends ContainerBase<Params, Data, Callback
         </ACC.Section>
         <ACC.Projects.Title pageTitle="Claim" project={data.project} />
         <ACC.Section>
-          <Form.Form data={data.editor.data} onChange={(dto) => this.onChange(dto)} onSubmit={() => this.saveAndReturn(data.editor.data)}>
+          <Form.Form data={data.editor.data} qa={"claim-forecast-form"} onChange={(dto) => this.onChange(dto)} onSubmit={() => this.saveAndReturn(data.editor.data)}>
             <Table.Table
               qa="cost-category-table"
               headers={this.renderTableHeaders(periods, data.claim)}
