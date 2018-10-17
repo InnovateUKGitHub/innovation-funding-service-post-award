@@ -35,7 +35,7 @@ class ProjectDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
     }
 
     private renderContents(project: Dtos.ProjectDto, partners: Dtos.PartnerDto[], contacts: Dtos.ProjectContactDto[]) {
-        const DetailsSection = ACC.Details.forData(project);
+        const DetailsSection = ACC.TypedDetails<Dtos.ProjectDto>();
 
         const monitoringOfficer = contacts.find(x => x.role === "Monitoring officer");
         const projectManager = contacts.find(x => x.role === "Project Manager");
@@ -57,7 +57,7 @@ class ProjectDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
                 </ACC.Section>
 
                 <ACC.Section title="Project information">
-                    <DetailsSection.Details labelWidth="Narrow">
+                    <DetailsSection.Details labelWidth="Narrow" data={project}>
                         <DetailsSection.Date label="Project start date" value={x => x.startDate} />
                         <DetailsSection.Date label="Project end date" value={x => x.endDate} />
                         <DetailsSection.MulilineString label="Project summary" value={x => x.summary} />

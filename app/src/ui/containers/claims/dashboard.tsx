@@ -5,7 +5,7 @@ import * as Actions from "../../redux/actions";
 import * as Selectors from "../../redux/selectors";
 import { ProjectOverviewPage } from "../../components/projectOverview";
 import { ClaimDto, PartnerDto, ProjectDto } from "../../models";
-import { Details, DualDetails, Link, Section, SectionPanel, TypedTable, TypedLoader } from "../../components";
+import { DualDetails, Link, Section, SectionPanel, TypedDetails, TypedTable, TypedLoader } from "../../components";
 import { DayAndLongMonth, FullDate, LongYear, ShortMonth } from "../../components/renderers";
 import { PrepareClaimRoute } from "./prepare";
 import { ClaimsDetailsRoute } from "./details";
@@ -58,17 +58,17 @@ interface ClaimsHistoryProps {
 }
 
 const ProjectClaimsHistory: React.SFC<ClaimsHistoryProps> = ({ partner }) => {
-  const { Details: Column, Currency, Percentage } = Details.forData(partner);
+  const { Details: Column, Currency, Percentage } = TypedDetails<PartnerDto>();
   return (
     <Section>
       <SectionPanel qa="claims-dashboard" title="Project claims history">
         <DualDetails displayDensity="Compact">
-          <Column qa="claims-history-col-0">
+          <Column qa="claims-history-col-0" data={partner}>
             <Currency label="Grant offer letter costs" value={x => x.totalParticipantGrant} />
             <Currency label="Costs claimed to date" value={x => x.totalParticipantCostsClaimed} />
             <Percentage label="Percentage claimed to date" value={x => x.percentageParticipantCostsClaimed} />
           </Column>
-          <Column qa="claims-history-col-1">
+          <Column qa="claims-history-col-1" data={partner}>
             <Percentage label="Award offer rate" value={x => x.awardRate} />
             <Percentage label="Cap limit" value={x => x.capLimit} />
           </Column>
