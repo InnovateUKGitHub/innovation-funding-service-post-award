@@ -5,9 +5,9 @@ import * as Actions from "../../redux/actions";
 import * as Selectors from "../../redux/selectors";
 import * as Dtos from "../../models";
 import * as ACC from "../../components";
-import {routeConfig} from "../../routing";
 import {Currency, Percentage} from "../../components/renderers";
 import {TypedLoader} from "../../components";
+import { ClaimsDetailsRoute } from "./details";
 
 interface Params {
   projectId: string;
@@ -50,7 +50,7 @@ export class ClaimLineItemsComponent extends ContainerBase<Params, Data, {}> {
       <ACC.Page>
         <ACC.Section>
           <ACC.BackLink
-            route={routeConfig.claimDetails.getLink({projectId: data.project.id, partnerId: this.props.partnerId, periodId: this.props.periodId })}
+            route={ClaimsDetailsRoute.getLink({projectId: data.project.id, partnerId: this.props.partnerId, periodId: this.props.periodId })}
           >Back
           </ACC.BackLink>
         </ACC.Section>

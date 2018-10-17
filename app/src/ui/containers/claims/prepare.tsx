@@ -1,5 +1,4 @@
 import * as Selectors from "../../redux/selectors";
-import { routeConfig } from "../../routing";
 import { ContainerBase, ReduxContainer } from "../containerBase";
 import { Pending } from "../../../shared/pending";
 import * as Actions from "../../redux/actions";
@@ -13,6 +12,7 @@ import { ClaimDetailsSummaryDto, ClaimDto } from "../../models";
 import { ClaimForecastRoute, ClaimsDashboardRoute } from ".";
 import { EditClaimLineItemsRoute } from "./editClaimLineItems";
 import { Result } from "../../validation/result";
+import { ClaimsDetailsRoute } from "./details";
 
 interface Params {
     projectId: string;
@@ -90,11 +90,11 @@ export class PrepareComponent extends ContainerBase<Params, Data, Callbacks> {
         return (
             <ACC.Page>
                 <ACC.Section>
-                    <ACC.BackLink route={routeConfig.claimsDashboard.getLink({ projectId: data.project.id, partnerId: data.partner.id })}>Claims dashboard</ACC.BackLink>
+                    <ACC.BackLink route={ClaimsDashboardRoute.getLink({ projectId: data.project.id, partnerId: data.partner.id })}>Claims dashboard</ACC.BackLink>
                 </ACC.Section>
                 <ACC.ValidationSummary validation={data.editor.validator} compressed={false} />
                 <ACC.Projects.Title pageTitle="Claim" project={data.project} />
-                <ACC.Claims.Navigation projectId={data.project.id} partnerId={data.partner.id} periodId={data.claim.periodId} currentRouteName={routeConfig.claimDetails.routeName} />
+                <ACC.Claims.Navigation projectId={data.project.id} partnerId={data.partner.id} periodId={data.claim.periodId} currentRouteName={ClaimsDetailsRoute.routeName} />
                 <ACC.Section title={title}>
                     {/* TODO: Fix error display */}
                     {data.editor.error ? <ACC.ValidationMessage message={new Result(null, true, false, data.editor.error.details || data.editor.error, false)} /> : null}

@@ -5,13 +5,13 @@ import * as Actions from "../../redux/actions";
 import * as Selectors from "../../redux/selectors";
 import {Pending} from "../../../shared/pending";
 import {ContainerBase, ReduxContainer} from "../containerBase";
-import {routeConfig} from "../../routing";
 import {IEditorStore} from "../../redux/reducers/editorsReducer";
 import {ClaimDtoValidator} from "../../validators/claimDtoValidator";
 import {ClaimsDashboardRoute} from "./dashboard";
 import {Currency, DateRange, Percentage} from "../../components/renderers";
 import {ClaimDetailsDto, ClaimDto, ForecastDetailsDTO} from "../../models";
 import { Interval } from "luxon";
+import { PrepareClaimRoute } from "./prepare";
 
 interface Params {
   projectId: string;
@@ -156,7 +156,7 @@ export class ClaimForecastComponent extends ContainerBase<Params, Data, Callback
     return (
       <ACC.Page>
         <ACC.Section>
-          <ACC.BackLink route={routeConfig.prepareClaim.getLink({ projectId: this.props.projectId, partnerId: this.props.partnerId, periodId: this.props.periodId })}>Back</ACC.BackLink>
+          <ACC.BackLink route={PrepareClaimRoute.getLink({ projectId: this.props.projectId, partnerId: this.props.partnerId, periodId: this.props.periodId })}>Back</ACC.BackLink>
         </ACC.Section>
         <ACC.Projects.Title pageTitle="Claim" project={data.project} />
         <ACC.Section>
