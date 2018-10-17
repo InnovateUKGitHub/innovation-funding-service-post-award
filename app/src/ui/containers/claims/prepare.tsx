@@ -134,7 +134,7 @@ export const PrepareClaim = definition.connect({
     claim: Selectors.getClaim(props.partnerId, props.periodId).getPending(state),
     claimDetailsSummary: Selectors.findClaimDetailsSummaryByPartnerAndPeriod(props.partnerId, props.periodId).getPending(state),
     editor: Selectors.getClaimEditor(props.partnerId, props.periodId).get(state, x => { x.status = "Draft"; })
-    }),
+  }),
   withCallbacks: (dispatch) => ({
     onChange: (partnerId, periodId, dto, details, costCategories) => dispatch(Actions.validateClaim(partnerId, periodId, dto, details, costCategories)),
     saveAndProgress: (projectId, partnerId, periodId, dto, details, costCategories) => dispatch(Actions.saveClaim(partnerId, periodId, dto, details, costCategories, () => progress(dispatch, projectId, partnerId, periodId))),

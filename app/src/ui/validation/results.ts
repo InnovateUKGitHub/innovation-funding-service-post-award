@@ -2,12 +2,10 @@ import { Result } from "./result";
 
 export class Results<T> {
     public readonly errors = new Array<Result>();
+    public readonly isValidationResult = true;
+    public isValid: boolean = true;
 
     constructor(public model: T, public readonly showValidationErrors: boolean) {
-    }
-
-    isValid() {
-        return this.errors.length === 0;
     }
 
     public isRequired: boolean = false;
@@ -15,6 +13,7 @@ export class Results<T> {
     /* internal */
     private add(result: Result) {
         if (!result.isValid) {
+            this.isValid = false;
             this.errors.push(result);
         }
         if (result.isRequired) {

@@ -6,7 +6,7 @@ export class NestedResult<T extends Results<{}>> extends Result {
         super(
             parentResults,
             parentResults.showValidationErrors,
-            results && results.length ? results.every(x => x.isValid()) : !isRequired,
+            results && results.length ? results.every(x => x.isValid) : !isRequired,
             results && results.length ? summaryMessage || "Validation failed" : emptyMessage,
             results.some(x => x.isRequired)
         );

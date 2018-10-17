@@ -1,4 +1,5 @@
 import { createAction } from "./common";
+import {Results} from "../../validation/results";
 
 type UpdateEditorThunk = typeof updateEditorAction;
 export type UpdateEditorAction = ReturnType<UpdateEditorThunk>;
@@ -6,8 +7,8 @@ export type UpdateEditorAction = ReturnType<UpdateEditorThunk>;
 export function updateEditorAction<T>(
     id: string,
     store: string,
-    dto: any,
-    validator: any,
+    dto: T,
+    validator: Results<T>,
     error?: any
 ) {
     const payload = { id, store, dto, validator, error };

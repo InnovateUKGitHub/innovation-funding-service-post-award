@@ -50,12 +50,7 @@ class Controller extends ControllerBase<ClaimLineItemDto> implements IClaimLineI
 
     const context = contextProvider.start();
 
-    await context.runCommand(command).catch(e => {
-      if (e instanceof ValidationError) {
-        throw new ApiError(ErrorCode.BAD_REQUEST, e);
-      }
-      throw new ApiError(ErrorCode.INTERNAL_SERVER_ERROR, "Failed to update claim line items");
-    });
+    await context.runCommand(command);
 
     const query = new GetAllLineItemsForClaimByCategoryQuery(partnerId, costCategoryId, periodId);
     return context.runQuery(query);

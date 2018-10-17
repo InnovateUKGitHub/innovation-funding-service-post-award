@@ -10,7 +10,7 @@ export class SaveLineItemsCommand implements ICommand<boolean> {
   public async Run(context: IContext) {
 
     const validationResult = new ClaimLineItemDtosValidator(this.lineItems, true);
-    if (!validationResult.isValid()) {
+    if (!validationResult.isValid) {
       throw new ValidationError(validationResult);
     }
 

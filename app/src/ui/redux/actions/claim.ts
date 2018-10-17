@@ -35,7 +35,7 @@ export function saveClaim(partnerId: string, periodId: number, dto: ClaimDto, de
     const selector = getClaimEditor(partnerId, periodId);
     const validation = validateClaim(partnerId, periodId, dto, details, costCategories, true)(dispatch, getState, null);
 
-    if (!validation.isValid()) {
+    if (!validation.isValid) {
       return Promise.resolve();
     }
 

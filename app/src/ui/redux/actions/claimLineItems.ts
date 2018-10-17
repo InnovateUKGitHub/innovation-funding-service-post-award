@@ -34,19 +34,20 @@ export function saveClaimLineItems(partnerId: string, periodId: number, costCate
 
     const key = findClaimLineItemsByPartnerCostCategoryAndPeriod(partnerId, costCategoryId, periodId).key;
     const validation = validateClaimLineItems(partnerId, periodId, costCategoryId, dto, true)(dispatch, getState, null);
-    if (!validation.isValid()) {
+    if (!validation.isValid) {
       return Promise.resolve();
     }
     return ApiClient.claimLineItems.saveLineItems(partnerId, costCategoryId, periodId, dto)
       .then((result) => {
         dispatch(dataLoadAction(key, claimLineItemsStore,LoadingStatus.Done, result));
+
         onComplete();
       }).catch((e) => {
         // TODO Server side validation not working
-        if (e.details && e.details.validationResult) {
+        if (e.details && e.details.isValidationResult) {
           return dispatch(updateEditorAction(key, claimLineItemsStore, dto, e.details, e));
         }
-        dispatch(updateEditorAction(key, claimLineItemsStore, dto, null, e));
+        dispatch(updateEditorAction(key, claimLineItemsStore, dto, validation, e));
       });
   };
 }

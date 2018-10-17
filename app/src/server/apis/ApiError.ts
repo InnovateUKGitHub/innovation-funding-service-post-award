@@ -1,4 +1,5 @@
 import {ValidationError} from "../../shared/validation";
+import {Results} from "../../ui/validation/results";
 
 export enum ErrorCode {
   BAD_REQUEST = 400,
@@ -7,9 +8,9 @@ export enum ErrorCode {
 
 export interface IApiError {
   errorCode: ErrorCode;
-  message: string | ValidationError;
+  message: string | Results<{}>;
 }
 
 export class ApiError implements IApiError {
-  constructor(public errorCode: ErrorCode, public message: string | ValidationError, public isApiError = true) {}
+  constructor(public errorCode: ErrorCode, public message: string | Results<{}>) {}
 }
