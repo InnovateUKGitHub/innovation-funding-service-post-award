@@ -1,6 +1,6 @@
 import "jest";
 import React from "react";
-import {Details, DualDetails} from "../../src/ui/components/details";
+import {TypedDetails, DualDetails} from "../../src/ui/components/details";
 import Enzyme, { shallow, mount } from "enzyme";
 import Adapter from "enzyme-adapter-react-16";
 
@@ -9,60 +9,68 @@ Enzyme.configure({ adapter: new Adapter() });
 describe("Details", () => {
   describe("Fields", () => {
     it("String values render title and value", () => {
-      const DTest = Details.forData({ name: "example" });
-      const output = shallow(<DTest.Details><DTest.String label="Name" value={x => x.name} /></DTest.Details>).html();
+      const example = { name: "example" };
+      const DTest = TypedDetails<typeof example>();
+      const output = shallow(<DTest.Details data={example}><DTest.String label="Name" value={x => x.name} /></DTest.Details>).html();
       expect(output).toContain(`<h4 class=\"govuk-heading-s\">Name</h4>`);
       expect(output).toContain(`<p class=\"govuk-body\">example</p>`);
     });
 
     it("Multi line string values render title and value", () => {
-      const DTest = Details.forData({ name: "example1\nexample2" });
-      const output = shallow(<DTest.Details><DTest.MulilineString label="Name" value={x => x.name} /></DTest.Details>).html();
+      const example = { name: "example1\nexample2" };
+      const DTest = TypedDetails<typeof example>();
+      const output = shallow(<DTest.Details data={example}><DTest.MulilineString label="Name" value={x => x.name} /></DTest.Details>).html();
       expect(output).toContain(`<h4 class=\"govuk-heading-s\">Name</h4>`);
       expect(output).toContain(`<p class=\"govuk-body\">example1</p>`);
       expect(output).toContain(`<p class=\"govuk-body\">example2</p>`);
     });
 
     it("Date values render title and value", () => {
-      const DTest = Details.forData({ created: new Date("2018/12/1") });
-      const output = shallow(<DTest.Details><DTest.Date label="Created" value={x => x.created} /></DTest.Details>).html();
+      const example = { created: new Date("2018/12/1") };
+      const DTest = TypedDetails<typeof example>();
+      const output = shallow(<DTest.Details data={example}><DTest.Date label="Created" value={x => x.created} /></DTest.Details>).html();
       expect(output).toContain(`<h4 class=\"govuk-heading-s\">Created</h4>`);
       expect(output).toContain(`<p class=\"govuk-body\"><span>1 December 2018</span></p>`);
     });
 
     it("Date time values render title and value", () => {
-      const DTest = Details.forData({ created: new Date("2018/12/1 9:08") });
-      const output = shallow(<DTest.Details><DTest.DateTime label="Created" value={x => x.created} /></DTest.Details>).html();
+      const example = { created: new Date("2018/12/1 9:08") };
+      const DTest = TypedDetails<typeof example>();
+      const output = shallow(<DTest.Details data={example}><DTest.DateTime label="Created" value={x => x.created} /></DTest.Details>).html();
       expect(output).toContain(`<h4 class=\"govuk-heading-s\">Created</h4>`);
       expect(output).toContain(`<p class=\"govuk-body\"><span>1 December 2018 09:08</span></p>`);
     });
 
     it("Custom values render expected content", () => {
-      const DTest = Details.forData({ name: "example" });
-      const output = shallow(<DTest.Details><DTest.Custom label="Custom" value={x => <p>Custom Content <i>{x.name}</i></p>} /></DTest.Details>).html();
+      const example = { name: "example" };
+      const DTest = TypedDetails<typeof example>();
+      const output = shallow(<DTest.Details data={example}><DTest.Custom label="Custom" value={x => <p>Custom Content <i>{x.name}</i></p>} /></DTest.Details>).html();
       expect(output).toContain(`<h4 class=\"govuk-heading-s\">Custom</h4>`);
       expect(output).toContain(`<p>Custom Content <i>example</i></p>`);
     });
 
     it("Number values render expected content", () => {
-      const DTest = Details.forData({ cost: 12.22 });
-      const output = shallow(<DTest.Details><DTest.Number label="Cost" value={x => x.cost} /></DTest.Details>).html();
+      const example = { cost: 12.22 };
+      const DTest = TypedDetails<typeof example>();
+      const output = shallow(<DTest.Details data={example}><DTest.Number label="Cost" value={x => x.cost} /></DTest.Details>).html();
       expect(output).toContain(`<h4 class="govuk-heading-s">Cost</h4>`);
       expect(output).toContain(`<p class="govuk-body">12.22</p>`);
     });
 
     it("Currency values render expected content", () => {
-      const DTest = Details.forData({ cost: 12.22 });
-      const output = shallow(<DTest.Details><DTest.Currency fractionDigits={2} label="Cost" value={x => x.cost} /></DTest.Details>).html();
+      const example = { cost: 12.22 };
+      const DTest = TypedDetails<typeof example>();
+      const output = shallow(<DTest.Details data={example}><DTest.Currency fractionDigits={2} label="Cost" value={x => x.cost} /></DTest.Details>).html();
       expect(output).toContain(`<h4 class="govuk-heading-s">Cost</h4>`);
       expect(output).toContain(`<p class="govuk-body"><span>£12.22</span></p>`);
     });
   });
 
   describe("Single Column", () => {
-    const DTest = Details.forData({ id:1, name: "example", cost: 100 });
+    const example = { id:1, name: "example", cost: 100 };
+    const DTest = TypedDetails<typeof example>();
     const wrapper = mount(
-      <DTest.Details labelWidth="Narrow">
+      <DTest.Details data={example} labelWidth="Narrow">
         <DTest.Number label="Id" value={x => x.id} />
         <DTest.String label="Name" value={x => x.name} />
         <DTest.Currency label="Cost" value={x => x.cost} />
@@ -82,14 +90,15 @@ describe("Details", () => {
   });
 
   describe("Double Column", () => {
-    const DTest = Details.forData({ id:1, name: "example", cost: 100 });
+    const example = { id:1, name: "example", cost: 100 };
+    const DTest = TypedDetails<typeof example>();
     const wrapper = mount(
         <DualDetails>
-            <DTest.Details>
+            <DTest.Details data={example}>
                 <DTest.Number label="Id" value={x => x.id} />
                 <DTest.String label="Name" value={x => x.name} />
             </DTest.Details>
-            <DTest.Details>
+            <DTest.Details data={example}>
                 <DTest.Currency label="Cost" value={x => x.cost} />
             </DTest.Details>
         </DualDetails>

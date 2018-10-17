@@ -6,7 +6,7 @@ export class MapToPartnerDtoCommand implements IQuery<PartnerDto> {
     constructor(readonly item: ISalesforcePartner) { }
 
     calcPercentageClaimed(total: number, claimed: number) {
-        return (total && claimed) ? Math.ceil((claimed / total) * 100) : null;
+        return (total && claimed) ? 100 * claimed / total  : null;
     }
 
     async Run(context: IContext) {

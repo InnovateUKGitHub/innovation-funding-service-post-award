@@ -29,7 +29,7 @@ describe("getAllForProjectQuery", () => {
             totalParticipantGrant: 125000,
             totalParticipantCostsClaimed: 17474,
             totalParticipantCostsPaid: 50000,
-            percentageParticipantCostsClaimed: 14,
+            percentageParticipantCostsClaimed: 13.9792,
             awardRate: 50,
             capLimit: 50
         });

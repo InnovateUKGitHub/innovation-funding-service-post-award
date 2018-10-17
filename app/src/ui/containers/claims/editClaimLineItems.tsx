@@ -80,7 +80,7 @@ export class EditClaimLineItemsComponent extends ContainerBase<Params, Data, Cal
     const LineItemTable = ACC.TypedTable<Dtos.ClaimLineItemDto>();
 
     return (
-      <LineItemForm.Form data={editor.data} onChange={x => { /* Todo */ }} onSubmit={() => this.props.save(this.props.projectId, this.props.partnerId, this.props.periodId, this.props.costCategoryId, this.props.editor.data)}>
+      <LineItemForm.Form data={editor.data} qa={"current-claim-summary-form"} onChange={x => { /* Todo */ }} onSubmit={() => this.props.save(this.props.projectId, this.props.partnerId, this.props.periodId, this.props.costCategoryId, this.props.editor.data)}>
         <LineItemForm.Fieldset>
           <LineItemTable.Table qa="current-claim-summary-table" data={editor.data} validationResult={editor.validator.items.results} footers={this.renderFooters(editor, forecastDetail)}>
             <LineItemTable.Custom header="Description of cost" qa="cost-description" value={(x, i) => this.renderDescription(x, i, editor.validator.items.results[i.row])} />
@@ -149,21 +149,21 @@ export class EditClaimLineItemsComponent extends ContainerBase<Params, Data, Cal
       ),
       (
         <tr key={2} className="govuk-table__row">
-          <th className="govuk-table__cell govuk-table__cell--numeric govuk-!-font-weight-bold">Total costs</th>
+          <td className="govuk-table__cell govuk-table__cell--numeric govuk-!-font-weight-bold">Total costs</td>
           <td className="govuk-table__cell govuk-table__cell--numeric"><ACC.Renderers.Currency value={total} /></td>
           <td className="govuk-table__cell" />
         </tr>
       ),
       (
         <tr key={3} className="govuk-table__row">
-          <th className="govuk-table__cell govuk-table__cell--numeric govuk-!-font-weight-bold">Forcast costs</th>
+          <td className="govuk-table__cell govuk-table__cell--numeric govuk-!-font-weight-bold">Forecast costs</td>
           <td className="govuk-table__cell govuk-table__cell--numeric"><ACC.Renderers.Currency value={forecast} /></td>
           <td className="govuk-table__cell" />
         </tr>
       ),
       (
         <tr key={4} className="govuk-table__row">
-          <th className="govuk-table__cell govuk-table__cell--numeric govuk-!-font-weight-bold">Difference</th>
+          <td className="govuk-table__cell govuk-table__cell--numeric govuk-!-font-weight-bold">Difference</td>
           <td className="govuk-table__cell govuk-table__cell--numeric"><ACC.Renderers.Percentage value={diff} /></td>
           <td className="govuk-table__cell" />
         </tr>
@@ -179,14 +179,14 @@ const afterSave = (dispatch: any, projectId: string, partnerId: string, periodId
 
 const definition = ReduxContainer.for<Params, Data, Callbacks>(EditClaimLineItemsComponent);
 
-const getEditor: (editor: IEditorStore<Dtos.ClaimLineItemDto[], ClaimLineItemDtosValidator>, original: Pending<Dtos.ClaimLineItemDto[]>) => IEditorStore<Dtos.ClaimLineItemDto[], ClaimLineItemDtosValidator> = (editor, original) => {
+const getEditor: (editor: IEditorStore<Dtos.ClaimLineItemDto[], ClaimLineItemDtosValidator>, partnerId: string, periodId: number, costCategoryId: string, original: Pending<Dtos.ClaimLineItemDto[]>) => IEditorStore<Dtos.ClaimLineItemDto[], ClaimLineItemDtosValidator> = (editor, partnerId, periodId, costCategoryId, original) => {
   if (editor) {
     return editor;
   }
 
   // default to a double item if empty
   return original
-    .then(x => x && x.length ? x : [{}, {}])
+    .then(x => x && x.length ? x : [{costCategoryId, partnerId, periodId}, {costCategoryId, partnerId, periodId}])
     .then(x => {
       const clone = JSON.parse(JSON.stringify(x)) as Dtos.ClaimLineItemDto[];
       return {
@@ -205,7 +205,7 @@ export const EditClaimLineItems = definition.connect({
       lineItems: lineItemsSelector.getPending(state),
       costCategories: Selectors.getCostCategories().getPending(state),
       forecastDetail: Selectors.getForecastDetail(props.partnerId, props.periodId, props.costCategoryId).getPending(state),
-      editor: getEditor(state.editors.claimLineItems[lineItemsSelector.key], lineItemsSelector.getPending(state))
+      editor: getEditor(state.editors.claimLineItems[lineItemsSelector.key], props.partnerId, props.periodId, props.costCategoryId, lineItemsSelector.getPending(state))
     };
   },
   withCallbacks: (dispatch) => ({

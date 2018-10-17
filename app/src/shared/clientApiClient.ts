@@ -58,7 +58,7 @@ const ajaxJson = <T>(url: string, opts?: {}): Promise<T> => {
   const options = Object.assign({ headers }, opts);
 
   return fetch(base + url, options).then(response => {
-    if (response.status === 200) {
+    if (response.ok) {
       return processResponse(response);
     }
 
