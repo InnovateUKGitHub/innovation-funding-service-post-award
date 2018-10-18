@@ -9,7 +9,7 @@ export class ClaimDtoValidator extends Results<ClaimDto>  {
         super(dto, showErrors);
     }
 
-    public id = Validation.required(this, this.model.id, "Id is requied");
+    public id = Validation.required(this, this.model.id, "Id is required");
 
     public comments = Validation.maxLength(this, this.model.comments, COMMENTS_LENGTH_MAX, `Comments must be a maximum of ${COMMENTS_LENGTH_MAX} characters`);
 
