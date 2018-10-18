@@ -120,17 +120,17 @@ class ClaimLineItemsTestRepository extends TestRepository<Repositories.ISalesfor
   }
 
   insert(lineItems: Partial<Repositories.ISalesforceClaimLineItem>[] | Partial<Repositories.ISalesforceClaimLineItem>) {
-    const isArray = lineItems instanceof Array;
+    const insert = lineItems instanceof Array ? lineItems : [lineItems];
     if (!(lineItems instanceof Array)) {
       lineItems = [lineItems];
     }
     const newIds: string[] = [];
-    lineItems.forEach((item) => {
+    insert.forEach((item) => {
       const Id = `ClaimLineItem-${this.Items.length}`;
       newIds.push(Id);
-      this.Items.push({ ...item, Id });
+      this.Items.push({ ...item, Id } as Repositories.ISalesforceClaimLineItem);
     });
-    if (isArray) {
+    if (lineItems instanceof Array) {
       return Promise.resolve(newIds);
     }
     return Promise.resolve(newIds[0]);

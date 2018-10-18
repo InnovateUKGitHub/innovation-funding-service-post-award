@@ -30,12 +30,6 @@ export abstract class TestRepository<T> {
         return Promise.resolve();
     }
 
-    async insert(insert: Partial<T>): Promise<string>;
-    async insert(insert: Partial<T>[]): Promise<string[]>;
-    async insert(insert: Partial<T>[] | Partial<T>): Promise<any> {
-        return Promise.resolve([ "a", "b" ]);
-    }
-
     protected update(update: Updatable<T> | Updatable<T>[]): Promise<boolean> {
         return Promise.resolve(true);
     }
