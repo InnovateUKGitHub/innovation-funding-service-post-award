@@ -35,7 +35,7 @@ class ProjectDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
     }
 
     private renderContents(project: Dtos.ProjectDto, partners: Dtos.PartnerDto[], contacts: Dtos.ProjectContactDto[]) {
-        const DetailsSection = ACC.Details.forData(project);
+        const DetailsSection = ACC.TypedDetails<Dtos.ProjectDto>();
 
         const monitoringOfficer = contacts.find(x => x.role === "Monitoring officer");
         const projectManager = contacts.find(x => x.role === "Project Manager");
@@ -57,7 +57,7 @@ class ProjectDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
                 </ACC.Section>
 
                 <ACC.Section title="Project information">
-                    <DetailsSection.Details labelWidth="Narrow">
+                    <DetailsSection.Details labelWidth="Narrow" data={project}>
                         <DetailsSection.Date label="Project start date" value={x => x.startDate} />
                         <DetailsSection.Date label="Project end date" value={x => x.endDate} />
                         <DetailsSection.MulilineString label="Project summary" value={x => x.summary} />
@@ -72,14 +72,14 @@ class ProjectDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
     }
 
     private renderPartnersCosts(partners: Dtos.PartnerDto[]) {
-        const PartnersTable = ACC.Table.forData(partners);
+        const PartnersTable = ACC.TypedTable<Dtos.PartnerDto>();
         const totalEligibleCosts = partners.reduce((val, partner) => val += partner.totalParticipantGrant, 0) || null;
         const totalClaimed = partners.reduce((val, partner) => val += partner.totalParticipantCostsClaimed, 0);
         const percentageClaimed = totalEligibleCosts ? 100 * totalClaimed / totalEligibleCosts : null;
 
         return (
             <ACC.Section title="Cost claimed status" qa="cost-claimed-status">
-                <PartnersTable.Table qa="cost-claimed">
+                <PartnersTable.Table qa="cost-claimed" data={partners}>
                     <PartnersTable.String header="Partner" qa="partner" value={x => x.isLead ? `${x.name} (Lead)` : x.name} footer="Total" />
                     <PartnersTable.Currency header="Total eligible costs" qa="total-costs" value={x => x.totalParticipantGrant} footer={<ACC.Renderers.Currency value={totalEligibleCosts} />} />
                     <PartnersTable.Currency header="Costs claimed to date" qa="costs-claimed" value={x => x.totalParticipantCostsClaimed} footer={<ACC.Renderers.Currency value={totalClaimed} />} />
