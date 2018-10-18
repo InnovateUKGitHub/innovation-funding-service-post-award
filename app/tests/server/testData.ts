@@ -185,8 +185,45 @@ export class TestData {
         this.repositories.claimDetails.Items.push(newItem);
 
         return newItem;
-
     }
+
+  public createClaimLineItem(options: {
+    persist: boolean
+    costCategory?: Repositories.ISalesforceCostCategory,
+    partner?: Repositories.ISalesforcePartner,
+    periodId?: number,
+    update?: (item: Partial<Repositories.ISalesforceClaimLineItem>) => void
+  } = {
+    persist: true,
+    periodId: 1
+  }): Partial<Repositories.ISalesforceClaimLineItem> {
+
+    let {costCategory, partner} = options;
+    const {update, periodId, persist} = options;
+
+    const seed = this.repositories.claimLineItems.Items.length + 1;
+    costCategory = costCategory || this.createCostCategory();
+    partner = partner || this.createPartner();
+
+    const newItem: Partial<Repositories.ISalesforceClaimLineItem> = {
+      Acc_CostCategory__c: costCategory.Id,
+      Acc_ProjectPeriodNumber__c: periodId!,
+      Acc_ProjectParticipant__c: partner.Id,
+      Acc_LineItemCost__c: 200,
+      Acc_LineItemDescription__c: "We hired a person to do a thing"
+    };
+
+    if (persist) {
+      newItem.Id = `ClaimLineItem-${seed}`;
+    }
+    if (update) {
+      update(newItem);
+    }
+    if (persist) {
+      this.repositories.claimLineItems.Items.push(newItem as Repositories.ISalesforceClaimLineItem);
+    }
+    return newItem;
+  }
 
     public createProfileDetail(
       costCategory?: Repositories.ISalesforceCostCategory,

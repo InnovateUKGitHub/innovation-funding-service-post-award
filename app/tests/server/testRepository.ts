@@ -26,15 +26,17 @@ export abstract class TestRepository<T> {
         return Promise.resolve(this.Items);
     }
 
-    protected delete(): Promise<void> {
+    protected delete(ids: string | string[]): Promise<void> {
         return Promise.resolve();
     }
 
-    protected insert(): Promise<string[]> {
+    async insert(insert: Partial<T>): Promise<string>;
+    async insert(insert: Partial<T>[]): Promise<string[]>;
+    async insert(insert: Partial<T>[] | Partial<T>): Promise<any> {
         return Promise.resolve([ "a", "b" ]);
     }
 
-    protected update(update: Updatable<T>): Promise<boolean> {
+    protected update(update: Updatable<T> | Updatable<T>[]): Promise<boolean> {
         return Promise.resolve(true);
     }
 }

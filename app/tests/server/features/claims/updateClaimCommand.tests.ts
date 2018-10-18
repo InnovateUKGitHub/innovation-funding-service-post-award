@@ -1,13 +1,13 @@
 import { TestContext } from "../../testContextProvider";
-import { UpdateClaimCommand, ValidationError } from "../../../../src/server/features/claims/updateClaim";
+import { UpdateClaimCommand } from "../../../../src/server/features/claims/updateClaim";
+import { ValidationError } from "../../../../src/shared/validation";
 import mapClaim from "../../../../src/server/features/claims/mapClaim";
-
 
 describe('UpdateClaimCommand', () => {
   it('when claim id not set expect validation expection', async () => {
     const context = new TestContext();
     const {testData} = context;
-    
+
     const dto = mapClaim(context)(testData.createClaim());
     dto.id = null;
 

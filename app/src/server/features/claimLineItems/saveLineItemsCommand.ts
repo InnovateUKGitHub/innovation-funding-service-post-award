@@ -8,12 +8,10 @@ export class SaveLineItemsCommand implements ICommand<boolean> {
   }
 
   public async Run(context: IContext) {
-
     const validationResult = new ClaimLineItemDtosValidator(this.lineItems, true);
     if (!validationResult.isValid) {
       throw new ValidationError(validationResult);
     }
-
     const existing = (await context.repositories.claimLineItems.getAllForCategory(this.partnerId, this.costCategoryId, this.periodId) || []);
     const updateDtos = this.lineItems.filter(item => !!item.id);
     const insertDtos = this.lineItems.filter(item => !item.id);
