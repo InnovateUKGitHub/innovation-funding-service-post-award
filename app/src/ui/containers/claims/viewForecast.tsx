@@ -131,7 +131,7 @@ export class ViewForecastComponent extends ContainerBase<Params, Data, Callbacks
 
   public renderContents(data: CombinedData) {
     const parsed    = this.parseClaimData(data);
-    const Table     = ACC.Table.forData(parsed);
+    const Table     = ACC.TypedTable<typeof parsed[0]>();
     const intervals = this.calculateClaimPeriods(data);
     const periods   = Object.keys(parsed[0].periods);
 
@@ -142,7 +142,7 @@ export class ViewForecastComponent extends ContainerBase<Params, Data, Callbacks
         </ACC.Section>
         <ACC.Projects.Title pageTitle="Claim" project={data.project} />
         <ACC.Section>
-          <Table.Table
+          <Table.Table data={parsed}
             qa="cost-category-table"
             headers={this.renderTableHeaders(periods, data.claim)}
             footers={this.renderTableFooters(periods, parsed)}
