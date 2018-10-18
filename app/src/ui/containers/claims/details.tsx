@@ -6,8 +6,8 @@ import * as Actions from "../../redux/actions";
 import * as Selectors from "../../redux/selectors";
 import * as Dtos from "../../models";
 import * as ACC from "../../components";
-import { routeConfig } from "../../routing";
 import { ClaimLineItemsRoute } from "./claimLineItems";
+import { ClaimsDashboardRoute } from "./dashboard";
 
 interface Params {
     projectId: string;
@@ -63,10 +63,10 @@ export class ClaimsDetailsComponent extends ContainerBase<Params, Data, {}> {
         return (
             <ACC.Page>
                 <ACC.Section>
-                    <ACC.BackLink route={routeConfig.claimsDashboard.getLink({ projectId: data.project.id, partnerId: data.partner.id })}>Claims dashboard</ACC.BackLink>
+                    <ACC.BackLink route={ClaimsDashboardRoute.getLink({ projectId: data.project.id, partnerId: data.partner.id })}>Claims dashboard</ACC.BackLink>
                 </ACC.Section>
                 <ACC.Projects.Title pageTitle="Claim" project={data.project} />
-                <ACC.Claims.Navigation projectId={data.project.id} partnerId={data.partner.id} periodId={data.claim.periodId} currentRouteName={routeConfig.claimDetails.routeName} />
+                <ACC.Claims.Navigation projectId={data.project.id} partnerId={data.partner.id} periodId={data.claim.periodId} currentRouteName={ClaimsDetailsRoute.routeName} />
                 <ACC.Section title={title}>
                     <ACC.Claims.ClaimTable {...data} getLink={costCategoryId => ClaimLineItemsRoute.getLink({partnerId: this.props.partnerId, projectId: this.props.projectId, periodId: this.props.periodId, costCategoryId})} />
                 </ACC.Section>

@@ -3,9 +3,9 @@ import { ContainerBase, ReduxContainer } from "../containerBase";
 import * as ACC from "../../components";
 import { ClaimFrequency, ProjectDto } from "../../models";
 import { Pending } from "../../../shared/pending";
-import { routeConfig } from "../../routing";
 import * as Actions from "../../redux/actions";
 import * as Selectors from "../../redux/selectors";
+import { HomeRoute } from "../home";
 
 interface Data {
   projects: Pending<ProjectDto[]>;
@@ -21,7 +21,7 @@ class ProjectDashboardComponent extends ContainerBase<{}, Data, Callbacks> {
     return (
       <ACC.Page>
         <ACC.Section>
-          <ACC.BackLink route={routeConfig.home.getLink({})}>Back</ACC.BackLink>
+          <ACC.BackLink route={HomeRoute.getLink({})}>Back</ACC.BackLink>
         </ACC.Section>
         <ACC.Title title="Projects Dashboard" />
         <Loader pending={this.props.projects} render={x => this.renderSubSections(x)} />

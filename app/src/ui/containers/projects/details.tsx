@@ -6,7 +6,6 @@ import { Pending } from "../../../shared/pending";
 import * as Actions from "../../redux/actions";
 import * as Selectors from "../../redux/selectors";
 import { ProjectOverviewPage } from "../../components/projectOverview";
-import { routeConfig } from "../../routing";
 
 interface Data {
     projectDetails: Pending<Dtos.ProjectDto>;
@@ -46,7 +45,7 @@ class ProjectDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
         ];
 
         return (
-            <ProjectOverviewPage selectedTab={routeConfig.projectDetails.routeName} project={project} partners={partners}>
+            <ProjectOverviewPage selectedTab={ProjectDetailsRoute.routeName} project={project} partners={partners}>
                 {this.renderPartnersCosts(partners)}
                 <ACC.Section title="Project Members">
                     <ACC.ProjectMember member={monitoringOfficer} qa="monitoring-officer" />

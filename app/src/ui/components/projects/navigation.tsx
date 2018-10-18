@@ -1,7 +1,7 @@
 import React from "react";
 import * as Dtos from "../../models";
-import {routeConfig} from "../../routing";
 import {TabItem, Tabs} from "../layout";
+import { ClaimsDashboardRoute, ViewForecastRoute, ProjectDetailsRoute } from "../../containers";
 
 interface Props {
   project: Dtos.ProjectDto;
@@ -11,9 +11,9 @@ interface Props {
 }
 
 export const ProjectNavigation: React.SFC<Props> = ({project, currentRoute, partnerId, partners}) => {
-  const claimsLink = routeConfig.claimsDashboard.getLink({projectId: project.id, partnerId: partnerId || partners.map(x => x.id)[0]});
-  const detailsLink = routeConfig.projectDetails.getLink({id: project.id});
-  const viewForecastLink = routeConfig.viewForecast.getLink({projectId: project.id, partnerId: partnerId || partners.map(x => x.id)[0], periodId: project.periodId});
+  const claimsLink = ClaimsDashboardRoute.getLink({projectId: project.id, partnerId: partnerId || partners.map(x => x.id)[0]});
+  const detailsLink = ProjectDetailsRoute.getLink({id: project.id});
+  const viewForecastLink = ViewForecastRoute.getLink({projectId: project.id, partnerId: partnerId || partners.map(x => x.id)[0], periodId: project.periodId});
 
   const navigationTabs: TabItem[] = [
     {text: "Claims", route: claimsLink, selected: claimsLink.routeName === currentRoute},
