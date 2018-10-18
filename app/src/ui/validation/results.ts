@@ -2,7 +2,6 @@ import { Result } from "./result";
 
 export class Results<T> {
     public readonly errors = new Array<Result>();
-    public readonly isValidationResult = true;
     public isValid: boolean = true;
 
     constructor(public model: T, public readonly showValidationErrors: boolean) {

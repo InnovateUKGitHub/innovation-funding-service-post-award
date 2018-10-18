@@ -6,6 +6,7 @@ import {SyncThunk} from "./common";
 import {updateEditorAction, UpdateEditorAction} from "./editorActions";
 import {ClaimLineItemDtosValidator} from "../../validators/claimLineItemDtosValidator";
 import {LoadingStatus} from "../../../shared/pending";
+import {ErrorCode} from "../../../server/apis/ApiError";
 
 export function loadClaimLineItemsForCategory(partnerId: string, costCategoryId: string, periodId: number) {
   return conditionalLoad(
@@ -40,11 +41,9 @@ export function saveClaimLineItems(partnerId: string, periodId: number, costCate
     return ApiClient.claimLineItems.saveLineItems(partnerId, costCategoryId, periodId, dto)
       .then((result) => {
         dispatch(dataLoadAction(key, claimLineItemsStore,LoadingStatus.Done, result));
-
         onComplete();
       }).catch((e) => {
-        // TODO Server side validation not working
-        if (e.details && e.details.isValidationResult) {
+        if (e.code === ErrorCode.VALIDATION_ERROR) {
           return dispatch(updateEditorAction(key, claimLineItemsStore, dto, e.details, e));
         }
         dispatch(updateEditorAction(key, claimLineItemsStore, dto, validation, e));

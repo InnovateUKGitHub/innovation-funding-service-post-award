@@ -1,6 +1,6 @@
 import {Router} from "express-serve-static-core";
 import express, {NextFunction, Request, Response} from "express";
-import {ApiError, ErrorCode} from "./ApiError";
+import {ApiError, ErrorCode, StatusCode} from "./ApiError";
 import {ValidationError} from "../../shared/validation";
 import {Results} from "../../ui/validation/results";
 
@@ -49,12 +49,12 @@ export abstract class ControllerBase<T> {
 
   private constructErrorResponse(e: ApiError | ValidationError | any): { status: number, data: { code: number, details: string | Results<{}> } } {
     if (e instanceof ValidationError) {
-      return { status: ErrorCode.BAD_REQUEST, data: { code: ErrorCode.BAD_REQUEST, details: e.validationResult }};
+      return { status: StatusCode.BAD_REQUEST, data: { code: ErrorCode.VALIDATION_ERROR, details: e.validationResult }};
     }
     if (e instanceof ApiError) {
-      return { status: e.errorCode, data: { code:e.errorCode, details: e.message }};
+      return { status: e.errorCode, data: { code: ErrorCode.SERVER_ERROR, details: e.message }};
     }
-    return { status: 500, data: { code: e.errorCode, details: "An unexpected error has occurred..." } };
+    return { status: 500, data: { code: ErrorCode.SERVER_ERROR, details: "An unexpected error has occurred..." } };
   }
 
   private executeMethod<TParams, TResponse>(successStatus: number, getParams: (params: any, query: any, body?: any) => TParams, run: (params: TParams) => Promise<TResponse | null>, allowNulls: boolean) {
