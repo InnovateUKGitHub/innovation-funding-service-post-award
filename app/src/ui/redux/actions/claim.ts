@@ -4,7 +4,7 @@ import { getClaim, getClaimEditor } from "../selectors/claim";
 import {ClaimDetailsSummaryDto, ClaimDto, CostCategoryDto} from "../../models";
 import {AsyncThunk, SyncThunk} from "./common";
 import {ClaimDtoValidator} from "../../validators/claimDtoValidator";
-import {updateEditorAction, UpdateEditorAction} from "./editorActions";
+import {handleError, updateEditorAction, UpdateEditorAction} from "./editorActions";
 import {LoadingStatus} from "../../../shared/pending";
 
 export function loadClaim(partnerId: string, periodId: number) {
@@ -46,7 +46,7 @@ export function saveClaim(partnerId: string, periodId: number, dto: ClaimDto, de
       dispatch(dataLoadAction(selector.key, selector.store, LoadingStatus.Done, result));
       onComplete();
     }).catch((e) => {
-      dispatch(updateEditorAction(selector.key, selector.store, dto, validation, e));
+      dispatch(handleError({ id: selector.key, store: selector.store, dto, validation, error: e }));
     });
   };
 }

@@ -3,7 +3,7 @@ import {ApiClient} from "../../../shared/apiClient";
 import {claimLineItemsStore, findClaimLineItemsByPartnerCostCategoryAndPeriod} from "../selectors/claimLineItems";
 import {ClaimLineItemDto} from "../../models";
 import {SyncThunk} from "./common";
-import {updateEditorAction, UpdateEditorAction} from "./editorActions";
+import {handleError, updateEditorAction, UpdateEditorAction} from "./editorActions";
 import {ClaimLineItemDtosValidator} from "../../validators/claimLineItemDtosValidator";
 import {LoadingStatus} from "../../../shared/pending";
 import {ErrorCode} from "../../../server/apis/ApiError";
@@ -43,10 +43,7 @@ export function saveClaimLineItems(partnerId: string, periodId: number, costCate
         dispatch(dataLoadAction(key, claimLineItemsStore,LoadingStatus.Done, result));
         onComplete();
       }).catch((e) => {
-        if (e.code === ErrorCode.VALIDATION_ERROR) {
-          return dispatch(updateEditorAction(key, claimLineItemsStore, dto, e.details, e));
-        }
-        dispatch(updateEditorAction(key, claimLineItemsStore, dto, validation, e));
+        dispatch(handleError({ id: key, store: claimLineItemsStore, dto, validation, error: e}));
       });
   };
 }
