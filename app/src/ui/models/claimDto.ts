@@ -5,9 +5,11 @@ export interface ClaimDto {
   status: string;
   periodStartDate: Date;
   periodEndDate: Date;
-  periodId: string;
+  periodId: number;
   totalCost: number;
   forecastCost: number;
   approvedDate: Date|null;
   paidDate: Date|null;
+  // ToDo: confirm field
+  comments: string|null;
 }

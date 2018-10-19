@@ -12,5 +12,5 @@ export interface ProjectDto {
     projectNumber: string;
 
     claimFrequency: ClaimFrequency;
-    period: number;
+    periodId: number;
 }

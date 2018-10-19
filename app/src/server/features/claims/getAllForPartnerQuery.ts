@@ -8,19 +8,11 @@ export class GetAllForPartnerQuery implements IQuery<ClaimDto[]> {
     }
 
     public async Run(context: IContext) {
-        const results = await context.repositories.claims.getAllByPartnerId(this.partnerId);
-        return results && results
-          .map(mapClaim(context))
-          .sort((x, y) => dateComparator(y.periodEndDate, x.periodEndDate));
-    }
-}
+        const claims = await context.repositories.claims.getAllByPartnerId(this.partnerId);
+        const forcasts = await context.repositories.profileTotalPeriod.getAllByPartnerId(this.partnerId);
+        const joined = claims.map(claim => ({ claim, forcast: forcasts.find(x => x.Acc_ProjectPeriodNumber__c === claim.Acc_ProjectPeriodNumber__c) }));
 
-export class GetByIdQuery implements IQuery<ClaimDto> {
-    constructor(private claimId: string) {
-    }
-
-    public async Run(context: IContext) {
-        const result = await context.repositories.claims.getById(this.claimId);
-        return mapClaim(context)(result);
+        return joined.map(x => mapClaim(context)(x.claim, x.forcast))
+            .sort((x, y) => dateComparator(y.periodEndDate, x.periodEndDate));
     }
 }

@@ -1,27 +1,43 @@
 import { IApiClient } from "../server/apis";
 import { processResponse } from "./processResponse";
+import {ClaimDto, ClaimLineItemDto} from "../ui/models";
 
 const clientApi: IApiClient = {
-  claimCosts: {
-    getAllForClaim: (claimId: string) => ajaxJson(`/api/claimcosts?claimId=${claimId}`)
+  claimLineItems: {
+    getAllForCategory: (partnerId: string, costCategoryId: string, periodId: number) => ajaxJson(`/api/claim-line-items/?partnerId=${partnerId}&periodId=${periodId}&costCategoryId=${costCategoryId}`),
+    saveLineItems: (partnerId: string, costCategoryId: string, periodId: number, lineItems: ClaimLineItemDto[]) => ajaxPost(`/api/claim-line-items/?partnerId=${partnerId}&periodId=${periodId}&costCategoryId=${costCategoryId}`, lineItems)
   },
   claims : {
-    getAllByPartnerId: (partnerId: string) => ajaxJson(`/api/claims?partnerId=${partnerId}`),
-    getById: (claimId: string) => ajaxJson(`/api/claims/${claimId}`),
+    getAllByPartnerId: (partnerId: string) => ajaxJson(`/api/claims/?partnerId=${partnerId}`),
+    get: (partnerId: string, periodId: number) => ajaxJson(`/api/claims/${partnerId}/${periodId}`),
+    update: (partnerId: string, periodId: number, claim: ClaimDto) => ajaxPut(`/api/claims/${partnerId}/${periodId}`, claim)
+  },
+  claimDetailsSummary: {
+    getAllByPartnerIdForPeriod: (partnerId: string, periodId: number) => ajaxJson(`/api/claim-details-summary/${partnerId}/${periodId}`)
+  },
+  claimDetails: {
+    getAllByPartner: (partnerId: string) => ajaxJson(`/api/claim-details/?partnerId=${partnerId}`)
   },
   contacts: {
     getAll: () => ajaxJson("/api/contacts"),
     get: (id: string) => ajaxJson(`/api/contact/${id}`),
   },
   costCategories: {
-    getAll: () => ajaxJson("/api/costcategories"),
+    getAll: () => ajaxJson("/api/cost-categories"),
+  },
+  forecastDetails: {
+    getAllByPartnerId: (partnerId: string, periodId: number) => ajaxJson(`/api/forecast-details/?partnerId=${partnerId}&periodId=${periodId}`),
+    get: (partnerId: string, periodId: number, costCategoryId: string) => ajaxJson(`/api/forecast-details/${partnerId}/${periodId}/${costCategoryId}`),
+  },
+  forecastGolCosts: {
+    getAllByPartnerId: (partnerId: string) => ajaxJson(`/api/forecast-gol-costs/?partnerId=${partnerId}`)
   },
   projects: {
     get: (id: string) => ajaxJson(`/api/projects/${id}`),
     getAll: () => ajaxJson("/api/projects"),
   },
   projectContacts: {
-    getAllByProjectId: (projectId: string) => ajaxJson(`/api/projectContacts?projectId=${projectId}`),
+    getAllByProjectId: (projectId: string) => ajaxJson(`/api/project-contacts?projectId=${projectId}`),
   },
   partners: {
     get: (id: string) => ajaxJson(`/api/partners/${id}`),
@@ -42,11 +58,13 @@ const ajaxJson = <T>(url: string, opts?: {}): Promise<T> => {
   const options = Object.assign({ headers }, opts);
 
   return fetch(base + url, options).then(response => {
-    if (response.status === 200) {
+    if (response.ok) {
       return processResponse(response);
     }
 
-    return Promise.reject(response.statusText);
+    return response.json()
+      .catch(e => Promise.reject(response.statusText))
+      .then(errText => Promise.reject(errText));
   });
 };
 
@@ -57,6 +75,13 @@ const ajaxPost = <T>(url: string, body: {} = {}, opts?: {}) => {
   }, opts);
 
   return ajaxJson<T>(url, options);
+};
+
+const ajaxPut = <T>(url: string, body: {} = {}, opts?: {}) => {
+  return ajaxPost<T>(url, body, {
+    ...opts,
+    method: "PUT",
+  });
 };
 
 export default clientApi;

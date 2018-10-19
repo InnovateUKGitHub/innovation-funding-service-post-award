@@ -1,7 +1,7 @@
 // tslint:disable
 import React from "react";
 import { range } from "../../shared/range";
-import { Table } from "../components/table";
+import { TypedTable } from "../components/table";
 import { FullDateTimeWithSeconds } from "../components/renderers";
 import { Currency } from "../components/renderers/currency";
 
@@ -32,9 +32,9 @@ export const tableGuide: IGuide = {
                     <p>This is the example for the following data</p>
                     <pre>{JSON.stringify(exampleData, null, 5)}</pre>
                     <pre>{
-                        "const ExampleTable = Table.forData(exampleData);\n" +
+                        "const ExampleTable = TypedTable<ExampleData>();\n" +
                         "return (\n" +
-                        "\t<ExampleTable.Table>\n" +
+                        "\t<ExampleTable.Table data={exampleData}>\n" +
                         "\t\t<ExampleTable.Number header=\"Id\" value={(x) => x.id} />\n" +
                         "\t\t<ExampleTable.String header=\"Name\" value={(x) => x.name} />\n" +
                         "\t\t<ExampleTable.Currency header=\"Cost\" value={(x) => x.cost} />\n" +
@@ -46,9 +46,9 @@ export const tableGuide: IGuide = {
                 </div>
             ),
             render: () => {
-                const ExampleTable = Table.forData(exampleData);
+                const ExampleTable = TypedTable<ExampleData>();
                 return (
-                    <ExampleTable.Table qa="example">
+                    <ExampleTable.Table qa="example" data={exampleData}>
                         <ExampleTable.String header="Id" qa="id" value={(x) => x.id} />
                         <ExampleTable.String header="Name" qa="name" value={(x) => x.name} />
                         <ExampleTable.Currency header="Cost" qa="cost" value={(x) => x.cost} />
@@ -62,9 +62,9 @@ export const tableGuide: IGuide = {
             name: "Custom column",
             comments: "Custom columns can also be added",
             example: (
-                "const ExampleTable = Table.forData(exampleData);\n" +
+                "const ExampleTable = TypedTable<ExampleData>();\n" +
                 "return (\n" +
-                "\t<ExampleTable.Table>\n" +
+                "\t<ExampleTable.Table data={exampleData}>\n" +
                 "\t\t<ExampleTable.Number header=\"Id\" value={(x) => x.id} />\n" +
                 "\t\t<ExampleTable.Custom\n" +
                 "\t\t\theader=\"The custom column\"\n" +
@@ -75,9 +75,9 @@ export const tableGuide: IGuide = {
                 ");`"
             ),
             render: () => {
-                const ExampleTable = Table.forData(exampleData);
+                const ExampleTable = TypedTable<ExampleData>();
                 return (
-                    <ExampleTable.Table qa="example">
+                    <ExampleTable.Table qa="example" data={exampleData}>
                         <ExampleTable.String header="Id" qa="id" value={(x) => x.id} />
                         <ExampleTable.Custom
                             header="The custom column"
@@ -93,9 +93,9 @@ export const tableGuide: IGuide = {
             name: "Footers",
             comments: "Footers can be added to columns",
             example: (
-                "const ExampleTable = Table.forData(exampleData);\n" +
+                "const ExampleTable = TypedTable<ExampleData>();\n" +
                 "return (\n" +
-                "\t<ExampleTable.Table>\n" +
+                "\t<ExampleTable.Table data={exampleData}>\n" +
                 "\t\t<ExampleTable.Number \n" +
                 "\t\t\tfooter=\"Total costs\"\n" +
                 "\t\t\theader=\"Id\"\n" +
@@ -110,9 +110,9 @@ export const tableGuide: IGuide = {
                 ");"
             ),
             render: () => {
-                const ExampleTable = Table.forData(exampleData);
+                const ExampleTable = TypedTable<ExampleData>();
                 return (
-                    <ExampleTable.Table qa="example">
+                    <ExampleTable.Table qa="example" data={exampleData}>
                         <ExampleTable.String footer="Total costs" header="Id" qa="id" value={(x) => x.id} />
                         <ExampleTable.Currency footer={<Currency value={exampleData.reduce((t, i) => t + i.cost, 0)} />} header="Cost" qa="cost"  value={(x) => x.cost} />
                     </ExampleTable.Table>

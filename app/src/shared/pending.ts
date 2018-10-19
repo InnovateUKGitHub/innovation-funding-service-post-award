@@ -44,7 +44,7 @@ export class Pending<T> {
      * @param combineData - a function that takes both Pendings and returns the combined data
      * @return Pending<TR>
      */
-    and<T2, TR>(pending: Pending<T2>, combineData: (pending1: T, pending2: T2) => TR ): Pending<TR> {
+    and<T2, TR>(pending: Pending<T2>, combineData: (pending1: T, pending2: T2) => TR): Pending<TR> {
         return Pending.combine(this, pending, combineData);
     }
 
@@ -86,6 +86,9 @@ export class Pending<T> {
     static combine<T1, T2, T3, T4, TR>(pending1: Pending<T1>, pending2: Pending<T2>, pending3: Pending<T3>, pending4: Pending<T4>, combineData: (pending1: T1, pending2: T2, pending3: T3, pending4: T4) => TR): Pending<TR>;
     static combine<T1, T2, T3, T4, T5, TR>(pending1: Pending<T1>, pending2: Pending<T2>, pending3: Pending<T3>, pending4: Pending<T4>, pending5: Pending<T5>, combineData: (pending1: T1, pending2: T2, pending3: T3, pending4: T4, pending5: T5) => TR): Pending<TR>;
     static combine<T1, T2, T3, T4, T5, T6, TR>(pending1: Pending<T1>, pending2: Pending<T2>, pending3: Pending<T3>, pending4: Pending<T4>, pending5: Pending<T5>, pending6: Pending<T6>, combineData: (pending1: T1, pending2: T2, pending3: T3, pending4: T4, pending5: T5, pending6: T6) => TR): Pending<TR>;
+    static combine<T1, T2, T3, T4, T5, T6, T7, TR>(pending1: Pending<T1>, pending2: Pending<T2>, pending3: Pending<T3>, pending4: Pending<T4>, pending5: Pending<T5>, pending6: Pending<T6>, pending7: Pending<T7>, combineData: (pending1: T1, pending2: T2, pending3: T3, pending4: T4, pending5: T5, pending6: T6, pending7: T7) => TR): Pending<TR>;
+    static combine<T1, T2, T3, T4, T5, T6, T7, T8, TR>(pending1: Pending<T1>, pending2: Pending<T2>, pending3: Pending<T3>, pending4: Pending<T4>, pending5: Pending<T5>, pending6: Pending<T6>, pending7: Pending<T7>, pending8: Pending<T8>, combineData: (pending1: T1, pending2: T2, pending3: T3, pending4: T4, pending5: T5, pending6: T6, pending7: T7, pending8: T8) => TR): Pending<TR>;
+
     static combine(...pendingsToCombine: any[]) {
         const pendingsCount = pendingsToCombine.length - 1;
         const pendings: any[] = [];
@@ -139,17 +142,17 @@ export class Pending<T> {
     }
 
     static create<T>(stored: IDataStore<T> | null): Pending<T> {
-      let status = LoadingStatus.Preload;
-      let data   = null;
-      let error  = null;
+        let status = LoadingStatus.Preload;
+        let data = null;
+        let error = null;
 
-      if(!!stored) {
-        status = stored.status;
-        data   = stored.data;
-        error  = stored.error;
-      }
+        if (!!stored) {
+            status = stored.status;
+            data = stored.data;
+            error = stored.error;
+        }
 
-      return new Pending<T>(status, data, error);
+        return new Pending<T>(status, data, error);
     }
 }
 
@@ -163,7 +166,7 @@ const orderedStates = [
 function lowestState(states: LoadingStatus[]) {
     let result = LoadingStatus.Done;
     orderedStates.forEach(state => {
-        if(result === LoadingStatus.Done && states.indexOf(state) >= 0){
+        if (result === LoadingStatus.Done && states.indexOf(state) >= 0) {
             result = state;
         }
     });

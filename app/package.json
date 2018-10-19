@@ -4,8 +4,8 @@
   "description": "External frontend for innovate uk acc system",
   "scripts": {
     "clean": "rimraf ./dist",
-    "start:server": "node ./dist/server/index.js",
-    "start:dev": "nodemon ./dist/server/index.js",
+    "start:server": "node ./dist/src/server/index.js",
+    "start:dev": "nodemon ./dist/src/server/index.js",
     "build:server": "rimraf dist/ && tsc",
     "watch:server": "tsc --watch",
     "build:client": "webpack --config webpack.client.js",
@@ -35,8 +35,7 @@
     "redux": "^4.0.0",
     "redux-router5": "^6.0.2",
     "redux-thunk": "^2.3.0",
-    "router5": "^6.4.1",
-    "typescript": "^3.0.1"
+    "router5": "^6.4.1"
   },
   "devDependencies": {
     "@types/classnames": "^2.2.6",
@@ -68,6 +67,7 @@
     "tslint-html-report": "^2.0.0",
     "tslint-react": "^3.6.0",
     "tslint-sonarts": "^1.7.0",
+    "typescript": "^3.0.1",
     "webpack": "^4.16.5",
     "webpack-command": "^0.4.1",
     "webpack-node-externals": "^1.7.2"

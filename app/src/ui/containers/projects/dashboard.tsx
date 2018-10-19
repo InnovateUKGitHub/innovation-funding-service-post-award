@@ -3,8 +3,9 @@ import { ContainerBase, ReduxContainer } from "../containerBase";
 import * as ACC from "../../components";
 import { ClaimFrequency, ProjectDto } from "../../models";
 import { Pending } from "../../../shared/pending";
-import { routeConfig } from "../../routing";
-import * as Actions from "../../redux/actions/thunks";
+import * as Actions from "../../redux/actions";
+import * as Selectors from "../../redux/selectors";
+import { HomeRoute } from "../home";
 
 interface Data {
   projects: Pending<ProjectDto[]>;
@@ -15,20 +16,15 @@ interface Callbacks {
 
 class ProjectDashboardComponent extends ContainerBase<{}, Data, Callbacks> {
 
-  static getLoadDataActions() {
-    return [Actions.loadProjects()];
-  }
-
   render() {
-    const Loading = ACC.Loading.forData(this.props.projects);
-
+    const Loader = ACC.TypedLoader<ProjectDto[]>();
     return (
       <ACC.Page>
         <ACC.Section>
-          <ACC.BackLink route={routeConfig.home.getLink({})}>Back</ACC.BackLink>
+          <ACC.BackLink route={HomeRoute.getLink({})}>Back</ACC.BackLink>
         </ACC.Section>
         <ACC.Title title="Projects Dashboard" />
-        <Loading.Loader render={x => this.renderSubSections(x)} />
+        <Loader pending={this.props.projects} render={x => this.renderSubSections(x)} />
       </ACC.Page>
     );
   }
@@ -45,7 +41,7 @@ class ProjectDashboardComponent extends ContainerBase<{}, Data, Callbacks> {
       const today = new Date();
       // needs last claim date to work out latest period for claim deadline
       const end = new Date(x.startDate);
-      const endMonth = x.period * (quarterly ? 4 : 1);
+      const endMonth = x.periodId * (quarterly ? 4 : 1);
       end.setMonth(end.getMonth() + endMonth);
       end.setDate(0);
       const timeRemaining = end.getTime() - today.getTime();
@@ -54,6 +50,7 @@ class ProjectDashboardComponent extends ContainerBase<{}, Data, Callbacks> {
       if (daysRemaining <= 30) {
         open.push((
           <ACC.OpenProjectItem
+            key={x.id}
             project={x}
             daysRemaining={daysRemaining}
             endDate={end}
@@ -69,6 +66,7 @@ class ProjectDashboardComponent extends ContainerBase<{}, Data, Callbacks> {
 
         awaiting.push((
           <ACC.AwaitingProjectItem
+            key={x.id}
             project={x}
             frequency={frequency}
             periodText={periodText}
@@ -105,7 +103,7 @@ class ProjectDashboardComponent extends ContainerBase<{}, Data, Callbacks> {
 const definition = ReduxContainer.for<{}, Data, Callbacks>(ProjectDashboardComponent);
 
 export const ProjectDashboard = definition.connect({
-  withData: (state, params) => ({projects: Pending.create(state.data.projects.all) }),
+  withData: (state, props) => ({projects: Selectors.getProjects().getPending(state) }),
   withCallbacks: () => ({})
 });
 
@@ -113,6 +111,6 @@ export const ProjectDashboardRoute = definition.route({
   routeName: "projectDashboard",
   routePath: "/projects/dashboard",
   getParams: () => ({}),
-  getLoadDataActions: (dispach) => [Actions.loadProjects()],
+  getLoadDataActions: (params) => [Actions.loadProjects()],
   container: ProjectDashboard
 });

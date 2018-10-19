@@ -1,15 +1,15 @@
 import "jest";
 import React from "react";
-import { ProjectMember } from "../../src/ui/components";
+import { ProjectMember } from "../../src/ui/components/projectMember";
 import Adapter from "enzyme-adapter-react-16";
 import Enzyme, { mount, shallow } from "enzyme";
 
 Enzyme.configure({ adapter: new Adapter() });
 
 describe("ProjectMember", () => {
-    const aProjectMemberWithOrg = { role: "aTestRole", name: "aTestName", email: "testemail@email.com", organisation: "aTestOrganisation" };
-    const aProjectMemberWithoutOrg = { role: "aTestRole", name: "aTestName", email: "testemail@email.com", organisation: null };
-    
+    const aProjectMemberWithOrg: ProjectMember = { role: "aTestRole", name: "aTestName", email: "testemail@email.com", organisation: "aTestOrganisation" };
+    const aProjectMemberWithoutOrg: ProjectMember = { role: "aTestRole", name: "aTestName", email: "testemail@email.com" };
+
     it("should render organisation if present", () => {
         const wrapper = shallow(<ProjectMember member={aProjectMemberWithOrg} qa="member-a" />);
         expect(wrapper.html()).toContain(`<h3 class=\"govuk-heading-s govuk-!-margin-bottom-0\">aTestRole - aTestOrganisation</h3>`);

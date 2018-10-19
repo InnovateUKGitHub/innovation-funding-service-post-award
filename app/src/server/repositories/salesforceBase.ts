@@ -1,11 +1,15 @@
 import salesforceConnection from "./salesforceConnection";
-import { SalesforceId } from "jsforce";
+import {SalesforceId, SuccessResult} from "jsforce";
+
+export type Updatable<T> = Partial<T> & {
+  Id: string
+};
 
 export default abstract class SalesforceBase<T> {
   private log = false;
 
   protected constructor(
-    private objectName: string,
+    protected objectName: string,
     private columns: string[]
   ) { }
 
@@ -40,7 +44,11 @@ export default abstract class SalesforceBase<T> {
       .select(this.columns.join(", "))
       .where(filter)
       .execute()
-      .then(x => this.asArray(x));
+      .then(x => this.asArray(x))
+      .catch(e => {
+        console.log("Salesforce Error", e);
+        throw e;
+      });
 
     return result as T[];
   }
@@ -77,6 +85,36 @@ export default abstract class SalesforceBase<T> {
       }
       throw e;
     }
+  }
+
+  protected async insert(inserts: Partial<T>): Promise<string>;
+  protected async insert(inserts: Partial<T>[]): Promise<string[]>;
+  protected async insert(inserts: Partial<T> | Partial<T>[]): Promise<string | string[]> {
+    const conn = await salesforceConnection();
+    return await conn.sobject(this.objectName)
+      .insert(inserts).then(results => {
+        const ids = (results as SuccessResult[]).map(r => r.id.toString());
+        return inserts instanceof Array ? ids : ids[0];
+      });
+  }
+
+  protected async update(updates: Updatable<T>[] | Updatable<T>): Promise<boolean> {
+    const conn = await salesforceConnection();
+    return await conn.sobject(this.objectName)
+      .update(updates)
+      .then(() => true);
+  }
+
+  protected async delete(ids: string[] | string): Promise<void> {
+    const conn = await salesforceConnection();
+    return new Promise<void>((resolve, reject) => {
+      conn.sobject(this.objectName).delete(ids, (err, res) => {
+        if (err) {
+          return reject(err);
+        }
+        resolve(res);
+      });
+    });
   }
 
   private asArray(result: Partial<{}>[]): T[] {

@@ -1,4 +1,4 @@
-import * as Repsoitories from "../../repositories";
+import * as Repositories from "../../repositories";
 import { Configuration, IConfig } from "./config";
 import { Clock, IClock } from "./clock";
 import { ILogger, Logger } from "./logger";
@@ -12,13 +12,18 @@ export interface ICommand<T> {
 }
 
 export interface IRepositories {
-  claims: Readonly<Repsoitories.IClaimRepository>;
-  claimCosts: Readonly<Repsoitories.IClaimCostRepository>;
-  contacts: Readonly<Repsoitories.IContactsRepository>;
-  costCategories: Readonly<Repsoitories.ICostCategoryRepository>;
-  projects: Readonly<Repsoitories.IProjectRepository>;
-  partners: Readonly<Repsoitories.IPartnerRepository>;
-  projectContacts: Readonly<Repsoitories.IProjectContactsRepository>;
+  claims: Readonly<Repositories.IClaimRepository>;
+  claimDetails: Readonly<Repositories.IClaimDetailsRepository>;
+  contacts: Readonly<Repositories.IContactsRepository>;
+  costCategories: Readonly<Repositories.ICostCategoryRepository>;
+  profileDetails: Readonly<Repositories.IProfileDetailsRepository>;
+  profileTotalPeriod: Readonly<Repositories.IProfileTotalPeriodRepository>;
+  profileTotalCostCategory: Readonly<Repositories.IProfileTotalCostCategoryRepository>;
+  projects: Readonly<Repositories.IProjectRepository>;
+  partners: Readonly<Repositories.IPartnerRepository>;
+  projectContacts: Readonly<Repositories.IProjectContactsRepository>;
+  claimLineItems: Readonly<Repositories.IClaimLineItemRepository>;
+  claimTotalCostCategory: Readonly<Repositories.IClaimTotalCostCategoryRepository>;
 }
 
 export interface IContext {
@@ -32,13 +37,19 @@ export interface IContext {
 
 export class Context implements IContext {
   public repositories = {
-    claims: new Repsoitories.ClaimRepository(),
-    claimCosts: new Repsoitories.ClaimCostRepository(),
-    contacts: new Repsoitories.ContactsRepository(),
-    costCategories: new Repsoitories.CostCategoryRepository(),
-    projects: new Repsoitories.ProjectRepository(),
-    partners: new Repsoitories.PartnerRepository(),
-    projectContacts: new Repsoitories.ProjectContactsRepository()
+    claims: new Repositories.ClaimRepository(),
+    claimDetails: new Repositories.ClaimDetailsRepository(),
+    claimTotalCostCategory: new Repositories.ClaimTotalCostCategoryRepository(),
+    claimCosts: new Repositories.ClaimCostRepository(),
+    contacts: new Repositories.ContactsRepository(),
+    costCategories: new Repositories.CostCategoryRepository(),
+    profileDetails: new Repositories.ProfileDetailsRepository(),
+    profileTotalPeriod: new Repositories.ProfileTotalPeriodRepository(),
+    profileTotalCostCategory: new Repositories.ProfileTotalCostCategoryRepository(),
+    projects: new Repositories.ProjectRepository(),
+    partners: new Repositories.PartnerRepository(),
+    projectContacts: new Repositories.ProjectContactsRepository(),
+    claimLineItems: new Repositories.ClaimLineItemRepository()
   };
 
   public config = Configuration;

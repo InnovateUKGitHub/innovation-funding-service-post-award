@@ -10,18 +10,26 @@ import { titleGuide } from "./titleGuide";
 import { linksListGuide } from "./linksListGuide";
 import { tableGuide } from "./tableGuide";
 import { detailsGuide } from "./detailsGuide";
+import { formGuide } from "./formGuide";
+import { validationMessageGuide } from "./validationMessageGuide";
+import { validationErrorGuide } from "./validationErrorGuide";
+import { validationSummaryGuide } from "./validationSummaryGuide";
 
 const guides: IGuide[] = [
     datesGuide,
     detailsGuide,
     emailGuide,
+    formGuide,
+    linksListGuide,
     projectMemberGuide,
     sectionGuide,
     sectionPanelGuide,
     tabsGuide,
-    titleGuide,
-    linksListGuide,
     tableGuide,
+    titleGuide,
+    validationMessageGuide,
+    validationErrorGuide,
+    validationSummaryGuide
 ];
 
 interface Props {

@@ -3,36 +3,34 @@ import SalesforceBase from "./salesforceBase";
 export interface ISalesforceCostCategory {
     Id: string;
     Acc_CostCategoryName__c: string;
-    Acc_CostCategoryDescption__c: string;
-    Acc_CostCategoryID__c: number;
     Acc_DisplayOrder__c: number;
+    Acc_OrganisationType__c: string;
+    Acc_CompetitionType__c: string;
+    Acc_CostCategoryDescription__c: string;
+    Acc_HintText__c: string;
 }
 
-const fieldNames: string[] = [];
+const fieldNames: string[] = [
+    "Id",
+    "Acc_CostCategoryName__c",
+    "Acc_DisplayOrder__c",
+    "Acc_OrganisationType__c",
+    "Acc_CompetitionType__c",
+    "Acc_CostCategoryDescription__c",
+    // ToDo: currently missing on poc2 ... should be fixed soon
+    "Acc_HintText__c"
+];
 
 export interface ICostCategoryRepository {
     getAll(): Promise<ISalesforceCostCategory[]>;
 }
 
-const fakeCCNames = ["Labour", "Overheads", "Materials", "Capital usage", "Subcontracting", "Travel and subsistence", "Other costs" ];
-
 export class CostCategoryRepository extends SalesforceBase<ISalesforceCostCategory> implements ICostCategoryRepository {
     constructor() {
-        super("TODO", fieldNames);
+        super("Acc_CostCategory__c", fieldNames);
     }
 
     getAll(): Promise<ISalesforceCostCategory[]> {
-        // ToDo: talk to salesforce
-        return Promise.resolve(fakeCCNames.map((name, index) => this.createDummyCostCategory(index + 1, name)));
-    }
-
-    createDummyCostCategory(seed: number, name: string): ISalesforceCostCategory {
-        return {
-            Id: `CostCategory${seed}`,
-            Acc_CostCategoryID__c: seed,
-            Acc_DisplayOrder__c: seed - 1,
-            Acc_CostCategoryName__c: name,
-            Acc_CostCategoryDescption__c: `The description for Cost Category ${seed}:${name}`
-        };
+        return super.all();
     }
 }

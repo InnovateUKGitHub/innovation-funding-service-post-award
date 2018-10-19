@@ -1,19 +1,22 @@
 import {ISalesforceClaim} from "../../repositories/claimsRepository";
 import {IContext} from "../common/context";
 import {ClaimDto} from "../../../ui/models";
+import { ISalesforceProfileTotalPeriod } from "../../repositories";
 
 const SALESFORCE_DATE_FORMAT = "yyyy-MM-dd";
+const SALESFORCE_DATE_TIME_FORMAT = "yyyy-MM-ddTHH:mm:ss.SSSZZZ";
 
-export default (context: IContext) => (claim: ISalesforceClaim): ClaimDto => ({
+export default (context: IContext) => (claim: ISalesforceClaim, forcast: ISalesforceProfileTotalPeriod|null|undefined): ClaimDto => ({
   id: claim.Id,
   partnerId: claim.Acc_ProjectParticipant__c,
-  lastModifiedDate: context.clock.parse(claim.LastModifiedDate, SALESFORCE_DATE_FORMAT)!,
+  lastModifiedDate: context.clock.parse(claim.LastModifiedDate, SALESFORCE_DATE_TIME_FORMAT)!,
   status: claim.Acc_ClaimStatus__c,
-  periodStartDate: context.clock.parse(claim.Acc_ProjectPeriodStartDate_c, SALESFORCE_DATE_FORMAT)!,
+  periodStartDate: context.clock.parse(claim.Acc_ProjectPeriodStartDate__c, SALESFORCE_DATE_FORMAT)!,
   periodEndDate: context.clock.parse(claim.Acc_ProjectPeriodEndDate__c,SALESFORCE_DATE_FORMAT)!,
-  periodId: claim.Acc_ProjectPeriodID__c,
-  totalCost: claim.Acc_TotalCost__c,
-  forecastCost: claim.Acc_ForecastCost__c,
+  periodId: claim.Acc_ProjectPeriodNumber__c,
+  totalCost: claim.Acc_ProjectPeriodCost__c,
+  forecastCost: forcast && forcast.Acc_PeriodInitialForecastCost__c || 0,
   approvedDate: claim.Acc_ApprovedDate__c === null ? null : context.clock.parse(claim.Acc_ApprovedDate__c, SALESFORCE_DATE_FORMAT),
   paidDate: claim.Acc_PaidDate__c === null ? null : context.clock.parse(claim.Acc_PaidDate__c, SALESFORCE_DATE_FORMAT),
+  comments: claim.Acc_LineItemDescription__c,
 });

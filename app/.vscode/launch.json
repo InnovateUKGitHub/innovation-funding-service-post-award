@@ -10,7 +10,7 @@
             "cwd": "${workspaceFolder}",
             "protocol": "inspector",
             "outFiles": [
-                "${workspaceFolder}\\dist\\server\\**\\*js"
+                "${workspaceFolder}\\dist\\src\\server\\**\\*js"
             ]
         }
     ]

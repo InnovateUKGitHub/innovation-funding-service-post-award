@@ -1,7 +1,8 @@
 import * as React from "react";
 import { Link } from "react-router5";
 import { Breadcrumbs, Title } from "../../components/layout";
-import * as Actions from "../../redux/actions/thunks";
+import * as Actions from "../../redux/actions";
+import * as Selectors from "../../redux/selectors";
 import { ContainerBase, ReduxContainer } from "../containerBase";
 import { Pending } from "../../../shared/pending";
 import * as Dtos from "../../models";
@@ -17,22 +18,21 @@ class ListComponent extends ContainerBase<{}, Props, {}> {
   }
 
   render() {
-    const Loading = Acc.Loading.forData(this.props.contacts);
-
+    const Loader = Acc.TypedLoader<Dtos.IContact[]>();
     return (
       <div>
         <Breadcrumbs links={[{ routeName: "home", text: "Home" }]}>Contacts</Breadcrumbs>
         <Title title="Contacts" />
-        <Loading.Loader render={contacts => this.renderTable(contacts)} />
+        <Loader pending={this.props.contacts} render={contacts => this.renderTable(contacts)} />
         <Link className="govuk-back-link" routeName="home">Home</Link>
       </div>
     );
   }
 
   private renderTable(contacts: Dtos.IContact[]) {
-    const Table = Acc.Table.forData(contacts);
+    const Table = Acc.TypedTable<Dtos.IContact>();
     return (
-      <Table.Table qa="contacts">
+      <Table.Table qa="contacts" data={contacts}>
         <Table.String header="Id" qa="id" value={x => x.id} />
         <Table.String header="Name" qa="name" value={x => `${x.firstName} ${x.lastName}`.trim()} />
         <Table.Email header="Email" qa="email" value={x => x.email} />
@@ -50,16 +50,10 @@ class ListComponent extends ContainerBase<{}, Props, {}> {
   }
 }
 
-function mapStateToProps(state: any) {
-  return {
-    data: state && state.data && state.data.contacts && state.data.contacts.all && state.data.contacts.all.data
-  };
-}
-
 const definition = ReduxContainer.for<{}, Props, {}>(ListComponent);
 
 export const ContactList = definition.connect({
-  withData: (store) => ({ contacts: Pending.create(store.data.contacts.all) }),
+  withData: (state) => ({ contacts: Selectors.getContacts().getPending(state) }),
   withCallbacks: () => ({})
 });
 

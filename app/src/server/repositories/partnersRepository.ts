@@ -13,9 +13,8 @@ export interface ISalesforcePartner {
     Acc_TotalParticipantGrant__c: number;
     Acc_TotalParticipantCosts__c: number;
     Acc_TotalParticipantCostsPaid__c: number;
-    Acc_PercentageParticipantCosts__c: number;
-    Acc_CapLimit__c: number;
-    Acc_AwardRate__c: number;
+    Acc_Cap_Limit__c: number;
+    Acc_Award_Rate__c: number;
 }
 
 const fields = [
@@ -24,11 +23,10 @@ const fields = [
     "Acc_AccountId__r.Name",
     "Acc_ParticipantType__c",
     "Acc_ParticipantSize__c",
-    // TODO "Acc_TotalParticipantGrant__c",
-    // TODO "Acc_TotalParticipantCosts__c",
-    // TODO "Acc_CapLimit__c",
-    // TODO "Acc_AwardRate__c",
-    // TODO "Acc_TotalProjectCosts__c",
+    "Acc_TotalParticipantGrant__c",
+    "Acc_TotalParticipantCosts__c",
+    "Acc_Cap_Limit__c",
+    "Acc_Award_Rate__c",
     "Acc_ProjectRole__c",
     "Acc_ProjectId__c",
 ];
@@ -38,33 +36,16 @@ export interface IPartnerRepository {
     getById(partnerId: string): Promise<ISalesforcePartner | null>;
 }
 
-// TODO delete once Salesforce fields are available
-const extendData = (data: any): ISalesforcePartner => {
-    return data && {
-        ...data,
-        Acc_TotalParticipantGrant__c: 100000,
-        Acc_TotalParticipantCosts__c: 50000,
-        Acc_TotalParticipantCostsPaid__c: 30000,
-        Acc_PercentageParticipantCosts__c: 50,
-        Acc_CapLimit__c: 85,
-        Acc_AwardRate__c: 50,
-    };
-};
-
 export class PartnerRepository extends SalesforceBase<ISalesforcePartner> implements IPartnerRepository {
     constructor() {
         super("Acc_ProjectParticipant__c", fields);
     }
 
     getAllByProjectId(projectId: string): Promise<ISalesforcePartner[]> {
-        return super.whereFilter(x => x.Acc_ProjectId__c = projectId)
-            // TODO delete once Salesforce fields are available
-            .then(results => results.map(extendData));
+        return super.whereFilter(x => x.Acc_ProjectId__c = projectId);
     }
 
     getById(partnerId: string): Promise<ISalesforcePartner | null> {
-        return super.filterOne(x => x.Id = partnerId)
-            // TODO delete once Salesforce fields are available
-            .then(extendData);
+        return super.filterOne(x => x.Id = partnerId);
     }
 }
