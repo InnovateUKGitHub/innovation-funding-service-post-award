@@ -47,7 +47,7 @@ export abstract class ControllerBase<T> {
     return this;
   }
 
-  private constructErrorResponse(e: ApiError | ValidationError | any): { status: number, data: { code: number, details: string | Results<{}> } } {
+  private constructErrorResponse(e: Error): { status: number, data: { code: number, details: string | Results<{}> } } {
     if (e instanceof ValidationError) {
       return { status: StatusCode.BAD_REQUEST, data: { code: ErrorCode.VALIDATION_ERROR, details: e.validationResult }};
     }
@@ -67,7 +67,7 @@ export abstract class ControllerBase<T> {
           }
           resp.status(successStatus).send(result);
         })
-        .catch((e: ApiError) => {
+        .catch((e: Error) => {
           console.log("Error in controller", e);
           const { status, data } = this.constructErrorResponse(e);
           return resp.status(status).json(data);

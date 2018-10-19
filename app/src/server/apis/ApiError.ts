@@ -1,5 +1,3 @@
-import {Results} from "../../ui/validation/results";
-
 export enum StatusCode {
   BAD_REQUEST = 400,
   INTERNAL_SERVER_ERROR = 500
@@ -12,9 +10,11 @@ export enum ErrorCode {
 
 export interface IApiError {
   errorCode: StatusCode;
-  message: string | Results<{}>;
+  message: string;
 }
 
-export class ApiError implements IApiError {
-  constructor(public errorCode: StatusCode, public message: string | Results<{}>) {}
+export class ApiError extends Error implements IApiError {
+  constructor(public errorCode: StatusCode, public message: string) {
+    super();
+  }
 }
