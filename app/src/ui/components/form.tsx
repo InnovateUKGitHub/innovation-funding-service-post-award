@@ -143,10 +143,7 @@ interface ButtonProps {
 
 const ButtonComponent: React.SFC<ButtonProps> = (props) => {
     return <button type="submit" name="button" value={props.name} className="govuk-button" style={{background:"buttonface", color: "buttontext" }} onClick={(e) => handleOtherButton(props, e)}>{props.children}</button>;
-};
 
-const DownloadButtonComponent: React.SFC<ButtonProps> = (props) => {
-  return <button type="submit" name="button" value={props.name} className="govuk-button" style={{background:"buttonface", color: "buttontext", boxShadow: "0 2px 0 #b8bec2"}} onClick={(e) => handleOtherButton(props, e)}>{props.children}</button>;
 };
 
 export const TypedForm = <T extends {}>() => ({
@@ -157,5 +154,4 @@ export const TypedForm = <T extends {}>() => ({
     Numeric: NumericField as React.SFC<ExternalFieldProps<T, number>>,
     Submit: SubmitComponent,
     Button: ButtonComponent,
-    DownloadButton: DownloadButtonComponent,
 });
