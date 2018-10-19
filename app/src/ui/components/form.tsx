@@ -153,5 +153,5 @@ export const TypedForm = <T extends {}>() => ({
     MultilineString: MultiStringField as React.SFC<MultiStringFieldProps<T>>,
     Numeric: NumericField as React.SFC<ExternalFieldProps<T, number>>,
     Submit: SubmitComponent,
-    Button: ButtonComponent,
+    Button: ButtonComponent
 });
