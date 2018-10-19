@@ -83,7 +83,7 @@ const ClaimLineItemsTable: React.SFC<{ lineItems: Dtos.ClaimLineItemDto[], forec
       qa="current-claim-summary-table"
       footers={[
         renderFooterRow({
-          key: "1", title: "Total labour costs", qa: "footer-total-costs", value:
+          key: "1", title: "Total costs", qa: "footer-total-costs", value:
             <ACC.Renderers.Currency className={"govuk-!-font-weight-bold"} value={total} />
         }),
         renderFooterRow({
