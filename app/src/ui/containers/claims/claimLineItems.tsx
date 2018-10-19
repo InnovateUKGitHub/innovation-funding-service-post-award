@@ -1,13 +1,11 @@
 import React from "react";
-import {ContainerBase, ReduxContainer} from "../containerBase";
-import {Pending} from "../../../shared/pending";
+import { ContainerBase, ReduxContainer } from "../containerBase";
+import { Pending } from "../../../shared/pending";
+import { ClaimsDetailsRoute } from "./details";
 import * as Actions from "../../redux/actions";
 import * as Selectors from "../../redux/selectors";
 import * as Dtos from "../../models";
 import * as ACC from "../../components";
-import {routeConfig} from "../../routing";
-import {Currency, Percentage} from "../../components/renderers";
-import {TypedLoader} from "../../components";
 
 interface Params {
   projectId: string;
@@ -38,9 +36,9 @@ export class ClaimLineItemsComponent extends ContainerBase<Params, Data, {}> {
       this.props.lineItems,
       this.props.costCategories,
       this.props.forecastDetail,
-      (project, lineItems, costCategories, forecastDetail) => ({project, lineItems, costCategories, forecastDetail})
+      (project, lineItems, costCategories, forecastDetail) => ({ project, lineItems, costCategories, forecastDetail })
     );
-    const Loader = TypedLoader<CombinedData>();
+    const Loader = ACC.TypedLoader<CombinedData>();
     return <Loader pending={combined} render={(data) => this.renderContents(data)} />;
   }
 
@@ -50,12 +48,12 @@ export class ClaimLineItemsComponent extends ContainerBase<Params, Data, {}> {
       <ACC.Page>
         <ACC.Section>
           <ACC.BackLink
-            route={routeConfig.claimDetails.getLink({projectId: data.project.id, partnerId: this.props.partnerId, periodId: this.props.periodId })}
+            route={ClaimsDetailsRoute.getLink({ projectId: data.project.id, partnerId: this.props.partnerId, periodId: this.props.periodId })}
           >Back
           </ACC.BackLink>
         </ACC.Section>
         <ACC.Section>
-          <ACC.Projects.Title pageTitle={`Claim for ${data.costCategories.find(x => x.id === this.props.costCategoryId )!.name}`} project={data.project} />
+          <ACC.Projects.Title pageTitle={`Claim for ${data.costCategories.find(x => x.id === this.props.costCategoryId)!.name}`} project={data.project} />
         </ACC.Section>
         <ACC.Section>
           <ClaimLineItemsTable lineItems={data.lineItems} forecastDetail={data.forecastDetail} />
@@ -65,8 +63,8 @@ export class ClaimLineItemsComponent extends ContainerBase<Params, Data, {}> {
   }
 }
 
-const ClaimLineItemsTable: React.SFC<{ lineItems: Dtos.ClaimLineItemDto[], forecastDetail: Dtos.ForecastDetailsDTO }> = ({lineItems, forecastDetail}) => {
-  const LineItemTable = ACC.Table.forData(lineItems);
+const ClaimLineItemsTable: React.SFC<{ lineItems: Dtos.ClaimLineItemDto[], forecastDetail: Dtos.ForecastDetailsDTO }> = ({ lineItems, forecastDetail }) => {
+  const LineItemTable = ACC.TypedTable<Dtos.ClaimLineItemDto>();
   const renderFooterRow = (row: { key: string, title: string, value: React.ReactNode, qa: string }) => (
     <tr key={row.key} className="govuk-table__row" data-qa={row.qa}>
       <th className="govuk-table__cell govuk-table__cell--numeric govuk-!-font-weight-bold">{row.title}</th>
@@ -81,22 +79,25 @@ const ClaimLineItemsTable: React.SFC<{ lineItems: Dtos.ClaimLineItemDto[], forec
   const diff = 100 * (forecast - total) / forecast;
 
   return (
-    <LineItemTable.Table
+    <LineItemTable.Table data={lineItems}
       qa="current-claim-summary-table"
       footers={[
-        renderFooterRow({ key: "1", title: "Total costs", qa:"footer-total-costs", value:
-            <Currency className={"govuk-!-font-weight-bold"} value={total}/>
+        renderFooterRow({
+          key: "1", title: "Total costs", qa: "footer-total-costs", value:
+            <ACC.Renderers.Currency className={"govuk-!-font-weight-bold"} value={total} />
         }),
-        renderFooterRow({ key: "2", title: "Forecast costs", qa:"footer-forecast-costs", value:
-            <Currency value={forecastDetail.value}/>
+        renderFooterRow({
+          key: "2", title: "Forecast costs", qa: "footer-forecast-costs", value:
+            <ACC.Renderers.Currency value={forecast} />
         }),
-        renderFooterRow({ key: "3", title: "Difference", qa:"footer-difference", value:
-            <Percentage value={diff}/>
+        renderFooterRow({
+          key: "3", title: "Difference", qa: "footer-difference", value:
+            <ACC.Renderers.Percentage value={diff} />
         })
       ]}
     >
-      <LineItemTable.String header="Description of cost" qa="cost-description" value={(x) => x.description}/>
-      <LineItemTable.Currency header="Cost (£)" qa="cost-value" value={(x) => x.value}/>
+      <LineItemTable.String header="Description of cost" qa="cost-description" value={(x) => x.description} />
+      <LineItemTable.Currency header="Cost (£)" qa="cost-value" value={(x) => x.value} />
     </LineItemTable.Table>
   );
 };

@@ -5,6 +5,7 @@ export * from "./contactsRepository";
 export * from "./costCategoriesRepository";
 export * from "./partnersRepository";
 export * from "./profileDetailsRepository";
+export * from "./profilePeriodTotalRepositotry";
 export * from "./profileTotalCostCategoryRepository";
 export * from "./projectContactsRepository";
 export * from "./projectsRepository";

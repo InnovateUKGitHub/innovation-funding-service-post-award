@@ -5,10 +5,10 @@ import * as Actions from "../../redux/actions";
 import * as Selectors from "../../redux/selectors";
 import {Pending} from "../../../shared/pending";
 import {ContainerBase, ReduxContainer} from "../containerBase";
-import {routeConfig} from "../../routing";
 import {Currency, DateRange, Percentage} from "../../components/renderers";
 import {ClaimDetailsDto, ClaimDto, ForecastDetailsDTO} from "../../models";
 import { Interval } from "luxon";
+import { PrepareClaimRoute } from "./prepare";
 
 interface Params {
   projectId: string;
@@ -131,18 +131,18 @@ export class ViewForecastComponent extends ContainerBase<Params, Data, Callbacks
 
   public renderContents(data: CombinedData) {
     const parsed    = this.parseClaimData(data);
-    const Table     = ACC.Table.forData(parsed);
+    const Table     = ACC.TypedTable<typeof parsed[0]>();
     const intervals = this.calculateClaimPeriods(data);
     const periods   = Object.keys(parsed[0].periods);
 
     return (
       <ACC.Page>
         <ACC.Section>
-          <ACC.BackLink route={routeConfig.prepareClaim.getLink({ projectId: this.props.projectId, partnerId: this.props.partnerId, periodId: this.props.periodId })}>Back</ACC.BackLink>
+          <ACC.BackLink route={PrepareClaimRoute.getLink({ projectId: this.props.projectId, partnerId: this.props.partnerId, periodId: this.props.periodId })}>Back</ACC.BackLink>
         </ACC.Section>
         <ACC.Projects.Title pageTitle="Claim" project={data.project} />
         <ACC.Section>
-          <Table.Table
+          <Table.Table data={parsed}
             qa="cost-category-table"
             headers={this.renderTableHeaders(periods, data.claim)}
             footers={this.renderTableFooters(periods, parsed)}
@@ -159,19 +159,19 @@ export class ViewForecastComponent extends ContainerBase<Params, Data, Callbacks
   }
 
   renderTableHeaders(periods: string[], claim: ClaimDto) {
-    const currentClaimPeriod = claim.periodId - 1;
+    const currentClaimPeriod = this.props.periodId - 1;
     const previous = currentClaimPeriod - 1;
     const forecasts = periods.length > currentClaimPeriod;
 
     return [(
       <tr key="cHeader1" className="govuk-table__row">
         <th className="govuk-table__header" />
-        {previous > 0 ? <th className="govuk-table__header" colSpan={previous}>Previous Costs</th> : null}
-        {currentClaimPeriod > 1 ? <th className="govuk-table__header">Current claim period costs</th> : null}
-        {forecasts ? <th className="govuk-table__header" colSpan={periods.length - currentClaimPeriod}>Forecasts</th> : null}
-        <th className="govuk-table__header">Forecasts and costs total</th>
-        <th className="govuk-table__header">Grant offer letter costs</th>
-        <th className="govuk-table__header">Difference</th>
+        {previous > 0 ? <th className="govuk-table__header govuk-table__header--numeric" colSpan={previous}>Previous Costs</th> : null}
+        {currentClaimPeriod > 0 ? <th className="govuk-table__header govuk-table__header--numeric">Current claim period costs</th> : null}
+        {forecasts ? <th className="govuk-table__header govuk-table__header--numeric" colSpan={periods.length - currentClaimPeriod}>Forecasts</th> : null}
+        <th className="govuk-table__header govuk-table__header--numeric">Forecasts and costs total</th>
+        <th className="govuk-table__header govuk-table__header--numeric">Grant offer letter costs</th>
+        <th className="govuk-table__header govuk-table__header--numeric">Difference</th>
       </tr>
     ),
     (

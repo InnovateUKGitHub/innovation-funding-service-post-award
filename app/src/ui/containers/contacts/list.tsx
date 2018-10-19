@@ -30,9 +30,9 @@ class ListComponent extends ContainerBase<{}, Props, {}> {
   }
 
   private renderTable(contacts: Dtos.IContact[]) {
-    const Table = Acc.Table.forData(contacts);
+    const Table = Acc.TypedTable<Dtos.IContact>();
     return (
-      <Table.Table qa="contacts">
+      <Table.Table qa="contacts" data={contacts}>
         <Table.String header="Id" qa="id" value={x => x.id} />
         <Table.String header="Name" qa="name" value={x => `${x.firstName} ${x.lastName}`.trim()} />
         <Table.Email header="Email" qa="email" value={x => x.email} />

@@ -5,7 +5,7 @@ import * as Actions from "../../redux/actions";
 import * as Selectors from "../../redux/selectors";
 import { ProjectOverviewPage } from "../../components/projectOverview";
 import { ClaimDto, PartnerDto, ProjectDto } from "../../models";
-import { Details, DualDetails, Link, Section, SectionPanel, Table, TypedLoader } from "../../components";
+import { DualDetails, Link, Section, SectionPanel, TypedDetails, TypedTable, TypedLoader } from "../../components";
 import { DayAndLongMonth, FullDate, LongYear, ShortMonth } from "../../components/renderers";
 import { PrepareClaimRoute } from "./prepare";
 import { ClaimsDetailsRoute } from "./details";
@@ -58,17 +58,17 @@ interface ClaimsHistoryProps {
 }
 
 const ProjectClaimsHistory: React.SFC<ClaimsHistoryProps> = ({ partner }) => {
-  const { Details: Column, Currency, Percentage } = Details.forData(partner);
+  const { Details: Column, Currency, Percentage } = TypedDetails<PartnerDto>();
   return (
     <Section>
       <SectionPanel qa="claims-dashboard" title="Project claims history">
         <DualDetails displayDensity="Compact">
-          <Column qa="claims-history-col-0">
+          <Column qa="claims-history-col-0" data={partner}>
             <Currency label="Grant offer letter costs" value={x => x.totalParticipantGrant} />
             <Currency label="Costs claimed to date" value={x => x.totalParticipantCostsClaimed} />
             <Percentage label="Percentage claimed to date" value={x => x.percentageParticipantCostsClaimed} />
           </Column>
-          <Column qa="claims-history-col-1">
+          <Column qa="claims-history-col-1" data={partner}>
             <Percentage label="Award offer rate" value={x => x.awardRate} />
             <Percentage label="Cap limit" value={x => x.capLimit} />
           </Column>
@@ -96,10 +96,10 @@ const CurrentClaimSummary: React.SFC<CurrentClaimSummaryProps> = (props) => {
   const sectionTitle = (
     <React.Fragment>Claim for P{claim.periodId} - <DayAndLongMonth value={claim.periodStartDate} /> to <FullDate value={claim.periodEndDate} /></React.Fragment>
   );
-  const ClaimTable = Table.forData([claim]);
+  const ClaimTable = TypedTable<ClaimDto>();
   return (
     <Section qa="current-claim-summary-table-section" title={sectionTitle}>
-      <ClaimTable.Table qa="current-claim-summary-table">
+      <ClaimTable.Table qa="current-claim-summary-table" data={[claim]}>
         <ClaimTable.Currency header="Forecast costs for period" qa="forecast-cost" value={(x) => x.forecastCost} />
         <ClaimTable.Currency header="Actual costs for period" qa="actual-cost" value={(x) => x.totalCost} />
         <ClaimTable.Currency header="Difference" qa="diff" value={(x) => x.forecastCost - x.totalCost} />
@@ -123,10 +123,10 @@ const PastClaimsSummary: React.SFC<PastClaimsSummaryProps> = ({ claims, projectI
         <p className="govuk-body">You do not have any previous claims for this project</p>
       </Section>);
   }
-  const ClaimTable = Table.forData(claims);
+  const ClaimTable = TypedTable<ClaimDto>();
   return (
     <Section qa="previous-claims-summary-table-section" title="Previous Claims">
-      <ClaimTable.Table qa="previous-claims-summary-table">
+      <ClaimTable.Table qa="previous-claims-summary-table" data={claims}>
         <ClaimTable.Custom
           header="Period"
           qa="period"

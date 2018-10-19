@@ -56,14 +56,14 @@ class ClaimsTestRepository extends TestRepository<Repositories.ISalesforceClaim>
         return super.getWhere(x => x.Acc_ProjectParticipant__c === partnerId);
     }
 
-    getByPartnerIdAndPeriodId(partnerId: string, periodId: number) {
+    get(partnerId: string, periodId: number) {
         return super.getOne(x => x.Acc_ProjectParticipant__c === partnerId && x.Acc_ProjectPeriodNumber__c === periodId);
     }
 
-    update(updatedClaim: Repositories.ISalesforceClaim) {
-        const index = super.Items.findIndex(x => x.Acc_ProjectParticipant__c === updatedClaim.Acc_ProjectParticipant__c && x.Acc_ProjectPeriodNumber__c == updatedClaim.Acc_ProjectPeriodNumber__c);
+    update(updatedClaim: Repositories.ISalesforceClaim){
+        const index = this.Items.findIndex(x => x.Id === updatedClaim.Id);
         if(index >= 0) {
-            super.Items[index] = updatedClaim;
+            this.Items[index] = Object.assign(this.Items[index], updatedClaim);
             return Promise.resolve(true);
         }
         return Promise.resolve(false);
@@ -111,6 +111,19 @@ class ProfileDetailsTestRepository extends TestRepository<Repositories.ISalesfor
   }
 }
 
+class ProfileTotalPeriodTestRepository extends TestRepository<Repositories.ISalesforceProfileTotalPeriod> implements Repositories.IProfileTotalPeriodRepository {
+    get(partnerId: string, periodId: number): Promise<Repositories.ISalesforceProfileTotalPeriod> {
+        return super
+            .getOne(x => x.Acc_ProjectParticipant__c === partnerId && x.Acc_ProjectPeriodNumber__c === periodId);
+    }
+
+    getAllByPartnerId(partnerId: string): Promise<Repositories.ISalesforceProfileTotalPeriod[]> {
+        return super
+            .getWhere(x => x.Acc_ProjectParticipant__c === partnerId);
+    }
+
+}
+
 class ProfileTotalCostCategoryTestRepository extends TestRepository<Repositories.ISalesforceProfileTotalCostCategory> implements Repositories.IProfileTotalCostCategoryRepository {
   getAllByPartnerId(partnerId: string) {
     return super.getWhere(x => x.Acc_ProjectParticipant__c === partnerId);
@@ -138,6 +151,7 @@ export const createTestRepositories = (): ITestRepositories => ({
     costCategories: new CostCategoriesTestRepository(),
     contacts: new ContactsTestRepository(),
     profileDetails: new ProfileDetailsTestRepository(),
+    profileTotalPeriod: new ProfileTotalPeriodTestRepository(),
     profileTotalCostCategory: new ProfileTotalCostCategoryTestRepository(),
     projects: new ProjectsTestRepository(),
     partners: new PartnerTestRepository(),

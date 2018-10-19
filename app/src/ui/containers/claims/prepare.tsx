@@ -1,5 +1,4 @@
 import * as Selectors from "../../redux/selectors";
-import { routeConfig } from "../../routing";
 import { ContainerBase, ReduxContainer } from "../containerBase";
 import { Pending } from "../../../shared/pending";
 import * as Actions from "../../redux/actions";
@@ -13,6 +12,7 @@ import { ClaimDetailsSummaryDto, ClaimDto } from "../../models";
 import { ClaimForecastRoute, ClaimsDashboardRoute } from ".";
 import { EditClaimLineItemsRoute } from "./editClaimLineItems";
 import { Result } from "../../validation/result";
+import { ClaimsDetailsRoute } from "./details";
 
 interface Params {
     projectId: string;
@@ -90,11 +90,11 @@ export class PrepareComponent extends ContainerBase<Params, Data, Callbacks> {
         return (
             <ACC.Page>
                 <ACC.Section>
-                    <ACC.BackLink route={routeConfig.claimsDashboard.getLink({ projectId: data.project.id, partnerId: data.partner.id })}>Claims dashboard</ACC.BackLink>
+                    <ACC.BackLink route={ClaimsDashboardRoute.getLink({ projectId: data.project.id, partnerId: data.partner.id })}>Claims dashboard</ACC.BackLink>
                 </ACC.Section>
                 <ACC.ValidationSummary validation={data.editor.validator} compressed={false} />
                 <ACC.Projects.Title pageTitle="Claim" project={data.project} />
-                <ACC.Claims.Navigation projectId={data.project.id} partnerId={data.partner.id} periodId={data.claim.periodId} currentRouteName={routeConfig.claimDetails.routeName} />
+                <ACC.Claims.Navigation projectId={data.project.id} partnerId={data.partner.id} periodId={data.claim.periodId} currentRouteName={ClaimsDetailsRoute.routeName} />
                 <ACC.Section title={title}>
                     {/* TODO: Fix error display */}
                     {data.editor.error ? <ACC.ValidationMessage message={new Result(null, true, false, data.editor.error.details || data.editor.error, false)} /> : null}
@@ -103,10 +103,10 @@ export class PrepareComponent extends ContainerBase<Params, Data, Callbacks> {
                         <Form.Fieldset heading={() => commentsLabel} qa="additional-info-form" headingQa="additional-info-heading">
                             <Form.MultilineString label="" hint={commentsHint} name="comments" value={m => m.comments} update={(m, v) => m.comments = v} validation={data.editor.validator.comments} qa="info-text-area"/>
                         </Form.Fieldset>
-                        <Form.Fieldset qa="review-forecasts-button">
+                        <Form.Fieldset qa="save-and-continue">
                             <Form.Submit>Review forecasts</Form.Submit>
                         </Form.Fieldset>
-                        <Form.Fieldset qa="save-button">
+                        <Form.Fieldset qa="save-and-return">
                             <Form.Button name="return" onClick={() => this.saveAndReturn(data.editor.data, data.claimDetails, data.costCategories)}>Save and return to claim dashboard</Form.Button>
                         </Form.Fieldset>
                     </Form.Form>
