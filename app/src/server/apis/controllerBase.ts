@@ -47,12 +47,12 @@ export abstract class ControllerBase<T> {
     return this;
   }
 
-  private constructErrorResponse(e: Error): { status: number, data: { code: number, details: string | Results<{}> } } {
-    if (e instanceof ValidationError) {
-      return { status: StatusCode.BAD_REQUEST, data: { code: ErrorCode.VALIDATION_ERROR, details: e.validationResult }};
+  private constructErrorResponse<E extends Error>(error: E): { status: number, data: { code: number, details: string | Results<{}> } } {
+    if (error instanceof ValidationError) {
+      return { status: StatusCode.BAD_REQUEST, data: { code: ErrorCode.VALIDATION_ERROR, details: error.validationResult }};
     }
-    if (e instanceof ApiError) {
-      return { status: e.errorCode, data: { code: ErrorCode.SERVER_ERROR, details: e.message }};
+    if (error instanceof ApiError) {
+      return { status: error.errorCode, data: { code: ErrorCode.SERVER_ERROR, details: error.message }};
     }
     return { status: 500, data: { code: ErrorCode.SERVER_ERROR, details: "An unexpected error has occurred..." } };
   }
