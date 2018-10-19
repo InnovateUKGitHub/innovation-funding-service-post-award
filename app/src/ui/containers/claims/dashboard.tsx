@@ -119,7 +119,7 @@ interface PastClaimsSummaryProps {
 const PastClaimsSummary: React.SFC<PastClaimsSummaryProps> = ({ claims, projectId }) => {
   if (claims.length === 0) {
     return (
-      <Section title="Previous Claims">
+      <Section title="Previous claims">
         <p className="govuk-body">You do not have any previous claims for this project</p>
       </Section>);
   }
