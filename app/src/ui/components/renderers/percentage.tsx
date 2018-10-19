@@ -6,7 +6,7 @@ interface Props extends React.HTMLAttributes<{}> {
   fractionDigits?: number;
 }
 
-export const Percentage: React.SFC<Props> = ({value, fractionDigits = 0, ...rest}) => {
+export const Percentage: React.SFC<Props> = ({value, fractionDigits = 1, ...rest}) => {
   if (!isNumber(value)) {
     return null;
   }
