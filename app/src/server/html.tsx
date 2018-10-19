@@ -4,7 +4,7 @@ export function renderHtml(html: string, preloadedState: any = {}) {
   <html>
       <head>
           <meta charset="utf-8" />
-          <title>GOV.UK - Inovate Funding Service</title>
+          <title>GOV.UK - Innovate Funding Service</title>
           <meta name="viewport" content="width=device-width, initial-scale=1">
           <meta name="theme-color" content="#0b0c0c" />
 
