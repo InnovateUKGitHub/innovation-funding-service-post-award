@@ -3,6 +3,7 @@ import * as React from "react";
 interface Props {
   title: React.ReactNode;
   qa?: string;
+  // openNewWindow: boolean;
 }
 
 export const ListSection: React.SFC<Props> = (props) => {
