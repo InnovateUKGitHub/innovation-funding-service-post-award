@@ -2,6 +2,8 @@ import { TestRepository } from "./testRepository";
 import * as Repositories from "../../src/server/repositories";
 import { IRepositories } from "../../src/server/features/common/context";
 import {Updatable} from "../../src/server/repositories/salesforceBase";
+import {instanceOf} from "prop-types";
+import {is} from "tslint-sonarts/lib/utils/nodes";
 
 class ContactsTestRepository extends TestRepository<Repositories.ISalesforceContact> implements Repositories.IContactsRepository {
     getById(id: string) {
@@ -84,13 +86,55 @@ class ClaimDetailsTestRepository extends TestRepository<Repositories.ISalesforce
     }
 }
 
-class ClaimLineItemsTestRepository extends TestRepository<Repositories.ISalesforceClaimLineItem> implements Repositories.IClaimLineItemRepository{
-    getAllForCategory(partnerId: string, categoryId: string, periodId: number)  {
-        return super.getWhere(x => x.Acc_ProjectPeriodNumber__c === periodId && x.Acc_CostCategory__c === categoryId && x.Acc_ProjectParticipant__c === partnerId);
+class ClaimLineItemsTestRepository extends TestRepository<Repositories.ISalesforceClaimLineItem> implements Repositories.IClaimLineItemRepository {
+  getAllForCategory(partnerId: string, categoryId: string, periodId: number) {
+    return super.getWhere(x => x.Acc_ProjectPeriodNumber__c === periodId && x.Acc_CostCategory__c === categoryId && x.Acc_ProjectParticipant__c === partnerId);
+  }
+
+  delete(ids: string | string[]) {
+    if (!(ids instanceof Array)) {
+      ids = [ids];
     }
-    delete() { return super.delete(); }
-    update(update: Updatable<Repositories.ISalesforceClaimLineItem>) { return super.update(update); }
-    insert() { return super.insert(); }
+    ids.forEach((id) => {
+      const index = this.Items.findIndex(x => x.Id === id);
+      if (index === -1) {
+        return Promise.reject();
+      }
+      this.Items = this.Items.splice(index,1);
+    });
+    return Promise.resolve();
+  }
+
+  update(updates: Updatable<Repositories.ISalesforceClaimLineItem>[] | Updatable<Repositories.ISalesforceClaimLineItem>) {
+    if (!(updates instanceof Array)) {
+        updates = [updates];
+    }
+    updates.forEach((update) => {
+      const index = this.Items.findIndex(x => x.Id === update.Id);
+      if (index === -1) {
+          return Promise.reject();
+      }
+      this.Items[index] = { ...this.Items[index], ...update };
+    });
+    return Promise.resolve(true);
+  }
+
+  insert(lineItems: Partial<Repositories.ISalesforceClaimLineItem>[] | Partial<Repositories.ISalesforceClaimLineItem>) {
+    const insert = lineItems instanceof Array ? lineItems : [lineItems];
+    if (!(lineItems instanceof Array)) {
+      lineItems = [lineItems];
+    }
+    const newIds: string[] = [];
+    insert.forEach((item) => {
+      const Id = `ClaimLineItem-${this.Items.length}`;
+      newIds.push(Id);
+      this.Items.push({ ...item, Id } as Repositories.ISalesforceClaimLineItem);
+    });
+    if (lineItems instanceof Array) {
+      return Promise.resolve(newIds);
+    }
+    return Promise.resolve(newIds[0]);
+  }
 }
 
 class ClaimTotalCostTestRepository extends TestRepository<Repositories.ISalesforceClaimTotalCostCategory> implements Repositories.IClaimTotalCostCategoryRepository{

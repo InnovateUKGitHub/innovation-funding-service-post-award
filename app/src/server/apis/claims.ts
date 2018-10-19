@@ -3,7 +3,7 @@ import {ClaimDto} from "../../ui/models/claimDto";
 import contextProvider from "../features/common/contextProvider";
 import {GetAllForPartnerQuery, GetClaim} from "../features/claims";
 import {UpdateClaimCommand} from "../features/claims/updateClaim";
-import {ApiError, ErrorCode} from "./ApiError";
+import {ApiError, StatusCode} from "./ApiError";
 import {processDto} from "../../shared/processResponse";
 
 export interface IClaimsApi {
@@ -34,14 +34,14 @@ class Controller extends ControllerBase<ClaimDto> implements IClaimsApi {
 
   public async update(partnerId: string, periodId: number, claim: ClaimDto) {
     if (partnerId !== claim.partnerId || periodId !== claim.periodId) {
-      throw new ApiError(ErrorCode.BAD_REQUEST, "Bad request");
+      throw new ApiError(StatusCode.BAD_REQUEST, "Bad request");
     }
 
     const command = new UpdateClaimCommand(claim);
 
     await contextProvider.start().runCommand(command).catch(e => {
       console.log("Api Error: ", e);
-      throw new ApiError(ErrorCode.INTERNAL_SERVER_ERROR, "Failed to update claim");
+      throw new ApiError(StatusCode.INTERNAL_SERVER_ERROR, "Failed to update claim");
     });
 
     const query = new GetClaim(partnerId, periodId);

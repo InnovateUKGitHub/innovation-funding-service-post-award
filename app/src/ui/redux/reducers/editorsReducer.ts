@@ -14,8 +14,8 @@ export interface IEditorStore<TDto, TValidator> {
 const editorsReducer = <TDto extends {}, TValidator extends Results<TDto>> (store: string) => (state: { [key: string]: IEditorStore<TDto, TValidator> } = {}, action: RootActions) => {
     if (action.type === "VALIDATE" && action.payload.store === store) {
         const payload: IEditorStore<TDto, TValidator> = {
-            data: action.payload.dto,
-            validator: action.payload.validator,
+            data: action.payload.dto as TDto,
+            validator: action.payload.validator as TValidator,
             error: action.payload.error
         };
         const result = Object.assign({}, state);
