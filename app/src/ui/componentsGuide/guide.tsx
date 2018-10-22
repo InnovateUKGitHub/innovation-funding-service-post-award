@@ -14,10 +14,12 @@ import { formGuide } from "./formGuide";
 import { validationMessageGuide } from "./validationMessageGuide";
 import { validationErrorGuide } from "./validationErrorGuide";
 import { validationSummaryGuide } from "./validationSummaryGuide";
+import {documentListGuide} from "./documentListGuide";
 
 const guides: IGuide[] = [
     datesGuide,
     detailsGuide,
+    documentListGuide,
     emailGuide,
     formGuide,
     linksListGuide,
