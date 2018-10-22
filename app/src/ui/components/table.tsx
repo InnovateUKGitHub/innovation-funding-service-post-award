@@ -74,7 +74,7 @@ export class TableColumn<T> extends React.Component<InternalColumnProps<T>> {
 
   renderCell(data: T, column: number, row: number) {
     // if its the first column check for error
-    const rowHasError = this.props.validation && this.props.validation.showValidationErrors && !this.props.validation.isValid();
+    const rowHasError = this.props.validation && this.props.validation.showValidationErrors && !this.props.validation.isValid;
     const className = classNames("govuk-table__cell", this.props.classSuffix ? "govuk-table__cell--" + this.props.classSuffix : "", this.props.cellClassName && this.props.cellClassName(data, { column, row }));
 
     const style: React.CSSProperties = {};

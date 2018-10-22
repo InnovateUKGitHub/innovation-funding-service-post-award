@@ -6,7 +6,7 @@ import { ISalesforceProfileTotalPeriod } from "../../repositories";
 const SALESFORCE_DATE_FORMAT = "yyyy-MM-dd";
 const SALESFORCE_DATE_TIME_FORMAT = "yyyy-MM-ddTHH:mm:ss.SSSZZZ";
 
-export default (context: IContext) => (claim: ISalesforceClaim, forcast: ISalesforceProfileTotalPeriod|null|undefined): ClaimDto => ({
+export default (context: IContext) => (claim: ISalesforceClaim, forecast?: ISalesforceProfileTotalPeriod): ClaimDto => ({
   id: claim.Id,
   partnerId: claim.Acc_ProjectParticipant__c,
   lastModifiedDate: context.clock.parse(claim.LastModifiedDate, SALESFORCE_DATE_TIME_FORMAT)!,
@@ -15,7 +15,7 @@ export default (context: IContext) => (claim: ISalesforceClaim, forcast: ISalesf
   periodEndDate: context.clock.parse(claim.Acc_ProjectPeriodEndDate__c,SALESFORCE_DATE_FORMAT)!,
   periodId: claim.Acc_ProjectPeriodNumber__c,
   totalCost: claim.Acc_ProjectPeriodCost__c,
-  forecastCost: forcast && forcast.Acc_PeriodInitialForecastCost__c || 0,
+  forecastCost: forecast && forecast.Acc_PeriodInitialForecastCost__c || 0,
   approvedDate: claim.Acc_ApprovedDate__c === null ? null : context.clock.parse(claim.Acc_ApprovedDate__c, SALESFORCE_DATE_FORMAT),
   paidDate: claim.Acc_PaidDate__c === null ? null : context.clock.parse(claim.Acc_PaidDate__c, SALESFORCE_DATE_FORMAT),
   comments: claim.Acc_LineItemDescription__c,

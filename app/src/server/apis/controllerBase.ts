@@ -1,6 +1,8 @@
 import {Router} from "express-serve-static-core";
 import express, {NextFunction, Request, Response} from "express";
-import {ApiError} from "./ApiError";
+import {ApiError, ErrorCode, StatusCode} from "./ApiError";
+import {ValidationError} from "../../shared/validation";
+import {Results} from "../../ui/validation/results";
 
 export abstract class ControllerBase<T> {
   public readonly router: Router;
@@ -45,20 +47,14 @@ export abstract class ControllerBase<T> {
     return this;
   }
 
-  private constructErrorResponse(e: ApiError) {
-    const data: any = { message: "An unexpected error has occurred..." };
-
-    if(!!e.errorCode) {
-      data.code = e.errorCode;
+  private constructErrorResponse<E extends Error>(error: E): { status: number, data: { code: number, details: string | Results<{}> } } {
+    if (error instanceof ValidationError) {
+      return { status: StatusCode.BAD_REQUEST, data: { code: ErrorCode.VALIDATION_ERROR, details: error.validationResult }};
     }
-
-    if(!!e.message) {
-      data.details = e.message;
+    if (error instanceof ApiError) {
+      return { status: error.errorCode, data: { code: ErrorCode.SERVER_ERROR, details: error.message }};
     }
-
-    const status = e.isApiError ? e.errorCode : 500;
-
-    return { status, data };
+    return { status: 500, data: { code: ErrorCode.SERVER_ERROR, details: "An unexpected error has occurred..." } };
   }
 
   private executeMethod<TParams, TResponse>(successStatus: number, getParams: (params: any, query: any, body?: any) => TParams, run: (params: TParams) => Promise<TResponse | null>, allowNulls: boolean) {
@@ -71,7 +67,7 @@ export abstract class ControllerBase<T> {
           }
           resp.status(successStatus).send(result);
         })
-        .catch((e: ApiError) => {
+        .catch((e: Error) => {
           console.log("Error in controller", e);
           const { status, data } = this.constructErrorResponse(e);
           return resp.status(status).json(data);

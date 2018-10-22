@@ -14,7 +14,7 @@ export class UpdateClaimCommand implements ICommand<boolean> {
     const details = await context.runQuery(new GetClaimDetailsSummaryForPartnerQuery(this.claimDto.partnerId, this.claimDto.periodId));
     const result = new ClaimDtoValidator(this.claimDto, details, costCategories, true);
 
-    if (!result.isValid()) {
+    if (!result.isValid) {
       throw new ValidationError(result);
     }
 
