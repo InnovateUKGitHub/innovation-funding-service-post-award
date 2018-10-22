@@ -59,9 +59,6 @@ export class ClaimLineItemsComponent extends ContainerBase<Params, Data, {}> {
         <ACC.Section>
           <ClaimLineItemsTable lineItems={data.lineItems} forecastDetail={data.forecastDetail} />
         </ACC.Section>
-        <ACC.Section>
-          <DocumentList documents={mockDocs} title={"Supporting Documents"} qa={"supporting-documents"}/>
-        </ACC.Section>
       </ACC.Page>
     );
   }
