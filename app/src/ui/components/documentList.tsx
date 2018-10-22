@@ -6,7 +6,7 @@ interface Props {
   qa: string;
 }
 interface Document {
-  onClick: () => void;
+  onClick: (e: React.MouseEvent<HTMLAnchorElement>) => void;
   title: string;
   qa?: string;
 }
