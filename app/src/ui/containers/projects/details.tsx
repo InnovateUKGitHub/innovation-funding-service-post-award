@@ -47,7 +47,7 @@ class ProjectDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
         return (
             <ProjectOverviewPage selectedTab={ProjectDetailsRoute.routeName} project={project} partners={partners}>
                 {this.renderPartnersCosts(partners)}
-                <ACC.Section title="Project Members">
+                <ACC.Section title="Project members">
                     <ACC.ProjectMember member={monitoringOfficer} qa="monitoring-officer" />
                     <ACC.ProjectMember member={projectManager} qa="project-manager" />
 

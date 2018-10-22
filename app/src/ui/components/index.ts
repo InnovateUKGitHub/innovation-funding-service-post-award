@@ -16,5 +16,6 @@ export * from "./partnersAndFinanceContacts";
 export * from "./validationError";
 export * from "./validationMessage";
 export * from "./validationSummary";
+export * from "./documentList";
 
 export { Renderers, Projects, Claims, Inputs };
