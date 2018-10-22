@@ -11,10 +11,12 @@ export interface IContentVersionRepository {
   getDocuments(contentDocumentIds: string[]): Promise<ISalesforceContentVersion[]>;
 }
 
+const fieldNames: (keyof ISalesforceContentVersion)[] = [ "ContentDocumentId", "LinkedEntityId", "Title", "FileExtension" ];
+
 export class ContentVersionRepository extends SalesforceBase<ISalesforceContentVersion> implements IContentVersionRepository {
 
   constructor() {
-    super("ContentVersion", [ "ContentDocumentId", "PathOnClient", "Title", "FileExtension" ]);
+    super("ContentVersion", fieldNames);
   }
 
   public getDocuments(contentDocumentIds: string[]): Promise<ISalesforceContentVersion[]> {

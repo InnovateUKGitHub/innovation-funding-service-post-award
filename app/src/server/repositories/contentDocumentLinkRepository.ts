@@ -5,7 +5,7 @@ export interface ISalesforceContentDocumentLink {
   LinkedEntityId: string;
 }
 
-const fieldNames: string[] = [
+const fieldNames: (keyof ISalesforceContentDocumentLink)[] = [
   "ContentDocumentId",
   "LinkedEntityId"
 ];
