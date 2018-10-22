@@ -95,29 +95,29 @@ class Component extends ContainerBase<Params, Data, {}> {
 
     return (
       <ClaimTable.Table qa={tableQa} data={data}>
-      <ClaimTable.Custom
-        header="Period"
-        qa="period"
-        value={(x) => (
-          <span>P{x.periodId}<br />
-              <ShortMonth value={x.periodStartDate} /> to <ShortMonth value={x.periodEndDate} /> <LongYear value={x.periodEndDate} />
-            </span>)}
-      />
-      <ClaimTable.Currency header="Forecast costs for period" qa="forecast-cost" value={(x) => x.forecastCost} />
-      <ClaimTable.Currency header="Actual costs for period" qa="actual-cost" value={(x) => x.totalCost} />
-      <ClaimTable.Currency header="Difference" qa="diff" value={(x) => x.forecastCost - x.totalCost} />
-      <ClaimTable.Custom
-        header="Status"
-        qa="status"
-        value={(x) => (
-          <span>
-              {x.status}
-            <br />
-              <ShortDate value={(x.paidDate || x.approvedDate || x.lastModifiedDate)} />
-            </span>)}
-      />
-      <ClaimTable.Custom header="" qa="link" value={(x) => this.getLink(x, projectId)}/>
-    </ClaimTable.Table>
+        <ClaimTable.Custom
+          header="Period"
+          qa="period"
+          value={(x) => (
+            <span>P{x.periodId}<br />
+                <ShortMonth value={x.periodStartDate} /> to <ShortMonth value={x.periodEndDate} /> <LongYear value={x.periodEndDate} />
+              </span>)}
+        />
+        <ClaimTable.Currency header="Forecast costs for period" qa="forecast-cost" value={(x) => x.forecastCost} />
+        <ClaimTable.Currency header="Actual costs for period" qa="actual-cost" value={(x) => x.totalCost} />
+        <ClaimTable.Currency header="Difference" qa="diff" value={(x) => x.forecastCost - x.totalCost} />
+        <ClaimTable.Custom
+          header="Status"
+          qa="status"
+          value={(x) => (
+            <span>
+                {x.status}
+              <br />
+                <ShortDate value={(x.paidDate || x.approvedDate || x.lastModifiedDate)} />
+              </span>)}
+        />
+        <ClaimTable.Custom header="" qa="link" value={(x) => this.getLink(x, projectId)}/>
+      </ClaimTable.Table>
     );
   }
 }
