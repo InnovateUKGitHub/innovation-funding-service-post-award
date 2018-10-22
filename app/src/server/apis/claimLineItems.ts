@@ -2,7 +2,7 @@ import contextProvider from "../features/common/contextProvider";
 import {ControllerBase} from "./controllerBase";
 import {GetAllLineItemsForClaimByCategoryQuery, SaveLineItemsCommand} from "../features/claimLineItems";
 import {ClaimLineItemDto} from "../../ui/models";
-import {ApiError, ErrorCode} from "./ApiError";
+import {ApiError, StatusCode} from "./ApiError";
 import {processDto} from "../../shared/processResponse";
 import {ValidationError} from "../../shared/validation";
 
@@ -43,19 +43,14 @@ class Controller extends ControllerBase<ClaimLineItemDto> implements IClaimLineI
       lineItems.every(x => x.periodId === periodId && x.partnerId === partnerId && x.costCategoryId === costCategoryId);
 
     if (!validRequest) {
-      throw new ApiError(ErrorCode.BAD_REQUEST,"Request is missing required fields");
+      throw new ApiError(StatusCode.BAD_REQUEST,"Request is missing required fields");
     }
 
     const command = new SaveLineItemsCommand(partnerId, costCategoryId, periodId, lineItems);
 
     const context = contextProvider.start();
 
-    await context.runCommand(command).catch(e => {
-      if (e instanceof ValidationError) {
-        throw new ApiError(ErrorCode.BAD_REQUEST, e);
-      }
-      throw new ApiError(ErrorCode.INTERNAL_SERVER_ERROR, "Failed to update claim line items");
-    });
+    await context.runCommand(command);
 
     const query = new GetAllLineItemsForClaimByCategoryQuery(partnerId, costCategoryId, periodId);
     return context.runQuery(query);
