@@ -9,6 +9,7 @@ import { DualDetails, Link, Section, SectionPanel, TypedDetails, TypedLoader, Ty
 import { DayAndLongMonth, FullDate, LongYear, ShortDate, ShortMonth } from "../../components/renderers";
 import { PrepareClaimRoute } from "./prepare";
 import { ClaimsDetailsRoute } from "./details";
+import { SimpleString} from "../../components/renderers";
 
 interface Params {
   projectId: string;
@@ -66,10 +67,10 @@ class Component extends ContainerBase<Params, Data, {}> {
           </SectionPanel>
         </Section>
         <Section qa="current-claim-summary-table-section" title={currentClaimsSectionTitle}>
-          {currentClaim && this.renderClaims([currentClaim],"current-claim-summary-table", project.id, true)}
+          {this.renderClaims(currentClaim ? [currentClaim] : [],"current-claim-summary-table", project.id, true)}
         </Section>
         <Section qa="" title="Previous claims">
-          {previousClaims && this.renderClaims(previousClaims, "previous-claims-summary-table", project.id, false)}
+          {this.renderClaims(previousClaims, "previous-claims-summary-table", project.id, false)}
         </Section>
       </ProjectOverviewPage>
     );
@@ -85,12 +86,12 @@ class Component extends ContainerBase<Params, Data, {}> {
   private renderClaims(data: ClaimDto[], tableQa: string, projectId: string, isCurrentClaim: boolean) {
     const ClaimTable = TypedTable<ClaimDto>();
 
-    if (isCurrentClaim && !data) {
-      return <p className="govuk-body">The next open claim period will be...</p>;
+    if (isCurrentClaim && !data.length) {
+      return <SimpleString>The next open claim period will be...</SimpleString>;
     }
 
-    if (!isCurrentClaim && data.length === 0) {
-      return <p className="govuk-body">You do not have any previous claims for this project</p>;
+    if (!isCurrentClaim && !data.length) {
+      return <SimpleString>You do not have any previous claims for this project</SimpleString>;
     }
 
     return (
