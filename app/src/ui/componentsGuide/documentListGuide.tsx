@@ -2,9 +2,9 @@ import React from "react";
 import { DocumentList } from "../components";
 
 const documents = [
-  { url: "Test-URL", title: "LABOUR_COSTS_Q3_2017-11-05.pdf" },
-  { url: "Test-URL", title: "PAYMENT_RECEIPT_PROJECT_MANAGER_Q3_2017-11-05.pdf" },
-  { url: "Test-URL", title: "PAYMENT_RECEIPT_ELECTRICIAN_Q3_2017-11-05.pdf" },
+  { onClick: () => console.log("click"), title: "LABOUR_COSTS_Q3_2017-11-05.pdf" },
+  { onClick: () => console.log("click"), title: "PAYMENT_RECEIPT_PROJECT_MANAGER_Q3_2017-11-05.pdf" },
+  { onClick: () => console.log("click"), title: "PAYMENT_RECEIPT_ELECTRICIAN_Q3_2017-11-05.pdf" },
 ];
 
 export const documentListGuide: IGuide = {
