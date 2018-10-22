@@ -5,10 +5,11 @@ import * as Actions from "../../redux/actions";
 import * as Selectors from "../../redux/selectors";
 import { ProjectOverviewPage } from "../../components/projectOverview";
 import { ClaimDto, PartnerDto, ProjectDto } from "../../models";
-import { DualDetails, Link, Section, SectionPanel, TypedDetails, TypedTable, TypedLoader } from "../../components";
-import { DayAndLongMonth, FullDate, LongYear, ShortMonth } from "../../components/renderers";
+import { DualDetails, Link, Section, SectionPanel, TypedDetails, TypedLoader, TypedTable } from "../../components";
+import { DayAndLongMonth, FullDate, LongYear, ShortDate, ShortMonth } from "../../components/renderers";
 import { PrepareClaimRoute } from "./prepare";
 import { ClaimsDetailsRoute } from "./details";
+import { SimpleString} from "../../components/renderers";
 
 interface Params {
   projectId: string;
@@ -40,123 +41,88 @@ class Component extends ContainerBase<Params, Data, {}> {
     return <Loader pending={combined} render={(x) => this.renderContents(x.projectDetails, x.partnerDetails, x.claims)} />;
   }
 
-  private renderContents = (project: ProjectDto, partner: PartnerDto, claims: ClaimDto[]) => {
+  private renderContents(project: ProjectDto, partner: PartnerDto, claims: ClaimDto[]) {
     const currentClaim = claims.find(claim => !claim.approvedDate);
     const previousClaims = currentClaim ? claims.filter(claim => claim.id !== currentClaim.id) : claims;
+    const Details = TypedDetails<PartnerDto>();
+    const currentClaimsSectionTitle = (
+      currentClaim && <React.Fragment>Claim for P{currentClaim.periodId} - <DayAndLongMonth value={currentClaim.periodStartDate} /> to <FullDate value={currentClaim.periodEndDate} /></React.Fragment>
+    );
+
     return (
       <ProjectOverviewPage selectedTab={ClaimsDashboardRoute.routeName} project={project} partnerId={partner.id} partners={[partner]}>
-        <ProjectClaimsHistory partner={partner} />
-        <CurrentClaimSummary claim={currentClaim} projectId={project.id} />
-        <PastClaimsSummary claims={previousClaims} projectId={project.id} />
+        <Section>
+          <SectionPanel qa="claims-dashboard" title="Project claims history">
+            <DualDetails displayDensity="Compact">
+              <Details.Details qa="claims-history-col-0" data={partner}>
+                <Details.Currency label="Grant offer letter costs" value={x => x.totalParticipantGrant} />
+                <Details.Currency label="Costs claimed to date" value={x => x.totalParticipantCostsClaimed} />
+                <Details.Percentage label="Percentage claimed to date" value={x => x.percentageParticipantCostsClaimed} />
+              </Details.Details>
+              <Details.Details qa="claims-history-col-1" data={partner}>
+                <Details.Percentage label="Award offer rate" value={x => x.awardRate} />
+                <Details.Percentage label="Cap limit" value={x => x.capLimit} />
+              </Details.Details>
+            </DualDetails>
+          </SectionPanel>
+        </Section>
+        <Section qa="current-claim-summary-table-section" title={currentClaimsSectionTitle}>
+          {this.renderClaims(currentClaim ? [currentClaim] : [],"current-claim-summary-table", project.id, true)}
+        </Section>
+        <Section qa="" title="Previous claims">
+          {this.renderClaims(previousClaims, "previous-claims-summary-table", project.id, false)}
+        </Section>
       </ProjectOverviewPage>
     );
   }
-}
 
-interface ClaimsHistoryProps {
-  partner: PartnerDto;
-}
-
-const ProjectClaimsHistory: React.SFC<ClaimsHistoryProps> = ({ partner }) => {
-  const { Details: Column, Currency, Percentage } = TypedDetails<PartnerDto>();
-  return (
-    <Section>
-      <SectionPanel qa="claims-dashboard" title="Project claims history">
-        <DualDetails displayDensity="Compact">
-          <Column qa="claims-history-col-0" data={partner}>
-            <Currency label="Grant offer letter costs" value={x => x.totalParticipantGrant} />
-            <Currency label="Costs claimed to date" value={x => x.totalParticipantCostsClaimed} />
-            <Percentage label="Percentage claimed to date" value={x => x.percentageParticipantCostsClaimed} />
-          </Column>
-          <Column qa="claims-history-col-1" data={partner}>
-            <Percentage label="Award offer rate" value={x => x.awardRate} />
-            <Percentage label="Cap limit" value={x => x.capLimit} />
-          </Column>
-        </DualDetails>
-      </SectionPanel>
-    </Section>
-  );
-};
-
-interface CurrentClaimSummaryProps {
-  claim?: ClaimDto;
-  projectId: string;
-}
-
-const CurrentClaimSummary: React.SFC<CurrentClaimSummaryProps> = (props) => {
-  const { claim } = props;
-
-  if (!claim) {
-    return (
-      <Section title="...">
-        <p className="govuk-body">The next open claim period will be...</p>
-      </Section>);
+  private getLink(claim: ClaimDto, projectId: string) {
+    if(claim.status === "New" || claim.status === "Draft") {
+      return <Link route={PrepareClaimRoute.getLink({ projectId, partnerId: claim.partnerId, periodId: claim.periodId })}>Edit claim</Link>;
+    }
+    return <Link route={ClaimsDetailsRoute.getLink({ projectId, partnerId: claim.partnerId, periodId: claim.periodId })}>View claim</Link>;
   }
 
-  const sectionTitle = (
-    <React.Fragment>Claim for P{claim.periodId} - <DayAndLongMonth value={claim.periodStartDate} /> to <FullDate value={claim.periodEndDate} /></React.Fragment>
-  );
-  const ClaimTable = TypedTable<ClaimDto>();
-  return (
-    <Section qa="current-claim-summary-table-section" title={sectionTitle}>
-      <ClaimTable.Table qa="current-claim-summary-table" data={[claim]}>
-        <ClaimTable.Currency header="Forecast costs for period" qa="forecast-cost" value={(x) => x.forecastCost} />
-        <ClaimTable.Currency header="Actual costs for period" qa="actual-cost" value={(x) => x.totalCost} />
-        <ClaimTable.Currency header="Difference" qa="diff" value={(x) => x.forecastCost - x.totalCost} />
-        <ClaimTable.String header="Status" qa="status" value={(x) => x.status} />
-        <ClaimTable.ShortDate header="Date of last update" qa="last-update" value={(x) => x.lastModifiedDate} />
-        <ClaimTable.Link header="" qa="link" content="Edit claim" value={(x) => PrepareClaimRoute.getLink({ projectId: props.projectId, partnerId: x.partnerId, periodId: x.periodId})} />
-      </ClaimTable.Table>
-    </Section>
-  );
-};
+  private renderClaims(data: ClaimDto[], tableQa: string, projectId: string, isCurrentClaim: boolean) {
+    const ClaimTable = TypedTable<ClaimDto>();
 
-interface PastClaimsSummaryProps {
-  claims: ClaimDto[];
-  projectId: string;
-}
+    if (isCurrentClaim && !data.length) {
+      return <SimpleString>The next open claim period will be...</SimpleString>;
+    }
 
-const PastClaimsSummary: React.SFC<PastClaimsSummaryProps> = ({ claims, projectId }) => {
-  if (claims.length === 0) {
+    if (!isCurrentClaim && !data.length) {
+      return <SimpleString>You do not have any previous claims for this project</SimpleString>;
+    }
+
     return (
-      <Section title="Previous claims">
-        <p className="govuk-body">You do not have any previous claims for this project</p>
-      </Section>);
-  }
-  const ClaimTable = TypedTable<ClaimDto>();
-  return (
-    <Section qa="previous-claims-summary-table-section" title="Previous Claims">
-      <ClaimTable.Table qa="previous-claims-summary-table" data={claims}>
+      <ClaimTable.Table qa={tableQa} data={data}>
         <ClaimTable.Custom
           header="Period"
           qa="period"
           value={(x) => (
             <span>P{x.periodId}<br />
-              <ShortMonth value={x.periodStartDate} /> to <ShortMonth value={x.periodEndDate} /> <LongYear value={x.periodEndDate} />
-            </span>)}
+                <ShortMonth value={x.periodStartDate} /> to <ShortMonth value={x.periodEndDate} /> <LongYear value={x.periodEndDate} />
+              </span>)}
         />
         <ClaimTable.Currency header="Forecast costs for period" qa="forecast-cost" value={(x) => x.forecastCost} />
         <ClaimTable.Currency header="Actual costs for period" qa="actual-cost" value={(x) => x.totalCost} />
         <ClaimTable.Currency header="Difference" qa="diff" value={(x) => x.forecastCost - x.totalCost} />
         <ClaimTable.Custom
-          header="Status and date"
+          header="Status"
           qa="status"
           value={(x) => (
             <span>
-              Claim {x.status}
+                {x.status}
               <br />
-              <FullDate value={(x.paidDate || x.approvedDate || x.lastModifiedDate)} />
-            </span>)}
+                <ShortDate value={(x.paidDate || x.approvedDate || x.lastModifiedDate)} />
+              </span>)}
         />
-        <ClaimTable.Custom
-          header=""
-          qa="link"
-          value={(x) => (<Link route={ClaimsDetailsRoute.getLink({ projectId,  partnerId : x.partnerId, periodId: x.periodId })}>View claim</Link>)}
-        />
+        <ClaimTable.Custom header="" qa="link" value={(x) => this.getLink(x, projectId)}/>
       </ClaimTable.Table>
-    </Section>
-  );
-};
+    );
+  }
+}
+
 const definition = ReduxContainer.for<Params, Data, {}>(Component);
 
 export const ClaimsDashboard = definition.connect({
