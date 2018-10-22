@@ -37,15 +37,13 @@ class Controller extends ControllerBase<ClaimDto> implements IClaimsApi {
       throw new ApiError(StatusCode.BAD_REQUEST, "Bad request");
     }
 
+    const context = contextProvider.start();
     const command = new UpdateClaimCommand(claim);
-
-    await contextProvider.start().runCommand(command).catch(e => {
-      console.log("Api Error: ", e);
-      throw new ApiError(StatusCode.INTERNAL_SERVER_ERROR, "Failed to update claim");
-    });
+    await context.runCommand(command);
 
     const query = new GetClaim(partnerId, periodId);
-    return (await contextProvider.start().runQuery(query))!;
+    // TODO - linked to getClaim query todo about nulls and exceptions
+    return context.runQuery(query).then(x => x!);
   }
 }
 

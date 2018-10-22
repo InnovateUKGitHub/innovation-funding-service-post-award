@@ -24,6 +24,10 @@ export abstract class ControllerBase<T> {
     return this.putCustom<TParams, T | null>(path, getParams, run);
   }
 
+  protected putItems<TParams>(path: string, getParams: (params: any, query: any, body: any) => TParams, run: (params: TParams) => Promise<T[]>) {
+    return this.putCustom<TParams, T[]>(path, getParams, run);
+  }
+
   protected postItems<TParams>(path: string, getParams: (params: any, query: any, body: any) => TParams, run: (params: TParams) => Promise<T[]>) {
     return this.postCustom<TParams, T[]>(path, 201, getParams, run);
   }
