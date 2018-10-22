@@ -26,7 +26,7 @@ export const DocumentList: React.SFC<Props> = (props) => {
     <div className="govuk-!-padding-3" data-qa={qa} style={style} >
       {title ? <h2 className="govuk-heading-m govuk-!-margin-bottom-6">{title}</h2> : null}
       <div className="govuk-!-padding-bottom-4">
-        <ol data-qa={`${qa}-list`}>
+        <ul data-qa={`${qa}-list`}>
           {
             documents.map((x, i) => (
               <li key={`link-${i}`}>
@@ -35,7 +35,7 @@ export const DocumentList: React.SFC<Props> = (props) => {
               </li>
             ))
           }
-        </ol>
+        </ul>
       </div>
     </div>
   );
