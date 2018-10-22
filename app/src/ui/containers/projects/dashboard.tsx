@@ -23,7 +23,7 @@ class ProjectDashboardComponent extends ContainerBase<{}, Data, Callbacks> {
         <ACC.Section>
           <ACC.BackLink route={HomeRoute.getLink({})}>Back</ACC.BackLink>
         </ACC.Section>
-        <ACC.Title title="Projects Dashboard" />
+        <ACC.Title title="Projects dashboard" />
         <Loader pending={this.props.projects} render={x => this.renderSubSections(x)} />
       </ACC.Page>
     );

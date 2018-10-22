@@ -7,8 +7,8 @@ export const sectionGuide: IGuide = {
         {
             name: "Simple",
             comments: "Renders a section and children",
-            example: "<Section title=\"Project Members\" />",
-            render: () => <Section title="Project Members"><div>I'm a child</div></Section>
+            example: "<Section title=\"Project members\" />",
+            render: () => <Section title="Project members"><div>I'm a child</div></Section>
         }
     ]
 };
