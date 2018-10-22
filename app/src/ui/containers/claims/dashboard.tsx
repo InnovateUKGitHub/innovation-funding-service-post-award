@@ -6,7 +6,7 @@ import * as Selectors from "../../redux/selectors";
 import { ProjectOverviewPage } from "../../components/projectOverview";
 import { ClaimDto, PartnerDto, ProjectDto } from "../../models";
 import { DualDetails, Link, Section, SectionPanel, TypedDetails, TypedTable, TypedLoader } from "../../components";
-import { DayAndLongMonth, FullDate, LongYear, ShortMonth } from "../../components/renderers";
+import { DayAndLongMonth, FullDate, ShortDate, LongYear, ShortMonth } from "../../components/renderers";
 import { PrepareClaimRoute } from "./prepare";
 import { ClaimsDetailsRoute } from "./details";
 
@@ -100,11 +100,27 @@ const CurrentClaimSummary: React.SFC<CurrentClaimSummaryProps> = (props) => {
   return (
     <Section qa="current-claim-summary-table-section" title={sectionTitle}>
       <ClaimTable.Table qa="current-claim-summary-table" data={[claim]}>
+        <ClaimTable.Custom
+          header="Period"
+          qa="period"
+          value={(x) => (
+            <span>P{x.periodId}<br />
+              <ShortMonth value={x.periodStartDate} /> to <ShortMonth value={x.periodEndDate} /> <LongYear value={x.periodEndDate} />
+            </span>)}
+        />
         <ClaimTable.Currency header="Forecast costs for period" qa="forecast-cost" value={(x) => x.forecastCost} />
         <ClaimTable.Currency header="Actual costs for period" qa="actual-cost" value={(x) => x.totalCost} />
         <ClaimTable.Currency header="Difference" qa="diff" value={(x) => x.forecastCost - x.totalCost} />
-        <ClaimTable.String header="Status" qa="status" value={(x) => x.status} />
-        <ClaimTable.ShortDate header="Date of last update" qa="last-update" value={(x) => x.lastModifiedDate} />
+        <ClaimTable.Custom
+          header="Status"
+          qa="status"
+          value={(x) => (
+            <span>
+              {x.status}
+              <br />
+              <ShortDate value={(x.paidDate || x.approvedDate || x.lastModifiedDate)} />
+            </span>)}
+        />
         <ClaimTable.Link header="" qa="link" content="Edit claim" value={(x) => PrepareClaimRoute.getLink({ projectId: props.projectId, partnerId: x.partnerId, periodId: x.periodId})} />
       </ClaimTable.Table>
     </Section>
@@ -139,13 +155,13 @@ const PastClaimsSummary: React.SFC<PastClaimsSummaryProps> = ({ claims, projectI
         <ClaimTable.Currency header="Actual costs for period" qa="actual-cost" value={(x) => x.totalCost} />
         <ClaimTable.Currency header="Difference" qa="diff" value={(x) => x.forecastCost - x.totalCost} />
         <ClaimTable.Custom
-          header="Status and date"
+          header="Status"
           qa="status"
           value={(x) => (
             <span>
               Claim {x.status}
               <br />
-              <FullDate value={(x.paidDate || x.approvedDate || x.lastModifiedDate)} />
+              <ShortDate value={(x.paidDate || x.approvedDate || x.lastModifiedDate)} />
             </span>)}
         />
         <ClaimTable.Custom
