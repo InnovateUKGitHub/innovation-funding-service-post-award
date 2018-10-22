@@ -120,9 +120,9 @@ const CurrencyField = <T extends {}>(props: ExternalFieldProps<T, number> & { fr
     return <TypedField {...props} render={(item) => <p className="govuk-body"><Currency fractionDigits={props.fractionDigits} value={props.value(item)} /></p>} />;
 };
 
-const PercentageField = <T extends {}>(props: ExternalFieldProps<T, number>) => {
+const PercentageField = <T extends {}>(props: ExternalFieldProps<T, number> & { fractionDigits?: number}) => {
     const TypedField = FieldComponent as { new(): FieldComponent<T> };
-    return <TypedField {...props} render={(item) => <p className="govuk-body"><Percentage value={props.value(item)} /></p>} />;
+    return <TypedField {...props} render={(item) => <p className="govuk-body"><Percentage fractionDigits={props.fractionDigits} value={props.value(item)} /></p>} />;
 };
 
 export const TypedDetails = <T extends {}>() => ({
@@ -133,6 +133,6 @@ export const TypedDetails = <T extends {}>() => ({
     DateTime: DateTimeField as React.SFC<ExternalFieldProps<T, Date>>,
     Number: NumberField as React.SFC<ExternalFieldProps<T, number>>,
     Currency: CurrencyField as React.SFC<ExternalFieldProps<T, number> & { fractionDigits?: number}>,
-    Percentage: PercentageField as React.SFC<ExternalFieldProps<T, number>>,
+    Percentage: PercentageField as React.SFC<ExternalFieldProps<T, number> & { fractionDigits?: number}>,
     Custom: CustomField as React.SFC<ExternalFieldProps<T, React.ReactNode>>
 });

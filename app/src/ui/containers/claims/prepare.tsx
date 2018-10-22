@@ -13,6 +13,7 @@ import { ClaimForecastRoute, ClaimsDashboardRoute } from ".";
 import { EditClaimLineItemsRoute } from "./editClaimLineItems";
 import { Result } from "../../validation/result";
 import { ClaimsDetailsRoute } from "./details";
+import { SimpleString } from "../../../ui/components/renderers";
 
 interface Params {
     projectId: string;
@@ -103,6 +104,9 @@ export class PrepareComponent extends ContainerBase<Params, Data, Callbacks> {
                         <Form.Fieldset heading={() => commentsLabel} qa="additional-info-form" headingQa="additional-info-heading">
                             <Form.MultilineString label="" hint={commentsHint} name="comments" value={m => m.comments} update={(m, v) => m.comments = v} validation={data.editor.validator.comments} qa="info-text-area"/>
                         </Form.Fieldset>
+                        <SimpleString>
+                            You need to review your forecasts before you can submit your claim.
+                        </SimpleString>
                         <Form.Fieldset qa="save-and-continue">
                             <Form.Submit>Review forecasts</Form.Submit>
                         </Form.Fieldset>

@@ -14,6 +14,8 @@ import { formGuide } from "./formGuide";
 import { validationMessageGuide } from "./validationMessageGuide";
 import { validationErrorGuide } from "./validationErrorGuide";
 import { validationSummaryGuide } from "./validationSummaryGuide";
+import { renderersGuide } from "./renderersGuide";
+import { insetText } from "./insetTextGuide";
 import {documentListGuide} from "./documentListGuide";
 
 const guides: IGuide[] = [
@@ -22,8 +24,10 @@ const guides: IGuide[] = [
     documentListGuide,
     emailGuide,
     formGuide,
+    insetText,
     linksListGuide,
     projectMemberGuide,
+    renderersGuide,
     sectionGuide,
     sectionPanelGuide,
     tabsGuide,
