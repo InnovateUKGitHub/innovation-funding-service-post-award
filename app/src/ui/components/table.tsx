@@ -161,14 +161,14 @@ const EmailColumn = <T extends {}>(props: ExternalColumnProps<T, string | null>)
   return <TypedColumn renderCell={(data, index) => <Email value={props.value(data, index)} />} {...props} />;
 };
 
-const CurrencyColumn = <T extends {}>(props: ExternalColumnProps<T, number | null>) => {
+const CurrencyColumn = <T extends {}>(props: ExternalColumnProps<T, number | null> & {fractionDigits?:number}) => {
   const TypedColumn = TableColumn as { new(): TableColumn<T> };
-  return <TypedColumn classSuffix="numeric" renderCell={(data, index) => <Currency value={props.value(data, index)} />} {...props} />;
+  return <TypedColumn classSuffix="numeric" renderCell={(data, index) => <Currency value={props.value(data, index)} fractionDigits={props.fractionDigits} />} {...props} />;
 };
 
-const PercentageColumn = <T extends {}>(props: ExternalColumnProps<T, number | null>) => {
+const PercentageColumn = <T extends {}>(props: ExternalColumnProps<T, number | null> & {fractionDigits?:number}) => {
   const TypedColumn = TableColumn as { new(): TableColumn<T> };
-  return <TypedColumn classSuffix="numeric" renderCell={(data, index) => <Percentage value={props.value(data, index)} />} {...props} />;
+  return <TypedColumn classSuffix="numeric" renderCell={(data, index) => <Percentage value={props.value(data, index)} fractionDigits={props.fractionDigits} />} {...props} />;
 };
 
 interface LinkColumnProps<T> extends ExternalColumnProps<T, ILinkInfo> {
@@ -185,8 +185,8 @@ export const TypedTable = <T extends {}>() => ({
   Custom: CustomColumn as React.SFC<ExternalColumnProps<T, React.ReactNode> & { classSuffix?: "numeric" }>,
   String: StringColumn as React.SFC<ExternalColumnProps<T, string | null>>,
   Number: NumberColumn as React.SFC<ExternalColumnProps<T, number | null>>,
-  Currency: CurrencyColumn as React.SFC<ExternalColumnProps<T, number | null>>,
-  Percentage: PercentageColumn as React.SFC<ExternalColumnProps<T, number | null>>,
+  Currency: CurrencyColumn as React.SFC<ExternalColumnProps<T, number | null> & {fractionDigits?:number}>,
+  Percentage: PercentageColumn as React.SFC<ExternalColumnProps<T, number | null> & {fractionDigits?:number}>,
   FullDate: FullDateColumn as React.SFC<ExternalColumnProps<T, Date | null>>,
   ShortDate: ShortDateColumn as React.SFC<ExternalColumnProps<T, Date | null>>,
   Email: EmailColumn as React.SFC<ExternalColumnProps<T, string | null>>,

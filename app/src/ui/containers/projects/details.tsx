@@ -83,7 +83,7 @@ class ProjectDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
                     <PartnersTable.Currency header="Total eligible costs" qa="total-costs" value={x => x.totalParticipantGrant} footer={<ACC.Renderers.Currency value={totalEligibleCosts} />} />
                     <PartnersTable.Currency header="Costs claimed to date" qa="costs-claimed" value={x => x.totalParticipantCostsClaimed} footer={<ACC.Renderers.Currency value={totalClaimed} />} />
                     <PartnersTable.Percentage header="Percentage claimed" qa="percentage-claimed" value={x => x.percentageParticipantCostsClaimed} footer={<ACC.Renderers.Percentage value={percentageClaimed} />} />
-                    <PartnersTable.Percentage header="Cap limit" qa="cap-limit" value={x => x.capLimit} />
+                    <PartnersTable.Percentage header="Cap limit" qa="cap-limit" value={x => x.capLimit} fractionDigits={0} />
                 </PartnersTable.Table>
             </ACC.Section>
         );

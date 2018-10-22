@@ -60,8 +60,8 @@ class Component extends ContainerBase<Params, Data, {}> {
                 <Details.Percentage label="Percentage claimed to date" value={x => x.percentageParticipantCostsClaimed} />
               </Details.Details>
               <Details.Details qa="claims-history-col-1" data={partner}>
-                <Details.Percentage label="Award offer rate" value={x => x.awardRate} />
-                <Details.Percentage label="Cap limit" value={x => x.capLimit} />
+                <Details.Percentage label="Award offer rate" value={x => x.awardRate} fractionDigits={0} />
+                <Details.Percentage label="Cap limit" value={x => x.capLimit} fractionDigits={0} />
               </Details.Details>
             </DualDetails>
           </SectionPanel>
