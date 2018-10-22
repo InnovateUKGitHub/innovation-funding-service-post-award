@@ -63,23 +63,6 @@ export class ClaimLineItemsComponent extends ContainerBase<Params, Data, {}> {
   }
 }
 
-const mockDocs = [
-  {
-    title: "Government form 1",
-    onClick: (e: React.MouseEvent<HTMLAnchorElement>) => {
-      e.preventDefault();
-      console.log("clicking");
-    }
-  },
-  {
-    title: "Really important notes",
-    onClick: (e: React.MouseEvent<HTMLAnchorElement>) => {
-      e.preventDefault();
-      console.log("clicking some more");
-    }
-  }
-];
-
 const ClaimLineItemsTable: React.SFC<{ lineItems: Dtos.ClaimLineItemDto[], forecastDetail: Dtos.ForecastDetailsDTO }> = ({ lineItems, forecastDetail }) => {
   const LineItemTable = ACC.TypedTable<Dtos.ClaimLineItemDto>();
   const renderFooterRow = (row: { key: string, title: string, value: React.ReactNode, qa: string }) => (
