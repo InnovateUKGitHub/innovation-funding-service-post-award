@@ -14,12 +14,9 @@ import { formGuide } from "./formGuide";
 import { validationMessageGuide } from "./validationMessageGuide";
 import { validationErrorGuide } from "./validationErrorGuide";
 import { validationSummaryGuide } from "./validationSummaryGuide";
-<<<<<<< HEAD
 import { renderersGuide } from "./renderersGuide";
 import { insetText } from "./insetTextGuide";
-=======
 import {documentListGuide} from "./documentListGuide";
->>>>>>> develop
 
 const guides: IGuide[] = [
     datesGuide,
