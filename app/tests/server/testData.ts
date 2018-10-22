@@ -171,6 +171,7 @@ export class TestData {
         periodId = periodId || 1;
 
         const newItem: Repositories.ISalesforceClaimDetails = {
+            Id: `${partner.Id}_${periodId}_${costCategory.Id}`,
             Acc_CostCategory__c: costCategory.Id,
             Acc_ProjectPeriodNumber__c: periodId,
             Acc_ProjectParticipant__c: partner.Id,

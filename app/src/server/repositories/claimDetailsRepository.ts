@@ -1,6 +1,7 @@
 import SalesforceBase from "./salesforceBase";
 
 export interface ISalesforceClaimDetails {
+  Id: string;
   Acc_CostCategory__c: string;
   Acc_PeriodCostCategoryTotal__c: number;
   Acc_ProjectParticipant__c: string;
@@ -12,6 +13,7 @@ export interface ISalesforceClaimDetails {
 type FieldNames = keyof ISalesforceClaimDetails;
 
 const fields: FieldNames[] = [
+  "Id",
   "Acc_CostCategory__c",
   "Acc_PeriodCostCategoryTotal__c",
   "Acc_ProjectParticipant__c",
@@ -23,6 +25,7 @@ const fields: FieldNames[] = [
 export interface IClaimDetailsRepository {
   getAllByPartnerForPeriod(partnerId: string, periodId: number): Promise<ISalesforceClaimDetails[]>;
   getAllByPartnerWithPeriodLt(partnerId: string, periodId: number): Promise<ISalesforceClaimDetails[]>;
+  get(partnerId: string, periodId: number, costCategoryId: string): Promise<ISalesforceClaimDetails>;
   getAllByPartner(partnerId: string): Promise<ISalesforceClaimDetails[]>;
 }
 
@@ -36,6 +39,20 @@ export class ClaimDetailsRepository extends SalesforceBase<ISalesforceClaimDetai
   getAllByPartnerForPeriod(partnerId: string, periodId: number): Promise<ISalesforceClaimDetails[]> {
     const filter = `Acc_ProjectParticipant__c = '${partnerId}' AND RecordType.Name = '${this.recordType}' AND Acc_ProjectPeriodNumber__c = ${periodId}`;
     return super.whereString(filter);
+  }
+
+  async get(partnerId: string, periodId: number, costCategoryId: string): Promise<ISalesforceClaimDetails> {
+    const filter = `
+    Acc_ProjectParticipant__c = '${partnerId}'
+    AND RecordType.Name = '${this.recordType}'
+    AND Acc_ProjectPeriodNumber__c = ${periodId}
+    AND Acc_CostCategory__c = '${costCategoryId}'
+    `;
+    const claimDetail = await super.filterOne(filter);
+    if (!claimDetail ) {
+      throw Error("Claim detail not found");
+    }
+    return claimDetail;
   }
 
   getAllByPartnerWithPeriodLt(partnerId: string, periodId: number): Promise<ISalesforceClaimDetails[]> {

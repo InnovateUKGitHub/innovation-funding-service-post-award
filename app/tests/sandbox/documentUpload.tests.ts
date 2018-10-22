@@ -24,7 +24,7 @@ describe("test", () => {
             const contentDocumentId = resp.ContentDocumentId;
             conn.sobject("ContentDocumentLink").insert({
               ContentDocumentId: contentDocumentId,
-              LinkedEntityId: "a061X000000IubVQAS",
+              LinkedEntityId: "a061X000000IucgQAC",
               ShareType: "V"
             }).then((resp) => {
               console.log(resp);
@@ -35,7 +35,7 @@ describe("test", () => {
 
               conn.sobject("ContentDocumentLink")
                 .select('ContentDocumentId')
-                .where("LinkedEntityId = 'a061X000000IubVQAS'")
+                .where("LinkedEntityId = 'a061X000000IucgQAC'")
                 .execute()
                 .then(resp => {
                   console.log(resp);
