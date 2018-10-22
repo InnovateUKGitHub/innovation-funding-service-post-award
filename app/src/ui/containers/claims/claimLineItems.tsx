@@ -6,6 +6,7 @@ import * as Actions from "../../redux/actions";
 import * as Selectors from "../../redux/selectors";
 import * as Dtos from "../../models";
 import * as ACC from "../../components";
+import {DocumentList} from "../../components";
 
 interface Params {
   projectId: string;
@@ -58,10 +59,30 @@ export class ClaimLineItemsComponent extends ContainerBase<Params, Data, {}> {
         <ACC.Section>
           <ClaimLineItemsTable lineItems={data.lineItems} forecastDetail={data.forecastDetail} />
         </ACC.Section>
+        <ACC.Section>
+          <DocumentList documents={mockDocs} title={"Supporting Documents"} qa={"supporting-documents"}/>
+        </ACC.Section>
       </ACC.Page>
     );
   }
 }
+
+const mockDocs = [
+  {
+    title: "Government form 1",
+    onClick: (e: React.MouseEvent<HTMLAnchorElement>) => {
+      e.preventDefault();
+      console.log("clicking");
+    }
+  },
+  {
+    title: "Really important notes",
+    onClick: (e: React.MouseEvent<HTMLAnchorElement>) => {
+      e.preventDefault();
+      console.log("clicking some more");
+    }
+  }
+];
 
 const ClaimLineItemsTable: React.SFC<{ lineItems: Dtos.ClaimLineItemDto[], forecastDetail: Dtos.ForecastDetailsDTO }> = ({ lineItems, forecastDetail }) => {
   const LineItemTable = ACC.TypedTable<Dtos.ClaimLineItemDto>();
