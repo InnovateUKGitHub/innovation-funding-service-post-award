@@ -1,26 +1,22 @@
 import {ControllerBase} from "./controllerBase";
 import {DocumentDto} from "../../ui/models";
+import contextProvider from "../features/common/contextProvider";
+import {GetDocumentsLinkedToRecordQuery} from "../features/documents/getAllForRecord";
 
 export interface IDocumentsApi {
-  getAll: (entityId: string) => Promise<DocumentDto[]>;
+  getAllForRecord: (recordId: string) => Promise<DocumentDto[]>;
 }
 
 class Controller extends ControllerBase<DocumentDto> implements IDocumentsApi {
   constructor() {
     super("documents");
 
-    this.getItems("/", (p, q) => ({ entityId: q.entityId, }), p => this.getAll(p.entityId));
+    this.getItems("/", (p, q) => ({ recordId: q.recordId, }), p => this.getAllForRecord(p.recordId));
   }
 
-  public async getAll(entityId: string) {
-    return Promise.resolve(
-      [
-        {
-          title: "Document 1",
-          url: "www.google.com",
-        }
-      ]
-      );
+  public async getAllForRecord(recordId: string) {
+    const query = new GetDocumentsLinkedToRecordQuery(recordId);
+    return await contextProvider.start().runQuery(query);
   }
 }
 

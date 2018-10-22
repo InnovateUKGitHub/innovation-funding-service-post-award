@@ -110,7 +110,7 @@ export const ClaimLineItems = definition.connect({
     lineItems: Selectors.findClaimLineItemsByPartnerCostCategoryAndPeriod(props.partnerId, props.costCategoryId, props.periodId).getPending(state),
     costCategories: Selectors.getCostCategories().getPending(state),
     forecastDetail: Selectors.getForecastDetail(props.partnerId, props.periodId, props.costCategoryId).getPending(state),
-    documents: Selectors.getDocuments(props.projectId)
+    // documents: Selectors.getDocuments(props.projectId)
   }),
   withCallbacks: () => ({})
 });
@@ -129,7 +129,7 @@ export const ClaimLineItemsRoute = definition.route({
     Actions.loadCostCategories(),
     Actions.loadForecastDetail(params.partnerId, params.periodId, params.costCategoryId),
     Actions.loadClaimLineItemsForCategory(params.partnerId, params.costCategoryId, params.periodId),
-    Actions.loadDocuments(params.projectId)
+    // Actions.loadDocuments(params.projectId)
   ],
   container: ClaimLineItems
 });

@@ -1,4 +1,5 @@
 export interface DocumentDto {
   title: string;
-    url: string;
+  id: string;
+  createdDate: string;
 }

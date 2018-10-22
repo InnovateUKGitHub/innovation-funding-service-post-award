@@ -16,6 +16,8 @@ export interface IRepositories {
   claimDetails: Readonly<Repositories.IClaimDetailsRepository>;
   contacts: Readonly<Repositories.IContactsRepository>;
   costCategories: Readonly<Repositories.ICostCategoryRepository>;
+  contentDocumentLinks: Readonly<Repositories.ContentDocumentLinkRepository>;
+  contentVersions: Readonly<Repositories.ContentVersionRepository>;
   profileDetails: Readonly<Repositories.IProfileDetailsRepository>;
   profileTotalPeriod: Readonly<Repositories.IProfileTotalPeriodRepository>;
   profileTotalCostCategory: Readonly<Repositories.IProfileTotalCostCategoryRepository>;
@@ -43,6 +45,8 @@ export class Context implements IContext {
     claimCosts: new Repositories.ClaimCostRepository(),
     contacts: new Repositories.ContactsRepository(),
     costCategories: new Repositories.CostCategoryRepository(),
+    contentDocumentLinks: new Repositories.ContentDocumentLinkRepository(),
+    contentVersions: new Repositories.ContentVersionRepository(),
     profileDetails: new Repositories.ProfileDetailsRepository(),
     profileTotalPeriod: new Repositories.ProfileTotalPeriodRepository(),
     profileTotalCostCategory: new Repositories.ProfileTotalCostCategoryRepository(),

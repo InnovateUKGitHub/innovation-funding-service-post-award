@@ -6,6 +6,6 @@ export function loadDocuments(id: string) {
   return conditionalLoad(
     getDocuments(id).key,
     documentStore,
-    () => ApiClient.documents.getAll(id)
+    () => ApiClient.documents.getAllForRecord(id)
   );
 }
