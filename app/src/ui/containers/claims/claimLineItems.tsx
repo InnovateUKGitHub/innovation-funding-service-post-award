@@ -70,17 +70,11 @@ export class ClaimLineItemsComponent extends ContainerBase<Params, Data, {}> {
 const mockDocs = [
   {
     title: "Government form 1",
-    onClick: (e: React.MouseEvent<HTMLAnchorElement>) => {
-      e.preventDefault();
-      console.log("clicking");
-    }
+    link: "https://www.google.com/"
   },
   {
     title: "Really important notes",
-    onClick: (e: React.MouseEvent<HTMLAnchorElement>) => {
-      e.preventDefault();
-      console.log("clicking some more");
-    }
+    link: "https://www.bbc.co.uk/"
   }
 ]
 const ClaimLineItemsTable: React.SFC<{ lineItems: Dtos.ClaimLineItemDto[], forecastDetail: Dtos.ForecastDetailsDTO }> = ({ lineItems, forecastDetail }) => {
