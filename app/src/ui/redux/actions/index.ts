@@ -9,6 +9,7 @@ export * from "./claimDetailsSummary";
 export * from "./contact";
 export * from "./contacts";
 export * from "./costCategories";
+export * from "./documents";
 export * from "./forecastDetails";
 export * from "./forecastGolCosts";
 export * from "./partner";

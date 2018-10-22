@@ -12,3 +12,5 @@ export * from "./projectsRepository";
 export * from "./claimLineItemRepository";
 export * from "./claimTotalCostCategoryRepository";
 export * from "./recordTypeRepository";
+export * from "./contentDocumentLinkRepository";
+export * from "./contentVersionRepository";
