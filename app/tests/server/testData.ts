@@ -254,6 +254,27 @@ export class TestData {
         return newItem;
     }
 
+    public createContentDocumentLink(contentDocumentId: string, entityId: string) {
+      const item = {
+        ContentDocumentId: contentDocumentId,
+        LinkedEntityId: entityId
+      };
+      this.repositories.contentDocumentLinks.Items.push(item);
+      return item;
+    }
+
+    public createContentVersion(entityId: string, title: string, fileExt: string) {
+      const id = ""+this.repositories.contentVersions.Items.length + 1;
+      const item = {
+        ContentDocumentId: id,
+        LinkedEntityId: entityId,
+        Title: title,
+        FileExtension: fileExt,
+      };
+      this.repositories.contentVersions.Items.push(item);
+      return item;
+    }
+
     public createProfileTotalCostCategory(
       costCategory?: Repositories.ISalesforceCostCategory,
       partner?: Repositories.ISalesforcePartner,
