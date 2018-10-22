@@ -3,6 +3,7 @@ export * from "./claims";
 export * from "./claimDetails";
 export * from "./contact";
 export * from "./contacts";
+export * from "./documents";
 export * from "./forecastDetails";
 export * from "./forecastGolCosts";
 export * from "./project";
