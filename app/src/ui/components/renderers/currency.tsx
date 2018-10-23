@@ -10,7 +10,7 @@ export const Currency: React.SFC<Props> = ({value, fractionDigits = 2, style,...
   if (!isNumber(value)) {
     return null;
   }
-  
+
   const options = {
     style: "currency",
     currency: "GBP",
@@ -19,7 +19,7 @@ export const Currency: React.SFC<Props> = ({value, fractionDigits = 2, style,...
   };
 
   style = Object.assign({ whiteSpace: "nowrap" }, style || {});
-  
+
   const valToRender = new Intl.NumberFormat("en-GB", options).format(value);
   return <span style={style} {...rest}>{valToRender}</span>;
 };

@@ -76,7 +76,8 @@ const mockDocs = [
     title: "Really important notes",
     link: "https://www.bbc.co.uk/"
   }
-]
+];
+
 const ClaimLineItemsTable: React.SFC<{ lineItems: Dtos.ClaimLineItemDto[], forecastDetail: Dtos.ForecastDetailsDTO }> = ({ lineItems, forecastDetail }) => {
   const LineItemTable = ACC.TypedTable<Dtos.ClaimLineItemDto>();
   const renderFooterRow = (row: { key: string, title: string, value: React.ReactNode, qa: string }) => (
@@ -93,7 +94,8 @@ const ClaimLineItemsTable: React.SFC<{ lineItems: Dtos.ClaimLineItemDto[], forec
   const diff = 100 * (forecast - total) / forecast;
 
   return (
-    <LineItemTable.Table data={lineItems}
+    <LineItemTable.Table
+      data={lineItems}
       qa="current-claim-summary-table"
       footers={[
         renderFooterRow({
