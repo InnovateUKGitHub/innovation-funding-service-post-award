@@ -45,6 +45,36 @@ describe('UpdateClaimCommand', () => {
     expect(claim.Acc_ClaimStatus__c).toBe("Submitted");
   });
 
+  it('when status updated to approved expect item updated', async () => {
+    const context = new TestContext();
+    const {testData} = context;
+
+    const claim = testData.createClaim(null, null, (x => x.Acc_ClaimStatus__c = "Draft"));
+    const dto = mapClaim(context)(claim);
+
+    dto.status = "Awaiting IUK Approval";
+
+    let command = new UpdateClaimCommand(dto);
+    await context.runCommand(command);
+
+    expect(claim.Acc_ClaimStatus__c).toBe("Awaiting IUK Approval");
+  });
+
+  it('when status updated to queried expect item updated', async () => {
+    const context = new TestContext();
+    const {testData} = context;
+
+    const claim = testData.createClaim(null, null, (x => x.Acc_ClaimStatus__c = "Draft"));
+    const dto = mapClaim(context)(claim);
+
+    dto.status = "MO Queried";
+
+    let command = new UpdateClaimCommand(dto);
+    await context.runCommand(command);
+
+    expect(claim.Acc_ClaimStatus__c).toBe("MO Queried");
+  });
+
   it('when status updated to something other than draft or submitted expect error', async () => {
     const context = new TestContext();
     const {testData} = context;
