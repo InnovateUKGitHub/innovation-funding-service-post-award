@@ -1,5 +1,5 @@
 import React from "react";
-import {TypedDetails, DualDetails} from "../components/details";
+import {DualDetails, TypedDetails} from "../components/details";
 
 export const detailsGuide: IGuide = {
     name: "Details",

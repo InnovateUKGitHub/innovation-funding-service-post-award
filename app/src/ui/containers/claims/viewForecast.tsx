@@ -3,10 +3,10 @@ import * as Dtos from "../../models";
 import * as ACC from "../../components";
 import * as Actions from "../../redux/actions";
 import * as Selectors from "../../redux/selectors";
-import {Pending} from "../../../shared/pending";
-import {ContainerBase, ReduxContainer} from "../containerBase";
-import {Currency, DateRange, Percentage} from "../../components/renderers";
-import {ClaimDetailsDto, ClaimDto, ForecastDetailsDTO} from "../../models";
+import { Pending } from "../../../shared/pending";
+import { ContainerBase, ReduxContainer } from "../containerBase";
+import { Currency, DateRange, Percentage } from "../../components/renderers";
+import { ClaimDetailsDto, ClaimDto, ForecastDetailsDTO } from "../../models";
 import { Interval } from "luxon";
 import { PrepareClaimRoute } from "./prepare";
 
@@ -36,7 +36,7 @@ interface CombinedData {
   costCategories: Dtos.CostCategoryDto[];
 }
 
-interface Callbacks {}
+interface Callbacks { }
 
 interface TableRow {
   categoryName: string;
@@ -76,19 +76,19 @@ export class ViewForecastComponent extends ContainerBase<Params, Data, Callbacks
         difference: 0
       };
 
-      for(let i = data.claim.periodId - 1; i > 0; i--) {
+      for (let i = data.claim.periodId - 1; i > 0; i--) {
         row.periods[i] = 0;
       }
 
       data.claimDetails.forEach(x => {
-        if(x.costCategoryId === category.id && x.periodId < currentPeriod) {
+        if (x.costCategoryId === category.id && x.periodId < currentPeriod) {
           row.periods[x.periodId] = x.value;
           row.total += x.value;
         }
       });
 
       data.forecastDetails.forEach(x => {
-        if(x.costCategoryId === category.id && x.periodId >= currentPeriod) {
+        if (x.costCategoryId === category.id && x.periodId >= currentPeriod) {
           row.periods[x.periodId] = x.value;
           row.total += x.value;
         }
@@ -120,9 +120,9 @@ export class ViewForecastComponent extends ContainerBase<Params, Data, Callbacks
   }
 
   periodHeader(period: Interval) {
-    const words  = [period.start.monthShort, "to", period.end.monthShort, period.end.year];
+    const words = [period.start.monthShort, "to", period.end.monthShort, period.end.year];
 
-    if(period.start.year !== period.end.year) {
+    if (period.start.year !== period.end.year) {
       words.splice(1, 0, period.start.year);
     }
 
@@ -130,10 +130,10 @@ export class ViewForecastComponent extends ContainerBase<Params, Data, Callbacks
   }
 
   public renderContents(data: CombinedData) {
-    const parsed    = this.parseClaimData(data);
-    const Table     = ACC.TypedTable<typeof parsed[0]>();
+    const parsed = this.parseClaimData(data);
+    const Table = ACC.TypedTable<typeof parsed[0]>();
     const intervals = this.calculateClaimPeriods(data);
-    const periods   = Object.keys(parsed[0].periods);
+    const periods = Object.keys(parsed[0].periods);
 
     return (
       <ACC.Page>
@@ -142,7 +142,8 @@ export class ViewForecastComponent extends ContainerBase<Params, Data, Callbacks
         </ACC.Section>
         <ACC.Projects.Title pageTitle="Claim" project={data.project} />
         <ACC.Section>
-          <Table.Table data={parsed}
+          <Table.Table
+            data={parsed}
             qa="cost-category-table"
             headers={this.renderTableHeaders(periods, data.claim)}
             footers={this.renderTableFooters(periods, parsed)}
@@ -177,17 +178,17 @@ export class ViewForecastComponent extends ContainerBase<Params, Data, Callbacks
     (
       <tr key="cHeader2" className="govuk-table__row">
         <th className="govuk-table__header">Period</th>
-        {periods.map((p, i) => <th key={i} className="govuk-table__header" style={{textAlign: "right"}}>{"P" + p}</th>)}
+        {periods.map((p, i) => <th key={i} className="govuk-table__header" style={{ textAlign: "right" }}>{"P" + p}</th>)}
         <th className="govuk-table__header" colSpan={3} />
       </tr>
     )];
   }
 
   renderTableFooters(periods: string[], parsed: TableRow[]) {
-    const cells     = [];
-    const totals    = periods.map(p => parsed.reduce((total, item) => total + item.periods[p], 0));
+    const cells = [];
+    const totals = periods.map(p => parsed.reduce((total, item) => total + item.periods[p], 0));
     const costTotal = parsed.reduce((total, item) => total + item.total, 0);
-    const golTotal  = parsed.reduce((total, item) => total + item.golCosts, 0);
+    const golTotal = parsed.reduce((total, item) => total + item.golCosts, 0);
     totals.push(costTotal);
     totals.push(golTotal);
 

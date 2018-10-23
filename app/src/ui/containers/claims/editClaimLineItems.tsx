@@ -106,7 +106,7 @@ export class EditClaimLineItemsComponent extends ContainerBase<Params, Data, Cal
     return (
       <span>
         <ACC.ValidationError error={validation.description} />
-        <ACC.Inputs.TextInput value={item.description} onChange={val => this.updateItem(index, dto => (dto.description = val!))} />
+        <ACC.Inputs.TextInput name="description" value={item.description} onChange={val => this.updateItem(index, dto => (dto.description = val!))} />
       </span>
     );
   }

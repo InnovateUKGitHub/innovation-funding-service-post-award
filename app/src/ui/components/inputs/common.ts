@@ -5,7 +5,7 @@ interface InputState {
 
 interface InputProps<T> {
     value?: T|null;
-    name?: string;
+    name: string;
     disabled?: boolean;
     onChange?: (v: T|null) => void;
     placeholder?: string;

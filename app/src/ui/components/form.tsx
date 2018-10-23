@@ -5,6 +5,7 @@ import { NumberInput } from "./inputs/numberInput";
 import classNames from "classnames";
 import { Result } from "../validation/result";
 import { ValidationError } from "./validationError";
+import { RadioList } from "./inputs";
 
 interface FormProps<T> {
     data: T;
@@ -63,7 +64,7 @@ interface ExternalFieldProps<TDto, TValue> {
     label: React.ReactNode;
     hint?: React.ReactNode;
     name: string;
-    value: (data: TDto) => TValue|null;
+    value: (data: TDto) => TValue|null|undefined;
     update: (data: TDto, value: TValue|null) => void;
     validation?: Result;
 }
@@ -126,6 +127,22 @@ const NumericField = <T extends {}>(props: ExternalFieldProps<T, number>) => {
     );
 };
 
+interface SelectOption {
+    id: string;
+    value: string;
+}
+
+interface RadioFieldProps<T extends {}> extends ExternalFieldProps<T, SelectOption> {
+    options: SelectOption[];
+}
+
+const RadioOptionsField = <T extends {}>(props: RadioFieldProps<T>) => {
+    const TypedFieldComponent = FieldComponent as { new(): FieldComponent<T, SelectOption> };
+    return (
+        <TypedFieldComponent field={(data) => <RadioList options={props.options} name={props.name} value={props.value(data)} onChange={(val) => handleChange(props, val)}/>} {...props} />
+    );
+};
+
 interface SubmitProps {
     qa?: string;
     disabled?: boolean;
@@ -152,6 +169,7 @@ export const TypedForm = <T extends {}>() => ({
     String: StringField as React.SFC<ExternalFieldProps<T, string>>,
     MultilineString: MultiStringField as React.SFC<MultiStringFieldProps<T>>,
     Numeric: NumericField as React.SFC<ExternalFieldProps<T, number>>,
+    Radio: RadioOptionsField as React.SFC<RadioFieldProps<T>>,
     Submit: SubmitComponent,
     Button: ButtonComponent
 });
