@@ -7,6 +7,7 @@ import { processDto } from "../../shared/processResponse";
 export interface IForecastDetailsApi {
   getAllByPartnerId: (partnerId: string, periodId: number) => Promise<ForecastDetailsDTO[]>;
   get: (partnerId: string, periodId: number, costCategoryId: string) => Promise<ForecastDetailsDTO>;
+  update: (partnerId: string, periodId: number, forecasts: ForecastDetailsDTO[]) => Promise<ForecastDetailsDTO[]>;
 }
 
 class Controller extends ControllerBase<ForecastDetailsDTO> implements IForecastDetailsApi {
@@ -16,7 +17,7 @@ class Controller extends ControllerBase<ForecastDetailsDTO> implements IForecast
     this.putItems(
       "/",
       (p, q, b) => ({ partnerId: q.partnerId, periodId: parseInt(q.periodId, 10), forecasts: processDto(b)}),
-      (p) => this.updateForecasts(p.partnerId, p.periodId, p.forecasts)
+      (p) => this.update(p.partnerId, p.periodId, p.forecasts)
     );
 
     this.getItems(
@@ -42,7 +43,7 @@ class Controller extends ControllerBase<ForecastDetailsDTO> implements IForecast
     return await contextProvider.start().runQuery(query);
   }
 
-  public async updateForecasts(partnerId: string, periodId: number, forecasts: ForecastDetailsDTO[]) {
+  public async update(partnerId: string, periodId: number, forecasts: ForecastDetailsDTO[]) {
     const command = new UpdateForecastDetailsCommand(partnerId, periodId, forecasts);
     await contextProvider.start().runCommand(command);
 

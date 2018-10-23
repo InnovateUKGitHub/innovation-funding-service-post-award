@@ -1,6 +1,6 @@
 import { IApiClient } from "../server/apis";
 import { processResponse } from "./processResponse";
-import {ClaimDto, ClaimLineItemDto} from "../ui/models";
+import {ClaimDto, ClaimLineItemDto, ForecastDetailsDTO} from "../ui/models";
 
 const clientApi: IApiClient = {
   claimLineItems: {
@@ -31,6 +31,7 @@ const clientApi: IApiClient = {
   forecastDetails: {
     getAllByPartnerId: (partnerId: string, periodId: number) => ajaxJson(`/api/forecast-details/?partnerId=${partnerId}&periodId=${periodId}`),
     get: (partnerId: string, periodId: number, costCategoryId: string) => ajaxJson(`/api/forecast-details/${partnerId}/${periodId}/${costCategoryId}`),
+    update: (partnerId: string, periodId: number, forecasts: ForecastDetailsDTO[]) => ajaxPut(`/api/forecast-details/?partnerId=${partnerId}&periodId=${periodId}`, forecasts),
   },
   forecastGolCosts: {
     getAllByPartnerId: (partnerId: string) => ajaxJson(`/api/forecast-gol-costs/?partnerId=${partnerId}`)
