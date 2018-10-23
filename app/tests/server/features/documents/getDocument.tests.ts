@@ -2,7 +2,7 @@ import {TestContext} from "../../testContextProvider";
 import {GetDocumentQuery} from "../../../../src/server/features/documents/getDocument";
 
 describe("GetDocumentQuery", () => {
-  it("returns a document", async () => {
+  it("returns a stream", async () => {
     const context = new TestContext();
     const contentVersion = context.testData.createContentVersion("12345", "cat", "jpg");
 
