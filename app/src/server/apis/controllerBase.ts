@@ -3,6 +3,7 @@ import express, {NextFunction, Request, Response} from "express";
 import {ApiError, ErrorCode, StatusCode} from "./ApiError";
 import {ValidationError} from "../../shared/validation";
 import {Results} from "../../ui/validation/results";
+import {Stream} from "stream";
 
 export abstract class ControllerBase<T> {
   public readonly router: Router;
@@ -18,6 +19,11 @@ export abstract class ControllerBase<T> {
 
   protected getItem<TParams>(path: string, getParams: (params: any, query: any) => TParams, run: (params: TParams) => Promise<T | null>) {
     return this.getCustom<TParams, T>(path, getParams, run, false);
+  }
+
+  protected getStream<TParams>(path: string, getParams: (params: any, query: any) => TParams, run: (params: TParams) => Promise<Stream>) {
+    this.router.get(path, this.executeMethod(200, getParams, run, false));
+    return this;
   }
 
   protected putItem<TParams>(path: string, getParams: (params: any, query: any, body: any) => TParams, run: (params: TParams) => Promise<T | null>) {
@@ -64,6 +70,9 @@ export abstract class ControllerBase<T> {
         .then(result => {
           if ((result === null || result === undefined) && allowNulls === false) {
             return resp.status(404).send();
+          }
+          if (result instanceof Stream) {
+            return result.pipe(resp.status(successStatus));
           }
           resp.status(successStatus).send(result);
         })

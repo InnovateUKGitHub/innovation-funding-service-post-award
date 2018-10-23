@@ -2,15 +2,11 @@ import { TestRepository } from "./testRepository";
 import * as Repositories from "../../src/server/repositories";
 import { IRepositories } from "../../src/server/features/common/context";
 import {Updatable} from "../../src/server/repositories/salesforceBase";
-import {instanceOf} from "prop-types";
-import {is} from "tslint-sonarts/lib/utils/nodes";
-import {ISalesforceContentDocumentLink} from "../../src/server/repositories";
-import {ISalesforceContentVersion} from "../../src/server/repositories";
-import {ISalesforceClaimDetails} from "../../src/server/repositories";
+import {Stream} from "stream";
 
 class ContactsTestRepository extends TestRepository<Repositories.ISalesforceContact> implements Repositories.IContactsRepository {
     getById(id: string) {
-        return super.getOne(x => x.Id == id);
+        return super.getOne(x => x.Id === id);
     }
 
     getAll() {
@@ -20,7 +16,7 @@ class ContactsTestRepository extends TestRepository<Repositories.ISalesforceCont
 
 class ProjectsTestRepository extends TestRepository<Repositories.ISalesforceProject> implements Repositories.IProjectRepository {
     getById(id: string) {
-        return super.getOne(x => x.Id == id);
+        return super.getOne(x => x.Id === id);
     }
 
     getAll() {
@@ -88,20 +84,29 @@ class ClaimDetailsTestRepository extends TestRepository<Repositories.ISalesforce
         return super.getWhere(x => x.Acc_ProjectParticipant__c === partnerId);
     }
 
-    get(partnerId: string, periodId: number, costCategoryId: string): Promise<ISalesforceClaimDetails> {
+    get(partnerId: string, periodId: number, costCategoryId: string): Promise<Repositories.ISalesforceClaimDetails> {
       return super.getOne(x => x.Acc_ProjectParticipant__c === partnerId && x.Acc_ProjectPeriodNumber__c === periodId && x.Acc_CostCategory__c === costCategoryId);
     }
 }
 
 class ContentDocumentLinkTestRepository extends TestRepository<Repositories.ISalesforceContentDocumentLink> implements Repositories.IContentDocumentLinkRepository {
-  getAllForEntity(entityId: string): Promise<ISalesforceContentDocumentLink[]> {
+  getAllForEntity(entityId: string): Promise<Repositories.ISalesforceContentDocumentLink[]> {
     return super.getWhere(x => x.LinkedEntityId === entityId);
   }
 }
 
 class ContentVersionTestRepository extends TestRepository<Repositories.ISalesforceContentVersion> implements Repositories.IContentVersionRepository {
-  getDocuments(contentDocumentIds: string[]): Promise<ISalesforceContentVersion[]> {
+  getDocuments(contentDocumentIds: string[]): Promise<Repositories.ISalesforceContentVersion[]> {
     return super.getWhere(x => contentDocumentIds.indexOf(x.ContentDocumentId) !== -1);
+  }
+  getDocument(documentId: string): Promise<Stream> {
+    return super.getOne(x => x.Id === documentId).then(x => {
+      const s = new Stream.Readable();
+      s._read = () => null;
+      s.push(x.Id);
+      s.push(null);
+      return s;
+    });
   }
 }
 

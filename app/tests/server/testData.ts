@@ -266,6 +266,7 @@ export class TestData {
     public createContentVersion(entityId: string, title: string, fileExt: string) {
       const id = ""+this.repositories.contentVersions.Items.length + 1;
       const item = {
+        Id: id,
         ContentDocumentId: id,
         LinkedEntityId: entityId,
         Title: title,
