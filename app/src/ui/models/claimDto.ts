@@ -2,7 +2,7 @@ export interface ClaimDto {
   id: string;
   partnerId: string;
   lastModifiedDate: Date;
-  status: string;
+  status: "New" | "Draft" | "Submitted" | "MO Queried" | "Awaiting IUK Approval" | "Innovate Queried" | "Approved" | "Paid";
   periodStartDate: Date;
   periodEndDate: Date;
   periodId: number;

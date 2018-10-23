@@ -4,7 +4,7 @@ export interface ISalesforceClaim {
   Id: string;
   Acc_ProjectParticipant__c: string;
   LastModifiedDate: string;
-  Acc_ClaimStatus__c: string;
+  Acc_ClaimStatus__c:  "New" | "Draft" | "Submitted" | "MO Queried" | "Awaiting IUK Approval" | "Innovate Queried" | "Approved" | "Paid";
   Acc_ProjectPeriodStartDate__c: string;
   Acc_ProjectPeriodEndDate__c: string;
   Acc_ProjectPeriodNumber__c: number;
