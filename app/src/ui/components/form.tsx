@@ -13,13 +13,26 @@ interface FormProps<T> {
     qa?: string;
 }
 
-const cloneChildrenWithData = <T extends {}>(formProps: FormProps<T>, children: React.ReactNode, parentKey: string) => {
-    return React.Children.map(children, (child, index) => React.cloneElement(child as any, { key: parentKey + "child" + index, data: formProps.data, onChange: formProps.onChange, onSubmit: formProps.onSubmit }));
-};
+interface FormChildProps<T> {
+  key?: string;
+  formData: T;
+  onChange: (data: T) => void;
+  onSubmit: () => void;
+  qa?: string;
+}
 
 class FormComponent<T> extends React.Component<FormProps<T>, []> {
     render() {
-        const childrenWithData = cloneChildrenWithData(this.props, this.props.children, "form");
+        const parentKey = "form";
+        const childProps = (index: number): FormChildProps<T> => ({
+          key: parentKey + "child" + index,
+          formData: this.props.data,
+          onChange: this.props.onChange,
+          onSubmit: this.props.onSubmit
+        });
+
+        const childrenWithData = React.Children.map(this.props.children, (child, index) => React.cloneElement(child as any, childProps(index)));
+
         return (
             <form method="post" action="" onSubmit={(e) => this.onSubmit(e)} data-qa={this.props.qa}>
                 {childrenWithData}
@@ -41,12 +54,21 @@ interface FieldsetProps<T> {
 
 class FieldsetComponent<T> extends React.Component<FieldsetProps<T>, []> {
     render() {
-        const formProps = (this.props as any as FormProps<T>);
-        const childrenWithData = cloneChildrenWithData(formProps, this.props.children, "fieldset");// React.Children.map(this.props.children, child => React.cloneElement(child as any, {data: this.props.data}));
+        const props      = this.props as any as FieldsetProps<T> & FormChildProps<T>;
+        const parentKey  = "fieldset";
+        const childProps = (index: number): FormChildProps<T> => ({
+          key: parentKey + "child" + index,
+          formData: props.formData,
+          onChange: props.onChange,
+          onSubmit: props.onSubmit
+        });
+
+        const childrenWithData = React.Children.map(this.props.children, (child, index) => React.cloneElement(child as any, childProps(index)));
+
         return (
             <fieldset className="govuk-fieldset" data-qa={this.props.qa}>
                 <legend className="govuk-fieldset__legend govuk-fieldset__legend--m">
-                    {this.props.heading ? <h1 className="govuk-fieldset__heading" data-qa={this.props.headingQa}>{this.props.heading(formProps.data)}</h1> : null}
+                    {this.props.heading ? <h1 className="govuk-fieldset__heading" data-qa={this.props.headingQa}>{this.props.heading(props.formData)}</h1> : null}
                 </legend>
                 {childrenWithData}
             </fieldset>
@@ -56,7 +78,7 @@ class FieldsetComponent<T> extends React.Component<FieldsetProps<T>, []> {
 
 interface InternalFieldProps<T> {
     field: (data: T) => React.ReactNode;
-    data?: T;
+    formData?: T;
 }
 
 interface ExternalFieldProps<TDto, TValue> {
@@ -70,13 +92,13 @@ interface ExternalFieldProps<TDto, TValue> {
 
 class FieldComponent<T, TValue> extends React.Component<InternalFieldProps<T> & ExternalFieldProps<T, TValue>, {}> {
     render() {
-        const { hint, name, label, field, data, validation } = this.props;
+        const { hint, name, label, field, formData, validation } = this.props;
         return (
             <div data-qa={`field-${name}`} className={classNames("govuk-form-group", {"govuk-form-group--error": validation && validation.showValidationErrors && !validation.isValid})}>
                 <label className="govuk-label" htmlFor={name}>{label}</label>
                 {hint ? <span id={`${name}-hint`} className="govuk-hint">{hint}</span> : null}
                 <ValidationError error={validation}/>
-                {field(data!)}
+                {field(formData!)}
             </div>
         );
     }
@@ -143,7 +165,6 @@ interface ButtonProps {
 
 const ButtonComponent: React.SFC<ButtonProps> = (props) => {
     return <button type="submit" name="button" value={props.name} className="govuk-button" style={{background:"buttonface", color: "buttontext" }} onClick={(e) => handleOtherButton(props, e)}>{props.children}</button>;
-
 };
 
 export const TypedForm = <T extends {}>() => ({
