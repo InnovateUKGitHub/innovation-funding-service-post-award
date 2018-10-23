@@ -236,7 +236,9 @@ export class TestData {
         partner      = partner || this.createPartner();
         periodId     = periodId || 1;
 
+        const seed = this.repositories.profileDetails.Items.length + 1;
         const newItem: Repositories.ISalesforceProfileDetails = {
+          Id: `ProfileDetailsItem-${seed}`,
           Acc_CostCategory__c: costCategory.Id,
           Acc_ProjectParticipant__c: partner.Id,
           Acc_ProjectPeriodNumber__c: periodId,

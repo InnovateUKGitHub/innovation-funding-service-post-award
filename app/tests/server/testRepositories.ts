@@ -172,6 +172,18 @@ class ProfileDetailsTestRepository extends TestRepository<Repositories.ISalesfor
       .getWhere(x => x.Acc_ProjectParticipant__c === partnerId && x.Acc_ProjectPeriodNumber__c === periodId && x.Acc_CostCategory__c === costCategoryId)
       .then(x => x[0]);
   }
+
+  update(updates: Updatable<Repositories.ISalesforceProfileDetails>[]) {
+    updates.forEach(update => {
+      const item = this.Items.find(x => x.Id === update.Id);
+
+      if(!!item) {
+        Object.assign(item, update);
+      }
+    });
+
+    return Promise.resolve(true);
+  }
 }
 
 class ProfileTotalPeriodTestRepository extends TestRepository<Repositories.ISalesforceProfileTotalPeriod> implements Repositories.IProfileTotalPeriodRepository {
