@@ -22,7 +22,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@types/mime-types": "^2.1.0",
     "body-passer": "^1.0.0",
     "classnames": "^2.2.6",
     "cors": "^2.8.4",
@@ -48,6 +47,7 @@
     "@types/jest": "^23.3.1",
     "@types/jsforce": "^1.8.13",
     "@types/luxon": "^1.2.2",
+    "@types/mime-types": "^2.1.0",
     "@types/react": "^16.4.8",
     "@types/react-dom": "^16.0.7",
     "@types/react-redux": "^6.0.6",
