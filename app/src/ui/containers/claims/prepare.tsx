@@ -8,7 +8,6 @@ import React from "react";
 import { DateTime } from "luxon";
 import { IEditorStore } from "../../redux/reducers/editorsReducer";
 import { ClaimDtoValidator } from "../../validators/claimDtoValidator";
-import { ClaimDetailsSummaryDto, ClaimDto } from "../../models";
 import { ClaimForecastRoute, ClaimsDashboardRoute } from ".";
 import { EditClaimLineItemsRoute } from "./editClaimLineItems";
 import { Result } from "../../validation/result";
@@ -31,9 +30,9 @@ interface Data {
 }
 
 interface Callbacks {
-    onChange: (partnerId: string, periodId: number, dto: ClaimDto, details: ClaimDetailsSummaryDto[], costCategories: Dtos.CostCategoryDto[]) => void;
-    saveAndProgress: (projectId: string, partnerId: string, periodId: number, dto: ClaimDto, details: ClaimDetailsSummaryDto[], costCategories: Dtos.CostCategoryDto[]) => void;
-    saveAndReturn: (projectId: string, partnerId: string, periodId: number, dto: ClaimDto, details: ClaimDetailsSummaryDto[], costCategories: Dtos.CostCategoryDto[]) => void;
+    onChange: (partnerId: string, periodId: number, dto: Dtos.ClaimDto, details: Dtos.ClaimDetailsSummaryDto[], costCategories: Dtos.CostCategoryDto[]) => void;
+    saveAndProgress: (projectId: string, partnerId: string, periodId: number, dto: Dtos.ClaimDto, details: Dtos.ClaimDetailsSummaryDto[], costCategories: Dtos.CostCategoryDto[]) => void;
+    saveAndReturn: (projectId: string, partnerId: string, periodId: number, dto: Dtos.ClaimDto, details: Dtos.ClaimDetailsSummaryDto[], costCategories: Dtos.CostCategoryDto[]) => void;
 }
 
 interface CombinedData {
@@ -69,15 +68,15 @@ export class PrepareComponent extends ContainerBase<Params, Data, Callbacks> {
         return `${data.partner.name} claim for P${data.claim.periodId} ${DateTime.fromJSDate(data.claim.periodStartDate).toFormat("MMMM")} to ${DateTime.fromJSDate(data.claim.periodEndDate).toFormat("MMMM yyyy")}`;
     }
 
-    private saveAndProgress(dto: ClaimDto, details: ClaimDetailsSummaryDto[], costCategories: Dtos.CostCategoryDto[]) {
+    private saveAndProgress(dto: Dtos.ClaimDto, details: Dtos.ClaimDetailsSummaryDto[], costCategories: Dtos.CostCategoryDto[]) {
         this.props.saveAndProgress(this.props.projectId, this.props.partnerId, this.props.periodId, dto, details, costCategories);
     }
 
-    private saveAndReturn(dto: ClaimDto, details: ClaimDetailsSummaryDto[], costCategories: Dtos.CostCategoryDto[]) {
+    private saveAndReturn(dto: Dtos.ClaimDto, details: Dtos.ClaimDetailsSummaryDto[], costCategories: Dtos.CostCategoryDto[]) {
         this.props.saveAndReturn(this.props.projectId, this.props.partnerId, this.props.periodId, dto, details, costCategories);
     }
 
-    private onChange(dto: ClaimDto, details: ClaimDetailsSummaryDto[], costCategories: Dtos.CostCategoryDto[]) {
+    private onChange(dto: Dtos.ClaimDto, details: Dtos.ClaimDetailsSummaryDto[], costCategories: Dtos.CostCategoryDto[]) {
         this.props.onChange(this.props.partnerId, this.props.periodId, dto, details, costCategories);
     }
 

@@ -144,7 +144,7 @@ export class TestData {
             Acc_ProjectPeriodStartDate__c: "2018-01-02",
             Acc_ProjectPeriodEndDate__c: "2018-03-04",
             Acc_ApprovedDate__c: null,
-            Acc_ClaimStatus__c: "New",
+            Acc_ClaimStatus__c: "Draft",
             Acc_LineItemDescription__c: null,
             Acc_ProjectPeriodCost__c : 100,
             Acc_PaidDate__c: null,

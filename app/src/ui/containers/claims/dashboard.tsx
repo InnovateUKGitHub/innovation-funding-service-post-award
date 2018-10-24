@@ -9,7 +9,8 @@ import { DualDetails, Link, Section, SectionPanel, TypedDetails, TypedLoader, Ty
 import { DayAndLongMonth, FullDate, LongYear, ShortDate, ShortMonth } from "../../components/renderers";
 import { PrepareClaimRoute } from "./prepare";
 import { ClaimsDetailsRoute } from "./details";
-import { SimpleString} from "../../components/renderers";
+import { SimpleString } from "../../components/renderers";
+import { ReviewClaimRoute } from "./review";
 
 interface Params {
   projectId: string;
@@ -67,7 +68,7 @@ class Component extends ContainerBase<Params, Data, {}> {
           </SectionPanel>
         </Section>
         <Section qa="current-claim-summary-table-section" title={currentClaimsSectionTitle}>
-          {this.renderClaims(currentClaim ? [currentClaim] : [],"current-claim-summary-table", project.id, true)}
+          {this.renderClaims(currentClaim ? [currentClaim] : [], "current-claim-summary-table", project.id, true)}
         </Section>
         <Section qa="" title="Previous claims">
           {this.renderClaims(previousClaims, "previous-claims-summary-table", project.id, false)}
@@ -77,8 +78,11 @@ class Component extends ContainerBase<Params, Data, {}> {
   }
 
   private getLink(claim: ClaimDto, projectId: string) {
-    if(claim.status === "New" || claim.status === "Draft") {
+    if (claim.status === "New" || claim.status === "Draft") {
       return <Link route={PrepareClaimRoute.getLink({ projectId, partnerId: claim.partnerId, periodId: claim.periodId })}>Edit claim</Link>;
+    }
+    if (claim.status === "Submitted" || claim.status === "MO Queried" || claim.status === "Awaiting IUK Approval") {
+      return <Link route={ReviewClaimRoute.getLink({ projectId, partnerId: claim.partnerId, periodId: claim.periodId })}>Review claim</Link>;
     }
     return <Link route={ClaimsDetailsRoute.getLink({ projectId, partnerId: claim.partnerId, periodId: claim.periodId })}>View claim</Link>;
   }
@@ -101,8 +105,8 @@ class Component extends ContainerBase<Params, Data, {}> {
           qa="period"
           value={(x) => (
             <span>P{x.periodId}<br />
-                <ShortMonth value={x.periodStartDate} /> to <ShortMonth value={x.periodEndDate} /> <LongYear value={x.periodEndDate} />
-              </span>)}
+              <ShortMonth value={x.periodStartDate} /> to <ShortMonth value={x.periodEndDate} /> <LongYear value={x.periodEndDate} />
+            </span>)}
         />
         <ClaimTable.Currency header="Forecast costs for period" qa="forecast-cost" value={(x) => x.forecastCost} />
         <ClaimTable.Currency header="Actual costs for period" qa="actual-cost" value={(x) => x.totalCost} />
@@ -112,12 +116,12 @@ class Component extends ContainerBase<Params, Data, {}> {
           qa="status"
           value={(x) => (
             <span>
-                {x.status}
+              {x.status}
               <br />
-                <ShortDate value={(x.paidDate || x.approvedDate || x.lastModifiedDate)} />
-              </span>)}
+              <ShortDate value={(x.paidDate || x.approvedDate || x.lastModifiedDate)} />
+            </span>)}
         />
-        <ClaimTable.Custom header="" qa="link" value={(x) => this.getLink(x, projectId)}/>
+        <ClaimTable.Custom header="" qa="link" value={(x) => this.getLink(x, projectId)} />
       </ClaimTable.Table>
     );
   }

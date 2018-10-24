@@ -7,6 +7,9 @@ import * as Selectors from "../../redux/selectors";
 import * as Dtos from "../../models";
 import * as ACC from "../../components";
 import {DocumentList} from "../../components";
+import { State } from "router5";
+import { AsyncThunk } from "../../redux/actions";
+import { ReviewClaimRoute } from "./review";
 
 interface Params {
   projectId: string;
@@ -43,15 +46,18 @@ export class ClaimLineItemsComponent extends ContainerBase<Params, Data, {}> {
     return <Loader pending={combined} render={(data) => this.renderContents(data)} />;
   }
 
-  // TODO fix back link
   private renderContents(data: { project: Dtos.ProjectDto, lineItems: Dtos.ClaimLineItemDto[], costCategories: Dtos.CostCategoryDto[], forecastDetail: Dtos.ForecastDetailsDTO }) {
+    const params : Params = {
+      partnerId : this.props.partnerId,
+      costCategoryId: this.props.costCategoryId,
+      periodId : this.props.periodId,
+      projectId: this.props.projectId
+    };
+    const backLink = this.props.route.name === ReviewClaimLineItemsRoute.routeName ? ReviewClaimRoute.getLink(params) : ClaimsDetailsRoute.getLink(params);
     return (
       <ACC.Page>
         <ACC.Section>
-          <ACC.BackLink
-            route={ClaimsDetailsRoute.getLink({ projectId: data.project.id, partnerId: this.props.partnerId, periodId: this.props.periodId })}
-          >Back
-          </ACC.BackLink>
+          <ACC.BackLink route={backLink}>Back</ACC.BackLink>
         </ACC.Section>
         <ACC.Section>
           <ACC.Projects.Title pageTitle={`Claim for ${data.costCategories.find(x => x.id === this.props.costCategoryId)!.name}`} project={data.project} />
@@ -131,21 +137,32 @@ export const ClaimLineItems = definition.connect({
   withCallbacks: () => ({})
 });
 
-export const ClaimLineItemsRoute = definition.route({
-  routeName: "claim-line-items-view",
-  routePath: "/projects/:projectId/claims/:partnerId/details/:periodId/costs/:costCategoryId",
-  getParams: (route) => ({
+const getParams = (route: State) : Params => ({
     projectId: route.params.projectId,
     partnerId: route.params.partnerId,
     costCategoryId: route.params.costCategoryId,
     periodId: parseInt(route.params.periodId, 10)
-  }),
-  getLoadDataActions: (params) => [
-    Actions.loadProject(params.projectId),
-    Actions.loadCostCategories(),
-    Actions.loadForecastDetail(params.partnerId, params.periodId, params.costCategoryId),
-    Actions.loadClaimLineItemsForCategory(params.partnerId, params.costCategoryId, params.periodId),
-    // Actions.loadDocuments(params.projectId)
-  ],
+  });
+
+const getLoadDataActions = (params: Params) : AsyncThunk<any>[] => [
+  Actions.loadProject(params.projectId),
+  Actions.loadCostCategories(),
+  Actions.loadForecastDetail(params.partnerId, params.periodId, params.costCategoryId),
+  Actions.loadClaimLineItemsForCategory(params.partnerId, params.costCategoryId, params.periodId),
+]
+
+export const ClaimLineItemsRoute = definition.route({
+  routeName: "claim-line-items-view",
+  routePath: "/projects/:projectId/claims/:partnerId/details/:periodId/costs/:costCategoryId",
+  getParams: (route) => getParams(route),
+  getLoadDataActions: (params) => getLoadDataActions(params),
+  container: ClaimLineItems
+});
+
+export const ReviewClaimLineItemsRoute = definition.route({
+  routeName: "claim-line-items-review",
+  routePath: "/projects/:projectId/claims/:partnerId/review/:periodId/costs/:costCategoryId",
+  getParams: (route) => getParams(route),
+  getLoadDataActions: (params) => getLoadDataActions(params),
   container: ClaimLineItems
 });
