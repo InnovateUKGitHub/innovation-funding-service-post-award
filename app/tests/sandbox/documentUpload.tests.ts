@@ -3,6 +3,7 @@ import fs from "fs";
 import salesforceConnection from "../../src/server/repositories/salesforceConnection";
 import {ContentDocumentLinkRepository} from "../../src/server/repositories/contentDocumentLinkRepository";
 import {ContentVersionRepository} from "../../src/server/repositories/contentVersionRepository";
+import {GetDocumentQuery} from "../../src/server/features/documents/getDocument";
 
 describe("test", () => {
   it("should", () => {
@@ -65,6 +66,29 @@ describe("test", () => {
 
 describe("test2", () => {
   it("should", () => {
+    new ContentDocumentLinkRepository()
+      .getAllForEntity("a061X000000IubVQAS")
+      .then((linkedDocs) => {
+        return new ContentVersionRepository().getDocuments(linkedDocs.map(x => x.ContentDocumentId));
+      })
+      .then(resp => {
+        console.log(resp);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  });
+});
+
+describe("test3", () => {
+  it("should", () => {
+    new ContentVersionRepository().getDocument('0681X00000099mIQAQ')
+      .then(x => {
+        const fileOut = fs.createWriteStream('./cat2.jpg', {
+          encoding: "base64"
+        });
+        x.pipe(fileOut);
+      });
     new ContentDocumentLinkRepository()
       .getAllForEntity("a061X000000IubVQAS")
       .then((linkedDocs) => {
