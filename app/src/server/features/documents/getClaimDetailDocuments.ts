@@ -1,8 +1,8 @@
 import {IContext, IQuery} from "../common/context";
-import {DocumentDto} from "../../../ui/models";
+import {DocumentSummaryDto} from "../../../ui/models";
 import {GetDocumentsLinkedToRecordQuery} from "./getAllForRecord";
 
-export class GetClaimDetailDocumentsQuery implements IQuery<DocumentDto[]> {
+export class GetClaimDetailDocumentsQuery implements IQuery<DocumentSummaryDto[]> {
   constructor(public partnerId: string, public periodId: number, public costCategoryId: string) {
   }
 

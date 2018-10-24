@@ -12,7 +12,7 @@ describe("GetClaimDetailDocumentsQuery", () => {
     const result = await context.runQuery(query);
     const item = result[0];
 
-    expect(item.title).toBe("cat.jpg");
-    expect(item.link).toBe(`/api/documents/${contentVersion.Id}`);
+    expect(item.fileName).toBe("cat.jpg");
+    expect(item.link).toBe(`/api/documents/${contentVersion.Id}/content`);
   });
 });

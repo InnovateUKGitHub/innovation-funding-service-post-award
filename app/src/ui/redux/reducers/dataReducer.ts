@@ -41,6 +41,7 @@ export const dataStoreReducer = <TData extends {}, TKey>(key: (key: TKey) => str
   return state;
 };
 
+// TODO remove key function
 export const dataReducer = combineReducers({
   claims: dataStoreReducer<Dtos.ClaimDto[], string>(x => x, "claims"),
   claim: dataStoreReducer<Dtos.ClaimDto, string>(x => x, "claim"),
@@ -50,7 +51,7 @@ export const dataReducer = combineReducers({
   contacts: dataStoreReducer<Dtos.IContact[], string>(x => x, "contacts"),
   contact: dataStoreReducer<Dtos.IContact, string>(x => x, "contact"),
   costCategories:dataStoreReducer<Dtos.CostCategoryDto[], string>(x => x, "costCategories"),
-  documents: dataStoreReducer<Dtos.DocumentDto[], string>(x => x, "documents"),
+  documents: dataStoreReducer<Dtos.DocumentSummaryDto[], string>(x => x, "documents"),
   forecastDetails: dataStoreReducer<Dtos.ForecastDetailsDTO[], string>(x => x, "forecastDetails"),
   forecastDetail: dataStoreReducer<Dtos.ForecastDetailsDTO, string>(x => x, "forecastDetail"),
   forecastGolCosts: dataStoreReducer<Dtos.GOLCostDto[], string>(x => x, "forecastGolCosts"),

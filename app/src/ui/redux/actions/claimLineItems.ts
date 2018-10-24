@@ -6,7 +6,6 @@ import {SyncThunk} from "./common";
 import {handleError, updateEditorAction, UpdateEditorAction} from "./editorActions";
 import {ClaimLineItemDtosValidator} from "../../validators/claimLineItemDtosValidator";
 import {LoadingStatus} from "../../../shared/pending";
-import {ErrorCode} from "../../../server/apis/ApiError";
 
 export function loadClaimLineItemsForCategory(partnerId: string, costCategoryId: string, periodId: number) {
   return conditionalLoad(

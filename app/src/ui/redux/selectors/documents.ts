@@ -1,16 +1,14 @@
-import {DocumentDto} from "../../models";
-import {IDataStore, RootState} from "../reducers";
-import {getData} from "./data";
+import {DocumentSummaryDto} from "../../models";
+import {RootState} from "../reducers";
+import {getDataStoreItem} from "./data";
 import {IDataSelector} from "./IDataSelector";
 import {Pending} from "../../../shared/pending";
 
 export const documentStore = "documents";
 
-const getDocumentsCollection = (state: RootState): { [key: string]: IDataStore<DocumentDto[]> } => (getData(state)[documentStore] || {});
-
 // selectors
-export const getDocuments = (entityId: string): IDataSelector<DocumentDto[]> => {
-  const key =  entityId;
-  const get = (state: RootState) => getDocumentsCollection(state)[key];
+export const getClaimDetailDocuments = (partnerId: string, periodId: number, costCategoryId: string): IDataSelector<DocumentSummaryDto[]> => {
+  const key =  `claim_detail_${partnerId}_${periodId}_${costCategoryId}`;
+  const get = (state: RootState) => getDataStoreItem(state, documentStore, key);
   return { key, get, getPending: (state: RootState) => Pending.create(get(state))};
 };

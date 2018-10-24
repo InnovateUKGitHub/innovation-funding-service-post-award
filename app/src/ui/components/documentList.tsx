@@ -7,7 +7,7 @@ interface Props {
 }
 interface Document {
   link: string;
-  title: string;
+  fileName: string;
   qa?: string;
 }
 
@@ -30,7 +30,7 @@ export const DocumentList: React.SFC<Props> = (props) => {
           {
             documents.map((x, i) => (
               <li key={`link-${i}`}>
-                <a href={x.link} className="govuk-link govuk-!-font-size-19" data-qa={x.qa} style={anchorStyle}>{x.title}</a>
+                <a target="_blank" href={x.link} className="govuk-link govuk-!-font-size-19" data-qa={x.qa} style={anchorStyle}>{x.fileName}</a>
                 <span>(opens in a new window)</span>
               </li>
             ))
