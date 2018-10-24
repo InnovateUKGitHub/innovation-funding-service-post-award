@@ -9,7 +9,7 @@ import { RadioList } from "./inputs";
 
 interface FormProps<T> {
     data: T;
-    onChange: (data: T) => void;
+    onChange?: (data: T) => void;
     onSubmit: () => void;
     qa?: string;
 }
@@ -17,16 +17,15 @@ interface FormProps<T> {
 interface FormChildProps<T> {
   key?: string;
   formData: T;
-  onChange: (data: T) => void;
+  onChange?: (data: T) => void;
   onSubmit: () => void;
   qa?: string;
 }
 
 class FormComponent<T> extends React.Component<FormProps<T>, []> {
     render() {
-        const parentKey = "form";
         const childProps = (index: number): FormChildProps<T> => ({
-          key: parentKey + "child" + index,
+          key: "formchild" + index,
           formData: this.props.data,
           onChange: this.props.onChange,
           onSubmit: this.props.onSubmit
@@ -120,7 +119,10 @@ const handleChange = <TDto extends {}, TValue extends {}>(props: ExternalFieldPr
     const formProps = props as any as FormChildProps<TDto>;
     const data = formProps.formData;
     props.update(data, value);
-    formProps.onChange(data);
+
+    if(!!formProps.onChange) {
+      formProps.onChange(data);
+    }
 };
 
 const StringField = <T extends {}>(props: ExternalFieldProps<T, string>) => {
