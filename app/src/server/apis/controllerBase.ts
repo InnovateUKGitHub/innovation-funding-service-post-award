@@ -1,9 +1,10 @@
+import mimeTypes from "mime-types";
 import {Router} from "express-serve-static-core";
 import express, {NextFunction, Request, Response} from "express";
 import {ApiError, ErrorCode, StatusCode} from "./ApiError";
 import {ValidationError} from "../../shared/validation";
 import {Results} from "../../ui/validation/results";
-import {Stream} from "stream";
+import {DocumentDto} from "../../ui/models";
 
 export abstract class ControllerBase<T> {
   public readonly router: Router;
@@ -21,8 +22,8 @@ export abstract class ControllerBase<T> {
     return this.getCustom<TParams, T>(path, getParams, run, false);
   }
 
-  protected getStream<TParams>(path: string, getParams: (params: any, query: any) => TParams, run: (params: TParams) => Promise<Stream>) {
-    this.router.get(path, this.executeMethod(200, getParams, run, false));
+  protected getAttachment<TParams>(path: string, getParams: (params: any, query: any) => TParams, run: (params: TParams) => Promise<DocumentDto>) {
+    this.router.get(path, this.attachmentHandler(200, getParams, run));
     return this;
   }
 
@@ -67,6 +68,12 @@ export abstract class ControllerBase<T> {
     return { status: 500, data: { code: ErrorCode.SERVER_ERROR, details: "An unexpected error has occurred..." } };
   }
 
+  private errorHandler<E extends Error>(err: E, resp: Response) {
+    console.log("Error in controller", err);
+    const {status, data} = this.constructErrorResponse(err);
+    return resp.status(status).json(data);
+  }
+
   private executeMethod<TParams, TResponse>(successStatus: number, getParams: (params: any, query: any, body?: any) => TParams, run: (params: TParams) => Promise<TResponse | null>, allowNulls: boolean) {
     return async (req: Request, resp: Response, next: NextFunction) => {
       const p = getParams(req.params || {}, req.query || {}, req.body || {});
@@ -75,16 +82,29 @@ export abstract class ControllerBase<T> {
           if ((result === null || result === undefined) && allowNulls === false) {
             return resp.status(404).send();
           }
-          if (result instanceof Stream) {
-            return result.pipe(resp.status(successStatus));
-          }
           resp.status(successStatus).send(result);
         })
-        .catch((e: Error) => {
-          console.log("Error in controller", e);
-          const { status, data } = this.constructErrorResponse(e);
-          return resp.status(status).json(data);
-        });
+        .catch((e: Error) => this.errorHandler(e, resp));
+    };
+  }
+
+  private attachmentHandler<TParams, TResponse>(successStatus: number, getParams: (params: any, query: any, body?: any) => TParams, run: (params: TParams) => Promise<DocumentDto>) {
+    return async (req: Request, resp: Response, next: NextFunction) => {
+      const p = getParams(req.params || {}, req.query || {}, req.body || {});
+      run(p)
+        .then(result => {
+          if ((result === null || result === undefined)) {
+            return resp.status(404).send();
+          }
+          const head = {
+            "Content-Length": result.contentLength,
+            "Content-Type": mimeTypes.lookup(result.fileType) || "application/octet-stream",
+            "Content-Disposition": `filename="${result.fileName}"`
+          };
+          resp.writeHead(successStatus, head);
+          return result.stream.pipe(resp);
+        })
+        .catch((e: Error) => this.errorHandler(e, resp));
     };
   }
 }

@@ -6,13 +6,17 @@ export interface ISalesforceContentVersion {
   Title: string;
   FileExtension: string;
   ContentDocumentId: string;
+  ContentSize: number;
+  FileType: string;
 }
 
 export interface IContentVersionRepository {
   getDocuments(contentDocumentIds: string[]): Promise<ISalesforceContentVersion[]>;
+  getDocument(id: string): Promise<ISalesforceContentVersion>;
+  getDocumentData(id: string): Promise<Stream>;
 }
 
-const fieldNames: (keyof ISalesforceContentVersion)[] = [ "Id", "Title", "FileExtension", "ContentDocumentId" ];
+const fieldNames: (keyof ISalesforceContentVersion)[] = [ "Id", "Title", "FileExtension", "ContentDocumentId", "ContentSize", "FileType" ];
 
 export class ContentVersionRepository extends SalesforceBase<ISalesforceContentVersion> implements IContentVersionRepository {
 
@@ -24,7 +28,16 @@ export class ContentVersionRepository extends SalesforceBase<ISalesforceContentV
     return super.whereString(`ContentDocumentId IN ('${contentDocumentIds.join("', '")}') AND IsLatest = true`);
   }
 
-  public getDocument(id: string): Promise<Stream> {
+  public getDocument(id: string): Promise<ISalesforceContentVersion> {
+    return super.retrieve(id).then(x => {
+      if (x === null) {
+        throw Error("Document not found");
+      }
+      return x;
+    });
+  }
+
+  public getDocumentData(id: string): Promise<Stream> {
     return super.getBlob(id, "VersionData");
   }
 }

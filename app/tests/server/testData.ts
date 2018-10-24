@@ -265,14 +265,16 @@ export class TestData {
       return item;
     }
 
-    public createContentVersion(entityId: string, title: string, fileExt: string) {
+    public createContentVersion(entityId: string, title: string, fileType: string) {
       const id = ""+this.repositories.contentVersions.Items.length + 1;
       const item = {
         Id: id,
         ContentDocumentId: id,
         LinkedEntityId: entityId,
         Title: title,
-        FileExtension: fileExt,
+        FileExtension: fileType,
+        ContentSize: 2,
+        FileType: fileType
       };
       this.repositories.contentVersions.Items.push(item);
       return item;

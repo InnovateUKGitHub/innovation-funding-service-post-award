@@ -20,6 +20,7 @@ interface Data {
   lineItems: Pending<Dtos.ClaimLineItemDto[]>;
   costCategories: Pending<Dtos.CostCategoryDto[]>;
   forecastDetail: Pending<Dtos.ForecastDetailsDTO>;
+  documents: Pending<Dtos.DocumentSummaryDto[]>;
 }
 
 interface CombinedData {
@@ -27,6 +28,7 @@ interface CombinedData {
   lineItems: Dtos.ClaimLineItemDto[];
   costCategories: Dtos.CostCategoryDto[];
   forecastDetail: Dtos.ForecastDetailsDTO;
+  documents: Dtos.DocumentSummaryDto[];
 }
 
 export class ClaimLineItemsComponent extends ContainerBase<Params, Data, {}> {
@@ -37,46 +39,35 @@ export class ClaimLineItemsComponent extends ContainerBase<Params, Data, {}> {
       this.props.lineItems,
       this.props.costCategories,
       this.props.forecastDetail,
-      (project, lineItems, costCategories, forecastDetail) => ({ project, lineItems, costCategories, forecastDetail })
+      this.props.documents,
+      (project, lineItems, costCategories, forecastDetail, documents) => ({ project, lineItems, costCategories, forecastDetail, documents })
     );
     const Loader = ACC.TypedLoader<CombinedData>();
     return <Loader pending={combined} render={(data) => this.renderContents(data)} />;
   }
 
-  // TODO fix back link
-  private renderContents(data: { project: Dtos.ProjectDto, lineItems: Dtos.ClaimLineItemDto[], costCategories: Dtos.CostCategoryDto[], forecastDetail: Dtos.ForecastDetailsDTO }) {
+  private renderContents({ project, lineItems, costCategories, forecastDetail, documents }: CombinedData) {
     return (
       <ACC.Page>
         <ACC.Section>
           <ACC.BackLink
-            route={ClaimsDetailsRoute.getLink({ projectId: data.project.id, partnerId: this.props.partnerId, periodId: this.props.periodId })}
+            route={ClaimsDetailsRoute.getLink({ projectId: project.id, partnerId: this.props.partnerId, periodId: this.props.periodId })}
           >Back
           </ACC.BackLink>
         </ACC.Section>
         <ACC.Section>
-          <ACC.Projects.Title pageTitle={`Claim for ${data.costCategories.find(x => x.id === this.props.costCategoryId)!.name}`} project={data.project} />
+          <ACC.Projects.Title pageTitle={`Claim for ${costCategories.find(x => x.id === this.props.costCategoryId)!.name}`} project={project} />
         </ACC.Section>
         <ACC.Section>
-          <ClaimLineItemsTable lineItems={data.lineItems} forecastDetail={data.forecastDetail} />
+          <ClaimLineItemsTable lineItems={lineItems} forecastDetail={forecastDetail} />
         </ACC.Section>
         <ACC.Section>
-          <DocumentList documents={mockDocs} title={"Supporting documents"} qa={"supporting-documents"}/>
+          <DocumentList documents={documents} title={"Supporting documents"} qa={"supporting-documents"}/>
         </ACC.Section>
       </ACC.Page>
     );
   }
 }
-
-const mockDocs = [
-  {
-    title: "Government form 1",
-    link: "https://www.google.com/"
-  },
-  {
-    title: "Really important notes",
-    link: "https://www.bbc.co.uk/"
-  }
-];
 
 const ClaimLineItemsTable: React.SFC<{ lineItems: Dtos.ClaimLineItemDto[], forecastDetail: Dtos.ForecastDetailsDTO }> = ({ lineItems, forecastDetail }) => {
   const LineItemTable = ACC.TypedTable<Dtos.ClaimLineItemDto>();
@@ -126,7 +117,7 @@ export const ClaimLineItems = definition.connect({
     lineItems: Selectors.findClaimLineItemsByPartnerCostCategoryAndPeriod(props.partnerId, props.costCategoryId, props.periodId).getPending(state),
     costCategories: Selectors.getCostCategories().getPending(state),
     forecastDetail: Selectors.getForecastDetail(props.partnerId, props.periodId, props.costCategoryId).getPending(state),
-    // documents: Selectors.getDocuments(props.projectId)
+    documents: Selectors.getClaimDetailDocuments(props.partnerId, props.periodId, props.costCategoryId).getPending(state)
   }),
   withCallbacks: () => ({})
 });
@@ -145,7 +136,7 @@ export const ClaimLineItemsRoute = definition.route({
     Actions.loadCostCategories(),
     Actions.loadForecastDetail(params.partnerId, params.periodId, params.costCategoryId),
     Actions.loadClaimLineItemsForCategory(params.partnerId, params.costCategoryId, params.periodId),
-    // Actions.loadDocuments(params.projectId)
+    Actions.loadClaimDetailDocuments(params.partnerId, params.periodId, params.costCategoryId)
   ],
   container: ClaimLineItems
 });

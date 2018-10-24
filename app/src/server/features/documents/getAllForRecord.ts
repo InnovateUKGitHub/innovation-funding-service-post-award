@@ -1,7 +1,7 @@
 import {IContext, IQuery} from "../common/context";
-import {DocumentDto} from "../../../ui/models";
+import {DocumentSummaryDto} from "../../../ui/models";
 
-export class GetDocumentsLinkedToRecordQuery implements IQuery<DocumentDto[]> {
+export class GetDocumentsLinkedToRecordQuery implements IQuery<DocumentSummaryDto[]> {
   constructor(public recordId: string) {
   }
 
@@ -13,9 +13,9 @@ export class GetDocumentsLinkedToRecordQuery implements IQuery<DocumentDto[]> {
     }
 
     const documents = await context.repositories.contentVersions.getDocuments(linkedDocs.map(x => x.ContentDocumentId));
-    return documents.map<DocumentDto>(doc => ({
-      link: `/api/documents/${doc.Id}`,
-      title: `${doc.Title}.${doc.FileExtension}`
+    return documents.map<DocumentSummaryDto>(doc => ({
+      link: `/api/documents/${doc.Id}/content`,
+      fileName: `${doc.Title}.${doc.FileExtension}`
     }));
   }
 }
