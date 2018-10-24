@@ -6,9 +6,8 @@ import * as Actions from "../../redux/actions";
 import * as Selectors from "../../redux/selectors";
 import * as Dtos from "../../models";
 import * as ACC from "../../components";
-import {DocumentList} from "../../components";
+import { DocumentList } from "../../components";
 import { State } from "router5";
-import { AsyncThunk } from "../../redux/actions";
 import { ReviewClaimRoute } from "./review";
 
 interface Params {
@@ -136,7 +135,7 @@ const getParams = (route: State) : Params => ({
     periodId: parseInt(route.params.periodId, 10)
   });
 
-const getLoadDataActions = (params: Params) : AsyncThunk<any>[] => [
+const getLoadDataActions = (params: Params) : Actions.AsyncThunk<any>[] => [
   Actions.loadProject(params.projectId),
   Actions.loadCostCategories(),
   Actions.loadForecastDetail(params.partnerId, params.periodId, params.costCategoryId),

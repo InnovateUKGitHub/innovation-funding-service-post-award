@@ -10,7 +10,6 @@ import { ClaimDtoValidator } from "../../validators/claimDtoValidator";
 import { DateTime } from "luxon";
 import { Result } from "../../validation/result";
 import { ReviewClaimLineItemsRoute } from "./claimLineItems";
-import { navigateTo } from "../../redux/actions";
 import { ClaimsDashboardRoute, ClaimsDetailsRoute } from ".";
 
 interface Params {
@@ -125,7 +124,7 @@ export const ReviewClaim = definition.connect({
   }),
   withCallbacks: (dispatch) => ({
     onChange: (partnerId, periodId, dto, details, costCategories) => dispatch(Actions.validateClaim(partnerId, periodId, dto, details, costCategories)),
-    onSave: (projectId, partnerId, periodId, dto, details, costCategories) => dispatch(Actions.saveClaim(partnerId, periodId, dto, details, costCategories, () => dispatch(navigateTo(ClaimsDashboardRoute.getLink({partnerId, projectId}))))),
+    onSave: (projectId, partnerId, periodId, dto, details, costCategories) => dispatch(Actions.saveClaim(partnerId, periodId, dto, details, costCategories, () => dispatch(Actions.navigateTo(ClaimsDashboardRoute.getLink({partnerId, projectId}))))),
   })
 });
 
