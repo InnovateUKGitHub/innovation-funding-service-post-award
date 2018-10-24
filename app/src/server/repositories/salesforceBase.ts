@@ -1,5 +1,6 @@
 import salesforceConnection from "./salesforceConnection";
 import {SalesforceId, SuccessResult} from "jsforce";
+import {Stream} from "stream";
 
 export type Updatable<T> = Partial<T> & {
   Id: string
@@ -36,6 +37,13 @@ export default abstract class SalesforceBase<T> {
       .then(x => this.asArray(x));
 
     return result as T[];
+  }
+
+  protected async getBlob(id: string, fieldName: string): Promise<Stream> {
+    const conn = await salesforceConnection();
+    return conn.sobject(this.objectName)
+      .record(id)
+      .blob(fieldName);
   }
 
   protected async whereString(filter: string): Promise<T[]> {
