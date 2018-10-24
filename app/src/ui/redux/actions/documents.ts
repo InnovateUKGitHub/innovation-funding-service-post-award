@@ -1,12 +1,11 @@
 import {conditionalLoad} from "./dataLoad";
 import {ApiClient} from "../../../shared/apiClient";
-import {documentStore, getDocuments} from "../selectors/documents";
+import {documentStore, getClaimDetailDocuments} from "../selectors/documents";
 
-// TODO fix & update this
-// export function loadDocuments(id: string) {
-//   return conditionalLoad(
-//     getDocuments(id).key,
-//     documentStore,
-//     () => ApiClient.documents.getClaimDetailDocuments(id)
-//   );
-// }
+export function loadClaimDetailDocuments(partnerId: string, periodId: number, costCategoryId: string) {
+  return conditionalLoad(
+    getClaimDetailDocuments(partnerId, periodId, costCategoryId).key,
+    documentStore,
+    () => ApiClient.documents.getClaimDetailDocuments(partnerId, periodId, costCategoryId)
+  );
+}

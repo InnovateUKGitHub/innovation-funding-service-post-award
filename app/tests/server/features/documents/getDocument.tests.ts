@@ -8,8 +8,11 @@ describe("GetDocumentQuery", () => {
 
     const query = new GetDocumentQuery(contentVersion.Id);
     const result = await context.runQuery(query);
-    const streamResponse = result;
+    const streamResponse = result.stream;
 
+    expect(result).toBeDefined();
+    expect(result.fileType).toBe("jpg");
+    expect(result.contentLength).toBe(2);
     expect(streamResponse).toBeDefined();
 
     let resp = "";

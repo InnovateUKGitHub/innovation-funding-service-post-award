@@ -3,7 +3,7 @@ import fs from "fs";
 import salesforceConnection from "../../src/server/repositories/salesforceConnection";
 import {ContentDocumentLinkRepository} from "../../src/server/repositories/contentDocumentLinkRepository";
 import {ContentVersionRepository} from "../../src/server/repositories/contentVersionRepository";
-import {GetDocumentQuery} from "../../src/server/features/documents/getDocument";
+import {ClaimDetailsRepository} from "../../src/server/repositories";
 
 describe("test", () => {
   it("should", () => {
@@ -13,7 +13,7 @@ describe("test", () => {
       conn.sobject("ContentVersion")
         .insert({
           ReasonForChange : "First Upload",
-          PathOnClient : "Cat.jpg",
+          PathOnClient : "cat.jpg",
           ContentLocation : "S",
           VersionData: base64data
         })
@@ -25,7 +25,7 @@ describe("test", () => {
             const contentDocumentId = resp.ContentDocumentId;
             conn.sobject("ContentDocumentLink").insert({
               ContentDocumentId: contentDocumentId,
-              LinkedEntityId: "a061X000000IucgQAC",
+              LinkedEntityId: "a061j0000007GwQAAU",
               ShareType: "V"
             }).then((resp) => {
               console.log(resp);
@@ -36,7 +36,7 @@ describe("test", () => {
 
               conn.sobject("ContentDocumentLink")
                 .select('ContentDocumentId')
-                .where("LinkedEntityId = 'a061X000000IucgQAC'")
+                .where("LinkedEntityId = 'a061j0000007GwQAAU'")
                 .execute()
                 .then(resp => {
                   console.log(resp);
@@ -65,7 +65,7 @@ describe("test", () => {
 });
 
 describe("test2", () => {
-  it("should", () => {
+  it("should get documents", () => {
     new ContentDocumentLinkRepository()
       .getAllForEntity("a061X000000IubVQAS")
       .then((linkedDocs) => {
@@ -81,19 +81,21 @@ describe("test2", () => {
 });
 
 describe("test3", () => {
-  it("should", () => {
-    new ContentVersionRepository().getDocument('0681X00000099mIQAQ')
+  it("should write to a file", () => {
+    new ContentVersionRepository().getDocumentData('0681X00000099mIQAQ')
       .then(x => {
-        const fileOut = fs.createWriteStream('./cat2.jpg', {
+        const fileOut = fs.createWriteStream('./sample.pdf', {
           encoding: "base64"
         });
         x.pipe(fileOut);
       });
-    new ContentDocumentLinkRepository()
-      .getAllForEntity("a061X000000IubVQAS")
-      .then((linkedDocs) => {
-        return new ContentVersionRepository().getDocuments(linkedDocs.map(x => x.ContentDocumentId));
-      })
+  });
+});
+
+describe("test6", () => {
+  it("should get claim detail", () => {
+    new ClaimDetailsRepository()
+      .get("a0B1j000000A4UiEAK", 1,"a071j000000Ozk3AAC")
       .then(resp => {
         console.log(resp);
       })

@@ -99,7 +99,10 @@ class ContentVersionTestRepository extends TestRepository<Repositories.ISalesfor
   getDocuments(contentDocumentIds: string[]): Promise<Repositories.ISalesforceContentVersion[]> {
     return super.getWhere(x => contentDocumentIds.indexOf(x.ContentDocumentId) !== -1);
   }
-  getDocument(documentId: string): Promise<Stream> {
+  getDocument(documentId: string): Promise<Repositories.ISalesforceContentVersion> {
+    return super.getOne(x => documentId === x.Id);
+  }
+  getDocumentData(documentId: string): Promise<Stream> {
     return super.getOne(x => x.Id === documentId).then(x => {
       const s = new Stream.Readable();
       s._read = () => null;
