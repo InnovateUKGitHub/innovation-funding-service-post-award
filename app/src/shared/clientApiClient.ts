@@ -26,8 +26,7 @@ const clientApi: IApiClient = {
     getAll: () => ajaxJson("/api/cost-categories"),
   },
   documents: {
-    getClaimDetailDocuments: (partnerId: string, periodId: number, costCategoryId: string) => ajaxJson(`/api/documents/claim-details/${partnerId}/${periodId}/${costCategoryId}`),
-    getDocument: (documentId: string) => ajaxJson(`/api/documents/${documentId}`),
+    getClaimDetailDocuments: (partnerId: string, periodId: number, costCategoryId: string) => ajaxJson(`/api/documents/claim-details/${partnerId}/${periodId}/${costCategoryId}`)
   },
   forecastDetails: {
     getAllByPartnerId: (partnerId: string, periodId: number) => ajaxJson(`/api/forecast-details/?partnerId=${partnerId}&periodId=${periodId}`),

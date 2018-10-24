@@ -6,7 +6,6 @@ import {GetDocumentQuery} from "../features/documents/getDocument";
 
 export interface IDocumentsApi {
   getClaimDetailDocuments: (partnerId: string, periodId: number, costCategoryId: string) => Promise<DocumentSummaryDto[]>;
-  getDocument: (documentId: string) => Promise<DocumentDto>;
 }
 
 class Controller extends ControllerBase<DocumentSummaryDto> implements IDocumentsApi {
@@ -18,7 +17,7 @@ class Controller extends ControllerBase<DocumentSummaryDto> implements IDocument
       (p) => ({ partnerId: p.partnerId, periodId: p.periodId, costCategoryId: p.costCategoryId }),
         p => this.getClaimDetailDocuments(p.partnerId, p.periodId, p.costCategoryId));
 
-    this.getAttachment("/:documentId", (p) => ({ documentId: p.documentId }), p => this.getDocument(p.documentId));
+    this.getAttachment("/:documentId/content", (p) => ({ documentId: p.documentId }), p => this.getDocument(p.documentId));
   }
 
   public async getClaimDetailDocuments(partnerId: string, periodId: number, costCategoryId: string) {
@@ -26,7 +25,7 @@ class Controller extends ControllerBase<DocumentSummaryDto> implements IDocument
     return await contextProvider.start().runQuery(query);
   }
 
-  public async getDocument(documentId: string) {
+  public async getDocument(documentId: string): Promise<DocumentDto> {
     const query = new GetDocumentQuery(documentId);
     return await contextProvider.start().runQuery(query);
   }

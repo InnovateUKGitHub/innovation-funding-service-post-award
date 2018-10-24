@@ -13,6 +13,6 @@ describe("GetClaimDetailDocumentsQuery", () => {
     const item = result[0];
 
     expect(item.fileName).toBe("cat.jpg");
-    expect(item.link).toBe(`/api/documents/${contentVersion.Id}`);
+    expect(item.link).toBe(`/api/documents/${contentVersion.Id}/content`);
   });
 });

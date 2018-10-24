@@ -11,7 +11,7 @@ describe("MapToProjectDtoCommand", () => {
         let expected: ProjectDto = {
             id: "Expected Id",
             competition: "Expected Competition",
-            title: "Expected fileName",
+            title: "Expected title",
             startDate: new Date("2008/12/12"),
             endDate: new Date("2010/12/12"),
             summary: "Expected summary",
