@@ -71,7 +71,7 @@ class ReviewComponent extends ContainerBase<Params, Data, Callbacks> {
     const Form = ACC.TypedForm<Dtos.ClaimDto>();
     const options : ACC.SelectOption[] = [
       {id: "MO Queried", value: "Query claim"},
-      {id: "Awaiting IUK Approval", value: "Submit claim for approval"},
+      {id: "Awaiting IUK Approval", value: "Submit for approval"},
     ];
     const showButton = data.editor.data.status === "MO Queried" || data.editor.data.status === "Awaiting IUK Approval";
 
