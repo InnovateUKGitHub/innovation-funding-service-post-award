@@ -189,7 +189,7 @@ export class ClaimForecastComponent extends ContainerBase<Params, Data, Callback
     return [(
       <tr key="cHeader1" className="govuk-table__row">
         <th className="govuk-table__header" />
-        {previous > 0 ? <th className="govuk-table__header" colSpan={previous}>Previous Costs</th> : null}
+        {previous > 0 ? <th className="govuk-table__header" colSpan={previous}>Previous costs</th> : null}
         {currentClaimPeriod > 1 ? <th className="govuk-table__header">Current claim period costs</th> : null}
         <th className="govuk-table__header" colSpan={periods.length - currentClaimPeriod}>Forecasts</th>
         <th className="govuk-table__header">Forecasts and costs total</th>
