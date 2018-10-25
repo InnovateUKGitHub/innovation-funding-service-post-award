@@ -8,7 +8,7 @@ import * as ACC from "../../components";
 import { PrepareClaimRoute } from ".";
 import { IEditorStore } from "../../redux/reducers/editorsReducer";
 import { ClaimLineItemDtosValidator, ClaimLineItemDtoValidator } from "../../validators/claimLineItemDtosValidator";
-import {DocumentList, LinksList, ValidationMessage} from "../../components";
+import { LinksList, ValidationMessage} from "../../components";
 
 interface Params {
   projectId: string;

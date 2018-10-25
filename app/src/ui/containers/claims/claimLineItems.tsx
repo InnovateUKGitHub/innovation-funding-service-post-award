@@ -6,7 +6,7 @@ import * as Actions from "../../redux/actions";
 import * as Selectors from "../../redux/selectors";
 import * as Dtos from "../../models";
 import * as ACC from "../../components";
-import {DocumentList, LinksList} from "../../components";
+import { LinksList} from "../../components";
 
 interface Params {
   projectId: string;
