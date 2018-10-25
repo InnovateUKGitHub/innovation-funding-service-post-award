@@ -58,16 +58,6 @@ export class EditClaimLineItemsComponent extends ContainerBase<Params, Data, Cal
   ) {
     const back = PrepareClaimRoute.getLink({ projectId: data.project.id, partnerId: this.props.partnerId, periodId: this.props.periodId });
     const costCategory = data.costCategories.find(x => x.id === this.props.costCategoryId)! || {};
-    const mockDocs = [
-      {
-        text: "Sharing or collaborating with government documents.pdf ",
-        url: "http://www.google.com"
-      },
-      {
-        text: "APA Citation Style, 6th edition: Government Publication.pdf",
-        url: "http://www.bbc.com"
-      }
-    ];
     const divTitleStyle = {
      "display": "flex",
       "align-items": "baseline",
@@ -93,7 +83,7 @@ export class EditClaimLineItemsComponent extends ContainerBase<Params, Data, Cal
             <span>(Documents open in a new window)</span>
           </div>
           <ValidationMessage message={"If you are unsure what evidence to provide, speak to your Monitoring Officer. They will use these documents when reviewing your claim.."} messageType={"info"}/>
-          {mockDocs.length > 0 ? <LinksList links={mockDocs}/> : <h2 className="govuk-heading-s govuk-!-margin-bottom-0 govuk-!-margin-right-2">No documents attached</h2> }
+          {mockDocs.length > 0 ? <LinksList links={}/> : <h2 className="govuk-heading-s govuk-!-margin-bottom-0 govuk-!-margin-right-2">No documents attached</h2> }
         </ACC.Section>
       </ACC.Page>
     );
@@ -229,7 +219,8 @@ export const EditClaimLineItems = definition.connect({
       lineItems: lineItemsSelector.getPending(state),
       costCategories: Selectors.getCostCategories().getPending(state),
       forecastDetail: Selectors.getForecastDetail(props.partnerId, props.periodId, props.costCategoryId).getPending(state),
-      editor: getEditor(state.editors.claimLineItems[lineItemsSelector.key], props.partnerId, props.periodId, props.costCategoryId, lineItemsSelector.getPending(state))
+      editor: getEditor(state.editors.claimLineItems[lineItemsSelector.key], props.partnerId, props.periodId, props.costCategoryId, lineItemsSelector.getPending(state)),
+      documents: Selectors.getClaimDetailDocuments(props.partnerId, props.periodId, props.costCategoryId).getPending(state)
     };
   },
   withCallbacks: (dispatch) => ({
@@ -251,7 +242,8 @@ export const EditClaimLineItemsRoute = definition.route({
     Actions.loadProject(params.projectId),
     Actions.loadCostCategories(),
     Actions.loadForecastDetail(params.partnerId, params.periodId, params.costCategoryId),
-    Actions.loadClaimLineItemsForCategory(params.partnerId, params.costCategoryId, params.periodId)
+    Actions.loadClaimLineItemsForCategory(params.partnerId, params.costCategoryId, params.periodId),
+    Actions.loadClaimDetailDocuments(params.partnerId, params.periodId, params.costCategoryId)
   ],
   container: EditClaimLineItems
 });
