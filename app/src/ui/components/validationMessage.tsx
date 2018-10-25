@@ -6,28 +6,34 @@ interface Props {
     messageType: "info" | "error";
 }
 
+interface MessageStyle {
+  validationColour: string;
+  validationSymbol: string;
+  validationText: string;
+}
+
+const getMessageStyle = (messageType: string): MessageStyle => {
+  switch (messageType) {
+    case "info": return {
+      validationColour: "#005EA5",
+      validationSymbol: "i",
+      validationText: "Info",
+    };
+    case "error": return {
+      validationColour: "#B10E1E",
+      validationSymbol: "!",
+      validationText: "Error",
+    };
+    default: throw Error("MessageType not supported");
+  }
+};
+
 export const ValidationMessage: React.SFC<Props> = ({ message, key, messageType }) => {
     if (!message) {
         return null;
     }
 
-    let validationColour = "";
-    let validationSymbol = "";
-    let validationText = "";
-    switch (messageType) {
-      case "info": {
-        validationColour = "#005EA5";
-        validationSymbol = "i";
-        validationText = "Info";
-        break;
-      }
-      case "error": {
-        validationColour = "#B10E1E";
-        validationSymbol = "!";
-        validationText = "Error";
-        break;
-      }
-    }
+    const {validationColour, validationSymbol, validationText} = getMessageStyle(messageType);
 
     const backgroundStyle = {
       padding: "2% 4% 2% 1%",
