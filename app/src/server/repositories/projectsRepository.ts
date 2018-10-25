@@ -1,4 +1,5 @@
 import SalesforceBase from "./salesforceBase";
+import { Connection } from "jsforce";
 
 export interface ISalesforceProject {
     Id: string;
@@ -56,8 +57,8 @@ export interface IProjectRepository {
 }
 
 export class ProjectRepository extends SalesforceBase<ISalesforceProject> implements IProjectRepository {
-    constructor() {
-        super("Acc_Project__c", fields);
+    constructor(connection: () => Promise<Connection>) {
+        super(connection, "Acc_Project__c", fields);
     }
 
     getById(id: string) {

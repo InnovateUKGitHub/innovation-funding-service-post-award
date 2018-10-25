@@ -1,4 +1,5 @@
 import SalesforceBase from "./salesforceBase";
+import { Connection } from "jsforce";
 
 export interface ISalesforceContentDocumentLink {
   ContentDocumentId: string;
@@ -16,8 +17,8 @@ export interface IContentDocumentLinkRepository {
 
 export class ContentDocumentLinkRepository extends SalesforceBase<ISalesforceContentDocumentLink> implements IContentDocumentLinkRepository {
 
-  constructor() {
-    super("ContentDocumentLink", fieldNames);
+  constructor(connection: () => Promise<Connection>) {
+    super(connection, "ContentDocumentLink", fieldNames);
   }
 
   public getAllForEntity(entityId: string): Promise<ISalesforceContentDocumentLink[]> {

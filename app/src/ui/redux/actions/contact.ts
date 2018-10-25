@@ -6,6 +6,6 @@ export function loadContact(id: string) {
   return conditionalLoad(
     getContact(id).key,
     contactStore,
-    () => ApiClient.contacts.get(id)
+    (params) => ApiClient.contacts.get({id, ...params})
   );
 }

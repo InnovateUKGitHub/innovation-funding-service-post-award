@@ -1,5 +1,6 @@
 import SalesforceBase from "./salesforceBase";
-import {Stream} from "stream";
+import { Stream } from "stream";
+import { Connection } from "jsforce";
 
 export interface ISalesforceContentVersion {
   Id: string;
@@ -16,12 +17,12 @@ export interface IContentVersionRepository {
   getDocumentData(id: string): Promise<Stream>;
 }
 
-const fieldNames: (keyof ISalesforceContentVersion)[] = [ "Id", "Title", "FileExtension", "ContentDocumentId", "ContentSize", "FileType" ];
+const fieldNames: (keyof ISalesforceContentVersion)[] = ["Id", "Title", "FileExtension", "ContentDocumentId", "ContentSize", "FileType"];
 
 export class ContentVersionRepository extends SalesforceBase<ISalesforceContentVersion> implements IContentVersionRepository {
 
-  constructor() {
-    super("ContentVersion", fieldNames);
+  constructor(connection: () => Promise<Connection>) {
+    super(connection, "ContentVersion", fieldNames);
   }
 
   public getDocuments(contentDocumentIds: string[]): Promise<ISalesforceContentVersion[]> {

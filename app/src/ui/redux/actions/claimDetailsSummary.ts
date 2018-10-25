@@ -6,6 +6,6 @@ export function loadClaimDetailsSummaryForPartner(partnerId: string, periodId: n
   return conditionalLoad(
     findClaimDetailsSummaryByPartnerAndPeriod(partnerId, periodId).key,
     claimDetailsSummaryStore,
-    () => ApiClient.claimDetailsSummary.getAllByPartnerIdForPeriod(partnerId, periodId)
+    (params) => ApiClient.claimDetailsSummary.getAllByPartnerIdForPeriod({partnerId, periodId, ...params})
   );
 }

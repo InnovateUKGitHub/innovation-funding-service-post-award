@@ -1,4 +1,5 @@
 import SalesforceBase from "./salesforceBase";
+import { Connection } from "jsforce";
 
 export interface ISalesforceRecordType {
   Id: string;
@@ -17,8 +18,8 @@ export interface IRecordTypeRepository {
 }
 
 export class RecordTypeRepository extends SalesforceBase<ISalesforceRecordType> implements IRecordTypeRepository {
-  constructor() {
-    super("RecordType", fieldNames);
+  constructor(connection: () => Promise<Connection>) {
+    super(connection, "RecordType", fieldNames);
   }
 
   getAll(): Promise<ISalesforceRecordType[]> {

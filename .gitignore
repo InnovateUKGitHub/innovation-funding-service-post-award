@@ -4,3 +4,4 @@ dist/
 /**/test-report.json
 /**/test-report.html
 /**/.idea
+bamboo-specs.iml

@@ -6,6 +6,6 @@ export function loadForecastGOLCostsForPartner(partnerId: string) {
   return conditionalLoad(
     findGolCostsByPartner(partnerId).key,
     "forecastGolCosts",
-    () => ApiClient.forecastGolCosts.getAllByPartnerId(partnerId)
+    (params) => ApiClient.forecastGolCosts.getAllByPartnerId({partnerId, ...params})
   );
 }

@@ -6,7 +6,7 @@ export function loadForecastDetailsForPartner(partnerId: string, periodId: numbe
   return conditionalLoad(
     findForecastDetailsByPartner(partnerId, periodId).key,
     "forecastDetails",
-    () => ApiClient.forecastDetails.getAllByPartnerId(partnerId, periodId)
+    (params) => ApiClient.forecastDetails.getAllByPartnerId({partnerId, periodId, ...params})
   );
 }
 
@@ -14,6 +14,6 @@ export function loadForecastDetail(partnerId: string, periodId: number, costCate
   return conditionalLoad(
     getForecastDetail(partnerId, periodId, costCategoryId).key,
     "forecastDetail",
-    () => ApiClient.forecastDetails.get(partnerId, periodId, costCategoryId)
+    (params) => ApiClient.forecastDetails.get({partnerId, periodId, costCategoryId, ...params})
   );
 }

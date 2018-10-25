@@ -1,4 +1,5 @@
 import SalesforceBase from "./salesforceBase";
+import { Connection } from "jsforce";
 
 export interface ISalesforceClaimDetails {
   Id: string;
@@ -32,8 +33,8 @@ export interface IClaimDetailsRepository {
 export class ClaimDetailsRepository extends SalesforceBase<ISalesforceClaimDetails> implements IClaimDetailsRepository {
   private recordType: string = "Claims Detail";
 
-  constructor() {
-    super("Acc_Claims__c", fields);
+  constructor(connection: () => Promise<Connection>) {
+    super(connection, "Acc_Claims__c", fields);
   }
 
   getAllByPartnerForPeriod(partnerId: string, periodId: number): Promise<ISalesforceClaimDetails[]> {

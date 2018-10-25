@@ -12,7 +12,7 @@ export function loadClaim(partnerId: string, periodId: number) {
   return conditionalLoad(
     selector.key,
     selector.store!,
-    () => ApiClient.claims.get(partnerId, periodId)
+    (params) => ApiClient.claims.get({partnerId, periodId, ...params})
   );
 }
 
@@ -30,10 +30,11 @@ export function validateClaim(partnerId: string, periodId: number, dto: ClaimDto
   };
 }
 
-export function saveClaim(partnerId: string, periodId: number, dto: ClaimDto, details: ClaimDetailsSummaryDto[], costCategories: CostCategoryDto[], onComplete: () => void): AsyncThunk<void, DataLoadAction | UpdateEditorAction> {
+export function saveClaim(partnerId: string, periodId: number, claim: ClaimDto, details: ClaimDetailsSummaryDto[], costCategories: CostCategoryDto[], onComplete: () => void): AsyncThunk<void, DataLoadAction | UpdateEditorAction> {
   return (dispatch, getState) => {
+    const state = getState();
     const selector = getClaimEditor(partnerId, periodId);
-    const validation = validateClaim(partnerId, periodId, dto, details, costCategories, true)(dispatch, getState, null);
+    const validation = validateClaim(partnerId, periodId, claim, details, costCategories, true)(dispatch, getState, null);
 
     if (!validation.isValid) {
       return Promise.resolve();
@@ -42,11 +43,11 @@ export function saveClaim(partnerId: string, periodId: number, dto: ClaimDto, de
     // send a loading action with undefined as it will just update the status
     dispatch(dataLoadAction(selector.key, selector.store, LoadingStatus.Loading, undefined));
 
-    return ApiClient.claims.update(partnerId, periodId, dto).then((result) => {
+    return ApiClient.claims.update({partnerId, periodId, claim, user: state.user}).then((result) => {
       dispatch(dataLoadAction(selector.key, selector.store, LoadingStatus.Done, result));
       onComplete();
     }).catch((e) => {
-      dispatch(handleError({ id: selector.key, store: selector.store, dto, validation, error: e }));
+      dispatch(handleError({ id: selector.key, store: selector.store, dto: claim, validation, error: e }));
     });
   };
 }

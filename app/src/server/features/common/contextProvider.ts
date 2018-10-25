@@ -1,8 +1,9 @@
 import { Context, IContext } from "./context";
+import { IUser } from "../../../shared/IUser";
 
 class ContextProvider {
-  start(): IContext {
-    return new Context();
+  start(user: IUser): IContext {
+    return new Context(user);
   }
 }
 

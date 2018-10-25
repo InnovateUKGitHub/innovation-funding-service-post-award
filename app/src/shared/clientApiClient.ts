@@ -4,48 +4,48 @@ import {ClaimDto, ClaimLineItemDto, ForecastDetailsDTO} from "../ui/models";
 
 const clientApi: IApiClient = {
   claimLineItems: {
-    getAllForCategory: (partnerId: string, costCategoryId: string, periodId: number) => ajaxJson(`/api/claim-line-items/?partnerId=${partnerId}&periodId=${periodId}&costCategoryId=${costCategoryId}`),
-    saveLineItems: (partnerId: string, costCategoryId: string, periodId: number, lineItems: ClaimLineItemDto[]) => ajaxPost(`/api/claim-line-items/?partnerId=${partnerId}&periodId=${periodId}&costCategoryId=${costCategoryId}`, lineItems)
+    getAllForCategory: (params) => ajaxJson(`/api/claim-line-items/?partnerId=${params.partnerId}&periodId=${params.periodId}&costCategoryId=${params.costCategoryId}`),
+    saveLineItems: (params) => ajaxPost(`/api/claim-line-items/?partnerId=${params.partnerId}&periodId=${params.periodId}&costCategoryId=${params.costCategoryId}`, params.lineItems)
   },
   claims : {
-    getAllByPartnerId: (partnerId: string) => ajaxJson(`/api/claims/?partnerId=${partnerId}`),
-    get: (partnerId: string, periodId: number) => ajaxJson(`/api/claims/${partnerId}/${periodId}`),
-    update: (partnerId: string, periodId: number, claim: ClaimDto) => ajaxPut(`/api/claims/${partnerId}/${periodId}`, claim)
+    getAllByPartnerId: (params) => ajaxJson(`/api/claims/?partnerId=${params.partnerId}`),
+    get: (params) => ajaxJson(`/api/claims/${params.partnerId}/${params.periodId}`),
+    update: (params) => ajaxPut(`/api/claims/${params.partnerId}/${params.periodId}`, params.claim)
   },
   claimDetailsSummary: {
-    getAllByPartnerIdForPeriod: (partnerId: string, periodId: number) => ajaxJson(`/api/claim-details-summary/${partnerId}/${periodId}`)
+    getAllByPartnerIdForPeriod: (params) => ajaxJson(`/api/claim-details-summary/${params.partnerId}/${params.periodId}`)
   },
   claimDetails: {
-    getAllByPartner: (partnerId: string) => ajaxJson(`/api/claim-details/?partnerId=${partnerId}`)
+    getAllByPartner: (params) => ajaxJson(`/api/claim-details/?partnerId=${params.partnerId}`)
   },
   contacts: {
-    getAll: () => ajaxJson("/api/contacts"),
-    get: (id: string) => ajaxJson(`/api/contact/${id}`),
+    getAll: (params) => ajaxJson("/api/contacts"),
+    get: (params) => ajaxJson(`/api/contact/${params.id}`),
   },
   costCategories: {
-    getAll: () => ajaxJson("/api/cost-categories"),
+    getAll: (params) => ajaxJson("/api/cost-categories"),
   },
   documents: {
-    getClaimDetailDocuments: (partnerId: string, periodId: number, costCategoryId: string) => ajaxJson(`/api/documents/claim-details/${partnerId}/${periodId}/${costCategoryId}`)
+    getClaimDetailDocuments: (params) => ajaxJson(`/api/documents/claim-details/${params.partnerId}/${params.periodId}/${params.costCategoryId}`)
   },
   forecastDetails: {
-    getAllByPartnerId: (partnerId: string, periodId: number) => ajaxJson(`/api/forecast-details/?partnerId=${partnerId}&periodId=${periodId}`),
-    get: (partnerId: string, periodId: number, costCategoryId: string) => ajaxJson(`/api/forecast-details/${partnerId}/${periodId}/${costCategoryId}`),
-    update: (partnerId: string, periodId: number, forecasts: ForecastDetailsDTO[]) => ajaxPut(`/api/forecast-details/?partnerId=${partnerId}&periodId=${periodId}`, forecasts),
+    getAllByPartnerId: (params) => ajaxJson(`/api/forecast-details/?partnerId=${params.partnerId}&periodId=${params.periodId}`),
+    get: (params) => ajaxJson(`/api/forecast-details/${params.partnerId}/${params.periodId}/${params.costCategoryId}`),
+    update: (params) => ajaxPut(`/api/forecast-details/?partnerId=${params.partnerId}&periodId=${params.periodId}`, params.forecasts),
   },
   forecastGolCosts: {
-    getAllByPartnerId: (partnerId: string) => ajaxJson(`/api/forecast-gol-costs/?partnerId=${partnerId}`)
+    getAllByPartnerId: (params) => ajaxJson(`/api/forecast-gol-costs/?partnerId=${params.partnerId}`)
   },
   projects: {
-    get: (id: string) => ajaxJson(`/api/projects/${id}`),
-    getAll: () => ajaxJson("/api/projects"),
+    get: (params) => ajaxJson(`/api/projects/${params.id}`),
+    getAll: (params) => ajaxJson("/api/projects"),
   },
   projectContacts: {
-    getAllByProjectId: (projectId: string) => ajaxJson(`/api/project-contacts?projectId=${projectId}`),
+    getAllByProjectId: (params) => ajaxJson(`/api/project-contacts?projectId=${params.projectId}`),
   },
   partners: {
-    get: (id: string) => ajaxJson(`/api/partners/${id}`),
-    getAllByProjectId: (projectId: string) => ajaxJson(`/api/partners?projectId=${projectId}`),
+    get: (params) => ajaxJson(`/api/partners/${params.id}`),
+    getAllByProjectId: (params) => ajaxJson(`/api/partners?projectId=${params.projectId}`),
   },
 };
 

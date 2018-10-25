@@ -1,4 +1,5 @@
 import SalesforceBase from "./salesforceBase";
+import { Connection } from "jsforce";
 
 export interface ISalesforceContact {
   Id: string;
@@ -18,8 +19,8 @@ export interface IContactsRepository {
 }
 
 export class ContactsRepository extends SalesforceBase<ISalesforceContact> implements IContactsRepository {
-  constructor() {
-    super("Contact", ["Id", "Salutation", "LastName", "FirstName", "Email", "MailingStreet", "MailingCity", "MailingState", "MailingPostalCode"]);
+  constructor(connection: () => Promise<Connection>) {
+    super(connection, "Contact", ["Id", "Salutation", "LastName", "FirstName", "Email", "MailingStreet", "MailingCity", "MailingState", "MailingPostalCode"]);
   }
 
   getById(id: string) {

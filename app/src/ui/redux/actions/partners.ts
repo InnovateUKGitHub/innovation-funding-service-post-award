@@ -6,6 +6,6 @@ export function loadPartnersForProject(projectId: string) {
   return conditionalLoad(
     findPartnersByProject(projectId).key,
     partnersStore,
-    () => ApiClient.partners.getAllByProjectId(projectId)
+    (params) => ApiClient.partners.getAllByProjectId({projectId, ...params})
   );
 }

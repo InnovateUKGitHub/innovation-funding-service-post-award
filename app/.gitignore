@@ -4,6 +4,7 @@ public/
 coverage/
 reports/
 build/
+/.env
 
 test-report.html
 .idea

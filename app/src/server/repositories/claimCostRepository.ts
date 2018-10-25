@@ -1,5 +1,6 @@
 import SalesforceBase from "./salesforceBase";
 import {DateTime} from "luxon";
+import { Connection } from "jsforce";
 
 export interface ISalesforceClaimCost {
   Id: string;
@@ -31,8 +32,9 @@ const fakeCCIds = ["a071X000000HE2cQAG", "a071X000000HE2dQAG", "a071X000000HE2eQ
 
 export class ClaimCostRepository extends SalesforceBase<ISalesforceClaimCost> implements IClaimCostRepository {
 
-  constructor() {
-    super("Acc_Cost__c", fieldNames);
+  constructor(connection: () => Promise<Connection>) {
+    super(connection, "Acc_Cost__c", fieldNames);
+
     this.now = DateTime.fromJSDate(new Date());
     this.start = this.now.minus({days: this.now.day - 1});
     this.end = this.start.plus({days: this.start.daysInMonth - 1});
