@@ -9,9 +9,9 @@ export class ClaimDtoValidator extends Results<ClaimDto>  {
     constructor(dto: ClaimDto, private details: ClaimDetailsSummaryDto[], private costCategories: CostCategoryDto[], showErrors: boolean) {
         super(dto, showErrors);
 
-        const permittedStatus = ["New", "Draft", "Submitted", "MO Queried", "Awaiting IUK Approval"];
+        const permittedStatus = ["Draft", "Submitted", "MO Queried", "Awaiting IUK Approval"];
 
-        this.status = Validation.isTrue(this, !this.model.status || permittedStatus.indexOf(this.model.status) !== -1, `Invalid status '${this.model.status}'`);
+        this.status = Validation.isTrue(this, !this.model.status || permittedStatus.indexOf(this.model.status) !== -1, `Set a valid status`);
     }
 
     public id = Validation.required(this, this.model.id, "Id is required");
