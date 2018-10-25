@@ -8,7 +8,7 @@ import * as ACC from "../../components";
 import { PrepareClaimRoute } from ".";
 import { IEditorStore } from "../../redux/reducers/editorsReducer";
 import { ClaimLineItemDtosValidator, ClaimLineItemDtoValidator } from "../../validators/claimLineItemDtosValidator";
-import {DocumentList, LinksList, ValidationMessage} from "../../components";
+import {DocumentList, ValidationMessage} from "../../components";
 
 interface Params {
   projectId: string;
@@ -61,11 +61,6 @@ export class EditClaimLineItemsComponent extends ContainerBase<Params, Data, Cal
   ) {
     const back = PrepareClaimRoute.getLink({ projectId: project.id, partnerId: this.props.partnerId, periodId: this.props.periodId });
     const costCategory = costCategories.find(x => x.id === this.props.costCategoryId)! || {};
-    const divTitleStyle = {
-     "display": "flex",
-      "align-items": "baseline",
-      "margin-bottom": "60px"
-    };
 
     return (
       <ACC.Page>

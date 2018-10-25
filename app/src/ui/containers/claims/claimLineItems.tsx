@@ -6,7 +6,7 @@ import * as Actions from "../../redux/actions";
 import * as Selectors from "../../redux/selectors";
 import * as Dtos from "../../models";
 import * as ACC from "../../components";
-import {DocumentList, LinksList} from "../../components";
+import { DocumentList } from "../../components";
 import { State } from "router5";
 import { ReviewClaimRoute } from "./review";
 
@@ -49,11 +49,6 @@ export class ClaimLineItemsComponent extends ContainerBase<Params, Data, {}> {
   }
 
   private renderContents({ project, lineItems, costCategories, forecastDetail, documents }: CombinedData) {
-    const divTitleStyle = {
-      "display": "flex",
-      "align-items": "baseline",
-      "margin-bottom": "60px"
-    };
     const params: Params = {
       partnerId : this.props.partnerId,
       costCategoryId: this.props.costCategoryId,
