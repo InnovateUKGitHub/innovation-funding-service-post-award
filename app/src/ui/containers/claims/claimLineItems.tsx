@@ -6,7 +6,7 @@ import * as Actions from "../../redux/actions";
 import * as Selectors from "../../redux/selectors";
 import * as Dtos from "../../models";
 import * as ACC from "../../components";
-import { LinksList} from "../../components";
+import {DocumentList, LinksList} from "../../components";
 import { State } from "router5";
 import { ReviewClaimRoute } from "./review";
 
@@ -49,16 +49,6 @@ export class ClaimLineItemsComponent extends ContainerBase<Params, Data, {}> {
   }
 
   private renderContents({ project, lineItems, costCategories, forecastDetail, documents }: CombinedData) {
-    const mockDocs = [
-      {
-        text: "Sharing or collaborating with government documents.pdf ",
-        url: "http://www.google.com"
-      },
-      {
-        text: "APA Citation Style, 6th edition: Government Publication.pdf",
-        url: "http://www.bbc.com"
-      }
-    ];
     const divTitleStyle = {
       "display": "flex",
       "align-items": "baseline",
@@ -82,12 +72,8 @@ export class ClaimLineItemsComponent extends ContainerBase<Params, Data, {}> {
         <ACC.Section>
           <ClaimLineItemsTable lineItems={lineItems} forecastDetail={forecastDetail} />
         </ACC.Section>
-        <ACC.Section>
-          <div style={divTitleStyle}>
-            <h2 className="govuk-heading-m govuk-!-margin-bottom-0 govuk-!-margin-right-2">Supporting documents</h2>
-            <span>(Documents open in a new window)</span>
-          </div>
-          {mockDocs.length > 0 ? <LinksList links={mockDocs}/> : <h2 className="govuk-heading-s govuk-!-margin-bottom-0 govuk-!-margin-right-2">No documents attached</h2> }
+        <ACC.Section title="Supporting documents" subtitle={documents.length > 0 ? "(Documents open in a new window)" : ""}>
+          {documents.length > 0 ? <DocumentList documents={documents} qa="supporting-documents"/>: <h2 className="govuk-heading-s govuk-!-margin-bottom-0 govuk-!-margin-right-2">No documents attached</h2> }
         </ACC.Section>
       </ACC.Page>
     );

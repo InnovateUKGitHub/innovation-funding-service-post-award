@@ -8,7 +8,7 @@ import * as ACC from "../../components";
 import { PrepareClaimRoute } from ".";
 import { IEditorStore } from "../../redux/reducers/editorsReducer";
 import { ClaimLineItemDtosValidator, ClaimLineItemDtoValidator } from "../../validators/claimLineItemDtosValidator";
-import { LinksList, ValidationMessage} from "../../components";
+import {DocumentList, LinksList, ValidationMessage} from "../../components";
 
 interface Params {
   projectId: string;
@@ -23,6 +23,7 @@ interface Data {
   costCategories: Pending<Dtos.CostCategoryDto[]>;
   editor: IEditorStore<Dtos.ClaimLineItemDto[], ClaimLineItemDtosValidator>;
   forecastDetail: Pending<Dtos.ForecastDetailsDTO>;
+  documents: Pending<Dtos.DocumentSummaryDto[]>;
 }
 
 interface CombinedData {
@@ -30,6 +31,7 @@ interface CombinedData {
   lineItems: Dtos.ClaimLineItemDto[];
   costCategories: Dtos.CostCategoryDto[];
   forecastDetail: Dtos.ForecastDetailsDTO;
+  documents: Dtos.DocumentSummaryDto[];
 }
 
 interface Callbacks {
@@ -45,7 +47,8 @@ export class EditClaimLineItemsComponent extends ContainerBase<Params, Data, Cal
       this.props.lineItems,
       this.props.costCategories,
       this.props.forecastDetail,
-      (project, lineItems, costCategories, forecastDetail) => ({ project, lineItems, costCategories, forecastDetail })
+      this.props.documents,
+      (project, lineItems, costCategories, forecastDetail, documents) => ({ project, lineItems, costCategories, forecastDetail, documents })
     );
     const Loader = ACC.TypedLoader<CombinedData>();
     return <Loader pending={combined} render={(data) => this.renderContents(data, this.props.editor)} />;
@@ -53,11 +56,11 @@ export class EditClaimLineItemsComponent extends ContainerBase<Params, Data, Cal
 
   // TODO fix back link
   private renderContents(
-    data: { project: Dtos.ProjectDto, lineItems: Dtos.ClaimLineItemDto[], costCategories: Dtos.CostCategoryDto[], forecastDetail: Dtos.ForecastDetailsDTO },
+    {project, lineItems, costCategories, documents, forecastDetail}: CombinedData,
     editor: IEditorStore<Dtos.ClaimLineItemDto[], ClaimLineItemDtosValidator>
   ) {
-    const back = PrepareClaimRoute.getLink({ projectId: data.project.id, partnerId: this.props.partnerId, periodId: this.props.periodId });
-    const costCategory = data.costCategories.find(x => x.id === this.props.costCategoryId)! || {};
+    const back = PrepareClaimRoute.getLink({ projectId: project.id, partnerId: this.props.partnerId, periodId: this.props.periodId });
+    const costCategory = costCategories.find(x => x.id === this.props.costCategoryId)! || {};
     const divTitleStyle = {
      "display": "flex",
       "align-items": "baseline",
@@ -71,19 +74,15 @@ export class EditClaimLineItemsComponent extends ContainerBase<Params, Data, Cal
         </ACC.Section>
         <ACC.ValidationSummary validation={this.props.editor && this.props.editor.validator} compressed={false} />
         <ACC.Section>
-          <ACC.Projects.Title pageTitle={`Claim for ${costCategory.name}`} project={data.project} />
+          <ACC.Projects.Title pageTitle={`Claim for ${costCategory.name}`} project={project} />
         </ACC.Section>
         <ACC.Section title="Breakdown of costs">
           <ACC.InsetText text={costCategory.hintText} />
-          {this.renderTable(editor, data.forecastDetail)}
+          {this.renderTable(editor, forecastDetail)}
         </ACC.Section>
-        <ACC.Section>
-          <div style={divTitleStyle}>
-            <h2 className="govuk-heading-m govuk-!-margin-bottom-0 govuk-!-margin-right-2">Supporting documents</h2>
-            <span>(Documents open in a new window)</span>
-          </div>
+        <ACC.Section title="Supporting documents" subtitle={documents.length > 0 ? "(Documents open in a new window)" : ""}>
           <ValidationMessage message={"If you are unsure what evidence to provide, speak to your Monitoring Officer. They will use these documents when reviewing your claim.."} messageType={"info"}/>
-          {mockDocs.length > 0 ? <LinksList links={}/> : <h2 className="govuk-heading-s govuk-!-margin-bottom-0 govuk-!-margin-right-2">No documents attached</h2> }
+          {documents.length > 0 ? <DocumentList documents={documents} qa="supporting-documents" /> : <h2 className="govuk-heading-s govuk-!-margin-bottom-0 govuk-!-margin-right-2">No documents attached</h2> }
         </ACC.Section>
       </ACC.Page>
     );
