@@ -24,14 +24,14 @@ export const DocumentList: React.SFC<Props> = (props) => {
 
   return (
     <div className="govuk-!-padding-3" data-qa={qa} style={style} >
-      {title ? <h2 className="govuk-heading-m govuk-!-margin-bottom-6">{title}</h2> : null}
+      {title ? <h2 className="govuk-heading-m govuk-!-margin-bottom-0">{title}</h2> : null}
+      <span>(Documents open in a new window)</span>
       <div className="govuk-!-padding-bottom-4">
         <ul data-qa={`${qa}-list`}>
           {
             documents.map((x, i) => (
               <li key={`link-${i}`}>
                 <a target="_blank" href={x.link} className="govuk-link govuk-!-font-size-19" data-qa={x.qa} style={anchorStyle}>{x.fileName}</a>
-                <span>(opens in a new window)</span>
               </li>
             ))
           }

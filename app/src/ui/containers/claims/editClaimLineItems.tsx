@@ -8,6 +8,7 @@ import * as ACC from "../../components";
 import { PrepareClaimRoute } from ".";
 import { IEditorStore } from "../../redux/reducers/editorsReducer";
 import { ClaimLineItemDtosValidator, ClaimLineItemDtoValidator } from "../../validators/claimLineItemDtosValidator";
+import {DocumentList, ValidationMessage} from "../../components";
 
 interface Params {
   projectId: string;
@@ -57,6 +58,16 @@ export class EditClaimLineItemsComponent extends ContainerBase<Params, Data, Cal
   ) {
     const back = PrepareClaimRoute.getLink({ projectId: data.project.id, partnerId: this.props.partnerId, periodId: this.props.periodId });
     const costCategory = data.costCategories.find(x => x.id === this.props.costCategoryId)! || {};
+    const mockDocs = [
+      {
+        fileName: "doc 1",
+        link: "http://www.google.com"
+      },
+      {
+        fileName: "doc 2",
+        link: "http://www.bbc.com"
+      }
+    ]
 
     return (
       <ACC.Page>
@@ -70,6 +81,12 @@ export class EditClaimLineItemsComponent extends ContainerBase<Params, Data, Cal
         <ACC.Section title="Breakdown of costs">
           <ACC.InsetText text={costCategory.hintText} />
           {this.renderTable(editor, data.forecastDetail)}
+        </ACC.Section>
+        <ACC.Section>
+          {mockDocs.length > 0 ?
+            <DocumentList documents={mockDocs} title={"Supporting documents"} qa={"supporting-documents"}/> :
+            <ValidationMessage message={"If you are unsure what evidence to provide, speak to your Monitoring Officer. They will use these documents when reviewing your claim.."} messageType={"info"}/>
+          }
         </ACC.Section>
       </ACC.Page>
     );

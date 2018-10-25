@@ -1,22 +1,38 @@
 import React from "react";
-import { Result } from "../validation/result";
 
 interface Props {
-    message: Result;
+    message: string;
     key?: string;
+    messageType: "info" | "error";
 }
 
-export const ValidationMessage: React.SFC<Props> = ({ message, key }) => {
-    if (!message || !message.showValidationErrors || message.isValid) {
+export const ValidationMessage: React.SFC<Props> = ({ message, key, messageType }) => {
+    if (!message) {
         return null;
     }
 
-    const warningColour = "#b10e1e";
+    let validationColour = "";
+    let validationSymbol = "";
+    let validationText = "";
+    switch (messageType) {
+      case "info": {
+        validationColour = "#005EA5";
+        validationSymbol = "i";
+        validationText = "Info";
+        break;
+      }
+      case "error": {
+        validationColour = "#B10E1E";
+        validationSymbol = "!";
+        validationText = "Error";
+        break;
+      }
+    }
 
     const backgroundStyle = {
         padding: "2% 4% 2% 1%",
         background: "rgb(248, 248, 248, 1)",
-        borderLeft: `5px solid ${warningColour}`,
+        borderLeft: `5px solid ${validationColour}`,
     };
 
     const textStyle = {
@@ -24,16 +40,16 @@ export const ValidationMessage: React.SFC<Props> = ({ message, key }) => {
     };
 
     const iconStyle = {
-        background: warningColour,
-        border: warningColour,
+        background: validationColour,
+        border: validationColour,
     };
 
     return (
         <div className="govuk-warning-text-background" style={backgroundStyle}>
             <div className="govuk-warning-text" key={key} style={textStyle}>
-                <span className="govuk-warning-text__icon" aria-hidden="true" style={iconStyle} >!</span>
+                <span className="govuk-warning-text__icon" aria-hidden="true" style={iconStyle} >{validationSymbol}</span>
                 <strong className="govuk-warning-text__text">
-                    <span className="govuk-warning-text__assistive">Warning</span> {message.errorMessage}
+                  <span className="govuk-warning-text__assistive">{validationText}</span>{message}
                 </strong>
             </div>
         </div>
