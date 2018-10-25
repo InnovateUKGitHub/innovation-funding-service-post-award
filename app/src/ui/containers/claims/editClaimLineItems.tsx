@@ -8,7 +8,7 @@ import * as ACC from "../../components";
 import { PrepareClaimRoute } from ".";
 import { IEditorStore } from "../../redux/reducers/editorsReducer";
 import { ClaimLineItemDtosValidator, ClaimLineItemDtoValidator } from "../../validators/claimLineItemDtosValidator";
-import {DocumentList, ValidationMessage} from "../../components";
+import {DocumentList, LinksList, ValidationMessage} from "../../components";
 
 interface Params {
   projectId: string;
@@ -60,14 +60,19 @@ export class EditClaimLineItemsComponent extends ContainerBase<Params, Data, Cal
     const costCategory = data.costCategories.find(x => x.id === this.props.costCategoryId)! || {};
     const mockDocs = [
       {
-        fileName: "doc 1",
-        link: "http://www.google.com"
+        text: "Sharing or collaborating with government documents.pdf ",
+        url: "http://www.google.com"
       },
       {
-        fileName: "doc 2",
-        link: "http://www.bbc.com"
+        text: "APA Citation Style, 6th edition: Government Publication.pdf",
+        url: "http://www.bbc.com"
       }
-    ]
+    ];
+    const divTitleStyle = {
+     "display": "flex",
+      "align-items": "baseline",
+      "margin-bottom": "60px"
+    };
 
     return (
       <ACC.Page>
@@ -83,10 +88,12 @@ export class EditClaimLineItemsComponent extends ContainerBase<Params, Data, Cal
           {this.renderTable(editor, data.forecastDetail)}
         </ACC.Section>
         <ACC.Section>
-          {mockDocs.length > 0 ?
-            <DocumentList documents={mockDocs} title={"Supporting documents"} qa={"supporting-documents"}/> :
-            <ValidationMessage message={"If you are unsure what evidence to provide, speak to your Monitoring Officer. They will use these documents when reviewing your claim.."} messageType={"info"}/>
-          }
+          <div style={divTitleStyle}>
+            <h2 className="govuk-heading-m govuk-!-margin-bottom-0 govuk-!-margin-right-2">Supporting documents</h2>
+            <span>(Documents open in a new window)</span>
+          </div>
+          <ValidationMessage message={"If you are unsure what evidence to provide, speak to your Monitoring Officer. They will use these documents when reviewing your claim.."} messageType={"info"}/>
+          {mockDocs.length > 0 ? <LinksList links={mockDocs}/> : <h2 className="govuk-heading-s govuk-!-margin-bottom-0 govuk-!-margin-right-2">No documents attached</h2> }
         </ACC.Section>
       </ACC.Page>
     );
