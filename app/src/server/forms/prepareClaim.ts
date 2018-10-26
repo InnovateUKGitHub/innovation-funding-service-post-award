@@ -21,7 +21,7 @@ const PrepareClaimForm = async (req: express.Request, res: express.Response) => 
     const params = { projectId: req.params.projectId, partnerId: req.params.partnerId, periodId: parseInt(req.params.periodId, 10) };
     const body = { comments: req.body.comments, button: req.body.button };
 
-    const context = contextProvider.start(req.session!.user);
+    const context = contextProvider.start({user: req.session!.user});
 
     const claim = await context.runQuery(new GetClaim(params.partnerId, params.periodId));
     if (claim === null) {
@@ -59,7 +59,7 @@ const ForcastClaimForm = async (req: express.Request, res: express.Response) => 
     const params = { projectId: req.params.projectId, partnerId: req.params.partnerId, periodId: parseInt(req.params.periodId, 10) };
     const body = {};
 
-    const context = contextProvider.start(req.session!.user);
+    const context = contextProvider.start({user: req.session!.user});
 
     const claim = await context.runQuery(new GetClaim(params.partnerId, params.periodId));
     if (claim === null) {
