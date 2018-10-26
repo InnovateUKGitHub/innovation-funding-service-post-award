@@ -12,14 +12,14 @@ export class ForecastDetailsDtosValidator extends Results<ForecastDetailsDTO[]> 
     private forecasts: ForecastDetailsDTO[],
     private claimDetails: ClaimDetailsDto[],
     private golCosts: GOLCostDto[],
-    private costCategories: CostCategoryDto[]
+    private costCategories: CostCategoryDto[],
+    private showErrors: boolean
   ) {
-    super(forecasts, true);
+    super(forecasts, showErrors);
 
-    const costCategoryIds = costCategories.filter(x => x.organistionType === "Industrial").map(x => x.id);
-    const totalGolCosts   = golCosts.reduce(totalReducer, 0);
-    const totalClaimCosts = claimDetails.filter(x => costCategoryIds.indexOf(x.costCategoryId) !== -1 && x.periodId < periodId)
-      .reduce(totalReducer, 0);
+    const costCategoryIds    = costCategories.filter(x => x.organistionType === "Industrial").map(x => x.id);
+    const totalGolCosts      = golCosts.reduce(totalReducer, 0);
+    const totalClaimCosts    = claimDetails.filter(x => costCategoryIds.indexOf(x.costCategoryId) !== -1 && x.periodId < periodId).reduce(totalReducer, 0);
     const totalForecastCosts = forecasts.filter(x => x.periodId >= periodId).reduce(totalReducer, 0);
 
     this.totalCosts = Validation.isTrue(this, totalForecastCosts + totalClaimCosts <= totalGolCosts, "You can not submit a claim if your forecasts and costs total is higher than your grant offer letter costs. You will be contacted by your Monitoring Officer if this is not amended.");

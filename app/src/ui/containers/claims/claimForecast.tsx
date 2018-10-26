@@ -6,12 +6,11 @@ import * as Selectors from "../../redux/selectors";
 import {Pending} from "../../../shared/pending";
 import {ContainerBase, ReduxContainer} from "../containerBase";
 import {IEditorStore} from "../../redux/reducers/editorsReducer";
-import {ClaimDtoValidator} from "../../validators/claimDtoValidator";
 import {ClaimsDashboardRoute} from "./dashboard";
 import {Currency, DateRange, Percentage} from "../../components/renderers";
-import {ClaimDetailsDto, ClaimDto, ForecastDetailsDTO} from "../../models";
 import { Interval } from "luxon";
 import { PrepareClaimRoute } from "./prepare";
+import { ForecastDetailsDtosValidator } from "../../validators/forecastDetailsDtosValidator";
 
 interface Params {
   projectId: string;
@@ -27,7 +26,7 @@ interface Data {
   forecastDetails: Pending<Dtos.ForecastDetailsDTO[]>;
   golCosts: Pending<Dtos.GOLCostDto[]>;
   costCategories: Pending<Dtos.CostCategoryDto[]>;
-  editor: Pending<IEditorStore<Dtos.ClaimDto, ClaimDtoValidator>>;
+  editor: Pending<IEditorStore<Dtos.ForecastDetailsDTO[], ForecastDetailsDtosValidator>>;
 }
 
 interface CombinedData {
@@ -38,20 +37,27 @@ interface CombinedData {
   forecastDetails: Dtos.ForecastDetailsDTO[];
   golCosts: Dtos.GOLCostDto[];
   costCategories: Dtos.CostCategoryDto[];
-  editor: IEditorStore<Dtos.ClaimDto, ClaimDtoValidator>;
+  editor: IEditorStore<Dtos.ForecastDetailsDTO[], ForecastDetailsDtosValidator>;
 }
 
 interface Callbacks {
-  saveAndReturn: (projectId: string, partnerId: string, periodId: number, dto: ClaimDto) => void;
-  onChange: (partnerId: string, periodId: number, dto: ClaimDto) => void;
+  saveAndReturn: (updateClaim: boolean, projectId: string, partnerId: string, periodId: number, data: CombinedData) => void;
+  onChange: (partnerId: string, periodId: number, data: CombinedData) => void;
 }
 
 interface TableRow {
+  categoryId: string;
   categoryName: string;
-  periods: { [k: string]: number };
+  claims: { [k: string]: number };
+  forecasts: { [k: string]: number };
   golCosts: number;
   total: number;
   difference: number;
+}
+
+interface Index {
+  column: number;
+  row: number;
 }
 
 export class ClaimForecastComponent extends ContainerBase<Params, Data, Callbacks> {
@@ -72,12 +78,12 @@ export class ClaimForecastComponent extends ContainerBase<Params, Data, Callback
     return <Loader pending={combined} render={data => this.renderContents(data)} />;
   }
 
-  private onChange(dto: ClaimDto) {
-    this.props.onChange(this.props.partnerId, this.props.periodId, dto);
+  private saveAndReturn(data: CombinedData) {
+    this.props.saveAndReturn(false, this.props.projectId, this.props.partnerId, this.props.periodId, data);
   }
 
-  private saveAndReturn(dto: ClaimDto) {
-    this.props.saveAndReturn(this.props.projectId, this.props.partnerId, this.props.periodId, dto);
+  private submitClaim(data: CombinedData) {
+    this.props.saveAndReturn(true, this.props.projectId, this.props.partnerId, this.props.periodId, data);
   }
 
   private parseClaimData(data: CombinedData) {
@@ -86,27 +92,25 @@ export class ClaimForecastComponent extends ContainerBase<Params, Data, Callback
     data.costCategories.filter(x => x.organistionType === "Industrial").forEach(category => {
       const currentPeriod = data.claim.periodId;
       const row: TableRow = {
+        categoryId: category.id,
         categoryName: category.name,
-        periods: {},
+        claims: {},
+        forecasts: {},
         golCosts: 0,
         total: 0,
         difference: 0
       };
 
-      for(let i = data.claim.periodId - 1; i > 0; i--) {
-        row.periods[i] = 0;
-      }
-
       data.claimDetails.forEach(x => {
         if(x.costCategoryId === category.id && x.periodId < currentPeriod) {
-          row.periods[x.periodId] = x.value;
+          row.claims[x.periodId] = x.value;
           row.total += x.value;
         }
       });
 
-      data.forecastDetails.forEach(x => {
+      data.editor.data.forEach(x => {
         if(x.costCategoryId === category.id && x.periodId >= currentPeriod) {
-          row.periods[x.periodId] = x.value;
+          row.forecasts[x.periodId] = x.value;
           row.total += x.value;
         }
       });
@@ -132,7 +136,7 @@ export class ClaimForecastComponent extends ContainerBase<Params, Data, Callback
     return periods;
   }
 
-  renderDateRange(details: ClaimDetailsDto | ForecastDetailsDTO) {
+  renderDateRange(details: Dtos.ClaimDetailsDto | Dtos.ForecastDetailsDTO) {
     return DateRange({ start: details.periodStart, end: details.periodEnd });
   }
 
@@ -149,18 +153,25 @@ export class ClaimForecastComponent extends ContainerBase<Params, Data, Callback
   public renderContents(data: CombinedData) {
     const parsed    = this.parseClaimData(data);
     const Table     = ACC.TypedTable<typeof parsed[0]>();
-    const Form      = ACC.TypedForm<Dtos.ClaimDto>();
+    const Form      = ACC.TypedForm<Dtos.ForecastDetailsDTO[]>();
     const intervals = this.calculateClaimPeriods(data);
-    const periods   = Object.keys(parsed[0].periods);
+    const claims    = Object.keys(parsed[0].claims);
+    const forecasts = Object.keys(parsed[0].forecasts);
+    const periods   = claims.concat(forecasts);
 
     return (
       <ACC.Page>
         <ACC.Section>
           <ACC.BackLink route={PrepareClaimRoute.getLink({ projectId: this.props.projectId, partnerId: this.props.partnerId, periodId: this.props.periodId })}>Back</ACC.BackLink>
         </ACC.Section>
+        <ACC.ValidationSummary validation={data.editor.validator} compressed={false} />
         <ACC.Projects.Title pageTitle="Claim" project={data.project} />
-        <ACC.Section>
-          <Form.Form data={data.editor.data} qa={"claim-forecast-form"} onChange={(dto) => this.onChange(dto)} onSubmit={() => this.saveAndReturn(data.editor.data)}>
+        <ACC.Section title={"Update forecasts table for " + data.partner.name}>
+          <Form.Form
+            data={data.editor.data}
+            qa={"claim-forecast-form"}
+            onSubmit={() => this.submitClaim(data)}
+          >
             <Table.Table
               data={parsed}
               qa="cost-category-table"
@@ -168,13 +179,22 @@ export class ClaimForecastComponent extends ContainerBase<Params, Data, Callback
               footers={this.renderTableFooters(periods, parsed)}
             >
               <Table.String header="Month" value={x => x.categoryName} qa="category-name" />
-              {periods.map(p => <Table.Currency key={p} header={intervals[p]} value={x => x.periods[p]} qa="category-period" />)}
+
+              {claims.map(p => <Table.Currency key={p} header={intervals[p]} value={x => x.claims[p]} qa="category-claim" />)}
+              {forecasts.map(p => <Table.Custom key={p} header={intervals[p]} value={(x, i) => this.renderForecastCell(x, p, i, data)} qa="category-forecast" />)}
+
               <Table.Currency header="" value={x => x.total} qa="category-total" />
               <Table.Currency header="" value={x => x.golCosts} qa="category-gol-costs" />
               <Table.Percentage header="" value={x => x.difference} qa="category-difference" />
             </Table.Table>
             <Form.Fieldset>
               <Form.Submit>Submit claim and forecast changes</Form.Submit>
+              <ACC.Renderers.SimpleString>Changes last saved:
+                <ACC.Renderers.ShortDateTime value={data.claim.forecastLastModified} />
+              </ACC.Renderers.SimpleString>
+            </Form.Fieldset>
+            <Form.Fieldset>
+              <Form.Button name="save" onClick={() => this.saveAndReturn(data)}>Save and return to claim</Form.Button>
             </Form.Fieldset>
           </Form.Form>
         </ACC.Section>
@@ -182,7 +202,30 @@ export class ClaimForecastComponent extends ContainerBase<Params, Data, Callback
     );
   }
 
-  renderTableHeaders(periods: string[], claim: ClaimDto) {
+  renderForecastCell(forecastRow: TableRow, period: string, index: Index, data: CombinedData) {
+    return (
+      <span>
+        <ACC.ValidationError error={data.editor.validator.items.results[index.row].id} />
+        <ACC.Inputs.NumberInput
+          name={"value" + index.row + index.column}
+          value={forecastRow.forecasts[period]}
+          onChange={val => this.updateItem(data, forecastRow.categoryId, period, dto => dto.value = val!)}
+        />
+      </span>
+    );
+  }
+
+  updateItem(data: CombinedData, categoryId: string, period: string, update: (item: Dtos.ForecastDetailsDTO) => void) {
+    const item = data.editor.data.find(x => x.costCategoryId === categoryId && x.periodId === parseInt(period, 10));
+
+    if(!!item) {
+      update(item);
+    }
+
+    this.props.onChange(this.props.partnerId, this.props.periodId, data);
+  }
+
+  renderTableHeaders(periods: string[], claim: Dtos.ClaimDto) {
     const currentClaimPeriod = claim.periodId - 1;
     const previous = currentClaimPeriod - 1;
 
@@ -190,7 +233,7 @@ export class ClaimForecastComponent extends ContainerBase<Params, Data, Callback
       <tr key="cHeader1" className="govuk-table__row">
         <th className="govuk-table__header" />
         {previous > 0 ? <th className="govuk-table__header" colSpan={previous}>Previous costs</th> : null}
-        {currentClaimPeriod > 1 ? <th className="govuk-table__header">Current claim period costs</th> : null}
+        {currentClaimPeriod > 0 ? <th className="govuk-table__header">Current claim period costs</th> : null}
         <th className="govuk-table__header" colSpan={periods.length - currentClaimPeriod}>Forecasts</th>
         <th className="govuk-table__header">Forecasts and costs total</th>
         <th className="govuk-table__header">Grant offer letter costs</th>
@@ -207,10 +250,15 @@ export class ClaimForecastComponent extends ContainerBase<Params, Data, Callback
   }
 
   renderTableFooters(periods: string[], parsed: TableRow[]) {
-    const cells     = [];
-    const totals    = periods.map(p => parsed.reduce((total, item) => total + item.periods[p], 0));
-    const costTotal = parsed.reduce((total, item) => total + item.total, 0);
-    const golTotal  = parsed.reduce((total, item) => total + item.golCosts, 0);
+    const cells          = [];
+    const costTotal      = parsed.reduce((total, item) => total + item.total, 0);
+    const golTotal       = parsed.reduce((total, item) => total + item.golCosts, 0);
+    const totals = periods.map(p => parsed.reduce((total, item) => {
+      const claim = item.claims[p];
+      const value = isNaN(claim) ? item.forecasts[p] : claim;
+      return total + value;
+    }, 0));
+
     totals.push(costTotal);
     totals.push(golTotal);
 
@@ -227,8 +275,18 @@ export class ClaimForecastComponent extends ContainerBase<Params, Data, Callback
     </td>
   )
 }
-const goBack = (dispatch: any, projectId: string, partnerId: string) => {
+
+const updateRedirect = (updateClaim: boolean, dispatch: any, projectId: string, partnerId: string, periodId: number) => {
+  const redirect = updateClaim ? redirectSave : goBack;
+  redirect(dispatch, projectId, partnerId, periodId);
+};
+
+const redirectSave = (dispatch: any, projectId: string, partnerId: string) => {
   dispatch(Actions.navigateTo(ClaimsDashboardRoute.getLink({projectId, partnerId})));
+};
+
+const goBack = (dispatch: any, projectId: string, partnerId: string, periodId: number) => {
+  dispatch(Actions.navigateTo(PrepareClaimRoute.getLink({projectId, partnerId, periodId})));
 };
 
 const definition = ReduxContainer.for<Params, Data, Callbacks>(ClaimForecastComponent);
@@ -244,12 +302,12 @@ export const ForecastClaim = definition.connect({
       forecastDetails: Selectors.findForecastDetailsByPartner(props.partnerId, props.periodId).getPending(state),
       golCosts: Selectors.findGolCostsByPartner(props.partnerId).getPending(state),
       costCategories: Selectors.getCostCategories().getPending(state),
-      editor: Selectors.getClaimEditor(props.partnerId, props.periodId).get(state, x => {x.status = "Submitted";})
+      editor: Selectors.getForecastDetailsEditor(props.partnerId, props.periodId).get(state)
     };
   },
   withCallbacks: (dispatch) => ({
-    onChange: (partnerId, periodId, dto) => dispatch(Actions.validateClaim(partnerId, periodId, dto, [], [])),
-    saveAndReturn: (projectId, partnerId, periodId, dto) => dispatch(Actions.saveClaim(partnerId, periodId, dto, [], [], () => goBack(dispatch, projectId, partnerId)))
+    onChange: (partnerId, periodId, data) => dispatch(Actions.validateForecastDetails(partnerId, periodId, data.editor.data, data.claimDetails, data.golCosts, data.costCategories)),
+    saveAndReturn: (updateClaim, projectId, partnerId, periodId, data) => dispatch(Actions.saveForecastDetails(updateClaim, partnerId, periodId, data.editor.data, data.claimDetails, data.golCosts, data.costCategories, () => updateRedirect(updateClaim, dispatch, projectId, partnerId, periodId)))
   })
 });
 

@@ -31,7 +31,7 @@ const clientApi: IApiClient = {
   forecastDetails: {
     getAllByPartnerId: (partnerId: string, periodId: number) => ajaxJson(`/api/forecast-details/?partnerId=${partnerId}&periodId=${periodId}`),
     get: (partnerId: string, periodId: number, costCategoryId: string) => ajaxJson(`/api/forecast-details/${partnerId}/${periodId}/${costCategoryId}`),
-    update: (partnerId: string, periodId: number, forecasts: ForecastDetailsDTO[]) => ajaxPut(`/api/forecast-details/?partnerId=${partnerId}&periodId=${periodId}`, forecasts),
+    update: (partnerId: string, periodId: number, forecasts: ForecastDetailsDTO[], submit: boolean) => ajaxPut(`/api/forecast-details/?partnerId=${partnerId}&periodId=${periodId}&submit=${submit}`, forecasts),
   },
   forecastGolCosts: {
     getAllByPartnerId: (partnerId: string) => ajaxJson(`/api/forecast-gol-costs/?partnerId=${partnerId}`)
