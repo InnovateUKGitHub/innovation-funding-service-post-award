@@ -85,7 +85,7 @@ export class PrepareComponent extends ContainerBase<Params, Data, Callbacks> {
         const Form = ACC.TypedForm<Dtos.ClaimDto>();
         const commentsLabel = "Additional information (optional)";
         const commentsHint = "These comments will be seen by your Monitoring Officer when they review your claim.";
-        const validationResult = new Result(null, true, false, data.editor.error.details || data.editor.error, false);
+        const validationResult = data.editor.error && new Result(null, true, false, data.editor.error.details || data.editor.error, false);
         return (
             <ACC.Page>
                 <ACC.Section>

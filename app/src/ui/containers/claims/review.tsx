@@ -74,7 +74,7 @@ class ReviewComponent extends ContainerBase<Params, Data, Callbacks> {
     ];
     const showButton = data.editor.data.status === "MO Queried" || data.editor.data.status === "Awaiting IUK Approval";
 
-    const validationResult = new Result(null, true, false, data.editor.error.details || data.editor.error, false);
+    const validationResult = data.editor.error && new Result(null, true, false, data.editor.error.details || data.editor.error, false);
 
     return (
       <ACC.Page>
