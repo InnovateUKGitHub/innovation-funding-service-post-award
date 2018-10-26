@@ -74,8 +74,6 @@ class ReviewComponent extends ContainerBase<Params, Data, Callbacks> {
     ];
     const showButton = data.editor.data.status === "MO Queried" || data.editor.data.status === "Awaiting IUK Approval";
 
-    const validationResult = data.editor.error && new Result(null, true, false, data.editor.error.details || data.editor.error, false);
-
     return (
       <ACC.Page>
         <ACC.Section>
@@ -86,7 +84,7 @@ class ReviewComponent extends ContainerBase<Params, Data, Callbacks> {
         <ACC.Claims.Navigation projectId={data.project.id} partnerId={data.partner.id} periodId={data.claim.periodId} currentRouteName={ClaimsDetailsRoute.routeName} />
         <ACC.Section title={title}>
           {/* TODO: Fix error display */}
-          {data.editor.error ? <ACC.ValidationMessage messageType="error" message={validationResult.errorMessage!} /> : null}
+          {data.editor.error ? <ACC.ValidationMessage messageType="error" message={data.editor.error.details || data.editor.error} /> : null}
           <ACC.Claims.ClaimTable {...data} validation={data.editor.validator.claimDetails.results} getLink={costCategoryId => ReviewClaimLineItemsRoute.getLink({ partnerId: this.props.partnerId, projectId: this.props.projectId, periodId: this.props.periodId, costCategoryId })} />
           <Form.Form data={data.editor.data} onSubmit={() => this.props.onSave(this.props.projectId, this.props.partnerId, this.props.periodId, data.editor.data, data.claimDetails, data.costCategories)} onChange={(dto) => this.props.onChange(this.props.partnerId, this.props.periodId, dto, data.claimDetails, data.costCategories)}>
             <Form.Fieldset heading={() => "How do you want to proceed with this claim?"}>
