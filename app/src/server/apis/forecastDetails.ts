@@ -1,13 +1,13 @@
-import { ControllerBase, ISession } from "./controllerBase";
+import { ControllerBase, ApiParams } from "./controllerBase";
 import { ForecastDetailsDTO } from "../../ui/models";
 import contextProvider from "../features/common/contextProvider";
 import {GetAllForecastsForPartnerQuery, GetForecastDetail, UpdateForecastDetailsCommand} from "../features/forecastDetails";
 import { processDto } from "../../shared/processResponse";
 
 export interface IForecastDetailsApi {
-  getAllByPartnerId: (params: {partnerId: string, periodId: number} & ISession) => Promise<ForecastDetailsDTO[]>;
-  get: (params: {partnerId: string, periodId: number, costCategoryId: string} & ISession) => Promise<ForecastDetailsDTO>;
-  update: (params: {partnerId: string, periodId: number, forecasts: ForecastDetailsDTO[]} & ISession) => Promise<ForecastDetailsDTO[]>;
+  getAllByPartnerId: (params: ApiParams<{partnerId: string, periodId: number}>) => Promise<ForecastDetailsDTO[]>;
+  get: (params: ApiParams<{partnerId: string, periodId: number, costCategoryId: string}>) => Promise<ForecastDetailsDTO>;
+  update: (params: ApiParams<{partnerId: string, periodId: number, forecasts: ForecastDetailsDTO[]}>) => Promise<ForecastDetailsDTO[]>;
 }
 
 class Controller extends ControllerBase<ForecastDetailsDTO> implements IForecastDetailsApi {
@@ -33,19 +33,19 @@ class Controller extends ControllerBase<ForecastDetailsDTO> implements IForecast
     );
   }
 
-  public async getAllByPartnerId(params: {partnerId: string, periodId: number} & ISession) {
+  public async getAllByPartnerId(params: ApiParams<{partnerId: string, periodId: number}>) {
     const {partnerId, periodId, user} = params;
     const query = new GetAllForecastsForPartnerQuery(partnerId, periodId);
     return await contextProvider.start(user).runQuery(query);
   }
 
-  public async get(params: {partnerId: string, periodId: number, costCategoryId: string} & ISession) {
+  public async get(params: ApiParams<{partnerId: string, periodId: number, costCategoryId: string}>) {
     const {partnerId, periodId, costCategoryId, user} = params;
     const query = new GetForecastDetail(partnerId, periodId, costCategoryId);
     return await contextProvider.start(user).runQuery(query);
   }
 
-  public async update(params: {partnerId: string, periodId: number, forecasts: ForecastDetailsDTO[]} & ISession) {
+  public async update(params: ApiParams<{partnerId: string, periodId: number, forecasts: ForecastDetailsDTO[]}>) {
     const {partnerId, periodId, forecasts, user} = params
     const command = new UpdateForecastDetailsCommand(partnerId, periodId, forecasts);
     await contextProvider.start(user).runCommand(command);

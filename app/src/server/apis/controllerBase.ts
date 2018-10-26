@@ -14,6 +14,9 @@ export interface ISession {
   user: IUser;
 }
 
+export type ApiParams<T> = T & ISession;
+
+
 export abstract class ControllerBase<T> {
   public readonly router: Router;
 
@@ -21,48 +24,48 @@ export abstract class ControllerBase<T> {
     this.router = express.Router();
   }
 
-  protected getCustom<TParams, TResponse>(path: string, getParams: (params: any, query: any) => TParams, run: (params: TParams & ISession) => Promise<TResponse | null>, allowNulls?: boolean) {
+  protected getCustom<TParams, TResponse>(path: string, getParams: (params: any, query: any) => TParams, run: (params: ApiParams<TParams>) => Promise<TResponse | null>, allowNulls?: boolean) {
     this.router.get(path, this.executeMethod(200, getParams, run, allowNulls || false));
     return this;
   }
 
-  protected getItem<TParams>(path: string, getParams: (params: any, query: any) => TParams, run: (params: TParams & ISession) => Promise<T | null>) {
+  protected getItem<TParams>(path: string, getParams: (params: any, query: any) => TParams, run: (params: ApiParams<TParams>) => Promise<T | null>) {
     return this.getCustom<TParams, T>(path, getParams, run, false);
   }
 
-  protected getAttachment<TParams>(path: string, getParams: (params: any, query: any) => TParams, run: (params: TParams & ISession) => Promise<DocumentDto>) {
+  protected getAttachment<TParams>(path: string, getParams: (params: any, query: any) => TParams, run: (params: ApiParams<TParams>) => Promise<DocumentDto>) {
     this.router.get(path, this.attachmentHandler(200, getParams, run));
     return this;
   }
 
-  protected putItem<TParams>(path: string, getParams: (params: any, query: any, body: any) => TParams, run: (params: TParams & ISession) => Promise<T | null>) {
+  protected putItem<TParams>(path: string, getParams: (params: any, query: any, body: any) => TParams, run: (params: ApiParams<TParams>) => Promise<T | null>) {
     return this.putCustom<TParams, T | null>(path, getParams, run);
   }
 
-  protected putItems<TParams>(path: string, getParams: (params: any, query: any, body: any) => TParams, run: (params: TParams & ISession) => Promise<T[]>) {
+  protected putItems<TParams>(path: string, getParams: (params: any, query: any, body: any) => TParams, run: (params: ApiParams<TParams>) => Promise<T[]>) {
     return this.putCustom<TParams, T[]>(path, getParams, run);
   }
 
 
-  protected postItems<TParams>(path: string, getParams: (params: any, query: any, body: any) => TParams, run: (params: TParams & ISession) => Promise<T[]>) {
+  protected postItems<TParams>(path: string, getParams: (params: any, query: any, body: any) => TParams, run: (params: ApiParams<TParams>) => Promise<T[]>) {
     return this.postCustom<TParams, T[]>(path, 201, getParams, run);
   }
 
-  protected getItems<TParams>(path: string, getParams: (params: any, query: any) => TParams, run: (params: TParams & ISession) => Promise<T[]>) {
+  protected getItems<TParams>(path: string, getParams: (params: any, query: any) => TParams, run: (params: ApiParams<TParams>) => Promise<T[]>) {
     return this.getCustom<TParams, T[]>(path, getParams, run, false);
   }
 
-  protected putCustom<TParams, TResponse>(path: string, getParams: (params: any, query: any, body?: any) => TParams, run: (params: TParams & ISession) => Promise<TResponse>) {
+  protected putCustom<TParams, TResponse>(path: string, getParams: (params: any, query: any, body?: any) => TParams, run: (params: ApiParams<TParams>) => Promise<TResponse>) {
     this.router.put(path, this.executeMethod(200, getParams, run, false));
     return this;
   }
 
-  protected postCustom<TParams, TResponse>(path: string, successStatus: number, getParams: (params: any, query: any, body?: any) => TParams, run: (params: TParams & ISession) => Promise<TResponse>) {
+  protected postCustom<TParams, TResponse>(path: string, successStatus: number, getParams: (params: any, query: any, body?: any) => TParams, run: (params: ApiParams<TParams>) => Promise<TResponse>) {
     this.router.post(path, this.executeMethod(successStatus || 201, getParams, run, false));
     return this;
   }
 
-  protected getEmpty<TParams>(path: string, getParams: (params: any, query: any) => TParams, run: (params: TParams & ISession) => Promise<void>) {
+  protected getEmpty<TParams>(path: string, getParams: (params: any, query: any) => TParams, run: (params: ApiParams<TParams>) => Promise<void>) {
     this.router.get(path, this.executeMethod<TParams, void>(204, getParams, run, true));
     return this;
   }
@@ -83,7 +86,7 @@ export abstract class ControllerBase<T> {
     return resp.status(status).json(data);
   }
 
-  private executeMethod<TParams, TResponse>(successStatus: number, getParams: (params: any, query: any, body?: any) => TParams, run: (params: TParams & ISession) => Promise<TResponse | null>, allowNulls: boolean) {
+  private executeMethod<TParams, TResponse>(successStatus: number, getParams: (params: any, query: any, body?: any) => TParams, run: (params: ApiParams<TParams>) => Promise<TResponse | null>, allowNulls: boolean) {
     return async (req: Request, resp: Response, next: NextFunction) => {
 
       const p = Object.assign({user: req.session!.user as IUser}, getParams(req.params || {}, req.query || {}, req.body || {}));
@@ -98,7 +101,7 @@ export abstract class ControllerBase<T> {
     };
   }
 
-  private attachmentHandler<TParams, TResponse>(successStatus: number, getParams: (params: any, query: any, body?: any) => TParams, run: (params: TParams & ISession) => Promise<DocumentDto>) {
+  private attachmentHandler<TParams, TResponse>(successStatus: number, getParams: (params: any, query: any, body?: any) => TParams, run: (params: ApiParams<TParams>) => Promise<DocumentDto>) {
     return async (req: Request, resp: Response, next: NextFunction) => {
       const p = Object.assign({user: req.session!.user as IUser}, getParams(req.params || {}, req.query || {}, req.body || {}));
       run(p)

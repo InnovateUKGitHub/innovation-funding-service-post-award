@@ -3,11 +3,11 @@ import contextProvider from "../features/common/contextProvider";
 import { GetAllQuery } from "../features/contacts/getAllQuery";
 import { GetByIdQuery } from "../features/contacts/getByIdQuery";
 import { IContact } from "../../ui/models";
-import { ControllerBase, ISession } from "./controllerBase";
+import { ControllerBase, ApiParams } from "./controllerBase";
 
 export interface IContactsApi {
-  get: (params: {id: string} & ISession) => Promise<IContact|null>;
-  getAll: (params: ISession) => Promise<IContact[]>;
+  get: (params: ApiParams<{ id: string }>) => Promise<IContact | null>;
+  getAll: (params: ApiParams<{}>) => Promise<IContact[]>;
 }
 
 class Controller extends ControllerBase<IContact> implements IContactsApi {
@@ -15,16 +15,16 @@ class Controller extends ControllerBase<IContact> implements IContactsApi {
   constructor() {
     super("contacts");
 
-    this.getItems("/", p => ({}),  (p) => this.getAll(p));
-    this.getItem("/:id", p => ({ id: p.id }),  (p) => this.get(p));
+    this.getItems("/", p => ({}), (p) => this.getAll(p));
+    this.getItem("/:id", p => ({ id: p.id }), (p) => this.get(p));
   }
 
-  public async getAll(params: ISession) {
+  public async getAll(params: ApiParams<{}>) {
     const query = new GetAllQuery();
     return await contextProvider.start(params.user).runQuery(query);
   }
 
-  public async get(params: {id: string} & ISession) {
+  public async get(params: ApiParams<{ id: string }>) {
     const query = new GetByIdQuery(params.id);
     return await contextProvider.start(params.user).runQuery(query);
   }

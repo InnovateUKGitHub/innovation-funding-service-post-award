@@ -1,4 +1,4 @@
-import {ControllerBase, ISession} from "./controllerBase";
+import {ControllerBase, ApiParams} from "./controllerBase";
 import {ClaimDto} from "../../ui/models/claimDto";
 import contextProvider from "../features/common/contextProvider";
 import {GetAllForPartnerQuery, GetClaim} from "../features/claims";
@@ -7,9 +7,9 @@ import {ApiError, StatusCode} from "./ApiError";
 import {processDto} from "../../shared/processResponse";
 
 export interface IClaimsApi {
-  getAllByPartnerId: (params: {partnerId: string} & ISession) => Promise<ClaimDto[]>;
-  get: (params: {partnerId: string, periodId: number} & ISession) => Promise<ClaimDto|null>;
-  update: (params: {partnerId: string, periodId: number, claim: ClaimDto} & ISession) => Promise<ClaimDto>;
+  getAllByPartnerId: (params: ApiParams<{partnerId: string}>) => Promise<ClaimDto[]>;
+  get: (params: ApiParams<{partnerId: string, periodId: number}>) => Promise<ClaimDto|null>;
+  update: (params: ApiParams<{partnerId: string, periodId: number, claim: ClaimDto}>) => Promise<ClaimDto>;
 }
 
 class Controller extends ControllerBase<ClaimDto> implements IClaimsApi {
@@ -22,18 +22,18 @@ class Controller extends ControllerBase<ClaimDto> implements IClaimsApi {
     this.putItem("/:partnerId/:periodId", (p, q, b) => ({partnerId: p.partnerId as string, periodId: parseInt(p.periodId, 10), claim: processDto(b)}),  (p) => this.update(p));
   }
 
-  public async getAllByPartnerId(params: {partnerId: string} & ISession) {
+  public async getAllByPartnerId(params: ApiParams<{partnerId: string}>) {
     const query = new GetAllForPartnerQuery(params.partnerId);
     return await contextProvider.start(params.user).runQuery(query);
   }
 
-  public async get(params: {partnerId: string, periodId: number} & ISession) {
+  public async get(params: ApiParams<{partnerId: string, periodId: number}>) {
     const {partnerId, periodId, user} = params;
     const query = new GetClaim(partnerId, periodId);
     return await contextProvider.start(user).runQuery(query);
   }
 
-  public async update(params: {partnerId: string, periodId: number, claim: ClaimDto} & ISession) {
+  public async update(params: ApiParams<{partnerId: string, periodId: number, claim: ClaimDto}>) {
     const {partnerId, periodId, claim, user} = params;
 
     if (partnerId !== claim.partnerId || periodId !== claim.periodId) {

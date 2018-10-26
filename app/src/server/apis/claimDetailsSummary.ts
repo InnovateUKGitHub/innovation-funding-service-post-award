@@ -1,10 +1,10 @@
-import {ControllerBase, ISession} from "./controllerBase";
-import {ClaimDetailsSummaryDto} from "../../ui/models/claimDetailsSummaryDto";
+import { ControllerBase, ApiParams } from "./controllerBase";
+import { ClaimDetailsSummaryDto } from "../../ui/models/claimDetailsSummaryDto";
 import contextProvider from "../features/common/contextProvider";
-import {GetClaimDetailsSummaryForPartnerQuery} from "../features/claims/claimDetails/getClaimDetailsSummaryForPartnerQuery";
+import { GetClaimDetailsSummaryForPartnerQuery } from "../features/claims/claimDetails/getClaimDetailsSummaryForPartnerQuery";
 
 export interface IClaimDetailsSummaryApi {
-  getAllByPartnerIdForPeriod: (params: {partnerId: string, periodId: number} & ISession) => Promise<ClaimDetailsSummaryDto[]>;
+  getAllByPartnerIdForPeriod: (params: ApiParams<{ partnerId: string, periodId: number }>) => Promise<ClaimDetailsSummaryDto[]>;
 }
 
 class Controller extends ControllerBase<ClaimDetailsSummaryDto> implements IClaimDetailsSummaryApi {
@@ -14,10 +14,10 @@ class Controller extends ControllerBase<ClaimDetailsSummaryDto> implements IClai
     this.getItems("/:partnerId/:periodId", (p, q) => ({
       partnerId: p.partnerId,
       periodId: parseInt(p.periodId, 10)
-    }),  (p) => this.getAllByPartnerIdForPeriod(p));
+    }), (p) => this.getAllByPartnerIdForPeriod(p));
   }
 
-  public async getAllByPartnerIdForPeriod(params: {partnerId: string, periodId: number} & ISession) {
+  public async getAllByPartnerIdForPeriod(params: ApiParams<{ partnerId: string, periodId: number }>) {
     const query = new GetClaimDetailsSummaryForPartnerQuery(params.partnerId, params.periodId);
     return await contextProvider.start(params.user).runQuery(query);
   }
