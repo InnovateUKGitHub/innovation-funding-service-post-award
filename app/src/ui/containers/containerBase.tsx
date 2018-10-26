@@ -2,18 +2,18 @@
 import React from "react";
 import { ThunkDispatch } from "redux-thunk";
 import { connect as reduxConnect } from "react-redux";
-import { State } from "router5";
+import { State as RouteState } from "router5";
 import { RootState } from "../redux/reducers/rootReducer";
 import { RootActions } from "../redux/actions/root";
 import { matchRoute } from "../routing/matchRoute";
 import { AsyncThunk } from "../redux/actions";
 
 export interface ContainerBaseClass<TParams, TData, TCallbacks> {
-    new(props: TParams & TData & TCallbacks, context?: any): ContainerBase<TParams, TData, TCallbacks>;
+    new(props: TParams & TData & TCallbacks & {route: RouteState}, context?: any): ContainerBase<TParams, TData, TCallbacks>;
 }
 
-export abstract class ContainerBase<TParams = {}, TData = {}, TCallbacks = {}> extends React.Component<TParams & TData & TCallbacks, {}> {
-    constructor(props: TParams & TData & TCallbacks) {
+export abstract class ContainerBase<TParams = {}, TData = {}, TCallbacks = {}> extends React.Component<TParams & TData & TCallbacks & {route: RouteState}, {}> {
+    constructor(props: TParams & TData & TCallbacks & {route: RouteState}) {
         super(props);
     }
 }
@@ -25,11 +25,11 @@ class ConnectWrapper<TParams, TData, TCallbacks> {
         private withCallbacks: (dispatch: (action: AsyncThunk<any>) => void) => TCallbacks
     ) { }
 
-    private mapStateToProps(state: RootState): TData & TParams {
+    private mapStateToProps(state: RootState): TData & TParams & {route: RouteState} {
         const route = matchRoute(state.router.route);
         const params = (route.getParams && route.getParams(state.router.route!) || {}) as TParams;
         const data = this.withData(state, params);
-        return Object.assign(params, data);
+        return Object.assign(data, params, {route: state.router.route!});
     }
 
     private mapDispachToProps(dispatch: ThunkDispatch<RootState, void, RootActions>) {
@@ -37,7 +37,7 @@ class ConnectWrapper<TParams, TData, TCallbacks> {
     }
 
     public connect() {
-        return reduxConnect<TData & TParams, {}, TCallbacks, RootState>((state) => this.mapStateToProps(state), (dispatch) => this.mapDispachToProps(dispatch))(this.component);
+        return reduxConnect<TData, TCallbacks, {route: RouteState} & TParams, RootState>((state) => this.mapStateToProps(state), (dispatch) => this.mapDispachToProps(dispatch))(this.component);
     }
 }
 
@@ -48,9 +48,9 @@ class ReduxContainerWrapper<TParams, TData, TCallbacks> {
     public route(options: {
         routeName: string,
         routePath: string,
-        getParams: (route: State) => TParams,
+        getParams: (route: RouteState) => TParams,
         getLoadDataActions: (params: TParams) => AsyncThunk<any>[],
-        container: React.ComponentClass<any> & { WrappedComponent: React.ComponentType<TParams & TData & TCallbacks> }
+        container: React.ComponentClass<any> & { WrappedComponent: React.ComponentType<TParams & TData & TCallbacks & {route: RouteState}> }
     }) {
         return {
              getLink: (params: TParams): ILinkInfo => ({ routeName: options.routeName, routeParams: params}),

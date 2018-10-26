@@ -32,7 +32,7 @@ class FormComponent<T> extends React.Component<FormProps<T>, []> {
           onSubmit: this.props.onSubmit
         });
 
-        const childrenWithData = React.Children.map(this.props.children, (child, index) => React.cloneElement(child as any, childProps(index)));
+        const childrenWithData = React.Children.map(this.props.children, (child, index) => child && React.cloneElement(child as any, childProps(index)));
 
         return (
             <form method="post" action="" onSubmit={(e) => this.onSubmit(e)} data-qa={this.props.qa}>
@@ -64,7 +64,7 @@ class FieldsetComponent<T> extends React.Component<FieldsetProps<T>, []> {
           onSubmit: props.onSubmit
         });
 
-        const childrenWithData = React.Children.map(this.props.children, (child, index) => React.cloneElement(child as any, childProps(index)));
+        const childrenWithData = React.Children.map(this.props.children, (child, index) => child && React.cloneElement(child as any, childProps(index)));
 
         return (
             <fieldset className="govuk-fieldset" data-qa={this.props.qa}>
@@ -117,8 +117,8 @@ const handleOtherButton = <TDto extends {}>(props: ButtonProps, e: React.Synthet
 };
 
 const handleChange = <TDto extends {}, TValue extends {}>(props: ExternalFieldProps<TDto, TValue>, value: TValue|null) => {
-    const formProps = props as any as FormProps<TDto>;
-    const data = formProps.data;
+    const formProps = props as any as FormChildProps<TDto>;
+    const data = formProps.formData;
     props.update(data, value);
     formProps.onChange(data);
 };
@@ -149,7 +149,7 @@ const NumericField = <T extends {}>(props: ExternalFieldProps<T, number>) => {
     );
 };
 
-interface SelectOption {
+export interface SelectOption {
     id: string;
     value: string;
 }
