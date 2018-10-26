@@ -1,13 +1,13 @@
-import { ControllerBase, ISession } from "./controllerBase";
+import { ControllerBase, ApiParams } from "./controllerBase";
 import { ForecastDetailsDTO } from "../../ui/models";
 import contextProvider from "../features/common/contextProvider";
-import {GetAllForecastsForPartnerQuery, GetForecastDetail, UpdateForecastDetailsCommand} from "../features/forecastDetails";
+import { GetAllForecastsForPartnerQuery, GetForecastDetail, UpdateForecastDetailsCommand } from "../features/forecastDetails";
 import { processDto } from "../../shared/processResponse";
 
 export interface IForecastDetailsApi {
-  getAllByPartnerId: (params: {partnerId: string, periodId: number} & ISession) => Promise<ForecastDetailsDTO[]>;
-  get: (params: {partnerId: string, periodId: number, costCategoryId: string} & ISession) => Promise<ForecastDetailsDTO>;
-  update: (params: {partnerId: string, periodId: number, forecasts: ForecastDetailsDTO[]} & ISession) => Promise<ForecastDetailsDTO[]>;
+  getAllByPartnerId: (params: ApiParams<{ partnerId: string, periodId: number }>) => Promise<ForecastDetailsDTO[]>;
+  get: (params: ApiParams<{ partnerId: string, periodId: number, costCategoryId: string }>) => Promise<ForecastDetailsDTO>;
+  update: (params: ApiParams<{ partnerId: string, periodId: number, forecasts: ForecastDetailsDTO[] }>) => Promise<ForecastDetailsDTO[]>;
 }
 
 class Controller extends ControllerBase<ForecastDetailsDTO> implements IForecastDetailsApi {
@@ -16,41 +16,41 @@ class Controller extends ControllerBase<ForecastDetailsDTO> implements IForecast
 
     this.putItems(
       "/",
-      (p, q, b) => ({ partnerId: q.partnerId, periodId: parseInt(q.periodId, 10), forecasts: processDto(b)}),
+      (p, q, b) => ({ partnerId: q.partnerId, periodId: parseInt(q.periodId, 10), forecasts: processDto(b) }),
       (p) => this.update(p)
     );
 
     this.getItems(
       "/",
-      (p, q) => ({ partnerId: q.partnerId, periodId: parseInt(q.periodId, 10)}),
+      (p, q) => ({ partnerId: q.partnerId, periodId: parseInt(q.periodId, 10) }),
       (p) => this.getAllByPartnerId(p)
     );
 
     this.getItem(
       "/:partnerId/:periodId/:costCategoryId",
-      (p) => ({ partnerId: p.partnerId, periodId: parseInt(p.periodId, 10), costCategoryId: p.costCategoryId}),
+      (p) => ({ partnerId: p.partnerId, periodId: parseInt(p.periodId, 10), costCategoryId: p.costCategoryId }),
       (p) => this.get(p)
     );
   }
 
-  public async getAllByPartnerId(params: {partnerId: string, periodId: number} & ISession) {
-    const {partnerId, periodId, user} = params;
+  public async getAllByPartnerId(params: ApiParams<{ partnerId: string, periodId: number }>) {
+    const { partnerId, periodId } = params;
     const query = new GetAllForecastsForPartnerQuery(partnerId, periodId);
-    return await contextProvider.start(user).runQuery(query);
+    return await contextProvider.start(params).runQuery(query);
   }
 
-  public async get(params: {partnerId: string, periodId: number, costCategoryId: string} & ISession) {
-    const {partnerId, periodId, costCategoryId, user} = params;
+  public async get(params: ApiParams<{ partnerId: string, periodId: number, costCategoryId: string }>) {
+    const { partnerId, periodId, costCategoryId } = params;
     const query = new GetForecastDetail(partnerId, periodId, costCategoryId);
-    return await contextProvider.start(user).runQuery(query);
+    return await contextProvider.start(params).runQuery(query);
   }
 
-  public async update(params: {partnerId: string, periodId: number, forecasts: ForecastDetailsDTO[]} & ISession) {
-    const {partnerId, periodId, forecasts, user} = params
+  public async update(params: ApiParams<{ partnerId: string, periodId: number, forecasts: ForecastDetailsDTO[] }>) {
+    const { partnerId, periodId, forecasts } = params
     const command = new UpdateForecastDetailsCommand(partnerId, periodId, forecasts);
-    await contextProvider.start(user).runCommand(command);
+    await contextProvider.start(params).runCommand(command);
 
-    return this.getAllByPartnerId({partnerId, periodId, user});
+    return this.getAllByPartnerId({ partnerId, periodId, user: params.user });
   }
 }
 

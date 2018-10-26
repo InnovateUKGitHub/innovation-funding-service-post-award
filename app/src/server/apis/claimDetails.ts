@@ -1,10 +1,10 @@
-import { ControllerBase, ISession } from "./controllerBase";
+import { ControllerBase, ApiParams } from "./controllerBase";
 import contextProvider from "../features/common/contextProvider";
 import { GetAllClaimDetailsByPartner } from "../features/claims/claimDetails/getAllByPartnerQuery";
 import { ClaimDetailsDto } from "../../ui/models";
 
 export interface IClaimDetailsApi {
-  getAllByPartner: (params: { partnerId: string } & ISession) => Promise<ClaimDetailsDto[]>;
+  getAllByPartner: (params: ApiParams<{ partnerId: string }>) => Promise<ClaimDetailsDto[]>;
 }
 
 class Controller extends ControllerBase<ClaimDetailsDto> implements IClaimDetailsApi {
@@ -14,10 +14,10 @@ class Controller extends ControllerBase<ClaimDetailsDto> implements IClaimDetail
     this.getItems("/", (p, q) => ({ partnerId: q.partnerId, }), (p) => this.getAllByPartner(p));
   }
 
-  public async getAllByPartner(params: { partnerId: string } & ISession) {
-    const { partnerId, user } = params;
+  public async getAllByPartner(params: ApiParams<{ partnerId: string }>) {
+    const { partnerId } = params;
     const query = new GetAllClaimDetailsByPartner(partnerId);
-    return await contextProvider.start(user).runQuery(query);
+    return await contextProvider.start(params).runQuery(query);
   }
 }
 
