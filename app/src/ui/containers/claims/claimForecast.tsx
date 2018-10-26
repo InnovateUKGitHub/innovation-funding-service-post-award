@@ -8,7 +8,6 @@ import {ContainerBase, ReduxContainer} from "../containerBase";
 import {IEditorStore} from "../../redux/reducers/editorsReducer";
 import {ClaimsDashboardRoute} from "./dashboard";
 import {Currency, DateRange, Percentage} from "../../components/renderers";
-import { Interval } from "luxon";
 import { PrepareClaimRoute } from "./prepare";
 import { ForecastDetailsDtosValidator } from "../../validators/forecastDetailsDtosValidator";
 
@@ -138,16 +137,6 @@ export class ClaimForecastComponent extends ContainerBase<Params, Data, Callback
 
   renderDateRange(details: Dtos.ClaimDetailsDto | Dtos.ForecastDetailsDTO) {
     return DateRange({ start: details.periodStart, end: details.periodEnd });
-  }
-
-  periodHeader(period: Interval) {
-    const words  = [period.start.monthShort, "to", period.end.monthShort, period.end.year];
-
-    if(period.start.year !== period.end.year) {
-      words.splice(1, 0, period.start.year);
-    }
-
-    return words.join(" ");
   }
 
   public renderContents(data: CombinedData) {
