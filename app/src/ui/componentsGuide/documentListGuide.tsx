@@ -14,7 +14,7 @@ export const documentListGuide: IGuide = {
       name: "Simple",
       comments: "Used inside a section to display a list of documents.",
       example: "<DocumentList documents={documents} fileName=\"Supporting documents\" qa=\"document-list\"/>",
-      render: () => <DocumentList documents={documents} title="Supporting documents" qa="document-list"/>
+      render: () => <DocumentList documents={documents} qa="document-list"/>
     }
   ]
 };

@@ -85,7 +85,7 @@ export class PrepareComponent extends ContainerBase<Params, Data, Callbacks> {
         const Form = ACC.TypedForm<Dtos.ClaimDto>();
         const commentsLabel = "Additional information (optional)";
         const commentsHint = "These comments will be seen by your Monitoring Officer when they review your claim.";
-
+        const validationResult = new Result(null, true, false, data.editor.error.details || data.editor.error, false);
         return (
             <ACC.Page>
                 <ACC.Section>
@@ -96,7 +96,7 @@ export class PrepareComponent extends ContainerBase<Params, Data, Callbacks> {
                 <ACC.Claims.Navigation projectId={data.project.id} partnerId={data.partner.id} periodId={data.claim.periodId} currentRouteName={ClaimsDetailsRoute.routeName} />
                 <ACC.Section title={title}>
                     {/* TODO: Fix error display */}
-                    {data.editor.error ? <ACC.ValidationMessage message={new Result(null, true, false, data.editor.error.details || data.editor.error, false)} /> : null}
+                    {data.editor.error ? <ACC.ValidationMessage messageType="error" message={validationResult.errorMessage!} /> : null}
                     <ACC.Claims.ClaimTable {...data} validation={data.editor.validator.claimDetails.results} getLink={costCategoryId => EditClaimLineItemsRoute.getLink({partnerId: this.props.partnerId, projectId: this.props.projectId, periodId: this.props.periodId, costCategoryId})} />
                     <Form.Form data={data.editor.data} onChange={(dto) => this.onChange(dto, data.claimDetails, data.costCategories)} onSubmit={() => this.saveAndProgress(data.editor.data, data.claimDetails, data.costCategories)}>
                         <Form.Fieldset heading={() => commentsLabel} qa="additional-info-form" headingQa="additional-info-heading">

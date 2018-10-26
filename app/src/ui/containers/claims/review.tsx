@@ -74,6 +74,8 @@ class ReviewComponent extends ContainerBase<Params, Data, Callbacks> {
     ];
     const showButton = data.editor.data.status === "MO Queried" || data.editor.data.status === "Awaiting IUK Approval";
 
+    const validationResult = new Result(null, true, false, data.editor.error.details || data.editor.error, false);
+
     return (
       <ACC.Page>
         <ACC.Section>
@@ -84,7 +86,7 @@ class ReviewComponent extends ContainerBase<Params, Data, Callbacks> {
         <ACC.Claims.Navigation projectId={data.project.id} partnerId={data.partner.id} periodId={data.claim.periodId} currentRouteName={ClaimsDetailsRoute.routeName} />
         <ACC.Section title={title}>
           {/* TODO: Fix error display */}
-          {data.editor.error ? <ACC.ValidationMessage message={new Result(null, true, false, data.editor.error.details || data.editor.error, false)} /> : null}
+          {data.editor.error ? <ACC.ValidationMessage messageType="error" message={validationResult.errorMessage!} /> : null}
           <ACC.Claims.ClaimTable {...data} validation={data.editor.validator.claimDetails.results} getLink={costCategoryId => ReviewClaimLineItemsRoute.getLink({ partnerId: this.props.partnerId, projectId: this.props.projectId, periodId: this.props.periodId, costCategoryId })} />
           <Form.Form data={data.editor.data} onSubmit={() => this.props.onSave(this.props.projectId, this.props.partnerId, this.props.periodId, data.editor.data, data.claimDetails, data.costCategories)} onChange={(dto) => this.props.onChange(this.props.partnerId, this.props.periodId, dto, data.claimDetails, data.costCategories)}>
             <Form.Fieldset heading={() => "How do you want to proceed with this claim?"}>
@@ -104,12 +106,12 @@ class ReviewComponent extends ContainerBase<Params, Data, Callbacks> {
   }
 }
 
-const initEditor = (dto: Dtos.ClaimDto) => { 
-  //if the status hasnt already been set to "MO Queried" or "Awaiting IUK Approval" then set the status to New so that the validation kicks in a forces a change
-  if(dto.status !== "MO Queried" && dto.status !== "Awaiting IUK Approval"){
+const initEditor = (dto: Dtos.ClaimDto) => {
+  // if the status hasnt already been set to "MO Queried" or "Awaiting IUK Approval" then set the status to New so that the validation kicks in a forces a change
+  if(dto.status !== "MO Queried" && dto.status !== "Awaiting IUK Approval") {
     dto.status = "New";
   }
-}
+};
 
 const definition = ReduxContainer.for<Params, Data, Callbacks>(ReviewComponent);
 
@@ -142,4 +144,3 @@ export const ReviewClaimRoute = definition.route({
     ],
     container: ReviewClaim
 });
-
