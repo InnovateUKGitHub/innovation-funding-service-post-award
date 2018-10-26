@@ -34,12 +34,12 @@ class Controller extends ControllerBase<ClaimLineItemDto> implements IClaimLineI
 
   public getAllForCategory(params: ApiParams<{ partnerId: string, costCategoryId: string, periodId: number }>) {
     const query = new GetAllLineItemsForClaimByCategoryQuery(params.partnerId, params.costCategoryId, params.periodId);
-    return contextProvider.start(params.user).runQuery(query);
+    return contextProvider.start(params).runQuery(query);
   }
 
   public async saveLineItems(params: ApiParams<{partnerId: string, costCategoryId: string, periodId: number, lineItems: ClaimLineItemDto[] }>): Promise<ClaimLineItemDto[]> {
 
-    const {partnerId, costCategoryId, periodId, lineItems, user } = params;
+    const {partnerId, costCategoryId, periodId, lineItems } = params;
     const validRequest = partnerId && costCategoryId && periodId &&
       lineItems.every(x => x.periodId === periodId && x.partnerId === partnerId && x.costCategoryId === costCategoryId);
 
@@ -49,7 +49,7 @@ class Controller extends ControllerBase<ClaimLineItemDto> implements IClaimLineI
 
     const command = new SaveLineItemsCommand(partnerId, costCategoryId, periodId, lineItems);
 
-    const context = contextProvider.start(user);
+    const context = contextProvider.start(params);
 
     await context.runCommand(command);
 

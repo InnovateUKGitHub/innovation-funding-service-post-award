@@ -19,9 +19,9 @@ class Controller extends ControllerBase<GOLCostDto> implements IForecastGolCosts
   }
 
   public async getAllByPartnerId(params: ApiParams<{partnerId: string}>) {
-    const {partnerId, user} = params;
+    const {partnerId} = params;
     const query = new GetAllForecastsGOLCostsQuery(partnerId);
-    return await contextProvider.start(user).runQuery(query);
+    return await contextProvider.start(params).runQuery(query);
   }
 }
 

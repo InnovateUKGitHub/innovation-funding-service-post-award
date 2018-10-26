@@ -15,9 +15,9 @@ class Controller extends ControllerBase<ClaimDetailsDto> implements IClaimDetail
   }
 
   public async getAllByPartner(params: ApiParams<{ partnerId: string }>) {
-    const { partnerId, user } = params;
+    const { partnerId } = params;
     const query = new GetAllClaimDetailsByPartner(partnerId);
-    return await contextProvider.start(user).runQuery(query);
+    return await contextProvider.start(params).runQuery(query);
   }
 }
 

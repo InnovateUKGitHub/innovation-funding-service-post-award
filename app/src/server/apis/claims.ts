@@ -24,23 +24,23 @@ class Controller extends ControllerBase<ClaimDto> implements IClaimsApi {
 
   public async getAllByPartnerId(params: ApiParams<{partnerId: string}>) {
     const query = new GetAllForPartnerQuery(params.partnerId);
-    return await contextProvider.start(params.user).runQuery(query);
+    return await contextProvider.start(params).runQuery(query);
   }
 
   public async get(params: ApiParams<{partnerId: string, periodId: number}>) {
-    const {partnerId, periodId, user} = params;
+    const {partnerId, periodId} = params;
     const query = new GetClaim(partnerId, periodId);
-    return await contextProvider.start(user).runQuery(query);
+    return await contextProvider.start(params).runQuery(query);
   }
 
   public async update(params: ApiParams<{partnerId: string, periodId: number, claim: ClaimDto}>) {
-    const {partnerId, periodId, claim, user} = params;
+    const {partnerId, periodId, claim} = params;
 
     if (partnerId !== claim.partnerId || periodId !== claim.periodId) {
       throw new ApiError(StatusCode.BAD_REQUEST, "Bad request");
     }
 
-    const context = contextProvider.start(user);
+    const context = contextProvider.start(params);
     const command = new UpdateClaimCommand(claim);
     await context.runCommand(command);
 

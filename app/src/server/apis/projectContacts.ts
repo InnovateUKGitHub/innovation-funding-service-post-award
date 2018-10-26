@@ -17,7 +17,7 @@ class Controller extends ControllerBase<ProjectContactDto> implements IProjectCo
 
   public async getAllByProjectId(params: ApiParams<{projectId: string}>) {
     const query = new GetAllForProjectQuery(params.projectId);
-    return await contextProvider.start(params.user).runQuery(query);
+    return await contextProvider.start(params).runQuery(query);
   }
 }
 

@@ -18,15 +18,15 @@ class Controller extends ControllerBase<PartnerDto> implements IPartnersApi {
   }
 
   public async getAllByProjectId(params: ApiParams<{ projectId: string }>) {
-    const { projectId, user } = params;
+    const { projectId } = params;
     const query = new GetAllForProjectQuery(projectId);
-    return await contextProvider.start(user).runQuery(query);
+    return await contextProvider.start(params).runQuery(query);
   }
 
   public async get(params: ApiParams<{ id: string }>) {
-    const { id, user } = params;
+    const { id } = params;
     const query = new GetByIdQuery(id);
-    return await contextProvider.start(user).runQuery(query);
+    return await contextProvider.start(params).runQuery(query);
   }
 }
 
