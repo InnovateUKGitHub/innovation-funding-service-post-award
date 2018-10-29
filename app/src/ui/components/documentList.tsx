@@ -17,6 +17,9 @@ const mapDocumentToLink = (document: Document, i: number) => ({
 });
 
 export const DocumentList: React.SFC<Props> = ({ documents = [], qa}: Props) => {
+  documents.sort((a, b) => {
+    return a.fileName.toLowerCase().localeCompare(b.fileName.toLowerCase());
+  });
   return (
     <div data-qa={qa}>
       <LinksList openNewWindow={true} links={documents.map(mapDocumentToLink)}/>

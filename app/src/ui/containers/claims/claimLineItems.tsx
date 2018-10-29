@@ -55,6 +55,7 @@ export class ClaimLineItemsComponent extends ContainerBase<Params, Data, {}> {
       periodId : this.props.periodId,
       projectId: this.props.projectId
     };
+
     const backLink = this.props.route.name === ReviewClaimLineItemsRoute.routeName ? ReviewClaimRoute.getLink(params) : ClaimsDetailsRoute.getLink(params);
     return (
       <ACC.Page>
