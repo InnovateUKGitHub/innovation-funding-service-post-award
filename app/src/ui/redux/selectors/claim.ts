@@ -77,7 +77,7 @@ const getNewEditor = <T, TVal extends Results<T>>(getData: (store: RootState) =>
         data: cloned!,
         validator: getValidator(cloned!, store),
         error: null
-      })
+      });
     }
       );
 
