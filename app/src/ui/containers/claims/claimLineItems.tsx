@@ -129,20 +129,20 @@ export const ClaimLineItems = definition.connect({
   withCallbacks: () => ({})
 });
 
-const getParams = (route: State) : Params => ({
+const getParams = (route: State): Params => ({
     projectId: route.params.projectId,
     partnerId: route.params.partnerId,
     costCategoryId: route.params.costCategoryId,
     periodId: parseInt(route.params.periodId, 10)
   });
 
-const getLoadDataActions = (params: Params) : Actions.AsyncThunk<any>[] => [
+const getLoadDataActions = (params: Params): Actions.AsyncThunk<any>[] => [
   Actions.loadProject(params.projectId),
   Actions.loadCostCategories(),
   Actions.loadForecastDetail(params.partnerId, params.periodId, params.costCategoryId),
   Actions.loadClaimLineItemsForCategory(params.partnerId, params.costCategoryId, params.periodId),
   Actions.loadClaimDetailDocuments(params.partnerId, params.periodId, params.costCategoryId),
-]
+];
 
 export const ClaimLineItemsRoute = definition.route({
   routeName: "claim-line-items-view",
