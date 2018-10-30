@@ -7,7 +7,8 @@ import { Pending } from "../../../shared/pending";
 import { ContainerBase, ReduxContainer } from "../containerBase";
 import { Currency, DateRange, Percentage } from "../../components/renderers";
 import { ClaimDetailsDto, ClaimDto, ForecastDetailsDTO } from "../../models";
-import { PrepareClaimRoute } from "./prepare";
+import { Interval } from "luxon";
+import { ProjectOverviewPage } from "../../components/projectOverview";
 
 interface Params {
   projectId: string;
@@ -104,7 +105,7 @@ export class ViewForecastComponent extends ContainerBase<Params, Data, Callbacks
   }
 
   calculateDifference(a: number, b: number) {
-    return Math.ceil(((a - b) / Math.max(1, a)) * 100);
+    return ((a - b) / Math.max(1, a)) * 100;
   }
 
   calculateClaimPeriods(data: CombinedData) {
@@ -125,26 +126,23 @@ export class ViewForecastComponent extends ContainerBase<Params, Data, Callbacks
     const periods = Object.keys(parsed[0].periods);
 
     return (
-      <ACC.Page>
-        <ACC.Section>
-          <ACC.BackLink route={PrepareClaimRoute.getLink({ projectId: this.props.projectId, partnerId: this.props.partnerId, periodId: this.props.periodId })}>Back</ACC.BackLink>
-        </ACC.Section>
-        <ACC.Projects.Title pageTitle="Claim" project={data.project} />
-        <ACC.Section>
-          <Table.Table
-            data={parsed}
-            qa="cost-category-table"
-            headers={this.renderTableHeaders(periods, data.claim)}
-            footers={this.renderTableFooters(periods, parsed)}
-          >
-            <Table.String header="Month" value={x => x.categoryName} qa="category-name" />
-            {periods.map(p => <Table.Currency key={p} header={intervals[p]} value={x => x.periods[p]} qa="category-period" />)}
-            <Table.Currency header="" value={x => x.total} qa="category-total" />
-            <Table.Currency header="" value={x => x.golCosts} qa="category-gol-costs" />
-            <Table.Percentage header="" value={x => x.difference} qa="category-difference" />
-          </Table.Table>
-        </ACC.Section>
-      </ACC.Page>
+      <ProjectOverviewPage selectedTab={ViewForecastRoute.routeName} project={data.project} partners={[data.partner]}>
+        <ACC.Section title={data.partner.name} qa={"partner-name"}/>
+          <ACC.Section>
+            <Table.Table
+              data={parsed}
+              qa="cost-category-table"
+              headers={this.renderTableHeaders(periods, data.claim)}
+              footers={this.renderTableFooters(periods, parsed)}
+            >
+              <Table.String header="Month" value={x => x.categoryName} qa="category-name" />
+              {periods.map(p => <Table.Currency key={p} header={intervals[p]} value={x => x.periods[p]} qa="category-period" />)}
+              <Table.Currency header="" value={x => x.total} qa="category-total" />
+              <Table.Currency header="" value={x => x.golCosts} qa="category-gol-costs" />
+              <Table.Percentage header="" value={x => x.difference} qa="category-difference" />
+            </Table.Table>
+          </ACC.Section>
+    </ProjectOverviewPage>
     );
   }
 
