@@ -7,12 +7,8 @@ import { Pending } from "../../../shared/pending";
 import { ContainerBase, ReduxContainer } from "../containerBase";
 import { Currency, DateRange, Percentage } from "../../components/renderers";
 import { ClaimDetailsDto, ClaimDto, ForecastDetailsDTO } from "../../models";
-<<<<<<< HEAD
 import { Interval } from "luxon";
 import { ProjectOverviewPage } from "../../components/projectOverview";
-=======
-import { PrepareClaimRoute } from "./prepare";
->>>>>>> develop
 
 interface Params {
   projectId: string;
@@ -109,7 +105,7 @@ export class ViewForecastComponent extends ContainerBase<Params, Data, Callbacks
   }
 
   calculateDifference(a: number, b: number) {
-    return Math.round((((a - b) / Math.max(1, a)) * 100) * 10) / 10;
+    return ((a - b) / Math.max(1, a)) * 100;
   }
 
   calculateClaimPeriods(data: CombinedData) {
