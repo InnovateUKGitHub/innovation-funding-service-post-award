@@ -1,9 +1,10 @@
 import { combineReducers } from "redux";
 import { RootActions } from "../actions";
-import { ClaimDto, ClaimLineItemDto } from "../../models";
+import { ClaimDto, ClaimLineItemDto, ForecastDetailsDTO } from "../../models";
 import { ClaimDtoValidator } from "../../validators/claimDtoValidator";
 import { ClaimLineItemDtosValidator } from "../../validators/claimLineItemDtosValidator";
 import { Results } from "../../validation/results";
+import { ForecastDetailsDtosValidator } from "../../validators/forecastDetailsDtosValidator";
 
 export interface IEditorStore<TDto, TValidator> {
     data: TDto;
@@ -34,4 +35,5 @@ const editorsReducer = <TDto extends {}, TValidator extends Results<TDto>> (stor
 export const editorReducer = combineReducers({
     claim: editorsReducer<ClaimDto, ClaimDtoValidator>("claim"),
     claimLineItems: editorsReducer<ClaimLineItemDto[], ClaimLineItemDtosValidator>("claimLineItems"),
+    forecastDetails: editorsReducer<ForecastDetailsDTO[], ForecastDetailsDtosValidator>("forecastDetails"),
 });

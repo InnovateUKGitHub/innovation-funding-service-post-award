@@ -18,8 +18,9 @@ export class UpdateForecastDetailsCommand implements ICommand<boolean> {
     const claimDetails   = await context.runQuery(new GetAllClaimDetailsByPartner(this.partnerId));
     const golCosts       = await context.runQuery(new GetAllForecastsGOLCostsQuery(this.partnerId));
     const costCategories = await context.runQuery(new GetCostCategoriesQuery());
+    const showErrors     = true;
     // TODO - period id needs to be resolved
-    const validation     = new ForecastDetailsDtosValidator(this.periodId, this.forecasts, claimDetails, golCosts, costCategories);
+    const validation     = new ForecastDetailsDtosValidator(this.periodId, this.forecasts, claimDetails, golCosts, costCategories, showErrors);
 
     if (!validation.isValid) {
       throw new ValidationError(validation);

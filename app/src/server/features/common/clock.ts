@@ -2,7 +2,7 @@ import { DateTime } from "luxon";
 
 export interface IClock {
   today(): Date;
-  parse(value: string, format: string): Date|null;
+  parse(value: string|null|undefined, format: string): Date|null;
 }
 
 export class Clock implements IClock {
@@ -10,7 +10,7 @@ export class Clock implements IClock {
     return new Date();
   }
 
-  parse(value: string, format: string) {
+  parse(value: string|null|undefined, format: string) {
     if(!value) {
       return null;
     }

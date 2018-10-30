@@ -7,8 +7,12 @@ import { Pending } from "../../../shared/pending";
 import { ContainerBase, ReduxContainer } from "../containerBase";
 import { Currency, DateRange, Percentage } from "../../components/renderers";
 import { ClaimDetailsDto, ClaimDto, ForecastDetailsDTO } from "../../models";
+<<<<<<< HEAD
 import { Interval } from "luxon";
 import { ProjectOverviewPage } from "../../components/projectOverview";
+=======
+import { PrepareClaimRoute } from "./prepare";
+>>>>>>> develop
 
 interface Params {
   projectId: string;
@@ -117,16 +121,6 @@ export class ViewForecastComponent extends ContainerBase<Params, Data, Callbacks
 
   renderDateRange(details: ClaimDetailsDto | ForecastDetailsDTO) {
     return DateRange({ start: details.periodStart, end: details.periodEnd });
-  }
-
-  periodHeader(period: Interval) {
-    const words = [period.start.monthShort, "to", period.end.monthShort, period.end.year];
-
-    if (period.start.year !== period.end.year) {
-      words.splice(1, 0, period.start.year);
-    }
-
-    return words.join(" ");
   }
 
   public renderContents(data: CombinedData) {

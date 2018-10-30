@@ -26,8 +26,13 @@ export function conditionalLoad<T>(
     const id = idSelector;
     const store = storeSelector;
     const existing = (state.data as any)[store][id] as IDataStore<T>;
+    const reloads = [
+      LoadingStatus.Preload,
+      LoadingStatus.Stale,
+      LoadingStatus.Failed
+    ];
 
-    if (!existing || existing.status === LoadingStatus.Preload || existing.status === LoadingStatus.Stale) {
+    if (!existing || reloads.indexOf(existing.status) !== -1) {
       dispatch(dataLoadAction(id, store, LoadingStatus.Loading, existing && existing.data));
       return load()
         .then((result) => {

@@ -1,7 +1,6 @@
 import { TestContext } from "../../testContextProvider";
 import { UpdateForecastDetailsCommand } from "../../../../src/server/features/forecastDetails";
 import { ValidationError } from "../../../../src/shared/validation";
-import mapClaim from "../../../../src/server/features/claims/mapClaim";
 import { ForecastDetailsDTO } from "../../../../src/ui/models";
 
 describe("UpdateForecastDetailsCommand", () => {
@@ -106,5 +105,4 @@ describe("UpdateForecastDetailsCommand", () => {
     expect(context.repositories.profileDetails.Items.find(x => x.Id === profileDetail.Id).Acc_LatestForecastCost__c).toBe(250);
     expect(context.repositories.profileDetails.Items.find(x => x.Id === profileDetail2.Id).Acc_LatestForecastCost__c).toBe(100);
   });
-
 });
