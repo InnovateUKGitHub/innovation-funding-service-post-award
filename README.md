@@ -1,8 +1,11 @@
 # Installation
 ## Prerequisites
 Ensure you have node.js and npm installed on your machine.
+
 [Windows](https://blog.teamtreehouse.com/install-node-js-npm-windows)
+
 [Mac](https://blog.teamtreehouse.com/install-node-js-npm-mac)
+
 Check out the repository on the `develop` branch.
 
 ## Site
