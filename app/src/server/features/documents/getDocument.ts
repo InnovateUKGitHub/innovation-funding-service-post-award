@@ -12,7 +12,7 @@ export class GetDocumentQuery implements IQuery<DocumentDto> {
       fileType: document.FileType,
       contentLength: document.ContentSize,
       stream: documentStream,
-      fileName: `${document.Title}.${document.FileExtension}`
+      fileName: document.FileExtension ? `${document.Title}.${document.FileExtension}` : document.Title
     };
   }
 }
