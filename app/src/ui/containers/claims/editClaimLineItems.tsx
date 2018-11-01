@@ -76,7 +76,7 @@ export class EditClaimLineItemsComponent extends ContainerBase<Params, Data, Cal
           {this.renderTable(editor, forecastDetail)}
         </ACC.Section>
         <ACC.Section title="Supporting documents" subtitle={documents.length > 0 ? "(Documents open in a new window)" : ""}>
-          <ValidationMessage message={"If you are unsure what evidence to provide, speak to your Monitoring Officer. They will use these documents when reviewing your claim.."} messageType={"info"}/>
+          <ValidationMessage message={"If you are unsure what evidence to provide, speak to your Monitoring Officer. They will use these documents when reviewing your claim."} messageType={"info"}/>
           {documents.length > 0 ? <DocumentList documents={documents} qa="supporting-documents" /> : <h2 className="govuk-heading-s govuk-!-margin-bottom-0 govuk-!-margin-right-2">No documents attached</h2> }
         </ACC.Section>
       </ACC.Page>

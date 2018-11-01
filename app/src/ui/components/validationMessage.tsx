@@ -37,7 +37,7 @@ export const ValidationMessage: React.SFC<Props> = ({ message, key, messageType 
 
     const backgroundStyle = {
       padding: "2% 4% 2% 1%",
-      background: "rgb(248, 248, 248, 1)",
+      background: "#f8f8f8",
       borderLeft: `5px solid ${validationColour}`,
       marginTop: "30px",
       marginBottom: "30px",
