@@ -170,7 +170,7 @@ export class ClaimForecastComponent extends ContainerBase<Params, Data, Callback
               <Table.String header="Month" value={x => x.categoryName} qa="category-name" />
 
               {claims.map((p, i) => <Table.Currency key={p} header={intervals[p]} value={x => x.claims[p]} qa={"category-claim" + i} />)}
-              {forecasts.map((p, i) => <Table.Custom key={p} header={intervals[p]} value={(x, i) => this.renderForecastCell(x, p, i, data)} qa={"category-forecast" + i} />)}
+              {forecasts.map((p, i) => <Table.Custom key={p} header={intervals[p]} value={(x, index) => this.renderForecastCell(x, p, index, data)} qa={"category-forecast" + i} />)}
 
               <Table.Currency header="" value={x => x.total} qa="category-total" />
               <Table.Currency header="" value={x => x.golCosts} qa="category-gol-costs" />
