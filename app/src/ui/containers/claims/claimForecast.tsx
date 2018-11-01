@@ -125,7 +125,7 @@ export class ClaimForecastComponent extends ContainerBase<Params, Data, Callback
   }
 
   calculateDifference(a: number, b: number) {
-    return Math.ceil(((a - b) / Math.max(1, a)) * 100);
+    return ((a - b) / Math.max(1, a)) * 100;
   }
 
   calculateClaimPeriods(data: CombinedData) {
@@ -155,7 +155,7 @@ export class ClaimForecastComponent extends ContainerBase<Params, Data, Callback
         </ACC.Section>
         <ACC.ValidationSummary validation={data.editor.validator} compressed={false} />
         <ACC.Projects.Title pageTitle="Claim" project={data.project} />
-        <ACC.Section title={"Update forecasts table for " + data.partner.name}>
+        <ACC.Section title={"Update forecasts table for " + data.partner.name} qa="partner-name">
           <Form.Form
             data={data.editor.data}
             qa={"claim-forecast-form"}
@@ -169,8 +169,8 @@ export class ClaimForecastComponent extends ContainerBase<Params, Data, Callback
             >
               <Table.String header="Month" value={x => x.categoryName} qa="category-name" />
 
-              {claims.map(p => <Table.Currency key={p} header={intervals[p]} value={x => x.claims[p]} qa="category-claim" />)}
-              {forecasts.map(p => <Table.Custom key={p} header={intervals[p]} value={(x, i) => this.renderForecastCell(x, p, i, data)} qa="category-forecast" />)}
+              {claims.map((p, i) => <Table.Currency key={p} header={intervals[p]} value={x => x.claims[p]} qa={"category-claim" + i} />)}
+              {forecasts.map((p, i) => <Table.Custom key={p} header={intervals[p]} value={(x, i) => this.renderForecastCell(x, p, i, data)} qa={"category-forecast" + i} />)}
 
               <Table.Currency header="" value={x => x.total} qa="category-total" />
               <Table.Currency header="" value={x => x.golCosts} qa="category-gol-costs" />
