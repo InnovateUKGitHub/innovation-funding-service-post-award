@@ -6,7 +6,7 @@ import {ContentVersionRepository} from "../../src/server/repositories/contentVer
 import {ClaimDetailsRepository} from "../../src/server/repositories";
 
 describe("test", () => {
-  it("should", () => {
+  xit("should", () => {
     salesforceConnection().then((conn) => {
       const contents = fs.readFileSync("./tests/sandbox/cat.jpg");
       const base64data = new Buffer(contents).toString("base64");
@@ -65,7 +65,7 @@ describe("test", () => {
 });
 
 describe("test2", () => {
-  it("should get documents", () => {
+  xit("should get documents", () => {
     new ContentDocumentLinkRepository()
       .getAllForEntity("a061X000000IubVQAS")
       .then((linkedDocs) => {
@@ -81,7 +81,7 @@ describe("test2", () => {
 });
 
 describe("test3", () => {
-  it("should write to a file", () => {
+  xit("should write to a file", () => {
     new ContentVersionRepository().getDocumentData('0681X00000099mIQAQ')
       .then(x => {
         const fileOut = fs.createWriteStream('./sample.pdf', {
@@ -93,7 +93,7 @@ describe("test3", () => {
 });
 
 describe("test6", () => {
-  it("should get claim detail", () => {
+  xit("should get claim detail", () => {
     new ClaimDetailsRepository()
       .get("a0B1j000000A4UiEAK", 1,"a071j000000Ozk3AAC")
       .then(resp => {
