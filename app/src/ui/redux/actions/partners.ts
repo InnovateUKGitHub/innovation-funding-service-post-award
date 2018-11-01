@@ -1,6 +1,6 @@
 import {conditionalLoad} from "./dataLoad";
 import { findPartnersByProject, partnersStore } from "../selectors/partners";
-import {ApiClient} from "../../../shared/apiClient";
+import { ApiClient } from "../../apiClient";
 
 export function loadPartnersForProject(projectId: string) {
   return conditionalLoad(

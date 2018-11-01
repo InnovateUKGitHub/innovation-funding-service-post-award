@@ -1,5 +1,5 @@
 import {conditionalLoad, DataLoadAction, dataLoadAction} from "./dataLoad";
-import {ApiClient} from "../../../shared/apiClient";
+import { ApiClient } from "../../apiClient";
 import {findForecastDetailsByPartner, getForecastDetail, getForecastDetailsEditor} from "../selectors";
 import { ClaimDetailsDto, CostCategoryDto, ForecastDetailsDTO, GOLCostDto } from "../../models";
 import { AsyncThunk, SyncThunk } from "./common";

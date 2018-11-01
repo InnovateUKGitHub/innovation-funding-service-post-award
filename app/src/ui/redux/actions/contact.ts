@@ -1,5 +1,5 @@
 import {conditionalLoad} from "./dataLoad";
-import {ApiClient} from "../../../shared/apiClient";
+import { ApiClient } from "../../apiClient";
 import { contactStore, getContact } from "../selectors/contact";
 
 export function loadContact(id: string) {

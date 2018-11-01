@@ -1,5 +1,5 @@
 import {conditionalLoad, DataLoadAction, dataLoadAction} from "./dataLoad";
-import {ApiClient} from "../../../shared/apiClient";
+import { ApiClient } from "../../apiClient";
 import {claimLineItemsStore, findClaimLineItemsByPartnerCostCategoryAndPeriod} from "../selectors/claimLineItems";
 import {ClaimLineItemDto} from "../../models";
 import {SyncThunk} from "./common";

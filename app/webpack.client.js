@@ -39,7 +39,7 @@ module.exports = [
       },
     },
     plugins: [
-      new webpack.NormalModuleReplacementPlugin(/serverApiClient\.ts/, './clientApiClient.ts'),
+      new webpack.NormalModuleReplacementPlugin(/apiClient\.ts/, '../client/apiClient.ts'),
       // new BundleAnalyzerPlugin({ analyzerMode: 'static' })
     ]
 }

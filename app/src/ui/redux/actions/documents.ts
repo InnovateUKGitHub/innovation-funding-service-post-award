@@ -1,5 +1,5 @@
 import {conditionalLoad} from "./dataLoad";
-import {ApiClient} from "../../../shared/apiClient";
+import { ApiClient } from "../../apiClient";
 import {documentStore, getClaimDetailDocuments} from "../selectors/documents";
 
 export function loadClaimDetailDocuments(partnerId: string, periodId: number, costCategoryId: string) {

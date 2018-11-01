@@ -1,5 +1,5 @@
 import { conditionalLoad } from "./dataLoad";
-import { ApiClient } from "../../../shared/apiClient";
+import { ApiClient } from "../../apiClient";
 import { getProjects, projectsStore } from "../selectors/projects";
 
 export function loadProjects() {

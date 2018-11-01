@@ -1,5 +1,5 @@
 import {conditionalLoad} from "./dataLoad";
-import {ApiClient} from "../../../shared/apiClient";
+import { ApiClient } from "../../apiClient";
 import { getPartner, partnerStore } from "../selectors/partner";
 
 export function loadPartner(id: string) {
