@@ -2,6 +2,7 @@ import SalesforceBase from "./salesforceBase";
 import { Connection } from "jsforce";
 
 export interface ISalesforceProfileTotalPeriod {
+  LastModifiedDate: string;
   Acc_ProjectParticipant__c: string;
   Acc_ProjectPeriodNumber__c: number;
   Acc_PeriodInitialForecastCost__c: number;
@@ -10,6 +11,7 @@ export interface ISalesforceProfileTotalPeriod {
 type FieldNames = keyof ISalesforceProfileTotalPeriod;
 
 const fields: FieldNames[] = [
+  "LastModifiedDate",
   "Acc_ProjectParticipant__c",
   "Acc_ProjectPeriodNumber__c",
   "Acc_PeriodInitialForecastCost__c"

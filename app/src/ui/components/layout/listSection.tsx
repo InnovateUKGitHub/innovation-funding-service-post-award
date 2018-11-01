@@ -1,4 +1,5 @@
 import * as React from "react";
+import * as colour from "../../styles/colours";
 
 interface Props {
   title: React.ReactNode;
@@ -7,7 +8,7 @@ interface Props {
 
 export const ListSection: React.SFC<Props> = (props) => {
   return (
-    <div className="govuk-!-padding-5 govuk-!-margin-bottom-9" style={{ backgroundColor: "#dee0e2" }} data-qa={props.qa}>
+    <div className="govuk-!-padding-5 govuk-!-margin-bottom-9" style={{ backgroundColor: colour.GOVUK_COLOUR_GREY_3 }} data-qa={props.qa}>
       <h3 className="govuk-heading-m">{props.title}</h3>
       {props.children}
     </div>

@@ -81,7 +81,7 @@ class Component extends ContainerBase<Params, Data, {}> {
     if (claim.status === "New" || claim.status === "Draft") {
       return <Link route={PrepareClaimRoute.getLink({ projectId, partnerId: claim.partnerId, periodId: claim.periodId })}>Edit claim</Link>;
     }
-    if (claim.status === "Submitted" || claim.status === "MO Queried" || claim.status === "Awaiting IUK Approval") {
+    if (claim.status === "Submitted") {
       return <Link route={ReviewClaimRoute.getLink({ projectId, partnerId: claim.partnerId, periodId: claim.periodId })}>Review claim</Link>;
     }
     return <Link route={ClaimsDetailsRoute.getLink({ projectId, partnerId: claim.partnerId, periodId: claim.periodId })}>View claim</Link>;

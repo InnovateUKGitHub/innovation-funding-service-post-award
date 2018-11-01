@@ -49,12 +49,13 @@ export class ClaimLineItemsComponent extends ContainerBase<Params, Data, {}> {
   }
 
   private renderContents({ project, lineItems, costCategories, forecastDetail, documents }: CombinedData) {
-    const params : Params = {
+    const params: Params = {
       partnerId : this.props.partnerId,
       costCategoryId: this.props.costCategoryId,
       periodId : this.props.periodId,
       projectId: this.props.projectId
     };
+
     const backLink = this.props.route.name === ReviewClaimLineItemsRoute.routeName ? ReviewClaimRoute.getLink(params) : ClaimsDetailsRoute.getLink(params);
     return (
       <ACC.Page>
@@ -67,8 +68,8 @@ export class ClaimLineItemsComponent extends ContainerBase<Params, Data, {}> {
         <ACC.Section>
           <ClaimLineItemsTable lineItems={lineItems} forecastDetail={forecastDetail} />
         </ACC.Section>
-        <ACC.Section>
-          <DocumentList documents={documents} title={"Supporting documents"} qa={"supporting-documents"}/>
+        <ACC.Section title="Supporting documents" subtitle={documents.length > 0 ? "(Documents open in a new window)" : ""}>
+          {documents.length > 0 ? <DocumentList documents={documents} qa="supporting-documents"/>: <h2 className="govuk-heading-s govuk-!-margin-bottom-0 govuk-!-margin-right-2">No documents attached</h2> }
         </ACC.Section>
       </ACC.Page>
     );
@@ -128,20 +129,20 @@ export const ClaimLineItems = definition.connect({
   withCallbacks: () => ({})
 });
 
-const getParams = (route: State) : Params => ({
+const getParams = (route: State): Params => ({
     projectId: route.params.projectId,
     partnerId: route.params.partnerId,
     costCategoryId: route.params.costCategoryId,
     periodId: parseInt(route.params.periodId, 10)
   });
 
-const getLoadDataActions = (params: Params) : Actions.AsyncThunk<any>[] => [
+const getLoadDataActions = (params: Params): Actions.AsyncThunk<any>[] => [
   Actions.loadProject(params.projectId),
   Actions.loadCostCategories(),
   Actions.loadForecastDetail(params.partnerId, params.periodId, params.costCategoryId),
   Actions.loadClaimLineItemsForCategory(params.partnerId, params.costCategoryId, params.periodId),
   Actions.loadClaimDetailDocuments(params.partnerId, params.periodId, params.costCategoryId),
-]
+];
 
 export const ClaimLineItemsRoute = definition.route({
   routeName: "claim-line-items-view",

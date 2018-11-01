@@ -8,6 +8,7 @@ export interface ClaimDto {
   periodId: number;
   totalCost: number;
   forecastCost: number;
+  forecastLastModified: Date|null;
   approvedDate: Date|null;
   paidDate: Date|null;
   // ToDo: confirm field

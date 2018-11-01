@@ -18,7 +18,7 @@ describe("Links Lists", () => {
     const links   = [{ url: "test1", text: "testtext1" }];
     const result  = <LinksList links={links} />;
     const wrapper = Enzyme.shallow(result);
-    expect(wrapper.contains(<a href="test1" className="govuk-link govuk-!-font-size-19">testtext1</a>)).toBe(true);
+    expect(wrapper.contains(<a target="" href="test1" className="govuk-link govuk-!-font-size-19">testtext1</a>)).toBe(true);
   });
 
   it("should render given 3 links", () => {
@@ -29,9 +29,9 @@ describe("Links Lists", () => {
     ];
     const result  = <LinksList links={links} />;
     const wrapper = Enzyme.shallow(result);
-    expect(wrapper.contains(<a href="test1" className="govuk-link govuk-!-font-size-19">testtext1</a>)).toBe(true);
-    expect(wrapper.contains(<a href="test2" className="govuk-link govuk-!-font-size-19">testtext2</a>)).toBe(true);
-    expect(wrapper.contains(<a href="test3" className="govuk-link govuk-!-font-size-19">testtext3</a>)).toBe(true);
+    expect(wrapper.contains(<a target="" href="test1" className="govuk-link govuk-!-font-size-19">testtext1</a>)).toBe(true);
+    expect(wrapper.contains(<a target="" href="test2" className="govuk-link govuk-!-font-size-19">testtext2</a>)).toBe(true);
+    expect(wrapper.contains(<a target="" href="test3" className="govuk-link govuk-!-font-size-19">testtext3</a>)).toBe(true);
   });
 
   it("should not error for null props", () => {
