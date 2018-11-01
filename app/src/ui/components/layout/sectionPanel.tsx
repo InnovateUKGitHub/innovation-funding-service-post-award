@@ -1,4 +1,5 @@
 import * as React from "react";
+import * as colour from "../../styles/colours";
 
 interface Props {
     title?: React.ReactNode;
@@ -8,7 +9,7 @@ interface Props {
 export const SectionPanel: React.SFC<Props> = (props) => {
     const { qa, title, children } = props;
     const style = {
-        border: "1px solid #bfc1c3"
+        border: `1px solid ${colour.GOVUK_BORDER_COLOUR}`
     };
     return (
         <div className="govuk-!-padding-3" data-qa={qa} style={style} >

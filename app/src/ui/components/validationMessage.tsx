@@ -1,4 +1,5 @@
 import React from "react";
+import * as colour from "../styles/colours";
 
 interface Props {
     message: string;
@@ -15,12 +16,12 @@ interface MessageStyle {
 const getMessageStyle = (messageType: string): MessageStyle => {
   switch (messageType) {
     case "info": return {
-      validationColour: "#005EA5",
+      validationColour: colour.GOVUK_COLOUR_BLUE,
       validationSymbol: "i",
       validationText: "Info",
     };
     case "error": return {
-      validationColour: "#B10E1E",
+      validationColour: colour.GOVUK_ERROR_COLOUR,
       validationSymbol: "!",
       validationText: "Error",
     };
@@ -37,7 +38,7 @@ export const ValidationMessage: React.SFC<Props> = ({ message, key, messageType 
 
     const backgroundStyle = {
       padding: "2% 4% 2% 1%",
-      background: "#f8f8f8",
+      background: colour.GOVUK_COLOUR_GREY_4,
       borderLeft: `5px solid ${validationColour}`,
       marginTop: "30px",
       marginBottom: "30px",
