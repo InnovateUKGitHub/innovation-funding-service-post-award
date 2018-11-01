@@ -6,8 +6,7 @@ import { Currency } from "./renderers/currency";
 import classNames from "classnames";
 import { Percentage } from "./renderers/percentage";
 import { Link } from ".";
-import { Result } from "../validation/result";
-import { NestedResult } from "../validation/nestedResult";
+import * as colour from "../styles/colours";
 import { Results } from "../validation/results";
 
 type columnMode = "cell" | "header" | "footer" | "col";
@@ -79,7 +78,7 @@ export class TableColumn<T> extends React.Component<InternalColumnProps<T>> {
 
     const style: React.CSSProperties = {};
     if(column === 0 && rowHasError) {
-      style.borderLeft = "10px #b10e1e solid";
+      style.borderLeft = `10px ${colour.GOVUK_ERROR_COLOUR} solid`;
       style.paddingLeft = "10px";
     }
     if(rowHasError) {
