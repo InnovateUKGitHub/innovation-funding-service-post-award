@@ -1,4 +1,5 @@
 import SalesforceBase from "./salesforceBase";
+import { Connection } from "jsforce";
 
 export interface ISalesforceProfileTotalPeriod {
   LastModifiedDate: string;
@@ -24,8 +25,8 @@ export interface IProfileTotalPeriodRepository {
 export class ProfileTotalPeriodRepository extends SalesforceBase<ISalesforceProfileTotalPeriod> implements IProfileTotalPeriodRepository {
   private recordType: string = "Total Project Period";
 
-  constructor() {
-    super("Acc_Profile__c", fields);
+  constructor(connection: () => Promise<Connection>) {
+    super(connection, "Acc_Profile__c", fields);
   }
 
   getAllByPartnerId(partnerId: string): Promise<ISalesforceProfileTotalPeriod[]> {

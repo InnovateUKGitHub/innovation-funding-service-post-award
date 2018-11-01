@@ -1,5 +1,4 @@
-import salesforceConnection from "./salesforceConnection";
-import {SalesforceId, SuccessResult} from "jsforce";
+import {Connection, SalesforceId, SuccessResult} from "jsforce";
 import {Stream} from "stream";
 
 export type Updatable<T> = Partial<T> & {
@@ -10,13 +9,14 @@ export default abstract class SalesforceBase<T> {
   private log = false;
 
   protected constructor(
+    protected getSalesforceConnection: () => Promise<Connection>,
     protected objectName: string,
     private columns: string[]
   ) { }
 
   protected async retrieve(id: string): Promise<T | null> {
     try {
-      const conn = await salesforceConnection();
+      const conn = await this.getSalesforceConnection();
       return await conn.sobject(this.objectName).retrieve(id).then(x => this.asItem(x));
     }
     catch (e) {
@@ -30,7 +30,7 @@ export default abstract class SalesforceBase<T> {
   }
 
   protected async all(): Promise<T[]> {
-    const conn = await salesforceConnection();
+    const conn = await this.getSalesforceConnection();
     const result = await conn.sobject(this.objectName)
       .select(this.columns.join(", "))
       .execute()
@@ -40,14 +40,14 @@ export default abstract class SalesforceBase<T> {
   }
 
   protected async getBlob(id: string, fieldName: string): Promise<Stream> {
-    const conn = await salesforceConnection();
+    const conn = await this.getSalesforceConnection();
     return conn.sobject(this.objectName)
       .record(id)
       .blob(fieldName);
   }
 
   protected async whereString(filter: string): Promise<T[]> {
-    const conn = await salesforceConnection();
+    const conn = await this.getSalesforceConnection();
     const result = await conn.sobject(this.objectName)
       .select(this.columns.join(", "))
       .where(filter)
@@ -62,7 +62,7 @@ export default abstract class SalesforceBase<T> {
   }
 
   protected async whereFilter(filter: Partial<T>): Promise<T[]> {
-    const conn = await salesforceConnection();
+    const conn = await this.getSalesforceConnection();
     const result = await conn.sobject(this.objectName)
       .select(this.columns.join(", "))
       .where(filter)
@@ -73,7 +73,7 @@ export default abstract class SalesforceBase<T> {
   }
 
   protected async filterOne(filter: Partial<T> | string): Promise<T | null> {
-    const conn = await salesforceConnection();
+    const conn = await this.getSalesforceConnection();
     const result = await conn.sobject(this.objectName)
       .select(this.columns.join(", "))
       .where(filter)
@@ -86,7 +86,7 @@ export default abstract class SalesforceBase<T> {
   protected async insert(inserts: Partial<T>): Promise<string>;
   protected async insert(inserts: Partial<T>[]): Promise<string[]>;
   protected async insert(inserts: Partial<T> | Partial<T>[]): Promise<string | string[]> {
-    const conn = await salesforceConnection();
+    const conn = await this.getSalesforceConnection();
     return await conn.sobject(this.objectName)
       .insert(inserts).then(results => {
         const ids = (results as SuccessResult[]).map(r => r.id.toString());
@@ -95,14 +95,14 @@ export default abstract class SalesforceBase<T> {
   }
 
   protected async update(updates: Updatable<T>[] | Updatable<T>): Promise<boolean> {
-    const conn = await salesforceConnection();
+    const conn = await this.getSalesforceConnection();
     return await conn.sobject(this.objectName)
       .update(updates)
       .then(() => true);
   }
 
   protected async delete(ids: string[] | string): Promise<void> {
-    const conn = await salesforceConnection();
+    const conn = await this.getSalesforceConnection();
     return new Promise<void>((resolve, reject) => {
       conn.sobject(this.objectName).delete(ids, (err, res) => {
         if (err) {

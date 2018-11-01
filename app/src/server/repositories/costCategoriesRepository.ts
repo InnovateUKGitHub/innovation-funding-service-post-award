@@ -1,4 +1,5 @@
 import SalesforceBase from "./salesforceBase";
+import { Connection } from "jsforce";
 
 export interface ISalesforceCostCategory {
     Id: string;
@@ -26,8 +27,8 @@ export interface ICostCategoryRepository {
 }
 
 export class CostCategoryRepository extends SalesforceBase<ISalesforceCostCategory> implements ICostCategoryRepository {
-    constructor() {
-        super("Acc_CostCategory__c", fieldNames);
+    constructor(connection: () => Promise<Connection>) {
+        super(connection, "Acc_CostCategory__c", fieldNames);
     }
 
     getAll(): Promise<ISalesforceCostCategory[]> {

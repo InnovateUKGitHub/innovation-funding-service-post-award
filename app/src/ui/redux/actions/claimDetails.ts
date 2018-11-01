@@ -6,6 +6,6 @@ export function loadClaimDetailsForPartner(partnerId: string) {
   return conditionalLoad(
     findClaimDetailsByPartner(partnerId).key,
     claimDetailsStore,
-    () => ApiClient.claimDetails.getAllByPartner(partnerId)
+    (params) => ApiClient.claimDetails.getAllByPartner({partnerId, ...params})
   );
 }

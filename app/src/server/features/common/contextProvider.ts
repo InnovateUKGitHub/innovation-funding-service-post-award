@@ -1,8 +1,10 @@
 import { Context, IContext } from "./context";
+import { IUser } from "../../../shared/IUser";
 
 class ContextProvider {
-  start(): IContext {
-    return new Context();
+  start(params: {user: IUser}): IContext {
+    const {user} = params;
+    return new Context(user);
   }
 }
 

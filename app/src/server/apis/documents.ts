@@ -1,11 +1,11 @@
-import {ControllerBase} from "./controllerBase";
-import {DocumentDto, DocumentSummaryDto} from "../../ui/models";
+import { ControllerBase, ApiParams } from "./controllerBase";
+import { DocumentDto, DocumentSummaryDto } from "../../ui/models";
 import contextProvider from "../features/common/contextProvider";
-import {GetClaimDetailDocumentsQuery} from "../features/documents/getClaimDetailDocuments";
-import {GetDocumentQuery} from "../features/documents/getDocument";
+import { GetClaimDetailDocumentsQuery } from "../features/documents/getClaimDetailDocuments";
+import { GetDocumentQuery } from "../features/documents/getDocument";
 
 export interface IDocumentsApi {
-  getClaimDetailDocuments: (partnerId: string, periodId: number, costCategoryId: string) => Promise<DocumentSummaryDto[]>;
+  getClaimDetailDocuments: (params: ApiParams<{ partnerId: string, periodId: number, costCategoryId: string }>) => Promise<DocumentSummaryDto[]>;
 }
 
 class Controller extends ControllerBase<DocumentSummaryDto> implements IDocumentsApi {
@@ -15,19 +15,21 @@ class Controller extends ControllerBase<DocumentSummaryDto> implements IDocument
     this.getItems(
       "/claim-details/:partnerId/:periodId/:costCategoryId",
       (p) => ({ partnerId: p.partnerId, periodId: p.periodId, costCategoryId: p.costCategoryId }),
-        p => this.getClaimDetailDocuments(p.partnerId, p.periodId, p.costCategoryId));
+      p => this.getClaimDetailDocuments(p));
 
-    this.getAttachment("/:documentId/content", (p) => ({ documentId: p.documentId }), p => this.getDocument(p.documentId));
+    this.getAttachment("/:documentId/content", (p) => ({ documentId: p.documentId }), p => this.getDocument(p));
   }
 
-  public async getClaimDetailDocuments(partnerId: string, periodId: number, costCategoryId: string) {
+  public async getClaimDetailDocuments(params: ApiParams<{ partnerId: string, periodId: number, costCategoryId: string }>) {
+    const { partnerId, periodId, costCategoryId } = params;
     const query = new GetClaimDetailDocumentsQuery(partnerId, periodId, costCategoryId);
-    return await contextProvider.start().runQuery(query);
+    return await contextProvider.start(params).runQuery(query);
   }
 
-  public async getDocument(documentId: string): Promise<DocumentDto> {
+  public async getDocument(params: ApiParams<{ documentId: string }>): Promise<DocumentDto> {
+    const { documentId } = params;
     const query = new GetDocumentQuery(documentId);
-    return await contextProvider.start().runQuery(query);
+    return await contextProvider.start(params).runQuery(query);
   }
 }
 

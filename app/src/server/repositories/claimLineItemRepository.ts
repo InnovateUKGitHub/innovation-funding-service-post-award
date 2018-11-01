@@ -1,5 +1,6 @@
 import SalesforceBase, {Updatable} from "./salesforceBase";
 import {RecordTypeRepository} from "./recordTypeRepository";
+import { Connection } from "jsforce";
 
 export interface ISalesforceClaimLineItem {
   Id: string;
@@ -31,8 +32,8 @@ export class ClaimLineItemRepository extends SalesforceBase<ISalesforceClaimLine
 
   private recordType: string = "Claims Line Item";
 
-  constructor() {
-    super("Acc_Claims__c", fields);
+  constructor(connection: () => Promise<Connection>) {
+    super(connection, "Acc_Claims__c", fields);
   }
 
   getAllForCategory(partnerId: string, categoryId: string, periodId: number): Promise<ISalesforceClaimLineItem[]> {
@@ -56,7 +57,7 @@ export class ClaimLineItemRepository extends SalesforceBase<ISalesforceClaimLine
   async insert(insert: Partial<ISalesforceClaimLineItem>): Promise<string>;
   async insert(insert: Partial<ISalesforceClaimLineItem>[]): Promise<string[]>;
   async insert(insert: Partial<ISalesforceClaimLineItem>[] | Partial<ISalesforceClaimLineItem>) {
-    const types = await new RecordTypeRepository().getAll();
+    const types = await new RecordTypeRepository(this.getSalesforceConnection).getAll();
     const type = types.find(x => x.Name === this.recordType && x.SobjectType === this.objectName);
     if (!type) {
       throw Error("Failed to find claim line item record type");

@@ -2,6 +2,8 @@ import * as Repositories from "../../repositories";
 import { Configuration, IConfig } from "./config";
 import { Clock, IClock } from "./clock";
 import { ILogger, Logger } from "./logger";
+import { IUser } from "../../../shared/IUser";
+import { ISalesforceConnectionDetails, salesforceConnection } from "../../repositories/salesforceConnection";
 
 export interface IQuery<T> {
   Run: (context: IContext) => Promise<T>;
@@ -38,25 +40,43 @@ export interface IContext {
 }
 
 export class Context implements IContext {
+
+  constructor(public readonly user: IUser) {
+
+    this.config = Configuration;
+
+    this.salesforceConnectionDetails = {
+      username: this.user.email,
+      password: this.config.salesforcePassword,
+      token: this.config.salesforceToken
+    };
+  }
+
+  // the connection details hane been left as delegates untill details of JWT Access token confirmed
   public repositories = {
-    claims: new Repositories.ClaimRepository(),
-    claimDetails: new Repositories.ClaimDetailsRepository(),
-    claimTotalCostCategory: new Repositories.ClaimTotalCostCategoryRepository(),
-    claimCosts: new Repositories.ClaimCostRepository(),
-    contacts: new Repositories.ContactsRepository(),
-    costCategories: new Repositories.CostCategoryRepository(),
-    contentDocumentLinks: new Repositories.ContentDocumentLinkRepository(),
-    contentVersions: new Repositories.ContentVersionRepository(),
-    profileDetails: new Repositories.ProfileDetailsRepository(),
-    profileTotalPeriod: new Repositories.ProfileTotalPeriodRepository(),
-    profileTotalCostCategory: new Repositories.ProfileTotalCostCategoryRepository(),
-    projects: new Repositories.ProjectRepository(),
-    partners: new Repositories.PartnerRepository(),
-    projectContacts: new Repositories.ProjectContactsRepository(),
-    claimLineItems: new Repositories.ClaimLineItemRepository()
+    claims: new Repositories.ClaimRepository(() => this.getSalesforceConnection()),
+    claimDetails: new Repositories.ClaimDetailsRepository(() => this.getSalesforceConnection()),
+    claimTotalCostCategory: new Repositories.ClaimTotalCostCategoryRepository(() => this.getSalesforceConnection()),
+    claimCosts: new Repositories.ClaimCostRepository(() => this.getSalesforceConnection()),
+    contacts: new Repositories.ContactsRepository(() => this.getSalesforceConnection()),
+    costCategories: new Repositories.CostCategoryRepository(() => this.getSalesforceConnection()),
+    contentDocumentLinks: new Repositories.ContentDocumentLinkRepository(() => this.getSalesforceConnection()),
+    contentVersions: new Repositories.ContentVersionRepository(() => this.getSalesforceConnection()),
+    profileDetails: new Repositories.ProfileDetailsRepository(() => this.getSalesforceConnection()),
+    profileTotalPeriod: new Repositories.ProfileTotalPeriodRepository(() => this.getSalesforceConnection()),
+    profileTotalCostCategory: new Repositories.ProfileTotalCostCategoryRepository(() => this.getSalesforceConnection()),
+    projects: new Repositories.ProjectRepository(() => this.getSalesforceConnection()),
+    partners: new Repositories.PartnerRepository(() => this.getSalesforceConnection()),
+    projectContacts: new Repositories.ProjectContactsRepository(() => this.getSalesforceConnection()),
+    claimLineItems: new Repositories.ClaimLineItemRepository(() => this.getSalesforceConnection())
   };
 
-  public config = Configuration;
+  private salesforceConnectionDetails: ISalesforceConnectionDetails;
+  private getSalesforceConnection() {
+    return salesforceConnection(this.salesforceConnectionDetails);
+  }
+
+  public config: Readonly<IConfig>;
   public logger = new Logger();
 
   public runQuery<TResult>(query: IQuery<TResult>): Promise<TResult> {

@@ -11,7 +11,7 @@ export function loadForecastDetailsForPartner(partnerId: string, periodId: numbe
   return conditionalLoad(
     findForecastDetailsByPartner(partnerId, periodId).key,
     "forecastDetails",
-    () => ApiClient.forecastDetails.getAllByPartnerId(partnerId, periodId)
+    (params) => ApiClient.forecastDetails.getAllByPartnerId({partnerId, periodId, ...params})
   );
 }
 
@@ -43,15 +43,16 @@ export function saveForecastDetails(
   updateClaim: boolean,
   partnerId: string,
   periodId: number,
-  dto: ForecastDetailsDTO[],
+  forecasts: ForecastDetailsDTO[],
   claimDetails: ClaimDetailsDto[],
   golCosts: GOLCostDto[],
   costCategories: CostCategoryDto[],
   onComplete: () => void
 ): AsyncThunk<void, DataLoadAction | UpdateEditorAction> {
   return (dispatch, getState) => {
+    const state = getState();
     const selector = getForecastDetailsEditor(partnerId, periodId);
-    const validatorThunk = validateForecastDetails(partnerId, periodId, dto, claimDetails, golCosts, costCategories, true);
+    const validatorThunk = validateForecastDetails(partnerId, periodId, forecasts, claimDetails, golCosts, costCategories, true);
     const validation = validatorThunk(dispatch, getState, null);
 
     if (!validation.isValid) {
@@ -61,11 +62,11 @@ export function saveForecastDetails(
     // send a loading action with undefined as it will just update the status
     dispatch(dataLoadAction(selector.key, selector.store, LoadingStatus.Loading, undefined));
 
-    return ApiClient.forecastDetails.update(partnerId, periodId, dto, updateClaim).then((result) => {
+    return ApiClient.forecastDetails.update({partnerId, periodId, forecasts, submit: updateClaim, user: state.user}).then((result) => {
       dispatch(dataLoadAction(selector.key, selector.store, LoadingStatus.Done, result));
       onComplete();
     }).catch((e) => {
-      dispatch(handleError({id: selector.key, store: selector.store, dto, validation, error: e}));
+      dispatch(handleError({id: selector.key, store: selector.store, dto: forecasts, validation, error: e}));
     });
   };
 }
@@ -74,6 +75,6 @@ export function loadForecastDetail(partnerId: string, periodId: number, costCate
   return conditionalLoad(
     getForecastDetail(partnerId, periodId, costCategoryId).key,
     "forecastDetail",
-    () => ApiClient.forecastDetails.get(partnerId, periodId, costCategoryId)
+    (params) => ApiClient.forecastDetails.get({partnerId, periodId, costCategoryId, ...params})
   );
 }

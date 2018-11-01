@@ -6,8 +6,6 @@ export function loadProject(id: string) {
   return conditionalLoad(
     getProject(id).key,
     projectStore,
-    () => {
-      return ApiClient.projects.get(id);
-    }
+    (params) => ApiClient.projects.get({id, ...params})
   );
 }

@@ -1,10 +1,10 @@
-import {ControllerBase} from "./controllerBase";
+import {ControllerBase, ApiParams} from "./controllerBase";
 import contextProvider from "../features/common/contextProvider";
 import {GetAllForProjectQuery} from "../features/projectContacts/getAllForProjectQuery";
 import {ProjectContactDto} from "../../ui/models";
 
 export interface IProjectContactsApi {
-  getAllByProjectId: (projectId: string) => Promise<ProjectContactDto[]>;
+  getAllByProjectId: (params: ApiParams<{projectId: string}>) => Promise<ProjectContactDto[]>;
 }
 
 class Controller extends ControllerBase<ProjectContactDto> implements IProjectContactsApi {
@@ -12,12 +12,12 @@ class Controller extends ControllerBase<ProjectContactDto> implements IProjectCo
   constructor() {
     super("project-contacts");
 
-    this.getItems("/", (p, q) => ({projectId: q.projectId}), p => this.getAllByProjectId(p.projectId));
+    this.getItems("/", (p, q) => ({projectId: q.projectId}),  (p) => this.getAllByProjectId(p));
   }
 
-  public async getAllByProjectId(projectId: string) {
-    const query = new GetAllForProjectQuery(projectId);
-    return await contextProvider.start().runQuery(query);
+  public async getAllByProjectId(params: ApiParams<{projectId: string}>) {
+    const query = new GetAllForProjectQuery(params.projectId);
+    return await contextProvider.start(params).runQuery(query);
   }
 }
 

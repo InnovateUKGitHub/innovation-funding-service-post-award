@@ -1,4 +1,5 @@
 import SalesforceBase, { Updatable } from "./salesforceBase";
+import { Connection } from "jsforce";
 import { ForecastDetailsDTO } from "../../ui/models";
 
 export interface ISalesforceProfileDetails {
@@ -32,8 +33,8 @@ export interface IProfileDetailsRepository {
 export class ProfileDetailsRepository extends SalesforceBase<ISalesforceProfileDetails> implements IProfileDetailsRepository {
   private recordType: string = "Profile Detail";
 
-  constructor() {
-    super("Acc_Profile__c", fields);
+  constructor(connection: () => Promise<Connection>) {
+    super(connection, "Acc_Profile__c", fields);
   }
 
   public async getAllByPartnerWithPeriodGt(partnerId: string, periodId: number): Promise<ISalesforceProfileDetails[]> {
