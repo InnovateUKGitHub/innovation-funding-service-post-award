@@ -10,7 +10,7 @@ import { rootReducer, setupInitialState, setupMiddleware } from "../ui/redux";
 import { configureRouter, matchRoute } from "../ui/routing";
 import { App } from "../ui/containers/app";
 import { Results } from "../ui/validation/results";
-import { updateEditorAction } from "../ui/redux/actions/editorActions";
+import { updateEditorAction } from "../ui/redux/actions/common";
 
 export function serverRender(req: Request, res: Response, validationError?: { key: string, store: string, dto: {}, result: Results<{}>, error: any }) {
   const router = configureRouter();

@@ -1,6 +1,6 @@
-import {createAction} from "./common";
-import {Results} from "../../validation/results";
-import {ErrorCode} from "../../../server/apis/ApiError";
+import {createAction} from "./createAction";
+import {Results} from "../../../validation/results";
+import {ErrorCode} from "../../../../server/apis/ApiError";
 
 type UpdateEditorThunk = typeof updateEditorAction;
 export type UpdateEditorAction = ReturnType<UpdateEditorThunk>;

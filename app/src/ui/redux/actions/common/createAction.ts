@@ -1,6 +1,6 @@
 import { ThunkAction } from "redux-thunk";
-import { RootActions } from "./root";
-import { RootState } from "../reducers/rootReducer";
+import { RootActions } from "../root";
+import { RootState } from "../../reducers/rootReducer";
 
 export interface IAction<T extends string> {
   type: T;

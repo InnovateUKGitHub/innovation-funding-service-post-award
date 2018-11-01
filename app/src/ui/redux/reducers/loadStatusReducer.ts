@@ -1,4 +1,4 @@
-import { DataLoadAction } from "../actions/dataLoad";
+import { DataLoadAction } from "../actions/common";
 import { LoadingStatus } from "../../../shared/pending";
 
 /// A reducer that monitors data loading to set a global variable that the selenium test framework can use to watch for pages to be ready to test
