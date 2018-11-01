@@ -8,7 +8,6 @@ import * as Selectors from "../../redux/selectors";
 import { IEditorStore } from "../../redux";
 import { ClaimDtoValidator } from "../../validators/claimDtoValidator";
 import { DateTime } from "luxon";
-import { Result } from "../../validation/result";
 import { ReviewClaimLineItemsRoute } from "./claimLineItems";
 import { ClaimsDashboardRoute, ClaimsDetailsRoute } from ".";
 
@@ -107,7 +106,7 @@ class ReviewComponent extends ContainerBase<Params, Data, Callbacks> {
 }
 
 const initEditor = (dto: Dtos.ClaimDto) => {
-  // if the status hasnt already been set to "MO Queried" or "Awaiting IUK Approval" then set the status to New so that the validation kicks in a forces a change
+  // if the status hasn't already been set to "MO Queried" or "Awaiting IUK Approval" then set the status to New so that the validation kicks in a forces a change
   if (dto.status !== moQueried && dto.status !== awaitingIukApproval) {
     dto.status = "New";
   }
