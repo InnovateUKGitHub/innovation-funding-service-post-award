@@ -1,4 +1,4 @@
-import { ControllerBase, ApiParams } from "./controllerBase";
+import { ApiParams, ControllerBase } from "./controllerBase";
 import { GOLCostDto } from "../../ui/models";
 import { GetAllForecastsGOLCostsQuery } from "../features/claims/getAllForecastGOLCostsQuery";
 import contextProvider from "../features/common/contextProvider";

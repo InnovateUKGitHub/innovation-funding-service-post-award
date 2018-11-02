@@ -1,6 +1,6 @@
 import { IApiClient } from "../server/apis";
-import { processResponse } from "./processResponse";
-import {ClaimDto, ClaimLineItemDto, ForecastDetailsDTO} from "../ui/models";
+import { processResponse } from "../shared/processResponse";
+import { ClaimDto, ClaimLineItemDto, ForecastDetailsDTO } from "../ui/models";
 
 const clientApi: IApiClient = {
   claimLineItems: {
@@ -88,4 +88,4 @@ const ajaxPut = <T>(url: string, body: {} = {}, opts?: {}) => {
   });
 };
 
-export default clientApi;
+export const ApiClient = clientApi;

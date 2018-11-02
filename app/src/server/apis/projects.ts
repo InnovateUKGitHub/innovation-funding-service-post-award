@@ -1,5 +1,5 @@
 import { GetAllQuery, GetByIdQuery } from "../features/projects";
-import { ControllerBase, ApiParams } from "./controllerBase";
+import { ApiParams, ControllerBase } from "./controllerBase";
 import contextProvider from "../features/common/contextProvider";
 import { ProjectDto } from "../../ui/models/projectDto";
 

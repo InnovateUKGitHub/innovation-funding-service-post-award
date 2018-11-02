@@ -1,5 +1,5 @@
 import {conditionalLoad} from "./dataLoad";
-import {ApiClient} from "../../../shared/apiClient";
+import { ApiClient } from "../../apiClient";
 import { costCategoriesStore, getCostCategories } from "../selectors/costCategories";
 
 export function loadCostCategories() {

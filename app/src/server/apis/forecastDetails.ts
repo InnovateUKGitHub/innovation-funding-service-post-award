@@ -1,4 +1,4 @@
-import { ControllerBase, ApiParams } from "./controllerBase";
+import { ApiParams, ControllerBase } from "./controllerBase";
 import { ForecastDetailsDTO } from "../../ui/models";
 import contextProvider from "../features/common/contextProvider";
 import {GetAllForecastsForPartnerQuery, GetForecastDetail, UpdateForecastDetailsCommand} from "../features/forecastDetails";
@@ -46,7 +46,7 @@ class Controller extends ControllerBase<ForecastDetailsDTO> implements IForecast
   }
 
   public async update(params: ApiParams<{ partnerId: string, periodId: number, forecasts: ForecastDetailsDTO[], submit: boolean }>) {
-    
+
     const context = contextProvider.start(params);
     const forecastCmd = new UpdateForecastDetailsCommand(params.partnerId, params.periodId, params.forecasts);
     await context.runCommand(forecastCmd);

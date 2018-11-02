@@ -1,6 +1,6 @@
 import {conditionalLoad} from "./dataLoad";
 import { claimsStore, findClaimsByPartner } from "../selectors/claims";
-import {ApiClient} from "../../../shared/apiClient";
+import { ApiClient } from "../../apiClient";
 
 export function loadClaimsForPartner(partnerId: string) {
   return conditionalLoad(

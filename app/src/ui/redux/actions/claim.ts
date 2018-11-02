@@ -1,5 +1,5 @@
 import {conditionalLoad, dataLoadAction, DataLoadAction} from "./dataLoad";
-import {ApiClient} from "../../../shared/apiClient";
+import { ApiClient } from "../../apiClient";
 import { getClaim, getClaimEditor } from "../selectors/claim";
 import {ClaimDetailsSummaryDto, ClaimDto, CostCategoryDto} from "../../models";
 import {AsyncThunk, SyncThunk} from "./common";
