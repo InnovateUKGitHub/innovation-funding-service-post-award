@@ -10,25 +10,25 @@ import { RadioList } from "./inputs";
 interface FormProps<T> {
     data: T;
     onChange?: (data: T) => void;
-    onSubmit: () => void;
+    onSubmit?: () => void;
     qa?: string;
 }
 
 interface FormChildProps<T> {
-  key?: string;
-  formData: T;
-  onChange?: (data: T) => void;
-  onSubmit: () => void;
-  qa?: string;
+    key?: string;
+    formData: T;
+    onChange?: (data: T) => void;
+    onSubmit?: () => void;
+    qa?: string;
 }
 
 class FormComponent<T> extends React.Component<FormProps<T>, []> {
     render() {
         const childProps = (index: number): FormChildProps<T> => ({
-          key: "formchild" + index,
-          formData: this.props.data,
-          onChange: this.props.onChange,
-          onSubmit: this.props.onSubmit
+            key: "formchild" + index,
+            formData: this.props.data,
+            onChange: this.props.onChange,
+            onSubmit: this.props.onSubmit
         });
 
         const childrenWithData = React.Children.map(this.props.children, (child, index) => child && React.cloneElement(child as any, childProps(index)));
@@ -41,8 +41,10 @@ class FormComponent<T> extends React.Component<FormProps<T>, []> {
     }
 
     private onSubmit(e: React.SyntheticEvent<HTMLFormElement>) {
-        e.preventDefault();
-        this.props.onSubmit();
+        if (this.props.onSubmit) {
+            e.preventDefault();
+            this.props.onSubmit();
+        }
     }
 }
 
@@ -54,13 +56,13 @@ interface FieldsetProps<T> {
 
 class FieldsetComponent<T> extends React.Component<FieldsetProps<T>, []> {
     render() {
-        const props      = this.props as any as FieldsetProps<T> & FormChildProps<T>;
-        const parentKey  = "fieldset";
+        const props = this.props as any as FieldsetProps<T> & FormChildProps<T>;
+        const parentKey = "fieldset";
         const childProps = (index: number): FormChildProps<T> => ({
-          key: parentKey + "child" + index,
-          formData: props.formData,
-          onChange: props.onChange,
-          onSubmit: props.onSubmit
+            key: parentKey + "child" + index,
+            formData: props.formData,
+            onChange: props.onChange,
+            onSubmit: props.onSubmit
         });
 
         const childrenWithData = React.Children.map(this.props.children, (child, index) => child && React.cloneElement(child as any, childProps(index)));
@@ -85,8 +87,8 @@ interface ExternalFieldProps<TDto, TValue> {
     label: React.ReactNode;
     hint?: React.ReactNode;
     name: string;
-    value: (data: TDto) => TValue|null|undefined;
-    update: (data: TDto, value: TValue|null) => void;
+    value: (data: TDto) => TValue | null | undefined;
+    update: (data: TDto, value: TValue | null) => void;
     validation?: Result;
 }
 
@@ -94,10 +96,10 @@ class FieldComponent<T, TValue> extends React.Component<InternalFieldProps<T> & 
     render() {
         const { hint, name, label, field, formData, validation } = this.props;
         return (
-            <div data-qa={`field-${name}`} className={classNames("govuk-form-group", {"govuk-form-group--error": validation && validation.showValidationErrors && !validation.isValid})}>
+            <div data-qa={`field-${name}`} className={classNames("govuk-form-group", { "govuk-form-group--error": validation && validation.showValidationErrors && !validation.isValid })}>
                 <label className="govuk-label" htmlFor={name}>{label}</label>
                 {hint ? <span id={`${name}-hint`} className="govuk-hint">{hint}</span> : null}
-                <ValidationError error={validation}/>
+                <ValidationError error={validation} />
                 {field(formData!)}
             </div>
         );
@@ -105,9 +107,11 @@ class FieldComponent<T, TValue> extends React.Component<InternalFieldProps<T> & 
 }
 
 const handleSubmit = <TDto extends {}>(props: SubmitProps, e: React.SyntheticEvent<HTMLButtonElement>) => {
-    e.preventDefault();
     const formProps = props as any as FormProps<TDto>;
-    formProps.onSubmit();
+    if (formProps.onSubmit) {
+        e.preventDefault();
+        formProps.onSubmit();
+    }
 };
 
 const handleOtherButton = <TDto extends {}>(props: ButtonProps, e: React.SyntheticEvent<HTMLButtonElement>) => {
@@ -115,13 +119,13 @@ const handleOtherButton = <TDto extends {}>(props: ButtonProps, e: React.Synthet
     props.onClick();
 };
 
-const handleChange = <TDto extends {}, TValue extends {}>(props: ExternalFieldProps<TDto, TValue>, value: TValue|null) => {
+const handleChange = <TDto extends {}, TValue extends {}>(props: ExternalFieldProps<TDto, TValue>, value: TValue | null) => {
     const formProps = props as any as FormChildProps<TDto>;
     const data = formProps.formData;
     props.update(data, value);
 
-    if(!!formProps.onChange) {
-      formProps.onChange(data);
+    if (!!formProps.onChange) {
+        formProps.onChange(data);
     }
 };
 
@@ -163,7 +167,7 @@ interface RadioFieldProps<T extends {}> extends ExternalFieldProps<T, SelectOpti
 const RadioOptionsField = <T extends {}>(props: RadioFieldProps<T>) => {
     const TypedFieldComponent = FieldComponent as { new(): FieldComponent<T, SelectOption> };
     return (
-        <TypedFieldComponent field={(data) => <RadioList options={props.options} name={props.name} value={props.value(data)} onChange={(val) => handleChange(props, val)}/>} {...props} />
+        <TypedFieldComponent field={(data) => <RadioList options={props.options} name={props.name} value={props.value(data)} onChange={(val) => handleChange(props, val)} />} {...props} />
     );
 };
 
@@ -183,7 +187,7 @@ interface ButtonProps {
 }
 
 const ButtonComponent: React.SFC<ButtonProps> = (props) => {
-    return <button type="submit" name="button" value={props.name} className="govuk-button" style={{background:"buttonface", color: "buttontext" }} onClick={(e) => handleOtherButton(props, e)}>{props.children}</button>;
+    return <button type="submit" name="button" value={props.name} className="govuk-button" style={{ background: "buttonface", color: "buttontext" }} onClick={(e) => handleOtherButton(props, e)}>{props.children}</button>;
 };
 
 export const TypedForm = <T extends {}>() => ({
