@@ -13,3 +13,6 @@ export const  GOVUK_ERROR_COLOUR = "#b10e1e";
 export const  GOVUK_COLOUR_BLACK = "#0b0c0c";
 export const  GOVUK_COLOUR_GREY_3 = "#dee0e2";
 export const  GOVUK_COLOUR_GREY_4 = "#f8f8f8";
+
+//EXTENDED COLOURS
+export const GOVUK_COLOUR_GREEN = "	#006435";
