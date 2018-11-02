@@ -1,4 +1,4 @@
-import { ControllerBase, ApiParams } from "./controllerBase";
+import { ApiParams, ControllerBase } from "./controllerBase";
 import { PartnerDto } from "../../ui/models/partnerDto";
 import contextProvider from "../features/common/contextProvider";
 import { GetAllForProjectQuery, GetByIdQuery } from "../features/partners";

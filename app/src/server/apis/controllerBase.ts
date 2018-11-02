@@ -16,7 +16,6 @@ export interface ISession {
 
 export type ApiParams<T> = T & ISession;
 
-
 export abstract class ControllerBase<T> {
   public readonly router: Router;
 
@@ -45,7 +44,6 @@ export abstract class ControllerBase<T> {
   protected putItems<TParams>(path: string, getParams: (params: any, query: any, body: any) => TParams, run: (params: ApiParams<TParams>) => Promise<T[]>) {
     return this.putCustom<TParams, T[]>(path, getParams, run);
   }
-
 
   protected postItems<TParams>(path: string, getParams: (params: any, query: any, body: any) => TParams, run: (params: ApiParams<TParams>) => Promise<T[]>) {
     return this.postCustom<TParams, T[]>(path, 201, getParams, run);

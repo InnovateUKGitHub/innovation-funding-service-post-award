@@ -3,7 +3,7 @@ import contextProvider from "../features/common/contextProvider";
 import { GetAllQuery } from "../features/contacts/getAllQuery";
 import { GetByIdQuery } from "../features/contacts/getByIdQuery";
 import { IContact } from "../../ui/models";
-import { ControllerBase, ApiParams } from "./controllerBase";
+import { ApiParams, ControllerBase } from "./controllerBase";
 
 export interface IContactsApi {
   get: (params: ApiParams<{ id: string }>) => Promise<IContact | null>;

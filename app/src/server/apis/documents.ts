@@ -1,4 +1,4 @@
-import { ControllerBase, ApiParams } from "./controllerBase";
+import { ApiParams, ControllerBase } from "./controllerBase";
 import { DocumentDto, DocumentSummaryDto } from "../../ui/models";
 import contextProvider from "../features/common/contextProvider";
 import { GetClaimDetailDocumentsQuery } from "../features/documents/getClaimDetailDocuments";
