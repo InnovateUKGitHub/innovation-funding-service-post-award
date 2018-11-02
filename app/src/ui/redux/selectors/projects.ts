@@ -1,16 +1,11 @@
-import {ProjectDto} from "../../models";
-import { IDataStore, RootState} from "../reducers";
-import {getData} from "./data";
-import {IDataSelector} from "./IDataSelector";
-import {Pending} from "../../../shared/pending";
+import { dataStoreHelper, IDataSelector } from "./common";
+import { ProjectContactDto, ProjectDto } from "../../models";
 
 export const projectsStore = "projects";
+export const getProjects = () => dataStoreHelper(projectsStore, "All") as IDataSelector<ProjectDto[]>;
 
-const getProjectsCollection = (state: RootState): { [key: string]: IDataStore<ProjectDto[]> } => (getData(state)[projectsStore] || {});
+export const projectStore = "project";
+export const getProject = (id: string) => dataStoreHelper(projectStore, id) as IDataSelector<ProjectDto>;
 
-// selectors
-export const getProjects = (): IDataSelector<ProjectDto[]> => {
-  const key =  "All";
-  const get = (state: RootState) => getProjectsCollection(state).All;
-  return { key, get, getPending: (state: RootState) => Pending.create(get(state))};
-};
+export const projectContactsStore = "projectContacts";
+export const findContactsByProject = (projectId: string) => dataStoreHelper(projectContactsStore, `projectId=${projectId}`) as IDataSelector<ProjectContactDto[]>;

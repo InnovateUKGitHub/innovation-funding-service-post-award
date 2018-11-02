@@ -1,11 +1,8 @@
-import {conditionalLoad} from "./dataLoad";
-import { ApiClient } from "../../apiClient";
-import { costCategoriesStore, getCostCategories } from "../selectors/costCategories";
+import {conditionalLoad} from "./common";
+import {ApiClient} from "../../apiClient";
+import { getCostCategories } from "../selectors/costCategories";
 
 export function loadCostCategories() {
-  return conditionalLoad(
-    getCostCategories().key,
-    costCategoriesStore,
-    (params) => ApiClient.costCategories.getAll(params)
-  );
+  const selector = getCostCategories();
+  return conditionalLoad(selector.key, selector.store, params => ApiClient.costCategories.getAll(params));
 }

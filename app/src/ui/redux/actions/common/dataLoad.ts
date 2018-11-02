@@ -1,7 +1,7 @@
-import { AsyncThunk, createAction } from "./common";
-import { DataStateKeys, IDataStore } from "../reducers";
-import { LoadingStatus } from "../../../shared/pending";
-import { IUser } from "../../../shared/IUser";
+import { AsyncThunk, createAction } from "./createAction";
+import { DataStateKeys, IDataStore } from "../../reducers";
+import { LoadingStatus } from "../../../../shared/pending";
+import { IUser } from "../../../../shared/IUser";
 
 type DataLoadThunk = typeof dataLoadAction;
 export type DataLoadAction = ReturnType<DataLoadThunk>;

@@ -1,18 +1,19 @@
-import {conditionalLoad, DataLoadAction, dataLoadAction} from "./dataLoad";
+import { AsyncThunk, conditionalLoad, DataLoadAction, dataLoadAction, SyncThunk } from "./common";
 import { ApiClient } from "../../apiClient";
-import {findForecastDetailsByPartner, getForecastDetail, getForecastDetailsEditor} from "../selectors";
 import { ClaimDetailsDto, CostCategoryDto, ForecastDetailsDTO, GOLCostDto } from "../../models";
-import { AsyncThunk, SyncThunk } from "./common";
 import { ForecastDetailsDtosValidator } from "../../validators/forecastDetailsDtosValidator";
-import { handleError, UpdateEditorAction, updateEditorAction } from "./editorActions";
+import { handleError, UpdateEditorAction, updateEditorAction } from "./common/editorActions";
 import { LoadingStatus } from "../../../shared/pending";
+import {
+  findForecastDetailsByPartner,
+  findGolCostsByPartner,
+  getForecastDetail,
+  getForecastDetailsEditor
+} from "../selectors";
 
 export function loadForecastDetailsForPartner(partnerId: string, periodId: number) {
-  return conditionalLoad(
-    findForecastDetailsByPartner(partnerId, periodId).key,
-    "forecastDetails",
-    (params) => ApiClient.forecastDetails.getAllByPartnerId({partnerId, periodId, ...params})
-  );
+  const selector = findForecastDetailsByPartner(partnerId, periodId);
+  return conditionalLoad(selector.key, selector.store, params => ApiClient.forecastDetails.getAllByPartnerId({partnerId, periodId, ...params}));
 }
 
 export function validateForecastDetails(
@@ -72,9 +73,11 @@ export function saveForecastDetails(
 }
 
 export function loadForecastDetail(partnerId: string, periodId: number, costCategoryId: string) {
-  return conditionalLoad(
-    getForecastDetail(partnerId, periodId, costCategoryId).key,
-    "forecastDetail",
-    (params) => ApiClient.forecastDetails.get({partnerId, periodId, costCategoryId, ...params})
-  );
+  const selector = getForecastDetail(partnerId, periodId, costCategoryId);
+  return conditionalLoad(selector.key, selector.store, params => ApiClient.forecastDetails.get({partnerId, periodId, costCategoryId, ...params}));
+}
+
+export function loadForecastGOLCostsForPartner(partnerId: string) {
+  const selector = findGolCostsByPartner(partnerId);
+  return conditionalLoad(selector.key, selector.store, params => ApiClient.forecastGolCosts.getAllByPartnerId({partnerId, ...params}));
 }

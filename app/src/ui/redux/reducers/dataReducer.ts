@@ -1,4 +1,4 @@
-import { DataLoadAction } from "../actions/dataLoad";
+import { DataLoadAction } from "../actions/common";
 import * as Dtos from "../../models";
 import { combineReducers } from "redux";
 import { ActionTransitionStart } from "redux-router5";
