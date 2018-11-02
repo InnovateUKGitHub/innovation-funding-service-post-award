@@ -75,7 +75,7 @@ export abstract class ControllerBase<T> {
     if (error instanceof ApiError) {
       return { status: error.errorCode, data: { code: ErrorCode.SERVER_ERROR, details: error.message }};
     }
-    return { status: 500, data: { code: ErrorCode.SERVER_ERROR, details: "An unexpected error has occurred..." } };
+    return { status: 500, data: { code: ErrorCode.SERVER_ERROR, details: error.message || "An unexpected error has occurred..." } };
   }
 
   private errorHandler<E extends Error>(err: E, resp: Response) {
