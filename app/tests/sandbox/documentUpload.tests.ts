@@ -7,7 +7,7 @@ import {ClaimDetailsRepository} from "../../src/server/repositories";
 
 const getSalesforceConnection = () => salesforceConnection({username:"", password: "", token: ""});
 
-xdescribe("test", () => {
+xdescribe("test document upload", () => {
   it("should", () => {
     getSalesforceConnection().then((conn) => {
       const contents = fs.readFileSync("./tests/sandbox/cat.jpg");
