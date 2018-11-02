@@ -7,14 +7,14 @@ export interface ISalesforceConnectionDetails {
   token: string;
 }
 
-export const salesforceConnection = ({ username, password, token }: ISalesforceConnectionDetails) => {
+export const salesforceConnection = ({username, password, token}: ISalesforceConnectionDetails) => {
 
   const connection = new jsforce.Connection({
     loginUrl: "https://test.salesforce.com"
   });
 
   return new Promise<jsforce.Connection>((resolve, reject) => {
-    if(!username || !password || !token){
+    if (!username || !password || !token) {
       throw new Error("Invalid connection details");
     }
     connection.login(username, password + token, (err, conn) => {

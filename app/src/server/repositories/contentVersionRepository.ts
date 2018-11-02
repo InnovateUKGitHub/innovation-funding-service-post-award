@@ -1,20 +1,25 @@
 import SalesforceBase from "./salesforceBase";
 import { Stream } from "stream";
-import { Connection } from "jsforce";
+import {Connection} from "jsforce";
 
 export interface ISalesforceContentVersion {
   Id: string;
   Title: string;
-  FileExtension: string;
+  FileExtension: string | null;
   ContentDocumentId: string;
   ContentSize: number;
-  FileType: string;
+  FileType: string | null;
+  ReasonForChange: string;
+  PathOnClient: string;
+  ContentLocation: "S";
+  VersionData: string;
 }
 
 export interface IContentVersionRepository {
   getDocuments(contentDocumentIds: string[]): Promise<ISalesforceContentVersion[]>;
   getDocument(id: string): Promise<ISalesforceContentVersion>;
   getDocumentData(id: string): Promise<Stream>;
+  insertDocument(content: string, fileName: string): Promise<string>;
 }
 
 const fieldNames: (keyof ISalesforceContentVersion)[] = ["Id", "Title", "FileExtension", "ContentDocumentId", "ContentSize", "FileType"];
@@ -35,6 +40,15 @@ export class ContentVersionRepository extends SalesforceBase<ISalesforceContentV
         throw Error("Document not found");
       }
       return x;
+    });
+  }
+
+  public insertDocument(content: string, fileName: string) {
+    return super.insert({
+      ReasonForChange: "First Upload",
+      PathOnClient: fileName,
+      ContentLocation: "S",
+      VersionData: content,
     });
   }
 

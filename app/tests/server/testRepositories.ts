@@ -93,6 +93,9 @@ class ContentDocumentLinkTestRepository extends TestRepository<Repositories.ISal
   getAllForEntity(entityId: string): Promise<Repositories.ISalesforceContentDocumentLink[]> {
     return super.getWhere(x => x.LinkedEntityId === entityId);
   }
+  public insertContentDocumentLink( contentDocumentId: string, linkedEntityId: string) {
+    return super.insertOne({ ContentDocumentId: contentDocumentId, LinkedEntityId: linkedEntityId, ShareType: "V"});
+  }
 }
 
 class ContentVersionTestRepository extends TestRepository<Repositories.ISalesforceContentVersion> implements Repositories.IContentVersionRepository {
@@ -109,6 +112,23 @@ class ContentVersionTestRepository extends TestRepository<Repositories.ISalesfor
       s.push(x.Id);
       s.push(null);
       return s;
+    });
+  }
+  public insertDocument(content: string, fileName: string) {
+    const nameParts = fileName.split(".");
+    const extension = nameParts.length > 1 ? nameParts[nameParts.length - 1] : null;
+    const title = nameParts[0];
+    return super.insertOne({
+      Id: (this.Items.length + 1).toString(),
+      Title: title,
+      FileExtension: extension,
+      ContentDocumentId: (this.Items.length + 1).toString(),
+      ContentSize: 5,
+      FileType: extension,
+      ReasonForChange: "First upload",
+      PathOnClient: fileName,
+      ContentLocation: "S",
+      VersionData: content,
     });
   }
 }
