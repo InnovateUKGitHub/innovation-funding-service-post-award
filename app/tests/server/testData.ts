@@ -1,6 +1,7 @@
 import * as Repositories from "../../src/server/repositories";
 import { ITestRepositories } from "./testRepositories";
 import { DateTime } from "luxon";
+import {string} from "prop-types";
 
 export class TestData {
     constructor(private repositories: ITestRepositories){
@@ -259,13 +260,14 @@ export class TestData {
     public createContentDocumentLink(contentDocumentId: string, entityId: string) {
       const item = {
         ContentDocumentId: contentDocumentId,
-        LinkedEntityId: entityId
+        LinkedEntityId: entityId,
+        ShareType: "V"
       };
       this.repositories.contentDocumentLinks.Items.push(item);
       return item;
     }
 
-    public createContentVersion(entityId: string, title: string, fileType: string) {
+    public createContentVersion(entityId: string, title: string, fileType: string, content: string = "") {
       const id = ""+this.repositories.contentVersions.Items.length + 1;
       const item = {
         Id: id,
@@ -274,7 +276,11 @@ export class TestData {
         Title: title,
         FileExtension: fileType,
         ContentSize: 2,
-        FileType: fileType
+        FileType: fileType,
+        ReasonForChange: "First upload",
+        PathOnClient: fileType ? `${title}.${fileType}` : title,
+        ContentLocation: "S",
+        VersionData: content,
       };
       this.repositories.contentVersions.Items.push(item);
       return item;

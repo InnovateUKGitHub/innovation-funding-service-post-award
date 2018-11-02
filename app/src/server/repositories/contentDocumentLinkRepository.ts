@@ -4,7 +4,7 @@ import { Connection } from "jsforce";
 export interface ISalesforceContentDocumentLink {
   ContentDocumentId: string;
   LinkedEntityId: string;
-  ShareType: "V";
+  ShareType: string;
 }
 
 const fieldNames: (keyof ISalesforceContentDocumentLink)[] = [

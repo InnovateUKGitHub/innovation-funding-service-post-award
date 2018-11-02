@@ -11,7 +11,7 @@ export interface ISalesforceContentVersion {
   FileType: string | null;
   ReasonForChange: string;
   PathOnClient: string;
-  ContentLocation: "S";
+  ContentLocation: string;
   VersionData: string;
 }
 
