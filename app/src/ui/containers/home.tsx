@@ -1,30 +1,47 @@
 import React from "react";
-import { Link, Title } from "../components";
-import { ContainerBase, ReduxContainer } from "./containerBase";
-import { ClaimLineItemsRoute, ClaimsDashboardRoute, ClaimsDetailsRoute, ContactListRoute, ProjectDashboardRoute, ProjectDetailsRoute } from ".";
+import { Link, Title, TypedForm } from "../components";
+import { ContainerBaseWithState, ContainerProps, ReduxContainer, } from "./containerBase";
+import { ContactListRoute, ProjectDashboardRoute, } from ".";
+import { SimpleString } from "../components/renderers";
 
-const projectId = "a0C1X000000CxrFUAS";
-const partnerId = "a0B1X000000DIxmUAG";
-const periodId = 1;
-const costCategoryId = "a071X000000HES6QAO";
+interface Props {
+  userEmail: string;
+}
 
-class Component extends ContainerBase<{}, {}, {}> {
+interface State {
+  email: string;
+}
+
+class Component extends ContainerBaseWithState<{}, Props, {}, State> {
+  constructor(props: ContainerProps<{}, Props, {}>) {
+    super(props);
+    this.state = { email: props.userEmail };
+  }
+
   render() {
+    const formData = ({ email: this.state && this.state.email });
+    const CurrentUserForm = TypedForm<typeof formData>();
     return (
       <div>
         <Title title="Home page" />
         <div className="govuk-grid-row">
+          <div className="govuk-grid-column-full">
+            <h2>Current user</h2>
+            <SimpleString>{this.props.userEmail}</SimpleString>
+            <CurrentUserForm.Form data={formData} onChange={v => this.setState(v)}>
+              <CurrentUserForm.String label="User" name="user" value={x => x.email} update={(x, v) => x.email = v || ""} />
+              <CurrentUserForm.Submit>Change user</CurrentUserForm.Submit>
+            </CurrentUserForm.Form>
+          </div>
+        </div>
+        <div className="govuk-grid-row">
           <div className="govuk-grid-column-one-third">
             <h2><Link route={ProjectDashboardRoute.getLink({})}>Projects</Link></h2>
-            <p>Projects dashboard</p>
-          </div>
-          <div className="govuk-grid-column-one-third">
-            <h2><Link route={ProjectDetailsRoute.getLink({ id: projectId })}>Example Project</Link></h2>
-            <p>Project with data</p>
+            <SimpleString>Projects dashboard</SimpleString>
           </div>
           <div className="govuk-grid-column-one-third">
             <h2><Link route={ContactListRoute.getLink({})}>Contacts</Link></h2>
-            <p>Some contacts from salesforce</p>
+            <SimpleString>Some contacts from salesforce</SimpleString>
           </div>
         </div>
       </div>
@@ -32,10 +49,10 @@ class Component extends ContainerBase<{}, {}, {}> {
   }
 }
 
-const containerDefinition = ReduxContainer.for(Component);
+const containerDefinition = ReduxContainer.for<{}, Props, {}>(Component);
 
 export const Home = containerDefinition.connect({
-  withData: () => ({}),
+  withData: (store) => ({ userEmail: store.user.email }),
   withCallbacks: () => ({})
 });
 

@@ -1,13 +1,13 @@
 import express from "express";
 import contextProvider from "../features/common/contextProvider";
 import { GetClaim } from "../features/claims";
-import { UpdateClaimCommand} from "../features/claims/updateClaim";
-import { ClaimForecastRoute, ClaimsDashboardRoute, PrepareClaimRoute, } from "../../ui/containers";
+import { UpdateClaimCommand } from "../features/claims/updateClaim";
+import { ClaimForecastRoute, ClaimsDashboardRoute, HomeRoute, PrepareClaimRoute, } from "../../ui/containers";
 import { configureRouter } from "../../ui/routing/configureRouter";
 import { serverRender } from "../serverRender";
 import { ClaimDtoValidator } from "../../ui/validators/claimDtoValidator";
 import { getClaimEditor } from "../../ui/redux/selectors";
-import {ValidationError} from "../../shared/validation";
+import { ValidationError } from "../../shared/validation";
 
 export const formRouter = express.Router();
 
@@ -21,7 +21,7 @@ const PrepareClaimForm = async (req: express.Request, res: express.Response) => 
     const params = { projectId: req.params.projectId, partnerId: req.params.partnerId, periodId: parseInt(req.params.periodId, 10) };
     const body = { comments: req.body.comments, button: req.body.button };
 
-    const context = contextProvider.start({user: req.session!.user});
+    const context = contextProvider.start({ user: req.session!.user });
 
     const claim = await context.runQuery(new GetClaim(params.partnerId, params.periodId));
     if (claim === null) {
@@ -59,7 +59,7 @@ const ForcastClaimForm = async (req: express.Request, res: express.Response) => 
     const params = { projectId: req.params.projectId, partnerId: req.params.partnerId, periodId: parseInt(req.params.periodId, 10) };
     const body = {};
 
-    const context = contextProvider.start({user: req.session!.user});
+    const context = contextProvider.start({ user: req.session!.user });
 
     const claim = await context.runQuery(new GetClaim(params.partnerId, params.periodId));
     if (claim === null) {
@@ -87,5 +87,14 @@ const ForcastClaimForm = async (req: express.Request, res: express.Response) => 
     }
 };
 
+const HomeForm = async (req: express.Request, res: express.Response) => {
+    const body = { user: req.body.user };
+    if (body.user) {
+        req.session!.user.email = body.user;
+    }
+    navigateTo(HomeRoute.getLink({}), res);
+};
+
 formRouter.post(PrepareClaimRoute.routePath, PrepareClaimForm);
 formRouter.post(ClaimForecastRoute.routePath, ForcastClaimForm);
+formRouter.post("/", HomeForm);
