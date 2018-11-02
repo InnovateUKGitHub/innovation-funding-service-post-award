@@ -1,4 +1,5 @@
 import SalesforceBase, {Updatable} from "./salesforceBase";
+import { Connection } from "jsforce";
 
 export interface ISalesforceClaim {
   Id: string;
@@ -40,8 +41,8 @@ export interface IClaimRepository {
 
 export class ClaimRepository extends SalesforceBase<ISalesforceClaim> implements IClaimRepository {
   private recordType = "Total Project Period";
-  constructor() {
-    super("Acc_Claims__c", fields);
+  constructor(connection: () => Promise<Connection>) {
+    super(connection, "Acc_Claims__c", fields);
   }
 
   public async getAllByPartnerId(partnerId: string): Promise<ISalesforceClaim[]> {

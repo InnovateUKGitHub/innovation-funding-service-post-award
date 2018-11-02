@@ -11,7 +11,7 @@ export function loadClaimLineItemsForCategory(partnerId: string, costCategoryId:
   return conditionalLoad(
     findClaimLineItemsByPartnerCostCategoryAndPeriod(partnerId, costCategoryId, periodId).key,
     claimLineItemsStore,
-    () => ApiClient.claimLineItems.getAllForCategory(partnerId, costCategoryId, periodId)
+    (params) => ApiClient.claimLineItems.getAllForCategory({ partnerId, costCategoryId, periodId, ...params})
   );
 }
 
@@ -29,20 +29,21 @@ export function validateClaimLineItems(partnerId: string, periodId: number, cost
   };
 }
 
-export function saveClaimLineItems(partnerId: string, periodId: number, costCategoryId: string, dto: ClaimLineItemDto[], onComplete: () => void): SyncThunk<void, UpdateEditorAction | DataLoadAction> {
+export function saveClaimLineItems(partnerId: string, periodId: number, costCategoryId: string, lineItems: ClaimLineItemDto[], onComplete: () => void): SyncThunk<void, UpdateEditorAction | DataLoadAction> {
   return (dispatch, getState) => {
-
+    const state = getState();
     const key = findClaimLineItemsByPartnerCostCategoryAndPeriod(partnerId, costCategoryId, periodId).key;
-    const validation = validateClaimLineItems(partnerId, periodId, costCategoryId, dto, true)(dispatch, getState, null);
+    const validation = validateClaimLineItems(partnerId, periodId, costCategoryId, lineItems, true)(dispatch, getState, null);
     if (!validation.isValid) {
       return Promise.resolve();
     }
-    return ApiClient.claimLineItems.saveLineItems(partnerId, costCategoryId, periodId, dto)
+
+    return ApiClient.claimLineItems.saveLineItems({partnerId, costCategoryId, periodId, lineItems, user: state.user})
       .then((result) => {
         dispatch(dataLoadAction(key, claimLineItemsStore,LoadingStatus.Done, result));
         onComplete();
       }).catch((e) => {
-        dispatch(handleError({ id: key, store: claimLineItemsStore, dto, validation, error: e}));
+        dispatch(handleError({ id: key, store: claimLineItemsStore, dto:lineItems, validation, error: e}));
       });
   };
 }

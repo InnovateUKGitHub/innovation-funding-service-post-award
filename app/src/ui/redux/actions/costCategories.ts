@@ -6,6 +6,6 @@ export function loadCostCategories() {
   return conditionalLoad(
     getCostCategories().key,
     costCategoriesStore,
-    () => ApiClient.costCategories.getAll()
+    (params) => ApiClient.costCategories.getAll(params)
   );
 }

@@ -3,6 +3,7 @@ import { createTestRepositories, ITestRepositories } from "./testRepositories";
 import { TestData } from "./testData";
 import { TestClock } from "./testClock";
 import { TestLogger } from "./testLogger";
+import { IConfig } from "../../src/server/features/common/config";
 
 export class TestContext implements IContext {
     constructor() {
@@ -16,9 +17,11 @@ export class TestContext implements IContext {
 
     public testData: TestData;
 
-    public config = {
+    public config: IConfig = {
         ifsApplicationUrl: "",
-        ifsGrantLetterUrl: ""
+        ifsGrantLetterUrl: "",
+        salesforcePassword: "",
+        salesforceToken: ""
     };
 
     public runQuery<TResult>(query: IQuery<TResult>): Promise<TResult> {

@@ -6,6 +6,6 @@ export function loadContactsForProject(projectId: string) {
   return conditionalLoad(
     findContactsByProject(projectId).key,
     projectContactsStore,
-    () => ApiClient.projectContacts.getAllByProjectId(projectId)
+    (params) => ApiClient.projectContacts.getAllByProjectId({projectId, ...params})
   );
 }

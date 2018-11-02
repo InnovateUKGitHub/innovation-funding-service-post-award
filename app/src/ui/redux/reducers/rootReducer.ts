@@ -3,6 +3,7 @@ import { router5Reducer } from "redux-router5";
 import { dataReducer } from "./dataReducer";
 import { loadStatusReducer } from "./loadStatusReducer";
 import { editorReducer } from "./editorsReducer";
+import { userReducer } from "./userReducer";
 
 export type RootState = ReturnType<typeof rootReducer>;
 export type DataState = ReturnType<typeof dataReducer>;
@@ -14,5 +15,6 @@ export const rootReducer = combineReducers({
   router: router5Reducer,
   data: dataReducer,
   editors: editorReducer,
-  loadStatus: loadStatusReducer
+  loadStatus: loadStatusReducer,
+  user: userReducer
 });

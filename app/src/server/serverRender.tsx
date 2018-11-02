@@ -22,7 +22,7 @@ export function serverRender(req: Request, res: Response, validationError?: { ke
       return res.status(500).send(routeError);
     }
 
-    const initialState = setupInitialState(route);
+    const initialState = setupInitialState(route, req.session!.user);
     const middleware = setupMiddleware(router, false);
     const store = createStore(rootReducer, initialState, middleware);
     const matched = matchRoute(route);

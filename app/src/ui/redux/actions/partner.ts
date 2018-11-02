@@ -6,8 +6,6 @@ export function loadPartner(id: string) {
   return conditionalLoad(
     getPartner(id).key,
     partnerStore,
-    () => {
-      return ApiClient.partners.get(id);
-    }
+    (params) => ApiClient.partners.get({id, ...params})
   );
 }

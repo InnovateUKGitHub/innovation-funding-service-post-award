@@ -1,4 +1,5 @@
 import SalesforceBase from "./salesforceBase";
+import { Connection } from "jsforce";
 
 export interface ISalesforceClaimTotalCostCategory {
     Acc_CostCategory__c: string;
@@ -19,8 +20,8 @@ export interface IClaimTotalCostCategoryRepository {
 export class ClaimTotalCostCategoryRepository extends SalesforceBase<ISalesforceClaimTotalCostCategory> implements IClaimTotalCostCategoryRepository {
     private recordType: string = "Total Cost Category";
 
-    constructor() {
-        super("Acc_Claims__c", fields);
+    constructor(connection: () => Promise<Connection>) {
+        super(connection, "Acc_Claims__c", fields);
     }
 
     getAllByPartnerId(partnerId: string): Promise<ISalesforceClaimTotalCostCategory[]> {

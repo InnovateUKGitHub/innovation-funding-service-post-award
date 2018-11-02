@@ -6,6 +6,6 @@ export function loadClaimDetailDocuments(partnerId: string, periodId: number, co
   return conditionalLoad(
     getClaimDetailDocuments(partnerId, periodId, costCategoryId).key,
     documentStore,
-    () => ApiClient.documents.getClaimDetailDocuments(partnerId, periodId, costCategoryId)
+    (params) => ApiClient.documents.getClaimDetailDocuments({partnerId, periodId, costCategoryId, ...params})
   );
 }
