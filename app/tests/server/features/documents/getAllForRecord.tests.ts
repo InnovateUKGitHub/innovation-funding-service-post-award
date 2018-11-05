@@ -1,6 +1,5 @@
-import {TestContext} from "../../testContextProvider";
-import {GetAllClaimDetailsByPartner} from "../../../../src/server/features/claims/claimDetails/getAllByPartnerQuery";
-import {GetDocumentsLinkedToRecordQuery} from "../../../../src/server/features/documents/getAllForRecord";
+import { TestContext } from "../../testContextProvider";
+import { GetDocumentsLinkedToRecordQuery } from "../../../../src/server/features/documents/getAllForRecord";
 
 describe("GetClaimDetailDocumentsQuery", () => {
   it("returns objects of correct shape", async () => {
