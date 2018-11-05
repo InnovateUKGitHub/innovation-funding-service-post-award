@@ -27,7 +27,7 @@ export class ContentDocumentLinkRepository extends SalesforceBase<ISalesforceCon
     return super.whereFilter({ LinkedEntityId: entityId });
   }
 
-  public insertContentDocumentLink( contentDocumentId: string, linkedEntityId: string) {
+  public insertContentDocumentLink(contentDocumentId: string, linkedEntityId: string) {
     return super.insert({
       ContentDocumentId: contentDocumentId,
       LinkedEntityId: linkedEntityId,
