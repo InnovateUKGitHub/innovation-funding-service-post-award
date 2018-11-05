@@ -8,6 +8,8 @@ import { router } from "./router";
 import cookieSession from "cookie-session";
 import { IUser } from "../shared/IUser";
 
+const defaultSalesforceEmail = process.env.SALESFORCEUSERNAME || "iuk.accproject@bjss.com.bjsspoc2";
+
 const app = express();
 const port = process.env.PORT || 8080;
 
@@ -29,7 +31,7 @@ app.use((req, resp, next) => {
   if (!req.session || !req.session.user) {
     const newSession: { user: IUser } = {
       user: {
-        email: "etlsalesforce@innovateuk.gov.uk.bjsspoc2",
+        email: defaultSalesforceEmail,
         name: "Salesforce service account"
       }
     };
