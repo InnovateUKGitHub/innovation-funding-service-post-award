@@ -7,7 +7,7 @@ export interface DocumentSummaryDto {
 
 export interface DocumentDto {
   fileName: string;
-  fileType: string;
+  fileType: string | null;
   contentLength: number;
   stream: Stream;
 }

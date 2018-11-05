@@ -107,9 +107,11 @@ export abstract class ControllerBase<T> {
           if ((result === null || result === undefined)) {
             return resp.status(404).send();
           }
+          const defaultContentType = "application/octet-stream";
+          const contentType = result.fileType ? mimeTypes.lookup(result.fileType) : defaultContentType;
           const head = {
             "Content-Length": result.contentLength,
-            "Content-Type": mimeTypes.lookup(result.fileType) || "application/octet-stream",
+            "Content-Type": contentType || defaultContentType,
             "Content-Disposition": `filename="${result.fileName}"`
           };
           resp.writeHead(successStatus, head);
