@@ -1,5 +1,5 @@
 import { TestContext } from "../../testContextProvider";
-import { GetClaimDetailsSummaryForPartnerQuery } from "../../../../src/server/features/claims/claimDetails/getClaimDetailsSummaryForPartnerQuery";
+import { GetClaimDetailsSummaryForPartnerQuery } from "../../../../src/server/features/claimDetails";
 
 describe("claimDetails/GetAllForPartnerQuery", () => {
     it("when valid then returns all cost categories", async () => {

@@ -1,9 +1,9 @@
-import {ICommand, IContext} from "../common/context";
-import {ClaimDto} from "../../../ui/models";
-import {ClaimDtoValidator} from "../../../ui/validators/claimDtoValidator";
-import {GetCostCategoriesQuery} from ".";
-import {GetClaimDetailsSummaryForPartnerQuery} from "./claimDetails/getClaimDetailsSummaryForPartnerQuery";
-import {ValidationError} from "../../../shared/validation";
+import { ICommand, IContext } from "../common/context";
+import { ClaimDto } from "../../../ui/models";
+import { ClaimDtoValidator } from "../../../ui/validators/claimDtoValidator";
+import { GetCostCategoriesQuery } from ".";
+import { GetClaimDetailsSummaryForPartnerQuery } from "../claimDetails";
+import { ValidationError } from "../../../shared/validation";
 
 export class UpdateClaimCommand implements ICommand<boolean> {
   constructor(private claimDto: ClaimDto) { }

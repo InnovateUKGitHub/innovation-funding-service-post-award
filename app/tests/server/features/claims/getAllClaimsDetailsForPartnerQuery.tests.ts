@@ -1,6 +1,6 @@
 import "jest";
 import { TestContext } from "../../testContextProvider";
-import {GetAllClaimDetailsByPartner} from "../../../../src/server/features/claims/claimDetails/getAllByPartnerQuery";
+import { GetAllClaimDetailsByPartner } from "../../../../src/server/features/claimDetails";
 
 describe("claimDetails/getAllByPartner", () => {
   it("returns objects of correct shape", async () => {

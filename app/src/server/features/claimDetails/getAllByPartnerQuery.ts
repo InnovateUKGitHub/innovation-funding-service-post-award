@@ -1,5 +1,5 @@
-import {IContext, IQuery} from "../../common/context";
-import {ClaimDetailsDto} from "../../../../ui/models";
+import {IContext, IQuery} from "../common/context";
+import {ClaimDetailsDto} from "../../../ui/models";
 
 export class GetAllClaimDetailsByPartner implements IQuery<ClaimDetailsDto[]> {
   constructor(private partnerId: string) {

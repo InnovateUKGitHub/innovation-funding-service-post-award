@@ -1,6 +1,6 @@
-import { IContext, IQuery } from "../../common/context";
-import { ClaimDetailsSummaryDto } from "../../../../ui/models";
-import { GetCostCategoriesQuery } from "../getCostCategoriesQuery";
+import { IContext, IQuery } from "../common/context";
+import { ClaimDetailsSummaryDto } from "../../../ui/models";
+import { GetCostCategoriesQuery } from "../claims";
 
 export class GetClaimDetailsSummaryForPartnerQuery implements IQuery<ClaimDetailsSummaryDto[]> {
     constructor(private partnerId: string, private periodId: number) {
