@@ -21,7 +21,7 @@ describe("UploadClaimDetailDocumentCommand", () => {
 
     expect(context.repositories.contentVersions.Items[0].VersionData).toEqual(content);
     expect(context.repositories.contentVersions.Items[0].PathOnClient).toEqual(fileName);
-    expect(context.repositories.contentDocumentLinks.Items[0].LinkedEntityId).toEqual(`${claimDetailKey.partnerId}_${claimDetailKey.periodId}_${claimDetailKey.costCategoryId}`);
+    expect(context.repositories.contentDocumentLinks.Items[0].LinkedEntityId).toEqual(claimDetail.Id);
 
   });
 });
