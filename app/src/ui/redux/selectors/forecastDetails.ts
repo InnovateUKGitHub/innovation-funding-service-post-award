@@ -1,5 +1,5 @@
-import { dataStoreHelper, editorStoreHelper, IDataSelector } from "./common";
-import { ForecastDetailsDTO, GOLCostDto } from "../../models";
+import { dataStoreHelper, editorStoreHelper } from "./common";
+import { ForecastDetailsDTO } from "../../models";
 import { getKey } from "../../../util/key";
 import { RootState } from "../reducers";
 import { ForecastDetailsDtosValidator } from "../../validators/forecastDetailsDtosValidator";
@@ -7,10 +7,10 @@ import { getCostCategories } from "./costCategories";
 import { findClaimDetailsByPartner } from "./claims";
 
 export const forecastDetailsStore = "forecastDetails";
-export const findForecastDetailsByPartner = (partnerId: string, periodId: number) => dataStoreHelper(forecastDetailsStore, getKey(partnerId, periodId)) as IDataSelector<ForecastDetailsDTO[]>;
+export const findForecastDetailsByPartner = (partnerId: string, periodId: number) => dataStoreHelper(forecastDetailsStore, getKey(partnerId, periodId));
 
 const forecastDetailStore = "forecastDetail";
-export const getForecastDetail = (partnerId: string, periodId: number, costCategoryId: string) => dataStoreHelper(forecastDetailStore, getKey(partnerId, periodId, costCategoryId)) as  IDataSelector<ForecastDetailsDTO>;
+export const getForecastDetail = (partnerId: string, periodId: number, costCategoryId: string) => dataStoreHelper(forecastDetailStore, getKey(partnerId, periodId, costCategoryId));
 
 const createValidator = (partnerId: string, periodId: number, forecastDetails: ForecastDetailsDTO[], store: RootState) => {
   // TODO - revist get vs getPending
@@ -29,4 +29,4 @@ export const getForecastDetailsEditor = (partnerId: string, periodId: number) =>
 );
 
 export const forecastGolCostStore = "forecastGolCosts";
-export const findGolCostsByPartner = (partnerId: string) => dataStoreHelper(forecastGolCostStore, partnerId) as IDataSelector<GOLCostDto[]>;
+export const findGolCostsByPartner = (partnerId: string) => dataStoreHelper(forecastGolCostStore, partnerId);

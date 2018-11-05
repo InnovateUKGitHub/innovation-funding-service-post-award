@@ -1,8 +1,7 @@
-import { dataStoreHelper, IDataSelector } from "./common";
-import { PartnerDto } from "../../models";
+import { dataStoreHelper } from "./common";
 
 export const partnersStore = "partners";
-export const findPartnersByProject = (projectId: string) => dataStoreHelper(partnersStore, `projectId=${projectId}`) as IDataSelector<PartnerDto[]>;
+export const findPartnersByProject = (projectId: string) => dataStoreHelper(partnersStore, `projectId=${projectId}`);
 
 export const partnerStore = "partner";
-export const getPartner = (partnerId: string) => dataStoreHelper(partnerStore, partnerId) as IDataSelector<PartnerDto>;
+export const getPartner = (partnerId: string) => dataStoreHelper(partnerStore, partnerId);
