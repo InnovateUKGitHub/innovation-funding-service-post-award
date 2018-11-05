@@ -10,6 +10,7 @@ import {ClaimsDashboardRoute} from "./dashboard";
 import {Currency, DateRange, Percentage} from "../../components/renderers";
 import { PrepareClaimRoute } from "./prepare";
 import { ForecastDetailsDtosValidator } from "../../validators/forecastDetailsDtosValidator";
+import * as Colour from "../../styles/colours";
 
 interface Params {
   projectId: string;
@@ -89,6 +90,7 @@ export class ClaimForecastComponent extends ContainerBase<Params, Data, Callback
     const tableRows: TableRow[] = [];
 
     data.costCategories.filter(x => x.organistionType === "Industrial").forEach(category => {
+      // TODO - remove this logic from here, waiting on SF to provide
       const currentPeriod = data.claim.periodId;
       const row: TableRow = {
         categoryId: category.id,
@@ -165,7 +167,7 @@ export class ClaimForecastComponent extends ContainerBase<Params, Data, Callback
               data={parsed}
               qa="cost-category-table"
               headers={this.renderTableHeaders(periods, data.claim)}
-              footers={this.renderTableFooters(periods, parsed)}
+              footers={this.renderTableFooters(periods, parsed, data.editor.validator)}
             >
               <Table.String header="Month" value={x => x.categoryName} qa="category-name" />
 
@@ -220,13 +222,13 @@ export class ClaimForecastComponent extends ContainerBase<Params, Data, Callback
 
     return [(
       <tr key="cHeader1" className="govuk-table__row">
-        <th className="govuk-table__header" />
-        {previous > 0 ? <th className="govuk-table__header" colSpan={previous}>Previous costs</th> : null}
-        {currentClaimPeriod > 0 ? <th className="govuk-table__header">Current claim period costs</th> : null}
-        <th className="govuk-table__header" colSpan={periods.length - currentClaimPeriod}>Forecasts</th>
-        <th className="govuk-table__header">Forecasts and costs total</th>
-        <th className="govuk-table__header">Grant offer letter costs</th>
-        <th className="govuk-table__header">Difference</th>
+        <th className="govuk-table__header govuk-table__header--numeric" />
+        {previous > 0 ? <th className="govuk-table__header govuk-table__header--numeric" colSpan={previous}>Previous costs</th> : null}
+        {currentClaimPeriod > 0 ? <th className="govuk-table__header govuk-table__header--numeric">Current claim period costs</th> : null}
+        <th className="govuk-table__header govuk-table__header--numeric" colSpan={periods.length - currentClaimPeriod}>Forecasts</th>
+        <th className="govuk-table__header govuk-table__header--numeric">Forecasts and costs total</th>
+        <th className="govuk-table__header govuk-table__header--numeric">Grant offer letter costs</th>
+        <th className="govuk-table__header govuk-table__header--numeric">Difference</th>
       </tr>
     ),
     (
@@ -238,7 +240,7 @@ export class ClaimForecastComponent extends ContainerBase<Params, Data, Callback
     )];
   }
 
-  renderTableFooters(periods: string[], parsed: TableRow[]) {
+  renderTableFooters(periods: string[], parsed: TableRow[], validator: ForecastDetailsDtosValidator) {
     const cells          = [];
     const costTotal      = parsed.reduce((total, item) => total + item.total, 0);
     const golTotal       = parsed.reduce((total, item) => total + item.golCosts, 0);
@@ -248,14 +250,23 @@ export class ClaimForecastComponent extends ContainerBase<Params, Data, Callback
       return total + value;
     }, 0));
 
+    const isValid = validator.isValid || !validator.showValidationErrors;
+    const thStyle = isValid ? {} : { paddingLeft: "1%" };
+    const trStyle = isValid ? {} : {
+      padding: "2% 4% 2% 1%",
+      background: Colour.GOVUK_COLOUR_GREY_4,
+      borderLeft: `5px solid ${Colour.GOVUK_ERROR_COLOUR}`,
+    };
+
     totals.push(costTotal);
     totals.push(golTotal);
 
-    cells.push(<th key="th" className="govuk-table__cell govuk-!-font-weight-bold">Total</th>);
+    cells.push(<th style={thStyle} key="th" className="govuk-table__cell govuk-!-font-weight-bold">Total</th>);
     cells.push(totals.map(this.renderTableFooterCell));
     cells.push(<td key="total_diff" className="govuk-table__cell govuk-table__cell--numeric"><Percentage className="govuk-!-font-weight-bold" value={this.calculateDifference(golTotal, costTotal)} /></td>);
 
-    return [<tr key="footer1" className="govuk-table__row">{cells}</tr>];
+
+    return [<tr style={trStyle} key="footer1" className="govuk-table__row">{cells}</tr>];
   }
 
   renderTableFooterCell = (total: number, key: number) => (
