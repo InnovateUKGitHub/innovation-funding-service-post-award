@@ -93,8 +93,8 @@ class ContentDocumentLinkTestRepository extends TestRepository<Repositories.ISal
   getAllForEntity(entityId: string): Promise<Repositories.ISalesforceContentDocumentLink[]> {
     return super.getWhere(x => x.LinkedEntityId === entityId);
   }
-  public insertContentDocumentLink( contentDocumentId: string, linkedEntityId: string) {
-    return super.insertOne({ ContentDocumentId: contentDocumentId, LinkedEntityId: linkedEntityId, ShareType: "V"});
+  public insertContentDocumentLink(contentDocumentId: string, linkedEntityId: string) {
+    return super.insertOne({ContentDocumentId: contentDocumentId, LinkedEntityId: linkedEntityId, ShareType: "V"});
   }
 }
 

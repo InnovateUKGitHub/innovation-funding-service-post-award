@@ -1,5 +1,4 @@
 import {Updatable} from "../../src/server/repositories/salesforceBase";
-import {parseString} from "tslint-sonarts/lib/utils/parser";
 
 export abstract class TestRepository<T> {
   Items: T[] = [];

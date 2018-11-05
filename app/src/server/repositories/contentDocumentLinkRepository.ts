@@ -14,7 +14,7 @@ const fieldNames: (keyof ISalesforceContentDocumentLink)[] = [
 
 export interface IContentDocumentLinkRepository {
   getAllForEntity(entityId: string): Promise<ISalesforceContentDocumentLink[]>;
-  insertContentDocumentLink( contentDocumentId: string, linkedEntityId: string): Promise<string>;
+  insertContentDocumentLink(contentDocumentId: string, linkedEntityId: string): Promise<string>;
 }
 
 export class ContentDocumentLinkRepository extends SalesforceBase<ISalesforceContentDocumentLink> implements IContentDocumentLinkRepository {
