@@ -1,7 +1,5 @@
 import * as Repositories from "../../src/server/repositories";
 import { ITestRepositories } from "./testRepositories";
-import { DateTime } from "luxon";
-import {string} from "prop-types";
 
 export class TestData {
     constructor(private repositories: ITestRepositories){
