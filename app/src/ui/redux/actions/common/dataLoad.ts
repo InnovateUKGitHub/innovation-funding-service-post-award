@@ -1,7 +1,8 @@
-import { AsyncThunk, createAction } from "./common";
-import { DataStateKeys, IDataStore } from "../reducers";
-import { LoadingStatus } from "../../../shared/pending";
-import { IUser } from "../../../shared/IUser";
+import { AsyncThunk, createAction } from "./createAction";
+import { DataStateKeys, IDataStore } from "../../reducers";
+import { LoadingStatus } from "../../../../shared/pending";
+import { IUser } from "../../../../shared/IUser";
+import { IDataSelector } from "../../selectors/common";
 
 type DataLoadThunk = typeof dataLoadAction;
 export type DataLoadAction = ReturnType<DataLoadThunk>;
@@ -18,15 +19,14 @@ export function dataLoadAction(
 }
 
 export function conditionalLoad<T>(
-  idSelector: string,
-  storeSelector: DataStateKeys,
+  selector: IDataSelector<T>,
   load: (params: {user: IUser}) => Promise<T>
 ): AsyncThunk<void, DataLoadAction> {
   return (dispatch, getState) => {
     const state = getState();
-    const id = idSelector;
-    const store = storeSelector;
-    const existing = (state.data as any)[store][id] as IDataStore<T>;
+    const id = selector.key;
+    const store = selector.store;
+    const existing = selector.get(state);
     const reloads = [
       LoadingStatus.Preload,
       LoadingStatus.Stale,

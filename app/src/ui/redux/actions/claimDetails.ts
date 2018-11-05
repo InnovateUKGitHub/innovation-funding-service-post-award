@@ -1,11 +1,14 @@
-import {conditionalLoad} from "./dataLoad";
 import { ApiClient } from "../../apiClient";
-import { claimDetailsStore, findClaimDetailsByPartner } from "../selectors/claimDetails";
+import { conditionalLoad } from "./common";
+import { findClaimDetailsByPartner, findClaimDetailsSummaryByPartnerAndPeriod } from "../selectors";
 
 export function loadClaimDetailsForPartner(partnerId: string) {
+  return conditionalLoad(findClaimDetailsByPartner(partnerId), params => ApiClient.claimDetails.getAllByPartner({partnerId, ...params}));
+}
+
+export function loadClaimDetailsSummaryForPartner(partnerId: string, periodId: number) {
   return conditionalLoad(
-    findClaimDetailsByPartner(partnerId).key,
-    claimDetailsStore,
-    (params) => ApiClient.claimDetails.getAllByPartner({partnerId, ...params})
+    findClaimDetailsSummaryByPartnerAndPeriod(partnerId, periodId),
+    params => ApiClient.claimDetailsSummary.getAllByPartnerIdForPeriod({partnerId, periodId, ...params})
   );
 }

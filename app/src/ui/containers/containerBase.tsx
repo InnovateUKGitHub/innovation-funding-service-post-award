@@ -8,12 +8,20 @@ import { RootActions } from "../redux/actions/root";
 import { matchRoute } from "../routing/matchRoute";
 import { AsyncThunk } from "../redux/actions";
 
+export type ContainerProps<TParams, TData, TCallbacks> = TParams & TData & TCallbacks & {route: RouteState};
+
 export interface ContainerBaseClass<TParams, TData, TCallbacks> {
     new(props: TParams & TData & TCallbacks & {route: RouteState}, context?: any): ContainerBase<TParams, TData, TCallbacks>;
 }
 
-export abstract class ContainerBase<TParams = {}, TData = {}, TCallbacks = {}> extends React.Component<TParams & TData & TCallbacks & {route: RouteState}, {}> {
-    constructor(props: TParams & TData & TCallbacks & {route: RouteState}) {
+export abstract class ContainerBaseWithState<TParams = {}, TData = {}, TCallbacks = {}, TState = {}> extends React.Component<ContainerProps<TParams, TData, TCallbacks>, TState> {
+    constructor(props: ContainerProps<TParams, TData, TCallbacks>) {
+        super(props);
+    }
+}
+
+export abstract class ContainerBase<TParams = {}, TData = {}, TCallbacks = {}> extends React.Component<ContainerProps<TParams, TData, TCallbacks>, {}> {
+    constructor(props: ContainerProps<TParams, TData, TCallbacks>) {
         super(props);
     }
 }

@@ -1,10 +1,12 @@
 import React from "react";
 import * as colour from "../styles/colours";
 
+type MessageType = "info" | "error" | "success";
+
 interface Props {
     message: string;
     key?: string;
-    messageType: "info" | "error";
+    messageType: MessageType;
 }
 
 interface MessageStyle {
@@ -13,7 +15,7 @@ interface MessageStyle {
   validationText: string;
 }
 
-const getMessageStyle = (messageType: string): MessageStyle => {
+const getMessageStyle = (messageType: MessageType): MessageStyle => {
   switch (messageType) {
     case "info": return {
       validationColour: colour.GOVUK_COLOUR_BLUE,
@@ -25,13 +27,17 @@ const getMessageStyle = (messageType: string): MessageStyle => {
       validationSymbol: "!",
       validationText: "Error",
     };
-    default: throw Error("MessageType not supported");
+    case "success": return {
+      validationColour: colour.GOVUK_COLOUR_GREEN,
+      validationSymbol: "✓",
+      validationText: "Success",
+    };
   }
 };
 
 export const ValidationMessage: React.SFC<Props> = ({ message, key, messageType }) => {
     if (!message) {
-        return null;
+      return null;
     }
 
     const {validationColour, validationSymbol, validationText} = getMessageStyle(messageType);

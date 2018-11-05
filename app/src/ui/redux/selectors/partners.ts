@@ -1,17 +1,7 @@
-import {PartnerDto} from "../../models";
-import {IDataStore, RootState} from "../reducers";
-import {getData} from "./data";
-import {IDataSelector} from "./IDataSelector";
-import {Pending} from "../../../shared/pending";
+import { dataStoreHelper } from "./common";
 
 export const partnersStore = "partners";
+export const findPartnersByProject = (projectId: string) => dataStoreHelper(partnersStore, `projectId=${projectId}`);
 
-const getPartners = (state: RootState): { [key: string]: IDataStore<PartnerDto[]> } => (getData(state)[partnersStore] || {});
-
-// selectors
-
-export const findPartnersByProject = (projectId: string): IDataSelector<PartnerDto[]> => {
-  const key =  `projectId=${projectId}`;
-  const get = (state: RootState) => getPartners(state)[key];
-  return {key, get, getPending: state => Pending.create(get(state))};
-};
+export const partnerStore = "partner";
+export const getPartner = (partnerId: string) => dataStoreHelper(partnerStore, partnerId);

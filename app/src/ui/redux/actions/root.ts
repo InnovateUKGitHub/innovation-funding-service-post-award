@@ -1,7 +1,5 @@
 import { actions } from "redux-router5";
-import { ActionsUnion } from "./common";
-import { DataLoadAction } from "./dataLoad";
-import { UpdateEditorAction } from "./editorActions";
+import { ActionsUnion, DataLoadAction, UpdateEditorAction } from "./common";
 
 type RouterActions = ActionsUnion<typeof actions>;
 

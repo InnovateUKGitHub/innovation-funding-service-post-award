@@ -1,11 +1,19 @@
-import { conditionalLoad } from "./dataLoad";
-import { ApiClient } from "../../apiClient";
-import { getProjects, projectsStore } from "../selectors/projects";
+import { ApiClient } from "../..//apiClient";
+import { conditionalLoad } from "./common";
+import {
+  findContactsByProject,
+  getProject,
+  getProjects,
+} from "../selectors";
+
+export function loadProject(projectId: string) {
+  return conditionalLoad(getProject(projectId), params => ApiClient.projects.get({id: projectId, ...params}));
+}
 
 export function loadProjects() {
-  return conditionalLoad(
-    getProjects().key,
-    projectsStore,
-    (params) => ApiClient.projects.getAll(params)
-  );
+  return conditionalLoad(getProjects(), params => ApiClient.projects.getAll(params));
+}
+
+export function loadContactsForProject(projectId: string) {
+  return conditionalLoad(findContactsByProject(projectId), params => ApiClient.projectContacts.getAllByProjectId({projectId, ...params}));
 }

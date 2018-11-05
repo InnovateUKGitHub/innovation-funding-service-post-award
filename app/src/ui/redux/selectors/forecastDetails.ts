@@ -1,28 +1,16 @@
-import { dataStoreHelper, getDataStoreItem } from "./data";
-import { IDataSelector } from "./IDataSelector";
-import { Pending } from "../../../shared/pending";
+import { dataStoreHelper, editorStoreHelper } from "./common";
 import { ForecastDetailsDTO } from "../../models";
-import { editorStoreHelper } from "./claim";
 import { getKey } from "../../../util/key";
 import { RootState } from "../reducers";
 import { ForecastDetailsDtosValidator } from "../../validators/forecastDetailsDtosValidator";
-import { findClaimDetailsByPartner } from "./claimDetails";
-import { findGolCostsByPartner } from "./forecastGolCosts";
 import { getCostCategories } from "./costCategories";
+import { findClaimDetailsByPartner } from "./claims";
 
 export const forecastDetailsStore = "forecastDetails";
-
-export const findForecastDetailsByPartner = (partnerId: string, periodId: number) => dataStoreHelper(forecastDetailsStore, getKey(partnerId, periodId)) as IDataSelector<ForecastDetailsDTO[]>;
+export const findForecastDetailsByPartner = (partnerId: string, periodId: number) => dataStoreHelper(forecastDetailsStore, getKey(partnerId, periodId));
 
 const forecastDetailStore = "forecastDetail";
-export const getForecastDetail = (partnerId: string, periodId: number, costCategoryId: string): IDataSelector<ForecastDetailsDTO> => {
-  const key = partnerId + "_" + periodId + "_" + costCategoryId;
-  return {
-    key,
-    get: state => getDataStoreItem(state, forecastDetailStore, key),
-    getPending: state => Pending.create(getDataStoreItem(state, forecastDetailStore, key))
-  };
-};
+export const getForecastDetail = (partnerId: string, periodId: number, costCategoryId: string) => dataStoreHelper(forecastDetailStore, getKey(partnerId, periodId, costCategoryId));
 
 const createValidator = (partnerId: string, periodId: number, forecastDetails: ForecastDetailsDTO[], store: RootState) => {
   // TODO - revist get vs getPending
@@ -39,3 +27,6 @@ export const getForecastDetailsEditor = (partnerId: string, periodId: number) =>
   (forecasts, store) => createValidator(partnerId, periodId, forecasts, store),
   getKey(partnerId, periodId)
 );
+
+export const forecastGolCostStore = "forecastGolCosts";
+export const findGolCostsByPartner = (partnerId: string) => dataStoreHelper(forecastGolCostStore, partnerId);
