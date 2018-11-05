@@ -6,8 +6,7 @@ import { AsyncThunk, conditionalLoad, dataLoadAction, DataLoadAction, handleErro
 import { findClaimsByPartner, getClaim, getClaimEditor } from "../selectors";
 
 export function loadClaim(partnerId: string, periodId: number) {
-  const selector = getClaim(partnerId, periodId);
-  return conditionalLoad(selector.key, selector.store, params => ApiClient.claims.get({partnerId, periodId, ...params}));
+  return conditionalLoad(getClaim(partnerId, periodId), params => ApiClient.claims.get({partnerId, periodId, ...params}));
 }
 
 export function validateClaim(partnerId: string, periodId: number, dto: ClaimDto, details: ClaimDetailsSummaryDto[], costCategories: CostCategoryDto[], showErrors?: boolean): SyncThunk<ClaimDtoValidator, UpdateEditorAction> {
@@ -47,6 +46,5 @@ export function saveClaim(partnerId: string, periodId: number, claim: ClaimDto, 
 }
 
 export function loadClaimsForPartner(partnerId: string) {
-  const selector = findClaimsByPartner(partnerId);
-  return conditionalLoad(selector.key, selector.store, params => ApiClient.claims.getAllByPartnerId({partnerId, ...params}));
+  return conditionalLoad(findClaimsByPartner(partnerId), params => ApiClient.claims.getAllByPartnerId({partnerId, ...params}));
 }

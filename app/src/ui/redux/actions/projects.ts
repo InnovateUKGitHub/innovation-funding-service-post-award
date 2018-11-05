@@ -1,5 +1,5 @@
-import { conditionalLoad } from "./common";
 import { ApiClient } from "../..//apiClient";
+import { conditionalLoad } from "./common";
 import {
   findContactsByProject,
   getProject,
@@ -7,16 +7,13 @@ import {
 } from "../selectors";
 
 export function loadProject(projectId: string) {
-  const selector = getProject(projectId);
-  return conditionalLoad(selector.key, selector.store, params => ApiClient.projects.get({id: projectId, ...params}));
+  return conditionalLoad(getProject(projectId), params => ApiClient.projects.get({id: projectId, ...params}));
 }
 
 export function loadProjects() {
-  const selector = getProjects();
-  return conditionalLoad(selector.key, selector.store, params => ApiClient.projects.getAll(params));
+  return conditionalLoad(getProjects(), params => ApiClient.projects.getAll(params));
 }
 
 export function loadContactsForProject(projectId: string) {
-  const selector = findContactsByProject(projectId);
-  return conditionalLoad(selector.key, selector.store, params => ApiClient.projectContacts.getAllByProjectId({projectId, ...params}));
+  return conditionalLoad(findContactsByProject(projectId), params => ApiClient.projectContacts.getAllByProjectId({projectId, ...params}));
 }

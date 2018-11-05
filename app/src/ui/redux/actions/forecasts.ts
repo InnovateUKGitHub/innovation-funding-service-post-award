@@ -1,5 +1,5 @@
-import { AsyncThunk, conditionalLoad, DataLoadAction, dataLoadAction, SyncThunk } from "./common";
 import { ApiClient } from "../../apiClient";
+import { AsyncThunk, conditionalLoad, DataLoadAction, dataLoadAction, SyncThunk } from "./common";
 import { ClaimDetailsDto, CostCategoryDto, ForecastDetailsDTO, GOLCostDto } from "../../models";
 import { ForecastDetailsDtosValidator } from "../../validators/forecastDetailsDtosValidator";
 import { handleError, UpdateEditorAction, updateEditorAction } from "./common/editorActions";
@@ -12,8 +12,7 @@ import {
 } from "../selectors";
 
 export function loadForecastDetailsForPartner(partnerId: string, periodId: number) {
-  const selector = findForecastDetailsByPartner(partnerId, periodId);
-  return conditionalLoad(selector.key, selector.store, params => ApiClient.forecastDetails.getAllByPartnerId({partnerId, periodId, ...params}));
+  return conditionalLoad(findForecastDetailsByPartner(partnerId, periodId), params => ApiClient.forecastDetails.getAllByPartnerId({partnerId, periodId, ...params}));
 }
 
 export function validateForecastDetails(
@@ -73,11 +72,9 @@ export function saveForecastDetails(
 }
 
 export function loadForecastDetail(partnerId: string, periodId: number, costCategoryId: string) {
-  const selector = getForecastDetail(partnerId, periodId, costCategoryId);
-  return conditionalLoad(selector.key, selector.store, params => ApiClient.forecastDetails.get({partnerId, periodId, costCategoryId, ...params}));
+  return conditionalLoad(getForecastDetail(partnerId, periodId, costCategoryId), params => ApiClient.forecastDetails.get({partnerId, periodId, costCategoryId, ...params}));
 }
 
 export function loadForecastGOLCostsForPartner(partnerId: string) {
-  const selector = findGolCostsByPartner(partnerId);
-  return conditionalLoad(selector.key, selector.store, params => ApiClient.forecastGolCosts.getAllByPartnerId({partnerId, ...params}));
+  return conditionalLoad(findGolCostsByPartner(partnerId), params => ApiClient.forecastGolCosts.getAllByPartnerId({partnerId, ...params}));
 }

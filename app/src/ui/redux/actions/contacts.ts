@@ -1,13 +1,11 @@
-import { conditionalLoad } from "./common";
 import { ApiClient } from "../../apiClient";
+import { conditionalLoad } from "./common";
 import { getContact, getContacts } from "../selectors";
 
 export function loadContacts() {
-  const selector = getContacts();
-  return conditionalLoad(selector.key, selector.store, params => ApiClient.contacts.getAll(params));
+  return conditionalLoad(getContacts(), params => ApiClient.contacts.getAll(params));
 }
 
 export function loadContact(id: string) {
-  const selector = getContact(id);
-  return conditionalLoad(selector.key, selector.store, params => ApiClient.contacts.get({id, ...params}));
+  return conditionalLoad(getContact(id), params => ApiClient.contacts.get({id, ...params}));
 }
