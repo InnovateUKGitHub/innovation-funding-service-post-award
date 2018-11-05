@@ -6,8 +6,10 @@ import { findClaimLineItemsByPartnerCostCategoryAndPeriod } from "../selectors";
 import { conditionalLoad, dataLoadAction, DataLoadAction, handleError, SyncThunk, updateEditorAction, UpdateEditorAction } from "./common";
 
 export function loadClaimLineItemsForCategory(partnerId: string, costCategoryId: string, periodId: number) {
-  const selector = findClaimLineItemsByPartnerCostCategoryAndPeriod(partnerId, costCategoryId, periodId);
-  return conditionalLoad(selector.key, selector.store, params => ApiClient.claimLineItems.getAllForCategory({partnerId, costCategoryId, periodId, ...params}));
+  return conditionalLoad(
+    findClaimLineItemsByPartnerCostCategoryAndPeriod(partnerId, costCategoryId, periodId),
+    params => ApiClient.claimLineItems.getAllForCategory({partnerId, costCategoryId, periodId, ...params})
+  );
 }
 
 export function validateClaimLineItems(partnerId: string, periodId: number, costCategoryId: string, dto: ClaimLineItemDto[], showErrors?: boolean): SyncThunk<ClaimLineItemDtosValidator, UpdateEditorAction> {

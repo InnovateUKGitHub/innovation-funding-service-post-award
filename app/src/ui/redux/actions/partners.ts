@@ -1,5 +1,5 @@
+import { ApiClient } from "../../apiClient";
 import { conditionalLoad } from "./common";
-import { ApiClient } from "../..//apiClient";
 import {
   findPartnersByProject,
   getPartner,
@@ -7,10 +7,9 @@ import {
 } from "../selectors/partners";
 
 export function loadPartner(partnerId: string) {
-  const selector = getPartner(partnerId);
-  return conditionalLoad(selector.key, selector.store, params => ApiClient.partners.get({id: partnerId, ...params}));
+  return conditionalLoad(getPartner(partnerId), params => ApiClient.partners.get({id: partnerId, ...params}));
 }
 
 export function loadPartnersForProject(projectId: string) {
-  return conditionalLoad(findPartnersByProject(projectId).key, partnersStore, params => ApiClient.partners.getAllByProjectId({projectId, ...params}));
+  return conditionalLoad(findPartnersByProject(projectId), params => ApiClient.partners.getAllByProjectId({projectId, ...params}));
 }
