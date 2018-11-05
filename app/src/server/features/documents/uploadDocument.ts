@@ -1,13 +1,13 @@
 import {ICommand, IContext} from "../common/context";
-import {DocumentSummaryDto} from "../../../ui/models";
-import {GetDocumentsLinkedToRecordQuery} from "./getAllForRecord";
 
-export class GetClaimDetailDocumentsQuery implements ICommand<DocumentSummaryDto[]> {
-  constructor(public partnerId: string, public periodId: number, public costCategoryId: string) {
+export class UploadDocumentCommand implements ICommand<string> {
+  constructor(private content: string, private fileName: string, private recordId: string) {
   }
 
   public async Run(context: IContext) {
-    const claimDetail = await context.repositories.claimDetails.get(this.partnerId, this.periodId, this.costCategoryId);
-    return context.runQuery(new GetDocumentsLinkedToRecordQuery(claimDetail.Id));
+    const contentVersionId = await context.repositories.contentVersions.insertDocument(this.content, this.fileName);
+    const contentVersion = await context.repositories.contentVersions.getDocument(contentVersionId);
+    const documentId = contentVersion.ContentDocumentId;
+    return context.repositories.contentDocumentLinks.insertContentDocumentLink(documentId, this.recordId);
   }
 }
