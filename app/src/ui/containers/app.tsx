@@ -37,7 +37,7 @@ class AppComponent extends React.Component<IAppProps, {}> {
         <Header />
         <div className="govuk-width-container">
           <PhaseBanner />
-          <main className="govuk-main-wrapper" id="main-content" role="main">
+          <main className="govuk-main-wrapper" id="main-content" role="main" data-qa={route.name}>
             <route.container {...this.props} />
           </main>
         </div>
