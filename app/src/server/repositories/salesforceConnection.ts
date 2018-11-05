@@ -14,7 +14,8 @@ export const salesforceConnection = ({username, password, token}: ISalesforceCon
 
   return new Promise<jsforce.Connection>((resolve, reject) => {
     if (!username || !password || !token) {
-      throw new Error("Invalid connection details");
+
+      throw new Error(`Invalid connection details username:${username}, password:${password}, token:${token}`);
     }
     connection.login(username, password + token, (err, conn) => {
       if (err) {
