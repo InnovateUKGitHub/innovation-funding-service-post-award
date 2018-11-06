@@ -1,13 +1,12 @@
 import mimeTypes from "mime-types";
 import {Router} from "express-serve-static-core";
+import multer from "multer";
 import express, {NextFunction, Request, Response} from "express";
 import {ApiError, ErrorCode, StatusCode} from "./ApiError";
 import {ValidationError} from "../../shared/validation";
 import {Results} from "../../ui/validation/results";
 import {DocumentDto} from "../../ui/models";
-
 import { IUser } from "../../shared/IUser";
-import multer from "multer";
 
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
