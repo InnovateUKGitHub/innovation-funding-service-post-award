@@ -3,7 +3,7 @@ import * as colour from "../ui/styles/colours";
 export function renderHtml(html: string, preloadedState: any = {}) {
   return `
   <!DOCTYPE html>
-  <html>
+  <html lang="en">
       <head>
           <meta charset="utf-8" />
           <title>GOV.UK - Innovate Funding Service</title>
