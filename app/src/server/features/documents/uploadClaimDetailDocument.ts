@@ -13,7 +13,6 @@ export class UploadClaimDetailDocumentCommand implements ICommand<string> {
 
   public async Run(context: IContext) {
     const claimDetail = await context.repositories.claimDetails.get(this.claimDetailKey.partnerId, this.claimDetailKey.periodId, this.claimDetailKey.costCategoryId);
-    this.content, this.fileName
-    return context.runQuery(new UploadDocumentCommand( files, claimDetail.Id));
+    return context.runQuery(new UploadDocumentCommand( this.content, this.fileName, claimDetail.Id));
   }
 }

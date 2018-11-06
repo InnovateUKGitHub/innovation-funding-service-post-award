@@ -3,7 +3,6 @@ import { DocumentDto, DocumentSummaryDto } from "../../ui/models";
 import contextProvider from "../features/common/contextProvider";
 import { GetClaimDetailDocumentsQuery } from "../features/documents/getClaimDetailDocuments";
 import { GetDocumentQuery } from "../features/documents/getDocument";
-import {UploadDocumentCommand} from "../features/documents/uploadDocument";
 import {UploadClaimDetailDocumentCommand} from "../features/documents/uploadClaimDetailDocument";
 
 export interface IDocumentsApi {
@@ -28,7 +27,7 @@ class Controller extends ControllerBase<DocumentSummaryDto> implements IDocument
 
     this.postAttachment(
       "/claim-details/:partnerId/:periodId/:costCategoryId",
-      (p, q, b, f) => ({ partnerId: p.partnerId, periodId: p.periodId, costCategoryId: p.costCategoryId, file: f }),
+      (p, q, b, f) => ({ partnerId: p.partnerId, periodId: p.periodId, costCategoryId: p.costCategoryId, file: {fileName: f.originalname, content: f.buffer.toString(f.encoding)} }),
       p => this.uploadClaimDetailDocument(p)
     );
 
@@ -46,12 +45,12 @@ class Controller extends ControllerBase<DocumentSummaryDto> implements IDocument
     return await contextProvider.start(params).runQuery(query);
   }
 
-  public async uploadClaimDetailDocument(params: ApiParams<{partnerId: string, periodId: number, costCategoryId: string, file: any}>) {
+  public async uploadClaimDetailDocument(params: ApiParams<{partnerId: string, periodId: number, costCategoryId: string, file: {fileName: string, content: string}}>) {
     const { partnerId, periodId, costCategoryId, file } = params;
     const claimDetailKey = {
-      partnerId: partnerId,
-      periodId: periodId,
-      costCategoryId: costCategoryId,
+      partnerId,
+      periodId,
+      costCategoryId,
     };
     const query = new UploadClaimDetailDocumentCommand(claimDetailKey, file.content, file.fileName);
     return await contextProvider.start(params).runQuery(query);

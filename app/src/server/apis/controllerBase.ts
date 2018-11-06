@@ -11,8 +11,16 @@ import multer from "multer";
 
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
+export interface UploadedFile {
+  originalname: string;
+  fieldname: string;
+  encoding: string;
+  mimetype: string;
+  buffer: Buffer;
+  size: number;
+}
 
-// this is the infromation extreacted from an express request / session and stored in the redux store
+// this is the information extracted from an express request / session and stored in the redux store
 // it is the same shape client and server side allowing the client and server api calls to have the same shape
 export interface ISession {
   user: IUser;
@@ -41,7 +49,7 @@ export abstract class ControllerBase<T> {
     return this;
   }
 
-  protected postAttachment<TParams>(path: string, getParams: (params: any, query: any, body: any, file: any) => TParams, run: (params: ApiParams<TParams>) => Promise<T[]>) {
+  protected postAttachment<TParams>(path: string, getParams: (params: any, query: any, body: any, file: any) => TParams, run: (params: ApiParams<TParams>) => Promise<any>) {
     this.router.post(path, upload.single("attachment"), this.executeMethod(201, getParams, run, false));
   }
 
@@ -93,9 +101,10 @@ export abstract class ControllerBase<T> {
   }
 
   private executeMethod<TParams, TResponse>(successStatus: number, getParams: (params: any, query: any, body?: any, file?: any) => TParams, run: (params: ApiParams<TParams>) => Promise<TResponse | null>, allowNulls: boolean) {
-    return async (req: Request, resp: Response, next: NextFunction) => {
+    type extendedRequest = Request & {file: UploadedFile};
+    return async (req: extendedRequest, resp: Response, next: NextFunction) => {
 
-      const p = Object.assign({user: req.session!.user as IUser}, getParams(req.params || {}, req.query || {}, req.body || {}, req.file || []));
+      const p = Object.assign({user: req.session!.user as IUser}, getParams(req.params || {}, req.query || {}, req.body || {}, req.file || {}));
       run(p)
         .then(result => {
           if ((result === null || result === undefined) && allowNulls === false) {
