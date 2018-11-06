@@ -27,9 +27,8 @@ class Component extends ContainerBaseWithState<{}, Props, {}, State> {
         <div className="govuk-grid-row">
           <div className="govuk-grid-column-full">
             <h2>Current user</h2>
-            <SimpleString>{this.props.userEmail}</SimpleString>
             <CurrentUserForm.Form data={formData} onChange={v => this.setState(v)}>
-              <CurrentUserForm.String label="User" name="user" value={x => x.email} update={(x, v) => x.email = v || ""} />
+              <CurrentUserForm.String label="" name="user" value={x => x.email} update={(x, v) => x.email = v || ""} />
               <CurrentUserForm.Submit>Change user</CurrentUserForm.Submit>
             </CurrentUserForm.Form>
           </div>

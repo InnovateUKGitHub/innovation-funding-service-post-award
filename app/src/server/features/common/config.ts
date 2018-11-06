@@ -3,11 +3,17 @@ export interface IConfig {
     ifsGrantLetterUrl: Readonly<string>;
     salesforcePassword: Readonly<string>;
     salesforceToken: Readonly<string>;
+    salesforceUseJwtToken: Readonly<boolean>;
+    salesforceClientId: Readonly<string>;
+    salesforceConnectionUrl: Readonly<string>;
 }
 
 const secrets = {
-    salesforcePassword: process.env.SALESFORCEPASSWORD as string,
-    salesforceToken: process.env.SALESFORCETOKEN as string
+    salesforcePassword: process.env.SALESFORCEPASSWORD!,
+    salesforceToken: process.env.SALESFORCETOKEN!,
+    salesforceUseJwtToken: process.env.SALESFORCEUSEJWTTOKEN === "true",
+    salesforceClientId: process.env.SALESFORCECLIENTID!,
+    salesforceConnectionUrl: process.env.SALESFORCECONNECTIONURL!
 };
 
 export const Configuration: IConfig = {
