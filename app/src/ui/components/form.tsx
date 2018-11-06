@@ -5,7 +5,7 @@ import { NumberInput } from "./inputs/numberInput";
 import classNames from "classnames";
 import { Result } from "../validation/result";
 import { ValidationError } from "./validationError";
-import { RadioList } from "./inputs";
+import { FileUpload, RadioList } from "./inputs";
 
 interface FormProps<T> {
     data: T;
@@ -89,6 +89,14 @@ interface ExternalFieldProps<TDto, TValue> {
     name: string;
     value: (data: TDto) => TValue | null | undefined;
     update: (data: TDto, value: TValue | null) => void;
+    validation?: Result;
+}
+
+interface FileUploadProps<TDto> {
+    label: React.ReactNode;
+    hint?: React.ReactNode;
+    name: string;
+    update: (data: TDto, value: File | null) => void;
     validation?: Result;
 }
 
@@ -190,6 +198,16 @@ const ButtonComponent: React.SFC<ButtonProps> = (props) => {
     return <button type="submit" name="button" value={props.name} className="govuk-button" style={{ background: "buttonface", color: "buttontext" }} onClick={(e) => handleOtherButton(props, e)}>{props.children}</button>;
 };
 
+const FileUploadComponent = <T extends {}>(props: FileUploadProps<T>) => {
+    const TypedFieldComponent = FieldComponent as { new(): FieldComponent<T, File> };
+
+    const fieldProps: ExternalFieldProps<T, File> = { value: () => (null), ...props};
+
+    return (
+        <TypedFieldComponent field={(data => <FileUpload name={props.name} onChange={(val) => handleChange(fieldProps, val)} />)} {...fieldProps}/>
+    );
+};
+
 export const TypedForm = <T extends {}>() => ({
     Form: FormComponent as { new(): FormComponent<T> },
     Fieldset: FieldsetComponent as { new(): FieldsetComponent<T> },
@@ -198,5 +216,6 @@ export const TypedForm = <T extends {}>() => ({
     Numeric: NumericField as React.SFC<ExternalFieldProps<T, number>>,
     Radio: RadioOptionsField as React.SFC<RadioFieldProps<T>>,
     Submit: SubmitComponent,
-    Button: ButtonComponent
+    Button: ButtonComponent,
+    FileUpload: FileUploadComponent as React.SFC<FileUploadProps<T>>,
 });
