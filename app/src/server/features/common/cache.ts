@@ -14,6 +14,14 @@ export class Cache<T> {
     return this.set(key, get());
   }
 
+  async fetchAsync(key: string, get: () => Promise<T>) : Promise<T> {
+    let result = this.store[key];
+    if(result){
+      return result;
+    }
+    return this.set(key, await get());
+  }
+
   set(key: string, item: T) : T {
     this.clear(key);
     this.store[key] = item;

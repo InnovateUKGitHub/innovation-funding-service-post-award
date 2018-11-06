@@ -4,6 +4,10 @@ import { ISalesforceCostCategory } from "../../repositories";
 
 export class GetCostCategoriesQuery implements IQuery<CostCategoryDto[]> {
   public async Run(context: IContext) {
+    return context.caches.costCategories.fetchAsync("All", () => this.executeQuery(context))
+  }
+
+  private async executeQuery(context: IContext) {
     const data = await context.repositories.costCategories.getAll();
 
     data.sort((a, b) => a.Acc_DisplayOrder__c - b.Acc_DisplayOrder__c);

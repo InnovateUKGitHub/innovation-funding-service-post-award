@@ -1,9 +1,11 @@
-import { ICommand, IContext, IQuery } from "../../src/server/features/common/context";
+import { ICommand, IContext, IQuery, ICaches } from "../../src/server/features/common/context";
 import { createTestRepositories, ITestRepositories } from "./testRepositories";
 import { TestData } from "./testData";
 import { TestClock } from "./testClock";
 import { TestLogger } from "./testLogger";
 import { IConfig } from "../../src/server/features/common/config";
+import { Cache } from "../../src/server/features/common/cache";
+import { CostCategoryDto } from "../../src/ui/models";
 
 export class TestContext implements IContext {
     constructor() {
@@ -23,6 +25,10 @@ export class TestContext implements IContext {
         salesforcePassword: "",
         salesforceToken: ""
     };
+
+    public caches: ICaches = {
+        costCategories: new Cache<CostCategoryDto[]>(1)
+    }
 
     public runQuery<TResult>(query: IQuery<TResult>): Promise<TResult> {
         return query.Run(this);
