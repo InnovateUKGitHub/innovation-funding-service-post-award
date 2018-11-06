@@ -27,10 +27,9 @@ class Controller extends ControllerBase<DocumentSummaryDto> implements IDocument
 
     this.postAttachment(
       "/claim-details/:partnerId/:periodId/:costCategoryId",
-      (p, q, b, f) => ({ partnerId: p.partnerId, periodId: p.periodId, costCategoryId: p.costCategoryId, file: {fileName: f.originalname, content: f.buffer.toString(f.encoding)} }),
+      (p, q, b, f) => ({ partnerId: p.partnerId, periodId: p.periodId, costCategoryId: p.costCategoryId, file: f }),
       p => this.uploadClaimDetailDocument(p)
     );
-
   }
 
   public async getClaimDetailDocuments(params: ApiParams<{ partnerId: string, periodId: number, costCategoryId: string }>) {
@@ -53,7 +52,7 @@ class Controller extends ControllerBase<DocumentSummaryDto> implements IDocument
       costCategoryId,
     };
     const query = new UploadClaimDetailDocumentCommand(claimDetailKey, file.content, file.fileName);
-    return await contextProvider.start(params).runQuery(query);
+    return contextProvider.start(params).runQuery(query);
   }
 }
 

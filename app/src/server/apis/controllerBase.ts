@@ -49,7 +49,7 @@ export abstract class ControllerBase<T> {
     return this;
   }
 
-  protected postAttachment<TParams>(path: string, getParams: (params: any, query: any, body: any, file: any) => TParams, run: (params: ApiParams<TParams>) => Promise<any>) {
+  protected postAttachment<TParams>(path: string, getParams: (params: any, query: any, body: any, file: any) => TParams, run: (params: ApiParams<TParams>) => Promise<string>) {
     this.router.post(path, upload.single("attachment"), this.executeMethod(201, getParams, run, false));
   }
 
@@ -104,7 +104,8 @@ export abstract class ControllerBase<T> {
     type extendedRequest = Request & {file: UploadedFile};
     return async (req: extendedRequest, resp: Response, next: NextFunction) => {
 
-      const p = Object.assign({user: req.session!.user as IUser}, getParams(req.params || {}, req.query || {}, req.body || {}, req.file || {}));
+      const file = req.file ? {fileName: req.file.originalname, content: req.file.buffer.toString("base64")} : {};
+      const p = Object.assign({user: req.session!.user as IUser}, getParams(req.params || {}, req.query || {}, req.body || {}, file));
       run(p)
         .then(result => {
           if ((result === null || result === undefined) && allowNulls === false) {
