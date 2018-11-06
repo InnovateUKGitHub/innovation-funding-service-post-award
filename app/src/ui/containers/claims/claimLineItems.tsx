@@ -69,7 +69,7 @@ export class ClaimLineItemsComponent extends ContainerBase<Params, Data, {}> {
           <ClaimLineItemsTable lineItems={lineItems} forecastDetail={forecastDetail} />
         </ACC.Section>
         <ACC.Section title="Supporting documents" subtitle={documents.length > 0 ? "(Documents open in a new window)" : ""}>
-          {documents.length > 0 ? <DocumentList documents={documents} qa="supporting-documents"/>: <h2 className="govuk-heading-s govuk-!-margin-bottom-0 govuk-!-margin-right-2">No documents attached</h2> }
+          {documents.length > 0 ? <DocumentList documents={documents} qa="supporting-documents"/>: <p className="govuk-body-m govuk-!-margin-bottom-0 govuk-!-margin-right-2">No documents attached</p> }
         </ACC.Section>
       </ACC.Page>
     );
