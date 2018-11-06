@@ -92,8 +92,7 @@ export default abstract class SalesforceBase<T> {
         if(!(inserts instanceof Array)) {
           return (results as SuccessResult).id.toString();
         }
-        const ids = (results as SuccessResult[]).map(r => r.id.toString());
-        return inserts instanceof Array ? ids : ids[0];
+        return (results as SuccessResult[]).map(r => r.id.toString());
       });
   }
 

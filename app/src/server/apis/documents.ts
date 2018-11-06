@@ -51,7 +51,8 @@ class Controller extends ControllerBase<DocumentSummaryDto> implements IDocument
       periodId,
       costCategoryId,
     };
-    const query = new UploadClaimDetailDocumentCommand(claimDetailKey, file.content, file.fileName);
+
+    const query = new UploadClaimDetailDocumentCommand(claimDetailKey, file);
     return contextProvider.start(params).runQuery(query);
   }
 }

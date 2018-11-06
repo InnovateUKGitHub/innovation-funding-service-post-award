@@ -11,14 +11,6 @@ import multer from "multer";
 
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
-export interface UploadedFile {
-  originalname: string;
-  fieldname: string;
-  encoding: string;
-  mimetype: string;
-  buffer: Buffer;
-  size: number;
-}
 
 // this is the information extracted from an express request / session and stored in the redux store
 // it is the same shape client and server side allowing the client and server api calls to have the same shape
@@ -101,7 +93,7 @@ export abstract class ControllerBase<T> {
   }
 
   private executeMethod<TParams, TResponse>(successStatus: number, getParams: (params: any, query: any, body?: any, file?: any) => TParams, run: (params: ApiParams<TParams>) => Promise<TResponse | null>, allowNulls: boolean) {
-    type extendedRequest = Request & {file: UploadedFile};
+    type extendedRequest = Request & {file: Express.Multer.File};
     return async (req: extendedRequest, resp: Response, next: NextFunction) => {
 
       const file = req.file ? {fileName: req.file.originalname, content: req.file.buffer.toString("base64")} : {};
