@@ -3,7 +3,7 @@ import { Configuration, IConfig } from "./config";
 import { Clock, IClock } from "./clock";
 import { ILogger, Logger } from "./logger";
 import { IUser } from "../../../shared/IUser";
-import { ISalesforceConnectionDetails, salesforceConnection } from "../../repositories/salesforceConnection";
+import { ISalesforceConnectionDetails, salesforceConnection, salesforceConnectionWithToken } from "../../repositories/salesforceConnection";
 import { Cache } from "./cache";
 import { CostCategoryDto } from "../../../ui/models";
 
@@ -60,7 +60,9 @@ export class Context implements IContext {
     this.salesforceConnectionDetails = {
       username: this.user.email,
       password: this.config.salesforcePassword,
-      token: this.config.salesforceToken
+      token: this.config.salesforceToken,
+      connectionUrl: this.config.salesforceConnectionUrl,
+      clientId: this.config.salesforceClientId
     };
   }
 
@@ -87,8 +89,14 @@ export class Context implements IContext {
   public caches = cachesImplimentation;
 
   private salesforceConnectionDetails: ISalesforceConnectionDetails;
+  
   private getSalesforceConnection() {
-    return salesforceConnection(this.salesforceConnectionDetails);
+    if(this.config.salesforceUseJwtToken){
+      return salesforceConnectionWithToken(this.salesforceConnectionDetails)
+    }
+    else{
+      return salesforceConnection(this.salesforceConnectionDetails);
+    }
   }
 
   public config: Readonly<IConfig>;

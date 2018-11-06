@@ -4,8 +4,11 @@ DotEnv.config();
 import express from "express";
 import cors from "cors";
 import bodyParser from "body-parser";
-import { router } from "./router";
 import cookieSession from "cookie-session";
+import "isomorphic-fetch";
+import "isomorphic-form-data";
+
+import { router } from "./router";
 import { IUser } from "../shared/IUser";
 
 const defaultSalesforceEmail = process.env.SALESFORCEUSERNAME || "iuk.accproject@bjss.com.bjsspoc2";
