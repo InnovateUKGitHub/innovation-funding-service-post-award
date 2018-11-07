@@ -53,7 +53,8 @@ class Controller extends ControllerBase<DocumentSummaryDto> implements IDocument
     };
 
     const query = new UploadClaimDetailDocumentCommand(claimDetailKey, file);
-    return contextProvider.start(params).runQuery(query);
+    const insertedID = await contextProvider.start(params).runQuery(query);
+    return {id: insertedID};
   }
 }
 
