@@ -281,6 +281,7 @@ export class TestData {
         VersionData: content,
       };
       this.repositories.contentVersions.Items.push(item);
+      this.repositories.contentDocument.Items.push({Id: item.ContentDocumentId});
       return item;
     }
 
