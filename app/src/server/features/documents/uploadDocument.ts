@@ -8,6 +8,7 @@ export class UploadDocumentCommand implements ICommand<string> {
     const contentVersionId = await context.repositories.contentVersions.insertDocument(this.content, this.fileName);
     const contentVersion = await context.repositories.contentVersions.getDocument(contentVersionId);
     const documentId = contentVersion.ContentDocumentId;
-    return context.repositories.contentDocumentLinks.insertContentDocumentLink(documentId, this.recordId);
+    await context.repositories.contentDocumentLinks.insertContentDocumentLink(documentId, this.recordId);
+    return contentVersion.Id;
   }
 }
