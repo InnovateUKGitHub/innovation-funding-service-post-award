@@ -27,7 +27,7 @@ export abstract class TestRepository<T> {
   }
 
   protected delete(ids: string | string[]): Promise<void> {
-    this.Items = this.Items.filter(element => element !== ids);
+    this.Items = this.Items.filter(element => {element.Id !== ids;});
     return Promise.resolve();
   }
 
