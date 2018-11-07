@@ -265,7 +265,6 @@ export class ClaimForecastComponent extends ContainerBase<Params, Data, Callback
     cells.push(totals.map(this.renderTableFooterCell));
     cells.push(<td key="total_diff" className="govuk-table__cell govuk-table__cell--numeric"><Percentage className="govuk-!-font-weight-bold" value={this.calculateDifference(golTotal, costTotal)} /></td>);
 
-
     return [<tr style={trStyle} key="footer1" className="govuk-table__row">{cells}</tr>];
   }
 
