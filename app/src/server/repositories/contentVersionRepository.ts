@@ -19,7 +19,7 @@ export interface IContentVersionRepository {
   getDocuments(contentDocumentIds: string[]): Promise<ISalesforceContentVersion[]>;
   getDocument(id: string): Promise<ISalesforceContentVersion>;
   getDocumentData(id: string): Promise<Stream>;
-  insertDocument(content: string, fileName: string): Promise<string>;
+  insertDocument(file: FileUpload): Promise<string>;
 }
 
 const fieldNames: (keyof ISalesforceContentVersion)[] = ["Id", "Title", "FileExtension", "ContentDocumentId", "ContentSize", "FileType"];
@@ -43,7 +43,7 @@ export class ContentVersionRepository extends SalesforceBase<ISalesforceContentV
     });
   }
 
-  public insertDocument(content: string, fileName: string) {
+  public insertDocument({content, fileName}: FileUpload) {
     return super.insert({
       ReasonForChange: "First Upload",
       PathOnClient: fileName,

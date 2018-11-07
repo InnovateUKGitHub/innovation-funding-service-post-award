@@ -17,7 +17,7 @@ describe("UploadClaimDetailDocumentCommand", () => {
     const file = {
       fileName: "fileName.txt",
       content: "Some content",
-    }
+    };
 
     const command = new UploadClaimDetailDocumentCommand(claimDetailKey, file);
     await context.runCommand(command);

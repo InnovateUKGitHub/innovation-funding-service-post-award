@@ -95,7 +95,7 @@ export abstract class ControllerBase<T> {
     type extendedRequest = Request & {file: Express.Multer.File};
     return async (req: extendedRequest, resp: Response, next: NextFunction) => {
 
-      const file = req.file ? {fileName: req.file.originalname, content: req.file.buffer.toString("base64")} : {};
+      const file: FileUpload | {} = req.file ? {fileName: req.file.originalname, content: req.file.buffer.toString("base64")} : {};
       const p = Object.assign({user: req.session!.user as IUser}, getParams(req.params || {}, req.query || {}, req.body || {}, file));
       run(p)
         .then(result => {
