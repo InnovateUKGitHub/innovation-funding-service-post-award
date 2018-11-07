@@ -1,14 +1,17 @@
 import mimeTypes from "mime-types";
 import {Router} from "express-serve-static-core";
+import multer from "multer";
 import express, {NextFunction, Request, Response} from "express";
 import {ApiError, ErrorCode, StatusCode} from "./ApiError";
 import {ValidationError} from "../../shared/validation";
 import {Results} from "../../ui/validation/results";
 import {DocumentDto} from "../../ui/models";
-
 import { IUser } from "../../shared/IUser";
 
-// this is the infromation extreacted from an express request / session and stored in the redux store
+const storage = multer.memoryStorage();
+const upload = multer({ storage });
+
+// this is the information extracted from an express request / session and stored in the redux store
 // it is the same shape client and server side allowing the client and server api calls to have the same shape
 export interface ISession {
   user: IUser;
@@ -35,6 +38,10 @@ export abstract class ControllerBase<T> {
   protected getAttachment<TParams>(path: string, getParams: (params: any, query: any) => TParams, run: (params: ApiParams<TParams>) => Promise<DocumentDto>) {
     this.router.get(path, this.attachmentHandler(200, getParams, run));
     return this;
+  }
+
+  protected postAttachment<TParams>(path: string, getParams: (params: any, query: any, body: any, file: any) => TParams, run: (params: ApiParams<TParams>) => Promise<string>) {
+    this.router.post(path, upload.single("attachment"), this.executeMethod(201, getParams, run, false));
   }
 
   protected putItem<TParams>(path: string, getParams: (params: any, query: any, body: any) => TParams, run: (params: ApiParams<TParams>) => Promise<T | null>) {
@@ -84,10 +91,12 @@ export abstract class ControllerBase<T> {
     return resp.status(status).json(data);
   }
 
-  private executeMethod<TParams, TResponse>(successStatus: number, getParams: (params: any, query: any, body?: any) => TParams, run: (params: ApiParams<TParams>) => Promise<TResponse | null>, allowNulls: boolean) {
-    return async (req: Request, resp: Response, next: NextFunction) => {
+  private executeMethod<TParams, TResponse>(successStatus: number, getParams: (params: any, query: any, body?: any, file?: any) => TParams, run: (params: ApiParams<TParams>) => Promise<TResponse | null>, allowNulls: boolean) {
+    type extendedRequest = Request & {file: Express.Multer.File};
+    return async (req: extendedRequest, resp: Response, next: NextFunction) => {
 
-      const p = Object.assign({user: req.session!.user as IUser}, getParams(req.params || {}, req.query || {}, req.body || {}));
+      const file: FileUpload | {} = req.file ? {fileName: req.file.originalname, content: req.file.buffer.toString("base64")} : {};
+      const p = Object.assign({user: req.session!.user as IUser}, getParams(req.params || {}, req.query || {}, req.body || {}, file));
       run(p)
         .then(result => {
           if ((result === null || result === undefined) && allowNulls === false) {

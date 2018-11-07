@@ -13,14 +13,17 @@ describe("UploadClaimDetailDocumentCommand", () => {
       periodId: claimDetail.Acc_ProjectPeriodNumber__c,
       costCategoryId: claimDetail.Acc_CostCategory__c,
     };
-    const content = "Some content";
-    const fileName = "fileName.txt";
 
-    const command = new UploadClaimDetailDocumentCommand(claimDetailKey, content, fileName);
+    const file = {
+      fileName: "fileName.txt",
+      content: "Some content",
+    };
+
+    const command = new UploadClaimDetailDocumentCommand(claimDetailKey, file);
     await context.runCommand(command);
 
-    expect(context.repositories.contentVersions.Items[0].VersionData).toEqual(content);
-    expect(context.repositories.contentVersions.Items[0].PathOnClient).toEqual(fileName);
+    expect(context.repositories.contentVersions.Items[0].VersionData).toEqual(file.content);
+    expect(context.repositories.contentVersions.Items[0].PathOnClient).toEqual(file.fileName);
     expect(context.repositories.contentDocumentLinks.Items[0].LinkedEntityId).toEqual(claimDetail.Id);
 
   });

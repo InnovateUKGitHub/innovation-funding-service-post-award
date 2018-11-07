@@ -84,7 +84,7 @@ class ClaimDetailsTestRepository extends TestRepository<Repositories.ISalesforce
         return super.getWhere(x => x.Acc_ProjectParticipant__c === partnerId);
     }
 
-    get(partnerId: string, periodId: number, costCategoryId: string): Promise<Repositories.ISalesforceClaimDetails> {
+    get({ partnerId, periodId, costCategoryId }: ClaimDetailKey): Promise<Repositories.ISalesforceClaimDetails> {
       return super.getOne(x => x.Acc_ProjectParticipant__c === partnerId && x.Acc_ProjectPeriodNumber__c === periodId && x.Acc_CostCategory__c === costCategoryId);
     }
 }
@@ -114,7 +114,7 @@ class ContentVersionTestRepository extends TestRepository<Repositories.ISalesfor
       return s;
     });
   }
-  public insertDocument(content: string, fileName: string) {
+  public insertDocument({ content, fileName }: FileUpload) {
     const nameParts = fileName.split(".");
     const extension = nameParts.length > 1 ? nameParts[nameParts.length - 1] : null;
     const title = nameParts[0];
