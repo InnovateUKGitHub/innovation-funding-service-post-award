@@ -18,6 +18,7 @@ export interface IRepositories {
   claimDetails: Readonly<Repositories.IClaimDetailsRepository>;
   contacts: Readonly<Repositories.IContactsRepository>;
   costCategories: Readonly<Repositories.ICostCategoryRepository>;
+  contentDocument: Readonly<Repositories.ContentDocumentRepository>;
   contentDocumentLinks: Readonly<Repositories.ContentDocumentLinkRepository>;
   contentVersions: Readonly<Repositories.ContentVersionRepository>;
   profileDetails: Readonly<Repositories.IProfileDetailsRepository>;
@@ -60,6 +61,7 @@ export class Context implements IContext {
     claimCosts: new Repositories.ClaimCostRepository(() => this.getSalesforceConnection()),
     contacts: new Repositories.ContactsRepository(() => this.getSalesforceConnection()),
     costCategories: new Repositories.CostCategoryRepository(() => this.getSalesforceConnection()),
+    contentDocument: new Repositories.ContentDocumentRepository(() => this.getSalesforceConnection()),
     contentDocumentLinks: new Repositories.ContentDocumentLinkRepository(() => this.getSalesforceConnection()),
     contentVersions: new Repositories.ContentVersionRepository(() => this.getSalesforceConnection()),
     profileDetails: new Repositories.ProfileDetailsRepository(() => this.getSalesforceConnection()),

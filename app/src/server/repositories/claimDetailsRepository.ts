@@ -26,7 +26,7 @@ const fields: FieldNames[] = [
 export interface IClaimDetailsRepository {
   getAllByPartnerForPeriod(partnerId: string, periodId: number): Promise<ISalesforceClaimDetails[]>;
   getAllByPartnerWithPeriodLt(partnerId: string, periodId: number): Promise<ISalesforceClaimDetails[]>;
-  get(partnerId: string, periodId: number, costCategoryId: string): Promise<ISalesforceClaimDetails>;
+  get(key: ClaimDetailKey): Promise<ISalesforceClaimDetails>;
   getAllByPartner(partnerId: string): Promise<ISalesforceClaimDetails[]>;
 }
 
@@ -42,7 +42,8 @@ export class ClaimDetailsRepository extends SalesforceBase<ISalesforceClaimDetai
     return super.whereString(filter);
   }
 
-  async get(partnerId: string, periodId: number, costCategoryId: string): Promise<ISalesforceClaimDetails> {
+  async get(claimDetailKey: ClaimDetailKey): Promise<ISalesforceClaimDetails> {
+    const { partnerId, periodId, costCategoryId } = claimDetailKey;
     const filter = `
     Acc_ProjectParticipant__c = '${partnerId}'
     AND RecordType.Name = '${this.recordType}'

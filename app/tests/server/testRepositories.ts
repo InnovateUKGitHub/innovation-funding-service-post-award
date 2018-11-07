@@ -84,9 +84,15 @@ class ClaimDetailsTestRepository extends TestRepository<Repositories.ISalesforce
         return super.getWhere(x => x.Acc_ProjectParticipant__c === partnerId);
     }
 
-    get(partnerId: string, periodId: number, costCategoryId: string): Promise<Repositories.ISalesforceClaimDetails> {
+    get({ partnerId, periodId, costCategoryId }: ClaimDetailKey): Promise<Repositories.ISalesforceClaimDetails> {
       return super.getOne(x => x.Acc_ProjectParticipant__c === partnerId && x.Acc_ProjectPeriodNumber__c === periodId && x.Acc_CostCategory__c === costCategoryId);
     }
+}
+
+class ContentDocumentTestRepository extends TestRepository<Repositories.ISalesforceContentDocument> implements Repositories.IContentDocumentRepository {
+  delete(id: string): Promise<void> {
+    return super.delete(id);
+  }
 }
 
 class ContentDocumentLinkTestRepository extends TestRepository<Repositories.ISalesforceContentDocumentLink> implements Repositories.IContentDocumentLinkRepository {
@@ -114,7 +120,7 @@ class ContentVersionTestRepository extends TestRepository<Repositories.ISalesfor
       return s;
     });
   }
-  public insertDocument(content: string, fileName: string) {
+  public insertDocument({ content, fileName }: FileUpload) {
     const nameParts = fileName.split(".");
     const extension = nameParts.length > 1 ? nameParts[nameParts.length - 1] : null;
     const title = nameParts[0];
@@ -240,6 +246,7 @@ export interface ITestRepositories extends IRepositories {
     costCategories: CostCategoriesTestRepository;
     contacts: ContactsTestRepository;
     contentDocumentLinks: ContentDocumentLinkTestRepository;
+    contentDocument: ContentDocumentTestRepository;
     contentVersions: ContentVersionTestRepository;
     profileDetails: ProfileDetailsTestRepository;
     profileTotalCostCategory: ProfileTotalCostCategoryTestRepository;
@@ -255,6 +262,7 @@ export const createTestRepositories = (): ITestRepositories => ({
     claimLineItems: new ClaimLineItemsTestRepository(),
     costCategories: new CostCategoriesTestRepository(),
     contacts: new ContactsTestRepository(),
+    contentDocument: new ContentDocumentTestRepository(),
     contentDocumentLinks: new ContentDocumentLinkTestRepository(),
     contentVersions: new ContentVersionTestRepository(),
     profileDetails: new ProfileDetailsTestRepository(),
