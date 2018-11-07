@@ -89,6 +89,12 @@ class ClaimDetailsTestRepository extends TestRepository<Repositories.ISalesforce
     }
 }
 
+class ContentDocumentTestRepository extends TestRepository<Repositories.ISalesforceContentDocument> implements Repositories.IContentDocumentRepository {
+  delete(id: string): Promise<void> {
+    return super.delete(id);
+  }
+}
+
 class ContentDocumentLinkTestRepository extends TestRepository<Repositories.ISalesforceContentDocumentLink> implements Repositories.IContentDocumentLinkRepository {
   getAllForEntity(entityId: string): Promise<Repositories.ISalesforceContentDocumentLink[]> {
     return super.getWhere(x => x.LinkedEntityId === entityId);
@@ -240,6 +246,7 @@ export interface ITestRepositories extends IRepositories {
     costCategories: CostCategoriesTestRepository;
     contacts: ContactsTestRepository;
     contentDocumentLinks: ContentDocumentLinkTestRepository;
+    contentDocument: ContentDocumentTestRepository;
     contentVersions: ContentVersionTestRepository;
     profileDetails: ProfileDetailsTestRepository;
     profileTotalCostCategory: ProfileTotalCostCategoryTestRepository;
@@ -255,6 +262,7 @@ export const createTestRepositories = (): ITestRepositories => ({
     claimLineItems: new ClaimLineItemsTestRepository(),
     costCategories: new CostCategoriesTestRepository(),
     contacts: new ContactsTestRepository(),
+    contentDocument: new ContentDocumentTestRepository(),
     contentDocumentLinks: new ContentDocumentLinkTestRepository(),
     contentVersions: new ContentVersionTestRepository(),
     profileDetails: new ProfileDetailsTestRepository(),
