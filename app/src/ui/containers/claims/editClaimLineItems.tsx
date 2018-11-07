@@ -6,6 +6,7 @@ import * as Selectors from "../../redux/selectors";
 import * as Dtos from "../../models";
 import * as ACC from "../../components";
 import { PrepareClaimRoute } from ".";
+import { ClaimDetailDocumentsRoute } from "./claimDetailDocuments";
 import { IEditorStore } from "../../redux/reducers/editorsReducer";
 import { ClaimLineItemDtosValidator, ClaimLineItemDtoValidator } from "../../validators/claimLineItemDtosValidator";
 import {DocumentList, ValidationMessage} from "../../components";
@@ -37,6 +38,7 @@ interface CombinedData {
 interface Callbacks {
   validate: (partnerId: string, periodId: number, costCategoryId: string, dto: Dtos.ClaimLineItemDto[]) => void;
   save: (projectId: string, partnerId: string, periodId: number, costCategoryId: string, dto: Dtos.ClaimLineItemDto[]) => void;
+  saveAndUpload: (projectId: string, partnerId: string, costCategoryId: string, periodId: number, dto: Dtos.ClaimLineItemDto[]) => void;
 }
 
 export class EditClaimLineItemsComponent extends ContainerBase<Params, Data, Callbacks> {
@@ -73,17 +75,13 @@ export class EditClaimLineItemsComponent extends ContainerBase<Params, Data, Cal
         </ACC.Section>
         <ACC.Section title="Breakdown of costs">
           <ACC.InsetText text={costCategory.hintText} />
-          {this.renderTable(editor, forecastDetail)}
-        </ACC.Section>
-        <ACC.Section title="Supporting documents" subtitle={documents.length > 0 ? "(Documents open in a new window)" : ""}>
-          <ValidationMessage message={"If you are unsure what evidence to provide, speak to your Monitoring Officer. They will use these documents when reviewing your claim."} messageType={"info"}/>
-          {documents.length > 0 ? <DocumentList documents={documents} qa="supporting-documents" /> : <p className="govuk-body-m govuk-!-margin-bottom-0 govuk-!-margin-right-2">No documents attached</p> }
+          {this.renderTable(editor, forecastDetail, documents)}
         </ACC.Section>
       </ACC.Page>
     );
   }
 
-  private renderTable(editor: IEditorStore<Dtos.ClaimLineItemDto[], ClaimLineItemDtosValidator>, forecastDetail: Dtos.ForecastDetailsDTO) {
+  private renderTable(editor: IEditorStore<Dtos.ClaimLineItemDto[], ClaimLineItemDtosValidator>, forecastDetail: Dtos.ForecastDetailsDTO, documents: Dtos.DocumentSummaryDto[]) {
     const LineItemForm = ACC.TypedForm<Dtos.ClaimLineItemDto[]>();
     const LineItemTable = ACC.TypedTable<Dtos.ClaimLineItemDto>();
 
@@ -95,6 +93,15 @@ export class EditClaimLineItemsComponent extends ContainerBase<Params, Data, Cal
             <LineItemTable.Custom header="Cost (£)" qa="cost-value" classSuffix="numeric" value={(x, i) => this.renderCost(x, i, editor.validator.items.results[i.row])} width={30} />
             <LineItemTable.Custom header="" qa="remove" value={(x, i) => <a href="#" onClick={e => this.removeItem(x, i, e)}>remove</a>} width={1} />
           </LineItemTable.Table>
+        </LineItemForm.Fieldset>
+        <LineItemForm.Fieldset>
+          <ACC.Section title="Supporting documents" subtitle={documents.length > 0 ? "(Documents open in a new window)" : ""}>
+            <ValidationMessage message={"If you are unsure what evidence to provide, speak to your Monitoring Officer. They will use these documents when reviewing your claim."} messageType={"info"} />
+            {documents.length > 0 ? <DocumentList documents={documents} qa="supporting-documents" /> : <p className="govuk-body-m govuk-!-margin-bottom-0 govuk-!-margin-right-2">No documents attached</p>}
+          </ACC.Section>
+        </LineItemForm.Fieldset>
+        <LineItemForm.Fieldset>
+          <LineItemForm.Button name="return" onClick={() => this.props.saveAndUpload(this.props.projectId, this.props.partnerId, this.props.costCategoryId, this.props.periodId, this.props.editor.data)}>Upload and remove document</LineItemForm.Button>
         </LineItemForm.Fieldset>
         <LineItemForm.Submit>Save and return to claim form</LineItemForm.Submit>
       </LineItemForm.Form>
@@ -185,6 +192,10 @@ const afterSave = (dispatch: any, projectId: string, partnerId: string, periodId
   dispatch(Actions.navigateTo(PrepareClaimRoute.getLink({ projectId, periodId, partnerId })));
 };
 
+const redirectToUploadPage = (dispatch: any, projectId: string, partnerId: string, costCategoryId: string, periodId: number) => {
+  dispatch(Actions.navigateTo(ClaimDetailDocumentsRoute.getLink({projectId, partnerId, costCategoryId, periodId})));
+};
+
 const definition = ReduxContainer.for<Params, Data, Callbacks>(EditClaimLineItemsComponent);
 
 const getEditor: (editor: IEditorStore<Dtos.ClaimLineItemDto[], ClaimLineItemDtosValidator>, partnerId: string, periodId: number, costCategoryId: string, original: Pending<Dtos.ClaimLineItemDto[]>) => IEditorStore<Dtos.ClaimLineItemDto[], ClaimLineItemDtosValidator> = (editor, partnerId, periodId, costCategoryId, original) => {
@@ -220,6 +231,7 @@ export const EditClaimLineItems = definition.connect({
   withCallbacks: (dispatch) => ({
     validate: (partnerId: string, periodId: number, costCategoryId: string, dto: Dtos.ClaimLineItemDto[]) => dispatch(Actions.validateClaimLineItems(partnerId, periodId, costCategoryId, dto)),
     save: (projectId: string, partnerId: string, periodId: number, costCategoryId: string, dto: Dtos.ClaimLineItemDto[]) => dispatch(Actions.saveClaimLineItems(partnerId, periodId, costCategoryId, dto, () => afterSave(dispatch, projectId, partnerId, periodId))),
+    saveAndUpload: (projectId: string, partnerId: string, costCategoryId: string, periodId: number, dto: Dtos.ClaimLineItemDto[]) => dispatch(Actions.saveClaimLineItems(partnerId, periodId, costCategoryId, dto, () => redirectToUploadPage(dispatch, projectId, partnerId, costCategoryId, periodId))),
   })
 });
 
