@@ -89,8 +89,10 @@ export default abstract class SalesforceBase<T> {
     const conn = await this.getSalesforceConnection();
     return await conn.sobject(this.objectName)
       .insert(inserts).then(results => {
-        const ids = (results as SuccessResult[]).map(r => r.id.toString());
-        return inserts instanceof Array ? ids : ids[0];
+        if(!(inserts instanceof Array)) {
+          return (results as SuccessResult).id.toString();
+        }
+        return (results as SuccessResult[]).map(r => r.id.toString());
       });
   }
 
