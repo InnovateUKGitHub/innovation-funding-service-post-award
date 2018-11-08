@@ -20,7 +20,6 @@ const editorsReducer = <TDto extends {}, TValidator extends Results<TDto>> (stor
         };
         const result = Object.assign({}, state);
         result[action.payload.id] = payload;
-
         return result;
     }
     else if (action.type === "@@router5/TRANSITION_START" && action.payload.previousRoute) {
@@ -35,4 +34,5 @@ export const editorReducer = combineReducers({
     claim: editorsReducer<ClaimDto, ClaimDtoValidator>("claim"),
     claimLineItems: editorsReducer<ClaimLineItemDto[], ClaimLineItemDtosValidator>("claimLineItems"),
     forecastDetails: editorsReducer<ForecastDetailsDTO[], ForecastDetailsDtosValidator>("forecastDetails"),
+    claimDetailDocument: editorsReducer<ClaimDetailDocumentDto, Results<ClaimDetailDocumentDto>>("claimDetailDocument"),
 });

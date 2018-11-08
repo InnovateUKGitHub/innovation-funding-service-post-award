@@ -8,6 +8,7 @@ export function loadClaim(partnerId: string, periodId: number) {
   return conditionalLoad(getClaim(partnerId, periodId), params => ApiClient.claims.get({partnerId, periodId, ...params}));
 }
 
+// update editor with validation
 export function validateClaim(partnerId: string, periodId: number, dto: ClaimDto, details: ClaimDetailsSummaryDto[], costCategories: CostCategoryDto[], showErrors?: boolean): SyncThunk<ClaimDtoValidator, UpdateEditorAction> {
   return (dispatch, getState) => {
     const selector = getClaimEditor(partnerId, periodId);
