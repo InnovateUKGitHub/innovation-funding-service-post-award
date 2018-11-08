@@ -25,7 +25,12 @@ const clientApi: IApiClient = {
     getAll: (params) => ajaxJson("/api/cost-categories"),
   },
   documents: {
-    getClaimDetailDocuments: (params) => ajaxJson(`/api/documents/claim-details/${params.partnerId}/${params.periodId}/${params.costCategoryId}`)
+    getClaimDetailDocuments: ({ claimDetailKey }) => ajaxJson(`/api/documents/claim-details/${claimDetailKey.partnerId}/${claimDetailKey.periodId}/${claimDetailKey.costCategoryId}`),
+    uploadClaimDetailDocument: ({ claimDetailKey, file }) => {
+      const formData = new FormData();
+      formData.append("attachment", file as File);
+      return ajaxPostFormData(`/api/documents/claim-details/${claimDetailKey.partnerId}/${claimDetailKey.periodId}/${claimDetailKey.costCategoryId}`, formData);
+    }
   },
   forecastDetails: {
     getAllByPartnerId: (params) => ajaxJson(`/api/forecast-details/?partnerId=${params.partnerId}&periodId=${params.periodId}`),
@@ -54,21 +59,23 @@ const getHeaders = () => {
   return headers;
 };
 
-const ajaxJson = <T>(url: string, opts?: {}): Promise<T> => {
+const ajax = <T>(url: string, opts?: {}): Promise<T> => {
   // TODO - ENV.URL?
   const base = "";
-  const headers = getHeaders();
-  const options = Object.assign({ headers }, opts);
-
-  return fetch(base + url, options).then(response => {
+  return fetch(base + url, opts).then(response => {
     if (response.ok) {
       return processResponse(response);
     }
-
     return response.json()
       .catch(e => Promise.reject(response.statusText))
       .then(errText => Promise.reject(errText));
-  });
+  }).catch(e => console.log(e));
+};
+
+const ajaxJson = <T>(url: string, opts?: {}): Promise<T> => {
+  const headers = getHeaders();
+  const options = Object.assign({ headers }, opts);
+  return ajax(url, options);
 };
 
 const ajaxPost = <T>(url: string, body: {} = {}, opts?: {}) => {
@@ -78,6 +85,11 @@ const ajaxPost = <T>(url: string, body: {} = {}, opts?: {}) => {
   }, opts);
 
   return ajaxJson<T>(url, options);
+};
+
+const ajaxPostFormData = <T>(url: string, formData: FormData, opts?: {}) => {
+  const options = { method: "POST", body: formData,  ...opts};
+  return ajax<T>(url, options);
 };
 
 const ajaxPut = <T>(url: string, body: {} = {}, opts?: {}) => {
