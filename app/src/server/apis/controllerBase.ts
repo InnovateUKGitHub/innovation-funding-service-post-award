@@ -1,11 +1,11 @@
 import mimeTypes from "mime-types";
-import {Router} from "express-serve-static-core";
+import { Router } from "express-serve-static-core";
 import multer from "multer";
-import express, {NextFunction, Request, Response} from "express";
-import {ApiError, ErrorCode, StatusCode} from "./ApiError";
-import {ValidationError} from "../../shared/validation";
-import {Results} from "../../ui/validation/results";
-import {DocumentDto} from "../../ui/models";
+import express, { NextFunction, Request, Response } from "express";
+import { ApiError, ErrorCode, StatusCode } from "./ApiError";
+import { ValidationError } from "../../shared/validation";
+import { Results } from "../../ui/validation/results";
+import { DocumentDto } from "../../ui/models";
 import { IUser } from "../../shared/IUser";
 import { SalesforceTokenError } from "../repositories/salesforceConnection";
 
@@ -78,29 +78,29 @@ export abstract class ControllerBase<T> {
 
   private constructErrorResponse<E extends Error>(error: E): { status: number, data: { code: number, details: string | Results<{}> } } {
     if (error instanceof ValidationError) {
-      return { status: StatusCode.BAD_REQUEST, data: { code: ErrorCode.VALIDATION_ERROR, details: error.validationResult }};
+      return { status: StatusCode.BAD_REQUEST, data: { code: ErrorCode.VALIDATION_ERROR, details: error.validationResult } };
     }
     if (error instanceof ApiError) {
-      return { status: error.errorCode, data: { code: ErrorCode.SERVER_ERROR, details: error.message }};
+      return { status: error.errorCode, data: { code: ErrorCode.SERVER_ERROR, details: error.message } };
     }
-    if(error instanceof SalesforceTokenError){
-      return { status: StatusCode.SERVICE_UNAVAILABLE, data: { code: ErrorCode.SECURITY_ERROR, details: error.message }};
+    if (error instanceof SalesforceTokenError) {
+      return { status: StatusCode.SERVICE_UNAVAILABLE, data: { code: ErrorCode.SECURITY_ERROR, details: error.message } };
     }
     return { status: 500, data: { code: ErrorCode.SERVER_ERROR, details: error.message || "An unexpected error has occurred..." } };
   }
 
   private errorHandler<E extends Error>(err: E, resp: Response) {
     console.log("Error in controller", err);
-    const {status, data} = this.constructErrorResponse(err);
+    const { status, data } = this.constructErrorResponse(err);
     return resp.status(status).json(data);
   }
 
   private executeMethod<TParams, TResponse>(successStatus: number, getParams: (params: any, query: any, body?: any, file?: any) => TParams, run: (params: ApiParams<TParams>) => Promise<TResponse | null>, allowNulls: boolean) {
-    type extendedRequest = Request & {file: Express.Multer.File};
+    type extendedRequest = Request & { file: Express.Multer.File };
     return async (req: extendedRequest, resp: Response, next: NextFunction) => {
 
-      const file: FileUpload | {} = req.file ? {fileName: req.file.originalname, content: req.file.buffer.toString("base64")} : {};
-      const p = Object.assign({user: req.session!.user as IUser}, getParams(req.params || {}, req.query || {}, req.body || {}, file));
+      const file: FileUpload | {} = req.file ? { fileName: req.file.originalname, content: req.file.buffer.toString("base64") } : {};
+      const p = Object.assign({ user: req.session!.user as IUser }, getParams(req.params || {}, req.query || {}, req.body || {}, file));
       run(p)
         .then(result => {
           if ((result === null || result === undefined) && allowNulls === false) {
@@ -114,7 +114,7 @@ export abstract class ControllerBase<T> {
 
   private attachmentHandler<TParams, TResponse>(successStatus: number, getParams: (params: any, query: any, body?: any) => TParams, run: (params: ApiParams<TParams>) => Promise<DocumentDto>) {
     return async (req: Request, resp: Response, next: NextFunction) => {
-      const p = Object.assign({user: req.session!.user as IUser}, getParams(req.params || {}, req.query || {}, req.body || {}));
+      const p = Object.assign({ user: req.session!.user as IUser }, getParams(req.params || {}, req.query || {}, req.body || {}));
       run(p)
         .then(result => {
           if ((result === null || result === undefined)) {

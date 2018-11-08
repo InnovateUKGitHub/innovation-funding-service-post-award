@@ -43,7 +43,7 @@ export class PartnerRepository extends SalesforceBase<ISalesforcePartner> implem
     }
 
     getAllByProjectId(projectId: string): Promise<ISalesforcePartner[]> {
-        return super.whereFilter({ Acc_ProjectId__c: projectId });
+        return super.where({ Acc_ProjectId__c: projectId });
     }
 
     getById(partnerId: string): Promise<ISalesforcePartner | null> {

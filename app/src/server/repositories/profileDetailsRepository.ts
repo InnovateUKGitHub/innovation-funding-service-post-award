@@ -39,12 +39,12 @@ export class ProfileDetailsRepository extends SalesforceBase<ISalesforceProfileD
 
   public async getAllByPartnerWithPeriodGt(partnerId: string, periodId: number): Promise<ISalesforceProfileDetails[]> {
     const filter = `Acc_ProjectParticipant__c = '${partnerId}' AND RecordType.Name = '${this.recordType}' AND Acc_ProjectPeriodNumber__c >= ${periodId}`;
-    return await super.whereString(filter);
+    return await super.where(filter);
   }
 
   public async getById(partnerId: string, periodId: number, costCategoryId: string): Promise<ISalesforceProfileDetails> {
     const filter = `Acc_ProjectParticipant__c = '${partnerId}' AND RecordType.Name = '${this.recordType}' AND Acc_ProjectPeriodNumber__c >= ${periodId} AND Acc_CostCategory__c = '${costCategoryId}'`;
-    return await super.whereString(filter).then((res) => res && res[0] || null);
+    return await super.where(filter).then((res) => res && res[0] || null);
   }
 
   public async update(profileDetails: Updatable<ForecastDetailsDTO>[]) {

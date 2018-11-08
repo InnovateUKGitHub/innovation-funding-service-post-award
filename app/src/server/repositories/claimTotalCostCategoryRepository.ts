@@ -26,6 +26,6 @@ export class ClaimTotalCostCategoryRepository extends SalesforceBase<ISalesforce
 
     getAllByPartnerId(partnerId: string): Promise<ISalesforceClaimTotalCostCategory[]> {
         const filter = `Acc_ProjectParticipant__c = '${partnerId}' AND RecordType.Name = '${this.recordType}'`;
-        return super.whereString(filter);
+        return super.where(filter);
     }
 }

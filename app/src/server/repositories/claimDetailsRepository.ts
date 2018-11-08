@@ -39,7 +39,7 @@ export class ClaimDetailsRepository extends SalesforceBase<ISalesforceClaimDetai
 
   getAllByPartnerForPeriod(partnerId: string, periodId: number): Promise<ISalesforceClaimDetails[]> {
     const filter = `Acc_ProjectParticipant__c = '${partnerId}' AND RecordType.Name = '${this.recordType}' AND Acc_ProjectPeriodNumber__c = ${periodId}`;
-    return super.whereString(filter);
+    return super.where(filter);
   }
 
   async get(claimDetailKey: ClaimDetailKey): Promise<ISalesforceClaimDetails> {
@@ -59,11 +59,11 @@ export class ClaimDetailsRepository extends SalesforceBase<ISalesforceClaimDetai
 
   getAllByPartnerWithPeriodLt(partnerId: string, periodId: number): Promise<ISalesforceClaimDetails[]> {
     const filter = `Acc_ProjectParticipant__c = '${partnerId}' AND RecordType.Name = '${this.recordType}' AND Acc_ProjectPeriodNumber__c < ${periodId}`;
-    return super.whereString(filter);
+    return super.where(filter);
   }
 
   getAllByPartner(partnerId: string): Promise<ISalesforceClaimDetails[]> {
     const filter = `Acc_ProjectParticipant__c = '${partnerId}' AND RecordType.Name = '${this.recordType}'`;
-    return super.whereString(filter);
+    return super.where(filter);
   }
 }
