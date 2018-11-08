@@ -5,9 +5,8 @@ import express, { NextFunction, Request, Response } from "express";
 import { ApiError, ErrorCode, StatusCode } from "./ApiError";
 import { ValidationError } from "../../shared/validation";
 import { Results } from "../../ui/validation/results";
-import { DocumentDto } from "../../ui/models";
-import { IUser } from "../../shared/IUser";
 import { SalesforceTokenError } from "../repositories/salesforceConnection";
+import {DocumentDto} from "../../ui/models";
 
 const storage = multer.memoryStorage();
 const upload = multer({ storage });

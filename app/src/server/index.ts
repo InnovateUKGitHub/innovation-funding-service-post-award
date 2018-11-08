@@ -9,7 +9,6 @@ import "isomorphic-fetch";
 import "isomorphic-form-data";
 
 import { router } from "./router";
-import { IUser } from "../shared/IUser";
 
 const defaultSalesforceEmail = process.env.SALESFORCEUSERNAME || "iuk.accproject@bjss.com.bjsspoc2";
 
