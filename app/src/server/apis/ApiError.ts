@@ -1,10 +1,12 @@
 export enum StatusCode {
   BAD_REQUEST = 400,
-  INTERNAL_SERVER_ERROR = 500
+  INTERNAL_SERVER_ERROR = 500,
+  SERVICE_UNAVAILABLE = 503,
 }
 
 export enum ErrorCode {
   SERVER_ERROR = 1,
+  SECURITY_ERROR = 2,
   VALIDATION_ERROR = 3,
 }
 
