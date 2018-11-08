@@ -69,7 +69,7 @@ const ajax = <T>(url: string, opts?: {}): Promise<T> => {
     return response.json()
       .catch(e => Promise.reject(response.statusText))
       .then(errText => Promise.reject(errText));
-  }).catch(e => console.log(e));
+  });
 };
 
 const ajaxJson = <T>(url: string, opts?: {}): Promise<T> => {
