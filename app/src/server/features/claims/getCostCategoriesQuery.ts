@@ -1,10 +1,10 @@
-import {IContext, IQuery} from "../common/context";
-import {CostCategoryDto} from "../../../ui/models/costCategoryDto";
+import { IContext, IQuery } from "../common/context";
+import { CostCategoryDto } from "../../../ui/models/costCategoryDto";
 import { ISalesforceCostCategory } from "../../repositories";
 
 export class GetCostCategoriesQuery implements IQuery<CostCategoryDto[]> {
   public async Run(context: IContext) {
-    return context.caches.costCategories.fetchAsync("All", () => this.executeQuery(context))
+    return context.caches.costCategories.fetchAsync("All", () => this.executeQuery(context));
   }
 
   private async executeQuery(context: IContext) {
@@ -24,17 +24,17 @@ export class GetCostCategoriesQuery implements IQuery<CostCategoryDto[]> {
   }
 
   private getOrganisationType(item: ISalesforceCostCategory) {
-    if(item.Acc_OrganisationType__c === "Academic") {
+    if (item.Acc_OrganisationType__c === "Academic") {
       return "Academic";
     }
-    else if(item.Acc_OrganisationType__c === "Industrial") {
+    else if (item.Acc_OrganisationType__c === "Industrial") {
       return "Industrial";
     }
     return "Unknown";
   }
 
   private getCompetitionType(item: ISalesforceCostCategory) {
-    if(item.Acc_CompetitionType__c === "Sector") {
+    if (item.Acc_CompetitionType__c === "Sector") {
       return "Sector";
     }
     return "Unknown";

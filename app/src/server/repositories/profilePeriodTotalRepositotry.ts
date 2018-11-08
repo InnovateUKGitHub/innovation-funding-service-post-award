@@ -31,11 +31,11 @@ export class ProfileTotalPeriodRepository extends SalesforceBase<ISalesforceProf
 
   getAllByPartnerId(partnerId: string): Promise<ISalesforceProfileTotalPeriod[]> {
     const filter = `Acc_ProjectParticipant__c = '${partnerId}' AND RecordType.Name = '${this.recordType}'`;
-    return super.whereString(filter);
+    return super.where(filter);
   }
 
   get(partnerId: string, periodId: number) {
     const filter = `Acc_ProjectParticipant__c = '${partnerId}' AND RecordType.Name = '${this.recordType}' AND Acc_ProjectPeriodNumber__c = ${periodId}`;
-    return super.whereString(filter).then(x => x[0]);
+    return super.where(filter).then(x => x[0]);
   }
 }

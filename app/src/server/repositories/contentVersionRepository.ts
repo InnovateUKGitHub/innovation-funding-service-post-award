@@ -31,7 +31,7 @@ export class ContentVersionRepository extends SalesforceBase<ISalesforceContentV
   }
 
   public getDocuments(contentDocumentIds: string[]): Promise<ISalesforceContentVersion[]> {
-    return super.whereString(`ContentDocumentId IN ('${contentDocumentIds.join("', '")}') AND IsLatest = true`);
+    return super.where(`ContentDocumentId IN ('${contentDocumentIds.join("', '")}') AND IsLatest = true`);
   }
 
   public getDocument(id: string): Promise<ISalesforceContentVersion> {
