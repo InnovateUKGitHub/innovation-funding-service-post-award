@@ -17,7 +17,7 @@ export class Cache<T> {
   async fetchAsync(key: string, get: () => Promise<T>) : Promise<T> {
     let result = this.store[key];
     if(result){
-      return result;
+      return Promise.resolve(result);
     }
     return this.set(key, await get());
   }
