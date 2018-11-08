@@ -20,6 +20,7 @@ const editorsReducer = <TDto extends {}, TValidator extends Results<TDto>> (stor
         };
         const result = Object.assign({}, state);
         result[action.payload.id] = payload;
+
         return result;
     }
     else if (action.type === "@@router5/TRANSITION_START" && action.payload.previousRoute) {
