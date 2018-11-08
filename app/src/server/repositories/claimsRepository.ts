@@ -47,12 +47,12 @@ export class ClaimRepository extends SalesforceBase<ISalesforceClaim> implements
 
   public async getAllByPartnerId(partnerId: string): Promise<ISalesforceClaim[]> {
     const filter = `Acc_ProjectParticipant__c = '${partnerId}' AND RecordType.Name = '${this.recordType}'`;
-    return await super.whereString(filter);
+    return await super.where(filter);
   }
 
   public async get(partnerId: string, periodId: number) {
     const filter = `Acc_ProjectParticipant__c = '${partnerId}' AND Acc_ProjectPeriodNumber__c = ${periodId} AND RecordType.Name = '${this.recordType}'`;
-    return await super.whereString(filter).then(x => x[0]);
+    return await super.where(filter).then(x => x[0]);
   }
 
   public update(updatedClaim: Updatable<ISalesforceClaim>) {

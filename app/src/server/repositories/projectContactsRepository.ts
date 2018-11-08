@@ -34,6 +34,6 @@ export class ProjectContactsRepository extends SalesforceBase<ISalesforceProject
     }
 
     getAllByProjectId(projectId: string): Promise<ISalesforceProjectContact[]> {
-        return this.whereFilter({ Acc_ProjectId__c: projectId });
+        return this.where({ Acc_ProjectId__c: projectId });
     }
 }
