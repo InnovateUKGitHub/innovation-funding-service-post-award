@@ -66,7 +66,7 @@ xdescribe("test document upload", () => {
   });
 });
 
-describe("test2", () => {
+xdescribe("test2", () => {
   it("should get documents", () => {
     new ContentDocumentLinkRepository(getSalesforceConnection)
       .getAllForEntity("a061X000000IubVQAS")
@@ -82,7 +82,7 @@ describe("test2", () => {
   });
 });
 
-describe("test3", () => {
+xdescribe("test3", () => {
   it("should write to a file", () => {
     new ContentVersionRepository(getSalesforceConnection).getDocumentData('0681X00000099mIQAQ')
       .then(x => {
@@ -94,7 +94,7 @@ describe("test3", () => {
   });
 });
 
-describe("test6", () => {
+xdescribe("test6", () => {
   it("should get claim detail", () => {
     new ClaimDetailsRepository(getSalesforceConnection)
       .get("a0B1j000000A4UiEAK", 1,"a071j000000Ozk3AAC")

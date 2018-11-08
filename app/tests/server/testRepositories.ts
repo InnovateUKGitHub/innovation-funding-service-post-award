@@ -100,7 +100,7 @@ class ContentDocumentLinkTestRepository extends TestRepository<Repositories.ISal
     return super.getWhere(x => x.LinkedEntityId === entityId);
   }
   public insertContentDocumentLink(contentDocumentId: string, linkedEntityId: string) {
-    return super.insertOne({ContentDocumentId: contentDocumentId, LinkedEntityId: linkedEntityId, ShareType: "V"});
+    return super.insertOne({Id: this.Items.length + 1 + "", ContentDocumentId: contentDocumentId, LinkedEntityId: linkedEntityId, ShareType: "V"});
   }
 }
 

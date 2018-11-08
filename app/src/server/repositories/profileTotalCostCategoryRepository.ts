@@ -2,6 +2,7 @@ import SalesforceBase from "./salesforceBase";
 import { Connection } from "jsforce";
 
 export interface ISalesforceProfileTotalCostCategory {
+  Id: string;
   Acc_CostCategory__c: string;
   // Acc_CostCategoryTotal__c: number;
   Acc_CostCategoryGOLCost__c: number;
@@ -11,6 +12,7 @@ export interface ISalesforceProfileTotalCostCategory {
 type FieldNames = keyof ISalesforceProfileTotalCostCategory;
 
 const fields: FieldNames[] = [
+  "Id",
   "Acc_CostCategory__c",
   // "Acc_CostCategoryTotal__c",
   "Acc_CostCategoryGOLCost__c",
