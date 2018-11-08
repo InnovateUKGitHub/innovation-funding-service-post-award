@@ -35,11 +35,7 @@ interface Callbacks {
   uploadFile: (key: ClaimDetailKey, dto: ClaimDetailDocumentDto) => void;
 }
 
-interface IEditorDto {
-  file: File | null;
-}
-
-export class ClaimDetailDocumentsComponent extends ContainerBase<Params, Data, Callbacks, { editor: IEditorDto }> {
+export class ClaimDetailDocumentsComponent extends ContainerBase<Params, Data, Callbacks> {
 
   public render() {
     const combined = Pending.combine(
