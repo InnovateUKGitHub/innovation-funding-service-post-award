@@ -69,7 +69,7 @@ const getToken = (username: string, clientId: string, connectionUrl: string) : P
     }
     else {
       return r.json().then(x => {
-        throw new SailsforceTokenError("Unable to get token: " + x.error + "\n" + x.error_description, r.status);
+        throw new SalesforceTokenError("Unable to get token: " + x.error + "\n" + x.error_description, r.status);
       });
     }
   })
@@ -95,8 +95,7 @@ interface ISalesforceTokenPayload {
   token_type: "Bearer";
 }
 
-
-class SailsforceTokenError extends Error {
+export class SalesforceTokenError extends Error {
   constructor(message: string, public status: number) {
     super(message);
   }
