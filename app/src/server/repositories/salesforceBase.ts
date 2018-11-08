@@ -1,5 +1,5 @@
-import {Connection, SalesforceId, SuccessResult} from "jsforce";
-import {Stream} from "stream";
+import { Connection, SalesforceId, SuccessResult } from "jsforce";
+import { Stream } from "stream";
 
 export type Updatable<T> = Partial<T> & {
   Id: string
@@ -49,20 +49,7 @@ export default abstract class SalesforceBase<T> {
       ;
   }
 
-  protected async whereString(filter: string): Promise<T[]> {
-    const conn = await this.getSalesforceConnection();
-    const result = await conn.sobject(this.objectName)
-      .select(this.columns.join(", "))
-      .where(filter)
-      .execute()
-      .then(x => this.asArray(x))
-      .catch(e => { throw this.constructError(e, conn); })
-      ;
-
-    return result as T[];
-  }
-
-  protected async whereFilter(filter: Partial<T>): Promise<T[]> {
+  protected async where(filter: Partial<T> | string): Promise<T[]> {
     const conn = await this.getSalesforceConnection();
     const result = await conn.sobject(this.objectName)
       .select(this.columns.join(", "))
@@ -85,7 +72,7 @@ export default abstract class SalesforceBase<T> {
       .then(x => this.asArray(x).pop())
       .catch(e => { throw this.constructError(e, conn); })
       ;
-      
+
     return result as T;
   }
 
@@ -96,7 +83,7 @@ export default abstract class SalesforceBase<T> {
     return await conn.sobject(this.objectName)
       .insert(inserts)
       .then(results => {
-        if(!(inserts instanceof Array)) {
+        if (!(inserts instanceof Array)) {
           return (results as SuccessResult).id.toString();
         }
         return (results as SuccessResult[]).map(r => r.id.toString());
@@ -122,28 +109,28 @@ export default abstract class SalesforceBase<T> {
           return reject(err);
         }
         resolve(res);
-      })
+      });
     })
-    .catch(e => { throw this.constructError(e, conn); })
-    ;
+      .catch(e => { throw this.constructError(e, conn); })
+      ;
   }
 
   private asArray(result: Partial<{}>[]): T[] {
-    if(this.log) {
+    if (this.log) {
       console.log("Retrieved array", result);
     }
     return result as T[];
   }
 
   private asItem(result: { Id?: SalesforceId }): T {
-    if(this.log) {
+    if (this.log) {
       console.log("Retrieved item", result);
     }
     return result as any as T;
   }
 
-  private constructError(e: any, connection: Connection){
-    if(e.errorCode === "ERROR_HTTP_503"){
+  private constructError(e: any, connection: Connection) {
+    if (e.errorCode === "ERROR_HTTP_503") {
       throw new SalesforceUnavilableError(`Salesforce unavailable`);
     }
     console.log("SALESFORCE ERROR:", JSON.stringify(e));

@@ -43,7 +43,7 @@ export class ClaimLineItemRepository extends SalesforceBase<ISalesforceClaimLine
       AND Acc_CostCategory__c = '${categoryId}'
       AND RecordType.Name = '${this.recordType}'
     `;
-    return super.whereString(filter);
+    return super.where(filter);
   }
 
   delete(ids: string[] | string): Promise<void>  {

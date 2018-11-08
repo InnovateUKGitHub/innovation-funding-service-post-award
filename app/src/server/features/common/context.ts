@@ -34,12 +34,12 @@ export interface IRepositories {
 }
 
 export interface ICaches {
-    costCategories: Readonly<Cache<CostCategoryDto[]>>
-};
+  costCategories: Readonly<Cache<CostCategoryDto[]>>;
+}
 
 export interface IContext {
   repositories: IRepositories;
-  caches:ICaches;
+  caches: ICaches;
   config: IConfig;
   runQuery<TResult>(cmd: IQuery<TResult>): Promise<TResult>;
   runCommand<TResult>(cmd: ICommand<TResult>): Promise<TResult>;
@@ -47,7 +47,7 @@ export interface IContext {
   logger: ILogger;
 }
 
-const cachesImplimentation : ICaches = {
+const cachesImplimentation: ICaches = {
   costCategories: new Cache<CostCategoryDto[]>(60 * 12)
 };
 
@@ -89,12 +89,12 @@ export class Context implements IContext {
   public caches = cachesImplimentation;
 
   private salesforceConnectionDetails: ISalesforceConnectionDetails;
-  
+
   private getSalesforceConnection() {
-    if(this.config.salesforceUseJwtToken){
-      return salesforceConnectionWithToken(this.salesforceConnectionDetails)
+    if (this.config.salesforceUseJwtToken) {
+      return salesforceConnectionWithToken(this.salesforceConnectionDetails);
     }
-    else{
+    else {
       return salesforceConnection(this.salesforceConnectionDetails);
     }
   }
@@ -103,20 +103,20 @@ export class Context implements IContext {
   public logger = new Logger();
 
   public runQuery<TResult>(query: IQuery<TResult>): Promise<TResult> {
-      this.logger.log("Running query", query);
+    this.logger.log("Running query", query);
 
-      return query.Run(this).catch(e => {
-        this.logger.log("Failed query", query);
-        throw e;
-      });
+    return query.Run(this).catch(e => {
+      this.logger.log("Failed query", query);
+      throw e;
+    });
   }
 
   public runCommand<TResult>(query: ICommand<TResult>): Promise<TResult> {
-      this.logger.log("Running command", query);
+    this.logger.log("Running command", query);
 
-      return query.Run(this).catch(e => {
-        this.logger.log("Failed command", query, e);
-        throw e;
+    return query.Run(this).catch(e => {
+      this.logger.log("Failed command", query, e);
+      throw e;
     });
   }
 
