@@ -4,6 +4,8 @@ import { Clock, IClock } from "./clock";
 import { ILogger, Logger } from "./logger";
 import { IUser } from "../../../shared/IUser";
 import { ISalesforceConnectionDetails, salesforceConnection } from "../../repositories/salesforceConnection";
+import { Cache } from "./cache";
+import { CostCategoryDto } from "../../../ui/models";
 
 export interface IQuery<T> {
   Run: (context: IContext) => Promise<T>;
@@ -31,14 +33,23 @@ export interface IRepositories {
   claimTotalCostCategory: Readonly<Repositories.IClaimTotalCostCategoryRepository>;
 }
 
+export interface ICaches {
+    costCategories: Readonly<Cache<CostCategoryDto[]>>
+};
+
 export interface IContext {
   repositories: IRepositories;
+  caches:ICaches;
   config: IConfig;
   runQuery<TResult>(cmd: IQuery<TResult>): Promise<TResult>;
   runCommand<TResult>(cmd: ICommand<TResult>): Promise<TResult>;
   clock: IClock;
   logger: ILogger;
 }
+
+const cachesImplimentation : ICaches = {
+  costCategories: new Cache<CostCategoryDto[]>(60 * 12)
+};
 
 export class Context implements IContext {
 
@@ -72,6 +83,8 @@ export class Context implements IContext {
     projectContacts: new Repositories.ProjectContactsRepository(() => this.getSalesforceConnection()),
     claimLineItems: new Repositories.ClaimLineItemRepository(() => this.getSalesforceConnection())
   };
+
+  public caches = cachesImplimentation;
 
   private salesforceConnectionDetails: ISalesforceConnectionDetails;
   private getSalesforceConnection() {

@@ -65,5 +65,15 @@ describe("Cache", () => {
     expect(cache.fetch("Example", valToAdd)).toBe(2);
   });
 
+  it("when item fetched async expect item retrived", async () => {
+    const cache = new Cache<number>(1);
+    let i = 0;
+    const valToAdd = () => new Promise<number>(res => setTimeout(() => res(++i), 10));
 
+    // add item
+    expect(await cache.fetchAsync("Example", valToAdd)).toBe(1);
+
+    // get again and it should be same value
+    expect(await cache.fetchAsync("Example", valToAdd)).toBe(1);
+  });
 });
