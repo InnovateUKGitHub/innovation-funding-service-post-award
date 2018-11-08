@@ -259,7 +259,8 @@ export class TestData {
       const item = {
         ContentDocumentId: contentDocumentId,
         LinkedEntityId: entityId,
-        ShareType: "V"
+        ShareType: "V",
+        Id: this.repositories.contentDocumentLinks.Items.length + 1 + ""
       };
       this.repositories.contentDocumentLinks.Items.push(item);
       return item;
@@ -299,6 +300,7 @@ export class TestData {
         Acc_CostCategory__c: costCategory.Id,
         Acc_ProjectParticipant__c: partner.Id,
         Acc_CostCategoryGOLCost__c: golCost,
+        Id: this.repositories.profileTotalCostCategory.Items.length + 1 + ""
       };
 
       if(!!update) {
