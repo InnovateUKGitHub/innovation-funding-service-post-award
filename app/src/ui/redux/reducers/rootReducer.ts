@@ -4,7 +4,6 @@ import { dataReducer } from "./dataReducer";
 import { loadStatusReducer } from "./loadStatusReducer";
 import { editorReducer } from "./editorsReducer";
 import { userReducer } from "./userReducer";
-import { IUser } from "../../../shared/IUser";
 
 export type DataState = ReturnType<typeof dataReducer>;
 export type DataStateKeys = keyof DataState;
