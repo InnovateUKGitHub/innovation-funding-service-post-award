@@ -23,7 +23,10 @@ export class TestContext implements IContext {
         ifsApplicationUrl: "",
         ifsGrantLetterUrl: "",
         salesforcePassword: "",
-        salesforceToken: ""
+        salesforceToken: "",
+        salesforceClientId: "",
+        salesforceUseJwtToken: false,
+        salesforceConnectionUrl: ""
     };
 
     public caches: ICaches = {

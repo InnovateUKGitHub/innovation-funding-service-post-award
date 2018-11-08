@@ -34,7 +34,9 @@ export default abstract class SalesforceBase<T> {
     const result = await conn.sobject(this.objectName)
       .select(this.columns.join(", "))
       .execute()
-      .then(x => this.asArray(x));
+      .then(x => this.asArray(x))
+      .catch(e => { throw this.constructError(e, conn); })
+      ;
 
     return result as T[];
   }
@@ -43,7 +45,8 @@ export default abstract class SalesforceBase<T> {
     const conn = await this.getSalesforceConnection();
     return conn.sobject(this.objectName)
       .record(id)
-      .blob(fieldName);
+      .blob(fieldName)
+      ;
   }
 
   protected async whereString(filter: string): Promise<T[]> {
@@ -53,10 +56,8 @@ export default abstract class SalesforceBase<T> {
       .where(filter)
       .execute()
       .then(x => this.asArray(x))
-      .catch(e => {
-        console.log("Salesforce Error", e);
-        throw e;
-      });
+      .catch(e => { throw this.constructError(e, conn); })
+      ;
 
     return result as T[];
   }
@@ -67,7 +68,9 @@ export default abstract class SalesforceBase<T> {
       .select(this.columns.join(", "))
       .where(filter)
       .execute()
-      .then(x => this.asArray(x));
+      .then(x => this.asArray(x))
+      .catch(e => { throw this.constructError(e, conn); })
+      ;
 
     return result as T[];
   }
@@ -79,7 +82,10 @@ export default abstract class SalesforceBase<T> {
       .where(filter)
       .limit(1)
       .execute()
-      .then(x => this.asArray(x).pop());
+      .then(x => this.asArray(x).pop())
+      .catch(e => { throw this.constructError(e, conn); })
+      ;
+      
     return result as T;
   }
 
@@ -88,19 +94,24 @@ export default abstract class SalesforceBase<T> {
   protected async insert(inserts: Partial<T> | Partial<T>[]): Promise<string | string[]> {
     const conn = await this.getSalesforceConnection();
     return await conn.sobject(this.objectName)
-      .insert(inserts).then(results => {
+      .insert(inserts)
+      .then(results => {
         if(!(inserts instanceof Array)) {
           return (results as SuccessResult).id.toString();
         }
         return (results as SuccessResult[]).map(r => r.id.toString());
-      });
+      })
+      .catch(e => { throw this.constructError(e, conn); })
+      ;
   }
 
   protected async update(updates: Updatable<T>[] | Updatable<T>): Promise<boolean> {
     const conn = await this.getSalesforceConnection();
     return await conn.sobject(this.objectName)
       .update(updates)
-      .then(() => true);
+      .then(() => true)
+      .catch(e => { throw this.constructError(e, conn); })
+      ;
   }
 
   protected async delete(ids: string[] | string): Promise<void> {
@@ -111,8 +122,10 @@ export default abstract class SalesforceBase<T> {
           return reject(err);
         }
         resolve(res);
-      });
-    });
+      })
+    })
+    .catch(e => { throw this.constructError(e, conn); })
+    ;
   }
 
   private asArray(result: Partial<{}>[]): T[] {
@@ -128,4 +141,15 @@ export default abstract class SalesforceBase<T> {
     }
     return result as any as T;
   }
+
+  private constructError(e: any, connection: Connection){
+    if(e.errorCode === "ERROR_HTTP_503"){
+      throw new SalesforceUnavilableError(`Salesforce unavailable`);
+    }
+    console.log("SALESFORCE ERROR:", JSON.stringify(e));
+    return new Error(e.errorCode + ": " + e.message);
+  }
+}
+export class SalesforceUnavilableError extends Error {
+
 }

@@ -7,6 +7,7 @@ import {ValidationError} from "../../shared/validation";
 import {Results} from "../../ui/validation/results";
 import {DocumentDto} from "../../ui/models";
 import { IUser } from "../../shared/IUser";
+import { SalesforceTokenError } from "../repositories/salesforceConnection";
 
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
@@ -81,6 +82,9 @@ export abstract class ControllerBase<T> {
     }
     if (error instanceof ApiError) {
       return { status: error.errorCode, data: { code: ErrorCode.SERVER_ERROR, details: error.message }};
+    }
+    if(error instanceof SalesforceTokenError){
+      return { status: StatusCode.SERVICE_UNAVAILABLE, data: { code: ErrorCode.SECURITY_ERROR, details: error.message }};
     }
     return { status: 500, data: { code: ErrorCode.SERVER_ERROR, details: error.message || "An unexpected error has occurred..." } };
   }
