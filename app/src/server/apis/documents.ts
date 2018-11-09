@@ -46,7 +46,8 @@ class Controller extends ControllerBase<DocumentSummaryDto> implements IDocument
   public async uploadClaimDetailDocument(params: ApiParams<{claimDetailKey: ClaimDetailKey, file: FileUpload}>) {
     const { claimDetailKey, file } = params;
     const query = new UploadClaimDetailDocumentCommand(claimDetailKey, file);
-    return contextProvider.start(params).runQuery(query);
+    const insertedID = await contextProvider.start(params).runQuery(query);
+    return {id: insertedID};
   }
 }
 
