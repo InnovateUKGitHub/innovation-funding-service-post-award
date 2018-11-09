@@ -1,5 +1,4 @@
 import { IContext, IQuery } from "../common/context";
-import { ForecastDetailsDTO } from "../../../ui/models/index";
 import mapForecastDetail from "./mapForecastDetail";
 
 export class GetAllForecastsForPartnerQuery implements IQuery<ForecastDetailsDTO[]> {

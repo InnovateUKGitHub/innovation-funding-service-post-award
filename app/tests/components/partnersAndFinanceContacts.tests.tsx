@@ -4,11 +4,10 @@ import Enzyme, { mount } from "enzyme";
 import Adapter from "enzyme-adapter-react-16";
 import { PartnersAndFinanceContacts } from "../../src/ui/components/partnersAndFinanceContacts";
 import { getColumnValues } from "./helpers/tableHelpers";
-import * as Dtos from "../../src/ui/models";
 
 Enzyme.configure({ adapter: new Adapter() });
 
-const testPartnerData: Dtos.PartnerDto[] = [
+const testPartnerData: PartnerDto[] = [
   {
     id: "123",
     type: "Industrial",
@@ -33,9 +32,9 @@ const testPartnerData: Dtos.PartnerDto[] = [
     accountId: "832",
     name: "Driverless Cars",
   }
-] as Dtos.PartnerDto[];
+] as PartnerDto[];
 
-const testContactData: Dtos.ProjectContactDto[] = [
+const testContactData: ProjectContactDto[] = [
   {
     id: "100",
     name: "Ted Tester",
@@ -68,7 +67,7 @@ const testContactData: Dtos.ProjectContactDto[] = [
     accountId: "832",
     projectId: "456",
   }
-] as Dtos.ProjectContactDto[];
+] as ProjectContactDto[];
 
 describe("Partners Table", () => {
   const testForCorrectTableEntries = (expectedA: string, expectedB: string, expectedC: string, columnQA: string) => {

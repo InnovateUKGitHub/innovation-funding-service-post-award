@@ -1,4 +1,4 @@
-export interface GOLCostDto {
+interface GOLCostDto {
   costCategoryId: string;
   value: number;
 }

@@ -1,5 +1,4 @@
 import { ICommand, IContext } from "../common/context";
-import { ClaimDto } from "../../../ui/models";
 import { ClaimDtoValidator } from "../../../ui/validators/claimDtoValidator";
 import { GetCostCategoriesQuery } from ".";
 import { GetClaimDetailsSummaryForPartnerQuery } from "../claimDetails";

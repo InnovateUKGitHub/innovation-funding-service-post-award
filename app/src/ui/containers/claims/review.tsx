@@ -3,13 +3,13 @@ import { ContainerBase, ReduxContainer } from "../containerBase";
 import { Pending } from "../../../shared/pending";
 import * as Actions from "../../redux/actions";
 import * as ACC from "../../components";
-import * as Dtos from "../../models";
 import * as Selectors from "../../redux/selectors";
 import { IEditorStore } from "../../redux";
 import { ClaimDtoValidator } from "../../validators/claimDtoValidator";
 import { DateTime } from "luxon";
 import { ReviewClaimLineItemsRoute } from "./claimLineItems";
 import { ClaimsDashboardRoute, ClaimsDetailsRoute } from ".";
+import { ClaimFrequency, ProjectDto } from "../../../types";
 
 const moQueried           = "MO Queried";
 const awaitingIukApproval = "Awaiting IUK Approval";
@@ -21,26 +21,26 @@ interface Params {
 }
 
 interface Data {
-  project: Pending<Dtos.ProjectDto>;
-  partner: Pending<Dtos.PartnerDto>;
-  costCategories: Pending<Dtos.CostCategoryDto[]>;
-  claim: Pending<Dtos.ClaimDto>;
-  claimDetailsSummary: Pending<Dtos.ClaimDetailsSummaryDto[]>;
-  editor: Pending<IEditorStore<Dtos.ClaimDto, ClaimDtoValidator>>;
+  project: Pending<ProjectDto>;
+  partner: Pending<PartnerDto>;
+  costCategories: Pending<CostCategoryDto[]>;
+  claim: Pending<ClaimDto>;
+  claimDetailsSummary: Pending<ClaimDetailsSummaryDto[]>;
+  editor: Pending<IEditorStore<ClaimDto, ClaimDtoValidator>>;
 }
 
 interface Callbacks {
-  onChange: (partnerId: string, periodId: number, dto: Dtos.ClaimDto, details: Dtos.ClaimDetailsSummaryDto[], costCategories: Dtos.CostCategoryDto[]) => void;
-  onSave: (projectId: string, partnerId: string, periodId: number, dto: Dtos.ClaimDto, details: Dtos.ClaimDetailsSummaryDto[], costCategories: Dtos.CostCategoryDto[]) => void;
+  onChange: (partnerId: string, periodId: number, dto: ClaimDto, details: ClaimDetailsSummaryDto[], costCategories: CostCategoryDto[]) => void;
+  onSave: (projectId: string, partnerId: string, periodId: number, dto: ClaimDto, details: ClaimDetailsSummaryDto[], costCategories: CostCategoryDto[]) => void;
 }
 
 interface CombinedData {
-  project: Dtos.ProjectDto;
-  partner: Dtos.PartnerDto;
-  costCategories: Dtos.CostCategoryDto[];
-  claim: Dtos.ClaimDto;
-  claimDetails: Dtos.ClaimDetailsSummaryDto[];
-  editor: IEditorStore<Dtos.ClaimDto, ClaimDtoValidator>;
+  project: ProjectDto;
+  partner: PartnerDto;
+  costCategories: CostCategoryDto[];
+  claim: ClaimDto;
+  claimDetails: ClaimDetailsSummaryDto[];
+  editor: IEditorStore<ClaimDto, ClaimDtoValidator>;
 }
 
 class ReviewComponent extends ContainerBase<Params, Data, Callbacks> {
@@ -60,7 +60,7 @@ class ReviewComponent extends ContainerBase<Params, Data, Callbacks> {
   }
 
   private getClaimPeriodTitle(data: any) {
-    if (data.project.claimFrequency === Dtos.ClaimFrequency.Monthly) {
+    if (data.project.claimFrequency === ClaimFrequency.Monthly) {
       return `${data.partner.name} claim for P${data.claim.periodId} ${DateTime.fromJSDate(data.claim.periodStartDate).toFormat("MMMM yyyy")}`;
     }
     return `${data.partner.name} claim for P${data.claim.periodId} ${DateTime.fromJSDate(data.claim.periodStartDate).toFormat("MMMM")} to ${DateTime.fromJSDate(data.claim.periodEndDate).toFormat("MMMM yyyy")}`;
@@ -68,7 +68,7 @@ class ReviewComponent extends ContainerBase<Params, Data, Callbacks> {
 
   private renderContents(data: CombinedData) {
     const title = this.getClaimPeriodTitle(data);
-    const Form = ACC.TypedForm<Dtos.ClaimDto>();
+    const Form = ACC.TypedForm<ClaimDto>();
     const options: ACC.SelectOption[] = [
       { id: moQueried, value: "Query claim"},
       { id: awaitingIukApproval, value: "Submit for approval"},
@@ -98,14 +98,14 @@ class ReviewComponent extends ContainerBase<Params, Data, Callbacks> {
     );
   }
 
-  private updateStatus(dto: Dtos.ClaimDto, option: ACC.SelectOption | null | undefined) {
+  private updateStatus(dto: ClaimDto, option: ACC.SelectOption | null | undefined) {
     if (option && (option.id === moQueried || option.id === awaitingIukApproval)) {
       dto.status = option.id;
     }
   }
 }
 
-const initEditor = (dto: Dtos.ClaimDto) => {
+const initEditor = (dto: ClaimDto) => {
   // if the status hasn't already been set to "MO Queried" or "Awaiting IUK Approval" then set the status to New so that the validation kicks in a forces a change
   if (dto.status !== moQueried && dto.status !== awaitingIukApproval) {
     dto.status = "New";

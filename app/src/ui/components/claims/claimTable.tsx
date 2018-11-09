@@ -1,14 +1,14 @@
 import React from "react";
-import * as Dtos from "../../models";
 import { Link, Renderers, TypedTable } from "..";
 import { ClaimDetailsValidator } from "../../validators/claimDtoValidator";
+import { ProjectDto } from "../../../types";
 
 interface Props {
-    project: Dtos.ProjectDto;
-    partner: Dtos.PartnerDto;
-    costCategories: Dtos.CostCategoryDto[];
-    claim: Dtos.ClaimDto;
-    claimDetails: Dtos.ClaimDetailsSummaryDto[];
+    project: ProjectDto;
+    partner: PartnerDto;
+    costCategories: CostCategoryDto[];
+    claim: ClaimDto;
+    claimDetails: ClaimDetailsSummaryDto[];
     validation?: ClaimDetailsValidator[];
     getLink: (costCategoryId: string) => ILinkInfo;
 }
@@ -20,7 +20,7 @@ export const ClaimTable: React.SFC<Props> = (props) => {
         .filter(x => x.organistionType === "Industrial")
         .map(x => ({
             category: x,
-            cost: props.claimDetails.find(y => y.costCategoryId === x.id) || {} as Dtos.ClaimDetailsSummaryDto,
+            cost: props.claimDetails.find(y => y.costCategoryId === x.id) || {} as ClaimDetailsSummaryDto,
             isTotal: false
         }));
 
@@ -63,7 +63,7 @@ export const ClaimTable: React.SFC<Props> = (props) => {
     );
 };
 
-const renderCostCategory = (category: Dtos.CostCategoryDto, getLink: (costCategoryId: string) => ILinkInfo, validation?: ClaimDetailsValidator) => {
+const renderCostCategory = (category: CostCategoryDto, getLink: (costCategoryId: string) => ILinkInfo, validation?: ClaimDetailsValidator) => {
     if(category.isCalculated) {
         return category.name;
     }
@@ -74,7 +74,7 @@ const renderCostCategory = (category: Dtos.CostCategoryDto, getLink: (costCatego
     );
 };
 
-const  renderFooters = (project: Dtos.ProjectDto, partner: Dtos.PartnerDto, claimsCosts: Dtos.ClaimDetailsSummaryDto[]) => {
+const  renderFooters = (project: ProjectDto, partner: PartnerDto, claimsCosts: ClaimDetailsSummaryDto[]) => {
     return [
       (
         <tr key="1" className="govuk-table__row">

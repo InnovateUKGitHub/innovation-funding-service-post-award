@@ -1,5 +1,4 @@
 import { ApiParams, ControllerBase } from "./controllerBase";
-import { ForecastDetailsDTO } from "../../ui/models";
 import contextProvider from "../features/common/contextProvider";
 import {GetAllForecastsForPartnerQuery, GetForecastDetail, UpdateForecastDetailsCommand} from "../features/forecastDetails";
 import { GetClaim } from "../features/claims";

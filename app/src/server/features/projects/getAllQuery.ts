@@ -1,6 +1,6 @@
 import { IContext, IQuery } from "../common/context";
-import { ProjectDto } from "../../../ui/models";
 import { MapToProjectsDtoCommand } from "./mapToProjectsDto";
+import { ProjectDto } from "../../../types";
 
 export class GetAllQuery implements IQuery<ProjectDto[]|null> {
   async Run(context: IContext) {

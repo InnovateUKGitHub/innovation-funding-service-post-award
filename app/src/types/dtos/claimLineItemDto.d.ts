@@ -1,4 +1,4 @@
-export interface ClaimLineItemDto {
+interface ClaimLineItemDto {
   id: string;
   description: string;
   value: number;

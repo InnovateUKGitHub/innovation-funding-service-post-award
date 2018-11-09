@@ -1,4 +1,3 @@
-import { IUser } from "../../../shared/IUser";
 import { RootActions } from "../actions/root";
 
 export const userReducer = (state: IUser = {} as IUser, action: RootActions) => {

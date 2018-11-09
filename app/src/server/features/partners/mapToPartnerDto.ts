@@ -1,5 +1,4 @@
 import { IContext, IQuery } from "../common/context";
-import { PartnerDto } from "../../../ui/models";
 import { ISalesforcePartner } from "../../repositories/partnersRepository";
 
 export class MapToPartnerDtoCommand implements IQuery<PartnerDto> {

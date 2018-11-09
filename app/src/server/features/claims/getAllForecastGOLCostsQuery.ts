@@ -1,5 +1,4 @@
 import { IContext, IQuery } from "../common/context";
-import { GOLCostDto } from "../../../ui/models";
 
 export class GetAllForecastsGOLCostsQuery implements IQuery<GOLCostDto[]> {
   constructor(private partnerId: string) {}

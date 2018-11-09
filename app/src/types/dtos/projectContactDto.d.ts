@@ -1,4 +1,4 @@
-export interface ProjectContactDto {
+interface ProjectContactDto {
     id: string;
     name: string;
     role: string;

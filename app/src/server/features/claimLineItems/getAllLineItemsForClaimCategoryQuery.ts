@@ -1,5 +1,4 @@
 import {IContext, IQuery} from "../common/context";
-import {ClaimLineItemDto} from "../../../ui/models";
 import mapClaimLineItem from "./mapClaimLineItem";
 
 export class GetAllLineItemsForClaimByCategoryQuery implements IQuery<ClaimLineItemDto[]> {
