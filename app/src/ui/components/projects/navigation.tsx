@@ -1,13 +1,13 @@
 import React from "react";
-import * as Dtos from "../../models";
 import {TabItem, Tabs} from "../layout";
 import { ClaimsDashboardRoute, ProjectDetailsRoute, ViewForecastRoute } from "../../containers";
+import { ProjectDto } from "../../../types";
 
 interface Props {
-  project: Dtos.ProjectDto;
+  project: ProjectDto;
   partnerId?: string;
   currentRoute: string;
-  partners: Dtos.PartnerDto[];
+  partners: PartnerDto[];
 }
 
 export const ProjectNavigation: React.SFC<Props> = ({project, currentRoute, partnerId, partners}) => {

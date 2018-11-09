@@ -1,11 +1,11 @@
 import React from "react";
 import { ContainerBase, ReduxContainer } from "../containerBase";
 import * as ACC from "../../components";
-import { ClaimFrequency, ProjectDto } from "../../models";
 import { Pending } from "../../../shared/pending";
 import * as Actions from "../../redux/actions";
 import * as Selectors from "../../redux/selectors";
 import { HomeRoute } from "../home";
+import { ClaimFrequency, ProjectDto } from "../../../types";
 
 interface Data {
   projects: Pending<ProjectDto[]>;

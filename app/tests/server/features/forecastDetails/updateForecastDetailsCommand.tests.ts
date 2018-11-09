@@ -1,7 +1,6 @@
 import { TestContext } from "../../testContextProvider";
 import { UpdateForecastDetailsCommand } from "../../../../src/server/features/forecastDetails";
 import { ValidationError } from "../../../../src/shared/validation";
-import { ForecastDetailsDTO } from "../../../../src/ui/models";
 
 describe("UpdateForecastDetailsCommand", () => {
   it("when id not set expect validation exception", async () => {

@@ -1,5 +1,4 @@
 import { IContext, IQuery } from "../common/context";
-import { CostCategoryDto } from "../../../ui/models/costCategoryDto";
 import { ISalesforceCostCategory } from "../../repositories";
 
 export class GetCostCategoriesQuery implements IQuery<CostCategoryDto[]> {

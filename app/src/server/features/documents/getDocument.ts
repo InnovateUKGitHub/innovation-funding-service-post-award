@@ -1,5 +1,4 @@
 import {IContext, IQuery} from "../common/context";
-import {DocumentDto} from "../../../ui/models";
 
 export class GetDocumentQuery implements IQuery<DocumentDto> {
   constructor(private documentId: string) {

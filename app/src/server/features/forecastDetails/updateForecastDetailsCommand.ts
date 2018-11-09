@@ -1,5 +1,4 @@
 import { ICommand, IContext } from "../common/context";
-import { ForecastDetailsDTO } from "../../../ui/models";
 import { ValidationError } from "../../../shared/validation";
 import { GetAllForecastsGOLCostsQuery, GetCostCategoriesQuery } from "../claims";
 import { ForecastDetailsDtosValidator } from "../../../ui/validators/forecastDetailsDtosValidator";

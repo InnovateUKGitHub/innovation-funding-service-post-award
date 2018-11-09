@@ -1,5 +1,4 @@
 import {ICommand, IContext} from "../common/context";
-import {ClaimLineItemDto} from "../../../ui/models";
 import {ClaimLineItemDtosValidator} from "../../../ui/validators/claimLineItemDtosValidator";
 import {ValidationError} from "../../../shared/validation";
 

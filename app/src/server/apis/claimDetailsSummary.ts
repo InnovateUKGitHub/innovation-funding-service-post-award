@@ -1,5 +1,4 @@
 import { ApiParams, ControllerBase } from "./controllerBase";
-import { ClaimDetailsSummaryDto } from "../../ui/models/claimDetailsSummaryDto";
 import { GetClaimDetailsSummaryForPartnerQuery } from "../features/claimDetails";
 import contextProvider from "../features/common/contextProvider";
 

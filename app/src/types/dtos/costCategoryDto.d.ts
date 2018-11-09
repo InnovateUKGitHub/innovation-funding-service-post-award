@@ -1,4 +1,4 @@
-export interface CostCategoryDto {
+interface CostCategoryDto {
     id: string;
     name: string;
     organistionType: "Industrial" | "Academic" | "Unknown";

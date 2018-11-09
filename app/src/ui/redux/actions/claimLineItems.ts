@@ -1,5 +1,4 @@
 import { ApiClient } from "../../apiClient";
-import { ClaimLineItemDto } from "../../models";
 import { LoadingStatus } from "../../../shared/pending";
 import { ClaimLineItemDtosValidator } from "../../validators";
 import { findClaimLineItemsByPartnerCostCategoryAndPeriod } from "../selectors";

@@ -1,7 +1,6 @@
 import contextProvider from "../features/common/contextProvider";
 import {ApiParams, ControllerBase} from "./controllerBase";
 import {GetAllLineItemsForClaimByCategoryQuery, SaveLineItemsCommand} from "../features/claimLineItems";
-import {ClaimLineItemDto} from "../../ui/models";
 import {ApiError, StatusCode} from "./ApiError";
 import {processDto} from "../../shared/processResponse";
 import {ValidationError} from "../../shared/validation";

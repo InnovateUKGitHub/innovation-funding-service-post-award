@@ -1,4 +1,4 @@
-export interface PartnerDto {
+interface PartnerDto {
     id: string;
     type: string;
     isLead: boolean;

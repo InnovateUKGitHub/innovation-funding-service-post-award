@@ -1,6 +1,5 @@
 import * as Validation from "./common";
 import { Results } from "../validation/results";
-import { ClaimDetailsDto, CostCategoryDto, ForecastDetailsDTO, GOLCostDto } from "../models";
 import { Result } from "../validation/result";
 
 export class ForecastDetailsDtosValidator extends Results<ForecastDetailsDTO[]>  {

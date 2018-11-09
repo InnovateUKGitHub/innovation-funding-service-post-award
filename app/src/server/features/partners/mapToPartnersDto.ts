@@ -1,5 +1,4 @@
 import { IContext, IQuery } from "../common/context";
-import {PartnerDto} from "../../../ui/models";
 import { MapToPartnerDtoCommand } from "./mapToPartnerDto";
 import {ISalesforcePartner} from "../../repositories/partnersRepository";
 

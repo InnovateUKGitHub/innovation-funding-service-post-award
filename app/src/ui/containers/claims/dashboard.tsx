@@ -4,13 +4,13 @@ import { Pending } from "../../../shared/pending";
 import * as Actions from "../../redux/actions";
 import * as Selectors from "../../redux/selectors";
 import { ProjectOverviewPage } from "../../components/projectOverview";
-import { ClaimDto, PartnerDto, ProjectDto } from "../../models";
 import { DualDetails, Link, Section, SectionPanel, TypedDetails, TypedLoader, TypedTable } from "../../components";
 import { DayAndLongMonth, FullDate, LongYear, ShortDate, ShortMonth } from "../../components/renderers";
 import { PrepareClaimRoute } from "./prepare";
 import { ClaimsDetailsRoute } from "./details";
 import { SimpleString } from "../../components/renderers";
 import { ReviewClaimRoute } from "./review";
+import { ProjectDto } from "../../../types";
 
 interface Params {
   projectId: string;

@@ -1,6 +1,5 @@
 import contextProvider from "../features/common/contextProvider";
 import {ApiParams, ControllerBase} from "./controllerBase";
-import {CostCategoryDto} from "../../ui/models/costCategoryDto";
 import {GetCostCategoriesQuery} from "../features/claims";
 
 export interface ICostCategoriesApi {

@@ -1,5 +1,4 @@
 import {IContext} from "../common/context";
-import {ForecastDetailsDTO} from "../../../ui/models";
 import {ISalesforceProfileDetails} from "../../repositories";
 
 const SALESFORCE_DATE_FORMAT = "yyyy-MM-dd";

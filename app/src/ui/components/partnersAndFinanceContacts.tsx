@@ -1,10 +1,9 @@
 import React from "react";
-import * as Dtos from "../models";
 import { TypedTable } from "./table";
 
 interface Props {
-  partners: Dtos.PartnerDto[];
-  contacts: Dtos.ProjectContactDto[];
+  partners: PartnerDto[];
+  contacts: ProjectContactDto[];
 }
 
 export const PartnersAndFinanceContacts: React.SFC<Props> = (props) => {

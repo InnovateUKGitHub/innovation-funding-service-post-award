@@ -1,5 +1,4 @@
 import { IContext, IQuery } from "../common/context";
-import { ClaimDetailsSummaryDto } from "../../../ui/models";
 import { GetCostCategoriesQuery } from "../claims";
 
 export class GetClaimDetailsSummaryForPartnerQuery implements IQuery<ClaimDetailsSummaryDto[]> {

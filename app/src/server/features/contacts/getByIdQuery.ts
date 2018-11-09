@@ -1,5 +1,4 @@
 import { IContext, IQuery } from "../common/context";
-import { IContact } from "../../../ui/models";
 import { mapItem } from "./mapItem";
 
 export class GetByIdQuery implements IQuery<IContact|null> {

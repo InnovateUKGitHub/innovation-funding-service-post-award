@@ -1,4 +1,4 @@
-export interface ForecastDetailsDTO {
+interface ForecastDetailsDTO {
   id: string;
   costCategoryId: string;
   periodId: number;
