@@ -1,12 +1,12 @@
 import React from "react";
 import { ContainerBase, ReduxContainer } from "../containerBase";
 import * as ACC from "../../components";
-import * as Dtos from "../../models";
 import { Pending } from "../../../shared/pending";
 import { EditClaimLineItemsRoute } from "./index";
 import * as Actions from "../../redux/actions";
 import * as Selectors from "../../redux/selectors";
 import { DocumentList } from "../../components";
+import { ProjectDto } from "../../../types";
 
 interface Params {
   projectId: string;
@@ -16,15 +16,15 @@ interface Params {
 }
 
 interface Data {
-  project: Pending<Dtos.ProjectDto>;
-  costCategories: Pending<Dtos.CostCategoryDto[]>;
-  documents: Pending<Dtos.DocumentSummaryDto[]>;
+  project: Pending<ProjectDto>;
+  costCategories: Pending<CostCategoryDto[]>;
+  documents: Pending<DocumentSummaryDto[]>;
 }
 
 interface CombinedData {
-  project: Dtos.ProjectDto;
-  costCategories: Dtos.CostCategoryDto[];
-  documents: Dtos.DocumentSummaryDto[];
+  project: ProjectDto;
+  costCategories: CostCategoryDto[];
+  documents: DocumentSummaryDto[];
 }
 
 export class ClaimDetailDocumentsComponent extends ContainerBase<Params, Data> {

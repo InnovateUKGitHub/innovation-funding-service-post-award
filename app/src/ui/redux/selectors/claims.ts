@@ -1,5 +1,4 @@
 import { dataStoreHelper, editorStoreHelper } from "./common";
-import { ClaimDto } from "../../models";
 import { RootState } from "../reducers";
 import { ClaimDtoValidator } from "../../validators/claimDtoValidator";
 import { getCostCategories } from "./costCategories";

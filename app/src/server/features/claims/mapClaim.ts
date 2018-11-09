@@ -1,6 +1,5 @@
 import {ISalesforceClaim} from "../../repositories/claimsRepository";
 import {IContext} from "../common/context";
-import {ClaimDto} from "../../../ui/models";
 import { ISalesforceProfileTotalPeriod } from "../../repositories";
 
 const SALESFORCE_DATE_FORMAT = "yyyy-MM-dd";

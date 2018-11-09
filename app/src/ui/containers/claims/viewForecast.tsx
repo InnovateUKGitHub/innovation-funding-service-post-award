@@ -1,14 +1,12 @@
 import React from "react";
-import * as Dtos from "../../models";
 import * as ACC from "../../components";
 import * as Actions from "../../redux/actions";
 import * as Selectors from "../../redux/selectors";
 import { Pending } from "../../../shared/pending";
 import { ContainerBase, ReduxContainer } from "../containerBase";
 import { Currency, DateRange, Percentage } from "../../components/renderers";
-import { ClaimDetailsDto, ClaimDto, ForecastDetailsDTO } from "../../models";
-import { Interval } from "luxon";
 import { ProjectOverviewPage } from "../../components/projectOverview";
+import { ProjectDto } from "../../../types";
 
 interface Params {
   projectId: string;
@@ -17,23 +15,23 @@ interface Params {
 }
 
 interface Data {
-  project: Pending<Dtos.ProjectDto>;
-  partner: Pending<Dtos.PartnerDto>;
-  claim: Pending<Dtos.ClaimDto>;
-  claimDetails: Pending<Dtos.ClaimDetailsDto[]>;
-  forecastDetails: Pending<Dtos.ForecastDetailsDTO[]>;
-  golCosts: Pending<Dtos.GOLCostDto[]>;
-  costCategories: Pending<Dtos.CostCategoryDto[]>;
+  project: Pending<ProjectDto>;
+  partner: Pending<PartnerDto>;
+  claim: Pending<ClaimDto>;
+  claimDetails: Pending<ClaimDetailsDto[]>;
+  forecastDetails: Pending<ForecastDetailsDTO[]>;
+  golCosts: Pending<GOLCostDto[]>;
+  costCategories: Pending<CostCategoryDto[]>;
 }
 
 interface CombinedData {
-  project: Dtos.ProjectDto;
-  partner: Dtos.PartnerDto;
-  claim: Dtos.ClaimDto;
-  claimDetails: Dtos.ClaimDetailsDto[];
-  forecastDetails: Dtos.ForecastDetailsDTO[];
-  golCosts: Dtos.GOLCostDto[];
-  costCategories: Dtos.CostCategoryDto[];
+  project: ProjectDto;
+  partner: PartnerDto;
+  claim: ClaimDto;
+  claimDetails: ClaimDetailsDto[];
+  forecastDetails: ForecastDetailsDTO[];
+  golCosts: GOLCostDto[];
+  costCategories: CostCategoryDto[];
 }
 
 interface Callbacks { }

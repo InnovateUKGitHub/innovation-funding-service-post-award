@@ -1,6 +1,4 @@
 import { IContext, IQuery } from "../common/context";
-import { PartnerDto } from "../../../ui/models/partnerDto";
-import { MapToPartnersDtoCommand } from "./mapToPartnersDto";
 import { MapToPartnerDtoCommand } from "./mapToPartnerDto";
 
 export class GetAllForProjectQuery implements IQuery<PartnerDto[]> {

@@ -4,7 +4,6 @@ import { Clock, IClock } from "./clock";
 import { ILogger, Logger } from "./logger";
 import { ISalesforceConnectionDetails, salesforceConnection, salesforceConnectionWithToken } from "../../repositories/salesforceConnection";
 import { Cache } from "./cache";
-import { CostCategoryDto } from "../../../ui/models";
 
 export interface IQuery<T> {
   Run: (context: IContext) => Promise<T>;

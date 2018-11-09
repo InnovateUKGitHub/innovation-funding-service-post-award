@@ -1,9 +1,9 @@
 import React from "react";
-import * as Dtos from "../../models";
 import * as ACC from "../";
+import { ProjectDto } from "../../../types";
 
 interface Props {
-    project: Dtos.ProjectDto;
+    project: ProjectDto;
     pageTitle: string;
 }
 

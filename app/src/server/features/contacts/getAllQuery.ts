@@ -1,6 +1,5 @@
-import { IContact } from "../../../ui/models";
-import { mapItem } from "./mapItem";
 import { IContext, IQuery } from "../common/context";
+import { mapItem } from "./mapItem";
 
 export class GetAllQuery implements IQuery<IContact[]> {
   async Run(context: IContext) {

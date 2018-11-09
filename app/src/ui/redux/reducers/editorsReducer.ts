@@ -1,6 +1,5 @@
 import { combineReducers } from "redux";
 import { RootActions } from "../actions";
-import { ClaimDto, ClaimLineItemDto, ForecastDetailsDTO } from "../../models";
 import { ClaimDtoValidator } from "../../validators/claimDtoValidator";
 import { ClaimLineItemDtosValidator } from "../../validators/claimLineItemDtosValidator";
 import { Results } from "../../validation/results";

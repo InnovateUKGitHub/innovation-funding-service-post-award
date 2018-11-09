@@ -1,5 +1,4 @@
 import { dataStoreHelper, editorStoreHelper } from "./common";
-import { ForecastDetailsDTO } from "../../models";
 import { getKey } from "../../../util/key";
 import { RootState } from "../reducers";
 import { ForecastDetailsDtosValidator } from "../../validators/forecastDetailsDtosValidator";

@@ -1,5 +1,4 @@
 import { IContext, IQuery } from "../common/context";
-import { ProjectContactDto } from "../../../ui/models/projectContactDto";
 import { ISalesforceProjectContact } from "../../repositories/projectContactsRepository";
 
 export class GetAllForProjectQuery implements IQuery<ProjectContactDto[]> {

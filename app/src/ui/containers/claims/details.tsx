@@ -4,10 +4,10 @@ import { ContainerBase, ReduxContainer } from "../containerBase";
 import { Pending } from "../../../shared/pending";
 import * as Actions from "../../redux/actions";
 import * as Selectors from "../../redux/selectors";
-import * as Dtos from "../../models";
 import * as ACC from "../../components";
 import { ClaimLineItemsRoute } from "./claimLineItems";
 import { ClaimsDashboardRoute } from "./dashboard";
+import { ClaimFrequency, ProjectDto } from "../../../types";
 
 interface Params {
     projectId: string;
@@ -17,19 +17,19 @@ interface Params {
 
 interface Data {
     id: string;
-    project: Pending<Dtos.ProjectDto>;
-    partner: Pending<Dtos.PartnerDto>;
-    costCategories: Pending<Dtos.CostCategoryDto[]>;
-    claim: Pending<Dtos.ClaimDto>;
-    claimDetailsSummary: Pending<Dtos.ClaimDetailsSummaryDto[]>;
+    project: Pending<ProjectDto>;
+    partner: Pending<PartnerDto>;
+    costCategories: Pending<CostCategoryDto[]>;
+    claim: Pending<ClaimDto>;
+    claimDetailsSummary: Pending<ClaimDetailsSummaryDto[]>;
 }
 
 interface CombinedData {
-    project: Dtos.ProjectDto;
-    partner: Dtos.PartnerDto;
-    costCategories: Dtos.CostCategoryDto[];
-    claim: Dtos.ClaimDto;
-    claimDetails: Dtos.ClaimDetailsSummaryDto[];
+    project: ProjectDto;
+    partner: PartnerDto;
+    costCategories: CostCategoryDto[];
+    claim: ClaimDto;
+    claimDetails: ClaimDetailsSummaryDto[];
 }
 
 export class ClaimsDetailsComponent extends ContainerBase<Params, Data, {}> {
@@ -49,13 +49,13 @@ export class ClaimsDetailsComponent extends ContainerBase<Params, Data, {}> {
     }
 
     private getClaimPeriodTitle(data: any) {
-        if (data.project.claimFrequency === Dtos.ClaimFrequency.Monthly) {
+        if (data.project.claimFrequency === ClaimFrequency.Monthly) {
             return `${data.partner.name} claim for P${data.claim.periodId} ${DateTime.fromJSDate(data.claim.periodStartDate).toFormat("MMMM yyyy")}`;
         }
         return `${data.partner.name} claim for P${data.claim.periodId} ${DateTime.fromJSDate(data.claim.periodStartDate).toFormat("MMMM")} to ${DateTime.fromJSDate(data.claim.periodEndDate).toFormat("MMMM yyyy")}`;
     }
 
-    private renderContents(data: { project: Dtos.ProjectDto, partner: Dtos.PartnerDto, costCategories: Dtos.CostCategoryDto[], claim: Dtos.ClaimDto, claimDetails: Dtos.ClaimDetailsSummaryDto[] }) {
+    private renderContents(data: { project: ProjectDto, partner: PartnerDto, costCategories: CostCategoryDto[], claim: ClaimDto, claimDetails: ClaimDetailsSummaryDto[] }) {
 
         const title = this.getClaimPeriodTitle(data);
         // const Details = ACC.TypedDetails<typeof data>();
