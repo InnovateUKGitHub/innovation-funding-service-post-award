@@ -84,7 +84,7 @@ export class ClaimDetailDocumentsComponent extends ContainerBase<Params, Data, C
           <UploadForm.Form data={editor.data} onSubmit={() => this.onSave(editor.data)} onChange={(dto) => this.onChange(dto)}>
             <UploadForm.Fieldset>
               <p className="govuk-body govuk-!-margin-bottom-6">Make sure each file name includes the date and a description</p>
-              <UploadForm.FileUpload label="" name="upload file" update={(dto, file) => dto.file = file}/>
+              <UploadForm.FileUpload value={(data) => data.file} label="" name="upload file" update={(dto, file) => dto.file = file}/>
             </UploadForm.Fieldset>
             <UploadForm.Submit disabled={!editor.data.file}>Upload file</UploadForm.Submit>
           </UploadForm.Form>
