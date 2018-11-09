@@ -4,6 +4,7 @@ import contextProvider from "../features/common/contextProvider";
 import { GetClaimDetailDocumentsQuery } from "../features/documents/getClaimDetailDocuments";
 import { GetDocumentQuery } from "../features/documents/getDocument";
 import { UploadClaimDetailDocumentCommand } from "../features/documents/uploadClaimDetailDocument";
+import { DeleteDocumentCommand } from "../features/documents/deleteDocument";
 
 export interface IDocumentsApi {
   getClaimDetailDocuments: (params: ApiParams<{ partnerId: string, periodId: number, costCategoryId: string }>) => Promise<DocumentSummaryDto[]>;
@@ -30,6 +31,12 @@ class Controller extends ControllerBase<DocumentSummaryDto> implements IDocument
       (p, q, b, f) => ({ claimDetailKey: { partnerId: p.partnerId, periodId: p.periodId, costCategoryId: p.costCategoryId, file: f }, file: f }),
       p => this.uploadClaimDetailDocument(p)
     );
+
+    this.deleteItem(
+      "/:documentId",
+      (p) => ({ documentId: p.documentId }),
+      p => this.deleteDocument(p)
+    );
   }
 
   public async getClaimDetailDocuments(params: ApiParams<{ partnerId: string, periodId: number, costCategoryId: string }>) {
@@ -48,6 +55,12 @@ class Controller extends ControllerBase<DocumentSummaryDto> implements IDocument
     const { claimDetailKey, file } = params;
     const query = new UploadClaimDetailDocumentCommand(claimDetailKey, file);
     return contextProvider.start(params).runQuery(query);
+  }
+
+  public async deleteDocument(params: ApiParams<{ documentId: string }>): Promise<void> {
+    const { documentId } = params;
+    const command = new DeleteDocumentCommand(documentId);
+    return contextProvider.start(params).runCommand(command);
   }
 }
 

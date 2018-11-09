@@ -36,6 +36,11 @@ export abstract class ControllerBase<T> {
     return this.getCustom<TParams, T>(path, getParams, run, false);
   }
 
+  protected deleteItem<TParams>(path: string, getParams: (params: any, query: any) => TParams, run: (params: ApiParams<TParams>) => Promise<void>) {
+    this.router.delete(path, this.executeMethod(200, getParams, run, true));
+    return this;
+  }
+
   protected getAttachment<TParams>(path: string, getParams: (params: any, query: any) => TParams, run: (params: ApiParams<TParams>) => Promise<DocumentDto>) {
     this.router.get(path, this.attachmentHandler(200, getParams, run));
     return this;
