@@ -1,5 +1,4 @@
 import {IContext} from "../common/context";
-import { ClaimLineItemDto} from "../../../ui/models";
 import {ISalesforceClaimLineItem} from "../../repositories";
 
 export default (context: IContext) => (item: ISalesforceClaimLineItem): ClaimLineItemDto => ({

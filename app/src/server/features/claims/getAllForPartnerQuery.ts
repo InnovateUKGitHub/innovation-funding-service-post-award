@@ -1,5 +1,4 @@
 import { IContext, IQuery } from "../common/context";
-import { ClaimDto } from "../../../ui/models/claimDto";
 import mapClaim from "./mapClaim";
 import {dateComparator} from "../../../util/comparator";
 

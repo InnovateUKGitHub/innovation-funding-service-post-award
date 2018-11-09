@@ -5,11 +5,10 @@ import * as Actions from "../../redux/actions";
 import * as Selectors from "../../redux/selectors";
 import { ContainerBase, ReduxContainer } from "../containerBase";
 import { Pending } from "../../../shared/pending";
-import * as Dtos from "../../models";
 import * as Acc from "../../components";
 
 interface Props {
-  contacts: Pending<Dtos.IContact[]>;
+  contacts: Pending<IContact[]>;
 }
 
 class ListComponent extends ContainerBase<{}, Props, {}> {
@@ -18,7 +17,7 @@ class ListComponent extends ContainerBase<{}, Props, {}> {
   }
 
   render() {
-    const Loader = Acc.TypedLoader<Dtos.IContact[]>();
+    const Loader = Acc.TypedLoader<IContact[]>();
     return (
       <div>
         <Breadcrumbs links={[{ routeName: "home", text: "Home" }]}>Contacts</Breadcrumbs>
@@ -29,8 +28,8 @@ class ListComponent extends ContainerBase<{}, Props, {}> {
     );
   }
 
-  private renderTable(contacts: Dtos.IContact[]) {
-    const Table = Acc.TypedTable<Dtos.IContact>();
+  private renderTable(contacts: IContact[]) {
+    const Table = Acc.TypedTable<IContact>();
     return (
       <Table.Table qa="contacts" data={contacts}>
         <Table.String header="Id" qa="id" value={x => x.id} />
@@ -41,7 +40,7 @@ class ListComponent extends ContainerBase<{}, Props, {}> {
     );
   }
 
-  renderAddress(address: Dtos.IContactAddress) {
+  renderAddress(address: IContactAddress) {
     const items = [address.street, address.city, address.county, address.postcode].filter(x => !!x);
 
     return (!items.length)

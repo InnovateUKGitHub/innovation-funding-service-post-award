@@ -1,6 +1,6 @@
 import { IContext, IQuery } from "../common/context";
-import { ProjectDto } from "../../../ui/models";
 import { MapToProjectDtoCommand } from "./mapToProjectDto";
+import { ProjectDto } from "../../../types";
 
 export class GetByIdQuery implements IQuery<ProjectDto|null> {
   constructor(readonly id: string) {}

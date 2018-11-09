@@ -1,4 +1,4 @@
-export interface ClaimDto {
+interface ClaimDto {
   id: string;
   partnerId: string;
   lastModifiedDate: Date;

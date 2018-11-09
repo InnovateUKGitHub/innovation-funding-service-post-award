@@ -1,5 +1,4 @@
 import React from "react";
-import * as Dtos from "../../models";
 import * as ACC from "../../components";
 import * as Actions from "../../redux/actions";
 import * as Selectors from "../../redux/selectors";
@@ -10,6 +9,7 @@ import {ClaimsDashboardRoute} from "./dashboard";
 import {Currency, DateRange, Percentage} from "../../components/renderers";
 import { PrepareClaimRoute } from "./prepare";
 import { ForecastDetailsDtosValidator } from "../../validators/forecastDetailsDtosValidator";
+import { ProjectDto } from "../../../types";
 import * as Colour from "../../styles/colours";
 
 interface Params {
@@ -19,25 +19,25 @@ interface Params {
 }
 
 interface Data {
-  project: Pending<Dtos.ProjectDto>;
-  partner: Pending<Dtos.PartnerDto>;
-  claim: Pending<Dtos.ClaimDto>;
-  claimDetails: Pending<Dtos.ClaimDetailsDto[]>;
-  forecastDetails: Pending<Dtos.ForecastDetailsDTO[]>;
-  golCosts: Pending<Dtos.GOLCostDto[]>;
-  costCategories: Pending<Dtos.CostCategoryDto[]>;
-  editor: Pending<IEditorStore<Dtos.ForecastDetailsDTO[], ForecastDetailsDtosValidator>>;
+  project: Pending<ProjectDto>;
+  partner: Pending<PartnerDto>;
+  claim: Pending<ClaimDto>;
+  claimDetails: Pending<ClaimDetailsDto[]>;
+  forecastDetails: Pending<ForecastDetailsDTO[]>;
+  golCosts: Pending<GOLCostDto[]>;
+  costCategories: Pending<CostCategoryDto[]>;
+  editor: Pending<IEditorStore<ForecastDetailsDTO[], ForecastDetailsDtosValidator>>;
 }
 
 interface CombinedData {
-  project: Dtos.ProjectDto;
-  partner: Dtos.PartnerDto;
-  claim: Dtos.ClaimDto;
-  claimDetails: Dtos.ClaimDetailsDto[];
-  forecastDetails: Dtos.ForecastDetailsDTO[];
-  golCosts: Dtos.GOLCostDto[];
-  costCategories: Dtos.CostCategoryDto[];
-  editor: IEditorStore<Dtos.ForecastDetailsDTO[], ForecastDetailsDtosValidator>;
+  project: ProjectDto;
+  partner: PartnerDto;
+  claim: ClaimDto;
+  claimDetails: ClaimDetailsDto[];
+  forecastDetails: ForecastDetailsDTO[];
+  golCosts: GOLCostDto[];
+  costCategories: CostCategoryDto[];
+  editor: IEditorStore<ForecastDetailsDTO[], ForecastDetailsDtosValidator>;
 }
 
 interface Callbacks {
@@ -137,14 +137,14 @@ export class ClaimForecastComponent extends ContainerBase<Params, Data, Callback
     return periods;
   }
 
-  renderDateRange(details: Dtos.ClaimDetailsDto | Dtos.ForecastDetailsDTO) {
+  renderDateRange(details: ClaimDetailsDto | ForecastDetailsDTO) {
     return DateRange({ start: details.periodStart, end: details.periodEnd });
   }
 
   public renderContents(data: CombinedData) {
     const parsed    = this.parseClaimData(data);
     const Table     = ACC.TypedTable<typeof parsed[0]>();
-    const Form      = ACC.TypedForm<Dtos.ForecastDetailsDTO[]>();
+    const Form      = ACC.TypedForm<ForecastDetailsDTO[]>();
     const intervals = this.calculateClaimPeriods(data);
     const claims    = Object.keys(parsed[0].claims);
     const forecasts = Object.keys(parsed[0].forecasts);
@@ -206,7 +206,7 @@ export class ClaimForecastComponent extends ContainerBase<Params, Data, Callback
     );
   }
 
-  updateItem(data: CombinedData, categoryId: string, period: string, update: (item: Dtos.ForecastDetailsDTO) => void) {
+  updateItem(data: CombinedData, categoryId: string, period: string, update: (item: ForecastDetailsDTO) => void) {
     const item = data.editor.data.find(x => x.costCategoryId === categoryId && x.periodId === parseInt(period, 10));
 
     if(!!item) {
@@ -216,7 +216,7 @@ export class ClaimForecastComponent extends ContainerBase<Params, Data, Callback
     this.props.onChange(this.props.partnerId, this.props.periodId, data);
   }
 
-  renderTableHeaders(periods: string[], claim: Dtos.ClaimDto) {
+  renderTableHeaders(periods: string[], claim: ClaimDto) {
     const currentClaimPeriod = claim.periodId - 1;
     const previous = currentClaimPeriod - 1;
 

@@ -1,5 +1,4 @@
 import {IContext, IQuery} from "../common/context";
-import {DocumentSummaryDto} from "../../../ui/models";
 import {GetDocumentsLinkedToRecordQuery} from "./getAllForRecord";
 
 export class GetClaimDetailDocumentsQuery implements IQuery<DocumentSummaryDto[]> {

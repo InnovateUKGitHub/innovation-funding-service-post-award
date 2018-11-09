@@ -1,9 +1,9 @@
 import React from "react";
-import { ProjectDto } from "../models";
 import { Link } from "./links";
 import { FullDate } from "./renderers";
 import { ListItem } from "./layout";
 import { ProjectDetailsRoute } from "../containers";
+import { ProjectDto } from "../../types";
 
 interface Props {
   project: ProjectDto;

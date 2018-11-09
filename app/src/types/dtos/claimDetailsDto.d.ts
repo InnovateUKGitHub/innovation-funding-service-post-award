@@ -1,4 +1,4 @@
-export interface ClaimDetailsDto {
+interface ClaimDetailsDto {
     costCategoryId: string;
     periodId: number;
     periodStart: Date|null;

@@ -1,16 +1,16 @@
 import React from "react";
 import { ContainerBase, ReduxContainer } from "../containerBase";
 import * as ACC from "../../components";
-import * as Dtos from "../../models";
 import { Pending } from "../../../shared/pending";
 import * as Actions from "../../redux/actions";
 import * as Selectors from "../../redux/selectors";
 import { ProjectOverviewPage } from "../../components/projectOverview";
+import { ProjectDto } from "../../../types";
 
 interface Data {
-    projectDetails: Pending<Dtos.ProjectDto>;
-    partners: Pending<Dtos.PartnerDto[]>;
-    contacts: Pending<Dtos.ProjectContactDto[]>;
+    projectDetails: Pending<ProjectDto>;
+    partners: Pending<PartnerDto[]>;
+    contacts: Pending<ProjectContactDto[]>;
 }
 
 interface Params {
@@ -21,9 +21,9 @@ interface Callbacks {
 }
 
 interface CombinedData {
-    projectDetails: Dtos.ProjectDto;
-    partners: Dtos.PartnerDto[];
-    contacts: Dtos.ProjectContactDto[];
+    projectDetails: ProjectDto;
+    partners: PartnerDto[];
+    contacts: ProjectContactDto[];
 }
 
 class ProjectDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
@@ -33,8 +33,8 @@ class ProjectDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
         return <Loader pending={combined} render={x => this.renderContents(x.projectDetails, x.partners, x.contacts)} />;
     }
 
-    private renderContents(project: Dtos.ProjectDto, partners: Dtos.PartnerDto[], contacts: Dtos.ProjectContactDto[]) {
-        const DetailsSection = ACC.TypedDetails<Dtos.ProjectDto>();
+    private renderContents(project: ProjectDto, partners: PartnerDto[], contacts: ProjectContactDto[]) {
+        const DetailsSection = ACC.TypedDetails<ProjectDto>();
 
         const monitoringOfficer = contacts.find(x => x.role === "Monitoring officer");
         const projectManager = contacts.find(x => x.role === "Project Manager");
@@ -70,8 +70,8 @@ class ProjectDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
         );
     }
 
-    private renderPartnersCosts(partners: Dtos.PartnerDto[]) {
-        const PartnersTable = ACC.TypedTable<Dtos.PartnerDto>();
+    private renderPartnersCosts(partners: PartnerDto[]) {
+        const PartnersTable = ACC.TypedTable<PartnerDto>();
         const totalEligibleCosts = partners.reduce((val, partner) => val += partner.totalParticipantGrant, 0) || null;
         const totalClaimed = partners.reduce((val, partner) => val += partner.totalParticipantCostsClaimed, 0);
         const percentageClaimed = totalEligibleCosts ? 100 * totalClaimed / totalEligibleCosts : null;

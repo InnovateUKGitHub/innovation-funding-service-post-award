@@ -1,11 +1,11 @@
-export interface IContactAddress {
+interface IContactAddress {
   street: string;
   city: string;
   county: string;
   postcode: string;
 }
 
-export interface IContact {
+interface IContact {
   id: string;
   title: string;
   firstName: string;

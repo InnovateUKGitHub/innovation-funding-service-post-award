@@ -1,7 +1,5 @@
 import { AsyncThunk, createAction } from "./createAction";
-import { DataStateKeys, IDataStore } from "../../reducers";
 import { LoadingStatus } from "../../../../shared/pending";
-import { IUser } from "../../../../shared/IUser";
 import { IDataSelector } from "../../selectors/common";
 
 type DataLoadThunk = typeof dataLoadAction;

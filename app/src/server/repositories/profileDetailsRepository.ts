@@ -1,6 +1,5 @@
 import SalesforceBase, { Updatable } from "./salesforceBase";
 import { Connection } from "jsforce";
-import { ForecastDetailsDTO } from "../../ui/models";
 
 export interface ISalesforceProfileDetails {
   Id: string;

@@ -4,11 +4,11 @@ import { Pending } from "../../../shared/pending";
 import { ClaimsDetailsRoute } from "./details";
 import * as Actions from "../../redux/actions";
 import * as Selectors from "../../redux/selectors";
-import * as Dtos from "../../models";
 import * as ACC from "../../components";
 import { DocumentList } from "../../components";
 import { State } from "router5";
 import { ReviewClaimRoute } from "./review";
+import { ProjectDto } from "../../../types";
 
 interface Params {
   projectId: string;
@@ -18,19 +18,19 @@ interface Params {
 }
 
 interface Data {
-  project: Pending<Dtos.ProjectDto>;
-  lineItems: Pending<Dtos.ClaimLineItemDto[]>;
-  costCategories: Pending<Dtos.CostCategoryDto[]>;
-  forecastDetail: Pending<Dtos.ForecastDetailsDTO>;
-  documents: Pending<Dtos.DocumentSummaryDto[]>;
+  project: Pending<ProjectDto>;
+  lineItems: Pending<ClaimLineItemDto[]>;
+  costCategories: Pending<CostCategoryDto[]>;
+  forecastDetail: Pending<ForecastDetailsDTO>;
+  documents: Pending<DocumentSummaryDto[]>;
 }
 
 interface CombinedData {
-  project: Dtos.ProjectDto;
-  lineItems: Dtos.ClaimLineItemDto[];
-  costCategories: Dtos.CostCategoryDto[];
-  forecastDetail: Dtos.ForecastDetailsDTO;
-  documents: Dtos.DocumentSummaryDto[];
+  project: ProjectDto;
+  lineItems: ClaimLineItemDto[];
+  costCategories: CostCategoryDto[];
+  forecastDetail: ForecastDetailsDTO;
+  documents: DocumentSummaryDto[];
 }
 
 export class ClaimLineItemsComponent extends ContainerBase<Params, Data, {}> {
@@ -76,8 +76,8 @@ export class ClaimLineItemsComponent extends ContainerBase<Params, Data, {}> {
   }
 }
 
-const ClaimLineItemsTable: React.SFC<{ lineItems: Dtos.ClaimLineItemDto[], forecastDetail: Dtos.ForecastDetailsDTO }> = ({ lineItems, forecastDetail }) => {
-  const LineItemTable = ACC.TypedTable<Dtos.ClaimLineItemDto>();
+const ClaimLineItemsTable: React.SFC<{ lineItems: ClaimLineItemDto[], forecastDetail: ForecastDetailsDTO }> = ({ lineItems, forecastDetail }) => {
+  const LineItemTable = ACC.TypedTable<ClaimLineItemDto>();
   const renderFooterRow = (row: { key: string, title: string, value: React.ReactNode, qa: string }) => (
     <tr key={row.key} className="govuk-table__row" data-qa={row.qa}>
       <th className="govuk-table__cell govuk-table__cell--numeric govuk-!-font-weight-bold">{row.title}</th>

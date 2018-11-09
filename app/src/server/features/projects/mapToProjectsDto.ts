@@ -1,7 +1,7 @@
 import { IContext, IQuery } from "../common/context";
-import { ProjectDto } from "../../../ui/models";
 import { ISalesforceProject } from "../../repositories/projectsRepository";
 import { MapToProjectDtoCommand } from "./mapToProjectDto";
+import { ProjectDto } from "../../../types";
 
 export class MapToProjectsDtoCommand implements IQuery<ProjectDto[]> {
   constructor(readonly items: ISalesforceProject[]) {}
