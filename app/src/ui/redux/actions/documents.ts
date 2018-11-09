@@ -2,15 +2,12 @@ import { ApiClient } from "../../apiClient";
 import {
   AsyncThunk,
   conditionalLoad, dataLoadAction,
-  DataLoadAction, handleError,
+  DataLoadAction, handleError, ResetEditorAction, resetEditorAction,
   SyncThunk,
   updateEditorAction,
   UpdateEditorAction
 } from "./common";
 import { getClaimDetailDocumentEditor, getClaimDetailDocuments } from "../selectors/documents";
-import { ClaimDetailsSummaryDto, ClaimDto, CostCategoryDto } from "../../models";
-import { ClaimDtoValidator } from "../../validators";
-import { getClaimEditor } from "../selectors";
 import { LoadingStatus } from "../../../shared/pending";
 import { Results } from "../../validation/results";
 
@@ -36,7 +33,7 @@ export function updateClaimDetailDocumentEditor(claimDetailKey: ClaimDetailKey, 
   };
 }
 
-export function uploadClaimDetailDocument(claimDetailKey: ClaimDetailKey, dto: ClaimDetailDocumentDto, onComplete: () => void): AsyncThunk<void, DataLoadAction | UpdateEditorAction> {
+export function uploadClaimDetailDocument(claimDetailKey: ClaimDetailKey, dto: ClaimDetailDocumentDto, onComplete: () => void): AsyncThunk<void, DataLoadAction | UpdateEditorAction | ResetEditorAction> {
   return (dispatch, getState) => {
     const state = getState();
     const selector = getClaimDetailDocumentEditor(claimDetailKey);
@@ -52,6 +49,7 @@ export function uploadClaimDetailDocument(claimDetailKey: ClaimDetailKey, dto: C
 
     return ApiClient.documents.uploadClaimDetailDocument({ claimDetailKey, file: dto.file!, user: state.user })
       .then(() => {
+        dispatch(resetEditorAction(selector.key, selector.store));
         onComplete();
       }).catch((e: any) => {
         dispatch(handleError({ id: selector.key, store: selector.store, dto, validation, error: e }));

@@ -53,7 +53,7 @@ class SimpleForm extends React.Component<{}, { original: ISimpleEditorDto, edito
                         <ExampleForm.MultilineString label="Description" name="description" hint="A multiline field" value={data => data.description} update={(dto, value) => dto.description = value} />
                         <ExampleForm.Numeric label="Value" name="value" hint="A numeric value" value={data => data.value} update={(dto, value) => dto.value = value} />
                         <ExampleForm.Radio label="Option" name="option" hint="The option value" options={this.options} value={dto => dto.option} update={(dto, option) => dto.option = option}/>
-                        <ExampleForm.FileUpload label="Upload file" name="upload file" hint="select file" update={(dto, file) => dto.file = file}/>
+                        <ExampleForm.FileUpload value={dto => dto.file} label="Upload file" name="upload file" hint="select file" update={(dto, file) => dto.file = file}/>
                     </ExampleForm.Fieldset>
                     <ExampleForm.Submit>Save</ExampleForm.Submit>
                 </ExampleForm.Form>
@@ -67,7 +67,9 @@ class SimpleForm extends React.Component<{}, { original: ISimpleEditorDto, edito
 
     private onSave() {
         console.log("Saving", this.state.editor);
-        const dto = this.state.editor;
-        this.setState({ original: dto, editor: JSON.parse(JSON.stringify(dto)) });
+        const original = this.state.editor;
+        const editor = JSON.parse(JSON.stringify(original));
+        editor.file = null;
+        this.setState({ original, editor });
     }
 }

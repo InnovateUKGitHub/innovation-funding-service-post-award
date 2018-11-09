@@ -101,7 +101,7 @@ export class EditClaimLineItemsComponent extends ContainerBase<Params, Data, Cal
           </ACC.Section>
         </LineItemForm.Fieldset>
         <LineItemForm.Fieldset>
-          <LineItemForm.Button name="return" onClick={() => this.props.saveAndUpload(this.props.projectId, this.props.partnerId, this.props.costCategoryId, this.props.periodId, this.props.editor.data)}>Upload and remove document</LineItemForm.Button>
+          <LineItemForm.Button name="return" onClick={() => this.props.saveAndUpload(this.props.projectId, this.props.partnerId, this.props.costCategoryId, this.props.periodId, this.props.editor.data)}>Upload and remove documents</LineItemForm.Button>
         </LineItemForm.Fieldset>
         <LineItemForm.Submit>Save and return to claim form</LineItemForm.Submit>
       </LineItemForm.Form>
