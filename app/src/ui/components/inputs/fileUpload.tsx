@@ -6,7 +6,7 @@ interface FileUploadProps {
   name: string;
   disabled?: boolean;
   onChange: (v: File | null) => void;
-  value: any;
+  value: File | null | undefined;
   placeholder?: string;
 }
 
