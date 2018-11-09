@@ -92,14 +92,6 @@ interface ExternalFieldProps<TDto, TValue> {
     validation?: Result;
 }
 
-interface FileUploadProps<TDto> {
-    label: React.ReactNode;
-    hint?: React.ReactNode;
-    name: string;
-    update: (data: TDto, value: File | null) => void;
-    validation?: Result;
-}
-
 class FieldComponent<T, TValue> extends React.Component<InternalFieldProps<T> & ExternalFieldProps<T, TValue>, {}> {
     render() {
         const { hint, name, label, field, formData, validation } = this.props;
@@ -198,13 +190,11 @@ const ButtonComponent: React.SFC<ButtonProps> = (props) => {
     return <button type="submit" name="button" value={props.name} className="govuk-button" style={{ background: "buttonface", color: "buttontext" }} onClick={(e) => handleOtherButton(props, e)}>{props.children}</button>;
 };
 
-const FileUploadComponent = <T extends {}>(props: FileUploadProps<T>) => {
+const FileUploadComponent = <T extends {}>(props: ExternalFieldProps<T, File>) => {
     const TypedFieldComponent = FieldComponent as { new(): FieldComponent<T, File> };
 
-    const fieldProps: ExternalFieldProps<T, File> = { value: () => (null), ...props};
-
     return (
-        <TypedFieldComponent field={(data => <FileUpload name={props.name} onChange={(val) => handleChange(fieldProps, val)} />)} {...fieldProps}/>
+        <TypedFieldComponent field={((data) => <FileUpload value={props.value(data)} name={props.name} onChange={(val) => handleChange(props, val)} />)} {...props}/>
     );
 };
 
@@ -217,5 +207,5 @@ export const TypedForm = <T extends {}>() => ({
     Radio: RadioOptionsField as React.SFC<RadioFieldProps<T>>,
     Submit: SubmitComponent,
     Button: ButtonComponent,
-    FileUpload: FileUploadComponent as React.SFC<FileUploadProps<T>>,
+    FileUpload: FileUploadComponent as React.SFC<ExternalFieldProps<T, File>>,
 });

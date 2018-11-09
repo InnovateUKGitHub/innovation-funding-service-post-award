@@ -5,7 +5,8 @@ import { GetDocumentQuery } from "../features/documents/getDocument";
 import { UploadClaimDetailDocumentCommand } from "../features/documents/uploadClaimDetailDocument";
 
 export interface IDocumentsApi {
-  getClaimDetailDocuments: (params: ApiParams<{ partnerId: string, periodId: number, costCategoryId: string }>) => Promise<DocumentSummaryDto[]>;
+  getClaimDetailDocuments: (params: ApiParams<{claimDetailKey: ClaimDetailKey}>) => Promise<DocumentSummaryDto[]>;
+  uploadClaimDetailDocument: (params: ApiParams<{claimDetailKey: ClaimDetailKey, file: FileUpload | File}>) => Promise<{ id: string }>;
 }
 
 class Controller extends ControllerBase<DocumentSummaryDto> implements IDocumentsApi {
@@ -14,7 +15,7 @@ class Controller extends ControllerBase<DocumentSummaryDto> implements IDocument
 
     this.getItems(
       "/claim-details/:partnerId/:periodId/:costCategoryId",
-      (p) => ({ partnerId: p.partnerId, periodId: p.periodId, costCategoryId: p.costCategoryId }),
+      (p) => ({claimDetailKey: { partnerId: p.partnerId, periodId: p.periodId, costCategoryId: p.costCategoryId }}),
       p => this.getClaimDetailDocuments(p)
     );
 
@@ -31,8 +32,8 @@ class Controller extends ControllerBase<DocumentSummaryDto> implements IDocument
     );
   }
 
-  public async getClaimDetailDocuments(params: ApiParams<{ partnerId: string, periodId: number, costCategoryId: string }>) {
-    const { partnerId, periodId, costCategoryId } = params;
+  public async getClaimDetailDocuments(params: ApiParams<{claimDetailKey: ClaimDetailKey}>) {
+    const { partnerId, periodId, costCategoryId } = params.claimDetailKey;
     const query = new GetClaimDetailDocumentsQuery(partnerId, periodId, costCategoryId);
     return await contextProvider.start(params).runQuery(query);
   }
@@ -43,9 +44,9 @@ class Controller extends ControllerBase<DocumentSummaryDto> implements IDocument
     return await contextProvider.start(params).runQuery(query);
   }
 
-  public async uploadClaimDetailDocument(params: ApiParams<{claimDetailKey: ClaimDetailKey, file: FileUpload}>) {
+  public async uploadClaimDetailDocument(params: ApiParams<{claimDetailKey: ClaimDetailKey, file: FileUpload | File}>) {
     const { claimDetailKey, file } = params;
-    const query = new UploadClaimDetailDocumentCommand(claimDetailKey, file);
+    const query = new UploadClaimDetailDocumentCommand(claimDetailKey, file as FileUpload);
     const insertedID = await contextProvider.start(params).runQuery(query);
     return {id: insertedID};
   }
