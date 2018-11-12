@@ -11,19 +11,18 @@ interface Props extends React.HTMLAttributes<{}> {
 
 export const Button: React.SFC<Props> = (props) => {
   const { className, styling, style, children, ...rest } = props;
-  const styles = classNames(className, "govuk-link");
-  const linkStyle: CSSProperties = {
-    color: GOVUK_LINK_COLOUR,
-    padding: 0,
-    cursor: "pointer",
-    textDecoration: "underline",
-    backgroundColor: "inherit",
-    border: "none",
-    boxSizing: "unset",
-    ...style
-  };
   if (styling === "Link") {
-    return <button className={styles} style={linkStyle} {...rest}>{children}</button>;
+    const linkStyles = classNames(className, "govuk-link");
+    const linkStyle: CSSProperties = {
+      color: GOVUK_LINK_COLOUR,
+      cursor: "pointer",
+      textDecoration: "underline",
+      backgroundColor: "inherit",
+      border: "none",
+      boxSizing: "unset",
+      ...style
+    };
+    return <button className={linkStyles} style={linkStyle} {...rest}>{children}</button>;
   }
   return null;
 };

@@ -32,7 +32,7 @@ interface PropsWithRemove extends Props {
 
 export const DocumentListWithDelete: React.SFC<PropsWithRemove> = ({ documents = [], qa, onRemove }: PropsWithRemove) => {
   sortDocuments(documents);
-  const renderRemove = (index: number) => <Button style={({paddingLeft: "20px"})} className="govuk-!-font-size-19" onClick={() => onRemove(documents[index])} styling="Link">Remove</Button>;
+  const renderRemove = (index: number) => <Button style={({marginLeft: "15px"})} className="govuk-!-font-size-19" onClick={() => onRemove(documents[index])} styling="Link">Remove</Button>;
   return (
     <div data-qa={qa}>
       <LinksList renderAfterLink={renderRemove} openNewWindow={true} links={documents.map(mapDocumentToLink)}/>
