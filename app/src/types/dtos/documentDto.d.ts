@@ -6,6 +6,7 @@ interface IStream {
 interface DocumentSummaryDto {
   fileName: string;
   link: string;
+  id: string;
 }
 
 interface DocumentDto {
