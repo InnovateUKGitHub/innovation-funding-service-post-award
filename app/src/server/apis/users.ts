@@ -15,7 +15,7 @@ class Controller extends ControllerBase<UserDto> implements IUserApi {
     super.getItem("/current", p => ({}), (p) => this.getCurrent(p));
   }
 
-  getCurrent(params:  ApiParams<{}>){
+  getCurrent(params: ApiParams<{}>) {
     return Promise.resolve<UserDto>({email: params.user.email});
   }
 }
