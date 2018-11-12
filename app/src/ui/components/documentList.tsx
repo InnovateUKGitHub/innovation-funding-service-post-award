@@ -13,9 +13,8 @@ const mapDocumentToLink = (document: DocumentSummaryDto, i: number) => ({
   qa: `document-${i}`,
 });
 
-const sortDocuments = (documents: DocumentSummaryDto[]) => documents.sort((a, b) => {
-  return a.fileName.toLowerCase().localeCompare(b.fileName.toLowerCase());
-});
+const sorter = (a: DocumentSummaryDto, b: DocumentSummaryDto) => a.fileName.toLowerCase().localeCompare(b.fileName.toLowerCase());
+const sortDocuments = (documents: DocumentSummaryDto[]) => { documents.sort(sorter); };
 
 export const DocumentList: React.SFC<Props> = ({ documents = [], qa}: Props) => {
   sortDocuments(documents);
