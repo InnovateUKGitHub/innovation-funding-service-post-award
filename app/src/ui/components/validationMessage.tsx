@@ -63,9 +63,14 @@ export const ValidationMessage: React.SFC<Props> = ({ message, key, messageType 
         <div className="govuk-warning-text-background" style={backgroundStyle}>
             <div className="govuk-warning-text" key={key} style={textStyle}>
                 <span className="govuk-warning-text__icon" aria-hidden="true" style={iconStyle} >{validationSymbol}</span>
-                <strong className="govuk-warning-text__text">
-                  <span className="govuk-warning-text__assistive">{validationText}</span>{message}
-                </strong>
+                {messageType === "info" ?
+                  <p className="govuk-warning-text__text">
+                    <span className="govuk-warning-text__assistive">{validationText}</span>{message}
+                  </p> :
+                  <strong className="govuk-warning-text__text">
+                    <span className="govuk-warning-text__assistive">{validationText}</span>{message}
+                  </strong>
+                }
             </div>
         </div>
     );
