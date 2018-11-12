@@ -14,7 +14,8 @@ export class GetDocumentsLinkedToRecordQuery implements IQuery<DocumentSummaryDt
     const documents = await context.repositories.contentVersions.getDocuments(linkedDocs.map(x => x.ContentDocumentId));
     return documents.map<DocumentSummaryDto>(doc => ({
       link: `/api/documents/${doc.Id}/content`,
-      fileName: doc.FileExtension ? `${doc.Title}.${doc.FileExtension}` : doc.Title
+      fileName: doc.FileExtension ? `${doc.Title}.${doc.FileExtension}` : doc.Title,
+      id: doc.ContentDocumentId
     }));
   }
 }

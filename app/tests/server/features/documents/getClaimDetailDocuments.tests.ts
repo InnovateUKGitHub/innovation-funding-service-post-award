@@ -14,5 +14,6 @@ describe("GetClaimDetailDocumentsQuery", () => {
 
     expect(item.fileName).toBe("cat.jpg");
     expect(item.link).toBe(`/api/documents/${contentVersion.Id}/content`);
+    expect(item.id).toBe(contentVersion.ContentDocumentId);
   });
 });
