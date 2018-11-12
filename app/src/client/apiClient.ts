@@ -26,6 +26,7 @@ const clientApi: IApiClient = {
   },
   documents: {
     getClaimDetailDocuments: ({ claimDetailKey }) => ajaxJson(`/api/documents/claim-details/${claimDetailKey.partnerId}/${claimDetailKey.periodId}/${claimDetailKey.costCategoryId}`),
+    deleteDocument: ({ documentId }) => ajaxJson(`/api/documents/${documentId}`, { method: "DELETE" }),
     uploadClaimDetailDocument: ({ claimDetailKey, file }) => {
       const formData = new FormData();
       formData.append("attachment", file as File);
@@ -51,6 +52,9 @@ const clientApi: IApiClient = {
     get: (params) => ajaxJson(`/api/partners/${params.id}`),
     getAllByProjectId: (params) => ajaxJson(`/api/partners?projectId=${params.projectId}`),
   },
+  users: {
+    getCurrent: () => ajaxJson(`/api/users/current`)
+  }
 };
 
 const getHeaders = () => {

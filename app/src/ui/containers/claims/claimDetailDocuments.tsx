@@ -33,6 +33,7 @@ interface CombinedData {
 interface Callbacks {
   validate: (key: ClaimDetailKey, dto: ClaimDetailDocumentDto) => void;
   uploadFile: (key: ClaimDetailKey, dto: ClaimDetailDocumentDto) => void;
+  deleteFile: (key: ClaimDetailKey, dto: DocumentSummaryDto) => void;
 }
 
 export class ClaimDetailDocumentsComponent extends ContainerBase<Params, Data, Callbacks> {
@@ -63,6 +64,15 @@ export class ClaimDetailDocumentsComponent extends ContainerBase<Params, Data, C
     this.props.uploadFile(claimDetailKey, dto);
   }
 
+  private onDelete(dto: DocumentSummaryDto) {
+    const claimDetailKey = {
+      partnerId: this.props.partnerId,
+      periodId: this.props.periodId,
+      costCategoryId: this.props.costCategoryId,
+    };
+    this.props.deleteFile(claimDetailKey, dto);
+  }
+
   private renderContents({project, costCategories, documents, editor}: CombinedData) {
     const back = EditClaimLineItemsRoute.getLink({ projectId: project.id, partnerId: this.props.partnerId, periodId: this.props.periodId, costCategoryId: this.props.costCategoryId });
     const costCategory = costCategories.find(x => x.id === this.props.costCategoryId)! || {};
@@ -78,13 +88,14 @@ export class ClaimDetailDocumentsComponent extends ContainerBase<Params, Data, C
           <ACC.Projects.Title pageTitle={`Claim for ${costCategory.name}`} project={project} />
         </ACC.Section>
         <ACC.Section title="Supporting documents" subtitle={documents.length > 0 ? "(Documents open in a new window)" : ""}>
-          {documents.length > 0 ? <ACC.DocumentList documents={documents} qa="supporting-documents"/>: <p className="govuk-body-m govuk-!-margin-bottom-0 govuk-!-margin-right-2">No documents attached</p> }
+          {documents.length > 0 ?
+            <ACC.DocumentListWithDelete onRemove={(document) => this.onDelete(document)} documents={documents} qa="supporting-documents"/> :
+            <p className="govuk-body-m govuk-!-margin-bottom-0 govuk-!-margin-right-2">No documents attached</p> }
         </ACC.Section>
         <ACC.Section title="Upload file">
           <UploadForm.Form data={editor.data} onSubmit={() => this.onSave(editor.data)} onChange={(dto) => this.onChange(dto)}>
             <UploadForm.Fieldset>
-              <p className="govuk-body govuk-!-margin-bottom-6">Make sure each file name includes the date and a description</p>
-              <UploadForm.FileUpload value={(data) => data.file} label="" name="upload file" update={(dto, file) => dto.file = file}/>
+              <UploadForm.FileUpload value={(data) => data.file} label="Make sure each file name includes the date and a description" name="Upload file" update={(dto, file) => dto.file = file}/>
             </UploadForm.Fieldset>
             <UploadForm.Submit disabled={!editor.data.file}>Upload file</UploadForm.Submit>
           </UploadForm.Form>
@@ -108,6 +119,9 @@ export const ClaimDetailDocuments = definition.connect({
   withCallbacks: (dispatch) => ({
     validate: (claimDetailKey, dto) =>
       dispatch(Actions.updateClaimDetailDocumentEditor(claimDetailKey, dto)),
+    deleteFile: (claimDetailKey, dto) =>
+      dispatch(Actions.deleteClaimDetailDocument(claimDetailKey, dto, () =>
+        dispatch(Actions.loadClaimDetailDocuments(claimDetailKey.partnerId, claimDetailKey.periodId, claimDetailKey.costCategoryId)))),
     uploadFile: (claimDetailKey, file) =>
       dispatch(Actions.uploadClaimDetailDocument(claimDetailKey, file, () =>
         dispatch(Actions.loadClaimDetailDocuments(claimDetailKey.partnerId, claimDetailKey.periodId, claimDetailKey.costCategoryId))))

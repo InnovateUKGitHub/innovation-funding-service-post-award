@@ -11,6 +11,8 @@ import * as claimDetailsSummary from "./claimDetailsSummary";
 import * as forecastDetails from "./forecastDetails";
 import * as forecastGolCosts from "./forecastGolCosts";
 import * as documents from "./documents";
+import * as users from "./users";
+
 import {ControllerBase} from "./controllerBase";
 
 export interface IApiClient {
@@ -26,6 +28,7 @@ export interface IApiClient {
   projects: projects.IProjectsApi;
   projectContacts: projectContacts.IProjectContactsApi;
   partners: partners.IPartnersApi;
+  users: users.IUserApi;
 }
 
 export const serverApis: IApiClient & { [key: string]: ControllerBase<{}> } = {
@@ -40,7 +43,8 @@ export const serverApis: IApiClient & { [key: string]: ControllerBase<{}> } = {
   forecastGolCosts: forecastGolCosts.controller,
   partners: partners.controller,
   projects: projects.controller,
-  projectContacts: projectContacts.controller
+  projectContacts: projectContacts.controller,
+  users: users.controller,
 };
 
 export const router = express.Router();
