@@ -24,7 +24,7 @@ export class FileUpload extends BaseInput<FileUploadProps, { value: File | null 
     return (
       <input
         type="file"
-        className={classNames("govuk-input")}
+        className={classNames("govuk-file-upload")}
         name={this.props.name}
         disabled={this.props.disabled}
         onChange={e => this.handleChange(e)}
