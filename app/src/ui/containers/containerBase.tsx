@@ -20,7 +20,7 @@ export abstract class ContainerBaseWithState<TParams = {}, TData = {}, TCallback
     }
 }
 
-export abstract class ContainerBase<TParams = {}, TData = {}, TCallbacks = {}> extends React.Component<ContainerProps<TParams, TData, TCallbacks>, {}> {
+export abstract class ContainerBase<TParams = {}, TData = {}, TCallbacks = {}> extends React.Component<ContainerProps<TParams, TData, TCallbacks>> {
     constructor(props: ContainerProps<TParams, TData, TCallbacks>) {
         super(props);
     }
