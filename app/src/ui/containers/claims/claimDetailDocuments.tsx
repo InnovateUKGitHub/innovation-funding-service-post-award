@@ -86,7 +86,7 @@ export class ClaimDetailDocumentsComponent extends ContainerBase<Params, Data, C
               <p className="govuk-body govuk-!-margin-bottom-6" data-qa="file-upload-help">Make sure each file name includes the date and a description</p>
               <UploadForm.FileUpload value={(data) => data.file} label="" name="upload file" update={(dto, file) => dto.file = file}/>
             </UploadForm.Fieldset>
-            <UploadForm.Submit disabled={!editor.data.file} qa="file-upload-submit">Upload file</UploadForm.Submit>
+            <UploadForm.Submit disabled={!editor.data.file}>Upload file</UploadForm.Submit>
           </UploadForm.Form>
         </ACC.Section>
       </ACC.Page>
