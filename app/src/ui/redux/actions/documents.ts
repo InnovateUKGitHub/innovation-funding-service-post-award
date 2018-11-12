@@ -44,7 +44,6 @@ export function uploadClaimDetailDocument(claimDetailKey: ClaimDetailKey, dto: C
       return Promise.resolve();
     }
 
-    // send a loading action with undefined as it will just update the status
     dispatch(dataLoadAction(docsSelector.key, docsSelector.store, LoadingStatus.Stale, undefined));
 
     return ApiClient.documents.uploadClaimDetailDocument({ claimDetailKey, file: dto.file!, user: state.user })
@@ -53,6 +52,21 @@ export function uploadClaimDetailDocument(claimDetailKey: ClaimDetailKey, dto: C
         onComplete();
       }).catch((e: any) => {
         dispatch(handleError({ id: selector.key, store: selector.store, dto, validation, error: e }));
+      });
+  };
+}
+
+export function deleteClaimDetailDocument(claimDetailKey: ClaimDetailKey, dto: DocumentSummaryDto, onComplete: () => void): AsyncThunk<void> {
+  return (dispatch, getState) => {
+    const state = getState();
+    const docsSelector = getClaimDetailDocuments(claimDetailKey.partnerId, claimDetailKey.periodId, claimDetailKey.costCategoryId);
+    dispatch(dataLoadAction(docsSelector.key, docsSelector.store, LoadingStatus.Stale, undefined));
+    return ApiClient.documents.deleteDocument({ documentId: dto.id, user: state.user })
+      .then(() => {
+        onComplete();
+      }).catch((e: any) => {
+        console.log(e);
+        // TODO handle error
       });
   };
 }

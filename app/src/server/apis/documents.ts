@@ -8,6 +8,7 @@ import { DeleteDocumentCommand } from "../features/documents/deleteDocument";
 export interface IDocumentsApi {
   getClaimDetailDocuments: (params: ApiParams<{claimDetailKey: ClaimDetailKey}>) => Promise<DocumentSummaryDto[]>;
   uploadClaimDetailDocument: (params: ApiParams<{claimDetailKey: ClaimDetailKey, file: FileUpload | File}>) => Promise<{ id: string }>;
+  deleteDocument: (params: ApiParams<{ documentId: string }>) => Promise<void>;
 }
 
 class Controller extends ControllerBase<DocumentSummaryDto> implements IDocumentsApi {
