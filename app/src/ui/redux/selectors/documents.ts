@@ -2,6 +2,7 @@ import { dataStoreHelper, editorStoreHelper } from "./common";
 import { getKey } from "../../../util/key";
 import { Results } from "../../validation/results";
 import { LoadingStatus, Pending } from "../../../shared/pending";
+import {DocumentUploadValidator} from "../../validators/documentUploadValidator";
 
 export const documentStore = "documents";
 export const getClaimDetailDocuments = (partnerId: string, periodId: number, costCategoryId: string) => dataStoreHelper(documentStore, getKey("claim", "detail", partnerId, periodId, costCategoryId));
@@ -10,6 +11,6 @@ export const getClaimDetailDocumentEditor = ({partnerId, periodId, costCategoryI
   "claimDetailDocument",
   x => x.claimDetailDocument,
   () => (Pending.create({ status: LoadingStatus.Done, data: { file: null }, error: null})),
-  () => new Results({ file: null }, true),
+  (dto) => new DocumentUploadValidator(dto, false),
   `${partnerId}_${periodId}_${costCategoryId}`
 );
