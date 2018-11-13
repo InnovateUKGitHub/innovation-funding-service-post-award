@@ -49,7 +49,7 @@ class FormComponent<T> extends React.Component<FormProps<T>, []> {
 }
 
 interface FieldsetProps<T> {
-    heading?: (data: T) => React.ReactNode;
+    heading?: React.ReactNode;
     qa?: string;
     headingQa?: string;
 }
@@ -70,7 +70,7 @@ class FieldsetComponent<T> extends React.Component<FieldsetProps<T>, []> {
         return (
             <fieldset className="govuk-fieldset" data-qa={this.props.qa}>
                 <legend className="govuk-fieldset__legend govuk-fieldset__legend--m">
-                    {this.props.heading ? <h1 className="govuk-fieldset__heading" data-qa={this.props.headingQa}>{this.props.heading(props.formData)}</h1> : null}
+                    {this.props.heading ? <h1 className="govuk-fieldset__heading" data-qa={this.props.headingQa}>{this.props.heading}</h1> : null}
                 </legend>
                 {childrenWithData}
             </fieldset>
@@ -84,7 +84,7 @@ interface InternalFieldProps<T> {
 }
 
 interface ExternalFieldProps<TDto, TValue> {
-    label: React.ReactNode;
+    label?: React.ReactNode;
     hint?: React.ReactNode;
     name: string;
     value: (data: TDto) => TValue | null | undefined;
