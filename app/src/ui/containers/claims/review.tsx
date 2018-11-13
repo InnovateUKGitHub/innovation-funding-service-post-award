@@ -130,7 +130,7 @@ export const ReviewClaim = definition.connect({
 });
 
 export const ReviewClaimRoute = definition.route({
-    routeName: "review-claim",
+    routeName: "reviewClaim",
     routePath: "/projects/:projectId/claims/:partnerId/review/:periodId",
     getParams: (route) => ({ projectId: route.params.projectId, partnerId: route.params.partnerId, periodId: parseInt(route.params.periodId, 10) }),
     getLoadDataActions: (params) => [

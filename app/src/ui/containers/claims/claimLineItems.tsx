@@ -145,7 +145,7 @@ const getLoadDataActions = (params: Params): Actions.AsyncThunk<any>[] => [
 ];
 
 export const ClaimLineItemsRoute = definition.route({
-  routeName: "claim-line-items-view",
+  routeName: "claimLineItemsView",
   routePath: "/projects/:projectId/claims/:partnerId/details/:periodId/costs/:costCategoryId",
   getParams: (route) => getParams(route),
   getLoadDataActions: (params) => getLoadDataActions(params),
@@ -153,7 +153,7 @@ export const ClaimLineItemsRoute = definition.route({
 });
 
 export const ReviewClaimLineItemsRoute = definition.route({
-  routeName: "claim-line-items-review",
+  routeName: "claimLineItemsReview",
   routePath: "/projects/:projectId/claims/:partnerId/review/:periodId/costs/:costCategoryId",
   getParams: (route) => getParams(route),
   getLoadDataActions: (params) => getLoadDataActions(params),

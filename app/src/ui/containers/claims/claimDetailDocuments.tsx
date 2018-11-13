@@ -129,7 +129,7 @@ export const ClaimDetailDocuments = definition.connect({
 });
 
 export const ClaimDetailDocumentsRoute = definition.route({
-  routeName: "ClaimDetailDocuments",
+  routeName: "claimDetailDocuments",
   routePath: "/projects/:projectId/claims/:partnerId/prepare/:periodId/costs/:costCategoryId/documents",
   getParams: (route) => ({
     projectId: route.params.projectId,
