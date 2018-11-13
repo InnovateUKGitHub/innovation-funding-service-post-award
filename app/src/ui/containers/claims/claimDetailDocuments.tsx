@@ -6,8 +6,8 @@ import { EditClaimLineItemsRoute } from "./index";
 import * as Actions from "../../redux/actions";
 import * as Selectors from "../../redux/selectors";
 import { ProjectDto } from "../../../types";
-import { IEditorStore } from "../../redux/reducers";
-import { Results } from "../../validation/results";
+import {IEditorStore} from "../../redux/reducers";
+import {DocumentUploadValidator} from "../../validators/documentUploadValidator";
 
 interface Params {
   projectId: string;
@@ -20,14 +20,14 @@ interface Data {
   project: Pending<ProjectDto>;
   costCategories: Pending<CostCategoryDto[]>;
   documents: Pending<DocumentSummaryDto[]>;
-  editor: Pending<IEditorStore<ClaimDetailDocumentDto, Results<ClaimDetailDocumentDto>>>;
+  editor: Pending<IEditorStore<ClaimDetailDocumentDto, DocumentUploadValidator>>;
 }
 
 interface CombinedData {
   project: ProjectDto;
   costCategories: CostCategoryDto[];
   documents: DocumentSummaryDto[];
-  editor: IEditorStore<ClaimDetailDocumentDto, Results<ClaimDetailDocumentDto>>;
+  editor: IEditorStore<ClaimDetailDocumentDto, DocumentUploadValidator>;
 }
 
 interface Callbacks {
@@ -92,12 +92,12 @@ export class ClaimDetailDocumentsComponent extends ContainerBase<Params, Data, C
             <ACC.DocumentListWithDelete onRemove={(document) => this.onDelete(document)} documents={documents} qa="supporting-documents"/> :
             <p className="govuk-body-m govuk-!-margin-bottom-0 govuk-!-margin-right-2">No documents attached</p> }
         </ACC.Section>
-        <ACC.Section title="Upload file">
+        <ACC.Section>
           <UploadForm.Form data={editor.data} onSubmit={() => this.onSave(editor.data)} onChange={(dto) => this.onChange(dto)}>
-            <UploadForm.Fieldset>
-              <UploadForm.FileUpload value={(data) => data.file} label="Make sure each file name includes the date and a description" name="Upload file" update={(dto, file) => dto.file = file}/>
+            <UploadForm.Fieldset heading={() => "Upload file"}>
+              <UploadForm.FileUpload validation={editor.validator.file} label="" value={(data) => data.file} hint="Make sure each file name includes the date and a description" name="Upload file" update={(dto, file) => dto.file = file}/>
             </UploadForm.Fieldset>
-            <UploadForm.Submit disabled={!editor.data.file}>Upload file</UploadForm.Submit>
+            <UploadForm.Submit>Upload file</UploadForm.Submit>
           </UploadForm.Form>
         </ACC.Section>
       </ACC.Page>
