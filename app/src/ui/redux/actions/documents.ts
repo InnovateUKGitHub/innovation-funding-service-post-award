@@ -10,6 +10,7 @@ import {
 import { getClaimDetailDocumentEditor, getClaimDetailDocuments } from "../selectors/documents";
 import { LoadingStatus } from "../../../shared/pending";
 import { Results } from "../../validation/results";
+import {DocumentUploadValidator} from "../../validators/documentUploadValidator";
 
 export function loadClaimDetailDocuments(partnerId: string, periodId: number, costCategoryId: string) {
   return conditionalLoad(
@@ -27,7 +28,7 @@ export function updateClaimDetailDocumentEditor(claimDetailKey: ClaimDetailKey, 
       const current = state.editors[selector.store][selector.key];
       showErrors = current && current.validator.showValidationErrors || false;
     }
-    const validator = new Results<ClaimDetailDocumentDto>(dto, showErrors);
+    const validator = new DocumentUploadValidator(dto, showErrors);
     dispatch(updateEditorAction(selector.key, selector.store, dto, validator));
     return validator;
   };
