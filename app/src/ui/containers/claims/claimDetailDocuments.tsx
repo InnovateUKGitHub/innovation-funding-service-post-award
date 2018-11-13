@@ -97,7 +97,7 @@ export class ClaimDetailDocumentsComponent extends ContainerBase<Params, Data, C
             <UploadForm.Fieldset heading={() => "Upload file"}>
               <UploadForm.FileUpload validation={editor.validator.file} label="" value={(data) => data.file} hint="Make sure each file name includes the date and a description" name="Upload file" update={(dto, file) => dto.file = file}/>
             </UploadForm.Fieldset>
-            <UploadForm.Submit disabled={!editor.data.file}>Upload file</UploadForm.Submit>
+            <UploadForm.Submit>Upload file</UploadForm.Submit>
           </UploadForm.Form>
         </ACC.Section>
       </ACC.Page>
