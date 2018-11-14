@@ -143,7 +143,7 @@ export const PrepareClaim = definition.connect({
 });
 
 export const PrepareClaimRoute = definition.route({
-    routeName: "prepare-claim",
+    routeName: "prepareClaim",
     routePath: "/projects/:projectId/claims/:partnerId/prepare/:periodId",
     getParams: (route) => ({ projectId: route.params.projectId, partnerId: route.params.partnerId, periodId: parseInt(route.params.periodId, 10) }),
     getLoadDataActions: (params) => [
