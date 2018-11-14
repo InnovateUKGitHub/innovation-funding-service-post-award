@@ -40,12 +40,6 @@ class ProjectContactTestRepository extends TestRepository<Repositories.ISalesfor
     }
 }
 
-class ClaimCostTestRepository extends TestRepository<Repositories.ISalesforceClaimCost> implements Repositories.IClaimCostRepository {
-    getAllForClaim(claimId: string) {
-        return super.getWhere(x => x.ACC_Claim_Id__c === claimId);
-    }
-}
-
 class CostCategoriesTestRepository extends TestRepository<Repositories.ISalesforceCostCategory> implements Repositories.ICostCategoryRepository {
     getAll() {
         return super.getAll();
