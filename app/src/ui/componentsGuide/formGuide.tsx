@@ -11,7 +11,7 @@ export const formGuide: IGuide = {
             comments: "Renders a simple form with text field",
             example: `
                 <ExampleForm.Form data={this.state.editor} onSubmit={() => this.onSave()} onChange={(dto) => this.onChange(dto)}>
-                    <ExampleForm.Fieldset heading={(data) => \`Example form for the editor \${this.state.original.name} \`}>
+                    <ExampleForm.Fieldset heading="Example form for the editor">
                         <ExampleForm.String label="Name" name="name" hint="A simple field" value={data => data.name} update={(dto, value) => dto.name = value} />
                         <ExampleForm.MultilineString label="Description" name="description" hint="A multiline field" value={data => data.description} update={(dto, value) => dto.description = value} />
                     </ExampleForm.Fieldset>
@@ -48,7 +48,7 @@ class SimpleForm extends React.Component<{}, { original: ISimpleEditorDto, edito
             <div>
                 <Json value={this.state} />
                 <ExampleForm.Form data={this.state.editor} onSubmit={() => this.onSave()} onChange={(dto) => this.onChange(dto)}>
-                    <ExampleForm.Fieldset heading={(data) => `Example form for the editor ${this.state.original.name} `}>
+                    <ExampleForm.Fieldset heading={`Example form for the editor ${this.state.original.name} `}>
                         <ExampleForm.String label="Name" name="name" hint="A simple field" value={data => data.name} update={(dto, value) => dto.name = value} />
                         <ExampleForm.MultilineString label="Description" name="description" hint="A multiline field" value={data => data.description} update={(dto, value) => dto.description = value} />
                         <ExampleForm.Numeric label="Value" name="value" hint="A numeric value" value={data => data.value} update={(dto, value) => dto.value = value} />
