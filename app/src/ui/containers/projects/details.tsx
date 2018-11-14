@@ -102,7 +102,7 @@ export const ProjectDetails = containerDefinition.connect({
 });
 
 export const ProjectDetailsRoute = containerDefinition.route({
-    routeName: "project-details",
+    routeName: "projectDetails",
     routePath: "/projects/:id/details",
     getParams: (r) => ({ id: r.params.id }),
     getLoadDataActions: (params) => [
