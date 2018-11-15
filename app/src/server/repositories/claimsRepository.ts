@@ -1,5 +1,7 @@
-import SalesforceBase, {Updatable} from "./salesforceBase";
+import SalesforceBase, { Updatable } from "./salesforceBase";
 import { Connection } from "jsforce";
+import { ApiError, StatusCode } from "../apis/ApiError";
+import { ClaimStatus } from "../../types";
 
 export interface ISalesforceClaim {
   Id: string;
@@ -54,11 +56,11 @@ export class ClaimRepository extends SalesforceBase<ISalesforceClaim> implements
 
   public async get(partnerId: string, periodId: number) {
     const filter = `Acc_ProjectParticipant__c = '${partnerId}' AND Acc_ProjectPeriodNumber__c = ${periodId} AND RecordType.Name = '${this.recordType}'`;
-    const claim = await super.where(filter).then(x => x[0]);
-    if (claim === null) {
-      throw Error("Claim does not exist");
+    const claim = await super.where(filter);
+    if (claim.length === 0) {
+      throw new ApiError(StatusCode.BAD_REQUEST, "Claim does not exist");
     }
-    return claim;
+    return claim[0];
   }
 
   public update(updatedClaim: Updatable<ISalesforceClaim>) {

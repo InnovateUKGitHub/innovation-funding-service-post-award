@@ -1,6 +1,7 @@
 import * as Validation from "./common";
 import { Results } from "../validation/results";
 import { Result } from "../validation/result";
+import { ClaimDto } from "../../types";
 
 const COMMENTS_LENGTH_MAX = 1000;
 

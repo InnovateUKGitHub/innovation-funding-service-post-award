@@ -1,3 +1,5 @@
+import { ClaimStatus } from "../constants";
+
 interface ClaimDto {
   id: string;
   partnerId: string;

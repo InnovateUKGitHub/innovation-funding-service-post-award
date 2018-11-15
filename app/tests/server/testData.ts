@@ -1,8 +1,9 @@
 import * as Repositories from "../../src/server/repositories";
 import { ITestRepositories } from "./testRepositories";
+import { ClaimStatus } from "../../src/types";
 
 export class TestData {
-    constructor(private repositories: ITestRepositories){
+    constructor(private repositories: ITestRepositories) {
 
     }
 

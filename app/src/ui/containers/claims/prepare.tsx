@@ -10,7 +10,7 @@ import { ClaimDtoValidator } from "../../validators/claimDtoValidator";
 import { ClaimForecastRoute, ClaimsDashboardRoute } from ".";
 import { EditClaimLineItemsRoute } from "./editClaimLineItems";
 import { ClaimsDetailsRoute } from "./details";
-import { ClaimFrequency, ProjectDto } from "../../../types";
+import { ClaimDto, ClaimFrequency, ClaimStatus, ProjectDto } from "../../../types";
 
 interface Params {
     projectId: string;

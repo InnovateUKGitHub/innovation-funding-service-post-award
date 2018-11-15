@@ -9,7 +9,7 @@ import {ClaimsDashboardRoute} from "./dashboard";
 import {Currency, DateRange, Percentage} from "../../components/renderers";
 import { PrepareClaimRoute } from "./prepare";
 import { ForecastDetailsDtosValidator } from "../../validators/forecastDetailsDtosValidator";
-import { ProjectDto } from "../../../types";
+import { ClaimDto, ProjectDto } from "../../../types";
 import * as Colour from "../../styles/colours";
 
 interface Params {
