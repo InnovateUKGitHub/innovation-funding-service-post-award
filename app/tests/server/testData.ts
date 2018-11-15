@@ -143,14 +143,15 @@ export class TestData {
             Acc_ProjectPeriodStartDate__c: "2018-01-02",
             Acc_ProjectPeriodEndDate__c: "2018-03-04",
             Acc_ApprovedDate__c: null,
-            Acc_ClaimStatus__c: "Draft",
+            Acc_ClaimStatus__c: ClaimStatus.DRAFT,
             Acc_LineItemDescription__c: null,
             Acc_ProjectPeriodCost__c : 100,
             Acc_PaidDate__c: null,
             Acc_TotalCostsApproved__c: 100,
             Acc_TotalCostsSubmitted__c: 100,
             Acc_TotalGrantApproved__c: 100,
-            LastModifiedDate: "2018-03-04T12:00:00.000+00"
+            LastModifiedDate: "2018-03-04T12:00:00.000+00",
+            Acc_IARRequired__c: false
         };
 
         if (update) {
@@ -266,7 +267,7 @@ export class TestData {
       return item;
     }
 
-    public createContentVersion(entityId: string, title: string, fileType: string, content: string = "") {
+    public createContentVersion(entityId: string, title: string, fileType: string, content: string = "", description: string) {
       const id = ""+this.repositories.contentVersions.Items.length + 1;
       const item = {
         Id: id,
@@ -280,6 +281,7 @@ export class TestData {
         PathOnClient: fileType ? `${title}.${fileType}` : title,
         ContentLocation: "S",
         VersionData: content,
+        Description: description
       };
       this.repositories.contentVersions.Items.push(item);
       this.repositories.contentDocument.Items.push({Id: item.ContentDocumentId});

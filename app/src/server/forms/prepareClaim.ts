@@ -30,7 +30,7 @@ const PrepareClaimForm = async (req: express.Request, res: express.Response) => 
     }
 
     claim.comments = body.comments;
-    claim.status = "Draft";
+    claim.status = ClaimStatus.DRAFT;
 
     try {
         await context.runCommand(new UpdateClaimCommand(claim));
@@ -67,7 +67,7 @@ const ForcastClaimForm = async (req: express.Request, res: express.Response) => 
         return;
     }
 
-    claim.status = "Submitted";
+    claim.status = ClaimStatus.SUBMITTED;
 
     try {
         await context.runCommand(new UpdateClaimCommand(claim));

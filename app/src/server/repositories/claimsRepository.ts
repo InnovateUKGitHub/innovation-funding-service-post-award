@@ -5,7 +5,7 @@ export interface ISalesforceClaim {
   Id: string;
   Acc_ProjectParticipant__c: string;
   LastModifiedDate: string;
-  Acc_ClaimStatus__c: "New" | "Draft" | "Submitted" | "MO Queried" | "Awaiting IUK Approval" | "Innovate Queried" | "Approved" | "Paid";
+  Acc_ClaimStatus__c: ClaimStatus;
   Acc_ProjectPeriodStartDate__c: string;
   Acc_ProjectPeriodEndDate__c: string;
   Acc_ProjectPeriodNumber__c: number;
@@ -17,6 +17,7 @@ export interface ISalesforceClaim {
   Acc_ApprovedDate__c: string | null;
   Acc_PaidDate__c: string | null;
   Acc_LineItemDescription__c: string | null;
+  Acc_IARRequired__c: boolean;
 }
 
 const fields = [
@@ -30,12 +31,13 @@ const fields = [
   "Acc_ProjectPeriodCost__c",
   "Acc_ApprovedDate__c",
   "Acc_PaidDate__c",
-  "Acc_LineItemDescription__c"
+  "Acc_LineItemDescription__c",
+  "Acc_IARRequired__c"
 ];
 
 export interface IClaimRepository {
   getAllByPartnerId(partnerId: string): Promise<ISalesforceClaim[]>;
-  get(partnerId: string, periodId: number): Promise<ISalesforceClaim | null>;
+  get(partnerId: string, periodId: number): Promise<ISalesforceClaim>;
   update(updatedClaim: Partial<ISalesforceClaim> & { Id: string }): Promise<boolean>;
 }
 
@@ -52,7 +54,11 @@ export class ClaimRepository extends SalesforceBase<ISalesforceClaim> implements
 
   public async get(partnerId: string, periodId: number) {
     const filter = `Acc_ProjectParticipant__c = '${partnerId}' AND Acc_ProjectPeriodNumber__c = ${periodId} AND RecordType.Name = '${this.recordType}'`;
-    return await super.where(filter).then(x => x[0]);
+    const claim = await super.where(filter).then(x => x[0]);
+    if (claim === null) {
+      throw Error("Claim does not exist");
+    }
+    return claim;
   }
 
   public update(updatedClaim: Updatable<ISalesforceClaim>) {

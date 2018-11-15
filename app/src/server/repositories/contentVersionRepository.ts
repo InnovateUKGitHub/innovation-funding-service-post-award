@@ -13,16 +13,21 @@ export interface ISalesforceContentVersion {
   PathOnClient: string;
   ContentLocation: string;
   VersionData: string;
+  Description: string;
+}
+
+interface DocumentFilter {
+  description: string;
 }
 
 export interface IContentVersionRepository {
-  getDocuments(contentDocumentIds: string[]): Promise<ISalesforceContentVersion[]>;
+  getDocuments(contentDocumentIds: string[], filter: DocumentFilter): Promise<ISalesforceContentVersion[]>;
   getDocument(id: string): Promise<ISalesforceContentVersion>;
   getDocumentData(id: string): Promise<Stream>;
   insertDocument(file: FileUpload): Promise<string>;
 }
 
-const fieldNames: (keyof ISalesforceContentVersion)[] = ["Id", "Title", "FileExtension", "ContentDocumentId", "ContentSize", "FileType"];
+const fieldNames: (keyof ISalesforceContentVersion)[] = ["Id", "Title", "FileExtension", "ContentDocumentId", "ContentSize", "FileType", "Description"];
 
 export class ContentVersionRepository extends SalesforceBase<ISalesforceContentVersion> implements IContentVersionRepository {
 
@@ -30,8 +35,12 @@ export class ContentVersionRepository extends SalesforceBase<ISalesforceContentV
     super(connection, "ContentVersion", fieldNames);
   }
 
-  public getDocuments(contentDocumentIds: string[]): Promise<ISalesforceContentVersion[]> {
-    return super.where(`ContentDocumentId IN ('${contentDocumentIds.join("', '")}') AND IsLatest = true`);
+  public getDocuments(contentDocumentIds: string[], filter?: DocumentFilter): Promise<ISalesforceContentVersion[]> {
+    let queryString = `ContentDocumentId IN ('${contentDocumentIds.join("', '")}') AND IsLatest = true`;
+    if (filter && filter.description) {
+      queryString += ` AND Description = '${filter.description}'`;
+    }
+    return super.where(queryString);
   }
 
   public getDocument(id: string): Promise<ISalesforceContentVersion> {
@@ -43,12 +52,13 @@ export class ContentVersionRepository extends SalesforceBase<ISalesforceContentV
     });
   }
 
-  public insertDocument({content, fileName}: FileUpload) {
+  public insertDocument({content, fileName, description}: FileUpload) {
     return super.insert({
       ReasonForChange: "First Upload",
       PathOnClient: fileName,
       ContentLocation: "S",
       VersionData: content,
+      Description: description
     });
   }
 
