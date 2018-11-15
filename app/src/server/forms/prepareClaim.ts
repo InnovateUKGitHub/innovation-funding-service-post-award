@@ -8,6 +8,7 @@ import { serverRender } from "../serverRender";
 import { ClaimDtoValidator } from "../../ui/validators/claimDtoValidator";
 import { getClaimEditor } from "../../ui/redux/selectors";
 import { ValidationError } from "../../shared/validation";
+import { ClaimStatus } from "../../types/constants";
 
 export const formRouter = express.Router();
 

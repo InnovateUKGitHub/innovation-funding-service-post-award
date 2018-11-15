@@ -1,4 +1,4 @@
-declare const enum ClaimStatus {
+export enum ClaimStatus {
   NEW = "New",
   DRAFT = "Draft",
   SUBMITTED = "Submitted",

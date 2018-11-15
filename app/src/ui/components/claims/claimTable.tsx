@@ -1,7 +1,7 @@
 import React from "react";
 import { Link, Renderers, TypedTable } from "..";
 import { ClaimDetailsValidator } from "../../validators/claimDtoValidator";
-import { ProjectDto } from "../../../types";
+import { ClaimDto, ProjectDto } from "../../../types";
 
 interface Props {
     project: ProjectDto;

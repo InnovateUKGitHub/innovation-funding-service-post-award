@@ -9,7 +9,7 @@ import { ClaimDtoValidator } from "../../validators/claimDtoValidator";
 import { DateTime } from "luxon";
 import { ReviewClaimLineItemsRoute } from "./claimLineItems";
 import { ClaimsDashboardRoute, ClaimsDetailsRoute } from ".";
-import { ClaimFrequency, ProjectDto } from "../../../types";
+import { ClaimDto, ClaimFrequency, ClaimStatus, ProjectDto } from "../../../types";
 
 interface Params {
   projectId: string;

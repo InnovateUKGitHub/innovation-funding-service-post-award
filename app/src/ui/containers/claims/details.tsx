@@ -8,6 +8,7 @@ import * as ACC from "../../components";
 import { ClaimLineItemsRoute } from "./claimLineItems";
 import { ClaimsDashboardRoute } from "./dashboard";
 import { ClaimFrequency, ProjectDto } from "../../../types";
+import { ClaimDto } from "../../../types";
 
 interface Params {
     projectId: string;

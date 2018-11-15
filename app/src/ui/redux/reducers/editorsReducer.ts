@@ -5,6 +5,7 @@ import { ClaimLineItemDtosValidator } from "../../validators/claimLineItemDtosVa
 import { Results } from "../../validation/results";
 import { ForecastDetailsDtosValidator } from "../../validators/forecastDetailsDtosValidator";
 import { DocumentUploadValidator } from "../../validators/documentUploadValidator";
+import { ClaimDto } from "../../../types";
 
 export interface IEditorStore<TDto, TValidator> {
   data: TDto;
