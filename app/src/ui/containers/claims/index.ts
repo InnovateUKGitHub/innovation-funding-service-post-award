@@ -1,3 +1,4 @@
+export * from "./allClaimsDashboard";
 export * from "./claimLineItems";
 export * from "./claimForecast";
 export * from "./claimDetailDocuments";
