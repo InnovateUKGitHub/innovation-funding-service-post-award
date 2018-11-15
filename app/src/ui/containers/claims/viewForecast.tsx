@@ -132,6 +132,8 @@ export class ViewForecastComponent extends ContainerBase<Params, Data, Callbacks
               qa="cost-category-table"
               headers={this.renderTableHeaders(periods, data.claim)}
               footers={this.renderTableFooters(periods, parsed)}
+              headerRowClass="govuk-body-s"
+              bodyRowClass={() => "govuk-body-s"}
             >
               <Table.String header="Month" value={x => x.categoryName} qa="category-name" />
               {periods.map(p => <Table.Currency key={p} header={intervals[p]} value={x => x.periods[p]} qa="category-period" />)}
@@ -150,7 +152,7 @@ export class ViewForecastComponent extends ContainerBase<Params, Data, Callbacks
     const forecasts = periods.length > currentClaimPeriod;
 
     return [(
-      <tr key="cHeader1" className="govuk-table__row">
+      <tr key="cHeader1" className="govuk-table__row govuk-body-s">
         <th className="govuk-table__header" />
         {previous > 0 ? <th className="govuk-table__header govuk-table__header--numeric" colSpan={previous}>Previous costs</th> : null}
         {currentClaimPeriod > 0 ? <th className="govuk-table__header govuk-table__header--numeric">Current claim period costs</th> : null}
@@ -161,7 +163,7 @@ export class ViewForecastComponent extends ContainerBase<Params, Data, Callbacks
       </tr>
     ),
     (
-      <tr key="cHeader2" className="govuk-table__row">
+      <tr key="cHeader2" className="govuk-table__row govuk-body-s">
         <th className="govuk-table__header">Period</th>
         {periods.map((p, i) => <th key={i} className="govuk-table__header" style={{ textAlign: "right" }}>{"P" + p}</th>)}
         <th className="govuk-table__header" colSpan={3} />
@@ -181,7 +183,7 @@ export class ViewForecastComponent extends ContainerBase<Params, Data, Callbacks
     cells.push(totals.map(this.renderTableFooterCell));
     cells.push(<td key="total_diff" className="govuk-table__cell govuk-table__cell--numeric"><Percentage className="govuk-!-font-weight-bold" value={this.calculateDifference(golTotal, costTotal)} /></td>);
 
-    return [<tr key="footer1" className="govuk-table__row">{cells}</tr>];
+    return [<tr key="footer1" className="govuk-table__row govuk-body-s">{cells}</tr>];
   }
 
   renderTableFooterCell = (total: number, key: number) => (

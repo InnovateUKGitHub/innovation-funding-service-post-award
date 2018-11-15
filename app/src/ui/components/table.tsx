@@ -44,6 +44,8 @@ interface TableProps<T> {
   headers?: JSX.Element[];
   data: T[];
   validationResult?: Results<{}>[];
+  bodyRowClass?: (row: T, index: number) => string;
+  headerRowClass?: string;
 }
 
 export class TableColumn<T> extends React.Component<InternalColumnProps<T>> {
@@ -107,6 +109,8 @@ const TableComponent = <T extends {}>(props: TableProps<T> & { data: T[]; valida
   const footers = footerColumns.length ? [<tr key="standardFooter" className="govuk-table__row">{footerColumns}</tr>] : [];
   (props.footers || []).forEach(customFooter => footers.push(customFooter));
 
+  const rowClass = props.data.map((dataItem, rowIndex) => (!!props.bodyRowClass && props.bodyRowClass(dataItem, rowIndex)) || "");
+
   return (
     <div className={props.className} data-qa={props.qa}>
       <table className="govuk-table">
@@ -115,13 +119,13 @@ const TableComponent = <T extends {}>(props: TableProps<T> & { data: T[]; valida
         </colgroup>
         <thead className="govuk-table__head">
           {customHeaders}
-          <tr className="govuk-table__row">
+          <tr className={classNames("govuk-table__row", props.headerRowClass)}>
             {headers}
           </tr>
         </thead>
         <tbody className="govuk-table__body">
           {
-            contents.map((row, rowIndex) => <tr className="govuk-table__row" key={rowIndex}>{row}</tr>)
+            contents.map((row, rowIndex) => <tr className={classNames("govuk-table__row", rowClass[rowIndex])} key={rowIndex}>{row}</tr>)
           }
         </tbody>
         {footers.length ? <tfoot>{footers}</tfoot> : null}
