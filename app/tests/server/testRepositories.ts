@@ -120,7 +120,7 @@ class ContentVersionTestRepository extends TestRepository<Repositories.ISalesfor
       return s;
     });
   }
-  public insertDocument({ content, fileName }: FileUpload) {
+  public insertDocument({ content, fileName, description }: FileUpload) {
     const nameParts = fileName.split(".");
     const extension = nameParts.length > 1 ? nameParts[nameParts.length - 1] : null;
     const title = nameParts[0];
@@ -135,6 +135,7 @@ class ContentVersionTestRepository extends TestRepository<Repositories.ISalesfor
       PathOnClient: fileName,
       ContentLocation: "S",
       VersionData: content,
+      Description: description
     });
   }
 }

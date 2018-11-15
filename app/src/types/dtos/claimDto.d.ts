@@ -2,7 +2,7 @@ interface ClaimDto {
   id: string;
   partnerId: string;
   lastModifiedDate: Date;
-  status: "New" | "Draft" | "Submitted" | "MO Queried" | "Awaiting IUK Approval" | "Innovate Queried" | "Approved" | "Paid";
+  status: ClaimStatus;
   periodStartDate: Date;
   periodEndDate: Date;
   periodId: number;
@@ -11,6 +11,8 @@ interface ClaimDto {
   forecastLastModified: Date|null;
   approvedDate: Date|null;
   paidDate: Date|null;
+  isIarRequired: boolean;
   // ToDo: confirm field
   comments: string|null;
+  statusAllowsIar: boolean;
 }

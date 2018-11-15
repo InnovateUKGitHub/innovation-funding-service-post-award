@@ -11,9 +11,6 @@ import { ReviewClaimLineItemsRoute } from "./claimLineItems";
 import { ClaimsDashboardRoute, ClaimsDetailsRoute } from ".";
 import { ClaimFrequency, ProjectDto } from "../../../types";
 
-const moQueried           = "MO Queried";
-const awaitingIukApproval = "Awaiting IUK Approval";
-
 interface Params {
   projectId: string;
   partnerId: string;
@@ -70,10 +67,10 @@ class ReviewComponent extends ContainerBase<Params, Data, Callbacks> {
     const title = this.getClaimPeriodTitle(data);
     const Form = ACC.TypedForm<ClaimDto>();
     const options: ACC.SelectOption[] = [
-      { id: moQueried, value: "Query claim"},
-      { id: awaitingIukApproval, value: "Submit for approval"},
+      { id: ClaimStatus.MO_QUERIED, value: "Query claim"},
+      { id: ClaimStatus.AWAITING_IUK_APPROVAL, value: "Submit for approval"},
     ];
-    const showButton = data.editor.data.status === moQueried || data.editor.data.status === awaitingIukApproval;
+    const showButton = data.editor.data.status === ClaimStatus.MO_QUERIED || data.editor.data.status === ClaimStatus.AWAITING_IUK_APPROVAL;
 
     return (
       <ACC.Page>
@@ -90,7 +87,7 @@ class ReviewComponent extends ContainerBase<Params, Data, Callbacks> {
           <Form.Form qa="review-form" data={data.editor.data} onSubmit={() => this.props.onSave(this.props.projectId, this.props.partnerId, this.props.periodId, data.editor.data, data.claimDetails, data.costCategories)} onChange={(dto) => this.props.onChange(this.props.partnerId, this.props.periodId, dto, data.claimDetails, data.costCategories)}>
             <Form.Fieldset heading="How do you want to proceed with this claim?">
               <Form.Radio name="status" options={options} value={(dto) => options.find(x => x.id === dto.status)} update={(dto, val) => this.updateStatus(dto, val)} validation={data.editor.validator.status}/>
-              {showButton ? <Form.Submit>{data.editor.data.status === moQueried ? "Send query" : "Submit"}</Form.Submit> : null}
+              {showButton ? <Form.Submit>{data.editor.data.status === ClaimStatus.MO_QUERIED ? "Send query" : "Submit"}</Form.Submit> : null}
             </Form.Fieldset>
           </Form.Form>
         </ACC.Section>
@@ -99,7 +96,7 @@ class ReviewComponent extends ContainerBase<Params, Data, Callbacks> {
   }
 
   private updateStatus(dto: ClaimDto, option: ACC.SelectOption | null | undefined) {
-    if (option && (option.id === moQueried || option.id === awaitingIukApproval)) {
+    if (option && (option.id === ClaimStatus.MO_QUERIED || option.id === ClaimStatus.AWAITING_IUK_APPROVAL)) {
       dto.status = option.id;
     }
   }
@@ -107,8 +104,8 @@ class ReviewComponent extends ContainerBase<Params, Data, Callbacks> {
 
 const initEditor = (dto: ClaimDto) => {
   // if the status hasn't already been set to "MO Queried" or "Awaiting IUK Approval" then set the status to New so that the validation kicks in a forces a change
-  if (dto.status !== moQueried && dto.status !== awaitingIukApproval) {
-    dto.status = "New";
+  if (dto.status !== ClaimStatus.MO_QUERIED && dto.status !== ClaimStatus.AWAITING_IUK_APPROVAL) {
+    dto.status = ClaimStatus.NEW;
   }
 };
 

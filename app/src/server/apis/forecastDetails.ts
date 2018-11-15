@@ -53,7 +53,7 @@ class Controller extends ControllerBase<ForecastDetailsDTO> implements IForecast
     if(params.submit) {
       const query    = new GetClaim(params.partnerId, params.periodId);
       const claim    = await context.runQuery(query).then(x => x!);
-      claim.status   = "Submitted";
+      claim.status   = ClaimStatus.SUBMITTED;
       const claimCmd = new UpdateClaimCommand(claim);
       await context.runCommand(claimCmd);
     }
