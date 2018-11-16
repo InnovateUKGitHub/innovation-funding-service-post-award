@@ -53,25 +53,25 @@ class Component extends ContainerBase<Params, Data, {}> {
     return (
       <ProjectOverviewPage selectedTab={ClaimsDashboardRoute.routeName} project={project} partnerId={partner.id} partners={[partner]}>
         <Section>
-          <SectionPanel qa="claims-dashboard" title="Project claims history">
+          <SectionPanel qa="claims-totals" title="Project claims history">
             <DualDetails displayDensity="Compact">
-              <Details.Details qa="claims-history-col-0" data={partner}>
-                <Details.Currency label="Grant offer letter costs" value={x => x.totalParticipantGrant} />
-                <Details.Currency label="Costs claimed to date" value={x => x.totalParticipantCostsClaimed} />
-                <Details.Percentage label="Percentage claimed to date" value={x => x.percentageParticipantCostsClaimed} />
+              <Details.Details qa="claims-totals-col-0" data={partner}>
+                <Details.Currency label="Grant offer letter costs" qa="gol-costs" value={x => x.totalParticipantGrant} />
+                <Details.Currency label="Costs claimed to date" qa="claimed-costs" value={x => x.totalParticipantCostsClaimed} />
+                <Details.Percentage label="Percentage claimed to date" qa="percentage-costs" value={x => x.percentageParticipantCostsClaimed} />
               </Details.Details>
-              <Details.Details qa="claims-history-col-1" data={partner}>
-                <Details.Percentage label="Award offer rate" value={x => x.awardRate} fractionDigits={0} />
-                <Details.Percentage label="Cap limit" value={x => x.capLimit} fractionDigits={0} />
+              <Details.Details qa="claims-totals-col-1" data={partner}>
+                <Details.Percentage label="Award offer rate" value={x => x.awardRate} qa="award-rate" fractionDigits={0} />
+                <Details.Percentage label="Cap limit" value={x => x.capLimit} fractionDigits={0} qa="cap-limit" />
               </Details.Details>
             </DualDetails>
           </SectionPanel>
         </Section>
-        <Section qa="current-claim-summary-table-section" title={currentClaimsSectionTitle}>
-          {this.renderClaims(currentClaim ? [currentClaim] : [], "current-claim-summary-table", project.id, true)}
+        <Section qa="current-claims-section" title={currentClaimsSectionTitle}>
+          {this.renderClaims(currentClaim ? [currentClaim] : [], "current-claims-table", project.id, true)}
         </Section>
-        <Section qa="" title="Previous claims">
-          {this.renderClaims(previousClaims, "previous-claims-summary-table", project.id, false)}
+        <Section qa="previous-claims-section" title="Previous claims">
+          {this.renderClaims(previousClaims, "previous-claims-table", project.id, false)}
         </Section>
       </ProjectOverviewPage>
     );
@@ -139,7 +139,7 @@ export const ClaimsDashboard = definition.connect({
 });
 
 export const ClaimsDashboardRoute = definition.route({
-  routeName: "claimDashboard",
+  routeName: "claimsDashboard",
   routePath: "/projects/:projectId/claims/?partnerId",
   getParams: (route) => ({
     projectId: route.params.projectId,

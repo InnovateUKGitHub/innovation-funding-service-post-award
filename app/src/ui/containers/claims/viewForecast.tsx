@@ -136,9 +136,9 @@ export class ViewForecastComponent extends ContainerBase<Params, Data, Callbacks
               bodyRowClass={() => "govuk-body-s"}
             >
               <Table.String header="Month" value={x => x.categoryName} qa="category-name" />
-              {periods.map(p => <Table.Currency key={p} header={intervals[p]} value={x => x.periods[p]} qa="category-period" />)}
-              <Table.Currency header="" value={x => x.total} qa="category-total" />
-              <Table.Currency header="" value={x => x.golCosts} qa="category-gol-costs" />
+              {periods.map((p, i) => <Table.Currency key={p} header={intervals[p]} value={x => x.periods[p]} qa="category-period" isDivider={i === this.props.periodId - 2 || i === this.props.periodId - 3 || i === periods.length - 1} />)}
+              <Table.Currency header="" value={x => x.total} qa="category-total" isDivider={true} />
+              <Table.Currency header="" value={x => x.golCosts} qa="category-gol-costs" isDivider={true} />
               <Table.Percentage header="" value={x => x.difference} qa="category-difference" />
             </Table.Table>
           </ACC.Section>
@@ -166,7 +166,9 @@ export class ViewForecastComponent extends ContainerBase<Params, Data, Callbacks
       <tr key="cHeader2" className="govuk-table__row govuk-body-s">
         <th className="govuk-table__header">Period</th>
         {periods.map((p, i) => <th key={i} className="govuk-table__header" style={{ textAlign: "right" }}>{"P" + p}</th>)}
-        <th className="govuk-table__header" colSpan={3} />
+        <th className="govuk-table__header" />
+        <th className="govuk-table__header" />
+        <th className="govuk-table__header" />
       </tr>
     )];
   }
