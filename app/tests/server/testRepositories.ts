@@ -3,6 +3,7 @@ import * as Repositories from "../../src/server/repositories";
 import { IRepositories } from "../../src/server/features/common/context";
 import {Updatable} from "../../src/server/repositories/salesforceBase";
 import {Stream} from "stream";
+import { FileUpload } from "../../src/types/FileUpload";
 
 class ContactsTestRepository extends TestRepository<Repositories.ISalesforceContact> implements Repositories.IContactsRepository {
     getById(id: string) {
