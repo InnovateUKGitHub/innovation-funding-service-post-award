@@ -24,6 +24,7 @@ export function renderHtml(html: string, preloadedState: any = {}) {
           <!--[if IE 8]>
           <link href="/govuk-frontend-ie8-1.2.0.min.css" rel="stylesheet" />
           <![endif]-->
+          <link href="/govuk-overrides.css" rel="stylesheet" />
 
           <meta property="og:image" content="/assets/images/govuk-opengraph-image.png">
       </head>
