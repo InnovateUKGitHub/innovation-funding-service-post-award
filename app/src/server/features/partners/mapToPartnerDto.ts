@@ -21,7 +21,8 @@ export class MapToPartnerDtoCommand implements IQuery<PartnerDto> {
             totalParticipantCostsPaid: this.item.Acc_TotalParticipantCostsPaid__c,
             percentageParticipantCostsClaimed: this.calcPercentageClaimed(this.item.Acc_TotalParticipantGrant__c, this.item.Acc_TotalParticipantCosts__c),
             awardRate: this.item.Acc_Award_Rate__c,
-            capLimit: this.item.Acc_Cap_Limit__c
+            capLimit: this.item.Acc_Cap_Limit__c,
+            totalFutureForecastsForParticipants: this.item.Acc_TotalFutureForecastsforParticipant__c,
         };
         return Promise.resolve(dto);
     }
