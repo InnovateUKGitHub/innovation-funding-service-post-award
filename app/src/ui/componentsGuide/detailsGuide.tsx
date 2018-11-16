@@ -22,9 +22,9 @@ export const detailsGuide: IGuide = {
                 const ItemDetails = TypedDetails<typeof data>();
                 return (
                     <ItemDetails.Details labelWidth="Narrow" data={data}>
-                        <ItemDetails.String label="Id" value={x => x.id}/>
-                        <ItemDetails.String label="Name" value={x => x.name}/>
-                        <ItemDetails.DateTime label="Started" value={x => x.created}/>
+                        <ItemDetails.String label="Id" qa="id" value={x => x.id}/>
+                        <ItemDetails.String label="Name" qa="name" value={x => x.name}/>
+                        <ItemDetails.DateTime label="Started" qa="started" value={x => x.created}/>
                     </ItemDetails.Details>
                 );
             }
@@ -46,9 +46,9 @@ export const detailsGuide: IGuide = {
                 const ItemDetails = TypedDetails<typeof data>();
                 return (
                     <ItemDetails.Details displayDensity="Compact" labelWidth="Narrow" data={data}>
-                        <ItemDetails.String label="Id" value={x => x.id}/>
-                        <ItemDetails.String label="Name" value={x => x.name}/>
-                        <ItemDetails.DateTime label="Started" value={x => x.created}/>
+                        <ItemDetails.String label="Id" qa="id" value={x => x.id}/>
+                        <ItemDetails.String label="Name" qa="name" value={x => x.name}/>
+                        <ItemDetails.DateTime label="Started" qa="started" value={x => x.created}/>
                     </ItemDetails.Details>
                 );
             }
@@ -61,11 +61,11 @@ export const detailsGuide: IGuide = {
                 return (
                     <DualDetails>
                         <ItemDetails.Details data={data}>
-                            <ItemDetails.String label="Id" value={x => x.id}/>
-                            <ItemDetails.String label="Name" value={x => x.name}/>
+                            <ItemDetails.String label="Id" qa="id" value={x => x.id}/>
+                            <ItemDetails.String label="Name" qa="name" value={x => x.name}/>
                         </ItemDetails.Details>
                         <ItemDetails.Details data={data}>
-                            <ItemDetails.DateTime label="Started" value={x => x.created}/>
+                            <ItemDetails.DateTime label="Started" qa="started" value={x => x.created}/>
                         </ItemDetails.Details>
                     </DualDetails>
                 );`
@@ -76,11 +76,11 @@ export const detailsGuide: IGuide = {
                 return (
                     <DualDetails>
                         <ItemDetails.Details data={data}>
-                            <ItemDetails.String label="Id" value={x => x.id}/>
-                            <ItemDetails.String label="Name" value={x => x.name}/>
+                            <ItemDetails.String label="Id" qa="id" value={x => x.id}/>
+                            <ItemDetails.String label="Name" qa="name" value={x => x.name}/>
                         </ItemDetails.Details>
                         <ItemDetails.Details data={data}>
-                            <ItemDetails.DateTime label="Started" value={x => x.created}/>
+                            <ItemDetails.DateTime label="Started" qa="started" value={x => x.created}/>
                         </ItemDetails.Details>
                     </DualDetails>
                 );
