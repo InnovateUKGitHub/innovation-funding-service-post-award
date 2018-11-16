@@ -1,4 +1,3 @@
-export * from "./claimCostRepository";
 export * from "./claimDetailsRepository";
 export * from "./claimsRepository";
 export * from "./contactsRepository";
