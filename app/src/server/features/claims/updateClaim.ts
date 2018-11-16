@@ -3,6 +3,7 @@ import { ClaimDtoValidator } from "../../../ui/validators/claimDtoValidator";
 import { GetCostCategoriesQuery } from ".";
 import { GetClaimDetailsSummaryForPartnerQuery } from "../claimDetails";
 import { ValidationError } from "../../../shared/validation";
+import { ClaimDto } from "../../../types";
 
 export class UpdateClaimCommand implements ICommand<boolean> {
   constructor(private claimDto: ClaimDto) { }

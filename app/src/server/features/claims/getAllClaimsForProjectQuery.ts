@@ -1,6 +1,7 @@
 import {IContext, IQuery} from "../common/context";
 import mapClaim from "./mapClaim";
 import { numberComparator } from "../../../util/comparator";
+import { ClaimDto } from "../../../types";
 
 export class GetAllClaimsForProjectQuery implements IQuery<ClaimDto[]> {
     constructor(private projectId: string) {

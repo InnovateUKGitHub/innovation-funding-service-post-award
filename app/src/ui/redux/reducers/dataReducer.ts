@@ -2,7 +2,7 @@ import { DataLoadAction } from "../actions/common";
 import { combineReducers } from "redux";
 import { ActionTransitionStart } from "redux-router5";
 import { LoadingStatus } from "../../../shared/pending";
-import { ProjectDto } from "../../../types";
+import { ClaimDto, ProjectDto } from "../../../types";
 
 export interface IDataStore<T> {
   status: LoadingStatus;

@@ -4,6 +4,7 @@ import {GetAllForPartnerQuery, GetClaim} from "../features/claims";
 import {UpdateClaimCommand} from "../features/claims/updateClaim";
 import {ApiError, StatusCode} from "./ApiError";
 import {processDto} from "../../shared/processResponse";
+import { ClaimDto } from "../../types";
 
 export interface IClaimsApi {
   getAllByPartnerId: (params: ApiParams<{partnerId: string}>) => Promise<ClaimDto[]>;
@@ -44,8 +45,7 @@ class Controller extends ControllerBase<ClaimDto> implements IClaimsApi {
     await context.runCommand(command);
 
     const query = new GetClaim(partnerId, periodId);
-    // TODO - linked to getClaim query todo about nulls and exceptions
-    return context.runQuery(query).then(x => x!);
+    return context.runQuery(query);
   }
 }
 

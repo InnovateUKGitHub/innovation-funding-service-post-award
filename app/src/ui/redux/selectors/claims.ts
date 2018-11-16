@@ -3,6 +3,7 @@ import { RootState } from "../reducers";
 import { ClaimDtoValidator } from "../../validators/claimDtoValidator";
 import { getCostCategories } from "./costCategories";
 import { getKey } from "../../../util/key";
+import { ClaimDto } from "../../../types";
 
 export const claimsStore = "claims";
 export const findClaimsByPartner = (partnerId: string) => dataStoreHelper(claimsStore, `partnerId=${partnerId}`);
