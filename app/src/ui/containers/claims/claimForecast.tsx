@@ -1,4 +1,5 @@
 import React from "react";
+import classNames from "classnames";
 import * as ACC from "../../components";
 import * as Actions from "../../redux/actions";
 import * as Selectors from "../../redux/selectors";
@@ -11,6 +12,7 @@ import { PrepareClaimRoute } from "./prepare";
 import { ForecastDetailsDtosValidator } from "../../validators/forecastDetailsDtosValidator";
 import { ClaimDto, ProjectDto } from "../../../types";
 import * as Colour from "../../styles/colours";
+import { ValidationMessage } from "../../components";
 
 interface Params {
   projectId: string;
@@ -156,6 +158,7 @@ export class ClaimForecastComponent extends ContainerBase<Params, Data, Callback
           <ACC.BackLink route={PrepareClaimRoute.getLink({ projectId: this.props.projectId, partnerId: this.props.partnerId, periodId: this.props.periodId })}>Back</ACC.BackLink>
         </ACC.Section>
         <ACC.ValidationSummary validation={data.editor.validator} compressed={false} />
+        {this.renderWarnings(data.editor.validator, parsed)}
         <ACC.Projects.Title pageTitle="Claim" project={data.project} />
         <ACC.Section title={"Update forecasts table for " + data.partner.name} qa="partner-name">
           <Form.Form
@@ -169,7 +172,7 @@ export class ClaimForecastComponent extends ContainerBase<Params, Data, Callback
               headers={this.renderTableHeaders(periods, data.claim)}
               footers={this.renderTableFooters(periods, parsed, data.editor.validator)}
               headerRowClass="govuk-body-s"
-              bodyRowClass={() => "govuk-body-s"}
+              bodyRowClass={x => classNames("govuk-body-s", {"table__row--warning": x.total > x.golCosts})}
             >
               <Table.String header="Month" value={x => x.categoryName} qa="category-name" />
 
@@ -193,6 +196,13 @@ export class ClaimForecastComponent extends ContainerBase<Params, Data, Callback
         </ACC.Section>
       </ACC.Page>
     );
+  }
+
+  renderWarnings(validator: ForecastDetailsDtosValidator, data: TableRow[]) {
+    const categories = data.filter(x => x.total > x.golCosts).map(x => x.categoryName);
+    return validator.showValidationErrors && !validator.isValid && categories.length > 0
+      ? <ValidationMessage messageType="info" message={`The total of forecasts and costs for ${categories.join(", ")} exceeds the grant offer letter costs. The Monitoring Officer may require more information in order to approve the claim.`} />
+      : null;
   }
 
   renderForecastCell(forecastRow: TableRow, period: string, index: Index, data: CombinedData) {
@@ -256,21 +266,15 @@ export class ClaimForecastComponent extends ContainerBase<Params, Data, Callback
     }, 0));
 
     const isValid = validator.isValid || !validator.showValidationErrors;
-    const thStyle = isValid ? {} : { paddingLeft: "1%" };
-    const trStyle = isValid ? {} : {
-      padding: "2% 4% 2% 1%",
-      background: Colour.GOVUK_COLOUR_GREY_4,
-      borderLeft: `5px solid ${Colour.GOVUK_ERROR_COLOUR}`,
-    };
 
     totals.push(costTotal);
     totals.push(golTotal);
 
-    cells.push(<th style={thStyle} key="th" className="govuk-table__cell govuk-!-font-weight-bold">Total</th>);
+    cells.push(<th key="th" className="govuk-table__cell govuk-!-font-weight-bold">Total</th>);
     cells.push(totals.map(this.renderTableFooterCell));
     cells.push(<td key="total_diff" className="govuk-table__cell govuk-table__cell--numeric"><Percentage className="govuk-!-font-weight-bold" value={this.calculateDifference(golTotal, costTotal)} /></td>);
 
-    return [<tr style={trStyle} key="footer1" className="govuk-table__row govuk-body-s">{cells}</tr>];
+    return [<tr key="footer1" className={classNames("govuk-table__row", "govuk-body-s", {"table__row--warning": !isValid})}>{cells}</tr>];
   }
 
   renderTableFooterCell = (total: number, key: number) => (
