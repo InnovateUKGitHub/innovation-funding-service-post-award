@@ -18,6 +18,7 @@ const fields: FieldNames[] = [
 ];
 
 export interface IProfileTotalPeriodRepository {
+  getAllByProjectId(projectId: string): Promise<ISalesforceProfileTotalPeriod[]>;
   getAllByPartnerId(partnerId: string): Promise<ISalesforceProfileTotalPeriod[]>;
   get(partnerId: string, periodId: number): Promise<ISalesforceProfileTotalPeriod>;
 }
@@ -27,6 +28,11 @@ export class ProfileTotalPeriodRepository extends SalesforceBase<ISalesforceProf
 
   constructor(connection: () => Promise<Connection>) {
     super(connection, "Acc_Profile__c", fields);
+  }
+
+  getAllByProjectId(projectId: string): Promise<ISalesforceProfileTotalPeriod[]> {
+    const filter = `Acc_ProjectParticipant__r.Acc_Project__c = '${projectId}' AND RecordType.Name = '${this.recordType}'`;
+    return super.where(filter);
   }
 
   getAllByPartnerId(partnerId: string): Promise<ISalesforceProfileTotalPeriod[]> {
