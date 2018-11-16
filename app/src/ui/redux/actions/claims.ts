@@ -3,6 +3,7 @@ import { ClaimDtoValidator } from "../../validators";
 import { LoadingStatus } from "../../../shared/pending";
 import { AsyncThunk, conditionalLoad, dataLoadAction, DataLoadAction, handleError, SyncThunk, updateEditorAction, UpdateEditorAction } from "./common";
 import { findClaimsByPartner, getClaim, getClaimEditor } from "../selectors";
+import { ClaimDto } from "../../../types";
 
 export function loadClaim(partnerId: string, periodId: number) {
   return conditionalLoad(getClaim(partnerId, periodId), params => ApiClient.claims.get({partnerId, periodId, ...params}));

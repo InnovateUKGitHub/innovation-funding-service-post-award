@@ -6,7 +6,7 @@ import { Pending } from "../../../shared/pending";
 import { ContainerBase, ReduxContainer } from "../containerBase";
 import { Currency, DateRange, Percentage } from "../../components/renderers";
 import { ProjectOverviewPage } from "../../components/projectOverview";
-import { ProjectDto } from "../../../types";
+import { ClaimDto, ProjectDto } from "../../../types";
 
 interface Params {
   projectId: string;
