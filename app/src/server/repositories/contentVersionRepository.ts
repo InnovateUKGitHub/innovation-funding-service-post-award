@@ -14,10 +14,10 @@ export interface ISalesforceContentVersion {
   PathOnClient: string;
   ContentLocation: string;
   VersionData: string;
-  Description: string;
+  Description?: string;
 }
 
-interface DocumentFilter {
+export interface DocumentFilter {
   description: string;
 }
 

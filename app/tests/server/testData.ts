@@ -1,6 +1,6 @@
 import * as Repositories from "../../src/server/repositories";
 import { ITestRepositories } from "./testRepositories";
-import { ClaimStatus } from "../../src/types";
+import { ClaimStatus, DocumentDescription } from "../../src/types";
 
 export class TestData {
     constructor(private repositories: ITestRepositories) {
@@ -268,7 +268,7 @@ export class TestData {
       return item;
     }
 
-    public createContentVersion(entityId: string, title: string, fileType: string, content: string = "", description: string) {
+    public createContentVersion(entityId: string, title: string, fileType: string, content: string = "", description?: DocumentDescription) {
       const id = ""+this.repositories.contentVersions.Items.length + 1;
       const item = {
         Id: id,
