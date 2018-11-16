@@ -1,7 +1,7 @@
 import {Updatable} from "../../src/server/repositories/salesforceBase";
 
 export abstract class TestRepository<T> {
-  Items: SalesforceObject<T>[] = [];
+  Items: T[] = [];
 
   protected getOne(conditional: (item: T) => boolean): Promise<T> {
     return new Promise<T>((resolve, reject) => {
@@ -26,8 +26,8 @@ export abstract class TestRepository<T> {
     return Promise.resolve(this.Items);
   }
 
-  protected delete(ids: string | string[]): Promise<void> {
-    this.Items = this.Items.filter(element => element.Id !== ids);
+  protected deleteItem(item: T|null|undefined): Promise<void> {
+    this.Items = this.Items.filter(element => element !== item);
     return Promise.resolve();
   }
 
@@ -35,7 +35,7 @@ export abstract class TestRepository<T> {
     return Promise.resolve(true);
   }
 
-  protected insertOne(inserted: SalesforceObject<T>) {
+  protected insertOne(inserted: T) {
     this.Items.push(inserted);
     return Promise.resolve(this.Items.length.toString());
   }
