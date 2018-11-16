@@ -1,0 +1,142 @@
+import "jest";
+import { TestContext } from "../../testContextProvider";
+import { GetAllClaimsForProjectQuery } from "../../../../src/server/features/claims";
+import { IQuery } from "../../../../src/server/features/common/context";
+
+describe("getAllClaimsForProjectQuery", () => {
+  it("returns the full claim details", async () => {
+    const context = new TestContext();
+
+    const expectedClaimCost = 10000;
+    const expectedForcastCost = 20000;
+    const expectedPeriodId = 2;
+
+    const project = context.testData.createProject();
+    const partner = context.testData.createPartner(project);
+
+    context.testData.createClaim(partner, expectedPeriodId, x => {
+      x.Acc_ProjectPeriodCost__c = expectedClaimCost;
+      x.Acc_ClaimStatus__c = "Innovate Queried"
+    });
+
+    context.testData.createProfileTotalPeriod(partner, expectedPeriodId, x => {
+      x.Acc_PeriodInitialForecastCost__c = expectedForcastCost;
+    });
+
+    const query = new GetAllClaimsForProjectQuery(project.Id);
+    const result = await context.runQuery(query);
+    const item = result[0];
+
+    expect(item.totalCost).toBe(expectedClaimCost);
+    expect(item.forecastCost).toBe(expectedForcastCost);
+    expect(item.partnerId).toBe(partner.Id);
+    expect(item.status).toBe("Innovate Queried");
+    expect(item.periodId).toBe(expectedPeriodId);
+  });
+
+  it("returns all claims for a partner", async () => {
+    const context = new TestContext();
+
+    const expectedNumberOfCLaims = 3;
+
+    const project = context.testData.createProject();
+    const partner = context.testData.createPartner(project);
+
+    context.testData.range(expectedNumberOfCLaims, i => {
+      context.testData.createClaim(partner, i, x => {
+        x.Acc_ProjectPeriodCost__c = i * 10;
+        x.Acc_ClaimStatus__c = "Innovate Queried"
+      });
+      context.testData.createProfileTotalPeriod(partner, i, x => {
+        x.Acc_PeriodInitialForecastCost__c = i * 100;
+      });
+    });
+
+
+    const query = new GetAllClaimsForProjectQuery(project.Id);
+    const results = await context.runQuery(query);
+
+    expect(results.length).toBe(3);
+    expect(results.map(x => x.periodId)).toEqual([1, 2, 3]);
+    expect(results.map(x => x.partnerId)).toEqual([partner.Id, partner.Id, partner.Id]);
+    expect(results.map(x => x.totalCost)).toEqual([10, 20, 30]);
+    expect(results.map(x => x.forecastCost)).toEqual([100, 200, 300]);
+
+  });
+
+  it("returns all claims for all partners", async () => {
+    const context = new TestContext();
+
+    const project = context.testData.createProject();
+    const partner1 = context.testData.createPartner(project);
+    const partner2 = context.testData.createPartner(project);
+
+    context.testData.createClaim(partner1, 1, x => {
+      x.Acc_ProjectPeriodCost__c = 10;
+      x.Acc_ClaimStatus__c = "Innovate Queried"
+    });
+
+    context.testData.createClaim(partner2, 1, x => {
+      x.Acc_ProjectPeriodCost__c = 20;
+      x.Acc_ClaimStatus__c = "Approved"
+    });
+
+    context.testData.createProfileTotalPeriod(partner1, 1, x => {
+      x.Acc_PeriodInitialForecastCost__c = 100;
+    });
+
+
+    context.testData.createProfileTotalPeriod(partner2, 1, x => {
+      x.Acc_PeriodInitialForecastCost__c = 200;
+    });
+
+    const query = new GetAllClaimsForProjectQuery(project.Id);
+    const results = await context.runQuery(query);
+
+    expect(results.length).toBe(2);
+    expect(results.map(x => x.periodId)).toEqual([1, 1]);
+    expect(results.map(x => x.partnerId)).toEqual([partner1.Id, partner2.Id]);
+    expect(results.map(x => x.totalCost)).toEqual([10, 20]);
+    expect(results.map(x => x.forecastCost)).toEqual([100, 200]);
+
+  });
+
+  it("returns only claims for project", async () => {
+    const context = new TestContext();
+
+    const project1 = context.testData.createProject();
+    const project2 = context.testData.createProject();
+    
+    const partner1 = context.testData.createPartner(project1);
+    const partner2 = context.testData.createPartner(project2);
+
+    context.testData.createClaim(partner1, 1, x => {
+      x.Acc_ProjectPeriodCost__c = 10;
+      x.Acc_ClaimStatus__c = "Innovate Queried"
+    });
+
+    context.testData.createClaim(partner2, 1, x => {
+      x.Acc_ProjectPeriodCost__c = 20;
+      x.Acc_ClaimStatus__c = "Approved"
+    });
+
+    context.testData.createProfileTotalPeriod(partner1, 1, x => {
+      x.Acc_PeriodInitialForecastCost__c = 100;
+    });
+
+
+    context.testData.createProfileTotalPeriod(partner2, 1, x => {
+      x.Acc_PeriodInitialForecastCost__c = 200;
+    });
+
+    const query = new GetAllClaimsForProjectQuery(project2.Id);
+    const results = await context.runQuery(query);
+
+    expect(results.length).toBe(1);
+    expect(results.map(x => x.periodId)).toEqual([1]);
+    expect(results.map(x => x.partnerId)).toEqual([partner2.Id]);
+    expect(results.map(x => x.totalCost)).toEqual([20]);
+    expect(results.map(x => x.forecastCost)).toEqual([200]);
+
+  });
+});

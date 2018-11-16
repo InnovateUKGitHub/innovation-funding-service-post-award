@@ -69,7 +69,6 @@ export class Context implements IContext {
     claims: new Repositories.ClaimRepository(() => this.getSalesforceConnection()),
     claimDetails: new Repositories.ClaimDetailsRepository(() => this.getSalesforceConnection()),
     claimTotalCostCategory: new Repositories.ClaimTotalCostCategoryRepository(() => this.getSalesforceConnection()),
-    claimCosts: new Repositories.ClaimCostRepository(() => this.getSalesforceConnection()),
     contacts: new Repositories.ContactsRepository(() => this.getSalesforceConnection()),
     costCategories: new Repositories.CostCategoryRepository(() => this.getSalesforceConnection()),
     contentDocument: new Repositories.ContentDocumentRepository(() => this.getSalesforceConnection()),
