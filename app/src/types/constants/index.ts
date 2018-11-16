@@ -1,2 +1,2 @@
 export * from "./claimStatus";
-export * from "./documentType";
+export * from "./documentDescription";

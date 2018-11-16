@@ -5,6 +5,7 @@ import { ApiError, StatusCode } from "../../apis/ApiError";
 import mapClaim from "../claims/mapClaim";
 import { DeleteDocumentCommand } from "./deleteDocument";
 import { ClaimDto, DocumentDescription } from "../../../types";
+import { FileUpload } from "../../../types/FileUpload";
 
 const validateIarUpload = async (context: IContext, claimKey: ClaimKey, claim: ClaimDto) => {
   if (!claim.isIarRequired || !claim.statusAllowsIar) {

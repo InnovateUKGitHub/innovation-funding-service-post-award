@@ -1,6 +1,6 @@
 import { ClaimStatus } from "../constants";
 
-interface ClaimDto {
+export interface ClaimDto {
   id: string;
   partnerId: string;
   lastModifiedDate: Date;

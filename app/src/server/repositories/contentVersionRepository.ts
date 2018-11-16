@@ -1,6 +1,7 @@
 import SalesforceBase from "./salesforceBase";
 import { Stream } from "stream";
 import {Connection} from "jsforce";
+import { FileUpload } from "../../types/FileUpload";
 
 export interface ISalesforceContentVersion {
   Id: string;
