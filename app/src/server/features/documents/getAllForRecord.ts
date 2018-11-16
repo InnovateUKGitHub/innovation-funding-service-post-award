@@ -16,7 +16,8 @@ export class GetDocumentsLinkedToRecordQuery implements IQuery<DocumentSummaryDt
     return documents.map<DocumentSummaryDto>(doc => ({
       link: `/api/documents/${doc.Id}/content`,
       fileName: doc.FileExtension ? `${doc.Title}.${doc.FileExtension}` : doc.Title,
-      id: doc.ContentDocumentId
+      id: doc.ContentDocumentId,
+      description: doc.Description
     }));
   }
 }

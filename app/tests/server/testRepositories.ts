@@ -4,6 +4,7 @@ import { IRepositories } from "../../src/server/features/common/context";
 import {Updatable} from "../../src/server/repositories/salesforceBase";
 import {Stream} from "stream";
 import { FileUpload } from "../../src/types/FileUpload";
+import { DocumentFilter } from "../../src/server/repositories";
 
 class ContactsTestRepository extends TestRepository<Repositories.ISalesforceContact> implements Repositories.IContactsRepository {
     getById(id: string) {
@@ -106,9 +107,12 @@ class ContentDocumentLinkTestRepository extends TestRepository<Repositories.ISal
 }
 
 class ContentVersionTestRepository extends TestRepository<Repositories.ISalesforceContentVersion> implements Repositories.IContentVersionRepository {
-  getDocuments(contentDocumentIds: string[]): Promise<Repositories.ISalesforceContentVersion[]> {
-    return super.getWhere(x => contentDocumentIds.indexOf(x.ContentDocumentId) !== -1);
+  getDocuments(contentDocumentIds: string[], filter: DocumentFilter): Promise<Repositories.ISalesforceContentVersion[]> {
+    return super.getWhere(x => (
+      contentDocumentIds.indexOf(x.ContentDocumentId) !== -1 && (!filter || x.Description === filter.description)
+    ));
   }
+
   getDocument(documentId: string): Promise<Repositories.ISalesforceContentVersion> {
     return super.getOne(x => documentId === x.Id);
   }
