@@ -38,6 +38,7 @@ const fields = [
 ];
 
 export interface IClaimRepository {
+  getAllByProjectId(projectId: string): Promise<ISalesforceClaim[]>;
   getAllByPartnerId(partnerId: string): Promise<ISalesforceClaim[]>;
   get(partnerId: string, periodId: number): Promise<ISalesforceClaim>;
   update(updatedClaim: Partial<ISalesforceClaim> & { Id: string }): Promise<boolean>;
@@ -47,6 +48,11 @@ export class ClaimRepository extends SalesforceBase<ISalesforceClaim> implements
   private recordType = "Total Project Period";
   constructor(connection: () => Promise<Connection>) {
     super(connection, "Acc_Claims__c", fields);
+  }
+
+  public async getAllByProjectId(projectId: string): Promise<ISalesforceClaim[]> {
+    const filter = `Acc_ProjectParticipant__r.Acc_Project__c = '${projectId}' AND RecordType.Name = '${this.recordType}'`;
+    return await super.where(filter);
   }
 
   public async getAllByPartnerId(partnerId: string): Promise<ISalesforceClaim[]> {

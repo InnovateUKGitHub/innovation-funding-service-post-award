@@ -23,7 +23,7 @@ class Component extends ContainerBaseWithState<{}, Props, {}, State> {
     const CurrentUserForm = TypedForm<typeof formData>();
     return (
       <div>
-        <Title title="Home page" />
+        <Title title="Not the Home page" />
         <div className="govuk-grid-row">
           <div className="govuk-grid-column-full">
             <h2>Current user</h2>
