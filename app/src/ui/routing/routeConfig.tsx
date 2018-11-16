@@ -3,6 +3,7 @@ import * as Containers from "../containers";
 export type RouteKeys = keyof typeof routeConfig;
 
 export const routeConfig = {
+  allClaimsDashboard: Containers.AllClaimsDashboardRoute,
   claimsDashboard: Containers.ClaimsDashboardRoute,
   claimDetails: Containers.ClaimsDetailsRoute,
   claimDetailDocuments: Containers.ClaimDetailDocumentsRoute,
