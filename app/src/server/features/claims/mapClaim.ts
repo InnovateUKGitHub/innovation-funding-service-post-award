@@ -10,9 +10,10 @@ const STATUS_ALLOWING_IAR_UPLOAD = [
   ClaimStatus.NEW,
   ClaimStatus.DRAFT,
   ClaimStatus.MO_QUERIED,
-  ClaimStatus.INNOVATE_QUERIED
-  // TODO Reviewing forecasts
-  // TODO Awaiting IAR
+  ClaimStatus.INNOVATE_QUERIED,
+  // TODO validate these two
+  ClaimStatus.REVIEWING_FORECASTS,
+  ClaimStatus.AWAITING_IAR
 ];
 
 export default (context: IContext) => (claim: ISalesforceClaim, forecast?: ISalesforceProfileTotalPeriod): ClaimDto => ({
