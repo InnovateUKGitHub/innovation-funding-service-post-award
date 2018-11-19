@@ -23,6 +23,7 @@ interface InternalColumnProps<T> {
   qa: string;
   width?: number;
   validation?: Results<{}>;
+  isDivider?: boolean;
 }
 
 interface ExternalColumnProps<T, TResult> {
@@ -32,6 +33,7 @@ interface ExternalColumnProps<T, TResult> {
   footer?: React.ReactNode;
   qa: string;
   width?: number;
+  isDivider?: boolean;
 }
 
 type TableChild<T> = React.ReactElement<ExternalColumnProps<T, {}>>;
@@ -93,6 +95,10 @@ export class TableColumn<T> extends React.Component<InternalColumnProps<T>> {
     const style: React.CSSProperties = {};
     if (this.props.width) {
       style.width = this.props.width + "%";
+    }
+
+    if(this.props.isDivider) {
+      style.borderRight = "1px solid " + colour.GOVUK_BORDER_COLOUR;
     }
 
     return <col key={column} data-qa={`col-${this.props.qa || column.toString()}`} style={style} />;

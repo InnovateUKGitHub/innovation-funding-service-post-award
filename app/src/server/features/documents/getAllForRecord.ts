@@ -1,7 +1,7 @@
 import {IContext, IQuery} from "../common/context";
 
 export class GetDocumentsLinkedToRecordQuery implements IQuery<DocumentSummaryDto[]> {
-  constructor(public recordId: string) {
+  constructor(public recordId: string, public filter?: DocumentFilter) {
   }
 
   public async Run(context: IContext) {
@@ -11,7 +11,7 @@ export class GetDocumentsLinkedToRecordQuery implements IQuery<DocumentSummaryDt
       return [];
     }
 
-    const documents = await context.repositories.contentVersions.getDocuments(linkedDocs.map(x => x.ContentDocumentId));
+    const documents = await context.repositories.contentVersions.getDocuments(linkedDocs.map(x => x.ContentDocumentId), this.filter);
     return documents.map<DocumentSummaryDto>(doc => ({
       link: `/api/documents/${doc.Id}/content`,
       fileName: doc.FileExtension ? `${doc.Title}.${doc.FileExtension}` : doc.Title,

@@ -4,6 +4,7 @@ import { GetClaimDetailDocumentsQuery } from "../features/documents/getClaimDeta
 import { GetDocumentQuery } from "../features/documents/getDocument";
 import { UploadClaimDetailDocumentCommand } from "../features/documents/uploadClaimDetailDocument";
 import { DeleteDocumentCommand } from "../features/documents/deleteDocument";
+import { FileUpload } from "../../types/FileUpload";
 
 export interface IDocumentsApi {
   getClaimDetailDocuments: (params: ApiParams<{claimDetailKey: ClaimDetailKey}>) => Promise<DocumentSummaryDto[]>;

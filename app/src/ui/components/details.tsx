@@ -18,6 +18,7 @@ interface InternalFieldProps<T> {
 
 interface ExternalFieldProps<T, TValue> {
     label: React.ReactNode;
+    qa: string;
     value: (item: T) => TValue|null;
 }
 
@@ -49,7 +50,7 @@ const DetailsComponent = <T extends {}>( props: DetailsProps & {data: T} & {chil
     return (
         <React.Fragment>
             {
-                rows.map((x, i) => <div data-qa={`details-row-${i}-${qa}`} className={rowClasses} key={`details-row-${i}`}>{x}</div>)
+                rows.map((x, i) => <div data-qa={`${props.qa}-${x.props.qa}`} className={rowClasses} key={`details-row-${i}`}>{x}</div>)
             }
         </React.Fragment>
     );
