@@ -5,10 +5,12 @@ import { GetDocumentQuery } from "../features/documents/getDocument";
 import { UploadClaimDetailDocumentCommand } from "../features/documents/uploadClaimDetailDocument";
 import { DeleteDocumentCommand } from "../features/documents/deleteDocument";
 import { FileUpload } from "../../types/FileUpload";
+import { UploadClaimDocumentCommand } from "../features/documents/uploadClaimDocument";
 
 export interface IDocumentsApi {
   getClaimDetailDocuments: (params: ApiParams<{claimDetailKey: ClaimDetailKey}>) => Promise<DocumentSummaryDto[]>;
   uploadClaimDetailDocument: (params: ApiParams<{claimDetailKey: ClaimDetailKey, file: FileUpload | File}>) => Promise<{ id: string }>;
+  uploadClaimDocument: (params: ApiParams<{claimKey: ClaimKey, file: FileUpload | File, description?: string}>) => Promise<{ id: string }>;
   deleteDocument: (params: ApiParams<{ documentId: string }>) => Promise<void>;
 }
 
@@ -34,6 +36,12 @@ class Controller extends ControllerBase<DocumentSummaryDto> implements IDocument
       p => this.uploadClaimDetailDocument(p)
     );
 
+    this.postAttachment(
+      "/claims/:partnerId/:periodId",
+      (p, q, b, f) => ({ claimKey: { partnerId: p.partnerId, periodId: p.periodId, file: f }, file: { ...f, ...b }}),
+      p => this.uploadClaimDocument(p)
+    );
+
     this.deleteItem(
       "/:documentId",
       (p) => ({ documentId: p.documentId }),
@@ -56,6 +64,13 @@ class Controller extends ControllerBase<DocumentSummaryDto> implements IDocument
   public async uploadClaimDetailDocument(params: ApiParams<{claimDetailKey: ClaimDetailKey, file: FileUpload | File}>) {
     const { claimDetailKey, file } = params;
     const query = new UploadClaimDetailDocumentCommand(claimDetailKey, file as FileUpload);
+    const insertedID = await contextProvider.start(params).runQuery(query);
+    return {id: insertedID};
+  }
+
+  public async uploadClaimDocument(params: ApiParams<{claimKey: ClaimKey, file: FileUpload | File}>) {
+    const { claimKey, file } = params;
+    const query = new UploadClaimDocumentCommand(claimKey, file as FileUpload);
     const insertedID = await contextProvider.start(params).runQuery(query);
     return {id: insertedID};
   }
