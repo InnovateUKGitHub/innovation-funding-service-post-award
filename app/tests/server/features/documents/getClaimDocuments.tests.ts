@@ -29,10 +29,10 @@ describe("GetClaimDocumentQuery", () => {
   it("should return only the relevant documents when there is a filter", async () => {
     const context = new TestContext();
 
-    const contentVersion1 = context.testData.createContentVersion("12345", "cat", "jpg");
+    const contentVersion1 = context.testData.createContentVersion("12345", "cat1", "jpg");
     context.testData.createContentDocumentLink(contentVersion1.ContentDocumentId, "12345");
 
-    const contentVersion2 = context.testData.createContentVersion("12345", "cat", "jpg", "hello world", DocumentDescription.IAR);
+    const contentVersion2 = context.testData.createContentVersion("12345", "cat2", "jpg", "hello world", DocumentDescription.IAR);
     context.testData.createContentDocumentLink(contentVersion2.ContentDocumentId, "12345");
 
     const partner = context.testData.createPartner();
@@ -44,8 +44,7 @@ describe("GetClaimDocumentQuery", () => {
       partnerId: claim.Acc_ProjectParticipant__c,
       periodId: claim.Acc_ProjectPeriodNumber__c
     };
-
-    const query = new GetClaimDocumentsQuery(claimKey, DocumentDescription.IAR);
+    const query = new GetClaimDocumentsQuery(claimKey, { description: DocumentDescription.IAR });
     const docs = await context.runCommand(query);
     expect(docs).toHaveLength(1);
     expect(docs[0].description).toBe(DocumentDescription.IAR);

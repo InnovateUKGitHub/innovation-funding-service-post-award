@@ -268,7 +268,7 @@ export class TestData {
     return item;
   }
 
-  public createContentVersion(entityId: string, title: string, fileType: string, content: string = "", description: string) {
+  public createContentVersion(entityId: string, title: string, fileType: string, content: string = "", description?: string) {
     const id = "" + this.repositories.contentVersions.Items.length + 1;
     const item = {
       Id: id,
