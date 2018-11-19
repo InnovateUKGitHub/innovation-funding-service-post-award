@@ -14,7 +14,7 @@ export interface ISalesforceContentVersion {
   PathOnClient: string;
   ContentLocation: string;
   VersionData: string;
-  Description: string;
+  Description?: string;
 }
 
 export interface IContentVersionRepository {
