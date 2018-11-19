@@ -51,7 +51,7 @@ export class ClaimRepository extends SalesforceBase<ISalesforceClaim> implements
   }
 
   public async getAllByProjectId(projectId: string): Promise<ISalesforceClaim[]> {
-    const filter = `Acc_ProjectParticipant__r.Acc_Project__c = '${projectId}' AND RecordType.Name = '${this.recordType}'`;
+    const filter = `Acc_ProjectParticipant__r.Acc_ProjectId__c = '${projectId}' AND RecordType.Name = '${this.recordType}'`;
     return await super.where(filter);
   }
 
