@@ -57,9 +57,9 @@ class ProjectDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
 
                 <ACC.Section title="Project information">
                     <DetailsSection.Details labelWidth="Narrow" data={project}>
-                        <DetailsSection.Date label="Project start date" value={x => x.startDate} />
-                        <DetailsSection.Date label="Project end date" value={x => x.endDate} />
-                        <DetailsSection.MulilineString label="Project summary" value={x => x.summary} />
+                        <DetailsSection.Date label="Project start date" qa="start-date" value={x => x.startDate} />
+                        <DetailsSection.Date label="Project end date" qa="end-date" value={x => x.endDate} />
+                        <DetailsSection.MulilineString label="Project summary" qa="summary" value={x => x.summary} />
                     </DetailsSection.Details>
                 </ACC.Section>
 

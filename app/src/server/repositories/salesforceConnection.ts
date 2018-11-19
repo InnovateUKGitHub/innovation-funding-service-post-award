@@ -73,7 +73,7 @@ const getToken = (username: string, clientId: string, connectionUrl: string): Pr
         });
       }
     })
-    .then<ITokenInfo>((token: ISalesforceTokenPayload) => ({ url: token.sfdc_community_url, accessToken: token.access_token }));
+    .then<ITokenInfo>((token: ISalesforceTokenPayload) => ({ url: token.instance_url, accessToken: token.access_token }));
 };
 
 export const salesforceConnectionWithToken = async ({ username, clientId, connectionUrl }: ISalesforceConnectionDetails): Promise<jsforce.Connection> => {
@@ -90,7 +90,7 @@ interface ISalesforceTokenPayload {
   sfdc_community_url: string;
   sfdc_community_id: string;
   scope: string;
-  intanceUrl: string;
+  instance_url: string;
   id: string;
   token_type: "Bearer";
 }

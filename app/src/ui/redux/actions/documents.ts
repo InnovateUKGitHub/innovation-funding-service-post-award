@@ -1,6 +1,6 @@
 import { ApiClient } from "../../apiClient";
 import { AsyncThunk, conditionalLoad, dataLoadAction, DataLoadAction, handleError, ResetEditorAction, resetEditorAction, SyncThunk, updateEditorAction, UpdateEditorAction } from "./common";
-import {getClaimDetailDocumentEditor, getClaimDetailDocuments, getIarDocuments} from "../selectors/documents";
+import {getClaimDetailDocumentEditor, getClaimDetailDocuments, getClaimDocuments} from "../selectors/documents";
 import { LoadingStatus } from "../../../shared/pending";
 import { Results } from "../../validation/results";
 import {DocumentUploadValidator} from "../../validators/documentUploadValidator";
@@ -14,8 +14,8 @@ export function loadClaimDetailDocuments(partnerId: string, periodId: number, co
 
 export function loadIarDocuments(partnerId: string, periodId: number) {
   return conditionalLoad(
-    getIarDocuments(partnerId, periodId),
-    params => ApiClient.documents.getIarDocuments({ partnerId, periodId, ...params})
+    getClaimDocuments(partnerId, periodId),
+    params => ApiClient.documents.getClaimDocuments({ partnerId, periodId, ...params})
   );
 }
 

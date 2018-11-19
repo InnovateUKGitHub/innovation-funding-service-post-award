@@ -25,6 +25,12 @@ class Controller extends ControllerBase<DocumentSummaryDto> implements IDocument
       p => this.getClaimDetailDocuments(p)
     );
 
+    this.getItems(
+      "/documents/claims/:partnerId/:periodId/",
+      (p, q) => ({ partnerId: p.partnerId, periodId: p.periodId, description: q.description }),
+      p => this.getClaimDocuments(p)
+    );
+
     this.getAttachment(
       "/:documentId/content",
       (p) => ({ documentId: p.documentId }),
@@ -42,17 +48,11 @@ class Controller extends ControllerBase<DocumentSummaryDto> implements IDocument
       (p) => ({ documentId: p.documentId }),
       p => this.deleteDocument(p)
     );
-
-    this.getItems(
-      "/documents/claims/:partnerId/:periodId/",
-      (p, q) => ({ partnerId: p.partnerId, periodId: p.periodId, description: q.description }),
-      p => this.getClaimDocuments(p)
-    );
   }
 
   public async getClaimDocuments(params: ApiParams<{partnerId: string, periodId: number}>) {
     const { partnerId, periodId } = params;
-    const query = new GetClaimDocumentsQuery(partnerId, periodId, DocumentDescription.IAR);
+    const query = new GetClaimDocumentsQuery({partnerId, periodId}, {description: DocumentDescription.IAR});
     return await contextProvider.start(params).runQuery(query);
   }
 
