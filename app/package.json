@@ -19,7 +19,7 @@
     "lint:fix": "tslint --fix --project tsconfig.json src/**/*.ts{,x}",
     "lint:report": "node tslint-report.js"
   },
-  "author": "",
+  "author": "BJSS Ltd",
   "license": "ISC",
   "dependencies": {
     "body-passer": "^1.0.0",
