@@ -1,5 +1,6 @@
 import {IContext, IQuery} from "../common/context";
 import {GetDocumentsLinkedToRecordQuery} from "./getAllForRecord";
+
 export class GetClaimDocumentsQuery implements IQuery<DocumentSummaryDto[]> {
   constructor(private claimKey: ClaimKey, public filter?: DocumentFilter) {
   }
