@@ -1,11 +1,13 @@
-import SalesforceBase, {Updatable} from "./salesforceBase";
+import SalesforceBase, { Updatable } from "./salesforceBase";
 import { Connection } from "jsforce";
+import { ApiError, StatusCode } from "../apis/ApiError";
+import { ClaimStatus } from "../../types";
 
 export interface ISalesforceClaim {
   Id: string;
   Acc_ProjectParticipant__c: string;
   LastModifiedDate: string;
-  Acc_ClaimStatus__c: "New" | "Draft" | "Submitted" | "MO Queried" | "Awaiting IUK Approval" | "Innovate Queried" | "Approved" | "Paid";
+  Acc_ClaimStatus__c: ClaimStatus;
   Acc_ProjectPeriodStartDate__c: string;
   Acc_ProjectPeriodEndDate__c: string;
   Acc_ProjectPeriodNumber__c: number;
@@ -17,6 +19,7 @@ export interface ISalesforceClaim {
   Acc_ApprovedDate__c: string | null;
   Acc_PaidDate__c: string | null;
   Acc_LineItemDescription__c: string | null;
+  Acc_IARRequired__c: boolean;
 }
 
 const fields = [
@@ -30,13 +33,14 @@ const fields = [
   "Acc_ProjectPeriodCost__c",
   "Acc_ApprovedDate__c",
   "Acc_PaidDate__c",
-  "Acc_LineItemDescription__c"
+  "Acc_LineItemDescription__c",
+  "Acc_IARRequired__c"
 ];
 
 export interface IClaimRepository {
   getAllByProjectId(projectId: string): Promise<ISalesforceClaim[]>;
   getAllByPartnerId(partnerId: string): Promise<ISalesforceClaim[]>;
-  get(partnerId: string, periodId: number): Promise<ISalesforceClaim | null>;
+  get(partnerId: string, periodId: number): Promise<ISalesforceClaim>;
   update(updatedClaim: Partial<ISalesforceClaim> & { Id: string }): Promise<boolean>;
 }
 
@@ -47,7 +51,7 @@ export class ClaimRepository extends SalesforceBase<ISalesforceClaim> implements
   }
 
   public async getAllByProjectId(projectId: string): Promise<ISalesforceClaim[]> {
-    const filter = `Acc_ProjectParticipant__r.Acc_Project__c = '${projectId}' AND RecordType.Name = '${this.recordType}'`;
+    const filter = `Acc_ProjectParticipant__r.Acc_ProjectId__c = '${projectId}' AND RecordType.Name = '${this.recordType}'`;
     return await super.where(filter);
   }
 
@@ -58,7 +62,11 @@ export class ClaimRepository extends SalesforceBase<ISalesforceClaim> implements
 
   public async get(partnerId: string, periodId: number) {
     const filter = `Acc_ProjectParticipant__c = '${partnerId}' AND Acc_ProjectPeriodNumber__c = ${periodId} AND RecordType.Name = '${this.recordType}'`;
-    return await super.where(filter).then(x => x[0]);
+    const claim = await super.where(filter);
+    if (claim.length === 0) {
+      throw new ApiError(StatusCode.BAD_REQUEST, "Claim does not exist");
+    }
+    return claim[0];
   }
 
   public update(updatedClaim: Updatable<ISalesforceClaim>) {

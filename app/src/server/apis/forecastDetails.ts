@@ -4,6 +4,7 @@ import {GetAllForecastsForPartnerQuery, GetForecastDetail, UpdateForecastDetails
 import { GetClaim } from "../features/claims";
 import { processDto } from "../../shared/processResponse";
 import { UpdateClaimCommand } from "../features/claims/updateClaim";
+import { ClaimStatus } from "../../types";
 
 export interface IForecastDetailsApi {
   getAllByPartnerId: (params: ApiParams<{partnerId: string, periodId: number }>) => Promise<ForecastDetailsDTO[]>;
@@ -52,8 +53,8 @@ class Controller extends ControllerBase<ForecastDetailsDTO> implements IForecast
 
     if(params.submit) {
       const query    = new GetClaim(params.partnerId, params.periodId);
-      const claim    = await context.runQuery(query).then(x => x!);
-      claim.status   = "Submitted";
+      const claim    = await context.runQuery(query);
+      claim.status   = ClaimStatus.SUBMITTED;
       const claimCmd = new UpdateClaimCommand(claim);
       await context.runCommand(claimCmd);
     }

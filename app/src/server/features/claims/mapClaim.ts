@@ -1,9 +1,20 @@
-import {ISalesforceClaim} from "../../repositories/claimsRepository";
-import {IContext} from "../common/context";
+import { ISalesforceClaim } from "../../repositories/claimsRepository";
+import { IContext } from "../common/context";
 import { ISalesforceProfileTotalPeriod } from "../../repositories";
+import { ClaimDto, ClaimStatus } from "../../../types";
 
 const SALESFORCE_DATE_FORMAT = "yyyy-MM-dd";
 const SALESFORCE_DATE_TIME_FORMAT = "yyyy-MM-ddTHH:mm:ss.SSSZZZ";
+
+const STATUS_ALLOWING_IAR_UPLOAD = [
+  ClaimStatus.NEW,
+  ClaimStatus.DRAFT,
+  ClaimStatus.MO_QUERIED,
+  ClaimStatus.INNOVATE_QUERIED,
+  // TODO validate these two
+  ClaimStatus.REVIEWING_FORECASTS,
+  ClaimStatus.AWAITING_IAR
+];
 
 export default (context: IContext) => (claim: ISalesforceClaim, forecast?: ISalesforceProfileTotalPeriod): ClaimDto => ({
   id: claim.Id,
@@ -19,4 +30,6 @@ export default (context: IContext) => (claim: ISalesforceClaim, forecast?: ISale
   approvedDate: claim.Acc_ApprovedDate__c === null ? null : context.clock.parse(claim.Acc_ApprovedDate__c, SALESFORCE_DATE_FORMAT),
   paidDate: claim.Acc_PaidDate__c === null ? null : context.clock.parse(claim.Acc_PaidDate__c, SALESFORCE_DATE_FORMAT),
   comments: claim.Acc_LineItemDescription__c,
+  isIarRequired: claim.Acc_IARRequired__c,
+  statusAllowsIar: STATUS_ALLOWING_IAR_UPLOAD.indexOf(claim.Acc_ClaimStatus__c) >= 0
 });

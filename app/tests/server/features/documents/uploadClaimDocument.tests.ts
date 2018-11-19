@@ -1,0 +1,75 @@
+import { TestContext } from "../../testContextProvider";
+import { UploadClaimDocumentCommand } from "../../../../src/server/features/documents/uploadClaimDocument";
+import { ClaimStatus, DocumentDescription } from "../../../../src/types/constants";
+import { ApiError } from "../../../../src/server/apis/ApiError";
+
+const validStatus = [ ClaimStatus.NEW, ClaimStatus.DRAFT, ClaimStatus.MO_QUERIED, ClaimStatus.INNOVATE_QUERIED, ClaimStatus.REVIEWING_FORECASTS, ClaimStatus.AWAITING_IAR ];
+const invalidStatus = Object.keys(ClaimStatus).filter((status: string) => validStatus.indexOf(ClaimStatus[status]) < 0).map(status => ClaimStatus[status]);
+const file = {
+  fileName: "fileName.txt",
+  content: "Some content",
+  description: DocumentDescription.IAR
+};
+
+describe("UploadClaimDocumentCommand", () => {
+  it("should not upload a claim document with an IAR description when an IAR is not required", async () => {
+    const context = new TestContext();
+    const partner = context.testData.createPartner();
+    const claim = context.testData.createClaim(partner, 1, (item) => {
+      item.Acc_IARRequired__c = false;
+      item.Acc_ClaimStatus__c = ClaimStatus.DRAFT;
+    });
+
+    const claimKey = {
+      partnerId: claim.Acc_ProjectParticipant__c,
+      periodId: claim.Acc_ProjectPeriodNumber__c
+    };
+
+    const command = new UploadClaimDocumentCommand(claimKey, file);
+    await expect(context.runCommand(command)).rejects.toThrow(ApiError);
+  });
+  describe("valid status", async () => {
+    validStatus.forEach(status => {
+      it("should upload a claim document with an IAR description when an IAR is required", async () => {
+        const context = new TestContext();
+        const partner = context.testData.createPartner();
+        const claim = context.testData.createClaim(partner, 1, (item) => {
+          item.Acc_IARRequired__c = true;
+          item.Acc_ClaimStatus__c = status;
+        });
+        const claimKey = {
+          partnerId: claim.Acc_ProjectParticipant__c,
+          periodId: claim.Acc_ProjectPeriodNumber__c
+        };
+
+        const command = new UploadClaimDocumentCommand(claimKey, file);
+        await context.runCommand(command);
+
+        expect(context.repositories.contentVersions.Items[0].VersionData).toEqual(file.content);
+        expect(context.repositories.contentVersions.Items[0].PathOnClient).toEqual(file.fileName);
+        expect(context.repositories.contentVersions.Items[0].Description).toEqual(file.description);
+        expect(context.repositories.contentDocumentLinks.Items[0].LinkedEntityId).toEqual(claim.Id);
+      });
+    });
+  });
+  describe("invalid status", async () => {
+    invalidStatus.forEach(status => {
+      it("should not upload a claim document with an IAR description when the claim is not in a valid status", async () => {
+        const context = new TestContext();
+        const partner = context.testData.createPartner();
+        const claim = context.testData.createClaim(partner, 1, (item) => {
+          item.Acc_IARRequired__c = true;
+          item.Acc_ClaimStatus__c = status;
+        });
+
+        const claimKey = {
+          partnerId: claim.Acc_ProjectParticipant__c,
+          periodId: claim.Acc_ProjectPeriodNumber__c
+        };
+
+        const command = new UploadClaimDocumentCommand(claimKey, file);
+        await expect(context.runCommand(command)).rejects.toThrow(ApiError);
+      });
+    });
+  });
+});

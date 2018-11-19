@@ -4,8 +4,12 @@ import { GetClaimDetailDocumentsQuery } from "../features/documents/getClaimDeta
 import { GetDocumentQuery } from "../features/documents/getDocument";
 import { UploadClaimDetailDocumentCommand } from "../features/documents/uploadClaimDetailDocument";
 import { DeleteDocumentCommand } from "../features/documents/deleteDocument";
+import { FileUpload } from "../../types/FileUpload";
+import {GetClaimDocumentsQuery} from "../features/documents/getClaimDocuments";
+import {DocumentDescription} from "../../types/constants";
 
 export interface IDocumentsApi {
+  getClaimDocuments: (params: ApiParams<{partnerId: string, periodId: number, description: DocumentDescription}>) => Promise<DocumentSummaryDto[]>;
   getClaimDetailDocuments: (params: ApiParams<{claimDetailKey: ClaimDetailKey}>) => Promise<DocumentSummaryDto[]>;
   uploadClaimDetailDocument: (params: ApiParams<{claimDetailKey: ClaimDetailKey, file: FileUpload | File}>) => Promise<{ id: string }>;
   deleteDocument: (params: ApiParams<{ documentId: string }>) => Promise<void>;
@@ -17,8 +21,14 @@ class Controller extends ControllerBase<DocumentSummaryDto> implements IDocument
 
     this.getItems(
       "/claim-details/:partnerId/:periodId/:costCategoryId",
-      (p) => ({claimDetailKey: { partnerId: p.partnerId, periodId: p.periodId, costCategoryId: p.costCategoryId }}),
+      (p) => ({claimDetailKey: { partnerId: p.partnerId, periodId: parseInt(p.periodId, 10), costCategoryId: p.costCategoryId }}),
       p => this.getClaimDetailDocuments(p)
+    );
+
+    this.getItems(
+      "/documents/claims/:partnerId/:periodId/",
+      (p, q) => ({ partnerId: p.partnerId, periodId: parseInt(p.periodId, 10), description: q.description }),
+      p => this.getClaimDocuments(p)
     );
 
     this.getAttachment(
@@ -29,7 +39,7 @@ class Controller extends ControllerBase<DocumentSummaryDto> implements IDocument
 
     this.postAttachment(
       "/claim-details/:partnerId/:periodId/:costCategoryId",
-      (p, q, b, f) => ({ claimDetailKey: { partnerId: p.partnerId, periodId: p.periodId, costCategoryId: p.costCategoryId, file: f }, file: f }),
+      (p, q, b, f) => ({ claimDetailKey: { partnerId: p.partnerId, periodId: parseInt(p.periodId, 10), costCategoryId: p.costCategoryId, file: f }, file: f }),
       p => this.uploadClaimDetailDocument(p)
     );
 
@@ -38,6 +48,12 @@ class Controller extends ControllerBase<DocumentSummaryDto> implements IDocument
       (p) => ({ documentId: p.documentId }),
       p => this.deleteDocument(p)
     );
+  }
+
+  public async getClaimDocuments(params: ApiParams<{partnerId: string, periodId: number}>) {
+    const { partnerId, periodId } = params;
+    const query = new GetClaimDocumentsQuery({partnerId, periodId}, {description: DocumentDescription.IAR});
+    return await contextProvider.start(params).runQuery(query);
   }
 
   public async getClaimDetailDocuments(params: ApiParams<{claimDetailKey: ClaimDetailKey}>) {
