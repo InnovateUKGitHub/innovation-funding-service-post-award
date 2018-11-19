@@ -1,6 +1,7 @@
 import { TestRepository } from "./testRepository";
 import * as Repositories from "../../src/server/repositories";
 import { IRepositories } from "../../src/server/features/common/context";
+import { FileUpload } from "../../src/types/FileUpload";
 import { Updatable } from "../../src/server/repositories/salesforceBase";
 import { Stream } from "stream";
 
@@ -108,8 +109,10 @@ class ContentDocumentLinkTestRepository extends TestRepository<Repositories.ISal
 }
 
 class ContentVersionTestRepository extends TestRepository<Repositories.ISalesforceContentVersion> implements Repositories.IContentVersionRepository {
-    getDocuments(contentDocumentIds: string[]): Promise<Repositories.ISalesforceContentVersion[]> {
-        return super.getWhere(x => contentDocumentIds.indexOf(x.ContentDocumentId) !== -1);
+    getDocuments(contentDocumentIds: string[], filter: DocumentFilter): Promise<Repositories.ISalesforceContentVersion[]> {
+      return super.getWhere(x => (
+        contentDocumentIds.indexOf(x.ContentDocumentId) !== -1 && (!filter || x.Description === filter.description)
+      ));
     }
     getDocument(documentId: string): Promise<Repositories.ISalesforceContentVersion> {
         return super.getOne(x => documentId === x.Id);
@@ -123,7 +126,7 @@ class ContentVersionTestRepository extends TestRepository<Repositories.ISalesfor
             return s;
         });
     }
-    public insertDocument({ content, fileName }: FileUpload) {
+    public insertDocument({ content, fileName, description }: FileUpload) {
         const nameParts = fileName.split(".");
         const extension = nameParts.length > 1 ? nameParts[nameParts.length - 1] : null;
         const title = nameParts[0];
@@ -138,6 +141,7 @@ class ContentVersionTestRepository extends TestRepository<Repositories.ISalesfor
             PathOnClient: fileName,
             ContentLocation: "S",
             VersionData: content,
+            Description: description
         });
     }
 }

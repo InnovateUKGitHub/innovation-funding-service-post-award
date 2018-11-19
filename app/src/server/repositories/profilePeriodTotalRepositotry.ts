@@ -31,7 +31,7 @@ export class ProfileTotalPeriodRepository extends SalesforceBase<ISalesforceProf
   }
 
   getAllByProjectId(projectId: string): Promise<ISalesforceProfileTotalPeriod[]> {
-    const filter = `Acc_ProjectParticipant__r.Acc_Project__c = '${projectId}' AND RecordType.Name = '${this.recordType}'`;
+    const filter = `Acc_ProjectParticipant__r.Acc_ProjectId__c = '${projectId}' AND RecordType.Name = '${this.recordType}'`;
     return super.where(filter);
   }
 

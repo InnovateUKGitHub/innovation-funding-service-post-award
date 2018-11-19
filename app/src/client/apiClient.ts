@@ -1,5 +1,6 @@
 import { IApiClient } from "../server/apis";
 import { processResponse } from "../shared/processResponse";
+import {DocumentDescription} from "../types/constants";
 
 const clientApi: IApiClient = {
   claimLineItems: {
@@ -7,6 +8,7 @@ const clientApi: IApiClient = {
     saveLineItems: (params) => ajaxPost(`/api/claim-line-items/?partnerId=${params.partnerId}&periodId=${params.periodId}&costCategoryId=${params.costCategoryId}`, params.lineItems)
   },
   claims : {
+    getAllByProjectId: (params) => ajaxJson(`/api/claims/?projectId=${params.projectId}`),
     getAllByPartnerId: (params) => ajaxJson(`/api/claims/?partnerId=${params.partnerId}`),
     get: (params) => ajaxJson(`/api/claims/${params.partnerId}/${params.periodId}`),
     update: (params) => ajaxPut(`/api/claims/${params.partnerId}/${params.periodId}`, params.claim)
@@ -25,6 +27,7 @@ const clientApi: IApiClient = {
     getAll: (params) => ajaxJson("/api/cost-categories"),
   },
   documents: {
+    getClaimDocuments:(params) => ajaxJson(`/api/documents/claims/${params.partnerId}/${params.periodId}/?description=${params.description}`),
     getClaimDetailDocuments: ({ claimDetailKey }) => ajaxJson(`/api/documents/claim-details/${claimDetailKey.partnerId}/${claimDetailKey.periodId}/${claimDetailKey.costCategoryId}`),
     deleteDocument: ({ documentId }) => ajaxJson(`/api/documents/${documentId}`, { method: "DELETE" }),
     uploadClaimDetailDocument: ({ claimDetailKey, file }) => {

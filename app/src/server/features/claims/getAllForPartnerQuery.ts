@@ -1,6 +1,7 @@
 import { IContext, IQuery } from "../common/context";
 import mapClaim from "./mapClaim";
 import {dateComparator} from "../../../util/comparator";
+import { ClaimDto } from "../../../types";
 
 export class GetAllForPartnerQuery implements IQuery<ClaimDto[]> {
     constructor(private partnerId: string) {

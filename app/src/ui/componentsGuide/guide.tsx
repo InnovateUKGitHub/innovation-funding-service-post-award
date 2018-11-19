@@ -16,12 +16,14 @@ import { validationErrorGuide } from "./validationErrorGuide";
 import { validationSummaryGuide } from "./validationSummaryGuide";
 import { renderersGuide } from "./renderersGuide";
 import { insetText } from "./insetTextGuide";
-import {documentListGuide} from "./documentListGuide";
+import { documentListGuide } from "./documentListGuide";
+import { documentSingleGuide } from "./documentSingleGuide";
 
 const guides: IGuide[] = [
     datesGuide,
     detailsGuide,
     documentListGuide,
+    documentSingleGuide,
     emailGuide,
     formGuide,
     insetText,
