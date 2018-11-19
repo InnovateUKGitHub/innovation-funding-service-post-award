@@ -109,8 +109,10 @@ class ContentDocumentLinkTestRepository extends TestRepository<Repositories.ISal
 }
 
 class ContentVersionTestRepository extends TestRepository<Repositories.ISalesforceContentVersion> implements Repositories.IContentVersionRepository {
-    getDocuments(contentDocumentIds: string[]): Promise<Repositories.ISalesforceContentVersion[]> {
-        return super.getWhere(x => contentDocumentIds.indexOf(x.ContentDocumentId) !== -1);
+    getDocuments(contentDocumentIds: string[], filter: DocumentFilter): Promise<Repositories.ISalesforceContentVersion[]> {
+      return super.getWhere(x => (
+        contentDocumentIds.indexOf(x.ContentDocumentId) !== -1 && (!filter || x.Description === filter.description)
+      ));
     }
     getDocument(documentId: string): Promise<Repositories.ISalesforceContentVersion> {
         return super.getOne(x => documentId === x.Id);

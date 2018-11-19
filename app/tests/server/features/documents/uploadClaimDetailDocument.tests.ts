@@ -2,7 +2,7 @@ import {TestContext} from "../../testContextProvider";
 import {UploadClaimDetailDocumentCommand} from "../../../../src/server/features/documents/uploadClaimDetailDocument";
 
 describe("UploadClaimDetailDocumentCommand", () => {
-  it("should", async () => {
+  it("should upload a claim detail document", async () => {
     const context = new TestContext();
     const costCat = context.testData.createCostCategory();
     const partner = context.testData.createPartner();
