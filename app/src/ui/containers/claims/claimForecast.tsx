@@ -173,11 +173,11 @@ export class ClaimForecastComponent extends ContainerBase<Params, Data, Callback
             >
               <Table.String header="Month" value={x => x.categoryName} qa="category-name" />
 
-              {claims.map((p, i) => <Table.Currency key={p} header={intervals[p]} value={x => x.claims[p]} qa={"category-claim" + i} />)}
-              {forecasts.map((p, i) => <Table.Custom key={p} header={intervals[p]} value={(x, index) => this.renderForecastCell(x, p, index, data)} qa={"category-forecast" + i} />)}
+              {claims.map((p, i) => <Table.Currency key={p} header={intervals[p]} value={x => x.claims[p]} qa={"category-claim" + i} isDivider={i === claims.length - 1 || i === claims.length - 2} />)}
+              {forecasts.map((p, i) => <Table.Custom key={p} header={intervals[p]} value={(x, index) => this.renderForecastCell(x, p, index, data)} qa={"category-forecast" + i}  isDivider={i === forecasts.length - 1} />)}
 
-              <Table.Currency header="" value={x => x.total} qa="category-total" />
-              <Table.Currency header="" value={x => x.golCosts} qa="category-gol-costs" />
+              <Table.Currency header="" value={x => x.total} qa="category-total" isDivider={true} />
+              <Table.Currency header="" value={x => x.golCosts} qa="category-gol-costs" isDivider={true} />
               <Table.Percentage header="" value={x => x.difference} qa="category-difference" />
             </Table.Table>
             <Form.Fieldset>
@@ -203,7 +203,7 @@ export class ClaimForecastComponent extends ContainerBase<Params, Data, Callback
           name={"value" + index.row + index.column}
           value={forecastRow.forecasts[period]}
           onChange={val => this.updateItem(data, forecastRow.categoryId, period, dto => dto.value = val!)}
-          className="govuk-body-s govuk-!-margin-bottom-0"
+          className="govuk-!-font-size-16"
         />
       </span>
     );
@@ -238,7 +238,9 @@ export class ClaimForecastComponent extends ContainerBase<Params, Data, Callback
       <tr key="cHeader2" className="govuk-table__row govuk-body-s">
         <th className="govuk-table__header">Period</th>
         {periods.map((p, i) => <th key={i} className="govuk-table__header" style={{textAlign: "right"}}>{"P" + p}</th>)}
-        <th className="govuk-table__header" colSpan={3} />
+        <th className="govuk-table__header" />
+        <th className="govuk-table__header" />
+        <th className="govuk-table__header" />
       </tr>
     )];
   }

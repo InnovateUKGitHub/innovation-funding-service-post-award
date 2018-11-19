@@ -17,10 +17,6 @@ export interface ISalesforceContentVersion {
   Description: string;
 }
 
-interface DocumentFilter {
-  description: string;
-}
-
 export interface IContentVersionRepository {
   getDocuments(contentDocumentIds: string[], filter: DocumentFilter): Promise<ISalesforceContentVersion[]>;
   getDocument(id: string): Promise<ISalesforceContentVersion>;
