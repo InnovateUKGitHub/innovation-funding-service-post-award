@@ -9,7 +9,7 @@ import {GetClaimDocumentsQuery} from "../features/documents/getClaimDocuments";
 import {DocumentDescription} from "../../types/constants";
 
 export interface IDocumentsApi {
-  getClaimDocuments: (params: ApiParams<{partnerId: string, periodId: number}>) => Promise<DocumentSummaryDto[]>;
+  getClaimDocuments: (params: ApiParams<{partnerId: string, periodId: number, description: DocumentDescription}>) => Promise<DocumentSummaryDto[]>;
   getClaimDetailDocuments: (params: ApiParams<{claimDetailKey: ClaimDetailKey}>) => Promise<DocumentSummaryDto[]>;
   uploadClaimDetailDocument: (params: ApiParams<{claimDetailKey: ClaimDetailKey, file: FileUpload | File}>) => Promise<{ id: string }>;
   deleteDocument: (params: ApiParams<{ documentId: string }>) => Promise<void>;
@@ -21,13 +21,13 @@ class Controller extends ControllerBase<DocumentSummaryDto> implements IDocument
 
     this.getItems(
       "/claim-details/:partnerId/:periodId/:costCategoryId",
-      (p) => ({claimDetailKey: { partnerId: p.partnerId, periodId: p.periodId, costCategoryId: p.costCategoryId }}),
+      (p) => ({claimDetailKey: { partnerId: p.partnerId, periodId: parseInt(p.periodId, 10), costCategoryId: p.costCategoryId }}),
       p => this.getClaimDetailDocuments(p)
     );
 
     this.getItems(
       "/documents/claims/:partnerId/:periodId/",
-      (p, q) => ({ partnerId: p.partnerId, periodId: p.periodId, description: q.description }),
+      (p, q) => ({ partnerId: p.partnerId, periodId: parseInt(p.periodId, 10), description: q.description }),
       p => this.getClaimDocuments(p)
     );
 
@@ -39,7 +39,7 @@ class Controller extends ControllerBase<DocumentSummaryDto> implements IDocument
 
     this.postAttachment(
       "/claim-details/:partnerId/:periodId/:costCategoryId",
-      (p, q, b, f) => ({ claimDetailKey: { partnerId: p.partnerId, periodId: p.periodId, costCategoryId: p.costCategoryId, file: f }, file: f }),
+      (p, q, b, f) => ({ claimDetailKey: { partnerId: p.partnerId, periodId: parseInt(p.periodId, 10), costCategoryId: p.costCategoryId, file: f }, file: f }),
       p => this.uploadClaimDetailDocument(p)
     );
 
