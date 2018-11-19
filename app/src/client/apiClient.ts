@@ -8,6 +8,7 @@ const clientApi: IApiClient = {
     saveLineItems: (params) => ajaxPost(`/api/claim-line-items/?partnerId=${params.partnerId}&periodId=${params.periodId}&costCategoryId=${params.costCategoryId}`, params.lineItems)
   },
   claims : {
+    getAllByProjectId: (params) => ajaxJson(`/api/claims/?projectId=${params.projectId}`),
     getAllByPartnerId: (params) => ajaxJson(`/api/claims/?partnerId=${params.partnerId}`),
     get: (params) => ajaxJson(`/api/claims/${params.partnerId}/${params.periodId}`),
     update: (params) => ajaxPut(`/api/claims/${params.partnerId}/${params.periodId}`, params.claim)
