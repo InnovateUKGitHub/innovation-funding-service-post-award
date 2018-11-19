@@ -1,4 +1,5 @@
 import {ICommand, IContext} from "../common/context";
+import { FileUpload } from "../../../types/FileUpload";
 
 export class UploadDocumentCommand implements ICommand<string> {
   constructor(private file: FileUpload, private recordId: string) {

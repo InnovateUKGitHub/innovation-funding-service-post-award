@@ -6,6 +6,7 @@ import { ApiError, ErrorCode, StatusCode } from "./ApiError";
 import { ValidationError } from "../../shared/validation";
 import { Results } from "../../ui/validation/results";
 import { SalesforceTokenError } from "../repositories/salesforceConnection";
+import { FileUpload } from "../../types/FileUpload";
 
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
