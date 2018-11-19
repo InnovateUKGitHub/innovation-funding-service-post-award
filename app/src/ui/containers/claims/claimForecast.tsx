@@ -158,7 +158,7 @@ export class ClaimForecastComponent extends ContainerBase<Params, Data, Callback
           <ACC.BackLink route={PrepareClaimRoute.getLink({ projectId: this.props.projectId, partnerId: this.props.partnerId, periodId: this.props.periodId })}>Back</ACC.BackLink>
         </ACC.Section>
         <ACC.ValidationSummary validation={data.editor.validator} compressed={false} />
-        {this.renderWarnings(data.editor.validator, parsed)}
+        {this.renderWarning(data.editor.validator, parsed)}
         <ACC.Projects.Title pageTitle="Claim" project={data.project} />
         <ACC.Section title={"Update forecasts table for " + data.partner.name} qa="partner-name">
           <Form.Form
@@ -189,7 +189,7 @@ export class ClaimForecastComponent extends ContainerBase<Params, Data, Callback
                 <ACC.Renderers.ShortDateTime value={data.claim.forecastLastModified} />
               </ACC.Renderers.SimpleString>
             </Form.Fieldset>
-            <Form.Fieldset>
+            <Form.Fieldset qa="save-button">
               <Form.Button name="save" onClick={() => this.saveAndReturn(data)}>Save and return to claim</Form.Button>
             </Form.Fieldset>
           </Form.Form>
@@ -198,10 +198,10 @@ export class ClaimForecastComponent extends ContainerBase<Params, Data, Callback
     );
   }
 
-  renderWarnings(validator: ForecastDetailsDtosValidator, data: TableRow[]) {
+  renderWarning(validator: ForecastDetailsDtosValidator, data: TableRow[]) {
     const categories = data.filter(x => x.total > x.golCosts).map(x => x.categoryName);
     return validator.showValidationErrors && !validator.isValid && categories.length > 0
-      ? <ValidationMessage messageType="info" message={`The total of forecasts and costs for ${categories.join(", ")} exceeds the grant offer letter costs. The Monitoring Officer may require more information in order to approve the claim.`} />
+      ? <ValidationMessage messageType="info" message={`The total of forecasts and costs for ${categories.join(", ")} exceeds the grant offer letter costs. The Monitoring Officer may require more information in order to approve the claim.`} qa="forecasts-warning" />
       : null;
   }
 
