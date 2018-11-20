@@ -4,12 +4,16 @@ import { LoadingStatus, Pending } from "../../../shared/pending";
 import {DocumentUploadValidator} from "../../validators/documentUploadValidator";
 import { IEditorStore, RootState } from "../reducers";
 import { getCurrentClaim } from "./claims";
+import { DocumentDescription } from "../../../types";
 
 export const documentStore = "documents";
 export const getClaimDetailDocuments = (partnerId: string, periodId: number, costCategoryId: string) => dataStoreHelper(documentStore, getKey("claim", "detail", partnerId, periodId, costCategoryId));
-export const getClaimDocuments = (partnerId: string, periodId: number) => dataStoreHelper(documentStore, getKey("claim", partnerId, periodId));
 
-export const getClaimDetailDocumentEditor = ({partnerId, periodId, costCategoryId}: ClaimDetailKey) => editorStoreHelper<DocumentUploadDto, DocumentUploadValidator>(
+export const getClaimDocuments = (partnerId: string, periodId: number, filter?: string) => dataStoreHelper(documentStore, getKey("claim", filter || "All", partnerId, periodId));
+
+export const getClaimIarDocuments = (partnerId: string, periodId: number) => getClaimDocuments(partnerId, periodId, DocumentDescription.IAR);
+
+export const getClaimDetailDocumentEditor = ({partnerId, periodId, costCategoryId}: ClaimDetailKey) => editorStoreHelper<ClaimDetailDocumentDto, DocumentUploadValidator>(
   "claimDetailDocument",
   x => x.claimDetailDocument,
   () => (Pending.create({ status: LoadingStatus.Done, data: { file: null }, error: null})),
