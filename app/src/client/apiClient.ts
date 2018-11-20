@@ -34,6 +34,12 @@ const clientApi: IApiClient = {
       const formData = new FormData();
       formData.append("attachment", file as File);
       return ajaxPostFormData(`/api/documents/claim-details/${claimDetailKey.partnerId}/${claimDetailKey.periodId}/${claimDetailKey.costCategoryId}`, formData);
+    },
+    uploadClaimDocument: ({ claimKey, file, description }) => {
+      const formData = new FormData();
+      formData.append("attachment", file as File);
+      if (description) { formData.append("description", description); }
+      return ajaxPostFormData(`/api/documents/claims/${claimKey.partnerId}/${claimKey.periodId}`, formData);
     }
   },
   forecastDetails: {
