@@ -7,11 +7,13 @@ import { DeleteDocumentCommand } from "../features/documents/deleteDocument";
 import { FileUpload } from "../../types/FileUpload";
 import {GetClaimDocumentsQuery} from "../features/documents/getClaimDocuments";
 import {DocumentDescription} from "../../types/constants";
+import { UploadClaimDocumentCommand } from "../features/documents/uploadClaimDocument";
 
 export interface IDocumentsApi {
   getClaimDocuments: (params: ApiParams<{partnerId: string, periodId: number, description: DocumentDescription}>) => Promise<DocumentSummaryDto[]>;
   getClaimDetailDocuments: (params: ApiParams<{claimDetailKey: ClaimDetailKey}>) => Promise<DocumentSummaryDto[]>;
   uploadClaimDetailDocument: (params: ApiParams<{claimDetailKey: ClaimDetailKey, file: FileUpload | File}>) => Promise<{ id: string }>;
+  uploadClaimDocument: (params: ApiParams<{claimKey: ClaimKey, file: FileUpload | File, description?: string}>) => Promise<{ id: string }>;
   deleteDocument: (params: ApiParams<{ documentId: string }>) => Promise<void>;
 }
 
@@ -26,7 +28,7 @@ class Controller extends ControllerBase<DocumentSummaryDto> implements IDocument
     );
 
     this.getItems(
-      "/documents/claims/:partnerId/:periodId/",
+      "/claims/:partnerId/:periodId/",
       (p, q) => ({ partnerId: p.partnerId, periodId: parseInt(p.periodId, 10), description: q.description }),
       p => this.getClaimDocuments(p)
     );
@@ -41,6 +43,12 @@ class Controller extends ControllerBase<DocumentSummaryDto> implements IDocument
       "/claim-details/:partnerId/:periodId/:costCategoryId",
       (p, q, b, f) => ({ claimDetailKey: { partnerId: p.partnerId, periodId: parseInt(p.periodId, 10), costCategoryId: p.costCategoryId, file: f }, file: f }),
       p => this.uploadClaimDetailDocument(p)
+    );
+
+    this.postAttachment(
+      "/claims/:partnerId/:periodId",
+      (p, q, b, f) => ({ claimKey: { partnerId: p.partnerId, periodId: p.periodId, file: f }, file: { ...f, ...b }}),
+      p => this.uploadClaimDocument(p)
     );
 
     this.deleteItem(
@@ -71,6 +79,13 @@ class Controller extends ControllerBase<DocumentSummaryDto> implements IDocument
   public async uploadClaimDetailDocument(params: ApiParams<{claimDetailKey: ClaimDetailKey, file: FileUpload | File}>) {
     const { claimDetailKey, file } = params;
     const query = new UploadClaimDetailDocumentCommand(claimDetailKey, file as FileUpload);
+    const insertedID = await contextProvider.start(params).runQuery(query);
+    return {id: insertedID};
+  }
+
+  public async uploadClaimDocument(params: ApiParams<{claimKey: ClaimKey, file: FileUpload | File}>) {
+    const { claimKey, file } = params;
+    const query = new UploadClaimDocumentCommand(claimKey, file as FileUpload);
     const insertedID = await contextProvider.start(params).runQuery(query);
     return {id: insertedID};
   }
