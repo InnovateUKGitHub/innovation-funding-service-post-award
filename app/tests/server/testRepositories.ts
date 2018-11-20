@@ -95,7 +95,7 @@ class ClaimDetailsTestRepository extends TestRepository<Repositories.ISalesforce
 
 class ContentDocumentTestRepository extends TestRepository<Repositories.ISalesforceContentDocument> implements Repositories.IContentDocumentRepository {
     delete(id: string): Promise<void> {
-        return super.deleteItem(this.Items.find(x => x.Id == id));
+        return super.deleteItem(this.Items.find(x => x.Id === id));
     }
 }
 
