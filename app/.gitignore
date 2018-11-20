@@ -5,6 +5,8 @@ coverage/
 reports/
 build/
 /.env
+/.env1
+/.env2
 
 test-report.html
 .idea
