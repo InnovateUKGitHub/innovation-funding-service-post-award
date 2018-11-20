@@ -4,7 +4,16 @@ import { Pending } from "../../../shared/pending";
 import * as Actions from "../../redux/actions";
 import * as Selectors from "../../redux/selectors";
 import { ProjectOverviewPage } from "../../components/projectOverview";
-import { DualDetails, Link, Section, SectionPanel, TypedDetails, TypedLoader, TypedTable } from "../../components";
+import {
+  DualDetails,
+  Link,
+  Section,
+  SectionPanel,
+  TypedDetails,
+  TypedLoader,
+  TypedTable,
+  ValidationMessage
+} from "../../components";
 import { DayAndLongMonth, FullDate, LongYear, ShortDate, ShortMonth } from "../../components/renderers";
 import { PrepareClaimRoute } from "./prepare";
 import { ClaimsDetailsRoute } from "./details";
@@ -78,16 +87,19 @@ class Component extends ContainerBase<Params, Data, Callbacks> {
   private renderIarDocumentUpload(claim: ClaimDto, editor: IEditorStore<DocumentUploadDto, DocumentUploadValidator>) {
     const UploadForm = ACC.TypedForm<{file: File | null }>();
     return (
-      <UploadForm.Form data={editor.data} onSubmit={() => this.onSave(editor.data, claim.periodId)} onChange={(dto) => this.onChange(dto, claim.periodId)}>
-        <UploadForm.Fieldset heading="Upload documents">
-          <UploadForm.FileUpload validation={editor.validator.file} value={(data) => data.file} hint="Make sure each file name includes the date and a description" name="Upload documents" update={(dto, file) => dto.file = file}/>
-        </UploadForm.Fieldset>
-        <UploadForm.Submit>Upload documents</UploadForm.Submit>
-      </UploadForm.Form>
+      <React.Fragment>
+        <ValidationMessage messageType="info" message="You must attach an independent audit report (IAR) for this claim to receive your payment."/>
+        <UploadForm.Form data={editor.data} onChange={(dto) => this.onChange(dto, claim.periodId)}>
+          <UploadForm.Fieldset>
+            <UploadForm.FileUpload validation={editor.validator.file} value={(data) => data.file} name="Upload documents" update={(dto, file) => dto.file = file}/>
+          </UploadForm.Fieldset>
+          <UploadForm.Button name="Upload IAR" onClick={() => this.onSave(editor.data, claim.periodId)}>Upload</UploadForm.Button>
+        </UploadForm.Form>
+      </React.Fragment>
     );
   }
 
-  private renderIarDocumentSection(claim: ClaimDto, editor: IEditorStore<DocumentUploadDto, DocumentUploadValidator>, document?: DocumentSummaryDto) {
+  private renderIarDocumentSection(claim: ClaimDto, editor: IEditorStore<DocumentUploadDto, DocumentUploadValidator>, document?: DocumentSummaryDto | null) {
     // TODO handle case where IAR required bu upload is not possible
     if (!claim.isIarRequired) {
       return null;
@@ -106,10 +118,10 @@ class Component extends ContainerBase<Params, Data, Callbacks> {
     );
 
     // TODO get from store
-    let document: DocumentSummaryDto;
+    const document: DocumentSummaryDto | null = null;
 
     return (
-      <ProjectOverviewPage selectedTab={ClaimsDashboardRoute.routeName} project={project} partnerId={partner.id} partners={[partner]}>
+      <ProjectOverviewPage selectedTab={ClaimsDashboardRoute.routeName} project={project} partnerId={partner.id} partners={[partner]} editor={editor}>
         <Section>
           <SectionPanel qa="claims-totals" title="Project claims history">
             <DualDetails displayDensity="Compact">
