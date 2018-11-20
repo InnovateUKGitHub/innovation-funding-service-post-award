@@ -1,21 +1,22 @@
 import { ApiClient } from "../../apiClient";
-import {
-  AsyncThunk,
-  conditionalLoad, dataLoadAction,
-  DataLoadAction, handleError, ResetEditorAction, resetEditorAction,
-  SyncThunk,
-  updateEditorAction,
-  UpdateEditorAction
-} from "./common";
-import { getClaimDetailDocumentEditor, getClaimDetailDocuments } from "../selectors/documents";
+import { AsyncThunk, conditionalLoad, dataLoadAction, DataLoadAction, handleError, ResetEditorAction, resetEditorAction, SyncThunk, updateEditorAction, UpdateEditorAction } from "./common";
+import {getClaimDetailDocumentEditor, getClaimDetailDocuments, getClaimDocuments} from "../selectors/documents";
 import { LoadingStatus } from "../../../shared/pending";
 import { Results } from "../../validation/results";
 import {DocumentUploadValidator} from "../../validators/documentUploadValidator";
+import {DocumentDescription} from "../../../types/constants";
 
 export function loadClaimDetailDocuments(partnerId: string, periodId: number, costCategoryId: string) {
   return conditionalLoad(
     getClaimDetailDocuments(partnerId, periodId, costCategoryId),
     params => ApiClient.documents.getClaimDetailDocuments({ claimDetailKey: {partnerId, periodId, costCategoryId}, ...params})
+  );
+}
+
+export function loadIarDocuments(partnerId: string, periodId: number) {
+  return conditionalLoad(
+    getClaimDocuments(partnerId, periodId),
+    params => ApiClient.documents.getClaimDocuments({ partnerId, periodId, description: DocumentDescription.IAR, ...params})
   );
 }
 
