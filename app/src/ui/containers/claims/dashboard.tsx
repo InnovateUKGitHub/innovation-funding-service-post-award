@@ -85,6 +85,9 @@ class Component extends ContainerBase<Params, Data, Callbacks> {
   }
 
   private renderIarDocumentUpload(claim: ClaimDto, editor: IEditorStore<DocumentUploadDto, DocumentUploadValidator>) {
+    if (!claim.statusAllowsIarUpload) {
+      return null;
+    }
     const UploadForm = ACC.TypedForm<{file: File | null }>();
     return (
       <React.Fragment>
@@ -119,9 +122,10 @@ class Component extends ContainerBase<Params, Data, Callbacks> {
 
     // TODO get from store
     const document: DocumentSummaryDto | null = null;
+    const validationMessage = editor && <ACC.ValidationSummary validation={editor && editor.validator} compressed={false} />;
 
     return (
-      <ProjectOverviewPage selectedTab={ClaimsDashboardRoute.routeName} project={project} partnerId={partner.id} partners={[partner]} editor={editor}>
+      <ProjectOverviewPage selectedTab={ClaimsDashboardRoute.routeName} project={project} partnerId={partner.id} partners={[partner]} validationMessage={validationMessage}>
         <Section>
           <SectionPanel qa="claims-totals" title="Project claims history">
             <DualDetails displayDensity="Compact">

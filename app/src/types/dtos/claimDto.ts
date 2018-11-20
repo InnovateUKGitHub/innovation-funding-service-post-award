@@ -16,5 +16,5 @@ export interface ClaimDto {
   isIarRequired: boolean;
   // ToDo: confirm field
   comments: string|null;
-  statusAllowsIar: boolean;
+  statusAllowsIarUpload: boolean;
 }
