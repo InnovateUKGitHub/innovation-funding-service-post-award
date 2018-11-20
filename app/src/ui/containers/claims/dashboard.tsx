@@ -10,7 +10,7 @@ import { PrepareClaimRoute } from "./prepare";
 import { ClaimsDetailsRoute } from "./details";
 import { SimpleString } from "../../components/renderers";
 import { ReviewClaimRoute } from "./review";
-import { ClaimDto, ClaimStatus, ProjectDto } from "../../../types";
+import { ClaimDto, ProjectDto } from "../../../types";
 
 interface Params {
   projectId: string;
