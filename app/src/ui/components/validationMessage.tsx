@@ -7,6 +7,7 @@ interface Props {
     message: string;
     key?: string;
     messageType: MessageType;
+    qa?: string;
 }
 
 interface MessageStyle {
@@ -35,7 +36,7 @@ const getMessageStyle = (messageType: MessageType): MessageStyle => {
   }
 };
 
-export const ValidationMessage: React.SFC<Props> = ({ message, key, messageType }) => {
+export const ValidationMessage: React.SFC<Props> = ({ message, key, messageType, qa }) => {
     if (!message) {
       return null;
     }
@@ -60,7 +61,7 @@ export const ValidationMessage: React.SFC<Props> = ({ message, key, messageType 
     };
 
     return (
-        <div className="govuk-warning-text-background" style={backgroundStyle}>
+        <div className="govuk-warning-text-background" style={backgroundStyle} data-qa={qa}>
             <div className="govuk-warning-text" key={key} style={textStyle}>
                 <span className="govuk-warning-text__icon" aria-hidden="true" style={iconStyle} >{validationSymbol}</span>
                 {messageType === "info" ?
