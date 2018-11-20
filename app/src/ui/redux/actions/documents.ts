@@ -13,6 +13,8 @@ import {
   getClaimDocumentEditor,
   getClaimDocuments
 } from "../selectors/documents";
+import { AsyncThunk, conditionalLoad, dataLoadAction, DataLoadAction, handleError, ResetEditorAction, resetEditorAction, SyncThunk, updateEditorAction, UpdateEditorAction } from "./common";
+import { getClaimDetailDocumentEditor, getClaimDetailDocuments, getClaimDocuments} from "../selectors/documents";
 import { LoadingStatus } from "../../../shared/pending";
 import { Results } from "../../validation/results";
 import {DocumentUploadValidator} from "../../validators/documentUploadValidator";
@@ -27,7 +29,7 @@ export function loadClaimDetailDocuments(partnerId: string, periodId: number, co
 
 export function loadIarDocuments(partnerId: string, periodId: number) {
   return conditionalLoad(
-    getClaimDocuments(partnerId, periodId),
+    getClaimDocuments(partnerId, periodId, DocumentDescription.IAR),
     params => ApiClient.documents.getClaimDocuments({ partnerId, periodId, description: DocumentDescription.IAR, ...params})
   );
 }
