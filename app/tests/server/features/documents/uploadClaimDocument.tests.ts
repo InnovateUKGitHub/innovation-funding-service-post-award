@@ -21,7 +21,7 @@ describe("UploadClaimDocumentCommand", () => {
     });
 
     const claimKey = {
-      partnerId: claim.Acc_ProjectParticipant__c,
+      partnerId: claim.Acc_ProjectParticipant__r.Id,
       periodId: claim.Acc_ProjectPeriodNumber__c
     };
 
@@ -38,7 +38,7 @@ describe("UploadClaimDocumentCommand", () => {
           item.Acc_ClaimStatus__c = status;
         });
         const claimKey = {
-          partnerId: claim.Acc_ProjectParticipant__c,
+          partnerId: claim.Acc_ProjectParticipant__r.Id,
           periodId: claim.Acc_ProjectPeriodNumber__c
         };
 
@@ -63,7 +63,7 @@ describe("UploadClaimDocumentCommand", () => {
         });
 
         const claimKey = {
-          partnerId: claim.Acc_ProjectParticipant__c,
+          partnerId: claim.Acc_ProjectParticipant__r.Id,
           periodId: claim.Acc_ProjectPeriodNumber__c
         };
 
