@@ -73,7 +73,7 @@ export function uploadClaimDetailDocument(claimDetailKey: ClaimDetailKey, dto: D
 // update editor with validation
 export function updateClaimDocumentEditor(claimKey: ClaimKey, dto: DocumentUploadDto, showErrors?: boolean): SyncThunk<Results<DocumentUploadDto>, UpdateEditorAction> {
   return (dispatch, getState) => {
-    const selector =  getClaimDocumentEditor(claimKey);
+    const selector =  getClaimDocumentEditor(claimKey, dto.description);
     const state = getState();
     if (showErrors === null || showErrors === undefined) {
       const current = state.editors[selector.store][selector.key];
@@ -88,7 +88,7 @@ export function updateClaimDocumentEditor(claimKey: ClaimKey, dto: DocumentUploa
 export function uploadClaimDocument(claimKey: ClaimKey, dto: DocumentUploadDto, onComplete: () => void): AsyncThunk<void, DataLoadAction | UpdateEditorAction | ResetEditorAction> {
   return (dispatch, getState) => {
     const state = getState();
-    const selector = getClaimDocumentEditor(claimKey);
+    const selector = getClaimDocumentEditor(claimKey, dto.description);
     const docsSelector = getClaimDocuments(claimKey.partnerId, claimKey.periodId, dto.description);
     const validation = updateClaimDocumentEditor(claimKey, dto, true)(dispatch, getState, null);
 

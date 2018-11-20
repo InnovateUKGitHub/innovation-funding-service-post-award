@@ -26,8 +26,8 @@ import { IEditorStore } from "../../redux/reducers";
 import { DocumentUploadValidator } from "../../validators/documentUploadValidator";
 import {
   getCurrentClaim,
-  getCurrentClaimDocumentsEditor,
   getCurrentClaimIarDocument,
+  getCurrentClaimIarDocumentsEditor,
   getPreviousClaims
 } from "../../redux/selectors";
 
@@ -218,7 +218,7 @@ export const ClaimsDashboard = definition.connect({
   withData: (state, props) => {
     return ({
       document: getCurrentClaimIarDocument(state, props.partnerId),
-      editor: getCurrentClaimDocumentsEditor(state, props.partnerId),
+      editor: getCurrentClaimIarDocumentsEditor(state, props.partnerId),
       projectDetails: Selectors.getProject(props.projectId).getPending(state),
       partnerDetails: Selectors.getPartner(props.partnerId).getPending(state),
       currentClaim: getCurrentClaim(state, props.partnerId),
