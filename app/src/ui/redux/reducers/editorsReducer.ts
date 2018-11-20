@@ -42,7 +42,5 @@ export const editorReducer = combineReducers({
   claim: editorsReducer<ClaimDto, ClaimDtoValidator>("claim"),
   claimLineItems: editorsReducer<ClaimLineItemDto[], ClaimLineItemDtosValidator>("claimLineItems"),
   forecastDetails: editorsReducer<ForecastDetailsDTO[], ForecastDetailsDtosValidator>("forecastDetails"),
-  // TODO make single document store
-  claimDetailDocument: editorsReducer<DocumentUploadDto, DocumentUploadValidator>("claimDetailDocument"),
-  claimDocument: editorsReducer<DocumentUploadDto, DocumentUploadValidator>("claimDocument"),
+  documents: editorsReducer<DocumentUploadDto, DocumentUploadValidator>("documents")
 });
