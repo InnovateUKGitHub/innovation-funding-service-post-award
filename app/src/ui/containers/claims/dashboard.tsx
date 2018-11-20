@@ -4,13 +4,14 @@ import { Pending } from "../../../shared/pending";
 import * as Actions from "../../redux/actions";
 import * as Selectors from "../../redux/selectors";
 import { ProjectOverviewPage } from "../../components/projectOverview";
-import { DualDetails, Link, Section, SectionPanel, TypedDetails, TypedLoader, TypedTable } from "../../components";
+import { DocumentSingle ,DualDetails, Link, Section, SectionPanel, TypedDetails, TypedLoader, TypedTable } from "../../components";
 import { DayAndLongMonth, FullDate, LongYear, ShortDate, ShortMonth } from "../../components/renderers";
 import { PrepareClaimRoute } from "./prepare";
 import { ClaimsDetailsRoute } from "./details";
 import { SimpleString } from "../../components/renderers";
 import { ReviewClaimRoute } from "./review";
-import { ClaimDto, ProjectDto } from "../../../types";
+import { ClaimDto, ClaimStatus, ProjectDto } from "../../../types";
+
 
 interface Params {
   projectId: string;
@@ -18,12 +19,14 @@ interface Params {
 }
 
 interface Data {
+  document: Pending<DocumentSummaryDto>;
   projectDetails: Pending<ProjectDto>;
   partnerDetails: Pending<PartnerDto>;
   claims: Pending<ClaimDto[]>;
 }
 
 interface CombinedData {
+  document: DocumentSummaryDto;
   projectDetails: ProjectDto;
   partnerDetails: PartnerDto;
   claims: ClaimDto[];
@@ -32,19 +35,22 @@ interface CombinedData {
 class Component extends ContainerBase<Params, Data, {}> {
   public render() {
     const combined = Pending.combine(
+      this.props.document,
       this.props.projectDetails,
       this.props.partnerDetails,
       this.props.claims,
-      (projectDetails, partnerDetails, claims) => ({ projectDetails, partnerDetails, claims })
+      (document, projectDetails, partnerDetails, claims) => ({ document, projectDetails, partnerDetails, claims })
     );
 
     const Loader = TypedLoader<CombinedData>();
-    return <Loader pending={combined} render={(x) => this.renderContents(x.projectDetails, x.partnerDetails, x.claims)} />;
+    return <Loader pending={combined} render={(x) => this.renderContents(x.projectDetails, x.partnerDetails, x.claims, x.document)} />;
   }
 
   private renderIarDocument(claim: ClaimDto, document: DocumentSummaryDto) {
-    // TODO
-    return null;
+
+    return (
+      <DocumentSingle message={"An IAR has been added to this claim"} document={document} openNewWindow={true} />
+    );
   }
 
   private renderIarDocumentUpload(claim: ClaimDto) {
@@ -59,21 +65,18 @@ class Component extends ContainerBase<Params, Data, {}> {
     }
     return (
       <Section qa="current-claim-iar" title="Independent audit report">
-        {document ? this.renderIarDocument(claim, document) : this.renderIarDocumentUpload(claim)}
+        {claim.status === ClaimStatus.AWAITING_IUK_APPROVAL ? this.renderIarDocument(claim, document!) : this.renderIarDocumentUpload(claim)}
       </Section>
     );
   }
 
-  private renderContents(project: ProjectDto, partner: PartnerDto, claims: ClaimDto[]) {
+  private renderContents(project: ProjectDto, partner: PartnerDto, claims: ClaimDto[], document: DocumentSummaryDto) {
     const currentClaim = claims.find(claim => !claim.approvedDate);
     const previousClaims = currentClaim ? claims.filter(claim => claim.id !== currentClaim.id) : claims;
     const Details = TypedDetails<PartnerDto>();
     const currentClaimsSectionTitle = (
       currentClaim && <React.Fragment>Claim for P{currentClaim.periodId} - <DayAndLongMonth value={currentClaim.periodStartDate} /> to <FullDate value={currentClaim.periodEndDate} /></React.Fragment>
     );
-
-    // TODO get from store
-    let document: DocumentSummaryDto;
 
     return (
       <ProjectOverviewPage selectedTab={ClaimsDashboardRoute.routeName} project={project} partnerId={partner.id} partners={[partner]}>
@@ -156,11 +159,17 @@ class Component extends ContainerBase<Params, Data, {}> {
 const definition = ReduxContainer.for<Params, Data, {}>(Component);
 
 export const ClaimsDashboard = definition.connect({
-  withData: (state, params) => ({
-    projectDetails: Selectors.getProject(params.projectId).getPending(state),
-    partnerDetails: Selectors.getPartner(params.partnerId).getPending(state),
-    claims: Selectors.findClaimsByPartner(params.partnerId).getPending(state)
-  }),
+  withData: (state, params) => {
+    const claims = Selectors.findClaimsByPartner(params.partnerId).getPending(state);
+    const currentClaim = claims.then(x => x![1]).data;
+
+    return ({
+      projectDetails: Selectors.getProject(params.projectId).getPending(state),
+      partnerDetails: Selectors.getPartner(params.partnerId).getPending(state),
+      document: Selectors.getClaimIarDocuments(params.partnerId, currentClaim && currentClaim.periodId || 0).getPending(state).then(x => x![1]),
+      claims
+    });
+  },
   withCallbacks: () => ({})
 });
 
@@ -174,7 +183,7 @@ export const ClaimsDashboardRoute = definition.route({
   getLoadDataActions: (params) => [
     Actions.loadProject(params.projectId),
     Actions.loadPartner(params.partnerId),
-    Actions.loadClaimsForPartner(params.partnerId)
+    Actions.loadClaimsAndDocuments(params.partnerId)
   ],
   container: ClaimsDashboard
 });
