@@ -11,9 +11,7 @@ export const getClaimDetailDocuments = (partnerId: string, periodId: number, cos
 
 export const getClaimDocuments = (partnerId: string, periodId: number, filter?: string) => dataStoreHelper(documentStore, getKey("claim", filter || "All", partnerId, periodId));
 
-export const getClaimIarDocuments = (partnerId: string, periodId: number) => getClaimDocuments(partnerId, periodId, DocumentDescription.IAR);
-
-export const getClaimDetailDocumentEditor = ({partnerId, periodId, costCategoryId}: ClaimDetailKey) => editorStoreHelper<ClaimDetailDocumentDto, DocumentUploadValidator>(
+export const getClaimDetailDocumentEditor = ({partnerId, periodId, costCategoryId}: ClaimDetailKey) => editorStoreHelper<DocumentUploadDto, DocumentUploadValidator>(
   "claimDetailDocument",
   x => x.claimDetailDocument,
   () => (Pending.create({ status: LoadingStatus.Done, data: { file: null }, error: null})),
@@ -24,7 +22,7 @@ export const getClaimDetailDocumentEditor = ({partnerId, periodId, costCategoryI
 export const getClaimDocumentEditor = ({partnerId, periodId}: ClaimKey) => editorStoreHelper<DocumentUploadDto, DocumentUploadValidator>(
   "claimDocument",
   x => x.claimDocument,
-  () => (Pending.create({ status: LoadingStatus.Done, data: { file: null }, error: null})),
+  () => (Pending.create({ status: LoadingStatus.Done, data: { file: null, description: DocumentDescription.IAR }, error: null})),
   (dto) => new DocumentUploadValidator(dto, false),
   getKey(partnerId, periodId)
 );
@@ -36,5 +34,15 @@ export const getCurrentClaimDocumentsEditor = (state: RootState, partnerId: stri
     }
     const editorPending =  getClaimDocumentEditor({partnerId, periodId: claim.periodId}).get(state);
     return editorPending.data || null;
+  });
+};
+
+export const getCurrentClaimIarDocument = (state: RootState, partnerId: string): Pending<DocumentSummaryDto | null> => {
+  return getCurrentClaim(state, partnerId).then(claim => {
+    if (!claim) {
+      return null;
+    }
+    const iarDocuments = getClaimDocuments(partnerId, claim.periodId, DocumentDescription.IAR).getPending(state).data;
+    return iarDocuments && iarDocuments.length ? iarDocuments[0] : null;
   });
 };

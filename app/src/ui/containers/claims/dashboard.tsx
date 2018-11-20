@@ -4,8 +4,8 @@ import { Pending } from "../../../shared/pending";
 import * as Actions from "../../redux/actions";
 import * as Selectors from "../../redux/selectors";
 import { ProjectOverviewPage } from "../../components/projectOverview";
-import { DocumentSingle ,DualDetails, Link, Section, SectionPanel, TypedDetails, TypedLoader, TypedTable } from "../../components";
 import {
+  DocumentSingle,
   DualDetails,
   Link,
   Section,
@@ -24,7 +24,12 @@ import { ClaimDto, ProjectDto } from "../../../types";
 import * as ACC from "../../components";
 import { IEditorStore } from "../../redux/reducers";
 import { DocumentUploadValidator } from "../../validators/documentUploadValidator";
-import { getCurrentClaim, getCurrentClaimDocumentsEditor, getPreviousClaims } from "../../redux/selectors";
+import {
+  getCurrentClaim,
+  getCurrentClaimDocumentsEditor,
+  getCurrentClaimIarDocument,
+  getPreviousClaims
+} from "../../redux/selectors";
 
 interface Params {
   projectId: string;
@@ -32,7 +37,7 @@ interface Params {
 }
 
 interface Data {
-  document: Pending<DocumentSummaryDto>;
+  document: Pending<DocumentSummaryDto | null>;
   projectDetails: Pending<ProjectDto>;
   partnerDetails: Pending<PartnerDto>;
   previousClaims: Pending<ClaimDto[]>;
@@ -41,7 +46,7 @@ interface Data {
 }
 
 interface CombinedData {
-  document: DocumentSummaryDto;
+  document: DocumentSummaryDto | null;
   project: ProjectDto;
   partner: PartnerDto;
   previousClaims: ClaimDto[];
@@ -63,7 +68,7 @@ class Component extends ContainerBase<Params, Data, Callbacks> {
       this.props.previousClaims,
       this.props.currentClaim,
       this.props.editor,
-      (project, partner, previousClaims, currentClaim, editor) => ({ project, partner, previousClaims, currentClaim, editor })
+      (document, project, partner, previousClaims, currentClaim, editor) => ({ project, partner, previousClaims, currentClaim, editor, document })
     );
 
     const Loader = TypedLoader<CombinedData>();
@@ -127,7 +132,6 @@ class Component extends ContainerBase<Params, Data, Callbacks> {
       currentClaim && <React.Fragment>Claim for P{currentClaim.periodId} - <DayAndLongMonth value={currentClaim.periodStartDate} /> to <FullDate value={currentClaim.periodEndDate} /></React.Fragment>
     );
 
-    // TODO get from store
     const validationMessage = editor && <ACC.ValidationSummary validation={editor && editor.validator} compressed={false} />;
 
     return (
@@ -212,11 +216,8 @@ const definition = ReduxContainer.for<Params, Data, Callbacks>(Component);
 
 export const ClaimsDashboard = definition.connect({
   withData: (state, props) => {
-    const claims = Selectors.findClaimsByPartner(props.partnerId).getPending(state);
-    const currentClaim = claims.then(x => x![1]).data;
-
     return ({
-      document: Selectors.getClaimIarDocuments(props.partnerId, currentClaim && currentClaim.periodId || 0).getPending(state).then(x => x![1]),
+      document: getCurrentClaimIarDocument(state, props.partnerId),
       editor: getCurrentClaimDocumentsEditor(state, props.partnerId),
       projectDetails: Selectors.getProject(props.projectId).getPending(state),
       partnerDetails: Selectors.getPartner(props.partnerId).getPending(state),
@@ -224,7 +225,13 @@ export const ClaimsDashboard = definition.connect({
       previousClaims: getPreviousClaims(state, props.partnerId)
     });
   },
-  withCallbacks: () => ({})
+  withCallbacks: (dispatch) => ({
+    validate: (claimKey, dto) =>
+      dispatch(Actions.updateClaimDocumentEditor(claimKey, dto)),
+    uploadFile: (claimKey, file) =>
+      dispatch(Actions.uploadClaimDocument(claimKey, file, () =>
+        dispatch(Actions.loadIarDocuments(claimKey.partnerId, claimKey.periodId))))
+  })
 });
 
 export const ClaimsDashboardRoute = definition.route({
