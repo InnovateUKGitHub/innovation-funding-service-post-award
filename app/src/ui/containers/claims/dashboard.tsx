@@ -12,7 +12,6 @@ import { SimpleString } from "../../components/renderers";
 import { ReviewClaimRoute } from "./review";
 import { ClaimDto, ClaimStatus, ProjectDto } from "../../../types";
 
-
 interface Params {
   projectId: string;
   partnerId: string;
@@ -63,9 +62,10 @@ class Component extends ContainerBase<Params, Data, {}> {
     if (!claim.isIarRequired) {
       return null;
     }
+
     return (
       <Section qa="current-claim-iar" title="Independent audit report">
-        {claim.status === ClaimStatus.AWAITING_IUK_APPROVAL ? this.renderIarDocument(claim, document!) : this.renderIarDocumentUpload(claim)}
+        {document ? this.renderIarDocument(claim, document!) : this.renderIarDocumentUpload(claim)}
       </Section>
     );
   }
