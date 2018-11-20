@@ -13,8 +13,6 @@ import {
   getClaimDocumentEditor,
   getClaimDocuments
 } from "../selectors/documents";
-import { AsyncThunk, conditionalLoad, dataLoadAction, DataLoadAction, handleError, ResetEditorAction, resetEditorAction, SyncThunk, updateEditorAction, UpdateEditorAction } from "./common";
-import { getClaimDetailDocumentEditor, getClaimDetailDocuments, getClaimDocuments} from "../selectors/documents";
 import { LoadingStatus } from "../../../shared/pending";
 import { Results } from "../../validation/results";
 import {DocumentUploadValidator} from "../../validators/documentUploadValidator";
@@ -91,7 +89,7 @@ export function uploadClaimDocument(claimKey: ClaimKey, dto: DocumentUploadDto, 
   return (dispatch, getState) => {
     const state = getState();
     const selector = getClaimDocumentEditor(claimKey);
-    const docsSelector = getClaimDocuments(claimKey.partnerId, claimKey.periodId);
+    const docsSelector = getClaimDocuments(claimKey.partnerId, claimKey.periodId, dto.description);
     const validation = updateClaimDocumentEditor(claimKey, dto, true)(dispatch, getState, null);
 
     if (!validation.isValid) {

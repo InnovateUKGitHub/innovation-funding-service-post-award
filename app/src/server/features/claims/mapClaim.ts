@@ -31,5 +31,5 @@ export default (context: IContext) => (claim: ISalesforceClaim, forecast?: ISale
   paidDate: claim.Acc_PaidDate__c === null ? null : context.clock.parse(claim.Acc_PaidDate__c, SALESFORCE_DATE_FORMAT),
   comments: claim.Acc_LineItemDescription__c,
   isIarRequired: claim.Acc_IARRequired__c,
-  statusAllowsIar: STATUS_ALLOWING_IAR_UPLOAD.indexOf(claim.Acc_ClaimStatus__c) >= 0
+  statusAllowsIarUpload: STATUS_ALLOWING_IAR_UPLOAD.indexOf(claim.Acc_ClaimStatus__c) >= 0
 });

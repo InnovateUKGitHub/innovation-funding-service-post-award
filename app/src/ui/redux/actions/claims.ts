@@ -2,7 +2,7 @@ import { ApiClient } from "../../apiClient";
 import { ClaimDtoValidator } from "../../validators";
 import { LoadingStatus } from "../../../shared/pending";
 import { AsyncThunk, conditionalLoad, dataLoadAction, DataLoadAction, handleError, SyncThunk, updateEditorAction, UpdateEditorAction } from "./common";
-import { findClaimsByPartner, getClaim, getClaimEditor } from "../selectors";
+import { findClaimsByPartner, getClaim, getClaimEditor, getCurrentClaim } from "../selectors";
 import { ClaimDto } from "../../../types";
 import { loadIarDocuments } from ".";
 
@@ -52,10 +52,10 @@ export function loadClaimsForPartner(partnerId: string) {
 }
 
 export function loadClaimsAndDocuments(partnerId: string): AsyncThunk<void, DataLoadAction> {
-    return (dispatch, getState) => {
-      return loadClaimsForPartner(partnerId)(dispatch, getState, null).then(() => {
-        const claim = findClaimsByPartner(partnerId).get(getState()).data[1];
-        return loadIarDocuments(partnerId, claim.periodId)(dispatch, getState, null);
-      });
-    };
+  return (dispatch, getState) => loadClaimsForPartner(partnerId)(dispatch, getState, null).then(() => {
+    const claim = getCurrentClaim(getState(), partnerId).data;
+    if (claim) {
+      return loadIarDocuments(partnerId, claim.periodId)(dispatch, getState, null);
+    }
+  });
 }
