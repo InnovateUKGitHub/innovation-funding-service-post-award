@@ -42,6 +42,28 @@ class Component extends ContainerBase<Params, Data, {}> {
     return <Loader pending={combined} render={(x) => this.renderContents(x.projectDetails, x.partnerDetails, x.claims)} />;
   }
 
+  private renderIarDocument(claim: ClaimDto, document: DocumentSummaryDto) {
+    // TODO
+    return null;
+  }
+
+  private renderIarDocumentUpload(claim: ClaimDto) {
+    // TODO
+    return null;
+  }
+
+  private renderIarDocumentSection(claim: ClaimDto, document?: DocumentSummaryDto) {
+    // TODO handle case where IAR required bu upload is not possible
+    if (!claim.isIarRequired) {
+      return null;
+    }
+    return (
+      <Section qa="current-claim-iar" title="Independent audit report">
+        {document ? this.renderIarDocument(claim, document) : this.renderIarDocumentUpload(claim)}
+      </Section>
+    );
+  }
+
   private renderContents(project: ProjectDto, partner: PartnerDto, claims: ClaimDto[]) {
     const currentClaim = claims.find(claim => !claim.approvedDate);
     const previousClaims = currentClaim ? claims.filter(claim => claim.id !== currentClaim.id) : claims;
@@ -49,6 +71,9 @@ class Component extends ContainerBase<Params, Data, {}> {
     const currentClaimsSectionTitle = (
       currentClaim && <React.Fragment>Claim for P{currentClaim.periodId} - <DayAndLongMonth value={currentClaim.periodStartDate} /> to <FullDate value={currentClaim.periodEndDate} /></React.Fragment>
     );
+
+    // TODO get from store
+    let document: DocumentSummaryDto;
 
     return (
       <ProjectOverviewPage selectedTab={ClaimsDashboardRoute.routeName} project={project} partnerId={partner.id} partners={[partner]}>
@@ -70,6 +95,7 @@ class Component extends ContainerBase<Params, Data, {}> {
         <Section qa="current-claims-section" title={currentClaimsSectionTitle}>
           {this.renderClaims(currentClaim ? [currentClaim] : [], "current-claims-table", project.id, true)}
         </Section>
+        {currentClaim && this.renderIarDocumentSection(currentClaim, document)}
         <Section qa="previous-claims-section" title="Previous claims">
           {this.renderClaims(previousClaims, "previous-claims-table", project.id, false)}
         </Section>
