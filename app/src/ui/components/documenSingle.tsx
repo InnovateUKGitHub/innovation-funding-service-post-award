@@ -4,7 +4,7 @@ interface Props {
     message: string;
     document: DocumentSummaryDto;
     openNewWindow?: boolean;
-    qa: string;
+    qa?: string;
 }
 
 export const DocumentSingle: React.SFC<Props> = ({ message, document, openNewWindow, qa }: Props) => {
