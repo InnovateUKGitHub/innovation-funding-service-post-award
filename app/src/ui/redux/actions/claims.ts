@@ -4,6 +4,7 @@ import { LoadingStatus } from "../../../shared/pending";
 import { AsyncThunk, conditionalLoad, dataLoadAction, DataLoadAction, handleError, SyncThunk, updateEditorAction, UpdateEditorAction } from "./common";
 import { findClaimsByPartner, getClaim, getClaimEditor } from "../selectors";
 import { ClaimDto } from "../../../types";
+import { loadIarDocuments } from ".";
 
 export function loadClaim(partnerId: string, periodId: number) {
   return conditionalLoad(getClaim(partnerId, periodId), params => ApiClient.claims.get({partnerId, periodId, ...params}));
@@ -48,4 +49,13 @@ export function saveClaim(partnerId: string, periodId: number, claim: ClaimDto, 
 
 export function loadClaimsForPartner(partnerId: string) {
   return conditionalLoad(findClaimsByPartner(partnerId), params => ApiClient.claims.getAllByPartnerId({partnerId, ...params}));
+}
+
+export function loadClaimsAndDocuments(partnerId: string): AsyncThunk<void, DataLoadAction> {
+    return (dispatch, getState) => {
+      return loadClaimsForPartner(partnerId)(dispatch, getState, null).then(() => {
+        const claim = findClaimsByPartner(partnerId).get(getState()).data[1];
+        return loadIarDocuments(partnerId, claim.periodId)(dispatch, getState, null);
+      });
+    };
 }
