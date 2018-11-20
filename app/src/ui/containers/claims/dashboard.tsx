@@ -96,7 +96,7 @@ class Component extends ContainerBase<Params, Data, Callbacks> {
   }
 
   private renderIarDocumentUpload(claim: ClaimDto, editor: IEditorStore<DocumentUploadDto, DocumentUploadValidator>) {
-    if (!claim.statusAllowsIarUpload) {
+    if (!claim.statusAllowsIarEdit) {
       return null;
     }
     const UploadForm = ACC.TypedForm<{file: File | null }>();
