@@ -11,6 +11,10 @@ import { ClaimsDetailsRoute } from "./details";
 import { SimpleString } from "../../components/renderers";
 import { ReviewClaimRoute } from "./review";
 import { ClaimDto, ProjectDto } from "../../../types";
+import * as ACC from "../../components";
+import { IEditorStore } from "../../redux/reducers";
+import { DocumentUploadValidator } from "../../validators/documentUploadValidator";
+import { getCurrentClaim, getCurrentClaimDocumentsEditor, getPreviousClaims } from "../../redux/selectors";
 
 interface Params {
   projectId: string;
@@ -20,26 +24,37 @@ interface Params {
 interface Data {
   projectDetails: Pending<ProjectDto>;
   partnerDetails: Pending<PartnerDto>;
-  claims: Pending<ClaimDto[]>;
+  previousClaims: Pending<ClaimDto[]>;
+  currentClaim: Pending<ClaimDto | null>;
+  editor: Pending<IEditorStore<DocumentUploadDto, DocumentUploadValidator> | null>;
 }
 
 interface CombinedData {
-  projectDetails: ProjectDto;
-  partnerDetails: PartnerDto;
-  claims: ClaimDto[];
+  project: ProjectDto;
+  partner: PartnerDto;
+  previousClaims: ClaimDto[];
+  currentClaim: ClaimDto | null;
+  editor: IEditorStore<DocumentUploadDto, DocumentUploadValidator> | null;
 }
 
-class Component extends ContainerBase<Params, Data, {}> {
+interface Callbacks {
+  validate: (key: ClaimKey, dto: DocumentUploadDto) => void;
+  uploadFile: (key: ClaimKey, dto: DocumentUploadDto) => void;
+}
+
+class Component extends ContainerBase<Params, Data, Callbacks> {
   public render() {
     const combined = Pending.combine(
       this.props.projectDetails,
       this.props.partnerDetails,
-      this.props.claims,
-      (projectDetails, partnerDetails, claims) => ({ projectDetails, partnerDetails, claims })
+      this.props.previousClaims,
+      this.props.currentClaim,
+      this.props.editor,
+      (project, partner, previousClaims, currentClaim, editor) => ({ project, partner, previousClaims, currentClaim, editor })
     );
 
     const Loader = TypedLoader<CombinedData>();
-    return <Loader pending={combined} render={(x) => this.renderContents(x.projectDetails, x.partnerDetails, x.claims)} />;
+    return <Loader pending={combined} render={(x) => this.renderContents(x)} />;
   }
 
   private renderIarDocument(claim: ClaimDto, document: DocumentSummaryDto) {
@@ -47,26 +62,44 @@ class Component extends ContainerBase<Params, Data, {}> {
     return null;
   }
 
-  private renderIarDocumentUpload(claim: ClaimDto) {
-    // TODO
-    return null;
+  private onChange(dto: DocumentUploadDto, periodId: number) {
+    const key = {partnerId: this.props.partnerId, periodId};
+    this.props.validate(key, dto);
   }
 
-  private renderIarDocumentSection(claim: ClaimDto, document?: DocumentSummaryDto) {
+  private onSave(dto: DocumentUploadDto, periodId: number) {
+    const claimKey = {
+      partnerId: this.props.partnerId,
+      periodId
+    };
+    this.props.uploadFile(claimKey, dto);
+  }
+
+  private renderIarDocumentUpload(claim: ClaimDto, editor: IEditorStore<DocumentUploadDto, DocumentUploadValidator>) {
+    const UploadForm = ACC.TypedForm<{file: File | null }>();
+    return (
+      <UploadForm.Form data={editor.data} onSubmit={() => this.onSave(editor.data, claim.periodId)} onChange={(dto) => this.onChange(dto, claim.periodId)}>
+        <UploadForm.Fieldset heading="Upload documents">
+          <UploadForm.FileUpload validation={editor.validator.file} value={(data) => data.file} hint="Make sure each file name includes the date and a description" name="Upload documents" update={(dto, file) => dto.file = file}/>
+        </UploadForm.Fieldset>
+        <UploadForm.Submit>Upload documents</UploadForm.Submit>
+      </UploadForm.Form>
+    );
+  }
+
+  private renderIarDocumentSection(claim: ClaimDto, editor: IEditorStore<DocumentUploadDto, DocumentUploadValidator>, document?: DocumentSummaryDto) {
     // TODO handle case where IAR required bu upload is not possible
     if (!claim.isIarRequired) {
       return null;
     }
     return (
       <Section qa="current-claim-iar" title="Independent audit report">
-        {document ? this.renderIarDocument(claim, document) : this.renderIarDocumentUpload(claim)}
+        {document ? this.renderIarDocument(claim, document) : this.renderIarDocumentUpload(claim, editor)}
       </Section>
     );
   }
 
-  private renderContents(project: ProjectDto, partner: PartnerDto, claims: ClaimDto[]) {
-    const currentClaim = claims.find(claim => !claim.approvedDate);
-    const previousClaims = currentClaim ? claims.filter(claim => claim.id !== currentClaim.id) : claims;
+  private renderContents({currentClaim, partner, previousClaims, project, editor}: CombinedData) {
     const Details = TypedDetails<PartnerDto>();
     const currentClaimsSectionTitle = (
       currentClaim && <React.Fragment>Claim for P{currentClaim.periodId} - <DayAndLongMonth value={currentClaim.periodStartDate} /> to <FullDate value={currentClaim.periodEndDate} /></React.Fragment>
@@ -95,7 +128,7 @@ class Component extends ContainerBase<Params, Data, {}> {
         <Section qa="current-claims-section" title={currentClaimsSectionTitle}>
           {this.renderClaims(currentClaim ? [currentClaim] : [], "current-claims-table", project.id, true)}
         </Section>
-        {currentClaim && this.renderIarDocumentSection(currentClaim, document)}
+        {currentClaim && editor && this.renderIarDocumentSection(currentClaim, editor, document)}
         <Section qa="previous-claims-section" title="Previous claims">
           {this.renderClaims(previousClaims, "previous-claims-table", project.id, false)}
         </Section>
@@ -153,15 +186,24 @@ class Component extends ContainerBase<Params, Data, {}> {
   }
 }
 
-const definition = ReduxContainer.for<Params, Data, {}>(Component);
+const definition = ReduxContainer.for<Params, Data, Callbacks>(Component);
 
 export const ClaimsDashboard = definition.connect({
-  withData: (state, params) => ({
-    projectDetails: Selectors.getProject(params.projectId).getPending(state),
-    partnerDetails: Selectors.getPartner(params.partnerId).getPending(state),
-    claims: Selectors.findClaimsByPartner(params.partnerId).getPending(state)
+  withData: (state, props) => ({
+    editor: getCurrentClaimDocumentsEditor(state, props.partnerId),
+    projectDetails: Selectors.getProject(props.projectId).getPending(state),
+    partnerDetails: Selectors.getPartner(props.partnerId).getPending(state),
+    currentClaim: getCurrentClaim(state, props.partnerId),
+    previousClaims: getPreviousClaims(state, props.partnerId)
   }),
-  withCallbacks: () => ({})
+  withCallbacks: (dispatch) => ({
+    validate: (claimKey, dto) =>
+      dispatch(Actions.updateClaimDocumentEditor(claimKey, dto)),
+    uploadFile: (claimKey, file) =>
+      dispatch(Actions.uploadClaimDocument(claimKey, file, () =>
+        console.log("TODO")))
+        // dispatch(Actions.loadClaimDocuments(claimKey, dto))))
+  })
 });
 
 export const ClaimsDashboardRoute = definition.route({

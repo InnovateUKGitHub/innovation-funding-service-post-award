@@ -20,19 +20,19 @@ interface Data {
   project: Pending<ProjectDto>;
   costCategories: Pending<CostCategoryDto[]>;
   documents: Pending<DocumentSummaryDto[]>;
-  editor: Pending<IEditorStore<ClaimDetailDocumentDto, DocumentUploadValidator>>;
+  editor: Pending<IEditorStore<DocumentUploadDto, DocumentUploadValidator>>;
 }
 
 interface CombinedData {
   project: ProjectDto;
   costCategories: CostCategoryDto[];
   documents: DocumentSummaryDto[];
-  editor: IEditorStore<ClaimDetailDocumentDto, DocumentUploadValidator>;
+  editor: IEditorStore<DocumentUploadDto, DocumentUploadValidator>;
 }
 
 interface Callbacks {
-  validate: (key: ClaimDetailKey, dto: ClaimDetailDocumentDto) => void;
-  uploadFile: (key: ClaimDetailKey, dto: ClaimDetailDocumentDto) => void;
+  validate: (key: ClaimDetailKey, dto: DocumentUploadDto) => void;
+  uploadFile: (key: ClaimDetailKey, dto: DocumentUploadDto) => void;
   deleteFile: (key: ClaimDetailKey, dto: DocumentSummaryDto) => void;
 }
 
@@ -50,12 +50,12 @@ export class ClaimDetailDocumentsComponent extends ContainerBase<Params, Data, C
     return <Loader pending={combined} render={(data) => this.renderContents(data)} />;
   }
 
-  private onChange(dto: ClaimDetailDocumentDto) {
+  private onChange(dto: DocumentUploadDto) {
     const key = {partnerId: this.props.partnerId, periodId: this.props.periodId, costCategoryId: this.props.costCategoryId};
     this.props.validate(key, dto);
   }
 
-  private onSave(dto: ClaimDetailDocumentDto) {
+  private onSave(dto: DocumentUploadDto) {
     const claimDetailKey = {
       partnerId: this.props.partnerId,
       periodId: this.props.periodId,
