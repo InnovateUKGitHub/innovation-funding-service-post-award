@@ -1,7 +1,7 @@
 import * as Validation from "./common";
 import { Results } from "../validation/results";
 import { Result } from "../validation/result";
-import { ClaimDto } from "../../types";
+import { ClaimDto, ClaimStatus } from "../../types";
 
 const COMMENTS_LENGTH_MAX = 1000;
 
@@ -9,7 +9,7 @@ export class ClaimDtoValidator extends Results<ClaimDto>  {
     constructor(dto: ClaimDto, private details: ClaimDetailsSummaryDto[], private costCategories: CostCategoryDto[], showErrors: boolean) {
         super(dto, showErrors);
 
-        const permittedStatus = ["Draft", "Submitted", "MO Queried", "Awaiting IUK Approval"];
+        const permittedStatus = [ ClaimStatus.DRAFT, ClaimStatus.SUBMITTED, ClaimStatus.MO_QUERIED, ClaimStatus.AWAITING_IUK_APPROVAL ];
 
         this.status = Validation.isTrue(this, !this.model.status || permittedStatus.indexOf(this.model.status) !== -1, `Set a valid status`);
     }
