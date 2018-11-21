@@ -2,6 +2,7 @@ import { TestContext } from "../../testContextProvider";
 import { UpdateClaimCommand } from "../../../../src/server/features/claims/updateClaim";
 import { ValidationError } from "../../../../src/shared/validation";
 import mapClaim from "../../../../src/server/features/claims/mapClaim";
+import { ClaimStatus } from "../../../../src/types/constants";
 
 describe('UpdateClaimCommand', () => {
   it('when claim id not set expect validation expection', async () => {
@@ -22,7 +23,7 @@ describe('UpdateClaimCommand', () => {
     const claim = testData.createClaim(null, null, (x => x.Acc_ClaimStatus__c = "New"));
     const dto = mapClaim(context)(claim);
 
-    dto.status = "Draft";
+    dto.status = ClaimStatus.DRAFT;
 
     let command = new UpdateClaimCommand(dto);
     await context.runCommand(command);

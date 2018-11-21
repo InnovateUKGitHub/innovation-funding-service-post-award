@@ -1,5 +1,5 @@
 import { IContext, IQuery } from "../common/context";
-import { ISalesforcePartner } from "../../repositories/partnersRepository";
+import { ISalesforcePartner, PROJECT_LEAD_IDENTIFIER } from "../../repositories/partnersRepository";
 
 export class MapToPartnerDtoCommand implements IQuery<PartnerDto> {
     constructor(readonly item: ISalesforcePartner) { }
@@ -14,7 +14,7 @@ export class MapToPartnerDtoCommand implements IQuery<PartnerDto> {
             name: this.item.Acc_AccountId__r.Name,
             accountId: this.item.Acc_AccountId__r.Id,
             type: this.item.Acc_ParticipantType__c,
-            isLead: this.item.Acc_ProjectRole__c === "Project Lead",
+            isLead: this.item.Acc_ProjectRole__c === PROJECT_LEAD_IDENTIFIER,
             projectId: this.item.Acc_ProjectId__c,
             totalParticipantGrant: this.item.Acc_TotalParticipantGrant__c,
             totalParticipantCostsClaimed: this.item.Acc_TotalParticipantCosts__c,

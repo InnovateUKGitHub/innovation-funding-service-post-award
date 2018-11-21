@@ -52,3 +52,5 @@ export class PartnerRepository extends SalesforceBase<ISalesforcePartner> implem
         return super.filterOne({ Id: partnerId });
     }
 }
+
+export const PROJECT_LEAD_IDENTIFIER = "Project Lead";
