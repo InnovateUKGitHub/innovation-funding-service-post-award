@@ -1,6 +1,8 @@
 import { IContext, IQuery } from "../common/context";
 import mapClaim from "./mapClaim";
 import { ClaimDto } from "../../../types";
+import { ISalesforceClaim, ISalesforceProfileTotalPeriod, PROJECT_LEAD_IDENTIFIER } from "../../repositories";
+import { IComparer } from "../../../util/comparator";
 
 export class GetAllClaimsForProjectQuery implements IQuery<ClaimDto[]> {
   constructor(private projectId: string) {
@@ -10,14 +12,19 @@ export class GetAllClaimsForProjectQuery implements IQuery<ClaimDto[]> {
     const claims = await context.repositories.claims.getAllByProjectId(this.projectId);
     const forcasts = await context.repositories.profileTotalPeriod.getAllByProjectId(this.projectId);
     const joined = claims.map(claim => ({ claim, forcast: forcasts.find(x => x.Acc_ProjectParticipant__c === claim.Acc_ProjectParticipant__r.Id && x.Acc_ProjectPeriodNumber__c === claim.Acc_ProjectPeriodNumber__c) }));
-    const sorted = joined.sort((x, y) => {
+    joined.sort(claimSorter);
 
+    return joined.map(x => mapClaim(context)(x.claim, x.forcast));
+  }
+}
+
+const claimSorter: IComparer<{claim: ISalesforceClaim}> = (x, y) => {
       // if x is not lead but y is lead then y is bigger
-      if (x.claim.Acc_ProjectParticipant__r.Acc_ProjectRole__c !== "Project Lead" && y.claim.Acc_ProjectParticipant__r.Acc_ProjectRole__c === "Project Lead") {
+      if (x.claim.Acc_ProjectParticipant__r.Acc_ProjectRole__c !== PROJECT_LEAD_IDENTIFIER && y.claim.Acc_ProjectParticipant__r.Acc_ProjectRole__c === PROJECT_LEAD_IDENTIFIER) {
         return 1;
       }
       // if x is lead but y is not lead then x is bigger
-      if (x.claim.Acc_ProjectParticipant__r.Acc_ProjectRole__c === "Project Lead" && y.claim.Acc_ProjectParticipant__r.Acc_ProjectRole__c !== "Project Lead") {
+      if (x.claim.Acc_ProjectParticipant__r.Acc_ProjectRole__c === PROJECT_LEAD_IDENTIFIER && y.claim.Acc_ProjectParticipant__r.Acc_ProjectRole__c !== PROJECT_LEAD_IDENTIFIER) {
         return -1;
       }
 
@@ -42,9 +49,4 @@ export class GetAllClaimsForProjectQuery implements IQuery<ClaimDto[]> {
       }
 
       return 0;
-    });
-
-    const mapped = sorted.map(x => mapClaim(context)(x.claim, x.forcast));
-    return mapped;
-  }
-}
+};
