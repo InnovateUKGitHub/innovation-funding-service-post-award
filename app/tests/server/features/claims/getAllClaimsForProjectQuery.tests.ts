@@ -2,6 +2,7 @@ import "jest";
 import { TestContext } from "../../testContextProvider";
 import { GetAllClaimsForProjectQuery } from "../../../../src/server/features/claims";
 import { IQuery } from "../../../../src/server/features/common/context";
+import { ClaimStatus } from "../../../../src/types";
 
 describe("getAllClaimsForProjectQuery", () => {
   it("returns the full claim details", async () => {
@@ -16,7 +17,7 @@ describe("getAllClaimsForProjectQuery", () => {
 
     context.testData.createClaim(partner, expectedPeriodId, x => {
       x.Acc_ProjectPeriodCost__c = expectedClaimCost;
-      x.Acc_ClaimStatus__c = "Innovate Queried"
+      x.Acc_ClaimStatus__c = ClaimStatus.INNOVATE_QUERIED;
     });
 
     context.testData.createProfileTotalPeriod(partner, expectedPeriodId, x => {
@@ -45,7 +46,7 @@ describe("getAllClaimsForProjectQuery", () => {
     context.testData.range(expectedNumberOfCLaims, i => {
       context.testData.createClaim(partner, i, x => {
         x.Acc_ProjectPeriodCost__c = i * 10;
-        x.Acc_ClaimStatus__c = "Innovate Queried"
+        x.Acc_ClaimStatus__c = ClaimStatus.INNOVATE_QUERIED;
       });
       context.testData.createProfileTotalPeriod(partner, i, x => {
         x.Acc_PeriodInitialForecastCost__c = i * 100;
@@ -57,10 +58,10 @@ describe("getAllClaimsForProjectQuery", () => {
     const results = await context.runQuery(query);
 
     expect(results.length).toBe(3);
-    expect(results.map(x => x.periodId)).toEqual([1, 2, 3]);
+    expect(results.map(x => x.periodId)).toEqual([3, 2, 1]);
     expect(results.map(x => x.partnerId)).toEqual([partner.Id, partner.Id, partner.Id]);
-    expect(results.map(x => x.totalCost)).toEqual([10, 20, 30]);
-    expect(results.map(x => x.forecastCost)).toEqual([100, 200, 300]);
+    expect(results.map(x => x.totalCost)).toEqual([30, 20, 10]);
+    expect(results.map(x => x.forecastCost)).toEqual([300, 200, 100]);
 
   });
 
@@ -73,12 +74,12 @@ describe("getAllClaimsForProjectQuery", () => {
 
     context.testData.createClaim(partner1, 1, x => {
       x.Acc_ProjectPeriodCost__c = 10;
-      x.Acc_ClaimStatus__c = "Innovate Queried"
+      x.Acc_ClaimStatus__c = ClaimStatus.INNOVATE_QUERIED;
     });
 
     context.testData.createClaim(partner2, 1, x => {
       x.Acc_ProjectPeriodCost__c = 20;
-      x.Acc_ClaimStatus__c = "Approved"
+      x.Acc_ClaimStatus__c = ClaimStatus.APPROVED;
     });
 
     context.testData.createProfileTotalPeriod(partner1, 1, x => {
@@ -106,18 +107,18 @@ describe("getAllClaimsForProjectQuery", () => {
 
     const project1 = context.testData.createProject();
     const project2 = context.testData.createProject();
-    
+
     const partner1 = context.testData.createPartner(project1);
     const partner2 = context.testData.createPartner(project2);
 
     context.testData.createClaim(partner1, 1, x => {
       x.Acc_ProjectPeriodCost__c = 10;
-      x.Acc_ClaimStatus__c = "Innovate Queried"
+      x.Acc_ClaimStatus__c = ClaimStatus.INNOVATE_QUERIED;
     });
 
     context.testData.createClaim(partner2, 1, x => {
       x.Acc_ProjectPeriodCost__c = 20;
-      x.Acc_ClaimStatus__c = "Approved"
+      x.Acc_ClaimStatus__c = ClaimStatus.APPROVED;
     });
 
     context.testData.createProfileTotalPeriod(partner1, 1, x => {
@@ -138,5 +139,50 @@ describe("getAllClaimsForProjectQuery", () => {
     expect(results.map(x => x.totalCost)).toEqual([20]);
     expect(results.map(x => x.forecastCost)).toEqual([200]);
 
+  });
+
+  it("sorts project lead first then alphabetical", async () => {
+    const context = new TestContext();
+
+    const project = context.testData.createProject();
+
+    const partner1 = context.testData.createPartner(project, p => { p.Acc_ProjectRole__c = ""; p.Acc_AccountId__r.Name = "XXXXXX" });
+    const partner2 = context.testData.createPartner(project, p => { p.Acc_ProjectRole__c = "Project Lead"; p.Acc_AccountId__r.Name = "ZZZZZZZZ" });
+    const partner3 = context.testData.createPartner(project, p => { p.Acc_ProjectRole__c = ""; p.Acc_AccountId__r.Name = "AAAAAA" });
+
+    context.testData.createClaim(partner1, 1);
+    context.testData.createClaim(partner2, 1);
+    context.testData.createClaim(partner3, 1);
+
+    console.log(JSON.stringify(context.repositories.claims.Items, null, "  "));
+
+    const query = new GetAllClaimsForProjectQuery(project.Id);
+    const results = await context.runQuery(query);
+
+    expect(results.map(x => x.partnerId)).toEqual([partner2.Id, partner3.Id, partner1.Id]);
+  });
+
+  it("sorts period ids decending", async () => {
+    const context = new TestContext();
+
+    const project = context.testData.createProject();
+
+    const partner1 = context.testData.createPartner(project, p => { p.Acc_ProjectRole__c = ""; p.Acc_AccountId__r.Name = "XXXXXX" });
+    const partner2 = context.testData.createPartner(project, p => { p.Acc_ProjectRole__c = "Project Lead"; p.Acc_AccountId__r.Name = "ZZZZZZZZ" });
+
+    context.testData.createClaim(partner1, 1);
+    context.testData.createClaim(partner1, 2);
+    context.testData.createClaim(partner1, 3);
+    context.testData.createClaim(partner2, 1);
+    context.testData.createClaim(partner2, 2);
+    context.testData.createClaim(partner2, 3);
+
+    console.log(JSON.stringify(context.repositories.claims.Items, null, "  "));
+
+    const query = new GetAllClaimsForProjectQuery(project.Id);
+    const results = await context.runQuery(query);
+
+    expect(results.map(x => x.partnerId)).toEqual([partner2.Id, partner2.Id, partner2.Id, partner1.Id, partner1.Id, partner1.Id]);
+    expect(results.map(x => x.periodId)).toEqual([3, 2, 1, 3, 2, 1]);
   });
 });

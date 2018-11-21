@@ -16,6 +16,7 @@ export interface ISalesforcePartner {
     Acc_TotalParticipantCostsPaid__c: number;
     Acc_Cap_Limit__c: number;
     Acc_Award_Rate__c: number;
+    Acc_TotalFutureForecastsforParticipant__c: number;
 }
 
 const fields = [
@@ -30,6 +31,7 @@ const fields = [
     "Acc_Award_Rate__c",
     "Acc_ProjectRole__c",
     "Acc_ProjectId__c",
+    "Acc_TotalFutureForecastsforParticipant__c",
 ];
 
 export interface IPartnerRepository {
@@ -50,3 +52,5 @@ export class PartnerRepository extends SalesforceBase<ISalesforcePartner> implem
         return super.filterOne({ Id: partnerId });
     }
 }
+
+export const PROJECT_LEAD_IDENTIFIER = "Project Lead";
