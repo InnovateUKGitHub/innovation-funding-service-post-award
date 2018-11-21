@@ -122,3 +122,17 @@ export function deleteClaimDetailDocument(claimDetailKey: ClaimDetailKey, dto: D
       });
   };
 }
+
+export function deleteClaimDocument(claimKey: ClaimKey, dto: DocumentSummaryDto, onComplete: () => void): AsyncThunk<void> {
+  return (dispatch, getState) => {
+    const state = getState();
+    const docsSelector = getClaimDocuments(claimKey.partnerId, claimKey.periodId, DocumentDescription.IAR);
+    dispatch(dataLoadAction(docsSelector.key, docsSelector.store, LoadingStatus.Stale, undefined));
+    return ApiClient.documents.deleteDocument({documentId: dto.id, user: state.user})
+      .then(() => {
+        onComplete();
+      }).catch((e: any) => {
+        console.log(e);
+      });
+  };
+}
