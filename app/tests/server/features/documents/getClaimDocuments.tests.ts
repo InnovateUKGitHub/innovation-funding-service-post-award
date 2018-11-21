@@ -18,7 +18,7 @@ describe("GetClaimDocumentQuery", () => {
     });
 
     const claimKey = {
-      partnerId: claim.Acc_ProjectParticipant__c,
+      partnerId: claim.Acc_ProjectParticipant__r.Id,
       periodId: claim.Acc_ProjectPeriodNumber__c
     };
 
@@ -41,7 +41,7 @@ describe("GetClaimDocumentQuery", () => {
     });
 
     const claimKey = {
-      partnerId: claim.Acc_ProjectParticipant__c,
+      partnerId: claim.Acc_ProjectParticipant__r.Id,
       periodId: claim.Acc_ProjectPeriodNumber__c
     };
     const query = new GetClaimDocumentsQuery(claimKey, { description: DocumentDescription.IAR });

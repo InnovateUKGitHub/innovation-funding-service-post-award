@@ -11,21 +11,58 @@ const renderDate = (value: Date | null, format: string) => {
     return null;
 };
 
-export const DateRange: React.SFC<{ start: Date|null, end: Date|null }> = props => {
-  const start = props.start && DateTime.fromJSDate(props.start);
-  const end   = props.end && DateTime.fromJSDate(props.end);
+export const DateRange: React.SFC<{ start: Date | null, end: Date | null }> = props => {
+    const start = props.start && DateTime.fromJSDate(props.start);
+    const end = props.end && DateTime.fromJSDate(props.end);
 
-  if(!start || !start.isValid || !end || !end.isValid) {
-    return null;
-  }
+    if (!start || !start.isValid || !end || !end.isValid) {
+        return null;
+    }
 
-  const words  = [start.monthShort, "to", end.monthShort, end.year];
+    if (start.month === end.month && start.year === end.year) {
+        return <span style={{ whiteSpace: "nowrap" }}>{end.monthShort} {end.year}</span>;
+    }
 
-  if(start.year !== end.year) {
-    words.splice(1, 0, start.year);
-  }
+    if (start.year === end.year) {
+        return (
+            <span>
+                <span style={{ whiteSpace: "nowrap" }}>{start.monthShort} to </span>
+                <span style={{ whiteSpace: "nowrap" }}>{end.monthShort} {end.year}</span>
+            </span>
+        );
+    }
 
-  return <span>{words.join(" ")}</span>;
+    return (
+        <span>
+            <span style={{ whiteSpace: "nowrap" }}>{start.monthShort} {start.year} to </span>
+            <span style={{ whiteSpace: "nowrap" }}>{end.monthShort} {end.year}</span>
+        </span>
+    );
+};
+
+export const LongDateRange: React.SFC<{ start: Date | null, end: Date | null }> = props => {
+    const start = props.start && DateTime.fromJSDate(props.start);
+    const end = props.end && DateTime.fromJSDate(props.end);
+
+    if (!start || !start.isValid || !end || !end.isValid) {
+        return null;
+    }
+
+    if (start.year === end.year) {
+        return (
+            <span>
+                <span style={{ whiteSpace: "nowrap" }}>{start.day} {start.monthLong} to </span>
+                <span style={{ whiteSpace: "nowrap" }}>{end.day} {end.monthLong} {end.year}</span>
+            </span>
+        );
+    }
+
+    return (
+        <span>
+            <span style={{ whiteSpace: "nowrap" }}>{start.day} {start.monthLong} {start.year} to </span>
+            <span style={{ whiteSpace: "nowrap" }}>{end.day} {end.monthLong} {end.year}</span>
+        </span>
+    );
 };
 
 export const ShortMonth: React.SFC<{ value: Date | null }> = (props) => {

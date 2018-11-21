@@ -5,7 +5,13 @@ import { ClaimStatus } from "../../types";
 
 export interface ISalesforceClaim {
   Id: string;
-  Acc_ProjectParticipant__c: string;
+  Acc_ProjectParticipant__r: {
+    Id: string;
+    Acc_ProjectRole__c: string;
+    Acc_AccountId__r: {
+      Name: string;
+    }
+  };
   LastModifiedDate: string;
   Acc_ClaimStatus__c: ClaimStatus;
   Acc_ProjectPeriodStartDate__c: string;
@@ -24,7 +30,9 @@ export interface ISalesforceClaim {
 
 const fields = [
   "Id",
-  "Acc_ProjectParticipant__c",
+  "Acc_ProjectParticipant__r.Id",
+  "Acc_ProjectParticipant__r.Acc_ProjectRole__c",
+  "Acc_ProjectParticipant__r.Acc_AccountId__r.Name",
   "LastModifiedDate",
   "Acc_ClaimStatus__c",
   "Acc_ProjectPeriodStartDate__c",
