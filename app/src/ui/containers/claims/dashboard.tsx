@@ -88,11 +88,8 @@ class Component extends ContainerBase<Params, Data, Callbacks> {
   }
 
   private onSave(dto: DocumentUploadDto, periodId: number) {
-    const claimKey = {
-      partnerId: this.props.partnerId,
-      periodId
-    };
-    this.props.uploadFile(claimKey, dto);
+    const key = {partnerId: this.props.partnerId, periodId};
+    this.props.uploadFile(key, dto);
   }
 
   private renderIarDocumentUpload(claim: ClaimDto, editor: IEditorStore<DocumentUploadDto, DocumentUploadValidator>) {
@@ -113,7 +110,7 @@ class Component extends ContainerBase<Params, Data, Callbacks> {
     );
   }
 
-  private renderIarDocumentSection(claim: ClaimDto, editor: IEditorStore<DocumentUploadDto, DocumentUploadValidator>, document?: DocumentSummaryDto | null) {
+  private renderIarDocumentSection(claim: ClaimDto, editor: IEditorStore<DocumentUploadDto, DocumentUploadValidator>, document: DocumentSummaryDto | null) {
     // TODO handle case where IAR required bu upload is not possible
     if (!claim.isIarRequired) {
       return null;
