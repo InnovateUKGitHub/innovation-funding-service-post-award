@@ -11,4 +11,5 @@ interface PartnerDto {
     totalParticipantCostsPaid: number;
     percentageParticipantCostsClaimed: number | null;
     capLimit: number;
+    totalFutureForecastsForParticipants: number;
 }

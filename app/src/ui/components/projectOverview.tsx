@@ -10,12 +10,13 @@ interface Props {
     children: ReactNode;
     partnerId?: string;
     validationMessage?: ReactNode;
+    backLinkText?: string;
 }
 
-export const ProjectOverviewPage: React.SFC<Props> = ({ project, selectedTab, children, partnerId, partners, validationMessage }) => (
+export const ProjectOverviewPage: React.SFC<Props> = ({ project, selectedTab, children, partnerId, partners, validationMessage, backLinkText }) => (
     <ACC.Page>
         <ACC.Section>
-            <ACC.BackLink route={ProjectDashboardRoute.getLink({})}>Main dashboard</ACC.BackLink>
+            <ACC.BackLink route={ProjectDashboardRoute.getLink({})}>{backLinkText || "Main dashboard"}</ACC.BackLink>
         </ACC.Section>
         {validationMessage}
         <ACC.Projects.Title pageTitle="View project" project={project} />
