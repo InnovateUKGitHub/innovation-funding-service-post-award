@@ -140,7 +140,11 @@ export class TestData {
         const newItem: Repositories.ISalesforceClaim = {
             Id: id,
             Acc_ProjectPeriodNumber__c: periodId,
-            Acc_ProjectParticipant__c: partner.Id,
+            Acc_ProjectParticipant__r: {
+              Id: partner.Id,
+              Acc_ProjectRole__c: partner.Acc_ProjectRole__c,
+              Acc_AccountId__r: partner.Acc_AccountId__r
+            },
             Acc_ProjectPeriodStartDate__c: "2018-01-02",
             Acc_ProjectPeriodEndDate__c: "2018-03-04",
             Acc_ApprovedDate__c: null,

@@ -18,7 +18,7 @@ const STATUS_ALLOWING_IAR_EDIT = [
 
 export default (context: IContext) => (claim: ISalesforceClaim, forecast?: ISalesforceProfileTotalPeriod): ClaimDto => ({
   id: claim.Id,
-  partnerId: claim.Acc_ProjectParticipant__c,
+  partnerId: claim.Acc_ProjectParticipant__r.Id,
   lastModifiedDate: context.clock.parse(claim.LastModifiedDate, SALESFORCE_DATE_TIME_FORMAT)!,
   status: claim.Acc_ClaimStatus__c,
   periodStartDate: context.clock.parse(claim.Acc_ProjectPeriodStartDate__c, SALESFORCE_DATE_FORMAT)!,

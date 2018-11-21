@@ -10,6 +10,7 @@ import { DocumentUploadValidator } from "../../validators/documentUploadValidato
 
 export const claimsStore = "claims";
 export const findClaimsByPartner = (partnerId: string) => dataStoreHelper(claimsStore, `partnerId=${partnerId}`);
+export const findClaimsByProject = (projectId: string) => dataStoreHelper(claimsStore, `projectId=${projectId}`);
 
 const claimStore = "claim";
 export const getClaim = (partnerId: string, periodId: number) => dataStoreHelper(claimStore, getKey(partnerId, periodId));
