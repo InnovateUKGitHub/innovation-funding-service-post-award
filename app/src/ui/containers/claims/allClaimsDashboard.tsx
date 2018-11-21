@@ -47,12 +47,12 @@ class Component extends ContainerBase<Params, Data, {}> {
   }
 
   private renderCurrentClaims(currentInfo: {periodId: number, start: Date, end: Date}, project: ProjectDto, partners: PartnerDto[], claims: ClaimDto[]){
-    const title = <React.Fragment>Claim for P{currentInfo.periodId} - <Acc.Renderers.DateRange {...currentInfo} /></React.Fragment>;
+    const title = <React.Fragment>Claim for P{currentInfo.periodId} - <Acc.Renderers.LongDateRange {...currentInfo} /></React.Fragment>;
     const ClaimTable = Acc.TypedTable<ClaimDto>();
 
     return (
-      <Acc.Section title={title}>
-          <ClaimTable.Table data={claims} qa="currentClaims">
+      <Acc.Section title={title} qa="current-claims-section"> 
+          <ClaimTable.Table data={claims} qa="current-claims-table">
             <ClaimTable.String header="Partner" qa="partner" value={x => {
               const p = partners.filter(y => y.id == x.partnerId)[0];
               if(p && p.isLead){
