@@ -1,6 +1,6 @@
 import { ApiParams, ControllerBase } from "./controllerBase";
 import contextProvider from "../features/common/contextProvider";
-import { GetAllForPartnerQuery, GetClaim, GetAllClaimsForProjectQuery } from "../features/claims";
+import { GetAllClaimsForProjectQuery, GetAllForPartnerQuery, GetClaim } from "../features/claims";
 import { UpdateClaimCommand } from "../features/claims/updateClaim";
 import { ApiError, StatusCode } from "./ApiError";
 import { processDto } from "../../shared/processResponse";
