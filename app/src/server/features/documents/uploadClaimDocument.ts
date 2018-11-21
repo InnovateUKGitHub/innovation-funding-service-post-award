@@ -11,7 +11,7 @@ export class UploadClaimDocumentCommand implements ICommand<string> {
   constructor(private claimKey: ClaimKey, private file: FileUpload) {}
 
   private validateIarUpload(claim: ClaimDto) {
-    if (!claim.isIarRequired || !claim.statusAllowsIar) {
+    if (!claim.isIarRequired || !claim.allowIarEdit) {
       throw new ApiError(StatusCode.BAD_REQUEST, "IAR is not required for this claim " + claim.id);
     }
   }

@@ -2,6 +2,8 @@ import { dataStoreHelper, editorStoreHelper } from "./common";
 import { getKey } from "../../../util/key";
 import { LoadingStatus, Pending } from "../../../shared/pending";
 import {DocumentUploadValidator} from "../../validators/documentUploadValidator";
+import { IEditorStore, RootState } from "../reducers";
+import { getCurrentClaim } from "./claims";
 import { DocumentDescription } from "../../../types";
 
 export const documentStore = "documents";
@@ -9,12 +11,38 @@ export const getClaimDetailDocuments = (partnerId: string, periodId: number, cos
 
 export const getClaimDocuments = (partnerId: string, periodId: number, filter?: string) => dataStoreHelper(documentStore, getKey("claim", filter || "All", partnerId, periodId));
 
-export const getClaimIarDocuments = (partnerId: string, periodId: number) => getClaimDocuments(partnerId, periodId, DocumentDescription.IAR);
-
-export const getClaimDetailDocumentEditor = ({partnerId, periodId, costCategoryId}: ClaimDetailKey) => editorStoreHelper<ClaimDetailDocumentDto, DocumentUploadValidator>(
-  "claimDetailDocument",
-  x => x.claimDetailDocument,
+export const getClaimDetailDocumentEditor = ({partnerId, periodId, costCategoryId}: ClaimDetailKey) => editorStoreHelper<DocumentUploadDto, DocumentUploadValidator>(
+  documentStore,
+  x => x.documents,
   () => (Pending.create({ status: LoadingStatus.Done, data: { file: null }, error: null})),
   (dto) => new DocumentUploadValidator(dto, false),
-  `${partnerId}_${periodId}_${costCategoryId}`
+  getKey("claim", "details", partnerId, periodId, costCategoryId)
 );
+
+export const getClaimDocumentEditor = ({partnerId, periodId}: ClaimKey, description?: string) => editorStoreHelper<DocumentUploadDto, DocumentUploadValidator>(
+  documentStore,
+  x => x.documents,
+  () => (Pending.create({ status: LoadingStatus.Done, data: { file: null, description }, error: null})),
+  (dto) => new DocumentUploadValidator(dto, false),
+  getKey("claim", partnerId, periodId)
+);
+
+export const getCurrentClaimIarDocumentsEditor = (state: RootState, partnerId: string): Pending<IEditorStore<DocumentUploadDto, DocumentUploadValidator> | null> => {
+  return getCurrentClaim(state, partnerId).then(claim => {
+    if (!claim) {
+      return null;
+    }
+    const editorPending =  getClaimDocumentEditor({partnerId, periodId: claim.periodId}, DocumentDescription.IAR).get(state);
+    return editorPending.data || null;
+  });
+};
+
+export const getCurrentClaimIarDocument = (state: RootState, partnerId: string): Pending<DocumentSummaryDto | null> => {
+  return getCurrentClaim(state, partnerId).then(claim => {
+    if (!claim) {
+      return null;
+    }
+    const iarDocuments = getClaimDocuments(partnerId, claim.periodId, DocumentDescription.IAR).getPending(state).data;
+    return iarDocuments && iarDocuments.length ? iarDocuments[0] : null;
+  });
+};
