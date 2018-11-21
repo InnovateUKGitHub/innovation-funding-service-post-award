@@ -187,7 +187,7 @@ interface ButtonProps {
 }
 
 const ButtonComponent: React.SFC<ButtonProps> = (props) => {
-    return <button type="submit" name="button" value={props.name} className="govuk-button" style={{ background: "buttonface", color: "buttontext"}} onClick={(e) => handleOtherButton(props, e)}>{props.children}</button>;
+    return <button type="submit" name="button" value={props.name} className="govuk-button" style={{ background: "buttonface", color: "buttontext" }} onClick={(e) => handleOtherButton(props, e)}>{props.children}</button>;
 };
 
 const FileUploadComponent = <T extends {}>(props: ExternalFieldProps<T, File>) => {
