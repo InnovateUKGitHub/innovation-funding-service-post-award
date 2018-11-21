@@ -51,7 +51,7 @@ class Component extends ContainerBase<Params, Data, {}> {
 
     return (
       <Acc.Section title={title} qa="current-claims-section">
-        <ClaimTable.Table data={claims} qa="current-claims-table">
+        <ClaimTable.Table data={claims} qa="current-claims-table" bodyRowFlag={(x) => x.status === ClaimStatus.SUBMITTED ? "info" : null }>
           <ClaimTable.String
             header="Partner"
             qa="partner"

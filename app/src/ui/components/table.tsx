@@ -47,6 +47,7 @@ interface TableProps<T> {
   data: T[];
   validationResult?: Results<{}>[];
   bodyRowClass?: (row: T, index: number) => string;
+  bodyRowFlag?: (row: T, index: number) => "warning" | "info" | "error" | null;
   headerRowClass?: string;
 }
 
@@ -76,19 +77,8 @@ export class TableColumn<T> extends React.Component<InternalColumnProps<T>> {
   }
 
   renderCell(data: T, column: number, row: number) {
-    // if its the first column check for error
-    const rowHasError = this.props.validation && this.props.validation.showValidationErrors && !this.props.validation.isValid;
     const className = classNames("govuk-table__cell", this.props.classSuffix ? "govuk-table__cell--" + this.props.classSuffix : "", this.props.cellClassName && this.props.cellClassName(data, { column, row }));
-
-    const style: React.CSSProperties = {};
-    if(column === 0 && rowHasError) {
-      style.borderLeft = `10px ${colour.GOVUK_ERROR_COLOUR} solid`;
-      style.paddingLeft = "10px";
-    }
-    if(rowHasError) {
-      style.verticalAlign = "bottom";
-    }
-    return <td className={className} style={style} key={column}>{this.props.renderCell(data, { column, row })}</td>;
+    return <td className={className} key={column}>{this.props.renderCell(data, { column, row })}</td>;
   }
 
   renderCol(column: number) {
@@ -115,7 +105,33 @@ const TableComponent = <T extends {}>(props: TableProps<T> & { data: T[]; valida
   const footers = footerColumns.length ? [<tr key="standardFooter" className="govuk-table__row">{footerColumns}</tr>] : [];
   (props.footers || []).forEach(customFooter => footers.push(customFooter));
 
-  const rowClass = props.data.map((dataItem, rowIndex) => (!!props.bodyRowClass && props.bodyRowClass(dataItem, rowIndex)) || "");
+  const rowClass = props.data.map((dataItem, rowIndex) => (props.bodyRowClass && props.bodyRowClass(dataItem, rowIndex)) || "");
+  
+  const rowFlags = props.data.map((dataItem, rowIndex) => {
+    console.log("checking row flag")
+    const validation = props.validationResult && props.validationResult[rowIndex];
+    if(validation && validation.showValidationErrors && !validation.isValid){
+      return "error";
+    }
+    if(props.bodyRowFlag)
+    {
+      return props.bodyRowFlag(dataItem, rowIndex);
+    }
+    return null;
+  });
+
+  const rowClasses = rowFlags.map(x => {
+    switch(x){
+      case "warning":
+        return "table__row--warning";
+      case "info":
+        return "table__row--info";
+      case "error":
+        return "table__row--error";
+      default:
+        return "";
+    }
+  });
 
   return (
     <div className={props.className} data-qa={props.qa}>
@@ -131,7 +147,7 @@ const TableComponent = <T extends {}>(props: TableProps<T> & { data: T[]; valida
         </thead>
         <tbody className="govuk-table__body">
           {
-            contents.map((row, rowIndex) => <tr className={classNames("govuk-table__row", rowClass[rowIndex])} key={rowIndex}>{row}</tr>)
+            contents.map((row, rowIndex) => <tr className={classNames("govuk-table__row", rowClass[rowIndex], rowClasses[rowIndex])} key={rowIndex}>{row}</tr>)
           }
         </tbody>
         {footers.length ? <tfoot>{footers}</tfoot> : null}
