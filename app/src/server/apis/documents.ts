@@ -58,9 +58,9 @@ class Controller extends ControllerBase<DocumentSummaryDto> implements IDocument
     );
   }
 
-  public async getClaimDocuments(params: ApiParams<{partnerId: string, periodId: number}>) {
-    const { partnerId, periodId } = params;
-    const query = new GetClaimDocumentsQuery({partnerId, periodId}, {description: DocumentDescription.IAR});
+  public async getClaimDocuments(params: ApiParams<{partnerId: string, periodId: number, description: string}>) {
+    const { partnerId, periodId, description } = params;
+    const query = new GetClaimDocumentsQuery({partnerId, periodId}, {description});
     return await contextProvider.start(params).runQuery(query);
   }
 
