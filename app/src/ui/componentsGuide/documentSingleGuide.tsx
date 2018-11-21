@@ -10,7 +10,7 @@ export const documentSingleGuide: IGuide = {
             name: "Simple",
             comments: "Renders a DocumentSingle component",
             example: "<DocumentSingle message={\"test\"} document={document} qa={\"qa\"}/>",
-            render: () => <DocumentSingle message={"An IAR has been added to this claim"} document={document} qa={"qa"}/>
+            render: () => <DocumentSingle message={"An IAR has been added to this claim"} document={document} qa={"qa"} onClick={() => console.log("onClick")}/>
         }
     ]
 };
