@@ -11,7 +11,7 @@ describe("isNumber", () => {
     });
 
     it("should return false if value is not a number", () => {
-        expect(isNumber(undefined as any)).toEqual(true);
+        expect(isNumber(undefined as any)).toEqual(false);
         expect(isNumber(null)).toEqual(false);
         expect(isNumber("four" as any)).toEqual(false);
         expect(isNumber(NaN)).toEqual(false);
