@@ -18,14 +18,27 @@ export const DateRange: React.SFC<{ start: Date|null, end: Date|null }> = props 
   if(!start || !start.isValid || !end || !end.isValid) {
     return null;
   }
-
-  const words  = [start.monthShort, "to", end.monthShort, end.year];
-
-  if(start.year !== end.year) {
-    words.splice(1, 0, start.year);
+  
+  if(start.month === end.month && start.year === end.year){
+    return <span style={{whiteSpace: "nowrap"}}>{end.monthShort} {end.year}</span>
   }
-
-  return <span>{words.join(" ")}</span>;
+  else if(start.year === end.year){
+    return (
+        <span>
+            <span style={{whiteSpace: "nowrap"}}>{start.monthShort} to</span>
+            <span style={{whiteSpace: "nowrap"}}>{end.monthShort} {end.year}</span>
+        </span>
+    );
+  }
+  else{
+    return (
+        <span>
+            <span style={{whiteSpace: "nowrap"}}>{start.monthShort} {start.year}</span>
+            to
+            <span style={{whiteSpace: "nowrap"}}>{end.monthShort} {end.year}</span>
+        </span>
+    );
+  }
 };
 
 export const ShortMonth: React.SFC<{ value: Date | null }> = (props) => {

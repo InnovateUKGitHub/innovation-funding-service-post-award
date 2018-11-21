@@ -54,15 +54,15 @@ class ClaimsTestRepository extends TestRepository<Repositories.ISalesforceClaim>
 
     getAllByProjectId(projectId: string) {
         const partnerIds = this.partnerRepository.Items.filter(x => x.Acc_ProjectId__c === projectId).map(x => x.Id);
-        return super.getWhere(x => partnerIds.indexOf(x.Acc_ProjectParticipant__c) !== -1);
+        return super.getWhere(x => partnerIds.indexOf(x.Acc_ProjectParticipant__r.Id) !== -1);
     }
 
     getAllByPartnerId(partnerId: string) {
-        return super.getWhere(x => x.Acc_ProjectParticipant__c === partnerId);
+        return super.getWhere(x => x.Acc_ProjectParticipant__r.Id === partnerId);
     }
 
     get(partnerId: string, periodId: number) {
-        return super.getOne(x => x.Acc_ProjectParticipant__c === partnerId && x.Acc_ProjectPeriodNumber__c === periodId);
+        return super.getOne(x => x.Acc_ProjectParticipant__r.Id === partnerId && x.Acc_ProjectPeriodNumber__c === periodId);
     }
 
     update(updatedClaim: Repositories.ISalesforceClaim) {
