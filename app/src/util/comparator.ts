@@ -1,3 +1,5 @@
-export const numberComparator = (a: number, b: number) => a - b;
+export type IComparer<T> = (x: T, y: T) => number;
 
-export const dateComparator = (a: Date, b: Date) => numberComparator(a.getTime(), b.getTime());
+export const numberComparator: IComparer<number> = (a, b) => a - b;
+
+export const dateComparator: IComparer<Date> = (a, b) => numberComparator(a.getTime(), b.getTime());

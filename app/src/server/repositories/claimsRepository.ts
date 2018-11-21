@@ -5,13 +5,13 @@ import { ClaimStatus } from "../../types";
 
 export interface ISalesforceClaim {
   Id: string;
-  Acc_ProjectParticipant__r:{
+  Acc_ProjectParticipant__r: {
     Id: string;
     Acc_ProjectRole__c: string;
-    Acc_AccountId__r:{
+    Acc_AccountId__r: {
       Name: string;
     }
-  }
+  };
   LastModifiedDate: string;
   Acc_ClaimStatus__c: ClaimStatus;
   Acc_ProjectPeriodStartDate__c: string;
