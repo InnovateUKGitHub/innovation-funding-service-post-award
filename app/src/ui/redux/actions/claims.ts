@@ -55,7 +55,7 @@ export function loadClaimsAndDocuments(partnerId: string): AsyncThunk<void, Data
   return (dispatch, getState) => loadClaimsForPartner(partnerId)(dispatch, getState, null).then(() => {
     const claim = getCurrentClaim(getState(), partnerId).data;
     if (claim) {
-      loadIarDocuments(partnerId, claim.periodId)(dispatch, getState, null);
+      return loadIarDocuments(partnerId, claim.periodId)(dispatch, getState, null);
     }
   });
 }
