@@ -28,7 +28,7 @@ class Controller extends ControllerBase<DocumentSummaryDto> implements IDocument
     );
 
     this.getItems(
-      "/documents/claims/:partnerId/:periodId/",
+      "/claims/:partnerId/:periodId/",
       (p, q) => ({ partnerId: p.partnerId, periodId: parseInt(p.periodId, 10), description: q.description }),
       p => this.getClaimDocuments(p)
     );
