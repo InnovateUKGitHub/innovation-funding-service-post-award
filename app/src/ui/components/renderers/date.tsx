@@ -20,7 +20,7 @@ export const DateRange: React.SFC<{ start: Date | null, end: Date | null }> = pr
     }
 
     if (start.month === end.month && start.year === end.year) {
-        return <span style={{ whiteSpace: "nowrap" }}>{end.monthShort} {end.year}</span>
+        return <span style={{ whiteSpace: "nowrap" }}>{end.monthShort} {end.year}</span>;
     }
 
     if (start.year === end.year) {

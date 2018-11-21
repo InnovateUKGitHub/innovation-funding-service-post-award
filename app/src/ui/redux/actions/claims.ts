@@ -2,7 +2,7 @@ import { ApiClient } from "../../apiClient";
 import { ClaimDtoValidator } from "../../validators";
 import { LoadingStatus } from "../../../shared/pending";
 import { AsyncThunk, conditionalLoad, dataLoadAction, DataLoadAction, handleError, SyncThunk, updateEditorAction, UpdateEditorAction } from "./common";
-import { findClaimsByPartner, getClaim, getClaimEditor, getCurrentClaim, findClaimsByProject } from "../selectors";
+import { findClaimsByPartner, findClaimsByProject, getClaim, getClaimEditor, getCurrentClaim } from "../selectors";
 import { ClaimDto } from "../../../types";
 import { loadIarDocuments } from ".";
 
