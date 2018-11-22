@@ -51,7 +51,7 @@ export function loadClaimsForPartner(partnerId: string) {
   return conditionalLoad(findClaimsByPartner(partnerId), params => ApiClient.claims.getAllByPartnerId({partnerId, ...params}));
 }
 
-export function loadClaimsAndDocuments(partnerId: string): AsyncThunk<void, DataLoadAction> {
+export function loadClaimsAndIarDocuments(partnerId: string): AsyncThunk<void, DataLoadAction> {
   return (dispatch, getState) => loadClaimsForPartner(partnerId)(dispatch, getState, null).then(() => {
     const claim = getCurrentClaim(getState(), partnerId).data;
     if (claim) {
