@@ -57,6 +57,7 @@ interface CombinedData {
 interface Callbacks {
   validate: (key: ClaimKey, dto: DocumentUploadDto) => void;
   uploadFile: (key: ClaimKey, dto: DocumentUploadDto) => void;
+  deleteFile: (key: ClaimKey, dto: DocumentSummaryDto) => void;
 }
 
 class Component extends ContainerBase<Params, Data, Callbacks> {
@@ -76,9 +77,17 @@ class Component extends ContainerBase<Params, Data, Callbacks> {
   }
 
   private renderIarDocument(claim: ClaimDto, document: DocumentSummaryDto) {
+    const button = () => {
+      const Form = ACC.TypedForm<DocumentSummaryDto>();
+      return (
+        <Form.Form data={document}>
+          <Form.Button name="return" onClick={() => this.onDelete(claim, document)}>Remove</Form.Button>
+        </Form.Form>
+      );
+    };
 
     return (
-      <DocumentSingle message={"An IAR has been added to this claim"} document={document} openNewWindow={true} />
+      <DocumentSingle message={"An IAR has been added to this claim"} document={document} openNewWindow={true} renderRemove={() => claim.allowIarEdit && button()}/>
     );
   }
 
@@ -90,6 +99,10 @@ class Component extends ContainerBase<Params, Data, Callbacks> {
   private onSave(dto: DocumentUploadDto, periodId: number) {
     const key = {partnerId: this.props.partnerId, periodId};
     this.props.uploadFile(key, dto);
+  }
+
+  private onDelete(claim: ClaimDto, dto: DocumentSummaryDto) {
+    this.props.deleteFile({partnerId: claim.partnerId, periodId: claim.periodId}, dto);
   }
 
   private renderIarDocumentUpload(claim: ClaimDto, editor: IEditorStore<DocumentUploadDto, DocumentUploadValidator>) {
@@ -227,6 +240,9 @@ export const ClaimsDashboard = definition.connect({
       dispatch(Actions.updateClaimDocumentEditor(claimKey, dto)),
     uploadFile: (claimKey, file) =>
       dispatch(Actions.uploadClaimDocument(claimKey, file, () =>
+        dispatch(Actions.loadIarDocuments(claimKey.partnerId, claimKey.periodId)))),
+    deleteFile: (claimKey, file) =>
+      dispatch(Actions.deleteClaimDocument(claimKey, file, () =>
         dispatch(Actions.loadIarDocuments(claimKey.partnerId, claimKey.periodId))))
   })
 });
