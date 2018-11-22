@@ -112,7 +112,8 @@
     ],
     "coverageReporters": [
       "text",
-      "html"
+      "html",
+      "lcov"
     ],
     "transform": {
       "^.+\\.tsx?$": "ts-jest"
