@@ -19,5 +19,6 @@ export * from "./table";
 export * from "./validationError";
 export * from "./validationMessage";
 export * from "./validationSummary";
+export * from "./projectOverview";
 
 export { Renderers, Projects, Claims, Inputs };

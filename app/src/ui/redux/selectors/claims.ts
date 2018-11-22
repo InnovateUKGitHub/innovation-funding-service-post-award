@@ -3,7 +3,7 @@ import { IEditorStore, RootState } from "../reducers";
 import { ClaimDtoValidator } from "../../validators/claimDtoValidator";
 import { getCostCategories } from "./costCategories";
 import { getKey } from "../../../util/key";
-import { ClaimDto } from "../../../types";
+import { ClaimDto, ClaimStatus } from "../../../types";
 import { getClaimDocumentEditor } from "./documents";
 import { Pending } from "../../../shared/pending";
 import { DocumentUploadValidator } from "../../validators/documentUploadValidator";

@@ -2,34 +2,33 @@ import React from "react";
 import { ContainerBase, ReduxContainer } from "../containerBase";
 import { Pending } from "../../../shared/pending";
 import * as Actions from "../../redux/actions";
-import * as Selectors from "../../redux/selectors";
-import { ProjectOverviewPage } from "../../components/projectOverview";
+import {
+  getCurrentClaim,
+  getCurrentClaimIarDocument,
+  getCurrentClaimIarDocumentsEditor, getPartner,
+  getPreviousClaims, getProject
+} from "../../redux/selectors";
 import {
   DocumentSingle,
   DualDetails,
   Link,
+  ProjectOverviewPage,
   Section,
   SectionPanel,
   TypedDetails,
+  TypedForm,
   TypedLoader,
   TypedTable,
-  ValidationMessage
+  ValidationMessage,
+  ValidationSummary
 } from "../../components";
-import { DayAndLongMonth, FullDate, LongYear, ShortDate, ShortMonth } from "../../components/renderers";
+import { DayAndLongMonth, FullDate, LongYear, ShortDate, ShortMonth, SimpleString } from "../../components/renderers";
 import { PrepareClaimRoute } from "./prepare";
 import { ClaimsDetailsRoute } from "./details";
-import { SimpleString } from "../../components/renderers";
 import { ReviewClaimRoute } from "./review";
-import { ClaimDto, ProjectDto } from "../../../types";
-import * as ACC from "../../components";
+import { ClaimDto, ClaimStatus, ProjectDto } from "../../../types";
 import { IEditorStore } from "../../redux/reducers";
 import { DocumentUploadValidator } from "../../validators/documentUploadValidator";
-import {
-  getCurrentClaim,
-  getCurrentClaimIarDocument,
-  getCurrentClaimIarDocumentsEditor,
-  getPreviousClaims
-} from "../../redux/selectors";
 
 interface Params {
   projectId: string;
@@ -78,7 +77,7 @@ class Component extends ContainerBase<Params, Data, Callbacks> {
 
   private renderIarDocument(claim: ClaimDto, document: DocumentSummaryDto) {
     const button = () => {
-      const Form = ACC.TypedForm<DocumentSummaryDto>();
+      const Form = TypedForm<DocumentSummaryDto>();
       return (
         <Form.Form data={document}>
           <Form.Button name="return" onClick={() => this.onDelete(claim, document)}>Remove</Form.Button>
@@ -109,10 +108,15 @@ class Component extends ContainerBase<Params, Data, Callbacks> {
     if (!claim.allowIarEdit) {
       return null;
     }
-    const UploadForm = ACC.TypedForm<{file: File | null }>();
+    const UploadForm = TypedForm<{file: File | null }>();
+    const isAwaitingIAR = claim.status === ClaimStatus.AWAITING_IAR;
+    const message = isAwaitingIAR
+      ? "Your most recent claim cannot be sent to us. You must attach an independent audit report (IAR)."
+      : "You must attach an independent audit report (IAR) for this claim to receive your payment.";
+    const messageType = isAwaitingIAR ? "error" : "info";
     return (
       <React.Fragment>
-        <ValidationMessage messageType="info" message="You must attach an independent audit report (IAR) for this claim to receive your payment."/>
+        <ValidationMessage messageType={messageType} message={message}/>
         <UploadForm.Form data={editor.data} onChange={(dto) => this.onChange(dto, claim.periodId)}>
           <UploadForm.Fieldset>
             <UploadForm.FileUpload validation={editor.validator.file} value={(data) => data.file} name="Upload documents" update={(dto, file) => dto.file = file}/>
@@ -124,7 +128,6 @@ class Component extends ContainerBase<Params, Data, Callbacks> {
   }
 
   private renderIarDocumentSection(claim: ClaimDto, editor: IEditorStore<DocumentUploadDto, DocumentUploadValidator>, document: DocumentSummaryDto | null) {
-    // TODO handle case where IAR required bu upload is not possible
     if (!claim.isIarRequired) {
       return null;
     }
@@ -142,7 +145,7 @@ class Component extends ContainerBase<Params, Data, Callbacks> {
       currentClaim && <React.Fragment>Claim for P{currentClaim.periodId} - <DayAndLongMonth value={currentClaim.periodStartDate} /> to <FullDate value={currentClaim.periodEndDate} /></React.Fragment>
     );
 
-    const validationMessage = editor && <ACC.ValidationSummary validation={editor && editor.validator} compressed={false} />;
+    const validationMessage = editor && <ValidationSummary validation={editor && editor.validator} compressed={false} />;
 
     return (
       <ProjectOverviewPage selectedTab={ClaimsDashboardRoute.routeName} project={project} partnerId={partner.id} partners={[partner]} validationMessage={validationMessage}>
@@ -229,8 +232,8 @@ export const ClaimsDashboard = definition.connect({
     return ({
       document: getCurrentClaimIarDocument(state, props.partnerId),
       editor: getCurrentClaimIarDocumentsEditor(state, props.partnerId),
-      projectDetails: Selectors.getProject(props.projectId).getPending(state),
-      partnerDetails: Selectors.getPartner(props.partnerId).getPending(state),
+      projectDetails: getProject(props.projectId).getPending(state),
+      partnerDetails: getPartner(props.partnerId).getPending(state),
       currentClaim: getCurrentClaim(state, props.partnerId),
       previousClaims: getPreviousClaims(state, props.partnerId)
     });
@@ -240,7 +243,7 @@ export const ClaimsDashboard = definition.connect({
       dispatch(Actions.updateClaimDocumentEditor(claimKey, dto)),
     uploadFile: (claimKey, file) =>
       dispatch(Actions.uploadClaimDocument(claimKey, file, () =>
-        dispatch(Actions.loadIarDocuments(claimKey.partnerId, claimKey.periodId)))),
+        dispatch(Actions.loadClaimsAndIarDocuments(claimKey.partnerId)))),
     deleteFile: (claimKey, file) =>
       dispatch(Actions.deleteClaimDocument(claimKey, file, () =>
         dispatch(Actions.loadIarDocuments(claimKey.partnerId, claimKey.periodId))))
@@ -257,7 +260,7 @@ export const ClaimsDashboardRoute = definition.route({
   getLoadDataActions: (params) => [
     Actions.loadProject(params.projectId),
     Actions.loadPartner(params.partnerId),
-    Actions.loadClaimsAndDocuments(params.partnerId)
+    Actions.loadClaimsAndIarDocuments(params.partnerId)
   ],
   container: ClaimsDashboard
 });

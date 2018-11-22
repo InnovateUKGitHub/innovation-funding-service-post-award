@@ -17,6 +17,7 @@ import { LoadingStatus } from "../../../shared/pending";
 import { Results } from "../../validation/results";
 import {DocumentUploadValidator} from "../../validators/documentUploadValidator";
 import {DocumentDescription} from "../../../types/constants";
+import { findClaimsByPartner } from "../selectors";
 
 export function loadClaimDetailDocuments(partnerId: string, periodId: number, costCategoryId: string) {
   return conditionalLoad(
@@ -90,12 +91,15 @@ export function uploadClaimDocument(claimKey: ClaimKey, dto: DocumentUploadDto, 
     const state = getState();
     const selector = getClaimDocumentEditor(claimKey, dto.description);
     const docsSelector = getClaimDocuments(claimKey.partnerId, claimKey.periodId, dto.description);
+    const claimsSelector = findClaimsByPartner(claimKey.partnerId);
     const validation = updateClaimDocumentEditor(claimKey, dto, true)(dispatch, getState, null);
 
     if (!validation.isValid) {
       return Promise.resolve();
     }
 
+    // Uploading an IAR Document when the claim status is Awaiting IAR will update the status so the claims need to be reloaded.
+    dispatch(dataLoadAction(claimsSelector.key, claimsSelector.store, LoadingStatus.Stale, undefined));
     dispatch(dataLoadAction(docsSelector.key, docsSelector.store, LoadingStatus.Stale, undefined));
 
     return ApiClient.documents.uploadClaimDocument({ claimKey, file: dto.file!, description: dto.description, user: state.user })
