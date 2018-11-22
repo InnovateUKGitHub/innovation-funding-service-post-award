@@ -78,14 +78,14 @@ class Component extends ContainerBase<Params, Data, Callbacks> {
 
   private renderIarDocument(claim: ClaimDto, document: DocumentSummaryDto) {
     const Form = ACC.TypedForm<DocumentSummaryDto>();
-    const button = (
+    const button = () => claim.allowIarEdit && (
       <Form.Form data={document}>
         <Form.Button name="return" onClick={() => this.onDelete(claim, document)}>Remove</Form.Button>
       </Form.Form>
     );
 
     return (
-      <DocumentSingle message={"An IAR has been added to this claim"} document={document} openNewWindow={true} renderRemove={() => claim.allowIarEdit && button}/>
+      <DocumentSingle message={"An IAR has been added to this claim"} document={document} openNewWindow={true} renderRemove={button}/>
     );
   }
 
