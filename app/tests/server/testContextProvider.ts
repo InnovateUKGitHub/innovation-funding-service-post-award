@@ -25,7 +25,11 @@ export class TestContext implements IContext {
         salesforceToken: "",
         salesforceClientId: "",
         salesforceUseJwtToken: false,
-        salesforceConnectionUrl: ""
+        salesforceConnectionUrl: "",
+        salesforceUsername: "",
+        useSSO: false,
+        serverUrl: "http://localhost:8080",
+        ssoProviderUrl: "https://shibboleth.com"
     };
 
     public caches: ICaches = {
