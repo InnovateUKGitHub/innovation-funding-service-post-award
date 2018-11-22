@@ -18,6 +18,7 @@ export const routeConfig = {
   projectForecast: Containers.ProjectForecastRoute,
   reviewClaim: Containers.ReviewClaimRoute,
   reviewClaimLineItems: Containers.ReviewClaimLineItemsRoute,
+  updateForecast: Containers.UpdateForecastRoute,
   viewForecast: Containers.ViewForecastRoute,
   // error: errorRoute
 };
