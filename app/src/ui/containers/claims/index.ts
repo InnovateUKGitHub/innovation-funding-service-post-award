@@ -1,10 +1,10 @@
 export * from "./allClaimsDashboard";
 export * from "./claimLineItems";
-export * from "./claimForecast";
 export * from "./claimDetailDocuments";
 export * from "./dashboard";
 export * from "./details";
 export * from "./editClaimLineItems";
-export * from "./viewForecast";
 export * from "./prepare";
 export * from "./review";
+
+export * from "./forecasts";
