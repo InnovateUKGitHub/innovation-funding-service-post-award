@@ -1,19 +1,36 @@
 export interface IConfig {
     ifsApplicationUrl: Readonly<string>;
     ifsGrantLetterUrl: Readonly<string>;
-    salesforcePassword: Readonly<string>;
-    salesforceToken: Readonly<string>;
-    salesforceUseJwtToken: Readonly<boolean>;
+  
+    serverUrl: string;
+    ssoProviderUrl: string;
+
     salesforceClientId: Readonly<string>;
     salesforceConnectionUrl: Readonly<string>;
+    // ToDo: Remove
+    salesforcePassword: Readonly<string>;
+    // ToDo: Remove
+    salesforceToken: Readonly<string>;
+    // ToDo: Remove
+    salesforceUseJwtToken: Readonly<boolean>;
+    // ToDo: Remove
+    salesforceUsername: string;
+    // ToDo: Remove
+    useSSO: boolean;
 }
 
 const secrets = {
-    salesforcePassword: process.env.SALESFORCEPASSWORD!,
-    salesforceToken: process.env.SALESFORCETOKEN!,
-    salesforceUseJwtToken: process.env.SALESFORCEUSEJWTTOKEN === "true",
+    serverUrl: process.env.SERVER_URL!,
+    ssoProviderUrl: process.env.SSO_PROVIDER_URL!,
+
     salesforceClientId: process.env.SALESFORCECLIENTID!,
-    salesforceConnectionUrl: process.env.SALESFORCECONNECTIONURL!
+    salesforceConnectionUrl: process.env.SALESFORCECONNECTIONURL!,
+    salesforcePassword: process.env.SALESFORCEPASSWORD!,
+    salesforceToken: process.env.SALESFORCETOKEN!,  
+    salesforceUseJwtToken: process.env.SALESFORCEUSEJWTTOKEN === "true",
+    salesforceUsername: process.env.SALESFORCEUSERNAME!,
+
+    useSSO: process.env.USE_SSO === "true",
 };
 
 export const Configuration: IConfig = {
