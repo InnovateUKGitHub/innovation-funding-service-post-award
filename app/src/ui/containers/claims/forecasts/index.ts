@@ -1,3 +1,3 @@
 export * from "./claimForecast";
-export * from "./updateForecasts";
+export * from "./updateForecast";
 export * from "./viewForecast";

@@ -5,7 +5,7 @@ import * as Selectors from "../../../redux/selectors";
 import { Pending } from "../../../../shared/pending";
 import { ContainerBase, ReduxContainer } from "../../containerBase";
 import { ProjectOverviewPage } from "../../../components/projectOverview";
-import { UpdateForecastRoute } from "./updateForecasts";
+import { UpdateForecastRoute } from "./updateForecast";
 import {
   CombinedData,
   Data,
