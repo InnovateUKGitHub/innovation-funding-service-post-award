@@ -7,7 +7,8 @@ export enum ClaimStatus {
   INNOVATE_QUERIED = "Innovate Queried",
   APPROVED = "Approved",
   PAID = "Paid",
-  // TODO update these with real SF values
-  REVIEWING_FORECASTS = "Reviewing forecasts",
+  REVIEWING_FORECASTS = "Reviewing forecast",
+  REVIEWING_FORECASTS_FOLLOWING_MO_QUERY = "Review forecast following MO query",
+  REVIEWING_FORECASTS_FOLLOWING_INNOVATE_QUERY = "Review forecast following Innovate query",
   AWAITING_IAR = "Awaiting IAR"
 }
