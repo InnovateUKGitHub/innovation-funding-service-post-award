@@ -3,7 +3,17 @@ import { UploadClaimDocumentCommand } from "../../../../src/server/features/docu
 import { ClaimStatus, DocumentDescription } from "../../../../src/types/constants";
 import { ApiError } from "../../../../src/server/apis/ApiError";
 
-const validStatus = [ ClaimStatus.NEW, ClaimStatus.DRAFT, ClaimStatus.MO_QUERIED, ClaimStatus.INNOVATE_QUERIED, ClaimStatus.REVIEWING_FORECASTS, ClaimStatus.AWAITING_IAR ];
+const validStatus = [
+  ClaimStatus.NEW,
+  ClaimStatus.DRAFT,
+  ClaimStatus.REVIEWING_FORECASTS,
+  ClaimStatus.SUBMITTED,
+  ClaimStatus.MO_QUERIED,
+  ClaimStatus.REVIEWING_FORECASTS_FOLLOWING_MO_QUERY,
+  ClaimStatus.AWAITING_IAR,
+  ClaimStatus.INNOVATE_QUERIED,
+  ClaimStatus.REVIEWING_FORECASTS_FOLLOWING_INNOVATE_QUERY
+];
 const invalidStatus = Object.keys(ClaimStatus).filter((status: string) => validStatus.indexOf(ClaimStatus[status]) < 0).map(status => ClaimStatus[status]);
 const file = {
   fileName: "fileName.txt",
