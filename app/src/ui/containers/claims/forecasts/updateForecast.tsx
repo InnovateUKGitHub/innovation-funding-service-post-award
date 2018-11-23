@@ -44,12 +44,12 @@ class UpdateForecastComponent extends ContainerBase<Params, Data, Callbacks> {
         <ACC.ValidationSummary validation={editor.validator} compressed={false} />
         {renderWarning(combined)}
         <ACC.Projects.Title pageTitle="Update forecasts" project={combined.project} />
-        <ACC.Section title={combined.partner.name} qa={"partner-name"} >
+        <ACC.Section title={combined.partner.name + " forecasts table"} qa="partner-forecast" >
           <Form.Form
             data={editor.data}
             onChange={data => this.handleChange(data, combined)}
             onSubmit={() => this.saveAndReturn(combined)}
-            qa="claim-forecast-form"
+            qa="partner-forecast-form"
           >
             <ACC.Claims.ForecastTable data={combined} />
             <Form.Fieldset>
