@@ -9,11 +9,13 @@ const SALESFORCE_DATE_TIME_FORMAT = "yyyy-MM-ddTHH:mm:ss.SSSZZZ";
 const STATUS_ALLOWING_IAR_EDIT = [
   ClaimStatus.NEW,
   ClaimStatus.DRAFT,
-  ClaimStatus.MO_QUERIED,
-  ClaimStatus.INNOVATE_QUERIED,
-  // TODO validate these two
   ClaimStatus.REVIEWING_FORECASTS,
-  ClaimStatus.AWAITING_IAR
+  ClaimStatus.SUBMITTED,
+  ClaimStatus.MO_QUERIED,
+  ClaimStatus.REVIEWING_FORECASTS_FOLLOWING_MO_QUERY,
+  ClaimStatus.AWAITING_IAR,
+  ClaimStatus.INNOVATE_QUERIED,
+  ClaimStatus.REVIEWING_FORECASTS_FOLLOWING_INNOVATE_QUERY
 ];
 
 export default (context: IContext) => (claim: ISalesforceClaim, forecast?: ISalesforceProfileTotalPeriod): ClaimDto => ({
