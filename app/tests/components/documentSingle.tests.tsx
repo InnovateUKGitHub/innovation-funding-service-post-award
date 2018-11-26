@@ -19,4 +19,10 @@ describe("DocumentSingle", () => {
         const wrapper = mount(<DocumentSingle message={"An IAR has been added to this claim"} document={document} qa={"qa"} />);
         expect(wrapper.find("p").props().children).toBe("An IAR has been added to this claim");
     });
+
+    it("should render <a> that opens in a new window", () => {
+        const document = { link: "https://www.google.com/", fileName: "LABOUR_COSTS_Q3_2017-11-05.pdf", id: "1" };
+        const html = shallow(<DocumentSingle message={"An IAR has been added to this claim"} document={document} qa={"qa"} openNewWindow={true} />).html();
+        expect(html).toContain("<a target=\"_blank\"");
+    });
 });
