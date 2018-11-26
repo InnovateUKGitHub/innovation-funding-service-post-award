@@ -36,13 +36,9 @@ const getMessageStyle = (messageType: MessageType): MessageStyle => {
   }
 };
 
-export const ValidationMessage: React.SFC<Props> = ({ message, key, messageType, qa }) => {
+export const ValidationMessage: React.SFC<Props> = ({ message, key, messageType, qa = "validation-message" }) => {
     if (!message) {
       return null;
-    }
-
-    if(!qa) {
-      qa = "validation-message";
     }
 
     const {validationColour, validationSymbol, validationText} = getMessageStyle(messageType);
