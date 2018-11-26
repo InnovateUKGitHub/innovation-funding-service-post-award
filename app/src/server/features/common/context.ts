@@ -9,12 +9,24 @@ export interface IRunnable<T> {
   Run: (context: IContext) => Promise<T>;
 }
 
+export interface ISyncRunnable<T> {
+  Run: (context: IContext) => T;
+}
+
 export abstract class QueryBase<T> {
   protected abstract Run(context: IContext): Promise<T>;
 }
 
+export abstract class SyncQueryBase<T> {
+  protected abstract Run(context: IContext): T;
+}
+
 export abstract class CommandBase<T> {
   protected abstract Run(context: IContext): Promise<T>;
+}
+
+export abstract class SyncCommandBase<T> {
+  protected abstract Run(context: IContext): T;
 }
 
 export interface IRepositories {
@@ -44,7 +56,9 @@ export interface IContext {
   caches: ICaches;
   config: IConfig;
   runQuery<TResult>(cmd: QueryBase<TResult>): Promise<TResult>;
+  runSyncQuery<TResult>(cmd: SyncQueryBase<TResult>): TResult;
   runCommand<TResult>(cmd: CommandBase<TResult>): Promise<TResult>;
+  runSyncCommand<TResult>(cmd: SyncCommandBase<TResult>): TResult;
   clock: IClock;
   logger: ILogger;
 }
@@ -106,7 +120,7 @@ export class Context implements IContext {
   public runQuery<TResult>(query: QueryBase<TResult>): Promise<TResult> {
     this.logger.log("Running query", query);
 
-    const runnable: IRunnable<TResult> = (query as any) as IRunnable<TResult>;
+    const runnable = (query as any) as IRunnable<TResult>;
 
     return runnable.Run(this)
       .catch(e => {
@@ -115,15 +129,31 @@ export class Context implements IContext {
       });
   }
 
+  public runSyncQuery<TResult>(query: SyncQueryBase<TResult>): TResult {
+    this.logger.log("Running query", query);
+
+    const runnable = (query as any) as ISyncRunnable<TResult>;
+
+    return runnable.Run(this);
+  }
+
   public runCommand<TResult>(command: CommandBase<TResult>): Promise<TResult> {
     this.logger.log("Running command", command);
 
-    const runnable: IRunnable<TResult> = (command as any) as IRunnable<TResult>;
+    const runnable = (command as any) as IRunnable<TResult>;
 
     return runnable.Run(this).catch(e => {
       this.logger.log("Failed command", command, e);
       throw e;
     });
+  }
+
+  public runSyncCommand<TResult>(command: SyncCommandBase<TResult>): TResult {
+    this.logger.log("Running command", command);
+
+    const runnable = (command as any) as ISyncRunnable<TResult>;
+
+    return runnable.Run(this);
   }
 
   public clock = new Clock();

@@ -38,7 +38,7 @@ describe("Claim Window", () => {
     const windowEndDate = periodEndDate.plus({days:30}).set({hour: 0, minute:0, second:0});
     const daysRemaining = Math.ceil(windowEndDate.diff(DateTime.local(), "days").days) + 1; 
 
-    it("renders number of dayes remaning in claim window", () => {
+    it("renders number of days remaning in claim window", () => {
       const output = Enzyme.mount(<ClaimWindow periodEnd={periodEndDate.toJSDate()}/>).find("h3").text();
       expect(output).toEqual(daysRemaining.toString());
     });
@@ -60,7 +60,7 @@ describe("Claim Window", () => {
     const windowEndDate = periodEndDate.plus({days:30}).set({hour: 0, minute:0, second:0});
     const daysOverdue = Math.floor(DateTime.local().diff(windowEndDate, "days").days); 
 
-    it("renders number of dayes overdue in claim window", () => {
+    it("renders number of days overdue in claim window", () => {
       const output = Enzyme.mount(<ClaimWindow periodEnd={periodEndDate.toJSDate()}/>).find("h3").text();
       expect(output).toEqual(daysOverdue.toString());
     });
