@@ -39,9 +39,30 @@ class Component extends ContainerBase<Params, Data, {}> {
 
     return (
       <ProjectOverviewPage project={projectDetails} partners={partners} selectedTab={AllClaimsDashboardRoute.routeName}>
+        {this.renderSummary(projectDetails)}
         {this.renderCurrentClaims(currentPeriodInfo, projectDetails, partners, currentClaims)}
         {/* {this.renderPreviousClaimsSections(projectDetails, partners, remainingClaims)} */}
       </ProjectOverviewPage>
+    );
+  }
+
+  private renderSummary(project: ProjectDto){
+    const SummaryDetails = Acc.TypedDetails<ProjectDto>();
+
+    return (
+      <Acc.Section>
+        <Acc.SectionPanel qa="claims-totals" title="Project claims history">
+          <Acc.DualDetails displayDensity="Compact">
+            <SummaryDetails.Details data={project} qa="project_summary-col-0">
+              <SummaryDetails.Currency label="Project grant offer letter costs" qa="gol-costs" value={x => x.grantOfferLetterCosts}/>
+              <SummaryDetails.Currency label="Project costs claimed to date" qa="claimed-costs" value={x => x.costsClaimedToDate}/>
+            </SummaryDetails.Details>
+            <SummaryDetails.Details data={project} qa="project_summary-col-1">
+              <SummaryDetails.Percentage label="Percentage claimed to date" qa="claimed-percentage" value={x => x.grantOfferLetterCosts ? 100 * x.costsClaimedToDate / x.grantOfferLetterCosts : null}/>
+            </SummaryDetails.Details>
+          </Acc.DualDetails>
+        </Acc.SectionPanel>
+      </Acc.Section>
     );
   }
 
