@@ -80,7 +80,7 @@ class Component extends ContainerBase<Params, Data, Callbacks> {
       const Form = TypedForm<DocumentSummaryDto>();
       return (
         <Form.Form data={document}>
-          <Form.Button name="return" onClick={() => this.onDelete(claim, document)}>Remove</Form.Button>
+          <Form.Button name="default" onClick={() => this.onDelete(claim, document)}>Remove</Form.Button>
         </Form.Form>
       );
     };
@@ -121,7 +121,7 @@ class Component extends ContainerBase<Params, Data, Callbacks> {
           <UploadForm.Fieldset>
             <UploadForm.FileUpload validation={editor.validator.file} value={(data) => data.file} name="Upload documents" update={(dto, file) => dto.file = file}/>
           </UploadForm.Fieldset>
-          <UploadForm.Button name="Upload IAR" onClick={() => this.onSave(editor.data, claim.periodId)}>Upload</UploadForm.Button>
+          <UploadForm.Button name="default" onClick={() => this.onSave(editor.data, claim.periodId)}>Upload</UploadForm.Button>
         </UploadForm.Form>
       </React.Fragment>
     );
