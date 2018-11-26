@@ -1,6 +1,7 @@
 import { CommandBase, IContext } from "../common/context";
 import { ISalesforceProject } from "../../repositories/projectsRepository";
 import { ClaimFrequency, ProjectDto } from "../../../types";
+import { GetPeriodInfoQuery } from ".";
 
 export class MapToProjectDtoCommand extends CommandBase<ProjectDto> {
   constructor(readonly item: ISalesforceProject) {
@@ -9,12 +10,14 @@ export class MapToProjectDtoCommand extends CommandBase<ProjectDto> {
 
   async Run(context: IContext) {
     const claimFrequency = this.mapFrequencyToEnum(this.item.Acc_ClaimFrequency__c);
+    const startDate = context.clock.parse(this.item.Acc_StartDate__c, "yyyy-MM-dd")!;
+    const endDate = context.clock.parse(this.item.Acc_EndDate__c, "yyyy-MM-dd")!;
+    const periodInfo = await context.runSyncQuery(new GetPeriodInfoQuery(startDate, endDate, claimFrequency));
+
     const dto: ProjectDto = {
       id: this.item.Id,
       title: this.item.Acc_ProjectTitle__c,
       summary: this.item.Acc_ProjectSummary__c,
-      startDate: context.clock.parse(this.item.Acc_StartDate__c, "yyyy-MM-dd")!,
-      endDate: context.clock.parse(this.item.Acc_EndDate__c, "yyyy-MM-dd")!,
       projectNumber: this.item.Acc_ProjectNumber__c,
       applicationUrl: this.getIFSUrl(this.item, context.config.ifsApplicationUrl),
       grantOfferLetterUrl: this.getIFSUrl(this.item, context.config.ifsGrantLetterUrl),
@@ -23,10 +26,13 @@ export class MapToProjectDtoCommand extends CommandBase<ProjectDto> {
       grantOfferLetterCosts: this.item.Acc_GOLTotalCostAwarded__c,
       costsClaimedToDate: this.item.Acc_TotalProjectCosts__c,
       claimedPercentage: this.item.Acc_GOLTotalCostAwarded__c ? 100 * this.item.Acc_TotalProjectCosts__c / this.item.Acc_GOLTotalCostAwarded__c : null,
-      periodId: NaN,
+      startDate,
+      endDate,
+      periodId: periodInfo.current,
+      periodStartDate: periodInfo.startDate,
+      periodEndDate: periodInfo.endDate,
+      totalPeriods: periodInfo.total
     };
-
-    dto.periodId = this.calcPeriod(context, dto);
 
     return Promise.resolve(dto);
   }
