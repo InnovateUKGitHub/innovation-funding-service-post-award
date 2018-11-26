@@ -37,12 +37,17 @@ export const getCurrentClaimIarDocumentsEditor = (state: RootState, partnerId: s
   });
 };
 
+export const getIarDocument = (state: RootState, partnerId: string, periodId: number): Pending<DocumentSummaryDto | null> => {
+  return getClaimDocuments(partnerId, periodId, DocumentDescription.IAR).getPending(state).then(iarDocuments => {
+    return iarDocuments && iarDocuments.length ? iarDocuments[0] : null;
+  });
+};
+
 export const getCurrentClaimIarDocument = (state: RootState, partnerId: string): Pending<DocumentSummaryDto | null> => {
   return getCurrentClaim(state, partnerId).then(claim => {
     if (!claim) {
       return null;
     }
-    const iarDocuments = getClaimDocuments(partnerId, claim.periodId, DocumentDescription.IAR).getPending(state).data;
-    return iarDocuments && iarDocuments.length ? iarDocuments[0] : null;
+    return getIarDocument(state,partnerId, claim.periodId).data || null;
   });
 };
