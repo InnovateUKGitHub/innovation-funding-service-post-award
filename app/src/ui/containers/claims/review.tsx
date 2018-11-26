@@ -24,7 +24,6 @@ interface Data {
   claim: Pending<ClaimDto>;
   claimDetailsSummary: Pending<ClaimDetailsSummaryDto[]>;
   editor: Pending<IEditorStore<ClaimDto, ClaimDtoValidator>>;
-  iarDocument: Pending<DocumentSummaryDto | null>;
 }
 
 interface Callbacks {
@@ -64,16 +63,6 @@ class ReviewComponent extends ContainerBase<Params, Data, Callbacks> {
     return `${data.partner.name} claim for P${data.claim.periodId} ${DateTime.fromJSDate(data.claim.periodStartDate).toFormat("MMMM")} to ${DateTime.fromJSDate(data.claim.periodEndDate).toFormat("MMMM yyyy")}`;
   }
 
-  private renderIarSection(claim: ClaimDto, iarDocument?: DocumentSummaryDto | null) {
-    if (!claim.isIarRequired || !claim.isApproved || !iarDocument) return null;
-
-    return (
-      <ACC.Section title={"Independent audit report"}>
-        <ACC.DocumentSingle document={iarDocument} openNewWindow={true}/>
-      </ACC.Section>
-    );
-  }
-
   private renderContents(data: CombinedData) {
     const title = this.getClaimPeriodTitle(data);
     const Form = ACC.TypedForm<ClaimDto>();
@@ -96,7 +85,6 @@ class ReviewComponent extends ContainerBase<Params, Data, Callbacks> {
           {data.editor.error ? <ACC.ValidationMessage messageType="error" message={data.editor.error.details || data.editor.error} /> : null}
           <ACC.Claims.ClaimTable {...data} validation={data.editor.validator.claimDetails.results} getLink={costCategoryId => ReviewClaimLineItemsRoute.getLink({ partnerId: this.props.partnerId, projectId: this.props.projectId, periodId: this.props.periodId, costCategoryId })} />
         </ACC.Section>
-        { this.renderIarSection(data.claim, this.props.iarDocument.data) }
         <Form.Form qa="review-form" data={data.editor.data} onSubmit={() => this.props.onSave(this.props.projectId, this.props.partnerId, this.props.periodId, data.editor.data, data.claimDetails, data.costCategories)} onChange={(dto) => this.props.onChange(this.props.partnerId, this.props.periodId, dto, data.claimDetails, data.costCategories)}>
           <Form.Fieldset heading="How do you want to proceed with this claim?">
             <Form.Radio name="status" options={options} value={(dto) => options.find(x => x.id === dto.status)} update={(dto, val) => this.updateStatus(dto, val)} validation={data.editor.validator.status}/>
@@ -131,7 +119,6 @@ export const ReviewClaim = definition.connect({
     claim: Selectors.getClaim(props.partnerId, props.periodId).getPending(state),
     claimDetailsSummary: Selectors.findClaimDetailsSummaryByPartnerAndPeriod(props.partnerId, props.periodId).getPending(state),
     editor: Selectors.getClaimEditor(props.partnerId, props.periodId).get(state, (dto) => initEditor(dto)),
-    iarDocument: Selectors.getIarDocument(state, props.partnerId, props.periodId)
   }),
   withCallbacks: (dispatch) => ({
     onChange: (partnerId, periodId, dto, details, costCategories) => dispatch(Actions.validateClaim(partnerId, periodId, dto, details, costCategories)),
@@ -149,8 +136,7 @@ export const ReviewClaimRoute = definition.route({
         Actions.loadPartnersForProject(params.projectId),
         Actions.loadCostCategories(),
         Actions.loadClaim(params.partnerId, params.periodId),
-        Actions.loadClaimDetailsSummaryForPartner(params.partnerId, params.periodId),
-        Actions.loadIarDocuments(params.partnerId, params.periodId)
+        Actions.loadClaimDetailsSummaryForPartner(params.partnerId, params.periodId)
     ],
     container: ReviewClaim
 });
