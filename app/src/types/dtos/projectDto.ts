@@ -16,5 +16,6 @@ export interface ProjectDto {
 
     grantOfferLetterCosts: number;
     costsClaimedToDate: number;
+    claimedPercentage: number|null;
 
 }

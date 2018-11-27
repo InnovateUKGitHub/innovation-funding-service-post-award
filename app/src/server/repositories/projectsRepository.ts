@@ -6,7 +6,7 @@ export interface ISalesforceProject {
     Name: string;
     Acc_ClaimFrequency__c: string;
     Acc_Duration__c: number;
-    Acc_EndDate__c: string;// Date,
+    Acc_EndDate__c: string;
     Acc_GOLTotalCostAwarded__c: number;
     Acc_IFSApplicationId__c: number;
     Acc_LegacyID__c: string;
@@ -20,9 +20,8 @@ export interface ISalesforceProject {
     Acc_ProjectSummary__c: string;
     Acc_ProjectTitle__c: string;
     Acc_PublicDescription__c: string;
-    Acc_StartDate__c: string;// Date,
+    Acc_StartDate__c: string;
     Acc_TotalProjectCosts__c: number;
-    // TODO percentage claimed to date : number;
 }
 
 const fields = [
@@ -45,6 +44,7 @@ const fields = [
     "Acc_ProjectTitle__c",
     "Acc_PublicDescription__c",
     "Acc_StartDate__c",
+    "Acc_TotalProjectCosts__c"
 ];
 
 export interface IProjectRepository {

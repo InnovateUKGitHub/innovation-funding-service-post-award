@@ -16,7 +16,10 @@ describe("MapToProjectDtoCommand", () => {
       summary: "Expected summary",
       projectNumber: "Expected project number",
       claimFrequency: ClaimFrequency.Quarterly,
-      periodId: 4
+      periodId: 4,
+      grantOfferLetterCosts: 2000,
+      costsClaimedToDate: 1000,
+      claimedPercentage: 50
     };
 
     let salesforce = context.testData.createProject(x => {
@@ -27,6 +30,8 @@ describe("MapToProjectDtoCommand", () => {
       x.Acc_EndDate__c = DateTime.fromJSDate(expected.endDate).toFormat("yyyy-MM-dd");
       x.Acc_ProjectNumber__c = expected.projectNumber;
       x.Acc_ClaimFrequency__c = "Quarterly";
+      x.Acc_GOLTotalCostAwarded__c = expected.grantOfferLetterCosts;
+      x.Acc_TotalProjectCosts__c = expected.costsClaimedToDate;
     });
 
     let result = await context.runCommand(new MapToProjectDtoCommand(salesforce));
