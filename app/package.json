@@ -102,7 +102,13 @@
     "collectCoverageFrom": [
       "src/**/*.{ts,tsx}",
       "!src/**/*.d.ts",
-      "!src/**/index.ts"
+      "!src/**/index.ts",
+      "!src/client/*",
+      "!src/ui/containers/**/*",
+      "!src/ui/componentsGuide/*",
+      "!src/server/*.ts",
+      "!src/server/*.tsx",
+      "!src/server/features/common/*"
     ],
     "coverageReporters": [
       "text",
