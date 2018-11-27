@@ -40,7 +40,7 @@ export class ForecastTable extends React.Component<Props> {
     return (
       <Table.Table
         data={parsed}
-        qa="cost-category-table"
+        qa="forecast-table"
         headers={this.renderTableHeaders(periods, data.claim)}
         footers={this.renderTableFooters(periods, parsed, data.editor)}
         headerRowClass="govuk-body-s"
@@ -153,8 +153,8 @@ export class ForecastTable extends React.Component<Props> {
     return [(
       <tr key="cHeader1" className="govuk-table__row govuk-body-s">
         <th className="govuk-table__header govuk-table__header--numeric" />
-        {!!previous ? <th className="govuk-table__header govuk-table__header--numeric" colSpan={previous}>Previous costs</th> : null}
-        {!!currentClaimPeriod ? <th className="govuk-table__header govuk-table__header--numeric">Current claim period costs</th> : null}
+        {previous > 0 ? <th className="govuk-table__header govuk-table__header--numeric" colSpan={previous}>Previous costs</th> : null}
+        {currentClaimPeriod > 0 ? <th className="govuk-table__header govuk-table__header--numeric">Current claim period costs</th> : null}
         {forecasts ? <th className="govuk-table__header govuk-table__header--numeric" colSpan={periods.length - currentClaimPeriod}>Forecasts</th> : null}
         <th className="govuk-table__header govuk-table__header--numeric">Forecasts and costs total</th>
         <th className="govuk-table__header govuk-table__header--numeric">Grant offer letter costs</th>
