@@ -46,7 +46,7 @@ class Component extends ContainerBase<Params, Data, {}> {
     );
   }
 
-  private renderSummary(project: ProjectDto){
+  private renderSummary(project: ProjectDto) {
     const SummaryDetails = Acc.TypedDetails<ProjectDto>();
 
     return (
