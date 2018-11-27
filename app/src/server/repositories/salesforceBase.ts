@@ -133,10 +133,18 @@ export default abstract class SalesforceBase<T> {
     if (e.errorCode === "ERROR_HTTP_503") {
       throw new SalesforceUnavilableError(`Salesforce unavailable`);
     }
+    if(e.errorCode === "INVALID_QUERY_FILTER_OPERATOR")
+    {
+      throw new SalesforceInvalidFilterError(`Salesforce unavailable`);
+    }
     console.log("SALESFORCE ERROR:", JSON.stringify(e));
     return new Error(e.errorCode + ": " + e.message);
   }
 }
 export class SalesforceUnavilableError extends Error {
+
+}
+
+export class SalesforceInvalidFilterError extends Error {
 
 }

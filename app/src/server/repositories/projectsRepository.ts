@@ -58,7 +58,7 @@ export class ProjectRepository extends SalesforceBase<ISalesforceProject> implem
     }
 
     getById(id: string) {
-        return super.retrieve(id);
+        return super.filterOne({Id: id});
     }
 
     getAll() {
