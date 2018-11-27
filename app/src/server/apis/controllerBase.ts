@@ -92,7 +92,7 @@ export abstract class ControllerBase<T> {
       return { status: StatusCode.SERVICE_UNAVAILABLE, data: { code: ErrorCode.SECURITY_ERROR, details: error.message } };
     }
     if(error instanceof SalesforceInvalidFilterError) {
-      return { status: StatusCode.NOT_FOUND, data: {code: ErrorCode.SECURITY_ERROR, details: "Not found"}};
+      return { status: StatusCode.NOT_FOUND, data: {code: ErrorCode.REQUEST_ERROR, details: "Not found"}};
     }
     return { status: 500, data: { code: ErrorCode.SERVER_ERROR, details: error.message || "An unexpected error has occurred..." } };
   }
