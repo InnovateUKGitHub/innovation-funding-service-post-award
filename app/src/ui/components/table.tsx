@@ -106,22 +106,21 @@ const TableComponent = <T extends {}>(props: TableProps<T> & { data: T[]; valida
   (props.footers || []).forEach(customFooter => footers.push(customFooter));
 
   const rowClass = props.data.map((dataItem, rowIndex) => (props.bodyRowClass && props.bodyRowClass(dataItem, rowIndex)) || "");
-  
+
   const rowFlags = props.data.map((dataItem, rowIndex) => {
-    console.log("checking row flag")
+    console.log("checking row flag");
     const validation = props.validationResult && props.validationResult[rowIndex];
-    if(validation && validation.showValidationErrors && !validation.isValid){
+    if(validation && validation.showValidationErrors && !validation.isValid) {
       return "error";
     }
-    if(props.bodyRowFlag)
-    {
+    if(props.bodyRowFlag) {
       return props.bodyRowFlag(dataItem, rowIndex);
     }
     return null;
   });
 
   const rowClasses = rowFlags.map(x => {
-    switch(x){
+    switch(x) {
       case "warning":
         return "table__row--warning";
       case "info":
