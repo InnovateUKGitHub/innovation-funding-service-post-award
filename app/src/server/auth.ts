@@ -42,7 +42,7 @@ router.use(cookieSession({
 
 router.use(passport.initialize());
 
-// configure passport to use shibboleth configured smal 
+// configure passport to use shibboleth configured saml
 passport.use("shibboleth", new passportSaml.Strategy(shibConfig, (payload: any, done: passportSaml.VerifiedCallback) => done(null, payload, {})));
 
 // extract session info out of shibboleth payload
@@ -58,19 +58,19 @@ router.post("/auth/success", passport.authenticate("shibboleth"), (req, res) => 
   req.session = req.session || {};
   req.session.user = { email: req.user[urnEmail] };
 
-  //redirect to orignal locaion if it starts with a / otherwise use server root 
+  // redirect to orignal locaion if it starts with a / otherwise use server root
   const redirect = req.session && req.session.redirect;
   const validatedRedirect = redirect && redirect.startsWith("/") ? redirect : Configuration.serverUrl;
   return res.redirect(validatedRedirect);
 });
 
 router.use((req, res, next) => {
-  //if user is logged in continue
+  // if user is logged in continue
   if (req.session && req.session.user && req.session.user.email) {
     next();
   }
   // if user not logged in but we arent using sso then set default user
-  else if (!Configuration.useSSO){
+  else if (!Configuration.useSSO) {
     req.session = req.session || {};
     req.session.user = req.session.user || {};
     req.session.user.email = Configuration.salesforceUsername;
@@ -83,7 +83,7 @@ router.use((req, res, next) => {
     req.session.redirect = req.url;
     res.redirect(`/login`);
   }
-  // not logged and api request throw 403 exception 
+  // not logged and api request throw 403 exception
   else {
     res.status(403).send();
   }

@@ -1,7 +1,7 @@
 export interface IConfig {
     ifsApplicationUrl: Readonly<string>;
     ifsGrantLetterUrl: Readonly<string>;
-  
+
     serverUrl: string;
     ssoProviderUrl: string;
 
@@ -26,7 +26,7 @@ const secrets = {
     salesforceClientId: process.env.SALESFORCECLIENTID!,
     salesforceConnectionUrl: process.env.SALESFORCECONNECTIONURL!,
     salesforcePassword: process.env.SALESFORCEPASSWORD!,
-    salesforceToken: process.env.SALESFORCETOKEN!,  
+    salesforceToken: process.env.SALESFORCETOKEN!,
     salesforceUseJwtToken: process.env.SALESFORCEUSEJWTTOKEN === "true",
     salesforceUsername: process.env.SALESFORCEUSERNAME!,
 
