@@ -7,6 +7,7 @@ import { ValidationError } from "../../shared/validation";
 import { Results } from "../../ui/validation/results";
 import { SalesforceTokenError } from "../repositories/salesforceConnection";
 import { FileUpload } from "../../types/FileUpload";
+import { SalesforceInvalidFilterError } from "../repositories/salesforceBase";
 
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
@@ -89,6 +90,9 @@ export abstract class ControllerBase<T> {
     }
     if (error instanceof SalesforceTokenError) {
       return { status: StatusCode.SERVICE_UNAVAILABLE, data: { code: ErrorCode.SECURITY_ERROR, details: error.message } };
+    }
+    if(error instanceof SalesforceInvalidFilterError) {
+      return { status: 404, data: {code: ErrorCode.SECURITY_ERROR, details: "Not found"}};
     }
     return { status: 500, data: { code: ErrorCode.SERVER_ERROR, details: error.message || "An unexpected error has occurred..." } };
   }
