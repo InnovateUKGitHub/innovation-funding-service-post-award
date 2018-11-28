@@ -1,4 +1,4 @@
-import { ICommand, IContext } from "../common/context";
+import { CommandBase, IContext } from "../common/context";
 import { ValidationError } from "../../../shared/validation";
 import { GetAllForecastsGOLCostsQuery, GetCostCategoriesQuery } from "../claims";
 import { ForecastDetailsDtosValidator } from "../../../ui/validators/forecastDetailsDtosValidator";
@@ -6,14 +6,16 @@ import { GetAllClaimDetailsByPartner } from "../claimDetails";
 import { ISalesforceProfileDetails } from "../../repositories";
 import { Updatable } from "../../repositories/salesforceBase";
 
-export class UpdateForecastDetailsCommand implements ICommand<boolean> {
+export class UpdateForecastDetailsCommand extends CommandBase<boolean> {
   constructor(
     private partnerId: string,
     private periodId: number,
     private forecasts: ForecastDetailsDTO[]
-  ) { }
+  ) { 
+    super();
+  }
 
-  public async Run(context: IContext) {
+  protected async Run(context: IContext) {
     const claimDetails   = await context.runQuery(new GetAllClaimDetailsByPartner(this.partnerId));
     const golCosts       = await context.runQuery(new GetAllForecastsGOLCostsQuery(this.partnerId));
     const costCategories = await context.runQuery(new GetCostCategoriesQuery());

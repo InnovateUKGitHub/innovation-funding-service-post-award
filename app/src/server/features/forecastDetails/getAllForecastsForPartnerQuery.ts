@@ -1,13 +1,15 @@
-import { IContext, IQuery } from "../common/context";
+import { IContext, QueryBase } from "../common/context";
 import mapForecastDetail from "./mapForecastDetail";
 
-export class GetAllForecastsForPartnerQuery implements IQuery<ForecastDetailsDTO[]> {
+export class GetAllForecastsForPartnerQuery extends QueryBase<ForecastDetailsDTO[]> {
   constructor(
     private partnerId: string,
     private periodId: number
-  ) {}
+  ) {
+    super();
+  }
 
-  public async Run(context: IContext) {
+  protected async Run(context: IContext) {
     const results = await context.repositories.profileDetails.getAllByPartnerWithPeriodGt(this.partnerId, this.periodId);
     return results.map(mapForecastDetail(context));
   }

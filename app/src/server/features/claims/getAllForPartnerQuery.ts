@@ -1,13 +1,14 @@
-import { IContext, IQuery } from "../common/context";
+import { IContext, QueryBase } from "../common/context";
 import mapClaim from "./mapClaim";
 import {dateComparator} from "../../../util/comparator";
 import { ClaimDto } from "../../../types";
 
-export class GetAllForPartnerQuery implements IQuery<ClaimDto[]> {
+export class GetAllForPartnerQuery extends QueryBase<ClaimDto[]> {
     constructor(private partnerId: string) {
+        super();
     }
 
-    public async Run(context: IContext) {
+    protected async Run(context: IContext) {
         const claims = await context.repositories.claims.getAllByPartnerId(this.partnerId);
         const forcasts = await context.repositories.profileTotalPeriod.getAllByPartnerId(this.partnerId);
         const joined = claims.map(claim => ({ claim, forcast: forcasts.find(x => x.Acc_ProjectPeriodNumber__c === claim.Acc_ProjectPeriodNumber__c) }));

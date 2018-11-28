@@ -1,10 +1,11 @@
-import {IContext, IQuery} from "../common/context";
+import {IContext, QueryBase} from "../common/context";
 
-export class GetAllClaimDetailsByPartner implements IQuery<ClaimDetailsDto[]> {
+export class GetAllClaimDetailsByPartner extends QueryBase<ClaimDetailsDto[]> {
   constructor(private partnerId: string) {
+    super();
   }
 
-  public async Run(context: IContext) {
+  protected async Run(context: IContext) {
     return context.repositories.claimDetails.getAllByPartner(this.partnerId)
       .then((claimDetails) => claimDetails.map(x => ({
         periodId: x.Acc_ProjectPeriodNumber__c,
