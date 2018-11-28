@@ -49,7 +49,7 @@ export class ForecastTable extends React.Component<Props> {
         <Table.String header="Month" value={x => x.categoryName} qa="category-name" />
 
         {claims.map((p, i) => <Table.Currency key={p} header={intervals[p]} value={x => x.claims[p]} qa={"category-claim" + i} isDivider={i === claims.length - 1 || i === claims.length - 2} />)}
-        {forecasts.map((p, i) => <Table.Custom key={p} header={intervals[p]} value={(x, index) => this.renderForecastCell(x, p, index, data)} qa={"category-forecast" + i}  isDivider={i === forecasts.length - 1} />)}
+        {forecasts.map((p, i) => <Table.Custom key={p} header={intervals[p]} value={(x, index) => this.renderForecastCell(x, p, index, data)} cellClassName={() => "govuk-table__cell--numeric"} qa={"category-forecast" + i} isDivider={i === forecasts.length - 1} />)}
 
         <Table.Currency header="" value={x => x.total} qa="category-total" isDivider={true} />
         <Table.Currency header="" value={x => x.golCosts} qa="category-gol-costs" isDivider={true} />
