@@ -1,8 +1,8 @@
-import { IContext, IQuery } from "../common/context";
+import { IContext, QueryBase } from "../common/context";
 import { ISalesforceCostCategory } from "../../repositories";
 
-export class GetCostCategoriesQuery implements IQuery<CostCategoryDto[]> {
-  public async Run(context: IContext) {
+export class GetCostCategoriesQuery extends QueryBase<CostCategoryDto[]> {
+  protected async Run(context: IContext) {
     return context.caches.costCategories.fetchAsync("All", () => this.executeQuery(context));
   }
 

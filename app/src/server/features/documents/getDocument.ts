@@ -1,10 +1,11 @@
-import {IContext, IQuery} from "../common/context";
+import {IContext, QueryBase} from "../common/context";
 
-export class GetDocumentQuery implements IQuery<DocumentDto> {
+export class GetDocumentQuery extends QueryBase<DocumentDto> {
   constructor(private documentId: string) {
+    super();
   }
 
-  public async Run(context: IContext) {
+  protected async Run(context: IContext) {
     const document = await context.repositories.contentVersions.getDocument(this.documentId);
     const documentStream = await context.repositories.contentVersions.getDocumentData(this.documentId);
     return {

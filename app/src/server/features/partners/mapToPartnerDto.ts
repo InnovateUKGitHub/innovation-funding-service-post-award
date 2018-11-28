@@ -1,8 +1,10 @@
-import { IContext, IQuery } from "../common/context";
+import { CommandBase, IContext } from "../common/context";
 import { ISalesforcePartner, PROJECT_LEAD_IDENTIFIER } from "../../repositories/partnersRepository";
 
-export class MapToPartnerDtoCommand implements IQuery<PartnerDto> {
-    constructor(readonly item: ISalesforcePartner) { }
+export class MapToPartnerDtoCommand extends CommandBase<PartnerDto> {
+    constructor(readonly item: ISalesforcePartner) {
+        super();
+     }
 
     calcPercentageClaimed(total: number, claimed: number) {
         return (total && claimed) ? 100 * claimed / total  : null;

@@ -1,10 +1,11 @@
-import {ICommand, IContext} from "../common/context";
+import {CommandBase, IContext} from "../common/context";
 
-export class DeleteDocumentCommand implements ICommand<void> {
+export class DeleteDocumentCommand extends CommandBase<void> {
   constructor(private id: string) {
+    super();
   }
 
-  public async Run(context: IContext) {
+  protected async Run(context: IContext) {
     return context.repositories.contentDocument.delete(this.id);
   }
 }

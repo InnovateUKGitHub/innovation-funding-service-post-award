@@ -1,10 +1,12 @@
-import { IContext, IQuery } from "../common/context";
+import { CommandBase, IContext } from "../common/context";
 import { ISalesforceProject } from "../../repositories/projectsRepository";
 import { MapToProjectDtoCommand } from "./mapToProjectDto";
 import { ProjectDto } from "../../../types";
 
-export class MapToProjectsDtoCommand implements IQuery<ProjectDto[]> {
-  constructor(readonly items: ISalesforceProject[]) {}
+export class MapToProjectsDtoCommand extends CommandBase<ProjectDto[]> {
+  constructor(readonly items: ISalesforceProject[]) {
+    super();
+  }
 
   async Run(context: IContext) {
     const projectDtos = this.items.map((item) => {

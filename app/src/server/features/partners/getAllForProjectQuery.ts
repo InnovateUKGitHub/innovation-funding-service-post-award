@@ -1,11 +1,12 @@
-import { IContext, IQuery } from "../common/context";
+import { IContext, QueryBase } from "../common/context";
 import { MapToPartnerDtoCommand } from "./mapToPartnerDto";
 
-export class GetAllForProjectQuery implements IQuery<PartnerDto[]> {
+export class GetAllForProjectQuery extends QueryBase<PartnerDto[]> {
     constructor(private projectId: string) {
+        super();
     }
 
-    public async Run(context: IContext) {
+    protected async Run(context: IContext) {
         const results = await context.repositories.partners.getAllByProjectId(this.projectId);
         const mapped = await Promise.all(results.map(item => context.runCommand(new MapToPartnerDtoCommand(item))));
 
