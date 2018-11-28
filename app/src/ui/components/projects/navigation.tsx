@@ -23,8 +23,8 @@ export const ProjectNavigation: React.SFC<Props> = ({project, currentRoute, part
   const navigationTabs: TabItem[] = [
     {text: "Claims", route: claimsLink, selected: claimsLink.routeName === currentRoute},
     {text: "All Claims", route: allClaimsLink, selected: allClaimsLink.routeName === currentRoute},
-    {text: "Partner Forecasts", route: viewForecastLink, selected: viewForecastLink.routeName === currentRoute},
-    {text: "Project Forecasts", route: projectForecastsLink, selected: ProjectForecastRoute.routeName === currentRoute},
+    {text: "Forecasts", route: viewForecastLink, selected: viewForecastLink.routeName === currentRoute},
+    {text: "All Forecasts", route: projectForecastsLink, selected: ProjectForecastRoute.routeName === currentRoute},
     {text: "Project change requests", url: "#"},
     {text: "Project details", route: detailsLink, selected: detailsLink.routeName === currentRoute},
   ];
