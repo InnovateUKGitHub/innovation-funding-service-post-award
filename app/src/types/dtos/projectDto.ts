@@ -13,4 +13,9 @@ export interface ProjectDto {
     claimFrequency: ClaimFrequency;
     claimFrequencyName: string;
     periodId: number;
+
+    grantOfferLetterCosts: number;
+    costsClaimedToDate: number;
+    claimedPercentage: number|null;
+
 }
