@@ -1,11 +1,12 @@
-import { IContext, IQuery } from "../common/context";
+import { IContext, QueryBase } from "../common/context";
 import { ISalesforceProjectContact } from "../../repositories/projectContactsRepository";
 
-export class GetAllForProjectQuery implements IQuery<ProjectContactDto[]> {
+export class GetAllForProjectQuery extends QueryBase<ProjectContactDto[]> {
     constructor(private projectId: string) {
+        super();
     }
 
-    public async Run(context: IContext) {
+    protected async Run(context: IContext) {
         const results = await context.repositories.projectContacts.getAllByProjectId(this.projectId);
         return results.map(this.map);
     }

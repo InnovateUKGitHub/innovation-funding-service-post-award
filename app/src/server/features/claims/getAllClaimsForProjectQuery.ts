@@ -1,14 +1,15 @@
-import { IContext, IQuery } from "../common/context";
+import { IContext, QueryBase } from "../common/context";
 import mapClaim from "./mapClaim";
 import { ClaimDto } from "../../../types";
 import { ISalesforceClaim, ISalesforceProfileTotalPeriod, PROJECT_LEAD_IDENTIFIER } from "../../repositories";
 import { IComparer } from "../../../util/comparator";
 
-export class GetAllClaimsForProjectQuery implements IQuery<ClaimDto[]> {
+export class GetAllClaimsForProjectQuery extends QueryBase<ClaimDto[]> {
   constructor(private projectId: string) {
+    super();
   }
 
-  public async Run(context: IContext) {
+  protected async Run(context: IContext) {
     const claims = await context.repositories.claims.getAllByProjectId(this.projectId);
     const forcasts = await context.repositories.profileTotalPeriod.getAllByProjectId(this.projectId);
     const joined = claims.map(claim => ({ claim, forcast: forcasts.find(x => x.Acc_ProjectParticipant__c === claim.Acc_ProjectParticipant__r.Id && x.Acc_ProjectPeriodNumber__c === claim.Acc_ProjectPeriodNumber__c) }));

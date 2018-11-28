@@ -1,13 +1,14 @@
-import {ICommand, IContext} from "../common/context";
+import { CommandBase, IContext} from "../common/context";
 import {UploadDocumentCommand} from "./uploadDocument";
 import { FileUpload } from "../../../types/FileUpload";
 
-export class UploadClaimDetailDocumentCommand implements ICommand<string> {
+export class UploadClaimDetailDocumentCommand extends CommandBase<string> {
   constructor(private claimDetailKey: ClaimDetailKey, private file: FileUpload) {
+    super();
   }
 
-  public async Run(context: IContext) {
+  protected async Run(context: IContext) {
     const claimDetail = await context.repositories.claimDetails.get(this.claimDetailKey);
-    return context.runQuery(new UploadDocumentCommand(this.file, claimDetail.Id));
+    return context.runCommand(new UploadDocumentCommand(this.file, claimDetail.Id));
   }
 }

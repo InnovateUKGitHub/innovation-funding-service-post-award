@@ -1,4 +1,4 @@
-import { ICommand, IContext, IQuery, ICaches } from "../../src/server/features/common/context";
+import { IContext, ICaches, IRunnable, QueryBase, CommandBase } from "../../src/server/features/common/context";
 import { createTestRepositories, ITestRepositories } from "./testRepositories";
 import { TestData } from "./testData";
 import { TestClock } from "./testClock";
@@ -36,11 +36,11 @@ export class TestContext implements IContext {
         costCategories: new Cache<CostCategoryDto[]>(1)
     }
 
-    public runQuery<TResult>(query: IQuery<TResult>): Promise<TResult> {
-        return query.Run(this);
+    public runQuery<TResult>(query: QueryBase<TResult>): Promise<TResult> {
+        return ((query as any) as IRunnable<TResult>).Run(this);
     }
 
-    public runCommand<TResult>(command: ICommand<TResult>): Promise<TResult> {
-        return command.Run(this);
+    public runCommand<TResult>(command: CommandBase<TResult>): Promise<TResult> {
+        return ((command as any) as IRunnable<TResult>).Run(this);
     }
 }

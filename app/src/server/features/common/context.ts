@@ -5,12 +5,16 @@ import { ILogger, Logger } from "./logger";
 import { ISalesforceConnectionDetails, salesforceConnection, salesforceConnectionWithToken } from "../../repositories/salesforceConnection";
 import { Cache } from "./cache";
 
-export interface IQuery<T> {
+export interface IRunnable<T> {
   Run: (context: IContext) => Promise<T>;
 }
 
-export interface ICommand<T> {
-  Run: (context: IContext) => Promise<T>;
+export abstract class QueryBase<T> {
+  protected abstract Run(context: IContext): Promise<T>;
+}
+
+export abstract class CommandBase<T> {
+  protected abstract Run(context: IContext): Promise<T>;
 }
 
 export interface IRepositories {
@@ -39,8 +43,8 @@ export interface IContext {
   repositories: IRepositories;
   caches: ICaches;
   config: IConfig;
-  runQuery<TResult>(cmd: IQuery<TResult>): Promise<TResult>;
-  runCommand<TResult>(cmd: ICommand<TResult>): Promise<TResult>;
+  runQuery<TResult>(cmd: QueryBase<TResult>): Promise<TResult>;
+  runCommand<TResult>(cmd: CommandBase<TResult>): Promise<TResult>;
   clock: IClock;
   logger: ILogger;
 }
@@ -99,20 +103,25 @@ export class Context implements IContext {
   public config: Readonly<IConfig>;
   public logger = new Logger();
 
-  public runQuery<TResult>(query: IQuery<TResult>): Promise<TResult> {
+  public runQuery<TResult>(query: QueryBase<TResult>): Promise<TResult> {
     this.logger.log("Running query", query);
 
-    return query.Run(this).catch(e => {
-      this.logger.log("Failed query", query);
-      throw e;
-    });
+    const runnable: IRunnable<TResult> = (query as any) as IRunnable<TResult>;
+
+    return runnable.Run(this)
+      .catch(e => {
+        this.logger.log("Failed query", query);
+        throw e;
+      });
   }
 
-  public runCommand<TResult>(query: ICommand<TResult>): Promise<TResult> {
-    this.logger.log("Running command", query);
+  public runCommand<TResult>(command: CommandBase<TResult>): Promise<TResult> {
+    this.logger.log("Running command", command);
 
-    return query.Run(this).catch(e => {
-      this.logger.log("Failed command", query, e);
+    const runnable: IRunnable<TResult> = (command as any) as IRunnable<TResult>;
+
+    return runnable.Run(this).catch(e => {
+      this.logger.log("Failed command", command, e);
       throw e;
     });
   }
