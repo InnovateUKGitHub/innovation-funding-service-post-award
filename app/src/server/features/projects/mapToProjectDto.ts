@@ -18,6 +18,9 @@ export class MapToProjectDtoCommand implements IQuery<ProjectDto> {
       grantOfferLetterUrl: this.getIFSUrl(this.item, context.config.ifsGrantLetterUrl),
       claimFrequency,
       claimFrequencyName: ClaimFrequency[claimFrequency],
+      grantOfferLetterCosts: this.item.Acc_GOLTotalCostAwarded__c,
+      costsClaimedToDate: this.item.Acc_TotalProjectCosts__c,
+      claimedPercentage: this.item.Acc_GOLTotalCostAwarded__c ? 100 * this.item.Acc_TotalProjectCosts__c / this.item.Acc_GOLTotalCostAwarded__c : null,
       periodId: NaN,
     };
 
