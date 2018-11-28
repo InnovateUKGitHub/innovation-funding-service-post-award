@@ -1,14 +1,16 @@
-import { ICommand, IContext } from "../common/context";
+import { IContext, CommandBase } from "../common/context";
 import { ClaimDtoValidator } from "../../../ui/validators/claimDtoValidator";
 import { GetCostCategoriesQuery } from ".";
 import { GetClaimDetailsSummaryForPartnerQuery } from "../claimDetails";
 import { ValidationError } from "../../../shared/validation";
 import { ClaimDto } from "../../../types";
 
-export class UpdateClaimCommand implements ICommand<boolean> {
-  constructor(private claimDto: ClaimDto) { }
+export class UpdateClaimCommand extends CommandBase<boolean> {
+  constructor(private claimDto: ClaimDto) {
+    super();
+   }
 
-  public async Run(context: IContext) {
+  protected async Run(context: IContext) {
 
     const costCategories = await context.runQuery(new GetCostCategoriesQuery());
     const details = await context.runQuery(new GetClaimDetailsSummaryForPartnerQuery(this.claimDto.partnerId, this.claimDto.periodId));

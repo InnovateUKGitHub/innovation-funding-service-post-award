@@ -1,9 +1,11 @@
-import { IContext, IQuery } from "../common/context";
+import { CommandBase, IContext } from "../common/context";
 import { ISalesforceProject } from "../../repositories/projectsRepository";
 import { ClaimFrequency, ProjectDto } from "../../../types";
 
-export class MapToProjectDtoCommand implements IQuery<ProjectDto> {
-  constructor(readonly item: ISalesforceProject) { }
+export class MapToProjectDtoCommand extends CommandBase<ProjectDto> {
+  constructor(readonly item: ISalesforceProject) {
+    super();
+   }
 
   async Run(context: IContext) {
     const claimFrequency = this.mapFrequencyToEnum(this.item.Acc_ClaimFrequency__c);
