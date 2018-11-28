@@ -1,6 +1,6 @@
 // TODO move to constants
 export enum ClaimFrequency {
-  "Unknown",
-  "Quarterly",
-  "Monthly"
+  "Unknown" = 0,
+  "Quarterly" = 3,
+  "Monthly" = 1
 }

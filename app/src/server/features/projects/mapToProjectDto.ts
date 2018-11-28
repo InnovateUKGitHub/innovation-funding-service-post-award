@@ -6,6 +6,7 @@ export class MapToProjectDtoCommand implements IQuery<ProjectDto> {
   constructor(readonly item: ISalesforceProject) { }
 
   async Run(context: IContext) {
+    const claimFrequency = this.mapFrequencyToEnum(this.item.Acc_ClaimFrequency__c);
     const dto: ProjectDto = {
       id: this.item.Id,
       title: this.item.Acc_ProjectTitle__c,
@@ -15,7 +16,8 @@ export class MapToProjectDtoCommand implements IQuery<ProjectDto> {
       projectNumber: this.item.Acc_ProjectNumber__c,
       applicationUrl: this.getIFSUrl(this.item, context.config.ifsApplicationUrl),
       grantOfferLetterUrl: this.getIFSUrl(this.item, context.config.ifsGrantLetterUrl),
-      claimFrequency: this.mapFrequencyToEnum(this.item.Acc_ClaimFrequency__c),
+      claimFrequency,
+      claimFrequencyName: ClaimFrequency[claimFrequency],
       periodId: NaN,
     };
 
