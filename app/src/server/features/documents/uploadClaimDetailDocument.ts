@@ -1,4 +1,4 @@
-import { IContext, CommandBase} from "../common/context";
+import { CommandBase, IContext} from "../common/context";
 import {UploadDocumentCommand} from "./uploadDocument";
 import { FileUpload } from "../../../types/FileUpload";
 

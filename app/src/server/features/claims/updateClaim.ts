@@ -1,4 +1,4 @@
-import { IContext, CommandBase } from "../common/context";
+import { CommandBase, IContext } from "../common/context";
 import { ClaimDtoValidator } from "../../../ui/validators/claimDtoValidator";
 import { GetCostCategoriesQuery } from ".";
 import { GetClaimDetailsSummaryForPartnerQuery } from "../claimDetails";
