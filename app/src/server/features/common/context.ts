@@ -3,7 +3,7 @@ import { Configuration, IConfig } from "./config";
 import { Clock, IClock } from "./clock";
 import { ILogger, Logger } from "./logger";
 import { ISalesforceConnectionDetails, salesforceConnection, salesforceConnectionWithToken } from "../../repositories/salesforceConnection";
-import { Cache } from "./cache"
+import { Cache } from "./cache";
 
 export interface IRunnable<T> {
   Run: (context: IContext) => Promise<T>;
