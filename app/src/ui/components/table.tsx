@@ -108,7 +108,6 @@ const TableComponent = <T extends {}>(props: TableProps<T> & { data: T[]; valida
   const rowClass = props.data.map((dataItem, rowIndex) => (props.bodyRowClass && props.bodyRowClass(dataItem, rowIndex)) || "");
 
   const rowFlags = props.data.map((dataItem, rowIndex) => {
-    console.log("checking row flag");
     const validation = props.validationResult && props.validationResult[rowIndex];
     if(validation && validation.showValidationErrors && !validation.isValid) {
       return "error";
