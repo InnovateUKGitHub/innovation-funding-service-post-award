@@ -5,7 +5,7 @@ import * as Selectors from "../../../redux/selectors";
 import { Pending } from "../../../../shared/pending";
 import { ContainerBase, ReduxContainer } from "../../containerBase";
 import { ProjectOverviewPage } from "../../../components/projectOverview";
-import { UpdateForecastRoute } from "./updateForecasts";
+import { UpdateForecastRoute } from "./updateForecast";
 import {
   CombinedData,
   Data,
@@ -41,9 +41,9 @@ class ViewForecastComponent extends ContainerBase<Params, Data, Callbacks> {
         selectedTab={ViewForecastRoute.routeName}
         project={data.project}
         partners={[data.partner]}
-        validationMessage={renderWarning(data)}
       >
         <ACC.Section title={data.partner.name} qa={"partner-name"} >
+          {renderWarning(data)}
           <ACC.Claims.ForecastTable data={data} />
         </ACC.Section>
         <ACC.Section>

@@ -1,7 +1,7 @@
 import React from "react";
 import * as Actions from "../../../redux/actions";
 import * as Selectors from "../../../redux/selectors";
-import { RootState, IEditorStore } from "../../../redux";
+import { IEditorStore, RootState } from "../../../redux";
 import { Pending } from "../../../../shared/pending";
 import { ClaimDto, ProjectDto } from "../../../../types";
 import { ForecastDetailsDtosValidator } from "../../../validators/forecastDetailsDtosValidator";

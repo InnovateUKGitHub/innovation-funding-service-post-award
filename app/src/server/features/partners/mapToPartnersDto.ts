@@ -1,9 +1,11 @@
-import { IContext, IQuery } from "../common/context";
+import { IContext, QueryBase } from "../common/context";
 import { MapToPartnerDtoCommand } from "./mapToPartnerDto";
 import {ISalesforcePartner} from "../../repositories/partnersRepository";
 
-export class MapToPartnersDtoCommand implements IQuery<PartnerDto[]> {
-    constructor(readonly items: ISalesforcePartner[]) {}
+export class MapToPartnersDtoCommand extends QueryBase<PartnerDto[]> {
+    constructor(readonly items: ISalesforcePartner[]) {
+        super();
+    }
 
     async Run(context: IContext) {
         const partnerDtos = this.items.map((item) => {

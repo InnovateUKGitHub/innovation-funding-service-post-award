@@ -43,9 +43,9 @@ class ClaimForecastComponent extends ContainerBase<Params, Data, Callbacks> {
           <ACC.BackLink route={PrepareClaimRoute.getLink({ projectId: this.props.projectId, partnerId: this.props.partnerId, periodId: this.props.periodId })}>Back</ACC.BackLink>
         </ACC.Section>
         <ACC.ValidationSummary validation={editor.validator} compressed={false} />
-        {renderWarning(combined)}
         <ACC.Projects.Title pageTitle="Claim" project={combined.project} />
         <ACC.Section title={"Update forecasts table for " + combined.partner.name} qa="partner-name">
+          {renderWarning(combined)}
           <Form.Form
             data={editor.data}
             onChange={data => this.handleChange(data, combined)}

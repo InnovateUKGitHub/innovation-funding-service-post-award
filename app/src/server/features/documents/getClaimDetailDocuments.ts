@@ -1,11 +1,12 @@
-import {IContext, IQuery} from "../common/context";
+import {IContext, QueryBase} from "../common/context";
 import {GetDocumentsLinkedToRecordQuery} from "./getAllForRecord";
 
-export class GetClaimDetailDocumentsQuery implements IQuery<DocumentSummaryDto[]> {
+export class GetClaimDetailDocumentsQuery extends QueryBase<DocumentSummaryDto[]> {
   constructor(public partnerId: string, public periodId: number, public costCategoryId: string) {
+    super();
   }
 
-  public async Run(context: IContext) {
+  protected async Run(context: IContext) {
     const key = {
       partnerId: this.partnerId,
       periodId: this.periodId,

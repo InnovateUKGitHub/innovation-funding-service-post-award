@@ -40,7 +40,7 @@ export class ForecastTable extends React.Component<Props> {
     return (
       <Table.Table
         data={parsed}
-        qa="cost-category-table"
+        qa="forecast-table"
         headers={this.renderTableHeaders(periods, data.claim)}
         footers={this.renderTableFooters(periods, parsed, data.editor)}
         headerRowClass="govuk-body-s"
@@ -49,7 +49,7 @@ export class ForecastTable extends React.Component<Props> {
         <Table.String header="Month" value={x => x.categoryName} qa="category-name" />
 
         {claims.map((p, i) => <Table.Currency key={p} header={intervals[p]} value={x => x.claims[p]} qa={"category-claim" + i} isDivider={i === claims.length - 1 || i === claims.length - 2} />)}
-        {forecasts.map((p, i) => <Table.Custom key={p} header={intervals[p]} value={(x, index) => this.renderForecastCell(x, p, index, data)} qa={"category-forecast" + i}  isDivider={i === forecasts.length - 1} />)}
+        {forecasts.map((p, i) => <Table.Custom key={p} header={intervals[p]} value={(x, index) => this.renderForecastCell(x, p, index, data)} cellClassName={() => "govuk-table__cell--numeric"} qa={"category-forecast" + i} isDivider={i === forecasts.length - 1} />)}
 
         <Table.Currency header="" value={x => x.total} qa="category-total" isDivider={true} />
         <Table.Currency header="" value={x => x.golCosts} qa="category-gol-costs" isDivider={true} />
@@ -153,8 +153,8 @@ export class ForecastTable extends React.Component<Props> {
     return [(
       <tr key="cHeader1" className="govuk-table__row govuk-body-s">
         <th className="govuk-table__header govuk-table__header--numeric" />
-        {!!previous ? <th className="govuk-table__header govuk-table__header--numeric" colSpan={previous}>Previous costs</th> : null}
-        {!!currentClaimPeriod ? <th className="govuk-table__header govuk-table__header--numeric">Current claim period costs</th> : null}
+        {previous > 0 ? <th className="govuk-table__header govuk-table__header--numeric" colSpan={previous}>Previous costs</th> : null}
+        {currentClaimPeriod > 0 ? <th className="govuk-table__header govuk-table__header--numeric">Current claim period costs</th> : null}
         {forecasts ? <th className="govuk-table__header govuk-table__header--numeric" colSpan={periods.length - currentClaimPeriod}>Forecasts</th> : null}
         <th className="govuk-table__header govuk-table__header--numeric">Forecasts and costs total</th>
         <th className="govuk-table__header govuk-table__header--numeric">Grant offer letter costs</th>

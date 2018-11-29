@@ -1,11 +1,12 @@
-import { IContext, IQuery } from "../common/context";
+import { IContext, QueryBase } from "../common/context";
 import { GetCostCategoriesQuery } from "../claims";
 
-export class GetClaimDetailsSummaryForPartnerQuery implements IQuery<ClaimDetailsSummaryDto[]> {
+export class GetClaimDetailsSummaryForPartnerQuery extends QueryBase<ClaimDetailsSummaryDto[]> {
     constructor(private partnerId: string, private periodId: number) {
+        super();
     }
 
-    public async Run(context: IContext) {
+    protected async Run(context: IContext) {
         const claimDetailResults = await context.repositories.claimDetails.getAllByPartnerForPeriod(this.partnerId, this.periodId);
         const totalCostCategoryResults = await context.repositories.claimDetails.getAllByPartnerWithPeriodLt(this.partnerId, this.periodId);
         const totalForcastResults = await context.repositories.profileTotalCostCategory.getAllByPartnerId(this.partnerId);
