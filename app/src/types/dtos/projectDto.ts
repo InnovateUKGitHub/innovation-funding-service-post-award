@@ -11,5 +11,11 @@ export interface ProjectDto {
     projectNumber: string;
 
     claimFrequency: ClaimFrequency;
+    claimFrequencyName: string;
     periodId: number;
+
+    grantOfferLetterCosts: number;
+    costsClaimedToDate: number;
+    claimedPercentage: number|null;
+
 }

@@ -1,4 +1,4 @@
-import { ICommand, IContext } from "../common/context";
+import { CommandBase, IContext } from "../common/context";
 import { UploadDocumentCommand } from "./uploadDocument";
 import { GetClaimDocumentsQuery } from "./getClaimDocuments";
 import { ApiError, StatusCode } from "../../apis/ApiError";
@@ -7,8 +7,10 @@ import { DeleteDocumentCommand } from "./deleteDocument";
 import { ClaimDto, ClaimStatus, DocumentDescription } from "../../../types";
 import { FileUpload } from "../../../types/FileUpload";
 
-export class UploadClaimDocumentCommand implements ICommand<string> {
-  constructor(private claimKey: ClaimKey, private file: FileUpload) {}
+export class UploadClaimDocumentCommand extends CommandBase<string> {
+  constructor(private claimKey: ClaimKey, private file: FileUpload) {
+    super();
+  }
 
   private validateIarUpload(claim: ClaimDto) {
     if (!claim.isIarRequired || !claim.allowIarEdit) {
@@ -28,12 +30,12 @@ export class UploadClaimDocumentCommand implements ICommand<string> {
     await context.repositories.claims.update(updatedClaim);
   }
 
-  public async Run(context: IContext) {
+  protected async Run(context: IContext) {
     const claim = await context.repositories.claims.get(this.claimKey.partnerId, this.claimKey.periodId).then(mapClaim(context));
 
     if (this.file.description === DocumentDescription.IAR) await this.preIarUpload(context, claim);
 
-    const documentId = context.runQuery(new UploadDocumentCommand(this.file, claim.id));
+    const documentId = context.runCommand(new UploadDocumentCommand(this.file, claim.id));
 
     if (this.file.description === DocumentDescription.IAR) await this.postIarUpload(context, claim);
 
