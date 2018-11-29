@@ -4,35 +4,35 @@ import * as Actions from "../../../redux/actions";
 import { ContainerBase, ReduxContainer } from "../../containerBase";
 import { ViewForecastRoute } from "./viewForecast";
 import {
-  CombinedData,
-  Data,
+  ForecastData,
   forecastDataLoadActions,
   forecastParams,
   Params,
+  PendingForecastData,
   renderWarning,
   withDataEditor
 } from "./common";
 
 interface Callbacks {
-  onChange: (partnerId: string, periodId: number, data: ForecastDetailsDTO[], combined: CombinedData) => void;
-  saveAndReturn: (updateClaim: boolean, projectId: string, partnerId: string, periodId: number, data: CombinedData) => void;
+  onChange: (partnerId: string, periodId: number, data: ForecastDetailsDTO[], combined: ForecastData) => void;
+  saveAndReturn: (updateClaim: boolean, projectId: string, partnerId: string, periodId: number, data: ForecastData) => void;
 }
 
-class UpdateForecastComponent extends ContainerBase<Params, Data, Callbacks> {
+class UpdateForecastComponent extends ContainerBase<Params, PendingForecastData, Callbacks> {
   public render() {
-    const Loader = ACC.TypedLoader<CombinedData>();
+    const Loader = ACC.TypedLoader<ForecastData>();
     return <Loader pending={this.props.combined} render={data => this.renderContents(data)} />;
   }
 
-  saveAndReturn(data: CombinedData) {
+  saveAndReturn(data: ForecastData) {
     this.props.saveAndReturn(false, this.props.projectId, this.props.partnerId, this.props.periodId, data);
   }
 
-  handleChange(data: ForecastDetailsDTO[], combined: CombinedData) {
+  handleChange(data: ForecastDetailsDTO[], combined: ForecastData) {
     this.props.onChange(this.props.partnerId, this.props.periodId, data, combined);
   }
 
-  public renderContents(combined: CombinedData) {
+  public renderContents(combined: ForecastData) {
     const Form = ACC.TypedForm<ForecastDetailsDTO[]>();
     const editor = combined.editor!;
 
@@ -65,7 +65,7 @@ class UpdateForecastComponent extends ContainerBase<Params, Data, Callbacks> {
   }
 }
 
-const definition = ReduxContainer.for<Params, Data, Callbacks>(UpdateForecastComponent);
+const definition = ReduxContainer.for<Params, PendingForecastData, Callbacks>(UpdateForecastComponent);
 
 const UpdateForecast = definition.connect({
   withData: (state, props) => withDataEditor(state, props),
