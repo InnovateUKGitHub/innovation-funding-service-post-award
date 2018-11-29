@@ -1,6 +1,8 @@
 node_modules/
 dist/
-public/
+!public/
+public/*
+!public/assets
 coverage/
 reports/
 build/
