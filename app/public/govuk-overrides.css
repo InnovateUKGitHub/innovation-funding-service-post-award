@@ -41,3 +41,24 @@
 .govuk-table__row.table__row--error th {
   vertical-align: bottom;
 }
+
+.acc-accordion {
+  border-bottom: 1px solid #bfc1c3;
+}
+.acc-accordion__section {
+  border-top: 1px solid #bfc1c3;
+}
+.acc-accordion__section-header {
+  display: inline-flex;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+}
+.acc-accordion__section-header:hover {
+  background: #f8f8f8;
+}
+.acc-accordion__section-panel {
+  padding-top: 15px;
+  padding-bottom: 15px;
+}
