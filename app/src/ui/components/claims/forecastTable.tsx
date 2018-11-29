@@ -23,13 +23,15 @@ interface Index {
 }
 
 interface Props {
+  hideValidation?: boolean;
   data: ForecastData;
   onChange?: (data: ForecastDetailsDTO[]) => void;
 }
 
 export class ForecastTable extends React.Component<Props> {
   public render() {
-    const data      = this.props.data;
+    const { data, hideValidation } = this.props;
+
     const parsed    = this.parseClaimData(data);
     const Table     = ACC.TypedTable<typeof parsed[0]>();
     const intervals = this.calculateClaimPeriods(data);
@@ -44,7 +46,7 @@ export class ForecastTable extends React.Component<Props> {
         headers={this.renderTableHeaders(periods, data.claim)}
         footers={this.renderTableFooters(periods, parsed, data.editor)}
         headerRowClass="govuk-body-s"
-        bodyRowClass={x => classNames("govuk-body-s", {"table__row--warning": x.total > x.golCosts})}
+        bodyRowClass={x => classNames("govuk-body-s", {"table__row--warning": !hideValidation && (x.total > x.golCosts)})}
       >
         <Table.String header="Month" value={x => x.categoryName} qa="category-name" />
 
@@ -182,9 +184,8 @@ export class ForecastTable extends React.Component<Props> {
       return total + value;
     }, 0));
 
-    const validator = !!editor ? editor.validator : false;
+    const validator = !this.props.hideValidation && !!editor ? editor.validator : false;
     const warning   = !!validator && validator.showValidationErrors && !validator.isValid;
-
     totals.push(costTotal);
     totals.push(golTotal);
 
