@@ -10,6 +10,7 @@ import { DateTime } from "luxon";
 import { ReviewClaimLineItemsRoute } from "./claimLineItems";
 import { ClaimsDashboardRoute, ClaimsDetailsRoute } from ".";
 import { ClaimDto, ClaimFrequency, ClaimStatus, ProjectDto } from "../../../types";
+import { ForecastData, forecastDataLoadActions } from "./forecasts/common";
 
 interface Params {
   projectId: string;
@@ -24,6 +25,7 @@ interface Data {
   claim: Pending<ClaimDto>;
   claimDetailsSummary: Pending<ClaimDetailsSummaryDto[]>;
   editor: Pending<IEditorStore<ClaimDto, ClaimDtoValidator>>;
+  forecastData: Pending<ForecastData>;
 }
 
 interface Callbacks {
@@ -72,6 +74,8 @@ class ReviewComponent extends ContainerBase<Params, Data, Callbacks> {
     ];
     const showButton = data.editor.data.status === ClaimStatus.MO_QUERIED || data.editor.data.status === ClaimStatus.AWAITING_IUK_APPROVAL;
 
+    const ForecastLoader = ACC.TypedLoader<ForecastData>();
+
     return (
       <ACC.Page>
         <ACC.Section>
@@ -84,6 +88,13 @@ class ReviewComponent extends ContainerBase<Params, Data, Callbacks> {
           {/* TODO: Fix error display */}
           {data.editor.error ? <ACC.ValidationMessage messageType="error" message={data.editor.error.details || data.editor.error} /> : null}
           <ACC.Claims.ClaimTable {...data} validation={data.editor.validator.claimDetails.results} getLink={costCategoryId => ReviewClaimLineItemsRoute.getLink({ partnerId: this.props.partnerId, projectId: this.props.projectId, periodId: this.props.periodId, costCategoryId })} />
+        </ACC.Section>
+        <ACC.Section>
+          <ACC.Accordion>
+            <ACC.AccordionItem  title="Forecast">
+              <ForecastLoader pending={this.props.forecastData} render={(forecastData) => (<ACC.Claims.ForecastTable data={forecastData} />)} />
+            </ACC.AccordionItem>
+          </ACC.Accordion>
         </ACC.Section>
         <Form.Form qa="review-form" data={data.editor.data} onSubmit={() => this.props.onSave(this.props.projectId, this.props.partnerId, this.props.periodId, data.editor.data, data.claimDetails, data.costCategories)} onChange={(dto) => this.props.onChange(this.props.partnerId, this.props.periodId, dto, data.claimDetails, data.costCategories)}>
           <Form.Fieldset heading="How do you want to proceed with this claim?">
@@ -112,14 +123,30 @@ const initEditor = (dto: ClaimDto) => {
 const definition = ReduxContainer.for<Params, Data, Callbacks>(ReviewComponent);
 
 export const ReviewClaim = definition.connect({
-  withData: (state, props): Data => ({
-    project: Selectors.getProject(props.projectId).getPending(state),
-    partner: Selectors.getPartner(props.partnerId).getPending(state),
-    costCategories: Selectors.getCostCategories().getPending(state),
-    claim: Selectors.getClaim(props.partnerId, props.periodId).getPending(state),
-    claimDetailsSummary: Selectors.findClaimDetailsSummaryByPartnerAndPeriod(props.partnerId, props.periodId).getPending(state),
-    editor: Selectors.getClaimEditor(props.partnerId, props.periodId).get(state, (dto) => initEditor(dto)),
-  }),
+  withData: (state, props): Data => {
+    const project = Selectors.getProject(props.projectId).getPending(state);
+    const partner = Selectors.getPartner(props.partnerId).getPending(state);
+    const costCategories = Selectors.getCostCategories().getPending(state);
+    const claim = Selectors.getClaim(props.partnerId, props.periodId).getPending(state);
+    return {
+      project,
+      partner,
+      costCategories,
+      claim,
+      claimDetailsSummary: Selectors.findClaimDetailsSummaryByPartnerAndPeriod(props.partnerId, props.periodId).getPending(state),
+      editor: Selectors.getClaimEditor(props.partnerId, props.periodId).get(state, (dto) => initEditor(dto)),
+      forecastData: Pending.combine(
+        project,
+        partner,
+        claim,
+        Selectors.findClaimDetailsByPartner(props.partnerId).getPending(state),
+        Selectors.findForecastDetailsByPartner(props.partnerId, props.periodId).getPending(state),
+        Selectors.findGolCostsByPartner(props.partnerId).getPending(state),
+        costCategories,
+        (a, b, c, d, e, f, g) => ({ project: a, partner: b, claim: c, claimDetails: d, forecastDetails: e, golCosts: f, costCategories: g })
+      )
+    };
+  },
   withCallbacks: (dispatch) => ({
     onChange: (partnerId, periodId, dto, details, costCategories) => dispatch(Actions.validateClaim(partnerId, periodId, dto, details, costCategories)),
     onSave: (projectId, partnerId, periodId, dto, details, costCategories) => dispatch(Actions.saveClaim(partnerId, periodId, dto, details, costCategories, () => dispatch(Actions.navigateTo(ClaimsDashboardRoute.getLink({partnerId, projectId}))))),
@@ -136,7 +163,8 @@ export const ReviewClaimRoute = definition.route({
         Actions.loadPartnersForProject(params.projectId),
         Actions.loadCostCategories(),
         Actions.loadClaim(params.partnerId, params.periodId),
-        Actions.loadClaimDetailsSummaryForPartner(params.partnerId, params.periodId)
+        Actions.loadClaimDetailsSummaryForPartner(params.partnerId, params.periodId),
+        ...forecastDataLoadActions(params)
     ],
     container: ReviewClaim
 });

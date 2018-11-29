@@ -5,7 +5,7 @@ import { Currency, DateRange, Percentage } from "../../components/renderers";
 import { ForecastDetailsDtosValidator } from "../../validators/forecastDetailsDtosValidator";
 import { ClaimDto } from "../../../types";
 import { IEditorStore } from "../../redux";
-import { CombinedData } from "../../containers/claims/forecasts/common";
+import { ForecastData } from "../../containers/claims/forecasts/common";
 
 interface TableRow {
   categoryId: string;
@@ -23,7 +23,7 @@ interface Index {
 }
 
 interface Props {
-  data: CombinedData;
+  data: ForecastData;
   onChange?: (data: ForecastDetailsDTO[]) => void;
 }
 
@@ -58,7 +58,7 @@ export class ForecastTable extends React.Component<Props> {
     );
   }
 
-  private parseClaimData(data: CombinedData) {
+  private parseClaimData(data: ForecastData) {
     const tableRows: TableRow[] = [];
     // TODO - remove this logic from here, waiting on SF to provide
     const currentPeriod = data.claim.periodId;
@@ -103,7 +103,7 @@ export class ForecastTable extends React.Component<Props> {
     return ((a - b) / Math.max(1, a)) * 100;
   }
 
-  private calculateClaimPeriods(data: CombinedData) {
+  private calculateClaimPeriods(data: ForecastData) {
     const periods: { [k: string]: React.ReactNode } = {};
     data.claimDetails.forEach(x => periods[x.periodId] = this.renderDateRange(x));
     data.forecastDetails.forEach(x => periods[x.periodId] = this.renderDateRange(x));
@@ -114,7 +114,7 @@ export class ForecastTable extends React.Component<Props> {
     return DateRange({ start: details.periodStart, end: details.periodEnd });
   }
 
-  renderForecastCell(forecastRow: TableRow, period: string, index: Index, data: CombinedData) {
+  renderForecastCell(forecastRow: TableRow, period: string, index: Index, data: ForecastData) {
     const editor = data.editor;
     const value  = forecastRow.forecasts[period];
 
