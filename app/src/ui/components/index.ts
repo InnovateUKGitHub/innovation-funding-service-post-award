@@ -3,7 +3,6 @@ import * as Projects from "./projects";
 import * as Claims from "./claims";
 import * as Inputs from "./inputs";
 
-export * from "./styledButton";
 export * from "./accordion";
 export * from "./accordionItem";
 export * from "./details";
@@ -12,15 +11,16 @@ export * from "./documentSingle";
 export * from "./form";
 export * from "./layout";
 export * from "./links";
-export * from "./loading";
 export * from "./linksList";
+export * from "./loading";
 export * from "./partnersAndFinanceContacts";
 export * from "./projectItem";
 export * from "./projectMember";
+export * from "./projectOverview";
+export * from "./styledButton";
 export * from "./table";
 export * from "./validationError";
 export * from "./validationMessage";
 export * from "./validationSummary";
-export * from "./projectOverview";
 
 export { Renderers, Projects, Claims, Inputs };
