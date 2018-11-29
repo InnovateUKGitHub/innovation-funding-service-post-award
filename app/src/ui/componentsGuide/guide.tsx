@@ -1,5 +1,7 @@
 import * as React from "react";
 import { Header } from "../components";
+import { accordionGuide } from "./accordionGuide";
+import { accordionContainerGuide } from "./accordionContainerGuide";
 import { datesGuide } from "./datesGuide";
 import { projectMemberGuide } from "./projectMemberGuide";
 import { emailGuide } from "./emailGuide";
@@ -20,6 +22,8 @@ import { documentListGuide } from "./documentListGuide";
 import { documentSingleGuide } from "./documentSingleGuide";
 
 const guides: IGuide[] = [
+    accordionGuide,
+    accordionContainerGuide,
     datesGuide,
     detailsGuide,
     documentListGuide,
