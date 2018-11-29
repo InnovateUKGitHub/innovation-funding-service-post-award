@@ -2,7 +2,7 @@ import * as React from "react";
 
 interface Props {
   title: string;
-  content: JSX.Element;
+  children: JSX.Element;
 }
 
 interface State {
@@ -33,7 +33,7 @@ export class AccordionItem extends React.Component<Props, State> {
           <img className="govuk-!-padding-right-2" src={this.state.accordionOpen ? "/assets/images/icon-minus.png" : "/assets/images/icon-plus.png"}/>
         </div>
         {this.state.accordionOpen && <div className="acc-accordion__section-panel">
-          {this.props.content}
+          {this.props.children}
         </div>}
       </div>
     );
