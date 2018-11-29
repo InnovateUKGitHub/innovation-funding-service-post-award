@@ -14,11 +14,11 @@ export interface Params {
   periodId: number;
 }
 
-export interface Data {
-  combined: Pending<CombinedData>;
+export interface PendingForecastData {
+  combined: Pending<ForecastData>;
 }
 
-export interface CombinedData {
+export interface ForecastData {
   project: ProjectDto;
   partner: PartnerDto;
   claim: ClaimDto;
@@ -45,7 +45,7 @@ export const forecastDataLoadActions = (p: Params) => [
   Actions.loadCostCategories(),
 ];
 
-export const withDataEditor = (state: RootState, props: Params): Data => {
+export const withDataEditor = (state: RootState, props: Params): PendingForecastData => {
   const combined = Pending.combine(
     Selectors.getProject(props.projectId).getPending(state),
     Selectors.getPartner(props.partnerId).getPending(state),
@@ -61,7 +61,7 @@ export const withDataEditor = (state: RootState, props: Params): Data => {
   return { combined };
 };
 
-export const renderWarning = (data: CombinedData) => {
+export const renderWarning = (data: ForecastData) => {
   const categories: string[] = [];
   const currentPeriod = data.claim.periodId;
   const forecasts = !!data.editor ? data.editor.data : data.forecastDetails;
