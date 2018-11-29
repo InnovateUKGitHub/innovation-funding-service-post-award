@@ -8,7 +8,7 @@ export class AccordionContainer extends React.Component<Props> {
 
   render() {
     return (
-      <div className="govuk-accordion">
+      <div className="acc-accordion">
         {this.props.children}
       </div>
     );

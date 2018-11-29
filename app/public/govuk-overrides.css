@@ -42,23 +42,23 @@
   vertical-align: bottom;
 }
 
-.govuk-accordion {
+.acc-accordion {
   border-bottom: 1px solid #bfc1c3;
 }
-.govuk-accordion__section {
+.acc-accordion__section {
   border-top: 1px solid #bfc1c3;
 }
-.govuk-accordion__section-header {
+.acc-accordion__section-header {
   display: inline-flex;
   width: 100%;
   justify-content: space-between;
   align-items: center;
   cursor: pointer;
 }
-.govuk-accordion__section-header:hover {
+.acc-accordion__section-header:hover {
   background: #f8f8f8;
 }
-.govuk-accordion__section-panel {
+.acc-accordion__section-panel {
   padding-top: 15px;
   padding-bottom: 15px;
 }
