@@ -1,7 +1,7 @@
 import React from "react";
-import {AccordionContainer} from "../components/accordionContainer";
-import {DocumentList, ProjectMember} from "../components";
 import {Accordion} from "../components/accordion";
+import {DocumentList, ProjectMember} from "../components";
+import {AccordionItem} from "../components/accordionItem";
 
 const documents = [
   { link: "https://www.google.com/", fileName: "LABOUR_COSTS_Q3_2017-11-05.pdf", id: "1" },
@@ -10,34 +10,34 @@ const documents = [
 ];
 
 export const accordionGuide: IGuide = {
-  name: "Accordion Container",
+  name: "Accordion",
   options: [
     {
       name: "Single accordion",
-      comments: "Renders a single accordion component in a container",
+      comments: "Renders a single accordion item",
       example:
-      "<AccordionContainer>\n" +
-      "\t<Accordion title=\"Section 1\" content={<DocumentList documents={documents} qa=\"documentList\"/>}/>\n" +
-      "</AccordionContainer>",
+      "<Accordion>\n" +
+      "\t<AccordionItem title=\"Section 1\" content={<DocumentList documents={documents} qa=\"documentList\"/>}/>\n" +
+      "</Accordion>",
       render: () => (
-        <AccordionContainer>
-          <Accordion title="Section 1" content={<DocumentList documents={documents} qa="documentList"/>}/>
-        </AccordionContainer>
+        <Accordion>
+          <AccordionItem title="Section 1" content={<DocumentList documents={documents} qa="documentList"/>}/>
+        </Accordion>
       )
     },
     {
       name: "Multiple accordions",
-      comments: "Renders multiple accordions in a container",
+      comments: "Renders multiple accordions items",
       example:
-      "<AccordionContainer>\n" +
-      "\t<Accordion title=\"Section 1\" content={<DocumentList documents={documents} qa=\"documentList\"/>}/>\n" +
-      "\t<Accordion title=\"Section 2\" content={<ProjectMember member={{name: \"Ms A Bloggs\", email: \"a.bloggs@test.com\", role: \"Team lead\"}} qa=\"teamMember\"/>}/>\n" +
-      "</AccordionContainer>",
+      "<Accordion>\n" +
+      "\t<AccordionItem title=\"Section 1\" content={<DocumentList documents={documents} qa=\"documentList\"/>}/>\n" +
+      "\t<AccordionItem title=\"Section 2\" content={<ProjectMember member={{name: \"Ms A Bloggs\", email: \"a.bloggs@test.com\", role: \"Team lead\"}} qa=\"teamMember\"/>}/>\n" +
+      "</Accordion>",
       render: () => (
-        <AccordionContainer>
-          <Accordion title="Section 1" content={<DocumentList documents={documents} qa="documentList"/>}/>
-          <Accordion title="Section 2" content={<ProjectMember member={{name: "Ms A Bloggs", email: "a.bloggs@test.com", role: "Team lead"}} qa="teamMember"/>}/>
-        </AccordionContainer>
+        <Accordion>
+          <AccordionItem title="Section 1" content={<DocumentList documents={documents} qa="documentList"/>}/>
+          <AccordionItem title="Section 2" content={<ProjectMember member={{name: "Ms A Bloggs", email: "a.bloggs@test.com", role: "Team lead"}} qa="teamMember"/>}/>
+        </Accordion>
       )
     },
   ]
