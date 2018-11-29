@@ -4,6 +4,8 @@ import * as Claims from "./claims";
 import * as Inputs from "./inputs";
 
 export * from "./styledButton";
+export * from "./accordion";
+export * from "./accordionItem";
 export * from "./details";
 export * from "./documentList";
 export * from "./documentSingle";
