@@ -46,18 +46,9 @@ class Controller extends ControllerBase<ForecastDetailsDTO> implements IForecast
   }
 
   public async update(params: ApiParams<{ partnerId: string, periodId: number, forecasts: ForecastDetailsDTO[], submit: boolean }>) {
-
     const context = contextProvider.start(params);
-    const forecastCmd = new UpdateForecastDetailsCommand(params.partnerId, params.periodId, params.forecasts);
+    const forecastCmd = new UpdateForecastDetailsCommand(params.partnerId, params.periodId, params.forecasts, params.submit);
     await context.runCommand(forecastCmd);
-
-    if(params.submit) {
-      const query    = new GetClaim(params.partnerId, params.periodId);
-      const claim    = await context.runQuery(query);
-      claim.status   = ClaimStatus.SUBMITTED;
-      const claimCmd = new UpdateClaimCommand(claim);
-      await context.runCommand(claimCmd);
-    }
 
     return this.getAllByPartnerId({ partnerId: params.partnerId, periodId: params.periodId, user: params.user });
   }
