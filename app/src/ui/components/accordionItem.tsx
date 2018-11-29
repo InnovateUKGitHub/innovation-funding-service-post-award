@@ -20,7 +20,6 @@ export class AccordionItem extends React.Component<Props, State> {
 
 
   componentDidMount(){
-    console.log("componentDidMount");
     this.setState({accordionOpen: false}); // once mounted on client can be initally shut
   }
 
