@@ -41,9 +41,9 @@ class ViewForecastComponent extends ContainerBase<Params, Data, Callbacks> {
         selectedTab={ViewForecastRoute.routeName}
         project={data.project}
         partners={[data.partner]}
-        validationMessage={renderWarning(data)}
       >
         <ACC.Section title={data.partner.name} qa={"partner-name"} >
+          {renderWarning(data)}
           <ACC.Claims.ForecastTable data={data} />
         </ACC.Section>
         <ACC.Section>
