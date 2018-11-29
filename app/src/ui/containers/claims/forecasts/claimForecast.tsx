@@ -5,35 +5,35 @@ import { ContainerBase, ReduxContainer } from "../../containerBase";
 import { ClaimsDashboardRoute } from "../dashboard";
 import { PrepareClaimRoute } from "../prepare";
 import {
-  CombinedData,
-  Data,
+  ForecastData,
   forecastDataLoadActions,
   forecastParams,
   Params,
+  PendingForecastData,
   renderWarning,
   withDataEditor
 } from "./common";
 
 interface Callbacks {
-  onChange: (partnerId: string, periodId: number, data: ForecastDetailsDTO[], combined: CombinedData) => void;
-  saveAndReturn: (updateClaim: boolean, projectId: string, partnerId: string, periodId: number, data: CombinedData) => void;
+  onChange: (partnerId: string, periodId: number, data: ForecastDetailsDTO[], combined: ForecastData) => void;
+  saveAndReturn: (updateClaim: boolean, projectId: string, partnerId: string, periodId: number, data: ForecastData) => void;
 }
 
-class ClaimForecastComponent extends ContainerBase<Params, Data, Callbacks> {
+class ClaimForecastComponent extends ContainerBase<Params, PendingForecastData, Callbacks> {
   render() {
-    const Loader = ACC.TypedLoader<CombinedData>();
+    const Loader = ACC.TypedLoader<ForecastData>();
     return <Loader pending={this.props.combined} render={data => this.renderContents(data)} />;
   }
 
-  saveAndReturn(data: CombinedData, updateClaim: boolean) {
+  saveAndReturn(data: ForecastData, updateClaim: boolean) {
     this.props.saveAndReturn(updateClaim, this.props.projectId, this.props.partnerId, this.props.periodId, data);
   }
 
-  handleChange(data: ForecastDetailsDTO[], combined: CombinedData) {
+  handleChange(data: ForecastDetailsDTO[], combined: ForecastData) {
     this.props.onChange(this.props.partnerId, this.props.periodId, data, combined);
   }
 
-  renderContents(combined: CombinedData) {
+  renderContents(combined: ForecastData) {
     const Form = ACC.TypedForm<ForecastDetailsDTO[]>();
     const editor = combined.editor!;
 
@@ -75,7 +75,7 @@ const updateRedirect = (updateClaim: boolean, dispatch: any, projectId: string, 
     : dispatch(Actions.navigateTo(PrepareClaimRoute.getLink({ projectId, partnerId, periodId })));
 };
 
-const definition = ReduxContainer.for<Params, Data, Callbacks>(ClaimForecastComponent);
+const definition = ReduxContainer.for<Params, PendingForecastData, Callbacks>(ClaimForecastComponent);
 
 const ForecastClaim = definition.connect({
   withData: (state, props) => withDataEditor(state, props),

@@ -6,4 +6,4 @@ export const Accordion: React.SFC = (props) => {
       {props.children}
     </div>
   );
-}
+};

@@ -7,11 +7,11 @@ import { ContainerBase, ReduxContainer } from "../../containerBase";
 import { ProjectOverviewPage } from "../../../components/projectOverview";
 import { UpdateForecastRoute } from "./updateForecast";
 import {
-  CombinedData,
-  Data,
+  ForecastData,
   forecastDataLoadActions,
   forecastParams,
   Params,
+  PendingForecastData,
   renderWarning
 } from "./common";
 
@@ -19,9 +19,9 @@ interface Callbacks {
   onSubmit: (params: Params) => void;
 }
 
-class ViewForecastComponent extends ContainerBase<Params, Data, Callbacks> {
+class ViewForecastComponent extends ContainerBase<Params, PendingForecastData, Callbacks> {
   public render() {
-    const Loader = ACC.TypedLoader<CombinedData>();
+    const Loader = ACC.TypedLoader<ForecastData>();
     return <Loader pending={this.props.combined} render={data => this.renderContents(data)} />;
   }
 
@@ -33,7 +33,7 @@ class ViewForecastComponent extends ContainerBase<Params, Data, Callbacks> {
     });
   }
 
-  public renderContents(data: CombinedData) {
+  public renderContents(data: ForecastData) {
     const Form = ACC.TypedForm();
 
     return (
@@ -59,7 +59,7 @@ class ViewForecastComponent extends ContainerBase<Params, Data, Callbacks> {
   }
 }
 
-const definition = ReduxContainer.for<Params, Data, Callbacks>(ViewForecastComponent);
+const definition = ReduxContainer.for<Params, PendingForecastData, Callbacks>(ViewForecastComponent);
 
 const ViewForecast = definition.connect({
   withData: (state, props) => {
