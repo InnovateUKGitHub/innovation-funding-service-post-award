@@ -17,11 +17,15 @@ export const accordionGuide: IGuide = {
       comments: "Renders a single accordion item",
       example:
       "<Accordion>\n" +
-      "\t<AccordionItem title=\"Section 1\" content={<DocumentList documents={documents} qa=\"documentList\"/>}/>\n" +
+      "\t<AccordionItem title=\"Section 1\">\n" +
+      "\t\t<DocumentList documents={documents} qa=\"documentList\"/>\n" +
+      "\t</AccordionItem>\n" +
       "</Accordion>",
       render: () => (
         <Accordion>
-          <AccordionItem title="Section 1" content={<DocumentList documents={documents} qa="documentList"/>}/>
+          <AccordionItem title="Section 1">
+            <DocumentList documents={documents} qa="documentList"/>
+          </AccordionItem>
         </Accordion>
       )
     },
@@ -30,13 +34,21 @@ export const accordionGuide: IGuide = {
       comments: "Renders multiple accordions items",
       example:
       "<Accordion>\n" +
-      "\t<AccordionItem title=\"Section 1\" content={<DocumentList documents={documents} qa=\"documentList\"/>}/>\n" +
-      "\t<AccordionItem title=\"Section 2\" content={<ProjectMember member={{name: \"Ms A Bloggs\", email: \"a.bloggs@test.com\", role: \"Team lead\"}} qa=\"teamMember\"/>}/>\n" +
+      "\t<AccordionItem title=\"Section 1\">\n" +
+      "\t\t<DocumentList documents={documents} qa=\"documentList\"/>\n" +
+      "\t</AccordionItem>\n" +
+      "\t<AccordionItem title=\"Section 2\">\n" +
+      "\t\t<ProjectMember member={{name: \"Ms A Bloggs\", email: \"a.bloggs@test.com\", role: \"Team lead\"}} qa=\"teamMember\"/>\n" +
+      "\t</AccordionItem>\n" +
       "</Accordion>",
       render: () => (
         <Accordion>
-          <AccordionItem title="Section 1" content={<DocumentList documents={documents} qa="documentList"/>}/>
-          <AccordionItem title="Section 2" content={<ProjectMember member={{name: "Ms A Bloggs", email: "a.bloggs@test.com", role: "Team lead"}} qa="teamMember"/>}/>
+          <AccordionItem title="Section 1">
+            <DocumentList documents={documents} qa="documentList"/>
+          </AccordionItem>
+          <AccordionItem title="Section 2">
+            <ProjectMember member={{name: "Ms A Bloggs", email: "a.bloggs@test.com", role: "Team lead"}} qa="teamMember"/>
+          </AccordionItem>
         </Accordion>
       )
     },
