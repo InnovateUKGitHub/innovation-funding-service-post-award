@@ -5,7 +5,7 @@ import { AsyncThunk, conditionalLoad, dataLoadAction, DataLoadAction, handleErro
 import { findClaimsByPartner, findClaimsByProject, getClaim, getClaimEditor, getCurrentClaim } from "../selectors";
 import { ClaimDto } from "../../../types";
 import { loadIarDocuments } from ".";
-import { scrollToErrorMessage } from "../../../util/windowHelpers";
+import { scrollToTheTop } from "../../../util/windowHelpers";
 
 export function loadClaim(partnerId: string, periodId: number) {
   return conditionalLoad(getClaim(partnerId, periodId), params => ApiClient.claims.get({partnerId, periodId, ...params}));
@@ -34,7 +34,7 @@ export function saveClaim(partnerId: string, periodId: number, claim: ClaimDto, 
     const validation = validateClaim(partnerId, periodId, claim, details, costCategories, true)(dispatch, getState, null);
 
     if (!validation.isValid) {
-      scrollToErrorMessage();
+      scrollToTheTop();
       return Promise.resolve();
     }
 
