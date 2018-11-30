@@ -121,7 +121,7 @@ class ReviewComponent extends ContainerBase<Params, Data, Callbacks> {
 const initEditor = (dto: ClaimDto) => {
   // if the status hasn't already been set to "MO Queried" or "Awaiting IUK Approval" then set the status to New so that the validation kicks in a forces a change
   if (dto.status !== ClaimStatus.MO_QUERIED && dto.status !== ClaimStatus.AWAITING_IUK_APPROVAL) {
-    dto.status = ClaimStatus.NEW;
+    dto.status = ClaimStatus.UNKNOWN;
   }
 };
 
