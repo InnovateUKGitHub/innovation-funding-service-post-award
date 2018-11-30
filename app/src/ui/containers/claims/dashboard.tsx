@@ -163,7 +163,7 @@ class Component extends ContainerBase<Params, Data, Callbacks> {
   }
 
   private getLink(claim: ClaimDto, projectId: string) {
-    if (claim.status === "New" || claim.status === "Draft") {
+    if (claim.status === "Draft") {
       return <Acc.Link route={PrepareClaimRoute.getLink({ projectId, partnerId: claim.partnerId, periodId: claim.periodId })}>Edit claim</Acc.Link>;
     }
     if (claim.status === "Submitted") {
