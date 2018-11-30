@@ -8,20 +8,7 @@ import {
   getCurrentClaimIarDocumentsEditor, getPartner,
   getPreviousClaims, getProject
 } from "../../redux/selectors";
-import {
-  DocumentSingle,
-  DualDetails,
-  Link,
-  ProjectOverviewPage,
-  Section,
-  SectionPanel,
-  TypedDetails,
-  TypedForm,
-  TypedLoader,
-  TypedTable,
-  ValidationMessage,
-  ValidationSummary
-} from "../../components";
+import * as Acc from "../../components";
 import { DayAndLongMonth, FullDate, LongYear, ShortDate, ShortMonth, SimpleString } from "../../components/renderers";
 import { PrepareClaimRoute } from "./prepare";
 import { ClaimsDetailsRoute } from "./details";
@@ -71,13 +58,13 @@ class Component extends ContainerBase<Params, Data, Callbacks> {
       (document, project, partner, previousClaims, currentClaim, editor) => ({ project, partner, previousClaims, currentClaim, editor, document })
     );
 
-    const Loader = TypedLoader<CombinedData>();
+    const Loader = Acc.TypedLoader<CombinedData>();
     return <Loader pending={combined} render={(x) => this.renderContents(x)} />;
   }
 
   private renderIarDocument(claim: ClaimDto, document: DocumentSummaryDto) {
     const button = () => {
-      const Form = TypedForm<DocumentSummaryDto>();
+      const Form = Acc.TypedForm<DocumentSummaryDto>();
       return (
         <Form.Form data={document}>
           <Form.Button name="default" onClick={() => this.onDelete(claim, document)}>Remove</Form.Button>
@@ -86,7 +73,7 @@ class Component extends ContainerBase<Params, Data, Callbacks> {
     };
 
     return (
-      <DocumentSingle message={"An IAR has been added to this claim"} document={document} openNewWindow={true} renderRemove={() => claim.allowIarEdit && button()}/>
+      <Acc.DocumentSingle message={"An IAR has been added to this claim"} document={document} openNewWindow={true} renderRemove={() => claim.allowIarEdit && button()}/>
     );
   }
 
@@ -108,7 +95,7 @@ class Component extends ContainerBase<Params, Data, Callbacks> {
     if (!claim.allowIarEdit) {
       return null;
     }
-    const UploadForm = TypedForm<{file: File | null }>();
+    const UploadForm = Acc.TypedForm<{file: File | null }>();
     const isAwaitingIAR = claim.status === ClaimStatus.AWAITING_IAR;
     const message = isAwaitingIAR
       ? "Your most recent claim cannot be sent to us. You must attach an independent audit report (IAR)."
@@ -116,7 +103,7 @@ class Component extends ContainerBase<Params, Data, Callbacks> {
     const messageType = isAwaitingIAR ? "error" : "info";
     return (
       <React.Fragment>
-        <ValidationMessage messageType={messageType} message={message}/>
+        <Acc.ValidationMessage messageType={messageType} message={message}/>
         <UploadForm.Form data={editor.data} onChange={(dto) => this.onChange(dto, claim.periodId)}>
           <UploadForm.Fieldset>
             <UploadForm.FileUpload validation={editor.validator.file} value={(data) => data.file} name="Upload documents" update={(dto, file) => dto.file = file}/>
@@ -133,25 +120,25 @@ class Component extends ContainerBase<Params, Data, Callbacks> {
     }
 
     return (
-      <Section qa="current-claim-iar" title="Independent audit report">
+      <Acc.Section qa="current-claim-iar" title="Independent audit report">
         {document ? this.renderIarDocument(claim, document) : this.renderIarDocumentUpload(claim, editor)}
-      </Section>
+      </Acc.Section>
     );
   }
 
   private renderContents({currentClaim, partner, previousClaims, project, editor, document}: CombinedData) {
-    const Details = TypedDetails<PartnerDto>();
+    const Details = Acc.TypedDetails<PartnerDto>();
     const currentClaimsSectionTitle = (
       currentClaim && <React.Fragment>Claim for P{currentClaim.periodId} - <DayAndLongMonth value={currentClaim.periodStartDate} /> to <FullDate value={currentClaim.periodEndDate} /></React.Fragment>
     );
 
-    const validationMessage = editor && <ValidationSummary validation={editor && editor.validator} compressed={false} />;
+    const validationMessage = editor && <Acc.ValidationSummary validation={editor && editor.validator} compressed={false} />;
 
     return (
-      <ProjectOverviewPage selectedTab={ClaimsDashboardRoute.routeName} project={project} partnerId={partner.id} partners={[partner]} validationMessage={validationMessage}>
-        <Section>
-          <SectionPanel qa="claims-totals" title="Project claims history">
-            <DualDetails displayDensity="Compact">
+      <Acc.ProjectOverviewPage selectedTab={ClaimsDashboardRoute.routeName} project={project} partnerId={partner.id} partners={[partner]} validationMessage={validationMessage}>
+        <Acc.Section>
+          <Acc.SectionPanel qa="claims-totals" title="Project claims history">
+            <Acc.DualDetails displayDensity="Compact">
               <Details.Details qa="claims-totals-col-0" data={partner}>
                 <Details.Currency label="Grant offer letter costs" qa="gol-costs" value={x => x.totalParticipantGrant} />
                 <Details.Currency label="Costs claimed to date" qa="claimed-costs" value={x => x.totalParticipantCostsClaimed} />
@@ -161,32 +148,32 @@ class Component extends ContainerBase<Params, Data, Callbacks> {
                 <Details.Percentage label="Award offer rate" value={x => x.awardRate} qa="award-rate" fractionDigits={0} />
                 <Details.Percentage label="Cap limit" value={x => x.capLimit} fractionDigits={0} qa="cap-limit" />
               </Details.Details>
-            </DualDetails>
-          </SectionPanel>
-        </Section>
-        <Section qa="current-claims-section" title={currentClaimsSectionTitle}>
+            </Acc.DualDetails>
+          </Acc.SectionPanel>
+        </Acc.Section>
+        <Acc.Section qa="current-claims-section" title={currentClaimsSectionTitle} badge={!!currentClaim ? <Acc.Claims.ClaimWindow periodEnd={currentClaim.periodEndDate} /> : null }>
           {this.renderClaims(currentClaim ? [currentClaim] : [], "current-claims-table", project.id, true)}
-        </Section>
+        </Acc.Section>
         {currentClaim && editor && this.renderIarDocumentSection(currentClaim, editor, document)}
-        <Section qa="previous-claims-section" title="Previous claims">
+        <Acc.Section qa="previous-claims-section" title="Previous claims">
           {this.renderClaims(previousClaims, "previous-claims-table", project.id, false)}
-        </Section>
-      </ProjectOverviewPage>
+        </Acc.Section>
+      </Acc.ProjectOverviewPage>
     );
   }
 
   private getLink(claim: ClaimDto, projectId: string) {
     if (claim.status === "New" || claim.status === "Draft") {
-      return <Link route={PrepareClaimRoute.getLink({ projectId, partnerId: claim.partnerId, periodId: claim.periodId })}>Edit claim</Link>;
+      return <Acc.Link route={PrepareClaimRoute.getLink({ projectId, partnerId: claim.partnerId, periodId: claim.periodId })}>Edit claim</Acc.Link>;
     }
     if (claim.status === "Submitted") {
-      return <Link route={ReviewClaimRoute.getLink({ projectId, partnerId: claim.partnerId, periodId: claim.periodId })}>Review claim</Link>;
+      return <Acc.Link route={ReviewClaimRoute.getLink({ projectId, partnerId: claim.partnerId, periodId: claim.periodId })}>Review claim</Acc.Link>;
     }
-    return <Link route={ClaimsDetailsRoute.getLink({ projectId, partnerId: claim.partnerId, periodId: claim.periodId })}>View claim</Link>;
+    return <Acc.Link route={ClaimsDetailsRoute.getLink({ projectId, partnerId: claim.partnerId, periodId: claim.periodId })}>View claim</Acc.Link>;
   }
 
   private renderClaims(data: ClaimDto[], tableQa: string, projectId: string, isCurrentClaim: boolean) {
-    const ClaimTable = TypedTable<ClaimDto>();
+    const ClaimTable = Acc.TypedTable<ClaimDto>();
 
     if (isCurrentClaim && !data.length) {
       return <SimpleString>The next open claim period will be...</SimpleString>;
