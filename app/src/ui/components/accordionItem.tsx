@@ -14,8 +14,13 @@ export class AccordionItem extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
-      accordionOpen: false
+      accordionOpen: true // on server needs to be open
     };
+  }
+
+
+  componentDidMount(){
+    this.setState({accordionOpen: false}); // once mounted on client can be initally shut
   }
 
   render() {
