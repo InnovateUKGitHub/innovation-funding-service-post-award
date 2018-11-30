@@ -4,7 +4,6 @@ import { ClaimStatus, DocumentDescription } from "../../../../src/types/constant
 import { ApiError } from "../../../../src/server/apis/ApiError";
 
 const validStatus = [
-  ClaimStatus.NEW,
   ClaimStatus.DRAFT,
   ClaimStatus.REVIEWING_FORECASTS,
   ClaimStatus.SUBMITTED,

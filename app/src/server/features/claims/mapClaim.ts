@@ -7,7 +7,6 @@ const SALESFORCE_DATE_FORMAT = "yyyy-MM-dd";
 const SALESFORCE_DATE_TIME_FORMAT = "yyyy-MM-ddTHH:mm:ss.SSSZZZ";
 
 const STATUS_ALLOWING_IAR_EDIT = [
-  ClaimStatus.NEW,
   ClaimStatus.DRAFT,
   ClaimStatus.REVIEWING_FORECASTS,
   ClaimStatus.SUBMITTED,
