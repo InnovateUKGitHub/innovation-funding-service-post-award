@@ -58,12 +58,12 @@ export class NumberInput extends BaseInput<NumberInputProps, NumberInputState> {
   private changeNow(value: string) {
     this.cancelTimeout();
 
-    const newValue = isFinite(value as any) ? parseFloat(value) : NaN;
+    const newValue = value === "" ? null : (isFinite(value as any) ? parseFloat(value) : NaN);
 
     if (this.props.onChange) {
       this.props.onChange(newValue);
     }
 
-    this.setState({ invalid: isNaN(newValue) });
+    this.setState({ invalid: newValue !== null && isNaN(newValue) });
   }
 }

@@ -1,6 +1,7 @@
 import { CommandBase, IContext } from "../common/context";
 import { ClaimLineItemDtosValidator } from "../../../ui/validators/claimLineItemDtosValidator";
 import { ValidationError } from "../../../shared/validation";
+import { isNumber } from "../../../util/NumberHelper";
 
 export class SaveLineItemsCommand extends CommandBase<boolean> {
   constructor(public partnerId: string, public costCategoryId: string, public periodId: number, private lineItems: ClaimLineItemDto[]) {
@@ -13,8 +14,9 @@ export class SaveLineItemsCommand extends CommandBase<boolean> {
       throw new ValidationError(validationResult);
     }
     const existing = (await context.repositories.claimLineItems.getAllForCategory(this.partnerId, this.costCategoryId, this.periodId) || []);
-    const updateDtos = this.lineItems.filter(item => !!item.id);
-    const insertDtos = this.lineItems.filter(item => !item.id);
+    const filtered     = this.lineItems.filter(x => !!x.description || isNumber(x.value));
+    const updateDtos   = filtered.filter(item => !!item.id);
+    const insertDtos   = filtered.filter(item => !item.id);
     const persistedIds = updateDtos.map(x => x.id);
 
     const deleteItems = existing.filter(x => persistedIds.indexOf(x.Id) === -1).map(x => x.Id);
