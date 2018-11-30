@@ -8,7 +8,7 @@ import { Percentage } from "./renderers/percentage";
 import { Link } from ".";
 import * as colour from "../styles/colours";
 import { Results } from "../validation/results";
-
+type dividerTypes = "normal" | "bold";
 type columnMode = "cell" | "header" | "footer" | "col";
 interface InternalColumnProps<T> {
   header: React.ReactNode;
@@ -23,7 +23,7 @@ interface InternalColumnProps<T> {
   qa: string;
   width?: number;
   validation?: Results<{}>;
-  isDivider?: boolean;
+  isDivider?: dividerTypes;
 }
 
 interface ExternalColumnProps<T, TResult> {
@@ -33,7 +33,7 @@ interface ExternalColumnProps<T, TResult> {
   footer?: React.ReactNode;
   qa: string;
   width?: number;
-  isDivider?: boolean;
+  isDivider?: dividerTypes;
 }
 
 type TableChild<T> = React.ReactElement<ExternalColumnProps<T, {}>>;
@@ -88,7 +88,11 @@ export class TableColumn<T> extends React.Component<InternalColumnProps<T>> {
     }
 
     if(this.props.isDivider) {
-      style.borderRight = "1px solid " + colour.GOVUK_BORDER_COLOUR;
+      if(this.props.isDivider === "normal") {
+        style.borderRight = "1px solid " + colour.GOVUK_BORDER_COLOUR;
+      } else {
+        style.borderRight = "3px solid " + colour.GOVUK_COLOUR_BLACK;
+      }
     }
 
     return <col key={column} data-qa={`col-${this.props.qa || column.toString()}`} style={style} />;
