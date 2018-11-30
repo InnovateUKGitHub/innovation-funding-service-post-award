@@ -8,7 +8,6 @@ import * as Selectors from "../../redux/selectors";
 import { ProjectDto } from "../../../types";
 import {IEditorStore} from "../../redux/reducers";
 import { DocumentUploadValidator } from "../../validators/documentUploadValidator";
-import { ValidationSummary } from "../../components";
 
 interface Params {
   projectId: string;
@@ -80,7 +79,7 @@ export class ClaimDetailDocumentsComponent extends ContainerBase<Params, Data, C
 
     const UploadForm = ACC.TypedForm<{file: File | null }>();
 
-    const validationMessage = editor && <ValidationSummary validation={editor && editor.validator} compressed={false} />;
+    const validationMessage = editor && <ACC.ValidationSummary validation={editor.validator} compressed={false} />;
 
     return (
       <ACC.Page>
