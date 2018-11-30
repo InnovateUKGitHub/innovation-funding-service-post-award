@@ -17,35 +17,68 @@ interface Data {
   projectDetails: Pending<ProjectDto>;
   partners: Pending<PartnerDto[]>;
   claims: Pending<ClaimDto[]>;
+  currentClaims: Pending<ClaimDto[]>;
+  previousClaims: Pending<ClaimDto[]>;
+}
+
+interface CombinedData {
+  projectDetails: ProjectDto;
+  partners: PartnerDto[];
+  claims: ClaimDto[];
+  currentClaims: ClaimDto[];
+  previousClaims: ClaimDto[];
+}
+
+interface ProjectPeriod {
+  periodId: number;
+  claims: ClaimDto[];
+  start: Date;
+  end: Date;
 }
 
 class Component extends ContainerBase<Params, Data, {}> {
   render() {
-    const combined = Pending.combine(this.props.projectDetails, this.props.partners, this.props.claims, (projectDetails, partners, claims) => ({ projectDetails, partners, claims }));
+    const combined = Pending.combine(
+      this.props.projectDetails,
+      this.props.partners,
+      this.props.claims,
+      this.props.currentClaims,
+      this.props.previousClaims,
+      (projectDetails, partners, claims, currentClaims, previousClaims) => ({ projectDetails, partners, claims, currentClaims, previousClaims }));
 
-    const Loader = Acc.TypedLoader<{ projectDetails: ProjectDto, partners: PartnerDto[], claims: ClaimDto[] }>();
+    const Loader = Acc.TypedLoader<CombinedData>();
 
     return (<Loader pending={combined} render={x => this.renderContents(x)} />);
   }
 
-  renderContents({ projectDetails, partners, claims }: { projectDetails: ProjectDto, partners: PartnerDto[], claims: ClaimDto[] }) {
-    const currentPeriodId = claims.reduce((x, y) => y.periodId > x ? y.periodId : x, 0);
-    const currentPeriodInfo = claims.filter(x => x.periodId === currentPeriodId)
-      .map(x => ({ periodId: currentPeriodId, start: x.periodStartDate, end: x.periodEndDate }))[0];
+  groupClaimsByPeriod(claims: ClaimDto[]): ProjectPeriod[] {
+    const distinctPeriods = [...new Set(claims.map(x => x.periodId))].sort((a, b) => a-b);
+    return distinctPeriods.map((period) => {
+      const periodClaims = claims.filter(x => x.periodId === period);
+      return {
+        periodId: period,
+        claims: periodClaims,
+        start: periodClaims[0].periodStartDate,
+        end: periodClaims[0].periodEndDate
+      };
+    });
+  }
 
-    const currentClaims = claims.filter(x => x.periodId === currentPeriodId);
-    // todo: not yet in scope willl be needed by following ticket
-    // const remainingClaims = claims.filter(x => x.periodId < currentPeriodId);
-
+  renderContents({ projectDetails, partners, claims, previousClaims, currentClaims }: CombinedData) {
     return (
       <ProjectOverviewPage project={projectDetails} partners={partners} selectedTab={AllClaimsDashboardRoute.routeName}>
         {this.renderSummary(projectDetails)}
         <Acc.Section title="Open">
-          {this.renderCurrentClaims(currentPeriodInfo, projectDetails, partners, currentClaims)}
+          {this.renderCurrentClaimsPerPeriod(currentClaims, projectDetails, partners)}
         </Acc.Section>
         {/* {this.renderPreviousClaimsSections(projectDetails, partners, remainingClaims)} */}
       </ProjectOverviewPage>
     );
+  }
+
+  private renderCurrentClaimsPerPeriod(claims: ClaimDto[], project: ProjectDto, partners: PartnerDto[]) {
+    const groupedClaims = this.groupClaimsByPeriod(claims);
+    return groupedClaims.map(x => this.renderCurrentClaims(x, project, partners));
   }
 
   private renderSummary(project: ProjectDto) {
@@ -64,28 +97,20 @@ class Component extends ContainerBase<Params, Data, {}> {
     );
   }
 
-  private renderCurrentClaims(currentInfo: { periodId: number, start: Date, end: Date }, project: ProjectDto, partners: PartnerDto[], claims: ClaimDto[]) {
-    const title = <React.Fragment>Claim for P{currentInfo.periodId} - <Acc.Renderers.LongDateRange {...currentInfo} /></React.Fragment>;
+  private renderCurrentClaims(currentInfo: ProjectPeriod, project: ProjectDto, partners: PartnerDto[]) {
+    const title = <React.Fragment>Period {currentInfo.periodId} - <Acc.Renderers.LongDateRange start={currentInfo.start} end={currentInfo.end} /></React.Fragment>;
     const ClaimTable = Acc.TypedTable<ClaimDto>();
+    const renderPartnerName = (x: ClaimDto) => {
+      const p = partners.filter(y => y.id === x.partnerId)[0];
+      if (p && p.isLead) return `${p.name} (Lead)`;
+      if (p) return p.name;
+      return null;
+    };
 
     return (
-      <Acc.Section title={title} qa="current-claims-section">
-        <ClaimTable.Table data={claims} qa="current-claims-table" bodyRowFlag={(x) => x.status === ClaimStatus.SUBMITTED ? "info" : null }>
-          <ClaimTable.String
-            header="Partner"
-            qa="partner"
-            value={x => {
-              const p = partners.filter(y => y.id === x.partnerId)[0];
-              if (p && p.isLead) {
-                return `${p.name} (Lead)`;
-              }
-              if (p) {
-                return p.name;
-              }
-              return null;
-            }}
-          />
-          <ClaimTable.Custom header="Period" qa="period" value={(x) => this.renderPeriodColumn(x)} />
+      <Acc.Section title={title} qa="current-claims-section" badge={<Acc.Claims.ClaimWindow periodEnd={currentInfo.end}/>}>
+        <ClaimTable.Table data={currentInfo.claims} qa="current-claims-table" bodyRowFlag={(x) => x.status === ClaimStatus.SUBMITTED ? "info" : null }>
+          <ClaimTable.String header="Partner" qa="partner" value={renderPartnerName}/>
           <ClaimTable.Currency header="Forecast costs for period" qa="forecast-cost" value={(x) => x.forecastCost} />
           <ClaimTable.Currency header="Actual costs for period" qa="actual-cost" value={(x) => x.totalCost} />
           <ClaimTable.Currency header="Difference" qa="diff" value={(x) => x.forecastCost - x.totalCost} />
@@ -99,7 +124,7 @@ class Component extends ContainerBase<Params, Data, {}> {
                 <Acc.Renderers.ShortDate value={(x.paidDate || x.approvedDate || x.lastModifiedDate)} />
               </span>)}
           />
-          <ClaimTable.Custom header="" qa="link" value={(x) => this.getLink(x, project.id)} />
+          <ClaimTable.Custom header="" qa="link" value={(x) => this.getReviewLink(x, project.id)} />
         </ClaimTable.Table>
       </Acc.Section>
     );
@@ -141,7 +166,7 @@ class Component extends ContainerBase<Params, Data, {}> {
                 <Acc.Renderers.ShortDate value={(x.paidDate || x.approvedDate || x.lastModifiedDate)} />
               </span>)}
           />
-          <ClaimTable.Custom header="" qa="link" value={(x) => this.getLink(x, project.id)} />
+          <ClaimTable.Custom header="" qa="link" value={(x) => this.getViewLink(x, project.id)} />
         </ClaimTable.Table>
       </div>
     );
@@ -153,11 +178,18 @@ class Component extends ContainerBase<Params, Data, {}> {
     );
   }
 
-  private getLink(claim: ClaimDto, projectId: string) {
-    const reviewStatus = [ClaimStatus.SUBMITTED, ClaimStatus.AWAITING_IAR, ClaimStatus.AWAITING_IUK_APPROVAL];
-    if (reviewStatus.indexOf(claim.status) >= 0) {
+  private getReviewLink(claim: ClaimDto, projectId: string) {
+    if (claim.status === ClaimStatus.SUBMITTED) {
       return <Acc.Link route={ReviewClaimRoute.getLink({ projectId, partnerId: claim.partnerId, periodId: claim.periodId })}>Review claim</Acc.Link>;
     }
+    const draftStatus = [ClaimStatus.DRAFT, ClaimStatus.REVIEWING_FORECASTS];
+    if (draftStatus.indexOf(claim.status) >= 0) {
+      return this.getViewLink(claim, projectId);
+    }
+    return null;
+  }
+
+  private getViewLink(claim: ClaimDto, projectId: string) {
     return <Acc.Link route={ClaimsDetailsRoute.getLink({ projectId, partnerId: claim.partnerId, periodId: claim.periodId })}>View claim</Acc.Link>;
   }
 }
@@ -165,10 +197,12 @@ class Component extends ContainerBase<Params, Data, {}> {
 const definition = ReduxContainer.for<Params, Data, {}>(Component);
 
 export const AllClaimsDashboard = definition.connect({
-  withData: (state, params) => ({
-    projectDetails: Selectors.getProject(params.projectId).getPending(state),
-    partners: Selectors.findPartnersByProject(params.projectId).getPending(state),
-    claims: Selectors.findClaimsByProject(params.projectId).getPending(state)
+  withData: (state, props) => ({
+    projectDetails: Selectors.getProject(props.projectId).getPending(state),
+    partners: Selectors.findPartnersByProject(props.projectId).getPending(state),
+    claims: Selectors.findClaimsByProject(props.projectId).getPending(state),
+    currentClaims: Selectors.getProjectCurrentClaims(state, props.projectId),
+    previousClaims: Selectors.getProjectPreviousClaims(state, props.projectId)
   }),
   withCallbacks: () => ({})
 });

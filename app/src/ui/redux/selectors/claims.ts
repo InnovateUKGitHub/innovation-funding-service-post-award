@@ -1,12 +1,10 @@
 import { dataStoreHelper, editorStoreHelper } from "./common";
-import { IEditorStore, RootState } from "../reducers";
+import { RootState } from "../reducers";
 import { ClaimDtoValidator } from "../../validators/claimDtoValidator";
 import { getCostCategories } from "./costCategories";
 import { getKey } from "../../../util/key";
 import { ClaimDto, ClaimStatus } from "../../../types";
-import { getClaimDocumentEditor } from "./documents";
 import { Pending } from "../../../shared/pending";
-import { DocumentUploadValidator } from "../../validators/documentUploadValidator";
 
 export const claimsStore = "claims";
 export const findClaimsByPartner = (partnerId: string) => dataStoreHelper(claimsStore, `partnerId=${partnerId}`);
@@ -40,13 +38,33 @@ export const findClaimDetailsByPartner = (partnerId: string) => dataStoreHelper(
 export const claimDetailsSummaryStore = "claimDetailsSummary";
 export const findClaimDetailsSummaryByPartnerAndPeriod = (partnerId: string, periodId: number) => dataStoreHelper(claimDetailsSummaryStore, `partnerId=${partnerId}&periodId=${periodId}`);
 
+const isActiveClaim = (claim: ClaimDto) => [ClaimStatus.APPROVED, ClaimStatus.PAID, ClaimStatus.NEW].indexOf(claim.status) < 0;
+
 export const getCurrentClaim = (state: RootState, partnerId: string): Pending<ClaimDto | null> => {
   return findClaimsByPartner(partnerId).getPending(state).then(claims => {
-    if (!claims) {
-      return null;
-    }
-    return claims.find(claim => !claim.approvedDate) || null;
+    if (!claims) return null;
+    return claims.find(isActiveClaim) || null;
   });
+};
+
+export const getProjectCurrentClaims = (state: RootState, projectId: string): Pending<ClaimDto[]> => {
+  return findClaimsByProject(projectId).getPending(state).then(claims => {
+    if (!claims) return [];
+    return claims.filter(isActiveClaim);
+  });
+};
+
+export const getProjectPreviousClaims = (state: RootState, projectId: string): Pending<ClaimDto[]> => {
+  return Pending.combine(
+    findClaimsByProject(projectId).getPending(state),
+    getProjectCurrentClaims(state, projectId),
+    (allClaims, currentClaims) => {
+      if (!allClaims) return [];
+      if (currentClaims.length === 0) return allClaims;
+      const currentClaimIds = currentClaims.map(x => x.id);
+      return allClaims.filter(claim => currentClaimIds.indexOf(claim.id) >= 0);
+    }
+  );
 };
 
 export const getPreviousClaims = (state: RootState, partnerId: string): Pending<ClaimDto[]> => {
@@ -54,10 +72,9 @@ export const getPreviousClaims = (state: RootState, partnerId: string): Pending<
     findClaimsByPartner(partnerId).getPending(state),
     getCurrentClaim(state, partnerId),
     (claims, currentClaim) => {
-      if (!claims || !currentClaim) {
-        return [];
-      }
-      return currentClaim ? claims.filter(claim => claim.id !== currentClaim.id) : claims;
+      if (!claims) return [];
+      if (!currentClaim) return claims;
+      return claims.filter(claim => claim.id !== currentClaim.id);
     }
   );
 };
