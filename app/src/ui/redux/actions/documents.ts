@@ -18,7 +18,7 @@ import { Results } from "../../validation/results";
 import {DocumentUploadValidator} from "../../validators/documentUploadValidator";
 import {DocumentDescription} from "../../../types/constants";
 import { findClaimsByPartner } from "../selectors";
-import { scrollToErrorMessage } from "../../../util/windowHelpers";
+import { scrollToTheTop } from "../../../util/windowHelpers";
 
 export function loadClaimDetailDocuments(partnerId: string, periodId: number, costCategoryId: string) {
   return conditionalLoad(
@@ -57,7 +57,7 @@ export function uploadClaimDetailDocument(claimDetailKey: ClaimDetailKey, dto: D
     const validation = updateClaimDetailDocumentEditor(claimDetailKey, dto, true)(dispatch, getState, null);
 
     if (!validation.isValid) {
-      scrollToErrorMessage();
+      scrollToTheTop();
       return Promise.resolve();
     }
 
@@ -97,7 +97,7 @@ export function uploadClaimDocument(claimKey: ClaimKey, dto: DocumentUploadDto, 
     const validation = updateClaimDocumentEditor(claimKey, dto, true)(dispatch, getState, null);
 
     if (!validation.isValid) {
-      scrollToErrorMessage();
+      scrollToTheTop();
       return Promise.resolve();
     }
 
