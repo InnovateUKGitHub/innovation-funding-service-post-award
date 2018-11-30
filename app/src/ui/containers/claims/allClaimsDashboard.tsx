@@ -40,7 +40,9 @@ class Component extends ContainerBase<Params, Data, {}> {
     return (
       <ProjectOverviewPage project={projectDetails} partners={partners} selectedTab={AllClaimsDashboardRoute.routeName}>
         {this.renderSummary(projectDetails)}
-        {this.renderCurrentClaims(currentPeriodInfo, projectDetails, partners, currentClaims)}
+        <Acc.Section title="Open">
+          {this.renderCurrentClaims(currentPeriodInfo, projectDetails, partners, currentClaims)}
+        </Acc.Section>
         {/* {this.renderPreviousClaimsSections(projectDetails, partners, remainingClaims)} */}
       </ProjectOverviewPage>
     );
@@ -51,16 +53,12 @@ class Component extends ContainerBase<Params, Data, {}> {
 
     return (
       <Acc.Section>
-        <Acc.SectionPanel qa="claims-summary" title="Project claims history">
-          <Acc.DualDetails displayDensity="Compact">
-            <SummaryDetails.Details data={project} qa="project_summary-col-0">
-              <SummaryDetails.Currency label="Project grant offer letter costs" qa="gol-costs" value={x => x.grantOfferLetterCosts}/>
-              <SummaryDetails.Currency label="Project costs claimed to date" qa="claimed-costs" value={x => x.costsClaimedToDate}/>
-            </SummaryDetails.Details>
-            <SummaryDetails.Details data={project} qa="project_summary-col-1">
-              <SummaryDetails.Percentage label="Percentage claimed to date" qa="claimed-percentage" value={x => x.claimedPercentage}/>
-            </SummaryDetails.Details>
-          </Acc.DualDetails>
+        <Acc.SectionPanel qa="claims-summary" title="History">
+          <SummaryDetails.Details data={project} qa="project_summary-col-0">
+            <SummaryDetails.Currency label="Grant offered" qa="gol-costs" value={x => x.grantOfferLetterCosts}/>
+            <SummaryDetails.Currency label="Costs claimed" qa="claimed-costs" value={x => x.costsClaimedToDate}/>
+            <SummaryDetails.Percentage label="Percentage claimed" qa="claimed-percentage" value={x => x.claimedPercentage}/>
+          </SummaryDetails.Details>
         </Acc.SectionPanel>
       </Acc.Section>
     );
