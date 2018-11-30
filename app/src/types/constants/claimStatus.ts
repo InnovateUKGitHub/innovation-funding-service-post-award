@@ -1,5 +1,5 @@
 export enum ClaimStatus {
-  NEW = "New",
+  UNKNOWN = "",
   DRAFT = "Draft",
   SUBMITTED = "Submitted",
   MO_QUERIED = "MO Queried",

@@ -59,17 +59,17 @@ export class ClaimRepository extends SalesforceBase<ISalesforceClaim> implements
   }
 
   public async getAllByProjectId(projectId: string): Promise<ISalesforceClaim[]> {
-    const filter = `Acc_ProjectParticipant__r.Acc_ProjectId__c = '${projectId}' AND RecordType.Name = '${this.recordType}'`;
+    const filter = `Acc_ProjectParticipant__r.Acc_ProjectId__c = '${projectId}' AND RecordType.Name = '${this.recordType}' AND Acc_ClaimStatus__c != 'New'`;
     return await super.where(filter);
   }
 
   public async getAllByPartnerId(partnerId: string): Promise<ISalesforceClaim[]> {
-    const filter = `Acc_ProjectParticipant__c = '${partnerId}' AND RecordType.Name = '${this.recordType}'`;
+    const filter = `Acc_ProjectParticipant__c = '${partnerId}' AND RecordType.Name = '${this.recordType}' AND Acc_ClaimStatus__c != 'New'`;
     return await super.where(filter);
   }
 
   public async get(partnerId: string, periodId: number) {
-    const filter = `Acc_ProjectParticipant__c = '${partnerId}' AND Acc_ProjectPeriodNumber__c = ${periodId} AND RecordType.Name = '${this.recordType}'`;
+    const filter = `Acc_ProjectParticipant__c = '${partnerId}' AND Acc_ProjectPeriodNumber__c = ${periodId} AND RecordType.Name = '${this.recordType}' AND Acc_ClaimStatus__c != 'New'`;
     const claim = await super.where(filter);
     if (claim.length === 0) {
       throw new ApiError(StatusCode.BAD_REQUEST, "Claim does not exist");
