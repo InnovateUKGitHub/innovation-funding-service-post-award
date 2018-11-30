@@ -42,6 +42,14 @@
   vertical-align: bottom;
 }
 
+.govuk-table__header--light .govuk-table__header:not(:first-child) {
+  font-weight: 100;
+}
+
+.acc-table__cell-top-border {
+  border-top: black 3px solid;
+}
+
 .acc-accordion {
   border-bottom: 1px solid #bfc1c3;
 }
