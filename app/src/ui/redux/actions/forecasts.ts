@@ -9,6 +9,7 @@ import {
   getForecastDetail,
   getForecastDetailsEditor
 } from "../selectors";
+import { scrollToErrorMessage } from "../../../util/windowHelpers";
 
 export function loadForecastDetailsForPartner(partnerId: string, periodId: number) {
   return conditionalLoad(findForecastDetailsByPartner(partnerId, periodId), params => ApiClient.forecastDetails.getAllByPartnerId({partnerId, periodId, ...params}));
@@ -55,6 +56,7 @@ export function saveForecastDetails(
     const validation = validatorThunk(dispatch, getState, null);
 
     if (!validation.isValid) {
+      scrollToErrorMessage();
       return Promise.resolve();
     }
 
