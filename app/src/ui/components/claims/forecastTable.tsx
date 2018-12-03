@@ -156,7 +156,7 @@ export class ForecastTable extends React.Component<Props> {
       <tr key="cHeader1" className="govuk-table__row govuk-body-s">
         <th className="govuk-table__header govuk-table__header--numeric" />
         {previous > 0 ? <th className="govuk-table__header govuk-table__header--numeric" colSpan={previous}>Previous costs</th> : null}
-        {currentClaimPeriod > 0 ? <th className="govuk-table__header govuk-table__header--numeric">Current costs</th> : null}
+        {currentClaimPeriod > 0 ? <th className="govuk-table__header govuk-table__header--numeric">Costs this period</th> : null}
         {forecasts ? <th className="govuk-table__header govuk-table__header--numeric" colSpan={periods.length - currentClaimPeriod}>Forecast</th> : null}
         <th className="govuk-table__header govuk-table__header--numeric">Total</th>
         <th className="govuk-table__header govuk-table__header--numeric">Grant offered</th>
@@ -191,14 +191,14 @@ export class ForecastTable extends React.Component<Props> {
 
     cells.push(<th key="th" className="govuk-table__cell govuk-!-font-weight-bold acc-table__cell-top-border">Total</th>);
     cells.push(totals.map(this.renderTableFooterCell));
-    cells.push(<td key="total_diff" className="govuk-table__cell govuk-table__cell--numeric acc-table__cell-top-border"><Percentage className="govuk-!-font-weight-bold" value={this.calculateDifference(golTotal, costTotal)} /></td>);
+    cells.push(<td key="total_diff" className="govuk-table__cell govuk-table__cell--numeric acc-table__cell-top-border"><Percentage className="govuk-!-font-weight-regular" value={this.calculateDifference(golTotal, costTotal)} /></td>);
 
     return [<tr key="footer1" className={classNames("govuk-table__row", "govuk-body-s", {"table__row--warning": warning})}>{cells}</tr>];
   }
 
   renderTableFooterCell = (total: number, key: number) => (
     <td key={key} className="govuk-table__cell govuk-table__cell--numeric acc-table__cell-top-border">
-      <Currency className="govuk-!-font-weight-bold" value={total} />
+      <Currency className="govuk-!-font-weight-regular" value={total} />
     </td>
   )
 }

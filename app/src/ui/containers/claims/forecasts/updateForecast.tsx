@@ -43,7 +43,7 @@ class UpdateForecastComponent extends ContainerBase<Params, PendingForecastData,
         </ACC.Section>
         <ACC.ValidationSummary validation={editor.validator} compressed={false} />
         <ACC.Projects.Title pageTitle="Update forecasts" project={combined.project} />
-        <ACC.Section title={combined.partner.name + " forecasts table"} qa="partner-forecast" >
+        <ACC.Section title="" qa="partner-forecast" >
           {renderWarning(combined)}
           <Form.Form
             data={editor.data}
@@ -53,7 +53,7 @@ class UpdateForecastComponent extends ContainerBase<Params, PendingForecastData,
           >
             <ACC.Claims.ForecastTable data={combined} />
             <Form.Fieldset>
-              <Form.Submit>Submit forecasts changes</Form.Submit>
+              <Form.Submit>Submit</Form.Submit>
               <ACC.Renderers.SimpleString>Changes last saved:
                 <ACC.Renderers.ShortDateTime value={combined.claim.forecastLastModified} />
               </ACC.Renderers.SimpleString>
