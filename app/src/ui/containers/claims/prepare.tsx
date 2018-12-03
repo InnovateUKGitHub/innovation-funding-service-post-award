@@ -107,7 +107,7 @@ export class PrepareComponent extends ContainerBase<Params, Data, Callbacks> {
                             <Form.Submit>Review forecasts</Form.Submit>
                         </Form.Fieldset>
                         <Form.Fieldset qa="save-and-return">
-                            <Form.Button name="return" onClick={() => this.saveAndReturn(data.editor.data, data.claimDetails, data.costCategories)}>Save and return to claim dashboard</Form.Button>
+                            <Form.Button name="return" onClick={() => this.saveAndReturn(data.editor.data, data.claimDetails, data.costCategories)}>Save and return to claim</Form.Button>
                         </Form.Fieldset>
                     </Form.Form>
                 </ACC.Section>
