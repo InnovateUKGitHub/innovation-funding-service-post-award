@@ -176,14 +176,15 @@ class Component extends ContainerBase<Params, Data, {}> {
   }
 
   private getReviewLink(claim: ClaimDto, projectId: string) {
-    if (claim.status === ClaimStatus.SUBMITTED) {
-      return <Acc.Link route={ReviewClaimRoute.getLink({ projectId, partnerId: claim.partnerId, periodId: claim.periodId })}>Review claim</Acc.Link>;
+    switch (claim.status) {
+      case ClaimStatus.DRAFT:
+      case ClaimStatus.REVIEWING_FORECASTS:
+        return null;
+      case ClaimStatus.SUBMITTED:
+        return <Acc.Link route={ReviewClaimRoute.getLink({ projectId, partnerId: claim.partnerId, periodId: claim.periodId })}>Review claim</Acc.Link>;
+      default:
+        return this.getViewLink(claim, projectId);
     }
-    const draftStatus = [ClaimStatus.DRAFT, ClaimStatus.REVIEWING_FORECASTS];
-    if (draftStatus.indexOf(claim.status) >= 0) {
-      return this.getViewLink(claim, projectId);
-    }
-    return null;
   }
 
   private getViewLink(claim: ClaimDto, projectId: string) {
