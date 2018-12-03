@@ -1,6 +1,6 @@
-import { DataLoadAction } from "../../src/ui/redux/actions/dataLoad";
-import { loadStatusReducer } from "../../src/ui/redux/reducers/loadStatusReducer";
-import { LoadingStatus } from "../../src/shared/pending";
+import { DataLoadAction } from "../../../src/ui/redux/actions/common";
+import { loadStatusReducer } from "../../../src/ui/redux/reducers/loadStatusReducer";
+import { LoadingStatus } from "../../../src/shared/pending";
 
 const createLoadDataAction = (status: LoadingStatus): DataLoadAction => {
     return {
