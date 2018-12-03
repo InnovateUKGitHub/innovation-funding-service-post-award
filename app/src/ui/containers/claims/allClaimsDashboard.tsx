@@ -8,7 +8,7 @@ import * as Actions from "../../redux/actions";
 import * as Acc from "../../components";
 import { ClaimsDetailsRoute, ReviewClaimRoute, } from ".";
 import { ClaimStatus } from "../../../types";
-import {Accordion, AccordionItem} from "../../components";
+import { Accordion, AccordionItem } from "../../components";
 
 interface Params {
   projectId: string;
