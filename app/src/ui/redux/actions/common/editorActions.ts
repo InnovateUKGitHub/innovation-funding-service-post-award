@@ -1,6 +1,7 @@
 import {createAction} from "./createAction";
 import {Results} from "../../../validation/results";
 import {ErrorCode} from "../../../../server/apis/ApiError";
+import { scrollToTheTop } from "../../../../util/windowHelpers";
 
 type UpdateEditorThunk = typeof updateEditorAction;
 type ResetEditorThunk = typeof resetEditorAction;
@@ -33,6 +34,7 @@ export function handleError<T>({id, store, dto, validation, error}: {
   error: any
 }) {
   if (error.code === ErrorCode.VALIDATION_ERROR) {
+    scrollToTheTop();
     return updateEditorAction(id, store, dto, error.details, error);
   }
   return updateEditorAction(id, store, dto, validation, error);
