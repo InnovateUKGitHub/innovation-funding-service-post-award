@@ -24,12 +24,8 @@ export class GetPeriodInfoQuery extends SyncQueryBase<PeriodInfo> {
     // if project is still in progress use today otherwise day before end so in last period
     const dateForCurrentPeriod = end.isValid && end < now ? end.minus({days:1}) : now;
     
-    console.log(start);
-    console.log(dateForCurrentPeriod);
-    console.log(dateForCurrentPeriod.diff(start, "months"));
     const monthsForCurrent = dateForCurrentPeriod.diff(start, "months").months;
 
-    console.log("months for current", monthsForCurrent);
     // if valid end date isnt supplied use null so we can return a total value of null
     const monthsForTotal = end.isValid ? end.diff(start, "months").months : null;
     const factor = this.claimFrequency as number;
