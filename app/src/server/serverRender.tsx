@@ -1,16 +1,29 @@
 import React from "react";
 import { Request, Response } from "express";
 import { renderToString } from "react-dom/server";
-import { createStore } from "redux";
+import { createStore, Dispatch, AnyAction } from "redux";
 import { Provider } from "react-redux";
 import { RouterProvider } from "react-router5";
 
 import { renderHtml } from "./html";
-import { rootReducer, setupInitialState, setupMiddleware } from "../ui/redux";
+import { rootReducer, setupInitialState, setupMiddleware, RootState } from "../ui/redux";
 import { configureRouter, matchRoute } from "../ui/routing";
 import { App } from "../ui/containers/app";
 import { Results } from "../ui/validation/results";
-import { updateEditorAction } from "../ui/redux/actions/common";
+import { updateEditorAction, AsyncThunk } from "../ui/redux/actions/common";
+
+async function loadData(dispatch: Dispatch<AnyAction>, getState: () => RootState, dataCalls: AsyncThunk<any>[]): Promise<void> {
+
+  const allPromises = dataCalls.map(action => action(dispatch, getState, null));
+  const loadingCount = getState().loadStatus;
+
+  // nothing is loading so safe to return and then render
+  if (loadingCount === 0) {
+    return Promise.resolve();
+  }
+  // something is loading so wait for that to finish and then try again
+  return Promise.all(allPromises).then(() => loadData(dispatch, getState, dataCalls));
+}
 
 export function serverRender(req: Request, res: Response, validationError?: { key: string, store: string, dto: {}, result: Results<{}>, error: any }) {
   const router = configureRouter();
@@ -36,7 +49,7 @@ export function serverRender(req: Request, res: Response, validationError?: { ke
       });
     }
 
-    Promise.all(actions.map(action => action(store.dispatch, store.getState, null)))
+    loadData(store.dispatch, () => store.getState(), actions)
       .then(() => {
         const html = renderToString(
           <Provider store={store}>
