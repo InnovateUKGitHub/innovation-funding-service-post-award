@@ -154,8 +154,6 @@ describe("getAllClaimsForProjectQuery", () => {
     context.testData.createClaim(partner2, 1);
     context.testData.createClaim(partner3, 1);
 
-    console.log(JSON.stringify(context.repositories.claims.Items, null, "  "));
-
     const query = new GetAllClaimsForProjectQuery(project.Id);
     const results = await context.runQuery(query);
 
@@ -176,8 +174,6 @@ describe("getAllClaimsForProjectQuery", () => {
     context.testData.createClaim(partner2, 1);
     context.testData.createClaim(partner2, 2);
     context.testData.createClaim(partner2, 3);
-
-    console.log(JSON.stringify(context.repositories.claims.Items, null, "  "));
 
     const query = new GetAllClaimsForProjectQuery(project.Id);
     const results = await context.runQuery(query);

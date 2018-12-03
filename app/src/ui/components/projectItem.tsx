@@ -3,12 +3,10 @@ import { Link } from "./links";
 import { FullDate } from "./renderers";
 import { ListItem } from "./layout";
 import { ProjectDetailsRoute } from "../containers";
-import { ProjectDto } from "../../types";
+import { ProjectDto, ClaimFrequency } from "../../types";
 
 interface Props {
   project: ProjectDto;
-  frequency: number;
-  periodText: string;
   warning: boolean;
 }
 
@@ -29,11 +27,11 @@ export const AwaitingProjectItem: React.SFC<Props & NextProps> = (props) => (
 export const ProjectDescription: React.SFC<Props> = (props) => (
   <div className="govuk-grid-column-two-thirds">
     <h2 className="govuk-heading-s govuk-!-margin-bottom-2">
-      <Link route={ProjectDetailsRoute.getLink({id: props.project.id})}>
+      <Link route={ProjectDetailsRoute.getLink({ id: props.project.id })}>
         {props.project.projectNumber}: {props.project.title}
       </Link>
     </h2>
-    <p className="govuk-body govuk-!-margin-bottom-2">{props.periodText} {props.project.periodId} of {props.frequency}</p>
+    {props.project.periodId ? <p className="govuk-body govuk-!-margin-bottom-2">{props.project.claimFrequency === ClaimFrequency.Monthly ? "Month" : "Quarter"} {props.project.periodId} of {props.project.totalPeriods}</p> : null}
   </div>
 );
 

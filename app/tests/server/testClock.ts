@@ -1,4 +1,5 @@
 import { Clock, IClock } from "../../src/server/features/common/clock";
+import { DateTime } from "luxon";
 
 export class TestClock implements IClock {
     private _now: Date|null;
@@ -10,10 +11,14 @@ export class TestClock implements IClock {
     }
 
     public setDate(value: string, format: string = "yyyy/MM/dd") {
-        this.setDateTime(value+ " 12:00:00", format + " HH:mm:ss")
+        return this.setDateTime(value+ " 12:00:00", format + " HH:mm:ss")
     }
 
     public setDateTime(value: string, format: string = "yyyy/MM/dd hh:mm:ss") {
+        const parsed = this.parse(value, format);
+        if(!parsed || isNaN(parsed.getTime())){
+            throw new Error(`Invalid date for format ${value} ${format}`)
+        }
         return this._now = this.parse(value, format);
     }
 
@@ -23,6 +28,10 @@ export class TestClock implements IClock {
 
     parse(value: string, format: string) {
         return this._inner.parse(value, format);
+    }
+
+    asLuxon(): DateTime {
+        return DateTime.fromJSDate(this.today());
     }
 
 }
