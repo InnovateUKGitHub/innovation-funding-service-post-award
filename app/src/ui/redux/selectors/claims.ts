@@ -1,12 +1,10 @@
 import { dataStoreHelper, editorStoreHelper } from "./common";
-import { IEditorStore, RootState } from "../reducers";
+import { RootState } from "../reducers";
 import { ClaimDtoValidator } from "../../validators/claimDtoValidator";
 import { getCostCategories } from "./costCategories";
 import { getKey } from "../../../util/key";
 import { ClaimDto, ClaimStatus } from "../../../types";
-import { getClaimDocumentEditor } from "./documents";
 import { Pending } from "../../../shared/pending";
-import { DocumentUploadValidator } from "../../validators/documentUploadValidator";
 
 export const claimsStore = "claims";
 export const findClaimsByPartner = (partnerId: string) => dataStoreHelper(claimsStore, `partnerId=${partnerId}`);
@@ -41,23 +39,25 @@ export const claimDetailsSummaryStore = "claimDetailsSummary";
 export const findClaimDetailsSummaryByPartnerAndPeriod = (partnerId: string, periodId: number) => dataStoreHelper(claimDetailsSummaryStore, `partnerId=${partnerId}&periodId=${periodId}`);
 
 export const getCurrentClaim = (state: RootState, partnerId: string): Pending<ClaimDto | null> => {
-  return findClaimsByPartner(partnerId).getPending(state).then(claims => {
-    if (!claims) {
-      return null;
-    }
-    return claims.find(claim => !claim.approvedDate) || null;
-  });
+  return findClaimsByPartner(partnerId)
+    .getPending(state)
+    .then(claims => (claims || []).find(x => !x.isApproved) || null);
+};
+
+export const getProjectCurrentClaims = (state: RootState, projectId: string): Pending<ClaimDto[]> => {
+  return findClaimsByProject(projectId)
+    .getPending(state)
+    .then(claims => (claims || []).filter(x => !x.isApproved));
+};
+
+export const getProjectPreviousClaims = (state: RootState, projectId: string): Pending<ClaimDto[]> => {
+  return findClaimsByProject(projectId)
+    .getPending(state)
+    .then(claims => (claims ||[]).filter(x => x.isApproved));
 };
 
 export const getPreviousClaims = (state: RootState, partnerId: string): Pending<ClaimDto[]> => {
-  return Pending.combine(
-    findClaimsByPartner(partnerId).getPending(state),
-    getCurrentClaim(state, partnerId),
-    (claims, currentClaim) => {
-      if (!claims || !currentClaim) {
-        return [];
-      }
-      return currentClaim ? claims.filter(claim => claim.id !== currentClaim.id) : claims;
-    }
-  );
+  return findClaimsByPartner(partnerId)
+    .getPending(state)
+    .then(claims => (claims ||[]).filter(x => x.isApproved));
 };
