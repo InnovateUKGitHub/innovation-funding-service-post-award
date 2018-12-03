@@ -140,7 +140,6 @@ class Component extends ContainerBase<Params, Data, {}> {
     }
 
     return (
-      <Acc.Section title="Previous claims">
         <Accordion>
           {grouped.map(x => (
             <AccordionItem title={`${x.partner.name} ${x.partner.isLead ? "(Lead)" : ""}`}>
@@ -148,7 +147,6 @@ class Component extends ContainerBase<Params, Data, {}> {
             </AccordionItem>
           ))}
         </Accordion>
-      </Acc.Section>
     );
   }
 
