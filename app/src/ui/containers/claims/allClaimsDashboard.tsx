@@ -98,7 +98,7 @@ class Component extends ContainerBase<Params, Data, {}> {
   }
 
   private renderCurrentClaims(currentInfo: ProjectPeriod, project: ProjectDto, partners: PartnerDto[]) {
-    const title = <React.Fragment>Period {currentInfo.periodId} - <Acc.Renderers.LongDateRange start={currentInfo.start} end={currentInfo.end} /></React.Fragment>;
+    const title = <React.Fragment>Period {currentInfo.periodId}: <Acc.Renderers.LongDateRange start={currentInfo.start} end={currentInfo.end} /></React.Fragment>;
     const ClaimTable = Acc.TypedTable<ClaimDto>();
     const renderPartnerName = (x: ClaimDto) => {
       const p = partners.filter(y => y.id === x.partnerId)[0];
@@ -114,16 +114,8 @@ class Component extends ContainerBase<Params, Data, {}> {
           <ClaimTable.Currency header="Forecast costs for period" qa="forecast-cost" value={(x) => x.forecastCost} />
           <ClaimTable.Currency header="Actual costs for period" qa="actual-cost" value={(x) => x.totalCost} />
           <ClaimTable.Currency header="Difference" qa="diff" value={(x) => x.forecastCost - x.totalCost} />
-          <ClaimTable.Custom
-            header="Status"
-            qa="status"
-            value={(x) => (
-              <span>
-                {x.status}
-                <br />
-                <Acc.Renderers.ShortDate value={(x.paidDate || x.approvedDate || x.lastModifiedDate)} />
-              </span>)}
-          />
+          <ClaimTable.String header="Status" qa="status" value={(x) => x.status}/>
+          <ClaimTable.ShortDate header="Date of last update" qa="last-update" value={x => x.paidDate || x.approvedDate || x.lastModifiedDate}/>
           <ClaimTable.Custom header="" qa="link" value={(x) => this.getLink(x, project.id)} />
         </ClaimTable.Table>
       </Acc.Section>
@@ -159,25 +151,11 @@ class Component extends ContainerBase<Params, Data, {}> {
           <ClaimTable.Currency header="Forecast costs for period" qa="forecast-cost" value={(x) => x.forecastCost} />
           <ClaimTable.Currency header="Actual costs for period" qa="actual-cost" value={(x) => x.totalCost} />
           <ClaimTable.Currency header="Difference" qa="diff" value={(x) => x.forecastCost - x.totalCost} />
-          <ClaimTable.Custom
-            header="Status"
-            qa="status"
-            value={(x) => (
-              <span>
-                {x.status}
-                <br />
-                <Acc.Renderers.ShortDate value={(x.paidDate || x.approvedDate || x.lastModifiedDate)} />
-              </span>)}
-          />
+          <ClaimTable.String header="Status" qa="status" value={(x) => x.status}/>
+          <ClaimTable.ShortDate header="Date of last update" qa="last-update" value={x => x.paidDate || x.approvedDate || x.lastModifiedDate}/>
           <ClaimTable.Custom header="" qa="link" value={(x) => this.getLink(x, project.id)} />
         </ClaimTable.Table>
       </div>
-    );
-  }
-
-  private renderPeriodColumn({ periodId, periodStartDate, periodEndDate }: ClaimDto) {
-    return (
-      <span>P{periodId} <Acc.Renderers.DateRange start={periodStartDate} end={periodEndDate} /></span>
     );
   }
 
