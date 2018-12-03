@@ -88,17 +88,17 @@ export class ClaimDetailDocumentsComponent extends ContainerBase<Params, Data, C
         </ACC.Section>
         {validationMessage}
         <ACC.Section>
-          <ACC.Projects.Title pageTitle={`Claim for ${costCategory.name}`} project={project} />
+          <ACC.Projects.Title pageTitle={`${costCategory.name}`} project={project} />
         </ACC.Section>
-        <ACC.Section title="Supporting documents" subtitle={documents.length > 0 ? "(Documents open in a new window)" : ""}>
+        <ACC.Section title={`${costCategory.name} documents`} subtitle={documents.length > 0 ? "All documents open in a new window." : ""}>
           {documents.length > 0 ?
             <ACC.DocumentListWithDelete onRemove={(document) => this.onDelete(document)} documents={documents} qa="supporting-documents"/> :
-            <p className="govuk-body-m govuk-!-margin-bottom-0 govuk-!-margin-right-2">No documents attached</p> }
+            <p className="govuk-body-m govuk-!-margin-bottom-0 govuk-!-margin-right-2">No documents uploaded.</p> }
         </ACC.Section>
         <ACC.Section>
           <UploadForm.Form data={editor.data} onSubmit={() => this.onSave(editor.data)} onChange={(dto) => this.onChange(dto)}>
-            <UploadForm.Fieldset heading="Upload documents">
-              <UploadForm.FileUpload validation={editor.validator.file} value={(data) => data.file} hint="Make sure each file name includes the date and a description" name="Upload documents" update={(dto, file) => dto.file = file}/>
+            <UploadForm.Fieldset heading="Upload">
+              <UploadForm.FileUpload validation={editor.validator.file} value={(data) => data.file} hint={<span>Give your files a name that describes their contents and includes today's date.<br/>For example, 'LabourCosts_2017-11-15'.</span>} name="Upload documents" update={(dto, file) => dto.file = file}/>
             </UploadForm.Fieldset>
             <UploadForm.Submit>Upload documents</UploadForm.Submit>
           </UploadForm.Form>
