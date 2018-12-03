@@ -28,7 +28,7 @@ export class Pending<T> {
      */
     then<T2>(map: (data: T | null | undefined, state?: LoadingStatus, error?: any) => T2, noData?: () => T2) {
         let newData: T2 | null | undefined = null;
-        if (this.data || (this.data as any as number) === 0) {
+        if (this.state === LoadingStatus.Done || this.data || (this.data as any as number) === 0) {
             newData = map(this.data, this.state, this.error);
         }
         else if (noData) {
