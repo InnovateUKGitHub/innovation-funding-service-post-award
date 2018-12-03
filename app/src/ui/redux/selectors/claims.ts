@@ -38,43 +38,26 @@ export const findClaimDetailsByPartner = (partnerId: string) => dataStoreHelper(
 export const claimDetailsSummaryStore = "claimDetailsSummary";
 export const findClaimDetailsSummaryByPartnerAndPeriod = (partnerId: string, periodId: number) => dataStoreHelper(claimDetailsSummaryStore, `partnerId=${partnerId}&periodId=${periodId}`);
 
-const isActiveClaim = (claim: ClaimDto) => [ClaimStatus.APPROVED, ClaimStatus.PAID, ClaimStatus.NEW].indexOf(claim.status) < 0;
-
 export const getCurrentClaim = (state: RootState, partnerId: string): Pending<ClaimDto | null> => {
-  return findClaimsByPartner(partnerId).getPending(state).then(claims => {
-    if (!claims) return null;
-    return claims.find(isActiveClaim) || null;
-  });
+  return findClaimsByPartner(partnerId)
+    .getPending(state)
+    .then(claims => (claims || []).find(x => !x.isApproved) || null);
 };
 
 export const getProjectCurrentClaims = (state: RootState, projectId: string): Pending<ClaimDto[]> => {
-  return findClaimsByProject(projectId).getPending(state).then(claims => {
-    if (!claims) return [];
-    return claims.filter(isActiveClaim);
-  });
+  return findClaimsByProject(projectId)
+    .getPending(state)
+    .then(claims => (claims || []).filter(x => !x.isApproved));
 };
 
 export const getProjectPreviousClaims = (state: RootState, projectId: string): Pending<ClaimDto[]> => {
-  return Pending.combine(
-    findClaimsByProject(projectId).getPending(state),
-    getProjectCurrentClaims(state, projectId),
-    (allClaims, currentClaims) => {
-      if (!allClaims) return [];
-      if (currentClaims.length === 0) return allClaims;
-      const currentClaimIds = currentClaims.map(x => x.id);
-      return allClaims.filter(claim => currentClaimIds.indexOf(claim.id) >= 0);
-    }
-  );
+  return findClaimsByProject(projectId)
+    .getPending(state)
+    .then(claims => (claims ||[]).filter(x => x.isApproved));
 };
 
 export const getPreviousClaims = (state: RootState, partnerId: string): Pending<ClaimDto[]> => {
-  return Pending.combine(
-    findClaimsByPartner(partnerId).getPending(state),
-    getCurrentClaim(state, partnerId),
-    (claims, currentClaim) => {
-      if (!claims) return [];
-      if (!currentClaim) return claims;
-      return claims.filter(claim => claim.id !== currentClaim.id);
-    }
-  );
+  return findClaimsByPartner(partnerId)
+    .getPending(state)
+    .then(claims => (claims ||[]).filter(x => x.isApproved));
 };
