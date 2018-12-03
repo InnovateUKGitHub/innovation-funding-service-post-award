@@ -8,6 +8,7 @@ import * as Actions from "../../redux/actions";
 import * as Acc from "../../components";
 import { ClaimsDetailsRoute, ReviewClaimRoute, } from ".";
 import { ClaimStatus } from "../../../types";
+import { Accordion, AccordionItem } from "../../components";
 
 interface Params {
   projectId: string;
@@ -68,7 +69,9 @@ class Component extends ContainerBase<Params, Data, {}> {
         <Acc.Section title="Open">
           {this.renderCurrentClaimsPerPeriod(currentClaims, projectDetails, partners)}
         </Acc.Section>
-        {/* {this.renderPreviousClaimsSections(projectDetails, partners, remainingClaims)} */}
+        <Acc.Section title="Closed">
+         {this.renderPreviousClaimsSections(projectDetails, partners, previousClaims)}
+        </Acc.Section>
       </ProjectOverviewPage>
     );
   }
@@ -121,7 +124,7 @@ class Component extends ContainerBase<Params, Data, {}> {
                 <Acc.Renderers.ShortDate value={(x.paidDate || x.approvedDate || x.lastModifiedDate)} />
               </span>)}
           />
-          <ClaimTable.Custom header="" qa="link" value={(x) => this.getReviewLink(x, project.id)} />
+          <ClaimTable.Custom header="" qa="link" value={(x) => this.getLink(x, project.id)} />
         </ClaimTable.Table>
       </Acc.Section>
     );
@@ -137,9 +140,13 @@ class Component extends ContainerBase<Params, Data, {}> {
     }
 
     return (
-      <Acc.Section title="Previous claims">
-        {grouped.map(x => this.previousClaimsSection(project, x.partner, x.claims))}
-      </Acc.Section>
+        <Accordion>
+          {grouped.map(x => (
+            <AccordionItem title={`${x.partner.name} ${x.partner.isLead ? "(Lead)" : ""}`}>
+              {this.previousClaimsSection(project, x.partner, x.claims)}
+            </AccordionItem>
+          ))}
+        </Accordion>
     );
   }
 
@@ -147,9 +154,8 @@ class Component extends ContainerBase<Params, Data, {}> {
     const ClaimTable = Acc.TypedTable<ClaimDto>();
     return (
       <div>
-        <h4>{partner.name}</h4>
         <ClaimTable.Table data={previousClaims} qa={`previousClaims-${partner.accountId}`}>
-          <ClaimTable.Custom header="Period" qa="period" value={(x) => this.renderPeriodColumn(x)} />
+          <ClaimTable.Custom header="" qa="period" value={(x) => this.renderClosedPeriodColumn(x)} />
           <ClaimTable.Currency header="Forecast costs for period" qa="forecast-cost" value={(x) => x.forecastCost} />
           <ClaimTable.Currency header="Actual costs for period" qa="actual-cost" value={(x) => x.totalCost} />
           <ClaimTable.Currency header="Difference" qa="diff" value={(x) => x.forecastCost - x.totalCost} />
@@ -163,7 +169,7 @@ class Component extends ContainerBase<Params, Data, {}> {
                 <Acc.Renderers.ShortDate value={(x.paidDate || x.approvedDate || x.lastModifiedDate)} />
               </span>)}
           />
-          <ClaimTable.Custom header="" qa="link" value={(x) => this.getViewLink(x, project.id)} />
+          <ClaimTable.Custom header="" qa="link" value={(x) => this.getLink(x, project.id)} />
         </ClaimTable.Table>
       </div>
     );
@@ -175,20 +181,21 @@ class Component extends ContainerBase<Params, Data, {}> {
     );
   }
 
-  private getReviewLink(claim: ClaimDto, projectId: string) {
+  private renderClosedPeriodColumn({ periodId, periodStartDate, periodEndDate }: ClaimDto) {
+    return (
+      <span>Period {periodId} <Acc.Renderers.LongDateRange start={periodStartDate} end={periodEndDate} isShortMonth={true} /></span>
+    );
+  }
+  private getLink(claim: ClaimDto, projectId: string) {
     switch (claim.status) {
       case ClaimStatus.DRAFT:
       case ClaimStatus.REVIEWING_FORECASTS:
         return null;
       case ClaimStatus.SUBMITTED:
-        return <Acc.Link route={ReviewClaimRoute.getLink({ projectId, partnerId: claim.partnerId, periodId: claim.periodId })}>Review claim</Acc.Link>;
+        return <Acc.Link route={ReviewClaimRoute.getLink({projectId, partnerId: claim.partnerId, periodId: claim.periodId})}>Review claim</Acc.Link>;
       default:
-        return this.getViewLink(claim, projectId);
+        return <Acc.Link route={ClaimsDetailsRoute.getLink({projectId, partnerId: claim.partnerId, periodId: claim.periodId})}>View claim</Acc.Link>;
     }
-  }
-
-  private getViewLink(claim: ClaimDto, projectId: string) {
-    return <Acc.Link route={ClaimsDetailsRoute.getLink({ projectId, partnerId: claim.partnerId, periodId: claim.periodId })}>View claim</Acc.Link>;
   }
 }
 
