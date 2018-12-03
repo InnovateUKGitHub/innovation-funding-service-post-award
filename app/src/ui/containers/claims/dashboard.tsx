@@ -230,10 +230,10 @@ export const ClaimsDashboard = definition.connect({
       dispatch(Actions.updateClaimDocumentEditor(claimKey, dto)),
     uploadFile: (claimKey, file) =>
       dispatch(Actions.uploadClaimDocument(claimKey, file, () =>
-        dispatch(Actions.loadClaimsAndIarDocuments(claimKey.partnerId)))),
+        dispatch(Actions.loadIarDocumentsForCurrentClaim(claimKey.partnerId)))),
     deleteFile: (claimKey, file) =>
       dispatch(Actions.deleteClaimDocument(claimKey, file, () =>
-        dispatch(Actions.loadIarDocuments(claimKey.partnerId, claimKey.periodId))))
+        dispatch(Actions.loadIarDocumentsForCurrentClaim(claimKey.partnerId))))
   })
 });
 
@@ -247,7 +247,8 @@ export const ClaimsDashboardRoute = definition.route({
   getLoadDataActions: (params) => [
     Actions.loadProject(params.projectId),
     Actions.loadPartner(params.partnerId),
-    Actions.loadClaimsAndIarDocuments(params.partnerId)
+    Actions.loadClaimsForPartner(params.partnerId),
+    Actions.loadIarDocumentsForCurrentClaim(params.partnerId)
   ],
   container: ClaimsDashboard
 });

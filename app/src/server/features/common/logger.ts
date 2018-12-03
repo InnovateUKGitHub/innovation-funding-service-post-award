@@ -4,6 +4,7 @@ export interface ILogger {
 
 export class Logger implements ILogger {
   log(message: string, ...params: any[]) {
-    console.log(`LOG: ${message}`, ...params);
+    // Todo: impliment logging for server logs
+    console.log(`LOG: ${message}`);// , ...params);
   }
 }

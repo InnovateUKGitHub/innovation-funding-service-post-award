@@ -51,14 +51,15 @@ export function loadClaimsForPartner(partnerId: string) {
   return conditionalLoad(findClaimsByPartner(partnerId), params => ApiClient.claims.getAllByPartnerId({partnerId, ...params}));
 }
 
-export function loadClaimsAndIarDocuments(partnerId: string): AsyncThunk<void, DataLoadAction> {
-  return (dispatch, getState) => loadClaimsForPartner(partnerId)(dispatch, getState, null).then(() => {
+export function loadIarDocumentsForCurrentClaim(partnerId: string): AsyncThunk<void, DataLoadAction> {
+  return (dispatch, getState) => {
     const claim = getCurrentClaim(getState(), partnerId).data;
     if (claim) {
       return loadIarDocuments(partnerId, claim.periodId)(dispatch, getState, null);
     }
-  });
-}
+    return Promise.resolve();
+  }
+};
 
 export function loadClaimsForProject(projectId: string) {
   return conditionalLoad(findClaimsByProject(projectId), params => ApiClient.claims.getAllByProjectId({projectId, ...params}));
