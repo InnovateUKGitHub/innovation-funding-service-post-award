@@ -40,9 +40,10 @@ export const DateRange: React.SFC<{ start: Date | null, end: Date | null }> = pr
     );
 };
 
-export const LongDateRange: React.SFC<{ start: Date | null, end: Date | null }> = props => {
+export const LongDateRange: React.SFC<{ start: Date | null, end: Date | null , isShortMonth?: boolean}> = props => {
     const start = props.start && DateTime.fromJSDate(props.start);
     const end = props.end && DateTime.fromJSDate(props.end);
+    const isShortMonth = props.isShortMonth;
 
     if (!start || !start.isValid || !end || !end.isValid) {
         return null;
@@ -51,16 +52,16 @@ export const LongDateRange: React.SFC<{ start: Date | null, end: Date | null }> 
     if (start.year === end.year) {
         return (
             <span>
-                <span style={{ whiteSpace: "nowrap" }}>{start.day} {start.monthLong} to </span>
-                <span style={{ whiteSpace: "nowrap" }}>{end.day} {end.monthLong} {end.year}</span>
+                <span style={{ whiteSpace: "nowrap" }}>{start.day} {isShortMonth ? start.monthShort : start.monthLong} to </span>
+                <span style={{ whiteSpace: "nowrap" }}>{end.day} {isShortMonth ? start.monthShort : end.monthLong} {end.year}</span>
             </span>
         );
     }
 
     return (
         <span>
-            <span style={{ whiteSpace: "nowrap" }}>{start.day} {start.monthLong} {start.year} to </span>
-            <span style={{ whiteSpace: "nowrap" }}>{end.day} {end.monthLong} {end.year}</span>
+            <span style={{ whiteSpace: "nowrap" }}>{start.day} {isShortMonth ? start.monthShort : start.monthLong} {start.year} to </span>
+            <span style={{ whiteSpace: "nowrap" }}>{end.day} {isShortMonth ? start.monthShort : end.monthLong} {end.year}</span>
         </span>
     );
 };

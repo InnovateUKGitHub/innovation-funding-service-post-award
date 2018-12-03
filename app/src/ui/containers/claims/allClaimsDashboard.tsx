@@ -8,6 +8,7 @@ import * as Actions from "../../redux/actions";
 import * as Acc from "../../components";
 import { ClaimsDetailsRoute, ReviewClaimRoute, } from ".";
 import { ClaimStatus } from "../../../types";
+import {Accordion, AccordionItem} from "../../components";
 
 interface Params {
   projectId: string;
@@ -35,7 +36,7 @@ class Component extends ContainerBase<Params, Data, {}> {
 
     const currentClaims = claims.filter(x => x.periodId === currentPeriodId);
     // todo: not yet in scope willl be needed by following ticket
-    // const remainingClaims = claims.filter(x => x.periodId < currentPeriodId);
+    const remainingClaims = claims.filter(x => x.periodId < currentPeriodId);
 
     return (
       <ProjectOverviewPage project={projectDetails} partners={partners} selectedTab={AllClaimsDashboardRoute.routeName}>
@@ -43,7 +44,9 @@ class Component extends ContainerBase<Params, Data, {}> {
         <Acc.Section title="Open">
           {this.renderCurrentClaims(currentPeriodInfo, projectDetails, partners, currentClaims)}
         </Acc.Section>
-        {/* {this.renderPreviousClaimsSections(projectDetails, partners, remainingClaims)} */}
+        <Acc.Section title="Closed">
+         {this.renderPreviousClaimsSections(projectDetails, partners, remainingClaims)}
+        </Acc.Section>
       </ProjectOverviewPage>
     );
   }
@@ -116,7 +119,13 @@ class Component extends ContainerBase<Params, Data, {}> {
 
     return (
       <Acc.Section title="Previous claims">
-        {grouped.map(x => this.previousClaimsSection(project, x.partner, x.claims))}
+        <Accordion>
+          {grouped.map(x => (
+            <AccordionItem title={`${x.partner.name} ${x.partner.isLead ? "(Lead)" : ""}`}>
+              {this.previousClaimsSection(project, x.partner, x.claims)}
+            </AccordionItem>
+          ))}
+        </Accordion>
       </Acc.Section>
     );
   }
@@ -125,9 +134,8 @@ class Component extends ContainerBase<Params, Data, {}> {
     const ClaimTable = Acc.TypedTable<ClaimDto>();
     return (
       <div>
-        <h4>{partner.name}</h4>
         <ClaimTable.Table data={previousClaims} qa={`previousClaims-${partner.accountId}`}>
-          <ClaimTable.Custom header="Period" qa="period" value={(x) => this.renderPeriodColumn(x)} />
+          <ClaimTable.Custom header="" qa="period" value={(x) => this.renderClosedPeriodColumn(x)} />
           <ClaimTable.Currency header="Forecast costs for period" qa="forecast-cost" value={(x) => x.forecastCost} />
           <ClaimTable.Currency header="Actual costs for period" qa="actual-cost" value={(x) => x.totalCost} />
           <ClaimTable.Currency header="Difference" qa="diff" value={(x) => x.forecastCost - x.totalCost} />
@@ -150,6 +158,12 @@ class Component extends ContainerBase<Params, Data, {}> {
   private renderPeriodColumn({ periodId, periodStartDate, periodEndDate }: ClaimDto) {
     return (
       <span>P{periodId} <Acc.Renderers.DateRange start={periodStartDate} end={periodEndDate} /></span>
+    );
+  }
+
+  private renderClosedPeriodColumn({ periodId, periodStartDate, periodEndDate }: ClaimDto) {
+    return (
+      <span>Period {periodId} <Acc.Renderers.LongDateRange start={periodStartDate} end={periodEndDate} isShortMonth={true} /></span>
     );
   }
 
