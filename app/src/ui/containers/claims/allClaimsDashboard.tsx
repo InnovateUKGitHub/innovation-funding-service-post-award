@@ -16,7 +16,6 @@ interface Params {
 interface Data {
   projectDetails: Pending<ProjectDto>;
   partners: Pending<PartnerDto[]>;
-  claims: Pending<ClaimDto[]>;
   currentClaims: Pending<ClaimDto[]>;
   previousClaims: Pending<ClaimDto[]>;
 }
@@ -24,7 +23,6 @@ interface Data {
 interface CombinedData {
   projectDetails: ProjectDto;
   partners: PartnerDto[];
-  claims: ClaimDto[];
   currentClaims: ClaimDto[];
   previousClaims: ClaimDto[];
 }
@@ -41,10 +39,9 @@ class Component extends ContainerBase<Params, Data, {}> {
     const combined = Pending.combine(
       this.props.projectDetails,
       this.props.partners,
-      this.props.claims,
       this.props.currentClaims,
       this.props.previousClaims,
-      (projectDetails, partners, claims, currentClaims, previousClaims) => ({ projectDetails, partners, claims, currentClaims, previousClaims }));
+      (projectDetails, partners, currentClaims, previousClaims) => ({ projectDetails, partners, currentClaims, previousClaims }));
 
     const Loader = Acc.TypedLoader<CombinedData>();
 
@@ -64,7 +61,7 @@ class Component extends ContainerBase<Params, Data, {}> {
     });
   }
 
-  renderContents({ projectDetails, partners, claims, previousClaims, currentClaims }: CombinedData) {
+  renderContents({ projectDetails, partners, previousClaims, currentClaims }: CombinedData) {
     return (
       <ProjectOverviewPage project={projectDetails} partners={partners} selectedTab={AllClaimsDashboardRoute.routeName}>
         {this.renderSummary(projectDetails)}
@@ -200,7 +197,6 @@ export const AllClaimsDashboard = definition.connect({
   withData: (state, props) => ({
     projectDetails: Selectors.getProject(props.projectId).getPending(state),
     partners: Selectors.findPartnersByProject(props.projectId).getPending(state),
-    claims: Selectors.findClaimsByProject(props.projectId).getPending(state),
     currentClaims: Selectors.getProjectCurrentClaims(state, props.projectId),
     previousClaims: Selectors.getProjectPreviousClaims(state, props.projectId)
   }),
