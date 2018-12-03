@@ -7,6 +7,8 @@ import { ClaimFrequency, ProjectDto } from "../../../../src/types";
 describe("MapToProjectDtoCommand", () => {
   it("when valid expect mapping", async () => {
     let context = new TestContext();
+    
+    context.clock.setDate("2009/11/01");
 
     let expected: ProjectDto = {
       id: "Expected Id",
