@@ -36,8 +36,6 @@ class ProjectDashboardComponent extends ContainerBase<{}, Data, Callbacks> {
 
     projects.forEach(x => {
       const quarterly = x.claimFrequency === ClaimFrequency.Quarterly;
-      const frequency = quarterly ? 4 : 12;
-      const periodText = quarterly ? "Quarter" : "Period";
       const today = new Date();
       // needs last claim date to work out latest period for claim deadline
       const end = new Date(x.startDate);
@@ -54,8 +52,6 @@ class ProjectDashboardComponent extends ContainerBase<{}, Data, Callbacks> {
             project={x}
             daysRemaining={daysRemaining}
             endDate={end}
-            frequency={frequency}
-            periodText={periodText}
             warning={true}
           />
         ));
@@ -68,8 +64,6 @@ class ProjectDashboardComponent extends ContainerBase<{}, Data, Callbacks> {
           <ACC.AwaitingProjectItem
             key={x.id}
             project={x}
-            frequency={frequency}
-            periodText={periodText}
             warning={false}
             periodStart={nextStart}
             periodEnd={end}
