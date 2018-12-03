@@ -47,17 +47,17 @@ export const getCurrentClaim = (state: RootState, partnerId: string): Pending<Cl
 export const getProjectCurrentClaims = (state: RootState, projectId: string): Pending<ClaimDto[]> => {
   return findClaimsByProject(projectId)
     .getPending(state)
-    .then(claims => (claims || []).filter(x => !x.isApproved), () => []);
+    .then(claims => (claims || []).filter(x => !x.isApproved));
 };
 
 export const getProjectPreviousClaims = (state: RootState, projectId: string): Pending<ClaimDto[]> => {
   return findClaimsByProject(projectId)
     .getPending(state)
-    .then(claims => (claims ||[]).filter(x => x.isApproved), () => []);
+    .then(claims => (claims ||[]).filter(x => x.isApproved));
 };
 
 export const getPreviousClaims = (state: RootState, partnerId: string): Pending<ClaimDto[]> => {
   return findClaimsByPartner(partnerId)
     .getPending(state)
-    .then(claims => (claims ||[]).filter(x => x.isApproved), () => []);
+    .then(claims => (claims ||[]).filter(x => x.isApproved));
 };

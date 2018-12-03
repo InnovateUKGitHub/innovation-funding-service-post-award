@@ -80,6 +80,11 @@ describe("claims by project", () => {
         ],
         error: undefined,
         status: 3
+      },
+      "projectId=x": {
+        data: null as any,
+        error: undefined,
+        status: 3
       }
     };
 
@@ -132,6 +137,11 @@ describe("claims by project", () => {
             isApproved: false
           })
         ],
+        error: undefined,
+        status: 3
+      },
+      "projectId=x": {
+        data: null as any,
         error: undefined,
         status: 3
       }
