@@ -3,6 +3,7 @@ import { LoadingStatus } from "../../../shared/pending";
 import { ClaimLineItemDtosValidator } from "../../validators";
 import { findClaimLineItemsByPartnerCostCategoryAndPeriod } from "../selectors";
 import { conditionalLoad, dataLoadAction, DataLoadAction, handleError, SyncThunk, updateEditorAction, UpdateEditorAction } from "./common";
+import { scrollToTheTop } from "../../../util/windowHelpers";
 
 export function loadClaimLineItemsForCategory(partnerId: string, costCategoryId: string, periodId: number) {
   return conditionalLoad(
@@ -35,6 +36,7 @@ export function saveClaimLineItems(partnerId: string, periodId: number, costCate
     const validation = validateClaimLineItems(partnerId, periodId, costCategoryId, lineItems, true)(dispatch, getState, null);
 
     if (!validation.isValid) {
+      scrollToTheTop();
       return Promise.resolve();
     }
 
