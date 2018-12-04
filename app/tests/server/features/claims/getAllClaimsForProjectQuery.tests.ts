@@ -1,7 +1,6 @@
 import "jest";
 import { TestContext } from "../../testContextProvider";
 import { GetAllClaimsForProjectQuery } from "../../../../src/server/features/claims";
-import { IQuery } from "../../../../src/server/features/common/context";
 import { ClaimStatus } from "../../../../src/types";
 
 describe("getAllClaimsForProjectQuery", () => {

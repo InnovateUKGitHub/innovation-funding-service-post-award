@@ -13,7 +13,7 @@ export function setupMiddleware(router: Router, isClient: boolean) {
   return applyMiddleware(
     thunk,
     cancelHashNavigation,
-    loggingMiddleware,
+    isClient ? loggingMiddleware : noopMiddleware,
     router5Middleware(router),
     isClient ? loadStatusMiddleware : noopMiddleware
   );

@@ -3,10 +3,11 @@ import { connect } from "react-redux";
 import { createRouteNodeSelector, RouterState } from "redux-router5";
 import { matchRoute } from "../routing";
 import { Footer, Header, PhaseBanner } from "../components";
+import { RootState } from "../redux";
 
 interface IAppProps extends RouterState {
   dispatch: any;
-  serverSide?: boolean;
+  loadStatus: number;
 }
 
 class AppComponent extends React.Component<IAppProps, {}> {
@@ -15,7 +16,7 @@ class AppComponent extends React.Component<IAppProps, {}> {
   }
 
   public componentDidUpdate(prevProps: Readonly<IAppProps>) {
-    if(prevProps.route !== this.props.route) {
+    if(prevProps.route !== this.props.route || (this.props.loadStatus === 0 && prevProps.loadStatus !== 0)) {
       this.loadData();
     }
   }
@@ -47,4 +48,12 @@ class AppComponent extends React.Component<IAppProps, {}> {
   }
 }
 
-export const App = connect(createRouteNodeSelector(""))(AppComponent);
+const connectState = () => {
+  const routeInfo = createRouteNodeSelector("");
+  return (state: RootState) => ({
+    loadStatus: state.loadStatus,
+    ...routeInfo(state)
+  });
+};
+
+export const App = connect(connectState())(AppComponent);
