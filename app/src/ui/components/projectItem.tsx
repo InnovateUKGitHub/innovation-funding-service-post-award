@@ -3,7 +3,7 @@ import { Link } from "./links";
 import { FullDate } from "./renderers";
 import { ListItem } from "./layout";
 import { ProjectDetailsRoute } from "../containers";
-import { ProjectDto, ClaimFrequency } from "../../types";
+import { ClaimFrequency, ProjectDto } from "../../types";
 
 interface Props {
   project: ProjectDto;
