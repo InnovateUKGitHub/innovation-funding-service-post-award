@@ -5,7 +5,7 @@
 
 .govuk-table__row.table__row--warning {
   background: #f8f8f8;
-  border-left: 5px solid #b10e1e;
+  border-left: 5px solid #005ea5;
   padding: 2% 4% 2% 1%;
 }
 
@@ -37,7 +37,7 @@
   padding-left: 1%;
 }
 
-.govuk-table__row.table__row--error td, 
+.govuk-table__row.table__row--error td,
 .govuk-table__row.table__row--error th {
   vertical-align: bottom;
 }
