@@ -28,7 +28,6 @@ export function conditionalLoad<T>(
     const reloads = [
       LoadingStatus.Preload,
       LoadingStatus.Stale,
-      LoadingStatus.Failed
     ];
 
     if (!existing || reloads.indexOf(existing.status) !== -1) {
