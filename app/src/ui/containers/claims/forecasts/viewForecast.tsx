@@ -42,13 +42,13 @@ class ViewForecastComponent extends ContainerBase<Params, PendingForecastData, C
         project={data.project}
         partners={[data.partner]}
       >
-        <ACC.Section title={data.partner.name} qa={"partner-name"} >
+        <ACC.Section title="" qa={"partner-name"} >
           {renderWarning(data)}
           <ACC.Claims.ForecastTable data={data} />
         </ACC.Section>
         <ACC.Section>
           <Form.Form data={{}} onSubmit={() => this.handleSubmit()}>
-            <Form.Submit>Update forecasts</Form.Submit>
+            <Form.Submit>Update forecast</Form.Submit>
             <ACC.Renderers.SimpleString>Changes last saved:
               <ACC.Renderers.ShortDateTime value={data.claim.forecastLastModified} />
             </ACC.Renderers.SimpleString>
