@@ -130,7 +130,7 @@ export class Context implements IContext {
   }
 
   public runSyncQuery<TResult>(query: SyncQueryBase<TResult>): TResult {
-    this.logger.log("Running query", query);
+    this.logger.log("Running sync query", query);
 
     const runnable = (query as any) as ISyncRunnable<TResult>;
 
@@ -149,7 +149,7 @@ export class Context implements IContext {
   }
 
   public runSyncCommand<TResult>(command: SyncCommandBase<TResult>): TResult {
-    this.logger.log("Running command", command);
+    this.logger.log("Running sync command", command);
 
     const runnable = (command as any) as ISyncRunnable<TResult>;
 
