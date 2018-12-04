@@ -40,10 +40,10 @@ class ClaimForecastComponent extends ContainerBase<Params, PendingForecastData, 
     return (
       <ACC.Page>
         <ACC.Section>
-          <ACC.BackLink route={PrepareClaimRoute.getLink({ projectId: this.props.projectId, partnerId: this.props.partnerId, periodId: this.props.periodId })}>Back</ACC.BackLink>
+          <ACC.BackLink route={PrepareClaimRoute.getLink({ projectId: this.props.projectId, partnerId: this.props.partnerId, periodId: this.props.periodId })}>Back to claim</ACC.BackLink>
         </ACC.Section>
         <ACC.ValidationSummary validation={editor.validator} compressed={false} />
-        <ACC.Projects.Title pageTitle="Claim" project={combined.project} />
+        <ACC.Projects.Title pageTitle="Update forecast" project={combined.project} />
         <ACC.Section title={"Update forecasts table for " + combined.partner.name} qa="partner-name">
           {renderWarning(combined)}
           <Form.Form
@@ -54,7 +54,7 @@ class ClaimForecastComponent extends ContainerBase<Params, PendingForecastData, 
           >
             <ACC.Claims.ForecastTable data={combined} />
             <Form.Fieldset>
-              <Form.Submit>Submit claim and forecast changes</Form.Submit>
+              <Form.Submit>Submit forecast and claim</Form.Submit>
               <ACC.Renderers.SimpleString>Changes last saved:
                 <ACC.Renderers.ShortDateTime value={combined.claim.forecastLastModified} />
               </ACC.Renderers.SimpleString>
