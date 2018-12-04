@@ -6,9 +6,9 @@ import { ClaimDto, ProjectDto } from "../../../types/dtos";
 import * as Selectors from "../../redux/selectors";
 import * as Actions from "../../redux/actions";
 import * as Acc from "../../components";
+import { Accordion, AccordionItem } from "../../components";
 import { ClaimsDetailsRoute, ReviewClaimRoute, } from ".";
 import { ClaimStatus } from "../../../types";
-import { Accordion, AccordionItem } from "../../components";
 
 interface Params {
   projectId: string;
@@ -97,6 +97,16 @@ class Component extends ContainerBase<Params, Data, {}> {
     );
   }
 
+  private claimHasNotBeenSubmittedToInnovate(x: ClaimDto) {
+    return [
+      ClaimStatus.INNOVATE_QUERIED,
+      ClaimStatus.REVIEWING_FORECASTS_FOLLOWING_INNOVATE_QUERY,
+      ClaimStatus.AWAITING_IUK_APPROVAL,
+      ClaimStatus.APPROVED,
+      ClaimStatus.PAID
+    ].indexOf(x.status) < 0;
+  }
+
   private renderCurrentClaims(currentInfo: ProjectPeriod, project: ProjectDto, partners: PartnerDto[]) {
     const title = <React.Fragment>Period {currentInfo.periodId}: <Acc.Renderers.LongDateRange start={currentInfo.start} end={currentInfo.end} /></React.Fragment>;
     const ClaimTable = Acc.TypedTable<ClaimDto>();
@@ -107,8 +117,11 @@ class Component extends ContainerBase<Params, Data, {}> {
       return null;
     };
 
+    const hasClaimNotYetSubmittedToInnovate = currentInfo.claims.find(this.claimHasNotBeenSubmittedToInnovate);
+    const badge = hasClaimNotYetSubmittedToInnovate && <Acc.Claims.ClaimWindow periodEnd={currentInfo.end}/>;
+
     return (
-      <Acc.Section title={title} qa="current-claims-section" badge={<Acc.Claims.ClaimWindow periodEnd={currentInfo.end}/>}>
+      <Acc.Section title={title} qa="current-claims-section" badge={badge}>
         <ClaimTable.Table data={currentInfo.claims} qa="current-claims-table" bodyRowFlag={(x) => x.status === ClaimStatus.SUBMITTED ? "info" : null }>
           <ClaimTable.String header="Partner" qa="partner" value={renderPartnerName}/>
           <ClaimTable.Currency header="Forecast costs for period" qa="forecast-cost" value={(x) => x.forecastCost} />
