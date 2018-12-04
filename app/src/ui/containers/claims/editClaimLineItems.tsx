@@ -156,7 +156,7 @@ export class EditClaimLineItemsComponent extends ContainerBase<Params, Data, Cal
     const forecast = forecastDetail.value;
     const diff = 100 * (forecast - total) / forecast;
 
-    return [
+    const footers = [
       (
         <tr key={1} className="govuk-table__row">
           <td className="govuk-table__cell" colSpan={3}><a href="#" onClick={(e) => this.addItem(e)}>Add a cost</a></td>
@@ -175,15 +175,20 @@ export class EditClaimLineItemsComponent extends ContainerBase<Params, Data, Cal
           <td className="govuk-table__cell govuk-table__cell--numeric"><ACC.Renderers.Currency value={forecast} /></td>
           <td className="govuk-table__cell" />
         </tr>
-      ),
-      (
-        <tr key={4} className="govuk-table__row">
-          <td className="govuk-table__cell govuk-table__cell--numeric govuk-!-font-weight-bold">Difference</td>
-          <td className="govuk-table__cell govuk-table__cell--numeric"><ACC.Renderers.Percentage value={diff} /></td>
-          <td className="govuk-table__cell" />
-        </tr>
       )
     ];
+
+    if(forecast > 0) {
+        footers.push(
+          <tr key={4} className="govuk-table__row">
+            <td className="govuk-table__cell govuk-table__cell--numeric govuk-!-font-weight-bold">Difference</td>
+            <td className="govuk-table__cell govuk-table__cell--numeric"><ACC.Renderers.Percentage value={diff} /></td>
+            <td className="govuk-table__cell" />
+          </tr>
+        );
+    }
+
+    return footers;
   }
 
 }
