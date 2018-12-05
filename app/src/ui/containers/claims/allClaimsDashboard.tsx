@@ -87,11 +87,13 @@ class Component extends ContainerBase<Params, Data, {}> {
     return (
       <Acc.Section>
         <Acc.SectionPanel qa="claims-summary" title="History">
-          <SummaryDetails.Details data={project} qa="project_summary-col-0">
-            <SummaryDetails.Currency label="Grant offered" qa="gol-costs" value={x => x.grantOfferLetterCosts}/>
-            <SummaryDetails.Currency label="Costs claimed" qa="claimed-costs" value={x => x.costsClaimedToDate}/>
-            <SummaryDetails.Percentage label="Percentage claimed" qa="claimed-percentage" value={x => x.claimedPercentage}/>
-          </SummaryDetails.Details>
+          <Acc.DualDetails>
+            <SummaryDetails.Details data={project} qa="project_summary-col-0">
+              <SummaryDetails.Currency label="Grant offered" qa="gol-costs" value={x => x.grantOfferLetterCosts}/>
+              <SummaryDetails.Currency label="Costs claimed" qa="claimed-costs" value={x => x.costsClaimedToDate}/>
+              <SummaryDetails.Percentage label="Percentage claimed" qa="claimed-percentage" value={x => x.claimedPercentage}/>
+            </SummaryDetails.Details>
+          </Acc.DualDetails>
         </Acc.SectionPanel>
       </Acc.Section>
     );
