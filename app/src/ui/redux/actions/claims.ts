@@ -61,8 +61,8 @@ export function loadIarDocumentsForCurrentClaim(partnerId: string): AsyncThunk<v
       return loadIarDocuments(partnerId, claim.periodId)(dispatch, getState, null);
     }
     return Promise.resolve();
-  }
-};
+  };
+}
 
 export function loadClaimsForProject(projectId: string) {
   return conditionalLoad(findClaimsByProject(projectId), params => ApiClient.claims.getAllByProjectId({projectId, ...params}));

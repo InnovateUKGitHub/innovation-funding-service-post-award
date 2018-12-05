@@ -8,7 +8,11 @@ export class MapToProjectDtoCommand extends CommandBase<ProjectDto> {
     super();
    }
 
-  async Run(context: IContext) {
+  protected LogMessage() {
+    return ["MapToProjectDtoCommand", {id: this.item.Id}];
+  }
+
+  protected async Run(context: IContext) {
     const claimFrequency = this.mapFrequencyToEnum(this.item.Acc_ClaimFrequency__c);
     const startDate = context.clock.parse(this.item.Acc_StartDate__c, "yyyy-MM-dd")!;
     const endDate = context.clock.parse(this.item.Acc_EndDate__c, "yyyy-MM-dd")!;
