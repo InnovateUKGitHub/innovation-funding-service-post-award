@@ -17,7 +17,7 @@ export interface RootState {
   loadStatus: number;
   user: IUser;
   isClient: boolean;
-};
+}
 
 export const rootReducer = combineReducers<RootState>({
   router: router5Reducer,

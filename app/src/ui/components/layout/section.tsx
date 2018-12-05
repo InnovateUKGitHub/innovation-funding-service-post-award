@@ -27,7 +27,7 @@ const renderTitles = ({ title, subtitle, badge }: Props) => {
 
 const renderBadge = ({ badge }: Props) => {
   if (!badge) {
-    return null
+    return null;
   }
 
   return (
@@ -37,7 +37,7 @@ const renderBadge = ({ badge }: Props) => {
 
 const renderContents = (children: React.ReactNode) => {
   if (!children) {
-    return null
+    return null;
   }
 
   return (
