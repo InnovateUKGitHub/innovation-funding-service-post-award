@@ -25,7 +25,7 @@ async function loadData(dispatch: Dispatch<AnyAction>, getState: () => RootState
   return Promise.all(allPromises).then(() => loadData(dispatch, getState, dataCalls));
 }
 
-export function serverRender(req: Request, res: Response, validationError?: { key: string, store: string, dto: {}, result: Results<{}>, error: any }) {
+export function serverRender(req: Request, res: Response, validationError?: { key: string, store: string, dto: {}, result: Results<{}>, error: IAppError | null }) {
   const router = configureRouter();
 
   router.start(req.originalUrl, (routeError, route) => {

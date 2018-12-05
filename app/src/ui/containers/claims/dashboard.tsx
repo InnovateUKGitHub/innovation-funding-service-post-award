@@ -128,11 +128,16 @@ class Component extends ContainerBase<Params, Data, Callbacks> {
   private renderContents({ currentClaim, partner, previousClaims, project, editor, document }: CombinedData) {
     const Details = Acc.TypedDetails<PartnerDto>();
 
-    const validationMessage = editor && <Acc.ValidationSummary validation={editor && editor.validator} compressed={false} />;
     const claimsWindow = !!currentClaim && ([ClaimStatus.DRAFT, ClaimStatus.REVIEWING_FORECASTS].indexOf(currentClaim.status) >= 0) ? <Acc.Claims.ClaimWindow periodEnd={currentClaim.periodEndDate} /> : null;
 
     return (
-      <Acc.ProjectOverviewPage selectedTab={ClaimsDashboardRoute.routeName} project={project} partnerId={partner.id} partners={[partner]} validationMessage={validationMessage}>
+      <Acc.ProjectOverviewPage
+        selectedTab={ClaimsDashboardRoute.routeName}
+        project={project}
+        partnerId={partner.id}
+        partners={[partner]}
+        editor={editor}
+      >
         <Acc.Section>
           <Acc.SectionPanel qa="claims-totals" title="History">
             <Acc.DualDetails displayDensity="Compact">

@@ -10,7 +10,7 @@ import { ClaimDto } from "../../../types";
 export interface IEditorStore<TDto, TValidator> {
   data: TDto;
   validator: TValidator;
-  error: any;
+  error?: IAppError | null;
 }
 
 const editorsReducer = <TDto extends {}, TValidator extends Results<TDto>>(store: string) => (state: { [key: string]: IEditorStore<TDto, TValidator> } = {}, action: RootActions) => {

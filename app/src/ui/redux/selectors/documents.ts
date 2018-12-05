@@ -9,7 +9,7 @@ import { DocumentDescription } from "../../../types";
 export const documentStore = "documents";
 export const getClaimDetailDocuments = (partnerId: string, periodId: number, costCategoryId: string) => dataStoreHelper(documentStore, getKey("claim", "detail", partnerId, periodId, costCategoryId));
 
-export const getClaimDocuments = (partnerId: string, periodId: number, filter?: string) => dataStoreHelper(documentStore, getKey("claim", filter || "All", partnerId, periodId));
+export const getClaimDocuments = (partnerId: string, periodId: number) => dataStoreHelper(documentStore, getKey("claim", partnerId, periodId));
 
 export const getClaimDetailDocumentEditor = ({partnerId, periodId, costCategoryId}: ClaimDetailKey) => editorStoreHelper<DocumentUploadDto, DocumentUploadValidator>(
   documentStore,
@@ -38,8 +38,8 @@ export const getCurrentClaimIarDocumentsEditor = (state: RootState, partnerId: s
 };
 
 export const getIarDocument = (state: RootState, partnerId: string, periodId: number): Pending<DocumentSummaryDto | null> => {
-  return getClaimDocuments(partnerId, periodId, DocumentDescription.IAR).getPending(state).then(iarDocuments => {
-    return iarDocuments && iarDocuments.length ? iarDocuments[0] : null;
+  return getClaimDocuments(partnerId, periodId).getPending(state).then(documents => {
+    return (documents && documents.find(x => x.description === DocumentDescription.IAR)) || null;
   });
 };
 
