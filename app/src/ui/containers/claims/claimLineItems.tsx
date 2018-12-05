@@ -62,9 +62,7 @@ export class ClaimLineItemsComponent extends ContainerBase<Params, Data, {}> {
         <ACC.Section>
           <ACC.BackLink route={backLink}>Back</ACC.BackLink>
         </ACC.Section>
-        <ACC.Section>
-          <ACC.Projects.Title pageTitle={`Claim for ${costCategories.find(x => x.id === this.props.costCategoryId)!.name}`} project={project} />
-        </ACC.Section>
+        <ACC.Projects.Title pageTitle={`Claim for ${costCategories.find(x => x.id === this.props.costCategoryId)!.name}`} project={project} />
         <ACC.Section>
           <ClaimLineItemsTable lineItems={lineItems} forecastDetail={forecastDetail} />
         </ACC.Section>
