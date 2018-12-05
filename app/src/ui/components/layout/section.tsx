@@ -26,4 +26,3 @@ export const Section: React.SFC<Props> = (props) => {
     </div>
   );
 };
- 
