@@ -7,26 +7,48 @@ import { Cache } from "./cache";
 
 export interface IRunnable<T> {
   Run: (context: IContext) => Promise<T>;
+  LogMessage: () => any[];
 }
 
 export interface ISyncRunnable<T> {
   Run: (context: IContext) => T;
+  LogMessage: () => any[];
 }
 
 export abstract class QueryBase<T> {
+
   protected abstract Run(context: IContext): Promise<T>;
+
+  protected LogMessage(): any[] {
+    return [this];
+  }
 }
 
 export abstract class SyncQueryBase<T> {
+
   protected abstract Run(context: IContext): T;
+
+  protected LogMessage(): any[] {
+    return [this];
+  }
 }
 
 export abstract class CommandBase<T> {
+
   protected abstract Run(context: IContext): Promise<T>;
+
+  protected LogMessage(): any[] {
+    return [this];
+  }
 }
 
 export abstract class SyncCommandBase<T> {
+
   protected abstract Run(context: IContext): T;
+
+  protected LogMessage(): any[] {
+    return [this];
+  }
 }
 
 export interface IRepositories {
@@ -118,9 +140,9 @@ export class Context implements IContext {
   public logger = new Logger();
 
   public runQuery<TResult>(query: QueryBase<TResult>): Promise<TResult> {
-    this.logger.log("Running query", query);
-
     const runnable = (query as any) as IRunnable<TResult>;
+
+    this.logger.log("Running async query", runnable.LogMessage());
 
     return runnable.Run(this)
       .catch(e => {
@@ -130,17 +152,17 @@ export class Context implements IContext {
   }
 
   public runSyncQuery<TResult>(query: SyncQueryBase<TResult>): TResult {
-    this.logger.log("Running sync query", query);
-
     const runnable = (query as any) as ISyncRunnable<TResult>;
+
+    this.logger.log("Running sync query", runnable.LogMessage());
 
     return runnable.Run(this);
   }
 
   public runCommand<TResult>(command: CommandBase<TResult>): Promise<TResult> {
-    this.logger.log("Running command", command);
-
     const runnable = (command as any) as IRunnable<TResult>;
+
+    this.logger.log("Running async command", runnable.LogMessage());
 
     return runnable.Run(this).catch(e => {
       this.logger.log("Failed command", command, e);
@@ -149,9 +171,9 @@ export class Context implements IContext {
   }
 
   public runSyncCommand<TResult>(command: SyncCommandBase<TResult>): TResult {
-    this.logger.log("Running sync command", command);
-
     const runnable = (command as any) as ISyncRunnable<TResult>;
+
+    this.logger.log("Running sync command", runnable.LogMessage());
 
     return runnable.Run(this);
   }

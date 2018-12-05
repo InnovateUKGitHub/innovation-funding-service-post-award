@@ -1,16 +1,16 @@
 import React from "react";
 import { Request, Response } from "express";
 import { renderToString } from "react-dom/server";
-import { createStore, Dispatch, AnyAction } from "redux";
+import { AnyAction, createStore, Dispatch } from "redux";
 import { Provider } from "react-redux";
 import { RouterProvider } from "react-router5";
 
 import { renderHtml } from "./html";
-import { rootReducer, setupInitialState, setupMiddleware, RootState } from "../ui/redux";
+import { rootReducer, RootState, setupInitialState, setupMiddleware } from "../ui/redux";
 import { configureRouter, matchRoute } from "../ui/routing";
 import { App } from "../ui/containers/app";
 import { Results } from "../ui/validation/results";
-import { updateEditorAction, AsyncThunk } from "../ui/redux/actions/common";
+import { AsyncThunk, updateEditorAction } from "../ui/redux/actions/common";
 
 async function loadData(dispatch: Dispatch<AnyAction>, getState: () => RootState, dataCalls: AsyncThunk<any>[]): Promise<void> {
 
