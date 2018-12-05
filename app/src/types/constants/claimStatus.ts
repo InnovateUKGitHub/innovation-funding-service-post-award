@@ -1,6 +1,7 @@
 export enum ClaimStatus {
   UNKNOWN = "",
   DRAFT = "Draft",
+  NEW = "New",
   SUBMITTED = "Submitted",
   MO_QUERIED = "MO Queried",
   AWAITING_IUK_APPROVAL = "Awaiting IUK Approval",
