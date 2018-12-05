@@ -163,41 +163,41 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<Params, 
     const forecast = forecastDetail.value;
     const diff = 100 * (forecast - total) / forecast;
 
-    const footers = [
-      (
-        <tr key={2} className="govuk-table__row">
-          <td className="govuk-table__cell govuk-table__cell--numeric govuk-!-font-weight-bold">Total costs</td>
-          <td className="govuk-table__cell govuk-table__cell--numeric"><ACC.Renderers.Currency value={total} /></td>
-          <td className="govuk-table__cell" />
-        </tr>
-      ),
-      (
-        <tr key={3} className="govuk-table__row">
-          <td className="govuk-table__cell govuk-table__cell--numeric govuk-!-font-weight-bold">Forecast costs</td>
-          <td className="govuk-table__cell govuk-table__cell--numeric"><ACC.Renderers.Currency value={forecast} /></td>
-          <td className="govuk-table__cell" />
-        </tr>
-      )
-    ];
+    const footers: JSX.Element[] = [];
 
     if (this.state.showAddRemove) {
-      footers.unshift((
+      footers.push(
         <tr key={1} className="govuk-table__row">
           <td className="govuk-table__cell" colSpan={3}><a href="#" onClick={(e) => this.addItem(e)}>Add a cost</a></td>
         </tr>
-      ));
-    };
-
-    if(forecast > 0) {
-        footers.push(
-          <tr key={4} className="govuk-table__row">
-            <td className="govuk-table__cell govuk-table__cell--numeric govuk-!-font-weight-bold">Difference</td>
-            <td className="govuk-table__cell govuk-table__cell--numeric"><ACC.Renderers.Percentage value={diff} /></td>
-            <td className="govuk-table__cell" />
-          </tr>
-        );
+      );
     }
 
+    footers.push(
+      <tr key={2} className="govuk-table__row">
+        <td className="govuk-table__cell govuk-table__cell--numeric govuk-!-font-weight-bold">Total costs</td>
+        <td className="govuk-table__cell govuk-table__cell--numeric"><ACC.Renderers.Currency value={total} /></td>
+        <td className="govuk-table__cell" />
+      </tr>
+    );
+
+    footers.push(
+      <tr key={3} className="govuk-table__row">
+        <td className="govuk-table__cell govuk-table__cell--numeric govuk-!-font-weight-bold">Forecast costs</td>
+        <td className="govuk-table__cell govuk-table__cell--numeric"><ACC.Renderers.Currency value={forecast} /></td>
+        <td className="govuk-table__cell" />
+      </tr>
+    );
+
+    if (forecast > 0) {
+      footers.push(
+        <tr key={4} className="govuk-table__row">
+          <td className="govuk-table__cell govuk-table__cell--numeric govuk-!-font-weight-bold">Difference</td>
+          <td className="govuk-table__cell govuk-table__cell--numeric"><ACC.Renderers.Percentage value={diff} /></td>
+          <td className="govuk-table__cell" />
+        </tr>
+      );
+    }
 
     return footers;
   }
@@ -215,20 +215,20 @@ const redirectToUploadPage = (dispatch: any, projectId: string, partnerId: strin
 const definition = ReduxContainer.for<Params, Data, Callbacks>(EditClaimLineItemsComponent);
 
 const getEditor: (isClient: boolean, editor: IEditorStore<ClaimLineItemDto[], ClaimLineItemDtosValidator>, partnerId: string, periodId: number, costCategoryId: string, original: Pending<ClaimLineItemDto[]>) => IEditorStore<ClaimLineItemDto[], ClaimLineItemDtosValidator> = (isClient, editor, partnerId, periodId, costCategoryId, original) => {
-  
+
   if (editor) {
     return editor;
   }
 
   return original
     .then(originalData => {
-      
+
       const items = originalData || [];
-      //if rendering on client and has items saved then render them
+      // if rendering on client and has items saved then render them
       if (items.length && isClient) {
         return items;
       }
-      //else rendering on server or no items saved so render default number
+      // else rendering on server or no items saved so render default number
       return range(isClient ? 2 : 10).map((x, index) => items[index] || ({ costCategoryId, partnerId, periodId }));
     })
     .then(x => {
