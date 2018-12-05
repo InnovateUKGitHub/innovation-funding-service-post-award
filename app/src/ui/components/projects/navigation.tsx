@@ -17,7 +17,7 @@ export const ProjectNavigation: React.SFC<Props> = ({project, currentRoute, part
   const claimsLink = ClaimsDashboardRoute.getLink({ projectId, partnerId });
   const allClaimsLink = AllClaimsDashboardRoute.getLink({ projectId });
   const detailsLink = ProjectDetailsRoute.getLink({ id: projectId });
-  const viewForecastLink = ViewForecastRoute.getLink({ projectId, partnerId, periodId: project.periodId });
+  const viewForecastLink = ViewForecastRoute.getLink({ projectId, partnerId });
   const projectForecastsLink = ProjectForecastRoute.getLink({ projectId });
 
   const navigationTabs: TabItem[] = [

@@ -12,7 +12,7 @@ import {
   forecastParams,
   Params,
   PendingForecastData,
-  renderWarning
+  renderWarning,
 } from "./common";
 
 interface Callbacks {
@@ -28,13 +28,13 @@ class ViewForecastComponent extends ContainerBase<Params, PendingForecastData, C
   handleSubmit() {
     this.props.onSubmit({
       projectId: this.props.projectId,
-      partnerId: this.props.partnerId,
-      periodId: this.props.periodId
+      partnerId: this.props.partnerId
     });
   }
 
   public renderContents(data: ForecastData) {
     const Form = ACC.TypedForm();
+    const periodId = data.project.periodId;
 
     return (
       <ProjectOverviewPage
@@ -44,14 +44,12 @@ class ViewForecastComponent extends ContainerBase<Params, PendingForecastData, C
       >
         <ACC.Section title="" qa={"partner-name"} >
           {renderWarning(data)}
-          <ACC.Claims.ForecastTable data={data} />
+          <ACC.Claims.ForecastTable data={data} periodId={periodId} />
         </ACC.Section>
         <ACC.Section>
           <Form.Form data={{}} onSubmit={() => this.handleSubmit()}>
             <Form.Submit>Update forecast</Form.Submit>
-            <ACC.Renderers.SimpleString>Changes last saved:
-              <ACC.Renderers.ShortDateTime value={data.claim.forecastLastModified} />
-            </ACC.Renderers.SimpleString>
+            <ACC.Claims.ClaimLastModified claim={data.claim} />
           </Form.Form>
         </ACC.Section>
       </ProjectOverviewPage>
@@ -66,9 +64,9 @@ const ViewForecast = definition.connect({
     const combined = Pending.combine(
       Selectors.getProject(props.projectId).getPending(state),
       Selectors.getPartner(props.partnerId).getPending(state),
-      Selectors.getClaim(props.partnerId, props.periodId).getPending(state),
+      Selectors.getCurrentClaim(state, props.partnerId),
       Selectors.findClaimDetailsByPartner(props.partnerId).getPending(state),
-      Selectors.findForecastDetailsByPartner(props.partnerId, props.periodId).getPending(state),
+      Selectors.findForecastDetailsByPartner(props.partnerId).getPending(state),
       Selectors.findGolCostsByPartner(props.partnerId).getPending(state),
       Selectors.getCostCategories().getPending(state),
       (a, b, c, d, e, f, g) => ({ project: a, partner: b, claim: c, claimDetails: d, forecastDetails: e, golCosts: f, costCategories: g })
@@ -83,7 +81,7 @@ const ViewForecast = definition.connect({
 
 export const ViewForecastRoute = definition.route({
   routeName: "viewForecast",
-  routePath: "/projects/:projectId/claims/:partnerId/viewForecast/:periodId",
+  routePath: "/projects/:projectId/claims/:partnerId/viewForecast",
   getParams: forecastParams,
   getLoadDataActions: forecastDataLoadActions,
   container: ViewForecast
