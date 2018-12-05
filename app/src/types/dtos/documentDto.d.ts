@@ -7,6 +7,7 @@ interface DocumentSummaryDto {
   fileName: string;
   link: string;
   id: string;
+  description?: string;
 }
 
 interface DocumentDto {

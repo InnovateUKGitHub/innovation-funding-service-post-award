@@ -86,6 +86,7 @@ export class ClaimDetailDocumentsComponent extends ContainerBase<Params, Data, C
         <ACC.Section>
           <ACC.BackLink route={back}>Back</ACC.BackLink>
         </ACC.Section>
+        <ACC.ErrorSummary error={editor && editor.error} />
         {validationMessage}
         <ACC.Projects.Title pageTitle={`${costCategory.name}`} project={project} />
         <ACC.Section title={`${costCategory.name} documents`} subtitle={documents.length > 0 ? "All documents open in a new window." : ""}>

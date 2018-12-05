@@ -29,7 +29,7 @@ export function loadClaimDetailDocuments(partnerId: string, periodId: number, co
 
 export function loadIarDocuments(partnerId: string, periodId: number) {
   return conditionalLoad(
-    getClaimDocuments(partnerId, periodId, DocumentDescription.IAR),
+    getClaimDocuments(partnerId, periodId),
     params => ApiClient.documents.getClaimDocuments({ partnerId, periodId, description: DocumentDescription.IAR, ...params})
   );
 }
@@ -92,7 +92,7 @@ export function uploadClaimDocument(claimKey: ClaimKey, dto: DocumentUploadDto, 
   return (dispatch, getState) => {
     const state = getState();
     const selector = getClaimDocumentEditor(claimKey, dto.description);
-    const docsSelector = getClaimDocuments(claimKey.partnerId, claimKey.periodId, dto.description);
+    const docsSelector = getClaimDocuments(claimKey.partnerId, claimKey.periodId);
     const claimsSelector = findClaimsByPartner(claimKey.partnerId);
     const validation = updateClaimDocumentEditor(claimKey, dto, true)(dispatch, getState, null);
 
@@ -133,7 +133,7 @@ export function deleteClaimDetailDocument(claimDetailKey: ClaimDetailKey, dto: D
 export function deleteClaimDocument(claimKey: ClaimKey, dto: DocumentSummaryDto, onComplete: () => void): AsyncThunk<void> {
   return (dispatch, getState) => {
     const state = getState();
-    const docsSelector = getClaimDocuments(claimKey.partnerId, claimKey.periodId, DocumentDescription.IAR);
+    const docsSelector = getClaimDocuments(claimKey.partnerId, claimKey.periodId);
     dispatch(dataLoadAction(docsSelector.key, docsSelector.store, LoadingStatus.Stale, undefined));
     return ApiClient.documents.deleteDocument({documentId: dto.id, user: state.user})
       .then(() => {

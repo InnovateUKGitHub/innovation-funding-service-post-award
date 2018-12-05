@@ -81,12 +81,11 @@ class ReviewComponent extends ContainerBase<Params, Data, Callbacks> {
         <ACC.Section>
           <ACC.BackLink route={ClaimsDashboardRoute.getLink({ projectId: data.project.id, partnerId: data.partner.id })}>Claims dashboard</ACC.BackLink>
         </ACC.Section>
+        <ACC.ErrorSummary error={data.editor.error} />
         <ACC.ValidationSummary validation={data.editor.validator} compressed={false} />
         <ACC.Projects.Title pageTitle="Claim" project={data.project} />
         <ACC.Claims.Navigation projectId={data.project.id} partnerId={data.partner.id} periodId={data.claim.periodId} currentRouteName={ClaimsDetailsRoute.routeName} />
         <ACC.Section title={title}>
-          {/* TODO: Fix error display */}
-          {data.editor.error ? <ACC.ValidationMessage messageType="error" message={data.editor.error.details || data.editor.error} /> : null}
           <ACC.Claims.ClaimTable {...data} validation={data.editor.validator.claimDetails.results} getLink={costCategoryId => ReviewClaimLineItemsRoute.getLink({ partnerId: this.props.partnerId, projectId: this.props.projectId, periodId: this.props.periodId, costCategoryId })} />
         </ACC.Section>
         <ACC.Section>

@@ -78,6 +78,7 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<Params, 
         <ACC.Section>
           <ACC.BackLink route={back}>Back</ACC.BackLink>
         </ACC.Section>
+        <ACC.ErrorSummary error={this.props.editor && this.props.editor.error}/>
         <ACC.ValidationSummary validation={this.props.editor && this.props.editor.validator} compressed={false} />
         <ACC.Projects.Title pageTitle={`${costCategory.name}`} project={project} />
         <ACC.Section title="Breakdown of costs">
