@@ -16,12 +16,14 @@ export interface RootState {
   editors: EditorState;
   loadStatus: number;
   user: IUser;
-}
+  isClient: boolean;
+};
 
 export const rootReducer = combineReducers<RootState>({
   router: router5Reducer,
   data: dataReducer,
   editors: editorReducer,
   loadStatus: loadStatusReducer,
-  user: userReducer
+  user: userReducer,
+  isClient: (state: boolean = false) => state
 });
