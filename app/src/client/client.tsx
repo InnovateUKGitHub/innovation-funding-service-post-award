@@ -9,12 +9,9 @@ import { App } from "../ui/containers/app";
 import { processDto } from "../shared/processResponse";
 
 const serverState = processDto((window as any).__PRELOADED_STATE__);
+serverState.isClient = true;
 
 console.log("initial state", serverState);
-// const logger = (store) => (next) => (action) => {
-//   console.log("logging", action, next);
-//   return next(action);
-// }
 
 const router     = configureRouter();
 const middleware = setupMiddleware(router, true);
