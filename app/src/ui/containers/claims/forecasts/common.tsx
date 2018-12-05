@@ -11,7 +11,6 @@ import { State } from "router5";
 export interface Params {
   projectId: string;
   partnerId: string;
-  periodId: number;
 }
 
 export interface PendingForecastData {
@@ -21,7 +20,7 @@ export interface PendingForecastData {
 export interface ForecastData {
   project: ProjectDto;
   partner: PartnerDto;
-  claim: ClaimDto;
+  claim: ClaimDto | null;
   claimDetails: ClaimDetailsDto[];
   forecastDetails: ForecastDetailsDTO[];
   golCosts: GOLCostDto[];
@@ -32,15 +31,14 @@ export interface ForecastData {
 export const forecastParams = (route: State) => ({
   projectId: route.params.projectId,
   partnerId: route.params.partnerId,
-  periodId: parseInt(route.params.periodId, 10)
 });
 
 export const forecastDataLoadActions = (p: Params) => [
   Actions.loadProject(p.projectId),
   Actions.loadPartner(p.partnerId),
-  Actions.loadClaim(p.partnerId, p.periodId),
+  Actions.loadClaimsForPartner(p.partnerId),
   Actions.loadClaimDetailsForPartner(p.partnerId),
-  Actions.loadForecastDetailsForPartner(p.partnerId, p.periodId),
+  Actions.loadForecastDetailsForPartner(p.partnerId),
   Actions.loadForecastGOLCostsForPartner(p.partnerId),
   Actions.loadCostCategories(),
 ];
@@ -49,12 +47,12 @@ export const withDataEditor = (state: RootState, props: Params): PendingForecast
   const combined = Pending.combine(
     Selectors.getProject(props.projectId).getPending(state),
     Selectors.getPartner(props.partnerId).getPending(state),
-    Selectors.getClaim(props.partnerId, props.periodId).getPending(state),
+    Selectors.getCurrentClaim(state, props.partnerId),
     Selectors.findClaimDetailsByPartner(props.partnerId).getPending(state),
-    Selectors.findForecastDetailsByPartner(props.partnerId, props.periodId).getPending(state),
+    Selectors.findForecastDetailsByPartner(props.partnerId).getPending(state),
     Selectors.findGolCostsByPartner(props.partnerId).getPending(state),
     Selectors.getCostCategories().getPending(state),
-    Selectors.getForecastDetailsEditor(props.partnerId, props.periodId).get(state),
+    Selectors.getForecastDetailsEditor(state, props.partnerId).get(state),
     (a, b, c, d, e, f, g, h) => ({ project: a, partner: b, claim: c, claimDetails: d, forecastDetails: e, golCosts: f, costCategories: g, editor: h })
   );
 
@@ -63,7 +61,7 @@ export const withDataEditor = (state: RootState, props: Params): PendingForecast
 
 export const renderWarning = (data: ForecastData) => {
   const categories: string[] = [];
-  const currentPeriod = data.claim.periodId;
+  const currentPeriod = data.project.periodId;
   const forecasts = !!data.editor ? data.editor.data : data.forecastDetails;
 
   data.costCategories.filter(x => x.organistionType === "Industrial").forEach(category => {
