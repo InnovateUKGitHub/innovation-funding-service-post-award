@@ -36,7 +36,7 @@ interface ExternalColumnProps<T, TResult> {
   isDivider?: dividerTypes;
 }
 
-type TableChild<T> = React.ReactElement<ExternalColumnProps<T, {}>>;
+type TableChild<T> = React.ReactElement<ExternalColumnProps<T, {}>> | null;
 
 interface TableProps<T> {
   children: TableChild<T> | (TableChild<T> | TableChild<T>[])[];
@@ -101,11 +101,13 @@ export class TableColumn<T> extends React.Component<InternalColumnProps<T>> {
 
 const TableComponent = <T extends {}>(props: TableProps<T> & { data: T[]; validationResult?: Results<{}>[]; }) => {
   // loop through the colums cloning them and assigning the props required
+  const children = React.Children.toArray(props.children).filter(x => !!x);
+
   const customHeaders = props.headers && props.headers.length ? props.headers : null;
-  const headers = React.Children.map(props.children, (column, columnIndex) => React.cloneElement(column as React.ReactElement<any>, { mode: "header", columnIndex }));
-  const cols = React.Children.map(props.children, (column, columnIndex) => React.cloneElement(column as React.ReactElement<any>, { mode: "col", columnIndex }));
-  const contents = props.data.map((dataItem, rowIndex) => React.Children.map(props.children, (column, columnIndex) => React.cloneElement(column as React.ReactElement<any>, { mode: "cell", rowIndex, columnIndex, dataItem, validation: props.validationResult && props.validationResult[rowIndex]  })));
-  const footerColumns = React.Children.toArray(props.children).some((x: any) => x.props && x.props.footer) ? React.Children.map(props.children, (column, columnIndex) => React.cloneElement(column as React.ReactElement<any>, { mode: "footer", columnIndex })) : [];
+  const headers = React.Children.map(children, (column, columnIndex) => React.cloneElement(column as React.ReactElement<any>, { mode: "header", columnIndex }));
+  const cols = React.Children.map(children, (column, columnIndex) => React.cloneElement(column as React.ReactElement<any>, { mode: "col", columnIndex }));
+  const contents = props.data.map((dataItem, rowIndex) => React.Children.map(children, (column, columnIndex) => React.cloneElement(column as React.ReactElement<any>, { mode: "cell", rowIndex, columnIndex, dataItem, validation: props.validationResult && props.validationResult[rowIndex]  })));
+  const footerColumns = React.Children.toArray(children).some((x: any) => x.props && x.props.footer) ? React.Children.map(children, (column, columnIndex) => React.cloneElement(column as React.ReactElement<any>, { mode: "footer", columnIndex })) : [];
   const footers = footerColumns.length ? [<tr key="standardFooter" className="govuk-table__row">{footerColumns}</tr>] : [];
   (props.footers || []).forEach(customFooter => footers.push(customFooter));
 

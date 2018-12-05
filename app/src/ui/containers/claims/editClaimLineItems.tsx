@@ -1,6 +1,6 @@
 import React from "react";
-import {ContainerBase, ReduxContainer} from "../containerBase";
-import {Pending} from "../../../shared/pending";
+import { ContainerBaseWithState, ContainerProps, ReduxContainer } from "../containerBase";
+import { Pending } from "../../../shared/pending";
 import * as Actions from "../../redux/actions";
 import * as Selectors from "../../redux/selectors";
 import * as ACC from "../../components";
@@ -8,8 +8,9 @@ import { PrepareClaimRoute } from ".";
 import { ClaimDetailDocumentsRoute } from "./claimDetailDocuments";
 import { IEditorStore } from "../../redux/reducers/editorsReducer";
 import { ClaimLineItemDtosValidator, ClaimLineItemDtoValidator } from "../../validators/claimLineItemDtosValidator";
-import {DocumentList, ValidationMessage} from "../../components";
+import { DocumentList, ValidationMessage } from "../../components";
 import { ProjectDto } from "../../../types";
+import { range } from "../../../shared/range";
 
 interface Params {
   projectId: string;
@@ -41,7 +42,15 @@ interface Callbacks {
   saveAndUpload: (projectId: string, partnerId: string, costCategoryId: string, periodId: number, dto: ClaimLineItemDto[]) => void;
 }
 
-export class EditClaimLineItemsComponent extends ContainerBase<Params, Data, Callbacks> {
+export class EditClaimLineItemsComponent extends ContainerBaseWithState<Params, Data, Callbacks, { showAddRemove: boolean }> {
+  constructor(props: ContainerProps<Params, Data, Callbacks>) {
+    super(props);
+    this.state = { showAddRemove: false };
+  }
+
+  componentDidMount() {
+    this.setState({ showAddRemove: true });
+  }
 
   public render() {
     const combined = Pending.combine(
@@ -58,7 +67,7 @@ export class EditClaimLineItemsComponent extends ContainerBase<Params, Data, Cal
 
   // TODO fix back link
   private renderContents(
-    {project, lineItems, costCategories, documents, forecastDetail}: CombinedData,
+    { project, lineItems, costCategories, documents, forecastDetail }: CombinedData,
     editor: IEditorStore<ClaimLineItemDto[], ClaimLineItemDtosValidator>
   ) {
     const back = PrepareClaimRoute.getLink({ projectId: project.id, partnerId: this.props.partnerId, periodId: this.props.periodId });
@@ -91,7 +100,7 @@ export class EditClaimLineItemsComponent extends ContainerBase<Params, Data, Cal
           <LineItemTable.Table qa="current-claim-summary-table" data={editor.data} validationResult={editor.validator.items.results} footers={this.renderFooters(editor, forecastDetail)}>
             <LineItemTable.Custom header="Description of cost" qa="cost-description" value={(x, i) => this.renderDescription(x, i, editor.validator.items.results[i.row])} />
             <LineItemTable.Custom header="Cost (£)" qa="cost-value" classSuffix="numeric" value={(x, i) => this.renderCost(x, i, editor.validator.items.results[i.row])} width={30} />
-            <LineItemTable.Custom header="" qa="remove" value={(x, i) => <a href="#" onClick={e => this.removeItem(x, i, e)}>remove</a>} width={1} />
+            {this.state.showAddRemove ? <LineItemTable.Custom header="" qa="remove" value={(x, i) => <a href="#" onClick={e => this.removeItem(x, i, e)}>remove</a>} width={1} /> : null}
           </LineItemTable.Table>
         </LineItemForm.Fieldset>
         <LineItemForm.Fieldset>
@@ -158,11 +167,6 @@ export class EditClaimLineItemsComponent extends ContainerBase<Params, Data, Cal
 
     const footers = [
       (
-        <tr key={1} className="govuk-table__row">
-          <td className="govuk-table__cell" colSpan={3}><a href="#" onClick={(e) => this.addItem(e)}>Add a cost</a></td>
-        </tr>
-      ),
-      (
         <tr key={2} className="govuk-table__row">
           <td className="govuk-table__cell govuk-table__cell--numeric govuk-!-font-weight-bold">Total costs</td>
           <td className="govuk-table__cell govuk-table__cell--numeric"><ACC.Renderers.Currency value={total} /></td>
@@ -178,6 +182,14 @@ export class EditClaimLineItemsComponent extends ContainerBase<Params, Data, Cal
       )
     ];
 
+    if (this.state.showAddRemove) {
+      footers.unshift((
+        <tr key={1} className="govuk-table__row">
+          <td className="govuk-table__cell" colSpan={3}><a href="#" onClick={(e) => this.addItem(e)}>Add a cost</a></td>
+        </tr>
+      ));
+    };
+
     if(forecast > 0) {
         footers.push(
           <tr key={4} className="govuk-table__row">
@@ -187,6 +199,7 @@ export class EditClaimLineItemsComponent extends ContainerBase<Params, Data, Cal
           </tr>
         );
     }
+
 
     return footers;
   }
@@ -198,19 +211,28 @@ const afterSave = (dispatch: any, projectId: string, partnerId: string, periodId
 };
 
 const redirectToUploadPage = (dispatch: any, projectId: string, partnerId: string, costCategoryId: string, periodId: number) => {
-  dispatch(Actions.navigateTo(ClaimDetailDocumentsRoute.getLink({projectId, partnerId, costCategoryId, periodId})));
+  dispatch(Actions.navigateTo(ClaimDetailDocumentsRoute.getLink({ projectId, partnerId, costCategoryId, periodId })));
 };
 
 const definition = ReduxContainer.for<Params, Data, Callbacks>(EditClaimLineItemsComponent);
 
-const getEditor: (editor: IEditorStore<ClaimLineItemDto[], ClaimLineItemDtosValidator>, partnerId: string, periodId: number, costCategoryId: string, original: Pending<ClaimLineItemDto[]>) => IEditorStore<ClaimLineItemDto[], ClaimLineItemDtosValidator> = (editor, partnerId, periodId, costCategoryId, original) => {
+const getEditor: (isClient: boolean, editor: IEditorStore<ClaimLineItemDto[], ClaimLineItemDtosValidator>, partnerId: string, periodId: number, costCategoryId: string, original: Pending<ClaimLineItemDto[]>) => IEditorStore<ClaimLineItemDto[], ClaimLineItemDtosValidator> = (isClient, editor, partnerId, periodId, costCategoryId, original) => {
+  
   if (editor) {
     return editor;
   }
 
-  // default to a double item if empty
   return original
-    .then(x => x && x.length ? x : [{costCategoryId, partnerId, periodId}, {costCategoryId, partnerId, periodId}])
+    .then(originalData => {
+      
+      const items = originalData || [];
+      //if rendering on client and has items saved then render them
+      if (items.length && isClient) {
+        return items;
+      }
+      //else rendering on server or no items saved so render default number
+      return range(isClient ? 2 : 10).map((x, index) => items[index] || ({ costCategoryId, partnerId, periodId }));
+    })
     .then(x => {
       const clone = JSON.parse(JSON.stringify(x)) as ClaimLineItemDto[];
       return {
@@ -229,7 +251,7 @@ export const EditClaimLineItems = definition.connect({
       lineItems: lineItemsSelector.getPending(state),
       costCategories: Selectors.getCostCategories().getPending(state),
       forecastDetail: Selectors.getForecastDetail(props.partnerId, props.periodId, props.costCategoryId).getPending(state),
-      editor: getEditor(state.editors.claimLineItems[lineItemsSelector.key], props.partnerId, props.periodId, props.costCategoryId, lineItemsSelector.getPending(state)),
+      editor: getEditor(state.isClient, state.editors.claimLineItems[lineItemsSelector.key], props.partnerId, props.periodId, props.costCategoryId, lineItemsSelector.getPending(state)),
       documents: Selectors.getClaimDetailDocuments(props.partnerId, props.periodId, props.costCategoryId).getPending(state)
     };
   },

@@ -146,7 +146,7 @@ export class Context implements IContext {
 
     return runnable.Run(this)
       .catch(e => {
-        this.logger.log("Failed query", query);
+        this.logger.log("Failed query", query, e);
         throw e;
       });
   }
