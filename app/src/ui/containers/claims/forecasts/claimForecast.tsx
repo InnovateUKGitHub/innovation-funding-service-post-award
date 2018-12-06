@@ -43,6 +43,7 @@ class ClaimForecastComponent extends ContainerBase<Params, PendingForecastData, 
         <ACC.Section>
           <ACC.BackLink route={PrepareClaimRoute.getLink({ periodId, projectId: this.props.projectId, partnerId: this.props.partnerId })}>Back to claim</ACC.BackLink>
         </ACC.Section>
+        <ACC.ErrorSummary error={editor.error} />
         <ACC.ValidationSummary validation={editor.validator} compressed={false} />
         <ACC.Projects.Title pageTitle="Update forecast" project={combined.project} />
         <ACC.Section title={"Update forecasts table for " + combined.partner.name} qa="partner-name">

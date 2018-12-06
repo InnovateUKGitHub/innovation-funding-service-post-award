@@ -13,7 +13,7 @@ export function updateEditorAction<T>(
   store: string,
   dto: T,
   validator: Results<T> | null,
-  error?: any
+  error?: IAppError | null
 ) {
   const payload = {id, store, dto, validator, error};
   return createAction("VALIDATE", payload);
@@ -33,9 +33,9 @@ export function handleError<T>({id, store, dto, validation, error}: {
   validation: Results<T> | null,
   error: any
 }) {
+  scrollToTheTop();
   if (error.code === ErrorCode.VALIDATION_ERROR) {
-    scrollToTheTop();
-    return updateEditorAction(id, store, dto, error.details, error);
+    return updateEditorAction(id, store, dto, error.details, null);
   }
   return updateEditorAction(id, store, dto, validation, error);
 }

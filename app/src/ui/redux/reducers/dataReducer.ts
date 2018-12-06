@@ -7,7 +7,7 @@ import { ClaimDto, ProjectDto } from "../../../types";
 export interface IDataStore<T> {
   status: LoadingStatus;
   data: T;
-  error: any;
+  error: IAppError | null;
 }
 
 export const dataStoreReducer = <TData extends {}, TKey>(key: (key: TKey) => string, storeKey: string) =>

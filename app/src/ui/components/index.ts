@@ -8,6 +8,7 @@ export * from "./accordionItem";
 export * from "./details";
 export * from "./documentList";
 export * from "./documentSingle";
+export * from "./errorSummary";
 export * from "./form";
 export * from "./layout";
 export * from "./links";

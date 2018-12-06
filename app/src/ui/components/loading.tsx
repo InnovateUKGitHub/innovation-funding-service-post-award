@@ -4,7 +4,7 @@ import { LoadingStatus, Pending } from "../../shared/pending";
 interface LoadingProps<T> {
     pending: Pending<T>;
     render: (data: T, loading?: boolean) => React.ReactNode;
-    renderError?: (error: any) => React.ReactNode ;
+    renderError?: (error: IAppError | null) => React.ReactNode ;
     renderLoading?: () => React.ReactNode;
 }
 
@@ -61,7 +61,7 @@ class LoadingComponent<T> extends React.Component<LoadingProps<T>, {}> {
         return !!this.props.renderLoading ? this.props.renderLoading() : <span>Loading....</span>;
     }
 
-    private renderError(error: any): React.ReactNode {
+    private renderError(error: IAppError): React.ReactNode {
         if (this.props.renderError) {
             return this.props.renderError(error);
         }
@@ -75,7 +75,7 @@ export class Loader {
     public static for<T>(
         pending: Pending<T>,
         render: (data: T) => React.ReactNode,
-        renderError?: (error: any) => React.ReactNode,
+        renderError?: (error: IAppError | null) => React.ReactNode,
         renderLoading?: () => React.ReactNode
     ): JSX.Element {
         const Component = TypedLoader<T>();
