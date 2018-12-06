@@ -12,8 +12,6 @@ export interface IConfig {
     // ToDo: Remove
     salesforceToken: Readonly<string>;
     // ToDo: Remove
-    salesforceUseJwtToken: Readonly<boolean>;
-    // ToDo: Remove
     salesforceUsername: string;
     // ToDo: Remove
     useSSO: boolean;
@@ -23,11 +21,10 @@ const secrets = {
     serverUrl: process.env.SERVER_URL!,
     ssoProviderUrl: process.env.SSO_PROVIDER_URL!,
 
-    salesforceClientId: process.env.SALESFORCECLIENTID!,
-    salesforceConnectionUrl: process.env.SALESFORCECONNECTIONURL!,
+    salesforceClientId: process.env.SALESFORCE_CLIENT_ID!,
+    salesforceConnectionUrl: process.env.SALESFORCE_CONNECTION_URL!,
     salesforcePassword: process.env.SALESFORCEPASSWORD!,
     salesforceToken: process.env.SALESFORCETOKEN!,
-    salesforceUseJwtToken: process.env.SALESFORCEUSEJWTTOKEN === "true",
     salesforceUsername: process.env.SALESFORCEUSERNAME!,
 
     useSSO: process.env.USE_SSO === "true",
