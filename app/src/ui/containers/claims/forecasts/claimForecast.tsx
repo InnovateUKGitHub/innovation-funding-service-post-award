@@ -46,7 +46,7 @@ class ClaimForecastComponent extends ContainerBase<Params, PendingForecastData, 
         <ACC.ErrorSummary error={editor.error} />
         <ACC.ValidationSummary validation={editor.validator} compressed={false} />
         <ACC.Projects.Title pageTitle="Update forecast" project={combined.project} />
-        <ACC.Section title={"Update forecasts table for " + combined.partner.name} qa="partner-name">
+        <ACC.Section qa="partner-name">
           {renderWarning(combined)}
           <Form.Form
             data={editor.data}
