@@ -18,24 +18,22 @@ export class AccordionItem extends React.Component<Props, State> {
     };
   }
 
-
-  componentDidMount(){
-    this.setState({accordionOpen: false}); // once mounted on client can be initally shut
+  componentDidMount() {
+    this.setState({ accordionOpen: false }); // once mounted on client can be initally shut
   }
 
   render() {
-    const styles = {
-      buttonStyle: {
-        background: "none",
-        border: "none"
-      }
+    const buttonStyle: React.CSSProperties = {
+      background: "none",
+      border: "none",
+      textAlign: "left"
     };
 
     return (
       <div className="acc-accordion__section">
-        <div className="acc-accordion__section-header" onClick={() => this.setState({accordionOpen: !this.state.accordionOpen})}>
-          <button style={styles.buttonStyle} className="govuk-heading-m govuk-!-margin-bottom-3 govuk-!-margin-top-3">{this.props.title}</button>
-          <img className="govuk-!-padding-right-2" src={this.state.accordionOpen ? "/assets/images/icon-minus.png" : "/assets/images/icon-plus.png"}/>
+        <div className="acc-accordion__section-header" onClick={() => this.setState({ accordionOpen: !this.state.accordionOpen })}>
+          <button style={buttonStyle} className="govuk-heading-m govuk-!-margin-bottom-3 govuk-!-margin-top-3">{this.props.title}</button>
+          <img className="govuk-!-padding-right-2" src={this.state.accordionOpen ? "/assets/images/icon-minus.png" : "/assets/images/icon-plus.png"} />
         </div>
         {this.state.accordionOpen && <div className="acc-accordion__section-panel">
           {this.props.children}

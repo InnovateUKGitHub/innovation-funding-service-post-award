@@ -73,29 +73,29 @@ class Component extends ContainerBase<Params, Data, Callbacks> {
     };
 
     return (
-      <Acc.DocumentSingle message={"An IAR has been added to this claim"} document={document} openNewWindow={true} renderRemove={() => claim.allowIarEdit && button()}/>
+      <Acc.DocumentSingle message={"An IAR has been added to this claim"} document={document} openNewWindow={true} renderRemove={() => claim.allowIarEdit && button()} />
     );
   }
 
   private onChange(dto: DocumentUploadDto, periodId: number) {
-    const key = {partnerId: this.props.partnerId, periodId};
+    const key = { partnerId: this.props.partnerId, periodId };
     this.props.validate(key, dto);
   }
 
   private onSave(dto: DocumentUploadDto, periodId: number) {
-    const key = {partnerId: this.props.partnerId, periodId};
+    const key = { partnerId: this.props.partnerId, periodId };
     this.props.uploadFile(key, dto);
   }
 
   private onDelete(claim: ClaimDto, dto: DocumentSummaryDto) {
-    this.props.deleteFile({partnerId: claim.partnerId, periodId: claim.periodId}, dto);
+    this.props.deleteFile({ partnerId: claim.partnerId, periodId: claim.periodId }, dto);
   }
 
   private renderIarDocumentUpload(claim: ClaimDto, editor: IEditorStore<DocumentUploadDto, DocumentUploadValidator>) {
     if (!claim.allowIarEdit) {
       return null;
     }
-    const UploadForm = Acc.TypedForm<{file: File | null }>();
+    const UploadForm = Acc.TypedForm<{ file: File | null }>();
     const isAwaitingIAR = claim.status === ClaimStatus.AWAITING_IAR;
     const message = isAwaitingIAR
       ? "Your most recent claim cannot be sent to us. You must attach an independent audit report (IAR)."
@@ -103,10 +103,10 @@ class Component extends ContainerBase<Params, Data, Callbacks> {
     const messageType = isAwaitingIAR ? "error" : "info";
     return (
       <React.Fragment>
-        <Acc.ValidationMessage messageType={messageType} message={message}/>
+        <Acc.ValidationMessage messageType={messageType} message={message} />
         <UploadForm.Form data={editor.data} onChange={(dto) => this.onChange(dto, claim.periodId)}>
           <UploadForm.Fieldset>
-            <UploadForm.FileUpload validation={editor.validator.file} value={(data) => data.file} name="Upload documents" update={(dto, file) => dto.file = file}/>
+            <UploadForm.FileUpload validation={editor.validator.file} value={(data) => data.file} name="Upload documents" update={(dto, file) => dto.file = file} />
           </UploadForm.Fieldset>
           <UploadForm.Button name="default" onClick={() => this.onSave(editor.data, claim.periodId)}>Upload</UploadForm.Button>
         </UploadForm.Form>
@@ -126,10 +126,11 @@ class Component extends ContainerBase<Params, Data, Callbacks> {
     );
   }
 
-  private renderContents({currentClaim, partner, previousClaims, project, editor, document}: CombinedData) {
+  private renderContents({ currentClaim, partner, previousClaims, project, editor, document }: CombinedData) {
     const Details = Acc.TypedDetails<PartnerDto>();
 
     const validationMessage = editor && <Acc.ValidationSummary validation={editor && editor.validator} compressed={false} />;
+    const claimsWindow = !!currentClaim && ([ClaimStatus.DRAFT, ClaimStatus.REVIEWING_FORECASTS].indexOf(currentClaim.status) >= 0) ? <Acc.Claims.ClaimWindow periodEnd={currentClaim.periodEndDate} /> : null;
 
     return (
       <Acc.ProjectOverviewPage selectedTab={ClaimsDashboardRoute.routeName} project={project} partnerId={partner.id} partners={[partner]} validationMessage={validationMessage}>
@@ -148,7 +149,7 @@ class Component extends ContainerBase<Params, Data, Callbacks> {
             </Acc.DualDetails>
           </Acc.SectionPanel>
         </Acc.Section>
-        <Acc.Section qa="current-claims-section" title="Open" badge={!!currentClaim ? <Acc.Claims.ClaimWindow periodEnd={currentClaim.periodEndDate} /> : null }>
+        <Acc.Section qa="current-claims-section" title={"Open"} badge={claimsWindow}>
           {this.renderClaims(currentClaim ? [currentClaim] : [], "current-claims-table", project.id, true)}
         </Acc.Section>
         {currentClaim && editor && this.renderIarDocumentSection(currentClaim, editor, document)}
