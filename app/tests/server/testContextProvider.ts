@@ -24,7 +24,6 @@ export class TestContext implements IContext {
         salesforcePassword: "",
         salesforceToken: "",
         salesforceClientId: "",
-        salesforceUseJwtToken: false,
         salesforceConnectionUrl: "",
         salesforceUsername: "",
         useSSO: false,
