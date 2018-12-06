@@ -128,9 +128,6 @@ class Component extends ContainerBase<Params, Data, Callbacks> {
 
   private renderContents({ currentClaim, partner, previousClaims, project, editor, document }: CombinedData) {
     const Details = Acc.TypedDetails<PartnerDto>();
-    const currentClaimsSectionTitle = (
-      currentClaim && <React.Fragment>Claim for P{currentClaim.periodId} - <DayAndLongMonth value={currentClaim.periodStartDate} /> to <FullDate value={currentClaim.periodEndDate} /></React.Fragment>
-    );
 
     const validationMessage = editor && <Acc.ValidationSummary validation={editor && editor.validator} compressed={false} />;
     const claimsWindow = !!currentClaim && ([ClaimStatus.DRAFT, ClaimStatus.REVIEWING_FORECASTS].indexOf(currentClaim.status) >= 0) ? <Acc.Claims.ClaimWindow periodEnd={currentClaim.periodEndDate} /> : null;
@@ -138,25 +135,25 @@ class Component extends ContainerBase<Params, Data, Callbacks> {
     return (
       <Acc.ProjectOverviewPage selectedTab={ClaimsDashboardRoute.routeName} project={project} partnerId={partner.id} partners={[partner]} validationMessage={validationMessage}>
         <Acc.Section>
-          <Acc.SectionPanel qa="claims-totals" title="Project claims history">
+          <Acc.SectionPanel qa="claims-totals" title="History">
             <Acc.DualDetails displayDensity="Compact">
               <Details.Details qa="claims-totals-col-0" data={partner}>
-                <Details.Currency label="Grant offer letter costs" qa="gol-costs" value={x => x.totalParticipantGrant} />
-                <Details.Currency label="Costs claimed to date" qa="claimed-costs" value={x => x.totalParticipantCostsClaimed} />
-                <Details.Percentage label="Percentage claimed to date" qa="percentage-costs" value={x => x.percentageParticipantCostsClaimed} />
+                <Details.Currency label="Grant offered" qa="gol-costs" value={x => x.totalParticipantGrant} />
+                <Details.Currency label="Costs claimed" qa="claimed-costs" value={x => x.totalParticipantCostsClaimed} />
+                <Details.Percentage label="Percentage claimed" qa="percentage-costs" value={x => x.percentageParticipantCostsClaimed} />
               </Details.Details>
               <Details.Details qa="claims-totals-col-1" data={partner}>
-                <Details.Percentage label="Award offer rate" value={x => x.awardRate} qa="award-rate" fractionDigits={0} />
+                <Details.Percentage label="Funding level" value={x => x.awardRate} qa="award-rate" fractionDigits={0} />
                 <Details.Percentage label="Cap limit" value={x => x.capLimit} fractionDigits={0} qa="cap-limit" />
               </Details.Details>
             </Acc.DualDetails>
           </Acc.SectionPanel>
         </Acc.Section>
-        <Acc.Section qa="current-claims-section" title={currentClaimsSectionTitle} badge={claimsWindow}>
+        <Acc.Section qa="current-claims-section" title={"Open"} badge={claimsWindow}>
           {this.renderClaims(currentClaim ? [currentClaim] : [], "current-claims-table", project.id, true)}
         </Acc.Section>
         {currentClaim && editor && this.renderIarDocumentSection(currentClaim, editor, document)}
-        <Acc.Section qa="previous-claims-section" title="Previous claims">
+        <Acc.Section qa="previous-claims-section" title="Closed">
           {this.renderClaims(previousClaims, "previous-claims-table", project.id, false)}
         </Acc.Section>
       </Acc.ProjectOverviewPage>
@@ -187,25 +184,21 @@ class Component extends ContainerBase<Params, Data, Callbacks> {
     return (
       <ClaimTable.Table qa={tableQa} data={data}>
         <ClaimTable.Custom
-          header="Period"
+          header=""
           qa="period"
           value={(x) => (
-            <span>P{x.periodId}<br />
-              <ShortMonth value={x.periodStartDate} /> to <ShortMonth value={x.periodEndDate} /> <LongYear value={x.periodEndDate} />
+            <span>Period {x.periodId}<br />
+              <LongDateRange start={x.periodStartDate} end={x.periodEndDate} isShortMonth={true} />
             </span>)}
         />
         <ClaimTable.Currency header="Forecast costs for period" qa="forecast-cost" value={(x) => x.forecastCost} />
         <ClaimTable.Currency header="Actual costs for period" qa="actual-cost" value={(x) => x.totalCost} />
         <ClaimTable.Currency header="Difference" qa="diff" value={(x) => x.forecastCost - x.totalCost} />
+        <ClaimTable.Custom header="Status" qa="status" value={(x) => x.status} />
         <ClaimTable.Custom
-          header="Status"
-          qa="status"
-          value={(x) => (
-            <span>
-              {x.status}
-              <br />
-              <ShortDate value={(x.paidDate || x.approvedDate || x.lastModifiedDate)} />
-            </span>)}
+          header="Date of last update"
+          qa="date"
+          value={(x) => <ShortDate value={(x.paidDate || x.approvedDate || x.lastModifiedDate)} />}
         />
         <ClaimTable.Custom header="" qa="link" value={(x) => this.getLink(x, projectId)} />
       </ClaimTable.Table>
