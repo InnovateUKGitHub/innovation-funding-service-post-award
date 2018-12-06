@@ -9,7 +9,6 @@ import {
   getPreviousClaims, getProject
 } from "../../redux/selectors";
 import * as Acc from "../../components";
-import { DayAndLongMonth, FullDate, LongYear, ShortDate, ShortMonth, SimpleString } from "../../components/renderers";
 import { PrepareClaimRoute } from "./prepare";
 import { ClaimsDetailsRoute } from "./details";
 import { ReviewClaimRoute } from "./review";
@@ -174,11 +173,11 @@ class Component extends ContainerBase<Params, Data, Callbacks> {
     const ClaimTable = Acc.TypedTable<ClaimDto>();
 
     if (isCurrentClaim && !data.length) {
-      return <SimpleString>The next open claim period will be...</SimpleString>;
+      return <Acc.Renderers.SimpleString>The next open claim period will be...</Acc.Renderers.SimpleString>;
     }
 
     if (!isCurrentClaim && !data.length) {
-      return <SimpleString>You do not have any previous claims for this project</SimpleString>;
+      return <Acc.Renderers.SimpleString>You do not have any previous claims for this project</Acc.Renderers.SimpleString>;
     }
 
     return (
@@ -188,7 +187,7 @@ class Component extends ContainerBase<Params, Data, Callbacks> {
           qa="period"
           value={(x) => (
             <span>Period {x.periodId}<br />
-              <LongDateRange start={x.periodStartDate} end={x.periodEndDate} isShortMonth={true} />
+              <Acc.Renderers.LongDateRange start={x.periodStartDate} end={x.periodEndDate} isShortMonth={true} />
             </span>)}
         />
         <ClaimTable.Currency header="Forecast costs for period" qa="forecast-cost" value={(x) => x.forecastCost} />
@@ -198,7 +197,7 @@ class Component extends ContainerBase<Params, Data, Callbacks> {
         <ClaimTable.Custom
           header="Date of last update"
           qa="date"
-          value={(x) => <ShortDate value={(x.paidDate || x.approvedDate || x.lastModifiedDate)} />}
+          value={(x) => <Acc.Renderers.ShortDate value={(x.paidDate || x.approvedDate || x.lastModifiedDate)} />}
         />
         <ClaimTable.Custom header="" qa="link" value={(x) => this.getLink(x, projectId)} />
       </ClaimTable.Table>
