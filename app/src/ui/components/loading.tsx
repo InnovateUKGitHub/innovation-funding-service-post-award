@@ -1,5 +1,9 @@
 import * as React from "react";
 import { LoadingStatus, Pending } from "../../shared/pending";
+import { Link, PageError } from "./";
+import { SimpleString } from "./renderers";
+import { ProjectDashboardRoute } from "../containers/projects";
+import * as ACC from "./index";
 
 interface LoadingProps<T> {
     pending: Pending<T>;
@@ -62,10 +66,15 @@ class LoadingComponent<T> extends React.Component<LoadingProps<T>, {}> {
     }
 
     private renderError(error: IAppError): React.ReactNode {
-        if (this.props.renderError) {
-            return this.props.renderError(error);
-        }
-        return <div>An error has occurred</div>;
+        if (this.props.renderError) return this.props.renderError(error);
+
+        return (
+          <PageError title="Something has gone wrong at our end.">
+            <SimpleString>
+              You can either go back to the page you were previously on or go back to your <Link route={ProjectDashboardRoute.getLink({})}>dashboard</Link>.
+            </SimpleString>
+          </PageError>
+        );
     }
 }
 

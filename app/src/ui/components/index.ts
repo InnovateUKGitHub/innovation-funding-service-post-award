@@ -15,6 +15,7 @@ export * from "./links";
 export * from "./linksList";
 export * from "./loading";
 export * from "./partnersAndFinanceContacts";
+export * from "./pageError";
 export * from "./projectItem";
 export * from "./projectMember";
 export * from "./projectOverview";

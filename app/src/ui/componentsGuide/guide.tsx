@@ -2,24 +2,25 @@ import * as React from "react";
 import { Header } from "../components";
 import { accordionGuide } from "./accordionGuide";
 import { claimWindowGuide } from "./claimWindowGuide";
+import { detailsGuide } from "./detailsGuide";
 import { datesGuide } from "./datesGuide";
-import { projectMemberGuide } from "./projectMemberGuide";
+import { documentListGuide } from "./documentListGuide";
+import { documentSingleGuide } from "./documentSingleGuide";
 import { emailGuide } from "./emailGuide";
+import { formGuide } from "./formGuide";
+import { insetText } from "./insetTextGuide";
+import { linksListGuide } from "./linksListGuide";
+import { pageGuide } from "./pageGuide";
+import { projectMemberGuide } from "./projectMemberGuide";
+import { renderersGuide } from "./renderersGuide";
 import { sectionGuide } from "./sectionGuide";
 import { sectionPanelGuide } from "./sectionPanelGuide";
 import { tabsGuide } from "./tabsGuide";
 import { titleGuide } from "./titleGuide";
-import { linksListGuide } from "./linksListGuide";
 import { tableGuide } from "./tableGuide";
-import { detailsGuide } from "./detailsGuide";
-import { formGuide } from "./formGuide";
 import { validationMessageGuide } from "./validationMessageGuide";
 import { validationErrorGuide } from "./validationErrorGuide";
 import { validationSummaryGuide } from "./validationSummaryGuide";
-import { renderersGuide } from "./renderersGuide";
-import { insetText } from "./insetTextGuide";
-import { documentListGuide } from "./documentListGuide";
-import { documentSingleGuide } from "./documentSingleGuide";
 
 const guides: IGuide[] = [
     accordionGuide,
@@ -32,6 +33,7 @@ const guides: IGuide[] = [
     formGuide,
     insetText,
     linksListGuide,
+    pageGuide,
     projectMemberGuide,
     renderersGuide,
     sectionGuide,
