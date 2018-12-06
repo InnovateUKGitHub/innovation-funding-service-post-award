@@ -62,12 +62,12 @@ export class ClaimLineItemsComponent extends ContainerBase<Params, Data, {}> {
         <ACC.Section>
           <ACC.BackLink route={backLink}>Back</ACC.BackLink>
         </ACC.Section>
-        <ACC.Projects.Title pageTitle={`Claim for ${costCategories.find(x => x.id === this.props.costCategoryId)!.name}`} project={project} />
+        <ACC.Projects.Title pageTitle={`${costCategories.find(x => x.id === this.props.costCategoryId)!.name}`} project={project} />
         <ACC.Section>
           <ClaimLineItemsTable lineItems={lineItems} forecastDetail={forecastDetail} />
         </ACC.Section>
         <ACC.Section title="Supporting documents" subtitle={documents.length > 0 ? "(Documents open in a new window)" : ""} qa="supporting-documents-section">
-          {documents.length > 0 ? <DocumentList documents={documents} qa="supporting-documents"/>: <p className="govuk-body-m govuk-!-margin-bottom-0 govuk-!-margin-right-2">No documents attached</p> }
+          {documents.length > 0 ? <DocumentList documents={documents} qa="supporting-documents"/>: <p className="govuk-body-m govuk-!-margin-bottom-0 govuk-!-margin-right-2">No documents uploaded</p> }
         </ACC.Section>
       </ACC.Page>
     );
