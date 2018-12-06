@@ -161,7 +161,7 @@ class Component extends ContainerBase<Params, Data, {}> {
     const ClaimTable = Acc.TypedTable<ClaimDto>();
     return (
       <div>
-        <ClaimTable.Table data={previousClaims} qa="previous-claims-table">
+        <ClaimTable.Table data={previousClaims} qa={`previousClaims-${partner.accountId}`}>
           <ClaimTable.Custom header="" qa="period" value={(x) => this.renderClosedPeriodColumn(x)} />
           <ClaimTable.Currency header="Forecast costs for period" qa="forecast-cost" value={(x) => x.forecastCost} />
           <ClaimTable.Currency header="Actual costs for period" qa="actual-cost" value={(x) => x.totalCost} />
