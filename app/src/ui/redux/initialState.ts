@@ -15,6 +15,7 @@ export function setupInitialState(route: State | undefined, user: IUser): RootSt
     router: { route },
     data: {
     },
-    loadStatus: 0
+    loadStatus: 0,
+    isClient: false,
   } as RootState;
 }

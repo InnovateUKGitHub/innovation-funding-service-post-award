@@ -6,9 +6,9 @@ import { ClaimDto, ProjectDto } from "../../../types/dtos";
 import * as Selectors from "../../redux/selectors";
 import * as Actions from "../../redux/actions";
 import * as Acc from "../../components";
+import { Accordion, AccordionItem } from "../../components";
 import { ClaimsDetailsRoute, ReviewClaimRoute, } from ".";
 import { ClaimStatus } from "../../../types";
-import { Accordion, AccordionItem } from "../../components";
 
 interface Params {
   projectId: string;
@@ -87,14 +87,26 @@ class Component extends ContainerBase<Params, Data, {}> {
     return (
       <Acc.Section>
         <Acc.SectionPanel qa="claims-summary" title="History">
-          <SummaryDetails.Details data={project} qa="project_summary-col-0">
-            <SummaryDetails.Currency label="Grant offered" qa="gol-costs" value={x => x.grantOfferLetterCosts}/>
-            <SummaryDetails.Currency label="Costs claimed" qa="claimed-costs" value={x => x.costsClaimedToDate}/>
-            <SummaryDetails.Percentage label="Percentage claimed" qa="claimed-percentage" value={x => x.claimedPercentage}/>
-          </SummaryDetails.Details>
+          <Acc.DualDetails>
+            <SummaryDetails.Details data={project} qa="project_summary-col-0">
+              <SummaryDetails.Currency label="Grant offered" qa="gol-costs" value={x => x.grantOfferLetterCosts}/>
+              <SummaryDetails.Currency label="Costs claimed" qa="claimed-costs" value={x => x.costsClaimedToDate}/>
+              <SummaryDetails.Percentage label="Percentage claimed" qa="claimed-percentage" value={x => x.claimedPercentage}/>
+            </SummaryDetails.Details>
+          </Acc.DualDetails>
         </Acc.SectionPanel>
       </Acc.Section>
     );
+  }
+
+  private claimHasNotBeenSubmittedToInnovate(x: ClaimDto) {
+    return [
+      ClaimStatus.INNOVATE_QUERIED,
+      ClaimStatus.REVIEWING_FORECASTS_FOLLOWING_INNOVATE_QUERY,
+      ClaimStatus.AWAITING_IUK_APPROVAL,
+      ClaimStatus.APPROVED,
+      ClaimStatus.PAID
+    ].indexOf(x.status) < 0;
   }
 
   private renderCurrentClaims(currentInfo: ProjectPeriod, project: ProjectDto, partners: PartnerDto[]) {
@@ -107,8 +119,11 @@ class Component extends ContainerBase<Params, Data, {}> {
       return null;
     };
 
+    const hasClaimNotYetSubmittedToInnovate = currentInfo.claims.find(this.claimHasNotBeenSubmittedToInnovate);
+    const badge = hasClaimNotYetSubmittedToInnovate && <Acc.Claims.ClaimWindow periodEnd={currentInfo.end}/>;
+
     return (
-      <Acc.Section title={title} qa="current-claims-section" badge={<Acc.Claims.ClaimWindow periodEnd={currentInfo.end}/>}>
+      <Acc.Section title={title} qa="current-claims-section" badge={badge}>
         <ClaimTable.Table data={currentInfo.claims} qa="current-claims-table" bodyRowFlag={(x) => x.status === ClaimStatus.SUBMITTED ? "info" : null }>
           <ClaimTable.String header="Partner" qa="partner" value={renderPartnerName}/>
           <ClaimTable.Currency header="Forecast costs for period" qa="forecast-cost" value={(x) => x.forecastCost} />

@@ -2,15 +2,12 @@ import { IContext, QueryBase } from "../common/context";
 import mapForecastDetail from "./mapForecastDetail";
 
 export class GetAllForecastsForPartnerQuery extends QueryBase<ForecastDetailsDTO[]> {
-  constructor(
-    private partnerId: string,
-    private periodId: number
-  ) {
+  constructor(private partnerId: string) {
     super();
   }
 
   protected async Run(context: IContext) {
-    const results = await context.repositories.profileDetails.getAllByPartnerWithPeriodGt(this.partnerId, this.periodId);
+    const results = await context.repositories.profileDetails.getAllByPartner(this.partnerId);
     return results.map(mapForecastDetail(context));
   }
 }

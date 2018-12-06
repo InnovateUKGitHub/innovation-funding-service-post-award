@@ -16,6 +16,7 @@ export interface RootState {
   editors: EditorState;
   loadStatus: number;
   user: IUser;
+  isClient: boolean;
 }
 
 export const rootReducer = combineReducers<RootState>({
@@ -23,5 +24,6 @@ export const rootReducer = combineReducers<RootState>({
   data: dataReducer,
   editors: editorReducer,
   loadStatus: loadStatusReducer,
-  user: userReducer
+  user: userReducer,
+  isClient: (state: boolean = false) => state
 });

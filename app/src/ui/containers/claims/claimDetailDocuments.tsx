@@ -87,9 +87,7 @@ export class ClaimDetailDocumentsComponent extends ContainerBase<Params, Data, C
           <ACC.BackLink route={back}>Back</ACC.BackLink>
         </ACC.Section>
         {validationMessage}
-        <ACC.Section>
-          <ACC.Projects.Title pageTitle={`${costCategory.name}`} project={project} />
-        </ACC.Section>
+        <ACC.Projects.Title pageTitle={`${costCategory.name}`} project={project} />
         <ACC.Section title={`${costCategory.name} documents`} subtitle={documents.length > 0 ? "All documents open in a new window." : ""}>
           {documents.length > 0 ?
             <ACC.DocumentListWithDelete onRemove={(document) => this.onDelete(document)} documents={documents} qa="supporting-documents"/> :
