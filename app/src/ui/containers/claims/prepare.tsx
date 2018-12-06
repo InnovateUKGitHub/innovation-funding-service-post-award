@@ -104,10 +104,10 @@ export class PrepareComponent extends ContainerBase<Params, Data, Callbacks> {
                             You need to review your forecasts before you can submit your claim.
                         </ACC.Renderers.SimpleString>
                         <Form.Fieldset qa="save-and-continue">
-                            <Form.Submit>Review forecasts</Form.Submit>
+                            <Form.Submit>Review forecast</Form.Submit>
                         </Form.Fieldset>
                         <Form.Fieldset qa="save-and-return">
-                            <Form.Button name="return" onClick={() => this.saveAndReturn(data.editor.data, data.claimDetails, data.costCategories)}>Save and return to claim</Form.Button>
+                            <Form.Button name="return" onClick={() => this.saveAndReturn(data.editor.data, data.claimDetails, data.costCategories)}>Save and return to project</Form.Button>
                         </Form.Fieldset>
                     </Form.Form>
                 </ACC.Section>
