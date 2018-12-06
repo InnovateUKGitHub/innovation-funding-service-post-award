@@ -79,7 +79,7 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<Params, 
           <ACC.BackLink route={back}>Back</ACC.BackLink>
         </ACC.Section>
         <ACC.ValidationSummary validation={this.props.editor && this.props.editor.validator} compressed={false} />
-        <ACC.Projects.Title pageTitle={`Claim for ${costCategory.name}`} project={project} />
+        <ACC.Projects.Title pageTitle={`${costCategory.name}`} project={project} />
         <ACC.Section title="Breakdown of costs">
           <ACC.InsetText text={costCategory.hintText} />
           {this.renderTable(editor, forecastDetail, documents)}
@@ -98,19 +98,19 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<Params, 
           <LineItemTable.Table qa="current-claim-summary-table" data={editor.data} validationResult={editor.validator.items.results} footers={this.renderFooters(editor, forecastDetail)}>
             <LineItemTable.Custom header="Description of cost" qa="cost-description" value={(x, i) => this.renderDescription(x, i, editor.validator.items.results[i.row])} />
             <LineItemTable.Custom header="Cost (£)" qa="cost-value" classSuffix="numeric" value={(x, i) => this.renderCost(x, i, editor.validator.items.results[i.row])} width={30} />
-            {this.state.showAddRemove ? <LineItemTable.Custom header="" qa="remove" value={(x, i) => <a href="#" onClick={e => this.removeItem(x, i, e)}>remove</a>} width={1} /> : null}
+            {this.state.showAddRemove ? <LineItemTable.Custom header="" qa="remove" value={(x, i) => <a href="#" onClick={e => this.removeItem(x, i, e)}>Remove</a>} width={1} /> : null}
           </LineItemTable.Table>
         </LineItemForm.Fieldset>
         <LineItemForm.Fieldset>
           <ACC.Section title="Supporting documents" subtitle={documents.length > 0 ? "(Documents open in a new window)" : ""} qa="supporting-documents-section">
             <ValidationMessage message={"If you are unsure what evidence to provide, speak to your Monitoring Officer. They will use these documents when reviewing your claim."} messageType={"info"} />
-            {documents.length > 0 ? <DocumentList documents={documents} qa="supporting-documents" /> : <p className="govuk-body-m govuk-!-margin-bottom-0 govuk-!-margin-right-2">No documents attached</p>}
+            {documents.length > 0 ? <DocumentList documents={documents} qa="supporting-documents" /> : <p className="govuk-body-m govuk-!-margin-bottom-0 govuk-!-margin-right-2">No documents uploaded</p>}
           </ACC.Section>
         </LineItemForm.Fieldset>
         <LineItemForm.Fieldset>
           <LineItemForm.Button name="return" onClick={() => this.props.saveAndUpload(this.props.projectId, this.props.partnerId, this.props.costCategoryId, this.props.periodId, this.props.editor.data)}>Upload and remove documents</LineItemForm.Button>
         </LineItemForm.Fieldset>
-        <LineItemForm.Submit>Save and return to claim form</LineItemForm.Submit>
+        <LineItemForm.Submit>Save and return to claim</LineItemForm.Submit>
       </LineItemForm.Form>
     );
   }
