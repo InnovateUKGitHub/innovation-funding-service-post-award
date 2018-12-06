@@ -15,6 +15,7 @@ import { ReviewClaimRoute } from "./review";
 import { ClaimDto, ClaimStatus, ProjectDto } from "../../../types";
 import { IEditorStore } from "../../redux/reducers";
 import { DocumentUploadValidator } from "../../validators/documentUploadValidator";
+import {DateTime} from "luxon";
 
 interface Params {
   projectId: string;
@@ -154,11 +155,11 @@ class Component extends ContainerBase<Params, Data, Callbacks> {
           </Acc.SectionPanel>
         </Acc.Section>
         <Acc.Section qa="current-claims-section" title={"Open"} badge={claimsWindow}>
-          {this.renderClaims(currentClaim ? [currentClaim] : [], "current-claims-table", project.id, true)}
+          {this.renderClaims(currentClaim ? [currentClaim] : [], "current-claims-table", project, true)}
         </Acc.Section>
         {currentClaim && editor && this.renderIarDocumentSection(currentClaim, editor, document)}
         <Acc.Section qa="previous-claims-section" title="Closed">
-          {this.renderClaims(previousClaims, "previous-claims-table", project.id, false)}
+          {this.renderClaims(previousClaims, "previous-claims-table", project, false)}
         </Acc.Section>
       </Acc.ProjectOverviewPage>
     );
@@ -174,11 +175,18 @@ class Component extends ContainerBase<Params, Data, Callbacks> {
     return <Acc.Link route={ClaimsDetailsRoute.getLink({ projectId, partnerId: claim.partnerId, periodId: claim.periodId })}>View claim</Acc.Link>;
   }
 
-  private renderClaims(data: ClaimDto[], tableQa: string, projectId: string, isCurrentClaim: boolean) {
+  private renderClaims(data: ClaimDto[], tableQa: string, project: ProjectDto, isCurrentClaim: boolean) {
     const ClaimTable = Acc.TypedTable<ClaimDto>();
 
     if (isCurrentClaim && !data.length) {
-      return <Acc.Renderers.SimpleString>The next open claim period will be...</Acc.Renderers.SimpleString>;
+      if(!project.periodEndDate) return null;
+      const date = DateTime.fromJSDate(project.periodEndDate).plus({days: 1}).toJSDate();
+
+      return (
+          <Acc.Renderers.SimpleString>
+            The claim period for P{project.periodId + 1} will open on <Acc.Renderers.FullDate value={date} />
+          </Acc.Renderers.SimpleString>
+      );
     }
 
     if (!isCurrentClaim && !data.length) {
@@ -204,7 +212,7 @@ class Component extends ContainerBase<Params, Data, Callbacks> {
           qa="date"
           value={(x) => <Acc.Renderers.ShortDate value={(x.paidDate || x.approvedDate || x.lastModifiedDate)} />}
         />
-        <ClaimTable.Custom header="" qa="link" value={(x) => this.getLink(x, projectId)} />
+        <ClaimTable.Custom header="" qa="link" value={(x) => this.getLink(x, project.id)} />
       </ClaimTable.Table>
     );
   }

@@ -53,7 +53,7 @@ export const LongDateRange: React.SFC<{ start: Date | null, end: Date | null , i
         return (
             <span>
                 <span style={{ whiteSpace: "nowrap" }}>{start.day} {isShortMonth ? start.monthShort : start.monthLong} to </span>
-                <span style={{ whiteSpace: "nowrap" }}>{end.day} {isShortMonth ? start.monthShort : end.monthLong} {end.year}</span>
+                <span style={{ whiteSpace: "nowrap" }}>{end.day} {isShortMonth ? end.monthShort : end.monthLong} {end.year}</span>
             </span>
         );
     }
@@ -61,7 +61,7 @@ export const LongDateRange: React.SFC<{ start: Date | null, end: Date | null , i
     return (
         <span>
             <span style={{ whiteSpace: "nowrap" }}>{start.day} {isShortMonth ? start.monthShort : start.monthLong} {start.year} to </span>
-            <span style={{ whiteSpace: "nowrap" }}>{end.day} {isShortMonth ? start.monthShort : end.monthLong} {end.year}</span>
+            <span style={{ whiteSpace: "nowrap" }}>{end.day} {isShortMonth ? end.monthShort : end.monthLong} {end.year}</span>
         </span>
     );
 };
