@@ -199,7 +199,7 @@ class Component extends ContainerBase<Params, Data, Callbacks> {
           header=""
           qa="period"
           value={(x) => (
-            <span>Period {x.periodId}<br />
+            <span>Period {x.periodId}:<br />
               <Acc.Renderers.LongDateRange start={x.periodStartDate} end={x.periodEndDate} isShortMonth={true} />
             </span>)}
         />
