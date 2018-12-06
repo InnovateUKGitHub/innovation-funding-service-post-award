@@ -128,11 +128,13 @@ export class Context implements IContext {
   private salesforceConnectionDetails: ISalesforceConnectionDetails;
 
   private getSalesforceConnection() {
-    if (this.config.salesforceUseJwtToken) {
-      return salesforceConnectionWithToken(this.salesforceConnectionDetails);
+    // if the standard user then connect using salesforceConnection other wise use the token
+    if(this.user.email === this.config.salesforceUsername) {
+      // todo: remove
+      return salesforceConnection(this.salesforceConnectionDetails);
     }
     else {
-      return salesforceConnection(this.salesforceConnectionDetails);
+      return salesforceConnectionWithToken(this.salesforceConnectionDetails);
     }
   }
 
