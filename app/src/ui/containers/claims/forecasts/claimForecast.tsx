@@ -11,7 +11,7 @@ import {
   Params,
   PendingForecastData,
   renderWarning,
-  withDataEditor
+  withDataEditor,
 } from "./common";
 
 interface Callbacks {
@@ -25,22 +25,23 @@ class ClaimForecastComponent extends ContainerBase<Params, PendingForecastData, 
     return <Loader pending={this.props.combined} render={data => this.renderContents(data)} />;
   }
 
-  saveAndReturn(data: ForecastData, updateClaim: boolean) {
-    this.props.saveAndReturn(updateClaim, this.props.projectId, this.props.partnerId, this.props.periodId, data);
+  saveAndReturn(data: ForecastData, updateClaim: boolean, periodId: number) {
+    this.props.saveAndReturn(updateClaim, this.props.projectId, this.props.partnerId, periodId, data);
   }
 
-  handleChange(data: ForecastDetailsDTO[], combined: ForecastData) {
-    this.props.onChange(this.props.partnerId, this.props.periodId, data, combined);
+  handleChange(data: ForecastDetailsDTO[], combined: ForecastData, periodId: number) {
+    this.props.onChange(this.props.partnerId, periodId, data, combined);
   }
 
   renderContents(combined: ForecastData) {
     const Form = ACC.TypedForm<ForecastDetailsDTO[]>();
     const editor = combined.editor!;
+    const periodId = combined.project.periodId;
 
     return (
       <ACC.Page>
         <ACC.Section>
-          <ACC.BackLink route={PrepareClaimRoute.getLink({ projectId: this.props.projectId, partnerId: this.props.partnerId, periodId: this.props.periodId })}>Back to claim</ACC.BackLink>
+          <ACC.BackLink route={PrepareClaimRoute.getLink({ periodId, projectId: this.props.projectId, partnerId: this.props.partnerId })}>Back to claim</ACC.BackLink>
         </ACC.Section>
         <ACC.ValidationSummary validation={editor.validator} compressed={false} />
         <ACC.Projects.Title pageTitle="Update forecast" project={combined.project} />
@@ -48,19 +49,17 @@ class ClaimForecastComponent extends ContainerBase<Params, PendingForecastData, 
           {renderWarning(combined)}
           <Form.Form
             data={editor.data}
-            onChange={data => this.handleChange(data, combined)}
-            onSubmit={() => this.saveAndReturn(combined, true)}
+            onChange={data => this.handleChange(data, combined, periodId)}
+            onSubmit={() => this.saveAndReturn(combined, true, periodId)}
             qa="claim-forecast-form"
           >
-            <ACC.Claims.ForecastTable data={combined} />
+            <ACC.Claims.ForecastTable data={combined} periodId={periodId} />
             <Form.Fieldset>
               <Form.Submit>Submit forecast and claim</Form.Submit>
-              <ACC.Renderers.SimpleString>Changes last saved:
-                <ACC.Renderers.ShortDateTime value={combined.claim.forecastLastModified} />
-              </ACC.Renderers.SimpleString>
+              <ACC.Claims.ClaimLastModified claim={combined.claim} />
             </Form.Fieldset>
             <Form.Fieldset qa="save-button">
-              <Form.Button name="save" onClick={() => this.saveAndReturn(combined, false)}>Save and return to claim</Form.Button>
+              <Form.Button name="save" onClick={() => this.saveAndReturn(combined, false, periodId)}>Save and return to claim</Form.Button>
             </Form.Fieldset>
           </Form.Form>
         </ACC.Section>
@@ -87,7 +86,7 @@ const ForecastClaim = definition.connect({
 
 export const ClaimForecastRoute = definition.route({
   routeName: "claimForecast",
-  routePath: "/projects/:projectId/claims/:partnerId/forecast/:periodId",
+  routePath: "/projects/:projectId/claims/:partnerId/forecast",
   getParams: forecastParams,
   getLoadDataActions: forecastDataLoadActions,
   container: ForecastClaim

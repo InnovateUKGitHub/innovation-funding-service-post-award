@@ -1,13 +1,10 @@
 import { ApiParams, ControllerBase } from "./controllerBase";
 import contextProvider from "../features/common/contextProvider";
 import {GetAllForecastsForPartnerQuery, GetForecastDetail, UpdateForecastDetailsCommand} from "../features/forecastDetails";
-import { GetClaim } from "../features/claims";
 import { processDto } from "../../shared/processResponse";
-import { UpdateClaimCommand } from "../features/claims/updateClaim";
-import { ClaimStatus } from "../../types";
 
 export interface IForecastDetailsApi {
-  getAllByPartnerId: (params: ApiParams<{partnerId: string, periodId: number }>) => Promise<ForecastDetailsDTO[]>;
+  getAllByPartnerId: (params: ApiParams<{ partnerId: string }>) => Promise<ForecastDetailsDTO[]>;
   get: (params: ApiParams<{partnerId: string, periodId: number, costCategoryId: string }>) => Promise<ForecastDetailsDTO>;
   update: (params: ApiParams<{partnerId: string, periodId: number, forecasts: ForecastDetailsDTO[], submit: boolean }>) => Promise<ForecastDetailsDTO[]>;
 }
@@ -24,7 +21,7 @@ class Controller extends ControllerBase<ForecastDetailsDTO> implements IForecast
 
     this.getItems(
       "/",
-      (p, q) => ({ partnerId: q.partnerId, periodId: parseInt(q.periodId, 10)}),
+      (p, q) => ({ partnerId: q.partnerId }),
       (p) => this.getAllByPartnerId(p)
     );
 
@@ -35,8 +32,8 @@ class Controller extends ControllerBase<ForecastDetailsDTO> implements IForecast
     );
   }
 
-  public async getAllByPartnerId(params: ApiParams<{ partnerId: string, periodId: number }>) {
-    const query = new GetAllForecastsForPartnerQuery(params.partnerId, params.periodId);
+  public async getAllByPartnerId(params: ApiParams<{ partnerId: string }>) {
+    const query = new GetAllForecastsForPartnerQuery(params.partnerId);
     return await contextProvider.start(params).runQuery(query);
   }
 
@@ -50,7 +47,7 @@ class Controller extends ControllerBase<ForecastDetailsDTO> implements IForecast
     const forecastCmd = new UpdateForecastDetailsCommand(params.partnerId, params.periodId, params.forecasts, params.submit);
     await context.runCommand(forecastCmd);
 
-    return this.getAllByPartnerId({ partnerId: params.partnerId, periodId: params.periodId, user: params.user });
+    return this.getAllByPartnerId({ partnerId: params.partnerId, user: params.user });
   }
 }
 
