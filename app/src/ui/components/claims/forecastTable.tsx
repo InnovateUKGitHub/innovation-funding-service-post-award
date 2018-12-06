@@ -3,9 +3,9 @@ import classNames from "classnames";
 import * as ACC from "../../components";
 import { Currency, DateRange, Percentage } from "../../components/renderers";
 import { ForecastDetailsDtosValidator } from "../../validators/forecastDetailsDtosValidator";
-import { ClaimDto } from "../../../types";
 import { IEditorStore } from "../../redux";
 import { ForecastData } from "../../containers/claims/forecasts/common";
+import { ClaimDto } from "../../../types";
 
 interface TableRow {
   categoryId: string;
@@ -26,13 +26,15 @@ interface Props {
   hideValidation?: boolean;
   data: ForecastData;
   onChange?: (data: ForecastDetailsDTO[]) => void;
+  periodId: number;
 }
 
 export class ForecastTable extends React.Component<Props> {
   public render() {
     const { data, hideValidation } = this.props;
 
-    const parsed    = this.parseClaimData(data);
+    const periodId  = !!data.claim ? data.claim.periodId : this.props.periodId;
+    const parsed    = this.parseClaimData(data, periodId);
     const Table     = ACC.TypedTable<typeof parsed[0]>();
     const intervals = this.calculateClaimPeriods(data);
     const claims    = Object.keys(parsed[0].claims);
@@ -43,7 +45,7 @@ export class ForecastTable extends React.Component<Props> {
       <Table.Table
         data={parsed}
         qa="forecast-table"
-        headers={this.renderTableHeaders(periods, data.claim)}
+        headers={this.renderTableHeaders(periods, periodId)}
         footers={this.renderTableFooters(periods, parsed, data.editor)}
         headerRowClass="govuk-body-s govuk-table__header--light"
         bodyRowClass={x => classNames("govuk-body-s", {"table__row--warning": !hideValidation && (x.total > x.golCosts)})}
@@ -60,10 +62,8 @@ export class ForecastTable extends React.Component<Props> {
     );
   }
 
-  private parseClaimData(data: ForecastData) {
+  private parseClaimData(data: ForecastData, periodId: number) {
     const tableRows: TableRow[] = [];
-    // TODO - remove this logic from here, waiting on SF to provide
-    const currentPeriod = data.claim.periodId;
     const forecasts = !!data.editor ? data.editor.data : data.forecastDetails;
 
     data.costCategories.filter(x => x.organistionType === "Industrial").forEach(category => {
@@ -78,14 +78,14 @@ export class ForecastTable extends React.Component<Props> {
       };
 
       data.claimDetails.forEach(x => {
-        if(x.costCategoryId === category.id && x.periodId < currentPeriod) {
+        if(x.costCategoryId === category.id && x.periodId < periodId) {
           row.claims[x.periodId] = x.value;
           row.total += x.value;
         }
       });
 
       forecasts.forEach(x => {
-        if(x.costCategoryId === category.id && x.periodId >= currentPeriod) {
+        if(x.costCategoryId === category.id && x.periodId >= periodId) {
           row.forecasts[x.periodId] = x.value;
           row.total += x.value;
         }
@@ -147,17 +147,16 @@ export class ForecastTable extends React.Component<Props> {
     }
   }
 
-  renderTableHeaders(periods: string[], claim: ClaimDto) {
-    const currentClaimPeriod = claim.periodId - 1;
-    const previous = currentClaimPeriod - 1;
-    const forecasts = periods.length > currentClaimPeriod;
+  renderTableHeaders(periods: string[], claimPeriod: number) {
+    const previous = claimPeriod - 1;
+    const forecasts = periods.length > claimPeriod;
 
     return [(
       <tr key="cHeader1" className="govuk-table__row govuk-body-s">
         <th className="govuk-table__header govuk-table__header--numeric" />
         {previous > 0 ? <th className="govuk-table__header govuk-table__header--numeric" colSpan={previous}>Previous costs</th> : null}
-        {currentClaimPeriod > 0 ? <th className="govuk-table__header govuk-table__header--numeric">Costs this period</th> : null}
-        {forecasts ? <th className="govuk-table__header govuk-table__header--numeric" colSpan={periods.length - currentClaimPeriod}>Forecast</th> : null}
+        {claimPeriod > 0 ? <th className="govuk-table__header govuk-table__header--numeric">Costs this period</th> : null}
+        {forecasts ? <th className="govuk-table__header govuk-table__header--numeric" colSpan={periods.length - claimPeriod}>Forecast</th> : null}
         <th className="govuk-table__header govuk-table__header--numeric">Total</th>
         <th className="govuk-table__header govuk-table__header--numeric">Grant offered</th>
         <th className="govuk-table__header govuk-table__header--numeric">Difference</th>
@@ -180,7 +179,7 @@ export class ForecastTable extends React.Component<Props> {
     const golTotal  = parsed.reduce((total, item) => total + item.golCosts, 0);
     const totals = periods.map(p => parsed.reduce((total, item) => {
       const claim = item.claims[p];
-      const value = isNaN(claim) ? item.forecasts[p] : claim;
+      const value = (isNaN(claim) ? item.forecasts[p] : claim) || 0;
       return total + value;
     }, 0));
 

@@ -95,7 +95,7 @@ class ReviewComponent extends ContainerBase<Params, Data, Callbacks> {
               <ForecastLoader
                 pending={this.props.forecastData}
                 render={(forecastData) => (
-                  <ACC.Claims.ForecastTable data={forecastData} hideValidation={true}/>
+                  <ACC.Claims.ForecastTable data={forecastData} hideValidation={true} periodId={this.props.periodId} />
                 )}
               />
             </ACC.AccordionItem>
@@ -145,7 +145,7 @@ export const ReviewClaim = definition.connect({
         partner,
         claim,
         Selectors.findClaimDetailsByPartner(props.partnerId).getPending(state),
-        Selectors.findForecastDetailsByPartner(props.partnerId, props.periodId).getPending(state),
+        Selectors.findForecastDetailsByPartner(props.partnerId).getPending(state),
         Selectors.findGolCostsByPartner(props.partnerId).getPending(state),
         costCategories,
         (a, b, c, d, e, f, g) => ({ project: a, partner: b, claim: c, claimDetails: d, forecastDetails: e, golCosts: f, costCategories: g })
