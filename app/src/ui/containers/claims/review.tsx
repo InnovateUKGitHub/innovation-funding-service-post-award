@@ -74,8 +74,6 @@ class ReviewComponent extends ContainerBase<Params, Data, Callbacks> {
     ];
     const showButton = data.editor.data.status === ClaimStatus.MO_QUERIED || data.editor.data.status === ClaimStatus.AWAITING_IUK_APPROVAL;
 
-    const ForecastLoader = ACC.TypedLoader<ForecastData>();
-
     return (
       <ACC.Page>
         <ACC.Section>
@@ -91,7 +89,7 @@ class ReviewComponent extends ContainerBase<Params, Data, Callbacks> {
         <ACC.Section>
           <ACC.Accordion>
             <ACC.AccordionItem  title="Forecast">
-              <ForecastLoader
+              <ACC.ComponentLoader
                 pending={this.props.forecastData}
                 render={(forecastData) => (
                   <ACC.Claims.ForecastTable data={forecastData} hideValidation={true} periodId={this.props.periodId} />
