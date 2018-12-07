@@ -197,10 +197,7 @@ class Component extends ContainerBase<Params, Data, Callbacks> {
         <ClaimTable.Custom
           header=""
           qa="period"
-          value={(x) => (
-            <span>Period {x.periodId}:<br />
-              <Acc.Renderers.LongDateRange start={x.periodStartDate} end={x.periodEndDate} isShortMonth={true} />
-            </span>)}
+          value={x => <Acc.Claims.ClaimPeriodDate claim={x} />}
         />
         <ClaimTable.Currency header="Forecast costs for period" qa="forecast-cost" value={(x) => x.forecastCost} />
         <ClaimTable.Currency header="Actual costs for period" qa="actual-cost" value={(x) => x.totalCost} />
