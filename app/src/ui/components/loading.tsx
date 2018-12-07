@@ -14,7 +14,7 @@ interface LoadingProps<T> {
 /**
  * component to render a given ReactNode based on the state of a given Pending object
  */
-export class ComponentLoader<T> extends React.Component<LoadingProps<T>, {}> {
+export class Loader<T> extends React.Component<LoadingProps<T>, {}> {
     render() {
         let result;
 
@@ -73,7 +73,7 @@ export class ComponentLoader<T> extends React.Component<LoadingProps<T>, {}> {
 
 export const PageLoader = <T, B>(props: LoadingProps<T>) => {
   return (
-    <ComponentLoader
+    <Loader
       {...props}
       renderError={() => {
         return (
@@ -86,25 +86,3 @@ export const PageLoader = <T, B>(props: LoadingProps<T>) => {
       }}
     />);
 };
-
-// TODO Replace uses with ComponentLoader
-export const TypedLoader = <T extends {}>() => ComponentLoader as { new(): ComponentLoader<T> };
-
-export class Loader {
-    public static for<T>(
-        pending: Pending<T>,
-        render: (data: T) => React.ReactNode,
-        renderError?: (error: IAppError | null) => React.ReactNode,
-        renderLoading?: () => React.ReactNode
-    ): JSX.Element {
-        const Component = TypedLoader<T>();
-        return (
-            <Component
-                pending={pending || new Pending<T>()}
-                render={render}
-                renderError={renderError}
-                renderLoading={renderLoading}
-            />
-        );
-    }
-}

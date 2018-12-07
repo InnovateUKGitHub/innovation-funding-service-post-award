@@ -54,8 +54,7 @@ class ReviewComponent extends ContainerBase<Params, Data, Callbacks> {
       (project, partner, costCategories, claim, claimDetails, editor) => ({ project, partner, costCategories, claim, claimDetails, editor })
     );
 
-    const Loader = ACC.TypedLoader<CombinedData>();
-    return <Loader pending={combined} render={(data) => this.renderContents(data)} />;
+    return <ACC.PageLoader pending={combined} render={(data) => this.renderContents(data)} />;
   }
 
   private getClaimPeriodTitle(data: any) {
@@ -89,7 +88,7 @@ class ReviewComponent extends ContainerBase<Params, Data, Callbacks> {
         <ACC.Section>
           <ACC.Accordion>
             <ACC.AccordionItem  title="Forecast">
-              <ACC.ComponentLoader
+              <ACC.Loader
                 pending={this.props.forecastData}
                 render={(forecastData) => (
                   <ACC.Claims.ForecastTable data={forecastData} hideValidation={true} periodId={this.props.periodId} />

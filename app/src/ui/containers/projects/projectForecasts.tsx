@@ -19,16 +19,10 @@ interface Params {
 
 interface Callbacks {}
 
-interface CombinedData {
-  projectDetails: ProjectDto;
-  partners: PartnerDto[];
-}
-
 class ProjectForecastComponent extends ContainerBase<Params, Data, Callbacks> {
   render() {
     const combined = Pending.combine(this.props.projectDetails, this.props.partners, (projectDetails, partners) => ({ projectDetails, partners }));
-    const Loader = ACC.TypedLoader<CombinedData>();
-    return <Loader pending={combined} render={x => this.renderContents(x.projectDetails, x.partners)} />;
+    return <ACC.PageLoader pending={combined} render={x => this.renderContents(x.projectDetails, x.partners)} />;
   }
 
   private renderContents(project: ProjectDto, partners: PartnerDto[]) {

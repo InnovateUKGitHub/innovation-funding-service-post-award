@@ -46,8 +46,7 @@ export class ClaimDetailDocumentsComponent extends ContainerBase<Params, Data, C
       this.props.editor,
       (project, costCategories, documents, editor) => ({ project, costCategories, documents, editor })
     );
-    const Loader = ACC.TypedLoader<CombinedData>();
-    return <Loader pending={combined} render={(data) => this.renderContents(data)} />;
+    return <ACC.PageLoader pending={combined} render={(data) => this.renderContents(data)} />;
   }
 
   private onChange(dto: DocumentUploadDto) {

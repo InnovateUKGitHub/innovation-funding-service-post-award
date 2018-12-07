@@ -21,8 +21,7 @@ interface Callbacks {
 
 class ClaimForecastComponent extends ContainerBase<Params, PendingForecastData, Callbacks> {
   render() {
-    const Loader = ACC.TypedLoader<ForecastData>();
-    return <Loader pending={this.props.combined} render={data => this.renderContents(data)} />;
+    return <ACC.PageLoader pending={this.props.combined} render={data => this.renderContents(data)} />;
   }
 
   saveAndReturn(data: ForecastData, updateClaim: boolean, periodId: number) {
