@@ -17,12 +17,15 @@ class ListComponent extends ContainerBase<{}, Props, {}> {
   }
 
   render() {
-    const Loader = Acc.TypedLoader<IContact[]>();
+    return <Acc.PageLoader pending={this.props.contacts} render={contacts => this.renderContent(contacts)} />;
+  }
+
+  private renderContent(contacts: IContact[]) {
     return (
       <div>
         <Breadcrumbs links={[{ routeName: "home", text: "Home" }]}>Contacts</Breadcrumbs>
         <Title title="Contacts" />
-        <Loader pending={this.props.contacts} render={contacts => this.renderTable(contacts)} />
+        {this.renderTable(contacts)}
         <Link className="govuk-back-link" routeName="home">Home</Link>
       </div>
     );
