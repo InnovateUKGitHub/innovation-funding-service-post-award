@@ -58,11 +58,8 @@ export class PrepareComponent extends ContainerBase<Params, Data, Callbacks> {
         return <ACC.PageLoader pending={combined} render={(data) => this.renderContents(data)} />;
     }
 
-    private getClaimPeriodTitle(data: any) {
-        if (data.project.claimFrequency === ClaimFrequency.Monthly) {
-            return `${data.partner.name} claim for P${data.claim.periodId} ${DateTime.fromJSDate(data.claim.periodStartDate).toFormat("MMMM yyyy")}`;
-        }
-        return `${data.partner.name} claim for P${data.claim.periodId} ${DateTime.fromJSDate(data.claim.periodStartDate).toFormat("MMMM")} to ${DateTime.fromJSDate(data.claim.periodEndDate).toFormat("MMMM yyyy")}`;
+    private getClaimPeriodTitle(data: CombinedData) {
+      return <ACC.Claims.ClaimPeriodDate claim={data.claim} />;
     }
 
     private saveAndProgress(dto: ClaimDto, details: ClaimDetailsSummaryDto[], costCategories: CostCategoryDto[]) {
@@ -78,8 +75,6 @@ export class PrepareComponent extends ContainerBase<Params, Data, Callbacks> {
     }
 
     private renderContents(data: CombinedData) {
-
-        const title = this.getClaimPeriodTitle(data);
         const Form = ACC.TypedForm<ClaimDto>();
         const commentsLabel = "Additional information (optional)";
         const commentsHint = "These comments will be seen by your Monitoring Officer when they review your claim.";
@@ -92,7 +87,7 @@ export class PrepareComponent extends ContainerBase<Params, Data, Callbacks> {
                 <ACC.ValidationSummary validation={data.editor.validator} compressed={false} />
                 <ACC.Projects.Title pageTitle="Claim" project={data.project} />
                 <ACC.Claims.Navigation projectId={data.project.id} partnerId={data.partner.id} periodId={data.claim.periodId} currentRouteName={ClaimsDetailsRoute.routeName} />
-                <ACC.Section title={title}>
+                <ACC.Section title={this.getClaimPeriodTitle(data)}>
                     <ACC.Claims.ClaimTable {...data} validation={data.editor.validator.claimDetails.results} getLink={costCategoryId => EditClaimLineItemsRoute.getLink({partnerId: this.props.partnerId, projectId: this.props.projectId, periodId: this.props.periodId, costCategoryId})} />
                     <Form.Form data={data.editor.data} onChange={(dto) => this.onChange(dto, data.claimDetails, data.costCategories)} onSubmit={() => this.saveAndProgress(data.editor.data, data.claimDetails, data.costCategories)}>
                         <Form.Fieldset heading={commentsLabel} qa="additional-info-form" headingQa="additional-info-heading">
