@@ -1,9 +1,8 @@
 import * as React from "react";
 import { LoadingStatus, Pending } from "../../shared/pending";
-import { Link, PageError } from "./";
+import { ErrorSummary, Link, PageError } from "./";
 import { SimpleString } from "./renderers";
 import { ProjectDashboardRoute } from "../containers/projects";
-import * as ACC from "./index";
 
 interface LoadingProps<T> {
     pending: Pending<T>;
@@ -15,7 +14,7 @@ interface LoadingProps<T> {
 /**
  * component to render a given ReactNode based on the state of a given Pending object
  */
-class LoadingComponent<T> extends React.Component<LoadingProps<T>, {}> {
+export class ComponentLoader<T> extends React.Component<LoadingProps<T>, {}> {
     render() {
         let result;
 
@@ -68,6 +67,15 @@ class LoadingComponent<T> extends React.Component<LoadingProps<T>, {}> {
     private renderError(error: IAppError): React.ReactNode {
         if (this.props.renderError) return this.props.renderError(error);
 
+        return <ErrorSummary error={error}/>;
+    }
+}
+
+export const PageLoader = <T, B>(props: LoadingProps<T>) => {
+  return (
+    <ComponentLoader
+      {...props}
+      renderError={() => {
         return (
           <PageError title="Something has gone wrong at our end.">
             <SimpleString>
@@ -75,10 +83,11 @@ class LoadingComponent<T> extends React.Component<LoadingProps<T>, {}> {
             </SimpleString>
           </PageError>
         );
-    }
-}
+      }}
+    />);
+};
 
-export const TypedLoader = <T extends {}>() => LoadingComponent as { new(): LoadingComponent<T> };
+export const TypedLoader = <T extends {}>() => ComponentLoader as { new(): ComponentLoader<T> };
 
 export class Loader {
     public static for<T>(
