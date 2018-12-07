@@ -43,10 +43,7 @@ class Component extends ContainerBase<Params, Data, {}> {
       this.props.currentClaims,
       this.props.previousClaims,
       (projectDetails, partners, currentClaims, previousClaims) => ({ projectDetails, partners, currentClaims, previousClaims }));
-
-    const Loader = Acc.TypedLoader<CombinedData>();
-
-    return (<Loader pending={combined} render={x => this.renderContents(x)} />);
+    return (<Acc.PageLoader pending={combined} render={x => this.renderContents(x)} />);
   }
 
   groupClaimsByPeriod(claims: ClaimDto[]): ProjectPeriod[] {

@@ -58,8 +58,7 @@ class Component extends ContainerBase<Params, Data, Callbacks> {
       (document, project, partner, previousClaims, currentClaim, editor) => ({ project, partner, previousClaims, currentClaim, editor, document })
     );
 
-    const Loader = Acc.TypedLoader<CombinedData>();
-    return <Loader pending={combined} render={(x) => this.renderContents(x)} />;
+    return <Acc.PageLoader pending={combined} render={(x) => this.renderContents(x)} />;
   }
 
   private renderIarDocument(claim: ClaimDto, document: DocumentSummaryDto) {
