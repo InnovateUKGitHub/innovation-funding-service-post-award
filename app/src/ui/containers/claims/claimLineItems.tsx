@@ -44,8 +44,7 @@ export class ClaimLineItemsComponent extends ContainerBase<Params, Data, {}> {
       this.props.documents,
       (project, lineItems, costCategories, forecastDetail, documents) => ({ project, lineItems, costCategories, forecastDetail, documents })
     );
-    const Loader = ACC.TypedLoader<CombinedData>();
-    return <Loader pending={combined} render={(data) => this.renderContents(data)} />;
+    return <ACC.PageLoader pending={combined} render={(data) => this.renderContents(data)} />;
   }
 
   private renderContents({ project, lineItems, costCategories, forecastDetail, documents }: CombinedData) {

@@ -45,8 +45,7 @@ export class ClaimsDetailsComponent extends ContainerBase<Params, Data, {}> {
             (project, partner, costCategories, claim, claimDetails) => ({ project, partner, costCategories, claim, claimDetails })
         );
 
-        const Loader = ACC.TypedLoader<CombinedData>();
-        return <Loader pending={combined} render={(data) => this.renderContents(data)} />;
+        return <ACC.PageLoader pending={combined} render={(data) => this.renderContents(data)} />;
     }
 
     private getClaimPeriodTitle(data: any) {
@@ -66,7 +65,7 @@ export class ClaimsDetailsComponent extends ContainerBase<Params, Data, {}> {
       );
     }
 
-    private renderContents(data: { project: ProjectDto, partner: PartnerDto, costCategories: CostCategoryDto[], claim: ClaimDto, claimDetails: ClaimDetailsSummaryDto[] }) {
+    private renderContents(data: CombinedData) {
 
         const title = this.getClaimPeriodTitle(data);
         // const Details = ACC.TypedDetails<typeof data>();

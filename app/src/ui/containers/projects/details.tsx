@@ -21,19 +21,18 @@ interface Callbacks {
 }
 
 interface CombinedData {
-    projectDetails: ProjectDto;
+    project: ProjectDto;
     partners: PartnerDto[];
     contacts: ProjectContactDto[];
 }
 
 class ProjectDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
     render() {
-        const combined = Pending.combine(this.props.projectDetails, this.props.partners, this.props.contacts, (projectDetails, partners, contacts) => ({ projectDetails, partners, contacts }));
-        const Loader = ACC.TypedLoader<CombinedData>();
-        return <Loader pending={combined} render={x => this.renderContents(x.projectDetails, x.partners, x.contacts)} />;
+        const combined = Pending.combine(this.props.projectDetails, this.props.partners, this.props.contacts, (project, partners, contacts) => ({ project, partners, contacts }));
+        return <ACC.PageLoader pending={combined} render={x => this.renderContents(x)} />;
     }
 
-    private renderContents(project: ProjectDto, partners: PartnerDto[], contacts: ProjectContactDto[]) {
+    private renderContents({project, partners, contacts}: CombinedData) {
         const DetailsSection = ACC.TypedDetails<ProjectDto>();
 
         const monitoringOfficer = contacts.find(x => x.role === "Monitoring officer");

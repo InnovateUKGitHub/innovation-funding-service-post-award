@@ -17,14 +17,17 @@ interface Callbacks {
 class ProjectDashboardComponent extends ContainerBase<{}, Data, Callbacks> {
 
   render() {
-    const Loader = ACC.TypedLoader<ProjectDto[]>();
+    return <ACC.PageLoader pending={this.props.projects} render={x => this.renderContent(x)} />;
+  }
+
+  private renderContent(projects: ProjectDto[]) {
     return (
       <ACC.Page>
         <ACC.Section>
           <ACC.BackLink route={HomeRoute.getLink({})}>Back</ACC.BackLink>
         </ACC.Section>
         <ACC.Title title="Projects dashboard" />
-        <Loader pending={this.props.projects} render={x => this.renderSubSections(x)} />
+        {this.renderSubSections(projects)}
       </ACC.Page>
     );
   }
