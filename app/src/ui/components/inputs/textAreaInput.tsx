@@ -25,6 +25,7 @@ export class TextAreaInput extends BaseInput<TextAreaInputProps, InputState> {
   public render() {
     return (
       <textarea
+        id={this.props.name}
         name={this.props.name}
         className={classNames("govuk-textarea")}
         rows={this.props.rows || 5}
