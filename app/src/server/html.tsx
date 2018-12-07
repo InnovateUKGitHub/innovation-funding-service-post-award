@@ -43,8 +43,8 @@ export function renderHtml(html: string, preloadedState: any = {}) {
               window.__PRELOADED_STATE__ = ${JSON.stringify(preloadedState).replace(/</g, "\\u003c")}
           </script>
           <script src="/govuk-frontend-1.2.0.min.js"></script>
-          <script src="/vendor.js"></script>
-          <script src="/bundle.js"></script>
+          <script src="/build/vendor.js"></script>
+          <script src="/build/bundle.js"></script>
           <script>
               window.GOVUKFrontend.initAll()
           </script>

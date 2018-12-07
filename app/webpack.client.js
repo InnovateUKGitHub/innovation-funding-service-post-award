@@ -15,7 +15,7 @@ module.exports = [
       net: 'empty'
     },
     output: {
-      path: __dirname + '/public',
+      path: __dirname + '/public/build',
       filename: '[name].js',
     },
     resolve: {
