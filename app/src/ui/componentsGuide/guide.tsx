@@ -2,8 +2,8 @@ import * as React from "react";
 import { Header } from "../components";
 import { accordionGuide } from "./accordionGuide";
 import { claimWindowGuide } from "./claimWindowGuide";
-import { detailsGuide } from "./detailsGuide";
 import { datesGuide } from "./datesGuide";
+import { detailsGuide } from "./detailsGuide";
 import { documentListGuide } from "./documentListGuide";
 import { documentSingleGuide } from "./documentSingleGuide";
 import { emailGuide } from "./emailGuide";
@@ -15,11 +15,11 @@ import { projectMemberGuide } from "./projectMemberGuide";
 import { renderersGuide } from "./renderersGuide";
 import { sectionGuide } from "./sectionGuide";
 import { sectionPanelGuide } from "./sectionPanelGuide";
+import { tableGuide } from "./tableGuide";
 import { tabsGuide } from "./tabsGuide";
 import { titleGuide } from "./titleGuide";
-import { tableGuide } from "./tableGuide";
-import { validationMessageGuide } from "./validationMessageGuide";
 import { validationErrorGuide } from "./validationErrorGuide";
+import { validationMessageGuide } from "./validationMessageGuide";
 import { validationSummaryGuide } from "./validationSummaryGuide";
 
 const guides: IGuide[] = [
