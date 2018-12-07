@@ -61,8 +61,7 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<Params, 
       this.props.documents,
       (project, lineItems, costCategories, forecastDetail, documents) => ({ project, lineItems, costCategories, forecastDetail, documents })
     );
-    const Loader = ACC.TypedLoader<CombinedData>();
-    return <Loader pending={combined} render={(data) => this.renderContents(data, this.props.editor)} />;
+    return <ACC.PageLoader pending={combined} render={(data) => this.renderContents(data, this.props.editor)} />;
   }
 
   // TODO fix back link
