@@ -55,8 +55,7 @@ export class PrepareComponent extends ContainerBase<Params, Data, Callbacks> {
             (project, partner, costCategories, claim, claimDetails, editor) => ({ project, partner, costCategories, claim, claimDetails, editor })
         );
 
-        const Loader = ACC.TypedLoader<CombinedData>();
-        return <Loader pending={combined} render={(data) => this.renderContents(data)} />;
+        return <ACC.PageLoader pending={combined} render={(data) => this.renderContents(data)} />;
     }
 
     private getClaimPeriodTitle(data: any) {
