@@ -87,6 +87,7 @@ export const PageLoader = <T, B>(props: LoadingProps<T>) => {
     />);
 };
 
+// TODO Replace uses with ComponentLoader
 export const TypedLoader = <T extends {}>() => ComponentLoader as { new(): ComponentLoader<T> };
 
 export class Loader {
