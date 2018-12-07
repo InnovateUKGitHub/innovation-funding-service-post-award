@@ -97,7 +97,7 @@ export class PrepareComponent extends ContainerBase<Params, Data, Callbacks> {
                     <ACC.Claims.ClaimTable {...data} validation={data.editor.validator.claimDetails.results} getLink={costCategoryId => EditClaimLineItemsRoute.getLink({partnerId: this.props.partnerId, projectId: this.props.projectId, periodId: this.props.periodId, costCategoryId})} />
                     <Form.Form data={data.editor.data} onChange={(dto) => this.onChange(dto, data.claimDetails, data.costCategories)} onSubmit={() => this.saveAndProgress(data.editor.data, data.claimDetails, data.costCategories)}>
                         <Form.Fieldset heading={commentsLabel} qa="additional-info-form" headingQa="additional-info-heading">
-                            <Form.MultilineString hint={commentsHint} name="comments" value={m => m.comments} update={(m, v) => m.comments = v} validation={data.editor.validator.comments} qa="info-text-area"/>
+                            <Form.MultilineString label="additional-info" labelHidden={true} hint={commentsHint} name="comments" value={m => m.comments} update={(m, v) => m.comments = v} validation={data.editor.validator.comments} qa="info-text-area"/>
                         </Form.Fieldset>
                         <ACC.Renderers.SimpleString>
                             You need to review your forecasts before you can submit your claim.

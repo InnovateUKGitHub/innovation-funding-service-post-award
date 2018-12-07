@@ -85,6 +85,7 @@ interface InternalFieldProps<T> {
 
 interface ExternalFieldProps<TDto, TValue> {
     label?: React.ReactNode;
+    labelHidden?: boolean;
     hint?: React.ReactNode;
     name: string;
     value: (data: TDto) => TValue | null | undefined;
@@ -94,10 +95,10 @@ interface ExternalFieldProps<TDto, TValue> {
 
 class FieldComponent<T, TValue> extends React.Component<InternalFieldProps<T> & ExternalFieldProps<T, TValue>, {}> {
     render() {
-        const { hint, name, label, field, formData, validation } = this.props;
+        const { hint, name, label, labelHidden, field, formData, validation } = this.props;
         return (
             <div data-qa={`field-${name}`} className={classNames("govuk-form-group", { "govuk-form-group--error": validation && validation.showValidationErrors && !validation.isValid })}>
-                <label className="govuk-label" htmlFor={name}>{label}</label>
+                {!!label ? <label className={classNames("govuk-label", { "govuk-visually-hidden" : labelHidden })} htmlFor={name}>{label}</label> : null}
                 {hint ? <span id={`${name}-hint`} className="govuk-hint">{hint}</span> : null}
                 <ValidationError error={validation} />
                 {field(formData!)}

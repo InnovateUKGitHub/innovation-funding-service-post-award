@@ -28,6 +28,7 @@ export class NumberInput extends BaseInput<NumberInputProps, NumberInputState> {
   public render() {
     return (
       <input
+        id={this.props.name}
         type="text"
         className={classNames("govuk-input", "govuk-table__cell--numeric", { "govuk-input--error": this.state.invalid }, this.props.className)}
         name={this.props.name}
