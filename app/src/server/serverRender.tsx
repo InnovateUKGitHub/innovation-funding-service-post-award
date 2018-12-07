@@ -35,7 +35,7 @@ export function serverRender(req: Request, res: Response, validationError?: { ke
 
     if (routeError) {
       console.log("router start error", routeError);
-      sendErrorResponse(res);
+      return sendErrorResponse(res);
     }
 
     const initialState = setupInitialState(route, req.session!.user);
@@ -52,7 +52,7 @@ export function serverRender(req: Request, res: Response, validationError?: { ke
       });
     }
 
-    loadData(store.dispatch, () => store.getState(), actions)
+    return loadData(store.dispatch, () => store.getState(), actions)
       .then(() => {
         const html = renderToString(
           <Provider store={store}>
@@ -66,7 +66,7 @@ export function serverRender(req: Request, res: Response, validationError?: { ke
       })
       .catch((error: any) => {
         console.log("server render error", error);
-        sendErrorResponse(res);
+        return sendErrorResponse(res);
       });
   });
 }
