@@ -3,6 +3,8 @@ import * as React from "react";
 interface Props {
   title: string;
   children: JSX.Element;
+  closedAltText?: string;
+  openAltText?: string;
 }
 
 interface State {
@@ -33,7 +35,11 @@ export class AccordionItem extends React.Component<Props, State> {
       <div className="acc-accordion__section">
         <div className="acc-accordion__section-header" onClick={() => this.setState({ accordionOpen: !this.state.accordionOpen })}>
           <button data-qa="accordion-button" style={buttonStyle} className="govuk-heading-m govuk-!-margin-bottom-3 govuk-!-margin-top-3">{this.props.title}</button>
-          <img className="govuk-!-padding-right-2" src={this.state.accordionOpen ? "/assets/images/icon-minus.png" : "/assets/images/icon-plus.png"} />
+          <img
+            className="govuk-!-padding-right-2"
+            src={this.state.accordionOpen ? "/assets/images/icon-minus.png" : "/assets/images/icon-plus.png"}
+            alt={this.state.accordionOpen ? this.props.openAltText : this.props.closedAltText}
+          />
         </div>
         {this.state.accordionOpen && <div className="acc-accordion__section-panel">
           {this.props.children}

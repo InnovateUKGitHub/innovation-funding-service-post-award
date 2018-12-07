@@ -146,7 +146,7 @@ class Component extends ContainerBase<Params, Data, {}> {
     return (
         <Accordion>
           {grouped.map(x => (
-            <AccordionItem title={`${x.partner.name} ${x.partner.isLead ? "(Lead)" : ""}`}>
+            <AccordionItem title={`${x.partner.name} ${x.partner.isLead ? "(Lead)" : ""}`} openAltText="Hide the closed claims" closedAltText="Show the closed claims">
               {this.previousClaimsSection(project, x.partner, x.claims)}
             </AccordionItem>
           ))}
@@ -171,9 +171,9 @@ class Component extends ContainerBase<Params, Data, {}> {
     );
   }
 
-  private renderClosedPeriodColumn({ periodId, periodStartDate, periodEndDate }: ClaimDto) {
+  private renderClosedPeriodColumn(claim: ClaimDto) {
     return (
-      <span>Period {periodId} <Acc.Renderers.LongDateRange start={periodStartDate} end={periodEndDate} isShortMonth={true} /></span>
+      <Acc.Claims.ClaimPeriodDate claim={claim} />
     );
   }
   private getLink(claim: ClaimDto, projectId: string) {
