@@ -1,4 +1,5 @@
 import React from "react";
+import path from "path";
 import { Request, Response } from "express";
 import { renderToString } from "react-dom/server";
 import { AnyAction, createStore, Dispatch } from "redux";
@@ -25,6 +26,8 @@ async function loadData(dispatch: Dispatch<AnyAction>, getState: () => RootState
   return Promise.all(allPromises).then(() => loadData(dispatch, getState, dataCalls));
 }
 
+const sendErrorResponse = (res: Response) => res.status(500).sendFile(path.join(__dirname, "../../../public/error.html"));
+
 export function serverRender(req: Request, res: Response, validationError?: { key: string, store: string, dto: {}, result: Results<{}>, error: IAppError | null }) {
   const router = configureRouter();
 
@@ -32,7 +35,7 @@ export function serverRender(req: Request, res: Response, validationError?: { ke
 
     if (routeError) {
       console.log("router start error", routeError);
-      return res.status(500).send(routeError);
+      return sendErrorResponse(res);
     }
 
     const initialState = setupInitialState(route, req.session!.user);
@@ -49,7 +52,7 @@ export function serverRender(req: Request, res: Response, validationError?: { ke
       });
     }
 
-    loadData(store.dispatch, () => store.getState(), actions)
+    return loadData(store.dispatch, () => store.getState(), actions)
       .then(() => {
         const html = renderToString(
           <Provider store={store}>
@@ -63,7 +66,7 @@ export function serverRender(req: Request, res: Response, validationError?: { ke
       })
       .catch((error: any) => {
         console.log("server render error", error);
-        res.status(500).send(error);
+        return sendErrorResponse(res);
       });
   });
 }
