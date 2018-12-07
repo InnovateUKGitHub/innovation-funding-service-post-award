@@ -57,15 +57,11 @@ class ReviewComponent extends ContainerBase<Params, Data, Callbacks> {
     return <ACC.PageLoader pending={combined} render={(data) => this.renderContents(data)} />;
   }
 
-  private getClaimPeriodTitle(data: any) {
-    if (data.project.claimFrequency === ClaimFrequency.Monthly) {
-      return `${data.partner.name} claim for P${data.claim.periodId} ${DateTime.fromJSDate(data.claim.periodStartDate).toFormat("MMMM yyyy")}`;
-    }
-    return `${data.partner.name} claim for P${data.claim.periodId} ${DateTime.fromJSDate(data.claim.periodStartDate).toFormat("MMMM")} to ${DateTime.fromJSDate(data.claim.periodEndDate).toFormat("MMMM yyyy")}`;
+  private getClaimPeriodTitle(data: CombinedData) {
+    return <ACC.Claims.ClaimPeriodDate claim={data.claim} />;
   }
 
   private renderContents(data: CombinedData) {
-    const title = this.getClaimPeriodTitle(data);
     const Form = ACC.TypedForm<ClaimDto>();
     const options: ACC.SelectOption[] = [
       { id: ClaimStatus.MO_QUERIED, value: "Query claim"},
@@ -82,7 +78,7 @@ class ReviewComponent extends ContainerBase<Params, Data, Callbacks> {
         <ACC.ValidationSummary validation={data.editor.validator} compressed={false} />
         <ACC.Projects.Title pageTitle="Claim" project={data.project} />
         <ACC.Claims.Navigation projectId={data.project.id} partnerId={data.partner.id} periodId={data.claim.periodId} currentRouteName={ClaimsDetailsRoute.routeName} />
-        <ACC.Section title={title}>
+        <ACC.Section title={this.getClaimPeriodTitle(data)}>
           <ACC.Claims.ClaimTable {...data} validation={data.editor.validator.claimDetails.results} getLink={costCategoryId => ReviewClaimLineItemsRoute.getLink({ partnerId: this.props.partnerId, projectId: this.props.projectId, periodId: this.props.periodId, costCategoryId })} />
         </ACC.Section>
         <ACC.Section>

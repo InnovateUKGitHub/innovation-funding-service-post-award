@@ -48,11 +48,8 @@ export class ClaimsDetailsComponent extends ContainerBase<Params, Data, {}> {
         return <ACC.PageLoader pending={combined} render={(data) => this.renderContents(data)} />;
     }
 
-    private getClaimPeriodTitle(data: any) {
-      if (data.project.claimFrequency === ClaimFrequency.Monthly) {
-        return `${data.partner.name} claim for P${data.claim.periodId} ${DateTime.fromJSDate(data.claim.periodStartDate).toFormat("MMMM yyyy")}`;
-      }
-      return `${data.partner.name} claim for P${data.claim.periodId} ${DateTime.fromJSDate(data.claim.periodStartDate).toFormat("MMMM")} to ${DateTime.fromJSDate(data.claim.periodEndDate).toFormat("MMMM yyyy")}`;
+    private getClaimPeriodTitle(data: CombinedData) {
+      return <ACC.Claims.ClaimPeriodDate claim={data.claim} />;
     }
 
     private renderIarSection(claim: ClaimDto, iarDocument?: DocumentSummaryDto | null) {
@@ -66,10 +63,6 @@ export class ClaimsDetailsComponent extends ContainerBase<Params, Data, {}> {
     }
 
     private renderContents(data: CombinedData) {
-
-        const title = this.getClaimPeriodTitle(data);
-        // const Details = ACC.TypedDetails<typeof data>();
-
         return (
             <ACC.Page>
                 <ACC.Section>
@@ -77,7 +70,7 @@ export class ClaimsDetailsComponent extends ContainerBase<Params, Data, {}> {
                 </ACC.Section>
                 <ACC.Projects.Title pageTitle="Claim" project={data.project} />
                 <ACC.Claims.Navigation projectId={data.project.id} partnerId={data.partner.id} periodId={data.claim.periodId} currentRouteName={ClaimsDetailsRoute.routeName} />
-                <ACC.Section title={title}>
+                <ACC.Section title={this.getClaimPeriodTitle(data)}>
                     <ACC.Claims.ClaimTable {...data} getLink={costCategoryId => ClaimLineItemsRoute.getLink({partnerId: this.props.partnerId, projectId: this.props.projectId, periodId: this.props.periodId, costCategoryId})} />
                 </ACC.Section>
                 { this.renderIarSection(data.claim, this.props.iarDocument.data) }
