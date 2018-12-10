@@ -4,7 +4,7 @@ import { GetAllForProjectQuery, GetByIdQuery } from "../features/partners";
 
 export interface IPartnersApi {
   getAllByProjectId: (params: ApiParams<{ projectId: string }>) => Promise<PartnerDto[]>;
-  get: (params: ApiParams<{ id: string }>) => Promise<PartnerDto | null>;
+  get: (params: ApiParams<{ partnerId: string }>) => Promise<PartnerDto | null>;
 }
 
 class Controller extends ControllerBase<PartnerDto> implements IPartnersApi {
@@ -13,7 +13,7 @@ class Controller extends ControllerBase<PartnerDto> implements IPartnersApi {
     super("partners");
 
     this.getItems("/", (p, q) => ({ projectId: q.projectId as string }), (p) => this.getAllByProjectId(p));
-    this.getItem("/:id", (p) => ({ id: p.id as string }), (p) => this.get(p));
+    this.getItem("/:partnerId", (p) => ({ partnerId: p.partnerId as string }), (p) => this.get(p));
   }
 
   public async getAllByProjectId(params: ApiParams<{ projectId: string }>) {
@@ -22,9 +22,9 @@ class Controller extends ControllerBase<PartnerDto> implements IPartnersApi {
     return await contextProvider.start(params).runQuery(query);
   }
 
-  public async get(params: ApiParams<{ id: string }>) {
-    const { id } = params;
-    const query = new GetByIdQuery(id);
+  public async get(params: ApiParams<{ partnerId: string }>) {
+    const { partnerId } = params;
+    const query = new GetByIdQuery(partnerId);
     return await contextProvider.start(params).runQuery(query);
   }
 }
