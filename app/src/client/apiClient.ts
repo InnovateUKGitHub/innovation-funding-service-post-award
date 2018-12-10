@@ -21,7 +21,7 @@ const clientApi: IApiClient = {
   },
   contacts: {
     getAll: (params) => ajaxJson("/api/contacts"),
-    get: (params) => ajaxJson(`/api/contact/${params.id}`),
+    get: (params) => ajaxJson(`/api/contact/${params.contactId}`),
   },
   costCategories: {
     getAll: (params) => ajaxJson("/api/cost-categories"),
@@ -51,14 +51,14 @@ const clientApi: IApiClient = {
     getAllByPartnerId: (params) => ajaxJson(`/api/forecast-gol-costs/?partnerId=${params.partnerId}`)
   },
   projects: {
-    get: (params) => ajaxJson(`/api/projects/${params.id}`),
+    get: (params) => ajaxJson(`/api/projects/${params.projectId}`),
     getAll: (params) => ajaxJson("/api/projects"),
   },
   projectContacts: {
     getAllByProjectId: (params) => ajaxJson(`/api/project-contacts?projectId=${params.projectId}`),
   },
   partners: {
-    get: (params) => ajaxJson(`/api/partners/${params.id}`),
+    get: (params) => ajaxJson(`/api/partners/${params.partnerId}`),
     getAllByProjectId: (params) => ajaxJson(`/api/partners?projectId=${params.projectId}`),
   },
   users: {
