@@ -52,7 +52,7 @@ class UpdateForecastComponent extends ContainerBase<Params, PendingForecastData,
             onSubmit={() => this.saveAndReturn(combined, periodId)}
             qa="partner-forecast-form"
           >
-            <ACC.Claims.ForecastTable data={combined} periodId={periodId} />
+            <ACC.Claims.ForecastTable data={combined} projectPeriodId={periodId} />
             <Form.Fieldset>
               <Form.Submit>Submit</Form.Submit>
               <ACC.Claims.ClaimLastModified claim={combined.claim} />
