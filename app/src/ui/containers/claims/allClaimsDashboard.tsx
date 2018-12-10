@@ -81,7 +81,7 @@ class Component extends ContainerBase<Params, Data, {}> {
         const date = DateTime.fromJSDate(project.periodEndDate).plus({days: 1}).toJSDate();
 
         return (
-          <Acc.Renderers.SimpleString>
+          <Acc.Renderers.SimpleString qa="notificationMessage">
             The claim period for P{project.periodId} will open on <Acc.Renderers.FullDate value={date} />
           </Acc.Renderers.SimpleString>
         );
