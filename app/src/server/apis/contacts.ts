@@ -5,7 +5,7 @@ import { GetByIdQuery } from "../features/contacts/getByIdQuery";
 import { ApiParams, ControllerBase } from "./controllerBase";
 
 export interface IContactsApi {
-  get: (params: ApiParams<{ id: string }>) => Promise<IContact | null>;
+  get: (params: ApiParams<{ contactId: string }>) => Promise<IContact | null>;
   getAll: (params: ApiParams<{}>) => Promise<IContact[]>;
 }
 
@@ -15,7 +15,7 @@ class Controller extends ControllerBase<IContact> implements IContactsApi {
     super("contacts");
 
     this.getItems("/", p => ({}), (p) => this.getAll(p));
-    this.getItem("/:id", p => ({ id: p.id }), (p) => this.get(p));
+    this.getItem("/:contactId", p => ({ contactId: p.contactId }), (p) => this.get(p));
   }
 
   public async getAll(params: ApiParams<{}>) {
@@ -23,8 +23,8 @@ class Controller extends ControllerBase<IContact> implements IContactsApi {
     return await contextProvider.start(params).runQuery(query);
   }
 
-  public async get(params: ApiParams<{ id: string }>) {
-    const query = new GetByIdQuery(params.id);
+  public async get(params: ApiParams<{ contactId: string }>) {
+    const query = new GetByIdQuery(params.contactId);
     return await contextProvider.start(params).runQuery(query);
   }
 }
