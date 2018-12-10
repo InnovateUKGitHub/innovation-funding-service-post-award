@@ -21,7 +21,7 @@ const createValidator = (partnerId: string, periodId: number, forecastDetails: F
 
 export const getForecastDetailsEditor = (state: RootState, partnerId: string) => {
   const claim = getCurrentClaim(state, partnerId);
-  const periodId = claim.isDone() ? claim.data!.periodId : NaN;
+  const periodId = claim.isDone() && !!claim.data ? claim.data.periodId : NaN;
 
   return editorStoreHelper<ForecastDetailsDTO[], ForecastDetailsDtosValidator>(
     forecastDetailsStore,
