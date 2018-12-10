@@ -1,6 +1,8 @@
 import { TestContext } from "../../testContextProvider";
 import { UpdateForecastDetailsCommand } from "../../../../src/server/features/forecastDetails";
 import { ValidationError } from "../../../../src/shared/validation";
+import { ClaimFrequency } from "../../../../src/types";
+import { DateTime } from "luxon";
 
 describe("UpdateForecastDetailsCommand", () => {
   it("when id not set expect validation exception", async () => {
@@ -103,5 +105,37 @@ describe("UpdateForecastDetailsCommand", () => {
 
     expect(context.repositories.profileDetails.Items.find(x => x.Id === profileDetail.Id).Acc_LatestForecastCost__c).toBe(250);
     expect(context.repositories.profileDetails.Items.find(x => x.Id === profileDetail2.Id).Acc_LatestForecastCost__c).toBe(100);
+  });
+
+  it("when updating forecast for period < project period id, expect exception", async () => {
+    const context  = new TestContext();
+    const testData = context.testData;
+
+    const periodId  = 1;
+    const startDate = DateTime.local().minus({ months: 6 });
+    const endDate   = DateTime.local().plus({ months: 6 });
+
+    const project   = testData.createProject(x => {
+      x.Acc_ClaimFrequency__c = "Monthly";
+      x.Acc_StartDate__c      = startDate.toFormat("yyyy-MM-dd");
+      x.Acc_EndDate__c        = endDate.toFormat("yyyy-MM-dd");
+    });
+    const partner       = testData.createPartner(project);
+    const costCat       = testData.createCostCategory();
+    const profileDetail = testData.createProfileDetail(costCat, partner, periodId, x => x.Acc_LatestForecastCost__c = 123);
+    const partnerId     = profileDetail.Acc_ProjectParticipant__c;
+    const dto: ForecastDetailsDTO[] = [{
+      periodId,
+      id: profileDetail.Id,
+      costCategoryId: costCat.Id,
+      periodStart: new Date(),
+      periodEnd: new Date(),
+      value: 500
+    }];
+    testData.createClaimDetail(costCat, partner, periodId - 1, x => x.Acc_PeriodCostCategoryTotal__c = 1000);
+    testData.createProfileTotalCostCategory(costCat, partner, 1500);
+
+    const command = new UpdateForecastDetailsCommand(partnerId, periodId, dto, false);
+    await expect(context.runCommand(command)).rejects.toThrow(Error);
   });
 });
