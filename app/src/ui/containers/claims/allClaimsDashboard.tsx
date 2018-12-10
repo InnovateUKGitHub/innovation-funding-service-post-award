@@ -9,6 +9,7 @@ import * as Acc from "../../components";
 import { Accordion, AccordionItem } from "../../components";
 import { ClaimsDetailsRoute, ReviewClaimRoute, } from ".";
 import { ClaimStatus } from "../../../types";
+import {DateTime} from "luxon";
 
 interface Params {
   projectId: string;
@@ -63,10 +64,10 @@ class Component extends ContainerBase<Params, Data, {}> {
     return (
       <ProjectOverviewPage project={projectDetails} partners={partners} selectedTab={AllClaimsDashboardRoute.routeName}>
         {this.renderSummary(projectDetails)}
-        <Acc.Section title="Open">
+        <Acc.Section qa="current-claims-section" title="Open">
           {this.renderCurrentClaimsPerPeriod(currentClaims, projectDetails, partners)}
         </Acc.Section>
-        <Acc.Section title="Closed">
+        <Acc.Section qa="closed-claims-section" title="Closed">
          {this.renderPreviousClaimsSections(projectDetails, partners, previousClaims)}
         </Acc.Section>
       </ProjectOverviewPage>
@@ -75,6 +76,16 @@ class Component extends ContainerBase<Params, Data, {}> {
 
   private renderCurrentClaimsPerPeriod(claims: ClaimDto[], project: ProjectDto, partners: PartnerDto[]) {
     const groupedClaims = this.groupClaimsByPeriod(claims);
+    if (groupedClaims.length === 0) {
+        if(!project.periodEndDate) return null;
+        const date = DateTime.fromJSDate(project.periodEndDate).plus({days: 1}).toJSDate();
+
+        return (
+          <Acc.Renderers.SimpleString>
+            The claim period for P{project.periodId} will open on <Acc.Renderers.FullDate value={date} />
+          </Acc.Renderers.SimpleString>
+        );
+    }
     return groupedClaims.map(x => this.renderCurrentClaims(x, project, partners));
   }
 
