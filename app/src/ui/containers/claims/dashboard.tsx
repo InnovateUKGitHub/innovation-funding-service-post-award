@@ -183,7 +183,7 @@ class Component extends ContainerBase<Params, Data, Callbacks> {
 
       return (
           <Acc.Renderers.SimpleString>
-            The claim period for P{project.periodId + 1} will open on <Acc.Renderers.FullDate value={date} />
+            The claim period for P{project.periodId} will open on <Acc.Renderers.FullDate value={date} />
           </Acc.Renderers.SimpleString>
       );
     }
