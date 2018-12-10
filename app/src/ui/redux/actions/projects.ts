@@ -7,7 +7,7 @@ import {
 } from "../selectors";
 
 export function loadProject(projectId: string) {
-  return conditionalLoad(getProject(projectId), params => ApiClient.projects.get({id: projectId, ...params}));
+  return conditionalLoad(getProject(projectId), params => ApiClient.projects.get({projectId, ...params}));
 }
 
 export function loadProjects() {
