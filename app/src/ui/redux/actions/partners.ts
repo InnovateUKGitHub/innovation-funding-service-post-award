@@ -7,7 +7,7 @@ import {
 } from "../selectors/partners";
 
 export function loadPartner(partnerId: string) {
-  return conditionalLoad(getPartner(partnerId), params => ApiClient.partners.get({id: partnerId, ...params}));
+  return conditionalLoad(getPartner(partnerId), params => ApiClient.partners.get({partnerId, ...params}));
 }
 
 export function loadPartnersForProject(projectId: string) {
