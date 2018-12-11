@@ -1,6 +1,6 @@
 import { ApiParams, ControllerBase } from "./controllerBase";
 import contextProvider from "../features/common/contextProvider";
-import {GetAllForecastsForPartnerQuery, GetForecastDetail, UpdateForecastDetailsCommand} from "../features/forecastDetails";
+import {GetAllForecastsForPartnerQuery, GetForecastDetailQuery, UpdateForecastDetailsCommand} from "../features/forecastDetails";
 import { processDto } from "../../shared/processResponse";
 
 export interface IForecastDetailsApi {
@@ -38,7 +38,7 @@ class Controller extends ControllerBase<ForecastDetailsDTO> implements IForecast
   }
 
   public async get(params: ApiParams<{ partnerId: string, periodId: number, costCategoryId: string }>) {
-    const query = new GetForecastDetail(params.partnerId, params.periodId, params.costCategoryId);
+    const query = new GetForecastDetailQuery(params.partnerId, params.periodId, params.costCategoryId);
     return await contextProvider.start(params).runQuery(query);
   }
 
