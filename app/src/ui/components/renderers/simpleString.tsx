@@ -1,3 +1,7 @@
 import React from "react";
 
-export const SimpleString: React.SFC = (props) => <p className="govuk-body">{props.children}</p>;
+interface Props {
+  qa?: string;
+}
+
+export const SimpleString: React.SFC<Props> = (props) => <p className="govuk-body" data-qa={props.qa}>{props.children}</p>;
