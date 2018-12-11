@@ -11,6 +11,6 @@ export function configureRouter() {
         path: r.routePath,
       }));
 
-  return createRouter(routes)
+  return createRouter(routes, { allowNotFound: true })
     .usePlugin(browserPluginFactory({ useHash: false }));
 }

@@ -5,6 +5,7 @@ import { renderToString } from "react-dom/server";
 import { AnyAction, createStore, Dispatch } from "redux";
 import { Provider } from "react-redux";
 import { RouterProvider } from "react-router5";
+import { constants as routerConstants } from "router5";
 
 import { renderHtml } from "./html";
 import { rootReducer, RootState, setupInitialState, setupMiddleware } from "../ui/redux";
@@ -27,6 +28,7 @@ async function loadData(dispatch: Dispatch<AnyAction>, getState: () => RootState
 }
 
 const sendErrorResponse = (res: Response) => res.status(500).sendFile(path.join(__dirname, "../../../public/error.html"));
+const sendNotFoundResponse = (res: Response) => res.status(404).sendFile(path.join(__dirname, "../../../public/error-not-found.html"));
 
 export function serverRender(req: Request, res: Response, validationError?: { key: string, store: string, dto: {}, result: Results<{}>, error: IAppError | null }) {
   const router = configureRouter();
@@ -36,6 +38,10 @@ export function serverRender(req: Request, res: Response, validationError?: { ke
     if (routeError) {
       console.log("router start error", routeError);
       return sendErrorResponse(res);
+    }
+
+    if (route && route.name === routerConstants.UNKNOWN_ROUTE) {
+      return sendNotFoundResponse(res);
     }
 
     const initialState = setupInitialState(route, req.session!.user);
