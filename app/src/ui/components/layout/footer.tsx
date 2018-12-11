@@ -53,7 +53,7 @@ export const Footer: React.SFC<{}> = () => {
               <path fill="currentColor" d={path} />
             </svg>
             <span className="govuk-footer__licence-description" data-qa="licence">
-              All content is available under the <a className="govuk-footer__link" href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/" rel="license">Open Government Licence v3.0</a>, except where otherwise stated
+              All content is available under the <a className="govuk-footer__link" href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/" rel="license" data-qa="license-link">Open Government Licence v3.0</a>, except where otherwise stated
             </span>
           </div>
           <div className="govuk-footer__meta-item">
