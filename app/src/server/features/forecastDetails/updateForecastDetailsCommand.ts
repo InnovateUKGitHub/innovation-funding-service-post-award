@@ -6,6 +6,9 @@ import { GetAllClaimDetailsByPartner } from "../claimDetails";
 import { ISalesforceProfileDetails } from "../../repositories";
 import { Updatable } from "../../repositories/salesforceBase";
 import { ClaimStatus } from "../../../types";
+import { GetAllForecastsForPartnerQuery } from "./getAllForecastsForPartnerQuery";
+import { GetByIdQuery as GetPartnerById } from "../partners";
+import { GetByIdQuery as GetProjectById } from "../projects";
 
 export class UpdateForecastDetailsCommand extends CommandBase<boolean> {
   constructor(
@@ -18,6 +21,18 @@ export class UpdateForecastDetailsCommand extends CommandBase<boolean> {
   }
 
   protected async Run(context: IContext) {
+    await this.testValidation(context);
+    await this.testPastForecastPeriodsHaveNotBeenUpdated(context);
+    await this.updateProfileDetails(context);
+
+    if(this.submit) {
+      await this.updateClaim(context);
+    }
+
+    return true;
+  }
+
+  private async testValidation(context: IContext) {
     const claimDetails = await context.runQuery(new GetAllClaimDetailsByPartner(this.partnerId));
     const golCosts = await context.runQuery(new GetAllForecastsGOLCostsQuery(this.partnerId));
     const costCategories = await context.runQuery(new GetCostCategoriesQuery());
@@ -28,14 +43,21 @@ export class UpdateForecastDetailsCommand extends CommandBase<boolean> {
     if (!validation.isValid) {
       throw new ValidationError(validation);
     }
+  }
 
-    await this.updateProfileDetails(context);
+  private async testPastForecastPeriodsHaveNotBeenUpdated(context: IContext) {
+    const partner = await context.runQuery(new GetPartnerById(this.partnerId));
+    const project = await context.runQuery(new GetProjectById(partner!.projectId));
+    const current = await context.runQuery(new GetAllForecastsForPartnerQuery(this.partnerId));
+    const passed  = current.filter(x => x.periodId <= project!.periodId)
+      .every(x => {
+        const forecast = this.forecasts.find(y => y.id === x.id);
+        return !!forecast && forecast.value === x.value;
+      });
 
-    if(this.submit) {
-      await this.updateClaim(context);
+    if(!passed) {
+      throw new Error("You can't update the forecast of completed periods.");
     }
-
-    return true;
   }
 
   private async updateProfileDetails(context: IContext) {

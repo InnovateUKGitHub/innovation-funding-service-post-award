@@ -5,7 +5,6 @@ import { Currency, DateRange, Percentage } from "../../components/renderers";
 import { ForecastDetailsDtosValidator } from "../../validators/forecastDetailsDtosValidator";
 import { IEditorStore } from "../../redux";
 import { ForecastData } from "../../containers/claims/forecasts/common";
-import { ClaimDto } from "../../../types";
 
 interface TableRow {
   categoryId: string;
@@ -26,14 +25,14 @@ interface Props {
   hideValidation?: boolean;
   data: ForecastData;
   onChange?: (data: ForecastDetailsDTO[]) => void;
-  periodId: number;
+  projectPeriodId: number;
 }
 
 export class ForecastTable extends React.Component<Props> {
   public render() {
     const { data, hideValidation } = this.props;
 
-    const periodId  = !!data.claim ? data.claim.periodId : this.props.periodId;
+    const periodId  = !!data.claim ? Math.min(this.props.projectPeriodId, data.claim.periodId) : this.props.projectPeriodId;
     const parsed    = this.parseClaimData(data, periodId);
     const Table     = ACC.TypedTable<typeof parsed[0]>();
     const intervals = this.calculateClaimPeriods(data);
@@ -78,14 +77,14 @@ export class ForecastTable extends React.Component<Props> {
       };
 
       data.claimDetails.forEach(x => {
-        if(x.costCategoryId === category.id && x.periodId < periodId) {
+        if(x.costCategoryId === category.id && x.periodId <= periodId) {
           row.claims[x.periodId] = x.value;
           row.total += x.value;
         }
       });
 
       forecasts.forEach(x => {
-        if(x.costCategoryId === category.id && x.periodId >= periodId) {
+        if(x.costCategoryId === category.id && x.periodId > periodId) {
           row.forecasts[x.periodId] = x.value;
           row.total += x.value;
         }
@@ -120,7 +119,8 @@ export class ForecastTable extends React.Component<Props> {
     const editor = data.editor;
     const value  = forecastRow.forecasts[period];
 
-    return !editor ? (
+    // if the whole table isn't editable or the periods are overdue then they aren't editable
+    return !editor || parseInt(period, 10) <= this.props.projectPeriodId ? (
       <Currency value={value} />
     ) : (
       <span>

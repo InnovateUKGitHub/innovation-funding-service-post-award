@@ -105,7 +105,7 @@ class Component extends ContainerBase<Params, Data, Callbacks> {
         <Acc.ValidationMessage messageType={messageType} message={message} />
         <UploadForm.Form data={editor.data} onChange={(dto) => this.onChange(dto, claim.periodId)}>
           <UploadForm.Fieldset>
-            <UploadForm.FileUpload validation={editor.validator.file} value={(data) => data.file} name="Upload documents" update={(dto, file) => dto.file = file} />
+            <UploadForm.FileUpload label="document" labelHidden={true} name="upload-documents" validation={editor.validator.file} value={(data) => data.file}  update={(dto, file) => dto.file = file} />
           </UploadForm.Fieldset>
           <UploadForm.Button name="default" onClick={() => this.onSave(editor.data, claim.periodId)}>Upload</UploadForm.Button>
         </UploadForm.Form>
@@ -183,7 +183,7 @@ class Component extends ContainerBase<Params, Data, Callbacks> {
 
       return (
           <Acc.Renderers.SimpleString>
-            The claim period for P{project.periodId + 1} will open on <Acc.Renderers.FullDate value={date} />
+            The claim period for P{project.periodId} will open on <Acc.Renderers.FullDate value={date} />
           </Acc.Renderers.SimpleString>
       );
     }
