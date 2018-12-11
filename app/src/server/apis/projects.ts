@@ -4,7 +4,7 @@ import contextProvider from "../features/common/contextProvider";
 import { ProjectDto } from "../../types";
 
 export interface IProjectsApi {
-  get: (params: ApiParams<{ id: string }>) => Promise<ProjectDto | null>;
+  get: (params: ApiParams<{ projectId: string }>) => Promise<ProjectDto | null>;
   getAll: (params: ApiParams<{}>) => Promise<ProjectDto[]>;
 }
 
@@ -13,12 +13,12 @@ class Controller extends ControllerBase<ProjectDto> implements IProjectsApi {
   constructor() {
     super("projects");
 
-    super.getItem("/:id", p => ({ id: p.id }), (p) => this.get(p));
+    super.getItem("/:projectId", p => ({ projectId: p.projectId }), (p) => this.get(p));
     super.getItems("/", p => ({}), (p) => this.getAll(p));
   }
 
-  public async get(params: ApiParams<{ id: string }>) {
-    const query = new GetByIdQuery(params.id);
+  public async get(params: ApiParams<{ projectId: string }>) {
+    const query = new GetByIdQuery(params.projectId);
     return await contextProvider.start(params).runQuery(query);
   }
 

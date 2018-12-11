@@ -1,7 +1,7 @@
 import { IContext, QueryBase } from "../common/context";
 import mapForecastDetail from "./mapForecastDetail";
 
-export class GetForecastDetail extends QueryBase<ForecastDetailsDTO> {
+export class GetForecastDetailQuery extends QueryBase<ForecastDetailsDTO> {
   constructor(private partnerId: string, private periodId: number, private costCategoryId: string) {
     super();
   }

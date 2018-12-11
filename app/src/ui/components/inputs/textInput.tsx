@@ -24,6 +24,7 @@ export class TextInput extends BaseInput<TextInputProps, InputState> {
   public render() {
     return (
       <input
+        id={this.props.name}
         type="text"
         className={classNames("govuk-input")}
         name={this.props.name}

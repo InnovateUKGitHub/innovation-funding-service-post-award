@@ -23,6 +23,7 @@ export class FileUpload extends BaseInput<FileUploadProps, { value: File | null 
   public render() {
     return (
       <input
+        id={this.props.name}
         type="file"
         className={classNames("govuk-file-upload")}
         name={this.props.name}

@@ -6,6 +6,6 @@ export function loadContacts() {
   return conditionalLoad(getContacts(), params => ApiClient.contacts.getAll(params));
 }
 
-export function loadContact(id: string) {
-  return conditionalLoad(getContact(id), params => ApiClient.contacts.get({id, ...params}));
+export function loadContact(contactId: string) {
+  return conditionalLoad(getContact(contactId), params => ApiClient.contacts.get({ contactId, ...params}));
 }
