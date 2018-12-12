@@ -12,7 +12,7 @@ import { EditClaimLineItemsRoute } from "./editClaimLineItems";
 import { ClaimsDetailsRoute } from "./details";
 import { ClaimDto, ClaimFrequency, ClaimStatus, ProjectDto } from "../../../types";
 
-interface Params {
+export interface PrepareClaimParams {
     projectId: string;
     partnerId: string;
     periodId: number;
@@ -42,7 +42,7 @@ interface CombinedData {
     editor: IEditorStore<ClaimDto, ClaimDtoValidator>;
 }
 
-export class PrepareComponent extends ContainerBase<Params, Data, Callbacks> {
+export class PrepareComponent extends ContainerBase<PrepareClaimParams, Data, Callbacks> {
 
     public render() {
         const combined = Pending.combine(
@@ -117,7 +117,7 @@ const goBack = (dispatch: any, projectId: string, partnerId: string) => {
     dispatch(Actions.navigateTo(ClaimsDashboardRoute.getLink({ projectId, partnerId })));
 };
 
-const definition = ReduxContainer.for<Params, Data, Callbacks>(PrepareComponent);
+const definition = ReduxContainer.for<PrepareClaimParams, Data, Callbacks>(PrepareComponent);
 
 export const PrepareClaim = definition.connect({
   withData: (state, props): Data => ({
