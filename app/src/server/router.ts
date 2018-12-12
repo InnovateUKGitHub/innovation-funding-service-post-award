@@ -2,7 +2,7 @@ import express from "express";
 import { serverRender } from "./serverRender";
 import { componentGuideRender } from "./componentGuideRender";
 import { router as apiRoutes } from "./apis";
-import { formRouter } from "./forms/prepareClaim";
+import { formRouter } from "./forms/formRouter";
 
 export const router = express.Router();
 
