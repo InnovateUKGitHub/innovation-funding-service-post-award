@@ -133,13 +133,15 @@ export function deleteClaimDetailDocument(claimDetailKey: ClaimDetailKey, dto: D
 export function deleteClaimDocument(claimKey: ClaimKey, dto: DocumentSummaryDto, onComplete: () => void): AsyncThunk<void> {
   return (dispatch, getState) => {
     const state = getState();
+    const selector = getClaimDocumentEditor(claimKey, dto.description);
     const docsSelector = getClaimDocuments(claimKey.partnerId, claimKey.periodId);
     dispatch(dataLoadAction(docsSelector.key, docsSelector.store, LoadingStatus.Stale, undefined));
     return ApiClient.documents.deleteDocument({documentId: dto.id, user: state.user})
       .then(() => {
+        dispatch(resetEditorAction(selector.key, selector.store));
         onComplete();
       }).catch((e: any) => {
-        console.log(e);
+        dispatch(handleError({ id: selector.key, store: selector.store, dto, validation: null, error: e }));
       });
   };
 }
