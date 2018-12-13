@@ -12,7 +12,7 @@ import { DocumentList, ValidationMessage } from "../../components";
 import { ProjectDto } from "../../../types";
 import { range } from "../../../shared/range";
 
-interface Params {
+export interface EditClaimLineItemsParams {
   projectId: string;
   partnerId: string;
   costCategoryId: string;
@@ -42,8 +42,8 @@ interface Callbacks {
   saveAndUpload: (projectId: string, partnerId: string, costCategoryId: string, periodId: number, dto: ClaimLineItemDto[]) => void;
 }
 
-export class EditClaimLineItemsComponent extends ContainerBaseWithState<Params, Data, Callbacks, { showAddRemove: boolean }> {
-  constructor(props: ContainerProps<Params, Data, Callbacks>) {
+export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClaimLineItemsParams, Data, Callbacks, { showAddRemove: boolean }> {
+  constructor(props: ContainerProps<EditClaimLineItemsParams, Data, Callbacks>) {
     super(props);
     this.state = { showAddRemove: false };
   }
@@ -108,7 +108,7 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<Params, 
           </ACC.Section>
         </LineItemForm.Fieldset>
         <LineItemForm.Fieldset>
-          <LineItemForm.Button name="return" onClick={() => this.props.saveAndUpload(this.props.projectId, this.props.partnerId, this.props.costCategoryId, this.props.periodId, this.props.editor.data)}>Upload and remove documents</LineItemForm.Button>
+          <LineItemForm.Button name="upload" onClick={() => this.props.saveAndUpload(this.props.projectId, this.props.partnerId, this.props.costCategoryId, this.props.periodId, this.props.editor.data)}>Upload and remove documents</LineItemForm.Button>
         </LineItemForm.Fieldset>
         <LineItemForm.Submit>Save and return to claim</LineItemForm.Submit>
       </LineItemForm.Form>
@@ -128,7 +128,7 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<Params, 
     return (
       <span>
         <ACC.ValidationError error={validation.description} />
-        <ACC.Inputs.TextInput name="description" value={item.description} onChange={val => this.updateItem(index, dto => (dto.description = val!))} />
+        <ACC.Inputs.TextInput name={`description${index.row}`} value={item.description} onChange={val => this.updateItem(index, dto => (dto.description = val!))} />
       </span>
     );
   }
@@ -212,7 +212,7 @@ const redirectToUploadPage = (dispatch: any, projectId: string, partnerId: strin
   dispatch(Actions.navigateTo(ClaimDetailDocumentsRoute.getLink({ projectId, partnerId, costCategoryId, periodId })));
 };
 
-const definition = ReduxContainer.for<Params, Data, Callbacks>(EditClaimLineItemsComponent);
+const definition = ReduxContainer.for<EditClaimLineItemsParams, Data, Callbacks>(EditClaimLineItemsComponent);
 
 const getEditor: (isClient: boolean, editor: IEditorStore<ClaimLineItemDto[], ClaimLineItemDtosValidator>, partnerId: string, periodId: number, costCategoryId: string, original: Pending<ClaimLineItemDto[]>) => IEditorStore<ClaimLineItemDto[], ClaimLineItemDtosValidator> = (isClient, editor, partnerId, periodId, costCategoryId, original) => {
 
