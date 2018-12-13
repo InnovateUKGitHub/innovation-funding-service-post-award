@@ -12,7 +12,7 @@ import { ClaimsDashboardRoute, ClaimsDetailsRoute } from ".";
 import { ClaimDto, ClaimFrequency, ClaimStatus, ProjectDto } from "../../../types";
 import { ForecastData, forecastDataLoadActions } from "./forecasts/common";
 
-interface Params {
+export interface ReviewClaimParams {
   projectId: string;
   partnerId: string;
   periodId: number;
@@ -26,6 +26,7 @@ interface Data {
   claimDetailsSummary: Pending<ClaimDetailsSummaryDto[]>;
   editor: Pending<IEditorStore<ClaimDto, ClaimDtoValidator>>;
   forecastData: Pending<ForecastData>;
+  isClient: boolean;
 }
 
 interface Callbacks {
@@ -42,7 +43,7 @@ interface CombinedData {
   editor: IEditorStore<ClaimDto, ClaimDtoValidator>;
 }
 
-class ReviewComponent extends ContainerBase<Params, Data, Callbacks> {
+class ReviewComponent extends ContainerBase<ReviewClaimParams, Data, Callbacks> {
   public render() {
     const combined = Pending.combine(
       this.props.project,
@@ -67,7 +68,7 @@ class ReviewComponent extends ContainerBase<Params, Data, Callbacks> {
       { id: ClaimStatus.MO_QUERIED, value: "Query claim"},
       { id: ClaimStatus.AWAITING_IUK_APPROVAL, value: "Submit for approval"},
     ];
-    const showButton = data.editor.data.status === ClaimStatus.MO_QUERIED || data.editor.data.status === ClaimStatus.AWAITING_IUK_APPROVAL;
+    const submitButtonLabel = this.getSubmitButtonLabel(data);
 
     return (
       <ACC.Page>
@@ -96,11 +97,26 @@ class ReviewComponent extends ContainerBase<Params, Data, Callbacks> {
         <Form.Form qa="review-form" data={data.editor.data} onSubmit={() => this.props.onSave(this.props.projectId, this.props.partnerId, this.props.periodId, data.editor.data, data.claimDetails, data.costCategories)} onChange={(dto) => this.props.onChange(this.props.partnerId, this.props.periodId, dto, data.claimDetails, data.costCategories)}>
           <Form.Fieldset heading="How do you want to proceed with this claim?">
             <Form.Radio name="status" options={options} value={(dto) => options.find(x => x.id === dto.status)} update={(dto, val) => this.updateStatus(dto, val)} validation={data.editor.validator.status}/>
-            {showButton ? <Form.Submit>{data.editor.data.status === ClaimStatus.MO_QUERIED ? "Send query" : "Submit"}</Form.Submit> : null}
+            {!!submitButtonLabel ? <Form.Submit>{submitButtonLabel}</Form.Submit> : null}
           </Form.Fieldset>
         </Form.Form>
       </ACC.Page>
     );
+  }
+
+  private getSubmitButtonLabel(data: CombinedData) {
+    let label: string | null = "Submit";
+
+    if(this.props.isClient) {
+      if(data.editor.data.status === ClaimStatus.MO_QUERIED) {
+        label = "Send Query";
+      }
+      else if(data.editor.data.status !== ClaimStatus.AWAITING_IUK_APPROVAL) {
+        label = null;
+      }
+    }
+
+    return label;
   }
 
   private updateStatus(dto: ClaimDto, option: ACC.SelectOption | null | undefined) {
@@ -117,7 +133,7 @@ const initEditor = (dto: ClaimDto) => {
   }
 };
 
-const definition = ReduxContainer.for<Params, Data, Callbacks>(ReviewComponent);
+const definition = ReduxContainer.for<ReviewClaimParams, Data, Callbacks>(ReviewComponent);
 
 export const ReviewClaim = definition.connect({
   withData: (state, props): Data => {
@@ -132,6 +148,7 @@ export const ReviewClaim = definition.connect({
       claim,
       claimDetailsSummary: Selectors.findClaimDetailsSummaryByPartnerAndPeriod(props.partnerId, props.periodId).getPending(state),
       editor: Selectors.getClaimEditor(props.partnerId, props.periodId).get(state, (dto) => initEditor(dto)),
+      isClient: state.isClient,
       forecastData: Pending.combine(
         project,
         partner,

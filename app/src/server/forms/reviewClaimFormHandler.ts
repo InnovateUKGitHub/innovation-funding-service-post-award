@@ -1,0 +1,40 @@
+import { FormHandlerBase } from "./formHandlerBase";
+import { ClaimsDashboardRoute, ReviewClaimParams, ReviewClaimRoute } from "../../ui/containers";
+import { ClaimDto, ClaimStatus } from "../../types";
+import { IContext } from "../features/common/context";
+import { GetClaim, UpdateClaimCommand } from "../features/claims";
+import { getClaimEditor } from "../../ui/redux/selectors";
+import { ClaimDtoValidator } from "../../ui/validators";
+import { Results } from "../../ui/validation/results";
+
+export class ReviewClaimFormHandler extends FormHandlerBase<ReviewClaimParams, ClaimDto> {
+    constructor() {
+        super(ReviewClaimRoute);
+    }
+
+    protected async getDto(context: IContext, params: ReviewClaimParams, button: string, body: { [key: string]: string; }): Promise<ClaimDto> {
+        const claim = await context.runQuery(new GetClaim(params.partnerId, params.periodId));
+
+        if (body.status === ClaimStatus.MO_QUERIED) {
+            claim.status = ClaimStatus.MO_QUERIED;
+        }
+        else if (body.status === ClaimStatus.AWAITING_IUK_APPROVAL) {
+            claim.status = ClaimStatus.AWAITING_IUK_APPROVAL;
+        }
+
+        return claim;
+    }
+
+    protected async run(context: IContext, params: ReviewClaimParams, button: string, dto: ClaimDto): Promise<ILinkInfo> {
+        await context.runCommand(new UpdateClaimCommand(dto));
+        return ClaimsDashboardRoute.getLink(params);
+    }
+
+    protected getStoreInfo(params: ReviewClaimParams): { key: string; store: string; } {
+        return getClaimEditor(params.partnerId, params.periodId);
+      }
+
+    protected createValidationResult(params: ReviewClaimParams, dto: ClaimDto): Results<ClaimDto> {
+        return new ClaimDtoValidator(dto, [], [], false);
+    }
+}
