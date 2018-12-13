@@ -5,8 +5,11 @@ import {DocumentUploadValidator} from "../../validators/documentUploadValidator"
 import { IEditorStore, RootState } from "../reducers";
 import { getCurrentClaim } from "./claims";
 import { DocumentDescription } from "../../../types";
+import { Results } from "../../validation/results";
 
 export const documentStore = "documents";
+export const documentSummaryEditorStore = "documentSummary";
+
 export const getClaimDetailDocuments = (partnerId: string, periodId: number, costCategoryId: string) => dataStoreHelper(documentStore, getKey("claim", "detail", partnerId, periodId, costCategoryId));
 
 export const getClaimDocuments = (partnerId: string, periodId: number) => dataStoreHelper(documentStore, getKey("claim", partnerId, periodId));
@@ -27,12 +30,30 @@ export const getClaimDocumentEditor = ({partnerId, periodId}: ClaimKey, descript
   getKey("claim", partnerId, periodId)
 );
 
+export const getClaimDocumentDeleteEditor = (document: DocumentSummaryDto) => editorStoreHelper<DocumentSummaryDto, Results<DocumentSummaryDto>>(
+  documentSummaryEditorStore,
+  x => x.documentSummary,
+  () => (Pending.create({ status: LoadingStatus.Done, data: document, error: null})),
+  () => new Results(document, false),
+  getKey("claim", document.id)
+);
+
 export const getCurrentClaimIarDocumentsEditor = (state: RootState, partnerId: string): Pending<IEditorStore<DocumentUploadDto, DocumentUploadValidator> | null> => {
   return getCurrentClaim(state, partnerId).then(claim => {
     if (!claim) {
       return null;
     }
     const editorPending =  getClaimDocumentEditor({partnerId, periodId: claim.periodId}, DocumentDescription.IAR).get(state);
+    return editorPending.data || null;
+  });
+};
+
+export const getCurrentClaimIarDocumentsDeleteEditor = (state: RootState, partnerId: string): Pending<IEditorStore<DocumentSummaryDto, Results<DocumentSummaryDto>> | null> => {
+  return getCurrentClaimIarDocument(state, partnerId).then(document => {
+    if (!document) {
+      return null;
+    }
+    const editorPending =  getClaimDocumentDeleteEditor(document).get(state);
     return editorPending.data || null;
   });
 };
