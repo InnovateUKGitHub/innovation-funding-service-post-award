@@ -4,7 +4,7 @@ import { Pending } from "../../../shared/pending";
 import * as Actions from "../../redux/actions";
 import {
   getCurrentClaim,
-  getCurrentClaimIarDocument,
+  getCurrentClaimIarDocument, getCurrentClaimIarDocumentsDeleteEditor,
   getCurrentClaimIarDocumentsEditor, getPartner,
   getPreviousClaims, getProject
 } from "../../redux/selectors";
@@ -16,6 +16,7 @@ import { ClaimDto, ClaimStatus, ProjectDto } from "../../../types";
 import { IEditorStore } from "../../redux/reducers";
 import { DocumentUploadValidator } from "../../validators/documentUploadValidator";
 import {DateTime} from "luxon";
+import { Results } from "../../validation/results";
 
 interface Params {
   projectId: string;
@@ -29,6 +30,7 @@ interface Data {
   previousClaims: Pending<ClaimDto[]>;
   currentClaim: Pending<ClaimDto | null>;
   editor: Pending<IEditorStore<DocumentUploadDto, DocumentUploadValidator> | null>;
+  deleteEditor: Pending<IEditorStore<DocumentSummaryDto, Results<DocumentSummaryDto>> | null>;
 }
 
 interface CombinedData {
@@ -38,6 +40,7 @@ interface CombinedData {
   previousClaims: ClaimDto[];
   currentClaim: ClaimDto | null;
   editor: IEditorStore<DocumentUploadDto, DocumentUploadValidator> | null;
+  deleteEditor: IEditorStore<DocumentSummaryDto, Results<DocumentSummaryDto>> | null;
 }
 
 interface Callbacks {
@@ -55,7 +58,8 @@ class Component extends ContainerBase<Params, Data, Callbacks> {
       this.props.previousClaims,
       this.props.currentClaim,
       this.props.editor,
-      (document, project, partner, previousClaims, currentClaim, editor) => ({ project, partner, previousClaims, currentClaim, editor, document })
+      this.props.deleteEditor,
+      (document, project, partner, previousClaims, currentClaim, editor, deleteEditor) => ({ project, partner, previousClaims, currentClaim, editor, document, deleteEditor })
     );
 
     return <Acc.PageLoader pending={combined} render={(x) => this.renderContents(x)} />;
@@ -125,10 +129,13 @@ class Component extends ContainerBase<Params, Data, Callbacks> {
     );
   }
 
-  private renderContents({ currentClaim, partner, previousClaims, project, editor, document }: CombinedData) {
+  private renderContents({ currentClaim, partner, previousClaims, project, editor, document, deleteEditor }: CombinedData) {
     const Details = Acc.TypedDetails<PartnerDto>();
 
     const claimsWindow = !!currentClaim && ([ClaimStatus.DRAFT, ClaimStatus.REVIEWING_FORECASTS].indexOf(currentClaim.status) >= 0) ? <Acc.Claims.ClaimWindow periodEnd={currentClaim.periodEndDate} /> : null;
+
+    const error = (editor && editor.error) || (deleteEditor && deleteEditor.error);
+    const validator = (editor && editor.validator) || (deleteEditor && deleteEditor.validator);
 
     return (
       <Acc.ProjectOverviewPage
@@ -136,7 +143,8 @@ class Component extends ContainerBase<Params, Data, Callbacks> {
         project={project}
         partnerId={partner.id}
         partners={[partner]}
-        editor={editor}
+        error={error}
+        validator={validator}
       >
         <Acc.Section>
           <Acc.SectionPanel qa="claims-totals" title="History">
@@ -221,6 +229,7 @@ export const ClaimsDashboard = definition.connect({
     return ({
       document: getCurrentClaimIarDocument(state, props.partnerId),
       editor: getCurrentClaimIarDocumentsEditor(state, props.partnerId),
+      deleteEditor: getCurrentClaimIarDocumentsDeleteEditor(state, props.partnerId),
       projectDetails: getProject(props.projectId).getPending(state),
       partnerDetails: getPartner(props.partnerId).getPending(state),
       currentClaim: getCurrentClaim(state, props.partnerId),
