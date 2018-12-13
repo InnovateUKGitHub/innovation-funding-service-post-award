@@ -3,3 +3,4 @@ export * from "./getAllForecastGOLCostsQuery";
 export * from "./getAllForPartnerQuery";
 export * from "./getCostCategoriesQuery";
 export * from "./getClaim";
+export * from "./updateClaim";
