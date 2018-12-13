@@ -46,7 +46,7 @@ export abstract class ControllerBase<T> {
     return this;
   }
 
-  protected postAttachment<TParams>(path: string, getParams: (params: any, query: any, body: any, file: any) => TParams, run: (params: ApiParams<TParams>) => Promise<{id: string}>) {
+  protected postAttachment<TParams>(path: string, getParams: (params: any, query: any, body: any, file: any) => TParams, run: (params: ApiParams<TParams>) => Promise<{documentId: string}>) {
     this.router.post(path, upload.single("attachment"), this.executeMethod(201, getParams, run, false));
   }
 
