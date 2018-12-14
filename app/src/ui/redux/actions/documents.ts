@@ -1,8 +1,13 @@
 import { ApiClient } from "../../apiClient";
 import {
   AsyncThunk,
-  conditionalLoad, dataLoadAction,
-  DataLoadAction, handleError, ResetEditorAction, resetEditorAction,
+  conditionalLoad,
+  dataLoadAction,
+  DataLoadAction,
+  handleError,
+  resetAllEditorsAction,
+  ResetEditorAction,
+  resetEditorAction,
   SyncThunk,
   updateEditorAction,
   UpdateEditorAction
@@ -19,6 +24,7 @@ import {DocumentUploadValidator} from "../../validators/documentUploadValidator"
 import {DocumentDescription} from "../../../types/constants";
 import { findClaimsByPartner } from "../selectors";
 import { scrollToTheTop } from "../../../util/windowHelpers";
+import * as Selectors from "../selectors";
 
 export function loadClaimDetailDocuments(partnerId: string, periodId: number, costCategoryId: string) {
   return conditionalLoad(
@@ -119,13 +125,15 @@ export function deleteClaimDetailDocument(claimDetailKey: ClaimDetailKey, dto: D
   return (dispatch, getState) => {
     const state = getState();
     const docsSelector = getClaimDetailDocuments(claimDetailKey.partnerId, claimDetailKey.periodId, claimDetailKey.costCategoryId);
+    const selector = Selectors.getDocumentDeleteEditor(dto);
     dispatch(dataLoadAction(docsSelector.key, docsSelector.store, LoadingStatus.Stale, undefined));
+
     return ApiClient.documents.deleteDocument({ documentId: dto.id, user: state.user })
       .then(() => {
+        dispatch(resetAllEditorsAction(selector.store));
         onComplete();
       }).catch((e: any) => {
-        console.log(e);
-        // TODO handle error
+        dispatch(handleError({ id: selector.key, store: selector.store, dto, validation: null, error: e }));
       });
   };
 }
@@ -133,7 +141,7 @@ export function deleteClaimDetailDocument(claimDetailKey: ClaimDetailKey, dto: D
 export function deleteClaimDocument(claimKey: ClaimKey, dto: DocumentSummaryDto, onComplete: () => void): AsyncThunk<void> {
   return (dispatch, getState) => {
     const state = getState();
-    const selector = getClaimDocumentEditor(claimKey, dto.description);
+    const selector = Selectors.getDocumentDeleteEditor(dto);
     const docsSelector = getClaimDocuments(claimKey.partnerId, claimKey.periodId);
     dispatch(dataLoadAction(docsSelector.key, docsSelector.store, LoadingStatus.Stale, undefined));
     return ApiClient.documents.deleteDocument({documentId: dto.id, user: state.user})
