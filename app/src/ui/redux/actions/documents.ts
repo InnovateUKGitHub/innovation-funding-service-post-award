@@ -125,7 +125,7 @@ export function deleteClaimDetailDocument(claimDetailKey: ClaimDetailKey, dto: D
   return (dispatch, getState) => {
     const state = getState();
     const docsSelector = getClaimDetailDocuments(claimDetailKey.partnerId, claimDetailKey.periodId, claimDetailKey.costCategoryId);
-    const selector = Selectors.getDocumentDeleteEditor(dto);
+    const selector = Selectors.getClaimDetailDocumentDeleteEditor(state, claimDetailKey);
     dispatch(dataLoadAction(docsSelector.key, docsSelector.store, LoadingStatus.Stale, undefined));
 
     return ApiClient.documents.deleteDocument({ documentId: dto.id, user: state.user })
