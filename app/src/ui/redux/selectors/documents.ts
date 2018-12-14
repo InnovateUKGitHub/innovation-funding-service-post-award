@@ -22,6 +22,15 @@ export const getClaimDetailDocumentEditor = ({partnerId, periodId, costCategoryI
   getKey("claim", "details", partnerId, periodId, costCategoryId)
 );
 
+export const getClaimDetailDocumentDeleteEditors = (state: RootState, partnerId: string, periodId: number, costCategoryId: string): Pending<IEditorStore<DocumentSummaryDto, Results<DocumentSummaryDto>>[]> => {
+  return getClaimDetailDocuments(partnerId, periodId, costCategoryId).getPending(state).then(documents => {
+    return (documents || []).map(document => {
+      const editorPending = getDocumentDeleteEditor(document).get(state);
+      return editorPending.data!;
+    });
+  });
+};
+
 export const getClaimDocumentEditor = ({partnerId, periodId}: ClaimKey, description?: string) => editorStoreHelper<DocumentUploadDto, DocumentUploadValidator>(
   documentStore,
   x => x.documents,
@@ -30,12 +39,12 @@ export const getClaimDocumentEditor = ({partnerId, periodId}: ClaimKey, descript
   getKey("claim", partnerId, periodId)
 );
 
-export const getClaimDocumentDeleteEditor = (document: DocumentSummaryDto) => editorStoreHelper<DocumentSummaryDto, Results<DocumentSummaryDto>>(
+export const getDocumentDeleteEditor = (document: DocumentSummaryDto) => editorStoreHelper<DocumentSummaryDto, Results<DocumentSummaryDto>>(
   documentSummaryEditorStore,
   x => x.documentSummary,
   () => (Pending.create({ status: LoadingStatus.Done, data: document, error: null})),
   () => new Results(document, false),
-  getKey("claim", document.id)
+  getKey(document.id)
 );
 
 export const getCurrentClaimIarDocumentsEditor = (state: RootState, partnerId: string): Pending<IEditorStore<DocumentUploadDto, DocumentUploadValidator> | null> => {
@@ -53,7 +62,7 @@ export const getCurrentClaimIarDocumentsDeleteEditor = (state: RootState, partne
     if (!document) {
       return null;
     }
-    const editorPending =  getClaimDocumentDeleteEditor(document).get(state);
+    const editorPending =  getDocumentDeleteEditor(document).get(state);
     return editorPending.data || null;
   });
 };

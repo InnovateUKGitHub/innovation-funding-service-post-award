@@ -8,6 +8,7 @@ import * as Selectors from "../../redux/selectors";
 import { ProjectDto } from "../../../types";
 import {IEditorStore} from "../../redux/reducers";
 import { DocumentUploadValidator } from "../../validators/documentUploadValidator";
+import { Results } from "../../validation/results";
 
 interface Params {
   projectId: string;
@@ -21,6 +22,7 @@ interface Data {
   costCategories: Pending<CostCategoryDto[]>;
   documents: Pending<DocumentSummaryDto[]>;
   editor: Pending<IEditorStore<DocumentUploadDto, DocumentUploadValidator>>;
+  deleteEditors: Pending<IEditorStore<DocumentSummaryDto, Results<DocumentSummaryDto>>[]>;
 }
 
 interface CombinedData {
@@ -28,6 +30,7 @@ interface CombinedData {
   costCategories: CostCategoryDto[];
   documents: DocumentSummaryDto[];
   editor: IEditorStore<DocumentUploadDto, DocumentUploadValidator>;
+  deleteEditors: IEditorStore<DocumentSummaryDto, Results<DocumentSummaryDto>>[];
 }
 
 interface Callbacks {
@@ -44,7 +47,8 @@ export class ClaimDetailDocumentsComponent extends ContainerBase<Params, Data, C
       this.props.costCategories,
       this.props.documents,
       this.props.editor,
-      (project, costCategories, documents, editor) => ({ project, costCategories, documents, editor })
+      this.props.deleteEditors,
+      (project, costCategories, documents, editor, deleteEditors) => ({ project, costCategories, documents, editor, deleteEditors })
     );
     return <ACC.PageLoader pending={combined} render={(data) => this.renderContents(data)} />;
   }
@@ -72,7 +76,7 @@ export class ClaimDetailDocumentsComponent extends ContainerBase<Params, Data, C
     this.props.deleteFile(claimDetailKey, dto);
   }
 
-  private renderContents({project, costCategories, documents, editor}: CombinedData) {
+  private renderContents({project, costCategories, documents, editor, deleteEditors}: CombinedData) {
     const back = EditClaimLineItemsRoute.getLink({ projectId: project.id, partnerId: this.props.partnerId, periodId: this.props.periodId, costCategoryId: this.props.costCategoryId });
     const costCategory = costCategories.find(x => x.id === this.props.costCategoryId)! || {};
 
@@ -115,6 +119,7 @@ export const ClaimDetailDocuments = definition.connect({
       costCategories: Selectors.getCostCategories().getPending(state),
       documents: Selectors.getClaimDetailDocuments(props.partnerId, props.periodId, props.costCategoryId).getPending(state),
       editor: Selectors.getClaimDetailDocumentEditor({partnerId: props.partnerId, periodId: props.periodId, costCategoryId: props.costCategoryId}).get(state),
+      deleteEditors: Selectors.getClaimDetailDocumentDeleteEditors(state, props.partnerId, props.periodId, props.costCategoryId),
     };
   },
   withCallbacks: (dispatch) => ({
