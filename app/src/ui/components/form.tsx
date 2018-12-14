@@ -1,4 +1,4 @@
-import React from "react";
+import React, { CSSProperties } from "react";
 import { TextInput } from "./inputs/textInput";
 import { TextAreaInput } from "./inputs/textAreaInput";
 import { NumberInput } from "./inputs/numberInput";
@@ -6,12 +6,14 @@ import classNames from "classnames";
 import { Result } from "../validation/result";
 import { ValidationError } from "./validationError";
 import { FileUpload, RadioList } from "./inputs";
+import { Button, StyledButtonProps } from "./styledButton";
 
 interface FormProps<T> {
     data: T;
     onChange?: (data: T) => void;
     onSubmit?: () => void;
     qa?: string;
+    type?: "post" | "delete";
 }
 
 interface FormChildProps<T> {
@@ -34,7 +36,7 @@ class FormComponent<T> extends React.Component<FormProps<T>, []> {
         const childrenWithData = React.Children.map(this.props.children, (child, index) => child && React.cloneElement(child as any, childProps(index)));
 
         return (
-            <form method="post" action="" onSubmit={(e) => this.onSubmit(e)} data-qa={this.props.qa}>
+            <form method={this.props.type || "post"} action="" onSubmit={(e) => this.onSubmit(e)} data-qa={this.props.qa}>
                 {childrenWithData}
             </form>
         );
@@ -107,7 +109,7 @@ class FieldComponent<T, TValue> extends React.Component<InternalFieldProps<T> & 
     }
 }
 
-const handleSubmit = <TDto extends {}>(props: SubmitProps, e: React.SyntheticEvent<HTMLButtonElement>) => {
+const handleSubmit = <TDto extends {}>(props: SubmitProps, e: React.MouseEvent<{}>) => {
     const formProps = props as any as FormProps<TDto>;
     if (formProps.onSubmit) {
         e.preventDefault();
@@ -115,7 +117,7 @@ const handleSubmit = <TDto extends {}>(props: SubmitProps, e: React.SyntheticEve
     }
 };
 
-const handleOtherButton = <TDto extends {}>(props: ButtonProps, e: React.SyntheticEvent<HTMLButtonElement>) => {
+const handleOtherButton = <TDto extends {}>(props: ButtonProps, e: React.MouseEvent<{}>) => {
     e.preventDefault();
     props.onClick();
 };
@@ -175,20 +177,30 @@ const RadioOptionsField = <T extends {}>(props: RadioFieldProps<T>) => {
 interface SubmitProps {
     qa?: string;
     disabled?: boolean;
+    styling?: "Link" | "Secondary" | "Primary";
+    className?: string;
+    style?: CSSProperties;
 }
 
 const SubmitComponent: React.SFC<SubmitProps> = (props) => {
-    return <button type="submit" name="button" value="default" disabled={props.disabled} className="govuk-button" onClick={(e) => handleSubmit(props, e)}>{props.children}</button>;
+    const { disabled, children, style, styling, qa, className } = props;
+    const buttonProps = { disabled, style, qa, className };
+    return <Button type="submit" name="button" value="default" styling={styling || "Primary"} onClick={(e) => handleSubmit(props, e)} {...buttonProps}>{children}</Button>;
 };
 
 interface ButtonProps {
     name: string;
     onClick: () => void;
     qa?: string;
+    styling?: "Link" | "Secondary" | "Primary";
+    className?: string;
+    style?: CSSProperties;
 }
 
 const ButtonComponent: React.SFC<ButtonProps> = (props) => {
-    return <button type="submit" name="button" value={props.name} className="govuk-button" style={{ background: "buttonface", color: "buttontext" }} onClick={(e) => handleOtherButton(props, e)}>{props.children}</button>;
+    const { name, children, style, styling, qa, className } = props;
+    const buttonProps = { style, qa, className };
+    return <Button type="submit" name="button" value={name} styling={styling || "Secondary"} onClick={(e) => handleOtherButton(props, e)} {...buttonProps}>{children}</Button>;
 };
 
 const FileUploadComponent = <T extends {}>(props: ExternalFieldProps<T, File>) => {

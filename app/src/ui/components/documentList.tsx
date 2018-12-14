@@ -1,6 +1,5 @@
 import * as React from "react";
-import { LinksList } from "./linksList";
-import { Button } from "./styledButton";
+import { LinksList, TypedForm } from "./";
 
 interface Props {
   documents: DocumentSummaryDto[];
@@ -29,12 +28,23 @@ interface PropsWithRemove extends Props {
   onRemove: (d: DocumentSummaryDto) => void;
 }
 
+const renderDocumentForm = (dto: DocumentSummaryDto, onRemove: (dto: DocumentSummaryDto) => void, qa: string) => {
+  const Form = TypedForm<DocumentSummaryDto>();
+  return (
+    <Form.Form type="delete" data={dto} key={`link-${dto.id}`}>
+      <div className="govuk-!-padding-bottom-4">
+        <a target={"_blank"} href={dto.link} className="govuk-link govuk-!-font-size-19" data-qa={qa}>{dto.fileName}</a>
+        <Form.Button name={dto.id} styling="Link" style={({marginLeft: "15px"})} onClick={() => onRemove(dto)} className="govuk-!-font-size-19">Remove</Form.Button>
+      </div>
+    </Form.Form>
+  );
+};
+
 export const DocumentListWithDelete: React.SFC<PropsWithRemove> = ({ documents = [], qa, onRemove }: PropsWithRemove) => {
   sortDocuments(documents);
-  const renderRemove = (index: number) => <Button style={({marginLeft: "15px"})} className="govuk-!-font-size-19" onClick={() => onRemove(documents[index])} styling="Link">Remove</Button>;
   return (
     <div data-qa={qa}>
-      <LinksList renderAfterLink={renderRemove} openNewWindow={true} links={documents.map(mapDocumentToLink)}/>
+      {documents.map((x, i) => renderDocumentForm(x, onRemove, `document-${i}`))}
     </div>
   );
 };
