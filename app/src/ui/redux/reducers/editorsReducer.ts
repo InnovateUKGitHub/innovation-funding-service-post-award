@@ -30,6 +30,9 @@ const editorsReducer = <TDto extends {}, TValidator extends Results<TDto>>(store
     delete result[action.payload.id];
     return result;
   }
+  if (action.type === "RESET_ALL_EDITORS" && action.payload.store === store) {
+    return {};
+  }
   else if (action.type === "@@router5/TRANSITION_START" && action.payload.previousRoute) {
     return {};
   }

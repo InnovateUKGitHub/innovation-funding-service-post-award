@@ -83,13 +83,14 @@ export class ClaimDetailDocumentsComponent extends ContainerBase<Params, Data, C
     const UploadForm = ACC.TypedForm<{file: File | null }>();
 
     const validationMessage = editor && <ACC.ValidationSummary validation={editor.validator} compressed={false} />;
+    const deleteError = deleteEditors.find(e => !!e.error);
 
     return (
       <ACC.Page>
         <ACC.Section>
           <ACC.BackLink route={back}>Back</ACC.BackLink>
         </ACC.Section>
-        <ACC.ErrorSummary error={editor && editor.error} />
+        <ACC.ErrorSummary error={(editor && editor.error) || (deleteError && deleteError.error)} />
         {validationMessage}
         <ACC.Projects.Title pageTitle={`${costCategory.name}`} project={project} />
         <ACC.Section title={`${costCategory.name} documents`} subtitle={documents.length > 0 ? "All documents open in a new window." : ""}>
