@@ -22,7 +22,7 @@ interface Data {
   costCategories: Pending<CostCategoryDto[]>;
   documents: Pending<DocumentSummaryDto[]>;
   editor: Pending<IEditorStore<DocumentUploadDto, DocumentUploadValidator>>;
-  deleteEditors: Pending<IEditorStore<DocumentSummaryDto, Results<DocumentSummaryDto>>[]>;
+  deleteEditor: Pending<IEditorStore<DocumentSummaryDto[], Results<DocumentSummaryDto[]>>>;
 }
 
 interface CombinedData {
@@ -30,7 +30,7 @@ interface CombinedData {
   costCategories: CostCategoryDto[];
   documents: DocumentSummaryDto[];
   editor: IEditorStore<DocumentUploadDto, DocumentUploadValidator>;
-  deleteEditors: IEditorStore<DocumentSummaryDto, Results<DocumentSummaryDto>>[];
+  deleteEditor: IEditorStore<DocumentSummaryDto[], Results<DocumentSummaryDto[]>>;
 }
 
 interface Callbacks {
@@ -47,8 +47,8 @@ export class ClaimDetailDocumentsComponent extends ContainerBase<Params, Data, C
       this.props.costCategories,
       this.props.documents,
       this.props.editor,
-      this.props.deleteEditors,
-      (project, costCategories, documents, editor, deleteEditors) => ({ project, costCategories, documents, editor, deleteEditors })
+      this.props.deleteEditor,
+      (project, costCategories, documents, editor, deleteEditor) => ({ project, costCategories, documents, editor, deleteEditor })
     );
     return <ACC.PageLoader pending={combined} render={(data) => this.renderContents(data)} />;
   }
@@ -76,21 +76,20 @@ export class ClaimDetailDocumentsComponent extends ContainerBase<Params, Data, C
     this.props.deleteFile(claimDetailKey, dto);
   }
 
-  private renderContents({project, costCategories, documents, editor, deleteEditors}: CombinedData) {
+  private renderContents({project, costCategories, documents, editor, deleteEditor}: CombinedData) {
     const back = EditClaimLineItemsRoute.getLink({ projectId: project.id, partnerId: this.props.partnerId, periodId: this.props.periodId, costCategoryId: this.props.costCategoryId });
     const costCategory = costCategories.find(x => x.id === this.props.costCategoryId)! || {};
 
     const UploadForm = ACC.TypedForm<{file: File | null }>();
 
     const validationMessage = editor && <ACC.ValidationSummary validation={editor.validator} compressed={false} />;
-    const deleteError = deleteEditors.find(e => !!e.error);
 
     return (
       <ACC.Page>
         <ACC.Section>
           <ACC.BackLink route={back}>Back</ACC.BackLink>
         </ACC.Section>
-        <ACC.ErrorSummary error={(editor && editor.error) || (deleteError && deleteError.error)} />
+        <ACC.ErrorSummary error={(editor && editor.error) || (deleteEditor && deleteEditor.error)} />
         {validationMessage}
         <ACC.Projects.Title pageTitle={`${costCategory.name}`} project={project} />
         <ACC.Section title={`${costCategory.name} documents`} subtitle={documents.length > 0 ? "All documents open in a new window." : ""}>
@@ -120,7 +119,7 @@ export const ClaimDetailDocuments = definition.connect({
       costCategories: Selectors.getCostCategories().getPending(state),
       documents: Selectors.getClaimDetailDocuments(props.partnerId, props.periodId, props.costCategoryId).getPending(state),
       editor: Selectors.getClaimDetailDocumentEditor({partnerId: props.partnerId, periodId: props.periodId, costCategoryId: props.costCategoryId}).get(state),
-      deleteEditors: Selectors.getClaimDetailDocumentDeleteEditors(state, props.partnerId, props.periodId, props.costCategoryId),
+      deleteEditor: Selectors.getClaimDetailDocumentDeleteEditor(state, {partnerId: props.partnerId, periodId: props.periodId, costCategoryId: props.costCategoryId}).get(state),
     };
   },
   withCallbacks: (dispatch) => ({

@@ -1,4 +1,4 @@
-import { dataStoreHelper, editorStoreHelper } from "./common";
+import { dataStoreHelper, editorStoreHelper, IEditorSelector } from "./common";
 import { getKey } from "../../../util/key";
 import { LoadingStatus, Pending } from "../../../shared/pending";
 import {DocumentUploadValidator} from "../../validators/documentUploadValidator";
@@ -22,13 +22,9 @@ export const getClaimDetailDocumentEditor = ({partnerId, periodId, costCategoryI
   getKey("claim", "details", partnerId, periodId, costCategoryId)
 );
 
-export const getClaimDetailDocumentDeleteEditors = (state: RootState, partnerId: string, periodId: number, costCategoryId: string): Pending<IEditorStore<DocumentSummaryDto, Results<DocumentSummaryDto>>[]> => {
-  return getClaimDetailDocuments(partnerId, periodId, costCategoryId).getPending(state).then(documents => {
-    return (documents || []).map(document => {
-      const editorPending = getDocumentDeleteEditor(document).get(state);
-      return editorPending.data!;
-    });
-  });
+export const getClaimDetailDocumentDeleteEditor = (state: RootState, {partnerId, periodId, costCategoryId}: ClaimDetailKey): IEditorSelector<DocumentSummaryDto[], Results<DocumentSummaryDto[]>> => {
+  const documents = getClaimDetailDocuments(partnerId, periodId, costCategoryId).get(state).data;
+  return getDocumentsDeleteEditor(getKey("claimDetail", partnerId, periodId, costCategoryId), documents || []);
 };
 
 export const getClaimDocumentEditor = ({partnerId, periodId}: ClaimKey, description?: string) => editorStoreHelper<DocumentUploadDto, DocumentUploadValidator>(
@@ -39,12 +35,12 @@ export const getClaimDocumentEditor = ({partnerId, periodId}: ClaimKey, descript
   getKey("claim", partnerId, periodId)
 );
 
-export const getDocumentDeleteEditor = (document: DocumentSummaryDto) => editorStoreHelper<DocumentSummaryDto, Results<DocumentSummaryDto>>(
+const getDocumentsDeleteEditor = (key: string, documents: DocumentSummaryDto[]) => editorStoreHelper<DocumentSummaryDto[], Results<DocumentSummaryDto[]>>(
   documentSummaryEditorStore,
   x => x.documentSummary,
-  () => (Pending.create({ status: LoadingStatus.Done, data: document, error: null})),
-  () => new Results(document, false),
-  getKey(document.id)
+  () => (Pending.create({ status: LoadingStatus.Done, data: documents, error: null})),
+  () => new Results(documents, false),
+  key
 );
 
 export const getCurrentClaimIarDocumentsEditor = (state: RootState, partnerId: string): Pending<IEditorStore<DocumentUploadDto, DocumentUploadValidator> | null> => {
@@ -57,7 +53,11 @@ export const getCurrentClaimIarDocumentsEditor = (state: RootState, partnerId: s
   });
 };
 
-export const getCurrentClaimIarDocumentsDeleteEditor = (state: RootState, partnerId: string): Pending<IEditorStore<DocumentSummaryDto, Results<DocumentSummaryDto>> | null> => {
+export const getDocumentDeleteEditor = (document: DocumentSummaryDto): IEditorSelector<DocumentSummaryDto[], Results<DocumentSummaryDto[]>> => {
+  return getDocumentsDeleteEditor(document.id, (document && [document]) || [document]);
+};
+
+export const getCurrentClaimIarDocumentsDeleteEditor = (state: RootState, partnerId: string): Pending<IEditorStore<DocumentSummaryDto[], Results<DocumentSummaryDto[]>> | null> => {
   return getCurrentClaimIarDocument(state, partnerId).then(document => {
     if (!document) {
       return null;

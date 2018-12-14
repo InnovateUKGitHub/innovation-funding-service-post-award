@@ -28,23 +28,19 @@ interface PropsWithRemove extends Props {
   onRemove: (d: DocumentSummaryDto) => void;
 }
 
-const renderDocumentForm = (dto: DocumentSummaryDto, onRemove: (dto: DocumentSummaryDto) => void, qa: string) => {
-  const Form = TypedForm<DocumentSummaryDto>();
-  return (
-    <Form.Form type="delete" data={dto} key={`link-${dto.id}`}>
-      <div className="govuk-!-padding-bottom-4">
-        <a target={"_blank"} href={dto.link} className="govuk-link govuk-!-font-size-19" data-qa={qa}>{dto.fileName}</a>
-        <Form.Button name={dto.id} styling="Link" style={({marginLeft: "15px"})} onClick={() => onRemove(dto)} className="govuk-!-font-size-19">Remove</Form.Button>
-      </div>
-    </Form.Form>
-  );
-};
-
 export const DocumentListWithDelete: React.SFC<PropsWithRemove> = ({ documents = [], qa, onRemove }: PropsWithRemove) => {
   sortDocuments(documents);
+  const Form = TypedForm<DocumentSummaryDto[]>();
   return (
     <div data-qa={qa}>
-      {documents.map((x, i) => renderDocumentForm(x, onRemove, `document-${i}`))}
+      <Form.Form type="delete" data={documents}>
+        {documents.map((dto) => (
+          <div className="govuk-!-padding-bottom-4">
+            <a target={"_blank"} href={dto.link} className="govuk-link govuk-!-font-size-19" data-qa={qa}>{dto.fileName}</a>
+            <Form.Button name={dto.id} styling="Link" style={({ marginLeft: "15px" })} onClick={() => onRemove(dto)} className="govuk-!-font-size-19">Remove</Form.Button>
+          </div>
+          ))}
+      </Form.Form>
     </div>
   );
 };
