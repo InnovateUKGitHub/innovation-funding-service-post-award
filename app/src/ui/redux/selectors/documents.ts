@@ -54,7 +54,7 @@ export const getCurrentClaimIarDocumentsEditor = (state: RootState, partnerId: s
 };
 
 export const getDocumentDeleteEditor = (document: DocumentSummaryDto): IEditorSelector<DocumentSummaryDto[], Results<DocumentSummaryDto[]>> => {
-  return getDocumentsDeleteEditor(document.id, (document && [document]) || [document]);
+  return getDocumentsDeleteEditor(document.id, (document && [document]) || []);
 };
 
 export const getCurrentClaimIarDocumentsDeleteEditor = (state: RootState, partnerId: string): Pending<IEditorStore<DocumentSummaryDto[], Results<DocumentSummaryDto[]>> | null> => {
