@@ -3,7 +3,7 @@ import { RootState } from "../reducers";
 import { ClaimDtoValidator } from "../../validators/claimDtoValidator";
 import { getCostCategories } from "./costCategories";
 import { getKey } from "../../../util/key";
-import { ClaimDto, ClaimStatus } from "../../../types";
+import { ClaimDto } from "../../../types";
 import { Pending } from "../../../shared/pending";
 
 export const claimsStore = "claims";
