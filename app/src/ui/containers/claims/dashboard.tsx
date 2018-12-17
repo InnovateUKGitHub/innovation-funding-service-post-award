@@ -30,7 +30,7 @@ interface Data {
   previousClaims: Pending<ClaimDto[]>;
   currentClaim: Pending<ClaimDto | null>;
   editor: Pending<IEditorStore<DocumentUploadDto, DocumentUploadValidator> | null>;
-  deleteEditor: Pending<IEditorStore<DocumentSummaryDto, Results<DocumentSummaryDto>> | null>;
+  deleteEditor: Pending<IEditorStore<DocumentSummaryDto[], Results<DocumentSummaryDto[]>> | null>;
 }
 
 interface CombinedData {
@@ -40,7 +40,7 @@ interface CombinedData {
   previousClaims: ClaimDto[];
   currentClaim: ClaimDto | null;
   editor: IEditorStore<DocumentUploadDto, DocumentUploadValidator> | null;
-  deleteEditor: IEditorStore<DocumentSummaryDto, Results<DocumentSummaryDto>> | null;
+  deleteEditor: IEditorStore<DocumentSummaryDto[], Results<DocumentSummaryDto[]>> | null;
 }
 
 interface Callbacks {

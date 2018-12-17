@@ -2,7 +2,7 @@ import { EditorState, EditorStateKeys, IEditorStore, RootState } from "../../red
 import { Results } from "../../../validation/results";
 import { LoadingStatus, Pending } from "../../../../shared/pending";
 
-interface IEditorSelector<T, TVal extends Results<T>> {
+export interface IEditorSelector<T, TVal extends Results<T>> {
   store: EditorStateKeys;
   key: string;
   get: (store: RootState, initalise?: (dto: T) => void) => Pending<IEditorStore<T, TVal>>;
