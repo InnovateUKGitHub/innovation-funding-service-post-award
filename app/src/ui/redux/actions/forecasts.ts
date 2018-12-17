@@ -1,7 +1,7 @@
 import { ApiClient } from "../../apiClient";
-import { AsyncThunk, conditionalLoad, DataLoadAction, dataLoadAction, SyncThunk } from "./common";
+import { AsyncThunk, conditionalLoad, DataLoadAction, dataLoadAction, EditorAction, SyncThunk } from "./common";
 import { ForecastDetailsDtosValidator } from "../../validators/forecastDetailsDtosValidator";
-import { handleError, UpdateEditorAction, updateEditorAction } from "./common/editorActions";
+import { handleEditorError, UpdateEditorAction, updateEditorAction } from "./common/editorActions";
 import { LoadingStatus } from "../../../shared/pending";
 import {
   findForecastDetailsByPartner,
@@ -48,7 +48,7 @@ export function saveForecastDetails(
   golCosts: GOLCostDto[],
   costCategories: CostCategoryDto[],
   onComplete: () => void
-): AsyncThunk<void, DataLoadAction | UpdateEditorAction> {
+): AsyncThunk<void, DataLoadAction | EditorAction> {
   return (dispatch, getState) => {
     const state = getState();
     const selector = getForecastDetailsEditor(state, partnerId);
@@ -67,7 +67,7 @@ export function saveForecastDetails(
       dispatch(dataLoadAction(selector.key, selector.store, LoadingStatus.Done, result));
       onComplete();
     }).catch((e) => {
-      dispatch(handleError({id: selector.key, store: selector.store, dto: forecasts, validation, error: e}));
+      dispatch(handleEditorError({id: selector.key, store: selector.store, dto: forecasts, validation, error: e}));
     });
   };
 }
