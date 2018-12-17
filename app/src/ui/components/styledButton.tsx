@@ -9,7 +9,7 @@ export interface StyledButtonProps extends React.ButtonHTMLAttributes<{}> {
   style?: CSSProperties;
 }
 
-const renderLinkButton = ({ className, styling, style, children, ...rest }: StyledButtonProps) => {
+const getLinkButtonStyling = (className?: string, style?: CSSProperties) => {
   const linkStyles = classNames(className, "govuk-link");
   const linkStyle: CSSProperties = {
     color: GOVUK_LINK_COLOUR,
@@ -20,30 +20,36 @@ const renderLinkButton = ({ className, styling, style, children, ...rest }: Styl
     boxSizing: "unset",
     ...style
   };
-  return <button className={linkStyles} style={linkStyle} {...rest}>{children}</button>;
+  return { className: linkStyles, style: linkStyle };
 };
 
-const renderPrimaryButton = ({ className, styling, style, children, ...rest }: StyledButtonProps) => {
+const getPrimaryButtonStyling = (className?: string, style?: CSSProperties) => {
   const linkStyles = classNames(className, "govuk-button");
   const linkStyle: CSSProperties = { ...style };
-  return <button className={linkStyles} style={linkStyle} {...rest}>{children}</button>;
+  return { className: linkStyles, style: linkStyle };
 };
 
-const renderSecondaryButton = ({ className, styling, style, children, ...rest }: StyledButtonProps) => {
+const getSecondaryButtonStyling = (className?: string, style?: CSSProperties) => {
   const linkStyles = classNames(className, "govuk-button");
   const linkStyle: CSSProperties = {
     background: "buttonface",
     color: "buttontext",
     ...style
   };
-  return <button className={linkStyles} style={linkStyle} {...rest}>{children}</button>;
+  return { className: linkStyles, style: linkStyle };
+};
+
+const getButtonStyling = ({styling, className, style}: StyledButtonProps) => {
+  switch (styling) {
+    case "Link": return getLinkButtonStyling(className, style);
+    case "Secondary": return getSecondaryButtonStyling(className, style);
+    case "Primary":
+    default: return getPrimaryButtonStyling(className, style);
+  }
 };
 
 export const Button: React.SFC<StyledButtonProps> = (props) => {
-  switch (props.styling) {
-    case "Link": return renderLinkButton(props);
-    case "Secondary": return renderSecondaryButton(props);
-    case "Primary":
-    default: return renderPrimaryButton(props);
-  }
+  const { className, styling, style, children, ...rest } = props;
+  const buttonStyling = getButtonStyling({className, styling, style});
+  return <button {...buttonStyling} {...rest}>{children}</button>;
 };

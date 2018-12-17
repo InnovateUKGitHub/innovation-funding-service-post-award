@@ -5,7 +5,6 @@ import {
   dataLoadAction,
   DataLoadAction,
   handleError,
-  resetAllEditorsAction,
   ResetEditorAction,
   resetEditorAction,
   SyncThunk,
@@ -130,7 +129,7 @@ export function deleteClaimDetailDocument(claimDetailKey: ClaimDetailKey, dto: D
 
     return ApiClient.documents.deleteDocument({ documentId: dto.id, user: state.user })
       .then(() => {
-        dispatch(resetAllEditorsAction(selector.store));
+        dispatch(resetEditorAction(selector.key, selector.store));
         onComplete();
       }).catch((e: any) => {
         dispatch(handleError({ id: selector.key, store: selector.store, dto, validation: null, error: e }));
