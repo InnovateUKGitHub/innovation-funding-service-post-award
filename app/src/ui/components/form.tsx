@@ -34,9 +34,9 @@ class FormComponent<T> extends React.Component<FormProps<T>, []> {
         });
 
         const childrenWithData = React.Children.map(this.props.children, (child, index) => child && React.cloneElement(child as any, childProps(index)));
-
+        const method = this.props.type || "post";
         return (
-            <form method={this.props.type || "post"} action="" onSubmit={(e) => this.onSubmit(e)} data-qa={this.props.qa}>
+            <form method={method} action="" onSubmit={(e) => this.onSubmit(e)} data-qa={this.props.qa}>
                 {childrenWithData}
             </form>
         );
