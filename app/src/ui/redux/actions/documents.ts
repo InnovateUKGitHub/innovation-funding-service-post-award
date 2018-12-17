@@ -4,9 +4,9 @@ import {
   conditionalLoad,
   dataLoadAction,
   DataLoadAction,
-  handleError,
-  ResetEditorAction,
-  resetEditorAction,
+  EditorAction,
+  handleEditorError,
+  handleEditorSuccess,
   SyncThunk,
   updateEditorAction,
   UpdateEditorAction
@@ -54,7 +54,7 @@ export function updateClaimDetailDocumentEditor(claimDetailKey: ClaimDetailKey, 
   };
 }
 
-export function uploadClaimDetailDocument(claimDetailKey: ClaimDetailKey, dto: DocumentUploadDto, onComplete: () => void): AsyncThunk<void, DataLoadAction | UpdateEditorAction | ResetEditorAction> {
+export function uploadClaimDetailDocument(claimDetailKey: ClaimDetailKey, dto: DocumentUploadDto, onComplete: () => void): AsyncThunk<void, DataLoadAction | EditorAction> {
   return (dispatch, getState) => {
     const state = getState();
     const selector = getClaimDetailDocumentEditor(claimDetailKey);
@@ -70,10 +70,10 @@ export function uploadClaimDetailDocument(claimDetailKey: ClaimDetailKey, dto: D
 
     return ApiClient.documents.uploadClaimDetailDocument({ claimDetailKey, file: dto.file!, user: state.user })
       .then(() => {
-        dispatch(resetEditorAction(selector.key, selector.store));
+        dispatch(handleEditorSuccess(selector.key, selector.store));
         onComplete();
       }).catch((e: any) => {
-        dispatch(handleError({ id: selector.key, store: selector.store, dto, validation, error: e }));
+        dispatch(handleEditorError({ id: selector.key, store: selector.store, dto, validation, error: e }));
       });
   };
 }
@@ -93,7 +93,7 @@ export function updateClaimDocumentEditor(claimKey: ClaimKey, dto: DocumentUploa
   };
 }
 
-export function uploadClaimDocument(claimKey: ClaimKey, dto: DocumentUploadDto, onComplete: () => void): AsyncThunk<void, DataLoadAction | UpdateEditorAction | ResetEditorAction> {
+export function uploadClaimDocument(claimKey: ClaimKey, dto: DocumentUploadDto, onComplete: () => void): AsyncThunk<void, DataLoadAction | EditorAction> {
   return (dispatch, getState) => {
     const state = getState();
     const selector = getClaimDocumentEditor(claimKey, dto.description);
@@ -112,10 +112,10 @@ export function uploadClaimDocument(claimKey: ClaimKey, dto: DocumentUploadDto, 
 
     return ApiClient.documents.uploadClaimDocument({ claimKey, file: dto.file!, description: dto.description, user: state.user })
       .then(() => {
-        dispatch(resetEditorAction(selector.key, selector.store));
+        dispatch(handleEditorSuccess(selector.key, selector.store));
         onComplete();
       }).catch((e: any) => {
-        dispatch(handleError({ id: selector.key, store: selector.store, dto, validation, error: e }));
+        dispatch(handleEditorError({ id: selector.key, store: selector.store, dto, validation, error: e }));
       });
   };
 }
@@ -129,10 +129,10 @@ export function deleteClaimDetailDocument(claimDetailKey: ClaimDetailKey, dto: D
 
     return ApiClient.documents.deleteDocument({ documentId: dto.id, user: state.user })
       .then(() => {
-        dispatch(resetEditorAction(selector.key, selector.store));
+        dispatch(handleEditorSuccess(selector.key, selector.store));
         onComplete();
       }).catch((e: any) => {
-        dispatch(handleError({ id: selector.key, store: selector.store, dto, validation: null, error: e }));
+        dispatch(handleEditorError({ id: selector.key, store: selector.store, dto, validation: null, error: e }));
       });
   };
 }
@@ -145,10 +145,10 @@ export function deleteClaimDocument(claimKey: ClaimKey, dto: DocumentSummaryDto,
     dispatch(dataLoadAction(docsSelector.key, docsSelector.store, LoadingStatus.Stale, undefined));
     return ApiClient.documents.deleteDocument({documentId: dto.id, user: state.user})
       .then(() => {
-        dispatch(resetEditorAction(selector.key, selector.store));
+        dispatch(handleEditorSuccess(selector.key, selector.store));
         onComplete();
       }).catch((e: any) => {
-        dispatch(handleError({ id: selector.key, store: selector.store, dto, validation: null, error: e }));
+        dispatch(handleEditorError({ id: selector.key, store: selector.store, dto, validation: null, error: e }));
       });
   };
 }
