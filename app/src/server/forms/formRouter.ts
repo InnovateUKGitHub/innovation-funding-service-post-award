@@ -11,9 +11,9 @@ export const formRouter = express.Router();
 const handlers: IFormHandler[] = [
   new ClaimForcastFormHandler(),
   new EditClaimLineItemsFormHandler(),
-  new HomeFormHandler(),
   new PrepareClaimFormHandler(),
   new ReviewClaimFormHandler(),
+  new HomeFormHandler(),
 ];
 
 handlers.forEach(x => {

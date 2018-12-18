@@ -189,11 +189,7 @@ export class Context implements IContext {
 
     this.logger.log("Running async query", runnable.LogMessage());
 
-    try {
-      return this.runAsync(runnable);
-    } catch (e) {
-      throw e;
-    }
+    return this.runAsync(runnable);
   }
 
   public runSyncQuery<TResult>(query: SyncQueryBase<TResult>): TResult {
