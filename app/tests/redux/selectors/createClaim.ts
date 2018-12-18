@@ -1,7 +1,7 @@
 import { ClaimDto } from "../../../src/types/dtos";
 import { ClaimStatus } from "../../../src/types/constants";
 
-export default (mod: Partial<ClaimDto>): ClaimDto => {
+export default (mod?: Partial<ClaimDto>): ClaimDto => {
   const template = {
     id: "",
     partnerId: "",

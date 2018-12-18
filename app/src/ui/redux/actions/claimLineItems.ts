@@ -2,7 +2,16 @@ import { ApiClient } from "../../apiClient";
 import { LoadingStatus } from "../../../shared/pending";
 import { ClaimLineItemDtosValidator } from "../../validators";
 import { findClaimLineItemsByPartnerCostCategoryAndPeriod } from "../selectors";
-import { conditionalLoad, dataLoadAction, DataLoadAction, handleError, SyncThunk, updateEditorAction, UpdateEditorAction } from "./common";
+import {
+  conditionalLoad,
+  dataLoadAction,
+  DataLoadAction,
+  EditorAction,
+  handleEditorError,
+  SyncThunk,
+  updateEditorAction,
+  UpdateEditorAction
+} from "./common";
 import { scrollToTheTop } from "../../../util/windowHelpers";
 
 export function loadClaimLineItemsForCategory(partnerId: string, costCategoryId: string, periodId: number) {
@@ -29,7 +38,7 @@ export function validateClaimLineItems(partnerId: string, periodId: number, cost
   };
 }
 
-export function saveClaimLineItems(partnerId: string, periodId: number, costCategoryId: string, lineItems: ClaimLineItemDto[], onComplete: () => void): SyncThunk<void, UpdateEditorAction | DataLoadAction> {
+export function saveClaimLineItems(partnerId: string, periodId: number, costCategoryId: string, lineItems: ClaimLineItemDto[], onComplete: () => void): SyncThunk<void, EditorAction | DataLoadAction> {
   return (dispatch, getState) => {
     const state      = getState();
     const selector   = findClaimLineItemsByPartnerCostCategoryAndPeriod(partnerId, costCategoryId, periodId);
@@ -45,7 +54,7 @@ export function saveClaimLineItems(partnerId: string, periodId: number, costCate
         dispatch(dataLoadAction(selector.key, selector.store, LoadingStatus.Done, result));
         onComplete();
       }).catch((e) => {
-        dispatch(handleError({ id: selector.key, store: selector.store, dto: lineItems, validation, error: e}));
+        dispatch(handleEditorError({ id: selector.key, store: selector.store, dto: lineItems, validation, error: e}));
       });
   };
 }

@@ -13,21 +13,47 @@ export interface IEditorStore<TDto, TValidator> {
   error?: IAppError | null;
 }
 
-const editorsReducer = <TDto extends {}, TValidator extends Results<TDto>>(store: string) => (state: { [key: string]: IEditorStore<TDto, TValidator> } = {}, action: RootActions) => {
-  if (action.type === "VALIDATE" && action.payload.store === store) {
-    const payload: IEditorStore<TDto, TValidator> = {
+interface State<TDto, TValidator> {
+  [x: string]: IEditorStore<TDto, TValidator>;
+}
+
+const getNewStateWithoutErrors = <TDto extends {}, TValidator extends Results<TDto>>(state: State<TDto, TValidator>): State<TDto, TValidator> => {
+  return Object.keys(state).reduce((newState: State<TDto, TValidator>, key) => {
+    const editorStore = state[key];
+    newState[key] = { ...editorStore, error: null };
+    return newState;
+  }, {});
+};
+
+export const editorsReducer = <TDto extends {}, TValidator extends Results<TDto>>(store: string) => (state: State<TDto, TValidator> = {}, action: RootActions) => {
+  if (action.type === "UPDATE_EDITOR" && action.payload.store === store) {
+    const result = { ...state };
+    const originalEditor = result[action.payload.id];
+    const newEditor: IEditorStore<TDto, TValidator> = {
+      ...originalEditor,
       data: action.payload.dto as TDto,
-      validator: action.payload.validator as TValidator,
-      error: action.payload.error
+      validator: action.payload.validator as TValidator
     };
-    const result = Object.assign({}, state);
-    result[action.payload.id] = payload;
+    result[action.payload.id] = newEditor;
 
     return result;
   }
-  if (action.type === "RESET_EDITOR" && action.payload.store === store) {
-    const result = { ...state };
-    delete result[action.payload.id];
+  if (action.type === "EDITOR_SUBMIT_SUCCESS") {
+    const result = getNewStateWithoutErrors(state);
+    if (action.payload.store === store) delete result[action.payload.id];
+    return result;
+  }
+  if (action.type === "EDITOR_SUBMIT_ERROR") {
+    const result = getNewStateWithoutErrors(state);
+    if (action.payload.store === store) {
+      const originalEditor = result[action.payload.id];
+      const newEditor: IEditorStore<TDto, TValidator> = {
+        ...originalEditor,
+        data: action.payload.dto as TDto,
+        error: action.payload.error
+      };
+      result[action.payload.id] = newEditor;
+    }
     return result;
   }
   else if (action.type === "@@router5/TRANSITION_START" && action.payload.previousRoute) {

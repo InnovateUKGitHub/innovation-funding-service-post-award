@@ -2,31 +2,36 @@ import {createAction} from "./createAction";
 import {Results} from "../../../validation/results";
 import {ErrorCode} from "../../../../server/apis/ApiError";
 import { scrollToTheTop } from "../../../../util/windowHelpers";
+import { dataLoadAction } from "./dataLoad";
+import { LoadingStatus } from "../../../../shared/pending";
 
 type UpdateEditorThunk = typeof updateEditorAction;
-type ResetEditorThunk = typeof resetEditorAction;
+type HandleSuccessThunk = typeof handleEditorSuccess;
+type HandleErrorThunk = typeof handleEditorError;
 export type UpdateEditorAction = ReturnType<UpdateEditorThunk>;
-export type ResetEditorAction = ReturnType<ResetEditorThunk>;
+export type HandleSuccessAction = ReturnType<HandleSuccessThunk>;
+export type HandleErrorAction = ReturnType<HandleErrorThunk>;
+
+export type EditorAction = UpdateEditorAction | HandleSuccessAction | HandleErrorAction;
 
 export function updateEditorAction<T>(
   id: string,
   store: string,
   dto: T,
-  validator: Results<T> | null,
-  error?: IAppError | null
+  validator: Results<T> | null
 ) {
-  const payload = {id, store, dto, validator, error};
-  return createAction("VALIDATE", payload);
+  const payload = {id, store, dto, validator};
+  return createAction("UPDATE_EDITOR", payload);
 }
 
-export function resetEditorAction<T>(
+export function handleEditorSuccess<T>(
   id: string,
-  store: string,
+  editorStore: string,
 ) {
-  return createAction("RESET_EDITOR", {id, store});
+  return createAction("EDITOR_SUBMIT_SUCCESS", {id, store: editorStore});
 }
 
-export function handleError<T>({id, store, dto, validation, error}: {
+export function handleEditorError<T>({id, store, dto, validation, error}: {
   id: string,
   store: string,
   dto: T,
@@ -35,7 +40,7 @@ export function handleError<T>({id, store, dto, validation, error}: {
 }) {
   scrollToTheTop();
   if (error.code === ErrorCode.VALIDATION_ERROR) {
-    return updateEditorAction(id, store, dto, error.details, null);
+    return updateEditorAction(id, store, dto, error.details);
   }
-  return updateEditorAction(id, store, dto, validation, error);
+  return createAction("EDITOR_SUBMIT_ERROR", { id, store, dto, error });
 }
