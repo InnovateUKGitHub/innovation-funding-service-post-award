@@ -14,7 +14,7 @@ export class GetCostCategoriesQuery extends QueryBase<CostCategoryDto[]> {
     return data.map<CostCategoryDto>(x => ({
       id: x.Id,
       name: x.Acc_CostCategoryName__c,
-      competitionType: this.getCompetitionType(x),
+      competitionType: x.Acc_CompetitionType__c,
       organistionType: this.getOrganisationType(x),
       isCalculated: x.Acc_CostCategoryName__c === "Overheads",
       description: x.Acc_CostCategoryDescription__c,
@@ -28,13 +28,6 @@ export class GetCostCategoriesQuery extends QueryBase<CostCategoryDto[]> {
     }
     else if (item.Acc_OrganisationType__c === "Industrial") {
       return "Industrial";
-    }
-    return "Unknown";
-  }
-
-  private getCompetitionType(item: ISalesforceCostCategory) {
-    if (item.Acc_CompetitionType__c === "Sector") {
-      return "Sector";
     }
     return "Unknown";
   }
