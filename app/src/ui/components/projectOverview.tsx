@@ -3,6 +3,7 @@ import * as ACC from "./index";
 import { ProjectDashboardRoute } from "../containers";
 import { ProjectDto } from "../../types";
 import { Results } from "../validation/results";
+import { IAppError } from "../../types/IAppError";
 
 interface Props {
     project: ProjectDto;

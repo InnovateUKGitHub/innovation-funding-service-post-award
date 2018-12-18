@@ -1,9 +1,7 @@
 import {createAction} from "./createAction";
 import {Results} from "../../../validation/results";
-import {ErrorCode} from "../../../../server/apis/ApiError";
 import { scrollToTheTop } from "../../../../util/windowHelpers";
-import { dataLoadAction } from "./dataLoad";
-import { LoadingStatus } from "../../../../shared/pending";
+import { ErrorCode } from "../../../../types/IAppError";
 
 type UpdateEditorThunk = typeof updateEditorAction;
 type HandleSuccessThunk = typeof handleEditorSuccess;

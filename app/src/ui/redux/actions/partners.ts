@@ -3,7 +3,6 @@ import { conditionalLoad } from "./common";
 import {
   findPartnersByProject,
   getPartner,
-  partnersStore,
 } from "../selectors/partners";
 
 export function loadPartner(partnerId: string) {
