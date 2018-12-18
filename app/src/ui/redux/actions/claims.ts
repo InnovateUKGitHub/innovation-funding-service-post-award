@@ -1,7 +1,17 @@
 import { ApiClient } from "../../apiClient";
 import { ClaimDtoValidator } from "../../validators";
 import { LoadingStatus } from "../../../shared/pending";
-import { AsyncThunk, conditionalLoad, dataLoadAction, DataLoadAction, handleError, SyncThunk, updateEditorAction, UpdateEditorAction } from "./common";
+import {
+  AsyncThunk,
+  conditionalLoad,
+  dataLoadAction,
+  DataLoadAction,
+  EditorAction,
+  handleEditorError,
+  SyncThunk,
+  updateEditorAction,
+  UpdateEditorAction
+} from "./common";
 import { findClaimsByPartner, findClaimsByProject, getClaim, getClaimEditor, getCurrentClaim } from "../selectors";
 import { ClaimDto } from "../../../types";
 import { loadIarDocuments } from ".";
@@ -27,7 +37,7 @@ export function validateClaim(partnerId: string, periodId: number, dto: ClaimDto
   };
 }
 
-export function saveClaim(partnerId: string, periodId: number, claim: ClaimDto, details: ClaimDetailsSummaryDto[], costCategories: CostCategoryDto[], onComplete: () => void): AsyncThunk<void, DataLoadAction | UpdateEditorAction> {
+export function saveClaim(partnerId: string, periodId: number, claim: ClaimDto, details: ClaimDetailsSummaryDto[], costCategories: CostCategoryDto[], onComplete: () => void): AsyncThunk<void, DataLoadAction | EditorAction> {
   return (dispatch, getState) => {
     const state = getState();
     const selector = getClaimEditor(partnerId, periodId);
@@ -45,7 +55,7 @@ export function saveClaim(partnerId: string, periodId: number, claim: ClaimDto, 
       dispatch(dataLoadAction(selector.key, selector.store, LoadingStatus.Done, result));
       onComplete();
     }).catch((e) => {
-      dispatch(handleError({ id: selector.key, store: selector.store, dto: claim, validation, error: e }));
+      dispatch(handleEditorError({ id: selector.key, store: selector.store, dto: claim, validation, error: e }));
     });
   };
 }

@@ -53,7 +53,7 @@ export function serverRender(req: Request, res: Response, validationError?: { ke
 
     if (validationError) {
       actions.push((dispatch, getState) => {
-        dispatch(updateEditorAction(validationError.key, validationError.store, validationError.dto, validationError.result, validationError.error));
+        dispatch(updateEditorAction(validationError.key, validationError.store, validationError.dto, validationError.result));
         return Promise.resolve();
       });
     }

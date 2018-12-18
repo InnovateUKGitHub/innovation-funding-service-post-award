@@ -4,8 +4,10 @@ import {
   getCurrentClaim, getPreviousClaims,
   getProjectCurrentClaims, getProjectPreviousClaims
 } from "../../../src/ui/redux/selectors";
-import rootState from "./getRootState";
+import getRootState from "./getRootState";
 import createClaim from "./createClaim";
+
+const rootState = getRootState();
 
 describe("claims by project", () => {
   describe("findClaimsByProject", () => {
