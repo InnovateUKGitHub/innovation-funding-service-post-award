@@ -29,4 +29,4 @@ You will only need to execute step 4 in future, unless code updates require you 
 5. Run `npm run test`
 6. After tests have completed the process will give you output location of the report
 
-You will only need to execute step 5 in future, unless code updates require you to install new dependencies - ask a developer.
+Please note there is further documentation in the /testframework README.
