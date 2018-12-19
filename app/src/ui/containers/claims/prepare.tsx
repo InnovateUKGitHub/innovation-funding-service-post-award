@@ -109,8 +109,8 @@ export class PrepareComponent extends ContainerBase<PrepareClaimParams, Data, Ca
     }
 }
 
-const progress = (dispatch: any, projectId: string, partnerId: string) => {
-    dispatch(Actions.navigateTo(ClaimForecastRoute.getLink({ projectId, partnerId })));
+const progress = (dispatch: any, projectId: string, partnerId: string, periodId: number) => {
+    dispatch(Actions.navigateTo(ClaimForecastRoute.getLink({ projectId, partnerId, periodId })));
 };
 
 const goBack = (dispatch: any, projectId: string, partnerId: string) => {
@@ -130,7 +130,7 @@ export const PrepareClaim = definition.connect({
   }),
   withCallbacks: (dispatch) => ({
     onChange: (partnerId, periodId, dto, details, costCategories) => dispatch(Actions.validateClaim(partnerId, periodId, dto, details, costCategories)),
-    saveAndProgress: (projectId, partnerId, periodId, dto, details, costCategories) => dispatch(Actions.saveClaim(partnerId, periodId, dto, details, costCategories, () => progress(dispatch, projectId, partnerId))),
+    saveAndProgress: (projectId, partnerId, periodId, dto, details, costCategories) => dispatch(Actions.saveClaim(partnerId, periodId, dto, details, costCategories, () => progress(dispatch, projectId, partnerId, periodId))),
     saveAndReturn: (projectId, partnerId, periodId, dto, details, costCategories) => dispatch(Actions.saveClaim(partnerId, periodId, dto, details, costCategories, () => goBack(dispatch, projectId, partnerId)))
   })
 });
