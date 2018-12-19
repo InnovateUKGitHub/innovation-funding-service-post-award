@@ -17,7 +17,6 @@ export function loadForecastDetailsForPartner(partnerId: string) {
 
 export function validateForecastDetails(
   partnerId: string,
-  periodId: number,
   dto: ForecastDetailsDTO[],
   claimDetails: ClaimDetailsDto[],
   golCosts: GOLCostDto[],
@@ -33,7 +32,7 @@ export function validateForecastDetails(
       showErrors = current && current.validator.showValidationErrors || false;
     }
 
-    const validator = new ForecastDetailsDtosValidator (periodId, dto, claimDetails, golCosts, costCategories, showErrors);
+    const validator = new ForecastDetailsDtosValidator(dto, claimDetails, golCosts, costCategories, showErrors);
     dispatch(updateEditorAction(selector.key, selector.store, dto, validator));
     return validator;
   };
@@ -42,7 +41,6 @@ export function validateForecastDetails(
 export function saveForecastDetails(
   updateClaim: boolean,
   partnerId: string,
-  periodId: number,
   forecasts: ForecastDetailsDTO[],
   claimDetails: ClaimDetailsDto[],
   golCosts: GOLCostDto[],
@@ -52,7 +50,7 @@ export function saveForecastDetails(
   return (dispatch, getState) => {
     const state = getState();
     const selector = getForecastDetailsEditor(state, partnerId);
-    const validatorThunk = validateForecastDetails(partnerId, periodId, forecasts, claimDetails, golCosts, costCategories, true);
+    const validatorThunk = validateForecastDetails(partnerId, forecasts, claimDetails, golCosts, costCategories, true);
     const validation = validatorThunk(dispatch, getState, null);
 
     if (!validation.isValid) {
@@ -63,7 +61,7 @@ export function saveForecastDetails(
     // send a loading action with undefined as it will just update the status
     dispatch(dataLoadAction(selector.key, selector.store, LoadingStatus.Loading, undefined));
 
-    return ApiClient.forecastDetails.update({partnerId, periodId, forecasts, submit: updateClaim, user: state.user}).then((result) => {
+    return ApiClient.forecastDetails.update({partnerId, forecasts, submit: updateClaim, user: state.user}).then(result => {
       dispatch(dataLoadAction(selector.key, selector.store, LoadingStatus.Done, result));
       onComplete();
     }).catch((e) => {

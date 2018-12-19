@@ -1,7 +1,6 @@
 import { TestContext } from "../../testContextProvider";
 import { UpdateForecastDetailsCommand } from "../../../../src/server/features/forecastDetails";
 import { ValidationError } from "../../../../src/shared/validation";
-import { ClaimFrequency } from "../../../../src/types";
 import { DateTime } from "luxon";
 
 describe("UpdateForecastDetailsCommand", () => {
@@ -10,7 +9,6 @@ describe("UpdateForecastDetailsCommand", () => {
 
     const profileDetail = context.testData.createProfileDetail();
     const partnerId     = profileDetail.Acc_ProjectParticipant__c;
-    const periodId      = profileDetail.Acc_ProjectPeriodNumber__c;
     const dto: ForecastDetailsDTO[] = [{
       id: null,
       costCategoryId: profileDetail.Acc_CostCategory__c,
@@ -20,7 +18,7 @@ describe("UpdateForecastDetailsCommand", () => {
       value: 123
     }];
 
-    const command = new UpdateForecastDetailsCommand(partnerId, periodId, dto);
+    const command = new UpdateForecastDetailsCommand(partnerId, dto);
     await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
   });
 
@@ -43,7 +41,7 @@ describe("UpdateForecastDetailsCommand", () => {
       value: 501
     }];
 
-    const command = new UpdateForecastDetailsCommand(partner.Id, periodId, dto);
+    const command = new UpdateForecastDetailsCommand(partner.Id, dto);
     await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
   });
 
@@ -66,7 +64,7 @@ describe("UpdateForecastDetailsCommand", () => {
       value: 500
     }];
 
-    const command = new UpdateForecastDetailsCommand(partner.Id, periodId, dto);
+    const command = new UpdateForecastDetailsCommand(partner.Id, dto);
     await context.runCommand(command);
 
     expect(context.repositories.profileDetails.Items.find(x => x.Id === profileDetail.Id).Acc_LatestForecastCost__c).toBe(500);
@@ -100,7 +98,7 @@ describe("UpdateForecastDetailsCommand", () => {
       value: 100
     }];
 
-    const command = new UpdateForecastDetailsCommand(partner.Id, periodId, dto);
+    const command = new UpdateForecastDetailsCommand(partner.Id, dto);
     await context.runCommand(command);
 
     expect(context.repositories.profileDetails.Items.find(x => x.Id === profileDetail.Id).Acc_LatestForecastCost__c).toBe(250);
@@ -135,7 +133,7 @@ describe("UpdateForecastDetailsCommand", () => {
     testData.createClaimDetail(costCat, partner, periodId - 1, x => x.Acc_PeriodCostCategoryTotal__c = 1000);
     testData.createProfileTotalCostCategory(costCat, partner, 1500);
 
-    const command = new UpdateForecastDetailsCommand(partnerId, periodId, dto, false);
+    const command = new UpdateForecastDetailsCommand(partnerId, dto, false);
     await expect(context.runCommand(command)).rejects.toThrow(Error);
   });
 });
