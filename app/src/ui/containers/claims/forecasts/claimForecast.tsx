@@ -7,19 +7,22 @@ import { PrepareClaimRoute } from "../prepare";
 import {
   ForecastData,
   forecastDataLoadActions,
-  forecastParams,
-  Params,
   PendingForecastData,
   renderWarning,
   withDataEditor,
 } from "./common";
 
+export interface ClaimForcastParams {
+  projectId: string;
+  partnerId: string;
+  periodId: number;
+}
 interface Callbacks {
   onChange: (partnerId: string, data: ForecastDetailsDTO[], combined: ForecastData) => void;
   saveAndReturn: (updateClaim: boolean, projectId: string, partnerId: string, periodId: number, data: ForecastData) => void;
 }
 
-class ClaimForecastComponent extends ContainerBase<Params, PendingForecastData, Callbacks> {
+class ClaimForecastComponent extends ContainerBase<ClaimForcastParams, PendingForecastData, Callbacks> {
   render() {
     return <ACC.PageLoader pending={this.props.combined} render={data => this.renderContents(data)} />;
   }
@@ -74,7 +77,7 @@ const updateRedirect = (updateClaim: boolean, dispatch: any, projectId: string, 
     : dispatch(Actions.navigateTo(PrepareClaimRoute.getLink({ projectId, partnerId, periodId })));
 };
 
-const definition = ReduxContainer.for<Params, PendingForecastData, Callbacks>(ClaimForecastComponent);
+const definition = ReduxContainer.for<ClaimForcastParams, PendingForecastData, Callbacks>(ClaimForecastComponent);
 
 const ForecastClaim = definition.connect({
   withData: (state, props) => withDataEditor(state, props),
@@ -86,8 +89,8 @@ const ForecastClaim = definition.connect({
 
 export const ClaimForecastRoute = definition.route({
   routeName: "claimForecast",
-  routePath: "/projects/:projectId/claims/:partnerId/forecast",
-  getParams: forecastParams,
+  routePath: "/projects/:projectId/claims/:partnerId/forecast/:periodId",
+  getParams: (route) => ({ projectId: route.params.projectId, partnerId: route.params.partnerId, periodId: parseInt(route.params.periodId) }),
   getLoadDataActions: forecastDataLoadActions,
   container: ForecastClaim
 });
