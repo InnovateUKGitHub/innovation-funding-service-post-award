@@ -1,19 +1,19 @@
 import { CommandBase, IContext } from "../common/context";
 import { ValidationError } from "../../../shared/validation";
-import { GetAllForecastsGOLCostsQuery, GetClaim, GetCostCategoriesQuery } from "../claims";
+import { GetAllForecastsGOLCostsQuery, GetAllForPartnerQuery, GetCostCategoriesQuery } from "../claims";
 import { ForecastDetailsDtosValidator } from "../../../ui/validators/forecastDetailsDtosValidator";
 import { GetAllClaimDetailsByPartner } from "../claimDetails";
 import { ISalesforceProfileDetails } from "../../repositories";
 import { Updatable } from "../../repositories/salesforceBase";
-import { ClaimStatus } from "../../../types";
+import { ClaimDto, ClaimStatus } from "../../../types";
 import { GetAllForecastsForPartnerQuery } from "./getAllForecastsForPartnerQuery";
 import { GetByIdQuery as GetPartnerById } from "../partners";
 import { GetByIdQuery as GetProjectById } from "../projects";
+import { ApiError, StatusCode } from "../../apis/ApiError";
 
 export class UpdateForecastDetailsCommand extends CommandBase<boolean> {
   constructor(
     private partnerId: string,
-    private periodId: number,
     private forecasts: ForecastDetailsDTO[],
     private submit: boolean
   ) {
@@ -37,8 +37,7 @@ export class UpdateForecastDetailsCommand extends CommandBase<boolean> {
     const golCosts = await context.runQuery(new GetAllForecastsGOLCostsQuery(this.partnerId));
     const costCategories = await context.runQuery(new GetCostCategoriesQuery());
     const showErrors = true;
-    // TODO - period id needs to be resolved
-    const validation = new ForecastDetailsDtosValidator(this.periodId, this.forecasts, claimDetails, golCosts, costCategories, showErrors);
+    const validation = new ForecastDetailsDtosValidator(this.forecasts, claimDetails, golCosts, costCategories, showErrors);
 
     if (!validation.isValid) {
       throw new ValidationError(validation);
@@ -56,7 +55,7 @@ export class UpdateForecastDetailsCommand extends CommandBase<boolean> {
       });
 
     if(!passed) {
-      throw new Error("You can't update the forecast of completed periods.");
+      throw new ApiError(StatusCode.BAD_REQUEST, "You can't update the forecast of approved periods.");
     }
   }
 
@@ -70,9 +69,26 @@ export class UpdateForecastDetailsCommand extends CommandBase<boolean> {
   }
 
   private async updateClaim(context: IContext) {
-    const query  = new GetClaim(this.partnerId, this.periodId);
-    const claim  = await context.runQuery(query);
-    const update = { Id: claim.id, Acc_ClaimStatus__c: ClaimStatus.SUBMITTED };
+    const query  = new GetAllForPartnerQuery(this.partnerId);
+    const claims = await context.runQuery(query);
+    const claim  = claims.find(x => !x.isApproved);
+
+    if(!claim) {
+      throw new ApiError(StatusCode.BAD_REQUEST, "Unable to find current claim.");
+    }
+
+    const status = this.nextClaimStatus(claim);
+    const update = { Id: claim.id, Acc_ClaimStatus__c: status };
     return await context.repositories.claims.update(update);
+  }
+
+  private nextClaimStatus(claim: ClaimDto) {
+    switch(claim.status) {
+      case ClaimStatus.DRAFT:            return ClaimStatus.SUBMITTED;
+      case ClaimStatus.MO_QUERIED:       return ClaimStatus.SUBMITTED;
+      case ClaimStatus.INNOVATE_QUERIED: return ClaimStatus.AWAITING_IUK_APPROVAL;
+    }
+
+    throw new ApiError(StatusCode.BAD_REQUEST, "Claim in invalid status.");
   }
 }

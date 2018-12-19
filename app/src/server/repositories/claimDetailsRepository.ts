@@ -38,7 +38,7 @@ export class ClaimDetailsRepository extends SalesforceBase<ISalesforceClaimDetai
   }
 
   getAllByPartnerForPeriod(partnerId: string, periodId: number): Promise<ISalesforceClaimDetails[]> {
-    const filter = `Acc_ProjectParticipant__c = '${partnerId}' AND RecordType.Name = '${this.recordType}' AND Acc_ProjectPeriodNumber__c = ${periodId}`;
+    const filter = `Acc_ProjectParticipant__c = '${partnerId}' AND RecordType.Name = '${this.recordType}' AND Acc_ProjectPeriodNumber__c = ${periodId} AND Acc_ClaimStatus__c != 'New'`;
     return super.where(filter);
   }
 
@@ -49,6 +49,7 @@ export class ClaimDetailsRepository extends SalesforceBase<ISalesforceClaimDetai
     AND RecordType.Name = '${this.recordType}'
     AND Acc_ProjectPeriodNumber__c = ${periodId}
     AND Acc_CostCategory__c = '${costCategoryId}'
+    AND Acc_ClaimStatus__c != 'New'
     `;
     const claimDetail = await super.filterOne(filter);
     if (!claimDetail ) {
@@ -58,12 +59,12 @@ export class ClaimDetailsRepository extends SalesforceBase<ISalesforceClaimDetai
   }
 
   getAllByPartnerWithPeriodLt(partnerId: string, periodId: number): Promise<ISalesforceClaimDetails[]> {
-    const filter = `Acc_ProjectParticipant__c = '${partnerId}' AND RecordType.Name = '${this.recordType}' AND Acc_ProjectPeriodNumber__c < ${periodId}`;
+    const filter = `Acc_ProjectParticipant__c = '${partnerId}' AND RecordType.Name = '${this.recordType}' AND Acc_ProjectPeriodNumber__c < ${periodId} AND Acc_ClaimStatus__c != 'New'`;
     return super.where(filter);
   }
 
   getAllByPartner(partnerId: string): Promise<ISalesforceClaimDetails[]> {
-    const filter = `Acc_ProjectParticipant__c = '${partnerId}' AND RecordType.Name = '${this.recordType}'`;
+    const filter = `Acc_ProjectParticipant__c = '${partnerId}' AND RecordType.Name = '${this.recordType}' AND Acc_ClaimStatus__c != 'New'`;
     return super.where(filter);
   }
 }

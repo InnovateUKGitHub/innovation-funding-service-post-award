@@ -7,19 +7,22 @@ import { PrepareClaimRoute } from "../prepare";
 import {
   ForecastData,
   forecastDataLoadActions,
-  forecastParams,
-  Params,
   PendingForecastData,
   renderWarning,
   withDataEditor,
 } from "./common";
 
+export interface ClaimForcastParams {
+  projectId: string;
+  partnerId: string;
+  periodId: number;
+}
 interface Callbacks {
-  onChange: (partnerId: string, periodId: number, data: ForecastDetailsDTO[], combined: ForecastData) => void;
+  onChange: (partnerId: string, data: ForecastDetailsDTO[], combined: ForecastData) => void;
   saveAndReturn: (updateClaim: boolean, projectId: string, partnerId: string, periodId: number, data: ForecastData) => void;
 }
 
-class ClaimForecastComponent extends ContainerBase<Params, PendingForecastData, Callbacks> {
+class ClaimForecastComponent extends ContainerBase<ClaimForcastParams, PendingForecastData, Callbacks> {
   render() {
     return <ACC.PageLoader pending={this.props.combined} render={data => this.renderContents(data)} />;
   }
@@ -28,8 +31,8 @@ class ClaimForecastComponent extends ContainerBase<Params, PendingForecastData, 
     this.props.saveAndReturn(updateClaim, this.props.projectId, this.props.partnerId, periodId, data);
   }
 
-  handleChange(data: ForecastDetailsDTO[], combined: ForecastData, periodId: number) {
-    this.props.onChange(this.props.partnerId, periodId, data, combined);
+  handleChange(data: ForecastDetailsDTO[], combined: ForecastData) {
+    this.props.onChange(this.props.partnerId, data, combined);
   }
 
   renderContents(combined: ForecastData) {
@@ -49,7 +52,7 @@ class ClaimForecastComponent extends ContainerBase<Params, PendingForecastData, 
           {renderWarning(combined)}
           <Form.Form
             data={editor.data}
-            onChange={data => this.handleChange(data, combined, periodId)}
+            onChange={data => this.handleChange(data, combined)}
             onSubmit={() => this.saveAndReturn(combined, true, periodId)}
             qa="claim-forecast-form"
           >
@@ -74,20 +77,20 @@ const updateRedirect = (updateClaim: boolean, dispatch: any, projectId: string, 
     : dispatch(Actions.navigateTo(PrepareClaimRoute.getLink({ projectId, partnerId, periodId })));
 };
 
-const definition = ReduxContainer.for<Params, PendingForecastData, Callbacks>(ClaimForecastComponent);
+const definition = ReduxContainer.for<ClaimForcastParams, PendingForecastData, Callbacks>(ClaimForecastComponent);
 
 const ForecastClaim = definition.connect({
   withData: (state, props) => withDataEditor(state, props),
   withCallbacks: (dispatch) => ({
-    onChange: (partnerId, periodId, data, combined) => dispatch(Actions.validateForecastDetails(partnerId, periodId, data, combined.claimDetails, combined.golCosts, combined.costCategories)),
-    saveAndReturn: (updateClaim, projectId, partnerId, periodId, data) => dispatch(Actions.saveForecastDetails(updateClaim, partnerId, periodId, data.editor!.data, data.claimDetails, data.golCosts, data.costCategories, () => updateRedirect(updateClaim, dispatch, projectId, partnerId, periodId)))
+    onChange: (partnerId, data, combined) => dispatch(Actions.validateForecastDetails(partnerId, data, combined.claimDetails, combined.golCosts, combined.costCategories)),
+    saveAndReturn: (updateClaim, projectId, partnerId, periodId, data) => dispatch(Actions.saveForecastDetails(updateClaim, partnerId, data.editor!.data, data.claimDetails, data.golCosts, data.costCategories, () => updateRedirect(updateClaim, dispatch, projectId, partnerId, periodId)))
   })
 });
 
 export const ClaimForecastRoute = definition.route({
   routeName: "claimForecast",
-  routePath: "/projects/:projectId/claims/:partnerId/forecast",
-  getParams: forecastParams,
+  routePath: "/projects/:projectId/claims/:partnerId/forecast/:periodId",
+  getParams: (route) => ({ projectId: route.params.projectId, partnerId: route.params.partnerId, periodId: parseInt(route.params.periodId, 10) }),
   getLoadDataActions: forecastDataLoadActions,
   container: ForecastClaim
 });

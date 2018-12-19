@@ -12,7 +12,8 @@ import { rootReducer, RootState, setupInitialState, setupMiddleware } from "../u
 import { configureRouter, matchRoute } from "../ui/routing";
 import { App } from "../ui/containers/app";
 import { Results } from "../ui/validation/results";
-import { AsyncThunk, updateEditorAction } from "../ui/redux/actions/common";
+import { AsyncThunk, handleEditorError, updateEditorAction } from "../ui/redux/actions/common";
+import { IAppError } from "../types/IAppError";
 
 async function loadData(dispatch: Dispatch<AnyAction>, getState: () => RootState, dataCalls: AsyncThunk<any>[]): Promise<void> {
 
@@ -30,7 +31,7 @@ async function loadData(dispatch: Dispatch<AnyAction>, getState: () => RootState
 const sendErrorResponse = (res: Response) => res.status(500).sendFile(path.join(__dirname, "../../../public/error.html"));
 const sendNotFoundResponse = (res: Response) => res.status(404).sendFile(path.join(__dirname, "../../../public/error-not-found.html"));
 
-export function serverRender(req: Request, res: Response, validationError?: { key: string, store: string, dto: {}, result: Results<{}>, error: IAppError | null }) {
+export function serverRender(req: Request, res: Response, errorDetails?: { key: string, store: string, dto: {}, result: Results<{}>, error: IAppError }) {
   const router = configureRouter();
 
   router.start(req.originalUrl, (routeError, route) => {
@@ -51,9 +52,20 @@ export function serverRender(req: Request, res: Response, validationError?: { ke
     const params = matched && matched.getParams && matched.getParams(route!) || {};
     const actions = matched && matched.getLoadDataActions && matched.getLoadDataActions(params) || [];
 
-    if (validationError) {
+    if (errorDetails) {
       actions.push((dispatch, getState) => {
-        dispatch(updateEditorAction(validationError.key, validationError.store, validationError.dto, validationError.result));
+        dispatch(updateEditorAction(errorDetails.key, errorDetails.store, errorDetails.dto, errorDetails.result));
+        return Promise.resolve();
+      });
+      actions.push((dispatch, getState) => {
+        dispatch(handleEditorError({
+          id: errorDetails.key,
+          dto: errorDetails.dto,
+          validation: errorDetails.result,
+          error: errorDetails.error,
+          store: errorDetails.store,
+          scrollToTop: false
+        }));
         return Promise.resolve();
       });
     }
@@ -70,8 +82,8 @@ export function serverRender(req: Request, res: Response, validationError?: { ke
 
         return res.send(renderHtml(html, store.getState()));
       })
-      .catch((error: any) => {
-        console.log("server render error", error);
+      .catch((e: any) => {
+        console.log("server render error", e);
         return sendErrorResponse(res);
       });
   });

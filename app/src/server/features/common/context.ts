@@ -2,8 +2,18 @@ import * as Repositories from "../../repositories";
 import { Configuration, IConfig } from "./config";
 import { Clock, IClock } from "./clock";
 import { ILogger, Logger } from "./logger";
-import { ISalesforceConnectionDetails, salesforceConnection, salesforceConnectionWithToken } from "../../repositories/salesforceConnection";
+import {
+  ISalesforceConnectionDetails,
+  salesforceConnection,
+  salesforceConnectionWithToken,
+  SalesforceTokenError
+} from "../../repositories/salesforceConnection";
 import { Cache } from "./cache";
+import { ValidationError } from "../../../shared/validation";
+import { SalesforceInvalidFilterError } from "../../repositories/salesforceBase";
+import { ApiError } from "../../apis/ApiError";
+import { AppError } from "./appError";
+import { ErrorCode } from "../../../types/IAppError";
 
 export interface IRunnable<T> {
   Run: (context: IContext) => Promise<T>;
@@ -89,6 +99,22 @@ const cachesImplimentation: ICaches = {
   costCategories: new Cache<CostCategoryDto[]>(60 * 12)
 };
 
+const constructErrorResponse = <E extends Error>(error: E): AppError => {
+  if (error instanceof ValidationError) {
+    return new AppError(ErrorCode.VALIDATION_ERROR, error.validationResult, error);
+  }
+  if (error instanceof ApiError) {
+    return new AppError(ErrorCode.SERVER_ERROR, error.message, error);
+  }
+  if (error instanceof SalesforceTokenError) {
+    return new AppError(ErrorCode.SECURITY_ERROR, error.message, error);
+  }
+  if(error instanceof SalesforceInvalidFilterError) {
+    return new AppError(ErrorCode.REQUEST_ERROR, "Not found", error);
+  }
+  return new AppError(ErrorCode.SERVER_ERROR, error.message || "An unexpected error has occurred...", error);
+};
+
 export class Context implements IContext {
 
   constructor(public readonly user: IUser) {
@@ -141,16 +167,29 @@ export class Context implements IContext {
   public config: Readonly<IConfig>;
   public logger = new Logger();
 
+  private runAsync<TResult>(runnable: IRunnable<TResult>): Promise<TResult> {
+    return runnable.Run(this).catch(e => {
+      this.logger.log("Failed query", runnable, e);
+      throw constructErrorResponse(e);
+    });
+  }
+
+  private runSync<TResult>(runnable: ISyncRunnable<TResult>): TResult {
+    try {
+      return runnable.Run(this);
+    }
+    catch (e) {
+      this.logger.log("Failed query", runnable, e);
+      throw constructErrorResponse(e);
+    }
+  }
+
   public runQuery<TResult>(query: QueryBase<TResult>): Promise<TResult> {
     const runnable = (query as any) as IRunnable<TResult>;
 
     this.logger.log("Running async query", runnable.LogMessage());
 
-    return runnable.Run(this)
-      .catch(e => {
-        this.logger.log("Failed query", query, e);
-        throw e;
-      });
+    return this.runAsync(runnable);
   }
 
   public runSyncQuery<TResult>(query: SyncQueryBase<TResult>): TResult {
@@ -158,7 +197,7 @@ export class Context implements IContext {
 
     this.logger.log("Running sync query", runnable.LogMessage());
 
-    return runnable.Run(this);
+    return this.runSync(runnable);
   }
 
   public runCommand<TResult>(command: CommandBase<TResult>): Promise<TResult> {
@@ -166,10 +205,7 @@ export class Context implements IContext {
 
     this.logger.log("Running async command", runnable.LogMessage());
 
-    return runnable.Run(this).catch(e => {
-      this.logger.log("Failed command", command, e);
-      throw e;
-    });
+    return this.runAsync(runnable);
   }
 
   public runSyncCommand<TResult>(command: SyncCommandBase<TResult>): TResult {
@@ -177,7 +213,7 @@ export class Context implements IContext {
 
     this.logger.log("Running sync command", runnable.LogMessage());
 
-    return runnable.Run(this);
+    return this.runSync(runnable);
   }
 
   public clock = new Clock();

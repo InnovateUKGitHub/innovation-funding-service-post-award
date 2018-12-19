@@ -1,6 +1,5 @@
 import { IApiClient } from "../server/apis";
 import { processResponse } from "../shared/processResponse";
-import {DocumentDescription} from "../types/constants";
 
 const clientApi: IApiClient = {
   claimLineItems: {
@@ -45,7 +44,7 @@ const clientApi: IApiClient = {
   forecastDetails: {
     getAllByPartnerId: (params) => ajaxJson(`/api/forecast-details/?partnerId=${params.partnerId}`),
     get: (params) => ajaxJson(`/api/forecast-details/${params.partnerId}/${params.periodId}/${params.costCategoryId}`),
-    update: (params) => ajaxPut(`/api/forecast-details/?partnerId=${params.partnerId}&periodId=${params.periodId}&submit=${params.submit}`, params.forecasts),
+    update: (params) => ajaxPut(`/api/forecast-details/?partnerId=${params.partnerId}&submit=${params.submit}`, params.forecasts),
   },
   forecastGolCosts: {
     getAllByPartnerId: (params) => ajaxJson(`/api/forecast-gol-costs/?partnerId=${params.partnerId}`)

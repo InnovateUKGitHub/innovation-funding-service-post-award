@@ -3,6 +3,7 @@ import { combineReducers } from "redux";
 import { ActionTransitionStart } from "redux-router5";
 import { LoadingStatus } from "../../../shared/pending";
 import { ClaimDto, ProjectDto } from "../../../types";
+import { IAppError } from "../../../types/IAppError";
 
 export interface IDataStore<T> {
   status: LoadingStatus;
@@ -15,11 +16,12 @@ export const dataStoreReducer = <TData extends {}, TKey>(key: (key: TKey) => str
   if (action.type === "DATA_LOAD" && action.payload.store === storeKey) {
 
     const existing = state[action.payload.id];
+    const err = action.payload.error;
 
     const pending: IDataStore<TData> = {
       status: action.payload.status,
       data: action.payload.data || (existing && existing.data),
-      error: action.payload.error
+      error: err && { code: err.code, details: err.details }
     };
 
     const result = Object.assign({}, state);

@@ -2,7 +2,6 @@ import express from "express";
 import { ISession } from "../apis/controllerBase";
 import { configureRouter } from "../../ui/routing";
 import { serverRender } from "../serverRender";
-import { ValidationError } from "../../shared/validation";
 import { Results } from "../../ui/validation/results";
 import contextProvider from "../features/common/contextProvider";
 import { IContext } from "../features/common/context";
@@ -40,9 +39,9 @@ export abstract class FormHandlerBase<TParams, TDto> implements IFormHandler {
       this.redirect(link, res);
       return;
     }
-    catch (e) {
+    catch (error) {
       const { key, store } = this.getStoreInfo(params);
-      serverRender(req, res, { key, store, dto, result: e instanceof ValidationError ? e.validationResult : this.createValidationResult(params, dto), error: e instanceof ValidationError ? null : e });
+      serverRender(req, res, { key, store, dto, result: this.createValidationResult(params, dto), error });
       return;
     }
   }
