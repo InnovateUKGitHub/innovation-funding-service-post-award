@@ -1,5 +1,5 @@
 import { FormHandlerBase } from "./formHandlerBase";
-import { ClaimsDashboardRoute, ReviewClaimParams, ReviewClaimRoute } from "../../ui/containers";
+import { AllClaimsDashboardRoute, ReviewClaimParams, ReviewClaimRoute,  } from "../../ui/containers";
 import { ClaimDto, ClaimStatus } from "../../types";
 import { IContext } from "../features/common/context";
 import { GetClaim, UpdateClaimCommand } from "../features/claims";
@@ -27,7 +27,7 @@ export class ReviewClaimFormHandler extends FormHandlerBase<ReviewClaimParams, C
 
     protected async run(context: IContext, params: ReviewClaimParams, button: string, dto: ClaimDto): Promise<ILinkInfo> {
         await context.runCommand(new UpdateClaimCommand(dto));
-        return ClaimsDashboardRoute.getLink(params);
+        return AllClaimsDashboardRoute.getLink(params);
     }
 
     protected getStoreInfo(params: ReviewClaimParams): { key: string; store: string; } {
