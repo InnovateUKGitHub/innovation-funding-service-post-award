@@ -14,8 +14,8 @@ import {
 } from "./common";
 
 interface Callbacks {
-  onChange: (partnerId: string, periodId: number, data: ForecastDetailsDTO[], combined: ForecastData) => void;
-  saveAndReturn: (updateClaim: boolean, projectId: string, partnerId: string, periodId: number, data: ForecastData) => void;
+  onChange: (partnerId: string, data: ForecastDetailsDTO[], combined: ForecastData) => void;
+  saveAndReturn: (updateClaim: boolean, projectId: string, partnerId: string, data: ForecastData) => void;
 }
 
 class UpdateForecastComponent extends ContainerBase<Params, PendingForecastData, Callbacks> {
@@ -23,12 +23,12 @@ class UpdateForecastComponent extends ContainerBase<Params, PendingForecastData,
     return <ACC.PageLoader pending={this.props.combined} render={data => this.renderContents(data)} />;
   }
 
-  saveAndReturn(data: ForecastData, periodId: number) {
-    this.props.saveAndReturn(false, this.props.projectId, this.props.partnerId, periodId, data);
+  saveAndReturn(data: ForecastData) {
+    this.props.saveAndReturn(false, this.props.projectId, this.props.partnerId, data);
   }
 
   handleChange(data: ForecastDetailsDTO[], combined: ForecastData, periodId: number) {
-    this.props.onChange(this.props.partnerId, periodId, data, combined);
+    this.props.onChange(this.props.partnerId, data, combined);
   }
 
   public renderContents(combined: ForecastData) {
@@ -49,7 +49,7 @@ class UpdateForecastComponent extends ContainerBase<Params, PendingForecastData,
           <Form.Form
             data={editor.data}
             onChange={data => this.handleChange(data, combined, periodId)}
-            onSubmit={() => this.saveAndReturn(combined, periodId)}
+            onSubmit={() => this.saveAndReturn(combined)}
             qa="partner-forecast-form"
           >
             <ACC.Claims.ForecastTable data={combined} projectPeriodId={periodId} />
@@ -69,8 +69,8 @@ const definition = ReduxContainer.for<Params, PendingForecastData, Callbacks>(Up
 const UpdateForecast = definition.connect({
   withData: (state, props) => withDataEditor(state, props),
   withCallbacks: dispatch => ({
-    onChange: (partnerId, periodId, data, combined) => dispatch(Actions.validateForecastDetails(partnerId, periodId, data, combined.claimDetails, combined.golCosts, combined.costCategories)),
-    saveAndReturn: (updateClaim, projectId, partnerId, periodId, data) => dispatch(Actions.saveForecastDetails(updateClaim, partnerId, periodId, data.editor!.data, data.claimDetails, data.golCosts, data.costCategories, () => dispatch(Actions.navigateTo(ViewForecastRoute.getLink({ projectId, partnerId })))))
+    onChange: (partnerId, data, combined) => dispatch(Actions.validateForecastDetails(partnerId, data, combined.claimDetails, combined.golCosts, combined.costCategories)),
+    saveAndReturn: (updateClaim, projectId, partnerId, data) => dispatch(Actions.saveForecastDetails(updateClaim, partnerId, data.editor!.data, data.claimDetails, data.golCosts, data.costCategories, () => dispatch(Actions.navigateTo(ViewForecastRoute.getLink({ projectId, partnerId })))))
   })
 });
 

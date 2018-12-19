@@ -6,7 +6,7 @@ import { processDto } from "../../shared/processResponse";
 export interface IForecastDetailsApi {
   getAllByPartnerId: (params: ApiParams<{ partnerId: string }>) => Promise<ForecastDetailsDTO[]>;
   get: (params: ApiParams<{partnerId: string, periodId: number, costCategoryId: string }>) => Promise<ForecastDetailsDTO>;
-  update: (params: ApiParams<{partnerId: string, periodId: number, forecasts: ForecastDetailsDTO[], submit: boolean }>) => Promise<ForecastDetailsDTO[]>;
+  update: (params: ApiParams<{partnerId: string, forecasts: ForecastDetailsDTO[], submit: boolean }>) => Promise<ForecastDetailsDTO[]>;
 }
 
 class Controller extends ControllerBase<ForecastDetailsDTO> implements IForecastDetailsApi {
@@ -15,7 +15,7 @@ class Controller extends ControllerBase<ForecastDetailsDTO> implements IForecast
 
     this.putItems(
       "/",
-      (p, q, b) => ({ partnerId: q.partnerId, periodId: parseInt(q.periodId, 10), forecasts: processDto(b), submit: q.submit === "true"}),
+      (p, q, b) => ({ partnerId: q.partnerId, forecasts: processDto(b), submit: q.submit === "true" }),
       (p) => this.update(p)
     );
 
@@ -42,9 +42,9 @@ class Controller extends ControllerBase<ForecastDetailsDTO> implements IForecast
     return await contextProvider.start(params).runQuery(query);
   }
 
-  public async update(params: ApiParams<{ partnerId: string, periodId: number, forecasts: ForecastDetailsDTO[], submit: boolean }>) {
+  public async update(params: ApiParams<{ partnerId: string, forecasts: ForecastDetailsDTO[], submit: boolean }>) {
     const context = contextProvider.start(params);
-    const forecastCmd = new UpdateForecastDetailsCommand(params.partnerId, params.periodId, params.forecasts, params.submit);
+    const forecastCmd = new UpdateForecastDetailsCommand(params.partnerId, params.forecasts, params.submit);
     await context.runCommand(forecastCmd);
 
     return this.getAllByPartnerId({ partnerId: params.partnerId, user: params.user });

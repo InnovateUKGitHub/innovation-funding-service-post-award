@@ -15,7 +15,7 @@ import {
 } from "./common";
 
 interface Callbacks {
-  onChange: (partnerId: string, periodId: number, data: ForecastDetailsDTO[], combined: ForecastData) => void;
+  onChange: (partnerId: string, data: ForecastDetailsDTO[], combined: ForecastData) => void;
   saveAndReturn: (updateClaim: boolean, projectId: string, partnerId: string, periodId: number, data: ForecastData) => void;
 }
 
@@ -28,8 +28,8 @@ class ClaimForecastComponent extends ContainerBase<Params, PendingForecastData, 
     this.props.saveAndReturn(updateClaim, this.props.projectId, this.props.partnerId, periodId, data);
   }
 
-  handleChange(data: ForecastDetailsDTO[], combined: ForecastData, periodId: number) {
-    this.props.onChange(this.props.partnerId, periodId, data, combined);
+  handleChange(data: ForecastDetailsDTO[], combined: ForecastData) {
+    this.props.onChange(this.props.partnerId, data, combined);
   }
 
   renderContents(combined: ForecastData) {
@@ -49,7 +49,7 @@ class ClaimForecastComponent extends ContainerBase<Params, PendingForecastData, 
           {renderWarning(combined)}
           <Form.Form
             data={editor.data}
-            onChange={data => this.handleChange(data, combined, periodId)}
+            onChange={data => this.handleChange(data, combined)}
             onSubmit={() => this.saveAndReturn(combined, true, periodId)}
             qa="claim-forecast-form"
           >
@@ -79,8 +79,8 @@ const definition = ReduxContainer.for<Params, PendingForecastData, Callbacks>(Cl
 const ForecastClaim = definition.connect({
   withData: (state, props) => withDataEditor(state, props),
   withCallbacks: (dispatch) => ({
-    onChange: (partnerId, periodId, data, combined) => dispatch(Actions.validateForecastDetails(partnerId, periodId, data, combined.claimDetails, combined.golCosts, combined.costCategories)),
-    saveAndReturn: (updateClaim, projectId, partnerId, periodId, data) => dispatch(Actions.saveForecastDetails(updateClaim, partnerId, periodId, data.editor!.data, data.claimDetails, data.golCosts, data.costCategories, () => updateRedirect(updateClaim, dispatch, projectId, partnerId, periodId)))
+    onChange: (partnerId, data, combined) => dispatch(Actions.validateForecastDetails(partnerId, data, combined.claimDetails, combined.golCosts, combined.costCategories)),
+    saveAndReturn: (updateClaim, projectId, partnerId, periodId, data) => dispatch(Actions.saveForecastDetails(updateClaim, partnerId, data.editor!.data, data.claimDetails, data.golCosts, data.costCategories, () => updateRedirect(updateClaim, dispatch, projectId, partnerId, periodId)))
   })
 });
 
