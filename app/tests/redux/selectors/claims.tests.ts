@@ -15,14 +15,8 @@ describe("claims by project", () => {
     const claims = {
       "projectId=1": {
         data: [
-          createClaim({
-            id: "p11",
-            partnerId: "p1"
-          }),
-          createClaim({
-            id: "p12",
-            partnerId: "p2"
-          })
+          createClaim({ id: "p11", partnerId: "p1" }),
+          createClaim({ id: "p12", partnerId: "p2" })
         ],
         error: undefined,
         status: 3
@@ -34,7 +28,8 @@ describe("claims by project", () => {
       }
     };
 
-    const state = { ...rootState, data: { ...rootState.data, claims } };
+    const state = Object.assign({}, rootState);
+    state.data = Object.assign({}, state.data, { claims });
 
     it("should return the claims for the queried partner", () => {
       const foundClaims = findClaimsByProject("1").getPending(state).data;
@@ -47,38 +42,20 @@ describe("claims by project", () => {
     });
   });
   describe("getProjectCurrentClaims", () => {
-
-    const openClaim = createClaim({
-      id: "p11",
-      partnerId: "p3",
-      isApproved: false
-    });
-
+    const openClaim = createClaim({ id: "p11", partnerId: "p3", isApproved: false });
     const claims = {
       "projectId=3": {
         data: [
           openClaim,
-          createClaim({
-            id: "p12",
-            partnerId: "p3",
-            isApproved: true
-          })
+          createClaim({ id: "p12", partnerId: "p3", isApproved: true })
         ],
         error: undefined,
         status: 3
       },
       "projectId=4": {
         data: [
-          createClaim({
-            id: "p21",
-            partnerId: "p4",
-            isApproved: true
-          }),
-          createClaim({
-            id: "p22",
-            partnerId: "p4",
-            isApproved: true
-          })
+          createClaim({ id: "p21", partnerId: "p4", isApproved: true }),
+          createClaim({ id: "p22", partnerId: "p4", isApproved: true })
         ],
         error: undefined,
         status: 3
@@ -90,7 +67,8 @@ describe("claims by project", () => {
       }
     };
 
-    const state = { ...rootState, data: { ...rootState.data, claims } };
+    const state = Object.assign({}, rootState);
+    state.data = Object.assign({}, state.data, { claims });
 
     it("should return the open claims", () => {
       const foundClaim = getProjectCurrentClaims(state, "3").data;
@@ -117,27 +95,15 @@ describe("claims by project", () => {
       "projectId=3": {
         data: [
           closedClaim,
-          createClaim({
-            id: "p12",
-            partnerId: "p3",
-            isApproved: false
-          })
+          createClaim({ id: "p12", partnerId: "p3", isApproved: false })
         ],
         error: undefined,
         status: 3
       },
       "projectId=4": {
         data: [
-          createClaim({
-            id: "p21",
-            partnerId: "p4",
-            isApproved: false
-          }),
-          createClaim({
-            id: "p22",
-            partnerId: "p4",
-            isApproved: false
-          })
+          createClaim({ id: "p21", partnerId: "p4", isApproved: false }),
+          createClaim({ id: "p22", partnerId: "p4", isApproved: false })
         ],
         error: undefined,
         status: 3
@@ -149,7 +115,8 @@ describe("claims by project", () => {
       }
     };
 
-    const state = { ...rootState, data: { ...rootState.data, claims } };
+    const state = Object.assign({}, rootState);
+    state.data = Object.assign({}, state.data, { claims });
 
     it("should return the open claim", () => {
       const foundClaim = getProjectPreviousClaims(state, "3").data;
@@ -172,14 +139,8 @@ describe("claims by partner", () => {
     const claims = {
       "partnerId=1": {
         data: [
-          createClaim({
-            id: "p11",
-            partnerId: "1"
-          }),
-          createClaim({
-            id: "p12",
-            partnerId: "1"
-          })
+          createClaim({ id: "p11", partnerId: "1" }),
+          createClaim({ id: "p12", partnerId: "1" })
         ],
         error: undefined,
         status: 3
@@ -191,7 +152,8 @@ describe("claims by partner", () => {
       }
     };
 
-    const state = { ...rootState, data: { ...rootState.data, claims } };
+    const state = Object.assign({}, rootState);
+    state.data = Object.assign({}, state.data, { claims });
 
     it("should return the claims for the queried partner", () => {
       const foundClaims = findClaimsByPartner("1").getPending(state).data;
@@ -215,34 +177,23 @@ describe("claims by partner", () => {
       "partnerId=3": {
         data: [
           openClaim,
-          createClaim({
-            id: "p12",
-            partnerId: "3",
-            isApproved: true
-          })
+          createClaim({ id: "p12", partnerId: "3", isApproved: true })
         ],
         error: undefined,
         status: 3
       },
       "partnerId=4": {
         data: [
-          createClaim({
-            id: "p21",
-            partnerId: "4",
-            isApproved: true
-          }),
-          createClaim({
-            id: "p22",
-            partnerId: "4",
-            isApproved: true
-          })
+          createClaim({ id: "p21", partnerId: "4", isApproved: true }),
+          createClaim({ id: "p22", partnerId: "4", isApproved: true })
         ],
         error: undefined,
         status: 3
       }
     };
 
-    const state = { ...rootState, data: { ...rootState.data, claims } };
+    const state = Object.assign({}, rootState);
+    state.data = Object.assign({}, state.data, { claims });
 
     it("should return the open claim", () => {
       const foundClaim = getCurrentClaim(state, "3").data;
@@ -260,50 +211,31 @@ describe("claims by partner", () => {
   describe("getPreviousClaims", () => {
 
     const closedClaims = [
-      createClaim({
-        id: "p11",
-        partnerId: "3",
-        isApproved: true
-      }),
-      createClaim({
-        id: "p12",
-        partnerId: "3",
-        isApproved: true
-      })
+      createClaim({ id: "p11", partnerId: "3", isApproved: true }),
+      createClaim({ id: "p12", partnerId: "3", isApproved: true })
     ];
 
     const claims = {
       "partnerId=3": {
         data: [
           ...closedClaims,
-          createClaim({
-            id: "p12",
-            partnerId: "3",
-            isApproved: false
-          })
+          createClaim({ id: "p12", partnerId: "3", isApproved: false })
         ],
         error: undefined,
         status: 3
       },
       "partnerId=4": {
         data: [
-          createClaim({
-            id: "p21",
-            partnerId: "4",
-            isApproved: false
-          }),
-          createClaim({
-            id: "p22",
-            partnerId: "4",
-            isApproved: false
-          })
+          createClaim({ id: "p21", partnerId: "4", isApproved: false }),
+          createClaim({ id: "p22", partnerId: "4", isApproved: false })
         ],
         error: undefined,
         status: 3
       }
     };
 
-    const state = { ...rootState, data: { ...rootState.data, claims } };
+    const state = Object.assign({}, rootState);
+    state.data = Object.assign({}, state.data, { claims });
 
     it("should return the approved claims", () => {
       const foundClaim = getPreviousClaims(state, "3").data;

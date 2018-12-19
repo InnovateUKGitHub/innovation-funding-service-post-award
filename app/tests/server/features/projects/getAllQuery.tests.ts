@@ -5,7 +5,7 @@ describe("ProjectsGetAllQuery", () => {
   it("when valid returns all projects", async () => {
     const context = new TestContext();
 
-    context.testData.range(3, () => context.testData.createProject())
+    context.testData.range(3, () => context.testData.createProject());
 
     const result = await context.runQuery(new GetAllQuery());
 

@@ -59,8 +59,8 @@ describe("GetAllLineItemsForClaimByCategoryQuery", () => {
         const result = await context.runQuery(query);
 
         expect(result.length).toBe(2);
-        expect(result[0].costCategory).toEqual(result[1].costCategory);
-        expect(result[0].period).toEqual(result[1].period);
+        expect(result[0].costCategoryId).toEqual(result[1].costCategoryId);
+        expect(result[0].periodId).toEqual(result[1].periodId);
     });
 
     it("returns empty array if none found", async () => {

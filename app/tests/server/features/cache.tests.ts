@@ -9,7 +9,7 @@ describe("Cache", () => {
     // add two items
     expect(cache.fetch("Example", valToAdd)).toBe(1);
     expect(cache.fetch("Example2", valToAdd)).toBe(2);
-    
+
     // get the original and should still be 1
     expect(cache.fetch("Example", valToAdd)).toBe(1);
   });
@@ -48,7 +48,6 @@ describe("Cache", () => {
     // get again and it should be new value
     expect(cache.fetch("Example", valToAdd)).toBe(2);
   });
-
 
   it("when item cleared expect new inital retrived", async () => {
     const cache = new Cache<number>(1);
