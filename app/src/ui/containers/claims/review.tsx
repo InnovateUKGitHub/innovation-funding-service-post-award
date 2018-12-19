@@ -8,7 +8,7 @@ import { IEditorStore } from "../../redux";
 import { ClaimDtoValidator } from "../../validators/claimDtoValidator";
 import { DateTime } from "luxon";
 import { ReviewClaimLineItemsRoute } from "./claimLineItems";
-import { ClaimsDashboardRoute, ClaimsDetailsRoute } from ".";
+import { AllClaimsDashboardRoute, ClaimsDashboardRoute, ClaimsDetailsRoute} from ".";
 import { ClaimDto, ClaimFrequency, ClaimStatus, ProjectDto } from "../../../types";
 import { ForecastData, forecastDataLoadActions } from "./forecasts/common";
 
@@ -163,7 +163,7 @@ export const ReviewClaim = definition.connect({
   },
   withCallbacks: (dispatch) => ({
     onChange: (partnerId, periodId, dto, details, costCategories) => dispatch(Actions.validateClaim(partnerId, periodId, dto, details, costCategories)),
-    onSave: (projectId, partnerId, periodId, dto, details, costCategories) => dispatch(Actions.saveClaim(partnerId, periodId, dto, details, costCategories, () => dispatch(Actions.navigateTo(ClaimsDashboardRoute.getLink({partnerId, projectId}))))),
+    onSave: (projectId, partnerId, periodId, dto, details, costCategories) => dispatch(Actions.saveClaim(partnerId, periodId, dto, details, costCategories, () => dispatch(Actions.navigateTo(AllClaimsDashboardRoute.getLink({projectId}))))),
   })
 });
 
