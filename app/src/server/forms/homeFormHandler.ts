@@ -6,7 +6,7 @@ import { HomeRoute } from "../../ui/containers";
 // ToDo: Remove as provides a back door to set the current user.....
 export class HomeFormHandler implements IFormHandler {
 
-  public readonly routePath = HomeRoute.routeName;
+  public readonly routePath = HomeRoute.routePath;
 
   public async handle(req: express.Request, res: express.Response): Promise<void> {
     const dto = { user: req.body.user };
