@@ -6,6 +6,7 @@ import { Results } from "../../validation/results";
 import { ForecastDetailsDtosValidator } from "../../validators/forecastDetailsDtosValidator";
 import { DocumentUploadValidator } from "../../validators/documentUploadValidator";
 import { ClaimDto } from "../../../types";
+import { IAppError } from "../../../types/IAppError";
 
 export interface IEditorStore<TDto, TValidator> {
   data: TDto;
@@ -45,12 +46,13 @@ export const editorsReducer = <TDto extends {}, TValidator extends Results<TDto>
   }
   if (action.type === "EDITOR_SUBMIT_ERROR") {
     const result = getNewStateWithoutErrors(state);
+    const err = action.payload.error;
     if (action.payload.store === store) {
       const originalEditor = result[action.payload.id];
       const newEditor: IEditorStore<TDto, TValidator> = {
         ...originalEditor,
         data: action.payload.dto as TDto,
-        error: action.payload.error
+        error: { code: err.code, details: err.details }
       };
       result[action.payload.id] = newEditor;
     }

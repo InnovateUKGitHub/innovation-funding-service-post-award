@@ -32,21 +32,6 @@ describe('GetCostCategoriesQuery', () => {
         expect(result[2].organistionType).toBe("Academic");
     });
 
-    it("Correctly maps competitionType",  async () =>{
-        let context = new TestContext();
-        
-        let data = context.testData.range(2, () => context.testData.createCostCategory());
-        data[0].Acc_CompetitionType__c = "xxxx";
-        data[1].Acc_CompetitionType__c = "Sector";
-
-        let query = new GetCostCategoriesQuery();
-        let result = await context.runQuery(query);
-        
-        expect(result.length).toBe(2);
-        expect(result[0].competitionType).toBe("Unknown");
-        expect(result[1].competitionType).toBe("Sector");
-    });
-
     it("Sorts by display order", async () =>{
         const context = new TestContext();
         const data = context.testData.range(5, (i) => context.testData.createCostCategory(x => { 
