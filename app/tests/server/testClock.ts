@@ -11,13 +11,13 @@ export class TestClock implements IClock {
     }
 
     public setDate(value: string, format: string = "yyyy/MM/dd") {
-        return this.setDateTime(value+ " 12:00:00", format + " HH:mm:ss")
+        return this.setDateTime(value+ " 12:00:00", format + " HH:mm:ss");
     }
 
     public setDateTime(value: string, format: string = "yyyy/MM/dd hh:mm:ss") {
         const parsed = this.parse(value, format);
-        if(!parsed || isNaN(parsed.getTime())){
-            throw new Error(`Invalid date for format ${value} ${format}`)
+        if(!parsed || isNaN(parsed.getTime())) {
+            throw new Error(`Invalid date for format ${value} ${format}`);
         }
         return this._now = this.parse(value, format);
     }

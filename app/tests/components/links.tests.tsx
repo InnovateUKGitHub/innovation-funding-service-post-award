@@ -1,3 +1,4 @@
+// tslint:disable:no-identical-functions
 import "jest";
 import React from "react";
 import * as Links from "../../src/ui/components/links";
@@ -89,6 +90,5 @@ describe("Links", () => {
       expect(html).toContain(linkText);
     });
   });
-
 
 });

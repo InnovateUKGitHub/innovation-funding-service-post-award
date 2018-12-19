@@ -1,9 +1,10 @@
+// tslint:disable: no-duplicate-string no-big-function no-identical-functions
 import { TestContext } from "../../testContextProvider";
 import { UpdateForecastDetailsCommand } from "../../../../src/server/features/forecastDetails";
 import { ValidationError } from "../../../../src/shared/validation";
 import { DateTime } from "luxon";
 import { ClaimFrequency } from "../../../../src/types";
-import { BadRequestError, StatusCode } from "../../../../src/server/apis/ApiError";
+import { BadRequestError } from "../../../../src/server/apis/ApiError";
 
 describe("UpdateForecastDetailsCommand", () => {
   it("when id not set expect validation exception", async () => {
@@ -18,7 +19,7 @@ describe("UpdateForecastDetailsCommand", () => {
       periodStart: new Date(profileDetail.Acc_ProjectPeriodStartDate__c),
       periodEnd: new Date(profileDetail.Acc_ProjectPeriodEndDate__c),
       value: 123
-    }];
+    } as any];
 
     const command = new UpdateForecastDetailsCommand(partnerId, dto, false);
     await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
@@ -70,7 +71,7 @@ describe("UpdateForecastDetailsCommand", () => {
     const command = new UpdateForecastDetailsCommand(partner.Id, dto, false);
     await context.runCommand(command);
 
-    expect(context.repositories.profileDetails.Items.find(x => x.Id === profileDetail.Id).Acc_LatestForecastCost__c).toBe(500);
+    expect(context.repositories.profileDetails.Items.find(x => x.Id === profileDetail.Id)!.Acc_LatestForecastCost__c).toBe(500);
   });
 
   it("total costs less than gol costs should update forecasts", async () => {
@@ -104,8 +105,8 @@ describe("UpdateForecastDetailsCommand", () => {
     const command = new UpdateForecastDetailsCommand(partner.Id, dto, false);
     await context.runCommand(command);
 
-    expect(context.repositories.profileDetails.Items.find(x => x.Id === profileDetail.Id).Acc_LatestForecastCost__c).toBe(250);
-    expect(context.repositories.profileDetails.Items.find(x => x.Id === profileDetail2.Id).Acc_LatestForecastCost__c).toBe(100);
+    expect(context.repositories.profileDetails.Items.find(x => x.Id === profileDetail.Id)!.Acc_LatestForecastCost__c).toBe(250);
+    expect(context.repositories.profileDetails.Items.find(x => x.Id === profileDetail2.Id)!.Acc_LatestForecastCost__c).toBe(100);
   });
 
   it("when updating forecast for period < project period id, expect exception", async () => {
@@ -197,7 +198,7 @@ describe("UpdateForecastDetailsCommand", () => {
       id: profileDetail.Id,
       costCategoryId: profileDetail.Acc_CostCategory__c,
       periodId: profileDetail.Acc_ProjectPeriodNumber__c,
-      periodStart: projectStart.plus({ months: i }),
+      periodStart: projectStart.plus({ months: i }).toJSDate(),
       periodEnd: projectStart.plus({ months: i + 1, days: -1 }).toJSDate(),
       value: profileDetail.Acc_LatestForecastCost__c
     }));
@@ -209,7 +210,6 @@ describe("UpdateForecastDetailsCommand", () => {
 
   });
 
-  
   it("when project in period 1 and period 2 updated expect no exception", async () => {
 
     const context = new TestContext();
@@ -231,11 +231,11 @@ describe("UpdateForecastDetailsCommand", () => {
     const profileDetail1 = context.testData.createProfileDetail(costCat, partner, 1, x => x.Acc_LatestForecastCost__c = 10);
     const profileDetail2 = context.testData.createProfileDetail(costCat, partner, 2, x => x.Acc_LatestForecastCost__c = 20);
 
-    const dtos: ForcastDetailDto[] = [profileDetail1, profileDetail2].map((profileDetail, i) => ({
+    const dtos: ForecastDetailsDTO[] = [profileDetail1, profileDetail2].map((profileDetail, i) => ({
       id: profileDetail.Id,
       costCategoryId: profileDetail.Acc_CostCategory__c,
       periodId: profileDetail.Acc_ProjectPeriodNumber__c,
-      periodStart: projectStart.plus({ months: i }),
+      periodStart: projectStart.plus({ months: i }).toJSDate(),
       periodEnd: projectStart.plus({ months: i + 1, days: -1 }).toJSDate(),
       value: profileDetail.Acc_LatestForecastCost__c
     }));
@@ -268,11 +268,11 @@ describe("UpdateForecastDetailsCommand", () => {
     const profileDetail1 = context.testData.createProfileDetail(costCat, partner, 1, x => x.Acc_LatestForecastCost__c = 100);
     const profileDetail2 = context.testData.createProfileDetail(costCat, partner, 2, x => x.Acc_LatestForecastCost__c = 0);
 
-    const dtos: ForcastDetailDto[] = [profileDetail1, profileDetail2].map((profileDetail, i) => ({
+    const dtos: ForecastDetailsDTO[] = [profileDetail1, profileDetail2].map((profileDetail, i) => ({
       id: profileDetail.Id,
       costCategoryId: profileDetail.Acc_CostCategory__c,
       periodId: profileDetail.Acc_ProjectPeriodNumber__c,
-      periodStart: projectStart.plus({ months: i }),
+      periodStart: projectStart.plus({ months: i }).toJSDate(),
       periodEnd: projectStart.plus({ months: i + 1, days: -1 }).toJSDate(),
       value: profileDetail.Acc_LatestForecastCost__c
     }));
@@ -280,10 +280,10 @@ describe("UpdateForecastDetailsCommand", () => {
     dtos[1].value++;
 
     const command = new UpdateForecastDetailsCommand(partner.Id, dtos, false);
-    let error : ValidationError | null = null;
-    
+    let error!: ValidationError;
+
     await context.runCommand(command).catch(e => error = e);
-    
+
     expect(error).not.toBeNull();
     expect(error).toBeInstanceOf(ValidationError);
     expect(error.message).toBe("Validation failed");

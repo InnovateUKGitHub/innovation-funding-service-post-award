@@ -52,7 +52,6 @@ describe("getAllClaimsForProjectQuery", () => {
       });
     });
 
-
     const query = new GetAllClaimsForProjectQuery(project.Id);
     const results = await context.runQuery(query);
 
@@ -84,7 +83,6 @@ describe("getAllClaimsForProjectQuery", () => {
     context.testData.createProfileTotalPeriod(partner1, 1, x => {
       x.Acc_PeriodInitialForecastCost__c = 100;
     });
-
 
     context.testData.createProfileTotalPeriod(partner2, 1, x => {
       x.Acc_PeriodInitialForecastCost__c = 200;
@@ -124,7 +122,6 @@ describe("getAllClaimsForProjectQuery", () => {
       x.Acc_PeriodInitialForecastCost__c = 100;
     });
 
-
     context.testData.createProfileTotalPeriod(partner2, 1, x => {
       x.Acc_PeriodInitialForecastCost__c = 200;
     });
@@ -145,9 +142,18 @@ describe("getAllClaimsForProjectQuery", () => {
 
     const project = context.testData.createProject();
 
-    const partner1 = context.testData.createPartner(project, p => { p.Acc_ProjectRole__c = ""; p.Acc_AccountId__r.Name = "XXXXXX" });
-    const partner2 = context.testData.createPartner(project, p => { p.Acc_ProjectRole__c = "Project Lead"; p.Acc_AccountId__r.Name = "ZZZZZZZZ" });
-    const partner3 = context.testData.createPartner(project, p => { p.Acc_ProjectRole__c = ""; p.Acc_AccountId__r.Name = "AAAAAA" });
+    const partner1 = context.testData.createPartner(project, p => {
+      p.Acc_ProjectRole__c = "";
+      p.Acc_AccountId__r.Name = "XXXXXX";
+    });
+    const partner2 = context.testData.createPartner(project, p => {
+      p.Acc_ProjectRole__c = "Project Lead";
+      p.Acc_AccountId__r.Name = "ZZZZZZZZ";
+    });
+    const partner3 = context.testData.createPartner(project, p => {
+      p.Acc_ProjectRole__c = "";
+      p.Acc_AccountId__r.Name = "AAAAAA";
+    });
 
     context.testData.createClaim(partner1, 1);
     context.testData.createClaim(partner2, 1);
@@ -164,8 +170,14 @@ describe("getAllClaimsForProjectQuery", () => {
 
     const project = context.testData.createProject();
 
-    const partner1 = context.testData.createPartner(project, p => { p.Acc_ProjectRole__c = ""; p.Acc_AccountId__r.Name = "XXXXXX" });
-    const partner2 = context.testData.createPartner(project, p => { p.Acc_ProjectRole__c = "Project Lead"; p.Acc_AccountId__r.Name = "ZZZZZZZZ" });
+    const partner1 = context.testData.createPartner(project, p => {
+      p.Acc_ProjectRole__c = "";
+      p.Acc_AccountId__r.Name = "XXXXXX";
+    });
+    const partner2 = context.testData.createPartner(project, p => {
+      p.Acc_ProjectRole__c = "Project Lead";
+      p.Acc_AccountId__r.Name = "ZZZZZZZZ";
+    });
 
     context.testData.createClaim(partner1, 1);
     context.testData.createClaim(partner1, 2);

@@ -1,17 +1,17 @@
+// tslint:disable:no-identical-functions no-duplicate-string
 import "jest";
 import React from "react";
 import Enzyme from "enzyme";
 import Adapter from "enzyme-adapter-react-16";
 import { DateTime, Settings } from "luxon";
 import { ClaimWindow } from "../../../src/ui/components/claims";
-import { notEqual } from "assert";
 
 Enzyme.configure({ adapter: new Adapter() });
 
 describe("Claim Window", () => {
-  
+
   describe("When not in claims window", () => {
-    // period ends at end of this month 
+    // period ends at end of this month
     const periodEndDate = DateTime.local().set({day:1}).plus({months:1}).minus({days: 1});
     const windowStartDate = periodEndDate.plus({days:1}).set({hour: 0, minute:0, second:0});
     const windowEndDate = periodEndDate.plus({days:30}).set({hour: 0, minute:0, second:0});
@@ -33,10 +33,10 @@ describe("Claim Window", () => {
   });
 
   describe("When in claims window", () => {
-    // period ends at end of last month 
+    // period ends at end of last month
     const periodEndDate = DateTime.local().set({day:1}).minus({days: 1});
     const windowEndDate = periodEndDate.plus({days:30}).set({hour: 0, minute:0, second:0});
-    const daysRemaining = Math.ceil(windowEndDate.diff(DateTime.local(), "days").days) + 1; 
+    const daysRemaining = Math.ceil(windowEndDate.diff(DateTime.local(), "days").days) + 1;
 
     it("renders number of days remaning in claim window", () => {
       const output = Enzyme.mount(<ClaimWindow periodEnd={periodEndDate.toJSDate()}/>).find("h3").text();
@@ -55,10 +55,10 @@ describe("Claim Window", () => {
   });
 
   describe("When overdue", () => {
-    // period ends at 2 months ago 
+    // period ends at 2 months ago
     const periodEndDate = DateTime.local().minus({ months: 1, days: 1});
     const windowEndDate = periodEndDate.plus({days:30}).set({hour: 0, minute:0, second:0});
-    const daysOverdue = Math.floor(DateTime.local().diff(windowEndDate, "days").days); 
+    const daysOverdue = Math.floor(DateTime.local().diff(windowEndDate, "days").days);
 
     it("renders number of days overdue in claim window", () => {
       const output = Enzyme.mount(<ClaimWindow periodEnd={periodEndDate.toJSDate()}/>).find("h3").text();
@@ -78,8 +78,8 @@ describe("Claim Window", () => {
 
   describe("When 1st day of claim window", () => {
     const periodEndDate = DateTime.fromString("2011/12/31", "yyyy/MM/dd");
-    
-    // set today to 1st of claim window 
+
+    // set today to 1st of claim window
     beforeEach(() => Settings.now = () => Date.parse("2012/1/1"));
     // reset luxon
     afterEach(() => Settings.now = () => new Date().valueOf());
@@ -92,8 +92,8 @@ describe("Claim Window", () => {
 
   describe("When 30th day of claim window", () => {
     const periodEndDate = DateTime.fromString("2011/12/31", "yyyy/MM/dd");
-    
-    // set today to 30th of claim window 
+
+    // set today to 30th of claim window
     beforeEach(() => Settings.now = () => Date.parse("2012/1/30"));
     // reset luxon
     afterEach(() => Settings.now = () => new Date().valueOf());
@@ -106,8 +106,8 @@ describe("Claim Window", () => {
 
   describe("When 31th day of claim window", () => {
     const periodEndDate = DateTime.fromString("2011/12/31", "yyyy/MM/dd");
-    
-    // set today to 30th of claim window 
+
+    // set today to 30th of claim window
     beforeEach(() => Settings.now = () => Date.parse("2012/1/30"));
     // reset luxon
     afterEach(() => Settings.now = () => new Date().valueOf());
