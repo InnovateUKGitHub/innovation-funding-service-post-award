@@ -1,6 +1,5 @@
 import { IApiClient } from "../server/apis";
 import { processResponse } from "../shared/processResponse";
-import {DocumentDescription} from "../types/constants";
 
 const clientApi: IApiClient = {
   claimLineItems: {

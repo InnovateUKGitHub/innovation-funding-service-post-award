@@ -3,7 +3,6 @@ import {ApiParams, ControllerBase} from "./controllerBase";
 import {GetAllLineItemsForClaimByCategoryQuery, SaveLineItemsCommand} from "../features/claimLineItems";
 import {ApiError, StatusCode} from "./ApiError";
 import {processDto} from "../../shared/processResponse";
-import {ValidationError} from "../../shared/validation";
 
 export interface IClaimLineItemApi {
   getAllForCategory: (params: ApiParams<{partnerId: string, costCategoryId: string, periodId: number}>) => Promise<ClaimLineItemDto[]>;
