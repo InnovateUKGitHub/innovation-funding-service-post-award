@@ -90,7 +90,7 @@ const ForecastClaim = definition.connect({
 export const ClaimForecastRoute = definition.route({
   routeName: "claimForecast",
   routePath: "/projects/:projectId/claims/:partnerId/forecast/:periodId",
-  getParams: (route) => ({ projectId: route.params.projectId, partnerId: route.params.partnerId, periodId: parseInt(route.params.periodId) }),
+  getParams: (route) => ({ projectId: route.params.projectId, partnerId: route.params.partnerId, periodId: parseInt(route.params.periodId, 10) }),
   getLoadDataActions: forecastDataLoadActions,
   container: ForecastClaim
 });
