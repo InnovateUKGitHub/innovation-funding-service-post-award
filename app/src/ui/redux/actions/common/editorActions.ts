@@ -1,7 +1,7 @@
 import {createAction} from "./createAction";
 import {Results} from "../../../validation/results";
 import { scrollToTheTop } from "../../../../util/windowHelpers";
-import { ErrorCode } from "../../../../types/IAppError";
+import { ErrorCode, IAppError } from "../../../../types/IAppError";
 
 type UpdateEditorThunk = typeof updateEditorAction;
 type HandleSuccessThunk = typeof handleEditorSuccess;
@@ -29,16 +29,17 @@ export function handleEditorSuccess<T>(
   return createAction("EDITOR_SUBMIT_SUCCESS", {id, store: editorStore});
 }
 
-export function handleEditorError<T>({id, store, dto, validation, error}: {
+export function handleEditorError<T>({id, store, dto, validation, error, scrollToTop = true}: {
   id: string,
   store: string,
   dto: T,
   validation: Results<T> | null,
-  error: any
+  error: IAppError,
+  scrollToTop?: boolean
 }) {
-  scrollToTheTop();
+  if (scrollToTop) scrollToTheTop();
   if (error.code === ErrorCode.VALIDATION_ERROR) {
-    return updateEditorAction(id, store, dto, error.details);
+    return updateEditorAction(id, store, dto, error.details as Results<{}>);
   }
   return createAction("EDITOR_SUBMIT_ERROR", { id, store, dto, error });
 }
