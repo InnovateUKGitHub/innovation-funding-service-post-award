@@ -2,12 +2,9 @@ import mimeTypes from "mime-types";
 import { Router } from "express-serve-static-core";
 import multer from "multer";
 import express, { NextFunction, Request, Response } from "express";
-import { ApiError, ErrorCode, StatusCode } from "./ApiError";
-import { ValidationError } from "../../shared/validation";
-import { Results } from "../../ui/validation/results";
-import { SalesforceTokenError } from "../repositories/salesforceConnection";
+import { StatusCode } from "./ApiError";
 import { FileUpload } from "../../types/FileUpload";
-import { SalesforceInvalidFilterError } from "../repositories/salesforceBase";
+import { ErrorCode, IAppError } from "../../types/IAppError";
 
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
@@ -81,26 +78,22 @@ export abstract class ControllerBase<T> {
     return this;
   }
 
-  private constructErrorResponse<E extends Error>(error: E): { status: number, data: { code: number, details: string | Results<{}> } } {
-    if (error instanceof ValidationError) {
-      return { status: StatusCode.BAD_REQUEST, data: { code: ErrorCode.VALIDATION_ERROR, details: error.validationResult } };
+  private getErrorStatus(code: number) {
+    switch (code) {
+      case (ErrorCode.VALIDATION_ERROR): return StatusCode.BAD_REQUEST;
+      case (ErrorCode.SECURITY_ERROR): return StatusCode.SERVICE_UNAVAILABLE;
+      case (ErrorCode.REQUEST_ERROR): return StatusCode.NOT_FOUND;
+      case (ErrorCode.SERVER_ERROR):
+      default: return StatusCode.INTERNAL_SERVER_ERROR;
     }
-    if (error instanceof ApiError) {
-      return { status: error.errorCode, data: { code: ErrorCode.SERVER_ERROR, details: error.message } };
-    }
-    if (error instanceof SalesforceTokenError) {
-      return { status: StatusCode.SERVICE_UNAVAILABLE, data: { code: ErrorCode.SECURITY_ERROR, details: error.message } };
-    }
-    if(error instanceof SalesforceInvalidFilterError) {
-      return { status: StatusCode.NOT_FOUND, data: {code: ErrorCode.REQUEST_ERROR, details: "Not found"}};
-    }
-    return { status: 500, data: { code: ErrorCode.SERVER_ERROR, details: error.message || "An unexpected error has occurred..." } };
   }
 
-  private errorHandler<E extends Error>(err: E, resp: Response) {
+  private errorHandler<E extends Error>(err: IAppError, resp: Response) {
     console.log("Error in controller", err);
-    const { status, data } = this.constructErrorResponse(err);
-    return resp.status(status).json(data);
+    const code = err.code || ErrorCode.SERVER_ERROR;
+    const details = err.details || "Something went wrong";
+    const status = this.getErrorStatus(err.code);
+    return resp.status(status).json({ code, details });
   }
 
   private executeMethod<TParams, TResponse>(successStatus: number, getParams: (params: any, query: any, body?: any, file?: any) => TParams, run: (params: ApiParams<TParams>) => Promise<TResponse | null>, allowNulls: boolean) {
@@ -116,7 +109,7 @@ export abstract class ControllerBase<T> {
           }
           resp.status(successStatus).send(result);
         })
-        .catch((e: Error) => this.errorHandler(e, resp));
+        .catch((e: IAppError) => this.errorHandler(e, resp));
     };
   }
 
@@ -138,7 +131,7 @@ export abstract class ControllerBase<T> {
           resp.writeHead(successStatus, head);
           return result.stream.pipe(resp);
         })
-        .catch((e: Error) => this.errorHandler(e, resp));
+        .catch((e: IAppError) => this.errorHandler(e, resp));
     };
   }
 }
