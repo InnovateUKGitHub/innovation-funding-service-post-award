@@ -6,14 +6,13 @@ import classNames from "classnames";
 import { Result } from "../validation/result";
 import { ValidationError } from "./validationError";
 import { FileUpload, RadioList } from "./inputs";
-import { Button, StyledButtonProps } from "./styledButton";
+import { Button } from "./styledButton";
 
 interface FormProps<T> {
     data: T;
     onChange?: (data: T) => void;
     onSubmit?: () => void;
     qa?: string;
-    type?: "post" | "delete";
     enctype?: "application/x-www-form-urlencoded" | "multipart/form-data" | "text/plain";
 }
 
@@ -35,10 +34,9 @@ class FormComponent<T> extends React.Component<FormProps<T>, []> {
         });
 
         const childrenWithData = React.Children.map(this.props.children, (child, index) => child && React.cloneElement(child as any, childProps(index)));
-        const method = this.props.type || "post";
         const enctype = { enctype: this.props.enctype };
         return (
-            <form {...enctype} method={method} action="" onSubmit={(e) => this.onSubmit(e)} data-qa={this.props.qa}>
+            <form {...enctype} method="post" action="" onSubmit={(e) => this.onSubmit(e)} data-qa={this.props.qa}>
                 {childrenWithData}
             </form>
         );
@@ -187,7 +185,7 @@ interface SubmitProps {
 const SubmitComponent: React.SFC<SubmitProps> = (props) => {
     const { disabled, children, style, styling, qa, className } = props;
     const buttonProps = { disabled, style, qa, className };
-    return <Button type="submit" name="button" value="default" styling={styling || "Primary"} onClick={(e) => handleSubmit(props, e)} {...buttonProps}>{children}</Button>;
+    return <Button type="submit" name="button_default" styling={styling || "Primary"} onClick={(e) => handleSubmit(props, e)} {...buttonProps}>{children}</Button>;
 };
 
 interface ButtonProps {
@@ -197,12 +195,13 @@ interface ButtonProps {
     styling?: "Link" | "Secondary" | "Primary";
     className?: string;
     style?: CSSProperties;
+    value?: string;
 }
 
 const ButtonComponent: React.SFC<ButtonProps> = (props) => {
-    const { name, children, style, styling, qa, className } = props;
+    const { name, children, style, styling, qa, className, value } = props;
     const buttonProps = { style, qa, className };
-    return <Button type="submit" name="button" value={name} styling={styling || "Secondary"} onClick={(e) => handleOtherButton(props, e)} {...buttonProps}>{children}</Button>;
+    return <Button type="submit" name={`button_${name}`} value={value} styling={styling || "Secondary"} onClick={(e) => handleOtherButton(props, e)} {...buttonProps}>{children}</Button>;
 };
 
 const FileUploadComponent = <T extends {}>(props: ExternalFieldProps<T, File>) => {

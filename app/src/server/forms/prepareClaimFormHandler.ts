@@ -1,4 +1,4 @@
-import { FormHandlerBase } from "./formHandlerBase";
+import { FormHandlerBase, IFormBody, IFormButton } from "./formHandlerBase";
 import { ClaimForecastRoute, ClaimsDashboardRoute, PrepareClaimParams, PrepareClaimRoute } from "../../ui/containers";
 import { IContext } from "../features/common/context";
 import { Results } from "../../ui/validation/results";
@@ -10,20 +10,20 @@ import { getClaimEditor } from "../../ui/redux/selectors";
 export class PrepareClaimFormHandler extends FormHandlerBase<PrepareClaimParams, ClaimDto> {
 
   constructor() {
-    super(PrepareClaimRoute);
+    super(PrepareClaimRoute, ["default", "return"]);
   }
 
-  protected async getDto(context: IContext, params: PrepareClaimParams, button: string, body: { [key: string]: string; }): Promise<ClaimDto> {
+  protected async getDto(context: IContext, params: PrepareClaimParams, button: IFormButton, body: IFormBody): Promise<ClaimDto> {
     const claim = await context.runQuery(new GetClaim(params.partnerId, params.periodId));
     claim.comments = body.comments;
     claim.status = ClaimStatus.DRAFT;
     return claim;
   }
 
-  protected async run(context: IContext, params: PrepareClaimParams, button: string, dto: ClaimDto): Promise<ILinkInfo> {
+  protected async run(context: IContext, params: PrepareClaimParams, button: IFormButton, dto: ClaimDto): Promise<ILinkInfo> {
     await context.runCommand(new UpdateClaimCommand(dto));
 
-    if (button === "default") {
+    if (button.name === "default") {
       return ClaimForecastRoute.getLink(params);
     }
     else {
