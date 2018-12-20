@@ -33,7 +33,8 @@ export abstract class FormHandlerBase<TParams, TDto> implements IFormHandler {
     const button = req.body.button as string;
     const session: ISession = { user: req.session!.user };
     const context = contextProvider.start(session);
-    const dto = await this.getDto(context, params, button, req.body);
+    const file = req.file && { fileName: req.file.originalname, content: req.file.buffer.toString("base64") };
+    const dto = await this.getDto(context, params, button, req.body, file);
     try {
       const link = await this.run(context, params, button, dto);
       this.redirect(link, res);
@@ -46,7 +47,7 @@ export abstract class FormHandlerBase<TParams, TDto> implements IFormHandler {
     }
   }
 
-  protected abstract getDto(context: IContext, params: TParams, button: string, body: { [key: string]: string }): Promise<TDto>;
+  protected abstract getDto(context: IContext, params: TParams, button: string, body: { [key: string]: string }, file?: any): Promise<TDto>;
 
   protected abstract run(context: IContext, params: TParams, button: string, dto: TDto): Promise<ILinkInfo>;
 
