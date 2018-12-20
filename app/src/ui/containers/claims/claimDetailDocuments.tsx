@@ -10,7 +10,7 @@ import {IEditorStore} from "../../redux/reducers";
 import { DocumentUploadValidator } from "../../validators/documentUploadValidator";
 import { Results } from "../../validation/results";
 
-export interface ClaimDetailParams {
+export interface ClaimDetailDocumentsPageParams {
   projectId: string;
   partnerId: string;
   costCategoryId: string;
@@ -39,7 +39,7 @@ interface Callbacks {
   deleteFile: (key: ClaimDetailKey, dto: DocumentSummaryDto) => void;
 }
 
-export class ClaimDetailDocumentsComponent extends ContainerBase<ClaimDetailParams, Data, Callbacks> {
+export class ClaimDetailDocumentsComponent extends ContainerBase<, Data, Callbacks> {
 
   public render() {
     const combined = Pending.combine(
@@ -110,7 +110,7 @@ export class ClaimDetailDocumentsComponent extends ContainerBase<ClaimDetailPara
   }
 }
 
-const definition = ReduxContainer.for<ClaimDetailParams, Data, Callbacks>(ClaimDetailDocumentsComponent);
+const definition = ReduxContainer.for<ClaimDetailDocumentsPageParams, Data, Callbacks>(ClaimDetailDocumentsComponent);
 
 export const ClaimDetailDocuments = definition.connect({
   withData: (state, props) => {

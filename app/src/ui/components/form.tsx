@@ -14,7 +14,7 @@ interface FormProps<T> {
     onSubmit?: () => void;
     qa?: string;
     type?: "post" | "delete";
-    enctype?: string;
+    enctype?: "application/x-www-form-urlencoded" | "multipart/form-data" | "text/plain";
 }
 
 interface FormChildProps<T> {
