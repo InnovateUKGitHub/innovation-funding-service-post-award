@@ -5,6 +5,7 @@ import { serverRender } from "../serverRender";
 import { Results } from "../../ui/validation/results";
 import contextProvider from "../features/common/contextProvider";
 import { IContext } from "../features/common/context";
+import { FileUpload } from "../../types/FileUpload";
 
 interface RouteInfo<TParams> {
   routeName: string;
@@ -47,7 +48,7 @@ export abstract class FormHandlerBase<TParams, TDto> implements IFormHandler {
     }
   }
 
-  protected abstract getDto(context: IContext, params: TParams, button: string, body: { [key: string]: string }, file?: any): Promise<TDto>;
+  protected abstract getDto(context: IContext, params: TParams, button: string, body: { [key: string]: string }, file?: FileUpload): Promise<TDto>;
 
   protected abstract run(context: IContext, params: TParams, button: string, dto: TDto): Promise<ILinkInfo>;
 
