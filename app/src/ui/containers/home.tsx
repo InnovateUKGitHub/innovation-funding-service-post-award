@@ -30,6 +30,7 @@ class Component extends ContainerBaseWithState<{}, Props, {}, State> {
             <CurrentUserForm.Form data={formData} qa={"currentUser"} onChange={v => this.setState(v)}>
               <CurrentUserForm.String label="user" labelHidden={true} name="user" value={x => x.email} update={(x, v) => x.email = v || ""} />
               <CurrentUserForm.Submit>Change user</CurrentUserForm.Submit>
+              <CurrentUserForm.Button name="reset">Reset user</CurrentUserForm.Button>
             </CurrentUserForm.Form>
           </div>
         </div>
