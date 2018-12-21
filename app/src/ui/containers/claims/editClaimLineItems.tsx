@@ -66,7 +66,7 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
 
   // TODO fix back link
   private renderContents(
-    { project, lineItems, costCategories, documents, forecastDetail }: CombinedData,
+    { project, costCategories, documents, forecastDetail }: CombinedData,
     editor: IEditorStore<ClaimLineItemDto[], ClaimLineItemDtosValidator>
   ) {
     const back = PrepareClaimRoute.getLink({ projectId: project.id, partnerId: this.props.partnerId, periodId: this.props.periodId });
