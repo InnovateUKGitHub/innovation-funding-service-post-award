@@ -26,7 +26,7 @@ const handlers: IFormHandler[] = [
   new ClaimDetailDocumentDeleteHandler(),
   // TODO revisit how we set middleware
   new ClaimDetailDocumentUploadHandler([upload.single("attachment")]),
-  
+
   new HomeFormHandler(),
 ];
 
