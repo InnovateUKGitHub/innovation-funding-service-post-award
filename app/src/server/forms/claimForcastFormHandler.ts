@@ -1,4 +1,4 @@
-import { FormHandlerBase } from "./formHandlerBase";
+import { FormHandlerBase, IFormBody, IFormButton } from "./formHandlerBase";
 import { ClaimDto, ClaimStatus } from "../../types";
 import { Params as ClaimForcastFormParams } from "../../ui/containers/claims/forecasts/common";
 import { IContext } from "../features/common/context";
@@ -12,10 +12,10 @@ import { ClaimDtoValidator } from "../../ui/validators";
 export class ClaimForcastFormHandler extends FormHandlerBase<ClaimForcastFormParams, ClaimDto> {
 
   constructor() {
-    super(ClaimForecastRoute);
+    super(ClaimForecastRoute, ["save", "default"]);
   }
 
-  protected async getDto(context: IContext, params: ClaimForcastFormParams, button: string, body: { [key: string]: string; }): Promise<ClaimDto> {
+  protected async getDto(context: IContext, params: ClaimForcastFormParams, button: IFormButton, body: IFormBody): Promise<ClaimDto> {
     // ToDo: Get the period id back.....!!!!
     const query = new GetClaim(params.partnerId, (params as any).periodId);
     const claim = await context.runQuery(query);
@@ -23,7 +23,7 @@ export class ClaimForcastFormHandler extends FormHandlerBase<ClaimForcastFormPar
     return claim;
   }
 
-  protected async run(context: IContext, params: ClaimForcastFormParams, button: string, dto: ClaimDto): Promise<ILinkInfo> {
+  protected async run(context: IContext, params: ClaimForcastFormParams, button: IFormButton, dto: ClaimDto): Promise<ILinkInfo> {
     await context.runCommand(new UpdateClaimCommand(dto));
     return ClaimsDashboardRoute.getLink(params);
   }

@@ -7,6 +7,7 @@ import { HomeFormHandler } from "./homeFormHandler";
 import { PrepareClaimFormHandler } from "./prepareClaimFormHandler";
 import { ReviewClaimFormHandler } from "./reviewClaimFormHandler";
 import { ClaimDetailFormHandler } from "./claimDetailFormHandler";
+import { ClaimDetailDocumentDeleteHandler } from "./claimDetailDocumentDeleteHandler";
 
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
@@ -19,11 +20,11 @@ const handlers: IFormHandler[] = [
   new PrepareClaimFormHandler(),
   new ReviewClaimFormHandler(),
   new HomeFormHandler(),
+  new ClaimDetailDocumentDeleteHandler(),
+  // TODO revisit how we set middleware
+  new ClaimDetailFormHandler([upload.single("attachment")])
 ];
 
 handlers.forEach(x => {
-  formRouter.post(x.routePath, async (req: express.Request, res: express.Response) => x.handle(req, res));
+  formRouter.post(x.routePath, ...x.middleware, async (req: express.Request, res: express.Response, next: express.NextFunction) => x.handle(req, res, next));
 });
-
-const claimDetailFormHandler = new ClaimDetailFormHandler();
-formRouter.post(claimDetailFormHandler.routePath, upload.single("attachment"), async (req: express.Request, res: express.Response) => claimDetailFormHandler.handle(req, res));
