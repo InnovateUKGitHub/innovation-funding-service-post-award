@@ -6,7 +6,7 @@ import { EditClaimLineItemsFormHandler } from "./editClaimLineItemsFormHandler";
 import { HomeFormHandler } from "./homeFormHandler";
 import { PrepareClaimFormHandler } from "./prepareClaimFormHandler";
 import { ReviewClaimFormHandler } from "./reviewClaimFormHandler";
-import { ClaimDetailFormHandler } from "./claimDetailFormHandler";
+import { ClaimDetailDocumentUploadHandler } from "./claimDetailDocumentUploadHandler";
 import { ClaimDetailDocumentDeleteHandler } from "./claimDetailDocumentDeleteHandler";
 
 const storage = multer.memoryStorage();
@@ -22,7 +22,7 @@ const handlers: IFormHandler[] = [
   new HomeFormHandler(),
   new ClaimDetailDocumentDeleteHandler(),
   // TODO revisit how we set middleware
-  new ClaimDetailFormHandler([upload.single("attachment")])
+  new ClaimDetailDocumentUploadHandler([upload.single("attachment")])
 ];
 
 handlers.forEach(x => {
