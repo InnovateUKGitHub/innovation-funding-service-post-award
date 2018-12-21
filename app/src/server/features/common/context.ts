@@ -11,7 +11,7 @@ import {
 import { Cache } from "./cache";
 import { ValidationError } from "../../../shared/validation";
 import { SalesforceInvalidFilterError } from "../../repositories/salesforceBase";
-import { ApiError } from "../../apis/ApiError";
+import { BadRequestError } from "../../apis/ApiError";
 import { AppError } from "./appError";
 import { ErrorCode } from "../../../types/IAppError";
 
@@ -103,8 +103,8 @@ const constructErrorResponse = <E extends Error>(error: E): AppError => {
   if (error instanceof ValidationError) {
     return new AppError(ErrorCode.VALIDATION_ERROR, error.validationResult, error);
   }
-  if (error instanceof ApiError) {
-    return new AppError(ErrorCode.SERVER_ERROR, error.message, error);
+  if (error instanceof BadRequestError) {
+    return new AppError(ErrorCode.BAD_REQUEST_ERROR, "Bad Request", error);
   }
   if (error instanceof SalesforceTokenError) {
     return new AppError(ErrorCode.SECURITY_ERROR, error.message, error);

@@ -1,6 +1,6 @@
 import SalesforceBase, { Updatable } from "./salesforceBase";
 import { Connection } from "jsforce";
-import { ApiError, StatusCode } from "../apis/ApiError";
+import { BadRequestError, StatusCode } from "../apis/ApiError";
 import { ClaimStatus } from "../../types";
 
 export interface ISalesforceClaim {
@@ -72,7 +72,7 @@ export class ClaimRepository extends SalesforceBase<ISalesforceClaim> implements
     const filter = `Acc_ProjectParticipant__c = '${partnerId}' AND Acc_ProjectPeriodNumber__c = ${periodId} AND RecordType.Name = '${this.recordType}' AND Acc_ClaimStatus__c != 'New'`;
     const claim = await super.where(filter);
     if (claim.length === 0) {
-      throw new ApiError(StatusCode.BAD_REQUEST, "Claim does not exist");
+      throw new BadRequestError("Claim does not exist");
     }
     return claim[0];
   }
