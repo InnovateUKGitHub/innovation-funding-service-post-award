@@ -33,7 +33,6 @@ class ViewForecastComponent extends ContainerBase<Params, PendingForecastData, C
 
   public renderContents(data: ForecastData) {
     const Form = ACC.TypedForm();
-    const periodId = data.project.periodId;
 
     return (
       <ProjectOverviewPage
@@ -43,7 +42,7 @@ class ViewForecastComponent extends ContainerBase<Params, PendingForecastData, C
       >
         <ACC.Section title="" qa={"partner-name"} >
           {renderWarning(data)}
-          <ACC.Claims.ForecastTable data={data} projectPeriodId={periodId} />
+          <ACC.Claims.ForecastTable data={data} />
         </ACC.Section>
         <ACC.Section>
           <Form.Form data={{}} onSubmit={() => this.handleSubmit()}>

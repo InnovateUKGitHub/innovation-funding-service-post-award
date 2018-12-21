@@ -38,12 +38,11 @@ class ClaimForecastComponent extends ContainerBase<ClaimForcastParams, PendingFo
   renderContents(combined: ForecastData) {
     const Form = ACC.TypedForm<ForecastDetailsDTO[]>();
     const editor = combined.editor!;
-    const periodId = combined.project.periodId;
 
     return (
       <ACC.Page>
         <ACC.Section>
-          <ACC.BackLink route={PrepareClaimRoute.getLink({ periodId, projectId: this.props.projectId, partnerId: this.props.partnerId })}>Back to claim</ACC.BackLink>
+          <ACC.BackLink route={PrepareClaimRoute.getLink({ periodId: this.props.periodId, projectId: this.props.projectId, partnerId: this.props.partnerId })}>Back to claim</ACC.BackLink>
         </ACC.Section>
         <ACC.ErrorSummary error={editor.error} />
         <ACC.ValidationSummary validation={editor.validator} compressed={false} />
@@ -53,16 +52,16 @@ class ClaimForecastComponent extends ContainerBase<ClaimForcastParams, PendingFo
           <Form.Form
             data={editor.data}
             onChange={data => this.handleChange(data, combined)}
-            onSubmit={() => this.saveAndReturn(combined, true, periodId)}
+            onSubmit={() => this.saveAndReturn(combined, true, this.props.periodId)}
             qa="claim-forecast-form"
           >
-            <ACC.Claims.ForecastTable data={combined} projectPeriodId={periodId} />
+            <ACC.Claims.ForecastTable data={combined} />
             <Form.Fieldset>
               <Form.Submit>Submit forecast and claim</Form.Submit>
               <ACC.Claims.ClaimLastModified claim={combined.claim} />
             </Form.Fieldset>
             <Form.Fieldset qa="save-button">
-              <Form.Button name="save" onClick={() => this.saveAndReturn(combined, false, periodId)}>Save and return to claim</Form.Button>
+              <Form.Button name="save" onClick={() => this.saveAndReturn(combined, false, this.props.periodId)}>Save and return to claim</Form.Button>
             </Form.Fieldset>
           </Form.Form>
         </ACC.Section>
