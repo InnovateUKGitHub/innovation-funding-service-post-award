@@ -27,14 +27,13 @@ class UpdateForecastComponent extends ContainerBase<Params, PendingForecastData,
     this.props.saveAndReturn(false, this.props.projectId, this.props.partnerId, data);
   }
 
-  handleChange(data: ForecastDetailsDTO[], combined: ForecastData, periodId: number) {
+  handleChange(data: ForecastDetailsDTO[], combined: ForecastData) {
     this.props.onChange(this.props.partnerId, data, combined);
   }
 
   public renderContents(combined: ForecastData) {
     const Form = ACC.TypedForm<ForecastDetailsDTO[]>();
     const editor = combined.editor!;
-    const periodId = combined.project.periodId;
 
     return (
       <ACC.Page>
@@ -48,11 +47,11 @@ class UpdateForecastComponent extends ContainerBase<Params, PendingForecastData,
           {renderWarning(combined)}
           <Form.Form
             data={editor.data}
-            onChange={data => this.handleChange(data, combined, periodId)}
+            onChange={data => this.handleChange(data, combined)}
             onSubmit={() => this.saveAndReturn(combined)}
             qa="partner-forecast-form"
           >
-            <ACC.Claims.ForecastTable data={combined} projectPeriodId={periodId} />
+            <ACC.Claims.ForecastTable data={combined} />
             <Form.Fieldset>
               <Form.Submit>Submit</Form.Submit>
               <ACC.Claims.ClaimLastModified claim={combined.claim} />

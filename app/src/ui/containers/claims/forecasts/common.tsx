@@ -52,7 +52,7 @@ export const withDataEditor = (state: RootState, props: Params): PendingForecast
     Selectors.findForecastDetailsByPartner(props.partnerId).getPending(state),
     Selectors.findGolCostsByPartner(props.partnerId).getPending(state),
     Selectors.getCostCategories().getPending(state),
-    Selectors.getForecastDetailsEditor(state, props.partnerId).get(state),
+    Selectors.getForecastDetailsEditor(props.partnerId).get(state),
     (a, b, c, d, e, f, g, h) => ({ project: a, partner: b, claim: c, claimDetails: d, forecastDetails: e, golCosts: f, costCategories: g, editor: h })
   );
 
