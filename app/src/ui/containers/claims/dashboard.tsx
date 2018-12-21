@@ -13,7 +13,7 @@ import { DocumentUploadValidator } from "../../validators/documentUploadValidato
 import { DateTime } from "luxon";
 import { Results } from "../../validation/results";
 
-interface Params {
+export interface ClaimDashboardPageParams {
   projectId: string;
   partnerId: string;
 }
@@ -44,7 +44,7 @@ interface Callbacks {
   deleteFile: (key: ClaimKey, dto: DocumentSummaryDto) => void;
 }
 
-class Component extends ContainerBase<Params, Data, Callbacks> {
+class Component extends ContainerBase<ClaimDashboardPageParams, Data, Callbacks> {
   public render() {
     const combined = Pending.combine(
       this.props.document,
@@ -65,7 +65,7 @@ class Component extends ContainerBase<Params, Data, Callbacks> {
       const Form = Acc.TypedForm<DocumentSummaryDto>();
       return (
         <Form.Form data={document}>
-          <Form.Button name="default" onClick={() => this.onDelete(claim, document)}>Remove</Form.Button>
+          <Form.Button name="delete" value={document.id} onClick={() => this.onDelete(claim, document)}>Remove</Form.Button>
         </Form.Form>
       );
     };
@@ -223,7 +223,7 @@ class Component extends ContainerBase<Params, Data, Callbacks> {
   }
 }
 
-const definition = ReduxContainer.for<Params, Data, Callbacks>(Component);
+const definition = ReduxContainer.for<ClaimDashboardPageParams, Data, Callbacks>(Component);
 
 export const ClaimsDashboard = definition.connect({
   withData: (state, props) => {
