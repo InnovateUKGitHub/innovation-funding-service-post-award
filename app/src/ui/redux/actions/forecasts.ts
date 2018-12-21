@@ -25,7 +25,7 @@ export function validateForecastDetails(
 ): SyncThunk <ForecastDetailsDtosValidator, UpdateEditorAction> {
   return (dispatch, getState) => {
     const state = getState();
-    const selector = getForecastDetailsEditor(state, partnerId);
+    const selector = getForecastDetailsEditor(partnerId);
 
     if (showErrors === false) {
       const current = state.editors[selector.store][selector.key];
@@ -49,7 +49,7 @@ export function saveForecastDetails(
 ): AsyncThunk<void, DataLoadAction | EditorAction> {
   return (dispatch, getState) => {
     const state = getState();
-    const selector = getForecastDetailsEditor(state, partnerId);
+    const selector = getForecastDetailsEditor(partnerId);
     const validatorThunk = validateForecastDetails(partnerId, forecasts, claimDetails, golCosts, costCategories, true);
     const validation = validatorThunk(dispatch, getState, null);
 
