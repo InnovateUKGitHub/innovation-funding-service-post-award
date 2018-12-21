@@ -1,7 +1,7 @@
 import contextProvider from "../features/common/contextProvider";
 import {ApiParams, ControllerBase} from "./controllerBase";
 import {GetAllLineItemsForClaimByCategoryQuery, SaveLineItemsCommand} from "../features/claimLineItems";
-import {ApiError, StatusCode} from "./ApiError";
+import {BadRequestError, StatusCode} from "./ApiError";
 import {processDto} from "../../shared/processResponse";
 
 export interface IClaimLineItemApi {
@@ -42,7 +42,7 @@ class Controller extends ControllerBase<ClaimLineItemDto> implements IClaimLineI
       lineItems.every(x => x.periodId === periodId && x.partnerId === partnerId && x.costCategoryId === costCategoryId);
 
     if (!validRequest) {
-      throw new ApiError(StatusCode.BAD_REQUEST,"Request is missing required fields");
+      throw new BadRequestError("Request is missing required fields");
     }
 
     const command = new SaveLineItemsCommand(partnerId, costCategoryId, periodId, lineItems);
