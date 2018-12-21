@@ -85,6 +85,11 @@ interface InternalFieldProps<T> {
     formData?: T;
 }
 
+interface HiddenFieldProps<TDto> {
+    name: string;
+    value: (data: TDto) => string | number | null | undefined;
+}
+
 interface ExternalFieldProps<TDto, TValue> {
     label?: React.ReactNode;
     labelHidden?: boolean;
@@ -174,6 +179,12 @@ const RadioOptionsField = <T extends {}>(props: RadioFieldProps<T>) => {
     );
 };
 
+const HiddenField = <T extends {}>(props: HiddenFieldProps<T>) => {
+    return (
+        <input type="hidden" name={props.name} value={props.value((props as any as InternalFieldProps<T>).formData!) || ""} />
+    );
+};
+
 interface SubmitProps {
     qa?: string;
     disabled?: boolean;
@@ -219,6 +230,7 @@ export const TypedForm = <T extends {}>() => ({
     MultilineString: MultiStringField as React.SFC<MultiStringFieldProps<T>>,
     Numeric: NumericField as React.SFC<ExternalFieldProps<T, number>>,
     Radio: RadioOptionsField as React.SFC<RadioFieldProps<T>>,
+    Hidden: HiddenField as React.SFC<HiddenFieldProps<T>>,
     Submit: SubmitComponent,
     Button: ButtonComponent,
     FileUpload: FileUploadComponent as React.SFC<ExternalFieldProps<T, File>>,

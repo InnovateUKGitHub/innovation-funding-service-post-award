@@ -13,7 +13,9 @@ export class EditClaimLineItemsFormHandler extends FormHandlerBase<EditClaimLine
   }
 
   protected getDto(context: IContext, params: EditClaimLineItemsParams, button: IFormButton, body: IFormBody) {
-    const dto = range(10).map((x,i) => ({
+    const itemCount = parseInt(body.itemCount, 10) || 10;
+
+    const dto = range(itemCount).map((x,i) => ({
       id: "",
       partnerId: params.partnerId,
       periodId: params.periodId,
