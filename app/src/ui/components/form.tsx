@@ -14,6 +14,7 @@ interface FormProps<T> {
     onSubmit?: () => void;
     qa?: string;
     type?: "post" | "delete";
+    enctype?: "application/x-www-form-urlencoded" | "multipart/form-data" | "text/plain";
 }
 
 interface FormChildProps<T> {
@@ -35,8 +36,9 @@ class FormComponent<T> extends React.Component<FormProps<T>, []> {
 
         const childrenWithData = React.Children.map(this.props.children, (child, index) => child && React.cloneElement(child as any, childProps(index)));
         const method = this.props.type || "post";
+        const enctype = { enctype: this.props.enctype };
         return (
-            <form method={method} action="" onSubmit={(e) => this.onSubmit(e)} data-qa={this.props.qa}>
+            <form {...enctype} method={method} action="" onSubmit={(e) => this.onSubmit(e)} data-qa={this.props.qa}>
                 {childrenWithData}
             </form>
         );
