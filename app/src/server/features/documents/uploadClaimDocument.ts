@@ -1,7 +1,7 @@
 import { CommandBase, IContext } from "../common/context";
 import { UploadDocumentCommand } from "./uploadDocument";
 import { GetClaimDocumentsQuery } from "./getClaimDocuments";
-import { ApiError, StatusCode } from "../../apis/ApiError";
+import { BadRequestError, StatusCode } from "../../apis/ApiError";
 import mapClaim from "../claims/mapClaim";
 import { DeleteDocumentCommand } from "./deleteDocument";
 import { ClaimDto, ClaimStatus, DocumentDescription } from "../../../types";
@@ -14,7 +14,7 @@ export class UploadClaimDocumentCommand extends CommandBase<string> {
 
   private validateIarUpload(claim: ClaimDto) {
     if (!claim.isIarRequired || !claim.allowIarEdit) {
-      throw new ApiError(StatusCode.BAD_REQUEST, "IAR is not required for this claim " + claim.id);
+      throw new BadRequestError("IAR is not required for this claim " + claim.id);
     }
   }
 

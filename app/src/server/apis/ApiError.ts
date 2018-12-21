@@ -5,13 +5,12 @@ export enum StatusCode {
   SERVICE_UNAVAILABLE = 503,
 }
 
-export interface IApiError {
-  errorCode: StatusCode;
+export interface IBadRequestError {
   message: string;
 }
 
-export class ApiError extends Error implements IApiError {
-  constructor(public errorCode: StatusCode, public message: string) {
+export class BadRequestError extends Error implements IBadRequestError {
+  constructor(public message: string) {
     super();
   }
 }
