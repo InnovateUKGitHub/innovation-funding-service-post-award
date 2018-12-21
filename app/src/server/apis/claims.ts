@@ -2,7 +2,7 @@ import { ApiParams, ControllerBase } from "./controllerBase";
 import contextProvider from "../features/common/contextProvider";
 import { GetAllClaimsForProjectQuery, GetAllForPartnerQuery, GetClaim } from "../features/claims";
 import { UpdateClaimCommand } from "../features/claims/updateClaim";
-import { ApiError, StatusCode } from "./ApiError";
+import { BadRequestError, StatusCode } from "./ApiError";
 import { processDto } from "../../shared/processResponse";
 import { ClaimDto } from "../../types";
 
@@ -27,7 +27,7 @@ class Controller extends ControllerBase<ClaimDto> implements IClaimsApi {
         if (p.projectId) {
           return this.getAllByProjectId(p);
         }
-        return Promise.reject(new ApiError(StatusCode.BAD_REQUEST, "Invalid parameters"));
+        return Promise.reject(new BadRequestError("Invalid parameters"));
       });
     this.getItem("/:partnerId/:periodId", (p) => ({ partnerId: p.partnerId as string, periodId: parseInt(p.periodId, 10) }), (p) => this.get(p));
     this.putItem("/:partnerId/:periodId", (p, q, b) => ({ partnerId: p.partnerId as string, periodId: parseInt(p.periodId, 10), claim: processDto(b) }), (p) => this.update(p));
@@ -53,7 +53,7 @@ class Controller extends ControllerBase<ClaimDto> implements IClaimsApi {
     const { partnerId, periodId, claim } = params;
 
     if (partnerId !== claim.partnerId || periodId !== claim.periodId) {
-      throw new ApiError(StatusCode.BAD_REQUEST, "Bad request");
+      throw new BadRequestError("Bad request");
     }
 
     const context = contextProvider.start(params);

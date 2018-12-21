@@ -9,7 +9,7 @@ import { ClaimDto, ClaimStatus } from "../../../types";
 import { GetAllForecastsForPartnerQuery } from "./getAllForecastsForPartnerQuery";
 import { GetByIdQuery as GetPartnerById } from "../partners";
 import { GetByIdQuery as GetProjectById } from "../projects";
-import { ApiError, StatusCode } from "../../apis/ApiError";
+import { BadRequestError, StatusCode } from "../../apis/ApiError";
 
 export class UpdateForecastDetailsCommand extends CommandBase<boolean> {
   constructor(
@@ -55,7 +55,7 @@ export class UpdateForecastDetailsCommand extends CommandBase<boolean> {
       });
 
     if(!passed) {
-      throw new ApiError(StatusCode.BAD_REQUEST, "You can't update the forecast of approved periods.");
+      throw new BadRequestError("You can't update the forecast of approved periods.");
     }
   }
 
@@ -74,7 +74,7 @@ export class UpdateForecastDetailsCommand extends CommandBase<boolean> {
     const claim  = claims.find(x => !x.isApproved);
 
     if(!claim) {
-      throw new ApiError(StatusCode.BAD_REQUEST, "Unable to find current claim.");
+      throw new BadRequestError("Unable to find current claim.");
     }
 
     const status = this.nextClaimStatus(claim);
@@ -89,6 +89,6 @@ export class UpdateForecastDetailsCommand extends CommandBase<boolean> {
       case ClaimStatus.INNOVATE_QUERIED: return ClaimStatus.AWAITING_IUK_APPROVAL;
     }
 
-    throw new ApiError(StatusCode.BAD_REQUEST, "Claim in invalid status.");
+    throw new BadRequestError("Claim in invalid status.");
   }
 }
