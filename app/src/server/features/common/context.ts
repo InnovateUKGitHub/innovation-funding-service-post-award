@@ -104,7 +104,7 @@ const constructErrorResponse = <E extends Error>(error: E): AppError => {
     return new AppError(ErrorCode.VALIDATION_ERROR, error.validationResult, error);
   }
   if (error instanceof BadRequestError) {
-    return new AppError(ErrorCode.BAD_REQUEST_ERROR, "Bad Request", error);
+    return new AppError(ErrorCode.BAD_REQUEST_ERROR, error.message, error);
   }
   if (error instanceof SalesforceTokenError) {
     return new AppError(ErrorCode.SECURITY_ERROR, error.message, error);
