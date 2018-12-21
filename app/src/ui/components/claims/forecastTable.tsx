@@ -1,10 +1,12 @@
 import React from "react";
 import classNames from "classnames";
 import * as ACC from "../../components";
-import { Currency, DateRange, Percentage } from "../../components/renderers";
-import { ForecastDetailsDtosValidator } from "../../validators/forecastDetailsDtosValidator";
+import { Currency, DateRange, FullDateTimeWithSeconds, Percentage } from "../../components/renderers";
+import { ForecastDetailsDtosValidator, ForecastDetailsDtoValidator } from "../../validators/forecastDetailsDtosValidator";
 import { IEditorStore } from "../../redux";
 import { ForecastData } from "../../containers/claims/forecasts/common";
+import { Result } from "../../validation/result";
+import { Results } from "../../validation/results";
 
 interface TableRow {
   categoryId: string;
@@ -25,14 +27,13 @@ interface Props {
   hideValidation?: boolean;
   data: ForecastData;
   onChange?: (data: ForecastDetailsDTO[]) => void;
-  projectPeriodId: number;
 }
 
 export class ForecastTable extends React.Component<Props> {
   public render() {
     const { data, hideValidation } = this.props;
 
-    const periodId  = !!data.claim ? Math.min(this.props.projectPeriodId, data.claim.periodId) : this.props.projectPeriodId;
+    const periodId  = !!data.claim ? Math.min(data.project.periodId, data.claim.periodId) : data.project.periodId;
     const parsed    = this.parseClaimData(data, periodId);
     const Table     = ACC.TypedTable<typeof parsed[0]>();
     const intervals = this.calculateClaimPeriods(data);
@@ -118,15 +119,14 @@ export class ForecastTable extends React.Component<Props> {
   renderForecastCell(forecastRow: TableRow, period: string, index: Index, data: ForecastData) {
     const editor = data.editor;
     const value  = forecastRow.forecasts[period];
-
     // if the whole table isn't editable or the periods are overdue then they aren't editable
-    return !editor || parseInt(period, 10) <= this.props.projectPeriodId ? (
+    return !editor || parseInt(period, 10) <= data.project.periodId ? (
       <Currency value={value} />
     ) : (
       <span>
         <ACC.ValidationError error={editor.validator.items.results[index.row].id} />
         <ACC.Inputs.NumberInput
-          name={"value" + index.row + index.column}
+          name={`value_${period}_${forecastRow.categoryId}`}
           value={value}
           onChange={val => this.updateItem(editor.data, forecastRow.categoryId, period, dto => dto.value = val!)}
           className="govuk-!-font-size-16"
