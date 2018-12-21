@@ -7,7 +7,7 @@ import { FileUpload } from "../../types/FileUpload";
 import { UploadClaimDetailDocumentCommand } from "../features/documents/uploadClaimDetailDocument";
 import { RequestHandler } from "express";
 
-export class ClaimDetailFormHandler extends FormHandlerBase<ClaimDetailDocumentsPageParams, FileUpload> {
+export class ClaimDetailDocumentUploadHandler extends FormHandlerBase<ClaimDetailDocumentsPageParams, FileUpload> {
     constructor(middleware: RequestHandler[]) {
         super(ClaimDetailDocumentsRoute, ["default"], middleware);
     }
