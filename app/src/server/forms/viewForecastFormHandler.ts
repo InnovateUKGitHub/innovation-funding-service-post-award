@@ -8,7 +8,6 @@ export class ViewForecastFormHandler implements IFormHandler {
 
   public readonly middleware: RequestHandler[] = [];
 
-
   handle(req: express.Request, res: express.Response): Promise<void> {
     const params = ViewForecastRoute.getParams({ name: ViewForecastRoute.routeName, params: req.params, path: req.path });
 
