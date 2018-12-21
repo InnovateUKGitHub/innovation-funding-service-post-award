@@ -19,7 +19,7 @@ const createValidator = (partnerId: string, forecastDetails: ForecastDetailsDTO[
   return new ForecastDetailsDtosValidator(forecastDetails, claimDetails, golCosts, costCategories, false);
 };
 
-export const getForecastDetailsEditor = (state: RootState, partnerId: string) => {
+export const getForecastDetailsEditor = (partnerId: string) => {
   return editorStoreHelper<ForecastDetailsDTO[], ForecastDetailsDtosValidator>(
     forecastDetailsStore,
     x => x.forecastDetails,
