@@ -39,7 +39,7 @@ interface Callbacks {
   deleteFile: (key: ClaimDetailKey, dto: DocumentSummaryDto) => void;
 }
 
-export class ClaimDetailDocumentsComponent extends ContainerBase<, Data, Callbacks> {
+export class ClaimDetailDocumentsComponent extends ContainerBase<ClaimDetailDocumentsPageParams, Data, Callbacks> {
 
   public render() {
     const combined = Pending.combine(
