@@ -1,6 +1,4 @@
 import { FormHandlerBase, IFormBody, IFormButton } from "./formHandlerBase";
-import { ClaimDto, ClaimStatus } from "../../types";
-import { Params as ClaimForcastFormParams } from "../../ui/containers/claims/forecasts/common";
 import { IContext } from "../features/common/context";
 import { Results } from "../../ui/validation/results";
 import { ClaimForcastParams, ClaimForecastRoute, ClaimsDashboardRoute } from "../../ui/containers";
@@ -16,11 +14,11 @@ export class ClaimForcastFormHandler extends FormHandlerBase<ClaimForcastParams,
     super(ClaimForecastRoute, ["save", "default"]);
   }
 
-  protected async getDto(context: IContext, params: ClaimForcastParams, button: string, body: { [key: string]: string; }): Promise<ForecastDetailsDTO[]> {
+  protected async getDto(context: IContext, params: ClaimForcastParams, button: IFormButton, body: IFormBody): Promise<ForecastDetailsDTO[]> {
     const dto = await context.runQuery(new GetAllForecastsForPartnerQuery(params.partnerId));
     const project = (await context.runQuery(new GetByIdQuery(params.projectId)))!;
     const costCategories = await context.runQuery(new GetCostCategoriesQuery());
-    
+
     const costCategoriesIdsToUpdate = costCategories
       .filter(x => !x.isCalculated)
       .filter(x => x.organistionType === "Industrial")
@@ -31,12 +29,12 @@ export class ClaimForcastFormHandler extends FormHandlerBase<ClaimForcastParams,
             x.value = parseFloat(body[`value_${x.periodId}_${x.costCategoryId}`]);
         }
     });
-    
+
     return dto;
   }
 
-  protected async run(context: IContext, params: ClaimForcastParams, button: string, dto: ForecastDetailsDTO[]): Promise<ILinkInfo> {
-    const submit = button === "default";
+  protected async run(context: IContext, params: ClaimForcastParams, button: IFormButton, dto: ForecastDetailsDTO[]): Promise<ILinkInfo> {
+    const submit = button.name === "default";
     await context.runCommand(new UpdateForecastDetailsCommand(params.partnerId, dto, submit));
     return ClaimsDashboardRoute.getLink(params);
   }
