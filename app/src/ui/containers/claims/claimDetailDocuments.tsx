@@ -10,7 +10,7 @@ import {IEditorStore} from "../../redux/reducers";
 import { DocumentUploadValidator } from "../../validators/documentUploadValidator";
 import { Results } from "../../validation/results";
 
-interface Params {
+export interface ClaimDetailDocumentsPageParams {
   projectId: string;
   partnerId: string;
   costCategoryId: string;
@@ -39,7 +39,7 @@ interface Callbacks {
   deleteFile: (key: ClaimDetailKey, dto: DocumentSummaryDto) => void;
 }
 
-export class ClaimDetailDocumentsComponent extends ContainerBase<Params, Data, Callbacks> {
+export class ClaimDetailDocumentsComponent extends ContainerBase<ClaimDetailDocumentsPageParams, Data, Callbacks> {
 
   public render() {
     const combined = Pending.combine(
@@ -98,9 +98,9 @@ export class ClaimDetailDocumentsComponent extends ContainerBase<Params, Data, C
             <p className="govuk-body-m govuk-!-margin-bottom-0 govuk-!-margin-right-2">No documents uploaded.</p> }
         </ACC.Section>
         <ACC.Section>
-          <UploadForm.Form data={editor.data} onSubmit={() => this.onSave(editor.data)} onChange={(dto) => this.onChange(dto)}>
+          <UploadForm.Form enctype="multipart/form-data" data={editor.data} onSubmit={() => this.onSave(editor.data)} onChange={(dto) => this.onChange(dto)}>
             <UploadForm.Fieldset heading="Upload">
-              <UploadForm.FileUpload label="Upload documents" labelHidden={true} name="upload-documents" validation={editor.validator.file} value={(data) => data.file} hint={<span>Give your files a name that describes their contents and includes today's date.<br/>For example, 'LabourCosts_2017-11-15'.</span>} update={(dto, file) => dto.file = file}/>
+              <UploadForm.FileUpload label="Upload documents" labelHidden={true} name="attachment" validation={editor.validator.file} value={(data) => data.file} hint={<span>Give your files a name that describes their contents and includes today's date.<br/>For example, 'LabourCosts_2017-11-15'.</span>} update={(dto, file) => dto.file = file}/>
             </UploadForm.Fieldset>
             <UploadForm.Submit>Upload documents</UploadForm.Submit>
           </UploadForm.Form>
@@ -110,7 +110,7 @@ export class ClaimDetailDocumentsComponent extends ContainerBase<Params, Data, C
   }
 }
 
-const definition = ReduxContainer.for<Params, Data, Callbacks>(ClaimDetailDocumentsComponent);
+const definition = ReduxContainer.for<ClaimDetailDocumentsPageParams, Data, Callbacks>(ClaimDetailDocumentsComponent);
 
 export const ClaimDetailDocuments = definition.connect({
   withData: (state, props) => {
