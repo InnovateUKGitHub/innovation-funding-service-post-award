@@ -94,6 +94,7 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
 
     return (
       <LineItemForm.Form data={editor.data} qa={"current-claim-summary-form"} onChange={x => { /* Todo */ }} onSubmit={() => this.props.save(this.props.projectId, this.props.partnerId, this.props.periodId, this.props.costCategoryId, this.props.editor.data)}>
+        <LineItemForm.Hidden name="itemCount" value={x => x.length}/>
         <LineItemForm.Fieldset>
           <LineItemTable.Table qa="current-claim-summary-table" data={editor.data} validationResult={editor.validator.items.results} footers={this.renderFooters(editor, forecastDetail)}>
             <LineItemTable.Custom header="Description of cost" qa="cost-description" value={(x, i) => this.renderDescription(x, i, editor.validator.items.results[i.row])} />
@@ -225,7 +226,7 @@ const getEditor: (isClient: boolean, editor: IEditorStore<ClaimLineItemDto[], Cl
 
       const items = originalData || [];
       // if rendering on client and has items saved then render them
-      if (items.length && isClient) {
+      if ((items.length && isClient) || items.length > 10) {
         return items;
       }
       // else rendering on server or no items saved so render default number
