@@ -29,7 +29,7 @@ export interface IFormBody {
 
 export abstract class FormHandlerBase<TParams, TDto> implements IFormHandler {
   protected constructor(routeInfo: RouteInfo<TParams>, buttons: string[], middleware?: RequestHandler[]) {
-    this.routePath = routeInfo.routePath;
+    this.routePath = routeInfo.routePath.split("?")[0];
     this.routeName = routeInfo.routeName;
     this.getParams = routeInfo.getParams;
     this.middleware = middleware || [];
@@ -43,7 +43,8 @@ export abstract class FormHandlerBase<TParams, TDto> implements IFormHandler {
   private readonly getParams: (route: { name: string, path: string, params: any }) => TParams;
 
   public async handle(req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> {
-    const params = this.getParams({ name: this.routeName, params: req.params, path: req.path });
+    const params = this.getParams({ name: this.routeName, params: { ...req.params, ...req.query }, path: req.path });
+
     const buttonName = this.buttons.find(x => `button_${x}` in req.body);
     const button = { name: buttonName, value: req.body[`button_${buttonName}`] };
     const body = { ...req.body };
@@ -60,12 +61,11 @@ export abstract class FormHandlerBase<TParams, TDto> implements IFormHandler {
       return this.redirect(link, res);
     }
     catch (error) {
-      const { key, store } = this.getStoreInfo(params);
+      const { key, store } = this.getStoreInfo(params, dto);
       return serverRender(req, res, { key, store, dto, result: this.createValidationResult(params, dto), error });
     }
   }
 
-  // TODO - discuss
   private async createDto(context: IContext, params: TParams, button: IFormButton, body: IFormBody, file?: FileUpload): Promise<TDto> {
     const defaultDto = {} as TDto;
     try {
@@ -80,7 +80,7 @@ export abstract class FormHandlerBase<TParams, TDto> implements IFormHandler {
 
   protected abstract run(context: IContext, params: TParams, button: IFormButton, dto: TDto): Promise<ILinkInfo>;
 
-  protected abstract getStoreInfo(params: TParams): { key: string, store: string };
+  protected abstract getStoreInfo(params: TParams, dto: TDto): { key: string, store: string };
 
   protected abstract createValidationResult(params: TParams, dto: TDto): Results<TDto>;
 
