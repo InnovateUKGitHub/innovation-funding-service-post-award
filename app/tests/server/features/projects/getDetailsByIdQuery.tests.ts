@@ -1,5 +1,7 @@
-import {TestContext} from "../../testContextProvider";
+import { TestContext } from "../../testContextProvider";
 import { GetByIdQuery } from "../../../../src/server/features/projects/getDetailsByIdQuery";
+import { ProjectRole } from "../../../../src/types";
+import { SalesforceRole } from "../../../../src/server/repositories/projectContactsRepository";
 
 describe("ProjectsGetDetailsByIdQuery", () => {
     it("when exists expect item", async () => {
@@ -35,5 +37,75 @@ describe("ProjectsGetDetailsByIdQuery", () => {
         context.testData.createProject();
 
         await expect(context.runQuery(new GetByIdQuery("NOTFOUND"))).rejects.toThrow();
+    });
+
+    it("when user is finance contact expect role returns correctly", async () => {
+        const context = new TestContext();
+        const email = "fc@test.com";
+
+        const project = context.testData.createProject();
+        context.testData.createProjectContact(project, null, x => {
+            x.Acc_ContactId__r.Email = email;
+            x.Acc_Role__c = "Finance contact";
+        });
+
+        //login as fc
+        context.user.set({ email });
+
+        const result = await context.runQuery(new GetByIdQuery(project.Id));
+        expect(result.roles).toBe(ProjectRole.FinancialContact);
+    });
+
+    it("when user is monitoring officer expect role returns correctly", async () => {
+        const context = new TestContext();
+        const email = "mo@test.com";
+
+        const project = context.testData.createProject();
+        context.testData.createProjectContact(project, null, x => {
+            x.Acc_ContactId__r.Email = email;
+            x.Acc_Role__c = "Monitoring officer";
+        });
+
+        //login as fc
+        context.user.set({ email });
+
+        const result = await context.runQuery(new GetByIdQuery(project.Id));
+        expect(result.roles).toBe(ProjectRole.MonitoringOfficer);
+    });
+
+    it("when user is project manager expect role returns correctly", async () => {
+        const context = new TestContext();
+        const email = "mo@test.com";
+
+        const project = context.testData.createProject();
+        context.testData.createProjectContact(project, null, x => {
+            x.Acc_ContactId__r.Email = email;
+            x.Acc_Role__c = "Project Manager";
+        });
+
+        //login as fc
+        context.user.set({ email });
+
+        const result = await context.runQuery(new GetByIdQuery(project.Id));
+        expect(result.roles).toBe(ProjectRole.ProjectManager);
+    });
+
+    it("when user is all roles expect role returns correctly", async () => {
+        const context = new TestContext();
+        const email = "all@test.com";
+
+        const project = context.testData.createProject();
+        const roles: SalesforceRole[] = ["Project Manager", "Monitoring officer", "Finance contact"];
+        roles.forEach(role => {
+            context.testData.createProjectContact(project, null, x => {
+                x.Acc_ContactId__r.Email = email;
+                x.Acc_Role__c = role;
+            });
+        });
+
+        context.user.set({ email });
+
+        const result = await context.runQuery(new GetByIdQuery(project.Id));
+        expect(result.roles).toBe(ProjectRole.ProjectManager | ProjectRole.FinancialContact | ProjectRole.MonitoringOfficer);
     });
 });

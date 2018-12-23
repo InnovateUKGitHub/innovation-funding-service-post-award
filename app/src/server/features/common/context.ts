@@ -12,6 +12,7 @@ import { Cache } from "./cache";
 import { SalesforceInvalidFilterError } from "../../repositories/salesforceBase";
 import { AppError, BadRequestError, NotFoundError, ValidationError } from "./appError";
 import { ErrorCode } from "../../../types/IAppError";
+import { ProjectRole } from "../../../types";
 
 export interface IRunnable<T> {
   Run: (context: IContext) => Promise<T>;
@@ -79,6 +80,7 @@ export interface IRepositories {
 
 export interface ICaches {
   costCategories: Readonly<Cache<CostCategoryDto[]>>;
+  projectRoles: Readonly<Cache<{[key:string]: ProjectRole}>>; 
 }
 
 export interface IContext {
@@ -91,10 +93,12 @@ export interface IContext {
   runSyncCommand<TResult>(cmd: SyncCommandBase<TResult>): TResult;
   clock: IClock;
   logger: ILogger;
+  user: IUser;
 }
 
 const cachesImplimentation: ICaches = {
-  costCategories: new Cache<CostCategoryDto[]>(60 * 12)
+  costCategories: new Cache<CostCategoryDto[]>(60 * 12),
+  projectRoles: new Cache<{[key:string]: ProjectRole}>(60 * 12),
 };
 
 const constructErrorResponse = <E extends Error>(error: E): AppError => {
