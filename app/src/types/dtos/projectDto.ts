@@ -20,4 +20,14 @@ export interface ProjectDto {
     grantOfferLetterCosts: number;
     costsClaimedToDate: number;
     claimedPercentage: number | null;
+
+    roles: ProjectRole;
+    roleTitles: string[];
 }
+
+export enum ProjectRole {
+    Unknown = 0,
+    MonitoringOfficer = 1 << 0,
+    ProjectManager = 1 << 1,
+    FinancialContact = 1 << 2,
+};
