@@ -63,11 +63,12 @@ const ViewForecast = definition.connect({
       Selectors.getProject(props.projectId).getPending(state),
       Selectors.getPartner(props.partnerId).getPending(state),
       Selectors.getCurrentClaim(state, props.partnerId),
+      Selectors.findClaimsByPartner(props.partnerId).getPending(state),
       Selectors.findClaimDetailsByPartner(props.partnerId).getPending(state),
       Selectors.findForecastDetailsByPartner(props.partnerId).getPending(state),
       Selectors.findGolCostsByPartner(props.partnerId).getPending(state),
       Selectors.getCostCategories().getPending(state),
-      (a, b, c, d, e, f, g) => ({ project: a, partner: b, claim: c, claimDetails: d, forecastDetails: e, golCosts: f, costCategories: g })
+      (project, partner, claim, claims, claimDetails, forecastDetails, golCosts, costCategories) => ({ project, partner, claim, claims, claimDetails, forecastDetails, golCosts, costCategories })
     );
 
     return { combined };

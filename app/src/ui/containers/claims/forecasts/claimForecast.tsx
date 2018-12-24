@@ -81,8 +81,8 @@ const definition = ReduxContainer.for<ClaimForcastParams, PendingForecastData, C
 const ForecastClaim = definition.connect({
   withData: (state, props) => withDataEditor(state, props),
   withCallbacks: (dispatch) => ({
-    onChange: (partnerId, data, combined) => dispatch(Actions.validateForecastDetails(partnerId, data, combined.claimDetails, combined.golCosts, combined.costCategories)),
-    saveAndReturn: (updateClaim, projectId, partnerId, periodId, data) => dispatch(Actions.saveForecastDetails(updateClaim, partnerId, data.editor!.data, data.claimDetails, data.golCosts, data.costCategories, () => updateRedirect(updateClaim, dispatch, projectId, partnerId, periodId)))
+    onChange: (partnerId, data, combined) => dispatch(Actions.validateForecastDetails(partnerId, data, combined.claims, combined.claimDetails, combined.golCosts)),
+    saveAndReturn: (updateClaim, projectId, partnerId, periodId, data) => dispatch(Actions.saveForecastDetails(updateClaim, partnerId, data.editor!.data, data.claims, data.claimDetails, data.golCosts, () => updateRedirect(updateClaim, dispatch, projectId, partnerId, periodId)))
   })
 });
 
