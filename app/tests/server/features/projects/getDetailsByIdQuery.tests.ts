@@ -1,3 +1,4 @@
+// tslint:disable:no-bitwise
 import { TestContext } from "../../testContextProvider";
 import { GetByIdQuery } from "../../../../src/server/features/projects/getDetailsByIdQuery";
 import { ProjectRole } from "../../../../src/types";
@@ -15,7 +16,7 @@ describe("ProjectsGetDetailsByIdQuery", () => {
             x.Acc_ProjectTitle__c = expectedName;
         });
 
-        const result = (await context.runQuery(new GetByIdQuery(project.Id)))!;
+        const result = (await context.runQuery(new GetByIdQuery(project.Id)));
 
         expect(result.id).toBe(expectedId);
         expect(result.title).toBe(expectedName);
@@ -24,7 +25,7 @@ describe("ProjectsGetDetailsByIdQuery", () => {
     it("when mutiple returns expected item", async () => {
         const context = new TestContext();
         const project2 = context.testData.createProject();
-        const result = (await context.runQuery(new GetByIdQuery(project2.Id)))!;
+        const result = (await context.runQuery(new GetByIdQuery(project2.Id)));
 
         expect(result.id).toBe(project2.Id);
         expect(result.title).toBe(project2.Acc_ProjectTitle__c);
@@ -44,12 +45,12 @@ describe("ProjectsGetDetailsByIdQuery", () => {
         const email = "fc@test.com";
 
         const project = context.testData.createProject();
-        context.testData.createProjectContact(project, null, x => {
+        context.testData.createProjectContact(project, undefined, x => {
             x.Acc_ContactId__r.Email = email;
             x.Acc_Role__c = "Finance contact";
         });
 
-        //login as fc
+        // login as fc
         context.user.set({ email });
 
         const result = await context.runQuery(new GetByIdQuery(project.Id));
@@ -61,12 +62,12 @@ describe("ProjectsGetDetailsByIdQuery", () => {
         const email = "mo@test.com";
 
         const project = context.testData.createProject();
-        context.testData.createProjectContact(project, null, x => {
+        context.testData.createProjectContact(project, undefined, x => {
             x.Acc_ContactId__r.Email = email;
             x.Acc_Role__c = "Monitoring officer";
         });
 
-        //login as fc
+        // login as fc
         context.user.set({ email });
 
         const result = await context.runQuery(new GetByIdQuery(project.Id));
@@ -78,12 +79,12 @@ describe("ProjectsGetDetailsByIdQuery", () => {
         const email = "mo@test.com";
 
         const project = context.testData.createProject();
-        context.testData.createProjectContact(project, null, x => {
+        context.testData.createProjectContact(project, undefined, x => {
             x.Acc_ContactId__r.Email = email;
             x.Acc_Role__c = "Project Manager";
         });
 
-        //login as fc
+        // login as fc
         context.user.set({ email });
 
         const result = await context.runQuery(new GetByIdQuery(project.Id));
@@ -97,7 +98,7 @@ describe("ProjectsGetDetailsByIdQuery", () => {
         const project = context.testData.createProject();
         const roles: SalesforceRole[] = ["Project Manager", "Monitoring officer", "Finance contact"];
         roles.forEach(role => {
-            context.testData.createProjectContact(project, null, x => {
+            context.testData.createProjectContact(project, undefined, x => {
                 x.Acc_ContactId__r.Email = email;
                 x.Acc_Role__c = role;
             });

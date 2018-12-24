@@ -36,7 +36,7 @@ export class TestContext implements IContext {
     public caches: ICaches = {
         costCategories: new Cache<CostCategoryDto[]>(1),
         projectRoles: new Cache<{ [key: string]: ProjectRole }>(1),
-    }
+    };
 
     public runQuery<TResult>(query: QueryBase<TResult>): Promise<TResult> {
         return ((query as any) as IRunnable<TResult>).Run(this);

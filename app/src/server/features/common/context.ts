@@ -80,7 +80,7 @@ export interface IRepositories {
 
 export interface ICaches {
   costCategories: Readonly<Cache<CostCategoryDto[]>>;
-  projectRoles: Readonly<Cache<{[key:string]: ProjectRole}>>; 
+  projectRoles: Readonly<Cache<{[key: string]: ProjectRole}>>;
 }
 
 export interface IContext {
@@ -98,7 +98,7 @@ export interface IContext {
 
 const cachesImplimentation: ICaches = {
   costCategories: new Cache<CostCategoryDto[]>(60 * 12),
-  projectRoles: new Cache<{[key:string]: ProjectRole}>(60 * 12),
+  projectRoles: new Cache<{[key: string]: ProjectRole}>(60 * 12),
 };
 
 const constructErrorResponse = <E extends Error>(error: E): AppError => {

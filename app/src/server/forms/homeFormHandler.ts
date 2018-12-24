@@ -1,8 +1,8 @@
-import express = require("express");
+import express from "express";
 import { IFormHandler } from "./formHandlerBase";
 import { configureRouter } from "../../ui/routing";
 import { HomeRoute } from "../../ui/containers";
-import {Configuration} from "../features/common/config";
+import { Configuration } from "../features/common/config";
 
 // ToDo: Remove as provides a back door to set the current user.....
 export class HomeFormHandler implements IFormHandler {
@@ -13,11 +13,11 @@ export class HomeFormHandler implements IFormHandler {
   public async handle(req: express.Request, res: express.Response): Promise<void> {
     const dto = { user: req.body.user, isReset: req.body.button_reset === "" };
 
-    if(dto.isReset){
+    if (dto.isReset) {
       req.session!.user.email = Configuration.salesforceUsername;
     }
     else if (dto.user) {
-        req.session!.user.email = dto.user;
+      req.session!.user.email = dto.user;
     }
 
     const router = configureRouter();

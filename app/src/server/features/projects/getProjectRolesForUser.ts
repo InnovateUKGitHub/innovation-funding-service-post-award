@@ -1,9 +1,9 @@
-import { QueryBase, IContext } from "../common/context";
+import { IContext, QueryBase } from "../common/context";
 import { ProjectRole } from "../../../types";
 import { GetAllProjectRolesForUser } from "./getAllProjectRolesForUser";
 
-export class GetProjectRolesForUser extends QueryBase<ProjectRole>{
-  constructor(private projectId: string){
+export class GetProjectRolesForUser extends QueryBase<ProjectRole> {
+  constructor(private projectId: string) {
       super();
   }
 

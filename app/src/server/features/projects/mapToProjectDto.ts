@@ -1,3 +1,4 @@
+// tslint:disable:no-bitwise
 import { CommandBase, IContext } from "../common/context";
 import { ISalesforceProject } from "../../repositories/projectsRepository";
 import { ClaimFrequency, ProjectDto, ProjectRole } from "../../../types";
@@ -17,7 +18,7 @@ export class MapToProjectDtoCommand extends CommandBase<ProjectDto> {
     const startDate = context.clock.parse(this.item.Acc_StartDate__c, "yyyy-MM-dd")!;
     const endDate = context.clock.parse(this.item.Acc_EndDate__c, "yyyy-MM-dd")!;
     const periodInfo = context.runSyncQuery(new GetPeriodInfoQuery(startDate, endDate, claimFrequency));
-    
+
     const dto: ProjectDto = {
       id: this.item.Id,
       title: this.item.Acc_ProjectTitle__c,
@@ -45,14 +46,14 @@ export class MapToProjectDtoCommand extends CommandBase<ProjectDto> {
 
   private getRoleTitles() {
     const roles = this.roles || ProjectRole.Unknown;
-    const results : string[] = [];
-    if((roles & ProjectRole.MonitoringOfficer) === ProjectRole.MonitoringOfficer){
+    const results: string[] = [];
+    if((roles & ProjectRole.MonitoringOfficer) === ProjectRole.MonitoringOfficer) {
       results.push("Monitoring Officer");
     }
-    if((roles & ProjectRole.ProjectManager) === ProjectRole.ProjectManager){
+    if((roles & ProjectRole.ProjectManager) === ProjectRole.ProjectManager) {
       results.push("Project Manager");
     }
-    if((roles & ProjectRole.FinancialContact) === ProjectRole.FinancialContact){
+    if((roles & ProjectRole.FinancialContact) === ProjectRole.FinancialContact) {
       results.push("Finance Contact");
     }
     return results;
