@@ -1,3 +1,4 @@
+// tslint:disable:no-bitwise
 import { ClaimFrequency } from "./claimFrequency";
 
 export interface ProjectDto {
@@ -30,4 +31,4 @@ export enum ProjectRole {
     MonitoringOfficer = 1 << 0,
     ProjectManager = 1 << 1,
     FinancialContact = 1 << 2,
-};
+}

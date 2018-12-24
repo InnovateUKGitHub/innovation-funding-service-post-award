@@ -64,8 +64,8 @@ export default abstract class SalesforceBase<T> {
 
   protected async loadItem(filter: Partial<T> | string): Promise<T> {
     const result = await this.filterOne(filter);
-    if(!result){
-      throw new SalesforceInvalidFilterError(); 
+    if(!result) {
+      throw new SalesforceInvalidFilterError();
     }
     return result;
   }

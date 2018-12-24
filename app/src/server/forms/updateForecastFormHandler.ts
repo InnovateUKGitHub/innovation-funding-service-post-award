@@ -15,7 +15,7 @@ export class UpdateForecastFormHandler extends FormHandlerBase<ForecastParams, F
   }
   protected async getDto(context: IContext, params: ForecastParams, button: IFormButton, body: { [key: string]: string; }): Promise<ForecastDetailsDTO[]> {
     const dto = await context.runQuery(new GetAllForecastsForPartnerQuery(params.partnerId));
-    const project = (await context.runQuery(new GetByIdQuery(params.projectId)))!;
+    const project = await context.runQuery(new GetByIdQuery(params.projectId));
     const costCategories = await context.runQuery(new GetCostCategoriesQuery());
 
     const costCategoriesIdsToUpdate = costCategories
