@@ -98,7 +98,7 @@ export class ClaimDetailDocumentsComponent extends ContainerBase<ClaimDetailDocu
             <p className="govuk-body-m govuk-!-margin-bottom-0 govuk-!-margin-right-2">No documents uploaded.</p> }
         </ACC.Section>
         <ACC.Section>
-          <UploadForm.Form enctype="multipart/form-data" data={editor.data} onSubmit={() => this.onSave(editor.data)} onChange={(dto) => this.onChange(dto)}>
+          <UploadForm.Form enctype="multipart/form-data" qa="claimDetailDocuments" data={editor.data} onSubmit={() => this.onSave(editor.data)} onChange={(dto) => this.onChange(dto)}>
             <UploadForm.Fieldset heading="Upload">
               <UploadForm.FileUpload label="Upload documents" labelHidden={true} name="attachment" validation={editor.validator.file} value={(data) => data.file} hint={<span>Give your files a name that describes their contents and includes today's date.<br/>For example, 'LabourCosts_2017-11-15'.</span>} update={(dto, file) => dto.file = file}/>
             </UploadForm.Fieldset>
