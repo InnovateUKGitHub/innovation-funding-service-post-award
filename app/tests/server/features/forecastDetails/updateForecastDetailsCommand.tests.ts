@@ -3,7 +3,7 @@ import { UpdateForecastDetailsCommand } from "../../../../src/server/features/fo
 import { ValidationError } from "../../../../src/shared/validation";
 import { DateTime } from "luxon";
 import { ClaimFrequency } from "../../../../src/types";
-import { ApiError, StatusCode } from "../../../../src/server/apis/ApiError";
+import { BadRequestError, StatusCode } from "../../../../src/server/apis/ApiError";
 
 describe("UpdateForecastDetailsCommand", () => {
   it("when id not set expect validation exception", async () => {
@@ -136,7 +136,7 @@ describe("UpdateForecastDetailsCommand", () => {
     testData.createProfileTotalCostCategory(costCat, partner, 1500);
 
     const command = new UpdateForecastDetailsCommand(partnerId, dto, false);
-    await expect(context.runCommand(command)).rejects.toMatchObject(new ApiError(StatusCode.BAD_REQUEST, "You can't update the forecast of approved periods."));
+    await expect(context.runCommand(command)).rejects.toMatchObject(new BadRequestError("You can't update the forecast of approved periods."));
   });
 
   it("when project in period 1 and period 1 updated expect exception", async () => {
@@ -168,7 +168,7 @@ describe("UpdateForecastDetailsCommand", () => {
     }];
 
     const command = new UpdateForecastDetailsCommand(partner.Id, update, false);
-    await expect(context.runCommand(command)).rejects.toMatchObject(new ApiError(StatusCode.BAD_REQUEST, "You can't update the forecast of approved periods."));
+    await expect(context.runCommand(command)).rejects.toMatchObject(new BadRequestError("You can't update the forecast of approved periods."));
 
   });
 
@@ -204,7 +204,7 @@ describe("UpdateForecastDetailsCommand", () => {
     dtos[0].value++;
 
     const command = new UpdateForecastDetailsCommand(partner.Id, dtos, false);
-    await expect(context.runCommand(command)).rejects.toMatchObject(new ApiError(StatusCode.BAD_REQUEST, "You can't update the forecast of approved periods."));
+    await expect(context.runCommand(command)).rejects.toMatchObject(new BadRequestError("You can't update the forecast of approved periods."));
 
   });
 
