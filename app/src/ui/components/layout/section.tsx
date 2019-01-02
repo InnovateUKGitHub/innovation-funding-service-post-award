@@ -15,7 +15,7 @@ const renderTitles = ({ title, subtitle, badge }: Props) => {
     return null;
   }
 
-  const className = classNames({ "govuk-grid-column-full": !badge, "govuk-grid-column-three-quarters": !!badge }, "govuk-!-margin-bottom-9");
+  const className = classNames({ "govuk-grid-column-full": !badge, "govuk-grid-column-three-quarters": !!badge }, "govuk-!-margin-bottom-5");
 
   return (
     <div className={className}>
@@ -31,7 +31,7 @@ const renderBadge = ({ badge }: Props) => {
   }
 
   return (
-    <div className={classNames("govuk-grid-column-one-quarter", "govuk-!-margin-bottom-9")}>{badge}</div>
+    <div className={classNames("govuk-grid-column-one-quarter", "govuk-!-margin-bottom-5")}>{badge}</div>
   );
 };
 
@@ -41,7 +41,7 @@ const renderContents = (children: React.ReactNode) => {
   }
 
   return (
-    <div className="govuk-grid-column-full govuk-!-margin-bottom-9">{children}</div>
+    <div className="govuk-grid-column-full govuk-!-margin-bottom-5">{children}</div>
   );
 };
 

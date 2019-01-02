@@ -87,12 +87,12 @@ export class ClaimDetailDocumentsComponent extends ContainerBase<ClaimDetailDocu
     return (
       <ACC.Page>
         <ACC.Section>
-          <ACC.BackLink route={back}>Back</ACC.BackLink>
+          <ACC.BackLink route={back}>{`Back to ${costCategory.name}`}</ACC.BackLink>
         </ACC.Section>
         <ACC.ErrorSummary error={(editor && editor.error) || (deleteEditor && deleteEditor.error)} />
         {validationMessage}
-        <ACC.Projects.Title pageTitle={`${costCategory.name}`} project={project} />
-        <ACC.Section title={`${costCategory.name} documents`} subtitle={documents.length > 0 ? "All documents open in a new window." : ""}>
+        <ACC.Projects.Title pageTitle={`${costCategory.name} documents`}  project={project} />
+        <ACC.Section subtitle={documents.length > 0 ? "All documents open in a new window." : ""}>
           {documents.length > 0 ?
             <ACC.DocumentListWithDelete onRemove={(document) => this.onDelete(document)} documents={documents} qa="supporting-documents"/> :
             <p className="govuk-body-m govuk-!-margin-bottom-0 govuk-!-margin-right-2">No documents uploaded.</p> }
