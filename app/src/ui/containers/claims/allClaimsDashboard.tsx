@@ -82,7 +82,7 @@ class Component extends ContainerBase<Params, Data, {}> {
 
         return (
           <Acc.Renderers.SimpleString qa="notificationMessage">
-            The claim period for P{project.periodId} will open on <Acc.Renderers.FullDate value={date} />
+            There are no open claims. The next claim period begins <Acc.Renderers.FullDate value={date} />.
           </Acc.Renderers.SimpleString>
         );
     }
@@ -151,7 +151,7 @@ class Component extends ContainerBase<Params, Data, {}> {
       .filter(x => x.claims.length);
 
     if (!grouped.length) {
-      return null;
+      return <Acc.Renderers.SimpleString>There are no closed claims for this partner.</Acc.Renderers.SimpleString>;
     }
 
     return (

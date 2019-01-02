@@ -76,7 +76,7 @@ export class PrepareComponent extends ContainerBase<PrepareClaimParams, Data, Ca
 
     private renderContents(data: CombinedData) {
         const Form = ACC.TypedForm<ClaimDto>();
-        const commentsLabel = "Additional information (optional)";
+        const commentsLabel = "Additional information";
         const commentsHint = "These comments will be seen by your Monitoring Officer when they review your claim.";
         return (
             <ACC.Page>
