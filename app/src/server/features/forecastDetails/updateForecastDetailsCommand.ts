@@ -33,11 +33,11 @@ export class UpdateForecastDetailsCommand extends CommandBase<boolean> {
   }
 
   private async testValidation(context: IContext) {
+    const claims = await context.runQuery(new GetAllForPartnerQuery(this.partnerId));
     const claimDetails = await context.runQuery(new GetAllClaimDetailsByPartner(this.partnerId));
     const golCosts = await context.runQuery(new GetAllForecastsGOLCostsQuery(this.partnerId));
-    const costCategories = await context.runQuery(new GetCostCategoriesQuery());
     const showErrors = true;
-    const validation = new ForecastDetailsDtosValidator(this.forecasts, claimDetails, golCosts, costCategories, showErrors);
+    const validation = new ForecastDetailsDtosValidator(this.forecasts, claims, claimDetails, golCosts, showErrors);
 
     if (!validation.isValid) {
       throw new ValidationError(validation);
