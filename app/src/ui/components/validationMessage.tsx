@@ -20,17 +20,17 @@ const getMessageStyle = (messageType: MessageType): MessageStyle => {
   switch (messageType) {
     case "info": return {
       validationColour: colour.GOVUK_COLOUR_BLUE,
-      validationSymbol: "i",
+      validationSymbol: "/assets/images/icon-info.png",
       validationText: "Info",
     };
     case "error": return {
       validationColour: colour.GOVUK_ERROR_COLOUR,
-      validationSymbol: "!",
+      validationSymbol: "/assets/images/icon-alert.png",
       validationText: "Error",
     };
     case "success": return {
       validationColour: colour.GOVUK_COLOUR_GREEN,
-      validationSymbol: "✓",
+      validationSymbol: "/assets/images/icon-tick.png",
       validationText: "Success",
     };
   }
@@ -52,18 +52,15 @@ export const ValidationMessage: React.SFC<Props> = ({ message, key, messageType,
     };
 
     const textStyle = {
-      margin: 0,
-    };
-
-    const iconStyle = {
-      background: validationColour,
-      border: validationColour,
+      "margin": 0,
+      "display": "inline-flex",
+      "align-items": "center"
     };
 
     return (
         <div className="govuk-warning-text-background" style={backgroundStyle} data-qa={qa} data-qa-type={messageType}>
             <div className="govuk-warning-text" key={key} style={textStyle}>
-                <span className="govuk-warning-text__icon" aria-hidden="true" style={iconStyle} >{validationSymbol}</span>
+                <img src={validationSymbol} />
                 {messageType === "info" ?
                   <p className="govuk-warning-text__text">
               <span className="govuk-warning-text__assistive">{validationText}</span><span>{message}</span>

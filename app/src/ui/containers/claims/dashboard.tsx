@@ -2,12 +2,7 @@ import React from "react";
 import { ContainerBase, ReduxContainer } from "../containerBase";
 import { Pending } from "../../../shared/pending";
 import * as Actions from "../../redux/actions";
-import {
-  getCurrentClaim,
-  getCurrentClaimIarDocument, getCurrentClaimIarDocumentsDeleteEditor,
-  getCurrentClaimIarDocumentsEditor, getPartner,
-  getPreviousClaims, getProject
-} from "../../redux/selectors";
+import { getCurrentClaim, getCurrentClaimIarDocument, getCurrentClaimIarDocumentsDeleteEditor, getCurrentClaimIarDocumentsEditor, getPartner, getPreviousClaims, getProject } from "../../redux/selectors";
 import * as Acc from "../../components";
 import { PrepareClaimRoute } from "./prepare";
 import { ClaimsDetailsRoute } from "./details";
@@ -15,7 +10,7 @@ import { ReviewClaimRoute } from "./review";
 import { ClaimDto, ClaimStatus, ProjectDto } from "../../../types";
 import { IEditorStore } from "../../redux/reducers";
 import { DocumentUploadValidator } from "../../validators/documentUploadValidator";
-import {DateTime} from "luxon";
+import { DateTime } from "luxon";
 import { Results } from "../../validation/results";
 
 interface Params {
@@ -191,17 +186,23 @@ class Component extends ContainerBase<Params, Data, Callbacks> {
 
       return (
           <Acc.Renderers.SimpleString>
-            The claim period for P{project.periodId} will open on <Acc.Renderers.FullDate value={date} />
+            You have no open claims. The next claim period begins <Acc.Renderers.FullDate value={date} />.
           </Acc.Renderers.SimpleString>
       );
     }
 
     if (!isCurrentClaim && !data.length) {
-      return <Acc.Renderers.SimpleString>You do not have any previous claims for this project</Acc.Renderers.SimpleString>;
+      return <Acc.Renderers.SimpleString>You have not made any claims.</Acc.Renderers.SimpleString>;
     }
 
     return (
-      <ClaimTable.Table qa={tableQa} data={data}>
+      <ClaimTable.Table qa={tableQa} data={data} bodyRowClass={() => data[0].status === "Draft" ? "table__row--draft" : ""}>
+        <ClaimTable.Custom
+          paddingRight="0px"
+          header=""
+          qa="edit-icon"
+          value={() => data[0].status === "Draft" ? <img src="/assets/images/icon-edit.png"/> : null}
+        />
         <ClaimTable.Custom
           header=""
           qa="period"
