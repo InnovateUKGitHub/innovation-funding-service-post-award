@@ -35,7 +35,7 @@ class ProjectDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
     private renderContents({project, partners, contacts}: CombinedData) {
         const DetailsSection = ACC.TypedDetails<ProjectDto>();
 
-        const monitoringOfficer = contacts.find(x => x.role === "Monitoring officer");
+        const monitoringOfficer = contacts.find(x => x.role === "Monitoring Officer");
         const projectManager = contacts.find(x => x.role === "Project Manager");
 
         const links = [
