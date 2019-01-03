@@ -38,7 +38,7 @@ const testContactData: ProjectContactDto[] = [
   {
     id: "100",
     name: "Ted Tester",
-    role: "Finance contact",
+    role: "Finance Contact",
     email: "tedtester@nowhere.com",
     accountId: "321",
     projectId: "456",
@@ -46,7 +46,7 @@ const testContactData: ProjectContactDto[] = [
   {
     id: "101",
     name: "Dave Developer",
-    role: "Project manager",
+    role: "Project Manager",
     email: "davedeveloper@nowhere.com",
     accountId: "312",
     projectId: "456"
@@ -54,7 +54,7 @@ const testContactData: ProjectContactDto[] = [
   {
     id: "102",
     name: "Joe Bloggs",
-    role: "Finance contact",
+    role: "Finance Contact",
     email: "joebloggs@nowhere.com",
     accountId: "312",
     projectId: "456"
@@ -62,7 +62,7 @@ const testContactData: ProjectContactDto[] = [
   {
     id: "103",
     name: "Bob Baker",
-    role: "Finance contact",
+    role: "Finance Contact",
     email: "bobbaker@nowhere.com",
     accountId: "832",
     projectId: "456",
@@ -86,11 +86,11 @@ describe("Partners Table", () => {
     testForCorrectTableEntries("Industrial", "Academic", "Industrial", "col-partner-type");
   });
 
-  it("should display the correct finance contact for each project", () => {
+  it("should display the correct Finance Contact for each project", () => {
     testForCorrectTableEntries("Ted Tester", "Joe Bloggs", "Bob Baker", "col-fc-name");
   });
 
-  it("should display the email for each finance contact", () => {
+  it("should display the email for each Finance Contact", () => {
     testForCorrectTableEntries("tedtester@nowhere.com", "joebloggs@nowhere.com", "bobbaker@nowhere.com", "col-fc-email");
   });
 });
