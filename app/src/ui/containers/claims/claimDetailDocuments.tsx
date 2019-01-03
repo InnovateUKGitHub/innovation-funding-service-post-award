@@ -76,6 +76,18 @@ export class ClaimDetailDocumentsComponent extends ContainerBase<ClaimDetailDocu
     this.props.deleteFile(claimDetailKey, dto);
   }
 
+  private renderSection(documents: DocumentSummaryDto[]) {
+    return documents.length > 0 ? (
+      <ACC.Section subtitle="All documents open in a new window.">
+        <ACC.DocumentListWithDelete onRemove={(document) => this.onDelete(document)} documents={documents} qa="supporting-documents"/>
+      </ACC.Section>
+    ) : (
+      <ACC.Section>
+        <p className="govuk-body-m govuk-!-margin-bottom-0 govuk-!-margin-right-2">No documents uploaded.</p>
+      </ACC.Section>
+    );
+  }
+
   private renderContents({project, costCategories, documents, editor, deleteEditor}: CombinedData) {
     const back = EditClaimLineItemsRoute.getLink({ projectId: project.id, partnerId: this.props.partnerId, periodId: this.props.periodId, costCategoryId: this.props.costCategoryId });
     const costCategory = costCategories.find(x => x.id === this.props.costCategoryId)! || {};
@@ -92,11 +104,7 @@ export class ClaimDetailDocumentsComponent extends ContainerBase<ClaimDetailDocu
         <ACC.ErrorSummary error={(editor && editor.error) || (deleteEditor && deleteEditor.error)} />
         {validationMessage}
         <ACC.Projects.Title pageTitle={`${costCategory.name} documents`}  project={project} />
-        <ACC.Section subtitle={documents.length > 0 ? "All documents open in a new window." : ""}>
-          {documents.length > 0 ?
-            <ACC.DocumentListWithDelete onRemove={(document) => this.onDelete(document)} documents={documents} qa="supporting-documents"/> :
-            <p className="govuk-body-m govuk-!-margin-bottom-0 govuk-!-margin-right-2">No documents uploaded.</p> }
-        </ACC.Section>
+        {this.renderSection(documents)}
         <ACC.Section>
           <UploadForm.Form enctype="multipart/form-data" data={editor.data} onSubmit={() => this.onSave(editor.data)} onChange={(dto) => this.onChange(dto)}>
             <UploadForm.Fieldset heading="Upload">

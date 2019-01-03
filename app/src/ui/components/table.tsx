@@ -51,7 +51,6 @@ interface TableProps<T> {
   bodyRowClass?: (row: T, index: number) => string;
   bodyRowFlag?: (row: T, index: number) => "warning" | "info" | "error" | null;
   headerRowClass?: string;
-  backgroundColour?: string;
 }
 
 export class TableColumn<T> extends React.Component<InternalColumnProps<T>> {
@@ -154,7 +153,7 @@ const TableComponent = <T extends {}>(props: TableProps<T> & { data: T[]; valida
         </thead>
         <tbody className="govuk-table__body">
           {
-            contents.map((row, rowIndex) => <tr style={{background: props.backgroundColour}} className={classNames("govuk-table__row", rowClass[rowIndex], rowClasses[rowIndex])} key={rowIndex}>{row}</tr>)
+            contents.map((row, rowIndex) => <tr className={classNames("govuk-table__row", rowClass[rowIndex], rowClasses[rowIndex])} key={rowIndex}>{row}</tr>)
           }
         </tbody>
         {footers.length ? <tfoot>{footers}</tfoot> : null}
