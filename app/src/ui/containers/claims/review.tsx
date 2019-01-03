@@ -88,7 +88,7 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, Data, Callbacks> 
               <ACC.Loader
                 pending={this.props.forecastData}
                 render={(forecastData) => (
-                  <ACC.Claims.ForecastTable data={forecastData} hideValidation={true} projectPeriodId={this.props.periodId} />
+                  <ACC.Claims.ForecastTable data={forecastData} hideValidation={true} />
                 )}
               />
             </ACC.AccordionItem>
@@ -135,29 +135,32 @@ const initEditor = (dto: ClaimDto) => {
 
 const definition = ReduxContainer.for<ReviewClaimParams, Data, Callbacks>(ReviewComponent);
 
+// ToDo: sort out with data as its a mess!
 export const ReviewClaim = definition.connect({
   withData: (state, props): Data => {
-    const project = Selectors.getProject(props.projectId).getPending(state);
-    const partner = Selectors.getPartner(props.partnerId).getPending(state);
-    const costCategories = Selectors.getCostCategories().getPending(state);
-    const claim = Selectors.getClaim(props.partnerId, props.periodId).getPending(state);
+    const projectPending = Selectors.getProject(props.projectId).getPending(state);
+    const partnerPending = Selectors.getPartner(props.partnerId).getPending(state);
+    const costCategoriesPending = Selectors.getCostCategories().getPending(state);
+    const claimPending = Selectors.getClaim(props.partnerId, props.periodId).getPending(state);
+    const claimsPending = Selectors.findClaimsByPartner(props.partnerId).getPending(state);
     return {
-      project,
-      partner,
-      costCategories,
-      claim,
+      project: projectPending,
+      partner: partnerPending,
+      costCategories:costCategoriesPending,
+      claim: claimPending,
       claimDetailsSummary: Selectors.findClaimDetailsSummaryByPartnerAndPeriod(props.partnerId, props.periodId).getPending(state),
       editor: Selectors.getClaimEditor(props.partnerId, props.periodId).get(state, (dto) => initEditor(dto)),
       isClient: state.isClient,
       forecastData: Pending.combine(
-        project,
-        partner,
-        claim,
+        projectPending,
+        partnerPending,
+        claimPending,
+        claimsPending,
         Selectors.findClaimDetailsByPartner(props.partnerId).getPending(state),
         Selectors.findForecastDetailsByPartner(props.partnerId).getPending(state),
         Selectors.findGolCostsByPartner(props.partnerId).getPending(state),
-        costCategories,
-        (a, b, c, d, e, f, g) => ({ project: a, partner: b, claim: c, claimDetails: d, forecastDetails: e, golCosts: f, costCategories: g })
+        costCategoriesPending,
+        (project, partner, claim, claims, claimDetails, forecastDetails, golCosts, costCategories) => ({ project, partner, claim, claims, claimDetails, forecastDetails, golCosts, costCategories })
       )
     };
   },

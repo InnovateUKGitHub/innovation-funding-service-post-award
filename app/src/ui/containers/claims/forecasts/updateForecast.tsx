@@ -27,14 +27,13 @@ class UpdateForecastComponent extends ContainerBase<Params, PendingForecastData,
     this.props.saveAndReturn(false, this.props.projectId, this.props.partnerId, data);
   }
 
-  handleChange(data: ForecastDetailsDTO[], combined: ForecastData, periodId: number) {
+  handleChange(data: ForecastDetailsDTO[], combined: ForecastData) {
     this.props.onChange(this.props.partnerId, data, combined);
   }
 
   public renderContents(combined: ForecastData) {
     const Form = ACC.TypedForm<ForecastDetailsDTO[]>();
     const editor = combined.editor!;
-    const periodId = combined.project.periodId;
 
     return (
       <ACC.Page>
@@ -48,11 +47,11 @@ class UpdateForecastComponent extends ContainerBase<Params, PendingForecastData,
           {renderWarning(combined)}
           <Form.Form
             data={editor.data}
-            onChange={data => this.handleChange(data, combined, periodId)}
+            onChange={data => this.handleChange(data, combined)}
             onSubmit={() => this.saveAndReturn(combined)}
             qa="partner-forecast-form"
           >
-            <ACC.Claims.ForecastTable data={combined} projectPeriodId={periodId} />
+            <ACC.Claims.ForecastTable data={combined} />
             <Form.Fieldset>
               <Form.Submit>Submit</Form.Submit>
               <ACC.Claims.ClaimLastModified claim={combined.claim} />
@@ -69,8 +68,8 @@ const definition = ReduxContainer.for<Params, PendingForecastData, Callbacks>(Up
 const UpdateForecast = definition.connect({
   withData: (state, props) => withDataEditor(state, props),
   withCallbacks: dispatch => ({
-    onChange: (partnerId, data, combined) => dispatch(Actions.validateForecastDetails(partnerId, data, combined.claimDetails, combined.golCosts, combined.costCategories)),
-    saveAndReturn: (updateClaim, projectId, partnerId, data) => dispatch(Actions.saveForecastDetails(updateClaim, partnerId, data.editor!.data, data.claimDetails, data.golCosts, data.costCategories, () => dispatch(Actions.navigateTo(ViewForecastRoute.getLink({ projectId, partnerId })))))
+    onChange: (partnerId, data, combined) => dispatch(Actions.validateForecastDetails(partnerId, data, combined.claims, combined.claimDetails, combined.golCosts)),
+    saveAndReturn: (updateClaim, projectId, partnerId, data) => dispatch(Actions.saveForecastDetails(updateClaim, partnerId, data.editor!.data, data.claims, data.claimDetails, data.golCosts, () => dispatch(Actions.navigateTo(ViewForecastRoute.getLink({ projectId, partnerId })))))
   })
 });
 

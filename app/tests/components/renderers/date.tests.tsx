@@ -1,3 +1,4 @@
+// tslint:disable:no-duplicate-string
 import "jest";
 import React from "react";
 import { FullDate, FullDateTime, FullDateTimeWithSeconds, ShortDate, ShortDateTime } from "../../../src/ui/components/renderers/date";

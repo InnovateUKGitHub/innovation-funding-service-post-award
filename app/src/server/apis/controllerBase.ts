@@ -80,7 +80,8 @@ export abstract class ControllerBase<T> {
 
   private getErrorStatus(code: number) {
     switch (code) {
-      case (ErrorCode.VALIDATION_ERROR): return StatusCode.BAD_REQUEST;
+      case (ErrorCode.VALIDATION_ERROR):
+      case (ErrorCode.BAD_REQUEST_ERROR): return StatusCode.BAD_REQUEST;
       case (ErrorCode.SECURITY_ERROR): return StatusCode.SERVICE_UNAVAILABLE;
       case (ErrorCode.REQUEST_ERROR): return StatusCode.NOT_FOUND;
       case (ErrorCode.SERVER_ERROR):

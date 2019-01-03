@@ -10,6 +10,7 @@ import {
   getForecastDetailsEditor
 } from "../selectors";
 import { scrollToTheTop } from "../../../util/windowHelpers";
+import { ClaimDto } from "../../../types";
 
 export function loadForecastDetailsForPartner(partnerId: string) {
   return conditionalLoad(findForecastDetailsByPartner(partnerId), params => ApiClient.forecastDetails.getAllByPartnerId({partnerId, ...params}));
@@ -18,21 +19,21 @@ export function loadForecastDetailsForPartner(partnerId: string) {
 export function validateForecastDetails(
   partnerId: string,
   dto: ForecastDetailsDTO[],
+  claims: ClaimDto[],
   claimDetails: ClaimDetailsDto[],
   golCosts: GOLCostDto[],
-  costCategories: CostCategoryDto[],
   showErrors: boolean = false
 ): SyncThunk <ForecastDetailsDtosValidator, UpdateEditorAction> {
   return (dispatch, getState) => {
     const state = getState();
-    const selector = getForecastDetailsEditor(state, partnerId);
+    const selector = getForecastDetailsEditor(partnerId);
 
     if (showErrors === false) {
       const current = state.editors[selector.store][selector.key];
       showErrors = current && current.validator.showValidationErrors || false;
     }
 
-    const validator = new ForecastDetailsDtosValidator(dto, claimDetails, golCosts, costCategories, showErrors);
+    const validator = new ForecastDetailsDtosValidator(dto, claims, claimDetails, golCosts, showErrors);
     dispatch(updateEditorAction(selector.key, selector.store, dto, validator));
     return validator;
   };
@@ -42,15 +43,15 @@ export function saveForecastDetails(
   updateClaim: boolean,
   partnerId: string,
   forecasts: ForecastDetailsDTO[],
+  claims: ClaimDto[],
   claimDetails: ClaimDetailsDto[],
   golCosts: GOLCostDto[],
-  costCategories: CostCategoryDto[],
   onComplete: () => void
 ): AsyncThunk<void, DataLoadAction | EditorAction> {
   return (dispatch, getState) => {
     const state = getState();
-    const selector = getForecastDetailsEditor(state, partnerId);
-    const validatorThunk = validateForecastDetails(partnerId, forecasts, claimDetails, golCosts, costCategories, true);
+    const selector = getForecastDetailsEditor(partnerId);
+    const validatorThunk = validateForecastDetails(partnerId, forecasts, claims, claimDetails, golCosts, true);
     const validation = validatorThunk(dispatch, getState, null);
 
     if (!validation.isValid) {
