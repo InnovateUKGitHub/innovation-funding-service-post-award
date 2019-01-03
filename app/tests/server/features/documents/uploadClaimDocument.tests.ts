@@ -1,7 +1,6 @@
 import { TestContext } from "../../testContextProvider";
 import { UploadClaimDocumentCommand } from "../../../../src/server/features/documents/uploadClaimDocument";
 import { ClaimStatus, DocumentDescription } from "../../../../src/types/constants";
-import { ApiError } from "../../../../src/server/apis/ApiError";
 
 const validStatus = [
   ClaimStatus.DRAFT,
@@ -13,7 +12,16 @@ const validStatus = [
   ClaimStatus.INNOVATE_QUERIED,
   ClaimStatus.REVIEWING_FORECASTS_FOLLOWING_INNOVATE_QUERY
 ];
-const invalidStatus = Object.keys(ClaimStatus).filter((status: string) => validStatus.indexOf(ClaimStatus[status]) < 0).map(status => ClaimStatus[status]);
+
+const invalidStatus: ClaimStatus[] = [];
+// tslint:disable forin
+for(const key in ClaimStatus) {
+  const status = ClaimStatus[key] as ClaimStatus;
+  if(validStatus.indexOf(status) === -1) {
+    invalidStatus.push(status);
+  }
+}
+
 const file = {
   fileName: "fileName.txt",
   content: "Some content",
@@ -36,8 +44,9 @@ describe("UploadClaimDocumentCommand", () => {
       };
 
       const command = new UploadClaimDocumentCommand(claimKey, file);
-      await expect(context.runCommand(command)).rejects.toThrow(ApiError);
+      await expect(context.runCommand(command)).rejects.toThrow();
     });
+
     describe("When the claim status is AWAITING_IAR", () => {
       it("should update the claim status to AWAITING_IUK_APPROVAL", async () => {
         const context = new TestContext();
@@ -100,6 +109,7 @@ describe("UploadClaimDocumentCommand", () => {
         });
       });
     });
+
     describe("when the claim status does not allow an IAR upload", async () => {
       invalidStatus.forEach(status => {
         it("should not upload a claim document with an IAR description when the claim is not in a valid status", async () => {
@@ -116,7 +126,7 @@ describe("UploadClaimDocumentCommand", () => {
           };
 
           const command = new UploadClaimDocumentCommand(claimKey, file);
-          await expect(context.runCommand(command)).rejects.toThrow(ApiError);
+          await expect(context.runCommand(command)).rejects.toThrow();
         });
       });
     });

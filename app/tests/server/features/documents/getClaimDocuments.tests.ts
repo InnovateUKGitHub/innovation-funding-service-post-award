@@ -23,7 +23,7 @@ describe("GetClaimDocumentQuery", () => {
     };
 
     const query = new GetClaimDocumentsQuery(claimKey);
-    const docs = await context.runCommand(query);
+    const docs = await context.runQuery(query);
     expect(docs).toHaveLength(2);
   });
   it("should return only the relevant documents when there is a filter", async () => {
@@ -45,7 +45,7 @@ describe("GetClaimDocumentQuery", () => {
       periodId: claim.Acc_ProjectPeriodNumber__c
     };
     const query = new GetClaimDocumentsQuery(claimKey, { description: DocumentDescription.IAR });
-    const docs = await context.runCommand(query);
+    const docs = await context.runQuery(query);
     expect(docs).toHaveLength(1);
     expect(docs[0].description).toBe(DocumentDescription.IAR);
   });

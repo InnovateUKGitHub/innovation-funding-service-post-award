@@ -30,4 +30,3 @@ describe("dataLoadAction", () => {
     expect(result.payload).toMatchObject(expected);
   });
 });
-

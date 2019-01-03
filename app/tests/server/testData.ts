@@ -1,6 +1,7 @@
+// tslint:disable:no-duplicate-string
 import * as Repositories from "../../src/server/repositories";
 import { ITestRepositories } from "./testRepositories";
-import { ClaimStatus, DocumentDescription } from "../../src/types";
+import { ClaimStatus } from "../../src/types";
 
 export class TestData {
   constructor(private repositories: ITestRepositories) {
@@ -12,9 +13,9 @@ export class TestData {
   }
 
   public createCostCategory(update?: (item: Repositories.ISalesforceCostCategory) => void): Repositories.ISalesforceCostCategory {
-    let seed = this.repositories.costCategories.Items.length + 1;
+    const seed = this.repositories.costCategories.Items.length + 1;
 
-    let newItem: Repositories.ISalesforceCostCategory = {
+    const newItem: Repositories.ISalesforceCostCategory = {
       Id: `CostCat${seed}`,
       Acc_CostCategoryName__c: `Cost Category ${seed}`,
       Acc_DisplayOrder__c: seed,
@@ -24,7 +25,7 @@ export class TestData {
       Acc_HintText__c: `Cost Category hint ${seed}`,
     };
 
-    update && update(newItem);
+    if(!!update) update(newItem);
 
     this.repositories.costCategories.Items.push(newItem);
 
@@ -32,9 +33,9 @@ export class TestData {
   }
 
   public createContact(update?: (item: Repositories.ISalesforceContact) => void) {
-    let seed = this.repositories.contacts.Items.length + 1;
+    const seed = this.repositories.contacts.Items.length + 1;
 
-    let newItem = {
+    const newItem = {
       Id: "Contact" + seed,
       Salutation: "Mr",
       LastName: "James" + seed,
@@ -46,7 +47,7 @@ export class TestData {
       MailingPostalCode: "",
     } as Repositories.ISalesforceContact;
 
-    update && update(newItem);
+    if(!!update) update(newItem);
 
     this.repositories.contacts.Items.push(newItem);
 
@@ -54,14 +55,14 @@ export class TestData {
   }
 
   public createProject(update?: (item: Repositories.ISalesforceProject) => void) {
-    let seed = this.repositories.projects.Items.length + 1;
+    const seed = this.repositories.projects.Items.length + 1;
 
-    let newItem = {
+    const newItem = {
       Id: "Project" + seed,
       Acc_ProjectTitle__c: "Project " + seed
     } as Repositories.ISalesforceProject;
 
-    update && update(newItem);
+    if(!!update) update(newItem);
 
     this.repositories.projects.Items.push(newItem);
 
@@ -69,7 +70,7 @@ export class TestData {
   }
 
   public createPartner(project?: Repositories.ISalesforceProject, update?: (item: Repositories.ISalesforcePartner) => void) {
-    let seed = this.repositories.partners.Items.length + 1;
+    const seed = this.repositories.partners.Items.length + 1;
     project = project || this.createProject();
 
     const newItem = {
@@ -89,7 +90,7 @@ export class TestData {
       Acc_Award_Rate__c: 50,
     } as Repositories.ISalesforcePartner;
 
-    update && update(newItem);
+    if(!!update) update(newItem);
 
     this.repositories.partners.Items.push(newItem);
 
@@ -101,9 +102,9 @@ export class TestData {
     project = project || this.createProject();
     partner = partner || this.createPartner(project);
 
-    let seed = this.repositories.projectContacts.Items.length + 1;
+    const seed = this.repositories.projectContacts.Items.length + 1;
 
-    let newItem: Repositories.ISalesforceProjectContact = {
+    const newItem: Repositories.ISalesforceProjectContact = {
       Id: `ProjectContact${seed}`,
       Acc_ProjectId__c: project.Id,
       Acc_AccountId__c: partner && partner.Acc_AccountId__r && partner.Acc_AccountId__r.Id,
@@ -137,7 +138,7 @@ export class TestData {
       id = `Claim_${seed}`;
     }
 
-        const newItem: Repositories.ISalesforceClaim = {
+    const newItem: Repositories.ISalesforceClaim = {
             Id: id,
             Acc_ProjectPeriodNumber__c: periodId,
             Acc_ProjectParticipant__r: {
@@ -169,7 +170,7 @@ export class TestData {
 
   }
 
-  public createClaimDetail(costCategory: Repositories.ISalesforceCostCategory, partner?: Repositories.ISalesforcePartner, periodId?: number, update?: (item: Repositories.ISalesforceClaimDetails) => void): Repositories.ISalesforceClaimDetails {
+  public createClaimDetail(costCategory?: Repositories.ISalesforceCostCategory, partner?: Repositories.ISalesforcePartner, periodId?: number, update?: (item: Repositories.ISalesforceClaimDetails) => void): Repositories.ISalesforceClaimDetails {
 
     costCategory = costCategory || this.createCostCategory();
     partner = partner || this.createPartner();

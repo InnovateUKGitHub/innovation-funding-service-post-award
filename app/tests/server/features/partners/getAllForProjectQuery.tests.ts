@@ -1,15 +1,15 @@
 import { TestContext } from "../../testContextProvider";
-import { GetAllForProjectQuery } from '../../../../src/server/features/partners/getAllForProjectQuery';
+import { GetAllForProjectQuery } from "../../../../src/server/features/partners/getAllForProjectQuery";
 import { range } from "../../../../src/shared/range";
 
 describe("getAllForProjectQuery", () => {
     it("when project has partner expect item returned", async () => {
-        let context = new TestContext();
+        const context = new TestContext();
 
-        let project = context.testData.createProject();
-        let partner = context.testData.createPartner(project);
+        const project = context.testData.createProject();
+        const partner = context.testData.createPartner(project);
 
-        let result = await context.runQuery(new GetAllForProjectQuery(project.Id));
+        const result = await context.runQuery(new GetAllForProjectQuery(project.Id));
 
         expect(result).not.toBe(null);
         expect(result.length).toBe(1);
@@ -21,61 +21,61 @@ describe("getAllForProjectQuery", () => {
     });
 
     it("when pathers only on other project expect empty", async () => {
-        let context = new TestContext();
+        const context = new TestContext();
 
-        let project1 = context.testData.createProject();
-        let project2 = context.testData.createProject();
+        const project1 = context.testData.createProject();
+        const project2 = context.testData.createProject();
         context.testData.createPartner(project1);
 
-        let result = await context.runQuery(new GetAllForProjectQuery(project2.Id));
+        const result = await context.runQuery(new GetAllForProjectQuery(project2.Id));
 
         expect(result).not.toBe(null);
         expect(result.length).toBe(0);
     });
 
     it("when role is 'Project Lead' expect isLead true", async () => {
-        let context = new TestContext();
+        const context = new TestContext();
 
-        let project = context.testData.createProject();
-        let notLeadPartner = context.testData.createPartner(project, (x) => x.Acc_ProjectRole__c = "Other");
-        let leadPartner = context.testData.createPartner(project, (x) => x.Acc_ProjectRole__c = "Project Lead");
+        const project = context.testData.createProject();
+        const notLeadPartner = context.testData.createPartner(project, (x) => x.Acc_ProjectRole__c = "Other");
+        const leadPartner = context.testData.createPartner(project, (x) => x.Acc_ProjectRole__c = "Project Lead");
 
-        let result = await context.runQuery(new GetAllForProjectQuery(project.Id));
+        const result = await context.runQuery(new GetAllForProjectQuery(project.Id));
 
         expect(result).not.toBe(null);
         expect(result.length).toBe(2);
-        expect(result.find(x => x.id == leadPartner.Id).isLead).toBe(true);
-        expect(result.find(x => x.id == notLeadPartner.Id).isLead).toBe(false);
+        expect(result.find(x => x.id === leadPartner.Id)!.isLead).toBe(true);
+        expect(result.find(x => x.id === notLeadPartner.Id)!.isLead).toBe(false);
     });
 
     it("sorts by 'Project Lead' and then alpabetical", async () => {
-        let context = new TestContext();
-        let project = context.testData.createProject();
-        let partners = context.testData.range(10, () => context.testData.createPartner(project));
+        const context = new TestContext();
+        const project = context.testData.createProject();
+        const partners = context.testData.range(10, () => context.testData.createPartner(project));
 
         partners
-            .forEach((p,i) =>{
-                p.Acc_AccountId__r.Name = "Partner_" + String.fromCharCode(65 + partners.length - 1 - i); //65 = A
+            .forEach((p,i) => {
+                p.Acc_AccountId__r.Name = "Partner_" + String.fromCharCode(65 + partners.length - 1 - i); // 65 = A
                 p.Acc_ProjectRole__c = "Other";
             });
 
-        //Set partner B, D to be lead
+        // Set partner B, D to be lead
         partners
             .filter(x => x.Acc_AccountId__r.Name === "Partner_B" || x.Acc_AccountId__r.Name === "Partner_D")
             .forEach(x => x.Acc_ProjectRole__c = "Project Lead");
 
-        let result = await context.runQuery(new GetAllForProjectQuery(project.Id));
+        const result = await context.runQuery(new GetAllForProjectQuery(project.Id));
 
-        let expected = [
-            "Partner_B", 
-            "Partner_D", 
-            "Partner_A", 
-            "Partner_C", 
-            "Partner_E", 
-            "Partner_F", 
-            "Partner_G", 
-            "Partner_H", 
-            "Partner_I", 
+        const expected = [
+            "Partner_B",
+            "Partner_D",
+            "Partner_A",
+            "Partner_C",
+            "Partner_E",
+            "Partner_F",
+            "Partner_G",
+            "Partner_H",
+            "Partner_I",
             "Partner_J"
         ];
 
@@ -83,29 +83,29 @@ describe("getAllForProjectQuery", () => {
     });
 
     it("sorts no name to bottom of list", async () => {
-        let context = new TestContext();
-        let project = context.testData.createProject();
-        let partners = context.testData.range(10, () => context.testData.createPartner(project));
+        const context = new TestContext();
+        const project = context.testData.createProject();
+        const partners = context.testData.range(10, () => context.testData.createPartner(project));
 
         partners
-            .forEach((p,i) =>{
-                p.Acc_AccountId__r.Name = "Partner_" + String.fromCharCode(65 + partners.length - 1 - i); //65 = A
+            .forEach((p,i) => {
+                p.Acc_AccountId__r.Name = "Partner_" + String.fromCharCode(65 + partners.length - 1 - i); // 65 = A
             });
 
-        //Set partner B, D, E, to be no name
+        // Set partner B, D, E, to be no name
         partners
             .filter(x => x.Acc_AccountId__r.Name === "Partner_B" || x.Acc_AccountId__r.Name === "Partner_D"|| x.Acc_AccountId__r.Name === "Partner_E")
-            .forEach(x => x.Acc_AccountId__r.Name = null);
+            .forEach(x => x.Acc_AccountId__r.Name = null!);
 
-        let result = await context.runQuery(new GetAllForProjectQuery(project.Id));
+        const result = await context.runQuery(new GetAllForProjectQuery(project.Id));
 
-        let expected = [
-            "Partner_A", 
-            "Partner_C", 
-            "Partner_F", 
-            "Partner_G", 
-            "Partner_H", 
-            "Partner_I", 
+        const expected = [
+            "Partner_A",
+            "Partner_C",
+            "Partner_F",
+            "Partner_G",
+            "Partner_H",
+            "Partner_I",
             "Partner_J",
             null,
             null,

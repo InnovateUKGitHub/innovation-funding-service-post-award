@@ -1,4 +1,4 @@
-import { CommandBase, IContext, ICaches, IRunnable, ISyncRunnable, QueryBase, SyncQueryBase, SyncCommandBase } from "../../src/server/features/common/context";
+import { CommandBase, ICaches, IContext, IRunnable, ISyncRunnable, QueryBase, SyncCommandBase, SyncQueryBase } from "../../src/server/features/common/context";
 import { createTestRepositories, ITestRepositories } from "./testRepositories";
 import { TestData } from "./testData";
 import { TestClock } from "./testClock";
@@ -33,7 +33,7 @@ export class TestContext implements IContext {
 
     public caches: ICaches = {
         costCategories: new Cache<CostCategoryDto[]>(1)
-    }
+    };
 
     public runQuery<TResult>(query: QueryBase<TResult>): Promise<TResult> {
         return ((query as any) as IRunnable<TResult>).Run(this);
