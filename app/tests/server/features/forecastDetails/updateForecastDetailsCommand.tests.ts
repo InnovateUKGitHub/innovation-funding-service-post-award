@@ -31,6 +31,7 @@ describe("UpdateForecastDetailsCommand", () => {
     const costCat = testData.createCostCategory();
     const periodId = 2;
     const profileDetail = testData.createProfileDetail(costCat, partner, periodId, x => x.Acc_LatestForecastCost__c = 123);
+    testData.createClaim(partner, periodId - 1, x => x.Acc_TotalCostsSubmitted__c = 1000);
     testData.createClaimDetail(costCat, partner, periodId - 1, x => x.Acc_PeriodCostCategoryTotal__c = 1000);
     testData.createProfileTotalCostCategory(costCat, partner, 1500);
 

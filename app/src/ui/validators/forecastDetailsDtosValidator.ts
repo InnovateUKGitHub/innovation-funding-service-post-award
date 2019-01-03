@@ -1,26 +1,26 @@
 import * as Validation from "./common";
 import { Results } from "../validation/results";
 import { Result } from "../validation/result";
+import { ClaimDto } from "../../types";
 
 export class ForecastDetailsDtosValidator extends Results<ForecastDetailsDTO[]>  {
   public readonly items = Validation.optionalChild(this, this.model, x => new ForecastDetailsDtoValidator(x));
   public totalCosts: Result;
 
   constructor(
-    private forecasts: ForecastDetailsDTO[],
-    private claimDetails: ClaimDetailsDto[],
-    private golCosts: GOLCostDto[],
-    private costCategories: CostCategoryDto[],
-    private showErrors: boolean
+    forecasts: ForecastDetailsDTO[],
+    claims: ClaimDto[],
+    claimDetails: ClaimDetailsDto[],
+    golCosts: GOLCostDto[],
+    showErrors: boolean
   ) {
     super(forecasts, showErrors);
 
     // infer period id from all the claim details we have
-    const periodId           = claimDetails.reduce((prev, item) => item.periodId > prev ? item.periodId : prev, 0);
-    const costCategoryIds    = costCategories.filter(x => x.organistionType === "Industrial").map(x => x.id);
-    const totalGolCosts      = golCosts.reduce(totalReducer, 0);
-    const totalClaimCosts    = claimDetails.filter(x => costCategoryIds.indexOf(x.costCategoryId) !== -1 && x.periodId <= periodId).reduce(totalReducer, 0);
-    const totalForecastCosts = forecasts.filter(x => x.periodId > periodId).reduce(totalReducer, 0);
+    const periodId           = claims.reduce((prev, item) => item.periodId > prev ? item.periodId : prev, 0);
+    const totalGolCosts      = golCosts.reduce((total, current) => total += current.value, 0);
+    const totalClaimCosts    = claimDetails.filter(x => x.periodId <= periodId).reduce((total, current) => total += current.value, 0);
+    const totalForecastCosts = forecasts.filter(x => x.periodId > periodId).reduce((total, current) => total += current.value, 0);
 
     this.totalCosts = Validation.isTrue(this, totalForecastCosts + totalClaimCosts <= totalGolCosts, "You can not submit a claim if your forecasts and costs total is higher than your grant offer letter costs. You will be contacted by your Monitoring Officer if this is not amended.");
   }
