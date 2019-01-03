@@ -21,6 +21,7 @@ export interface ForecastData {
   project: ProjectDto;
   partner: PartnerDto;
   claim: ClaimDto | null;
+  claims: ClaimDto[];
   claimDetails: ClaimDetailsDto[];
   forecastDetails: ForecastDetailsDTO[];
   golCosts: GOLCostDto[];
@@ -44,17 +45,23 @@ export const forecastDataLoadActions = (p: Params) => [
 ];
 
 export const withDataEditor = (state: RootState, props: Params): PendingForecastData => {
-  const combined = Pending.combine(
+  // not sure why but seems that the pending may now have too many overloads!!!!
+  // ToDo: Really need to look at this data load and make it more efficient and require less data!
+  const pendingData = Pending.combine(
     Selectors.getProject(props.projectId).getPending(state),
     Selectors.getPartner(props.partnerId).getPending(state),
     Selectors.getCurrentClaim(state, props.partnerId),
+    Selectors.findClaimsByPartner(props.partnerId).getPending(state),
     Selectors.findClaimDetailsByPartner(props.partnerId).getPending(state),
     Selectors.findForecastDetailsByPartner(props.partnerId).getPending(state),
     Selectors.findGolCostsByPartner(props.partnerId).getPending(state),
     Selectors.getCostCategories().getPending(state),
-    Selectors.getForecastDetailsEditor(props.partnerId).get(state),
-    (a, b, c, d, e, f, g, h) => ({ project: a, partner: b, claim: c, claimDetails: d, forecastDetails: e, golCosts: f, costCategories: g, editor: h })
+    (project, partner, claim, claims, claimDetails, forecastDetails, golCosts, costCategories) => ({project, partner, claim, claims, claimDetails, forecastDetails, golCosts, costCategories})
   );
+
+  const pendingEditor = Selectors.getForecastDetailsEditor(props.partnerId).get(state).then(x => ({editor: x!}));
+
+  const combined = Pending.combine(pendingData, pendingEditor, (data, editor) => ({...data, ...editor}));
 
   return { combined };
 };
