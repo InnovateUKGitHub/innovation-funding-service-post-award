@@ -1,7 +1,8 @@
+// tslint:disable:no-duplicate-string
 import "jest";
 import React from "react";
-import {TypedDetails, DualDetails} from "../../src/ui/components/details";
-import Enzyme, { shallow, mount } from "enzyme";
+import {DualDetails, TypedDetails} from "../../src/ui/components/details";
+import Enzyme, { mount, shallow } from "enzyme";
 import Adapter from "enzyme-adapter-react-16";
 
 Enzyme.configure({ adapter: new Adapter() });

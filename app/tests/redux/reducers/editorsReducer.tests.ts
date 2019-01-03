@@ -9,7 +9,7 @@ const testSubmitError = () => {
   it("should add the editor error to the store", () => {
     const originalState = getRootState();
     const action = {
-      type: "EDITOR_SUBMIT_ERROR" as "EDITOR_SUBMIT_ERROR",
+      type: "EDITOR_SUBMIT_ERROR" as any,
       payload: {
         id: "1",
         store: "claim",
@@ -29,7 +29,7 @@ const testSubmitError = () => {
   it("should strip out the original error", () => {
     const originalState = getRootState();
     const action = {
-      type: "EDITOR_SUBMIT_ERROR" as "EDITOR_SUBMIT_ERROR",
+      type: "EDITOR_SUBMIT_ERROR" as any,
       payload: {
         id: "1",
         store: "claim",
@@ -54,7 +54,7 @@ const testSubmitError = () => {
       }
     };
     const action = {
-      type: "EDITOR_SUBMIT_ERROR" as "EDITOR_SUBMIT_ERROR",
+      type: "EDITOR_SUBMIT_ERROR" as any,
       payload: {
         id: "1",
         store: "claim",
@@ -83,7 +83,7 @@ const testSubmitError = () => {
       }
     };
     const action = {
-      type: "EDITOR_SUBMIT_ERROR" as "EDITOR_SUBMIT_ERROR",
+      type: "EDITOR_SUBMIT_ERROR" as any,
       payload: {
         id: "2",
         store: "claim",
@@ -105,7 +105,7 @@ const testSubmitError = () => {
       }
     };
     const action = {
-      type: "EDITOR_SUBMIT_ERROR" as "EDITOR_SUBMIT_ERROR",
+      type: "EDITOR_SUBMIT_ERROR" as any,
       payload: {
         id: "2",
         store: "testStore",
@@ -130,7 +130,7 @@ const testSubmitSuccess = () => {
       }
     };
     const action = {
-      type: "EDITOR_SUBMIT_SUCCESS" as "EDITOR_SUBMIT_SUCCESS",
+      type: "EDITOR_SUBMIT_SUCCESS" as any,
       payload: {
         id: "1",
         store: "claim"
@@ -151,7 +151,7 @@ const testSubmitSuccess = () => {
       }
     };
     const action = {
-      type: "EDITOR_SUBMIT_SUCCESS" as "EDITOR_SUBMIT_SUCCESS",
+      type: "EDITOR_SUBMIT_SUCCESS" as any,
       payload: {
         id: "2",
         store: "claim"
@@ -171,7 +171,7 @@ const testSubmitSuccess = () => {
       }
     };
     const action = {
-      type: "EDITOR_SUBMIT_SUCCESS" as "EDITOR_SUBMIT_SUCCESS",
+      type: "EDITOR_SUBMIT_SUCCESS" as any,
       payload: {
         id: "2",
         store: "testStore",
@@ -195,7 +195,7 @@ const testEditorUpdate = () => {
       }
     };
     const action = {
-      type: "UPDATE_EDITOR" as "UPDATE_EDITOR",
+      type: "UPDATE_EDITOR" as any,
       payload: {
         id: "1",
         store: "claim",
@@ -218,7 +218,7 @@ const testEditorUpdate = () => {
       }
     };
     const action = {
-      type: "UPDATE_EDITOR" as "UPDATE_EDITOR",
+      type: "UPDATE_EDITOR" as any,
       payload: {
         id: "1",
         store: "claim",

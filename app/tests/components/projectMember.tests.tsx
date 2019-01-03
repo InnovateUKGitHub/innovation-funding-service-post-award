@@ -1,3 +1,4 @@
+// tslint:disable:no-duplicate-string
 import "jest";
 import React from "react";
 import { ProjectMember } from "../../src/ui/components/projectMember";

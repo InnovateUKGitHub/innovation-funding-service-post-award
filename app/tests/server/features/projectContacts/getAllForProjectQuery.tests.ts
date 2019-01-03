@@ -1,19 +1,19 @@
 import { TestContext } from "../../testContextProvider";
-import { GetAllForProjectQuery } from '../../../../src/server/features/projectContacts/getAllForProjectQuery';
+import { GetAllForProjectQuery } from "../../../../src/server/features/projectContacts/getAllForProjectQuery";
 
 describe("getAllForProjectQuery", () => {
     it("when project has contact expect item returned", async () => {
-        let context = new TestContext();
+        const context = new TestContext();
 
-        let project = context.testData.createProject();
-        let partner = context.testData.createPartner(project);
-        let projectContact = context.testData.createProjectContact(project, partner, x=> {
+        const project = context.testData.createProject();
+        const partner = context.testData.createPartner(project);
+        const projectContact = context.testData.createProjectContact(project, partner, x=> {
             x.Acc_ContactId__r = { Id : "ExpectedContactId", Name:"ExpectedContactName"};
             x.Acc_EmailOfSFContact__c = "ExpectedEmail";
             x.Acc_Role__c = "ExpectedRole";
         });
 
-        let result = await context.runQuery(new GetAllForProjectQuery(project.Id));
+        const result = await context.runQuery(new GetAllForProjectQuery(project.Id));
 
         expect(result).not.toBe(null);
         expect(result.length).toBe(1);
@@ -26,13 +26,13 @@ describe("getAllForProjectQuery", () => {
     });
 
     it("when contact only on other project expect empty", async () => {
-        let context = new TestContext();
-        
-        let project1 = context.testData.createProject();
-        let project2 = context.testData.createProject();
+        const context = new TestContext();
+
+        const project1 = context.testData.createProject();
+        const project2 = context.testData.createProject();
         context.testData.createProjectContact(project1);
 
-        let result = await context.runQuery(new GetAllForProjectQuery(project2.Id));
+        const result = await context.runQuery(new GetAllForProjectQuery(project2.Id));
 
         expect(result).not.toBe(null);
         expect(result.length).toBe(0);

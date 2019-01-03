@@ -33,8 +33,8 @@ describe("Table", () => {
     const data = ["Item"];
     const TableComponent  = TypedTable<string>();
 
-      const wrapper = shallow(<TableComponent.Table data={data} qa=""><TableComponent.String header="The header" value={x => "Content"} qa="val"/></TableComponent.Table>);
-      expect(wrapper.html()).toContain(`<th class="govuk-table__header" scope="col">The header</th>`);
+    const wrapper = shallow(<TableComponent.Table data={data} qa=""><TableComponent.String header="The header" value={x => "Content"} qa="val"/></TableComponent.Table>);
+    expect(wrapper.html()).toContain(`<th class="govuk-table__header" scope="col">The header</th>`);
   });
 
   it("should render tr as expected", () => {

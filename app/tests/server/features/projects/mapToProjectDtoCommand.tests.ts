@@ -1,3 +1,4 @@
+// tslint:disable:no-identical-functions no-duplicate-string
 import "jest";
 import { TestContext } from "../../testContextProvider";
 import { MapToProjectDtoCommand } from "../../../../src/server/features/projects/mapToProjectDto";
@@ -6,11 +7,11 @@ import { ClaimFrequency, ProjectDto } from "../../../../src/types";
 
 describe("MapToProjectDtoCommand", () => {
     it("when valid expect mapping", async () => {
-        let context = new TestContext();
+        const context = new TestContext();
 
         context.clock.setDate("2008/12/31");
 
-        let expected: ProjectDto = {
+        const expected: ProjectDto = {
             id: "Expected Id",
             title: "Expected title",
             startDate: new Date("2008/01/01"),
@@ -28,7 +29,7 @@ describe("MapToProjectDtoCommand", () => {
             periodEndDate: new Date("2008/12/31")
           };
 
-        let salesforce = context.testData.createProject(x => {
+        const salesforce = context.testData.createProject(x => {
             x.Id = expected.id;
             x.Acc_ProjectSummary__c = expected.summary;
             x.Acc_ProjectTitle__c = expected.title;
@@ -40,39 +41,39 @@ describe("MapToProjectDtoCommand", () => {
             x.Acc_TotalProjectCosts__c = expected.costsClaimedToDate;
           });
 
-        let result = await context.runCommand(new MapToProjectDtoCommand(salesforce));
+        const result = await context.runCommand(new MapToProjectDtoCommand(salesforce));
 
         expect(result).toMatchObject(expected);
     });
 
     it("when ifs application url configured expect full url", async () => {
-        let context = new TestContext();
+        const context = new TestContext();
         context.config.ifsApplicationUrl = "https://ifs.application.url/application/competition/<<Acc_ProjectNumber__c>>/project/<<Acc_IFSApplicationId__c>>";
 
-        let salesforce = context.testData.createProject(x => {
+        const salesforce = context.testData.createProject(x => {
             x.Acc_ProjectSource__c = "IFS";
             x.Acc_IFSApplicationId__c = 1;
             x.Acc_ProjectNumber__c = "30000";
         });
 
-        let result = await context.runCommand(new MapToProjectDtoCommand(salesforce));
+        const result = await context.runCommand(new MapToProjectDtoCommand(salesforce));
 
-        expect(result.applicationUrl).toBe("https://ifs.application.url/application/competition/30000/project/1")
+        expect(result.applicationUrl).toBe("https://ifs.application.url/application/competition/30000/project/1");
     });
 
     it("when ifs grant letter url configured expect full url", async () => {
-        let context = new TestContext();
+        const context = new TestContext();
         context.config.ifsGrantLetterUrl = "https://ifs.application.url/grantletter/competition/<<Acc_ProjectNumber__c>>/project/<<Acc_IFSApplicationId__c>>";
 
-        let salesforce = context.testData.createProject(x => {
+        const salesforce = context.testData.createProject(x => {
             x.Acc_ProjectSource__c = "IFS";
             x.Acc_IFSApplicationId__c = 1;
             x.Acc_ProjectNumber__c = "30000";
         });
 
-        let result = await context.runCommand(new MapToProjectDtoCommand(salesforce));
+        const result = await context.runCommand(new MapToProjectDtoCommand(salesforce));
 
-        expect(result.grantOfferLetterUrl).toBe("https://ifs.application.url/grantletter/competition/30000/project/1")
+        expect(result.grantOfferLetterUrl).toBe("https://ifs.application.url/grantletter/competition/30000/project/1");
     });
 
     it("ClaimFrequency should map correct - Quarterly", async () => {
@@ -142,11 +143,11 @@ describe("MapToProjectDtoCommand", () => {
       }
     });
 
-  it("Gol Costs should be returned", async () => {
+    it("Gol Costs should be returned", async () => {
     const context = new TestContext();
 
     const salesforce = context.testData.createProject(x => {
-      x.Acc_GOLTotalCostAwarded__c = 100000
+      x.Acc_GOLTotalCostAwarded__c = 100000;
     });
 
     const result = await context.runCommand(new MapToProjectDtoCommand(salesforce));
@@ -155,11 +156,11 @@ describe("MapToProjectDtoCommand", () => {
 
   });
 
-  it("Claimed Costs should be returned", async () => {
+    it("Claimed Costs should be returned", async () => {
     const context = new TestContext();
 
     const salesforce = context.testData.createProject(x => {
-      x.Acc_TotalProjectCosts__c = 500000
+      x.Acc_TotalProjectCosts__c = 500000;
     });
 
     const result = await context.runCommand(new MapToProjectDtoCommand(salesforce));

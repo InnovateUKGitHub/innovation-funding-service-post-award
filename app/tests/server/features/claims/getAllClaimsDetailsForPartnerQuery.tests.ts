@@ -34,7 +34,7 @@ describe("claimDetails/getAllByPartner", () => {
     const context = new TestContext();
     const costCat = context.testData.createCostCategory();
     const partner = context.testData.createPartner();
-    
+
     context.testData.createClaimDetail(costCat, partner);
     context.testData.createClaimDetail(costCat, partner);
     context.testData.createClaimDetail(costCat, partner);
