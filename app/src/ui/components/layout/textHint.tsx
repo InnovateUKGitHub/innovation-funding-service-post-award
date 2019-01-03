@@ -1,5 +1,5 @@
 import React from "react";
-import * as colour from "../../styles/colours"
+import * as colour from "../../styles/colours";
 
 export const TextHint: React.SFC<{ text: string|null}> = ({ text }) => {
   if(!text) {
