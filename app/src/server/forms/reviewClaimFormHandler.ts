@@ -1,4 +1,4 @@
-import { FormHandlerBase } from "./formHandlerBase";
+import { FormHandlerBase, IFormBody, IFormButton } from "./formHandlerBase";
 import { AllClaimsDashboardRoute, ReviewClaimParams, ReviewClaimRoute,  } from "../../ui/containers";
 import { ClaimDto, ClaimStatus } from "../../types";
 import { IContext } from "../features/common/context";
@@ -9,10 +9,10 @@ import { Results } from "../../ui/validation/results";
 
 export class ReviewClaimFormHandler extends FormHandlerBase<ReviewClaimParams, ClaimDto> {
     constructor() {
-        super(ReviewClaimRoute);
+        super(ReviewClaimRoute, ["default"]);
     }
 
-    protected async getDto(context: IContext, params: ReviewClaimParams, button: string, body: { [key: string]: string; }): Promise<ClaimDto> {
+    protected async getDto(context: IContext, params: ReviewClaimParams, button: IFormButton, body: IFormBody): Promise<ClaimDto> {
         const claim = await context.runQuery(new GetClaim(params.partnerId, params.periodId));
 
         if (body.status === ClaimStatus.MO_QUERIED) {
@@ -25,7 +25,7 @@ export class ReviewClaimFormHandler extends FormHandlerBase<ReviewClaimParams, C
         return claim;
     }
 
-    protected async run(context: IContext, params: ReviewClaimParams, button: string, dto: ClaimDto): Promise<ILinkInfo> {
+    protected async run(context: IContext, params: ReviewClaimParams, button: IFormButton, dto: ClaimDto): Promise<ILinkInfo> {
         await context.runCommand(new UpdateClaimCommand(dto));
         return AllClaimsDashboardRoute.getLink(params);
     }

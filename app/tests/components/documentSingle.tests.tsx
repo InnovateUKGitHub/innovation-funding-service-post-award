@@ -1,3 +1,4 @@
+// tslint:disable:no-duplicate-string
 import "jest";
 import React from "react";
 import { DocumentSingle } from "../../src/ui/components";

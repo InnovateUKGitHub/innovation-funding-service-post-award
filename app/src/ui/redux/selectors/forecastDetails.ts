@@ -3,7 +3,7 @@ import { getKey } from "../../../util/key";
 import { RootState } from "../reducers";
 import { ForecastDetailsDtosValidator } from "../../validators/forecastDetailsDtosValidator";
 import { getCostCategories } from "./costCategories";
-import { findClaimDetailsByPartner } from "./claims";
+import { findClaimDetailsByPartner, findClaimsByPartner } from "./claims";
 
 export const forecastDetailsStore = "forecastDetails";
 export const findForecastDetailsByPartner = (partnerId: string) => dataStoreHelper(forecastDetailsStore, partnerId);
@@ -13,13 +13,13 @@ export const getForecastDetail = (partnerId: string, periodId: number, costCateg
 
 const createValidator = (partnerId: string, forecastDetails: ForecastDetailsDTO[], store: RootState) => {
   // TODO - revist get vs getPending
+  const claims = findClaimsByPartner(partnerId).getPending(store).data || [];
   const claimDetails   = findClaimDetailsByPartner(partnerId).getPending(store).data || [];
   const golCosts       = findGolCostsByPartner(partnerId).getPending(store).data || [];
-  const costCategories = getCostCategories().getPending(store).data || [];
-  return new ForecastDetailsDtosValidator(forecastDetails, claimDetails, golCosts, costCategories, false);
+  return new ForecastDetailsDtosValidator(forecastDetails, claims, claimDetails, golCosts, false);
 };
 
-export const getForecastDetailsEditor = (state: RootState, partnerId: string) => {
+export const getForecastDetailsEditor = (partnerId: string) => {
   return editorStoreHelper<ForecastDetailsDTO[], ForecastDetailsDtosValidator>(
     forecastDetailsStore,
     x => x.forecastDetails,

@@ -33,11 +33,11 @@ export const DocumentListWithDelete: React.SFC<PropsWithRemove> = ({ documents =
   const Form = TypedForm<DocumentSummaryDto[]>();
   return (
     <div data-qa={qa}>
-      <Form.Form type="delete" data={documents}>
+      <Form.Form data={documents}>
         {documents.map((dto, i) => (
           <div className="govuk-!-padding-bottom-4" key={`document-${i}`}>
-            <a target={"_blank"} href={dto.link} className="govuk-link govuk-!-font-size-19" data-qa={qa}>{dto.fileName}</a>
-            <Form.Button name={dto.id} styling="Link" style={({ marginLeft: "15px" })} onClick={() => onRemove(dto)} className="govuk-!-font-size-19">Remove</Form.Button>
+            <a target={"_blank"} href={dto.link} className="govuk-link govuk-!-font-size-19" data-qa={`document-${i}`}>{dto.fileName}</a>
+            <Form.Button name="delete" value={dto.id} styling="Link" style={({ marginLeft: "15px" })} onClick={() => onRemove(dto)} className="govuk-!-font-size-19">Remove</Form.Button>
           </div>
           ))}
       </Form.Form>
