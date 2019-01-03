@@ -24,6 +24,7 @@ interface InternalColumnProps<T> {
   width?: number;
   validation?: Results<{}>;
   isDivider?: dividerTypes;
+  paddingRight?: string;
 }
 
 interface ExternalColumnProps<T, TResult> {
@@ -34,6 +35,7 @@ interface ExternalColumnProps<T, TResult> {
   qa: string;
   width?: number;
   isDivider?: dividerTypes;
+  paddingRight?: string;
 }
 
 type TableChild<T> = React.ReactElement<ExternalColumnProps<T, {}>> | null;
@@ -78,7 +80,7 @@ export class TableColumn<T> extends React.Component<InternalColumnProps<T>> {
 
   renderCell(data: T, column: number, row: number) {
     const className = classNames("govuk-table__cell", this.props.classSuffix ? "govuk-table__cell--" + this.props.classSuffix : "", this.props.cellClassName && this.props.cellClassName(data, { column, row }));
-    return <td className={className} key={column}>{this.props.renderCell(data, { column, row })}</td>;
+    return <td style={{paddingRight: this.props.paddingRight}} className={className} key={column}>{this.props.renderCell(data, { column, row })}</td>;
   }
 
   renderCol(column: number) {
@@ -162,7 +164,7 @@ const TableComponent = <T extends {}>(props: TableProps<T> & { data: T[]; valida
 
 const CustomColumn = <T extends {}>(props: ExternalColumnProps<T, React.ReactNode> & { classSuffix?: "numeric" }) => {
   const TypedColumn = TableColumn as { new(): TableColumn<T> };
-  return <TypedColumn renderCell={(data, index) => props.value(data, index)} {...props} />;
+  return <TypedColumn paddingRight={props.paddingRight} renderCell={(data, index) => props.value(data, index)} {...props} />;
 };
 
 const StringColumn = <T extends {}>(props: ExternalColumnProps<T, string | null>) => {

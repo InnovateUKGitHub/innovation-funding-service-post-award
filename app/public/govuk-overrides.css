@@ -20,6 +20,10 @@
   padding: 2% 4% 2% 1%;
 }
 
+.govuk-table__row.table__row--draft {
+  background: #dee0e2;
+}
+
 .govuk-table__row.table__row--info td:first-child,
 .govuk-table__row.table__row--info th:first-child {
   padding-left: 1%;
@@ -70,3 +74,4 @@
   padding-top: 15px;
   padding-bottom: 15px;
 }
+

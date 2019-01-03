@@ -75,13 +75,13 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
     return (
       <ACC.Page>
         <ACC.Section>
-          <ACC.BackLink route={back}>Back</ACC.BackLink>
+          <ACC.BackLink route={back}>Back to claim</ACC.BackLink>
         </ACC.Section>
         <ACC.ErrorSummary error={this.props.editor && this.props.editor.error}/>
         <ACC.ValidationSummary validation={this.props.editor && this.props.editor.validator} compressed={false} />
         <ACC.Projects.Title pageTitle={`${costCategory.name}`} project={project} />
-        <ACC.Section title="Breakdown of costs">
-          <ACC.InsetText text={costCategory.hintText} />
+        <ACC.Section>
+          <ACC.TextHint text={costCategory.hintText} />
           {this.renderTable(editor, forecastDetail, documents)}
         </ACC.Section>
       </ACC.Page>
@@ -105,7 +105,7 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
         <LineItemForm.Fieldset>
           <ACC.Section title="Supporting documents" subtitle={documents.length > 0 ? "(Documents open in a new window)" : ""} qa="supporting-documents-section">
             <ValidationMessage message={"If you are unsure what evidence to provide, speak to your Monitoring Officer. They will use these documents when reviewing your claim."} messageType={"info"} />
-            {documents.length > 0 ? <DocumentList documents={documents} qa="supporting-documents" /> : <p className="govuk-body-m govuk-!-margin-bottom-0 govuk-!-margin-right-2">No documents uploaded</p>}
+            {documents.length > 0 ? <DocumentList documents={documents} qa="supporting-documents" /> : <p className="govuk-body-m govuk-!-margin-bottom-0 govuk-!-margin-right-2">No documents uploaded.</p>}
           </ACC.Section>
         </LineItemForm.Fieldset>
         <LineItemForm.Fieldset>
