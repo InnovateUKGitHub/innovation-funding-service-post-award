@@ -59,7 +59,7 @@ export class ClaimLineItemsComponent extends ContainerBase<Params, Data, {}> {
     return (
       <ACC.Page>
         <ACC.Section>
-          <ACC.BackLink route={backLink}>Back</ACC.BackLink>
+          <ACC.BackLink route={backLink}>Back to claim</ACC.BackLink>
         </ACC.Section>
         <ACC.Projects.Title pageTitle={`${costCategories.find(x => x.id === this.props.costCategoryId)!.name}`} project={project} />
         <ACC.Section>

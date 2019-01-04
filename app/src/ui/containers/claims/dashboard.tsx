@@ -166,7 +166,7 @@ class Component extends ContainerBase<ClaimDashboardPageParams, Data, Callbacks>
           </Acc.SectionPanel>
         </Acc.Section>
         <Acc.Section qa="current-claims-section" title={"Open"} badge={claimsWindow}>
-          {this.renderClaims(currentClaim ? [currentClaim] : [], "current-claims-table", project, true)}
+          {this.renderClaims(currentClaim ? [currentClaim] : [], "current-claims-table", project, true, previousClaims)}
         </Acc.Section>
         {currentClaim && editor && this.renderIarDocumentSection(currentClaim, editor, document)}
         <Acc.Section qa="previous-claims-section" title="Closed">
@@ -186,17 +186,30 @@ class Component extends ContainerBase<ClaimDashboardPageParams, Data, Callbacks>
     return <Acc.Link route={ClaimsDetailsRoute.getLink({ projectId, partnerId: claim.partnerId, periodId: claim.periodId })}>View claim</Acc.Link>;
   }
 
-  private renderClaims(data: ClaimDto[], tableQa: string, project: ProjectDto, isCurrentClaim: boolean) {
+  private renderNextPeriodStartDate(date: Date) {
+    return (
+      <Acc.Renderers.SimpleString>
+        You have no open claims. The next claim period begins <Acc.Renderers.FullDate value={date} />.
+      </Acc.Renderers.SimpleString>
+    );
+  }
+
+  private renderClaims(data: ClaimDto[], tableQa: string, project: ProjectDto, isCurrentClaim: boolean, previousClaims?: ClaimDto[]) {
     const ClaimTable = Acc.TypedTable<ClaimDto>();
 
     if (isCurrentClaim && !data.length) {
+      if (!project.periodEndDate && previousClaims) {
+        const startDate = DateTime.fromJSDate(previousClaims[previousClaims.length-1].periodEndDate).plus({days: 1}).toJSDate();
+        return (
+          this.renderNextPeriodStartDate(startDate)
+        );
+      }
+
       if(!project.periodEndDate) return null;
       const date = DateTime.fromJSDate(project.periodEndDate).plus({days: 1}).toJSDate();
 
       return (
-          <Acc.Renderers.SimpleString>
-            You have no open claims. The next claim period begins <Acc.Renderers.FullDate value={date} />.
-          </Acc.Renderers.SimpleString>
+          this.renderNextPeriodStartDate(date)
       );
     }
 
@@ -204,13 +217,15 @@ class Component extends ContainerBase<ClaimDashboardPageParams, Data, Callbacks>
       return <Acc.Renderers.SimpleString>You have not made any claims.</Acc.Renderers.SimpleString>;
     }
 
+    const editableStatuses = [ClaimStatus.DRAFT, ClaimStatus.MO_QUERIED, ClaimStatus.INNOVATE_QUERIED];
+
     return (
-      <ClaimTable.Table qa={tableQa} data={data} bodyRowClass={() => data[0].status === "Draft" ? "table__row--draft" : ""}>
+      <ClaimTable.Table qa={tableQa} data={data} bodyRowClass={() => editableStatuses.indexOf(data[0].status) > -1 ? "table__row--edit" : ""}>
         <ClaimTable.Custom
           paddingRight="0px"
           header=""
           qa="edit-icon"
-          value={() => data[0].status === "Draft" ? <img src="/assets/images/icon-edit.png"/> : null}
+          value={() => editableStatuses.indexOf(data[0].status) > -1 ? <img src="/assets/images/icon-edit.png"/> : null}
         />
         <ClaimTable.Custom
           header=""
