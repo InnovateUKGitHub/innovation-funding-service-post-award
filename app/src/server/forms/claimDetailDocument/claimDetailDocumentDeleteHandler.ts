@@ -1,14 +1,14 @@
-import { FormHandlerBase, IFormBody, IFormButton } from "./formHandlerBase";
+import { FormHandlerBase, IFormBody, IFormButton } from "../formHandlerBase";
 import {
   ClaimDetailDocumentsPageParams,
   ClaimDetailDocumentsRoute
-} from "../../ui/containers";
-import { IContext } from "../features/common/context";
+} from "../../../ui/containers";
+import { IContext } from "../../features/common/context";
 import {
   getClaimDetailDocumentDeleteEditorStoreInfo
-} from "../../ui/redux/selectors";
-import { DeleteDocumentCommand } from "../features/documents/deleteDocument";
-import { Results } from "../../ui/validation/results";
+} from "../../../ui/redux/selectors";
+import { DeleteDocumentCommand } from "../../features/documents/deleteDocument";
+import { Results } from "../../../ui/validation/results";
 
 interface Document {
   id: string;

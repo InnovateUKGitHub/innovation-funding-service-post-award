@@ -1,15 +1,14 @@
-import { getClaimDetailDocumentEditor } from "../../ui/redux/selectors";
-import { FormHandlerBase, IFormBody, IFormButton } from "./formHandlerBase";
-import { Results } from "../../ui/validation/results";
-import { ClaimDetailDocumentsPageParams, ClaimDetailDocumentsRoute } from "../../ui/containers";
-import { IContext } from "../features/common/context";
-import { FileUpload } from "../../types/FileUpload";
-import { UploadClaimDetailDocumentCommand } from "../features/documents/uploadClaimDetailDocument";
-import { RequestHandler } from "express";
+import { getClaimDetailDocumentEditor } from "../../../ui/redux/selectors";
+import { FormHandlerBase, IFormBody, IFormButton } from "../formHandlerBase";
+import { Results } from "../../../ui/validation/results";
+import { ClaimDetailDocumentsPageParams, ClaimDetailDocumentsRoute } from "../../../ui/containers";
+import { IContext } from "../../features/common/context";
+import { FileUpload } from "../../../types/FileUpload";
+import { UploadClaimDetailDocumentCommand } from "../../features/documents/uploadClaimDetailDocument";
 
 export class ClaimDetailDocumentUploadHandler extends FormHandlerBase<ClaimDetailDocumentsPageParams, FileUpload> {
-    constructor(middleware: RequestHandler[]) {
-        super(ClaimDetailDocumentsRoute, ["default"], middleware);
+    constructor() {
+      super(ClaimDetailDocumentsRoute, ["default"]);
     }
 
     protected async getDto(context: IContext, params: ClaimDetailDocumentsPageParams, button: IFormButton, body: IFormBody, file: FileUpload): Promise<FileUpload> {

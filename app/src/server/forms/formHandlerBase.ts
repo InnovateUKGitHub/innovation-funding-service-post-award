@@ -20,7 +20,7 @@ export interface IFormHandler {
 }
 
 export interface IFormButton {
-  name: string;
+  name: string | undefined;
   value: string;
 }
 export interface IFormBody {
@@ -44,10 +44,7 @@ export abstract class FormHandlerBase<TParams, TDto> implements IFormHandler {
 
   public async handle(req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> {
     const params = this.getParams({ name: this.routeName, params: req.params, path: req.path });
-
     const buttonName = this.buttons.find(x => `button_${x}` in req.body);
-    if (!buttonName) return next();
-
     const button = { name: buttonName, value: req.body[`button_${buttonName}`] };
     const body = { ...req.body };
     delete body[`button_${buttonName}`];
@@ -57,14 +54,14 @@ export abstract class FormHandlerBase<TParams, TDto> implements IFormHandler {
     const file = req.file && { fileName: req.file.originalname, content: req.file.buffer.toString("base64") };
     const dto = await this.createDto(context, params, button, body, file);
     try {
+      // if we've matched the route without an acceptable button show an error
+      if(!buttonName) throw Error("Bad Request");
       const link = await this.run(context, params, button, dto);
-      this.redirect(link, res);
-      return;
+      return this.redirect(link, res);
     }
     catch (error) {
       const { key, store } = this.getStoreInfo(params);
-      serverRender(req, res, { key, store, dto, result: this.createValidationResult(params, dto), error });
-      return;
+      return serverRender(req, res, { key, store, dto, result: this.createValidationResult(params, dto), error });
     }
   }
 
