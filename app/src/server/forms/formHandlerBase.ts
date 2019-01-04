@@ -55,7 +55,7 @@ export abstract class FormHandlerBase<TParams, TDto> implements IFormHandler {
     const session: ISession = { user: req.session!.user };
     const context = contextProvider.start(session);
     const file = req.file && { fileName: req.file.originalname, content: req.file.buffer.toString("base64") };
-    const dto = await this.getDto(context, params, button, body, file);
+    const dto = await this.createDto(context, params, button, body, file);
     try {
       const link = await this.run(context, params, button, dto);
       this.redirect(link, res);
@@ -65,6 +65,17 @@ export abstract class FormHandlerBase<TParams, TDto> implements IFormHandler {
       const { key, store } = this.getStoreInfo(params);
       serverRender(req, res, { key, store, dto, result: this.createValidationResult(params, dto), error });
       return;
+    }
+  }
+
+  // TODO - discuss
+  private async createDto(context: IContext, params: TParams, button: IFormButton, body: IFormBody, file?: FileUpload): Promise<TDto> {
+    const defaultDto = {} as TDto;
+    try {
+      return await this.getDto(context, params, button, body, file) || defaultDto;
+    }
+    catch(e) {
+      return defaultDto;
     }
   }
 
