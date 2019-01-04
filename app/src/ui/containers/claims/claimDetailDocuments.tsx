@@ -108,7 +108,15 @@ export class ClaimDetailDocumentsComponent extends ContainerBase<ClaimDetailDocu
         <ACC.Section>
           <UploadForm.Form enctype="multipart/form-data" qa="claimDetailDocuments" data={editor.data} onSubmit={() => this.onSave(editor.data)} onChange={(dto) => this.onChange(dto)}>
             <UploadForm.Fieldset heading="Upload">
-              <UploadForm.FileUpload label="Upload documents" labelHidden={true} name="attachment" validation={editor.validator.file} value={(data) => data.file} hint={<span>Give your files a name that describes their contents and includes today's date.<br/>For example, 'LabourCosts_2017-11-15'.</span>} update={(dto, file) => dto.file = file}/>
+              <UploadForm.FileUpload
+                label="Upload documents"
+                labelHidden={true}
+                name="attachment"
+                validation={editor.validator.file}
+                value={(data) => data.file}
+                update={(dto, file) => dto.file = file}
+                hint={<span>Give your files a name that describes their contents and includes today's date.<br/>For example, 'LabourCosts_2017-11-15'.</span>}
+              />
             </UploadForm.Fieldset>
             <UploadForm.Submit>Upload documents</UploadForm.Submit>
           </UploadForm.Form>
