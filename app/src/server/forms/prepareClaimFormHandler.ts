@@ -7,8 +7,8 @@ import { GetClaim } from "../features/claims";
 import { UpdateClaimCommand } from "../features/claims/updateClaim";
 import { ClaimDtoValidator } from "../../ui/validators/claimDtoValidator";
 import { getClaimEditor } from "../../ui/redux/selectors";
-export class PrepareClaimFormHandler extends FormHandlerBase<PrepareClaimParams, ClaimDto> {
 
+export class PrepareClaimFormHandler extends FormHandlerBase<PrepareClaimParams, ClaimDto> {
   constructor() {
     super(PrepareClaimRoute, ["default", "return"]);
   }
