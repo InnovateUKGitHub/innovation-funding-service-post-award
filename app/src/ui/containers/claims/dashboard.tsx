@@ -224,14 +224,15 @@ class Component extends ContainerBase<ClaimDashboardPageParams, Data, Callbacks>
     const ClaimTable = Acc.TypedTable<ClaimDto>();
 
     const editableStatuses = [ClaimStatus.DRAFT, ClaimStatus.MO_QUERIED, ClaimStatus.INNOVATE_QUERIED];
+    const isClaimEditable = editableStatuses.indexOf(data[0].status) > -1;
 
     return (
-      <ClaimTable.Table qa={tableQa} data={data} bodyRowClass={() => editableStatuses.indexOf(data[0].status) > -1 ? "table__row--edit" : ""}>
+      <ClaimTable.Table qa={tableQa} data={data} bodyRowClass={() => isClaimEditable ? "table__row--edit" : ""}>
         <ClaimTable.Custom
           paddingRight="0px"
           header=""
           qa="edit-icon"
-          value={() => editableStatuses.indexOf(data[0].status) > -1 ? <img src="/assets/images/icon-edit.png"/> : null}
+          value={() => isClaimEditable ? <img src="/assets/images/icon-edit.png"/> : null}
         />
         <ClaimTable.Custom
           header=""
