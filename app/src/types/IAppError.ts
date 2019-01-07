@@ -1,7 +1,7 @@
 import { Results } from "../ui/validation/results";
 
 export enum ErrorCode {
-  SERVER_ERROR = 1,
+  UNKNOWN_ERROR = 1,
   SECURITY_ERROR = 2,
   VALIDATION_ERROR = 3,
   REQUEST_ERROR = 4,
@@ -10,5 +10,6 @@ export enum ErrorCode {
 
 export interface IAppError {
   code: ErrorCode;
-  details: string | Results<{}>;
+  message: string;
+  results: Results<{}> | null;
 }

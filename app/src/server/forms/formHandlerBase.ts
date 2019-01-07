@@ -6,6 +6,7 @@ import { Results } from "../../ui/validation/results";
 import contextProvider from "../features/common/contextProvider";
 import { IContext } from "../features/common/context";
 import { FileUpload } from "../../types/FileUpload";
+import { BadRequestError } from "../features/common/appError";
 
 interface RouteInfo<TParams> {
   routeName: string;
@@ -56,7 +57,7 @@ export abstract class FormHandlerBase<TParams, TDto> implements IFormHandler {
     const dto = await this.createDto(context, params, button, body, file);
     try {
       // if we've matched the route without an acceptable button show an error
-      if(!buttonName) throw Error("Bad Request");
+      if(!buttonName) throw new BadRequestError();
       const link = await this.run(context, params, button, dto);
       return this.redirect(link, res);
     }

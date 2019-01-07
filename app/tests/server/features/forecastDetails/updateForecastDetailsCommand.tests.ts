@@ -1,10 +1,9 @@
 // tslint:disable: no-duplicate-string no-big-function no-identical-functions
 import { TestContext } from "../../testContextProvider";
 import { UpdateForecastDetailsCommand } from "../../../../src/server/features/forecastDetails";
-import { ValidationError } from "../../../../src/shared/validation";
 import { DateTime } from "luxon";
 import { ClaimFrequency } from "../../../../src/types";
-import { BadRequestError } from "../../../../src/server/apis/ApiError";
+import { BadRequestError, ValidationError } from "../../../../src/server/features/common/appError";
 
 describe("UpdateForecastDetailsCommand", () => {
   it("when id not set expect validation exception", async () => {
@@ -286,8 +285,7 @@ describe("UpdateForecastDetailsCommand", () => {
 
     expect(error).not.toBeNull();
     expect(error).toBeInstanceOf(ValidationError);
-    expect(error.message).toBe("Validation failed");
-    expect(error.validationResult.isValid).toBe(false);
-    expect(error.validationResult.errors.map(x => x.errorMessage)).toEqual(["You can not submit a claim if your forecasts and costs total is higher than your grant offer letter costs. You will be contacted by your Monitoring Officer if this is not amended."]);
+    expect(error.results!.isValid).toBe(false);
+    expect(error.results!.errors.map(x => x.errorMessage)).toEqual(["You can not submit a claim if your forecasts and costs total is higher than your grant offer letter costs. You will be contacted by your Monitoring Officer if this is not amended."]);
   });
 });

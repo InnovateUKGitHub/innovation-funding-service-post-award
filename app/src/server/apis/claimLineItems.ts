@@ -1,8 +1,8 @@
 import contextProvider from "../features/common/contextProvider";
 import {ApiParams, ControllerBase} from "./controllerBase";
 import {GetAllLineItemsForClaimByCategoryQuery, SaveLineItemsCommand} from "../features/claimLineItems";
-import {BadRequestError, StatusCode} from "./ApiError";
 import {processDto} from "../../shared/processResponse";
+import { BadRequestError } from "../features/common/appError";
 
 export interface IClaimLineItemApi {
   getAllForCategory: (params: ApiParams<{partnerId: string, costCategoryId: string, periodId: number}>) => Promise<ClaimLineItemDto[]>;
@@ -46,7 +46,6 @@ class Controller extends ControllerBase<ClaimLineItemDto> implements IClaimLineI
     }
 
     const command = new SaveLineItemsCommand(partnerId, costCategoryId, periodId, lineItems);
-
     const context = contextProvider.start(params);
 
     await context.runCommand(command);

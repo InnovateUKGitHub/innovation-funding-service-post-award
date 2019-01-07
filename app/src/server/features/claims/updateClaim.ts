@@ -2,8 +2,8 @@ import { CommandBase, IContext } from "../common/context";
 import { ClaimDtoValidator } from "../../../ui/validators/claimDtoValidator";
 import { GetCostCategoriesQuery } from ".";
 import { GetClaimDetailsSummaryForPartnerQuery } from "../claimDetails";
-import { ValidationError } from "../../../shared/validation";
 import { ClaimDto } from "../../../types";
+import { ValidationError } from "../common/appError";
 
 export class UpdateClaimCommand extends CommandBase<boolean> {
   constructor(private claimDto: ClaimDto) {

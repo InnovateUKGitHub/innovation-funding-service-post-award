@@ -1,5 +1,4 @@
 import React from "react";
-import path from "path";
 import { Request, Response } from "express";
 import { renderToString } from "react-dom/server";
 import { AnyAction, createStore, Dispatch } from "redux";
@@ -14,9 +13,10 @@ import { App } from "../ui/containers/app";
 import { Results } from "../ui/validation/results";
 import { AsyncThunk, handleEditorError, updateEditorAction } from "../ui/redux/actions/common";
 import { IAppError } from "../types/IAppError";
+import { errorHandlerRender } from "./errorHandlers";
+import { NotFoundError } from "./features/common/appError";
 
 async function loadData(dispatch: Dispatch<AnyAction>, getState: () => RootState, dataCalls: AsyncThunk<any>[]): Promise<void> {
-
   const allPromises = dataCalls.map(action => action(dispatch, getState, null));
   const loadingCount = getState().loadStatus;
 
@@ -28,63 +28,57 @@ async function loadData(dispatch: Dispatch<AnyAction>, getState: () => RootState
   return Promise.all(allPromises).then(() => loadData(dispatch, getState, dataCalls));
 }
 
-const sendErrorResponse = (res: Response) => res.status(500).sendFile(path.join(__dirname, "../../../public/error.html"));
-const sendNotFoundResponse = (res: Response) => res.status(404).sendFile(path.join(__dirname, "../../../public/error-not-found.html"));
-
 export function serverRender(req: Request, res: Response, errorDetails?: { key: string, store: string, dto: {}, result: Results<{}>, error: IAppError }) {
-  const router = configureRouter();
+  try {
+    const router = configureRouter();
 
-  router.start(req.originalUrl, (routeError, route) => {
+    router.start(req.originalUrl, async (routeError, route) => {
+      if (routeError) {
+        throw new Error("Server error");
+      }
 
-    if (routeError) {
-      console.log("router start error", routeError);
-      return sendErrorResponse(res);
-    }
+      if (route && route.name === routerConstants.UNKNOWN_ROUTE) {
+        throw new NotFoundError();
+      }
 
-    if (route && route.name === routerConstants.UNKNOWN_ROUTE) {
-      return sendNotFoundResponse(res);
-    }
+      const initialState = setupInitialState(route, req.session!.user);
+      const middleware = setupMiddleware(router, false);
+      const store = createStore(rootReducer, initialState, middleware);
+      const matched = matchRoute(route);
+      const params = matched && matched.getParams && matched.getParams(route!) || {};
+      const actions = matched && matched.getLoadDataActions && matched.getLoadDataActions(params) || [];
 
-    const initialState = setupInitialState(route, req.session!.user);
-    const middleware = setupMiddleware(router, false);
-    const store = createStore(rootReducer, initialState, middleware);
-    const matched = matchRoute(route);
-    const params = matched && matched.getParams && matched.getParams(route!) || {};
-    const actions = matched && matched.getLoadDataActions && matched.getLoadDataActions(params) || [];
+      if (errorDetails) {
+        actions.push((dispatch, getState) => {
+          dispatch(updateEditorAction(errorDetails.key, errorDetails.store, errorDetails.dto, errorDetails.result));
+          return Promise.resolve();
+        });
+        actions.push((dispatch, getState) => {
+          dispatch(handleEditorError({
+            id: errorDetails.key,
+            dto: errorDetails.dto,
+            validation: errorDetails.result,
+            error: errorDetails.error,
+            store: errorDetails.store,
+            scrollToTop: false
+          }));
+          return Promise.resolve();
+        });
+      }
 
-    if (errorDetails) {
-      actions.push((dispatch, getState) => {
-        dispatch(updateEditorAction(errorDetails.key, errorDetails.store, errorDetails.dto, errorDetails.result));
-        return Promise.resolve();
-      });
-      actions.push((dispatch, getState) => {
-        dispatch(handleEditorError({
-          id: errorDetails.key,
-          dto: errorDetails.dto,
-          validation: errorDetails.result,
-          error: errorDetails.error,
-          store: errorDetails.store,
-          scrollToTop: false
-        }));
-        return Promise.resolve();
-      });
-    }
+      await loadData(store.dispatch, store.getState, actions);
+      const html = renderToString(
+        <Provider store={store}>
+          <RouterProvider router={router}>
+            <App />
+          </RouterProvider>
+        </Provider>
+      );
 
-    return loadData(store.dispatch, () => store.getState(), actions)
-      .then(() => {
-        const html = renderToString(
-          <Provider store={store}>
-            <RouterProvider router={router}>
-              <App />
-            </RouterProvider>
-          </Provider>
-        );
-
-        return res.send(renderHtml(html, store.getState()));
-      })
-      .catch((e: any) => {
-        console.log("server render error", e);
-        return sendErrorResponse(res);
-      });
-  });
+      return res.send(renderHtml(html, store.getState()));
+    });
+  }
+  catch(e) {
+    return errorHandlerRender(res, e);
+  }
 }

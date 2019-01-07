@@ -9,10 +9,8 @@ import {
   SalesforceTokenError
 } from "../../repositories/salesforceConnection";
 import { Cache } from "./cache";
-import { ValidationError } from "../../../shared/validation";
 import { SalesforceInvalidFilterError } from "../../repositories/salesforceBase";
-import { BadRequestError } from "../../apis/ApiError";
-import { AppError } from "./appError";
+import { AppError, BadRequestError, NotFoundError, ValidationError } from "./appError";
 import { ErrorCode } from "../../../types/IAppError";
 
 export interface IRunnable<T> {
@@ -101,18 +99,19 @@ const cachesImplimentation: ICaches = {
 
 const constructErrorResponse = <E extends Error>(error: E): AppError => {
   if (error instanceof ValidationError) {
-    return new AppError(ErrorCode.VALIDATION_ERROR, error.validationResult, error);
+    return error;
   }
   if (error instanceof BadRequestError) {
-    return new AppError(ErrorCode.BAD_REQUEST_ERROR, error.message, error);
+    return error;
   }
   if (error instanceof SalesforceTokenError) {
     return new AppError(ErrorCode.SECURITY_ERROR, error.message, error);
   }
   if(error instanceof SalesforceInvalidFilterError) {
-    return new AppError(ErrorCode.REQUEST_ERROR, "Not found", error);
+    return new NotFoundError(undefined, error);
   }
-  return new AppError(ErrorCode.SERVER_ERROR, error.message || "An unexpected error has occurred...", error);
+
+  return new AppError(ErrorCode.UNKNOWN_ERROR, error.message, error);
 };
 
 export class Context implements IContext {

@@ -52,7 +52,7 @@ export const editorsReducer = <TDto extends {}, TValidator extends Results<TDto>
       const newEditor: IEditorStore<TDto, TValidator> = {
         ...originalEditor,
         data: action.payload.dto as TDto,
-        error: { code: err.code, details: err.details }
+        error: { code: err.code, message: err.message, results: err.results }
       };
       result[action.payload.id] = newEditor;
     }

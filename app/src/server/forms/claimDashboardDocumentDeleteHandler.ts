@@ -10,7 +10,7 @@ import {
 import { DeleteDocumentCommand } from "../features/documents/deleteDocument";
 import { Results } from "../../ui/validation/results";
 import { GetDocumentsSummaryQuery } from "../features/documents/getDocumentsSummary";
-import { BadRequestError } from "../apis/ApiError";
+import { BadRequestError } from "../features/common/appError";
 
 export class ClaimDashboardDocumentDeleteHandler extends FormHandlerBase<ClaimDashboardPageParams, DocumentSummaryDto> {
 
