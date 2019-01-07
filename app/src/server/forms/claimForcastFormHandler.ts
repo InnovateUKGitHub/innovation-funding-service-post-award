@@ -1,7 +1,7 @@
 import { FormHandlerBase, IFormBody, IFormButton } from "./formHandlerBase";
 import { IContext } from "../features/common/context";
 import { Results } from "../../ui/validation/results";
-import { ClaimForcastParams, ClaimForecastRoute, ClaimsDashboardRoute } from "../../ui/containers";
+import { ClaimForcastParams, ClaimForecastRoute, ClaimsDashboardRoute, PrepareClaimRoute } from "../../ui/containers";
 import { getForecastDetailsEditor } from "../../ui/redux/selectors";
 import { ForecastDetailsDtosValidator } from "../../ui/validators";
 import { GetAllForecastsForPartnerQuery, UpdateForecastDetailsCommand } from "../features/forecastDetails";
@@ -36,6 +36,10 @@ export class ClaimForcastFormHandler extends FormHandlerBase<ClaimForcastParams,
   protected async run(context: IContext, params: ClaimForcastParams, button: IFormButton, dto: ForecastDetailsDTO[]): Promise<ILinkInfo> {
     const submit = button.name === "default";
     await context.runCommand(new UpdateForecastDetailsCommand(params.partnerId, dto, submit));
+
+    if (button.name === "save") {
+      return PrepareClaimRoute.getLink(params);
+    }
     return ClaimsDashboardRoute.getLink(params);
   }
 
