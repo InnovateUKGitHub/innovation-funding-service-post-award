@@ -1,4 +1,5 @@
 import {IContext, QueryBase} from "../common/context";
+import { GetDocumentsSummaryQuery } from "./getDocumentsSummary";
 
 export class GetDocumentsLinkedToRecordQuery extends QueryBase<DocumentSummaryDto[]> {
   constructor(public recordId: string, public filter?: DocumentFilter) {
@@ -12,12 +13,6 @@ export class GetDocumentsLinkedToRecordQuery extends QueryBase<DocumentSummaryDt
       return [];
     }
 
-    const documents = await context.repositories.contentVersions.getDocuments(linkedDocs.map(x => x.ContentDocumentId), this.filter);
-    return documents.map<DocumentSummaryDto>(doc => ({
-      link: `/api/documents/${doc.Id}/content`,
-      fileName: doc.FileExtension ? `${doc.Title}.${doc.FileExtension}` : doc.Title,
-      id: doc.ContentDocumentId,
-      description: doc.Description
-    }));
+    return context.runQuery(new GetDocumentsSummaryQuery(linkedDocs.map(x => x.ContentDocumentId), this.filter));
   }
 }
