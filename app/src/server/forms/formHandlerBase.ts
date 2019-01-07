@@ -28,7 +28,7 @@ export interface IFormBody {
   [key: string]: string;
 }
 
-export abstract class FormHandlerBase<TParams, TDto> implements IFormHandler {
+export abstract class FormHandlerBase<TParams, TDto, TValidation = {}> implements IFormHandler {
   protected constructor(routeInfo: RouteInfo<TParams>, buttons: string[], middleware?: RequestHandler[]) {
     this.routePath = routeInfo.routePath.split("?")[0];
     this.routeName = routeInfo.routeName;
@@ -53,6 +53,7 @@ export abstract class FormHandlerBase<TParams, TDto> implements IFormHandler {
 
     const session: ISession = { user: req.session!.user };
     const context = contextProvider.start(session);
+
     const file = req.file && { fileName: req.file.originalname, content: req.file.buffer.toString("base64") };
     const dto = await this.createDto(context, params, button, body, file);
     try {
@@ -83,7 +84,7 @@ export abstract class FormHandlerBase<TParams, TDto> implements IFormHandler {
 
   protected abstract getStoreInfo(params: TParams, dto: TDto): { key: string, store: string };
 
-  protected abstract createValidationResult(params: TParams, dto: TDto): Results<TDto>;
+  protected abstract createValidationResult(params: TParams, dto: TDto): Results<TDto | TValidation>;
 
   protected redirect(link: ILinkInfo, res: express.Response) {
     const router = configureRouter();

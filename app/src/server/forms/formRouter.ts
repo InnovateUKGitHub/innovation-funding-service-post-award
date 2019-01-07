@@ -9,7 +9,7 @@ import { ReviewClaimFormHandler } from "./reviewClaimFormHandler";
 import { ClaimDetailDocumentHandler } from "./claimDetailDocument";
 import { ViewForecastFormHandler } from "./viewForecastFormHandler";
 import { UpdateForecastFormHandler } from "./updateForecastFormHandler";
-import { ClaimDashboardDocumentDeleteHandler } from "./claimDashboardDocumentDeleteHandler";
+import { ClaimDashboardDocumentHandler } from "./claimDashboard/claimDashboardDocumentHandler";
 
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
@@ -23,9 +23,9 @@ const handlers: IFormHandler[] = [
   new ReviewClaimFormHandler(),
   new UpdateForecastFormHandler(),
   new ViewForecastFormHandler(),
-  new ClaimDashboardDocumentDeleteHandler(),
   // TODO revisit how we set middleware
   new ClaimDetailDocumentHandler([upload.single("attachment")]),
+  new ClaimDashboardDocumentHandler([upload.single("attachment")]),
   new HomeFormHandler(),
 ];
 
