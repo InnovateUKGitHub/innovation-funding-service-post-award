@@ -52,9 +52,9 @@ export const ValidationMessage: React.SFC<Props> = ({ message, key, messageType,
     };
 
     const textStyle = {
-      "margin": 0,
-      "display": "inline-flex",
-      "align-items": "center"
+      margin: 0,
+      display: "inline-flex",
+      alignItems: "center"
     };
 
     return (
