@@ -5,7 +5,8 @@ import mapClaim from "../claims/mapClaim";
 import { DeleteDocumentCommand } from "./deleteDocument";
 import { ClaimDto, ClaimStatus, DocumentDescription } from "../../../types";
 import { FileUpload } from "../../../types/FileUpload";
-import { BadRequestError } from "../common/appError";
+import { BadRequestError, ValidationError } from "../common/appError";
+import { FileUploadValidator } from "../../../ui/validators/documentUploadValidator";
 
 export class UploadClaimDocumentCommand extends CommandBase<string> {
   constructor(private claimKey: ClaimKey, private file: FileUpload) {
@@ -31,6 +32,13 @@ export class UploadClaimDocumentCommand extends CommandBase<string> {
   }
 
   protected async Run(context: IContext) {
+
+    const result = new FileUploadValidator(this.file, true);
+
+    if (!result.isValid) {
+      throw new ValidationError(result);
+    }
+
     const claim = await context.repositories.claims.get(this.claimKey.partnerId, this.claimKey.periodId).then(mapClaim(context));
 
     if (this.file.description === DocumentDescription.IAR) await this.preIarUpload(context, claim);
