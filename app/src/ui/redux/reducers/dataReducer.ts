@@ -21,7 +21,7 @@ export const dataStoreReducer = <TData extends {}, TKey>(key: (key: TKey) => str
     const pending: IDataStore<TData> = {
       status: action.payload.status,
       data: action.payload.data || (existing && existing.data),
-      error: err && { code: err.code, details: err.details }
+      error: err && { code: err.code, message: err.message, results: err.results }
     };
 
     const result = Object.assign({}, state);

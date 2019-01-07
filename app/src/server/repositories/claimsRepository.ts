@@ -1,7 +1,7 @@
 import SalesforceBase, { Updatable } from "./salesforceBase";
 import { Connection } from "jsforce";
-import { BadRequestError, StatusCode } from "../apis/ApiError";
 import { ClaimStatus } from "../../types";
+import { BadRequestError } from "../features/common/appError";
 
 export interface ISalesforceClaim {
   Id: string;

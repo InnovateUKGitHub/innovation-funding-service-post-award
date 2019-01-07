@@ -1,6 +1,5 @@
 import { CommandBase, IContext } from "../common/context";
-import { ValidationError } from "../../../shared/validation";
-import { GetAllForecastsGOLCostsQuery, GetAllForPartnerQuery, GetCostCategoriesQuery } from "../claims";
+import { GetAllForecastsGOLCostsQuery, GetAllForPartnerQuery } from "../claims";
 import { ForecastDetailsDtosValidator } from "../../../ui/validators/forecastDetailsDtosValidator";
 import { GetAllClaimDetailsByPartner } from "../claimDetails";
 import { ISalesforceProfileDetails } from "../../repositories";
@@ -9,7 +8,7 @@ import { ClaimDto, ClaimStatus } from "../../../types";
 import { GetAllForecastsForPartnerQuery } from "./getAllForecastsForPartnerQuery";
 import { GetByIdQuery as GetPartnerById } from "../partners";
 import { GetByIdQuery as GetProjectById } from "../projects";
-import { BadRequestError, StatusCode } from "../../apis/ApiError";
+import { BadRequestError, ValidationError } from "../common/appError";
 
 export class UpdateForecastDetailsCommand extends CommandBase<boolean> {
   constructor(

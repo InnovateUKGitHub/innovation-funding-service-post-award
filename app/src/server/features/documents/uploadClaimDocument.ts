@@ -1,11 +1,11 @@
 import { CommandBase, IContext } from "../common/context";
 import { UploadDocumentCommand } from "./uploadDocument";
 import { GetClaimDocumentsQuery } from "./getClaimDocuments";
-import { BadRequestError, StatusCode } from "../../apis/ApiError";
 import mapClaim from "../claims/mapClaim";
 import { DeleteDocumentCommand } from "./deleteDocument";
 import { ClaimDto, ClaimStatus, DocumentDescription } from "../../../types";
 import { FileUpload } from "../../../types/FileUpload";
+import { BadRequestError } from "../common/appError";
 
 export class UploadClaimDocumentCommand extends CommandBase<string> {
   constructor(private claimKey: ClaimKey, private file: FileUpload) {

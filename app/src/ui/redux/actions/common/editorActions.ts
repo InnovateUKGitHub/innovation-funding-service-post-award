@@ -39,7 +39,7 @@ export function handleEditorError<T>({id, store, dto, validation, error, scrollT
 }) {
   if (scrollToTop) scrollToTheTop();
   if (error.code === ErrorCode.VALIDATION_ERROR) {
-    return updateEditorAction(id, store, dto, error.details as Results<{}>);
+    return updateEditorAction(id, store, dto, error.results);
   }
   return createAction("EDITOR_SUBMIT_ERROR", { id, store, dto, error });
 }
