@@ -34,9 +34,8 @@ class FormComponent<T> extends React.Component<FormProps<T>, []> {
         });
 
         const childrenWithData = React.Children.map(this.props.children, (child, index) => child && React.cloneElement(child as any, childProps(index)));
-        const enctype = { enctype: this.props.enctype };
         return (
-            <form {...enctype} method="post" action="" onSubmit={(e) => this.onSubmit(e)} data-qa={this.props.qa}>
+            <form encType={this.props.enctype} method="post" action="" onSubmit={(e) => this.onSubmit(e)} data-qa={this.props.qa}>
                 {childrenWithData}
             </form>
         );
