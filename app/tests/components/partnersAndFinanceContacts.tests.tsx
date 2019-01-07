@@ -39,7 +39,7 @@ const testContactData: ProjectContactDto[] = [
   {
     id: "100",
     name: "Ted Tester",
-    role: "Finance Contact",
+    role: "Finance contact",
     email: "tedtester@nowhere.com",
     accountId: "321",
     projectId: "456",
@@ -55,7 +55,7 @@ const testContactData: ProjectContactDto[] = [
   {
     id: "102",
     name: "Joe Bloggs",
-    role: "Finance Contact",
+    role: "Finance contact",
     email: "joebloggs@nowhere.com",
     accountId: "312",
     projectId: "456"
@@ -63,7 +63,7 @@ const testContactData: ProjectContactDto[] = [
   {
     id: "103",
     name: "Bob Baker",
-    role: "Finance Contact",
+    role: "Finance contact",
     email: "bobbaker@nowhere.com",
     accountId: "832",
     projectId: "456",

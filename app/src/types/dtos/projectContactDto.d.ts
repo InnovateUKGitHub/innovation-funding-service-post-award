@@ -1,7 +1,8 @@
 interface ProjectContactDto {
     id: string;
     name: string;
-    role: string;
+    role: "Monitoring officer" | "Project Manager" | "Finance contact";
+    roleName: string;
     email: string;
     accountId?: string;
     projectId: string;

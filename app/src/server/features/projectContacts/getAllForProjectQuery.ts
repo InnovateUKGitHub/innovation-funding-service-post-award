@@ -16,6 +16,7 @@ export class GetAllForProjectQuery extends QueryBase<ProjectContactDto[]> {
             id: x.Id,
             name: x.Acc_ContactId__r.Name,
             role: x.Acc_Role__c,
+            roleName: x.RoleName,
             email: x.Acc_EmailOfSFContact__c,
             accountId: x.Acc_AccountId__c,
             projectId: x.Acc_ProjectId__c

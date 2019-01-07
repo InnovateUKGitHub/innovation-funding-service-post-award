@@ -7,7 +7,7 @@ interface Props {
 }
 
 export const PartnersAndFinanceContacts: React.SFC<Props> = (props) => {
-  const partnersAndContactsData = props.partners.map(partner => ({ partner, financeContact: props.contacts.find(x => x.accountId === partner.accountId && x.role === "Finance Contact") }));
+  const partnersAndContactsData = props.partners.map(partner => ({ partner, financeContact: props.contacts.find(x => x.accountId === partner.accountId && x.role === "Finance contact") }));
   const PartnersTable = TypedTable<typeof partnersAndContactsData[0]>();
 
   return (
