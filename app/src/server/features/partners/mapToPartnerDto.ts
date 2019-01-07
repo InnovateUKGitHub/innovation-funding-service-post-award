@@ -20,7 +20,6 @@ export class MapToPartnerDtoCommand extends CommandBase<PartnerDto> {
             projectId: this.item.Acc_ProjectId__c,
             totalParticipantGrant: this.item.Acc_TotalParticipantGrant__c,
             totalParticipantCostsClaimed: this.item.Acc_TotalParticipantCosts__c,
-            totalParticipantCostsPaid: this.item.Acc_TotalParticipantCostsPaid__c,
             percentageParticipantCostsClaimed: this.calcPercentageClaimed(this.item.Acc_TotalParticipantGrant__c, this.item.Acc_TotalParticipantCosts__c),
             awardRate: this.item.Acc_Award_Rate__c,
             capLimit: this.item.Acc_Cap_Limit__c,

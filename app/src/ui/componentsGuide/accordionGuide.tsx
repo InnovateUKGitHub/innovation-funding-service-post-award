@@ -47,7 +47,7 @@ export const accordionGuide: IGuide = {
             <DocumentList documents={documents} qa="documentList"/>
           </AccordionItem>
           <AccordionItem title="Section 2">
-            <ProjectMember member={{name: "Ms A Bloggs", email: "a.bloggs@test.com", role: "Team lead"}} qa="teamMember"/>
+            <ProjectMember member={{name: "Ms A Bloggs", email: "a.bloggs@test.com", roleName: "Team lead"}} qa="teamMember"/>
           </AccordionItem>
         </Accordion>
       )
