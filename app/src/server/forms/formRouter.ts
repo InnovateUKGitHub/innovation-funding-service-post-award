@@ -6,8 +6,7 @@ import { EditClaimLineItemsFormHandler } from "./editClaimLineItemsFormHandler";
 import { HomeFormHandler } from "./homeFormHandler";
 import { PrepareClaimFormHandler } from "./prepareClaimFormHandler";
 import { ReviewClaimFormHandler } from "./reviewClaimFormHandler";
-import { ClaimDetailDocumentUploadHandler } from "./claimDetailDocumentUploadHandler";
-import { ClaimDetailDocumentDeleteHandler } from "./claimDetailDocumentDeleteHandler";
+import { ClaimDetailDocumentHandler } from "./claimDetailDocument";
 import { ViewForecastFormHandler } from "./viewForecastFormHandler";
 import { UpdateForecastFormHandler } from "./updateForecastFormHandler";
 
@@ -23,13 +22,12 @@ const handlers: IFormHandler[] = [
   new ReviewClaimFormHandler(),
   new UpdateForecastFormHandler(),
   new ViewForecastFormHandler(),
-  new ClaimDetailDocumentDeleteHandler(),
   // TODO revisit how we set middleware
-  new ClaimDetailDocumentUploadHandler([upload.single("attachment")]),
+  new ClaimDetailDocumentHandler([upload.single("attachment")]),
 
   new HomeFormHandler(),
 ];
 
 handlers.forEach(x => {
-  formRouter.post(x.routePath, ...x.middleware, async (req: express.Request, res: express.Response, next: express.NextFunction) => x.handle(req, res, next));
+  formRouter.post(x.routePath, ...x.middleware, (req: express.Request, res: express.Response, next: express.NextFunction) => x.handle(req, res, next));
 });
