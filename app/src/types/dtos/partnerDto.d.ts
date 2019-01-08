@@ -8,7 +8,6 @@ interface PartnerDto {
     totalParticipantGrant: number;
     totalParticipantCostsClaimed: number;
     awardRate: number;
-    totalParticipantCostsPaid: number;
     percentageParticipantCostsClaimed: number | null;
     capLimit: number;
     totalFutureForecastsForParticipants: number;

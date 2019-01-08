@@ -2,7 +2,7 @@ import React from "react";
 import { Email } from "./renderers/email";
 
 export interface ProjectMember {
-    role: string;
+    roleName: string;
     name: string;
     email: string;
     organisation?: string;
@@ -17,7 +17,7 @@ export const ProjectMember: React.SFC<Props> = (props) => {
     const { member } = props;
     if (!member) { return null; }
 
-    const displayRole = member.organisation ? `${member.role} - ${member.organisation}` : member.role;
+    const displayRole = member.organisation ? `${member.roleName} - ${member.organisation}` : member.roleName;
 
     return (
         <div className="govuk-heading-m govuk-!-margin-bottom-9">
