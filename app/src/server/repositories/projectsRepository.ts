@@ -32,7 +32,7 @@ const fields = [
 ];
 
 export interface IProjectRepository {
-    getById(id: string): Promise<ISalesforceProject | null>;
+    getById(id: string): Promise<ISalesforceProject>;
     getAll(): Promise<ISalesforceProject[]>;
 }
 
@@ -42,7 +42,7 @@ export class ProjectRepository extends SalesforceBase<ISalesforceProject> implem
     }
 
     getById(id: string) {
-        return super.filterOne({ Id: id });
+        return super.loadItem({ Id: id });
     }
 
     getAll() {

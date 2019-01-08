@@ -5,6 +5,8 @@ import { TestClock } from "./testClock";
 import { TestLogger } from "./testLogger";
 import { IConfig } from "../../src/server/features/common/config";
 import { Cache } from "../../src/server/features/common/cache";
+import { TestUser } from "./testUser";
+import { ProjectRole } from "../../src/types";
 
 export class TestContext implements IContext {
     constructor() {
@@ -15,7 +17,7 @@ export class TestContext implements IContext {
     public clock = new TestClock();
     public logger = new TestLogger();
     public repositories: ITestRepositories;
-
+    public user = new TestUser();
     public testData: TestData;
 
     public config: IConfig = {
@@ -32,7 +34,8 @@ export class TestContext implements IContext {
     };
 
     public caches: ICaches = {
-        costCategories: new Cache<CostCategoryDto[]>(1)
+        costCategories: new Cache<CostCategoryDto[]>(1),
+        projectRoles: new Cache<{ [key: string]: ProjectRole }>(1),
     };
 
     public runQuery<TResult>(query: QueryBase<TResult>): Promise<TResult> {

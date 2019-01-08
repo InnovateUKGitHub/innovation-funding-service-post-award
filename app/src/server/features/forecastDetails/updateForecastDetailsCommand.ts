@@ -47,7 +47,7 @@ export class UpdateForecastDetailsCommand extends CommandBase<boolean> {
     const partner = await context.runQuery(new GetPartnerById(this.partnerId));
     const project = await context.runQuery(new GetProjectById(partner!.projectId));
     const current = await context.runQuery(new GetAllForecastsForPartnerQuery(this.partnerId));
-    const passed  = current.filter(x => x.periodId <= project!.periodId)
+    const passed  = current.filter(x => x.periodId <= project.periodId)
       .every(x => {
         const forecast = this.forecasts.find(y => y.id === x.id);
         return !!forecast && forecast.value === x.value;

@@ -1,22 +1,23 @@
+// tslint:disable:no-bitwise
 import { CommandBase, IContext } from "../common/context";
 import { ISalesforceProject } from "../../repositories/projectsRepository";
-import { ClaimFrequency, ProjectDto } from "../../../types";
+import { ClaimFrequency, ProjectDto, ProjectRole } from "../../../types";
 import { GetPeriodInfoQuery } from ".";
 
 export class MapToProjectDtoCommand extends CommandBase<ProjectDto> {
-  constructor(readonly item: ISalesforceProject) {
+  constructor(readonly item: ISalesforceProject, readonly roles: ProjectRole) {
     super();
    }
 
   protected LogMessage() {
-    return ["MapToProjectDtoCommand", {id: this.item.Id}];
+    return ["MapToProjectDtoCommand", {id: this.item.Id, role: this.roles}];
   }
 
   protected async Run(context: IContext) {
     const claimFrequency = this.mapFrequencyToEnum(this.item.Acc_ClaimFrequency__c);
     const startDate = context.clock.parse(this.item.Acc_StartDate__c, "yyyy-MM-dd")!;
     const endDate = context.clock.parse(this.item.Acc_EndDate__c, "yyyy-MM-dd")!;
-    const periodInfo = await context.runSyncQuery(new GetPeriodInfoQuery(startDate, endDate, claimFrequency));
+    const periodInfo = context.runSyncQuery(new GetPeriodInfoQuery(startDate, endDate, claimFrequency));
 
     const dto: ProjectDto = {
       id: this.item.Id,
@@ -35,10 +36,27 @@ export class MapToProjectDtoCommand extends CommandBase<ProjectDto> {
       periodId: periodInfo.current,
       periodStartDate: periodInfo.startDate,
       periodEndDate: periodInfo.endDate,
-      totalPeriods: periodInfo.total
+      totalPeriods: periodInfo.total,
+      roles: this.roles || ProjectRole.Unknown,
+      roleTitles: this.getRoleTitles()
     };
 
     return Promise.resolve(dto);
+  }
+
+  private getRoleTitles() {
+    const roles = this.roles || ProjectRole.Unknown;
+    const results: string[] = [];
+    if((roles & ProjectRole.MonitoringOfficer) === ProjectRole.MonitoringOfficer) {
+      results.push("Monitoring Officer");
+    }
+    if((roles & ProjectRole.ProjectManager) === ProjectRole.ProjectManager) {
+      results.push("Project Manager");
+    }
+    if((roles & ProjectRole.FinancialContact) === ProjectRole.FinancialContact) {
+      results.push("Finance Contact");
+    }
+    return results;
   }
 
   mapFrequencyToEnum(freq: string): ClaimFrequency {
