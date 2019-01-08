@@ -2,9 +2,11 @@ import mimeTypes from "mime-types";
 import { Router } from "express-serve-static-core";
 import multer from "multer";
 import express, { NextFunction, Request, Response } from "express";
-import { StatusCode } from "./ApiError";
+
 import { FileUpload } from "../../types/FileUpload";
 import { ErrorCode, IAppError } from "../../types/IAppError";
+import { AppError, NotFoundError } from "../features/common/appError";
+import { errorHandlerApi } from "../errorHandlers";
 
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
@@ -78,25 +80,6 @@ export abstract class ControllerBase<T> {
     return this;
   }
 
-  private getErrorStatus(code: number) {
-    switch (code) {
-      case (ErrorCode.VALIDATION_ERROR):
-      case (ErrorCode.BAD_REQUEST_ERROR): return StatusCode.BAD_REQUEST;
-      case (ErrorCode.SECURITY_ERROR): return StatusCode.SERVICE_UNAVAILABLE;
-      case (ErrorCode.REQUEST_ERROR): return StatusCode.NOT_FOUND;
-      case (ErrorCode.SERVER_ERROR):
-      default: return StatusCode.INTERNAL_SERVER_ERROR;
-    }
-  }
-
-  private errorHandler<E extends Error>(err: IAppError, resp: Response) {
-    console.log("Error in controller", err);
-    const code = err.code || ErrorCode.SERVER_ERROR;
-    const details = err.details || "Something went wrong";
-    const status = this.getErrorStatus(err.code);
-    return resp.status(status).json({ code, details });
-  }
-
   private executeMethod<TParams, TResponse>(successStatus: number, getParams: (params: any, query: any, body?: any, file?: any) => TParams, run: (params: ApiParams<TParams>) => Promise<TResponse | null>, allowNulls: boolean) {
     type extendedRequest = Request & { file: Express.Multer.File };
     return async (req: extendedRequest, resp: Response, next: NextFunction) => {
@@ -106,11 +89,11 @@ export abstract class ControllerBase<T> {
       run(p)
         .then(result => {
           if ((result === null || result === undefined) && allowNulls === false) {
-            return resp.status(404).send();
+            throw new NotFoundError();
           }
           resp.status(successStatus).send(result);
         })
-        .catch((e: IAppError) => this.errorHandler(e, resp));
+        .catch((e: IAppError) => errorHandlerApi(resp, e));
     };
   }
 
@@ -119,8 +102,8 @@ export abstract class ControllerBase<T> {
       const p = Object.assign({ user: req.session!.user as IUser }, getParams(req.params || {}, req.query || {}, req.body || {}));
       run(p)
         .then(result => {
-          if ((result === null || result === undefined)) {
-            return resp.status(404).send();
+          if(result === null || result === undefined) {
+            throw new NotFoundError();
           }
           const defaultContentType = "application/octet-stream";
           const contentType = result.fileType ? mimeTypes.lookup(result.fileType) : defaultContentType;
@@ -132,7 +115,7 @@ export abstract class ControllerBase<T> {
           resp.writeHead(successStatus, head);
           return result.stream.pipe(resp);
         })
-        .catch((e: IAppError) => this.errorHandler(e, resp));
+        .catch((e: IAppError) => errorHandlerApi(resp, e));
     };
   }
 }

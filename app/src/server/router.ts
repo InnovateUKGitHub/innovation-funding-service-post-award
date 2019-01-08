@@ -3,6 +3,8 @@ import { serverRender } from "./serverRender";
 import { componentGuideRender } from "./componentGuideRender";
 import { router as apiRoutes } from "./apis";
 import { formRouter } from "./forms/formRouter";
+import { errorHandlerRender } from "./errorHandlers";
+import { NotFoundError } from "./features/common/appError";
 
 export const router = express.Router();
 
@@ -13,4 +15,4 @@ router.post("*", formRouter);
 
 router.get("*", (req, res) => serverRender(req, res));
 
-router.get("*", (req, res) => res.status(404).send("Not found"));
+router.all("*", (req, res) => errorHandlerRender(res, new NotFoundError()));

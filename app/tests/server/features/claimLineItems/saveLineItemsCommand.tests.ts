@@ -2,7 +2,7 @@ import { TestContext } from "../../testContextProvider";
 import mapClaimLineItem from "../../../../src/server/features/claimLineItems/mapClaimLineItem";
 import {SaveLineItemsCommand} from "../../../../src/server/features/claimLineItems";
 import * as Repositories from "../../../../src/server/repositories";
-import {ValidationError} from "../../../../src/shared/validation";
+import { ValidationError } from "../../../../src/server/features/common/appError";
 
 describe("UpdateClaimLineItemsCommand", () => {
 

@@ -13,7 +13,9 @@ import * as forecastGolCosts from "./forecastGolCosts";
 import * as documents from "./documents";
 import * as users from "./users";
 
-import {ControllerBase} from "./controllerBase";
+import { ControllerBase } from "./controllerBase";
+import { errorHandlerApi } from "../errorHandlers";
+import { NotFoundError } from "../features/common/appError";
 
 export interface IApiClient {
   claimDetails: claimDetails.IClaimDetailsApi;
@@ -53,4 +55,4 @@ Object.keys(serverApis)
   .map(key => ({ path: serverApis[key].path, controller: serverApis[key] }))
   .forEach(item => router.use("/" + item.path, item.controller.router));
 
-router.all("*", (req, res, next) => res.status(404).send());
+router.all("*", (req, res) => errorHandlerApi(res, new NotFoundError()));

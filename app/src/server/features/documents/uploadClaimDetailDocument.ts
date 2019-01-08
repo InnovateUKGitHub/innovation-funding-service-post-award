@@ -2,7 +2,7 @@ import { CommandBase, IContext} from "../common/context";
 import {UploadDocumentCommand} from "./uploadDocument";
 import { FileUpload } from "../../../types/FileUpload";
 import { FileUploadValidator } from "../../../ui/validators/documentUploadValidator";
-import { ValidationError } from "../../../shared/validation";
+import { ValidationError } from "../common/appError";
 
 export class UploadClaimDetailDocumentCommand extends CommandBase<string> {
   constructor(private claimDetailKey: ClaimDetailKey, private file: FileUpload) {
