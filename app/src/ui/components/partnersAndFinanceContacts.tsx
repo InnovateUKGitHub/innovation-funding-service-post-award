@@ -11,7 +11,7 @@ export const PartnersAndFinanceContacts: React.SFC<Props> = (props) => {
   const PartnersTable = TypedTable<typeof partnersAndContactsData[0]>();
 
   return (
-    <PartnersTable.Table qa="project-details-table" data={partnersAndContactsData}>
+    <PartnersTable.Table qa="partner-details" data={partnersAndContactsData}>
       <PartnersTable.String header="Partner" value={x => x.partner.isLead ? `${x.partner.name} (Lead)` : x.partner.name} qa="partner-name"/>
       <PartnersTable.String header="Partner type" value={x => x.partner.type} qa="partner-type"/>
       <PartnersTable.String header="Finance Contact" value={x => x.financeContact && x.financeContact.name || ""} qa="fc-name" />

@@ -39,8 +39,8 @@ class ProjectDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
         const projectManager = contacts.find(x => x.role === "Project Manager");
 
         const links = [
-            { text: "View original application", url: project.applicationUrl, qa: "Original_application" },
-            { text: "View original grant offer letter", url: project.grantOfferLetterUrl, qa: "Original_grant_letter" }
+            { text: "View original application", url: project.applicationUrl, qa: "application-link" },
+            { text: "View original grant offer letter", url: project.grantOfferLetterUrl, qa: "grant-letter-link" }
         ];
 
         return (
@@ -54,15 +54,15 @@ class ProjectDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
 
                 </ACC.Section>
 
-                <ACC.Section title="Project information">
-                    <DetailsSection.Details labelWidth="Narrow" data={project}>
+                <ACC.Section title="Project information" qa="project-details">
+                    <DetailsSection.Details labelWidth="Narrow" data={project} qa="project-details">
                         <DetailsSection.Date label="Project start date" qa="start-date" value={x => x.startDate} />
                         <DetailsSection.Date label="Project end date" qa="end-date" value={x => x.endDate} />
                         <DetailsSection.MulilineString label="Project summary" qa="summary" value={x => x.summary} />
                     </DetailsSection.Details>
                 </ACC.Section>
 
-                <ACC.Section title="Application information">
+                <ACC.Section title="Application information" qa="application-details">
                     <ACC.LinksList links={links} />
                 </ACC.Section>
             </ProjectOverviewPage>
@@ -78,7 +78,7 @@ class ProjectDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
         return (
             <ACC.Section title="Cost claimed status" qa="cost-claimed-status">
                 <PartnersTable.Table qa="cost-claimed" data={partners}>
-                    <PartnersTable.String header="Partner" qa="partner" value={x => x.isLead ? `${x.name} (Lead)` : x.name} footer="Total" />
+                    <PartnersTable.String header="Partner" qa="partner-name" value={x => x.isLead ? `${x.name} (Lead)` : x.name} footer="Total" />
                     <PartnersTable.Currency header="Total eligible costs" qa="total-costs" value={x => x.totalParticipantGrant} footer={<ACC.Renderers.Currency value={totalEligibleCosts} />} />
                     <PartnersTable.Currency header="Costs claimed to date" qa="costs-claimed" value={x => x.totalParticipantCostsClaimed} footer={<ACC.Renderers.Currency value={totalClaimed} />} />
                     <PartnersTable.Percentage header="Percentage claimed" qa="percentage-claimed" value={x => x.percentageParticipantCostsClaimed} footer={<ACC.Renderers.Percentage value={percentageClaimed} />} />
