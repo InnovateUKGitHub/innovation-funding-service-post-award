@@ -13,13 +13,14 @@ describe("getAllForProjectQuery", () => {
             x.Acc_TotalParticipantCosts__c = 17474;
             x.Acc_Award_Rate__c = 50;
             x.Acc_Cap_Limit__c = 50;
+            x.Acc_TotalFutureForecastsforParticipant__c = 1002;
         });
 
         const result = await context.runQuery(new GetByIdQuery(partner.Id));
 
         expect(result).not.toBe(null);
 
-        expect(result).toEqual({
+        const expected: PartnerDto = {
             id: "Partner1",
             name: "Expected name",
             accountId: "AccountId1",
@@ -28,11 +29,13 @@ describe("getAllForProjectQuery", () => {
             projectId: "Project1",
             totalParticipantGrant: 125000,
             totalParticipantCostsClaimed: 17474,
-            totalParticipantCostsPaid: 50000,
             percentageParticipantCostsClaimed: 13.9792,
             awardRate: 50,
-            capLimit: 50
-        });
+            capLimit: 50,
+            totalFutureForecastsForParticipants: 1002,
+        };
+
+        expect(result).toEqual(expected);
     });
 
     it("calculated cost claimed percentage", async () => {

@@ -7,7 +7,8 @@ export interface ISalesforceProjectContact {
     Acc_AccountId__c: string;
     Acc_ProjectId__c: string;
     Acc_EmailOfSFContact__c: string;
-    Acc_Role__c: string;
+    Acc_Role__c: "Monitoring officer" | "Project Manager" | "Finance contact";
+    RoleName: string;
     Acc_ContactId__r: {
         Id: string;
         Name: string;
@@ -20,6 +21,7 @@ const fields = [
     "Acc_ProjectId__c",
     "Acc_EmailOfSFContact__c",
     "Acc_Role__c",
+    "toLabel(Acc_Role__c) RoleName",
     "Acc_ContactId__r.Id",
     "Acc_ContactId__r.Name"
 ];

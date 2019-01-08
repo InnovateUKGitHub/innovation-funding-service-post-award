@@ -8,8 +8,8 @@ import Enzyme, { mount, shallow } from "enzyme";
 Enzyme.configure({ adapter: new Adapter() });
 
 describe("ProjectMember", () => {
-    const aProjectMemberWithOrg: ProjectMember = { role: "aTestRole", name: "aTestName", email: "testemail@email.com", organisation: "aTestOrganisation" };
-    const aProjectMemberWithoutOrg: ProjectMember = { role: "aTestRole", name: "aTestName", email: "testemail@email.com" };
+    const aProjectMemberWithOrg: ProjectMember = { roleName: "aTestRole", name: "aTestName", email: "testemail@email.com", organisation: "aTestOrganisation" };
+    const aProjectMemberWithoutOrg: ProjectMember = { roleName: "aTestRole", name: "aTestName", email: "testemail@email.com" };
 
     it("should render organisation if present", () => {
         const wrapper = shallow(<ProjectMember member={aProjectMemberWithOrg} qa="member-a" />);
