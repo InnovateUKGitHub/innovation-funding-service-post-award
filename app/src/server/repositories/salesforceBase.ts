@@ -62,6 +62,14 @@ export default abstract class SalesforceBase<T> {
     return result as T[];
   }
 
+  protected async loadItem(filter: Partial<T> | string): Promise<T> {
+    const result = await this.filterOne(filter);
+    if(!result) {
+      throw new SalesforceInvalidFilterError();
+    }
+    return result;
+  }
+
   protected async filterOne(filter: Partial<T> | string): Promise<T | null> {
     const conn = await this.getSalesforceConnection();
     const result = await conn.sobject(this.objectName)

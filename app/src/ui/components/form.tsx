@@ -122,8 +122,10 @@ const handleSubmit = <TDto extends {}>(props: SubmitProps, e: React.MouseEvent<{
 };
 
 const handleOtherButton = <TDto extends {}>(props: ButtonProps, e: React.MouseEvent<{}>) => {
-    e.preventDefault();
-    props.onClick();
+    if (props.onClick) {
+        e.preventDefault();
+        props.onClick();
+    }
 };
 
 const handleChange = <TDto extends {}, TValue extends {}>(props: ExternalFieldProps<TDto, TValue>, value: TValue | null) => {
@@ -200,7 +202,7 @@ const SubmitComponent: React.SFC<SubmitProps> = (props) => {
 
 interface ButtonProps {
     name: string;
-    onClick: () => void;
+    onClick?: () => void;
     qa?: string;
     styling?: "Link" | "Secondary" | "Primary";
     className?: string;

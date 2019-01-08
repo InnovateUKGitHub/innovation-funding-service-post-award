@@ -112,9 +112,10 @@ export class TestData {
       Acc_ContactId__r: {
         Id: "Contact" + seed,
         Name: `Ms Contact ${seed}`,
+        Email: `projectcontact${seed}@login.com`,
       },
       Acc_Role__c: "Finance contact",
-      RoleName: "Finance Contact"
+      RoleName: "Finance Contact",
     };
 
     if (update) {

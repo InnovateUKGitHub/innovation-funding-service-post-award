@@ -39,6 +39,10 @@ class ProjectContactTestRepository extends TestRepository<Repositories.ISalesfor
     getAllByProjectId(projectId: string) {
         return super.getWhere(x => x.Acc_ProjectId__c === projectId);
     }
+
+    getAllForUser(email: string) {
+        return super.getWhere(x => x.Acc_ContactId__r.Email === email);
+    }
 }
 
 class CostCategoriesTestRepository extends TestRepository<Repositories.ISalesforceCostCategory> implements Repositories.ICostCategoryRepository {
