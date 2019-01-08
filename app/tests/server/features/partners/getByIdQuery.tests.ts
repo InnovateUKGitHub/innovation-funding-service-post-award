@@ -20,7 +20,7 @@ describe("getAllForProjectQuery", () => {
 
         expect(result).not.toBe(null);
 
-        const expected : PartnerDto = {
+        const expected: PartnerDto = {
             id: "Partner1",
             name: "Expected name",
             accountId: "AccountId1",
