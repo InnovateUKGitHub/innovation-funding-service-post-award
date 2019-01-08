@@ -23,7 +23,7 @@ export const ProjectMember: React.SFC<Props> = (props) => {
         <div className="govuk-heading-m govuk-!-margin-bottom-9">
             <h3 className="govuk-heading-s govuk-!-margin-bottom-0">{displayRole}</h3>
             <p className="govuk-body govuk-!-margin-bottom-0" data-qa={`${props.qa}-name`}>{member.name}</p>
-            <Email value={member.email} />
+            <Email value={member.email} qa={props.qa + "-email"} />
         </div>
     );
 };
