@@ -1,16 +1,16 @@
-import { FormHandlerBase, IFormBody, IFormButton } from "./formHandlerBase";
+import { FormHandlerBase, IFormBody, IFormButton } from "../formHandlerBase";
 import {
   ClaimDashboardPageParams,
   ClaimsDashboardRoute
-} from "../../ui/containers";
-import { IContext } from "../features/common/context";
+} from "../../../ui/containers";
+import { IContext } from "../../features/common/context";
 import {
   getDocumentDeleteEditor
-} from "../../ui/redux/selectors";
-import { DeleteDocumentCommand } from "../features/documents/deleteDocument";
-import { Results } from "../../ui/validation/results";
-import { GetDocumentsSummaryQuery } from "../features/documents/getDocumentsSummary";
-import { BadRequestError } from "../features/common/appError";
+} from "../../../ui/redux/selectors";
+import { DeleteDocumentCommand } from "../../features/documents/deleteDocument";
+import { Results } from "../../../ui/validation/results";
+import { GetDocumentsSummaryQuery } from "../../features/documents/getDocumentsSummary";
+import { BadRequestError } from "../../features/common/appError";
 
 export class ClaimDashboardDocumentDeleteHandler extends FormHandlerBase<ClaimDashboardPageParams, DocumentSummaryDto> {
 
