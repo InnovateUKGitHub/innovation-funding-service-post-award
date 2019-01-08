@@ -177,7 +177,7 @@ class Component extends ContainerBase<ClaimDashboardPageParams, Data, Callbacks>
   }
 
   private getLink(claim: ClaimDto, projectId: string) {
-    if (claim.status === "Draft") {
+    if ([ClaimStatus.DRAFT, ClaimStatus.INNOVATE_QUERIED, ClaimStatus.MO_QUERIED].indexOf(claim.status) > -1) {
       return <Acc.Link route={PrepareClaimRoute.getLink({ projectId, partnerId: claim.partnerId, periodId: claim.periodId })}>Edit claim</Acc.Link>;
     }
     if (claim.status === "Submitted") {
@@ -227,12 +227,12 @@ class Component extends ContainerBase<ClaimDashboardPageParams, Data, Callbacks>
     const isClaimEditable = editableStatuses.indexOf(data[0].status) > -1;
 
     return (
-      <ClaimTable.Table qa={tableQa} data={data} bodyRowClass={() => isClaimEditable ? "table__row--edit" : ""}>
+      <ClaimTable.Table qa={tableQa} data={data} bodyRowClass={() => isClaimEditable ? "table__row--info" : ""}>
         <ClaimTable.Custom
           paddingRight="0px"
           header=""
           qa="edit-icon"
-          value={() => isClaimEditable ? <img src="/assets/images/icon-edit.png"/> : null}
+          value={() => isClaimEditable ? <img style={{height: "19px"}} src="/assets/images/icon-edit.png"/> : null}
         />
         <ClaimTable.Custom
           header=""
