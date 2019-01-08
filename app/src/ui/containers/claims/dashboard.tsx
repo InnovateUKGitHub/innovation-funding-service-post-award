@@ -166,11 +166,11 @@ class Component extends ContainerBase<ClaimDashboardPageParams, Data, Callbacks>
           </Acc.SectionPanel>
         </Acc.Section>
         <Acc.Section qa="current-claims-section" title={"Open"} badge={claimsWindow}>
-          {this.renderClaims(currentClaim ? [currentClaim] : [], "current-claims-table", project, true)}
+          {this.renderCurrentClaims(currentClaim ? [currentClaim] : [], "current-claims-table", project, previousClaims)}
         </Acc.Section>
         {currentClaim && editor && this.renderIarDocumentSection(currentClaim, editor, document)}
         <Acc.Section qa="previous-claims-section" title="Closed">
-          {this.renderClaims(previousClaims, "previous-claims-table", project, false)}
+          {this.renderPreviousClaims(previousClaims, "previous-claims-table", project)}
         </Acc.Section>
       </Acc.ProjectOverviewPage>
     );
@@ -186,31 +186,53 @@ class Component extends ContainerBase<ClaimDashboardPageParams, Data, Callbacks>
     return <Acc.Link route={ClaimsDetailsRoute.getLink({ projectId, partnerId: claim.partnerId, periodId: claim.periodId })}>View claim</Acc.Link>;
   }
 
-  private renderClaims(data: ClaimDto[], tableQa: string, project: ProjectDto, isCurrentClaim: boolean) {
+  private renderNextPeriodStartDate(endDate: Date) {
+    const date = DateTime.fromJSDate(endDate).plus({days: 1}).toJSDate();
+    return (
+      <Acc.Renderers.SimpleString>
+        You have no open claims. The next claim period begins <Acc.Renderers.FullDate value={date} />.
+      </Acc.Renderers.SimpleString>
+    );
+  }
+
+  private renderCurrentClaims(data: ClaimDto[], tableQa: string, project: ProjectDto, previousClaims?: ClaimDto[]) {
+    if (data.length) {
+      return this.renderClaimsTable(data, tableQa, project);
+    }
+
+    if (!!project.periodEndDate) {
+      return this.renderNextPeriodStartDate(project.periodEndDate);
+    }
+
+    if (!!previousClaims) {
+      return this.renderNextPeriodStartDate(previousClaims[0].periodEndDate);
+    }
+
+    return null;
+
+  }
+
+  private renderPreviousClaims(data: ClaimDto[], tableQa: string, project: ProjectDto) {
+    if (data.length) {
+      return this.renderClaimsTable(data, tableQa, project);
+    }
+
+    return <Acc.Renderers.SimpleString>You have not made any claims.</Acc.Renderers.SimpleString>;
+  }
+
+  private renderClaimsTable(data: ClaimDto[], tableQa: string, project: ProjectDto) {
     const ClaimTable = Acc.TypedTable<ClaimDto>();
 
-    if (isCurrentClaim && !data.length) {
-      if(!project.periodEndDate) return null;
-      const date = DateTime.fromJSDate(project.periodEndDate).plus({days: 1}).toJSDate();
-
-      return (
-          <Acc.Renderers.SimpleString>
-            You have no open claims. The next claim period begins <Acc.Renderers.FullDate value={date} />.
-          </Acc.Renderers.SimpleString>
-      );
-    }
-
-    if (!isCurrentClaim && !data.length) {
-      return <Acc.Renderers.SimpleString>You have not made any claims.</Acc.Renderers.SimpleString>;
-    }
+    const editableStatuses = [ClaimStatus.DRAFT, ClaimStatus.MO_QUERIED, ClaimStatus.INNOVATE_QUERIED];
+    const isClaimEditable = editableStatuses.indexOf(data[0].status) > -1;
 
     return (
-      <ClaimTable.Table qa={tableQa} data={data} bodyRowClass={() => data[0].status === "Draft" ? "table__row--draft" : ""}>
+      <ClaimTable.Table qa={tableQa} data={data} bodyRowClass={() => isClaimEditable ? "table__row--edit" : ""}>
         <ClaimTable.Custom
           paddingRight="0px"
           header=""
           qa="edit-icon"
-          value={() => data[0].status === "Draft" ? <img src="/assets/images/icon-edit.png"/> : null}
+          value={() => isClaimEditable ? <img src="/assets/images/icon-edit.png"/> : null}
         />
         <ClaimTable.Custom
           header=""
