@@ -7,7 +7,7 @@ import * as Acc from "../../components";
 import { PrepareClaimRoute } from "./prepare";
 import { ClaimsDetailsRoute } from "./details";
 import { ReviewClaimRoute } from "./review";
-import { ClaimDto, ClaimStatus, ProjectDto } from "../../../types";
+import { ClaimDto, ClaimStatus, DocumentDescription, ProjectDto } from "../../../types";
 import { IEditorStore } from "../../redux/reducers";
 import { DocumentUploadValidator } from "../../validators/documentUploadValidator";
 import { DateTime } from "luxon";
@@ -102,11 +102,20 @@ class Component extends ContainerBase<ClaimDashboardPageParams, Data, Callbacks>
     return (
       <React.Fragment>
         <Acc.ValidationMessage messageType={messageType} message={message} />
-        <UploadForm.Form data={editor.data} onChange={(dto) => this.onChange(dto, claim.periodId)}>
+        <UploadForm.Form enctype="multipart/form-data" data={editor.data} onChange={(dto) => this.onChange(dto, claim.periodId)}>
           <UploadForm.Fieldset>
-            <UploadForm.FileUpload label="document" labelHidden={true} name="upload-documents" validation={editor.validator.file} value={(data) => data.file}  update={(dto, file) => dto.file = file} />
+            <UploadForm.FileUpload
+              label="document"
+              labelHidden={true}
+              name="attachment"
+              validation={editor.validator.file}
+              value={(data) => data.file}
+              update={(dto, file) => dto.file = file}
+            />
+            <UploadForm.Hidden name="periodId" value={() => claim.periodId} />
+            <UploadForm.Hidden name="description" value={() => DocumentDescription.IAR} />
           </UploadForm.Fieldset>
-          <UploadForm.Button name="default" onClick={() => this.onSave(editor.data, claim.periodId)}>Upload</UploadForm.Button>
+          <UploadForm.Button name="upload" onClick={() => this.onSave(editor.data, claim.periodId)}>Upload</UploadForm.Button>
         </UploadForm.Form>
       </React.Fragment>
     );
