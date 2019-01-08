@@ -2,9 +2,9 @@ import { ApiParams, ControllerBase } from "./controllerBase";
 import contextProvider from "../features/common/contextProvider";
 import { GetAllClaimsForProjectQuery, GetAllForPartnerQuery, GetClaim } from "../features/claims";
 import { UpdateClaimCommand } from "../features/claims/updateClaim";
-import { BadRequestError, StatusCode } from "./ApiError";
 import { processDto } from "../../shared/processResponse";
 import { ClaimDto } from "../../types";
+import { BadRequestError } from "../features/common/appError";
 
 export interface IClaimsApi {
   getAllByProjectId: (params: ApiParams<{ projectId: string }>) => Promise<ClaimDto[]>;
@@ -53,7 +53,7 @@ class Controller extends ControllerBase<ClaimDto> implements IClaimsApi {
     const { partnerId, periodId, claim } = params;
 
     if (partnerId !== claim.partnerId || periodId !== claim.periodId) {
-      throw new BadRequestError("Bad request");
+      throw new BadRequestError();
     }
 
     const context = contextProvider.start(params);

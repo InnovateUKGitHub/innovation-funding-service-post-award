@@ -1,8 +1,8 @@
 import { TestContext } from "../../testContextProvider";
 import { UpdateClaimCommand } from "../../../../src/server/features/claims/updateClaim";
-import { ValidationError } from "../../../../src/shared/validation";
 import mapClaim from "../../../../src/server/features/claims/mapClaim";
 import { ClaimStatus } from "../../../../src/types/constants";
+import { ValidationError } from "../../../../src/server/features/common/appError";
 
 describe("UpdateClaimCommand", () => {
   it("when claim id not set expect validation exception", async () => {

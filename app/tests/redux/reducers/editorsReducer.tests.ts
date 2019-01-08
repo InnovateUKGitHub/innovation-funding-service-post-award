@@ -14,14 +14,14 @@ const testSubmitError = () => {
         id: "1",
         store: "claim",
         dto: "test data",
-        error: { code: 1, details: "this is an error 1" }
+        error: { code: 1, message: "this is an error 1" }
       }
     };
     const newState = editorsReducer("claim")(originalState.editors.claim, action);
     expect(newState).toEqual({
       1: {
         data: "test data",
-        error: { code: 1, details: "this is an error 1" },
+        error: { code: 1, message: "this is an error 1" },
         validator: undefined
       }
     });
@@ -34,7 +34,7 @@ const testSubmitError = () => {
         id: "1",
         store: "claim",
         dto: "test data",
-        error: { code: 1, details: "this is an error", original: "the original error passed in the context" }
+        error: { code: 1, message: "this is an error", original: "the original error passed in the context" }
       }
     };
     const newState = editorsReducer("claim")(originalState.editors.claim, action);
@@ -59,14 +59,14 @@ const testSubmitError = () => {
         id: "1",
         store: "claim",
         dto: "test data",
-        error: { code: 1, details: "this is also an error" }
+        error: { code: 1, message: "this is also an error" }
       }
     };
     const newState = editorsReducer("claim")(originalState.editors.claim, action);
     expect(newState).toEqual({
       1: {
         data: "test data",
-        error: { code: 1, details: "this is also an error" },
+        error: { code: 1, message: "this is also an error" },
         validator
       }
     });
@@ -78,7 +78,7 @@ const testSubmitError = () => {
     originalState.editors.claim = {
       1: {
         data: claimDto,
-        error: { code: 1, details: "original error" },
+        error: { code: 1, message: "original error", results: null },
         validator
       }
     };
@@ -100,7 +100,7 @@ const testSubmitError = () => {
     originalState.editors.claim = {
       1: {
         data: claimDto,
-        error: { code: 1, details: "This is an existing error" },
+        error: { code: 1, message: "This is an existing error", results: null },
         validator: new ClaimDtoValidator(claimDto, [], [createCostCategory()], true)
       }
     };
@@ -146,7 +146,7 @@ const testSubmitSuccess = () => {
     originalState.editors.claim = {
       1: {
         data: claimDto,
-        error: { code: 1, details: "original error" },
+        error: { code: 1, message: "original error", results: null },
         validator
       }
     };
@@ -167,7 +167,7 @@ const testSubmitSuccess = () => {
       1: {
         data: claimDto,
         validator: new ClaimDtoValidator(claimDto, [], [createCostCategory({name: "Materials"})], true),
-        error: { code: 1, details: "This is an existing error" }
+        error: { code: 1, message: "This is an existing error", results: null }
       }
     };
     const action = {
@@ -191,7 +191,7 @@ const testEditorUpdate = () => {
       1: {
         data: claimDto,
         validator: new ClaimDtoValidator(claimDto, [], [createCostCategory({name: "Materials"})], true),
-        error: { code: 1, details: "keep this error" }
+        error: { code: 1, message: "keep this error", results: null }
       }
     };
     const action = {
@@ -204,7 +204,7 @@ const testEditorUpdate = () => {
       }
     };
     const newState = editorsReducer("claim")(originalState.editors.claim, action);
-    expect(newState[1].error).toEqual({ code: 1, details: "keep this error" });
+    expect(newState[1].error).toEqual({ code: 1, message: "keep this error", results: null });
   });
   it("should update the dto", () => {
     const originalState = getRootState();
