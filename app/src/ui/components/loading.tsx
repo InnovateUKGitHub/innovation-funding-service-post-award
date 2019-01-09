@@ -82,7 +82,7 @@ const renderPageNotFoundError = () => (
 );
 
 const renderStandardErrorPage = () => (
-  <PageError title="Something has gone wrong at our end.">
+  <PageError title="Something has gone wrong at our end">
     <SimpleString>
       You can either go back to the page you were previously on or go back to your <Link route={ProjectDashboardRoute.getLink({})}>dashboard</Link>.
     </SimpleString>
