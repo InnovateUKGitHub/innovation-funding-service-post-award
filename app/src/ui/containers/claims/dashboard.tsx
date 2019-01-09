@@ -102,7 +102,7 @@ class Component extends ContainerBase<ClaimDashboardPageParams, Data, Callbacks>
     return (
       <React.Fragment>
         <Acc.ValidationMessage messageType={messageType} message={message} />
-        <UploadForm.Form qa="iar-upload-form" enctype="multipart/form-data" data={editor.data} onChange={(dto) => this.onChange(dto, claim.periodId)}>
+        <UploadForm.Form enctype="multipart/form-data" data={editor.data} onChange={(dto) => this.onChange(dto, claim.periodId)} qa="iar-upload-form" >
           <UploadForm.Fieldset>
             <UploadForm.FileUpload
               label="document"
@@ -115,7 +115,7 @@ class Component extends ContainerBase<ClaimDashboardPageParams, Data, Callbacks>
             <UploadForm.Hidden name="periodId" value={() => claim.periodId} />
             <UploadForm.Hidden name="description" value={() => DocumentDescription.IAR} />
           </UploadForm.Fieldset>
-          <UploadForm.Button qa="iar-upload-button" name="upload" onClick={() => this.onSave(editor.data, claim.periodId)}>Upload</UploadForm.Button>
+          <UploadForm.Button name="upload" onClick={() => this.onSave(editor.data, claim.periodId)} qa="iar-upload-button">Upload</UploadForm.Button>
         </UploadForm.Form>
       </React.Fragment>
     );
