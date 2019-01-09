@@ -1,12 +1,11 @@
 import express, { RequestHandler } from "express";
 import { ISession } from "../apis/controllerBase";
 import { configureRouter } from "../../ui/routing";
-import { serverRender } from "../serverRender";
 import { Results } from "../../ui/validation/results";
 import contextProvider from "../features/common/contextProvider";
 import { IContext } from "../features/common/context";
 import { FileUpload } from "../../types/FileUpload";
-import { BadRequestError } from "../features/common/appError";
+import { FormHandlerError } from "../features/common/appError";
 
 interface RouteInfo<TParams> {
   routeName: string;
@@ -44,9 +43,15 @@ export abstract class FormHandlerBase<TParams, TDto, TValidation = {}> implement
   private readonly getParams: (route: { name: string, path: string, params: any }) => TParams;
 
   public async handle(req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> {
+    // Used by BadRequestHandler to determine that the route has been matched
+    res.locals.isMatchedRoute = true;
+
     const params = this.getParams({ name: this.routeName, params: { ...req.params, ...req.query }, path: req.path });
 
     const buttonName = this.buttons.find(x => `button_${x}` in req.body);
+    // If the button in the request does not match this handler, call next handler
+    if (!buttonName) return next();
+
     const button = { name: buttonName, value: req.body[`button_${buttonName}`] };
     const body = { ...req.body };
     delete body[`button_${buttonName}`];
@@ -56,15 +61,14 @@ export abstract class FormHandlerBase<TParams, TDto, TValidation = {}> implement
 
     const file = req.file && { fileName: req.file.originalname, content: req.file.buffer.toString("base64") };
     const dto = await this.createDto(context, params, button, body, file);
+
     try {
-      // if we've matched the route without an acceptable button show an error
-      if(!buttonName) throw new BadRequestError();
       const link = await this.run(context, params, button, dto);
       return this.redirect(link, res);
     }
     catch (error) {
       const { key, store } = this.getStoreInfo(params, dto);
-      return serverRender(req, res, { key, store, dto, result: this.createValidationResult(params, dto), error });
+      throw new FormHandlerError(key, store, dto, this.createValidationResult(params, dto), error);
     }
   }
 

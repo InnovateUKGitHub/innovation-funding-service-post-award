@@ -7,6 +7,7 @@ import { FileUpload } from "../../../types/FileUpload";
 import { UploadClaimDocumentCommand } from "../../features/documents/uploadClaimDocument";
 import { DocumentDescription } from "../../../types/constants";
 import { FileUploadValidator } from "../../../ui/validators/documentUploadValidator";
+import { upload } from "../memoryStorage";
 
 interface Data {
   file: FileUpload;
@@ -16,7 +17,7 @@ interface Data {
 export class ClaimDashboardDocumentUploadHandler extends FormHandlerBase<ClaimDashboardPageParams, Data, FileUpload> {
 
   constructor() {
-    super(ClaimsDashboardRoute, ["upload"]);
+    super(ClaimsDashboardRoute, ["upload"], [upload.single("attachment")]);
   }
 
   protected async getDto(context: IContext, params: ClaimDashboardPageParams, button: IFormButton, body: IFormBody, file: FileUpload): Promise<Data> {

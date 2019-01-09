@@ -5,10 +5,11 @@ import { ClaimDetailDocumentsPageParams, ClaimDetailDocumentsRoute } from "../..
 import { IContext } from "../../features/common/context";
 import { FileUpload } from "../../../types/FileUpload";
 import { UploadClaimDetailDocumentCommand } from "../../features/documents/uploadClaimDetailDocument";
+import { upload } from "../memoryStorage";
 
 export class ClaimDetailDocumentUploadHandler extends FormHandlerBase<ClaimDetailDocumentsPageParams, FileUpload> {
     constructor() {
-      super(ClaimDetailDocumentsRoute, ["default"]);
+      super(ClaimDetailDocumentsRoute, ["default"], [upload.single("attachment")]);
     }
 
     protected async getDto(context: IContext, params: ClaimDetailDocumentsPageParams, button: IFormButton, body: IFormBody, file: FileUpload): Promise<FileUpload> {
