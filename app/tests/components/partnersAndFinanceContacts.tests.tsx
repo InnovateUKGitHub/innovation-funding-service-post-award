@@ -40,6 +40,7 @@ const testContactData: ProjectContactDto[] = [
     id: "100",
     name: "Ted Tester",
     role: "Finance contact",
+    roleName: "Finance Contact",
     email: "tedtester@nowhere.com",
     accountId: "321",
     projectId: "456",
@@ -48,6 +49,7 @@ const testContactData: ProjectContactDto[] = [
     id: "101",
     name: "Dave Developer",
     role: "Project Manager",
+    roleName: "Project Manager",
     email: "davedeveloper@nowhere.com",
     accountId: "312",
     projectId: "456"
@@ -56,6 +58,7 @@ const testContactData: ProjectContactDto[] = [
     id: "102",
     name: "Joe Bloggs",
     role: "Finance contact",
+    roleName: "Finance Contact",
     email: "joebloggs@nowhere.com",
     accountId: "312",
     projectId: "456"
@@ -64,16 +67,17 @@ const testContactData: ProjectContactDto[] = [
     id: "103",
     name: "Bob Baker",
     role: "Finance contact",
+    roleName: "Finance Contact",
     email: "bobbaker@nowhere.com",
     accountId: "832",
     projectId: "456",
   }
-] as ProjectContactDto[];
+];
 
 describe("Partners Table", () => {
   const testForCorrectTableEntries = (expectedA: string, expectedB: string, expectedC: string, columnQA: string) => {
     const wrapper = mount(<PartnersAndFinanceContacts partners={testPartnerData} contacts={testContactData} />);
-    const columnValues = getColumnValues(wrapper, "project-details-table", columnQA).map(x => x.text());
+    const columnValues = getColumnValues(wrapper, "partner-details", columnQA).map(x => x.text());
     expect(columnValues[0]).toBe(expectedA);
     expect(columnValues[1]).toBe(expectedB);
     expect(columnValues[2]).toBe(expectedC);
