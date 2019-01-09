@@ -4,7 +4,7 @@ import { renderToString } from "react-dom/server";
 import { AnyAction, createStore, Dispatch } from "redux";
 import { Provider } from "react-redux";
 import { RouterProvider } from "react-router5";
-import { constants as routerConstants } from "router5";
+import { constants as routerConstants, Router, State } from "router5";
 
 import { renderHtml } from "./html";
 import { rootReducer, RootState, setupInitialState, setupMiddleware } from "../ui/redux";
@@ -28,18 +28,14 @@ async function loadData(dispatch: Dispatch<AnyAction>, getState: () => RootState
   return Promise.all(allPromises).then(() => loadData(dispatch, getState, dataCalls));
 }
 
-export function serverRender(req: Request, res: Response, error?: IAppError ) {
+export async function serverRender(req: Request, res: Response, error?: IAppError): Promise<void> {
   try {
-    if (error && !(error instanceof FormHandlerError)) {
-      throw error;
-    }
-
-    const router = configureRouter();
-
-    router.start(req.originalUrl, async (routeError, route) => {
-      if (routeError) {
-        throw new Error("Server error");
+      if (error && !(error instanceof FormHandlerError)) {
+        throw error;
       }
+
+      const router = configureRouter();
+      const route = await startRouter(req, router);
 
       if (route && route.name === routerConstants.UNKNOWN_ROUTE) {
         throw new NotFoundError();
@@ -49,7 +45,7 @@ export function serverRender(req: Request, res: Response, error?: IAppError ) {
       const middleware = setupMiddleware(router, false);
       const store = createStore(rootReducer, initialState, middleware);
       const matched = matchRoute(route);
-      const params = matched && matched.getParams && matched.getParams(route!) || {};
+      const params = matched && matched.getParams && matched.getParams(route) || {};
       const actions = matched && matched.getLoadDataActions && matched.getLoadDataActions(params) || [];
 
       if (error) {
@@ -79,10 +75,22 @@ export function serverRender(req: Request, res: Response, error?: IAppError ) {
         </Provider>
       );
 
-      return res.send(renderHtml(html, store.getState()));
+      res.send(renderHtml(html, store.getState()));
+    }
+    catch(e) {
+      return errorHandlerRender(res, e);
+    }
+}
+
+// wrap callback in Promise so we use await for consistency
+function startRouter(req: Request, router: Router): Promise<State> {
+  return new Promise((resolve, reject) => {
+    router.start(req.originalUrl,  (routeError, route) => {
+      if (routeError) {
+        return reject(routeError);
+      }
+
+      return resolve(route);
     });
-  }
-  catch(e) {
-    return errorHandlerRender(res, e);
-  }
+  });
 }
