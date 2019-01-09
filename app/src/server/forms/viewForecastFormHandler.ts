@@ -1,14 +1,13 @@
-import express, { RequestHandler } from "express";
+import express from "express";
 import { IFormHandler } from "./formHandlerBase";
 import { UpdateForecastRoute, ViewForecastRoute } from "../../ui/containers";
 import { configureRouter } from "../../ui/routing";
 
 export class ViewForecastFormHandler implements IFormHandler {
-  routePath = ViewForecastRoute.routePath;
+  public routePath = ViewForecastRoute.routePath;
+  public middleware = [];
 
-  public readonly middleware: RequestHandler[] = [];
-
-  handle(req: express.Request, res: express.Response): Promise<void> {
+  public handle(req: express.Request, res: express.Response): Promise<void> {
     const params = ViewForecastRoute.getParams({ name: ViewForecastRoute.routeName, params: req.params, path: req.path });
 
     const redirectLink = UpdateForecastRoute.getLink(params);

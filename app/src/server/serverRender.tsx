@@ -14,7 +14,7 @@ import { Results } from "../ui/validation/results";
 import { AsyncThunk, handleEditorError, updateEditorAction } from "../ui/redux/actions/common";
 import { IAppError } from "../types/IAppError";
 import { errorHandlerRender } from "./errorHandlers";
-import { NotFoundError } from "./features/common/appError";
+import { FormHandlerError, NotFoundError } from "./features/common/appError";
 
 async function loadData(dispatch: Dispatch<AnyAction>, getState: () => RootState, dataCalls: AsyncThunk<any>[]): Promise<void> {
   const allPromises = dataCalls.map(action => action(dispatch, getState, null));
@@ -28,8 +28,12 @@ async function loadData(dispatch: Dispatch<AnyAction>, getState: () => RootState
   return Promise.all(allPromises).then(() => loadData(dispatch, getState, dataCalls));
 }
 
-export function serverRender(req: Request, res: Response, errorDetails?: { key: string, store: string, dto: {}, result: Results<{}>, error: IAppError }) {
+export function serverRender(req: Request, res: Response, error?: IAppError ) {
   try {
+    if (error && !(error instanceof FormHandlerError)) {
+      throw error;
+    }
+
     const router = configureRouter();
 
     router.start(req.originalUrl, async (routeError, route) => {
@@ -48,18 +52,18 @@ export function serverRender(req: Request, res: Response, errorDetails?: { key: 
       const params = matched && matched.getParams && matched.getParams(route!) || {};
       const actions = matched && matched.getLoadDataActions && matched.getLoadDataActions(params) || [];
 
-      if (errorDetails) {
+      if (error) {
         actions.push((dispatch, getState) => {
-          dispatch(updateEditorAction(errorDetails.key, errorDetails.store, errorDetails.dto, errorDetails.result));
+          dispatch(updateEditorAction(error.key, error.store, error.dto, error.result));
           return Promise.resolve();
         });
         actions.push((dispatch, getState) => {
           dispatch(handleEditorError({
-            id: errorDetails.key,
-            dto: errorDetails.dto,
-            validation: errorDetails.result,
-            error: errorDetails.error,
-            store: errorDetails.store,
+            id: error.key,
+            dto: error.dto,
+            validation: error.result,
+            error: error.error,
+            store: error.store,
             scrollToTop: false
           }));
           return Promise.resolve();

@@ -18,6 +18,14 @@ export class NotFoundError extends AppError {
   }
 }
 
+export class FormHandlerError extends AppError {
+  constructor(
+    public key: string, public store: string, public dto: {}, public result: Results<{}>, public error: IAppError
+  ) {
+    super(error.code, error.message || "Not Found");
+  }
+}
+
 export class BadRequestError extends AppError {
   constructor(
     details?: string,
