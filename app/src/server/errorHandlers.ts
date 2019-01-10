@@ -19,10 +19,11 @@ const getErrorStatus = (code: number) => {
 
 export const errorHandlerApi = (res: Response, err?: IAppError) => {
   const code    = !!err ? err.code : ErrorCode.UNKNOWN_ERROR;
-  const details = !!err ? err.message : "Something went wrong";
+  const message = !!err ? err.message : "Something went wrong";
+  const results = !!err ? err.results : null;
   const status  = getErrorStatus(code);
 
-  return res.status(status).json({ code, details });
+  return res.status(status).json({ code, message, results });
 };
 
 export const errorHandlerRender = (res: Response, err?: IAppError) => {
