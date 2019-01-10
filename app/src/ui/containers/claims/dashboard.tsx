@@ -64,8 +64,8 @@ class Component extends ContainerBase<ClaimDashboardPageParams, Data, Callbacks>
     const button = () => {
       const Form = Acc.TypedForm<DocumentSummaryDto>();
       return (
-        <Form.Form data={document}>
-          <Form.Button name="delete" value={document.id} onClick={() => this.onDelete(claim, document)}>Remove</Form.Button>
+        <Form.Form data={document} qa="iar-delete-form">
+          <Form.Button name="delete" value={document.id} onClick={() => this.onDelete(claim, document)} qa="iar-delete-button">Remove</Form.Button>
         </Form.Form>
       );
     };
