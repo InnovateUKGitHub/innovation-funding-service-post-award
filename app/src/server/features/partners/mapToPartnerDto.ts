@@ -1,8 +1,9 @@
 import { CommandBase, IContext } from "../common/context";
 import { ISalesforcePartner, PROJECT_LEAD_IDENTIFIER } from "../../repositories/partnersRepository";
+import { PartnerDto, ProjectRole } from "../../../types";
 
 export class MapToPartnerDtoCommand extends CommandBase<PartnerDto> {
-    constructor(readonly item: ISalesforcePartner) {
+    constructor(readonly item: ISalesforcePartner, readonly roles: ProjectRole) {
         super();
      }
 
@@ -24,6 +25,7 @@ export class MapToPartnerDtoCommand extends CommandBase<PartnerDto> {
             awardRate: this.item.Acc_Award_Rate__c,
             capLimit: this.item.Acc_Cap_Limit__c,
             totalFutureForecastsForParticipants: this.item.Acc_TotalFutureForecastsforParticipant__c,
+            roles: this.roles
         };
         return Promise.resolve(dto);
     }

@@ -1,6 +1,7 @@
 // tslint:disable:no-identical-functions no-duplicate-string
 import { TestContext } from "../../testContextProvider";
 import { GetByIdQuery } from "../../../../src/server/features/partners/getByIdQuery";
+import { PartnerDto, ProjectRole } from "../../../../src/types";
 
 describe("getAllForProjectQuery", () => {
     it("when partner exists is mapped to DTO", async () => {
@@ -33,6 +34,7 @@ describe("getAllForProjectQuery", () => {
             awardRate: 50,
             capLimit: 50,
             totalFutureForecastsForParticipants: 1002,
+            roles: ProjectRole.Unknown
         };
 
         expect(result).toEqual(expected);
@@ -50,7 +52,7 @@ describe("getAllForProjectQuery", () => {
             x.Acc_Cap_Limit__c = 50;
         });
 
-        const result = (await context.runQuery(new GetByIdQuery(partner.Id)))!;
+        const result = (await context.runQuery(new GetByIdQuery(partner.Id)));
 
         expect(result.percentageParticipantCostsClaimed).toBe(10);
     });
@@ -67,7 +69,7 @@ describe("getAllForProjectQuery", () => {
             x.Acc_Cap_Limit__c = 50;
         });
 
-        const result = (await context.runQuery(new GetByIdQuery(partner.Id)))!;
+        const result = (await context.runQuery(new GetByIdQuery(partner.Id)));
 
         expect(result.percentageParticipantCostsClaimed).toBe(null);
     });
@@ -84,12 +86,34 @@ describe("getAllForProjectQuery", () => {
             x.Acc_Cap_Limit__c = 50;
         });
 
-        const result = (await context.runQuery(new GetByIdQuery(partner.Id)))!;
+        const result = (await context.runQuery(new GetByIdQuery(partner.Id)));
         expect(result.percentageParticipantCostsClaimed).toBe(null);
     });
 
     it("when partner doesn't exist", async () => {
         const context = new TestContext();
         await expect(context.runQuery(new GetByIdQuery("fakePartnerId"))).rejects.toThrow();
+    });
+
+    it("when user is finance contact expect role set", async () => {
+        const context = new TestContext();
+
+        const project = context.testData.createProject();
+        const partner = context.testData.createPartner(project);
+
+        const projectContact1 = context.testData.createFinanceContact(project, partner, x => x.Acc_ContactId__r.Email = "financecontact@test.com");
+        const projectContact2 = context.testData.createProjectManager(project, x => x.Acc_ContactId__r.Email = "projectManager@test.com");
+
+        // now set user to the finance contact
+        context.user.set({ email: projectContact1.Acc_ContactId__r.Email });
+
+        const result1 = await context.runQuery(new GetByIdQuery(partner.Id));
+        expect(result1.roles).toBe(ProjectRole.FinancialContact);
+
+        // now set user to the project manager
+        context.user.set({ email: projectContact2.Acc_ContactId__r.Email });
+
+        const result2 = await context.runQuery(new GetByIdQuery(partner.Id));
+        expect(result2.roles).toBe(ProjectRole.Unknown);
     });
 });

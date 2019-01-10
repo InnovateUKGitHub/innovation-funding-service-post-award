@@ -1,7 +1,7 @@
 import React from "react";
 import {TabItem, Tabs} from "../layout";
 import { AllClaimsDashboardRoute, ClaimsDashboardRoute, ProjectDetailsRoute, ProjectForecastRoute, ViewForecastRoute } from "../../containers";
-import { ProjectDto } from "../../../types";
+import { PartnerDto, ProjectDto } from "../../../types";
 
 interface Props {
   project: ProjectDto;

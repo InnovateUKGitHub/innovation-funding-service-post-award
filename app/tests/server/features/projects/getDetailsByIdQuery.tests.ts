@@ -45,10 +45,7 @@ describe("ProjectsGetDetailsByIdQuery", () => {
         const email = "fc@test.com";
 
         const project = context.testData.createProject();
-        context.testData.createProjectContact(project, undefined, x => {
-            x.Acc_ContactId__r.Email = email;
-            x.Acc_Role__c = "Finance contact";
-        });
+        context.testData.createFinanceContact(project, undefined, x => x.Acc_ContactId__r.Email = email);
 
         // login as fc
         context.user.set({ email });
@@ -62,10 +59,7 @@ describe("ProjectsGetDetailsByIdQuery", () => {
         const email = "mo@test.com";
 
         const project = context.testData.createProject();
-        context.testData.createProjectContact(project, undefined, x => {
-            x.Acc_ContactId__r.Email = email;
-            x.Acc_Role__c = "Monitoring officer";
-        });
+        context.testData.createMonitoringOfficer(project, x => x.Acc_ContactId__r.Email = email);
 
         // login as fc
         context.user.set({ email });
@@ -79,9 +73,8 @@ describe("ProjectsGetDetailsByIdQuery", () => {
         const email = "mo@test.com";
 
         const project = context.testData.createProject();
-        context.testData.createProjectContact(project, undefined, x => {
+        context.testData.createProjectManager(project, x => {
             x.Acc_ContactId__r.Email = email;
-            x.Acc_Role__c = "Project Manager";
         });
 
         // login as fc
@@ -96,13 +89,9 @@ describe("ProjectsGetDetailsByIdQuery", () => {
         const email = "all@test.com";
 
         const project = context.testData.createProject();
-        const roles: SalesforceRole[] = ["Project Manager", "Monitoring officer", "Finance contact"];
-        roles.forEach(role => {
-            context.testData.createProjectContact(project, undefined, x => {
-                x.Acc_ContactId__r.Email = email;
-                x.Acc_Role__c = role;
-            });
-        });
+        context.testData.createProjectManager(project, x => x.Acc_ContactId__r.Email = email);
+        context.testData.createMonitoringOfficer(project, x => x.Acc_ContactId__r.Email = email);
+        context.testData.createFinanceContact(project, undefined, x => x.Acc_ContactId__r.Email = email);
 
         context.user.set({ email });
 
