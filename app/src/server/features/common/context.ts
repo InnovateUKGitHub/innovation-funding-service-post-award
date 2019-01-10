@@ -170,11 +170,14 @@ export class Context implements IContext {
   public config: Readonly<IConfig>;
   public logger = new Logger();
 
-  private runAsync<TResult>(runnable: IRunnable<TResult>): Promise<TResult> {
-    return runnable.Run(this).catch(e => {
+  private async runAsync<TResult>(runnable: IRunnable<TResult>): Promise<TResult> {
+    try {
+      return await runnable.Run(this);
+    }
+    catch(e) {
       this.logger.log("Failed query", runnable, e);
       throw constructErrorResponse(e);
-    });
+    }
   }
 
   private runSync<TResult>(runnable: ISyncRunnable<TResult>): TResult {
