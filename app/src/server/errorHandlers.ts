@@ -28,10 +28,8 @@ export const errorHandlerApi = (res: Response, err?: IAppError) => {
 
 export const errorHandlerRender = (res: Response, err?: IAppError) => {
   const code = !!err ? err.code : ErrorCode.UNKNOWN_ERROR;
+  const status = getErrorStatus(code);
+  const html = code === ErrorCode.REQUEST_ERROR ? "../../../public/error-not-found.html" : "../../../public/error.html";
 
-  if(code === ErrorCode.UNKNOWN_ERROR) {
-    return res.status(500).sendFile(path.join(__dirname, "../../../public/error.html"));
-  }
-
-  return res.status(404).sendFile(path.join(__dirname, "../../../public/error-not-found.html"));
+  return res.status(status).sendFile(path.join(__dirname, html));
 };
