@@ -187,7 +187,6 @@ const HiddenField = <T extends {}>(props: HiddenFieldProps<T>) => {
 };
 
 interface SubmitProps {
-    qa?: string;
     disabled?: boolean;
     styling?: "Link" | "Secondary" | "Primary";
     className?: string;
@@ -195,15 +194,14 @@ interface SubmitProps {
 }
 
 const SubmitComponent: React.SFC<SubmitProps> = (props) => {
-    const { disabled, children, style, styling, qa, className } = props;
-    const buttonProps = { disabled, style, qa, className };
+    const { disabled, children, style, styling, className } = props;
+    const buttonProps = { disabled, style, className };
     return <Button type="submit" name="button_default" styling={styling || "Primary"} onClick={(e) => handleSubmit(props, e)} {...buttonProps}>{children}</Button>;
 };
 
 interface ButtonProps {
     name: string;
     onClick?: () => void;
-    qa?: string;
     styling?: "Link" | "Secondary" | "Primary";
     className?: string;
     style?: CSSProperties;
@@ -211,8 +209,8 @@ interface ButtonProps {
 }
 
 const ButtonComponent: React.SFC<ButtonProps> = (props) => {
-    const { name, children, style, styling, qa, className, value } = props;
-    const buttonProps = { style, qa, className };
+    const { name, children, style, styling, className, value } = props;
+    const buttonProps = { style, className };
     return <Button type="submit" name={`button_${name}`} value={value} styling={styling || "Secondary"} onClick={(e) => handleOtherButton(props, e)} {...buttonProps}>{children}</Button>;
 };
 
