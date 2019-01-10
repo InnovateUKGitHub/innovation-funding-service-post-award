@@ -6,7 +6,7 @@ export type SalesforceRole = "Project Manager" | "Monitoring officer" | "Finance
 
 export interface ISalesforceProjectContact {
     Id: string;
-    Acc_AccountId__c: string;
+    Acc_AccountId__c: string|undefined;
     Acc_ProjectId__c: string;
     Acc_EmailOfSFContact__c: string;
     Acc_Role__c: SalesforceRole;

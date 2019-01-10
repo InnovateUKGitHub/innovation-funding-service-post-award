@@ -1,16 +1,16 @@
+import { DateTime } from "luxon";
 import * as Selectors from "../../redux/selectors";
-import { ContainerBase, ReduxContainer } from "../containerBase";
 import { Pending } from "../../../shared/pending";
 import * as Actions from "../../redux/actions";
 import * as ACC from "../../components";
 import React from "react";
-import { DateTime } from "luxon";
+import { ContainerBase, ReduxContainer } from "../containerBase";
 import { IEditorStore } from "../../redux/reducers/editorsReducer";
 import { ClaimDtoValidator } from "../../validators/claimDtoValidator";
 import { ClaimForecastRoute, ClaimsDashboardRoute } from ".";
 import { EditClaimLineItemsRoute } from "./editClaimLineItems";
 import { ClaimsDetailsRoute } from "./details";
-import { ClaimDto, ClaimFrequency, ClaimStatus, ProjectDto } from "../../../types";
+import { ClaimDto, ClaimFrequency, ClaimStatus, PartnerDto, ProjectDto } from "../../../types";
 
 export interface PrepareClaimParams {
     projectId: string;

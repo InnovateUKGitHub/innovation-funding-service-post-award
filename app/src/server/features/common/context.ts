@@ -13,6 +13,7 @@ import { SalesforceInvalidFilterError } from "../../repositories/salesforceBase"
 import { AppError, BadRequestError, NotFoundError, ValidationError } from "./appError";
 import { ErrorCode } from "../../../types/IAppError";
 import { ProjectRole } from "../../../types";
+import { IRoleInfo } from "../projects/getAllProjectRolesForUser";
 
 export interface IRunnable<T> {
   Run: (context: IContext) => Promise<T>;
@@ -80,7 +81,7 @@ export interface IRepositories {
 
 export interface ICaches {
   costCategories: Readonly<Cache<CostCategoryDto[]>>;
-  projectRoles: Readonly<Cache<{[key: string]: ProjectRole}>>;
+  projectRoles: Readonly<Cache<{ [key: string]: IRoleInfo }>>;
 }
 
 export interface IContext {
@@ -98,7 +99,7 @@ export interface IContext {
 
 const cachesImplimentation: ICaches = {
   costCategories: new Cache<CostCategoryDto[]>(60 * 12),
-  projectRoles: new Cache<{[key: string]: ProjectRole}>(60 * 12),
+  projectRoles: new Cache<{ [key: string]: IRoleInfo}>(60 * 12),
 };
 
 const constructErrorResponse = <E extends Error>(error: E): AppError => {
@@ -111,7 +112,7 @@ const constructErrorResponse = <E extends Error>(error: E): AppError => {
   if (error instanceof SalesforceTokenError) {
     return new AppError(ErrorCode.SECURITY_ERROR, error.message, error);
   }
-  if(error instanceof SalesforceInvalidFilterError) {
+  if (error instanceof SalesforceInvalidFilterError) {
     return new NotFoundError(undefined, error);
   }
 
@@ -158,7 +159,7 @@ export class Context implements IContext {
 
   private getSalesforceConnection() {
     // if the standard user then connect using salesforceConnection other wise use the token
-    if(this.user.email === this.config.salesforceUsername) {
+    if (this.user.email === this.config.salesforceUsername) {
       // todo: remove
       return salesforceConnection(this.salesforceConnectionDetails);
     }

@@ -1,10 +1,10 @@
+import * as Actions from "../../redux/actions";
 import React from "react";
-import { ContainerBase, ReduxContainer } from "../containerBase";
 import { ProjectOverviewPage } from "../../components/projectOverview";
 import { Pending } from "../../../shared/pending";
-import { ClaimDto, ProjectDto } from "../../../types/dtos";
+import { ClaimDto, PartnerDto, ProjectDto } from "../../../types/dtos";
 import * as Selectors from "../../redux/selectors";
-import * as Actions from "../../redux/actions";
+import { ContainerBase, ReduxContainer } from "../containerBase";
 import * as Acc from "../../components";
 import { Accordion, AccordionItem } from "../../components";
 import { ClaimsDetailsRoute, ReviewClaimRoute, } from ".";

@@ -1,9 +1,11 @@
+// tslint:disable:no-bitwise
+
 import React from "react";
 import * as Actions from "../../../redux/actions";
 import * as Selectors from "../../../redux/selectors";
 import { IEditorStore, RootState } from "../../../redux";
 import { Pending } from "../../../../shared/pending";
-import { ClaimDto, ProjectDto } from "../../../../types";
+import { ClaimDto, PartnerDto, ProjectDto, ProjectRole } from "../../../../types";
 import { ForecastDetailsDtosValidator } from "../../../validators/forecastDetailsDtosValidator";
 import { ValidationMessage } from "../../../components";
 import { State } from "router5";
@@ -56,17 +58,20 @@ export const withDataEditor = (state: RootState, props: Params): PendingForecast
     Selectors.findForecastDetailsByPartner(props.partnerId).getPending(state),
     Selectors.findGolCostsByPartner(props.partnerId).getPending(state),
     Selectors.getCostCategories().getPending(state),
-    (project, partner, claim, claims, claimDetails, forecastDetails, golCosts, costCategories) => ({project, partner, claim, claims, claimDetails, forecastDetails, golCosts, costCategories})
+    (project, partner, claim, claims, claimDetails, forecastDetails, golCosts, costCategories) => ({ project, partner, claim, claims, claimDetails, forecastDetails, golCosts, costCategories })
   );
 
-  const pendingEditor = Selectors.getForecastDetailsEditor(props.partnerId).get(state).then(x => ({editor: x!}));
+  const pendingEditor = Selectors.getForecastDetailsEditor(props.partnerId).get(state).then(x => ({ editor: x! }));
 
-  const combined = Pending.combine(pendingData, pendingEditor, (data, editor) => ({...data, ...editor}));
+  const combined = Pending.combine(pendingData, pendingEditor, (data, editor) => ({ ...data, ...editor }));
 
   return { combined };
 };
 
 export const renderWarning = (data: ForecastData) => {
+  if (!(data.partner.roles & ProjectRole.FinancialContact)) {
+    return null;
+  }
   const categories: string[] = [];
   const currentPeriod = data.project.periodId;
   const forecasts = !!data.editor ? data.editor.data : data.forecastDetails;
@@ -78,7 +83,7 @@ export const renderWarning = (data: ForecastData) => {
     data.claimDetails.forEach(x => total += (x.costCategoryId === category.id && x.periodId < currentPeriod) ? x.value : 0);
     forecasts.forEach(x => total += (x.costCategoryId === category.id && x.periodId >= currentPeriod) ? x.value : 0);
 
-    if(!gol || gol.value < total) {
+    if (!gol || gol.value < total) {
       categories.push(category.name);
     }
   });

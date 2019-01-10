@@ -45,7 +45,7 @@ export class UpdateForecastDetailsCommand extends CommandBase<boolean> {
 
   private async testPastForecastPeriodsHaveNotBeenUpdated(context: IContext) {
     const partner = await context.runQuery(new GetPartnerById(this.partnerId));
-    const project = await context.runQuery(new GetProjectById(partner!.projectId));
+    const project = await context.runQuery(new GetProjectById(partner.projectId));
     const current = await context.runQuery(new GetAllForecastsForPartnerQuery(this.partnerId));
     const passed  = current.filter(x => x.periodId <= project.periodId)
       .every(x => {
