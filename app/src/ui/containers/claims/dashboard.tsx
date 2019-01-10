@@ -65,7 +65,7 @@ class Component extends ContainerBase<ClaimDashboardPageParams, Data, Callbacks>
       const Form = Acc.TypedForm<DocumentSummaryDto>();
       return (
         <Form.Form data={document} qa="iar-delete-form">
-          <Form.Button name="delete" value={document.id} onClick={() => this.onDelete(claim, document)} qa="iar-delete-button">Remove</Form.Button>
+          <Form.Button name="delete" value={document.id} onClick={() => this.onDelete(claim, document)}>Remove</Form.Button>
         </Form.Form>
       );
     };
@@ -115,7 +115,7 @@ class Component extends ContainerBase<ClaimDashboardPageParams, Data, Callbacks>
             <UploadForm.Hidden name="periodId" value={() => claim.periodId} />
             <UploadForm.Hidden name="description" value={() => DocumentDescription.IAR} />
           </UploadForm.Fieldset>
-          <UploadForm.Button name="upload" onClick={() => this.onSave(editor.data, claim.periodId)} qa="iar-upload-button">Upload</UploadForm.Button>
+          <UploadForm.Button name="upload" onClick={() => this.onSave(editor.data, claim.periodId)}>Upload</UploadForm.Button>
         </UploadForm.Form>
       </React.Fragment>
     );
