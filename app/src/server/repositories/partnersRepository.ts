@@ -39,7 +39,7 @@ const fields = [
 export interface IPartnerRepository {
     getAllByProjectId(projectId: string): Promise<ISalesforcePartner[]>;
     getById(partnerId: string): Promise<ISalesforcePartner>;
-    update(partnerId: Updatable<ISalesforcePartner>): Promise<boolean>;
+    update(updatedPartner: Updatable<ISalesforcePartner>): Promise<boolean>;
 }
 
 export class PartnerRepository extends SalesforceBase<ISalesforcePartner> implements IPartnerRepository {

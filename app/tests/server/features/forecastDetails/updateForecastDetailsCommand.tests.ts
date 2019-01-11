@@ -4,7 +4,7 @@ import { UpdateForecastDetailsCommand } from "../../../../src/server/features/fo
 import { DateTime } from "luxon";
 import { ClaimFrequency } from "../../../../src/types";
 import { BadRequestError, ValidationError } from "../../../../src/server/features/common/appError";
-import { SALESFORCE_DATE_TIME_FORMAT } from "../../../../src/server/features/claims/mapClaim";
+import { SALESFORCE_DATE_TIME_FORMAT } from "../../../../src/server/features/common/clock";
 
 describe("UpdateForecastDetailsCommand", () => {
   it("when id not set expect validation exception", async () => {
@@ -109,7 +109,7 @@ describe("UpdateForecastDetailsCommand", () => {
     expect(context.repositories.profileDetails.Items.find(x => x.Id === profileDetail2.Id)!.Acc_LatestForecastCost__c).toBe(100);
   });
 
-  it("should update timestamp if update forecast is successful", async () => {
+  it("should update partner timestamp if update forecast is successful", async () => {
 
     const context = new TestContext();
     context.clock.setDateTime("2015/12/25 12:44:22");
@@ -146,7 +146,7 @@ describe("UpdateForecastDetailsCommand", () => {
     expect(context.repositories.partners.Items.find(x => x.Id === partner.Id)!.Acc_ForecastLastModifiedDate__c).toBe(context.clock.asLuxon().toFormat(SALESFORCE_DATE_TIME_FORMAT));
   });
 
-  it("should not update timestamp if exception occured", async () => {
+  it("should not update partner timestamp if exception occured", async () => {
     const context = new TestContext();
     const testData = context.testData;
     const time = "2015/12/25 12:44:22";
