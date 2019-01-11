@@ -33,6 +33,15 @@ class PartnerTestRepository extends TestRepository<Repositories.ISalesforcePartn
     getById(partnerId: string) {
         return super.getOne(x => x.Id === partnerId);
     }
+
+    update(updatedPartner: Repositories.ISalesforcePartner) {
+        const index = this.Items.findIndex(x => x.Id === updatedPartner.Id);
+        if (index >= 0) {
+            this.Items[index] = Object.assign(this.Items[index], updatedPartner);
+            return Promise.resolve(true);
+        }
+        return Promise.resolve(false);
+    }
 }
 
 class ProjectContactTestRepository extends TestRepository<Repositories.ISalesforceProjectContact> implements Repositories.IProjectContactsRepository {
