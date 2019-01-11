@@ -11,8 +11,7 @@ import {
 import { Cache } from "./cache";
 import { SalesforceInvalidFilterError } from "../../repositories/salesforceBase";
 import { AppError, BadRequestError, NotFoundError, ValidationError } from "./appError";
-import { ErrorCode } from "../../../types/IAppError";
-import { ProjectRole } from "../../../types";
+import { ErrorCode, IUser } from "../../../types";
 import { IRoleInfo } from "../projects/getAllProjectRolesForUser";
 
 export interface IRunnable<T> {

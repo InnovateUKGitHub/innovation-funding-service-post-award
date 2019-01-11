@@ -7,6 +7,7 @@ import { RootState } from "../redux/reducers/rootReducer";
 import { RootActions } from "../redux/actions/root";
 import { matchRoute } from "../routing/matchRoute";
 import { AsyncThunk } from "../redux/actions";
+import { IUser } from "../../types/IUser";
 
 export type ContainerProps<TParams, TData, TCallbacks> = TParams & TData & TCallbacks & {route: RouteState};
 
@@ -58,6 +59,7 @@ class ReduxContainerWrapper<TParams, TData, TCallbacks> {
         routePath: string,
         getParams: (route: RouteState) => TParams,
         getLoadDataActions: (params: TParams) => AsyncThunk<any>[],
+        accessControl?: (user: IUser, params: TParams) => boolean,
         container: React.ComponentClass<any> & { WrappedComponent: React.ComponentType<TParams & TData & TCallbacks & {route: RouteState}> }
     }) {
         return {
