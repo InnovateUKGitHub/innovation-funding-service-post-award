@@ -7,6 +7,8 @@ const getErrorStatus = (code: number) => {
     case ErrorCode.VALIDATION_ERROR:
     case ErrorCode.BAD_REQUEST_ERROR:
       return 400;
+    case ErrorCode.FORBIDDEN_ERROR:
+      return 403;
     case ErrorCode.REQUEST_ERROR:
       return 404;
     case ErrorCode.SECURITY_ERROR:

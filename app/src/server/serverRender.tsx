@@ -10,11 +10,12 @@ import { renderHtml } from "./html";
 import { rootReducer, RootState, setupInitialState, setupMiddleware } from "../ui/redux";
 import { configureRouter, matchRoute } from "../ui/routing";
 import { App } from "../ui/containers/app";
-import { Results } from "../ui/validation/results";
 import { AsyncThunk, handleEditorError, updateEditorAction } from "../ui/redux/actions/common";
 import { IAppError } from "../types/IAppError";
 import { errorHandlerRender } from "./errorHandlers";
-import { FormHandlerError, NotFoundError } from "./features/common/appError";
+import { ForbiddenError, FormHandlerError, NotFoundError } from "./features/common/appError";
+import contextProvider from "./features/common/contextProvider";
+import { GetAllProjectRolesForUser } from "./features/projects/getAllProjectRolesForUser";
 
 async function loadData(dispatch: Dispatch<AnyAction>, getState: () => RootState, dataCalls: AsyncThunk<any>[]): Promise<void> {
   const allPromises = dataCalls.map(action => action(dispatch, getState, null));
@@ -41,11 +42,20 @@ export async function serverRender(req: Request, res: Response, error?: IAppErro
         throw new NotFoundError();
       }
 
-      const initialState = setupInitialState(route, req.session!.user);
+      const context = contextProvider.start({user: req.session!.user});
+      const roleInfo = await context.runQuery(new GetAllProjectRolesForUser());
+      const user = { ...req.session!.user, roleInfo };
+
+      const initialState = setupInitialState(route, user);
       const middleware = setupMiddleware(router, false);
       const store = createStore(rootReducer, initialState, middleware);
       const matched = matchRoute(route);
       const params = matched && matched.getParams && matched.getParams(route) || {};
+
+      if (matched.accessControl && !matched.accessControl(user, params)) {
+        throw new ForbiddenError();
+      }
+
       const actions = matched && matched.getLoadDataActions && matched.getLoadDataActions(params) || [];
 
       if (error) {

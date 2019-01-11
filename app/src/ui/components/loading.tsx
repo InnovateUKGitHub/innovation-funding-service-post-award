@@ -5,6 +5,8 @@ import { SimpleString } from "./renderers";
 import { ProjectDashboardRoute } from "../containers/projects";
 import { HomeRoute } from "../containers";
 import { ErrorCode, IAppError } from "../../types/IAppError";
+import { StandardErrorPage } from "./standardErrorPage";
+import { NotFoundErrorPage } from "./notFoundErrorPage";
 
 interface LoadingProps<T> {
     pending: Pending<T>;
@@ -73,31 +75,15 @@ export class Loader<T> extends React.Component<LoadingProps<T>, {}> {
     }
 }
 
-const renderPageNotFoundError = () => (
-  <PageError title="Page not found">
-    <SimpleString>
-      Please check the web address or search term you entered for any errors. You can return to <Link route={ProjectDashboardRoute.getLink({})}>your dashboard</Link> or go back to the <Link route={HomeRoute.getLink({})}>Innovate UK homepage</Link>.
-    </SimpleString>
-  </PageError>
-);
-
-const renderStandardErrorPage = () => (
-  <PageError title="Something has gone wrong at our end">
-    <SimpleString>
-      You can either go back to the page you were previously on or go back to your <Link route={ProjectDashboardRoute.getLink({})}>dashboard</Link>.
-    </SimpleString>
-  </PageError>
-);
-
 export const PageLoader = <T, B>(props: LoadingProps<T>) => {
   return (
     <Loader
       {...props}
       renderError={(error) => {
         if (error && error.code === ErrorCode.REQUEST_ERROR) {
-          return renderPageNotFoundError();
+          return (<StandardErrorPage />);
         }
-        return renderStandardErrorPage();
+        return (<NotFoundErrorPage />);
       }}
     />);
 };
