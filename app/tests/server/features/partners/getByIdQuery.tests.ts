@@ -35,7 +35,7 @@ describe("getAllForProjectQuery", () => {
             capLimit: 50,
             totalFutureForecastsForParticipants: 1002,
             roles: ProjectRole.Unknown,
-            lastModifiedDate: null
+            forecastLastModifiedDate: null,
         };
 
         expect(result).toEqual(expected);
