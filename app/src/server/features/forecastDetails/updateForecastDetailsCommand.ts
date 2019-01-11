@@ -25,9 +25,9 @@ export class UpdateForecastDetailsCommand extends CommandBase<boolean> {
     const partner = await context.runQuery(new GetPartnerById(this.partnerId));
 
     await this.testValidation(context);
-    await this.testPastForecastPeriodsHaveNotBeenUpdated(context, partner!);
+    await this.testPastForecastPeriodsHaveNotBeenUpdated(context, partner);
     await this.updateProfileDetails(context);
-    await this.updatePartner(context, partner!);
+    await this.updatePartner(context, partner);
 
     if(this.submit) {
       await this.updateClaim(context);
@@ -49,7 +49,7 @@ export class UpdateForecastDetailsCommand extends CommandBase<boolean> {
   }
 
   private async testPastForecastPeriodsHaveNotBeenUpdated(context: IContext, partner: PartnerDto) {
-    const project = await context.runQuery(new GetProjectById(partner!.projectId));
+    const project = await context.runQuery(new GetProjectById(partner.projectId));
     const current = await context.runQuery(new GetAllForecastsForPartnerQuery(this.partnerId));
     const passed  = current.filter(x => x.periodId <= project.periodId)
       .every(x => {
@@ -88,7 +88,7 @@ export class UpdateForecastDetailsCommand extends CommandBase<boolean> {
   private async updatePartner(context: IContext, partner: PartnerDto) {
     const now = context.clock.today();
     const dateString = DateTime.fromJSDate(now).toFormat(SALESFORCE_DATE_TIME_FORMAT);
-    const update = { Id: partner!.id, Acc_ForecastLastModifiedDate__c: dateString };
+    const update = { Id: partner.id, Acc_ForecastLastModifiedDate__c: dateString };
     return await context.repositories.partners.update(update);
   }
 
