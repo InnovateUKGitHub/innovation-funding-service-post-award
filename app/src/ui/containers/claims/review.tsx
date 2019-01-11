@@ -1,15 +1,15 @@
+import { IEditorStore } from "../../redux";
 import React from "react";
-import { ContainerBase, ReduxContainer } from "../containerBase";
 import { Pending } from "../../../shared/pending";
 import * as Actions from "../../redux/actions";
 import * as ACC from "../../components";
 import * as Selectors from "../../redux/selectors";
-import { IEditorStore } from "../../redux";
+import { ContainerBase, ReduxContainer } from "../containerBase";
 import { ClaimDtoValidator } from "../../validators/claimDtoValidator";
 import { DateTime } from "luxon";
 import { ReviewClaimLineItemsRoute } from "./claimLineItems";
 import { AllClaimsDashboardRoute, ClaimsDashboardRoute, ClaimsDetailsRoute} from ".";
-import { ClaimDto, ClaimFrequency, ClaimStatus, ProjectDto } from "../../../types";
+import { ClaimDto, ClaimFrequency, ClaimStatus, PartnerDto, ProjectDto } from "../../../types";
 import { ForecastData, forecastDataLoadActions } from "./forecasts/common";
 
 export interface ReviewClaimParams {

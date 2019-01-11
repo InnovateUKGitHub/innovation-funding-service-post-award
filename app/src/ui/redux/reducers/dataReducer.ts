@@ -2,7 +2,7 @@ import { DataLoadAction } from "../actions/common";
 import { combineReducers } from "redux";
 import { ActionTransitionStart } from "redux-router5";
 import { LoadingStatus } from "../../../shared/pending";
-import { ClaimDto, ProjectDto } from "../../../types";
+import { ClaimDto, PartnerDto, ProjectDto } from "../../../types";
 import { IAppError } from "../../../types/IAppError";
 
 export interface IDataStore<T> {

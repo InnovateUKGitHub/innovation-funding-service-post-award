@@ -1,3 +1,5 @@
+// tslint:disable:no-bitwise
+
 import React from "react";
 import * as ACC from "../../../components";
 import * as Actions from "../../../redux/actions";
@@ -14,6 +16,7 @@ import {
   PendingForecastData,
   renderWarning,
 } from "./common";
+import { PartnerDto, ProjectDto, ProjectRole } from "../../../../types";
 
 interface Callbacks {
   onSubmit: (params: Params) => void;
@@ -32,7 +35,6 @@ class ViewForecastComponent extends ContainerBase<Params, PendingForecastData, C
   }
 
   public renderContents(data: ForecastData) {
-    const Form = ACC.TypedForm();
 
     return (
       <ProjectOverviewPage
@@ -45,13 +47,24 @@ class ViewForecastComponent extends ContainerBase<Params, PendingForecastData, C
           <ACC.Claims.ForecastTable data={data} />
         </ACC.Section>
         <ACC.Section>
-          <Form.Form data={{}} onSubmit={() => this.handleSubmit()}>
-            <Form.Submit>Update forecast</Form.Submit>
-            <ACC.Claims.ClaimLastModified claim={data.claim} />
-          </Form.Form>
+          {this.renderUpdateSection(data.partner)}
+          <ACC.Claims.ClaimLastModified claim={data.claim} />
         </ACC.Section>
       </ProjectOverviewPage>
     );
+  }
+
+  private renderUpdateSection(partner: PartnerDto) {
+    // todo: Should this really be a form?
+    const Form = ACC.TypedForm();
+    if (partner.roles & ProjectRole.FinancialContact) {
+      return (
+        <Form.Form data={{}} onSubmit={() => this.handleSubmit()}>
+          <Form.Submit>Update forecast</Form.Submit>
+        </Form.Form>
+      );
+    }
+    return null;
   }
 }
 

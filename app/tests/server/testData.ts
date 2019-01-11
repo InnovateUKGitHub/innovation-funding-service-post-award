@@ -2,6 +2,7 @@
 import * as Repositories from "../../src/server/repositories";
 import { ITestRepositories } from "./testRepositories";
 import { ClaimStatus } from "../../src/types";
+import { SalesforceRole } from "../../src/server/repositories";
 
 export class TestData {
   constructor(private repositories: ITestRepositories) {
@@ -25,7 +26,7 @@ export class TestData {
       Acc_HintText__c: `Cost Category hint ${seed}`,
     };
 
-    if(!!update) update(newItem);
+    if (!!update) update(newItem);
 
     this.repositories.costCategories.Items.push(newItem);
 
@@ -47,7 +48,7 @@ export class TestData {
       MailingPostalCode: "",
     } as Repositories.ISalesforceContact;
 
-    if(!!update) update(newItem);
+    if (!!update) update(newItem);
 
     this.repositories.contacts.Items.push(newItem);
 
@@ -62,7 +63,7 @@ export class TestData {
       Acc_ProjectTitle__c: "Project " + seed
     } as Repositories.ISalesforceProject;
 
-    if(!!update) update(newItem);
+    if (!!update) update(newItem);
 
     this.repositories.projects.Items.push(newItem);
 
@@ -90,17 +91,29 @@ export class TestData {
       Acc_Award_Rate__c: 50,
     } as Repositories.ISalesforcePartner;
 
-    if(!!update) update(newItem);
+    if (!!update) update(newItem);
 
     this.repositories.partners.Items.push(newItem);
 
     return newItem;
   }
 
-  public createProjectContact(project?: Repositories.ISalesforceProject, partner?: Repositories.ISalesforcePartner, update?: (item: Repositories.ISalesforceProjectContact) => void) {
+  private getRoleName(role: SalesforceRole) {
+    switch (role) {
+      case "Finance contact":
+        return "Finance Contact";
+      case "Monitoring officer":
+        return "Monitoring Officer";
+      case "Project Manager":
+        return "Project Manager";
+    }
+  }
+
+  private createProjectContact(project?: Repositories.ISalesforceProject, partner?: Repositories.ISalesforcePartner, role?: SalesforceRole, update?: (item: Repositories.ISalesforceProjectContact) => void) {
 
     project = project || this.createProject();
-    partner = partner || this.createPartner(project);
+    role = role || "Monitoring officer";
+    const roleName = this.getRoleName(role);
 
     const seed = this.repositories.projectContacts.Items.length + 1;
 
@@ -114,8 +127,8 @@ export class TestData {
         Name: `Ms Contact ${seed}`,
         Email: `projectcontact${seed}@login.com`,
       },
-      Acc_Role__c: "Finance contact",
-      RoleName: "Finance Contact",
+      Acc_Role__c: role,
+      RoleName: roleName,
     };
 
     if (update) {
@@ -125,6 +138,20 @@ export class TestData {
     this.repositories.projectContacts.Items.push(newItem);
 
     return newItem;
+  }
+
+  public createFinanceContact(project?: Repositories.ISalesforceProject, partner?: Repositories.ISalesforcePartner, update?: (item: Repositories.ISalesforceProjectContact) => void) {
+    project = project || this.createProject();
+    partner = partner || this.createPartner(project);
+    return this.createProjectContact(project, partner, "Finance contact", update);
+  }
+
+  public createMonitoringOfficer(project?: Repositories.ISalesforceProject, update?: (item: Repositories.ISalesforceProjectContact) => void) {
+    return this.createProjectContact(project, undefined, "Monitoring officer", update);
+  }
+
+  public createProjectManager(project?: Repositories.ISalesforceProject, update?: (item: Repositories.ISalesforceProjectContact) => void) {
+    return this.createProjectContact(project, undefined, "Project Manager", update);
   }
 
   public createClaim(partner?: Repositories.ISalesforcePartner, periodId?: number, update?: (item: Repositories.ISalesforceClaim) => void): Repositories.ISalesforceClaim {
@@ -141,26 +168,26 @@ export class TestData {
     }
 
     const newItem: Repositories.ISalesforceClaim = {
-            Id: id,
-            Acc_ProjectPeriodNumber__c: periodId,
-            Acc_ProjectParticipant__r: {
-              Id: partner.Id,
-              Acc_ProjectRole__c: partner.Acc_ProjectRole__c,
-              Acc_AccountId__r: partner.Acc_AccountId__r
-            },
-            Acc_ProjectPeriodStartDate__c: "2018-01-02",
-            Acc_ProjectPeriodEndDate__c: "2018-03-04",
-            Acc_ApprovedDate__c: null,
-            Acc_ClaimStatus__c: ClaimStatus.DRAFT,
-            Acc_LineItemDescription__c: null,
-            Acc_ProjectPeriodCost__c : 100,
-            Acc_PaidDate__c: null,
-            Acc_TotalCostsApproved__c: 100,
-            Acc_TotalCostsSubmitted__c: 100,
-            Acc_TotalGrantApproved__c: 100,
-            LastModifiedDate: "2018-03-04T12:00:00.000+00",
-            Acc_IARRequired__c: false
-        };
+      Id: id,
+      Acc_ProjectPeriodNumber__c: periodId,
+      Acc_ProjectParticipant__r: {
+        Id: partner.Id,
+        Acc_ProjectRole__c: partner.Acc_ProjectRole__c,
+        Acc_AccountId__r: partner.Acc_AccountId__r
+      },
+      Acc_ProjectPeriodStartDate__c: "2018-01-02",
+      Acc_ProjectPeriodEndDate__c: "2018-03-04",
+      Acc_ApprovedDate__c: null,
+      Acc_ClaimStatus__c: ClaimStatus.DRAFT,
+      Acc_LineItemDescription__c: null,
+      Acc_ProjectPeriodCost__c: 100,
+      Acc_PaidDate__c: null,
+      Acc_TotalCostsApproved__c: 100,
+      Acc_TotalCostsSubmitted__c: 100,
+      Acc_TotalGrantApproved__c: 100,
+      LastModifiedDate: "2018-03-04T12:00:00.000+00",
+      Acc_IARRequired__c: false
+    };
 
     if (update) {
       update(newItem);
