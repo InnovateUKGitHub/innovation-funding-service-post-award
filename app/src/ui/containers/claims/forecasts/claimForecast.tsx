@@ -11,6 +11,7 @@ import {
   renderWarning,
   withDataEditor,
 } from "./common";
+import { ProjectRole } from "../../../../types";
 
 export interface ClaimForcastParams {
   projectId: string;
@@ -91,5 +92,12 @@ export const ClaimForecastRoute = definition.route({
   routePath: "/projects/:projectId/claims/:partnerId/forecast/:periodId",
   getParams: (route) => ({ projectId: route.params.projectId, partnerId: route.params.partnerId, periodId: parseInt(route.params.periodId, 10) }),
   getLoadDataActions: forecastDataLoadActions,
-  container: ForecastClaim
+  container: ForecastClaim,
+  accessControl: (user, params) => {
+    const userRoles = user.roleInfo[params.projectId];
+    if(!userRoles) return false;
+
+    const partnerRoles = userRoles.partnerRoles[params.partnerId];
+    return !!partnerRoles && !!(userRoles.projectRoles & ProjectRole.FinancialContact) && !!(partnerRoles & ProjectRole.FinancialContact);
+  }
 });

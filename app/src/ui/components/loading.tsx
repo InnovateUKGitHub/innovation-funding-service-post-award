@@ -1,9 +1,6 @@
 import * as React from "react";
 import { LoadingStatus, Pending } from "../../shared/pending";
-import { ErrorSummary, Link, PageError } from "./";
-import { SimpleString } from "./renderers";
-import { ProjectDashboardRoute } from "../containers/projects";
-import { HomeRoute } from "../containers";
+import { ErrorSummary } from "./";
 import { ErrorCode, IAppError } from "../../types/IAppError";
 import { StandardErrorPage } from "./standardErrorPage";
 import { NotFoundErrorPage } from "./notFoundErrorPage";
@@ -79,11 +76,7 @@ export const PageLoader = <T, B>(props: LoadingProps<T>) => {
   return (
     <Loader
       {...props}
-      renderError={(error) => {
-        if (error && error.code === ErrorCode.REQUEST_ERROR) {
-          return (<StandardErrorPage />);
-        }
-        return (<NotFoundErrorPage />);
-      }}
-    />);
+      renderError={(error) => (error && error.code === ErrorCode.REQUEST_ERROR) ? <NotFoundErrorPage /> : <StandardErrorPage />}
+    />
+  );
 };
