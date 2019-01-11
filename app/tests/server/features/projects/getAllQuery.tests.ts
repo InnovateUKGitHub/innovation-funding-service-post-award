@@ -1,5 +1,5 @@
 // tslint:disable:no-bitwise
-import {TestContext} from "../../testContextProvider";
+import { TestContext } from "../../testContextProvider";
 import { GetAllQuery } from "../../../../src/server/features/projects";
 import { ProjectRole } from "../../../../src/types";
 
@@ -32,7 +32,7 @@ describe("ProjectsGetAllQuery", () => {
     const context = new TestContext();
 
     const email = "test@test.com";
-    context.user.set({email});
+    context.user.set({ email });
 
     const projects = context.testData.range(5, x => context.testData.createProject());
 
@@ -41,38 +41,23 @@ describe("ProjectsGetAllQuery", () => {
       ProjectRole.FinancialContact,
       ProjectRole.MonitoringOfficer,
       ProjectRole.ProjectManager,
-      ProjectRole.FinancialContact|ProjectRole.MonitoringOfficer|ProjectRole.ProjectManager,
+      ProjectRole.FinancialContact | ProjectRole.MonitoringOfficer | ProjectRole.ProjectManager,
     ];
 
-    context.testData.createProjectContact(projects[1], undefined, x => {
-      x.Acc_Role__c = "Finance contact";
-      x.Acc_ContactId__r.Email = email;
-    });
+    context.testData.createFinanceContact(projects[1], undefined, x => x.Acc_ContactId__r.Email = email);
 
-    context.testData.createProjectContact(projects[2], undefined, x => {
-      x.Acc_Role__c = "Monitoring officer";
-      x.Acc_ContactId__r.Email = email;
-    });
+    context.testData.createMonitoringOfficer(projects[2], x => x.Acc_ContactId__r.Email = email);
 
-    context.testData.createProjectContact(projects[3], undefined, x => {
-       x.Acc_Role__c = "Project Manager";
-       x.Acc_ContactId__r.Email = email;
-    });
+    context.testData.createProjectManager(projects[3], x => x.Acc_ContactId__r.Email = email);
 
-    context.testData.createProjectContact(projects[4], undefined, x => {
-      x.Acc_Role__c = "Finance contact";
-      x.Acc_ContactId__r.Email = email;
-    });
+    context.testData.createFinanceContact(projects[4], undefined, x => x.Acc_ContactId__r.Email = email);
 
-    context.testData.createProjectContact(projects[4], undefined, x => {
-      x.Acc_Role__c = "Monitoring officer";
-      x.Acc_ContactId__r.Email = email;
-    });
+    context.testData.createMonitoringOfficer(projects[4], x => x.Acc_ContactId__r.Email = email);
 
-    context.testData.createProjectContact(projects[4], undefined, x => {
-      x.Acc_Role__c = "Project Manager";
-      x.Acc_ContactId__r.Email = email;
-    });
+    context.testData.createProjectManager(projects[4], x => x.Acc_ContactId__r.Email = email);
+
+    const projects2 = await context.runQuery(new GetAllQuery());
+    expect(projects2.length).toBe(5);
 
     const results = (await context.runQuery(new GetAllQuery())).map(x => x.roles);
 

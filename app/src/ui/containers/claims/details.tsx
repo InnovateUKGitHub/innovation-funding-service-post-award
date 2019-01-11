@@ -7,7 +7,7 @@ import * as Selectors from "../../redux/selectors";
 import * as ACC from "../../components";
 import { ClaimLineItemsRoute } from "./claimLineItems";
 import { ClaimsDashboardRoute } from "./dashboard";
-import { ClaimDto, ClaimFrequency, ProjectDto } from "../../../types";
+import { ClaimDto, ClaimFrequency, PartnerDto, ProjectDto } from "../../../types";
 
 interface Params {
     projectId: string;

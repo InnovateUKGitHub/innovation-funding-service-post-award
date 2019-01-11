@@ -1,13 +1,13 @@
+import { ClaimsDetailsRoute } from "./details";
 import React from "react";
-import { ContainerBase, ReduxContainer } from "../containerBase";
 import { Pending } from "../../../shared/pending";
 import * as Actions from "../../redux/actions";
 import { getCurrentClaim, getCurrentClaimIarDocument, getCurrentClaimIarDocumentsDeleteEditor, getCurrentClaimIarDocumentsEditor, getPartner, getPreviousClaims, getProject } from "../../redux/selectors";
 import * as Acc from "../../components";
 import { PrepareClaimRoute } from "./prepare";
-import { ClaimsDetailsRoute } from "./details";
+import { ContainerBase, ReduxContainer } from "../containerBase";
 import { ReviewClaimRoute } from "./review";
-import { ClaimDto, ClaimStatus, DocumentDescription, ProjectDto } from "../../../types";
+import { ClaimDto, ClaimStatus, DocumentDescription, PartnerDto, ProjectDto } from "../../../types";
 import { IEditorStore } from "../../redux/reducers";
 import { DocumentUploadValidator } from "../../validators/documentUploadValidator";
 import { DateTime } from "luxon";

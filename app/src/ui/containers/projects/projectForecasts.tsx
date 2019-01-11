@@ -5,7 +5,7 @@ import { Pending } from "../../../shared/pending";
 import * as Actions from "../../redux/actions";
 import * as Selectors from "../../redux/selectors";
 import { ProjectOverviewPage } from "../../components/projectOverview";
-import { ProjectDto } from "../../../types";
+import { PartnerDto, ProjectDto } from "../../../types";
 import { ViewForecastRoute } from "../claims";
 
 interface Data {

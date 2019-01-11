@@ -1,4 +1,6 @@
-interface PartnerDto {
+import { ProjectRole } from ".";
+
+export interface PartnerDto {
     id: string;
     type: string;
     isLead: boolean;
@@ -11,4 +13,5 @@ interface PartnerDto {
     percentageParticipantCostsClaimed: number | null;
     capLimit: number;
     totalFutureForecastsForParticipants: number;
+    roles: ProjectRole;
 }

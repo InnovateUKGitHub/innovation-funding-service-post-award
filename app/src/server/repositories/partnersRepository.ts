@@ -36,7 +36,7 @@ const fields = [
 
 export interface IPartnerRepository {
     getAllByProjectId(projectId: string): Promise<ISalesforcePartner[]>;
-    getById(partnerId: string): Promise<ISalesforcePartner | null>;
+    getById(partnerId: string): Promise<ISalesforcePartner>;
 }
 
 export class PartnerRepository extends SalesforceBase<ISalesforcePartner> implements IPartnerRepository {
@@ -48,8 +48,8 @@ export class PartnerRepository extends SalesforceBase<ISalesforcePartner> implem
         return super.where({ Acc_ProjectId__c: projectId });
     }
 
-    getById(partnerId: string): Promise<ISalesforcePartner | null> {
-        return super.filterOne({ Id: partnerId });
+    getById(partnerId: string): Promise<ISalesforcePartner> {
+        return super.loadItem({ Id: partnerId });
     }
 }
 
