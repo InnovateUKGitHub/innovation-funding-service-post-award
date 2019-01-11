@@ -1,4 +1,4 @@
-import SalesforceBase from "./salesforceBase";
+import SalesforceBase, { Updatable } from "./salesforceBase";
 import { Connection } from "jsforce";
 
 export interface ISalesforcePartner {
@@ -17,6 +17,7 @@ export interface ISalesforcePartner {
     Acc_Cap_Limit__c: number;
     Acc_Award_Rate__c: number;
     Acc_TotalFutureForecastsforParticipant__c: number;
+    Acc_ForecastLastModifiedDate__c: string;
 }
 
 const fields = [
@@ -32,11 +33,13 @@ const fields = [
     "Acc_ProjectRole__c",
     "Acc_ProjectId__c",
     "Acc_TotalFutureForecastsforParticipant__c",
+    "Acc_ForecastLastModifiedDate__c",
 ];
 
 export interface IPartnerRepository {
     getAllByProjectId(projectId: string): Promise<ISalesforcePartner[]>;
     getById(partnerId: string): Promise<ISalesforcePartner>;
+    update(partnerId: Updatable<ISalesforcePartner>): Promise<boolean>;
 }
 
 export class PartnerRepository extends SalesforceBase<ISalesforcePartner> implements IPartnerRepository {
@@ -50,6 +53,10 @@ export class PartnerRepository extends SalesforceBase<ISalesforcePartner> implem
 
     getById(partnerId: string): Promise<ISalesforcePartner> {
         return super.loadItem({ Id: partnerId });
+    }
+
+    update(updatedPartner: Updatable<ISalesforcePartner>) {
+        return super.update(updatedPartner);
     }
 }
 

@@ -14,4 +14,5 @@ export interface PartnerDto {
     capLimit: number;
     totalFutureForecastsForParticipants: number;
     roles: ProjectRole;
+    lastModifiedDate: Date|null;
 }

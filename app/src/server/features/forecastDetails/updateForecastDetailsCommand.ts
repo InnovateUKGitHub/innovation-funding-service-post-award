@@ -1,5 +1,6 @@
 import { CommandBase, IContext } from "../common/context";
 import { GetAllForecastsGOLCostsQuery, GetAllForPartnerQuery } from "../claims";
+import { GetByIdQuery } from "../partners";
 import { ForecastDetailsDtosValidator } from "../../../ui/validators/forecastDetailsDtosValidator";
 import { GetAllClaimDetailsByPartner } from "../claimDetails";
 import { ISalesforceProfileDetails } from "../../repositories";
@@ -9,6 +10,8 @@ import { GetAllForecastsForPartnerQuery } from "./getAllForecastsForPartnerQuery
 import { GetByIdQuery as GetPartnerById } from "../partners";
 import { GetByIdQuery as GetProjectById } from "../projects";
 import { BadRequestError, ValidationError } from "../common/appError";
+import { DateTime } from "luxon";
+import { SALESFORCE_DATE_TIME_FORMAT } from "../claims/mapClaim";
 
 export class UpdateForecastDetailsCommand extends CommandBase<boolean> {
   constructor(
@@ -23,6 +26,7 @@ export class UpdateForecastDetailsCommand extends CommandBase<boolean> {
     await this.testValidation(context);
     await this.testPastForecastPeriodsHaveNotBeenUpdated(context);
     await this.updateProfileDetails(context);
+    await this.updatePartner(context);
 
     if(this.submit) {
       await this.updateClaim(context);
@@ -79,6 +83,15 @@ export class UpdateForecastDetailsCommand extends CommandBase<boolean> {
     const status = this.nextClaimStatus(claim);
     const update = { Id: claim.id, Acc_ClaimStatus__c: status };
     return await context.repositories.claims.update(update);
+  }
+
+  private async updatePartner(context: IContext) {
+    const query = new GetByIdQuery(this.partnerId);
+    const partner = await context.runQuery(query);
+    const now = context.clock.today();
+    const dateString = DateTime.fromJSDate(now).toFormat(SALESFORCE_DATE_TIME_FORMAT);
+    const update = { Id: partner!.id, Acc_ForecastLastModifiedDate__c: dateString };
+    return await context.repositories.partners.update(update);
   }
 
   private nextClaimStatus(claim: ClaimDto) {

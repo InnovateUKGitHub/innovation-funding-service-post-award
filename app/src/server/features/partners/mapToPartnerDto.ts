@@ -1,6 +1,7 @@
 import { CommandBase, IContext } from "../common/context";
 import { ISalesforcePartner, PROJECT_LEAD_IDENTIFIER } from "../../repositories/partnersRepository";
 import { PartnerDto, ProjectRole } from "../../../types";
+import { SALESFORCE_DATE_TIME_FORMAT } from "../claims/mapClaim";
 
 export class MapToPartnerDtoCommand extends CommandBase<PartnerDto> {
     constructor(readonly item: ISalesforcePartner, readonly roles: ProjectRole) {
@@ -25,7 +26,8 @@ export class MapToPartnerDtoCommand extends CommandBase<PartnerDto> {
             awardRate: this.item.Acc_Award_Rate__c,
             capLimit: this.item.Acc_Cap_Limit__c,
             totalFutureForecastsForParticipants: this.item.Acc_TotalFutureForecastsforParticipant__c,
-            roles: this.roles
+            roles: this.roles,
+            lastModifiedDate: context.clock.parse(this.item.Acc_ForecastLastModifiedDate__c, SALESFORCE_DATE_TIME_FORMAT),
         };
         return Promise.resolve(dto);
     }
