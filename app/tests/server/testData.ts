@@ -89,6 +89,8 @@ export class TestData {
       Acc_TotalParticipantCostsPaid__c: 50000,
       Acc_Cap_Limit__c: 50,
       Acc_Award_Rate__c: 50,
+      Acc_ForecastLastModifiedDate__c: ""
+
     } as Repositories.ISalesforcePartner;
 
     if (!!update) update(newItem);
