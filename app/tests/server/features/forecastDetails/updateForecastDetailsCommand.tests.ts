@@ -143,7 +143,7 @@ describe("UpdateForecastDetailsCommand", () => {
     const command = new UpdateForecastDetailsCommand(partner.Id, dto, false);
     await context.runCommand(command);
 
-    expect(context.repositories.partners.Items.find(x => x.Id === partner.Id)!.Acc_ForecastLastModifiedDate__c).toBe(context.clock.asLuxon().toFormat(SALESFORCE_DATE_TIME_FORMAT));
+    expect(context.repositories.partners.Items.find(x => x.Id === partner.Id)!.Acc_ForecastLastModifiedDate__c).toBe(context.clock.asLuxon().toISO());
   });
 
   it("should not update partner timestamp if exception occured", async () => {
