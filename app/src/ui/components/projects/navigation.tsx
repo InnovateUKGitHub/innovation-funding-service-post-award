@@ -1,5 +1,5 @@
 import React from "react";
-import { PartnerDto, ProjectDto, ProjectRole } from "../../../types";
+import { PartnerDto, ProjectDto } from "../../../types";
 import { TabItem, Tabs } from "../layout";
 import {
   AllClaimsDashboardRoute,
@@ -34,19 +34,11 @@ export const ProjectNavigation: React.SFC<Props> = ({project, currentRoute, part
   const changeRequestsTab = {text: "Project change requests", url: "#"};
   const projectDetailsTab = {text: "Project details", route: detailsLink, selected: detailsLink.routeName === currentRoute};
 
-  const hasProjectRole = (project.roles & (ProjectRole.ProjectManager | ProjectRole.MonitoringOfficer)) !== ProjectRole.Unknown;
-
-  const navigationTabs: TabItem[] = hasProjectRole ? [
+  const navigationTabs: TabItem[] = [
     claimsTab,
     allClaimsTab,
     forecastTab,
     allForecastsTab,
-    changeRequestsTab,
-    projectDetailsTab,
-  ] : [
-    claimsTab,
-    allClaimsTab,
-    forecastTab,
     changeRequestsTab,
     projectDetailsTab,
   ];

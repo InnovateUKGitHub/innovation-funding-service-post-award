@@ -6,6 +6,7 @@ import { IContext } from "../../features/common/context";
 import { FileUpload } from "../../../types/FileUpload";
 import { UploadClaimDetailDocumentCommand } from "../../features/documents/uploadClaimDetailDocument";
 import { upload } from "../memoryStorage";
+import { ILinkInfo } from "../../../types/ILinkInfo";
 
 export class ClaimDetailDocumentUploadHandler extends FormHandlerBase<ClaimDetailDocumentsPageParams, FileUpload> {
     constructor() {

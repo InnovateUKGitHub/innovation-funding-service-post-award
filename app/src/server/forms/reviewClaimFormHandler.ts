@@ -6,6 +6,7 @@ import { GetClaim, UpdateClaimCommand } from "../features/claims";
 import { getClaimEditor } from "../../ui/redux/selectors";
 import { ClaimDtoValidator } from "../../ui/validators";
 import { Results } from "../../ui/validation/results";
+import { ILinkInfo } from "../../types/ILinkInfo";
 
 export class ReviewClaimFormHandler extends FormHandlerBase<ReviewClaimParams, ClaimDto> {
     constructor() {

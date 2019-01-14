@@ -10,7 +10,7 @@ import { ClaimDtoValidator } from "../../validators/claimDtoValidator";
 import { ClaimForecastRoute, ClaimsDashboardRoute } from ".";
 import { EditClaimLineItemsRoute } from "./editClaimLineItems";
 import { ClaimsDetailsRoute } from "./details";
-import { ClaimDto, ClaimFrequency, ClaimStatus, PartnerDto, ProjectDto } from "../../../types";
+import { ClaimDto, ClaimFrequency, ClaimStatus, PartnerDto, ProjectDto, ProjectRole } from "../../../types";
 
 export interface PrepareClaimParams {
     projectId: string;
@@ -139,6 +139,13 @@ export const PrepareClaimRoute = definition.route({
     routeName: "prepareClaim",
     routePath: "/projects/:projectId/claims/:partnerId/prepare/:periodId",
     getParams: (route) => ({ projectId: route.params.projectId, partnerId: route.params.partnerId, periodId: parseInt(route.params.periodId, 10) }),
+    accessControl: (user, {projectId, partnerId}) => {
+      const userRoles = user.roleInfo[projectId];
+      if (!userRoles) return false;
+      const partnerRoles = userRoles.partnerRoles[partnerId];
+      if (!partnerRoles) return false;
+      return (partnerRoles & ProjectRole.FinancialContact) === ProjectRole.FinancialContact;
+    },
     getLoadDataActions: (params) => [
         Actions.loadProject(params.projectId),
         Actions.loadPartner(params.partnerId),
