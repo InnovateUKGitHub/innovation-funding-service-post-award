@@ -2,6 +2,7 @@ import React from "react";
 import { Link, Renderers, TypedTable } from "..";
 import { ClaimDetailsValidator } from "../../validators/claimDtoValidator";
 import { ClaimDto, PartnerDto, ProjectDto } from "../../../types";
+import { ILinkInfo } from "../../../types/ILinkInfo";
 
 interface Props {
     project: ProjectDto;

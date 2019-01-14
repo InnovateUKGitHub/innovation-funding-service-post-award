@@ -8,6 +8,7 @@ import { UploadClaimDocumentCommand } from "../../features/documents/uploadClaim
 import { DocumentDescription } from "../../../types/constants";
 import { FileUploadValidator } from "../../../ui/validators/documentUploadValidator";
 import { upload } from "../memoryStorage";
+import { ILinkInfo } from "../../../types/ILinkInfo";
 
 interface Data {
   file: FileUpload;
