@@ -55,11 +55,11 @@ class ViewForecastComponent extends ContainerBase<Params, PendingForecastData, C
   }
 
   private renderUpdateSection(partner: PartnerDto) {
-    // todo: Should this really be a form?
+    // TODO: Should this really be a form?
     const Form = ACC.TypedForm();
     if (partner.roles & ProjectRole.FinancialContact) {
       return (
-        <Form.Form data={{}} onSubmit={() => this.handleSubmit()}>
+        <Form.Form data={{}} qa={"update-navigation-button"} onSubmit={() => this.handleSubmit()}>
           <Form.Submit>Update forecast</Form.Submit>
         </Form.Form>
       );
