@@ -4,11 +4,13 @@ import { ForecastDetailsDtosValidator } from "../../../ui/validators/forecastDet
 import { GetAllClaimDetailsByPartner } from "../claimDetails";
 import { ISalesforceProfileDetails } from "../../repositories";
 import { Updatable } from "../../repositories/salesforceBase";
-import { ClaimDto, ClaimStatus } from "../../../types";
+import { ClaimDto, ClaimStatus, PartnerDto } from "../../../types";
 import { GetAllForecastsForPartnerQuery } from "./getAllForecastsForPartnerQuery";
 import { GetByIdQuery as GetPartnerById } from "../partners";
 import { GetByIdQuery as GetProjectById } from "../projects";
 import { BadRequestError, ValidationError } from "../common/appError";
+import { DateTime } from "luxon";
+import { SALESFORCE_DATE_TIME_FORMAT } from "../common/clock";
 
 export class UpdateForecastDetailsCommand extends CommandBase<boolean> {
   constructor(
@@ -20,9 +22,12 @@ export class UpdateForecastDetailsCommand extends CommandBase<boolean> {
   }
 
   protected async Run(context: IContext) {
+    const partner = await context.runQuery(new GetPartnerById(this.partnerId));
+
     await this.testValidation(context);
-    await this.testPastForecastPeriodsHaveNotBeenUpdated(context);
+    await this.testPastForecastPeriodsHaveNotBeenUpdated(context, partner);
     await this.updateProfileDetails(context);
+    await this.updatePartner(context, partner);
 
     if(this.submit) {
       await this.updateClaim(context);
@@ -43,8 +48,7 @@ export class UpdateForecastDetailsCommand extends CommandBase<boolean> {
     }
   }
 
-  private async testPastForecastPeriodsHaveNotBeenUpdated(context: IContext) {
-    const partner = await context.runQuery(new GetPartnerById(this.partnerId));
+  private async testPastForecastPeriodsHaveNotBeenUpdated(context: IContext, partner: PartnerDto) {
     const project = await context.runQuery(new GetProjectById(partner.projectId));
     const current = await context.runQuery(new GetAllForecastsForPartnerQuery(this.partnerId));
     const passed  = current.filter(x => x.periodId <= project.periodId)
@@ -79,6 +83,13 @@ export class UpdateForecastDetailsCommand extends CommandBase<boolean> {
     const status = this.nextClaimStatus(claim);
     const update = { Id: claim.id, Acc_ClaimStatus__c: status };
     return await context.repositories.claims.update(update);
+  }
+
+  private async updatePartner(context: IContext, partner: PartnerDto) {
+    const now = context.clock.today();
+    const dateString = DateTime.fromJSDate(now).toFormat(SALESFORCE_DATE_TIME_FORMAT);
+    const update = { Id: partner.id, Acc_ForecastLastModifiedDate__c: dateString };
+    return await context.repositories.partners.update(update);
   }
 
   private nextClaimStatus(claim: ClaimDto) {

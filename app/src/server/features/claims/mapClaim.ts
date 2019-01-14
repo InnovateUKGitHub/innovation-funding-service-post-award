@@ -2,9 +2,7 @@ import { ISalesforceClaim } from "../../repositories/claimsRepository";
 import { IContext } from "../common/context";
 import { ISalesforceProfileTotalPeriod } from "../../repositories";
 import { ClaimDto, ClaimStatus } from "../../../types";
-
-const SALESFORCE_DATE_FORMAT = "yyyy-MM-dd";
-const SALESFORCE_DATE_TIME_FORMAT = "yyyy-MM-ddTHH:mm:ss.SSSZZZ";
+import { SALESFORCE_DATE_FORMAT, SALESFORCE_DATE_TIME_FORMAT } from "../common/clock";
 
 const STATUS_ALLOWING_IAR_EDIT = [
   ClaimStatus.DRAFT,
