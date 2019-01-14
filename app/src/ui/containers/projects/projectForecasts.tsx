@@ -5,7 +5,7 @@ import { Pending } from "../../../shared/pending";
 import * as Actions from "../../redux/actions";
 import * as Selectors from "../../redux/selectors";
 import { ProjectOverviewPage } from "../../components/projectOverview";
-import { PartnerDto, ProjectDto } from "../../../types";
+import { IUser, PartnerDto, ProjectDto, ProjectRole } from "../../../types";
 import { ViewForecastRoute } from "../claims";
 
 interface Data {
@@ -59,6 +59,11 @@ export const ProjectForecastRoute = containerDefinition.route({
   routeName: "projectForecasts",
   routePath: "/projects/:projectId/forecasts",
   getParams: (r) => ({ projectId: r.params.projectId }),
+  accessControl: (user: IUser, { projectId }) => {
+    const userRoles = user.roleInfo[projectId];
+    if (!userRoles) return false;
+    return !!(userRoles.projectRoles & (ProjectRole.MonitoringOfficer | ProjectRole.ProjectManager));
+  },
   getLoadDataActions: (params) => [
     Actions.loadProject(params.projectId),
     Actions.loadPartnersForProject(params.projectId),

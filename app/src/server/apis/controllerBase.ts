@@ -7,6 +7,7 @@ import { FileUpload } from "../../types/FileUpload";
 import { ErrorCode, IAppError } from "../../types/IAppError";
 import { AppError, NotFoundError } from "../features/common/appError";
 import { errorHandlerApi } from "../errorHandlers";
+import { IUser } from "../../types/IUser";
 
 const storage = multer.memoryStorage();
 const upload = multer({ storage });

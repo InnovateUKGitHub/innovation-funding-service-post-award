@@ -1,6 +1,6 @@
 import { IContext, QueryBase } from "../common/context";
 import { MapToProjectDtoCommand } from "./mapToProjectDto";
-import { ProjectDto, ProjectRole } from "../../../types";
+import { ProjectDto } from "../../../types";
 import { GetAllProjectRolesForUser, getEmptyRoleInfo } from "./getAllProjectRolesForUser";
 
 export class GetAllQuery extends QueryBase<ProjectDto[]> {

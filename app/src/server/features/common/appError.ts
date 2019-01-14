@@ -18,6 +18,15 @@ export class NotFoundError extends AppError {
   }
 }
 
+export class ForbiddenError extends AppError {
+  constructor(
+    details?: string,
+    readonly original?: Error
+  ) {
+    super(ErrorCode.FORBIDDEN_ERROR, details || "Forbidden", original);
+  }
+}
+
 export class FormHandlerError extends AppError {
   constructor(
     public key: string, public store: string, public dto: {}, public result: Results<{}>, public error: IAppError
