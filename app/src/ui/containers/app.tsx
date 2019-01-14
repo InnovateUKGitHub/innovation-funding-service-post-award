@@ -1,13 +1,16 @@
 import React from "react";
 import { connect } from "react-redux";
 import { createRouteNodeSelector, RouterState } from "redux-router5";
-import { matchRoute } from "../routing";
+import { MatchedRoute, matchRoute } from "../routing";
 import { Footer, Header, PhaseBanner } from "../components";
 import { RootState } from "../redux";
+import { IUser } from "../../types/IUser";
+import { StandardErrorPage } from "../components/standardErrorPage";
 
 interface IAppProps extends RouterState {
   dispatch: any;
   loadStatus: number;
+  user: IUser;
 }
 
 class AppComponent extends React.Component<IAppProps, {}> {
@@ -21,6 +24,12 @@ class AppComponent extends React.Component<IAppProps, {}> {
     }
   }
 
+  private accessControl(route: MatchedRoute) {
+    if (!route.accessControl) return true;
+    const params = route.getParams(this.props.route!);
+    return route.accessControl(this.props.user, params);
+  }
+
   private loadData() {
     const route = matchRoute(this.props.route);
     const params = route.getParams(this.props.route!);
@@ -32,6 +41,9 @@ class AppComponent extends React.Component<IAppProps, {}> {
 
   public render() {
     const route = matchRoute(this.props.route);
+    const hasAccess = this.accessControl(route);
+
+    const pageContent = hasAccess ? <route.container {...this.props} /> : <StandardErrorPage />;
 
     return (
       <div>
@@ -39,7 +51,7 @@ class AppComponent extends React.Component<IAppProps, {}> {
         <div className="govuk-width-container">
           <PhaseBanner />
           <main className="govuk-main-wrapper" id="main-content" role="main" data-qa={route.name}>
-            <route.container {...this.props} />
+            { pageContent }
           </main>
         </div>
         <Footer />
@@ -52,6 +64,7 @@ const connectState = () => {
   const routeInfo = createRouteNodeSelector("");
   return (state: RootState) => ({
     loadStatus: state.loadStatus,
+    user: state.user,
     ...routeInfo(state)
   });
 };

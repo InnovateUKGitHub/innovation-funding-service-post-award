@@ -6,7 +6,6 @@ import { TestLogger } from "./testLogger";
 import { IConfig } from "../../src/server/features/common/config";
 import { Cache } from "../../src/server/features/common/cache";
 import { TestUser } from "./testUser";
-import { ProjectRole } from "../../src/types";
 import { IRoleInfo } from "../../src/server/features/projects/getAllProjectRolesForUser";
 
 export class TestContext implements IContext {

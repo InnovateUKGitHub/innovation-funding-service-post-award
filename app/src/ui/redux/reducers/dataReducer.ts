@@ -2,7 +2,7 @@ import { DataLoadAction } from "../actions/common";
 import { combineReducers } from "redux";
 import { ActionTransitionStart } from "redux-router5";
 import { LoadingStatus } from "../../../shared/pending";
-import { ClaimDto, PartnerDto, ProjectDto } from "../../../types";
+import { ClaimDto, PartnerDto, ProjectDto, ProjectRole } from "../../../types";
 import { IAppError } from "../../../types/IAppError";
 
 export interface IDataStore<T> {
@@ -61,5 +61,6 @@ export const dataReducer = combineReducers({
   partner: dataStoreReducer<PartnerDto, string>(x => x, "partner"),
   project: dataStoreReducer<ProjectDto, string>(x => x, "project"),
   projects: dataStoreReducer<ProjectDto[], string>(x => x, "projects"),
-  projectContacts: dataStoreReducer<ProjectContactDto[], string>(x => x, "projectContacts")
+  projectContacts: dataStoreReducer<ProjectContactDto[], string>(x => x, "projectContacts"),
+  user: dataStoreReducer<{[key: string]: ProjectRole}, string>(x => x, "user")
 });
