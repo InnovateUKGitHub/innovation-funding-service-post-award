@@ -71,7 +71,7 @@ class Component extends ContainerBase<ClaimDashboardPageParams, Data, Callbacks>
     };
 
     return (
-      <Acc.DocumentSingle message={"An IAR has been added to this claim"} document={document} openNewWindow={true} renderRemove={() => claim.allowIarEdit && button()} />
+      <Acc.DocumentSingle message={"An IAR has been added to this claim."} document={document} openNewWindow={true} renderRemove={() => claim.allowIarEdit && button()} />
     );
   }
 
