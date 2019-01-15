@@ -7,6 +7,7 @@ export interface TabItem {
     route?: ILinkInfo;
     url?: string;
     selected?: boolean;
+    qa?: string;
 }
 
 export interface TabProps {
@@ -34,7 +35,7 @@ export class Tabs extends React.PureComponent<TabProps, {}> {
         const tab = this.renderTab(item);
         if (!tab) return null;
         return (
-            <li className="govuk-tabs__list-item" key={`tab-${index}`} role="presentation">
+            <li className="govuk-tabs__list-item" key={`tab-${index}`} role="presentation" data-qa={item.qa}>
                 {tab}
             </li>
         );
