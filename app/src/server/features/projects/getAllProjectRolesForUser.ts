@@ -22,6 +22,7 @@ export class GetAllProjectRolesForUser extends QueryBase<{ [key: string]: IRoleI
 
   private async getProjectRoles(context: IContext): Promise<{ [key: string]: IRoleInfo }> {
     const roles = await context.repositories.projectContacts.getAllForUser(context.user.email);
+    const partners = await context.repositories.partners.getAll();
 
     // get all rows grouped by project into lookup
     return roles.reduce<{ [key: string]: IRoleInfo }>((allRoles, current) => {
@@ -34,7 +35,9 @@ export class GetAllProjectRolesForUser extends QueryBase<{ [key: string]: IRoleI
 
       // if this is a partner level role then add it at the partner level too
       if (newRole === ProjectRole.FinancialContact && current.Acc_AccountId__c) {
-        roleInfo.partnerRoles[current.Acc_AccountId__c] = roleInfo.partnerRoles[current.Acc_AccountId__c] | newRole;
+        partners.filter(x => x.Acc_AccountId__r.Id === current.Acc_AccountId__c).forEach(x => {
+          roleInfo.partnerRoles[x.Id] = roleInfo.partnerRoles[x.Id] | newRole;
+        });
       }
 
       return allRoles;

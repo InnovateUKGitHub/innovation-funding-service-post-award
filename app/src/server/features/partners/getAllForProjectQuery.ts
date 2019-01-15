@@ -14,7 +14,7 @@ export class GetAllForProjectQuery extends QueryBase<PartnerDto[]> {
 
         const mapped = await Promise.all(results.map(item => {
             const roleInfo = roles[item.Acc_ProjectId__c] || getEmptyRoleInfo();
-            const partnerRoles = roleInfo.partnerRoles[item.Acc_AccountId__r.Id] || ProjectRole.Unknown;
+            const partnerRoles = roleInfo.partnerRoles[item.Id] || ProjectRole.Unknown;
             return context.runCommand(new MapToPartnerDtoCommand(item, partnerRoles));
         }));
 
