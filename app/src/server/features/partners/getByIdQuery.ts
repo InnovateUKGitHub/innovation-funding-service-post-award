@@ -12,7 +12,7 @@ export class GetByIdQuery extends QueryBase<PartnerDto> {
       const result = await context.repositories.partners.getById(this.id);
       const roles = await context.runQuery(new GetAllProjectRolesForUser());
       const roleInfo = roles[result.Acc_ProjectId__c] || getEmptyRoleInfo();
-      const partnerRoles = roleInfo.partnerRoles[result.Acc_AccountId__r.Id] || ProjectRole.Unknown;
+      const partnerRoles = roleInfo.partnerRoles[result.Id] || ProjectRole.Unknown;
       return await context.runCommand(new MapToPartnerDtoCommand(result, partnerRoles));
   }
 }
