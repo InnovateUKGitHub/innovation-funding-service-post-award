@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "../links";
+import { ILinkInfo } from "../../../types/ILinkInfo";
 
 export interface TabItem {
     text: string;
@@ -29,9 +30,11 @@ export class Tabs extends React.PureComponent<TabProps, {}> {
     }
 
     private renderItem(item: TabItem, index: number) {
+        const tab = this.renderTab(item);
+        if (!tab) return null;
         return (
             <li className="govuk-tabs__list-item" key={`tab-${index}`} role="presentation">
-                {this.renderTab(item)}
+                {tab}
             </li>
         );
     }

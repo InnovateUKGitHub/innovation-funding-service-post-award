@@ -6,6 +6,7 @@ import contextProvider from "../features/common/contextProvider";
 import { IContext } from "../features/common/context";
 import { FileUpload } from "../../types/FileUpload";
 import { FormHandlerError } from "../features/common/appError";
+import { ILinkInfo } from "../../types/ILinkInfo";
 
 interface RouteInfo<TParams> {
   routeName: string;
