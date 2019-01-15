@@ -13,11 +13,11 @@ export class Clock implements IClock {
     return new Date();
   }
 
-  parse(value: string|null|undefined, format: string) {
+  parse(value: string|null|undefined, format: string): Date|null {
     if(!value) {
       return null;
     }
-    const result = DateTime.fromFormat(value, format);
+    const result = DateTime.fromFormat(value, format, {locale: "en-GB", zone: "Europe/London"});
     return result.toLocal().toJSDate();
   }
 }
