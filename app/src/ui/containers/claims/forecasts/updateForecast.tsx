@@ -12,6 +12,7 @@ import {
   renderWarning,
   withDataEditor,
 } from "./common";
+import { ProjectRole } from "../../../../types";
 
 interface Callbacks {
   onChange: (partnerId: string, data: ForecastDetailsDTO[], combined: ForecastData) => void;
@@ -78,5 +79,12 @@ export const UpdateForecastRoute = definition.route({
   routePath: "/projects/:projectId/claims/:partnerId/updateForecast",
   getParams: forecastParams,
   getLoadDataActions: forecastDataLoadActions,
-  container: UpdateForecast
+  container: UpdateForecast,
+  accessControl: (user, params) => {
+    const userRoles = user.roleInfo[params.projectId];
+    if(!userRoles) return false;
+
+    const partnerRoles = userRoles.partnerRoles[params.partnerId];
+    return !!partnerRoles && !!(userRoles.projectRoles & ProjectRole.FinancialContact) && !!(partnerRoles & ProjectRole.FinancialContact);
+  }
 });

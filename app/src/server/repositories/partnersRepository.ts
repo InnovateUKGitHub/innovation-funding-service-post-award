@@ -40,6 +40,7 @@ export interface IPartnerRepository {
     getAllByProjectId(projectId: string): Promise<ISalesforcePartner[]>;
     getById(partnerId: string): Promise<ISalesforcePartner>;
     update(updatedPartner: Updatable<ISalesforcePartner>): Promise<boolean>;
+    getAll(): Promise<ISalesforcePartner[]>;
 }
 
 export class PartnerRepository extends SalesforceBase<ISalesforcePartner> implements IPartnerRepository {
@@ -56,7 +57,11 @@ export class PartnerRepository extends SalesforceBase<ISalesforcePartner> implem
     }
 
     update(updatedPartner: Updatable<ISalesforcePartner>) {
-        return super.update(updatedPartner);
+      return super.update(updatedPartner);
+    }
+
+    getAll() {
+      return super.all();
     }
 }
 

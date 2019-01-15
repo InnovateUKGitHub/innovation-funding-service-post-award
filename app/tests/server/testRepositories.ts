@@ -42,6 +42,10 @@ class PartnerTestRepository extends TestRepository<Repositories.ISalesforcePartn
         }
         return Promise.resolve(false);
     }
+
+    getAll() {
+      return super.getAll();
+    }
 }
 
 class ProjectContactTestRepository extends TestRepository<Repositories.ISalesforceProjectContact> implements Repositories.IProjectContactsRepository {
