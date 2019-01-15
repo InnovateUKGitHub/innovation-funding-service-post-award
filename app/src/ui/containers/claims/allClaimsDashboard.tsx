@@ -147,18 +147,17 @@ class Component extends ContainerBase<Params, Data, {}> {
 
   private renderPreviousClaimsSections(project: ProjectDto, partners: PartnerDto[], previousClaims: ClaimDto[]) {
     const grouped = partners
-      .map(x => ({ partner: x, claims: previousClaims.filter(y => y.partnerId === x.id) }))
-      .filter(x => x.claims.length);
-
-    if (!grouped.length) {
-      return <Acc.Renderers.SimpleString>There are no closed claims for this partner.</Acc.Renderers.SimpleString>;
-    }
+      .map(x => ({ partner: x, claims: previousClaims.filter(y => y.partnerId === x.id) }));
 
     return (
         <Accordion>
           {grouped.map(x => (
             <AccordionItem title={`${x.partner.name} ${x.partner.isLead ? "(Lead)" : ""}`} openAltText="Hide the closed claims" closedAltText="Show the closed claims">
-              {this.previousClaimsSection(project, x.partner, x.claims)}
+              {
+                x.claims.length > 0 ?
+                this.previousClaimsSection(project, x.partner, x.claims) :
+                <Acc.Renderers.SimpleString>There are no closed claims for this partner.</Acc.Renderers.SimpleString>
+              }
             </AccordionItem>
           ))}
         </Accordion>
