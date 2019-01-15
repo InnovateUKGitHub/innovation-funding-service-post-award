@@ -10,7 +10,6 @@ import { GetByIdQuery as GetPartnerById } from "../partners";
 import { GetByIdQuery as GetProjectById } from "../projects";
 import { BadRequestError, ValidationError } from "../common/appError";
 import { DateTime } from "luxon";
-import { SALESFORCE_DATE_TIME_FORMAT } from "../common/clock";
 
 export class UpdateForecastDetailsCommand extends CommandBase<boolean> {
   constructor(
@@ -87,7 +86,7 @@ export class UpdateForecastDetailsCommand extends CommandBase<boolean> {
 
   private async updatePartner(context: IContext, partner: PartnerDto) {
     const now = context.clock.today();
-    const dateString = DateTime.fromJSDate(now).toFormat(SALESFORCE_DATE_TIME_FORMAT);
+    const dateString = DateTime.fromJSDate(now).toISO();
     const update = { Id: partner.id, Acc_ForecastLastModifiedDate__c: dateString };
     return await context.repositories.partners.update(update);
   }
