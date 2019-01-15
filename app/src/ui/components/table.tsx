@@ -8,6 +8,7 @@ import { Percentage } from "./renderers/percentage";
 import { Link } from ".";
 import * as colour from "../styles/colours";
 import { Results } from "../validation/results";
+import { ILinkInfo } from "../../types/ILinkInfo";
 type dividerTypes = "normal" | "bold";
 type columnMode = "cell" | "header" | "footer" | "col";
 interface InternalColumnProps<T> {

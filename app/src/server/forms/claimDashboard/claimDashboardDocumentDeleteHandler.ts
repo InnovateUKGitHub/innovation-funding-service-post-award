@@ -11,6 +11,7 @@ import { DeleteDocumentCommand } from "../../features/documents/deleteDocument";
 import { Results } from "../../../ui/validation/results";
 import { GetDocumentsSummaryQuery } from "../../features/documents/getDocumentsSummary";
 import { BadRequestError } from "../../features/common/appError";
+import { ILinkInfo } from "../../../types/ILinkInfo";
 
 export class ClaimDashboardDocumentDeleteHandler extends FormHandlerBase<ClaimDashboardPageParams, DocumentSummaryDto> {
 

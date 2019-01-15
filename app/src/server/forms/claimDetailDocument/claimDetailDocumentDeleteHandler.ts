@@ -9,6 +9,7 @@ import {
 } from "../../../ui/redux/selectors";
 import { DeleteDocumentCommand } from "../../features/documents/deleteDocument";
 import { Results } from "../../../ui/validation/results";
+import { ILinkInfo } from "../../../types/ILinkInfo";
 
 interface Document {
   id: string;

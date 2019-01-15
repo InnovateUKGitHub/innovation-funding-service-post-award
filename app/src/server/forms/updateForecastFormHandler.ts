@@ -8,6 +8,7 @@ import { GetCostCategoriesQuery } from "../features/claims";
 import { UpdateForecastRoute, ViewForecastRoute } from "../../ui/containers";
 import { getForecastDetailsEditor } from "../../ui/redux/selectors";
 import { ForecastDetailsDtosValidator } from "../../ui/validators";
+import { ILinkInfo } from "../../types/ILinkInfo";
 
 export class UpdateForecastFormHandler extends FormHandlerBase<ForecastParams, ForecastDetailsDTO[]> {
   constructor() {
