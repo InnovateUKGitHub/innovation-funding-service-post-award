@@ -70,10 +70,9 @@ class ProjectDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
     }
 
     private renderPartnersCosts(partners: PartnerDto[], project: ProjectDto) {
-        const roles = project.roles;
         const requiredRoles = ProjectRole.ProjectManager | ProjectRole.MonitoringOfficer;
 
-        if ((requiredRoles & roles) === ProjectRole.Unknown) {
+        if ((requiredRoles & project.roles) === ProjectRole.Unknown) {
             return null;
         }
 
