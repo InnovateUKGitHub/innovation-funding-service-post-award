@@ -86,7 +86,7 @@ class Component extends ContainerBase<Params, Data, {}> {
           </Acc.Renderers.SimpleString>
         );
     }
-    return groupedClaims.map(x => this.renderCurrentClaims(x, project, partners));
+    return groupedClaims.map((x, i) => this.renderCurrentClaims(x, project, partners, i));
   }
 
   private renderSummary(project: ProjectDto) {
@@ -117,7 +117,7 @@ class Component extends ContainerBase<Params, Data, {}> {
     ].indexOf(x.status) < 0;
   }
 
-  private renderCurrentClaims(currentInfo: ProjectPeriod, project: ProjectDto, partners: PartnerDto[]) {
+  private renderCurrentClaims(currentInfo: ProjectPeriod, project: ProjectDto, partners: PartnerDto[], index: number) {
     const title = <React.Fragment>Period {currentInfo.periodId}: <Acc.Renderers.LongDateRange start={currentInfo.start} end={currentInfo.end} /></React.Fragment>;
     const ClaimTable = Acc.TypedTable<ClaimDto>();
     const renderPartnerName = (x: ClaimDto) => {
@@ -131,7 +131,7 @@ class Component extends ContainerBase<Params, Data, {}> {
     const badge = hasClaimNotYetSubmittedToInnovate && <Acc.Claims.ClaimWindow periodEnd={currentInfo.end}/>;
 
     return (
-      <Acc.Section title={title} qa="current-claims-section" badge={badge}>
+      <Acc.Section title={title} qa="current-claims-section" badge={badge} key={index}>
         <ClaimTable.Table data={currentInfo.claims} qa="current-claims-table" bodyRowFlag={(x) => x.status === ClaimStatus.SUBMITTED ? "info" : null }>
           <ClaimTable.String header="Partner" qa="partner" value={renderPartnerName}/>
           <ClaimTable.Currency header="Forecast costs for period" qa="forecast-cost" value={(x) => x.forecastCost} />
@@ -150,8 +150,8 @@ class Component extends ContainerBase<Params, Data, {}> {
 
     return (
         <Accordion>
-          {grouped.map(x => (
-            <AccordionItem title={`${x.partner.name} ${x.partner.isLead ? "(Lead)" : ""}`} openAltText="Hide the closed claims" closedAltText="Show the closed claims">
+          {grouped.map((x, i) => (
+            <AccordionItem title={`${x.partner.name} ${x.partner.isLead ? "(Lead)" : ""}`} openAltText="Hide the closed claims" closedAltText="Show the closed claims" key={i}>
               {this.previousClaimsSection(project, x.partner, x.claims)}
             </AccordionItem>
           ))}
