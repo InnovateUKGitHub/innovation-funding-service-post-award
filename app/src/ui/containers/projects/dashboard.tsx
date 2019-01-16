@@ -5,7 +5,7 @@ import { Pending } from "../../../shared/pending";
 import * as Actions from "../../redux/actions";
 import * as Selectors from "../../redux/selectors";
 import { HomeRoute } from "../home";
-import { ClaimFrequency, ProjectDto } from "../../../types";
+import { ClaimFrequency, ProjectDto, ProjectRole } from "../../../types";
 
 interface Data {
   projects: Pending<ProjectDto[]>;
@@ -38,40 +38,42 @@ class ProjectDashboardComponent extends ContainerBase<{}, Data, Callbacks> {
     const archived: JSX.Element[] = [];
 
     projects.forEach(x => {
-      const quarterly = x.claimFrequency === ClaimFrequency.Quarterly;
-      const today = new Date();
-      // needs last claim date to work out latest period for claim deadline
-      const end = new Date(x.startDate);
-      const endMonth = x.periodId * (quarterly ? 4 : 1);
-      end.setMonth(end.getMonth() + endMonth);
-      end.setDate(0);
-      const timeRemaining = end.getTime() - today.getTime();
-      const daysRemaining = Math.floor(timeRemaining / (60 * 60 * 24 * 1000));
+      if (x.roles !== ProjectRole.Unknown) {
+        const quarterly = x.claimFrequency === ClaimFrequency.Quarterly;
+        const today = new Date();
+        // needs last claim date to work out latest period for claim deadline
+        const end = new Date(x.startDate);
+        const endMonth = x.periodId * (quarterly ? 4 : 1);
+        end.setMonth(end.getMonth() + endMonth);
+        end.setDate(0);
+        const timeRemaining = end.getTime() - today.getTime();
+        const daysRemaining = Math.floor(timeRemaining / (60 * 60 * 24 * 1000));
 
-      if (daysRemaining <= 30) {
-        open.push((
-          <ACC.OpenProjectItem
-            key={x.id}
-            project={x}
-            daysRemaining={daysRemaining}
-            endDate={end}
-            warning={true}
-          />
-        ));
-      }
-      else {
-        const nextStart = new Date(end);
-        nextStart.setDate(1);
+        if (daysRemaining <= 30) {
+          open.push((
+            <ACC.OpenProjectItem
+              key={x.id}
+              project={x}
+              daysRemaining={daysRemaining}
+              endDate={end}
+              warning={true}
+            />
+          ));
+        }
+        else {
+          const nextStart = new Date(end);
+          nextStart.setDate(1);
 
-        awaiting.push((
-          <ACC.AwaitingProjectItem
-            key={x.id}
-            project={x}
-            warning={false}
-            periodStart={nextStart}
-            periodEnd={end}
-          />
-        ));
+          awaiting.push((
+            <ACC.AwaitingProjectItem
+              key={x.id}
+              project={x}
+              warning={false}
+              periodStart={nextStart}
+              periodEnd={end}
+            />
+          ));
+        }
       }
     });
 
@@ -109,5 +111,5 @@ export const ProjectDashboardRoute = definition.route({
   routePath: "/projects/dashboard",
   getParams: () => ({}),
   getLoadDataActions: (params) => [Actions.loadProjects()],
-  container: ProjectDashboard
+  container: ProjectDashboard,
 });
