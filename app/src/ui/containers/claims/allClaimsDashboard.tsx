@@ -146,13 +146,7 @@ class Component extends ContainerBase<Params, Data, {}> {
   }
 
   private renderPreviousClaimsSections(project: ProjectDto, partners: PartnerDto[], previousClaims: ClaimDto[]) {
-    const grouped = partners
-      .map(x => ({ partner: x, claims: previousClaims.filter(y => y.partnerId === x.id) }))
-      .filter(x => x.claims.length);
-
-    if (!grouped.length) {
-      return <Acc.Renderers.SimpleString>There are no closed claims for this partner.</Acc.Renderers.SimpleString>;
-    }
+    const grouped = partners.map(x => ({ partner: x, claims: previousClaims.filter(y => y.partnerId === x.id) }));
 
     return (
         <Accordion>
@@ -166,6 +160,11 @@ class Component extends ContainerBase<Params, Data, {}> {
   }
 
   private previousClaimsSection(project: ProjectDto, partner: PartnerDto, previousClaims: ClaimDto[]) {
+    if (previousClaims.length === 0) {
+      return (
+        <Acc.Renderers.SimpleString qa={`noClosedClaims-${partner.accountId}`}>There are no closed claims for this partner.</Acc.Renderers.SimpleString>
+      );
+    }
     const ClaimTable = Acc.TypedTable<ClaimDto>();
     return (
       <div>
