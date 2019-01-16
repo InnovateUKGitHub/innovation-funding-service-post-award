@@ -5,7 +5,8 @@ import { Pending } from "../../../shared/pending";
 import * as Actions from "../../redux/actions";
 import * as Selectors from "../../redux/selectors";
 import { ProjectOverviewPage } from "../../components/projectOverview";
-import { PartnerDto, ProjectDto } from "../../../types";
+import { PartnerDto, ProjectDto, IUser, ProjectRole } from "../../../types";
+import { userInfo } from "os";
 
 interface Data {
     projectDetails: Pending<ProjectDto>;
@@ -45,7 +46,7 @@ class ProjectDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
 
         return (
             <ProjectOverviewPage selectedTab={ProjectDetailsRoute.routeName} project={project} partners={partners}>
-                {this.renderPartnersCosts(partners)}
+                {this.renderPartnersCosts(partners, project)}
                 <ACC.Section title="Project members">
                     <ACC.ProjectMember member={monitoringOfficer} qa="monitoring-officer" />
                     <ACC.ProjectMember member={projectManager} qa="project-manager" />
@@ -69,7 +70,14 @@ class ProjectDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
         );
     }
 
-    private renderPartnersCosts(partners: PartnerDto[]) {
+    private renderPartnersCosts(partners: PartnerDto[], project: ProjectDto) {
+        const roles = project.roles;
+        const requiredRoles = ProjectRole.ProjectManager | ProjectRole.MonitoringOfficer;
+
+        if ((requiredRoles & roles) === ProjectRole.Unknown) {
+            return null;
+        }
+
         const PartnersTable = ACC.TypedTable<PartnerDto>();
         const totalEligibleCosts = partners.reduce((val, partner) => val += partner.totalParticipantGrant, 0) || null;
         const totalClaimed = partners.reduce((val, partner) => val += partner.totalParticipantCostsClaimed, 0);
@@ -109,5 +117,10 @@ export const ProjectDetailsRoute = containerDefinition.route({
         Actions.loadContactsForProject(params.id),
         Actions.loadPartnersForProject(params.id),
     ],
-    container: ProjectDetails
+    container: ProjectDetails,
+    accessControl: (user: IUser, { id }) => {
+        const userRoles = user.roleInfo[id];
+        if (!userRoles) return false;
+        return !!(userRoles.projectRoles & (ProjectRole.MonitoringOfficer | ProjectRole.ProjectManager));
+    }
 });
