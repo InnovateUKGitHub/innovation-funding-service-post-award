@@ -6,7 +6,6 @@ import * as Actions from "../../redux/actions";
 import * as Selectors from "../../redux/selectors";
 import { ProjectOverviewPage } from "../../components/projectOverview";
 import { IUser, PartnerDto, ProjectDto, ProjectRole } from "../../../types";
-import { userInfo } from "os";
 
 interface Data {
     projectDetails: Pending<ProjectDto>;
@@ -118,9 +117,5 @@ export const ProjectDetailsRoute = containerDefinition.route({
         Actions.loadPartnersForProject(params.id),
     ],
     container: ProjectDetails,
-    accessControl: (user: IUser, { id }) => {
-        const userRoles = user.roleInfo[id];
-        if (!userRoles) return false;
-        return !!(userRoles.projectRoles & (ProjectRole.MonitoringOfficer | ProjectRole.ProjectManager));
-    }
+    accessControl: (user: IUser, { id }) => user.roleInfo[id] && user.roleInfo[id].projectRoles !== ProjectRole.Unknown
 });
