@@ -5,7 +5,7 @@ import { Pending } from "../../../shared/pending";
 import * as Actions from "../../redux/actions";
 import * as Selectors from "../../redux/selectors";
 import { HomeRoute } from "../home";
-import { ClaimFrequency, ProjectDto, ProjectRole } from "../../../types";
+import { ClaimFrequency, ProjectDto } from "../../../types";
 
 interface Data {
   projects: Pending<ProjectDto[]>;
@@ -109,5 +109,5 @@ export const ProjectDashboardRoute = definition.route({
   routePath: "/projects/dashboard",
   getParams: () => ({}),
   getLoadDataActions: (params) => [Actions.loadProjects()],
-  container: ProjectDashboard,
+  container: ProjectDashboard
 });
