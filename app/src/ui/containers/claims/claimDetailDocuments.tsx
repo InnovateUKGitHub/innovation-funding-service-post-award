@@ -5,7 +5,7 @@ import { Pending } from "../../../shared/pending";
 import { EditClaimLineItemsRoute } from "./index";
 import * as Actions from "../../redux/actions";
 import * as Selectors from "../../redux/selectors";
-import { ProjectDto } from "../../../types";
+import { ProjectDto, ProjectRole } from "../../../types";
 import {IEditorStore} from "../../redux/reducers";
 import { DocumentUploadValidator } from "../../validators/documentUploadValidator";
 import { Results } from "../../validation/results";
@@ -164,5 +164,10 @@ export const ClaimDetailDocumentsRoute = definition.route({
     Actions.loadProject(params.projectId),
     Actions.loadClaimDetailDocuments(params.partnerId, params.periodId, params.costCategoryId)
   ],
+  accessControl: (user, {projectId, partnerId}) => {
+    const userRoles = user.roleInfo[projectId];
+    if (!userRoles) return false;
+    return (userRoles.partnerRoles[partnerId] & ProjectRole.FinancialContact) !== ProjectRole.Unknown;
+  },
   container: ClaimDetailDocuments
 });
