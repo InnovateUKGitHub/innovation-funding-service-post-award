@@ -1,5 +1,3 @@
-// tslint:disable:no-bitwise
-
 import React from "react";
 import * as ACC from "../../../components";
 import * as Actions from "../../../redux/actions";
@@ -16,7 +14,8 @@ import {
   PendingForecastData,
   renderWarning,
 } from "./common";
-import { PartnerDto, ProjectDto, ProjectRole } from "../../../../types";
+import { PartnerDto, ProjectRole } from "../../../../types";
+import { ProjectDashboardRoute } from "../../projects";
 
 interface Callbacks {
   onSubmit: (params: Params) => void;
@@ -35,14 +34,18 @@ class ViewForecastComponent extends ContainerBase<Params, PendingForecastData, C
   }
 
   public renderContents(data: ForecastData) {
+    // MO, PM & FC/PM should see partner name
+    const isMoPm = !!(data.project.roles & (ProjectRole.ProjectManager | ProjectRole.MonitoringOfficer));
+    const partnerName = isMoPm ? data.partner.name : null;
 
     return (
-      <ProjectOverviewPage
-        selectedTab={ViewForecastRoute.routeName}
-        project={data.project}
-        partners={[data.partner]}
-      >
-        <ACC.Section title="" qa={"partner-name"} >
+      <ACC.Page>
+        <ACC.Section>
+          <ACC.BackLink route={ProjectDashboardRoute.getLink({})}>Back to dashboard</ACC.BackLink>
+        </ACC.Section>
+        <ACC.Projects.Title pageTitle="View project" project={data.project} />
+        {this.renderTabs(isMoPm, data)}
+        <ACC.Section title={partnerName} qa="partner-name">
           {renderWarning(data)}
           <ACC.Claims.ForecastTable data={data} />
         </ACC.Section>
@@ -50,8 +53,13 @@ class ViewForecastComponent extends ContainerBase<Params, PendingForecastData, C
           {this.renderUpdateSection(data.partner)}
           <ACC.Claims.ClaimLastModified claim={data.claim} />
         </ACC.Section>
-      </ProjectOverviewPage>
+      </ACC.Page>
     );
+  }
+
+  // MO, PM & FC/PM should not see tabs
+  private renderTabs(isMoPm: boolean, data: ForecastData) {
+    return isMoPm ? null : <ACC.Projects.ProjectNavigation currentRoute={ViewForecastRoute.routeName} partners={[data.partner]} project={data.project} />;
   }
 
   private renderUpdateSection(partner: PartnerDto) {
