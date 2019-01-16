@@ -11,15 +11,16 @@ export interface TabItem {
 
 export interface TabProps {
     tabList: TabItem[];
+    qa?: string;
 }
 
 export class Tabs extends React.PureComponent<TabProps, {}> {
     render() {
-        const { tabList } = this.props;
+        const { tabList, qa } = this.props;
 
         if (tabList !== null && tabList.length) {
             return (
-                <div className={`govuk-tabs govuk-!-margin-bottom-9`} >
+                <div className={`govuk-tabs govuk-!-margin-bottom-9`} data-qa={qa}>
                     <ul className="govuk-tabs__list">
                         {tabList.map((item, index) => this.renderItem(item, index))}
                     </ul>
