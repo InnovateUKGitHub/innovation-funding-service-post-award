@@ -2,12 +2,20 @@ import { ClaimsDetailsRoute } from "./details";
 import React from "react";
 import { Pending } from "../../../shared/pending";
 import * as Actions from "../../redux/actions";
-import { getCurrentClaim, getCurrentClaimIarDocument, getCurrentClaimIarDocumentsDeleteEditor, getCurrentClaimIarDocumentsEditor, getPartner, getPreviousClaims, getProject } from "../../redux/selectors";
+import {
+  getCurrentClaim,
+  getCurrentClaimIarDocument,
+  getCurrentClaimIarDocumentsDeleteEditor,
+  getCurrentClaimIarDocumentsEditor,
+  getPartner,
+  getPreviousClaims,
+  getProject
+} from "../../redux/selectors";
 import * as Acc from "../../components";
 import { PrepareClaimRoute } from "./prepare";
 import { ContainerBase, ReduxContainer } from "../containerBase";
 import { ReviewClaimRoute } from "./review";
-import { ClaimDto, ClaimStatus, DocumentDescription, PartnerDto, ProjectDto } from "../../../types";
+import { ClaimDto, ClaimStatus, DocumentDescription, PartnerDto, ProjectDto, ProjectRole } from "../../../types";
 import { IEditorStore } from "../../redux/reducers";
 import { DocumentUploadValidator } from "../../validators/documentUploadValidator";
 import { DateTime } from "luxon";
@@ -287,6 +295,18 @@ export const ClaimsDashboardRoute = definition.route({
     projectId: route.params.projectId,
     partnerId: route.params.partnerId
   }),
+  accessControl: (user, {projectId, partnerId}) => {
+    const userRoles = user.roleInfo[projectId];
+    if (!userRoles) return false;
+
+    const partnerRoles = userRoles.partnerRoles[partnerId];
+    const projectRoles = userRoles.projectRoles;
+
+    const isFC = (ProjectRole.FinancialContact & partnerRoles) !== ProjectRole.Unknown;
+    const isMoOrPm = ((ProjectRole.MonitoringOfficer | ProjectRole.ProjectManager) & projectRoles) !== ProjectRole.Unknown;
+
+    return isFC && !isMoOrPm;
+  },
   getLoadDataActions: (params) => [
     Actions.loadProject(params.projectId),
     Actions.loadPartner(params.partnerId),

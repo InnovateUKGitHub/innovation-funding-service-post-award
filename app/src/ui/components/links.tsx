@@ -18,14 +18,14 @@ interface Data {
 
 class LinkComponent extends React.Component<Props & Data> {
 
-  private accessControl(route: ILinkInfo) {
+  private userHasAccess(route: ILinkInfo) {
     if (!route.accessControl) return true;
     return route.accessControl(this.props.user);
   }
 
   render() {
     const { id, route, selected, children, className } = this.props;
-    if (!this.accessControl(route)) return null;
+    if (!this.userHasAccess(route)) return null;
     return (
       <RouterLink
         id={id}
