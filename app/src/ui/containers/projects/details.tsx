@@ -5,7 +5,7 @@ import { Pending } from "../../../shared/pending";
 import * as Actions from "../../redux/actions";
 import * as Selectors from "../../redux/selectors";
 import { ProjectOverviewPage } from "../../components/projectOverview";
-import { PartnerDto, ProjectDto, IUser, ProjectRole } from "../../../types";
+import { IUser, PartnerDto, ProjectDto, ProjectRole } from "../../../types";
 import { userInfo } from "os";
 
 interface Data {
