@@ -43,5 +43,5 @@ export const ProjectNavigation: React.SFC<Props> = ({project, currentRoute, part
     projectDetailsTab,
   ];
 
-  return <Tabs tabList={navigationTabs}/>;
+  return <Tabs tabList={navigationTabs} qa="project-navigation" />;
 };
