@@ -8,8 +8,8 @@ export class GetAllQuery extends QueryBase<ProjectDto[]> {
     const items = await context.repositories.projects.getAll();
     const allRoles = await context.runQuery(new GetAllProjectRolesForUser());
     const mapped = items.map(x => {
-      const roles = allRoles[x.Id] || getEmptyRoleInfo();
-      return context.runCommand(new MapToProjectDtoCommand(x, roles.projectRoles));
+      const roles = allRoles.getProjectRoles(x.Id);
+      return context.runCommand(new MapToProjectDtoCommand(x, roles));
     });
     return Promise.all(mapped);
   }
