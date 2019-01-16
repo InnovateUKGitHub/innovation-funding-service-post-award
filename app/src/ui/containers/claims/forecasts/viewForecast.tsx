@@ -96,5 +96,6 @@ export const ViewForecastRoute = definition.route({
   routePath: "/projects/:projectId/claims/:partnerId/viewForecast",
   getParams: forecastParams,
   getLoadDataActions: forecastDataLoadActions,
-  container: ViewForecast
+  container: ViewForecast,
+  accessControl: (user, params) => user.roleInfo[params.projectId] && user.roleInfo[params.projectId].projectRoles !== ProjectRole.Unknown
 });
