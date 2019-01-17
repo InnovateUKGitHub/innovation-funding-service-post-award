@@ -55,7 +55,7 @@ class UpdateForecastComponent extends ContainerBase<Params, PendingForecastData,
             <ACC.Claims.ForecastTable data={combined} />
             <Form.Fieldset>
               <Form.Submit>Submit</Form.Submit>
-              <ACC.Claims.ClaimLastModified claim={combined.claim} />
+              <ACC.Claims.ClaimLastModified partner={combined.partner} />
             </Form.Fieldset>
           </Form.Form>
         </ACC.Section>

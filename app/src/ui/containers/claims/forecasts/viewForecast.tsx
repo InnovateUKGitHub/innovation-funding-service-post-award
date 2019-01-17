@@ -51,7 +51,7 @@ class ViewForecastComponent extends ContainerBase<Params, PendingForecastData, C
         </ACC.Section>
         <ACC.Section>
           {this.renderUpdateSection(data.partner)}
-          <ACC.Claims.ClaimLastModified claim={data.claim} />
+          <ACC.Claims.ClaimLastModified partner={data.partner} />
         </ACC.Section>
       </ACC.Page>
     );
