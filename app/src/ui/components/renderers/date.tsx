@@ -74,6 +74,10 @@ export const DayAndLongMonth: React.SFC<{ value: Date | null }> = (props) => {
     return renderDate(props.value, "d MMMM");
 };
 
+export const LastUpdatedDateTime: React.SFC<{ value: Date | null }> = (props) => {
+  return renderDate(props.value, "d MMMM yyyy, hh:mm a");
+};
+
 export const LongYear: React.SFC<{ value: Date | null }> = (props) => {
     return renderDate(props.value, "yyyy");
 };
