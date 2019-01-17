@@ -1,6 +1,6 @@
 // tslint:disable:no-bitwise
 import { IContext, QueryBase } from "../common/context";
-import { ProjectRole } from "../../../types";
+import { Authorisation, ProjectRole } from "../../../types";
 import { SalesforceRole } from "../../repositories";
 
 export interface IRoleInfo {
@@ -15,12 +15,13 @@ export function getEmptyRoleInfo(): IRoleInfo {
   });
 }
 
-export class GetAllProjectRolesForUser extends QueryBase<{ [key: string]: IRoleInfo }> {
-  protected Run(context: IContext): Promise<{ [key: string]: IRoleInfo }> {
-    return context.caches.projectRoles.fetchAsync(context.user.email, () => this.getProjectRoles(context));
+export class GetAllProjectRolesForUser extends QueryBase<Authorisation> {
+  protected async Run(context: IContext): Promise<Authorisation> {
+    const permisions = await context.caches.projectRoles.fetchAsync(context.user.email, () => context.config.salesforceUsername !== context.user.email ? this.getProjectRoles(context) : this.getServiceAccountRoles(context));
+    return new Authorisation(permisions);
   }
 
-  private async getProjectRoles(context: IContext): Promise<{ [key: string]: IRoleInfo }> {
+  private async getProjectRoles(context: IContext) {
     const roles = await context.repositories.projectContacts.getAllForUser(context.user.email);
     const partners = await context.repositories.partners.getAll();
 
@@ -42,6 +43,25 @@ export class GetAllProjectRolesForUser extends QueryBase<{ [key: string]: IRoleI
 
       return allRoles;
     }, {});
+  }
+
+  private async getServiceAccountRoles(context: IContext): Promise<{ [key: string]: IRoleInfo }> {
+    const projects = await context.repositories.projects.getAll();
+    const partners = await context.repositories.partners.getAll();
+    const allRoles = ProjectRole.MonitoringOfficer | ProjectRole.ProjectManager | ProjectRole.FinancialContact;
+
+    const projectRoles = projects.reduce<{ [key: string]: IRoleInfo }>((roles, project) => {
+      roles[project.Id] = {
+        projectRoles: allRoles,
+        partnerRoles: {}
+      };
+      return roles;
+    }, {});
+
+    return partners.reduce((roles, partner) => {
+      roles[partner.Acc_ProjectId__c].partnerRoles[partner.Id] = allRoles;
+      return roles;
+    }, projectRoles);
   }
 
   private getProjectRole(salesforceRole: SalesforceRole): ProjectRole {
