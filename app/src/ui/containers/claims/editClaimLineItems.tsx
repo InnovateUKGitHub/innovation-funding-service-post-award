@@ -9,7 +9,7 @@ import { ClaimDetailDocumentsRoute } from "./claimDetailDocuments";
 import { IEditorStore } from "../../redux/reducers/editorsReducer";
 import { ClaimLineItemDtosValidator, ClaimLineItemDtoValidator } from "../../validators/claimLineItemDtosValidator";
 import { DocumentList, ValidationMessage } from "../../components";
-import { ProjectDto } from "../../../types";
+import { Authorisation, ProjectDto, ProjectRole } from "../../../types";
 import { range } from "../../../shared/range";
 
 export interface EditClaimLineItemsParams {
@@ -277,5 +277,9 @@ export const EditClaimLineItemsRoute = definition.route({
     Actions.loadClaimLineItemsForCategory(params.partnerId, params.costCategoryId, params.periodId),
     Actions.loadClaimDetailDocuments(params.partnerId, params.periodId, params.costCategoryId)
   ],
-  container: EditClaimLineItems
+  container: EditClaimLineItems,
+  accessControl: (user, params) => {
+    // I would propose to pass in the Authorisation rather than to construct it here
+    return new Authorisation(user.roleInfo).hasPartnerRole(params.projectId, params.partnerId, ProjectRole.FinancialContact);
+  }
 });
