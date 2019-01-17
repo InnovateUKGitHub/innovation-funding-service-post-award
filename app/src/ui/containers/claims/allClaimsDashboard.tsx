@@ -2,14 +2,14 @@ import * as Actions from "../../redux/actions";
 import React from "react";
 import { ProjectOverviewPage } from "../../components/projectOverview";
 import { Pending } from "../../../shared/pending";
-import { ClaimDto, PartnerDto, ProjectDto } from "../../../types/dtos";
+import { ClaimDto, PartnerDto, ProjectDto, ProjectRole } from "../../../types/dtos";
 import * as Selectors from "../../redux/selectors";
 import { ContainerBase, ReduxContainer } from "../containerBase";
 import * as Acc from "../../components";
 import { Accordion, AccordionItem } from "../../components";
 import { ClaimsDetailsRoute, ReviewClaimRoute, } from ".";
 import { ClaimStatus } from "../../../types";
-import {DateTime} from "luxon";
+import { DateTime } from "luxon";
 
 interface Params {
   projectId: string;
@@ -222,5 +222,11 @@ export const AllClaimsDashboardRoute = definition.route({
     Actions.loadPartnersForProject(params.projectId),
     Actions.loadClaimsForProject(params.projectId),
   ],
+  accessControl: (user, params) => {
+    const userRoles = user.roleInfo[params.projectId];
+    if(!userRoles) return false;
+    const projectRoles = userRoles.projectRoles;
+    return (projectRoles & (ProjectRole.MonitoringOfficer | ProjectRole.ProjectManager)) !== ProjectRole.Unknown;
+  },
   container: AllClaimsDashboard
 });
