@@ -1,4 +1,3 @@
-import { ClaimsDetailsRoute } from "./details";
 import React from "react";
 import { Pending } from "../../../shared/pending";
 import * as Actions from "../../redux/actions";
@@ -12,9 +11,7 @@ import {
   getProject
 } from "../../redux/selectors";
 import * as Acc from "../../components";
-import { PrepareClaimRoute } from "./prepare";
 import { ContainerBase, ReduxContainer } from "../containerBase";
-import { ReviewClaimRoute } from "./review";
 import { ClaimDto, ClaimStatus, DocumentDescription, PartnerDto, ProjectDto, ProjectRole } from "../../../types";
 import { IEditorStore } from "../../redux/reducers";
 import { DocumentUploadValidator } from "../../validators/documentUploadValidator";
@@ -174,24 +171,14 @@ class Component extends ContainerBase<ClaimDashboardPageParams, Data, Callbacks>
           </Acc.SectionPanel>
         </Acc.Section>
         <Acc.Section qa="current-claims-section" title={"Open"} badge={claimsWindow}>
-          {this.renderCurrentClaims(currentClaim ? [currentClaim] : [], "current-claims-table", project, previousClaims)}
+          {this.renderCurrentClaims(currentClaim ? [currentClaim] : [], "current-claims-table", project, partner, previousClaims)}
         </Acc.Section>
         {currentClaim && editor && this.renderIarDocumentSection(currentClaim, editor, document)}
         <Acc.Section qa="previous-claims-section" title="Closed">
-          {this.renderPreviousClaims(previousClaims, "previous-claims-table", project)}
+          {this.renderPreviousClaims(previousClaims, "previous-claims-table", project, partner)}
         </Acc.Section>
       </Acc.ProjectOverviewPage>
     );
-  }
-
-  private getLink(claim: ClaimDto, projectId: string) {
-    if ([ClaimStatus.DRAFT, ClaimStatus.INNOVATE_QUERIED, ClaimStatus.MO_QUERIED].indexOf(claim.status) > -1) {
-      return <Acc.Link route={PrepareClaimRoute.getLink({ projectId, partnerId: claim.partnerId, periodId: claim.periodId })}>Edit claim</Acc.Link>;
-    }
-    if (claim.status === "Submitted") {
-      return <Acc.Link route={ReviewClaimRoute.getLink({ projectId, partnerId: claim.partnerId, periodId: claim.periodId })}>Review claim</Acc.Link>;
-    }
-    return <Acc.Link route={ClaimsDetailsRoute.getLink({ projectId, partnerId: claim.partnerId, periodId: claim.periodId })}>View claim</Acc.Link>;
   }
 
   private renderNextPeriodStartDate(endDate: Date) {
@@ -203,9 +190,9 @@ class Component extends ContainerBase<ClaimDashboardPageParams, Data, Callbacks>
     );
   }
 
-  private renderCurrentClaims(data: ClaimDto[], tableQa: string, project: ProjectDto, previousClaims?: ClaimDto[]) {
+  private renderCurrentClaims(data: ClaimDto[], tableQa: string, project: ProjectDto, partner: PartnerDto, previousClaims?: ClaimDto[]) {
     if (data.length) {
-      return this.renderClaimsTable(data, tableQa, project);
+      return this.renderClaimsTable(data, tableQa, project, partner);
     }
 
     if (!!project.periodEndDate) {
@@ -220,15 +207,15 @@ class Component extends ContainerBase<ClaimDashboardPageParams, Data, Callbacks>
 
   }
 
-  private renderPreviousClaims(data: ClaimDto[], tableQa: string, project: ProjectDto) {
+  private renderPreviousClaims(data: ClaimDto[], tableQa: string, project: ProjectDto, partner: PartnerDto) {
     if (data.length) {
-      return this.renderClaimsTable(data, tableQa, project);
+      return this.renderClaimsTable(data, tableQa, project, partner);
     }
 
     return <Acc.Renderers.SimpleString>You have not made any claims.</Acc.Renderers.SimpleString>;
   }
 
-  private renderClaimsTable(data: ClaimDto[], tableQa: string, project: ProjectDto) {
+  private renderClaimsTable(data: ClaimDto[], tableQa: string, project: ProjectDto, partner: PartnerDto) {
     const ClaimTable = Acc.TypedTable<ClaimDto>();
 
     const editableStatuses = [ClaimStatus.DRAFT, ClaimStatus.MO_QUERIED, ClaimStatus.INNOVATE_QUERIED];
@@ -256,7 +243,7 @@ class Component extends ContainerBase<ClaimDashboardPageParams, Data, Callbacks>
           qa="date"
           value={(x) => <Acc.Renderers.ShortDate value={(x.paidDate || x.approvedDate || x.lastModifiedDate)} />}
         />
-        <ClaimTable.Custom header="" qa="link" value={(x) => this.getLink(x, project.id)} />
+        <ClaimTable.Custom header="" qa="link" value={(x) => <Acc.Claims.ClaimDetailsLink claim={x} project={project} partner={partner} />} />
       </ClaimTable.Table>
     );
   }

@@ -27,7 +27,7 @@ export const ProjectOverviewPage = ({ project, selectedTab, children, partnerId,
         {renderError(error)}
         {renderValidation(validator)}
         <ACC.Projects.Title pageTitle="View project" project={project} />
-        <ACC.Projects.ProjectNavigation project={project} currentRoute={selectedTab} partnerId={partnerId} partners={partners}/>
+        <ACC.Projects.ProjectNavigation project={project} currentRoute={selectedTab} partners={partners}/>
         {children}
     </ACC.Page>
 );
