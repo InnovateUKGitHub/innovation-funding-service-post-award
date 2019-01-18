@@ -1,3 +1,4 @@
+export * from "./claimDetailsLink";
 export * from "./claimLastModified";
 export * from "./claimPeriodDate";
 export * from "./claimTable";
