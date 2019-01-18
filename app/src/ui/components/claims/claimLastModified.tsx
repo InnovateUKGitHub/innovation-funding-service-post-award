@@ -7,7 +7,7 @@ interface Props {
 }
 
 export const ClaimLastModified: React.SFC<Props> = (props) => !props.partner ? null : (
-  <ACC.Renderers.SimpleString qa="claim-last-modified">Changes last saved:&nbsp;
+  <ACC.Renderers.SimpleString qa="last-updated">Changes last saved:&nbsp;
     <ACC.Renderers.FullDateTime value={props.partner.forecastLastModifiedDate} />
   </ACC.Renderers.SimpleString>
 );
