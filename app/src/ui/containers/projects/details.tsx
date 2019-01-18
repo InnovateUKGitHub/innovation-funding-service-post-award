@@ -79,15 +79,15 @@ class ProjectDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
         const PartnersTable = ACC.TypedTable<PartnerDto>();
         const totalEligibleCosts = partners.reduce((val, partner) => val += partner.totalParticipantGrant, 0) || null;
         const totalClaimed = partners.reduce((val, partner) => val += partner.totalParticipantCostsClaimed, 0);
-        const percentageClaimed = totalEligibleCosts ? 100 * totalClaimed / totalEligibleCosts : null;
+        const percentageClaimed = totalEligibleCosts ? 100 * totalClaimed / totalEligibleCosts : 0;
 
         return (
             <ACC.Section title="Cost claimed status" qa="cost-claimed-status">
                 <PartnersTable.Table qa="cost-claimed" data={partners}>
                     <PartnersTable.String header="Partner" qa="partner-name" value={x => x.isLead ? `${x.name} (Lead)` : x.name} footer="Total" />
-                    <PartnersTable.Currency header="Total eligible costs" qa="total-costs" value={x => x.totalParticipantGrant} footer={<ACC.Renderers.Currency value={totalEligibleCosts} />} />
-                    <PartnersTable.Currency header="Costs claimed to date" qa="costs-claimed" value={x => x.totalParticipantCostsClaimed} footer={<ACC.Renderers.Currency value={totalClaimed} />} />
-                    <PartnersTable.Percentage header="Percentage claimed" qa="percentage-claimed" value={x => x.percentageParticipantCostsClaimed} footer={<ACC.Renderers.Percentage value={percentageClaimed} />} />
+                    <PartnersTable.Currency header="Total eligible costs" qa="total-costs" value={x => x.totalParticipantGrant || 0} footer={<ACC.Renderers.Currency value={totalEligibleCosts} />} />
+                    <PartnersTable.Currency header="Costs claimed to date" qa="costs-claimed" value={x => x.totalParticipantCostsClaimed || 0} footer={<ACC.Renderers.Currency value={totalClaimed} />} />
+                    <PartnersTable.Percentage header="Percentage claimed" qa="percentage-claimed" value={x => x.percentageParticipantCostsClaimed || 0} footer={<ACC.Renderers.Percentage value={percentageClaimed} />} />
                     <PartnersTable.Percentage header="Cap limit" qa="cap-limit" value={x => x.capLimit} fractionDigits={0} />
                 </PartnersTable.Table>
             </ACC.Section>
