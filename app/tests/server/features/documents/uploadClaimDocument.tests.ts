@@ -4,13 +4,10 @@ import { ClaimStatus, DocumentDescription } from "../../../../src/types/constant
 
 const validStatus = [
   ClaimStatus.DRAFT,
-  ClaimStatus.REVIEWING_FORECASTS,
   ClaimStatus.SUBMITTED,
   ClaimStatus.MO_QUERIED,
-  ClaimStatus.REVIEWING_FORECASTS_FOLLOWING_MO_QUERY,
   ClaimStatus.AWAITING_IAR,
   ClaimStatus.INNOVATE_QUERIED,
-  ClaimStatus.REVIEWING_FORECASTS_FOLLOWING_INNOVATE_QUERY
 ];
 
 const invalidStatus: ClaimStatus[] = [];

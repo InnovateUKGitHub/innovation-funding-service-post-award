@@ -9,7 +9,6 @@ export default (mod?: Partial<ClaimDto>): ClaimDto => {
     approvedDate: null,
     comments: null,
     forecastCost: 0,
-    forecastLastModified: null,
     isApproved: true,
     isIarRequired: true,
     lastModifiedDate: new Date(),

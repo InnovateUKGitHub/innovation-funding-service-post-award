@@ -141,7 +141,7 @@ class Component extends ContainerBase<ClaimDashboardPageParams, Data, Callbacks>
   private renderContents({ currentClaim, partner, previousClaims, project, editor, document, deleteEditor }: CombinedData) {
     const Details = Acc.TypedDetails<PartnerDto>();
 
-    const claimsWindow = !!currentClaim && ([ClaimStatus.DRAFT, ClaimStatus.REVIEWING_FORECASTS].indexOf(currentClaim.status) >= 0) ? <Acc.Claims.ClaimWindow periodEnd={currentClaim.periodEndDate} /> : null;
+    const claimsWindow = !!currentClaim && currentClaim.status === ClaimStatus.DRAFT ? <Acc.Claims.ClaimWindow periodEnd={currentClaim.periodEndDate} /> : null;
 
     const error = (editor && editor.error) || (deleteEditor && deleteEditor.error);
     const validator = (editor && editor.validator) || (deleteEditor && deleteEditor.validator);
