@@ -6,13 +6,10 @@ import { SALESFORCE_DATE_FORMAT, SALESFORCE_DATE_TIME_FORMAT } from "../common/c
 
 const STATUS_ALLOWING_IAR_EDIT = [
   ClaimStatus.DRAFT,
-  ClaimStatus.REVIEWING_FORECASTS,
   ClaimStatus.SUBMITTED,
   ClaimStatus.MO_QUERIED,
-  ClaimStatus.REVIEWING_FORECASTS_FOLLOWING_MO_QUERY,
   ClaimStatus.AWAITING_IAR,
   ClaimStatus.INNOVATE_QUERIED,
-  ClaimStatus.REVIEWING_FORECASTS_FOLLOWING_INNOVATE_QUERY
 ];
 
 export default (context: IContext) => (claim: ISalesforceClaim, forecast?: ISalesforceProfileTotalPeriod): ClaimDto => ({
@@ -25,7 +22,6 @@ export default (context: IContext) => (claim: ISalesforceClaim, forecast?: ISale
   periodId: claim.Acc_ProjectPeriodNumber__c,
   totalCost: claim.Acc_ProjectPeriodCost__c,
   forecastCost: forecast && forecast.Acc_PeriodInitialForecastCost__c || 0,
-  forecastLastModified: context.clock.parse(forecast && forecast.LastModifiedDate, SALESFORCE_DATE_FORMAT)!,
   approvedDate: claim.Acc_ApprovedDate__c === null ? null : context.clock.parse(claim.Acc_ApprovedDate__c, SALESFORCE_DATE_FORMAT),
   paidDate: claim.Acc_PaidDate__c === null ? null : context.clock.parse(claim.Acc_PaidDate__c, SALESFORCE_DATE_FORMAT),
   comments: claim.Acc_LineItemDescription__c,
