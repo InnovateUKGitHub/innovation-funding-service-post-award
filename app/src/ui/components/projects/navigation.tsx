@@ -35,16 +35,16 @@ export const ProjectNavigation: React.SFC<Props> = ({ project, currentRoute, par
   const navigationTabs: TabItem[] = [];
 
   if(isFC && !isMOorPM) {
-    navigationTabs.push({ text: "Claims", route: claimsLink, selected: claimsLink.routeName === currentRoute });
-    navigationTabs.push({ text: "Forecast", route: viewForecastLink, selected: viewForecastLink.routeName === currentRoute });
+    navigationTabs.push({ text: "Claims", route: claimsLink, selected: claimsLink.routeName === currentRoute, qa: "claimsTab" });
+    navigationTabs.push({ text: "Forecast", route: viewForecastLink, selected: viewForecastLink.routeName === currentRoute, qa: "forecastTab" });
   }
   else if (isMOorPM) {
-    navigationTabs.push({ text: "All Claims", route: allClaimsLink, selected: allClaimsLink.routeName === currentRoute });
-    navigationTabs.push({ text: "All Forecasts", route: projectForecastsLink, selected: projectForecastsLink.routeName === currentRoute });
+    navigationTabs.push({ text: "All Claims", route: allClaimsLink, selected: allClaimsLink.routeName === currentRoute, qa: "allClaimsTab" });
+    navigationTabs.push({ text: "All Forecasts", route: projectForecastsLink, selected: projectForecastsLink.routeName === currentRoute, qa: "allForecastsTab" });
   }
 
-  navigationTabs.push({ text: "Project change requests", url: "#" });
-  navigationTabs.push({ text: "Project details", route: detailsLink, selected: detailsLink.routeName === currentRoute });
+  navigationTabs.push({ text: "Project change requests", url: "#", qa: "changeRequestsTab" });
+  navigationTabs.push({ text: "Project details", route: detailsLink, selected: detailsLink.routeName === currentRoute, qa: "projectDetailsTab" });
 
   return <Tabs tabList={navigationTabs} qa="project-navigation" />;
 };
