@@ -1,4 +1,3 @@
-import { DateTime } from "luxon";
 import * as Selectors from "../../redux/selectors";
 import { Pending } from "../../../shared/pending";
 import * as Actions from "../../redux/actions";
@@ -7,10 +6,10 @@ import React from "react";
 import { ContainerBase, ReduxContainer } from "../containerBase";
 import { IEditorStore } from "../../redux/reducers/editorsReducer";
 import { ClaimDtoValidator } from "../../validators/claimDtoValidator";
-import { ClaimForecastRoute, ClaimsDashboardRoute } from ".";
+import { AllClaimsDashboardRoute, ClaimForecastRoute, ClaimsDashboardRoute } from ".";
 import { EditClaimLineItemsRoute } from "./editClaimLineItems";
 import { ClaimsDetailsRoute } from "./details";
-import { ClaimDto, ClaimFrequency, ClaimStatus, PartnerDto, ProjectDto, ProjectRole } from "../../../types";
+import { ClaimDto, ClaimStatus, PartnerDto, ProjectDto, ProjectRole } from "../../../types";
 
 export interface PrepareClaimParams {
     projectId: string;
@@ -78,10 +77,13 @@ export class PrepareComponent extends ContainerBase<PrepareClaimParams, Data, Ca
         const Form = ACC.TypedForm<ClaimDto>();
         const commentsLabel = "Additional information";
         const commentsHint = "These comments will be seen by your Monitoring Officer when they review your claim.";
+        const isPmOrMo = (data.project.roles & (ProjectRole.ProjectManager | ProjectRole.MonitoringOfficer)) !== ProjectRole.Unknown;
+        const backLink = isPmOrMo ? AllClaimsDashboardRoute.getLink({ projectId: data.project.id }) : ClaimsDashboardRoute.getLink({ projectId: data.project.id, partnerId: data.partner.id });
+
         return (
             <ACC.Page>
                 <ACC.Section>
-                    <ACC.BackLink route={ClaimsDashboardRoute.getLink({ projectId: data.project.id, partnerId: data.partner.id })}>Claims dashboard</ACC.BackLink>
+                    <ACC.BackLink route={backLink}>Claims dashboard</ACC.BackLink>
                 </ACC.Section>
                 <ACC.ErrorSummary error={data.editor.error} />
                 <ACC.ValidationSummary validation={data.editor.validator} compressed={false} />

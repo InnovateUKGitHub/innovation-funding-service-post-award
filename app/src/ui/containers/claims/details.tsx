@@ -1,5 +1,4 @@
 import React from "react";
-import { DateTime } from "luxon";
 import { ContainerBase, ReduxContainer } from "../containerBase";
 import { Pending } from "../../../shared/pending";
 import * as Actions from "../../redux/actions";
@@ -7,7 +6,8 @@ import * as Selectors from "../../redux/selectors";
 import * as ACC from "../../components";
 import { ClaimLineItemsRoute } from "./claimLineItems";
 import { ClaimsDashboardRoute } from "./dashboard";
-import { ClaimDto, ClaimFrequency, PartnerDto, ProjectDto } from "../../../types";
+import { ClaimDto, PartnerDto, ProjectDto, ProjectRole } from "../../../types";
+import { AllClaimsDashboardRoute } from "./allClaimsDashboard";
 
 interface Params {
     projectId: string;
@@ -63,10 +63,13 @@ export class ClaimsDetailsComponent extends ContainerBase<Params, Data, {}> {
     }
 
     private renderContents(data: CombinedData) {
+
+        const isPmOrMo = (data.project.roles & (ProjectRole.ProjectManager | ProjectRole.MonitoringOfficer)) !== ProjectRole.Unknown;
+        const backLink = isPmOrMo ? AllClaimsDashboardRoute.getLink({ projectId: data.project.id }) : ClaimsDashboardRoute.getLink({ projectId: data.project.id, partnerId: data.partner.id });
         return (
             <ACC.Page>
                 <ACC.Section>
-                    <ACC.BackLink route={ClaimsDashboardRoute.getLink({ projectId: data.project.id, partnerId: data.partner.id })}>Claims dashboard</ACC.BackLink>
+                    <ACC.BackLink route={backLink}>Claims dashboard</ACC.BackLink>
                 </ACC.Section>
                 <ACC.Projects.Title pageTitle="Claim" project={data.project} />
                 <ACC.Claims.Navigation projectId={data.project.id} partnerId={data.partner.id} periodId={data.claim.periodId} currentRouteName={ClaimsDetailsRoute.routeName} />
