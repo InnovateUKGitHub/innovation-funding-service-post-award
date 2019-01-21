@@ -22,7 +22,7 @@ export class ClaimForcastFormHandler extends FormHandlerBase<ClaimForcastParams,
 
     const costCategoriesIdsToUpdate = costCategories
       .filter(x => !x.isCalculated)
-      .filter(x => x.organistionType === "Industrial")
+      .filter(x => x.organisationType === "Industrial")
       .map(x => x.id);
 
     dto.forEach(x => {
