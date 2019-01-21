@@ -110,7 +110,6 @@ class Component extends ContainerBase<Params, Data, {}> {
   private claimHasNotBeenSubmittedToInnovate(x: ClaimDto) {
     return [
       ClaimStatus.INNOVATE_QUERIED,
-      ClaimStatus.REVIEWING_FORECASTS_FOLLOWING_INNOVATE_QUERY,
       ClaimStatus.AWAITING_IUK_APPROVAL,
       ClaimStatus.APPROVED,
       ClaimStatus.PAID
