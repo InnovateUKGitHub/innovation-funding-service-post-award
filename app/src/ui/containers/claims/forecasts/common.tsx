@@ -76,7 +76,7 @@ export const renderWarning = (data: ForecastData) => {
   const currentPeriod = data.claims.reduce((prev, item) => item.periodId > prev ? item.periodId : prev, 0);
   const forecasts = !!data.editor ? data.editor.data : data.forecastDetails;
 
-  data.costCategories.filter(x => x.organistionType === "Industrial").forEach(category => {
+  data.costCategories.filter(x => x.organisationType === "Industrial").forEach(category => {
     let total = 0;
     const gol = data.golCosts.find(x => x.costCategoryId === category.id);
 

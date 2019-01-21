@@ -15,7 +15,7 @@ export class GetCostCategoriesQuery extends QueryBase<CostCategoryDto[]> {
       id: x.Id,
       name: x.Acc_CostCategoryName__c,
       competitionType: x.Acc_CompetitionType__c,
-      organistionType: this.getOrganisationType(x),
+      organisationType: this.getOrganisationType(x),
       isCalculated: x.Acc_CostCategoryName__c === "Overheads",
       description: x.Acc_CostCategoryDescription__c,
       hintText: x.Acc_HintText__c

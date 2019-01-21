@@ -11,7 +11,7 @@ export class GetClaimDetailsSummaryForPartnerQuery extends QueryBase<ClaimDetail
         const totalCostCategoryResults = await context.repositories.claimDetails.getAllByPartnerWithPeriodLt(this.partnerId, this.periodId);
         const totalForcastResults = await context.repositories.profileTotalCostCategory.getAllByPartnerId(this.partnerId);
         const costCategories = await context.runQuery(new GetCostCategoriesQuery());
-        const filteredCostCategories = costCategories.filter(x => x.organistionType === "Industrial"); // Todo: filter based on project
+        const filteredCostCategories = costCategories.filter(x => x.organisationType === "Industrial"); // Todo: filter based on project
 
         return filteredCostCategories.map(x => {
             const claimDetail = claimDetailResults.filter(y => y.Acc_CostCategory__c === x.id).map(y => y.Acc_PeriodCostCategoryTotal__c)[0] || 0;
