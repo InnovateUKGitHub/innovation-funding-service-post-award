@@ -5,12 +5,12 @@ import { SALESFORCE_DATE_TIME_FORMAT } from "../common/clock";
 import { DateTime } from "luxon";
 
 export class MapToPartnerDtoCommand extends CommandBase<PartnerDto> {
-    constructor(readonly item: ISalesforcePartner, readonly roles: ProjectRole) {
+    constructor(readonly item: ISalesforcePartner, readonly partnerLevelRoles: ProjectRole, readonly projectLevelRoles: ProjectRole) {
         super();
      }
 
     calcPercentageClaimed(total: number, claimed: number) {
-        return (total && claimed) ? 100 * claimed / total  : null;
+        return (total) ? 100 * (claimed || 0) / total  : null;
     }
 
     async Run(context: IContext) {
@@ -21,15 +21,23 @@ export class MapToPartnerDtoCommand extends CommandBase<PartnerDto> {
             type: this.item.Acc_ParticipantType__c,
             isLead: this.item.Acc_ProjectRole__c === PROJECT_LEAD_IDENTIFIER,
             projectId: this.item.Acc_ProjectId__c,
-            totalParticipantGrant: this.item.Acc_TotalParticipantGrant__c,
-            totalParticipantCostsClaimed: this.item.Acc_TotalParticipantCosts__c,
-            percentageParticipantCostsClaimed: this.calcPercentageClaimed(this.item.Acc_TotalParticipantGrant__c, this.item.Acc_TotalParticipantCosts__c),
-            awardRate: this.item.Acc_Award_Rate__c,
-            capLimit: this.item.Acc_Cap_Limit__c,
-            totalFutureForecastsForParticipants: this.item.Acc_TotalFutureForecastsforParticipant__c,
-            roles: this.roles,
+            totalParticipantGrant: this.valueIfPermission(this.item.Acc_TotalParticipantGrant__c),
+            totalParticipantCostsClaimed: this.valueIfPermission(this.item.Acc_TotalParticipantCosts__c),
+            percentageParticipantCostsClaimed: this.valueIfPermission(this.calcPercentageClaimed(this.item.Acc_TotalParticipantGrant__c, this.item.Acc_TotalParticipantCosts__c)),
+            awardRate: this.valueIfPermission(this.item.Acc_Award_Rate__c),
+            capLimit: this.valueIfPermission(this.item.Acc_Cap_Limit__c),
+            totalFutureForecastsForParticipants: this.valueIfPermission(this.item.Acc_TotalFutureForecastsforParticipant__c),
+            roles: this.partnerLevelRoles,
             forecastLastModifiedDate: this.item.Acc_ForecastLastModifiedDate__c ? DateTime.fromISO(this.item.Acc_ForecastLastModifiedDate__c).toJSDate() : null,
         };
         return Promise.resolve(dto);
     }
+
+    private valueIfPermission(value: number|null) {
+        if(this.projectLevelRoles & (ProjectRole.MonitoringOfficer | ProjectRole.ProjectManager) || this.partnerLevelRoles & ProjectRole.FinancialContact) {
+            return value;
+        }
+        return null;
+    }
+
 }
