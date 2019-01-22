@@ -41,6 +41,9 @@ const getLinkType = (props: Props): "edit" | "review" | "view" | "nothing" => {
       if (props.partner.roles & ProjectRole.FinancialContact) {
         return "edit";
       }
+      else {
+        return "view";
+      }
     case ClaimStatus.SUBMITTED:
       if (props.project.roles & ProjectRole.MonitoringOfficer) {
         return "review";
