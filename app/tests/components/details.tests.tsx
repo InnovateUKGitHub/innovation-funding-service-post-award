@@ -39,7 +39,7 @@ describe("Details", () => {
       const DTest = TypedDetails<typeof example>();
       const output = shallow(<DTest.Details data={example}><DTest.DateTime label="Created" qa="created" value={x => x.created} /></DTest.Details>).html();
       expect(output).toContain(`<h4 class=\"govuk-heading-s\">Created</h4>`);
-      expect(output).toContain(`<p class=\"govuk-body\"><span>1 December 2018 09:08</span></p>`);
+      expect(output).toContain(`<p class=\"govuk-body\"><span>1 December 2018, 09:08 AM</span></p>`);
     });
 
     it("Custom values render expected content", () => {
