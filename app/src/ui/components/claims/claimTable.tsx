@@ -18,7 +18,7 @@ export const ClaimTable: React.SFC<Props> = (props) => {
 
     // Todo: filter the cost cats by the project type
     const combinedData = props.costCategories
-        .filter(x => x.organistionType === "Industrial")
+        .filter(x => x.organisationType === "Industrial")
         .map(x => ({
             category: x,
             cost: props.claimDetails.find(y => y.costCategoryId === x.id) || {} as ClaimDetailsSummaryDto,
@@ -32,7 +32,7 @@ export const ClaimTable: React.SFC<Props> = (props) => {
             id: "",
             isCalculated: true,
             competitionType: "Unknown",
-            organistionType: "Unknown",
+            organisationType: "Unknown",
             description: "",
             hintText: ""
         },

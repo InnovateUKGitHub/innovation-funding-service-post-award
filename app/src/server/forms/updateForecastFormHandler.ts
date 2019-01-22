@@ -21,7 +21,7 @@ export class UpdateForecastFormHandler extends FormHandlerBase<ForecastParams, F
 
     const costCategoriesIdsToUpdate = costCategories
       .filter(x => !x.isCalculated)
-      .filter(x => x.organistionType === "Industrial")
+      .filter(x => x.organisationType === "Industrial")
       .map(x => x.id);
 
     dto.forEach(x => {
