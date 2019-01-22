@@ -8,7 +8,7 @@ import { ContainerBase, ReduxContainer } from "../containerBase";
 import { ClaimDtoValidator } from "../../validators/claimDtoValidator";
 import { ReviewClaimLineItemsRoute } from "./claimLineItems";
 import { AllClaimsDashboardRoute, ClaimsDashboardRoute, ClaimsDetailsRoute} from ".";
-import { ClaimDto, ClaimFrequency, ClaimStatus, PartnerDto, ProjectDto } from "../../../types";
+import { ClaimDto, ClaimFrequency, ClaimStatus, PartnerDto, ProjectDto, ProjectRole } from "../../../types";
 import { ForecastData, forecastDataLoadActions } from "./forecasts/common";
 
 export interface ReviewClaimParams {
@@ -68,11 +68,10 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, Data, Callbacks> 
       { id: ClaimStatus.AWAITING_IUK_APPROVAL, value: "Submit for approval"},
     ];
     const submitButtonLabel = this.getSubmitButtonLabel(data);
-
     return (
       <ACC.Page>
         <ACC.Section>
-          <ACC.BackLink route={ClaimsDashboardRoute.getLink({ projectId: data.project.id, partnerId: data.partner.id })}>Claims dashboard</ACC.BackLink>
+          <ACC.BackLink route={AllClaimsDashboardRoute.getLink({ projectId: data.project.id })}>Claims dashboard</ACC.BackLink>
         </ACC.Section>
         <ACC.ErrorSummary error={data.editor.error} />
         <ACC.ValidationSummary validation={data.editor.validator} compressed={false} />

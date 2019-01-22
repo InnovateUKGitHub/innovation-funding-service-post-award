@@ -4,7 +4,6 @@ import * as Actions from "../../../redux/actions";
 import * as Selectors from "../../../redux/selectors";
 import { Pending } from "../../../../shared/pending";
 import { ContainerBase, ReduxContainer } from "../../containerBase";
-import { ProjectOverviewPage } from "../../../components/projectOverview";
 import { UpdateForecastRoute } from "./updateForecast";
 import {
   ForecastData,
@@ -15,7 +14,7 @@ import {
   renderWarning,
 } from "./common";
 import { PartnerDto, ProjectRole } from "../../../../types";
-import { ProjectDashboardRoute } from "../../projects";
+import { ProjectDashboardRoute, ProjectForecastRoute } from "../../projects";
 
 interface Callbacks {
   onSubmit: (params: Params) => void;
@@ -38,10 +37,14 @@ class ViewForecastComponent extends ContainerBase<Params, PendingForecastData, C
     const isMoPm = !!(data.project.roles & (ProjectRole.ProjectManager | ProjectRole.MonitoringOfficer));
     const partnerName = isMoPm ? data.partner.name : null;
 
+    const backLink = isMoPm ? ProjectForecastRoute.getLink({ projectId: data.project.id }) : ProjectDashboardRoute.getLink({});
+
+    const backText = isMoPm ? "Back" : "Back to dashboard";
+
     return (
       <ACC.Page>
         <ACC.Section>
-          <ACC.BackLink route={ProjectDashboardRoute.getLink({})}>Back to dashboard</ACC.BackLink>
+          <ACC.BackLink route={backLink}>{backText}</ACC.BackLink>
         </ACC.Section>
         <ACC.Projects.Title pageTitle="View project" project={data.project} />
         {this.renderTabs(isMoPm, data)}
