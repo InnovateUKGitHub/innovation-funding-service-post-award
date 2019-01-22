@@ -2,9 +2,8 @@
 import { TestContext } from "../../testContextProvider";
 import { UpdateForecastDetailsCommand } from "../../../../src/server/features/forecastDetails";
 import { DateTime } from "luxon";
-import { ClaimFrequency } from "../../../../src/types";
+import { ClaimFrequency, ClaimStatus } from "../../../../src/types";
 import { BadRequestError, ValidationError } from "../../../../src/server/features/common/appError";
-import { SALESFORCE_DATE_TIME_FORMAT } from "../../../../src/server/features/common/clock";
 
 describe("UpdateForecastDetailsCommand", () => {
   it("when id not set expect validation exception", async () => {
@@ -178,6 +177,122 @@ describe("UpdateForecastDetailsCommand", () => {
     const command = new UpdateForecastDetailsCommand(partnerId, dto, false);
     await expect(context.runCommand(command)).rejects.toMatchObject(new BadRequestError("You can't update the forecast of approved periods."));
     expect(context.repositories.partners.Items.find(x => x.Id === partner.Id)!.Acc_ForecastLastModifiedDate__c).toBe(time);
+  });
+
+  it("should update claim status from DRAFT to SUBMITTED", async () => {
+    const context = new TestContext();
+    const testData = context.testData;
+
+    const periodId = 1;
+
+    const project = testData.createProject();
+    const partner = testData.createPartner(project);
+    const costCat = testData.createCostCategory();
+    const profileDetail = testData.createProfileDetail(costCat, partner, periodId, x => x.Acc_LatestForecastCost__c = 123);
+    const claim = testData.createClaim(partner, periodId);
+
+    const dto: ForecastDetailsDTO[] = [{
+      periodId,
+      id: profileDetail.Id,
+      costCategoryId: costCat.Id,
+      periodStart: new Date(),
+      periodEnd: new Date(),
+      value: 500
+    }];
+    testData.createClaimDetail(costCat, partner, periodId - 1, x => x.Acc_PeriodCostCategoryTotal__c = 1000);
+    testData.createProfileTotalCostCategory(costCat, partner, 1500);
+
+    const command = new UpdateForecastDetailsCommand(partner.Id, dto, true);
+    await context.runCommand(command);
+    expect(context.repositories.claims.Items.find(x => x.Id === claim.Id)!.Acc_ClaimStatus__c).toBe(ClaimStatus.SUBMITTED);
+  });
+
+  it("should update claim status from MO_QUERIED to SUBMITTED", async () => {
+    const context = new TestContext();
+    const testData = context.testData;
+
+    const periodId = 1;
+
+    const project = testData.createProject();
+    const partner = testData.createPartner(project);
+    const costCat = testData.createCostCategory();
+    const profileDetail = testData.createProfileDetail(costCat, partner, periodId, x => x.Acc_LatestForecastCost__c = 123);
+    const claim = testData.createClaim(partner, periodId, (item) => {
+      item.Acc_ClaimStatus__c = ClaimStatus.MO_QUERIED;
+    });
+
+    const dto: ForecastDetailsDTO[] = [{
+      periodId,
+      id: profileDetail.Id,
+      costCategoryId: costCat.Id,
+      periodStart: new Date(),
+      periodEnd: new Date(),
+      value: 500
+    }];
+    testData.createClaimDetail(costCat, partner, periodId - 1, x => x.Acc_PeriodCostCategoryTotal__c = 1000);
+    testData.createProfileTotalCostCategory(costCat, partner, 1500);
+
+    const command = new UpdateForecastDetailsCommand(partner.Id, dto, true);
+    await context.runCommand(command);
+    expect(context.repositories.claims.Items.find(x => x.Id === claim.Id)!.Acc_ClaimStatus__c).toBe(ClaimStatus.SUBMITTED);
+  });
+
+  it("should update claim status from INNOVATE_QUERIED to AWAITING_IUK_APPROVAL", async () => {
+    const context = new TestContext();
+    const testData = context.testData;
+
+    const periodId = 1;
+
+    const project = testData.createProject();
+    const partner = testData.createPartner(project);
+    const costCat = testData.createCostCategory();
+    const profileDetail = testData.createProfileDetail(costCat, partner, periodId, x => x.Acc_LatestForecastCost__c = 123);
+    const claim = testData.createClaim(partner, periodId, (item) => {
+      item.Acc_ClaimStatus__c = ClaimStatus.INNOVATE_QUERIED;
+    });
+
+    const dto: ForecastDetailsDTO[] = [{
+      periodId,
+      id: profileDetail.Id,
+      costCategoryId: costCat.Id,
+      periodStart: new Date(),
+      periodEnd: new Date(),
+      value: 500
+    }];
+    testData.createClaimDetail(costCat, partner, periodId - 1, x => x.Acc_PeriodCostCategoryTotal__c = 1000);
+    testData.createProfileTotalCostCategory(costCat, partner, 1500);
+
+    const command = new UpdateForecastDetailsCommand(partner.Id, dto, true);
+    await context.runCommand(command);
+    expect(context.repositories.claims.Items.find(x => x.Id === claim.Id)!.Acc_ClaimStatus__c).toBe(ClaimStatus.AWAITING_IUK_APPROVAL);
+  });
+
+  it("should throw an error if invalid claim status when updating forecast", async () => {
+    const context = new TestContext();
+    const testData = context.testData;
+
+    const periodId = 1;
+
+    const project = testData.createProject();
+    const partner = testData.createPartner(project);
+    const costCat = testData.createCostCategory();
+    const profileDetail = testData.createProfileDetail(costCat, partner, periodId, x => x.Acc_LatestForecastCost__c = 123);
+    testData.createClaim(partner, periodId);
+
+    const dto: ForecastDetailsDTO[] = [{
+      periodId,
+      id: profileDetail.Id,
+      costCategoryId: costCat.Id,
+      periodStart: new Date(),
+      periodEnd: new Date(),
+      value: 500
+    }];
+    testData.createClaimDetail(costCat, partner, periodId - 1, x => x.Acc_PeriodCostCategoryTotal__c = 1000);
+    testData.createProfileTotalCostCategory(costCat, partner, 1500);
+
+    const command = new UpdateForecastDetailsCommand(partner.Id, dto, true);
+    await context.runCommand(command);
+    await expect(context.runCommand(command)).rejects.toThrow(BadRequestError);
   });
 
   it("when updating forecast for period < project period id, expect exception", async () => {
