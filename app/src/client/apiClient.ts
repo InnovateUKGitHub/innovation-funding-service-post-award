@@ -71,10 +71,12 @@ const getHeaders = () => {
   return headers;
 };
 
-const ajax = <T>(url: string, opts?: {}): Promise<T> => {
+const ajax = <T>(url: string, opts?: RequestInit): Promise<T> => {
   // TODO - ENV.URL?
   const base = "";
-  return fetch(base + url, opts).then(response => {
+  const options = Object.assign({ credentials: "same-origin" as RequestCredentials }, opts);
+
+  return fetch(base + url, options).then(response => {
     if (response.ok) {
       return processResponse(response);
     }
@@ -84,31 +86,31 @@ const ajax = <T>(url: string, opts?: {}): Promise<T> => {
   });
 };
 
-const ajaxJson = <T>(url: string, opts?: {}): Promise<T> => {
+const ajaxJson = <T>(url: string, opts?: RequestInit): Promise<T> => {
   const headers = getHeaders();
   const options = Object.assign({ headers }, opts);
   return ajax(url, options);
 };
 
-const ajaxPost = <T>(url: string, body: {} = {}, opts?: {}) => {
-  const options = Object.assign({
+const ajaxPost = <T>(url: string, body: {} = {}, opts?: RequestInit) => {
+  const options: RequestInit = Object.assign({}, opts, {
     method: "POST",
     body: JSON.stringify(body)
-  }, opts);
+  });
 
   return ajaxJson<T>(url, options);
 };
 
-const ajaxPostFormData = <T>(url: string, formData: FormData, opts?: {}) => {
-  const options = { method: "POST", body: formData,  ...opts};
+const ajaxPostFormData = <T>(url: string, formData: FormData, opts?: RequestInit) => {
+  const options: RequestInit = Object.assign({}, opts, {
+    method: "POST",
+    body: formData
+  });
   return ajax<T>(url, options);
 };
 
-const ajaxPut = <T>(url: string, body: {} = {}, opts?: {}) => {
-  return ajaxPost<T>(url, body, {
-    ...opts,
-    method: "PUT",
-  });
+const ajaxPut = <T>(url: string, body: {} = {}, opts?: RequestInit) => {
+  return ajaxPost<T>(url, body, { ...opts, method: "PUT" });
 };
 
 export const ApiClient = clientApi;
