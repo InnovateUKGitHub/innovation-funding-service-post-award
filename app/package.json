@@ -100,15 +100,10 @@
       ]
     ],
     "collectCoverageFrom": [
-      "src/**/*.{ts,tsx}",
-      "!src/**/*.d.ts",
-      "!src/**/index.ts",
-      "!src/client/*",
-      "!src/ui/containers/**/*",
-      "!src/ui/componentsGuide/*",
-      "!src/server/*.ts",
-      "!src/server/*.tsx",
-      "!src/server/features/common/*"
+      "src/server/features/**/*.{ts,tsx}",
+      "src/ui/components/**/*.{ts,tsx}",
+      "src/ui/redux/**/*.{ts,tsx}",
+      "src/ui/validators/**/*.{ts,tsx}"
     ],
     "coverageReporters": [
       "text",
