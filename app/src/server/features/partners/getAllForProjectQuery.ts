@@ -11,10 +11,11 @@ export class GetAllForProjectQuery extends QueryBase<PartnerDto[]> {
     protected async Run(context: IContext) {
         const results = await context.repositories.partners.getAllByProjectId(this.projectId);
         const roles = await context.runQuery(new GetAllProjectRolesForUser());
+        const projectRoles = roles.getProjectRoles(this.projectId);
 
         const mapped = await Promise.all(results.map(item => {
-            const roleInfo = roles.getPartnerRoles(item.Acc_ProjectId__c, item.Id);
-            return context.runCommand(new MapToPartnerDtoCommand(item, roleInfo));
+            const partnerRoles = roles.getPartnerRoles(item.Acc_ProjectId__c, item.Id);
+            return context.runCommand(new MapToPartnerDtoCommand(item, partnerRoles, projectRoles));
         }));
 
         return mapped.sort((x, y) => {

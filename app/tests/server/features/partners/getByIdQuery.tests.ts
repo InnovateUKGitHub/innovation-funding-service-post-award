@@ -17,6 +17,9 @@ describe("getAllForProjectQuery", () => {
             x.Acc_TotalFutureForecastsforParticipant__c = 1002;
         });
 
+        const projectManger = context.testData.createProjectManager(project);
+        context.user.set({ email: projectManger.Acc_ContactId__r.Email });
+
         const result = await context.runQuery(new GetByIdQuery(partner.Id));
 
         expect(result).not.toBe(null);
@@ -53,6 +56,9 @@ describe("getAllForProjectQuery", () => {
             x.Acc_Cap_Limit__c = 50;
         });
 
+        const projectManger = context.testData.createProjectManager(project);
+        context.user.set({ email: projectManger.Acc_ContactId__r.Email });
+
         const result = (await context.runQuery(new GetByIdQuery(partner.Id)));
 
         expect(result.percentageParticipantCostsClaimed).toBe(10);
@@ -70,12 +76,15 @@ describe("getAllForProjectQuery", () => {
             x.Acc_Cap_Limit__c = 50;
         });
 
+        const projectManger = context.testData.createProjectManager(project);
+        context.user.set({ email: projectManger.Acc_ContactId__r.Email });
+
         const result = (await context.runQuery(new GetByIdQuery(partner.Id)));
 
         expect(result.percentageParticipantCostsClaimed).toBe(null);
     });
 
-    it("calculated cost claimed percentage is 0 when totalParticipantGrant is null", async () => {
+    it("calculated cost claimed percentage is 0 when nothing clamed", async () => {
         const context = new TestContext();
 
         const project = context.testData.createProject();
@@ -87,8 +96,11 @@ describe("getAllForProjectQuery", () => {
             x.Acc_Cap_Limit__c = 50;
         });
 
+        const projectManger = context.testData.createProjectManager(project);
+        context.user.set({ email: projectManger.Acc_ContactId__r.Email });
+
         const result = (await context.runQuery(new GetByIdQuery(partner.Id)));
-        expect(result.percentageParticipantCostsClaimed).toBe(null);
+        expect(result.percentageParticipantCostsClaimed).toBe(0);
     });
 
     it("when partner doesn't exist", async () => {
