@@ -109,8 +109,14 @@ const ajaxPostFormData = <T>(url: string, formData: FormData, opts?: RequestInit
   return ajax<T>(url, options);
 };
 
+// tslint:disable: no-identical-functions
 const ajaxPut = <T>(url: string, body: {} = {}, opts?: RequestInit) => {
-  return ajaxPost<T>(url, body, { ...opts, method: "PUT" });
+  const options: RequestInit = Object.assign({}, opts, {
+    method: "PUT",
+    body: JSON.stringify(body)
+  });
+
+  return ajaxJson<T>(url, options);
 };
 
 export const ApiClient = clientApi;
