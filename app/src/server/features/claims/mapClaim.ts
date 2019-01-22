@@ -1,8 +1,9 @@
+import { DateTime } from "luxon";
 import { ISalesforceClaim } from "../../repositories/claimsRepository";
 import { IContext } from "../common/context";
 import { ISalesforceProfileTotalPeriod } from "../../repositories";
 import { ClaimDto, ClaimStatus } from "../../../types";
-import { SALESFORCE_DATE_FORMAT, SALESFORCE_DATE_TIME_FORMAT } from "../common/clock";
+import { SALESFORCE_DATE_FORMAT } from "../common/clock";
 
 const STATUS_ALLOWING_IAR_EDIT = [
   ClaimStatus.DRAFT,
@@ -15,7 +16,7 @@ const STATUS_ALLOWING_IAR_EDIT = [
 export default (context: IContext) => (claim: ISalesforceClaim, forecast?: ISalesforceProfileTotalPeriod): ClaimDto => ({
   id: claim.Id,
   partnerId: claim.Acc_ProjectParticipant__r.Id,
-  lastModifiedDate: context.clock.parse(claim.LastModifiedDate, SALESFORCE_DATE_TIME_FORMAT)!,
+  lastModifiedDate: DateTime.fromISO(claim.LastModifiedDate).toJSDate(),
   status: claim.Acc_ClaimStatus__c,
   periodStartDate: context.clock.parse(claim.Acc_ProjectPeriodStartDate__c, SALESFORCE_DATE_FORMAT)!,
   periodEndDate: context.clock.parse(claim.Acc_ProjectPeriodEndDate__c,SALESFORCE_DATE_FORMAT)!,
