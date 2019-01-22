@@ -36,7 +36,7 @@ class ProjectForecastComponent extends ContainerBase<Params, Data, Callbacks> {
             <Table.Currency header="Grant offered" value={x => x.totalParticipantGrant} qa="grant-offered" />
             <Table.Currency header="Forecasts and costs" value={x => x.totalFutureForecastsForParticipants} qa="forecasts-and-costs" />
             <Table.Currency header="Underspend" value={x => Math.abs(x.totalParticipantGrant - x.totalFutureForecastsForParticipants)} qa="underspend" />
-            <Table.Custom header="Date of last update" value={x => x.forecastLastModifiedDate ? <ACC.Renderers.FullDateTime value={x.forecastLastModifiedDate}/> : null} qa="last-updated" />
+            <Table.Custom header="Date of last update" value={x => x.forecastLastModifiedDate ? <ACC.Renderers.ShortDate value={x.forecastLastModifiedDate}/> : null} qa="last-updated" />
             <Table.Link header="" value={x => ViewForecastRoute.getLink({ projectId: this.props.projectId, partnerId: x.id })} content="View forecast" qa="view-partner-forecast" />
           </Table.Table>
         </ACC.Section>
