@@ -1,5 +1,5 @@
 import React from "react";
-import { FullDate, FullDateTime, FullDateTimeWithSeconds, ShortDate, ShortDateTime } from "../components/renderers/date";
+import { FullDate, FullDateTime, ShortDate, ShortDateTime } from "../components/renderers/date";
 
 export const datesGuide: IGuide = {
     name: "Dates",
@@ -15,12 +15,6 @@ export const datesGuide: IGuide = {
             comments: `Renders a full date and time`,
             example: `<FullDateTime value={new Date()} />`,
             render: () => <FullDateTime value={new Date()} />,
-        },
-        {
-            name: "Full date time with seconds",
-            comments: `Renders a full date and time including seconds`,
-            example: `<FullDateTimeWithSeconds value={new Date()} />`,
-            render: () => <FullDateTimeWithSeconds value={new Date()} />,
         },
         {
             name: "Short date",
