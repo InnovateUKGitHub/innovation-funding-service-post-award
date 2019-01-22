@@ -88,11 +88,7 @@ export const FullDate: React.SFC<{ value: Date | null }> = (props) => {
 };
 
 export const FullDateTime: React.SFC<{ value: Date | null }> = (props) => {
-    return render(convertDateAndTime(props.value), "d MMMM yyyy HH:mm");
-};
-
-export const FullDateTimeWithSeconds: React.SFC<{ value: Date | null }> = (props) => {
-    return render(convertDateAndTime(props.value), "d MMMM yyyy HH:mm:ss");
+    return render(convertDateAndTime(props.value), "d MMMM yyyy, hh:mm a");
 };
 
 export const ShortDate: React.SFC<{ value: Date | null }> = (props) => {
@@ -100,5 +96,5 @@ export const ShortDate: React.SFC<{ value: Date | null }> = (props) => {
 };
 
 export const ShortDateTime: React.SFC<{ value: Date | null }> = (props) => {
-    return render(convertDateAndTime(props.value), "d MMM yyyy HH:mm");
+    return render(convertDateAndTime(props.value), "d MMM yyyy, hh:mm a");
 };

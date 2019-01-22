@@ -1,7 +1,7 @@
 import React from "react";
 import classNames from "classnames";
 import * as ACC from "../../components";
-import { Currency, DateRange, FullDateTimeWithSeconds, Percentage } from "../../components/renderers";
+import { Currency, DateRange, Percentage } from "../../components/renderers";
 import { ForecastDetailsDtosValidator, ForecastDetailsDtoValidator } from "../../validators/forecastDetailsDtosValidator";
 import { IEditorStore } from "../../redux";
 import { ForecastData } from "../../containers/claims/forecasts/common";
