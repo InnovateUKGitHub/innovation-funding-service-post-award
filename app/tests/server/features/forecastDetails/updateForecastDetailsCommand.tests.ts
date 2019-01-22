@@ -4,7 +4,6 @@ import { UpdateForecastDetailsCommand } from "../../../../src/server/features/fo
 import { DateTime } from "luxon";
 import { ClaimFrequency } from "../../../../src/types";
 import { BadRequestError, ValidationError } from "../../../../src/server/features/common/appError";
-import { SALESFORCE_DATE_TIME_FORMAT } from "../../../../src/server/features/common/clock";
 
 describe("UpdateForecastDetailsCommand", () => {
   it("when id not set expect validation exception", async () => {
