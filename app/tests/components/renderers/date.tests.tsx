@@ -1,7 +1,7 @@
 // tslint:disable:no-duplicate-string
 import "jest";
 import React from "react";
-import { FullDate, FullDateTime, FullDateTimeWithSeconds, ShortDate, ShortDateTime } from "../../../src/ui/components/renderers/date";
+import { FullDate, FullDateTime, ShortDate, ShortDateTime } from "../../../src/ui/components/renderers/date";
 import Adapter from "enzyme-adapter-react-16";
 import Enzyme, { shallow } from "enzyme";
 
@@ -24,23 +24,11 @@ describe("FullDate", () => {
 describe("FullDateTime", () => {
     it("should render the date as 7 January 1993 09:02 09:02", () => {
         const wrapper = shallow(<FullDateTime value={date} />);
-        expect(wrapper.text()).toEqual("7 January 1993 09:02");
+        expect(wrapper.text()).toEqual("7 January 1993, 09:02 am");
     });
 
     it("should return null when a null prop is passed in", () => {
         const wrapper = shallow(<FullDateTime value={null} />);
-        expect(wrapper.html()).toBeNull();
-    });
-});
-
-describe("FullDateTimeWithSeconds", () => {
-    it("should render the date as 7 January 1993 09:02:01", () => {
-        const wrapper = shallow(<FullDateTimeWithSeconds value={date} />);
-        expect(wrapper.text()).toEqual("7 January 1993 09:02:01");
-    });
-
-    it("should return null when a null prop is passed in", () => {
-        const wrapper = shallow(<FullDateTimeWithSeconds value={null} />);
         expect(wrapper.html()).toBeNull();
     });
 });
@@ -60,7 +48,7 @@ describe("ShortDate", () => {
 describe("ShortDateTime", () => {
     it("should render the date as 7 Jan 1993 09:02", () => {
         const wrapper = shallow(<ShortDateTime value={date} />);
-        expect(wrapper.text()).toEqual("7 Jan 1993 09:02");
+        expect(wrapper.text()).toEqual("7 Jan 1993, 09:02 am");
     });
 
     it("should return null when a null prop is passed in", () => {
