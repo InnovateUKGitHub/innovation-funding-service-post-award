@@ -15,7 +15,7 @@ describe("GetCostCategoriesQuery", () => {
         expect(result.length).toBe(5);
     });
 
-    it("Correctly maps organistionType",  async () => {
+    it("Correctly maps organisationType",  async () => {
         const context = new TestContext();
 
         const data = context.testData.range(3, () => context.testData.createCostCategory());
@@ -27,9 +27,9 @@ describe("GetCostCategoriesQuery", () => {
         const result = await context.runQuery(query);
 
         expect(result.length).toBe(3);
-        expect(result[0].organistionType).toBe("Unknown");
-        expect(result[1].organistionType).toBe("Industrial");
-        expect(result[2].organistionType).toBe("Academic");
+        expect(result[0].organisationType).toBe("Unknown");
+        expect(result[1].organisationType).toBe("Industrial");
+        expect(result[2].organisationType).toBe("Academic");
     });
 
     it("Sorts by display order", async () => {

@@ -66,7 +66,7 @@ export class ForecastTable extends React.Component<Props> {
     const tableRows: TableRow[] = [];
     const forecasts = !!data.editor ? data.editor.data : data.forecastDetails;
 
-    data.costCategories.filter(x => x.organistionType === "Industrial").forEach(category => {
+    data.costCategories.filter(x => x.organisationType === "Industrial").forEach(category => {
       const row: TableRow = {
         categoryId: category.id,
         categoryName: category.name,
