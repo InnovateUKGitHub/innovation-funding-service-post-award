@@ -7,12 +7,12 @@ export interface PartnerDto {
     projectId: string;
     accountId: string;
     name: string;
-    totalParticipantGrant: number;
-    totalParticipantCostsClaimed: number;
-    awardRate: number;
+    totalParticipantGrant: number|null;
+    totalParticipantCostsClaimed: number|null;
+    awardRate: number|null;
     percentageParticipantCostsClaimed: number | null;
-    capLimit: number;
-    totalFutureForecastsForParticipants: number;
+    capLimit: number|null;
+    totalFutureForecastsForParticipants: number|null;
     roles: ProjectRole;
     forecastLastModifiedDate: Date|null;
 }

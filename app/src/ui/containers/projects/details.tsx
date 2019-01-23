@@ -77,8 +77,8 @@ class ProjectDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
         }
 
         const PartnersTable = ACC.TypedTable<PartnerDto>();
-        const totalEligibleCosts = partners.reduce((val, partner) => val += partner.totalParticipantGrant, 0) || null;
-        const totalClaimed = partners.reduce((val, partner) => val += partner.totalParticipantCostsClaimed, 0);
+        const totalEligibleCosts = partners.reduce((val, partner) => val += partner.totalParticipantGrant || 0, 0) || null;
+        const totalClaimed = partners.reduce((val, partner) => val += partner.totalParticipantCostsClaimed || 0, 0);
         const percentageClaimed = totalEligibleCosts ? 100 * totalClaimed / totalEligibleCosts : 0;
 
         return (
