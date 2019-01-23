@@ -238,10 +238,10 @@ class Component extends ContainerBase<ClaimDashboardPageParams, Data, Callbacks>
         <ClaimTable.Currency header="Actual costs for period" qa="actual-cost" value={(x) => x.totalCost} />
         <ClaimTable.Currency header="Difference" qa="diff" value={(x) => x.forecastCost - x.totalCost} />
         <ClaimTable.Custom header="Status" qa="status" value={(x) => x.status} />
-        <ClaimTable.Custom
+        <ClaimTable.ShortDate
           header="Date of last update"
           qa="date"
-          value={(x) => <Acc.Renderers.ShortDate value={(x.paidDate || x.approvedDate || x.lastModifiedDate)} />}
+          value={(x) => (x.paidDate || x.approvedDate || x.lastModifiedDate)}
         />
         <ClaimTable.Custom header="" qa="link" value={(x) => <Acc.Claims.ClaimDetailsLink claim={x} project={project} partner={partner} />} />
       </ClaimTable.Table>
