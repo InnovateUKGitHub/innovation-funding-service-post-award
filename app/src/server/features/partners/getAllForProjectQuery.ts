@@ -1,7 +1,7 @@
 import { IContext, QueryBase } from "../common/context";
 import { MapToPartnerDtoCommand } from "./mapToPartnerDto";
-import { PartnerDto, ProjectRole } from "../../../types";
-import { GetAllProjectRolesForUser, getEmptyRoleInfo } from "../projects/getAllProjectRolesForUser";
+import { PartnerDto } from "../../../types";
+import { GetAllProjectRolesForUser } from "../projects/getAllProjectRolesForUser";
 
 export class GetAllForProjectQuery extends QueryBase<PartnerDto[]> {
     constructor(private projectId: string) {
@@ -13,10 +13,10 @@ export class GetAllForProjectQuery extends QueryBase<PartnerDto[]> {
         const roles = await context.runQuery(new GetAllProjectRolesForUser());
         const projectRoles = roles.getProjectRoles(this.projectId);
 
-        const mapped = await Promise.all(results.map(item => {
+        const mapped = results.map(item => {
             const partnerRoles = roles.getPartnerRoles(item.Acc_ProjectId__c, item.Id);
-            return context.runCommand(new MapToPartnerDtoCommand(item, partnerRoles, projectRoles));
-        }));
+            return context.runSyncCommand(new MapToPartnerDtoCommand(item, partnerRoles, projectRoles));
+        });
 
         return mapped.sort((x, y) => {
             // if x is not lead but y is lead then y is bigger

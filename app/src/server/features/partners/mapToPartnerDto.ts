@@ -1,10 +1,10 @@
-import { CommandBase, IContext } from "../common/context";
+import { CommandBase, IContext, SyncCommandBase } from "../common/context";
 import { ISalesforcePartner, PROJECT_LEAD_IDENTIFIER } from "../../repositories/partnersRepository";
 import { PartnerDto, ProjectRole } from "../../../types";
 import { SALESFORCE_DATE_TIME_FORMAT } from "../common/clock";
 import { DateTime } from "luxon";
 
-export class MapToPartnerDtoCommand extends CommandBase<PartnerDto> {
+export class MapToPartnerDtoCommand extends SyncCommandBase<PartnerDto> {
     constructor(readonly item: ISalesforcePartner, readonly partnerLevelRoles: ProjectRole, readonly projectLevelRoles: ProjectRole) {
         super();
      }
@@ -13,8 +13,8 @@ export class MapToPartnerDtoCommand extends CommandBase<PartnerDto> {
         return (total) ? 100 * (claimed || 0) / total  : null;
     }
 
-    async Run(context: IContext) {
-        const dto: PartnerDto = {
+    Run(context: IContext): PartnerDto {
+        return {
             id: this.item.Id,
             name: this.item.Acc_AccountId__r.Name,
             accountId: this.item.Acc_AccountId__r.Id,
@@ -30,7 +30,6 @@ export class MapToPartnerDtoCommand extends CommandBase<PartnerDto> {
             roles: this.partnerLevelRoles,
             forecastLastModifiedDate: this.item.Acc_ForecastLastModifiedDate__c ? DateTime.fromISO(this.item.Acc_ForecastLastModifiedDate__c).toJSDate() : null,
         };
-        return Promise.resolve(dto);
     }
 
     private valueIfPermission(value: number|null) {
