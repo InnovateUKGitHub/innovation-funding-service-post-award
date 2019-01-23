@@ -1,7 +1,6 @@
 import { CommandBase, IContext, SyncCommandBase } from "../common/context";
 import { ISalesforcePartner, PROJECT_LEAD_IDENTIFIER } from "../../repositories/partnersRepository";
 import { PartnerDto, ProjectRole } from "../../../types";
-import { SALESFORCE_DATE_TIME_FORMAT } from "../common/clock";
 import { DateTime } from "luxon";
 
 export class MapToPartnerDtoCommand extends SyncCommandBase<PartnerDto> {
