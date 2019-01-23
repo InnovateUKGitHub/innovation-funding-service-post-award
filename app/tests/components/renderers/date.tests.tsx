@@ -22,9 +22,9 @@ describe("FullDate", () => {
 });
 
 describe("FullDateTime", () => {
-    it("should render the date as 7 January 1993 09:02 09:02", () => {
+    it("should render the date as 7 January 1993 09:02 9:02", () => {
         const wrapper = shallow(<FullDateTime value={date} />);
-        expect(wrapper.text()).toEqual("7 January 1993, 09:02 AM");
+        expect(wrapper.text()).toEqual("7 January 1993, 9:02 AM");
     });
 
     it("should return null when a null prop is passed in", () => {
@@ -46,9 +46,9 @@ describe("ShortDate", () => {
 });
 
 describe("ShortDateTime", () => {
-    it("should render the date as 7 Jan 1993 09:02", () => {
+    it("should render the date as 7 Jan 1993 9:02", () => {
         const wrapper = shallow(<ShortDateTime value={date} />);
-        expect(wrapper.text()).toEqual("7 Jan 1993, 09:02 AM");
+        expect(wrapper.text()).toEqual("7 Jan 1993, 9:02 AM");
     });
 
     it("should return null when a null prop is passed in", () => {
