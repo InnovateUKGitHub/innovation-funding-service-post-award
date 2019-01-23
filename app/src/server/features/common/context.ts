@@ -114,7 +114,6 @@ const constructErrorResponse = <E extends Error>(error: E): AppError => {
   if (error instanceof SalesforceInvalidFilterError) {
     return new NotFoundError(undefined, error);
   }
-
   return new AppError(ErrorCode.UNKNOWN_ERROR, error.message, error);
 };
 
