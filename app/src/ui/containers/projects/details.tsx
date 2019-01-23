@@ -38,10 +38,11 @@ class ProjectDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
         const monitoringOfficer = contacts.find(x => x.role === "Monitoring officer");
         const projectManager = contacts.find(x => x.role === "Project Manager");
 
-        const links = [
-            { text: "View original application", url: project.applicationUrl, qa: "application-link" },
-            { text: "View original grant offer letter", url: project.grantOfferLetterUrl, qa: "grant-letter-link" }
-        ];
+        // project links are not currenly required but will be added back
+        // const links = [
+        //     { text: "View original application", url: project.applicationUrl, qa: "application-link" },
+        //     { text: "View original grant offer letter", url: project.grantOfferLetterUrl, qa: "grant-letter-link" }
+        // ];
 
         return (
             <ProjectOverviewPage selectedTab={ProjectDetailsRoute.routeName} project={project} partners={partners}>
@@ -62,9 +63,12 @@ class ProjectDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
                     </DetailsSection.Details>
                 </ACC.Section>
 
+                {/*
+                // project links are not currenly required but will be added back
                 <ACC.Section title="Application information" qa="application-details">
                     <ACC.LinksList links={links} />
                 </ACC.Section>
+                */}
             </ProjectOverviewPage>
         );
     }
