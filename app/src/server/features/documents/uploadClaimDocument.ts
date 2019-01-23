@@ -43,7 +43,7 @@ export class UploadClaimDocumentCommand extends CommandBase<string> {
 
     if (this.file.description === DocumentDescription.IAR) await this.preIarUpload(context, claim);
 
-    const documentId = context.runCommand(new UploadDocumentCommand(this.file, claim.id));
+    const documentId = await context.runCommand(new UploadDocumentCommand(this.file, claim.id));
 
     if (this.file.description === DocumentDescription.IAR) await this.postIarUpload(context, claim);
 
