@@ -1,4 +1,3 @@
-// import express from "express";
 import contextProvider from "../features/common/contextProvider";
 import { GetAllQuery } from "../features/contacts/getAllQuery";
 import { GetByIdQuery } from "../features/contacts/getByIdQuery";
@@ -20,12 +19,12 @@ class Controller extends ControllerBase<IContact> implements IContactsApi {
 
   public async getAll(params: ApiParams<{}>) {
     const query = new GetAllQuery();
-    return await contextProvider.start(params).runQuery(query);
+    return contextProvider.start(params).runQuery(query);
   }
 
   public async get(params: ApiParams<{ contactId: string }>) {
     const query = new GetByIdQuery(params.contactId);
-    return await contextProvider.start(params).runQuery(query);
+    return contextProvider.start(params).runQuery(query);
   }
 }
 
