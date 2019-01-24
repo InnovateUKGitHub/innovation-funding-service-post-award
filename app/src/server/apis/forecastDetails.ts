@@ -34,12 +34,12 @@ class Controller extends ControllerBase<ForecastDetailsDTO> implements IForecast
 
   public async getAllByPartnerId(params: ApiParams<{ partnerId: string }>) {
     const query = new GetAllForecastsForPartnerQuery(params.partnerId);
-    return await contextProvider.start(params).runQuery(query);
+    return contextProvider.start(params).runQuery(query);
   }
 
   public async get(params: ApiParams<{ partnerId: string, periodId: number, costCategoryId: string }>) {
     const query = new GetForecastDetailQuery(params.partnerId, params.periodId, params.costCategoryId);
-    return await contextProvider.start(params).runQuery(query);
+    return contextProvider.start(params).runQuery(query);
   }
 
   public async update(params: ApiParams<{ partnerId: string, forecasts: ForecastDetailsDTO[], submit: boolean }>) {

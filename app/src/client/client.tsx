@@ -19,9 +19,6 @@ const store      = createStore(rootReducer, serverState, middleware);
 
 (window as any).Store = store;
 
-// window["router"] = router;
-// window["store"] = store;
-
 router.start(() => {
   hydrate((
     <Provider store={store}>

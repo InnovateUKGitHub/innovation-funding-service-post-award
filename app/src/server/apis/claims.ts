@@ -35,18 +35,18 @@ class Controller extends ControllerBase<ClaimDto> implements IClaimsApi {
 
   public async getAllByProjectId(params: ApiParams<{ projectId: string; }>) {
     const query = new GetAllClaimsForProjectQuery(params.projectId);
-    return await contextProvider.start(params).runQuery(query);
+    return contextProvider.start(params).runQuery(query);
   }
 
   public async getAllByPartnerId(params: ApiParams<{ partnerId: string }>) {
     const query = new GetAllForPartnerQuery(params.partnerId);
-    return await contextProvider.start(params).runQuery(query);
+    return contextProvider.start(params).runQuery(query);
   }
 
   public async get(params: ApiParams<{ partnerId: string, periodId: number }>) {
     const { partnerId, periodId } = params;
     const query = new GetClaim(partnerId, periodId);
-    return await contextProvider.start(params).runQuery(query);
+    return contextProvider.start(params).runQuery(query);
   }
 
   public async update(params: ApiParams<{ partnerId: string, periodId: number, claim: ClaimDto }>) {

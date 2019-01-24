@@ -15,7 +15,7 @@ class Controller extends ControllerBase<CostCategoryDto> implements ICostCategor
 
   public async getAll(params: ApiParams<{}>) {
     const query = new GetCostCategoriesQuery();
-    return await contextProvider.start(params).runQuery(query);
+    return contextProvider.start(params).runQuery(query);
   }
 
 }

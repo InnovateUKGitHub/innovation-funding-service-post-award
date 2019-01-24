@@ -61,19 +61,19 @@ class Controller extends ControllerBase<DocumentSummaryDto> implements IDocument
   public async getClaimDocuments(params: ApiParams<{partnerId: string, periodId: number, description: string}>) {
     const { partnerId, periodId, description } = params;
     const query = new GetClaimDocumentsQuery({partnerId, periodId}, {description});
-    return await contextProvider.start(params).runQuery(query);
+    return contextProvider.start(params).runQuery(query);
   }
 
   public async getClaimDetailDocuments(params: ApiParams<{claimDetailKey: ClaimDetailKey}>) {
     const { partnerId, periodId, costCategoryId } = params.claimDetailKey;
     const query = new GetClaimDetailDocumentsQuery(partnerId, periodId, costCategoryId);
-    return await contextProvider.start(params).runQuery(query);
+    return contextProvider.start(params).runQuery(query);
   }
 
   public async getDocument(params: ApiParams<{ documentId: string }>): Promise<DocumentDto> {
     const { documentId } = params;
     const query = new GetDocumentQuery(documentId);
-    return await contextProvider.start(params).runQuery(query);
+    return contextProvider.start(params).runQuery(query);
   }
 
   public async uploadClaimDetailDocument(params: ApiParams<{claimDetailKey: ClaimDetailKey, file: FileUpload | File}>) {

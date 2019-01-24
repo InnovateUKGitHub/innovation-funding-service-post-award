@@ -27,14 +27,3 @@ export function createAction<T extends string, P>(type: T, payload: P): IActionW
 export function createAction<T extends string, P>(type: T, payload?: P) {
   return payload === undefined ? { type } : { type, payload };
 }
-
-// function createThunkAction<T extends string>(type: T): ThunkAction<T, RootState, {}, Actions> {
-//   return (dispatch) => {
-//     const action = createAction(type);
-//     return dispatch(action);
-//   }
-// }
-
-// function _base(type: any, store: any, status: any, identifier: any, payload: any, error: any) {
-//   return { type, store, status, identifier, payload, error };
-// }
