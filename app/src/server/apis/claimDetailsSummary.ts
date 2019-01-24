@@ -18,7 +18,7 @@ class Controller extends ControllerBase<ClaimDetailsSummaryDto> implements IClai
 
   public async getAllByPartnerIdForPeriod(params: ApiParams<{ partnerId: string, periodId: number }>) {
     const query = new GetClaimDetailsSummaryForPartnerQuery(params.partnerId, params.periodId);
-    return await contextProvider.start(params).runQuery(query);
+    return contextProvider.start(params).runQuery(query);
   }
 }
 

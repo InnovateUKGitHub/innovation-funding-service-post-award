@@ -88,7 +88,7 @@ export default abstract class SalesforceBase<T> {
   protected async insert(inserts: Partial<T>[]): Promise<string[]>;
   protected async insert(inserts: Partial<T> | Partial<T>[]): Promise<string | string[]> {
     const conn = await this.getSalesforceConnection();
-    return await conn.sobject(this.objectName)
+    return conn.sobject(this.objectName)
       .insert(inserts)
       .then(results => {
         if (!(inserts instanceof Array)) {
@@ -102,7 +102,7 @@ export default abstract class SalesforceBase<T> {
 
   protected async update(updates: Updatable<T>[] | Updatable<T>): Promise<boolean> {
     const conn = await this.getSalesforceConnection();
-    return await conn.sobject(this.objectName)
+    return conn.sobject(this.objectName)
       .update(updates)
       .then(() => true)
       .catch(e => { throw this.constructError(e, conn); })
