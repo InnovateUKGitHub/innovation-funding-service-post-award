@@ -2,11 +2,9 @@ import React from "react";
 import classNames from "classnames";
 import * as ACC from "../../components";
 import { Currency, DateRange, Percentage } from "../../components/renderers";
-import { ForecastDetailsDtosValidator, ForecastDetailsDtoValidator } from "../../validators/forecastDetailsDtosValidator";
+import { ForecastDetailsDtosValidator } from "../../validators/forecastDetailsDtosValidator";
 import { IEditorStore } from "../../redux";
 import { ForecastData } from "../../containers/claims/forecasts/common";
-import { Result } from "../../validation/result";
-import { Results } from "../../validation/results";
 
 interface TableRow {
   categoryId: string;
