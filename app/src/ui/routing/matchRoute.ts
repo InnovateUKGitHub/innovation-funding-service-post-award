@@ -25,11 +25,3 @@ export function matchRoute(route: State | null | undefined): MatchedRoute {
     container: found.container
   };
 }
-
-/*export function matchRouteLoader(route: State | undefined): (route: State, params: {}) => AsyncThunk<any>[] {
-  const match = matchRoute(route) || defaultRoute();
-  if(match.component.getLoadDataActions) {
-    return match.component.getLoadDataActions;
-  }
-  return () => [];
-}*/
