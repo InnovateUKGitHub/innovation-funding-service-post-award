@@ -2,7 +2,6 @@ import * as React from "react";
 
 interface Props {
   title: string;
-  children: JSX.Element;
   closedAltText?: string;
   openAltText?: string;
 }
@@ -12,7 +11,6 @@ interface State {
 }
 
 export class AccordionItem extends React.Component<Props, State> {
-
   constructor(props: Props) {
     super(props);
     this.state = {
@@ -41,10 +39,12 @@ export class AccordionItem extends React.Component<Props, State> {
             alt={this.state.accordionOpen ? this.props.openAltText : this.props.closedAltText}
           />
         </div>
-        {this.state.accordionOpen && <div className="acc-accordion__section-panel">
-          {this.props.children}
-        </div>}
+        {this.renderChildren()}
       </div>
     );
+  }
+
+  renderChildren() {
+    return this.state.accordionOpen ? (<div className="acc-accordion__section-panel">{this.props.children}</div>) : null;
   }
 }
