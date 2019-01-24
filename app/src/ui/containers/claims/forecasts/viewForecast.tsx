@@ -36,9 +36,7 @@ class ViewForecastComponent extends ContainerBase<Params, PendingForecastData, C
     // MO, PM & FC/PM should see partner name
     const isMoPm = !!(data.project.roles & (ProjectRole.ProjectManager | ProjectRole.MonitoringOfficer));
     const partnerName = isMoPm ? data.partner.name : null;
-
     const backLink = isMoPm ? ProjectForecastRoute.getLink({ projectId: data.project.id }) : ProjectDashboardRoute.getLink({});
-
     const backText = isMoPm ? "Back" : "Back to dashboard";
 
     return (
@@ -50,7 +48,7 @@ class ViewForecastComponent extends ContainerBase<Params, PendingForecastData, C
         {this.renderTabs(isMoPm, data)}
         <ACC.Section title={partnerName} qa="partner-name">
           {renderWarning(data)}
-          <ACC.Claims.ForecastTable data={data} />
+          <ACC.Claims.ForecastTable data={data} hideValidation={isMoPm} />
         </ACC.Section>
         <ACC.Section>
           {this.renderUpdateSection(data.partner)}
