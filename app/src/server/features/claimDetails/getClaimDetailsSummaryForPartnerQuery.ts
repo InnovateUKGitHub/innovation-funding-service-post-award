@@ -15,10 +15,10 @@ export class GetClaimDetailsSummaryForPartnerQuery extends QueryBase<ClaimDetail
 
         return filteredCostCategories.map(x => {
             const claimDetail = claimDetailResults.filter(y => y.Acc_CostCategory__c === x.id).map(y => y.Acc_PeriodCostCategoryTotal__c)[0] || 0;
-            const forcast = totalForcastResults.filter(y => y.Acc_CostCategory__c === x.id).map(y => y.Acc_CostCategoryGOLCost__c)[0] || 0;
+            const forecast = totalForcastResults.filter(y => y.Acc_CostCategory__c === x.id).map(y => y.Acc_CostCategoryGOLCost__c)[0] || 0;
             const totalCostCategory = totalCostCategoryResults.filter(y => y.Acc_CostCategory__c === x.id).map(y => y.Acc_PeriodCostCategoryTotal__c).reduce((t,c) => t + c, 0);
 
-            const offerCosts = forcast || 0;
+            const offerCosts = forecast || 0;
             const costsClaimedThisPeriod = claimDetail;
             const costsClaimedToDate = totalCostCategory;
             const remainingOfferCosts = offerCosts - totalCostCategory - costsClaimedThisPeriod;
