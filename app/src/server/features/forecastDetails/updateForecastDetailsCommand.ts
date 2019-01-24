@@ -67,7 +67,7 @@ export class UpdateForecastDetailsCommand extends CommandBase<boolean> {
       Acc_LatestForecastCost__c: x.value
     }));
 
-    return await context.repositories.profileDetails.update(updates);
+    return context.repositories.profileDetails.update(updates);
   }
 
   private async updateClaim(context: IContext) {
@@ -81,14 +81,14 @@ export class UpdateForecastDetailsCommand extends CommandBase<boolean> {
 
     const status = this.nextClaimStatus(claim);
     const update = { Id: claim.id, Acc_ClaimStatus__c: status };
-    return await context.repositories.claims.update(update);
+    return context.repositories.claims.update(update);
   }
 
   private async updatePartner(context: IContext, partner: PartnerDto) {
     const now = context.clock.today();
     const dateString = DateTime.fromJSDate(now).toISO();
     const update = { Id: partner.id, Acc_ForecastLastModifiedDate__c: dateString };
-    return await context.repositories.partners.update(update);
+    return context.repositories.partners.update(update);
   }
 
   private nextClaimStatus(claim: ClaimDto) {

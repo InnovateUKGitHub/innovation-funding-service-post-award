@@ -26,6 +26,6 @@ export class UpdateClaimCommand extends CommandBase<boolean> {
       Acc_LineItemDescription__c: this.claimDto.comments,
     };
 
-    return await context.repositories.claims.update(update);
+    return context.repositories.claims.update(update);
   }
 }
