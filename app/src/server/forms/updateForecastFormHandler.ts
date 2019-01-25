@@ -1,6 +1,5 @@
 import { Params as ForecastParams } from "../../ui/containers/claims/forecasts/common";
 import { FormHandlerBase, IFormButton } from "./formHandlerBase";
-import { IContext } from "../features/common/context";
 import { Results } from "../../ui/validation/results";
 import { GetAllForecastsForPartnerQuery, UpdateForecastDetailsCommand } from "../features/forecastDetails";
 import { GetByIdQuery } from "../features/projects";
@@ -9,6 +8,7 @@ import { UpdateForecastRoute, ViewForecastRoute } from "../../ui/containers";
 import { getForecastDetailsEditor } from "../../ui/redux/selectors";
 import { ForecastDetailsDtosValidator } from "../../ui/validators";
 import { ILinkInfo } from "../../types/ILinkInfo";
+import { IContext } from "../../types/IContext";
 
 export class UpdateForecastFormHandler extends FormHandlerBase<ForecastParams, ForecastDetailsDTO[]> {
   constructor() {

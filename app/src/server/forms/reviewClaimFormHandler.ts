@@ -1,12 +1,12 @@
 import { FormHandlerBase, IFormBody, IFormButton } from "./formHandlerBase";
 import { AllClaimsDashboardRoute, ReviewClaimParams, ReviewClaimRoute, } from "../../ui/containers";
 import { ClaimDto, ClaimStatus } from "../../types";
-import { IContext } from "../features/common/context";
 import { GetClaim, UpdateClaimCommand } from "../features/claims";
 import { getClaimEditor } from "../../ui/redux/selectors";
 import { ClaimDtoValidator } from "../../ui/validators";
 import { Results } from "../../ui/validation/results";
 import { ILinkInfo } from "../../types/ILinkInfo";
+import { IContext } from "../../types/IContext";
 
 export class ReviewClaimFormHandler extends FormHandlerBase<ReviewClaimParams, ClaimDto> {
     constructor() {

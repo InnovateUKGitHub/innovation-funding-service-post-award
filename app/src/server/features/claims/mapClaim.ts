@@ -1,9 +1,9 @@
 import { DateTime } from "luxon";
 import { ISalesforceClaim } from "../../repositories/claimsRepository";
-import { IContext } from "../common/context";
 import { ISalesforceProfileTotalPeriod } from "../../repositories";
 import { ClaimDto, ClaimStatus } from "../../../types";
 import { SALESFORCE_DATE_FORMAT } from "../common/clock";
+import { IContext } from "../../../types/IContext";
 
 const STATUS_ALLOWING_IAR_EDIT = [
   ClaimStatus.DRAFT,

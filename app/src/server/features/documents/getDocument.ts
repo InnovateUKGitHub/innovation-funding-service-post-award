@@ -1,4 +1,5 @@
-import {IContext, QueryBase} from "../common/context";
+import {QueryBase} from "../common/queryBase";
+import { IContext } from "../../../types/IContext";
 
 export class GetDocumentQuery extends QueryBase<DocumentDto> {
   constructor(private documentId: string) {

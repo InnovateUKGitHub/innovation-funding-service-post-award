@@ -1,4 +1,4 @@
-import { CommandBase, ICaches, IContext, IRunnable, ISyncRunnable, QueryBase, SyncCommandBase, SyncQueryBase } from "../../src/server/features/common/context";
+import { QueryBase} from "../../src/server/features/common/queryBase";
 import { createTestRepositories, ITestRepositories } from "./testRepositories";
 import { TestData } from "./testData";
 import { TestClock } from "./testClock";
@@ -7,6 +7,9 @@ import { IConfig } from "../../src/server/features/common/config";
 import { Cache } from "../../src/server/features/common/cache";
 import { TestUser } from "./testUser";
 import { IRoleInfo } from "../../src/server/features/projects/getAllProjectRolesForUser";
+import { ICaches, IContext, IRunnable, ISyncRunnable } from "../../src/types/IContext";
+import { SyncQueryBase } from "../../src/server/features/common/queryBase";
+import { CommandBase, SyncCommandBase } from "../../src/server/features/common/commandBase";
 
 export class TestContext implements IContext {
     constructor() {

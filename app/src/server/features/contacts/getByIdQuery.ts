@@ -1,5 +1,6 @@
-import { IContext, QueryBase } from "../common/context";
+import { QueryBase } from "../common/queryBase";
 import { mapItem } from "./mapItem";
+import { IContext } from "../../../types/IContext";
 
 export class GetByIdQuery extends QueryBase<IContact|null> {
   constructor(readonly id: string) {

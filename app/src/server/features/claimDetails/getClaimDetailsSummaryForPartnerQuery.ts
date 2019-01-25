@@ -1,5 +1,6 @@
-import { IContext, QueryBase } from "../common/context";
+import { QueryBase } from "../common/queryBase";
 import { GetCostCategoriesQuery } from "../claims";
+import { IContext } from "../../../types/IContext";
 
 export class GetClaimDetailsSummaryForPartnerQuery extends QueryBase<ClaimDetailsSummaryDto[]> {
     constructor(private partnerId: string, private periodId: number) {

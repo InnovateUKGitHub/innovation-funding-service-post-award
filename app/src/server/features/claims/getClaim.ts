@@ -1,6 +1,7 @@
-import {IContext, QueryBase} from "../common/context";
+import {QueryBase} from "../common/queryBase";
 import mapClaim from "./mapClaim";
 import { ClaimDto } from "../../../types";
+import { IContext } from "../../../types/IContext";
 
 // TODO - nullable or throw to be decided
 export class GetClaim extends QueryBase<ClaimDto> {

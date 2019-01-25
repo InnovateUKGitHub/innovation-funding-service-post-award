@@ -1,7 +1,7 @@
-// tslint:disable:no-bitwise
-import { IContext, QueryBase } from "../common/context";
+import { QueryBase } from "../common/queryBase";
 import { Authorisation, ProjectRole } from "../../../types";
 import { SalesforceRole } from "../../repositories";
+import { IContext } from "../../../types/IContext";
 
 export interface IRoleInfo {
   projectRoles: ProjectRole;
@@ -16,7 +16,7 @@ export function getEmptyRoleInfo(): IRoleInfo {
 }
 
 export class GetAllProjectRolesForUser extends QueryBase<Authorisation> {
-  protected async Run(context: IContext): Promise<Authorisation> {
+  public async Run(context: IContext): Promise<Authorisation> {
     const permisions = await context.caches.projectRoles.fetchAsync(context.user.email, () => context.config.salesforceUsername !== context.user.email ? this.getProjectRoles(context) : this.getServiceAccountRoles(context));
     return new Authorisation(permisions);
   }

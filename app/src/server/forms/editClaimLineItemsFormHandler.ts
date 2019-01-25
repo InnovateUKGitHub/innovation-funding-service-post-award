@@ -3,9 +3,9 @@ import { ClaimDetailDocumentsRoute, EditClaimLineItemsParams, EditClaimLineItems
 import { SaveLineItemsCommand } from "../features/claimLineItems";
 import { ClaimLineItemDtosValidator } from "../../ui/validators";
 import { range } from "../../shared/range";
-import { IContext } from "../features/common/context";
 import { findClaimLineItemsByPartnerCostCategoryAndPeriod } from "../../ui/redux/selectors";
 import { ILinkInfo } from "../../types/ILinkInfo";
+import { IContext } from "../../types/IContext";
 
 export class EditClaimLineItemsFormHandler extends FormHandlerBase<EditClaimLineItemsParams, ClaimLineItemDto[]> {
 

@@ -3,13 +3,13 @@ import {
   ClaimDetailDocumentsPageParams,
   ClaimDetailDocumentsRoute
 } from "../../../ui/containers";
-import { IContext } from "../../features/common/context";
 import {
   getClaimDetailDocumentDeleteEditorStoreInfo
 } from "../../../ui/redux/selectors";
 import { DeleteDocumentCommand } from "../../features/documents/deleteDocument";
 import { Results } from "../../../ui/validation/results";
 import { ILinkInfo } from "../../../types/ILinkInfo";
+import { IContext } from "../../../types/IContext";
 
 interface Document {
   id: string;

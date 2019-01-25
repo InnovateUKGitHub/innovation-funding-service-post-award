@@ -3,77 +3,81 @@ import { TestContext } from "../../testContextProvider";
 import { GetAllLineItemsForClaimByCategoryQuery } from "../../../../src/server/features/claimLineItems";
 
 describe("GetAllLineItemsForClaimByCategoryQuery", () => {
-    it("returns objects of correct shape", async () => {
-        const context = new TestContext();
-        const partner = context.testData.createPartner();
+  it("returns objects of correct shape", async () => {
+    const context = new TestContext();
+    const project = context.testData.createProject();
+    const partner = context.testData.createPartner();
 
-        const testData = context.testData;
-        const period = 1;
-        const costCat = testData.createCostCategory();
+    const testData = context.testData;
+    const period = 1;
+    const costCat = testData.createCostCategory();
 
-        testData.createClaimLineItem({
-            persist: true,
-            costCategory: costCat,
-            partner,
-            periodId: period
-        });
-
-        testData.createClaim(partner, period);
-        testData.createProfileTotalPeriod(partner, period);
-
-        const query = new GetAllLineItemsForClaimByCategoryQuery(partner.Id, costCat.Id, period);
-        const result = await context.runQuery(query);
-        const item   = result[0];
-
-        expect(result.length).toBe(1);
-        expect(item.partnerId).toBe(partner.Id);
-        expect(item.periodId).toBe(period);
+    testData.createClaimLineItem({
+      persist: true,
+      costCategory: costCat,
+      partner,
+      periodId: period
     });
 
-    it("returns an array of objects", async () => {
-        const context = new TestContext();
-        const partner = context.testData.createPartner();
+    testData.createClaim(partner, period);
+    testData.createProfileTotalPeriod(partner, period);
 
-        const testData = context.testData;
-        const period = 1;
-        const costCat = testData.createCostCategory();
+    const query = new GetAllLineItemsForClaimByCategoryQuery(project.Id, partner.Id, costCat.Id, period);
+    const result = await context.runQuery(query);
+    const item = result[0];
 
-        testData.createClaimLineItem({
-            persist: true,
-            costCategory: costCat,
-            partner,
-            periodId: period
-        });
+    expect(result.length).toBe(1);
+    expect(item.partnerId).toBe(partner.Id);
+    expect(item.periodId).toBe(period);
+  });
 
-        testData.createClaimLineItem({
-            persist: true,
-            costCategory: costCat,
-            partner,
-            periodId: period
-        });
+  it("returns an array of objects", async () => {
+    const context = new TestContext();
 
-        testData.createClaim(partner, period);
-        testData.createProfileTotalPeriod(partner, period);
+    const project = context.testData.createProject();
+    const partner = context.testData.createPartner();
 
-        const query = new GetAllLineItemsForClaimByCategoryQuery(partner.Id, costCat.Id, period);
-        const result = await context.runQuery(query);
+    const testData = context.testData;
+    const period = 1;
+    const costCat = testData.createCostCategory();
 
-        expect(result.length).toBe(2);
-        expect(result[0].costCategoryId).toEqual(result[1].costCategoryId);
-        expect(result[0].periodId).toEqual(result[1].periodId);
+    testData.createClaimLineItem({
+      persist: true,
+      costCategory: costCat,
+      partner,
+      periodId: period
     });
 
-    it("returns empty array if none found", async () => {
-        const context = new TestContext();
-        const partner = context.testData.createPartner();
-
-        const testData = context.testData;
-        const period = 1;
-        const costCat = testData.createCostCategory();
-
-        const query = new GetAllLineItemsForClaimByCategoryQuery(partner.Id, costCat.Id, period);
-        const result = await context.runQuery(query);
-
-        expect(result).toEqual([]);
+    testData.createClaimLineItem({
+      persist: true,
+      costCategory: costCat,
+      partner,
+      periodId: period
     });
+
+    testData.createClaim(partner, period);
+    testData.createProfileTotalPeriod(partner, period);
+
+    const query = new GetAllLineItemsForClaimByCategoryQuery(project.Id, partner.Id, costCat.Id, period);
+    const result = await context.runQuery(query);
+
+    expect(result.length).toBe(2);
+    expect(result[0].costCategoryId).toEqual(result[1].costCategoryId);
+    expect(result[0].periodId).toEqual(result[1].periodId);
+  });
+
+  it("returns empty array if none found", async () => {
+    const context = new TestContext();
+    const project = context.testData.createProject();
+    const partner = context.testData.createPartner();
+
+    const testData = context.testData;
+    const period = 1;
+    const costCat = testData.createCostCategory();
+
+    const query = new GetAllLineItemsForClaimByCategoryQuery(project.Id, partner.Id, costCat.Id, period);
+    const result = await context.runQuery(query);
+
+    expect(result).toEqual([]);
+  });
 });
