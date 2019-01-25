@@ -14,10 +14,10 @@ import {
 } from "./common";
 import { scrollToTheTop } from "../../../util/windowHelpers";
 
-export function loadClaimLineItemsForCategory(partnerId: string, costCategoryId: string, periodId: number) {
+export function loadClaimLineItemsForCategory(projectId: string, partnerId: string, costCategoryId: string, periodId: number) {
   return conditionalLoad(
     findClaimLineItemsByPartnerCostCategoryAndPeriod(partnerId, costCategoryId, periodId),
-    params => ApiClient.claimLineItems.getAllForCategory({partnerId, costCategoryId, periodId, ...params})
+    params => ApiClient.claimLineItems.getAllForCategory({projectId, partnerId, costCategoryId, periodId, ...params})
   );
 }
 
@@ -38,7 +38,7 @@ export function validateClaimLineItems(partnerId: string, periodId: number, cost
   };
 }
 
-export function saveClaimLineItems(partnerId: string, periodId: number, costCategoryId: string, lineItems: ClaimLineItemDto[], onComplete: () => void): SyncThunk<void, EditorAction | DataLoadAction> {
+export function saveClaimLineItems(projectId: string, partnerId: string, periodId: number, costCategoryId: string, lineItems: ClaimLineItemDto[], onComplete: () => void): SyncThunk<void, EditorAction | DataLoadAction> {
   return (dispatch, getState) => {
     const state      = getState();
     const selector   = findClaimLineItemsByPartnerCostCategoryAndPeriod(partnerId, costCategoryId, periodId);
@@ -49,7 +49,7 @@ export function saveClaimLineItems(partnerId: string, periodId: number, costCate
       return Promise.resolve();
     }
 
-    return ApiClient.claimLineItems.saveLineItems({partnerId, costCategoryId, periodId, lineItems, user: state.user})
+    return ApiClient.claimLineItems.saveLineItems({projectId, partnerId, costCategoryId, periodId, lineItems, user: state.user})
       .then((result) => {
         dispatch(dataLoadAction(selector.key, selector.store, LoadingStatus.Done, result));
         onComplete();

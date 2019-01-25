@@ -1,12 +1,12 @@
 import contextProvider from "../features/common/contextProvider";
-import {ApiParams, ControllerBase} from "./controllerBase";
-import {GetAllLineItemsForClaimByCategoryQuery, SaveLineItemsCommand} from "../features/claimLineItems";
-import {processDto} from "../../shared/processResponse";
+import { ApiParams, ControllerBase } from "./controllerBase";
+import { GetAllLineItemsForClaimByCategoryQuery, SaveLineItemsCommand } from "../features/claimLineItems";
+import { processDto } from "../../shared/processResponse";
 import { BadRequestError } from "../features/common/appError";
 
 export interface IClaimLineItemApi {
-  getAllForCategory: (params: ApiParams<{partnerId: string, costCategoryId: string, periodId: number}>) => Promise<ClaimLineItemDto[]>;
-  saveLineItems: (params: ApiParams<{partnerId: string, costCategoryId: string, periodId: number, lineItems: ClaimLineItemDto[]}>) => Promise<ClaimLineItemDto[]>;
+  getAllForCategory: (params: ApiParams<{projectId: string, partnerId: string, costCategoryId: string, periodId: number}>) => Promise<ClaimLineItemDto[]>;
+  saveLineItems: (params: ApiParams<{projectId: string, partnerId: string, costCategoryId: string, periodId: number, lineItems: ClaimLineItemDto[]}>) => Promise<ClaimLineItemDto[]>;
 }
 
 class Controller extends ControllerBase<ClaimLineItemDto> implements IClaimLineItemApi {
@@ -15,12 +15,13 @@ class Controller extends ControllerBase<ClaimLineItemDto> implements IClaimLineI
     super("claim-line-items");
     this.getItems(
       "/",
-      (p, q) => ({ partnerId: q.partnerId, periodId: parseInt(q.periodId, 10), costCategoryId: q.costCategoryId}),
+      (p, q) => ({ projectId: q.projectId, partnerId: q.partnerId, periodId: parseInt(q.periodId, 10), costCategoryId: q.costCategoryId}),
       (p) => this.getAllForCategory(p)
     );
     this.postItems(
       "/",
       (p, q, b) => ({
+        projectId: q.projectId,
         partnerId: q.partnerId,
         periodId: parseInt(q.periodId, 10),
         costCategoryId: q.costCategoryId,
@@ -30,15 +31,15 @@ class Controller extends ControllerBase<ClaimLineItemDto> implements IClaimLineI
     );
   }
 
-  public getAllForCategory(params: ApiParams<{ partnerId: string, costCategoryId: string, periodId: number }>) {
-    const query = new GetAllLineItemsForClaimByCategoryQuery(params.partnerId, params.costCategoryId, params.periodId);
+  public getAllForCategory(params: ApiParams<{ projectId: string, partnerId: string, costCategoryId: string, periodId: number }>) {
+    const query = new GetAllLineItemsForClaimByCategoryQuery(params.projectId, params.partnerId, params.costCategoryId, params.periodId);
     return contextProvider.start(params).runQuery(query);
   }
 
-  public async saveLineItems(params: ApiParams<{partnerId: string, costCategoryId: string, periodId: number, lineItems: ClaimLineItemDto[] }>): Promise<ClaimLineItemDto[]> {
+  public async saveLineItems(params: ApiParams<{ projectId: string, partnerId: string, costCategoryId: string, periodId: number, lineItems: ClaimLineItemDto[] }>): Promise<ClaimLineItemDto[]> {
 
-    const {partnerId, costCategoryId, periodId, lineItems } = params;
-    const validRequest = partnerId && costCategoryId && periodId &&
+    const {projectId, partnerId, costCategoryId, periodId, lineItems } = params;
+    const validRequest = projectId && partnerId && costCategoryId && periodId &&
       lineItems.every(x => x.periodId === periodId && x.partnerId === partnerId && x.costCategoryId === costCategoryId);
 
     if (!validRequest) {
@@ -50,7 +51,7 @@ class Controller extends ControllerBase<ClaimLineItemDto> implements IClaimLineI
 
     await context.runCommand(command);
 
-    const query = new GetAllLineItemsForClaimByCategoryQuery(partnerId, costCategoryId, periodId);
+    const query = new GetAllLineItemsForClaimByCategoryQuery(projectId, partnerId, costCategoryId, periodId);
     return context.runQuery(query);
   }
 }
