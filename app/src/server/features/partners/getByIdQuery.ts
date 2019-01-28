@@ -1,7 +1,8 @@
-import { IContext, QueryBase } from "../common/context";
+import { QueryBase } from "../common/queryBase";
 import { MapToPartnerDtoCommand } from "./mapToPartnerDto";
-import { PartnerDto, ProjectRole } from "../../../types";
+import { PartnerDto } from "../../../types";
 import { GetAllProjectRolesForUser } from "../projects/getAllProjectRolesForUser";
+import { IContext } from "../../../types/IContext";
 
 export class GetByIdQuery extends QueryBase<PartnerDto> {
   constructor(readonly id: string) {

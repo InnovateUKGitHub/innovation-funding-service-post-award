@@ -1,7 +1,8 @@
-import { IContext, QueryBase } from "../common/context";
+import { QueryBase } from "../common/queryBase";
 import { MapToPartnerDtoCommand } from "./mapToPartnerDto";
 import { PartnerDto } from "../../../types";
 import { GetAllProjectRolesForUser } from "../projects/getAllProjectRolesForUser";
+import { IContext } from "../../../types/IContext";
 
 export class GetAllForProjectQuery extends QueryBase<PartnerDto[]> {
     constructor(private projectId: string) {

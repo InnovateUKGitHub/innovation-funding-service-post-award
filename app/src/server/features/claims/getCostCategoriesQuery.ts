@@ -1,5 +1,6 @@
-import { IContext, QueryBase } from "../common/context";
+import { QueryBase } from "../common/queryBase";
 import { ISalesforceCostCategory } from "../../repositories";
+import { IContext } from "../../../types/IContext";
 
 export class GetCostCategoriesQuery extends QueryBase<CostCategoryDto[]> {
   protected async Run(context: IContext) {

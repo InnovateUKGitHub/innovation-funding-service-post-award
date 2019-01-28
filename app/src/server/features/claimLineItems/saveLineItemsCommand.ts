@@ -1,7 +1,8 @@
-import { CommandBase, IContext } from "../common/context";
+import { CommandBase } from "../common/commandBase";
 import { ClaimLineItemDtosValidator } from "../../../ui/validators/claimLineItemDtosValidator";
 import { isNumber } from "../../../util/NumberHelper";
 import { ValidationError } from "../common/appError";
+import { IContext } from "../../../types/IContext";
 
 export class SaveLineItemsCommand extends CommandBase<boolean> {
   constructor(public partnerId: string, public costCategoryId: string, public periodId: number, private lineItems: ClaimLineItemDto[]) {

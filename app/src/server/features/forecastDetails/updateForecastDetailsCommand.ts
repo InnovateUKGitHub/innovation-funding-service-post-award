@@ -1,4 +1,4 @@
-import { CommandBase, IContext } from "../common/context";
+import { CommandBase } from "../common/commandBase";
 import { GetAllForecastsGOLCostsQuery, GetAllForPartnerQuery } from "../claims";
 import { ForecastDetailsDtosValidator } from "../../../ui/validators/forecastDetailsDtosValidator";
 import { GetAllClaimDetailsByPartner } from "../claimDetails";
@@ -10,6 +10,7 @@ import { GetByIdQuery as GetPartnerById } from "../partners";
 import { GetByIdQuery as GetProjectById } from "../projects";
 import { BadRequestError, ValidationError } from "../common/appError";
 import { DateTime } from "luxon";
+import { IContext } from "../../../types/IContext";
 
 export class UpdateForecastDetailsCommand extends CommandBase<boolean> {
   constructor(

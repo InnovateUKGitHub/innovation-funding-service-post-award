@@ -3,7 +3,6 @@ import {
   ClaimDashboardPageParams,
   ClaimsDashboardRoute
 } from "../../../ui/containers";
-import { IContext } from "../../features/common/context";
 import {
   getDocumentDeleteEditor
 } from "../../../ui/redux/selectors";
@@ -12,6 +11,7 @@ import { Results } from "../../../ui/validation/results";
 import { GetDocumentsSummaryQuery } from "../../features/documents/getDocumentsSummary";
 import { BadRequestError } from "../../features/common/appError";
 import { ILinkInfo } from "../../../types/ILinkInfo";
+import { IContext } from "../../../types/IContext";
 
 export class ClaimDashboardDocumentDeleteHandler extends FormHandlerBase<ClaimDashboardPageParams, DocumentSummaryDto> {
 

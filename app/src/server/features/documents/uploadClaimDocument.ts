@@ -1,4 +1,4 @@
-import { CommandBase, IContext } from "../common/context";
+import { CommandBase } from "../common/commandBase";
 import { UploadDocumentCommand } from "./uploadDocument";
 import { GetClaimDocumentsQuery } from "./getClaimDocuments";
 import mapClaim from "../claims/mapClaim";
@@ -7,6 +7,7 @@ import { ClaimDto, ClaimStatus, DocumentDescription } from "../../../types";
 import { FileUpload } from "../../../types/FileUpload";
 import { BadRequestError, ValidationError } from "../common/appError";
 import { FileUploadValidator } from "../../../ui/validators/documentUploadValidator";
+import { IContext } from "../../../types/IContext";
 
 export class UploadClaimDocumentCommand extends CommandBase<string> {
   constructor(private claimKey: ClaimKey, private file: FileUpload) {

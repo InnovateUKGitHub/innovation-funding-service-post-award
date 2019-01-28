@@ -1,7 +1,8 @@
-import { CommandBase, IContext, SyncCommandBase } from "../common/context";
+import { SyncCommandBase } from "../common/commandBase";
 import { ISalesforcePartner, PROJECT_LEAD_IDENTIFIER } from "../../repositories/partnersRepository";
 import { PartnerDto, ProjectRole } from "../../../types";
 import { DateTime } from "luxon";
+import { IContext } from "../../../types/IContext";
 
 export class MapToPartnerDtoCommand extends SyncCommandBase<PartnerDto> {
     constructor(readonly item: ISalesforcePartner, readonly partnerLevelRoles: ProjectRole, readonly projectLevelRoles: ProjectRole) {

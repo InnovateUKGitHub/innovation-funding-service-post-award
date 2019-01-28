@@ -1,6 +1,7 @@
-import { IContext, SyncQueryBase } from "../common/context";
+import { SyncQueryBase } from "../common/queryBase";
 import { ClaimFrequency } from "../../../types/dtos";
 import { DateTime } from "luxon";
+import { IContext } from "../../../types/IContext";
 
 interface PeriodInfo {
   current: number;

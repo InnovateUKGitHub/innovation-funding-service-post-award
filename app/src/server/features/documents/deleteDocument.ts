@@ -1,4 +1,5 @@
-import {CommandBase, IContext} from "../common/context";
+import {CommandBase} from "../common/commandBase";
+import { IContext } from "../../../types/IContext";
 
 export class DeleteDocumentCommand extends CommandBase<void> {
   constructor(private id: string) {

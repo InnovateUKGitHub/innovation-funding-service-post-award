@@ -1,6 +1,5 @@
 import { FormHandlerBase, IFormBody, IFormButton } from "./formHandlerBase";
 import { ClaimForecastRoute, ClaimsDashboardRoute, PrepareClaimParams, PrepareClaimRoute } from "../../ui/containers";
-import { IContext } from "../features/common/context";
 import { Results } from "../../ui/validation/results";
 import { ClaimDto, ClaimStatus } from "../../types";
 import { GetClaim } from "../features/claims";
@@ -8,6 +7,7 @@ import { UpdateClaimCommand } from "../features/claims/updateClaim";
 import { ClaimDtoValidator } from "../../ui/validators/claimDtoValidator";
 import { getClaimEditor } from "../../ui/redux/selectors";
 import { ILinkInfo } from "../../types/ILinkInfo";
+import { IContext } from "../../types/IContext";
 
 export class PrepareClaimFormHandler extends FormHandlerBase<PrepareClaimParams, ClaimDto> {
   constructor() {

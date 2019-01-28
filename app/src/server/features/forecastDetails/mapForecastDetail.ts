@@ -1,5 +1,5 @@
-import {IContext} from "../common/context";
 import {ISalesforceProfileDetails} from "../../repositories";
+import { IContext } from "../../../types/IContext";
 
 const SALESFORCE_DATE_FORMAT = "yyyy-MM-dd";
 

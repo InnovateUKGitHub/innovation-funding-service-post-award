@@ -1,8 +1,9 @@
-import { IContext, QueryBase } from "../common/context";
+import { QueryBase } from "../common/queryBase";
 import mapClaim from "./mapClaim";
 import { ClaimDto } from "../../../types";
-import { ISalesforceClaim, ISalesforceProfileTotalPeriod, PROJECT_LEAD_IDENTIFIER } from "../../repositories";
+import { ISalesforceClaim, PROJECT_LEAD_IDENTIFIER } from "../../repositories";
 import { IComparer } from "../../../util/comparator";
+import { IContext } from "../../../types/IContext";
 
 export class GetAllClaimsForProjectQuery extends QueryBase<ClaimDto[]> {
   constructor(private projectId: string) {
