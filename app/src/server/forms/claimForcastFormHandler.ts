@@ -1,5 +1,4 @@
 import { FormHandlerBase, IFormBody, IFormButton } from "./formHandlerBase";
-import { IContext } from "../features/common/context";
 import { Results } from "../../ui/validation/results";
 import { ClaimForcastParams, ClaimForecastRoute, ClaimsDashboardRoute, PrepareClaimRoute } from "../../ui/containers";
 import { getForecastDetailsEditor } from "../../ui/redux/selectors";
@@ -8,6 +7,7 @@ import { GetAllForecastsForPartnerQuery, UpdateForecastDetailsCommand } from "..
 import { GetByIdQuery } from "../features/projects";
 import { GetCostCategoriesQuery } from "../features/claims";
 import { ILinkInfo } from "../../types/ILinkInfo";
+import { IContext } from "../../types/IContext";
 
 export class ClaimForcastFormHandler extends FormHandlerBase<ClaimForcastParams, ForecastDetailsDTO[]> {
 

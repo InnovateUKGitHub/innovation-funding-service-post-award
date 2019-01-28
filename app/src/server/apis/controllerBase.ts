@@ -4,8 +4,8 @@ import multer from "multer";
 import express, { NextFunction, Request, Response } from "express";
 
 import { FileUpload } from "../../types/FileUpload";
-import { ErrorCode, IAppError } from "../../types/IAppError";
-import { AppError, NotFoundError } from "../features/common/appError";
+import { IAppError } from "../../types/IAppError";
+import { NotFoundError } from "../features/common/appError";
 import { errorHandlerApi } from "../errorHandlers";
 import { IUser } from "../../types/IUser";
 

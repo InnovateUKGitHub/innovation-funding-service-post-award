@@ -1,4 +1,5 @@
-import {IContext, QueryBase} from "../common/context";
+import {QueryBase} from "../common/queryBase";
+import { IContext } from "../../../types/IContext";
 
 export class GetAllClaimDetailsByPartner extends QueryBase<ClaimDetailsDto[]> {
   constructor(private partnerId: string) {

@@ -1,7 +1,7 @@
 import * as Repositories from "../../repositories";
 import { Configuration, IConfig } from "./config";
-import { Clock, IClock } from "./clock";
-import { ILogger, Logger } from "./logger";
+import { Clock } from "./clock";
+import { Logger } from "./logger";
 import {
   ISalesforceConnectionDetails,
   salesforceConnection,
@@ -10,99 +10,23 @@ import {
 } from "../../repositories/salesforceConnection";
 import { Cache } from "./cache";
 import { SalesforceInvalidFilterError } from "../../repositories/salesforceBase";
-import { AppError, BadRequestError, NotFoundError, ValidationError } from "./appError";
+import { AppError, BadRequestError, ForbiddenError, NotFoundError, ValidationError } from "./appError";
 import { ErrorCode, IUser } from "../../../types";
-import { IRoleInfo } from "../projects/getAllProjectRolesForUser";
+import { GetAllProjectRolesForUser, IRoleInfo } from "../projects/getAllProjectRolesForUser";
+import { ICaches, IContext, IRunnable, ISyncRunnable } from "../../../types/IContext";
+import { QueryBase, SyncQueryBase } from "./queryBase";
+import { CommandBase, SyncCommandBase } from "./commandBase";
 
-export interface IRunnable<T> {
-  Run: (context: IContext) => Promise<T>;
-  LogMessage: () => any[];
-}
-
-export interface ISyncRunnable<T> {
-  Run: (context: IContext) => T;
-  LogMessage: () => any[];
-}
-
-export abstract class QueryBase<T> {
-
-  protected abstract Run(context: IContext): Promise<T>;
-
-  protected LogMessage(): any[] {
-    return [this];
-  }
-}
-
-export abstract class SyncQueryBase<T> {
-
-  protected abstract Run(context: IContext): T;
-
-  protected LogMessage(): any[] {
-    return [this];
-  }
-}
-
-export abstract class CommandBase<T> {
-
-  protected abstract Run(context: IContext): Promise<T>;
-
-  protected LogMessage(): any[] {
-    return [this];
-  }
-}
-
-export abstract class SyncCommandBase<T> {
-
-  protected abstract Run(context: IContext): T;
-
-  protected LogMessage(): any[] {
-    return [this];
-  }
-}
-
-export interface IRepositories {
-  claims: Readonly<Repositories.IClaimRepository>;
-  claimDetails: Readonly<Repositories.IClaimDetailsRepository>;
-  contacts: Readonly<Repositories.IContactsRepository>;
-  costCategories: Readonly<Repositories.ICostCategoryRepository>;
-  contentDocument: Readonly<Repositories.ContentDocumentRepository>;
-  contentDocumentLinks: Readonly<Repositories.ContentDocumentLinkRepository>;
-  contentVersions: Readonly<Repositories.ContentVersionRepository>;
-  profileDetails: Readonly<Repositories.IProfileDetailsRepository>;
-  profileTotalPeriod: Readonly<Repositories.IProfileTotalPeriodRepository>;
-  profileTotalCostCategory: Readonly<Repositories.IProfileTotalCostCategoryRepository>;
-  projects: Readonly<Repositories.IProjectRepository>;
-  partners: Readonly<Repositories.IPartnerRepository>;
-  projectContacts: Readonly<Repositories.IProjectContactsRepository>;
-  claimLineItems: Readonly<Repositories.IClaimLineItemRepository>;
-  claimTotalCostCategory: Readonly<Repositories.IClaimTotalCostCategoryRepository>;
-}
-
-export interface ICaches {
-  costCategories: Readonly<Cache<CostCategoryDto[]>>;
-  projectRoles: Readonly<Cache<{ [key: string]: IRoleInfo }>>;
-}
-
-export interface IContext {
-  repositories: IRepositories;
-  caches: ICaches;
-  config: IConfig;
-  runQuery<TResult>(cmd: QueryBase<TResult>): Promise<TResult>;
-  runSyncQuery<TResult>(cmd: SyncQueryBase<TResult>): TResult;
-  runCommand<TResult>(cmd: CommandBase<TResult>): Promise<TResult>;
-  runSyncCommand<TResult>(cmd: SyncCommandBase<TResult>): TResult;
-  clock: IClock;
-  logger: ILogger;
-  user: IUser;
-}
-
-const cachesImplimentation: ICaches = {
+const cachesImplementation: ICaches = {
   costCategories: new Cache<CostCategoryDto[]>(60 * 12),
   projectRoles: new Cache<{ [key: string]: IRoleInfo}>(60 * 12),
 };
 
 const constructErrorResponse = <E extends Error>(error: E): AppError => {
   if (error instanceof ValidationError) {
+    return error;
+  }
+  if (error instanceof ForbiddenError) {
     return error;
   }
   if (error instanceof BadRequestError) {
@@ -151,7 +75,7 @@ export class Context implements IContext {
     claimLineItems: new Repositories.ClaimLineItemRepository(() => this.getSalesforceConnection())
   };
 
-  public caches = cachesImplimentation;
+  public caches = cachesImplementation;
 
   private salesforceConnectionDetails: ISalesforceConnectionDetails;
 
@@ -171,6 +95,8 @@ export class Context implements IContext {
 
   private async runAsync<TResult>(runnable: IRunnable<TResult>): Promise<TResult> {
     try {
+      const auth = await new GetAllProjectRolesForUser().Run(this);
+      if (!(await runnable.accessControl(auth, this))) throw new ForbiddenError();
       return await runnable.Run(this);
     }
     catch(e) {

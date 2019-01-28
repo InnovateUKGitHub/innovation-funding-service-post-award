@@ -1,8 +1,9 @@
 // tslint:disable:no-bitwise
-import { CommandBase, IContext } from "../common/context";
+import { CommandBase } from "../common/commandBase";
 import { ISalesforceProject } from "../../repositories/projectsRepository";
 import { ClaimFrequency, ProjectDto, ProjectRole } from "../../../types";
 import { GetPeriodInfoQuery } from ".";
+import { IContext } from "../../../types/IContext";
 
 export class MapToProjectDtoCommand extends CommandBase<ProjectDto> {
   constructor(readonly item: ISalesforceProject, readonly roles: ProjectRole) {
