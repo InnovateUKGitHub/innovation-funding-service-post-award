@@ -47,6 +47,7 @@ class ViewForecastComponent extends ContainerBase<Params, PendingForecastData, C
         <ACC.Projects.Title pageTitle="View project" project={data.project} />
         {this.renderTabs(isMoPm, data)}
         <ACC.Section title={partnerName} qa="partner-name">
+          <ACC.Renderers.Messages messages={this.props.messages} />
           {renderWarning(data)}
           <ACC.Claims.ForecastTable data={data} hideValidation={isMoPm} />
         </ACC.Section>

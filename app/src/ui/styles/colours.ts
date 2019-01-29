@@ -1,3 +1,4 @@
+// https://design-system.service.gov.uk/styles/colour/
 // TEXT
 export const GOVUK_TEXT_COLOUR = "#0b0c0c";
 export const GOVUK_SECONDARY_TEXT_COLOUR = "#6f777b";
@@ -18,4 +19,4 @@ export const GOVUK_COLOUR_GREY_4 = "#f8f8f8";
 export const GOVUK_LINK_COLOUR = "#005ea5";
 
 // EXTENDED COLOURS
-export const GOVUK_COLOUR_GREEN = "	#006435";
+export const GOVUK_COLOUR_GREEN = "#006435";

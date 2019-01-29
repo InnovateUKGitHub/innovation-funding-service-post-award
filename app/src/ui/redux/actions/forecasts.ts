@@ -1,5 +1,5 @@
 import { ApiClient } from "../../apiClient";
-import { AsyncThunk, conditionalLoad, DataLoadAction, dataLoadAction, EditorAction, SyncThunk } from "./common";
+import { AsyncThunk, conditionalLoad, DataLoadAction, dataLoadAction, EditorAction, messageSuccess, SyncThunk } from "./common";
 import { ForecastDetailsDtosValidator } from "../../validators/forecastDetailsDtosValidator";
 import { handleEditorError, UpdateEditorAction, updateEditorAction } from "./common/editorActions";
 import { LoadingStatus } from "../../../shared/pending";
@@ -47,7 +47,7 @@ export function saveForecastDetails(
   claimDetails: ClaimDetailsDto[],
   golCosts: GOLCostDto[],
   onComplete: () => void
-): AsyncThunk<void, DataLoadAction | EditorAction> {
+): AsyncThunk<void, DataLoadAction | EditorAction | messageSuccess> {
   return (dispatch, getState) => {
     const state = getState();
     const selector = getForecastDetailsEditor(partnerId);
@@ -64,6 +64,7 @@ export function saveForecastDetails(
 
     return ApiClient.forecastDetails.update({partnerId, forecasts, submit: updateClaim, user: state.user}).then(result => {
       dispatch(dataLoadAction(selector.key, selector.store, LoadingStatus.Done, result));
+      dispatch(messageSuccess("Your forecast has been updated."));
       onComplete();
     }).catch((e) => {
       dispatch(handleEditorError({id: selector.key, store: selector.store, dto: forecasts, validation, error: e}));
