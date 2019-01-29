@@ -37,7 +37,7 @@ export class EditClaimLineItemsFormHandler extends FormHandlerBase<EditClaimLine
   }
 
   protected async run(context: IContext, params: EditClaimLineItemsParams, button: IFormButton, dto: ClaimLineItemDto[]): Promise<ILinkInfo> {
-    const command = new SaveLineItemsCommand(params.partnerId, params.costCategoryId, params.periodId, dto);
+    const command = new SaveLineItemsCommand(params.projectId, params.partnerId, params.costCategoryId, params.periodId, dto);
 
     await context.runCommand(command);
 
