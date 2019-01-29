@@ -46,7 +46,7 @@ class Controller extends ControllerBase<ClaimLineItemDto> implements IClaimLineI
       throw new BadRequestError("Request is missing required fields");
     }
 
-    const command = new SaveLineItemsCommand(partnerId, costCategoryId, periodId, lineItems);
+    const command = new SaveLineItemsCommand(projectId, partnerId, costCategoryId, periodId, lineItems);
     const context = contextProvider.start(params);
 
     await context.runCommand(command);
