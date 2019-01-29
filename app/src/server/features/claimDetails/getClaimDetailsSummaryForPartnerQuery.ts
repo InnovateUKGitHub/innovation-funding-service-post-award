@@ -1,10 +1,16 @@
 import { QueryBase } from "../common/queryBase";
 import { GetCostCategoriesQuery } from "../claims";
 import { IContext } from "../../../types/IContext";
+import { Authorisation, ProjectRole } from "../../../types";
 
 export class GetClaimDetailsSummaryForPartnerQuery extends QueryBase<ClaimDetailsSummaryDto[]> {
-    constructor(private partnerId: string, private periodId: number) {
+    constructor(private projectId: string, private partnerId: string, private periodId: number) {
         super();
+    }
+
+    protected async accessControl(auth: Authorisation, context: IContext) {
+        return auth.hasAnyProjectRoles(this.projectId, ProjectRole.MonitoringOfficer, ProjectRole.ProjectManager) ||
+            auth.hasPartnerRole(this.projectId, this.partnerId, ProjectRole.FinancialContact);
     }
 
     protected async Run(context: IContext) {
@@ -30,7 +36,7 @@ export class GetClaimDetailsSummaryForPartnerQuery extends QueryBase<ClaimDetail
                 costsClaimedToDate,
                 costsClaimedThisPeriod,
                 remainingOfferCosts
-        });}
-    );
+            });
+        });
     }
 }

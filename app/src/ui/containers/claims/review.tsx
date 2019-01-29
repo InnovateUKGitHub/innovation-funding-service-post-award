@@ -164,7 +164,7 @@ export const ReviewClaim = definition.connect({
   },
   withCallbacks: (dispatch) => ({
     onChange: (partnerId, periodId, dto, details, costCategories) => dispatch(Actions.validateClaim(partnerId, periodId, dto, details, costCategories)),
-    onSave: (projectId, partnerId, periodId, dto, details, costCategories) => dispatch(Actions.saveClaim(partnerId, periodId, dto, details, costCategories, () => dispatch(Actions.navigateTo(AllClaimsDashboardRoute.getLink({projectId}))))),
+    onSave: (projectId, partnerId, periodId, dto, details, costCategories) => dispatch(Actions.saveClaim(projectId, partnerId, periodId, dto, details, costCategories, () => dispatch(Actions.navigateTo(AllClaimsDashboardRoute.getLink({projectId}))))),
   })
 });
 
@@ -178,7 +178,7 @@ export const ReviewClaimRoute = definition.route({
         Actions.loadPartnersForProject(params.projectId),
         Actions.loadCostCategories(),
         Actions.loadClaim(params.partnerId, params.periodId),
-        Actions.loadClaimDetailsSummaryForPartner(params.partnerId, params.periodId),
+        Actions.loadClaimDetailsSummaryForPartner(params.projectId, params.partnerId, params.periodId),
         ...forecastDataLoadActions(params)
     ],
     container: ReviewClaim
