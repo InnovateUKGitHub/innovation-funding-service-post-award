@@ -2,7 +2,8 @@ import { actions } from "redux-router5";
 import {
   ActionsUnion,
   DataLoadAction,
-  EditorAction
+  EditorAction,
+  MessageActions
 } from "./common";
 
 type RouterActions = ActionsUnion<typeof actions>;
@@ -10,5 +11,6 @@ type RouterActions = ActionsUnion<typeof actions>;
 export type RootActions =
   RouterActions  |
   DataLoadAction |
-  EditorAction
-  ;
+  EditorAction   |
+  MessageActions
+;
