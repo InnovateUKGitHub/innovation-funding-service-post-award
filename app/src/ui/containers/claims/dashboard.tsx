@@ -154,6 +154,7 @@ class Component extends ContainerBase<ClaimDashboardPageParams, Data, Callbacks>
         partners={[partner]}
         error={error}
         validator={validator}
+        messages={this.props.messages}
       >
         <Acc.Section>
           <Acc.SectionPanel qa="claims-totals" title="History">

@@ -14,12 +14,13 @@ interface Props {
     backLinkText?: string;
     error?: IAppError | null;
     validator?: Results<any> | null;
+    messages?: string[];
 }
 
 const renderError = (error?: IAppError | null) => error && <ACC.ErrorSummary error={error} />;
 const renderValidation = (validator?: Results<any> | null) => validator && <ACC.ValidationSummary validation={validator} compressed={false} />;
 
-export const ProjectOverviewPage = ({ project, selectedTab, children, partnerId, partners, error, validator, backLinkText }: Props) => (
+export const ProjectOverviewPage = ({ project, selectedTab, children, partnerId, partners, error, validator, backLinkText, messages }: Props) => (
     <ACC.Page>
         <ACC.Section>
             <ACC.BackLink route={ProjectDashboardRoute.getLink({})}>{backLinkText || "Back to dashboard"}</ACC.BackLink>
@@ -28,6 +29,7 @@ export const ProjectOverviewPage = ({ project, selectedTab, children, partnerId,
         {renderValidation(validator)}
         <ACC.Projects.Title pageTitle="View project" project={project} />
         <ACC.Projects.ProjectNavigation project={project} currentRoute={selectedTab} partners={partners}/>
+        <ACC.Renderers.Messages messages={messages || []} />
         {children}
     </ACC.Page>
 );
