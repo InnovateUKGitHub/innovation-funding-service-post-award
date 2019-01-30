@@ -9,8 +9,7 @@ export class GetAllLineItemsForClaimByCategoryQuery extends QueryBase<ClaimLineI
   }
 
   protected async accessControl(auth: Authorisation, context: IContext) {
-    return auth.hasProjectRole(this.projectId, ProjectRole.MonitoringOfficer)
-      || auth.hasPartnerRole(this.projectId, this.partnerId, ProjectRole.FinancialContact);
+    return auth.for(this.projectId, this.partnerId).hasAnyRoles(ProjectRole.MonitoringOfficer, ProjectRole.FinancialContact);
   }
 
   protected async Run(context: IContext) {

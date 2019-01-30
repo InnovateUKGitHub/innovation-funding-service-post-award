@@ -22,135 +22,135 @@ describe("authorisation", () => {
 
   const auth = new Authorisation(roles);
 
-  describe("GetProjectRoles", () => {
+  describe("getRoles for project", () => {
     it("when project not found returns Unknown", async () => {
-      expect(auth.getProjectRoles("ProjectX")).toBe(ProjectRole.Unknown);
+      expect(auth.for("ProjectX").getRoles()).toBe(ProjectRole.Unknown);
     });
 
     it("when project found returns correct role", async () => {
-      expect(auth.getProjectRoles("Project2")).toBe(roles.Project2.projectRoles);
+      expect(auth.for("Project2").getRoles()).toBe(roles.Project2.projectRoles);
     });
   });
 
-  describe("GetPartnerRoles", () => {
+  describe("getRoles for partner", () => {
     it("when project not found returns Unknown", async () => {
-      expect(auth.getPartnerRoles("ProjectX", "Partner2A")).toBe(ProjectRole.Unknown);
+      expect(auth.for("ProjectX", "Partner2A").getRoles()).toBe(ProjectRole.Unknown);
     });
 
     it("when partner not found returns Unknown", async () => {
-      expect(auth.getPartnerRoles("Project2", "PartnerX")).toBe(ProjectRole.Unknown);
+      expect(auth.for("Project2", "PartnerX").getRoles()).toBe(ProjectRole.Unknown);
     });
 
     it("when partner found returns correct role", async () => {
-      expect(auth.getPartnerRoles("Project2", "Partner2A")).toBe(roles.Project2.partnerRoles.Partner2A);
+      expect(auth.for("Project2", "Partner2A").getRoles()).toBe(roles.Project2.partnerRoles.Partner2A | roles.Project2.projectRoles);
     });
   });
 
-  describe("HasProjectRole", () => {
+  describe("hasRole for project", () => {
     it("when project not found returns false", async () => {
-      expect(auth.hasProjectRole("ProjectX", ProjectRole.FinancialContact)).toBe(false);
+      expect(auth.for("ProjectX").hasRole(ProjectRole.FinancialContact)).toBe(false);
     });
 
     it("when project found but not role returns false", async () => {
-      expect(auth.hasProjectRole("Project1", ProjectRole.MonitoringOfficer)).toBe(false);
+      expect(auth.for("Project1").hasRole(ProjectRole.MonitoringOfficer)).toBe(false);
     });
 
     it("when project found and role found returns true", async () => {
-      expect(auth.hasProjectRole("Project1", ProjectRole.FinancialContact)).toBe(true);
+      expect(auth.for("Project1").hasRole(ProjectRole.FinancialContact)).toBe(true);
     });
 
     it("when project found and role one of many returns true", async () => {
-      expect(auth.hasProjectRole("Project2", ProjectRole.MonitoringOfficer)).toBe(true);
+      expect(auth.for("Project2").hasRole(ProjectRole.MonitoringOfficer)).toBe(true);
     });
   });
 
-  describe("HasAllProjectRoles", () => {
+  describe("hasAllRoles for project", () => {
     it("when project not found returns false", async () => {
-      expect(auth.hasAllProjectRoles("ProjectX", ProjectRole.FinancialContact, ProjectRole.MonitoringOfficer)).toBe(false);
+      expect(auth.for("ProjectX").hasAllRoles(ProjectRole.FinancialContact, ProjectRole.MonitoringOfficer)).toBe(false);
     });
 
     it("when project found but not all roles found returns false", async () => {
-      expect(auth.hasAllProjectRoles("Project1", ProjectRole.FinancialContact, ProjectRole.MonitoringOfficer)).toBe(false);
+      expect(auth.for("Project1").hasAllRoles(ProjectRole.FinancialContact, ProjectRole.MonitoringOfficer)).toBe(false);
     });
 
     it("when project found and all roles found returns true", async () => {
-      expect(auth.hasAllProjectRoles("Project2", ProjectRole.FinancialContact, ProjectRole.MonitoringOfficer)).toBe(true);
+      expect(auth.for("Project2").hasAllRoles(ProjectRole.FinancialContact, ProjectRole.MonitoringOfficer)).toBe(true);
     });
   });
 
-  describe("HasAnyProjectRoles", () => {
+  describe("hasAnyRoles for project", () => {
     it("when project not found returns false", async () => {
-      expect(auth.hasAnyProjectRoles("ProjectX", ProjectRole.FinancialContact, ProjectRole.MonitoringOfficer)).toBe(false);
+      expect(auth.for("ProjectX").hasAnyRoles(ProjectRole.FinancialContact, ProjectRole.MonitoringOfficer)).toBe(false);
     });
 
     it("when project found and one roles found returns true", async () => {
-      expect(auth.hasAnyProjectRoles("Project1", ProjectRole.FinancialContact, ProjectRole.ProjectManager)).toBe(true);
+      expect(auth.for("Project1").hasAnyRoles(ProjectRole.FinancialContact, ProjectRole.ProjectManager)).toBe(true);
     });
 
     it("when project found and all roles found returns true", async () => {
-      expect(auth.hasAnyProjectRoles("Project2", ProjectRole.FinancialContact, ProjectRole.MonitoringOfficer)).toBe(true);
+      expect(auth.for("Project2").hasAnyRoles(ProjectRole.FinancialContact, ProjectRole.MonitoringOfficer)).toBe(true);
     });
 
     it("when project found and no roles found returns false", async () => {
-      expect(auth.hasAnyProjectRoles("Project1", ProjectRole.MonitoringOfficer, ProjectRole.ProjectManager)).toBe(false);
+      expect(auth.for("Project1").hasAnyRoles(ProjectRole.MonitoringOfficer, ProjectRole.ProjectManager)).toBe(false);
     });
   });
 
-  describe("HasPartnerRole", () => {
+  describe("hasRole for partner", () => {
     it("when project not found returns false", async () => {
-      expect(auth.hasPartnerRole("ProjectX", "Partner1A", ProjectRole.FinancialContact)).toBe(false);
+      expect(auth.for("ProjectX", "Partner1A").hasRole(ProjectRole.FinancialContact)).toBe(false);
     });
 
     it("when partner not found returns false", async () => {
-      expect(auth.hasPartnerRole("Project1", "PartnerX", ProjectRole.FinancialContact)).toBe(false);
+      expect(auth.for("Project1", "PartnerX").hasRole(ProjectRole.FinancialContact)).toBe(false);
     });
 
     it("when partner found and role not found returns false", async () => {
-      expect(auth.hasPartnerRole("Project1", "Partner1A", ProjectRole.ProjectManager)).toBe(false);
+      expect(auth.for("Project1", "Partner1A").hasRole(ProjectRole.ProjectManager)).toBe(false);
     });
 
     it("when partner found and role found returns true", async () => {
-      expect(auth.hasPartnerRole("Project1", "Partner1A", ProjectRole.FinancialContact)).toBe(true);
+      expect(auth.for("Project1", "Partner1A").hasRole(ProjectRole.FinancialContact)).toBe(true);
     });
   });
 
-  describe("HasAllPartnerRoles", () => {
+  describe("hasAllRoles for partner", () => {
     it("when project not found returns false", async () => {
-      expect(auth.hasAllPartnerRoles("ProjectX", "Partner1A", ProjectRole.FinancialContact, ProjectRole.MonitoringOfficer)).toBe(false);
+      expect(auth.for("ProjectX", "Partner1A").hasAllRoles(ProjectRole.FinancialContact, ProjectRole.MonitoringOfficer)).toBe(false);
     });
 
     it("when partner not found returns false", async () => {
-      expect(auth.hasAllPartnerRoles("Project1", "PartnerX", ProjectRole.FinancialContact, ProjectRole.MonitoringOfficer)).toBe(false);
+      expect(auth.for("Project1", "PartnerX").hasAllRoles(ProjectRole.FinancialContact, ProjectRole.MonitoringOfficer)).toBe(false);
     });
 
     it("when partner found and roles not all found returns false", async () => {
-      expect(auth.hasAllPartnerRoles("Project2", "Partner2A", ProjectRole.FinancialContact, ProjectRole.MonitoringOfficer)).toBe(false);
+      expect(auth.for("Project2", "Partner2A").hasAllRoles(ProjectRole.FinancialContact, 32)).toBe(false);
     });
 
     it("when partner found and roles all found not returns true", async () => {
-      expect(auth.hasAllPartnerRoles("Project2", "Partner2B", ProjectRole.FinancialContact, ProjectRole.MonitoringOfficer)).toBe(true);
+      expect(auth.for("Project2", "Partner2B").hasAllRoles(ProjectRole.FinancialContact, ProjectRole.MonitoringOfficer)).toBe(true);
     });
   });
 
-  describe("HasAnyPartnerRoles", () => {
+  describe("hasAnyRoles for partner", () => {
     it("when project not found returns false", async () => {
-      expect(auth.hasAnyPartnerRoles("ProjectX", "Partner1A", ProjectRole.FinancialContact, ProjectRole.MonitoringOfficer)).toBe(false);
+      expect(auth.for("ProjectX", "Partner1A").hasAnyRoles(ProjectRole.FinancialContact, ProjectRole.MonitoringOfficer)).toBe(false);
     });
 
     it("when partner not found returns false", async () => {
-      expect(auth.hasAnyPartnerRoles("Project1", "PartnerX", ProjectRole.FinancialContact, ProjectRole.MonitoringOfficer)).toBe(false);
+      expect(auth.for("Project1", "PartnerX").hasAnyRoles(ProjectRole.FinancialContact, ProjectRole.MonitoringOfficer)).toBe(false);
     });
 
     it("when partner found and roles not all found returns true", async () => {
-      expect(auth.hasAnyPartnerRoles("Project2", "Partner2A", ProjectRole.FinancialContact, ProjectRole.MonitoringOfficer)).toBe(true);
+      expect(auth.for("Project2", "Partner2A").hasAnyRoles(ProjectRole.FinancialContact, ProjectRole.MonitoringOfficer)).toBe(true);
     });
 
     it("when partner found and role all found returns true", async () => {
-      expect(auth.hasAnyPartnerRoles("Project2", "Partner2B", ProjectRole.FinancialContact, ProjectRole.MonitoringOfficer)).toBe(true);
+      expect(auth.for("Project2", "Partner2B").hasAnyRoles(ProjectRole.FinancialContact, ProjectRole.MonitoringOfficer)).toBe(true);
     });
 
     it("when partner found and no roles found returns false", async () => {
-      expect(auth.hasAnyPartnerRoles("Project2", "Partner2A", ProjectRole.ProjectManager, ProjectRole.MonitoringOfficer)).toBe(false);
+      expect(auth.for("Project2", "Partner2A").hasAnyRoles(ProjectRole.ProjectManager)).toBe(false);
     });
   });
 });
