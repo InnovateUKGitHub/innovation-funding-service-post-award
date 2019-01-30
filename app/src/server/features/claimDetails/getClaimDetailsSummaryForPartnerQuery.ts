@@ -9,8 +9,7 @@ export class GetClaimDetailsSummaryForPartnerQuery extends QueryBase<ClaimDetail
     }
 
     protected async accessControl(auth: Authorisation, context: IContext) {
-        return auth.hasAnyProjectRoles(this.projectId, ProjectRole.MonitoringOfficer, ProjectRole.ProjectManager) ||
-            auth.hasPartnerRole(this.projectId, this.partnerId, ProjectRole.FinancialContact);
+        return auth.for(this.projectId, this.partnerId).hasAnyRoles(ProjectRole.MonitoringOfficer, ProjectRole.ProjectManager, ProjectRole.FinancialContact);
     }
 
     protected async Run(context: IContext) {
