@@ -12,7 +12,9 @@ describe("UpdateClaimCommand", () => {
     const dto = mapClaim(context)(testData.createClaim());
     dto.id = null!;
 
-    const command = new UpdateClaimCommand(dto);
+    const project = context.testData.createProject();
+
+    const command = new UpdateClaimCommand(project.Id, dto);
     await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
   });
 
@@ -23,9 +25,11 @@ describe("UpdateClaimCommand", () => {
     const claim = testData.createClaim(null!, null!, x => x.Acc_ClaimStatus__c = "New" as any);
     const dto = mapClaim(context)(claim);
 
+    const project = context.testData.createProject();
+
     dto.status = ClaimStatus.DRAFT;
 
-    const command = new UpdateClaimCommand(dto);
+    const command = new UpdateClaimCommand(project.Id, dto);
     await context.runCommand(command);
 
     expect(claim.Acc_ClaimStatus__c).toBe(ClaimStatus.DRAFT);
@@ -38,9 +42,11 @@ describe("UpdateClaimCommand", () => {
     const claim = testData.createClaim(null!, null!, x => x.Acc_ClaimStatus__c = ClaimStatus.DRAFT);
     const dto = mapClaim(context)(claim);
 
+    const project = context.testData.createProject();
+
     dto.status = ClaimStatus.SUBMITTED;
 
-    const command = new UpdateClaimCommand(dto);
+    const command = new UpdateClaimCommand(project.Id, dto);
     await context.runCommand(command);
 
     expect(claim.Acc_ClaimStatus__c).toBe(ClaimStatus.SUBMITTED);
@@ -53,9 +59,11 @@ describe("UpdateClaimCommand", () => {
     const claim = testData.createClaim(null!, null!, x => x.Acc_ClaimStatus__c = ClaimStatus.DRAFT);
     const dto = mapClaim(context)(claim);
 
+    const project = context.testData.createProject();
+
     dto.status = ClaimStatus.AWAITING_IUK_APPROVAL;
 
-    const command = new UpdateClaimCommand(dto);
+    const command = new UpdateClaimCommand(project.Id, dto);
     await context.runCommand(command);
 
     expect(claim.Acc_ClaimStatus__c).toBe(ClaimStatus.AWAITING_IUK_APPROVAL);
@@ -68,9 +76,11 @@ describe("UpdateClaimCommand", () => {
     const claim = testData.createClaim(null!, null!, x => x.Acc_ClaimStatus__c = ClaimStatus.DRAFT);
     const dto = mapClaim(context)(claim);
 
+    const project = context.testData.createProject();
+
     dto.status = ClaimStatus.MO_QUERIED;
 
-    const command = new UpdateClaimCommand(dto);
+    const command = new UpdateClaimCommand(project.Id, dto);
     await context.runCommand(command);
 
     expect(claim.Acc_ClaimStatus__c).toBe(ClaimStatus.MO_QUERIED);
@@ -83,9 +93,11 @@ describe("UpdateClaimCommand", () => {
     const claim = testData.createClaim(null!, null!, x => x.Acc_ClaimStatus__c = ClaimStatus.DRAFT);
     const dto = mapClaim(context)(claim);
 
+    const project = context.testData.createProject();
+
     dto.status = ClaimStatus.PAID;
 
-    const command = new UpdateClaimCommand(dto);
+    const command = new UpdateClaimCommand(project.Id, dto);
     await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
   });
 
@@ -96,9 +108,11 @@ describe("UpdateClaimCommand", () => {
     const claim = testData.createClaim(null!, null!, x => x.Acc_LineItemDescription__c = "Original Message");
     const dto = mapClaim(context)(claim);
 
+    const project = context.testData.createProject();
+
     dto.comments = "A New Message";
 
-    const command = new UpdateClaimCommand(dto);
+    const command = new UpdateClaimCommand(project.Id, dto);
     await context.runCommand(command);
 
     expect(claim.Acc_LineItemDescription__c).toBe("A New Message");
@@ -111,9 +125,11 @@ describe("UpdateClaimCommand", () => {
     const claim = testData.createClaim();
     const dto = mapClaim(context)(claim);
 
+    const project = context.testData.createProject();
+
     dto.comments = "a".repeat(1001);
 
-    const command = new UpdateClaimCommand(dto);
+    const command = new UpdateClaimCommand(project.Id, dto);
     await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
   });
 
@@ -124,9 +140,11 @@ describe("UpdateClaimCommand", () => {
     const claim = testData.createClaim();
     const dto = mapClaim(context)(claim);
 
+    const project = context.testData.createProject();
+
     dto.comments = "a".repeat(1000);
 
-    const command = new UpdateClaimCommand(dto);
+    const command = new UpdateClaimCommand(project.Id, dto);
     await context.runCommand(command);
   });
 
@@ -141,8 +159,10 @@ describe("UpdateClaimCommand", () => {
     testData.createClaimDetail(costCategory, partner, 1, (x) => { x.Acc_PeriodCostCategoryTotal__c = 1000000;});
     testData.createClaimDetail(costCategory, partner, 2, (x) => { x.Acc_PeriodCostCategoryTotal__c = 1000000;});
 
+    const project = context.testData.createProject();
+
     const dto = mapClaim(context)(claim);
-    const command = new UpdateClaimCommand(dto);
+    const command = new UpdateClaimCommand(project.Id, dto);
     await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
   });
 

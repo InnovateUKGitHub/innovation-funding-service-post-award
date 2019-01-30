@@ -8,7 +8,9 @@ describe("claimDetails/GetAllForPartnerQuery", () => {
         const partner = context.testData.createPartner();
         context.testData.range(5, _ => context.testData.createCostCategory(x => x.Acc_OrganisationType__c = "Industrial"));
 
-        const query = new GetClaimDetailsSummaryForPartnerQuery(partner.Id, 1);
+        const project = context.testData.createProject();
+
+        const query = new GetClaimDetailsSummaryForPartnerQuery(project.Id, partner.Id, 1);
 
         const result = await context.runQuery(query);
 
@@ -24,9 +26,11 @@ describe("claimDetails/GetAllForPartnerQuery", () => {
         const partner = context.testData.createPartner();
         const periodId = 1;
 
+        const project = context.testData.createProject();
+
         context.testData.createClaimDetail(costCategory, partner, periodId, x => x.Acc_PeriodCostCategoryTotal__c = expectedCost);
 
-        const query = new GetClaimDetailsSummaryForPartnerQuery(partner.Id, periodId);
+        const query = new GetClaimDetailsSummaryForPartnerQuery(project.Id, partner.Id, periodId);
 
         const result = await context.runQuery(query);
 
@@ -47,10 +51,12 @@ describe("claimDetails/GetAllForPartnerQuery", () => {
         const partner = context.testData.createPartner();
         const periodId = 1;
 
+        const project = context.testData.createProject();
+
         context.testData.createClaimDetail(costCategory1, partner, periodId, x => x.Acc_PeriodCostCategoryTotal__c = expectedCost1);
         context.testData.createClaimDetail(costCategory2, partner, periodId, x => x.Acc_PeriodCostCategoryTotal__c = expectedCost2);
 
-        const query = new GetClaimDetailsSummaryForPartnerQuery(partner.Id, periodId);
+        const query = new GetClaimDetailsSummaryForPartnerQuery(project.Id, partner.Id, periodId);
 
         const result = await context.runQuery(query);
 

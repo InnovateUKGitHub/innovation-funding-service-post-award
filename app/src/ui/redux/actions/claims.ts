@@ -37,7 +37,7 @@ export function validateClaim(partnerId: string, periodId: number, dto: ClaimDto
   };
 }
 
-export function saveClaim(partnerId: string, periodId: number, claim: ClaimDto, details: ClaimDetailsSummaryDto[], costCategories: CostCategoryDto[], onComplete: () => void): AsyncThunk<void, DataLoadAction | EditorAction> {
+export function saveClaim(projectId: string, partnerId: string, periodId: number, claim: ClaimDto, details: ClaimDetailsSummaryDto[], costCategories: CostCategoryDto[], onComplete: () => void): AsyncThunk<void, DataLoadAction | EditorAction> {
   return (dispatch, getState) => {
     const state = getState();
     const selector = getClaimEditor(partnerId, periodId);
@@ -51,7 +51,7 @@ export function saveClaim(partnerId: string, periodId: number, claim: ClaimDto, 
     // send a loading action with undefined as it will just update the status
     dispatch(dataLoadAction(selector.key, selector.store, LoadingStatus.Loading, undefined));
 
-    return ApiClient.claims.update({partnerId, periodId, claim, user: state.user}).then((result) => {
+    return ApiClient.claims.update({projectId, partnerId, periodId, claim, user: state.user}).then((result) => {
       dispatch(dataLoadAction(selector.key, selector.store, LoadingStatus.Done, result));
       onComplete();
     }).catch((e) => {
