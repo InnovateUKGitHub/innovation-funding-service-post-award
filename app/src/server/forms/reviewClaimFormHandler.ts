@@ -27,7 +27,7 @@ export class ReviewClaimFormHandler extends FormHandlerBase<ReviewClaimParams, C
     }
 
     protected async run(context: IContext, params: ReviewClaimParams, button: IFormButton, dto: ClaimDto): Promise<ILinkInfo> {
-        await context.runCommand(new UpdateClaimCommand(dto));
+        await context.runCommand(new UpdateClaimCommand(params.projectId, dto));
         return AllClaimsDashboardRoute.getLink(params);
     }
 

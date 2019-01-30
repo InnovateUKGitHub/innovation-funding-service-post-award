@@ -22,7 +22,7 @@ export class PrepareClaimFormHandler extends FormHandlerBase<PrepareClaimParams,
   }
 
   protected async run(context: IContext, params: PrepareClaimParams, button: IFormButton, dto: ClaimDto): Promise<ILinkInfo> {
-    await context.runCommand(new UpdateClaimCommand(dto));
+    await context.runCommand(new UpdateClaimCommand(params.projectId, dto));
 
     if (button.name === "default") {
       return ClaimForecastRoute.getLink(params);

@@ -113,7 +113,7 @@ export const ClaimsDetailsRoute = definition.route({
         Actions.loadPartner(params.partnerId),
         Actions.loadCostCategories(),
         Actions.loadClaim(params.partnerId, params.periodId),
-        Actions.loadClaimDetailsSummaryForPartner(params.partnerId, params.periodId),
+        Actions.loadClaimDetailsSummaryForPartner(params.projectId, params.partnerId, params.periodId),
         Actions.loadIarDocuments(params.partnerId, params.periodId)
     ],
     container: ClaimsDetails

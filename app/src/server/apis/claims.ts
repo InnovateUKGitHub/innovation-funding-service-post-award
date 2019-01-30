@@ -10,7 +10,7 @@ export interface IClaimsApi {
   getAllByProjectId: (params: ApiParams<{ projectId: string }>) => Promise<ClaimDto[]>;
   getAllByPartnerId: (params: ApiParams<{ partnerId: string }>) => Promise<ClaimDto[]>;
   get: (params: ApiParams<{ partnerId: string, periodId: number }>) => Promise<ClaimDto | null>;
-  update: (params: ApiParams<{ partnerId: string, periodId: number, claim: ClaimDto }>) => Promise<ClaimDto>;
+  update: (params: ApiParams<{ projectId: string, partnerId: string, periodId: number, claim: ClaimDto }>) => Promise<ClaimDto>;
 }
 
 class Controller extends ControllerBase<ClaimDto> implements IClaimsApi {
@@ -30,7 +30,7 @@ class Controller extends ControllerBase<ClaimDto> implements IClaimsApi {
         return Promise.reject(new BadRequestError("Invalid parameters"));
       });
     this.getItem("/:partnerId/:periodId", (p) => ({ partnerId: p.partnerId as string, periodId: parseInt(p.periodId, 10) }), (p) => this.get(p));
-    this.putItem("/:partnerId/:periodId", (p, q, b) => ({ partnerId: p.partnerId as string, periodId: parseInt(p.periodId, 10), claim: processDto(b) }), (p) => this.update(p));
+    this.putItem("/:projectId/:partnerId/:periodId", (p, q, b) => ({ projectId: p.projectId, partnerId: p.partnerId, periodId: parseInt(p.periodId, 10), claim: processDto(b) }), (p) => this.update(p));
   }
 
   public async getAllByProjectId(params: ApiParams<{ projectId: string; }>) {
@@ -49,15 +49,15 @@ class Controller extends ControllerBase<ClaimDto> implements IClaimsApi {
     return contextProvider.start(params).runQuery(query);
   }
 
-  public async update(params: ApiParams<{ partnerId: string, periodId: number, claim: ClaimDto }>) {
-    const { partnerId, periodId, claim } = params;
+  public async update(params: ApiParams<{ projectId: string, partnerId: string, periodId: number, claim: ClaimDto }>) {
+    const { projectId, partnerId, periodId, claim } = params;
 
     if (partnerId !== claim.partnerId || periodId !== claim.periodId) {
       throw new BadRequestError();
     }
 
     const context = contextProvider.start(params);
-    const command = new UpdateClaimCommand(claim);
+    const command = new UpdateClaimCommand(projectId, claim);
     await context.runCommand(command);
 
     const query = new GetClaim(partnerId, periodId);
