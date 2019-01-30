@@ -161,7 +161,7 @@ class Component extends ContainerBase<ClaimDashboardPageParams, Data, Callbacks>
             <Acc.DualDetails displayDensity="Compact">
               <Details.Details qa="claims-totals-col-0" data={partner}>
                 <Details.Currency label="Grant offered" qa="gol-costs" value={x => x.totalParticipantGrant} />
-                <Details.Currency label="Costs claimed" qa="claimed-costs" value={x => x.totalParticipantCostsClaimed} />
+                <Details.Currency label="Costs claimed" qa="claimed-costs" value={x => x.totalParticipantCostsClaimed || 0} />
                 <Details.Percentage label="Percentage claimed" qa="percentage-costs" value={x => x.percentageParticipantCostsClaimed} />
               </Details.Details>
               <Details.Details qa="claims-totals-col-1" data={partner}>
