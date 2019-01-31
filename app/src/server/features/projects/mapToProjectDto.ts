@@ -68,23 +68,6 @@ export class MapToProjectDtoCommand extends CommandBase<ProjectDto> {
     }
   }
 
-  calcPeriod(context: IContext, dto: ProjectDto): number {
-    if(!dto.startDate || dto.claimFrequency === ClaimFrequency.Unknown) {
-      return 0;
-    }
-    const today        = context.clock.today();
-    const currentMonth = today.getUTCMonth();
-    const startMonth   = dto.startDate.getUTCMonth();
-    const frequency    = dto.claimFrequency;
-
-    // add 1 to increment index from 0-11 to 1-12
-    const periodMonth  = 1 + ((currentMonth - startMonth) + 12) % 12;
-
-    return frequency === ClaimFrequency.Quarterly
-      ? Math.ceil(periodMonth / 3)
-      : periodMonth;
-  }
-
   private getIFSUrl(project: ISalesforceProject, ifsUrl: string): string | null {
     if (ifsUrl && project.Acc_ProjectSource__c === "IFS") {
       /// foreach prop in project build regex replacing <<PROP_NAME>> with value and then replace the expected value in string
