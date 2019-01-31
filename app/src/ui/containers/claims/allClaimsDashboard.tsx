@@ -7,7 +7,6 @@ import * as Selectors from "../../redux/selectors";
 import React from "react";
 import * as Acc from "../../components";
 import { Accordion, AccordionItem } from "../../components";
-import { ClaimsDetailsRoute, PrepareClaimRoute, ReviewClaimRoute, } from ".";
 import { ClaimStatus } from "../../../types";
 import { DateTime } from "luxon";
 
@@ -98,7 +97,7 @@ class Component extends ContainerBase<Params, Data, {}> {
           <Acc.DualDetails>
             <SummaryDetails.Details data={project} qa="project_summary-col-0">
               <SummaryDetails.Currency label="Grant offered" qa="gol-costs" value={x => x.grantOfferLetterCosts} />
-              <SummaryDetails.Currency label="Costs claimed" qa="claimed-costs" value={x => x.costsClaimedToDate} />
+              <SummaryDetails.Currency label="Costs claimed" qa="claimed-costs" value={x => x.costsClaimedToDate || 0} />
               <SummaryDetails.Percentage label="Percentage claimed" qa="claimed-percentage" value={x => x.claimedPercentage} />
             </SummaryDetails.Details>
           </Acc.DualDetails>
