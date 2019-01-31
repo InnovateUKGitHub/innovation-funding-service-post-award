@@ -45,6 +45,7 @@ export class GetAllProjectRolesForUser extends QueryBase<Authorisation> {
     }, {});
   }
 
+  // TODO remove before live
   private async getServiceAccountRoles(context: IContext): Promise<{ [key: string]: IRoleInfo }> {
     const projects = await context.repositories.projects.getAll();
     const partners = await context.repositories.partners.getAll();
