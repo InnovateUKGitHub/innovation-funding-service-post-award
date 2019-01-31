@@ -16,7 +16,6 @@ export class TextAreaInput extends BaseInput<TextAreaInputProps, InputState> {
 
   public componentWillReceiveProps(nextProps: InputProps<string>) {
     if (nextProps.value !== this.props.value) {
-
       this.setState({ value: nextProps.value || "" });
       this.cancelTimeout();
     }
