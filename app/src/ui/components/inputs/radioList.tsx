@@ -1,5 +1,4 @@
 import * as React from "react";
-import classNames from "classnames";
 import { BaseInput } from "./baseInput";
 
 interface RadioListProps extends InputProps<{ id: string, value: string }> {
