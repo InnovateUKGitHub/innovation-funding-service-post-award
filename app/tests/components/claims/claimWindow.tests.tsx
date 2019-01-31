@@ -33,25 +33,29 @@ describe("Claim Window", () => {
   });
 
   describe("When in claims window", () => {
-    // period ends at end of last month
-    const periodEndDate = DateTime.local().set({day:1}).minus({days: 1});
-    const windowEndDate = periodEndDate.plus({days:30}).set({hour: 0, minute:0, second:0});
-    const daysRemaining = Math.ceil(windowEndDate.diff(DateTime.local(), "days").days) + 1;
+    // don't run these tests on the 31st as they don't apply
+    // 31st of a month is tested explicitly later
+    if(DateTime.local().day !== 31) {
+      // period ends at end of last month
+      const periodEndDate = DateTime.local().set({day:1}).minus({days: 1});
+      const windowEndDate = periodEndDate.plus({days:30}).set({hour: 0, minute:0, second:0});
+      const daysRemaining = Math.ceil(windowEndDate.diff(DateTime.local(), "days").days) + 1;
 
-    it("renders number of days remaning in claim window", () => {
-      const output = Enzyme.mount(<ClaimWindow periodEnd={periodEndDate.toJSDate()}/>).find("h3").text();
-      expect(output).toEqual(daysRemaining.toString());
-    });
+      it("renders number of days remaning in claim window", () => {
+        const output = Enzyme.mount(<ClaimWindow periodEnd={periodEndDate.toJSDate()}/>).find("h3").text();
+        expect(output).toEqual(daysRemaining.toString());
+      });
 
-    it("renders message for days remaing", () => {
-      const output = Enzyme.mount(<ClaimWindow periodEnd={periodEndDate.toJSDate()}/>).text();
-      expect(output).toContain(`days left of claim period`);
-    });
+      it("renders message for days remaing", () => {
+        const output = Enzyme.mount(<ClaimWindow periodEnd={periodEndDate.toJSDate()}/>).text();
+        expect(output).toContain(`days left of claim period`);
+      });
 
-    it("renders claim window end date", () => {
-      const output = Enzyme.mount(<ClaimWindow periodEnd={periodEndDate.toJSDate()}/>).text();
-      expect(output).toContain(`deadline ${windowEndDate.toFormat("d MMMM yyyy")}`);
-    });
+      it("renders claim window end date", () => {
+        const output = Enzyme.mount(<ClaimWindow periodEnd={periodEndDate.toJSDate()}/>).text();
+        expect(output).toContain(`deadline ${windowEndDate.toFormat("d MMMM yyyy")}`);
+      });
+    }
   });
 
   describe("When overdue", () => {
@@ -104,7 +108,7 @@ describe("Claim Window", () => {
     });
   });
 
-  describe("When 31th day of claim window", () => {
+  describe("When 31st day of claim window", () => {
     const periodEndDate = DateTime.fromString("2011/12/31", "yyyy/MM/dd");
 
     // set today to 30th of claim window
