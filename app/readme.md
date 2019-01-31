@@ -23,7 +23,7 @@ This is where application logic sits. They are run against a context (see below)
 
 - `Query<T>` - implements `common/IQuery<T>`
 
-A query returns a items or array of items usually a DTO
+A query returns an item or array of items usually a DTO
 
 - `Command` - implements `ICommand`
 - `Command<T>` - implements `ICommand`
@@ -42,16 +42,16 @@ It is constructed using a `contextProvider`
 
 `./server/apis`
 
-This is where rest endpoints are exposed. Defined as a class and exported as `controller`. Each api should generally return a single type of dto or maybe a summary dto and a full dto. They inherit from `ControllerBase<TDto>` or `ControllerBaseSummary<TFullDto, TSummaryDto>` *(todo when first required)*. 
+This is where rest endpoints are exposed. Defined as a class and exported as `controller`. Each api should generally return a single type of dto or maybe a summary dto and a full dto. They inherit from `ControllerBase<TDto>` or `ControllerBaseSummary<TFullDto, TSummaryDto>` *(todo when first required)*.
 
-In order to support the isomorphic rendering it is important to define an interface which is also implimented by the `apiclient` that runs on the client side using `fetch` (see below). 
+In order to support the isomorphic rendering it is important to define an interface which is also implemented by the `apiClient` that runs on the client side using `fetch` (see below).
 
 In the constructor these methods which match the interface are bound to express using protected methods in the base that separate extracting and typing parameters from the url and calling on to the methods in the class.
 
 New contollers interfaces are added to the `IApiClient` are registered with the server by adding to the `serverApis` const in `./server/apis/index.ts`
 
 	export interface IProjectContactsApi {
-	    getAllByProjectId: (projectId: string) => Promise<ProjectContactDto[]>    
+	    getAllByProjectId: (projectId: string) => Promise<ProjectContactDto[]>
 	}
 	
 	class Controller extends ControllerBase<ProjectContactDto> implements IProjectContactsApi {
@@ -83,7 +83,7 @@ Routes are objects that inherit from `AsyncRoute<T>` and provide the following p
 - `fromPrams<T>` - used to extract strongly typed params from the route
 - `component` - used to define the container to render
 - `title` - method to get the title
-- `loadData` - method that returns actions that are dispatched when the component first loads 
+- `loadData` - method that returns actions that are dispatched when the component first loads
 
 
 ### Containers
