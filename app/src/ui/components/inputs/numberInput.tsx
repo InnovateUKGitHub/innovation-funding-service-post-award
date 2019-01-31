@@ -52,7 +52,6 @@ export class NumberInput extends BaseInput<NumberInputProps, NumberInputState> {
     if (this.state.value !== value) {
       this.setState({ value });
       debounce ? this.debounce(() => this.changeNow(value), 250) : this.changeNow(value);
-
     }
   }
 
