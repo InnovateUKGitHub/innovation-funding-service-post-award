@@ -9,6 +9,7 @@ import { matchRoute } from "../routing/matchRoute";
 import { AsyncThunk } from "../redux/actions";
 import { IUser } from "../../types/IUser";
 import { ILinkInfo } from "../../types/ILinkInfo";
+import { Authorisation } from "../../types";
 
 interface BaseProps {
   messages: string[];
@@ -71,11 +72,11 @@ class ReduxContainerWrapper<TParams, TData, TCallbacks> {
         routePath: string,
         getParams: (route: RouteState) => TParams,
         getLoadDataActions: (params: TParams) => AsyncThunk<any>[],
-        accessControl?: (user: IUser, params: TParams) => boolean,
+        accessControl?: (auth: Authorisation, params: TParams) => boolean,
         container: React.ComponentClass<any> & { WrappedComponent: React.ComponentType<TParams & TData & TCallbacks & BaseProps> }
     }) {
         return {
-             getLink: (params: TParams): ILinkInfo => ({ routeName: options.routeName, routeParams: params, accessControl: (user: IUser) => !options.accessControl || options.accessControl(user, params) }),
+             getLink: (params: TParams): ILinkInfo => ({ routeName: options.routeName, routeParams: params, accessControl: (user: IUser) => !options.accessControl || options.accessControl(new Authorisation(user.roleInfo), params) }),
              ...options,
         };
     }

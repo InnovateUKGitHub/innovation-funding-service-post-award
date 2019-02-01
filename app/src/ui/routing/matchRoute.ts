@@ -3,12 +3,12 @@ import { routeConfig, RouteKeys } from "./routeConfig";
 import { HomeRoute } from "../containers";
 import { AsyncThunk, DataLoadAction } from "../redux/actions";
 import React from "react";
-import { IUser } from "../../types/IUser";
+import { Authorisation } from "../../types";
 
 export interface MatchedRoute {
   name: string;
   path: string;
-  accessControl?: (user: IUser, params: {}) => boolean;
+  accessControl?: (auth: Authorisation, params: {}) => boolean;
   getParams: (route: State) => {};
   getLoadDataActions: (params: {}) => AsyncThunk<DataLoadAction | void>[];
   container: React.ComponentClass<any>;
