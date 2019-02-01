@@ -19,7 +19,7 @@ class Controller extends ControllerBase<ClaimDto> implements IClaimsApi {
     super("claims");
 
     this.getItems("/",
-      (p, q) => ({ partnerId: q.partnerId as string, projectId: q.projectId as string }),
+      (p, q) => ({ partnerId: q.partnerId, projectId: q.projectId }),
       (p) => {
         if (p.partnerId) {
           return this.getAllByPartnerId(p);
@@ -29,7 +29,7 @@ class Controller extends ControllerBase<ClaimDto> implements IClaimsApi {
         }
         return Promise.reject(new BadRequestError("Invalid parameters"));
       });
-    this.getItem("/:partnerId/:periodId", (p) => ({ partnerId: p.partnerId as string, periodId: parseInt(p.periodId, 10) }), (p) => this.get(p));
+    this.getItem("/:partnerId/:periodId", (p) => ({ partnerId: p.partnerId, periodId: parseInt(p.periodId, 10) }), (p) => this.get(p));
     this.putItem("/:projectId/:partnerId/:periodId", (p, q, b) => ({ projectId: p.projectId, partnerId: p.partnerId, periodId: parseInt(p.periodId, 10), claim: processDto(b) }), (p) => this.update(p));
   }
 

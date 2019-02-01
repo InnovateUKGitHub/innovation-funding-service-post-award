@@ -2,14 +2,19 @@ import { CommandBase } from "../common/commandBase";
 import { ClaimDtoValidator } from "../../../ui/validators/claimDtoValidator";
 import { GetCostCategoriesQuery } from ".";
 import { GetClaimDetailsSummaryForPartnerQuery } from "../claimDetails";
-import { ClaimDto, ProjectDto } from "../../../types";
+import { Authorisation, ClaimDto, ProjectRole } from "../../../types";
 import { ValidationError } from "../common/appError";
 import { IContext } from "../../../types/IContext";
 
 export class UpdateClaimCommand extends CommandBase<boolean> {
   constructor(private projectId: string, private claimDto: ClaimDto) {
     super();
-   }
+  }
+
+  protected async accessControl(auth: Authorisation, context: IContext) {
+    return auth.for(this.projectId, this.claimDto.partnerId)
+      .hasAnyRoles(ProjectRole.MonitoringOfficer, ProjectRole.FinancialContact);
+  }
 
   protected async Run(context: IContext) {
 

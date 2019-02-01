@@ -17,29 +17,30 @@ export function getEmptyRoleInfo(): IRoleInfo {
 
 export class GetAllProjectRolesForUser extends QueryBase<Authorisation> {
   public async Run(context: IContext): Promise<Authorisation> {
-    const permisions = await context.caches.projectRoles.fetchAsync(context.user.email, () => context.config.salesforceUsername !== context.user.email ? this.getProjectRoles(context) : this.getServiceAccountRoles(context));
-    return new Authorisation(permisions);
+    const permissions = await context.caches.projectRoles.fetchAsync(context.user.email, () => context.config.salesforceUsername !== context.user.email ? this.getProjectRoles(context) : this.getServiceAccountRoles(context));
+    return new Authorisation(permissions);
   }
 
   private async getProjectRoles(context: IContext) {
-    const roles = await context.repositories.projectContacts.getAllForUser(context.user.email);
+    const contacts = await context.repositories.projectContacts.getAllForUser(context.user.email);
     const partners = await context.repositories.partners.getAll();
 
     // get all rows grouped by project into lookup
-    return roles.reduce<{ [key: string]: IRoleInfo }>((allRoles, current) => {
-      const newRole = this.getProjectRole(current.Acc_Role__c);
+    return contacts.reduce<{ [key: string]: IRoleInfo }>((allRoles, contact) => {
+      const newRole = this.getProjectRole(contact.Acc_Role__c);
 
-      // get current for project and if null initalise to empty and assign to allRoles
-      const roleInfo = allRoles[current.Acc_ProjectId__c] = (allRoles[current.Acc_ProjectId__c] || getEmptyRoleInfo());
+      // get contact for project and if null initalise to empty and assign to allRoles
+      const roleInfo = allRoles[contact.Acc_ProjectId__c] = (allRoles[contact.Acc_ProjectId__c] || getEmptyRoleInfo());
 
       roleInfo.projectRoles = roleInfo.projectRoles | newRole;
 
-      // if this is a partner level role then add it at the partner level too
-      if (newRole === ProjectRole.FinancialContact && current.Acc_AccountId__c) {
-        partners.filter(x => x.Acc_AccountId__r.Id === current.Acc_AccountId__c).forEach(x => {
-          roleInfo.partnerRoles[x.Id] = roleInfo.partnerRoles[x.Id] | newRole;
-        });
-      }
+      partners.forEach(partner => {
+        roleInfo.partnerRoles[partner.Id] = roleInfo.partnerRoles[partner.Id] | ProjectRole.Unknown;
+        // if this is a partner level contact then add it at the partner level too
+        if (contact.Acc_AccountId__c && partner.Acc_AccountId__r.Id === contact.Acc_AccountId__c && newRole === ProjectRole.FinancialContact) {
+          roleInfo.partnerRoles[partner.Id] = roleInfo.partnerRoles[partner.Id] | newRole;
+        }
+      });
 
       return allRoles;
     }, {});

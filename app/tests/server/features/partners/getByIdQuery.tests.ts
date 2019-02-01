@@ -37,7 +37,7 @@ describe("getAllForProjectQuery", () => {
             awardRate: 50,
             capLimit: 50,
             totalFutureForecastsForParticipants: 1002,
-            roles: ProjectRole.Unknown,
+            roles: ProjectRole.ProjectManager,
             forecastLastModifiedDate: null,
         };
 
@@ -127,6 +127,6 @@ describe("getAllForProjectQuery", () => {
         context.user.set({ email: projectContact2.Acc_ContactId__r.Email });
 
         const result2 = await context.runQuery(new GetByIdQuery(partner.Id));
-        expect(result2.roles).toBe(ProjectRole.Unknown);
+        expect(result2.roles).toBe(ProjectRole.ProjectManager);
     });
 });
