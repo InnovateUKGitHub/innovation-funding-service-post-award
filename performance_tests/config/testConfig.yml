@@ -1,13 +1,15 @@
 execution:
-- concurrency: 20
-  ramp-up: 1m
-  hold-for: 2m
+- concurrency: 10
+  ramp-up: 15s
+  hold-for: 15s
   scenario: acc-performance-test
 
 scenarios:
   acc-performance-test:
     requests:
-    - envURL
+    - url: http://blazedemo.com
+      method: GET
+      label: homepage
 
 reporting:
 - module: console
@@ -20,6 +22,7 @@ reporting:
   percentiles: true
   failed-labels: false
   test-duration: true
+  dump-csv: results/final-stats/final-stats.csv
 - module: junit-xml
   data-source: pass-fail
-  filename: TaurusResult/junit-result.xml
+  filename: results/junit-xml/junit-result.xml
