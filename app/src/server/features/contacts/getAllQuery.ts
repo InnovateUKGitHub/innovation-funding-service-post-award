@@ -1,6 +1,6 @@
-import { QueryBase } from "../common/queryBase";
+import { QueryBase } from "../common";
 import { mapItem } from "./mapItem";
-import { IContext } from "../../../types/IContext";
+import { IContext } from "../../../types";
 
 export class GetAllQuery extends QueryBase<IContact[]> {
   async Run(context: IContext) {

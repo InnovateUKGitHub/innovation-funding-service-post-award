@@ -89,11 +89,14 @@ export class ClaimDetailDocumentsComponent extends ContainerBase<ClaimDetailDocu
   }
 
   private renderContents({project, costCategories, documents, editor, deleteEditor}: CombinedData) {
-    const back = EditClaimLineItemsRoute.getLink({ projectId: project.id, partnerId: this.props.partnerId, periodId: this.props.periodId, costCategoryId: this.props.costCategoryId });
+    const back = EditClaimLineItemsRoute.getLink({
+      projectId: project.id,
+      partnerId: this.props.partnerId,
+      periodId: this.props.periodId,
+      costCategoryId: this.props.costCategoryId
+    });
     const costCategory = costCategories.find(x => x.id === this.props.costCategoryId)! || {};
-
     const UploadForm = ACC.TypedForm<{file: File | null }>();
-
     const validationMessage = editor && <ACC.ValidationSummary validation={editor.validator} compressed={false} />;
 
     return (
@@ -106,7 +109,7 @@ export class ClaimDetailDocumentsComponent extends ContainerBase<ClaimDetailDocu
         <ACC.Projects.Title pageTitle={`${costCategory.name} documents`}  project={project} />
         {this.renderSection(documents)}
         <ACC.Section>
-          <UploadForm.Form enctype="multipart/form-data" qa="claimDetailDocuments" data={editor.data} onSubmit={() => this.onSave(editor.data)} onChange={(dto) => this.onChange(dto)}>
+          <UploadForm.Form enctype="multipart" qa="claimDetailDocuments" data={editor.data} onSubmit={() => this.onSave(editor.data)} onChange={(dto) => this.onChange(dto)}>
             <UploadForm.Fieldset heading="Upload">
               <UploadForm.FileUpload
                 label="Upload documents"

@@ -15,7 +15,5 @@ export const ValidationError: React.SFC<Props> = ({ error }) => {
     return null;
   }
 
-  return (
-    <a id={error.key} style={alignTextLeftStyle} className="govuk-error-message">{error.errorMessage}</a>
-  );
+  return (<a id={error.key} style={alignTextLeftStyle} className="govuk-error-message">{error.errorMessage}</a>);
 };

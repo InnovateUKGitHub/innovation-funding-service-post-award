@@ -31,25 +31,30 @@ export interface IClaimDetailsRepository {
 }
 
 export class ClaimDetailsRepository extends SalesforceBase<ISalesforceClaimDetails> implements IClaimDetailsRepository {
-  private recordType: string = "Claims Detail";
+  private readonly recordType: string = "Claims Detail";
 
   constructor(connection: () => Promise<Connection>) {
     super(connection, "Acc_Claims__c", fields);
   }
 
   getAllByPartnerForPeriod(partnerId: string, periodId: number): Promise<ISalesforceClaimDetails[]> {
-    const filter = `Acc_ProjectParticipant__c = '${partnerId}' AND RecordType.Name = '${this.recordType}' AND Acc_ProjectPeriodNumber__c = ${periodId} AND Acc_ClaimStatus__c != 'New'`;
+    const filter = `
+      Acc_ProjectParticipant__c = '${partnerId}'
+      AND RecordType.Name = '${this.recordType}'
+      AND Acc_ProjectPeriodNumber__c = ${periodId}
+      AND Acc_ClaimStatus__c != 'New'
+    `;
     return super.where(filter);
   }
 
   async get(claimDetailKey: ClaimDetailKey): Promise<ISalesforceClaimDetails> {
     const { partnerId, periodId, costCategoryId } = claimDetailKey;
     const filter = `
-    Acc_ProjectParticipant__c = '${partnerId}'
-    AND RecordType.Name = '${this.recordType}'
-    AND Acc_ProjectPeriodNumber__c = ${periodId}
-    AND Acc_CostCategory__c = '${costCategoryId}'
-    AND Acc_ClaimStatus__c != 'New'
+      Acc_ProjectParticipant__c = '${partnerId}'
+      AND RecordType.Name = '${this.recordType}'
+      AND Acc_ProjectPeriodNumber__c = ${periodId}
+      AND Acc_CostCategory__c = '${costCategoryId}'
+      AND Acc_ClaimStatus__c != 'New'
     `;
     const claimDetail = await super.filterOne(filter);
     if (!claimDetail ) {
@@ -59,7 +64,12 @@ export class ClaimDetailsRepository extends SalesforceBase<ISalesforceClaimDetai
   }
 
   getAllByPartnerWithPeriodLt(partnerId: string, periodId: number): Promise<ISalesforceClaimDetails[]> {
-    const filter = `Acc_ProjectParticipant__c = '${partnerId}' AND RecordType.Name = '${this.recordType}' AND Acc_ProjectPeriodNumber__c < ${periodId} AND Acc_ClaimStatus__c != 'New'`;
+    const filter = `
+      Acc_ProjectParticipant__c = '${partnerId}'
+      AND RecordType.Name = '${this.recordType}'
+      AND Acc_ProjectPeriodNumber__c < ${periodId}
+      AND Acc_ClaimStatus__c != 'New'
+    `;
     return super.where(filter);
   }
 

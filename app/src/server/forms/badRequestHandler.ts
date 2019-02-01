@@ -3,7 +3,6 @@ import { IFormHandler } from "./formHandlerBase";
 import { BadRequestError } from "../features/common/appError";
 
 export class BadRequestHandler implements IFormHandler {
-
   public routePath = "*";
   public middleware = [];
 

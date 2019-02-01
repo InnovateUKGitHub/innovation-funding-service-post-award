@@ -1,5 +1,4 @@
 import mimeTypes from "mime-types";
-import { Router } from "express-serve-static-core";
 import multer from "multer";
 import express, { NextFunction, Request, Response } from "express";
 
@@ -28,71 +27,74 @@ interface RequestQueryParams {
   [key: string]: string;
 }
 
+type GetParams<T> = (params: RequestUrlParams, query: RequestQueryParams, body?: any, file?: any) => T;
+type Run<T, TR> = (params: ApiParams<T>) => Promise<TR>;
+
 export abstract class ControllerBase<T> {
-  public readonly router: Router;
+  public readonly router: express.Router;
 
   protected constructor(public path: string) {
     this.router = express.Router();
   }
 
-  protected getCustom<TParams, TResponse>(path: string, getParams: (params: RequestUrlParams, query: RequestQueryParams) => TParams, run: (params: ApiParams<TParams>) => Promise<TResponse | null>, allowNulls?: boolean) {
+  protected getCustom<TParams, TResponse>(path: string, getParams: GetParams<TParams>, run: Run<TParams, TResponse | null>, allowNulls?: boolean) {
     this.router.get(path, this.executeMethod(200, getParams, run, allowNulls || false));
     return this;
   }
 
-  protected getItem<TParams>(path: string, getParams: (params: RequestUrlParams, query: RequestQueryParams) => TParams, run: (params: ApiParams<TParams>) => Promise<T | null>) {
+  protected getItem<TParams>(path: string, getParams: GetParams<TParams>, run: Run<TParams, T | null>) {
     return this.getCustom<TParams, T>(path, getParams, run, false);
   }
 
-  protected deleteItem<TParams>(path: string, getParams: (params: RequestUrlParams, query: RequestQueryParams) => TParams, run: (params: ApiParams<TParams>) => Promise<void>) {
+  protected deleteItem<TParams>(path: string, getParams: GetParams<TParams>, run: Run<TParams, void>) {
     this.router.delete(path, this.executeMethod(200, getParams, run, true));
     return this;
   }
 
-  protected getAttachment<TParams>(path: string, getParams: (params: RequestUrlParams, query: RequestQueryParams) => TParams, run: (params: ApiParams<TParams>) => Promise<DocumentDto>) {
+  protected getAttachment<TParams>(path: string, getParams: GetParams<TParams>, run: Run<TParams, DocumentDto>) {
     this.router.get(path, this.attachmentHandler(200, getParams, run));
     return this;
   }
 
-  protected postAttachment<TParams>(path: string, getParams: (params: RequestUrlParams, query: RequestQueryParams, body: any, file: any) => TParams, run: (params: ApiParams<TParams>) => Promise<{ documentId: string }>) {
+  protected postAttachment<TParams>(path: string, getParams: GetParams<TParams>, run: Run<TParams, { documentId: string }>) {
     this.router.post(path, upload.single("attachment"), this.executeMethod(201, getParams, run, false));
   }
 
-  protected putItem<TParams>(path: string, getParams: (params: RequestUrlParams, query: RequestQueryParams, body: any) => TParams, run: (params: ApiParams<TParams>) => Promise<T | null>) {
+  protected putItem<TParams>(path: string, getParams: GetParams<TParams>, run: Run<TParams, T | null>) {
     return this.putCustom<TParams, T | null>(path, getParams, run);
   }
 
-  protected putItems<TParams>(path: string, getParams: (params: RequestUrlParams, query: RequestQueryParams, body: any) => TParams, run: (params: ApiParams<TParams>) => Promise<T[]>) {
+  protected putItems<TParams>(path: string, getParams: GetParams<TParams>, run: Run<TParams, T[]>) {
     return this.putCustom<TParams, T[]>(path, getParams, run);
   }
 
-  protected postItems<TParams>(path: string, getParams: (params: RequestUrlParams, query: RequestQueryParams, body: any) => TParams, run: (params: ApiParams<TParams>) => Promise<T[]>) {
+  protected postItems<TParams>(path: string, getParams: GetParams<TParams>, run: Run<TParams, T[]>) {
     return this.postCustom<TParams, T[]>(path, 201, getParams, run);
   }
 
-  protected getItems<TParams>(path: string, getParams: (params: RequestUrlParams, query: RequestQueryParams) => TParams, run: (params: ApiParams<TParams>) => Promise<T[]>) {
+  protected getItems<TParams>(path: string, getParams: GetParams<TParams>, run: Run<TParams, T[]>) {
     return this.getCustom<TParams, T[]>(path, getParams, run, false);
   }
 
-  protected putCustom<TParams, TResponse>(path: string, getParams: (params: RequestUrlParams, query: RequestQueryParams, body?: any) => TParams, run: (params: ApiParams<TParams>) => Promise<TResponse>) {
+  protected putCustom<TParams, TResponse>(path: string, getParams: GetParams<TParams>, run: Run<TParams, TResponse>) {
     this.router.put(path, this.executeMethod(200, getParams, run, false));
     return this;
   }
 
-  protected postCustom<TParams, TResponse>(path: string, successStatus: number, getParams: (params: RequestUrlParams, query: RequestQueryParams, body?: any) => TParams, run: (params: ApiParams<TParams>) => Promise<TResponse>) {
+  protected postCustom<TParams, TResponse>(path: string, successStatus: number, getParams: GetParams<TParams>, run: Run<TParams, TResponse>) {
     this.router.post(path, this.executeMethod(successStatus || 201, getParams, run, false));
     return this;
   }
 
-  protected getEmpty<TParams>(path: string, getParams: (params: RequestUrlParams, query: RequestQueryParams) => TParams, run: (params: ApiParams<TParams>) => Promise<void>) {
+  protected getEmpty<TParams>(path: string, getParams: GetParams<TParams>, run: Run<TParams, void>) {
     this.router.get(path, this.executeMethod<TParams, void>(204, getParams, run, true));
     return this;
   }
 
-  private executeMethod<TParams, TResponse>(successStatus: number, getParams: (params: RequestUrlParams, query: RequestQueryParams, body?: any, file?: any) => TParams, run: (params: ApiParams<TParams>) => Promise<TResponse | null>, allowNulls: boolean) {
+  private executeMethod<TParams, TResponse>(successStatus: number, getParams: GetParams<TParams>, run: Run<TParams, TResponse | null>, allowNulls: boolean) {
     type extendedRequest = Request & { file: Express.Multer.File };
-    return async (req: extendedRequest, resp: Response, next: NextFunction) => {
 
+    return async (req: extendedRequest, resp: Response) => {
       const file: FileUpload | {} = req.file ? { fileName: req.file.originalname, content: req.file.buffer.toString("base64") } : {};
       const p = Object.assign({ user: req.session!.user as IUser }, getParams(req.params || {}, req.query || {}, req.body || {}, file));
       run(p)
@@ -106,8 +108,8 @@ export abstract class ControllerBase<T> {
     };
   }
 
-  private attachmentHandler<TParams, TResponse>(successStatus: number, getParams: (params: RequestUrlParams, query: RequestQueryParams, body?: any) => TParams, run: (params: ApiParams<TParams>) => Promise<DocumentDto>) {
-    return async (req: Request, resp: Response, next: NextFunction) => {
+  private attachmentHandler<TParams>(successStatus: number, getParams: GetParams<TParams>, run: Run<TParams, DocumentDto>) {
+    return async (req: Request, resp: Response) => {
       const p = Object.assign({ user: req.session!.user as IUser }, getParams(req.params || {}, req.query || {}, req.body || {}));
       run(p)
         .then(result => {

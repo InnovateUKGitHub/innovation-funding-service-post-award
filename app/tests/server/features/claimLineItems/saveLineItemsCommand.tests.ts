@@ -12,7 +12,7 @@ describe("UpdateClaimLineItemsCommand", () => {
 
     const claimLineItem = testData.createClaimLineItem({persist: false});
     expect(context.repositories.claimLineItems.Items).toHaveLength(0);
-    const dto = mapClaimLineItem(context)(claimLineItem as Repositories.ISalesforceClaimLineItem);
+    const dto = mapClaimLineItem()(claimLineItem as Repositories.ISalesforceClaimLineItem);
 
     const command = new SaveLineItemsCommand("", dto.partnerId, dto.costCategoryId, dto.periodId, [dto]);
     await context.runCommand(command);
@@ -26,7 +26,7 @@ describe("UpdateClaimLineItemsCommand", () => {
     const {testData} = context;
 
     const claimLineItem = testData.createClaimLineItem({persist: false});
-    const dto = mapClaimLineItem(context)(claimLineItem as Repositories.ISalesforceClaimLineItem);
+    const dto = mapClaimLineItem()(claimLineItem as Repositories.ISalesforceClaimLineItem);
 
     const command = new SaveLineItemsCommand("", dto.partnerId, dto.costCategoryId, dto.periodId, [dto]);
     expect(context.repositories.claimLineItems.Items).toHaveLength(0);
@@ -64,8 +64,8 @@ describe("UpdateClaimLineItemsCommand", () => {
     const claimLineItem2 = testData.createClaimLineItem({persist: false});
     expect(context.repositories.claimLineItems.Items).toHaveLength(0);
 
-    const dto1 = mapClaimLineItem(context)(claimLineItem1 as Repositories.ISalesforceClaimLineItem);
-    const dto2 = mapClaimLineItem(context)(claimLineItem2 as Repositories.ISalesforceClaimLineItem);
+    const dto1 = mapClaimLineItem()(claimLineItem1 as Repositories.ISalesforceClaimLineItem);
+    const dto2 = mapClaimLineItem()(claimLineItem2 as Repositories.ISalesforceClaimLineItem);
 
     const command = new SaveLineItemsCommand("", dto1.partnerId, dto1.costCategoryId, dto1.periodId, [dto1, dto2]);
     await context.runCommand(command);
@@ -103,7 +103,7 @@ describe("UpdateClaimLineItemsCommand", () => {
     });
 
     expect(context.repositories.claimLineItems.Items).toHaveLength(0);
-    const dto = mapClaimLineItem(context)(claimLineItem as Repositories.ISalesforceClaimLineItem);
+    const dto = mapClaimLineItem()(claimLineItem as Repositories.ISalesforceClaimLineItem);
 
     const command = new SaveLineItemsCommand("", dto.partnerId, dto.costCategoryId, dto.periodId, [dto]);
     await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
@@ -120,7 +120,7 @@ describe("UpdateClaimLineItemsCommand", () => {
       }
     });
     expect(context.repositories.claimLineItems.Items).toHaveLength(0);
-    const dto = mapClaimLineItem(context)(claimLineItem as Repositories.ISalesforceClaimLineItem);
+    const dto = mapClaimLineItem()(claimLineItem as Repositories.ISalesforceClaimLineItem);
 
     const command = new SaveLineItemsCommand("", dto.partnerId, dto.costCategoryId, dto.periodId, [dto]);
     await expect(context.runCommand(command)).rejects.toThrow(ValidationError);

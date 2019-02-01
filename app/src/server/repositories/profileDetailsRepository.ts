@@ -31,7 +31,7 @@ export interface IProfileDetailsRepository {
 }
 
 export class ProfileDetailsRepository extends SalesforceBase<ISalesforceProfileDetails> implements IProfileDetailsRepository {
-  private recordType: string = "Profile Detail";
+  private readonly recordType: string = "Profile Detail";
 
   constructor(connection: () => Promise<Connection>) {
     super(connection, "Acc_Profile__c", fields);
@@ -43,12 +43,21 @@ export class ProfileDetailsRepository extends SalesforceBase<ISalesforceProfileD
   }
 
   public async getAllByPartnerWithPeriodGt(partnerId: string, periodId: number): Promise<ISalesforceProfileDetails[]> {
-    const filter = `Acc_ProjectParticipant__c = '${partnerId}' AND RecordType.Name = '${this.recordType}' AND Acc_ProjectPeriodNumber__c >= ${periodId}`;
+    const filter = `
+      Acc_ProjectParticipant__c = '${partnerId}'
+      AND RecordType.Name = '${this.recordType}'
+      AND Acc_ProjectPeriodNumber__c >= ${periodId}
+    `;
     return super.where(filter);
   }
 
   public async getById(partnerId: string, periodId: number, costCategoryId: string): Promise<ISalesforceProfileDetails> {
-    const filter = `Acc_ProjectParticipant__c = '${partnerId}' AND RecordType.Name = '${this.recordType}' AND Acc_ProjectPeriodNumber__c >= ${periodId} AND Acc_CostCategory__c = '${costCategoryId}'`;
+    const filter = `
+      Acc_ProjectParticipant__c = '${partnerId}'
+      AND RecordType.Name = '${this.recordType}'
+      AND Acc_ProjectPeriodNumber__c >= ${periodId}
+      AND Acc_CostCategory__c = '${costCategoryId}'
+    `;
     return super.where(filter).then((res) => res && res[0] || null);
   }
 

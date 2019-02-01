@@ -1,16 +1,20 @@
-import { CommandBase } from "../common/commandBase";
+import { CommandBase, ValidationError } from "../common";
 import { ClaimLineItemDtosValidator } from "../../../ui/validators/claimLineItemDtosValidator";
 import { isNumber } from "../../../util/NumberHelper";
-import { ValidationError } from "../common/appError";
-import { IContext } from "../../../types/IContext";
-import { Authorisation, ProjectRole } from "../../../types";
+import { Authorisation, IContext, ProjectRole } from "../../../types";
 
 export class SaveLineItemsCommand extends CommandBase<boolean> {
-  constructor(public projectId: string, public partnerId: string, public costCategoryId: string, public periodId: number, private lineItems: ClaimLineItemDto[]) {
+  constructor(
+    private readonly projectId: string,
+    private readonly partnerId: string,
+    private readonly costCategoryId: string,
+    private readonly periodId: number,
+    private readonly lineItems: ClaimLineItemDto[]
+  ) {
     super();
   }
 
-  protected async accessControl(auth: Authorisation, context: IContext) {
+  protected async accessControl(auth: Authorisation) {
     return auth.for(this.projectId, this.partnerId).hasRole(ProjectRole.FinancialContact);
   }
 

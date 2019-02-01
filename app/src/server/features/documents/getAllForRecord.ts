@@ -1,9 +1,9 @@
-import {QueryBase} from "../common/queryBase";
+import { QueryBase } from "../common";
 import { GetDocumentsSummaryQuery } from "./getDocumentsSummary";
-import { IContext } from "../../../types/IContext";
+import { IContext } from "../../../types";
 
 export class GetDocumentsLinkedToRecordQuery extends QueryBase<DocumentSummaryDto[]> {
-  constructor(public recordId: string, public filter?: DocumentFilter) {
+  constructor(private readonly recordId: string, private readonly filter?: DocumentFilter) {
     super();
   }
 

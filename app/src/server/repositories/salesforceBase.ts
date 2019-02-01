@@ -6,12 +6,10 @@ export type Updatable<T> = Partial<T> & {
 };
 
 export default abstract class SalesforceBase<T> {
-  private log = false;
-
   protected constructor(
     protected getSalesforceConnection: () => Promise<Connection>,
     protected objectName: string,
-    private columns: string[]
+    private readonly columns: string[]
   ) { }
 
   protected async retrieve(id: string): Promise<T | null> {
@@ -124,16 +122,10 @@ export default abstract class SalesforceBase<T> {
   }
 
   private asArray(result: Partial<{}>[]): T[] {
-    if (this.log) {
-      console.log("Retrieved array", result);
-    }
     return result as T[];
   }
 
   private asItem(result: { Id?: SalesforceId }): T {
-    if (this.log) {
-      console.log("Retrieved item", result);
-    }
     return result as any as T;
   }
 
@@ -148,10 +140,7 @@ export default abstract class SalesforceBase<T> {
     return new Error(e.errorCode + ": " + e.message);
   }
 }
-export class SalesforceUnavilableError extends Error {
 
-}
+export class SalesforceUnavilableError extends Error {}
 
-export class SalesforceInvalidFilterError extends Error {
-
-}
+export class SalesforceInvalidFilterError extends Error {}

@@ -1,7 +1,6 @@
 import { QueryBase } from "../common/queryBase";
-import { Authorisation, ProjectRole } from "../../../types";
 import { SalesforceRole } from "../../repositories";
-import { IContext } from "../../../types/IContext";
+import { Authorisation, IContext, ProjectRole } from "../../../types";
 
 export interface IRoleInfo {
   projectRoles: ProjectRole;
@@ -17,7 +16,10 @@ export function getEmptyRoleInfo(): IRoleInfo {
 
 export class GetAllProjectRolesForUser extends QueryBase<Authorisation> {
   public async Run(context: IContext): Promise<Authorisation> {
-    const permissions = await context.caches.projectRoles.fetchAsync(context.user.email, () => context.config.salesforceUsername !== context.user.email ? this.getProjectRoles(context) : this.getServiceAccountRoles(context));
+    const permissions = await context.caches.projectRoles.fetchAsync(
+      context.user.email,
+      () => context.config.salesforceUsername !== context.user.email ? this.getProjectRoles(context) : this.getServiceAccountRoles(context)
+    );
     return new Authorisation(permissions);
   }
 
