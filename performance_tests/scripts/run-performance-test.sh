@@ -11,5 +11,5 @@ mkdir $WORKING_DIR/artifacts
 
 echo "Running performance test on Openshift environment"
 
-docker run --rm -v $WORKING_DIR/config:/bzt-configs -v $WORKING_DIR/artifacts:/tmp/artifacts -v $WORKING_DIR/artifacts/TaurusReport:/TaurusReport docker-acc.devops.innovateuk.org/load-test-user-setup:1.0 testConfig.yml
+docker run --rm -v $WORKING_DIR/config:/bzt-configs -v $WORKING_DIR/artifacts:/tmp/artifacts -v $WORKING_DIR/artifacts/TaurusReport:/TaurusReport docker-acc.devops.innovateuk.org/acc-blazemeter-taurus:v1 testConfig.yml
 
