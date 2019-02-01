@@ -27,4 +27,15 @@ describe("GetDocumentQuery", () => {
       });
     });
   });
+
+  it("returns a file without file type", async () => {
+    const context = new TestContext();
+    const contentVersion = context.testData.createContentVersion("12345", "cat", null);
+
+    const query = new GetDocumentQuery(contentVersion.Id);
+    const result = await context.runQuery(query);
+
+    expect(result).toBeDefined();
+    expect(result.fileType).toBe(null);
+  });
 });
