@@ -1,8 +1,8 @@
 import React from "react";
 import { SimpleString } from "./renderers";
-import { Link } from "./index";
+import { Link } from "./links";
+import { PageError } from "./pageError";
 import { ProjectDashboardRoute } from "../containers/projects";
-import { PageError } from "./index";
 
 export const NotFoundErrorPage = () => (
   <PageError title="Something has gone wrong at our end">

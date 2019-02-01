@@ -1,9 +1,9 @@
-import { QueryBase } from "../common/queryBase";
+import { QueryBase } from "../common";
+import { IContext } from "../../../types";
 import mapForecastDetail from "./mapForecastDetail";
-import { IContext } from "../../../types/IContext";
 
 export class GetAllForecastsForPartnerQuery extends QueryBase<ForecastDetailsDTO[]> {
-  constructor(private partnerId: string) {
+  constructor(private readonly partnerId: string) {
     super();
   }
 

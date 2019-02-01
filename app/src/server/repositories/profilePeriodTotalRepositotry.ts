@@ -24,14 +24,17 @@ export interface IProfileTotalPeriodRepository {
 }
 
 export class ProfileTotalPeriodRepository extends SalesforceBase<ISalesforceProfileTotalPeriod> implements IProfileTotalPeriodRepository {
-  private recordType: string = "Total Project Period";
+  private readonly recordType: string = "Total Project Period";
 
   constructor(connection: () => Promise<Connection>) {
     super(connection, "Acc_Profile__c", fields);
   }
 
   getAllByProjectId(projectId: string): Promise<ISalesforceProfileTotalPeriod[]> {
-    const filter = `Acc_ProjectParticipant__r.Acc_ProjectId__c = '${projectId}' AND RecordType.Name = '${this.recordType}'`;
+    const filter = `
+      Acc_ProjectParticipant__r.Acc_ProjectId__c = '${projectId}'
+      AND RecordType.Name = '${this.recordType}'
+    `;
     return super.where(filter);
   }
 
@@ -41,7 +44,11 @@ export class ProfileTotalPeriodRepository extends SalesforceBase<ISalesforceProf
   }
 
   get(partnerId: string, periodId: number) {
-    const filter = `Acc_ProjectParticipant__c = '${partnerId}' AND RecordType.Name = '${this.recordType}' AND Acc_ProjectPeriodNumber__c = ${periodId}`;
+    const filter = `
+      Acc_ProjectParticipant__c = '${partnerId}'
+      AND RecordType.Name = '${this.recordType}'
+      AND Acc_ProjectPeriodNumber__c = ${periodId}
+    `;
     return super.where(filter).then(x => x[0]);
   }
 }

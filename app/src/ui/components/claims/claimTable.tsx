@@ -49,18 +49,18 @@ export const ClaimTable: React.SFC<Props> = (props) => {
     const CostCategoriesTable = TypedTable<typeof combinedData[0]>();
 
     return (
-        <CostCategoriesTable.Table qa="cost-cat" data={combinedData} footers={renderFooters(props.project, props.partner, props.claimDetails)} validationResult={props.validation}>
-            <CostCategoriesTable.Custom
-                header="Category"
-                qa="category"
-                cellClassName={x => x.isTotal ? "govuk-!-font-weight-bold" : null}
-                value={(x,i) => renderCostCategory(x.category, props.getLink, props.validation && props.validation[i.row])}
-            />
-            <CostCategoriesTable.Currency header="Grant offered" qa="offerCosts" value={x => x.cost.offerCosts} />
-            <CostCategoriesTable.Currency header="Costs claimed" qa="claimedToDate" value={x => x.cost.costsClaimedToDate} />
-            <CostCategoriesTable.Currency header="Costs this period" qa="periodCosts" value={x => x.cost.costsClaimedThisPeriod} cellClassName={x => x.isTotal ? "govuk-!-font-weight-bold" : null} />
-            <CostCategoriesTable.Currency header="Remaining grant" qa="remainingCosts" value={x => x.cost.remainingOfferCosts} />
-        </CostCategoriesTable.Table>
+      <CostCategoriesTable.Table qa="cost-cat" data={combinedData} footers={renderFooters(props.project, props.partner, props.claimDetails)} validationResult={props.validation}>
+        <CostCategoriesTable.Custom
+            header="Category"
+            qa="category"
+            cellClassName={x => x.isTotal ? "govuk-!-font-weight-bold" : null}
+            value={(x,i) => renderCostCategory(x.category, props.getLink, props.validation && props.validation[i.row])}
+        />
+        <CostCategoriesTable.Currency header="Grant offered" qa="offerCosts" value={x => x.cost.offerCosts} />
+        <CostCategoriesTable.Currency header="Costs claimed" qa="claimedToDate" value={x => x.cost.costsClaimedToDate} />
+        <CostCategoriesTable.Currency header="Costs this period" qa="periodCosts" value={x => x.cost.costsClaimedThisPeriod} cellClassName={x => x.isTotal ? "govuk-!-font-weight-bold" : null} />
+        <CostCategoriesTable.Currency header="Remaining grant" qa="remainingCosts" value={x => x.cost.remainingOfferCosts} />
+      </CostCategoriesTable.Table>
     );
 };
 
@@ -75,20 +75,22 @@ const renderCostCategory = (category: CostCategoryDto, getLink: (costCategoryId:
     );
 };
 
-const  renderFooters = (project: ProjectDto, partner: PartnerDto, claimsCosts: ClaimDetailsSummaryDto[]) => {
+const renderFooters = (project: ProjectDto, partner: PartnerDto, claimsCosts: ClaimDetailsSummaryDto[]) => {
     return [
       (
         <tr key="1" className="govuk-table__row">
-            <td className="govuk-table__cell govuk-table__cell--numeric govuk-!-font-weight-bold" colSpan={3}>Funding level</td>
-            <td className="govuk-table__cell govuk-table__cell--numeric"><Renderers.Percentage fractionDigits={0} value={partner.awardRate} /></td>
-            <td className="govuk-table__cell" />
+          <td className="govuk-table__cell govuk-table__cell--numeric govuk-!-font-weight-bold" colSpan={3}>Funding level</td>
+          <td className="govuk-table__cell govuk-table__cell--numeric"><Renderers.Percentage fractionDigits={0} value={partner.awardRate} /></td>
+          <td className="govuk-table__cell" />
         </tr>
       ),
       (
         <tr key="2" className="govuk-table__row">
-            <td className="govuk-table__cell govuk-table__cell--numeric govuk-!-font-weight-bold" colSpan={3}>Costs to be paid this period</td>
-            <td className="govuk-table__cell govuk-table__cell--numeric"><Renderers.Currency value={claimsCosts.reduce((total, item) => total + item.costsClaimedThisPeriod, 0) * partner.awardRate! / 100} /></td>
-            <td className="govuk-table__cell" />
+          <td className="govuk-table__cell govuk-table__cell--numeric govuk-!-font-weight-bold" colSpan={3}>Costs to be paid this period</td>
+          <td className="govuk-table__cell govuk-table__cell--numeric">
+            <Renderers.Currency value={claimsCosts.reduce((total, item) => total + item.costsClaimedThisPeriod, 0) * partner.awardRate! / 100} />
+          </td>
+          <td className="govuk-table__cell" />
         </tr>
       )
     ];

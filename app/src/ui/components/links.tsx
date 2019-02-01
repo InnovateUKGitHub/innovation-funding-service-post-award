@@ -17,7 +17,6 @@ interface Data {
 }
 
 class LinkComponent extends React.Component<Props & Data> {
-
   private userHasAccess(route: ILinkInfo) {
     if (!route.accessControl) return true;
     return route.accessControl(this.props.user);
@@ -26,6 +25,7 @@ class LinkComponent extends React.Component<Props & Data> {
   render() {
     const { id, route, selected, children, className } = this.props;
     if (!this.userHasAccess(route)) return null;
+
     return (
       <RouterLink
         id={id}
@@ -34,7 +34,8 @@ class LinkComponent extends React.Component<Props & Data> {
         className={`govuk-link ${className}`}
         aria-selected={selected}
         successCallback={() => window.scrollTo(0, 0)}
-      >{children}
+      >
+        {children}
       </RouterLink>
     );
   }
@@ -44,4 +45,12 @@ export const Link = reduxConnect<Data, {}, Props, RootState>(
 )(LinkComponent);
 
 // TODO go back to same place in page (no scroll to top)
-export const BackLink: React.SFC<Props> = (props) => <RouterLink routeName={props.route.routeName} routeParams={props.route.routeParams} className={`govuk-back-link ${props.className}`}>{props.children}</RouterLink>;
+export const BackLink: React.SFC<Props> = (props) => (
+  <RouterLink
+    routeName={props.route.routeName}
+    routeParams={props.route.routeParams}
+    className={`govuk-back-link ${props.className}`}
+  >
+    {props.children}
+  </RouterLink>
+);

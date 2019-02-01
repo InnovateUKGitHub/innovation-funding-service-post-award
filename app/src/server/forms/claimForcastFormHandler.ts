@@ -6,11 +6,9 @@ import { ForecastDetailsDtosValidator } from "../../ui/validators";
 import { GetAllForecastsForPartnerQuery, UpdateForecastDetailsCommand } from "../features/forecastDetails";
 import { GetByIdQuery } from "../features/projects";
 import { GetCostCategoriesQuery } from "../features/claims";
-import { ILinkInfo } from "../../types/ILinkInfo";
-import { IContext } from "../../types/IContext";
+import { IContext, ILinkInfo } from "../../types";
 
 export class ClaimForcastFormHandler extends FormHandlerBase<ClaimForcastParams, ForecastDetailsDTO[]> {
-
   constructor() {
     super(ClaimForecastRoute, ["save", "default"]);
   }

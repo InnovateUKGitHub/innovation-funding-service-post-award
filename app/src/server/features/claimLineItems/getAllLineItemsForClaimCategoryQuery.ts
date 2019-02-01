@@ -1,20 +1,23 @@
-import {QueryBase} from "../common/queryBase";
+import { QueryBase } from "../common";
+import { Authorisation, IContext, ProjectRole } from "../../../types";
 import mapClaimLineItem from "./mapClaimLineItem";
-import { Authorisation, ProjectRole } from "../../../types";
-import { IContext } from "../../../types/IContext";
 
 export class GetAllLineItemsForClaimByCategoryQuery extends QueryBase<ClaimLineItemDto[]> {
-  constructor(public projectId: string, public partnerId: string, public costCategoryId: string, public periodId: number) {
+  constructor(
+    private readonly projectId: string,
+    private readonly partnerId: string,
+    private readonly costCategoryId: string,
+    private readonly periodId: number
+  ) {
     super();
   }
 
-  protected async accessControl(auth: Authorisation, context: IContext) {
+  protected async accessControl(auth: Authorisation) {
     return auth.for(this.projectId, this.partnerId).hasAnyRoles(ProjectRole.MonitoringOfficer, ProjectRole.FinancialContact);
   }
 
   protected async Run(context: IContext) {
     const data = await context.repositories.claimLineItems.getAllForCategory(this.partnerId, this.costCategoryId, this.periodId) || [];
-
-    return data.map<ClaimLineItemDto>( mapClaimLineItem(context));
+    return data.map<ClaimLineItemDto>(mapClaimLineItem());
   }
 }

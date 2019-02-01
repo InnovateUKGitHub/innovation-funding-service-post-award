@@ -1,9 +1,9 @@
-import { QueryBase } from "../common/queryBase";
+import { QueryBase } from "../common";
+import { IContext } from "../../../types";
 import { mapItem } from "./mapItem";
-import { IContext } from "../../../types/IContext";
 
 export class GetByIdQuery extends QueryBase<IContact|null> {
-  constructor(readonly id: string) {
+  constructor(private readonly id: string) {
     super();
   }
 

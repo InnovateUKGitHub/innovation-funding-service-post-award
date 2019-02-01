@@ -1,6 +1,6 @@
 import * as React from "react";
 import { LoadingStatus, Pending } from "../../shared/pending";
-import { ErrorSummary } from "./";
+import { ErrorSummary } from "./errorSummary";
 import { ErrorCode, IAppError } from "../../types/IAppError";
 import { StandardErrorPage } from "./standardErrorPage";
 import { NotFoundErrorPage } from "./notFoundErrorPage";

@@ -1,11 +1,14 @@
+import { DateTime } from "luxon";
 import { SyncCommandBase } from "../common/commandBase";
 import { ISalesforcePartner, PROJECT_LEAD_IDENTIFIER } from "../../repositories/partnersRepository";
 import { PartnerDto, ProjectRole } from "../../../types";
-import { DateTime } from "luxon";
-import { IContext } from "../../../types/IContext";
 
 export class MapToPartnerDtoCommand extends SyncCommandBase<PartnerDto> {
-    constructor(readonly item: ISalesforcePartner, readonly partnerLevelRoles: ProjectRole, readonly projectLevelRoles: ProjectRole) {
+    constructor(
+      private readonly item: ISalesforcePartner,
+      private readonly partnerLevelRoles: ProjectRole,
+      private readonly projectLevelRoles: ProjectRole
+    ) {
         super();
      }
 
@@ -13,7 +16,7 @@ export class MapToPartnerDtoCommand extends SyncCommandBase<PartnerDto> {
         return (total) ? 100 * (claimed || 0) / total  : null;
     }
 
-    Run(context: IContext): PartnerDto {
+    Run(): PartnerDto {
         return {
             id: this.item.Id,
             name: this.item.Acc_AccountId__r.Name,

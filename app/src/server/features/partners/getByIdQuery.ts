@@ -1,16 +1,15 @@
-import { QueryBase } from "../common/queryBase";
+import { QueryBase } from "../common";
 import { MapToPartnerDtoCommand } from "./mapToPartnerDto";
-import { PartnerDto } from "../../../types";
 import { GetAllProjectRolesForUser } from "../projects/getAllProjectRolesForUser";
-import { IContext } from "../../../types/IContext";
+import { IContext, PartnerDto } from "../../../types";
 
 export class GetByIdQuery extends QueryBase<PartnerDto> {
-  constructor(readonly id: string) {
+  constructor(private readonly partnerId: string) {
     super();
   }
 
   async Run(context: IContext) {
-      const result = await context.repositories.partners.getById(this.id);
+      const result = await context.repositories.partners.getById(this.partnerId);
       const roles = await context.runQuery(new GetAllProjectRolesForUser());
       const projectRoleInfo = roles.for(result.Acc_ProjectId__c).getRoles();
       const partnerRoleInfo = roles.for(result.Acc_ProjectId__c, result.Id).getRoles();

@@ -1,10 +1,8 @@
 export class Cache<T> {
-  private store: { [key: string]: T } = {};
-  private timeouts: { [key: string]: NodeJS.Timer } = {};
+  private readonly store: { [key: string]: T } = {};
+  private readonly timeouts: { [key: string]: NodeJS.Timer } = {};
 
-  constructor(private minutes: number) {
-
-  }
+  constructor(private readonly minutes: number) {}
 
   fetch(key: string, get: () => T): T {
     const result = this.store[key];

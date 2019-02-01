@@ -53,23 +53,37 @@ export interface IClaimRepository {
 }
 
 export class ClaimRepository extends SalesforceBase<ISalesforceClaim> implements IClaimRepository {
-  private recordType = "Total Project Period";
+  private readonly recordType = "Total Project Period";
+
   constructor(connection: () => Promise<Connection>) {
     super(connection, "Acc_Claims__c", fields);
   }
 
   public async getAllByProjectId(projectId: string): Promise<ISalesforceClaim[]> {
-    const filter = `Acc_ProjectParticipant__r.Acc_ProjectId__c = '${projectId}' AND RecordType.Name = '${this.recordType}' AND Acc_ClaimStatus__c != 'New'`;
+    const filter = `
+      Acc_ProjectParticipant__r.Acc_ProjectId__c = '${projectId}'
+      AND RecordType.Name = '${this.recordType}'
+      AND Acc_ClaimStatus__c != 'New'
+    `;
     return await super.where(filter);
   }
 
   public async getAllByPartnerId(partnerId: string): Promise<ISalesforceClaim[]> {
-    const filter = `Acc_ProjectParticipant__c = '${partnerId}' AND RecordType.Name = '${this.recordType}' AND Acc_ClaimStatus__c != 'New'`;
+    const filter = `
+      Acc_ProjectParticipant__c = '${partnerId}'
+      AND RecordType.Name = '${this.recordType}'
+      AND Acc_ClaimStatus__c != 'New'
+    `;
     return await super.where(filter);
   }
 
   public async get(partnerId: string, periodId: number) {
-    const filter = `Acc_ProjectParticipant__c = '${partnerId}' AND Acc_ProjectPeriodNumber__c = ${periodId} AND RecordType.Name = '${this.recordType}' AND Acc_ClaimStatus__c != 'New'`;
+    const filter = `
+      Acc_ProjectParticipant__c = '${partnerId}'
+      AND Acc_ProjectPeriodNumber__c = ${periodId}
+      AND RecordType.Name = '${this.recordType}'
+      AND Acc_ClaimStatus__c != 'New'
+    `;
     const claim = await super.where(filter);
     if (claim.length === 0) {
       throw new BadRequestError("Claim does not exist");

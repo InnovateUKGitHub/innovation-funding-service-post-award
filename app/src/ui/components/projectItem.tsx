@@ -31,9 +31,17 @@ export const ProjectDescription: React.SFC<Props> = (props) => (
         {props.project.projectNumber}: {props.project.title}
       </Link>
     </h2>
-    {props.project.periodId ? <p className="govuk-body govuk-!-margin-bottom-2">{props.project.claimFrequency === ClaimFrequency.Monthly ? "Month" : "Quarter"} {props.project.periodId} of {props.project.totalPeriods}</p> : null}
+    {renderPeriod(props.project)}
   </div>
 );
+
+const renderPeriod = (project: ProjectDto) => {
+  return !project.periodId ? null : (
+    <p className="govuk-body govuk-!-margin-bottom-2">
+      {project.claimFrequency === ClaimFrequency.Monthly ? "Month" : "Quarter"} {project.periodId} of {project.totalPeriods}
+    </p>
+  );
+};
 
 interface OpenProps {
   daysRemaining: number;

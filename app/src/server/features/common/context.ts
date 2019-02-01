@@ -1,19 +1,15 @@
 import * as Repositories from "../../repositories";
-import { Configuration, IConfig } from "./config";
-import { Clock } from "./clock";
-import { Logger } from "./logger";
+import { Cache, Clock, Configuration, IConfig, Logger } from "./";
+import { AppError, BadRequestError, ForbiddenError, NotFoundError, ValidationError } from "./appError";
 import {
   ISalesforceConnectionDetails,
   salesforceConnection,
   salesforceConnectionWithToken,
   SalesforceTokenError
 } from "../../repositories/salesforceConnection";
-import { Cache } from "./cache";
 import { SalesforceInvalidFilterError } from "../../repositories/salesforceBase";
-import { AppError, BadRequestError, ForbiddenError, NotFoundError, ValidationError } from "./appError";
-import { ErrorCode, IUser } from "../../../types";
 import { GetAllProjectRolesForUser, IRoleInfo } from "../projects/getAllProjectRolesForUser";
-import { ICaches, IContext, IRunnable, ISyncRunnable } from "../../../types/IContext";
+import { ErrorCode, ICaches, IContext, IRunnable, ISyncRunnable, IUser } from "../../../types";
 import { QueryBase, SyncQueryBase } from "./queryBase";
 import { CommandBase, SyncCommandBase } from "./commandBase";
 
@@ -42,9 +38,7 @@ const constructErrorResponse = <E extends Error>(error: E): AppError => {
 };
 
 export class Context implements IContext {
-
   constructor(public readonly user: IUser) {
-
     this.config = Configuration;
 
     this.salesforceConnectionDetails = {
@@ -75,9 +69,12 @@ export class Context implements IContext {
     claimLineItems: new Repositories.ClaimLineItemRepository(() => this.getSalesforceConnection())
   };
 
-  public caches = cachesImplementation;
+  public readonly config: Readonly<IConfig>;
+  public readonly logger = new Logger();
+  public readonly clock = new Clock();
+  public readonly caches = cachesImplementation;
 
-  private salesforceConnectionDetails: ISalesforceConnectionDetails;
+  private readonly salesforceConnectionDetails: ISalesforceConnectionDetails;
 
   private getSalesforceConnection() {
     // if the standard user then connect using salesforceConnection other wise use the token
@@ -89,9 +86,6 @@ export class Context implements IContext {
       return salesforceConnectionWithToken(this.salesforceConnectionDetails);
     }
   }
-
-  public config: Readonly<IConfig>;
-  public logger = new Logger();
 
   private async runAsync<TResult>(runnable: IRunnable<TResult>): Promise<TResult> {
     try {
@@ -117,7 +111,6 @@ export class Context implements IContext {
 
   public runQuery<TResult>(query: QueryBase<TResult>): Promise<TResult> {
     const runnable = (query as any) as IRunnable<TResult>;
-
     this.logger.log("Running async query", runnable.LogMessage());
 
     return this.runAsync(runnable);
@@ -125,7 +118,6 @@ export class Context implements IContext {
 
   public runSyncQuery<TResult>(query: SyncQueryBase<TResult>): TResult {
     const runnable = (query as any) as ISyncRunnable<TResult>;
-
     this.logger.log("Running sync query", runnable.LogMessage());
 
     return this.runSync(runnable);
@@ -133,7 +125,6 @@ export class Context implements IContext {
 
   public runCommand<TResult>(command: CommandBase<TResult>): Promise<TResult> {
     const runnable = (command as any) as IRunnable<TResult>;
-
     this.logger.log("Running async command", runnable.LogMessage());
 
     return this.runAsync(runnable);
@@ -141,11 +132,8 @@ export class Context implements IContext {
 
   public runSyncCommand<TResult>(command: SyncCommandBase<TResult>): TResult {
     const runnable = (command as any) as ISyncRunnable<TResult>;
-
     this.logger.log("Running sync command", runnable.LogMessage());
 
     return this.runSync(runnable);
   }
-
-  public clock = new Clock();
 }

@@ -1,7 +1,6 @@
-import { SyncQueryBase } from "../common/queryBase";
-import { ClaimFrequency } from "../../../types/dtos";
 import { DateTime } from "luxon";
-import { IContext } from "../../../types/IContext";
+import { SyncQueryBase } from "../common";
+import { ClaimFrequency, IContext } from "../../../types";
 
 interface PeriodInfo {
   current: number;
@@ -11,20 +10,21 @@ interface PeriodInfo {
 }
 
 export class GetPeriodInfoQuery extends SyncQueryBase<PeriodInfo> {
-  constructor(private startDate: Date, private endDate: Date, private claimFrequency: ClaimFrequency) {
+  constructor(
+    private readonly startDate: Date,
+    private readonly endDate: Date,
+    private readonly claimFrequency: ClaimFrequency
+  ) {
     super();
   }
 
   protected Run(context: IContext): PeriodInfo {
-
     const start = DateTime.fromJSDate(this.startDate);
-
     const end = DateTime.fromJSDate(this.endDate);
     const now = DateTime.fromJSDate(context.clock.today());
 
     // if project is still in progress use today otherwise day before end so in last period
     const dateForCurrentPeriod = end.isValid && end < now ? end.minus({ days: 1 }) : now;
-
     const monthsForCurrent = dateForCurrentPeriod.diff(start, "months").months;
 
     // if valid end date isnt supplied use null so we can return a total value of null
