@@ -47,7 +47,7 @@ class Controller extends ControllerBase<DocumentSummaryDto> implements IDocument
 
     this.postAttachment(
       "/claims/:partnerId/:periodId",
-      (p, q, b, f) => ({ claimKey: { partnerId: p.partnerId, periodId: p.periodId, file: f }, file: { ...f, ...b }}),
+      (p, q, b, f) => ({ claimKey: { partnerId: p.partnerId, periodId: parseInt(p.periodId, 10), file: f }, file: { ...f, ...b }}),
       p => this.uploadClaimDocument(p)
     );
 
