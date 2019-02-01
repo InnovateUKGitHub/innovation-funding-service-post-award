@@ -4,13 +4,7 @@ import * as Actions from "../../../redux/actions";
 import { ContainerBase, ReduxContainer } from "../../containerBase";
 import { ClaimsDashboardRoute } from "../dashboard";
 import { PrepareClaimRoute } from "../prepare";
-import {
-  ForecastData,
-  forecastDataLoadActions,
-  PendingForecastData,
-  renderWarning,
-  withDataEditor,
-} from "./common";
+import { ForecastData, forecastDataLoadActions, PendingForecastData, renderWarning, withDataEditor, } from "./common";
 import { ProjectRole } from "../../../../types";
 
 export interface ClaimForcastParams {
@@ -93,11 +87,5 @@ export const ClaimForecastRoute = definition.route({
   getParams: (route) => ({ projectId: route.params.projectId, partnerId: route.params.partnerId, periodId: parseInt(route.params.periodId, 10) }),
   getLoadDataActions: forecastDataLoadActions,
   container: ForecastClaim,
-  accessControl: (user, params) => {
-    const userRoles = user.roleInfo[params.projectId];
-    if(!userRoles) return false;
-
-    const partnerRoles = userRoles.partnerRoles[params.partnerId];
-    return !!partnerRoles && !!(userRoles.projectRoles & ProjectRole.FinancialContact) && !!(partnerRoles & ProjectRole.FinancialContact);
-  }
+  accessControl: (auth, { projectId, partnerId }) => auth.for(projectId, partnerId).hasRole(ProjectRole.FinancialContact)
 });

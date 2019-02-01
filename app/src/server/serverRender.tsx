@@ -16,7 +16,7 @@ import { errorHandlerRender } from "./errorHandlers";
 import { ForbiddenError, FormHandlerError, NotFoundError } from "./features/common/appError";
 import contextProvider from "./features/common/contextProvider";
 import { GetAllProjectRolesForUser } from "./features/projects/getAllProjectRolesForUser";
-import { IUser } from "../types";
+import { Authorisation, IUser } from "../types";
 
 async function loadData(dispatch: Dispatch<AnyAction>, getState: () => RootState, dataCalls: AsyncThunk<any>[]): Promise<void> {
   const allPromises = dataCalls.map(action => action(dispatch, getState, null));
@@ -53,7 +53,7 @@ export async function serverRender(req: Request, res: Response, error?: IAppErro
       const matched = matchRoute(route);
       const params = matched && matched.getParams && matched.getParams(route) || {};
 
-      if (matched.accessControl && !matched.accessControl(user, params)) {
+      if (matched.accessControl && !matched.accessControl(new Authorisation(user.roleInfo), params)) {
         throw new ForbiddenError();
       }
 

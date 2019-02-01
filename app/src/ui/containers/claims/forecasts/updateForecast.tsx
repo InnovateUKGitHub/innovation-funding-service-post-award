@@ -80,11 +80,5 @@ export const UpdateForecastRoute = definition.route({
   getParams: forecastParams,
   getLoadDataActions: forecastDataLoadActions,
   container: UpdateForecast,
-  accessControl: (user, params) => {
-    const userRoles = user.roleInfo[params.projectId];
-    if(!userRoles) return false;
-
-    const partnerRoles = userRoles.partnerRoles[params.partnerId];
-    return !!partnerRoles && !!(userRoles.projectRoles & ProjectRole.FinancialContact) && !!(partnerRoles & ProjectRole.FinancialContact);
-  }
+  accessControl: (auth, { projectId, partnerId }) => auth.for(projectId, partnerId).hasRole(ProjectRole.FinancialContact)
 });
