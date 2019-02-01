@@ -6,6 +6,7 @@ import { Footer, Header, PhaseBanner } from "../components";
 import { RootState } from "../redux";
 import { IUser } from "../../types/IUser";
 import { StandardErrorPage } from "../components/standardErrorPage";
+import { Authorisation } from "../../types";
 
 interface IAppProps extends RouterState {
   dispatch: any;
@@ -27,7 +28,7 @@ class AppComponent extends React.Component<IAppProps, {}> {
   private accessControl(route: MatchedRoute) {
     if (!route.accessControl) return true;
     const params = route.getParams(this.props.route!);
-    return route.accessControl(this.props.user, params);
+    return route.accessControl(new Authorisation((this.props.user.roleInfo)), params);
   }
 
   private loadData() {
