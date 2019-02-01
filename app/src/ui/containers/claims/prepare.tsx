@@ -141,13 +141,7 @@ export const PrepareClaimRoute = definition.route({
     routeName: "prepareClaim",
     routePath: "/projects/:projectId/claims/:partnerId/prepare/:periodId",
     getParams: (route) => ({ projectId: route.params.projectId, partnerId: route.params.partnerId, periodId: parseInt(route.params.periodId, 10) }),
-    accessControl: (user, {projectId, partnerId}) => {
-      const userRoles = user.roleInfo[projectId];
-      if (!userRoles) return false;
-      const partnerRoles = userRoles.partnerRoles[partnerId];
-      if (!partnerRoles) return false;
-      return (partnerRoles & ProjectRole.FinancialContact) === ProjectRole.FinancialContact;
-    },
+    accessControl: (auth, {projectId, partnerId}) => auth.for(projectId, partnerId).hasRole(ProjectRole.FinancialContact),
     getLoadDataActions: (params) => [
         Actions.loadProject(params.projectId),
         Actions.loadPartner(params.partnerId),

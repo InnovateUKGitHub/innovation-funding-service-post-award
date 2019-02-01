@@ -209,11 +209,6 @@ export const AllClaimsDashboardRoute = definition.route({
     Actions.loadPartnersForProject(params.projectId),
     Actions.loadClaimsForProject(params.projectId),
   ],
-  accessControl: (user, params) => {
-    const userRoles = user.roleInfo[params.projectId];
-    if(!userRoles) return false;
-    const projectRoles = userRoles.projectRoles;
-    return (projectRoles & (ProjectRole.MonitoringOfficer | ProjectRole.ProjectManager)) !== ProjectRole.Unknown;
-  },
+  accessControl: (auth, { projectId }) => auth.for(projectId).hasAnyRoles(ProjectRole.MonitoringOfficer, ProjectRole.ProjectManager),
   container: AllClaimsDashboard
 });

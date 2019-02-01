@@ -5,7 +5,7 @@ import { Pending } from "../../../shared/pending";
 import * as Actions from "../../redux/actions";
 import * as Selectors from "../../redux/selectors";
 import { ProjectOverviewPage } from "../../components/projectOverview";
-import { IUser, PartnerDto, ProjectDto, ProjectRole } from "../../../types";
+import { PartnerDto, ProjectDto, ProjectRole } from "../../../types";
 
 interface Data {
     projectDetails: Pending<ProjectDto>;
@@ -120,5 +120,5 @@ export const ProjectDetailsRoute = containerDefinition.route({
         Actions.loadPartnersForProject(params.id),
     ],
     container: ProjectDetails,
-    accessControl: (user: IUser, { id }) => user.roleInfo[id] && user.roleInfo[id].projectRoles !== ProjectRole.Unknown
+    accessControl: (auth, { id }) => auth.for(id).hasAnyRoles(ProjectRole.FinancialContact, ProjectRole.ProjectManager, ProjectRole.MonitoringOfficer)
 });

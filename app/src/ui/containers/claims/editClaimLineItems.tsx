@@ -278,10 +278,5 @@ export const EditClaimLineItemsRoute = definition.route({
     Actions.loadClaimDetailDocuments(params.partnerId, params.periodId, params.costCategoryId)
   ],
   container: EditClaimLineItems,
-  accessControl: (user, params) => {
-    // I would propose to pass in the Authorisation rather than to construct it here
-    return new Authorisation(user.roleInfo)
-      .for(params.projectId, params.partnerId)
-      .hasRole(ProjectRole.FinancialContact);
-  }
+  accessControl: (auth, params) => auth.for(params.projectId, params.partnerId).hasRole(ProjectRole.FinancialContact)
 });
