@@ -1,6 +1,7 @@
 import { TestContext } from "../../testContextProvider";
 import { UploadClaimDocumentCommand } from "../../../../src/server/features/documents/uploadClaimDocument";
 import { ClaimStatus, DocumentDescription } from "../../../../src/types/constants";
+import { BadRequestError, ValidationError } from "../../../../src/server/features/common/appError";
 
 const validStatus = [
   ClaimStatus.DRAFT,
@@ -41,7 +42,56 @@ describe("UploadClaimDocumentCommand", () => {
       };
 
       const command = new UploadClaimDocumentCommand(claimKey, file);
-      await expect(context.runCommand(command)).rejects.toThrow();
+      await expect(context.runCommand(command)).rejects.toThrow(BadRequestError);
+    });
+
+    it("should throw an exception if file upload validation fails", async () => {
+      const context = new TestContext();
+      const partner = context.testData.createPartner();
+      const claim = context.testData.createClaim(partner, 1, (item) => {
+        item.Acc_IARRequired__c = false;
+        item.Acc_ClaimStatus__c = ClaimStatus.DRAFT;
+      });
+
+      const badFile = {
+        fileName: undefined,
+        content: "Some content",
+        description: DocumentDescription.IAR
+      };
+
+      const claimKey = {
+        partnerId: claim.Acc_ProjectParticipant__r.Id,
+        periodId: claim.Acc_ProjectPeriodNumber__c
+      };
+
+      const command = new UploadClaimDocumentCommand(claimKey, badFile as any);
+      await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
+    });
+
+    it("should upload document if description is not IAR", async () => {
+      const context = new TestContext();
+      const partner = context.testData.createPartner();
+      const claim = context.testData.createClaim(partner, 1, (item) => {
+        item.Acc_IARRequired__c = true;
+        item.Acc_ClaimStatus__c = ClaimStatus.AWAITING_IAR;
+      });
+      const claimKey = {
+        partnerId: claim.Acc_ProjectParticipant__r.Id,
+        periodId: claim.Acc_ProjectPeriodNumber__c
+      };
+
+      const nonIARDocument = {
+        fileName: "fileName.txt",
+        content: "test content",
+        description: "any"
+      };
+
+      const command = new UploadClaimDocumentCommand(claimKey, nonIARDocument as any);
+      await context.runCommand(command);
+
+      expect(context.repositories.contentVersions.Items[0].VersionData).toEqual(nonIARDocument.content);
+      expect(context.repositories.contentVersions.Items[0].PathOnClient).toEqual(nonIARDocument.fileName);
+      expect(context.repositories.contentVersions.Items[0].Description).toEqual(nonIARDocument.description);
     });
 
     describe("When the claim status is AWAITING_IAR", () => {
@@ -63,6 +113,7 @@ describe("UploadClaimDocumentCommand", () => {
         expect(context.repositories.claims.Items[0].Acc_ClaimStatus__c).toBe(ClaimStatus.AWAITING_IUK_APPROVAL);
       });
     });
+
     describe("When the claim status is not AWAITING_IAR", () => {
       it("should not update the claim status", async () => {
         const context = new TestContext();
@@ -82,6 +133,7 @@ describe("UploadClaimDocumentCommand", () => {
         expect(context.repositories.claims.Items[0].Acc_ClaimStatus__c).toBe(ClaimStatus.DRAFT);
       });
     });
+
     describe("when the claim status allows an IAR upload", async () => {
       validStatus.forEach(status => {
         it("should upload an IAR claim document", async () => {
