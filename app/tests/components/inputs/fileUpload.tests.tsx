@@ -7,23 +7,18 @@ import { FileUpload } from "../../../src/ui/components/inputs";
 
 Enzyme.configure({ adapter: new Adapter() });
 
-describe("NumberInput", () => {
-  it("Renders with correct class", () => {
-    const wrapper = mount(<FileUpload name="testName" value={null} onChange={(x) => console.log(x)} />);
-    expect(wrapper.childAt(0).prop("className")).toContain("govuk-file-upload");
-  });
-
+describe("FileInput", () => {
   it("Renders with correct name", () => {
     const wrapper = mount(<FileUpload name="testName" value={null} onChange={(x) => x} />);
     expect(wrapper.childAt(0).prop("name")).toContain("testName");
   });
 
-  it("Renders as enabled", () => {
+  it("Renders as enabled when the disabled flag is set to false", () => {
     const wrapper = mount(<FileUpload name="testName" value={null} onChange={(x) => x} disabled={false}/>);
     expect(wrapper.childAt(0).prop("disabled")).toBe(false);
   });
 
-  it("Renders as disabled", () => {
+  it("Renders as disabled when the disabled flag is set to true", () => {
     const wrapper = mount(<FileUpload name="testName" value={null} onChange={(x) => x} disabled={true}/>);
     expect(wrapper.childAt(0).prop("disabled")).toBe(true);
   });
@@ -51,11 +46,17 @@ describe("NumberInput", () => {
     expect(onChange).toHaveBeenCalledTimes(1);
   });
 
-  it("Will update file to '' if props are null", () => {
-    const wrapper = mount(<FileUpload name="testName" value={null} onChange={(x) => x}/>);
+  it("doesn't use default value prop when a value is passed", () => {
+    const wrapper = mount(<FileUpload name="test" value={"testfile" as any} onChange={jest.fn()} />);
+    expect(wrapper.find("input").prop("value")).toBe(undefined);
+  });
 
-    wrapper.setProps({files: null});
+  it("Will unset selected file when props value changes to null", () => {
+    const wrapper = mount(<FileUpload name="testName" value={"test" as any} onChange={jest.fn()}/>);
+    wrapper.setProps({value: "string"});
+    expect(wrapper.prop("value")).toBe("string");
 
-    expect(wrapper.prop("files")).toEqual("");
+    wrapper.setProps({value: null});
+    expect(wrapper.find("input").prop("value")).toBe(undefined);
   });
 });
