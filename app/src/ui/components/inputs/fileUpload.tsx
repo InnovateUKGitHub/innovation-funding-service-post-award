@@ -7,15 +7,13 @@ interface FileUploadProps {
   disabled?: boolean;
   onChange: (v: File | null) => void;
   value: File | null | undefined;
-  placeholder?: string;
 }
 
 export class FileUpload extends BaseInput<FileUploadProps, { value: File | null }> {
-
-  private fileInput: any;
+  private fileInput: HTMLInputElement | null = null;
 
   public componentWillReceiveProps(nextProps: InputProps<File | null>) {
-    if (nextProps.value !== this.props.value && nextProps.value === null) {
+    if (nextProps.value !== this.props.value && nextProps.value === null && this.fileInput) {
       this.fileInput.value = "";
     }
   }
