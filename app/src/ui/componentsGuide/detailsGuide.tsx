@@ -75,11 +75,11 @@ export const detailsGuide: IGuide = {
                 const ItemDetails = TypedDetails<typeof data>();
                 return (
                     <DualDetails>
-                        <ItemDetails.Details data={data}>
+                        <ItemDetails.Details title="Title one the one" data={data}>
                             <ItemDetails.String label="Id" qa="id" value={x => x.id}/>
                             <ItemDetails.String label="Name" qa="name" value={x => x.name}/>
                         </ItemDetails.Details>
-                        <ItemDetails.Details data={data}>
+                        <ItemDetails.Details title="Title two the two" data={data}>
                             <ItemDetails.DateTime label="Started" qa="started" value={x => x.created}/>
                         </ItemDetails.Details>
                     </DualDetails>
