@@ -62,7 +62,7 @@ class Component extends ContainerBase<Params, Data, {}> {
   renderContents({ projectDetails, partners, previousClaims, currentClaims }: CombinedData) {
     return (
       <ProjectOverviewPage project={projectDetails} partners={partners} selectedTab={AllClaimsDashboardRoute.routeName}>
-        {this.renderSummary(projectDetails)}
+        {this.renderSummary(projectDetails, partners.find(x => x.isLead)!)}
         <Acc.Section qa="current-claims-section" title="Open">
           {this.renderCurrentClaimsPerPeriod(currentClaims, projectDetails, partners)}
         </Acc.Section>
@@ -88,18 +88,33 @@ class Component extends ContainerBase<Params, Data, {}> {
     return groupedClaims.map((x, i) => this.renderCurrentClaims(x, project, partners, i));
   }
 
-  private renderSummary(project: ProjectDto) {
-    const SummaryDetails = Acc.TypedDetails<ProjectDto>();
+  private renderLeadPartnerDetails(project: ProjectDto, partner: PartnerDto) {
+    if (!partner || !(project.roles & ProjectRole.ProjectManager)) return null;
+    const PartnerSummaryDetails = Acc.TypedDetails<PartnerDto>();
+    return (
+      <PartnerSummaryDetails.Details data={partner} title={`${partner.name} claims history`} qa="project_summary-col-0">
+        <PartnerSummaryDetails.Currency label="Grant offered" qa="gol-costs" value={x => x.totalParticipantGrant} />
+        <PartnerSummaryDetails.Currency label="Costs claimed" qa="claimed-costs" value={x => x.totalParticipantCostsClaimed || 0} />
+        <PartnerSummaryDetails.Percentage label="Percentage claimed" qa="percentage-costs" value={x => x.percentageParticipantCostsClaimed} />
+        <PartnerSummaryDetails.Percentage label="Funding level" value={x => x.awardRate} qa="award-rate" fractionDigits={0} />
+        <PartnerSummaryDetails.Percentage label="Cap limit" value={x => x.capLimit} fractionDigits={0} qa="cap-limit" />
+      </PartnerSummaryDetails.Details>
+    );
+  }
+
+  private renderSummary(project: ProjectDto, partner: PartnerDto) {
+    const ProjectSummaryDetails = Acc.TypedDetails<ProjectDto>();
 
     return (
       <Acc.Section>
-        <Acc.SectionPanel qa="claims-summary" title="History">
+        <Acc.SectionPanel qa="claims-summary">
           <Acc.DualDetails>
-            <SummaryDetails.Details data={project} qa="project_summary-col-0">
-              <SummaryDetails.Currency label="Grant offered" qa="gol-costs" value={x => x.grantOfferLetterCosts} />
-              <SummaryDetails.Currency label="Costs claimed" qa="claimed-costs" value={x => x.costsClaimedToDate || 0} />
-              <SummaryDetails.Percentage label="Percentage claimed" qa="claimed-percentage" value={x => x.claimedPercentage} />
-            </SummaryDetails.Details>
+            <ProjectSummaryDetails.Details title="Project claims history" data={project} qa="project_summary-col-0">
+              <ProjectSummaryDetails.Currency label="Grant offered" qa="gol-costs" value={x => x.grantOfferLetterCosts} />
+              <ProjectSummaryDetails.Currency label="Costs claimed" qa="claimed-costs" value={x => x.costsClaimedToDate || 0} />
+              <ProjectSummaryDetails.Percentage label="Percentage claimed" qa="claimed-percentage" value={x => x.claimedPercentage} />
+            </ProjectSummaryDetails.Details>
+            { this.renderLeadPartnerDetails(project, partner) }
           </Acc.DualDetails>
         </Acc.SectionPanel>
       </Acc.Section>

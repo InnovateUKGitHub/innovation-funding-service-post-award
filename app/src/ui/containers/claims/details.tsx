@@ -80,7 +80,7 @@ export class ClaimsDetailsComponent extends ContainerBase<Params, Data, {}> {
                 {/*
                 This was started but not required fot the story.... will be finished in a future story
                 <Details.Details data={data}>
-                    <Details.MulilineString label="Addition information" value={x => x.claim.comments || "N/A"}/>
+                    <Details.MultilineString label="Addition information" value={x => x.claim.comments || "N/A"}/>
                 </Details.Details>
                 */}
             </ACC.Page>
