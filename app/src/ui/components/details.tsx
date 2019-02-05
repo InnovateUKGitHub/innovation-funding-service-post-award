@@ -6,6 +6,7 @@ interface DetailsProps {
     displayDensity?: "Compact" | "Comfortable";
     labelWidth?: "Wide" | "Narrow";
     qa?: string;
+    title?: string;
 }
 
 interface InternalFieldProps<T> {
@@ -57,15 +58,31 @@ const DetailsComponent = <T extends {}>( props: DetailsProps & {data: T} & {chil
 };
 
 export const DualDetails: React.SFC<DetailsProps> = ({ children, ...rest }) => {
-    const columns = React.Children.toArray(children).map((field) => {
-        return React.cloneElement(field as React.ReactElement<any>, rest);
-    });
+  const columns = React.Children.toArray(children).map((field) => {
+    return React.cloneElement(field as React.ReactElement<any>, rest);
+  });
 
-    return (
-        <div className="govuk-grid-row" >
-            {columns.map((column, i) => (<div key={`dual-details-row-${i}`} className="govuk-grid-column-one-half">{column}</div>))}
+  const titles = !columns.every(x => !x.props.title) && columns.map(x => x.props.title);
+
+  const header = titles ? (
+    <div className="govuk-grid-row">
+      {titles.map((x, i) => (
+        <div key={`dual-details-title-${i}`} className="govuk-grid-column-one-half">
+          <h2 className="govuk-heading-m govuk-!-margin-bottom-6">{x}</h2>
         </div>
-    );
+      ))}
+    </div>
+  ) : null;
+
+  return (
+    <React.Fragment>
+      {header}
+      <div className="govuk-grid-row">
+        {columns.map((column, i) => (
+          <div key={`dual-details-row-${i}`} className="govuk-grid-column-one-half">{column}</div>))}
+      </div>
+    </React.Fragment>
+  );
 };
 
 export class FieldComponent<T> extends React.Component<InternalFieldProps<T>, {}> {
@@ -129,7 +146,7 @@ const PercentageField = <T extends {}>(props: ExternalFieldProps<T, number> & { 
 export const TypedDetails = <T extends {}>() => ({
     Details: DetailsComponent as React.SFC<DetailsProps & {data: T}>,
     String: StringField as React.SFC<ExternalFieldProps<T, string>>,
-    MulilineString: MultilineStringField as React.SFC<ExternalFieldProps<T, string>>,
+    MultilineString: MultilineStringField as React.SFC<ExternalFieldProps<T, string>>,
     Date: DateField as React.SFC<ExternalFieldProps<T, Date>>,
     DateTime: DateTimeField as React.SFC<ExternalFieldProps<T, Date>>,
     Number: NumberField as React.SFC<ExternalFieldProps<T, number>>,

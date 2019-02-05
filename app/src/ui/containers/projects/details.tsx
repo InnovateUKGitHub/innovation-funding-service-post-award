@@ -59,12 +59,12 @@ class ProjectDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
                     <DetailsSection.Details labelWidth="Narrow" data={project} qa="project-details">
                         <DetailsSection.Date label="Project start date" qa="start-date" value={x => x.startDate} />
                         <DetailsSection.Date label="Project end date" qa="end-date" value={x => x.endDate} />
-                        <DetailsSection.MulilineString label="Project summary" qa="summary" value={x => x.summary} />
+                        <DetailsSection.MultilineString label="Project summary" qa="summary" value={x => x.summary} />
                     </DetailsSection.Details>
                 </ACC.Section>
 
                 {/*
-                // project links are not currenly required but will be added back
+                // project links are not currently required but will be added back
                 <ACC.Section title="Application information" qa="application-details">
                     <ACC.LinksList links={links} />
                 </ACC.Section>

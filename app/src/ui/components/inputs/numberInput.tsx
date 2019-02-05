@@ -18,7 +18,7 @@ export class NumberInput extends BaseInput<NumberInputProps, NumberInputState> {
   }
 
   public componentWillReceiveProps(nextProps: NumberInputProps) {
-    // if both new and current is nan then dont change
+    // if both new and current is nan then don't change
     if (nextProps.value !== this.props.value && !(isNaN(nextProps.value!) && !isFinite(this.state.value as any))) {
       this.setState(this.getStateFromProps(nextProps));
       this.cancelTimeout();

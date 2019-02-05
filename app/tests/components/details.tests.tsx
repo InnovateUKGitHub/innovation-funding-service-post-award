@@ -20,7 +20,7 @@ describe("Details", () => {
     it("Multi line string values render title and value", () => {
       const example = { name: "example1\nexample2" };
       const DTest = TypedDetails<typeof example>();
-      const output = shallow(<DTest.Details data={example}><DTest.MulilineString label="Name" qa="name" value={x => x.name} /></DTest.Details>).html();
+      const output = shallow(<DTest.Details data={example}><DTest.MultilineString label="Name" qa="name" value={x => x.name} /></DTest.Details>).html();
       expect(output).toContain(`<h4 class=\"govuk-heading-s\">Name</h4>`);
       expect(output).toContain(`<p class=\"govuk-body\">example1</p>`);
       expect(output).toContain(`<p class=\"govuk-body\">example2</p>`);
