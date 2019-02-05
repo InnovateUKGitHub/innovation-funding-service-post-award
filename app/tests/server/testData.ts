@@ -60,7 +60,8 @@ export class TestData {
 
     const newItem = {
       Id: "Project" + seed,
-      Acc_ProjectTitle__c: "Project " + seed
+      Acc_ProjectTitle__c: "Project " + seed,
+      Acc_CompetitionType__c: "SBRI",
     } as Repositories.ISalesforceProject;
 
     if (!!update) update(newItem);
@@ -89,7 +90,8 @@ export class TestData {
       Acc_TotalParticipantCostsPaid__c: 50000,
       Acc_Cap_Limit__c: 50,
       Acc_Award_Rate__c: 50,
-      Acc_ForecastLastModifiedDate__c: ""
+      Acc_ForecastLastModifiedDate__c: "",
+      Acc_OrganisationType__c: "Industrial"
 
     } as Repositories.ISalesforcePartner;
 

@@ -1,7 +1,7 @@
 interface CostCategoryDto {
     id: string;
     name: string;
-    organisationType: "Industrial" | "Academic" | "Unknown";
+    organisationType: string;
     competitionType: string;
     isCalculated: boolean;
     description: string;

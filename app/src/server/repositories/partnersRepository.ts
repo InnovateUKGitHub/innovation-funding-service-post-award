@@ -7,6 +7,7 @@ export interface ISalesforcePartner {
         Id: string;
         Name: string;
     };
+    Acc_OrganisationType__c: string;
     Acc_ParticipantType__c: string;
     Acc_ParticipantSize__c: string;
     Acc_ProjectRole__c: string;
@@ -24,6 +25,7 @@ const fields = [
     "Id",
     "Acc_AccountId__r.Id",
     "Acc_AccountId__r.Name",
+    "Acc_OrganisationType__c",
     "Acc_ParticipantType__c",
     "Acc_ParticipantSize__c",
     "Acc_TotalParticipantGrant__c",
