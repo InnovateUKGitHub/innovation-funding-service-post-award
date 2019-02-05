@@ -1,0 +1,10 @@
+execution:
+- scenario: testJMeter
+
+scenarios:
+  testJMeter:
+    script: ../perf_scripts/testJMeter.jmx
+
+modules:
+  jmeter:
+    gui: false
