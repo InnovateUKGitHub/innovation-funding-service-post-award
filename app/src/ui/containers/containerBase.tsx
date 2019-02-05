@@ -36,9 +36,9 @@ export abstract class ContainerBase<TParams = {}, TData = {}, TCallbacks = {}> e
 
 class ConnectWrapper<TParams, TData, TCallbacks> {
     constructor(
-        private component: ContainerBaseClass<TParams, TData, TCallbacks>,
-        private withData: (state: RootState, params: TParams) => TData,
-        private withCallbacks: (dispatch: (action: AsyncThunk<any>) => void) => TCallbacks
+        private readonly component: ContainerBaseClass<TParams, TData, TCallbacks>,
+        private readonly withData: (state: RootState, params: TParams) => TData,
+        private readonly withCallbacks: (dispatch: (action: AsyncThunk<any>) => void) => TCallbacks
     ) { }
 
     private mapStateToProps(state: RootState): TData & TParams & BaseProps {
@@ -64,8 +64,7 @@ class ConnectWrapper<TParams, TData, TCallbacks> {
 }
 
 class ReduxContainerWrapper<TParams, TData, TCallbacks> {
-    constructor(private component: ContainerBaseClass<TParams, TData, TCallbacks>) {
-    }
+    constructor(private readonly component: ContainerBaseClass<TParams, TData, TCallbacks>) {}
 
     public route(options: {
         routeName: string,
@@ -76,8 +75,11 @@ class ReduxContainerWrapper<TParams, TData, TCallbacks> {
         container: React.ComponentClass<any> & { WrappedComponent: React.ComponentType<TParams & TData & TCallbacks & BaseProps> }
     }) {
         return {
-             getLink: (params: TParams): ILinkInfo => ({ routeName: options.routeName, routeParams: params, accessControl: (user: IUser) => !options.accessControl || options.accessControl(new Authorisation(user.roleInfo), params) }),
-             ...options,
+            getLink: (params: TParams): ILinkInfo => ({
+              routeName: options.routeName,
+              routeParams: params,
+              accessControl: (user: IUser) => !options.accessControl || options.accessControl(new Authorisation(user.roleInfo), params) }),
+            ...options,
         };
     }
 

@@ -50,8 +50,23 @@ export class ForecastTable extends React.Component<Props> {
       >
         <Table.String header="Month" value={x => x.categoryName} qa="category-name" />
 
-        {claims.map((p, i) => <Table.Currency key={p} header={intervals[p]} value={x => x.claims[p]} qa={"category-claim" + i} isDivider={i === claims.length - 1 || i === claims.length - 2 ? "normal" : undefined} />)}
-        {forecasts.map((p, i) => <Table.Custom key={p} header={intervals[p]} value={(x, index) => this.renderForecastCell(x, p, index, data)} cellClassName={() => "govuk-table__cell--numeric"} classSuffix="numeric" qa={"category-forecast" + i} isDivider={i === forecasts.length - 1 ? "bold" : undefined} />)}
+        {claims.map((p, i) => <Table.Currency
+          key={p}
+          header={intervals[p]}
+          value={x => x.claims[p]}
+          qa={"category-claim" + i}
+          isDivider={i === claims.length - 1 || i === claims.length - 2 ? "normal" : undefined}
+        />)}
+
+        {forecasts.map((p, i) => <Table.Custom
+          key={p}
+          header={intervals[p]}
+          value={(x, index) => this.renderForecastCell(x, p, index, data)}
+          cellClassName={() => "govuk-table__cell--numeric"}
+          classSuffix="numeric"
+          qa={"category-forecast" + i}
+          isDivider={i === forecasts.length - 1 ? "bold" : undefined}
+        />)}
 
         <Table.Currency header="" value={x => x.total} qa="category-total" isDivider="normal" />
         <Table.Currency header="" value={x => x.golCosts} qa="category-gol-costs" isDivider="normal" />
@@ -188,7 +203,11 @@ export class ForecastTable extends React.Component<Props> {
 
     cells.push(<th key="th" className="govuk-table__cell govuk-!-font-weight-bold acc-table__cell-top-border">Total</th>);
     cells.push(totals.map(this.renderTableFooterCell));
-    cells.push(<td key="total_diff" className="govuk-table__cell govuk-table__cell--numeric acc-table__cell-top-border"><Percentage className="govuk-!-font-weight-regular" value={this.calculateDifference(golTotal, costTotal)} /></td>);
+    cells.push((
+      <td key="total_diff" className="govuk-table__cell govuk-table__cell--numeric acc-table__cell-top-border">
+        <Percentage className="govuk-!-font-weight-regular" value={this.calculateDifference(golTotal, costTotal)} />
+      </td>
+    ));
 
     return [<tr key="footer1" className={classNames("govuk-table__row", "govuk-body-s", {"table__row--error": warning})}>{cells}</tr>];
   }

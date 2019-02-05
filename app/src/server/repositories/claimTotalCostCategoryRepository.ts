@@ -18,7 +18,7 @@ export interface IClaimTotalCostCategoryRepository {
 }
 
 export class ClaimTotalCostCategoryRepository extends SalesforceBase<ISalesforceClaimTotalCostCategory> implements IClaimTotalCostCategoryRepository {
-    private recordType: string = "Total Cost Category";
+    private readonly recordType: string = "Total Cost Category";
 
     constructor(connection: () => Promise<Connection>) {
         super(connection, "Acc_Claims__c", fields);

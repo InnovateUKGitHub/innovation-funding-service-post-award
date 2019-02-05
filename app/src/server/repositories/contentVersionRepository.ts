@@ -1,7 +1,7 @@
-import SalesforceBase from "./salesforceBase";
 import { Stream } from "stream";
-import {Connection} from "jsforce";
+import { Connection } from "jsforce";
 import { FileUpload } from "../../types/FileUpload";
+import SalesforceBase from "./salesforceBase";
 
 export interface ISalesforceContentVersion {
   Id: string;
@@ -27,7 +27,6 @@ export interface IContentVersionRepository {
 const fieldNames: (keyof ISalesforceContentVersion)[] = ["Id", "Title", "FileExtension", "ContentDocumentId", "ContentSize", "FileType", "Description"];
 
 export class ContentVersionRepository extends SalesforceBase<ISalesforceContentVersion> implements IContentVersionRepository {
-
   constructor(connection: () => Promise<Connection>) {
     super(connection, "ContentVersion", fieldNames);
   }

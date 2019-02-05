@@ -1,14 +1,11 @@
 import { TestContext } from "../../testContextProvider";
 import { GetAllForProjectQuery } from "../../../../src/server/features/partners/getAllForProjectQuery";
-import { range } from "../../../../src/shared/range";
 
 describe("getAllForProjectQuery", () => {
     it("when project has partner expect item returned", async () => {
         const context = new TestContext();
-
         const project = context.testData.createProject();
         const partner = context.testData.createPartner(project);
-
         const result = await context.runQuery(new GetAllForProjectQuery(project.Id));
 
         expect(result).not.toBe(null);
@@ -22,7 +19,6 @@ describe("getAllForProjectQuery", () => {
 
     it("when pathers only on other project expect empty", async () => {
         const context = new TestContext();
-
         const project1 = context.testData.createProject();
         const project2 = context.testData.createProject();
         context.testData.createPartner(project1);
@@ -35,11 +31,9 @@ describe("getAllForProjectQuery", () => {
 
     it("when role is 'Project Lead' expect isLead true", async () => {
         const context = new TestContext();
-
         const project = context.testData.createProject();
         const notLeadPartner = context.testData.createPartner(project, (x) => x.Acc_ProjectRole__c = "Other");
         const leadPartner = context.testData.createPartner(project, (x) => x.Acc_ProjectRole__c = "Project Lead");
-
         const result = await context.runQuery(new GetAllForProjectQuery(project.Id));
 
         expect(result).not.toBe(null);

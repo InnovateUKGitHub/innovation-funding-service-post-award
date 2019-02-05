@@ -1,11 +1,14 @@
-import { QueryBase } from "../common/queryBase";
+import { QueryBase } from "../common";
 import { GetCostCategoriesQuery } from "../claims";
-import { IContext } from "../../../types/IContext";
-import { Authorisation, ProjectRole } from "../../../types";
+import { Authorisation, IContext, ProjectRole } from "../../../types";
 
 export class GetClaimDetailsSummaryForPartnerQuery extends QueryBase<ClaimDetailsSummaryDto[]> {
-    constructor(private projectId: string, private partnerId: string, private periodId: number) {
-        super();
+    constructor(
+      private readonly projectId: string,
+      private readonly partnerId: string,
+      private readonly periodId: number
+    ) {
+      super();
     }
 
     protected async accessControl(auth: Authorisation, context: IContext) {

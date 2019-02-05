@@ -1,16 +1,13 @@
-import { CommandBase } from "../common/commandBase";
+import { BadRequestError, CommandBase, ValidationError } from "../common";
 import { UploadDocumentCommand } from "./uploadDocument";
 import { GetClaimDocumentsQuery } from "./getClaimDocuments";
-import mapClaim from "../claims/mapClaim";
 import { DeleteDocumentCommand } from "./deleteDocument";
-import { ClaimDto, ClaimStatus, DocumentDescription } from "../../../types";
-import { FileUpload } from "../../../types/FileUpload";
-import { BadRequestError, ValidationError } from "../common/appError";
 import { FileUploadValidator } from "../../../ui/validators/documentUploadValidator";
-import { IContext } from "../../../types/IContext";
+import { ClaimDto, ClaimStatus, DocumentDescription, FileUpload, IContext } from "../../../types";
+import mapClaim from "../claims/mapClaim";
 
 export class UploadClaimDocumentCommand extends CommandBase<string> {
-  constructor(private claimKey: ClaimKey, private file: FileUpload) {
+  constructor(private readonly claimKey: ClaimKey, private readonly file: FileUpload) {
     super();
   }
 
@@ -33,7 +30,6 @@ export class UploadClaimDocumentCommand extends CommandBase<string> {
   }
 
   protected async Run(context: IContext) {
-
     const result = new FileUploadValidator(this.file, true);
 
     if (!result.isValid) {

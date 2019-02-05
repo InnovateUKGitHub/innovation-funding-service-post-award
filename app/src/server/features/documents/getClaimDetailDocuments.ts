@@ -1,9 +1,13 @@
-import {QueryBase} from "../common/queryBase";
-import {GetDocumentsLinkedToRecordQuery} from "./getAllForRecord";
-import { IContext } from "../../../types/IContext";
+import { QueryBase } from "../common";
+import { GetDocumentsLinkedToRecordQuery } from "./getAllForRecord";
+import { IContext } from "../../../types";
 
 export class GetClaimDetailDocumentsQuery extends QueryBase<DocumentSummaryDto[]> {
-  constructor(public partnerId: string, public periodId: number, public costCategoryId: string) {
+  constructor(
+    private readonly partnerId: string,
+    private readonly periodId: number,
+    private readonly costCategoryId: string
+  ) {
     super();
   }
 

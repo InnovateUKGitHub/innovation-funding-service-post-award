@@ -1,3 +1,4 @@
+// tslint:disable:no-duplicate-string
 import { Results } from "../validation/results";
 import { Result } from "../validation/result";
 import { NestedResult } from "../validation/nestedResult";
@@ -29,17 +30,14 @@ export const isFalse = rule<boolean>((value) => value === null || value === unde
 export const isDate = rule<Date>((value) => value === null || value === undefined || (value.getTime && !isNaN(value.getTime())), "Invalid date");
 
 export function maxLength(results: Results<{}>, value: string|null, length: number, message?: string) {
-    // tslint:disable-next-line
     return isTrue(results, (!value) || value.length <= length, message || "Maximum of " + length + " characters");
 }
 
 export function minLength(results: Results<{}>, value: string, length: number, message?: string) {
-    // tslint:disable-next-line
     return isTrue(results, value !== null && value.length >= length, message || "Minimum of " + length + " characters");
 }
 
 export function exactLength(results: Results<{}>, value: string, length: number, message?: string) {
-    // tslint:disable-next-line
     return isTrue(results, (!value) || value.length === length, message || "Must be exactly " + length + " characters");
 }
 

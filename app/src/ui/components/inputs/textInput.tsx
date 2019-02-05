@@ -31,14 +31,14 @@ export class TextInput extends BaseInput<TextInputProps, InputState> {
         value={this.state.value}
         disabled={!!this.props.disabled}
         onChange={e => this.handleChange(e, true)}
-        onKeyUp={this.props.handleKeyTyped ? (e) => this.handleChange(e, false) : undefined}
         onBlur={e => this.handleChange(e, false)}
+        onKeyUp={this.props.handleKeyTyped ? (e) => this.handleChange(e, false) : undefined}
         maxLength={this.props.maxLength}
       />
     );
   }
 
-  private handleChange = (e: React.ChangeEvent<HTMLInputElement> | React.KeyboardEvent<HTMLInputElement>, debounce: boolean) => {
+  private handleChange(e: React.ChangeEvent<HTMLInputElement> | React.KeyboardEvent<HTMLInputElement>, debounce: boolean) {
     const value = e.currentTarget.value;
     if (this.state.value !== value) {
       this.setState({ value });

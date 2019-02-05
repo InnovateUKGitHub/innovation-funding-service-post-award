@@ -34,7 +34,6 @@ interface CombinedData {
 }
 
 export class ClaimLineItemsComponent extends ContainerBase<Params, Data, {}> {
-
   public render() {
     const combined = Pending.combine(
       this.props.project,
@@ -66,10 +65,16 @@ export class ClaimLineItemsComponent extends ContainerBase<Params, Data, {}> {
           <ClaimLineItemsTable lineItems={lineItems} forecastDetail={forecastDetail} />
         </ACC.Section>
         <ACC.Section title="Supporting documents" subtitle={documents.length > 0 ? "(Documents open in a new window)" : ""} qa="supporting-documents-section">
-          {documents.length > 0 ? <DocumentList documents={documents} qa="supporting-documents"/>: <p className="govuk-body-m govuk-!-margin-bottom-0 govuk-!-margin-right-2">No documents uploaded.</p> }
+          {this.renderDocumentList(documents)}
         </ACC.Section>
       </ACC.Page>
     );
+  }
+
+  private renderDocumentList(documents: DocumentSummaryDto[]) {
+    return documents.length > 0
+      ? <DocumentList documents={documents} qa="supporting-documents"/>
+      : <p className="govuk-body-m govuk-!-margin-bottom-0 govuk-!-margin-right-2">No documents uploaded.</p>;
   }
 }
 

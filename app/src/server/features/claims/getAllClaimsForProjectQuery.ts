@@ -1,22 +1,24 @@
-import { QueryBase } from "../common/queryBase";
-import mapClaim from "./mapClaim";
-import { ClaimDto } from "../../../types";
+import { QueryBase } from "../common";
 import { ISalesforceClaim, PROJECT_LEAD_IDENTIFIER } from "../../repositories";
 import { IComparer } from "../../../util/comparator";
-import { IContext } from "../../../types/IContext";
+import { ClaimDto, IContext } from "../../../types";
+import mapClaim from "./mapClaim";
 
 export class GetAllClaimsForProjectQuery extends QueryBase<ClaimDto[]> {
-  constructor(private projectId: string) {
+  constructor(private readonly projectId: string) {
     super();
   }
 
   protected async Run(context: IContext) {
     const claims = await context.repositories.claims.getAllByProjectId(this.projectId);
     const forcasts = await context.repositories.profileTotalPeriod.getAllByProjectId(this.projectId);
-    const joined = claims.map(claim => ({ claim, forcast: forcasts.find(x => x.Acc_ProjectParticipant__c === claim.Acc_ProjectParticipant__r.Id && x.Acc_ProjectPeriodNumber__c === claim.Acc_ProjectPeriodNumber__c) }));
+    const joined = claims.map(claim => ({
+      claim,
+      forecast: forcasts.find(x => x.Acc_ProjectParticipant__c === claim.Acc_ProjectParticipant__r.Id && x.Acc_ProjectPeriodNumber__c === claim.Acc_ProjectPeriodNumber__c)
+    }));
     joined.sort(claimSorter);
 
-    return joined.map(x => mapClaim(context)(x.claim, x.forcast));
+    return joined.map(x => mapClaim(context)(x.claim, x.forecast));
   }
 }
 

@@ -18,7 +18,6 @@ export interface IContentDocumentLinkRepository {
 }
 
 export class ContentDocumentLinkRepository extends SalesforceBase<ISalesforceContentDocumentLink> implements IContentDocumentLinkRepository {
-
   constructor(connection: () => Promise<Connection>) {
     super(connection, "ContentDocumentLink", fieldNames);
   }
