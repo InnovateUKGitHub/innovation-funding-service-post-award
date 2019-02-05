@@ -9,6 +9,8 @@ import { getForecastDetailsEditor } from "../../ui/redux/selectors";
 import { ForecastDetailsDtosValidator } from "../../ui/validators";
 import { ILinkInfo } from "../../types/ILinkInfo";
 import { IContext } from "../../types/IContext";
+import { GetByIdQuery as GetPartnerByIdQuery } from "../features/partners";
+import { GetCostCategoriesForPartnerQuery } from "../features/claims/getCostCategoriesForPartnerQuery";
 
 export class UpdateForecastFormHandler extends FormHandlerBase<ForecastParams, ForecastDetailsDTO[]> {
   constructor() {
@@ -17,11 +19,11 @@ export class UpdateForecastFormHandler extends FormHandlerBase<ForecastParams, F
   protected async getDto(context: IContext, params: ForecastParams, button: IFormButton, body: { [key: string]: string; }): Promise<ForecastDetailsDTO[]> {
     const dto = await context.runQuery(new GetAllForecastsForPartnerQuery(params.partnerId));
     const project = await context.runQuery(new GetByIdQuery(params.projectId));
-    const costCategories = await context.runQuery(new GetCostCategoriesQuery());
+    const partner = await context.runQuery(new GetPartnerByIdQuery(params.partnerId));
+    const costCategories = await context.runQuery(new GetCostCategoriesForPartnerQuery(project, partner));
 
     const costCategoriesIdsToUpdate = costCategories
       .filter(x => !x.isCalculated)
-      .filter(x => x.organisationType === "Industrial")
       .map(x => x.id);
 
     dto.forEach(x => {

@@ -11,34 +11,38 @@ export class GetClaimDetailsSummaryForPartnerQuery extends QueryBase<ClaimDetail
       super();
     }
 
-    protected async accessControl(auth: Authorisation, context: IContext) {
-        return auth.for(this.projectId, this.partnerId).hasAnyRoles(ProjectRole.MonitoringOfficer, ProjectRole.ProjectManager, ProjectRole.FinancialContact);
-    }
+  protected async accessControl(auth: Authorisation, context: IContext) {
+    return auth.for(this.projectId, this.partnerId).hasAnyRoles(ProjectRole.MonitoringOfficer, ProjectRole.ProjectManager, ProjectRole.FinancialContact);
+  }
 
-    protected async Run(context: IContext) {
-        const claimDetailResults = await context.repositories.claimDetails.getAllByPartnerForPeriod(this.partnerId, this.periodId);
-        const totalCostCategoryResults = await context.repositories.claimDetails.getAllByPartnerWithPeriodLt(this.partnerId, this.periodId);
-        const totalForcastResults = await context.repositories.profileTotalCostCategory.getAllByPartnerId(this.partnerId);
-        const costCategories = await context.runQuery(new GetCostCategoriesQuery());
-        const filteredCostCategories = costCategories.filter(x => x.organisationType === "Industrial"); // Todo: filter based on project
+  protected async Run(context: IContext) {
+    const claimDetailResults = await context.repositories.claimDetails.getAllByPartnerForPeriod(this.partnerId, this.periodId);
+    const totalCostCategoryResults = await context.repositories.claimDetails.getAllByPartnerWithPeriodLt(this.partnerId, this.periodId);
+    const totalForcastResults = await context.repositories.profileTotalCostCategory.getAllByPartnerId(this.partnerId);
+    const costCategories = await context.runQuery(new GetCostCategoriesQuery());
 
-        return filteredCostCategories.map(x => {
-            const claimDetail = claimDetailResults.filter(y => y.Acc_CostCategory__c === x.id).map(y => y.Acc_PeriodCostCategoryTotal__c)[0] || 0;
-            const forecast = totalForcastResults.filter(y => y.Acc_CostCategory__c === x.id).map(y => y.Acc_CostCategoryGOLCost__c)[0] || 0;
-            const totalCostCategory = totalCostCategoryResults.filter(y => y.Acc_CostCategory__c === x.id).map(y => y.Acc_PeriodCostCategoryTotal__c).reduce((t,c) => t + c, 0);
+    return claimDetailResults.map(claimDetail => {
+      const forecast = totalForcastResults
+        .filter(y => y.Acc_CostCategory__c === claimDetail.Acc_CostCategory__c)
+        .map(y => y.Acc_CostCategoryGOLCost__c)[0] || 0;
 
-            const offerCosts = forecast || 0;
-            const costsClaimedThisPeriod = claimDetail;
-            const costsClaimedToDate = totalCostCategory;
-            const remainingOfferCosts = offerCosts - totalCostCategory - costsClaimedThisPeriod;
+      const totalCostCategory = totalCostCategoryResults
+        .filter(y => y.Acc_CostCategory__c === claimDetail.Acc_CostCategory__c)
+        .map(y => y.Acc_PeriodCostCategoryTotal__c)
+        .reduce((t, c) => t + c, 0);
 
-            return ({
-                costCategoryId: x.id,
-                offerCosts,
-                costsClaimedToDate,
-                costsClaimedThisPeriod,
-                remainingOfferCosts
-            });
-        });
-    }
+      const offerCosts = forecast || 0;
+      const costsClaimedThisPeriod = claimDetail.Acc_PeriodCostCategoryTotal__c || 0;
+      const costsClaimedToDate = totalCostCategory;
+      const remainingOfferCosts = offerCosts - totalCostCategory - costsClaimedThisPeriod;
+
+      return ({
+        costCategoryId: claimDetail.Acc_CostCategory__c,
+        offerCosts,
+        costsClaimedToDate,
+        costsClaimedThisPeriod,
+        remainingOfferCosts
+      });
+    }).sort((x, y) => costCategories.findIndex((costCat) => costCat.id === x.costCategoryId) - costCategories.findIndex((costCat) => costCat.id === y.costCategoryId));
+  }
 }

@@ -5,8 +5,9 @@ import { getForecastDetailsEditor } from "../../ui/redux/selectors";
 import { ForecastDetailsDtosValidator } from "../../ui/validators";
 import { GetAllForecastsForPartnerQuery, UpdateForecastDetailsCommand } from "../features/forecastDetails";
 import { GetByIdQuery } from "../features/projects";
-import { GetCostCategoriesQuery } from "../features/claims";
+import { GetByIdQuery as GetPartnerByIdQuery } from "../features/partners";
 import { IContext, ILinkInfo } from "../../types";
+import { GetCostCategoriesForPartnerQuery } from "../features/claims/getCostCategoriesForPartnerQuery";
 
 export class ClaimForcastFormHandler extends FormHandlerBase<ClaimForcastParams, ForecastDetailsDTO[]> {
   constructor() {
@@ -16,11 +17,11 @@ export class ClaimForcastFormHandler extends FormHandlerBase<ClaimForcastParams,
   protected async getDto(context: IContext, params: ClaimForcastParams, button: IFormButton, body: IFormBody): Promise<ForecastDetailsDTO[]> {
     const dto = await context.runQuery(new GetAllForecastsForPartnerQuery(params.partnerId));
     const project = await context.runQuery(new GetByIdQuery(params.projectId));
-    const costCategories = await context.runQuery(new GetCostCategoriesQuery());
+    const partner = await context.runQuery(new GetPartnerByIdQuery(params.partnerId));
+    const costCategories = await context.runQuery(new GetCostCategoriesForPartnerQuery(project, partner));
 
     const costCategoriesIdsToUpdate = costCategories
       .filter(x => !x.isCalculated)
-      .filter(x => x.organisationType === "Industrial")
       .map(x => x.id);
 
     dto.forEach(x => {
