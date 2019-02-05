@@ -29,8 +29,7 @@ export interface IClaimLineItemRepository {
 }
 
 export class ClaimLineItemRepository extends SalesforceBase<ISalesforceClaimLineItem> implements IClaimLineItemRepository {
-
-  private recordType: string = "Claims Line Item";
+  private readonly recordType: string = "Claims Line Item";
 
   constructor(connection: () => Promise<Connection>) {
     super(connection, "Acc_Claims__c", fields);

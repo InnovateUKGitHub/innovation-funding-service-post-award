@@ -112,10 +112,8 @@ const StringField = <T extends {}>(props: ExternalFieldProps<T, string>) => {
 
 const MultilineStringField = <T extends {}>(props: ExternalFieldProps<T, string>) => {
     const TypedField = FieldComponent as { new(): FieldComponent<T> };
-    const splitString = (v: string) => {
-        return (v || "").split("\n").filter(x => !!x);
-    };
-    return <TypedField {...props} render={(item) => splitString(props.value(item) || "").map((line, index) => <p className="govuk-body" key={`multiline-string-${index}`}>{line}</p>)} />;
+    const splitString = (v: string | null) => (v || "").split("\n").filter(x => !!x);
+    return <TypedField {...props} render={(item) => splitString(props.value(item)).map((line, index) => <p className="govuk-body" key={index}>{line}</p>)} />;
 };
 
 const DateField = <T extends {}>(props: ExternalFieldProps<T, Date>) => {

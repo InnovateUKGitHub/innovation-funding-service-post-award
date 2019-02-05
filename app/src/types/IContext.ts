@@ -1,14 +1,10 @@
-import { IConfig } from "../server/features/common/config";
-import { IClock } from "../server/features/common/clock";
-import { ILogger } from "../server/features/common/logger";
+import { Cache, IClock, IConfig, ILogger } from "../server/features/common";
 import { IUser } from "./IUser";
-import { QueryBase } from "../server/features/common/queryBase";
-import { Cache } from "../server/features/common/cache";
 import { IRoleInfo } from "../server/features/projects/getAllProjectRolesForUser";
 import { Authorisation } from "./authorisation";
-import * as Repositories from "../server/repositories";
-import { SyncQueryBase } from "../server/features/common/queryBase";
+import { QueryBase, SyncQueryBase } from "../server/features/common/queryBase";
 import { CommandBase, SyncCommandBase } from "../server/features/common/commandBase";
+import * as Repositories from "../server/repositories";
 
 export interface IRepositories {
   claims: Readonly<Repositories.IClaimRepository>;

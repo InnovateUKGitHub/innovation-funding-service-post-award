@@ -24,7 +24,7 @@ export interface IProfileTotalCostCategoryRepository {
 }
 
 export class ProfileTotalCostCategoryRepository extends SalesforceBase<ISalesforceProfileTotalCostCategory> implements IProfileTotalCostCategoryRepository {
-  private recordType: string = "Total Cost Category";
+  private readonly recordType: string = "Total Cost Category";
 
   constructor(connection: () => Promise<Connection>) {
     super(connection, "Acc_Profile__c", fields);

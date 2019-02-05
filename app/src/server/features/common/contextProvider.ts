@@ -1,6 +1,5 @@
 import { Context } from "./context";
-import { IUser } from "../../../types/IUser";
-import { IContext } from "../../../types/IContext";
+import { IContext, IUser } from "../../../types";
 
 class ContextProvider {
   start(params: {user: IUser}): IContext {

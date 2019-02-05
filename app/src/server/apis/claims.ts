@@ -30,7 +30,10 @@ class Controller extends ControllerBase<ClaimDto> implements IClaimsApi {
         return Promise.reject(new BadRequestError("Invalid parameters"));
       });
     this.getItem("/:partnerId/:periodId", (p) => ({ partnerId: p.partnerId, periodId: parseInt(p.periodId, 10) }), (p) => this.get(p));
-    this.putItem("/:projectId/:partnerId/:periodId", (p, q, b) => ({ projectId: p.projectId, partnerId: p.partnerId, periodId: parseInt(p.periodId, 10), claim: processDto(b) }), (p) => this.update(p));
+    this.putItem("/:projectId/:partnerId/:periodId",
+      (p, q, b) => ({ projectId: p.projectId, partnerId: p.partnerId, periodId: parseInt(p.periodId, 10), claim: processDto(b) }),
+      (p) => this.update(p)
+    );
   }
 
   public async getAllByProjectId(params: ApiParams<{ projectId: string; }>) {

@@ -1,22 +1,20 @@
-import { CommandBase } from "../common/commandBase";
-import { GetAllForecastsGOLCostsQuery, GetAllForPartnerQuery } from "../claims";
-import { ForecastDetailsDtosValidator } from "../../../ui/validators/forecastDetailsDtosValidator";
-import { GetAllClaimDetailsByPartner } from "../claimDetails";
+import { DateTime } from "luxon";
+import { BadRequestError, CommandBase, ValidationError } from "../common";
+import { GetAllForecastsForPartnerQuery } from "./getAllForecastsForPartnerQuery";
 import { ISalesforceProfileDetails } from "../../repositories";
 import { Updatable } from "../../repositories/salesforceBase";
-import { ClaimDto, ClaimStatus, PartnerDto } from "../../../types";
-import { GetAllForecastsForPartnerQuery } from "./getAllForecastsForPartnerQuery";
+import { GetAllForecastsGOLCostsQuery, GetAllForPartnerQuery } from "../claims";
+import { GetAllClaimDetailsByPartner } from "../claimDetails";
 import { GetByIdQuery as GetPartnerById } from "../partners";
 import { GetByIdQuery as GetProjectById } from "../projects";
-import { BadRequestError, ValidationError } from "../common/appError";
-import { DateTime } from "luxon";
-import { IContext } from "../../../types/IContext";
+import { ForecastDetailsDtosValidator } from "../../../ui/validators/forecastDetailsDtosValidator";
+import { ClaimDto, ClaimStatus, IContext, PartnerDto } from "../../../types";
 
 export class UpdateForecastDetailsCommand extends CommandBase<boolean> {
   constructor(
-    private partnerId: string,
-    private forecasts: ForecastDetailsDTO[],
-    private submit: boolean
+    private readonly partnerId: string,
+    private readonly forecasts: ForecastDetailsDTO[],
+    private readonly submit: boolean
   ) {
     super();
   }

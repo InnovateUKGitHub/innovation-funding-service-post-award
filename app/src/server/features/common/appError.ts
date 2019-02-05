@@ -1,4 +1,4 @@
-import { ErrorCode, IAppError } from "../../../types/IAppError";
+import { ErrorCode, IAppError } from "../../../types";
 import { Results } from "../../../ui/validation/results";
 
 export class AppError extends Error implements IAppError {

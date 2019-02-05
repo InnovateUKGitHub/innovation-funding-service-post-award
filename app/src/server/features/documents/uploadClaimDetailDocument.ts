@@ -1,12 +1,10 @@
-import { CommandBase} from "../common/commandBase";
-import {UploadDocumentCommand} from "./uploadDocument";
-import { FileUpload } from "../../../types/FileUpload";
+import { CommandBase, ValidationError } from "../common";
+import { UploadDocumentCommand } from "./uploadDocument";
 import { FileUploadValidator } from "../../../ui/validators/documentUploadValidator";
-import { ValidationError } from "../common/appError";
-import { IContext } from "../../../types/IContext";
+import { FileUpload, IContext } from "../../../types";
 
 export class UploadClaimDetailDocumentCommand extends CommandBase<string> {
-  constructor(private claimDetailKey: ClaimDetailKey, private file: FileUpload) {
+  constructor(private readonly claimDetailKey: ClaimDetailKey, private readonly file: FileUpload) {
     super();
   }
 

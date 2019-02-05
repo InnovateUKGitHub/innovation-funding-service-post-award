@@ -1,8 +1,8 @@
-import { QueryBase } from "../common/queryBase";
-import { IContext } from "../../../types/IContext";
+import { QueryBase } from "../common";
+import { IContext } from "../../../types";
 
 export class GetAllForecastsGOLCostsQuery extends QueryBase<GOLCostDto[]> {
-  constructor(private partnerId: string) {
+  constructor(private readonly partnerId: string) {
     super();
   }
 

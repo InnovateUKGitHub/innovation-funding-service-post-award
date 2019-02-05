@@ -28,7 +28,6 @@ export class ContactsRepository extends SalesforceBase<ISalesforceContact> imple
   }
 
   getAll() {
-    console.log("getting all");
     return super.all();
   }
 }

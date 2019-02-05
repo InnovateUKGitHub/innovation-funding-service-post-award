@@ -13,7 +13,7 @@ interface FormProps<T> {
     onChange?: (data: T) => void;
     onSubmit?: () => void;
     qa?: string;
-    enctype?: "application/x-www-form-urlencoded" | "multipart/form-data" | "text/plain";
+    enctype?: "urlencoded" | "multipart";
 }
 
 interface FormChildProps<T> {
@@ -35,10 +35,14 @@ class FormComponent<T> extends React.Component<FormProps<T>, []> {
 
         const childrenWithData = React.Children.map(this.props.children, (child, index) => child && React.cloneElement(child as any, childProps(index)));
         return (
-            <form encType={this.props.enctype} method="post" action="" onSubmit={(e) => this.onSubmit(e)} data-qa={this.props.qa}>
+            <form encType={this.mapEncType()} method="post" action="" onSubmit={(e) => this.onSubmit(e)} data-qa={this.props.qa}>
                 {childrenWithData}
             </form>
         );
+    }
+
+    private mapEncType() {
+      return this.props.enctype === "multipart" ? "multipart/form-data" : "application/x-www-form-urlencoded";
     }
 
     private onSubmit(e: React.SyntheticEvent<HTMLFormElement>) {
@@ -100,17 +104,19 @@ interface ExternalFieldProps<TDto, TValue> {
 }
 
 class FieldComponent<T, TValue> extends React.Component<InternalFieldProps<T> & ExternalFieldProps<T, TValue>, {}> {
-    render() {
-        const { hint, name, label, labelHidden, field, formData, validation } = this.props;
-        return (
-            <div data-qa={`field-${name}`} className={classNames("govuk-form-group", { "govuk-form-group--error": validation && validation.showValidationErrors && !validation.isValid })}>
-                {!!label ? <label className={classNames("govuk-label", { "govuk-visually-hidden" : labelHidden })} htmlFor={name}>{label}</label> : null}
-                {hint ? <span id={`${name}-hint`} className="govuk-hint">{hint}</span> : null}
-                <ValidationError error={validation} />
-                {field(formData!)}
-            </div>
-        );
-    }
+  render() {
+    const { hint, name, label, labelHidden, field, formData, validation } = this.props;
+    const isValid = validation && validation.showValidationErrors && !validation.isValid;
+
+    return (
+      <div data-qa={`field-${name}`} className={classNames("govuk-form-group", { "govuk-form-group--error": isValid })}>
+        {!!label ? <label className={classNames("govuk-label", { "govuk-visually-hidden" : labelHidden })} htmlFor={name}>{label}</label> : null}
+        {hint ? <span id={`${name}-hint`} className="govuk-hint">{hint}</span> : null}
+        <ValidationError error={validation} />
+        {field(formData!)}
+      </div>
+    );
+  }
 }
 
 const handleSubmit = <TDto extends {}>(props: SubmitProps, e: React.MouseEvent<{}>) => {
@@ -139,29 +145,38 @@ const handleChange = <TDto extends {}, TValue extends {}>(props: ExternalFieldPr
 };
 
 const StringField = <T extends {}>(props: ExternalFieldProps<T, string>) => {
-    const TypedFieldComponent = FieldComponent as { new(): FieldComponent<T, string> };
-    return (
-        <TypedFieldComponent field={(data => <TextInput name={props.name} value={props.value(data)} onChange={(val) => handleChange(props, val)} />)} {...props} />
-    );
+  const TypedFieldComponent = FieldComponent as { new(): FieldComponent<T, string> };
+  return (
+    <TypedFieldComponent
+      field={(data => <TextInput name={props.name} value={props.value(data)} onChange={(val) => handleChange(props, val)} />)}
+      {...props}
+    />
+  );
 };
 
 interface MultiStringFieldProps<T> extends ExternalFieldProps<T, string> {
-    rows?: number;
-    qa?: string;
+  rows?: number;
+  qa?: string;
 }
 
 const MultiStringField = <T extends {}>(props: MultiStringFieldProps<T>) => {
-    const TypedFieldComponent = FieldComponent as { new(): FieldComponent<T, string> };
-    return (
-        <TypedFieldComponent field={(data => <TextAreaInput name={props.name} value={props.value(data)} onChange={(val) => handleChange(props, val)} rows={props.rows} qa={props.qa} />)}  {...props} />
-    );
+  const TypedFieldComponent = FieldComponent as { new(): FieldComponent<T, string> };
+  return (
+    <TypedFieldComponent
+      field={(data => <TextAreaInput name={props.name} value={props.value(data)} onChange={(val) => handleChange(props, val)} rows={props.rows} qa={props.qa} />)}
+      {...props}
+    />
+  );
 };
 
 const NumericField = <T extends {}>(props: ExternalFieldProps<T, number>) => {
-    const TypedFieldComponent = FieldComponent as { new(): FieldComponent<T, number> };
-    return (
-        <TypedFieldComponent field={(data => <NumberInput name={props.name} value={props.value(data)} onChange={(val) => handleChange(props, val)} />)} {...props} />
-    );
+  const TypedFieldComponent = FieldComponent as { new(): FieldComponent<T, number> };
+  return (
+    <TypedFieldComponent
+      field={(data => <NumberInput name={props.name} value={props.value(data)} onChange={(val) => handleChange(props, val)} />)}
+      {...props}
+    />
+  );
 };
 
 export interface SelectOption {
@@ -174,16 +189,19 @@ interface RadioFieldProps<T extends {}> extends ExternalFieldProps<T, SelectOpti
 }
 
 const RadioOptionsField = <T extends {}>(props: RadioFieldProps<T>) => {
-    const TypedFieldComponent = FieldComponent as { new(): FieldComponent<T, SelectOption> };
-    return (
-        <TypedFieldComponent field={(data) => <RadioList options={props.options} name={props.name} value={props.value(data)} onChange={(val) => handleChange(props, val)} />} {...props} />
-    );
+  const TypedFieldComponent = FieldComponent as { new(): FieldComponent<T, SelectOption> };
+  return (
+    <TypedFieldComponent
+      field={(data) => <RadioList options={props.options} name={props.name} value={props.value(data)} onChange={(val) => handleChange(props, val)} />}
+      {...props}
+    />
+  );
 };
 
 const HiddenField = <T extends {}>(props: HiddenFieldProps<T>) => {
-    return (
-        <input type="hidden" name={props.name} value={props.value((props as any as InternalFieldProps<T>).formData!) || ""} />
-    );
+  return (
+    <input type="hidden" name={props.name} value={props.value((props as any as InternalFieldProps<T>).formData!) || ""} />
+  );
 };
 
 interface SubmitProps {
@@ -209,17 +227,31 @@ interface ButtonProps {
 }
 
 const ButtonComponent: React.SFC<ButtonProps> = (props) => {
-    const { name, children, style, styling, className, value } = props;
-    const buttonProps = { style, className };
-    return <Button type="submit" name={`button_${name}`} value={value} styling={styling || "Secondary"} onClick={(e) => handleOtherButton(props, e)} {...buttonProps}>{children}</Button>;
+  const { name, children, style, styling, className, value } = props;
+  const buttonProps = { style, className };
+
+  return (
+    <Button
+      type="submit"
+      name={`button_${name}`}
+      styling={styling || "Secondary"}
+      value={value}
+      onClick={(e) => handleOtherButton(props, e)}
+      {...buttonProps}
+    >
+      {children}
+    </Button>
+  );
 };
 
 const FileUploadComponent = <T extends {}>(props: ExternalFieldProps<T, File>) => {
-    const TypedFieldComponent = FieldComponent as { new(): FieldComponent<T, File> };
-
-    return (
-        <TypedFieldComponent field={((data) => <FileUpload value={props.value(data)} name={props.name} onChange={(val) => handleChange(props, val)} />)} {...props}/>
-    );
+  const TypedFieldComponent = FieldComponent as { new(): FieldComponent<T, File> };
+  return (
+    <TypedFieldComponent
+      field={((data) => <FileUpload value={props.value(data)} name={props.name} onChange={(val) => handleChange(props, val)} />)}
+      {...props}
+    />
+  );
 };
 
 export const TypedForm = <T extends {}>() => ({

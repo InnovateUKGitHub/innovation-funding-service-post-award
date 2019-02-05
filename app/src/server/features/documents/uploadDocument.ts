@@ -1,9 +1,8 @@
-import { CommandBase } from "../common/commandBase";
-import { FileUpload } from "../../../types/FileUpload";
-import { IContext } from "../../../types/IContext";
+import { CommandBase } from "../common";
+import { FileUpload, IContext } from "../../../types";
 
 export class UploadDocumentCommand extends CommandBase<string> {
-  constructor(private file: FileUpload, private recordId: string) {
+  constructor(private readonly file: FileUpload, private readonly recordId: string) {
     super();
   }
 

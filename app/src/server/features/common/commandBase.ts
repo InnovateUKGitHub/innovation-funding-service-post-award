@@ -1,8 +1,6 @@
-import { IContext } from "../../../types/IContext";
-import { Authorisation } from "../../../types";
+import { Authorisation, IContext } from "../../../types";
 
 export abstract class CommandBase<T> {
-
   protected abstract Run(context: IContext): Promise<T>;
 
   protected accessControl(auth: Authorisation, context: IContext) {
@@ -15,7 +13,6 @@ export abstract class CommandBase<T> {
 }
 
 export abstract class SyncCommandBase<T> {
-
   protected abstract Run(context: IContext): T;
 
   protected LogMessage(): any[] {

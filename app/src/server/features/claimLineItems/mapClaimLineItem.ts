@@ -1,7 +1,6 @@
-import {ISalesforceClaimLineItem} from "../../repositories";
-import { IContext } from "../../../types/IContext";
+import { ISalesforceClaimLineItem } from "../../repositories";
 
-export default (context: IContext) => (item: ISalesforceClaimLineItem): ClaimLineItemDto => ({
+export default () => (item: ISalesforceClaimLineItem): ClaimLineItemDto => ({
   id: item.Id,
   description: item.Acc_LineItemDescription__c,
   value: item.Acc_LineItemCost__c,
