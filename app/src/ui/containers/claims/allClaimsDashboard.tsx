@@ -92,10 +92,10 @@ class Component extends ContainerBase<Params, Data, {}> {
     if (!partner || !(project.roles & ProjectRole.ProjectManager)) return null;
     const PartnerSummaryDetails = Acc.TypedDetails<PartnerDto>();
     return (
-      <PartnerSummaryDetails.Details data={partner} title={`${partner.name} claims history`} qa="project_summary-col-0">
+      <PartnerSummaryDetails.Details data={partner} title={`${partner.name} claims history`} qa="lead-partner-summary">
         <PartnerSummaryDetails.Currency label="Grant offered" qa="gol-costs" value={x => x.totalParticipantGrant} />
         <PartnerSummaryDetails.Currency label="Costs claimed" qa="claimed-costs" value={x => x.totalParticipantCostsClaimed || 0} />
-        <PartnerSummaryDetails.Percentage label="Percentage claimed" qa="percentage-costs" value={x => x.percentageParticipantCostsClaimed} />
+        <PartnerSummaryDetails.Percentage label="Percentage claimed" qa="claimed-percentage" value={x => x.percentageParticipantCostsClaimed} />
         <PartnerSummaryDetails.Percentage label="Funding level" value={x => x.awardRate} qa="award-rate" fractionDigits={0} />
         <PartnerSummaryDetails.Percentage label="Cap limit" value={x => x.capLimit} fractionDigits={0} qa="cap-limit" />
       </PartnerSummaryDetails.Details>
@@ -109,7 +109,7 @@ class Component extends ContainerBase<Params, Data, {}> {
       <Acc.Section>
         <Acc.SectionPanel qa="claims-summary">
           <Acc.DualDetails>
-            <ProjectSummaryDetails.Details title="Project claims history" data={project} qa="project_summary-col-0">
+            <ProjectSummaryDetails.Details title="Project claims history" data={project} qa="project-summary">
               <ProjectSummaryDetails.Currency label="Grant offered" qa="gol-costs" value={x => x.grantOfferLetterCosts} />
               <ProjectSummaryDetails.Currency label="Costs claimed" qa="claimed-costs" value={x => x.costsClaimedToDate || 0} />
               <ProjectSummaryDetails.Percentage label="Percentage claimed" qa="claimed-percentage" value={x => x.claimedPercentage} />
