@@ -1,5 +1,5 @@
 execution:
-- concurrency: 10
+- concurrency: 5
   ramp-up: 15s
   hold-for: 15s
   scenario: acc-performance-test
