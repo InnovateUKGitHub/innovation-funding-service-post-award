@@ -76,17 +76,19 @@ export const renderWarning = (data: ForecastData) => {
   const currentPeriod = data.claims.reduce((prev, item) => item.periodId > prev ? item.periodId : prev, 0);
   const forecasts = !!data.editor ? data.editor.data : data.forecastDetails;
 
-  data.costCategories.filter(x => x.organisationType === "Industrial").forEach(category => {
-    let total = 0;
-    const gol = data.golCosts.find(x => x.costCategoryId === category.id);
+  data.costCategories
+    .filter(x => x.competitionType === data.project.competitionType && x.organisationType === data.partner.organisationType)
+    .forEach(category => {
+      let total = 0;
+      const gol = data.golCosts.find(x => x.costCategoryId === category.id);
 
-    data.claimDetails.forEach(x => total += (x.costCategoryId === category.id && x.periodId <= currentPeriod) ? x.value : 0);
-    forecasts.forEach(x => total += (x.costCategoryId === category.id && x.periodId > currentPeriod) ? x.value : 0);
+      data.claimDetails.forEach(x => total += (x.costCategoryId === category.id && x.periodId <= currentPeriod) ? x.value : 0);
+      forecasts.forEach(x => total += (x.costCategoryId === category.id && x.periodId > currentPeriod) ? x.value : 0);
 
-    if (!gol || gol.value < total) {
-      categories.push(category.name);
-    }
-  });
+      if (!gol || gol.value < total) {
+        categories.push(category.name);
+      }
+    });
 
   return categories.length === 0 ? null : (
     <ValidationMessage

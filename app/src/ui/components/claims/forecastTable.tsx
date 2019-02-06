@@ -79,37 +79,39 @@ export class ForecastTable extends React.Component<Props> {
     const tableRows: TableRow[] = [];
     const forecasts = !!data.editor ? data.editor.data : data.forecastDetails;
 
-    data.costCategories.filter(x => x.organisationType === "Industrial").forEach(category => {
-      const row: TableRow = {
-        categoryId: category.id,
-        categoryName: category.name,
-        claims: {},
-        forecasts: {},
-        golCosts: 0,
-        total: 0,
-        difference: 0
-      };
+    data.costCategories
+      .filter(x => x.competitionType === data.project.competitionType && x.organisationType === data.partner.organisationType)
+      .forEach(category => {
+        const row: TableRow = {
+          categoryId: category.id,
+          categoryName: category.name,
+          claims: {},
+          forecasts: {},
+          golCosts: 0,
+          total: 0,
+          difference: 0
+        };
 
-      data.claimDetails.forEach(x => {
-        if(x.costCategoryId === category.id && x.periodId <= periodId) {
-          row.claims[x.periodId] = x.value;
-          row.total += x.value;
-        }
+        data.claimDetails.forEach(x => {
+          if (x.costCategoryId === category.id && x.periodId <= periodId) {
+            row.claims[x.periodId] = x.value;
+            row.total += x.value;
+          }
+        });
+
+        forecasts.forEach(x => {
+          if (x.costCategoryId === category.id && x.periodId > periodId) {
+            row.forecasts[x.periodId] = x.value;
+            row.total += x.value;
+          }
+        });
+
+        const gol = data.golCosts.find(x => x.costCategoryId === category.id);
+        row.golCosts = !!gol ? gol.value : 0;
+        row.difference = this.calculateDifference(row.golCosts, row.total);
+
+        tableRows.push(row);
       });
-
-      forecasts.forEach(x => {
-        if(x.costCategoryId === category.id && x.periodId > periodId) {
-          row.forecasts[x.periodId] = x.value;
-          row.total += x.value;
-        }
-      });
-
-      const gol = data.golCosts.find(x => x.costCategoryId === category.id);
-      row.golCosts = !!gol ? gol.value : 0;
-      row.difference = this.calculateDifference(row.golCosts, row.total);
-
-      tableRows.push(row);
-    });
 
     return tableRows;
   }
