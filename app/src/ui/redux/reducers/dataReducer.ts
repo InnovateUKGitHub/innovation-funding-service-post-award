@@ -1,9 +1,8 @@
-import { DataLoadAction } from "../actions/common";
 import { combineReducers } from "redux";
-import { ActionTransitionStart } from "redux-router5";
+import { ActionTransitionStart, actionTypes } from "redux-router5";
+import { DataLoadAction } from "../actions/common";
 import { LoadingStatus } from "../../../shared/pending";
-import { ClaimDto, PartnerDto, ProjectDto, ProjectRole } from "../../../types";
-import { IAppError } from "../../../types/IAppError";
+import { ClaimDto, IAppError, PartnerDto, ProjectDto, ProjectRole } from "../../../types";
 
 export interface IDataStore<T> {
   status: LoadingStatus;
@@ -11,10 +10,9 @@ export interface IDataStore<T> {
   error: IAppError | null;
 }
 
-export const dataStoreReducer = <TData extends {}, TKey>(key: (key: TKey) => string, storeKey: string) =>
+const dataStoreReducer = <TData extends {}>(storeKey: string) =>
   (state: { [key: string]: IDataStore<TData> } = {}, action: DataLoadAction | ActionTransitionStart) => {
   if (action.type === "DATA_LOAD" && action.payload.store === storeKey) {
-
     const existing = state[action.payload.id];
     const err = action.payload.error;
 
@@ -24,12 +22,10 @@ export const dataStoreReducer = <TData extends {}, TKey>(key: (key: TKey) => str
       error: err && { code: err.code, message: err.message, results: err.results }
     };
 
-    const result = Object.assign({}, state);
-    result[action.payload.id] = pending;
-    return result;
+    return Object.assign({}, state, { [action.payload.id]: pending });
   }
 
-  if (action.type === "@@router5/TRANSITION_START" && action.payload.previousRoute !== null) {
+  if (action.type === actionTypes.TRANSITION_START && action.payload.previousRoute !== null) {
     const result = Object.assign({}, state);
     Object.keys(result).forEach(itemKey => {
       const pending = result[itemKey];
@@ -43,24 +39,23 @@ export const dataStoreReducer = <TData extends {}, TKey>(key: (key: TKey) => str
   return state;
 };
 
-// TODO remove key function
 export const dataReducer = combineReducers({
-  claims: dataStoreReducer<ClaimDto[], string>(x => x, "claims"),
-  claim: dataStoreReducer<ClaimDto, string>(x => x, "claim"),
-  claimDetails: dataStoreReducer<ClaimDetailsDto[], string>(x => x || "empty", "claimDetails"),
-  claimDetailsSummary: dataStoreReducer<ClaimDetailsSummaryDto[], string>(x => x || "empty", "claimDetailsSummary"),
-  claimLineItems: dataStoreReducer<ClaimLineItemDto[], string>(x => x || "empty", "claimLineItems"),
-  contacts: dataStoreReducer<IContact[], string>(x => x, "contacts"),
-  contact: dataStoreReducer<IContact, string>(x => x, "contact"),
-  costCategories:dataStoreReducer<CostCategoryDto[], string>(x => x, "costCategories"),
-  documents: dataStoreReducer<DocumentSummaryDto[], string>(x => x, "documents"),
-  forecastDetails: dataStoreReducer<ForecastDetailsDTO[], string>(x => x, "forecastDetails"),
-  forecastDetail: dataStoreReducer<ForecastDetailsDTO, string>(x => x, "forecastDetail"),
-  forecastGolCosts: dataStoreReducer<GOLCostDto[], string>(x => x, "forecastGolCosts"),
-  partners: dataStoreReducer<PartnerDto[], string>(x => x, "partners"),
-  partner: dataStoreReducer<PartnerDto, string>(x => x, "partner"),
-  project: dataStoreReducer<ProjectDto, string>(x => x, "project"),
-  projects: dataStoreReducer<ProjectDto[], string>(x => x, "projects"),
-  projectContacts: dataStoreReducer<ProjectContactDto[], string>(x => x, "projectContacts"),
-  user: dataStoreReducer<{[key: string]: ProjectRole}, string>(x => x, "user")
+  claims: dataStoreReducer<ClaimDto[]>("claims"),
+  claim: dataStoreReducer<ClaimDto>("claim"),
+  claimDetails: dataStoreReducer<ClaimDetailsDto[]>("claimDetails"),
+  claimDetailsSummary: dataStoreReducer<ClaimDetailsSummaryDto[]>("claimDetailsSummary"),
+  claimLineItems: dataStoreReducer<ClaimLineItemDto[]>("claimLineItems"),
+  contacts: dataStoreReducer<IContact[]>("contacts"),
+  contact: dataStoreReducer<IContact>("contact"),
+  costCategories:dataStoreReducer<CostCategoryDto[]>("costCategories"),
+  documents: dataStoreReducer<DocumentSummaryDto[]>("documents"),
+  forecastDetails: dataStoreReducer<ForecastDetailsDTO[]>("forecastDetails"),
+  forecastDetail: dataStoreReducer<ForecastDetailsDTO>("forecastDetail"),
+  forecastGolCosts: dataStoreReducer<GOLCostDto[]>("forecastGolCosts"),
+  partners: dataStoreReducer<PartnerDto[]>("partners"),
+  partner: dataStoreReducer<PartnerDto>("partner"),
+  project: dataStoreReducer<ProjectDto>("project"),
+  projects: dataStoreReducer<ProjectDto[]>("projects"),
+  projectContacts: dataStoreReducer<ProjectContactDto[]>("projectContacts"),
+  user: dataStoreReducer<{[key: string]: ProjectRole}>("user")
 });
