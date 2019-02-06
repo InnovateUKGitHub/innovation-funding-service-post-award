@@ -51,16 +51,15 @@ interface Callbacks {
 
 class Component extends ContainerBase<ClaimDashboardPageParams, Data, Callbacks> {
   public render() {
-    const combined = Pending.combine(
-      this.props.document,
-      this.props.projectDetails,
-      this.props.partnerDetails,
-      this.props.previousClaims,
-      this.props.currentClaim,
-      this.props.editor,
-      this.props.deleteEditor,
-      (document, project, partner, previousClaims, currentClaim, editor, deleteEditor) => ({ project, partner, previousClaims, currentClaim, editor, document, deleteEditor })
-    );
+    const combined = Pending.combine({
+      document: this.props.document,
+      project: this.props.projectDetails,
+      partner: this.props.partnerDetails,
+      previousClaims: this.props.previousClaims,
+      currentClaim: this.props.currentClaim,
+      editor: this.props.editor,
+      deleteEditor: this.props.deleteEditor,
+    });
 
     return <Acc.PageLoader pending={combined} render={(x) => this.renderContents(x)} />;
   }

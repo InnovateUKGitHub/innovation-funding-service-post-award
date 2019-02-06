@@ -44,15 +44,14 @@ interface CombinedData {
 export class PrepareComponent extends ContainerBase<PrepareClaimParams, Data, Callbacks> {
 
     public render() {
-        const combined = Pending.combine(
-            this.props.project,
-            this.props.partner,
-            this.props.costCategories,
-            this.props.claim,
-            this.props.claimDetailsSummary,
-            this.props.editor,
-            (project, partner, costCategories, claim, claimDetails, editor) => ({ project, partner, costCategories, claim, claimDetails, editor })
-        );
+        const combined = Pending.combine({
+          project: this.props.project,
+          partner: this.props.partner,
+          costCategories: this.props.costCategories,
+          claim: this.props.claim,
+          claimDetails: this.props.claimDetailsSummary,
+          editor: this.props.editor,
+        });
 
         return <ACC.PageLoader pending={combined} render={(data) => this.renderContents(data)} />;
     }

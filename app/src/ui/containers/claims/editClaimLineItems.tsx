@@ -53,14 +53,14 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
   }
 
   public render() {
-    const combined = Pending.combine(
-      this.props.project,
-      this.props.lineItems,
-      this.props.costCategories,
-      this.props.forecastDetail,
-      this.props.documents,
-      (project, lineItems, costCategories, forecastDetail, documents) => ({ project, lineItems, costCategories, forecastDetail, documents })
-    );
+    const combined = Pending.combine({
+      project: this.props.project,
+      lineItems: this.props.lineItems,
+      costCategories: this.props.costCategories,
+      forecastDetail: this.props.forecastDetail,
+      documents: this.props.documents,
+    });
+
     return <ACC.PageLoader pending={combined} render={(data) => this.renderContents(data, this.props.editor)} />;
   }
 

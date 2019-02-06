@@ -47,23 +47,18 @@ export const forecastDataLoadActions = (p: Params) => [
 ];
 
 export const withDataEditor = (state: RootState, props: Params): PendingForecastData => {
-  // not sure why but seems that the pending may now have too many overloads!!!!
-  // ToDo: Really need to look at this data load and make it more efficient and require less data!
-  const pendingData = Pending.combine(
-    Selectors.getProject(props.projectId).getPending(state),
-    Selectors.getPartner(props.partnerId).getPending(state),
-    Selectors.getCurrentClaim(state, props.partnerId),
-    Selectors.findClaimsByPartner(props.partnerId).getPending(state),
-    Selectors.findClaimDetailsByPartner(props.partnerId).getPending(state),
-    Selectors.findForecastDetailsByPartner(props.partnerId).getPending(state),
-    Selectors.findGolCostsByPartner(props.partnerId).getPending(state),
-    Selectors.getCostCategories().getPending(state),
-    (project, partner, claim, claims, claimDetails, forecastDetails, golCosts, costCategories) => ({ project, partner, claim, claims, claimDetails, forecastDetails, golCosts, costCategories })
-  );
-
-  const pendingEditor = Selectors.getForecastDetailsEditor(props.partnerId).get(state).then(x => ({ editor: x! }));
-
-  const combined = Pending.combine(pendingData, pendingEditor, (data, editor) => ({ ...data, ...editor }));
+  // TODO: Really need to look at this data load and make it more efficient and require less data!
+  const combined = Pending.combine({
+    project: Selectors.getProject(props.projectId).getPending(state),
+    partner: Selectors.getPartner(props.partnerId).getPending(state),
+    claim: Selectors.getCurrentClaim(state, props.partnerId),
+    claims: Selectors.findClaimsByPartner(props.partnerId).getPending(state),
+    claimDetails: Selectors.findClaimDetailsByPartner(props.partnerId).getPending(state),
+    forecastDetails: Selectors.findForecastDetailsByPartner(props.partnerId).getPending(state),
+    golCosts: Selectors.findGolCostsByPartner(props.partnerId).getPending(state),
+    costCategories: Selectors.getCostCategories().getPending(state),
+    editor: Selectors.getForecastDetailsEditor(props.partnerId).get(state).then(x => x!),
+  });
 
   return { combined };
 };
