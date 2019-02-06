@@ -22,6 +22,7 @@ export class MapToPartnerDtoCommand extends SyncCommandBase<PartnerDto> {
             name: this.item.Acc_AccountId__r.Name,
             accountId: this.item.Acc_AccountId__r.Id,
             type: this.item.Acc_ParticipantType__c,
+            organisationType: this.item.Acc_OrganisationType__c,
             isLead: this.item.Acc_ProjectRole__c === PROJECT_LEAD_IDENTIFIER,
             projectId: this.item.Acc_ProjectId__c,
             totalParticipantGrant: this.valueIfPermission(this.item.Acc_TotalParticipantGrant__c),

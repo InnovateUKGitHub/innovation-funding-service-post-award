@@ -6,6 +6,7 @@ export interface ISalesforceProject {
     Acc_ClaimFrequency__c: string;
     Acc_EndDate__c: string;
     Acc_GOLTotalCostAwarded__c: number;
+    Acc_CompetitionType__c: string;
     Acc_IFSApplicationId__c: number;
     Acc_ProjectNumber__c: string;
     Acc_ProjectSource__c: string;
@@ -21,6 +22,7 @@ const fields = [
     "Acc_ClaimFrequency__c",
     "Acc_EndDate__c",
     "Acc_GOLTotalCostAwarded__c",
+    "Acc_CompetitionType__c",
     "Acc_IFSApplicationId__c",
     "Acc_ProjectNumber__c",
     "Acc_ProjectSource__c",
