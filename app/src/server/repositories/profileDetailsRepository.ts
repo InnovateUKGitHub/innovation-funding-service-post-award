@@ -1,4 +1,4 @@
-import SalesforceBase, { Updatable } from "./salesforceBase";
+import SalesforceRepositoryBase, { Updatable } from "./salesforceRepositoryBase";
 import { Connection } from "jsforce";
 
 export interface ISalesforceProfileDetails {
@@ -30,12 +30,21 @@ export interface IProfileDetailsRepository {
   update(profileDetails: Updatable<ISalesforceProfileDetails>[]): Promise<boolean>;
 }
 
-export class ProfileDetailsRepository extends SalesforceBase<ISalesforceProfileDetails> implements IProfileDetailsRepository {
+export class ProfileDetailsRepository extends SalesforceRepositoryBase<ISalesforceProfileDetails> implements IProfileDetailsRepository {
+
   private readonly recordType: string = "Profile Detail";
 
-  constructor(connection: () => Promise<Connection>) {
-    super(connection, "Acc_Profile__c", fields);
-  }
+  protected readonly salesforceObjectName = "Acc_Profile__c";
+
+  protected readonly salesforceFieldNames = [
+    "Id",
+    "Acc_CostCategory__c",
+    "Acc_LatestForecastCost__c",
+    "Acc_ProjectParticipant__c",
+    "Acc_ProjectPeriodNumber__c",
+    "Acc_ProjectPeriodStartDate__c",
+    "Acc_ProjectPeriodEndDate__c",
+  ];
 
   public async getAllByPartner(partnerId: string) {
     const filter = `Acc_ProjectParticipant__c = '${partnerId}' AND RecordType.Name = '${this.recordType}'`;

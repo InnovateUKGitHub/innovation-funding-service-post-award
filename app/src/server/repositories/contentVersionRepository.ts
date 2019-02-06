@@ -1,7 +1,6 @@
 import { Stream } from "stream";
-import { Connection } from "jsforce";
 import { FileUpload } from "../../types/FileUpload";
-import SalesforceBase from "./salesforceBase";
+import SalesforceRepositoryBase from "./salesforceRepositoryBase";
 
 export interface ISalesforceContentVersion {
   Id: string;
@@ -24,12 +23,19 @@ export interface IContentVersionRepository {
   insertDocument(file: FileUpload): Promise<string>;
 }
 
-const fieldNames: (keyof ISalesforceContentVersion)[] = ["Id", "Title", "FileExtension", "ContentDocumentId", "ContentSize", "FileType", "Description"];
+export class ContentVersionRepository extends SalesforceRepositoryBase<ISalesforceContentVersion> implements IContentVersionRepository {
 
-export class ContentVersionRepository extends SalesforceBase<ISalesforceContentVersion> implements IContentVersionRepository {
-  constructor(connection: () => Promise<Connection>) {
-    super(connection, "ContentVersion", fieldNames);
-  }
+  protected readonly salesforceObjectName = "ContentVersion";
+
+  protected readonly salesforceFieldNames = [
+    "Id",
+    "Title",
+    "FileExtension",
+    "ContentDocumentId",
+    "ContentSize",
+    "FileType",
+    "Description"
+  ];
 
   public getDocuments(contentDocumentIds: string[], filter?: DocumentFilter): Promise<ISalesforceContentVersion[]> {
     let queryString = `ContentDocumentId IN ('${contentDocumentIds.join("', '")}') AND IsLatest = true`;
@@ -48,7 +54,7 @@ export class ContentVersionRepository extends SalesforceBase<ISalesforceContentV
     });
   }
 
-  public insertDocument({content, fileName, description}: FileUpload) {
+  public insertDocument({ content, fileName, description }: FileUpload) {
     return super.insert({
       ReasonForChange: "First Upload",
       PathOnClient: fileName,

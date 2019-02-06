@@ -1,4 +1,4 @@
-import SalesforceBase from "./salesforceBase";
+import SalesforceRepositoryBase from "./salesforceRepositoryBase";
 import { Connection } from "jsforce";
 
 export interface ISalesforceProfileTotalPeriod {
@@ -23,12 +23,18 @@ export interface IProfileTotalPeriodRepository {
   get(partnerId: string, periodId: number): Promise<ISalesforceProfileTotalPeriod>;
 }
 
-export class ProfileTotalPeriodRepository extends SalesforceBase<ISalesforceProfileTotalPeriod> implements IProfileTotalPeriodRepository {
+export class ProfileTotalPeriodRepository extends SalesforceRepositoryBase<ISalesforceProfileTotalPeriod> implements IProfileTotalPeriodRepository {
+
   private readonly recordType: string = "Total Project Period";
 
-  constructor(connection: () => Promise<Connection>) {
-    super(connection, "Acc_Profile__c", fields);
-  }
+  protected readonly salesforceObjectName = "Acc_Profile__c";
+
+  protected readonly salesforceFieldNames = [
+    "LastModifiedDate",
+    "Acc_ProjectParticipant__c",
+    "Acc_ProjectPeriodNumber__c",
+    "Acc_PeriodInitialForecastCost__c"
+  ];
 
   getAllByProjectId(projectId: string): Promise<ISalesforceProfileTotalPeriod[]> {
     const filter = `

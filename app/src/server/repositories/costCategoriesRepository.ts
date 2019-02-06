@@ -1,17 +1,24 @@
-import SalesforceBase from "./salesforceBase";
-import { Connection } from "jsforce";
+import SalesforceRepositoryBase from "./salesforceRepositoryBase";
 
 export interface ISalesforceCostCategory {
-    Id: string;
-    Acc_CostCategoryName__c: string;
-    Acc_DisplayOrder__c: number;
-    Acc_OrganisationType__c: string;
-    Acc_CompetitionType__c: string;
-    Acc_CostCategoryDescription__c: string;
-    Acc_HintText__c: string;
+  Id: string;
+  Acc_CostCategoryName__c: string;
+  Acc_DisplayOrder__c: number;
+  Acc_OrganisationType__c: string;
+  Acc_CompetitionType__c: string;
+  Acc_CostCategoryDescription__c: string;
+  Acc_HintText__c: string;
 }
 
-const fieldNames: string[] = [
+export interface ICostCategoryRepository {
+  getAll(): Promise<ISalesforceCostCategory[]>;
+}
+
+export class CostCategoryRepository extends SalesforceRepositoryBase<ISalesforceCostCategory> implements ICostCategoryRepository {
+
+  protected readonly salesforceObjectName = "Acc_CostCategory__c";
+
+  protected readonly salesforceFieldNames = [
     "Id",
     "Acc_CostCategoryName__c",
     "Acc_DisplayOrder__c",
@@ -19,18 +26,9 @@ const fieldNames: string[] = [
     "Acc_CompetitionType__c",
     "Acc_CostCategoryDescription__c",
     "Acc_HintText__c"
-];
+  ];
 
-export interface ICostCategoryRepository {
-    getAll(): Promise<ISalesforceCostCategory[]>;
-}
-
-export class CostCategoryRepository extends SalesforceBase<ISalesforceCostCategory> implements ICostCategoryRepository {
-    constructor(connection: () => Promise<Connection>) {
-        super(connection, "Acc_CostCategory__c", fieldNames);
-    }
-
-    getAll(): Promise<ISalesforceCostCategory[]> {
-        return super.all();
-    }
+  getAll(): Promise<ISalesforceCostCategory[]> {
+    return super.all();
+  }
 }
