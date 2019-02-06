@@ -9,6 +9,7 @@ import { ProjectDto, ProjectRole } from "../../../types";
 import { IEditorStore } from "../../redux/reducers";
 import { DocumentUploadValidator } from "../../validators/documentUploadValidator";
 import { Results } from "../../validation/results";
+import { dataLoadAction } from "../../redux/actions";
 
 export interface ClaimDetailDocumentsPageParams {
   projectId: string;
@@ -42,14 +43,14 @@ interface Callbacks {
 export class ClaimDetailDocumentsComponent extends ContainerBase<ClaimDetailDocumentsPageParams, Data, Callbacks> {
 
   public render() {
-    const combined = Pending.combine(
-      this.props.project,
-      this.props.costCategories,
-      this.props.documents,
-      this.props.editor,
-      this.props.deleteEditor,
-      (project, costCategories, documents, editor, deleteEditor) => ({ project, costCategories, documents, editor, deleteEditor })
-    );
+    const combined = Pending.combine({
+      project: this.props.project,
+      costCategories: this.props.costCategories,
+      documents: this.props.documents,
+      editor: this.props.editor,
+      deleteEditor: this.props.deleteEditor
+    });
+
     return <ACC.PageLoader pending={combined} render={(data) => this.renderContents(data)} />;
   }
 
