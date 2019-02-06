@@ -19,6 +19,6 @@ const getDataStoreItem = <T extends DataStateKeys, K extends string>(state: Root
 export const dataStoreHelper = <T extends DataStateKeys, K extends string, TDto extends Infer<DataState[T][K]>>(store: T, key: K): IDataSelector<TDto> => ({
   store,
   key,
-  get: state => getDataStoreItem(state, store, key) as IDataStore<TDto>,
-  getPending: state => Pending.create(getDataStoreItem(state, store, key) as IDataStore<TDto>)
+  get: state => getDataStoreItem(state, store, key) as any as IDataStore<TDto>,
+  getPending: state => Pending.create(getDataStoreItem(state, store, key) as any as IDataStore<TDto>)
 });
