@@ -1,27 +1,37 @@
-import SalesforceBase, { Updatable } from "./salesforceBase";
-import { Connection } from "jsforce";
+import SalesforceRepositoryBase, { Updatable } from "./salesforceRepositoryBase";
 
 export interface ISalesforcePartner {
+  Id: string;
+  Acc_AccountId__r: {
     Id: string;
-    Acc_AccountId__r: {
-        Id: string;
-        Name: string;
-    };
-    Acc_OrganisationType__c: string;
-    Acc_ParticipantType__c: string;
-    Acc_ParticipantSize__c: string;
-    Acc_ProjectRole__c: string;
-    Acc_ProjectId__c: string;
-    Acc_TotalParticipantGrant__c: number;
-    Acc_TotalParticipantCosts__c: number;
-    Acc_TotalParticipantCostsPaid__c: number;
-    Acc_Cap_Limit__c: number;
-    Acc_Award_Rate__c: number;
-    Acc_TotalFutureForecastsforParticipant__c: number;
-    Acc_ForecastLastModifiedDate__c: string;
+    Name: string;
+  };
+  Acc_OrganisationType__c: string;
+  Acc_ParticipantType__c: string;
+  Acc_ParticipantSize__c: string;
+  Acc_ProjectRole__c: string;
+  Acc_ProjectId__c: string;
+  Acc_TotalParticipantGrant__c: number;
+  Acc_TotalParticipantCosts__c: number;
+  Acc_TotalParticipantCostsPaid__c: number;
+  Acc_Cap_Limit__c: number;
+  Acc_Award_Rate__c: number;
+  Acc_TotalFutureForecastsforParticipant__c: number;
+  Acc_ForecastLastModifiedDate__c: string;
 }
 
-const fields = [
+export interface IPartnerRepository {
+  getAllByProjectId(projectId: string): Promise<ISalesforcePartner[]>;
+  getById(partnerId: string): Promise<ISalesforcePartner>;
+  update(updatedPartner: Updatable<ISalesforcePartner>): Promise<boolean>;
+  getAll(): Promise<ISalesforcePartner[]>;
+}
+
+export class PartnerRepository extends SalesforceRepositoryBase<ISalesforcePartner> implements IPartnerRepository {
+
+  protected readonly salesforceObjectName = "Acc_ProjectParticipant__c";
+
+  protected readonly salesforceFieldNames = [
     "Id",
     "Acc_AccountId__r.Id",
     "Acc_AccountId__r.Name",
@@ -36,35 +46,23 @@ const fields = [
     "Acc_ProjectId__c",
     "Acc_TotalFutureForecastsforParticipant__c",
     "Acc_ForecastLastModifiedDate__c",
-];
+  ];
 
-export interface IPartnerRepository {
-    getAllByProjectId(projectId: string): Promise<ISalesforcePartner[]>;
-    getById(partnerId: string): Promise<ISalesforcePartner>;
-    update(updatedPartner: Updatable<ISalesforcePartner>): Promise<boolean>;
-    getAll(): Promise<ISalesforcePartner[]>;
-}
+  getAllByProjectId(projectId: string): Promise<ISalesforcePartner[]> {
+    return super.where({ Acc_ProjectId__c: projectId });
+  }
 
-export class PartnerRepository extends SalesforceBase<ISalesforcePartner> implements IPartnerRepository {
-    constructor(connection: () => Promise<Connection>) {
-        super(connection, "Acc_ProjectParticipant__c", fields);
-    }
+  getById(partnerId: string): Promise<ISalesforcePartner> {
+    return super.loadItem({ Id: partnerId });
+  }
 
-    getAllByProjectId(projectId: string): Promise<ISalesforcePartner[]> {
-        return super.where({ Acc_ProjectId__c: projectId });
-    }
+  update(updatedPartner: Updatable<ISalesforcePartner>) {
+    return super.update(updatedPartner);
+  }
 
-    getById(partnerId: string): Promise<ISalesforcePartner> {
-        return super.loadItem({ Id: partnerId });
-    }
-
-    update(updatedPartner: Updatable<ISalesforcePartner>) {
-      return super.update(updatedPartner);
-    }
-
-    getAll() {
-      return super.all();
-    }
+  getAll() {
+    return super.all();
+  }
 }
 
 export const PROJECT_LEAD_IDENTIFIER = "Project Lead";

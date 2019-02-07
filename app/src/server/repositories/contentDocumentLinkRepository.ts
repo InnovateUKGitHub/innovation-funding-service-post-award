@@ -1,5 +1,4 @@
-import SalesforceBase from "./salesforceBase";
-import { Connection } from "jsforce";
+import SalesforceRepositoryBase from "./salesforceRepositoryBase";
 
 export interface ISalesforceContentDocumentLink {
   ContentDocumentId: string;
@@ -7,20 +6,19 @@ export interface ISalesforceContentDocumentLink {
   ShareType: string;
 }
 
-const fieldNames: (keyof ISalesforceContentDocumentLink)[] = [
-  "ContentDocumentId",
-  "LinkedEntityId"
-];
-
 export interface IContentDocumentLinkRepository {
   getAllForEntity(entityId: string): Promise<ISalesforceContentDocumentLink[]>;
   insertContentDocumentLink(contentDocumentId: string, linkedEntityId: string): Promise<string>;
 }
 
-export class ContentDocumentLinkRepository extends SalesforceBase<ISalesforceContentDocumentLink> implements IContentDocumentLinkRepository {
-  constructor(connection: () => Promise<Connection>) {
-    super(connection, "ContentDocumentLink", fieldNames);
-  }
+export class ContentDocumentLinkRepository extends SalesforceRepositoryBase<ISalesforceContentDocumentLink> implements IContentDocumentLinkRepository {
+
+  protected readonly salesforceObjectName = "ContentDocumentLink";
+
+  protected readonly salesforceFieldNames = [
+    "ContentDocumentId",
+    "LinkedEntityId"
+  ];
 
   public getAllForEntity(entityId: string): Promise<ISalesforceContentDocumentLink[]> {
     return super.where({ LinkedEntityId: entityId });

@@ -1,5 +1,4 @@
-import SalesforceBase from "./salesforceBase";
-import { Connection } from "jsforce";
+import SalesforceRepositoryBase from "./salesforceRepositoryBase";
 
 export interface ISalesforceClaimDetails {
   Id: string;
@@ -11,18 +10,6 @@ export interface ISalesforceClaimDetails {
   Acc_ProjectPeriodEndDate__c: string;
 }
 
-type FieldNames = keyof ISalesforceClaimDetails;
-
-const fields: FieldNames[] = [
-  "Id",
-  "Acc_CostCategory__c",
-  "Acc_PeriodCostCategoryTotal__c",
-  "Acc_ProjectParticipant__c",
-  "Acc_ProjectPeriodNumber__c",
-  "Acc_ProjectPeriodStartDate__c",
-  "Acc_ProjectPeriodEndDate__c",
-];
-
 export interface IClaimDetailsRepository {
   getAllByPartnerForPeriod(partnerId: string, periodId: number): Promise<ISalesforceClaimDetails[]>;
   getAllByPartnerWithPeriodLt(partnerId: string, periodId: number): Promise<ISalesforceClaimDetails[]>;
@@ -30,12 +17,21 @@ export interface IClaimDetailsRepository {
   getAllByPartner(partnerId: string): Promise<ISalesforceClaimDetails[]>;
 }
 
-export class ClaimDetailsRepository extends SalesforceBase<ISalesforceClaimDetails> implements IClaimDetailsRepository {
+export class ClaimDetailsRepository extends SalesforceRepositoryBase<ISalesforceClaimDetails> implements IClaimDetailsRepository {
+
   private readonly recordType: string = "Claims Detail";
 
-  constructor(connection: () => Promise<Connection>) {
-    super(connection, "Acc_Claims__c", fields);
-  }
+  protected readonly salesforceObjectName = "Acc_Claims__c";
+
+  protected readonly salesforceFieldNames = [
+    "Id",
+    "Acc_CostCategory__c",
+    "Acc_PeriodCostCategoryTotal__c",
+    "Acc_ProjectParticipant__c",
+    "Acc_ProjectPeriodNumber__c",
+    "Acc_ProjectPeriodStartDate__c",
+    "Acc_ProjectPeriodEndDate__c",
+  ];
 
   getAllByPartnerForPeriod(partnerId: string, periodId: number): Promise<ISalesforceClaimDetails[]> {
     const filter = `
@@ -57,7 +53,7 @@ export class ClaimDetailsRepository extends SalesforceBase<ISalesforceClaimDetai
       AND Acc_ClaimStatus__c != 'New'
     `;
     const claimDetail = await super.filterOne(filter);
-    if (!claimDetail ) {
+    if (!claimDetail) {
       throw Error("Claim detail not found");
     }
     return claimDetail;

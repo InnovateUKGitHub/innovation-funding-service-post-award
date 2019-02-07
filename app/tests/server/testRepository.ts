@@ -1,4 +1,4 @@
-import {Updatable} from "../../src/server/repositories/salesforceBase";
+import {Updatable} from "../../src/server/repositories/salesforceRepositoryBase";
 
 export abstract class TestRepository<T> {
   Items: T[] = [];

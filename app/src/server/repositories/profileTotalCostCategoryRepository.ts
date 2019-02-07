@@ -1,5 +1,4 @@
-import SalesforceBase from "./salesforceBase";
-import { Connection } from "jsforce";
+import SalesforceRepositoryBase from "./salesforceRepositoryBase";
 
 export interface ISalesforceProfileTotalCostCategory {
   Id: string;
@@ -9,26 +8,23 @@ export interface ISalesforceProfileTotalCostCategory {
   Acc_ProjectParticipant__c: string;
 }
 
-type FieldNames = keyof ISalesforceProfileTotalCostCategory;
-
-const fields: FieldNames[] = [
-  "Id",
-  "Acc_CostCategory__c",
-  // "Acc_CostCategoryTotal__c",
-  "Acc_CostCategoryGOLCost__c",
-  "Acc_ProjectParticipant__c",
-];
-
 export interface IProfileTotalCostCategoryRepository {
   getAllByPartnerId(partnerId: string): Promise<ISalesforceProfileTotalCostCategory[]>;
 }
 
-export class ProfileTotalCostCategoryRepository extends SalesforceBase<ISalesforceProfileTotalCostCategory> implements IProfileTotalCostCategoryRepository {
+export class ProfileTotalCostCategoryRepository extends SalesforceRepositoryBase<ISalesforceProfileTotalCostCategory> implements IProfileTotalCostCategoryRepository {
+
   private readonly recordType: string = "Total Cost Category";
 
-  constructor(connection: () => Promise<Connection>) {
-    super(connection, "Acc_Profile__c", fields);
-  }
+  protected readonly salesforceObjectName = "Acc_Profile__c";
+
+  protected readonly salesforceFieldNames = [
+    "Id",
+    "Acc_CostCategory__c",
+    // "Acc_CostCategoryTotal__c",
+    "Acc_CostCategoryGOLCost__c",
+    "Acc_ProjectParticipant__c",
+  ];
 
   getAllByPartnerId(partnerId: string): Promise<ISalesforceProfileTotalCostCategory[]> {
     const filter = `Acc_ProjectParticipant__c = '${partnerId}' AND RecordType.Name = '${this.recordType}'`;

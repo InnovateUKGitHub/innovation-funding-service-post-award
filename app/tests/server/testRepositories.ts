@@ -1,7 +1,7 @@
 import { TestRepository } from "./testRepository";
 import * as Repositories from "../../src/server/repositories";
 import { FileUpload } from "../../src/types/FileUpload";
-import { Updatable } from "../../src/server/repositories/salesforceBase";
+import { Updatable } from "../../src/server/repositories/salesforceRepositoryBase";
 import { Stream } from "stream";
 import { IRepositories } from "../../src/types/IContext";
 

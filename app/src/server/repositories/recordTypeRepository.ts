@@ -1,5 +1,4 @@
-import SalesforceBase from "./salesforceBase";
-import { Connection } from "jsforce";
+import SalesforceRepositoryBase from "./salesforceRepositoryBase";
 
 export interface ISalesforceRecordType {
   Id: string;
@@ -7,20 +6,19 @@ export interface ISalesforceRecordType {
   SobjectType: string;
 }
 
-const fieldNames: string[] = [
-  "Id",
-  "Name",
-  "SobjectType"
-];
-
 export interface IRecordTypeRepository {
   getAll(): Promise<ISalesforceRecordType[]>;
 }
 
-export class RecordTypeRepository extends SalesforceBase<ISalesforceRecordType> implements IRecordTypeRepository {
-  constructor(connection: () => Promise<Connection>) {
-    super(connection, "RecordType", fieldNames);
-  }
+export class RecordTypeRepository extends SalesforceRepositoryBase<ISalesforceRecordType> implements IRecordTypeRepository {
+
+  protected readonly salesforceObjectName = "RecordType";
+
+  protected readonly salesforceFieldNames = [
+    "Id",
+    "Name",
+    "SobjectType"
+  ];
 
   getAll(): Promise<ISalesforceRecordType[]> {
     return super.all();

@@ -1,5 +1,4 @@
-import SalesforceBase, { Updatable } from "./salesforceBase";
-import { Connection } from "jsforce";
+import SalesforceRepositoryBase, { Updatable } from "./salesforceRepositoryBase";
 import { ClaimStatus } from "../../types";
 import { BadRequestError } from "../features/common/appError";
 
@@ -21,29 +20,11 @@ export interface ISalesforceClaim {
   Acc_TotalCostsApproved__c: number;
   Acc_TotalCostsSubmitted__c: number;
   Acc_TotalGrantApproved__c: number;
-  // TODO get real field names when available
   Acc_ApprovedDate__c: string | null;
   Acc_PaidDate__c: string | null;
   Acc_LineItemDescription__c: string | null;
   Acc_IARRequired__c: boolean;
 }
-
-const fields = [
-  "Id",
-  "Acc_ProjectParticipant__r.Id",
-  "Acc_ProjectParticipant__r.Acc_ProjectRole__c",
-  "Acc_ProjectParticipant__r.Acc_AccountId__r.Name",
-  "LastModifiedDate",
-  "Acc_ClaimStatus__c",
-  "Acc_ProjectPeriodStartDate__c",
-  "Acc_ProjectPeriodEndDate__c",
-  "Acc_ProjectPeriodNumber__c",
-  "Acc_ProjectPeriodCost__c",
-  "Acc_ApprovedDate__c",
-  "Acc_PaidDate__c",
-  "Acc_LineItemDescription__c",
-  "Acc_IARRequired__c"
-];
 
 export interface IClaimRepository {
   getAllByProjectId(projectId: string): Promise<ISalesforceClaim[]>;
@@ -52,12 +33,28 @@ export interface IClaimRepository {
   update(updatedClaim: Partial<ISalesforceClaim> & { Id: string }): Promise<boolean>;
 }
 
-export class ClaimRepository extends SalesforceBase<ISalesforceClaim> implements IClaimRepository {
+export class ClaimRepository extends SalesforceRepositoryBase<ISalesforceClaim> implements IClaimRepository {
+
   private readonly recordType = "Total Project Period";
 
-  constructor(connection: () => Promise<Connection>) {
-    super(connection, "Acc_Claims__c", fields);
-  }
+  protected readonly salesforceObjectName = "Acc_Claims__c";
+
+  protected readonly salesforceFieldNames = [
+    "Id",
+    "Acc_ProjectParticipant__r.Id",
+    "Acc_ProjectParticipant__r.Acc_ProjectRole__c",
+    "Acc_ProjectParticipant__r.Acc_AccountId__r.Name",
+    "LastModifiedDate",
+    "Acc_ClaimStatus__c",
+    "Acc_ProjectPeriodStartDate__c",
+    "Acc_ProjectPeriodEndDate__c",
+    "Acc_ProjectPeriodNumber__c",
+    "Acc_ProjectPeriodCost__c",
+    "Acc_ApprovedDate__c",
+    "Acc_PaidDate__c",
+    "Acc_LineItemDescription__c",
+    "Acc_IARRequired__c"
+  ];
 
   public async getAllByProjectId(projectId: string): Promise<ISalesforceClaim[]> {
     const filter = `
