@@ -44,15 +44,14 @@ interface CombinedData {
 
 class ReviewComponent extends ContainerBase<ReviewClaimParams, Data, Callbacks> {
   public render() {
-    const combined = Pending.combine(
-      this.props.project,
-      this.props.partner,
-      this.props.costCategories,
-      this.props.claim,
-      this.props.claimDetailsSummary,
-      this.props.editor,
-      (project, partner, costCategories, claim, claimDetails, editor) => ({ project, partner, costCategories, claim, claimDetails, editor })
-    );
+    const combined = Pending.combine({
+      project: this.props.project,
+      partner: this.props.partner,
+      costCategories: this.props.costCategories,
+      claim: this.props.claim,
+      claimDetails: this.props.claimDetailsSummary,
+      editor: this.props.editor,
+    });
 
     return <ACC.PageLoader pending={combined} render={(data) => this.renderContents(data)} />;
   }
@@ -149,17 +148,16 @@ export const ReviewClaim = definition.connect({
       claimDetailsSummary: Selectors.findClaimDetailsSummaryByPartnerAndPeriod(props.partnerId, props.periodId).getPending(state),
       editor: Selectors.getClaimEditor(props.partnerId, props.periodId).get(state, (dto) => initEditor(dto)),
       isClient: state.isClient,
-      forecastData: Pending.combine(
-        projectPending,
-        partnerPending,
-        claimPending,
-        claimsPending,
-        Selectors.findClaimDetailsByPartner(props.partnerId).getPending(state),
-        Selectors.findForecastDetailsByPartner(props.partnerId).getPending(state),
-        Selectors.findGolCostsByPartner(props.partnerId).getPending(state),
-        costCategoriesPending,
-        (project, partner, claim, claims, claimDetails, forecastDetails, golCosts, costCategories) => ({ project, partner, claim, claims, claimDetails, forecastDetails, golCosts, costCategories })
-      )
+      forecastData: Pending.combine({
+        project: projectPending,
+        partner: partnerPending,
+        claim: claimPending,
+        claims: claimsPending,
+        claimDetails: Selectors.findClaimDetailsByPartner(props.partnerId).getPending(state),
+        forecastDetails: Selectors.findForecastDetailsByPartner(props.partnerId).getPending(state),
+        golCosts: Selectors.findGolCostsByPartner(props.partnerId).getPending(state),
+        costCategories: costCategoriesPending,
+      })
     };
   },
   withCallbacks: (dispatch) => ({

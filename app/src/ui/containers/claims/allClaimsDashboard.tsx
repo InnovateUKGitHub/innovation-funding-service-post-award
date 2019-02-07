@@ -37,13 +37,14 @@ interface ProjectPeriod {
 
 class Component extends ContainerBase<Params, Data, {}> {
   render() {
-    const combined = Pending.combine(
-      this.props.projectDetails,
-      this.props.partners,
-      this.props.currentClaims,
-      this.props.previousClaims,
-      (projectDetails, partners, currentClaims, previousClaims) => ({ projectDetails, partners, currentClaims, previousClaims }));
-    return (<Acc.PageLoader pending={combined} render={x => this.renderContents(x)} />);
+    const combined = Pending.combine({
+      projectDetails: this.props.projectDetails,
+      partners: this.props.partners,
+      currentClaims: this.props.currentClaims,
+      previousClaims: this.props.previousClaims,
+    });
+
+    return <Acc.PageLoader pending={combined} render={x => this.renderContents(x)} />;
   }
 
   groupClaimsByPeriod(claims: ClaimDto[]): ProjectPeriod[] {

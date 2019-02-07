@@ -82,17 +82,16 @@ const definition = ReduxContainer.for<Params, PendingForecastData, Callbacks>(Vi
 
 const ViewForecast = definition.connect({
   withData: (state, props) => {
-    const combined = Pending.combine(
-      Selectors.getProject(props.projectId).getPending(state),
-      Selectors.getPartner(props.partnerId).getPending(state),
-      Selectors.getCurrentClaim(state, props.partnerId),
-      Selectors.findClaimsByPartner(props.partnerId).getPending(state),
-      Selectors.findClaimDetailsByPartner(props.partnerId).getPending(state),
-      Selectors.findForecastDetailsByPartner(props.partnerId).getPending(state),
-      Selectors.findGolCostsByPartner(props.partnerId).getPending(state),
-      Selectors.getCostCategories().getPending(state),
-      (project, partner, claim, claims, claimDetails, forecastDetails, golCosts, costCategories) => ({ project, partner, claim, claims, claimDetails, forecastDetails, golCosts, costCategories })
-    );
+    const combined = Pending.combine({
+      project: Selectors.getProject(props.projectId).getPending(state),
+      partner: Selectors.getPartner(props.partnerId).getPending(state),
+      claim: Selectors.getCurrentClaim(state, props.partnerId),
+      claims: Selectors.findClaimsByPartner(props.partnerId).getPending(state),
+      claimDetails: Selectors.findClaimDetailsByPartner(props.partnerId).getPending(state),
+      forecastDetails: Selectors.findForecastDetailsByPartner(props.partnerId).getPending(state),
+      golCosts: Selectors.findGolCostsByPartner(props.partnerId).getPending(state),
+      costCategories: Selectors.getCostCategories().getPending(state),
+    });
 
     return { combined };
   },
