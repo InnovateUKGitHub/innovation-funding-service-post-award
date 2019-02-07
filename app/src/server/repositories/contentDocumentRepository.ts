@@ -1,5 +1,4 @@
-import SalesforceBase from "./salesforceBase";
-import { Connection } from "jsforce";
+import SalesforceRepositoryBase from "./salesforceRepositoryBase";
 
 export interface ISalesforceContentDocument {
   Id: string;
@@ -9,12 +8,13 @@ export interface IContentDocumentRepository {
   delete(id: string): Promise<void>;
 }
 
-const fieldNames: (keyof ISalesforceContentDocument)[] = ["Id"];
+export class ContentDocumentRepository extends SalesforceRepositoryBase<ISalesforceContentDocument> implements IContentDocumentRepository {
 
-export class ContentDocumentRepository extends SalesforceBase<ISalesforceContentDocument> implements IContentDocumentRepository {
-  constructor(connection: () => Promise<Connection>) {
-    super(connection, "ContentDocument", fieldNames);
-  }
+  protected readonly salesforceObjectName = "ContentDocument";
+
+  protected readonly salesforceFieldNames = [
+    "Id",
+  ];
 
   public delete(id: string): Promise<void> {
     return super.delete(id);

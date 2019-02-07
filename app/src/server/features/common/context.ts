@@ -7,7 +7,7 @@ import {
   salesforceConnectionWithToken,
   SalesforceTokenError
 } from "../../repositories/salesforceConnection";
-import { SalesforceInvalidFilterError } from "../../repositories/salesforceBase";
+import { SalesforceInvalidFilterError } from "../../repositories/salesforceRepositoryBase";
 import { GetAllProjectRolesForUser, IRoleInfo } from "../projects/getAllProjectRolesForUser";
 import { ErrorCode, ICaches, IContext, IRunnable, ISyncRunnable, IUser } from "../../../types";
 import { QueryBase, SyncQueryBase } from "./queryBase";

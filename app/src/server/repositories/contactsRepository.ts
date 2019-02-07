@@ -1,5 +1,4 @@
-import SalesforceBase from "./salesforceBase";
-import { Connection } from "jsforce";
+import SalesforceRepositoryBase from "./salesforceRepositoryBase";
 
 export interface ISalesforceContact {
   Id: string;
@@ -14,14 +13,25 @@ export interface ISalesforceContact {
 }
 
 export interface IContactsRepository {
-  getById(id: string): Promise<ISalesforceContact|null>;
+  getById(id: string): Promise<ISalesforceContact | null>;
   getAll(): Promise<ISalesforceContact[]>;
 }
 
-export class ContactsRepository extends SalesforceBase<ISalesforceContact> implements IContactsRepository {
-  constructor(connection: () => Promise<Connection>) {
-    super(connection, "Contact", ["Id", "Salutation", "LastName", "FirstName", "Email", "MailingStreet", "MailingCity", "MailingState", "MailingPostalCode"]);
-  }
+export class ContactsRepository extends SalesforceRepositoryBase<ISalesforceContact> implements IContactsRepository {
+
+  protected readonly salesforceObjectName = "Contact";
+
+  protected readonly salesforceFieldNames = [
+    "Id",
+    "Salutation",
+    "LastName",
+    "FirstName",
+    "Email",
+    "MailingStreet",
+    "MailingCity",
+    "MailingState",
+    "MailingPostalCode"
+  ];
 
   getById(id: string) {
     return super.retrieve(id);

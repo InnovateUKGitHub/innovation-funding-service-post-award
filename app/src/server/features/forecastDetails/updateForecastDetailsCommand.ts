@@ -2,7 +2,7 @@ import { DateTime } from "luxon";
 import { BadRequestError, CommandBase, ValidationError } from "../common";
 import { GetAllForecastsForPartnerQuery } from "./getAllForecastsForPartnerQuery";
 import { ISalesforceProfileDetails } from "../../repositories";
-import { Updatable } from "../../repositories/salesforceBase";
+import { Updatable } from "../../repositories/salesforceRepositoryBase";
 import { GetAllForecastsGOLCostsQuery, GetAllForPartnerQuery } from "../claims";
 import { GetAllClaimDetailsByPartner } from "../claimDetails";
 import { GetByIdQuery as GetPartnerById } from "../partners";
