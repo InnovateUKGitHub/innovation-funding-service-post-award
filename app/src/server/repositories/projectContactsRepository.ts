@@ -43,8 +43,6 @@ export class ProjectContactsRepository extends SalesforceRepositoryBase<ISalesfo
   }
 
   getAllForUser(email: string): Promise<ISalesforceProjectContact[]> {
-    // ToDo: remove email suffic once tallend no long appends sandbox name
-    email = email.replace(".bjsspoc2", "").replace(".bjsspoc", "");
     // ToDo: see if we can/should get access to the login rather than the email...
     // It may be correct to use the contact email - salesforce are expecting the contact email to always equal the user login
     // only a problem if they dont
