@@ -21,7 +21,7 @@ interface Callbacks {}
 
 class ProjectForecastComponent extends ContainerBase<Params, Data, Callbacks> {
   render() {
-    const combined = Pending.combine(this.props.projectDetails, this.props.partners, (projectDetails, partners) => ({ projectDetails, partners }));
+    const combined = Pending.combine({projectDetails: this.props.projectDetails, partners: this.props.partners});
     return <ACC.PageLoader pending={combined} render={x => this.renderContents(x.projectDetails, x.partners)} />;
   }
 

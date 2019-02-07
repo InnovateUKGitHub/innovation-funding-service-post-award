@@ -36,14 +36,13 @@ interface CombinedData {
 export class ClaimsDetailsComponent extends ContainerBase<Params, Data, {}> {
 
     public render() {
-        const combined = Pending.combine(
-            this.props.project,
-            this.props.partner,
-            this.props.costCategories,
-            this.props.claim,
-            this.props.claimDetailsSummary,
-            (project, partner, costCategories, claim, claimDetails) => ({ project, partner, costCategories, claim, claimDetails })
-        );
+        const combined = Pending.combine({
+          project: this.props.project,
+          partner: this.props.partner,
+          costCategories: this.props.costCategories,
+          claim: this.props.claim,
+          claimDetails: this.props.claimDetailsSummary,
+        });
 
         return <ACC.PageLoader pending={combined} render={(data) => this.renderContents(data)} />;
     }

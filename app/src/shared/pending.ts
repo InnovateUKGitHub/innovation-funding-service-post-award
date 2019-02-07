@@ -1,5 +1,9 @@
 import { IDataStore } from "../ui/redux";
 
+type MapPendings<T> = {
+  [P in keyof T]: T[P] extends Pending<infer U> ? U : never;
+};
+
 export enum LoadingStatus {
     Preload = 1, // State before a request is made to the server, may have partial data.
     Loading = 2, // A request has been made to the server, waiting for data.
@@ -44,68 +48,27 @@ export class Pending<T> {
      * @param combineData - a function that takes both Pendings and returns the combined data
      * @return Pending<TR>
      */
-    and<T2, TR>(pending: Pending<T2>, combineData: (pending1: T, pending2: T2) => TR): Pending<TR> {
-        return Pending.combine(this, pending, combineData);
-    }
-
-    /**
-     * say if the status is marked as Done
-     */
-    isDone() {
-        return this.state === LoadingStatus.Done;
-    }
-
-    /**
-     * determine if the data has been marked as Done or if it's available for reading
-     * @return boolean
-     */
-    isReady() {
-        return this.isDone() || this.data;
-    }
-
-    /**
-     * determine if the data has been marked as failed
-     * @return boolean
-     */
-    isFailed() {
-        return this.state === LoadingStatus.Failed;
-    }
-
-    setStale() {
-        this.state = LoadingStatus.Stale;
+    and<T2, TR extends { [k: string]: Pending<T> | Pending<T2> }>(
+      pending: Pending<T2>,
+      combineData: (pending1: Pending<T>, pending2: Pending<T2>) => TR
+    ): Pending<MapPendings<TR>> {
+      const combined = combineData(this, pending);
+      return Pending.combine(combined);
     }
 
     /**
      * provide ways to combine multiple Pending objects into a single Pending source
-     * @param pending1
-     * @param pending2
-     * @param combineData
+     * @param pendings - an associative array of Pendings that defines the shape of the returned pending with it's keys
      */
-    static combine<T1, T2, TR>(pending1: Pending<T1>, pending2: Pending<T2>, combineData: (pending1: T1, pending2: T2) => TR): Pending<TR>;
-    static combine<T1, T2, T3, TR>(pending1: Pending<T1>, pending2: Pending<T2>, pending3: Pending<T3>, combineData: (pending1: T1, pending2: T2, pending3: T3) => TR): Pending<TR>;
-    static combine<T1, T2, T3, T4, TR>(pending1: Pending<T1>, pending2: Pending<T2>, pending3: Pending<T3>, pending4: Pending<T4>, combineData: (pending1: T1, pending2: T2, pending3: T3, pending4: T4) => TR): Pending<TR>;
-    static combine<T1, T2, T3, T4, T5, TR>(pending1: Pending<T1>, pending2: Pending<T2>, pending3: Pending<T3>, pending4: Pending<T4>, pending5: Pending<T5>, combineData: (pending1: T1, pending2: T2, pending3: T3, pending4: T4, pending5: T5) => TR): Pending<TR>;
-    static combine<T1, T2, T3, T4, T5, T6, TR>(pending1: Pending<T1>, pending2: Pending<T2>, pending3: Pending<T3>, pending4: Pending<T4>, pending5: Pending<T5>, pending6: Pending<T6>, combineData: (pending1: T1, pending2: T2, pending3: T3, pending4: T4, pending5: T5, pending6: T6) => TR): Pending<TR>;
-    static combine<T1, T2, T3, T4, T5, T6, T7, TR>(pending1: Pending<T1>, pending2: Pending<T2>, pending3: Pending<T3>, pending4: Pending<T4>, pending5: Pending<T5>, pending6: Pending<T6>, pending7: Pending<T7>, combineData: (pending1: T1, pending2: T2, pending3: T3, pending4: T4, pending5: T5, pending6: T6, pending7: T7) => TR): Pending<TR>;
-    static combine<T1, T2, T3, T4, T5, T6, T7, T8, TR>(pending1: Pending<T1>, pending2: Pending<T2>, pending3: Pending<T3>, pending4: Pending<T4>, pending5: Pending<T5>, pending6: Pending<T6>, pending7: Pending<T7>, pending8: Pending<T8>, combineData: (pending1: T1, pending2: T2, pending3: T3, pending4: T4, pending5: T5, pending6: T6, pending7: T7, pending8: T8) => TR): Pending<TR>;
-    static combine<T1, T2, T3, T4, T5, T6, T7, T8, T9, TR>(pending1: Pending<T1>, pending2: Pending<T2>, pending3: Pending<T3>, pending4: Pending<T4>, pending5: Pending<T5>, pending6: Pending<T6>, pending7: Pending<T7>, pending8: Pending<T8>, combineData: (pending1: T1, pending2: T2, pending3: T3, pending4: T4, pending5: T5, pending6: T6, pending7: T7, pending8: T8, pending9: T9) => TR): Pending<TR>;
-    static combine<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TR>(pending1: Pending<T1>, pending2: Pending<T2>, pending3: Pending<T3>, pending4: Pending<T4>, pending5: Pending<T5>, pending6: Pending<T6>, pending7: Pending<T7>, pending8: Pending<T8>, combineData: (pending1: T1, pending2: T2, pending3: T3, pending4: T4, pending5: T5, pending6: T6, pending7: T7, pending8: T8, pending9: T9, pending10: T10) => TR): Pending<TR>;
+    static combine<T extends { [k: string]: Pending<any> }, TR extends MapPendings<T>>(pendings: T): Pending<TR> {
+      const keys = Object.keys(pendings);
+      const errors = keys.map(k => pendings[k].error).find(x => !!x);
+      const state = Pending.lowestState(keys.map(k => pendings[k].state));
+      const data = Pending.allComplete(keys.map(k => pendings[k]))
+        ? keys.reduce((combined, k) => Object.assign({}, combined, {[k]: pendings[k].data }), {}) as TR
+        : null;
 
-    static combine(...pendingsToCombine: any[]) {
-        const pendingsCount = pendingsToCombine.length - 1;
-        const pendings: any[] = [];
-
-        for (let i = 0; i < pendingsCount; i++) {
-            pendings.push(pendingsToCombine[i]);
-        }
-
-        const mapper = pendingsToCombine[pendingsCount];
-
-        return new Pending(
-            lowestState(pendings.map(x => x.state)),
-            Pending.allComplete(pendings) ? mapper(...pendings.map(x => x.data)) : null,
-            pendings.map(x => x.error).find(x => !!x)
-        );
+      return new Pending(state, data, errors);
     }
 
     /**
@@ -137,7 +100,7 @@ export class Pending<T> {
      * @return Pending
      */
     static flatten<T>(pendings: Pending<T>[]): Pending<T[]> {
-        const state = lowestState(pendings.map(x => x.state));
+        const state = Pending.lowestState(pendings.map(x => x.state));
         const data = Pending.allComplete(pendings) ? pendings.map(x => x.data!) : null;
         const error = pendings.filter(x => !!x.error).map(x => x.error).shift();
         return new Pending<T[]>(state, data, error);
@@ -156,21 +119,48 @@ export class Pending<T> {
 
         return new Pending<T>(status, data, error);
     }
-}
 
-const orderedStates = [
-    LoadingStatus.Failed,
-    LoadingStatus.Loading,
-    LoadingStatus.Preload,
-    LoadingStatus.Stale
-];
+    static lowestState(states: LoadingStatus[]) {
+      const orderedStates = [
+        LoadingStatus.Failed,
+        LoadingStatus.Loading,
+        LoadingStatus.Preload,
+        LoadingStatus.Stale
+      ];
 
-function lowestState(states: LoadingStatus[]) {
-    let result = LoadingStatus.Done;
-    orderedStates.forEach(state => {
-        if (result === LoadingStatus.Done && states.indexOf(state) >= 0) {
-            result = state;
-        }
-    });
-    return result;
+      let result = LoadingStatus.Done;
+      orderedStates.forEach(state => {
+          if (result === LoadingStatus.Done && states.indexOf(state) >= 0) {
+              result = state;
+          }
+      });
+      return result;
+    }
+
+    /**
+     * say if the status is marked as Done
+     */
+    isDone() {
+      return this.state === LoadingStatus.Done;
+    }
+
+  /**
+   * determine if the data has been marked as Done or if it's available for reading
+   * @return boolean
+   */
+    isReady() {
+        return this.isDone() || this.data;
+    }
+
+    /**
+     * determine if the data has been marked as failed
+     * @return boolean
+     */
+    isFailed() {
+        return this.state === LoadingStatus.Failed;
+    }
+
+    setStale() {
+        this.state = LoadingStatus.Stale;
+    }
 }

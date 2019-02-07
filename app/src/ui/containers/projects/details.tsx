@@ -28,7 +28,12 @@ interface CombinedData {
 
 class ProjectDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
     render() {
-        const combined = Pending.combine(this.props.projectDetails, this.props.partners, this.props.contacts, (project, partners, contacts) => ({ project, partners, contacts }));
+        const combined = Pending.combine({
+          project: this.props.projectDetails,
+          partners: this.props.partners,
+          contacts: this.props.contacts,
+        });
+
         return <ACC.PageLoader pending={combined} render={x => this.renderContents(x)} />;
     }
 
