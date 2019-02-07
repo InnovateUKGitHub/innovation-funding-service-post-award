@@ -68,12 +68,12 @@ const getToken = (username: string, clientId: string, connectionUrl: string): Pr
       }
       else if (r.headers.get("content-type") === "application/json") {
         return r.json().then(x => {
-          throw new SalesforceTokenError("Unable to get token: url- " + r.url + ": originalUrl-" + connectionUrl + ": " + x.error + "\n" + x.error_description, r.status);
+          throw new SalesforceTokenError(`Unable to get token: url- ${r.url}: originalUrl- ${connectionUrl}: ${x.error} \n ${x.error_description}`, r.status);
         });
       }
       else {
         return r.text().then(x => {
-          throw new SalesforceTokenError("Unable to get token or json error: url- " + r.url + ": originalUrl-" + connectionUrl + ": " + x, r.status);
+          throw new SalesforceTokenError(`Unable to get token or json error: url- ${r.url}: originalUrl- ${connectionUrl}: ${x}`, r.status);
         });
       }
     })

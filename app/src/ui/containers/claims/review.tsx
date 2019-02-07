@@ -77,23 +77,36 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, Data, Callbacks> 
         <ACC.Projects.Title pageTitle="Review claim" project={data.project} />
         <ACC.Claims.Navigation projectId={data.project.id} partnerId={data.partner.id} periodId={data.claim.periodId} currentRouteName={ClaimsDetailsRoute.routeName} />
         <ACC.Section title={this.getClaimPeriodTitle(data)}>
-          <ACC.Claims.ClaimTable {...data} validation={data.editor.validator.claimDetails.results} getLink={costCategoryId => ReviewClaimLineItemsRoute.getLink({ partnerId: this.props.partnerId, projectId: this.props.projectId, periodId: this.props.periodId, costCategoryId })} />
+          <ACC.Claims.ClaimTable
+            {...data}
+            validation={data.editor.validator.claimDetails.results}
+            getLink={costCategoryId => ReviewClaimLineItemsRoute.getLink({ partnerId: this.props.partnerId, projectId: this.props.projectId, periodId: this.props.periodId, costCategoryId })}
+          />
         </ACC.Section>
         <ACC.Section>
           <ACC.Accordion>
             <ACC.AccordionItem  title="Forecast">
               <ACC.Loader
                 pending={this.props.forecastData}
-                render={(forecastData) => (
-                  <ACC.Claims.ForecastTable data={forecastData} hideValidation={true} />
-                )}
+                render={(forecastData) => (<ACC.Claims.ForecastTable data={forecastData} hideValidation={true} />)}
               />
             </ACC.AccordionItem>
           </ACC.Accordion>
         </ACC.Section>
-        <Form.Form qa="review-form" data={data.editor.data} onSubmit={() => this.props.onSave(this.props.projectId, this.props.partnerId, this.props.periodId, data.editor.data, data.claimDetails, data.costCategories)} onChange={(dto) => this.props.onChange(this.props.partnerId, this.props.periodId, dto, data.claimDetails, data.costCategories)}>
+        <Form.Form
+          data={data.editor.data}
+          onSubmit={() => this.props.onSave(this.props.projectId, this.props.partnerId, this.props.periodId, data.editor.data, data.claimDetails, data.costCategories)}
+          onChange={(dto) => this.props.onChange(this.props.partnerId, this.props.periodId, dto, data.claimDetails, data.costCategories)}
+          qa="review-form"
+        >
           <Form.Fieldset heading="How do you want to proceed with this claim?">
-            <Form.Radio name="status" options={options} value={(dto) => options.find(x => x.id === dto.status)} update={(dto, val) => this.updateStatus(dto, val)} validation={data.editor.validator.status}/>
+            <Form.Radio
+              name="status"
+              options={options}
+              value={(dto) => options.find(x => x.id === dto.status)}
+              update={(dto, val) => this.updateStatus(dto, val)}
+              validation={data.editor.validator.status}
+            />
             {!!submitButtonLabel ? <Form.Submit>{submitButtonLabel}</Form.Submit> : null}
           </Form.Fieldset>
         </Form.Form>

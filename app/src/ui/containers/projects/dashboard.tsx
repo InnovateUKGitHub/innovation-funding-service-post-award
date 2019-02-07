@@ -212,6 +212,8 @@ class ProjectDashboardComponent extends ContainerBase<Props, Data, Callbacks> {
     else if (section === "closed") {
       return <ACC.Claims.ClaimWindow periodEnd={project.periodEndDate!} />;
     }
+
+    return null;
   }
 
   private renderProject(project: ProjectDto, partner: PartnerDto | null, section: Section, index: number) {

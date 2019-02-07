@@ -6,7 +6,12 @@ import { ClaimDto, ClaimStatus } from "../../types";
 const COMMENTS_LENGTH_MAX = 1000;
 
 export class ClaimDtoValidator extends Results<ClaimDto>  {
-    constructor(dto: ClaimDto, private details: ClaimDetailsSummaryDto[], private costCategories: CostCategoryDto[], showErrors: boolean) {
+    constructor(
+      dto: ClaimDto,
+      private readonly details: ClaimDetailsSummaryDto[],
+      private readonly costCategories: CostCategoryDto[],
+      readonly showErrors: boolean
+    ) {
         super(dto, showErrors);
 
         const permittedStatus = [ ClaimStatus.DRAFT, ClaimStatus.SUBMITTED, ClaimStatus.MO_QUERIED, ClaimStatus.AWAITING_IUK_APPROVAL ];
@@ -20,12 +25,28 @@ export class ClaimDtoValidator extends Results<ClaimDto>  {
 
     public status: Result;
 
-    public claimDetails = Validation.optionalChild(this, this.details, (item) => new ClaimDetailsValidator(item, this.costCategories.find(x => x.id === item.costCategoryId), this.showValidationErrors), "Your costs for this period are more than your remaining grant offer letter costs in at least one cost category. You must remove some costs before you can submit this claim.");
+    public claimDetails = Validation.optionalChild(
+      this,
+      this.details,
+      (item) => new ClaimDetailsValidator(item, this.costCategories.find(x => x.id === item.costCategoryId), this.showValidationErrors),
+      "Your costs for this period are more than your remaining grant offer letter costs in at least one cost category. You must remove some costs before you can submit this claim."
+    );
 }
 
 export class ClaimDetailsValidator extends Results<ClaimDetailsSummaryDto> {
-    constructor(model: ClaimDetailsSummaryDto, private costCategory: CostCategoryDto | null | undefined, show: boolean) {
+    constructor(
+      readonly model: ClaimDetailsSummaryDto,
+      private readonly costCategory: CostCategoryDto | null | undefined,
+      readonly show: boolean
+    ) {
         super(model, show);
     }
-    costsClaimedThisPeriod = Validation.isFalse(this, this.model.offerCosts < (this.model.costsClaimedToDate + this.model.costsClaimedThisPeriod), this.costCategory ? `Your costs for ${this.costCategory.name} this period are more than your remaining grant offer letter costs. You must remove some costs before you can submit this claim.` : `Your costs for this period are more than your remaining grant offer letter costs. You must remove some costs before you can submit this claim.`);
+
+    costsClaimedThisPeriod = Validation.isFalse(
+      this,
+      this.model.offerCosts < (this.model.costsClaimedToDate + this.model.costsClaimedThisPeriod),
+      this.costCategory
+        ? `Your costs for ${this.costCategory.name} this period are more than your remaining grant offer letter costs. You must remove some costs before you can submit this claim.`
+        : `Your costs for this period are more than your remaining grant offer letter costs. You must remove some costs before you can submit this claim.`
+    );
 }

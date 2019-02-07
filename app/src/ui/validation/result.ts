@@ -24,12 +24,19 @@ export class Result {
             internalResults.add(this);
         }
 
-        this.key = "Val" + valSeed++;
+        this.key = "Val" + valSeed;
+        valSeed++;
     }
 
     public readonly key: string;
 
     combine(other: Result) {
-        return new Result(null, this.showValidationErrors || other.showValidationErrors, this.isValid && other.isValid, this.errorMessage || other.errorMessage || "", this.isRequired || other.isRequired);
+        return new Result(
+          null,
+          this.showValidationErrors || other.showValidationErrors,
+          this.isValid && other.isValid,
+          this.errorMessage || other.errorMessage || "",
+          this.isRequired || other.isRequired
+        );
     }
 }

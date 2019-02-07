@@ -2,7 +2,7 @@ import express from "express";
 import passport from "passport";
 import passportSaml from "passport-saml";
 import fs from "fs";
-import cookieSession = require("cookie-session");
+import cookieSession from "cookie-session";
 import { Configuration } from "../server/features/common/config";
 
 // definitions for URNs: https://commons.lbl.gov/display/IDMgmt/Attribute+Definitions
