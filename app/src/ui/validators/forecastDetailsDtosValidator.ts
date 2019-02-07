@@ -8,11 +8,11 @@ export class ForecastDetailsDtosValidator extends Results<ForecastDetailsDTO[]> 
   public totalCosts: Result;
 
   constructor(
-    forecasts: ForecastDetailsDTO[],
-    claims: ClaimDto[],
-    claimDetails: ClaimDetailsDto[],
-    golCosts: GOLCostDto[],
-    showErrors: boolean
+    private readonly forecasts: ForecastDetailsDTO[],
+    private readonly claims: ClaimDto[],
+    private readonly claimDetails: ClaimDetailsDto[],
+    private readonly golCosts: GOLCostDto[],
+    private readonly showErrors: boolean
   ) {
     super(forecasts, showErrors);
 
@@ -33,5 +33,3 @@ export class ForecastDetailsDtoValidator extends Results<ForecastDetailsDTO> {
 
   public id = Validation.required(this, this.model.id, "Id is required");
 }
-
-const totalReducer = (total: number, item: {value: number}) => total + item.value;

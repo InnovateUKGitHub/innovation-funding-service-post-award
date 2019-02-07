@@ -1,7 +1,7 @@
 import React from "react";
 import { Request, Response } from "express";
 import { renderToString } from "react-dom/server";
-import { AnyAction, createStore, Dispatch, Store } from "redux";
+import { createStore, Dispatch, Store } from "redux";
 import { Provider } from "react-redux";
 import { RouterProvider } from "react-router5";
 import { constants as routerConstants, Router, State } from "router5";
@@ -18,7 +18,7 @@ import contextProvider from "./features/common/contextProvider";
 import { GetAllProjectRolesForUser } from "./features/projects/getAllProjectRolesForUser";
 import { Authorisation, IUser } from "../types";
 
-async function loadData(dispatch: Dispatch<AnyAction>, getState: () => RootState, dataCalls: AsyncThunk<any>[]): Promise<void> {
+async function loadData(dispatch: Dispatch, getState: () => RootState, dataCalls: AsyncThunk<any>[]): Promise<void> {
   const allPromises = dataCalls.map(action => action(dispatch, getState, null));
   const loadingCount = getState().loadStatus;
 
