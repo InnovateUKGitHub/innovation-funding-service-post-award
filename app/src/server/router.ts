@@ -1,4 +1,4 @@
-import express from "express";
+import express, { NextFunction, Request, Response } from "express";
 import { serverRender } from "./serverRender";
 import { componentGuideRender } from "./componentGuideRender";
 import { router as apiRoutes } from "./apis";
@@ -8,7 +8,12 @@ import { NotFoundError } from "./features/common/appError";
 
 export const router = express.Router();
 
-router.use("/api", apiRoutes);
+const cacheControl = (req: Request, res: Response, next: NextFunction) => {
+  res.setHeader("Cache-Control", "no-cache");
+  return next();
+};
+
+router.use("/api", cacheControl, apiRoutes);
 router.use("/components", componentGuideRender);
 /*form posts*/
 router.post("*", formRouter);
