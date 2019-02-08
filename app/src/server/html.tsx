@@ -32,7 +32,7 @@ export function renderHtml(html: string, preloadedState: any = {}) {
           <script>
             // if js enabled then hide page for moment to allow any difference from server v client rendering to be sorted
             document.body.style.visibility = "hidden";
-            setTimeout(() => {
+            setTimeout(function () {
                 document.body.style.visibility = "visible";
             }, 10);
             document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');
