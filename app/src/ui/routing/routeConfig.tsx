@@ -13,6 +13,7 @@ export const routeConfig = {
   home: Containers.HomeRoute,
   prepareClaim: Containers.PrepareClaimRoute,
   prepareClaimLineItems: Containers.EditClaimLineItemsRoute,
+  projectChangeRequests: Containers.ProjectChangeRequestsRoute,
   projectDashboard: Containers.ProjectDashboardRoute,
   projectDetails: Containers.ProjectDetailsRoute,
   projectForecast: Containers.ProjectForecastRoute,
