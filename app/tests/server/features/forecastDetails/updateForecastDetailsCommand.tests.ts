@@ -48,6 +48,33 @@ describe("UpdateForecastDetailsCommand", () => {
     await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
   });
 
+  it("should throw Bad Request Error if current claim does not exist", async () => {
+    const context = new TestContext();
+    const testData = context.testData;
+
+    const periodId = 1;
+
+    const project = testData.createProject();
+    const partner = testData.createPartner(project);
+    const costCat = testData.createCostCategory();
+    const profileDetail = testData.createProfileDetail(costCat, partner, periodId, x => x.Acc_LatestForecastCost__c = 123);
+
+    const dto: ForecastDetailsDTO[] = [{
+      periodId,
+      id: profileDetail.Id,
+      costCategoryId: costCat.Id,
+      periodStart: new Date(),
+      periodEnd: new Date(),
+      value: 500
+    }];
+    testData.createClaimDetail(costCat, partner, periodId - 1, x => x.Acc_PeriodCostCategoryTotal__c = 1000);
+    testData.createProfileTotalCostCategory(costCat, partner, 1500);
+
+    const command = new UpdateForecastDetailsCommand(partner.Id, dto, true);
+
+    await expect(context.runCommand(command)).rejects.toThrow(BadRequestError);
+  });
+
   it("total costs equal gol costs should update forecasts", async () => {
     const context = new TestContext();
     const testData = context.testData;
