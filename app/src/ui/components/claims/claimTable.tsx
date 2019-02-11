@@ -14,15 +14,13 @@ interface Props {
     getLink: (costCategoryId: string) => ILinkInfo;
 }
 
-export const ClaimTable: React.SFC<Props> = (props) => {
+export const ClaimTable: React.FunctionComponent<Props> = (props) => {
 
-    const combinedData = props.costCategories
-        .filter(x => x.competitionType === props.project.competitionType && x.organisationType === props.partner.organisationType)
-        .map(x => ({
-            category: x,
-            cost: props.claimDetails.find(y => y.costCategoryId === x.id) || {} as ClaimDetailsSummaryDto,
-            isTotal: false
-        }));
+    const combinedData = props.claimDetails.map(x => ({
+      category: props.costCategories.find(y => y.id === x.costCategoryId)!,
+      cost: x,
+      isTotal: false
+    }));
 
     // add total row (dosnt have a cost cat so use 0)
     combinedData.push({
