@@ -4,6 +4,7 @@ import { ErrorSummary } from "./errorSummary";
 import { ErrorCode, IAppError } from "../../types/IAppError";
 import { StandardErrorPage } from "./standardErrorPage";
 import { NotFoundErrorPage } from "./notFoundErrorPage";
+import { SimpleString } from "./renderers";
 
 interface LoadingProps<T> {
     pending: Pending<T>;
@@ -62,7 +63,7 @@ export class Loader<T> extends React.Component<LoadingProps<T>, {}> {
     }
 
     private renderLoading(): React.ReactNode {
-        return !!this.props.renderLoading ? this.props.renderLoading() : <span>Loading....</span>;
+        return !!this.props.renderLoading ? this.props.renderLoading() : <SimpleString>Loading...</SimpleString>;
     }
 
     private renderError(error: IAppError): React.ReactNode {
