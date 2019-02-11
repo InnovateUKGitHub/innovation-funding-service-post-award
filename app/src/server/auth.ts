@@ -35,9 +35,12 @@ const shibConfig: passportSaml.SamlConfig = {
 
 export const router = express.Router();
 
+const cookieName = "chocolate-chip";
 router.use(cookieSession({
-  name: "chocolate-chip",
-  keys: ["thekey", "thesecret"]
+  name: cookieName,
+  keys: ["thekey", "thesecret"],
+  // TODO - configurise this when Shibboleth is ready to go
+  maxAge: 1000 * 60 * 30
 }));
 
 router.use(passport.initialize());
@@ -52,6 +55,11 @@ passport.serializeUser((payload: ShibbolethPayload, done) => {
 
 // force login using passport shibboleth config
 router.get("/login", passport.authenticate("shibboleth"));
+
+router.get("/logout", (req, res) => {
+  res.cookie(cookieName, "", { expires: new Date("1970-01-01") });
+  return res.redirect("/");
+});
 
 router.post("/auth/success", passport.authenticate("shibboleth"), (req, res) => {
   // copy user info from shibboleth that has been serilised to the user object and store it in the session object
