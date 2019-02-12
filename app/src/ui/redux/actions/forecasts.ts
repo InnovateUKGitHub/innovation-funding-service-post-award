@@ -46,7 +46,8 @@ export function saveForecastDetails(
   claims: ClaimDto[],
   claimDetails: ClaimDetailsDto[],
   golCosts: GOLCostDto[],
-  onComplete: () => void
+  onComplete: () => void,
+  message: string
 ): AsyncThunk<void, DataLoadAction | EditorAction | messageSuccess> {
   return (dispatch, getState) => {
     const state = getState();
@@ -64,7 +65,7 @@ export function saveForecastDetails(
 
     return ApiClient.forecastDetails.update({partnerId, forecasts, submit: updateClaim, user: state.user}).then(result => {
       dispatch(dataLoadAction(selector.key, selector.store, LoadingStatus.Done, result));
-      dispatch(messageSuccess("Your forecast has been updated."));
+      dispatch(messageSuccess(message));
       onComplete();
     }).catch((e) => {
       dispatch(handleEditorError({id: selector.key, store: selector.store, dto: forecasts, validation, error: e}));
