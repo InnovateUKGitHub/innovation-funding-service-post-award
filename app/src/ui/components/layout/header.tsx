@@ -32,7 +32,7 @@ export const Header: React.SFC = () => (
               <a href="/" className="govuk-header__link" data-qa="nav-dashboard">Dashboard</a>
             </li>
             <li className="govuk-header__navigation-item">
-              <a href="/" className="govuk-header__link" data-qa="nav-profile">Profile</a>
+              <a href="https://apply-for-innovation-funding.service.gov.uk/profile/view" className="govuk-header__link" data-qa="nav-profile">Profile</a>
             </li>
             <li className="govuk-header__navigation-item">
               <a href="/logout" className="govuk-header__link" data-qa="nav-sign-out">Sign out</a>
