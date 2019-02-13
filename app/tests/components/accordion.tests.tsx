@@ -1,20 +1,85 @@
 import "jest";
 import React from "react";
-import Enzyme, { shallow } from "enzyme";
+import Enzyme, { mount, shallow } from "enzyme";
 import Adapter from "enzyme-adapter-react-16";
-import { Accordion } from "../../src/ui/components";
+import { Accordion, AccordionItem } from "../../src/ui/components";
 
 Enzyme.configure({ adapter: new Adapter() });
 
 describe("Accordion", () => {
   it("Renders with correct class", () => {
-    const output = shallow(<Accordion />).html();
-    expect(output).toContain(`class=\"acc-accordion\"`);
+    const output = shallow(<Accordion/>).html();
+    expect(output).toContain(`class=\"govuk-accordion\"`);
   });
 
   it("Renders with given children", () => {
     const output = shallow(<Accordion><span>child1</span><span>child2</span></Accordion>).html();
     expect(output).toContain(`child1`);
     expect(output).toContain(`child2`);
+  });
+
+  describe("Open / Close All", () => {
+    const getAccordion = () => mount(
+      <Accordion>
+        <AccordionItem title="testTitle1">
+          <span id="child1">child1text</span>
+        </AccordionItem>
+        <AccordionItem title="testTitle2">
+          <span id="child2">child1text</span>
+        </AccordionItem>
+        <AccordionItem title="testTitle3">
+          <span id="child3">child1text</span>
+        </AccordionItem>
+      </Accordion>);
+
+    const collapseItemSelector = "span.govuk-accordion__icon";
+    const accordionControlsButtonSelector = ".govuk-accordion__controls button";
+    const openAllButtonSelector = "button.govuk-accordion__open-all";
+    const expandedSectionSelector = "div.govuk-accordion__section--expanded";
+
+    it("Displays 'Close All' button when all the items are expanded", () => {
+      const component = getAccordion();
+      component.find(collapseItemSelector).forEach(x => x.simulate("click"));
+      expect(component.find(accordionControlsButtonSelector).text()).toEqual("Close All sections");
+    });
+
+    it("Displays 'Open All' button when some of the items are collapsed", () => {
+      const component = getAccordion();
+      component.find(collapseItemSelector).first().simulate("click");
+      expect(component.find(accordionControlsButtonSelector).text()).toEqual("Open All sections");
+    });
+
+    it("Displays 'Open All' button when all the items are collapsed", () => {
+      const component = getAccordion();
+      expect(component.find(accordionControlsButtonSelector).text()).toEqual("Open All sections");
+    });
+
+    it("Expands all the accordion items when 'Open All' button is clicked", () => {
+      const component = getAccordion();
+      component.find(openAllButtonSelector).simulate("click");
+      expect(component.find(expandedSectionSelector).length).toBe(3);
+    });
+
+    it("Collapses all the accordion items when 'close All' button is clicked", () => {
+      const component = getAccordion();
+      component.find(collapseItemSelector).forEach(x => x.simulate("click"));
+      component.find(openAllButtonSelector).simulate("click");
+      expect(component.find(expandedSectionSelector).length).toBe(0);
+    });
+
+    it("expands the section after all collapsed when the section expand icon is clicked", () => {
+      const component = getAccordion();
+      component.find(collapseItemSelector).forEach(x => x.simulate("click"));
+      component.find(openAllButtonSelector).simulate("click");
+      component.find(collapseItemSelector).first().simulate("click");
+      expect(component.find(expandedSectionSelector).length).toBe(1);
+    });
+
+    it("collapses the section after all expanded when the section collapse icon is clicked", () => {
+      const component = getAccordion();
+      component.find(openAllButtonSelector).simulate("click");
+      component.find(collapseItemSelector).first().simulate("click");
+      expect(component.find(expandedSectionSelector).length).toBe(2);
+    });
   });
 });
