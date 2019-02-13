@@ -1,7 +1,79 @@
 import * as React from "react";
 
-export const Accordion: React.SFC = (props) => (
-  <div className="acc-accordion" data-qa="accordion-container">
-    {props.children}
-  </div>
-);
+export const AccordionContext = React.createContext({
+  allOpen: false,
+  allClosed: true,
+  jsEnabled: false,
+  toggle: (open: boolean) => {
+    return;
+  },
+  subscribe: () => {
+    return;
+  }
+});
+
+export class Accordion extends React.Component<{}, { jsEnabled: boolean, openCount: number, subscribedCount: number }> {
+
+  constructor(props: {}) {
+    super(props);
+    this.state = {
+      jsEnabled: false,
+      openCount: 0,
+      subscribedCount: 0
+    };
+  }
+
+  componentDidMount() {
+    this.setState({ jsEnabled: true });
+  }
+
+  subscribe() {
+    this.setState(state => ({ subscribedCount: state.subscribedCount + 1 }));
+  }
+
+  toggle(open: boolean) {
+    this.setState(state => ({ openCount: open ? state.openCount + 1 : state.openCount - 1 }));
+  }
+
+  openAll() {
+    this.setState(state => ({ openCount: state.subscribedCount }));
+  }
+
+  closeAll() {
+    this.setState({ openCount: 0 });
+  }
+
+  renderAccordionControls(allOpen: boolean) {
+    if (!this.state.jsEnabled) return null;
+    return (
+      <div className="govuk-accordion__controls">
+        <button onClick={() => allOpen ? this.closeAll() : this.openAll()} type="button" className="govuk-accordion__open-all" aria-expanded={allOpen}>
+          {allOpen ? "Close All" : "Open All"}
+          <span className="govuk-visually-hidden"> sections</span>
+        </button>
+      </div>
+    );
+  }
+
+  render() {
+    const allOpen = this.state.subscribedCount === this.state.openCount;
+    const allClosed = this.state.openCount === 0;
+
+    const context = {
+      allOpen,
+      allClosed,
+      jsEnabled: this.state.jsEnabled,
+      toggle: (open: boolean) => this.toggle(open),
+      subscribe: () => this.subscribe()
+    };
+
+    return (
+      <div className="govuk-accordion" data-qa="accordion-container">
+        {this.renderAccordionControls(allOpen)}
+        <AccordionContext.Provider value={context}>
+          {this.props.children}
+        </AccordionContext.Provider>
+      </div>
+    );
+  }
+}

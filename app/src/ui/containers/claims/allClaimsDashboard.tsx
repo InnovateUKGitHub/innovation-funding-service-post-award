@@ -165,7 +165,7 @@ class Component extends ContainerBase<Params, Data, {}> {
     return (
       <Accordion>
         {grouped.map((x, i) => (
-          <AccordionItem title={`${x.partner.name} ${x.partner.isLead ? "(Lead)" : ""}`} openAltText="Hide the closed claims" closedAltText="Show the closed claims" key={i}>
+          <AccordionItem title={`${x.partner.name} ${x.partner.isLead ? "(Lead)" : ""}`} key={i}>
             {this.previousClaimsSection(project, x.partner, x.claims)}
           </AccordionItem>
         ))}
