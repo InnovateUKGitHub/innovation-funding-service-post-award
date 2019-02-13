@@ -41,7 +41,7 @@ class ProjectChangeRequestsComponent extends ContainerBase<Params, Data, Callbac
               If the project team wish to adjust the details of a project, for example, the allocation of funds across cost categories, the Project Manager must submit a project change request.
             </Acc.Renderers.SimpleString>
             <Acc.Renderers.SimpleString>
-              The Project Manager must follow these steps.
+              The Project Manager must follow these steps:
             </Acc.Renderers.SimpleString>
 
             <Acc.Renderers.SimpleString>
