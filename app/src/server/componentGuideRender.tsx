@@ -25,12 +25,12 @@ const renderGuide = (html: string) => {
             <link rel="apple-touch-icon" sizes="152x152" href="/assets/images/govuk-apple-touch-icon-152x152.png">
             <link rel="apple-touch-icon" href="/assets/images/govuk-apple-touch-icon.png">
             <!--[if !IE 8]><!-->
-            <link href="/govuk-frontend-1.2.0.min.css" rel="stylesheet" />
+            <link href="/govuk-frontend-2.7.0.min.css" rel="stylesheet" />
             <!--<![endif]-->
             <link href="/govuk-overrides.css" rel="stylesheet" />
 
             <!--[if IE 8]>
-            <link href="/govuk-frontend-ie8-1.2.0.min.css" rel="stylesheet" />
+            <link href="/govuk-frontend-ie8-2.7.0.min.css" rel="stylesheet" />
             <![endif]-->
 
             <meta property="og:image" content="/assets/images/govuk-opengraph-image.png">
@@ -46,7 +46,7 @@ const renderGuide = (html: string) => {
             </script>
             <a href="#main-content" class="govuk-skip-link">Skip to main content</a>
             <div id="root">${html}</div>
-            <script src="/govuk-frontend-1.2.0.min.js"></script>
+            <script src="/govuk-frontend-2.7.0.min.js"></script>
             <script src="/build/vendor.js"></script>
             <script src="/build/componentsGuide.js"></script>
             <script>

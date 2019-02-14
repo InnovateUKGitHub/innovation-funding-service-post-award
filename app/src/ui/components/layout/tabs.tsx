@@ -1,4 +1,5 @@
 import React from "react";
+import cn from "classnames";
 import { Link } from "../links";
 import { ILinkInfo } from "../../../types/ILinkInfo";
 
@@ -42,14 +43,19 @@ export class Tabs extends React.PureComponent<TabProps, {}> {
     }
 
     private renderTab(item: TabItem) {
+        const classes = cn({
+          "govuk-tabs__tab": true,
+          "govuk-tabs__tab--selected": item.selected
+        });
+
         if (item.route) {
-            return <Link className="govuk-tabs__tab" route={item.route} selected={item.selected}>{item.text}</Link>;
+            return <Link className={classes} route={item.route} selected={item.selected}>{item.text}</Link>;
         }
 
         if (item.url) {
-            return <a href={item.url} className="govuk-tabs__tab" aria-selected={item.selected}>{item.text}</a>;
+            return <a href={item.url} className={classes} aria-selected={item.selected}>{item.text}</a>;
         }
 
-        return <span className="govuk-tabs__tab">item.text</span>;
+        return <span className={classes}>item.text</span>;
     }
 }
