@@ -74,3 +74,37 @@
   padding-bottom: 15px;
 }
 
+.acc-message {
+  background-color: #f8f8f8;
+  background-position: 8px 50%;
+  background-repeat: no-repeat;
+  background-size: 16px 16px;
+  border-width: 0 0 0 5px;
+  border-style: solid;
+  margin: 10px 0;
+  padding: 20px 10px 20px 30px;
+}
+
+.acc-message__info {
+  background-image: url("/assets/images/icon-info.png");
+}
+.acc-message__error {
+  background-image: url("/assets/images/icon-alert.png");
+}
+.acc-message__success {
+  background-image: url("/assets/images/icon-tick.png");
+}
+
+.acc-message .govuk-warning-text {
+  align-items: center;
+  display: inline-flex;
+  margin: 0;
+}
+
+@media (min-width: 640px) {
+ .acc-message {
+   background-position: 20px 50%;
+   background-size: 20px 20px;
+   padding: 20px 20px 20px 60px;
+ }
+}
