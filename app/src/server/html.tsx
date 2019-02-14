@@ -18,11 +18,11 @@ export function renderHtml(html: string, preloadedState: any = {}) {
           <link rel="apple-touch-icon" href="/assets/images/govuk-apple-touch-icon.png">
 
           <!--[if !IE 8]><!-->
-          <link href="/govuk-frontend-1.2.0.min.css" rel="stylesheet" />
+          <link href="/govuk-frontend-2.7.0.min.css" rel="stylesheet" />
           <!--<![endif]-->
 
           <!--[if IE 8]>
-          <link href="/govuk-frontend-ie8-1.2.0.min.css" rel="stylesheet" />
+          <link href="/govuk-frontend-ie8-2.7.0.min.css" rel="stylesheet" />
           <![endif]-->
           <link href="/govuk-overrides.css" rel="stylesheet" />
 
@@ -42,7 +42,7 @@ export function renderHtml(html: string, preloadedState: any = {}) {
           <script>
               window.__PRELOADED_STATE__ = ${JSON.stringify(preloadedState).replace(/</g, "\\u003c")}
           </script>
-          <script src="/govuk-frontend-1.2.0.min.js"></script>
+          <script src="/govuk-frontend-2.7.0.min.js"></script>
           <script src="/build/vendor.js"></script>
           <script src="/build/bundle.js"></script>
           <script>
