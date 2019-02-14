@@ -12,7 +12,7 @@ interface Props {
 
 interface MessageStyle {
   validationColour: string;
-  validationSymbol: string;
+  validationClass: string;
   validationText: string;
 }
 
@@ -20,17 +20,17 @@ const getMessageStyle = (messageType: MessageType): MessageStyle => {
   switch (messageType) {
     case "info": return {
       validationColour: colour.GOVUK_COLOUR_BLUE,
-      validationSymbol: "/assets/images/icon-info.png",
+      validationClass: "acc-message__info",
       validationText: "Info",
     };
     case "error": return {
       validationColour: colour.GOVUK_ERROR_COLOUR,
-      validationSymbol: "/assets/images/icon-alert.png",
+      validationClass: "acc-message__error",
       validationText: "Error",
     };
     case "success": return {
       validationColour: colour.GOVUK_COLOUR_GREEN,
-      validationSymbol: "/assets/images/icon-tick.png",
+      validationClass: "acc-message__success",
       validationText: "Success",
     };
   }
@@ -39,34 +39,19 @@ const getMessageStyle = (messageType: MessageType): MessageStyle => {
 export const ValidationMessage: React.SFC<Props> = ({ message, messageType, qa = "validation-message" }) => {
     if (!message) return null;
 
-    const {validationColour, validationSymbol, validationText} = getMessageStyle(messageType);
+    const {validationColour, validationClass, validationText} = getMessageStyle(messageType);
 
-    const backgroundStyle = {
-      padding: "2% 4% 2% 1%",
-      background: colour.GOVUK_COLOUR_GREY_4,
-      borderLeft: `5px solid ${validationColour}`,
-      marginTop: "30px",
-      marginBottom: "30px",
-    };
-
-    const textStyle = {
-      margin: 0,
-      display: "inline-flex",
-      alignItems: "center"
-    };
-
-    const classes = classnames("govuk-warning-text__text", { "govuk-!-font-weight-bold": messageType !== "info" });
-    const fontStyle = { color: messageType === "success" ? colour.GOVUK_COLOUR_GREEN : undefined };
+    const backgroundStyle = { borderColor: validationColour };
+    const textStyle = messageType === "success" ? { color: colour.GOVUK_COLOUR_GREEN } : undefined;
+    const msgClasses = classnames("govuk-warning-text-background", "acc-message", validationClass);
+    const textClasses = classnames("govuk-warning-text", { "govuk-!-font-weight-bold": messageType !== "info" });
 
     return (
-        <div className="govuk-warning-text-background" style={backgroundStyle} data-qa={qa} data-qa-type={messageType}>
-            <div className="govuk-warning-text" style={textStyle}>
-              <img src={validationSymbol} />
-              <p className={classes} style={fontStyle}>
-                <span className="govuk-warning-text__assistive">{validationText}</span>
-                <span>{message}</span>
-              </p>
-            </div>
+      <div className={msgClasses} style={backgroundStyle} data-qa={qa} data-qa-type={messageType}>
+        <div className={textClasses} style={textStyle}>
+          <span className="govuk-warning-text__assistive">{validationText}</span>
+          <span>{message}</span>
         </div>
+      </div>
     );
 };
