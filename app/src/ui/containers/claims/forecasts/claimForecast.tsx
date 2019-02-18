@@ -77,7 +77,7 @@ const ForecastClaim = definition.connect({
   withData: (state, props) => withDataEditor(state, props),
   withCallbacks: (dispatch) => ({
     onChange: (partnerId, data, combined) => dispatch(Actions.validateForecastDetails(partnerId, data, combined.claims, combined.claimDetails, combined.golCosts)),
-    saveAndReturn: (updateClaim, projectId, partnerId, periodId, data) => dispatch(Actions.saveForecastDetails(updateClaim, partnerId, data.editor!.data, data.claims, data.claimDetails, data.golCosts, () => updateRedirect(updateClaim, dispatch, projectId, partnerId, periodId), "You have submitted your claim for this period."))
+    saveAndReturn: (updateClaim, projectId, partnerId, periodId, data) => dispatch(Actions.saveForecastDetails(updateClaim, projectId, partnerId, data.editor!.data, data.claims, data.claimDetails, data.golCosts, () => updateRedirect(updateClaim, dispatch, projectId, partnerId, periodId), "You have submitted your claim for this period."))
   })
 });
 

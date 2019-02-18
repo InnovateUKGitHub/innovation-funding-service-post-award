@@ -10,6 +10,7 @@ describe("UpdateForecastDetailsCommand", () => {
     const context = new TestContext();
 
     const profileDetail = context.testData.createProfileDetail();
+    const project = context.testData.createProject();
     const partnerId = profileDetail.Acc_ProjectParticipant__c;
     const dto: ForecastDetailsDTO[] = [{
       id: null,
@@ -20,7 +21,7 @@ describe("UpdateForecastDetailsCommand", () => {
       value: 123
     } as any];
 
-    const command = new UpdateForecastDetailsCommand(partnerId, dto, false);
+    const command = new UpdateForecastDetailsCommand(project.Id, partnerId, dto, false);
     await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
   });
 
@@ -44,7 +45,7 @@ describe("UpdateForecastDetailsCommand", () => {
       value: 501
     }];
 
-    const command = new UpdateForecastDetailsCommand(partner.Id, dto, false);
+    const command = new UpdateForecastDetailsCommand(partner.Acc_ProjectId__c, partner.Id, dto, false);
     await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
   });
 
@@ -70,7 +71,7 @@ describe("UpdateForecastDetailsCommand", () => {
     testData.createClaimDetail(costCat, partner, periodId - 1, x => x.Acc_PeriodCostCategoryTotal__c = 1000);
     testData.createProfileTotalCostCategory(costCat, partner, 1500);
 
-    const command = new UpdateForecastDetailsCommand(partner.Id, dto, true);
+    const command = new UpdateForecastDetailsCommand(project.Id, partner.Id, dto, true);
 
     await expect(context.runCommand(command)).rejects.toThrow(BadRequestError);
   });
@@ -94,7 +95,7 @@ describe("UpdateForecastDetailsCommand", () => {
       value: 500
     }];
 
-    const command = new UpdateForecastDetailsCommand(partner.Id, dto, false);
+    const command = new UpdateForecastDetailsCommand(partner.Acc_ProjectId__c, partner.Id, dto, false);
     await context.runCommand(command);
 
     expect(context.repositories.profileDetails.Items.find(x => x.Id === profileDetail.Id)!.Acc_LatestForecastCost__c).toBe(500);
@@ -128,7 +129,7 @@ describe("UpdateForecastDetailsCommand", () => {
       value: 100
     }];
 
-    const command = new UpdateForecastDetailsCommand(partner.Id, dto, false);
+    const command = new UpdateForecastDetailsCommand(partner.Acc_ProjectId__c, partner.Id, dto, false);
     await context.runCommand(command);
 
     expect(context.repositories.profileDetails.Items.find(x => x.Id === profileDetail.Id)!.Acc_LatestForecastCost__c).toBe(250);
@@ -166,7 +167,7 @@ describe("UpdateForecastDetailsCommand", () => {
       value: 100
     }];
 
-    const command = new UpdateForecastDetailsCommand(partner.Id, dto, false);
+    const command = new UpdateForecastDetailsCommand(partner.Acc_ProjectId__c, partner.Id, dto, false);
     await context.runCommand(command);
 
     expect(context.repositories.partners.Items.find(x => x.Id === partner.Id)!.Acc_ForecastLastModifiedDate__c).toBe(context.clock.asLuxon().toISO());
@@ -201,7 +202,7 @@ describe("UpdateForecastDetailsCommand", () => {
     testData.createClaimDetail(costCat, partner, periodId - 1, x => x.Acc_PeriodCostCategoryTotal__c = 1000);
     testData.createProfileTotalCostCategory(costCat, partner, 1500);
 
-    const command = new UpdateForecastDetailsCommand(partnerId, dto, false);
+    const command = new UpdateForecastDetailsCommand(project.Id, partnerId, dto, false);
     await expect(context.runCommand(command)).rejects.toMatchObject(new BadRequestError("You can't update the forecast of approved periods."));
     expect(context.repositories.partners.Items.find(x => x.Id === partner.Id)!.Acc_ForecastLastModifiedDate__c).toBe(time);
   });
@@ -229,7 +230,7 @@ describe("UpdateForecastDetailsCommand", () => {
     testData.createClaimDetail(costCat, partner, periodId - 1, x => x.Acc_PeriodCostCategoryTotal__c = 1000);
     testData.createProfileTotalCostCategory(costCat, partner, 1500);
 
-    const command = new UpdateForecastDetailsCommand(partner.Id, dto, true);
+    const command = new UpdateForecastDetailsCommand(partner.Acc_ProjectId__c, partner.Id, dto, true);
     await context.runCommand(command);
     expect(context.repositories.claims.Items.find(x => x.Id === claim.Id)!.Acc_ClaimStatus__c).toBe(ClaimStatus.SUBMITTED);
   });
@@ -259,7 +260,7 @@ describe("UpdateForecastDetailsCommand", () => {
     testData.createClaimDetail(costCat, partner, periodId - 1, x => x.Acc_PeriodCostCategoryTotal__c = 1000);
     testData.createProfileTotalCostCategory(costCat, partner, 1500);
 
-    const command = new UpdateForecastDetailsCommand(partner.Id, dto, true);
+    const command = new UpdateForecastDetailsCommand(partner.Acc_ProjectId__c, partner.Id, dto, true);
     await context.runCommand(command);
     expect(context.repositories.claims.Items.find(x => x.Id === claim.Id)!.Acc_ClaimStatus__c).toBe(ClaimStatus.SUBMITTED);
   });
@@ -289,7 +290,7 @@ describe("UpdateForecastDetailsCommand", () => {
     testData.createClaimDetail(costCat, partner, periodId - 1, x => x.Acc_PeriodCostCategoryTotal__c = 1000);
     testData.createProfileTotalCostCategory(costCat, partner, 1500);
 
-    const command = new UpdateForecastDetailsCommand(partner.Id, dto, true);
+    const command = new UpdateForecastDetailsCommand(partner.Acc_ProjectId__c, partner.Id, dto, true);
     await context.runCommand(command);
     expect(context.repositories.claims.Items.find(x => x.Id === claim.Id)!.Acc_ClaimStatus__c).toBe(ClaimStatus.AWAITING_IUK_APPROVAL);
   });
@@ -317,7 +318,7 @@ describe("UpdateForecastDetailsCommand", () => {
     testData.createClaimDetail(costCat, partner, periodId - 1, x => x.Acc_PeriodCostCategoryTotal__c = 1000);
     testData.createProfileTotalCostCategory(costCat, partner, 1500);
 
-    const command = new UpdateForecastDetailsCommand(partner.Id, dto, true);
+    const command = new UpdateForecastDetailsCommand(partner.Acc_ProjectId__c, partner.Id, dto, true);
     await context.runCommand(command);
     await expect(context.runCommand(command)).rejects.toThrow(BadRequestError);
   });
@@ -350,7 +351,7 @@ describe("UpdateForecastDetailsCommand", () => {
     testData.createClaimDetail(costCat, partner, periodId - 1, x => x.Acc_PeriodCostCategoryTotal__c = 1000);
     testData.createProfileTotalCostCategory(costCat, partner, 1500);
 
-    const command = new UpdateForecastDetailsCommand(partnerId, dto, false);
+    const command = new UpdateForecastDetailsCommand(project.Id, partnerId, dto, false);
     await expect(context.runCommand(command)).rejects.toMatchObject(new BadRequestError("You can't update the forecast of approved periods."));
   });
 
@@ -382,7 +383,7 @@ describe("UpdateForecastDetailsCommand", () => {
       value: profileDetail.Acc_LatestForecastCost__c + 1
     }];
 
-    const command = new UpdateForecastDetailsCommand(partner.Id, update, false);
+    const command = new UpdateForecastDetailsCommand(partner.Acc_ProjectId__c, partner.Id, update, false);
     await expect(context.runCommand(command)).rejects.toMatchObject(new BadRequestError("You can't update the forecast of approved periods."));
 
   });
@@ -418,7 +419,7 @@ describe("UpdateForecastDetailsCommand", () => {
 
     dtos[0].value++;
 
-    const command = new UpdateForecastDetailsCommand(partner.Id, dtos, false);
+    const command = new UpdateForecastDetailsCommand(partner.Acc_ProjectId__c, partner.Id, dtos, false);
     await expect(context.runCommand(command)).rejects.toMatchObject(new BadRequestError("You can't update the forecast of approved periods."));
 
   });
@@ -455,7 +456,7 @@ describe("UpdateForecastDetailsCommand", () => {
 
     dtos[1].value++;
 
-    const command = new UpdateForecastDetailsCommand(partner.Id, dtos, false);
+    const command = new UpdateForecastDetailsCommand(partner.Acc_ProjectId__c, partner.Id, dtos, false);
     await expect(context.runCommand(command)).resolves.toBe(true);
 
   });
@@ -492,7 +493,7 @@ describe("UpdateForecastDetailsCommand", () => {
 
     dtos[1].value++;
 
-    const command = new UpdateForecastDetailsCommand(partner.Id, dtos, false);
+    const command = new UpdateForecastDetailsCommand(partner.Acc_ProjectId__c, partner.Id, dtos, false);
     let error!: ValidationError;
 
     await context.runCommand(command).catch(e => error = e);
