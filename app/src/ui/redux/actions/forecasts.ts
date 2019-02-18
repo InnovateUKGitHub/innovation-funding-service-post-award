@@ -41,6 +41,7 @@ export function validateForecastDetails(
 
 export function saveForecastDetails(
   updateClaim: boolean,
+  projectId: string,
   partnerId: string,
   forecasts: ForecastDetailsDTO[],
   claims: ClaimDto[],
@@ -63,7 +64,7 @@ export function saveForecastDetails(
     // send a loading action with undefined as it will just update the status
     dispatch(dataLoadAction(selector.key, selector.store, LoadingStatus.Loading, undefined));
 
-    return ApiClient.forecastDetails.update({partnerId, forecasts, submit: updateClaim, user: state.user}).then(result => {
+    return ApiClient.forecastDetails.update({projectId, partnerId, forecasts, submit: updateClaim, user: state.user}).then(result => {
       dispatch(dataLoadAction(selector.key, selector.store, LoadingStatus.Done, result));
       dispatch(messageSuccess(message));
       onComplete();

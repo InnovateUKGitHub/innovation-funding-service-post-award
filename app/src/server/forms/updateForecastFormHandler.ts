@@ -36,7 +36,7 @@ export class UpdateForecastFormHandler extends FormHandlerBase<ForecastParams, F
   }
 
   protected async run(context: IContext, params: ForecastParams, button: IFormButton, dto: ForecastDetailsDTO[]): Promise<ILinkInfo> {
-    await context.runCommand(new UpdateForecastDetailsCommand(params.partnerId, dto, false));
+    await context.runCommand(new UpdateForecastDetailsCommand(params.projectId, params.partnerId, dto, false));
     return ViewForecastRoute.getLink(params);
 }
 
