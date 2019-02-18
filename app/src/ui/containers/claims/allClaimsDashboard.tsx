@@ -163,7 +163,7 @@ class Component extends ContainerBase<Params, Data, {}> {
     const grouped = partners.map(x => ({ partner: x, claims: previousClaims.filter(y => y.partnerId === x.id) }));
 
     return (
-      <Accordion>
+      <Accordion qa="previous-claims">
         {grouped.map((x, i) => (
           <AccordionItem title={`${x.partner.name} ${x.partner.isLead ? "(Lead)" : ""}`} key={i}>
             {this.previousClaimsSection(project, x.partner, x.claims)}
