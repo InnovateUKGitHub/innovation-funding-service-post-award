@@ -1,50 +1,93 @@
 import * as React from "react";
+import cn from "classnames";
+import { AccordionContext } from "./accordion";
 
 interface Props {
   title: string;
-  closedAltText?: string;
-  openAltText?: string;
 }
 
 interface State {
   accordionOpen: boolean;
+  focused: boolean;
 }
 
 export class AccordionItem extends React.Component<Props, State> {
+
+  static contextType = AccordionContext;
+  context!: React.ContextType<typeof AccordionContext>;
+
   constructor(props: Props) {
     super(props);
     this.state = {
-      accordionOpen: true // on server needs to be open
+      accordionOpen: true, // on server needs to be open
+      focused: false
     };
   }
 
   componentDidMount() {
+    this.context.subscribe();
     this.setState({ accordionOpen: false }); // once mounted on client can be initally shut
   }
 
-  render() {
-    const buttonStyle: React.CSSProperties = {
-      background: "none",
-      border: "none",
-      textAlign: "left"
-    };
+  onClick() {
+    const newAccordionState = !this.state.accordionOpen;
+    this.context.toggle(newAccordionState);
+    this.setState({ accordionOpen: newAccordionState });
+  }
 
+  onBlur() {
+    this.setState({ focused: false });
+  }
+
+  onFocus() {
+    this.setState({ focused: true });
+  }
+
+  componentDidUpdate(prevProps: Props, prevState: State) {
+    if (this.context.allOpen && !prevState.accordionOpen) {
+      this.setState({
+        accordionOpen: true
+      });
+    }
+    if (this.context.allClosed && prevState.accordionOpen) {
+      this.setState({
+        accordionOpen: false
+      });
+    }
+  }
+
+  renderTitle() {
+    if (!this.context.jsEnabled) {
+      return <span className="govuk-accordion__section-button">{this.props.title}</span>;
+    }
     return (
-      <div className="acc-accordion__section">
-        <div className="acc-accordion__section-header" onClick={() => this.setState({ accordionOpen: !this.state.accordionOpen })}>
-          <button data-qa="accordion-button" style={buttonStyle} className="govuk-heading-m govuk-!-margin-bottom-3 govuk-!-margin-top-3">{this.props.title}</button>
-          <img
-            className="govuk-!-padding-right-2"
-            src={this.state.accordionOpen ? "/assets/images/icon-minus.png" : "/assets/images/icon-plus.png"}
-            alt={this.state.accordionOpen ? this.props.openAltText : this.props.closedAltText}
-          />
-        </div>
-        {this.renderChildren()}
-      </div>
+      <React.Fragment>
+        <button type="button" className="govuk-accordion__section-button" aria-expanded={this.state.accordionOpen}>{this.props.title}</button>
+        <span className="govuk-accordion__icon" aria-hidden={!this.state.accordionOpen}/>
+      </React.Fragment>
     );
   }
 
-  renderChildren() {
-    return this.state.accordionOpen ? (<div className="acc-accordion__section-panel">{this.props.children}</div>) : null;
+  render() {
+    const topLevelClasses = cn({
+      "govuk-accordion__section": true,
+      "govuk-accordion__section--expanded": this.state.accordionOpen
+    });
+    const headerClasses = cn({
+      "govuk-accordion__section-header": true,
+      "govuk-accordion__section-header--focused": this.state.focused
+    });
+    return (
+      <div className={topLevelClasses}>
+        <div onBlur={() => this.onBlur()} onFocus={() => this.onFocus()} onClick={() => this.onClick()} className={headerClasses} >
+          <h2 className="govuk-accordion__section-heading">
+            {this.renderTitle()}
+          </h2>
+        </div>
+        <div className="govuk-accordion__section-content">
+          <p className="govuk-body">{this.props.children}</p>
+        </div>
+      </div>
+    );
   }
 }
