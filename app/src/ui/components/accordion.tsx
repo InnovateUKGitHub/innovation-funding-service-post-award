@@ -12,7 +12,7 @@ export const AccordionContext = React.createContext({
   }
 });
 
-export class Accordion extends React.Component<{}, { jsEnabled: boolean, openCount: number, subscribedCount: number }> {
+export class Accordion extends React.Component<{qa?: string}, { jsEnabled: boolean, openCount: number, subscribedCount: number }> {
 
   constructor(props: {}) {
     super(props);
@@ -66,9 +66,9 @@ export class Accordion extends React.Component<{}, { jsEnabled: boolean, openCou
       toggle: (open: boolean) => this.toggle(open),
       subscribe: () => this.subscribe()
     };
-
+    const qa = this.props.qa? this.props.qa + "-accordion-container" : "accordion-container";
     return (
-      <div className="govuk-accordion" data-qa="accordion-container">
+      <div className="govuk-accordion" data-qa={qa}>
         {this.renderAccordionControls(allOpen)}
         <AccordionContext.Provider value={context}>
           {this.props.children}
