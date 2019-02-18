@@ -46,7 +46,7 @@ export class Accordion extends React.Component<{}, { jsEnabled: boolean, openCou
   renderAccordionControls(allOpen: boolean) {
     if (!this.state.jsEnabled) return null;
     return (
-      <div className="govuk-accordion__controls">
+      <div className="govuk-accordion__controls" data-qa="open-close-all-button">
         <button onClick={() => allOpen ? this.closeAll() : this.openAll()} type="button" className="govuk-accordion__open-all" aria-expanded={allOpen}>
           {allOpen ? "Close All" : "Open All"}
           <span className="govuk-visually-hidden"> sections</span>
