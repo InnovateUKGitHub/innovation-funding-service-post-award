@@ -35,7 +35,7 @@ export class ClaimForcastFormHandler extends FormHandlerBase<ClaimForcastParams,
 
   protected async run(context: IContext, params: ClaimForcastParams, button: IFormButton, dto: ForecastDetailsDTO[]): Promise<ILinkInfo> {
     const submit = button.name === "default";
-    await context.runCommand(new UpdateForecastDetailsCommand(params.partnerId, dto, submit));
+    await context.runCommand(new UpdateForecastDetailsCommand(params.projectId, params.partnerId, dto, submit));
 
     if (button.name === "save") {
       return PrepareClaimRoute.getLink(params);

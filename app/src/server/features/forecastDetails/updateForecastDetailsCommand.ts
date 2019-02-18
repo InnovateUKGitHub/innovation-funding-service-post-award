@@ -8,15 +8,20 @@ import { GetAllClaimDetailsByPartner } from "../claimDetails";
 import { GetByIdQuery as GetPartnerById } from "../partners";
 import { GetByIdQuery as GetProjectById } from "../projects";
 import { ForecastDetailsDtosValidator } from "../../../ui/validators/forecastDetailsDtosValidator";
-import { ClaimDto, ClaimStatus, IContext, PartnerDto } from "../../../types";
+import {Authorisation, ClaimDto, ClaimStatus, IContext, PartnerDto, ProjectRole} from "../../../types";
 
 export class UpdateForecastDetailsCommand extends CommandBase<boolean> {
   constructor(
+    private readonly projectId: string,
     private readonly partnerId: string,
     private readonly forecasts: ForecastDetailsDTO[],
     private readonly submit: boolean
   ) {
     super();
+  }
+
+  protected async accessControl(auth: Authorisation) {
+    return auth.for(this.projectId, this.partnerId).hasRole(ProjectRole.FinancialContact);
   }
 
   protected async Run(context: IContext) {
