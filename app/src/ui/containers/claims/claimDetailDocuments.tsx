@@ -103,7 +103,7 @@ export class ClaimDetailDocumentsComponent extends ContainerBase<ClaimDetailDocu
     return (
       <ACC.Page>
         <ACC.Section>
-          <ACC.BackLink route={back}>{`Back to ${costCategory.name}`}</ACC.BackLink>
+          <ACC.BackLink route={back}>{`Back to ${costCategory.name.toLowerCase()}`}</ACC.BackLink>
         </ACC.Section>
         <ACC.ErrorSummary error={(editor && editor.error) || (deleteEditor && deleteEditor.error)} />
         {validationMessage}
