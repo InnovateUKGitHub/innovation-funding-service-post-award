@@ -16,7 +16,7 @@ export const ListSection: React.SFC<Props> = (props) => {
   );
 };
 
-export const ListItem: React.SFC<{ icon?: "none" | "warning" | "edit" }> = (props) => {
+export const ListItem: React.SFC<{ icon?: "none" | "warning" | "edit", qa?: string }> = (props) => {
   const className = classNames({
     "govuk-grid-row": true,
     "govuk-!-padding-4": true,
@@ -37,7 +37,7 @@ export const ListItem: React.SFC<{ icon?: "none" | "warning" | "edit" }> = (prop
   }
 
   return (
-    <div className={className} style={style}>
+    <div className={className} style={style} data-qa={props.qa}>
       {props.children}
     </div>
   );
