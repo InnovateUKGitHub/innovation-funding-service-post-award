@@ -96,8 +96,8 @@ class ProjectDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
                     <PartnersTable.String header="Partner" qa="partner-name" value={x => x.isLead ? `${x.name} (Lead)` : x.name} footer="Total" />
                     <PartnersTable.Currency header="Total eligible costs" qa="total-costs" value={x => x.totalParticipantGrant || 0} footer={<ACC.Renderers.Currency value={totalEligibleCosts} />} />
                     <PartnersTable.Currency header="Costs claimed to date" qa="costs-claimed" value={x => x.totalParticipantCostsClaimed || 0} footer={<ACC.Renderers.Currency value={totalClaimed} />} />
-                    <PartnersTable.Percentage header="Percentage claimed" qa="percentage-claimed" value={x => x.percentageParticipantCostsClaimed || 0} footer={<ACC.Renderers.Percentage value={percentageClaimed} />} />
-                    <PartnersTable.Percentage header="Cap limit" qa="cap-limit" value={x => x.capLimit} fractionDigits={0} />
+                    <PartnersTable.Percentage header="Percentage of eligible costs claimed to date" qa="percentage-claimed" value={x => x.percentageParticipantCostsClaimed || 0} footer={<ACC.Renderers.Percentage value={percentageClaimed} />} />
+                    <PartnersTable.Percentage header="Retention rate" qa="cap-limit" value={x => x.capLimit} fractionDigits={0} />
                 </PartnersTable.Table>
             </ACC.Section>
         );
