@@ -3,13 +3,13 @@ import "jest";
 import { DateTime } from "luxon";
 import { TestContext } from "../../testContextProvider";
 import { MapToProjectDtoCommand } from "../../../../src/server/features/projects/mapToProjectDto";
-import { ClaimFrequency, ProjectDto, ProjectRole } from "../../../../src/types";
+import { ClaimFrequency, ProjectClaimTrackingStatus, ProjectDto, ProjectRole, ProjectStatus } from "../../../../src/types";
 
 describe("MapToProjectDtoCommand", () => {
   it("when valid expect mapping", async () => {
     const context = new TestContext();
 
-    context.clock.setDate("2008/12/31");
+    context.clock.setDate("2009/01/15");
 
     const expected: ProjectDto = {
       id: "Expected Id",
@@ -21,15 +21,25 @@ describe("MapToProjectDtoCommand", () => {
       competitionType: "SBRI",
       claimFrequency: ClaimFrequency.Quarterly,
       claimFrequencyName: ClaimFrequency[ClaimFrequency.Quarterly],
-      periodId: 4,
+      periodId: 5,
       totalPeriods: 12,
       grantOfferLetterCosts: 2000,
       costsClaimedToDate: 1000,
       claimedPercentage: 50,
-      periodStartDate: new Date("2008/10/01"),
-      periodEndDate: new Date("2008/12/31"),
+      periodStartDate: new Date("2009/01/01"),
+      periodEndDate: new Date("2009/03/31"),
       roles: ProjectRole.Unknown,
-      roleTitles: []
+      roleTitles: [],
+      claimWindowStart: new Date("2009/01/01 00:00:00"),
+      claimWindowEnd: new Date("2009/01/30 23:59:00"),
+      claimsOverdue: 5,
+      claimsQueried: 1,
+      claimsToReview: 2,
+      claimsStatus: ProjectClaimTrackingStatus.AllClaimsSubmitted,
+      claimsStatusName: "All Claims Submitted",
+      status: ProjectStatus.Live,
+      statusName: "Live",
+      numberOfOpenClaims: 10
     };
 
     const salesforce = context.testData.createProject(x => {
@@ -42,6 +52,14 @@ describe("MapToProjectDtoCommand", () => {
       x.Acc_ClaimFrequency__c = "Quarterly";
       x.Acc_GOLTotalCostAwarded__c = expected.grantOfferLetterCosts;
       x.Acc_TotalProjectCosts__c = expected.costsClaimedToDate;
+      x.Acc_TrackingClaimStatus__c = expected.claimsStatusName;
+      x.ClaimStatusName = expected.claimsStatusName;
+      x.Acc_ProjectStatus__c = expected.statusName;
+      x.ProjectStatusName = expected.statusName;
+      x.Acc_Claims_Overdue__c = expected.claimsOverdue;
+      x.Acc_Claims_Under_Query__c = expected.claimsQueried;
+      x.Acc_Claims_For_Review__c = expected.claimsToReview;
+      x.Acc_Number_of_Open_Claims__c = expected.numberOfOpenClaims;
     });
 
     const result = await context.runCommand(new MapToProjectDtoCommand(salesforce, ProjectRole.Unknown));

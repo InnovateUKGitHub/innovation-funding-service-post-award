@@ -18,6 +18,11 @@ export interface ISalesforcePartner {
   Acc_Award_Rate__c: number;
   Acc_TotalFutureForecastsforParticipant__c: number;
   Acc_ForecastLastModifiedDate__c: string;
+  // ToDo: remove null once salesforce working
+  Acc_Claims_For_Review__c: number|null;
+  Claims_Overdue__c: number;
+  Acc_Claims_Under_Query__c: number;
+  Acc_TrackingClaims__c: string;
 }
 
 export interface IPartnerRepository {
@@ -46,6 +51,10 @@ export class PartnerRepository extends SalesforceRepositoryBase<ISalesforcePartn
     "Acc_ProjectId__c",
     "Acc_TotalFutureForecastsforParticipant__c",
     "Acc_ForecastLastModifiedDate__c",
+    "Acc_Claims_For_Review__c",
+    "Claims_Overdue__c",
+    "Acc_Claims_Under_Query__c",
+    "Acc_TrackingClaims__c",
   ];
 
   getAllByProjectId(projectId: string): Promise<ISalesforcePartner[]> {

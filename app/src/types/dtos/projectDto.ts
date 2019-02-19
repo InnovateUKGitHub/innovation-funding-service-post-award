@@ -1,6 +1,25 @@
 // tslint:disable:no-bitwise
 import { ClaimFrequency } from "./claimFrequency";
 
+export enum ProjectStatus {
+    Unknown = 0,
+    OfferLetterSent = 1,
+    Live = 2,
+    OnHold = 3,
+    FinalClaim = 4,
+    Closed = 5,
+    Terminated = 6
+}
+
+export enum ProjectClaimTrackingStatus {
+    Unknown = 0,
+    NoClaimsDue = 1,
+    ClaimsDue = 2,
+    ClaimsOverdue = 3,
+    ClaimsQueried = 4,
+    AllClaimsSubmitted = 5
+}
+
 export interface ProjectDto {
     id: string;
     title: string;
@@ -14,10 +33,14 @@ export interface ProjectDto {
     claimFrequency: ClaimFrequency;
     claimFrequencyName: string;
     competitionType: string;
+
     periodId: number;
     totalPeriods: number | null;
     periodStartDate: Date | null;
     periodEndDate: Date | null;
+
+    claimWindowStart: Date|null;
+    claimWindowEnd: Date|null;
 
     grantOfferLetterCosts: number;
     costsClaimedToDate: number;
@@ -25,6 +48,15 @@ export interface ProjectDto {
 
     roles: ProjectRole;
     roleTitles: string[];
+
+    status: ProjectStatus;
+    statusName: string;
+    claimsToReview: number;
+    claimsOverdue: number;
+    claimsQueried: number;
+    claimsStatus: ProjectClaimTrackingStatus;
+    claimsStatusName: string;
+    numberOfOpenClaims: number;
 }
 
 export enum ProjectRole {
