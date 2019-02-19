@@ -30,10 +30,10 @@ class ProjectForecastComponent extends ContainerBase<Params, Data, Callbacks> {
 
     return (
       <ProjectOverviewPage selectedTab={ProjectForecastRoute.routeName} project={project} partners={partners} backLinkText="Back to all projects">
-        <ACC.Section title="Project forecasts" qa="project-forecasts">
+        <ACC.Section qa="project-forecasts">
           <Table.Table data={partners} qa="partner-table">
             <Table.String header="Partner" value={x => x.name + (x.isLead ? " (Lead)" : "")} qa="partner" />
-            <Table.Currency header="Grant offered" value={x => x.totalParticipantGrant} qa="grant-offered" />
+            <Table.Currency header="Total eligible costs" value={x => x.totalParticipantGrant} qa="grant-offered" />
             <Table.Currency header="Forecasts and costs" value={x => x.totalFutureForecastsForParticipants} qa="forecasts-and-costs" />
             <Table.Currency header="Underspend" value={x => Math.abs(x.totalParticipantGrant! - x.totalFutureForecastsForParticipants!)} qa="underspend" />
             <Table.ShortDate header="Date of last update" value={x => x.forecastLastModifiedDate} qa="last-updated" />

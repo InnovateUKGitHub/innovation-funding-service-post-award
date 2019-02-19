@@ -112,7 +112,7 @@ const ClaimLineItemsTable: React.SFC<{ lineItems: ClaimLineItemDto[], forecastDe
         })
       ]}
     >
-      <LineItemTable.String header="Description of cost" qa="cost-description" value={(x) => x.description} />
+      <LineItemTable.String header="Description" qa="cost-description" value={(x) => x.description} />
       <LineItemTable.Currency header="Cost (£)" qa="cost-value" value={(x) => x.value} />
     </LineItemTable.Table>
   );
