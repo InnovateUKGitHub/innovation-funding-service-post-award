@@ -23,7 +23,7 @@ const renderValidation = (validator?: Results<any> | null) => validator && <ACC.
 export const ProjectOverviewPage = ({ project, selectedTab, children, partnerId, partners, error, validator, backLinkText, messages }: Props) => (
     <ACC.Page>
         <ACC.Section>
-            <ACC.BackLink route={ProjectDashboardRoute.getLink({})}>{backLinkText || "Back to dashboard"}</ACC.BackLink>
+            <ACC.BackLink route={ProjectDashboardRoute.getLink({})}>{backLinkText || "Back to all projects"}</ACC.BackLink>
         </ACC.Section>
         {renderError(error)}
         {renderValidation(validator)}

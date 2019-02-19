@@ -24,7 +24,7 @@ class ProjectDashboardComponent extends ContainerBase<{}, Data, Callbacks> {
     return (
       <ACC.Page>
         <ACC.Section>
-          <ACC.BackLink route={HomeRoute.getLink({})}>Back</ACC.BackLink>
+          <ACC.BackLink route={HomeRoute.getLink({})}>Back to dashboard</ACC.BackLink>
         </ACC.Section>
         <ACC.Title title="Projects dashboard" />
         {this.renderSubSections(projects)}
