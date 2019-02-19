@@ -39,7 +39,7 @@ class ProjectDashboardComponent extends ContainerBase<Props, Data, Callbacks> {
         <ACC.Section>
           <ACC.BackLink route={HomeRoute.getLink({})}>Back to dashboard</ACC.BackLink>
         </ACC.Section>
-        <ACC.Title title="Projects dashboard" />
+        <ACC.Title title="Projects" />
         {this.renderContents(projects, partners)}
       </ACC.Page>
     );
@@ -62,15 +62,15 @@ class ProjectDashboardComponent extends ContainerBase<Props, Data, Callbacks> {
 
     return (
       <React.Fragment>
-        <ACC.ListSection title="Projects with open claims" qa="Projects-with-open-claims" key={`section-open`}>
+        <ACC.ListSection title="Open claims" qa="open-claims" key={`section-open`}>
           {open.map((x, i) => this.renderProject(x.project, x.partner, "open", i))}
           {!open.length ? <ACC.ListItem><p className="govuk-body govuk-!-margin-0">You currently do not have any projects with open claims.</p></ACC.ListItem> : null}
         </ACC.ListSection>
-        <ACC.ListSection title="Projects awaiting the next claim period" qa="Projects-awaiting-next-claims-period" key={`section-closed`}>
+        <ACC.ListSection title="Awaiting the next claim period" qa="next-claims" key={`section-closed`}>
           {closed.map((x, i) => this.renderProject(x.project, x.partner, "closed", i))}
           {!closed.length ? <ACC.ListItem><p className="govuk-body govuk-!-margin-0">You currently do not have any projects outside of the claims period.</p></ACC.ListItem> : null}
         </ACC.ListSection>
-        <ACC.ListSection title="Archived projects" qa="Archived-projects" key={`section-archived`}>
+        <ACC.ListSection title="Archive" qa="archived-claims" key={`section-archived`}>
           {archived.map((x, i) => this.renderProject(x.project, x.partner, "archived", i))}
           {!archived.length ? <ACC.ListItem><p className="govuk-body govuk-!-margin-0">You currently do not have any archived projects.</p></ACC.ListItem> : null}
         </ACC.ListSection>
@@ -231,7 +231,7 @@ class ProjectDashboardComponent extends ContainerBase<Props, Data, Callbacks> {
     };
 
     return (
-      <ACC.ListItem icon={iconStatus} key={`project_${index}`}>
+      <ACC.ListItem icon={iconStatus} key={`project_${index}`} qa={`project-${project.projectNumber}`}>
         <div className="govuk-grid-column-two-thirds" style={{ display: "inline-flex", alignItems: "center" }}>
           {iconStatus === "warning" ? <div style={iconStyle}><img src="/assets/images/icon-alert.png" /></div> : null}
           {iconStatus === "edit" ? <div style={iconStyle}><img src="/assets/images/icon-edit.png" /></div> : null}
