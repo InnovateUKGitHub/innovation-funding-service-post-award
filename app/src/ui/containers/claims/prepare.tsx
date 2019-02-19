@@ -82,7 +82,7 @@ export class PrepareComponent extends ContainerBase<PrepareClaimParams, Data, Ca
         return (
             <ACC.Page>
                 <ACC.Section>
-                    <ACC.BackLink route={backLink}>Claims dashboard</ACC.BackLink>
+                    <ACC.BackLink route={backLink}>Back to project</ACC.BackLink>
                 </ACC.Section>
                 <ACC.ErrorSummary error={data.editor.error} />
                 <ACC.ValidationSummary validation={data.editor.validator} compressed={false} />

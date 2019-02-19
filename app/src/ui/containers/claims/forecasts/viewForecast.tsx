@@ -37,7 +37,7 @@ class ViewForecastComponent extends ContainerBase<Params, PendingForecastData, C
     const isMoPm = !!(data.project.roles & (ProjectRole.ProjectManager | ProjectRole.MonitoringOfficer));
     const partnerName = isMoPm ? data.partner.name : null;
     const backLink = isMoPm ? ProjectForecastRoute.getLink({ projectId: data.project.id }) : ProjectDashboardRoute.getLink({});
-    const backText = isMoPm ? "Back" : "Back to dashboard";
+    const backText = isMoPm ? "Back to project" : "Back to all projects";
 
     return (
       <ACC.Page>
