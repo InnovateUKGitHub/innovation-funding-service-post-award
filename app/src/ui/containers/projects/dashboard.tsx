@@ -1,113 +1,275 @@
+import * as Selectors from "../../redux/selectors";
 import React from "react";
-import { ContainerBase, ReduxContainer } from "../containerBase";
 import * as ACC from "../../components";
 import { Pending } from "../../../shared/pending";
 import * as Actions from "../../redux/actions";
-import * as Selectors from "../../redux/selectors";
+import { ContainerBase, ReduxContainer } from "../containerBase";
+import { PartnerClaimStatus, PartnerDto, ProjectDto, ProjectRole, ProjectStatus } from "../../../types";
+import { DateTime } from "luxon";
+import { ProjectDetailsRoute } from ".";
+import * as colour from "../../styles/colours";
 import { HomeRoute } from "../home";
-import { ClaimFrequency, ProjectDto } from "../../../types";
 
 interface Data {
-  projects: Pending<ProjectDto[]>;
+  data: Pending<{
+    projects: ProjectDto[];
+    partners: PartnerDto[];
+  }>;
 }
 
 interface Callbacks {
 }
 
-class ProjectDashboardComponent extends ContainerBase<{}, Data, Callbacks> {
+interface Props {
+  useSalesforceStatus?: boolean;
+}
+
+type Section = "archived" | "open" | "closed" | "none";
+type Icon = "warning" | "edit" | "none";
+
+class ProjectDashboardComponent extends ContainerBase<Props, Data, Callbacks> {
 
   render() {
-    return <ACC.PageLoader pending={this.props.projects} render={x => this.renderContent(x)} />;
+    return <ACC.PageLoader pending={this.props.data} render={x => this.renderContent(x.projects, x.partners)} />;
   }
 
-  private renderContent(projects: ProjectDto[]) {
+  private renderContent(projects: ProjectDto[], partners: PartnerDto[]) {
     return (
       <ACC.Page>
         <ACC.Section>
           <ACC.BackLink route={HomeRoute.getLink({})}>Back to dashboard</ACC.BackLink>
         </ACC.Section>
         <ACC.Title title="Projects dashboard" />
-        {this.renderSubSections(projects)}
+        {this.renderContents(projects, partners)}
       </ACC.Page>
     );
   }
 
-  renderSubSections(projects: ProjectDto[]) {
-    const open: JSX.Element[] = [];
-    const awaiting: JSX.Element[] = [];
-    const archived: JSX.Element[] = [];
-
-    projects.forEach(x => {
-      const quarterly = x.claimFrequency === ClaimFrequency.Quarterly;
-      const today = new Date();
-      // needs last claim date to work out latest period for claim deadline
-      const end = new Date(x.startDate);
-      const endMonth = x.periodId * (quarterly ? 4 : 1);
-      end.setMonth(end.getMonth() + endMonth);
-      end.setDate(0);
-      const timeRemaining = end.getTime() - today.getTime();
-      const daysRemaining = Math.floor(timeRemaining / (60 * 60 * 24 * 1000));
-
-      if (daysRemaining <= 30) {
-        open.push((
-          <ACC.OpenProjectItem
-            key={x.id}
-            project={x}
-            daysRemaining={daysRemaining}
-            endDate={end}
-            warning={true}
-          />
-        ));
-      }
-      else {
-        const nextStart = new Date(end);
-        nextStart.setDate(1);
-
-        awaiting.push((
-          <ACC.AwaitingProjectItem
-            key={x.id}
-            project={x}
-            warning={false}
-            periodStart={nextStart}
-            periodEnd={end}
-          />
-        ));
-      }
+  private renderContents(projects: ProjectDto[], partners: PartnerDto[]) {
+    const combinedData = projects.map(project => {
+      const partner = partners.find(y => (y.projectId === project.id) && !!(y.roles & ProjectRole.FinancialContact)) || null;
+      const status = this.props.useSalesforceStatus === true ? this.getProjectStatus(project, partner) : this.getProjectStatus2(project, partner);
+      return {
+        project,
+        partner,
+        status
+      };
     });
+
+    const open = combinedData.filter(x => x.status === "open");
+    const closed = combinedData.filter(x => x.status === "closed");
+    const archived = combinedData.filter(x => x.status === "archived");
 
     return (
       <React.Fragment>
-        <ACC.ListSection title="Projects with open claims" qa="Projects-with-open-claims">
-          {this.renderProjects(open, "You currently do not have any projects with open claims.")}
+        <ACC.ListSection title="Projects with open claims" qa="Projects-with-open-claims" key={`section-open`}>
+          {open.map((x, i) => this.renderProject(x.project, x.partner, "open", i))}
+          {!open.length ? <ACC.ListItem><p className="govuk-body govuk-!-margin-0">You currently do not have any projects with open claims.</p></ACC.ListItem> : null}
         </ACC.ListSection>
-        <ACC.ListSection title="Projects awaiting the next claim period" qa="Projects-awaiting-next-claims-period">
-          {this.renderProjects(awaiting, "You currently do not have any projects outside of the claims period.")}
+        <ACC.ListSection title="Projects awaiting the next claim period" qa="Projects-awaiting-next-claims-period" key={`section-closed`}>
+          {closed.map((x, i) => this.renderProject(x.project, x.partner, "closed", i))}
+          {!closed.length ? <ACC.ListItem><p className="govuk-body govuk-!-margin-0">You currently do not have any projects outside of the claims period.</p></ACC.ListItem> : null}
         </ACC.ListSection>
-        <ACC.ListSection title="Archived projects" qa="Archived-projects">
-          {this.renderProjects(archived, "You currently do not have any archived projects.")}
+        <ACC.ListSection title="Archived projects" qa="Archived-projects" key={`section-archived`}>
+          {archived.map((x, i) => this.renderProject(x.project, x.partner, "archived", i))}
+          {!archived.length ? <ACC.ListItem><p className="govuk-body govuk-!-margin-0">You currently do not have any archived projects.</p></ACC.ListItem> : null}
         </ACC.ListSection>
       </React.Fragment>
     );
   }
 
-  renderProjects(projects: JSX.Element[], emptyMessage: string) {
-    return projects.length > 0
-      ? projects
-      : <ACC.ListItem><p className="govuk-body govuk-!-margin-0">{emptyMessage}</p></ACC.ListItem>;
+  // ToDo: remove once salesforce rollups and status are working
+  private getProjectStatus2(x: ProjectDto, partner: PartnerDto | null): Section {
+    if (x.totalPeriods === x.periodId) {
+      if (x.claimWindowStart) {
+        return "open";
+      }
+
+      if (x.endDate && x.endDate < new Date()) {
+        return "archived";
+      }
+
+      return "closed";
+    }
+    else if (x.periodId > 0) {
+      if (x.claimWindowStart) {
+        return "open";
+      }
+      return "closed";
+    }
+    return "none";
+  }
+
+  private getProjectStatus(project: ProjectDto, partner: PartnerDto | null): Section {
+    switch (project.status) {
+      case ProjectStatus.Live:
+      case ProjectStatus.FinalClaim:
+        if (project.roles & (ProjectRole.ProjectManager | ProjectRole.MonitoringOfficer)) {
+          return project.numberOfOpenClaims > 0 ? "open" : "closed";
+        }
+        else if (project.roles & (ProjectRole.FinancialContact) && partner) {
+          return partner.status === PartnerClaimStatus.ClaimSubmitted || partner.status === PartnerClaimStatus.NoClaimsDue ? "closed" : "open";
+        }
+        else {
+          return "none";
+        }
+      case ProjectStatus.Closed:
+      case ProjectStatus.OnHold:
+      case ProjectStatus.Terminated:
+        return "archived";
+      default:
+        return "none";
+    }
+  }
+
+  private getIconStatus(project: ProjectDto, partner: PartnerDto | null): Icon {
+    // if fc return warning if overdue or iar required
+    if (partner && (partner.claimsOverdue > 0 || partner.status === PartnerClaimStatus.IARRequired)) {
+      return "warning";
+    }
+
+    // mo or pm return warning if any claims overdue
+    if ((project.roles & (ProjectRole.MonitoringOfficer | ProjectRole.ProjectManager)) && project.claimsOverdue > 0) {
+      return "warning";
+    }
+
+    // if fc return edit if claim is not submitted
+    if (partner && (partner.status !== PartnerClaimStatus.ClaimSubmitted && partner.status !== PartnerClaimStatus.NoClaimsDue)) {
+      return "edit";
+    }
+
+    // if mo return edit if claims to review
+    if ((project.roles & ProjectRole.MonitoringOfficer) && project.claimsToReview > 0) {
+      return "edit";
+    }
+
+    return "none";
+  }
+
+  private getMessages(project: ProjectDto, partner: PartnerDto | null, section: Section): React.ReactNode[] {
+    const messages: React.ReactNode[] = [];
+
+    const isMo = !!(project.roles & ProjectRole.MonitoringOfficer);
+    const isPM = !!(project.roles & ProjectRole.ProjectManager);
+
+    if (section === "open" || section === "closed") {
+      messages.push(`Period ${project.periodId} of ${project.totalPeriods}`);
+    }
+
+    if (section === "archived") {
+      messages.push(<ACC.Renderers.LongDateRange start={project.startDate} end={project.endDate} />);
+    }
+
+    if (section === "open") {
+      if (isMo) {
+        messages.push(`Claims you need to review: ${project.claimsToReview}`);
+      }
+
+      if (isMo || isPM) {
+        messages.push(`Unsubmitted or queried claims: ${project.claimsQueried}`);
+      }
+
+      switch (partner && partner.status) {
+        case PartnerClaimStatus.ClaimDue:
+          messages.push(`You need to submit your claim.`);
+          break;
+        case PartnerClaimStatus.ClaimSubmitted:
+          messages.push(`You have submitted your claim.`);
+          break;
+        case PartnerClaimStatus.ClaimQueried:
+          messages.push(`Your claim has been queried. Please respond.`);
+          break;
+        case PartnerClaimStatus.IARRequired:
+          messages.push(`You need to submit your IAR.`);
+          break;
+      }
+    }
+
+    return messages;
+  }
+
+  private getIsOverdue(project: ProjectDto, partner: PartnerDto | null): boolean {
+    if ((project.roles & (ProjectRole.MonitoringOfficer | ProjectRole.ProjectManager)) && project.claimsOverdue > 0) {
+      return true;
+    }
+
+    if (partner && partner.claimsOverdue > 0) {
+      return true;
+    }
+
+    return false;
+  }
+
+  private renderBadge(project: ProjectDto, partner: PartnerDto | null, section: Section) {
+    const isOverdue = section === "open" ? this.getIsOverdue(project, partner) : false;
+
+    if (isOverdue) {
+      return (<div className="govuk-body" style={{ color: colour.GOVUK_ERROR_COLOUR, fontWeight: "bold" }}>Claim overdue</div>);
+    }
+    else if (section === "open") {
+      return <ACC.Claims.ClaimWindow periodEnd={DateTime.fromJSDate(project.claimWindowStart!).minus({ days: 1 }).toJSDate()} />;
+    }
+    else if (section === "closed") {
+      return <ACC.Claims.ClaimWindow periodEnd={project.periodEndDate!} />;
+    }
+  }
+
+  private renderProject(project: ProjectDto, partner: PartnerDto | null, section: Section, index: number) {
+    const iconStatus = section === "open" ? this.getIconStatus(project, partner) : "none";
+    const messages: React.ReactNode[] = this.getMessages(project, partner, section);
+
+    const itemStyle: React.CSSProperties = {
+
+    };
+
+    if (iconStatus !== "none") {
+      itemStyle.marginLeft = "30px";
+    }
+
+    const iconStyle: React.CSSProperties = {
+      marginLeft: "-10px"
+    };
+
+    return (
+      <ACC.ListItem icon={iconStatus} key={`project_${index}`}>
+        <div className="govuk-grid-column-two-thirds" style={{ display: "inline-flex", alignItems: "center" }}>
+          {iconStatus === "warning" ? <div style={iconStyle}><img src="/assets/images/icon-alert.png" /></div> : null}
+          {iconStatus === "edit" ? <div style={iconStyle}><img src="/assets/images/icon-edit.png" /></div> : null}
+          <div style={itemStyle}>
+            <h2 className="govuk-heading-s govuk-!-margin-bottom-2">
+              <ACC.Link route={ProjectDetailsRoute.getLink({ id: project.id })}>{project.projectNumber}: {project.title}</ACC.Link>
+            </h2>
+            {messages.map((content, i) => <p key={`message${i}`} className="govuk-body govuk-!-margin-bottom-0">{content}</p>)}
+          </div>
+        </div>
+        <div className="govuk-grid-column-one-third govuk-!-margin-top-2" style={{ display: "inline-flex", alignItems: "center", justifyContent: "center" }}>
+          {this.renderBadge(project, partner, section)}
+        </div>
+      </ACC.ListItem>
+    );
   }
 }
 
-const definition = ReduxContainer.for<{}, Data, Callbacks>(ProjectDashboardComponent);
+const definition = ReduxContainer.for<Props, Data, Callbacks>(ProjectDashboardComponent);
 
 export const ProjectDashboard = definition.connect({
-  withData: (state, props) => ({projects: Selectors.getProjects().getPending(state) }),
+  withData: (state, props) => ({
+    data: Pending.combine({
+      projects: Selectors.getProjects().getPending(state),
+      partners: Selectors.getAllPartners().getPending(state),
+    }),
+    useSalesforceStatus: props.useSalesforceStatus
+  }),
   withCallbacks: () => ({})
 });
 
 export const ProjectDashboardRoute = definition.route({
   routeName: "projectDashboard",
   routePath: "/projects/dashboard",
-  getParams: () => ({}),
-  getLoadDataActions: (params) => [Actions.loadProjects()],
+  getParams: (route) => ({ useSalesforceStatus: route.params.useSalesforceStatus === "true" }),
+  getLoadDataActions: (params) => [
+    Actions.loadProjects(),
+    Actions.loadPartners()
+  ],
   container: ProjectDashboard
 });

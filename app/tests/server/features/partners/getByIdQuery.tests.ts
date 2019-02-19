@@ -1,13 +1,15 @@
 // tslint:disable:no-identical-functions no-duplicate-string
 import { TestContext } from "../../testContextProvider";
 import { GetByIdQuery } from "../../../../src/server/features/partners/getByIdQuery";
-import { PartnerDto, ProjectRole } from "../../../../src/types";
+import { PartnerClaimStatus, PartnerDto, ProjectRole } from "../../../../src/types";
+import { Results } from "../../../../src/ui/validation/results";
 
 describe("getAllForProjectQuery", () => {
   it("when partner exists is mapped to DTO", async () => {
     const context = new TestContext();
 
     const project = context.testData.createProject();
+
     const partner = context.testData.createPartner(project, x => {
       x.Acc_AccountId__r.Name = "Expected name";
       x.Acc_TotalParticipantGrant__c = 125000;
@@ -15,6 +17,10 @@ describe("getAllForProjectQuery", () => {
       x.Acc_Award_Rate__c = 50;
       x.Acc_Cap_Limit__c = 50;
       x.Acc_TotalFutureForecastsforParticipant__c = 1002;
+      x.Acc_Claims_For_Review__c = 10;
+      x.Acc_Claims_Under_Query__c = 20;
+      x.Claims_Overdue__c = 30;
+      x.Acc_TrackingClaims__c = "Claim Due";
     });
 
     const projectManger = context.testData.createProjectManager(project);
@@ -40,6 +46,11 @@ describe("getAllForProjectQuery", () => {
       totalFutureForecastsForParticipants: 1002,
       roles: ProjectRole.ProjectManager,
       forecastLastModifiedDate: null,
+      claimsToReview: 10,
+      claimsQuried: 20,
+      claimsOverdue: 30,
+      status: PartnerClaimStatus.ClaimDue,
+      statusName: "Claim Due"
     };
 
     expect(result).toEqual(expected);

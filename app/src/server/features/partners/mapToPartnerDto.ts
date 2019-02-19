@@ -1,19 +1,19 @@
 import { DateTime } from "luxon";
 import { SyncCommandBase } from "../common/commandBase";
 import { ISalesforcePartner, PROJECT_LEAD_IDENTIFIER } from "../../repositories/partnersRepository";
-import { PartnerDto, ProjectRole } from "../../../types";
+import { PartnerClaimStatus, PartnerDto, ProjectRole } from "../../../types";
 
 export class MapToPartnerDtoCommand extends SyncCommandBase<PartnerDto> {
     constructor(
-      private readonly item: ISalesforcePartner,
-      private readonly partnerLevelRoles: ProjectRole,
-      private readonly projectLevelRoles: ProjectRole
+        private readonly item: ISalesforcePartner,
+        private readonly partnerLevelRoles: ProjectRole,
+        private readonly projectLevelRoles: ProjectRole
     ) {
         super();
-     }
+    }
 
     calcPercentageClaimed(total: number, claimed: number) {
-        return (total) ? 100 * (claimed || 0) / total  : null;
+        return (total) ? 100 * (claimed || 0) / total : null;
     }
 
     Run(): PartnerDto {
@@ -33,11 +33,34 @@ export class MapToPartnerDtoCommand extends SyncCommandBase<PartnerDto> {
             totalFutureForecastsForParticipants: this.valueIfPermission(this.item.Acc_TotalFutureForecastsforParticipant__c),
             roles: this.partnerLevelRoles,
             forecastLastModifiedDate: this.item.Acc_ForecastLastModifiedDate__c ? DateTime.fromISO(this.item.Acc_ForecastLastModifiedDate__c).toJSDate() : null,
+            claimsToReview: this.item.Acc_Claims_For_Review__c || 0,
+            claimsOverdue: this.item.Claims_Overdue__c,
+            claimsQuried: this.item.Acc_Claims_Under_Query__c,
+            status: this.getClaimStatus(this.item.Acc_TrackingClaims__c),
+            statusName: this.item.Acc_TrackingClaims__c,
+
         };
     }
 
-    private valueIfPermission(value: number|null) {
-        if(this.projectLevelRoles & (ProjectRole.MonitoringOfficer | ProjectRole.ProjectManager) || this.partnerLevelRoles & ProjectRole.FinancialContact) {
+    getClaimStatus(salesforceStatus: string): PartnerClaimStatus {
+        switch (salesforceStatus) {
+            case "No Claims Due":
+                return PartnerClaimStatus.NoClaimsDue;
+            case "Claim Due":
+                return PartnerClaimStatus.ClaimDue;
+            case "Claims Overdue":
+                return PartnerClaimStatus.ClaimsOverdue;
+            case "Claim Queried":
+                return PartnerClaimStatus.ClaimQueried;
+            case "Claim Submitted":
+                return PartnerClaimStatus.ClaimSubmitted;
+            default:
+                return PartnerClaimStatus.Unknown;
+        }
+    }
+
+    private valueIfPermission(value: number | null) {
+        if (this.projectLevelRoles & (ProjectRole.MonitoringOfficer | ProjectRole.ProjectManager) || this.partnerLevelRoles & ProjectRole.FinancialContact) {
             return value;
         }
         return null;

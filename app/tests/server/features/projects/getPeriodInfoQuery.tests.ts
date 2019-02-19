@@ -4,222 +4,183 @@ import { GetPeriodInfoQuery } from "../../../../src/server/features/projects/get
 import { ClaimFrequency } from "../../../../src/types";
 import { DateTime } from "luxon";
 
+const mapTestData = (data: { [key: string]: any }[]) => {
+  return data.map(item => Object.keys(item).map((k) => item[k]));
+};
+
 describe("GetCurrentPeriodQuery", () => {
-  it("when current date before start date returns 0", async () => {
 
+  const monthlyPeriodTestData: { startDate: string, endDate: string, now: string, current: number, total: number }[] = [
+    { startDate: "2000/01/01", endDate: "2001/12/31", now: "1999/12/31", current: 0, total: 24 },
+    { startDate: "2000/01/01", endDate: "2001/12/31", now: "2000/01/01", current: 1, total: 24 },
+    { startDate: "2000/01/01", endDate: "2001/12/31", now: "2000/01/31", current: 1, total: 24 },
+    { startDate: "2000/01/01", endDate: "2001/12/31", now: "2000/02/01", current: 2, total: 24 },
+    { startDate: "2000/01/01", endDate: "2001/12/31", now: "2000/02/28", current: 2, total: 24 },
+    { startDate: "2000/01/01", endDate: "2001/12/31", now: "2001/02/28", current: 14, total: 24 },
+    { startDate: "2000/01/01", endDate: "2001/12/31", now: "2001/07/25", current: 19, total: 24 },
+    { startDate: "2000/01/01", endDate: "2001/12/31", now: "2001/07/31", current: 19, total: 24 },
+    { startDate: "2000/01/01", endDate: "2001/12/31", now: "2001/12/01", current: 24, total: 24 },
+    { startDate: "2000/01/01", endDate: "2001/12/31", now: "2002/01/01", current: 24, total: 24 },
+    { startDate: "2000/01/01", endDate: "2001/12/31", now: "2002/06/01", current: 24, total: 24 },
+  ];
+
+  test.each(mapTestData(monthlyPeriodTestData))("For monthly project starting on %s ending %s when it is %s then period should be %i of %i", async (startDate: string, endDate: string, now: string, current: number, total: number) => {
     const context = new TestContext();
-    context.clock.setDate("2012/05/01");
 
-    const now = context.clock.asLuxon();
-    const projectStart = now.plus({ days: 1 });
-    const projectEnd = projectStart.plus({ years: 1 });
+    const projectStart = DateTime.fromFormat(startDate, "yyyy/MM/dd");
+    const projectEnd = DateTime.fromFormat(endDate, "yyyy/MM/dd");
     const frequency = ClaimFrequency.Monthly;
+
+    context.clock.setDate(now);
 
     const query = new GetPeriodInfoQuery(projectStart.toJSDate(), projectEnd.toJSDate(), frequency);
     const result = await context.runSyncQuery(query);
 
-    expect(result.current).toBe(0);
+    expect(result.current).toEqual(current);
+    expect(result.total).toEqual(total);
+
+    if (current === 0) {
+      expect(result.startDate).toBeNull();
+      expect(result.endDate).toBeNull();
+    }
+    else {
+      expect(result.startDate).toEqual(projectStart.plus({ months: current - 1 }).toJSDate());
+      expect(result.endDate).toEqual(projectStart.plus({ months: current, days: -1 }).toJSDate());
+    }
   });
 
-  it("when current date is start date returns 1", async () => {
+  const quartlerlyPeriodTestData: { startDate: string, endDate: string, now: string, current: number, total: number }[] = [
+    { startDate: "2000/01/01", endDate: "2001/12/31", now: "1999/12/31", current: 0, total: 8 },
+    { startDate: "2000/01/01", endDate: "2001/12/31", now: "2000/01/01", current: 1, total: 8 },
+    { startDate: "2000/01/01", endDate: "2001/12/31", now: "2000/01/31", current: 1, total: 8 },
+    { startDate: "2000/01/01", endDate: "2001/12/31", now: "2000/02/01", current: 1, total: 8 },
+    { startDate: "2000/01/01", endDate: "2001/12/31", now: "2000/02/28", current: 1, total: 8 },
+    { startDate: "2000/01/01", endDate: "2001/12/31", now: "2000/03/31", current: 1, total: 8 },
+    { startDate: "2000/01/01", endDate: "2001/12/31", now: "2000/04/01", current: 2, total: 8 },
+    { startDate: "2000/01/01", endDate: "2001/12/31", now: "2000/12/31", current: 4, total: 8 },
+    { startDate: "2000/01/01", endDate: "2001/12/31", now: "2001/01/01", current: 5, total: 8 },
+    { startDate: "2000/01/01", endDate: "2001/12/31", now: "2001/07/25", current: 7, total: 8 },
+    { startDate: "2000/01/01", endDate: "2001/12/31", now: "2001/07/31", current: 7, total: 8 },
+    { startDate: "2000/01/01", endDate: "2001/12/31", now: "2001/12/01", current: 8, total: 8 },
+    { startDate: "2000/01/01", endDate: "2001/12/31", now: "2002/01/01", current: 8, total: 8 },
+    { startDate: "2000/01/01", endDate: "2001/12/31", now: "2002/06/01", current: 8, total: 8 },
+  ];
 
+  test.each(mapTestData(quartlerlyPeriodTestData))("For quartlery project starting on %s ending %s when it is %s then period should be %i of %i", async (startDate: string, endDate: string, now: string, current: number, total: number) => {
     const context = new TestContext();
 
-    context.clock.setDate("2012/05/01");
-
-    const now = context.clock.asLuxon();
-    const projectStart = now.set({});
-    const projectEnd = projectStart.plus({ years: 1 });
-    const frequency = ClaimFrequency.Monthly;
-
-    const query = new GetPeriodInfoQuery(projectStart.toJSDate(), projectEnd.toJSDate(), frequency);
-    const result = await context.runSyncQuery(query);
-
-    expect(result.current).toBe(1);
-  });
-
-  it("when current date is month after start date and frequency is monthly returns 2", async () => {
-
-    const context = new TestContext();
-
-    context.clock.setDate("2012/05/01");
-
-    const now = context.clock.asLuxon();
-    const projectStart = now.minus({ months: 1 });
-    const projectEnd = projectStart.plus({ years: 1 });
-    const frequency = ClaimFrequency.Monthly;
-
-    const query = new GetPeriodInfoQuery(projectStart.toJSDate(), projectEnd.toJSDate(), frequency);
-    const result = await context.runSyncQuery(query);
-
-    expect(result.current).toBe(2);
-  });
-
-  it("when current date is year after start date and frequency is monthly returns 13", async () => {
-
-    const context = new TestContext();
-
-    context.clock.setDate("2012/05/01");
-    const now = context.clock.asLuxon();
-    const projectStart = now.minus({ years: 1 });
-    const projectEnd = projectStart.plus({ years: 2 });
-    const frequency = ClaimFrequency.Monthly;
-
-    const query = new GetPeriodInfoQuery(projectStart.toJSDate(), projectEnd.toJSDate(), frequency);
-    const result = await context.runSyncQuery(query);
-
-    expect(result.current).toBe(13);
-  });
-
-  it("when current date is month after start date and frequency is quarterly returns 1", async () => {
-
-    const context = new TestContext();
-
-    context.clock.setDate("2012/05/01");
-    const now = context.clock.asLuxon();
-    const projectStart = now.minus({ months: 1 });
-    const projectEnd = projectStart.plus({ years: 1 });
+    const projectStart = DateTime.fromFormat(startDate, "yyyy/MM/dd");
+    const projectEnd = DateTime.fromFormat(endDate, "yyyy/MM/dd");
     const frequency = ClaimFrequency.Quarterly;
 
+    context.clock.setDate(now);
+
     const query = new GetPeriodInfoQuery(projectStart.toJSDate(), projectEnd.toJSDate(), frequency);
     const result = await context.runSyncQuery(query);
 
-    expect(result.current).toBe(1);
+    expect(result.current).toEqual(current);
+    expect(result.total).toEqual(total);
+
+    if (current === 0) {
+      expect(result.startDate).toBeNull();
+      expect(result.endDate).toBeNull();
+    }
+    else {
+      expect(result.startDate).toEqual(projectStart.plus({ months: (current - 1) * 3 }).toJSDate());
+      expect(result.endDate).toEqual(projectStart.plus({ months: (current * 3), days: -1 }).toJSDate());
+    }
   });
 
-  it("when current date is 4 months after start date and frequency is quarterly returns 2", async () => {
+  const monthlyClaimWindowTestData: { startDate: string, endDate: string, now: string, expectClaimWindow: string | null }[] = [
+    { startDate: "2000/01/01", endDate: "2000/12/31", now: "1999/12/31", expectClaimWindow: null },
+    { startDate: "2000/01/01", endDate: "2000/12/31", now: "2000/01/01", expectClaimWindow: null },
+    { startDate: "2000/01/01", endDate: "2000/12/31", now: "2000/01/31", expectClaimWindow: null },
+    { startDate: "2000/01/01", endDate: "2000/12/31", now: "2000/02/01", expectClaimWindow: "2000/02/01" },
+    { startDate: "2000/01/01", endDate: "2000/12/31", now: "2000/02/28", expectClaimWindow: "2000/02/01" },
+    { startDate: "2000/01/01", endDate: "2000/12/31", now: "2000/03/01", expectClaimWindow: "2000/03/01" },
+    { startDate: "2000/01/01", endDate: "2000/12/31", now: "2000/03/02", expectClaimWindow: "2000/03/01" },
+    { startDate: "2000/01/01", endDate: "2000/12/31", now: "2000/03/03", expectClaimWindow: "2000/03/01" },
+    { startDate: "2000/01/01", endDate: "2000/12/31", now: "2000/03/30", expectClaimWindow: "2000/03/01" },
+    { startDate: "2000/01/01", endDate: "2000/12/31", now: "2000/03/31", expectClaimWindow: null },
+    { startDate: "2000/01/01", endDate: "2000/12/31", now: "2000/12/31", expectClaimWindow: null },
+    { startDate: "2000/01/01", endDate: "2000/12/31", now: "2001/01/01", expectClaimWindow: "2001/01/01" },
+    { startDate: "2000/01/01", endDate: "2000/12/31", now: "2001/01/30", expectClaimWindow: "2001/01/01" },
+    { startDate: "2000/01/01", endDate: "2000/12/31", now: "2001/01/31", expectClaimWindow: null },
+    { startDate: "2000/01/01", endDate: "2000/12/31", now: "2001/02/01", expectClaimWindow: null },
+  ];
 
+  test.each(mapTestData(monthlyClaimWindowTestData))("For monthly project starting on %s ending %s when it is %s then claim window start should be %s", async (startDate: string, endDate: string, now: string, expectClaimWindow: string | null) => {
     const context = new TestContext();
 
-    context.clock.setDate("2012/05/01");
-    const now = context.clock.asLuxon();
-    const projectStart = now.minus({ months: 4 });
-    const projectEnd = projectStart.plus({ years: 1 });
+    const projectStart = DateTime.fromFormat(startDate, "yyyy/MM/dd");
+    const projectEnd = DateTime.fromFormat(endDate, "yyyy/MM/dd");
+    const frequency = ClaimFrequency.Monthly;
+
+    context.clock.setDate(now);
+
+    const query = new GetPeriodInfoQuery(projectStart.toJSDate(), projectEnd.toJSDate(), frequency);
+    const result = await context.runSyncQuery(query);
+
+    if (expectClaimWindow) {
+      const expectedStart = DateTime.fromString(expectClaimWindow, "yyyy/MM/dd");
+      const expectedEnd = expectedStart.plus({ days: 30, minutes: -1 });
+
+      expect(result.currentClaimWindowStart).toEqual(expectedStart.toJSDate());
+      expect(result.currentClaimWindowEnd).toEqual(expectedEnd.toJSDate());
+    }
+    else {
+      expect(result.currentClaimWindowStart).toBeNull();
+      expect(result.currentClaimWindowEnd).toBeNull();
+    }
+  });
+
+  const quarterlyClaimWindowTestData: { startDate: string, endDate: string, now: string, expectClaimWindow: string | null }[] = [
+    { startDate: "2000/01/01", endDate: "2000/12/31", now: "1999/12/31", expectClaimWindow: null },
+    { startDate: "2000/01/01", endDate: "2000/12/31", now: "2000/01/01", expectClaimWindow: null },
+    { startDate: "2000/01/01", endDate: "2000/12/31", now: "2000/01/31", expectClaimWindow: null },
+    { startDate: "2000/01/01", endDate: "2000/12/31", now: "2000/02/01", expectClaimWindow: null },
+    { startDate: "2000/01/01", endDate: "2000/12/31", now: "2000/03/31", expectClaimWindow: null },
+    { startDate: "2000/01/01", endDate: "2000/12/31", now: "2000/04/01", expectClaimWindow: "2000/04/01" },
+    { startDate: "2000/01/01", endDate: "2000/12/31", now: "2000/04/30", expectClaimWindow: "2000/04/01" },
+    { startDate: "2000/01/01", endDate: "2000/12/31", now: "2000/05/01", expectClaimWindow: null },
+    { startDate: "2000/01/01", endDate: "2000/12/31", now: "2000/07/31", expectClaimWindow: null },
+    { startDate: "2000/01/01", endDate: "2000/12/31", now: "2000/06/30", expectClaimWindow: null },
+    { startDate: "2000/01/01", endDate: "2000/12/31", now: "2000/07/01", expectClaimWindow: "2000/07/01" },
+    { startDate: "2000/01/01", endDate: "2000/12/31", now: "2000/07/30", expectClaimWindow: "2000/07/01" },
+    { startDate: "2000/01/01", endDate: "2000/12/31", now: "2000/07/31", expectClaimWindow: null },
+    { startDate: "2000/01/01", endDate: "2000/12/31", now: "2000/09/30", expectClaimWindow: null },
+    { startDate: "2000/01/01", endDate: "2000/12/31", now: "2000/10/01", expectClaimWindow: "2000/10/01" },
+    { startDate: "2000/01/01", endDate: "2000/12/31", now: "2000/10/30", expectClaimWindow: "2000/10/01" },
+    { startDate: "2000/01/01", endDate: "2000/12/31", now: "2000/10/31", expectClaimWindow: null },
+    { startDate: "2000/01/01", endDate: "2000/12/31", now: "2000/12/31", expectClaimWindow: null },
+    { startDate: "2000/01/01", endDate: "2000/12/31", now: "2001/01/01", expectClaimWindow: "2001/01/01" },
+    { startDate: "2000/01/01", endDate: "2000/12/31", now: "2001/01/30", expectClaimWindow: "2001/01/01" },
+    { startDate: "2000/01/01", endDate: "2000/12/31", now: "2001/01/31", expectClaimWindow: null },
+    { startDate: "2000/01/01", endDate: "2000/12/31", now: "2002/01/31", expectClaimWindow: null },
+  ];
+
+  test.each(mapTestData(quarterlyClaimWindowTestData))("For quarterly project starting on %s ending %s when it is %s then claim window start should be %s", async (startDate: string, endDate: string, now: string, expectClaimWindow: string | null) => {
+    const context = new TestContext();
+
+    const projectStart = DateTime.fromFormat(startDate, "yyyy/MM/dd");
+    const projectEnd = DateTime.fromFormat(endDate, "yyyy/MM/dd");
     const frequency = ClaimFrequency.Quarterly;
 
-    const query = new GetPeriodInfoQuery(projectStart.toJSDate(), projectEnd.toJSDate(), frequency);
-    const result = await context.runSyncQuery(query);
-
-    expect(result.current).toBe(2);
-  });
-
-  it("when current date is year after start date and frequency is quartly returns 5", async () => {
-
-    const context = new TestContext();
-
-    context.clock.setDate("2012/05/01");
-    const now = context.clock.asLuxon();
-    const projectStart = now.minus({ years: 1 });
-    const projectEnd = projectStart.plus({ years: 2 });
-    const frequency = ClaimFrequency.Quarterly;
+    context.clock.setDate(now);
 
     const query = new GetPeriodInfoQuery(projectStart.toJSDate(), projectEnd.toJSDate(), frequency);
     const result = await context.runSyncQuery(query);
 
-    expect(result.current).toBe(5);
-  });
+    if (expectClaimWindow) {
+      const expectedStart = DateTime.fromString(expectClaimWindow, "yyyy/MM/dd");
+      const expectedEnd = expectedStart.plus({ days: 30, minutes: -1 });
 
-  it("when current date is year after start date and max number is 6 returns 6", async () => {
-
-    const context = new TestContext();
-
-    context.clock.setDate("2012/05/01");
-    const now = context.clock.asLuxon();
-    const projectStart = now.minus({ years: 1 });
-    const projectEnd = projectStart.plus({ months: 6 });
-    const frequency = ClaimFrequency.Monthly;
-
-    const query = new GetPeriodInfoQuery(projectStart.toJSDate(), projectEnd.toJSDate(), frequency);
-    const result = await context.runSyncQuery(query);
-
-    expect(result.current).toBe(6);
-  });
-
-  it("when project ends 1 year after it starts and frequency is monthly then total periods is 12", async () => {
-
-    const context = new TestContext();
-
-    const projectStart = context.clock.asLuxon();
-    const projectEnd = projectStart.plus({years:1});
-    const frequency = ClaimFrequency.Monthly;
-
-    const query = new GetPeriodInfoQuery(projectStart.toJSDate(), projectEnd.toJSDate(), frequency);
-    const result = await context.runSyncQuery(query);
-
-    expect(result.total).toBe(12);
-  });
-
-  it("when project ends 1 year after it starts and frequency is quartlery then total periods is 4", async () => {
-
-    const context = new TestContext();
-
-    const projectStart = context.clock.asLuxon();
-    const projectEnd = projectStart.plus({years:1});
-    const frequency = ClaimFrequency.Quarterly;
-
-    const query = new GetPeriodInfoQuery(projectStart.toJSDate(), projectEnd.toJSDate(), frequency);
-    const result = await context.runSyncQuery(query);
-
-    expect(result.total).toBe(4);
-  });
-
-  it("when project ends 1 year minus a day after it starts and frequency is monthly then total periods is 12", async () => {
-
-    const context = new TestContext();
-
-    const projectStart = context.clock.asLuxon();
-    const projectEnd = projectStart.plus({years:1}).minus({days: 1});
-    const frequency = ClaimFrequency.Monthly;
-
-    const query = new GetPeriodInfoQuery(projectStart.toJSDate(), projectEnd.toJSDate(), frequency);
-    const result = await context.runSyncQuery(query);
-
-    expect(result.total).toBe(12);
-  });
-
-  it("when project ends 1 year and a day after it starts and frequency is monthly then total periods is 13", async () => {
-
-    const context = new TestContext();
-
-    const projectStart = context.clock.asLuxon();
-    const projectEnd = projectStart.plus({years:1, days: 1});
-    const frequency = ClaimFrequency.Monthly;
-
-    const query = new GetPeriodInfoQuery(projectStart.toJSDate(), projectEnd.toJSDate(), frequency);
-    const result = await context.runSyncQuery(query);
-
-    expect(result.total).toBe(13);
-  });
-
-  it("when project is in period and frequency is monthly then start date and end date are correct", async () => {
-    const context = new TestContext();
-
-    context.clock.setDate("2000/05/01");
-
-    const projectStart = context.clock.asLuxon().set({hour:0, minute: 0, second: 0}).minus({months: 1});
-    const projectEnd = projectStart.plus({years:1});
-    const frequency = ClaimFrequency.Monthly;
-
-    const query = new GetPeriodInfoQuery(projectStart.toJSDate(), projectEnd.toJSDate(), frequency);
-    const result = await context.runSyncQuery(query);
-
-    expect(result.startDate!.toISOString()).toBe(DateTime.fromFormat("2000/05/01", "yyyy/MM/dd").toJSDate().toISOString());
-    expect(result.endDate!.toISOString()).toBe(DateTime.fromFormat("2000/05/31", "yyyy/MM/dd").toJSDate().toISOString());
-  });
-
-  it("when project is in period and frequency is quartley then start date and end date are correct", async () => {
-    const context = new TestContext();
-
-    context.clock.setDate("2000/05/01");
-
-    const projectStart = context.clock.asLuxon().set({hour:0, minute: 0, second: 0}).minus({months: 1});
-    const projectEnd = projectStart.plus({years:1});
-    const frequency = ClaimFrequency.Quarterly;
-
-    const query = new GetPeriodInfoQuery(projectStart.toJSDate(), projectEnd.toJSDate(), frequency);
-    const result = await context.runSyncQuery(query);
-
-    expect(result.startDate!.toISOString()).toBe(DateTime.fromFormat("2000/04/01", "yyyy/MM/dd").toJSDate().toISOString());
-    expect(result.endDate!.toISOString()).toBe(DateTime.fromFormat("2000/06/30", "yyyy/MM/dd").toJSDate().toISOString());
+      expect(result.currentClaimWindowStart).toEqual(expectedStart.toJSDate());
+      expect(result.currentClaimWindowEnd).toEqual(expectedEnd.toJSDate());
+    }
+    else {
+      expect(result.currentClaimWindowStart).toBeNull();
+      expect(result.currentClaimWindowEnd).toBeNull();
+    }
   });
 });

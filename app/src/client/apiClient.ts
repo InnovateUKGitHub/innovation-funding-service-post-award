@@ -58,6 +58,7 @@ const clientApi: IApiClient = {
   },
   partners: {
     get: (params) => ajaxJson(`/api/partners/${params.partnerId}`),
+    getAll:(params) => ajaxJson(`/api/partners`),
     getAllByProjectId: (params) => ajaxJson(`/api/partners?projectId=${params.projectId}`),
   },
   users: {
