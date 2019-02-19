@@ -173,7 +173,7 @@ export class ForecastTable extends React.Component<Props> {
         {claimPeriod > 0 ? <th className="govuk-table__header govuk-table__header--numeric">Costs this period</th> : null}
         {forecasts ? <th className="govuk-table__header govuk-table__header--numeric" colSpan={periods.length - claimPeriod}>Forecast</th> : null}
         <th className="govuk-table__header govuk-table__header--numeric">Total</th>
-        <th className="govuk-table__header govuk-table__header--numeric">Grant offered</th>
+        <th className="govuk-table__header govuk-table__header--numeric">Total eligible costs</th>
         <th className="govuk-table__header govuk-table__header--numeric">Difference</th>
       </tr>
     ),
