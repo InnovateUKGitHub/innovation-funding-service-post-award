@@ -29,7 +29,7 @@ class ProjectForecastComponent extends ContainerBase<Params, Data, Callbacks> {
     const Table = ACC.TypedTable<PartnerDto>();
 
     return (
-      <ProjectOverviewPage selectedTab={ProjectForecastRoute.routeName} project={project} partners={partners} backLinkText="Back to dashboard">
+      <ProjectOverviewPage selectedTab={ProjectForecastRoute.routeName} project={project} partners={partners} backLinkText="Back to all projects">
         <ACC.Section title="Project forecasts" qa="project-forecasts">
           <Table.Table data={partners} qa="partner-table">
             <Table.String header="Partner" value={x => x.name + (x.isLead ? " (Lead)" : "")} qa="partner" />
