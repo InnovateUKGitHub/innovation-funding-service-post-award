@@ -1,5 +1,5 @@
 import React from "react";
-import { FullDate } from "../renderers";
+import { ShortDate } from "../renderers";
 import { DateTime } from "luxon";
 
 interface Props {
@@ -18,8 +18,8 @@ export const ClaimWindow: React.SFC<Props> = (props) => {
     return (
       <div style={{ textAlign: "center" }}>
         <h3 className="govuk-heading-s govuk-!-margin-bottom-2">Next claim period</h3>
-        <p className="govuk-body govuk-!-margin-bottom-1 govuk-!-font-size-16"><strong>Begins</strong> <FullDate value={windowStart.toJSDate()} /></p>
-        <p className="govuk-body govuk-!-margin-bottom-1 govuk-!-font-size-16"><strong>Ends</strong> <FullDate value={windowEnd.toJSDate()} /></p>
+        <p className="govuk-body govuk-!-margin-bottom-1 govuk-!-font-size-16"><strong>Begins</strong> <ShortDate value={windowStart.toJSDate()} /></p>
+        <p className="govuk-body govuk-!-margin-bottom-1 govuk-!-font-size-16"><strong>Ends</strong> <ShortDate value={windowEnd.toJSDate()} /></p>
       </div>
     );
   }
@@ -30,7 +30,7 @@ export const ClaimWindow: React.SFC<Props> = (props) => {
       <div style={{ textAlign: "center" }}>
         <h3 className="govuk-heading-m govuk-!-margin-bottom-2">{days + 1}</h3>
         <p className="govuk-heading-s govuk-!-margin-bottom-1 govuk-!-font-size-16">days left of claim period</p>
-        <p className="govuk-heading-s govuk-!-margin-bottom-1 govuk-!-font-size-16">deadline <FullDate value={windowEnd.toJSDate()} /></p>
+        <p className="govuk-heading-s govuk-!-margin-bottom-1 govuk-!-font-size-16">deadline <ShortDate value={windowEnd.toJSDate()} /></p>
       </div>
     );
   }
@@ -40,7 +40,7 @@ export const ClaimWindow: React.SFC<Props> = (props) => {
     <div style={{ textAlign: "center" }}>
       <h3 className="govuk-heading-m govuk-!-margin-bottom-2" style={{ color: "#b10e1e" }}>{(days * -1)}</h3>
       <p className="govuk-heading-s govuk-!-margin-bottom-1 govuk-!-font-size-16" style={{ color: "#b10e1e" }}>days past claim period</p>
-      <p className="govuk-heading-s govuk-!-margin-bottom-1 govuk-!-font-size-16" style={{ color: "#b10e1e" }}>deadline <FullDate value={windowEnd.toJSDate()} /></p>
+      <p className="govuk-heading-s govuk-!-margin-bottom-1 govuk-!-font-size-16" style={{ color: "#b10e1e" }}>deadline <ShortDate value={windowEnd.toJSDate()} /></p>
     </div>
   );
 };

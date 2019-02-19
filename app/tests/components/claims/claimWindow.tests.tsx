@@ -23,12 +23,12 @@ describe("Claim Window", () => {
 
     it("renders claim window start date", () => {
       const output = Enzyme.mount(<ClaimWindow periodEnd={periodEndDate.toJSDate()}/>).text();
-      expect(output).toContain(`Begins ${windowStartDate.toFormat("d MMMM yyyy")}`);
+      expect(output).toContain(`Begins ${windowStartDate.toFormat("d MMM yyyy")}`);
     });
 
     it("renders claim window end date", () => {
       const output = Enzyme.mount(<ClaimWindow periodEnd={periodEndDate.toJSDate()}/>).text();
-      expect(output).toContain(`Ends ${windowEndDate.toFormat("d MMMM yyyy")}`);
+      expect(output).toContain(`Ends ${windowEndDate.toFormat("d MMM yyyy")}`);
     });
   });
 
@@ -53,7 +53,7 @@ describe("Claim Window", () => {
 
       it("renders claim window end date", () => {
         const output = Enzyme.mount(<ClaimWindow periodEnd={periodEndDate.toJSDate()}/>).text();
-        expect(output).toContain(`deadline ${windowEndDate.toFormat("d MMMM yyyy")}`);
+        expect(output).toContain(`deadline ${windowEndDate.toFormat("d MMM yyyy")}`);
       });
     }
   });
@@ -76,7 +76,7 @@ describe("Claim Window", () => {
 
     it("renders claim window end date", () => {
       const output = Enzyme.mount(<ClaimWindow periodEnd={periodEndDate.toJSDate()}/>).text();
-      expect(output).toContain(`deadline ${windowEndDate.toFormat("d MMMM yyyy")}`);
+      expect(output).toContain(`deadline ${windowEndDate.toFormat("d MMM yyyy")}`);
     });
   });
 
