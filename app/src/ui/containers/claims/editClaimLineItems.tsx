@@ -97,13 +97,13 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
         <LineItemForm.Hidden name="itemCount" value={x => x.length}/>
         <LineItemForm.Fieldset>
           <LineItemTable.Table qa="current-claim-summary-table" data={editor.data} validationResult={editor.validator.items.results} footers={this.renderFooters(editor, forecastDetail)}>
-            <LineItemTable.Custom header="Description of cost" qa="cost-description" value={(x, i) => this.renderDescription(x, i, editor.validator.items.results[i.row])} />
+            <LineItemTable.Custom header="Description" qa="cost-description" value={(x, i) => this.renderDescription(x, i, editor.validator.items.results[i.row])} />
             <LineItemTable.Custom header="Cost (£)" qa="cost-value" classSuffix="numeric" value={(x, i) => this.renderCost(x, i, editor.validator.items.results[i.row])} width={30} />
             {this.state.showAddRemove ? <LineItemTable.Custom header="" qa="remove" value={(x, i) => <a href="#" onClick={e => this.removeItem(x, i, e)}>Remove</a>} width={1} /> : null}
           </LineItemTable.Table>
         </LineItemForm.Fieldset>
         <LineItemForm.Fieldset>
-          <ACC.Section title="Supporting documents" subtitle={documents.length > 0 ? "(Documents open in a new window)" : ""} qa="supporting-documents-section">
+          <ACC.Section title="Supporting documents" subtitle={documents.length > 0 ? "(All documents open in a new window)" : ""} qa="supporting-documents-section">
             <ValidationMessage message={"If you are unsure what evidence to provide, speak to your Monitoring Officer. They will use these documents when reviewing your claim."} messageType={"info"} />
             {documents.length > 0 ? <DocumentList documents={documents} qa="supporting-documents" /> : <p className="govuk-body-m govuk-!-margin-bottom-0 govuk-!-margin-right-2">No documents uploaded.</p>}
           </ACC.Section>
