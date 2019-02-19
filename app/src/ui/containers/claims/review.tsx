@@ -70,7 +70,7 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, Data, Callbacks> 
     return (
       <ACC.Page>
         <ACC.Section>
-          <ACC.BackLink route={AllClaimsDashboardRoute.getLink({ projectId: data.project.id })}>Claims dashboard</ACC.BackLink>
+          <ACC.BackLink route={AllClaimsDashboardRoute.getLink({ projectId: data.project.id })}>Back to project</ACC.BackLink>
         </ACC.Section>
         <ACC.ErrorSummary error={data.editor.error} />
         <ACC.ValidationSummary validation={data.editor.validator} compressed={false} />
