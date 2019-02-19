@@ -2,15 +2,15 @@
 import { CommandBase } from "../common";
 import { GetPeriodInfoQuery } from "./";
 import { ISalesforceProject } from "../../repositories/projectsRepository";
-import { ClaimFrequency, IContext, ProjectDto, ProjectRole } from "../../../types";
+import { ClaimFrequency, IContext, ProjectClaimTrackingStatus, ProjectDto, ProjectRole, ProjectStatus } from "../../../types";
 
 export class MapToProjectDtoCommand extends CommandBase<ProjectDto> {
   constructor(private readonly item: ISalesforceProject, private readonly roles: ProjectRole) {
     super();
-   }
+  }
 
   protected LogMessage() {
-    return ["MapToProjectDtoCommand", {id: this.item.Id, role: this.roles}];
+    return ["MapToProjectDtoCommand", { id: this.item.Id, role: this.roles }];
   }
 
   protected async Run(context: IContext) {
@@ -38,33 +38,78 @@ export class MapToProjectDtoCommand extends CommandBase<ProjectDto> {
       periodStartDate: periodInfo.startDate,
       periodEndDate: periodInfo.endDate,
       totalPeriods: periodInfo.total,
+      claimWindowStart: periodInfo.currentClaimWindowStart,
+      claimWindowEnd: periodInfo.currentClaimWindowEnd,
       roles: this.roles || ProjectRole.Unknown,
-      roleTitles: this.getRoleTitles()
+      roleTitles: this.getRoleTitles(),
+      status: this.getProjectStatus(this.item.Acc_ProjectStatus__c),
+      statusName: this.item.ProjectStatusName,
+      claimsOverdue: this.item.Acc_Claims_Overdue__c,
+      claimsToReview: this.item.Acc_Claims_For_Review__c,
+      claimsQueried: this.item.Acc_Claims_Under_Query__c,
+      claimsStatus: this.getClaimStatus(this.item.Acc_TrackingClaimStatus__c),
+      claimsStatusName: this.item.ClaimStatusName,
+      numberOfOpenClaims: this.item.Acc_Number_of_Open_Claims__c
     };
 
     return Promise.resolve(dto);
+  }
+  getClaimStatus(salesforceClaimStatus: string): ProjectClaimTrackingStatus {
+    switch (salesforceClaimStatus) {
+      case "No Claims Due":
+        return ProjectClaimTrackingStatus.NoClaimsDue;
+      case "Claims Due":
+        return ProjectClaimTrackingStatus.ClaimsDue;
+      case "Claims Overdue":
+        return ProjectClaimTrackingStatus.ClaimsOverdue;
+      case "Claims Queried":
+        return ProjectClaimTrackingStatus.ClaimsQueried;
+      case "All Claims Submitted":
+        return ProjectClaimTrackingStatus.AllClaimsSubmitted;
+      default:
+        return ProjectClaimTrackingStatus.Unknown;
+    }
+  }
+
+  private getProjectStatus(salesforceProjectStatus: string): ProjectStatus {
+    switch (salesforceProjectStatus) {
+      case "Offer Letter Sent":
+        return ProjectStatus.OfferLetterSent;
+      case "Live":
+        return ProjectStatus.Live;
+      case "On Hold":
+        return ProjectStatus.OnHold;
+      case "Final Claim":
+        return ProjectStatus.FinalClaim;
+      case "Closed":
+        return ProjectStatus.Closed;
+      case "Terminated":
+        return ProjectStatus.Terminated;
+      default:
+        return ProjectStatus.Unknown;
+    }
   }
 
   private getRoleTitles() {
     const roles = this.roles || ProjectRole.Unknown;
     const results: string[] = [];
-    if((roles & ProjectRole.MonitoringOfficer) === ProjectRole.MonitoringOfficer) {
+    if ((roles & ProjectRole.MonitoringOfficer) === ProjectRole.MonitoringOfficer) {
       results.push("Monitoring Officer");
     }
-    if((roles & ProjectRole.ProjectManager) === ProjectRole.ProjectManager) {
+    if ((roles & ProjectRole.ProjectManager) === ProjectRole.ProjectManager) {
       results.push("Project Manager");
     }
-    if((roles & ProjectRole.FinancialContact) === ProjectRole.FinancialContact) {
+    if ((roles & ProjectRole.FinancialContact) === ProjectRole.FinancialContact) {
       results.push("Finance Contact");
     }
     return results;
   }
 
   mapFrequencyToEnum(freq: string): ClaimFrequency {
-    switch(freq) {
+    switch (freq) {
       case "Quarterly": return ClaimFrequency.Quarterly;
-      case "Monthly":   return ClaimFrequency.Monthly;
-      default:          return ClaimFrequency.Unknown;
+      case "Monthly": return ClaimFrequency.Monthly;
+      default: return ClaimFrequency.Unknown;
     }
   }
 
