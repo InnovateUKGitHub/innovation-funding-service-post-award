@@ -1,13 +1,14 @@
 import React from "react";
-import { SimpleString } from "./renderers";
-import { Link } from "./index";
+import * as ACC from "./index";
 import { ProjectDashboardRoute } from "../containers/projects";
-import { PageError } from "./index";
 
 export const StandardErrorPage = () => (
-  <PageError title="Something has gone wrong at our end">
-    <SimpleString>
-      You can either go back to the page you were previously on or go back to your <Link route={ProjectDashboardRoute.getLink({})}>dashboard</Link>.
-    </SimpleString>
-  </PageError>
+  <ACC.Page>
+    <ACC.Title title="Something has gone wrong at our end" />
+    <ACC.Section>
+      <ACC.Renderers.SimpleString>
+        You can either go back to the page you were previously on or go back to your <ACC.Link route={ProjectDashboardRoute.getLink({})}>dashboard</ACC.Link>.
+      </ACC.Renderers.SimpleString>
+    </ACC.Section>
+  </ACC.Page>
 );

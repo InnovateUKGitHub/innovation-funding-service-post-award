@@ -43,7 +43,6 @@ class AppComponent extends React.Component<IAppProps, {}> {
   public render() {
     const route = matchRoute(this.props.route);
     const hasAccess = this.accessControl(route);
-
     const pageContent = hasAccess ? <route.container {...this.props} /> : <StandardErrorPage />;
 
     return (
