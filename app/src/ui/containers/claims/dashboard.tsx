@@ -101,8 +101,8 @@ class Component extends ContainerBase<ClaimDashboardPageParams, Data, Callbacks>
     const isAwaitingIAR = claim.status === ClaimStatus.AWAITING_IAR;
     const message = isAwaitingIAR
       ? "Your most recent claim cannot be sent to us. You must attach an independent audit report (IAR)."
-      : "You must attach an independent audit report (IAR) for this claim to receive your payment.";
-    const messageType = isAwaitingIAR ? "error" : "info";
+      : "You must attach an independent audit report (IAR) for your most recent claim to receive your payment.";
+    const messageType = isAwaitingIAR ? "error" : "declare";
     return (
       <React.Fragment>
         <Acc.ValidationMessage messageType={messageType} message={message} />
@@ -159,13 +159,13 @@ class Component extends ContainerBase<ClaimDashboardPageParams, Data, Callbacks>
           <Acc.SectionPanel qa="claims-totals" title="History">
             <Acc.DualDetails displayDensity="Compact">
               <Details.Details qa="claims-totals-col-0" data={partner}>
-                <Details.Currency label="Grant offered" qa="gol-costs" value={x => x.totalParticipantGrant} />
-                <Details.Currency label="Costs claimed" qa="claimed-costs" value={x => x.totalParticipantCostsClaimed || 0} />
-                <Details.Percentage label="Percentage claimed" qa="percentage-costs" value={x => x.percentageParticipantCostsClaimed} />
+                <Details.Currency label="Total eligible costs" qa="gol-costs" value={x => x.totalParticipantGrant} />
+                <Details.Currency label="Costs claimed to date" qa="claimed-costs" value={x => x.totalParticipantCostsClaimed || 0} />
+                <Details.Percentage label="Percentage of eligible costs claimed to date" qa="percentage-costs" value={x => x.percentageParticipantCostsClaimed} />
               </Details.Details>
               <Details.Details qa="claims-totals-col-1" data={partner}>
                 <Details.Percentage label="Funding level" value={x => x.awardRate} qa="award-rate" fractionDigits={0} />
-                <Details.Percentage label="Cap limit" value={x => x.capLimit} fractionDigits={0} qa="cap-limit" />
+                <Details.Percentage label="Retention rate" value={x => x.capLimit} fractionDigits={0} qa="cap-limit" />
               </Details.Details>
             </Acc.DualDetails>
           </Acc.SectionPanel>
@@ -222,7 +222,7 @@ class Component extends ContainerBase<ClaimDashboardPageParams, Data, Callbacks>
     const isClaimEditable = editableStatuses.indexOf(data[0].status) > -1;
 
     return (
-      <ClaimTable.Table qa={tableQa} data={data} bodyRowClass={() => isClaimEditable ? "table__row--info" : ""}>
+      <ClaimTable.Table qa={tableQa} data={data} bodyRowClass={() => isClaimEditable ? "table__row--info" : ""} className="govuk-!-font-size-16">
         <ClaimTable.Custom
           paddingRight="0px"
           header=""
@@ -230,7 +230,7 @@ class Component extends ContainerBase<ClaimDashboardPageParams, Data, Callbacks>
           value={() => isClaimEditable ? <img style={{height: "19px"}} src="/assets/images/icon-edit.png"/> : null}
         />
         <ClaimTable.Custom
-          header=""
+          header="Period"
           qa="period"
           value={x => <Acc.Claims.ClaimPeriodDate claim={x} />}
         />
