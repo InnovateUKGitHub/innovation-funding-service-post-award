@@ -29,4 +29,10 @@ describe("ValidationMessage", () => {
     expect(wrapper).toContain(`<span class=\"govuk-warning-text__assistive\">Success</span>`);
     expect(wrapper).toContain(`<span>Success message</span>`);
   });
+
+  it("should render a declare message", () => {
+    const wrapper = shallow(<ValidationMessage message="Declare message" messageType="declare" />).html();
+    expect(wrapper).toContain(`<span class=\"govuk-warning-text__assistive\">Declare</span>`);
+    expect(wrapper).toContain(`<span>Declare message</span>`);
+  });
 });
