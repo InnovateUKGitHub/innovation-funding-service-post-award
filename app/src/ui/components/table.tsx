@@ -146,8 +146,8 @@ const TableComponent = <T extends {}>(props: TableProps<T> & { data: T[]; valida
   });
 
   return (
-    <div className={props.className} data-qa={props.qa}>
-      <table className="govuk-table">
+    <div data-qa={props.qa}>
+      <table className={classNames("govuk-table", props.className)}>
         <colgroup>
           {cols}
         </colgroup>
