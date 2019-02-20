@@ -29,7 +29,7 @@ export const Header: React.SFC = () => (
         <nav>
           <ul id="navigation" className="govuk-header__navigation" aria-label="Top Level Navigation" aria-hidden="false">
             <li className="govuk-header__navigation-item">
-              <a href="/" className="govuk-header__link" data-qa="nav-dashboard">Dashboard</a>
+              <a href="https://apply-for-innovation-funding.service.gov.uk/dashboard-selection" className="govuk-header__link" data-qa="nav-dashboard">Dashboard</a>
             </li>
             <li className="govuk-header__navigation-item">
               <a href="https://apply-for-innovation-funding.service.gov.uk/profile/view" className="govuk-header__link" data-qa="nav-profile">Profile</a>
