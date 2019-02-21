@@ -48,7 +48,7 @@ export class ClaimsDetailsComponent extends ContainerBase<Params, Data, {}> {
     }
 
     private getClaimPeriodTitle(data: CombinedData) {
-      return <ACC.Claims.ClaimPeriodDate claim={data.claim} />;
+      return <ACC.Claims.ClaimPeriodDate claim={data.claim} partner={data.partner} />;
     }
 
     private renderIarSection(claim: ClaimDto, iarDocument?: DocumentSummaryDto | null) {
@@ -70,7 +70,7 @@ export class ClaimsDetailsComponent extends ContainerBase<Params, Data, {}> {
                 <ACC.Section>
                     <ACC.BackLink route={backLink}>Back to project</ACC.BackLink>
                 </ACC.Section>
-                <ACC.Projects.Title pageTitle="Claim" project={data.project} />
+                <ACC.Projects.Title pageTitle="Review claim" project={data.project} />
                 <ACC.Claims.Navigation projectId={data.project.id} partnerId={data.partner.id} periodId={data.claim.periodId} currentRouteName={ClaimsDetailsRoute.routeName} />
                 <ACC.Section title={this.getClaimPeriodTitle(data)}>
                     <ACC.Claims.ClaimTable {...data} getLink={costCategoryId => ClaimLineItemsRoute.getLink({partnerId: this.props.partnerId, projectId: this.props.projectId, periodId: this.props.periodId, costCategoryId})} />
