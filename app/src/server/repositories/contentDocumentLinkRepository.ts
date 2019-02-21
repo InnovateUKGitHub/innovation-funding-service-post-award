@@ -25,7 +25,7 @@ export class ContentDocumentLinkRepository extends SalesforceRepositoryBase<ISal
   }
 
   public insertContentDocumentLink(contentDocumentId: string, linkedEntityId: string) {
-    return super.insert({
+    return super.insertItem({
       ContentDocumentId: contentDocumentId,
       LinkedEntityId: linkedEntityId,
       ShareType: "V"

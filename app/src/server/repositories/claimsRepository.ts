@@ -89,6 +89,6 @@ export class ClaimRepository extends SalesforceRepositoryBase<ISalesforceClaim> 
   }
 
   public update(updatedClaim: Updatable<ISalesforceClaim>) {
-    return super.update(updatedClaim);
+    return super.updateItem(updatedClaim);
   }
 }

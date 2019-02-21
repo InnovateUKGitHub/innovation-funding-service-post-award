@@ -36,6 +36,7 @@ export class SaveLineItemsCommand extends CommandBase<boolean> {
       Acc_LineItemDescription__c: x.description,
       Acc_LineItemCost__c: x.value
     }));
+
     const insertItems = insertDtos.map(x => ({
       Acc_LineItemDescription__c: x.description,
       Acc_LineItemCost__c: x.value,

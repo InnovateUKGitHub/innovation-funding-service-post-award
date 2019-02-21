@@ -55,7 +55,7 @@ export class ContentVersionRepository extends SalesforceRepositoryBase<ISalesfor
   }
 
   public insertDocument({ content, fileName, description }: FileUpload) {
-    return super.insert({
+    return super.insertItem({
       ReasonForChange: "First Upload",
       PathOnClient: fileName,
       ContentLocation: "S",
