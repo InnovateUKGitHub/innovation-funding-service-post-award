@@ -10,6 +10,7 @@ export const routeConfig = {
   claimForecast: Containers.ClaimForecastRoute,
   claimLineItems: Containers.ClaimLineItemsRoute,
   contacts: Containers.ContactListRoute,
+  error: Containers.ErrorRoute,
   home: Containers.HomeRoute,
   prepareClaim: Containers.PrepareClaimRoute,
   prepareClaimLineItems: Containers.EditClaimLineItemsRoute,
@@ -21,5 +22,4 @@ export const routeConfig = {
   reviewClaimLineItems: Containers.ReviewClaimLineItemsRoute,
   updateForecast: Containers.UpdateForecastRoute,
   viewForecast: Containers.ViewForecastRoute,
-  // error: errorRoute
 };
