@@ -16,59 +16,42 @@ const render = (value: DateTime | null, format: string) => {
     return null;
 };
 
-export const DateRange: React.SFC<{ start: Date | null, end: Date | null }> = props => {
-    const start = convertDateOnly(props.start);
-    const end = convertDateOnly(props.end);
-
+const renderDateRange = ( start: DateTime | null, end: DateTime | null, format: string, isCondensed: boolean = false )=> {
     if (!start || !start.isValid || !end || !end.isValid) {
         return null;
     }
 
-    if (start.month === end.month && start.year === end.year) {
-        return <span style={{ whiteSpace: "nowrap" }}>{end.monthShort} {end.year}</span>;
+    if (start.month === end.month && start.year === end.year && isCondensed) {
+        return <span style={{whiteSpace: "nowrap"}}>{end.toFormat(format + " yyyy")}</span>;
     }
 
     if (start.year === end.year) {
         return (
             <span>
-                <span style={{ whiteSpace: "nowrap" }}>{start.monthShort} to </span>
-                <span style={{ whiteSpace: "nowrap" }}>{end.monthShort} {end.year}</span>
+                <span style={{whiteSpace: "nowrap"}}>{start.toFormat(format)} to </span>
+                <span style={{whiteSpace: "nowrap"}}>{end.toFormat(format + " yyyy")}</span>
             </span>
         );
     }
 
     return (
         <span>
-            <span style={{ whiteSpace: "nowrap" }}>{start.monthShort} {start.year} to </span>
-            <span style={{ whiteSpace: "nowrap" }}>{end.monthShort} {end.year}</span>
+            <span style={{whiteSpace: "nowrap"}}>{start.toFormat(format + " yyyy")} to </span>
+            <span style={{whiteSpace: "nowrap"}}>{end.toFormat(format + " yyyy")}</span>
         </span>
     );
 };
 
-export const LongDateRange: React.SFC<{ start: Date | null, end: Date | null, isShortMonth?: boolean }> = props => {
-    const start = convertDateOnly(props.start);
-    const end = convertDateOnly(props.end);
-    const isShortMonth = props.isShortMonth;
+export const CondensedDateRange: React.SFC<{ start: Date | null, end: Date | null }> = props => {
+    return renderDateRange(convertDateOnly(props.start), convertDateOnly(props.end), "MMM", true);
+};
 
-    if (!start || !start.isValid || !end || !end.isValid) {
-        return null;
-    }
+export const LongDateRange: React.SFC<{ start: Date | null, end: Date | null }> = props => {
+    return renderDateRange(convertDateOnly(props.start), convertDateOnly(props.end), "d MMMM");
+};
 
-    if (start.year === end.year) {
-        return (
-            <span>
-                <span style={{ whiteSpace: "nowrap" }}>{start.day} {isShortMonth ? start.monthShort : start.monthLong} to </span>
-                <span style={{ whiteSpace: "nowrap" }}>{end.day} {isShortMonth ? end.monthShort : end.monthLong} {end.year}</span>
-            </span>
-        );
-    }
-
-    return (
-        <span>
-            <span style={{ whiteSpace: "nowrap" }}>{start.day} {isShortMonth ? start.monthShort : start.monthLong} {start.year} to </span>
-            <span style={{ whiteSpace: "nowrap" }}>{end.day} {isShortMonth ? end.monthShort : end.monthLong} {end.year}</span>
-        </span>
-    );
+export const ShortDateRange: React.SFC<{ start: Date | null, end: Date | null }> = props => {
+    return renderDateRange(convertDateOnly(props.start), convertDateOnly(props.end), "d MMM");
 };
 
 export const ShortMonth: React.SFC<{ value: Date | null }> = (props) => {
