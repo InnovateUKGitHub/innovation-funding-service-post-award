@@ -1,7 +1,7 @@
 import React from "react";
 import classNames from "classnames";
 import * as ACC from "../../components";
-import { Currency, DateRange, Percentage } from "../../components/renderers";
+import {CondensedDateRange, Currency, Percentage} from "../../components/renderers";
 import { ForecastDetailsDtosValidator } from "../../validators/forecastDetailsDtosValidator";
 import { IEditorStore } from "../../redux";
 import { ForecastData } from "../../containers/claims/forecasts/common";
@@ -128,7 +128,7 @@ export class ForecastTable extends React.Component<Props> {
   }
 
   private renderDateRange(details: ClaimDetailsDto | ForecastDetailsDTO) {
-    return DateRange({ start: details.periodStart, end: details.periodEnd });
+    return CondensedDateRange({ start: details.periodStart, end: details.periodEnd });
   }
 
   renderForecastCell(forecastRow: TableRow, period: string, index: Index, data: ForecastData) {
