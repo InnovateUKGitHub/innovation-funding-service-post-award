@@ -165,7 +165,7 @@ class Component extends ContainerBase<ClaimDashboardPageParams, Data, Callbacks>
               </Details.Details>
               <Details.Details qa="claims-totals-col-1" data={partner}>
                 <Details.Percentage label="Funding level" value={x => x.awardRate} qa="award-rate" fractionDigits={0} />
-                <Details.Percentage label="Retention rate" value={x => x.capLimit} fractionDigits={0} qa="cap-limit" />
+                <Details.Percentage label="Cap limit" value={x => x.capLimit} fractionDigits={0} qa="cap-limit" />
               </Details.Details>
             </Acc.DualDetails>
           </Acc.SectionPanel>

@@ -49,7 +49,7 @@ export const ValidationMessage: React.SFC<Props> = ({ message, messageType, qa =
     const backgroundStyle = { borderColor: validationColour };
     const textStyle = messageType === "success" ? { color: colour.GOVUK_COLOUR_GREEN } : undefined;
     const msgClasses = classnames("govuk-warning-text-background", "acc-message", validationClass);
-    const textClasses = classnames("govuk-warning-text", { "govuk-!-font-weight-bold": messageType !== "info" });
+    const textClasses = classnames("govuk-warning-text", { "govuk-!-font-weight-bold": messageType === "error" });
 
     return (
       <div className={msgClasses} style={backgroundStyle} data-qa={qa} data-qa-type={messageType}>
