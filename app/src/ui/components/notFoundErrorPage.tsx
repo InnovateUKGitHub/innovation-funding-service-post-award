@@ -1,13 +1,14 @@
 import React from "react";
-import { SimpleString } from "./renderers";
-import { Link } from "./links";
-import { PageError } from "./pageError";
-import { ProjectDashboardRoute } from "../containers/projects";
+import * as ACC from "./index";
+import { HomeRoute, ProjectDashboardRoute } from "../containers";
 
 export const NotFoundErrorPage = () => (
-  <PageError title="Something has gone wrong at our end">
-    <SimpleString>
-      You can either go back to the page you were previously on or go back to your <Link route={ProjectDashboardRoute.getLink({})}>dashboard</Link>.
-    </SimpleString>
-  </PageError>
+  <ACC.Page>
+    <ACC.Title title="Page not found" />
+    <ACC.Section>
+      <ACC.Renderers.SimpleString qa="errorMessage">
+        Please check the web address or search term you entered for any errors. You can return to <ACC.Link route={ProjectDashboardRoute.getLink({})}>your dashboard</ACC.Link> or go back to the <ACC.Link route={HomeRoute.getLink({})}>Innovate UK homepage</ACC.Link>.
+      </ACC.Renderers.SimpleString>
+    </ACC.Section>
+  </ACC.Page>
 );

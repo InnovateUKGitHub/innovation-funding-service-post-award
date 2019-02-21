@@ -1,7 +1,7 @@
 import React from "react";
 import { Request, Response } from "express";
 import { renderToString } from "react-dom/server";
-import { AnyAction, createStore, Dispatch } from "redux";
+import { AnyAction, createStore, Dispatch, Store } from "redux";
 import { Provider } from "react-redux";
 import { RouterProvider } from "react-router5";
 import { constants as routerConstants, Router, State } from "router5";
@@ -60,11 +60,11 @@ export async function serverRender(req: Request, res: Response, error?: IAppErro
       const actions = matched && matched.getLoadDataActions && matched.getLoadDataActions(params) || [];
 
       if (error) {
-        actions.push((dispatch, getState) => {
+        actions.push((dispatch) => {
           dispatch(updateEditorAction(error.key, error.store, error.dto, error.result));
           return Promise.resolve();
         });
-        actions.push((dispatch, getState) => {
+        actions.push((dispatch) => {
           dispatch(handleEditorError({
             id: error.key,
             dto: error.dto,
@@ -78,18 +78,14 @@ export async function serverRender(req: Request, res: Response, error?: IAppErro
       }
 
       await loadData(store.dispatch, store.getState, actions);
-      const html = renderToString(
-        <Provider store={store}>
-          <RouterProvider router={router}>
-            <App />
-          </RouterProvider>
-        </Provider>
-      );
-
-      res.send(renderHtml(html, store.getState()));
+      res.send(renderApp(router, store));
     }
     catch(e) {
-      return errorHandlerRender(res, e);
+      const errorName = e instanceof NotFoundError ? "errorNotFound" : "error";
+      const router = configureRouter();
+      const store = createStore(rootReducer, { router: { route: { name: errorName } } });
+
+      errorHandlerRender(res, renderApp(router, store), e);
     }
 }
 
@@ -104,4 +100,15 @@ function startRouter(req: Request, router: Router): Promise<State> {
       return resolve(route);
     });
   });
+}
+
+function renderApp(router: Router, store: Store): string {
+  const html = renderToString(
+    <Provider store={store}>
+      <RouterProvider router={router}>
+        <App />
+      </RouterProvider>
+    </Provider>
+  );
+  return renderHtml(html, store.getState());
 }
