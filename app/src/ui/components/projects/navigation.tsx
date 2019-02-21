@@ -36,13 +36,14 @@ export const ProjectNavigation: React.SFC<Props> = ({ project, currentRoute, par
   // add tabs conditionally
   const navigationTabs: TabItem[] = [];
 
-  if(isFC && !isMOorPM) {
-    navigationTabs.push({ text: "Claims", route: claimsLink, selected: claimsLink.routeName === currentRoute, qa: "claimsTab" });
-    navigationTabs.push({ text: "Forecast", route: viewForecastLink, selected: viewForecastLink.routeName === currentRoute, qa: "forecastTab" });
-  }
-  else if (isMOorPM) {
+  if (isMOorPM) {
     navigationTabs.push({ text: "Claims", route: allClaimsLink, selected: allClaimsLink.routeName === currentRoute, qa: "allClaimsTab" });
     navigationTabs.push({ text: "Forecasts", route: projectForecastsLink, selected: projectForecastsLink.routeName === currentRoute, qa: "allForecastsTab" });
+  }
+
+  else if (isFC) {
+    navigationTabs.push({ text: "Claims", route: claimsLink, selected: claimsLink.routeName === currentRoute, qa: "claimsTab" });
+    navigationTabs.push({ text: "Forecast", route: viewForecastLink, selected: viewForecastLink.routeName === currentRoute, qa: "forecastTab" });
   }
 
   navigationTabs.push({ text: "Project change requests", route: projectChangeRequestLink, selected: projectChangeRequestLink.routeName === currentRoute, qa: "changeRequestsTab" });
