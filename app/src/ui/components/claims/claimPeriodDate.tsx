@@ -13,14 +13,14 @@ export const ClaimPeriodDate: React.SFC<Props> = (props) => {
   if (!props.partner) {
     return (
       <React.Fragment>
-        Period {props.claim.periodId}: <ACC.Renderers.LongDateRange start={props.claim.periodStartDate} end={props.claim.periodEndDate} isShortMonth={true} />
+        Period {props.claim.periodId}: <ACC.Renderers.ShortDateRange start={props.claim.periodStartDate} end={props.claim.periodEndDate} />
       </React.Fragment>
     );
   }
 
   return (
     <React.Fragment>
-      {props.partner.name} claim for period {props.claim.periodId}: <ACC.Renderers.LongDateRange start={props.claim.periodStartDate} end={props.claim.periodEndDate} isShortMonth={true}/>
+      {props.partner.name} claim for period {props.claim.periodId}: <ACC.Renderers.ShortDateRange start={props.claim.periodStartDate} end={props.claim.periodEndDate} />
     </React.Fragment>
   );
 };

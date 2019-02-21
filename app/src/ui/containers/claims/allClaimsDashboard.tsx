@@ -132,7 +132,7 @@ class Component extends ContainerBase<Params, Data, {}> {
   }
 
   private renderCurrentClaims(currentInfo: ProjectPeriod, project: ProjectDto, partners: PartnerDto[], index: number) {
-    const title = <React.Fragment>Period {currentInfo.periodId}: <Acc.Renderers.LongDateRange start={currentInfo.start} end={currentInfo.end} isShortMonth={true}/></React.Fragment>;
+    const title = <React.Fragment>Period {currentInfo.periodId}: <Acc.Renderers.ShortDateRange start={currentInfo.start} end={currentInfo.end} /></React.Fragment>;
     const ClaimTable = Acc.TypedTable<ClaimDto>();
     const renderPartnerName = (x: ClaimDto) => {
       const p = partners.filter(y => y.id === x.partnerId)[0];
