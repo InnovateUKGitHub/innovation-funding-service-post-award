@@ -501,6 +501,6 @@ describe("UpdateForecastDetailsCommand", () => {
     expect(error).not.toBeNull();
     expect(error).toBeInstanceOf(ValidationError);
     expect(error.results!.isValid).toBe(false);
-    expect(error.results!.errors.map(x => x.errorMessage)).toEqual(["You can not submit a claim if your forecasts and costs total is higher than your grant offer letter costs. You will be contacted by your Monitoring Officer if this is not amended."]);
+    expect(error.results!.errors.map(x => x.errorMessage)).toEqual(["Your overall total cannot be higher than your total eligible costs."]);
   });
 });
