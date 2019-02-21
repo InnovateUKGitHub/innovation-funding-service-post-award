@@ -22,7 +22,7 @@ export class ForecastDetailsDtosValidator extends Results<ForecastDetailsDTO[]> 
     const totalClaimCosts    = claimDetails.filter(x => x.periodId <= periodId).reduce((total, current) => total += current.value, 0);
     const totalForecastCosts = forecasts.filter(x => x.periodId > periodId).reduce((total, current) => total += current.value, 0);
 
-    this.totalCosts = Validation.isTrue(this, totalForecastCosts + totalClaimCosts <= totalGolCosts, "You can not submit a claim if your forecasts and costs total is higher than your grant offer letter costs. You will be contacted by your Monitoring Officer if this is not amended.");
+    this.totalCosts = Validation.isTrue(this, totalForecastCosts + totalClaimCosts <= totalGolCosts, "Your overall total cannot be higher than your total eligible costs.");
   }
 }
 

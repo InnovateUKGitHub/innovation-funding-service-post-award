@@ -5,7 +5,7 @@ import * as colour from "../styles/colours";
 type MessageType = "info" | "error" | "success" | "declare";
 
 interface Props {
-    message: string;
+    message: React.ReactNode;
     messageType: MessageType;
     qa?: string;
 }

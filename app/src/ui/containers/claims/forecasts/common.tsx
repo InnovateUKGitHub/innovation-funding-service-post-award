@@ -85,10 +85,12 @@ export const renderWarning = (data: ForecastData) => {
       }
     });
 
+  const categoriesList = categories.map((x, i) => <li key={i}>{x}</li>);
+
   return categories.length === 0 ? null : (
     <ValidationMessage
       messageType="info"
-      message={`The total of forecasts and costs for ${categories.join(", ")} exceeds the grant offer letter costs. The Monitoring Officer may require more information in order to approve the claim.`}
+      message={<div>The amount you are requesting is more than the grant offered for: <ul>{categoriesList}</ul> Your Monitoring Officer will let you know if they have any concerns.</div>}
       qa="forecasts-warning"
     />
   );

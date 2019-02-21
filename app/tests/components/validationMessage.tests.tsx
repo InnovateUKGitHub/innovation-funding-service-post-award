@@ -35,4 +35,10 @@ describe("ValidationMessage", () => {
     expect(wrapper).toContain(`<span class=\"govuk-warning-text__assistive\">Declare</span>`);
     expect(wrapper).toContain(`<span>Declare message</span>`);
   });
+
+  it("should render a React Node", () => {
+    const wrapper = shallow(<ValidationMessage message={<div>Test</div>} messageType="declare" />).html();
+    expect(wrapper).toContain(`<span class=\"govuk-warning-text__assistive\">Declare</span>`);
+    expect(wrapper).toContain(`<span><div>Test</div></span>`);
+  });
 });
