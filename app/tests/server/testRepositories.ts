@@ -168,10 +168,7 @@ class ClaimLineItemsTestRepository extends TestRepository<Repositories.ISalesfor
         return super.getWhere(x => x.Acc_ProjectPeriodNumber__c === periodId && x.Acc_CostCategory__c === categoryId && x.Acc_ProjectParticipant__c === partnerId);
     }
 
-    delete(ids: string | string[]) {
-        if (!(ids instanceof Array)) {
-            ids = [ids];
-        }
+    delete(ids: string[]) {
         ids.forEach((id) => {
             const index = this.Items.findIndex(x => x.Id === id);
             if (index === -1) {
@@ -182,7 +179,7 @@ class ClaimLineItemsTestRepository extends TestRepository<Repositories.ISalesfor
         return Promise.resolve();
     }
 
-    update(updates: Updatable<Repositories.ISalesforceClaimLineItem>[] | Updatable<Repositories.ISalesforceClaimLineItem>) {
+    update(updates: Updatable<Repositories.ISalesforceClaimLineItem>[]) {
         if (!(updates instanceof Array)) {
             updates = [updates];
         }
@@ -196,21 +193,14 @@ class ClaimLineItemsTestRepository extends TestRepository<Repositories.ISalesfor
         return Promise.resolve(true);
     }
 
-    insert(lineItems: Partial<Repositories.ISalesforceClaimLineItem>[] | Partial<Repositories.ISalesforceClaimLineItem>) {
-        const insert = lineItems instanceof Array ? lineItems : [lineItems];
-        if (!(lineItems instanceof Array)) {
-            lineItems = [lineItems];
-        }
+    insert(lineItems: Partial<Repositories.ISalesforceClaimLineItem>[]) {
         const newIds: string[] = [];
-        insert.forEach((item) => {
+        lineItems.forEach((item) => {
             const Id = `ClaimLineItem-${this.Items.length}`;
             newIds.push(Id);
             this.Items.push({ ...item, Id } as Repositories.ISalesforceClaimLineItem);
         });
-        if (lineItems instanceof Array) {
-            return Promise.resolve(newIds);
-        }
-        return Promise.resolve(newIds[0]);
+        return Promise.resolve(newIds);
     }
 }
 
