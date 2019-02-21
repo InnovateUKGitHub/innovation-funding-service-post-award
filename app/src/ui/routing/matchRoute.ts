@@ -1,8 +1,8 @@
+import React from "react";
 import { State } from "router5";
 import { routeConfig, RouteKeys } from "./routeConfig";
-import { HomeRoute } from "../containers";
 import { AsyncThunk, DataLoadAction } from "../redux/actions";
-import React from "react";
+import { ErrorNotFoundRoute } from "../containers";
 import { Authorisation } from "../../types";
 
 export interface MatchedRoute {
@@ -15,7 +15,7 @@ export interface MatchedRoute {
 }
 
 export function matchRoute(route: State | null | undefined): MatchedRoute {
-  const found = Object.keys(routeConfig).map(x => x as RouteKeys).map(x => routeConfig[x]).find(x => x.routeName === (route && route.name)) || HomeRoute;
+  const found = Object.keys(routeConfig).map(x => x as RouteKeys).map(x => routeConfig[x]).find(x => x.routeName === (route && route.name)) || ErrorNotFoundRoute;
   return {
     name: found.routeName,
     path: found.routePath,

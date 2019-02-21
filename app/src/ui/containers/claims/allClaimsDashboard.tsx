@@ -93,12 +93,12 @@ class Component extends ContainerBase<Params, Data, {}> {
     if (!partner || !(project.roles & ProjectRole.ProjectManager)) return null;
     const PartnerSummaryDetails = Acc.TypedDetails<PartnerDto>();
     return (
-      <PartnerSummaryDetails.Details data={partner} title={`${partner.name} claims history`} qa="lead-partner-summary">
-        <PartnerSummaryDetails.Currency label="Grant offered" qa="gol-costs" value={x => x.totalParticipantGrant} />
-        <PartnerSummaryDetails.Currency label="Costs claimed" qa="claimed-costs" value={x => x.totalParticipantCostsClaimed || 0} />
-        <PartnerSummaryDetails.Percentage label="Percentage claimed" qa="claimed-percentage" value={x => x.percentageParticipantCostsClaimed} />
+      <PartnerSummaryDetails.Details data={partner} title={`${partner.name} history`} qa="lead-partner-summary">
+        <PartnerSummaryDetails.Currency label="Total eligible costs" qa="gol-costs" value={x => x.totalParticipantGrant} />
+        <PartnerSummaryDetails.Currency label="Costs claimed to date" qa="claimed-costs" value={x => x.totalParticipantCostsClaimed || 0} />
+        <PartnerSummaryDetails.Percentage label="Percentage of eligible costs claimed to date" qa="claimed-percentage" value={x => x.percentageParticipantCostsClaimed} />
         <PartnerSummaryDetails.Percentage label="Funding level" value={x => x.awardRate} qa="award-rate" fractionDigits={0} />
-        <PartnerSummaryDetails.Percentage label="Cap limit" value={x => x.capLimit} fractionDigits={0} qa="cap-limit" />
+        <PartnerSummaryDetails.Percentage label="Retention rate" value={x => x.capLimit} fractionDigits={0} qa="cap-limit" />
       </PartnerSummaryDetails.Details>
     );
   }
@@ -110,10 +110,10 @@ class Component extends ContainerBase<Params, Data, {}> {
       <Acc.Section>
         <Acc.SectionPanel qa="claims-summary">
           <Acc.DualDetails>
-            <ProjectSummaryDetails.Details title="Project claims history" data={project} qa="project-summary">
-              <ProjectSummaryDetails.Currency label="Grant offered" qa="gol-costs" value={x => x.grantOfferLetterCosts} />
-              <ProjectSummaryDetails.Currency label="Costs claimed" qa="claimed-costs" value={x => x.costsClaimedToDate || 0} />
-              <ProjectSummaryDetails.Percentage label="Percentage claimed" qa="claimed-percentage" value={x => x.claimedPercentage} />
+            <ProjectSummaryDetails.Details title="History" data={project} qa="project-summary">
+              <ProjectSummaryDetails.Currency label="Total eligible costs" qa="gol-costs" value={x => x.grantOfferLetterCosts} />
+              <ProjectSummaryDetails.Currency label="Costs claimed to date" qa="claimed-costs" value={x => x.costsClaimedToDate || 0} />
+              <ProjectSummaryDetails.Percentage label="Percentage of eligible costs claimed to date" qa="claimed-percentage" value={x => x.claimedPercentage} />
             </ProjectSummaryDetails.Details>
             { this.renderLeadPartnerDetails(project, partner) }
           </Acc.DualDetails>
@@ -132,7 +132,7 @@ class Component extends ContainerBase<Params, Data, {}> {
   }
 
   private renderCurrentClaims(currentInfo: ProjectPeriod, project: ProjectDto, partners: PartnerDto[], index: number) {
-    const title = <React.Fragment>Period {currentInfo.periodId}: <Acc.Renderers.LongDateRange start={currentInfo.start} end={currentInfo.end} /></React.Fragment>;
+    const title = <React.Fragment>Period {currentInfo.periodId}: <Acc.Renderers.LongDateRange start={currentInfo.start} end={currentInfo.end} isShortMonth={true}/></React.Fragment>;
     const ClaimTable = Acc.TypedTable<ClaimDto>();
     const renderPartnerName = (x: ClaimDto) => {
       const p = partners.filter(y => y.id === x.partnerId)[0];
@@ -146,7 +146,7 @@ class Component extends ContainerBase<Params, Data, {}> {
 
     return (
       <Acc.Section title={title} qa="current-claims-section" badge={badge} key={index}>
-        <ClaimTable.Table data={currentInfo.claims} qa="current-claims-table" bodyRowFlag={(x) => x.status === ClaimStatus.SUBMITTED ? "info" : null}>
+        <ClaimTable.Table data={currentInfo.claims} qa="current-claims-table" bodyRowFlag={(x) => x.status === ClaimStatus.SUBMITTED ? "info" : null} className="govuk-!-font-size-16">
           <ClaimTable.String header="Partner" qa="partner" value={renderPartnerName} />
           <ClaimTable.Currency header="Forecast costs for period" qa="forecast-cost" value={(x) => x.forecastCost} />
           <ClaimTable.Currency header="Actual costs for period" qa="actual-cost" value={(x) => x.totalCost} />
@@ -163,7 +163,7 @@ class Component extends ContainerBase<Params, Data, {}> {
     const grouped = partners.map(x => ({ partner: x, claims: previousClaims.filter(y => y.partnerId === x.id) }));
 
     return (
-      <Accordion>
+      <Accordion qa="previous-claims">
         {grouped.map((x, i) => (
           <AccordionItem title={`${x.partner.name} ${x.partner.isLead ? "(Lead)" : ""}`} key={i}>
             {this.previousClaimsSection(project, x.partner, x.claims)}

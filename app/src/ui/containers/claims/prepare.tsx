@@ -75,7 +75,7 @@ export class PrepareComponent extends ContainerBase<PrepareClaimParams, Data, Ca
     private renderContents(data: CombinedData) {
         const Form = ACC.TypedForm<ClaimDto>();
         const commentsLabel = "Additional information";
-        const commentsHint = "These comments will be seen by your Monitoring Officer when they review your claim.";
+        const commentsHint = "Explain any difference between a category's forecast and its claim, and answer any queries after you submit your claim.";
         const isPmOrMo = (data.project.roles & (ProjectRole.ProjectManager | ProjectRole.MonitoringOfficer)) !== ProjectRole.Unknown;
         const backLink = isPmOrMo ? AllClaimsDashboardRoute.getLink({ projectId: data.project.id }) : ClaimsDashboardRoute.getLink({ projectId: data.project.id, partnerId: data.partner.id });
 
@@ -94,9 +94,6 @@ export class PrepareComponent extends ContainerBase<PrepareClaimParams, Data, Ca
                         <Form.Fieldset heading={commentsLabel} qa="additional-info-form" headingQa="additional-info-heading">
                             <Form.MultilineString label="additional-info" labelHidden={true} hint={commentsHint} name="comments" value={m => m.comments} update={(m, v) => m.comments = v} validation={data.editor.validator.comments} qa="info-text-area"/>
                         </Form.Fieldset>
-                        <ACC.Renderers.SimpleString>
-                            You need to review your forecasts before you can submit your claim.
-                        </ACC.Renderers.SimpleString>
                         <Form.Fieldset qa="save-and-continue">
                             <Form.Submit>Review forecast</Form.Submit>
                         </Form.Fieldset>
