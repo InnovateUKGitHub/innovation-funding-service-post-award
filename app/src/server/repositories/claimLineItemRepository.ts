@@ -13,9 +13,9 @@ export interface ISalesforceClaimLineItem {
 
 export interface IClaimLineItemRepository {
   getAllForCategory(partnerId: string, categoryId: string, periodId: number): Promise<ISalesforceClaimLineItem[]>;
-  delete(ids: string[] | string): Promise<void>;
-  update(update: Updatable<ISalesforceClaimLineItem>[] | Updatable<ISalesforceClaimLineItem>): Promise<boolean>;
-  insert(insert: Partial<ISalesforceClaimLineItem>[] | Partial<ISalesforceClaimLineItem>): Promise<string[]> | Promise<string>;
+  delete(ids: string[]): Promise<void>;
+  update(update: Updatable<ISalesforceClaimLineItem>[]): Promise<boolean>;
+  insert(insert: Partial<ISalesforceClaimLineItem>[]): Promise<string[]>;
 }
 
 export class ClaimLineItemRepository extends SalesforceRepositoryBase<ISalesforceClaimLineItem> implements IClaimLineItemRepository {
@@ -42,26 +42,21 @@ export class ClaimLineItemRepository extends SalesforceRepositoryBase<ISalesforc
     return super.where(filter);
   }
 
-  delete(ids: string[] | string): Promise<void>  {
-    return super.delete(ids);
+  delete(ids: string[]): Promise<void>  {
+    return super.deleteAll(ids);
   }
 
-  update(lineItems: (Updatable<ISalesforceClaimLineItem>)[] | Updatable<ISalesforceClaimLineItem>): Promise<boolean>  {
-    return super.update(lineItems);
+  update(lineItems: (Updatable<ISalesforceClaimLineItem>)[]): Promise<boolean>  {
+    return super.updateAll(lineItems);
   }
 
-  async insert(insert: Partial<ISalesforceClaimLineItem>): Promise<string>;
-  async insert(insert: Partial<ISalesforceClaimLineItem>[]): Promise<string[]>;
-  async insert(insert: Partial<ISalesforceClaimLineItem>[] | Partial<ISalesforceClaimLineItem>) {
+  async insert(insert: Partial<ISalesforceClaimLineItem>[]) {
     // ToDo: should this be cached?
     const types = await new RecordTypeRepository(this.getSalesforceConnection).getAll();
     const type = types.find(x => x.Name === this.recordType && x.SobjectType === this.salesforceObjectName);
     if (!type) {
       throw Error("Failed to find claim line item record type");
     }
-    if (insert instanceof Array) {
-      return super.insert(insert.map(item => ({...item, RecordTypeId: type.Id})));
-    }
-    return super.insert({...insert, RecordTypeId: type.Id});
+    return super.insertAll(insert.map(item => ({...item, RecordTypeId: type.Id})));
   }
 }

@@ -66,7 +66,7 @@ export class PartnerRepository extends SalesforceRepositoryBase<ISalesforcePartn
   }
 
   update(updatedPartner: Updatable<ISalesforcePartner>) {
-    return super.update(updatedPartner);
+    return super.updateItem(updatedPartner);
   }
 
   getAll() {

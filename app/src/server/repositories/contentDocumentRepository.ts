@@ -17,6 +17,6 @@ export class ContentDocumentRepository extends SalesforceRepositoryBase<ISalesfo
   ];
 
   public delete(id: string): Promise<void> {
-    return super.delete(id);
+    return super.deleteItem(id);
   }
 }
