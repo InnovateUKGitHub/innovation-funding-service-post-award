@@ -71,6 +71,6 @@ export class ProfileDetailsRepository extends SalesforceRepositoryBase<ISalesfor
   }
 
   public async update(profileDetails: Updatable<ForecastDetailsDTO>[]) {
-    return super.update(profileDetails);
+    return super.updateAll(profileDetails);
   }
 }
