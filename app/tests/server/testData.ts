@@ -88,6 +88,7 @@ export class TestData {
       Acc_TotalParticipantGrant__c: 125000,
       Acc_TotalParticipantCosts__c: 17474,
       Acc_TotalParticipantCostsPaid__c: 50000,
+      Acc_TotalPaidCosts__c: 25000,
       Acc_Cap_Limit__c: 50,
       Acc_Award_Rate__c: 50,
       Acc_ForecastLastModifiedDate__c: "",

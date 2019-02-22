@@ -31,6 +31,7 @@ export class MapToPartnerDtoCommand extends SyncCommandBase<PartnerDto> {
             percentageParticipantCostsClaimed: this.valueIfPermission(this.calcPercentageClaimed(this.item.Acc_TotalParticipantGrant__c, this.item.Acc_TotalParticipantCosts__c)),
             awardRate: this.valueIfPermission(this.item.Acc_Award_Rate__c),
             capLimit: this.valueIfPermission(this.item.Acc_Cap_Limit__c),
+            totalPaidCosts: this.valueIfPermission(this.item.Acc_TotalPaidCosts__c),
             totalFutureForecastsForParticipants: this.valueIfPermission(this.item.Acc_TotalFutureForecastsforParticipant__c),
             roles: this.partnerLevelRoles,
             forecastLastModifiedDate: this.item.Acc_ForecastLastModifiedDate__c ? DateTime.fromISO(this.item.Acc_ForecastLastModifiedDate__c).toJSDate() : null,

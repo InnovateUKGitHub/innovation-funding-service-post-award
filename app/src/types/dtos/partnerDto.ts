@@ -22,6 +22,7 @@ export interface PartnerDto {
   organisationType: string;
   totalParticipantGrant: number | null;
   totalParticipantCostsClaimed: number | null;
+  totalPaidCosts: number | null;
   awardRate: number | null;
   percentageParticipantCostsClaimed: number | null;
   capLimit: number | null;
