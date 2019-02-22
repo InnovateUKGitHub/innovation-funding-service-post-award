@@ -97,6 +97,7 @@ class Component extends ContainerBase<Params, Data, {}> {
         <PartnerSummaryDetails.Currency label="Total eligible costs" qa="gol-costs" value={x => x.totalParticipantGrant} />
         <PartnerSummaryDetails.Currency label="Costs claimed to date" qa="claimed-costs" value={x => x.totalParticipantCostsClaimed || 0} />
         <PartnerSummaryDetails.Percentage label="Percentage of eligible costs claimed to date" qa="claimed-percentage" value={x => x.percentageParticipantCostsClaimed} />
+        <PartnerSummaryDetails.Currency label="Costs paid to date" qa="paid-costs" value={x => x.totalPaidCosts || 0} />
         <PartnerSummaryDetails.Percentage label="Funding level" value={x => x.awardRate} qa="award-rate" fractionDigits={0} />
         <PartnerSummaryDetails.Percentage label="Cap limit" value={x => x.capLimit} fractionDigits={0} qa="cap-limit" />
       </PartnerSummaryDetails.Details>

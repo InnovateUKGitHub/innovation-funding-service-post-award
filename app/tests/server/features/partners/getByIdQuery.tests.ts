@@ -2,7 +2,6 @@
 import { TestContext } from "../../testContextProvider";
 import { GetByIdQuery } from "../../../../src/server/features/partners/getByIdQuery";
 import { PartnerClaimStatus, PartnerDto, ProjectRole } from "../../../../src/types";
-import { Results } from "../../../../src/ui/validation/results";
 import { SalesforceProjectRole } from "../../../../src/server/repositories";
 
 describe("getAllForProjectQuery", () => {
@@ -15,6 +14,7 @@ describe("getAllForProjectQuery", () => {
       x.Acc_AccountId__r.Name = "Expected name";
       x.Acc_TotalParticipantGrant__c = 125000;
       x.Acc_TotalParticipantCosts__c = 17474;
+      x.Acc_TotalPaidCosts__c = 25555;
       x.Acc_Award_Rate__c = 50;
       x.ProjectRoleName = SalesforceProjectRole.ProjectLead;
       x.Acc_Cap_Limit__c = 50;
@@ -41,6 +41,7 @@ describe("getAllForProjectQuery", () => {
       projectRoleName: "Project Lead",
       projectId: "Project1",
       organisationType: "Industrial",
+      totalPaidCosts: 25555,
       totalParticipantGrant: 125000,
       totalParticipantCostsClaimed: 17474,
       percentageParticipantCostsClaimed: 13.9792,
