@@ -3,6 +3,7 @@ import { TestContext } from "../../testContextProvider";
 import { GetByIdQuery } from "../../../../src/server/features/partners/getByIdQuery";
 import { PartnerClaimStatus, PartnerDto, ProjectRole } from "../../../../src/types";
 import { Results } from "../../../../src/ui/validation/results";
+import { SalesforceProjectRole } from "../../../../src/server/repositories";
 
 describe("getAllForProjectQuery", () => {
   it("when partner exists is mapped to DTO", async () => {
@@ -15,6 +16,7 @@ describe("getAllForProjectQuery", () => {
       x.Acc_TotalParticipantGrant__c = 125000;
       x.Acc_TotalParticipantCosts__c = 17474;
       x.Acc_Award_Rate__c = 50;
+      x.ProjectRoleName = SalesforceProjectRole.ProjectLead;
       x.Acc_Cap_Limit__c = 50;
       x.Acc_TotalFutureForecastsforParticipant__c = 1002;
       x.Acc_Claims_For_Review__c = 10;
@@ -36,6 +38,7 @@ describe("getAllForProjectQuery", () => {
       accountId: "AccountId1",
       type: "Accedemic",
       isLead: true,
+      projectRoleName: "Project Lead",
       projectId: "Project1",
       organisationType: "Industrial",
       totalParticipantGrant: 125000,
