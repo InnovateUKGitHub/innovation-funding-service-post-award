@@ -1,5 +1,9 @@
 import SalesforceRepositoryBase, { Updatable } from "./salesforceRepositoryBase";
 
+export enum SalesforceProjectRole {
+  ProjectLead = "Project Lead"
+}
+
 export interface ISalesforcePartner {
   Id: string;
   Acc_AccountId__r: {
@@ -10,6 +14,7 @@ export interface ISalesforcePartner {
   Acc_ParticipantType__c: string;
   Acc_ParticipantSize__c: string;
   Acc_ProjectRole__c: string;
+  ProjectRoleName: string;
   Acc_ProjectId__c: string;
   Acc_TotalParticipantGrant__c: number;
   Acc_TotalParticipantCosts__c: number;
@@ -48,6 +53,7 @@ export class PartnerRepository extends SalesforceRepositoryBase<ISalesforcePartn
     "Acc_Cap_Limit__c",
     "Acc_Award_Rate__c",
     "Acc_ProjectRole__c",
+    "toLabel(Acc_ProjectRole__c) ProjectRoleName",
     "Acc_ProjectId__c",
     "Acc_TotalFutureForecastsforParticipant__c",
     "Acc_ForecastLastModifiedDate__c",
@@ -73,5 +79,3 @@ export class PartnerRepository extends SalesforceRepositoryBase<ISalesforcePartn
     return super.all();
   }
 }
-
-export const PROJECT_LEAD_IDENTIFIER = "Project Lead";

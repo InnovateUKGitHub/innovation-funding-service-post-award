@@ -1,6 +1,6 @@
 import { DateTime } from "luxon";
 import { SyncCommandBase } from "../common/commandBase";
-import { ISalesforcePartner, PROJECT_LEAD_IDENTIFIER } from "../../repositories/partnersRepository";
+import { ISalesforcePartner, SalesforceProjectRole } from "../../repositories/partnersRepository";
 import { PartnerClaimStatus, PartnerDto, ProjectRole } from "../../../types";
 
 export class MapToPartnerDtoCommand extends SyncCommandBase<PartnerDto> {
@@ -23,7 +23,8 @@ export class MapToPartnerDtoCommand extends SyncCommandBase<PartnerDto> {
             accountId: this.item.Acc_AccountId__r.Id,
             type: this.item.Acc_ParticipantType__c,
             organisationType: this.item.Acc_OrganisationType__c,
-            isLead: this.item.Acc_ProjectRole__c === PROJECT_LEAD_IDENTIFIER,
+            isLead: this.item.Acc_ProjectRole__c === SalesforceProjectRole.ProjectLead,
+            projectRoleName: this.item.ProjectRoleName,
             projectId: this.item.Acc_ProjectId__c,
             totalParticipantGrant: this.valueIfPermission(this.item.Acc_TotalParticipantGrant__c),
             totalParticipantCostsClaimed: this.valueIfPermission(this.item.Acc_TotalParticipantCosts__c),
@@ -38,7 +39,6 @@ export class MapToPartnerDtoCommand extends SyncCommandBase<PartnerDto> {
             claimsQuried: this.item.Acc_Claims_Under_Query__c,
             status: this.getClaimStatus(this.item.Acc_TrackingClaims__c),
             statusName: this.item.Acc_TrackingClaims__c,
-
         };
     }
 

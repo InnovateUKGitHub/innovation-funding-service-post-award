@@ -14,6 +14,7 @@ export interface PartnerDto {
   id: string;
   type: string;
   isLead: boolean;
+  projectRoleName: string;
   projectId: string;
   accountId: string;
   name: string;
