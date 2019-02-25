@@ -4,6 +4,7 @@ export interface IConfig {
 
     serverUrl: string;
     ssoProviderUrl: string;
+    ssoSignoutUrl: string;
 
     salesforceClientId: Readonly<string>;
     salesforceConnectionUrl: Readonly<string>;
@@ -20,7 +21,7 @@ export interface IConfig {
 const secrets = {
     serverUrl: process.env.SERVER_URL!,
     ssoProviderUrl: process.env.SSO_PROVIDER_URL!,
-
+    ssoSignoutUrl: process.env.SSO_SIGNOUT_URL!,
     salesforceClientId: process.env.SALESFORCE_CLIENT_ID!,
     salesforceConnectionUrl: process.env.SALESFORCE_CONNECTION_URL!,
     salesforcePassword: process.env.SALESFORCEPASSWORD!,
