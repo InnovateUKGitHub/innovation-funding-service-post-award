@@ -1,5 +1,5 @@
 import { QueryBase } from "../common";
-import { ISalesforceClaim, PROJECT_LEAD_IDENTIFIER } from "../../repositories";
+import { ISalesforceClaim, SalesforceProjectRole } from "../../repositories";
 import { IComparer } from "../../../util/comparator";
 import { ClaimDto, IContext } from "../../../types";
 import mapClaim from "./mapClaim";
@@ -24,11 +24,11 @@ export class GetAllClaimsForProjectQuery extends QueryBase<ClaimDto[]> {
 
 const claimSorter: IComparer<{claim: ISalesforceClaim}> = (x, y) => {
       // if x is not lead but y is lead then y is bigger
-      if (x.claim.Acc_ProjectParticipant__r.Acc_ProjectRole__c !== PROJECT_LEAD_IDENTIFIER && y.claim.Acc_ProjectParticipant__r.Acc_ProjectRole__c === PROJECT_LEAD_IDENTIFIER) {
+      if (x.claim.Acc_ProjectParticipant__r.Acc_ProjectRole__c !== SalesforceProjectRole.ProjectLead && y.claim.Acc_ProjectParticipant__r.Acc_ProjectRole__c === SalesforceProjectRole.ProjectLead) {
         return 1;
       }
       // if x is lead but y is not lead then x is bigger
-      if (x.claim.Acc_ProjectParticipant__r.Acc_ProjectRole__c === PROJECT_LEAD_IDENTIFIER && y.claim.Acc_ProjectParticipant__r.Acc_ProjectRole__c !== PROJECT_LEAD_IDENTIFIER) {
+      if (x.claim.Acc_ProjectParticipant__r.Acc_ProjectRole__c === SalesforceProjectRole.ProjectLead && y.claim.Acc_ProjectParticipant__r.Acc_ProjectRole__c !== SalesforceProjectRole.ProjectLead) {
         return -1;
       }
 
