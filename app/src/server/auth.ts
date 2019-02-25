@@ -58,7 +58,7 @@ router.get("/login", passport.authenticate("shibboleth"));
 
 router.get("/logout", (req, res) => {
   res.cookie(cookieName, "", { expires: new Date("1970-01-01") });
-  return res.redirect("/");
+  return res.redirect(Configuration.useSSO && Configuration.ssoSignoutUrl || "/");
 });
 
 router.post("/auth/success", passport.authenticate("shibboleth"), (req, res) => {
