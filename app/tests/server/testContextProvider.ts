@@ -33,7 +33,8 @@ export class TestContext implements IContext {
         salesforceUsername: "",
         useSSO: false,
         serverUrl: "http://localhost:8080",
-        ssoProviderUrl: "https://shibboleth.com"
+        ssoProviderUrl: "https://shibboleth.com",
+        ssoSignoutUrl: "https://shibboleth.com/Logout",
     };
 
     public caches: ICaches = {
