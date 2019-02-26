@@ -21,6 +21,7 @@ export interface ISalesforcePartner {
   Acc_TotalParticipantCostsPaid__c: number;
   Acc_Cap_Limit__c: number;
   Acc_Award_Rate__c: number;
+  Acc_TotalPaidCosts__c: number;
   Acc_TotalFutureForecastsforParticipant__c: number;
   Acc_ForecastLastModifiedDate__c: string;
   // ToDo: remove null once salesforce working
@@ -55,6 +56,7 @@ export class PartnerRepository extends SalesforceRepositoryBase<ISalesforcePartn
     "Acc_ProjectRole__c",
     "toLabel(Acc_ProjectRole__c) ProjectRoleName",
     "Acc_ProjectId__c",
+    "Acc_TotalPaidCosts__c",
     "Acc_TotalFutureForecastsforParticipant__c",
     "Acc_ForecastLastModifiedDate__c",
     "Acc_Claims_For_Review__c",

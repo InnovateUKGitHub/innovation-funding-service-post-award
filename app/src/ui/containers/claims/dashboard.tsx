@@ -162,6 +162,7 @@ class Component extends ContainerBase<ClaimDashboardPageParams, Data, Callbacks>
                 <Details.Currency label="Total eligible costs" qa="gol-costs" value={x => x.totalParticipantGrant} />
                 <Details.Currency label="Costs claimed to date" qa="claimed-costs" value={x => x.totalParticipantCostsClaimed || 0} />
                 <Details.Percentage label="Percentage of eligible costs claimed to date" qa="percentage-costs" value={x => x.percentageParticipantCostsClaimed} />
+                <Details.Currency label="Costs paid to date" qa="paid-costs" value={x => x.totalPaidCosts || 0} />
               </Details.Details>
               <Details.Details qa="claims-totals-col-1" data={partner}>
                 <Details.Percentage label="Funding level" value={x => x.awardRate} qa="award-rate" fractionDigits={0} />
@@ -284,7 +285,6 @@ export const ClaimsDashboardRoute = definition.route({
   }),
   accessControl: (auth, {projectId, partnerId}) => {
     const roleChecker = auth.for(projectId, partnerId);
-
     const isFC = roleChecker.hasRole(ProjectRole.FinancialContact);
     const isMoOrPm = roleChecker.hasAnyRoles(ProjectRole.MonitoringOfficer, ProjectRole.ProjectManager);
 
