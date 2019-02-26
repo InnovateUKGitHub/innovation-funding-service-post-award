@@ -1,4 +1,5 @@
 import * as colour from "../ui/styles/colours";
+import { Configuration } from "../server/features/common";
 
 export function renderHtml(html: string, preloadedState: any = {}) {
   return `
@@ -24,7 +25,7 @@ export function renderHtml(html: string, preloadedState: any = {}) {
           <!--[if IE 8]>
           <link href="/govuk-frontend-ie8-2.7.0.min.css" rel="stylesheet" />
           <![endif]-->
-          <link href="/govuk-overrides.css" rel="stylesheet" />
+          <link href="/govuk-overrides.css?build=${Configuration.build}" rel="stylesheet" />
 
           <meta property="og:image" content="/assets/images/govuk-opengraph-image.png">
       </head>
@@ -43,8 +44,8 @@ export function renderHtml(html: string, preloadedState: any = {}) {
               window.__PRELOADED_STATE__ = ${JSON.stringify(preloadedState).replace(/</g, "\\u003c")}
           </script>
           <script src="/govuk-frontend-2.7.0.min.js"></script>
-          <script src="/build/vendor.js"></script>
-          <script src="/build/bundle.js"></script>
+          <script src="/build/vendor.js?build=${Configuration.build}"></script>
+          <script src="/build/bundle.js?build=${Configuration.build}"></script>
           <script>
               window.GOVUKFrontend.initAll()
           </script>
