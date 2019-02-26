@@ -179,5 +179,6 @@ export const ReviewClaimRoute = definition.route({
         Actions.loadClaimDetailsSummaryForPartner(params.projectId, params.partnerId, params.periodId),
         ...forecastDataLoadActions(params)
     ],
+    accessControl: (auth, { projectId, partnerId }) => auth.for(projectId, partnerId).hasRole(ProjectRole.MonitoringOfficer),
     container: ReviewClaim
 });
