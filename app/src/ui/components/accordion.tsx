@@ -48,7 +48,7 @@ export class Accordion extends React.Component<{qa?: string}, { jsEnabled: boole
     return (
       <div className="govuk-accordion__controls" data-qa="accordion-open-close-all-button">
         <button onClick={() => allOpen ? this.closeAll() : this.openAll()} type="button" className="govuk-accordion__open-all" aria-expanded={allOpen}>
-          {allOpen ? "Close All" : "Open All"}
+          {allOpen ? "Close all" : "Open all"}
           <span className="govuk-visually-hidden"> sections</span>
         </button>
       </div>
