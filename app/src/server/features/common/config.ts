@@ -16,6 +16,8 @@ export interface IConfig {
     salesforceUsername: string;
     // ToDo: Remove
     useSSO: boolean;
+
+    build: string;
 }
 
 const secrets = {
@@ -27,7 +29,7 @@ const secrets = {
     salesforcePassword: process.env.SALESFORCEPASSWORD!,
     salesforceToken: process.env.SALESFORCETOKEN!,
     salesforceUsername: process.env.SALESFORCEUSERNAME!,
-
+    build: process.env.BUILD || `${Date.now()}`,
     useSSO: process.env.USE_SSO === "true",
 };
 
