@@ -35,6 +35,7 @@ export class TestContext implements IContext {
         serverUrl: "http://localhost:8080",
         ssoProviderUrl: "https://shibboleth.com",
         ssoSignoutUrl: "https://shibboleth.com/Logout",
+        build: `test${Date.now()}`,
     };
 
     public caches: ICaches = {
