@@ -56,10 +56,10 @@ describe("MapToProjectDtoCommand", () => {
       x.ClaimStatusName = expected.claimsStatusName;
       x.Acc_ProjectStatus__c = expected.statusName;
       x.ProjectStatusName = expected.statusName;
-      x.Acc_Claims_Overdue__c = expected.claimsOverdue;
-      x.Acc_Claims_Under_Query__c = expected.claimsQueried;
-      x.Acc_Claims_For_Review__c = expected.claimsToReview;
-      x.Acc_Number_of_Open_Claims__c = expected.numberOfOpenClaims;
+      x.Acc_ClaimsOverdue__c = expected.claimsOverdue;
+      x.Acc_ClaimsUnderQuery__c = expected.claimsQueried;
+      x.Acc_ClaimsForReview__c = expected.claimsToReview;
+      x.Acc_NumberOfOpenClaims__c = expected.numberOfOpenClaims;
     });
 
     const result = await context.runCommand(new MapToProjectDtoCommand(salesforce, ProjectRole.Unknown));

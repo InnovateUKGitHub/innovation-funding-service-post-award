@@ -16,12 +16,12 @@ export interface ISalesforceProject {
   Acc_TotalProjectCosts__c: number;
   Acc_ProjectStatus__c: string;
   ProjectStatusName: string;
-  Acc_Claims_For_Review__c: number;
-  Acc_Claims_Overdue__c: number;
-  Acc_Claims_Under_Query__c: number;
+  Acc_ClaimsForReview__c: number;
+  Acc_ClaimsOverdue__c: number;
+  Acc_ClaimsUnderQuery__c: number;
   Acc_TrackingClaimStatus__c: string;
   ClaimStatusName: string;
-  Acc_Number_of_Open_Claims__c: number;
+  Acc_NumberOfOpenClaims__c: number;
 }
 
 export interface IProjectRepository {
@@ -49,12 +49,12 @@ export class ProjectRepository extends SalesforceRepositoryBase<ISalesforceProje
     "Acc_TotalProjectCosts__c",
     "Acc_ProjectStatus__c",
     "toLabel(Acc_ProjectStatus__c) ProjectStatusName",
-    "Acc_Claims_For_Review__c",
-    "Acc_Claims_Overdue__c",
-    "Acc_Claims_Under_Query__c",
+    "Acc_ClaimsForReview__c",
+    "Acc_ClaimsOverdue__c",
+    "Acc_ClaimsUnderQuery__c",
     "Acc_TrackingClaimStatus__c",
     "toLabel(Acc_TrackingClaimStatus__c) ClaimStatusName",
-    "Acc_Number_of_Open_Claims__c"
+    "Acc_NumberOfOpenClaims__c"
   ];
 
   getById(id: string) {
