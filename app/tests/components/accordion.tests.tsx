@@ -18,7 +18,7 @@ describe("Accordion", () => {
     expect(output).toContain(`child2`);
   });
 
-  describe("Open / Close All", () => {
+  describe("Open / Close all", () => {
     const getAccordion = () => mount(
       <Accordion>
         <AccordionItem title="testTitle1">
@@ -37,30 +37,30 @@ describe("Accordion", () => {
     const openAllButtonSelector = "button.govuk-accordion__open-all";
     const expandedSectionSelector = "div.govuk-accordion__section--expanded";
 
-    it("Displays 'Close All' button when all the items are expanded", () => {
+    it("Displays 'Close all' button when all the items are expanded", () => {
       const component = getAccordion();
       component.find(collapseItemSelector).forEach(x => x.simulate("click"));
-      expect(component.find(accordionControlsButtonSelector).text()).toEqual("Close All sections");
+      expect(component.find(accordionControlsButtonSelector).text()).toEqual("Close all sections");
     });
 
-    it("Displays 'Open All' button when some of the items are collapsed", () => {
+    it("Displays 'Open all' button when some of the items are collapsed", () => {
       const component = getAccordion();
       component.find(collapseItemSelector).first().simulate("click");
-      expect(component.find(accordionControlsButtonSelector).text()).toEqual("Open All sections");
+      expect(component.find(accordionControlsButtonSelector).text()).toEqual("Open all sections");
     });
 
-    it("Displays 'Open All' button when all the items are collapsed", () => {
+    it("Displays 'Open all' button when all the items are collapsed", () => {
       const component = getAccordion();
-      expect(component.find(accordionControlsButtonSelector).text()).toEqual("Open All sections");
+      expect(component.find(accordionControlsButtonSelector).text()).toEqual("Open all sections");
     });
 
-    it("Expands all the accordion items when 'Open All' button is clicked", () => {
+    it("Expands all the accordion items when 'Open all' button is clicked", () => {
       const component = getAccordion();
       component.find(openAllButtonSelector).simulate("click");
       expect(component.find(expandedSectionSelector).length).toBe(3);
     });
 
-    it("Collapses all the accordion items when 'close All' button is clicked", () => {
+    it("Collapses all the accordion items when 'Close all' button is clicked", () => {
       const component = getAccordion();
       component.find(collapseItemSelector).forEach(x => x.simulate("click"));
       component.find(openAllButtonSelector).simulate("click");
