@@ -57,7 +57,7 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, Data, Callbacks> 
   }
 
   private getClaimPeriodTitle(data: CombinedData) {
-    return <ACC.Claims.ClaimPeriodDate claim={data.claim} />;
+    return <ACC.Claims.ClaimPeriodDate claim={data.claim} partner={data.partner} />;
   }
 
   private renderContents(data: CombinedData) {
@@ -74,7 +74,7 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, Data, Callbacks> 
         </ACC.Section>
         <ACC.ErrorSummary error={data.editor.error} />
         <ACC.ValidationSummary validation={data.editor.validator} compressed={false} />
-        <ACC.Projects.Title pageTitle="Claim" project={data.project} />
+        <ACC.Projects.Title pageTitle="Review claim" project={data.project} />
         <ACC.Claims.Navigation projectId={data.project.id} partnerId={data.partner.id} periodId={data.claim.periodId} currentRouteName={ClaimsDetailsRoute.routeName} />
         <ACC.Section title={this.getClaimPeriodTitle(data)}>
           <ACC.Claims.ClaimTable {...data} validation={data.editor.validator.claimDetails.results} getLink={costCategoryId => ReviewClaimLineItemsRoute.getLink({ partnerId: this.props.partnerId, projectId: this.props.projectId, periodId: this.props.periodId, costCategoryId })} />
