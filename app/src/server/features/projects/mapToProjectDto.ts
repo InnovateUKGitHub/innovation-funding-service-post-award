@@ -44,12 +44,12 @@ export class MapToProjectDtoCommand extends CommandBase<ProjectDto> {
       roleTitles: this.getRoleTitles(),
       status: this.getProjectStatus(this.item.Acc_ProjectStatus__c),
       statusName: this.item.ProjectStatusName,
-      claimsOverdue: this.item.Acc_Claims_Overdue__c,
-      claimsToReview: this.item.Acc_Claims_For_Review__c,
-      claimsQueried: this.item.Acc_Claims_Under_Query__c,
+      claimsOverdue: this.item.Acc_ClaimsOverdue__c,
+      claimsToReview: this.item.Acc_ClaimsForReview__c,
+      claimsQueried: this.item.Acc_ClaimsUnderQuery__c,
       claimsStatus: this.getClaimStatus(this.item.Acc_TrackingClaimStatus__c),
       claimsStatusName: this.item.ClaimStatusName,
-      numberOfOpenClaims: this.item.Acc_Number_of_Open_Claims__c
+      numberOfOpenClaims: this.item.Acc_NumberOfOpenClaims__c
     };
 
     return Promise.resolve(dto);
