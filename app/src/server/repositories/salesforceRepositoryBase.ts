@@ -196,11 +196,8 @@ export default abstract class SalesforceRepositoryBase<T> {
     if (e.errorCode === "INVALID_QUERY_FILTER_OPERATOR") {
       throw new SalesforceInvalidFilterError(`Salesforce unavailable`);
     }
-    console.log("SALESFORCE ERROR:", JSON.stringify(e));
-    if (e instanceof Error) {
-      return e;
-    }
-    return new Error(e.errorCode + ": " + e.message);
+
+    return e instanceof Error ? e : new Error(e.errorCode + ": " + e.message);
   }
 }
 

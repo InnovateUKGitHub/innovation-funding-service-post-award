@@ -9,13 +9,20 @@ import "isomorphic-form-data";
 
 import { router as authRouter } from "./auth";
 import { router } from "./router";
+import { Logger } from "./features/common";
 
 const app = express();
 const port = process.env.PORT || 8080;
+const log = new Logger();
 
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+
+app.use((req, res, next) => {
+  log.debug(req.url);
+  next();
+});
 
 // serve the public folder contents
 app.use(express.static("public"));
@@ -27,5 +34,3 @@ app.use(authRouter);
 app.use(router);
 
 app.listen(port);
-
-console.log(`Listening at http://localhost:${port}`);
