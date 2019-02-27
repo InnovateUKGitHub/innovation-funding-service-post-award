@@ -35,9 +35,9 @@ export class MapToPartnerDtoCommand extends SyncCommandBase<PartnerDto> {
             totalFutureForecastsForParticipants: this.valueIfPermission(this.item.Acc_TotalFutureForecastsforParticipant__c),
             roles: this.partnerLevelRoles,
             forecastLastModifiedDate: this.item.Acc_ForecastLastModifiedDate__c ? DateTime.fromISO(this.item.Acc_ForecastLastModifiedDate__c).toJSDate() : null,
-            claimsToReview: this.item.Acc_Claims_For_Review__c || 0,
-            claimsOverdue: this.item.Claims_Overdue__c,
-            claimsQuried: this.item.Acc_Claims_Under_Query__c,
+            claimsToReview: this.item.Acc_ClaimsForReview__c || 0,
+            claimsOverdue: this.item.Acc_ClaimsOverdue__c,
+            claimsQuried: this.item.Acc_ClaimsUnderQuery__c,
             status: this.getClaimStatus(this.item.Acc_TrackingClaims__c),
             statusName: this.item.Acc_TrackingClaims__c,
         };
