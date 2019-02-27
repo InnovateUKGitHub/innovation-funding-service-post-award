@@ -19,9 +19,9 @@ describe("getAllForProjectQuery", () => {
       x.ProjectRoleName = SalesforceProjectRole.ProjectLead;
       x.Acc_Cap_Limit__c = 50;
       x.Acc_TotalFutureForecastsforParticipant__c = 1002;
-      x.Acc_Claims_For_Review__c = 10;
-      x.Acc_Claims_Under_Query__c = 20;
-      x.Claims_Overdue__c = 30;
+      x.Acc_ClaimsForReview__c = 10;
+      x.Acc_ClaimsUnderQuery__c = 20;
+      x.Acc_ClaimsOverdue__c = 30;
       x.Acc_TrackingClaims__c = "Claim Due";
     });
 
