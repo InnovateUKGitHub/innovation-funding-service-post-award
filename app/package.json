@@ -11,6 +11,7 @@
     "build:client": "webpack --config webpack.client.js",
     "watch:client": "npm run build:client -- --watch",
     "watch": "parallelshell \"npm run watch:client\" \"npm run watch:server\" ",
+    "watch:all": "parallelshell \"npm run watch:client\" \"npm run watch:server\" \"npm run start:dev\" ",
     "build": "npm run build:server && npm run build:client",
     "test": "jest",
     "tests": "npm run test",

@@ -102,6 +102,6 @@ export class UpdateForecastDetailsCommand extends CommandBase<boolean> {
       case ClaimStatus.INNOVATE_QUERIED: return ClaimStatus.AWAITING_IUK_APPROVAL;
     }
 
-    throw new BadRequestError("Claim in invalid status.");
+    throw new BadRequestError(`Claim in invalid status. Cannot get next claim status for claim in ${claim.status}`);
   }
 }

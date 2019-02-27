@@ -1,5 +1,6 @@
 import { QueryBase } from "../common";
 import { IContext } from "../../../types";
+import { GetCostCategoriesQuery } from "./getCostCategoriesQuery";
 
 export class GetAllForecastsGOLCostsQuery extends QueryBase<GOLCostDto[]> {
   constructor(private readonly partnerId: string) {
@@ -7,10 +8,15 @@ export class GetAllForecastsGOLCostsQuery extends QueryBase<GOLCostDto[]> {
   }
 
   protected async Run(context: IContext) {
+    const costCategories = await context.runQuery(new GetCostCategoriesQuery());
+    const costCategoriesOrder = costCategories.map(y => y.id);
+
     const results = await context.repositories.profileTotalCostCategory.getAllByPartnerId(this.partnerId);
-    return results.map(x => ({
+    const mapped = results.map(x => ({
       costCategoryId: x.Acc_CostCategory__c,
-      value: x.Acc_CostCategoryGOLCost__c
+      value: x.Acc_CostCategoryGOLCost__c,
     }));
+
+    return mapped.sort((x,y) => costCategoriesOrder.indexOf(x.costCategoryId) - costCategoriesOrder.indexOf(y.costCategoryId));
   }
 }
