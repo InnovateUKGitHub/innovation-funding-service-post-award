@@ -18,6 +18,7 @@ export interface IConfig {
     useSSO: boolean;
 
     build: string;
+    logLevel: "VERBOSE" | "DEBUG" | "INFO" | "WARN" | "ERROR";
 }
 
 const secrets = {
@@ -30,6 +31,7 @@ const secrets = {
     salesforceToken: process.env.SALESFORCETOKEN!,
     salesforceUsername: process.env.SALESFORCEUSERNAME!,
     build: process.env.BUILD || `${Date.now()}`,
+    logLevel: process.env.LOGLEVEL || "ERROR" as any,
     useSSO: process.env.USE_SSO === "true",
 };
 
