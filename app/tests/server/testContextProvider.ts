@@ -37,6 +37,10 @@ export class TestContext implements IContext {
         ssoSignoutUrl: "https://shibboleth.com/Logout",
         build: `test${Date.now()}`,
         logLevel: "DEBUG",
+        cacheTimeouts: {
+            costCategories: 720,
+            projectRoles: 720
+        }
     };
 
     public caches: ICaches = {
