@@ -1,4 +1,3 @@
-import path from "path";
 import { Response } from "express";
 import { ErrorCode, IAppError } from "../types/IAppError";
 

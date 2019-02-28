@@ -4,9 +4,8 @@ import {ClaimDto} from "../../types";
 import * as ACC from "../components";
 
 const document = { link: "https://www.google.com/", fileName: "LABOUR_COSTS_Q3_2017-11-05.pdf", id: "1"};
-
 const Form = ACC.TypedForm<ClaimDto>();
-const button = <Form.Button name="return" onClick={() => console.log("clicked")}>Remove</Form.Button>;
+const button = <Form.Button name="return">Remove</Form.Button>;
 
 export const documentSingleGuide: IGuide = {
     name: "DocumentSingle",

@@ -66,7 +66,6 @@ class SimpleForm extends React.Component<{}, { original: ISimpleEditorDto, edito
     }
 
     private onSave() {
-        console.log("Saving", this.state.editor);
         const original = this.state.editor;
         const editor = JSON.parse(JSON.stringify(original));
         editor.file = null;

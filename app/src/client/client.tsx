@@ -11,8 +11,6 @@ import { processDto } from "../shared/processResponse";
 const serverState = processDto((window as any).__PRELOADED_STATE__);
 serverState.isClient = true;
 
-console.log("initial state", serverState);
-
 const router     = configureRouter();
 const middleware = setupMiddleware(router, true);
 const store      = createStore(rootReducer, serverState, middleware);

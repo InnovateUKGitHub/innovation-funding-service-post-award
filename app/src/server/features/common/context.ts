@@ -19,21 +19,18 @@ const cachesImplementation: ICaches = {
 };
 
 const constructErrorResponse = <E extends Error>(error: E): AppError => {
-  if (error instanceof ValidationError) {
+  if (error instanceof ValidationError || error instanceof ForbiddenError || error instanceof BadRequestError) {
     return error;
   }
-  if (error instanceof ForbiddenError) {
-    return error;
-  }
-  if (error instanceof BadRequestError) {
-    return error;
-  }
+
   if (error instanceof SalesforceTokenError) {
     return new AppError(ErrorCode.SECURITY_ERROR, error.message, error);
   }
+
   if (error instanceof SalesforceInvalidFilterError) {
     return new NotFoundError(undefined, error);
   }
+
   return new AppError(ErrorCode.UNKNOWN_ERROR, error.message, error);
 };
 
@@ -94,7 +91,7 @@ export class Context implements IContext {
       return await runnable.Run(this);
     }
     catch(e) {
-      this.logger.log("Failed query", runnable, e);
+      this.logger.warn("Failed query", runnable, e);
       throw constructErrorResponse(e);
     }
   }
@@ -104,35 +101,35 @@ export class Context implements IContext {
       return runnable.Run(this);
     }
     catch (e) {
-      this.logger.log("Failed query", runnable, e);
+      this.logger.warn("Failed query", runnable, e);
       throw constructErrorResponse(e);
     }
   }
 
   public runQuery<TResult>(query: QueryBase<TResult>): Promise<TResult> {
     const runnable = (query as any) as IRunnable<TResult>;
-    this.logger.log("Running async query", runnable.LogMessage());
+    this.logger.info("Running async query", runnable.LogMessage());
 
     return this.runAsync(runnable);
   }
 
   public runSyncQuery<TResult>(query: SyncQueryBase<TResult>): TResult {
     const runnable = (query as any) as ISyncRunnable<TResult>;
-    this.logger.log("Running sync query", runnable.LogMessage());
+    this.logger.info("Running sync query", runnable.LogMessage());
 
     return this.runSync(runnable);
   }
 
   public runCommand<TResult>(command: CommandBase<TResult>): Promise<TResult> {
     const runnable = (command as any) as IRunnable<TResult>;
-    this.logger.log("Running async command", runnable.LogMessage());
+    this.logger.info("Running async command", runnable.LogMessage());
 
     return this.runAsync(runnable);
   }
 
   public runSyncCommand<TResult>(command: SyncCommandBase<TResult>): TResult {
     const runnable = (command as any) as ISyncRunnable<TResult>;
-    this.logger.log("Running sync command", runnable.LogMessage());
+    this.logger.info("Running sync command", runnable.LogMessage());
 
     return this.runSync(runnable);
   }
