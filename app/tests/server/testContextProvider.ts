@@ -1,4 +1,4 @@
-import { QueryBase} from "../../src/server/features/common/queryBase";
+import { QueryBase } from "../../src/server/features/common/queryBase";
 import { createTestRepositories, ITestRepositories } from "./testRepositories";
 import { TestData } from "./testData";
 import { TestClock } from "./testClock";
@@ -10,6 +10,7 @@ import { IRoleInfo } from "../../src/server/features/projects/getAllProjectRoles
 import { ICaches, IContext, IRunnable, ISyncRunnable } from "../../src/types/IContext";
 import { SyncQueryBase } from "../../src/server/features/common/queryBase";
 import { CommandBase, SyncCommandBase } from "../../src/server/features/common/commandBase";
+import { LogLevel } from "../../src/types/logLevel";
 
 export class TestContext implements IContext {
     constructor() {
@@ -24,19 +25,7 @@ export class TestContext implements IContext {
     public testData: TestData;
 
     public config: IConfig = {
-        ifsApplicationUrl: "",
-        ifsGrantLetterUrl: "",
-        salesforcePassword: "",
-        salesforceToken: "",
-        salesforceClientId: "",
-        salesforceConnectionUrl: "",
-        salesforceUsername: "",
-        useSSO: false,
-        serverUrl: "http://localhost:8080",
-        ssoProviderUrl: "https://shibboleth.com",
-        ssoSignoutUrl: "https://shibboleth.com/Logout",
         build: `test${Date.now()}`,
-        logLevel: "DEBUG",
         cacheTimeouts: {
             costCategories: 720,
             projectRoles: 720
@@ -44,6 +33,24 @@ export class TestContext implements IContext {
         certificates: {
             salesforce: "./salesforce.cert",
             shibboleth: "./shibboleth.cert",
+        },
+        logLevel: LogLevel.DEBUG,
+        salesforce: {
+            password: "",
+            token: "",
+            clientId: "",
+            connectionUrl: "",
+            username: "",
+        },
+        serverUrl: "http://localhost:8080",
+        sso: {
+            enabled: false,
+            providerUrl: "https://shibboleth.com",
+            signoutUrl: "https://shibboleth.com/Logout",
+        },
+        urls: {
+            ifsApplicationUrl: "",
+            ifsGrantLetterUrl: "",
         }
     };
 
