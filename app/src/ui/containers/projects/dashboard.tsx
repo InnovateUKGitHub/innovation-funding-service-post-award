@@ -124,7 +124,7 @@ class ProjectDashboardComponent extends ContainerBase<Props, Data, Callbacks> {
 
   private getIconStatus(project: ProjectDto, partner: PartnerDto | null): Icon {
     // if fc return warning if overdue or iar required
-    if (partner && (partner.claimsOverdue > 0 || partner.status === PartnerClaimStatus.IARRequired)) {
+    if (partner && ((partner.claimsOverdue! > 0) || partner.status === PartnerClaimStatus.IARRequired)) {
       return "warning";
     }
 
@@ -193,7 +193,7 @@ class ProjectDashboardComponent extends ContainerBase<Props, Data, Callbacks> {
       return true;
     }
 
-    if (partner && partner.claimsOverdue > 0) {
+    if (partner && partner.claimsOverdue! > 0) {
       return true;
     }
 
