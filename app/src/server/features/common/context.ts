@@ -14,8 +14,8 @@ import { QueryBase, SyncQueryBase } from "./queryBase";
 import { CommandBase, SyncCommandBase } from "./commandBase";
 
 const cachesImplementation: ICaches = {
-  costCategories: new Cache<CostCategoryDto[]>(60 * 12),
-  projectRoles: new Cache<{ [key: string]: IRoleInfo}>(60 * 12),
+  costCategories: new Cache<CostCategoryDto[]>(Configuration.cacheTimeouts.costCategories),
+  projectRoles: new Cache<{ [key: string]: IRoleInfo}>(Configuration.cacheTimeouts.projectRoles),
 };
 
 const constructErrorResponse = <E extends Error>(error: E): AppError => {

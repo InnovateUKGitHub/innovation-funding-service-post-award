@@ -1,3 +1,5 @@
+const defaultCacheTimeout: number = 720;
+
 export interface IConfig {
     ifsApplicationUrl: Readonly<string>;
     ifsGrantLetterUrl: Readonly<string>;
@@ -19,7 +21,16 @@ export interface IConfig {
 
     build: string;
     logLevel: "VERBOSE" | "DEBUG" | "INFO" | "WARN" | "ERROR";
+    cacheTimeouts: {
+      costCategories: number;
+      projectRoles: number;
+    };
 }
+
+const cacheTimeouts = {
+    costCategories: parseInt(process.env.COST_CAT_TIMEOUT_MINUTES!, 10) || defaultCacheTimeout,
+    projectRoles: parseInt(process.env.PROJ_ROLES_TIMEOUT_MINUTES!, 10) || defaultCacheTimeout
+};
 
 const secrets = {
     serverUrl: process.env.SERVER_URL!,
@@ -33,6 +44,7 @@ const secrets = {
     build: process.env.BUILD || `${Date.now()}`,
     logLevel: process.env.LOGLEVEL || "ERROR" as any,
     useSSO: process.env.USE_SSO === "true",
+    cacheTimeouts
 };
 
 export const Configuration: IConfig = {
