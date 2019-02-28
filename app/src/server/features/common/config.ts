@@ -1,38 +1,49 @@
+import { LogLevel, parseLogLevel } from "../../../types/logLevel";
+
 const defaultCacheTimeout: number = 720;
 
 export interface IConfig {
-    ifsApplicationUrl: Readonly<string>;
-    ifsGrantLetterUrl: Readonly<string>;
 
-    serverUrl: string;
-    ssoProviderUrl: string;
-    ssoSignoutUrl: string;
-
-    salesforceClientId: Readonly<string>;
-    salesforceConnectionUrl: Readonly<string>;
-    // ToDo: Remove
-    salesforcePassword: Readonly<string>;
-    // ToDo: Remove
-    salesforceToken: Readonly<string>;
-    // ToDo: Remove
-    salesforceUsername: string;
-    // ToDo: Remove
-    useSSO: boolean;
-
-    build: string;
-
-    logLevel: "VERBOSE" | "DEBUG" | "INFO" | "WARN" | "ERROR";
+    build: Readonly<string>;
 
     cacheTimeouts: {
-        costCategories: number;
-        projectRoles: number;
+        costCategories: Readonly<number>;
+        projectRoles: Readonly<number>;
     };
 
     certificates: {
-        salesforce: string;
-        shibboleth: string;
+        salesforce: Readonly<string>;
+        shibboleth: Readonly<string>;
+    };
+
+    logLevel: Readonly<LogLevel>;
+
+    salesforce: {
+        clientId: Readonly<string>;
+        connectionUrl: Readonly<string>;
+        // ToDo: Remove
+        password: Readonly<string>;
+        // ToDo: Remove
+        token: Readonly<string>;
+        // ToDo: Remove
+        username: string;
+    };
+
+    serverUrl: Readonly<string>;
+
+    sso: {
+        enabled: Readonly<boolean>;
+        providerUrl: Readonly<string>;
+        signoutUrl: Readonly<string>;
+    };
+
+    urls: {
+        ifsApplicationUrl: Readonly<string>;
+        ifsGrantLetterUrl: Readonly<string>;
     };
 }
+
+const build = process.env.BUILD || `${Date.now()}`;
 
 const cacheTimeouts = {
     costCategories: parseInt(process.env.COST_CAT_TIMEOUT_MINUTES!, 10) || defaultCacheTimeout,
@@ -44,24 +55,36 @@ const certificates = {
     shibboleth: process.env.SHIBBOLETH_CERTIFICATE || "./security/AccPrivateKey.key",
 };
 
-const secrets = {
-    serverUrl: process.env.SERVER_URL!,
-    ssoProviderUrl: process.env.SSO_PROVIDER_URL!,
-    ssoSignoutUrl: process.env.SSO_SIGNOUT_URL!,
-    salesforceClientId: process.env.SALESFORCE_CLIENT_ID!,
-    salesforceConnectionUrl: process.env.SALESFORCE_CONNECTION_URL!,
-    salesforcePassword: process.env.SALESFORCEPASSWORD!,
-    salesforceToken: process.env.SALESFORCETOKEN!,
-    salesforceUsername: process.env.SALESFORCEUSERNAME!,
-    build: process.env.BUILD || `${Date.now()}`,
-    logLevel: process.env.LOGLEVEL || "ERROR" as any,
-    useSSO: process.env.USE_SSO === "true",
-    cacheTimeouts,
-    certificates
+const logLevel = parseLogLevel(process.env.LOG_LEVEL! || process.env.LOGLEVEL!);
+
+const salesforce = {
+    clientId: process.env.SALESFORCE_CLIENT_ID!,
+    connectionUrl: process.env.SALESFORCE_CONNECTION_URL!,
+    password: process.env.SALESFORCE_PASSWORD! || process.env.SALESFORCEPASSWORD!,
+    token: process.env.SALESFORCE_TOKEN! || process.env.SALESFORCETOKEN!,
+    username: process.env.SALESFORCE_USERNAME! || process.env.SALESFORCEUSERNAME!,
+};
+
+const serverUrl = process.env.SERVER_URL!;
+
+const sso = {
+    enabled: process.env.USE_SSO === "true",
+    providerUrl: process.env.SSO_PROVIDER_URL!,
+    signoutUrl: process.env.SSO_SIGNOUT_URL!,
+};
+
+const urls = {
+    ifsApplicationUrl: "https://application-for-innovation-funding.service.gov.uk/management/competition/<<Acc_CompetitionId__c>>/application/<<Acc_IFSApplicationId__c>>",
+    ifsGrantLetterUrl: "https://application-for-innovation-funding.service.gov.uk/management/competition/<<Acc_CompetitionId__c>>/project/<<Acc_IFSApplicationId__c>>",
 };
 
 export const Configuration: IConfig = {
-    ifsApplicationUrl: "https://application-for-innovation-funding.service.gov.uk/management/competition/<<Acc_CompetitionId__c>>/application/<<Acc_IFSApplicationId__c>>",
-    ifsGrantLetterUrl: "https://application-for-innovation-funding.service.gov.uk/management/competition/<<Acc_CompetitionId__c>>/project/<<Acc_IFSApplicationId__c>>",
-    ...secrets
+    build,
+    cacheTimeouts,
+    certificates,
+    logLevel,
+    salesforce,
+    serverUrl,
+    sso,
+    urls,
 };
