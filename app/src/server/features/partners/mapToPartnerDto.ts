@@ -55,6 +55,8 @@ export class MapToPartnerDtoCommand extends SyncCommandBase<PartnerDto> {
                 return PartnerClaimStatus.ClaimQueried;
             case "Claim Submitted":
                 return PartnerClaimStatus.ClaimSubmitted;
+            case "Awaiting IAR":
+                return PartnerClaimStatus.IARRequired;
             default:
                 return PartnerClaimStatus.Unknown;
         }
