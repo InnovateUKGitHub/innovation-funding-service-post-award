@@ -1,12 +1,7 @@
 import * as Repositories from "../../repositories";
 import { Cache, Clock, Configuration, IConfig, Logger } from "./";
 import { AppError, BadRequestError, ForbiddenError, NotFoundError, ValidationError } from "./appError";
-import {
-  ISalesforceConnectionDetails,
-  salesforceConnection,
-  salesforceConnectionWithToken,
-  SalesforceTokenError
-} from "../../repositories/salesforceConnection";
+import * as Salesforce from "../../repositories/salesforceConnection";
 import { SalesforceInvalidFilterError } from "../../repositories/salesforceRepositoryBase";
 import { GetAllProjectRolesForUser, IRoleInfo } from "../projects/getAllProjectRolesForUser";
 import { ErrorCode, ICaches, IContext, IRunnable, ISyncRunnable, IUser } from "../../../types";
@@ -23,7 +18,7 @@ const constructErrorResponse = <E extends Error>(error: E): AppError => {
     return error;
   }
 
-  if (error instanceof SalesforceTokenError) {
+  if (error instanceof Salesforce.SalesforceTokenError) {
     return new AppError(ErrorCode.SECURITY_ERROR, error.message, error);
   }
 
@@ -71,16 +66,16 @@ export class Context implements IContext {
   public readonly clock = new Clock();
   public readonly caches = cachesImplementation;
 
-  private readonly salesforceConnectionDetails: ISalesforceConnectionDetails;
+  private readonly salesforceConnectionDetails: Salesforce.ISalesforceConnectionDetails;
 
   private getSalesforceConnection() {
-    // if the standard user then connect using salesforceConnection other wise use the token
+    // if the standard user then connect using salesforceConnection otherwise use the token
     if (this.user.email === this.config.salesforceUsername) {
       // todo: remove
-      return salesforceConnection(this.salesforceConnectionDetails);
+      return Salesforce.salesforceConnection(this.salesforceConnectionDetails);
     }
     else {
-      return salesforceConnectionWithToken(this.salesforceConnectionDetails);
+      return Salesforce.salesforceConnectionWithToken(this.salesforceConnectionDetails);
     }
   }
 

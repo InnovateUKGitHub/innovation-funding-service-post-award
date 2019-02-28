@@ -40,6 +40,10 @@ export class TestContext implements IContext {
         cacheTimeouts: {
             costCategories: 720,
             projectRoles: 720
+        },
+        certificates: {
+            salesforce: "./salesforce.cert",
+            shibboleth: "./shibboleth.cert",
         }
     };
 
