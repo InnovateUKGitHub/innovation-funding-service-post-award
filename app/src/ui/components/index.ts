@@ -14,6 +14,7 @@ export * from "./layout";
 export * from "./links";
 export * from "./linksList";
 export * from "./loading";
+export * from "./navigationArrows";
 export * from "./partnersAndFinanceContacts";
 export * from "./projectMember";
 export * from "./projectOverview";
