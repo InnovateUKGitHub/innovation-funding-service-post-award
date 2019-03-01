@@ -29,7 +29,7 @@ const shibConfig: passportSaml.SamlConfig = {
   callbackUrl: `${Configuration.serverUrl}/auth/success`,
   identifierFormat: `urn:oasis:names:tc:SAML:1.1:nameid-format:persistent`,
   disableRequestedAuthnContext: true,
-  decryptionPvk: fs.readFileSync("./security/AccPrivateKey.key", "utf-8"),
+  decryptionPvk: fs.readFileSync(Configuration.certificates.shibboleth, "utf-8"),
   acceptedClockSkewMs: -1,
 };
 
