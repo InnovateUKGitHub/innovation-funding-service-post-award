@@ -16,7 +16,7 @@ export default abstract class SalesforceRepositoryBase<T> {
   protected async retrieve(id: string): Promise<T | null> {
     try {
       const conn = await this.getSalesforceConnection();
-      return await conn.sobject(this.salesforceObjectName).retrieve(id).then(x => this.asItem(x));
+      return await conn.sobject<T>(this.salesforceObjectName).retrieve(id);
     }
     catch (e) {
       if (e.errorCode === "MALFORMED_ID" || e.errorCode === "NOT_FOUND") {
@@ -31,7 +31,7 @@ export default abstract class SalesforceRepositoryBase<T> {
   protected async all(): Promise<T[]> {
     const conn = await this.getSalesforceConnection();
     const result = await conn.sobject(this.salesforceObjectName)
-      .select(this.salesforceFieldNames.join(", "))
+      .select(this.salesforceFieldNames)
       .execute()
       .then(x => this.asArray(x))
       .catch(e => { throw this.constructError(e); })
@@ -51,7 +51,7 @@ export default abstract class SalesforceRepositoryBase<T> {
   protected async where(filter: Partial<T> | string): Promise<T[]> {
     const conn = await this.getSalesforceConnection();
     const result = await conn.sobject(this.salesforceObjectName)
-      .select(this.salesforceFieldNames.join(", "))
+      .select(this.salesforceFieldNames)
       .where(filter)
       .execute()
       .then(x => this.asArray(x))
@@ -72,7 +72,7 @@ export default abstract class SalesforceRepositoryBase<T> {
   protected async filterOne(filter: Partial<T> | string): Promise<T | null> {
     const conn = await this.getSalesforceConnection();
     const result = await conn.sobject(this.salesforceObjectName)
-      .select(this.salesforceFieldNames.join(", "))
+      .select(this.salesforceFieldNames)
       .where(filter)
       .limit(1)
       .execute()
@@ -95,10 +95,9 @@ export default abstract class SalesforceRepositoryBase<T> {
     const conn = await this.getSalesforceConnection();
     return conn.sobject(this.salesforceObjectName)
       .insert(inserts)
-      .then((r) => {
-        const result = r as RecordResult;
+      .then((result) => {
         if (result.success) {
-          return result.id as string;
+          return result.id;
         }
         throw new SalesforceDataChangeError("Failed to insert to saleforce", this.getDataChangeErrorMessage(result));
       })
@@ -108,10 +107,9 @@ export default abstract class SalesforceRepositoryBase<T> {
 
   protected async insertAll(inserts: Partial<T>[]): Promise<string[]> {
     const conn = await this.getSalesforceConnection();
-    return conn.sobject(this.salesforceObjectName)
+    return conn.sobject<Partial<T>>(this.salesforceObjectName)
       .insert(inserts)
-      .then((r) => {
-        const results = r as RecordResult[];
+      .then(results => {
         if (results.every(x => x.success)) {
           return results.map(x => x.success ? x.id.toString() : "");
         }
@@ -137,10 +135,9 @@ export default abstract class SalesforceRepositoryBase<T> {
 
   protected async updateAll(updates: Updatable<T>[]): Promise<boolean> {
     const conn = await this.getSalesforceConnection();
-    return conn.sobject(this.salesforceObjectName)
+    return conn.sobject<Updatable<T>>(this.salesforceObjectName)
       .update(updates)
-      .then(r => {
-        const results = r as any as RecordResult[];
+      .then(results => {
         if (results.every(x => x.success)) {
           return true;
         }
@@ -152,9 +149,8 @@ export default abstract class SalesforceRepositoryBase<T> {
 
   protected async deleteAll(ids: string[]): Promise<void> {
     const conn = await this.getSalesforceConnection();
-    // missing typeing in the jsForce.d.ts
-    // tslint:disable
-    return (conn.sobject(this.salesforceObjectName).delete(ids) as any as Promise<RecordResult[]>)
+
+    return conn.sobject(this.salesforceObjectName).delete(ids)
       .then(result => {
         if (result.every(x => x.success)) {
           return;
@@ -162,15 +158,12 @@ export default abstract class SalesforceRepositoryBase<T> {
         throw new SalesforceDataChangeError("Failed to delete from saleforce", this.getDataChangeErrorMessages(result));
       })
       .catch(e => { throw this.constructError(e); });
-    // tslint:enable
   }
 
   protected async deleteItem(id: string): Promise<void> {
     const conn = await this.getSalesforceConnection();
 
-    // missing typeing in the jsForce.d.ts
-    // tslint:disable
-    return (conn.sobject(this.salesforceObjectName).delete(id) as any as Promise<RecordResult>)
+    return conn.sobject(this.salesforceObjectName).delete(id)
       .then(result => {
         if (result.success) {
           return;
@@ -178,15 +171,10 @@ export default abstract class SalesforceRepositoryBase<T> {
         throw new SalesforceDataChangeError("Failed to delete from saleforce", this.getDataChangeErrorMessage(result));
       })
       .catch(e => { throw this.constructError(e); });
-    // tslint:enable
   }
 
   private asArray(result: Partial<{}>[]): T[] {
     return result as T[];
-  }
-
-  private asItem(result: { Id?: SalesforceId }): T {
-    return result as any as T;
   }
 
   private constructError(e: any) {
