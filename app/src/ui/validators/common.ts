@@ -30,15 +30,15 @@ export const isFalse = rule<boolean>((value) => value === null || value === unde
 export const isDate = rule<Date>((value) => value === null || value === undefined || (value.getTime && !isNaN(value.getTime())), "Invalid date");
 
 export function maxLength(results: Results<{}>, value: string|null, length: number, message?: string) {
-    return isTrue(results, (!value) || value.length <= length, message || "Maximum of " + length + " characters");
+    return isTrue(results, (!value) || value.length <= length, message || `Maximum of ${length} characters`);
 }
 
 export function minLength(results: Results<{}>, value: string, length: number, message?: string) {
-    return isTrue(results, value !== null && value.length >= length, message || "Minimum of " + length + " characters");
+    return isTrue(results, value !== null && value.length >= length, message || `Minimum of ${length} characters`);
 }
 
 export function exactLength(results: Results<{}>, value: string, length: number, message?: string) {
-    return isTrue(results, (!value) || value.length === length, message || "Must be exactly " + length + " characters");
+    return isTrue(results, (!value) || value.length === length, message || `Must be exactly ${length} characters`);
 }
 
 export function alphanumeric(results: Results<{}>, value: string, message?: string) {

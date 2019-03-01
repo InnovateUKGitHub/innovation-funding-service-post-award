@@ -9,7 +9,7 @@ import { ClaimDetailDocumentsRoute } from "./claimDetailDocuments";
 import { IEditorStore } from "../../redux/reducers/editorsReducer";
 import { ClaimLineItemDtosValidator, ClaimLineItemDtoValidator } from "../../validators/claimLineItemDtosValidator";
 import { DocumentList, ValidationMessage } from "../../components";
-import { Authorisation, ProjectDto, ProjectRole } from "../../../types";
+import { ProjectDto, ProjectRole } from "../../../types";
 import { range } from "../../../shared/range";
 
 export interface EditClaimLineItemsParams {
@@ -91,20 +91,30 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
   private renderTable(editor: IEditorStore<ClaimLineItemDto[], ClaimLineItemDtosValidator>, forecastDetail: ForecastDetailsDTO, documents: DocumentSummaryDto[]) {
     const LineItemForm = ACC.TypedForm<ClaimLineItemDto[]>();
     const LineItemTable = ACC.TypedTable<ClaimLineItemDto>();
+    const validationResults = editor.validator.items.results;
 
     return (
-      <LineItemForm.Form data={editor.data} qa={"current-claim-summary-form"} onChange={x => { /* Todo */ }} onSubmit={() => this.props.save(this.props.projectId, this.props.partnerId, this.props.periodId, this.props.costCategoryId, this.props.editor.data)}>
+      <LineItemForm.Form
+        data={editor.data}
+        onSubmit={() => this.props.save(this.props.projectId, this.props.partnerId, this.props.periodId, this.props.costCategoryId, this.props.editor.data)}
+        qa="current-claim-summary-form"
+      >
         <LineItemForm.Hidden name="itemCount" value={x => x.length}/>
         <LineItemForm.Fieldset>
-          <LineItemTable.Table qa="current-claim-summary-table" data={editor.data} validationResult={editor.validator.items.results} footers={this.renderFooters(editor, forecastDetail)}>
-            <LineItemTable.Custom header="Description" qa="cost-description" value={(x, i) => this.renderDescription(x, i, editor.validator.items.results[i.row])} />
-            <LineItemTable.Custom header="Cost (£)" qa="cost-value" classSuffix="numeric" value={(x, i) => this.renderCost(x, i, editor.validator.items.results[i.row])} width={30} />
+          <LineItemTable.Table
+            data={editor.data}
+            validationResult={validationResults}
+            footers={this.renderFooters(editor, forecastDetail)}
+            qa="current-claim-summary-table"
+          >
+            <LineItemTable.Custom header="Description" qa="cost-description" value={(x, i) => this.renderDescription(x, i, validationResults[i.row])} />
+            <LineItemTable.Custom header="Cost (£)" qa="cost-value" classSuffix="numeric" value={(x, i) => this.renderCost(x, i, validationResults[i.row])} width={30} />
             {this.state.showAddRemove ? <LineItemTable.Custom header="" qa="remove" value={(x, i) => <a href="#" onClick={e => this.removeItem(x, i, e)}>Remove</a>} width={1} /> : null}
           </LineItemTable.Table>
         </LineItemForm.Fieldset>
         <LineItemForm.Fieldset>
           <ACC.Section title="Supporting documents" subtitle={documents.length > 0 ? "All documents open in a new window." : ""} qa="supporting-documents-section">
-            <ValidationMessage message={"If you are unsure what evidence to provide, speak to your Monitoring Officer. They will use these documents when reviewing your claim."} messageType={"info"} />
+            <ValidationMessage message="If you are unsure what evidence to provide, speak to your Monitoring Officer. They will use these documents when reviewing your claim." messageType="info" />
             {documents.length > 0 ? <DocumentList documents={documents} qa="supporting-documents" /> : <p className="govuk-body-m govuk-!-margin-bottom-0 govuk-!-margin-right-2">No documents uploaded.</p>}
           </ACC.Section>
         </LineItemForm.Fieldset>
