@@ -20,18 +20,18 @@ export interface IConfig {
     useSSO: boolean;
 
     build: string;
-    
+
     logLevel: "VERBOSE" | "DEBUG" | "INFO" | "WARN" | "ERROR";
-    
+
     cacheTimeouts: {
-      costCategories: number;
-      projectRoles: number;
+        costCategories: number;
+        projectRoles: number;
     };
 
     certificates: {
-        salesforce:string;
-        shibboleth:string;
-    }
+        salesforce: string;
+        shibboleth: string;
+    };
 }
 
 const cacheTimeouts = {
@@ -42,7 +42,7 @@ const cacheTimeouts = {
 const certificates = {
     salesforce: process.env.SALESFORCE_CERTIFICATE || "./security/AccPrivateKey.key",
     shibboleth: process.env.SHIBBOLETH_CERTIFICATE || "./security/AccPrivateKey.key",
-}
+};
 
 const secrets = {
     serverUrl: process.env.SERVER_URL!,
