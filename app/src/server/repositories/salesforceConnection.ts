@@ -2,6 +2,7 @@ import jsforce from "jsforce";
 import fs from "fs";
 import jwt from "jsonwebtoken";
 import { Cache } from "../features/common/cache";
+import { Configuration } from "../features/common";
 
 // This will need revisting once SSO with Salesforce has been resolved
 export interface ISalesforceConnectionDetails {
@@ -41,7 +42,7 @@ export const salesforceConnection = ({ username, password, token }: ISalesforceC
 };
 
 const getToken = (username: string, clientId: string, connectionUrl: string): Promise<ITokenInfo> => {
-  const privateKey = fs.readFileSync("./security/AccPrivateKey.key", "utf8");
+  const privateKey = fs.readFileSync(Configuration.certificates.salesforce, "utf8");
 
   const claimSet = {
     prn: username
