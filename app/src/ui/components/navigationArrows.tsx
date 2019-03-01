@@ -22,8 +22,8 @@ export class NavigationArrows extends React.Component<Props> {
   private renderLeftHalf() {
     if (this.props.previousLink === null) return null;
     return (
-      <Link route={this.props.previousLink.route} id="previousLInk" className="govuk-navigation-arrows__button--left">
-        <div>
+      <Link route={this.props.previousLink.route} className="govuk-navigation-arrows__button--left">
+        <div data-qa="arrow-left">
           <ArrowLeft />
           <span>Previous</span>
         </div>
@@ -35,8 +35,8 @@ export class NavigationArrows extends React.Component<Props> {
   private renderRightHalf() {
     if (this.props.nextLink === null) return null;
     return (
-      <Link route={this.props.nextLink.route} id="nextLink" className="govuk-navigation-arrows__button govuk-navigation-arrows__button--right">
-        <div>
+      <Link route={this.props.nextLink.route} className="govuk-navigation-arrows__button govuk-navigation-arrows__button--right">
+        <div data-qa="arrow-right">
           <span>Next</span>
           <ArrowRight />
         </div>
