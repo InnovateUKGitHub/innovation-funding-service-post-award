@@ -62,9 +62,9 @@ export class ClaimsDetailsComponent extends ContainerBase<Params, Data, {}> {
     }
 
     private renderContents(data: CombinedData) {
-
         const isPmOrMo = (data.project.roles & (ProjectRole.ProjectManager | ProjectRole.MonitoringOfficer)) !== ProjectRole.Unknown;
         const backLink = isPmOrMo ? AllClaimsDashboardRoute.getLink({ projectId: data.project.id }) : ClaimsDashboardRoute.getLink({ projectId: data.project.id, partnerId: data.partner.id });
+
         return (
             <ACC.Page>
                 <ACC.Section>
@@ -73,7 +73,10 @@ export class ClaimsDetailsComponent extends ContainerBase<Params, Data, {}> {
                 <ACC.Projects.Title pageTitle="Review claim" project={data.project} />
                 <ACC.Claims.Navigation projectId={data.project.id} partnerId={data.partner.id} periodId={data.claim.periodId} currentRouteName={ClaimsDetailsRoute.routeName} />
                 <ACC.Section title={this.getClaimPeriodTitle(data)}>
-                    <ACC.Claims.ClaimTable {...data} getLink={costCategoryId => ClaimLineItemsRoute.getLink({partnerId: this.props.partnerId, projectId: this.props.projectId, periodId: this.props.periodId, costCategoryId})} />
+                    <ACC.Claims.ClaimTable
+                      {...data}
+                      getLink={costCategoryId => ClaimLineItemsRoute.getLink({partnerId: this.props.partnerId, projectId: this.props.projectId, periodId: this.props.periodId, costCategoryId})}
+                    />
                 </ACC.Section>
                 { this.renderIarSection(data.claim, this.props.iarDocument.data) }
                 {/*

@@ -33,7 +33,7 @@ export class FileUpload extends BaseInput<FileUploadProps, { value: File | null 
     );
   }
 
-  private handleChange = (e: React.ChangeEvent<HTMLInputElement> | React.KeyboardEvent<HTMLInputElement>) => {
+  private handleChange(e: React.ChangeEvent<HTMLInputElement> | React.KeyboardEvent<HTMLInputElement>) {
     const files = (e.target as HTMLInputElement).files;
     const value = (files && files.length > 0 && files[0]) || null;
     this.props.onChange(value);

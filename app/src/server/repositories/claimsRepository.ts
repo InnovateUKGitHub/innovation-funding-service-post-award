@@ -56,22 +56,22 @@ export class ClaimRepository extends SalesforceRepositoryBase<ISalesforceClaim> 
     "Acc_IARRequired__c"
   ];
 
-  public async getAllByProjectId(projectId: string): Promise<ISalesforceClaim[]> {
+  public getAllByProjectId(projectId: string): Promise<ISalesforceClaim[]> {
     const filter = `
       Acc_ProjectParticipant__r.Acc_ProjectId__c = '${projectId}'
       AND RecordType.Name = '${this.recordType}'
       AND Acc_ClaimStatus__c != 'New'
     `;
-    return await super.where(filter);
+    return super.where(filter);
   }
 
-  public async getAllByPartnerId(partnerId: string): Promise<ISalesforceClaim[]> {
+  public getAllByPartnerId(partnerId: string): Promise<ISalesforceClaim[]> {
     const filter = `
       Acc_ProjectParticipant__c = '${partnerId}'
       AND RecordType.Name = '${this.recordType}'
       AND Acc_ClaimStatus__c != 'New'
     `;
-    return await super.where(filter);
+    return super.where(filter);
   }
 
   public async get(partnerId: string, periodId: number) {

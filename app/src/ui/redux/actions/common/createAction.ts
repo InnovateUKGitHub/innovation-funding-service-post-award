@@ -16,9 +16,6 @@ interface IActionCreatorsMapObject {
   [ac: string]: FunctionType;
 }
 export type ActionsUnion<T extends IActionCreatorsMapObject> = ReturnType<T[keyof T]>;
-
-// export type ModuleThunk<T, S, A extends Action<any>> = ThunkAction<Promise<T>, S, {}, A>;
-
 export type AsyncThunk<T, A extends RootActions = RootActions> = ThunkAction<Promise<T>, RootState, any, A>;
 export type SyncThunk<T, A extends RootActions = RootActions> = ThunkAction<T, RootState, any, A>;
 
