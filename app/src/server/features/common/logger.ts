@@ -1,4 +1,5 @@
 import { Configuration } from "./config";
+import { LogLevel } from "../../../types/logLevel";
 
 export interface ILogger {
   info(message: string, params: any[]): void;
@@ -7,19 +8,11 @@ export interface ILogger {
   error(message: string, params: any[]): void;
 }
 
-enum LogLevel {
-  VERBOSE = 1,
-  DEBUG,
-  INFO,
-  WARN,
-  ERROR
-}
-
 export class Logger implements ILogger {
   private readonly level: LogLevel;
 
   constructor(logLevel?: LogLevel) {
-    this.level = logLevel || this.parseLogLevel(Configuration.logLevel);
+    this.level = logLevel || Configuration.logLevel;
   }
 
   debug(message: string, ...params: any[]) {
@@ -42,17 +35,6 @@ export class Logger implements ILogger {
     // TODO: impliment logging for server logs
     if(level >= this.level) {
       console.log(`${LogLevel[level]}: ${message}`, ...params);
-    }
-  }
-
-  private parseLogLevel(level: string) {
-    switch(level) {
-      case "VERBOSE": return LogLevel.VERBOSE;
-      case "DEBUG":   return LogLevel.DEBUG;
-      case "INFO":    return LogLevel.INFO;
-      case "WARN":    return LogLevel.WARN;
-      case "ERROR":
-      default:        return LogLevel.ERROR;
     }
   }
 }

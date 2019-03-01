@@ -35,10 +35,7 @@ export class Context implements IContext {
 
     this.salesforceConnectionDetails = {
       username: this.user.email,
-      password: this.config.salesforcePassword,
-      token: this.config.salesforceToken,
-      connectionUrl: this.config.salesforceConnectionUrl,
-      clientId: this.config.salesforceClientId
+      ...this.config.salesforce
     };
   }
 
@@ -70,7 +67,7 @@ export class Context implements IContext {
 
   private getSalesforceConnection() {
     // if the standard user then connect using salesforceConnection otherwise use the token
-    if (this.user.email === this.config.salesforceUsername) {
+    if (this.user.email === this.config.salesforce.username) {
       // todo: remove
       return Salesforce.salesforceConnection(this.salesforceConnectionDetails);
     }

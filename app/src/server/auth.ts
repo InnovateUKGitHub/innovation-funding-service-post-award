@@ -24,7 +24,7 @@ type ShibbolethPayload = {
 };
 
 const shibConfig: passportSaml.SamlConfig = {
-  entryPoint: Configuration.ssoProviderUrl,
+  entryPoint: Configuration.sso.providerUrl,
   issuer:  Configuration.serverUrl,
   callbackUrl: `${Configuration.serverUrl}/auth/success`,
   identifierFormat: `urn:oasis:names:tc:SAML:1.1:nameid-format:persistent`,
@@ -58,7 +58,7 @@ router.get("/login", passport.authenticate("shibboleth"));
 
 router.get("/logout", (req, res) => {
   res.cookie(cookieName, "", { expires: new Date("1970-01-01") });
-  return res.redirect(Configuration.useSSO && Configuration.ssoSignoutUrl || "/");
+  return res.redirect(Configuration.sso.enabled && Configuration.sso.signoutUrl || "/");
 });
 
 router.post("/auth/success", passport.authenticate("shibboleth"), (req, res) => {
@@ -78,10 +78,10 @@ router.use((req, res, next) => {
     next();
   }
   // if user not logged in but we arent using sso then set default user
-  else if (!Configuration.useSSO) {
+  else if (!Configuration.sso.enabled) {
     req.session = req.session || {};
     req.session.user = req.session.user || {};
-    req.session.user.email = Configuration.salesforceUsername;
+    req.session.user.email = Configuration.salesforce.username;
     next();
   }
   // if not logged in and not api request or login request (ie somethings gone wrong)
