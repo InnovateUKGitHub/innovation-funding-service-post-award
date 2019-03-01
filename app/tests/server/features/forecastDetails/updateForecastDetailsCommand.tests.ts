@@ -355,12 +355,12 @@ describe("UpdateForecastDetailsCommand", () => {
     await expect(context.runCommand(command)).rejects.toMatchObject(new BadRequestError("You can't update the forecast of approved periods."));
   });
 
-  it.skip("when project in period 1 and period 1 updated expect exception", async () => {
+  it.only("when project in period 2 and period 1 updated expect exception", async () => {
 
     const context = new TestContext();
 
-    const projectStart = DateTime.local().set({ day: 1 });
-    const projectEnd = projectStart.plus({ months: 2 }).minus({ days: 1 });
+    const projectStart = DateTime.local().set({ day: 1 }).minus({ months: 2 });
+    const projectEnd = projectStart.plus({ months: 1, days: -1 });
 
     const project = context.testData.createProject(x => {
       x.Acc_StartDate__c = projectStart.toFormat("yyyy-MM-dd");
