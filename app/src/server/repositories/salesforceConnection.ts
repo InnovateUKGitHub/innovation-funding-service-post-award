@@ -73,7 +73,7 @@ const getToken = (username: string, clientId: string, connectionUrl: string): Pr
       }
       else {
         return r.text().then(x => {
-          throw new SalesforceTokenError(`Unable to get token or json error: url- ${r.url}: originalUrl- ${connectionUrl}: ${x}`, r.status);
+          throw new SalesforceTokenError(`Unable to get token or json error: url- ${r.url}: status: -${r.status} originalUrl- ${connectionUrl}: ${x}`, r.status);
         });
       }
     })

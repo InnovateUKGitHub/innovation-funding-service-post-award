@@ -33,10 +33,8 @@ describe("MapToProjectDtoCommand", () => {
       claimWindowStart: new Date("2009/01/01 00:00:00"),
       claimWindowEnd: new Date("2009/01/30 23:59:00"),
       claimsOverdue: 5,
-      claimsQueried: 1,
+      claimsWithParticipant: 1,
       claimsToReview: 2,
-      claimsStatus: ProjectClaimTrackingStatus.AllClaimsSubmitted,
-      claimsStatusName: "All Claims Submitted",
       status: ProjectStatus.Live,
       statusName: "Live",
       numberOfOpenClaims: 10
@@ -52,12 +50,10 @@ describe("MapToProjectDtoCommand", () => {
       x.Acc_ClaimFrequency__c = "Quarterly";
       x.Acc_GOLTotalCostAwarded__c = expected.grantOfferLetterCosts;
       x.Acc_TotalProjectCosts__c = expected.costsClaimedToDate;
-      x.Acc_TrackingClaimStatus__c = expected.claimsStatusName;
-      x.ClaimStatusName = expected.claimsStatusName;
       x.Acc_ProjectStatus__c = expected.statusName;
       x.ProjectStatusName = expected.statusName;
       x.Acc_ClaimsOverdue__c = expected.claimsOverdue;
-      x.Acc_ClaimsUnderQuery__c = expected.claimsQueried;
+      x.Acc_ClaimsUnderQuery__c = expected.claimsWithParticipant;
       x.Acc_ClaimsForReview__c = expected.claimsToReview;
       x.Acc_NumberOfOpenClaims__c = expected.numberOfOpenClaims;
     });
