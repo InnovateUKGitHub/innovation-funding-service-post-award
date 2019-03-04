@@ -21,10 +21,10 @@ interface Callbacks {
 }
 
 interface Props {
-  useSalesforceStatus?: boolean;
+  showHidden?: boolean;
 }
 
-type Section = "archived" | "open" | "closed" | "none";
+type Section = "archived" | "open" | "awaiting" | "upcoming";
 type Icon = "warning" | "edit" | "none";
 
 class ProjectDashboardComponent extends ContainerBase<Props, Data, Callbacks> {
@@ -48,7 +48,7 @@ class ProjectDashboardComponent extends ContainerBase<Props, Data, Callbacks> {
   private renderContents(projects: ProjectDto[], partners: PartnerDto[]) {
     const combinedData = projects.map(project => {
       const partner = partners.find(y => (y.projectId === project.id) && !!(y.roles & ProjectRole.FinancialContact)) || null;
-      const status = this.props.useSalesforceStatus === true ? this.getProjectStatus(project, partner) : this.getProjectStatus2(project, partner);
+      const status = this.getProjectStatus(project, partner);
       return {
         project,
         partner,
@@ -57,8 +57,9 @@ class ProjectDashboardComponent extends ContainerBase<Props, Data, Callbacks> {
     });
 
     const open = combinedData.filter(x => x.status === "open");
-    const closed = combinedData.filter(x => x.status === "closed");
+    const awaiting = combinedData.filter(x => x.status === "awaiting");
     const archived = combinedData.filter(x => x.status === "archived");
+    const upcoming = combinedData.filter(x => x.status === "upcoming");
 
     return (
       <React.Fragment>
@@ -67,58 +68,43 @@ class ProjectDashboardComponent extends ContainerBase<Props, Data, Callbacks> {
           {!open.length ? <ACC.ListItem><p className="govuk-body govuk-!-margin-0">You currently do not have any projects with open claims.</p></ACC.ListItem> : null}
         </ACC.ListSection>
         <ACC.ListSection title="Awaiting the next claim period" qa="next-claims" key={`section-closed`}>
-          {closed.map((x, i) => this.renderProject(x.project, x.partner, "closed", i))}
-          {!closed.length ? <ACC.ListItem><p className="govuk-body govuk-!-margin-0">You currently do not have any projects outside of the claims period.</p></ACC.ListItem> : null}
+          {awaiting.map((x, i) => this.renderProject(x.project, x.partner, "awaiting", i))}
+          {!awaiting.length ? <ACC.ListItem><p className="govuk-body govuk-!-margin-0">You currently do not have any projects outside of the claims period.</p></ACC.ListItem> : null}
         </ACC.ListSection>
         <ACC.ListSection title="Archive" qa="archived-claims" key={`section-archived`}>
           {archived.map((x, i) => this.renderProject(x.project, x.partner, "archived", i))}
           {!archived.length ? <ACC.ListItem><p className="govuk-body govuk-!-margin-0">You currently do not have any archived projects.</p></ACC.ListItem> : null}
         </ACC.ListSection>
+        {
+          this.props.showHidden === true && upcoming.length ?
+            <ACC.ListSection title="Hidden" qa="hidden-claims" key={`section-hidden`}>
+              {upcoming.map((x, i) => this.renderProject(x.project, x.partner, "archived", i))}
+            </ACC.ListSection>
+            : null
+        }
       </React.Fragment>
     );
-  }
-
-  // ToDo: remove once salesforce rollups and status are working
-  private getProjectStatus2(x: ProjectDto, partner: PartnerDto | null): Section {
-    if (x.totalPeriods === x.periodId) {
-      if (x.claimWindowStart) {
-        return "open";
-      }
-
-      if (x.endDate && x.endDate < new Date()) {
-        return "archived";
-      }
-
-      return "closed";
-    }
-    else if (x.periodId > 0) {
-      if (x.claimWindowStart) {
-        return "open";
-      }
-      return "closed";
-    }
-    return "none";
   }
 
   private getProjectStatus(project: ProjectDto, partner: PartnerDto | null): Section {
     switch (project.status) {
       case ProjectStatus.Live:
       case ProjectStatus.FinalClaim:
-        if (project.roles & (ProjectRole.ProjectManager | ProjectRole.MonitoringOfficer)) {
-          return project.numberOfOpenClaims > 0 ? "open" : "closed";
+        if (project.periodId === 0) {
+          return "upcoming";
+        }
+        else if (project.roles & (ProjectRole.ProjectManager | ProjectRole.MonitoringOfficer)) {
+          return project.numberOfOpenClaims > 0 ? "open" : "awaiting";
         }
         else if (project.roles & (ProjectRole.FinancialContact) && partner) {
-          return partner.status === PartnerClaimStatus.ClaimSubmitted || partner.status === PartnerClaimStatus.NoClaimsDue ? "closed" : "open";
-        }
-        else {
-          return "none";
+          return partner.status === PartnerClaimStatus.ClaimSubmitted || partner.status === PartnerClaimStatus.NoClaimsDue ? "awaiting" : "open";
         }
       case ProjectStatus.Closed:
       case ProjectStatus.OnHold:
       case ProjectStatus.Terminated:
         return "archived";
       default:
-        return "none";
+        return "upcoming";
     }
   }
 
@@ -152,7 +138,7 @@ class ProjectDashboardComponent extends ContainerBase<Props, Data, Callbacks> {
     const isMo = !!(project.roles & ProjectRole.MonitoringOfficer);
     const isPM = !!(project.roles & ProjectRole.ProjectManager);
 
-    if (section === "open" || section === "closed") {
+    if (section === "open" || section === "awaiting") {
       messages.push(`Period ${project.periodId} of ${project.totalPeriods}`);
     }
 
@@ -166,7 +152,7 @@ class ProjectDashboardComponent extends ContainerBase<Props, Data, Callbacks> {
       }
 
       if (isMo || isPM) {
-        messages.push(`Unsubmitted or queried claims: ${project.claimsQueried}`);
+        messages.push(`Unsubmitted or queried claims: ${project.claimsWithParticipant}`);
       }
 
       switch (partner && partner.status) {
@@ -182,6 +168,12 @@ class ProjectDashboardComponent extends ContainerBase<Props, Data, Callbacks> {
         case PartnerClaimStatus.IARRequired:
           messages.push(`You need to submit your IAR.`);
           break;
+      }
+    }
+
+    if (section === "archived") {
+      if (project.status === ProjectStatus.Terminated) {
+        messages.push("Terminated.");
       }
     }
 
@@ -209,7 +201,7 @@ class ProjectDashboardComponent extends ContainerBase<Props, Data, Callbacks> {
     else if (section === "open") {
       return <ACC.Claims.ClaimWindow periodEnd={DateTime.fromJSDate(project.claimWindowStart!).minus({ days: 1 }).toJSDate()} />;
     }
-    else if (section === "closed") {
+    else if (section === "awaiting") {
       return <ACC.Claims.ClaimWindow periodEnd={project.periodEndDate!} />;
     }
 
@@ -260,7 +252,6 @@ export const ProjectDashboard = definition.connect({
       projects: Selectors.getProjects().getPending(state),
       partners: Selectors.getAllPartners().getPending(state),
     }),
-    useSalesforceStatus: props.useSalesforceStatus
   }),
   withCallbacks: () => ({})
 });
@@ -268,7 +259,10 @@ export const ProjectDashboard = definition.connect({
 export const ProjectDashboardRoute = definition.route({
   routeName: "projectDashboard",
   routePath: "/projects/dashboard",
-  getParams: (route) => ({ useSalesforceStatus: route.params.useSalesforceStatus === "true" }),
+  getParams: (route) => ({
+    useSalesforceStatus: route.params.useSalesforceStatus === "true",
+    showHidden: route.params.showHidden === "true"
+  }),
   getLoadDataActions: (params) => [
     Actions.loadProjects(),
     Actions.loadPartners()
