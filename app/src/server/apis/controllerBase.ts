@@ -1,6 +1,6 @@
 import mimeTypes from "mime-types";
 import multer from "multer";
-import express, { NextFunction, Request, Response } from "express";
+import express, { Request, Response } from "express";
 
 import { FileUpload } from "../../types/FileUpload";
 import { IAppError } from "../../types/IAppError";
