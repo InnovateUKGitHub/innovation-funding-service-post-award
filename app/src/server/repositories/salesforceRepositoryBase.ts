@@ -1,11 +1,14 @@
-import { Connection, RecordResult, SalesforceId } from "jsforce";
+import { Connection, RecordResult } from "jsforce";
 import { Stream } from "stream";
+import { Logger } from "../features/common";
 
 export type Updatable<T> = Partial<T> & {
   Id: string
 };
 
 export default abstract class SalesforceRepositoryBase<T> {
+  private log = new Logger();
+
   public constructor(
     protected getSalesforceConnection: () => Promise<Connection>
   ) { }
@@ -23,7 +26,7 @@ export default abstract class SalesforceRepositoryBase<T> {
         return null;
       }
       else {
-        throw e;
+        throw this.constructError(e);
       }
     }
   }
@@ -178,11 +181,13 @@ export default abstract class SalesforceRepositoryBase<T> {
   }
 
   private constructError(e: any) {
+    this.log.error("Salesforce Error: ", e.errorCode, e.message);
+
     if (e.errorCode === "ERROR_HTTP_503") {
       throw new SalesforceUnavilableError(`Salesforce unavailable`);
     }
     if (e.errorCode === "INVALID_QUERY_FILTER_OPERATOR") {
-      throw new SalesforceInvalidFilterError(`Salesforce unavailable`);
+      throw new SalesforceInvalidFilterError(`Salesforce filter error`);
     }
 
     return e instanceof Error ? e : new Error(e.errorCode + ": " + e.message);
