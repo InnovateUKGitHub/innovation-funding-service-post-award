@@ -101,29 +101,36 @@
 
 .govuk-navigation-arrows__button {
   display: inline-flex;
-  flex-direction: column;
+  flex-direction: row;
   text-decoration: none;
 }
 
-.govuk-navigation-arrows__button--left {
+.govuk-navigation-arrows__button__label--left {
   margin-right: auto;
   align-items: flex-start;
 }
 
-.govuk-navigation-arrows__button--right {
+.govuk-navigation-arrows__button__label--right {
   margin-left: auto;
   align-items: flex-end;
 }
 
 .govuk-navigation-arrows__button--left__arrow {
+  margin-top: 5px;
   margin-right: 10px;
 }
 
 .govuk-navigation-arrows__button--right__arrow {
+  margin-top: 5px;
   margin-left: 10px;
 }
 
-.govuk-navigation-arrows__button__category {
+.govuk-navigation-arrows__button__label {
+  display: inline-flex;
+  flex-direction: column;
+}
+
+.govuk-navigation-arrows__button__label__category {
   font-size: 1.1rem;
   text-decoration: underline;
 }
