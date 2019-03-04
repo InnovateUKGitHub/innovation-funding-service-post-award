@@ -24,8 +24,10 @@ app.use((req, res, next) => {
   next();
 });
 
+// un-authed routes
 // serve the public folder contents
 app.use(express.static("public"));
+app.get("/api/health", (req, res) => res.send(true));
 
 // auth handler
 app.use(authRouter);
