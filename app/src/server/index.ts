@@ -12,7 +12,7 @@ import { router } from "./router";
 import { Logger } from "./features/common";
 
 // Set up New Relic to monitor app when deployed
-if(process.env.NEW_RELIC_ENABLED) {
+if(process.env.NEW_RELIC_ENABLED === "true") {
   require("newrelic"); // tslint:disable-line:no-var-requires
 }
 
