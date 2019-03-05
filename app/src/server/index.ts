@@ -41,3 +41,5 @@ app.use(authRouter);
 app.use(router);
 
 app.listen(port);
+
+log.info(`Listening at ${process.env.SERVER_URL}`);
