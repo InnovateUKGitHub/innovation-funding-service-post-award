@@ -22,11 +22,11 @@ export interface IConfig {
         clientId: Readonly<string>;
         connectionUrl: Readonly<string>;
         // ToDo: Remove
-        password: Readonly<string>;
+        serivcePassword: Readonly<string>;
         // ToDo: Remove
-        token: Readonly<string>;
+        serivceToken: Readonly<string>;
         // ToDo: Remove
-        username: string;
+        serivceUsername: Readonly<string>;
     };
 
     serverUrl: Readonly<string>;
@@ -60,9 +60,9 @@ const logLevel = parseLogLevel(process.env.LOG_LEVEL! || process.env.LOGLEVEL!);
 const salesforce = {
     clientId: process.env.SALESFORCE_CLIENT_ID!,
     connectionUrl: process.env.SALESFORCE_CONNECTION_URL!,
-    password: process.env.SALESFORCE_PASSWORD! || process.env.SALESFORCEPASSWORD!,
-    token: process.env.SALESFORCE_TOKEN! || process.env.SALESFORCETOKEN!,
-    username: process.env.SALESFORCE_USERNAME! || process.env.SALESFORCEUSERNAME!,
+    serivcePassword: process.env.SALESFORCE_PASSWORD! || process.env.SALESFORCEPASSWORD!,
+    serivceToken: process.env.SALESFORCE_TOKEN! || process.env.SALESFORCETOKEN!,
+    serivceUsername: process.env.SALESFORCE_USERNAME! || process.env.SALESFORCEUSERNAME!,
 };
 
 const serverUrl = process.env.SERVER_URL!;

@@ -6,12 +6,12 @@ import { Configuration } from "../features/common";
 
 // This will need revisting once SSO with Salesforce has been resolved
 export interface ISalesforceConnectionDetails {
-  username: string;
-  password: string;
-  token: string;
+  currentUsername: string;
+  serviceUsername: string;
+  servicePassword: string;
+  serviceToken: string;
   connectionUrl: string;
   clientId: string;
-
 }
 
 interface ITokenInfo {
@@ -21,16 +21,16 @@ interface ITokenInfo {
 
 const tokenCache = new Cache<ITokenInfo>(5);
 
-export const salesforceConnection = ({ username, password, token }: ISalesforceConnectionDetails) => {
+export const salesforceConnection = (connectionDetails: ISalesforceConnectionDetails) => {
   const connection = new jsforce.Connection({
     loginUrl: "https://test.salesforce.com"
   });
 
   return new Promise<jsforce.Connection>((resolve, reject) => {
-    if (!username || !password || !token) {
-      throw new Error(`Invalid connection details username:${username}, password:${password}, token:${token}`);
+    if (!connectionDetails.serviceUsername || !connectionDetails.servicePassword || !connectionDetails.serviceToken) {
+      throw new Error(`Invalid connection details username:${connectionDetails.serviceUsername}, password:${connectionDetails.servicePassword}, token:${connectionDetails.serviceToken}`);
     }
-    connection.login(username, password + token, (err, conn) => {
+    connection.login(connectionDetails.serviceUsername, connectionDetails.servicePassword + connectionDetails.serviceToken, (err, conn) => {
       if (err) {
         reject(err);
       }
@@ -51,9 +51,12 @@ const getToken = (username: string, clientId: string, connectionUrl: string): Pr
   const options = {
     issuer: clientId,
     audience: connectionUrl,
-    expiresIn: 1,
+    expiresIn: 10,
     algorithm: "RS256"
   };
+
+  console.log("Getting token - claim set", claimSet);
+  console.log("Getting token - options", options);
 
   const signedToken = jwt.sign(claimSet, privateKey, options);
 
@@ -82,8 +85,9 @@ const getToken = (username: string, clientId: string, connectionUrl: string): Pr
 
 };
 
-export const salesforceConnectionWithToken = async ({ username, clientId, connectionUrl }: ISalesforceConnectionDetails): Promise<jsforce.Connection> => {
-  const token = await tokenCache.fetchAsync(username, () => getToken(username, clientId, connectionUrl));
+export const salesforceConnectionWithToken = async ({ currentUsername, clientId, connectionUrl }: ISalesforceConnectionDetails): Promise<jsforce.Connection> => {
+  console.log("Getting salesforce token for", currentUsername);
+  const token = await tokenCache.fetchAsync(currentUsername, () => getToken(currentUsername, clientId, connectionUrl));
 
   return new jsforce.Connection({
     accessToken: token.accessToken,

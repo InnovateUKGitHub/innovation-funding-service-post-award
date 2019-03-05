@@ -14,7 +14,7 @@ export class HomeFormHandler implements IFormHandler {
     const dto = { user: (req.body.user as string || "").trim() || null, isReset: req.body.button_reset === "" };
 
     if (dto.isReset) {
-      req.session!.user.email = Configuration.salesforce.username;
+      req.session!.user.email = Configuration.salesforce.serivceUsername;
     }
     else if (dto.user) {
       req.session!.user.email = dto.user;

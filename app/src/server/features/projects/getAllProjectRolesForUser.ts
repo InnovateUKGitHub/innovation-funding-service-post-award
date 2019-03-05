@@ -18,7 +18,7 @@ export class GetAllProjectRolesForUser extends QueryBase<Authorisation> {
   public async Run(context: IContext): Promise<Authorisation> {
     const permissions = await context.caches.projectRoles.fetchAsync(
       context.user.email,
-      () => context.config.salesforce.username !== context.user.email ? this.getProjectRoles(context) : this.getServiceAccountRoles(context)
+      () => context.config.salesforce.serivceUsername !== context.user.email ? this.getProjectRoles(context) : this.getServiceAccountRoles(context)
     );
     return new Authorisation(permissions);
   }
