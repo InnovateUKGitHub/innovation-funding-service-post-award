@@ -81,7 +81,7 @@ router.use((req, res, next) => {
   else if (!Configuration.sso.enabled) {
     req.session = req.session || {};
     req.session.user = req.session.user || {};
-    req.session.user.email = Configuration.salesforce.username;
+    req.session.user.email = Configuration.salesforce.serivceUsername;
     next();
   }
   // if not logged in and not api request or login request (ie somethings gone wrong)

@@ -36,11 +36,11 @@ export class TestContext implements IContext {
         },
         logLevel: LogLevel.DEBUG,
         salesforce: {
-            password: "",
-            token: "",
+            serivcePassword: "",
+            serivceToken: "",
             clientId: "",
             connectionUrl: "",
-            username: "",
+            serivceUsername: "",
         },
         serverUrl: "http://localhost:8080",
         sso: {
