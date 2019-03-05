@@ -72,7 +72,6 @@ export class Context implements IContext {
   private readonly salesforceConnectionDetails: Salesforce.ISalesforceConnectionDetails;
 
   private getSalesforceConnection() {
-    console.log("GEt Salesforce connection", this.user, this.config.salesforce.serivceUsername);
     // if the standard user then connect using salesforceConnection otherwise use the token
     if (this.user.email === this.config.salesforce.serivceUsername) {
       // todo: remove
