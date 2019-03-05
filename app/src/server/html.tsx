@@ -43,6 +43,7 @@ export function renderHtml(html: string, preloadedState: any = {}) {
           <script>
               window.__PRELOADED_STATE__ = ${JSON.stringify(preloadedState).replace(/</g, "\\u003c")}
           </script>
+          <script src="/time-zone-polyfill.js"></script>
           <script src="/govuk-frontend-2.7.0.min.js"></script>
           <script src="/build/vendor.js?build=${Configuration.build}"></script>
           <script src="/build/bundle.js?build=${Configuration.build}"></script>

@@ -6,7 +6,7 @@ module.exports = [
   {
     mode: env || "development",
     entry: {
-      bundle: ["@babel/polyfill", "isomorphic-fetch", "date-time-format-timezone", "./src/client/client.tsx"],
+      bundle: ["@babel/polyfill", "isomorphic-fetch", "./src/client/client.tsx"],
       componentsGuide: "./src/client/componentsGuide.tsx",
       vendor: ["react"],
     },
