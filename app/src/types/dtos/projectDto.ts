@@ -53,9 +53,7 @@ export interface ProjectDto {
     statusName: string;
     claimsToReview: number;
     claimsOverdue: number;
-    claimsQueried: number;
-    claimsStatus: ProjectClaimTrackingStatus;
-    claimsStatusName: string;
+    claimsWithParticipant: number;
     numberOfOpenClaims: number;
 }
 

@@ -50,8 +50,7 @@ describe("getAllForProjectQuery", () => {
       totalFutureForecastsForParticipants: 1002,
       roles: ProjectRole.ProjectManager,
       forecastLastModifiedDate: null,
-      claimsToReview: 10,
-      claimsQueried: 20,
+      claimsWithParticipant: 20,
       claimsOverdue: 30,
       status: PartnerClaimStatus.ClaimDue,
       statusName: "Claim Due"
