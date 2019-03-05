@@ -55,9 +55,6 @@ const getToken = (username: string, clientId: string, connectionUrl: string): Pr
     algorithm: "RS256"
   };
 
-  console.log("Getting token - claim set", claimSet);
-  console.log("Getting token - options", options);
-
   const signedToken = jwt.sign(claimSet, privateKey, options);
 
   const body = new FormData();
@@ -86,7 +83,6 @@ const getToken = (username: string, clientId: string, connectionUrl: string): Pr
 };
 
 export const salesforceConnectionWithToken = async ({ currentUsername, clientId, connectionUrl }: ISalesforceConnectionDetails): Promise<jsforce.Connection> => {
-  console.log("Getting salesforce token for", currentUsername);
   const token = await tokenCache.fetchAsync(currentUsername, () => getToken(currentUsername, clientId, connectionUrl));
 
   return new jsforce.Connection({
