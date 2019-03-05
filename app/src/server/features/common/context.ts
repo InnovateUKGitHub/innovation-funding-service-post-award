@@ -10,7 +10,7 @@ import { CommandBase, SyncCommandBase } from "./commandBase";
 
 const cachesImplementation: ICaches = {
   costCategories: new Cache<CostCategoryDto[]>(Configuration.cacheTimeouts.costCategories),
-  projectRoles: new Cache<{ [key: string]: IRoleInfo}>(Configuration.cacheTimeouts.projectRoles),
+  projectRoles: new Cache<{ [key: string]: IRoleInfo }>(Configuration.cacheTimeouts.projectRoles),
 };
 
 const constructErrorResponse = <E extends Error>(error: E): AppError => {
@@ -33,10 +33,16 @@ export class Context implements IContext {
   constructor(public readonly user: IUser) {
     this.config = Configuration;
 
-    this.salesforceConnectionDetails = {
-      username: this.user.email,
-      ...this.config.salesforce
+    const salesforceConfig = {
+      clientId: this.config.salesforce.clientId,
+      connectionUrl: this.config.salesforce.connectionUrl,
+      servicePassword: this.config.salesforce.serivcePassword,
+      serviceUsername: this.config.salesforce.serivceUsername,
+      serviceToken: this.config.salesforce.serivceToken,
     };
+
+    this.salesforceConnectionDetails = Object.assign(salesforceConfig, { currentUsername: this.user.email });
+
   }
 
   // the connection details hane been left as delegates untill details of JWT Access token confirmed
@@ -66,8 +72,9 @@ export class Context implements IContext {
   private readonly salesforceConnectionDetails: Salesforce.ISalesforceConnectionDetails;
 
   private getSalesforceConnection() {
+    console.log("GEt Salesforce connection", this.user, this.config.salesforce.serivceUsername);
     // if the standard user then connect using salesforceConnection otherwise use the token
-    if (this.user.email === this.config.salesforce.username) {
+    if (this.user.email === this.config.salesforce.serivceUsername) {
       // todo: remove
       return Salesforce.salesforceConnection(this.salesforceConnectionDetails);
     }
@@ -82,7 +89,7 @@ export class Context implements IContext {
       if (!(await runnable.accessControl(auth, this))) throw new ForbiddenError();
       return await runnable.Run(this);
     }
-    catch(e) {
+    catch (e) {
       this.logger.warn("Failed query", runnable, e);
       throw constructErrorResponse(e);
     }
