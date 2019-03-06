@@ -1,4 +1,5 @@
 import { Configuration } from "./config";
+import { IUser } from "../../../types";
 import { LogLevel } from "../../../types/logLevel";
 
 export interface ILogger {
@@ -10,8 +11,10 @@ export interface ILogger {
 
 export class Logger implements ILogger {
   private readonly level: LogLevel;
+  private readonly user: IUser | undefined;
 
-  constructor(logLevel?: LogLevel) {
+  constructor(user?: IUser, logLevel?: LogLevel) {
+    this.user = user;
     this.level = logLevel || Configuration.logLevel;
   }
 
@@ -34,7 +37,8 @@ export class Logger implements ILogger {
   private log(level: LogLevel, message: string, ...params: any[]) {
     // TODO: impliment logging for server logs
     if(level >= this.level) {
-      console.log(`${LogLevel[level]}: ${message}`, ...params);
+      const email = !!this.user ? ` : ${this.user.email} ` : "";
+      console.log(`${LogLevel[level]}${email}: ${message}`, ...params);
     }
   }
 }
