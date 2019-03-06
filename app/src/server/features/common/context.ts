@@ -42,7 +42,7 @@ export class Context implements IContext {
     };
 
     this.salesforceConnectionDetails = Object.assign(salesforceConfig, { currentUsername: this.user.email });
-
+    this.logger = new Logger(user);
   }
 
   // the connection details hane been left as delegates untill details of JWT Access token confirmed
@@ -64,8 +64,8 @@ export class Context implements IContext {
     claimLineItems: new Repositories.ClaimLineItemRepository(() => this.getSalesforceConnection())
   };
 
+  public readonly logger: Logger;
   public readonly config: Readonly<IConfig>;
-  public readonly logger = new Logger();
   public readonly clock = new Clock();
   public readonly caches = cachesImplementation;
 
