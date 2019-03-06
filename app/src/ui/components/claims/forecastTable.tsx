@@ -30,8 +30,8 @@ interface Props {
 export class ForecastTable extends React.Component<Props> {
   public render() {
     const { data, hideValidation } = this.props;
-
-    const periodId  = !!data.claim ? Math.min(data.project.periodId, data.claim.periodId) : data.project.periodId;
+    // if there is no claim then we must be in period 1 ie, claim period 0
+    const periodId  = !!data.claim ? Math.min(data.project.periodId, data.claim.periodId) : 0;
     const parsed    = this.parseClaimData(data, periodId);
     const Table     = ACC.TypedTable<typeof parsed[0]>();
     const intervals = this.calculateClaimPeriods(data);

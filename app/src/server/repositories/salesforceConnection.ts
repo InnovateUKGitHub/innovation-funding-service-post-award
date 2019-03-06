@@ -3,6 +3,7 @@ import fs from "fs";
 import jwt from "jsonwebtoken";
 import { Cache } from "../features/common/cache";
 import { Configuration } from "../features/common";
+import { LogLevel } from "../../types/logLevel";
 
 // This will need revisting once SSO with Salesforce has been resolved
 export interface ISalesforceConnectionDetails {
@@ -23,7 +24,8 @@ const tokenCache = new Cache<ITokenInfo>(5);
 
 export const salesforceConnection = (connectionDetails: ISalesforceConnectionDetails) => {
   const connection = new jsforce.Connection({
-    loginUrl: "https://test.salesforce.com"
+    loginUrl: "https://test.salesforce.com",
+    logLevel: Configuration.logLevel === LogLevel.VERBOSE ? "DEBUG" : undefined
   });
 
   return new Promise<jsforce.Connection>((resolve, reject) => {
