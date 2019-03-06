@@ -37,6 +37,8 @@ export const router = express.Router();
 
 const cookieName = "chocolate-chip";
 router.use(cookieSession({
+  secure: process.env.SERVER_URL !== "http://localhost:8080",
+  httpOnly: true,
   name: cookieName,
   keys: ["thekey", "thesecret"],
   // TODO - configurise this when Shibboleth is ready to go
@@ -57,7 +59,11 @@ passport.serializeUser((payload: ShibbolethPayload, done) => {
 router.get("/login", passport.authenticate("shibboleth"));
 
 router.get("/logout", (req, res) => {
-  res.cookie(cookieName, "", { expires: new Date("1970-01-01") });
+  res.cookie(cookieName, "", {
+    expires: new Date("1970-01-01"),
+    secure: process.env.SERVER_URL !== "http://localhost:8080",
+    httpOnly: true
+  });
   return res.redirect(Configuration.sso.enabled && Configuration.sso.signoutUrl || "/");
 });
 
