@@ -7,7 +7,7 @@ export const NotFoundErrorPage = () => (
     <ACC.Title title="Page not found" />
     <ACC.Section>
       <ACC.Renderers.SimpleString qa="errorMessage">
-        Please check the web address or search term you entered for any errors. You can return to <ACC.Link route={ProjectDashboardRoute.getLink({})}>your dashboard</ACC.Link> or go back to the <ACC.Link route={HomeRoute.getLink({})}>Innovate UK homepage</ACC.Link>.
+        Please check the web address or search term you entered for any errors. You can return to <a href={ProjectDashboardRoute.routePath}>your dashboard</a> or go back to the <ACC.Link route={HomeRoute.getLink({})}>Innovate UK homepage</ACC.Link>.
       </ACC.Renderers.SimpleString>
     </ACC.Section>
   </ACC.Page>
