@@ -122,4 +122,10 @@ describe("Claim Window", () => {
       expect(output).toEqual("1");
     });
   });
+
+  test("invalid periodEnd renders null", () => {
+    const periodEnd = new Date("broken");
+    const output = Enzyme.mount(<ClaimWindow periodEnd={periodEnd} />);
+    expect(output.html()).toBeNull();
+  });
 });
