@@ -5,6 +5,7 @@ import { Router } from "router5";
 import { loadStatusMiddleware } from "./middleware/loadStatusMiddleware";
 import { loggingMiddleware } from "./middleware/loggingMiddleware";
 import { cancelHashNavigation } from "./middleware/cancelHashNavigation";
+import { cancelInitialNavigation } from "./middleware/cancelInitialNavigation";
 
 // used as replacement for optional middleware
 const noopMiddleware = () => (next: Dispatch) => (action: AnyAction) => next(action);
@@ -12,6 +13,7 @@ const noopMiddleware = () => (next: Dispatch) => (action: AnyAction) => next(act
 export function setupMiddleware(router: Router, isClient: boolean) {
   return applyMiddleware(
     thunk,
+    cancelInitialNavigation,
     cancelHashNavigation,
     isClient ? loggingMiddleware : noopMiddleware,
     router5Middleware(router),
