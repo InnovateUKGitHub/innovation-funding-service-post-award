@@ -56,7 +56,7 @@ export const ClaimTable: React.FunctionComponent<Props> = (props) => {
             value={(x,i) => renderCostCategory(x.category, props.getLink, props.validation && props.validation[i.row])}
         />
         <CostCategoriesTable.Currency header="Total eligible costs" qa="offerCosts" value={x => x.cost.offerCosts} />
-        <CostCategoriesTable.Currency header="Costs claimed to date" qa="claimedToDate" value={x => x.cost.costsClaimedToDate} />
+        <CostCategoriesTable.Currency header="Eligible costs claimed to date" qa="claimedToDate" value={x => x.cost.costsClaimedToDate} />
         <CostCategoriesTable.Currency header="Costs claimed this period" qa="periodCosts" value={x => x.cost.costsClaimedThisPeriod} cellClassName={x => x.isTotal ? "govuk-!-font-weight-bold" : null} />
         <CostCategoriesTable.Currency header="Remaining eligible costs" qa="remainingCosts" value={x => x.cost.remainingOfferCosts} />
       </CostCategoriesTable.Table>

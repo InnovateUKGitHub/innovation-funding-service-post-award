@@ -100,8 +100,8 @@ class Component extends ContainerBase<ClaimDashboardPageParams, Data, Callbacks>
     const UploadForm = Acc.TypedForm<{ file: File | null }>();
     const isAwaitingIAR = claim.status === ClaimStatus.AWAITING_IAR;
     const message = isAwaitingIAR
-      ? "Your most recent claim cannot be sent to us. You must attach an independent audit report (IAR)."
-      : "You must attach an independent audit report (IAR) for your most recent claim to receive your payment.";
+      ? "Your most recent claim cannot be sent to us. You must attach an independent accountant's report (IAR)."
+      : "You must attach an independent accountant's report (IAR) for your most recent claim to receive your payment.";
     const messageType = isAwaitingIAR ? "error" : "declare";
     return (
       <React.Fragment>
@@ -131,7 +131,7 @@ class Component extends ContainerBase<ClaimDashboardPageParams, Data, Callbacks>
     }
 
     return (
-      <Acc.Section qa="current-claim-iar" title="Independent audit report">
+      <Acc.Section qa="current-claim-iar" title="Independent accountant's report">
         {document ? this.renderIarDocument(claim, document) : this.renderIarDocumentUpload(claim, editor)}
       </Acc.Section>
     );
@@ -160,7 +160,7 @@ class Component extends ContainerBase<ClaimDashboardPageParams, Data, Callbacks>
             <Acc.DualDetails displayDensity="Compact">
               <Details.Details qa="claims-totals-col-0" data={partner}>
                 <Details.Currency label="Total eligible costs" qa="gol-costs" value={x => x.totalParticipantGrant} />
-                <Details.Currency label="Costs claimed to date" qa="claimed-costs" value={x => x.totalParticipantCostsClaimed || 0} />
+                <Details.Currency label="Eligible costs claimed to date" qa="claimed-costs" value={x => x.totalParticipantCostsClaimed || 0} />
                 <Details.Percentage label="Percentage of eligible costs claimed to date" qa="percentage-costs" value={x => x.percentageParticipantCostsClaimed} />
                 <Details.Currency label="Costs paid to date" qa="paid-costs" value={x => x.totalPaidCosts || 0} />
               </Details.Details>

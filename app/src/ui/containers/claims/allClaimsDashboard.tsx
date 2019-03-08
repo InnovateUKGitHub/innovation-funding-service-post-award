@@ -95,7 +95,7 @@ class Component extends ContainerBase<Params, Data, {}> {
     return (
       <PartnerSummaryDetails.Details data={partner} title={`${partner.name} history`} qa="lead-partner-summary">
         <PartnerSummaryDetails.Currency label="Total eligible costs" qa="gol-costs" value={x => x.totalParticipantGrant} />
-        <PartnerSummaryDetails.Currency label="Costs claimed to date" qa="claimed-costs" value={x => x.totalParticipantCostsClaimed || 0} />
+        <PartnerSummaryDetails.Currency label="Eligible costs claimed to date" qa="claimed-costs" value={x => x.totalParticipantCostsClaimed || 0} />
         <PartnerSummaryDetails.Percentage label="Percentage of eligible costs claimed to date" qa="claimed-percentage" value={x => x.percentageParticipantCostsClaimed} />
         <PartnerSummaryDetails.Currency label="Costs paid to date" qa="paid-costs" value={x => x.totalPaidCosts || 0} />
         <PartnerSummaryDetails.Percentage label="Funding level" value={x => x.awardRate} qa="award-rate" fractionDigits={0} />
@@ -113,7 +113,7 @@ class Component extends ContainerBase<Params, Data, {}> {
           <Acc.DualDetails>
             <ProjectSummaryDetails.Details title="History" data={project} qa="project-summary">
               <ProjectSummaryDetails.Currency label="Total eligible costs" qa="gol-costs" value={x => x.grantOfferLetterCosts} />
-              <ProjectSummaryDetails.Currency label="Costs claimed to date" qa="claimed-costs" value={x => x.costsClaimedToDate || 0} />
+              <ProjectSummaryDetails.Currency label="Eligible costs claimed to date" qa="claimed-costs" value={x => x.costsClaimedToDate || 0} />
               <ProjectSummaryDetails.Percentage label="Percentage of eligible costs claimed to date" qa="claimed-percentage" value={x => x.claimedPercentage} />
             </ProjectSummaryDetails.Details>
             { this.renderLeadPartnerDetails(project, partner) }
