@@ -38,6 +38,7 @@ export interface IConfig {
     };
 
     urls: {
+        ifsRoot: Readonly<string>;
         ifsApplicationUrl: Readonly<string>;
         ifsGrantLetterUrl: Readonly<string>;
     };
@@ -74,6 +75,7 @@ const sso = {
 };
 
 const urls = {
+    ifsRoot: process.env.IFS_ROOT || "https://apply-for-innovation-funding.service.gov.uk",
     ifsApplicationUrl: "https://application-for-innovation-funding.service.gov.uk/management/competition/<<Acc_CompetitionId__c>>/application/<<Acc_IFSApplicationId__c>>",
     ifsGrantLetterUrl: "https://application-for-innovation-funding.service.gov.uk/management/competition/<<Acc_CompetitionId__c>>/project/<<Acc_IFSApplicationId__c>>",
 };
