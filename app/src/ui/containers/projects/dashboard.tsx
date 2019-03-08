@@ -97,7 +97,7 @@ class ProjectDashboardComponent extends ContainerBase<Props, Data, Callbacks> {
           return project.numberOfOpenClaims > 0 ? "open" : "awaiting";
         }
         else if (project.roles & (ProjectRole.FinancialContact) && partner) {
-          return partner.status === PartnerClaimStatus.ClaimSubmitted || partner.status === PartnerClaimStatus.NoClaimsDue ? "awaiting" : "open";
+          return partner.status === PartnerClaimStatus.NoClaimsDue ? "awaiting" : "open";
         }
       case ProjectStatus.Closed:
       case ProjectStatus.OnHold:
