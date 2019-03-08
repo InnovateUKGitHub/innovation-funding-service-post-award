@@ -49,6 +49,7 @@ export class TestContext implements IContext {
             signoutUrl: "https://shibboleth.com/Logout",
         },
         urls: {
+            ifsRoot: "",
             ifsApplicationUrl: "",
             ifsGrantLetterUrl: "",
         }

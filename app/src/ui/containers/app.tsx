@@ -7,11 +7,13 @@ import { RootState } from "../redux";
 import { IUser } from "../../types/IUser";
 import { StandardErrorPage } from "../components/standardErrorPage";
 import { Authorisation } from "../../types";
+import { IClientConfig } from "../redux/reducers/configReducer";
 
 interface IAppProps extends RouterState {
   dispatch: any;
   loadStatus: number;
   user: IUser;
+  config: IClientConfig;
 }
 
 class AppComponent extends React.Component<IAppProps, {}> {
@@ -47,7 +49,7 @@ class AppComponent extends React.Component<IAppProps, {}> {
 
     return (
       <div>
-        <Header />
+        <Header ifsRoot={this.props.config.ifsRoot} />
         <div className="govuk-width-container">
           <PhaseBanner />
           <main className="govuk-main-wrapper" id="main-content" role="main" data-qa={route.name}>
@@ -65,6 +67,7 @@ const connectState = () => {
   return (state: RootState) => ({
     loadStatus: state.loadStatus,
     user: state.user,
+    config: state.config,
     ...routeInfo(state)
   });
 };
