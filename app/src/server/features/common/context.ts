@@ -72,14 +72,7 @@ export class Context implements IContext {
   private readonly salesforceConnectionDetails: Salesforce.ISalesforceConnectionDetails;
 
   private getSalesforceConnection() {
-    // if the standard user then connect using salesforceConnection otherwise use the token
-    if (this.user.email === this.config.salesforce.serivceUsername) {
-      // todo: remove
-      return Salesforce.salesforceConnection(this.salesforceConnectionDetails);
-    }
-    else {
       return Salesforce.salesforceConnectionWithToken(this.salesforceConnectionDetails);
-    }
   }
 
   private async runAsync<TResult>(runnable: IRunnable<TResult>): Promise<TResult> {
