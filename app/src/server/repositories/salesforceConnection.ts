@@ -5,7 +5,6 @@ import { Cache } from "../features/common/cache";
 import { Configuration } from "../features/common";
 import { LogLevel } from "../../types/logLevel";
 
-// This will need revisting once SSO with Salesforce has been resolved
 export interface ISalesforceConnectionDetails {
   currentUsername: string;
   serviceUsername: string;
