@@ -85,7 +85,7 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, Data, Callbacks> 
         </ACC.Section>
         <ACC.Section>
           <ACC.Accordion>
-            <ACC.AccordionItem  title="Forecast">
+            <ACC.AccordionItem  title="Forecast" qa="forecast-accordion">
               <ACC.Loader
                 pending={this.props.forecastData}
                 render={(forecastData) => (<ACC.Claims.ForecastTable data={forecastData} hideValidation={true} />)}
