@@ -101,6 +101,19 @@ describe("UpdateClaimCommand", () => {
     await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
   });
 
+  it("can update when status is Innovate Queried", async () => {
+    const context = new TestContext();
+    const {testData} = context;
+
+    const claim = testData.createClaim(null!, null!, x => x.Acc_ClaimStatus__c = ClaimStatus.INNOVATE_QUERIED);
+    const dto = mapClaim(context)(claim);
+    const project = context.testData.createProject();
+    const command = new UpdateClaimCommand(project.Id, dto);
+    await context.runCommand(command);
+
+    expect(claim.Acc_ClaimStatus__c).toBe(ClaimStatus.INNOVATE_QUERIED);
+  });
+
   it("when message updated expect item updated", async () => {
     const context = new TestContext();
     const {testData} = context;
