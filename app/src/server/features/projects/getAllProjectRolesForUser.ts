@@ -16,11 +16,16 @@ export function getEmptyRoleInfo(): IRoleInfo {
 
 export class GetAllProjectRolesForUser extends QueryBase<Authorisation> {
   public async Run(context: IContext): Promise<Authorisation> {
-    const permissions = await context.caches.projectRoles.fetchAsync(
-      context.user.email,
-      () => context.config.salesforce.serivceUsername !== context.user.email ? this.getProjectRoles(context) : this.getServiceAccountRoles(context)
-    );
-    return new Authorisation(permissions);
+    const email = context.user && context.user.email;
+    if (!email) {
+      return new Authorisation({});
+    }
+    else if (email === context.config.salesforce.serivceUsername) {
+      return new Authorisation(await context.caches.projectRoles.fetchAsync(email, () => this.getServiceAccountRoles(context)));
+    }
+    else {
+      return new Authorisation(await context.caches.projectRoles.fetchAsync(email, () => this.getProjectRoles(context)));
+    }
   }
 
   private async getProjectRoles(context: IContext) {

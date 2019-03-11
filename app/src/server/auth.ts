@@ -25,7 +25,7 @@ type ShibbolethPayload = {
 
 const shibConfig: passportSaml.SamlConfig = {
   entryPoint: Configuration.sso.providerUrl,
-  issuer:  Configuration.serverUrl,
+  issuer: Configuration.serverUrl,
   callbackUrl: `${Configuration.serverUrl}/auth/success`,
   identifierFormat: `urn:oasis:names:tc:SAML:1.1:nameid-format:persistent`,
   disableRequestedAuthnContext: true,
@@ -39,8 +39,7 @@ const cookieName = "chocolate-chip";
 router.use(cookieSession({
   name: cookieName,
   keys: ["thekey", "thesecret"],
-  // TODO - configurise this when Shibboleth is ready to go
-  maxAge: 1000 * 60 * 30
+  maxAge: 1000 * 60 * Configuration.timeouts.cookie
 }));
 
 router.use(passport.initialize());
@@ -77,6 +76,9 @@ router.use((req, res, next) => {
   if (req.session && req.session.user && req.session.user.email) {
     next();
   }
+  else if (!Configuration.sso.enabled && req.url === "/") {
+    next();
+  }
   // if user not logged in but we arent using sso then set default user
   else if (!Configuration.sso.enabled) {
     req.session = req.session || {};
@@ -91,8 +93,8 @@ router.use((req, res, next) => {
     req.session.redirect = req.url;
     res.redirect(`/login`);
   }
-  // not logged and api request throw 403 exception
+  // not logged and api request throw 401 exception
   else {
-    res.status(403).send();
+    res.sendStatus(401);
   }
 });
