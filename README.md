@@ -8,6 +8,12 @@ Ensure you have node.js and npm installed on your machine.
 
 Check out the repository on the `develop` branch.
 
+## Secrets
+In order to build the node.js service, you'll need to get a secret created on your openshift project.
+You will need to do this manually and once only. You run it as follows:
+`oc create secret generic signingkey --from-file=signing.key=app/security/AccPrivateKey.key`
+The path is to the file containing your key so will need to change accordingly. Leave the rest as it is.
+
 ## Site
  1. Navigate to `/app` from repository root
  2. Run `npm install` to install dependencies
