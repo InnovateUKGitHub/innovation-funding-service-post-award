@@ -81,6 +81,14 @@ const ajax = <T>(url: string, opts?: RequestInit): Promise<T> => {
     if (response.ok) {
       return processResponse(response);
     }
+
+    if(response.status === 401 && (options.method || "GET") === "GET") {
+      window.location.reload();
+      return new Promise<T>(() => {
+        // Nothing to return as we never want this to return!
+      });
+    }
+
     return response.json()
       .catch(e => Promise.reject(response.statusText))
       .then(errText => Promise.reject(errText));

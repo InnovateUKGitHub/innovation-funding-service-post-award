@@ -9,8 +9,8 @@ import { QueryBase, SyncQueryBase } from "./queryBase";
 import { CommandBase, SyncCommandBase } from "./commandBase";
 
 const cachesImplementation: ICaches = {
-  costCategories: new Cache<CostCategoryDto[]>(Configuration.cacheTimeouts.costCategories),
-  projectRoles: new Cache<{ [key: string]: IRoleInfo }>(Configuration.cacheTimeouts.projectRoles),
+  costCategories: new Cache<CostCategoryDto[]>(Configuration.timeouts.costCategories),
+  projectRoles: new Cache<{ [key: string]: IRoleInfo }>(Configuration.timeouts.projectRoles),
 };
 
 const constructErrorResponse = <E extends Error>(error: E): AppError => {
@@ -41,7 +41,7 @@ export class Context implements IContext {
       serviceToken: this.config.salesforce.serivceToken,
     };
 
-    this.salesforceConnectionDetails = Object.assign(salesforceConfig, { currentUsername: this.user.email });
+    this.salesforceConnectionDetails = Object.assign(salesforceConfig, { currentUsername: this.user && this.user.email });
     this.logger = new Logger(user);
   }
 
