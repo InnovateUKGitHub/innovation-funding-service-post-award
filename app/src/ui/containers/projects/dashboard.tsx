@@ -90,6 +90,7 @@ class ProjectDashboardComponent extends ContainerBase<Props, Data, Callbacks> {
     switch (project.status) {
       case ProjectStatus.Live:
       case ProjectStatus.FinalClaim:
+      case ProjectStatus.OnHold:
         if (project.periodId === 0) {
           return "upcoming";
         }
@@ -100,7 +101,6 @@ class ProjectDashboardComponent extends ContainerBase<Props, Data, Callbacks> {
           return partner.status === PartnerClaimStatus.NoClaimsDue ? "awaiting" : "open";
         }
       case ProjectStatus.Closed:
-      case ProjectStatus.OnHold:
       case ProjectStatus.Terminated:
         return "archived";
       default:
