@@ -95,30 +95,31 @@
   line-height: 1.25;
   display: inline-flex;
   flex-direction: column;
+  width: 100%;
 }
 
-.govuk-navigation-arrows__section {
-  padding-bottom: 30px;
-}
-
-.govuk-navigation-arrows__section__button {
+.govuk-navigation-arrows__button {
   display: inline-flex;
   flex-direction: row;
   text-decoration: none;
+  padding: 15px;
 }
 
+.govuk-navigation-arrows__button:hover {
+  background: #f8f8f8
+}
 
-.govuk-navigation-arrows__section__button__arrow {
+.govuk-navigation-arrows__button__arrow {
   margin-top: 5px;
   margin-right: 10px;
 }
 
-.govuk-navigation-arrows__section__button__label {
+.govuk-navigation-arrows__button__label {
   display: inline-flex;
   flex-direction: column;
 }
 
-.govuk-navigation-arrows__section__button__label__category {
+.govuk-navigation-arrows__button__label__category {
   font-size: 1.1rem;
   text-decoration: underline;
 }
