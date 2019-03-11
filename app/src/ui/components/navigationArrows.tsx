@@ -22,30 +22,26 @@ export class NavigationArrows extends React.Component<Props> {
   private renderLeftHalf() {
     if (this.props.previousLink === null) return null;
     return (
-      <div className="govuk-navigation-arrows__section">
-        <Link route={this.props.previousLink.route} className="govuk-navigation-arrows__section__button">
-          <ArrowLeft className="govuk-navigation-arrows__section__button__arrow" />
-          <div data-qa="arrow-left" className="govuk-navigation-arrows__section__button__label">
-            <span>Previous</span>
-            <span className="govuk-navigation-arrows__section__button__label__category">{this.props.previousLink.label}</span>
-          </div>
-        </Link>
-      </div>
+      <Link route={this.props.previousLink.route} className="govuk-navigation-arrows__button">
+        <ArrowLeft className="govuk-navigation-arrows__button__arrow" />
+        <div data-qa="arrow-left" className="govuk-navigation-arrows__button__label">
+          <span>Previous</span>
+          <span className="govuk-navigation-arrows__button__label__category">{this.props.previousLink.label}</span>
+        </div>
+      </Link>
     );
   }
 
   private renderRightHalf() {
     if (this.props.nextLink === null) return null;
     return (
-      <div>
-        <Link route={this.props.nextLink.route} className="govuk-navigation-arrows__section__button">
-          <ArrowRight className="govuk-navigation-arrows__section__button__arrow" />
-          <div data-qa="arrow-right" className="govuk-navigation-arrows__section__button__label govuk-navigation-arrows__section__button__label">
-            <span>Next</span>
-            <span className="govuk-navigation-arrows__section__button__label__category">{this.props.nextLink.label}</span>
-          </div>
-        </Link>
-      </div>
+      <Link route={this.props.nextLink.route} className="govuk-navigation-arrows__button">
+        <ArrowRight className="govuk-navigation-arrows__button__arrow" />
+        <div data-qa="arrow-right" className="govuk-navigation-arrows__button__label govuk-navigation-arrows__button__label">
+          <span>Next</span>
+          <span className="govuk-navigation-arrows__button__label__category">{this.props.nextLink.label}</span>
+        </div>
+      </Link>
     );
   }
 
