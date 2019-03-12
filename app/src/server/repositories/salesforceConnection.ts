@@ -19,7 +19,7 @@ interface ITokenInfo {
   url: string;
 }
 
-const tokenCache = new Cache<ITokenInfo>(5);
+const tokenCache = new Cache<ITokenInfo>(Configuration.timeouts.token);
 
 export const salesforceConnection = (connectionDetails: ISalesforceConnectionDetails) => {
   const connection = new jsforce.Connection({
