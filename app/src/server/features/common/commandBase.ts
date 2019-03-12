@@ -7,15 +7,15 @@ export abstract class CommandBase<T> {
     return Promise.resolve(true);
   }
 
-  protected LogMessage(): any[] {
-    return [this];
+  protected LogMessage(): any {
+    return [this.constructor.name, this];
   }
 }
 
 export abstract class SyncCommandBase<T> {
   protected abstract Run(context: IContext): T;
 
-  protected LogMessage(): any[] {
-    return [this];
+  protected LogMessage(): any {
+    return [this.constructor.name, this];
   }
 }

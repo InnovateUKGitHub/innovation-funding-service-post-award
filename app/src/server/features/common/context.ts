@@ -82,7 +82,7 @@ export class Context implements IContext {
       return await runnable.Run(this);
     }
     catch (e) {
-      this.logger.warn("Failed query", runnable, e);
+      this.logger.warn("Failed query", runnable.LogMessage(), e);
       throw constructErrorResponse(e);
     }
   }
@@ -92,7 +92,7 @@ export class Context implements IContext {
       return runnable.Run(this);
     }
     catch (e) {
-      this.logger.warn("Failed query", runnable, e);
+      this.logger.warn("Failed query", runnable.LogMessage(), e);
       throw constructErrorResponse(e);
     }
   }
