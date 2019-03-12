@@ -79,7 +79,10 @@ router.post("/auth/success", passport.authenticate("shibboleth"), (req, res) => 
 
 router.use((req, res, next) => {
   // if user is logged in continue
-  if (req.session && req.session.user && req.session.user.email) {
+  if (Configuration.sso.enabled && req.url === "/") {
+    res.redirect("/projects/dashboard");
+  }
+  else if (req.session && req.session.user && req.session.user.email) {
     next();
   }
   else if (!Configuration.sso.enabled && req.url === "/") {
