@@ -57,8 +57,8 @@ const timeouts = {
 };
 
 const certificates = {
-    salesforce: process.env.SALESFORCE_KEY || "./security/AccPrivateKey.key",
-    shibboleth: process.env.SHIBBOLETH_KEY || "./security/AccPrivateKey.key",
+    salesforce: process.env.SALESFORCE_PRIVATE_KEY || "./security/AccPrivateKey.key",
+    shibboleth: process.env.SHIBBOLETH_PRIVATE_KEY || "./security/AccPrivateKey.key",
 };
 
 const logLevel = parseLogLevel(process.env.LOG_LEVEL! || process.env.LOGLEVEL!);
