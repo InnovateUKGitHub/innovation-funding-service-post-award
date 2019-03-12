@@ -7,15 +7,15 @@ export abstract class QueryBase<T> {
     return Promise.resolve(true);
   }
 
-  protected LogMessage(): any[] {
-    return [this];
+  protected LogMessage(): any {
+    return [this.constructor.name, this];
   }
 }
 
 export abstract class SyncQueryBase<T> {
   protected abstract Run(context: IContext): T;
 
-  protected LogMessage(): any[] {
-    return [this];
+  protected LogMessage(): any {
+    return [this.constructor.name, this];
   }
 }
