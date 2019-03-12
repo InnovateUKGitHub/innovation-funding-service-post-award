@@ -1,4 +1,5 @@
 import { LogLevel, parseLogLevel } from "../../../types/logLevel";
+import { IContext } from "../../../types";
 
 const defaultCacheTimeout: number = 720;
 
@@ -6,9 +7,11 @@ export interface IConfig {
 
     build: Readonly<string>;
 
-    cacheTimeouts: {
+    timeouts: {
         costCategories: Readonly<number>;
         projectRoles: Readonly<number>;
+        token: Readonly<number>;
+        cookie: Readonly<number>;
     };
 
     certificates: {
@@ -46,9 +49,11 @@ export interface IConfig {
 
 const build = process.env.BUILD || `${Date.now()}`;
 
-const cacheTimeouts = {
-    costCategories: parseInt(process.env.COST_CAT_TIMEOUT_MINUTES!, 10) || defaultCacheTimeout,
-    projectRoles: parseInt(process.env.PROJ_ROLES_TIMEOUT_MINUTES!, 10) || defaultCacheTimeout
+const timeouts = {
+    costCategories: parseFloat(process.env.COST_CAT_TIMEOUT_MINUTES!) || defaultCacheTimeout,
+    projectRoles: parseFloat(process.env.PROJ_ROLES_TIMEOUT_MINUTES!) || defaultCacheTimeout,
+    token: parseFloat(process.env.TOKEN_TIMEOUT_MINUTES!) || 10,
+    cookie: parseFloat(process.env.COOKIE_TIMEOUT_MINUTES!) || 1,
 };
 
 const certificates = {
@@ -82,7 +87,7 @@ const urls = {
 
 export const Configuration: IConfig = {
     build,
-    cacheTimeouts,
+    timeouts,
     certificates,
     logLevel,
     salesforce,
