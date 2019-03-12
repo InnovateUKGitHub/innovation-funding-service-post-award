@@ -1,19 +1,29 @@
 import { Response } from "express";
 import { ErrorCode, IAppError } from "../types/IAppError";
+import { Logger } from "./features/common/logger";
 
-const getErrorStatus = (code: number) => {
+const Log = new Logger();
+
+const getErrorStatus = (err?: IAppError) => {
+  const code = !!err ? err.code : ErrorCode.UNKNOWN_ERROR;
+
   switch (code) {
     case ErrorCode.VALIDATION_ERROR:
     case ErrorCode.BAD_REQUEST_ERROR:
+      Log.info("BAD_REQUEST_ERROR", err);
       return 400;
     case ErrorCode.FORBIDDEN_ERROR:
+      Log.warn("FORBIDDEN_ERROR", err);
       return 403;
     case ErrorCode.REQUEST_ERROR:
+      Log.info("REQUEST_ERROR", err);
       return 404;
     case ErrorCode.SECURITY_ERROR:
+      Log.error("SECURITY_ERROR", err);
       return 503;
     case ErrorCode.UNKNOWN_ERROR:
     default:
+      Log.error("UNKNOWN_ERROR", err);
       return 500;
   }
 };
@@ -22,14 +32,12 @@ export const errorHandlerApi = (res: Response, err?: IAppError) => {
   const code    = !!err ? err.code : ErrorCode.UNKNOWN_ERROR;
   const message = !!err ? err.message : "Something went wrong";
   const results = !!err ? err.results : null;
-  const status  = getErrorStatus(code);
+  const status  = getErrorStatus(err);
 
   return res.status(status).json({ code, message, results });
 };
 
 export const errorHandlerRender = (res: Response, html: string, err?: IAppError) => {
-  const code = !!err ? err.code : ErrorCode.UNKNOWN_ERROR;
-  const status = getErrorStatus(code);
-
+  const status = getErrorStatus(err);
   return res.status(status).send(html);
 };
