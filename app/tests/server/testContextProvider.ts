@@ -26,9 +26,11 @@ export class TestContext implements IContext {
 
     public config: IConfig = {
         build: `test${Date.now()}`,
-        cacheTimeouts: {
+        timeouts: {
             costCategories: 720,
-            projectRoles: 720
+            projectRoles: 720,
+            cookie: 1,
+            token: 1
         },
         certificates: {
             salesforce: "./salesforce.cert",
