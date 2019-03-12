@@ -13,6 +13,10 @@ export class HomeFormHandler implements IFormHandler {
   public async handle(req: express.Request, res: express.Response): Promise<void> {
     const dto = { user: (req.body.user as string || "").trim() || null, isReset: req.body.button_reset === "" };
 
+    if(!req.session!.user) {
+      req.session!.user = {};
+    }
+
     if (dto.isReset) {
       req.session!.user.email = Configuration.salesforce.serivceUsername;
     }
