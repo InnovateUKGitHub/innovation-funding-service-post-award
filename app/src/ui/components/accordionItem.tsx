@@ -86,7 +86,7 @@ export class AccordionItem extends React.Component<Props, State> {
           </h2>
         </div>
         <div className="govuk-accordion__section-content">
-          <p className="govuk-body">{this.props.children}</p>
+          {this.props.children}
         </div>
       </div>
     );
