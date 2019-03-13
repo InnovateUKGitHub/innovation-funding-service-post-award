@@ -1,5 +1,4 @@
 import { LogLevel, parseLogLevel } from "../../../types/logLevel";
-import { IContext } from "../../../types";
 
 const defaultCacheTimeout: number = 720;
 
@@ -53,7 +52,7 @@ const timeouts = {
     costCategories: parseFloat(process.env.COST_CAT_TIMEOUT_MINUTES!) || defaultCacheTimeout,
     projectRoles: parseFloat(process.env.PROJ_ROLES_TIMEOUT_MINUTES!) || defaultCacheTimeout,
     token: parseFloat(process.env.TOKEN_TIMEOUT_MINUTES!) || 10,
-    cookie: parseFloat(process.env.COOKIE_TIMEOUT_MINUTES!) || 1,
+    cookie: parseFloat(process.env.COOKIE_TIMEOUT_MINUTES!) || 10,
 };
 
 const certificates = {
