@@ -147,7 +147,7 @@ describe("getAllClaimsForProjectQuery", () => {
       p.Acc_AccountId__r.Name = "XXXXXX";
     });
     const partner2 = context.testData.createPartner(project, p => {
-      p.Acc_ProjectRole__c = "Project Lead";
+      p.Acc_ProjectRole__c = "Lead";
       p.Acc_AccountId__r.Name = "ZZZZZZZZ";
     });
     const partner3 = context.testData.createPartner(project, p => {
@@ -175,7 +175,7 @@ describe("getAllClaimsForProjectQuery", () => {
       p.Acc_AccountId__r.Name = "XXXXXX";
     });
     const partner2 = context.testData.createPartner(project, p => {
-      p.Acc_ProjectRole__c = "Project Lead";
+      p.Acc_ProjectRole__c = "Lead";
       p.Acc_AccountId__r.Name = "ZZZZZZZZ";
     });
 

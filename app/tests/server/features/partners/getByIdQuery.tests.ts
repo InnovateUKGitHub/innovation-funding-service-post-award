@@ -16,6 +16,7 @@ describe("getAllForProjectQuery", () => {
       x.Acc_TotalParticipantCosts__c = 17474;
       x.Acc_TotalPaidCosts__c = 25555;
       x.Acc_Award_Rate__c = 50;
+      x.Acc_ProjectRole__c = SalesforceProjectRole.ProjectLead;
       x.ProjectRoleName = SalesforceProjectRole.ProjectLead;
       x.Acc_Cap_Limit__c = 50;
       x.Acc_TotalFutureForecastsforParticipant__c = 1002;
@@ -38,7 +39,7 @@ describe("getAllForProjectQuery", () => {
       accountId: "AccountId1",
       type: "Accedemic",
       isLead: true,
-      projectRoleName: "Project Lead",
+      projectRoleName: "Lead",
       projectId: "Project1",
       organisationType: "Industrial",
       totalPaidCosts: 25555,
