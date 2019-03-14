@@ -37,6 +37,7 @@ export class TestContext implements IContext {
             shibboleth: "./shibboleth.cert",
         },
         logLevel: LogLevel.DEBUG,
+        prettyLogs: false,
         salesforce: {
             serivcePassword: "",
             serivceToken: "",

@@ -19,6 +19,7 @@ export interface IConfig {
     };
 
     logLevel: Readonly<LogLevel>;
+    prettyLogs: Readonly<boolean>;
 
     salesforce: {
         clientId: Readonly<string>;
@@ -61,6 +62,7 @@ const certificates = {
 };
 
 const logLevel = parseLogLevel(process.env.LOG_LEVEL! || process.env.LOGLEVEL!);
+const prettyLogs = process.env.PRETTY_LOGS === "true";
 
 const salesforce = {
     clientId: process.env.SALESFORCE_CLIENT_ID!,
@@ -89,6 +91,7 @@ export const Configuration: IConfig = {
     timeouts,
     certificates,
     logLevel,
+    prettyLogs,
     salesforce,
     serverUrl,
     sso,
