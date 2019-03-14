@@ -1,4 +1,3 @@
-import Util from "util";
 import { Configuration } from "./config";
 import { IUser } from "../../../types";
 import { LogLevel } from "../../../types/logLevel";
@@ -37,13 +36,14 @@ export class Logger implements ILogger {
 
   private log(level: LogLevel, message: string, ...params: any[]) {
     if(level >= this.level) {
-      console.log(JSON.stringify({
-        timestamp: (new Date()).toISOString(),
+      const item = {
         type: LogLevel[level],
         email: !!this.user ? this.user.email : "",
         message,
         params
-      }, null, 2));
+      };
+      const output = Configuration.prettyLogs ? JSON.stringify(item, null, 2) : JSON.stringify(item);
+      console.log(output);
     }
   }
 }
