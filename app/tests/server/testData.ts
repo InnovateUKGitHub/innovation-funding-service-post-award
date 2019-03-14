@@ -83,7 +83,6 @@ export class TestData {
       },
       Acc_ParticipantType__c: "Accedemic",
       Acc_ParticipantSize__c: "Large",
-      Acc_ProjectRole__c: "Project Lead",
       Acc_ProjectId__c: project.Id,
       Acc_TotalParticipantGrant__c: 125000,
       Acc_TotalParticipantCosts__c: 17474,

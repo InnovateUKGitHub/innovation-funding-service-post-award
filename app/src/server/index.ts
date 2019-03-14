@@ -10,10 +10,10 @@ import "isomorphic-form-data";
 
 import { router as authRouter } from "./auth";
 import { router } from "./router";
-import { Logger } from "./features/common";
+import { Configuration, Logger } from "./features/common";
 
 // Set up New Relic to monitor app when deployed
-if(process.env.NEW_RELIC_ENABLED === "true") {
+if (process.env.NEW_RELIC_ENABLED === "true") {
   require("newrelic"); // tslint:disable-line:no-var-requires
 }
 
@@ -64,3 +64,4 @@ app.use(setOwaspHeaders, noCache, router);
 app.listen(port);
 
 log.info(`Listening at ${process.env.SERVER_URL}`);
+log.info("Configuration", Configuration);
