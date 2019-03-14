@@ -8,7 +8,7 @@ import { GetAllClaimDetailsByPartner } from "../claimDetails";
 import { GetByIdQuery as GetPartnerById } from "../partners";
 import { GetByIdQuery as GetProjectById } from "../projects";
 import { ForecastDetailsDtosValidator } from "../../../ui/validators/forecastDetailsDtosValidator";
-import {Authorisation, ClaimDto, ClaimStatus, IContext, PartnerDto, ProjectRole} from "../../../types";
+import { Authorisation, ClaimDto, ClaimStatus, IContext, PartnerDto, ProjectDto, ProjectRole } from "../../../types";
 
 export class UpdateForecastDetailsCommand extends CommandBase<boolean> {
   constructor(
@@ -25,13 +25,16 @@ export class UpdateForecastDetailsCommand extends CommandBase<boolean> {
   }
 
   protected async Run(context: IContext) {
+
     const partner = await context.runQuery(new GetPartnerById(this.partnerId));
+    const project = await context.runQuery(new GetProjectById(partner.projectId));
+    const existing = await context.runQuery(new GetAllForecastsForPartnerQuery(this.partnerId));
 
     await this.testValidation(context);
-    await this.testPastForecastPeriodsHaveNotBeenUpdated(context, partner);
-    await this.updateProfileDetails(context);
+    await this.testPastForecastPeriodsHaveNotBeenUpdated(context, project, partner, existing);
+    await this.updateProfileDetails(context, existing);
 
-    if(this.submit) {
+    if (this.submit) {
       await this.updateClaim(context);
     }
 
@@ -50,22 +53,25 @@ export class UpdateForecastDetailsCommand extends CommandBase<boolean> {
     }
   }
 
-  private async testPastForecastPeriodsHaveNotBeenUpdated(context: IContext, partner: PartnerDto) {
-    const project = await context.runQuery(new GetProjectById(partner.projectId));
-    const current = await context.runQuery(new GetAllForecastsForPartnerQuery(this.partnerId));
-    const passed  = current.filter(x => x.periodId <= project.periodId)
+  private async testPastForecastPeriodsHaveNotBeenUpdated(context: IContext, project: ProjectDto, partner: PartnerDto, existing: ForecastDetailsDTO[]) {
+    const passed = existing.filter(x => x.periodId <= project.periodId)
       .every(x => {
         const forecast = this.forecasts.find(y => y.id === x.id);
         return !!forecast && forecast.value === x.value;
       });
 
-    if(!passed) {
+    if (!passed) {
       throw new BadRequestError("You can't update the forecast of approved periods.");
     }
   }
 
-  private async updateProfileDetails(context: IContext) {
-    const updates = this.forecasts.map<Updatable<ISalesforceProfileDetails>>(x => ({
+  private hasChanged(item: ForecastDetailsDTO, existing: ForecastDetailsDTO[]): boolean {
+    const existingItem = existing.find(x => x.id === item.id);
+    return !existingItem || item.value !== existingItem.value;
+  }
+
+  private async updateProfileDetails(context: IContext, existing: ForecastDetailsDTO[]) {
+    const updates = this.forecasts.filter(x => this.hasChanged(x, existing)).map<Updatable<ISalesforceProfileDetails>>(x => ({
       Id: x.id,
       Acc_LatestForecastCost__c: x.value
     }));
@@ -74,11 +80,11 @@ export class UpdateForecastDetailsCommand extends CommandBase<boolean> {
   }
 
   private async updateClaim(context: IContext) {
-    const query  = new GetAllForPartnerQuery(this.partnerId);
+    const query = new GetAllForPartnerQuery(this.partnerId);
     const claims = await context.runQuery(query);
-    const claim  = claims.find(x => !x.isApproved);
+    const claim = claims.find(x => !x.isApproved);
 
-    if(!claim) {
+    if (!claim) {
       throw new BadRequestError("Unable to find current claim.");
     }
 
@@ -88,9 +94,9 @@ export class UpdateForecastDetailsCommand extends CommandBase<boolean> {
   }
 
   private nextClaimStatus(claim: ClaimDto) {
-    switch(claim.status) {
-      case ClaimStatus.DRAFT:            return ClaimStatus.SUBMITTED;
-      case ClaimStatus.MO_QUERIED:       return ClaimStatus.SUBMITTED;
+    switch (claim.status) {
+      case ClaimStatus.DRAFT: return ClaimStatus.SUBMITTED;
+      case ClaimStatus.MO_QUERIED: return ClaimStatus.SUBMITTED;
       case ClaimStatus.INNOVATE_QUERIED: return ClaimStatus.AWAITING_IUK_APPROVAL;
     }
 
