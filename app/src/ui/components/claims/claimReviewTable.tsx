@@ -1,0 +1,86 @@
+import React from "react";
+import { Link, TypedTable } from "..";
+import { ClaimDetailsValidator } from "../../validators/claimDtoValidator";
+import { ClaimDto, PartnerDto, ProjectDto } from "../../../types";
+import { ILinkInfo } from "../../../types/ILinkInfo";
+
+interface Props {
+  project: ProjectDto;
+  partner: PartnerDto;
+  costCategories: CostCategoryDto[];
+  claim: ClaimDto;
+  claimDetails: ClaimDetailsSummaryDto[];
+  validation?: ClaimDetailsValidator[];
+  getLink: (costCategoryId: string) => ILinkInfo;
+}
+
+export const ClaimReviewTable: React.FunctionComponent<Props> = (props) => {
+
+  const combinedData = props.costCategories
+    .filter(x => x.competitionType === props.project.competitionType && x.organisationType === props.partner.organisationType)
+    .map(x => ({
+      category: x,
+      cost: props.claimDetails.find(y => y.costCategoryId === x.id) || {} as ClaimDetailsSummaryDto,
+      isTotal: false
+    }));
+
+  combinedData.push({
+    category: {
+      name: "Total",
+      id: "",
+      isCalculated: true,
+      competitionType: "Unknown",
+      organisationType: "Unknown",
+      description: "",
+      hintText: ""
+    },
+    cost: {
+      costCategoryId: "",
+      offerCosts: props.claimDetails.reduce((total, item) => total + item.offerCosts, 0),
+      costsClaimedThisPeriod: props.claimDetails.reduce((total, item) => total + item.costsClaimedThisPeriod, 0),
+      remainingOfferCosts: props.claimDetails.reduce((total, item) => total + item.remainingOfferCosts, 0),
+      costsClaimedToDate: props.claimDetails.reduce((total, item) => total + item.costsClaimedToDate, 0),
+    },
+    isTotal: true
+  });
+
+  const CostCategoriesTable = TypedTable<typeof combinedData[0]>();
+
+  const diff = (x: typeof combinedData[0]) => x.cost.offerCosts - x.cost.costsClaimedThisPeriod;
+  const diffPercentage = (x: typeof combinedData[0]) => 100 * diff(x) / x.cost.offerCosts;
+
+  return (
+    <CostCategoriesTable.Table
+      qa="cost-cat"
+      data={combinedData}
+      validationResult={props.validation}
+    >
+      <CostCategoriesTable.Custom
+        header="Category"
+        qa="category"
+        cellClassName={x => x.isTotal ? "govuk-!-font-weight-bold" : null}
+        value={(x, i) => renderCostCategory(x.category, props.getLink, props.validation && props.validation[i.row])}
+      />
+      <CostCategoriesTable.Currency header="Forecast for period" qa="forecastForPeriod" value={x => x.cost.offerCosts}/>
+      <CostCategoriesTable.Currency
+        header="Costs claimed this period"
+        qa="costsThisPeriod"
+        value={x => x.cost.costsClaimedThisPeriod}
+        cellClassName={x => x.isTotal ? "govuk-!-font-weight-bold" : null}
+      />
+      <CostCategoriesTable.Currency header="Difference (£)" qa="differencePounds" value={x => diff(x)}/>
+      <CostCategoriesTable.Percentage header="Difference (%)" qa="differencePercentage" value={x => diffPercentage(x)}/>
+    </CostCategoriesTable.Table>
+  );
+};
+
+const renderCostCategory = (category: CostCategoryDto, getLink: (costCategoryId: string) => ILinkInfo, validation?: ClaimDetailsValidator) => {
+  if (category.isCalculated) {
+    return category.name;
+  }
+  const validationError = validation && validation.errors[0];
+  const id = validationError && validationError.key;
+  return (
+    <Link id={id} route={getLink(category.id)}>{category.name}</Link>
+  );
+};
