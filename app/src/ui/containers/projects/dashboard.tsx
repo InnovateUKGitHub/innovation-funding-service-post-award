@@ -157,6 +157,7 @@ class ProjectDashboardComponent extends ContainerBase<Props, Data, Callbacks> {
 
       switch (partner && partner.status) {
         case PartnerClaimStatus.ClaimDue:
+        case PartnerClaimStatus.ClaimsOverdue:
           messages.push(`You need to submit your claim.`);
           break;
         case PartnerClaimStatus.ClaimSubmitted:
@@ -239,6 +240,7 @@ class ProjectDashboardComponent extends ContainerBase<Props, Data, Callbacks> {
         <div className="govuk-grid-column-one-third govuk-!-margin-top-2" style={{ display: "inline-flex", alignItems: "center", justifyContent: "center" }}>
           {this.renderBadge(project, partner, section)}
         </div>
+        
       </ACC.ListItem>
     );
   }
