@@ -240,7 +240,6 @@ class ProjectDashboardComponent extends ContainerBase<Props, Data, Callbacks> {
         <div className="govuk-grid-column-one-third govuk-!-margin-top-2" style={{ display: "inline-flex", alignItems: "center", justifyContent: "center" }}>
           {this.renderBadge(project, partner, section)}
         </div>
-        
       </ACC.ListItem>
     );
   }
