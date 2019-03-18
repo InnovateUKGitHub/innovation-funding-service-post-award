@@ -88,6 +88,7 @@ export class PrepareComponent extends ContainerBase<PrepareClaimParams, Data, Ca
                 <ACC.ValidationSummary validation={data.editor.validator} compressed={false} />
                 <ACC.Projects.Title pageTitle="Claim" project={data.project} />
                 <ACC.Claims.Navigation projectId={data.project.id} partnerId={data.partner.id} periodId={data.claim.periodId} currentRouteName={ClaimsDetailsRoute.routeName} />
+                <ACC.Renderers.Messages messages={this.props.messages || []} />
                 <ACC.Section title={this.getClaimPeriodTitle(data)}>
                     <ACC.Claims.ClaimTable {...data} validation={data.editor.validator.claimDetails.results} getLink={costCategoryId => EditClaimLineItemsRoute.getLink({partnerId: this.props.partnerId, projectId: this.props.projectId, periodId: this.props.periodId, costCategoryId})} />
                     <Form.Form data={data.editor.data} onChange={(dto) => this.onChange(dto, data.claimDetails, data.costCategories)} onSubmit={() => this.saveAndProgress(data.editor.data, data.claimDetails, data.costCategories)}>
@@ -129,7 +130,7 @@ export const PrepareClaim = definition.connect({
   withCallbacks: (dispatch) => ({
     onChange: (partnerId, periodId, dto, details, costCategories) => dispatch(Actions.validateClaim(partnerId, periodId, dto, details, costCategories)),
     saveAndProgress: (projectId, partnerId, periodId, dto, details, costCategories) => dispatch(Actions.saveClaim(projectId, partnerId, periodId, dto, details, costCategories, () => progress(dispatch, projectId, partnerId, periodId))),
-    saveAndReturn: (projectId, partnerId, periodId, dto, details, costCategories) => dispatch(Actions.saveClaim(projectId, partnerId, periodId, dto, details, costCategories, () => goBack(dispatch, projectId, partnerId)))
+    saveAndReturn: (projectId, partnerId, periodId, dto, details, costCategories) => dispatch(Actions.saveClaim(projectId, partnerId, periodId, dto, details, costCategories, () => goBack(dispatch, projectId, partnerId), "You have saved your claim."))
   })
 });
 
