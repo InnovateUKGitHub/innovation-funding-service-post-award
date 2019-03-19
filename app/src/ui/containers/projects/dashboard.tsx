@@ -157,6 +157,7 @@ class ProjectDashboardComponent extends ContainerBase<Props, Data, Callbacks> {
 
       switch (partner && partner.status) {
         case PartnerClaimStatus.ClaimDue:
+        case PartnerClaimStatus.ClaimsOverdue:
           messages.push(`You need to submit your claim.`);
           break;
         case PartnerClaimStatus.ClaimSubmitted:
