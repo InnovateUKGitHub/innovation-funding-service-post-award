@@ -77,7 +77,7 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, Data, Callbacks> 
         <ACC.Projects.Title pageTitle="Review claim" project={data.project} />
         <ACC.Claims.Navigation projectId={data.project.id} partnerId={data.partner.id} periodId={data.claim.periodId} currentRouteName={ClaimsDetailsRoute.routeName} />
         <ACC.Section title={this.getClaimPeriodTitle(data)}>
-          <ACC.Claims.ClaimTable
+          <ACC.Claims.ClaimReviewTable
             {...data}
             validation={data.editor.validator.claimDetails.results}
             getLink={costCategoryId => ReviewClaimLineItemsRoute.getLink({ partnerId: this.props.partnerId, projectId: this.props.projectId, periodId: this.props.periodId, costCategoryId })}
