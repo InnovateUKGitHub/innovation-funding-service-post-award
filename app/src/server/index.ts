@@ -44,7 +44,7 @@ const allowCache = (req: Request, res: Response, next: NextFunction) => {
   return next();
 };
 
-const noCache = (req: Request, res: Response, next: NextFunction) => {
+export const noCache = (req: Request, res: Response, next: NextFunction) => {
   res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate, max-age=0");
   res.setHeader("Pragma", "no-cache");
   return next();
