@@ -4,6 +4,7 @@ import passportSaml from "passport-saml";
 import fs from "fs";
 import cookieSession from "cookie-session";
 import { Configuration } from "../server/features/common/config";
+import { noCache } from "./index";
 
 // definitions for URNs: https://commons.lbl.gov/display/IDMgmt/Attribute+Definitions
 const urnUid = "urn:oid:0.9.2342.19200300.100.1.1";
@@ -55,9 +56,9 @@ passport.serializeUser((payload: ShibbolethPayload, done) => {
 });
 
 // force login using passport shibboleth config
-router.get("/login", passport.authenticate("shibboleth"));
+router.get("/login", noCache, passport.authenticate("shibboleth"));
 
-router.get("/logout", (req, res) => {
+router.get("/logout", noCache, (req, res) => {
   res.cookie(cookieName, "", {
     expires: new Date("1970-01-01"),
     secure: process.env.SERVER_URL !== "http://localhost:8080",
