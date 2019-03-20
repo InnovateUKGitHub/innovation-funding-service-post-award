@@ -2,6 +2,7 @@
 import { Results } from "../validation/results";
 import { Result } from "../validation/result";
 import { NestedResult } from "../validation/nestedResult";
+import { isNumber } from "../../util/NumberHelper";
 
 // A helper for creating validation rules
 function rule<T>(test: (value: T) => boolean, defaultMessage: string, isRequired?: boolean): (results: Results<{}>, value: T, message?: string) => Result {
@@ -44,6 +45,10 @@ export function exactLength(results: Results<{}>, value: string, length: number,
 export function alphanumeric(results: Results<{}>, value: string, message?: string) {
     const regex = new RegExp(/^[a-z0-9]+$/i);
     return isTrue(results, (!value) || regex.test(value), message || "Only  numbers and letters allowed");
+}
+
+export function number(results: Results<{}>, value: number, message?: string) {
+    return isTrue(results, value === undefined || value === null || isNumber(value), message || "This field can only contain numerals.");
 }
 
 export function email(results: Results<{}>, value: string, message?: string) {
