@@ -266,6 +266,12 @@ class ProfileTotalCostCategoryTestRepository extends TestRepository<Repositories
     }
 }
 
+class QuestionsTestRepository extends TestRepository<Repositories.ISalesforceQuestions> implements Repositories.IQuestionsRepository {
+  getAll() {
+    return super.getWhere(x => x.Acc_ActiveFlag__c === "Y");
+  }
+}
+
 export interface ITestRepositories extends IRepositories {
     claims: ClaimsTestRepository;
     claimDetails: ClaimDetailsTestRepository;
@@ -282,6 +288,7 @@ export interface ITestRepositories extends IRepositories {
     partners: PartnerTestRepository;
     projectContacts: ProjectContactTestRepository;
     claimTotalCostCategory: ClaimTotalCostTestRepository;
+    questions: QuestionsTestRepository;
 }
 
 export const createTestRepositories = (): ITestRepositories => {
@@ -303,5 +310,6 @@ export const createTestRepositories = (): ITestRepositories => {
         partners: partnerRepository,
         projectContacts: new ProjectContactTestRepository(),
         claimTotalCostCategory: new ClaimTotalCostTestRepository(),
+        questions: new QuestionsTestRepository(),
     });
 };

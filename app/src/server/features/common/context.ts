@@ -61,7 +61,8 @@ export class Context implements IContext {
     projects: new Repositories.ProjectRepository(() => this.getSalesforceConnection()),
     partners: new Repositories.PartnerRepository(() => this.getSalesforceConnection()),
     projectContacts: new Repositories.ProjectContactsRepository(() => this.getSalesforceConnection()),
-    claimLineItems: new Repositories.ClaimLineItemRepository(() => this.getSalesforceConnection())
+    claimLineItems: new Repositories.ClaimLineItemRepository(() => this.getSalesforceConnection()),
+    questions: new Repositories.QuestionsRepository(() => this.getSalesforceConnection())
   };
 
   public readonly logger: Logger;
