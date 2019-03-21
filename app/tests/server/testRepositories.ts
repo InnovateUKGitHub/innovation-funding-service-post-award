@@ -158,7 +158,11 @@ class ContentVersionTestRepository extends TestRepository<Repositories.ISalesfor
             PathOnClient: fileName,
             ContentLocation: "S",
             VersionData: content,
-            Description: description
+            Description: description,
+            CreatedDate: new Date().toISOString(),
+            Owner: {
+                Username: "aUserName"
+            }
         });
     }
 }

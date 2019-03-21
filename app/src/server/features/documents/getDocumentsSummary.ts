@@ -12,7 +12,10 @@ export class GetDocumentsSummaryQuery extends QueryBase<DocumentSummaryDto[]> {
       link: `/api/documents/${doc.Id}/content`,
       fileName: doc.FileExtension ? `${doc.Title}.${doc.FileExtension}` : doc.Title,
       id: doc.ContentDocumentId,
-      description: doc.Description
+      description: doc.Description,
+      fileSize: doc.ContentSize,
+      dateCreated: doc.CreatedDate,
+      owner: doc.Owner.Username
     }));
   }
 }
