@@ -13,6 +13,7 @@ import { ClaimDashboardDocumentDeleteHandler } from "./claimDashboard/claimDashb
 import { ClaimDashboardDocumentUploadHandler } from "./claimDashboard/claimDashboardDocumentUploadHandler";
 import { ClaimDetailDocumentDeleteHandler } from "./claimDetailDocument/claimDetailDocumentDeleteHandler";
 import { ClaimDetailDocumentUploadHandler } from "./claimDetailDocument/claimDetailDocumentUploadHandler";
+import { ProjectDocumentUploadHandler } from "./projectDocumentFormHandler";
 import { Configuration } from "../features/common";
 
 export const formRouter = express.Router();
@@ -28,6 +29,7 @@ const handlers: IFormHandler[] = [
   new ClaimDetailDocumentUploadHandler(),
   new ClaimDashboardDocumentDeleteHandler(),
   new ClaimDashboardDocumentUploadHandler(),
+  new ProjectDocumentUploadHandler(),
 ];
 
 // Todo remove once we have local sso in dev

@@ -16,6 +16,14 @@ export const getClaimDocuments = (partnerId: string, periodId: number) => dataSt
 
 export const getProjectDocuments = (projectId: string) => dataStoreHelper(documentStore, getKey("project", projectId));
 
+export const getProjectDocumentEditor = (projectId: string) => editorStoreHelper<DocumentUploadDto, DocumentUploadValidator>(
+  documentStore,
+  x => x.documents,
+  () => Pending.create({ status: LoadingStatus.Done, data: { file: null }, error: null }),
+  (dto) => new DocumentUploadValidator(dto, false),
+  getKey("project", projectId)
+);
+
 export const getClaimDetailDocumentEditor = ({partnerId, periodId, costCategoryId}: ClaimDetailKey) => editorStoreHelper<DocumentUploadDto, DocumentUploadValidator>(
   documentStore,
   x => x.documents,

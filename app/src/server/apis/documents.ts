@@ -9,6 +9,7 @@ import { FileUpload } from "../../types/FileUpload";
 import {GetClaimDocumentsQuery} from "../features/documents/getClaimDocuments";
 import {DocumentDescription} from "../../types/constants";
 import { UploadClaimDocumentCommand } from "../features/documents/uploadClaimDocument";
+import { UploadProjectDocumentCommand } from "../features/documents/uploadProjectDocument";
 
 export interface IDocumentsApi {
   getClaimDocuments: (params: ApiParams<{partnerId: string, periodId: number, description: DocumentDescription}>) => Promise<DocumentSummaryDto[]>;
@@ -16,6 +17,7 @@ export interface IDocumentsApi {
   getProjectDocuments: (params: ApiParams<{projectId: string}>) => Promise<DocumentSummaryDto[]>;
   uploadClaimDetailDocument: (params: ApiParams<{claimDetailKey: ClaimDetailKey, file: FileUpload | File}>) => Promise<{ documentId: string }>;
   uploadClaimDocument: (params: ApiParams<{claimKey: ClaimKey, file: FileUpload | File, description?: string}>) => Promise<{ documentId: string }>;
+  uploadProjectDocument: (params: ApiParams<{projectId: string, file: FileUpload | File, description?: string}>) => Promise<{ documentId: string }>;
   deleteDocument: (params: ApiParams<{ documentId: string }>) => Promise<void>;
 }
 
@@ -57,6 +59,12 @@ class Controller extends ControllerBase<DocumentSummaryDto> implements IDocument
       "/claims/:partnerId/:periodId",
       (p, q, b, f) => ({ claimKey: { partnerId: p.partnerId, periodId: parseInt(p.periodId, 10), file: f }, file: { ...f, ...b }}),
       p => this.uploadClaimDocument(p)
+    );
+
+    this.postAttachment(
+      "/projects/:projectId",
+      (p, q, b, f) => ({ projectId: p.projectId, file: f }),
+      p => this.uploadProjectDocument(p)
     );
 
     this.deleteItem(
@@ -102,6 +110,13 @@ class Controller extends ControllerBase<DocumentSummaryDto> implements IDocument
     const command = new UploadClaimDocumentCommand(claimKey, file as FileUpload);
     const insertedID = await contextProvider.start(params).runCommand(command);
     return {documentId: insertedID};
+  }
+
+  public async uploadProjectDocument(params: ApiParams<{projectId: string, file: FileUpload | File}>) {
+    const command = new UploadProjectDocumentCommand(params.projectId, params.file as FileUpload);
+    const insertedID = await contextProvider.start(params).runCommand(command);
+
+    return { documentId: insertedID };
   }
 
   public async deleteDocument(params: ApiParams<{ documentId: string }>): Promise<void> {
