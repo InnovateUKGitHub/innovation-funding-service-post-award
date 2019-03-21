@@ -56,7 +56,7 @@ passport.serializeUser((payload: ShibbolethPayload, done) => {
 });
 
 // force login using passport shibboleth config
-router.get("/login", passport.authenticate("shibboleth"));
+router.get("/login", noCache, passport.authenticate("shibboleth"));
 
 router.get("/logout", noCache, (req, res) => {
   res.cookie(cookieName, "", {
