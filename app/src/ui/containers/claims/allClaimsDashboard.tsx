@@ -62,7 +62,7 @@ class Component extends ContainerBase<Params, Data, {}> {
 
   renderContents({ projectDetails, partners, previousClaims, currentClaims }: CombinedData) {
     return (
-      <ProjectOverviewPage project={projectDetails} partners={partners} selectedTab={AllClaimsDashboardRoute.routeName}>
+      <ProjectOverviewPage project={projectDetails} partners={partners} selectedTab={AllClaimsDashboardRoute.routeName} messages={this.props.messages}>
         {this.renderSummary(projectDetails, partners.find(x => x.isLead)!)}
         <Acc.Section qa="current-claims-section" title="Open">
           {this.renderCurrentClaimsPerPeriod(currentClaims, projectDetails, partners)}
