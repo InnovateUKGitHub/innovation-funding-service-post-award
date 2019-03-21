@@ -11,6 +11,7 @@ import "isomorphic-form-data";
 import { router as authRouter } from "./auth";
 import { router } from "./router";
 import { Configuration, Logger } from "./features/common";
+import { allowCache, noCache} from "./cacheHeaders";
 
 // Set up New Relic to monitor app when deployed
 if (process.env.NEW_RELIC_ENABLED === "true") {
@@ -35,18 +36,6 @@ const setOwaspHeaders = (req: Request, res: Response, next: NextFunction) => {
   res.setHeader("X-Frame-Options", "deny");
   res.setHeader("X-Content-Type-Options", "nosniff");
   res.setHeader("X-XSS-Protection", "1");
-  return next();
-};
-
-const allowCache = (req: Request, res: Response, next: NextFunction) => {
-  const tenYears = 10 * 31536000;
-  res.setHeader("Cache-Control", `max-age=${tenYears}, public, immutable`);
-  return next();
-};
-
-export const noCache = (req: Request, res: Response, next: NextFunction) => {
-  res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate, max-age=0");
-  res.setHeader("Pragma", "no-cache");
   return next();
 };
 
