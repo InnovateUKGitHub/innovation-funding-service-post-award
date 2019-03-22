@@ -2,6 +2,8 @@ export * from "./claimDetailsRepository";
 export * from "./claimsRepository";
 export * from "./contactsRepository";
 export * from "./costCategoriesRepository";
+export * from "./monitoringReportHeader";
+export * from "./monitoringReportResponse";
 export * from "./partnersRepository";
 export * from "./profileDetailsRepository";
 export * from "./profilePeriodTotalRepositotry";
