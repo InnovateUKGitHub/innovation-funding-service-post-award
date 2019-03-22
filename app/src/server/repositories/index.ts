@@ -14,3 +14,4 @@ export * from "./recordTypeRepository";
 export * from "./contentDocumentRepository";
 export * from "./contentDocumentLinkRepository";
 export * from "./contentVersionRepository";
+export * from "./questionsRepository";

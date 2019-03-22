@@ -22,6 +22,7 @@ export interface IRepositories {
   projectContacts: Readonly<Repositories.IProjectContactsRepository>;
   claimLineItems: Readonly<Repositories.IClaimLineItemRepository>;
   claimTotalCostCategory: Readonly<Repositories.IClaimTotalCostCategoryRepository>;
+  questions: Readonly<Repositories.IQuestionsRepository>;
 }
 
 export interface IContext {
