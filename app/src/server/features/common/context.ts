@@ -50,18 +50,20 @@ export class Context implements IContext {
     claims: new Repositories.ClaimRepository(() => this.getSalesforceConnection()),
     claimDetails: new Repositories.ClaimDetailsRepository(() => this.getSalesforceConnection()),
     claimTotalCostCategory: new Repositories.ClaimTotalCostCategoryRepository(() => this.getSalesforceConnection()),
+    claimLineItems: new Repositories.ClaimLineItemRepository(() => this.getSalesforceConnection()),
     contacts: new Repositories.ContactsRepository(() => this.getSalesforceConnection()),
     costCategories: new Repositories.CostCategoryRepository(() => this.getSalesforceConnection()),
     contentDocument: new Repositories.ContentDocumentRepository(() => this.getSalesforceConnection()),
     contentDocumentLinks: new Repositories.ContentDocumentLinkRepository(() => this.getSalesforceConnection()),
     contentVersions: new Repositories.ContentVersionRepository(() => this.getSalesforceConnection()),
+    monitoringReportResponse: new Repositories.MonitoringReportResponseRepository(() => this.getSalesforceConnection()),
+    monitoringReportHeader: new Repositories.MonitoringReportHeaderRepository(() => this.getSalesforceConnection()),
     profileDetails: new Repositories.ProfileDetailsRepository(() => this.getSalesforceConnection()),
     profileTotalPeriod: new Repositories.ProfileTotalPeriodRepository(() => this.getSalesforceConnection()),
     profileTotalCostCategory: new Repositories.ProfileTotalCostCategoryRepository(() => this.getSalesforceConnection()),
     projects: new Repositories.ProjectRepository(() => this.getSalesforceConnection()),
     partners: new Repositories.PartnerRepository(() => this.getSalesforceConnection()),
     projectContacts: new Repositories.ProjectContactsRepository(() => this.getSalesforceConnection()),
-    claimLineItems: new Repositories.ClaimLineItemRepository(() => this.getSalesforceConnection()),
     questions: new Repositories.QuestionsRepository(() => this.getSalesforceConnection())
   };
 
