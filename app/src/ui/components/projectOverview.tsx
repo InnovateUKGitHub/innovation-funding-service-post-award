@@ -1,6 +1,6 @@
 import React, { ReactNode } from "react";
 import * as ACC from "./index";
-import { ProjectDashboardRoute } from "../containers";
+import { ProjectDashboardRoute, ProjectDetailsRoute } from "../containers";
 import { PartnerDto, ProjectDto } from "../../types";
 import { Results } from "../validation/results";
 import { IAppError } from "../../types/IAppError";
@@ -28,8 +28,16 @@ export const ProjectOverviewPage = ({ project, selectedTab, children, partnerId,
         {renderError(error)}
         {renderValidation(validator)}
         <ACC.Projects.Title pageTitle="View project" project={project} />
+        <ACC.Section>
+          {renderProjectDetailsRoute(project.id)}
+        </ACC.Section>
         <ACC.Projects.ProjectNavigation project={project} currentRoute={selectedTab} partners={partners}/>
         <ACC.Renderers.Messages messages={messages || []} />
         {children}
     </ACC.Page>
 );
+
+const renderProjectDetailsRoute = (projectId: string) => {
+  const route = ProjectDetailsRoute.getLink({ id: projectId });
+  return <ACC.Link route={route}>Contact details and project summary</ACC.Link>;
+};
