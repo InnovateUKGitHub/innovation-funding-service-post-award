@@ -5,7 +5,6 @@ import {
   AllClaimsDashboardRoute,
   ClaimsDashboardRoute,
   ProjectChangeRequestsRoute,
-  ProjectDetailsRoute,
   ProjectForecastRoute,
   ViewForecastRoute,
 } from "../../containers";
@@ -24,7 +23,6 @@ export const ProjectNavigation: React.SFC<Props> = ({ project, currentRoute, par
   // potential links
   const claimsLink = ClaimsDashboardRoute.getLink({ projectId, partnerId });
   const allClaimsLink = AllClaimsDashboardRoute.getLink({ projectId });
-  const detailsLink = ProjectDetailsRoute.getLink({ id: projectId });
   const viewForecastLink = ViewForecastRoute.getLink({ projectId, partnerId });
   const projectForecastsLink = ProjectForecastRoute.getLink({ projectId });
   const projectChangeRequestLink = ProjectChangeRequestsRoute.getLink({ projectId });
@@ -47,7 +45,6 @@ export const ProjectNavigation: React.SFC<Props> = ({ project, currentRoute, par
   }
 
   navigationTabs.push({ text: "Project change requests", route: projectChangeRequestLink, selected: projectChangeRequestLink.routeName === currentRoute, qa: "changeRequestsTab" });
-  navigationTabs.push({ text: "Project details", route: detailsLink, selected: detailsLink.routeName === currentRoute, qa: "projectDetailsTab" });
 
   return <Tabs tabList={navigationTabs} qa="project-navigation" />;
 };
