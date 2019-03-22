@@ -4,6 +4,7 @@ import { FileUpload } from "../../src/types/FileUpload";
 import { Updatable } from "../../src/server/repositories/salesforceRepositoryBase";
 import { Stream } from "stream";
 import { IRepositories } from "../../src/types/IContext";
+import { ISalesforceMonitoringReportResponse } from "../../src/server/repositories";
 
 class ContactsTestRepository extends TestRepository<Repositories.ISalesforceContact> implements Repositories.IContactsRepository {
     getById(id: string) {
@@ -204,6 +205,53 @@ class ClaimLineItemsTestRepository extends TestRepository<Repositories.ISalesfor
     }
 }
 
+class MonitoringReportHeaderTestRepository extends TestRepository<Repositories.ISalesforceMonitoringReportHeader> implements Repositories.IMonitoringReportHeaderRepository {
+  get(projectId: string, periodId: number): Promise<Repositories.ISalesforceMonitoringReportHeader> {
+    return super.getOne(x => x.Acc_ProjectId__c === projectId && x.Acc_ProjectPeriodNumber__c === periodId);
+  }
+}
+
+class MonitoringReportResponseTestRepository extends TestRepository<Repositories.ISalesforceMonitoringReportResponse> implements Repositories.IMonitoringReportResponseRepository {
+  getAllForHeader(monitoringReportHeaderId: string): Promise<ISalesforceMonitoringReportResponse[]> {
+    return super.getWhere(x => x.Acc_MonitingReportHeader__c ===monitoringReportHeaderId);
+  }
+
+  delete(idList: string[]) {
+    idList.forEach((Id) => {
+      const index = this.Items.findIndex(x => x.Id === Id);
+      if (index === -1) {
+        return Promise.reject();
+      }
+      this.Items = this.Items.splice(index, 1);
+    });
+    return Promise.resolve();
+  }
+
+  update(updates: Updatable<Repositories.ISalesforceMonitoringReportResponse>[]) {
+    if (!(updates instanceof Array)) {
+      updates = [updates];
+    }
+    updates.forEach((item) => {
+      const index = this.Items.findIndex(x => x.Id === item.Id);
+      if (index === -1) {
+        return Promise.reject();
+      }
+      this.Items[index] = { ...this.Items[index], ...item };
+    });
+    return Promise.resolve(true);
+  }
+
+  insert(lineItems: Partial<Repositories.ISalesforceMonitoringReportResponse>[]) {
+    const newIds: string[] = [];
+    lineItems.forEach((x) => {
+      const Id = `MonitoringReportResponse-${this.Items.length}`;
+      newIds.push(Id);
+      this.Items.push({ ...x, Id } as Repositories.ISalesforceMonitoringReportResponse);
+    });
+    return Promise.resolve(newIds);
+  }
+}
+
 class ClaimTotalCostTestRepository extends TestRepository<Repositories.ISalesforceClaimTotalCostCategory> implements Repositories.IClaimTotalCostCategoryRepository {
     getAllByPartnerId(partnerId: string) {
         return super.getWhere(x => x.Acc_ProjectParticipant__c === partnerId);
@@ -303,6 +351,8 @@ export const createTestRepositories = (): ITestRepositories => {
         contentDocument: new ContentDocumentTestRepository(),
         contentDocumentLinks: new ContentDocumentLinkTestRepository(),
         contentVersions: new ContentVersionTestRepository(),
+        monitoringReportResponse: new MonitoringReportResponseTestRepository(),
+        monitoringReportHeader: new MonitoringReportHeaderTestRepository(),
         profileDetails: new ProfileDetailsTestRepository(),
         profileTotalPeriod: new ProfileTotalPeriodTestRepository(partnerRepository),
         profileTotalCostCategory: new ProfileTotalCostCategoryTestRepository(),
