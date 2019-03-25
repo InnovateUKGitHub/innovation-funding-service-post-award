@@ -48,7 +48,7 @@ export function alphanumeric(results: Results<{}>, value: string, message?: stri
 }
 
 export function number(results: Results<{}>, value: number, message?: string) {
-    return isTrue(results, value === undefined || value === null || isNumber(value), message || "This field can only contain numerals.");
+    return isTrue(results, value === undefined || value === null || isNumber(value), message || "Field must be a number.");
 }
 
 export function email(results: Results<{}>, value: string, message?: string) {
