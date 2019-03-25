@@ -36,5 +36,5 @@ export class ForecastDetailsDtoValidator extends Results<ForecastDetailsDTO> {
   }
 
   public id = Validation.required(this, this.model.id, "Id is required");
-  public value = Validation.number(this, this.model.value);
+  public value = Validation.number(this, this.model.value, "The forecast value must be a number.");
 }
