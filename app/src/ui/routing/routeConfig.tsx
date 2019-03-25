@@ -18,6 +18,7 @@ export const routeConfig = {
   projectDashboard: Containers.ProjectDashboardRoute,
   projectDetails: Containers.ProjectDetailsRoute,
   projectForecast: Containers.ProjectForecastRoute,
+  prepareMonitoringReport: Containers.PrepareMonitoringReportRoute,
   reviewClaim: Containers.ReviewClaimRoute,
   reviewClaimLineItems: Containers.ReviewClaimLineItemsRoute,
   updateForecast: Containers.UpdateForecastRoute,
