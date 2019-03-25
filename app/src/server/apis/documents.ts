@@ -13,6 +13,7 @@ import { UploadClaimDocumentCommand } from "../features/documents/uploadClaimDoc
 export interface IDocumentsApi {
   getClaimDocuments: (params: ApiParams<{partnerId: string, periodId: number, description: DocumentDescription}>) => Promise<DocumentSummaryDto[]>;
   getClaimDetailDocuments: (params: ApiParams<{claimDetailKey: ClaimDetailKey}>) => Promise<DocumentSummaryDto[]>;
+  getProjectDocuments: (params: ApiParams<{projectId: string}>) => Promise<DocumentSummaryDto[]>;
   uploadClaimDetailDocument: (params: ApiParams<{claimDetailKey: ClaimDetailKey, file: FileUpload | File}>) => Promise<{ documentId: string }>;
   uploadClaimDocument: (params: ApiParams<{claimKey: ClaimKey, file: FileUpload | File, description?: string}>) => Promise<{ documentId: string }>;
   deleteDocument: (params: ApiParams<{ documentId: string }>) => Promise<void>;
