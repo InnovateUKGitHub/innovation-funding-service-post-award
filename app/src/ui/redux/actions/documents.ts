@@ -15,7 +15,8 @@ import {
   getClaimDetailDocumentEditor,
   getClaimDetailDocuments,
   getClaimDocumentEditor,
-  getClaimDocuments
+  getClaimDocuments,
+  getProjectDocuments,
 } from "../selectors/documents";
 import { LoadingStatus } from "../../../shared/pending";
 import { Results } from "../../validation/results";
@@ -36,6 +37,13 @@ export function loadIarDocuments(partnerId: string, periodId: number) {
   return conditionalLoad(
     getClaimDocuments(partnerId, periodId),
     params => ApiClient.documents.getClaimDocuments({ partnerId, periodId, description: DocumentDescription.IAR, ...params})
+  );
+}
+
+export function loadProjectDocuments(projectId: string) {
+  return conditionalLoad(
+    getProjectDocuments(projectId),
+    params => ApiClient.documents.getProjectDocuments({projectId, ...params})
   );
 }
 

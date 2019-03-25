@@ -7,6 +7,7 @@ import {
   ClaimsDashboardRoute,
   ProjectChangeRequestsRoute,
   ProjectDetailsRoute,
+  ProjectDocumentsRoute,
   ProjectForecastRoute,
   ViewForecastRoute,
 } from "../../containers";
@@ -28,10 +29,12 @@ export const ProjectNavigation: React.SFC<Props> = ({ project, currentRoute, par
   const viewForecastLink = ViewForecastRoute.getLink({ projectId, partnerId });
   const projectForecastsLink = ProjectForecastRoute.getLink({ projectId });
   const projectChangeRequestLink = ProjectChangeRequestsRoute.getLink({ projectId });
+  const projectDocumentsLink = ProjectDocumentsRoute.getLink({projectId});
 
   // roles
   const isFC = !!(project.roles & ProjectRole.FinancialContact);
   const isMOorPM = !!(project.roles & (ProjectRole.MonitoringOfficer | ProjectRole.ProjectManager));
+  const isMO = !!(project.roles & ProjectRole.MonitoringOfficer);
 
   // add tabs conditionally
   const navigationTabs: TabItem[] = [];
@@ -48,6 +51,10 @@ export const ProjectNavigation: React.SFC<Props> = ({ project, currentRoute, par
 
   navigationTabs.push({ text: "Project change requests", route: projectChangeRequestLink, selected: projectChangeRequestLink.routeName === currentRoute, qa: "changeRequestsTab" });
 
+  if (isMO) {
+    navigationTabs.push({ text: "Documents", route: projectDocumentsLink, selected: projectDocumentsLink.routeName === currentRoute, qa: "documentsTab" });
+  }
+
   return (
     <React.Fragment>
       <Section qa="projectDetailsLink">
@@ -56,4 +63,5 @@ export const ProjectNavigation: React.SFC<Props> = ({ project, currentRoute, par
       <Tabs tabList={navigationTabs} qa="project-navigation" />
     </React.Fragment>
   );
+
 };
