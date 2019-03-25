@@ -2,7 +2,7 @@ import argparse
 from lxml import etree
 from pprint import pprint
 
-out = '/tmp/report.xml'
+out = 'owasp-zap/logs/report.xml'
 high = 0
 
 # read results from xml
