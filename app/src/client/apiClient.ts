@@ -63,6 +63,9 @@ const clientApi: IApiClient = {
   },
   users: {
     getCurrent: () => ajaxJson(`/api/users/current`)
+  },
+  version: {
+    getCurrent: () => ajaxJson(`/api/version`)
   }
 };
 
