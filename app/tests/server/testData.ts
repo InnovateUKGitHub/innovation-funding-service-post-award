@@ -320,7 +320,11 @@ export class TestData {
       PathOnClient: fileType ? `${title}.${fileType}` : title,
       ContentLocation: "S",
       VersionData: content,
-      Description: description
+      Description: description,
+      CreatedDate: new Date().toISOString(),
+      Owner: {
+        Username: "aUserId"
+      }
     };
     this.repositories.contentVersions.Items.push(item);
     this.repositories.contentDocument.Items.push({ Id: item.ContentDocumentId });
