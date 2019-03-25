@@ -15,6 +15,7 @@ class Controller extends ControllerBase<MonitoringReportDto> implements IMonitor
 
   public async get(params: ApiParams<{ projectId: string, periodId: number }>) {
     const {projectId, periodId} = params;
+    // TODO remove header id requirement
     const query = new GetMonitoringReport("", projectId, periodId);
     return contextProvider.start(params).runQuery(query);
   }
