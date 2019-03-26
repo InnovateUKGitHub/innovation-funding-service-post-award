@@ -5,6 +5,7 @@ import fs from "fs";
 import cookieSession from "cookie-session";
 import { Configuration } from "../server/features/common/config";
 import { noCache } from "./cacheHeaders";
+import { Logger } from "./features/common";
 
 // definitions for URNs: https://commons.lbl.gov/display/IDMgmt/Attribute+Definitions
 const urnUid = "urn:oid:0.9.2342.19200300.100.1.1";
@@ -67,16 +68,20 @@ router.get("/logout", noCache, (req, res) => {
   return res.redirect(Configuration.sso.enabled && Configuration.sso.signoutUrl || "/");
 });
 
-router.post("/auth/success", passport.authenticate("shibboleth"), (req, res) => {
+router.post("/auth/success", (req, res, next) => passport.authenticate("shibboleth", (err, user) => {
+  if(err) {
+    new Logger().error("Authentication Error", err);
+    return res.sendStatus(500);
+  }
   // copy user info from shibboleth that has been serilised to the user object and store it in the session object
   req.session = req.session || {};
-  req.session.user = { email: req.user[urnEmail] };
+  req.session.user = { email: user[urnEmail] };
 
   // redirect to orignal locaion if it starts with a / otherwise use server root
   const redirect = req.session && req.session.redirect;
   const validatedRedirect = redirect && redirect.startsWith("/") ? redirect : Configuration.serverUrl;
   return res.redirect(validatedRedirect);
-});
+})(req, res, next));
 
 router.use((req, res, next) => {
   // if user is logged in continue
