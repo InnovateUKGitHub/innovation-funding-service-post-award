@@ -6,6 +6,8 @@ export interface ISalesforceMonitoringReportHeader {
   Acc_MonitoringReportStatus__c: string;
   Acc_ProjectId__c: string; // is this correct?
   Acc_ProjectPeriodNumber__c: number;
+  Acc_ProjectStartDate__c: Date;
+  Acc_ProjectEndDate__c: Date;
 }
 
 export interface IMonitoringReportHeaderRepository {
@@ -22,7 +24,9 @@ export class MonitoringReportHeaderRepository extends SalesforceRepositoryBase<I
     "Id",
     "Acc_MonitoringReportStatus__c",
     "Acc_ProjectId__c",
-    "Acc_ProjectPeriodNumber__c"
+    "Acc_ProjectPeriodNumber__c",
+    "Acc_ProjectStartDate__c",
+    "Acc_ProjectEndDate__c"
   ];
 
   // TODO delete me
@@ -32,6 +36,8 @@ export class MonitoringReportHeaderRepository extends SalesforceRepositoryBase<I
     Acc_MonitoringReportStatus__c: "draft",
     Acc_ProjectId__c: "1",
     Acc_ProjectPeriodNumber__c: 1,
+    Acc_ProjectStartDate__c: new Date(),
+    Acc_ProjectEndDate__c: new Date(),
   };
 
   async get(projectId: string, periodId: number): Promise<ISalesforceMonitoringReportHeader> {
