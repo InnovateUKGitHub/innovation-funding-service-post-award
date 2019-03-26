@@ -4,6 +4,7 @@ import { ITestRepositories } from "./testRepositories";
 import { ClaimStatus } from "../../src/types";
 import { SalesforceRole } from "../../src/server/repositories";
 import { ISalesforceMonitoringReportResponse} from "../../src/server/repositories";
+import { MonitoringReportStatus } from "../../src/types/constants/monitoringReportStatus";
 
 export class TestData {
   constructor(private repositories: ITestRepositories) {
@@ -137,10 +138,29 @@ export class TestData {
     return this.createProjectContact(project, undefined, "Project Manager", update);
   }
 
+  // TODO remove 'createQuestion' and use this instead
+  public createQuestionA(answersPerQuestion: number, displayOrder: number): Repositories.ISalesforceQuestions[] {
+    const newQuestionArray = [];
+    const seed = this.repositories.monitoringReportQuestions.Items.length + 1;
+    for (let i = 0; i < answersPerQuestion; i++) {
+      const newQuestion: Repositories.ISalesforceQuestions = {
+        Id: `QuestionId: ${seed + i}`,
+        Acc_QuestionName__c: `QuestionName: ${displayOrder}`,
+        Acc_DisplayOrder__c: displayOrder,
+        Acc_Score__c: i + 1,
+        Acc_QuestionText__c: `QuestionText: ${seed} ${i}`,
+        Acc_ActiveFlag__c: "Y",
+      };
+      this.repositories.monitoringReportQuestions.Items.push(newQuestion);
+      newQuestionArray.push(newQuestion);
+    }
+    return newQuestionArray;
+  }
+
   public createQuestion(answersPerQuestion: number, displayOrder = 1, overrideCalculation = false): Repositories.ISalesforceQuestions[] {
     let i;
     const newQuestionArray = [];
-    const seed = this.repositories.questions.Items.length + 1;
+    const seed = this.repositories.monitoringReportQuestions.Items.length + 1;
     for (i = 0; i < answersPerQuestion; i++) {
       const newQuestion: Repositories.ISalesforceQuestions = {
         Id: `QuestionId: ${seed + i}`,
@@ -150,8 +170,7 @@ export class TestData {
         Acc_QuestionText__c: `QuestionText: ${seed} ${i}`,
         Acc_ActiveFlag__c: "Y",
       };
-
-      this.repositories.questions.Items.push(newQuestion);
+      this.repositories.monitoringReportQuestions.Items.push(newQuestion);
       newQuestionArray.push(newQuestion);
     }
 
@@ -162,7 +181,7 @@ export class TestData {
 
     const newHeader = {
       Id: id,
-      Acc_MonitoringReportStatus__c: "Draft",
+      Acc_MonitoringReportStatus__c: MonitoringReportStatus.DRAFT,
       Acc_ProjectId__c: projectId,
       Acc_ProjectPeriodNumber__c: period,
       Acc_ProjectStartDate__c: "2018-02-04",
@@ -181,7 +200,7 @@ export class TestData {
       responseArray.push(
         {
           Id: "",
-          Acc_MonitingReportHeader__c: "",
+          Acc_MonitoringReportHeader__c: "",
           Acc_Question__c: x,
           Acc_QuestionComments__c: "",
         }
@@ -192,7 +211,7 @@ export class TestData {
       questions.forEach(q => {
         if (r.Acc_Question__c === q.Id) {
           r.Id = `Response: ${questionCount + 1}`;
-          r.Acc_MonitingReportHeader__c = "a";
+          r.Acc_MonitoringReportHeader__c = "a";
           r.Acc_QuestionComments__c = `Comments: ${q.Acc_DisplayOrder__c}`;
         }
       });

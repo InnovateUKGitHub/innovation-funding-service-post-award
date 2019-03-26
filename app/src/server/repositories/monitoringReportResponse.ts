@@ -1,11 +1,10 @@
 import SalesforceRepositoryBase, { Updatable } from "./salesforceRepositoryBase";
 import { NotFoundError } from "../features/common";
-import { RecordTypeRepository } from "./recordTypeRepository";
 import * as Repositories from "./index";
 
 export interface ISalesforceMonitoringReportResponse {
   Id: string;
-  Acc_MonitingReportHeader__c: string;  // ToDo respell monitoring
+  Acc_MonitoringReportHeader__c: string;
   Acc_Question__c: string;
   Acc_QuestionComments__c: string;
 }
@@ -25,7 +24,7 @@ export class MonitoringReportResponseRepository extends SalesforceRepositoryBase
 
   protected readonly salesforceFieldNames = [
     "Id",
-    "Acc_MonitingReportHeader__c",
+    "Acc_MonitoringReportHeader__c",
     "Acc_Question__c",
     "Acc_QuestionComments__c",
   ];
@@ -33,15 +32,15 @@ export class MonitoringReportResponseRepository extends SalesforceRepositoryBase
   // TODO delete me
   private records = [{
     Id: "1",
-    Acc_MonitingReportHeader__c: "1",
+    Acc_MonitoringReportHeader__c: "1",
     Acc_Question__c: "a",
-    Acc_QuestionComments__c: "blah",
+    Acc_QuestionComments__c: "blah"
   }];
 
   async getAllForHeader(monitoringReportHeaderId: string): Promise<ISalesforceMonitoringReportResponse[]> {
     // TODO don't use name for record type
     // const filter = `
-    //   Acc_MonitingReportHeader__c = '${monitoringReportHeaderId}'
+    //   Acc_MonitoringReportHeader__c = '${monitoringReportHeaderId}'
     //   AND RecordType.Name = '${this.recordType}'
     // `;
     const records = this.records;// TODO put this back: await super.where(filter);

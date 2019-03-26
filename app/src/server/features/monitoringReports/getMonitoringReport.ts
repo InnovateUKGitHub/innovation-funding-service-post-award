@@ -1,5 +1,6 @@
 import { QueryBase, SALESFORCE_DATE_FORMAT } from "../common";
 import { Authorisation, IContext, ProjectRole } from "../../../types";
+import { MonitoringReportDto, OptionDto, QuestionDto } from "../../../types/dtos/monitoringReportDto";
 
 export class GetMonitoringReport extends QueryBase<MonitoringReportDto> {
   constructor(
@@ -16,8 +17,7 @@ export class GetMonitoringReport extends QueryBase<MonitoringReportDto> {
   protected async Run(context: IContext) {
     const header = await context.repositories.monitoringReportHeader.get(this.projectId, this.periodId);
     const results = await context.repositories.monitoringReportResponse.getAllForHeader(header.Id);
-    // TODO rename getAll to getAllEnabled ?
-    const questions = await context.repositories.questions.getAll(); // TODO rename questions repo to monitoringReportQuestions ?;
+    const questions = await context.repositories.monitoringReportQuestions.getAll();
     const uniqueDisplayOrders = [...new Set(questions.map(x => x.Acc_DisplayOrder__c))];
 
     const questionArray: QuestionDto[] = [];
@@ -57,6 +57,7 @@ export class GetMonitoringReport extends QueryBase<MonitoringReportDto> {
     const monitoringReport: MonitoringReportDto = {
       headerId: header.Id,
       status: header.Acc_MonitoringReportStatus__c,
+      projectId: header.Acc_ProjectId__c,
       startDate: context.clock.parse(header.Acc_ProjectStartDate__c, SALESFORCE_DATE_FORMAT)!,
       endDate: context.clock.parse(header.Acc_ProjectEndDate__c, SALESFORCE_DATE_FORMAT)!,
       periodId: header.Acc_ProjectPeriodNumber__c,
