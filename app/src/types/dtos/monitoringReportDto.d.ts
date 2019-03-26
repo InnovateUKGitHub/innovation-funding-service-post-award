@@ -11,6 +11,7 @@ interface QuestionDto {
 }
 
 interface MonitoringReportDto {
+  id: string;
   status: string;
   startDate: Date;
   endDate: Date;
