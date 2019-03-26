@@ -33,6 +33,59 @@ export class TestData {
     return newItem;
   }
 
+  public createQuestion(answersPerQuestion: number): Repositories.ISalesforceQuestions[] {
+    let i;
+    const newQuestionArray = [];
+    const seed = this.repositories.questions.Items.length + 1;
+    for (i = 0; i < answersPerQuestion; i++) {
+      const newQuestion: Repositories.ISalesforceQuestions = {
+        Id: `Id${seed + i}`,
+        Acc_QuestionName__c: `QuestionName${(seed-1)/answersPerQuestion + 1}`,
+        Acc_DisplayOrder__c: (seed-1)/answersPerQuestion + 1,
+        Acc_Score__c: i + 1,
+        Acc_QuestionText__c: `QuestionText: ${seed} ${i}`,
+        Acc_ActiveFlag__c: "Y",
+      };
+
+      this.repositories.questions.Items.push(newQuestion);
+      newQuestionArray.push(newQuestion);
+    }
+
+    return newQuestionArray;
+  }
+
+  public createMonitoringReportHeader(id: string, projectId: string, period: number): Repositories.ISalesforceMonitoringReportHeader {
+    const startDate = new Date();
+    const endDate = new Date();
+    endDate.setMonth(endDate.getMonth() + 1);
+
+    return {
+      Id: id,
+      Acc_MonitoringReportStatus__c: "Draft",
+      Acc_ProjectId__c: projectId,
+      Acc_ProjectPeriodNumber__c: period,
+      Acc_ProjectStartDate__c: startDate,
+      Acc_ProjectEndDate__c: endDate
+    };
+  }
+
+  public createMonitoringReportResponse(answersToCreate: number): Repositories.ISalesforceMonitoringReportResponse[] {
+    let i;
+    const newAnswerArray = [];
+    for (i = 0; i < answersToCreate; i++) {
+      const newAnswer: Repositories.ISalesforceMonitoringReportResponse = {
+        Id: `Id: ${i + 1}`,
+        Acc_MonitingReportHeader__c: "a",
+        Acc_Question__c: `QuestionName${i + 1}`,
+        Acc_QuestionComments__c: `comment ${i + 1}`,
+        Acc_QuestionScore__c: i
+      };
+      newAnswerArray.push(newAnswer);
+    }
+
+    return newAnswerArray;
+  }
+
   public createContact(update?: (item: Repositories.ISalesforceContact) => void) {
     const seed = this.repositories.contacts.Items.length + 1;
 
