@@ -1,9 +1,9 @@
 import { State } from "router5";
 import { RootState } from "./reducers/rootReducer";
-import { IUser } from "../../types/IUser";
+import { IClientUser } from "../../types/IUser";
 import { Configuration } from "../../server/features/common";
 
-export function setupInitialState(route: State | undefined, user: IUser): RootState {
+export function setupInitialState(route: State | undefined, user: IClientUser): RootState {
   if(!route) {
     route = {
       name: "error",

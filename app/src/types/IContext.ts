@@ -1,5 +1,5 @@
 import { Cache, IClock, IConfig, ILogger } from "../server/features/common";
-import { IUser } from "./IUser";
+import { ISessionUser } from "./IUser";
 import { IRoleInfo } from "../server/features/projects/getAllProjectRolesForUser";
 import { Authorisation } from "./authorisation";
 import { QueryBase, SyncQueryBase } from "../server/features/common/queryBase";
@@ -36,7 +36,7 @@ export interface IContext {
   runSyncCommand<TResult>(cmd: SyncCommandBase<TResult>): TResult;
   clock: IClock;
   logger: ILogger;
-  user: IUser;
+  user: ISessionUser;
 }
 
 export interface ICaches {
