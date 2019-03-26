@@ -8,6 +8,7 @@ import express, { NextFunction, Request, Response } from "express";
 import "isomorphic-fetch";
 import "isomorphic-form-data";
 
+import { router as healthRouter} from "./health";
 import { router as authRouter } from "./auth";
 import { router } from "./router";
 import { Configuration, Logger } from "./features/common";
@@ -42,7 +43,8 @@ const setOwaspHeaders = (req: Request, res: Response, next: NextFunction) => {
 // un-authed routes
 // serve the public folder contents
 app.use(setOwaspHeaders, allowCache, express.static("public"));
-app.get("/api/health", noCache, (req, res) => res.send(true));
+
+app.use(noCache, healthRouter);
 
 // auth handler
 app.use(authRouter);

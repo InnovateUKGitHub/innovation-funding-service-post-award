@@ -1,7 +1,7 @@
 import React from "react";
 import { Link as RouterLink } from "react-router5";
 import { RootState } from "../redux/reducers";
-import { IUser } from "../../types";
+import { IClientUser } from "../../types";
 import { ILinkInfo } from "../../types/ILinkInfo";
 import { connect as reduxConnect } from "react-redux";
 
@@ -13,7 +13,7 @@ interface Props {
 }
 
 interface Data {
-  user: IUser;
+  user: IClientUser;
 }
 
 class LinkComponent extends React.Component<Props & Data> {

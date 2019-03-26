@@ -1,7 +1,7 @@
 import { AsyncThunk, createAction } from "./createAction";
 import { LoadingStatus } from "../../../../shared/pending";
 import { IDataSelector } from "../../selectors/common";
-import { IUser } from "../../../../types/IUser";
+import { IClientUser } from "../../../../types/IUser";
 
 type DataLoadThunk = typeof dataLoadAction;
 export type DataLoadAction = ReturnType<DataLoadThunk>;
@@ -19,7 +19,7 @@ export function dataLoadAction(
 
 export function conditionalLoad<T>(
   selector: IDataSelector<T>,
-  load: (params: {user: IUser}) => Promise<T>
+  load: (params: {user: IClientUser}) => Promise<T>
 ): AsyncThunk<void, DataLoadAction> {
   return (dispatch, getState) => {
     const state = getState();

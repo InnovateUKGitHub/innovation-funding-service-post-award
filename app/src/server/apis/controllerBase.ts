@@ -2,11 +2,9 @@ import mimeTypes from "mime-types";
 import multer from "multer";
 import express, { Request, Response } from "express";
 
-import { FileUpload } from "../../types/FileUpload";
-import { IAppError } from "../../types/IAppError";
+import { FileUpload, IAppError, ISessionUser } from "../../types";
 import { NotFoundError } from "../features/common/appError";
 import { errorHandlerApi } from "../errorHandlers";
-import { IUser } from "../../types/IUser";
 
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
@@ -14,7 +12,7 @@ const upload = multer({ storage });
 // this is the information extracted from an express request / session and stored in the redux store
 // it is the same shape client and server side allowing the client and server api calls to have the same shape
 export interface ISession {
-  user: IUser;
+  user: ISessionUser;
 }
 
 export type ApiParams<T> = T & ISession;
@@ -96,7 +94,7 @@ export abstract class ControllerBase<T> {
 
     return async (req: extendedRequest, resp: Response) => {
       const file: FileUpload | {} = req.file ? { fileName: req.file.originalname, content: req.file.buffer.toString("base64") } : {};
-      const p = Object.assign({ user: req.session!.user as IUser }, getParams(req.params || {}, req.query || {}, req.body || {}, file));
+      const p = Object.assign({ user: req.session!.user as ISessionUser }, getParams(req.params || {}, req.query || {}, req.body || {}, file));
       run(p)
         .then(result => {
           if ((result === null || result === undefined) && allowNulls === false) {
@@ -110,7 +108,7 @@ export abstract class ControllerBase<T> {
 
   private attachmentHandler<TParams>(successStatus: number, getParams: GetParams<TParams>, run: Run<TParams, DocumentDto>) {
     return async (req: Request, resp: Response) => {
-      const p = Object.assign({ user: req.session!.user as IUser }, getParams(req.params || {}, req.query || {}, req.body || {}));
+      const p = Object.assign({ user: req.session!.user as ISessionUser }, getParams(req.params || {}, req.query || {}, req.body || {}));
       run(p)
         .then(result => {
           if (result === null || result === undefined) {

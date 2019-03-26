@@ -1,7 +1,7 @@
 import { RootActions } from "../actions/root";
-import { IUser } from "../../../types/IUser";
+import { IClientUser } from "../../../types/IUser";
 
-export const userReducer = (state: IUser = {} as IUser, action: RootActions) => {
+export const userReducer = (state = {} as IClientUser, action: RootActions) => {
   // no update on client side this is initialised from server
   return state;
 };
