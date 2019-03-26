@@ -1,5 +1,6 @@
 import { QueryBase, SALESFORCE_DATE_FORMAT } from "../common";
 import { Authorisation, IContext, ProjectRole } from "../../../types";
+import { MonitoringReportSummaryDto } from "../../../types/dtos/monitoringReportDto";
 
 export class GetMonitoringReportsForProject extends QueryBase<MonitoringReportSummaryDto[]> {
   constructor(
