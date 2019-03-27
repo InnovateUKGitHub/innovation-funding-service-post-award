@@ -18,10 +18,6 @@ const clientApi: IApiClient = {
   claimDetails: {
     getAllByPartner: (params) => ajaxJson(`/api/claim-details/?partnerId=${params.partnerId}`)
   },
-  contacts: {
-    getAll: (params) => ajaxJson("/api/contacts"),
-    get: (params) => ajaxJson(`/api/contact/${params.contactId}`),
-  },
   costCategories: {
     getAll: (params) => ajaxJson("/api/cost-categories"),
   },
