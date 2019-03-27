@@ -1,17 +1,20 @@
 interface OptionDto {
+  id: string;
   questionText: string;
   questionScore: number;
 }
 
 interface QuestionDto {
+  responseId: string;
+  optionId: string;
   title: string;
-  score?: number;
   comments?: string;
   options: OptionDto[];
+  displayOrder: number;
 }
 
 interface MonitoringReportDto {
-  id: string;
+  headerId: string;
   status: string;
   startDate: Date;
   endDate: Date;
