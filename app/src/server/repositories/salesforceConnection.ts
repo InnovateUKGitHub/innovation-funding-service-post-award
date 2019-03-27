@@ -5,13 +5,16 @@ import { Cache } from "../features/common/cache";
 import { Configuration } from "../features/common";
 import { LogLevel } from "../../types/logLevel";
 
-export interface ISalesforceConnectionDetails {
+export interface ISalesforceTokenDetails {
   currentUsername: string;
+  connectionUrl: string;
+  clientId: string;
+}
+
+export interface ISalesforceConnectionDetails extends ISalesforceTokenDetails {
   serviceUsername: string;
   servicePassword: string;
   serviceToken: string;
-  connectionUrl: string;
-  clientId: string;
 }
 
 interface ITokenInfo {
@@ -67,11 +70,6 @@ const getToken = (username: string, clientId: string, connectionUrl: string): Pr
       if (r.ok) {
         return r.json();
       }
-      else if (r.headers.get("content-type") === "application/json") {
-        return r.json().then(x => {
-          throw new SalesforceTokenError(`Unable to get token: url- ${r.url}: originalUrl- ${connectionUrl}: ${x.error} \n ${x.error_description}`, r.status);
-        });
-      }
       else {
         return r.text().then(x => {
           throw new SalesforceTokenError(`Unable to get token or json error: url- ${r.url}: status: -${r.status} originalUrl- ${connectionUrl}: ${x}`, r.status);
@@ -83,7 +81,7 @@ const getToken = (username: string, clientId: string, connectionUrl: string): Pr
 
 };
 
-export const salesforceConnectionWithToken = async ({ currentUsername, clientId, connectionUrl }: ISalesforceConnectionDetails): Promise<jsforce.Connection> => {
+export const salesforceConnectionWithToken = async ({ currentUsername, clientId, connectionUrl }: ISalesforceTokenDetails): Promise<jsforce.Connection> => {
   const token = await tokenCache.fetchAsync(currentUsername, () => getToken(currentUsername, clientId, connectionUrl));
 
   return new jsforce.Connection({

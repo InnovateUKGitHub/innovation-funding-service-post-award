@@ -16,7 +16,7 @@ import { errorHandlerRender } from "./errorHandlers";
 import { ForbiddenError, FormHandlerError, NotFoundError } from "./features/common/appError";
 import contextProvider from "./features/common/contextProvider";
 import { GetAllProjectRolesForUser } from "./features/projects/getAllProjectRolesForUser";
-import { Authorisation, IUser } from "../types";
+import { Authorisation, IClientUser } from "../types";
 import { Logger } from "./features/common/logger";
 
 async function loadData(dispatch: Dispatch, getState: () => RootState, dataCalls: AsyncThunk<any>[]): Promise<void> {
@@ -46,7 +46,7 @@ export async function serverRender(req: Request, res: Response, error?: IAppErro
 
     const context = contextProvider.start({ user: req.session!.user });
     const roleInfo = await context.runQuery(new GetAllProjectRolesForUser()).then(x => x.permissions);
-    const user: IUser = { ...req.session!.user, roleInfo };
+    const user: IClientUser = { ...req.session!.user, roleInfo };
 
     const initialState = setupInitialState(route, user);
     const middleware = setupMiddleware(router, false);
