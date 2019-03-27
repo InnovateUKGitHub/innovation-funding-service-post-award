@@ -3,6 +3,7 @@ import * as Repositories from "../../src/server/repositories";
 import { ITestRepositories } from "./testRepositories";
 import { ClaimStatus } from "../../src/types";
 import { SalesforceRole } from "../../src/server/repositories";
+import { ISalesforceMonitoringReportResponse} from "../../src/server/repositories";
 
 export class TestData {
   constructor(private repositories: ITestRepositories) {
@@ -33,15 +34,15 @@ export class TestData {
     return newItem;
   }
 
-  public createQuestion(answersPerQuestion: number): Repositories.ISalesforceQuestions[] {
+  public createQuestion(answersPerQuestion: number, displayOrder = 1, overrideCalculation = false): Repositories.ISalesforceQuestions[] {
     let i;
     const newQuestionArray = [];
     const seed = this.repositories.questions.Items.length + 1;
     for (i = 0; i < answersPerQuestion; i++) {
       const newQuestion: Repositories.ISalesforceQuestions = {
-        Id: `Id${seed + i}`,
-        Acc_QuestionName__c: `QuestionName${(seed-1)/answersPerQuestion + 1}`,
-        Acc_DisplayOrder__c: (seed-1)/answersPerQuestion + 1,
+        Id: `QuestionId: ${seed + i}`,
+        Acc_QuestionName__c: `QuestionName: ${overrideCalculation ? displayOrder : (seed-1)/answersPerQuestion + displayOrder}`,
+        Acc_DisplayOrder__c: overrideCalculation ? displayOrder : (seed-1)/answersPerQuestion + displayOrder,
         Acc_Score__c: i + 1,
         Acc_QuestionText__c: `QuestionText: ${seed} ${i}`,
         Acc_ActiveFlag__c: "Y",
@@ -59,7 +60,7 @@ export class TestData {
     const endDate = new Date();
     endDate.setMonth(endDate.getMonth() + 1);
 
-    return {
+    const newHeader = {
       Id: id,
       Acc_MonitoringReportStatus__c: "Draft",
       Acc_ProjectId__c: projectId,
@@ -67,23 +68,38 @@ export class TestData {
       Acc_ProjectStartDate__c: startDate,
       Acc_ProjectEndDate__c: endDate
     };
+    this.repositories.monitoringReportHeader.Items.push(newHeader);
+
+    return newHeader;
   }
 
-  public createMonitoringReportResponse(answersToCreate: number): Repositories.ISalesforceMonitoringReportResponse[] {
-    let i;
-    const newAnswerArray = [];
-    for (i = 0; i < answersToCreate; i++) {
-      const newAnswer: Repositories.ISalesforceMonitoringReportResponse = {
-        Id: `Id: ${i + 1}`,
-        Acc_MonitingReportHeader__c: "a",
-        Acc_Question__c: `QuestionName${i + 1}`,
-        Acc_QuestionComments__c: `comment ${i + 1}`,
-        Acc_QuestionScore__c: i
-      };
-      newAnswerArray.push(newAnswer);
-    }
+  public createMonitoringReportResponseFromQuestions(questions: Repositories.ISalesforceQuestions[], questionCount = 0) {
+    const uniqueQuestionIds = [...new Set(questions.map(x => x.Id))];
+    const responseArray: ISalesforceMonitoringReportResponse[] = [];
 
-    return newAnswerArray;
+    uniqueQuestionIds.forEach(x => {
+      responseArray.push(
+        {
+          Id: "",
+          Acc_MonitingReportHeader__c: "",
+          Acc_Question__c: x,
+          Acc_QuestionComments__c: "",
+        }
+      );
+    });
+
+    responseArray.forEach(r => {
+      questions.forEach(q => {
+        if (r.Acc_Question__c === q.Id) {
+          r.Id = `Response: ${questionCount + 1}`;
+          r.Acc_MonitingReportHeader__c = "a";
+          r.Acc_QuestionComments__c = `Comments: ${q.Acc_DisplayOrder__c}`;
+        }
+      });
+      this.repositories.monitoringReportResponse.Items.push(r);
+    });
+
+    return responseArray;
   }
 
   public createContact(update?: (item: Repositories.ISalesforceContact) => void) {
