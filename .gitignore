@@ -6,3 +6,5 @@ dist/
 /**/.idea
 bamboo-specs.iml
 salesforce
+Vagrantfile
+provision.sh
