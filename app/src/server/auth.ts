@@ -42,7 +42,7 @@ router.use(cookieSession({
   secure: process.env.SERVER_URL !== "http://localhost:8080",
   httpOnly: true,
   name: cookieName,
-  keys: ["thekey", "thesecret"],
+  secret: Configuration.cookieKey,
   maxAge: 1000 * 60 * Configuration.timeouts.cookie
 }));
 
