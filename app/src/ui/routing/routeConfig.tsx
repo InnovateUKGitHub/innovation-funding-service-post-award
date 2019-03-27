@@ -16,6 +16,7 @@ export const routeConfig = {
   projectChangeRequests: Containers.ProjectChangeRequestsRoute,
   projectDashboard: Containers.ProjectDashboardRoute,
   projectDetails: Containers.ProjectDetailsRoute,
+  projectDocuments: Containers.ProjectDocumentsRoute,
   projectForecast: Containers.ProjectForecastRoute,
   prepareMonitoringReport: Containers.PrepareMonitoringReportRoute,
   reviewClaim: Containers.ReviewClaimRoute,

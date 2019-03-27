@@ -24,6 +24,7 @@ const clientApi: IApiClient = {
   documents: {
     getClaimDocuments:(params) => ajaxJson(`/api/documents/claims/${params.partnerId}/${params.periodId}/?description=${params.description}`),
     getClaimDetailDocuments: ({ claimDetailKey }) => ajaxJson(`/api/documents/claim-details/${claimDetailKey.partnerId}/${claimDetailKey.periodId}/${claimDetailKey.costCategoryId}`),
+    getProjectDocuments: (params) => ajaxJson(`/api/documents/projects/${params.projectId}`),
     deleteDocument: ({ documentId }) => ajaxJson(`/api/documents/${documentId}`, { method: "DELETE" }),
     uploadClaimDetailDocument: ({ claimDetailKey, file }) => {
       const formData = new FormData();
