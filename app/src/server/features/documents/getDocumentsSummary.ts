@@ -1,5 +1,6 @@
 import { QueryBase } from "../common";
 import { IContext } from "../../../types";
+import { DateTime } from "luxon";
 
 export class GetDocumentsSummaryQuery extends QueryBase<DocumentSummaryDto[]> {
   constructor(private readonly documentIds: string[], private readonly filter?: DocumentFilter) {
@@ -14,7 +15,7 @@ export class GetDocumentsSummaryQuery extends QueryBase<DocumentSummaryDto[]> {
       id: doc.ContentDocumentId,
       description: doc.Description,
       fileSize: doc.ContentSize,
-      dateCreated: doc.CreatedDate,
+      dateCreated: DateTime.fromISO(doc.CreatedDate).toJSDate(),
       owner: doc.Owner.Username
     }));
   }
