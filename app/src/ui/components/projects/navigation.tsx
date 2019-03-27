@@ -51,7 +51,7 @@ export const ProjectNavigation: React.SFC<Props> = ({ project, currentRoute, par
   return (
     <React.Fragment>
       <Section qa="projectDetailsLink">
-        <Link route={ProjectDetailsRoute.getLink({ id: projectId })}>Contact details and project summary</Link>
+        <Link className="govuk-!-font-size-19" route={ProjectDetailsRoute.getLink({ id: projectId })}>Contact details and project summary</Link>
       </Section>
       <Tabs tabList={navigationTabs} qa="project-navigation" />
     </React.Fragment>
