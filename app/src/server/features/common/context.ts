@@ -4,7 +4,7 @@ import { AppError, BadRequestError, ForbiddenError, NotFoundError, ValidationErr
 import * as Salesforce from "../../repositories/salesforceConnection";
 import { SalesforceInvalidFilterError } from "../../repositories/salesforceRepositoryBase";
 import { GetAllProjectRolesForUser, IRoleInfo } from "../projects/getAllProjectRolesForUser";
-import { ErrorCode, ICaches, IContext, IRunnable, ISyncRunnable, IUser } from "../../../types";
+import { ErrorCode, ICaches, IContext, IRunnable, ISessionUser, ISyncRunnable, } from "../../../types";
 import { QueryBase, SyncQueryBase } from "./queryBase";
 import { CommandBase, SyncCommandBase } from "./commandBase";
 
@@ -30,7 +30,7 @@ const constructErrorResponse = <E extends Error>(error: E): AppError => {
 };
 
 export class Context implements IContext {
-  constructor(public readonly user: IUser) {
+  constructor(public readonly user: ISessionUser) {
     this.config = Configuration;
 
     const salesforceConfig = {
@@ -42,7 +42,7 @@ export class Context implements IContext {
     };
 
     this.salesforceConnectionDetails = Object.assign(salesforceConfig, { currentUsername: this.user && this.user.email });
-    this.logger = new Logger(user);
+    this.logger = new Logger(user && user.email);
   }
 
   // the connection details hane been left as delegates untill details of JWT Access token confirmed

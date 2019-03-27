@@ -4,7 +4,7 @@ import { createRouteNodeSelector, RouterState } from "redux-router5";
 import { MatchedRoute, matchRoute } from "../routing";
 import { Footer, Header, PhaseBanner } from "../components";
 import { RootState } from "../redux";
-import { IUser } from "../../types/IUser";
+import { IClientUser } from "../../types/IUser";
 import { StandardErrorPage } from "../components/standardErrorPage";
 import { Authorisation } from "../../types";
 import { IClientConfig } from "../redux/reducers/configReducer";
@@ -12,7 +12,7 @@ import { IClientConfig } from "../redux/reducers/configReducer";
 interface IAppProps extends RouterState {
   dispatch: any;
   loadStatus: number;
-  user: IUser;
+  user: IClientUser;
   config: IClientConfig;
 }
 

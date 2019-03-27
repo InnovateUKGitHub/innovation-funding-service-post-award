@@ -5,7 +5,7 @@ import { loadStatusReducer } from "./loadStatusReducer";
 import { editorReducer } from "./editorsReducer";
 import { userReducer } from "./userReducer";
 import { messagesReducer } from "./messagesReducer";
-import { IUser } from "../../../types/IUser";
+import { IClientUser } from "../../../types/IUser";
 import { configReducer, IClientConfig } from "./configReducer";
 
 export type DataState = ReturnType<typeof dataReducer>;
@@ -20,7 +20,7 @@ export interface RootState {
   editors: EditorState;
   loadStatus: number;
   messages: MessagesState;
-  user: IUser;
+  user: IClientUser;
   isClient: boolean;
   config: IClientConfig;
 }

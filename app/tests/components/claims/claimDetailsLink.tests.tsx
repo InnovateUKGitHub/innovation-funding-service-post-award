@@ -12,7 +12,7 @@ import { createStore } from "redux";
 import { rootReducer } from "../../../src/ui/redux/reducers";
 import { Provider } from "react-redux";
 import { RouterProvider } from "react-router5";
-import { IUser } from "../../../src/types";
+import { IClientUser } from "../../../src/types";
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -23,7 +23,7 @@ const partnerId = "a0B0Q000001eWRHUA2";
 const projectId = "a0C0Q000001uK5VUAU";
 const claimId = "a050Q00000206gHQAQ";
 
-const preloadedState: IUser = {
+const preloadedState: IClientUser = {
   email: "iuk.accproject@bjss.com.bjsspoc2",
   roleInfo: {
     a0C0Q000001uK5VUAU: {
@@ -32,15 +32,14 @@ const preloadedState: IUser = {
         a0B0Q000001eWRHUA2: 7
       }
     }
-  },
-  name: ""
+  }
 };
 
 describe("ClaimDetailsLink", () => {
   describe("as a monitoring officer", () => {
     it("should render a Review Claim link when claim is submitted", () => {
       const wrapper = mount(
-  <Provider store={createStore(rootReducer, {user: preloadedState})}>
+        <Provider store={createStore(rootReducer, {user: preloadedState})}>
           <RouterProvider router={router}>
             <ClaimDetailsLink claim={{id: claimId, periodId: 3, status: ClaimStatus.SUBMITTED} as any} project={{id: projectId, roles: ProjectRole.MonitoringOfficer} as any} partner={{id: partnerId} as any}/>
           </RouterProvider>

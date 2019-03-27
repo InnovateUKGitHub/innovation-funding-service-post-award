@@ -1,6 +1,6 @@
-import { IUser } from "../../src/types/IUser";
+import { IClientUser } from "../../src/types/IUser";
 
-export class TestUser implements IUser {
+export class TestUser implements IClientUser {
     constructor() {
         this.email = "test.user@test.com";
         this.name = "Test User";
