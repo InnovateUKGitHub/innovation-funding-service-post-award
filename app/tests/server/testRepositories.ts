@@ -6,16 +6,6 @@ import { Stream } from "stream";
 import { IRepositories } from "../../src/types/IContext";
 import { ISalesforceMonitoringReportResponse } from "../../src/server/repositories";
 
-class ContactsTestRepository extends TestRepository<Repositories.ISalesforceContact> implements Repositories.IContactsRepository {
-    getById(id: string) {
-        return super.getOne(x => x.Id === id);
-    }
-
-    getAll() {
-        return super.getAll();
-    }
-}
-
 class ProjectsTestRepository extends TestRepository<Repositories.ISalesforceProject> implements Repositories.IProjectRepository {
     getById(id: string) {
         return super.getOne(x => x.Id === id);
@@ -329,7 +319,6 @@ export interface ITestRepositories extends IRepositories {
     claimDetails: ClaimDetailsTestRepository;
     claimLineItems: ClaimLineItemsTestRepository;
     costCategories: CostCategoriesTestRepository;
-    contacts: ContactsTestRepository;
     contentDocumentLinks: ContentDocumentLinkTestRepository;
     contentDocument: ContentDocumentTestRepository;
     contentVersions: ContentVersionTestRepository;
@@ -351,7 +340,6 @@ export const createTestRepositories = (): ITestRepositories => {
         claimDetails: new ClaimDetailsTestRepository(),
         claimLineItems: new ClaimLineItemsTestRepository(),
         costCategories: new CostCategoriesTestRepository(),
-        contacts: new ContactsTestRepository(),
         contentDocument: new ContentDocumentTestRepository(),
         contentDocumentLinks: new ContentDocumentLinkTestRepository(),
         contentVersions: new ContentVersionTestRepository(),

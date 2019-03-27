@@ -1,6 +1,5 @@
 export * from "./claimDetailsRepository";
 export * from "./claimsRepository";
-export * from "./contactsRepository";
 export * from "./costCategoriesRepository";
 export * from "./monitoringReportHeader";
 export * from "./monitoringReportResponse";

@@ -46,7 +46,6 @@ export const dataReducer = combineReducers({
   claimDetailsSummary: dataStoreReducer<ClaimDetailsSummaryDto[]>("claimDetailsSummary"),
   claimLineItems: dataStoreReducer<ClaimLineItemDto[]>("claimLineItems"),
   contacts: dataStoreReducer<IContact[]>("contacts"),
-  contact: dataStoreReducer<IContact>("contact"),
   costCategories:dataStoreReducer<CostCategoryDto[]>("costCategories"),
   documents: dataStoreReducer<DocumentSummaryDto[]>("documents"),
   forecastDetails: dataStoreReducer<ForecastDetailsDTO[]>("forecastDetails"),
