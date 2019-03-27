@@ -9,7 +9,6 @@ import * as Repositories from "../server/repositories";
 export interface IRepositories {
   claims: Readonly<Repositories.IClaimRepository>;
   claimDetails: Readonly<Repositories.IClaimDetailsRepository>;
-  contacts: Readonly<Repositories.IContactsRepository>;
   costCategories: Readonly<Repositories.ICostCategoryRepository>;
   contentDocument: Readonly<Repositories.ContentDocumentRepository>;
   contentDocumentLinks: Readonly<Repositories.ContentDocumentLinkRepository>;

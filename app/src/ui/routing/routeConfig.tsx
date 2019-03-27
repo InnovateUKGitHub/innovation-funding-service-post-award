@@ -9,7 +9,6 @@ export const routeConfig = {
   claimDetailDocuments: Containers.ClaimDetailDocumentsRoute,
   claimForecast: Containers.ClaimForecastRoute,
   claimLineItems: Containers.ClaimLineItemsRoute,
-  contacts: Containers.ContactListRoute,
   error: Containers.ErrorRoute,
   home: Containers.HomeRoute,
   prepareClaim: Containers.PrepareClaimRoute,
