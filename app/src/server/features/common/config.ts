@@ -45,6 +45,8 @@ export interface IConfig {
         ifsApplicationUrl: Readonly<string>;
         ifsGrantLetterUrl: Readonly<string>;
     };
+
+    cookieKey: Readonly<string>;
 }
 
 const build = process.env.BUILD || `${Date.now()}`;
@@ -86,8 +88,11 @@ const urls = {
     ifsGrantLetterUrl: "https://application-for-innovation-funding.service.gov.uk/management/competition/<<Acc_CompetitionId__c>>/project/<<Acc_IFSApplicationId__c>>",
 };
 
+const cookieKey = process.env.COOKIE_KEY!;
+
 export const Configuration: IConfig = {
     build,
+    cookieKey,
     timeouts,
     certificates,
     logLevel,
