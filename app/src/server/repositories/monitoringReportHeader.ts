@@ -6,12 +6,13 @@ export interface ISalesforceMonitoringReportHeader {
   Acc_MonitoringReportStatus__c: string;
   Acc_ProjectId__c: string; // is this correct?
   Acc_ProjectPeriodNumber__c: number;
-  Acc_ProjectStartDate__c: Date;
-  Acc_ProjectEndDate__c: Date;
+  Acc_ProjectStartDate__c: string;
+  Acc_ProjectEndDate__c: string;
 }
 
 export interface IMonitoringReportHeaderRepository {
   get(projectId: string, periodId: number): Promise<ISalesforceMonitoringReportHeader>;
+  getAllForProject(projectId: string): Promise<ISalesforceMonitoringReportHeader[]>;
 }
 
 export class MonitoringReportHeaderRepository extends SalesforceRepositoryBase<ISalesforceMonitoringReportHeader> implements IMonitoringReportHeaderRepository {
@@ -36,8 +37,18 @@ export class MonitoringReportHeaderRepository extends SalesforceRepositoryBase<I
     Acc_MonitoringReportStatus__c: "draft",
     Acc_ProjectId__c: "1",
     Acc_ProjectPeriodNumber__c: 1,
-    Acc_ProjectStartDate__c: new Date(),
-    Acc_ProjectEndDate__c: new Date(),
+    Acc_ProjectStartDate__c: "2018-02-04",
+    Acc_ProjectEndDate__c: "2018-03-04",
+  };
+
+  private record1 = {
+    Id: "1",
+    Acc_MonitoringReportID__c: "1",
+    Acc_MonitoringReportStatus__c: "draft",
+    Acc_ProjectId__c: "2",
+    Acc_ProjectPeriodNumber__c: 2,
+    Acc_ProjectStartDate__c: "2018-03-04",
+    Acc_ProjectEndDate__c: "2018-04-04",
   };
 
   async get(projectId: string, periodId: number): Promise<ISalesforceMonitoringReportHeader> {
@@ -52,5 +63,9 @@ export class MonitoringReportHeaderRepository extends SalesforceRepositoryBase<I
     if (!record) throw new NotFoundError("Monitoring Report Header");
 
     return record;
+  }
+
+  async getAllForProject(projectId: string): Promise<ISalesforceMonitoringReportHeader[]> {
+    return [this.record, this.record1];
   }
 }
