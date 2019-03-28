@@ -34,6 +34,28 @@ export class TestData {
     return newItem;
   }
 
+  public createContact(update?: (item: Repositories.ISalesforceContact) => void) {
+    const seed = this.repositories.contacts.Items.length + 1;
+
+    const newItem = {
+      Id: "Contact" + seed,
+      Salutation: "Mr",
+      LastName: "James" + seed,
+      FirstName: "Joyce" + seed,
+      Email: "james" + seed + "@test.com",
+      MailingStreet: "",
+      MailingCity: "",
+      MailingState: "",
+      MailingPostalCode: "",
+    } as Repositories.ISalesforceContact;
+
+    if (!!update) update(newItem);
+
+    this.repositories.contacts.Items.push(newItem);
+
+    return newItem;
+  }
+
   public createProject(update?: (item: Repositories.ISalesforceProject) => void) {
     const seed = this.repositories.projects.Items.length + 1;
 
