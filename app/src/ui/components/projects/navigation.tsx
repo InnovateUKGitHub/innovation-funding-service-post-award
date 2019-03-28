@@ -29,7 +29,7 @@ export const ProjectNavigation: React.SFC<Props> = ({ project, currentRoute, par
   const viewForecastLink = ViewForecastRoute.getLink({ projectId, partnerId });
   const projectForecastsLink = ProjectForecastRoute.getLink({ projectId });
   const projectChangeRequestLink = ProjectChangeRequestsRoute.getLink({ projectId });
-  const projectDocumentsLink = ProjectDocumentsRoute.getLink({projectId});
+  const projectDocumentsLink = ProjectDocumentsRoute.getLink({ projectId });
 
   // roles
   const isFC = !!(project.roles & ProjectRole.FinancialContact);
