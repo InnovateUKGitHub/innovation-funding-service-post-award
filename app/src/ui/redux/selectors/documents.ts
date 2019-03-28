@@ -14,6 +14,8 @@ export const getClaimDetailDocuments = (partnerId: string, periodId: number, cos
 
 export const getClaimDocuments = (partnerId: string, periodId: number) => dataStoreHelper(documentStore, getKey("claim", partnerId, periodId));
 
+export const getProjectDocuments = (projectId: string) => dataStoreHelper(documentStore, getKey("project", projectId));
+
 export const getClaimDetailDocumentEditor = ({partnerId, periodId, costCategoryId}: ClaimDetailKey) => editorStoreHelper<DocumentUploadDto, DocumentUploadValidator>(
   documentStore,
   x => x.documents,

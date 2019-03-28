@@ -1,10 +1,13 @@
 import React from "react";
 import { PartnerDto, ProjectDto, ProjectRole } from "../../../types";
-import { TabItem, Tabs } from "../layout";
+import { Section, TabItem, Tabs } from "../layout";
+import { Link } from "../links";
 import {
   AllClaimsDashboardRoute,
   ClaimsDashboardRoute,
   ProjectChangeRequestsRoute,
+  ProjectDetailsRoute,
+  ProjectDocumentsRoute,
   ProjectForecastRoute,
   ViewForecastRoute,
 } from "../../containers";
@@ -26,10 +29,12 @@ export const ProjectNavigation: React.SFC<Props> = ({ project, currentRoute, par
   const viewForecastLink = ViewForecastRoute.getLink({ projectId, partnerId });
   const projectForecastsLink = ProjectForecastRoute.getLink({ projectId });
   const projectChangeRequestLink = ProjectChangeRequestsRoute.getLink({ projectId });
+  const projectDocumentsLink = ProjectDocumentsRoute.getLink({ projectId });
 
   // roles
   const isFC = !!(project.roles & ProjectRole.FinancialContact);
   const isMOorPM = !!(project.roles & (ProjectRole.MonitoringOfficer | ProjectRole.ProjectManager));
+  const isMO = !!(project.roles & ProjectRole.MonitoringOfficer);
 
   // add tabs conditionally
   const navigationTabs: TabItem[] = [];
@@ -46,5 +51,17 @@ export const ProjectNavigation: React.SFC<Props> = ({ project, currentRoute, par
 
   navigationTabs.push({ text: "Project change requests", route: projectChangeRequestLink, selected: projectChangeRequestLink.routeName === currentRoute, qa: "changeRequestsTab" });
 
-  return <Tabs tabList={navigationTabs} qa="project-navigation" />;
+  if (isMO) {
+    navigationTabs.push({ text: "Documents", route: projectDocumentsLink, selected: projectDocumentsLink.routeName === currentRoute, qa: "documentsTab" });
+  }
+
+  return (
+    <React.Fragment>
+      <Section qa="projectDetailsLink">
+        <Link className="govuk-!-font-size-19" route={ProjectDetailsRoute.getLink({ id: projectId })}>Contact details and project summary</Link>
+      </Section>
+      <Tabs tabList={navigationTabs} qa="project-navigation" />
+    </React.Fragment>
+  );
+
 };
