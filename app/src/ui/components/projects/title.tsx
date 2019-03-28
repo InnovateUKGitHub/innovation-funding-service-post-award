@@ -1,12 +1,12 @@
 import React from "react";
-import * as ACC from "../";
 import { ProjectDto } from "../../../types";
+import { Title as PageTitle } from "../layout/title";
 
 interface Props {
-    project: ProjectDto;
-    pageTitle: string;
+  project: ProjectDto;
+  pageTitle: string;
 }
 
-export const Title: React.SFC<Props> = ({pageTitle, project}) => {
-    return <ACC.Title title={pageTitle} caption={`${project.projectNumber || ""} : ${project.title || ""}`} />;
-};
+export const Title: React.SFC<Props> = ({pageTitle, project}) => (
+  <PageTitle title={pageTitle} caption={`${project.projectNumber || ""} : ${project.title || ""}`} />
+);
