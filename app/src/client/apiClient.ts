@@ -18,16 +18,13 @@ const clientApi: IApiClient = {
   claimDetails: {
     getAllByPartner: (params) => ajaxJson(`/api/claim-details/?partnerId=${params.partnerId}`)
   },
-  contacts: {
-    getAll: (params) => ajaxJson("/api/contacts"),
-    get: (params) => ajaxJson(`/api/contact/${params.contactId}`),
-  },
   costCategories: {
     getAll: (params) => ajaxJson("/api/cost-categories"),
   },
   documents: {
     getClaimDocuments:(params) => ajaxJson(`/api/documents/claims/${params.partnerId}/${params.periodId}/?description=${params.description}`),
     getClaimDetailDocuments: ({ claimDetailKey }) => ajaxJson(`/api/documents/claim-details/${claimDetailKey.partnerId}/${claimDetailKey.periodId}/${claimDetailKey.costCategoryId}`),
+    getProjectDocuments: (params) => ajaxJson(`/api/documents/projects/${params.projectId}`),
     deleteDocument: ({ documentId }) => ajaxJson(`/api/documents/${documentId}`, { method: "DELETE" }),
     uploadClaimDetailDocument: ({ claimDetailKey, file }) => {
       const formData = new FormData();
@@ -48,6 +45,9 @@ const clientApi: IApiClient = {
   },
   forecastGolCosts: {
     getAllByPartnerId: (params) => ajaxJson(`/api/forecast-gol-costs/?partnerId=${params.partnerId}`)
+  },
+  monitoringReports: {
+    get: (params) => ajaxJson(`/api/monitoring-reports/${params.projectId}/${params.periodId}`)
   },
   projects: {
     get: (params) => ajaxJson(`/api/projects/${params.projectId}`),

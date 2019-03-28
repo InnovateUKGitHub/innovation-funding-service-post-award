@@ -1,6 +1,6 @@
 import { Configuration } from "./config";
-import { IUser } from "../../../types";
 import { LogLevel } from "../../../types/logLevel";
+import { AppError } from "./appError";
 
 export interface ILogger {
   debug(message: string, params: any[]): void;
@@ -11,10 +11,10 @@ export interface ILogger {
 
 export class Logger implements ILogger {
   private readonly level: LogLevel;
-  private readonly user: IUser | undefined;
+  private readonly identifier: string | undefined;
 
-  constructor(user?: IUser, logLevel?: LogLevel) {
-    this.user = user;
+  constructor(identifier?: string, logLevel?: LogLevel) {
+    this.identifier = identifier;
     this.level = logLevel || Configuration.logLevel;
   }
 
@@ -38,7 +38,7 @@ export class Logger implements ILogger {
     if(level >= this.level) {
       const item = {
         type: LogLevel[level],
-        email: !!this.user ? this.user.email : "",
+        identifier: this.identifier || "",
         message,
         params
       };

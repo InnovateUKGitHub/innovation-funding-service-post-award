@@ -9,7 +9,7 @@ interface DocumentSummaryDto {
   id: string;
   description?: string;
   fileSize: number;
-  dateCreated: string;
+  dateCreated: Date;
   owner: string;
 }
 
