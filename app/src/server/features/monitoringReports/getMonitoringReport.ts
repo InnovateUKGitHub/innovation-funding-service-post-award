@@ -1,4 +1,4 @@
-import { QueryBase } from "../common";
+import { QueryBase, SALESFORCE_DATE_FORMAT } from "../common";
 import { Authorisation, IContext, ProjectRole } from "../../../types";
 
 export class GetMonitoringReport extends QueryBase<MonitoringReportDto> {
@@ -57,8 +57,8 @@ export class GetMonitoringReport extends QueryBase<MonitoringReportDto> {
     const monitoringReport: MonitoringReportDto = {
       headerId: header.Id,
       status: header.Acc_MonitoringReportStatus__c,
-      startDate: header.Acc_ProjectStartDate__c,
-      endDate: header.Acc_ProjectEndDate__c,
+      startDate: context.clock.parse(header.Acc_ProjectStartDate__c, SALESFORCE_DATE_FORMAT)!,
+      endDate: context.clock.parse(header.Acc_ProjectEndDate__c, SALESFORCE_DATE_FORMAT)!,
       periodId: header.Acc_ProjectPeriodNumber__c,
       questions: questionArray
     };

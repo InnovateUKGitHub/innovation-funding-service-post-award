@@ -1,21 +1,30 @@
-import { ApiParams, ControllerBase } from "./controllerBase";
+import { ApiParams, ControllerBaseWithSummary } from "./controllerBase";
 import contextProvider from "../features/common/contextProvider";
 import { GetMonitoringReport } from "../features/monitoringReports/getMonitoringReport";
+import { GetMonitoringReportsForProject } from "../features/monitoringReports/getMonitoringReportsForProject";
 
 export interface IMonitoringReportsApi {
   get: (params: ApiParams<{ projectId: string, periodId: number }>) => Promise<MonitoringReportDto>;
+  getAllForProject: (params: ApiParams<{projectId: string}>) => Promise<MonitoringReportSummaryDto[]>;
 }
 
-class Controller extends ControllerBase<MonitoringReportDto> implements IMonitoringReportsApi {
+class Controller extends ControllerBaseWithSummary<MonitoringReportSummaryDto, MonitoringReportDto> implements IMonitoringReportsApi {
   constructor() {
     super("monitoring-reports");
 
     this.getItem("/:projectId/:periodId", (p) => ({ projectId: p.partnerId, periodId: parseInt(p.periodId, 10)}), (p) => this.get(p));
+    this.getItems("/:projectId", (p) => ({ projectId: p.projectId }), (p) => this.getAllForProject(p));
   }
 
   public async get(params: ApiParams<{ projectId: string, periodId: number }>) {
     const {projectId, periodId} = params;
     const query = new GetMonitoringReport(projectId, periodId);
+    return contextProvider.start(params).runQuery(query);
+  }
+
+  public async getAllForProject(params: ApiParams<{projectId: string}>) {
+    const {projectId} = params;
+    const query = new GetMonitoringReportsForProject(projectId);
     return contextProvider.start(params).runQuery(query);
   }
 }
