@@ -3,6 +3,7 @@ import * as Repositories from "../../src/server/repositories";
 import { ITestRepositories } from "./testRepositories";
 import { ClaimStatus } from "../../src/types";
 import { SalesforceRole } from "../../src/server/repositories";
+import { ISalesforceMonitoringReportResponse} from "../../src/server/repositories";
 
 export class TestData {
   constructor(private repositories: ITestRepositories) {
@@ -134,6 +135,74 @@ export class TestData {
 
   public createProjectManager(project?: Repositories.ISalesforceProject, update?: (item: Repositories.ISalesforceProjectContact) => void) {
     return this.createProjectContact(project, undefined, "Project Manager", update);
+  }
+
+  public createQuestion(answersPerQuestion: number, displayOrder = 1, overrideCalculation = false): Repositories.ISalesforceQuestions[] {
+    let i;
+    const newQuestionArray = [];
+    const seed = this.repositories.questions.Items.length + 1;
+    for (i = 0; i < answersPerQuestion; i++) {
+      const newQuestion: Repositories.ISalesforceQuestions = {
+        Id: `QuestionId: ${seed + i}`,
+        Acc_QuestionName__c: `QuestionName: ${overrideCalculation ? displayOrder : (seed-1)/answersPerQuestion + displayOrder}`,
+        Acc_DisplayOrder__c: overrideCalculation ? displayOrder : (seed-1)/answersPerQuestion + displayOrder,
+        Acc_Score__c: i + 1,
+        Acc_QuestionText__c: `QuestionText: ${seed} ${i}`,
+        Acc_ActiveFlag__c: "Y",
+      };
+
+      this.repositories.questions.Items.push(newQuestion);
+      newQuestionArray.push(newQuestion);
+    }
+
+    return newQuestionArray;
+  }
+
+  public createMonitoringReportHeader(id: string, projectId: string, period: number): Repositories.ISalesforceMonitoringReportHeader {
+    const startDate = new Date();
+    const endDate = new Date();
+    endDate.setMonth(endDate.getMonth() + 1);
+
+    const newHeader = {
+      Id: id,
+      Acc_MonitoringReportStatus__c: "Draft",
+      Acc_ProjectId__c: projectId,
+      Acc_ProjectPeriodNumber__c: period,
+      Acc_ProjectStartDate__c: startDate,
+      Acc_ProjectEndDate__c: endDate
+    };
+    this.repositories.monitoringReportHeader.Items.push(newHeader);
+
+    return newHeader;
+  }
+
+  public createMonitoringReportResponseFromQuestions(questions: Repositories.ISalesforceQuestions[], questionCount = 0) {
+    const uniqueQuestionIds = [...new Set(questions.map(x => x.Id))];
+    const responseArray: ISalesforceMonitoringReportResponse[] = [];
+
+    uniqueQuestionIds.forEach(x => {
+      responseArray.push(
+        {
+          Id: "",
+          Acc_MonitingReportHeader__c: "",
+          Acc_Question__c: x,
+          Acc_QuestionComments__c: "",
+        }
+      );
+    });
+
+    responseArray.forEach(r => {
+      questions.forEach(q => {
+        if (r.Acc_Question__c === q.Id) {
+          r.Id = `Response: ${questionCount + 1}`;
+          r.Acc_MonitingReportHeader__c = "a";
+          r.Acc_QuestionComments__c = `Comments: ${q.Acc_DisplayOrder__c}`;
+        }
+      });
+      this.repositories.monitoringReportResponse.Items.push(r);
+    });
+
+    return responseArray;
   }
 
   public createClaim(partner?: Repositories.ISalesforcePartner, periodId?: number, update?: (item: Repositories.ISalesforceClaim) => void): Repositories.ISalesforceClaim {

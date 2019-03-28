@@ -52,6 +52,7 @@ export const dataReducer = combineReducers({
   forecastDetail: dataStoreReducer<ForecastDetailsDTO>("forecastDetail"),
   forecastGolCosts: dataStoreReducer<GOLCostDto[]>("forecastGolCosts"),
   partners: dataStoreReducer<PartnerDto[]>("partners"),
+  monitoringReport: dataStoreReducer<MonitoringReportDto>("monitoringReport"),
   partner: dataStoreReducer<PartnerDto>("partner"),
   project: dataStoreReducer<ProjectDto>("project"),
   projects: dataStoreReducer<ProjectDto[]>("projects"),
