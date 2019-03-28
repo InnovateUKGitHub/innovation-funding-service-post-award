@@ -49,7 +49,7 @@ export class GetMonitoringReport extends QueryBase<MonitoringReportDto> {
       });
     });
 
-    const scoreSorter = (a: OptionDto, b: OptionDto) => b.questionScore.toLocaleString().localeCompare(a.questionScore.toLocaleString());
+    const scoreSorter = (a: OptionDto, b: OptionDto) => b.questionScore - a.questionScore;
     const sortOptions = (x: QuestionDto) => {x.options.sort(scoreSorter);};
 
     questionArray.forEach(x => sortOptions(x));
