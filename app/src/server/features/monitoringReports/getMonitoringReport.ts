@@ -19,29 +19,44 @@ export class GetMonitoringReport extends QueryBase<MonitoringReportDto> {
     const results = await context.repositories.monitoringReportResponse.getAllForHeader(this.monitoringReportHeaderId);
     // TODO rename getAll to getAllEnabled ?
     const questions = await context.repositories.questions.getAll(); // TODO rename questions repo to monitoringReportQuestions ?;
+    const uniqueDisplayOrders = [...new Set(questions.map(x => x.Acc_DisplayOrder__c))];
 
-    const questionCount = Math.max.apply(Math, questions.map(x => x.Acc_DisplayOrder__c));
-
-    let i;
     const questionArray: QuestionDto[] = [];
-    for (i = 0; i < questionCount; i++) {
+    uniqueDisplayOrders.forEach(x => {
       questionArray.push(
         {
+          responseId: "",
+          optionId: "",
           title: "",
-          score: 0,
           comments: "",
-          options: []
+          options: [],
+          displayOrder: x
         }
       );
-    }
-
-    questions.forEach(x => {
-      questionArray[x.Acc_DisplayOrder__c - 1].title = x.Acc_QuestionName__c;
-      questionArray[x.Acc_DisplayOrder__c - 1].options.push({questionText: x.Acc_QuestionText__c, questionScore: x.Acc_Score__c});
     });
 
+    questionArray.forEach(x => {
+      questions.forEach(y => {
+        if (x.displayOrder === y.Acc_DisplayOrder__c) {
+          x.optionId = y.Id;
+          x.title = y.Acc_QuestionName__c;
+          x.options.push({questionText: y.Acc_QuestionText__c, questionScore: y.Acc_Score__c, id: y.Id});
+        }
+      });
+      results.forEach(r => {
+        if (x.optionId === r.Acc_Question__c) {
+          x.responseId = r.Id;
+        }
+      });
+    });
+
+    const scoreSorter = (a: OptionDto, b: OptionDto) => b.questionScore.toLocaleString().localeCompare(a.questionScore.toLocaleString());
+    const sortOptions = (x: QuestionDto) => {x.options.sort(scoreSorter);};
+
+    questionArray.forEach(x => sortOptions(x));
+
     const monitoringReport: MonitoringReportDto = {
-      id: header.Id,
+      headerId: header.Id,
       status: header.Acc_MonitoringReportStatus__c,
       startDate: header.Acc_ProjectStartDate__c,
       endDate: header.Acc_ProjectEndDate__c,
@@ -49,11 +64,17 @@ export class GetMonitoringReport extends QueryBase<MonitoringReportDto> {
       questions: questionArray
     };
 
-    results.forEach(x => {
-      monitoringReport.questions.forEach(y => {
-        if (y.title === x.Acc_Question__c) {
-          y.comments = x.Acc_QuestionComments__c;
-          y.score = x.Acc_QuestionScore__c;
+    const displayOrderSorter = (a: QuestionDto, b: QuestionDto) => {
+      return a.displayOrder > b.displayOrder ? 1 : -1;
+    };
+    const sortQuestions = (x: MonitoringReportDto) => {x.questions.sort(displayOrderSorter);};
+
+    sortQuestions(monitoringReport);
+
+    monitoringReport.questions.forEach(q => {
+      results.forEach(r => {
+        if (q.optionId === r.Acc_Question__c) {
+          q.comments = r.Acc_QuestionComments__c;
         }
       });
     });
