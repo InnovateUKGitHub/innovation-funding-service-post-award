@@ -1,5 +1,7 @@
+// tslint:disable: no-duplicate-string no-big-function
+
 import { TestContext } from "../../testContextProvider";
-import { GetMonitoringReport} from "../../../../src/server/features/monitoringReports/getMonitoringReport";
+import { GetMonitoringReport } from "../../../../src/server/features/monitoringReports/getMonitoringReport";
 import * as Repositories from "../../../../src/server/repositories";
 
 describe("GetMonitoringReport", () => {
@@ -12,10 +14,53 @@ describe("GetMonitoringReport", () => {
     questions.forEach((x, i) => testData.createMonitoringReportResponseFromQuestions(x, i));
     testData.createMonitoringReportHeader("a", "b", 1);
 
-    const query = new GetMonitoringReport("a", "b", 1);
+    const query = new GetMonitoringReport("b", 1);
 
     const result = await context.runQuery(query);
+    console.log("result", JSON.stringify(result));
     expect(result.questions).toHaveLength(questionCount);
+  });
+
+  it("returns the right shape", async () => {
+
+    const context = new TestContext();
+    const testData = context.testData;
+    const questionCount = 3;
+
+    const questions = testData.range(questionCount, _ => testData.createQuestion(3));
+    questions.forEach((x, i) => testData.createMonitoringReportResponseFromQuestions(x, i));
+    testData.createMonitoringReportHeader("a", "b", 1);
+
+    const query = new GetMonitoringReport("b", 1);
+
+    const result = await context.runQuery(query);
+
+    expect(result.headerId).toBe("a");
+    expect(result.status).toBe("Draft");
+    expect(result.startDate).toBeDefined();
+    expect(result.endDate).toBeDefined();
+    expect(result.periodId).toBe(1);
+    expect(result.questions).toHaveLength(3);
+    expect(result.questions[0]).toEqual({
+      responseId: "Response: 1",
+      optionId: "QuestionId: 3",
+      title: "QuestionName: 1",
+      comments: "Comments: 1",
+      options: [{
+        questionText: "QuestionText: 1 2",
+        questionScore: 3,
+        id: "QuestionId: 3"
+      }, {
+        questionText: "QuestionText: 1 1",
+        questionScore: 2,
+        id: "QuestionId: 2"
+      }, {
+        questionText: "QuestionText: 1 0",
+        questionScore: 1,
+        id: "QuestionId: 1"
+      }],
+      displayOrder: 1
+    });
   });
 
   it("returns an array with no empty values when the display order beings at non-1", async () => {
@@ -27,7 +72,7 @@ describe("GetMonitoringReport", () => {
     questions.forEach((x, i) => testData.createMonitoringReportResponseFromQuestions(x, i));
     testData.createMonitoringReportHeader("a", "b", 1);
 
-    const query = new GetMonitoringReport("a", "b", 1);
+    const query = new GetMonitoringReport("b", 1);
 
     const result = await context.runQuery(query);
     expect(result.questions).toHaveLength(questionCount);
@@ -41,14 +86,14 @@ describe("GetMonitoringReport", () => {
     const questionArray = [];
 
     let i;
-    for (i = 0; i < questionCount*step; i = i + step) {
+    for (i = 0; i < questionCount * step; i = i + step) {
       const question = testData.createQuestion(3, 5 + i, true);
       questionArray.push(question);
     }
     questionArray.forEach((x, y) => testData.createMonitoringReportResponseFromQuestions(x, y));
     testData.createMonitoringReportHeader("a", "b", 1);
 
-    const query = new GetMonitoringReport("a", "b", 1);
+    const query = new GetMonitoringReport("b", 1);
 
     const result = await context.runQuery(query);
     expect(result.questions).toHaveLength(questionCount);
@@ -73,15 +118,14 @@ describe("GetMonitoringReport", () => {
     questionArray.forEach((x, i) => testData.createMonitoringReportResponseFromQuestions(x, i));
     testData.createMonitoringReportHeader("a", "b", 1);
 
-    const query = new GetMonitoringReport("a", "b", 1);
+    const query = new GetMonitoringReport("b", 1);
 
     const result = await context.runQuery(query);
-    console.log("result", result);
 
     const displayOrders = result.questions.map(x => x.displayOrder);
     const sortNumbers = (a: number, b: number) => a > b ? 1 : -1;
-    const displayOrdersSorted = result.questions.map(x => x.displayOrder).sort(sortNumbers);
 
+    const displayOrdersSorted = result.questions.map(x => x.displayOrder).sort(sortNumbers);
     expect(displayOrders).toEqual(displayOrdersSorted);
   });
 
@@ -93,11 +137,12 @@ describe("GetMonitoringReport", () => {
     testData.createMonitoringReportResponseFromQuestions(question);
     testData.createMonitoringReportHeader("a", "b", 1);
 
-    const query = new GetMonitoringReport("a", "b", 1);
+    const query = new GetMonitoringReport("b", 1);
 
     const result = await context.runQuery(query);
 
     const scores = result.questions[0].options.map(x => x.questionScore);
+    console.log("scores", scores);
     const scoresSorted = result.questions[0].options.map(x => x.questionScore).sort().reverse();
 
     expect(scores).toEqual(scoresSorted);
@@ -114,7 +159,7 @@ describe("GetMonitoringReport", () => {
     testData.createQuestion(3, 7, true);
     testData.createMonitoringReportHeader("a", "b", 1);
 
-    const query = new GetMonitoringReport("a", "b", 1);
+    const query = new GetMonitoringReport("b", 1);
 
     const result = await context.runQuery(query);
     expect(result.questions).toHaveLength(questionCount + 1);
