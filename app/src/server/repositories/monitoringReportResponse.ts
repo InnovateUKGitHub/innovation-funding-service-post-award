@@ -8,7 +8,6 @@ export interface ISalesforceMonitoringReportResponse {
   Acc_MonitingReportHeader__c: string;  // ToDo respell monitoring
   Acc_Question__c: string;
   Acc_QuestionComments__c: string;
-  Acc_QuestionScore__c: number;
 }
 
 export interface IMonitoringReportResponseRepository {
@@ -29,7 +28,6 @@ export class MonitoringReportResponseRepository extends SalesforceRepositoryBase
     "Acc_MonitingReportHeader__c",
     "Acc_Question__c",
     "Acc_QuestionComments__c",
-    "Acc_QuestionScore__c"
   ];
 
   // TODO delete me
@@ -38,7 +36,6 @@ export class MonitoringReportResponseRepository extends SalesforceRepositoryBase
     Acc_MonitingReportHeader__c: "1",
     Acc_Question__c: "a",
     Acc_QuestionComments__c: "blah",
-    Acc_QuestionScore__c: 1,
   }];
 
   async getAllForHeader(monitoringReportHeaderId: string): Promise<ISalesforceMonitoringReportResponse[]> {

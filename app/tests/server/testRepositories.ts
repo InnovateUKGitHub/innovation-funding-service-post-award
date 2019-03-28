@@ -329,6 +329,8 @@ export interface ITestRepositories extends IRepositories {
     contentDocumentLinks: ContentDocumentLinkTestRepository;
     contentDocument: ContentDocumentTestRepository;
     contentVersions: ContentVersionTestRepository;
+    monitoringReportHeader: MonitoringReportHeaderTestRepository;
+    monitoringReportResponse: MonitoringReportResponseTestRepository;
     profileDetails: ProfileDetailsTestRepository;
     profileTotalCostCategory: ProfileTotalCostCategoryTestRepository;
     profileTotalPeriod: ProfileTotalPeriodTestRepository;
