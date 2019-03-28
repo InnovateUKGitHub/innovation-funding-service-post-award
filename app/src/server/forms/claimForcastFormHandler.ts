@@ -1,12 +1,12 @@
 import { FormHandlerBase, IFormBody, IFormButton } from "./formHandlerBase";
 import { Results } from "../../ui/validation/results";
-import { ClaimForcastParams, ClaimForecastRoute, ClaimsDashboardRoute, PrepareClaimRoute } from "../../ui/containers";
+import { AllClaimsDashboardRoute, ClaimForcastParams, ClaimForecastRoute, ClaimsDashboardRoute, PrepareClaimRoute } from "../../ui/containers";
 import { getForecastDetailsEditor } from "../../ui/redux/selectors";
 import { ForecastDetailsDtosValidator } from "../../ui/validators";
 import { GetAllForecastsForPartnerQuery, UpdateForecastDetailsCommand } from "../features/forecastDetails";
-import { GetByIdQuery } from "../features/projects";
+import { GetAllProjectRolesForUser, GetByIdQuery } from "../features/projects";
 import { GetByIdQuery as GetPartnerByIdQuery } from "../features/partners";
-import { IContext, ILinkInfo } from "../../types";
+import { IContext, ILinkInfo, ProjectRole } from "../../types";
 import { GetCostCategoriesForPartnerQuery } from "../features/claims/getCostCategoriesForPartnerQuery";
 
 export class ClaimForcastFormHandler extends FormHandlerBase<ClaimForcastParams, ForecastDetailsDTO[]> {
@@ -25,9 +25,9 @@ export class ClaimForcastFormHandler extends FormHandlerBase<ClaimForcastParams,
       .map(x => x.id);
 
     dto.forEach(x => {
-        if (x.periodId > project.periodId && costCategoriesIdsToUpdate.indexOf(x.costCategoryId) >= 0) {
-            x.value = parseFloat(body[`value_${x.periodId}_${x.costCategoryId}`]);
-        }
+      if (x.periodId > project.periodId && costCategoriesIdsToUpdate.indexOf(x.costCategoryId) >= 0) {
+        x.value = parseFloat(body[`value_${x.periodId}_${x.costCategoryId}`]);
+      }
     });
 
     return dto;
@@ -40,7 +40,15 @@ export class ClaimForcastFormHandler extends FormHandlerBase<ClaimForcastParams,
     if (button.name === "save") {
       return PrepareClaimRoute.getLink(params);
     }
+
+    // if pm as well as fc then go to all claims route
+    const roles = await context.runQuery(new GetAllProjectRolesForUser()).then(x => x.for(params.projectId, params.partnerId));
+    if (roles.hasRole(ProjectRole.ProjectManager)) {
+      return AllClaimsDashboardRoute.getLink(params);
+    }
+
     return ClaimsDashboardRoute.getLink(params);
+
   }
 
   protected getStoreInfo(params: ClaimForcastParams): { key: string; store: string; } {
@@ -48,7 +56,7 @@ export class ClaimForcastFormHandler extends FormHandlerBase<ClaimForcastParams,
   }
 
   protected createValidationResult(params: ClaimForcastParams, dto: ForecastDetailsDTO[]): Results<ForecastDetailsDTO[]> {
-    return new ForecastDetailsDtosValidator (dto, [], [], [], false);
+    return new ForecastDetailsDtosValidator(dto, [], [], [], false);
   }
 
 }
