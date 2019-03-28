@@ -3,7 +3,6 @@ import { Authorisation, IContext, ProjectRole } from "../../../types";
 
 export class GetMonitoringReport extends QueryBase<MonitoringReportDto> {
   constructor(
-    private readonly monitoringReportHeaderId: string, // TODO don't use this
     private readonly projectId: string,
     private readonly periodId: number,
   ) {
@@ -16,7 +15,7 @@ export class GetMonitoringReport extends QueryBase<MonitoringReportDto> {
 
   protected async Run(context: IContext) {
     const header = await context.repositories.monitoringReportHeader.get(this.projectId, this.periodId);
-    const results = await context.repositories.monitoringReportResponse.getAllForHeader(this.monitoringReportHeaderId);
+    const results = await context.repositories.monitoringReportResponse.getAllForHeader(header.Id);
     // TODO rename getAll to getAllEnabled ?
     const questions = await context.repositories.questions.getAll(); // TODO rename questions repo to monitoringReportQuestions ?;
     const uniqueDisplayOrders = [...new Set(questions.map(x => x.Acc_DisplayOrder__c))];
