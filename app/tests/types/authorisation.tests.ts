@@ -8,14 +8,14 @@ describe("authorisation", () => {
     Project1: {
       projectRoles: ProjectRole.FinancialContact,
       partnerRoles: {
-        Partner1A : ProjectRole.FinancialContact
+        Partner1A: ProjectRole.FinancialContact
       }
     },
     Project2: {
       projectRoles: ProjectRole.FinancialContact | ProjectRole.MonitoringOfficer,
       partnerRoles: {
-        Partner2A : ProjectRole.FinancialContact,
-        Partner2B : ProjectRole.FinancialContact | ProjectRole.MonitoringOfficer
+        Partner2A: ProjectRole.FinancialContact,
+        Partner2B: ProjectRole.FinancialContact | ProjectRole.MonitoringOfficer
       }
     }
   };
@@ -96,6 +96,21 @@ describe("authorisation", () => {
     });
   });
 
+  describe("hasOnlyRole for project", () => {
+    it("when project not found returns false", async () => {
+      expect(auth.for("ProjectX").hasOnlyRole(ProjectRole.FinancialContact)).toBe(false);
+    });
+
+    it("when project found and has only role returns true", async () => {
+      expect(auth.for("Project1").hasOnlyRole(ProjectRole.FinancialContact)).toBe(true);
+    });
+
+    it("when project found and has other roles as well returns false", async () => {
+      expect(auth.for("Project2").hasOnlyRole(ProjectRole.FinancialContact)).toBe(false);
+    });
+
+  });
+
   describe("hasRole for partner", () => {
     it("when project not found returns false", async () => {
       expect(auth.for("ProjectX", "Partner1A").hasRole(ProjectRole.FinancialContact)).toBe(false);
@@ -153,4 +168,24 @@ describe("authorisation", () => {
       expect(auth.for("Project2", "Partner2A").hasAnyRoles(ProjectRole.ProjectManager)).toBe(false);
     });
   });
+
+  describe("hasOnlyRole for partner", () => {
+    it("when project not found returns false", async () => {
+      expect(auth.for("ProjectX", "Partner1A").hasOnlyRole(ProjectRole.FinancialContact)).toBe(false);
+    });
+
+    it("when partner not found returns false", async () => {
+      expect(auth.for("Project1", "Partner2A").hasOnlyRole(ProjectRole.FinancialContact)).toBe(false);
+    });
+
+    it("when partner found and has only role returns true", async () => {
+      expect(auth.for("Project1", "Partner1A").hasOnlyRole(ProjectRole.FinancialContact)).toBe(true);
+    });
+
+    it("when partner found and has other roles as well returns false", async () => {
+      expect(auth.for("Project2", "Partner2B").hasOnlyRole(ProjectRole.FinancialContact)).toBe(false);
+    });
+
+  });
+
 });
