@@ -1,9 +1,10 @@
-import SalesforceRepositoryBase from "./salesforceRepositoryBase";
+import SalesforceRepositoryBase, { Updatable } from "./salesforceRepositoryBase";
 import { NotFoundError } from "../features/common";
+import { MonitoringReportStatus } from "../../types/constants/monitoringReportStatus";
 
 export interface ISalesforceMonitoringReportHeader {
   Id: string;
-  Acc_MonitoringReportStatus__c: string;
+  Acc_MonitoringReportStatus__c: MonitoringReportStatus;
   Acc_ProjectId__c: string; // is this correct?
   Acc_ProjectPeriodNumber__c: number;
   Acc_ProjectStartDate__c: string;
@@ -12,6 +13,7 @@ export interface ISalesforceMonitoringReportHeader {
 
 export interface IMonitoringReportHeaderRepository {
   get(projectId: string, periodId: number): Promise<ISalesforceMonitoringReportHeader>;
+  update(updateDto: Updatable<ISalesforceMonitoringReportHeader>): Promise<boolean>;
   getAllForProject(projectId: string): Promise<ISalesforceMonitoringReportHeader[]>;
 }
 
@@ -34,7 +36,7 @@ export class MonitoringReportHeaderRepository extends SalesforceRepositoryBase<I
   private record = {
     Id: "1",
     Acc_MonitoringReportID__c: "1",
-    Acc_MonitoringReportStatus__c: "draft",
+    Acc_MonitoringReportStatus__c: MonitoringReportStatus.DRAFT,
     Acc_ProjectId__c: "1",
     Acc_ProjectPeriodNumber__c: 1,
     Acc_ProjectStartDate__c: "2018-02-04",
@@ -44,7 +46,7 @@ export class MonitoringReportHeaderRepository extends SalesforceRepositoryBase<I
   private record1 = {
     Id: "1",
     Acc_MonitoringReportID__c: "1",
-    Acc_MonitoringReportStatus__c: "draft",
+    Acc_MonitoringReportStatus__c: MonitoringReportStatus.DRAFT,
     Acc_ProjectId__c: "2",
     Acc_ProjectPeriodNumber__c: 2,
     Acc_ProjectStartDate__c: "2018-03-04",
@@ -63,6 +65,13 @@ export class MonitoringReportHeaderRepository extends SalesforceRepositoryBase<I
     if (!record) throw new NotFoundError("Monitoring Report Header");
 
     return record;
+  }
+
+  update(updateDto: Updatable<ISalesforceMonitoringReportHeader>): Promise<boolean> {
+    // return super.updateItem(updateDto);
+    // TODO remove this
+    this.record = { ...this.record, ...updateDto };
+    return Promise.resolve(true);
   }
 
   async getAllForProject(projectId: string): Promise<ISalesforceMonitoringReportHeader[]> {

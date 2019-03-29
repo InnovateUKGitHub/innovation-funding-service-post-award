@@ -3,6 +3,7 @@ import { ActionTransitionStart, actionTypes } from "redux-router5";
 import { DataLoadAction } from "../actions/common";
 import { LoadingStatus } from "../../../shared/pending";
 import { ClaimDto, IAppError, PartnerDto, ProjectDto, ProjectRole } from "../../../types";
+import { MonitoringReportDto } from "../../../types/dtos/monitoringReportDto";
 
 export interface IDataStore<T> {
   status: LoadingStatus;
@@ -51,8 +52,8 @@ export const dataReducer = combineReducers({
   forecastDetails: dataStoreReducer<ForecastDetailsDTO[]>("forecastDetails"),
   forecastDetail: dataStoreReducer<ForecastDetailsDTO>("forecastDetail"),
   forecastGolCosts: dataStoreReducer<GOLCostDto[]>("forecastGolCosts"),
-  partners: dataStoreReducer<PartnerDto[]>("partners"),
   monitoringReport: dataStoreReducer<MonitoringReportDto>("monitoringReport"),
+  partners: dataStoreReducer<PartnerDto[]>("partners"),
   partner: dataStoreReducer<PartnerDto>("partner"),
   project: dataStoreReducer<ProjectDto>("project"),
   projects: dataStoreReducer<ProjectDto[]>("projects"),
