@@ -94,12 +94,13 @@ class ProjectDashboardComponent extends ContainerBase<Props, Data, Callbacks> {
         if (project.periodId === 0) {
           return "upcoming";
         }
-        else if (project.roles & (ProjectRole.ProjectManager | ProjectRole.MonitoringOfficer)) {
+        if (project.roles & (ProjectRole.ProjectManager | ProjectRole.MonitoringOfficer)) {
           return project.numberOfOpenClaims > 0 ? "open" : "awaiting";
         }
-        else if (project.roles & (ProjectRole.FinancialContact) && partner) {
+        if (project.roles & (ProjectRole.FinancialContact) && partner) {
           return partner.status === PartnerClaimStatus.NoClaimsDue ? "awaiting" : "open";
         }
+        return "upcoming";
       case ProjectStatus.Closed:
       case ProjectStatus.Terminated:
         return "archived";
