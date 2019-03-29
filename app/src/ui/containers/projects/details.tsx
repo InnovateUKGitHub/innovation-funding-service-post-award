@@ -4,8 +4,9 @@ import * as ACC from "../../components";
 import { Pending } from "../../../shared/pending";
 import * as Actions from "../../redux/actions";
 import * as Selectors from "../../redux/selectors";
-import { ProjectOverviewPage } from "../../components/projectOverview";
 import { PartnerDto, ProjectDto, ProjectRole } from "../../../types";
+import { AllClaimsDashboardRoute } from "../claims/allClaimsDashboard";
+import { ClaimsDashboardRoute } from "../claims/dashboard";
 
 interface Data {
     projectDetails: Pending<ProjectDto>;
@@ -50,7 +51,11 @@ class ProjectDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
         // ];
 
         return (
-            <ProjectOverviewPage selectedTab={ProjectDetailsRoute.routeName} project={project} partners={partners}>
+            <ACC.Page>
+                <ACC.Section>
+                  {this.renderBackLink(project, partners)}
+                </ACC.Section>
+                <ACC.Projects.Title pageTitle="View project" project={project} />
                 {this.renderPartnersCosts(partners, project)}
                 <ACC.Section title="Project members">
                     <ACC.ProjectMember member={monitoringOfficer} qa="monitoring-officer" />
@@ -74,7 +79,7 @@ class ProjectDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
                     <ACC.LinksList links={links} />
                 </ACC.Section>
                 */}
-            </ProjectOverviewPage>
+            </ACC.Page>
         );
     }
 
@@ -101,6 +106,19 @@ class ProjectDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
                 </PartnersTable.Table>
             </ACC.Section>
         );
+    }
+
+    private renderBackLink(project: ProjectDto, partners: PartnerDto[]) {
+        const partnerId = partners.filter(x => x.roles & ProjectRole.FinancialContact).map(x => x.id)[0];
+        const isMOorPM = !!(project.roles & (ProjectRole.MonitoringOfficer | ProjectRole.ProjectManager));
+        const isFC = !!(project.roles & ProjectRole.FinancialContact);
+
+        if(isMOorPM) {
+            return <ACC.BackLink route={AllClaimsDashboardRoute.getLink({ projectId: project.id })}>Back to project</ACC.BackLink>;
+        }
+        else if (isFC) {
+            return <ACC.BackLink route={ClaimsDashboardRoute.getLink({ projectId: project.id, partnerId})}>Back to project</ACC.BackLink>;
+        }
     }
 }
 
