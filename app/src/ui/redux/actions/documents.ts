@@ -16,6 +16,7 @@ import {
   getClaimDetailDocuments,
   getClaimDocumentEditor,
   getClaimDocuments,
+  getProjectDocumentEditor,
   getProjectDocuments,
 } from "../selectors/documents";
 import { LoadingStatus } from "../../../shared/pending";
@@ -41,10 +42,43 @@ export function loadIarDocuments(partnerId: string, periodId: number) {
 }
 
 export function loadProjectDocuments(projectId: string) {
-  return conditionalLoad(
-    getProjectDocuments(projectId),
-    params => ApiClient.documents.getProjectDocuments({projectId, ...params})
-  );
+  return conditionalLoad(getProjectDocuments(projectId), params => ApiClient.documents.getProjectDocuments({projectId, ...params}));
+}
+
+export function updateProjectDocumentEditor(projectId: string, dto: DocumentUploadDto, showErrors: boolean = false): SyncThunk<Results<DocumentUploadDto>, UpdateEditorAction> {
+  return (dispatch, getState) => {
+    const selector = getProjectDocumentEditor(projectId);
+    const state = getState();
+    const current = state.editors[selector.store][selector.key];
+    const errors = showErrors || current && current.validator.showValidationErrors || false;
+    const validator = new DocumentUploadValidator(dto, errors);
+    dispatch(updateEditorAction(selector.key, selector.store, dto, validator));
+    return validator;
+  };
+}
+
+export function uploadProjectDocument(projectId: string, dto: DocumentUploadDto, onComplete: () => void): AsyncThunk<void, DataLoadAction | EditorAction> {
+  return (dispatch, getState) => {
+    const state = getState();
+    const selector = getProjectDocumentEditor(projectId);
+    const validation = updateProjectDocumentEditor(projectId, dto, true)(dispatch, getState, null);
+
+    if(!validation.isValid) {
+      scrollToTheTop();
+      return Promise.resolve();
+    }
+
+    dispatch(dataLoadAction(selector.key, selector.store, LoadingStatus.Stale, undefined));
+
+    return ApiClient.documents.uploadProjectDocument({ projectId, file: dto.file!, user: state.user })
+      .then(() => {
+        dispatch(handleEditorSuccess(selector.key, selector.store));
+        onComplete();
+      })
+      .catch(e => {
+        dispatch(handleEditorError({ id: selector.key, store: selector.store, dto, validation, error: e }));
+      });
+  };
 }
 
 // update editor with validation
