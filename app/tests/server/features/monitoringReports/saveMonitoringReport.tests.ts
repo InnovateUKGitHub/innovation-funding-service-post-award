@@ -72,7 +72,7 @@ const response: MonitoringReportDto = {
 const saveResponse = async (context: TestContext, saveThis: MonitoringReportDto, submit: boolean, numberOfQuestions: number = 4) => {
   context.testData.createMonitoringReportHeader(saveThis.headerId, "P1", 1);
   for (let i = 0; i < numberOfQuestions; i++) {
-    context.testData.createQuestionA(3, i + 1);
+    context.testData.createQuestion(3, i + 1);
   }
   const command = new SaveMonitoringReport(saveThis, submit);
   await context.runCommand(command);
