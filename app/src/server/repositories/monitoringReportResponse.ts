@@ -6,6 +6,9 @@ export interface ISalesforceMonitoringReportResponse {
   Id: string;
   Acc_MonitoringReportHeader__c: string;
   Acc_Question__c: string;
+  Acc_Question__r: {
+    Acc_DisplayOrder__c: number;
+  };
   Acc_QuestionComments__c: string;
 }
 
@@ -26,6 +29,7 @@ export class MonitoringReportResponseRepository extends SalesforceRepositoryBase
     "Id",
     "Acc_MonitoringReportHeader__c",
     "Acc_Question__c",
+    "Acc_Question__r.Acc_DisplayOrder__c",
     "Acc_QuestionComments__c",
   ];
 
@@ -34,6 +38,9 @@ export class MonitoringReportResponseRepository extends SalesforceRepositoryBase
     Id: "1",
     Acc_MonitoringReportHeader__c: "1",
     Acc_Question__c: "a",
+    Acc_Question__r: {
+      Acc_DisplayOrder__c: 1
+    },
     Acc_QuestionComments__c: "blah"
   }];
 
@@ -97,7 +104,7 @@ export class MonitoringReportResponseRepository extends SalesforceRepositoryBase
     records.forEach((x) => {
       const Id = ++largestId + "";
       newIds.push(Id);
-      this.records.push({ ...x, Id } as Repositories.ISalesforceMonitoringReportResponse);
+      this.records.push({ ...x, Id, Acc_Question__r: { Acc_DisplayOrder__c: 1} } as Repositories.ISalesforceMonitoringReportResponse);
     });
     return Promise.resolve(newIds);
   }

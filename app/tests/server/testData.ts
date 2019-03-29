@@ -2,8 +2,7 @@
 import * as Repositories from "../../src/server/repositories";
 import { ITestRepositories } from "./testRepositories";
 import { ClaimStatus } from "../../src/types";
-import { SalesforceRole } from "../../src/server/repositories";
-import { ISalesforceMonitoringReportResponse} from "../../src/server/repositories";
+import { ISalesforceQuestions, SalesforceRole } from "../../src/server/repositories";
 import { MonitoringReportStatus } from "../../src/types/constants/monitoringReportStatus";
 
 export class TestData {
@@ -139,7 +138,7 @@ export class TestData {
   }
 
   // TODO remove 'createQuestion' and use this instead
-  public createQuestionA(answersPerQuestion: number, displayOrder: number): Repositories.ISalesforceQuestions[] {
+  public createQuestion(answersPerQuestion: number, displayOrder: number): Repositories.ISalesforceQuestions[] {
     const newQuestionArray = [];
     const seed = this.repositories.monitoringReportQuestions.Items.length + 1;
     for (let i = 0; i < answersPerQuestion; i++) {
@@ -154,26 +153,6 @@ export class TestData {
       this.repositories.monitoringReportQuestions.Items.push(newQuestion);
       newQuestionArray.push(newQuestion);
     }
-    return newQuestionArray;
-  }
-
-  public createQuestion(answersPerQuestion: number, displayOrder = 1, overrideCalculation = false): Repositories.ISalesforceQuestions[] {
-    let i;
-    const newQuestionArray = [];
-    const seed = this.repositories.monitoringReportQuestions.Items.length + 1;
-    for (i = 0; i < answersPerQuestion; i++) {
-      const newQuestion: Repositories.ISalesforceQuestions = {
-        Id: `QuestionId: ${seed + i}`,
-        Acc_QuestionName__c: `QuestionName: ${overrideCalculation ? displayOrder : (seed-1)/answersPerQuestion + displayOrder}`,
-        Acc_DisplayOrder__c: overrideCalculation ? displayOrder : (seed-1)/answersPerQuestion + displayOrder,
-        Acc_Score__c: i + 1,
-        Acc_QuestionText__c: `QuestionText: ${seed} ${i}`,
-        Acc_ActiveFlag__c: "Y",
-      };
-      this.repositories.monitoringReportQuestions.Items.push(newQuestion);
-      newQuestionArray.push(newQuestion);
-    }
-
     return newQuestionArray;
   }
 
@@ -192,33 +171,19 @@ export class TestData {
     return newHeader;
   }
 
-  public createMonitoringReportResponseFromQuestions(questions: Repositories.ISalesforceQuestions[], questionCount = 0) {
-    const uniqueQuestionIds = [...new Set(questions.map(x => x.Id))];
-    const responseArray: ISalesforceMonitoringReportResponse[] = [];
+  public createMonitoringReportResponse(question: ISalesforceQuestions) {
+    const response = {
+      Id: `Response: ${this.repositories.monitoringReportResponse.Items.length}`,
+      Acc_MonitoringReportHeader__c: "a",
+      Acc_QuestionComments__c: `Comments: ${question.Acc_DisplayOrder__c}`,
+      Acc_Question__c: question.Id,
+      Acc_Question__r: {
+        Acc_DisplayOrder__c: question.Acc_DisplayOrder__c
+      }
+    };
+    this.repositories.monitoringReportResponse.Items.push(response);
 
-    uniqueQuestionIds.forEach(x => {
-      responseArray.push(
-        {
-          Id: "",
-          Acc_MonitoringReportHeader__c: "",
-          Acc_Question__c: x,
-          Acc_QuestionComments__c: "",
-        }
-      );
-    });
-
-    responseArray.forEach(r => {
-      questions.forEach(q => {
-        if (r.Acc_Question__c === q.Id) {
-          r.Id = `Response: ${questionCount + 1}`;
-          r.Acc_MonitoringReportHeader__c = "a";
-          r.Acc_QuestionComments__c = `Comments: ${q.Acc_DisplayOrder__c}`;
-        }
-      });
-      this.repositories.monitoringReportResponse.Items.push(r);
-    });
-
-    return responseArray;
+    return response;
   }
 
   public createClaim(partner?: Repositories.ISalesforcePartner, periodId?: number, update?: (item: Repositories.ISalesforceClaim) => void): Repositories.ISalesforceClaim {
