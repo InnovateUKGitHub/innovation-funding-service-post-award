@@ -21,3 +21,11 @@ interface MonitoringReportDto {
   periodId: number;
   questions: QuestionDto[];
 }
+
+interface MonitoringReportSummaryDto {
+  headerId: string;
+  status: string;
+  startDate: Date;
+  endDate: Date;
+  periodId: number;
+}
