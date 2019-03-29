@@ -159,17 +159,14 @@ export class TestData {
   }
 
   public createMonitoringReportHeader(id: string, projectId: string, period: number): Repositories.ISalesforceMonitoringReportHeader {
-    const startDate = new Date();
-    const endDate = new Date();
-    endDate.setMonth(endDate.getMonth() + 1);
 
     const newHeader = {
       Id: id,
       Acc_MonitoringReportStatus__c: "Draft",
       Acc_ProjectId__c: projectId,
       Acc_ProjectPeriodNumber__c: period,
-      Acc_ProjectStartDate__c: startDate,
-      Acc_ProjectEndDate__c: endDate
+      Acc_ProjectStartDate__c: "2018-02-04",
+      Acc_ProjectEndDate__c: "2018-03-04"
     };
     this.repositories.monitoringReportHeader.Items.push(newHeader);
 
