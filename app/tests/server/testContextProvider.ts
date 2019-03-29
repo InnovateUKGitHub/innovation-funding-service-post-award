@@ -55,7 +55,8 @@ export class TestContext implements IContext {
             ifsRoot: "",
             ifsApplicationUrl: "",
             ifsGrantLetterUrl: "",
-        }
+        },
+        cookieKey: "thekey"
     };
 
     public caches: ICaches = {
