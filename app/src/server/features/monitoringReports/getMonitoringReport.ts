@@ -1,8 +1,10 @@
 import { QueryBase, SALESFORCE_DATE_FORMAT } from "../common";
 import { Authorisation, IContext, ProjectRole } from "../../../types";
 import { MonitoringReportDto, QuestionDto } from "../../../types/dtos/monitoringReportDto";
-import { GetMonitoringReportQuestions } from "./getMonitoringReportQuestions";
-import { ISalesforceMonitoringReportResponse } from "../../repositories";
+import { ISalesforceMonitoringReportHeader, ISalesforceMonitoringReportResponse } from "../../repositories";
+import { MonitoringReportStatus } from "../../../types/constants/monitoringReportStatus";
+import { GetMonitoringReportActiveQuestions } from "./getMonitoringReportActiveQuestions";
+import { GetMonitoringReportAnsweredQuestions } from "./getMonitoringReportAnsweredQuestions";
 
 export class GetMonitoringReport extends QueryBase<MonitoringReportDto> {
   constructor(
@@ -17,7 +19,8 @@ export class GetMonitoringReport extends QueryBase<MonitoringReportDto> {
   }
 
   private createQuestionDto(question: QuestionDto, responses: ISalesforceMonitoringReportResponse[]) {
-    const response = responses.find(r => r.Acc_Question__r.Acc_DisplayOrder__c === question.displayOrder);
+    const options = question.options.map(o => o.id);
+    const response = responses.find(r => options.indexOf(r.Acc_Question__c) >= 0);
     return {
       displayOrder: question.displayOrder,
       title: question.title,
@@ -28,10 +31,18 @@ export class GetMonitoringReport extends QueryBase<MonitoringReportDto> {
     };
   }
 
+  private async getQuestions(context: IContext, header: ISalesforceMonitoringReportHeader, results: ISalesforceMonitoringReportResponse[]) {
+    if (header.Acc_MonitoringReportStatus__c !== MonitoringReportStatus.SUBMITTED) {
+      return context.runQuery(new GetMonitoringReportActiveQuestions());
+    }
+    const answeredQuestions = results.map(r => r.Acc_Question__c);
+    return context.runQuery(new GetMonitoringReportAnsweredQuestions(answeredQuestions));
+  }
+
   protected async Run(context: IContext) {
     const header = await context.repositories.monitoringReportHeader.get(this.projectId, this.periodId);
     const results = await context.repositories.monitoringReportResponse.getAllForHeader(header.Id);
-    const questionArray = await context.runQuery(new GetMonitoringReportQuestions());
+    const questionArray = await this.getQuestions(context, header, results);
 
     return {
       headerId: header.Id,
