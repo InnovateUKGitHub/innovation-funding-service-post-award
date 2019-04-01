@@ -21,9 +21,9 @@ export class GetPeriodInfoQuery extends SyncQueryBase<PeriodInfo> {
   }
 
   protected Run(context: IContext): PeriodInfo {
-    const start = DateTime.fromJSDate(this.startDate).set({ hour: 0, minute: 0, second: 0, millisecond: 0 });
-    const end = DateTime.fromJSDate(this.endDate).set({ hour: 0, minute: 0, second: 0, millisecond: 0 });
-    const today = DateTime.fromJSDate(context.clock.today()).set({ hour: 0, minute: 0, second: 0, millisecond: 0 });
+    const start = context.clock.dateTime(this.startDate).set({ hour: 0, minute: 0, second: 0, millisecond: 0 });
+    const end = context.clock.dateTime(this.endDate).set({ hour: 0, minute: 0, second: 0, millisecond: 0 });
+    const today = context.clock.dateTime(context.clock.today()).set({ hour: 0, minute: 0, second: 0, millisecond: 0 });
 
     // if project is still in progress use today otherwise day before end so in last period
     const dateForCurrentPeriod = end.isValid && end < today ? end.minus({ days: 1 }) : today;
