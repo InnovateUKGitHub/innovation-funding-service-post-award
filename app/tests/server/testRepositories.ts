@@ -319,7 +319,7 @@ class ProfileTotalCostCategoryTestRepository extends TestRepository<Repositories
 
 class QuestionsTestRepository extends TestRepository<Repositories.ISalesforceQuestions> implements Repositories.IQuestionsRepository {
   getAll() {
-    return super.getWhere(x => x.Acc_ActiveFlag__c === "Y");
+    return super.getAll();
   }
 }
 
