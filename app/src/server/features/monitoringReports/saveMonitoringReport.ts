@@ -1,9 +1,11 @@
 import { BadRequestError, CommandBase, ValidationError } from "../common";
 import { Authorisation, IContext, ProjectRole } from "../../../types";
 import { MonitoringReportDtoValidator } from "../../../ui/validators/MonitoringReportDtoValidator";
-import { GetMonitoringReportQuestions } from "./getMonitoringReportQuestions";
+import { GetMonitoringReportActiveQuestions } from "./getMonitoringReportActiveQuestions";
 import { MonitoringReportDto } from "../../../types/dtos/monitoringReportDto";
 import { MonitoringReportStatus } from "../../../types/constants/monitoringReportStatus";
+import { ISalesforceMonitoringReportResponse } from "../../repositories";
+import { Updatable } from "../../repositories/salesforceRepositoryBase";
 
 export class SaveMonitoringReport extends CommandBase<boolean> {
   constructor(
@@ -32,9 +34,13 @@ export class SaveMonitoringReport extends CommandBase<boolean> {
       throw new BadRequestError("Header does not match monitoringReportDto");
     }
 
-    const questions = await context.runQuery(new GetMonitoringReportQuestions());
+    if(header.Acc_MonitoringReportStatus__c !== MonitoringReportStatus.DRAFT) {
+      throw new BadRequestError("Report has already been submitted");
+    }
 
-    const validationResult = new MonitoringReportDtoValidator(this.monitoringReportDto, true, this.submit, questions, header.Acc_MonitoringReportStatus__c);
+    const questions = await context.runQuery(new GetMonitoringReportActiveQuestions());
+
+    const validationResult = new MonitoringReportDtoValidator(this.monitoringReportDto, true, this.submit, questions);
     if (!validationResult.isValid) {
       throw new ValidationError(validationResult);
     }
@@ -45,7 +51,7 @@ export class SaveMonitoringReport extends CommandBase<boolean> {
     const persistedIds = updateDtos.map(x => x.responseId);
     const deleteItems = existing.filter(x => persistedIds.indexOf(x.Id) === -1).map(x => x.Id);
 
-    const updateItems = updateDtos.map(updateDto => ({
+    const updateItems = updateDtos.map<Updatable<ISalesforceMonitoringReportResponse>>(updateDto => ({
       Id: updateDto.responseId!,
       Acc_Question__c: updateDto.optionId!,
       Acc_QuestionComments__c: updateDto.comments
@@ -57,7 +63,7 @@ export class SaveMonitoringReport extends CommandBase<boolean> {
       Acc_QuestionComments__c: insertDto.comments
     }));
 
-    await Promise.all<boolean, string | string[], void>([
+    await Promise.all<{}>([
       context.repositories.monitoringReportResponse.update(updateItems),
       context.repositories.monitoringReportResponse.insert(insertItems),
       context.repositories.monitoringReportResponse.delete(deleteItems),
