@@ -50,6 +50,7 @@ export abstract class FormHandlerBase<TParams, TDto, TValidation = {}> implement
     const params = this.getParams({ name: this.routeName, params: { ...req.params, ...req.query }, path: req.path });
 
     const buttonName = this.buttons.find(x => `button_${x}` in req.body);
+
     // If the button in the request does not match this handler, call next handler
     if (!buttonName) return next();
 
@@ -65,7 +66,8 @@ export abstract class FormHandlerBase<TParams, TDto, TValidation = {}> implement
 
     try {
       const link = await this.run(context, params, button, dto);
-      return this.redirect(link, res);
+      this.redirect(link, res);
+      return;
     }
     catch (error) {
       const { key, store } = this.getStoreInfo(params, dto);
@@ -95,5 +97,6 @@ export abstract class FormHandlerBase<TParams, TDto, TValidation = {}> implement
     const router = configureRouter();
     const url = router.buildPath(link.routeName, link.routeParams);
     res.redirect(url);
+    return;
   }
 }

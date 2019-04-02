@@ -5,6 +5,7 @@ import { Link } from "../links";
 import {
   AllClaimsDashboardRoute,
   ClaimsDashboardRoute,
+  MonitoringReportDashboardRoute,
   ProjectChangeRequestsRoute,
   ProjectDetailsRoute,
   ProjectDocumentsRoute,
@@ -30,6 +31,7 @@ export const ProjectNavigation: React.SFC<Props> = ({ project, currentRoute, par
   const projectForecastsLink = ProjectForecastRoute.getLink({ projectId });
   const projectChangeRequestLink = ProjectChangeRequestsRoute.getLink({ projectId });
   const projectDocumentsLink = ProjectDocumentsRoute.getLink({ projectId });
+  const monitoringReportsLink = MonitoringReportDashboardRoute.getLink({ projectId });
 
   // roles
   const isFC = !!(project.roles & ProjectRole.FinancialContact);
@@ -41,11 +43,19 @@ export const ProjectNavigation: React.SFC<Props> = ({ project, currentRoute, par
 
   if (isMOorPM) {
     navigationTabs.push({ text: "Claims", route: allClaimsLink, selected: allClaimsLink.routeName === currentRoute, qa: "allClaimsTab" });
-    navigationTabs.push({ text: "Forecasts", route: projectForecastsLink, selected: projectForecastsLink.routeName === currentRoute, qa: "allForecastsTab" });
   }
-
   else if (isFC) {
     navigationTabs.push({ text: "Claims", route: claimsLink, selected: claimsLink.routeName === currentRoute, qa: "claimsTab" });
+  }
+
+  if (isMO) {
+    navigationTabs.push({ text: "Monitoring reports", route: monitoringReportsLink, selected: monitoringReportsLink.routeName === currentRoute, qa: "monitoringReportsTab" });
+  }
+
+  if (isMOorPM) {
+    navigationTabs.push({ text: "Forecasts", route: projectForecastsLink, selected: projectForecastsLink.routeName === currentRoute, qa: "allForecastsTab" });
+  }
+  else if (isFC) {
     navigationTabs.push({ text: "Forecast", route: viewForecastLink, selected: viewForecastLink.routeName === currentRoute, qa: "forecastTab" });
   }
 
@@ -63,5 +73,4 @@ export const ProjectNavigation: React.SFC<Props> = ({ project, currentRoute, par
       <Tabs tabList={navigationTabs} qa="project-navigation" />
     </React.Fragment>
   );
-
 };

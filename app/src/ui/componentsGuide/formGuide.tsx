@@ -52,7 +52,7 @@ class SimpleForm extends React.Component<{}, { original: ISimpleEditorDto, edito
                         <ExampleForm.String label="Name" name="name" hint="A simple field" value={data => data.name} update={(dto, value) => dto.name = value} />
                         <ExampleForm.MultilineString label="Description" name="description" hint="A multiline field" value={data => data.description} update={(dto, value) => dto.description = value} />
                         <ExampleForm.Numeric label="Value" name="value" hint="A numeric value" value={data => data.value} update={(dto, value) => dto.value = value} />
-                        <ExampleForm.Radio label="Option" name="option" hint="The option value" options={this.options} value={dto => dto.option} update={(dto, option) => dto.option = option}/>
+                        <ExampleForm.Radio label="Option" name="option" hint="The option value" inline={true} options={this.options} value={dto => dto.option} update={(dto, option) => dto.option = option}/>
                         <ExampleForm.FileUpload value={dto => dto.file} label="Upload file" name="upload file" hint="select file" update={(dto, file) => dto.file = file}/>
                     </ExampleForm.Fieldset>
                     <ExampleForm.Submit>Save</ExampleForm.Submit>

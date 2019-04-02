@@ -25,13 +25,13 @@ export class GetMonitoringReport extends QueryBase<MonitoringReportDto> {
       displayOrder: question.displayOrder,
       title: question.title,
       options: question.options,
-      optionId: response && response.Acc_Question__c,
-      comments: response && response.Acc_QuestionComments__c,
-      responseId: response && response.Id
+      optionId: response && response.Acc_Question__c || null,
+      comments: response && response.Acc_QuestionComments__c || null,
+      responseId: response && response.Id || null
     };
   }
 
-  private async getQuestions(context: IContext, header: ISalesforceMonitoringReportHeader, results: ISalesforceMonitoringReportResponse[]) {
+  private async getQuestions(context: IContext, header: ISalesforceMonitoringReportHeader, results: ISalesforceMonitoringReportResponse[]): Promise<QuestionDto[]> {
     if (header.Acc_MonitoringReportStatus__c !== MonitoringReportStatus.SUBMITTED) {
       return context.runQuery(new GetMonitoringReportActiveQuestions());
     }
@@ -39,14 +39,14 @@ export class GetMonitoringReport extends QueryBase<MonitoringReportDto> {
     return context.runQuery(new GetMonitoringReportAnsweredQuestions(answeredQuestions));
   }
 
-  protected async Run(context: IContext) {
+  protected async Run(context: IContext): Promise<MonitoringReportDto> {
     const header = await context.repositories.monitoringReportHeader.get(this.projectId, this.periodId);
     const results = await context.repositories.monitoringReportResponse.getAllForHeader(header.Id);
     const questionArray = await this.getQuestions(context, header, results);
 
     return {
       headerId: header.Id,
-      status: header.Acc_MonitoringReportStatus__c,
+      status: header.Acc_MonitoringReportStatus__c === "Draft" ? MonitoringReportStatus.DRAFT : MonitoringReportStatus.SUBMITTED,
       projectId: header.Acc_ProjectId__c,
       startDate: context.clock.parse(header.Acc_ProjectStartDate__c, SALESFORCE_DATE_FORMAT)!,
       endDate: context.clock.parse(header.Acc_ProjectEndDate__c, SALESFORCE_DATE_FORMAT)!,

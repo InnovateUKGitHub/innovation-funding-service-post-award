@@ -22,6 +22,9 @@ export class GetMonitoringReportActiveQuestions extends QueryBase<QuestionDto[]>
     return [...questions].map(([ displayOrder, options ]) => ({
       title: options[0].Acc_QuestionName__c,
       displayOrder,
+      optionId: null,
+      responseId: null,
+      comments: null,
       options: options
         .map(o => ({
           id: o.Id,
