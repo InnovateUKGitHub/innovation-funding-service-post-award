@@ -1,7 +1,7 @@
 // tslint:disable: no-duplicate-string no-big-function
 
 import { TestContext } from "../../testContextProvider";
-import { GetMonitoringReportQuestions } from "../../../../src/server/features/monitoringReports/getMonitoringReportQuestions";
+import { GetMonitoringReportActiveQuestions } from "../../../../src/server/features/monitoringReports/getMonitoringReportActiveQuestions";
 
 describe("GetMonitoringReportActiveQuestions", () => {
 
@@ -13,7 +13,7 @@ describe("GetMonitoringReportActiveQuestions", () => {
     testData.createQuestion(3, 2, false);
     testData.createQuestion(3, 3);
 
-    const query = new GetMonitoringReportQuestions();
+    const query = new GetMonitoringReportActiveQuestions();
     const result = await context.runQuery(query);
     expect(result).toHaveLength(2);
     expect(result[0].displayOrder).toBe(1);

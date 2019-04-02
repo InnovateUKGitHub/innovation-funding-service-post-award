@@ -1,7 +1,7 @@
 // tslint:disable:no-duplicate-string no-big-function
 import { TestContext } from "../../testContextProvider";
 import { SaveMonitoringReport } from "../../../../src/server/features/monitoringReports/saveMonitoringReport";
-import { ValidationError } from "../../../../src/server/features/common";
+import { BadRequestError, ValidationError } from "../../../../src/server/features/common";
 import { MonitoringReportDto } from "../../../../src/types/dtos/monitoringReportDto";
 import { MonitoringReportStatus } from "../../../../src/types/constants/monitoringReportStatus";
 
@@ -235,7 +235,7 @@ describe("saveMonitoringReports", () => {
 });
 
 describe("saveMonitoringReports validation", () => {
-  it("should throw a validation error if the report has already been submitted", async () => {
+  it("should throw an error if the report has already been submitted", async () => {
     const context = new TestContext();
     const submit = {
       headerId: "H1",
@@ -266,7 +266,7 @@ describe("saveMonitoringReports validation", () => {
     } as MonitoringReportDto;
     await saveResponse(context, submit, true, 1);
     const command = new SaveMonitoringReport(submit, true);
-    await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
+    await expect(context.runCommand(command)).rejects.toThrow(BadRequestError);
   });
 
   it("should return a validation error if an invalid option is selected", async () => {

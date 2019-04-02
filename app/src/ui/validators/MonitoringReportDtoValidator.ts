@@ -28,16 +28,14 @@ class QuestionValidator extends Results<QuestionDto> {
 
 export class MonitoringReportDtoValidator extends Results<MonitoringReportDto> {
   constructor(
-    readonly model: MonitoringReportDto,
-    readonly show: boolean,
-    readonly submit: boolean,
-    readonly questions: QuestionDto[],
-    readonly status: string,
+    model: MonitoringReportDto,
+    show: boolean,
+    public readonly submit: boolean,
+    private readonly questions: QuestionDto[],
   ) {
     super(model, show);
   }
 
-  public readonly report = Validation.isTrue(this, this.status === MonitoringReportStatus.DRAFT, "Report has already been submitted");
   public readonly responses = Validation.optionalChild(this, this.questions,
     q => (
       new QuestionValidator(

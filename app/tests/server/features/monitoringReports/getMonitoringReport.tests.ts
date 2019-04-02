@@ -91,9 +91,9 @@ describe("GetMonitoringReport", () => {
     const query = new GetMonitoringReport("b", 1);
     const result = await context.runQuery(query);
 
-    expect(result.questions[0].responseId).toBeUndefined();
-    expect(result.questions[0].optionId).toBeUndefined();
-    expect(result.questions[0].comments).toBeUndefined();
+    expect(result.questions[0].responseId).toBeNull();
+    expect(result.questions[0].optionId).toBeNull();
+    expect(result.questions[0].comments).toBeNull();
 
     expect(result.questions[1].responseId).toBe(response.Id);
     expect(result.questions[1].optionId).toBe(response.Acc_Question__c);

@@ -7,9 +7,10 @@ export interface ISalesforceMonitoringReportResponse {
   Acc_MonitoringReportHeader__c: string;
   Acc_Question__c: string;
   Acc_Question__r: {
+    // TODO: can we remove?
     Acc_DisplayOrder__c: number;
   };
-  Acc_QuestionComments__c: string;
+  Acc_QuestionComments__c: string | null;
 }
 
 export interface IMonitoringReportResponseRepository {
@@ -34,14 +35,23 @@ export class MonitoringReportResponseRepository extends SalesforceRepositoryBase
   ];
 
   // TODO delete me
-  private records = [{
+  private records: ISalesforceMonitoringReportResponse[] = [{
     Id: "1",
     Acc_MonitoringReportHeader__c: "1",
-    Acc_Question__c: "a",
+    Acc_Question__c: "b",
     Acc_Question__r: {
       Acc_DisplayOrder__c: 1
     },
     Acc_QuestionComments__c: "blah"
+  },
+  {
+    Id: "2",
+    Acc_MonitoringReportHeader__c: "2",
+    Acc_Question__c: "c",
+    Acc_Question__r: {
+      Acc_DisplayOrder__c: 2
+    },
+    Acc_QuestionComments__c: "Some comments"
   }];
 
   async getAllForHeader(monitoringReportHeaderId: string): Promise<ISalesforceMonitoringReportResponse[]> {
@@ -87,9 +97,11 @@ export class MonitoringReportResponseRepository extends SalesforceRepositoryBase
   delete(ids: string[]): Promise<void> {
     return this.deleteAll(ids);
   }
+
   update(records: Updatable<ISalesforceMonitoringReportResponse>[]): Promise<boolean> {
     return this.updateAll(records);
   }
+
   async insert(records: Partial<ISalesforceMonitoringReportResponse>[]): Promise<string[]> {
     // const types = await new RecordTypeRepository(this.getSalesforceConnection).getAll();
     // const type = types.find(x => x.Name === this.recordType && x.SobjectType === this.salesforceObjectName);
@@ -102,9 +114,9 @@ export class MonitoringReportResponseRepository extends SalesforceRepositoryBase
     let largestId = Math.max(...this.records.map(x => parseInt(x.Id, 10)));
     const newIds: string[] = [];
     records.forEach((x) => {
-      const Id = ++largestId + "";
+      const Id = (++largestId).toString();
       newIds.push(Id);
-      this.records.push({ ...x, Id, Acc_Question__r: { Acc_DisplayOrder__c: 1} } as Repositories.ISalesforceMonitoringReportResponse);
+      this.records.push({ ...x, Id, Acc_Question__r: { Acc_DisplayOrder__c: 1 } } as Repositories.ISalesforceMonitoringReportResponse);
     });
     return Promise.resolve(newIds);
   }

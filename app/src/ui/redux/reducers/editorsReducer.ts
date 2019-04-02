@@ -5,8 +5,9 @@ import { ClaimLineItemDtosValidator } from "../../validators/claimLineItemDtosVa
 import { Results } from "../../validation/results";
 import { ForecastDetailsDtosValidator } from "../../validators/forecastDetailsDtosValidator";
 import { DocumentUploadValidator } from "../../validators/documentUploadValidator";
-import { ClaimDto } from "../../../types";
+import { ClaimDto, MonitoringReportDto } from "../../../types";
 import { IAppError } from "../../../types/IAppError";
+import { MonitoringReportDtoValidator } from "../../validators/MonitoringReportDtoValidator";
 
 export interface IEditorStore<TDto, TValidator> {
   data: TDto;
@@ -71,5 +72,6 @@ export const editorReducer = combineReducers({
   claimLineItems: editorsReducer<ClaimLineItemDto[], ClaimLineItemDtosValidator>("claimLineItems"),
   forecastDetails: editorsReducer<ForecastDetailsDTO[], ForecastDetailsDtosValidator>("forecastDetails"),
   documents: editorsReducer<DocumentUploadDto, DocumentUploadValidator>("documents"),
-  documentSummary: editorsReducer<DocumentSummaryDto[], Results<DocumentSummaryDto[]>>("documentSummary")
+  documentSummary: editorsReducer<DocumentSummaryDto[], Results<DocumentSummaryDto[]>>("documentSummary"),
+  monitoringReport: editorsReducer<MonitoringReportDto, MonitoringReportDtoValidator>("monitoringReport")
 });

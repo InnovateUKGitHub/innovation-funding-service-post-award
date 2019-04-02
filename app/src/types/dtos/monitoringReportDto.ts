@@ -7,10 +7,10 @@ export interface OptionDto {
 }
 
 export interface QuestionDto {
-  responseId?: string;
-  optionId?: string;
+  responseId: string|null;
+  optionId: string|null;
   title: string;
-  comments?: string;
+  comments: string|null;
   options: OptionDto[];
   displayOrder: number;
 }
@@ -31,4 +31,5 @@ export interface MonitoringReportSummaryDto {
   startDate: Date;
   endDate: Date;
   periodId: number;
+  lastUpdated: Date|null;
 }
