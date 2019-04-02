@@ -57,13 +57,13 @@ export class Context implements IContext {
     contentVersions: new Repositories.ContentVersionRepository(() => this.getSalesforceConnection()),
     monitoringReportResponse: new Repositories.MonitoringReportResponseRepository(() => this.getSalesforceConnection()),
     monitoringReportHeader: new Repositories.MonitoringReportHeaderRepository(() => this.getSalesforceConnection()),
+    monitoringReportQuestions: new Repositories.QuestionsRepository(() => this.getSalesforceConnection()),
     profileDetails: new Repositories.ProfileDetailsRepository(() => this.getSalesforceConnection()),
     profileTotalPeriod: new Repositories.ProfileTotalPeriodRepository(() => this.getSalesforceConnection()),
     profileTotalCostCategory: new Repositories.ProfileTotalCostCategoryRepository(() => this.getSalesforceConnection()),
     projects: new Repositories.ProjectRepository(() => this.getSalesforceConnection()),
     partners: new Repositories.PartnerRepository(() => this.getSalesforceConnection()),
-    projectContacts: new Repositories.ProjectContactsRepository(() => this.getSalesforceConnection()),
-    questions: new Repositories.QuestionsRepository(() => this.getSalesforceConnection())
+    projectContacts: new Repositories.ProjectContactsRepository(() => this.getSalesforceConnection())
   };
 
   public readonly logger: Logger;

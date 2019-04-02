@@ -15,6 +15,7 @@ import { ClaimDetailDocumentDeleteHandler } from "./claimDetailDocument/claimDet
 import { ClaimDetailDocumentUploadHandler } from "./claimDetailDocument/claimDetailDocumentUploadHandler";
 import { ProjectDocumentUploadHandler } from "./projectDocumentFormHandler";
 import { Configuration } from "../features/common";
+import { MonitoringReportFormHandler } from "./saveMonitoringReportFormHandler";
 
 export const formRouter = express.Router();
 
@@ -29,6 +30,7 @@ const handlers: IFormHandler[] = [
   new ClaimDetailDocumentUploadHandler(),
   new ClaimDashboardDocumentDeleteHandler(),
   new ClaimDashboardDocumentUploadHandler(),
+  new MonitoringReportFormHandler(),
   new ProjectDocumentUploadHandler(),
 ];
 
