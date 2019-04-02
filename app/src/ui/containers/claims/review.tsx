@@ -110,6 +110,7 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, Data, Callbacks> 
               value={(dto) => options.find(x => x.id === dto.status)}
               update={(dto, val) => this.updateStatus(dto, val)}
               validation={data.editor.validator.status}
+              inline={true}
             />
             {!!submitButtonLabel ? <Form.Submit>{submitButtonLabel}</Form.Submit> : null}
           </Form.Fieldset>

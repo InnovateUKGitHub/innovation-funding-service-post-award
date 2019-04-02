@@ -1,10 +1,14 @@
 import SalesforceRepositoryBase, { Updatable } from "./salesforceRepositoryBase";
 import { NotFoundError } from "../features/common";
-import { MonitoringReportStatus } from "../../types/constants/monitoringReportStatus";
+import { object } from "prop-types";
+
+// todo remove
+const __DRAFT__ = "Draft";
+const __SUBMITTED__ = "Submitted for approval";
 
 export interface ISalesforceMonitoringReportHeader {
   Id: string;
-  Acc_MonitoringReportStatus__c: MonitoringReportStatus;
+  Acc_MonitoringReportStatus__c: "Draft" | "Submitted for approval";
   Acc_ProjectId__c: string; // is this correct?
   Acc_ProjectPeriodNumber__c: number;
   Acc_ProjectStartDate__c: string;
@@ -33,24 +37,31 @@ export class MonitoringReportHeaderRepository extends SalesforceRepositoryBase<I
   ];
 
   // TODO delete me
-  private record = {
+  private record1: ISalesforceMonitoringReportHeader = {
     Id: "1",
-    Acc_MonitoringReportID__c: "1",
-    Acc_MonitoringReportStatus__c: MonitoringReportStatus.DRAFT,
-    Acc_ProjectId__c: "1",
+    Acc_MonitoringReportStatus__c: __SUBMITTED__,
+    Acc_ProjectId__c: "xxxx",
     Acc_ProjectPeriodNumber__c: 1,
-    Acc_ProjectStartDate__c: "2018-02-04",
-    Acc_ProjectEndDate__c: "2018-03-04",
+    Acc_ProjectStartDate__c: "2018-02-01",
+    Acc_ProjectEndDate__c: "2018-02-28",
   };
 
-  private record1 = {
-    Id: "1",
-    Acc_MonitoringReportID__c: "1",
-    Acc_MonitoringReportStatus__c: MonitoringReportStatus.DRAFT,
-    Acc_ProjectId__c: "2",
+  private record2: ISalesforceMonitoringReportHeader = {
+    Id: "2",
+    Acc_MonitoringReportStatus__c: __SUBMITTED__,
+    Acc_ProjectId__c: "xxxx",
     Acc_ProjectPeriodNumber__c: 2,
-    Acc_ProjectStartDate__c: "2018-03-04",
-    Acc_ProjectEndDate__c: "2018-04-04",
+    Acc_ProjectStartDate__c: "2018-03-01",
+    Acc_ProjectEndDate__c: "2018-03-31",
+  };
+
+  private record3: ISalesforceMonitoringReportHeader = {
+    Id: "3",
+    Acc_MonitoringReportStatus__c: __DRAFT__,
+    Acc_ProjectId__c: "xxxx",
+    Acc_ProjectPeriodNumber__c: 3,
+    Acc_ProjectStartDate__c: "2018-04-01",
+    Acc_ProjectEndDate__c: "2018-04-30",
   };
 
   async get(projectId: string, periodId: number): Promise<ISalesforceMonitoringReportHeader> {
@@ -60,21 +71,25 @@ export class MonitoringReportHeaderRepository extends SalesforceRepositoryBase<I
     //   AND Acc_ProjectPeriodNumber__c = '${periodId}'
     //   AND RecordType.Name = '${this.recordType}'
     // `;
-    const record = this.record;// TODO put this back await super.filterOne(filter);
+
+    const record = [this.record1, this.record2, this.record3].find(x => x.Acc_ProjectPeriodNumber__c === periodId);
 
     if (!record) throw new NotFoundError("Monitoring Report Header");
 
-    return record;
+    return Object.assign({}, record, {Acc_ProjectId__c: projectId});// this.record1;// TODO put this back await super.filterOne(filter);
   }
 
   update(updateDto: Updatable<ISalesforceMonitoringReportHeader>): Promise<boolean> {
     // return super.updateItem(updateDto);
     // TODO remove this
-    this.record = { ...this.record, ...updateDto };
+    this.record3 = { ...this.record3, ...updateDto };
     return Promise.resolve(true);
   }
 
   async getAllForProject(projectId: string): Promise<ISalesforceMonitoringReportHeader[]> {
-    return [this.record, this.record1];
+    return [this.record1, this.record2, this.record3].map(x => {
+      x.Acc_ProjectId__c = projectId;
+      return x;
+    });
   }
 }

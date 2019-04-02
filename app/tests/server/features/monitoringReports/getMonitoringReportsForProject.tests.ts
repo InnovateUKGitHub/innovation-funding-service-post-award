@@ -46,7 +46,7 @@ describe("GetMonitoringReportsForProject", () => {
 
     const query = new GetMonitoringReportsForProject(project.Id);
     const result = await context.runQuery(query);
-    expect(result[0].periodId).toEqual(1);
-    expect(result[2].periodId).toEqual(3);
+    expect(result[0].periodId).toEqual(3);
+    expect(result[2].periodId).toEqual(1);
   });
 });
