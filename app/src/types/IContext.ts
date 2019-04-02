@@ -15,6 +15,7 @@ export interface IRepositories {
   contentVersions: Readonly<Repositories.ContentVersionRepository>;
   monitoringReportResponse: Readonly<Repositories.IMonitoringReportResponseRepository>;
   monitoringReportHeader: Readonly<Repositories.IMonitoringReportHeaderRepository>;
+  monitoringReportQuestions: Readonly<Repositories.IQuestionsRepository>;
   profileDetails: Readonly<Repositories.IProfileDetailsRepository>;
   profileTotalPeriod: Readonly<Repositories.IProfileTotalPeriodRepository>;
   profileTotalCostCategory: Readonly<Repositories.IProfileTotalCostCategoryRepository>;
@@ -23,7 +24,6 @@ export interface IRepositories {
   projectContacts: Readonly<Repositories.IProjectContactsRepository>;
   claimLineItems: Readonly<Repositories.IClaimLineItemRepository>;
   claimTotalCostCategory: Readonly<Repositories.IClaimTotalCostCategoryRepository>;
-  questions: Readonly<Repositories.IQuestionsRepository>;
 }
 
 export interface IContext {

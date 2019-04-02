@@ -4,7 +4,6 @@ import { FileUpload } from "../../src/types/FileUpload";
 import { Updatable } from "../../src/server/repositories/salesforceRepositoryBase";
 import { Stream } from "stream";
 import { IRepositories } from "../../src/types/IContext";
-import { ISalesforceMonitoringReportResponse } from "../../src/server/repositories";
 
 class ProjectsTestRepository extends TestRepository<Repositories.ISalesforceProject> implements Repositories.IProjectRepository {
     getById(id: string) {
@@ -203,14 +202,21 @@ class MonitoringReportHeaderTestRepository extends TestRepository<Repositories.I
   get(projectId: string, periodId: number): Promise<Repositories.ISalesforceMonitoringReportHeader> {
     return super.getOne(x => x.Acc_ProjectId__c === projectId && x.Acc_ProjectPeriodNumber__c === periodId);
   }
+  update(updateDto: Updatable<Repositories.ISalesforceMonitoringReportHeader>): Promise<boolean> {
+      const currentIndex = this.Items.findIndex(x => x.Id === updateDto.Id);
+      const current = this.Items[currentIndex];
+      const update = { ...current, ...updateDto};
+      this.Items[currentIndex] = update;
+      return Promise.resolve(true);
+  }
   getAllForProject(projectId: string): Promise<Repositories.ISalesforceMonitoringReportHeader[]> {
     return super.getWhere(x => x.Acc_ProjectId__c === projectId);
   }
 }
 
 class MonitoringReportResponseTestRepository extends TestRepository<Repositories.ISalesforceMonitoringReportResponse> implements Repositories.IMonitoringReportResponseRepository {
-  getAllForHeader(monitoringReportHeaderId: string): Promise<ISalesforceMonitoringReportResponse[]> {
-    return super.getWhere(x => x.Acc_MonitingReportHeader__c ===monitoringReportHeaderId);
+  getAllForHeader(monitoringReportHeaderId: string): Promise<Repositories.ISalesforceMonitoringReportResponse[]> {
+      return super.getWhere(x => x.Acc_MonitoringReportHeader__c === monitoringReportHeaderId);
   }
 
   delete(idList: string[]) {
@@ -238,9 +244,9 @@ class MonitoringReportResponseTestRepository extends TestRepository<Repositories
     return Promise.resolve(true);
   }
 
-  insert(lineItems: Partial<Repositories.ISalesforceMonitoringReportResponse>[]) {
+  insert(response: Partial<Repositories.ISalesforceMonitoringReportResponse>[]) {
     const newIds: string[] = [];
-    lineItems.forEach((x) => {
+    response.forEach((x) => {
       const Id = `MonitoringReportResponse-${this.Items.length}`;
       newIds.push(Id);
       this.Items.push({ ...x, Id } as Repositories.ISalesforceMonitoringReportResponse);
@@ -327,6 +333,7 @@ export interface ITestRepositories extends IRepositories {
     contentVersions: ContentVersionTestRepository;
     monitoringReportHeader: MonitoringReportHeaderTestRepository;
     monitoringReportResponse: MonitoringReportResponseTestRepository;
+    monitoringReportQuestions: QuestionsTestRepository;
     profileDetails: ProfileDetailsTestRepository;
     profileTotalCostCategory: ProfileTotalCostCategoryTestRepository;
     profileTotalPeriod: ProfileTotalPeriodTestRepository;
@@ -334,7 +341,6 @@ export interface ITestRepositories extends IRepositories {
     partners: PartnerTestRepository;
     projectContacts: ProjectContactTestRepository;
     claimTotalCostCategory: ClaimTotalCostTestRepository;
-    questions: QuestionsTestRepository;
 }
 
 export const createTestRepositories = (): ITestRepositories => {
@@ -350,6 +356,7 @@ export const createTestRepositories = (): ITestRepositories => {
         contentVersions: new ContentVersionTestRepository(),
         monitoringReportResponse: new MonitoringReportResponseTestRepository(),
         monitoringReportHeader: new MonitoringReportHeaderTestRepository(),
+        monitoringReportQuestions: new QuestionsTestRepository(),
         profileDetails: new ProfileDetailsTestRepository(),
         profileTotalPeriod: new ProfileTotalPeriodTestRepository(partnerRepository),
         profileTotalCostCategory: new ProfileTotalCostCategoryTestRepository(),
@@ -357,6 +364,5 @@ export const createTestRepositories = (): ITestRepositories => {
         partners: partnerRepository,
         projectContacts: new ProjectContactTestRepository(),
         claimTotalCostCategory: new ClaimTotalCostTestRepository(),
-        questions: new QuestionsTestRepository(),
     });
 };
