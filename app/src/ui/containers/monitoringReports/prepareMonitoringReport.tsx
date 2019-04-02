@@ -11,7 +11,7 @@ interface Data {
   projectDetails: Pending<ProjectDto>;
 }
 
-interface Params {
+export interface PrepareMonitoringReportParams {
   projectId: string;
   periodId: number;
 }
@@ -19,7 +19,7 @@ interface Params {
 interface Callbacks {
 }
 
-class PrepareMonitoringReportComponent extends ContainerBase<Params, Data, Callbacks> {
+class PrepareMonitoringReportComponent extends ContainerBase<PrepareMonitoringReportParams, Data, Callbacks> {
   render() {
     const combined = Pending.combine({projectDetails: this.props.projectDetails});
     return <ACC.PageLoader pending={combined} render={x => this.renderContents(x.projectDetails)} />;
@@ -37,7 +37,7 @@ class PrepareMonitoringReportComponent extends ContainerBase<Params, Data, Callb
   }
 }
 
-const containerDefinition = ReduxContainer.for<Params, Data, Callbacks>(PrepareMonitoringReportComponent);
+const containerDefinition = ReduxContainer.for<PrepareMonitoringReportParams, Data, Callbacks>(PrepareMonitoringReportComponent);
 
 const PrepareMonitoringReport = containerDefinition.connect({
   withData: (state, props) => ({
