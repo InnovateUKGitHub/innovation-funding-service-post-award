@@ -5,6 +5,8 @@ export const SALESFORCE_DATE_FORMAT = "yyyy-MM-dd";
 export interface IClock {
   today(): Date;
   parse(value: string|null|undefined, format: string): Date|null;
+  dateTime(value: Date): DateTime;
+  dateTime(value: string, format: string): DateTime;
 }
 
 export class Clock implements IClock {
@@ -16,7 +18,15 @@ export class Clock implements IClock {
     if(!value) {
       return null;
     }
-    const result = DateTime.fromFormat(value, format, {locale: "en-GB", zone: "Europe/London"});
-    return result.toLocal().toJSDate();
+
+    return this.dateTime(value, format).toJSDate();
+  }
+
+  dateTime(value: Date|string, format?: string): DateTime {
+    const localOpts = { locale: "en-GB", zone: "Europe/London" };
+
+    return typeof value === "string"
+      ? DateTime.fromFormat(value, format!, localOpts)
+      : DateTime.fromJSDate(value, localOpts);
   }
 }
