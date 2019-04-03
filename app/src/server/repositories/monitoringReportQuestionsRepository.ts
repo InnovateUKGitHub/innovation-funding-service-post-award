@@ -1,6 +1,6 @@
 import SalesforceRepositoryBase from "./salesforceRepositoryBase";
 
-export interface ISalesforceQuestions {
+export interface ISalesforceMonitoringReportQuestions {
   Id: string;
   Acc_QuestionName__c: string;
   Acc_DisplayOrder__c: number;
@@ -9,11 +9,11 @@ export interface ISalesforceQuestions {
   Acc_ActiveFlag__c: "Y" | "N";
 }
 
-export interface IQuestionsRepository {
-  getAll(): Promise<ISalesforceQuestions[]>;
+export interface IMonitoringReportQuestionsRepository {
+  getAll(): Promise<ISalesforceMonitoringReportQuestions[]>;
 }
 
-export class QuestionsRepository extends SalesforceRepositoryBase<ISalesforceQuestions> implements IQuestionsRepository {
+export class MonitoringReportQuestionsRepository extends SalesforceRepositoryBase<ISalesforceMonitoringReportQuestions> implements IMonitoringReportQuestionsRepository {
   protected readonly salesforceObjectName = "Acc_Question__c";
 
   protected readonly salesforceFieldNames = [
@@ -60,7 +60,7 @@ export class QuestionsRepository extends SalesforceRepositoryBase<ISalesforceQue
     }
   ];
 
-  async getAll(): Promise<ISalesforceQuestions[]> {
-    return this.questions as ISalesforceQuestions[];
+  async getAll(): Promise<ISalesforceMonitoringReportQuestions[]> {
+    return this.questions as ISalesforceMonitoringReportQuestions[];
   }
 }

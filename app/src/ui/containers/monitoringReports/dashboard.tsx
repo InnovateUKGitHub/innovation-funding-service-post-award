@@ -1,12 +1,12 @@
 import React from "react";
-import { LoadingStatus, Pending } from "../../../shared/pending";
+import { Pending } from "../../../shared/pending";
 import * as Dtos from "../../../types";
 import { ContainerBase, ReduxContainer } from "../containerBase";
 import * as Actions from "../../redux/actions";
 import * as ACC from "../../components";
 import * as Selectors from "../../redux/selectors";
-import { PrepareMonitoringReportRoute } from "./prepareMonitoringReport";
-import { MonitoringReportDetailsRoute } from "./details";
+import { MonitoringReportPrepareRoute } from "./prepare";
+import { MonitoringReportViewRoute } from "./details";
 import { ProjectRole } from "../../../types";
 
 interface Params {
@@ -75,9 +75,9 @@ class DashboardComponent extends ContainerBase<Params, Data, Callbacks> {
 
   private renderLink(project: Dtos.ProjectDto, report: Dtos.MonitoringReportSummaryDto) {
     if (report.status === "Draft") {
-      return <ACC.Link route={PrepareMonitoringReportRoute.getLink({ projectId: project.id, periodId: report.periodId })}>Edit report</ACC.Link>;
+      return <ACC.Link route={MonitoringReportPrepareRoute.getLink({ projectId: project.id, periodId: report.periodId })}>Edit report</ACC.Link>;
     }
-    return <ACC.Link route={MonitoringReportDetailsRoute.getLink({ projectId: project.id, periodId: report.periodId })}>View report</ACC.Link>;
+    return <ACC.Link route={MonitoringReportViewRoute.getLink({ projectId: project.id, periodId: report.periodId })}>View report</ACC.Link>;
   }
 }
 
