@@ -15,7 +15,7 @@ export class GetMonitoringReport extends QueryBase<MonitoringReportDto> {
   }
 
   protected async accessControl(auth: Authorisation, context: IContext) {
-    return auth.for(this.projectId).hasRole(ProjectRole.MonitoringOfficer);
+    return context.config.features.monitoringReports && auth.for(this.projectId).hasRole(ProjectRole.MonitoringOfficer);
   }
 
   private createQuestionDto(question: QuestionDto, responses: ISalesforceMonitoringReportResponse[]) {

@@ -48,13 +48,13 @@ export async function serverRender(req: Request, res: Response, error?: IAppErro
     const roleInfo = await context.runQuery(new GetAllProjectRolesForUser()).then(x => x.permissions);
     const user: IClientUser = { ...req.session!.user, roleInfo };
 
-    const initialState = setupInitialState(route, user);
+    const initialState = setupInitialState(route, user, context.config);
     const middleware = setupMiddleware(router, false);
     const store = createStore(rootReducer, initialState, middleware);
     const matched = matchRoute(route);
     const params = matched && matched.getParams && matched.getParams(route) || {};
 
-    if (matched.accessControl && !matched.accessControl(new Authorisation(user.roleInfo), params)) {
+    if (matched.accessControl && !matched.accessControl(new Authorisation(user.roleInfo), params, context.config.features)) {
       throw new ForbiddenError();
     }
 

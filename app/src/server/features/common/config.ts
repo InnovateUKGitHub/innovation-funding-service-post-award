@@ -18,6 +18,8 @@ export interface IConfig {
         shibboleth: Readonly<string>;
     };
 
+    features: IFeatureFlags;
+
     logLevel: Readonly<LogLevel>;
     prettyLogs: Readonly<boolean>;
 
@@ -63,6 +65,11 @@ const certificates = {
     shibboleth: process.env.SHIBBOLETH_PRIVATE_KEY || "./security/AccPrivateKey.key",
 };
 
+const features: IFeatureFlags = {
+    monitoringReports: process.env.FEATURE_MONITORING_REPORTS === "true",
+    projectDocuments: process.env.FEATURE_PROJECT_DOCUMENTS === "true"
+};
+
 const logLevel = parseLogLevel(process.env.LOG_LEVEL! || process.env.LOGLEVEL!);
 const prettyLogs = process.env.PRETTY_LOGS === "true";
 
@@ -95,6 +102,7 @@ export const Configuration: IConfig = {
     cookieKey,
     timeouts,
     certificates,
+    features,
     logLevel,
     prettyLogs,
     salesforce,
