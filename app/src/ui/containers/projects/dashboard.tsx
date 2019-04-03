@@ -152,10 +152,6 @@ class ProjectDashboardComponent extends ContainerBase<Props, Data, Callbacks> {
         messages.push(`Claims you need to review: ${project.claimsToReview}`);
       }
 
-      if (isMo || isPM) {
-        messages.push(`Unsubmitted or queried claims: ${project.claimsWithParticipant}`);
-      }
-
       switch (partner && partner.status) {
         case PartnerClaimStatus.ClaimDue:
         case PartnerClaimStatus.ClaimsOverdue:
@@ -170,6 +166,10 @@ class ProjectDashboardComponent extends ContainerBase<Props, Data, Callbacks> {
         case PartnerClaimStatus.IARRequired:
           messages.push(`You need to submit your IAR.`);
           break;
+      }
+
+      if (isMo || isPM) {
+        messages.push(`Unsubmitted or queried claims: ${project.claimsWithParticipant}`);
       }
     }
 
