@@ -30,7 +30,9 @@ export interface PartnerDto {
   roles: ProjectRole;
   forecastLastModifiedDate: Date | null;
   claimsOverdue: number | null;
-  claimsWithParticipant: number  | null;
+  claimsWithParticipant: number | null;
   status: PartnerClaimStatus;
   statusName: string;
+
+  overheadRate: number | null;
 }
