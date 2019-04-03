@@ -1,3 +1,3 @@
 export * from "./details";
 export * from "./dashboard";
-export * from "./prepareMonitoringReport";
+export * from "./prepare";

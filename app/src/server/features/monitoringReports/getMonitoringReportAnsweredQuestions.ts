@@ -1,8 +1,8 @@
 import { QueryBase } from "../common";
+import { MonitoringReportQuestionDto } from "../../../types/dtos/monitoringReportDto";
 import { Authorisation, IContext } from "../../../types";
-import { QuestionDto } from "../../../types/dtos/monitoringReportDto";
 
-export class GetMonitoringReportAnsweredQuestions extends QueryBase<QuestionDto[]> {
+export class GetMonitoringReportAnsweredQuestions extends QueryBase<MonitoringReportQuestionDto[]> {
 
   constructor(
     private readonly questionIds: string[]
@@ -14,7 +14,7 @@ export class GetMonitoringReportAnsweredQuestions extends QueryBase<QuestionDto[
     return context.config.features.monitoringReports;
   }
 
-  public async Run(context: IContext): Promise<QuestionDto[]> {
+  public async Run(context: IContext): Promise<MonitoringReportQuestionDto[]> {
     return (await context.repositories.monitoringReportQuestions.getAll())
       .filter(q => this.questionIds.indexOf(q.Id) >= 0)
       .sort((a, b) => a.Acc_DisplayOrder__c - b.Acc_DisplayOrder__c)

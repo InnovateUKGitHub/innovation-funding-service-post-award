@@ -4,9 +4,7 @@ import * as Actions from "../../redux/actions";
 import * as Selectors from "../../redux/selectors";
 import * as ACC from "../../components";
 import * as Dtos from "../../../types";
-import { LoadingStatus, Pending } from "../../../shared/pending";
-import { DateTime } from "luxon";
-import { range } from "../../../shared/range";
+import { Pending } from "../../../shared/pending";
 import { MonitoringReportDashboardRoute } from "./dashboard";
 import { ProjectRole } from "../../../types";
 
@@ -64,7 +62,7 @@ class DetailsComponent extends ContainerBase<Params, Data, Callbacks> {
 
 const containerDefinition = ReduxContainer.for<Params, Data, Callbacks>(DetailsComponent);
 
-export const MonitoringReportDetails = containerDefinition.connect({
+export const MonitoringReportView = containerDefinition.connect({
   withData: (state, props) => ({
     project: Selectors.getProject(props.projectId).getPending(state),
     report: Selectors.getMonitoringReport(props.projectId, props.periodId).getPending(state),
@@ -72,14 +70,14 @@ export const MonitoringReportDetails = containerDefinition.connect({
   withCallbacks: () => ({})
 });
 
-export const MonitoringReportDetailsRoute = containerDefinition.route({
-  routeName: "monitoringReportDetails",
+export const MonitoringReportViewRoute = containerDefinition.route({
+  routeName: "monitoringReportView",
   routePath: "/projects/:projectId/monitoring-reports/:periodId",
   getParams: (r) => ({ projectId: r.params.projectId, periodId: parseInt(r.params.periodId, 10) }),
   getLoadDataActions: (params) => [
     Actions.loadProject(params.projectId),
     Actions.loadMonitoringReport(params.projectId, params.periodId),
   ],
-  container: MonitoringReportDetails,
+  container: MonitoringReportView,
   accessControl: (auth, params, features) => features.monitoringReports && auth.for(params.projectId).hasAnyRoles(ProjectRole.MonitoringOfficer)
 });

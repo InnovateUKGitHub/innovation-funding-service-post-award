@@ -6,10 +6,6 @@ export interface ISalesforceMonitoringReportResponse {
   Id: string;
   Acc_MonitoringReportHeader__c: string;
   Acc_Question__c: string;
-  Acc_Question__r: {
-    // TODO: can we remove?
-    Acc_DisplayOrder__c: number;
-  };
   Acc_QuestionComments__c: string | null;
 }
 
@@ -39,18 +35,12 @@ export class MonitoringReportResponseRepository extends SalesforceRepositoryBase
     Id: "1",
     Acc_MonitoringReportHeader__c: "1",
     Acc_Question__c: "b",
-    Acc_Question__r: {
-      Acc_DisplayOrder__c: 1
-    },
     Acc_QuestionComments__c: "blah"
   },
   {
     Id: "2",
     Acc_MonitoringReportHeader__c: "2",
     Acc_Question__c: "c",
-    Acc_Question__r: {
-      Acc_DisplayOrder__c: 2
-    },
     Acc_QuestionComments__c: "Some comments"
   }];
 
