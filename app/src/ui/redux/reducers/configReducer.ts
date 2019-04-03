@@ -2,6 +2,7 @@ import { RootActions } from "../actions/root";
 
 export interface IClientConfig {
   ifsRoot: string;
+  features: IFeatureFlags;
 }
 
 export const configReducer = (state: IClientConfig  = {} as IClientConfig , action: RootActions) => {
