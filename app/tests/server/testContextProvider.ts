@@ -36,6 +36,10 @@ export class TestContext implements IContext {
             salesforce: "./salesforce.cert",
             shibboleth: "./shibboleth.cert",
         },
+        features: {
+            monitoringReports: true,
+            projectDocuments: true,
+        },
         logLevel: LogLevel.DEBUG,
         prettyLogs: false,
         salesforce: {
