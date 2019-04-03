@@ -1,9 +1,9 @@
-import { State } from "router5";
+import { State as RouterState } from "router5";
 import { RootState } from "./reducers/rootReducer";
 import { IClientUser } from "../../types/IUser";
-import { Configuration } from "../../server/features/common";
+import { IConfig } from "../../server/features/common";
 
-export function setupInitialState(route: State | undefined, user: IClientUser): RootState {
+export function setupInitialState(route: RouterState | undefined, user: IClientUser, config: IConfig): RootState {
   if(!route) {
     route = {
       name: "error",
@@ -20,7 +20,8 @@ export function setupInitialState(route: State | undefined, user: IClientUser): 
     loadStatus: 0,
     isClient: false,
     config:{
-      ifsRoot: Configuration.urls.ifsRoot
+      ifsRoot: config.urls.ifsRoot,
+      features: config.features
     }
   } as RootState;
 }

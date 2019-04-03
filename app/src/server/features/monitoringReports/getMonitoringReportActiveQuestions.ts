@@ -1,9 +1,13 @@
 import { QueryBase } from "../common";
-import { IContext } from "../../../types";
-import { MonitoringReportDto, OptionDto, QuestionDto } from "../../../types/dtos/monitoringReportDto";
+import { Authorisation, IContext } from "../../../types";
+import { QuestionDto } from "../../../types/dtos/monitoringReportDto";
 import { ISalesforceQuestions } from "../../repositories";
 
 export class GetMonitoringReportActiveQuestions extends QueryBase<QuestionDto[]> {
+
+  protected async accessControl(auth: Authorisation, context: IContext) {
+    return context.config.features.monitoringReports;
+  }
 
   private async getQuestions(context: IContext) {
     return (await context.repositories.monitoringReportQuestions.getAll())
@@ -19,7 +23,7 @@ export class GetMonitoringReportActiveQuestions extends QueryBase<QuestionDto[]>
 
   public async Run(context: IContext) {
     const questions = await this.getQuestions(context);
-    return [...questions].map(([ displayOrder, options ]) => ({
+    return [...questions].map(([displayOrder, options]) => ({
       title: options[0].Acc_QuestionName__c,
       displayOrder,
       optionId: null,
