@@ -317,7 +317,7 @@ class ProfileTotalCostCategoryTestRepository extends TestRepository<Repositories
     }
 }
 
-class QuestionsTestRepository extends TestRepository<Repositories.ISalesforceQuestions> implements Repositories.IQuestionsRepository {
+class QuestionsTestRepository extends TestRepository<Repositories.ISalesforceMonitoringReportQuestions> implements Repositories.IMonitoringReportQuestionsRepository {
   getAll() {
     return super.getAll();
   }

@@ -1,6 +1,6 @@
 import { QueryBase, SALESFORCE_DATE_FORMAT } from "../common";
 import { Authorisation, IContext, ProjectRole } from "../../../types";
-import { MonitoringReportDto, QuestionDto } from "../../../types/dtos/monitoringReportDto";
+import { MonitoringReportDto, MonitoringReportQuestionDto } from "../../../types/dtos/monitoringReportDto";
 import { ISalesforceMonitoringReportHeader, ISalesforceMonitoringReportResponse } from "../../repositories";
 import { MonitoringReportStatus } from "../../../types/constants/monitoringReportStatus";
 import { GetMonitoringReportActiveQuestions } from "./getMonitoringReportActiveQuestions";
@@ -18,7 +18,7 @@ export class GetMonitoringReport extends QueryBase<MonitoringReportDto> {
     return context.config.features.monitoringReports && auth.for(this.projectId).hasRole(ProjectRole.MonitoringOfficer);
   }
 
-  private createQuestionDto(question: QuestionDto, responses: ISalesforceMonitoringReportResponse[]) {
+  private createQuestionDto(question: MonitoringReportQuestionDto, responses: ISalesforceMonitoringReportResponse[]) {
     const options = question.options.map(o => o.id);
     const response = responses.find(r => options.indexOf(r.Acc_Question__c) >= 0);
     return {
@@ -31,7 +31,7 @@ export class GetMonitoringReport extends QueryBase<MonitoringReportDto> {
     };
   }
 
-  private async getQuestions(context: IContext, header: ISalesforceMonitoringReportHeader, results: ISalesforceMonitoringReportResponse[]): Promise<QuestionDto[]> {
+  private async getQuestions(context: IContext, header: ISalesforceMonitoringReportHeader, results: ISalesforceMonitoringReportResponse[]): Promise<MonitoringReportQuestionDto[]> {
     if (header.Acc_MonitoringReportStatus__c !== MonitoringReportStatus.SUBMITTED) {
       return context.runQuery(new GetMonitoringReportActiveQuestions());
     }
