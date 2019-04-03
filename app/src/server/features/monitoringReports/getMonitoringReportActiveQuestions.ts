@@ -1,9 +1,10 @@
 import { QueryBase } from "../common";
-import { Authorisation, IContext } from "../../../types";
-import { QuestionDto } from "../../../types/dtos/monitoringReportDto";
-import { ISalesforceQuestions } from "../../repositories";
+import { Authorisation } from "../../../types";
+import { IContext } from "../../../types";
+import { MonitoringReportQuestionDto } from "../../../types/dtos/monitoringReportDto";
+import { ISalesforceMonitoringReportQuestions } from "../../repositories";
 
-export class GetMonitoringReportActiveQuestions extends QueryBase<QuestionDto[]> {
+export class GetMonitoringReportActiveQuestions extends QueryBase<MonitoringReportQuestionDto[]> {
 
   protected async accessControl(auth: Authorisation, context: IContext) {
     return context.config.features.monitoringReports;
@@ -18,7 +19,7 @@ export class GetMonitoringReportActiveQuestions extends QueryBase<QuestionDto[]>
         options.push(q);
         acc.set(q.Acc_DisplayOrder__c, options);
         return acc;
-      }, new Map<number, ISalesforceQuestions[]>());
+      }, new Map<number, ISalesforceMonitoringReportQuestions[]>());
   }
 
   public async Run(context: IContext) {

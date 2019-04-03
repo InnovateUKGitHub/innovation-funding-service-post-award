@@ -1,12 +1,12 @@
 import * as Validation from "./common";
 import { Results } from "../validation/results";
-import { MonitoringReportDto, QuestionDto } from "../../types/dtos/monitoringReportDto";
+import { MonitoringReportDto, MonitoringReportQuestionDto } from "../../types/dtos/monitoringReportDto";
 import { MonitoringReportStatus } from "../../types/constants/monitoringReportStatus";
 
-class QuestionValidator extends Results<QuestionDto> {
+class QuestionValidator extends Results<MonitoringReportQuestionDto> {
   constructor(
-    readonly question: QuestionDto,
-    readonly answer: QuestionDto,
+    readonly question: MonitoringReportQuestionDto,
+    readonly answer: MonitoringReportQuestionDto,
     readonly show: boolean,
     readonly submit: boolean,
   ) {
@@ -31,7 +31,7 @@ export class MonitoringReportDtoValidator extends Results<MonitoringReportDto> {
     model: MonitoringReportDto,
     show: boolean,
     public readonly submit: boolean,
-    private readonly questions: QuestionDto[],
+    private readonly questions: MonitoringReportQuestionDto[],
   ) {
     super(model, show);
   }
@@ -40,7 +40,7 @@ export class MonitoringReportDtoValidator extends Results<MonitoringReportDto> {
     q => (
       new QuestionValidator(
         q,
-        this.model.questions.find(x => x.displayOrder === q.displayOrder) || {} as QuestionDto,
+        this.model.questions.find(x => x.displayOrder === q.displayOrder) || {} as MonitoringReportQuestionDto,
         this.showValidationErrors,
         this.submit
       )), "There are invalid responses.");

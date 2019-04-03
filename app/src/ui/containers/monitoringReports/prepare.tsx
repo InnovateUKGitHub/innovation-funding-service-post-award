@@ -1,21 +1,15 @@
 import { MonitoringReportDashboardRoute } from "./dashboard";
 import React from "react";
 import * as ACC from "../../components/index";
-import { LoadingStatus, Pending } from "../../../shared/pending";
+import { Pending } from "../../../shared/pending";
 import * as Actions from "../../redux/actions/index";
 import * as Selectors from "../../redux/selectors/index";
 import * as Dtos from "../../../types/dtos";
-import { AllClaimsDashboardRoute } from "../claims";
 import { ContainerBase, ReduxContainer } from "../containerBase";
-import { DateTime } from "luxon";
-import { range } from "../../../shared/range";
 import { ProjectRole } from "../../../types/dtos";
 import { IEditorStore } from "../../redux";
-import * as Validation from "../../validation";
-import * as Validators from "../../validators/common";
-import { dataLoadAction } from "../../redux/actions/index";
 import { MonitoringReportDtoValidator } from "../../validators/MonitoringReportDtoValidator";
-export interface PrepareMonitoringReportParams {
+export interface MonitoringReportPrepareParams {
   projectId: string;
   periodId: number;
 }
@@ -30,7 +24,7 @@ interface Callbacks {
   onSave: (projectId: string, periodId: number, dto: Dtos.MonitoringReportDto, submit: boolean) => void;
 }
 
-class PrepareMonitoringReportComponent extends ContainerBase<PrepareMonitoringReportParams, Data, Callbacks> {
+class PrepareMonitoringReportComponent extends ContainerBase<MonitoringReportPrepareParams, Data, Callbacks> {
   render() {
     const combined = Pending.combine({
       editor: this.props.editor,
@@ -81,9 +75,9 @@ class PrepareMonitoringReportComponent extends ContainerBase<PrepareMonitoringRe
   }
 }
 
-const containerDefinition = ReduxContainer.for<PrepareMonitoringReportParams, Data, Callbacks>(PrepareMonitoringReportComponent);
+const containerDefinition = ReduxContainer.for<MonitoringReportPrepareParams, Data, Callbacks>(PrepareMonitoringReportComponent);
 
-const PrepareMonitoringReport = containerDefinition.connect({
+const MonitoringReportPrepare = containerDefinition.connect({
   withData: (state, props) => ({
     project: Selectors.getProject(props.projectId).getPending(state),
     editor: Selectors.getMonitoringReportEditor(props.projectId, props.periodId).get(state)
@@ -100,8 +94,8 @@ const PrepareMonitoringReport = containerDefinition.connect({
   })
 });
 
-export const PrepareMonitoringReportRoute = containerDefinition.route({
-  routeName: "prepareMonitoringReport",
+export const MonitoringReportPrepareRoute = containerDefinition.route({
+  routeName: "monitoringReportPrepare",
   routePath: "/projects/:projectId/monitoring-reports/:periodId/prepare",
   getParams: (r) => ({ projectId: r.params.projectId, periodId: r.params.periodId }),
   accessControl: (auth, { projectId }, features) => features.monitoringReports && auth.for(projectId).hasAnyRoles(ProjectRole.MonitoringOfficer),
@@ -109,5 +103,5 @@ export const PrepareMonitoringReportRoute = containerDefinition.route({
     Actions.loadProject(params.projectId),
     Actions.loadMonitoringReport(params.projectId, params.periodId)
   ],
-  container: PrepareMonitoringReport
+  container: MonitoringReportPrepare
 });

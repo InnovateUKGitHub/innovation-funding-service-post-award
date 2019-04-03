@@ -1,6 +1,6 @@
 // tslint:disable:no-duplicate-string
 import * as Repositories from "../../src/server/repositories";
-import { ISalesforceQuestions, SalesforceRole } from "../../src/server/repositories";
+import { ISalesforceMonitoringReportQuestions, SalesforceRole } from "../../src/server/repositories";
 import { ITestRepositories } from "./testRepositories";
 import { ClaimStatus } from "../../src/types";
 import { MonitoringReportStatus } from "../../src/types/constants/monitoringReportStatus";
@@ -138,11 +138,11 @@ export class TestData {
   }
 
   // TODO remove 'createQuestion' and use this instead
-  public createQuestion(answersPerQuestion: number, displayOrder: number, isActive: boolean = true): Repositories.ISalesforceQuestions[] {
+  public createQuestion(answersPerQuestion: number, displayOrder: number, isActive: boolean = true): Repositories.ISalesforceMonitoringReportQuestions[] {
     const newQuestionArray = [];
     const seed = this.repositories.monitoringReportQuestions.Items.length + 1;
     for (let i = 0; i < answersPerQuestion; i++) {
-      const newQuestion: Repositories.ISalesforceQuestions = {
+      const newQuestion: Repositories.ISalesforceMonitoringReportQuestions = {
         Id: `QuestionId: ${seed + i}`,
         Acc_QuestionName__c: `QuestionName: ${displayOrder}`,
         Acc_DisplayOrder__c: displayOrder,
@@ -171,7 +171,7 @@ export class TestData {
     return newHeader;
   }
 
-  public createMonitoringReportResponse(question: ISalesforceQuestions) {
+  public createMonitoringReportResponse(question: ISalesforceMonitoringReportQuestions) {
     const response = {
       Id: `Response: ${this.repositories.monitoringReportResponse.Items.length}`,
       Acc_MonitoringReportHeader__c: "a",
