@@ -147,7 +147,13 @@ class Component extends ContainerBase<Params, Data, {}> {
 
     return (
       <Acc.Section title={title} qa="current-claims-section" badge={badge} key={index}>
-        <ClaimTable.Table data={currentInfo.claims} qa="current-claims-table" bodyRowFlag={(x) => x.status === ClaimStatus.SUBMITTED ? "info" : null} className="govuk-!-font-size-16">
+        <ClaimTable.Table
+          data={currentInfo.claims}
+          className="govuk-!-font-size-16"
+          bodyRowFlag={x => this.getBodyRowFlag(x, project, partners) ? "info" : null}
+          rowIcon={true}
+          qa="current-claims-table"
+        >
           <ClaimTable.String header="Partner" qa="partner" value={renderPartnerName} />
           <ClaimTable.Currency header="Forecast costs for period" qa="forecast-cost" value={(x) => x.forecastCost} />
           <ClaimTable.Currency header="Actual costs for period" qa="actual-cost" value={(x) => x.totalCost} />
@@ -158,6 +164,14 @@ class Component extends ContainerBase<Params, Data, {}> {
         </ClaimTable.Table>
       </Acc.Section>
     );
+  }
+
+  getBodyRowFlag(claim: ClaimDto, project: ProjectDto, partners: PartnerDto[]) {
+    const partner  = partners.find(x => x.id === claim.partnerId);
+    if(!partner) return false;
+
+    const linkType = Acc.Claims.getClaimDetailsLinkType({ claim, project, partner });
+    return linkType === "edit" || linkType === "review";
   }
 
   private renderPreviousClaimsSections(project: ProjectDto, partners: PartnerDto[], previousClaims: ClaimDto[]) {
