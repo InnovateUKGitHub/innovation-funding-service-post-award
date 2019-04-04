@@ -11,3 +11,10 @@ export const noCache = (req: express.Request, res: express.Response, next: expre
   res.setHeader("Pragma", "no-cache");
   return next();
 };
+
+export const setOwaspHeaders = (req: express.Request, res: express.Response, next: express.NextFunction) => {
+  res.setHeader("X-Frame-Options", "deny");
+  res.setHeader("X-Content-Type-Options", "nosniff");
+  res.setHeader("X-XSS-Protection", "1");
+  return next();
+};
