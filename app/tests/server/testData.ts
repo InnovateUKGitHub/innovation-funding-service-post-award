@@ -204,6 +204,7 @@ export class TestData {
       Acc_ProjectPeriodNumber__c: periodId,
       Acc_ProjectParticipant__r: {
         Id: partner.Id,
+        Acc_OverheadRate__c: 0,
         Acc_ProjectRole__c: partner.Acc_ProjectRole__c,
         Acc_AccountId__r: partner.Acc_AccountId__r
       },
