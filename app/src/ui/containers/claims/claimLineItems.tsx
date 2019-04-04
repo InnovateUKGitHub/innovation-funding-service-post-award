@@ -8,7 +8,7 @@ import * as ACC from "../../components";
 import { DocumentList, NavigationArrows } from "../../components";
 import { State } from "router5";
 import { ReviewClaimRoute } from "./review";
-import { ILinkInfo, PartnerDto, ProjectDto } from "../../../types";
+import { ClaimDto, ILinkInfo, PartnerDto, ProjectDto } from "../../../types";
 
 interface Params {
   projectId: string;
@@ -24,6 +24,8 @@ interface Data {
   costCategories: Pending<CostCategoryDto[]>;
   forecastDetail: Pending<ForecastDetailsDTO>;
   documents: Pending<DocumentSummaryDto[]>;
+  claim: Pending<ClaimDto>;
+  standardOverheadRate: number;
 }
 
 interface CombinedData {
@@ -33,6 +35,7 @@ interface CombinedData {
   costCategories: CostCategoryDto[];
   forecastDetail: ForecastDetailsDTO;
   documents: DocumentSummaryDto[];
+  claim: ClaimDto;
 }
 
 export class ClaimLineItemsComponent extends ContainerBase<Params, Data, {}> {
@@ -44,12 +47,13 @@ export class ClaimLineItemsComponent extends ContainerBase<Params, Data, {}> {
       costCategories: this.props.costCategories,
       forecastDetail: this.props.forecastDetail,
       documents: this.props.documents,
+      claim: this.props.claim,
     });
 
     return <ACC.PageLoader pending={combined} render={(data) => this.renderContents(data)} />;
   }
 
-  private renderContents({ project, partner, lineItems, costCategories, forecastDetail, documents }: CombinedData) {
+  private renderContents({ project, partner, lineItems, costCategories, forecastDetail, documents, claim }: CombinedData) {
     const params: Params = {
       partnerId : this.props.partnerId,
       costCategoryId: this.props.costCategoryId,
@@ -71,7 +75,7 @@ export class ClaimLineItemsComponent extends ContainerBase<Params, Data, {}> {
         <ACC.Section title="Supporting documents" subtitle={documents.length > 0 ? "(Documents open in a new window)" : ""} qa="supporting-documents-section">
           {this.renderDocumentList(documents)}
         </ACC.Section>
-        {this.renderNavigationArrows(this.props.route.name, costCategories, project, partner)}
+          {this.renderNavigationArrows(costCategories, project, partner, claim)}
       </ACC.Page>
     );
   }
@@ -82,8 +86,11 @@ export class ClaimLineItemsComponent extends ContainerBase<Params, Data, {}> {
       : <p className="govuk-body-m govuk-!-margin-bottom-0 govuk-!-margin-right-2">No documents uploaded.</p>;
   }
 
-  private getLinks = (costCategories: CostCategoryDto[], project: ProjectDto, partner: PartnerDto) => {
-    const costCategoriesToUse = costCategories.filter(x => x.competitionType === project.competitionType && x.organisationType === partner.organisationType && !x.isCalculated);
+  private getLinks(costCategories: CostCategoryDto[], project: ProjectDto, partner: PartnerDto, claim: ClaimDto, pages: {getLink: (params: Params) => ILinkInfo}) {
+    const periodId = this.props.periodId;
+    const costCategoriesToUse = costCategories
+      .filter(x => x.competitionType === project.competitionType && x.organisationType === partner.organisationType)
+      .filter(x => !x.isCalculated || claim.overheadRate > this.props.standardOverheadRate);
     const currentCostCategory = costCategoriesToUse.find(x => x.id === this.props.costCategoryId);
 
     if (currentCostCategory === undefined) return null;
@@ -102,20 +109,20 @@ export class ClaimLineItemsComponent extends ContainerBase<Params, Data, {}> {
 
     const previousLink = previousCostCategory ? {
       label: previousCostCategory.name,
-      route: ReviewClaimLineItemsRoute.getLink({
+      route: pages.getLink({
         partnerId: partner.id,
         projectId: project.id,
-        periodId: project.periodId,
+        periodId,
         costCategoryId: previousCostCategory.id
       })
     } : null;
 
     const nextLink = nextCostCategory ? {
       label: nextCostCategory.name,
-      route: ReviewClaimLineItemsRoute.getLink({
+      route: pages.getLink({
         partnerId: partner.id,
         projectId: project.id,
-        periodId: project.periodId,
+        periodId,
         costCategoryId: nextCostCategory.id
       })
     } : null;
@@ -126,15 +133,13 @@ export class ClaimLineItemsComponent extends ContainerBase<Params, Data, {}> {
     };
   }
 
-  private renderNavigationArrows = (routeName: string, costCategories: CostCategoryDto[], project: ProjectDto, partner: PartnerDto) => {
-    if (routeName !== "claimLineItemsReview") return null;
-
-    const arrowLinks = this.getLinks(costCategories, project, partner);
+  private renderNavigationArrows = (costCategories: CostCategoryDto[], project: ProjectDto, partner: PartnerDto, claim: ClaimDto) => {
+    const route = this.props.route.name === ReviewClaimLineItemsRoute.routeName ? ReviewClaimLineItemsRoute : ClaimLineItemsRoute;
+    const arrowLinks = this.getLinks(costCategories, project, partner, claim, route);
     if (arrowLinks === null) return null;
 
     return <NavigationArrows nextLink={arrowLinks.nextLink} previousLink={arrowLinks.previousLink}/>;
   }
-
 }
 
 const ClaimLineItemsTable: React.SFC<{ lineItems: ClaimLineItemDto[], forecastDetail: ForecastDetailsDTO }> = ({ lineItems, forecastDetail }) => {
@@ -186,7 +191,9 @@ export const ClaimLineItems = definition.connect({
     lineItems: Selectors.findClaimLineItemsByPartnerCostCategoryAndPeriod(props.partnerId, props.costCategoryId, props.periodId).getPending(state),
     costCategories: Selectors.getCostCategories().getPending(state),
     forecastDetail: Selectors.getForecastDetail(props.partnerId, props.periodId, props.costCategoryId).getPending(state),
-    documents: Selectors.getClaimDetailDocuments(props.partnerId, props.periodId, props.costCategoryId).getPending(state)
+    documents: Selectors.getClaimDetailDocuments(props.partnerId, props.periodId, props.costCategoryId).getPending(state),
+    claim: Selectors.getClaim(props.partnerId, props.periodId).getPending(state),
+    standardOverheadRate: state.config.standardOverheadRate,
   }),
   withCallbacks: () => ({})
 });
@@ -205,6 +212,7 @@ const getLoadDataActions = (params: Params): Actions.AsyncThunk<any>[] => [
   Actions.loadForecastDetail(params.partnerId, params.periodId, params.costCategoryId),
   Actions.loadClaimLineItemsForCategory(params.projectId, params.partnerId, params.costCategoryId, params.periodId),
   Actions.loadClaimDetailDocuments(params.partnerId, params.periodId, params.costCategoryId),
+  Actions.loadClaim(params.partnerId, params.periodId),
 ];
 
 export const ClaimLineItemsRoute = definition.route({
