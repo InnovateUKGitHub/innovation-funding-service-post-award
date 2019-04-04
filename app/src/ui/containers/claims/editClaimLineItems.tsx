@@ -77,7 +77,7 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
         <ACC.Section>
           <ACC.BackLink route={back}>Back to claim</ACC.BackLink>
         </ACC.Section>
-        <ACC.ErrorSummary error={this.props.editor && this.props.editor.error}/>
+        <ACC.ErrorSummary error={this.props.editor && this.props.editor.error} />
         <ACC.ValidationSummary validation={this.props.editor && this.props.editor.validator} compressed={false} />
         <ACC.Projects.Title pageTitle={`${costCategory.name}`} project={project} />
         <ACC.Section>
@@ -99,7 +99,7 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
         onSubmit={() => this.props.save(this.props.projectId, this.props.partnerId, this.props.periodId, this.props.costCategoryId, this.props.editor.data)}
         qa="current-claim-summary-form"
       >
-        <LineItemForm.Hidden name="itemCount" value={x => x.length}/>
+        <LineItemForm.Hidden name="itemCount" value={x => x.length} />
         <LineItemForm.Fieldset>
           <LineItemTable.Table
             data={editor.data}
