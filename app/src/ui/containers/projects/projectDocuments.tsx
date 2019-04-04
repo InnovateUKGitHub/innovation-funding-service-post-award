@@ -96,7 +96,7 @@ class ProjectDocumentsComponent extends ContainerBase<ProjectDocumentPageParams,
 
   renderDocumentsTable(documents: DocumentSummaryDto[]) {
     if (documents.length === 0) {
-      return <ACC.Renderers.SimpleString>No documents uploaded</ACC.Renderers.SimpleString>;
+      return <ACC.Renderers.SimpleString qa={"noDocuments"}>No documents uploaded</ACC.Renderers.SimpleString>;
     }
     const ProjectDocumentsTable = ACC.TypedTable<DocumentSummaryDto>();
 
