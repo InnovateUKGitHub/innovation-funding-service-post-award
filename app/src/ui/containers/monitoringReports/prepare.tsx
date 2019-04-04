@@ -97,7 +97,7 @@ const MonitoringReportPrepare = containerDefinition.connect({
 export const MonitoringReportPrepareRoute = containerDefinition.route({
   routeName: "monitoringReportPrepare",
   routePath: "/projects/:projectId/monitoring-reports/:periodId/prepare",
-  getParams: (r) => ({ projectId: r.params.projectId, periodId: r.params.periodId }),
+  getParams: (r) => ({ projectId: r.params.projectId, periodId: parseInt(r.params.periodId, 10) }),
   accessControl: (auth, { projectId }, features) => features.monitoringReports && auth.for(projectId).hasAnyRoles(ProjectRole.MonitoringOfficer),
   getLoadDataActions: (params) => [
     Actions.loadProject(params.projectId),
