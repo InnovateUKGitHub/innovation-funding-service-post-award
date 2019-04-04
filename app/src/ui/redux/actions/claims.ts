@@ -8,6 +8,7 @@ import {
   DataLoadAction,
   EditorAction,
   handleEditorError,
+  messageSuccess,
   SyncThunk,
   updateEditorAction,
   UpdateEditorAction
@@ -37,7 +38,17 @@ export function validateClaim(partnerId: string, periodId: number, dto: ClaimDto
   };
 }
 
-export function saveClaim(projectId: string, partnerId: string, periodId: number, claim: ClaimDto, details: ClaimDetailsSummaryDto[], costCategories: CostCategoryDto[], onComplete: () => void): AsyncThunk<void, DataLoadAction | EditorAction> {
+export function saveClaim(
+  projectId: string,
+  partnerId: string,
+  periodId: number,
+  claim: ClaimDto,
+  details: ClaimDetailsSummaryDto[],
+  costCategories: CostCategoryDto[],
+  onComplete: () => void,
+  message?: string
+)
+  : AsyncThunk<void, DataLoadAction | EditorAction | messageSuccess> {
   return (dispatch, getState) => {
     const state = getState();
     const selector = getClaimEditor(partnerId, periodId);
@@ -51,8 +62,9 @@ export function saveClaim(projectId: string, partnerId: string, periodId: number
     // send a loading action with undefined as it will just update the status
     dispatch(dataLoadAction(selector.key, selector.store, LoadingStatus.Loading, undefined));
 
-    return ApiClient.claims.update({projectId, partnerId, periodId, claim, user: state.user}).then((result) => {
+    return ApiClient.claims.update({ projectId, partnerId, periodId, claim, user: state.user }).then((result) => {
       dispatch(dataLoadAction(selector.key, selector.store, LoadingStatus.Done, result));
+      if (message) dispatch(messageSuccess(message));
       onComplete();
     }).catch((e) => {
       dispatch(handleEditorError({ id: selector.key, store: selector.store, dto: claim, validation, error: e }));
@@ -61,7 +73,7 @@ export function saveClaim(projectId: string, partnerId: string, periodId: number
 }
 
 export function loadClaimsForPartner(partnerId: string) {
-  return conditionalLoad(findClaimsByPartner(partnerId), params => ApiClient.claims.getAllByPartnerId({partnerId, ...params}));
+  return conditionalLoad(findClaimsByPartner(partnerId), params => ApiClient.claims.getAllByPartnerId({ partnerId, ...params }));
 }
 
 export function loadIarDocumentsForCurrentClaim(partnerId: string): AsyncThunk<void, DataLoadAction> {
@@ -75,5 +87,5 @@ export function loadIarDocumentsForCurrentClaim(partnerId: string): AsyncThunk<v
 }
 
 export function loadClaimsForProject(projectId: string) {
-  return conditionalLoad(findClaimsByProject(projectId), params => ApiClient.claims.getAllByProjectId({projectId, ...params}));
+  return conditionalLoad(findClaimsByProject(projectId), params => ApiClient.claims.getAllByProjectId({ projectId, ...params }));
 }

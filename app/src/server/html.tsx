@@ -29,19 +29,17 @@ export function renderHtml(html: string, preloadedState: any = {}) {
 
           <meta property="og:image" content="/assets/images/govuk-opengraph-image.png">
       </head>
-      <body class="govuk-template__body ">
+      <body class="govuk-template__body">
+          <a href="#main-content" class="govuk-skip-link">Skip to main content</a>
+          <div id="root">${html}</div>
           <script>
             // if js enabled then hide page for moment to allow any difference from server v client rendering to be sorted
             document.body.style.visibility = "hidden";
             setTimeout(function () {
-                document.body.style.visibility = "visible";
+              document.body.style.visibility = "visible";
             }, 10);
-            document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');
-          </script>
-          <a href="#main-content" class="govuk-skip-link">Skip to main content</a>
-          <div id="root">${html}</div>
-          <script>
-              window.__PRELOADED_STATE__ = ${JSON.stringify(preloadedState).replace(/</g, "\\u003c")}
+            document.body.className = document.body.className + ' js-enabled';
+            window.__PRELOADED_STATE__ = ${JSON.stringify(preloadedState).replace(/</g, "\\u003c")}
           </script>
           <script src="/govuk-frontend-2.7.0.min.js"></script>
           <script src="/build/vendor.js?build=${Configuration.build}"></script>

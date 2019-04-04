@@ -2,7 +2,6 @@
 import { TestContext } from "../../testContextProvider";
 import { GetPeriodInfoQuery } from "../../../../src/server/features/projects/getPeriodInfoQuery";
 import { ClaimFrequency } from "../../../../src/types";
-import { DateTime } from "luxon";
 
 const mapTestData = (data: { [key: string]: any }[]) => {
   return data.map(item => Object.keys(item).map((k) => item[k]));
@@ -27,8 +26,8 @@ describe("GetCurrentPeriodQuery", () => {
   test.each(mapTestData(monthlyPeriodTestData))("For monthly project starting on %s ending %s when it is %s then period should be %i of %i", async (startDate: string, endDate: string, now: string, current: number, total: number) => {
     const context = new TestContext();
 
-    const projectStart = DateTime.fromFormat(startDate, "yyyy/MM/dd");
-    const projectEnd = DateTime.fromFormat(endDate, "yyyy/MM/dd");
+    const projectStart = context.clock.dateTime(startDate, "yyyy/MM/dd");
+    const projectEnd = context.clock.dateTime(endDate, "yyyy/MM/dd");
     const frequency = ClaimFrequency.Monthly;
 
     context.clock.setDate(now);
@@ -69,8 +68,8 @@ describe("GetCurrentPeriodQuery", () => {
   test.each(mapTestData(quartlerlyPeriodTestData))("For quartlery project starting on %s ending %s when it is %s then period should be %i of %i", async (startDate: string, endDate: string, now: string, current: number, total: number) => {
     const context = new TestContext();
 
-    const projectStart = DateTime.fromFormat(startDate, "yyyy/MM/dd");
-    const projectEnd = DateTime.fromFormat(endDate, "yyyy/MM/dd");
+    const projectStart = context.clock.dateTime(startDate, "yyyy/MM/dd");
+    const projectEnd = context.clock.dateTime(endDate, "yyyy/MM/dd");
     const frequency = ClaimFrequency.Quarterly;
 
     context.clock.setDate(now);
@@ -112,8 +111,8 @@ describe("GetCurrentPeriodQuery", () => {
   test.each(mapTestData(monthlyClaimWindowTestData))("For monthly project starting on %s ending %s when it is %s then claim window start should be %s", async (startDate: string, endDate: string, now: string, expectClaimWindow: string | null) => {
     const context = new TestContext();
 
-    const projectStart = DateTime.fromFormat(startDate, "yyyy/MM/dd");
-    const projectEnd = DateTime.fromFormat(endDate, "yyyy/MM/dd");
+    const projectStart = context.clock.dateTime(startDate, "yyyy/MM/dd");
+    const projectEnd = context.clock.dateTime(endDate, "yyyy/MM/dd");
     const frequency = ClaimFrequency.Monthly;
 
     context.clock.setDate(now);
@@ -122,7 +121,7 @@ describe("GetCurrentPeriodQuery", () => {
     const result = await context.runSyncQuery(query);
 
     if (expectClaimWindow) {
-      const expectedStart = DateTime.fromString(expectClaimWindow, "yyyy/MM/dd");
+      const expectedStart = context.clock.dateTime(expectClaimWindow, "yyyy/MM/dd");
       const expectedEnd = expectedStart.plus({ days: 30, minutes: -1 });
 
       expect(result.currentClaimWindowStart).toEqual(expectedStart.toJSDate());
@@ -162,8 +161,8 @@ describe("GetCurrentPeriodQuery", () => {
   test.each(mapTestData(quarterlyClaimWindowTestData))("For quarterly project starting on %s ending %s when it is %s then claim window start should be %s", async (startDate: string, endDate: string, now: string, expectClaimWindow: string | null) => {
     const context = new TestContext();
 
-    const projectStart = DateTime.fromFormat(startDate, "yyyy/MM/dd");
-    const projectEnd = DateTime.fromFormat(endDate, "yyyy/MM/dd");
+    const projectStart = context.clock.dateTime(startDate, "yyyy/MM/dd");
+    const projectEnd = context.clock.dateTime(endDate, "yyyy/MM/dd");
     const frequency = ClaimFrequency.Quarterly;
 
     context.clock.setDate(now);
@@ -172,7 +171,7 @@ describe("GetCurrentPeriodQuery", () => {
     const result = await context.runSyncQuery(query);
 
     if (expectClaimWindow) {
-      const expectedStart = DateTime.fromString(expectClaimWindow, "yyyy/MM/dd");
+      const expectedStart = context.clock.dateTime(expectClaimWindow, "yyyy/MM/dd");
       const expectedEnd = expectedStart.plus({ days: 30, minutes: -1 });
 
       expect(result.currentClaimWindowStart).toEqual(expectedStart.toJSDate());

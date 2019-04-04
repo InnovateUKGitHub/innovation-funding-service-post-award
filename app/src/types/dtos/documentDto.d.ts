@@ -8,6 +8,9 @@ interface DocumentSummaryDto {
   link: string;
   id: string;
   description?: string;
+  fileSize: number;
+  dateCreated: Date;
+  owner: string;
 }
 
 interface DocumentDto {

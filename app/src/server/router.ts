@@ -7,13 +7,7 @@ import { NotFoundError } from "./features/common/appError";
 
 export const router = express.Router();
 
-const cacheControl = (req: Request, res: Response, next: NextFunction) => {
-  res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate, max-age=0");
-  res.setHeader("Pragma", "no-cache");
-  return next();
-};
-
-router.use("/api", cacheControl, apiRoutes);
+router.use("/api", apiRoutes);
 router.use("/components", componentGuideRender);
 /*form posts*/
 router.post("*", formRouter);

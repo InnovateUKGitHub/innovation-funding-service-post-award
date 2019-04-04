@@ -22,7 +22,11 @@ export class ForecastDetailsDtosValidator extends Results<ForecastDetailsDTO[]> 
     const totalClaimCosts    = claimDetails.filter(x => x.periodId <= periodId).reduce((total, current) => total += current.value, 0);
     const totalForecastCosts = forecasts.filter(x => x.periodId > periodId).reduce((total, current) => total += current.value, 0);
 
-    this.totalCosts = Validation.isTrue(this, totalForecastCosts + totalClaimCosts <= totalGolCosts, "Your overall total cannot be higher than your total eligible costs.");
+    if( this.items.isValid) {
+      this.totalCosts = Validation.isTrue(this, totalForecastCosts + totalClaimCosts <= totalGolCosts, "Your overall total cannot be higher than your total eligible costs.");
+    } else {
+      this.totalCosts = Validation.valid(this);
+    }
   }
 }
 
@@ -32,4 +36,5 @@ export class ForecastDetailsDtoValidator extends Results<ForecastDetailsDTO> {
   }
 
   public id = Validation.required(this, this.model.id, "Id is required");
+  public value = Validation.number(this, this.model.value, "Forecast must be a number.");
 }

@@ -1,7 +1,7 @@
 import React from "react";
 import { Link, Title, TypedForm } from "../components";
 import { ContainerBaseWithState, ContainerProps, ReduxContainer, } from "./containerBase";
-import { ContactListRoute, ProjectDashboardRoute, } from ".";
+import { ProjectDashboardRoute, } from ".";
 import { SimpleString } from "../components/renderers";
 
 interface Props {
@@ -38,10 +38,6 @@ class Component extends ContainerBaseWithState<{}, Props, {}, State> {
           <div className="govuk-grid-column-one-third">
             <h2><Link route={ProjectDashboardRoute.getLink({})}>Projects</Link></h2>
             <SimpleString>Projects dashboard</SimpleString>
-          </div>
-          <div className="govuk-grid-column-one-third">
-            <h2><Link route={ContactListRoute.getLink({})}>Contacts</Link></h2>
-            <SimpleString>Some contacts from salesforce</SimpleString>
           </div>
         </div>
       </div>

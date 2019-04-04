@@ -12,7 +12,7 @@ describe("PhaseBanner", () => {
     it("should render feedback <a>", () => {
         const wrapper = shallow(<PhaseBanner />);
         expect(wrapper
-            .containsMatchingElement(<a className="govuk-link" href="#">feedback</a>))
+            .containsMatchingElement(<a className="govuk-link" href="https://www.surveymonkey.co.uk/r/IFSPostAwardFeedback">feedback</a>))
             .toBeTruthy();
     });
 });

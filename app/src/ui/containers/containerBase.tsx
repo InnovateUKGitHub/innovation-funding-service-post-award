@@ -7,7 +7,7 @@ import { RootState } from "../redux/reducers/rootReducer";
 import { RootActions } from "../redux/actions/root";
 import { matchRoute } from "../routing/matchRoute";
 import { AsyncThunk } from "../redux/actions";
-import { IUser } from "../../types/IUser";
+import { IClientUser } from "../../types/IUser";
 import { ILinkInfo } from "../../types/ILinkInfo";
 import { Authorisation } from "../../types";
 
@@ -71,14 +71,14 @@ class ReduxContainerWrapper<TParams, TData, TCallbacks> {
         routePath: string,
         getParams: (route: RouteState) => TParams,
         getLoadDataActions: (params: TParams) => AsyncThunk<any>[],
-        accessControl?: (auth: Authorisation, params: TParams) => boolean,
+        accessControl?: (auth: Authorisation, params: TParams, features: IFeatureFlags) => boolean,
         container: React.ComponentClass<any> & { WrappedComponent: React.ComponentType<TParams & TData & TCallbacks & BaseProps> }
     }) {
         return {
             getLink: (params: TParams): ILinkInfo => ({
               routeName: options.routeName,
               routeParams: params,
-              accessControl: (user: IUser) => !options.accessControl || options.accessControl(new Authorisation(user.roleInfo), params) }),
+              accessControl: (user: IClientUser, features: IFeatureFlags) => !options.accessControl || options.accessControl(new Authorisation(user.roleInfo), params, features) }),
             ...options,
         };
     }

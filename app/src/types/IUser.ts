@@ -1,7 +1,10 @@
 import { IRoleInfo } from "../server/features/projects/getAllProjectRolesForUser";
 
-export interface IUser {
+export interface ISessionUser {
   email: string;
-  name: string;
+}
+
+export interface IClientUser {
+  email: string;
   roleInfo: {[key: string]: IRoleInfo};
 }

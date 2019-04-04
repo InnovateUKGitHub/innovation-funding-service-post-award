@@ -13,6 +13,9 @@ import { ClaimDashboardDocumentDeleteHandler } from "./claimDashboard/claimDashb
 import { ClaimDashboardDocumentUploadHandler } from "./claimDashboard/claimDashboardDocumentUploadHandler";
 import { ClaimDetailDocumentDeleteHandler } from "./claimDetailDocument/claimDetailDocumentDeleteHandler";
 import { ClaimDetailDocumentUploadHandler } from "./claimDetailDocument/claimDetailDocumentUploadHandler";
+import { ProjectDocumentUploadHandler } from "./projectDocumentFormHandler";
+import { Configuration } from "../features/common";
+import { MonitoringReportFormHandler } from "./saveMonitoringReportFormHandler";
 
 export const formRouter = express.Router();
 
@@ -27,9 +30,16 @@ const handlers: IFormHandler[] = [
   new ClaimDetailDocumentUploadHandler(),
   new ClaimDashboardDocumentDeleteHandler(),
   new ClaimDashboardDocumentUploadHandler(),
-  new HomeFormHandler(),
-  new BadRequestHandler()
+  new MonitoringReportFormHandler(),
+  new ProjectDocumentUploadHandler(),
 ];
+
+// Todo remove once we have local sso in dev
+if (!Configuration.sso.enabled) {
+  handlers.push(new HomeFormHandler());
+}
+
+handlers.push(new BadRequestHandler());
 
 handlers.forEach(x => {
   formRouter.post(x.routePath, ...x.middleware, async (req: express.Request, res: express.Response, next: express.NextFunction) => {

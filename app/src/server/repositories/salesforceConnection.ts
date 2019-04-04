@@ -3,15 +3,18 @@ import fs from "fs";
 import jwt from "jsonwebtoken";
 import { Cache } from "../features/common/cache";
 import { Configuration } from "../features/common";
+import { LogLevel } from "../../types/logLevel";
 
-// This will need revisting once SSO with Salesforce has been resolved
-export interface ISalesforceConnectionDetails {
-  username: string;
-  password: string;
-  token: string;
+export interface ISalesforceTokenDetails {
+  currentUsername: string;
   connectionUrl: string;
   clientId: string;
+}
 
+export interface ISalesforceConnectionDetails extends ISalesforceTokenDetails {
+  serviceUsername: string;
+  servicePassword: string;
+  serviceToken: string;
 }
 
 interface ITokenInfo {
@@ -19,18 +22,19 @@ interface ITokenInfo {
   url: string;
 }
 
-const tokenCache = new Cache<ITokenInfo>(5);
+const tokenCache = new Cache<ITokenInfo>(Configuration.timeouts.token);
 
-export const salesforceConnection = ({ username, password, token }: ISalesforceConnectionDetails) => {
+export const salesforceConnection = (connectionDetails: ISalesforceConnectionDetails) => {
   const connection = new jsforce.Connection({
-    loginUrl: "https://test.salesforce.com"
+    loginUrl: "https://test.salesforce.com",
+    logLevel: Configuration.logLevel === LogLevel.VERBOSE ? "DEBUG" : undefined
   });
 
   return new Promise<jsforce.Connection>((resolve, reject) => {
-    if (!username || !password || !token) {
-      throw new Error(`Invalid connection details username:${username}, password:${password}, token:${token}`);
+    if (!connectionDetails.serviceUsername || !connectionDetails.servicePassword || !connectionDetails.serviceToken) {
+      throw new Error(`Invalid connection details username:${connectionDetails.serviceUsername}, password:${connectionDetails.servicePassword}, token:${connectionDetails.serviceToken}`);
     }
-    connection.login(username, password + token, (err, conn) => {
+    connection.login(connectionDetails.serviceUsername, connectionDetails.servicePassword + connectionDetails.serviceToken, (err, conn) => {
       if (err) {
         reject(err);
       }
@@ -51,7 +55,7 @@ const getToken = (username: string, clientId: string, connectionUrl: string): Pr
   const options = {
     issuer: clientId,
     audience: connectionUrl,
-    expiresIn: 1,
+    expiresIn: 10,
     algorithm: "RS256"
   };
 
@@ -66,14 +70,9 @@ const getToken = (username: string, clientId: string, connectionUrl: string): Pr
       if (r.ok) {
         return r.json();
       }
-      else if (r.headers.get("content-type") === "application/json") {
-        return r.json().then(x => {
-          throw new SalesforceTokenError(`Unable to get token: url- ${r.url}: originalUrl- ${connectionUrl}: ${x.error} \n ${x.error_description}`, r.status);
-        });
-      }
       else {
         return r.text().then(x => {
-          throw new SalesforceTokenError(`Unable to get token or json error: url- ${r.url}: originalUrl- ${connectionUrl}: ${x}`, r.status);
+          throw new SalesforceTokenError(`Unable to get token or json error: url- ${r.url}: status: -${r.status} originalUrl- ${connectionUrl}: ${x}`, r.status);
         });
       }
     })
@@ -82,8 +81,8 @@ const getToken = (username: string, clientId: string, connectionUrl: string): Pr
 
 };
 
-export const salesforceConnectionWithToken = async ({ username, clientId, connectionUrl }: ISalesforceConnectionDetails): Promise<jsforce.Connection> => {
-  const token = await tokenCache.fetchAsync(username, () => getToken(username, clientId, connectionUrl));
+export const salesforceConnectionWithToken = async ({ currentUsername, clientId, connectionUrl }: ISalesforceTokenDetails): Promise<jsforce.Connection> => {
+  const token = await tokenCache.fetchAsync(currentUsername, () => getToken(currentUsername, clientId, connectionUrl));
 
   return new jsforce.Connection({
     accessToken: token.accessToken,

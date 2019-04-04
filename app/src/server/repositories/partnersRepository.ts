@@ -1,7 +1,7 @@
 import SalesforceRepositoryBase, { Updatable } from "./salesforceRepositoryBase";
 
 export enum SalesforceProjectRole {
-  ProjectLead = "Project Lead"
+  ProjectLead = "Lead"
 }
 
 export interface ISalesforcePartner {

@@ -14,6 +14,10 @@ export interface ISalesforceContentVersion {
   ContentLocation: string;
   VersionData: string;
   Description?: string;
+  CreatedDate: string;
+  Owner: {
+    Username: string
+  };
 }
 
 export interface IContentVersionRepository {
@@ -34,7 +38,9 @@ export class ContentVersionRepository extends SalesforceRepositoryBase<ISalesfor
     "ContentDocumentId",
     "ContentSize",
     "FileType",
-    "Description"
+    "Description",
+    "CreatedDate",
+    "Owner.Username"
   ];
 
   public getDocuments(contentDocumentIds: string[], filter?: DocumentFilter): Promise<ISalesforceContentVersion[]> {

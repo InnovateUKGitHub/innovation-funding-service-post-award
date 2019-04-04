@@ -55,7 +55,7 @@ export class ClaimsDetailsComponent extends ContainerBase<Params, Data, {}> {
       if (!claim.isIarRequired || !claim.isApproved || !iarDocument) return null;
 
       return (
-        <ACC.Section qa="claim-iar" title={"Independent audit report"}>
+        <ACC.Section qa="claim-iar" title={"Independent accountant's report"}>
           <ACC.DocumentSingle document={iarDocument} openNewWindow={true}/>
         </ACC.Section>
       );

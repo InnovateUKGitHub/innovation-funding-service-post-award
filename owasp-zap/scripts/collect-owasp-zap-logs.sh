@@ -1,2 +1,2 @@
 #!/bin/bash  
- python collect_logs.py
+ python owasp-zap/scripts/collect_logs.py

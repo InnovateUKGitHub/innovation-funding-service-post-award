@@ -7,8 +7,8 @@ import * as Selectors from "../../redux/selectors";
 import { ContainerBase, ReduxContainer } from "../containerBase";
 import { ClaimDtoValidator } from "../../validators/claimDtoValidator";
 import { ReviewClaimLineItemsRoute } from "./claimLineItems";
-import { AllClaimsDashboardRoute, ClaimsDashboardRoute, ClaimsDetailsRoute} from ".";
-import { ClaimDto, ClaimFrequency, ClaimStatus, PartnerDto, ProjectDto, ProjectRole } from "../../../types";
+import { AllClaimsDashboardRoute, ClaimsDetailsRoute } from ".";
+import { ClaimDto, ClaimStatus, PartnerDto, ProjectDto, ProjectRole } from "../../../types";
 import { ForecastData, forecastDataLoadActions } from "./forecasts/common";
 
 export interface ReviewClaimParams {
@@ -30,7 +30,7 @@ interface Data {
 
 interface Callbacks {
   onChange: (partnerId: string, periodId: number, dto: ClaimDto, details: ClaimDetailsSummaryDto[], costCategories: CostCategoryDto[]) => void;
-  onSave: (projectId: string, partnerId: string, periodId: number, dto: ClaimDto, details: ClaimDetailsSummaryDto[], costCategories: CostCategoryDto[]) => void;
+  onSave: (projectId: string, partnerId: string, periodId: number, dto: ClaimDto, details: ClaimDetailsSummaryDto[], costCategories: CostCategoryDto[], message: string) => void;
 }
 
 interface CombinedData {
@@ -59,6 +59,10 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, Data, Callbacks> 
   private getClaimPeriodTitle(data: CombinedData) {
     return <ACC.Claims.ClaimPeriodDate claim={data.claim} partner={data.partner} />;
   }
+  private onClaimSubmit(data: CombinedData) {
+    const message = data.editor.data.status === ClaimStatus.MO_QUERIED ? "You have queried this claim." : "You have approved this claim.";
+    this.props.onSave(this.props.projectId, this.props.partnerId, this.props.periodId, data.editor.data, data.claimDetails, data.costCategories, message);
+  }
 
   private renderContents(data: CombinedData) {
     const Form = ACC.TypedForm<ClaimDto>();
@@ -77,7 +81,7 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, Data, Callbacks> 
         <ACC.Projects.Title pageTitle="Review claim" project={data.project} />
         <ACC.Claims.Navigation projectId={data.project.id} partnerId={data.partner.id} periodId={data.claim.periodId} currentRouteName={ClaimsDetailsRoute.routeName} />
         <ACC.Section title={this.getClaimPeriodTitle(data)}>
-          <ACC.Claims.ClaimTable
+          <ACC.Claims.ClaimReviewTable
             {...data}
             validation={data.editor.validator.claimDetails.results}
             getLink={costCategoryId => ReviewClaimLineItemsRoute.getLink({ partnerId: this.props.partnerId, projectId: this.props.projectId, periodId: this.props.periodId, costCategoryId })}
@@ -85,7 +89,7 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, Data, Callbacks> 
         </ACC.Section>
         <ACC.Section>
           <ACC.Accordion>
-            <ACC.AccordionItem  title="Forecast">
+            <ACC.AccordionItem  title="Forecast" qa="forecast-accordion">
               <ACC.Loader
                 pending={this.props.forecastData}
                 render={(forecastData) => (<ACC.Claims.ForecastTable data={forecastData} hideValidation={true} />)}
@@ -95,7 +99,7 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, Data, Callbacks> 
         </ACC.Section>
         <Form.Form
           data={data.editor.data}
-          onSubmit={() => this.props.onSave(this.props.projectId, this.props.partnerId, this.props.periodId, data.editor.data, data.claimDetails, data.costCategories)}
+          onSubmit={() => this.onClaimSubmit(data)}
           onChange={(dto) => this.props.onChange(this.props.partnerId, this.props.periodId, dto, data.claimDetails, data.costCategories)}
           qa="review-form"
         >
@@ -106,6 +110,7 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, Data, Callbacks> 
               value={(dto) => options.find(x => x.id === dto.status)}
               update={(dto, val) => this.updateStatus(dto, val)}
               validation={data.editor.validator.status}
+              inline={true}
             />
             {!!submitButtonLabel ? <Form.Submit>{submitButtonLabel}</Form.Submit> : null}
           </Form.Fieldset>
@@ -174,8 +179,10 @@ export const ReviewClaim = definition.connect({
     };
   },
   withCallbacks: (dispatch) => ({
-    onChange: (partnerId, periodId, dto, details, costCategories) => dispatch(Actions.validateClaim(partnerId, periodId, dto, details, costCategories)),
-    onSave: (projectId, partnerId, periodId, dto, details, costCategories) => dispatch(Actions.saveClaim(projectId, partnerId, periodId, dto, details, costCategories, () => dispatch(Actions.navigateTo(AllClaimsDashboardRoute.getLink({projectId}))))),
+    onChange: (partnerId, periodId, dto, details, costCategories) =>
+      dispatch(Actions.validateClaim(partnerId, periodId, dto, details, costCategories)),
+    onSave: (projectId, partnerId, periodId, dto, details, costCategories, message) =>
+      dispatch(Actions.saveClaim(projectId, partnerId, periodId, dto, details, costCategories, () => dispatch(Actions.navigateTo(AllClaimsDashboardRoute.getLink({projectId}))), message)),
   })
 });
 

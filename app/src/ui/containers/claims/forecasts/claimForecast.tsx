@@ -14,7 +14,7 @@ export interface ClaimForcastParams {
 }
 interface Callbacks {
   onChange: (partnerId: string, data: ForecastDetailsDTO[], combined: ForecastData) => void;
-  saveAndReturn: (updateClaim: boolean, projectId: string, partnerId: string, periodId: number, data: ForecastData) => void;
+  saveAndReturn: (updateClaim: boolean, projectId: string, partnerId: string, periodId: number, data: ForecastData, message: string) => void;
 }
 
 class ClaimForecastComponent extends ContainerBase<ClaimForcastParams, PendingForecastData, Callbacks> {
@@ -22,8 +22,8 @@ class ClaimForecastComponent extends ContainerBase<ClaimForcastParams, PendingFo
     return <ACC.PageLoader pending={this.props.combined} render={data => this.renderContents(data)} />;
   }
 
-  saveAndReturn(data: ForecastData, updateClaim: boolean, periodId: number) {
-    this.props.saveAndReturn(updateClaim, this.props.projectId, this.props.partnerId, periodId, data);
+  saveAndReturn(data: ForecastData, updateClaim: boolean, periodId: number, message: string) {
+    this.props.saveAndReturn(updateClaim, this.props.projectId, this.props.partnerId, periodId, data, message);
   }
 
   handleChange(data: ForecastDetailsDTO[], combined: ForecastData) {
@@ -47,7 +47,7 @@ class ClaimForecastComponent extends ContainerBase<ClaimForcastParams, PendingFo
           <Form.Form
             data={editor.data}
             onChange={data => this.handleChange(data, combined)}
-            onSubmit={() => this.saveAndReturn(combined, true, this.props.periodId)}
+            onSubmit={() => this.saveAndReturn(combined, true, this.props.periodId, "You have submitted your claim for this period.")}
             qa="claim-forecast-form"
           >
             <ACC.Claims.ForecastTable data={combined} />
@@ -56,7 +56,7 @@ class ClaimForecastComponent extends ContainerBase<ClaimForcastParams, PendingFo
               <ACC.Claims.ClaimLastModified partner={combined.partner} />
             </Form.Fieldset>
             <Form.Fieldset qa="save-button">
-              <Form.Button name="save" onClick={() => this.saveAndReturn(combined, false, this.props.periodId)}>Save and return to claim</Form.Button>
+              <Form.Button name="save" onClick={() => this.saveAndReturn(combined, false, this.props.periodId, "You have saved your claim.")}>Save and return to claim</Form.Button>
             </Form.Fieldset>
           </Form.Form>
         </ACC.Section>
@@ -76,8 +76,20 @@ const definition = ReduxContainer.for<ClaimForcastParams, PendingForecastData, C
 const ForecastClaim = definition.connect({
   withData: (state, props) => withDataEditor(state, props),
   withCallbacks: (dispatch) => ({
-    onChange: (partnerId, data, combined) => dispatch(Actions.validateForecastDetails(partnerId, data, combined.claims, combined.claimDetails, combined.golCosts)),
-    saveAndReturn: (updateClaim, projectId, partnerId, periodId, data) => dispatch(Actions.saveForecastDetails(updateClaim, projectId, partnerId, data.editor!.data, data.claims, data.claimDetails, data.golCosts, () => updateRedirect(updateClaim, dispatch, projectId, partnerId, periodId), "You have submitted your claim for this period."))
+    onChange: (partnerId, data, combined) =>
+      dispatch(Actions.validateForecastDetails(partnerId, data, combined.claims, combined.claimDetails, combined.golCosts)),
+    saveAndReturn: (updateClaim, projectId, partnerId, periodId, data, message) =>
+      dispatch(Actions.saveForecastDetails(
+        updateClaim,
+        projectId,
+        partnerId,
+        data.editor!.data,
+        data.claims,
+        data.claimDetails,
+        data.golCosts,
+        () => updateRedirect(updateClaim, dispatch, projectId, partnerId, periodId),
+        message)
+      )
   })
 });
 

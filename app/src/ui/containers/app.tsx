@@ -4,14 +4,16 @@ import { createRouteNodeSelector, RouterState } from "redux-router5";
 import { MatchedRoute, matchRoute } from "../routing";
 import { Footer, Header, PhaseBanner } from "../components";
 import { RootState } from "../redux";
-import { IUser } from "../../types/IUser";
+import { IClientUser } from "../../types/IUser";
 import { StandardErrorPage } from "../components/standardErrorPage";
 import { Authorisation } from "../../types";
+import { IClientConfig } from "../redux/reducers/configReducer";
 
 interface IAppProps extends RouterState {
   dispatch: any;
   loadStatus: number;
-  user: IUser;
+  user: IClientUser;
+  config: IClientConfig;
 }
 
 class AppComponent extends React.Component<IAppProps, {}> {
@@ -28,7 +30,7 @@ class AppComponent extends React.Component<IAppProps, {}> {
   private accessControl(route: MatchedRoute) {
     if (!route.accessControl) return true;
     const params = route.getParams(this.props.route!);
-    return route.accessControl(new Authorisation((this.props.user.roleInfo)), params);
+    return route.accessControl(new Authorisation((this.props.user.roleInfo)), params, this.props.config.features);
   }
 
   private loadData() {
@@ -47,7 +49,7 @@ class AppComponent extends React.Component<IAppProps, {}> {
 
     return (
       <div>
-        <Header />
+        <Header ifsRoot={this.props.config.ifsRoot} />
         <div className="govuk-width-container">
           <PhaseBanner />
           <main className="govuk-main-wrapper" id="main-content" role="main" data-qa={route.name}>
@@ -65,6 +67,7 @@ const connectState = () => {
   return (state: RootState) => ({
     loadStatus: state.loadStatus,
     user: state.user,
+    config: state.config,
     ...routeInfo(state)
   });
 };

@@ -29,9 +29,8 @@ export interface PartnerDto {
   totalFutureForecastsForParticipants: number | null;
   roles: ProjectRole;
   forecastLastModifiedDate: Date | null;
-  claimsToReview: number | null;
   claimsOverdue: number | null;
-  claimsQueried: number | null;
+  claimsWithParticipant: number  | null;
   status: PartnerClaimStatus;
   statusName: string;
 }

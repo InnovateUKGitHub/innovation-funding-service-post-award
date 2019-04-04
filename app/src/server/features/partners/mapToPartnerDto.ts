@@ -35,11 +35,10 @@ export class MapToPartnerDtoCommand extends SyncCommandBase<PartnerDto> {
             totalFutureForecastsForParticipants: this.valueIfPermission(this.item.Acc_TotalFutureForecastsforParticipant__c),
             roles: this.partnerLevelRoles,
             forecastLastModifiedDate: this.item.Acc_ForecastLastModifiedDate__c ? DateTime.fromISO(this.item.Acc_ForecastLastModifiedDate__c).toJSDate() : null,
-            claimsToReview: this.valueIfPermission(this.item.Acc_ClaimsForReview__c || 0),
             claimsOverdue: this.valueIfPermission(this.item.Acc_ClaimsOverdue__c),
-            claimsQueried: this.valueIfPermission(this.item.Acc_ClaimsUnderQuery__c),
+            claimsWithParticipant: this.valueIfPermission(this.item.Acc_ClaimsUnderQuery__c),
             status: this.getClaimStatus(this.item.Acc_TrackingClaims__c),
-            statusName: this.item.Acc_TrackingClaims__c,
+            statusName: this.item.Acc_TrackingClaims__c || "",
         };
     }
 

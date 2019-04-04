@@ -4,8 +4,9 @@ import * as ACC from "../../components";
 import { Pending } from "../../../shared/pending";
 import * as Actions from "../../redux/actions";
 import * as Selectors from "../../redux/selectors";
-import { ProjectOverviewPage } from "../../components/projectOverview";
 import { PartnerDto, ProjectDto, ProjectRole } from "../../../types";
+import { AllClaimsDashboardRoute } from "../claims/allClaimsDashboard";
+import { ClaimsDashboardRoute } from "../claims/dashboard";
 
 interface Data {
     projectDetails: Pending<ProjectDto>;
@@ -50,7 +51,11 @@ class ProjectDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
         // ];
 
         return (
-            <ProjectOverviewPage selectedTab={ProjectDetailsRoute.routeName} project={project} partners={partners}>
+            <ACC.Page>
+                <ACC.Section>
+                  {this.renderBackLink(project, partners)}
+                </ACC.Section>
+                <ACC.Projects.Title pageTitle="View project" project={project} />
                 {this.renderPartnersCosts(partners, project)}
                 <ACC.Section title="Project members">
                     <ACC.ProjectMember member={monitoringOfficer} qa="monitoring-officer" />
@@ -74,7 +79,7 @@ class ProjectDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
                     <ACC.LinksList links={links} />
                 </ACC.Section>
                 */}
-            </ProjectOverviewPage>
+            </ACC.Page>
         );
     }
 
@@ -94,13 +99,26 @@ class ProjectDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
             <ACC.Section title="Cost claimed status" qa="cost-claimed-status">
                 <PartnersTable.Table qa="cost-claimed" data={partners}>
                     <PartnersTable.String header="Partner" qa="partner-name" value={x => x.isLead ? `${x.name} (Lead)` : x.name} footer="Total" />
-                    <PartnersTable.Currency header="Total eligible costs" qa="total-costs" value={x => x.totalParticipantGrant || 0} footer={<ACC.Renderers.Currency value={totalEligibleCosts} />} />
-                    <PartnersTable.Currency header="Costs claimed to date" qa="costs-claimed" value={x => x.totalParticipantCostsClaimed || 0} footer={<ACC.Renderers.Currency value={totalClaimed} />} />
-                    <PartnersTable.Percentage header="Percentage of eligible costs claimed to date" qa="percentage-claimed" value={x => x.percentageParticipantCostsClaimed || 0} footer={<ACC.Renderers.Percentage value={percentageClaimed} />} />
+                    <PartnersTable.Currency header={<React.Fragment><span>Total eligible</span><br/><span>costs</span></React.Fragment>} qa="total-costs" value={x => x.totalParticipantGrant || 0} footer={<ACC.Renderers.Currency value={totalEligibleCosts} />} />
+                    <PartnersTable.Currency header={<React.Fragment><span>Costs claimed</span><br/><span>to date</span></React.Fragment>} qa="costs-claimed" value={x => x.totalParticipantCostsClaimed || 0} footer={<ACC.Renderers.Currency value={totalClaimed} />} />
+                    <PartnersTable.Percentage header={<React.Fragment><span>Percentage of eligible</span><br/><span>costs claimed to date</span></React.Fragment>} qa="percentage-claimed" value={x => x.percentageParticipantCostsClaimed || 0} footer={<ACC.Renderers.Percentage value={percentageClaimed} />} />
                     <PartnersTable.Percentage header="Cap limit" qa="cap-limit" value={x => x.capLimit} fractionDigits={0} />
                 </PartnersTable.Table>
             </ACC.Section>
         );
+    }
+
+    private renderBackLink(project: ProjectDto, partners: PartnerDto[]) {
+        const partnerId = partners.filter(x => x.roles & ProjectRole.FinancialContact).map(x => x.id)[0];
+        const isMOorPM = !!(project.roles & (ProjectRole.MonitoringOfficer | ProjectRole.ProjectManager));
+        const isFC = !!(project.roles & ProjectRole.FinancialContact);
+
+        if(isMOorPM) {
+            return <ACC.BackLink route={AllClaimsDashboardRoute.getLink({ projectId: project.id })}>Back to project</ACC.BackLink>;
+        }
+        else if (isFC) {
+            return <ACC.BackLink route={ClaimsDashboardRoute.getLink({ projectId: project.id, partnerId})}>Back to project</ACC.BackLink>;
+        }
     }
 }
 

@@ -1,8 +1,9 @@
 // tslint:disable:no-duplicate-string
 import * as Repositories from "../../src/server/repositories";
+import { ISalesforceMonitoringReportQuestions, SalesforceRole } from "../../src/server/repositories";
 import { ITestRepositories } from "./testRepositories";
 import { ClaimStatus } from "../../src/types";
-import { SalesforceRole } from "../../src/server/repositories";
+import { MonitoringReportStatus } from "../../src/types/constants/monitoringReportStatus";
 
 export class TestData {
   constructor(private repositories: ITestRepositories) {
@@ -29,28 +30,6 @@ export class TestData {
     if (!!update) update(newItem);
 
     this.repositories.costCategories.Items.push(newItem);
-
-    return newItem;
-  }
-
-  public createContact(update?: (item: Repositories.ISalesforceContact) => void) {
-    const seed = this.repositories.contacts.Items.length + 1;
-
-    const newItem = {
-      Id: "Contact" + seed,
-      Salutation: "Mr",
-      LastName: "James" + seed,
-      FirstName: "Joyce" + seed,
-      Email: "james" + seed + "@test.com",
-      MailingStreet: "",
-      MailingCity: "",
-      MailingState: "",
-      MailingPostalCode: "",
-    } as Repositories.ISalesforceContact;
-
-    if (!!update) update(newItem);
-
-    this.repositories.contacts.Items.push(newItem);
 
     return newItem;
   }
@@ -83,7 +62,6 @@ export class TestData {
       },
       Acc_ParticipantType__c: "Accedemic",
       Acc_ParticipantSize__c: "Large",
-      Acc_ProjectRole__c: "Project Lead",
       Acc_ProjectId__c: project.Id,
       Acc_TotalParticipantGrant__c: 125000,
       Acc_TotalParticipantCosts__c: 17474,
@@ -159,6 +137,55 @@ export class TestData {
     return this.createProjectContact(project, undefined, "Project Manager", update);
   }
 
+  // TODO remove 'createQuestion' and use this instead
+  public createQuestion(answersPerQuestion: number, displayOrder: number, isActive: boolean = true): Repositories.ISalesforceMonitoringReportQuestions[] {
+    const newQuestionArray = [];
+    const seed = this.repositories.monitoringReportQuestions.Items.length + 1;
+    for (let i = 0; i < answersPerQuestion; i++) {
+      const newQuestion: Repositories.ISalesforceMonitoringReportQuestions = {
+        Id: `QuestionId: ${seed + i}`,
+        Acc_QuestionName__c: `QuestionName: ${displayOrder}`,
+        Acc_DisplayOrder__c: displayOrder,
+        Acc_Score__c: i + 1,
+        Acc_QuestionText__c: `QuestionText: ${seed} ${i}`,
+        Acc_ActiveFlag__c: isActive ? "Y" : "N",
+      };
+      this.repositories.monitoringReportQuestions.Items.push(newQuestion);
+      newQuestionArray.push(newQuestion);
+    }
+    return newQuestionArray;
+  }
+
+  public createMonitoringReportHeader(id: string, projectId: string, period: number, status: MonitoringReportStatus = MonitoringReportStatus.DRAFT): Repositories.ISalesforceMonitoringReportHeader {
+
+    const newHeader = {
+      Id: id,
+      Acc_MonitoringReportStatus__c: status,
+      Acc_ProjectId__c: projectId,
+      Acc_ProjectPeriodNumber__c: period,
+      Acc_ProjectStartDate__c: "2018-02-04",
+      Acc_ProjectEndDate__c: "2018-03-04"
+    };
+    this.repositories.monitoringReportHeader.Items.push(newHeader);
+
+    return newHeader;
+  }
+
+  public createMonitoringReportResponse(question: ISalesforceMonitoringReportQuestions) {
+    const response = {
+      Id: `Response: ${this.repositories.monitoringReportResponse.Items.length}`,
+      Acc_MonitoringReportHeader__c: "a",
+      Acc_QuestionComments__c: `Comments: ${question.Acc_DisplayOrder__c}`,
+      Acc_Question__c: question.Id,
+      Acc_Question__r: {
+        Acc_DisplayOrder__c: question.Acc_DisplayOrder__c
+      }
+    };
+    this.repositories.monitoringReportResponse.Items.push(response);
+
+    return response;
+  }
+
   public createClaim(partner?: Repositories.ISalesforcePartner, periodId?: number, update?: (item: Repositories.ISalesforceClaim) => void): Repositories.ISalesforceClaim {
 
     partner = partner || this.createPartner();
@@ -177,6 +204,7 @@ export class TestData {
       Acc_ProjectPeriodNumber__c: periodId,
       Acc_ProjectParticipant__r: {
         Id: partner.Id,
+        Acc_OverheadRate__c: 0,
         Acc_ProjectRole__c: partner.Acc_ProjectRole__c,
         Acc_AccountId__r: partner.Acc_AccountId__r
       },
@@ -321,7 +349,11 @@ export class TestData {
       PathOnClient: fileType ? `${title}.${fileType}` : title,
       ContentLocation: "S",
       VersionData: content,
-      Description: description
+      Description: description,
+      CreatedDate: new Date().toISOString(),
+      Owner: {
+        Username: "aUserId"
+      }
     };
     this.repositories.contentVersions.Items.push(item);
     this.repositories.contentDocument.Items.push({ Id: item.ContentDocumentId });

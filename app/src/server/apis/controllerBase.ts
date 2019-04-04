@@ -2,11 +2,9 @@ import mimeTypes from "mime-types";
 import multer from "multer";
 import express, { Request, Response } from "express";
 
-import { FileUpload } from "../../types/FileUpload";
-import { IAppError } from "../../types/IAppError";
+import { FileUpload, IAppError, ISessionUser } from "../../types";
 import { NotFoundError } from "../features/common/appError";
 import { errorHandlerApi } from "../errorHandlers";
-import { IUser } from "../../types/IUser";
 
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
@@ -14,7 +12,7 @@ const upload = multer({ storage });
 // this is the information extracted from an express request / session and stored in the redux store
 // it is the same shape client and server side allowing the client and server api calls to have the same shape
 export interface ISession {
-  user: IUser;
+  user: ISessionUser;
 }
 
 export type ApiParams<T> = T & ISession;
@@ -30,7 +28,7 @@ interface RequestQueryParams {
 type GetParams<T> = (params: RequestUrlParams, query: RequestQueryParams, body?: any, file?: any) => T;
 type Run<T, TR> = (params: ApiParams<T>) => Promise<TR>;
 
-export abstract class ControllerBase<T> {
+export abstract class ControllerBaseWithSummary<TSummaryDto, TDto> {
   public readonly router: express.Router;
 
   protected constructor(public path: string) {
@@ -42,8 +40,8 @@ export abstract class ControllerBase<T> {
     return this;
   }
 
-  protected getItem<TParams>(path: string, getParams: GetParams<TParams>, run: Run<TParams, T | null>) {
-    return this.getCustom<TParams, T>(path, getParams, run, false);
+  protected getItem<TParams>(path: string, getParams: GetParams<TParams>, run: Run<TParams, TDto | null>) {
+    return this.getCustom<TParams, TDto>(path, getParams, run, false);
   }
 
   protected deleteItem<TParams>(path: string, getParams: GetParams<TParams>, run: Run<TParams, void>) {
@@ -60,20 +58,20 @@ export abstract class ControllerBase<T> {
     this.router.post(path, upload.single("attachment"), this.executeMethod(201, getParams, run, false));
   }
 
-  protected putItem<TParams>(path: string, getParams: GetParams<TParams>, run: Run<TParams, T | null>) {
-    return this.putCustom<TParams, T | null>(path, getParams, run);
+  protected putItem<TParams>(path: string, getParams: GetParams<TParams>, run: Run<TParams, TDto | null>) {
+    return this.putCustom<TParams, TDto | null>(path, getParams, run);
   }
 
-  protected putItems<TParams>(path: string, getParams: GetParams<TParams>, run: Run<TParams, T[]>) {
-    return this.putCustom<TParams, T[]>(path, getParams, run);
+  protected putItems<TParams>(path: string, getParams: GetParams<TParams>, run: Run<TParams, TSummaryDto[]>) {
+    return this.putCustom<TParams, TSummaryDto[]>(path, getParams, run);
   }
 
-  protected postItems<TParams>(path: string, getParams: GetParams<TParams>, run: Run<TParams, T[]>) {
-    return this.postCustom<TParams, T[]>(path, 201, getParams, run);
+  protected postItems<TParams>(path: string, getParams: GetParams<TParams>, run: Run<TParams, TSummaryDto[]>) {
+    return this.postCustom<TParams, TSummaryDto[]>(path, 201, getParams, run);
   }
 
-  protected getItems<TParams>(path: string, getParams: GetParams<TParams>, run: Run<TParams, T[]>) {
-    return this.getCustom<TParams, T[]>(path, getParams, run, false);
+  protected getItems<TParams>(path: string, getParams: GetParams<TParams>, run: Run<TParams, TSummaryDto[]>) {
+    return this.getCustom<TParams, TSummaryDto[]>(path, getParams, run, false);
   }
 
   protected putCustom<TParams, TResponse>(path: string, getParams: GetParams<TParams>, run: Run<TParams, TResponse>) {
@@ -96,7 +94,7 @@ export abstract class ControllerBase<T> {
 
     return async (req: extendedRequest, resp: Response) => {
       const file: FileUpload | {} = req.file ? { fileName: req.file.originalname, content: req.file.buffer.toString("base64") } : {};
-      const p = Object.assign({ user: req.session!.user as IUser }, getParams(req.params || {}, req.query || {}, req.body || {}, file));
+      const p = Object.assign({ user: req.session!.user as ISessionUser }, getParams(req.params || {}, req.query || {}, req.body || {}, file));
       run(p)
         .then(result => {
           if ((result === null || result === undefined) && allowNulls === false) {
@@ -110,7 +108,7 @@ export abstract class ControllerBase<T> {
 
   private attachmentHandler<TParams>(successStatus: number, getParams: GetParams<TParams>, run: Run<TParams, DocumentDto>) {
     return async (req: Request, resp: Response) => {
-      const p = Object.assign({ user: req.session!.user as IUser }, getParams(req.params || {}, req.query || {}, req.body || {}));
+      const p = Object.assign({ user: req.session!.user as ISessionUser }, getParams(req.params || {}, req.query || {}, req.body || {}));
       run(p)
         .then(result => {
           if (result === null || result === undefined) {
@@ -129,4 +127,7 @@ export abstract class ControllerBase<T> {
         .catch((e: IAppError) => errorHandlerApi(resp, e));
     };
   }
+}
+
+export abstract class ControllerBase<T> extends ControllerBaseWithSummary<T,T> {
 }
