@@ -30,6 +30,7 @@ interface CombinedData {
 }
 
 interface Callbacks {
+  clearMessage: () => void;
   validate: (projectId: string, dto: DocumentUploadDto) => void;
   uploadFile: (projectId: string, dto: DocumentUploadDto) => void;
 }
@@ -46,6 +47,11 @@ class ProjectDocumentsComponent extends ContainerBase<ProjectDocumentPageParams,
     return <ACC.PageLoader pending={combined} render={x => this.renderContents(x)} />;
   }
 
+  private onFileChange(projectId: string, dto: {file: File | null}) {
+    this.props.clearMessage();
+    this.props.validate(projectId, dto);
+  }
+
   private renderContents({project, partners, documents, editor}: CombinedData) {
     const ProjectDocumentsTable = ACC.TypedTable<DocumentSummaryDto>();
     const UploadForm = ACC.TypedForm<{file: File | null}>();
@@ -57,12 +63,13 @@ class ProjectDocumentsComponent extends ContainerBase<ProjectDocumentPageParams,
         partners={partners}
         validator={editor.validator}
         error={editor.error}
+        messages={this.props.messages}
       >
         <ACC.Section>
           <UploadForm.Form
             enctype="multipart"
             data={editor.data}
-            onChange={dto => this.props.validate(project.id, dto)}
+            onChange={dto => this.onFileChange(project.id, dto)}
             onSubmit={() => this.props.uploadFile(project.id, editor.data)}
             qa="projectDocumentUpload"
           >
@@ -113,8 +120,10 @@ const ProjectDocuments = container.connect({
     editor: Selectors.getProjectDocumentEditor(props.projectId).get(state),
   }),
   withCallbacks: (dispatch) => ({
+    clearMessage: () => dispatch(Actions.removeMessages()),
     validate: (projectId, dto) => dispatch(Actions.updateProjectDocumentEditor(projectId, dto)),
-    uploadFile: (projectId, dto) => dispatch(Actions.uploadProjectDocument(projectId, dto, () => dispatch(Actions.loadProjectDocuments(projectId))))
+    uploadFile: (projectId, dto) => dispatch(Actions.uploadProjectDocument(projectId, dto,
+      () => dispatch(Actions.loadProjectDocuments(projectId)), "Your document has been uploaded."))
   })
 });
 
