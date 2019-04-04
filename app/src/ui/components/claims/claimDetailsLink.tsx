@@ -12,7 +12,7 @@ interface Props {
 export const ClaimDetailsLink: React.SFC<Props> = (props) => {
   const linkProps = { projectId: props.project.id, partnerId: props.partner.id, periodId: props.claim.periodId };
 
-  switch (getLinkType(props)) {
+  switch (getClaimDetailsLinkType(props)) {
     case "edit":
       return <Link route={PrepareClaimRoute.getLink(linkProps)}>Edit claim</Link>;
 
@@ -27,7 +27,7 @@ export const ClaimDetailsLink: React.SFC<Props> = (props) => {
   }
 };
 
-const getLinkType = (props: Props): "edit" | "review" | "view" | "nothing" => {
+export const getClaimDetailsLinkType = (props: Props): "edit" | "review" | "view" | "nothing" => {
   switch (props.claim.status) {
     case ClaimStatus.DRAFT:
       if (props.partner.roles & ProjectRole.FinancialContact) {
