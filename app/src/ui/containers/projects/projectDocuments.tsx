@@ -47,7 +47,6 @@ class ProjectDocumentsComponent extends ContainerBase<ProjectDocumentPageParams,
   }
 
   private renderContents({project, partners, documents, editor}: CombinedData) {
-    const ProjectDocumentsTable = ACC.TypedTable<DocumentSummaryDto>();
     const UploadForm = ACC.TypedForm<{file: File | null}>();
 
     return (
@@ -79,18 +78,29 @@ class ProjectDocumentsComponent extends ContainerBase<ProjectDocumentPageParams,
             <UploadForm.Submit styling="Secondary">Upload</UploadForm.Submit>
           </UploadForm.Form>
         </ACC.Section>
-        <ProjectDocumentsTable.Table data={documents} qa="project-documents">
-          <ProjectDocumentsTable.Custom  header="File name" qa="fileName" value={x => this.renderDocumentName(x)}/>
-          <ProjectDocumentsTable.ShortDate header="Date uploaded" qa="dateUploaded" value={x => x.dateCreated}/>
-          <ProjectDocumentsTable.Custom header="File size" qa="fileSize" value={x => this.renderFileSize(x.fileSize)}/>
-          <ProjectDocumentsTable.Email header="Uploaded by" qa="uploadedBy" value={x => x.owner}/>
-        </ProjectDocumentsTable.Table>
+        {this.renderDocumentsTable(documents)}
       </ProjectOverviewPage>
     );
   }
 
   renderDocumentName(document: DocumentSummaryDto) {
     return <a target={"_blank"} href={document.link}>{document.fileName}</a>;
+  }
+
+  renderDocumentsTable(documents: DocumentSummaryDto[]) {
+    if (documents.length === 0) {
+      return <ACC.Renderers.SimpleString>No documents uploaded</ACC.Renderers.SimpleString>;
+    }
+    const ProjectDocumentsTable = ACC.TypedTable<DocumentSummaryDto>();
+
+    return (
+      <ProjectDocumentsTable.Table data={documents} qa="project-documents">
+          <ProjectDocumentsTable.Custom  header="File name" qa="fileName" value={x => this.renderDocumentName(x)}/>
+          <ProjectDocumentsTable.ShortDate header="Date uploaded" qa="dateUploaded" value={x => x.dateCreated}/>
+          <ProjectDocumentsTable.Custom header="File size" qa="fileSize" value={x => this.renderFileSize(x.fileSize)}/>
+          <ProjectDocumentsTable.Email header="Uploaded by" qa="uploadedBy" value={x => x.owner}/>
+        </ProjectDocumentsTable.Table>
+    );
   }
 
   renderFileSize(fileSize: number) {
