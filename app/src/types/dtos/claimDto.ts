@@ -17,4 +17,5 @@ export interface ClaimDto {
   // ToDo: confirm field
   comments: string|null;
   allowIarEdit: boolean;
+  overheadRate: number;
 }
