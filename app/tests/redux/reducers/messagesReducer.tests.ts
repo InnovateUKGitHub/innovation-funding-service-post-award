@@ -1,4 +1,5 @@
 import { messagesReducer } from "../../../src/ui/redux/reducers";
+import { removeMessages } from "../../../src/ui/redux/actions/common";
 
 const successMessage = (message: string): any => ({
   type: "MESSAGE_SUCCESS",
@@ -34,6 +35,15 @@ describe("MessagesReducer", () => {
     const first   = messagesReducer([], action);
     const second  = messagesReducer(first, navigate());
     const third   = messagesReducer(second, navigate());
+    expect(third.length).toBe(0);
+  });
+
+  it("should remove messages", () => {
+    const message = "test message 3";
+    const successAction  = successMessage(message);
+    const first   = messagesReducer([], successAction);
+    const second   = messagesReducer(first, successAction);
+    const third  = messagesReducer(second, removeMessages());
     expect(third.length).toBe(0);
   });
 });
