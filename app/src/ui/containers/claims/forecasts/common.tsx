@@ -85,7 +85,7 @@ export const renderWarning = (data: ForecastData) => {
       }
     });
 
-  const categoriesList = categories.map((x, i) => <li key={i}>{x}</li>);
+  const categoriesList = categories.map((x, i) => <li key={i}>{x.toLocaleLowerCase()}</li>);
 
   return categories.length === 0 ? null : (
     <ValidationMessage

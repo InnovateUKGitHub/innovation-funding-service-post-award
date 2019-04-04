@@ -4,6 +4,7 @@ import { AccordionContext } from "./accordion";
 
 interface Props {
   title: string;
+  qa?: string;
 }
 
 interface State {
@@ -62,7 +63,7 @@ export class AccordionItem extends React.Component<Props, State> {
     }
     return (
       <React.Fragment>
-        <button type="button" className="govuk-accordion__section-button" aria-expanded={this.state.accordionOpen}>{this.props.title}</button>
+        <button type="button" className="govuk-accordion__section-button" aria-expanded={this.state.accordionOpen} data-qa={`${this.props.qa}-button`}>{this.props.title}</button>
         <span className="govuk-accordion__icon" aria-hidden={!this.state.accordionOpen}/>
       </React.Fragment>
     );
@@ -78,14 +79,14 @@ export class AccordionItem extends React.Component<Props, State> {
       "govuk-accordion__section-header--focused": this.state.focused
     });
     return (
-      <div className={topLevelClasses}>
+      <div className={topLevelClasses} data-qa={this.props.qa}>
         <div onBlur={() => this.onBlur()} onFocus={() => this.onFocus()} onClick={() => this.onClick()} className={headerClasses} >
           <h2 className="govuk-accordion__section-heading">
             {this.renderTitle()}
           </h2>
         </div>
         <div className="govuk-accordion__section-content">
-          <p className="govuk-body">{this.props.children}</p>
+          {this.props.children}
         </div>
       </div>
     );

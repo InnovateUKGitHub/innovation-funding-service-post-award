@@ -1,7 +1,7 @@
-import { IUser } from "./IUser";
+import { IClientUser } from "./IUser";
 
 export interface ILinkInfo {
     routeName: string;
     routeParams: any;
-    accessControl: (user: IUser) => boolean;
+    accessControl: (user: IClientUser, features: IFeatureFlags) => boolean;
 }

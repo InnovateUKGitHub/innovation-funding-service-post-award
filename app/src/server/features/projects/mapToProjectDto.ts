@@ -46,29 +46,11 @@ export class MapToProjectDtoCommand extends CommandBase<ProjectDto> {
       statusName: this.item.ProjectStatusName,
       claimsOverdue: this.item.Acc_ClaimsOverdue__c,
       claimsToReview: this.item.Acc_ClaimsForReview__c,
-      claimsQueried: this.item.Acc_ClaimsUnderQuery__c,
-      claimsStatus: this.getClaimStatus(this.item.Acc_TrackingClaimStatus__c),
-      claimsStatusName: this.item.ClaimStatusName,
+      claimsWithParticipant: this.item.Acc_ClaimsUnderQuery__c,
       numberOfOpenClaims: this.item.Acc_NumberOfOpenClaims__c
     };
 
     return Promise.resolve(dto);
-  }
-  getClaimStatus(salesforceClaimStatus: string): ProjectClaimTrackingStatus {
-    switch (salesforceClaimStatus) {
-      case "No Claims Due":
-        return ProjectClaimTrackingStatus.NoClaimsDue;
-      case "Claims Due":
-        return ProjectClaimTrackingStatus.ClaimsDue;
-      case "Claims Overdue":
-        return ProjectClaimTrackingStatus.ClaimsOverdue;
-      case "Claims Queried":
-        return ProjectClaimTrackingStatus.ClaimsQueried;
-      case "All Claims Submitted":
-        return ProjectClaimTrackingStatus.AllClaimsSubmitted;
-      default:
-        return ProjectClaimTrackingStatus.Unknown;
-    }
   }
 
   private getProjectStatus(salesforceProjectStatus: string): ProjectStatus {

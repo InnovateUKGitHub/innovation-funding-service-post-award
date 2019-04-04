@@ -10,8 +10,9 @@ export const ClaimWindow: React.SFC<Props> = (props) => {
   const today = DateTime.local().set({ hour: 0, minute: 0, second: 0 });
   const windowStart = DateTime.fromJSDate(props.periodEnd).plus({ days: 1 }).set({ hour: 0, minute: 0, second: 0 });
   const windowEnd = windowStart.plus({ days: 29 });
-
   const days = Math.round(windowEnd.diff(today, "days").days);
+
+  if(!windowStart.isValid) return null;
 
   // if before period end date then display UpcomingPeriodInfo
   if (today < windowStart) {

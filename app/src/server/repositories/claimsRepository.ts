@@ -6,6 +6,7 @@ export interface ISalesforceClaim {
   Id: string;
   Acc_ProjectParticipant__r: {
     Id: string;
+    Acc_OverheadRate__c: number;
     Acc_ProjectRole__c: string;
     Acc_AccountId__r: {
       Name: string;
@@ -42,6 +43,7 @@ export class ClaimRepository extends SalesforceRepositoryBase<ISalesforceClaim> 
   protected readonly salesforceFieldNames = [
     "Id",
     "Acc_ProjectParticipant__r.Id",
+    "Acc_ProjectParticipant__r.Acc_OverheadRate__c",
     "Acc_ProjectParticipant__r.Acc_ProjectRole__c",
     "Acc_ProjectParticipant__r.Acc_AccountId__r.Name",
     "LastModifiedDate",

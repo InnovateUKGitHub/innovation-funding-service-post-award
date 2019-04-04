@@ -18,16 +18,13 @@ const clientApi: IApiClient = {
   claimDetails: {
     getAllByPartner: (params) => ajaxJson(`/api/claim-details/?partnerId=${params.partnerId}`)
   },
-  contacts: {
-    getAll: (params) => ajaxJson("/api/contacts"),
-    get: (params) => ajaxJson(`/api/contact/${params.contactId}`),
-  },
   costCategories: {
     getAll: (params) => ajaxJson("/api/cost-categories"),
   },
   documents: {
     getClaimDocuments:(params) => ajaxJson(`/api/documents/claims/${params.partnerId}/${params.periodId}/?description=${params.description}`),
     getClaimDetailDocuments: ({ claimDetailKey }) => ajaxJson(`/api/documents/claim-details/${claimDetailKey.partnerId}/${claimDetailKey.periodId}/${claimDetailKey.costCategoryId}`),
+    getProjectDocuments: (params) => ajaxJson(`/api/documents/projects/${params.projectId}`),
     deleteDocument: ({ documentId }) => ajaxJson(`/api/documents/${documentId}`, { method: "DELETE" }),
     uploadClaimDetailDocument: ({ claimDetailKey, file }) => {
       const formData = new FormData();
@@ -39,6 +36,15 @@ const clientApi: IApiClient = {
       formData.append("attachment", file as File);
       if (description) { formData.append("description", description); }
       return ajaxPostFormData(`/api/documents/claims/${claimKey.partnerId}/${claimKey.periodId}`, formData);
+    },
+    uploadProjectDocument: ({ projectId, file, description }) => {
+      const formData = new FormData();
+      formData.append("attachment", file as File);
+      if(!!description) {
+        formData.append("description", description);
+      }
+
+      return ajaxPostFormData(`/api/documents/projects/${projectId}`, formData);
     }
   },
   forecastDetails: {
@@ -48,6 +54,11 @@ const clientApi: IApiClient = {
   },
   forecastGolCosts: {
     getAllByPartnerId: (params) => ajaxJson(`/api/forecast-gol-costs/?partnerId=${params.partnerId}`)
+  },
+  monitoringReports: {
+    get: (params) => ajaxJson(`/api/monitoring-reports/${params.projectId}/${params.periodId}`),
+    saveMonitoringReport: (params) => ajaxPut("/api/monitoring-reports", params.monitoringReportDto),
+    getAllForProject: (params) => ajax(`/api/monitoring-reports/${params.projectId}`)
   },
   projects: {
     get: (params) => ajaxJson(`/api/projects/${params.projectId}`),
@@ -63,6 +74,9 @@ const clientApi: IApiClient = {
   },
   users: {
     getCurrent: () => ajaxJson(`/api/users/current`)
+  },
+  version: {
+    getCurrent: () => ajaxJson(`/api/version`)
   }
 };
 
@@ -81,6 +95,14 @@ const ajax = <T>(url: string, opts?: RequestInit): Promise<T> => {
     if (response.ok) {
       return processResponse(response);
     }
+
+    if(response.status === 401 && (options.method || "GET") === "GET") {
+      window.location.reload();
+      return new Promise<T>(() => {
+        // Nothing to return as we never want this to return!
+      });
+    }
+
     return response.json()
       .catch(e => Promise.reject(response.statusText))
       .then(errText => Promise.reject(errText));

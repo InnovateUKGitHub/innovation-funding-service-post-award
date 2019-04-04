@@ -5,7 +5,7 @@ describe("getAllForProjectQuery", () => {
     it("when project has partner expect item returned", async () => {
         const context = new TestContext();
         const project = context.testData.createProject();
-        const partner = context.testData.createPartner(project);
+        const partner = context.testData.createPartner(project, x => x.Acc_ProjectRole__c = "Lead");
         const result = await context.runQuery(new GetAllForProjectQuery(project.Id));
 
         expect(result).not.toBe(null);
@@ -33,7 +33,7 @@ describe("getAllForProjectQuery", () => {
         const context = new TestContext();
         const project = context.testData.createProject();
         const notLeadPartner = context.testData.createPartner(project, (x) => x.Acc_ProjectRole__c = "Other");
-        const leadPartner = context.testData.createPartner(project, (x) => x.Acc_ProjectRole__c = "Project Lead");
+        const leadPartner = context.testData.createPartner(project, (x) => x.Acc_ProjectRole__c = "Lead");
         const result = await context.runQuery(new GetAllForProjectQuery(project.Id));
 
         expect(result).not.toBe(null);
@@ -56,7 +56,7 @@ describe("getAllForProjectQuery", () => {
         // Set partner B, D to be lead
         partners
             .filter(x => x.Acc_AccountId__r.Name === "Partner_B" || x.Acc_AccountId__r.Name === "Partner_D")
-            .forEach(x => x.Acc_ProjectRole__c = "Project Lead");
+            .forEach(x => x.Acc_ProjectRole__c = "Lead");
 
         const result = await context.runQuery(new GetAllForProjectQuery(project.Id));
 

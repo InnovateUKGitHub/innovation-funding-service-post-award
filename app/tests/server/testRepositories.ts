@@ -5,16 +5,6 @@ import { Updatable } from "../../src/server/repositories/salesforceRepositoryBas
 import { Stream } from "stream";
 import { IRepositories } from "../../src/types/IContext";
 
-class ContactsTestRepository extends TestRepository<Repositories.ISalesforceContact> implements Repositories.IContactsRepository {
-    getById(id: string) {
-        return super.getOne(x => x.Id === id);
-    }
-
-    getAll() {
-        return super.getAll();
-    }
-}
-
 class ProjectsTestRepository extends TestRepository<Repositories.ISalesforceProject> implements Repositories.IProjectRepository {
     getById(id: string) {
         return super.getOne(x => x.Id === id);
@@ -158,7 +148,11 @@ class ContentVersionTestRepository extends TestRepository<Repositories.ISalesfor
             PathOnClient: fileName,
             ContentLocation: "S",
             VersionData: content,
-            Description: description
+            Description: description,
+            CreatedDate: new Date().toISOString(),
+            Owner: {
+                Username: "aUserName"
+            }
         });
     }
 }
@@ -202,6 +196,63 @@ class ClaimLineItemsTestRepository extends TestRepository<Repositories.ISalesfor
         });
         return Promise.resolve(newIds);
     }
+}
+
+class MonitoringReportHeaderTestRepository extends TestRepository<Repositories.ISalesforceMonitoringReportHeader> implements Repositories.IMonitoringReportHeaderRepository {
+  get(projectId: string, periodId: number): Promise<Repositories.ISalesforceMonitoringReportHeader> {
+    return super.getOne(x => x.Acc_ProjectId__c === projectId && x.Acc_ProjectPeriodNumber__c === periodId);
+  }
+  update(updateDto: Updatable<Repositories.ISalesforceMonitoringReportHeader>): Promise<boolean> {
+      const currentIndex = this.Items.findIndex(x => x.Id === updateDto.Id);
+      const current = this.Items[currentIndex];
+      const update = { ...current, ...updateDto};
+      this.Items[currentIndex] = update;
+      return Promise.resolve(true);
+  }
+  getAllForProject(projectId: string): Promise<Repositories.ISalesforceMonitoringReportHeader[]> {
+    return super.getWhere(x => x.Acc_ProjectId__c === projectId);
+  }
+}
+
+class MonitoringReportResponseTestRepository extends TestRepository<Repositories.ISalesforceMonitoringReportResponse> implements Repositories.IMonitoringReportResponseRepository {
+  getAllForHeader(monitoringReportHeaderId: string): Promise<Repositories.ISalesforceMonitoringReportResponse[]> {
+      return super.getWhere(x => x.Acc_MonitoringReportHeader__c === monitoringReportHeaderId);
+  }
+
+  delete(idList: string[]) {
+    idList.forEach((Id) => {
+      const index = this.Items.findIndex(x => x.Id === Id);
+      if (index === -1) {
+        return Promise.reject();
+      }
+      this.Items = this.Items.splice(index, 1);
+    });
+    return Promise.resolve();
+  }
+
+  update(updates: Updatable<Repositories.ISalesforceMonitoringReportResponse>[]) {
+    if (!(updates instanceof Array)) {
+      updates = [updates];
+    }
+    updates.forEach((item) => {
+      const index = this.Items.findIndex(x => x.Id === item.Id);
+      if (index === -1) {
+        return Promise.reject();
+      }
+      this.Items[index] = { ...this.Items[index], ...item };
+    });
+    return Promise.resolve(true);
+  }
+
+  insert(response: Partial<Repositories.ISalesforceMonitoringReportResponse>[]) {
+    const newIds: string[] = [];
+    response.forEach((x) => {
+      const Id = `MonitoringReportResponse-${this.Items.length}`;
+      newIds.push(Id);
+      this.Items.push({ ...x, Id } as Repositories.ISalesforceMonitoringReportResponse);
+    });
+    return Promise.resolve(newIds);
+  }
 }
 
 class ClaimTotalCostTestRepository extends TestRepository<Repositories.ISalesforceClaimTotalCostCategory> implements Repositories.IClaimTotalCostCategoryRepository {
@@ -266,15 +317,23 @@ class ProfileTotalCostCategoryTestRepository extends TestRepository<Repositories
     }
 }
 
+class QuestionsTestRepository extends TestRepository<Repositories.ISalesforceMonitoringReportQuestions> implements Repositories.IMonitoringReportQuestionsRepository {
+  getAll() {
+    return super.getAll();
+  }
+}
+
 export interface ITestRepositories extends IRepositories {
     claims: ClaimsTestRepository;
     claimDetails: ClaimDetailsTestRepository;
     claimLineItems: ClaimLineItemsTestRepository;
     costCategories: CostCategoriesTestRepository;
-    contacts: ContactsTestRepository;
     contentDocumentLinks: ContentDocumentLinkTestRepository;
     contentDocument: ContentDocumentTestRepository;
     contentVersions: ContentVersionTestRepository;
+    monitoringReportHeader: MonitoringReportHeaderTestRepository;
+    monitoringReportResponse: MonitoringReportResponseTestRepository;
+    monitoringReportQuestions: QuestionsTestRepository;
     profileDetails: ProfileDetailsTestRepository;
     profileTotalCostCategory: ProfileTotalCostCategoryTestRepository;
     profileTotalPeriod: ProfileTotalPeriodTestRepository;
@@ -292,10 +351,12 @@ export const createTestRepositories = (): ITestRepositories => {
         claimDetails: new ClaimDetailsTestRepository(),
         claimLineItems: new ClaimLineItemsTestRepository(),
         costCategories: new CostCategoriesTestRepository(),
-        contacts: new ContactsTestRepository(),
         contentDocument: new ContentDocumentTestRepository(),
         contentDocumentLinks: new ContentDocumentLinkTestRepository(),
         contentVersions: new ContentVersionTestRepository(),
+        monitoringReportResponse: new MonitoringReportResponseTestRepository(),
+        monitoringReportHeader: new MonitoringReportHeaderTestRepository(),
+        monitoringReportQuestions: new QuestionsTestRepository(),
         profileDetails: new ProfileDetailsTestRepository(),
         profileTotalPeriod: new ProfileTotalPeriodTestRepository(partnerRepository),
         profileTotalCostCategory: new ProfileTotalCostCategoryTestRepository(),

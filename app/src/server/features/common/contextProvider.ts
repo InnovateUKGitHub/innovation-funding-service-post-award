@@ -1,9 +1,9 @@
 import { Context } from "./context";
-import { IContext, IUser } from "../../../types";
+import { IContext, ISessionUser } from "../../../types";
 
 class ContextProvider {
-  start(params: {user: IUser}): IContext {
-    const {user} = params;
+  start(params: { user: ISessionUser }): IContext {
+    const { user } = params;
     return new Context(user);
   }
 }

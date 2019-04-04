@@ -9,7 +9,7 @@ import { ClaimDtoValidator } from "../../validators/claimDtoValidator";
 import { AllClaimsDashboardRoute, ClaimForecastRoute, ClaimsDashboardRoute } from ".";
 import { EditClaimLineItemsRoute } from "./editClaimLineItems";
 import { ClaimsDetailsRoute } from "./details";
-import { ClaimDto, ClaimStatus, PartnerDto, ProjectDto, ProjectRole } from "../../../types";
+import { ClaimDto, PartnerDto, ProjectDto, ProjectRole } from "../../../types";
 
 export interface PrepareClaimParams {
     projectId: string;
@@ -29,7 +29,7 @@ interface Data {
 interface Callbacks {
     onChange: (partnerId: string, periodId: number, dto: ClaimDto, details: ClaimDetailsSummaryDto[], costCategories: CostCategoryDto[]) => void;
     saveAndProgress: (projectId: string, partnerId: string, periodId: number, dto: ClaimDto, details: ClaimDetailsSummaryDto[], costCategories: CostCategoryDto[]) => void;
-    saveAndReturn: (projectId: string, partnerId: string, periodId: number, dto: ClaimDto, details: ClaimDetailsSummaryDto[], costCategories: CostCategoryDto[]) => void;
+    saveAndReturn: (projectId: string, partnerId: string, periodId: number, dto: ClaimDto, details: ClaimDetailsSummaryDto[], costCategories: CostCategoryDto[], project: ProjectDto) => void;
 }
 
 interface CombinedData {
@@ -64,8 +64,8 @@ export class PrepareComponent extends ContainerBase<PrepareClaimParams, Data, Ca
         this.props.saveAndProgress(this.props.projectId, this.props.partnerId, this.props.periodId, dto, details, costCategories);
     }
 
-    private saveAndReturn(dto: ClaimDto, details: ClaimDetailsSummaryDto[], costCategories: CostCategoryDto[]) {
-        this.props.saveAndReturn(this.props.projectId, this.props.partnerId, this.props.periodId, dto, details, costCategories);
+    private saveAndReturn(dto: ClaimDto, details: ClaimDetailsSummaryDto[], costCategories: CostCategoryDto[], project: ProjectDto) {
+        this.props.saveAndReturn(this.props.projectId, this.props.partnerId, this.props.periodId, dto, details, costCategories, project);
     }
 
     private onChange(dto: ClaimDto, details: ClaimDetailsSummaryDto[], costCategories: CostCategoryDto[]) {
@@ -88,6 +88,7 @@ export class PrepareComponent extends ContainerBase<PrepareClaimParams, Data, Ca
                 <ACC.ValidationSummary validation={data.editor.validator} compressed={false} />
                 <ACC.Projects.Title pageTitle="Claim" project={data.project} />
                 <ACC.Claims.Navigation projectId={data.project.id} partnerId={data.partner.id} periodId={data.claim.periodId} currentRouteName={ClaimsDetailsRoute.routeName} />
+                <ACC.Renderers.Messages messages={this.props.messages || []} />
                 <ACC.Section title={this.getClaimPeriodTitle(data)}>
                     <ACC.Claims.ClaimTable {...data} validation={data.editor.validator.claimDetails.results} getLink={costCategoryId => EditClaimLineItemsRoute.getLink({partnerId: this.props.partnerId, projectId: this.props.projectId, periodId: this.props.periodId, costCategoryId})} />
                     <Form.Form data={data.editor.data} onChange={(dto) => this.onChange(dto, data.claimDetails, data.costCategories)} onSubmit={() => this.saveAndProgress(data.editor.data, data.claimDetails, data.costCategories)}>
@@ -98,7 +99,7 @@ export class PrepareComponent extends ContainerBase<PrepareClaimParams, Data, Ca
                             <Form.Submit>Review forecast</Form.Submit>
                         </Form.Fieldset>
                         <Form.Fieldset qa="save-and-return">
-                            <Form.Button name="return" onClick={() => this.saveAndReturn(data.editor.data, data.claimDetails, data.costCategories)}>Save and return to project</Form.Button>
+                            <Form.Button name="return" onClick={() => this.saveAndReturn(data.editor.data, data.claimDetails, data.costCategories, data.project)}>Save and return to project</Form.Button>
                         </Form.Fieldset>
                     </Form.Form>
                 </ACC.Section>
@@ -111,8 +112,12 @@ const progress = (dispatch: any, projectId: string, partnerId: string, periodId:
     dispatch(Actions.navigateTo(ClaimForecastRoute.getLink({ projectId, partnerId, periodId })));
 };
 
-const goBack = (dispatch: any, projectId: string, partnerId: string) => {
-    dispatch(Actions.navigateTo(ClaimsDashboardRoute.getLink({ projectId, partnerId })));
+const goBack = (dispatch: any, projectId: string, partnerId: string, project: ProjectDto) => {
+    if (project.roles & ProjectRole.ProjectManager) {
+      dispatch(Actions.navigateTo(AllClaimsDashboardRoute.getLink({ projectId })));
+    } else {
+      dispatch(Actions.navigateTo(ClaimsDashboardRoute.getLink({ projectId, partnerId })));
+    }
 };
 
 const definition = ReduxContainer.for<PrepareClaimParams, Data, Callbacks>(PrepareComponent);
@@ -124,12 +129,12 @@ export const PrepareClaim = definition.connect({
     costCategories: Selectors.getCostCategories().getPending(state),
     claim: Selectors.getClaim(props.partnerId, props.periodId).getPending(state),
     claimDetailsSummary: Selectors.findClaimDetailsSummaryByPartnerAndPeriod(props.partnerId, props.periodId).getPending(state),
-    editor: Selectors.getClaimEditor(props.partnerId, props.periodId).get(state, x => { x.status = ClaimStatus.DRAFT; })
+    editor: Selectors.getClaimEditor(props.partnerId, props.periodId).get(state)
   }),
   withCallbacks: (dispatch) => ({
     onChange: (partnerId, periodId, dto, details, costCategories) => dispatch(Actions.validateClaim(partnerId, periodId, dto, details, costCategories)),
     saveAndProgress: (projectId, partnerId, periodId, dto, details, costCategories) => dispatch(Actions.saveClaim(projectId, partnerId, periodId, dto, details, costCategories, () => progress(dispatch, projectId, partnerId, periodId))),
-    saveAndReturn: (projectId, partnerId, periodId, dto, details, costCategories) => dispatch(Actions.saveClaim(projectId, partnerId, periodId, dto, details, costCategories, () => goBack(dispatch, projectId, partnerId)))
+    saveAndReturn: (projectId, partnerId, periodId, dto, details, costCategories, project) => dispatch(Actions.saveClaim(projectId, partnerId, periodId, dto, details, costCategories, () => goBack(dispatch, projectId, partnerId, project), "You have saved your claim."))
   })
 });
 

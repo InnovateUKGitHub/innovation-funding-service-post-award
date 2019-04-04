@@ -11,6 +11,10 @@ class RoleChecker {
     return this.hasAllRoles(role);
   }
 
+  public hasOnlyRole(role: ProjectRole): boolean {
+    return this.permissions === role;
+  }
+
   public hasAllRoles(...roles: ProjectRole[]): boolean {
     const combinedRoles = this.combineRoles(roles);
     return (this.permissions & combinedRoles) === combinedRoles;

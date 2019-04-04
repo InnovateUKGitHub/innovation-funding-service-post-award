@@ -1,22 +1,26 @@
 import * as DotEnv from "dotenv";
 DotEnv.config();
 
-import express from "express";
 import cors from "cors";
 import bodyParser from "body-parser";
+
+import express, { NextFunction, Request, Response } from "express";
 import "isomorphic-fetch";
 import "isomorphic-form-data";
 
+import { router as healthRouter} from "./health";
 import { router as authRouter } from "./auth";
 import { router } from "./router";
-import { Logger } from "./features/common";
+import { Configuration, Logger } from "./features/common";
+import { allowCache, noCache} from "./cacheHeaders";
 
 // Set up New Relic to monitor app when deployed
-if(process.env.NEW_RELIC_ENABLED === "true") {
+if (process.env.NEW_RELIC_ENABLED === "true") {
   require("newrelic"); // tslint:disable-line:no-var-requires
 }
 
 const app = express();
+app.enable("trust proxy");
 const port = process.env.PORT || 8080;
 const log = new Logger();
 
@@ -29,15 +33,26 @@ app.use((req, res, next) => {
   next();
 });
 
+const setOwaspHeaders = (req: Request, res: Response, next: NextFunction) => {
+  res.setHeader("X-Frame-Options", "deny");
+  res.setHeader("X-Content-Type-Options", "nosniff");
+  res.setHeader("X-XSS-Protection", "1");
+  return next();
+};
+
 // un-authed routes
 // serve the public folder contents
-app.use(express.static("public"));
-app.get("/api/health", (req, res) => res.send(true));
+app.use(setOwaspHeaders, allowCache, express.static("public"));
+
+app.use(noCache, healthRouter);
 
 // auth handler
 app.use(authRouter);
 
 // all our defined routes
-app.use(router);
+app.use(setOwaspHeaders, noCache, router);
 
 app.listen(port);
+
+log.info(`Listening at ${process.env.SERVER_URL}`);
+log.info("Configuration", Configuration);

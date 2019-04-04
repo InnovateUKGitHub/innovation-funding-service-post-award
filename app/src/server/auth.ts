@@ -4,6 +4,8 @@ import passportSaml from "passport-saml";
 import fs from "fs";
 import cookieSession from "cookie-session";
 import { Configuration } from "../server/features/common/config";
+import { noCache } from "./cacheHeaders";
+import { Logger } from "./features/common";
 
 // definitions for URNs: https://commons.lbl.gov/display/IDMgmt/Attribute+Definitions
 const urnUid = "urn:oid:0.9.2342.19200300.100.1.1";
@@ -25,7 +27,7 @@ type ShibbolethPayload = {
 
 const shibConfig: passportSaml.SamlConfig = {
   entryPoint: Configuration.sso.providerUrl,
-  issuer:  Configuration.serverUrl,
+  issuer: Configuration.serverUrl,
   callbackUrl: `${Configuration.serverUrl}/auth/success`,
   identifierFormat: `urn:oasis:names:tc:SAML:1.1:nameid-format:persistent`,
   disableRequestedAuthnContext: true,
@@ -37,10 +39,11 @@ export const router = express.Router();
 
 const cookieName = "chocolate-chip";
 router.use(cookieSession({
+  secure: process.env.SERVER_URL !== "http://localhost:8080",
+  httpOnly: true,
   name: cookieName,
-  keys: ["thekey", "thesecret"],
-  // TODO - configurise this when Shibboleth is ready to go
-  maxAge: 1000 * 60 * 30
+  secret: Configuration.cookieKey,
+  maxAge: 1000 * 60 * Configuration.timeouts.cookie
 }));
 
 router.use(passport.initialize());
@@ -54,34 +57,48 @@ passport.serializeUser((payload: ShibbolethPayload, done) => {
 });
 
 // force login using passport shibboleth config
-router.get("/login", passport.authenticate("shibboleth"));
+router.get("/login", noCache, passport.authenticate("shibboleth"));
 
-router.get("/logout", (req, res) => {
-  res.cookie(cookieName, "", { expires: new Date("1970-01-01") });
+router.get("/logout", noCache, (req, res) => {
+  res.cookie(cookieName, "", {
+    expires: new Date("1970-01-01"),
+    secure: process.env.SERVER_URL !== "http://localhost:8080",
+    httpOnly: true
+  });
   return res.redirect(Configuration.sso.enabled && Configuration.sso.signoutUrl || "/");
 });
 
-router.post("/auth/success", passport.authenticate("shibboleth"), (req, res) => {
+router.post("/auth/success", (req, res, next) => passport.authenticate("shibboleth", (err, user) => {
+  if(err) {
+    new Logger().error("Authentication Error", err);
+    return res.sendStatus(500);
+  }
   // copy user info from shibboleth that has been serilised to the user object and store it in the session object
   req.session = req.session || {};
-  req.session.user = { email: req.user[urnEmail] };
+  req.session.user = { email: user[urnEmail] };
 
   // redirect to orignal locaion if it starts with a / otherwise use server root
   const redirect = req.session && req.session.redirect;
   const validatedRedirect = redirect && redirect.startsWith("/") ? redirect : Configuration.serverUrl;
   return res.redirect(validatedRedirect);
-});
+})(req, res, next));
 
 router.use((req, res, next) => {
   // if user is logged in continue
-  if (req.session && req.session.user && req.session.user.email) {
+  if (Configuration.sso.enabled && req.url === "/") {
+    res.redirect("/projects/dashboard");
+  }
+  else if (req.session && req.session.user && req.session.user.email) {
+    next();
+  }
+  else if (!Configuration.sso.enabled && req.url === "/") {
     next();
   }
   // if user not logged in but we arent using sso then set default user
   else if (!Configuration.sso.enabled) {
     req.session = req.session || {};
     req.session.user = req.session.user || {};
-    req.session.user.email = Configuration.salesforce.username;
+    req.session.user.email = Configuration.salesforce.serivceUsername;
     next();
   }
   // if not logged in and not api request or login request (ie somethings gone wrong)
@@ -91,8 +108,8 @@ router.use((req, res, next) => {
     req.session.redirect = req.url;
     res.redirect(`/login`);
   }
-  // not logged and api request throw 403 exception
+  // not logged and api request throw 401 exception
   else {
-    res.status(403).send();
+    res.sendStatus(401);
   }
 });

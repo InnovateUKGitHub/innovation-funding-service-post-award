@@ -62,7 +62,7 @@ class Component extends ContainerBase<Params, Data, {}> {
 
   renderContents({ projectDetails, partners, previousClaims, currentClaims }: CombinedData) {
     return (
-      <ProjectOverviewPage project={projectDetails} partners={partners} selectedTab={AllClaimsDashboardRoute.routeName}>
+      <ProjectOverviewPage project={projectDetails} partners={partners} selectedTab={AllClaimsDashboardRoute.routeName} messages={this.props.messages}>
         {this.renderSummary(projectDetails, partners.find(x => x.isLead)!)}
         <Acc.Section qa="current-claims-section" title="Open">
           {this.renderCurrentClaimsPerPeriod(currentClaims, projectDetails, partners)}
@@ -95,7 +95,7 @@ class Component extends ContainerBase<Params, Data, {}> {
     return (
       <PartnerSummaryDetails.Details data={partner} title={`${partner.name} history`} qa="lead-partner-summary">
         <PartnerSummaryDetails.Currency label="Total eligible costs" qa="gol-costs" value={x => x.totalParticipantGrant} />
-        <PartnerSummaryDetails.Currency label="Costs claimed to date" qa="claimed-costs" value={x => x.totalParticipantCostsClaimed || 0} />
+        <PartnerSummaryDetails.Currency label="Eligible costs claimed to date" qa="claimed-costs" value={x => x.totalParticipantCostsClaimed || 0} />
         <PartnerSummaryDetails.Percentage label="Percentage of eligible costs claimed to date" qa="claimed-percentage" value={x => x.percentageParticipantCostsClaimed} />
         <PartnerSummaryDetails.Currency label="Costs paid to date" qa="paid-costs" value={x => x.totalPaidCosts || 0} />
         <PartnerSummaryDetails.Percentage label="Funding level" value={x => x.awardRate} qa="award-rate" fractionDigits={0} />
@@ -113,7 +113,7 @@ class Component extends ContainerBase<Params, Data, {}> {
           <Acc.DualDetails>
             <ProjectSummaryDetails.Details title="History" data={project} qa="project-summary">
               <ProjectSummaryDetails.Currency label="Total eligible costs" qa="gol-costs" value={x => x.grantOfferLetterCosts} />
-              <ProjectSummaryDetails.Currency label="Costs claimed to date" qa="claimed-costs" value={x => x.costsClaimedToDate || 0} />
+              <ProjectSummaryDetails.Currency label="Eligible costs claimed to date" qa="claimed-costs" value={x => x.costsClaimedToDate || 0} />
               <ProjectSummaryDetails.Percentage label="Percentage of eligible costs claimed to date" qa="claimed-percentage" value={x => x.claimedPercentage} />
             </ProjectSummaryDetails.Details>
             { this.renderLeadPartnerDetails(project, partner) }
@@ -147,7 +147,13 @@ class Component extends ContainerBase<Params, Data, {}> {
 
     return (
       <Acc.Section title={title} qa="current-claims-section" badge={badge} key={index}>
-        <ClaimTable.Table data={currentInfo.claims} qa="current-claims-table" bodyRowFlag={(x) => x.status === ClaimStatus.SUBMITTED ? "info" : null} className="govuk-!-font-size-16">
+        <ClaimTable.Table
+          data={currentInfo.claims}
+          className="govuk-!-font-size-16"
+          bodyRowFlag={x => this.getBodyRowFlag(x, project, partners) ? "info" : null}
+          rowIcon={true}
+          qa="current-claims-table"
+        >
           <ClaimTable.String header="Partner" qa="partner" value={renderPartnerName} />
           <ClaimTable.Currency header="Forecast costs for period" qa="forecast-cost" value={(x) => x.forecastCost} />
           <ClaimTable.Currency header="Actual costs for period" qa="actual-cost" value={(x) => x.totalCost} />
@@ -160,13 +166,21 @@ class Component extends ContainerBase<Params, Data, {}> {
     );
   }
 
+  getBodyRowFlag(claim: ClaimDto, project: ProjectDto, partners: PartnerDto[]) {
+    const partner  = partners.find(x => x.id === claim.partnerId);
+    if(!partner) return false;
+
+    const linkType = Acc.Claims.getClaimDetailsLinkType({ claim, project, partner });
+    return linkType === "edit" || linkType === "review";
+  }
+
   private renderPreviousClaimsSections(project: ProjectDto, partners: PartnerDto[], previousClaims: ClaimDto[]) {
     const grouped = partners.map(x => ({ partner: x, claims: previousClaims.filter(y => y.partnerId === x.id) }));
 
     return (
       <Accordion qa="previous-claims">
         {grouped.map((x, i) => (
-          <AccordionItem title={`${x.partner.name} ${x.partner.isLead ? "(Lead)" : ""}`} key={i}>
+          <AccordionItem title={`${x.partner.name} ${x.partner.isLead ? "(Lead)" : ""}`} key={i} qa={`accordion-item-${i}`}>
             {this.previousClaimsSection(project, x.partner, x.claims)}
           </AccordionItem>
         ))}

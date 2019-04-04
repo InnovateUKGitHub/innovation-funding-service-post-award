@@ -136,77 +136,6 @@ describe("UpdateForecastDetailsCommand", () => {
     expect(context.repositories.profileDetails.Items.find(x => x.Id === profileDetail2.Id)!.Acc_LatestForecastCost__c).toBe(100);
   });
 
-  it("should update partner timestamp if update forecast is successful", async () => {
-
-    const context = new TestContext();
-    context.clock.setDateTime("2015/12/25 12:44:22");
-
-    const testData = context.testData;
-    const partner = testData.createPartner();
-    const costCat = testData.createCostCategory();
-    const periodId = 1;
-    const profileDetail = testData.createProfileDetail(costCat, partner, periodId, x => x.Acc_LatestForecastCost__c = 123);
-    const profileDetail2 = testData.createProfileDetail(costCat, partner, periodId + 1, x => x.Acc_LatestForecastCost__c = 123);
-    testData.createClaimDetail(costCat, partner, periodId - 1, x => x.Acc_PeriodCostCategoryTotal__c = 1000);
-    testData.createProfileTotalCostCategory(costCat, partner, 1500);
-
-    const dto: ForecastDetailsDTO[] = [{
-      periodId,
-      id: profileDetail.Id,
-      costCategoryId: costCat.Id,
-      periodStart: new Date(),
-      periodEnd: new Date(),
-      value: 250
-    },
-    {
-      periodId: periodId + 1,
-      id: profileDetail2.Id,
-      costCategoryId: costCat.Id,
-      periodStart: new Date(),
-      periodEnd: new Date(),
-      value: 100
-    }];
-
-    const command = new UpdateForecastDetailsCommand(partner.Acc_ProjectId__c, partner.Id, dto, false);
-    await context.runCommand(command);
-
-    expect(context.repositories.partners.Items.find(x => x.Id === partner.Id)!.Acc_ForecastLastModifiedDate__c).toBe(context.clock.asLuxon().toISO());
-  });
-
-  it("should not update partner timestamp if exception occured", async () => {
-    const context = new TestContext();
-    const testData = context.testData;
-    const time = "2015/12/25 12:44:22";
-
-    const periodId = 1;
-    const startDate = DateTime.local().minus({ months: 6 });
-    const endDate = DateTime.local().plus({ months: 6 });
-
-    const project = testData.createProject(x => {
-      x.Acc_ClaimFrequency__c = "Monthly";
-      x.Acc_StartDate__c = startDate.toFormat("yyyy-MM-dd");
-      x.Acc_EndDate__c = endDate.toFormat("yyyy-MM-dd");
-    });
-    const partner = testData.createPartner(project, x => x.Acc_ForecastLastModifiedDate__c = time);
-    const costCat = testData.createCostCategory();
-    const profileDetail = testData.createProfileDetail(costCat, partner, periodId, x => x.Acc_LatestForecastCost__c = 123);
-    const partnerId = profileDetail.Acc_ProjectParticipant__c;
-    const dto: ForecastDetailsDTO[] = [{
-      periodId,
-      id: profileDetail.Id,
-      costCategoryId: costCat.Id,
-      periodStart: new Date(),
-      periodEnd: new Date(),
-      value: 500
-    }];
-    testData.createClaimDetail(costCat, partner, periodId - 1, x => x.Acc_PeriodCostCategoryTotal__c = 1000);
-    testData.createProfileTotalCostCategory(costCat, partner, 1500);
-
-    const command = new UpdateForecastDetailsCommand(project.Id, partnerId, dto, false);
-    await expect(context.runCommand(command)).rejects.toMatchObject(new BadRequestError("You can't update the forecast of approved periods."));
-    expect(context.repositories.partners.Items.find(x => x.Id === partner.Id)!.Acc_ForecastLastModifiedDate__c).toBe(time);
-  });
-
   it("should update claim status from DRAFT to SUBMITTED", async () => {
     const context = new TestContext();
     const testData = context.testData;
@@ -355,7 +284,7 @@ describe("UpdateForecastDetailsCommand", () => {
     await expect(context.runCommand(command)).rejects.toMatchObject(new BadRequestError("You can't update the forecast of approved periods."));
   });
 
-  it.only("when project in period 2 and period 1 updated expect exception", async () => {
+  it("when project in period 2 and period 1 updated expect exception", async () => {
 
     const context = new TestContext();
 

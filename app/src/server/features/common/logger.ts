@@ -1,5 +1,6 @@
 import { Configuration } from "./config";
 import { LogLevel } from "../../../types/logLevel";
+import { AppError } from "./appError";
 
 export interface ILogger {
   debug(message: string, params: any[]): void;
@@ -10,8 +11,10 @@ export interface ILogger {
 
 export class Logger implements ILogger {
   private readonly level: LogLevel;
+  private readonly identifier: string | undefined;
 
-  constructor(logLevel?: LogLevel) {
+  constructor(identifier?: string, logLevel?: LogLevel) {
+    this.identifier = identifier;
     this.level = logLevel || Configuration.logLevel;
   }
 
@@ -32,9 +35,15 @@ export class Logger implements ILogger {
   }
 
   private log(level: LogLevel, message: string, ...params: any[]) {
-    // TODO: impliment logging for server logs
     if(level >= this.level) {
-      console.log(`${LogLevel[level]}: ${message}`, ...params);
+      const item = {
+        type: LogLevel[level],
+        identifier: this.identifier || "",
+        message,
+        params
+      };
+      const output = Configuration.prettyLogs ? JSON.stringify(item, null, 2) : JSON.stringify(item);
+      console.log(output);
     }
   }
 }

@@ -1,7 +1,7 @@
 import React from "react";
 import { Link as RouterLink } from "react-router5";
 import { RootState } from "../redux/reducers";
-import { IUser } from "../../types";
+import { IClientUser } from "../../types";
 import { ILinkInfo } from "../../types/ILinkInfo";
 import { connect as reduxConnect } from "react-redux";
 
@@ -13,13 +13,14 @@ interface Props {
 }
 
 interface Data {
-  user: IUser;
+  user: IClientUser;
+  features: IFeatureFlags;
 }
 
 class LinkComponent extends React.Component<Props & Data> {
   private userHasAccess(route: ILinkInfo) {
     if (!route.accessControl) return true;
-    return route.accessControl(this.props.user);
+    return route.accessControl(this.props.user, this.props.features);
   }
 
   render() {
@@ -41,7 +42,7 @@ class LinkComponent extends React.Component<Props & Data> {
   }
 }
 export const Link = reduxConnect<Data, {}, Props, RootState>(
-  (state: RootState) => ({user: state.user})
+  (state: RootState) => ({ user: state.user, features: state.config.features })
 )(LinkComponent);
 
 // TODO go back to same place in page (no scroll to top)

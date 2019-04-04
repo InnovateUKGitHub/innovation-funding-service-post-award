@@ -37,8 +37,8 @@ describe("Claim Window", () => {
     // 31st of a month is tested explicitly later
     if (DateTime.local().day !== 31) {
       // period ends at end of last month
-      const periodEndDate = DateTime.local().set({ day: 1 }).minus({ days: 1 });
-      const windowEndDate = periodEndDate.plus({ days: 30 }).set({ hour: 0, minute: 0, second: 0 });
+      const periodEndDate = DateTime.local().set({ day: 1 }).set({ hour: 0, minute: 0, second: 0 }).minus({ days: 1 });
+      const windowEndDate = periodEndDate.plus({ days: 30 });
       const daysRemaining = Math.ceil(windowEndDate.diff(DateTime.local(), "days").days) + 1;
 
       it("renders number of days remaning in claim window", () => {
@@ -121,5 +121,11 @@ describe("Claim Window", () => {
       const output = Enzyme.mount(<ClaimWindow periodEnd={periodEndDate.toJSDate()} />).find("h3").text();
       expect(output).toEqual("1");
     });
+  });
+
+  test("invalid periodEnd renders null", () => {
+    const periodEnd = new Date("broken");
+    const output = Enzyme.mount(<ClaimWindow periodEnd={periodEnd} />);
+    expect(output.html()).toBeNull();
   });
 });
