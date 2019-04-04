@@ -21,7 +21,8 @@ export function setupInitialState(route: RouterState | undefined, user: IClientU
     isClient: false,
     config:{
       ifsRoot: config.urls.ifsRoot,
-      features: config.features
+      features: config.features,
+      standardOverheadRate: config.standardOverheadRate,
     }
   } as RootState;
 }
