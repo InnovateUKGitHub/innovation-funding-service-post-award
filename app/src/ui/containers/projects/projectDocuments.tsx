@@ -56,6 +56,7 @@ class ProjectDocumentsComponent extends ContainerBase<ProjectDocumentPageParams,
         project={project}
         partners={partners}
         validator={editor.validator}
+        error={editor.error}
       >
         <ACC.Section>
           <UploadForm.Form
