@@ -30,6 +30,7 @@ interface CombinedData {
 }
 
 interface Callbacks {
+  clearMessage: () => void;
   validate: (projectId: string, dto: DocumentUploadDto) => void;
   uploadFile: (projectId: string, dto: DocumentUploadDto) => void;
 }
@@ -46,8 +47,12 @@ class ProjectDocumentsComponent extends ContainerBase<ProjectDocumentPageParams,
     return <ACC.PageLoader pending={combined} render={x => this.renderContents(x)} />;
   }
 
+  private onFileChange(projectId: string, dto: {file: File | null}) {
+    this.props.clearMessage();
+    this.props.validate(projectId, dto);
+  }
+
   private renderContents({project, partners, documents, editor}: CombinedData) {
-    const ProjectDocumentsTable = ACC.TypedTable<DocumentSummaryDto>();
     const UploadForm = ACC.TypedForm<{file: File | null}>();
 
     return (
@@ -57,12 +62,13 @@ class ProjectDocumentsComponent extends ContainerBase<ProjectDocumentPageParams,
         partners={partners}
         validator={editor.validator}
         error={editor.error}
+        messages={this.props.messages}
       >
         <ACC.Section>
           <UploadForm.Form
             enctype="multipart"
             data={editor.data}
-            onChange={dto => this.props.validate(project.id, dto)}
+            onChange={dto => this.onFileChange(project.id, dto)}
             onSubmit={() => this.props.uploadFile(project.id, editor.data)}
             qa="projectDocumentUpload"
           >
@@ -79,18 +85,29 @@ class ProjectDocumentsComponent extends ContainerBase<ProjectDocumentPageParams,
             <UploadForm.Submit styling="Secondary">Upload</UploadForm.Submit>
           </UploadForm.Form>
         </ACC.Section>
-        <ProjectDocumentsTable.Table data={documents} qa="project-documents">
-          <ProjectDocumentsTable.Custom  header="File name" qa="fileName" value={x => this.renderDocumentName(x)}/>
-          <ProjectDocumentsTable.ShortDate header="Date uploaded" qa="dateUploaded" value={x => x.dateCreated}/>
-          <ProjectDocumentsTable.Custom header="File size" qa="fileSize" value={x => this.renderFileSize(x.fileSize)}/>
-          <ProjectDocumentsTable.Email header="Uploaded by" qa="uploadedBy" value={x => x.owner}/>
-        </ProjectDocumentsTable.Table>
+        {this.renderDocumentsTable(documents)}
       </ProjectOverviewPage>
     );
   }
 
   renderDocumentName(document: DocumentSummaryDto) {
     return <a target={"_blank"} href={document.link}>{document.fileName}</a>;
+  }
+
+  renderDocumentsTable(documents: DocumentSummaryDto[]) {
+    if (documents.length === 0) {
+      return <ACC.Renderers.SimpleString>No documents uploaded</ACC.Renderers.SimpleString>;
+    }
+    const ProjectDocumentsTable = ACC.TypedTable<DocumentSummaryDto>();
+
+    return (
+      <ProjectDocumentsTable.Table data={documents} qa="project-documents">
+          <ProjectDocumentsTable.Custom  header="File name" qa="fileName" value={x => this.renderDocumentName(x)}/>
+          <ProjectDocumentsTable.ShortDate header="Date uploaded" qa="dateUploaded" value={x => x.dateCreated}/>
+          <ProjectDocumentsTable.Custom header="File size" qa="fileSize" value={x => this.renderFileSize(x.fileSize)}/>
+          <ProjectDocumentsTable.Email header="Uploaded by" qa="uploadedBy" value={x => x.owner}/>
+        </ProjectDocumentsTable.Table>
+    );
   }
 
   renderFileSize(fileSize: number) {
@@ -113,8 +130,10 @@ const ProjectDocuments = container.connect({
     editor: Selectors.getProjectDocumentEditor(props.projectId).get(state),
   }),
   withCallbacks: (dispatch) => ({
+    clearMessage: () => dispatch(Actions.removeMessages()),
     validate: (projectId, dto) => dispatch(Actions.updateProjectDocumentEditor(projectId, dto)),
-    uploadFile: (projectId, dto) => dispatch(Actions.uploadProjectDocument(projectId, dto, () => dispatch(Actions.loadProjectDocuments(projectId))))
+    uploadFile: (projectId, dto) => dispatch(Actions.uploadProjectDocument(projectId, dto,
+      () => dispatch(Actions.loadProjectDocuments(projectId)), "Your document has been uploaded."))
   })
 });
 
