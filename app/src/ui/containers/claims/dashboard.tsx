@@ -219,17 +219,14 @@ class Component extends ContainerBase<ClaimDashboardPageParams, Data, Callbacks>
   private renderClaimsTable(data: ClaimDto[], tableQa: string, project: ProjectDto, partner: PartnerDto) {
     const ClaimTable = Acc.TypedTable<ClaimDto>();
 
-    const editableStatuses = [ClaimStatus.DRAFT, ClaimStatus.MO_QUERIED, ClaimStatus.INNOVATE_QUERIED];
-    const isClaimEditable = editableStatuses.indexOf(data[0].status) > -1;
-
     return (
-      <ClaimTable.Table qa={tableQa} data={data} bodyRowClass={() => isClaimEditable ? "table__row--info" : ""} className="govuk-!-font-size-16">
-        <ClaimTable.Custom
-          paddingRight="0px"
-          header=""
-          qa="edit-icon"
-          value={() => isClaimEditable ? <img style={{height: "19px"}} src="/assets/images/icon-edit.png"/> : null}
-        />
+      <ClaimTable.Table
+        data={data}
+        className="govuk-!-font-size-16"
+        bodyRowFlag={x => Acc.Claims.getClaimDetailsLinkType({ claim: x, project, partner }) === "edit" ? "info" : null}
+        rowIcon={true}
+        qa={tableQa}
+      >
         <ClaimTable.Custom
           header="Period"
           qa="period"

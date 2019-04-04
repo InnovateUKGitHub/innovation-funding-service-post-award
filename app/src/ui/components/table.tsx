@@ -51,6 +51,7 @@ interface TableProps<T> {
   validationResult?: Results<{}>[];
   bodyRowClass?: (row: T, index: number) => string;
   bodyRowFlag?: (row: T, index: number) => "warning" | "info" | "error" | null;
+  rowIcon?: boolean;
   headerRowClass?: string;
 }
 
@@ -159,7 +160,7 @@ const TableComponent = <T extends {}>(props: TableProps<T> & { data: T[]; valida
         </thead>
         <tbody className="govuk-table__body">
           {
-            contents.map((row, rowIndex) => <tr className={classNames("govuk-table__row", rowClass[rowIndex], rowClasses[rowIndex])} key={rowIndex}>{row}</tr>)
+            contents.map((row, rowIndex) => <tr className={classNames("govuk-table__row", rowClass[rowIndex], rowClasses[rowIndex], {"table__row--icon": props.rowIcon})} key={rowIndex}>{row}</tr>)
           }
         </tbody>
         {footers.length ? <tfoot>{footers}</tfoot> : null}
