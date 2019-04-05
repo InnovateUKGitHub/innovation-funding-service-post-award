@@ -7,8 +7,9 @@ interface Props {
 }
 
 export const ClaimWindow: React.SFC<Props> = (props) => {
-  const today = DateTime.local().set({ hour: 0, minute: 0, second: 0 });
-  const windowStart = DateTime.fromJSDate(props.periodEnd).plus({ days: 1 }).set({ hour: 0, minute: 0, second: 0 });
+  const localOpts = { locale: "en-GB", zone: "Europe/London" };
+  const today = DateTime.local().setLocale(localOpts.locale).setZone(localOpts.zone).set({ hour: 0, minute: 0, second: 0 });
+  const windowStart = DateTime.fromJSDate(props.periodEnd, localOpts).plus({ days: 1 }).set({ hour: 0, minute: 0, second: 0 });
   const windowEnd = windowStart.plus({ days: 29 });
   const days = Math.round(windowEnd.diff(today, "days").days);
 
