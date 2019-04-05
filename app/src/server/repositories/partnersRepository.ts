@@ -28,6 +28,7 @@ export interface ISalesforcePartner {
   Acc_ClaimsOverdue__c: number;
   Acc_ClaimsUnderQuery__c: number;
   Acc_TrackingClaims__c: string;
+  Acc_OverheadRate__c: number;
 }
 
 export interface IPartnerRepository {
@@ -62,6 +63,7 @@ export class PartnerRepository extends SalesforceRepositoryBase<ISalesforcePartn
     "Acc_ClaimsOverdue__c",
     "Acc_ClaimsUnderQuery__c",
     "Acc_TrackingClaims__c",
+    "Acc_OverheadRate__c",
   ];
 
   getAllByProjectId(projectId: string): Promise<ISalesforcePartner[]> {
