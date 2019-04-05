@@ -60,7 +60,8 @@ export class TestContext implements IContext {
             ifsApplicationUrl: "",
             ifsGrantLetterUrl: "",
         },
-        cookieKey: "thekey"
+        cookieKey: "thekey",
+        standardOverheadRate: 20,
     };
 
     public caches: ICaches = {
