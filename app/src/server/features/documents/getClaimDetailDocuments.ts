@@ -17,7 +17,13 @@ export class GetClaimDetailDocumentsQuery extends QueryBase<DocumentSummaryDto[]
       periodId: this.periodId,
       costCategoryId: this.costCategoryId
     };
+
     const claimDetail = await context.repositories.claimDetails.get(key);
+
+    if (!claimDetail) {
+      return [];
+    }
+
     return context.runQuery(new GetDocumentsLinkedToRecordQuery(claimDetail.Id));
   }
 }
