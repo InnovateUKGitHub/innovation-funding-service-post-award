@@ -49,6 +49,8 @@ export interface IConfig {
     };
 
     cookieKey: Readonly<string>;
+
+    standardOverheadRate: Readonly<number>;
 }
 
 const build = process.env.BUILD || `${Date.now()}`;
@@ -97,6 +99,8 @@ const urls = {
 
 const cookieKey = process.env.COOKIE_KEY!;
 
+const standardOverheadRate = parseFloat(process.env.STANDARD_OVERHEAD_RATE!) || 20;
+
 export const Configuration: IConfig = {
     build,
     cookieKey,
@@ -107,6 +111,7 @@ export const Configuration: IConfig = {
     prettyLogs,
     salesforce,
     serverUrl,
+    standardOverheadRate,
     sso,
     urls,
 };
