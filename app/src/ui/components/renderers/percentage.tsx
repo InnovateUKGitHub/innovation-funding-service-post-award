@@ -1,12 +1,13 @@
 import React from "react";
 import {isNumber} from "../../../util/NumberHelper";
+import { SimpleString } from "./simpleString";
 
-interface Props extends React.HTMLAttributes<{}> {
+interface Props {
   value: number | null;
   fractionDigits?: number;
 }
 
-export const Percentage: React.SFC<Props> = ({value, fractionDigits = 1, style, ...rest}) => {
+export const Percentage: React.SFC<Props> = ({ value, fractionDigits = 1 }) => {
   if (!isNumber(value)) {
     return null;
   }
@@ -17,9 +18,8 @@ export const Percentage: React.SFC<Props> = ({value, fractionDigits = 1, style, 
     maximumFractionDigits: fractionDigits
   };
 
-  style = Object.assign({ whiteSpace: "nowrap" }, style || {});
-
   // TODO we need to find out if Salesforce will be returning 0.75 vs 75 and possibly remove this "/100"
   const valToRender = new Intl.NumberFormat("en-GB", options).format(value/100);
-  return <span style={style} {...rest}>{valToRender}</span>;
+
+  return <span style={{ whiteSpace: "nowrap" }}>{valToRender}</span>;
 };
