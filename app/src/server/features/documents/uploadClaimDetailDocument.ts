@@ -1,4 +1,4 @@
-import { CommandBase, ValidationError } from "../common";
+import { BadRequestError, CommandBase, ValidationError } from "../common";
 import { UploadDocumentCommand } from "./uploadDocument";
 import { FileUploadValidator } from "../../../ui/validators/documentUploadValidator";
 import { FileUpload, IContext } from "../../../types";
@@ -11,6 +11,10 @@ export class UploadClaimDetailDocumentCommand extends CommandBase<string> {
   protected async Run(context: IContext) {
     const claimDetail = await context.repositories.claimDetails.get(this.claimDetailKey);
     const result = new FileUploadValidator(this.file, true);
+
+    if (!claimDetail) {
+      throw new BadRequestError("No Claim Detail");
+    }
 
     if (!result.isValid) {
       throw new ValidationError(result);

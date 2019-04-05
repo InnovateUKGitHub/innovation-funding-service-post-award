@@ -13,7 +13,7 @@ export interface ISalesforceClaimDetails {
 export interface IClaimDetailsRepository {
   getAllByPartnerForPeriod(partnerId: string, periodId: number): Promise<ISalesforceClaimDetails[]>;
   getAllByPartnerWithPeriodLt(partnerId: string, periodId: number): Promise<ISalesforceClaimDetails[]>;
-  get(key: ClaimDetailKey): Promise<ISalesforceClaimDetails>;
+  get(key: ClaimDetailKey): Promise<ISalesforceClaimDetails|null>;
   getAllByPartner(partnerId: string): Promise<ISalesforceClaimDetails[]>;
 }
 
@@ -43,7 +43,7 @@ export class ClaimDetailsRepository extends SalesforceRepositoryBase<ISalesforce
     return super.where(filter);
   }
 
-  async get(claimDetailKey: ClaimDetailKey): Promise<ISalesforceClaimDetails> {
+  async get(claimDetailKey: ClaimDetailKey): Promise<ISalesforceClaimDetails|null> {
     const { partnerId, periodId, costCategoryId } = claimDetailKey;
     const filter = `
       Acc_ProjectParticipant__c = '${partnerId}'
@@ -52,11 +52,7 @@ export class ClaimDetailsRepository extends SalesforceRepositoryBase<ISalesforce
       AND Acc_CostCategory__c = '${costCategoryId}'
       AND Acc_ClaimStatus__c != 'New'
     `;
-    const claimDetail = await super.filterOne(filter);
-    if (!claimDetail) {
-      throw Error("Claim detail not found");
-    }
-    return claimDetail;
+    return await super.filterOne(filter);
   }
 
   getAllByPartnerWithPeriodLt(partnerId: string, periodId: number): Promise<ISalesforceClaimDetails[]> {

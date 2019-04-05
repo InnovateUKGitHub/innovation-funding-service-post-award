@@ -61,3 +61,5 @@ export const getPreviousClaims = (state: RootState, partnerId: string): Pending<
     .getPending(state)
     .then(claims => (claims ||[]).filter(x => x.isApproved));
 };
+
+export const getClaimDetails = (partnerId: string, periodId: number, costCategoryId: string) => dataStoreHelper("claimDetail", getKey(partnerId, periodId, costCategoryId));

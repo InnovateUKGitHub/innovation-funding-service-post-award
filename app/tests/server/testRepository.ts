@@ -15,6 +15,18 @@ export abstract class TestRepository<T> {
     });
   }
 
+  protected filterOne(conditional: (item: T) => boolean): Promise<T|null> {
+    return new Promise<T|null>((resolve, reject) => {
+      const found = this.Items.find(x => conditional(x));
+      if (found) {
+        resolve(found);
+      }
+      else {
+        resolve(null);
+      }
+    });
+  }
+
   protected getWhere(conditional: (item: T) => boolean): Promise<T[]> {
     return new Promise<T[]>((resolve) => {
       const found = this.Items.filter(x => conditional(x));
