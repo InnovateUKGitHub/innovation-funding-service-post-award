@@ -24,6 +24,7 @@ interface Data {
     claim: Pending<ClaimDto>;
     claimDetailsSummary: Pending<ClaimDetailsSummaryDto[]>;
     editor: Pending<IEditorStore<ClaimDto, ClaimDtoValidator>>;
+    standardOverheadRate: number;
 }
 
 interface Callbacks {
@@ -90,10 +91,10 @@ export class PrepareComponent extends ContainerBase<PrepareClaimParams, Data, Ca
                 <ACC.Claims.Navigation projectId={data.project.id} partnerId={data.partner.id} periodId={data.claim.periodId} currentRouteName={ClaimsDetailsRoute.routeName} />
                 <ACC.Renderers.Messages messages={this.props.messages || []} />
                 <ACC.Section title={this.getClaimPeriodTitle(data)}>
-                    <ACC.Claims.ClaimTable {...data} validation={data.editor.validator.claimDetails.results} getLink={costCategoryId => EditClaimLineItemsRoute.getLink({partnerId: this.props.partnerId, projectId: this.props.projectId, periodId: this.props.periodId, costCategoryId})} />
+                    <ACC.Claims.ClaimTable {...data} validation={data.editor.validator.claimDetails.results} standardOverheadRate={this.props.standardOverheadRate} getLink={costCategoryId => EditClaimLineItemsRoute.getLink({ partnerId: this.props.partnerId, projectId: this.props.projectId, periodId: this.props.periodId, costCategoryId })} />
                     <Form.Form data={data.editor.data} onChange={(dto) => this.onChange(dto, data.claimDetails, data.costCategories)} onSubmit={() => this.saveAndProgress(data.editor.data, data.claimDetails, data.costCategories)}>
                         <Form.Fieldset heading={commentsLabel} qa="additional-info-form" headingQa="additional-info-heading">
-                            <Form.MultilineString label="additional-info" labelHidden={true} hint={commentsHint} name="comments" value={m => m.comments} update={(m, v) => m.comments = v} validation={data.editor.validator.comments} qa="info-text-area"/>
+                            <Form.MultilineString label="additional-info" labelHidden={true} hint={commentsHint} name="comments" value={m => m.comments} update={(m, v) => m.comments = v} validation={data.editor.validator.comments} qa="info-text-area" />
                         </Form.Fieldset>
                         <Form.Fieldset qa="save-and-continue">
                             <Form.Submit>Review forecast</Form.Submit>
@@ -114,9 +115,9 @@ const progress = (dispatch: any, projectId: string, partnerId: string, periodId:
 
 const goBack = (dispatch: any, projectId: string, partnerId: string, project: ProjectDto) => {
     if (project.roles & ProjectRole.ProjectManager) {
-      dispatch(Actions.navigateTo(AllClaimsDashboardRoute.getLink({ projectId })));
+        dispatch(Actions.navigateTo(AllClaimsDashboardRoute.getLink({ projectId })));
     } else {
-      dispatch(Actions.navigateTo(ClaimsDashboardRoute.getLink({ projectId, partnerId })));
+        dispatch(Actions.navigateTo(ClaimsDashboardRoute.getLink({ projectId, partnerId })));
     }
 };
 
@@ -129,7 +130,8 @@ export const PrepareClaim = definition.connect({
     costCategories: Selectors.getCostCategories().getPending(state),
     claim: Selectors.getClaim(props.partnerId, props.periodId).getPending(state),
     claimDetailsSummary: Selectors.findClaimDetailsSummaryByPartnerAndPeriod(props.partnerId, props.periodId).getPending(state),
-    editor: Selectors.getClaimEditor(props.partnerId, props.periodId).get(state)
+    editor: Selectors.getClaimEditor(props.partnerId, props.periodId).get(state),
+    standardOverheadRate: state.config.standardOverheadRate,
   }),
   withCallbacks: (dispatch) => ({
     onChange: (partnerId, periodId, dto, details, costCategories) => dispatch(Actions.validateClaim(partnerId, periodId, dto, details, costCategories)),
@@ -142,7 +144,7 @@ export const PrepareClaimRoute = definition.route({
     routeName: "prepareClaim",
     routePath: "/projects/:projectId/claims/:partnerId/prepare/:periodId",
     getParams: (route) => ({ projectId: route.params.projectId, partnerId: route.params.partnerId, periodId: parseInt(route.params.periodId, 10) }),
-    accessControl: (auth, {projectId, partnerId}) => auth.for(projectId, partnerId).hasRole(ProjectRole.FinancialContact),
+    accessControl: (auth, { projectId, partnerId }) => auth.for(projectId, partnerId).hasRole(ProjectRole.FinancialContact),
     getLoadDataActions: (params) => [
         Actions.loadProject(params.projectId),
         Actions.loadPartner(params.partnerId),

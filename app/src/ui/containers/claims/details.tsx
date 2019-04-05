@@ -23,6 +23,7 @@ interface Data {
     claim: Pending<ClaimDto>;
     claimDetailsSummary: Pending<ClaimDetailsSummaryDto[]>;
     iarDocument: Pending<DocumentSummaryDto | null>;
+    standardOverheadRate: number;
 }
 
 interface CombinedData {
@@ -75,6 +76,7 @@ export class ClaimsDetailsComponent extends ContainerBase<Params, Data, {}> {
                 <ACC.Section title={this.getClaimPeriodTitle(data)}>
                     <ACC.Claims.ClaimTable
                       {...data}
+                      standardOverheadRate={this.props.standardOverheadRate}
                       getLink={costCategoryId => ClaimLineItemsRoute.getLink({partnerId: this.props.partnerId, projectId: this.props.projectId, periodId: this.props.periodId, costCategoryId})}
                     />
                 </ACC.Section>
@@ -100,7 +102,8 @@ export const ClaimsDetails = definition.connect({
       costCategories: Selectors.getCostCategories().getPending(state),
       claim: Selectors.getClaim(props.partnerId, props.periodId).getPending(state),
       claimDetailsSummary: Selectors.findClaimDetailsSummaryByPartnerAndPeriod(props.partnerId, props.periodId).getPending(state),
-      iarDocument: Selectors.getIarDocument(state, props.partnerId, props.periodId)
+      iarDocument: Selectors.getIarDocument(state, props.partnerId, props.periodId),
+      standardOverheadRate: state.config.standardOverheadRate
     }),
     withCallbacks: () => ({})
 });
