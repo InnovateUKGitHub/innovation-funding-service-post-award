@@ -26,6 +26,7 @@ interface Data {
   editor: Pending<IEditorStore<ClaimDto, ClaimDtoValidator>>;
   forecastData: Pending<ForecastData>;
   isClient: boolean;
+  standardOverheadRate:number;
 }
 
 interface Callbacks {
@@ -83,6 +84,7 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, Data, Callbacks> 
         <ACC.Section title={this.getClaimPeriodTitle(data)}>
           <ACC.Claims.ClaimReviewTable
             {...data}
+            standardOverheadRate={this.props.standardOverheadRate}
             validation={data.editor.validator.claimDetails.results}
             getLink={costCategoryId => ReviewClaimLineItemsRoute.getLink({ partnerId: this.props.partnerId, projectId: this.props.projectId, periodId: this.props.periodId, costCategoryId })}
           />
@@ -175,7 +177,8 @@ export const ReviewClaim = definition.connect({
         forecastDetails: Selectors.findForecastDetailsByPartner(props.partnerId).getPending(state),
         golCosts: Selectors.findGolCostsByPartner(props.partnerId).getPending(state),
         costCategories: costCategoriesPending,
-      })
+      }),
+      standardOverheadRate: state.config.standardOverheadRate
     };
   },
   withCallbacks: (dispatch) => ({
