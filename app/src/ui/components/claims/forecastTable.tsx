@@ -206,8 +206,8 @@ export class ForecastTable extends React.Component<Props> {
     cells.push(<th key="th" className="govuk-table__cell govuk-!-font-weight-bold acc-table__cell-top-border">Total</th>);
     cells.push(totals.map(this.renderTableFooterCell));
     cells.push((
-      <td key="total_diff" className="govuk-table__cell govuk-table__cell--numeric acc-table__cell-top-border">
-        <Percentage className="govuk-!-font-weight-regular" value={this.calculateDifference(golTotal, costTotal)} />
+      <td key="total_diff" className="govuk-table__cell govuk-table__cell--numeric acc-table__cell-top-border govuk-!-font-weight-regular">
+        <Percentage value={this.calculateDifference(golTotal, costTotal)} />
       </td>
     ));
 
@@ -215,8 +215,8 @@ export class ForecastTable extends React.Component<Props> {
   }
 
   renderTableFooterCell = (total: number, key: number) => (
-    <td key={key} className="govuk-table__cell govuk-table__cell--numeric acc-table__cell-top-border">
-      <Currency className="govuk-!-font-weight-regular" value={total} />
+    <td key={key} className="govuk-table__cell govuk-table__cell--numeric acc-table__cell-top-border govuk-!-font-weight-regular">
+      <Currency value={total} />
     </td>
   )
 }

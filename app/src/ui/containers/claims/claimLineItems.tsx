@@ -9,6 +9,7 @@ import { DocumentList, NavigationArrows } from "../../components";
 import { State } from "router5";
 import { ReviewClaimRoute } from "./review";
 import { ClaimDto, ILinkInfo, PartnerDto, ProjectDto } from "../../../types";
+import classNames from "classnames";
 
 interface Params {
   projectId: string;
@@ -144,10 +145,10 @@ export class ClaimLineItemsComponent extends ContainerBase<Params, Data, {}> {
 
 const ClaimLineItemsTable: React.SFC<{ lineItems: ClaimLineItemDto[], forecastDetail: ForecastDetailsDTO }> = ({ lineItems, forecastDetail }) => {
   const LineItemTable = ACC.TypedTable<ClaimLineItemDto>();
-  const renderFooterRow = (row: { key: string, title: string, value: React.ReactNode, qa: string }) => (
+  const renderFooterRow = (row: { key: string, title: string, value: React.ReactNode, qa: string, isBold?: boolean }) => (
     <tr key={row.key} className="govuk-table__row" data-qa={row.qa}>
       <th className="govuk-table__cell govuk-table__cell--numeric govuk-!-font-weight-bold">{row.title}</th>
-      <td className="govuk-table__cell govuk-table__cell--numeric">{row.value}</td>
+      <td className={classNames("govuk-table__cell", "govuk-table__cell--numeric", {"govuk-!-font-weight-bold": row.isBold})}>{row.value}</td>
     </tr>
   );
 
@@ -163,8 +164,8 @@ const ClaimLineItemsTable: React.SFC<{ lineItems: ClaimLineItemDto[], forecastDe
       qa="current-claim-summary-table"
       footers={[
         renderFooterRow({
-          key: "1", title: "Total costs", qa: "footer-total-costs", value:
-            <ACC.Renderers.Currency className={"govuk-!-font-weight-bold"} value={total} />
+          key: "1", title: "Total costs", qa: "footer-total-costs", isBold: true, value:
+            <ACC.Renderers.Currency value={total} />
         }),
         renderFooterRow({
           key: "2", title: "Forecast costs", qa: "footer-forecast-costs", value:
