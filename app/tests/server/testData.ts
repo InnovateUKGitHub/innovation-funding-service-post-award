@@ -133,8 +133,8 @@ export class TestData {
     return this.createProjectContact(project, undefined, "Monitoring officer", update);
   }
 
-  public createProjectManager(project?: Repositories.ISalesforceProject, update?: (item: Repositories.ISalesforceProjectContact) => void) {
-    return this.createProjectContact(project, undefined, "Project Manager", update);
+  public createProjectManager(project?: Repositories.ISalesforceProject, update?: (item: Repositories.ISalesforceProjectContact) => void, partner?: Repositories.ISalesforcePartner) {
+    return this.createProjectContact(project, partner, "Project Manager", update);
   }
 
   // TODO remove 'createQuestion' and use this instead

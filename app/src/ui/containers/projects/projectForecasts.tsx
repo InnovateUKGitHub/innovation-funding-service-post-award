@@ -59,7 +59,7 @@ export const ProjectForecastRoute = containerDefinition.route({
   routeName: "projectForecasts",
   routePath: "/projects/:projectId/forecasts",
   getParams: (r) => ({ projectId: r.params.projectId }),
-  accessControl: (auth, { projectId }) => auth.for(projectId).hasAnyRoles(ProjectRole.MonitoringOfficer, ProjectRole.ProjectManager),
+  accessControl: (auth, { projectId }) => auth.forProject(projectId).hasAnyRoles(ProjectRole.MonitoringOfficer, ProjectRole.ProjectManager),
   getLoadDataActions: (params) => [
     Actions.loadProject(params.projectId),
     Actions.loadPartnersForProject(params.projectId),

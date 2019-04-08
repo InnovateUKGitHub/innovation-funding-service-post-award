@@ -281,9 +281,8 @@ export const ClaimsDashboardRoute = definition.route({
     partnerId: route.params.partnerId
   }),
   accessControl: (auth, {projectId, partnerId}) => {
-    const roleChecker = auth.for(projectId, partnerId);
-    const isFC = roleChecker.hasRole(ProjectRole.FinancialContact);
-    const isMoOrPm = roleChecker.hasAnyRoles(ProjectRole.MonitoringOfficer, ProjectRole.ProjectManager);
+    const isFC = auth.forPartner(projectId, partnerId).hasRole(ProjectRole.FinancialContact);
+    const isMoOrPm = auth.forProject(projectId).hasAnyRoles(ProjectRole.MonitoringOfficer, ProjectRole.ProjectManager);
 
     return isFC && !isMoOrPm;
   },

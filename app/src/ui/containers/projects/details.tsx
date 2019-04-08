@@ -143,5 +143,5 @@ export const ProjectDetailsRoute = containerDefinition.route({
         Actions.loadPartnersForProject(params.id),
     ],
     container: ProjectDetails,
-    accessControl: (auth, { id }) => auth.for(id).hasAnyRoles(ProjectRole.FinancialContact, ProjectRole.ProjectManager, ProjectRole.MonitoringOfficer)
+    accessControl: (auth, { id }) => auth.forProject(id).hasAnyRoles(ProjectRole.FinancialContact, ProjectRole.ProjectManager, ProjectRole.MonitoringOfficer)
 });

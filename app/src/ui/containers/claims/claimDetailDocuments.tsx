@@ -168,6 +168,6 @@ export const ClaimDetailDocumentsRoute = definition.route({
     Actions.loadProject(params.projectId),
     Actions.loadClaimDetailDocuments(params.partnerId, params.periodId, params.costCategoryId)
   ],
-  accessControl: (auth, {projectId, partnerId}) => auth.for(projectId, partnerId).hasRole(ProjectRole.FinancialContact),
+  accessControl: (auth, {projectId, partnerId}) => auth.forPartner(projectId, partnerId).hasRole(ProjectRole.FinancialContact),
   container: ClaimDetailDocuments
 });

@@ -80,5 +80,5 @@ export const UpdateForecastRoute = definition.route({
   getParams: forecastParams,
   getLoadDataActions: forecastDataLoadActions,
   container: UpdateForecast,
-  accessControl: (auth, { projectId, partnerId }) => auth.for(projectId, partnerId).hasRole(ProjectRole.FinancialContact)
+  accessControl: (auth, { projectId, partnerId }) => auth.forPartner(projectId, partnerId).hasRole(ProjectRole.FinancialContact)
 });
