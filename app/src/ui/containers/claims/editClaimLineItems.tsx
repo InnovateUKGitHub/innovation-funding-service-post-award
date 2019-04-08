@@ -21,6 +21,7 @@ export interface EditClaimLineItemsParams {
 
 interface Data {
   project: Pending<ProjectDto>;
+  claimDetails: Pending<ClaimDetailsDto>;
   lineItems: Pending<ClaimLineItemDto[]>;
   costCategories: Pending<CostCategoryDto[]>;
   editor: IEditorStore<ClaimLineItemDto[], ClaimLineItemDtosValidator>;
@@ -30,6 +31,7 @@ interface Data {
 
 interface CombinedData {
   project: ProjectDto;
+  claimDetails: ClaimDetailsDto;
   lineItems: ClaimLineItemDto[];
   costCategories: CostCategoryDto[];
   forecastDetail: ForecastDetailsDTO;
@@ -55,10 +57,12 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
   public render() {
     const combined = Pending.combine({
       project: this.props.project,
+      claimDetails: this.props.claimDetails,
       lineItems: this.props.lineItems,
       costCategories: this.props.costCategories,
       forecastDetail: this.props.forecastDetail,
       documents: this.props.documents,
+
     });
 
     return <ACC.PageLoader pending={combined} render={(data) => this.renderContents(data, this.props.editor)} />;
@@ -66,7 +70,7 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
 
   // TODO fix back link
   private renderContents(
-    { project, costCategories, documents, forecastDetail }: CombinedData,
+    { project, costCategories, documents, forecastDetail, claimDetails }: CombinedData,
     editor: IEditorStore<ClaimLineItemDto[], ClaimLineItemDtosValidator>
   ) {
     const back = PrepareClaimRoute.getLink({ projectId: project.id, partnerId: this.props.partnerId, periodId: this.props.periodId });
@@ -82,10 +86,51 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
         <ACC.Projects.Title pageTitle={`${costCategory.name}`} project={project} />
         <ACC.Section>
           <ACC.TextHint text={costCategory.hintText} />
-          {this.renderTable(editor, forecastDetail, documents)}
+          {costCategory.isCalculated ? this.renderCalculated(costCategory, claimDetails, forecastDetail, documents) : this.renderTable(editor, forecastDetail, documents)}
         </ACC.Section>
       </ACC.Page>
     );
+  }
+
+  private renderCalculated(costCategory: CostCategoryDto, claimDetails: ClaimDetailsDto, forecastDetail: ForecastDetailsDTO, documents: DocumentSummaryDto[]) {
+    const LineItemForm = ACC.TypedForm<ClaimLineItemDto[]>();
+    const LineItemTable = ACC.TypedTable<ClaimLineItemDto>();
+
+    const data: ClaimLineItemDto[] = [{
+      costCategoryId: costCategory.id,
+      description: costCategory.name,
+      partnerId: this.props.partnerId,
+      periodId: this.props.periodId,
+      id: "",
+      value: claimDetails.value
+    }];
+
+    return (
+      <LineItemForm.Form
+        data={data}
+        onSubmit={() => this.props.save(this.props.projectId, this.props.partnerId, this.props.periodId, this.props.costCategoryId, this.props.editor.data)}
+        qa="current-claim-summary-form"
+      >
+        <LineItemForm.Fieldset>
+          <LineItemTable.Table
+            data={data}
+            footers={this.renderFooters(data, forecastDetail, false)}
+            qa="current-claim-summary-table"
+          >
+            <LineItemTable.String header="Description" qa="cost-description" value={(x, i) => x.description} />
+            <LineItemTable.Currency header="Cost (£)" qa="cost-value" value={(x, i) => x.value} width={30} />
+          </LineItemTable.Table>
+        </LineItemForm.Fieldset>
+        <LineItemForm.Fieldset>
+          {this.renderDocuments(documents)}
+        </LineItemForm.Fieldset>
+        <LineItemForm.Fieldset>
+          <LineItemForm.Button name="upload" onClick={() => this.props.saveAndUpload(this.props.projectId, this.props.partnerId, this.props.costCategoryId, this.props.periodId, this.props.editor.data)}>Upload and remove documents</LineItemForm.Button>
+        </LineItemForm.Fieldset>
+        <LineItemForm.Submit>Save and return to claim</LineItemForm.Submit>
+      </LineItemForm.Form>
+    );
+
   }
 
   private renderTable(editor: IEditorStore<ClaimLineItemDto[], ClaimLineItemDtosValidator>, forecastDetail: ForecastDetailsDTO, documents: DocumentSummaryDto[]) {
@@ -104,7 +149,7 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
           <LineItemTable.Table
             data={editor.data}
             validationResult={validationResults}
-            footers={this.renderFooters(editor, forecastDetail)}
+            footers={this.renderFooters(editor.data, forecastDetail, this.state.showAddRemove)}
             qa="current-claim-summary-table"
           >
             <LineItemTable.Custom header="Description" qa="cost-description" value={(x, i) => this.renderDescription(x, i, validationResults[i.row])} />
@@ -113,16 +158,22 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
           </LineItemTable.Table>
         </LineItemForm.Fieldset>
         <LineItemForm.Fieldset>
-          <ACC.Section title="Supporting documents" subtitle={documents.length > 0 ? "All documents open in a new window." : ""} qa="supporting-documents-section">
-            <ValidationMessage message="If you are unsure what evidence to provide, speak to your Monitoring Officer. They will use these documents when reviewing your claim." messageType="info" />
-            {documents.length > 0 ? <DocumentList documents={documents} qa="supporting-documents" /> : <p className="govuk-body-m govuk-!-margin-bottom-0 govuk-!-margin-right-2">No documents uploaded.</p>}
-          </ACC.Section>
+          {this.renderDocuments(documents)}
         </LineItemForm.Fieldset>
         <LineItemForm.Fieldset>
           <LineItemForm.Button name="upload" onClick={() => this.props.saveAndUpload(this.props.projectId, this.props.partnerId, this.props.costCategoryId, this.props.periodId, this.props.editor.data)}>Upload and remove documents</LineItemForm.Button>
         </LineItemForm.Fieldset>
         <LineItemForm.Submit>Save and return to claim</LineItemForm.Submit>
       </LineItemForm.Form>
+    );
+  }
+
+  private renderDocuments(documents: DocumentSummaryDto[]) {
+    return (
+      <ACC.Section title="Supporting documents" subtitle={documents.length > 0 ? "All documents open in a new window." : ""} qa="supporting-documents-section">
+        <ValidationMessage message="If you are unsure what evidence to provide, speak to your Monitoring Officer. They will use these documents when reviewing your claim." messageType="info" />
+        {documents.length > 0 ? <DocumentList documents={documents} qa="supporting-documents" /> : <p className="govuk-body-m govuk-!-margin-bottom-0 govuk-!-margin-right-2">No documents uploaded.</p>}
+      </ACC.Section>
     );
   }
 
@@ -168,15 +219,15 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
     this.props.validate(this.props.partnerId, this.props.periodId, this.props.costCategoryId, dto);
   }
 
-  private renderFooters(editor: IEditorStore<ClaimLineItemDto[], ClaimLineItemDtosValidator>, forecastDetail: ForecastDetailsDTO) {
-    const total = editor.data.reduce((t, item) => t + (item.value || 0), 0);
+  private renderFooters(data: ClaimLineItemDto[], forecastDetail: ForecastDetailsDTO, showAddRemove: boolean) {
+    const total = data.reduce((t, item) => t + (item.value || 0), 0);
     // TODO remove multiply by 100
     const forecast = forecastDetail.value;
     const diff = 100 * (forecast - total) / forecast;
 
     const footers: JSX.Element[] = [];
 
-    if (this.state.showAddRemove) {
+    if (showAddRemove) {
       footers.push(
         <tr key={1} className="govuk-table__row">
           <td className="govuk-table__cell" colSpan={3}><a href="#" onClick={(e) => this.addItem(e)} data-qa="add-cost">Add a cost</a></td>
@@ -188,7 +239,7 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
       <tr key={2} className="govuk-table__row">
         <td className="govuk-table__cell govuk-table__cell--numeric govuk-!-font-weight-bold">Total costs</td>
         <td className="govuk-table__cell govuk-table__cell--numeric"><ACC.Renderers.Currency value={total} /></td>
-        <td className="govuk-table__cell" />
+        {showAddRemove ? <td className="govuk-table__cell" /> : null}
       </tr>
     );
 
@@ -196,7 +247,7 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
       <tr key={3} className="govuk-table__row">
         <td className="govuk-table__cell govuk-table__cell--numeric govuk-!-font-weight-bold">Forecast costs</td>
         <td className="govuk-table__cell govuk-table__cell--numeric"><ACC.Renderers.Currency value={forecast} /></td>
-        <td className="govuk-table__cell" />
+        {showAddRemove ? <td className="govuk-table__cell" /> : null}
       </tr>
     );
 
@@ -205,7 +256,7 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
         <tr key={4} className="govuk-table__row">
           <td className="govuk-table__cell govuk-table__cell--numeric govuk-!-font-weight-bold">Difference</td>
           <td className="govuk-table__cell govuk-table__cell--numeric"><ACC.Renderers.Percentage value={diff} /></td>
-          <td className="govuk-table__cell" />
+          {showAddRemove ? <td className="govuk-table__cell" /> : null}
         </tr>
       );
     }
@@ -257,6 +308,7 @@ export const EditClaimLineItems = definition.connect({
     const lineItemsSelector = Selectors.findClaimLineItemsByPartnerCostCategoryAndPeriod(props.partnerId, props.costCategoryId, props.periodId);
     return {
       project: Selectors.getProject(props.projectId).getPending(state),
+      claimDetails: Selectors.getClaimDetails(props.partnerId, props.periodId, props.costCategoryId).getPending(state),
       lineItems: lineItemsSelector.getPending(state),
       costCategories: Selectors.getCostCategories().getPending(state),
       forecastDetail: Selectors.getForecastDetail(props.partnerId, props.periodId, props.costCategoryId).getPending(state),
@@ -283,6 +335,7 @@ export const EditClaimLineItemsRoute = definition.route({
   getLoadDataActions: (params) => [
     Actions.loadProject(params.projectId),
     Actions.loadCostCategories(),
+    Actions.loadClaimDetails(params.partnerId, params.periodId, params.costCategoryId),
     Actions.loadForecastDetail(params.partnerId, params.periodId, params.costCategoryId),
     Actions.loadClaimLineItemsForCategory(params.projectId, params.partnerId, params.costCategoryId, params.periodId),
     Actions.loadClaimDetailDocuments(params.partnerId, params.periodId, params.costCategoryId)
