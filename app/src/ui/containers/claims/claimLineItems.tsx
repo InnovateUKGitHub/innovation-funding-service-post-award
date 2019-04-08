@@ -8,7 +8,7 @@ import * as ACC from "../../components";
 import { DocumentList, NavigationArrows } from "../../components";
 import { State } from "router5";
 import { ReviewClaimRoute } from "./review";
-import { ClaimDto, ILinkInfo, PartnerDto, ProjectDto } from "../../../types";
+import { ClaimDto, ILinkInfo, PartnerDto, ProjectDto, ProjectRole } from "../../../types";
 import classNames from "classnames";
 
 interface Params {
@@ -229,5 +229,7 @@ export const ReviewClaimLineItemsRoute = definition.route({
   routePath: "/projects/:projectId/claims/:partnerId/review/:periodId/costs/:costCategoryId",
   getParams: (route) => getParams(route),
   getLoadDataActions: (params) => getLoadDataActions(params),
+  accessControl: (auth, { projectId, partnerId }) => auth.forPartner(projectId, partnerId).hasAnyRoles(ProjectRole.FinancialContact, ProjectRole.ProjectManager)
+  || auth.forProject(projectId).hasRole(ProjectRole.MonitoringOfficer),
   container: ClaimLineItems
 });

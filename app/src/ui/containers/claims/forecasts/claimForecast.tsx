@@ -99,5 +99,5 @@ export const ClaimForecastRoute = definition.route({
   getParams: (route) => ({ projectId: route.params.projectId, partnerId: route.params.partnerId, periodId: parseInt(route.params.periodId, 10) }),
   getLoadDataActions: forecastDataLoadActions,
   container: ForecastClaim,
-  accessControl: (auth, { projectId, partnerId }) => auth.for(projectId, partnerId).hasRole(ProjectRole.FinancialContact)
+  accessControl: (auth, { projectId, partnerId }) => auth.forPartner(projectId, partnerId).hasRole(ProjectRole.FinancialContact)
 });

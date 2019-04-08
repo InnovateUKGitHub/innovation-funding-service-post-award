@@ -114,5 +114,6 @@ export const ViewForecastRoute = definition.route({
   getParams: forecastParams,
   getLoadDataActions: forecastDataLoadActions,
   container: ViewForecast,
-  accessControl: (auth, { projectId, partnerId }) => auth.for(projectId, partnerId).hasAnyRoles(ProjectRole.FinancialContact, ProjectRole.ProjectManager, ProjectRole.MonitoringOfficer)
+  accessControl: (auth, { projectId, partnerId }) => auth.forProject(projectId).hasAnyRoles(ProjectRole.ProjectManager, ProjectRole.MonitoringOfficer)
+  || auth.forPartner(projectId, partnerId).hasRole(ProjectRole.FinancialContact)
 });

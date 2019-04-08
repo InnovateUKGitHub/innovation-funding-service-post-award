@@ -240,6 +240,6 @@ export const AllClaimsDashboardRoute = definition.route({
     Actions.loadPartnersForProject(params.projectId),
     Actions.loadClaimsForProject(params.projectId),
   ],
-  accessControl: (auth, { projectId }) => auth.for(projectId).hasAnyRoles(ProjectRole.MonitoringOfficer, ProjectRole.ProjectManager),
+  accessControl: (auth, { projectId }) => auth.forProject(projectId).hasAnyRoles(ProjectRole.MonitoringOfficer, ProjectRole.ProjectManager),
   container: AllClaimsDashboard
 });

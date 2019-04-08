@@ -1,5 +1,5 @@
 import { QueryBase } from "../common/queryBase";
-import { SalesforceRole } from "../../repositories";
+import { ISalesforcePartner, ISalesforceProjectContact, SalesforceProjectRole, SalesforceRole } from "../../repositories";
 import { Authorisation, IContext, ProjectRole } from "../../../types";
 
 export interface IRoleInfo {
@@ -44,13 +44,21 @@ export class GetAllProjectRolesForUser extends QueryBase<Authorisation> {
       partners.forEach(partner => {
         roleInfo.partnerRoles[partner.Id] = roleInfo.partnerRoles[partner.Id] | ProjectRole.Unknown;
         // if this is a partner level contact then add it at the partner level too
-        if (contact.Acc_AccountId__c && partner.Acc_AccountId__r.Id === contact.Acc_AccountId__c && newRole === ProjectRole.FinancialContact) {
-          roleInfo.partnerRoles[partner.Id] = roleInfo.partnerRoles[partner.Id] | newRole;
-        }
+        if (this.isPartnerContact(contact, partner) && this.isPartnerLevelRole(newRole, partner)) {
+            roleInfo.partnerRoles[partner.Id] = roleInfo.partnerRoles[partner.Id] | newRole;
+          }
       });
 
       return allRoles;
     }, {});
+  }
+
+  private isPartnerContact(contact: ISalesforceProjectContact, partner: ISalesforcePartner): boolean {
+    return !!contact.Acc_AccountId__c && partner.Acc_AccountId__r.Id === contact.Acc_AccountId__c;
+  }
+
+  private isPartnerLevelRole(role: ProjectRole, partner: ISalesforcePartner): boolean {
+    return role === ProjectRole.FinancialContact || (role === ProjectRole.ProjectManager && partner.Acc_ProjectRole__c === SalesforceProjectRole.ProjectLead);
   }
 
   // TODO remove before live

@@ -6,5 +6,5 @@ export interface ISessionUser {
 
 export interface IClientUser {
   email: string;
-  roleInfo: {[key: string]: IRoleInfo};
+  roleInfo: {[projectId: string]: IRoleInfo};
 }

@@ -12,7 +12,7 @@ export class UploadProjectDocumentCommand extends CommandBase<string> {
   }
 
   protected async accessControl(auth: Authorisation, context: IContext) {
-    return context.config.features.projectDocuments && auth.for(this.projectId).hasRole(ProjectRole.MonitoringOfficer);
+    return context.config.features.projectDocuments && auth.forProject(this.projectId).hasRole(ProjectRole.MonitoringOfficer);
   }
 
   protected async Run(context: IContext) {

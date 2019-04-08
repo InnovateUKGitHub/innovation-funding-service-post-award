@@ -15,7 +15,7 @@ export class SaveLineItemsCommand extends CommandBase<boolean> {
   }
 
   protected async accessControl(auth: Authorisation) {
-    return auth.for(this.projectId, this.partnerId).hasRole(ProjectRole.FinancialContact);
+    return auth.forPartner(this.projectId, this.partnerId).hasRole(ProjectRole.FinancialContact);
   }
 
   protected async Run(context: IContext) {

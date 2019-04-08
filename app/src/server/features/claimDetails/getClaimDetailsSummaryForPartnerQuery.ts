@@ -12,7 +12,8 @@ export class GetClaimDetailsSummaryForPartnerQuery extends QueryBase<ClaimDetail
     }
 
   protected async accessControl(auth: Authorisation, context: IContext) {
-    return auth.for(this.projectId, this.partnerId).hasAnyRoles(ProjectRole.MonitoringOfficer, ProjectRole.ProjectManager, ProjectRole.FinancialContact);
+    return auth.forProject(this.projectId).hasAnyRoles(ProjectRole.MonitoringOfficer, ProjectRole.ProjectManager)
+    || auth.forPartner(this.projectId, this.partnerId).hasRole(ProjectRole.FinancialContact);
   }
 
   protected async Run(context: IContext) {

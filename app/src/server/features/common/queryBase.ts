@@ -3,7 +3,7 @@ import { Authorisation, IContext } from "../../../types";
 export abstract class QueryBase<T> {
   protected abstract Run(context: IContext): Promise<T>;
 
-  protected accessControl(auth: Authorisation, context: IContext) {
+  protected accessControl(auth: Authorisation, context: IContext): Promise<boolean> {
     return Promise.resolve(true);
   }
 

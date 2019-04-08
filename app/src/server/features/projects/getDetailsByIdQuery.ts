@@ -11,7 +11,7 @@ export class GetByIdQuery extends QueryBase<ProjectDto> {
   async Run(context: IContext) {
     const item = await context.repositories.projects.getById(this.projectId);
     const roles = await context.runQuery(new GetAllProjectRolesForUser());
-    const roleInfo = roles.for(this.projectId).getRoles();
+    const roleInfo = roles.forProject(this.projectId).getRoles();
     return context.runCommand(new MapToProjectDtoCommand(item, roleInfo));
   }
 }

@@ -16,7 +16,7 @@ export class SaveMonitoringReport extends CommandBase<boolean> {
   }
 
   protected async accessControl(auth: Authorisation, context: IContext) {
-    return context.config.features.monitoringReports && auth.for(this.monitoringReportDto.projectId).hasRole(ProjectRole.MonitoringOfficer);
+    return context.config.features.monitoringReports && auth.forProject(this.monitoringReportDto.projectId).hasRole(ProjectRole.MonitoringOfficer);
   }
 
   private async updateHeader(context: IContext) {
