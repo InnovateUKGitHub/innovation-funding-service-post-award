@@ -3,7 +3,7 @@ import { BadRequestError, CommandBase, ValidationError } from "../common";
 import { GetAllForecastsForPartnerQuery } from "./getAllForecastsForPartnerQuery";
 import { ISalesforceProfileDetails } from "../../repositories";
 import { Updatable } from "../../repositories/salesforceRepositoryBase";
-import { GetAllForecastsGOLCostsQuery, GetAllForPartnerQuery } from "../claims";
+import { GetAllForecastsGOLCostsQuery, GetAllForPartnerQuery, GetCostCategoriesQuery } from "../claims";
 import { GetAllClaimDetailsByPartner } from "../claimDetails";
 import { GetByIdQuery as GetPartnerById } from "../partners";
 import { GetByIdQuery as GetProjectById } from "../projects";
@@ -26,13 +26,17 @@ export class UpdateForecastDetailsCommand extends CommandBase<boolean> {
 
   protected async Run(context: IContext) {
 
+    const costCategories = await context.runQuery(new GetCostCategoriesQuery()).then(x => x.map<[string, boolean]>(y => [y.id, y.isCalculated])).then(x => new Map(x));
     const partner = await context.runQuery(new GetPartnerById(this.partnerId));
     const project = await context.runQuery(new GetProjectById(partner.projectId));
     const existing = await context.runQuery(new GetAllForecastsForPartnerQuery(this.partnerId));
 
+    const filteredForcasts = this.forecasts.filter(x => costCategories.get(x.costCategoryId) !== true);
+    const filteredExisting = existing.filter(x => costCategories.get(x.costCategoryId) !== true);
+
     await this.testValidation(context);
-    await this.testPastForecastPeriodsHaveNotBeenUpdated(context, project, partner, existing);
-    await this.updateProfileDetails(context, existing);
+    await this.testPastForecastPeriodsHaveNotBeenUpdated(context, project, partner, filteredForcasts, filteredExisting);
+    await this.updateProfileDetails(context, filteredForcasts, filteredExisting);
 
     if (this.submit) {
       await this.updateClaim(context);
@@ -53,10 +57,10 @@ export class UpdateForecastDetailsCommand extends CommandBase<boolean> {
     }
   }
 
-  private async testPastForecastPeriodsHaveNotBeenUpdated(context: IContext, project: ProjectDto, partner: PartnerDto, existing: ForecastDetailsDTO[]) {
+  private async testPastForecastPeriodsHaveNotBeenUpdated(context: IContext, project: ProjectDto, partner: PartnerDto, forcasts: ForecastDetailsDTO[], existing: ForecastDetailsDTO[]) {
     const passed = existing.filter(x => x.periodId <= project.periodId)
       .every(x => {
-        const forecast = this.forecasts.find(y => y.id === x.id);
+        const forecast = forcasts.find(y => y.id === x.id);
         return !!forecast && forecast.value === x.value;
       });
 
@@ -70,8 +74,8 @@ export class UpdateForecastDetailsCommand extends CommandBase<boolean> {
     return !existingItem || item.value !== existingItem.value;
   }
 
-  private async updateProfileDetails(context: IContext, existing: ForecastDetailsDTO[]) {
-    const updates = this.forecasts.filter(x => this.hasChanged(x, existing)).map<Updatable<ISalesforceProfileDetails>>(x => ({
+  private async updateProfileDetails(context: IContext, forcasts: ForecastDetailsDTO[], existing: ForecastDetailsDTO[]) {
+    const updates = forcasts.filter(x => this.hasChanged(x, existing)).map<Updatable<ISalesforceProfileDetails>>(x => ({
       Id: x.id,
       Acc_LatestForecastCost__c: x.value
     }));
