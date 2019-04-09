@@ -15,6 +15,7 @@ import {
 } from "./common";
 import { PartnerDto, ProjectRole } from "../../../../types";
 import { ProjectDashboardRoute, ProjectForecastRoute } from "../../projects";
+import { Percentage, SimpleString } from "../../../components/renderers";
 
 interface Callbacks {
   onSubmit: (params: Params) => void;
@@ -46,6 +47,7 @@ class ViewForecastComponent extends ContainerBase<Params, PendingForecastData, C
         </ACC.Section>
         <ACC.Projects.Title pageTitle="View project" project={data.project} />
         {this.renderTabs(isMoPm, data)}
+        {this.renderOverheadsRate(data.partner.overheadRate)}
         <ACC.Section title={partnerName} qa="partner-name">
           <ACC.Renderers.Messages messages={this.props.messages} />
           {renderWarning(data)}
@@ -62,6 +64,12 @@ class ViewForecastComponent extends ContainerBase<Params, PendingForecastData, C
   // MO, PM & FC/PM should not see tabs
   private renderTabs(isMoPm: boolean, data: ForecastData) {
     return isMoPm ? null : <ACC.Projects.ProjectNavigation currentRoute={ViewForecastRoute.routeName} partners={[data.partner]} project={data.project} />;
+  }
+
+  private renderOverheadsRate(overheadRate: number | null) {
+    if (!overheadRate) return null;
+
+    return <SimpleString>Overhead costs: <Percentage value={overheadRate}/></SimpleString>;
   }
 
   private renderUpdateSection(partner: PartnerDto) {

@@ -2,7 +2,7 @@ import { ClaimDto } from "../../../src/types/dtos";
 import { ClaimStatus } from "../../../src/types/constants";
 
 export default (mod?: Partial<ClaimDto>): ClaimDto => {
-  const template = {
+  const template: ClaimDto = {
     id: "",
     partnerId: "",
     allowIarEdit: false,
@@ -17,7 +17,8 @@ export default (mod?: Partial<ClaimDto>): ClaimDto => {
     periodId: 1,
     periodStartDate: new Date(),
     status: ClaimStatus.DRAFT,
-    totalCost: 0
+    totalCost: 0,
+    overheadRate: 0,
   };
   return { ...template, ...mod };
 };

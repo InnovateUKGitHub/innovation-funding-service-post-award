@@ -54,7 +54,8 @@ describe("getAllForProjectQuery", () => {
       claimsWithParticipant: 20,
       claimsOverdue: 30,
       status: PartnerClaimStatus.ClaimDue,
-      statusName: "Claim Due"
+      statusName: "Claim Due",
+      overheadRate: null
     };
 
     expect(result).toEqual(expected);

@@ -6,9 +6,9 @@ import * as Actions from "../../redux/actions";
 import { ContainerBase, ReduxContainer } from "../containerBase";
 import { PartnerClaimStatus, PartnerDto, ProjectDto, ProjectRole, ProjectStatus } from "../../../types";
 import { DateTime } from "luxon";
-import { ProjectDetailsRoute } from ".";
 import * as colour from "../../styles/colours";
 import { HomeRoute } from "../home";
+import { AllClaimsDashboardRoute, ClaimsDashboardRoute } from "../claims";
 
 interface Data {
   data: Pending<{
@@ -152,10 +152,6 @@ class ProjectDashboardComponent extends ContainerBase<Props, Data, Callbacks> {
         messages.push(`Claims you need to review: ${project.claimsToReview}`);
       }
 
-      if (isMo || isPM) {
-        messages.push(`Unsubmitted or queried claims: ${project.claimsWithParticipant}`);
-      }
-
       switch (partner && partner.status) {
         case PartnerClaimStatus.ClaimDue:
         case PartnerClaimStatus.ClaimsOverdue:
@@ -170,6 +166,10 @@ class ProjectDashboardComponent extends ContainerBase<Props, Data, Callbacks> {
         case PartnerClaimStatus.IARRequired:
           messages.push(`You need to submit your IAR.`);
           break;
+      }
+
+      if (isMo || isPM) {
+        messages.push(`Unsubmitted or queried claims: ${project.claimsWithParticipant}`);
       }
     }
 
@@ -210,6 +210,14 @@ class ProjectDashboardComponent extends ContainerBase<Props, Data, Callbacks> {
     return null;
   }
 
+  private renderLink(project: ProjectDto, partner: PartnerDto | null) {
+    const text = `${project.projectNumber}: ${project.title}`;
+    if (project.roles === ProjectRole.FinancialContact && partner) {
+      return <ACC.Link route={ClaimsDashboardRoute.getLink({ projectId: project.id, partnerId: partner.id })}>{text}</ACC.Link>;
+    }
+    return <ACC.Link route={AllClaimsDashboardRoute.getLink({ projectId: project.id })}>{text}</ACC.Link>;
+  }
+
   private renderProject(project: ProjectDto, partner: PartnerDto | null, section: Section, index: number) {
     const iconStatus = section === "open" ? this.getIconStatus(project, partner) : "none";
     const messages: React.ReactNode[] = this.getMessages(project, partner, section);
@@ -233,7 +241,7 @@ class ProjectDashboardComponent extends ContainerBase<Props, Data, Callbacks> {
           {iconStatus === "edit" ? <div style={iconStyle}><img src="/assets/images/icon-edit.png" /></div> : null}
           <div style={itemStyle}>
             <h2 className="govuk-heading-s govuk-!-margin-bottom-2">
-              <ACC.Link route={ProjectDetailsRoute.getLink({ id: project.id })}>{project.projectNumber}: {project.title}</ACC.Link>
+              {this.renderLink(project, partner)}
             </h2>
             {messages.map((content, i) => <p key={`message${i}`} className="govuk-body govuk-!-margin-bottom-0">{content}</p>)}
           </div>

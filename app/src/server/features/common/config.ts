@@ -18,6 +18,8 @@ export interface IConfig {
         shibboleth: Readonly<string>;
     };
 
+    features: IFeatureFlags;
+
     logLevel: Readonly<LogLevel>;
     prettyLogs: Readonly<boolean>;
 
@@ -47,6 +49,8 @@ export interface IConfig {
     };
 
     cookieKey: Readonly<string>;
+
+    standardOverheadRate: Readonly<number>;
 }
 
 const build = process.env.BUILD || `${Date.now()}`;
@@ -61,6 +65,11 @@ const timeouts = {
 const certificates = {
     salesforce: process.env.SALESFORCE_PRIVATE_KEY_FILE || "/etc/pki/AccPrivateKey.key",
     shibboleth: process.env.SHIBBOLETH_PRIVATE_KEY_FILE || "/etc/pki/AccPrivateKey.key",
+};
+
+const features: IFeatureFlags = {
+    monitoringReports: process.env.FEATURE_MONITORING_REPORTS === "true",
+    projectDocuments: process.env.FEATURE_PROJECT_DOCUMENTS === "true"
 };
 
 const logLevel = parseLogLevel(process.env.LOG_LEVEL! || process.env.LOGLEVEL!);
@@ -90,15 +99,19 @@ const urls = {
 
 const cookieKey = process.env.COOKIE_KEY!;
 
+const standardOverheadRate = parseFloat(process.env.STANDARD_OVERHEAD_RATE!) || 20;
+
 export const Configuration: IConfig = {
     build,
     cookieKey,
     timeouts,
     certificates,
+    features,
     logLevel,
     prettyLogs,
     salesforce,
     serverUrl,
+    standardOverheadRate,
     sso,
     urls,
 };

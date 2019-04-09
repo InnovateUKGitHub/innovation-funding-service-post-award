@@ -95,8 +95,8 @@ class ClaimDetailsTestRepository extends TestRepository<Repositories.ISalesforce
         return super.getWhere(x => x.Acc_ProjectParticipant__c === partnerId);
     }
 
-    get({ partnerId, periodId, costCategoryId }: ClaimDetailKey): Promise<Repositories.ISalesforceClaimDetails> {
-        return super.getOne(x => x.Acc_ProjectParticipant__c === partnerId && x.Acc_ProjectPeriodNumber__c === periodId && x.Acc_CostCategory__c === costCategoryId);
+    get({ partnerId, periodId, costCategoryId }: ClaimDetailKey): Promise<Repositories.ISalesforceClaimDetails|null> {
+        return super.filterOne(x => x.Acc_ProjectParticipant__c === partnerId && x.Acc_ProjectPeriodNumber__c === periodId && x.Acc_CostCategory__c === costCategoryId);
     }
 }
 
@@ -317,9 +317,9 @@ class ProfileTotalCostCategoryTestRepository extends TestRepository<Repositories
     }
 }
 
-class QuestionsTestRepository extends TestRepository<Repositories.ISalesforceQuestions> implements Repositories.IQuestionsRepository {
+class QuestionsTestRepository extends TestRepository<Repositories.ISalesforceMonitoringReportQuestions> implements Repositories.IMonitoringReportQuestionsRepository {
   getAll() {
-    return super.getWhere(x => x.Acc_ActiveFlag__c === "Y");
+    return super.getAll();
   }
 }
 

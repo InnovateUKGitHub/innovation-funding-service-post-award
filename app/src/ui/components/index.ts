@@ -16,6 +16,7 @@ export * from "./linksList";
 export * from "./loading";
 export * from "./navigationArrows";
 export * from "./partnersAndFinanceContacts";
+export * from "./periodTitle";
 export * from "./projectMember";
 export * from "./projectOverview";
 export * from "./styledButton";

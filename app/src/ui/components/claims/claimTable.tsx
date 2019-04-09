@@ -12,6 +12,7 @@ interface Props {
     claimDetails: ClaimDetailsSummaryDto[];
     validation?: ClaimDetailsValidator[];
     getLink: (costCategoryId: string) => ILinkInfo;
+    standardOverheadRate: number;
 }
 
 export const ClaimTable: React.FunctionComponent<Props> = (props) => {
@@ -53,7 +54,7 @@ export const ClaimTable: React.FunctionComponent<Props> = (props) => {
             header="Category"
             qa="category"
             cellClassName={x => x.isTotal ? "govuk-!-font-weight-bold" : null}
-            value={(x,i) => renderCostCategory(x.category, props.getLink, props.validation && props.validation[i.row])}
+            value={(x,i) => renderCostCategory(props.claim, x.category, x.isTotal, props.standardOverheadRate, props.getLink, props.validation && props.validation[i.row])}
         />
         <CostCategoriesTable.Currency header="Total eligible costs" qa="offerCosts" value={x => x.cost.offerCosts} />
         <CostCategoriesTable.Currency header="Eligible costs claimed to date" qa="claimedToDate" value={x => x.cost.costsClaimedToDate} />
@@ -63,9 +64,9 @@ export const ClaimTable: React.FunctionComponent<Props> = (props) => {
     );
 };
 
-const renderCostCategory = (category: CostCategoryDto, getLink: (costCategoryId: string) => ILinkInfo, validation?: ClaimDetailsValidator) => {
-    if(category.isCalculated) {
-        return category.name;
+const renderCostCategory = (claim: ClaimDto, category: CostCategoryDto, isTotal: boolean, standardOverheadRate: number, getLink: (costCategoryId: string) => ILinkInfo, validation?: ClaimDetailsValidator) => {
+    if(isTotal || (category.isCalculated && claim.overheadRate <= standardOverheadRate)) {
+         return category.name;
     }
     const validationError = validation && validation.errors[0];
     const id = validationError && validationError.key;

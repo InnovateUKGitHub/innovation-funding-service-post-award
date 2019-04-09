@@ -1,12 +1,12 @@
 import * as Validation from "./common";
 import { Results } from "../validation/results";
-import { MonitoringReportDto, QuestionDto } from "../../types/dtos/monitoringReportDto";
+import { MonitoringReportDto, MonitoringReportQuestionDto } from "../../types/dtos/monitoringReportDto";
 import { MonitoringReportStatus } from "../../types/constants/monitoringReportStatus";
 
-class QuestionValidator extends Results<QuestionDto> {
+class QuestionValidator extends Results<MonitoringReportQuestionDto> {
   constructor(
-    readonly question: QuestionDto,
-    readonly answer: QuestionDto,
+    readonly question: MonitoringReportQuestionDto,
+    readonly answer: MonitoringReportQuestionDto,
     readonly show: boolean,
     readonly submit: boolean,
   ) {
@@ -28,21 +28,19 @@ class QuestionValidator extends Results<QuestionDto> {
 
 export class MonitoringReportDtoValidator extends Results<MonitoringReportDto> {
   constructor(
-    readonly model: MonitoringReportDto,
-    readonly show: boolean,
-    readonly submit: boolean,
-    readonly questions: QuestionDto[],
-    readonly status: string,
+    model: MonitoringReportDto,
+    show: boolean,
+    public readonly submit: boolean,
+    private readonly questions: MonitoringReportQuestionDto[],
   ) {
     super(model, show);
   }
 
-  public readonly report = Validation.isTrue(this, this.status === MonitoringReportStatus.DRAFT, "Report has already been submitted");
   public readonly responses = Validation.optionalChild(this, this.questions,
     q => (
       new QuestionValidator(
         q,
-        this.model.questions.find(x => x.displayOrder === q.displayOrder) || {} as QuestionDto,
+        this.model.questions.find(x => x.displayOrder === q.displayOrder) || {} as MonitoringReportQuestionDto,
         this.showValidationErrors,
         this.submit
       )), "There are invalid responses.");

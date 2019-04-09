@@ -30,6 +30,10 @@ export class TestClock implements IClock {
         return this._inner.parse(value, format);
     }
 
+    dateTime(value: Date|string, format?: string) {
+      return this._inner.dateTime(value, format);
+    }
+
     asLuxon(): DateTime {
         return DateTime.fromJSDate(this.today());
     }
