@@ -26,7 +26,7 @@ interface Data {
   editor: Pending<IEditorStore<ClaimDto, ClaimDtoValidator>>;
   forecastData: Pending<ForecastData>;
   isClient: boolean;
-  standardOverheadRate:number;
+  standardOverheadRate: number;
 }
 
 interface Callbacks {
