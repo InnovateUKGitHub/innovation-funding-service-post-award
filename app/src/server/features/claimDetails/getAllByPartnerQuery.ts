@@ -1,5 +1,5 @@
-import { QueryBase } from "@server/features/common";
-import { IContext } from "@framework/IContext";
+import { QueryBase, SALESFORCE_DATE_FORMAT } from "../common";
+import { IContext } from "../../../types";
 import { mapClaimDetails } from "./mapClaimDetails";
 
 export class GetAllClaimDetailsByPartner extends QueryBase<ClaimDetailsDto[]> {
