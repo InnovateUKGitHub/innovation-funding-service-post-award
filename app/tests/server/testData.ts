@@ -1,8 +1,8 @@
 // tslint:disable:no-duplicate-string
 import * as Repositories from "../../src/server/repositories";
+import { ISalesforceMonitoringReportQuestions, SalesforceRole } from "../../src/server/repositories";
 import { ITestRepositories } from "./testRepositories";
 import { ClaimStatus } from "../../src/types";
-import { ISalesforceQuestions, SalesforceRole } from "../../src/server/repositories";
 import { MonitoringReportStatus } from "../../src/types/constants/monitoringReportStatus";
 
 export class TestData {
@@ -138,17 +138,17 @@ export class TestData {
   }
 
   // TODO remove 'createQuestion' and use this instead
-  public createQuestion(answersPerQuestion: number, displayOrder: number): Repositories.ISalesforceQuestions[] {
+  public createQuestion(answersPerQuestion: number, displayOrder: number, isActive: boolean = true): Repositories.ISalesforceMonitoringReportQuestions[] {
     const newQuestionArray = [];
     const seed = this.repositories.monitoringReportQuestions.Items.length + 1;
     for (let i = 0; i < answersPerQuestion; i++) {
-      const newQuestion: Repositories.ISalesforceQuestions = {
+      const newQuestion: Repositories.ISalesforceMonitoringReportQuestions = {
         Id: `QuestionId: ${seed + i}`,
         Acc_QuestionName__c: `QuestionName: ${displayOrder}`,
         Acc_DisplayOrder__c: displayOrder,
         Acc_Score__c: i + 1,
         Acc_QuestionText__c: `QuestionText: ${seed} ${i}`,
-        Acc_ActiveFlag__c: "Y",
+        Acc_ActiveFlag__c: isActive ? "Y" : "N",
       };
       this.repositories.monitoringReportQuestions.Items.push(newQuestion);
       newQuestionArray.push(newQuestion);
@@ -156,11 +156,11 @@ export class TestData {
     return newQuestionArray;
   }
 
-  public createMonitoringReportHeader(id: string, projectId: string, period: number): Repositories.ISalesforceMonitoringReportHeader {
+  public createMonitoringReportHeader(id: string, projectId: string, period: number, status: MonitoringReportStatus = MonitoringReportStatus.DRAFT): Repositories.ISalesforceMonitoringReportHeader {
 
     const newHeader = {
       Id: id,
-      Acc_MonitoringReportStatus__c: MonitoringReportStatus.DRAFT,
+      Acc_MonitoringReportStatus__c: status,
       Acc_ProjectId__c: projectId,
       Acc_ProjectPeriodNumber__c: period,
       Acc_ProjectStartDate__c: "2018-02-04",
@@ -171,7 +171,7 @@ export class TestData {
     return newHeader;
   }
 
-  public createMonitoringReportResponse(question: ISalesforceQuestions) {
+  public createMonitoringReportResponse(question: ISalesforceMonitoringReportQuestions) {
     const response = {
       Id: `Response: ${this.repositories.monitoringReportResponse.Items.length}`,
       Acc_MonitoringReportHeader__c: "a",
@@ -204,6 +204,7 @@ export class TestData {
       Acc_ProjectPeriodNumber__c: periodId,
       Acc_ProjectParticipant__r: {
         Id: partner.Id,
+        Acc_OverheadRate__c: 0,
         Acc_ProjectRole__c: partner.Acc_ProjectRole__c,
         Acc_AccountId__r: partner.Acc_AccountId__r
       },

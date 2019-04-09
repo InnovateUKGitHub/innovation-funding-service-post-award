@@ -3,8 +3,8 @@ import contextProvider from "../features/common/contextProvider";
 import { GetMonitoringReport } from "../features/monitoringReports/getMonitoringReport";
 import { SaveMonitoringReport } from "../features/monitoringReports/saveMonitoringReport";
 import { processDto } from "../../shared/processResponse";
-import { MonitoringReportDto, MonitoringReportSummaryDto } from "../../types/dtos/monitoringReportDto";
 import { GetMonitoringReportsForProject } from "../features/monitoringReports/getMonitoringReportsForProject";
+import { MonitoringReportDto, MonitoringReportSummaryDto } from "../../types";
 
 export interface IMonitoringReportsApi {
   get: (params: ApiParams<{ projectId: string, periodId: number }>) => Promise<MonitoringReportDto>;
@@ -16,7 +16,7 @@ class Controller extends ControllerBaseWithSummary<MonitoringReportSummaryDto, M
   constructor() {
     super("monitoring-reports");
 
-    this.getItem("/:projectId/:periodId", (p) => ({ projectId: p.partnerId, periodId: parseInt(p.periodId, 10)}), (p) => this.get(p));
+    this.getItem("/:projectId/:periodId", (p) => ({ projectId: p.projectId, periodId: parseInt(p.periodId, 10)}), (p) => this.get(p));
     this.putItem("/", (p, q, b) => ({ monitoringReportDto: processDto(b), submit: q.submit === "true"}), (p) => this.saveMonitoringReport(p));
     this.getItems("/:projectId", (p) => ({ projectId: p.projectId }), (p) => this.getAllForProject(p));
   }

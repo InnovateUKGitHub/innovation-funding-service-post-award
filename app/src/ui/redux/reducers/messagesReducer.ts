@@ -12,6 +12,10 @@ export const messagesReducer = (state: Message[] = [], action: RootActions) => {
     return state.filter(x => x.ttl-- > 0);
   }
 
+  if (action.type === "REMOVE_MESSAGES") {
+    return [];
+  }
+
   if(action.type === "MESSAGE_SUCCESS") {
     const message = { message: action.payload, ttl: 1 };
     return state.concat(message);

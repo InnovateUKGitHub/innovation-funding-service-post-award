@@ -1,36 +1,32 @@
+import { GetMonitoringReportActiveQuestions } from "../features/monitoringReports/getMonitoringReportActiveQuestions";
 import { FormHandlerBase, IFormBody, IFormButton } from "./formHandlerBase";
-import {
-  AllClaimsDashboardRoute,
-  PrepareMonitoringReportParams,
-  PrepareMonitoringReportRoute
-} from "../../ui/containers";
 import { ILinkInfo } from "../../types/ILinkInfo";
 import { IContext } from "../../types/IContext";
-import { MonitoringReportDto, QuestionDto } from "../../types/dtos/monitoringReportDto";
-import { GetMonitoringReportQuestions } from "../features/monitoringReports/getMonitoringReportQuestions";
+import { MonitoringReportDto } from "../../types/dtos/monitoringReportDto";
+import {
+  MonitoringReportDashboardRoute,
+  MonitoringReportPrepareParams,
+  MonitoringReportPrepareRoute
+} from "../../ui/containers";
 import { SALESFORCE_DATE_FORMAT } from "../features/common";
 import { MonitoringReportDtoValidator } from "../../ui/validators/MonitoringReportDtoValidator";
 import { SaveMonitoringReport } from "../features/monitoringReports/saveMonitoringReport";
+import { getMonitoringReportEditor } from "../../ui/redux/selectors";
+import { MonitoringReportStatus } from "../../types/constants/monitoringReportStatus";
 
-interface Dto {
-  monitoringReport: MonitoringReportDto;
-  questions: QuestionDto[];
-  submit: boolean;
-}
-export class MonitoringReportFormHandler extends FormHandlerBase<PrepareMonitoringReportParams, Dto> {
+export class MonitoringReportFormHandler extends FormHandlerBase<MonitoringReportPrepareParams, MonitoringReportDto> {
 
   constructor() {
-    super(PrepareMonitoringReportRoute, ["save_and_return", "save_and_submit"]);
+    super(MonitoringReportPrepareRoute, ["save-draft", "save-submitted"]);
   }
 
-  protected async getDto(context: IContext, params: PrepareMonitoringReportParams, button: IFormButton, body: IFormBody) {
+  protected async getDto(context: IContext, params: MonitoringReportPrepareParams, button: IFormButton, body: IFormBody): Promise<MonitoringReportDto> {
     const header = await context.repositories.monitoringReportHeader.get(params.projectId, params.periodId);
-    const questions = await context.runQuery(new GetMonitoringReportQuestions());
+    const questions = await context.runQuery(new GetMonitoringReportActiveQuestions());
 
-    const monitoringReport = {
+    return {
       headerId: header.Id,
-      title: body.title,
-      status: header.Acc_MonitoringReportStatus__c,
+      status: header.Acc_MonitoringReportStatus__c === "Draft" ? MonitoringReportStatus.DRAFT : MonitoringReportStatus.SUBMITTED,
       projectId: header.Acc_ProjectId__c,
       startDate: context.clock.parse(header.Acc_ProjectStartDate__c, SALESFORCE_DATE_FORMAT)!,
       endDate: context.clock.parse(header.Acc_ProjectEndDate__c, SALESFORCE_DATE_FORMAT)!,
@@ -44,29 +40,20 @@ export class MonitoringReportFormHandler extends FormHandlerBase<PrepareMonitori
         options: q.options
       }))
     };
-
-    return {
-      monitoringReport,
-      questions,
-      submit: button.name === "save_and_submit"
-    };
   }
 
-  protected createValidationResult(params: PrepareMonitoringReportParams, dto: Dto) {
-    return new MonitoringReportDtoValidator(dto.monitoringReport, false, dto.submit, dto.questions, dto.monitoringReport.status);
+  protected createValidationResult(params: MonitoringReportPrepareParams, dto: MonitoringReportDto) {
+    return new MonitoringReportDtoValidator(dto, false, false, dto.questions);
   }
 
-  protected getStoreInfo(params: PrepareMonitoringReportParams): { key: string; store: string; } {
-    // TODO use selector once available
-    return {
-      store: "monitoringReport",
-      key: `${params.projectId}_${params.periodId}`
-    };
+  protected getStoreInfo(params: MonitoringReportPrepareParams): { key: string; store: string; } {
+    return getMonitoringReportEditor(params.projectId, params.periodId);
   }
 
-  protected async run(context: IContext, params: PrepareMonitoringReportParams, button: IFormButton, dto: Dto): Promise<ILinkInfo> {
-    const command = new SaveMonitoringReport( dto.monitoringReport, dto.submit);
+  protected async run(context: IContext, params: MonitoringReportPrepareParams, button: IFormButton, dto: MonitoringReportDto): Promise<ILinkInfo> {
+    const command = new SaveMonitoringReport(dto, button.name === "save-submitted");
     await context.runCommand(command);
-    return AllClaimsDashboardRoute.getLink({ projectId: params.projectId});
+
+    return MonitoringReportDashboardRoute.getLink({ projectId: params.projectId });
   }
 }

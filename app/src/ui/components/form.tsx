@@ -186,13 +186,14 @@ export interface SelectOption {
 
 interface RadioFieldProps<T extends {}> extends ExternalFieldProps<T, SelectOption> {
     options: SelectOption[];
+    inline: boolean;
 }
 
 const RadioOptionsField = <T extends {}>(props: RadioFieldProps<T>) => {
   const TypedFieldComponent = FieldComponent as { new(): FieldComponent<T, SelectOption> };
   return (
     <TypedFieldComponent
-      field={(data) => <RadioList options={props.options} name={props.name} value={props.value(data)} onChange={(val) => handleChange(props, val)} />}
+      field={(data) => <RadioList options={props.options} name={props.name} value={props.value(data)} inline={props.inline} onChange={(val) => handleChange(props, val)} />}
       {...props}
     />
   );

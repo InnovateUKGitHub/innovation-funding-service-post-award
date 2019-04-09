@@ -1,17 +1,17 @@
 import { MonitoringReportStatus } from "../constants/monitoringReportStatus";
 
-export interface OptionDto {
+export interface MonitoringReportOptionDto {
   id: string;
   questionText: string;
   questionScore: number;
 }
 
-export interface QuestionDto {
-  responseId?: string;
-  optionId?: string;
+export interface MonitoringReportQuestionDto {
+  responseId: string|null;
+  optionId: string|null;
   title: string;
-  comments?: string;
-  options: OptionDto[];
+  comments: string|null;
+  options: MonitoringReportOptionDto[];
   displayOrder: number;
 }
 
@@ -22,7 +22,7 @@ export interface MonitoringReportDto {
   endDate: Date;
   projectId: string;
   periodId: number;
-  questions: QuestionDto[];
+  questions: MonitoringReportQuestionDto[];
 }
 
 export interface MonitoringReportSummaryDto {
@@ -31,4 +31,5 @@ export interface MonitoringReportSummaryDto {
   startDate: Date;
   endDate: Date;
   periodId: number;
+  lastUpdated: Date|null;
 }

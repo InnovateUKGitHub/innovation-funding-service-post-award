@@ -5,12 +5,15 @@ import { Link } from "../links";
 import {
   AllClaimsDashboardRoute,
   ClaimsDashboardRoute,
+  MonitoringReportDashboardRoute,
   ProjectChangeRequestsRoute,
   ProjectDetailsRoute,
   ProjectDocumentsRoute,
   ProjectForecastRoute,
   ViewForecastRoute,
 } from "../../containers";
+import { connect } from "react-redux";
+import { RootState } from "../../redux";
 
 interface Props {
   project: ProjectDto;
@@ -18,50 +21,67 @@ interface Props {
   partners: PartnerDto[];
 }
 
-export const ProjectNavigation: React.SFC<Props> = ({ project, currentRoute, partners }) => {
+interface Data {
+  features: IFeatureFlags;
+}
 
-  const projectId = project.id;
-  const partnerId = partners.filter(x => x.roles & ProjectRole.FinancialContact).map(x => x.id)[0];
+class ProjectNavigationComponent extends React.Component<Props & Data> {
+  render() {
+    const { currentRoute, features, project, partners } = this.props;
 
-  // potential links
-  const claimsLink = ClaimsDashboardRoute.getLink({ projectId, partnerId });
-  const allClaimsLink = AllClaimsDashboardRoute.getLink({ projectId });
-  const viewForecastLink = ViewForecastRoute.getLink({ projectId, partnerId });
-  const projectForecastsLink = ProjectForecastRoute.getLink({ projectId });
-  const projectChangeRequestLink = ProjectChangeRequestsRoute.getLink({ projectId });
-  const projectDocumentsLink = ProjectDocumentsRoute.getLink({ projectId });
+    const projectId = project.id;
+    const partnerId = partners.filter(x => x.roles & ProjectRole.FinancialContact).map(x => x.id)[0];
 
-  // roles
-  const isFC = !!(project.roles & ProjectRole.FinancialContact);
-  const isMOorPM = !!(project.roles & (ProjectRole.MonitoringOfficer | ProjectRole.ProjectManager));
-  const isMO = !!(project.roles & ProjectRole.MonitoringOfficer);
+    // potential links
+    const claimsLink = ClaimsDashboardRoute.getLink({ projectId, partnerId });
+    const allClaimsLink = AllClaimsDashboardRoute.getLink({ projectId });
+    const viewForecastLink = ViewForecastRoute.getLink({ projectId, partnerId });
+    const projectForecastsLink = ProjectForecastRoute.getLink({ projectId });
+    const projectChangeRequestLink = ProjectChangeRequestsRoute.getLink({ projectId });
+    const projectDocumentsLink = ProjectDocumentsRoute.getLink({ projectId });
+    const monitoringReportsLink = MonitoringReportDashboardRoute.getLink({ projectId });
 
-  // add tabs conditionally
-  const navigationTabs: TabItem[] = [];
+    // roles
+    const isFC = !!(project.roles & ProjectRole.FinancialContact);
+    const isMOorPM = !!(project.roles & (ProjectRole.MonitoringOfficer | ProjectRole.ProjectManager));
+    const isMO = !!(project.roles & ProjectRole.MonitoringOfficer);
 
-  if (isMOorPM) {
-    navigationTabs.push({ text: "Claims", route: allClaimsLink, selected: allClaimsLink.routeName === currentRoute, qa: "allClaimsTab" });
-    navigationTabs.push({ text: "Forecasts", route: projectForecastsLink, selected: projectForecastsLink.routeName === currentRoute, qa: "allForecastsTab" });
+    // add tabs conditionally
+    const navigationTabs: TabItem[] = [];
+
+    if (isMOorPM) {
+      navigationTabs.push({ text: "Claims", route: allClaimsLink, selected: allClaimsLink.routeName === currentRoute, qa: "allClaimsTab" });
+    }
+    else if (isFC) {
+      navigationTabs.push({ text: "Claims", route: claimsLink, selected: claimsLink.routeName === currentRoute, qa: "claimsTab" });
+    }
+
+    if (features.monitoringReports && isMO) {
+      navigationTabs.push({ text: "Monitoring reports", route: monitoringReportsLink, selected: monitoringReportsLink.routeName === currentRoute, qa: "monitoringReportsTab" });
+    }
+
+    if (isMOorPM) {
+      navigationTabs.push({ text: "Forecasts", route: projectForecastsLink, selected: projectForecastsLink.routeName === currentRoute, qa: "allForecastsTab" });
+    }
+    else if (isFC) {
+      navigationTabs.push({ text: "Forecast", route: viewForecastLink, selected: viewForecastLink.routeName === currentRoute, qa: "forecastTab" });
+    }
+
+    navigationTabs.push({ text: "Project change requests", route: projectChangeRequestLink, selected: projectChangeRequestLink.routeName === currentRoute, qa: "changeRequestsTab" });
+
+    if (features.projectDocuments && isMO) {
+      navigationTabs.push({ text: "Documents", route: projectDocumentsLink, selected: projectDocumentsLink.routeName === currentRoute, qa: "documentsTab" });
+    }
+
+    return (
+      <React.Fragment>
+        <Section qa="projectDetailsLink">
+          <Link className="govuk-!-font-size-19" route={ProjectDetailsRoute.getLink({ id: projectId })}>Contact details and project summary</Link>
+        </Section>
+        <Tabs tabList={navigationTabs} qa="project-navigation" />
+      </React.Fragment>
+    );
   }
+}
 
-  else if (isFC) {
-    navigationTabs.push({ text: "Claims", route: claimsLink, selected: claimsLink.routeName === currentRoute, qa: "claimsTab" });
-    navigationTabs.push({ text: "Forecast", route: viewForecastLink, selected: viewForecastLink.routeName === currentRoute, qa: "forecastTab" });
-  }
-
-  navigationTabs.push({ text: "Project change requests", route: projectChangeRequestLink, selected: projectChangeRequestLink.routeName === currentRoute, qa: "changeRequestsTab" });
-
-  if (isMO) {
-    navigationTabs.push({ text: "Documents", route: projectDocumentsLink, selected: projectDocumentsLink.routeName === currentRoute, qa: "documentsTab" });
-  }
-
-  return (
-    <React.Fragment>
-      <Section qa="projectDetailsLink">
-        <Link className="govuk-!-font-size-19" route={ProjectDetailsRoute.getLink({ id: projectId })}>Contact details and project summary</Link>
-      </Section>
-      <Tabs tabList={navigationTabs} qa="project-navigation" />
-    </React.Fragment>
-  );
-
-};
+export const ProjectNavigation = connect<Data, {}, Props, RootState>((store) => ({ features: store.config.features }), () => ({}))(ProjectNavigationComponent);

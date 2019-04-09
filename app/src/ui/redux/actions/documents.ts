@@ -7,6 +7,7 @@ import {
   EditorAction,
   handleEditorError,
   handleEditorSuccess,
+  messageSuccess,
   SyncThunk,
   updateEditorAction,
   UpdateEditorAction
@@ -57,7 +58,7 @@ export function updateProjectDocumentEditor(projectId: string, dto: DocumentUplo
   };
 }
 
-export function uploadProjectDocument(projectId: string, dto: DocumentUploadDto, onComplete: () => void): AsyncThunk<void, DataLoadAction | EditorAction> {
+export function uploadProjectDocument(projectId: string, dto: DocumentUploadDto, onComplete: () => void, message: string): AsyncThunk<void, DataLoadAction | EditorAction | messageSuccess> {
   return (dispatch, getState) => {
     const state = getState();
     const selector = getProjectDocumentEditor(projectId);
@@ -73,6 +74,7 @@ export function uploadProjectDocument(projectId: string, dto: DocumentUploadDto,
     return ApiClient.documents.uploadProjectDocument({ projectId, file: dto.file!, user: state.user })
       .then(() => {
         dispatch(handleEditorSuccess(selector.key, selector.store));
+        dispatch(messageSuccess(message));
         onComplete();
       })
       .catch(e => {

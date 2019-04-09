@@ -91,9 +91,9 @@ describe("GetMonitoringReport", () => {
     const query = new GetMonitoringReport("b", 1);
     const result = await context.runQuery(query);
 
-    expect(result.questions[0].responseId).toBeUndefined();
-    expect(result.questions[0].optionId).toBeUndefined();
-    expect(result.questions[0].comments).toBeUndefined();
+    expect(result.questions[0].responseId).toBeNull();
+    expect(result.questions[0].optionId).toBeNull();
+    expect(result.questions[0].comments).toBeNull();
 
     expect(result.questions[1].responseId).toBe(response.Id);
     expect(result.questions[1].optionId).toBe(response.Acc_Question__c);
@@ -139,5 +139,50 @@ describe("GetMonitoringReport", () => {
     expect(options[2].questionScore).toBe(3);
     expect(options[3].questionScore).toBe(2);
     expect(options[4].questionScore).toBe(1);
+  });
+
+  it("returns only active questions when the report is in draft", async () => {
+    const context = new TestContext();
+    const testData = context.testData;
+
+    const question1 = testData.createQuestion(3, 1);
+    const question2 = testData.createQuestion(3, 2);
+    const question3 = testData.createQuestion(3, 3, false);
+
+    testData.createMonitoringReportResponse(question1[0]);
+    testData.createMonitoringReportResponse(question2[0]);
+    testData.createMonitoringReportResponse(question3[0]);
+
+    testData.createMonitoringReportHeader("a", "b", 1);
+
+    const query = new GetMonitoringReport("b", 1);
+
+    const result = await context.runQuery(query);
+    expect(result.questions).toHaveLength(2);
+    expect(result.questions[0].optionId).toBe("QuestionId: 1");
+    expect(result.questions[1].optionId).toBe("QuestionId: 4");
+  });
+
+  it("returns only answered questions when the report is submitted", async () => {
+    const context = new TestContext();
+    const testData = context.testData;
+
+    const question1 = testData.createQuestion(3, 1);
+    const question2 = testData.createQuestion(3, 2);
+    const question3 = testData.createQuestion(3, 3, false);
+
+    testData.createMonitoringReportResponse(question1[0]);
+    testData.createMonitoringReportResponse(question2[0]);
+    testData.createMonitoringReportResponse(question3[0]);
+
+    testData.createMonitoringReportHeader("a", "b", 1, MonitoringReportStatus.SUBMITTED);
+
+    const query = new GetMonitoringReport("b", 1);
+
+    const result = await context.runQuery(query);
+    expect(result.questions).toHaveLength(3);
+    expect(result.questions[0].optionId).toBe("QuestionId: 1");
+    expect(result.questions[1].optionId).toBe("QuestionId: 4");
+    expect(result.questions[2].optionId).toBe("QuestionId: 7");
   });
 });

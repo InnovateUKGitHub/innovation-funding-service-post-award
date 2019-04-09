@@ -2,8 +2,7 @@ import { combineReducers } from "redux";
 import { ActionTransitionStart, actionTypes } from "redux-router5";
 import { DataLoadAction } from "../actions/common";
 import { LoadingStatus } from "../../../shared/pending";
-import { ClaimDto, IAppError, PartnerDto, ProjectDto, ProjectRole } from "../../../types";
-import { MonitoringReportDto } from "../../../types/dtos/monitoringReportDto";
+import { ClaimDto, IAppError, MonitoringReportDto, MonitoringReportSummaryDto, PartnerDto, ProjectDto, ProjectRole } from "../../../types";
 
 export interface IDataStore<T> {
   status: LoadingStatus;
@@ -43,6 +42,7 @@ const dataStoreReducer = <TData extends {}>(storeKey: string) =>
 export const dataReducer = combineReducers({
   claims: dataStoreReducer<ClaimDto[]>("claims"),
   claim: dataStoreReducer<ClaimDto>("claim"),
+  claimDetail: dataStoreReducer<ClaimDetailsDto>("claimDetail"),
   claimDetails: dataStoreReducer<ClaimDetailsDto[]>("claimDetails"),
   claimDetailsSummary: dataStoreReducer<ClaimDetailsSummaryDto[]>("claimDetailsSummary"),
   claimLineItems: dataStoreReducer<ClaimLineItemDto[]>("claimLineItems"),
@@ -53,8 +53,9 @@ export const dataReducer = combineReducers({
   forecastDetail: dataStoreReducer<ForecastDetailsDTO>("forecastDetail"),
   forecastGolCosts: dataStoreReducer<GOLCostDto[]>("forecastGolCosts"),
   monitoringReport: dataStoreReducer<MonitoringReportDto>("monitoringReport"),
-  partners: dataStoreReducer<PartnerDto[]>("partners"),
+  monitoringReports: dataStoreReducer<MonitoringReportSummaryDto[]>("monitoringReports"),
   partner: dataStoreReducer<PartnerDto>("partner"),
+  partners: dataStoreReducer<PartnerDto[]>("partners"),
   project: dataStoreReducer<ProjectDto>("project"),
   projects: dataStoreReducer<ProjectDto[]>("projects"),
   projectContacts: dataStoreReducer<ProjectContactDto[]>("projectContacts"),

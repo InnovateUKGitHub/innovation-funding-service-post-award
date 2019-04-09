@@ -1,5 +1,5 @@
 import "jest";
-import { messageSuccess } from "../../../src/ui/redux/actions";
+import { messageSuccess, removeMessages } from "../../../src/ui/redux/actions";
 
 describe("messageSuccess", () => {
   it("should create message with type success", () => {
@@ -7,6 +7,15 @@ describe("messageSuccess", () => {
     expect(result).toEqual({
       type: "MESSAGE_SUCCESS",
       payload: "test message"
+    });
+  });
+});
+
+describe("removeMessages", () => {
+  it("should remove messages", () => {
+    const result = removeMessages();
+    expect(result).toEqual({
+      type: "REMOVE_MESSAGES"
     });
   });
 });

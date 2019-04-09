@@ -432,4 +432,45 @@ describe("UpdateForecastDetailsCommand", () => {
     expect(error.results!.isValid).toBe(false);
     expect(error.results!.errors.map(x => x.errorMessage)).toEqual(["Your overall total cannot be higher than your total eligible costs."]);
   });
+
+  it("will ignore calculated cost categories", async () => {
+    const context = new TestContext();
+
+    const updateableCostCateogry = context.testData.createCostCategory();
+    const calculatedCostCateogry = context.testData.createCostCategory(x => x.Acc_CostCategoryName__c = "Overheads");
+
+    const projectStart = DateTime.local().set({ day: 1 });
+    const projectEnd = projectStart.plus({ months: 2 }).minus({ days: 1 });
+
+    const project = context.testData.createProject(x => {
+      x.Acc_StartDate__c = projectStart.toFormat("yyyy-MM-dd");
+      x.Acc_EndDate__c = projectEnd.toFormat("yyyy-MM-dd");
+      x.Acc_ClaimFrequency__c = ClaimFrequency[ClaimFrequency.Monthly];
+    });
+
+    const partner = context.testData.createPartner(project);
+
+    context.testData.createProfileTotalCostCategory(updateableCostCateogry, partner, 1500);
+    context.testData.createProfileTotalCostCategory(calculatedCostCateogry, partner, 1500);
+
+    const profileDetail1 = context.testData.createProfileDetail(updateableCostCateogry, partner, 2, x => x.Acc_LatestForecastCost__c = 1000);
+    const profileDetail2 = context.testData.createProfileDetail(calculatedCostCateogry, partner, 2, x => x.Acc_LatestForecastCost__c = 100);
+
+    const dtos = [profileDetail1, profileDetail2].map((profileDetail, i) => ({
+      id: profileDetail.Id,
+      costCategoryId: profileDetail.Acc_CostCategory__c,
+      periodId: profileDetail.Acc_ProjectPeriodNumber__c,
+      periodStart: projectStart.plus({ months: i }).toJSDate(),
+      periodEnd: projectStart.plus({ months: i + 1, days: -1 }).toJSDate(),
+      value: 500
+    }));
+
+    const command = new UpdateForecastDetailsCommand(partner.Acc_ProjectId__c, partner.Id, dtos, false);
+
+    await context.runCommand(command);
+
+    expect(profileDetail1.Acc_LatestForecastCost__c).toBe(500);
+    expect(profileDetail2.Acc_LatestForecastCost__c).toBe(100);
+
+  });
 });
