@@ -63,8 +63,8 @@ const timeouts = {
 };
 
 const certificates = {
-    salesforce: process.env.SALESFORCE_PRIVATE_KEY || "./security/AccPrivateKey.key",
-    shibboleth: process.env.SHIBBOLETH_PRIVATE_KEY || "./security/AccPrivateKey.key",
+    salesforce: process.env.SALESFORCE_PRIVATE_KEY_FILE || "/etc/pki/AccPrivateKey.key",
+    shibboleth: process.env.SHIBBOLETH_PRIVATE_KEY_FILE || "/etc/pki/AccPrivateKey.key",
 };
 
 const features: IFeatureFlags = {
