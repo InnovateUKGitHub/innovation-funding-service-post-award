@@ -134,10 +134,12 @@ export class ForecastTable extends React.Component<Props> {
   renderForecastCell(forecastRow: TableRow, period: string, index: Index, data: ForecastData) {
     const editor = data.editor;
     const value  = forecastRow.forecasts[period];
-    // if the whole table isn't editable or the periods are overdue then they aren't editable
-    return !editor || parseInt(period, 10) <= data.project.periodId ? (
-      <Currency value={value} />
-    ) : (
+    const costCategory = data.costCategories.find(x => x.id === forecastRow.categoryId);
+
+    if ((costCategory && costCategory.isCalculated) || !editor || parseInt(period, 10) <= data.project.periodId) {
+      return <Currency value={value} />;
+    }
+    return (
       <span>
         <ACC.ValidationError error={editor.validator.items.results[index.row].id} />
         <ACC.Inputs.NumberInput
@@ -155,6 +157,19 @@ export class ForecastTable extends React.Component<Props> {
 
     if(!!item) {
       update(item);
+      const updatedCategory = this.props.data.costCategories.find(x => x.id === categoryId);
+      const overheadRate = this.props.data.partner.overheadRate;
+
+      if(updatedCategory && updatedCategory.name === "Labour" && overheadRate) {
+        const overheadsCategory = this.props.data.costCategories
+          .filter(x => x.competitionType === this.props.data.project.competitionType && x.organisationType === this.props.data.partner.organisationType)
+          .find(x => x.isCalculated);
+
+        const categoryToUpdate = overheadsCategory && data.find(x => x.costCategoryId === overheadsCategory.id && x.periodId === item.periodId);
+        if(categoryToUpdate) {
+          categoryToUpdate.value = item.value * overheadRate/100;
+        }
+      }
     }
 
     if(!!this.props.onChange) {
