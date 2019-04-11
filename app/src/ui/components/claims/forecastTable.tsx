@@ -145,6 +145,7 @@ export class ForecastTable extends React.Component<Props> {
         <ACC.Inputs.NumberInput
           name={`value_${period}_${forecastRow.categoryId}`}
           value={value}
+          ariaLabel={`${forecastRow.categoryName} Period ${period}`}
           onChange={val => this.updateItem(editor.data, forecastRow.categoryId, period, dto => dto.value = val!)}
           className="govuk-!-font-size-16"
         />
