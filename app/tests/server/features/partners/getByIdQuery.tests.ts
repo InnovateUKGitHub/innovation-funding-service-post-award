@@ -26,7 +26,7 @@ describe("getAllForProjectQuery", () => {
       x.Acc_TrackingClaims__c = "Claim Due";
     });
 
-    const projectManger = context.testData.createProjectManager(project);
+    const projectManger = context.testData.createProjectManager(project, undefined, partner);
     context.user.set({ email: projectManger.Acc_ContactId__r.Email });
 
     const result = await context.runQuery(new GetByIdQuery(partner.Id));
@@ -125,14 +125,17 @@ describe("getAllForProjectQuery", () => {
     await expect(context.runQuery(new GetByIdQuery("fakePartnerId"))).rejects.toThrow();
   });
 
-  it("when user is finance contact expect role set", async () => {
+  it("when user is finance contact expect role set", async () => { // TODO separete into 2 separate tests
     const context = new TestContext();
 
     const project = context.testData.createProject();
-    const partner = context.testData.createPartner(project);
+    const partner = context.testData.createPartner(project, x => {
+      x.Acc_ProjectRole__c = SalesforceProjectRole.ProjectLead;
+      x.ProjectRoleName = SalesforceProjectRole.ProjectLead;
+    });
 
     const projectContact1 = context.testData.createFinanceContact(project, partner, x => x.Acc_ContactId__r.Email = "financecontact@test.com");
-    const projectContact2 = context.testData.createProjectManager(project, x => x.Acc_ContactId__r.Email = "projectManager@test.com");
+    const projectContact2 = context.testData.createProjectManager(project, x => x.Acc_ContactId__r.Email = "projectManager@test.com", partner);
 
     // now set user to the finance contact
     context.user.set({ email: projectContact1.Acc_ContactId__r.Email });

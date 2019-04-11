@@ -13,7 +13,8 @@ export class GetAllLineItemsForClaimByCategoryQuery extends QueryBase<ClaimLineI
   }
 
   protected async accessControl(auth: Authorisation) {
-    return auth.for(this.projectId, this.partnerId).hasAnyRoles(ProjectRole.MonitoringOfficer, ProjectRole.FinancialContact);
+    return auth.forProject(this.projectId).hasRole(ProjectRole.MonitoringOfficer)
+    || auth.forPartner(this.projectId, this.partnerId).hasRole(ProjectRole.FinancialContact);
   }
 
   protected async Run(context: IContext) {

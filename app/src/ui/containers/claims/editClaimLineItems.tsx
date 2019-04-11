@@ -341,5 +341,5 @@ export const EditClaimLineItemsRoute = definition.route({
     Actions.loadClaimDetailDocuments(params.partnerId, params.periodId, params.costCategoryId)
   ],
   container: EditClaimLineItems,
-  accessControl: (auth, params) => auth.for(params.projectId, params.partnerId).hasRole(ProjectRole.FinancialContact)
+  accessControl: (auth, params) => auth.forPartner(params.projectId, params.partnerId).hasRole(ProjectRole.FinancialContact)
 });

@@ -91,7 +91,12 @@ export class PrepareComponent extends ContainerBase<PrepareClaimParams, Data, Ca
         <ACC.Claims.Navigation projectId={data.project.id} partnerId={data.partner.id} periodId={data.claim.periodId} currentRouteName={ClaimsDetailsRoute.routeName} />
         <ACC.Renderers.Messages messages={this.props.messages || []} />
         <ACC.Section title={this.getClaimPeriodTitle(data)}>
-          <ACC.Claims.ClaimTable {...data} validation={data.editor.validator.claimDetails.results} standardOverheadRate={this.props.standardOverheadRate} getLink={costCategoryId => EditClaimLineItemsRoute.getLink({ partnerId: this.props.partnerId, projectId: this.props.projectId, periodId: this.props.periodId, costCategoryId })} />
+          <ACC.Claims.ClaimTable
+            {...data}
+            validation={data.editor.validator.claimDetails.results}
+            standardOverheadRate={this.props.standardOverheadRate}
+            getLink={costCategoryId => EditClaimLineItemsRoute.getLink({ partnerId: this.props.partnerId, projectId: this.props.projectId, periodId: this.props.periodId, costCategoryId })}
+          />
           <Form.Form data={data.editor.data} onChange={(dto) => this.onChange(dto, data.claimDetails, data.costCategories)} onSubmit={() => this.saveAndProgress(data.editor.data, data.claimDetails, data.costCategories)}>
             <Form.Fieldset heading={commentsLabel} qa="additional-info-form" headingQa="additional-info-heading">
               <Form.MultilineString label="additional-info" labelHidden={true} hint={commentsHint} name="comments" value={m => m.comments} update={(m, v) => m.comments = v} validation={data.editor.validator.comments} qa="info-text-area" />
@@ -144,7 +149,7 @@ export const PrepareClaimRoute = definition.route({
   routeName: "prepareClaim",
   routePath: "/projects/:projectId/claims/:partnerId/prepare/:periodId",
   getParams: (route) => ({ projectId: route.params.projectId, partnerId: route.params.partnerId, periodId: parseInt(route.params.periodId, 10) }),
-  accessControl: (auth, { projectId, partnerId }) => auth.for(projectId, partnerId).hasRole(ProjectRole.FinancialContact),
+  accessControl: (auth, {projectId, partnerId}) => auth.forPartner(projectId, partnerId).hasRole(ProjectRole.FinancialContact),
   getLoadDataActions: (params) => [
     Actions.loadProject(params.projectId),
     Actions.loadPartner(params.partnerId),

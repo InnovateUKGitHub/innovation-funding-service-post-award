@@ -42,7 +42,7 @@ export class ClaimForcastFormHandler extends FormHandlerBase<ClaimForcastParams,
     }
 
     // if pm as well as fc then go to all claims route
-    const roles = await context.runQuery(new GetAllProjectRolesForUser()).then(x => x.for(params.projectId, params.partnerId));
+    const roles = await context.runQuery(new GetAllProjectRolesForUser()).then(x => x.forProject(params.projectId));
     if (roles.hasRole(ProjectRole.ProjectManager)) {
       return AllClaimsDashboardRoute.getLink(params);
     }

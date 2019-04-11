@@ -77,5 +77,5 @@ export const ProjectChangeRequestsRoute = containerDefinition.route({
     Actions.loadPartnersForProject(params.projectId),
 ],
   container: ProjectChangeRequests,
-  accessControl: (auth, { projectId }) => auth.for(projectId).hasAnyRoles(ProjectRole.FinancialContact, ProjectRole.ProjectManager, ProjectRole.MonitoringOfficer)
+  accessControl: (auth, { projectId }) => auth.forProject(projectId).hasAnyRoles(ProjectRole.FinancialContact, ProjectRole.ProjectManager, ProjectRole.MonitoringOfficer)
 });

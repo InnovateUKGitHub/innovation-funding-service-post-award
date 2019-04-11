@@ -11,7 +11,7 @@ interface Props {
     claim: ClaimDto;
     claimDetails: ClaimDetailsSummaryDto[];
     validation?: ClaimDetailsValidator[];
-    getLink: (costCategoryId: string) => ILinkInfo;
+    getLink: (costCategoryId: string) => ILinkInfo | null;
     standardOverheadRate: number;
 }
 
@@ -64,15 +64,17 @@ export const ClaimTable: React.FunctionComponent<Props> = (props) => {
     );
 };
 
-const renderCostCategory = (claim: ClaimDto, category: CostCategoryDto, isTotal: boolean, standardOverheadRate: number, getLink: (costCategoryId: string) => ILinkInfo, validation?: ClaimDetailsValidator) => {
-    if(isTotal || (category.isCalculated && claim.overheadRate <= standardOverheadRate)) {
-         return category.name;
-    }
-    const validationError = validation && validation.errors[0];
-    const id = validationError && validationError.key;
-    return (
-        <Link id={id} route={getLink(category.id)}>{category.name}</Link>
-    );
+const renderCostCategory = (claim: ClaimDto, category: CostCategoryDto, isTotal: boolean, standardOverheadRate: number, getLink: (costCategoryId: string) => ILinkInfo | null, validation?: ClaimDetailsValidator) => {
+  const route = getLink(category.id);
+
+  if(!route || isTotal || (category.isCalculated && claim.overheadRate <= standardOverheadRate)) {
+    return category.name;
+  }
+
+  const validationError = validation && validation.errors[0];
+  const id = validationError && validationError.key;
+
+  return <Link id={id} route={route}>{category.name}</Link>;
 };
 
 const renderFooters = (project: ProjectDto, partner: PartnerDto, claimsCosts: ClaimDetailsSummaryDto[]) => {

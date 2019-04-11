@@ -79,5 +79,5 @@ export const MonitoringReportViewRoute = containerDefinition.route({
     Actions.loadMonitoringReport(params.projectId, params.periodId),
   ],
   container: MonitoringReportView,
-  accessControl: (auth, params, features) => features.monitoringReports && auth.for(params.projectId).hasAnyRoles(ProjectRole.MonitoringOfficer)
+  accessControl: (auth, params, features) => features.monitoringReports && auth.forProject(params.projectId).hasRole(ProjectRole.MonitoringOfficer)
 });
