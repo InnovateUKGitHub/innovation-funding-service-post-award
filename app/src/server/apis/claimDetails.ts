@@ -1,7 +1,6 @@
 import { ApiParams, ControllerBase } from "./controllerBase";
-import contextProvider from "../features/common/contextProvider";
-import { GetAllClaimDetailsByPartner } from "../features/claimDetails";
-import { GetClaimDetailsQuery } from "../features/claimDetails/getClaimDetailsQuery";
+import contextProvider from "@server/features/common/contextProvider";
+import { GetAllClaimDetailsByPartner, GetClaimDetailsQuery } from "@server/features/claimDetails";
 
 export interface IClaimDetailsApi {
   getAllByPartner: (params: ApiParams<{ partnerId: string }>) => Promise<ClaimDetailsDto[]>;

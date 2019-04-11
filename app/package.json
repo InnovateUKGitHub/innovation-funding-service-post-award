@@ -38,6 +38,7 @@
     "jsonwebtoken": "^8.3.0",
     "luxon": "^1.3.3",
     "mime-types": "^2.1.21",
+    "module-alias": "^2.2.0",
     "multer": "^1.4.1",
     "newrelic": "^5.5.0",
     "passport": "^0.4.0",
@@ -99,6 +100,13 @@
     "webpack-command": "^0.4.1",
     "webpack-node-externals": "^1.7.2"
   },
+  "_moduleAliases": {
+    "@server": "dist/src/server",
+    "@shared": "dist/src/shared",
+    "@framework": "dist/src/types",
+    "@ui": "dist/src/ui",
+    "@util": "dist/src/util"
+  },
   "jest": {
     "testURL": "http://localhost",
     "reporters": [
@@ -130,6 +138,13 @@
       "tsx",
       "js"
     ],
+    "moduleNameMapper": {
+      "@server/(.*)": "<rootDir>/src/server/$1",
+      "@shared/(.*)": "<rootDir>/src/shared/$1",
+      "@framework/(.*)": "<rootDir>/src/types/$1",
+      "@ui/(.*)": "<rootDir>/src/ui/$1",
+      "@util/(.*)": "<rootDir>/src/util/$1"
+    },
     "coveragePathIgnorePatterns": [
       "/node_modules/"
     ],

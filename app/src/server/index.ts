@@ -1,6 +1,7 @@
 import * as DotEnv from "dotenv";
 DotEnv.config();
 
+import "module-alias/register";
 import "isomorphic-fetch";
 import "isomorphic-form-data";
 
