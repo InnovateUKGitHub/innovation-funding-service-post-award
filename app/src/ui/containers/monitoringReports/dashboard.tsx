@@ -58,13 +58,11 @@ class DashboardComponent extends ContainerBase<Params, Data, Callbacks> {
     const ReportsTable = ACC.TypedTable<Dtos.MonitoringReportSummaryDto>();
 
     return (
-      <ReportsTable.Table data={reports} qa={`${section}-reports-table`} bodyRowFlag={x => section === "current" ? "info": null}>
-        {section === "current" ? <ReportsTable.Custom
-          paddingRight="0px"
-          header=""
-          qa="edit-icon"
-          value={(x) => x.status === "Draft" ? <img style={{ height: "19px" }} src="/assets/images/icon-edit.png" /> : null}
-        /> : null}
+      <ReportsTable.Table
+        data={reports}
+        bodyRowFlag={x => section !== "current" ? null : (x.status === "Draft" ? "edit" : "info")}
+        qa={`${section}-reports-table`}
+      >
         <ReportsTable.Custom header={`Period`} qa="period" value={x => <ACC.PeriodTitle periodId={x.periodId} periodStartDate={x.startDate} periodEndDate={x.endDate} />} />
         <ReportsTable.String header={`Status`} qa="status" value={x => x.status} />
         <ReportsTable.ShortDate header={`Date of last update`} qa="dateUpdated" value={x => x.lastUpdated} />

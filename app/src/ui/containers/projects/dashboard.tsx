@@ -222,24 +222,10 @@ class ProjectDashboardComponent extends ContainerBase<Props, Data, Callbacks> {
     const iconStatus = section === "open" ? this.getIconStatus(project, partner) : "none";
     const messages: React.ReactNode[] = this.getMessages(project, partner, section);
 
-    const itemStyle: React.CSSProperties = {
-
-    };
-
-    if (iconStatus !== "none") {
-      itemStyle.marginLeft = "30px";
-    }
-
-    const iconStyle: React.CSSProperties = {
-      marginLeft: "-10px"
-    };
-
     return (
       <ACC.ListItem icon={iconStatus} key={`project_${index}`} qa={`project-${project.projectNumber}`}>
         <div className="govuk-grid-column-two-thirds" style={{ display: "inline-flex", alignItems: "center" }}>
-          {iconStatus === "warning" ? <div style={iconStyle}><img src="/assets/images/icon-alert.png" /></div> : null}
-          {iconStatus === "edit" ? <div style={iconStyle}><img src="/assets/images/icon-edit.png" /></div> : null}
-          <div style={itemStyle}>
+          <div className={iconStatus !== "none" ? "govuk-!-margin-left-8" : ""}>
             <h2 className="govuk-heading-s govuk-!-margin-bottom-2">
               {this.renderLink(project, partner)}
             </h2>

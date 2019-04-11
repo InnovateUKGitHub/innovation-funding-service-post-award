@@ -17,27 +17,13 @@ export const ListSection: React.SFC<Props> = (props) => {
 };
 
 export const ListItem: React.SFC<{ icon?: "none" | "warning" | "edit", qa?: string }> = (props) => {
-  const className = classNames({
-    "govuk-grid-row": true,
-    "govuk-!-padding-4": true,
-    "govuk-!-margin-0": true,
-    "govuk-!-margin-bottom-2": true
+  const className = classNames("govuk-grid-row", "govuk-!-padding-4", "govuk-!-margin-bottom-2", "acc-message", "acc-message__icon--large", {
+    "acc-message__edit": props.icon === "edit",
+    "acc-message__error": props.icon === "warning"
   });
 
-  const style: React.CSSProperties = {
-    backgroundColor: "white",
-    border: `1px solid ${colour.GOVUK_BORDER_COLOUR}`,
-  };
-
-  if (props.icon === "warning") {
-    style.borderLeft = `5px solid ${colour.GOVUK_ERROR_COLOUR}`;
-  }
-  else if(props.icon === "edit") {
-    style.borderLeft = `5px solid ${colour.GOVUK_COLOUR_BLACK}`;
-  }
-
   return (
-    <div className={className} style={style} data-qa={props.qa}>
+    <div className={className} data-qa={props.qa}>
       {props.children}
     </div>
   );

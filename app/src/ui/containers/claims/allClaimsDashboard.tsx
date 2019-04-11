@@ -150,8 +150,7 @@ class Component extends ContainerBase<Params, Data, {}> {
         <ClaimTable.Table
           data={currentInfo.claims}
           className="govuk-!-font-size-16"
-          bodyRowFlag={x => this.getBodyRowFlag(x, project, partners) ? "info" : null}
-          rowIcon={true}
+          bodyRowFlag={x => this.getBodyRowFlag(x, project, partners) ? "edit" : null}
           qa="current-claims-table"
         >
           <ClaimTable.String header="Partner" qa="partner" value={renderPartnerName} />
