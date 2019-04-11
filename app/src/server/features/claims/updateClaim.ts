@@ -10,8 +10,8 @@ export class UpdateClaimCommand extends CommandBase<boolean> {
   }
 
   protected async accessControl(auth: Authorisation) {
-    return auth.for(this.projectId, this.claimDto.partnerId)
-      .hasAnyRoles(ProjectRole.MonitoringOfficer, ProjectRole.FinancialContact);
+    return auth.forProject(this.projectId).hasRole(ProjectRole.MonitoringOfficer)
+      || auth.forPartner(this.projectId, this.claimDto.partnerId).hasRole(ProjectRole.FinancialContact);
   }
 
   protected async Run(context: IContext) {

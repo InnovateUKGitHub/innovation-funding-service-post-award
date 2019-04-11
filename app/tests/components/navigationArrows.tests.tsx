@@ -11,6 +11,7 @@ import { RouterProvider } from "react-router5";
 import { Provider } from "react-redux";
 import createRouter from "router5";
 import browserPluginFactory from "router5/plugins/browser";
+import { IClientUser, ProjectRole } from "../../src/types";
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -37,10 +38,19 @@ const nextLink = {
 const route = { name: "test", path: "/test" } as any;
 const router = createRouter([route]).usePlugin(browserPluginFactory({ useHash: false }));
 
+const preloadedState: IClientUser = {
+  email: "iuk.accproject@bjss.com.bjsspoc2",
+  roleInfo: {
+    a0C0Q000001tr5yUAA: {
+      projectRoles: ProjectRole.MonitoringOfficer,
+      partnerRoles: {}
+    }
+  }
+};
 describe("NavigationArrows", () => {
   it("renders only the next arrow if no previous link is given", () => {
     const wrapper = mount(
-  <Provider store={createStore(rootReducer)}>
+  <Provider store={createStore(rootReducer, {user: preloadedState})}>
           <RouterProvider router={router}>
             <NavigationArrows previousLink={null} nextLink={nextLink}/>
           </RouterProvider>
@@ -54,7 +64,7 @@ describe("NavigationArrows", () => {
 
   it("renders the previous and the next arrow", () => {
     const wrapper = mount(
-<Provider store={createStore(rootReducer)}>
+<Provider store={createStore(rootReducer, {user: preloadedState})}>
         <RouterProvider router={router}>
           <NavigationArrows previousLink={previousLink} nextLink={nextLink}/>
         </RouterProvider>
@@ -72,7 +82,7 @@ describe("NavigationArrows", () => {
 
   it("renders only the previous arrow if no next link is given", () => {
     const wrapper = mount(
-<Provider store={createStore(rootReducer)}>
+<Provider store={createStore(rootReducer, {user: preloadedState})}>
         <RouterProvider router={router}>
           <NavigationArrows previousLink={previousLink} nextLink={null}/>
         </RouterProvider>
@@ -86,7 +96,7 @@ describe("NavigationArrows", () => {
 
   it("renders no arrows if no links are given", () => {
     const wrapper = mount(
-<Provider store={createStore(rootReducer)}>
+<Provider store={createStore(rootReducer, {user: preloadedState})}>
         <RouterProvider router={router}>
           <NavigationArrows previousLink={null} nextLink={null}/>
         </RouterProvider>

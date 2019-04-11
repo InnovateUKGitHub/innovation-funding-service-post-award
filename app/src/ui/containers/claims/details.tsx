@@ -8,6 +8,8 @@ import { ClaimLineItemsRoute } from "./claimLineItems";
 import { ClaimsDashboardRoute } from "./dashboard";
 import { ClaimDto, PartnerDto, ProjectDto, ProjectRole } from "../../../types";
 import { AllClaimsDashboardRoute } from "./allClaimsDashboard";
+import { SimpleString } from "../../components/renderers";
+import { costCategoriesStore } from "../../redux/selectors";
 
 interface Params {
     projectId: string;
@@ -52,14 +54,17 @@ export class ClaimsDetailsComponent extends ContainerBase<Params, Data, {}> {
       return <ACC.Claims.ClaimPeriodDate claim={data.claim} partner={data.partner} />;
     }
 
-    private renderIarSection(claim: ClaimDto, iarDocument?: DocumentSummaryDto | null) {
+    private renderIarSection(claim: ClaimDto, project: ProjectDto, partner: PartnerDto, iarDocument?: DocumentSummaryDto | null) {
       if (!claim.isIarRequired || !claim.isApproved || !iarDocument) return null;
 
-      return (
-        <ACC.Section qa="claim-iar" title={"Independent accountant's report"}>
-          <ACC.DocumentSingle document={iarDocument} openNewWindow={true}/>
-        </ACC.Section>
-      );
+      if(this.hasRoleOnPartner(project, partner)) {
+        return (
+          <ACC.Section qa="claim-iar" title={"Independent accountant's report"}>
+            <ACC.DocumentSingle document={iarDocument} openNewWindow={true}/>
+          </ACC.Section>
+        );
+      }
+      return <SimpleString>{iarDocument.fileName}</SimpleString>;
     }
 
     private renderContents(data: CombinedData) {
@@ -77,10 +82,10 @@ export class ClaimsDetailsComponent extends ContainerBase<Params, Data, {}> {
                     <ACC.Claims.ClaimTable
                       {...data}
                       standardOverheadRate={this.props.standardOverheadRate}
-                      getLink={costCategoryId => ClaimLineItemsRoute.getLink({partnerId: this.props.partnerId, projectId: this.props.projectId, periodId: this.props.periodId, costCategoryId})}
+                      getLink={costCategoryId => this.getClaimLineItemLink(costCategoryId, data)}
                     />
                 </ACC.Section>
-                { this.renderIarSection(data.claim, this.props.iarDocument.data) }
+                { this.renderIarSection(data.claim, data.project, data.partner, this.props.iarDocument.data) }
                 {/*
                 This was started but not required fot the story.... will be finished in a future story
                 <Details.Details data={data}>
@@ -89,6 +94,19 @@ export class ClaimsDetailsComponent extends ContainerBase<Params, Data, {}> {
                 */}
             </ACC.Page>
         );
+    }
+
+    private getClaimLineItemLink(costCategoryId: string, data: CombinedData) {
+      return this.hasRoleOnPartner(data.project, data.partner)
+        ? ClaimLineItemsRoute.getLink({partnerId: this.props.partnerId, projectId: this.props.projectId, periodId: this.props.periodId, costCategoryId})
+        : null;
+    }
+
+    private hasRoleOnPartner(project: ProjectDto, partner: PartnerDto): boolean {
+      const isFC = !!(partner.roles & ProjectRole.FinancialContact);
+      const isMO = !!(project.roles & ProjectRole.MonitoringOfficer);
+      const pmOnParticipant = !!(partner.roles & ProjectRole.ProjectManager);
+      return isFC || isMO || pmOnParticipant;
     }
 }
 

@@ -147,5 +147,5 @@ export const ProjectDocumentsRoute = container.route({
     Actions.loadPartnersForProject(params.projectId),
     Actions.loadProjectDocuments(params.projectId),
   ],
-  accessControl: (auth, { projectId }, features) => features.projectDocuments && auth.for(projectId).hasRole(ProjectRole.MonitoringOfficer)
+  accessControl: (auth, { projectId }, features) => features.projectDocuments && auth.forProject(projectId).hasRole(ProjectRole.MonitoringOfficer)
 });
