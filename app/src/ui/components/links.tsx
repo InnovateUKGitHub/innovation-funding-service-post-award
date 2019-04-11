@@ -4,6 +4,7 @@ import { RootState } from "../redux/reducers";
 import { IClientUser } from "../../types";
 import { ILinkInfo } from "../../types/ILinkInfo";
 import { connect as reduxConnect } from "react-redux";
+import { scrollToTheTopInstantly } from "../../util/windowHelpers";
 
 interface Props {
   id?: string;
@@ -34,7 +35,7 @@ class LinkComponent extends React.Component<Props & Data> {
         routeParams={route.routeParams}
         className={`govuk-link ${className}`}
         aria-selected={selected}
-        successCallback={() => window.scrollTo(0, 0)}
+        successCallback={scrollToTheTopInstantly}
       >
         {children}
       </RouterLink>

@@ -1,6 +1,6 @@
 import {createAction} from "./createAction";
 import {Results} from "../../../validation/results";
-import { scrollToTheTop } from "../../../../util/windowHelpers";
+import { scrollToTheTopSmoothly } from "../../../../util/windowHelpers";
 import { ErrorCode, IAppError } from "../../../../types/IAppError";
 
 type UpdateEditorThunk = typeof updateEditorAction;
@@ -37,7 +37,7 @@ export function handleEditorError<T>({id, store, dto, validation, error, scrollT
   error: IAppError,
   scrollToTop?: boolean
 }) {
-  if (scrollToTop) scrollToTheTop();
+  if (scrollToTop) scrollToTheTopSmoothly();
   if (error.code === ErrorCode.VALIDATION_ERROR) {
     return updateEditorAction(id, store, dto, error.results);
   }
