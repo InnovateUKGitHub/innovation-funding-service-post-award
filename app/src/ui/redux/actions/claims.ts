@@ -16,7 +16,7 @@ import {
 import { findClaimsByPartner, findClaimsByProject, getClaim, getClaimEditor, getCurrentClaim } from "../selectors";
 import { ClaimDto } from "../../../types";
 import { loadIarDocuments } from ".";
-import { scrollToTheTop } from "../../../util/windowHelpers";
+import { scrollToTheTopSmoothly } from "../../../util/windowHelpers";
 
 export function loadClaim(partnerId: string, periodId: number) {
   return conditionalLoad(getClaim(partnerId, periodId), params => ApiClient.claims.get({partnerId, periodId, ...params}));
@@ -55,7 +55,7 @@ export function saveClaim(
     const validation = validateClaim(partnerId, periodId, claim, details, costCategories, true)(dispatch, getState, null);
 
     if (!validation.isValid) {
-      scrollToTheTop();
+      scrollToTheTopSmoothly();
       return Promise.resolve();
     }
 

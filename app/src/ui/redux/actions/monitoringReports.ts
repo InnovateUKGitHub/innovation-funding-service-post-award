@@ -3,7 +3,7 @@ import { ApiClient } from "../../apiClient";
 import { getAllMonitoringReports, getMonitoringReport, getMonitoringReportEditor } from "../selectors/monitoringReports";
 import { MonitoringReportDto, MonitoringReportQuestionDto } from "../../../types";
 import { MonitoringReportDtoValidator } from "../../validators/MonitoringReportDtoValidator";
-import { scrollToTheTop } from "../../../util/windowHelpers";
+import { scrollToTheTopSmoothly } from "../../../util/windowHelpers";
 import { LoadingStatus } from "../../../shared/pending";
 
 export function loadMonitoringReport(projectId: string, periodId: number) {
@@ -56,7 +56,7 @@ export function saveMonitoringReport(
     const validation = validateMonitoringReport(projectId, periodId, dto, questions, submit, true)(dispatch, getState, null);
 
     if (!validation.isValid) {
-      scrollToTheTop();
+      scrollToTheTopSmoothly();
       return Promise.resolve();
     }
 
