@@ -9,7 +9,7 @@ import {
   getForecastDetail,
   getForecastDetailsEditor
 } from "../selectors";
-import { scrollToTheTop } from "../../../util/windowHelpers";
+import { scrollToTheTopSmoothly } from "../../../util/windowHelpers";
 import { ClaimDto } from "../../../types";
 
 export function loadForecastDetailsForPartner(partnerId: string) {
@@ -57,7 +57,7 @@ export function saveForecastDetails(
     const validation = validatorThunk(dispatch, getState, null);
 
     if (!validation.isValid) {
-      scrollToTheTop();
+      scrollToTheTopSmoothly();
       return Promise.resolve();
     }
 

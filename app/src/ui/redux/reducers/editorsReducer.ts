@@ -1,4 +1,5 @@
 import { combineReducers } from "redux";
+import { actionTypes } from "redux-router5";
 import { RootActions } from "../actions";
 import { ClaimDtoValidator } from "../../validators/claimDtoValidator";
 import { ClaimLineItemDtosValidator } from "../../validators/claimLineItemDtosValidator";
@@ -59,7 +60,7 @@ export const editorsReducer = <TDto extends {}, TValidator extends Results<TDto>
     }
     return result;
   }
-  else if (action.type === "@@router5/TRANSITION_START" && action.payload.previousRoute) {
+  else if (action.type === actionTypes.TRANSITION_START && action.payload.previousRoute) {
     return {};
   }
   else {

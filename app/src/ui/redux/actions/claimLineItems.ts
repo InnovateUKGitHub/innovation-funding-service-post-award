@@ -12,7 +12,7 @@ import {
   updateEditorAction,
   UpdateEditorAction
 } from "./common";
-import { scrollToTheTop } from "../../../util/windowHelpers";
+import { scrollToTheTopSmoothly } from "../../../util/windowHelpers";
 
 export function loadClaimLineItemsForCategory(projectId: string, partnerId: string, costCategoryId: string, periodId: number) {
   return conditionalLoad(
@@ -45,7 +45,7 @@ export function saveClaimLineItems(projectId: string, partnerId: string, periodI
     const validation = validateClaimLineItems(partnerId, periodId, costCategoryId, lineItems, true)(dispatch, getState, null);
 
     if (!validation.isValid) {
-      scrollToTheTop();
+      scrollToTheTopSmoothly();
       return Promise.resolve();
     }
 
