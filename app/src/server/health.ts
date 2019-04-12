@@ -9,11 +9,9 @@ import { ErrorCode } from "../types";
 export const router = express.Router();
 
 const endpoint = "/api/health";
+const logger = new Logger();
 
-// health check endpoint tests dependencies ie slaesforce connection
-router.get(`${endpoint}/details`, async (req, res) => {
-  const logger = new Logger();
-
+export const health = async () => {
   const salesforce = await new CostCategoryRepository(() => salesforceConnectionWithToken({
     clientId: Configuration.salesforce.clientId,
     connectionUrl: Configuration.salesforce.connectionUrl,
@@ -28,9 +26,14 @@ router.get(`${endpoint}/details`, async (req, res) => {
 
   const status = salesforce ? 200 : 500;
   const response = { salesforce };
+  return { status, response };
+};
 
-  logger.debug("HEALTH CHECK COMPLETE", { status, response });
-  res.status(status).send(response);
+// health check endpoint tests dependencies ie slaesforce connection
+router.get(`${endpoint}/details`, async (req, res) => {
+  const result = await health();
+  logger.debug("HEALTH CHECK COMPLETE", result);
+  return res.status(result.status).send(result.response);
 });
 
 // general ok endpoint
