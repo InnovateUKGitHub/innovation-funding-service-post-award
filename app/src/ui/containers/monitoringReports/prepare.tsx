@@ -51,12 +51,11 @@ class PrepareMonitoringReportComponent extends ContainerBase<MonitoringReportPre
     });
 
     return (
-      <ACC.Page>
-        <ACC.Section>
-          <ACC.BackLink route={MonitoringReportDashboardRoute.getLink({ projectId: this.props.projectId })}>Back to project</ACC.BackLink>
-        </ACC.Section>
-        <ACC.Projects.Title pageTitle="Monitoring report" project={project} />
-        <ACC.ValidationSummary validation={editor.validator} />
+      <ACC.Page
+        backLink={<ACC.BackLink route={MonitoringReportDashboardRoute.getLink({ projectId: this.props.projectId })}>Back to project</ACC.BackLink>}
+        pageTitle={<ACC.Projects.Title pageTitle="Monitoring report" project={project} />}
+        validator={editor.validator}
+      >
         <ACC.Section title={title}>
           <ReportForm.Form data={editor.data} onChange={(dto) => this.props.onChange(this.props.projectId, this.props.periodId, dto)}>
             <ACC.Renderers.SimpleString>For each question score the project against the criteria from 1 to 5, providing a comment explaining your reason. Your Monitoring Portfolio Executive will return the report to you otherwise.</ACC.Renderers.SimpleString>

@@ -18,7 +18,6 @@ export * from "./navigationArrows";
 export * from "./partnersAndFinanceContacts";
 export * from "./periodTitle";
 export * from "./projectMember";
-export * from "./projectOverview";
 export * from "./styledButton";
 export * from "./table";
 export * from "./validationError";

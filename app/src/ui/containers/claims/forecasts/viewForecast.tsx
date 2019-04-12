@@ -41,12 +41,11 @@ class ViewForecastComponent extends ContainerBase<Params, PendingForecastData, C
     const backText = isMoPm ? "Back to project" : "Back to all projects";
 
     return (
-      <ACC.Page>
-        <ACC.Section>
-          <ACC.BackLink route={backLink}>{backText}</ACC.BackLink>
-        </ACC.Section>
-        <ACC.Projects.Title pageTitle="View project" project={data.project} />
-        {this.renderTabs(isMoPm, data)}
+      <ACC.Page
+        backLink={<ACC.BackLink route={backLink}>{backText}</ACC.BackLink>}
+        pageTitle={<ACC.Projects.Title pageTitle="View project" project={data.project} />}
+        tabs={this.renderTabs(isMoPm, data)}
+      >
         {this.renderOverheadsRate(data.partner.overheadRate)}
         <ACC.Section title={partnerName} qa="partner-name">
           <ACC.Renderers.Messages messages={this.props.messages} />
