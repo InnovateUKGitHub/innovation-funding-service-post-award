@@ -65,11 +65,10 @@ export class ClaimLineItemsComponent extends ContainerBase<Params, Data, {}> {
     const backLink = this.props.route.name === ReviewClaimLineItemsRoute.routeName ? ReviewClaimRoute.getLink(params) : ClaimsDetailsRoute.getLink(params);
 
     return (
-      <ACC.Page>
-        <ACC.Section>
-          <ACC.BackLink route={backLink}>Back to claim</ACC.BackLink>
-        </ACC.Section>
-        <ACC.Projects.Title pageTitle={`${costCategories.find(x => x.id === this.props.costCategoryId)!.name}`} project={project} />
+      <ACC.Page
+        backLink={<ACC.BackLink route={backLink}>Back to claim</ACC.BackLink>}
+        pageTitle={<ACC.Projects.Title pageTitle={`${costCategories.find(x => x.id === this.props.costCategoryId)!.name}`} project={project} />}
+      >
         <ACC.Section>
           <ClaimLineItemsTable lineItems={lineItems} forecastDetail={forecastDetail} />
         </ACC.Section>

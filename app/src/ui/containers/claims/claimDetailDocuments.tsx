@@ -9,7 +9,6 @@ import { ProjectDto, ProjectRole } from "../../../types";
 import { IEditorStore } from "../../redux/reducers";
 import { DocumentUploadValidator } from "../../validators/documentUploadValidator";
 import { Results } from "../../validation/results";
-import { dataLoadAction } from "../../redux/actions";
 
 export interface ClaimDetailDocumentsPageParams {
   projectId: string;
@@ -98,16 +97,14 @@ export class ClaimDetailDocumentsComponent extends ContainerBase<ClaimDetailDocu
     });
     const costCategory = costCategories.find(x => x.id === this.props.costCategoryId)! || {};
     const UploadForm = ACC.TypedForm<{file: File | null }>();
-    const validationMessage = editor && <ACC.ValidationSummary validation={editor.validator} compressed={false} />;
 
     return (
-      <ACC.Page>
-        <ACC.Section>
-          <ACC.BackLink route={back}>{`Back to ${costCategory.name.toLowerCase()}`}</ACC.BackLink>
-        </ACC.Section>
-        <ACC.ErrorSummary error={(editor && editor.error) || (deleteEditor && deleteEditor.error)} />
-        {validationMessage}
-        <ACC.Projects.Title pageTitle={`${costCategory.name} documents`}  project={project} />
+      <ACC.Page
+        backLink={<ACC.BackLink route={back}>{`Back to ${costCategory.name.toLowerCase()}`}</ACC.BackLink>}
+        error={(editor.error) || (deleteEditor.error)}
+        validator={editor.validator}
+        pageTitle={<ACC.Projects.Title pageTitle={`${costCategory.name} documents`}  project={project} />}
+      >
         {this.renderSection(documents)}
         <ACC.Section>
           <UploadForm.Form enctype="multipart" qa="claimDetailDocuments" data={editor.data} onSubmit={() => this.onSave(editor.data)} onChange={(dto) => this.onChange(dto)}>

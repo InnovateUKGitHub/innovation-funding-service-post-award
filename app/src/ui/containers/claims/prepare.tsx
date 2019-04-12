@@ -81,15 +81,14 @@ export class PrepareComponent extends ContainerBase<PrepareClaimParams, Data, Ca
     const backLink = isPmOrMo ? AllClaimsDashboardRoute.getLink({ projectId: data.project.id }) : ClaimsDashboardRoute.getLink({ projectId: data.project.id, partnerId: data.partner.id });
 
     return (
-      <ACC.Page>
-        <ACC.Section>
-          <ACC.BackLink route={backLink}>Back to project</ACC.BackLink>
-        </ACC.Section>
-        <ACC.ErrorSummary error={data.editor.error} />
-        <ACC.ValidationSummary validation={data.editor.validator} compressed={false} />
-        <ACC.Projects.Title pageTitle="Claim" project={data.project} />
-        <ACC.Claims.Navigation projectId={data.project.id} partnerId={data.partner.id} periodId={data.claim.periodId} currentRouteName={ClaimsDetailsRoute.routeName} />
-        <ACC.Renderers.Messages messages={this.props.messages || []} />
+      <ACC.Page
+        backLink={<ACC.BackLink route={backLink}>Back to project</ACC.BackLink>}
+        error={data.editor.error}
+        validator={data.editor.validator}
+        pageTitle={<ACC.Projects.Title pageTitle="Claim" project={data.project} />}
+        tabs={<ACC.Claims.Navigation projectId={data.project.id} partnerId={data.partner.id} periodId={data.claim.periodId} currentRouteName={ClaimsDetailsRoute.routeName} />}
+        messages={this.props.messages || []}
+      >
         <ACC.Section title={this.getClaimPeriodTitle(data)}>
           <ACC.Claims.ClaimTable
             {...data}

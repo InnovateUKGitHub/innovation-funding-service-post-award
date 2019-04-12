@@ -17,6 +17,7 @@ import { IEditorStore } from "../../redux/reducers";
 import { DocumentUploadValidator } from "../../validators/documentUploadValidator";
 import { DateTime } from "luxon";
 import { Results } from "../../validation/results";
+import { ProjectDashboardRoute } from "@ui/containers";
 
 export interface ClaimDashboardPageParams {
   projectId: string;
@@ -146,14 +147,13 @@ class Component extends ContainerBase<ClaimDashboardPageParams, Data, Callbacks>
     const validator = (editor && editor.validator) || (deleteEditor && deleteEditor.validator);
 
     return (
-      <Acc.ProjectOverviewPage
-        selectedTab={ClaimsDashboardRoute.routeName}
-        project={project}
-        partnerId={partner.id}
-        partners={[partner]}
+      <Acc.Page
+        pageTitle={<Acc.Projects.Title pageTitle="View project" project={project}/>}
         error={error}
+        tabs={<Acc.Projects.ProjectNavigation project={project} currentRoute={ClaimsDashboardRoute.routeName} partners={[partner]}/>}
         validator={validator}
         messages={this.props.messages}
+        backLink={<Acc.BackLink route={ProjectDashboardRoute.getLink({})}>Back to all projects</Acc.BackLink>}
       >
         <Acc.Section>
           <Acc.SectionPanel qa="claims-totals" title="History">
@@ -178,7 +178,7 @@ class Component extends ContainerBase<ClaimDashboardPageParams, Data, Callbacks>
         <Acc.Section qa="previous-claims-section" title="Closed">
           {this.renderPreviousClaims(previousClaims, "previous-claims-table", project, partner)}
         </Acc.Section>
-      </Acc.ProjectOverviewPage>
+      </Acc.Page>
     );
   }
 

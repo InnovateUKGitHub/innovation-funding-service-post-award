@@ -1,11 +1,11 @@
 import React from "react";
 import { ContainerBase, ReduxContainer } from "../containerBase";
-import { ProjectOverviewPage } from "../../components";
+import * as Acc from "@ui/components";
 import { PartnerDto, ProjectDto, ProjectRole } from "../../../types/dtos";
-import { Pending } from "../../../shared/pending";
-import * as Acc from "../../components";
+import { Pending } from "@shared/pending";
 import * as Selectors from "../../redux/selectors";
 import * as Actions from "../../redux/actions";
+import { ProjectDashboardRoute } from "@ui/containers";
 
 interface Callbacks {}
 
@@ -36,7 +36,11 @@ class ProjectChangeRequestsComponent extends ContainerBase<Params, Data, Callbac
 
   private renderContents({projectDetails, partners}: CombinedData) {
     return (
-        <ProjectOverviewPage selectedTab={ProjectChangeRequestsRoute.routeName} project={projectDetails} partners={partners}>
+        <Acc.Page
+          backLink={<Acc.BackLink route={ProjectDashboardRoute.getLink({})}>Back to all projects</Acc.BackLink>}
+          tabs={<Acc.Projects.ProjectNavigation project={projectDetails} currentRoute={ProjectChangeRequestsRoute.routeName} partners={partners}/>}
+          pageTitle={<Acc.Projects.Title pageTitle="View project" project={projectDetails}/>}
+        >
             <Acc.Renderers.SimpleString>
               If the project team wish to adjust the details of a project, for example, the allocation of funds across cost categories, the Project Manager must submit a project change request.
             </Acc.Renderers.SimpleString>
@@ -51,7 +55,7 @@ class ProjectChangeRequestsComponent extends ContainerBase<Params, Data, Callbac
                 <li>3. Email it back to the Monitoring Officer to review.</li>
               </ol>
             </Acc.Renderers.SimpleString>
-        </ProjectOverviewPage>
+        </Acc.Page>
     );
   }
 }

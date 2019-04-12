@@ -1,4 +1,5 @@
 // var BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+var TsConfigPathsPlugin = require('awesome-typescript-loader').TsConfigPathsPlugin;
 var webpack = require("webpack");
 
 module.exports = function pack(env) {
@@ -49,7 +50,7 @@ module.exports = function pack(env) {
           },
           {
             test: /\.tsx?$/,
-            loader: "ts-loader"
+            loader: "awesome-typescript-loader"
           }
         ],
       },
@@ -63,6 +64,11 @@ module.exports = function pack(env) {
             },
           },
         },
+      },
+      resolve: {
+        modules: ['node_modules'],
+        extensions: ['.tsx', '.ts', '.jsx', '.js'],
+        plugins: [ new TsConfigPathsPlugin() ],
       },
       plugins: [
         new webpack.NormalModuleReplacementPlugin(/apiClient\.ts/, "../client/apiClient.ts"),
