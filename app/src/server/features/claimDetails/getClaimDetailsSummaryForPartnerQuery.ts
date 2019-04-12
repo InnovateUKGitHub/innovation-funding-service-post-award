@@ -1,6 +1,6 @@
-import { QueryBase } from "../common";
-import { GetCostCategoriesQuery } from "../claims";
-import { Authorisation, IContext, ProjectRole } from "../../../types";
+import { QueryBase } from "@server/features/common";
+import { GetCostCategoriesQuery } from "@server/features/claims";
+import { Authorisation, IContext, ProjectRole } from "@framework/";
 
 export class GetClaimDetailsSummaryForPartnerQuery extends QueryBase<ClaimDetailsSummaryDto[]> {
     constructor(
