@@ -50,8 +50,7 @@ interface TableProps<T> {
   data: T[];
   validationResult?: Results<{}>[];
   bodyRowClass?: (row: T, index: number) => string;
-  bodyRowFlag?: (row: T, index: number) => "warning" | "info" | "error" | null;
-  rowIcon?: boolean;
+  bodyRowFlag?: (row: T, index: number) => "warning" | "info" | "error" | "edit" | null;
   headerRowClass?: string;
 }
 
@@ -135,14 +134,11 @@ const TableComponent = <T extends {}>(props: TableProps<T> & { data: T[]; valida
 
   const rowClasses = rowFlags.map(x => {
     switch(x) {
-      case "warning":
-        return "table__row--warning";
-      case "info":
-        return "table__row--info";
-      case "error":
-        return "table__row--error";
-      default:
-        return "";
+      case "warning": return "table__row--warning";
+      case "error":   return "table__row--error";
+      case "info":    return "table__row--info";
+      case "edit":    return "table__row--info table__row--icon";
+      default:        return "";
     }
   });
 
@@ -160,7 +156,7 @@ const TableComponent = <T extends {}>(props: TableProps<T> & { data: T[]; valida
         </thead>
         <tbody className="govuk-table__body">
           {
-            contents.map((row, rowIndex) => <tr className={classNames("govuk-table__row", rowClass[rowIndex], rowClasses[rowIndex], {"table__row--icon": props.rowIcon})} key={rowIndex}>{row}</tr>)
+            contents.map((row, rowIndex) => <tr className={classNames("govuk-table__row", rowClass[rowIndex], rowClasses[rowIndex])} key={rowIndex}>{row}</tr>)
           }
         </tbody>
         {footers.length ? <tfoot>{footers}</tfoot> : null}

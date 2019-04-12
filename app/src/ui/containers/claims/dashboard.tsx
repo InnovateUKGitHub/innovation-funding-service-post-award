@@ -223,8 +223,7 @@ class Component extends ContainerBase<ClaimDashboardPageParams, Data, Callbacks>
       <ClaimTable.Table
         data={data}
         className="govuk-!-font-size-16"
-        bodyRowFlag={x => Acc.Claims.getClaimDetailsLinkType({ claim: x, project, partner }) === "edit" ? "info" : null}
-        rowIcon={true}
+        bodyRowFlag={x => Acc.Claims.getClaimDetailsLinkType({ claim: x, project, partner }) === "edit" ? "edit" : null}
         qa={tableQa}
       >
         <ClaimTable.Custom
