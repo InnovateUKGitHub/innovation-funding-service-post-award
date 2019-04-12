@@ -34,6 +34,7 @@ export class NumberInput extends BaseInput<NumberInputProps, NumberInputState> {
         name={this.props.name}
         value={this.state.value}
         disabled={!!this.props.disabled}
+        aria-label={this.props.ariaLabel}
         onChange={x => this.handleChange(x, true)}
         onBlur={x => this.handleChange(x, false)}
       />

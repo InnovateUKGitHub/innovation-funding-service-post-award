@@ -9,4 +9,5 @@ interface InputProps<T> {
     disabled?: boolean;
     onChange?: (v: T|null) => void;
     placeholder?: string;
+    ariaLabel?: string;
 }
