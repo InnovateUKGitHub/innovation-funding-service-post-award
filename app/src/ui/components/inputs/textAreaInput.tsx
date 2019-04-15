@@ -33,6 +33,7 @@ export class TextAreaInput extends BaseInput<TextAreaInputProps, InputState> {
         onChange={x => this.handleChange(x, true)}
         onBlur={x => this.handleChange(x, false)}
         maxLength={this.props.maxLength}
+        aria-describedby={this.props.ariaDescribedBy}
         data-qa={this.props.qa}
       />
     );
