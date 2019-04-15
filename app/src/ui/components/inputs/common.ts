@@ -10,4 +10,5 @@ interface InputProps<T> {
     onChange?: (v: T|null) => void;
     placeholder?: string;
     ariaLabel?: string;
+    ariaDescribedBy?: string;
 }

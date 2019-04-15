@@ -103,6 +103,9 @@ interface ExternalFieldProps<TDto, TValue> {
     validation?: Result;
 }
 
+// encapsulate logic for hint it generation
+const createFieldHintId = <TDto, TValue>(props: ExternalFieldProps<TDto, TValue>) => `${props.name}-hint`;
+
 class FieldComponent<T, TValue> extends React.Component<InternalFieldProps<T> & ExternalFieldProps<T, TValue>, {}> {
   render() {
     const { hint, name, label, labelHidden, field, formData, validation } = this.props;
@@ -111,7 +114,7 @@ class FieldComponent<T, TValue> extends React.Component<InternalFieldProps<T> & 
     return (
       <div data-qa={`field-${name}`} className={classNames("govuk-form-group", { "govuk-form-group--error": isValid })}>
         {!!label ? <label className={classNames("govuk-label", { "govuk-visually-hidden" : labelHidden })} htmlFor={name}>{label}</label> : null}
-        {hint ? <span id={`${name}-hint`} className="govuk-hint">{hint}</span> : null}
+        {hint ? <span id={createFieldHintId(this.props)} className="govuk-hint">{hint}</span> : null}
         <ValidationError error={validation} />
         {field(formData!)}
       </div>
@@ -163,7 +166,7 @@ const MultiStringField = <T extends {}>(props: MultiStringFieldProps<T>) => {
   const TypedFieldComponent = FieldComponent as { new(): FieldComponent<T, string> };
   return (
     <TypedFieldComponent
-      field={(data => <TextAreaInput name={props.name} value={props.value(data)} onChange={(val) => handleChange(props, val)} rows={props.rows} qa={props.qa} />)}
+      field={(data => <TextAreaInput name={props.name} value={props.value(data)} onChange={(val) => handleChange(props, val)} rows={props.rows} qa={props.qa} ariaDescribedBy={props.hint ? createFieldHintId(props) : undefined} />)}
       {...props}
     />
   );
