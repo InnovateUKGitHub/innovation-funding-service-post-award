@@ -35,11 +35,10 @@ class ProjectDashboardComponent extends ContainerBase<Props, Data, Callbacks> {
 
   private renderContent(projects: ProjectDto[], partners: PartnerDto[]) {
     return (
-      <ACC.Page>
-        <ACC.Section>
-          <ACC.BackLink route={HomeRoute.getLink({})}>Back to dashboard</ACC.BackLink>
-        </ACC.Section>
-        <ACC.Title title="Projects" />
+      <ACC.Page
+        backLink={<ACC.BackLink route={HomeRoute.getLink({})}>Back to dashboard</ACC.BackLink>}
+        pageTitle={<ACC.Title title="Projects" />}
+      >
         {this.renderContents(projects, partners)}
       </ACC.Page>
     );

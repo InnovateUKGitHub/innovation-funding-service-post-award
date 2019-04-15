@@ -45,11 +45,10 @@ class DetailsComponent extends ContainerBase<Params, Data, Callbacks> {
     }).reduce((a, b) => a.concat(b), []).filter(x => !!x);
 
     return (
-      <ACC.Page>
-        <ACC.Section>
-          <ACC.BackLink route={MonitoringReportDashboardRoute.getLink({ projectId: this.props.projectId })}>Back to project</ACC.BackLink>
-        </ACC.Section>
-        <ACC.Projects.Title pageTitle="Monitoring report" project={project} />
+      <ACC.Page
+        backLink={<ACC.BackLink route={MonitoringReportDashboardRoute.getLink({ projectId: this.props.projectId })}>Back to project</ACC.BackLink>}
+        pageTitle={<ACC.Projects.Title pageTitle="Monitoring report" project={project} />}
+      >
         <ACC.Section title={title}>
         <Details.Details qa="monitoring-report" data={report} labelWidth="Narrow">
             {fields}

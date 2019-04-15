@@ -35,13 +35,12 @@ class ClaimForecastComponent extends ContainerBase<ClaimForcastParams, PendingFo
     const editor = combined.editor!;
 
     return (
-      <ACC.Page>
-        <ACC.Section>
-          <ACC.BackLink route={PrepareClaimRoute.getLink({ periodId: this.props.periodId, projectId: this.props.projectId, partnerId: this.props.partnerId })}>Back to claim</ACC.BackLink>
-        </ACC.Section>
-        <ACC.ErrorSummary error={editor.error} />
-        <ACC.ValidationSummary validation={editor.validator} compressed={false} />
-        <ACC.Projects.Title pageTitle="Update forecast" project={combined.project} />
+      <ACC.Page
+        backLink={<ACC.BackLink route={PrepareClaimRoute.getLink({ periodId: this.props.periodId, projectId: this.props.projectId, partnerId: this.props.partnerId })}>Back to claim</ACC.BackLink>}
+        error={editor.error}
+        validator={editor.validator}
+        pageTitle={<ACC.Projects.Title pageTitle="Update forecast" project={combined.project} />}
+      >
         <ACC.Section qa="partner-name">
           {renderWarning(combined)}
           <Form.Form

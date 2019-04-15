@@ -9,7 +9,7 @@ Enzyme.configure({ adapter: new Adapter() });
 
 describe("Page", () => {
     it("should render child element", () => {
-        const wrapper = shallow(<Page><div>a test child</div></Page>);
+        const wrapper = shallow(<Page pageTitle="title" backLink="backLink"><div>a test child</div></Page>);
         expect(wrapper
             .containsMatchingElement(<div>a test child</div>))
             .toBeTruthy();

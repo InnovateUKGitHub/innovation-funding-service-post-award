@@ -9,7 +9,6 @@ import { ClaimsDashboardRoute } from "./dashboard";
 import { ClaimDto, PartnerDto, ProjectDto, ProjectRole } from "../../../types";
 import { AllClaimsDashboardRoute } from "./allClaimsDashboard";
 import { SimpleString } from "../../components/renderers";
-import { costCategoriesStore } from "../../redux/selectors";
 
 interface Params {
     projectId: string;
@@ -72,12 +71,11 @@ export class ClaimsDetailsComponent extends ContainerBase<Params, Data, {}> {
         const backLink = isPmOrMo ? AllClaimsDashboardRoute.getLink({ projectId: data.project.id }) : ClaimsDashboardRoute.getLink({ projectId: data.project.id, partnerId: data.partner.id });
 
         return (
-            <ACC.Page>
-                <ACC.Section>
-                    <ACC.BackLink route={backLink}>Back to project</ACC.BackLink>
-                </ACC.Section>
-                <ACC.Projects.Title pageTitle="Review claim" project={data.project} />
-                <ACC.Claims.Navigation projectId={data.project.id} partnerId={data.partner.id} periodId={data.claim.periodId} currentRouteName={ClaimsDetailsRoute.routeName} />
+            <ACC.Page
+              backLink={<ACC.BackLink route={backLink}>Back to project</ACC.BackLink>}
+              pageTitle={<ACC.Projects.Title pageTitle="Review claim" project={data.project} />}
+              tabs={<ACC.Claims.Navigation projectId={data.project.id} partnerId={data.partner.id} periodId={data.claim.periodId} currentRouteName={ClaimsDetailsRoute.routeName} />}
+            >
                 <ACC.Section title={this.getClaimPeriodTitle(data)}>
                     <ACC.Claims.ClaimTable
                       {...data}

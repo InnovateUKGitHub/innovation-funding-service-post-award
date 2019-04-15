@@ -77,13 +77,12 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
     const costCategory = costCategories.find(x => x.id === this.props.costCategoryId)! || {};
 
     return (
-      <ACC.Page>
-        <ACC.Section>
-          <ACC.BackLink route={back}>Back to claim</ACC.BackLink>
-        </ACC.Section>
-        <ACC.ErrorSummary error={this.props.editor && this.props.editor.error} />
-        <ACC.ValidationSummary validation={this.props.editor && this.props.editor.validator} compressed={false} />
-        <ACC.Projects.Title pageTitle={`${costCategory.name}`} project={project} />
+      <ACC.Page
+        backLink={<ACC.BackLink route={back}>Back to claim</ACC.BackLink>}
+        error={this.props.editor.error}
+        validator={this.props.editor.validator}
+        pageTitle={<ACC.Projects.Title pageTitle={`${costCategory.name}`} project={project} />}
+      >
         <ACC.Section>
           <ACC.TextHint text={costCategory.hintText} />
           {costCategory.isCalculated ? this.renderCalculated(costCategory, claimDetails, forecastDetail, documents) : this.renderTable(editor, forecastDetail, documents)}

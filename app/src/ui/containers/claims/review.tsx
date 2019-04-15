@@ -73,14 +73,13 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, Data, Callbacks> 
     ];
     const submitButtonLabel = this.getSubmitButtonLabel(data);
     return (
-      <ACC.Page>
-        <ACC.Section>
-          <ACC.BackLink route={AllClaimsDashboardRoute.getLink({ projectId: data.project.id })}>Back to project</ACC.BackLink>
-        </ACC.Section>
-        <ACC.ErrorSummary error={data.editor.error} />
-        <ACC.ValidationSummary validation={data.editor.validator} compressed={false} />
-        <ACC.Projects.Title pageTitle="Review claim" project={data.project} />
-        <ACC.Claims.Navigation projectId={data.project.id} partnerId={data.partner.id} periodId={data.claim.periodId} currentRouteName={ClaimsDetailsRoute.routeName} />
+      <ACC.Page
+        backLink={<ACC.BackLink route={AllClaimsDashboardRoute.getLink({ projectId: data.project.id })}>Back to project</ACC.BackLink>}
+        error={data.editor.error}
+        validator={data.editor.validator}
+        pageTitle={<ACC.Projects.Title pageTitle="Review claim" project={data.project} />}
+        tabs={<ACC.Claims.Navigation projectId={data.project.id} partnerId={data.partner.id} periodId={data.claim.periodId} currentRouteName={ClaimsDetailsRoute.routeName} />}
+      >
         <ACC.Section title={this.getClaimPeriodTitle(data)}>
           <ACC.Claims.ClaimReviewTable
             {...data}

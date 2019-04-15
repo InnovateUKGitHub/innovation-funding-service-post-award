@@ -1,6 +1,5 @@
 import React from "react";
 import { ContainerBase, ReduxContainer } from "../containerBase";
-import { ProjectOverviewPage } from "../../components";
 import { PartnerDto, ProjectDto, ProjectRole } from "../../../types/dtos";
 import { Pending } from "../../../shared/pending";
 import * as ACC from "../../components";
@@ -8,6 +7,7 @@ import * as Selectors from "../../redux/selectors";
 import * as Actions from "../../redux/actions";
 import { IEditorStore } from "../../redux";
 import { DocumentUploadValidator } from "../../validators/documentUploadValidator";
+import { ProjectDashboardRoute } from "@ui/containers";
 
 const bytesInMegabyte = 1048576;
 
@@ -56,13 +56,13 @@ class ProjectDocumentsComponent extends ContainerBase<ProjectDocumentPageParams,
     const UploadForm = ACC.TypedForm<{file: File | null}>();
 
     return (
-      <ProjectOverviewPage
-        selectedTab={ProjectDocumentsRoute.routeName}
-        project={project}
-        partners={partners}
+      <ACC.Page
+        pageTitle={<ACC.Projects.Title pageTitle="View project" project={project}/>}
+        tabs={<ACC.Projects.ProjectNavigation project={project} currentRoute={ProjectDocumentsRoute.routeName} partners={partners}/>}
         validator={editor.validator}
         error={editor.error}
         messages={this.props.messages}
+        backLink={<ACC.BackLink route={ProjectDashboardRoute.getLink({})}>Back to all projects</ACC.BackLink>}
       >
         <ACC.Section>
           <UploadForm.Form
@@ -86,7 +86,7 @@ class ProjectDocumentsComponent extends ContainerBase<ProjectDocumentPageParams,
           </UploadForm.Form>
         </ACC.Section>
         {this.renderDocumentsTable(documents)}
-      </ProjectOverviewPage>
+      </ACC.Page>
     );
   }
 

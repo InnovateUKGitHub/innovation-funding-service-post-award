@@ -51,11 +51,10 @@ class ProjectDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
         // ];
 
         return (
-            <ACC.Page>
-                <ACC.Section>
-                  {this.renderBackLink(project, partners)}
-                </ACC.Section>
-                <ACC.Projects.Title pageTitle="View project" project={project} />
+            <ACC.Page
+              backLink={this.renderBackLink(project, partners)}
+              pageTitle={<ACC.Projects.Title pageTitle="View project" project={project} />}
+            >
                 {this.renderPartnersCosts(partners, project)}
                 <ACC.Section title="Project members">
                     <ACC.ProjectMember member={monitoringOfficer} qa="monitoring-officer" />
