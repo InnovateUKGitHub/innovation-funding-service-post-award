@@ -4,7 +4,7 @@ import { NestedResult } from "../validation/nestedResult";
 import { Result } from "../validation/result";
 
 interface Props {
-  validation: Results<{}>;
+  validation?: Results<{}> | null;
   compressed?: boolean;
 }
 

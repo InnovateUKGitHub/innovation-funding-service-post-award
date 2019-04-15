@@ -1,6 +1,5 @@
 import { ContainerBase, ReduxContainer } from "../containerBase";
 import * as Actions from "../../redux/actions";
-import { ProjectOverviewPage } from "../../components/projectOverview";
 import { Pending } from "../../../shared/pending";
 import { ClaimDto, PartnerDto, ProjectDto, ProjectRole } from "../../../types/dtos";
 import * as Selectors from "../../redux/selectors";
@@ -9,6 +8,7 @@ import * as Acc from "../../components";
 import { Accordion, AccordionItem } from "../../components";
 import { ClaimStatus } from "../../../types";
 import { DateTime } from "luxon";
+import { ProjectDashboardRoute } from "@ui/containers";
 
 interface Params {
   projectId: string;
@@ -62,7 +62,12 @@ class Component extends ContainerBase<Params, Data, {}> {
 
   renderContents({ projectDetails, partners, previousClaims, currentClaims }: CombinedData) {
     return (
-      <ProjectOverviewPage project={projectDetails} partners={partners} selectedTab={AllClaimsDashboardRoute.routeName} messages={this.props.messages}>
+      <Acc.Page
+        pageTitle={<Acc.Projects.Title pageTitle="View project" project={projectDetails}/>}
+        backLink={<Acc.BackLink route={ProjectDashboardRoute.getLink({})}>Back to all projects</Acc.BackLink>}
+        tabs={<Acc.Projects.ProjectNavigation project={projectDetails} currentRoute={AllClaimsDashboardRoute.routeName} partners={partners}/>}
+        messages={this.props.messages}
+      >
         {this.renderSummary(projectDetails, partners.find(x => x.isLead)!)}
         <Acc.Section qa="current-claims-section" title="Open">
           {this.renderCurrentClaimsPerPeriod(currentClaims, projectDetails, partners)}
@@ -70,7 +75,7 @@ class Component extends ContainerBase<Params, Data, {}> {
         <Acc.Section qa="closed-claims-section" title="Closed">
           {this.renderPreviousClaimsSections(projectDetails, partners, previousClaims)}
         </Acc.Section>
-      </ProjectOverviewPage>
+      </Acc.Page>
     );
   }
 

@@ -8,6 +8,7 @@ import * as Selectors from "../../redux/selectors";
 import { MonitoringReportPrepareRoute } from "./prepare";
 import { MonitoringReportViewRoute } from "./details";
 import { ProjectRole } from "../../../types";
+import { ProjectDashboardRoute } from "@ui/containers";
 
 interface Params {
   projectId: string;
@@ -37,10 +38,10 @@ class DashboardComponent extends ContainerBase<Params, Data, Callbacks> {
 
   private renderContents(project: Dtos.ProjectDto, partners: Dtos.PartnerDto[], currentReports: Dtos.MonitoringReportSummaryDto[], previousReports: Dtos.MonitoringReportSummaryDto[]) {
     return (
-      <ACC.ProjectOverviewPage
-        selectedTab={MonitoringReportDashboardRoute.routeName}
-        project={project}
-        partners={partners}
+      <ACC.Page
+        backLink={<ACC.BackLink route={ProjectDashboardRoute.getLink({})}>Back to all projects</ACC.BackLink>}
+        pageTitle={<ACC.Projects.Title pageTitle="View project" project={project} />}
+        tabs={<ACC.Projects.ProjectNavigation project={project} currentRoute={MonitoringReportDashboardRoute.routeName} partners={partners}/>}
       >
         <ACC.Section title={"Current report"}>
           {currentReports.length ? this.renderTable(project, currentReports, "current") : null}
@@ -50,7 +51,7 @@ class DashboardComponent extends ContainerBase<Params, Data, Callbacks> {
           {previousReports.length ? this.renderTable(project, previousReports, "previous") : null}
           {!previousReports.length ? <ACC.Renderers.SimpleString>There are no previous reports</ACC.Renderers.SimpleString> : null}
         </ACC.Section>
-      </ACC.ProjectOverviewPage>
+      </ACC.Page>
     );
   }
 

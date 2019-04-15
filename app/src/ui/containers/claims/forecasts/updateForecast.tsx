@@ -37,13 +37,12 @@ class UpdateForecastComponent extends ContainerBase<Params, PendingForecastData,
     const editor = combined.editor!;
 
     return (
-      <ACC.Page>
-        <ACC.Section>
-          <ACC.BackLink route={ViewForecastRoute.getLink({ projectId: this.props.projectId, partnerId: this.props.partnerId })}>Back to forecast</ACC.BackLink>
-        </ACC.Section>
-        <ACC.ErrorSummary error={editor && editor.error} />
-        <ACC.ValidationSummary validation={editor.validator} compressed={false} />
-        <ACC.Projects.Title pageTitle="Update forecasts" project={combined.project} />
+      <ACC.Page
+        backLink={<ACC.BackLink route={ViewForecastRoute.getLink({ projectId: this.props.projectId, partnerId: this.props.partnerId })}>Back to forecast</ACC.BackLink>}
+        error={editor.error}
+        validator={editor.validator}
+        pageTitle={<ACC.Projects.Title pageTitle="Update forecasts" project={combined.project} />}
+      >
         <ACC.Section title="" qa="partner-forecast" >
           {renderWarning(combined)}
           <Form.Form
