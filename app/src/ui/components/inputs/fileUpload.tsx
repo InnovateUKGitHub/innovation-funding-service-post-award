@@ -12,7 +12,7 @@ interface FileUploadProps {
 export class FileUpload extends BaseInput<FileUploadProps, { value: File | null }> {
   private fileInput: HTMLInputElement | null = null;
 
-  public componentWillReceiveProps(nextProps: InputProps<File | null>) {
+  public componentWillReceiveProps(nextProps: FileUploadProps) {
     if (nextProps.value !== this.props.value && nextProps.value === null && this.fileInput) {
       this.fileInput.value = "";
     }
