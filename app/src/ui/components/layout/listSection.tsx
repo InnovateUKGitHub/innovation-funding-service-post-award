@@ -10,7 +10,7 @@ interface Props {
 export const ListSection: React.SFC<Props> = (props) => {
   return (
     <div className="govuk-!-padding-5 govuk-!-margin-bottom-9" style={{ backgroundColor: colour.GOVUK_COLOUR_GREY_3 }} data-qa={props.qa}>
-      <h3 className="govuk-heading-m">{props.title}</h3>
+      <h2 className="govuk-heading-m">{props.title}</h2>
       {props.children}
     </div>
   );
