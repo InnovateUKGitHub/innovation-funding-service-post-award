@@ -17,7 +17,7 @@
     "paths": {
       "@server/*": ["src/server/*"],
       "@shared/*": ["src/shared/*"],
-      "@framework/*": ["src/types/"],
+      "@framework/*": ["src/*"],
       "@ui/*": ["src/ui/*"],
       "@util/*": ["src/util/*"]
     },

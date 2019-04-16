@@ -134,7 +134,7 @@ describe("UploadClaimDocumentCommand", () => {
       });
     });
 
-    describe("when the claim status allows an IAR upload", async () => {
+    describe("when the claim status allows an IAR upload", () => {
       validStatus.forEach(status => {
         it("should upload an IAR claim document", async () => {
           const context = new TestContext();
@@ -159,7 +159,7 @@ describe("UploadClaimDocumentCommand", () => {
       });
     });
 
-    describe("when the claim status does not allow an IAR upload", async () => {
+    describe("when the claim status does not allow an IAR upload", () => {
       invalidStatus.forEach(status => {
         it("should not upload a claim document with an IAR description when the claim is not in a valid status", async () => {
           const context = new TestContext();
