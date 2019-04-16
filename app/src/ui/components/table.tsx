@@ -143,7 +143,7 @@ const TableComponent = <T extends {}>(props: TableProps<T> & { data: T[]; valida
   });
 
   return (
-    <div data-qa={props.qa}>
+    <div data-qa={props.qa} style={{overflowX:"auto"}}>
       <table className={classNames("govuk-table", props.className)}>
         <colgroup>
           {cols}
