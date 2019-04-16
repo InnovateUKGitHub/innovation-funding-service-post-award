@@ -2,7 +2,7 @@ import * as React from "react";
 import { DateTime } from "luxon";
 
 const convertDateAndTime = (jsDate: Date | null): DateTime | null => {
-    return jsDate && DateTime.fromJSDate(jsDate);
+    return jsDate && DateTime.fromJSDate(jsDate).setZone("Europe/London");
 };
 
 const convertDateOnly = (jsDate: Date | null): DateTime | null => {
