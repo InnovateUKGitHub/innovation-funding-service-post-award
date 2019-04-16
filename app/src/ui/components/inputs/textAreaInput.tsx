@@ -35,6 +35,7 @@ export class TextAreaInput extends BaseInput<TextAreaInputProps, InputState> {
         maxLength={this.props.maxLength}
         aria-describedby={this.props.ariaDescribedBy}
         data-qa={this.props.qa}
+        aria-label={this.props.ariaLabel}
       />
     );
   }

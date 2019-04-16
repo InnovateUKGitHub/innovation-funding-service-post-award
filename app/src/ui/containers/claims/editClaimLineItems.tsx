@@ -180,7 +180,12 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
     return (
       <span>
         <ACC.ValidationError error={validation.cost} />
-        <ACC.Inputs.NumberInput name={`value${index.row}`} value={item.value} onChange={val => this.updateItem(index, dto => (dto.value = val!))} />
+        <ACC.Inputs.NumberInput
+          name={`value${index.row}`}
+          value={item.value}
+          onChange={val => this.updateItem(index, dto => (dto.value = val!))}
+          ariaLabel={`value of claim line item ${index.row + 1}`}
+        />
       </span>
     );
   }
@@ -189,7 +194,12 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
     return (
       <span>
         <ACC.ValidationError error={validation.description} />
-        <ACC.Inputs.TextInput name={`description${index.row}`} value={item.description} onChange={val => this.updateItem(index, dto => (dto.description = val!))} />
+        <ACC.Inputs.TextInput
+          name={`description${index.row}`}
+          value={item.description}
+          onChange={val => this.updateItem(index, dto => (dto.description = val!))}
+          ariaLabel={`description of claim line item ${index.row + 1}`}
+        />
       </span>
     );
   }
