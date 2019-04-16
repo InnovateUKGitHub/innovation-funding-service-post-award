@@ -200,7 +200,7 @@ class ProjectDashboardComponent extends ContainerBase<Props, Data, Callbacks> {
       return (<div className="govuk-body" style={{ color: colour.GOVUK_ERROR_COLOUR, fontWeight: "bold" }}>Claim overdue</div>);
     }
     else if (section === "open") {
-      return <ACC.Claims.ClaimWindow periodEnd={DateTime.fromJSDate(project.claimWindowStart!).minus({ days: 1 }).toJSDate()} />;
+      return <ACC.Claims.ClaimWindow periodEnd={DateTime.fromJSDate(project.claimWindowStart!).setZone("Europe/London").minus({ days: 1 }).toJSDate()} />;
     }
     else if (section === "awaiting") {
       return <ACC.Claims.ClaimWindow periodEnd={project.periodEndDate!} />;
