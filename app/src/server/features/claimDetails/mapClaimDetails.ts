@@ -1,6 +1,6 @@
 import { ISalesforceClaimDetails } from "@server/repositories";
 import { SALESFORCE_DATE_FORMAT } from "@server/features/common";
-import { IContext } from "@framework/";
+import { IContext } from "@framework/types";
 
 export function mapClaimDetails(salesforceClaimDetails: ISalesforceClaimDetails, context: IContext): ClaimDetailsDto {
   return ({

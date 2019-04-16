@@ -1,5 +1,5 @@
 import React from "react";
-import { IAppError } from "@framework/";
+import { IAppError } from "@framework/types";
 import { Results } from "@ui/validation/results";
 import * as ACC from "@ui/components";
 

@@ -1,13 +1,12 @@
 import React from "react";
 import { connect } from "react-redux";
 import { createRouteNodeSelector, RouterState } from "redux-router5";
-import { MatchedRoute, matchRoute } from "../routing";
-import { Footer, Header, PhaseBanner } from "../components";
-import { RootState } from "../redux";
-import { IClientUser } from "../../types/IUser";
-import { StandardErrorPage } from "../components/standardErrorPage";
-import { Authorisation } from "../../types";
-import { IClientConfig } from "../redux/reducers/configReducer";
+import { MatchedRoute, matchRoute } from "@ui/routing";
+import { Footer, Header, PhaseBanner } from "@ui/components";
+import { StandardErrorPage } from "@ui/components/standardErrorPage";
+import { RootState } from "@ui/redux";
+import { IClientConfig } from "@ui/redux/reducers/configReducer";
+import { Authorisation, IClientUser } from "@framework/types";
 
 interface IAppProps extends RouterState {
   dispatch: any;
