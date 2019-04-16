@@ -151,7 +151,7 @@ class Component extends ContainerBase<Params, Data, {}> {
     const badge = hasClaimNotYetSubmittedToInnovate && <Acc.Claims.ClaimWindow periodEnd={currentInfo.end} />;
 
     return (
-      <Acc.Section title={title} qa="current-claims-section" badge={badge} key={index}>
+      <Acc.Section title={title} qa="current-claims-section" badge={badge} key={index} subsection={true}>
         <ClaimTable.Table
           data={currentInfo.claims}
           className="govuk-!-font-size-16"

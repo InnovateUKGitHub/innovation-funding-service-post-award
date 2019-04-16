@@ -7,17 +7,19 @@ interface Props {
   subtitle?: React.ReactNode;
   qa?: string;
   badge?: React.ReactNode;
+  subsection?: boolean;
 }
 
-const renderTitles = ({ title, subtitle, badge }: Props) => {
+const renderTitles = ({ title, subtitle, badge, subsection }: Props) => {
   // if nothing to render at top then we return null if there is a badge but no titles we still need to render the div with three quarters
   if (!title && !subtitle && !badge) return null;
 
   const classes = classNames({ "govuk-grid-column-full": !badge, "govuk-grid-column-three-quarters": !!badge }, "govuk-!-margin-bottom-5");
+  const Header =  subsection ? "h3" : "h2";
 
   return (
     <div className={classes}>
-      {!!title ? <h2 className={classNames("govuk-heading-m", { "govuk-!-margin-bottom-2": !!subtitle })}>{title}</h2> : null}
+      {!!title ? <Header className={classNames("govuk-heading-m", { "govuk-!-margin-bottom-2": !!subtitle })}>{title}</Header> : null}
       {!!subtitle ? <SimpleString>{subtitle}</SimpleString> : null}
     </div>
   );
