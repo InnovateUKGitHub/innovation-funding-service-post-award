@@ -1,30 +1,68 @@
 import { TestContext } from "../../testContextProvider";
-import { UpdateClaimCommand } from "../../../../src/server/features/claims/updateClaim";
-import mapClaim from "../../../../src/server/features/claims/mapClaim";
-import { ClaimStatus } from "../../../../src/types/constants";
-import { ValidationError } from "../../../../src/server/features/common/appError";
+import { UpdateClaimCommand } from "@server/features/claims/updateClaim";
+import mapClaim from "@server/features/claims/mapClaim";
+import { ClaimStatus } from "@framework/types/constants";
+import { ValidationError } from "@server/features/common/appError";
+import { Authorisation, ProjectRole } from "@framework/types";
 
 describe("UpdateClaimCommand", () => {
+  test("accessControl - Project Monitoring Officer passes", async () => {
+    const context = new TestContext();
+    const project = context.testData.createProject();
+    const command = new UpdateClaimCommand(project.Id, {} as any);
+    const auth    = new Authorisation({
+      [project.Id]: {
+        projectRoles: ProjectRole.MonitoringOfficer,
+        partnerRoles: {}
+      }
+    });
+
+    expect(await context.runAccessControl(auth, command)).toBe(true);
+  });
+
+  test("accessControl - Partner Financial Contact passes", async () => {
+    const context  = new TestContext();
+    const project  = context.testData.createProject();
+    const claimDto = { partnerId: "abc" };
+    const command  = new UpdateClaimCommand(project.Id, claimDto as any);
+    const auth     = new Authorisation({
+      [project.Id]: {
+        projectRoles: ProjectRole.Unknown,
+        partnerRoles: { [claimDto.partnerId]: ProjectRole.FinancialContact }
+      }
+    });
+
+    expect(await context.runAccessControl(auth, command)).toBe(true);
+  });
+
+  test("accessControl - all other roles fail", async () => {
+    const context  = new TestContext();
+    const project  = context.testData.createProject();
+    const claimDto = { partnerId: "abc" };
+    const command  = new UpdateClaimCommand(project.Id, claimDto as any);
+    const auth     = new Authorisation({
+      [project.Id]: {
+        projectRoles: ProjectRole.FinancialContact | ProjectRole.ProjectManager,
+        partnerRoles: { [claimDto.partnerId]: ProjectRole.MonitoringOfficer | ProjectRole.ProjectManager }
+      }
+    });
+
+    expect(await context.runAccessControl(auth, command)).toBe(false);
+  });
+
   it("when claim id not set expect validation exception", async () => {
     const context = new TestContext();
-    const {testData} = context;
-
-    const dto = mapClaim(context)(testData.createClaim());
+    const dto = mapClaim(context)(context.testData.createClaim());
     dto.id = null!;
-
     const project = context.testData.createProject();
-
     const command = new UpdateClaimCommand(project.Id, dto);
     await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
   });
 
   it("when status updated to draft expect item updated", async () => {
     const context = new TestContext();
-    const {testData} = context;
-
-    const claim = testData.createClaim(null!, null!, x => x.Acc_ClaimStatus__c = "New" as any);
+    const claim = context.testData.createClaim(null!, null!, x => x.Acc_ClaimStatus__c = "New" as any);
     const dto = mapClaim(context)(claim);
-
     const project = context.testData.createProject();
 
     dto.status = ClaimStatus.DRAFT;
@@ -37,11 +75,8 @@ describe("UpdateClaimCommand", () => {
 
   it("when status updated to submitted expect item updated", async () => {
     const context = new TestContext();
-    const {testData} = context;
-
-    const claim = testData.createClaim(null!, null!, x => x.Acc_ClaimStatus__c = ClaimStatus.DRAFT);
+    const claim = context.testData.createClaim(null!, null!, x => x.Acc_ClaimStatus__c = ClaimStatus.DRAFT);
     const dto = mapClaim(context)(claim);
-
     const project = context.testData.createProject();
 
     dto.status = ClaimStatus.SUBMITTED;
@@ -54,11 +89,8 @@ describe("UpdateClaimCommand", () => {
 
   it("when status updated to approved expect item updated", async () => {
     const context = new TestContext();
-    const {testData} = context;
-
-    const claim = testData.createClaim(null!, null!, x => x.Acc_ClaimStatus__c = ClaimStatus.DRAFT);
+    const claim = context.testData.createClaim(null!, null!, x => x.Acc_ClaimStatus__c = ClaimStatus.DRAFT);
     const dto = mapClaim(context)(claim);
-
     const project = context.testData.createProject();
 
     dto.status = ClaimStatus.AWAITING_IUK_APPROVAL;
@@ -71,11 +103,8 @@ describe("UpdateClaimCommand", () => {
 
   it("when status updated to queried expect item updated", async () => {
     const context = new TestContext();
-    const {testData} = context;
-
-    const claim = testData.createClaim(null!, null!, x => x.Acc_ClaimStatus__c = ClaimStatus.DRAFT);
+    const claim = context.testData.createClaim(null!, null!, x => x.Acc_ClaimStatus__c = ClaimStatus.DRAFT);
     const dto = mapClaim(context)(claim);
-
     const project = context.testData.createProject();
 
     dto.status = ClaimStatus.MO_QUERIED;
@@ -88,11 +117,8 @@ describe("UpdateClaimCommand", () => {
 
   it("when status updated to something other than draft or submitted expect error", async () => {
     const context = new TestContext();
-    const {testData} = context;
-
-    const claim = testData.createClaim(null!, null!, x => x.Acc_ClaimStatus__c = ClaimStatus.DRAFT);
+    const claim = context.testData.createClaim(null!, null!, x => x.Acc_ClaimStatus__c = ClaimStatus.DRAFT);
     const dto = mapClaim(context)(claim);
-
     const project = context.testData.createProject();
 
     dto.status = ClaimStatus.PAID;
@@ -103,9 +129,7 @@ describe("UpdateClaimCommand", () => {
 
   it("can update when status is Innovate Queried", async () => {
     const context = new TestContext();
-    const {testData} = context;
-
-    const claim = testData.createClaim(null!, null!, x => x.Acc_ClaimStatus__c = ClaimStatus.INNOVATE_QUERIED);
+    const claim = context.testData.createClaim(null!, null!, x => x.Acc_ClaimStatus__c = ClaimStatus.INNOVATE_QUERIED);
     const dto = mapClaim(context)(claim);
     const project = context.testData.createProject();
     const command = new UpdateClaimCommand(project.Id, dto);
@@ -116,11 +140,8 @@ describe("UpdateClaimCommand", () => {
 
   it("when message updated expect item updated", async () => {
     const context = new TestContext();
-    const {testData} = context;
-
-    const claim = testData.createClaim(null!, null!, x => x.Acc_LineItemDescription__c = "Original Message");
+    const claim = context.testData.createClaim(null!, null!, x => x.Acc_LineItemDescription__c = "Original Message");
     const dto = mapClaim(context)(claim);
-
     const project = context.testData.createProject();
 
     dto.comments = "A New Message";
@@ -133,11 +154,8 @@ describe("UpdateClaimCommand", () => {
 
   it("when message is over 1000 characters expect expection", async () => {
     const context = new TestContext();
-    const {testData} = context;
-
-    const claim = testData.createClaim();
+    const claim = context.testData.createClaim();
     const dto = mapClaim(context)(claim);
-
     const project = context.testData.createProject();
 
     dto.comments = "a".repeat(1001);
@@ -148,11 +166,8 @@ describe("UpdateClaimCommand", () => {
 
   it("when message is 1000 characters expect no exception", async () => {
     const context = new TestContext();
-    const {testData} = context;
-
-    const claim = testData.createClaim();
+    const claim = context.testData.createClaim();
     const dto = mapClaim(context)(claim);
-
     const project = context.testData.createProject();
 
     dto.comments = "a".repeat(1000);

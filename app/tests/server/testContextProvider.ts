@@ -1,16 +1,16 @@
-import { QueryBase } from "../../src/server/features/common/queryBase";
+import { QueryBase } from "@server/features/common/queryBase";
+import { IRoleInfo } from "@server/features/projects/getAllProjectRolesForUser";
+import { SyncQueryBase } from "@server/features/common/queryBase";
+import { CommandBase, SyncCommandBase } from "@server/features/common/commandBase";
+import { IConfig } from "@server/features/common/config";
+import { Cache } from "@server/features/common/cache";
+import { LogLevel } from "@framework/types/logLevel";
+import { Authorisation,ICaches, IContext, IRunnable, ISyncRunnable } from "@framework/types";
 import { createTestRepositories, ITestRepositories } from "./testRepositories";
 import { TestData } from "./testData";
 import { TestClock } from "./testClock";
 import { TestLogger } from "./testLogger";
-import { IConfig } from "../../src/server/features/common/config";
-import { Cache } from "../../src/server/features/common/cache";
 import { TestUser } from "./testUser";
-import { IRoleInfo } from "../../src/server/features/projects/getAllProjectRolesForUser";
-import { ICaches, IContext, IRunnable, ISyncRunnable } from "../../src/types/IContext";
-import { SyncQueryBase } from "../../src/server/features/common/queryBase";
-import { CommandBase, SyncCommandBase } from "../../src/server/features/common/commandBase";
-import { LogLevel } from "../../src/types/logLevel";
 
 export class TestContext implements IContext {
     constructor() {
@@ -83,5 +83,10 @@ export class TestContext implements IContext {
 
     public runSyncCommand<TResult>(command: SyncCommandBase<TResult>): TResult {
         return ((command as any) as ISyncRunnable<TResult>).Run(this);
+    }
+
+    // handle access control seperate to running the commands to keep tests focused on single areas
+    public runAccessControl(auth: Authorisation, runnable: QueryBase<any> | CommandBase<any>): Promise<boolean> {
+      return (runnable as any as IRunnable<any>).accessControl(auth, this);
     }
 }
