@@ -1,8 +1,8 @@
-import { CommandBase, ValidationError } from "../common";
-import { ClaimDtoValidator } from "../../../ui/validators/claimDtoValidator";
-import { GetCostCategoriesQuery } from ".";
+import { CommandBase, ValidationError } from "@server/features/common";
+import { ClaimDtoValidator } from "@ui/validators/claimDtoValidator";
+import { Authorisation, ClaimDto, IContext, ProjectRole } from "@framework/types";
 import { GetClaimDetailsSummaryForPartnerQuery } from "../claimDetails";
-import { Authorisation, ClaimDto, IContext, ProjectRole } from "../../../types";
+import { GetCostCategoriesQuery } from ".";
 
 export class UpdateClaimCommand extends CommandBase<boolean> {
   constructor(private readonly projectId: string, private readonly claimDto: ClaimDto) {
