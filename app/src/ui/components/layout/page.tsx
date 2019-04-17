@@ -16,11 +16,15 @@ export const Page: React.FunctionComponent<Props> = (props) => {
   return (
     <div>
       {backLink && (<ACC.Section>{backLink}</ACC.Section>)}
-      <ACC.ErrorSummary error={error} />
-      <ACC.ValidationSummary validation={validator} compressed={false} />
+      <ACC.Renderers.AriaLive>
+        <ACC.ErrorSummary error={error} />
+        <ACC.ValidationSummary validation={validator} compressed={false} />
+      </ACC.Renderers.AriaLive>
       {pageTitle}
       {tabs}
-      <ACC.Renderers.Messages messages={messages || []}/>
+      <ACC.Renderers.AriaLive>
+        <ACC.Renderers.Messages messages={messages || []}/>
+      </ACC.Renderers.AriaLive>
       {children}
     </div>
   );
