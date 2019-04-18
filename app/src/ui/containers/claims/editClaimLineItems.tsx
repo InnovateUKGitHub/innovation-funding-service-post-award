@@ -38,6 +38,11 @@ interface CombinedData {
   documents: DocumentSummaryDto[];
 }
 
+interface FormData {
+  claimDetails: ClaimDetailsDto;
+  lineItems: ClaimLineItemDto[];
+}
+
 interface Callbacks {
   validate: (partnerId: string, periodId: number, costCategoryId: string, dto: ClaimLineItemDto[]) => void;
   save: (projectId: string, partnerId: string, periodId: number, costCategoryId: string, dto: ClaimLineItemDto[]) => void;
@@ -85,16 +90,13 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
       >
         <ACC.Section>
           <ACC.TextHint text={costCategory.hintText} />
-          {costCategory.isCalculated ? this.renderCalculated(costCategory, claimDetails, forecastDetail, documents) : this.renderTable(editor, forecastDetail, documents)}
+          {costCategory.isCalculated ? this.renderCalculated(costCategory, claimDetails, forecastDetail, documents) : this.renderTable(editor, forecastDetail, documents, claimDetails)}
         </ACC.Section>
       </ACC.Page>
     );
   }
 
   private renderCalculated(costCategory: CostCategoryDto, claimDetails: ClaimDetailsDto, forecastDetail: ForecastDetailsDTO, documents: DocumentSummaryDto[]) {
-    const LineItemForm = ACC.TypedForm<ClaimLineItemDto[]>();
-    const LineItemTable = ACC.TypedTable<ClaimLineItemDto>();
-
     const data: ClaimLineItemDto[] = [{
       costCategoryId: costCategory.id,
       description: costCategory.name,
@@ -103,6 +105,12 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
       id: "",
       value: claimDetails.value
     }];
+
+    // const formData = {claimLineItem: data, claimDetails};
+    const LineItemForm = ACC.TypedForm<typeof data>();
+    const LineItemTable = ACC.TypedTable<ClaimLineItemDto>();
+    const commentsLabel = "Additional information";
+    const commentsHint = "Explain any difference between the forecast costs and the total costs.";
 
     return (
       <LineItemForm.Form
@@ -123,6 +131,9 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
         <LineItemForm.Fieldset>
           {this.renderDocuments(documents)}
         </LineItemForm.Fieldset>
+        <LineItemForm.Fieldset heading={commentsLabel} qa="additional-info-form" headingQa="additional-info-heading">
+          <LineItemForm.MultilineString label="additional-info" hint={commentsHint} labelHidden={true} name="comments" value={() => claimDetails.comments} update={(m, v) => claimDetails.comments = v} qa="info-text-area" />
+        </LineItemForm.Fieldset>
         <LineItemForm.Fieldset>
           <LineItemForm.Button name="upload" onClick={() => this.props.saveAndUpload(this.props.projectId, this.props.partnerId, this.props.costCategoryId, this.props.periodId, this.props.editor.data)}>Upload and remove documents</LineItemForm.Button>
         </LineItemForm.Fieldset>
@@ -132,10 +143,12 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
 
   }
 
-  private renderTable(editor: IEditorStore<ClaimLineItemDto[], ClaimLineItemDtosValidator>, forecastDetail: ForecastDetailsDTO, documents: DocumentSummaryDto[]) {
+  private renderTable(editor: IEditorStore<ClaimLineItemDto[], ClaimLineItemDtosValidator>, forecastDetail: ForecastDetailsDTO, documents: DocumentSummaryDto[], claimDetails: ClaimDetailsDto) {
     const LineItemForm = ACC.TypedForm<ClaimLineItemDto[]>();
     const LineItemTable = ACC.TypedTable<ClaimLineItemDto>();
     const validationResults = editor.validator.items.results;
+    const commentsLabel = "Additional information";
+    const commentsHint = "Explain any difference between the forecast costs and the total costs.";
 
     return (
       <LineItemForm.Form
@@ -158,6 +171,9 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
         </LineItemForm.Fieldset>
         <LineItemForm.Fieldset>
           {this.renderDocuments(documents)}
+        </LineItemForm.Fieldset>
+        <LineItemForm.Fieldset heading={commentsLabel} qa="additional-info-form" headingQa="additional-info-heading">
+          <LineItemForm.MultilineString label="additional-info" hint={commentsHint} labelHidden={true} name="comments" value={() => claimDetails.comments} update={(m, v) => claimDetails.comments = v} qa="info-text-area" />
         </LineItemForm.Fieldset>
         <LineItemForm.Fieldset>
           <LineItemForm.Button name="upload" onClick={() => this.props.saveAndUpload(this.props.projectId, this.props.partnerId, this.props.costCategoryId, this.props.periodId, this.props.editor.data)}>Upload and remove documents</LineItemForm.Button>
