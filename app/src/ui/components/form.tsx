@@ -75,7 +75,7 @@ class FieldsetComponent<T> extends React.Component<FieldsetProps<T>, []> {
         return (
             <fieldset className="govuk-fieldset" data-qa={this.props.qa}>
                 <legend className="govuk-fieldset__legend govuk-fieldset__legend--m">
-                    {this.props.heading ? <h1 className="govuk-fieldset__heading" data-qa={this.props.headingQa}>{this.props.heading}</h1> : null}
+                    {this.props.heading ? <h2 className="govuk-fieldset__heading" data-qa={this.props.headingQa}>{this.props.heading}</h2> : null}
                 </legend>
                 {childrenWithData}
             </fieldset>

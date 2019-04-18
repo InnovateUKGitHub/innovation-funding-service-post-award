@@ -225,9 +225,9 @@ class ProjectDashboardComponent extends ContainerBase<Props, Data, Callbacks> {
       <ACC.ListItem icon={iconStatus} key={`project_${index}`} qa={`project-${project.projectNumber}`}>
         <div className="govuk-grid-column-two-thirds" style={{ display: "inline-flex", alignItems: "center" }}>
           <div className={iconStatus !== "none" ? "govuk-!-margin-left-8" : ""}>
-            <h2 className="govuk-heading-s govuk-!-margin-bottom-2">
+            <h3 className="govuk-heading-s govuk-!-margin-bottom-2">
               {this.renderLink(project, partner)}
-            </h2>
+            </h3>
             {messages.map((content, i) => <p key={`message${i}`} className="govuk-body govuk-!-margin-bottom-0">{content}</p>)}
           </div>
         </div>

@@ -81,9 +81,9 @@ export class AccordionItem extends React.Component<Props, State> {
     return (
       <div className={topLevelClasses} data-qa={this.props.qa}>
         <div onBlur={() => this.onBlur()} onFocus={() => this.onFocus()} onClick={() => this.onClick()} className={headerClasses} >
-          <h2 className="govuk-accordion__section-heading">
+          <p className="govuk-accordion__section-heading">
             {this.renderTitle()}
-          </h2>
+          </p>
         </div>
         <div className="govuk-accordion__section-content">
           {this.props.children}
