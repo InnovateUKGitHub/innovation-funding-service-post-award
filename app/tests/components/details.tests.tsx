@@ -13,7 +13,7 @@ describe("Details", () => {
       const example = { name: "example" };
       const DTest = TypedDetails<typeof example>();
       const output = shallow(<DTest.Details data={example}><DTest.String label="Name" qa="name" value={x => x.name} /></DTest.Details>).html();
-      expect(output).toContain(`<h4 class=\"govuk-heading-s\">Name</h4>`);
+      expect(output).toContain(`<p class=\"govuk-heading-s\">Name</p>`);
       expect(output).toContain(`<p class=\"govuk-body\">example</p>`);
     });
 
@@ -21,7 +21,7 @@ describe("Details", () => {
       const example = { name: "example1\nexample2" };
       const DTest = TypedDetails<typeof example>();
       const output = shallow(<DTest.Details data={example}><DTest.MultilineString label="Name" qa="name" value={x => x.name} /></DTest.Details>).html();
-      expect(output).toContain(`<h4 class=\"govuk-heading-s\">Name</h4>`);
+      expect(output).toContain(`<p class=\"govuk-heading-s\">Name</p>`);
       expect(output).toContain(`<p class=\"govuk-body\">example1</p>`);
       expect(output).toContain(`<p class=\"govuk-body\">example2</p>`);
     });
@@ -30,7 +30,7 @@ describe("Details", () => {
       const example = { created: new Date("2018/12/1") };
       const DTest = TypedDetails<typeof example>();
       const output = shallow(<DTest.Details data={example}><DTest.Date label="Created" qa="created" value={x => x.created} /></DTest.Details>).html();
-      expect(output).toContain(`<h4 class=\"govuk-heading-s\">Created</h4>`);
+      expect(output).toContain(`<p class=\"govuk-heading-s\">Created</p>`);
       expect(output).toContain(`<p class=\"govuk-body\"><span>1 December 2018</span></p>`);
     });
 
@@ -38,7 +38,7 @@ describe("Details", () => {
       const example = { created: new Date("2018/12/1 9:08") };
       const DTest = TypedDetails<typeof example>();
       const output = shallow(<DTest.Details data={example}><DTest.DateTime label="Created" qa="created" value={x => x.created} /></DTest.Details>).html();
-      expect(output).toContain(`<h4 class=\"govuk-heading-s\">Created</h4>`);
+      expect(output).toContain(`<p class=\"govuk-heading-s\">Created</p>`);
       expect(output).toContain(`<p class=\"govuk-body\"><span>1 December 2018, 9:08 AM</span></p>`);
     });
 
@@ -46,7 +46,7 @@ describe("Details", () => {
       const example = { name: "example" };
       const DTest = TypedDetails<typeof example>();
       const output = shallow(<DTest.Details data={example}><DTest.Custom label="Custom" qa="custom" value={x => <p>Custom Content <i>{x.name}</i></p>} /></DTest.Details>).html();
-      expect(output).toContain(`<h4 class=\"govuk-heading-s\">Custom</h4>`);
+      expect(output).toContain(`<p class=\"govuk-heading-s\">Custom</p>`);
       expect(output).toContain(`<p>Custom Content <i>example</i></p>`);
     });
 
@@ -54,7 +54,7 @@ describe("Details", () => {
       const example = { cost: 12.22 };
       const DTest = TypedDetails<typeof example>();
       const output = shallow(<DTest.Details data={example}><DTest.Number label="Cost" qa="cost" value={x => x.cost} /></DTest.Details>).html();
-      expect(output).toContain(`<h4 class="govuk-heading-s">Cost</h4>`);
+      expect(output).toContain(`<p class="govuk-heading-s">Cost</p>`);
       expect(output).toContain(`<p class="govuk-body">12.22</p>`);
     });
 
@@ -62,7 +62,7 @@ describe("Details", () => {
       const example = { cost: 12.22 };
       const DTest = TypedDetails<typeof example>();
       const output = shallow(<DTest.Details data={example}><DTest.Currency fractionDigits={2} label="Cost" qa="cost" value={x => x.cost} /></DTest.Details>).html();
-      expect(output).toContain(`<h4 class="govuk-heading-s">Cost</h4>`);
+      expect(output).toContain(`<p class="govuk-heading-s">Cost</p>`);
       expect(output).toContain(`<p class="govuk-body"><span style="white-space:nowrap">£12.22</span></p>`);
     });
   });

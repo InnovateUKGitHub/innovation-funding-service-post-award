@@ -95,7 +95,7 @@ export class FieldComponent<T> extends React.Component<InternalFieldProps<T>, {}
         return (
             <React.Fragment>
                 <div className={this.props.labelClass}>
-                    <h4 className="govuk-heading-s">{this.props.label}</h4>
+                    <p className="govuk-heading-s">{this.props.label}</p>
                 </div>
                 <div className={this.props.valueClass}>
                     {this.props.render(this.props.data!)}
