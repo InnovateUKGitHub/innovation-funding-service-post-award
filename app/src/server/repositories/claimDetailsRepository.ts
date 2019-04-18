@@ -8,6 +8,7 @@ export interface ISalesforceClaimDetails {
   Acc_ProjectPeriodNumber__c: number;
   Acc_ProjectPeriodStartDate__c: string;
   Acc_ProjectPeriodEndDate__c: string;
+  Acc_ReasonForDifference__c: string;
 }
 
 export interface IClaimDetailsRepository {
@@ -31,6 +32,7 @@ export class ClaimDetailsRepository extends SalesforceRepositoryBase<ISalesforce
     "Acc_ProjectPeriodNumber__c",
     "Acc_ProjectPeriodStartDate__c",
     "Acc_ProjectPeriodEndDate__c",
+    "Acc_ReasonForDifference__c",
   ];
 
   getAllByPartnerForPeriod(partnerId: string, periodId: number): Promise<ISalesforceClaimDetails[]> {

@@ -6,7 +6,7 @@ export class GetClaimDetailsQuery extends QueryBase<ClaimDetailsDto> {
   constructor(
     private readonly partnerId: string,
     private readonly periodId: number,
-    private readonly costCategoryId: string
+    private readonly costCategoryId: string,
   ) {
     super();
   }
@@ -21,6 +21,7 @@ export class GetClaimDetailsQuery extends QueryBase<ClaimDetailsDto> {
         periodStart: null,
         periodEnd: null,
         value: 0,
+        comments: null,
       });
     }
     return mapClaimDetails(item, context);
