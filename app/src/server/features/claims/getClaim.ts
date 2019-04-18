@@ -1,5 +1,5 @@
-import { QueryBase } from "../common";
-import { ClaimDto, IContext } from "../../../types";
+import { QueryBase } from "@server/features/common";
+import { ClaimDto, IContext } from "@framework/types";
 import mapClaim from "./mapClaim";
 
 // TODO - nullable or throw to be decided
@@ -9,8 +9,8 @@ export class GetClaim extends QueryBase<ClaimDto> {
   }
 
   protected async Run(context: IContext) {
-    const result = await context.repositories.claims.get(this.partnerId, this.periodId);
-    const forcast = await context.repositories.profileTotalPeriod.get(this.partnerId, this.periodId);
-    return result && mapClaim(context)(result, forcast);
+    const result   = await context.repositories.claims.get(this.partnerId, this.periodId);
+    const forecast = await context.repositories.profileTotalPeriod.get(this.partnerId, this.periodId);
+    return result && mapClaim(context)(result, forecast);
   }
 }

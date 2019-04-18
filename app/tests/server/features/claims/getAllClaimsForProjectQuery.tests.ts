@@ -1,12 +1,11 @@
 import "jest";
 import { TestContext } from "../../testContextProvider";
-import { GetAllClaimsForProjectQuery } from "../../../../src/server/features/claims";
-import { ClaimStatus } from "../../../../src/types";
+import { GetAllClaimsForProjectQuery } from "@server/features/claims";
+import { ClaimStatus } from "@framework/types";
 
 describe("getAllClaimsForProjectQuery", () => {
   it("returns the full claim details", async () => {
     const context = new TestContext();
-
     const expectedClaimCost = 10000;
     const expectedForcastCost = 20000;
     const expectedPeriodId = 2;
@@ -36,9 +35,7 @@ describe("getAllClaimsForProjectQuery", () => {
 
   it("returns all claims for a partner", async () => {
     const context = new TestContext();
-
     const expectedNumberOfCLaims = 3;
-
     const project = context.testData.createProject();
     const partner = context.testData.createPartner(project);
 
@@ -60,7 +57,6 @@ describe("getAllClaimsForProjectQuery", () => {
     expect(results.map(x => x.partnerId)).toEqual([partner.Id, partner.Id, partner.Id]);
     expect(results.map(x => x.totalCost)).toEqual([30, 20, 10]);
     expect(results.map(x => x.forecastCost)).toEqual([300, 200, 100]);
-
   });
 
   it("returns all claims for all partners", async () => {
@@ -96,7 +92,6 @@ describe("getAllClaimsForProjectQuery", () => {
     expect(results.map(x => x.partnerId)).toEqual([partner1.Id, partner2.Id]);
     expect(results.map(x => x.totalCost)).toEqual([10, 20]);
     expect(results.map(x => x.forecastCost)).toEqual([100, 200]);
-
   });
 
   it("returns only claims for project", async () => {
@@ -134,7 +129,6 @@ describe("getAllClaimsForProjectQuery", () => {
     expect(results.map(x => x.partnerId)).toEqual([partner2.Id]);
     expect(results.map(x => x.totalCost)).toEqual([20]);
     expect(results.map(x => x.forecastCost)).toEqual([200]);
-
   });
 
   it("sorts project lead first then alphabetical", async () => {
@@ -167,9 +161,7 @@ describe("getAllClaimsForProjectQuery", () => {
 
   it("sorts period ids decending", async () => {
     const context = new TestContext();
-
     const project = context.testData.createProject();
-
     const partner1 = context.testData.createPartner(project, p => {
       p.Acc_ProjectRole__c = "";
       p.Acc_AccountId__r.Name = "XXXXXX";
@@ -183,13 +175,14 @@ describe("getAllClaimsForProjectQuery", () => {
     context.testData.createClaim(partner1, 2);
     context.testData.createClaim(partner1, 3);
     context.testData.createClaim(partner2, 1);
-    context.testData.createClaim(partner2, 2);
     context.testData.createClaim(partner2, 3);
+    context.testData.createClaim(partner2, 2);
+    context.testData.createClaim(partner2, 1);
 
     const query = new GetAllClaimsForProjectQuery(project.Id);
     const results = await context.runQuery(query);
 
-    expect(results.map(x => x.partnerId)).toEqual([partner2.Id, partner2.Id, partner2.Id, partner1.Id, partner1.Id, partner1.Id]);
-    expect(results.map(x => x.periodId)).toEqual([3, 2, 1, 3, 2, 1]);
+    expect(results.map(x => x.partnerId)).toEqual([partner2.Id, partner2.Id, partner2.Id, partner2.Id, partner1.Id, partner1.Id, partner1.Id]);
+    expect(results.map(x => x.periodId)).toEqual([3, 2, 1, 1, 3, 2, 1]);
   });
 });
