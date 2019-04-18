@@ -3,6 +3,7 @@
 import React from "react";
 import * as Actions from "../../../redux/actions";
 import * as Selectors from "../../../redux/selectors";
+import * as ACC from "../../../components";
 import { IEditorStore, RootState } from "../../../redux";
 import { Pending } from "../../../../shared/pending";
 import { ClaimDto, PartnerDto, ProjectDto, ProjectRole } from "../../../../types";
@@ -63,7 +64,13 @@ export const withDataEditor = (state: RootState, props: Params): PendingForecast
   return { combined };
 };
 
-export const renderWarning = (data: ForecastData) => {
+export const renderWarning = (data: ForecastData) => (
+  <ACC.Renderers.AriaLive>
+    {renderWarningMessage(data)}
+  </ACC.Renderers.AriaLive>
+);
+
+const renderWarningMessage = (data: ForecastData) => {
   if (!(data.partner.roles & ProjectRole.FinancialContact)) {
     return null;
   }
