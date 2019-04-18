@@ -8,6 +8,7 @@ export function mapClaimDetails(salesforceClaimDetails: ISalesforceClaimDetails,
     periodStart: context.clock.parse(salesforceClaimDetails.Acc_ProjectPeriodStartDate__c, SALESFORCE_DATE_FORMAT),
     periodEnd: context.clock.parse(salesforceClaimDetails.Acc_ProjectPeriodEndDate__c, SALESFORCE_DATE_FORMAT),
     costCategoryId: salesforceClaimDetails.Acc_CostCategory__c,
-    value: salesforceClaimDetails.Acc_PeriodCostCategoryTotal__c
+    value: salesforceClaimDetails.Acc_PeriodCostCategoryTotal__c,
+    comments: salesforceClaimDetails.Acc_ReasonForDifference__c,
   });
 }
