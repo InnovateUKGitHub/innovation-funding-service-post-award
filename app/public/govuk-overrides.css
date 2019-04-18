@@ -14,16 +14,16 @@
   padding: 2% 4% 2% 1%;
 }
 
-.govuk-table__row.table__row--error {
-  border-left: 5px solid #b10e1e;
-}
-
 .govuk-table__row.table__row--info {
   border-left: 5px solid #0b0c0c;
 }
 
 .govuk-table__row.table__row--warning {
   border-left: 5px solid #005ea5;
+}
+
+.govuk-table__row.table__row--error {
+  border-left: 5px solid #b10e1e;
 }
 
 .govuk-table__row.table__row--error td:first-child,
@@ -48,11 +48,6 @@
 .govuk-table__row.table__row--info.table__row--icon td:first-child,
 .govuk-table__row.table__row--info.table__row--icon th:first-child {
   padding-left: 4%;
-}
-
-.govuk-table__row.table__row--error td,
-.govuk-table__row.table__row--error th {
-  vertical-align: bottom;
 }
 
 .govuk-table__header--light .govuk-table__header:not(:first-child) {
