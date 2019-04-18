@@ -15,6 +15,7 @@ describe("GetClaimDetailsQuery", () => {
     const expectedValue = 2000;
     const expectedStartDate = DateTime.fromFormat("1 Dec 2014", "d MMM yyyy");
     const expectedEndDate = expectedStartDate.plus({ days: 30 });
+    const expectedComments = "comments";
 
     const costCategory = context.testData.createCostCategory(x => {
       x.Id = exectedCostCategoryId;
@@ -29,6 +30,7 @@ describe("GetClaimDetailsQuery", () => {
       x.Acc_ProjectPeriodStartDate__c = expectedStartDate.toFormat("yyyy-MM-dd");
       x.Acc_ProjectPeriodEndDate__c = expectedEndDate.toFormat("yyyy-MM-dd");
       x.Acc_PeriodCostCategoryTotal__c = expectedValue;
+      x.Acc_ReasonForDifference__c = expectedComments;
     });
 
     const query = new GetClaimDetailsQuery(exectedParticipantId, expectedPeriod, exectedCostCategoryId);
@@ -39,6 +41,7 @@ describe("GetClaimDetailsQuery", () => {
     expect(result.periodStart).toEqual(expectedStartDate.toJSDate());
     expect(result.periodEnd).toEqual(expectedEndDate.toJSDate());
     expect(result.value).toEqual(expectedValue);
+    expect(result.comments).toEqual(expectedComments);
   });
 
   // this needs revising once rollups are working
@@ -61,6 +64,7 @@ describe("GetClaimDetailsQuery", () => {
     expect(result.value).toEqual(0);
     expect(result.periodStart).toBeNull();
     expect(result.periodEnd).toBeNull();
+    expect(result.comments).toBeNull();
 
   });
 });
