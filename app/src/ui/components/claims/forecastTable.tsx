@@ -2,7 +2,7 @@ import React from "react";
 import classNames from "classnames";
 import * as ACC from "../../components";
 import {CondensedDateRange, Currency, Percentage} from "../../components/renderers";
-import { ForecastDetailsDtosValidator } from "../../validators/forecastDetailsDtosValidator";
+import { ForecastDetailsDtosValidator, ForecastDetailsDtoValidator } from "../../validators/forecastDetailsDtosValidator";
 import { IEditorStore } from "../../redux";
 import { ForecastData } from "../../containers/claims/forecasts/common";
 
@@ -14,6 +14,7 @@ interface TableRow {
   golCosts: number;
   total: number;
   difference: number;
+  validators: ForecastDetailsDtoValidator[];
 }
 
 interface Index {
@@ -46,7 +47,10 @@ export class ForecastTable extends React.Component<Props> {
         headers={this.renderTableHeaders(periods, periodId)}
         footers={this.renderTableFooters(periods, parsed, data.editor)}
         headerRowClass="govuk-body-s govuk-table__header--light"
-        bodyRowClass={x => classNames("govuk-body-s", {"table__row--warning": !hideValidation && (x.total > x.golCosts)})}
+        bodyRowClass={x => classNames("govuk-body-s", {
+          "table__row--warning": !hideValidation && x.total > x.golCosts,
+          "table__row--error": !hideValidation && x.validators.some(v => !v.isValid)
+        })}
       >
         <Table.String header="Month" value={x => x.categoryName} qa="category-name" />
 
@@ -82,6 +86,10 @@ export class ForecastTable extends React.Component<Props> {
     data.costCategories
       .filter(x => x.competitionType === data.project.competitionType && x.organisationType === data.partner.organisationType)
       .forEach(category => {
+        const validators = data.editor && data.editor.validator.items.results
+          .filter(x => x.model.costCategoryId === category.id)
+          .sort((a, b) => a.model.periodId - b.model.periodId);
+
         const row: TableRow = {
           categoryId: category.id,
           categoryName: category.name,
@@ -89,7 +97,8 @@ export class ForecastTable extends React.Component<Props> {
           forecasts: {},
           golCosts: 0,
           total: 0,
-          difference: 0
+          difference: 0,
+          validators: validators || []
         };
 
         data.claimDetails.forEach(x => {
@@ -135,14 +144,17 @@ export class ForecastTable extends React.Component<Props> {
     const editor = data.editor;
     const value  = forecastRow.forecasts[period];
     const costCategory = data.costCategories.find(x => x.id === forecastRow.categoryId);
+    const validator = forecastRow.validators[index.column - 1];
+    const error = validator && validator.value;
 
     if ((costCategory && costCategory.isCalculated) || !editor || parseInt(period, 10) <= data.project.periodId) {
       return <Currency value={value} />;
     }
+
     return (
       <span>
-        <ACC.ValidationError error={editor.validator.items.results[index.row].id} />
         <ACC.Inputs.NumberInput
+          id={error && error.key}
           name={`value_${period}_${forecastRow.categoryId}`}
           value={value}
           ariaLabel={`${forecastRow.categoryName} Period ${period}`}
