@@ -10,7 +10,6 @@ interface Props {
   id?: string;
   route: ILinkInfo;
   className?: string;
-  selected?: boolean;
 }
 
 interface Data {
@@ -25,7 +24,7 @@ class LinkComponent extends React.Component<Props & Data> {
   }
 
   render() {
-    const { id, route, selected, children, className } = this.props;
+    const { id, route, children, className } = this.props;
     if (!this.userHasAccess(route)) return null;
 
     return (
@@ -34,7 +33,6 @@ class LinkComponent extends React.Component<Props & Data> {
         routeName={route.routeName}
         routeParams={route.routeParams}
         className={`govuk-link ${className}`}
-        aria-selected={selected}
         successCallback={scrollToTheTopInstantly}
       >
         {children}
