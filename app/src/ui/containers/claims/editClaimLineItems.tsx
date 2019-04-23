@@ -165,7 +165,9 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
           >
             <LineItemTable.Custom header="Description" qa="cost-description" value={(x, i) => this.renderDescription(x, i, validationResults[i.row])} />
             <LineItemTable.Custom header="Cost (£)" qa="cost-value" classSuffix="numeric" value={(x, i) => this.renderCost(x, i, validationResults[i.row])} width={30} />
-            {this.state.showAddRemove ? <LineItemTable.Custom header="" qa="remove" value={(x, i) => <a href="#" onClick={e => this.removeItem(x, i, e)}>Remove</a>} width={1} /> : null}
+            {this.state.showAddRemove ?
+              <LineItemTable.Custom header="" qa="remove" value={(x, i) => <a href="" role="button" onClick={e => this.removeItem(x, i, e)}>Remove</a>} width={1}/>
+              : null}
           </LineItemTable.Table>
         </LineItemForm.Fieldset>
         <LineItemForm.Fieldset>
@@ -262,7 +264,7 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
     if (showAddRemove) {
       footers.push(
         <tr key={1} className="govuk-table__row">
-          <td className="govuk-table__cell" colSpan={3}><a href="#" onClick={(e) => this.addItem(e)} data-qa="add-cost">Add a cost</a></td>
+          <td className="govuk-table__cell" colSpan={3}><a href="" role="button" onClick={(e) => this.addItem(e)} data-qa="add-cost">Add a cost</a></td>
         </tr>
       );
     }

@@ -23,7 +23,7 @@ export class Tabs extends React.PureComponent<TabProps, {}> {
         if (tabList !== null && tabList.length) {
             return (
                 <div className={`govuk-tabs govuk-!-margin-bottom-9`} data-qa={qa}>
-                    <ul className="govuk-tabs__list">
+                    <ul className="govuk-tabs__list" role="tablist">
                         {tabList.map((item, index) => this.renderItem(item, index))}
                     </ul>
                 </div>
@@ -36,7 +36,7 @@ export class Tabs extends React.PureComponent<TabProps, {}> {
         const tab = this.renderTab(item);
         if (!tab) return null;
         return (
-            <li className="govuk-tabs__list-item" key={`tab-${index}`} role="presentation" data-qa={item.qa}>
+            <li role="tab" aria-selected={item.selected} className="govuk-tabs__list-item" key={`tab-${index}`} data-qa={item.qa}>
                 {tab}
             </li>
         );
@@ -49,11 +49,11 @@ export class Tabs extends React.PureComponent<TabProps, {}> {
         });
 
         if (item.route) {
-            return <Link className={classes} route={item.route} selected={item.selected}>{item.text}</Link>;
+            return <Link className={classes} route={item.route}>{item.text}</Link>;
         }
 
         if (item.url) {
-            return <a href={item.url} className={classes} aria-selected={item.selected}>{item.text}</a>;
+            return <a href={item.url} className={classes}>{item.text}</a>;
         }
 
         return <span className={classes}>item.text</span>;
