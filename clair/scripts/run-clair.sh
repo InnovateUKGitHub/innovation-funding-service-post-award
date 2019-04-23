@@ -4,6 +4,9 @@ PROJECTPATH=${bamboo_build_working_directory}
 
 echo 'logging in to nexus'
 docker login --username ${bamboo_nexusRepoUser} --password ${bamboo_nexusRepoPassword} ${bamboo_nexusRepoUrl} > /dev/null 2>&1 
+docker pull arminc/clair-db:latest
+docker pull arminc/clair-local-scan:v2.0.5
+docker pull docker-ifs.devops.innovateuk.org/ifs-clair-scanner:v2
 
 ./clair-container-scan.sh > $PROJECTPATH/clair/output.json;
 
