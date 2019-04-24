@@ -3,7 +3,8 @@
   "extends": [
     "tslint:recommended",
     "tslint-sonarts",
-    "tslint-react"
+    "tslint-react",
+    "tslint-react-a11y"
   ],
   "jsRules": {},
   "rules": {
