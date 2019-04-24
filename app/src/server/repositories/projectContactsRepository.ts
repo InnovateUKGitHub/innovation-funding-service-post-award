@@ -1,4 +1,3 @@
-// tslint:disable
 import SalesforceRepositoryBase from "./salesforceRepositoryBase";
 
 export type SalesforceRole = "Project Manager" | "Monitoring officer" | "Finance contact";

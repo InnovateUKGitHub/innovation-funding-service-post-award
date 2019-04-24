@@ -76,7 +76,7 @@ export class Guide extends React.Component<Props, {}> {
     }
 
     private renderMenus() {
-        return <ul><li><a className="govuk-link" href="/components">All</a></li>{guides.map((x, i) => <li className="govuk-link" key={`guide-menu-${i}`}><a href={`/components?guide=${x.name}`}>{x.name}</a></li>)}</ul>;
+        return <ul><li><a className="govuk-link" href="/components">Show All</a></li>{guides.map((x, i) => <li className="govuk-link" key={`guide-menu-${i}`}><a href={`/components?guide=${x.name}`}>{x.name}</a></li>)}</ul>;
     }
 
     private renderGuides() {

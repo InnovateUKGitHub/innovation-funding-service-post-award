@@ -18,13 +18,13 @@ describe("Tabs", () => {
         expect(items.length).toBe(2);
         items.forEach(item => {
             expect(item.props().className).toContain("govuk-tabs__list-item");
-            expect(item.props().role).toBe("presentation");
+            expect(item.props().role).toBe("tab");
         });
     });
 
     it("should render the selected tab", () => {
         const wrapper = Enzyme.shallow(<Tabs tabList={aTabList} />);
-        expect(wrapper.html()).toContain(`<a href="#" class="govuk-tabs__tab govuk-tabs__tab--selected" aria-selected="true">Project change requests</a>`);
+        expect(wrapper.html()).toContain(`<a href="#" class="govuk-tabs__tab govuk-tabs__tab--selected">Project change requests</a>`);
     });
 
     it("should render the unselected tab", () => {
