@@ -1,8 +1,9 @@
 import { TestContext } from "../../testContextProvider";
-import mapClaimLineItem from "../../../../src/server/features/claimLineItems/mapClaimLineItem";
-import {SaveLineItemsCommand} from "../../../../src/server/features/claimLineItems";
-import * as Repositories from "../../../../src/server/repositories";
-import { ValidationError } from "../../../../src/server/features/common/appError";
+import mapClaimLineItem from "@server/features/claimLineItems/mapClaimLineItem";
+import { SaveLineItemsCommand } from "@server/features/claimLineItems";
+import { ValidationError } from "@server/features/common/appError";
+import * as Repositories from "@server/repositories";
+import { Authorisation, ProjectRole } from "@framework/types";
 
 describe("UpdateClaimLineItemsCommand", () => {
 
@@ -125,5 +126,35 @@ describe("UpdateClaimLineItemsCommand", () => {
     const command = new SaveLineItemsCommand("", dto.partnerId, dto.costCategoryId, dto.periodId, [dto]);
     await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
     expect(context.repositories.claimLineItems.Items).toHaveLength(0);
+  });
+
+  test("accessControl - Partner Finance contact passes", async () => {
+    const context = new TestContext();
+    const project = context.testData.createProject();
+    const partner = context.testData.createPartner();
+    const command = new SaveLineItemsCommand(project.Id, partner.Id, "", 1, []);
+    const auth    = new Authorisation({
+      [project.Id]: {
+        projectRoles: ProjectRole.Unknown,
+        partnerRoles: { [partner.Id]: ProjectRole.FinancialContact }
+      }
+    });
+
+    expect(await context.runAccessControl(auth, command)).toBe(true);
+  });
+
+  test("accessControl - all other roles fail", async () => {
+    const context = new TestContext();
+    const project = context.testData.createProject();
+    const partner = context.testData.createPartner();
+    const command = new SaveLineItemsCommand(project.Id, partner.Id, "", 1, []);
+    const auth    = new Authorisation({
+      [project.Id]: {
+        projectRoles: ProjectRole.FinancialContact | ProjectRole.MonitoringOfficer | ProjectRole.ProjectManager,
+        partnerRoles: { [partner.Id]: ProjectRole.MonitoringOfficer | ProjectRole.ProjectManager }
+      }
+    });
+
+    expect(await context.runAccessControl(auth, command)).toBe(false);
   });
 });
