@@ -4,6 +4,7 @@ import { FileUpload } from "../../src/types/FileUpload";
 import { Updatable } from "../../src/server/repositories/salesforceRepositoryBase";
 import { Stream } from "stream";
 import { IRepositories } from "../../src/types/IContext";
+import { ISalesforceClaimDetails } from "@server/repositories/claimDetailsRepository";
 
 class ProjectsTestRepository extends TestRepository<Repositories.ISalesforceProject> implements Repositories.IProjectRepository {
     getById(id: string) {
@@ -97,6 +98,15 @@ class ClaimDetailsTestRepository extends TestRepository<Repositories.ISalesforce
 
     get({ partnerId, periodId, costCategoryId }: ClaimDetailKey): Promise<Repositories.ISalesforceClaimDetails|null> {
         return super.filterOne(x => x.Acc_ProjectParticipant__c === partnerId && x.Acc_ProjectPeriodNumber__c === periodId && x.Acc_CostCategory__c === costCategoryId);
+    }
+
+    update(item: Updatable<ISalesforceClaimDetails>): Promise<boolean> {
+        const index = this.Items.findIndex(x => x.Id === item.Id);
+        if (index >= 0) {
+          this.Items[index] = Object.assign(this.Items[index], item);
+          return Promise.resolve(true);
+        }
+        return Promise.resolve(false);
     }
 }
 

@@ -1,4 +1,5 @@
 interface ClaimDetailsDto {
+    id: string;
     costCategoryId: string;
     periodId: number;
     periodStart: Date|null;

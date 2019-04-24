@@ -1,4 +1,4 @@
-import SalesforceRepositoryBase from "./salesforceRepositoryBase";
+import SalesforceRepositoryBase, { Updatable } from "./salesforceRepositoryBase";
 
 export interface ISalesforceClaimDetails {
   Id: string;
@@ -8,7 +8,7 @@ export interface ISalesforceClaimDetails {
   Acc_ProjectPeriodNumber__c: number;
   Acc_ProjectPeriodStartDate__c: string;
   Acc_ProjectPeriodEndDate__c: string;
-  Acc_ReasonForDifference__c: string;
+  Acc_ReasonForDifference__c: string|null;
 }
 
 export interface IClaimDetailsRepository {
@@ -16,6 +16,7 @@ export interface IClaimDetailsRepository {
   getAllByPartnerWithPeriodLt(partnerId: string, periodId: number): Promise<ISalesforceClaimDetails[]>;
   get(key: ClaimDetailKey): Promise<ISalesforceClaimDetails|null>;
   getAllByPartner(partnerId: string): Promise<ISalesforceClaimDetails[]>;
+  update(item: Updatable<ISalesforceClaimDetails>): Promise<boolean>;
 }
 
 export class ClaimDetailsRepository extends SalesforceRepositoryBase<ISalesforceClaimDetails> implements IClaimDetailsRepository {
@@ -70,5 +71,9 @@ export class ClaimDetailsRepository extends SalesforceRepositoryBase<ISalesforce
   getAllByPartner(partnerId: string): Promise<ISalesforceClaimDetails[]> {
     const filter = `Acc_ProjectParticipant__c = '${partnerId}' AND RecordType.Name = '${this.recordType}' AND Acc_ClaimStatus__c != 'New'`;
     return super.where(filter);
+  }
+
+  update(item: Updatable<ISalesforceClaimDetails>) {
+    return super.updateItem(item);
   }
 }
