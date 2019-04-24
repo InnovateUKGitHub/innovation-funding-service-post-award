@@ -5,6 +5,7 @@ import {CondensedDateRange, Currency, Percentage} from "../../components/rendere
 import { ForecastDetailsDtosValidator, ForecastDetailsDtoValidator } from "../../validators/forecastDetailsDtosValidator";
 import { IEditorStore } from "../../redux";
 import { ForecastData } from "../../containers/claims/forecasts/common";
+import { ErrorRoute } from "@framework/ui/containers";
 
 interface TableRow {
   categoryId: string;
@@ -154,7 +155,7 @@ export class ForecastTable extends React.Component<Props> {
     return (
       <span>
         <ACC.Inputs.NumberInput
-          id={error && error.key}
+          id={error && !error.isValid ? error.key : ""}
           name={`value_${period}_${forecastRow.categoryId}`}
           value={value}
           ariaLabel={`${forecastRow.categoryName} Period ${period}`}
@@ -227,7 +228,9 @@ export class ForecastTable extends React.Component<Props> {
     }, 0));
 
     const validator = !this.props.hideValidation && !!editor ? editor.validator : false;
-    const warning   = !!validator && validator.showValidationErrors && !validator.isValid;
+    const warning   = !!validator && validator.showValidationErrors && !validator.totalCosts.isValid;
+    const warningId = !!validator && warning ? validator.totalCosts.key : "";
+
     totals.push(costTotal);
     totals.push(golTotal);
 
@@ -239,7 +242,7 @@ export class ForecastTable extends React.Component<Props> {
       </td>
     ));
 
-    return [<tr key="footer1" className={classNames("govuk-table__row", "govuk-body-s", {"table__row--error": warning})}>{cells}</tr>];
+    return [<tr id={warningId} key="footer1" className={classNames("govuk-table__row", "govuk-body-s", {"table__row--error": warning})}>{cells}</tr>];
   }
 
   renderTableFooterCell = (total: number, key: number) => (
