@@ -25,6 +25,7 @@ interface Data {
   claimDetailsSummary: Pending<ClaimDetailsSummaryDto[]>;
   editor: Pending<IEditorStore<ClaimDto, ClaimDtoValidator>>;
   forecastData: Pending<ForecastData>;
+  iarDocument: Pending<DocumentSummaryDto | null>;
   isClient: boolean;
   standardOverheadRate: number;
 }
@@ -40,6 +41,7 @@ interface CombinedData {
   costCategories: CostCategoryDto[];
   claim: ClaimDto;
   claimDetails: ClaimDetailsSummaryDto[];
+  iarDocument: DocumentSummaryDto | null;
   editor: IEditorStore<ClaimDto, ClaimDtoValidator>;
 }
 
@@ -51,6 +53,7 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, Data, Callbacks> 
       costCategories: this.props.costCategories,
       claim: this.props.claim,
       claimDetails: this.props.claimDetailsSummary,
+      iarDocument: this.props.iarDocument,
       editor: this.props.editor,
     });
 
@@ -60,18 +63,13 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, Data, Callbacks> 
   private getClaimPeriodTitle(data: CombinedData) {
     return <ACC.Claims.ClaimPeriodDate claim={data.claim} partner={data.partner} />;
   }
+
   private onClaimSubmit(data: CombinedData) {
     const message = data.editor.data.status === ClaimStatus.MO_QUERIED ? "You have queried this claim." : "You have approved this claim.";
     this.props.onSave(this.props.projectId, this.props.partnerId, this.props.periodId, data.editor.data, data.claimDetails, data.costCategories, message);
   }
 
   private renderContents(data: CombinedData) {
-    const Form = ACC.TypedForm<ClaimDto>();
-    const options: ACC.SelectOption[] = [
-      { id: ClaimStatus.MO_QUERIED, value: "Query claim"},
-      { id: ClaimStatus.AWAITING_IUK_APPROVAL, value: "Submit for approval"},
-    ];
-    const submitButtonLabel = this.getSubmitButtonLabel(data);
     return (
       <ACC.Page
         backLink={<ACC.BackLink route={AllClaimsDashboardRoute.getLink({ projectId: data.project.id })}>Back to project</ACC.BackLink>}
@@ -85,7 +83,7 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, Data, Callbacks> 
             {...data}
             standardOverheadRate={this.props.standardOverheadRate}
             validation={data.editor.validator.claimDetails.results}
-            getLink={costCategoryId => ReviewClaimLineItemsRoute.getLink({ partnerId: this.props.partnerId, projectId: this.props.projectId, periodId: this.props.periodId, costCategoryId })}
+            getLink={costCategoryId => this.getClaimLineItemLink(costCategoryId)}
           />
         </ACC.Section>
         <ACC.Section>
@@ -98,25 +96,53 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, Data, Callbacks> 
             </ACC.AccordionItem>
           </ACC.Accordion>
         </ACC.Section>
-        <Form.Form
-          data={data.editor.data}
-          onSubmit={() => this.onClaimSubmit(data)}
-          onChange={(dto) => this.props.onChange(this.props.partnerId, this.props.periodId, dto, data.claimDetails, data.costCategories)}
-          qa="review-form"
-        >
-          <Form.Fieldset heading="How do you want to proceed with this claim?">
-            <Form.Radio
-              name="status"
-              options={options}
-              value={(dto) => options.find(x => x.id === dto.status)}
-              update={(dto, val) => this.updateStatus(dto, val)}
-              validation={data.editor.validator.status}
-              inline={true}
-            />
-            {!!submitButtonLabel ? <Form.Submit>{submitButtonLabel}</Form.Submit> : null}
-          </Form.Fieldset>
-        </Form.Form>
+        {this.renderIarSection(data.claim, data.iarDocument)}
+        {this.renderForm(data)}
       </ACC.Page>
+    );
+  }
+
+  private getClaimLineItemLink(costCategoryId: string) {
+    return ReviewClaimLineItemsRoute.getLink({ partnerId: this.props.partnerId, projectId: this.props.projectId, periodId: this.props.periodId, costCategoryId });
+  }
+
+  private renderIarSection(claim: ClaimDto, iarDocument?: DocumentSummaryDto | null) {
+    if (!claim.isIarRequired || !claim.isApproved || !iarDocument) return null;
+
+    return (
+      <ACC.Section qa="claim-iar" title={"Independent accountant's report"}>
+        <ACC.DocumentSingle document={iarDocument} openNewWindow={true}/>
+      </ACC.Section>
+    );
+  }
+
+  private renderForm(data: CombinedData) {
+    const Form = ACC.TypedForm<ClaimDto>();
+    const options: ACC.SelectOption[] = [
+      { id: ClaimStatus.MO_QUERIED, value: "Query claim"},
+      { id: ClaimStatus.AWAITING_IUK_APPROVAL, value: "Submit for approval"},
+    ];
+    const submitButtonLabel = this.getSubmitButtonLabel(data);
+
+    return (
+      <Form.Form
+        data={data.editor.data}
+        onSubmit={() => this.onClaimSubmit(data)}
+        onChange={(dto) => this.props.onChange(this.props.partnerId, this.props.periodId, dto, data.claimDetails, data.costCategories)}
+        qa="review-form"
+      >
+        <Form.Fieldset heading="How do you want to proceed with this claim?">
+          <Form.Radio
+            name="status"
+            options={options}
+            value={(dto) => options.find(x => x.id === dto.status)}
+            update={(dto, val) => this.updateStatus(dto, val)}
+            validation={data.editor.validator.status}
+            inline={true}
+          />
+          {!!submitButtonLabel ? <Form.Submit>{submitButtonLabel}</Form.Submit> : null}
+        </Form.Fieldset>
+      </Form.Form>
     );
   }
 
@@ -167,6 +193,7 @@ export const ReviewClaim = definition.connect({
       claimDetailsSummary: Selectors.findClaimDetailsSummaryByPartnerAndPeriod(props.partnerId, props.periodId).getPending(state),
       editor: Selectors.getClaimEditor(props.partnerId, props.periodId).get(state, (dto) => initEditor(dto)),
       isClient: state.isClient,
+      iarDocument: Selectors.getIarDocument(state, props.partnerId, props.periodId),
       forecastData: Pending.combine({
         project: projectPending,
         partner: partnerPending,
@@ -199,8 +226,9 @@ export const ReviewClaimRoute = definition.route({
         Actions.loadCostCategories(),
         Actions.loadClaim(params.partnerId, params.periodId),
         Actions.loadClaimDetailsSummaryForPartner(params.projectId, params.partnerId, params.periodId),
+        Actions.loadIarDocuments(params.partnerId, params.periodId),
         ...forecastDataLoadActions(params)
     ],
-    accessControl: (auth, { projectId, partnerId }) => auth.forProject(projectId).hasRole(ProjectRole.MonitoringOfficer),
+    accessControl: (auth, { projectId }) => auth.forProject(projectId).hasRole(ProjectRole.MonitoringOfficer),
     container: ReviewClaim
 });
