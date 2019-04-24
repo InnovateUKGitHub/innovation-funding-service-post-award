@@ -38,11 +38,6 @@ interface CombinedData {
   documents: DocumentSummaryDto[];
 }
 
-interface FormData {
-  claimDetails: ClaimDetailsDto;
-  lineItems: ClaimLineItemDto[];
-}
-
 interface Callbacks {
   validate: (partnerId: string, periodId: number, costCategoryId: string, dto: ClaimLineItemDto[]) => void;
   save: (projectId: string, partnerId: string, periodId: number, costCategoryId: string, dto: ClaimLineItemDto[]) => void;
