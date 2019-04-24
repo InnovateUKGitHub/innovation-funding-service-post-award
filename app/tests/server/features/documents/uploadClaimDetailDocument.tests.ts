@@ -1,6 +1,6 @@
-import {TestContext} from "../../testContextProvider";
-import {UploadClaimDetailDocumentCommand} from "../../../../src/server/features/documents/uploadClaimDetailDocument";
-import { ValidationError } from "../../../../src/server/features/common/appError";
+import { TestContext } from "../../testContextProvider";
+import { UploadClaimDetailDocumentCommand } from "@server/features/documents/uploadClaimDetailDocument";
+import { BadRequestError, ValidationError } from "@server/features/common/appError";
 
 describe("UploadClaimDetailDocumentCommand", () => {
   it("should upload a claim detail document", async () => {
@@ -17,7 +17,7 @@ describe("UploadClaimDetailDocumentCommand", () => {
 
     const file = {
       fileName: "fileName.txt",
-      content: "Some content",
+      content: "Some content1",
     };
 
     const command = new UploadClaimDetailDocumentCommand(claimDetailKey, file);
@@ -28,7 +28,7 @@ describe("UploadClaimDetailDocumentCommand", () => {
     expect(context.repositories.contentDocumentLinks.Items[0].LinkedEntityId).toEqual(claimDetail.Id);
   });
 
-  it("should throw a validation exception", async () => {
+  test("invalid filename should throw a validation exception", async () => {
     const context = new TestContext();
     const costCat = context.testData.createCostCategory();
     const partner = context.testData.createPartner();
@@ -42,11 +42,28 @@ describe("UploadClaimDetailDocumentCommand", () => {
 
     const file = {
       fileName: undefined,
-      content: "Some content",
+      content: "Some content2",
     };
 
     const command = new UploadClaimDetailDocumentCommand(claimDetailKey, file as any);
-
     await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
+  });
+
+  test("invalid claimDetailKey should throw exception", async () => {
+    const context = new TestContext();
+
+    const claimDetailKey = {
+      partnerId: "",
+      periodId: "",
+      costCategoryId: ""
+    };
+
+    const file = {
+      fileName: "undefined.txt",
+      content: "Some content3",
+    };
+
+    const command = new UploadClaimDetailDocumentCommand(claimDetailKey as any, file as any);
+    await expect(context.runCommand(command)).rejects.toThrow(BadRequestError);
   });
 });

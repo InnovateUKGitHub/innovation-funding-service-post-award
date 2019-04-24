@@ -1,7 +1,7 @@
 import { TestContext } from "../../testContextProvider";
-import { UploadClaimDocumentCommand } from "../../../../src/server/features/documents/uploadClaimDocument";
-import { ClaimStatus, DocumentDescription } from "../../../../src/types/constants";
-import { BadRequestError, ValidationError } from "../../../../src/server/features/common/appError";
+import { UploadClaimDocumentCommand } from "@server/features/documents/uploadClaimDocument";
+import { BadRequestError, ValidationError } from "@server/features/common/appError";
+import { ClaimStatus, DocumentDescription } from "@framework/types/constants";
 
 const validStatus = [
   ClaimStatus.DRAFT,
@@ -178,6 +178,33 @@ describe("UploadClaimDocumentCommand", () => {
           await expect(context.runCommand(command)).rejects.toThrow();
         });
       });
+    });
+
+    it("removes other IARs when a new one is uploaded", async () => {
+      const context = new TestContext();
+      const partner = context.testData.createPartner();
+      const claimId = "12345";
+      const claim = context.testData.createClaim(partner, 1, item => {
+        item.Id = claimId;
+        item.Acc_IARRequired__c = true;
+      });
+      const contentVersion1 = context.testData.createContentVersion("12345", "cat", "jpg", "", DocumentDescription.IAR);
+      const contentVersion2 = context.testData.createContentVersion("12345", "cat", "jpg", "", DocumentDescription.IAR);
+
+      context.testData.createContentDocumentLink(contentVersion1.ContentDocumentId, claimId);
+      context.testData.createContentDocumentLink(contentVersion2.ContentDocumentId, claimId);
+
+      const claimKey = {
+        partnerId: claim.Acc_ProjectParticipant__r.Id,
+        periodId: claim.Acc_ProjectPeriodNumber__c
+      };
+
+      expect(context.repositories.contentDocument.Items).toHaveLength(2);
+
+      const command = new UploadClaimDocumentCommand(claimKey, file);
+      await context.runCommand(command);
+
+      expect(context.repositories.contentDocument.Items).toHaveLength(0);
     });
   });
 });

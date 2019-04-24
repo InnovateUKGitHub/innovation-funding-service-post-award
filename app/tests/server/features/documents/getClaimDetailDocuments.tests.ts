@@ -1,5 +1,5 @@
-import {TestContext} from "../../testContextProvider";
-import {GetClaimDetailDocumentsQuery} from "../../../../src/server/features/documents/getClaimDetailDocuments";
+import { TestContext } from "../../testContextProvider";
+import { GetClaimDetailDocumentsQuery } from "@server/features/documents/getClaimDetailDocuments";
 
 describe("GetClaimDetailDocumentsQuery", () => {
   it("returns objects of correct shape", async () => {
@@ -15,5 +15,14 @@ describe("GetClaimDetailDocumentsQuery", () => {
     expect(item.fileName).toBe("cat.jpg");
     expect(item.link).toBe(`/api/documents/${contentVersion.Id}/content`);
     expect(item.id).toBe(contentVersion.ContentDocumentId);
+  });
+
+  it("returns empty array if no claim detail", async () => {
+    const context = new TestContext();
+    const query = new GetClaimDetailDocumentsQuery("", 1, "");
+    const result = await context.runQuery(query);
+
+    expect(result).toBeInstanceOf(Array);
+    expect(result.length).toBe(0);
   });
 });

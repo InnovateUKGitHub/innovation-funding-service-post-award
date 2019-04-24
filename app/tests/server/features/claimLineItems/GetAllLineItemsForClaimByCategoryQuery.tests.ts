@@ -1,6 +1,6 @@
 import "jest";
 import { TestContext } from "../../testContextProvider";
-import { GetAllLineItemsForClaimByCategoryQuery } from "../../../../src/server/features/claimLineItems";
+import { GetAllLineItemsForClaimByCategoryQuery } from "@server/features/claimLineItems";
 
 describe("GetAllLineItemsForClaimByCategoryQuery", () => {
   it("returns objects of correct shape", async () => {
