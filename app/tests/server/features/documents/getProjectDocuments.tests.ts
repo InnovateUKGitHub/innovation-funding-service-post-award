@@ -1,10 +1,10 @@
 import { TestContext } from "../../testContextProvider";
-import { GetProjectDocumentsQuery } from "../../../../src/server/features/documents/getProjectDocuments";
+import { GetProjectDocumentsQuery } from "@server/features/documents/getProjectDocuments";
+import { Authorisation, ProjectRole } from "@framework/types";
 
 describe("GetProjectDocumentsQuery", () => {
   it("should return all documents associated with the project", async () => {
     const context = new TestContext();
-
     const project = context.testData.createProject();
 
     const contentVersion1 = context.testData.createContentVersion(project.Id, "report1", "pdf");
@@ -16,5 +16,33 @@ describe("GetProjectDocumentsQuery", () => {
     const query = new GetProjectDocumentsQuery(project.Id);
     const docs = await context.runQuery(query);
     expect(docs).toHaveLength(2);
+  });
+
+  test("accessControl - Project Monitoring officer passes", async () => {
+    const context = new TestContext();
+    const project = context.testData.createProject();
+    const command = new GetProjectDocumentsQuery(project.Id);
+    const auth    = new Authorisation({
+      [project.Id]: {
+        projectRoles: ProjectRole.MonitoringOfficer,
+        partnerRoles: {}
+      }
+    });
+
+    expect(await context.runAccessControl(auth, command)).toBe(true);
+  });
+
+  test("accessControl - all other roles fail", async () => {
+    const context = new TestContext();
+    const project = context.testData.createProject();
+    const command = new GetProjectDocumentsQuery(project.Id);
+    const auth    = new Authorisation({
+      [project.Id]: {
+        projectRoles: ProjectRole.FinancialContact | ProjectRole.ProjectManager,
+        partnerRoles: {}
+      }
+    });
+
+    expect(await context.runAccessControl(auth, command)).toBe(false);
   });
 });

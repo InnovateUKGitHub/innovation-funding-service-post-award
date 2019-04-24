@@ -1,7 +1,7 @@
-import { BadRequestError, CommandBase, ValidationError } from "../common";
+import { BadRequestError, CommandBase, ValidationError } from "@server/features/common";
 import { UploadDocumentCommand } from "./uploadDocument";
-import { FileUploadValidator } from "../../../ui/validators/documentUploadValidator";
-import { FileUpload, IContext } from "../../../types";
+import { FileUploadValidator } from "@ui/validators/documentUploadValidator";
+import { FileUpload, IContext } from "@framework/types";
 
 export class UploadClaimDetailDocumentCommand extends CommandBase<string> {
   constructor(private readonly claimDetailKey: ClaimDetailKey, private readonly file: FileUpload) {

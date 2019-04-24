@@ -1,6 +1,7 @@
 import { TestContext } from "../../testContextProvider";
-import { UploadProjectDocumentCommand } from "../../../../src/server/features/documents/uploadProjectDocument";
-import { ValidationError } from "../../../../src/server/features/common/appError";
+import { UploadProjectDocumentCommand } from "@server/features/documents/uploadProjectDocument";
+import { ValidationError } from "@server/features/common/appError";
+import { Authorisation, ProjectRole } from "@framework/types";
 
 describe("UploadProjectDocumentCommand", () => {
   it("should upload a project document", async () => {
@@ -31,5 +32,33 @@ describe("UploadProjectDocumentCommand", () => {
 
     const command = new UploadProjectDocumentCommand(project.Id, file as any);
     await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
+  });
+
+  test("accessControl - Project Monitoring officer passes", async () => {
+    const context = new TestContext();
+    const project = context.testData.createProject();
+    const command = new UploadProjectDocumentCommand(project.Id, {} as any);
+    const auth    = new Authorisation({
+      [project.Id]: {
+        projectRoles: ProjectRole.MonitoringOfficer,
+        partnerRoles: {}
+      }
+    });
+
+    expect(await context.runAccessControl(auth, command)).toBe(true);
+  });
+
+  test("accessControl - all other roles fail", async () => {
+    const context = new TestContext();
+    const project = context.testData.createProject();
+    const command = new UploadProjectDocumentCommand(project.Id, {} as any);
+    const auth    = new Authorisation({
+      [project.Id]: {
+        projectRoles: ProjectRole.FinancialContact | ProjectRole.ProjectManager,
+        partnerRoles: {}
+      }
+    });
+
+    expect(await context.runAccessControl(auth, command)).toBe(false);
   });
 });
