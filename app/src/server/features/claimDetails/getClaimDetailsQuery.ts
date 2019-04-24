@@ -16,6 +16,7 @@ export class GetClaimDetailsQuery extends QueryBase<ClaimDetailsDto> {
     if (!item) {
       // todo: throw once overheads renenabled?
       return ({
+        id: "",
         costCategoryId: this.costCategoryId,
         periodId: this.periodId,
         periodStart: null,
