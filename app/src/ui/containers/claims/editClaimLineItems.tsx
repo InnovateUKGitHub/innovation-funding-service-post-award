@@ -130,8 +130,8 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
             hint={"Explain any difference between the forecast costs and the total costs."}
             labelHidden={true}
             name="comments"
-            value={() => claimDetails.comments}
-            update={(m, v) => claimDetails.comments = v}
+            value={() => claimDetails.comments} // TODO need to come from editor
+            update={(m, v) => {return;}}
             qa="info-text-area"
           />
         </LineItemForm.Fieldset>
@@ -177,8 +177,8 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
             hint={"Explain any difference between the forecast costs and the total costs."}
             labelHidden={true}
             name="comments"
-            value={() => claimDetails.comments}
-            update={(m, v) => claimDetails.comments = v}
+            value={() => claimDetails.comments} // TODO need to come from editor
+            update={(m, v) => {return;}}
             qa="info-text-area"
           />
         </LineItemForm.Fieldset>
