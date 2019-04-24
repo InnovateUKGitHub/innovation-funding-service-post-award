@@ -1,10 +1,10 @@
-import { BadRequestError, CommandBase, ValidationError } from "../common";
+import { BadRequestError, CommandBase, ValidationError } from "@server/features/common";
 import { UploadDocumentCommand } from "./uploadDocument";
 import { GetClaimDocumentsQuery } from "./getClaimDocuments";
 import { DeleteDocumentCommand } from "./deleteDocument";
-import { FileUploadValidator } from "../../../ui/validators/documentUploadValidator";
-import { ClaimDto, ClaimStatus, DocumentDescription, FileUpload, IContext } from "../../../types";
-import mapClaim from "../claims/mapClaim";
+import { FileUploadValidator } from "@ui/validators/documentUploadValidator";
+import { ClaimDto, ClaimStatus, DocumentDescription, FileUpload, IContext } from "@framework/types";
+import mapClaim from "@server/features/claims/mapClaim";
 
 export class UploadClaimDocumentCommand extends CommandBase<string> {
   constructor(private readonly claimKey: ClaimKey, private readonly file: FileUpload) {
