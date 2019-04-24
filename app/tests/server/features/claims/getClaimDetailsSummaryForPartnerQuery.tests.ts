@@ -1,6 +1,8 @@
 import { TestContext } from "../../testContextProvider";
 import { GetClaimDetailsSummaryForPartnerQuery } from "../../../../src/server/features/claimDetails";
+import { Authorisation, ProjectRole } from "@framework/types";
 
+// tslint:disable-next-line:no-big-function
 describe("claimDetails/GetAllForPartnerQuery", () => {
   it("when valid then returns all cost categories", async () => {
     const context = new TestContext();
@@ -113,5 +115,138 @@ describe("claimDetails/GetAllForPartnerQuery", () => {
 
     expect(result[1].costCategoryId).toBe(costCategory2.Id);
     expect(result[1].costsClaimedThisPeriod).toBe(expectedCost2);
+  });
+
+  it("should return correct cost category offer costs", async () => {
+    const context = new TestContext();
+    const periodId = 1;
+    const partner = context.testData.createPartner();
+    const project = context.testData.createProject();
+    const costCategory = context.testData.createCostCategory();
+    const value = 1234;
+
+    context.testData.createProfileTotalCostCategory(costCategory,partner, value);
+    context.testData.createClaimDetail(costCategory, partner, periodId);
+
+    const query = new GetClaimDetailsSummaryForPartnerQuery(project.Id, partner.Id, periodId);
+    const result = await context.runQuery(query);
+
+    expect(result[0].offerCosts).toBe(value);
+  });
+
+  it("should default cost claimed to date to 0", async () => {
+    const context = new TestContext();
+    const periodId = 1;
+    const partner = context.testData.createPartner();
+    const project = context.testData.createProject();
+    const costCategory = context.testData.createCostCategory();
+
+    context.testData.createClaimDetail(costCategory, partner, periodId,x => x.Acc_PeriodCostCategoryTotal__c = null!);
+
+    const query = new GetClaimDetailsSummaryForPartnerQuery(project.Id, partner.Id, periodId);
+    const result = await context.runQuery(query);
+
+    expect(result[0].costsClaimedToDate).toBe(0);
+  });
+
+  it("should return correct cost claimed to date for cost category", async () => {
+    const context = new TestContext();
+    const periodId1 = 1;
+    const periodId2= 2;
+    const partner = context.testData.createPartner();
+    const project = context.testData.createProject();
+    const costCategory = context.testData.createCostCategory();
+
+    context.testData.createClaimDetail(costCategory, partner, periodId1, x => x.Acc_PeriodCostCategoryTotal__c = 1234);
+    context.testData.createClaimDetail(costCategory, partner, periodId2, x => x.Acc_PeriodCostCategoryTotal__c = 3456);
+
+    const query = new GetClaimDetailsSummaryForPartnerQuery(project.Id, partner.Id, periodId2);
+    const result = await context.runQuery(query);
+
+    expect(result[0].costsClaimedToDate).toBe(1234);
+  });
+
+  test("accessControl - Partner Financial Contact passes", async () => {
+    const context  = new TestContext();
+    const project  = context.testData.createProject();
+    const partner = context.testData.createPartner();
+    const periodId = 1;
+
+    const query = new GetClaimDetailsSummaryForPartnerQuery(project.Id, partner.Id, periodId);
+    const auth     = new Authorisation({
+      [project.Id]: {
+        projectRoles: ProjectRole.Unknown,
+        partnerRoles: { [partner.Id]: ProjectRole.FinancialContact }
+      }
+    });
+
+    expect(await context.runAccessControl(auth, query)).toBe(true);
+  });
+
+  test("accessControl - Project Manager passes", async () => {
+    const context  = new TestContext();
+    const project  = context.testData.createProject();
+    const partner = context.testData.createPartner();
+    const periodId = 1;
+    const query = new GetClaimDetailsSummaryForPartnerQuery(project.Id, partner.Id, periodId);
+    const auth     = new Authorisation({
+      [project.Id]: {
+        projectRoles: ProjectRole.ProjectManager,
+        partnerRoles: { }
+      }
+    });
+
+    expect(await context.runAccessControl(auth, query)).toBe(true);
+});
+
+  test("accessControl - Project Monitoring Officer passes", async () => {
+    const context  = new TestContext();
+    const project  = context.testData.createProject();
+    const partner = context.testData.createPartner();
+    const periodId = 1;
+
+    const query = new GetClaimDetailsSummaryForPartnerQuery(project.Id, partner.Id, periodId);
+    const auth     = new Authorisation({
+      [project.Id]: {
+        projectRoles: ProjectRole.MonitoringOfficer,
+        partnerRoles: { }
+      }
+    });
+
+    expect(await context.runAccessControl(auth, query)).toBe(true);
+  });
+
+  test("accessControl - Project Unkown fails", async () => {
+    const context  = new TestContext();
+    const project  = context.testData.createProject();
+    const partner = context.testData.createPartner();
+    const periodId = 1;
+
+    const query = new GetClaimDetailsSummaryForPartnerQuery(project.Id, partner.Id, periodId);
+    const auth     = new Authorisation({
+      [project.Id]: {
+        projectRoles: ProjectRole.Unknown,
+        partnerRoles: { }
+      }
+    });
+
+    expect(await context.runAccessControl(auth, query)).toBe(false);
+  });
+
+  test("accessControl - Project Financial Contact fails", async () => {
+    const context  = new TestContext();
+    const project  = context.testData.createProject();
+    const partner = context.testData.createPartner();
+    const periodId = 1;
+
+    const query = new GetClaimDetailsSummaryForPartnerQuery(project.Id, partner.Id, periodId);
+    const auth     = new Authorisation({
+      [project.Id]: {
+        projectRoles: ProjectRole.FinancialContact,
+        partnerRoles: { }
+      }
+    });
+
+    expect(await context.runAccessControl(auth, query)).toBe(false);
   });
 });
