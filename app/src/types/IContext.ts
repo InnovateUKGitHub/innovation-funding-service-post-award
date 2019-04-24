@@ -10,9 +10,7 @@ export interface IRepositories {
   claims: Readonly<Repositories.IClaimRepository>;
   claimDetails: Readonly<Repositories.IClaimDetailsRepository>;
   costCategories: Readonly<Repositories.ICostCategoryRepository>;
-  contentDocument: Readonly<Repositories.ContentDocumentRepository>;
-  contentDocumentLinks: Readonly<Repositories.ContentDocumentLinkRepository>;
-  contentVersions: Readonly<Repositories.ContentVersionRepository>;
+  documents: Readonly<Repositories.IDocumentsRepository>;
   monitoringReportResponse: Readonly<Repositories.IMonitoringReportResponseRepository>;
   monitoringReportHeader: Readonly<Repositories.IMonitoringReportHeaderRepository>;
   monitoringReportQuestions: Readonly<Repositories.IMonitoringReportQuestionsRepository>;

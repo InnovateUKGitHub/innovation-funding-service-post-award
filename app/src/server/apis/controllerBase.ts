@@ -44,7 +44,7 @@ export abstract class ControllerBaseWithSummary<TSummaryDto, TDto> {
     return this.getCustom<TParams, TDto>(path, getParams, run, false);
   }
 
-  protected deleteItem<TParams>(path: string, getParams: GetParams<TParams>, run: Run<TParams, void>) {
+  protected deleteItem<TParams>(path: string, getParams: GetParams<TParams>, run: Run<TParams, boolean>) {
     this.router.delete(path, this.executeMethod(200, getParams, run, true));
     return this;
   }

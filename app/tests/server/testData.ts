@@ -325,19 +325,8 @@ export class TestData {
     return newItem;
   }
 
-  public createContentDocumentLink(contentDocumentId: string, entityId: string) {
-    const item = {
-      ContentDocumentId: contentDocumentId,
-      LinkedEntityId: entityId,
-      ShareType: "V",
-      Id: this.repositories.contentDocumentLinks.Items.length + 1 + ""
-    };
-    this.repositories.contentDocumentLinks.Items.push(item);
-    return item;
-  }
-
-  public createContentVersion(entityId: string, title: string, fileType: string | null, content: string = "", description?: string) {
-    const id = "" + this.repositories.contentVersions.Items.length + 1;
+  public createDocument(entityId: string, title: string, fileType: string | null, content: string = "", description?: string) {
+    const id = "" + this.repositories.documents.Items.length + 1;
     const item = {
       Id: id,
       ContentDocumentId: id,
@@ -356,8 +345,7 @@ export class TestData {
         Username: "aUserId"
       }
     };
-    this.repositories.contentVersions.Items.push(item);
-    this.repositories.contentDocument.Items.push({ Id: item.ContentDocumentId });
+    this.repositories.documents.Items.push([entityId, item]);
     return item;
   }
 

@@ -2,7 +2,7 @@ import { Stream } from "stream";
 import { FileUpload } from "../../types/FileUpload";
 import SalesforceRepositoryBase from "./salesforceRepositoryBase";
 
-export interface ISalesforceContentVersion {
+interface ISalesforceContentVersion {
   Id: string;
   Title: string;
   FileExtension: string | null;

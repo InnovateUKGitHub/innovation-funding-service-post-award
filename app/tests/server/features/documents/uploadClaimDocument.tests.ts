@@ -87,11 +87,12 @@ describe("UploadClaimDocumentCommand", () => {
       };
 
       const command = new UploadClaimDocumentCommand(claimKey, nonIARDocument as any);
-      await context.runCommand(command);
+      const documentId = await context.runCommand(command);
+      const document = await context.repositories.documents.getDocumentMetadata(documentId);
 
-      expect(context.repositories.contentVersions.Items[0].VersionData).toEqual(nonIARDocument.content);
-      expect(context.repositories.contentVersions.Items[0].PathOnClient).toEqual(nonIARDocument.fileName);
-      expect(context.repositories.contentVersions.Items[0].Description).toEqual(nonIARDocument.description);
+      expect(document.VersionData).toEqual(nonIARDocument.content);
+      expect(document.PathOnClient).toEqual(nonIARDocument.fileName);
+      expect(document.Description).toEqual(nonIARDocument.description);
     });
 
     describe("When the claim status is AWAITING_IAR", () => {
@@ -149,12 +150,12 @@ describe("UploadClaimDocumentCommand", () => {
           };
 
           const command = new UploadClaimDocumentCommand(claimKey, file);
-          await context.runCommand(command);
+          const documentId = await context.runCommand(command);
+          const document = await context.repositories.documents.getDocumentMetadata(documentId);
 
-          expect(context.repositories.contentVersions.Items[0].VersionData).toEqual(file.content);
-          expect(context.repositories.contentVersions.Items[0].PathOnClient).toEqual(file.fileName);
-          expect(context.repositories.contentVersions.Items[0].Description).toEqual(file.description);
-          expect(context.repositories.contentDocumentLinks.Items[0].LinkedEntityId).toEqual(claim.Id);
+          expect(document.VersionData).toEqual(file.content);
+          expect(document.PathOnClient).toEqual(file.fileName);
+          expect(document.Description).toEqual(file.description);
         });
       });
     });
@@ -188,23 +189,21 @@ describe("UploadClaimDocumentCommand", () => {
         item.Id = claimId;
         item.Acc_IARRequired__c = true;
       });
-      const contentVersion1 = context.testData.createContentVersion("12345", "cat", "jpg", "", DocumentDescription.IAR);
-      const contentVersion2 = context.testData.createContentVersion("12345", "cat", "jpg", "", DocumentDescription.IAR);
-
-      context.testData.createContentDocumentLink(contentVersion1.ContentDocumentId, claimId);
-      context.testData.createContentDocumentLink(contentVersion2.ContentDocumentId, claimId);
+      const originalDocumentId = context.testData.createDocument("12345", "cat", "jpg", "", DocumentDescription.IAR).ContentDocumentId;
 
       const claimKey = {
         partnerId: claim.Acc_ProjectParticipant__r.Id,
         periodId: claim.Acc_ProjectPeriodNumber__c
       };
 
-      expect(context.repositories.contentDocument.Items).toHaveLength(2);
+      expect(context.repositories.documents.Items).toHaveLength(1);
+      expect(await context.repositories.documents.getDocumentMetadata(originalDocumentId)).toBeDefined();
 
       const command = new UploadClaimDocumentCommand(claimKey, file);
-      await context.runCommand(command);
+      const newDocumentId = await context.runCommand(command);
 
-      expect(context.repositories.contentDocument.Items).toHaveLength(0);
+      expect(context.repositories.documents.Items).toHaveLength(1);
+      expect(await context.repositories.documents.getDocumentMetadata(newDocumentId)).toBeDefined();
     });
   });
 });

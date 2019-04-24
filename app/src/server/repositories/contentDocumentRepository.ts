@@ -1,6 +1,6 @@
 import SalesforceRepositoryBase from "./salesforceRepositoryBase";
 
-export interface ISalesforceContentDocument {
+interface ISalesforceContentDocument {
   Id: string;
 }
 

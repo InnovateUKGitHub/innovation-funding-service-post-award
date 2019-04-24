@@ -6,11 +6,8 @@ describe("GetClaimDocumentQuery", () => {
   it("should return all the documents when there is no filter", async () => {
     const context = new TestContext();
 
-    const contentVersion1 = context.testData.createContentVersion("12345", "cat", "jpg");
-    context.testData.createContentDocumentLink(contentVersion1.ContentDocumentId, "12345");
-
-    const contentVersion2 = context.testData.createContentVersion("12345", "cat", "jpg", DocumentDescription.IAR);
-    context.testData.createContentDocumentLink(contentVersion2.ContentDocumentId, "12345");
+    context.testData.createDocument("12345", "cat", "jpg");
+    context.testData.createDocument("12345", "cat", "jpg", DocumentDescription.IAR);
 
     const partner = context.testData.createPartner();
     const claim = context.testData.createClaim(partner, 1, (item) => {
@@ -29,11 +26,8 @@ describe("GetClaimDocumentQuery", () => {
   it("should return only the relevant documents when there is a filter", async () => {
     const context = new TestContext();
 
-    const contentVersion1 = context.testData.createContentVersion("12345", "cat1", "jpg");
-    context.testData.createContentDocumentLink(contentVersion1.ContentDocumentId, "12345");
-
-    const contentVersion2 = context.testData.createContentVersion("12345", "cat2", "jpg", "hello world", DocumentDescription.IAR);
-    context.testData.createContentDocumentLink(contentVersion2.ContentDocumentId, "12345");
+    context.testData.createDocument("12345", "cat1", "jpg");
+    context.testData.createDocument("12345", "cat2", "jpg", "hello world", DocumentDescription.IAR);
 
     const partner = context.testData.createPartner();
     const claim = context.testData.createClaim(partner, 1, (item) => {

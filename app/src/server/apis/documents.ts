@@ -18,7 +18,7 @@ export interface IDocumentsApi {
   uploadClaimDetailDocument: (params: ApiParams<{claimDetailKey: ClaimDetailKey, file: FileUpload | File}>) => Promise<{ documentId: string }>;
   uploadClaimDocument: (params: ApiParams<{claimKey: ClaimKey, file: FileUpload | File, description?: string}>) => Promise<{ documentId: string }>;
   uploadProjectDocument: (params: ApiParams<{projectId: string, file: FileUpload | File, description?: string}>) => Promise<{ documentId: string }>;
-  deleteDocument: (params: ApiParams<{ documentId: string }>) => Promise<void>;
+  deleteDocument: (params: ApiParams<{ documentId: string }>) => Promise<boolean>;
 }
 
 class Controller extends ControllerBase<DocumentSummaryDto> implements IDocumentsApi {
@@ -119,10 +119,11 @@ class Controller extends ControllerBase<DocumentSummaryDto> implements IDocument
     return { documentId: insertedID };
   }
 
-  public async deleteDocument(params: ApiParams<{ documentId: string }>): Promise<void> {
+  public async deleteDocument(params: ApiParams<{ documentId: string }>): Promise<boolean> {
     const { documentId } = params;
     const command = new DeleteDocumentCommand(documentId);
-    return contextProvider.start(params).runCommand(command);
+    await contextProvider.start(params).runCommand(command);
+    return true;
   }
 }
 
