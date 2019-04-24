@@ -4,45 +4,24 @@ import {UploadDocumentCommand} from "../../../../src/server/features/documents/u
 describe("UploadDocumentCommand", () => {
   const docToUpload = {content: "Hello world", fileName: "hello.txt"};
   const recordId = "TESTid";
-  it("should store a document and contentVersions", async () => {
+  it("should store a document", async () => {
     const context = new TestContext();
 
     const command = new UploadDocumentCommand(docToUpload, recordId);
     await context.runCommand(command);
 
-    expect(context.repositories.contentVersions.Items).toHaveLength(1);
+    expect(context.repositories.documents.Items).toHaveLength(1);
   });
 
-  it("should store a document and contentDocumentLink", async () => {
+  it("should have the correct content in the document", async () => {
     const context = new TestContext();
 
     const command = new UploadDocumentCommand(docToUpload, recordId);
-    await context.runCommand(command);
+    const documentId = await context.runCommand(command);
 
-    expect(context.repositories.contentDocumentLinks.Items).toHaveLength(1);
-  });
-
-  it("should have the correct content in contentVersions", async () => {
-    const context = new TestContext();
-
-    const command = new UploadDocumentCommand(docToUpload, recordId);
-    await context.runCommand(command);
-
-    const document = (context.repositories.contentVersions.Items[0]);
+    const document = await context.repositories.documents.getDocumentMetadata(documentId);
 
     expect(document.VersionData).toEqual(docToUpload.content);
     expect(document.PathOnClient).toEqual(docToUpload.fileName);
   });
-
-  it("should have the correct content in contentDocumentLinks", async () => {
-    const context = new TestContext();
-
-    const command = new UploadDocumentCommand(docToUpload, recordId);
-    await context.runCommand(command);
-
-    const document = (context.repositories.contentDocumentLinks.Items[0]);
-
-    expect(document.LinkedEntityId).toEqual(recordId);
-  });
-
 });

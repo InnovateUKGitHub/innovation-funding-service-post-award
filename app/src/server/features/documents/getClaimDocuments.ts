@@ -1,6 +1,6 @@
-import { QueryBase } from "../common";
-import { GetDocumentsLinkedToRecordQuery } from "./getAllForRecord";
-import { IContext } from "../../../types";
+import { QueryBase } from "@server/features/common";
+import { IContext } from "@framework/types";
+import { GetDocumentsLinkedToRecordQuery } from "@server/features/documents/getAllForRecord";
 
 export class GetClaimDocumentsQuery extends QueryBase<DocumentSummaryDto[]> {
   constructor(private readonly claimKey: ClaimKey, private readonly filter?: DocumentFilter) {

@@ -7,11 +7,8 @@ describe("GetProjectDocumentsQuery", () => {
     const context = new TestContext();
     const project = context.testData.createProject();
 
-    const contentVersion1 = context.testData.createContentVersion(project.Id, "report1", "pdf");
-    context.testData.createContentDocumentLink(contentVersion1.ContentDocumentId, project.Id);
-
-    const contentVersion2 = context.testData.createContentVersion(project.Id, "report2", "pdf");
-    context.testData.createContentDocumentLink(contentVersion2.ContentDocumentId, project.Id);
+    context.testData.createDocument(project.Id, "report1", "pdf");
+    context.testData.createDocument(project.Id, "report2", "pdf");
 
     const query = new GetProjectDocumentsQuery(project.Id);
     const docs = await context.runQuery(query);
