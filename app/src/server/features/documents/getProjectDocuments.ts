@@ -1,6 +1,6 @@
-import { QueryBase } from "../common";
-import { GetDocumentsLinkedToRecordQuery } from "./getAllForRecord";
-import { Authorisation, IContext, ProjectRole } from "../../../types";
+import { QueryBase } from "@server/features/common";
+import { Authorisation, IContext, ProjectRole } from "@framework/types";
+import { GetDocumentsLinkedToRecordQuery } from "@server/features/documents/getAllForRecord";
 
 export class GetProjectDocumentsQuery extends QueryBase<DocumentSummaryDto[]> {
   constructor(private readonly projectId: string) {

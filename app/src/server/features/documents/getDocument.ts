@@ -1,5 +1,5 @@
-import { QueryBase } from "../common";
-import { IContext } from "../../../types";
+import { QueryBase } from "@server/features/common";
+import { IContext } from "@framework/types";
 
 export class GetDocumentQuery extends QueryBase<DocumentDto> {
   constructor(private readonly documentId: string) {
@@ -7,8 +7,8 @@ export class GetDocumentQuery extends QueryBase<DocumentDto> {
   }
 
   protected async Run(context: IContext) {
-    const document = await context.repositories.contentVersions.getDocument(this.documentId);
-    const documentStream = await context.repositories.contentVersions.getDocumentData(this.documentId);
+    const document = await context.repositories.documents.getDocumentMetadata(this.documentId);
+    const documentStream = await context.repositories.documents.getDocumentContent(this.documentId);
     return {
       fileType: document.FileType,
       contentLength: document.ContentSize,

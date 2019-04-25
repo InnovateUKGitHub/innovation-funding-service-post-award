@@ -1,12 +1,12 @@
-import { CommandBase } from "../common";
-import { IContext } from "../../../types";
+import { CommandBase } from "@server/features/common";
+import { IContext } from "@framework/types";
 
 export class DeleteDocumentCommand extends CommandBase<void> {
-  constructor(private readonly id: string) {
+  constructor(private readonly documentId: string) {
     super();
   }
 
   protected async Run(context: IContext) {
-    return context.repositories.contentDocument.delete(this.id);
+    return context.repositories.documents.deleteDocument(this.documentId);
   }
 }

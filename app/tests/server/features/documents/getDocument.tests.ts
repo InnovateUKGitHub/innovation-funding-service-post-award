@@ -4,9 +4,9 @@ import {GetDocumentQuery} from "../../../../src/server/features/documents/getDoc
 describe("GetDocumentQuery", () => {
   it("returns a stream", async () => {
     const context = new TestContext();
-    const contentVersion = context.testData.createContentVersion("12345", "cat", "jpg");
+    const document = context.testData.createDocument("12345", "cat", "jpg");
 
-    const query = new GetDocumentQuery(contentVersion.Id);
+    const query = new GetDocumentQuery(document.Id);
     const result = await context.runQuery(query);
 
     expect(result).toBeDefined();
@@ -22,7 +22,7 @@ describe("GetDocumentQuery", () => {
 
     return new Promise((resolve) => {
       streamResponse.on("end", () => {
-        expect(resp).toBe(contentVersion.Id );
+        expect(resp).toBe(document.Id );
         resolve();
       });
     });
@@ -30,9 +30,9 @@ describe("GetDocumentQuery", () => {
 
   it("returns a file without file type", async () => {
     const context = new TestContext();
-    const contentVersion = context.testData.createContentVersion("12345", "cat", null);
+    const document = context.testData.createDocument("12345", "cat", null);
 
-    const query = new GetDocumentQuery(contentVersion.Id);
+    const query = new GetDocumentQuery(document.Id);
     const result = await context.runQuery(query);
 
     expect(result).toBeDefined();

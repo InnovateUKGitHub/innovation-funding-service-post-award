@@ -1,7 +1,7 @@
-import { CommandBase, ValidationError } from "../common";
-import { UploadDocumentCommand } from "./uploadDocument";
-import { FileUploadValidator } from "../../../ui/validators/documentUploadValidator";
-import { Authorisation, FileUpload, IContext, ProjectRole } from "../../../types";
+import { Authorisation, FileUpload, IContext, ProjectRole } from "@framework/types";
+import { CommandBase, ValidationError } from "@server/features/common";
+import { FileUploadValidator } from "@ui/validators/documentUploadValidator";
+import { UploadDocumentCommand } from "@server/features/documents/uploadDocument";
 
 export class UploadProjectDocumentCommand extends CommandBase<string> {
   constructor(

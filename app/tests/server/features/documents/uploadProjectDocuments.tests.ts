@@ -14,11 +14,11 @@ describe("UploadProjectDocumentCommand", () => {
     };
 
     const command = new UploadProjectDocumentCommand(project.Id, file);
-    await context.runCommand(command);
+    const documentId = await context.runCommand(command);
+    const document = await context.repositories.documents.getDocumentMetadata(documentId);
 
-    expect(context.repositories.contentVersions.Items[0].VersionData).toEqual(file.content);
-    expect(context.repositories.contentVersions.Items[0].PathOnClient).toEqual(file.fileName);
-    expect(context.repositories.contentDocumentLinks.Items[0].LinkedEntityId).toEqual(project.Id);
+    expect(document.VersionData).toEqual(file.content);
+    expect(document.PathOnClient).toEqual(file.fileName);
   });
 
   it("should throw a validation exception", async () => {

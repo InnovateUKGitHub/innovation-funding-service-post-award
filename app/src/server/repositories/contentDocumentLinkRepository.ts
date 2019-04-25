@@ -1,6 +1,6 @@
 import SalesforceRepositoryBase from "./salesforceRepositoryBase";
 
-export interface ISalesforceContentDocumentLink {
+interface ISalesforceContentDocumentLink {
   ContentDocumentId: string;
   LinkedEntityId: string;
   ShareType: string;
