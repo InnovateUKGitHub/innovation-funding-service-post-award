@@ -1,10 +1,9 @@
-import { TestRepository } from "./testRepository";
-import * as Repositories from "../../src/server/repositories";
-import { FileUpload } from "../../src/types/FileUpload";
-import { Updatable } from "../../src/server/repositories/salesforceRepositoryBase";
 import { Stream } from "stream";
-import { IRepositories } from "../../src/types/IContext";
-import { ISalesforceClaimDetails } from "@server/repositories/claimDetailsRepository";
+import { TestRepository } from "./testRepository";
+import * as Repositories from "@server/repositories";
+import { Updatable } from "@server/repositories/salesforceRepositoryBase";
+import { ISalesforceClaimDetails, ISalesforceDocument } from "@server/repositories";
+import { FileUpload, IRepositories } from "@framework/types";
 
 class ProjectsTestRepository extends TestRepository<Repositories.ISalesforceProject> implements Repositories.IProjectRepository {
     getById(id: string) {
@@ -110,61 +109,59 @@ class ClaimDetailsTestRepository extends TestRepository<Repositories.ISalesforce
     }
 }
 
-class ContentDocumentTestRepository extends TestRepository<Repositories.ISalesforceContentDocument> implements Repositories.IContentDocumentRepository {
-    delete(id: string): Promise<void> {
-        return super.deleteItem(this.Items.find(x => x.Id === id));
-    }
-}
+class DocumentsTestRepository extends TestRepository<any> implements Repositories.IDocumentsRepository {
+  async insertDocument({ content, fileName, description }: FileUpload, recordId: string): Promise<string> {
+    const nameParts = fileName.split(".");
+    const extension = nameParts.length > 1 ? nameParts[nameParts.length - 1] : null;
+    const title = nameParts[0];
 
-class ContentDocumentLinkTestRepository extends TestRepository<Repositories.ISalesforceContentDocumentLink> implements Repositories.IContentDocumentLinkRepository {
-    getAllForEntity(entityId: string): Promise<Repositories.ISalesforceContentDocumentLink[]> {
-        return super.getWhere(x => x.LinkedEntityId === entityId);
-    }
-    public insertContentDocumentLink(contentDocumentId: string, linkedEntityId: string) {
-        return super.insertOne({ ContentDocumentId: contentDocumentId, LinkedEntityId: linkedEntityId, ShareType: "V" });
-    }
-}
+    const newDocumentId = (this.Items.length + 1).toString();
+    // insert tuple [linkedRecordId, document] to enable lookup by linkedRecordId in test repository
+    await super.insertOne([recordId, {
+      Id: newDocumentId,
+      Title: title,
+      FileExtension: extension,
+      ContentDocumentId: newDocumentId,
+      ContentSize: 5,
+      FileType: extension,
+      ReasonForChange: "First upload",
+      PathOnClient: fileName,
+      ContentLocation: "S",
+      VersionData: content,
+      Description: description,
+      CreatedDate: new Date().toISOString(),
+      Owner: {
+        Username: "aUserName"
+      }
+    }]);
+    return newDocumentId;
+  }
 
-class ContentVersionTestRepository extends TestRepository<Repositories.ISalesforceContentVersion> implements Repositories.IContentVersionRepository {
-    getDocuments(contentDocumentIds: string[], filter: DocumentFilter): Promise<Repositories.ISalesforceContentVersion[]> {
-      return super.getWhere(x => (
-        contentDocumentIds.indexOf(x.ContentDocumentId) !== -1 && (!filter || x.Description === filter.description)
-      ));
-    }
-    getDocument(documentId: string): Promise<Repositories.ISalesforceContentVersion> {
-        return super.getOne(x => documentId === x.Id);
-    }
-    getDocumentData(documentId: string): Promise<Stream> {
-        return super.getOne(x => x.Id === documentId).then(x => {
-            const s = new Stream.Readable();
-            s._read = () => null;
-            s.push(x.Id);
-            s.push(null);
-            return s;
-        });
-    }
-    public insertDocument({ content, fileName, description }: FileUpload) {
-        const nameParts = fileName.split(".");
-        const extension = nameParts.length > 1 ? nameParts[nameParts.length - 1] : null;
-        const title = nameParts[0];
-        return super.insertOne({
-            Id: (this.Items.length + 1).toString(),
-            Title: title,
-            FileExtension: extension,
-            ContentDocumentId: (this.Items.length + 1).toString(),
-            ContentSize: 5,
-            FileType: extension,
-            ReasonForChange: "First upload",
-            PathOnClient: fileName,
-            ContentLocation: "S",
-            VersionData: content,
-            Description: description,
-            CreatedDate: new Date().toISOString(),
-            Owner: {
-                Username: "aUserName"
-            }
-        });
-    }
+  deleteDocument(documentId: string): Promise<void> {
+    return super.deleteItem(this.Items.find(x => x[1].Id === documentId));
+  }
+
+  getDocumentContent(documentId: string): Promise<Stream> {
+    return super.getOne(x => x[1].Id === documentId).then(x => {
+      const s = new Stream.Readable();
+      s._read = () => null;
+      s.push(x[1].Id);
+      s.push(null);
+      return s;
+    });
+  }
+
+  getDocumentMetadata(documentId: string): Promise<ISalesforceDocument> {
+    return super.getOne(x => documentId === x[1].Id).then(x => x[1]);
+  }
+
+  getDocumentsMetadata(documentIds: string[], filter?: DocumentFilter): Promise<ISalesforceDocument[]> {
+    return super.getWhere(x => documentIds.indexOf(x[1].ContentDocumentId) > 1 && (!filter || filter.description === x[1].Description)).then(x => x.map(y => y[1]));
+  }
+
+  getDocumentsMetedataByLinkedRecord(recordId: string, filter?: DocumentFilter): Promise<ISalesforceDocument[]> {
+    return super.getWhere(x => x[0] === recordId && (!filter || x[1].Description === filter.description)).then(x => x.map(y => y[1]));
+  }
 }
 
 class ClaimLineItemsTestRepository extends TestRepository<Repositories.ISalesforceClaimLineItem> implements Repositories.IClaimLineItemRepository {
@@ -338,9 +335,7 @@ export interface ITestRepositories extends IRepositories {
     claimDetails: ClaimDetailsTestRepository;
     claimLineItems: ClaimLineItemsTestRepository;
     costCategories: CostCategoriesTestRepository;
-    contentDocumentLinks: ContentDocumentLinkTestRepository;
-    contentDocument: ContentDocumentTestRepository;
-    contentVersions: ContentVersionTestRepository;
+    documents: DocumentsTestRepository;
     monitoringReportHeader: MonitoringReportHeaderTestRepository;
     monitoringReportResponse: MonitoringReportResponseTestRepository;
     monitoringReportQuestions: QuestionsTestRepository;
@@ -361,9 +356,7 @@ export const createTestRepositories = (): ITestRepositories => {
         claimDetails: new ClaimDetailsTestRepository(),
         claimLineItems: new ClaimLineItemsTestRepository(),
         costCategories: new CostCategoriesTestRepository(),
-        contentDocument: new ContentDocumentTestRepository(),
-        contentDocumentLinks: new ContentDocumentLinkTestRepository(),
-        contentVersions: new ContentVersionTestRepository(),
+        documents: new DocumentsTestRepository(),
         monitoringReportResponse: new MonitoringReportResponseTestRepository(),
         monitoringReportHeader: new MonitoringReportHeaderTestRepository(),
         monitoringReportQuestions: new QuestionsTestRepository(),

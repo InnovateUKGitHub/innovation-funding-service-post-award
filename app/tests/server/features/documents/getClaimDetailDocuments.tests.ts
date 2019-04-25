@@ -5,16 +5,15 @@ describe("GetClaimDetailDocumentsQuery", () => {
   it("returns objects of correct shape", async () => {
     const context = new TestContext();
     const claimDetail = context.testData.createClaimDetail();
-    const contentVersion = context.testData.createContentVersion(claimDetail.Id, "cat", "jpg");
-    context.testData.createContentDocumentLink(contentVersion.ContentDocumentId, claimDetail.Id);
+    const document = context.testData.createDocument(claimDetail.Id, "cat", "jpg");
 
     const query = new GetClaimDetailDocumentsQuery(claimDetail.Acc_ProjectParticipant__c, claimDetail.Acc_ProjectPeriodNumber__c, claimDetail.Acc_CostCategory__c);
     const result = await context.runQuery(query);
     const item = result[0];
 
     expect(item.fileName).toBe("cat.jpg");
-    expect(item.link).toBe(`/api/documents/${contentVersion.Id}/content`);
-    expect(item.id).toBe(contentVersion.ContentDocumentId);
+    expect(item.link).toBe(`/api/documents/${document.Id}/content`);
+    expect(item.id).toBe(document.ContentDocumentId);
   });
 
   it("returns empty array if no claim detail", async () => {

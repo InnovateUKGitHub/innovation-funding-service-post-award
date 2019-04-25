@@ -1,24 +1,22 @@
 import { TestContext } from "../../testContextProvider";
 import { GetDocumentsLinkedToRecordQuery } from "../../../../src/server/features/documents/getAllForRecord";
 
-describe("GetClaimDetailDocumentsQuery", () => {
+describe("GetDocumentsLinkedToRecord", () => {
   it("returns objects of correct shape", async () => {
     const context = new TestContext();
-    const contentVersion = context.testData.createContentVersion("12345", "cat", "jpg");
-    context.testData.createContentDocumentLink(contentVersion.ContentDocumentId, "12345");
+    const document = context.testData.createDocument("12345", "cat", "jpg");
 
     const query = new GetDocumentsLinkedToRecordQuery("12345");
     const result = await context.runQuery(query);
     const item = result[0];
 
     expect(item.fileName).toBe("cat.jpg");
-    expect(item.link).toBe(`/api/documents/${contentVersion.Id}/content`);
+    expect(item.link).toBe(`/api/documents/${document.Id}/content`);
   });
 
   it("returns a file without file type", async () => {
     const context = new TestContext();
-    const contentVersion = context.testData.createContentVersion("12345", "cat", null);
-    context.testData.createContentDocumentLink(contentVersion.ContentDocumentId, "12345");
+    context.testData.createDocument("12345", "cat", null);
 
     const query = new GetDocumentsLinkedToRecordQuery("12345");
     const result = await context.runQuery(query);
