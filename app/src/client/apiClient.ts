@@ -4,7 +4,7 @@ import { processResponse } from "../shared/processResponse";
 const clientApi: IApiClient = {
   claimLineItems: {
     getAllForCategory: (params) => ajaxJson(`/api/claim-line-items/?projectId=${params.projectId}&partnerId=${params.partnerId}&periodId=${params.periodId}&costCategoryId=${params.costCategoryId}`),
-    saveLineItems: (params) => ajaxPost(`/api/claim-line-items/?projectId=${params.projectId}&partnerId=${params.partnerId}&periodId=${params.periodId}&costCategoryId=${params.costCategoryId}`, params.lineItems)
+    saveLineItems: (params) => ajaxPut(`/api/claim-line-items/?projectId=${params.projectId}&partnerId=${params.partnerId}&periodId=${params.periodId}&costCategoryId=${params.costCategoryId}`, params.claimLineItemsFormData)
   },
   claims : {
     getAllByProjectId: (params) => ajaxJson(`/api/claims/?projectId=${params.projectId}`),

@@ -175,7 +175,7 @@ class ClaimLineItemsTestRepository extends TestRepository<Repositories.ISalesfor
             if (index === -1) {
                 return Promise.reject();
             }
-            this.Items = this.Items.splice(index, 1);
+            this.Items.splice(index, 1);
         });
         return Promise.resolve();
     }

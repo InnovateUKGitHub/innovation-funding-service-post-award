@@ -1,4 +1,4 @@
-import { ISalesforceClaimLineItem } from "../../repositories";
+import { ISalesforceClaimLineItem } from "@server/repositories";
 
 export default () => (item: ISalesforceClaimLineItem): ClaimLineItemDto => ({
   id: item.Id,

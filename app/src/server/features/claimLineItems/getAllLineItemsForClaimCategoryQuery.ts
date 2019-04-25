@@ -12,6 +12,7 @@ export class GetAllLineItemsForClaimByCategoryQuery extends QueryBase<ClaimLineI
     super();
   }
 
+  // TODO tighten up auth
   protected async accessControl(auth: Authorisation) {
     return auth.forProject(this.projectId).hasRole(ProjectRole.MonitoringOfficer)
     || auth.forPartner(this.projectId, this.partnerId).hasAnyRoles(ProjectRole.FinancialContact, ProjectRole.ProjectManager);
