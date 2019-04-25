@@ -10,7 +10,7 @@ export interface MatchedRoute {
   path: string;
   accessControl?: (auth: Authorisation, params: {}, features: IFeatureFlags) => boolean;
   getParams: (route: State) => {};
-  getLoadDataActions: (params: {}) => AsyncThunk<DataLoadAction | void>[];
+  getLoadDataActions: (params: {}, auth: Authorisation) => AsyncThunk<DataLoadAction | void>[];
   container: React.ComponentClass<any>;
 }
 
@@ -20,7 +20,7 @@ export function matchRoute(route: State | null | undefined): MatchedRoute {
     name: found.routeName,
     path: found.routePath,
     getParams: found.getParams,
-    getLoadDataActions: found.getLoadDataActions as (params: {}) => AsyncThunk<any>[],
+    getLoadDataActions: found.getLoadDataActions as (params: {}, auth: Authorisation) => AsyncThunk<any>[],
     accessControl: found.accessControl as (auth: Authorisation, params: {}, features: IFeatureFlags) => boolean,
     container: found.container
   };
