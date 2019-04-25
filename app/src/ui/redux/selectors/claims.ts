@@ -1,10 +1,12 @@
 import { dataStoreHelper, editorStoreHelper } from "./common";
-import { RootState } from "../reducers";
+import { IEditorStore, RootState } from "../reducers";
 import { ClaimDtoValidator } from "../../validators/claimDtoValidator";
 import { getCostCategories } from "./costCategories";
 import { getKey } from "../../../util/key";
 import { ClaimDto } from "../../../types";
 import { Pending } from "../../../shared/pending";
+import { ClaimLineItemDtosValidator } from "@ui/validators";
+import { range } from "@shared/range";
 
 export const claimsStore = "claims";
 export const findClaimsByPartner = (partnerId: string) => dataStoreHelper(claimsStore, `partnerId=${partnerId}`);
@@ -29,8 +31,26 @@ const createClaimValidator = (partnerId: string, periodId: number, claim: ClaimD
   return new ClaimDtoValidator(claim, details, costCategories, false);
 };
 
+export const getClaimLineItemEditor = (partnerId: string, periodId: number, costCategoryId: string) => editorStoreHelper<ClaimLineItemDto[], ClaimLineItemDtosValidator>(
+  claimLineItemsStore,
+  x => x.claimLineItems,
+  (store) => createClaimLineItemEditorDto(partnerId, periodId, costCategoryId, store),
+  (claimLineItems) => new ClaimLineItemDtosValidator(claimLineItems, false),
+  findClaimLineItemsByPartnerCostCategoryAndPeriod(partnerId, costCategoryId, periodId).key
+);
 export const claimLineItemsStore = "claimLineItems";
 export const findClaimLineItemsByPartnerCostCategoryAndPeriod = (partnerId: string, costCategoryId: string, periodId: number) => dataStoreHelper(claimLineItemsStore, `partnerId=${partnerId}&costCategoryId=${costCategoryId}&periodId=${periodId}`);
+const createClaimLineItemEditorDto = (partnerId: string, periodId: number, costCategoryId: string, state: RootState) => {
+  return findClaimLineItemsByPartnerCostCategoryAndPeriod(partnerId, costCategoryId, periodId).getPending(state).then(lineItems => {
+    const items = lineItems || [];
+    // if rendering on client and has items saved then render them
+    if ((items.length && state.isClient) || items.length > 10) {
+      return items;
+    }
+    // else rendering on server or no items saved so render default number
+    return range(state.isClient ? 2 : 10).map((x, index) => items[index] || ({ costCategoryId, partnerId, periodId }));
+  });
+};
 
 export const claimDetailsStore = "claimDetails";
 export const findClaimDetailsByPartner = (partnerId: string) => dataStoreHelper(claimDetailsStore, `partnerId=${partnerId}`);

@@ -10,7 +10,6 @@ import { IEditorStore } from "../../redux/reducers/editorsReducer";
 import { ClaimLineItemDtosValidator, ClaimLineItemDtoValidator } from "../../validators/claimLineItemDtosValidator";
 import { DocumentList, ValidationMessage } from "../../components";
 import { ProjectDto, ProjectRole } from "../../../types";
-import { range } from "../../../shared/range";
 
 export interface EditClaimLineItemsParams {
   projectId: string;
@@ -24,7 +23,7 @@ interface Data {
   claimDetails: Pending<ClaimDetailsDto>;
   lineItems: Pending<ClaimLineItemDto[]>;
   costCategories: Pending<CostCategoryDto[]>;
-  editor: IEditorStore<ClaimLineItemDto[], ClaimLineItemDtosValidator>;
+  editor: Pending<IEditorStore<ClaimLineItemDto[], ClaimLineItemDtosValidator>>;
   forecastDetail: Pending<ForecastDetailsDTO>;
   documents: Pending<DocumentSummaryDto[]>;
 }
@@ -36,6 +35,7 @@ interface CombinedData {
   costCategories: CostCategoryDto[];
   forecastDetail: ForecastDetailsDTO;
   documents: DocumentSummaryDto[];
+  editor: IEditorStore<ClaimLineItemDto[], ClaimLineItemDtosValidator>;
 }
 
 interface Callbacks {
@@ -62,16 +62,15 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
       costCategories: this.props.costCategories,
       forecastDetail: this.props.forecastDetail,
       documents: this.props.documents,
-
+      editor: this.props.editor,
     });
 
-    return <ACC.PageLoader pending={combined} render={(data) => this.renderContents(data, this.props.editor)} />;
+    return <ACC.PageLoader pending={combined} render={(data) => this.renderContents(data)} />;
   }
 
   // TODO fix back link
   private renderContents(
-    { project, costCategories, documents, forecastDetail, claimDetails }: CombinedData,
-    editor: IEditorStore<ClaimLineItemDto[], ClaimLineItemDtosValidator>
+    { project, costCategories, documents, forecastDetail, claimDetails, editor }: CombinedData,
   ) {
     const back = PrepareClaimRoute.getLink({ projectId: project.id, partnerId: this.props.partnerId, periodId: this.props.periodId });
     const costCategory = costCategories.find(x => x.id === this.props.costCategoryId)! || {};
@@ -79,19 +78,19 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
     return (
       <ACC.Page
         backLink={<ACC.BackLink route={back}>Back to claim</ACC.BackLink>}
-        error={this.props.editor.error}
-        validator={this.props.editor.validator}
+        error={editor.error}
+        validator={editor.validator}
         pageTitle={<ACC.Projects.Title pageTitle={`${costCategory.name}`} project={project} />}
       >
         <ACC.Section>
           <ACC.TextHint text={costCategory.hintText} />
-          {costCategory.isCalculated ? this.renderCalculated(costCategory, claimDetails, forecastDetail, documents) : this.renderTable(editor, forecastDetail, documents, claimDetails)}
+          {costCategory.isCalculated ? this.renderCalculated(costCategory, claimDetails, forecastDetail, documents, editor) : this.renderTable(editor, forecastDetail, documents, claimDetails)}
         </ACC.Section>
       </ACC.Page>
     );
   }
 
-  private renderCalculated(costCategory: CostCategoryDto, claimDetails: ClaimDetailsDto, forecastDetail: ForecastDetailsDTO, documents: DocumentSummaryDto[]) {
+  private renderCalculated(costCategory: CostCategoryDto, claimDetails: ClaimDetailsDto, forecastDetail: ForecastDetailsDTO, documents: DocumentSummaryDto[], editor: IEditorStore<ClaimLineItemDto[], ClaimLineItemDtosValidator> ) {
     const data: ClaimLineItemDto[] = [{
       costCategoryId: costCategory.id,
       description: costCategory.name,
@@ -108,13 +107,13 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
     return (
       <LineItemForm.Form
         data={data}
-        onSubmit={() => this.props.save(this.props.projectId, this.props.partnerId, this.props.periodId, this.props.costCategoryId, this.props.editor.data)}
+        onSubmit={() => this.props.save(this.props.projectId, this.props.partnerId, this.props.periodId, this.props.costCategoryId, editor.data)}
         qa="current-claim-summary-form"
       >
         <LineItemForm.Fieldset>
           <LineItemTable.Table
             data={data}
-            footers={this.renderFooters(data, forecastDetail, false)}
+            footers={this.renderFooters(data, forecastDetail, false, editor)}
             qa="current-claim-summary-table"
           >
             <LineItemTable.String header="Description" qa="cost-description" value={(x, i) => x.description} />
@@ -136,7 +135,7 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
           />
         </LineItemForm.Fieldset>
         <LineItemForm.Fieldset>
-          <LineItemForm.Button name="upload" onClick={() => this.props.saveAndUpload(this.props.projectId, this.props.partnerId, this.props.costCategoryId, this.props.periodId, this.props.editor.data)}>Upload and remove documents</LineItemForm.Button>
+          <LineItemForm.Button name="upload" onClick={() => this.props.saveAndUpload(this.props.projectId, this.props.partnerId, this.props.costCategoryId, this.props.periodId, editor.data)}>Upload and remove documents</LineItemForm.Button>
         </LineItemForm.Fieldset>
         <LineItemForm.Submit>Save and return to claim</LineItemForm.Submit>
       </LineItemForm.Form>
@@ -152,7 +151,7 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
     return (
       <LineItemForm.Form
         data={editor.data}
-        onSubmit={() => this.props.save(this.props.projectId, this.props.partnerId, this.props.periodId, this.props.costCategoryId, this.props.editor.data)}
+        onSubmit={() => this.props.save(this.props.projectId, this.props.partnerId, this.props.periodId, this.props.costCategoryId, editor.data)}
         qa="current-claim-summary-form"
       >
         <LineItemForm.Hidden name="itemCount" value={x => x.length} />
@@ -160,13 +159,13 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
           <LineItemTable.Table
             data={editor.data}
             validationResult={validationResults}
-            footers={this.renderFooters(editor.data, forecastDetail, this.state.showAddRemove)}
+            footers={this.renderFooters(editor.data, forecastDetail, this.state.showAddRemove, editor)}
             qa="current-claim-summary-table"
           >
-            <LineItemTable.Custom header="Description" qa="cost-description" value={(x, i) => this.renderDescription(x, i, validationResults[i.row])} />
-            <LineItemTable.Custom header="Cost (£)" qa="cost-value" classSuffix="numeric" value={(x, i) => this.renderCost(x, i, validationResults[i.row])} width={30} />
+            <LineItemTable.Custom header="Description" qa="cost-description" value={(x, i) => this.renderDescription(x, i, validationResults[i.row], editor)} />
+            <LineItemTable.Custom header="Cost (£)" qa="cost-value" classSuffix="numeric" value={(x, i) => this.renderCost(x, i, validationResults[i.row], editor)} width={30} />
             {this.state.showAddRemove ?
-              <LineItemTable.Custom header="" qa="remove" value={(x, i) => <a href="" role="button" onClick={e => this.removeItem(x, i, e)}>Remove</a>} width={1}/>
+              <LineItemTable.Custom header="" qa="remove" value={(x, i) => <a href="" role="button" onClick={e => this.removeItem(x, i, e, editor)}>Remove</a>} width={1}/>
               : null}
           </LineItemTable.Table>
         </LineItemForm.Fieldset>
@@ -185,7 +184,7 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
           />
         </LineItemForm.Fieldset>
         <LineItemForm.Fieldset>
-          <LineItemForm.Button name="upload" onClick={() => this.props.saveAndUpload(this.props.projectId, this.props.partnerId, this.props.costCategoryId, this.props.periodId, this.props.editor.data)}>Upload and remove documents</LineItemForm.Button>
+          <LineItemForm.Button name="upload" onClick={() => this.props.saveAndUpload(this.props.projectId, this.props.partnerId, this.props.costCategoryId, this.props.periodId, editor.data)}>Upload and remove documents</LineItemForm.Button>
         </LineItemForm.Fieldset>
         <LineItemForm.Submit>Save and return to claim</LineItemForm.Submit>
       </LineItemForm.Form>
@@ -201,44 +200,44 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
     );
   }
 
-  renderCost(item: ClaimLineItemDto, index: { column: number; row: number; }, validation: ClaimLineItemDtoValidator) {
+  renderCost(item: ClaimLineItemDto, index: { column: number; row: number; }, validation: ClaimLineItemDtoValidator, editor: IEditorStore<ClaimLineItemDto[], ClaimLineItemDtosValidator>) {
     return (
       <span>
         <ACC.ValidationError error={validation.cost} />
         <ACC.Inputs.NumberInput
           name={`value${index.row}`}
           value={item.value}
-          onChange={val => this.updateItem(index, dto => (dto.value = val!))}
+          onChange={val => this.updateItem(index, editor, dto => (dto.value = val!))}
           ariaLabel={`value of claim line item ${index.row + 1}`}
         />
       </span>
     );
   }
 
-  renderDescription(item: ClaimLineItemDto, index: { column: number; row: number; }, validation: ClaimLineItemDtoValidator) {
+  renderDescription(item: ClaimLineItemDto, index: { column: number; row: number; }, validation: ClaimLineItemDtoValidator, editor: IEditorStore<ClaimLineItemDto[], ClaimLineItemDtosValidator>) {
     return (
       <span>
         <ACC.ValidationError error={validation.description} />
         <ACC.Inputs.TextInput
           name={`description${index.row}`}
           value={item.description}
-          onChange={val => this.updateItem(index, dto => (dto.description = val!))}
+          onChange={val => this.updateItem(index, editor, dto => (dto.description = val!))}
           ariaLabel={`description of claim line item ${index.row + 1}`}
         />
       </span>
     );
   }
 
-  removeItem(item: ClaimLineItemDto, i: { column: number; row: number; }, e: React.SyntheticEvent<HTMLAnchorElement>) {
+  removeItem(item: ClaimLineItemDto, i: { column: number; row: number; }, e: React.SyntheticEvent<HTMLAnchorElement>, editor: IEditorStore<ClaimLineItemDto[], ClaimLineItemDtosValidator>) {
     e.preventDefault();
-    const dto = this.props.editor.data;
+    const dto = editor.data;
     dto.splice(i.row, 1);
     this.props.validate(this.props.partnerId, this.props.periodId, this.props.costCategoryId, dto);
   }
 
-  addItem(e: React.SyntheticEvent<HTMLAnchorElement>) {
+  addItem(e: React.SyntheticEvent<HTMLAnchorElement>, editor: IEditorStore<ClaimLineItemDto[], ClaimLineItemDtosValidator>) {
     e.preventDefault();
-    const dto = this.props.editor.data;
+    const dto = editor.data;
     dto.push({
       partnerId: this.props.partnerId,
       periodId: this.props.periodId,
@@ -247,13 +246,13 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
     this.props.validate(this.props.partnerId, this.props.periodId, this.props.costCategoryId, dto);
   }
 
-  updateItem(i: { column: number; row: number; }, update: (item: ClaimLineItemDto) => void) {
-    const dto = this.props.editor.data;
+  updateItem(i: { column: number; row: number; }, editor: IEditorStore<ClaimLineItemDto[], ClaimLineItemDtosValidator>, update: (item: ClaimLineItemDto) => void) {
+    const dto = editor.data;
     update(dto[i.row]);
     this.props.validate(this.props.partnerId, this.props.periodId, this.props.costCategoryId, dto);
   }
 
-  private renderFooters(data: ClaimLineItemDto[], forecastDetail: ForecastDetailsDTO, showAddRemove: boolean) {
+  private renderFooters(data: ClaimLineItemDto[], forecastDetail: ForecastDetailsDTO, showAddRemove: boolean, editor: IEditorStore<ClaimLineItemDto[], ClaimLineItemDtosValidator>) {
     const total = data.reduce((t, item) => t + (item.value || 0), 0);
     // TODO remove multiply by 100
     const forecast = forecastDetail.value;
@@ -264,7 +263,7 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
     if (showAddRemove) {
       footers.push(
         <tr key={1} className="govuk-table__row">
-          <td className="govuk-table__cell" colSpan={3}><a href="" role="button" onClick={(e) => this.addItem(e)} data-qa="add-cost">Add a cost</a></td>
+          <td className="govuk-table__cell" colSpan={3}><a href="" role="button" onClick={(e) => this.addItem(e, editor)} data-qa="add-cost">Add a cost</a></td>
         </tr>
       );
     }
@@ -310,33 +309,6 @@ const redirectToUploadPage = (dispatch: any, projectId: string, partnerId: strin
 
 const definition = ReduxContainer.for<EditClaimLineItemsParams, Data, Callbacks>(EditClaimLineItemsComponent);
 
-const getEditor: (isClient: boolean, editor: IEditorStore<ClaimLineItemDto[], ClaimLineItemDtosValidator>, partnerId: string, periodId: number, costCategoryId: string, original: Pending<ClaimLineItemDto[]>) => IEditorStore<ClaimLineItemDto[], ClaimLineItemDtosValidator> = (isClient, editor, partnerId, periodId, costCategoryId, original) => {
-
-  if (editor) {
-    return editor;
-  }
-
-  return original
-    .then(originalData => {
-
-      const items = originalData || [];
-      // if rendering on client and has items saved then render them
-      if ((items.length && isClient) || items.length > 10) {
-        return items;
-      }
-      // else rendering on server or no items saved so render default number
-      return range(isClient ? 2 : 10).map((x, index) => items[index] || ({ costCategoryId, partnerId, periodId }));
-    })
-    .then(x => {
-      const clone = JSON.parse(JSON.stringify(x)) as ClaimLineItemDto[];
-      return {
-        data: clone,
-        validator: new ClaimLineItemDtosValidator(clone, false),
-        error: null
-      };
-    }).data!;
-};
-
 export const EditClaimLineItems = definition.connect({
   withData: (state, props) => {
     const lineItemsSelector = Selectors.findClaimLineItemsByPartnerCostCategoryAndPeriod(props.partnerId, props.costCategoryId, props.periodId);
@@ -346,7 +318,7 @@ export const EditClaimLineItems = definition.connect({
       lineItems: lineItemsSelector.getPending(state),
       costCategories: Selectors.getCostCategories().getPending(state),
       forecastDetail: Selectors.getForecastDetail(props.partnerId, props.periodId, props.costCategoryId).getPending(state),
-      editor: getEditor(state.isClient, state.editors.claimLineItems[lineItemsSelector.key], props.partnerId, props.periodId, props.costCategoryId, lineItemsSelector.getPending(state)),
+      editor: Selectors.getClaimLineItemEditor(props.partnerId, props.periodId, props.costCategoryId).get(state),
       documents: Selectors.getClaimDetailDocuments(props.partnerId, props.periodId, props.costCategoryId).getPending(state)
     };
   },
