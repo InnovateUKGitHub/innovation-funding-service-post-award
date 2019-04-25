@@ -46,6 +46,7 @@ export async function serverRender(req: Request, res: Response, error?: IAppErro
 
     const context = contextProvider.start({ user: req.session!.user });
     const roleInfo = await context.runQuery(new GetAllProjectRolesForUser()).then(x => x.permissions);
+    const auth = new Authorisation(roleInfo);
     const user: IClientUser = { ...req.session!.user, roleInfo };
 
     const initialState = setupInitialState(route, user, context.config);
@@ -54,11 +55,11 @@ export async function serverRender(req: Request, res: Response, error?: IAppErro
     const matched = matchRoute(route);
     const params = matched && matched.getParams && matched.getParams(route) || {};
 
-    if (matched.accessControl && !matched.accessControl(new Authorisation(user.roleInfo), params, context.config.features)) {
+    if (matched.accessControl && !matched.accessControl(auth, params, context.config.features)) {
       throw new ForbiddenError();
     }
 
-    const actions = matched && matched.getLoadDataActions && matched.getLoadDataActions(params) || [];
+    const actions = matched && matched.getLoadDataActions && matched.getLoadDataActions(params, auth) || [];
 
     if (error) {
       actions.push((dispatch) => {

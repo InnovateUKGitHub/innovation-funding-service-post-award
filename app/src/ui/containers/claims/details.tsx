@@ -6,9 +6,10 @@ import * as Selectors from "../../redux/selectors";
 import { ContainerBase, ReduxContainer } from "../containerBase";
 import { ClaimLineItemsRoute } from "./claimLineItems";
 import { ClaimsDashboardRoute } from "./dashboard";
-import { ClaimDto, ILinkInfo, PartnerDto, ProjectDto, ProjectRole } from "../../../types";
+import { Authorisation, ClaimDto, ILinkInfo, PartnerDto, ProjectDto, ProjectRole } from "../../../types";
 import { AllClaimsDashboardRoute } from "./allClaimsDashboard";
 import { SimpleString } from "../../components/renderers";
+import { ForecastData, forecastDataLoadActions } from "./forecasts/common";
 
 interface Params {
   projectId: string;
@@ -25,6 +26,7 @@ interface Data {
   claimDetailsSummary: Pending<ClaimDetailsSummaryDto[]>;
   iarDocument: Pending<DocumentSummaryDto | null>;
   standardOverheadRate: number;
+  forecastData: Pending<ForecastData> | null;
 }
 
 interface CombinedData {
@@ -58,14 +60,21 @@ export class ClaimsDetailsComponent extends ContainerBase<Params, Data, {}> {
     return (
       <ACC.Page
         backLink={<ACC.BackLink route={backLink}>Back to project</ACC.BackLink>}
-        pageTitle={<ACC.Projects.Title pageTitle="Review claim" project={data.project} />}
+        pageTitle={<ACC.Projects.Title pageTitle="Claim" project={data.project} />}
         tabs={<ACC.Claims.Navigation projectId={data.project.id} partnerId={data.partner.id} periodId={data.claim.periodId} currentRouteName={ClaimsDetailsRoute.routeName} />}
       >
-        <ACC.Section title={this.getClaimPeriodTitle(data)}>
-          {this.renderTable(data)}
-        </ACC.Section>
+        {this.renderTableSection(data)}
         {this.renderIarSection(data.claim, data.project, data.partner, data.iarDocument)}
+        {this.renderForecastSection()}
       </ACC.Page>
+    );
+  }
+
+  private renderTableSection(data: CombinedData) {
+    return (
+      <ACC.Section title={this.getClaimPeriodTitle(data)}>
+        {this.renderTable(data)}
+      </ACC.Section>
     );
   }
 
@@ -109,21 +118,54 @@ export class ClaimsDetailsComponent extends ContainerBase<Params, Data, {}> {
     return <SimpleString>{iarDocument.fileName}</SimpleString>;
   }
 
+  private renderForecastSection() {
+    if (!this.props.forecastData) {
+      return null;
+    }
+
+    return (
+      <ACC.Section>
+        <ACC.Accordion>
+          <ACC.AccordionItem title="Forecast" qa="forecast-accordion">
+            <ACC.Loader pending={this.props.forecastData} render={(x) => this.renderForcastTable(x)} />
+          </ACC.AccordionItem>
+        </ACC.Accordion>
+      </ACC.Section>
+    );
+  }
+
+  private renderForcastTable(forecastData: ForecastData) {
+    return <ACC.Claims.ForecastTable data={forecastData} hideValidation={true} />;
+  }
+
 }
 
 const definition = ReduxContainer.for<Params, Data, {}>(ClaimsDetailsComponent);
 
 export const ClaimsDetails = definition.connect({
-  withData: (state, props) => ({
-    id: props.projectId,
-    project: Selectors.getProject(props.projectId).getPending(state),
-    partner: Selectors.getPartner(props.partnerId).getPending(state),
-    costCategories: Selectors.getCostCategories().getPending(state),
-    claim: Selectors.getClaim(props.partnerId, props.periodId).getPending(state),
-    claimDetailsSummary: Selectors.findClaimDetailsSummaryByPartnerAndPeriod(props.partnerId, props.periodId).getPending(state),
-    iarDocument: Selectors.getIarDocument(state, props.partnerId, props.periodId),
-    standardOverheadRate: state.config.standardOverheadRate
-  }),
+  withData: (state, props, auth) => {
+    const showForcast = auth.forProject(props.projectId).hasAnyRoles(ProjectRole.MonitoringOfficer, ProjectRole.ProjectManager);
+    return {
+      id: props.projectId,
+      project: Selectors.getProject(props.projectId).getPending(state),
+      partner: Selectors.getPartner(props.partnerId).getPending(state),
+      costCategories: Selectors.getCostCategories().getPending(state),
+      claim: Selectors.getClaim(props.partnerId, props.periodId).getPending(state),
+      claimDetailsSummary: Selectors.findClaimDetailsSummaryByPartnerAndPeriod(props.partnerId, props.periodId).getPending(state),
+      iarDocument: Selectors.getIarDocument(state, props.partnerId, props.periodId),
+      standardOverheadRate: state.config.standardOverheadRate,
+      forecastData: showForcast ? Pending.combine({
+        project: Selectors.getProject(props.projectId).getPending(state),
+        partner: Selectors.getPartner(props.partnerId).getPending(state),
+        claim: Selectors.getClaim(props.partnerId, props.periodId).getPending(state),
+        claims: Selectors.findClaimsByPartner(props.partnerId).getPending(state),
+        claimDetails: Selectors.findClaimDetailsByPartner(props.partnerId).getPending(state),
+        forecastDetails: Selectors.findForecastDetailsByPartner(props.partnerId).getPending(state),
+        golCosts: Selectors.findGolCostsByPartner(props.partnerId).getPending(state),
+        costCategories: Selectors.getCostCategories().getPending(state),
+      }) : null
+    };
+  },
   withCallbacks: () => ({})
 });
 
@@ -131,15 +173,23 @@ export const ClaimsDetailsRoute = definition.route({
   routeName: "claimDetails",
   routePath: "/projects/:projectId/claims/:partnerId/details/:periodId",
   getParams: (route) => ({ projectId: route.params.projectId, partnerId: route.params.partnerId, periodId: parseInt(route.params.periodId, 10) }),
-  getLoadDataActions: (params) => [
-    Actions.loadProject(params.projectId),
-    Actions.loadPartnersForProject(params.projectId),
-    Actions.loadPartner(params.partnerId),
-    Actions.loadCostCategories(),
-    Actions.loadClaim(params.partnerId, params.periodId),
-    Actions.loadClaimDetailsSummaryForPartner(params.projectId, params.partnerId, params.periodId),
-    Actions.loadIarDocuments(params.partnerId, params.periodId)
-  ],
+  getLoadDataActions: (params, auth) => {
+    const showForcast = auth.forProject(params.projectId).hasAnyRoles(ProjectRole.MonitoringOfficer, ProjectRole.ProjectManager);
+
+    const standardActions = [
+      Actions.loadProject(params.projectId),
+      Actions.loadPartnersForProject(params.projectId),
+      Actions.loadPartner(params.partnerId),
+      Actions.loadCostCategories(),
+      Actions.loadClaim(params.partnerId, params.periodId),
+      Actions.loadClaimDetailsSummaryForPartner(params.projectId, params.partnerId, params.periodId),
+      Actions.loadIarDocuments(params.partnerId, params.periodId)
+    ];
+
+    const forcastActions = showForcast ? forecastDataLoadActions(params) : [];
+
+    return [...standardActions, ...forcastActions];
+  },
   accessControl: (auth, params) => auth.forProject(params.projectId).hasAnyRoles(ProjectRole.MonitoringOfficer, ProjectRole.ProjectManager) || auth.forPartner(params.projectId, params.partnerId).hasRole(ProjectRole.FinancialContact),
   container: ClaimsDetails
 });
