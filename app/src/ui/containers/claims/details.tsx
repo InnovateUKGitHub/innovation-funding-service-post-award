@@ -144,7 +144,9 @@ const definition = ReduxContainer.for<Params, Data, {}>(ClaimsDetailsComponent);
 
 export const ClaimsDetails = definition.connect({
   withData: (state, props, auth) => {
-    const showForcast = auth.forProject(props.projectId).hasAnyRoles(ProjectRole.MonitoringOfficer, ProjectRole.ProjectManager);
+    const isMoOrPM = auth.forProject(props.projectId).hasAnyRoles(ProjectRole.MonitoringOfficer, ProjectRole.ProjectManager);
+    const isFC = auth.forPartner(props.projectId, props.partnerId).hasRole(ProjectRole.FinancialContact);
+
     return {
       id: props.projectId,
       project: Selectors.getProject(props.projectId).getPending(state),
@@ -154,7 +156,7 @@ export const ClaimsDetails = definition.connect({
       claimDetailsSummary: Selectors.findClaimDetailsSummaryByPartnerAndPeriod(props.partnerId, props.periodId).getPending(state),
       iarDocument: Selectors.getIarDocument(state, props.partnerId, props.periodId),
       standardOverheadRate: state.config.standardOverheadRate,
-      forecastData: showForcast ? Pending.combine({
+      forecastData: isMoOrPM && !isFC ? Pending.combine({
         project: Selectors.getProject(props.projectId).getPending(state),
         partner: Selectors.getPartner(props.partnerId).getPending(state),
         claim: Selectors.getClaim(props.partnerId, props.periodId).getPending(state),
@@ -174,7 +176,8 @@ export const ClaimsDetailsRoute = definition.route({
   routePath: "/projects/:projectId/claims/:partnerId/details/:periodId",
   getParams: (route) => ({ projectId: route.params.projectId, partnerId: route.params.partnerId, periodId: parseInt(route.params.periodId, 10) }),
   getLoadDataActions: (params, auth) => {
-    const showForcast = auth.forProject(params.projectId).hasAnyRoles(ProjectRole.MonitoringOfficer, ProjectRole.ProjectManager);
+    const isMoOrPM = auth.forProject(params.projectId).hasAnyRoles(ProjectRole.MonitoringOfficer, ProjectRole.ProjectManager);
+    const isFC = auth.forPartner(params.projectId, params.partnerId).hasRole(ProjectRole.FinancialContact);
 
     const standardActions = [
       Actions.loadProject(params.projectId),
@@ -186,7 +189,7 @@ export const ClaimsDetailsRoute = definition.route({
       Actions.loadIarDocuments(params.partnerId, params.periodId)
     ];
 
-    const forcastActions = showForcast ? forecastDataLoadActions(params) : [];
+    const forcastActions = isMoOrPM && !isFC ? forecastDataLoadActions(params) : [];
 
     return [...standardActions, ...forcastActions];
   },
