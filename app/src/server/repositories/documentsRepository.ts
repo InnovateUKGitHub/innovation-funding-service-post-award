@@ -1,9 +1,9 @@
-import { FileUpload } from "@framework/types";
-import { ContentVersionRepository } from "@server/repositories/contentVersionRepository";
 import { Connection } from "jsforce";
+import { FileUpload } from "@framework/types";
+import { Stream } from "stream";
 import { ContentDocumentLinkRepository } from "@server/repositories/contentDocumentLinkRepository";
 import { ContentDocumentRepository } from "@server/repositories/contentDocumentRepository";
-import { Stream } from "stream";
+import { ContentVersionRepository } from "@server/repositories/contentVersionRepository";
 
 export interface ISalesforceDocument {
   Id: string;
@@ -34,32 +34,41 @@ export interface IDocumentsRepository {
 
 export class DocumentsRepository implements IDocumentsRepository {
 
+  private contentVersionRepository: ContentVersionRepository;
+  private contentDocumentLinkRepository: ContentDocumentLinkRepository;
+  private contentDocumentRepository: ContentDocumentRepository;
+
   public constructor(
-    protected getSalesforceConnection: () => Promise<Connection>
-  ) { }
+    getSalesforceConnection: () => Promise<Connection>
+  ) {
+    this.contentVersionRepository = new ContentVersionRepository(getSalesforceConnection);
+    this.contentDocumentLinkRepository = new ContentDocumentLinkRepository(getSalesforceConnection);
+    this.contentDocumentRepository = new ContentDocumentRepository(getSalesforceConnection);
+  }
 
   public async insertDocument(document: FileUpload, recordId: string) {
-    const contentVersionId = await new ContentVersionRepository(this.getSalesforceConnection).insertDocument(document);
-    const contentVersion = await new ContentVersionRepository(this.getSalesforceConnection).getDocument(contentVersionId);
+    const contentVersionId = await this.contentVersionRepository.insertDocument(document);
+    const contentVersion = await this.contentVersionRepository.getDocument(contentVersionId);
     const documentId = contentVersion.ContentDocumentId;
-    await new ContentDocumentLinkRepository(this.getSalesforceConnection).insertContentDocumentLink(documentId, recordId);
+
+    await this.contentDocumentLinkRepository.insertContentDocumentLink(documentId, recordId);
     return documentId;
   }
 
   public deleteDocument(documentId: string) {
-    return new ContentDocumentRepository(this.getSalesforceConnection).delete(documentId);
+    return this.contentDocumentRepository.delete(documentId);
   }
 
   public getDocumentsMetadata(documentIds: string[], filter?: DocumentFilter) {
-    return new ContentVersionRepository(this.getSalesforceConnection).getDocuments(documentIds, filter);
+    return this.contentVersionRepository.getDocuments(documentIds, filter);
   }
 
   public getDocumentMetadata(documentId: string) {
-    return new ContentVersionRepository(this.getSalesforceConnection).getDocument(documentId);
+    return this.contentVersionRepository.getDocument(documentId);
   }
 
   public async getDocumentsMetedataByLinkedRecord(recordId: string, filter?: DocumentFilter) {
-    const linkedDocs = await new ContentDocumentLinkRepository(this.getSalesforceConnection).getAllForEntity(recordId);
+    const linkedDocs = await this.contentDocumentLinkRepository.getAllForEntity(recordId);
     if (!linkedDocs || !linkedDocs.length) {
       return [];
     }
@@ -67,6 +76,6 @@ export class DocumentsRepository implements IDocumentsRepository {
   }
 
   public getDocumentContent(documentId: string) {
-    return new ContentVersionRepository(this.getSalesforceConnection).getDocumentData(documentId);
+    return this.contentVersionRepository.getDocumentData(documentId);
   }
 }
