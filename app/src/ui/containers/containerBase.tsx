@@ -37,14 +37,15 @@ export abstract class ContainerBase<TParams = {}, TData = {}, TCallbacks = {}> e
 class ConnectWrapper<TParams, TData, TCallbacks> {
     constructor(
         private readonly component: ContainerBaseClass<TParams, TData, TCallbacks>,
-        private readonly withData: (state: RootState, params: TParams) => TData,
+        private readonly withData: (state: RootState, params: TParams, auth: Authorisation) => TData,
         private readonly withCallbacks: (dispatch: (action: AsyncThunk<any>) => void) => TCallbacks
     ) { }
 
     private mapStateToProps(state: RootState): TData & TParams & BaseProps {
         const matched = matchRoute(state.router.route);
+        const auth = new Authorisation(state.user.roleInfo);
         const params = (matched.getParams && matched.getParams(state.router.route!) || {}) as TParams;
-        const data = this.withData(state, params);
+        const data = this.withData(state, params, auth);
         const messages = state.messages.map(x => x.message);
         const route = state.router.route!;
 
@@ -70,7 +71,7 @@ class ReduxContainerWrapper<TParams, TData, TCallbacks> {
         routeName: string,
         routePath: string,
         getParams: (route: RouteState) => TParams,
-        getLoadDataActions: (params: TParams) => AsyncThunk<any>[],
+        getLoadDataActions: (params: TParams, auth: Authorisation) => AsyncThunk<any>[],
         accessControl?: (auth: Authorisation, params: TParams, features: IFeatureFlags) => boolean,
         container: React.ComponentClass<any> & { WrappedComponent: React.ComponentType<TParams & TData & TCallbacks & BaseProps> }
     }) {
@@ -83,7 +84,7 @@ class ReduxContainerWrapper<TParams, TData, TCallbacks> {
         };
     }
 
-    public connect(options: { withData: (state: RootState, params: TParams) => TData, withCallbacks: (dispatch: ThunkDispatch<RootState, void, RootActions>) => TCallbacks }) {
+    public connect(options: { withData: (state: RootState, params: TParams, auth: Authorisation) => TData, withCallbacks: (dispatch: ThunkDispatch<RootState, void, RootActions>) => TCallbacks }) {
         return new ConnectWrapper(this.component, options.withData, options.withCallbacks).connect();
     }
 }
