@@ -5,8 +5,9 @@ import { getCostCategories } from "./costCategories";
 import { getKey } from "../../../util/key";
 import { ClaimDto } from "../../../types";
 import { Pending } from "../../../shared/pending";
-import { ClaimLineItemDtosValidator } from "@ui/validators";
+import { ClaimLineItemFormValidator } from "@ui/validators";
 import { range } from "@shared/range";
+import { ClaimLineItemsFormData } from "@framework/types/dtos/claimLineItemsFormData";
 
 export const claimsStore = "claims";
 export const findClaimsByPartner = (partnerId: string) => dataStoreHelper(claimsStore, `partnerId=${partnerId}`);
@@ -31,24 +32,36 @@ const createClaimValidator = (partnerId: string, periodId: number, claim: ClaimD
   return new ClaimDtoValidator(claim, details, costCategories, false);
 };
 
-export const getClaimLineItemEditor = (partnerId: string, periodId: number, costCategoryId: string) => editorStoreHelper<ClaimLineItemDto[], ClaimLineItemDtosValidator>(
-  claimLineItemsStore,
-  x => x.claimLineItems,
+export const claimLineItemsStore = "claimLineItems";
+export const claimLineItemsFormStore = "claimLineItemsForm";
+
+export const getClaimLineItemEditor = (partnerId: string, periodId: number, costCategoryId: string) => editorStoreHelper<ClaimLineItemsFormData, ClaimLineItemFormValidator>(
+  claimLineItemsFormStore,
+  x => x.claimLineItemsForm,
   (store) => createClaimLineItemEditorDto(partnerId, periodId, costCategoryId, store),
-  (claimLineItems) => new ClaimLineItemDtosValidator(claimLineItems, false),
+  (claimLineItemForm) => new ClaimLineItemFormValidator(claimLineItemForm, false),
   findClaimLineItemsByPartnerCostCategoryAndPeriod(partnerId, costCategoryId, periodId).key
 );
-export const claimLineItemsStore = "claimLineItems";
+
 export const findClaimLineItemsByPartnerCostCategoryAndPeriod = (partnerId: string, costCategoryId: string, periodId: number) => dataStoreHelper(claimLineItemsStore, `partnerId=${partnerId}&costCategoryId=${costCategoryId}&periodId=${periodId}`);
-const createClaimLineItemEditorDto = (partnerId: string, periodId: number, costCategoryId: string, state: RootState) => {
-  return findClaimLineItemsByPartnerCostCategoryAndPeriod(partnerId, costCategoryId, periodId).getPending(state).then(lineItems => {
-    const items = lineItems || [];
+
+const createClaimLineItemEditorDto = (partnerId: string, periodId: number, costCategoryId: string, state: RootState): Pending<ClaimLineItemsFormData> => {
+  return Pending.combine({
+    lineItems: findClaimLineItemsByPartnerCostCategoryAndPeriod(partnerId, costCategoryId, periodId).getPending(state),
+    claimDetails: getClaimDetails(partnerId, periodId, costCategoryId).getPending(state),
+  }).then((x) => {
+    const items = x!.lineItems || [];
     // if rendering on client and has items saved then render them
-    if ((items.length && state.isClient) || items.length > 10) {
-      return items;
-    }
     // else rendering on server or no items saved so render default number
-    return range(state.isClient ? 2 : 10).map((x, index) => items[index] || ({ costCategoryId, partnerId, periodId }));
+    const lineItems = (items.length && state.isClient) || items.length > 10 ? items : range(state.isClient ? 2 : 10).map((lineItem, index) => items[index] || ({
+      costCategoryId,
+      partnerId,
+      periodId
+    }));
+    return {
+      lineItems,
+      claimDetails: x!.claimDetails
+    };
   });
 };
 
