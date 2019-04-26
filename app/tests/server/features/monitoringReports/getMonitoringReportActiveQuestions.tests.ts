@@ -9,9 +9,9 @@ describe("GetMonitoringReportActiveQuestions", () => {
     const context = new TestContext();
     const testData = context.testData;
 
-    testData.createQuestion(3, 1);
-    testData.createQuestion(3, 2, false);
-    testData.createQuestion(3, 3);
+    testData.createMonitoringReportQuestionSet(1, 3);
+    testData.createMonitoringReportQuestionSet(2, 3, false);
+    testData.createMonitoringReportQuestionSet(3, 3);
 
     const query = new GetMonitoringReportActiveQuestions();
     const result = await context.runQuery(query);

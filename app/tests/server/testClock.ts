@@ -2,7 +2,8 @@ import { Clock, IClock } from "../../src/server/features/common/clock";
 import { DateTime } from "luxon";
 
 export class TestClock implements IClock {
-    private _now: Date|null;
+
+    private _now: Date | null;
     private _inner: Clock;
 
     constructor() {
@@ -11,12 +12,12 @@ export class TestClock implements IClock {
     }
 
     public setDate(value: string, format: string = "yyyy/MM/dd") {
-        return this.setDateTime(value+ " 12:00:00", format + " HH:mm:ss");
+        return this.setDateTime(value + " 12:00:00", format + " HH:mm:ss");
     }
 
     public setDateTime(value: string, format: string = "yyyy/MM/dd hh:mm:ss") {
         const parsed = this.parse(value, format);
-        if(!parsed || isNaN(parsed.getTime())) {
+        if (!parsed || isNaN(parsed.getTime())) {
             throw new Error(`Invalid date for format ${value} ${format}`);
         }
         return this._now = this.parse(value, format);
@@ -30,12 +31,28 @@ export class TestClock implements IClock {
         return this._inner.parse(value, format);
     }
 
-    dateTime(value: Date|string, format?: string) {
-      return this._inner.dateTime(value, format);
+    dateTime(value: Date | string, format?: string) {
+        return this._inner.dateTime(value, format);
     }
 
     asLuxon(): DateTime {
         return DateTime.fromJSDate(this.today());
+    }
+
+    parseOptionalSalesforceDate(value: string): Date | null {
+        return this._inner.parseOptionalSalesforceDate(value);
+    }
+
+    parseRequiredSalesforceDate(value: string): Date {
+        return this._inner.parseRequiredSalesforceDate(value);
+    }
+
+    parseOptionalSalesforceDateTime(value: string): Date | null {
+        return this._inner.parseOptionalSalesforceDateTime(value);
+    }
+
+    parseRequiredSalesforceDateTime(value: string): Date {
+        return this._inner.parseRequiredSalesforceDateTime(value);
     }
 
 }

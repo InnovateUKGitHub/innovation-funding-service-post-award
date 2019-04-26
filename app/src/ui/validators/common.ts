@@ -51,6 +51,10 @@ export function number(results: Results<{}>, value: number, message?: string) {
     return isTrue(results, value === undefined || value === null || isNumber(value), message || "Field must be a number.");
 }
 
+export function integer(results: Results<{}>, value: number, message?: string) {
+    return isTrue(results, value === undefined || value === null || (isNumber(value) && Number.isInteger(value)), message || "Field must be a number.");
+}
+
 export function email(results: Results<{}>, value: string, message?: string) {
     // http://stackoverflow.com/questions/46155/validate-email-address-in-javascript
     const regex = /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;

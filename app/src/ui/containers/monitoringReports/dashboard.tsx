@@ -9,6 +9,7 @@ import { MonitoringReportPrepareRoute } from "./prepare";
 import { MonitoringReportViewRoute } from "./details";
 import { ProjectRole } from "../../../types";
 import { ProjectDashboardRoute } from "@ui/containers";
+import { MonitoringReportStatus } from "@framework/types/constants/monitoringReportStatus";
 
 interface Params {
   projectId: string;
@@ -25,31 +26,46 @@ interface Callbacks {
 }
 
 class DashboardComponent extends ContainerBase<Params, Data, Callbacks> {
+  private editStatuses = [MonitoringReportStatus.New, MonitoringReportStatus.Draft, MonitoringReportStatus.Queried];
+  private currentStatuses = [MonitoringReportStatus.New, MonitoringReportStatus.Draft, MonitoringReportStatus.Queried, MonitoringReportStatus.AwaitingApproval];
+
   render() {
     const combined = Pending.combine({
-      currentReports: this.props.reports.then(x => (x || []).filter(y => y.status === "Draft")),
-      previousReports: this.props.reports.then(x => (x || []).filter(y => y.status !== "Draft")),
+      reports: this.props.reports,
       project: this.props.project,
       partners: this.props.partners
     });
 
-    return <ACC.PageLoader pending={combined} render={(data) => this.renderContents(data.project, data.partners, data.currentReports, data.previousReports)} />;
+    return <ACC.PageLoader pending={combined} render={(data) => this.renderContents(data.project, data.partners, data.reports)} />;
   }
 
-  private renderContents(project: Dtos.ProjectDto, partners: Dtos.PartnerDto[], currentReports: Dtos.MonitoringReportSummaryDto[], previousReports: Dtos.MonitoringReportSummaryDto[]) {
+  private renderContents(project: Dtos.ProjectDto, partners: Dtos.PartnerDto[], reports: Dtos.MonitoringReportSummaryDto[]) {
+    // loop though reports splitting them into open or archived
+    const reportSections = reports.reduce<{ open: Dtos.MonitoringReportSummaryDto[], archived: Dtos.MonitoringReportSummaryDto[] }>((result, report) => {
+        if (this.currentStatuses.indexOf(report.status) > -1) {
+          result.open.push(report);
+        }
+        else {
+          result.archived.push(report);
+        }
+        return result;
+      },
+      { open: [], archived: [] }
+    );
+
     return (
       <ACC.Page
         backLink={<ACC.BackLink route={ProjectDashboardRoute.getLink({})}>Back to all projects</ACC.BackLink>}
         pageTitle={<ACC.Projects.Title pageTitle="View project" project={project} />}
-        tabs={<ACC.Projects.ProjectNavigation project={project} currentRoute={MonitoringReportDashboardRoute.routeName} partners={partners}/>}
+        tabs={<ACC.Projects.ProjectNavigation project={project} currentRoute={MonitoringReportDashboardRoute.routeName} partners={partners} />}
       >
-        <ACC.Section title={"Current report"}>
-          {currentReports.length ? this.renderTable(project, currentReports, "current") : null}
-          {!currentReports.length ? <ACC.Renderers.SimpleString>There are no reports due</ACC.Renderers.SimpleString> : null}
+        <ACC.Section title={"Open"}>
+          {reportSections.open.length ? this.renderTable(project, reportSections.open, "current") : null}
+          {!reportSections.open ? <ACC.Renderers.SimpleString>There are no open reports.</ACC.Renderers.SimpleString> : null}
         </ACC.Section>
-        <ACC.Section title={"Previous reports"}>
-          {previousReports.length ? this.renderTable(project, previousReports, "previous") : null}
-          {!previousReports.length ? <ACC.Renderers.SimpleString>There are no previous reports</ACC.Renderers.SimpleString> : null}
+        <ACC.Section title={"Archived"}>
+          {reportSections.archived.length ? this.renderTable(project, reportSections.open, "previous") : null}
+          {!reportSections.archived.length ? <ACC.Renderers.SimpleString>There are no archived reports.</ACC.Renderers.SimpleString> : null}
         </ACC.Section>
       </ACC.Page>
     );
@@ -61,19 +77,20 @@ class DashboardComponent extends ContainerBase<Params, Data, Callbacks> {
     return (
       <ReportsTable.Table
         data={reports}
-        bodyRowFlag={x => section !== "current" ? null : (x.status === "Draft" ? "edit" : "info")}
+        bodyRowFlag={x => section !== "current" ? null : this.editStatuses.indexOf(x.status) >= 0 ? "edit" : "info"}
         qa={`${section}-reports-table`}
       >
-        <ReportsTable.Custom header={`Period`} qa="period" value={x => <ACC.PeriodTitle periodId={x.periodId} periodStartDate={x.startDate} periodEndDate={x.endDate} />} />
-        <ReportsTable.String header={`Status`} qa="status" value={x => x.status} />
-        <ReportsTable.ShortDate header={`Date of last update`} qa="dateUpdated" value={x => x.lastUpdated} />
+        <ReportsTable.String header={`Title`} qa="title" value={x => x.title} />
+        <ReportsTable.Number header={`Period`} qa="period" value={x => x.periodId} />
+        <ReportsTable.String header={`Status`} qa="status" value={x => x.statusName} />
+        <ReportsTable.ShortDateTime header={`Last updated`} qa="dateUpdated" value={x => x.lastUpdated} />
         <ReportsTable.Custom header="" qa="link" value={x => this.renderLink(project, x)} />
       </ReportsTable.Table>
     );
   }
 
   private renderLink(project: Dtos.ProjectDto, report: Dtos.MonitoringReportSummaryDto) {
-    if (report.status === "Draft") {
+    if (this.editStatuses.indexOf(report.status) > -1) {
       return <ACC.Link route={MonitoringReportPrepareRoute.getLink({ projectId: project.id, periodId: report.periodId })}>Edit report</ACC.Link>;
     }
     return <ACC.Link route={MonitoringReportViewRoute.getLink({ projectId: project.id, periodId: report.periodId })}>View report</ACC.Link>;

@@ -11,23 +11,21 @@ export interface MonitoringReportQuestionDto {
   optionId: string|null;
   title: string;
   comments: string|null;
+  isScored: boolean;
   options: MonitoringReportOptionDto[];
   displayOrder: number;
 }
 
-export interface MonitoringReportDto {
-  headerId: string;
-  status: MonitoringReportStatus;
-  startDate: Date;
-  endDate: Date;
-  projectId: string;
-  periodId: number;
+export interface MonitoringReportDto extends MonitoringReportSummaryDto {
   questions: MonitoringReportQuestionDto[];
 }
 
 export interface MonitoringReportSummaryDto {
+  projectId: string;
   headerId: string;
+  title: string;
   status: MonitoringReportStatus;
+  statusName: string;
   startDate: Date;
   endDate: Date;
   periodId: number;

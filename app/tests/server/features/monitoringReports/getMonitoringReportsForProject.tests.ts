@@ -3,6 +3,8 @@
 import { TestContext } from "../../testContextProvider";
 import { GetMonitoringReportsForProject } from "../../../../src/server/features/monitoringReports/getMonitoringReportsForProject";
 import * as Repositories from "../../../../src/server/repositories";
+import { MonitoringReportStatus } from "../../../../src/types/constants/monitoringReportStatus";
+import { DateTime } from "luxon";
 
 describe("GetMonitoringReportsForProject", () => {
 
@@ -11,15 +13,16 @@ describe("GetMonitoringReportsForProject", () => {
     const testData = context.testData;
 
     const project = testData.createProject();
-    testData.createMonitoringReportHeader("testId", project.Id, 1);
+    const periodId = 1;
+    const header = testData.createMonitoringReportHeader(project, periodId);
 
     const query = new GetMonitoringReportsForProject(project.Id);
     const result = await context.runQuery(query);
-    expect(result[0].headerId).toBe("testId");
-    expect(result[0].status).toBe("Draft");
-    expect(result[0].periodId).toBe(1);
-    expect(result[0].startDate).toEqual(new Date("2018-02-04"));
-    expect(result[0].endDate).toEqual(new Date("2018-03-04"));
+    expect(result[0].headerId).toBe(header.Id);
+    expect(result[0].status).toBe(MonitoringReportStatus.Draft);
+    expect(result[0].periodId).toBe(periodId);
+    expect(result[0].startDate).toEqual(DateTime.fromFormat(header.Acc_PeriodStartDate__c, "yyyy-MM-dd").toJSDate());
+    expect(result[0].endDate).toEqual(DateTime.fromFormat(header.Acc_PeriodEndDate__c, "yyyy-MM-dd").toJSDate());
   });
 
   it("returns the correct number of objects", async () => {
@@ -27,8 +30,8 @@ describe("GetMonitoringReportsForProject", () => {
     const testData = context.testData;
 
     const project = testData.createProject();
-    testData.createMonitoringReportHeader("testId_1", project.Id, 1);
-    testData.createMonitoringReportHeader("testId_2", project.Id, 2);
+    testData.createMonitoringReportHeader(project, 1);
+    testData.createMonitoringReportHeader(project, 2);
 
     const query = new GetMonitoringReportsForProject(project.Id);
     const result = await context.runQuery(query);
@@ -40,9 +43,9 @@ describe("GetMonitoringReportsForProject", () => {
     const testData = context.testData;
 
     const project = testData.createProject();
-    testData.createMonitoringReportHeader("testId_1", project.Id, 1);
-    testData.createMonitoringReportHeader("testId_2", project.Id, 2);
-    testData.createMonitoringReportHeader("testId_2", project.Id, 3);
+    testData.createMonitoringReportHeader(project, 1);
+    testData.createMonitoringReportHeader(project, 2);
+    testData.createMonitoringReportHeader(project, 3);
 
     const query = new GetMonitoringReportsForProject(project.Id);
     const result = await context.runQuery(query);

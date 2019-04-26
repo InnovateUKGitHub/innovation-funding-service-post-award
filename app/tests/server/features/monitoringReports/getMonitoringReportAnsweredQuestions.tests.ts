@@ -8,9 +8,9 @@ describe("GetMonitoringReportAnsweredQuestions", () => {
     const context = new TestContext();
     const testData = context.testData;
 
-    testData.createQuestion(2, 1);
-    testData.createQuestion(2, 2, false);
-    testData.createQuestion(2, 3);
+    testData.createMonitoringReportQuestionSet(1, 2);
+    testData.createMonitoringReportQuestionSet(2, 2, false);
+    testData.createMonitoringReportQuestionSet(3, 2);
 
     const query = new GetMonitoringReportAnsweredQuestions(["QuestionId: 1", "QuestionId: 5"]);
     const result = await context.runQuery(query);

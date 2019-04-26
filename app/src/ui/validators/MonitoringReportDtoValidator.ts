@@ -1,7 +1,6 @@
 import * as Validation from "./common";
 import { Results } from "../validation/results";
 import { MonitoringReportDto, MonitoringReportQuestionDto } from "../../types/dtos/monitoringReportDto";
-import { MonitoringReportStatus } from "../../types/constants/monitoringReportStatus";
 
 class QuestionValidator extends Results<MonitoringReportQuestionDto> {
   constructor(
@@ -18,9 +17,9 @@ class QuestionValidator extends Results<MonitoringReportQuestionDto> {
     () => this.answer.comments ? Validation.required(this, this.answer.optionId, "Score must be selected to submit a comment.") : Validation.valid(this)
   );
 
-  public readonly score = this.question.options && this.question.options.length ?
+  public readonly score = this.question.isScored ?
     Validation.all(this,
-      () => this.submit ? Validation.required(this, this.answer.optionId) : Validation.valid(this),
+      () => this.submit ? Validation.required(this, this.answer.optionId, "Score is required") : Validation.valid(this),
       () => Validation.isTrue(this, !this.answer.optionId || !!this.question.options.find(x => x.id === this.answer.optionId), "Select a value from the list.")
     )
     : Validation.valid(this);
@@ -32,9 +31,21 @@ export class MonitoringReportDtoValidator extends Results<MonitoringReportDto> {
     show: boolean,
     public readonly submit: boolean,
     private readonly questions: MonitoringReportQuestionDto[],
+    private readonly totalProjectPeriods: number,
   ) {
     super(model, show);
   }
+
+  public readonly title = Validation.all(this,
+    () => Validation.required(this, this.model.title, "Title is required"),
+    () => Validation.maxLength(this, this.model.title, 80, "Title must be less than 80 characters"),
+    );
+
+  public readonly periodId = Validation.all(this,
+    () => Validation.required(this, this.model.periodId, "Period is required"),
+    () => Validation.integer(this, this.model.periodId, "Period must be a valid period"),
+    () => Validation.isTrue(this, (this.model.periodId > 0 && this.model.periodId <= this.totalProjectPeriods), `Maximun period is ${this.totalProjectPeriods}`)
+  );
 
   public readonly responses = Validation.optionalChild(this, this.questions,
     q => (
