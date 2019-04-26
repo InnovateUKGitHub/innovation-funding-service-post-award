@@ -8,5 +8,5 @@ export const mapToDocumentSummaryDto = (doc: ISalesforceDocument) => ({
   description: doc.Description,
   fileSize: doc.ContentSize,
   dateCreated: DateTime.fromISO(doc.CreatedDate).toJSDate(),
-  owner: doc.Owner.Username
+  owner: doc.Owner && doc.Owner.Username
 });
