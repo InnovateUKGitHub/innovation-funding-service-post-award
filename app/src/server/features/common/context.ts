@@ -7,6 +7,8 @@ import { GetAllProjectRolesForUser, IRoleInfo } from "../projects/getAllProjectR
 import { ErrorCode, ICaches, IContext, IRunnable, ISessionUser, ISyncRunnable, } from "../../../types";
 import { QueryBase, SyncQueryBase } from "./queryBase";
 import { CommandBase, SyncCommandBase } from "./commandBase";
+import { DateTime } from "luxon";
+import { Timer } from "@framework/types/timer";
 
 const cachesImplementation: ICaches = {
   costCategories: new Cache<CostCategoryDto[]>(Configuration.timeouts.costCategories),
@@ -74,22 +76,32 @@ export class Context implements IContext {
   private readonly salesforceConnectionDetails: Salesforce.ISalesforceConnectionDetails;
 
   private getSalesforceConnection() {
-      return Salesforce.salesforceConnectionWithToken(this.salesforceConnectionDetails);
+    return Salesforce.salesforceConnectionWithToken(this.salesforceConnectionDetails);
+  }
+
+  public startTimer(message: string) {
+    return new Timer(this.logger, message);
   }
 
   private async runAsync<TResult>(runnable: IRunnable<TResult>): Promise<TResult> {
+    const timer = this.startTimer(runnable.constructor.name);
     try {
       const auth = await new GetAllProjectRolesForUser().Run(this);
       if (!(await runnable.accessControl(auth, this))) throw new ForbiddenError();
+      // await the run because of the finally
       return await runnable.Run(this);
     }
     catch (e) {
       this.logger.warn("Failed query", runnable.LogMessage(), e);
       throw constructErrorResponse(e);
     }
+    finally {
+      timer.finish();
+    }
   }
 
   private runSync<TResult>(runnable: ISyncRunnable<TResult>): TResult {
+    const timer = this.startTimer(runnable.constructor.name);
     try {
       return runnable.Run(this);
     }
@@ -97,33 +109,32 @@ export class Context implements IContext {
       this.logger.warn("Failed query", runnable.LogMessage(), e);
       throw constructErrorResponse(e);
     }
+    finally {
+      timer.finish();
+    }
   }
 
   public runQuery<TResult>(query: QueryBase<TResult>): Promise<TResult> {
     const runnable = (query as any) as IRunnable<TResult>;
     this.logger.info("Running async query", runnable.LogMessage());
-
     return this.runAsync(runnable);
   }
 
   public runSyncQuery<TResult>(query: SyncQueryBase<TResult>): TResult {
     const runnable = (query as any) as ISyncRunnable<TResult>;
     this.logger.info("Running sync query", runnable.LogMessage());
-
     return this.runSync(runnable);
   }
 
   public runCommand<TResult>(command: CommandBase<TResult>): Promise<TResult> {
     const runnable = (command as any) as IRunnable<TResult>;
     this.logger.info("Running async command", runnable.LogMessage());
-
     return this.runAsync(runnable);
   }
 
   public runSyncCommand<TResult>(command: SyncCommandBase<TResult>): TResult {
     const runnable = (command as any) as ISyncRunnable<TResult>;
     this.logger.info("Running sync command", runnable.LogMessage());
-
     return this.runSync(runnable);
   }
 }

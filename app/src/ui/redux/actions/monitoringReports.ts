@@ -1,7 +1,7 @@
 import { AsyncThunk, conditionalLoad, DataLoadAction, dataLoadAction, EditorAction, handleEditorError, messageSuccess, SyncThunk, UpdateEditorAction, updateEditorAction } from "./common";
 import { ApiClient } from "../../apiClient";
 import { getAllMonitoringReports, getMonitoringReport, getMonitoringReportEditor } from "../selectors/monitoringReports";
-import { MonitoringReportDto, MonitoringReportQuestionDto } from "../../../types";
+import { MonitoringReportDto, MonitoringReportQuestionDto, ProjectDto } from "../../../types";
 import { MonitoringReportDtoValidator } from "../../validators/MonitoringReportDtoValidator";
 import { scrollToTheTopSmoothly } from "../../../util/windowHelpers";
 import { LoadingStatus } from "../../../shared/pending";
@@ -20,7 +20,7 @@ export function loadMonitoringReports(projectId: string) {
   );
 }
 
-export function validateMonitoringReport(projectId: string, periodId: number, dto: MonitoringReportDto, questions: MonitoringReportQuestionDto[], submit?: boolean, showErrors?: boolean): SyncThunk<MonitoringReportDtoValidator, UpdateEditorAction> {
+export function validateMonitoringReport(projectId: string, periodId: number, dto: MonitoringReportDto, questions: MonitoringReportQuestionDto[], project: ProjectDto, submit?: boolean, showErrors?: boolean): SyncThunk<MonitoringReportDtoValidator, UpdateEditorAction> {
   return (dispatch, getState) => {
     const selector = getMonitoringReportEditor(projectId, periodId);
     const state = getState();
@@ -33,7 +33,7 @@ export function validateMonitoringReport(projectId: string, periodId: number, dt
       submit = current && (current.validator as MonitoringReportDtoValidator).submit || false;
     }
 
-    const validator = new MonitoringReportDtoValidator(dto, showErrors, submit, questions);
+    const validator = new MonitoringReportDtoValidator(dto, showErrors, submit, questions, project.periodId);
 
     dispatch(updateEditorAction(selector.key, selector.store, dto, validator));
     return validator;
@@ -45,6 +45,7 @@ export function saveMonitoringReport(
   periodId: number,
   dto: MonitoringReportDto,
   questions: MonitoringReportQuestionDto[],
+  project: ProjectDto,
   submit: boolean,
   onComplete: () => void,
   message?: string
@@ -53,7 +54,7 @@ export function saveMonitoringReport(
   return (dispatch, getState) => {
     const state = getState();
     const selector = getMonitoringReportEditor(projectId, periodId);
-    const validation = validateMonitoringReport(projectId, periodId, dto, questions, submit, true)(dispatch, getState, null);
+    const validation = validateMonitoringReport(projectId, periodId, dto, questions, project, submit, true)(dispatch, getState, null);
 
     if (!validation.isValid) {
       scrollToTheTopSmoothly();

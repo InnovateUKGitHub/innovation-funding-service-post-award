@@ -128,6 +128,7 @@ describe("MapToProjectDtoCommand", () => {
     const salesforce = context.testData.createProject(x => {
       x.Acc_ClaimFrequency__c = "Quarterly";
       x.Acc_StartDate__c = "2018-01-01";
+      x.Acc_EndDate__c = "2018-12-31";
     });
 
     for (let i = 1; i <= 12; i++) {
@@ -144,6 +145,7 @@ describe("MapToProjectDtoCommand", () => {
     const salesforce = context.testData.createProject(x => {
       x.Acc_ClaimFrequency__c = "Monthly";
       x.Acc_StartDate__c = "2018-01-01";
+      x.Acc_EndDate__c = "2018-12-31";
     });
 
     for (let i = 1; i <= 12; i++) {
@@ -159,6 +161,7 @@ describe("MapToProjectDtoCommand", () => {
     const salesforce = context.testData.createProject(x => {
       x.Acc_ClaimFrequency__c = "Monthly";
       x.Acc_StartDate__c = "2018-01-01";
+      x.Acc_EndDate__c = "2018-12-31";
     });
 
     for (let i = 1; i <= 12; i++) {

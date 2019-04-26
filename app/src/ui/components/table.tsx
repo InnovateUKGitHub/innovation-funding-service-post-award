@@ -1,6 +1,6 @@
 // tslint:disable:max-classes-per-file
 import React from "react";
-import { FullDate, ShortDate } from "./renderers/date";
+import { FullDate, ShortDate, ShortDateTime } from "./renderers/date";
 import { Email } from "./renderers/email";
 import { Currency } from "./renderers/currency";
 import classNames from "classnames";
@@ -190,6 +190,11 @@ const ShortDateColumn = <T extends {}>(props: ExternalColumnProps<T, Date | null
   return <TypedColumn renderCell={(data, index) => <ShortDate value={props.value(data, index)} />} {...props} />;
 };
 
+const ShortDateTimeColumn = <T extends {}>(props: ExternalColumnProps<T, Date | null>) => {
+  const TypedColumn = TableColumn as { new(): TableColumn<T> };
+  return <TypedColumn renderCell={(data, index) => <ShortDateTime value={props.value(data, index)} />} {...props} />;
+};
+
 const EmailColumn = <T extends {}>(props: ExternalColumnProps<T, string | null>) => {
   const TypedColumn = TableColumn as { new(): TableColumn<T> };
   return <TypedColumn renderCell={(data, index) => <Email value={props.value(data, index)} />} {...props} />;
@@ -223,6 +228,7 @@ export const TypedTable = <T extends {}>() => ({
   Percentage: PercentageColumn as React.SFC<ExternalColumnProps<T, number | null> & {fractionDigits?: number}>,
   FullDate: FullDateColumn as React.SFC<ExternalColumnProps<T, Date | null>>,
   ShortDate: ShortDateColumn as React.SFC<ExternalColumnProps<T, Date | null>>,
+  ShortDateTime: ShortDateTimeColumn as React.SFC<ExternalColumnProps<T, Date | null>>,
   Email: EmailColumn as React.SFC<ExternalColumnProps<T, string | null>>,
   Link: LinkColumn as React.SFC<LinkColumnProps<T>>
 });
