@@ -6,6 +6,7 @@ import { ClaimsDashboardRoute } from "../dashboard";
 import { PrepareClaimRoute } from "../prepare";
 import { ForecastData, forecastDataLoadActions, PendingForecastData, renderWarning, withDataEditor, } from "./common";
 import { ProjectRole } from "../../../../types";
+import { isNumber } from "@util/NumberHelper";
 
 export interface ClaimForcastParams {
   projectId: string;
@@ -30,6 +31,12 @@ class ClaimForecastComponent extends ContainerBase<ClaimForcastParams, PendingFo
     this.props.onChange(this.props.partnerId, data, combined);
   }
 
+  renderOverheadsRate(overheadRate: number | null) {
+    if(!isNumber(overheadRate)) return null;
+
+    return <ACC.Renderers.SimpleString>Overhead costs: <ACC.Renderers.Percentage value={overheadRate}/></ACC.Renderers.SimpleString>;
+  }
+
   renderContents(combined: ForecastData) {
     const Form = ACC.TypedForm<ForecastDetailsDTO[]>();
     const editor = combined.editor!;
@@ -41,6 +48,7 @@ class ClaimForecastComponent extends ContainerBase<ClaimForcastParams, PendingFo
         validator={editor.validator}
         pageTitle={<ACC.Projects.Title pageTitle="Update forecast" project={combined.project} />}
       >
+        {this.renderOverheadsRate(combined.partner.overheadRate)}
         <ACC.Section qa="partner-name">
           {renderWarning(combined)}
           <Form.Form
