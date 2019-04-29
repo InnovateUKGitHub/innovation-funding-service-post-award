@@ -1,9 +1,10 @@
 import * as Validation from "./common";
 import { Results } from "../validation/results";
 import { isNumber } from "../../util/NumberHelper";
+import { ClaimLineItemsFormData } from "@framework/types/dtos/claimLineItemsFormData";
 
-export class ClaimLineItemDtosValidator extends Results<ClaimLineItemDto[]> {
-    public readonly items = Validation.optionalChild(this, this.model, x => new ClaimLineItemDtoValidator(x, this.showValidationErrors), "There are invalid claim line items.");
+export class ClaimLineItemFormValidator extends Results<ClaimLineItemsFormData> {
+    public readonly items = Validation.optionalChild(this, this.model.lineItems, x => new ClaimLineItemDtoValidator(x, this.showValidationErrors), "There are invalid claim line items.");
 }
 
 export class ClaimLineItemDtoValidator extends Results<ClaimLineItemDto> {

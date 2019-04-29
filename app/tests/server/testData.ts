@@ -326,7 +326,7 @@ export class TestData {
 
     const newItem: Partial<Repositories.ISalesforceClaimLineItem> = {
       Acc_CostCategory__c: costCategory.Id,
-      Acc_ProjectPeriodNumber__c: periodId!,
+      Acc_ProjectPeriodNumber__c: periodId,
       Acc_ProjectParticipant__c: partner.Id,
       Acc_LineItemCost__c: 200,
       Acc_LineItemDescription__c: "We hired a person to do a thing"
