@@ -1,15 +1,15 @@
 import React from "react";
-import { ContainerBaseWithState, ContainerProps, ReduxContainer } from "../containerBase";
-import { Pending } from "../../../shared/pending";
-import * as Actions from "../../redux/actions";
-import * as Selectors from "../../redux/selectors";
-import * as ACC from "../../components";
-import { PrepareClaimRoute } from ".";
-import { ClaimDetailDocumentsRoute } from "./claimDetailDocuments";
-import { IEditorStore } from "../../redux/reducers/editorsReducer";
-import { ClaimLineItemDtosValidator, ClaimLineItemDtoValidator } from "../../validators/claimLineItemDtosValidator";
-import { DocumentList, ValidationMessage } from "../../components";
-import { ProjectDto, ProjectRole } from "../../../types";
+import * as ACC from "@ui/components";
+import * as Actions from "@ui/redux/actions";
+import * as Selectors from "@ui/redux/selectors";
+import { ClaimLineItemsFormData } from "@framework/types/dtos/claimLineItemsFormData";
+import { Pending } from "@shared/pending";
+import { ProjectDto, ProjectRole } from "@framework/types";
+import { IEditorStore } from "@ui/redux";
+import { ClaimLineItemDtoValidator, ClaimLineItemFormValidator } from "@ui/validators";
+import { ContainerBaseWithState, ContainerProps, ReduxContainer } from "@ui/containers/containerBase";
+import { ClaimDetailDocumentsRoute, PrepareClaimRoute } from "@ui/containers";
+import { DocumentList, ValidationMessage } from "@ui/components";
 
 export interface EditClaimLineItemsParams {
   projectId: string;
@@ -23,7 +23,7 @@ interface Data {
   claimDetails: Pending<ClaimDetailsDto>;
   lineItems: Pending<ClaimLineItemDto[]>;
   costCategories: Pending<CostCategoryDto[]>;
-  editor: Pending<IEditorStore<ClaimLineItemDto[], ClaimLineItemDtosValidator>>;
+  editor: Pending<IEditorStore<ClaimLineItemsFormData, ClaimLineItemFormValidator>>;
   forecastDetail: Pending<ForecastDetailsDTO>;
   documents: Pending<DocumentSummaryDto[]>;
 }
@@ -35,13 +35,13 @@ interface CombinedData {
   costCategories: CostCategoryDto[];
   forecastDetail: ForecastDetailsDTO;
   documents: DocumentSummaryDto[];
-  editor: IEditorStore<ClaimLineItemDto[], ClaimLineItemDtosValidator>;
+  editor: IEditorStore<ClaimLineItemsFormData, ClaimLineItemFormValidator>;
 }
 
 interface Callbacks {
-  validate: (partnerId: string, periodId: number, costCategoryId: string, dto: ClaimLineItemDto[]) => void;
-  save: (projectId: string, partnerId: string, periodId: number, costCategoryId: string, dto: ClaimLineItemDto[]) => void;
-  saveAndUpload: (projectId: string, partnerId: string, costCategoryId: string, periodId: number, dto: ClaimLineItemDto[]) => void;
+  validate: (partnerId: string, periodId: number, costCategoryId: string, dto: ClaimLineItemsFormData) => void;
+  save: (projectId: string, partnerId: string, periodId: number, costCategoryId: string, dto: ClaimLineItemsFormData) => void;
+  saveAndUpload: (projectId: string, partnerId: string, costCategoryId: string, periodId: number, dto: ClaimLineItemsFormData) => void;
 }
 
 export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClaimLineItemsParams, Data, Callbacks, { showAddRemove: boolean }> {
@@ -84,24 +84,27 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
       >
         <ACC.Section>
           <ACC.TextHint text={costCategory.hintText} />
-          {costCategory.isCalculated ? this.renderCalculated(costCategory, claimDetails, forecastDetail, documents, editor) : this.renderTable(editor, forecastDetail, documents, claimDetails)}
+          {costCategory.isCalculated ? this.renderCalculated(costCategory, claimDetails, forecastDetail, documents, editor) : this.renderTable(editor, forecastDetail, documents)}
         </ACC.Section>
       </ACC.Page>
     );
   }
 
-  private renderCalculated(costCategory: CostCategoryDto, claimDetails: ClaimDetailsDto, forecastDetail: ForecastDetailsDTO, documents: DocumentSummaryDto[], editor: IEditorStore<ClaimLineItemDto[], ClaimLineItemDtosValidator> ) {
-    const data: ClaimLineItemDto[] = [{
-      costCategoryId: costCategory.id,
-      description: costCategory.name,
-      partnerId: this.props.partnerId,
-      periodId: this.props.periodId,
-      id: "",
-      value: claimDetails.value
-    }];
+  private renderCalculated(costCategory: CostCategoryDto, claimDetails: ClaimDetailsDto, forecastDetail: ForecastDetailsDTO, documents: DocumentSummaryDto[], editor: IEditorStore<ClaimLineItemsFormData, ClaimLineItemFormValidator> ) {
 
-    // const formData = {claimLineItem: data, claimDetails};
-    const LineItemForm = ACC.TypedForm<typeof data>();
+    const data = {
+      ...editor.data,
+      lineItems: [{
+        costCategoryId: costCategory.id,
+        description: costCategory.name,
+        partnerId: this.props.partnerId,
+        periodId: this.props.periodId,
+        id: "",
+        value: claimDetails.value
+      }]
+    };
+
+    const LineItemForm = ACC.TypedForm<ClaimLineItemsFormData>();
     const LineItemTable = ACC.TypedTable<ClaimLineItemDto>();
 
     return (
@@ -112,8 +115,8 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
       >
         <LineItemForm.Fieldset>
           <LineItemTable.Table
-            data={data}
-            footers={this.renderFooters(data, forecastDetail, false, editor)}
+            data={data.lineItems}
+            footers={this.renderFooters(data.lineItems, forecastDetail, false, editor)}
             qa="current-claim-summary-table"
           >
             <LineItemTable.String header="Description" qa="cost-description" value={(x, i) => x.description} />
@@ -129,8 +132,8 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
             hint={"Explain any difference between the forecast costs and the total costs."}
             labelHidden={true}
             name="comments"
-            value={() => claimDetails.comments} // TODO need to come from editor
-            update={(m, v) => {return;}}
+            value={() => editor.data.claimDetails.comments}
+            update={(dto, v) => dto.claimDetails.comments = v}
             qa="info-text-area"
           />
         </LineItemForm.Fieldset>
@@ -143,8 +146,8 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
 
   }
 
-  private renderTable(editor: IEditorStore<ClaimLineItemDto[], ClaimLineItemDtosValidator>, forecastDetail: ForecastDetailsDTO, documents: DocumentSummaryDto[], claimDetails: ClaimDetailsDto) {
-    const LineItemForm = ACC.TypedForm<ClaimLineItemDto[]>();
+  private renderTable(editor: IEditorStore<ClaimLineItemsFormData, ClaimLineItemFormValidator>, forecastDetail: ForecastDetailsDTO, documents: DocumentSummaryDto[]) {
+    const LineItemForm = ACC.TypedForm<ClaimLineItemsFormData>();
     const LineItemTable = ACC.TypedTable<ClaimLineItemDto>();
     const validationResults = editor.validator.items.results;
 
@@ -154,12 +157,12 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
         onSubmit={() => this.props.save(this.props.projectId, this.props.partnerId, this.props.periodId, this.props.costCategoryId, editor.data)}
         qa="current-claim-summary-form"
       >
-        <LineItemForm.Hidden name="itemCount" value={x => x.length} />
+        <LineItemForm.Hidden name="itemCount" value={x => x.lineItems.length} />
         <LineItemForm.Fieldset>
           <LineItemTable.Table
-            data={editor.data}
+            data={editor.data.lineItems}
             validationResult={validationResults}
-            footers={this.renderFooters(editor.data, forecastDetail, this.state.showAddRemove, editor)}
+            footers={this.renderFooters(editor.data.lineItems, forecastDetail, this.state.showAddRemove, editor)}
             qa="current-claim-summary-table"
           >
             <LineItemTable.Custom header="Description" qa="cost-description" value={(x, i) => this.renderDescription(x, i, validationResults[i.row], editor)} />
@@ -178,8 +181,8 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
             hint={"Explain any difference between the forecast costs and the total costs."}
             labelHidden={true}
             name="comments"
-            value={() => claimDetails.comments} // TODO need to come from editor
-            update={(m, v) => {return;}}
+            value={() => editor.data.claimDetails.comments}
+            update={(data, v) => data.claimDetails.comments = v}
             qa="info-text-area"
           />
         </LineItemForm.Fieldset>
@@ -200,7 +203,7 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
     );
   }
 
-  renderCost(item: ClaimLineItemDto, index: { column: number; row: number; }, validation: ClaimLineItemDtoValidator, editor: IEditorStore<ClaimLineItemDto[], ClaimLineItemDtosValidator>) {
+  renderCost(item: ClaimLineItemDto, index: { column: number; row: number; }, validation: ClaimLineItemDtoValidator, editor: IEditorStore<ClaimLineItemsFormData, ClaimLineItemFormValidator>) {
     return (
       <span>
         <ACC.ValidationError error={validation.cost} />
@@ -214,7 +217,7 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
     );
   }
 
-  renderDescription(item: ClaimLineItemDto, index: { column: number; row: number; }, validation: ClaimLineItemDtoValidator, editor: IEditorStore<ClaimLineItemDto[], ClaimLineItemDtosValidator>) {
+  renderDescription(item: ClaimLineItemDto, index: { column: number; row: number; }, validation: ClaimLineItemDtoValidator, editor: IEditorStore<ClaimLineItemsFormData, ClaimLineItemFormValidator>) {
     return (
       <span>
         <ACC.ValidationError error={validation.description} />
@@ -228,17 +231,17 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
     );
   }
 
-  removeItem(item: ClaimLineItemDto, i: { column: number; row: number; }, e: React.SyntheticEvent<HTMLAnchorElement>, editor: IEditorStore<ClaimLineItemDto[], ClaimLineItemDtosValidator>) {
+  removeItem(item: ClaimLineItemDto, i: { column: number; row: number; }, e: React.SyntheticEvent<HTMLAnchorElement>, editor: IEditorStore<ClaimLineItemsFormData, ClaimLineItemFormValidator>) {
     e.preventDefault();
     const dto = editor.data;
-    dto.splice(i.row, 1);
+    dto.lineItems.splice(i.row, 1);
     this.props.validate(this.props.partnerId, this.props.periodId, this.props.costCategoryId, dto);
   }
 
-  addItem(e: React.SyntheticEvent<HTMLAnchorElement>, editor: IEditorStore<ClaimLineItemDto[], ClaimLineItemDtosValidator>) {
+  addItem(e: React.SyntheticEvent<HTMLAnchorElement>, editor: IEditorStore<ClaimLineItemsFormData, ClaimLineItemFormValidator>) {
     e.preventDefault();
     const dto = editor.data;
-    dto.push({
+    dto.lineItems.push({
       partnerId: this.props.partnerId,
       periodId: this.props.periodId,
       costCategoryId: this.props.costCategoryId
@@ -246,13 +249,13 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
     this.props.validate(this.props.partnerId, this.props.periodId, this.props.costCategoryId, dto);
   }
 
-  updateItem(i: { column: number; row: number; }, editor: IEditorStore<ClaimLineItemDto[], ClaimLineItemDtosValidator>, update: (item: ClaimLineItemDto) => void) {
+  updateItem(i: { column: number; row: number; }, editor: IEditorStore<ClaimLineItemsFormData, ClaimLineItemFormValidator>, update: (item: ClaimLineItemDto) => void) {
     const dto = editor.data;
-    update(dto[i.row]);
+    update(dto.lineItems[i.row]);
     this.props.validate(this.props.partnerId, this.props.periodId, this.props.costCategoryId, dto);
   }
 
-  private renderFooters(data: ClaimLineItemDto[], forecastDetail: ForecastDetailsDTO, showAddRemove: boolean, editor: IEditorStore<ClaimLineItemDto[], ClaimLineItemDtosValidator>) {
+  private renderFooters(data: ClaimLineItemDto[], forecastDetail: ForecastDetailsDTO, showAddRemove: boolean, editor: IEditorStore<ClaimLineItemsFormData, ClaimLineItemFormValidator>) {
     const total = data.reduce((t, item) => t + (item.value || 0), 0);
     // TODO remove multiply by 100
     const forecast = forecastDetail.value;
@@ -323,9 +326,11 @@ export const EditClaimLineItems = definition.connect({
     };
   },
   withCallbacks: (dispatch) => ({
-    validate: (partnerId: string, periodId: number, costCategoryId: string, dto: ClaimLineItemDto[]) => dispatch(Actions.validateClaimLineItems(partnerId, periodId, costCategoryId, dto)),
-    save: (projectId: string, partnerId: string, periodId: number, costCategoryId: string, dto: ClaimLineItemDto[]) => dispatch(Actions.saveClaimLineItems(projectId, partnerId, periodId, costCategoryId, dto, () => afterSave(dispatch, projectId, partnerId, periodId))),
-    saveAndUpload: (projectId: string, partnerId: string, costCategoryId: string, periodId: number, dto: ClaimLineItemDto[]) => dispatch(Actions.saveClaimLineItems(projectId, partnerId, periodId, costCategoryId, dto, () => redirectToUploadPage(dispatch, projectId, partnerId, costCategoryId, periodId))),
+    validate: (partnerId: string, periodId: number, costCategoryId: string, dto: ClaimLineItemsFormData) => dispatch(Actions.validateClaimLineItems(partnerId, periodId, costCategoryId, dto)),
+    save: (projectId: string, partnerId: string, periodId: number, costCategoryId: string, dto: ClaimLineItemsFormData) => dispatch(Actions.saveClaimLineItems(projectId, partnerId, periodId, costCategoryId, dto, () => afterSave(dispatch, projectId, partnerId, periodId))),
+    saveAndUpload: (projectId: string, partnerId: string, costCategoryId: string, periodId: number, dto: ClaimLineItemsFormData) =>
+      dispatch(Actions.saveClaimLineItems(projectId, partnerId, periodId, costCategoryId, dto, () =>
+        redirectToUploadPage(dispatch, projectId, partnerId, costCategoryId, periodId))),
   })
 });
 

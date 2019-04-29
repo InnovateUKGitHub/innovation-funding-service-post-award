@@ -1,12 +1,15 @@
 import contextProvider from "../features/common/contextProvider";
 import { ApiParams, ControllerBase } from "./controllerBase";
-import { GetAllLineItemsForClaimByCategoryQuery, SaveLineItemsCommand } from "../features/claimLineItems";
+import { GetAllLineItemsForClaimByCategoryQuery } from "../features/claimLineItems";
 import { processDto } from "../../shared/processResponse";
 import { BadRequestError } from "../features/common/appError";
+import { GetClaimDetailsQuery } from "@server/features/claimDetails";
+import { ClaimLineItemsFormData } from "@framework/types/dtos/claimLineItemsFormData";
+import { SaveLineItemsFormDataCommand } from "@server/features/claimLineItems/saveLineItemsFormDataCommand";
 
 export interface IClaimLineItemApi {
   getAllForCategory: (params: ApiParams<{projectId: string, partnerId: string, costCategoryId: string, periodId: number}>) => Promise<ClaimLineItemDto[]>;
-  saveLineItems: (params: ApiParams<{projectId: string, partnerId: string, costCategoryId: string, periodId: number, lineItems: ClaimLineItemDto[]}>) => Promise<ClaimLineItemDto[]>;
+  saveLineItems: (params: ApiParams<{projectId: string, partnerId: string, costCategoryId: string, periodId: number, claimLineItemsFormData: ClaimLineItemsFormData}>) => Promise<ClaimLineItemsFormData>;
 }
 
 class Controller extends ControllerBase<ClaimLineItemDto> implements IClaimLineItemApi {
@@ -18,14 +21,14 @@ class Controller extends ControllerBase<ClaimLineItemDto> implements IClaimLineI
       (p, q) => ({ projectId: q.projectId, partnerId: q.partnerId, periodId: parseInt(q.periodId, 10), costCategoryId: q.costCategoryId}),
       (p) => this.getAllForCategory(p)
     );
-    this.postItems(
+    this.putCustom(
       "/",
       (p, q, b) => ({
         projectId: q.projectId,
         partnerId: q.partnerId,
         periodId: parseInt(q.periodId, 10),
         costCategoryId: q.costCategoryId,
-        lineItems: processDto(b)
+        claimLineItemsFormData: processDto(b)
       }),
       (p) => this.saveLineItems(p)
     );
@@ -36,23 +39,30 @@ class Controller extends ControllerBase<ClaimLineItemDto> implements IClaimLineI
     return contextProvider.start(params).runQuery(query);
   }
 
-  public async saveLineItems(params: ApiParams<{ projectId: string, partnerId: string, costCategoryId: string, periodId: number, lineItems: ClaimLineItemDto[] }>): Promise<ClaimLineItemDto[]> {
+  public async saveLineItems(params: ApiParams<{ projectId: string, partnerId: string, costCategoryId: string, periodId: number, claimLineItemsFormData: ClaimLineItemsFormData }>): Promise<ClaimLineItemsFormData> {
 
-    const {projectId, partnerId, costCategoryId, periodId, lineItems } = params;
+    const {projectId, partnerId, costCategoryId, periodId, claimLineItemsFormData } = params;
     const validRequest = projectId && partnerId && costCategoryId && periodId &&
-      lineItems.every(x => x.periodId === periodId && x.partnerId === partnerId && x.costCategoryId === costCategoryId);
+      claimLineItemsFormData.lineItems.every(x => x.periodId === periodId && x.partnerId === partnerId && x.costCategoryId === costCategoryId);
 
     if (!validRequest) {
       throw new BadRequestError("Request is missing required fields");
     }
 
-    const command = new SaveLineItemsCommand(projectId, partnerId, costCategoryId, periodId, lineItems);
     const context = contextProvider.start(params);
+    const saveLineItemsCommand = new SaveLineItemsFormDataCommand(projectId, partnerId, costCategoryId, periodId, claimLineItemsFormData);
+    await context.runCommand(saveLineItemsCommand);
 
-    await context.runCommand(command);
+    const lineItemsQuery = new GetAllLineItemsForClaimByCategoryQuery(projectId, partnerId, costCategoryId, periodId);
+    const claimDetailsQuery = new GetClaimDetailsQuery(partnerId, periodId, costCategoryId);
 
-    const query = new GetAllLineItemsForClaimByCategoryQuery(projectId, partnerId, costCategoryId, periodId);
-    return context.runQuery(query);
+    const lineItems = await context.runQuery(lineItemsQuery);
+    const claimDetails = await context.runQuery(claimDetailsQuery);
+
+    return {
+      lineItems,
+      claimDetails
+    };
   }
 }
 
