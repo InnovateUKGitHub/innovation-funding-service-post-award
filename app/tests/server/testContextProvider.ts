@@ -24,6 +24,12 @@ export class TestContext implements IContext {
     public user = new TestUser();
     public testData: TestData;
 
+    public startTimer = (message: string) => {
+        return {
+            finish: () => { return; }
+        };
+    }
+
     public config: IConfig = {
         build: `test${Date.now()}`,
         timeouts: {

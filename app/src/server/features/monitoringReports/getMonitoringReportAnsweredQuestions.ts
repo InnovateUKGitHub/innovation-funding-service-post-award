@@ -24,10 +24,11 @@ export class GetMonitoringReportAnsweredQuestions extends QueryBase<MonitoringRe
         optionId: null,
         responseId: null,
         comments: null,
+        isScored: x.Acc_ScoredQuestion__c,
         options: [{
           id: x.Id,
           questionText: x.Acc_QuestionText__c,
-          questionScore: x.Acc_Score__c
+          questionScore: x.Acc_QuestionScore__c
         }],
       }));
   }

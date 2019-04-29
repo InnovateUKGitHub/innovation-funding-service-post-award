@@ -13,6 +13,7 @@ import { MonitoringReportDtoValidator } from "../../ui/validators/MonitoringRepo
 import { SaveMonitoringReport } from "../features/monitoringReports/saveMonitoringReport";
 import { getMonitoringReportEditor } from "../../ui/redux/selectors";
 import { MonitoringReportStatus } from "../../types/constants/monitoringReportStatus";
+import { mapMonitoringReportStatus } from "@server/features/monitoringReports/mapMonitoringReportStatus";
 
 export class MonitoringReportFormHandler extends FormHandlerBase<MonitoringReportPrepareParams, MonitoringReportDto> {
 
@@ -26,24 +27,28 @@ export class MonitoringReportFormHandler extends FormHandlerBase<MonitoringRepor
 
     return {
       headerId: header.Id,
-      status: header.Acc_MonitoringReportStatus__c === "Draft" ? MonitoringReportStatus.DRAFT : MonitoringReportStatus.SUBMITTED,
-      projectId: header.Acc_ProjectId__c,
-      startDate: context.clock.parse(header.Acc_ProjectStartDate__c, SALESFORCE_DATE_FORMAT)!,
-      endDate: context.clock.parse(header.Acc_ProjectEndDate__c, SALESFORCE_DATE_FORMAT)!,
+      title: header.Name,
+      status: mapMonitoringReportStatus(header),
+      statusName: header.MonitoringReportStatusName,
+      projectId: header.Acc_Project__c,
+      startDate: context.clock.parse(header.Acc_PeriodStartDate__c, SALESFORCE_DATE_FORMAT)!,
+      endDate: context.clock.parse(header.Acc_PeriodEndDate__c, SALESFORCE_DATE_FORMAT)!,
       periodId: header.Acc_ProjectPeriodNumber__c,
+      lastUpdated: null,
       questions: questions.map(q => ({
         displayOrder: q.displayOrder,
         title: q.title,
         responseId: body[`question_${q.displayOrder}_reponse_id`],
         optionId: body[`question_${q.displayOrder}_options`],
         comments: body[`question_${q.displayOrder}_comments`],
-        options: q.options
+        options: q.options,
+        isScored: q.isScored
       }))
     };
   }
 
   protected createValidationResult(params: MonitoringReportPrepareParams, dto: MonitoringReportDto) {
-    return new MonitoringReportDtoValidator(dto, false, false, dto.questions);
+    return new MonitoringReportDtoValidator(dto, false, false, dto.questions, 100);
   }
 
   protected getStoreInfo(params: MonitoringReportPrepareParams): { key: string; store: string; } {

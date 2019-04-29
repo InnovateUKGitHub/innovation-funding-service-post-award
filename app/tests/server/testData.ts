@@ -2,8 +2,10 @@
 import * as Repositories from "../../src/server/repositories";
 import { ISalesforceMonitoringReportQuestions, SalesforceRole } from "../../src/server/repositories";
 import { ITestRepositories } from "./testRepositories";
-import { ClaimStatus } from "../../src/types";
+import { ClaimStatus, ProjectDto } from "../../src/types";
 import { MonitoringReportStatus } from "../../src/types/constants/monitoringReportStatus";
+import { range } from "@shared/range";
+import { DateTime } from "luxon";
 
 export class TestData {
   constructor(private repositories: ITestRepositories) {
@@ -37,11 +39,29 @@ export class TestData {
   public createProject(update?: (item: Repositories.ISalesforceProject) => void) {
     const seed = this.repositories.projects.Items.length + 1;
 
-    const newItem = {
+    const newItem: Repositories.ISalesforceProject = {
       Id: "Project" + seed,
       Acc_ProjectTitle__c: "Project " + seed,
       Acc_CompetitionType__c: "SBRI",
-    } as Repositories.ISalesforceProject;
+      Acc_StartDate__c: "",
+      Acc_EndDate__c: "",
+      Acc_ClaimFrequency__c: "",
+      Acc_ClaimsForReview__c: 0,
+      Acc_ClaimsOverdue__c: 0,
+      Acc_ClaimsUnderQuery__c: 0,
+      Acc_GOLTotalCostAwarded__c: 0,
+      Acc_IFSApplicationId__c: 0,
+      Acc_NumberOfOpenClaims__c: 0,
+      Acc_ProjectNumber__c: "",
+      Acc_ProjectSource__c: "",
+      Acc_ProjectStatus__c: "",
+      ProjectStatusName: "",
+      Acc_ProjectSummary__c: "",
+      Acc_PublicDescription__c: "",
+      Acc_TotalProjectCosts__c: 0,
+      Acc_TrackingClaimStatus__c: "",
+      ClaimStatusName: "",
+    };
 
     if (!!update) update(newItem);
 
@@ -137,50 +157,79 @@ export class TestData {
     return this.createProjectContact(project, partner, "Project Manager", update);
   }
 
-  // TODO remove 'createQuestion' and use this instead
-  public createQuestion(answersPerQuestion: number, displayOrder: number, isActive: boolean = true): Repositories.ISalesforceMonitoringReportQuestions[] {
-    const newQuestionArray = [];
-    const seed = this.repositories.monitoringReportQuestions.Items.length + 1;
-    for (let i = 0; i < answersPerQuestion; i++) {
-      const newQuestion: Repositories.ISalesforceMonitoringReportQuestions = {
-        Id: `QuestionId: ${seed + i}`,
-        Acc_QuestionName__c: `QuestionName: ${displayOrder}`,
-        Acc_DisplayOrder__c: displayOrder,
-        Acc_Score__c: i + 1,
-        Acc_QuestionText__c: `QuestionText: ${seed} ${i}`,
-        Acc_ActiveFlag__c: isActive ? "Y" : "N",
-      };
-      this.repositories.monitoringReportQuestions.Items.push(newQuestion);
-      newQuestionArray.push(newQuestion);
-    }
-    return newQuestionArray;
+  public createMonitoringReportQuestionSet(displayOrder: number, noOptions: number = 3, isActive: boolean = true): Repositories.ISalesforceMonitoringReportQuestions[] {
+    return range(noOptions).map(x => this.createMonitoringReportQuestion(displayOrder, isActive, true));
   }
 
-  public createMonitoringReportHeader(id: string, projectId: string, period: number, status: MonitoringReportStatus = MonitoringReportStatus.DRAFT): Repositories.ISalesforceMonitoringReportHeader {
+  public createMonitoringReportQuestion(displayOrder: number, isActive: boolean = true, isScored: boolean = true): Repositories.ISalesforceMonitoringReportQuestions {
 
-    const newHeader = {
-      Id: id,
-      Acc_MonitoringReportStatus__c: status,
-      Acc_ProjectId__c: projectId,
-      Acc_ProjectPeriodNumber__c: period,
-      Acc_ProjectStartDate__c: "2018-02-04",
-      Acc_ProjectEndDate__c: "2018-03-04"
+    const seed = this.repositories.monitoringReportQuestions.Items.length + 1;
+    const score = this.repositories.monitoringReportQuestions.Items.filter(x => x.Acc_DisplayOrder__c === displayOrder).length + 1;
+
+    const newQuestion = {
+      Id: `QuestionId: ${seed}`,
+      Acc_QuestionName__c: `QuestionName: ${displayOrder}`,
+      Acc_DisplayOrder__c: displayOrder,
+      Acc_QuestionScore__c: score,
+      Acc_QuestionText__c: `QuestionText: ${displayOrder} Item: ${score}`,
+      Acc_ActiveFlag__c: isActive,
+      Acc_ScoredQuestion__c: isScored,
     };
+
+    this.repositories.monitoringReportQuestions.Items.push(newQuestion);
+
+    return newQuestion;
+  }
+
+  public createMonitoringReportHeader(project?: Repositories.ISalesforceProject, periodId: number = 1, update?: Partial<Repositories.ISalesforceMonitoringReportHeader>): Repositories.ISalesforceMonitoringReportHeader {
+    const seed = this.repositories.monitoringReportHeader.Items.length + 1;
+
+    project = project || this.createProject(x => {
+      x.Acc_StartDate__c = "2000-01-01";
+      x.Acc_EndDate__c = "2019-12-31";
+    });
+
+    const startDate = project.Acc_StartDate__c || "2000-01-01";
+    const frequency = project.Acc_ClaimFrequency__c === "Quarterly" ? 3 : 1;
+    const format = "yyyy-MM-dd";
+
+    const newHeader: Repositories.ISalesforceMonitoringReportHeader = {
+      Id: "Report Header " + seed,
+      Name: "Report Name " + seed,
+      Acc_MonitoringReportStatus__c: "Draft",
+      MonitoringReportStatusName: "Draft",
+      Acc_Project__c: project.Id,
+      Acc_ProjectPeriodNumber__c: periodId,
+      Acc_PeriodStartDate__c: DateTime.fromFormat(startDate, format).plus({ months: (periodId - 1) * frequency }).toFormat(format),
+      Acc_PeriodEndDate__c: DateTime.fromFormat(startDate, format).plus({ months: periodId * frequency, days: -1 }).toFormat(format),
+      LastModifiedDate: DateTime.local().toISO()
+    };
+
+    if (update) {
+      Object.assign(newHeader, update);
+    }
+
     this.repositories.monitoringReportHeader.Items.push(newHeader);
 
     return newHeader;
   }
 
-  public createMonitoringReportResponse(question: ISalesforceMonitoringReportQuestions) {
-    const response = {
-      Id: `Response: ${this.repositories.monitoringReportResponse.Items.length}`,
-      Acc_MonitoringReportHeader__c: "a",
+  public createMonitoringReportResponse(header?: Repositories.ISalesforceMonitoringReportHeader, question?: ISalesforceMonitoringReportQuestions, update?: Partial<Repositories.ISalesforceMonitoringReportResponse>): Repositories.ISalesforceMonitoringReportResponse {
+    header = header || this.createMonitoringReportHeader();
+    question = question || this.createMonitoringReportQuestion(this.repositories.monitoringReportQuestions.Items.reduce((a, b) => a > b.Acc_DisplayOrder__c ? a : b.Acc_DisplayOrder__c, 0));
+
+    const seed = this.repositories.monitoringReportResponse.Items.length + 1;
+    const response: Repositories.ISalesforceMonitoringReportResponse = {
+      Id: `Response: ${seed}`,
+      Acc_MonitoringHeader__c: header.Id,
       Acc_QuestionComments__c: `Comments: ${question.Acc_DisplayOrder__c}`,
       Acc_Question__c: question.Id,
-      Acc_Question__r: {
-        Acc_DisplayOrder__c: question.Acc_DisplayOrder__c
-      }
     };
+
+    if (update) {
+      Object.assign(response, update);
+    }
+
     this.repositories.monitoringReportResponse.Items.push(response);
 
     return response;

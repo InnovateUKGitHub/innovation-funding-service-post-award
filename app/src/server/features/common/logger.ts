@@ -1,6 +1,7 @@
 import { Configuration } from "./config";
 import { LogLevel } from "../../../types/logLevel";
 import { AppError } from "./appError";
+import { DateTime } from "luxon";
 
 export interface ILogger {
   debug(message: string, params: any[]): void;
@@ -39,6 +40,7 @@ export class Logger implements ILogger {
       const item = {
         type: LogLevel[level],
         identifier: this.identifier || "",
+        time: DateTime.local().toISO(),
         message,
         params
       };

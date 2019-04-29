@@ -95,6 +95,7 @@ interface HiddenFieldProps<TDto> {
 
 interface ExternalFieldProps<TDto, TValue> {
     label?: React.ReactNode;
+    labelBold?: boolean;
     labelHidden?: boolean;
     hint?: React.ReactNode;
     name: string;
@@ -108,12 +109,12 @@ const createFieldHintId = <TDto, TValue>(props: ExternalFieldProps<TDto, TValue>
 
 class FieldComponent<T, TValue> extends React.Component<InternalFieldProps<T> & ExternalFieldProps<T, TValue>, {}> {
   render() {
-    const { hint, name, label, labelHidden, field, formData, validation } = this.props;
+    const { hint, name, label, labelHidden, labelBold, field, formData, validation } = this.props;
     const isValid = validation && validation.showValidationErrors && !validation.isValid;
 
     return (
       <div data-qa={`field-${name}`} className={classNames("govuk-form-group", { "govuk-form-group--error": isValid })}>
-        {!!label ? <label className={classNames("govuk-label", { "govuk-visually-hidden" : labelHidden })} htmlFor={name}>{label}</label> : null}
+        {!!label ? <label className={classNames("govuk-label", { "govuk-visually-hidden" : labelHidden, "govuk-label--m" : labelBold })} htmlFor={name}>{label}</label> : null}
         {hint ? <span id={createFieldHintId(this.props)} className="govuk-hint">{hint}</span> : null}
         <ValidationError error={validation} />
         {field(formData!)}
@@ -172,11 +173,15 @@ const MultiStringField = <T extends {}>(props: MultiStringFieldProps<T>) => {
   );
 };
 
-const NumericField = <T extends {}>(props: ExternalFieldProps<T, number>) => {
+interface NumericFieldProps<T> extends ExternalFieldProps<T, number> {
+  width?: "small" | "medium" | "normal";
+}
+
+const NumericField = <T extends {}>(props: NumericFieldProps<T>) => {
   const TypedFieldComponent = FieldComponent as { new(): FieldComponent<T, number> };
   return (
     <TypedFieldComponent
-      field={(data => <NumberInput name={props.name} value={props.value(data)} onChange={(val) => handleChange(props, val)} />)}
+      field={(data => <NumberInput name={props.name} value={props.value(data)} onChange={(val) => handleChange(props, val)} width={props.width} />)}
       {...props}
     />
   );
@@ -263,7 +268,7 @@ export const TypedForm = <T extends {}>() => ({
     Fieldset: FieldsetComponent as { new(): FieldsetComponent<T> },
     String: StringField as React.SFC<ExternalFieldProps<T, string>>,
     MultilineString: MultiStringField as React.SFC<MultiStringFieldProps<T>>,
-    Numeric: NumericField as React.SFC<ExternalFieldProps<T, number>>,
+    Numeric: NumericField as React.SFC<NumericFieldProps<T>>,
     Radio: RadioOptionsField as React.SFC<RadioFieldProps<T>>,
     Hidden: HiddenField as React.SFC<HiddenFieldProps<T>>,
     Submit: SubmitComponent,

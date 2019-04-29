@@ -10,13 +10,15 @@ describe("GetMonitoringReport", () => {
     const context = new TestContext();
     const testData = context.testData;
 
-    const question1 = testData.createQuestion(3, 1);
-    const question2 = testData.createQuestion(3, 2);
-    testData.createMonitoringReportResponse(question1[0]);
-    testData.createMonitoringReportResponse(question2[0]);
-    testData.createMonitoringReportHeader("a", "b", 1);
+    const question1Options = testData.createMonitoringReportQuestionSet(1);
+    const question2Options = testData.createMonitoringReportQuestionSet(2);
 
-    const query = new GetMonitoringReport("b", 1);
+    const report = testData.createMonitoringReportHeader();
+
+    testData.createMonitoringReportResponse(report, question1Options[0]);
+    testData.createMonitoringReportResponse(report, question2Options[0]);
+
+    const query = new GetMonitoringReport(report.Acc_Project__c, report.Acc_ProjectPeriodNumber__c);
 
     const result = await context.runQuery(query);
     expect(result.questions).toHaveLength(2);
@@ -26,12 +28,12 @@ describe("GetMonitoringReport", () => {
     const context = new TestContext();
     const testData = context.testData;
 
-    const question1 = testData.createQuestion(3, 1);
-    testData.createQuestion(3, 2);
-    testData.createMonitoringReportResponse(question1[0]);
-    testData.createMonitoringReportHeader("a", "b", 1);
+    testData.createMonitoringReportQuestionSet(1);
+    testData.createMonitoringReportQuestionSet(2);
 
-    const query = new GetMonitoringReport("b", 1);
+    const report = testData.createMonitoringReportHeader();
+
+    const query = new GetMonitoringReport(report.Acc_Project__c, report.Acc_ProjectPeriodNumber__c);
 
     const result = await context.runQuery(query);
     expect(result.questions).toHaveLength(2);
@@ -41,40 +43,43 @@ describe("GetMonitoringReport", () => {
     const context = new TestContext();
     const testData = context.testData;
 
-    const question = testData.createQuestion(3, 1);
-    testData.createMonitoringReportHeader("a", "b", 1);
+    const questionOptions = testData.createMonitoringReportQuestionSet(1, 3);
 
-    const query = new GetMonitoringReport("b", 1);
+    const report = testData.createMonitoringReportHeader();
+
+    const query = new GetMonitoringReport(report.Acc_Project__c, report.Acc_ProjectPeriodNumber__c);
 
     const result = await context.runQuery(query);
-    expect(result.questions[0].options[0].id).toBe(question[2].Id);
-    expect(result.questions[0].options[1].id).toBe(question[1].Id);
-    expect(result.questions[0].options[2].id).toBe(question[0].Id);
 
-    expect(result.questions[0].options[0].questionScore).toBe(question[2].Acc_Score__c);
-    expect(result.questions[0].options[1].questionScore).toBe(question[1].Acc_Score__c);
-    expect(result.questions[0].options[2].questionScore).toBe(question[0].Acc_Score__c);
+    expect(result.questions[0].options[0].id).toBe(questionOptions[2].Id);
+    expect(result.questions[0].options[1].id).toBe(questionOptions[1].Id);
+    expect(result.questions[0].options[2].id).toBe(questionOptions[0].Id);
 
-    expect(result.questions[0].options[0].questionText).toBe(question[2].Acc_QuestionText__c);
-    expect(result.questions[0].options[1].questionText).toBe(question[1].Acc_QuestionText__c);
-    expect(result.questions[0].options[2].questionText).toBe(question[0].Acc_QuestionText__c);
+    expect(result.questions[0].options[0].questionScore).toBe(questionOptions[2].Acc_QuestionScore__c);
+    expect(result.questions[0].options[1].questionScore).toBe(questionOptions[1].Acc_QuestionScore__c);
+    expect(result.questions[0].options[2].questionScore).toBe(questionOptions[0].Acc_QuestionScore__c);
+
+    expect(result.questions[0].options[0].questionText).toBe(questionOptions[2].Acc_QuestionText__c);
+    expect(result.questions[0].options[1].questionText).toBe(questionOptions[1].Acc_QuestionText__c);
+    expect(result.questions[0].options[2].questionText).toBe(questionOptions[0].Acc_QuestionText__c);
   });
 
   it("the report has the right fields", async () => {
     const context = new TestContext();
     const testData = context.testData;
 
-    testData.createQuestion(3, 1);
-    testData.createQuestion(3, 2);
-    testData.createMonitoringReportHeader("a", "b", 1);
+    const expectedPeriodId = 2;
+    const project = testData.createProject();
 
-    const query = new GetMonitoringReport("b", 1);
+    const report = testData.createMonitoringReportHeader(project, expectedPeriodId, { Acc_MonitoringReportStatus__c: "Awaiting IUK Approval" });
+
+    const query = new GetMonitoringReport(report.Acc_Project__c, report.Acc_ProjectPeriodNumber__c);
 
     const result = await context.runQuery(query);
-    expect(result.periodId).toBe(1);
-    expect(result.projectId).toBe("b");
-    expect(result.headerId).toBe("a");
-    expect(result.status).toBe(MonitoringReportStatus.DRAFT);
+    expect(result.periodId).toBe(expectedPeriodId);
+    expect(result.projectId).toBe(project.Id);
+    expect(result.headerId).toBe(report.Id);
+    expect(result.status).toBe(MonitoringReportStatus.AwaitingApproval);
     expect(result.startDate).toBeDefined();
     expect(result.endDate).toBeDefined();
   });
@@ -83,36 +88,40 @@ describe("GetMonitoringReport", () => {
     const context = new TestContext();
     const testData = context.testData;
 
-    testData.createQuestion(3, 1);
-    const question2 = testData.createQuestion(3, 2);
-    testData.createMonitoringReportHeader("a", "b", 1);
-    const response = testData.createMonitoringReportResponse(question2[1]);
+    testData.createMonitoringReportQuestionSet(1, 3);
 
-    const query = new GetMonitoringReport("b", 1);
+    testData.createMonitoringReportQuestionSet(1, 3);
+    const question2Options = testData.createMonitoringReportQuestionSet(2, 3);
+
+    const report = testData.createMonitoringReportHeader();
+
+    const question2Answer = testData.createMonitoringReportResponse(report, question2Options[2]);
+
+    const query = new GetMonitoringReport(report.Acc_Project__c, report.Acc_ProjectPeriodNumber__c);
     const result = await context.runQuery(query);
 
     expect(result.questions[0].responseId).toBeNull();
     expect(result.questions[0].optionId).toBeNull();
     expect(result.questions[0].comments).toBeNull();
 
-    expect(result.questions[1].responseId).toBe(response.Id);
-    expect(result.questions[1].optionId).toBe(response.Acc_Question__c);
-    expect(result.questions[1].comments).toBe(response.Acc_QuestionComments__c);
+    expect(result.questions[1].responseId).toBe(question2Answer.Id);
+    expect(result.questions[1].optionId).toBe(question2Answer.Acc_Question__c);
+    expect(result.questions[1].comments).toBe(question2Answer.Acc_QuestionComments__c);
   });
 
   it("returns an array with the display orders sorted in ascending order", async () => {
     const context = new TestContext();
     const testData = context.testData;
 
-    testData.createQuestion(3, 86);
-    testData.createQuestion(3, 3);
-    testData.createQuestion(3, 152);
-    testData.createQuestion(3, 22);
-    testData.createQuestion(3, 94);
+    testData.createMonitoringReportQuestionSet(86);
+    testData.createMonitoringReportQuestionSet(3);
+    testData.createMonitoringReportQuestionSet(152);
+    testData.createMonitoringReportQuestionSet(22);
+    testData.createMonitoringReportQuestionSet(94);
 
-    testData.createMonitoringReportHeader("a", "b", 1);
+    const report = testData.createMonitoringReportHeader();
 
-    const query = new GetMonitoringReport("b", 1);
+    const query = new GetMonitoringReport(report.Acc_Project__c, report.Acc_ProjectPeriodNumber__c);
 
     const result = await context.runQuery(query);
     expect(result.questions[0].displayOrder).toBe(3);
@@ -126,63 +135,55 @@ describe("GetMonitoringReport", () => {
     const context = new TestContext();
     const testData = context.testData;
 
-    testData.createQuestion(5, 1);
-    testData.createMonitoringReportHeader("a", "b", 1);
+    testData.createMonitoringReportQuestionSet(1, 5);
+    const report = testData.createMonitoringReportHeader();
 
-    const query = new GetMonitoringReport("b", 1);
+    const query = new GetMonitoringReport(report.Acc_Project__c, report.Acc_ProjectPeriodNumber__c);
 
     const result = await context.runQuery(query);
-    const options = result.questions[0].options;
 
-    expect(options[0].questionScore).toBe(5);
-    expect(options[1].questionScore).toBe(4);
-    expect(options[2].questionScore).toBe(3);
-    expect(options[3].questionScore).toBe(2);
-    expect(options[4].questionScore).toBe(1);
+    expect(result.questions[0].options.map(x => x.questionScore)).toEqual([5, 4, 3, 2, 1]);
   });
 
   it("returns only active questions when the report is in draft", async () => {
     const context = new TestContext();
     const testData = context.testData;
 
-    const question1 = testData.createQuestion(3, 1);
-    const question2 = testData.createQuestion(3, 2);
-    const question3 = testData.createQuestion(3, 3, false);
+    // 3 questions - question 2 inactive
+    const question1 = testData.createMonitoringReportQuestionSet(1, 3);
+    testData.createMonitoringReportQuestionSet(2, 3, false);
+    const question3 = testData.createMonitoringReportQuestionSet(3, 3);
 
-    testData.createMonitoringReportResponse(question1[0]);
-    testData.createMonitoringReportResponse(question2[0]);
-    testData.createMonitoringReportResponse(question3[0]);
+    const report = testData.createMonitoringReportHeader(undefined, undefined, { Acc_MonitoringReportStatus__c: "Draft" });
 
-    testData.createMonitoringReportHeader("a", "b", 1);
-
-    const query = new GetMonitoringReport("b", 1);
+    const query = new GetMonitoringReport(report.Acc_Project__c, report.Acc_ProjectPeriodNumber__c);
 
     const result = await context.runQuery(query);
+
     expect(result.questions).toHaveLength(2);
-    expect(result.questions[0].optionId).toBe("QuestionId: 1");
-    expect(result.questions[1].optionId).toBe("QuestionId: 4");
+    expect(result.questions.map(x => x.title)).toEqual([question1[0].Acc_QuestionName__c, question3[0].Acc_QuestionName__c]);
   });
 
   it("returns only answered questions when the report is submitted", async () => {
     const context = new TestContext();
     const testData = context.testData;
 
-    const question1 = testData.createQuestion(3, 1);
-    const question2 = testData.createQuestion(3, 2);
-    const question3 = testData.createQuestion(3, 3, false);
+    // 3 questions - question 2 inactive
+    const question1 = testData.createMonitoringReportQuestionSet(1, 3);
+    const question2 = testData.createMonitoringReportQuestionSet(2, 3, false);
+    const question3 = testData.createMonitoringReportQuestionSet(3, 3);
 
-    testData.createMonitoringReportResponse(question1[0]);
-    testData.createMonitoringReportResponse(question2[0]);
-    testData.createMonitoringReportResponse(question3[0]);
+    const report = testData.createMonitoringReportHeader(undefined, undefined, { Acc_MonitoringReportStatus__c: "Approved" });
 
-    testData.createMonitoringReportHeader("a", "b", 1, MonitoringReportStatus.SUBMITTED);
+    testData.createMonitoringReportResponse(report, question1[1]);
+    testData.createMonitoringReportResponse(report, question2[2]);
+    testData.createMonitoringReportResponse(report, question3[0]);
 
-    const query = new GetMonitoringReport("b", 1);
+    const query = new GetMonitoringReport(report.Acc_Project__c, report.Acc_ProjectPeriodNumber__c);
 
     const result = await context.runQuery(query);
     expect(result.questions).toHaveLength(3);
-    expect(result.questions[0].optionId).toBe("QuestionId: 1");
-    expect(result.questions[1].optionId).toBe("QuestionId: 4");
-    expect(result.questions[2].optionId).toBe("QuestionId: 7");
+    expect(result.questions.map(x => x.title)).toEqual([question1[0].Acc_QuestionName__c, question2[0].Acc_QuestionName__c, question3[2].Acc_QuestionName__c]);
+    expect(result.questions.map(x => x.optionId)).toEqual([question1[1].Id, question2[2].Id, question3[0].Id]);
   });
 });

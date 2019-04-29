@@ -206,24 +206,26 @@ class ClaimLineItemsTestRepository extends TestRepository<Repositories.ISalesfor
 }
 
 class MonitoringReportHeaderTestRepository extends TestRepository<Repositories.ISalesforceMonitoringReportHeader> implements Repositories.IMonitoringReportHeaderRepository {
-  get(projectId: string, periodId: number): Promise<Repositories.ISalesforceMonitoringReportHeader> {
-    return super.getOne(x => x.Acc_ProjectId__c === projectId && x.Acc_ProjectPeriodNumber__c === periodId);
+    getById(id: string): Promise<Repositories.ISalesforceMonitoringReportHeader> {
+        return super.getOne(x => x.Id === id);
+    }
+
+    get(projectId: string, periodId: number): Promise<Repositories.ISalesforceMonitoringReportHeader> {
+    return super.getOne(x => x.Acc_Project__c === projectId && x.Acc_ProjectPeriodNumber__c === periodId);
   }
   update(updateDto: Updatable<Repositories.ISalesforceMonitoringReportHeader>): Promise<boolean> {
       const currentIndex = this.Items.findIndex(x => x.Id === updateDto.Id);
-      const current = this.Items[currentIndex];
-      const update = { ...current, ...updateDto};
-      this.Items[currentIndex] = update;
+      this.Items[currentIndex] = Object.assign(this.Items[currentIndex], updateDto);
       return Promise.resolve(true);
   }
   getAllForProject(projectId: string): Promise<Repositories.ISalesforceMonitoringReportHeader[]> {
-    return super.getWhere(x => x.Acc_ProjectId__c === projectId);
+    return super.getWhere(x => x.Acc_Project__c === projectId);
   }
 }
 
 class MonitoringReportResponseTestRepository extends TestRepository<Repositories.ISalesforceMonitoringReportResponse> implements Repositories.IMonitoringReportResponseRepository {
   getAllForHeader(monitoringReportHeaderId: string): Promise<Repositories.ISalesforceMonitoringReportResponse[]> {
-      return super.getWhere(x => x.Acc_MonitoringReportHeader__c === monitoringReportHeaderId);
+      return super.getWhere(x => x.Acc_MonitoringHeader__c === monitoringReportHeaderId);
   }
 
   delete(idList: string[]) {
@@ -232,7 +234,7 @@ class MonitoringReportResponseTestRepository extends TestRepository<Repositories
       if (index === -1) {
         return Promise.reject();
       }
-      this.Items = this.Items.splice(index, 1);
+      this.Items.splice(index, 1);
     });
     return Promise.resolve();
   }
@@ -246,7 +248,7 @@ class MonitoringReportResponseTestRepository extends TestRepository<Repositories
       if (index === -1) {
         return Promise.reject();
       }
-      this.Items[index] = { ...this.Items[index], ...item };
+      this.Items[index] = Object.assign(this.Items[index], item);
     });
     return Promise.resolve(true);
   }
@@ -324,7 +326,7 @@ class ProfileTotalCostCategoryTestRepository extends TestRepository<Repositories
     }
 }
 
-class QuestionsTestRepository extends TestRepository<Repositories.ISalesforceMonitoringReportQuestions> implements Repositories.IMonitoringReportQuestionsRepository {
+class MonitoringReportQuestionsRepository extends TestRepository<Repositories.ISalesforceMonitoringReportQuestions> implements Repositories.IMonitoringReportQuestionsRepository {
   getAll() {
     return super.getAll();
   }
@@ -338,7 +340,7 @@ export interface ITestRepositories extends IRepositories {
     documents: DocumentsTestRepository;
     monitoringReportHeader: MonitoringReportHeaderTestRepository;
     monitoringReportResponse: MonitoringReportResponseTestRepository;
-    monitoringReportQuestions: QuestionsTestRepository;
+    monitoringReportQuestions: MonitoringReportQuestionsRepository;
     profileDetails: ProfileDetailsTestRepository;
     profileTotalCostCategory: ProfileTotalCostCategoryTestRepository;
     profileTotalPeriod: ProfileTotalPeriodTestRepository;
@@ -359,7 +361,7 @@ export const createTestRepositories = (): ITestRepositories => {
         documents: new DocumentsTestRepository(),
         monitoringReportResponse: new MonitoringReportResponseTestRepository(),
         monitoringReportHeader: new MonitoringReportHeaderTestRepository(),
-        monitoringReportQuestions: new QuestionsTestRepository(),
+        monitoringReportQuestions: new MonitoringReportQuestionsRepository(),
         profileDetails: new ProfileDetailsTestRepository(),
         profileTotalPeriod: new ProfileTotalPeriodTestRepository(partnerRepository),
         profileTotalCostCategory: new ProfileTotalCostCategoryTestRepository(),
