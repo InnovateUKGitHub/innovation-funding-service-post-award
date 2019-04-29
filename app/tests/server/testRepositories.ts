@@ -213,11 +213,19 @@ class MonitoringReportHeaderTestRepository extends TestRepository<Repositories.I
     get(projectId: string, periodId: number): Promise<Repositories.ISalesforceMonitoringReportHeader> {
     return super.getOne(x => x.Acc_Project__c === projectId && x.Acc_ProjectPeriodNumber__c === periodId);
   }
+
   update(updateDto: Updatable<Repositories.ISalesforceMonitoringReportHeader>): Promise<boolean> {
-      const currentIndex = this.Items.findIndex(x => x.Id === updateDto.Id);
-      this.Items[currentIndex] = Object.assign(this.Items[currentIndex], updateDto);
-      return Promise.resolve(true);
+    const currentIndex = this.Items.findIndex(x => x.Id === updateDto.Id);
+    this.Items[currentIndex] = Object.assign(this.Items[currentIndex], updateDto);
+    return Promise.resolve(true);
   }
+
+  create(item: Repositories.ISalesforceMonitoringReportHeader): Promise<string> {
+    item.Id = `New resonse ${this.Items.length + 1}`;
+    super.insertOne(item);
+    return Promise.resolve(item.Id);
+  }
+
   getAllForProject(projectId: string): Promise<Repositories.ISalesforceMonitoringReportHeader[]> {
     return super.getWhere(x => x.Acc_Project__c === projectId);
   }

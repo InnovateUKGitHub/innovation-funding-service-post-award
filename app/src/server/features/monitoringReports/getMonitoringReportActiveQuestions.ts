@@ -23,7 +23,7 @@ export class GetMonitoringReportActiveQuestions extends QueryBase<MonitoringRepo
       }, new Map<number, ISalesforceMonitoringReportQuestions[]>());
   }
 
-  public async Run(context: IContext) {
+  public async Run(context: IContext): Promise<MonitoringReportQuestionDto[]> {
     const questions = await this.getQuestions(context);
     // if the question is not a scored question the optionId should be prepopulated
     return [...questions].map(([displayOrder, options]) => ({
