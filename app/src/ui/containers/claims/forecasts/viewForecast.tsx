@@ -16,6 +16,7 @@ import {
 import { PartnerDto, ProjectRole } from "../../../../types";
 import { ProjectDashboardRoute, ProjectForecastRoute } from "../../projects";
 import { Percentage, SimpleString } from "../../../components/renderers";
+import { isNumber } from "@util/NumberHelper";
 
 interface Callbacks {
   onSubmit: (params: Params) => void;
@@ -68,7 +69,7 @@ class ViewForecastComponent extends ContainerBase<Params, PendingForecastData, C
   }
 
   private renderOverheadsRate(overheadRate: number | null) {
-    if (!overheadRate) return null;
+    if (!isNumber(overheadRate)) return null;
 
     return <SimpleString>Overhead costs: <Percentage value={overheadRate}/></SimpleString>;
   }
