@@ -33,24 +33,25 @@ class DetailsComponent extends ContainerBase<Params, Data, Callbacks> {
   }
 
   private renderContents(project: Dtos.ProjectDto, report: Dtos.MonitoringReportDto) {
-    const title = <ACC.PeriodTitle periodId={report.periodId} periodStartDate={report.startDate} periodEndDate={report.endDate} />;
     const Details = ACC.TypedDetails<Dtos.MonitoringReportDto>();
     const fields = report.questions.map((q, i) => {
       const response = q.options.find(x => x.id === q.optionId);
       return ([
         <Details.Heading label={report.questions[i].title} key={i} qa={`Question_${i}`} />,
-        report.questions[i].options && report.questions[i].options.length ? <Details.String label="Score" value={x => `${(response && response.questionScore) || ""} - ${(response && response.questionText) || ""}`} key={i} qa={`Score_${i}`} /> : null,
+        report.questions[i].isScored ? <Details.String label="Score" value={x => `${(response && response.questionScore) || ""} - ${(response && response.questionText) || ""}`} key={i} qa={`Score_${i}`} /> : null,
         report.questions[i].comments ? <Details.String label="Comments" value={x => report.questions[i].comments} key={i} qa={`Comments_${i}`} /> : null
       ]);
     }).reduce((a, b) => a.concat(b), []).filter(x => !!x);
 
+    const title = `Period ${report.periodId} - ${report.title}`;
+
     return (
       <ACC.Page
-        backLink={<ACC.BackLink route={MonitoringReportDashboardRoute.getLink({ projectId: this.props.projectId })}>Back to project</ACC.BackLink>}
+        backLink={<ACC.BackLink route={MonitoringReportDashboardRoute.getLink({ projectId: this.props.projectId })}>Back to monitoring reports</ACC.BackLink>}
         pageTitle={<ACC.Projects.Title pageTitle="Monitoring report" project={project} />}
       >
         <ACC.Section title={title}>
-        <Details.Details qa="monitoring-report" data={report} labelWidth="Narrow">
+          <Details.Details qa="monitoring-report" data={report} labelWidth="Narrow">
             {fields}
           </Details.Details>
         </ACC.Section>

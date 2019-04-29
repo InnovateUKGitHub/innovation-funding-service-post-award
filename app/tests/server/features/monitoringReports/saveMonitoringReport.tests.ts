@@ -4,364 +4,221 @@ import { SaveMonitoringReport } from "../../../../src/server/features/monitoring
 import { BadRequestError, ValidationError } from "../../../../src/server/features/common";
 import { MonitoringReportDto } from "../../../../src/types/dtos/monitoringReportDto";
 import { MonitoringReportStatus } from "../../../../src/types/constants/monitoringReportStatus";
-
-const response: MonitoringReportDto = {
-  headerId: "H1",
-  endDate: new Date(),
-  startDate: new Date(),
-  projectId: "P1",
-  periodId: 1,
-  status: MonitoringReportStatus.DRAFT,
-  questions: [{
-    comments: "Comment the first",
-    optionId: "QuestionId: 2",
-    displayOrder: 1,
-    title: "Scones?",
-    options: [{
-      id: "QuestionId: 1",
-      questionText: "A",
-      questionScore: 1
-    }, {
-      id: "QuestionId: 2",
-      questionText: "B",
-      questionScore: 2
-    }, {
-      id: "QuestionId: 3",
-      questionText: "C",
-      questionScore: 3
-    }]
-  }, {
-    comments: "Comment the second",
-    optionId: "QuestionId: 6",
-    displayOrder: 2,
-    title: "Crumpets?",
-    options: [{
-      id: "QuestionId: 4",
-      questionText: "A",
-      questionScore: 1
-    }, {
-      id: "QuestionId: 5",
-      questionText: "B",
-      questionScore: 2
-    }, {
-      id: "QuestionId: 6",
-      questionText: "C",
-      questionScore: 3
-    }]
-  }, {
-    comments: null,
-    optionId: null,
-    displayOrder: 3,
-    title: "Tea?",
-    options: [{
-      id: "QuestionId: 7",
-      questionText: "A",
-      questionScore: 1
-    }, {
-      id: "QuestionId: 8",
-      questionText: "B",
-      questionScore: 2
-    }, {
-      id: "QuestionId: 9",
-      questionText: "C",
-      questionScore: 3
-    }]
-  }]
-} as MonitoringReportDto;
-
-const saveResponse = async (context: TestContext, saveThis: MonitoringReportDto, submit: boolean, numberOfQuestions: number = 4) => {
-  context.testData.createMonitoringReportHeader(saveThis.headerId, "P1", 1);
-  for (let i = 0; i < numberOfQuestions; i++) {
-    context.testData.createQuestion(3, i + 1);
-  }
-  const command = new SaveMonitoringReport(saveThis, submit);
-  await context.runCommand(command);
-  return await context.repositories.monitoringReportResponse.getAllForHeader(saveThis.headerId);
-};
+import { ISalesforceMonitoringReportHeader } from "@server/repositories";
+import { GetMonitoringReport } from "@server/features/monitoringReports/getMonitoringReport";
 
 describe("saveMonitoringReports", () => {
-
   it("should not save responses without an option id", async () => {
     const context = new TestContext();
-    const responses = await saveResponse(context, response, false);
-    expect(responses.find(x => x.Acc_Question__c === "QuestionId: 7")).toBeUndefined();
-    expect(responses.find(x => x.Acc_Question__c === "QuestionId: 8")).toBeUndefined();
-    expect(responses.find(x => x.Acc_Question__c === "QuestionId: 9")).toBeUndefined();
+
+    // create a question
+    context.testData.createMonitoringReportQuestionSet(1, 3);
+
+    const report = context.testData.createMonitoringReportHeader();
+
+    const dto = await getDto(context, report);
+
+    const command = new SaveMonitoringReport(dto, false);
+    await context.runCommand(command);
+
+    expect(context.repositories.monitoringReportResponse.Items).toEqual([]);
   });
 
   it("should save all new responses", async () => {
     const context = new TestContext();
-    const responses = await saveResponse(context, response, false);
-    expect(responses).toHaveLength(2);
-    const resp1 = responses.find(x => x.Acc_Question__c === "QuestionId: 2")!;
-    const resp2 = responses.find(x => x.Acc_Question__c === "QuestionId: 6")!;
-    expect(resp1.Acc_QuestionComments__c).toBe("Comment the first");
-    expect(resp2.Acc_QuestionComments__c).toBe("Comment the second");
+
+    const question1Options = context.testData.createMonitoringReportQuestionSet(1, 3);
+    const question1Answer = question1Options[2];
+    const question2Options = context.testData.createMonitoringReportQuestionSet(2, 3);
+    const question2Answer = question2Options[1];
+
+    const report = context.testData.createMonitoringReportHeader();
+
+    const dto = await getDto(context, report);
+
+    dto.questions[0].optionId = question1Answer.Id;
+    dto.questions[0].comments = "Question 1 comments";
+
+    dto.questions[1].optionId = question2Answer.Id;
+    dto.questions[1].comments = "Question 2 comments";
+
+    const command = new SaveMonitoringReport(dto, false);
+    await context.runCommand(command);
+
+    expect(context.repositories.monitoringReportResponse.Items.length).toEqual(2);
+
+    expect(context.repositories.monitoringReportResponse.Items[0].Acc_QuestionComments__c).toEqual("Question 1 comments");
+    expect(context.repositories.monitoringReportResponse.Items[0].Acc_Question__c).toEqual(question1Answer.Id);
+
+    expect(context.repositories.monitoringReportResponse.Items[1].Acc_QuestionComments__c).toEqual("Question 2 comments");
+    expect(context.repositories.monitoringReportResponse.Items[1].Acc_Question__c).toEqual(question2Answer.Id);
   });
 
   it("should update existing responses", async () => {
     const context = new TestContext();
-    const resp = await saveResponse(context, response, false);
-    const update = {
-      headerId: "H1",
-      endDate: new Date(),
-      startDate: new Date(),
-      projectId: "P1",
-      periodId: 1,
-      status: MonitoringReportStatus.DRAFT,
-      questions: [{
-        comments: "Comment the first update",
-        optionId: "QuestionId: 3",
-        displayOrder: 1,
-        responseId: resp[0].Id,
-        title: "Scones?",
-        options: [{
-          id: "QuestionId: 1",
-          questionText: "A",
-          questionScore: 1
-        }, {
-          id: "QuestionId: 2",
-          questionText: "B",
-          questionScore: 2
-        }, {
-          id: "QuestionId: 3",
-          questionText: "C",
-          questionScore: 3
-        }]
-      }, {
-        comments: "Comment the second update",
-        optionId: "QuestionId: 4",
-        responseId: resp[1].Id,
-        displayOrder: 2,
-        title: "Crumpets?",
-        options: [{
-          id: "QuestionId: 4",
-          questionText: "A",
-          questionScore: 1
-        }, {
-          id: "QuestionId: 5",
-          questionText: "B",
-          questionScore: 2
-        }, {
-          id: "QuestionId: 6",
-          questionText: "C",
-          questionScore: 3
-        }]
-      }]
-    } as MonitoringReportDto;
-    const responses = await saveResponse(context, update, false);
-    expect(responses).toHaveLength(2);
-    const resp1 = responses.find(x => x.Acc_Question__c === "QuestionId: 3")!;
-    const resp2 = responses.find(x => x.Acc_Question__c === "QuestionId: 4")!;
-    expect(resp1.Acc_QuestionComments__c).toBe("Comment the first update");
-    expect(resp2.Acc_QuestionComments__c).toBe("Comment the second update");
+
+    const question1Options = context.testData.createMonitoringReportQuestionSet(1, 3);
+    const question1NewAnswer = question1Options[2];
+    const question2Options = context.testData.createMonitoringReportQuestionSet(2, 3);
+    const question2Answer = question2Options[1];
+
+    const report = context.testData.createMonitoringReportHeader();
+
+    const responseQuestion1 = context.testData.createMonitoringReportResponse(report, question1Options[0], { Acc_QuestionComments__c: "Question 1 - old answer" });
+    const responseQuestion2 = context.testData.createMonitoringReportResponse(report, question2Answer, { Acc_QuestionComments__c: "Question 2 comments" });
+
+    const dto = await getDto(context, report);
+
+    dto.questions[0].optionId = question1NewAnswer.Id;
+    dto.questions[0].comments = "Question 1 new comments";
+
+    const command = new SaveMonitoringReport(dto, false);
+    await context.runCommand(command);
+
+    expect(context.repositories.monitoringReportResponse.Items.map(x => x.Id)).toEqual([responseQuestion1.Id, responseQuestion2.Id]);
+
+    expect(responseQuestion1.Acc_QuestionComments__c).toEqual("Question 1 new comments");
+    expect(responseQuestion1.Acc_Question__c).toEqual(question1NewAnswer.Id);
+
+    expect(responseQuestion2.Acc_QuestionComments__c).toEqual("Question 2 comments");
+    expect(responseQuestion2.Acc_Question__c).toEqual(question2Answer.Id);
   });
 
   it("should remove ommitted responses", async () => {
     const context = new TestContext();
-    const resp = await saveResponse(context, response, false);
-    const update = {
-      headerId: "H1",
-      endDate: new Date(),
-      startDate: new Date(),
-      projectId: "P1",
-      periodId: 1,
-      status: MonitoringReportStatus.DRAFT,
-      questions: [{
-        comments: "Comment the second update",
-        optionId: "QuestionId: 4",
-        displayOrder: 2,
-        responseId: resp[0].Id,
-        title: "Crumpets?",
-        options: [{
-          id: "QuestionId: 4",
-          questionText: "A",
-          questionScore: 1
-        }, {
-          id: "QuestionId: 5",
-          questionText: "B",
-          questionScore: 2
-        }, {
-          id: "QuestionId: 6",
-          questionText: "C",
-          questionScore: 3
-        }]
-      }]
-    } as MonitoringReportDto;
-    const responses = await saveResponse(context, update, false);
-    expect(responses).toHaveLength(1);
+
+    const question1Options = context.testData.createMonitoringReportQuestionSet(1, 3);
+    const question2Options = context.testData.createMonitoringReportQuestionSet(2, 3);
+
+    const report = context.testData.createMonitoringReportHeader();
+    const responseQuestion1 = context.testData.createMonitoringReportResponse(report, question1Options[0], { Acc_QuestionComments__c: "Question 1 - old answer" });
+    const responseQuestion2 = context.testData.createMonitoringReportResponse(report, question2Options[0], { Acc_QuestionComments__c: "Question 2 - old answer" });
+
+    const dto = await getDto(context, report);
+
+    dto.questions[0].responseId = null;
+    dto.questions[0].optionId = null;
+    dto.questions[0].comments = null;
+
+    expect(context.repositories.monitoringReportResponse.Items).toEqual([responseQuestion1, responseQuestion2]);
+
+    const command = new SaveMonitoringReport(dto, false);
+    await context.runCommand(command);
+
+    expect(context.repositories.monitoringReportResponse.Items).toEqual([responseQuestion2]);
   });
 
   it("should not change the report status from draft if it has not been submitted", async () => {
     const context = new TestContext();
-    await saveResponse(context, response, false);
-    const header = await context.repositories.monitoringReportHeader.get(response.projectId, response.periodId);
-    expect(header.Acc_MonitoringReportStatus__c).toBe(MonitoringReportStatus.DRAFT);
+
+    const report = context.testData.createMonitoringReportHeader(undefined, 1, { Acc_MonitoringReportStatus__c: "Draft" });
+
+    const dto = await getDto(context, report);
+
+    await context.runCommand(new SaveMonitoringReport(dto, false));
+
+    expect(report.Acc_MonitoringReportStatus__c).toBe("Draft");
+
   });
 
   it("should save the report with submitted status if it is submitted", async () => {
     const context = new TestContext();
-    const submit = {
-      headerId: "H1",
-      endDate: new Date(),
-      startDate: new Date(),
-      projectId: "P1",
-      periodId: 1,
-      status: MonitoringReportStatus.DRAFT,
-      questions: [{
-        comments: "Comment the first",
-        optionId: "QuestionId: 2",
-        displayOrder: 1,
-        title: "Scones?",
-        options: [{
-          id: "QuestionId: 1",
-          questionText: "A",
-          questionScore: 1
-        }, {
-          id: "QuestionId: 2",
-          questionText: "B",
-          questionScore: 2
-        }, {
-          id: "QuestionId: 3",
-          questionText: "C",
-          questionScore: 3
-        }]
-      }]
-    } as MonitoringReportDto;
-    await saveResponse(context, submit, true, 1);
-    const header = await context.repositories.monitoringReportHeader.get(response.projectId, response.periodId);
-    expect(header.Acc_MonitoringReportStatus__c).toBe(MonitoringReportStatus.SUBMITTED);
+
+    const report = context.testData.createMonitoringReportHeader(undefined, 1, { Acc_MonitoringReportStatus__c: "Draft" });
+
+    const dto = await getDto(context, report);
+
+    await context.runCommand(new SaveMonitoringReport(dto, true));
+
+    expect(report.Acc_MonitoringReportStatus__c).toBe("Awaiting IUK Approval");
   });
 });
 
 describe("saveMonitoringReports validation", () => {
   it("should throw an error if the report has already been submitted", async () => {
     const context = new TestContext();
-    const submit = {
-      headerId: "H1",
-      endDate: new Date(),
-      startDate: new Date(),
-      projectId: "P1",
-      periodId: 1,
-      status: MonitoringReportStatus.DRAFT,
-      questions: [{
-        comments: "Comment the first",
-        optionId: "QuestionId: 2",
-        displayOrder: 1,
-        title: "Scones?",
-        options: [{
-          id: "QuestionId: 1",
-          questionText: "A",
-          questionScore: 1
-        }, {
-          id: "QuestionId: 2",
-          questionText: "B",
-          questionScore: 2
-        }, {
-          id: "QuestionId: 3",
-          questionText: "C",
-          questionScore: 3
-        }]
-      }]
-    } as MonitoringReportDto;
-    await saveResponse(context, submit, true, 1);
-    const command = new SaveMonitoringReport(submit, true);
-    await expect(context.runCommand(command)).rejects.toThrow(BadRequestError);
+
+    const report = context.testData.createMonitoringReportHeader(undefined, 1, { Acc_MonitoringReportStatus__c: "Awaiting IUK Approval" });
+
+    const dto = await getDto(context, report);
+
+    await expect(context.runCommand(new SaveMonitoringReport(dto, true))).rejects.toThrow(BadRequestError);
   });
 
   it("should return a validation error if an invalid option is selected", async () => {
     const context = new TestContext();
-    const update = {
-      headerId: "H1",
-      endDate: new Date(),
-      startDate: new Date(),
-      projectId: "P1",
-      periodId: 1,
-      status: MonitoringReportStatus.DRAFT,
-      questions: [{
-        comments: "Comment the second update",
-        optionId: "notathing",
-        displayOrder: 2,
-        title: "Crumpets?",
-        options: [{
-          id: "QuestionId: 4",
-          questionText: "A",
-          questionScore: 1
-        }, {
-          id: "QuestionId: 5",
-          questionText: "B",
-          questionScore: 2
-        }, {
-          id: "QuestionId: 6",
-          questionText: "C",
-          questionScore: 3
-        }]
-      }]
-    } as MonitoringReportDto;
-    await expect(saveResponse(context, update, false)).rejects.toThrow(ValidationError);
-    expect(await context.repositories.monitoringReportResponse.getAllForHeader(update.headerId)).toHaveLength(0);
+
+    const question1Options = context.testData.createMonitoringReportQuestionSet(1, 3);
+    const question2Options = context.testData.createMonitoringReportQuestionSet(2, 3);
+
+    const report = context.testData.createMonitoringReportHeader();
+
+    const dto = await getDto(context, report);
+
+    // save 2nd question with option from first question
+    dto.questions[0].optionId = question1Options[1].Id;
+    dto.questions[0].comments = "Question 1 comments";
+    dto.questions[1].optionId = question1Options[1].Id;
+    dto.questions[1].comments = "Question 2 comments";
+
+    await expect(context.runCommand(new SaveMonitoringReport(dto, false))).rejects.toThrow(ValidationError);
+
+    // save 2nd question with option from second question
+    dto.questions[1].optionId = question2Options[1].Id;
+
+    await expect(context.runCommand(new SaveMonitoringReport(dto, false))).resolves.toBe(true);
   });
+
   it("should return a validation error if submitted and there are scores missing", async () => {
     const context = new TestContext();
-    const submit = {
-      headerId: "H1",
-      endDate: new Date(),
-      startDate: new Date(),
-      projectId: "P1",
-      periodId: 1,
-      status: MonitoringReportStatus.DRAFT,
-      questions: [{
-        comments: "Comment the first",
-        optionId: "QuestionId: 2",
-        displayOrder: 1,
-        title: "Scones?",
-        options: [{
-          id: "QuestionId: 1",
-          questionText: "A",
-          questionScore: 1
-        }, {
-          id: "QuestionId: 2",
-          questionText: "B",
-          questionScore: 2
-        }, {
-          id: "QuestionId: 3",
-          questionText: "C",
-          questionScore: 3
-        }]
-      }]
-    } as MonitoringReportDto;
-    await expect(saveResponse(context, submit, true)).rejects.toThrow(ValidationError);
+
+    const question1Options = context.testData.createMonitoringReportQuestionSet(1, 3);
+    const question2Options = context.testData.createMonitoringReportQuestionSet(2, 3);
+
+    const report = context.testData.createMonitoringReportHeader();
+
+    const dto = await getDto(context, report);
+
+    dto.questions[0].optionId = question1Options[1].Id;
+    dto.questions[0].comments = "Comment 1";
+
+    // save draft
+    await expect(context.runCommand(new SaveMonitoringReport(dto, false))).resolves.toBe(true);
+
+    // save submitted expect fail
+    await expect(context.runCommand(new SaveMonitoringReport(dto, true))).rejects.toThrow(ValidationError);
+
+    dto.questions[1].optionId = question2Options[1].Id;
+    dto.questions[1].comments = "Comment 2";
+
+    // save submitted
+    await expect(context.runCommand(new SaveMonitoringReport(dto, true))).resolves.toBe(true);
   });
 
   it("should return a validation error if submitted and with a comment without a score", async () => {
     const context = new TestContext();
-    const update = {
-      headerId: "H1",
-      endDate: new Date(),
-      startDate: new Date(),
-      projectId: "P1",
-      periodId: 1,
-      status: MonitoringReportStatus.DRAFT,
-      questions: [{
-        comments: "Comment the second update",
-        title: "Crumpets?",
-        displayOrder: 2,
-        options: [{
-          id: "QuestionId: 4",
-          questionText: "A",
-          questionScore: 1
-        }, {
-          id: "QuestionId: 5",
-          questionText: "B",
-          questionScore: 2
-        }, {
-          id: "QuestionId: 6",
-          questionText: "C",
-          questionScore: 3
-        }]
-      }]
-    } as MonitoringReportDto;
-    await expect(saveResponse(context, update, false)).rejects.toThrow(ValidationError);
-    expect(await context.repositories.monitoringReportResponse.getAllForHeader(update.headerId)).toHaveLength(0);
+
+    const question1Options = context.testData.createMonitoringReportQuestionSet(1, 3);
+    const question2Options = context.testData.createMonitoringReportQuestionSet(2, 3);
+
+    const report = context.testData.createMonitoringReportHeader();
+
+    const dto = await getDto(context, report);
+
+    dto.questions[0].comments = "Comment 1";
+    dto.questions[1].optionId = question2Options[2].Id;
+    dto.questions[1].comments = "Comment 2";
+
+    // save draft
+    await expect(context.runCommand(new SaveMonitoringReport(dto, true))).rejects.toThrow(ValidationError);
+
+    dto.questions[0].optionId = question1Options[1].Id;
+
+    // save draft
+    await expect(context.runCommand(new SaveMonitoringReport(dto, true))).resolves.toBe(true);
   });
 });
+
+function getDto(context: TestContext, report: ISalesforceMonitoringReportHeader): Promise<MonitoringReportDto> {
+  return context.runQuery(new GetMonitoringReport(report.Acc_Project__c, report.Acc_ProjectPeriodNumber__c));
+}

@@ -35,6 +35,11 @@ export interface IContext {
   clock: IClock;
   logger: ILogger;
   user: ISessionUser;
+  startTimer: (message: string) => ITimer;
+}
+
+export interface ITimer {
+  finish(): void;
 }
 
 export interface ICaches {

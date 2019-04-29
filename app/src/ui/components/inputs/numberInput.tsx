@@ -5,6 +5,7 @@ import { BaseInput } from "./baseInput";
 interface NumberInputProps extends InputProps<number> {
   id?: string;
   className?: string;
+  width?: "small" | "medium" | "normal";
 }
 
 interface NumberInputState extends InputState {
@@ -27,11 +28,22 @@ export class NumberInput extends BaseInput<NumberInputProps, NumberInputState> {
   }
 
   public render() {
+    const className = classNames(
+      "govuk-input",
+      "govuk-table__cell--numeric",
+      {
+        "govuk-input--error": this.state.invalid,
+        "govuk-!-width-one-quarter": this.props.width === "small",
+        "govuk-!-width-one-half": this.props.width === "medium"
+      },
+      this.props.className
+    );
+
     return (
       <input
         id={this.props.id || this.props.name}
         type="text"
-        className={classNames("govuk-input", "govuk-table__cell--numeric", { "govuk-input--error": this.state.invalid }, this.props.className)}
+        className={className}
         name={this.props.name}
         value={this.state.value}
         disabled={!!this.props.disabled}

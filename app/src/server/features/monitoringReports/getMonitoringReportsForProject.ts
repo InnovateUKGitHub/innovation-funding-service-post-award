@@ -1,7 +1,7 @@
-import { QueryBase, SALESFORCE_DATE_FORMAT } from "../common";
+import { QueryBase } from "../common";
 import { Authorisation, IContext, ProjectRole } from "../../../types";
 import { MonitoringReportSummaryDto } from "../../../types/dtos/monitoringReportDto";
-import { MonitoringReportStatus } from "../../../types/constants/monitoringReportStatus";
+import { mapMonitoringReportStatus } from "./mapMonitoringReportStatus";
 
 export class GetMonitoringReportsForProject extends QueryBase<MonitoringReportSummaryDto[]> {
   constructor(
@@ -18,11 +18,14 @@ export class GetMonitoringReportsForProject extends QueryBase<MonitoringReportSu
     const headers = await context.repositories.monitoringReportHeader.getAllForProject(this.projectId);
     return headers.map<MonitoringReportSummaryDto>(x => ({
       headerId: x.Id,
-      status: x.Acc_MonitoringReportStatus__c === "Draft" ? MonitoringReportStatus.DRAFT : MonitoringReportStatus.SUBMITTED,
-      startDate: context.clock.parse(x.Acc_ProjectStartDate__c, SALESFORCE_DATE_FORMAT)!,
-      endDate: context.clock.parse(x.Acc_ProjectEndDate__c, SALESFORCE_DATE_FORMAT)!,
+      projectId: x.Acc_Project__c,
+      title: x.Name,
+      status: mapMonitoringReportStatus(x),
+      statusName: x.MonitoringReportStatusName,
+      startDate: context.clock.parseRequiredSalesforceDate(x.Acc_PeriodStartDate__c),
+      endDate: context.clock.parseRequiredSalesforceDate(x.Acc_PeriodEndDate__c),
       periodId: x.Acc_ProjectPeriodNumber__c,
-      lastUpdated: null
+      lastUpdated: context.clock.parseRequiredSalesforceDateTime(x.LastModifiedDate)
     }))
     .sort((a, b) => b.periodId - a.periodId);
   }

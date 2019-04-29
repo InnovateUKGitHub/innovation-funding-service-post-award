@@ -1,10 +1,10 @@
-import { QueryBase, SALESFORCE_DATE_FORMAT } from "../common";
+import { QueryBase } from "../common";
 import { Authorisation, IContext, ProjectRole } from "../../../types";
 import { MonitoringReportDto, MonitoringReportQuestionDto } from "../../../types/dtos/monitoringReportDto";
 import { ISalesforceMonitoringReportHeader, ISalesforceMonitoringReportResponse } from "../../repositories";
-import { MonitoringReportStatus } from "../../../types/constants/monitoringReportStatus";
 import { GetMonitoringReportActiveQuestions } from "./getMonitoringReportActiveQuestions";
 import { GetMonitoringReportAnsweredQuestions } from "./getMonitoringReportAnsweredQuestions";
+import { mapMonitoringReportStatus } from "./mapMonitoringReportStatus";
 
 export class GetMonitoringReport extends QueryBase<MonitoringReportDto> {
   constructor(
@@ -18,21 +18,25 @@ export class GetMonitoringReport extends QueryBase<MonitoringReportDto> {
     return context.config.features.monitoringReports && auth.forProject(this.projectId).hasRole(ProjectRole.MonitoringOfficer);
   }
 
-  private createQuestionDto(question: MonitoringReportQuestionDto, responses: ISalesforceMonitoringReportResponse[]) {
+  private populateAnswer(question: MonitoringReportQuestionDto, responses: ISalesforceMonitoringReportResponse[]): MonitoringReportQuestionDto {
     const options = question.options.map(o => o.id);
+
+    // if there are no options get it from the preselected answer as its a non-option question
     const response = responses.find(r => options.indexOf(r.Acc_Question__c) >= 0);
-    return {
-      displayOrder: question.displayOrder,
-      title: question.title,
-      options: question.options,
-      optionId: response && response.Acc_Question__c || null,
-      comments: response && response.Acc_QuestionComments__c || null,
-      responseId: response && response.Id || null
-    };
+
+    if(!response) {
+      return question;
+    }
+
+    return Object.assign(question, {
+      optionId: response.Acc_Question__c,
+      comments: response.Acc_QuestionComments__c,
+      responseId: response.Id
+    });
   }
 
   private async getQuestions(context: IContext, header: ISalesforceMonitoringReportHeader, results: ISalesforceMonitoringReportResponse[]): Promise<MonitoringReportQuestionDto[]> {
-    if (header.Acc_MonitoringReportStatus__c !== MonitoringReportStatus.SUBMITTED) {
+    if (header.Acc_MonitoringReportStatus__c === "New" || header.Acc_MonitoringReportStatus__c === "Draft") {
       return context.runQuery(new GetMonitoringReportActiveQuestions());
     }
     const answeredQuestions = results.map(r => r.Acc_Question__c);
@@ -44,14 +48,19 @@ export class GetMonitoringReport extends QueryBase<MonitoringReportDto> {
     const results = await context.repositories.monitoringReportResponse.getAllForHeader(header.Id);
     const questionArray = await this.getQuestions(context, header, results);
 
+    const questions = questionArray.map(q => this.populateAnswer(q, results));
+
     return {
       headerId: header.Id,
-      status: header.Acc_MonitoringReportStatus__c === "Draft" ? MonitoringReportStatus.DRAFT : MonitoringReportStatus.SUBMITTED,
-      projectId: header.Acc_ProjectId__c,
-      startDate: context.clock.parse(header.Acc_ProjectStartDate__c, SALESFORCE_DATE_FORMAT)!,
-      endDate: context.clock.parse(header.Acc_ProjectEndDate__c, SALESFORCE_DATE_FORMAT)!,
+      title: header.Name,
+      status: mapMonitoringReportStatus(header),
+      statusName: header.MonitoringReportStatusName,
+      projectId: header.Acc_Project__c,
+      startDate: context.clock.parseRequiredSalesforceDate(header.Acc_PeriodStartDate__c),
+      endDate: context.clock.parseRequiredSalesforceDate(header.Acc_PeriodEndDate__c),
       periodId: header.Acc_ProjectPeriodNumber__c,
-      questions: questionArray.map(q => this.createQuestionDto(q, results))
+      questions,
+      lastUpdated: context.clock.parseRequiredSalesforceDateTime(header.LastModifiedDate)
     };
   }
 }
