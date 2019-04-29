@@ -64,7 +64,7 @@ class DashboardComponent extends ContainerBase<Params, Data, Callbacks> {
           {!reportSections.open ? <ACC.Renderers.SimpleString>There are no open reports.</ACC.Renderers.SimpleString> : null}
         </ACC.Section>
         <ACC.Section title={"Archived"}>
-          {reportSections.archived.length ? this.renderTable(project, reportSections.open, "previous") : null}
+          {reportSections.archived.length ? this.renderTable(project, reportSections.archived, "previous") : null}
           {!reportSections.archived.length ? <ACC.Renderers.SimpleString>There are no archived reports.</ACC.Renderers.SimpleString> : null}
         </ACC.Section>
       </ACC.Page>
