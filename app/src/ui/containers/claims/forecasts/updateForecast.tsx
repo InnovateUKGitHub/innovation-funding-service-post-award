@@ -13,6 +13,7 @@ import {
   withDataEditor,
 } from "./common";
 import { ProjectRole } from "../../../../types";
+import { isNumber } from "@util/NumberHelper";
 
 interface Callbacks {
   onChange: (partnerId: string, data: ForecastDetailsDTO[], combined: ForecastData) => void;
@@ -32,6 +33,12 @@ class UpdateForecastComponent extends ContainerBase<Params, PendingForecastData,
     this.props.onChange(this.props.partnerId, data, combined);
   }
 
+  renderOverheadsRate(overheadRate: number | null) {
+    if(!isNumber(overheadRate)) return null;
+
+    return <ACC.Renderers.SimpleString>Overhead costs: <ACC.Renderers.Percentage value={overheadRate}/></ACC.Renderers.SimpleString>;
+  }
+
   public renderContents(combined: ForecastData) {
     const Form = ACC.TypedForm<ForecastDetailsDTO[]>();
     const editor = combined.editor!;
@@ -43,6 +50,7 @@ class UpdateForecastComponent extends ContainerBase<Params, PendingForecastData,
         validator={editor.validator}
         pageTitle={<ACC.Projects.Title pageTitle="Update forecasts" project={combined.project} />}
       >
+        {this.renderOverheadsRate(combined.partner.overheadRate)}
         <ACC.Section title="" qa="partner-forecast" >
           {renderWarning(combined)}
           <Form.Form
