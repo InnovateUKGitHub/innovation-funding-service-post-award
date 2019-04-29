@@ -14,6 +14,7 @@ export const routeConfig = {
   monitoringReportDashboard: Containers.MonitoringReportDashboardRoute,
   monitoringReportView: Containers.MonitoringReportViewRoute,
   monitoringReportPrepare: Containers.MonitoringReportPrepareRoute,
+  monitoringReportCreate: Containers.MonitoringReportCreateRoute,
   prepareClaim: Containers.PrepareClaimRoute,
   prepareClaimLineItems: Containers.EditClaimLineItemsRoute,
   projectChangeRequests: Containers.ProjectChangeRequestsRoute,
