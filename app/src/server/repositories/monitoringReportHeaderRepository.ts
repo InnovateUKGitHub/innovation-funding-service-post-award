@@ -17,6 +17,7 @@ export interface IMonitoringReportHeaderRepository {
   getById(id: string): Promise<ISalesforceMonitoringReportHeader>;
   get(projectId: string, periodId: number): Promise<ISalesforceMonitoringReportHeader>;
   update(updateDto: Updatable<ISalesforceMonitoringReportHeader>): Promise<boolean>;
+  create(updateDto: Partial<ISalesforceMonitoringReportHeader>): Promise<string>;
   getAllForProject(projectId: string): Promise<ISalesforceMonitoringReportHeader[]>;
 }
 
@@ -39,7 +40,7 @@ export class MonitoringReportHeaderRepository extends SalesforceRepositoryBase<I
   ];
 
   async getById(id: string): Promise<ISalesforceMonitoringReportHeader> {
-    return super.loadItem({Id: id});
+    return super.loadItem({ Id: id });
   }
 
   async get(projectId: string, periodId: number): Promise<ISalesforceMonitoringReportHeader> {
@@ -48,6 +49,10 @@ export class MonitoringReportHeaderRepository extends SalesforceRepositoryBase<I
 
   update(updateDto: Updatable<ISalesforceMonitoringReportHeader>): Promise<boolean> {
     return super.updateItem(updateDto);
+  }
+
+  create(item: Partial<ISalesforceMonitoringReportHeader>): Promise<string> {
+    return super.insertItem(item);
   }
 
   async getAllForProject(projectId: string): Promise<ISalesforceMonitoringReportHeader[]> {

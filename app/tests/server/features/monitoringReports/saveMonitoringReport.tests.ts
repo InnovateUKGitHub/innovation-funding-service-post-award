@@ -217,6 +217,24 @@ describe("saveMonitoringReports validation", () => {
     // save draft
     await expect(context.runCommand(new SaveMonitoringReport(dto, true))).resolves.toBe(true);
   });
+
+  it("should return a bad request if submitted with a different project id", async () => {
+    const context = new TestContext();
+
+    const project1 = context.testData.createProject(x => x.Acc_StartDate__c = "2012-01-01");
+    const project2 = context.testData.createProject(x => x.Acc_StartDate__c = "2012-01-01");
+
+    const report = context.testData.createMonitoringReportHeader(project1);
+
+    const dto = await getDto(context, report);
+    dto.projectId = project2.Id;
+
+    await expect(context.runCommand(new SaveMonitoringReport(dto, false))).rejects.toThrow(BadRequestError);
+
+    dto.projectId = project1.Id;
+
+    await expect(context.runCommand(new SaveMonitoringReport(dto, false))).resolves.toBe(true);
+  });
 });
 
 function getDto(context: TestContext, report: ISalesforceMonitoringReportHeader): Promise<MonitoringReportDto> {

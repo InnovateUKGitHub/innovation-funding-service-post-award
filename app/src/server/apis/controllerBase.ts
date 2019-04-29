@@ -66,6 +66,10 @@ export abstract class ControllerBaseWithSummary<TSummaryDto, TDto> {
     return this.putCustom<TParams, TSummaryDto[]>(path, getParams, run);
   }
 
+  protected postItem<TParams>(path: string, getParams: GetParams<TParams>, run: Run<TParams, TDto | null>) {
+    return this.postCustom<TParams, TDto | null>(path, null, getParams, run);
+  }
+
   protected postItems<TParams>(path: string, getParams: GetParams<TParams>, run: Run<TParams, TSummaryDto[]>) {
     return this.postCustom<TParams, TSummaryDto[]>(path, 201, getParams, run);
   }
@@ -79,7 +83,7 @@ export abstract class ControllerBaseWithSummary<TSummaryDto, TDto> {
     return this;
   }
 
-  protected postCustom<TParams, TResponse>(path: string, successStatus: number, getParams: GetParams<TParams>, run: Run<TParams, TResponse>) {
+  protected postCustom<TParams, TResponse>(path: string, successStatus: number|null, getParams: GetParams<TParams>, run: Run<TParams, TResponse>) {
     this.router.post(path, this.executeMethod(successStatus || 201, getParams, run, false));
     return this;
   }
