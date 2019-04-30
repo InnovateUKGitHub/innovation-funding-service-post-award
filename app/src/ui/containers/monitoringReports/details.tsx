@@ -10,7 +10,7 @@ import { ProjectRole } from "../../../types";
 
 interface Params {
   projectId: string;
-  periodId: number;
+  id: string;
 }
 
 interface Data {
@@ -65,18 +65,18 @@ const containerDefinition = ReduxContainer.for<Params, Data, Callbacks>(DetailsC
 export const MonitoringReportView = containerDefinition.connect({
   withData: (state, props) => ({
     project: Selectors.getProject(props.projectId).getPending(state),
-    report: Selectors.getMonitoringReport(props.projectId, props.periodId).getPending(state),
+    report: Selectors.getMonitoringReport(props.projectId, props.id).getPending(state),
   }),
   withCallbacks: () => ({})
 });
 
 export const MonitoringReportViewRoute = containerDefinition.route({
   routeName: "monitoringReportView",
-  routePath: "/projects/:projectId/monitoring-reports/:periodId",
-  getParams: (r) => ({ projectId: r.params.projectId, periodId: parseInt(r.params.periodId, 10) }),
+  routePath: "/projects/:projectId/monitoring-reports/:id",
+  getParams: (r) => ({ projectId: r.params.projectId, id: r.params.id }),
   getLoadDataActions: (params) => [
     Actions.loadProject(params.projectId),
-    Actions.loadMonitoringReport(params.projectId, params.periodId),
+    Actions.loadMonitoringReport(params.projectId, params.id),
   ],
   container: MonitoringReportView,
   accessControl: (auth, params, features) => features.monitoringReports && auth.forProject(params.projectId).hasRole(ProjectRole.MonitoringOfficer)

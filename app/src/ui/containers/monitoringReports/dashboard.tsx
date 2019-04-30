@@ -10,7 +10,6 @@ import { MonitoringReportViewRoute } from "./details";
 import { ProjectRole } from "../../../types";
 import { ProjectDashboardRoute } from "@ui/containers";
 import { MonitoringReportStatus } from "@framework/types/constants/monitoringReportStatus";
-import { CreateMonitoringReport } from "@server/features/monitoringReports/createMonitoringReport";
 
 interface Params {
   projectId: string;
@@ -42,6 +41,7 @@ class DashboardComponent extends ContainerBase<Params, Data, Callbacks> {
 
   private renderContents(project: Dtos.ProjectDto, partners: Dtos.PartnerDto[], reports: Dtos.MonitoringReportSummaryDto[]) {
     // loop though reports splitting them into open or archived
+    const inital = { open: [], archived: [] };
     const reportSections = reports.reduce<{ open: Dtos.MonitoringReportSummaryDto[], archived: Dtos.MonitoringReportSummaryDto[] }>((result, report) => {
         if (this.currentStatuses.indexOf(report.status) > -1) {
           result.open.push(report);
@@ -51,7 +51,7 @@ class DashboardComponent extends ContainerBase<Params, Data, Callbacks> {
         }
         return result;
       },
-      { open: [], archived: [] }
+      inital
     );
 
     return (
@@ -60,7 +60,7 @@ class DashboardComponent extends ContainerBase<Params, Data, Callbacks> {
         pageTitle={<ACC.Projects.Title pageTitle="View project" project={project} />}
         tabs={<ACC.Projects.ProjectNavigation project={project} currentRoute={MonitoringReportDashboardRoute.routeName} partners={partners} />}
       >
-        <ACC.Link route={MonitoringReportCreateRoute.getLink({projectId: this.props.projectId, periodId: 0})} className="govuk-button">Create new</ACC.Link>
+        <ACC.Link route={MonitoringReportCreateRoute.getLink({ projectId: this.props.projectId })} className="govuk-button">Create new</ACC.Link>
         <ACC.Section title={"Open"}>
           {reportSections.open.length ? this.renderTable(project, reportSections.open, "current") : null}
           {!reportSections.open.length ? <ACC.Renderers.SimpleString>There are no open reports.</ACC.Renderers.SimpleString> : null}
@@ -93,9 +93,9 @@ class DashboardComponent extends ContainerBase<Params, Data, Callbacks> {
 
   private renderLink(project: Dtos.ProjectDto, report: Dtos.MonitoringReportSummaryDto) {
     if (this.editStatuses.indexOf(report.status) > -1) {
-      return <ACC.Link route={MonitoringReportPrepareRoute.getLink({ projectId: project.id, periodId: report.periodId })}>Edit report</ACC.Link>;
+      return <ACC.Link route={MonitoringReportPrepareRoute.getLink({ projectId: project.id, id: report.headerId })}>Edit report</ACC.Link>;
     }
-    return <ACC.Link route={MonitoringReportViewRoute.getLink({ projectId: project.id, periodId: report.periodId })}>View report</ACC.Link>;
+    return <ACC.Link route={MonitoringReportViewRoute.getLink({ projectId: project.id, id: report.headerId })}>View report</ACC.Link>;
   }
 }
 

@@ -35,7 +35,6 @@ export class CreateMonitoringReport extends CommandBase<string> {
 
     const validationResult = new MonitoringReportDtoValidator(this.monitoringReportDto, true, this.submit, questions, project.periodId);
     if (!validationResult.isValid) {
-      console.log("VAlidation failed", validationResult);
       throw new ValidationError(validationResult);
     }
 

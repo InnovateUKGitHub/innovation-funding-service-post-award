@@ -7,18 +7,23 @@ import { RootState } from "../reducers/rootReducer";
 import { getProject } from "./projects";
 import { MonitoringReportStatus } from "@framework/types/constants/monitoringReportStatus";
 
-export const getMonitoringReport = (projectId: string, periodId: number) => dataStoreHelper("monitoringReport", getKey(projectId, periodId));
+export const getMonitoringReport = (projectId: string, id: string) => dataStoreHelper("monitoringReport", getKey(projectId, id));
 
 export const getAllMonitoringReports = (projectId: string) => {
   return dataStoreHelper("monitoringReports", getKey(projectId));
 };
 
-export const getMonitoringReportEditor = (projectId: string, periodId: number) => editorStoreHelper<MonitoringReportDto, MonitoringReportDtoValidator>(
+export const getMonitoringReportEditor = (projectId: string, id?: string ) => editorStoreHelper<MonitoringReportDto, MonitoringReportDtoValidator>(
   "monitoringReport",
   x => x.monitoringReport,
-  (store) => periodId === 0 ? getMonitoringReportQuestions().getPending(store).then(x => getCreateDto(projectId, x!)) : getMonitoringReport(projectId, periodId).getPending(store),
+  (store) => {
+    if(id) {
+      return getMonitoringReport(projectId, id).getPending(store);
+    }
+    return getMonitoringReportQuestions().getPending(store).then(x => getCreateDto(projectId, x!));
+  },
   (monitoringReport, store) => getInitialValdiator(projectId, monitoringReport, store),
-  periodId === 0 ? getKey(projectId, "new") : getKey(projectId, periodId)
+  getKey(projectId, id || "new")
 );
 
 const getCreateDto = (projectId: string, questions: MonitoringReportQuestionDto[]): MonitoringReportDto => {

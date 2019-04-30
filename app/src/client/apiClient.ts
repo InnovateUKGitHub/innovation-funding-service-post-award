@@ -57,10 +57,10 @@ const clientApi: IApiClient = {
     getAllByPartnerId: (params) => ajaxJson(`/api/forecast-gol-costs/?partnerId=${params.partnerId}`)
   },
   monitoringReports: {
-    get: (params) => ajaxJson(`/api/monitoring-reports/${params.projectId}/${params.periodId}`),
+    get: (params) => ajaxJson(`/api/monitoring-reports/${params.projectId}/${params.id}`),
     saveMonitoringReport: (params) => ajaxPut(`/api/monitoring-reports?submit=${params.submit}`, params.monitoringReportDto),
     createMonitoringReport: (params) => ajaxPost(`/api/monitoring-reports?submit=${params.submit}`, params.monitoringReportDto),
-    getAllForProject: (params) => ajax(`/api/monitoring-reports/${params.projectId}`),
+    getAllForProject: (params) => ajax(`/api/monitoring-reports/?projectId=${params.projectId}`),
     getActiveQuestions: (params) => ajax(`/api/monitoring-reports/questions`)
   },
   projects: {
