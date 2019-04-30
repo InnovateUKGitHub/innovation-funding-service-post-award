@@ -79,7 +79,7 @@ const containerDefinition = ReduxContainer.for<MonitoringReportPrepareParams, Da
 const MonitoringReportPrepare = containerDefinition.connect({
   withData: (state, props) => ({
     project: Selectors.getProject(props.projectId).getPending(state),
-    editor: Selectors.getMonitoringReportEditor(props.projectId, props.periodId).get(state)
+    editor: Selectors.getMonitoringReportEditor(props.projectId, props.periodId).get(state),
   }),
   withCallbacks: (dispatch) => ({
     onChange: (projectId, periodId, dto, project) => {
@@ -100,7 +100,20 @@ export const MonitoringReportPrepareRoute = containerDefinition.route({
   accessControl: (auth, { projectId }, features) => features.monitoringReports && auth.forProject(projectId).hasRole(Dtos.ProjectRole.MonitoringOfficer),
   getLoadDataActions: (params) => [
     Actions.loadProject(params.projectId),
+    Actions.loadMonitoringReportQuestions(),
     Actions.loadMonitoringReport(params.projectId, params.periodId)
+  ],
+  container: MonitoringReportPrepare
+});
+
+export const MonitoringReportCreateRoute = containerDefinition.route({
+  routeName: "monitoringReportCreate",
+  routePath: "/projects/:projectId/monitoring-reports/create",
+  getParams: (r) => ({ projectId: r.params.projectId, periodId: 0 }),
+  accessControl: (auth, { projectId }, features) => features.monitoringReports && auth.forProject(projectId).hasRole(Dtos.ProjectRole.MonitoringOfficer),
+  getLoadDataActions: (params) => [
+    Actions.loadProject(params.projectId),
+    Actions.loadMonitoringReportQuestions()
   ],
   container: MonitoringReportPrepare
 });

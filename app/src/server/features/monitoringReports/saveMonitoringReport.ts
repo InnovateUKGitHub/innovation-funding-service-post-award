@@ -46,14 +46,17 @@ export class SaveMonitoringReport extends CommandBase<boolean> {
   protected async Run(context: IContext) {
     const header = await context.repositories.monitoringReportHeader.getById(this.monitoringReportDto.headerId);
 
-    if (header.Id !== this.monitoringReportDto.headerId) {
-      throw new BadRequestError("Header does not match monitoringReportDto");
+    if(header.Acc_Project__c !== this.monitoringReportDto.projectId) {
+      throw new BadRequestError("Invalid request");
     }
 
     if(header.Acc_MonitoringReportStatus__c !== "Draft" && header.Acc_MonitoringReportStatus__c !== "New" && header.Acc_MonitoringReportStatus__c !== "IUK Queried") {
       throw new BadRequestError("Report has already been submitted");
     }
 
+    // as we can save a queried by IUK report should this be dependent on the status of the report?
+    // discussed with Jamie and so unliklly not something to consider at the moment
+    // user can always create a new report to sort this!
     const questions = await context.runQuery(new GetMonitoringReportActiveQuestions());
 
     const project = await context.runQuery(new GetByIdQuery(this.monitoringReportDto.projectId));
