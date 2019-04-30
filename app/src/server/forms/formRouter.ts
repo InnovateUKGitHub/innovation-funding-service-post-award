@@ -15,7 +15,7 @@ import { ClaimDetailDocumentDeleteHandler } from "./claimDetailDocument/claimDet
 import { ClaimDetailDocumentUploadHandler } from "./claimDetailDocument/claimDetailDocumentUploadHandler";
 import { ProjectDocumentUploadHandler } from "./projectDocumentFormHandler";
 import { Configuration } from "../features/common";
-import { MonitoringReportPrepareFormHandler } from "./MonitoringReportPrepareFormHandler";
+import { MonitoringReportPrepareFormHandler } from "./monitoringReportPrepareFormHandler";
 import { MonitoringReportCreateFormHandler } from "./monitoringReportCreateFormHandler";
 
 export const formRouter = express.Router();
