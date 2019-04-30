@@ -13,13 +13,13 @@ class QuestionValidator extends Results<MonitoringReportQuestionDto> {
   }
 
   public readonly comments = Validation.all(this,
-    () => this.submit ? Validation.required(this, this.answer.comments, "Comments are required.") : Validation.valid(this),
+    () => this.submit ? Validation.required(this, this.answer.comments, "Comments are required to submit the report.") : Validation.valid(this),
     () => this.answer.comments ? Validation.required(this, this.answer.optionId, "Score must be selected to submit a comment.") : Validation.valid(this)
   );
 
   public readonly score = this.question.isScored ?
     Validation.all(this,
-      () => this.submit ? Validation.required(this, this.answer.optionId, "Score is required") : Validation.valid(this),
+      () => this.submit ? Validation.required(this, this.answer.optionId, "Score is required to submit the report.") : Validation.valid(this),
       () => Validation.isTrue(this, !this.answer.optionId || !!this.question.options.find(x => x.id === this.answer.optionId), "Select a value from the list.")
     )
     : Validation.valid(this);
@@ -44,7 +44,7 @@ export class MonitoringReportDtoValidator extends Results<MonitoringReportDto> {
   public readonly periodId = Validation.all(this,
     () => Validation.required(this, this.model.periodId, "Period is required"),
     () => Validation.integer(this, this.model.periodId, "Period must be a valid period"),
-    () => Validation.isTrue(this, (this.model.periodId > 0 && this.model.periodId <= this.totalProjectPeriods), `Maximun period is ${this.totalProjectPeriods}`)
+    () => Validation.isTrue(this, (this.model.periodId > 0 && this.model.periodId <= this.totalProjectPeriods), `Maximum period is ${this.totalProjectPeriods}`)
   );
 
   public readonly responses = Validation.optionalChild(this, this.questions,

@@ -53,6 +53,7 @@ class PrepareMonitoringReportComponent extends ContainerBase<MonitoringReportPre
         backLink={<ACC.BackLink route={MonitoringReportDashboardRoute.getLink({ projectId: this.props.projectId })}>Back to monitoring reports</ACC.BackLink>}
         pageTitle={<ACC.Projects.Title pageTitle="Monitoring report" project={project} />}
         validator={editor.validator}
+        error={editor.error}
       >
         <ACC.Section>
           <ReportForm.Form data={editor.data} onChange={(dto) => this.props.onChange(dto.projectId, dto.headerId, dto, project)} >
