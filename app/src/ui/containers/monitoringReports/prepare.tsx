@@ -10,7 +10,7 @@ import { IEditorStore } from "../../redux";
 import { MonitoringReportDtoValidator } from "../../validators/MonitoringReportDtoValidator";
 export interface MonitoringReportPrepareParams {
   projectId: string;
-  periodId: number;
+  id?: string;
 }
 
 interface Data {
@@ -19,8 +19,8 @@ interface Data {
 }
 
 interface Callbacks {
-  onChange: (projectId: string, periodId: number, dto: Dtos.MonitoringReportDto, project: Dtos.ProjectDto) => void;
-  onSave: (projectId: string, periodId: number, dto: Dtos.MonitoringReportDto, project: Dtos.ProjectDto, submit: boolean) => void;
+  onChange: (projectId: string, id: string, dto: Dtos.MonitoringReportDto, project: Dtos.ProjectDto) => void;
+  onSave: (projectId: string, id: string, dto: Dtos.MonitoringReportDto, project: Dtos.ProjectDto, submit: boolean) => void;
 }
 
 class PrepareMonitoringReportComponent extends ContainerBase<MonitoringReportPrepareParams, Data, Callbacks> {
@@ -55,17 +55,17 @@ class PrepareMonitoringReportComponent extends ContainerBase<MonitoringReportPre
         validator={editor.validator}
       >
         <ACC.Section>
-          <ReportForm.Form data={editor.data} onChange={(dto) => this.props.onChange(this.props.projectId, this.props.periodId, dto, project)} >
+          <ReportForm.Form data={editor.data} onChange={(dto) => this.props.onChange(dto.projectId, dto.headerId, dto, project)} >
             <ReportForm.String label="Title" labelBold={true} name="title" value={x => x.title} update={(x,v) => x.title = v!} validation={editor.validator.title} />
             <ReportForm.Numeric label="Period" labelBold={true} width="small" name="period" value={x => x.periodId} update={(x, v) => x.periodId = v!} validation={editor.validator.periodId} />
             <ACC.Renderers.SimpleString>For each question score the project against the criteria from 1 to 5, providing a comment explaining your reason. Your Monitoring Portfolio Executive will return the report to you otherwise.</ACC.Renderers.SimpleString>
             {formItems}
             <ACC.Renderers.SimpleString>By submitting this report, you certify that from the project monitoring documents shown to you, this report represents your best opinion of the current progress of this project.</ACC.Renderers.SimpleString>
             <ReportForm.Fieldset qa="save-and-submit">
-              <ReportForm.Button name="save-submitted" styling="Primary" onClick={() => this.props.onSave(this.props.projectId, this.props.periodId, editor.data, project, true)}>Submit report</ReportForm.Button>
+              <ReportForm.Button name="save-submitted" styling="Primary" onClick={() => this.props.onSave(editor.data.projectId, editor.data.headerId, editor.data, project, true)}>Submit report</ReportForm.Button>
             </ReportForm.Fieldset>
             <ReportForm.Fieldset qa="save-and-return">
-              <ReportForm.Button name="save-draft" onClick={() => this.props.onSave(this.props.projectId, this.props.periodId, editor.data, project, false)}>Save and return to project</ReportForm.Button>
+              <ReportForm.Button name="save-draft" onClick={() => this.props.onSave(editor.data.projectId, editor.data.headerId, editor.data, project, false)}>Save and return to project</ReportForm.Button>
             </ReportForm.Fieldset>
           </ReportForm.Form>
         </ACC.Section>
@@ -79,14 +79,14 @@ const containerDefinition = ReduxContainer.for<MonitoringReportPrepareParams, Da
 const MonitoringReportPrepare = containerDefinition.connect({
   withData: (state, props) => ({
     project: Selectors.getProject(props.projectId).getPending(state),
-    editor: Selectors.getMonitoringReportEditor(props.projectId, props.periodId).get(state),
+    editor: Selectors.getMonitoringReportEditor(props.projectId, props.id).get(state),
   }),
   withCallbacks: (dispatch) => ({
-    onChange: (projectId, periodId, dto, project) => {
-      dispatch(Actions.validateMonitoringReport(projectId, periodId, dto, dto.questions, project));
+    onChange: (projectId, id, dto, project) => {
+      dispatch(Actions.validateMonitoringReport(projectId, id, dto, dto.questions, project));
     },
-    onSave: (projectId, periodId, dto, project, submit) => {
-      dispatch(Actions.saveMonitoringReport(projectId, periodId, dto, dto.questions, project, submit, () => {
+    onSave: (projectId, id, dto, project, submit) => {
+      dispatch(Actions.saveMonitoringReport(projectId, id, dto, dto.questions, project, submit, () => {
         dispatch(Actions.navigateTo(MonitoringReportDashboardRoute.getLink({ projectId })));
       }));
     }
@@ -95,13 +95,13 @@ const MonitoringReportPrepare = containerDefinition.connect({
 
 export const MonitoringReportPrepareRoute = containerDefinition.route({
   routeName: "monitoringReportPrepare",
-  routePath: "/projects/:projectId/monitoring-reports/:periodId/prepare",
-  getParams: (r) => ({ projectId: r.params.projectId, periodId: parseInt(r.params.periodId, 10) }),
+  routePath: "/projects/:projectId/monitoring-reports/:id/prepare",
+  getParams: (r) => ({ projectId: r.params.projectId, id: r.params.id }),
   accessControl: (auth, { projectId }, features) => features.monitoringReports && auth.forProject(projectId).hasRole(Dtos.ProjectRole.MonitoringOfficer),
   getLoadDataActions: (params) => [
     Actions.loadProject(params.projectId),
     Actions.loadMonitoringReportQuestions(),
-    Actions.loadMonitoringReport(params.projectId, params.periodId)
+    Actions.loadMonitoringReport(params.projectId, params.id!)
   ],
   container: MonitoringReportPrepare
 });
@@ -109,7 +109,7 @@ export const MonitoringReportPrepareRoute = containerDefinition.route({
 export const MonitoringReportCreateRoute = containerDefinition.route({
   routeName: "monitoringReportCreate",
   routePath: "/projects/:projectId/monitoring-reports/create",
-  getParams: (r) => ({ projectId: r.params.projectId, periodId: 0 }),
+  getParams: (r) => ({ projectId: r.params.projectId }),
   accessControl: (auth, { projectId }, features) => features.monitoringReports && auth.forProject(projectId).hasRole(Dtos.ProjectRole.MonitoringOfficer),
   getLoadDataActions: (params) => [
     Actions.loadProject(params.projectId),
