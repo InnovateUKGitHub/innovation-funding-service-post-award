@@ -1,15 +1,16 @@
+import * as Selectors from "../../redux/selectors";
 import React from "react";
-import { Pending } from "../../../shared/pending";
 import * as Dtos from "../../../types";
 import { ContainerBase, ReduxContainer } from "../containerBase";
 import * as Actions from "../../redux/actions";
 import * as ACC from "../../components";
-import * as Selectors from "../../redux/selectors";
-import { MonitoringReportPrepareRoute } from "./prepare";
+import { Pending } from "../../../shared/pending";
+import { MonitoringReportCreateRoute, MonitoringReportPrepareRoute } from "./prepare";
 import { MonitoringReportViewRoute } from "./details";
 import { ProjectRole } from "../../../types";
 import { ProjectDashboardRoute } from "@ui/containers";
 import { MonitoringReportStatus } from "@framework/types/constants/monitoringReportStatus";
+import { CreateMonitoringReport } from "@server/features/monitoringReports/createMonitoringReport";
 
 interface Params {
   projectId: string;
@@ -59,9 +60,10 @@ class DashboardComponent extends ContainerBase<Params, Data, Callbacks> {
         pageTitle={<ACC.Projects.Title pageTitle="View project" project={project} />}
         tabs={<ACC.Projects.ProjectNavigation project={project} currentRoute={MonitoringReportDashboardRoute.routeName} partners={partners} />}
       >
+        <ACC.Link route={MonitoringReportCreateRoute.getLink({projectId: this.props.projectId, periodId: 0})} className="govuk-button">Create new</ACC.Link>
         <ACC.Section title={"Open"}>
           {reportSections.open.length ? this.renderTable(project, reportSections.open, "current") : null}
-          {!reportSections.open ? <ACC.Renderers.SimpleString>There are no open reports.</ACC.Renderers.SimpleString> : null}
+          {!reportSections.open.length ? <ACC.Renderers.SimpleString>There are no open reports.</ACC.Renderers.SimpleString> : null}
         </ACC.Section>
         <ACC.Section title={"Archived"}>
           {reportSections.archived.length ? this.renderTable(project, reportSections.archived, "previous") : null}
