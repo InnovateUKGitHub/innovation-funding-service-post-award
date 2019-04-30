@@ -33,8 +33,8 @@ export class GetMonitoringReportById extends QueryBase<MonitoringReportDto> {
       status: mapMonitoringReportStatus(header),
       statusName: header.MonitoringReportStatusName,
       projectId: header.Acc_Project__c,
-      startDate: context.clock.parseRequiredSalesforceDate(header.Acc_PeriodStartDate__c),
-      endDate: context.clock.parseRequiredSalesforceDate(header.Acc_PeriodEndDate__c),
+      startDate: context.clock.parseOptionalSalesforceDate(header.Acc_PeriodStartDate__c),
+      endDate: context.clock.parseOptionalSalesforceDate(header.Acc_PeriodEndDate__c),
       periodId: header.Acc_ProjectPeriodNumber__c,
       questions,
       lastUpdated: context.clock.parseRequiredSalesforceDateTime(header.LastModifiedDate)
@@ -119,11 +119,11 @@ export class GetMonitoringReport extends QueryBase<MonitoringReportDto> {
       status: mapMonitoringReportStatus(header),
       statusName: header.MonitoringReportStatusName,
       projectId: header.Acc_Project__c,
-      startDate: context.clock.parseRequiredSalesforceDate(header.Acc_PeriodStartDate__c),
-      endDate: context.clock.parseRequiredSalesforceDate(header.Acc_PeriodEndDate__c),
+      startDate: context.clock.parseOptionalSalesforceDate(header.Acc_PeriodStartDate__c),
+      endDate: context.clock.parseOptionalSalesforceDate(header.Acc_PeriodEndDate__c),
       periodId: header.Acc_ProjectPeriodNumber__c,
       questions,
-      lastUpdated: context.clock.parseRequiredSalesforceDateTime(header.LastModifiedDate)
+      lastUpdated: context.clock.parseOptionalSalesforceDateTime(header.LastModifiedDate)
     };
   }
 }
