@@ -22,10 +22,10 @@ export class GetMonitoringReportsForProject extends QueryBase<MonitoringReportSu
       title: x.Name,
       status: mapMonitoringReportStatus(x),
       statusName: x.MonitoringReportStatusName,
-      startDate: context.clock.parseRequiredSalesforceDate(x.Acc_PeriodStartDate__c),
-      endDate: context.clock.parseRequiredSalesforceDate(x.Acc_PeriodEndDate__c),
+      startDate: context.clock.parseOptionalSalesforceDate(x.Acc_PeriodStartDate__c),
+      endDate: context.clock.parseOptionalSalesforceDate(x.Acc_PeriodEndDate__c),
       periodId: x.Acc_ProjectPeriodNumber__c,
-      lastUpdated: context.clock.parseRequiredSalesforceDateTime(x.LastModifiedDate)
+      lastUpdated: context.clock.parseOptionalSalesforceDateTime(x.LastModifiedDate)
     }))
     .sort((a, b) => b.periodId - a.periodId);
   }

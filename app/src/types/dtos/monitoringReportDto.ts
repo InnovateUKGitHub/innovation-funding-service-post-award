@@ -26,8 +26,8 @@ export interface MonitoringReportSummaryDto {
   title: string;
   status: MonitoringReportStatus;
   statusName: string;
-  startDate: Date;
-  endDate: Date;
+  startDate: Date|null;
+  endDate: Date|null;
   periodId: number;
   lastUpdated: Date|null;
 }

@@ -33,8 +33,8 @@ export class MonitoringReportCreateFormHandler extends FormHandlerBase<Monitorin
       statusName: "",
       lastUpdated: null,
       // ToDo: remove
-      startDate: new Date(),
-      endDate: new Date(),
+      startDate: null,
+      endDate: null,
     };
   }
 
