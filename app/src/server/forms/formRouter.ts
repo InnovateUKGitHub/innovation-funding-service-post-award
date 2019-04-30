@@ -1,5 +1,5 @@
+import { BadRequestHandler } from "./badRequestHandler";
 import express from "express";
-import { IFormHandler } from "./formHandlerBase";
 import { ClaimForcastFormHandler } from "./claimForcastFormHandler";
 import { EditClaimLineItemsFormHandler } from "./editClaimLineItemsFormHandler";
 import { HomeFormHandler } from "./homeFormHandler";
@@ -7,7 +7,7 @@ import { PrepareClaimFormHandler } from "./prepareClaimFormHandler";
 import { ReviewClaimFormHandler } from "./reviewClaimFormHandler";
 import { ViewForecastFormHandler } from "./viewForecastFormHandler";
 import { UpdateForecastFormHandler } from "./updateForecastFormHandler";
-import { BadRequestHandler } from "./badRequestHandler";
+import { IFormHandler } from "./formHandlerBase";
 import { serverRender } from "../serverRender";
 import { ClaimDashboardDocumentDeleteHandler } from "./claimDashboard/claimDashboardDocumentDeleteHandler";
 import { ClaimDashboardDocumentUploadHandler } from "./claimDashboard/claimDashboardDocumentUploadHandler";
@@ -15,7 +15,8 @@ import { ClaimDetailDocumentDeleteHandler } from "./claimDetailDocument/claimDet
 import { ClaimDetailDocumentUploadHandler } from "./claimDetailDocument/claimDetailDocumentUploadHandler";
 import { ProjectDocumentUploadHandler } from "./projectDocumentFormHandler";
 import { Configuration } from "../features/common";
-import { MonitoringReportFormHandler } from "./saveMonitoringReportFormHandler";
+import { MonitoringReportPrepareFormHandler } from "./monitoringReportPrepareFormHandler";
+import { MonitoringReportCreateFormHandler } from "./monitoringReportCreateFormHandler";
 
 export const formRouter = express.Router();
 
@@ -30,7 +31,8 @@ const handlers: IFormHandler[] = [
   new ClaimDetailDocumentUploadHandler(),
   new ClaimDashboardDocumentDeleteHandler(),
   new ClaimDashboardDocumentUploadHandler(),
-  new MonitoringReportFormHandler(),
+  new MonitoringReportPrepareFormHandler(),
+  new MonitoringReportCreateFormHandler(),
   new ProjectDocumentUploadHandler(),
 ];
 
