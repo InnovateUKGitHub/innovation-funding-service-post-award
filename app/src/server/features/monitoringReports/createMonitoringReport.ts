@@ -20,7 +20,7 @@ export class CreateMonitoringReport extends CommandBase<string> {
   }
 
   protected async Run(context: IContext) {
-    console.log("RUNNING CREATE");
+
     if(this.monitoringReportDto.headerId) {
       throw new BadRequestError("Report has already been created");
     }
@@ -56,7 +56,7 @@ export class CreateMonitoringReport extends CommandBase<string> {
 
     const headerId = await context.repositories.monitoringReportHeader.create(createRequest);
 
-    const insertItems = this.monitoringReportDto.questions.filter(x => !x.responseId && x.optionId).map<Partial<ISalesforceMonitoringReportResponse>>(insertDto => ({
+    const insertItems = this.monitoringReportDto.questions.filter(x => x.optionId).map<Partial<ISalesforceMonitoringReportResponse>>(insertDto => ({
       Acc_MonitoringHeader__c: headerId,
       Acc_Question__c: insertDto.optionId!,
       Acc_QuestionComments__c: insertDto.comments

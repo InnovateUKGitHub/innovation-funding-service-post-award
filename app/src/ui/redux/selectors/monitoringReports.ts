@@ -1,6 +1,6 @@
 import { dataStoreHelper, editorStoreHelper } from "./common";
 import { getKey } from "../../../util/key";
-import { MonitoringReportDto, ProjectDto, MonitoringReportOptionDto, MonitoringReportQuestionDto } from "../../../types";
+import { MonitoringReportDto, MonitoringReportOptionDto, MonitoringReportQuestionDto, ProjectDto } from "../../../types";
 import { MonitoringReportDtoValidator } from "../../validators/MonitoringReportDtoValidator";
 import { Pending } from "../../../shared/pending";
 import { RootState } from "../reducers/rootReducer";
@@ -21,13 +21,13 @@ export const getMonitoringReportEditor = (projectId: string, periodId: number) =
   periodId === 0 ? getKey(projectId, "new") : getKey(projectId, periodId)
 );
 
-const getCreateDto = (projectId: string, questions: MonitoringReportQuestionDto[]) : MonitoringReportDto => {
+const getCreateDto = (projectId: string, questions: MonitoringReportQuestionDto[]): MonitoringReportDto => {
   return {
     status: MonitoringReportStatus.Draft,
     projectId,
     questions,
   } as MonitoringReportDto;
-}
+};
 
 const getInitialValdiator = (projectId: string, monitoringReport: MonitoringReportDto, store: RootState) => {
   const currentPeriod = getProject(projectId).getPending(store).then(x => x && x.periodId).data || 1;

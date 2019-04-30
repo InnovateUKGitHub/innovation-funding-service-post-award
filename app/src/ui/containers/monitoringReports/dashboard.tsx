@@ -1,11 +1,11 @@
+import * as Selectors from "../../redux/selectors";
 import React from "react";
-import { Pending } from "../../../shared/pending";
 import * as Dtos from "../../../types";
 import { ContainerBase, ReduxContainer } from "../containerBase";
 import * as Actions from "../../redux/actions";
 import * as ACC from "../../components";
-import * as Selectors from "../../redux/selectors";
-import { MonitoringReportPrepareRoute, MonitoringReportCreateRoute } from "./prepare";
+import { Pending } from "../../../shared/pending";
+import { MonitoringReportCreateRoute, MonitoringReportPrepareRoute } from "./prepare";
 import { MonitoringReportViewRoute } from "./details";
 import { ProjectRole } from "../../../types";
 import { ProjectDashboardRoute } from "@ui/containers";

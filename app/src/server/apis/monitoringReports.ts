@@ -4,7 +4,7 @@ import { GetMonitoringReport, GetMonitoringReportById } from "../features/monito
 import { SaveMonitoringReport } from "../features/monitoringReports/saveMonitoringReport";
 import { processDto } from "../../shared/processResponse";
 import { GetMonitoringReportsForProject } from "../features/monitoringReports/getMonitoringReportsForProject";
-import { MonitoringReportDto, MonitoringReportSummaryDto, MonitoringReportQuestionDto } from "../../types";
+import { MonitoringReportDto, MonitoringReportQuestionDto, MonitoringReportSummaryDto } from "../../types";
 import { CreateMonitoringReport } from "@server/features/monitoringReports/createMonitoringReport";
 import { GetMonitoringReportActiveQuestions } from "@server/features/monitoringReports/getMonitoringReportActiveQuestions";
 
