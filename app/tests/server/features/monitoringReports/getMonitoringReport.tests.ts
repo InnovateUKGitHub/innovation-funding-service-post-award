@@ -80,8 +80,6 @@ describe("GetMonitoringReport", () => {
     expect(result.projectId).toBe(project.Id);
     expect(result.headerId).toBe(report.Id);
     expect(result.status).toBe(MonitoringReportStatus.AwaitingApproval);
-    expect(result.startDate).toBeDefined();
-    expect(result.endDate).toBeDefined();
   });
 
   it("the answered questions have the response id and option id set", async () => {

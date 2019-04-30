@@ -99,8 +99,8 @@ async function getCreateDto(context: TestContext, project: ISalesforceProject): 
     title: "The test report",
     status: MonitoringReportStatus.Draft,
     statusName: "Draft",
-    startDate: new Date(),
-    endDate: new Date(),
+    startDate: null,
+    endDate: null,
     periodId: 1,
     lastUpdated: null,
     questions
