@@ -22,15 +22,15 @@ interface Data {
   partner: Pending<PartnerDto>;
   costCategories: Pending<CostCategoryDto[]>;
   claim: Pending<ClaimDto>;
-  claimDetailsSummary: Pending<ClaimDetailsSummaryDto[]>;
+  claimDetailsSummary: Pending<CostsSummaryForPeriodDto[]>;
   editor: Pending<IEditorStore<ClaimDto, ClaimDtoValidator>>;
   standardOverheadRate: number;
 }
 
 interface Callbacks {
-  onChange: (partnerId: string, periodId: number, dto: ClaimDto, details: ClaimDetailsSummaryDto[], costCategories: CostCategoryDto[]) => void;
-  saveAndProgress: (projectId: string, partnerId: string, periodId: number, dto: ClaimDto, details: ClaimDetailsSummaryDto[], costCategories: CostCategoryDto[]) => void;
-  saveAndReturn: (projectId: string, partnerId: string, periodId: number, dto: ClaimDto, details: ClaimDetailsSummaryDto[], costCategories: CostCategoryDto[], project: ProjectDto) => void;
+  onChange: (partnerId: string, periodId: number, dto: ClaimDto, details: CostsSummaryForPeriodDto[], costCategories: CostCategoryDto[]) => void;
+  saveAndProgress: (projectId: string, partnerId: string, periodId: number, dto: ClaimDto, details: CostsSummaryForPeriodDto[], costCategories: CostCategoryDto[]) => void;
+  saveAndReturn: (projectId: string, partnerId: string, periodId: number, dto: ClaimDto, details: CostsSummaryForPeriodDto[], costCategories: CostCategoryDto[], project: ProjectDto) => void;
 }
 
 interface CombinedData {
@@ -38,7 +38,7 @@ interface CombinedData {
   partner: PartnerDto;
   costCategories: CostCategoryDto[];
   claim: ClaimDto;
-  claimDetails: ClaimDetailsSummaryDto[];
+  claimDetails: CostsSummaryForPeriodDto[];
   editor: IEditorStore<ClaimDto, ClaimDtoValidator>;
 }
 
@@ -61,15 +61,15 @@ export class PrepareComponent extends ContainerBase<PrepareClaimParams, Data, Ca
     return <ACC.Claims.ClaimPeriodDate claim={data.claim} />;
   }
 
-  private saveAndProgress(dto: ClaimDto, details: ClaimDetailsSummaryDto[], costCategories: CostCategoryDto[]) {
+  private saveAndProgress(dto: ClaimDto, details: CostsSummaryForPeriodDto[], costCategories: CostCategoryDto[]) {
     this.props.saveAndProgress(this.props.projectId, this.props.partnerId, this.props.periodId, dto, details, costCategories);
   }
 
-  private saveAndReturn(dto: ClaimDto, details: ClaimDetailsSummaryDto[], costCategories: CostCategoryDto[], project: ProjectDto) {
+  private saveAndReturn(dto: ClaimDto, details: CostsSummaryForPeriodDto[], costCategories: CostCategoryDto[], project: ProjectDto) {
     this.props.saveAndReturn(this.props.projectId, this.props.partnerId, this.props.periodId, dto, details, costCategories, project);
   }
 
-  private onChange(dto: ClaimDto, details: ClaimDetailsSummaryDto[], costCategories: CostCategoryDto[]) {
+  private onChange(dto: ClaimDto, details: CostsSummaryForPeriodDto[], costCategories: CostCategoryDto[]) {
     this.props.onChange(this.props.partnerId, this.props.periodId, dto, details, costCategories);
   }
 
@@ -133,7 +133,7 @@ export const PrepareClaim = definition.connect({
     partner: Selectors.getPartner(props.partnerId).getPending(state),
     costCategories: Selectors.getCostCategories().getPending(state),
     claim: Selectors.getClaim(props.partnerId, props.periodId).getPending(state),
-    claimDetailsSummary: Selectors.findClaimDetailsSummaryByPartnerAndPeriod(props.partnerId, props.periodId).getPending(state),
+    claimDetailsSummary: Selectors.getCostsSummaryForPeriod(props.partnerId, props.periodId).getPending(state),
     editor: Selectors.getClaimEditor(props.partnerId, props.periodId).get(state),
     standardOverheadRate: state.config.standardOverheadRate,
   }),
@@ -155,7 +155,7 @@ export const PrepareClaimRoute = definition.route({
     Actions.loadPartnersForProject(params.projectId),
     Actions.loadCostCategories(),
     Actions.loadClaim(params.partnerId, params.periodId),
-    Actions.loadClaimDetailsSummaryForPartner(params.projectId, params.partnerId, params.periodId)
+    Actions.loadCostsSummaryForPeriod(params.projectId, params.partnerId, params.periodId)
   ],
   container: PrepareClaim
 });

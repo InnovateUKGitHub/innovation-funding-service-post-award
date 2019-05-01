@@ -22,7 +22,7 @@ interface Data {
   partner: Pending<PartnerDto>;
   costCategories: Pending<CostCategoryDto[]>;
   claim: Pending<ClaimDto>;
-  claimDetailsSummary: Pending<ClaimDetailsSummaryDto[]>;
+  claimDetailsSummary: Pending<CostsSummaryForPeriodDto[]>;
   editor: Pending<IEditorStore<ClaimDto, ClaimDtoValidator>>;
   forecastData: Pending<ForecastData>;
   iarDocument: Pending<DocumentSummaryDto | null>;
@@ -31,8 +31,8 @@ interface Data {
 }
 
 interface Callbacks {
-  onChange: (partnerId: string, periodId: number, dto: ClaimDto, details: ClaimDetailsSummaryDto[], costCategories: CostCategoryDto[]) => void;
-  onSave: (projectId: string, partnerId: string, periodId: number, dto: ClaimDto, details: ClaimDetailsSummaryDto[], costCategories: CostCategoryDto[], message: string) => void;
+  onChange: (partnerId: string, periodId: number, dto: ClaimDto, details: CostsSummaryForPeriodDto[], costCategories: CostCategoryDto[]) => void;
+  onSave: (projectId: string, partnerId: string, periodId: number, dto: ClaimDto, details: CostsSummaryForPeriodDto[], costCategories: CostCategoryDto[], message: string) => void;
 }
 
 interface CombinedData {
@@ -40,7 +40,7 @@ interface CombinedData {
   partner: PartnerDto;
   costCategories: CostCategoryDto[];
   claim: ClaimDto;
-  claimDetails: ClaimDetailsSummaryDto[];
+  claimDetails: CostsSummaryForPeriodDto[];
   iarDocument: DocumentSummaryDto | null;
   editor: IEditorStore<ClaimDto, ClaimDtoValidator>;
 }
@@ -190,7 +190,7 @@ export const ReviewClaim = definition.connect({
       partner: partnerPending,
       costCategories:costCategoriesPending,
       claim: claimPending,
-      claimDetailsSummary: Selectors.findClaimDetailsSummaryByPartnerAndPeriod(props.partnerId, props.periodId).getPending(state),
+      claimDetailsSummary: Selectors.getCostsSummaryForPeriod(props.partnerId, props.periodId).getPending(state),
       editor: Selectors.getClaimEditor(props.partnerId, props.periodId).get(state, (dto) => initEditor(dto)),
       isClient: state.isClient,
       iarDocument: Selectors.getIarDocument(state, props.partnerId, props.periodId),
@@ -225,7 +225,7 @@ export const ReviewClaimRoute = definition.route({
         Actions.loadPartnersForProject(params.projectId),
         Actions.loadCostCategories(),
         Actions.loadClaim(params.partnerId, params.periodId),
-        Actions.loadClaimDetailsSummaryForPartner(params.projectId, params.partnerId, params.periodId),
+        Actions.loadCostsSummaryForPeriod(params.projectId, params.partnerId, params.periodId),
         Actions.loadIarDocuments(params.partnerId, params.periodId),
         ...forecastDataLoadActions(params)
     ],

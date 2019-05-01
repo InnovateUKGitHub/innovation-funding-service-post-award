@@ -23,7 +23,7 @@ export function loadClaim(partnerId: string, periodId: number) {
 }
 
 // update editor with validation
-export function validateClaim(partnerId: string, periodId: number, dto: ClaimDto, details: ClaimDetailsSummaryDto[], costCategories: CostCategoryDto[], showErrors?: boolean): SyncThunk<ClaimDtoValidator, UpdateEditorAction> {
+export function validateClaim(partnerId: string, periodId: number, dto: ClaimDto, details: CostsSummaryForPeriodDto[], costCategories: CostCategoryDto[], showErrors?: boolean): SyncThunk<ClaimDtoValidator, UpdateEditorAction> {
   return (dispatch, getState) => {
     const selector = getClaimEditor(partnerId, periodId);
     const state = getState();
@@ -43,7 +43,7 @@ export function saveClaim(
   partnerId: string,
   periodId: number,
   claim: ClaimDto,
-  details: ClaimDetailsSummaryDto[],
+  details: CostsSummaryForPeriodDto[],
   costCategories: CostCategoryDto[],
   onComplete: () => void,
   message?: string

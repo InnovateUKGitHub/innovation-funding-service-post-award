@@ -8,7 +8,7 @@ const COMMENTS_LENGTH_MAX = 1000;
 export class ClaimDtoValidator extends Results<ClaimDto>  {
     constructor(
       dto: ClaimDto,
-      private readonly details: ClaimDetailsSummaryDto[],
+      private readonly details: CostsSummaryForPeriodDto[],
       private readonly costCategories: CostCategoryDto[],
       readonly showErrors: boolean
     ) {
@@ -28,14 +28,14 @@ export class ClaimDtoValidator extends Results<ClaimDto>  {
     public claimDetails = Validation.optionalChild(
       this,
       this.details,
-      (item) => new ClaimDetailsValidator(item, this.costCategories.find(x => x.id === item.costCategoryId), this.showValidationErrors),
+      (item) => new CostsSummaryForPeriodValidator(item, this.costCategories.find(x => x.id === item.costCategoryId), this.showValidationErrors),
       "Your costs for this period are more than your remaining grant offer letter costs in at least one cost category. You must remove some costs before you can submit this claim."
     );
 }
 
-export class ClaimDetailsValidator extends Results<ClaimDetailsSummaryDto> {
+export class CostsSummaryForPeriodValidator extends Results<CostsSummaryForPeriodDto> {
     constructor(
-      readonly model: ClaimDetailsSummaryDto,
+      readonly model: CostsSummaryForPeriodDto,
       private readonly costCategory: CostCategoryDto | null | undefined,
       readonly show: boolean
     ) {

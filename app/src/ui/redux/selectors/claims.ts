@@ -27,7 +27,7 @@ export const getClaimEditor = (partnerId: string, periodId: number) => editorSto
 const createClaimEditorDto = (partnerId: string, periodId: number, store: RootState) => getClaim(partnerId, periodId).getPending(store);
 
 const createClaimValidator = (partnerId: string, periodId: number, claim: ClaimDto, store: RootState) => {
-  const details = findClaimDetailsSummaryByPartnerAndPeriod(partnerId, periodId).getPending(store).data || [];
+  const details = getCostsSummaryForPeriod(partnerId, periodId).getPending(store).data || [];
   const costCategories = getCostCategories().getPending(store).data || [];
   return new ClaimDtoValidator(claim, details, costCategories, false);
 };
@@ -68,8 +68,7 @@ const createClaimLineItemEditorDto = (partnerId: string, periodId: number, costC
 export const claimDetailsStore = "claimDetails";
 export const findClaimDetailsByPartner = (partnerId: string) => dataStoreHelper(claimDetailsStore, `partnerId=${partnerId}`);
 
-export const claimDetailsSummaryStore = "claimDetailsSummary";
-export const findClaimDetailsSummaryByPartnerAndPeriod = (partnerId: string, periodId: number) => dataStoreHelper(claimDetailsSummaryStore, `partnerId=${partnerId}&periodId=${periodId}`);
+export const getCostsSummaryForPeriod = (partnerId: string, periodId: number) => dataStoreHelper("costsSummary", `partnerId=${partnerId}&periodId=${periodId}`);
 
 export const getCurrentClaim = (state: RootState, partnerId: string): Pending<ClaimDto | null> => {
   return findClaimsByPartner(partnerId)
