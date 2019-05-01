@@ -2,7 +2,7 @@ import { QueryBase } from "@server/features/common";
 import { GetCostCategoriesQuery } from "@server/features/claims";
 import { Authorisation, IContext, ProjectRole } from "@framework/types";
 
-export class GetClaimDetailsSummaryForPartnerQuery extends QueryBase<ClaimDetailsSummaryDto[]> {
+export class GetCostSummaryForPeriodQuery extends QueryBase<CostsSummaryForPeriodDto[]> {
     constructor(
       private readonly projectId: string,
       private readonly partnerId: string,
