@@ -22,7 +22,7 @@ interface Data {
   partner: Pending<PartnerDto>;
   costCategories: Pending<CostCategoryDto[]>;
   claim: Pending<ClaimDto>;
-  claimDetailsSummary: Pending<CostsSummaryForPeriodDto[]>;
+  costsSummaryForPeriod: Pending<CostsSummaryForPeriodDto[]>;
   editor: Pending<IEditorStore<ClaimDto, ClaimDtoValidator>>;
   standardOverheadRate: number;
 }
@@ -50,7 +50,7 @@ export class PrepareComponent extends ContainerBase<PrepareClaimParams, Data, Ca
       partner: this.props.partner,
       costCategories: this.props.costCategories,
       claim: this.props.claim,
-      claimDetails: this.props.claimDetailsSummary,
+      claimDetails: this.props.costsSummaryForPeriod,
       editor: this.props.editor,
     });
 
@@ -133,7 +133,7 @@ export const PrepareClaim = definition.connect({
     partner: Selectors.getPartner(props.partnerId).getPending(state),
     costCategories: Selectors.getCostCategories().getPending(state),
     claim: Selectors.getClaim(props.partnerId, props.periodId).getPending(state),
-    claimDetailsSummary: Selectors.getCostsSummaryForPeriod(props.partnerId, props.periodId).getPending(state),
+    costsSummaryForPeriod: Selectors.getCostsSummaryForPeriod(props.partnerId, props.periodId).getPending(state),
     editor: Selectors.getClaimEditor(props.partnerId, props.periodId).get(state),
     standardOverheadRate: state.config.standardOverheadRate,
   }),

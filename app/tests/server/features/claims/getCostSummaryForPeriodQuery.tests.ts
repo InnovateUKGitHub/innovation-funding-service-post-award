@@ -1,5 +1,5 @@
 import { TestContext } from "../../testContextProvider";
-import { GetCostSummaryForPeriodQuery } from "../../../../src/server/features/claimDetails";
+import { GetCostsSummaryForPeriodQuery } from "@server/features/claimDetails";
 import { Authorisation, ProjectRole } from "@framework/types";
 
 // tslint:disable-next-line:no-big-function
@@ -16,7 +16,7 @@ describe("GetCostSummaryForPeriodQuery", () => {
       context.testData.createClaimDetail(project, x, partner, 1);
     });
 
-    const query = new GetCostSummaryForPeriodQuery(project.Id, partner.Id, 1);
+    const query = new GetCostsSummaryForPeriodQuery(project.Id, partner.Id, 1);
 
     const result = await context.runQuery(query);
 
@@ -39,7 +39,7 @@ describe("GetCostSummaryForPeriodQuery", () => {
       context.testData.createClaimDetail(project, x, partner, 1);
     });
 
-    const query = new GetCostSummaryForPeriodQuery(project.Id, partner.Id, 1);
+    const query = new GetCostsSummaryForPeriodQuery(project.Id, partner.Id, 1);
 
     const result = await context.runQuery(query);
 
@@ -59,7 +59,7 @@ describe("GetCostSummaryForPeriodQuery", () => {
       context.testData.createClaimDetail(project, x, partner, 1);
     });
 
-    const query = new GetCostSummaryForPeriodQuery(project.Id, partner.Id, 1);
+    const query = new GetCostsSummaryForPeriodQuery(project.Id, partner.Id, 1);
 
     const result = await context.runQuery(query);
 
@@ -79,7 +79,7 @@ describe("GetCostSummaryForPeriodQuery", () => {
 
     context.testData.createClaimDetail(project, costCategory, partner, periodId, x => x.Acc_PeriodCostCategoryTotal__c = expectedCost);
 
-    const query = new GetCostSummaryForPeriodQuery(project.Id, partner.Id, periodId);
+    const query = new GetCostsSummaryForPeriodQuery(project.Id, partner.Id, periodId);
 
     const result = await context.runQuery(query);
 
@@ -105,7 +105,7 @@ describe("GetCostSummaryForPeriodQuery", () => {
     context.testData.createClaimDetail(project, costCategory1, partner, periodId, x => x.Acc_PeriodCostCategoryTotal__c = expectedCost1);
     context.testData.createClaimDetail(project, costCategory2, partner, periodId, x => x.Acc_PeriodCostCategoryTotal__c = expectedCost2);
 
-    const query = new GetCostSummaryForPeriodQuery(project.Id, partner.Id, periodId);
+    const query = new GetCostsSummaryForPeriodQuery(project.Id, partner.Id, periodId);
 
     const result = await context.runQuery(query);
 
@@ -128,7 +128,7 @@ describe("GetCostSummaryForPeriodQuery", () => {
     context.testData.createProfileTotalCostCategory(costCategory,partner, value);
     context.testData.createClaimDetail(project, costCategory, partner, periodId);
 
-    const query = new GetCostSummaryForPeriodQuery(project.Id, partner.Id, periodId);
+    const query = new GetCostsSummaryForPeriodQuery(project.Id, partner.Id, periodId);
     const result = await context.runQuery(query);
 
     expect(result[0].offerCosts).toBe(value);
@@ -143,7 +143,7 @@ describe("GetCostSummaryForPeriodQuery", () => {
 
     context.testData.createClaimDetail(project, costCategory, partner, periodId,x => x.Acc_PeriodCostCategoryTotal__c = null!);
 
-    const query = new GetCostSummaryForPeriodQuery(project.Id, partner.Id, periodId);
+    const query = new GetCostsSummaryForPeriodQuery(project.Id, partner.Id, periodId);
     const result = await context.runQuery(query);
 
     expect(result[0].costsClaimedToDate).toBe(0);
@@ -160,7 +160,7 @@ describe("GetCostSummaryForPeriodQuery", () => {
     context.testData.createClaimDetail(project, costCategory, partner, periodId1, x => x.Acc_PeriodCostCategoryTotal__c = 1234);
     context.testData.createClaimDetail(project, costCategory, partner, periodId2, x => x.Acc_PeriodCostCategoryTotal__c = 3456);
 
-    const query = new GetCostSummaryForPeriodQuery(project.Id, partner.Id, periodId2);
+    const query = new GetCostsSummaryForPeriodQuery(project.Id, partner.Id, periodId2);
     const result = await context.runQuery(query);
 
     expect(result[0].costsClaimedToDate).toBe(1234);
@@ -172,7 +172,7 @@ describe("GetCostSummaryForPeriodQuery", () => {
     const partner = context.testData.createPartner();
     const periodId = 1;
 
-    const query = new GetCostSummaryForPeriodQuery(project.Id, partner.Id, periodId);
+    const query = new GetCostsSummaryForPeriodQuery(project.Id, partner.Id, periodId);
     const auth     = new Authorisation({
       [project.Id]: {
         projectRoles: ProjectRole.Unknown,
@@ -188,7 +188,7 @@ describe("GetCostSummaryForPeriodQuery", () => {
     const project  = context.testData.createProject();
     const partner = context.testData.createPartner();
     const periodId = 1;
-    const query = new GetCostSummaryForPeriodQuery(project.Id, partner.Id, periodId);
+    const query = new GetCostsSummaryForPeriodQuery(project.Id, partner.Id, periodId);
     const auth     = new Authorisation({
       [project.Id]: {
         projectRoles: ProjectRole.ProjectManager,
@@ -205,7 +205,7 @@ describe("GetCostSummaryForPeriodQuery", () => {
     const partner = context.testData.createPartner();
     const periodId = 1;
 
-    const query = new GetCostSummaryForPeriodQuery(project.Id, partner.Id, periodId);
+    const query = new GetCostsSummaryForPeriodQuery(project.Id, partner.Id, periodId);
     const auth     = new Authorisation({
       [project.Id]: {
         projectRoles: ProjectRole.MonitoringOfficer,
@@ -222,7 +222,7 @@ describe("GetCostSummaryForPeriodQuery", () => {
     const partner = context.testData.createPartner();
     const periodId = 1;
 
-    const query = new GetCostSummaryForPeriodQuery(project.Id, partner.Id, periodId);
+    const query = new GetCostsSummaryForPeriodQuery(project.Id, partner.Id, periodId);
     const auth     = new Authorisation({
       [project.Id]: {
         projectRoles: ProjectRole.Unknown,
@@ -239,7 +239,7 @@ describe("GetCostSummaryForPeriodQuery", () => {
     const partner = context.testData.createPartner();
     const periodId = 1;
 
-    const query = new GetCostSummaryForPeriodQuery(project.Id, partner.Id, periodId);
+    const query = new GetCostsSummaryForPeriodQuery(project.Id, partner.Id, periodId);
     const auth     = new Authorisation({
       [project.Id]: {
         projectRoles: ProjectRole.FinancialContact,

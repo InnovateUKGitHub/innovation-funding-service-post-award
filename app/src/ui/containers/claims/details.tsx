@@ -29,7 +29,7 @@ interface Data {
   partner: Pending<PartnerDto>;
   costCategories: Pending<CostCategoryDto[]>;
   claim: Pending<ClaimDto>;
-  claimDetailsSummary: Pending<CostsSummaryForPeriodDto[]>;
+  costsSummaryForPeriod: Pending<CostsSummaryForPeriodDto[]>;
   iarDocument: Pending<DocumentSummaryDto | null>;
   standardOverheadRate: number;
   forecastData: Pending<ForecastData> | null;
@@ -52,7 +52,7 @@ export class ClaimsDetailsComponent extends ContainerBase<Params, Data, {}> {
       partner: this.props.partner,
       costCategories: this.props.costCategories,
       claim: this.props.claim,
-      claimDetails: this.props.claimDetailsSummary,
+      claimDetails: this.props.costsSummaryForPeriod,
       iarDocument: this.props.iarDocument
     });
 
@@ -159,7 +159,7 @@ export const ClaimsDetails = definition.connect({
       partner: Selectors.getPartner(props.partnerId).getPending(state),
       costCategories: Selectors.getCostCategories().getPending(state),
       claim: Selectors.getClaim(props.partnerId, props.periodId).getPending(state),
-      claimDetailsSummary: Selectors.getCostsSummaryForPeriod(props.partnerId, props.periodId).getPending(state),
+      costsSummaryForPeriod: Selectors.getCostsSummaryForPeriod(props.partnerId, props.periodId).getPending(state),
       iarDocument: Selectors.getIarDocument(state, props.partnerId, props.periodId),
       standardOverheadRate: state.config.standardOverheadRate,
       forecastData: isMoOrPM && !isFC ? Pending.combine({

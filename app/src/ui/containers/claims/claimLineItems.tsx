@@ -21,7 +21,6 @@ interface Params {
 interface Data {
   project: Pending<ProjectDto>;
   partner: Pending<PartnerDto>;
-  lineItems: Pending<ClaimLineItemDto[]>;
   claimDetails: Pending<ClaimDetailsDto>;
   costCategories: Pending<CostCategoryDto[]>;
   forecastDetail: Pending<ForecastDetailsDTO>;
@@ -33,7 +32,6 @@ interface Data {
 interface CombinedData {
   project: ProjectDto;
   partner: PartnerDto;
-  lineItems: ClaimLineItemDto[];
   claimDetails: ClaimDetailsDto;
   costCategories: CostCategoryDto[];
   forecastDetail: ForecastDetailsDTO;
@@ -46,7 +44,6 @@ export class ClaimLineItemsComponent extends ContainerBase<Params, Data, {}> {
     const combined = Pending.combine({
       project: this.props.project,
       partner: this.props.partner,
-      lineItems: this.props.lineItems,
       claimDetails: this.props.claimDetails,
       costCategories: this.props.costCategories,
       forecastDetail: this.props.forecastDetail,
@@ -57,7 +54,7 @@ export class ClaimLineItemsComponent extends ContainerBase<Params, Data, {}> {
     return <ACC.PageLoader pending={combined} render={(data) => this.renderContents(data)} />;
   }
 
-  private renderContents({ project, partner, lineItems, claimDetails, costCategories, forecastDetail, documents, claim }: CombinedData) {
+  private renderContents({ project, partner, claimDetails, costCategories, forecastDetail, documents, claim }: CombinedData) {
     const params: Params = {
       partnerId : this.props.partnerId,
       costCategoryId: this.props.costCategoryId,
@@ -73,7 +70,7 @@ export class ClaimLineItemsComponent extends ContainerBase<Params, Data, {}> {
         pageTitle={<ACC.Projects.Title pageTitle={`${costCategories.find(x => x.id === this.props.costCategoryId)!.name}`} project={project} />}
       >
         <ACC.Section>
-          <ClaimLineItemsTable lineItems={lineItems} forecastDetail={forecastDetail} />
+          <ClaimLineItemsTable lineItems={claimDetails.lineItems} forecastDetail={forecastDetail} />
         </ACC.Section>
         <ACC.Section title="Supporting documents" subtitle={documents.length > 0 ? "(Documents open in a new window)" : ""} qa="supporting-documents-section">
           {this.renderDocumentList(documents)}
@@ -203,7 +200,6 @@ export const ClaimLineItems = definition.connect({
   withData: (state, props) => ({
     project: Selectors.getProject(props.projectId).getPending(state),
     partner: Selectors.getPartner(props.partnerId).getPending(state),
-    lineItems: Selectors.findClaimLineItemsByPartnerCostCategoryAndPeriod(props.partnerId, props.costCategoryId, props.periodId).getPending(state),
     claimDetails: Selectors.getClaimDetails(props.partnerId, props.periodId, props.costCategoryId).getPending(state),
     costCategories: Selectors.getCostCategories().getPending(state),
     forecastDetail: Selectors.getForecastDetail(props.partnerId, props.periodId, props.costCategoryId).getPending(state),
@@ -226,10 +222,9 @@ const getLoadDataActions = (params: Params): Actions.AsyncThunk<any>[] => [
   Actions.loadPartner(params.partnerId),
   Actions.loadCostCategories(),
   Actions.loadForecastDetail(params.partnerId, params.periodId, params.costCategoryId),
-  Actions.loadClaimLineItemsForCategory(params.projectId, params.partnerId, params.costCategoryId, params.periodId),
+  Actions.loadClaimDetails(params.projectId, params.partnerId, params.periodId, params.costCategoryId),
   Actions.loadClaimDetailDocuments(params.projectId, params.partnerId, params.periodId, params.costCategoryId),
   Actions.loadClaim(params.partnerId, params.periodId),
-  Actions.loadClaimDetails(params.projectId, params.partnerId, params.periodId, params.costCategoryId),
 ];
 
 export const ClaimLineItemsRoute = definition.route({

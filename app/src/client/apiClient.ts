@@ -2,10 +2,6 @@ import { IApiClient } from "../server/apis";
 import { processResponse } from "../shared/processResponse";
 
 const clientApi: IApiClient = {
-  claimLineItems: {
-    getAllForCategory: (params) => ajaxJson(`/api/claim-line-items/?projectId=${params.projectId}&partnerId=${params.partnerId}&periodId=${params.periodId}&costCategoryId=${params.costCategoryId}`),
-    saveLineItems: (params) => ajaxPut(`/api/claim-line-items/?projectId=${params.projectId}&partnerId=${params.partnerId}&periodId=${params.periodId}&costCategoryId=${params.costCategoryId}`, params.claimLineItemsFormData)
-  },
   claims : {
     getAllByProjectId: (params) => ajaxJson(`/api/claims/?projectId=${params.projectId}`),
     getAllByPartnerId: (params) => ajaxJson(`/api/claims/?partnerId=${params.partnerId}`),
@@ -17,6 +13,7 @@ const clientApi: IApiClient = {
   },
   claimDetails: {
     get: (params) => ajaxJson(`/api/claim-details/${params.projectId}/${params.partnerId}/${params.periodId}/${params.costCategoryId}`),
+    saveClaimDetails: (params) => ajaxPut(`/api/claim-details/${params.projectId}/${params.partnerId}/${params.periodId}/${params.costCategoryId}`, params.claimDetails),
     getAllByPartner: (params) => ajaxJson(`/api/claim-details/?partnerId=${params.partnerId}`)
   },
   costCategories: {

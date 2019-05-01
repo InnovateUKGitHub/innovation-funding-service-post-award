@@ -1,34 +1,28 @@
 import { TestContext } from "../../testContextProvider";
-import mapClaimLineItem from "@server/features/claimLineItems/mapClaimLineItem";
 import { ValidationError } from "@server/features/common/appError";
 import * as Repositories from "@server/repositories";
 import { Authorisation, ProjectRole } from "@framework/types";
-import { SaveLineItemsFormDataCommand } from "@server/features/claimLineItems/saveLineItemsFormDataCommand";
-import { ClaimLineItemsFormData } from "@framework/types/dtos/claimLineItemsFormData";
 import { mapClaimDetails } from "@server/features/claimDetails/mapClaimDetails";
+import { SaveClaimDetails } from "@server/features/claimDetails/saveClaimDetailsCommand";
+import mapClaimLineItem from "@server/features/claimDetails/mapClaimLineItem";
 
 // tslint:disable-next-line:no-big-function
-describe("SaveLineItemsFormDataCommand", () => {
+describe("SaveClaimDetails", () => {
 
   it("should save the comments field", async () => {
     const context = new TestContext();
     const {testData} = context;
 
-    const sfLineItem = testData.createClaimLineItem({persist: false});
-    const lineItem = mapClaimLineItem()(sfLineItem as Repositories.ISalesforceClaimLineItem);
-
+    const sfLineItem = testData.createClaimLineItem({persist: false}) as Repositories.ISalesforceClaimLineItem;
     const sfClaimDetails = testData.createClaimDetail();
-    const claimDetails = mapClaimDetails(sfClaimDetails, context);
+    const claimDetails = mapClaimDetails(sfClaimDetails, [sfLineItem], context);
 
     const dto = {
-      lineItems: [lineItem],
-      claimDetails: {
-        ...claimDetails,
-        comments: "this is a comment"
-      }
+      ...claimDetails,
+      comments: "this is a comment"
     };
 
-    const command = new SaveLineItemsFormDataCommand("", lineItem.partnerId, lineItem.costCategoryId, lineItem.periodId, dto);
+    const command = new SaveClaimDetails("Project1", "Partner1", dto.periodId, dto.costCategoryId, dto);
     await context.runCommand(command);
 
     expect(context.repositories.claimDetails.Items).toHaveLength(1);
@@ -48,15 +42,13 @@ describe("SaveLineItemsFormDataCommand", () => {
     expect(context.repositories.claimLineItems.Items).toHaveLength(0);
     const lineItem = mapClaimLineItem()(claimLineItem as Repositories.ISalesforceClaimLineItem);
     const claimDetails = testData.createClaimDetail();
-    const dto: ClaimLineItemsFormData = {
+    const dto: ClaimDetailsDto = {
       lineItems: [lineItem],
-      claimDetails: {
-        id: claimDetails.Id,
-        comments: claimDetails.Acc_ReasonForDifference__c
-      } as ClaimDetailsDto
-    };
+      id: claimDetails.Id,
+      comments: claimDetails.Acc_ReasonForDifference__c
+    } as ClaimDetailsDto;
 
-    const command = new SaveLineItemsFormDataCommand("", lineItem.partnerId, lineItem.costCategoryId, lineItem.periodId, dto);
+    const command = new SaveClaimDetails(claimDetails.Acc_ProjectParticipant__r.Acc_ProjectId__c, lineItem.partnerId, dto.periodId, dto.costCategoryId, dto);
     await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
     expect(context.repositories.claimLineItems.Items).toHaveLength(0);
   });
@@ -73,15 +65,13 @@ describe("SaveLineItemsFormDataCommand", () => {
     expect(context.repositories.claimLineItems.Items).toHaveLength(0);
     const lineItem = mapClaimLineItem()(claimLineItem as Repositories.ISalesforceClaimLineItem);
     const claimDetails = testData.createClaimDetail();
-    const dto: ClaimLineItemsFormData = {
+    const dto: ClaimDetailsDto = {
       lineItems: [lineItem],
-      claimDetails: {
-        id: claimDetails.Id,
-        comments: claimDetails.Acc_ReasonForDifference__c
-      } as ClaimDetailsDto
-    };
+      id: claimDetails.Id,
+      comments: claimDetails.Acc_ReasonForDifference__c
+    } as ClaimDetailsDto;
 
-    const command = new SaveLineItemsFormDataCommand("", lineItem.partnerId, lineItem.costCategoryId, lineItem.periodId, dto);
+    const command = new SaveClaimDetails(claimDetails.Acc_ProjectParticipant__r.Acc_ProjectId__c, lineItem.partnerId, dto.periodId, dto.costCategoryId, dto);
     await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
     expect(context.repositories.claimLineItems.Items).toHaveLength(0);
   });
@@ -90,16 +80,17 @@ describe("SaveLineItemsFormDataCommand", () => {
     const context = new TestContext();
     const {testData} = context;
 
+    const claimDetails = testData.createClaimDetail();
     const claimLineItem = testData.createClaimLineItem({persist: false});
     expect(context.repositories.claimLineItems.Items).toHaveLength(0);
     const lineItem = mapClaimLineItem()(claimLineItem as Repositories.ISalesforceClaimLineItem);
 
-    const dto: ClaimLineItemsFormData = {
-      lineItems: [lineItem],
-      claimDetails: {} as ClaimDetailsDto
-    };
+    const dto: ClaimDetailsDto = {
+      id: claimDetails.Id,
+      lineItems: [lineItem]
+    } as ClaimDetailsDto;
 
-    const command = new SaveLineItemsFormDataCommand("", lineItem.partnerId, lineItem.costCategoryId, lineItem.periodId, dto);
+    const command = new SaveClaimDetails(claimDetails.Acc_ProjectParticipant__r.Acc_ProjectId__c, lineItem.partnerId, dto.periodId, dto.costCategoryId, dto);
     await context.runCommand(command);
 
     expect(context.repositories.claimLineItems.Items).toHaveLength(1);
@@ -112,12 +103,11 @@ describe("SaveLineItemsFormDataCommand", () => {
 
     const claimLineItem = testData.createClaimLineItem({persist: false});
     const lineItem = mapClaimLineItem()(claimLineItem as Repositories.ISalesforceClaimLineItem);
-    const dto: ClaimLineItemsFormData = {
-      lineItems: [lineItem],
-      claimDetails: {} as ClaimDetailsDto
-    };
+    const dto: ClaimDetailsDto = {
+      lineItems: [lineItem]
+    } as ClaimDetailsDto;
 
-    const command = new SaveLineItemsFormDataCommand("", lineItem.partnerId, lineItem.costCategoryId, lineItem.periodId, dto);
+    const command = new SaveClaimDetails("", lineItem.partnerId, dto.periodId, dto.costCategoryId, dto);
     expect(context.repositories.claimLineItems.Items).toHaveLength(0);
     await context.runCommand(command);
 
@@ -125,7 +115,7 @@ describe("SaveLineItemsFormDataCommand", () => {
     expect(context.repositories.claimLineItems.Items[0]).toEqual(expect.objectContaining(claimLineItem));
     const id = context.repositories.claimLineItems.Items[0].Id;
 
-    const update: ClaimLineItemsFormData = {
+    const update: ClaimDetailsDto = {
       ...dto,
       lineItems: [{
         ...lineItem,
@@ -135,7 +125,7 @@ describe("SaveLineItemsFormDataCommand", () => {
       }]
     };
 
-    const command2 = new SaveLineItemsFormDataCommand("", lineItem.partnerId, lineItem.costCategoryId, lineItem.periodId, update);
+    const command2 = new SaveClaimDetails("", lineItem.partnerId, dto.periodId, dto.costCategoryId, update);
     await context.runCommand(command2);
 
     expect(context.repositories.claimLineItems.Items).toHaveLength(1);
@@ -152,26 +142,26 @@ describe("SaveLineItemsFormDataCommand", () => {
     const context = new TestContext();
     const {testData} = context;
 
+    const project = testData.createProject();
     const partner = testData.createPartner();
     const costCategory = testData.createCostCategory();
-    const claimLineItem1 = testData.createClaimLineItem({partner, costCategory, persist: false});
-    const claimLineItem2 = testData.createClaimLineItem({
-      periodId: claimLineItem1.Acc_ProjectPeriodNumber__c,
-      partner,
-      costCategory,
-      persist: false
-    });
+    const periodId = 1;
+    const claimDetail = testData.createClaimDetail(project, costCategory, partner, periodId);
+
+    const claimLineItem1 = testData.createClaimLineItem({periodId, partner, costCategory, persist: false});
+    const claimLineItem2 = testData.createClaimLineItem({periodId, partner, costCategory, persist: false });
+
     expect(context.repositories.claimLineItems.Items).toHaveLength(0);
 
     const lineItem1 = mapClaimLineItem()(claimLineItem1 as Repositories.ISalesforceClaimLineItem);
     const lineItem2 = mapClaimLineItem()(claimLineItem2 as Repositories.ISalesforceClaimLineItem);
 
-    const dto: ClaimLineItemsFormData = {
-      lineItems: [lineItem1, lineItem2],
-      claimDetails: {} as ClaimDetailsDto
-    };
+    const dto: ClaimDetailsDto = {
+      id: claimDetail.Id,
+      lineItems: [lineItem1, lineItem2]
+    } as ClaimDetailsDto;
 
-    const command = new SaveLineItemsFormDataCommand("", partner.Id, costCategory.Id, lineItem1.periodId, dto);
+    const command = new SaveClaimDetails(project.Id, partner.Id, periodId, costCategory.Id, dto);
     await context.runCommand(command);
 
     expect(context.repositories.claimLineItems.Items).toHaveLength(2);
@@ -186,7 +176,7 @@ describe("SaveLineItemsFormDataCommand", () => {
         id: id1
       }]
     };
-    const command2 = new SaveLineItemsFormDataCommand("", lineItem1.partnerId, lineItem1.costCategoryId, lineItem1.periodId, update);
+    const command2 = new SaveClaimDetails(project.Id, partner.Id, periodId, costCategory.Id, update);
     await context.runCommand(command2);
     expect(context.repositories.claimLineItems.Items).toHaveLength(1);
     expect(context.repositories.claimLineItems.Items[0]).toEqual({
@@ -201,16 +191,10 @@ describe("SaveLineItemsFormDataCommand", () => {
     const project = context.testData.createProject();
     const partner = context.testData.createPartner();
     const claimDetail = context.testData.createClaimDetail(project, undefined, partner, 1, x => x.Acc_ReasonForDifference__c = "An old message" );
-    const claimDetails = mapClaimDetails(claimDetail, context);
-
+    const claimDetails = mapClaimDetails(claimDetail, [],context);
     claimDetails.comments = "A new message";
 
-    const dto = {
-      claimDetails,
-      lineItems: []
-    };
-
-    const command = new SaveLineItemsFormDataCommand("", partner.Id, claimDetail.Acc_CostCategory__c, 1, dto);
+    const command = new SaveClaimDetails("", partner.Id, 1, claimDetail.Acc_CostCategory__c, claimDetails);
     await context.runCommand(command);
 
     expect(claimDetail.Acc_ReasonForDifference__c).toBe("A new message");
@@ -221,16 +205,11 @@ describe("SaveLineItemsFormDataCommand", () => {
     const project = context.testData.createProject();
     const partner = context.testData.createPartner();
     const claimDetail = context.testData.createClaimDetail(project, undefined, partner, undefined, x => x.Acc_ReasonForDifference__c = "An old message" );
-    const claimDetails = mapClaimDetails(claimDetail, context);
+    const claimDetails = mapClaimDetails(claimDetail, [],context);
 
     claimDetails.comments = null;
 
-    const dto = {
-      claimDetails,
-      lineItems: []
-    };
-
-    const command = new SaveLineItemsFormDataCommand("", partner.Id, claimDetail.Acc_CostCategory__c, 1, dto);
+    const command = new SaveClaimDetails("", partner.Id, 1,claimDetail.Acc_CostCategory__c, claimDetails);
     await context.runCommand(command);
 
     expect(claimDetail.Acc_ReasonForDifference__c).toBe(null);
@@ -242,7 +221,7 @@ describe("accessControl", () => {
     const context = new TestContext();
     const project = context.testData.createProject();
     const partner = context.testData.createPartner();
-    const command = new SaveLineItemsFormDataCommand(project.Id, partner.Id, "", 1, {} as ClaimLineItemsFormData);
+    const command = new SaveClaimDetails(project.Id, partner.Id, 1, "", {} as ClaimDetailsDto);
     const auth    = new Authorisation({
       [project.Id]: {
         projectRoles: ProjectRole.Unknown,
@@ -257,7 +236,7 @@ describe("accessControl", () => {
     const context = new TestContext();
     const project = context.testData.createProject();
     const partner = context.testData.createPartner();
-    const command = new SaveLineItemsFormDataCommand(project.Id, partner.Id, "", 1, {} as ClaimLineItemsFormData);
+    const command = new SaveClaimDetails(project.Id, partner.Id, 1, "",  {} as ClaimDetailsDto);
     const auth    = new Authorisation({
       [project.Id]: {
         projectRoles: ProjectRole.FinancialContact | ProjectRole.MonitoringOfficer | ProjectRole.ProjectManager,
