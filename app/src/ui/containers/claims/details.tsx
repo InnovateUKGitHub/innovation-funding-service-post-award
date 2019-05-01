@@ -23,7 +23,7 @@ interface Data {
   partner: Pending<PartnerDto>;
   costCategories: Pending<CostCategoryDto[]>;
   claim: Pending<ClaimDto>;
-  claimDetailsSummary: Pending<ClaimDetailsSummaryDto[]>;
+  claimDetailsSummary: Pending<CostsSummaryForPeriodDto[]>;
   iarDocument: Pending<DocumentSummaryDto | null>;
   standardOverheadRate: number;
   forecastData: Pending<ForecastData> | null;
@@ -34,7 +34,7 @@ interface CombinedData {
   partner: PartnerDto;
   costCategories: CostCategoryDto[];
   claim: ClaimDto;
-  claimDetails: ClaimDetailsSummaryDto[];
+  claimDetails: CostsSummaryForPeriodDto[];
   iarDocument: DocumentSummaryDto | null;
 }
 
@@ -153,7 +153,7 @@ export const ClaimsDetails = definition.connect({
       partner: Selectors.getPartner(props.partnerId).getPending(state),
       costCategories: Selectors.getCostCategories().getPending(state),
       claim: Selectors.getClaim(props.partnerId, props.periodId).getPending(state),
-      claimDetailsSummary: Selectors.findClaimDetailsSummaryByPartnerAndPeriod(props.partnerId, props.periodId).getPending(state),
+      claimDetailsSummary: Selectors.getCostsSummaryForPeriod(props.partnerId, props.periodId).getPending(state),
       iarDocument: Selectors.getIarDocument(state, props.partnerId, props.periodId),
       standardOverheadRate: state.config.standardOverheadRate,
       forecastData: isMoOrPM && !isFC ? Pending.combine({
@@ -185,7 +185,7 @@ export const ClaimsDetailsRoute = definition.route({
       Actions.loadPartner(params.partnerId),
       Actions.loadCostCategories(),
       Actions.loadClaim(params.partnerId, params.periodId),
-      Actions.loadClaimDetailsSummaryForPartner(params.projectId, params.partnerId, params.periodId),
+      Actions.loadCostsSummaryForPeriod(params.projectId, params.partnerId, params.periodId),
       Actions.loadIarDocuments(params.partnerId, params.periodId)
     ];
 

@@ -1,4 +1,4 @@
-interface ClaimDetailsSummaryDto {
+interface CostsSummaryForPeriodDto {
     costCategoryId: string;
     offerCosts: number;
     costsClaimedToDate: number;

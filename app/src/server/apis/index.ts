@@ -1,7 +1,7 @@
 import express from "express";
 import * as claims from "./claims";
 import * as claimDetails from "./claimDetails";
-import * as claimDetailsSummary from "./claimDetailsSummary";
+import * as costsSummary from "./costsSummary";
 import * as claimLineItems from "./claimLineItems";
 import * as costCategories from "./costCategories";
 import * as documents from "./documents";
@@ -20,7 +20,7 @@ import { NotFoundError } from "../features/common/appError";
 
 export interface IApiClient {
   claimDetails: claimDetails.IClaimDetailsApi;
-  claimDetailsSummary: claimDetailsSummary.IClaimDetailsSummaryApi;
+  costsSummary: costsSummary.ICostsSummaryApi;
   claimLineItems: claimLineItems.IClaimLineItemApi;
   claims: claims.IClaimsApi;
   costCategories: costCategories.ICostCategoriesApi;
@@ -38,7 +38,7 @@ export interface IApiClient {
 export const serverApis: IApiClient & { [key: string]: ControllerBase<{}> } = {
   claims: claims.controller,
   claimDetails: claimDetails.controller,
-  claimDetailsSummary: claimDetailsSummary.controller,
+  costsSummary: costsSummary.controller,
   claimLineItems: claimLineItems.controller,
   costCategories: costCategories.controller,
   documents: documents.controller,
