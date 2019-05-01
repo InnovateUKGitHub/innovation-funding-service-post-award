@@ -1,5 +1,5 @@
 import { ApiParams, ControllerBase } from "./controllerBase";
-import { GetCostSummaryForPeriodQuery } from "../features/claimDetails";
+import { GetCostsSummaryForPeriodQuery } from "../features/claimDetails";
 import contextProvider from "../features/common/contextProvider";
 
 export interface ICostsSummaryApi {
@@ -18,7 +18,7 @@ class Controller extends ControllerBase<CostsSummaryForPeriodDto> implements ICo
   }
 
   public async getAllByPartnerIdForPeriod(params: ApiParams<{ projectId: string, partnerId: string, periodId: number }>) {
-    const query = new GetCostSummaryForPeriodQuery(params.projectId, params.partnerId, params.periodId);
+    const query = new GetCostsSummaryForPeriodQuery(params.projectId, params.partnerId, params.periodId);
     return contextProvider.start(params).runQuery(query);
   }
 }

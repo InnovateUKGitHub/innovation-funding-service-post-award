@@ -10,7 +10,7 @@ export class ForecastDetailsDtosValidator extends Results<ForecastDetailsDTO[]> 
   constructor(
     private readonly forecasts: ForecastDetailsDTO[],
     private readonly claims: ClaimDto[],
-    private readonly claimDetails: ClaimDetailsDto[],
+    private readonly claimDetails: ClaimDetailsSummaryDto[],
     private readonly golCosts: GOLCostDto[],
     private readonly showErrors: boolean
   ) {

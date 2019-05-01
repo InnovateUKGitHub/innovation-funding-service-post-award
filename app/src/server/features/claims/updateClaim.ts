@@ -1,8 +1,8 @@
 import { CommandBase, ValidationError } from "@server/features/common";
 import { ClaimDtoValidator } from "@ui/validators/claimDtoValidator";
 import { Authorisation, ClaimDto, IContext, ProjectRole } from "@framework/types";
-import { GetCostSummaryForPeriodQuery } from "../claimDetails";
-import { GetCostCategoriesQuery } from ".";
+import { GetCostsSummaryForPeriodQuery } from "../claimDetails";
+import { GetCostCategoriesQuery } from "@server/features/claims/getCostCategoriesQuery";
 
 export class UpdateClaimCommand extends CommandBase<boolean> {
   constructor(private readonly projectId: string, private readonly claimDto: ClaimDto) {
@@ -16,7 +16,7 @@ export class UpdateClaimCommand extends CommandBase<boolean> {
 
   protected async Run(context: IContext) {
     const costCategories = await context.runQuery(new GetCostCategoriesQuery());
-    const details = await context.runQuery(new GetCostSummaryForPeriodQuery(this.projectId, this.claimDto.partnerId, this.claimDto.periodId));
+    const details = await context.runQuery(new GetCostsSummaryForPeriodQuery(this.projectId, this.claimDto.partnerId, this.claimDto.periodId));
     const result = new ClaimDtoValidator(this.claimDto, details, costCategories, true);
 
     if (!result.isValid) {

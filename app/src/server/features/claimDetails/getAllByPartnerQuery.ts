@@ -1,14 +1,14 @@
 import { QueryBase } from "@server/features/common";
 import { IContext } from "@framework/types";
-import { mapClaimDetails } from "./mapClaimDetails";
+import { mapClaimDetailsSummary } from "./mapClaimDetails";
 
-export class GetAllClaimDetailsByPartner extends QueryBase<ClaimDetailsDto[]> {
+export class GetAllClaimDetailsByPartner extends QueryBase<ClaimDetailsSummaryDto[]> {
   constructor(private readonly partnerId: string) {
     super();
   }
 
   protected async Run(context: IContext) {
     const items = await context.repositories.claimDetails.getAllByPartner(this.partnerId);
-    return items.map(claimDetail => mapClaimDetails(claimDetail, context));
+    return items.map(claimDetail => mapClaimDetailsSummary(claimDetail, context));
   }
 }

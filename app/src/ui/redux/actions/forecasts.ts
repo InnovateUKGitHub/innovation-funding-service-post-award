@@ -20,7 +20,7 @@ export function validateForecastDetails(
   partnerId: string,
   dto: ForecastDetailsDTO[],
   claims: ClaimDto[],
-  claimDetails: ClaimDetailsDto[],
+  claimDetails: ClaimDetailsSummaryDto[],
   golCosts: GOLCostDto[],
   showErrors: boolean = false
 ): SyncThunk <ForecastDetailsDtosValidator, UpdateEditorAction> {
@@ -45,7 +45,7 @@ export function saveForecastDetails(
   partnerId: string,
   forecasts: ForecastDetailsDTO[],
   claims: ClaimDto[],
-  claimDetails: ClaimDetailsDto[],
+  claimDetails: ClaimDetailsSummaryDto[],
   golCosts: GOLCostDto[],
   onComplete: () => void,
   message: string

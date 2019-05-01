@@ -22,7 +22,7 @@ interface Data {
   partner: Pending<PartnerDto>;
   costCategories: Pending<CostCategoryDto[]>;
   claim: Pending<ClaimDto>;
-  claimDetailsSummary: Pending<CostsSummaryForPeriodDto[]>;
+  costsSummaryForPeriod: Pending<CostsSummaryForPeriodDto[]>;
   editor: Pending<IEditorStore<ClaimDto, ClaimDtoValidator>>;
   forecastData: Pending<ForecastData>;
   iarDocument: Pending<DocumentSummaryDto | null>;
@@ -52,7 +52,7 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, Data, Callbacks> 
       partner: this.props.partner,
       costCategories: this.props.costCategories,
       claim: this.props.claim,
-      claimDetails: this.props.claimDetailsSummary,
+      claimDetails: this.props.costsSummaryForPeriod,
       iarDocument: this.props.iarDocument,
       editor: this.props.editor,
     });
@@ -190,7 +190,7 @@ export const ReviewClaim = definition.connect({
       partner: partnerPending,
       costCategories:costCategoriesPending,
       claim: claimPending,
-      claimDetailsSummary: Selectors.getCostsSummaryForPeriod(props.partnerId, props.periodId).getPending(state),
+      costsSummaryForPeriod: Selectors.getCostsSummaryForPeriod(props.partnerId, props.periodId).getPending(state),
       editor: Selectors.getClaimEditor(props.partnerId, props.periodId).get(state, (dto) => initEditor(dto)),
       isClient: state.isClient,
       iarDocument: Selectors.getIarDocument(state, props.partnerId, props.periodId),

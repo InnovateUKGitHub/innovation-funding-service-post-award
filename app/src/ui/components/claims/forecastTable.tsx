@@ -137,7 +137,7 @@ export class ForecastTable extends React.Component<Props> {
     return periods;
   }
 
-  private renderDateRange(details: ClaimDetailsDto | ForecastDetailsDTO) {
+  private renderDateRange(details: ClaimDetailsSummaryDto | ForecastDetailsDTO) {
     return CondensedDateRange({ start: details.periodStart, end: details.periodEnd });
   }
 

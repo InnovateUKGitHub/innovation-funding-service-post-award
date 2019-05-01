@@ -1,9 +1,8 @@
 import * as Validation from "./common";
 import { Results } from "../validation/results";
 import { isNumber } from "../../util/NumberHelper";
-import { ClaimLineItemsFormData } from "@framework/types/dtos/claimLineItemsFormData";
 
-export class ClaimLineItemFormValidator extends Results<ClaimLineItemsFormData> {
+export class ClaimDetailsValidator extends Results<ClaimDetailsDto> {
     public readonly items = Validation.optionalChild(this, this.model.lineItems, x => new ClaimLineItemDtoValidator(x, this.showValidationErrors), "There are invalid claim line items.");
 }
 

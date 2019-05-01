@@ -18,8 +18,10 @@ export class GetClaimDetailsQuery extends QueryBase<ClaimDetailsDto> {
   }
 
   protected async Run(context: IContext) {
-    const item = await context.repositories.claimDetails.get({ projectId: this.projectId, partnerId: this.partnerId, periodId: this.periodId, costCategoryId: this.costCategoryId });
-    if (!item) {
+    const claimDetail = await context.repositories.claimDetails.get({ projectId: this.projectId, partnerId: this.partnerId, periodId: this.periodId, costCategoryId: this.costCategoryId });
+    const lineItems = await context.repositories.claimLineItems.getAllForCategory(this.partnerId, this.costCategoryId, this.periodId) || [];
+
+    if (!claimDetail) {
       // todo: throw once overheads renenabled?
       return ({
         id: "",
@@ -29,8 +31,9 @@ export class GetClaimDetailsQuery extends QueryBase<ClaimDetailsDto> {
         periodEnd: null,
         value: 0,
         comments: null,
+        lineItems: [] // TODO move clientside logic here?
       });
     }
-    return mapClaimDetails(item, context);
+    return mapClaimDetails(claimDetail, lineItems, context);
   }
 }

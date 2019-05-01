@@ -1,18 +1,17 @@
-import { ClaimLineItemsFormData } from "@framework/types/dtos/claimLineItemsFormData";
 import { CommandBase, ValidationError } from "@server/features/common";
 import { Authorisation, IContext, ProjectRole } from "@framework/types";
-import { ClaimLineItemFormValidator } from "@ui/validators";
+import { ClaimDetailsValidator } from "@ui/validators";
 import { isNumber } from "@util/NumberHelper";
 import { Updatable } from "@server/repositories/salesforceRepositoryBase";
 import { ISalesforceClaimDetails } from "@server/repositories";
 
-export class SaveLineItemsFormDataCommand extends CommandBase<boolean> {
+export class SaveClaimDetails extends CommandBase<boolean> {
   constructor(
     private readonly projectId: string,
     private readonly partnerId: string,
-    private readonly costCategoryId: string,
     private readonly periodId: number,
-    private readonly lineItemsFormData: ClaimLineItemsFormData
+    private readonly costCategoryId: string,
+    private readonly claimDetails: ClaimDetailsDto
   ) {
     super();
   }
@@ -61,14 +60,14 @@ export class SaveLineItemsFormDataCommand extends CommandBase<boolean> {
   }
 
   protected async Run(context: IContext) {
-    const validationResult = new ClaimLineItemFormValidator(this.lineItemsFormData, true);
+    const validationResult = new ClaimDetailsValidator(this.claimDetails, true);
     if (!validationResult.isValid) {
       throw new ValidationError(validationResult);
     }
 
     return Promise.all([
-      this.saveLineItems(context, this.lineItemsFormData.lineItems),
-      this.saveClaimDetail(context, this.lineItemsFormData.claimDetails)
+      this.saveLineItems(context, this.claimDetails.lineItems),
+      this.saveClaimDetail(context, this.claimDetails)
     ]).then(() => true);
   }
 }
