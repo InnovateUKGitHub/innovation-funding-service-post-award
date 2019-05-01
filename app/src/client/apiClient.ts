@@ -12,8 +12,8 @@ const clientApi: IApiClient = {
     get: (params) => ajaxJson(`/api/claims/${params.partnerId}/${params.periodId}`),
     update: (params) => ajaxPut(`/api/claims/${params.projectId}/${params.partnerId}/${params.periodId}`, params.claim)
   },
-  claimDetailsSummary: {
-    getAllByPartnerIdForPeriod: (params) => ajaxJson(`/api/claim-details-summary/${params.projectId}/${params.partnerId}/${params.periodId}`)
+  costsSummary: {
+    getAllByPartnerIdForPeriod: (params) => ajaxJson(`/api/costs-summary?projectId=${params.projectId}&partnerId=${params.partnerId}&periodId=${params.periodId}`)
   },
   claimDetails: {
     get: (params) => ajaxJson(`/api/claim-details/${params.partnerId}/${params.periodId}/${params.costCategoryId}`),

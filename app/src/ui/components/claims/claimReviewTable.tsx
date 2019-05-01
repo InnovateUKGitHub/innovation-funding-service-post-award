@@ -1,6 +1,6 @@
 import React from "react";
 import { Link, TypedTable } from "..";
-import { ClaimDetailsValidator } from "../../validators/claimDtoValidator";
+import { CostsSummaryForPeriodValidator } from "../../validators/claimDtoValidator";
 import { ClaimDto, PartnerDto, ProjectDto } from "../../../types";
 import { ILinkInfo } from "../../../types/ILinkInfo";
 
@@ -9,8 +9,8 @@ interface Props {
   partner: PartnerDto;
   costCategories: CostCategoryDto[];
   claim: ClaimDto;
-  claimDetails: ClaimDetailsSummaryDto[];
-  validation?: ClaimDetailsValidator[];
+  claimDetails: CostsSummaryForPeriodDto[];
+  validation?: CostsSummaryForPeriodValidator[];
   getLink: (costCategoryId: string) => ILinkInfo | null;
   standardOverheadRate: number;
 }
@@ -21,7 +21,7 @@ export const ClaimReviewTable: React.FunctionComponent<Props> = (props) => {
     .filter(x => x.competitionType === props.project.competitionType && x.organisationType === props.partner.organisationType)
     .map(x => ({
       category: x,
-      cost: props.claimDetails.find(y => y.costCategoryId === x.id) || {} as ClaimDetailsSummaryDto,
+      cost: props.claimDetails.find(y => y.costCategoryId === x.id) || {} as CostsSummaryForPeriodDto,
       isTotal: false
     }));
 
@@ -75,7 +75,7 @@ export const ClaimReviewTable: React.FunctionComponent<Props> = (props) => {
   );
 };
 
-const renderCostCategory = (claim: ClaimDto, category: CostCategoryDto, isTotal: boolean, standardOverheadRate: number, getLink: (costCategoryId: string) => ILinkInfo | null, validation?: ClaimDetailsValidator) => {
+const renderCostCategory = (claim: ClaimDto, category: CostCategoryDto, isTotal: boolean, standardOverheadRate: number, getLink: (costCategoryId: string) => ILinkInfo | null, validation?: CostsSummaryForPeriodValidator) => {
   const route = category.id && getLink(category.id);
 
   if(!route || isTotal || (category.isCalculated && claim.overheadRate <= standardOverheadRate)) {
