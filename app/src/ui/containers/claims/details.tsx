@@ -6,7 +6,13 @@ import * as Selectors from "../../redux/selectors";
 import { ContainerBase, ReduxContainer } from "../containerBase";
 import { ClaimLineItemsRoute } from "./claimLineItems";
 import { ClaimsDashboardRoute } from "./dashboard";
-import { Authorisation, ClaimDto, ILinkInfo, PartnerDto, ProjectDto, ProjectRole } from "../../../types";
+import {
+  ClaimDto,
+  ILinkInfo,
+  PartnerDto,
+  ProjectDto,
+  ProjectRole
+} from "../../../types";
 import { AllClaimsDashboardRoute } from "./allClaimsDashboard";
 import { SimpleString } from "../../components/renderers";
 import { ForecastData, forecastDataLoadActions } from "./forecasts/common";

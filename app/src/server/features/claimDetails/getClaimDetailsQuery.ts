@@ -1,9 +1,10 @@
 import { QueryBase } from "@server/features/common";
-import { IContext } from "@framework/types";
+import { Authorisation, IContext, ProjectRole } from "@framework/types";
 import { mapClaimDetails } from "./mapClaimDetails";
 
 export class GetClaimDetailsQuery extends QueryBase<ClaimDetailsDto> {
   constructor(
+    private readonly projectId: string,
     private readonly partnerId: string,
     private readonly periodId: number,
     private readonly costCategoryId: string,
@@ -11,8 +12,13 @@ export class GetClaimDetailsQuery extends QueryBase<ClaimDetailsDto> {
     super();
   }
 
+  protected async accessControl(auth: Authorisation) {
+    return auth.forProject(this.projectId).hasRole(ProjectRole.MonitoringOfficer)
+    || auth.forPartner(this.projectId, this.partnerId).hasAnyRoles(ProjectRole.FinancialContact, ProjectRole.ProjectManager);
+  }
+
   protected async Run(context: IContext) {
-    const item = await context.repositories.claimDetails.get({ partnerId: this.partnerId, periodId: this.periodId, costCategoryId: this.costCategoryId });
+    const item = await context.repositories.claimDetails.get({ projectId: this.projectId, partnerId: this.partnerId, periodId: this.periodId, costCategoryId: this.costCategoryId });
     if (!item) {
       // todo: throw once overheads renenabled?
       return ({

@@ -2,7 +2,6 @@ import { dataStoreHelper, editorStoreHelper } from "./common";
 import { getKey } from "../../../util/key";
 import { RootState } from "../reducers";
 import { ForecastDetailsDtosValidator } from "../../validators/forecastDetailsDtosValidator";
-import { getCostCategories } from "./costCategories";
 import { findClaimDetailsByPartner, findClaimsByPartner } from "./claims";
 
 export const forecastDetailsStore = "forecastDetails";

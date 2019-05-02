@@ -54,7 +54,7 @@ class Controller extends ControllerBase<ClaimLineItemDto> implements IClaimLineI
     await context.runCommand(saveLineItemsCommand);
 
     const lineItemsQuery = new GetAllLineItemsForClaimByCategoryQuery(projectId, partnerId, costCategoryId, periodId);
-    const claimDetailsQuery = new GetClaimDetailsQuery(partnerId, periodId, costCategoryId);
+    const claimDetailsQuery = new GetClaimDetailsQuery(projectId, partnerId, periodId, costCategoryId);
 
     const lineItems = await context.runQuery(lineItemsQuery);
     const claimDetails = await context.runQuery(claimDetailsQuery);

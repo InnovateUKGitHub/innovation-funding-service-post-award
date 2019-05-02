@@ -7,7 +7,7 @@ describe("GetClaimDetailDocumentsQuery", () => {
     const claimDetail = context.testData.createClaimDetail();
     const document = context.testData.createDocument(claimDetail.Id, "cat", "jpg");
 
-    const query = new GetClaimDetailDocumentsQuery(claimDetail.Acc_ProjectParticipant__c, claimDetail.Acc_ProjectPeriodNumber__c, claimDetail.Acc_CostCategory__c);
+    const query = new GetClaimDetailDocumentsQuery("",  claimDetail.Acc_ProjectParticipant__c, claimDetail.Acc_ProjectPeriodNumber__c, claimDetail.Acc_CostCategory__c);
     const result = await context.runQuery(query);
     const item = result[0];
 
@@ -18,7 +18,7 @@ describe("GetClaimDetailDocumentsQuery", () => {
 
   it("returns empty array if no claim detail", async () => {
     const context = new TestContext();
-    const query = new GetClaimDetailDocumentsQuery("", 1, "");
+    const query = new GetClaimDetailDocumentsQuery("", "", 1, "");
     const result = await context.runQuery(query);
 
     expect(result).toBeInstanceOf(Array);

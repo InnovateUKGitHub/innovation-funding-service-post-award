@@ -179,15 +179,14 @@ describe("UpdateClaimCommand", () => {
   it("when claim is over limits for any cost category expect exception", async () => {
     const context      = new TestContext();
     const testData     = context.testData;
+    const project      = testData.createProject();
     const partner      = testData.createPartner();
     const claim        = testData.createClaim(partner, 2);
     const costCategory = testData.createCostCategory();
 
     // TODO offer costs are currently hard coded to 10000
-    testData.createClaimDetail(costCategory, partner, 1, (x) => { x.Acc_PeriodCostCategoryTotal__c = 1000000;});
-    testData.createClaimDetail(costCategory, partner, 2, (x) => { x.Acc_PeriodCostCategoryTotal__c = 1000000;});
-
-    const project = context.testData.createProject();
+    testData.createClaimDetail(project, costCategory, partner, 1, (x) => { x.Acc_PeriodCostCategoryTotal__c = 1000000;});
+    testData.createClaimDetail(project, costCategory, partner, 2, (x) => { x.Acc_PeriodCostCategoryTotal__c = 1000000;});
 
     const dto = mapClaim(context)(claim);
     const command = new UpdateClaimCommand(project.Id, dto);
