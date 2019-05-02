@@ -211,7 +211,7 @@ const getLoadDataActions = (params: Params): Actions.AsyncThunk<any>[] => [
   Actions.loadCostCategories(),
   Actions.loadForecastDetail(params.partnerId, params.periodId, params.costCategoryId),
   Actions.loadClaimLineItemsForCategory(params.projectId, params.partnerId, params.costCategoryId, params.periodId),
-  Actions.loadClaimDetailDocuments(params.partnerId, params.periodId, params.costCategoryId),
+  Actions.loadClaimDetailDocuments(params.projectId, params.partnerId, params.periodId, params.costCategoryId),
   Actions.loadClaim(params.partnerId, params.periodId),
 ];
 

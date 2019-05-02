@@ -22,7 +22,7 @@ export class EditClaimLineItemsFormHandler extends FormHandlerBase<EditClaimLine
   protected async getDto(context: IContext, params: EditClaimLineItemsParams, button: IFormButton, body: IFormBody) {
     const itemCount = parseInt(body.itemCount, 10) || 10;
 
-    const originalClaimDetails = await context.runQuery(new GetClaimDetailsQuery(params.partnerId, params.periodId, params.costCategoryId));
+    const originalClaimDetails = await context.runQuery(new GetClaimDetailsQuery(params.projectId, params.partnerId, params.periodId, params.costCategoryId));
     const claimDetails: ClaimDetailsDto = {
       ...originalClaimDetails,
       comments: body.comments

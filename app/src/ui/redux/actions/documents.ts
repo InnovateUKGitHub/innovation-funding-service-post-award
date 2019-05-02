@@ -28,10 +28,10 @@ import { findClaimsByPartner } from "../selectors";
 import { scrollToTheTopSmoothly } from "../../../util/windowHelpers";
 import * as Selectors from "../selectors";
 
-export function loadClaimDetailDocuments(partnerId: string, periodId: number, costCategoryId: string) {
+export function loadClaimDetailDocuments(projectId: string, partnerId: string, periodId: number, costCategoryId: string) {
   return conditionalLoad(
     getClaimDetailDocuments(partnerId, periodId, costCategoryId),
-    params => ApiClient.documents.getClaimDetailDocuments({ claimDetailKey: {partnerId, periodId, costCategoryId}, ...params})
+    params => ApiClient.documents.getClaimDetailDocuments({ claimDetailKey: {projectId, partnerId, periodId, costCategoryId}, ...params})
   );
 }
 

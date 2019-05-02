@@ -6,8 +6,9 @@ describe("claimDetails/getAllByPartner", () => {
   it("returns objects of correct shape", async () => {
     const context = new TestContext();
     const costCat = context.testData.createCostCategory();
+    const project = context.testData.createProject();
     const partner = context.testData.createPartner();
-    context.testData.createClaimDetail(costCat, partner);
+    context.testData.createClaimDetail(project, costCat, partner);
 
     const query  = new GetAllClaimDetailsByPartner(partner.Id);
     const result = await context.runQuery(query);
@@ -21,8 +22,9 @@ describe("claimDetails/getAllByPartner", () => {
   it("returns array with single result", async () => {
     const context = new TestContext();
     const costCat = context.testData.createCostCategory();
+    const project = context.testData.createProject();
     const partner = context.testData.createPartner();
-    context.testData.createClaimDetail(costCat, partner);
+    context.testData.createClaimDetail(project, costCat, partner);
 
     const query  = new GetAllClaimDetailsByPartner(partner.Id);
     const result = await context.runQuery(query);
@@ -33,11 +35,12 @@ describe("claimDetails/getAllByPartner", () => {
   it("returns array with multiple results", async () => {
     const context = new TestContext();
     const costCat = context.testData.createCostCategory();
+    const project = context.testData.createProject();
     const partner = context.testData.createPartner();
 
-    context.testData.createClaimDetail(costCat, partner);
-    context.testData.createClaimDetail(costCat, partner);
-    context.testData.createClaimDetail(costCat, partner);
+    context.testData.createClaimDetail(project, costCat, partner);
+    context.testData.createClaimDetail(project, costCat, partner);
+    context.testData.createClaimDetail(project, costCat, partner);
 
     const query  = new GetAllClaimDetailsByPartner(partner.Id);
     const result = await context.runQuery(query);

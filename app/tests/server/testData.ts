@@ -281,10 +281,11 @@ export class TestData {
 
   }
 
-  public createClaimDetail(costCategory?: Repositories.ISalesforceCostCategory, partner?: Repositories.ISalesforcePartner, periodId?: number, update?: (item: Repositories.ISalesforceClaimDetails) => void): Repositories.ISalesforceClaimDetails {
+  public createClaimDetail(project?: Repositories.ISalesforceProject, costCategory?: Repositories.ISalesforceCostCategory, partner?: Repositories.ISalesforcePartner, periodId?: number, update?: (item: Repositories.ISalesforceClaimDetails) => void): Repositories.ISalesforceClaimDetails {
 
     costCategory = costCategory || this.createCostCategory();
     partner = partner || this.createPartner();
+    project = project || this.createProject();
     periodId = periodId || 1;
 
     const newItem: Repositories.ISalesforceClaimDetails = {
@@ -292,6 +293,9 @@ export class TestData {
       Acc_CostCategory__c: costCategory.Id,
       Acc_ProjectPeriodNumber__c: periodId,
       Acc_ProjectParticipant__c: partner.Id,
+      Acc_ProjectParticipant__r: {
+        Acc_ProjectId__c: project.Id
+      },
       Acc_PeriodCostCategoryTotal__c: 1000,
       Acc_ProjectPeriodStartDate__c: "2018-01-02",
       Acc_ProjectPeriodEndDate__c: "2018-03-04",

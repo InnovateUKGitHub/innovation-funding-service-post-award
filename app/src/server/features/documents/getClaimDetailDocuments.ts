@@ -4,6 +4,7 @@ import { GetDocumentsLinkedToRecordQuery } from "@server/features/documents/getA
 
 export class GetClaimDetailDocumentsQuery extends QueryBase<DocumentSummaryDto[]> {
   constructor(
+    private readonly projectId: string,
     private readonly partnerId: string,
     private readonly periodId: number,
     private readonly costCategoryId: string
@@ -13,6 +14,7 @@ export class GetClaimDetailDocumentsQuery extends QueryBase<DocumentSummaryDto[]
 
   protected async Run(context: IContext) {
     const key = {
+      projectId: this.projectId,
       partnerId: this.partnerId,
       periodId: this.periodId,
       costCategoryId: this.costCategoryId

@@ -26,8 +26,8 @@ class Controller extends ControllerBase<DocumentSummaryDto> implements IDocument
     super("documents");
 
     this.getItems(
-      "/claim-details/:partnerId/:periodId/:costCategoryId",
-      (p) => ({claimDetailKey: { partnerId: p.partnerId, periodId: parseInt(p.periodId, 10), costCategoryId: p.costCategoryId }}),
+      "/claim-details/:projectId/:partnerId/:periodId/:costCategoryId",
+      (p) => ({claimDetailKey: { projectId: p.projectId, partnerId: p.partnerId, periodId: parseInt(p.periodId, 10), costCategoryId: p.costCategoryId }}),
       p => this.getClaimDetailDocuments(p)
     );
 
@@ -50,8 +50,8 @@ class Controller extends ControllerBase<DocumentSummaryDto> implements IDocument
     );
 
     this.postAttachment(
-      "/claim-details/:partnerId/:periodId/:costCategoryId",
-      (p, q, b, f) => ({ claimDetailKey: { partnerId: p.partnerId, periodId: parseInt(p.periodId, 10), costCategoryId: p.costCategoryId, file: f }, file: f }),
+      "/claim-details/:projectId/:partnerId/:periodId/:costCategoryId",
+      (p, q, b, f) => ({ claimDetailKey: { projectId: p.projectId, partnerId: p.partnerId, periodId: parseInt(p.periodId, 10), costCategoryId: p.costCategoryId, file: f }, file: f }),
       p => this.uploadClaimDetailDocument(p)
     );
 
@@ -81,8 +81,8 @@ class Controller extends ControllerBase<DocumentSummaryDto> implements IDocument
   }
 
   public async getClaimDetailDocuments(params: ApiParams<{claimDetailKey: ClaimDetailKey}>) {
-    const { partnerId, periodId, costCategoryId } = params.claimDetailKey;
-    const query = new GetClaimDetailDocumentsQuery(partnerId, periodId, costCategoryId);
+    const { projectId, partnerId, periodId, costCategoryId } = params.claimDetailKey;
+    const query = new GetClaimDetailDocumentsQuery(projectId, partnerId, periodId, costCategoryId);
     return contextProvider.start(params).runQuery(query);
   }
 

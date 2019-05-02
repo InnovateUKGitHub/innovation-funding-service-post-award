@@ -198,8 +198,9 @@ describe("SaveLineItemsFormDataCommand", () => {
 
   test("expect comments to be updated", async () => {
     const context = new TestContext();
+    const project = context.testData.createProject();
     const partner = context.testData.createPartner();
-    const claimDetail = context.testData.createClaimDetail(undefined, partner, 1, x => x.Acc_ReasonForDifference__c = "An old message" );
+    const claimDetail = context.testData.createClaimDetail(project, undefined, partner, 1, x => x.Acc_ReasonForDifference__c = "An old message" );
     const claimDetails = mapClaimDetails(claimDetail, context);
 
     claimDetails.comments = "A new message";
@@ -217,8 +218,9 @@ describe("SaveLineItemsFormDataCommand", () => {
 
   test("expect comments to be null", async () => {
     const context = new TestContext();
+    const project = context.testData.createProject();
     const partner = context.testData.createPartner();
-    const claimDetail = context.testData.createClaimDetail(undefined, partner, undefined, x => x.Acc_ReasonForDifference__c = "An old message" );
+    const claimDetail = context.testData.createClaimDetail(project, undefined, partner, undefined, x => x.Acc_ReasonForDifference__c = "An old message" );
     const claimDetails = mapClaimDetails(claimDetail, context);
 
     claimDetails.comments = null;
