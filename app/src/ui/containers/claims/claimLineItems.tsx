@@ -22,6 +22,7 @@ interface Data {
   project: Pending<ProjectDto>;
   partner: Pending<PartnerDto>;
   lineItems: Pending<ClaimLineItemDto[]>;
+  claimDetails: Pending<ClaimDetailsDto>;
   costCategories: Pending<CostCategoryDto[]>;
   forecastDetail: Pending<ForecastDetailsDTO>;
   documents: Pending<DocumentSummaryDto[]>;
@@ -33,6 +34,7 @@ interface CombinedData {
   project: ProjectDto;
   partner: PartnerDto;
   lineItems: ClaimLineItemDto[];
+  claimDetails: ClaimDetailsDto;
   costCategories: CostCategoryDto[];
   forecastDetail: ForecastDetailsDTO;
   documents: DocumentSummaryDto[];
@@ -45,6 +47,7 @@ export class ClaimLineItemsComponent extends ContainerBase<Params, Data, {}> {
       project: this.props.project,
       partner: this.props.partner,
       lineItems: this.props.lineItems,
+      claimDetails: this.props.claimDetails,
       costCategories: this.props.costCategories,
       forecastDetail: this.props.forecastDetail,
       documents: this.props.documents,
@@ -54,7 +57,7 @@ export class ClaimLineItemsComponent extends ContainerBase<Params, Data, {}> {
     return <ACC.PageLoader pending={combined} render={(data) => this.renderContents(data)} />;
   }
 
-  private renderContents({ project, partner, lineItems, costCategories, forecastDetail, documents, claim }: CombinedData) {
+  private renderContents({ project, partner, lineItems, claimDetails, costCategories, forecastDetail, documents, claim }: CombinedData) {
     const params: Params = {
       partnerId : this.props.partnerId,
       costCategoryId: this.props.costCategoryId,
@@ -75,7 +78,8 @@ export class ClaimLineItemsComponent extends ContainerBase<Params, Data, {}> {
         <ACC.Section title="Supporting documents" subtitle={documents.length > 0 ? "(Documents open in a new window)" : ""} qa="supporting-documents-section">
           {this.renderDocumentList(documents)}
         </ACC.Section>
-          {this.renderNavigationArrows(costCategories, project, partner, claim)}
+        {this.renderAdditionalInformation(claimDetails)}
+        {this.renderNavigationArrows(costCategories, project, partner, claim)}
       </ACC.Page>
     );
   }
@@ -140,6 +144,17 @@ export class ClaimLineItemsComponent extends ContainerBase<Params, Data, {}> {
 
     return <NavigationArrows nextLink={arrowLinks.nextLink} previousLink={arrowLinks.previousLink}/>;
   }
+
+  private renderAdditionalInformation = (claimDetail: ClaimDetailsDto) => {
+    if (!claimDetail.comments) return null;
+    return (
+      <ACC.Section title="Additional information">
+        <ACC.Renderers.SimpleString>
+          {claimDetail.comments}
+        </ACC.Renderers.SimpleString>
+      </ACC.Section>
+    );
+  }
 }
 
 const ClaimLineItemsTable: React.SFC<{ lineItems: ClaimLineItemDto[], forecastDetail: ForecastDetailsDTO }> = ({ lineItems, forecastDetail }) => {
@@ -189,6 +204,7 @@ export const ClaimLineItems = definition.connect({
     project: Selectors.getProject(props.projectId).getPending(state),
     partner: Selectors.getPartner(props.partnerId).getPending(state),
     lineItems: Selectors.findClaimLineItemsByPartnerCostCategoryAndPeriod(props.partnerId, props.costCategoryId, props.periodId).getPending(state),
+    claimDetails: Selectors.getClaimDetails(props.partnerId, props.periodId, props.costCategoryId).getPending(state),
     costCategories: Selectors.getCostCategories().getPending(state),
     forecastDetail: Selectors.getForecastDetail(props.partnerId, props.periodId, props.costCategoryId).getPending(state),
     documents: Selectors.getClaimDetailDocuments(props.partnerId, props.periodId, props.costCategoryId).getPending(state),
@@ -213,6 +229,7 @@ const getLoadDataActions = (params: Params): Actions.AsyncThunk<any>[] => [
   Actions.loadClaimLineItemsForCategory(params.projectId, params.partnerId, params.costCategoryId, params.periodId),
   Actions.loadClaimDetailDocuments(params.partnerId, params.periodId, params.costCategoryId),
   Actions.loadClaim(params.partnerId, params.periodId),
+  Actions.loadClaimDetails(params.partnerId, params.periodId, params.costCategoryId),
 ];
 
 export const ClaimLineItemsRoute = definition.route({
