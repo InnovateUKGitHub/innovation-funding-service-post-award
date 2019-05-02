@@ -38,7 +38,7 @@ class SimpleForm extends React.Component<{}, { original: ISimpleEditorDto, edito
         super(props);
         const dto: ISimpleEditorDto = { name: "Example Name", description: "", value: 100, option: null, file: null };
         this.state = { original: dto, editor: JSON.parse(JSON.stringify(dto)) };
-        this.options = range(4).map(i => ({ value: "Option " + i, id: i + ""}));
+        this.options = range(4).map(i => ({ value: "Option " + i, id: i + "", qa: `qa-${i}`}));
     }
 
     render() {
