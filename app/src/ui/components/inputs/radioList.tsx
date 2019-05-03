@@ -2,8 +2,14 @@ import * as React from "react";
 import { BaseInput } from "./baseInput";
 import classNames from "classnames";
 
+interface RadioOptionProps {
+  id: string;
+  value: string;
+  qa?: string;
+}
+
 interface RadioListProps extends InputProps<{ id: string, value: string }> {
-  options: { id: string, value: string }[];
+  options: RadioOptionProps[];
   inline: boolean;
 }
 
@@ -17,11 +23,12 @@ export class RadioList extends BaseInput<RadioListProps, {}> {
     );
   }
 
-  renderOption(name: string, item: { id: string; value: string; }, index: number): any {
+  renderOption(name: string, item: RadioOptionProps, index: number): any {
     const selected = this.props.value ? this.props.value.id === item.id : false;
     return (
       <div className="govuk-radios__item" key={`option` + index}>
         <input
+          data-qa={item.qa}
           className="govuk-radios__input"
           id={`${this.props.name}_${item.id}`}
           name={this.props.name}
