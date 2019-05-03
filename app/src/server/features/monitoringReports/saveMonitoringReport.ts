@@ -3,7 +3,6 @@ import { Authorisation, ClaimFrequency, IContext, ProjectDto, ProjectRole } from
 import { MonitoringReportDtoValidator } from "../../../ui/validators/MonitoringReportDtoValidator";
 import { GetMonitoringReportActiveQuestions } from "./getMonitoringReportActiveQuestions";
 import { MonitoringReportDto } from "../../../types/dtos/monitoringReportDto";
-import { MonitoringReportStatus } from "../../../types/constants/monitoringReportStatus";
 import { ISalesforceMonitoringReportHeader, ISalesforceMonitoringReportResponse } from "../../repositories";
 import { Updatable } from "../../repositories/salesforceRepositoryBase";
 import { GetByIdQuery } from "../projects/getDetailsByIdQuery";
