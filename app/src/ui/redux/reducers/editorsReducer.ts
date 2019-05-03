@@ -2,14 +2,13 @@ import { combineReducers } from "redux";
 import { actionTypes } from "redux-router5";
 import { RootActions } from "../actions";
 import { ClaimDtoValidator } from "../../validators/claimDtoValidator";
-import { ClaimLineItemFormValidator } from "../../validators/claimLineItemDtosValidator";
 import { Results } from "../../validation/results";
 import { ForecastDetailsDtosValidator } from "../../validators/forecastDetailsDtosValidator";
 import { DocumentUploadValidator } from "../../validators/documentUploadValidator";
 import { ClaimDto, MonitoringReportDto } from "../../../types";
 import { IAppError } from "../../../types/IAppError";
 import { MonitoringReportDtoValidator } from "../../validators/MonitoringReportDtoValidator";
-import { ClaimLineItemsFormData } from "@framework/types/dtos/claimLineItemsFormData";
+import { ClaimDetailsValidator } from "@ui/validators";
 
 export interface IEditorStore<TDto, TValidator> {
   data: TDto;
@@ -71,7 +70,7 @@ export const editorsReducer = <TDto extends {}, TValidator extends Results<TDto>
 
 export const editorReducer = combineReducers({
   claim: editorsReducer<ClaimDto, ClaimDtoValidator>("claim"),
-  claimLineItemsForm: editorsReducer<ClaimLineItemsFormData, ClaimLineItemFormValidator>("claimLineItemsForm"),
+  claimDetail: editorsReducer<ClaimDetailsDto, ClaimDetailsValidator>("claimDetail"),
   forecastDetails: editorsReducer<ForecastDetailsDTO[], ForecastDetailsDtosValidator>("forecastDetails"),
   documents: editorsReducer<DocumentUploadDto, DocumentUploadValidator>("documents"),
   documentSummary: editorsReducer<DocumentSummaryDto[], Results<DocumentSummaryDto[]>>("documentSummary"),
