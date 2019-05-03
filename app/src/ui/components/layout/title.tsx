@@ -1,17 +1,35 @@
 import React from "react";
+import { connect as reduxConnect } from "react-redux";
+import { RootState } from "@framework/ui/redux";
 
 interface Props {
-    caption?: string;
-    title: string;
+  caption?: string;
 }
 
-export const Title: React.SFC<Props> = (props: Props) => {
-  const renderCaption = () => props.caption ? <span className="govuk-caption-xl">{props.caption}</span> : null;
+interface Data {
+  storePageTitle: string;
+}
 
-  return (
-    <div data-qa="page-title">
-      {renderCaption()}
-      <h1 className="govuk-heading-xl clearFix">{props.title}</h1>
-    </div>
-  );
-};
+class TitleComponent extends React.Component<Props & Data> {
+  render() {
+
+    return (
+      <div data-qa="page-title">
+        {this.renderCaption()}
+        <h1 className="govuk-heading-xl clearFix">{this.props.storePageTitle}</h1>
+      </div>
+    );
+  }
+  private renderCaption() {
+    const { caption } = this.props;
+    return caption ? <span className="govuk-caption-xl">{caption}</span> : null;
+  }
+}
+
+export const Title = reduxConnect<Data, {}, Props, RootState>(
+  (state: RootState) => {
+    return {
+      storePageTitle: state.title.displayTitle
+    };
+  }
+)(TitleComponent);

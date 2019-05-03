@@ -37,7 +37,7 @@ class ProjectDashboardComponent extends ContainerBase<Props, Data, Callbacks> {
     return (
       <ACC.Page
         backLink={<ACC.BackLink route={HomeRoute.getLink({})}>Back to dashboard</ACC.BackLink>}
-        pageTitle={<ACC.Title title="Projects" />}
+        pageTitle={<ACC.Title />}
       >
         {this.renderContents(projects, partners)}
       </ACC.Page>
@@ -262,5 +262,9 @@ export const ProjectDashboardRoute = definition.route({
     Actions.loadProjects(),
     Actions.loadPartners()
   ],
+  getTitle: () => ({
+    htmlTitle: "Projects - Innovation Funding Service",
+    displayTitle: "Projects"
+  }),
   container: ProjectDashboard
 });

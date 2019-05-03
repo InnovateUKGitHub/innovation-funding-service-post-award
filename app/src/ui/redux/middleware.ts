@@ -7,6 +7,7 @@ import { loggingMiddleware } from "./middleware/loggingMiddleware";
 import { cancelHashNavigation } from "./middleware/cancelHashNavigation";
 import { cancelInitialNavigation } from "./middleware/cancelInitialNavigation";
 import { messagesMiddleware } from "./middleware/messagesMiddleware";
+import { htmlTitleMiddleware } from "./middleware/htmlTitleMiddleware";
 
 // used as replacement for optional middleware
 const noopMiddleware = () => (next: Dispatch) => (action: AnyAction) => next(action);
@@ -19,6 +20,7 @@ export function setupMiddleware(router: Router, isClient: boolean) {
     isClient ? loggingMiddleware : noopMiddleware,
     router5Middleware(router),
     isClient ? messagesMiddleware : noopMiddleware,
-    isClient ? loadStatusMiddleware : noopMiddleware
+    isClient ? loadStatusMiddleware : noopMiddleware,
+    isClient? htmlTitleMiddleware : noopMiddleware,
   );
 }

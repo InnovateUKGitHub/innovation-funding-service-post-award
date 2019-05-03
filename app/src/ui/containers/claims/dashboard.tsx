@@ -148,7 +148,7 @@ class Component extends ContainerBase<ClaimDashboardPageParams, Data, Callbacks>
 
     return (
       <Acc.Page
-        pageTitle={<Acc.Projects.Title pageTitle="View project" project={project}/>}
+        pageTitle={<Acc.Projects.Title project={project}/>}
         error={error}
         tabs={<Acc.Projects.ProjectNavigation project={project} currentRoute={ClaimsDashboardRoute.routeName} partners={[partner]}/>}
         validator={validator}
@@ -292,5 +292,11 @@ export const ClaimsDashboardRoute = definition.route({
     Actions.loadClaimsForPartner(params.partnerId),
     Actions.loadIarDocumentsForCurrentClaim(params.partnerId)
   ],
+  getTitle: (store) => {
+    return {
+      displayTitle: "View project",
+      htmlTitle: "Claims - View project"
+    };
+  },
   container: ClaimsDashboard
 });

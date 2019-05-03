@@ -77,7 +77,7 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
         backLink={<ACC.BackLink route={back}>Back to claim</ACC.BackLink>}
         error={editor.error}
         validator={editor.validator}
-        pageTitle={<ACC.Projects.Title pageTitle={`${costCategory.name}`} project={project} />}
+        pageTitle={<ACC.Projects.Title project={project} />}
       >
         <ACC.Section>
           <ACC.TextHint text={costCategory.hintText} />
@@ -349,5 +349,12 @@ export const EditClaimLineItemsRoute = definition.route({
     Actions.loadClaimDetailDocuments(params.projectId, params.partnerId, params.periodId, params.costCategoryId)
   ],
   container: EditClaimLineItems,
-  accessControl: (auth, params) => auth.forPartner(params.projectId, params.partnerId).hasRole(ProjectRole.FinancialContact)
+  accessControl: (auth, params) => auth.forPartner(params.projectId, params.partnerId).hasRole(ProjectRole.FinancialContact),
+  getTitle: (store, params) => {
+    const costCatName = Selectors.getCostCatetory(params.costCategoryId).getPending(store).then(x => x!.name).data;
+    return {
+      htmlTitle: costCatName ? `Add costs for ${costCatName}` : "Add costs",
+      displayTitle: costCatName || "Costs"
+    };
+  },
 });

@@ -75,7 +75,7 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, Data, Callbacks> 
         backLink={<ACC.BackLink route={AllClaimsDashboardRoute.getLink({ projectId: data.project.id })}>Back to project</ACC.BackLink>}
         error={data.editor.error}
         validator={data.editor.validator}
-        pageTitle={<ACC.Projects.Title pageTitle="Review claim" project={data.project} />}
+        pageTitle={<ACC.Projects.Title project={data.project} />}
         tabs={<ACC.Claims.Navigation projectId={data.project.id} partnerId={data.partner.id} periodId={data.claim.periodId} currentRouteName={ClaimsDetailsRoute.routeName} />}
       >
         <ACC.Section title={this.getClaimPeriodTitle(data)}>
@@ -230,5 +230,11 @@ export const ReviewClaimRoute = definition.route({
         ...forecastDataLoadActions(params)
     ],
     accessControl: (auth, { projectId }) => auth.forProject(projectId).hasRole(ProjectRole.MonitoringOfficer),
+    getTitle: (store, params) => {
+      return {
+        htmlTitle: "Review claim",
+        displayTitle: "Claim"
+      };
+    },
     container: ReviewClaim
 });

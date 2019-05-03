@@ -6,11 +6,14 @@ import {
   MessageActions
 } from "./common";
 
+import { SetPageTitleAction } from "./pageTitle";
+
 type RouterActions = ActionsUnion<typeof actions>;
 
 export type RootActions =
-  RouterActions  |
+  RouterActions |
   DataLoadAction |
-  EditorAction   |
-  MessageActions
-;
+  EditorAction |
+  MessageActions |
+  SetPageTitleAction
+  ;

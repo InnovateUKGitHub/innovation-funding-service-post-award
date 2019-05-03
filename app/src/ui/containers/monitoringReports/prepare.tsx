@@ -71,13 +71,13 @@ class PrepareMonitoringReportComponent extends ContainerBase<MonitoringReportPre
     return (
       <ACC.Page
         backLink={<ACC.BackLink route={MonitoringReportDashboardRoute.getLink({ projectId: this.props.projectId })}>Back to monitoring reports</ACC.BackLink>}
-        pageTitle={<ACC.Projects.Title pageTitle="Monitoring report" project={project} />}
+        pageTitle={<ACC.Projects.Title project={project} />}
         validator={editor.validator}
         error={editor.error}
       >
         <ACC.Section>
           <ReportForm.Form data={editor.data} onChange={(dto) => this.props.onChange(dto.projectId, dto.headerId, dto, project)} >
-            <ReportForm.String label="Title" labelBold={true} name="title" value={x => x.title} update={(x,v) => x.title = v!} validation={editor.validator.title} />
+            <ReportForm.String label="Title" labelBold={true} name="title" value={x => x.title} update={(x, v) => x.title = v!} validation={editor.validator.title} />
             <ReportForm.Numeric label="Period" labelBold={true} width="small" name="period" value={x => x.periodId} update={(x, v) => x.periodId = v!} validation={editor.validator.periodId} />
             <ACC.Renderers.SimpleString>For each question score the project against the criteria from 1 to 5, providing a comment explaining your reason. Your Monitoring Portfolio Executive will return the report to you otherwise.</ACC.Renderers.SimpleString>
             {this.renderFormItems(editor)}
@@ -124,7 +124,8 @@ export const MonitoringReportPrepareRoute = containerDefinition.route({
     Actions.loadMonitoringReportQuestions(),
     Actions.loadMonitoringReport(params.projectId, params.id!)
   ],
-  container: MonitoringReportPrepare
+  getTitle: () => ({ htmlTitle: "Edit monitoring report", displayTitle: "Monitoring report" }),
+  container: MonitoringReportPrepare,
 });
 
 export const MonitoringReportCreateRoute = containerDefinition.route({
@@ -136,5 +137,9 @@ export const MonitoringReportCreateRoute = containerDefinition.route({
     Actions.loadProject(params.projectId),
     Actions.loadMonitoringReportQuestions()
   ],
+  getTitle: () => ({
+    htmlTitle: "Create monitoring report",
+    displayTitle: "Monitoring report"
+  }),
   container: MonitoringReportPrepare
 });

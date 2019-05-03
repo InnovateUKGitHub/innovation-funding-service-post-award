@@ -48,7 +48,7 @@ class UpdateForecastComponent extends ContainerBase<Params, PendingForecastData,
         backLink={<ACC.BackLink route={ViewForecastRoute.getLink({ projectId: this.props.projectId, partnerId: this.props.partnerId })}>Back to forecast</ACC.BackLink>}
         error={editor.error}
         validator={editor.validator}
-        pageTitle={<ACC.Projects.Title pageTitle="Update forecasts" project={combined.project} />}
+        pageTitle={<ACC.Projects.Title project={combined.project} />}
       >
         {this.renderOverheadsRate(combined.partner.overheadRate)}
         <ACC.Section title="" qa="partner-forecast" >
@@ -87,5 +87,12 @@ export const UpdateForecastRoute = definition.route({
   getParams: forecastParams,
   getLoadDataActions: forecastDataLoadActions,
   container: UpdateForecast,
-  accessControl: (auth, { projectId, partnerId }) => auth.forPartner(projectId, partnerId).hasRole(ProjectRole.FinancialContact)
+  accessControl: (auth, { projectId, partnerId }) => auth.forPartner(projectId, partnerId).hasRole(ProjectRole.FinancialContact),
+  getTitle: (store, params) => {
+    return {
+      htmlTitle: "Update forecast",
+      displayTitle: "Update forecast"
+    };
+  }
+
 });

@@ -3,9 +3,30 @@ import { Request, Response } from "express";
 import { renderToString } from "react-dom/server";
 import { Guide } from "../ui/componentsGuide/guide";
 import * as colour from "../ui/styles/colours";
+import { Title } from "@framework/ui/redux/reducers/pageTitleReducer";
+import { combineReducers, createStore } from "redux";
+import { Provider } from "react-redux";
+import { Configuration } from "./features/common";
 
 export function componentGuideRender(req: Request, res: Response) {
-    res.send(renderGuide(renderToString(<Guide source="server" filter={req.query.guide}/>)));
+    const exampleTitle: Title = {
+        displayTitle: "Component guide example title",
+        htmlTitle: "Display title",
+    };
+
+    const reducer = combineReducers({
+        title: (s: Title = exampleTitle) => s
+    });
+
+    const store = createStore(reducer, { title: exampleTitle });
+
+    const html = renderToString(
+        <Provider store={store}>
+            <Guide source="server" filter={req.query.guide}/>
+        </Provider>
+      );
+
+    res.send(renderGuide(html));
 }
 
 const renderGuide = (html: string) => {
@@ -46,11 +67,10 @@ const renderGuide = (html: string) => {
             </script>
             <a href="#main-content" class="govuk-skip-link">Skip to main content</a>
             <div id="root">${html}</div>
-            <script src="/govuk-frontend-2.7.0.min.js"></script>
-            <script src="/build/vendor.js"></script>
-            <script src="/build/componentsGuide.js"></script>
+            <script src="/build/vendor.js?build=${Configuration.build}"></script>
+            <script src="/build/componentsGuide.js?build=${Configuration.build}"></script>
             <script>
-                window.GOVUKFrontend.initAll()
+                // window.GOVUKFrontend.initAll()
             </script>
         </body>
     </html>
