@@ -79,7 +79,7 @@ class DashboardComponent extends ContainerBase<Params, Data, Callbacks> {
     return (
       <ReportsTable.Table
         data={reports}
-        bodyRowFlag={x => section !== "current" ? null : this.editStatuses.indexOf(x.status) >= 0 ? "edit" : "info"}
+        bodyRowFlag={x => section !== "current" ? null : this.editStatuses.indexOf(x.status) >= 0 ? "edit" : null}
         qa={`${section}-reports-table`}
       >
         <ReportsTable.String header={`Title`} qa="title" value={x => x.title} />
