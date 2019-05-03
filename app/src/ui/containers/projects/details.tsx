@@ -7,6 +7,7 @@ import * as Selectors from "../../redux/selectors";
 import { PartnerDto, ProjectDto, ProjectRole } from "../../../types";
 import { AllClaimsDashboardRoute } from "../claims/allClaimsDashboard";
 import { ClaimsDashboardRoute } from "../claims/dashboard";
+import { AccessibilityText } from "@framework/ui/components/renderers";
 
 interface Data {
     projectDetails: Pending<ProjectDto>;
@@ -96,12 +97,12 @@ class ProjectDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
 
         return (
             <ACC.Section title="Cost claimed status" qa="cost-claimed-status">
-                <PartnersTable.Table qa="cost-claimed" data={partners}>
+                <PartnersTable.Table qa="cost-claimed" data={partners} caption="Cost claimed status">
                     <PartnersTable.String header="Partner" qa="partner-name" value={x => x.isLead ? `${x.name} (Lead)` : x.name} footer="Total" />
                     <PartnersTable.Currency header={<React.Fragment><span>Total eligible</span><br/><span>costs</span></React.Fragment>} qa="total-costs" value={x => x.totalParticipantGrant || 0} footer={<ACC.Renderers.Currency value={totalEligibleCosts} />} />
                     <PartnersTable.Currency header={<React.Fragment><span>Costs claimed</span><br/><span>to date</span></React.Fragment>} qa="costs-claimed" value={x => x.totalParticipantCostsClaimed || 0} footer={<ACC.Renderers.Currency value={totalClaimed} />} />
                     <PartnersTable.Percentage header={<React.Fragment><span>Percentage of eligible</span><br/><span>costs claimed to date</span></React.Fragment>} qa="percentage-claimed" value={x => x.percentageParticipantCostsClaimed || 0} footer={<ACC.Renderers.Percentage value={percentageClaimed} />} />
-                    <PartnersTable.Percentage header="Cap limit" qa="cap-limit" value={x => x.capLimit} fractionDigits={0} />
+                    <PartnersTable.Percentage header="Cap limit" qa="cap-limit" value={x => x.capLimit} fractionDigits={0} footer={<AccessibilityText>No data</AccessibilityText>}/>
                 </PartnersTable.Table>
             </ACC.Section>
         );

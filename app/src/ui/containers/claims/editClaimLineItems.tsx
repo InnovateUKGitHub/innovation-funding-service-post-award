@@ -9,6 +9,7 @@ import { ContainerBaseWithState, ContainerProps, ReduxContainer } from "@ui/cont
 import { ClaimDetailDocumentsRoute, PrepareClaimRoute } from "@ui/containers";
 import { DocumentList, ValidationMessage } from "@ui/components";
 import { ClaimDetailsValidator, ClaimLineItemDtoValidator } from "@ui/validators/claimDetailsValidator";
+import { AccessibilityText } from "@framework/ui/components/renderers";
 
 export interface EditClaimDetailsParams {
   projectId: string;
@@ -164,7 +165,7 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
             <LineItemTable.Custom header="Description" qa="cost-description" value={(x, i) => this.renderDescription(x, i, validationResults[i.row], editor)} />
             <LineItemTable.Custom header="Cost (£)" qa="cost-value" classSuffix="numeric" value={(x, i) => this.renderCost(x, i, validationResults[i.row], editor)} width={30} />
             {this.state.showAddRemove ?
-              <LineItemTable.Custom header="" qa="remove" value={(x, i) => <a href="" role="button" onClick={e => this.removeItem(x, i, e, editor)}>Remove</a>} width={1}/>
+              <LineItemTable.Custom header="No data" hideHeader={true} qa="remove" value={(x, i) => <a href="" role="button" onClick={e => this.removeItem(x, i, e, editor)}>Remove</a>} width={1}/>
               : null}
           </LineItemTable.Table>
         </LineItemForm.Fieldset>
@@ -271,7 +272,7 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
       <tr key={2} className="govuk-table__row">
         <td className="govuk-table__cell govuk-table__cell--numeric govuk-!-font-weight-bold">Total costs</td>
         <td className="govuk-table__cell govuk-table__cell--numeric"><ACC.Renderers.Currency value={total} /></td>
-        {showAddRemove ? <td className="govuk-table__cell" /> : null}
+        {showAddRemove ? <td className="govuk-table__cell"><AccessibilityText>No data</AccessibilityText></td> : null}
       </tr>
     );
 
@@ -279,7 +280,7 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
       <tr key={3} className="govuk-table__row">
         <td className="govuk-table__cell govuk-table__cell--numeric govuk-!-font-weight-bold">Forecast costs</td>
         <td className="govuk-table__cell govuk-table__cell--numeric"><ACC.Renderers.Currency value={forecast} /></td>
-        {showAddRemove ? <td className="govuk-table__cell" /> : null}
+        {showAddRemove ? <td className="govuk-table__cell"><AccessibilityText>No data</AccessibilityText></td> : null}
       </tr>
     );
 
@@ -288,7 +289,7 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
         <tr key={4} className="govuk-table__row">
           <td className="govuk-table__cell govuk-table__cell--numeric govuk-!-font-weight-bold">Difference</td>
           <td className="govuk-table__cell govuk-table__cell--numeric"><ACC.Renderers.Percentage value={diff} /></td>
-          {showAddRemove ? <td className="govuk-table__cell" /> : null}
+          {showAddRemove ? <td className="govuk-table__cell"><AccessibilityText>No data</AccessibilityText></td> : null}
         </tr>
       );
     }
