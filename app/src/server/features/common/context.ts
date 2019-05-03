@@ -58,6 +58,7 @@ export class Context implements IContext {
     monitoringReportResponse: new Repositories.MonitoringReportResponseRepository(() => this.getSalesforceConnection()),
     monitoringReportHeader: new Repositories.MonitoringReportHeaderRepository(() => this.getSalesforceConnection()),
     monitoringReportQuestions: new Repositories.MonitoringReportQuestionsRepository(() => this.getSalesforceConnection()),
+    monitoringReportStatusChange: new Repositories.MonitoringReportStatusChangeRepository(() => this.getSalesforceConnection()),
     profileDetails: new Repositories.ProfileDetailsRepository(() => this.getSalesforceConnection()),
     profileTotalPeriod: new Repositories.ProfileTotalPeriodRepository(() => this.getSalesforceConnection()),
     profileTotalCostCategory: new Repositories.ProfileTotalCostCategoryRepository(() => this.getSalesforceConnection()),
