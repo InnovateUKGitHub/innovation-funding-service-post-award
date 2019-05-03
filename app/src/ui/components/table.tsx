@@ -9,6 +9,7 @@ import { Link } from ".";
 import * as colour from "../styles/colours";
 import { Results } from "../validation/results";
 import { ILinkInfo } from "../../types/ILinkInfo";
+import { AccessibilityText } from "./renderers";
 type dividerTypes = "normal" | "bold";
 type columnMode = "cell" | "header" | "footer" | "col";
 interface InternalColumnProps<T> {
@@ -26,6 +27,7 @@ interface InternalColumnProps<T> {
   validation?: Results<{}>;
   isDivider?: dividerTypes;
   paddingRight?: string;
+  hideHeader?: boolean;
 }
 
 interface ExternalColumnProps<T, TResult> {
@@ -37,6 +39,7 @@ interface ExternalColumnProps<T, TResult> {
   width?: number;
   isDivider?: dividerTypes;
   paddingRight?: string;
+  hideHeader?: boolean;
 }
 
 type TableChild<T> = React.ReactElement<ExternalColumnProps<T, {}>> | null;
@@ -49,6 +52,7 @@ interface TableProps<T> {
   headers?: JSX.Element[];
   data: T[];
   validationResult?: Results<{}>[];
+  caption?: string;
   bodyRowClass?: (row: T, index: number) => string;
   bodyRowFlag?: (row: T, index: number) => "warning" | "info" | "error" | "edit" | null;
   headerRowClass?: string;
@@ -60,7 +64,7 @@ export class TableColumn<T> extends React.Component<InternalColumnProps<T>> {
       case "cell":
         return this.renderCell(this.props.dataItem!, this.props.columnIndex!, this.props.rowIndex!);
       case "header":
-        return this.renderHeader(this.props.columnIndex!);
+        return this.renderHeader(this.props.columnIndex!, this.props.hideHeader!);
       case "footer":
         return this.renderFooter(this.props.columnIndex!);
       case "col":
@@ -69,9 +73,13 @@ export class TableColumn<T> extends React.Component<InternalColumnProps<T>> {
     return null;
   }
 
-  renderHeader(column: number) {
+  renderHeader(column: number, hideHeader = false) {
     const className = classNames("govuk-table__header", { ["govuk-table__header--" + this.props.classSuffix]: !!this.props.classSuffix });
-    return <th className={className} scope="col" key={column}>{this.props.header}</th>;
+    return <th className={className} scope="col" key={column}>{this.renderHeaderElement()}</th>;
+  }
+
+  renderHeaderElement() {
+    return this.props.hideHeader ? <AccessibilityText>{this.props.header}</AccessibilityText> : this.props.header;
   }
 
   renderFooter(column: number) {
@@ -145,6 +153,7 @@ const TableComponent = <T extends {}>(props: TableProps<T> & { data: T[]; valida
   return (
     <div data-qa={props.qa} style={{overflowX:"auto"}}>
       <table className={classNames("govuk-table", props.className)}>
+        {!!props.caption ? <caption className="govuk-visually-hidden">{props.caption}</caption> : null}
         <colgroup>
           {cols}
         </colgroup>

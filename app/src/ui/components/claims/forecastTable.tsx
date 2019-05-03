@@ -1,7 +1,7 @@
 import React from "react";
 import classNames from "classnames";
 import * as ACC from "../../components";
-import {CondensedDateRange, Currency, Percentage} from "../../components/renderers";
+import { AccessibilityText, CondensedDateRange, Currency, Percentage } from "../../components/renderers";
 import { ForecastDetailsDtosValidator, ForecastDetailsDtoValidator } from "../../validators/forecastDetailsDtosValidator";
 import { IEditorStore } from "../../redux";
 import { ForecastData } from "../../containers/claims/forecasts/common";
@@ -73,9 +73,9 @@ export class ForecastTable extends React.Component<Props> {
           isDivider={i === forecasts.length - 1 ? "bold" : undefined}
         />)}
 
-        <Table.Currency header="" value={x => x.total} qa="category-total" isDivider="normal" />
-        <Table.Currency header="" value={x => x.golCosts} qa="category-gol-costs" isDivider="normal" />
-        <Table.Percentage header="" value={x => x.difference} qa="category-difference" />
+        <Table.Currency header="No data" hideHeader={true} value={x => x.total} qa="category-total" isDivider="normal" />
+        <Table.Currency header="No data" hideHeader={true} value={x => x.golCosts} qa="category-gol-costs" isDivider="normal" />
+        <Table.Percentage header="No data" hideHeader={true} value={x => x.difference} qa="category-difference" />
       </Table.Table>
     );
   }
@@ -197,7 +197,9 @@ export class ForecastTable extends React.Component<Props> {
 
     return [(
       <tr key="cHeader1" className="govuk-table__row govuk-body-s">
-        <th className="govuk-table__header govuk-table__header--numeric" />
+        <th className="govuk-table__header govuk-table__header--numeric">
+          <AccessibilityText>Cost categories</AccessibilityText>
+        </th>
         {previous > 0 ? <th className="govuk-table__header govuk-table__header--numeric" colSpan={previous}>Previous costs</th> : null}
         {claimPeriod > 0 ? <th className="govuk-table__header govuk-table__header--numeric">Costs this period</th> : null}
         {forecasts ? <th className="govuk-table__header govuk-table__header--numeric" colSpan={periods.length - claimPeriod}>Forecast</th> : null}
@@ -210,9 +212,15 @@ export class ForecastTable extends React.Component<Props> {
       <tr key="cHeader2" className="govuk-table__row govuk-body-s">
         <th className="govuk-table__header">Period</th>
         {periods.map((p, i) => <th key={i} className="govuk-table__header" style={{textAlign: "right"}}>{p}</th>)}
-        <th className="govuk-table__header" />
-        <th className="govuk-table__header" />
-        <th className="govuk-table__header" />
+        <th className="govuk-table__header">
+          <AccessibilityText>No data</AccessibilityText>
+        </th>
+        <th className="govuk-table__header">
+          <AccessibilityText>No data</AccessibilityText>
+        </th>
+        <th className="govuk-table__header">
+          <AccessibilityText>No data</AccessibilityText>
+        </th>
       </tr>
     )];
   }

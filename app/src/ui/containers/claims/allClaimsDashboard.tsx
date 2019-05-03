@@ -156,6 +156,7 @@ class Component extends ContainerBase<Params, Data, {}> {
           data={currentInfo.claims}
           className="govuk-!-font-size-16"
           bodyRowFlag={x => this.getBodyRowFlag(x, project, partners) ? "edit" : null}
+          caption="Open"
           qa="current-claims-table"
         >
           <ClaimTable.String header="Partner" qa="partner" value={renderPartnerName} />
@@ -164,7 +165,7 @@ class Component extends ContainerBase<Params, Data, {}> {
           <ClaimTable.Currency header="Difference" qa="diff" value={(x) => x.forecastCost - x.totalCost} />
           <ClaimTable.String header="Status" qa="status" value={(x) => x.status} />
           <ClaimTable.ShortDate header="Date of last update" qa="last-update" value={x => x.paidDate || x.approvedDate || x.lastModifiedDate} />
-          <ClaimTable.Custom header="" qa="link" value={(x) => <Acc.Claims.ClaimDetailsLink claim={x} project={project} partner={partners.find(p => p.id === x.partnerId)!} /> }/>
+          <ClaimTable.Custom header="Action" hideHeader={true} qa="link" value={(x) => <Acc.Claims.ClaimDetailsLink claim={x} project={project} partner={partners.find(p => p.id === x.partnerId)!} /> }/>
         </ClaimTable.Table>
       </Acc.Section>
     );
@@ -201,14 +202,14 @@ class Component extends ContainerBase<Params, Data, {}> {
     const ClaimTable = Acc.TypedTable<ClaimDto>();
     return (
       <div>
-        <ClaimTable.Table data={previousClaims} qa={`previousClaims-${partner.accountId}`}>
+        <ClaimTable.Table data={previousClaims} caption={partner.name} qa={`previousClaims-${partner.accountId}`}>
           <ClaimTable.Custom header="" qa="period" value={(x) => this.renderClosedPeriodColumn(x)} />
           <ClaimTable.Currency header="Forecast costs for period" qa="forecast-cost" value={(x) => x.forecastCost} />
           <ClaimTable.Currency header="Actual costs for period" qa="actual-cost" value={(x) => x.totalCost} />
           <ClaimTable.Currency header="Difference" qa="diff" value={(x) => x.forecastCost - x.totalCost} />
           <ClaimTable.String header="Status" qa="status" value={(x) => x.status} />
           <ClaimTable.ShortDate header="Date of last update" qa="last-update" value={x => x.paidDate || x.approvedDate || x.lastModifiedDate} />
-          <ClaimTable.Custom header="" qa="link" value={(x) => <Acc.Claims.ClaimDetailsLink claim={x} project={project} partner={partner} />} />
+          <ClaimTable.Custom header="Action" hideHeader={true} qa="link" value={(x) => <Acc.Claims.ClaimDetailsLink claim={x} project={project} partner={partner} />} />
         </ClaimTable.Table>
       </div>
     );

@@ -1,3 +1,4 @@
+export * from "./accessibilityText";
 export * from "./ariaLive";
 export * from "./currency";
 export * from "./date";
