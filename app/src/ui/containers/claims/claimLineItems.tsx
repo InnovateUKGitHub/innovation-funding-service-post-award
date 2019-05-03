@@ -229,7 +229,7 @@ const getLoadDataActions = (params: Params): Actions.AsyncThunk<any>[] => [
   Actions.loadClaimLineItemsForCategory(params.projectId, params.partnerId, params.costCategoryId, params.periodId),
   Actions.loadClaimDetailDocuments(params.projectId, params.partnerId, params.periodId, params.costCategoryId),
   Actions.loadClaim(params.partnerId, params.periodId),
-  Actions.loadClaimDetails(params.partnerId, params.periodId, params.costCategoryId),
+  Actions.loadClaimDetails(params.projectId, params.partnerId, params.periodId, params.costCategoryId),
 ];
 
 export const ClaimLineItemsRoute = definition.route({
