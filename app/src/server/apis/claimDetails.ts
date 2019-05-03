@@ -4,7 +4,7 @@ import { GetAllClaimDetailsByPartner, GetClaimDetailsQuery } from "@server/featu
 
 export interface IClaimDetailsApi {
   getAllByPartner: (params: ApiParams<{ partnerId: string }>) => Promise<ClaimDetailsDto[]>;
-  get: (params: ApiParams<{ partnerId: string, periodId: number, costCategoryId: string }>) => Promise<ClaimDetailsDto>;
+  get: (params: ApiParams<ClaimDetailKey>) => Promise<ClaimDetailsDto>;
 }
 
 class Controller extends ControllerBase<ClaimDetailsDto> implements IClaimDetailsApi {
@@ -12,7 +12,7 @@ class Controller extends ControllerBase<ClaimDetailsDto> implements IClaimDetail
     super("claim-details");
 
     this.getItems("/", (p, q) => ({ partnerId: q.partnerId, }), (p) => this.getAllByPartner(p));
-    this.getItem("/:partnerId/:periodId/:costCategoryId", (p, q) => ({ partnerId: p.partnerId, periodId: parseInt(p.periodId, 10), costCategoryId: p.costCategoryId }), p => this.get(p));
+    this.getItem("/:projectId/:partnerId/:periodId/:costCategoryId", (p) => ({ projectId: p.projectId,  partnerId: p.partnerId, periodId: parseInt(p.periodId, 10), costCategoryId: p.costCategoryId }), p => this.get(p));
   }
 
   public async getAllByPartner(params: ApiParams<{ partnerId: string }>) {
@@ -21,8 +21,8 @@ class Controller extends ControllerBase<ClaimDetailsDto> implements IClaimDetail
     return contextProvider.start(params).runQuery(query);
   }
 
-  public async get(params: ApiParams<{ partnerId: string, periodId: number, costCategoryId: string }>) {
-    const query = new GetClaimDetailsQuery(params.partnerId, params.periodId, params.costCategoryId);
+  public async get(params: ApiParams<ClaimDetailKey>) {
+    const query = new GetClaimDetailsQuery(params.projectId, params.partnerId, params.periodId, params.costCategoryId);
     return contextProvider.start(params).runQuery(query);
   }
 }

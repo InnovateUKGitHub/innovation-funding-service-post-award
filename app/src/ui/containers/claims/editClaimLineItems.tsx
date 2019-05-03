@@ -346,10 +346,10 @@ export const EditClaimLineItemsRoute = definition.route({
   getLoadDataActions: (params) => [
     Actions.loadProject(params.projectId),
     Actions.loadCostCategories(),
-    Actions.loadClaimDetails(params.partnerId, params.periodId, params.costCategoryId),
+    Actions.loadClaimDetails(params.projectId, params.partnerId, params.periodId, params.costCategoryId),
     Actions.loadForecastDetail(params.partnerId, params.periodId, params.costCategoryId),
     Actions.loadClaimLineItemsForCategory(params.projectId, params.partnerId, params.costCategoryId, params.periodId),
-    Actions.loadClaimDetailDocuments(params.partnerId, params.periodId, params.costCategoryId)
+    Actions.loadClaimDetailDocuments(params.projectId, params.partnerId, params.periodId, params.costCategoryId)
   ],
   container: EditClaimLineItems,
   accessControl: (auth, params) => auth.forPartner(params.projectId, params.partnerId).hasRole(ProjectRole.FinancialContact)

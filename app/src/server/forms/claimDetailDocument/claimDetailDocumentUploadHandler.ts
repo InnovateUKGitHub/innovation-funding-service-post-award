@@ -18,7 +18,7 @@ export class ClaimDetailDocumentUploadHandler extends FormHandlerBase<ClaimDetai
     }
 
     protected async run(context: IContext, params: ClaimDetailDocumentsPageParams, button: IFormButton, dto: FileUpload): Promise<ILinkInfo> {
-        const claimDetailKey = { partnerId: params.partnerId, periodId: params.periodId, costCategoryId: params.costCategoryId };
+        const claimDetailKey = { projectId: params.projectId, partnerId: params.partnerId, periodId: params.periodId, costCategoryId: params.costCategoryId };
 
         await context.runCommand(new UploadClaimDetailDocumentCommand(claimDetailKey, dto));
 
@@ -26,7 +26,7 @@ export class ClaimDetailDocumentUploadHandler extends FormHandlerBase<ClaimDetai
     }
 
     protected getStoreInfo(params: ClaimDetailDocumentsPageParams): { key: string, store: string } {
-        return getClaimDetailDocumentEditor({partnerId: params.partnerId, periodId: params.periodId, costCategoryId: params.costCategoryId });
+        return getClaimDetailDocumentEditor({ projectId: params.projectId, partnerId: params.partnerId, periodId: params.periodId, costCategoryId: params.costCategoryId });
     }
 
     protected createValidationResult(params: ClaimDetailDocumentsPageParams, dto: FileUpload): Results<FileUpload> {

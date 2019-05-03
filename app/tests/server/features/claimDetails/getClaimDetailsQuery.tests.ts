@@ -20,12 +20,12 @@ describe("GetClaimDetailsQuery", () => {
     const costCategory = context.testData.createCostCategory(x => {
       x.Id = exectedCostCategoryId;
     });
-
+    const project = context.testData.createProject();
     const partner = context.testData.createPartner(undefined, x => {
       x.Id = exectedParticipantId;
     });
 
-    context.testData.createClaimDetail(costCategory, partner, expectedPeriod, x => {
+    context.testData.createClaimDetail(project, costCategory, partner, expectedPeriod, x => {
       x.Id = expectedId;
       x.Acc_ProjectPeriodStartDate__c = expectedStartDate.toFormat("yyyy-MM-dd");
       x.Acc_ProjectPeriodEndDate__c = expectedEndDate.toFormat("yyyy-MM-dd");
@@ -33,7 +33,7 @@ describe("GetClaimDetailsQuery", () => {
       x.Acc_ReasonForDifference__c = expectedComments;
     });
 
-    const query = new GetClaimDetailsQuery(exectedParticipantId, expectedPeriod, exectedCostCategoryId);
+    const query = new GetClaimDetailsQuery(partner.Acc_ProjectId__c, exectedParticipantId, expectedPeriod, exectedCostCategoryId);
     const result = await context.runQuery(query);
 
     expect(result).not.toBeNull();
@@ -54,7 +54,7 @@ describe("GetClaimDetailsQuery", () => {
     const expectedPeriod = 3;
     const requestedPeriodId = expectedPeriod + 1;
 
-    const query = new GetClaimDetailsQuery(exectedParticipantId, requestedPeriodId, exectedCostCategoryId);
+    const query = new GetClaimDetailsQuery("", exectedParticipantId, requestedPeriodId, exectedCostCategoryId);
     const result = await context.runQuery(query);
 
     expect(result).not.toBeNull();
