@@ -1,3 +1,3 @@
 export * from "./claimDtoValidator";
-export * from "./claimLineItemDtosValidator";
+export * from "./claimDetailsValidator";
 export * from "./forecastDetailsDtosValidator";

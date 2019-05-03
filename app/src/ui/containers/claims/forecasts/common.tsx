@@ -25,7 +25,7 @@ export interface ForecastData {
   partner: PartnerDto;
   claim: ClaimDto | null;
   claims: ClaimDto[];
-  claimDetails: ClaimDetailsDto[];
+  claimDetails: ClaimDetailsSummaryDto[];
   forecastDetails: ForecastDetailsDTO[];
   golCosts: GOLCostDto[];
   costCategories: CostCategoryDto[];
