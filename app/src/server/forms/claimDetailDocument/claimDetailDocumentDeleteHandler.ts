@@ -29,7 +29,7 @@ export class ClaimDetailDocumentDeleteHandler extends FormHandlerBase<ClaimDetai
   }
 
   protected getStoreInfo(params: ClaimDetailDocumentsPageParams): { key: string; store: string; } {
-    return getClaimDetailDocumentDeleteEditorStoreInfo({ partnerId: params.partnerId, periodId: params.periodId, costCategoryId: params.costCategoryId }, []);
+    return getClaimDetailDocumentDeleteEditorStoreInfo({ projectId: params.projectId, partnerId: params.partnerId, periodId: params.periodId, costCategoryId: params.costCategoryId }, []);
   }
 
   protected async run(context: IContext, params: ClaimDetailDocumentsPageParams, button: IFormButton, dto: Document): Promise<ILinkInfo> {

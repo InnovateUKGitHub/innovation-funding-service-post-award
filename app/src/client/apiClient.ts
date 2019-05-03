@@ -16,7 +16,7 @@ const clientApi: IApiClient = {
     getAllByPartnerIdForPeriod: (params) => ajaxJson(`/api/costs-summary?projectId=${params.projectId}&partnerId=${params.partnerId}&periodId=${params.periodId}`)
   },
   claimDetails: {
-    get: (params) => ajaxJson(`/api/claim-details/${params.partnerId}/${params.periodId}/${params.costCategoryId}`),
+    get: (params) => ajaxJson(`/api/claim-details/${params.projectId}/${params.partnerId}/${params.periodId}/${params.costCategoryId}`),
     getAllByPartner: (params) => ajaxJson(`/api/claim-details/?partnerId=${params.partnerId}`)
   },
   costCategories: {
@@ -24,13 +24,13 @@ const clientApi: IApiClient = {
   },
   documents: {
     getClaimDocuments:(params) => ajaxJson(`/api/documents/claims/${params.partnerId}/${params.periodId}/?description=${params.description}`),
-    getClaimDetailDocuments: ({ claimDetailKey }) => ajaxJson(`/api/documents/claim-details/${claimDetailKey.partnerId}/${claimDetailKey.periodId}/${claimDetailKey.costCategoryId}`),
+    getClaimDetailDocuments: ({ claimDetailKey }) => ajaxJson(`/api/documents/claim-details/${claimDetailKey.projectId}/${claimDetailKey.partnerId}/${claimDetailKey.periodId}/${claimDetailKey.costCategoryId}`),
     getProjectDocuments: (params) => ajaxJson(`/api/documents/projects/${params.projectId}`),
     deleteDocument: ({ documentId }) => ajaxJson(`/api/documents/${documentId}`, { method: "DELETE" }),
     uploadClaimDetailDocument: ({ claimDetailKey, file }) => {
       const formData = new FormData();
       formData.append("attachment", file as File);
-      return ajaxPostFormData(`/api/documents/claim-details/${claimDetailKey.partnerId}/${claimDetailKey.periodId}/${claimDetailKey.costCategoryId}`, formData);
+      return ajaxPostFormData(`/api/documents/claim-details/${claimDetailKey.projectId}/${claimDetailKey.partnerId}/${claimDetailKey.periodId}/${claimDetailKey.costCategoryId}`, formData);
     },
     uploadClaimDocument: ({ claimKey, file, description }) => {
       const formData = new FormData();

@@ -13,7 +13,7 @@ describe("GetCostSummaryForPeriodQuery", () => {
     const project = context.testData.createProject();
 
     costCategories.forEach(x => {
-      context.testData.createClaimDetail(x, partner, 1);
+      context.testData.createClaimDetail(project, x, partner, 1);
     });
 
     const query = new GetCostSummaryForPeriodQuery(project.Id, partner.Id, 1);
@@ -36,7 +36,7 @@ describe("GetCostSummaryForPeriodQuery", () => {
     const project = context.testData.createProject();
 
     costCategories.forEach(x => {
-      context.testData.createClaimDetail(x, partner, 1);
+      context.testData.createClaimDetail(project, x, partner, 1);
     });
 
     const query = new GetCostSummaryForPeriodQuery(project.Id, partner.Id, 1);
@@ -56,7 +56,7 @@ describe("GetCostSummaryForPeriodQuery", () => {
     const project = context.testData.createProject();
 
     costCategories.forEach(x => {
-      context.testData.createClaimDetail(x, partner, 1);
+      context.testData.createClaimDetail(project, x, partner, 1);
     });
 
     const query = new GetCostSummaryForPeriodQuery(project.Id, partner.Id, 1);
@@ -77,7 +77,7 @@ describe("GetCostSummaryForPeriodQuery", () => {
 
     const project = context.testData.createProject();
 
-    context.testData.createClaimDetail(costCategory, partner, periodId, x => x.Acc_PeriodCostCategoryTotal__c = expectedCost);
+    context.testData.createClaimDetail(project, costCategory, partner, periodId, x => x.Acc_PeriodCostCategoryTotal__c = expectedCost);
 
     const query = new GetCostSummaryForPeriodQuery(project.Id, partner.Id, periodId);
 
@@ -102,8 +102,8 @@ describe("GetCostSummaryForPeriodQuery", () => {
 
     const project = context.testData.createProject();
 
-    context.testData.createClaimDetail(costCategory1, partner, periodId, x => x.Acc_PeriodCostCategoryTotal__c = expectedCost1);
-    context.testData.createClaimDetail(costCategory2, partner, periodId, x => x.Acc_PeriodCostCategoryTotal__c = expectedCost2);
+    context.testData.createClaimDetail(project, costCategory1, partner, periodId, x => x.Acc_PeriodCostCategoryTotal__c = expectedCost1);
+    context.testData.createClaimDetail(project, costCategory2, partner, periodId, x => x.Acc_PeriodCostCategoryTotal__c = expectedCost2);
 
     const query = new GetCostSummaryForPeriodQuery(project.Id, partner.Id, periodId);
 
@@ -126,7 +126,7 @@ describe("GetCostSummaryForPeriodQuery", () => {
     const value = 1234;
 
     context.testData.createProfileTotalCostCategory(costCategory,partner, value);
-    context.testData.createClaimDetail(costCategory, partner, periodId);
+    context.testData.createClaimDetail(project, costCategory, partner, periodId);
 
     const query = new GetCostSummaryForPeriodQuery(project.Id, partner.Id, periodId);
     const result = await context.runQuery(query);
@@ -141,7 +141,7 @@ describe("GetCostSummaryForPeriodQuery", () => {
     const project = context.testData.createProject();
     const costCategory = context.testData.createCostCategory();
 
-    context.testData.createClaimDetail(costCategory, partner, periodId,x => x.Acc_PeriodCostCategoryTotal__c = null!);
+    context.testData.createClaimDetail(project, costCategory, partner, periodId,x => x.Acc_PeriodCostCategoryTotal__c = null!);
 
     const query = new GetCostSummaryForPeriodQuery(project.Id, partner.Id, periodId);
     const result = await context.runQuery(query);
@@ -157,8 +157,8 @@ describe("GetCostSummaryForPeriodQuery", () => {
     const project = context.testData.createProject();
     const costCategory = context.testData.createCostCategory();
 
-    context.testData.createClaimDetail(costCategory, partner, periodId1, x => x.Acc_PeriodCostCategoryTotal__c = 1234);
-    context.testData.createClaimDetail(costCategory, partner, periodId2, x => x.Acc_PeriodCostCategoryTotal__c = 3456);
+    context.testData.createClaimDetail(project, costCategory, partner, periodId1, x => x.Acc_PeriodCostCategoryTotal__c = 1234);
+    context.testData.createClaimDetail(project, costCategory, partner, periodId2, x => x.Acc_PeriodCostCategoryTotal__c = 3456);
 
     const query = new GetCostSummaryForPeriodQuery(project.Id, partner.Id, periodId2);
     const result = await context.runQuery(query);

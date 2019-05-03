@@ -3,7 +3,6 @@ import { FormHandlerBase, IFormButton } from "./formHandlerBase";
 import { Results } from "../../ui/validation/results";
 import { GetAllForecastsForPartnerQuery, UpdateForecastDetailsCommand } from "../features/forecastDetails";
 import { GetByIdQuery } from "../features/projects";
-import { GetCostCategoriesQuery } from "../features/claims";
 import { UpdateForecastRoute, ViewForecastRoute } from "../../ui/containers";
 import { getForecastDetailsEditor } from "../../ui/redux/selectors";
 import { ForecastDetailsDtosValidator } from "../../ui/validators";

@@ -6,10 +6,12 @@ describe("UploadClaimDetailDocumentCommand", () => {
   it("should upload a claim detail document", async () => {
     const context = new TestContext();
     const costCat = context.testData.createCostCategory();
+    const project = context.testData.createProject();
     const partner = context.testData.createPartner();
-    const claimDetail = context.testData.createClaimDetail(costCat, partner);
+    const claimDetail = context.testData.createClaimDetail(project, costCat, partner, 1);
 
     const claimDetailKey = {
+      projectId: project.Id,
       partnerId: claimDetail.Acc_ProjectParticipant__c,
       periodId: claimDetail.Acc_ProjectPeriodNumber__c,
       costCategoryId: claimDetail.Acc_CostCategory__c,
@@ -32,9 +34,11 @@ describe("UploadClaimDetailDocumentCommand", () => {
     const context = new TestContext();
     const costCat = context.testData.createCostCategory();
     const partner = context.testData.createPartner();
-    const claimDetail = context.testData.createClaimDetail(costCat, partner);
+    const project = context.testData.createProject();
+    const claimDetail = context.testData.createClaimDetail(project, costCat, partner);
 
     const claimDetailKey = {
+      projectId: project.Id,
       partnerId: claimDetail.Acc_ProjectParticipant__c,
       periodId: claimDetail.Acc_ProjectPeriodNumber__c,
       costCategoryId: claimDetail.Acc_CostCategory__c,

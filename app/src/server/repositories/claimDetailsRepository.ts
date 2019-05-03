@@ -2,6 +2,9 @@ import SalesforceRepositoryBase, { Updatable } from "./salesforceRepositoryBase"
 
 export interface ISalesforceClaimDetails {
   Id: string;
+  Acc_ProjectParticipant__r: {
+    Acc_ProjectId__c: string;
+  };
   Acc_CostCategory__c: string;
   Acc_PeriodCostCategoryTotal__c: number;
   Acc_ProjectParticipant__c: string;
@@ -29,7 +32,8 @@ export class ClaimDetailsRepository extends SalesforceRepositoryBase<ISalesforce
     "Id",
     "Acc_CostCategory__c",
     "Acc_PeriodCostCategoryTotal__c",
-    "Acc_ProjectParticipant__c",
+    "Acc_ProjectParticipant__r.Id",
+    "Acc_ProjectParticipant__r.Acc_ProjectId__c",
     "Acc_ProjectPeriodNumber__c",
     "Acc_ProjectPeriodStartDate__c",
     "Acc_ProjectPeriodEndDate__c",
@@ -47,9 +51,10 @@ export class ClaimDetailsRepository extends SalesforceRepositoryBase<ISalesforce
   }
 
   async get(claimDetailKey: ClaimDetailKey): Promise<ISalesforceClaimDetails|null> {
-    const { partnerId, periodId, costCategoryId } = claimDetailKey;
+    const { projectId, partnerId, periodId, costCategoryId } = claimDetailKey;
     const filter = `
-      Acc_ProjectParticipant__c = '${partnerId}'
+      Acc_ProjectParticipant__r.Acc_ProjectId__c = '${projectId}'
+      AND Acc_ProjectParticipant__c = '${partnerId}'
       AND RecordType.Name = '${this.recordType}'
       AND Acc_ProjectPeriodNumber__c = ${periodId}
       AND Acc_CostCategory__c = '${costCategoryId}'

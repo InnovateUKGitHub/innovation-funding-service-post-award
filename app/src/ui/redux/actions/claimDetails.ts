@@ -13,7 +13,7 @@ export function loadCostsSummaryForPeriod(projectId: string, partnerId: string, 
   );
 }
 
-export function loadClaimDetails(partnerId: string, periodId: number, costCategoryId: string) {
-  return conditionalLoad(getClaimDetails(partnerId, periodId, costCategoryId), params => ApiClient.claimDetails.get({partnerId, periodId, costCategoryId, ...params}));
+export function loadClaimDetails(projectId: string, partnerId: string, periodId: number, costCategoryId: string) {
+  return conditionalLoad(getClaimDetails(partnerId, periodId, costCategoryId), params => ApiClient.claimDetails.get({projectId, partnerId, periodId, costCategoryId, ...params}));
 
 }

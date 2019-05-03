@@ -28,12 +28,13 @@ describe("UpdateForecastDetailsCommand", () => {
   it("total costs exceed gol costs", async () => {
     const context = new TestContext();
     const testData = context.testData;
+    const project = testData.createProject();
     const partner = testData.createPartner();
     const costCat = testData.createCostCategory();
     const periodId = 2;
     const profileDetail = testData.createProfileDetail(costCat, partner, periodId, x => x.Acc_LatestForecastCost__c = 123);
     testData.createClaim(partner, periodId - 1, x => x.Acc_TotalCostsSubmitted__c = 1000);
-    testData.createClaimDetail(costCat, partner, periodId - 1, x => x.Acc_PeriodCostCategoryTotal__c = 1000);
+    testData.createClaimDetail(project, costCat, partner, periodId - 1, x => x.Acc_PeriodCostCategoryTotal__c = 1000);
     testData.createProfileTotalCostCategory(costCat, partner, 1500);
 
     const dto: ForecastDetailsDTO[] = [{
@@ -68,7 +69,7 @@ describe("UpdateForecastDetailsCommand", () => {
       periodEnd: new Date(),
       value: 500
     }];
-    testData.createClaimDetail(costCat, partner, periodId - 1, x => x.Acc_PeriodCostCategoryTotal__c = 1000);
+    testData.createClaimDetail(project, costCat, partner, periodId - 1, x => x.Acc_PeriodCostCategoryTotal__c = 1000);
     testData.createProfileTotalCostCategory(costCat, partner, 1500);
 
     const command = new UpdateForecastDetailsCommand(project.Id, partner.Id, dto, true);
@@ -79,11 +80,12 @@ describe("UpdateForecastDetailsCommand", () => {
   it("total costs equal gol costs should update forecasts", async () => {
     const context = new TestContext();
     const testData = context.testData;
+    const project = testData.createProject();
     const partner = testData.createPartner();
     const costCat = testData.createCostCategory();
     const periodId = 1;
     const profileDetail = testData.createProfileDetail(costCat, partner, periodId, x => x.Acc_LatestForecastCost__c = 123);
-    testData.createClaimDetail(costCat, partner, periodId - 1, x => x.Acc_PeriodCostCategoryTotal__c = 1000);
+    testData.createClaimDetail(project, costCat, partner, periodId - 1, x => x.Acc_PeriodCostCategoryTotal__c = 1000);
     testData.createProfileTotalCostCategory(costCat, partner, 1500);
 
     const dto: ForecastDetailsDTO[] = [{
@@ -104,12 +106,13 @@ describe("UpdateForecastDetailsCommand", () => {
   it("total costs less than gol costs should update forecasts", async () => {
     const context = new TestContext();
     const testData = context.testData;
+    const project = testData.createProject();
     const partner = testData.createPartner();
     const costCat = testData.createCostCategory();
     const periodId = 1;
     const profileDetail = testData.createProfileDetail(costCat, partner, periodId, x => x.Acc_LatestForecastCost__c = 123);
     const profileDetail2 = testData.createProfileDetail(costCat, partner, periodId + 1, x => x.Acc_LatestForecastCost__c = 123);
-    testData.createClaimDetail(costCat, partner, periodId - 1, x => x.Acc_PeriodCostCategoryTotal__c = 1000);
+    testData.createClaimDetail(project, costCat, partner, periodId - 1, x => x.Acc_PeriodCostCategoryTotal__c = 1000);
     testData.createProfileTotalCostCategory(costCat, partner, 1500);
 
     const dto: ForecastDetailsDTO[] = [{
@@ -156,7 +159,7 @@ describe("UpdateForecastDetailsCommand", () => {
       periodEnd: new Date(),
       value: 500
     }];
-    testData.createClaimDetail(costCat, partner, periodId - 1, x => x.Acc_PeriodCostCategoryTotal__c = 1000);
+    testData.createClaimDetail(project, costCat, partner, periodId - 1, x => x.Acc_PeriodCostCategoryTotal__c = 1000);
     testData.createProfileTotalCostCategory(costCat, partner, 1500);
 
     const command = new UpdateForecastDetailsCommand(partner.Acc_ProjectId__c, partner.Id, dto, true);
@@ -186,7 +189,7 @@ describe("UpdateForecastDetailsCommand", () => {
       periodEnd: new Date(),
       value: 500
     }];
-    testData.createClaimDetail(costCat, partner, periodId - 1, x => x.Acc_PeriodCostCategoryTotal__c = 1000);
+    testData.createClaimDetail(project, costCat, partner, periodId - 1, x => x.Acc_PeriodCostCategoryTotal__c = 1000);
     testData.createProfileTotalCostCategory(costCat, partner, 1500);
 
     const command = new UpdateForecastDetailsCommand(partner.Acc_ProjectId__c, partner.Id, dto, true);
@@ -216,7 +219,7 @@ describe("UpdateForecastDetailsCommand", () => {
       periodEnd: new Date(),
       value: 500
     }];
-    testData.createClaimDetail(costCat, partner, periodId - 1, x => x.Acc_PeriodCostCategoryTotal__c = 1000);
+    testData.createClaimDetail(project, costCat, partner, periodId - 1, x => x.Acc_PeriodCostCategoryTotal__c = 1000);
     testData.createProfileTotalCostCategory(costCat, partner, 1500);
 
     const command = new UpdateForecastDetailsCommand(partner.Acc_ProjectId__c, partner.Id, dto, true);
@@ -244,7 +247,7 @@ describe("UpdateForecastDetailsCommand", () => {
       periodEnd: new Date(),
       value: 500
     }];
-    testData.createClaimDetail(costCat, partner, periodId - 1, x => x.Acc_PeriodCostCategoryTotal__c = 1000);
+    testData.createClaimDetail(project, costCat, partner, periodId - 1, x => x.Acc_PeriodCostCategoryTotal__c = 1000);
     testData.createProfileTotalCostCategory(costCat, partner, 1500);
 
     const command = new UpdateForecastDetailsCommand(partner.Acc_ProjectId__c, partner.Id, dto, true);
@@ -277,7 +280,7 @@ describe("UpdateForecastDetailsCommand", () => {
       periodEnd: new Date(),
       value: 500
     }];
-    testData.createClaimDetail(costCat, partner, periodId - 1, x => x.Acc_PeriodCostCategoryTotal__c = 1000);
+    testData.createClaimDetail(project, costCat, partner, periodId - 1, x => x.Acc_PeriodCostCategoryTotal__c = 1000);
     testData.createProfileTotalCostCategory(costCat, partner, 1500);
 
     const command = new UpdateForecastDetailsCommand(project.Id, partnerId, dto, false);

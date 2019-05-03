@@ -54,12 +54,18 @@ export class ClaimDetailDocumentsComponent extends ContainerBase<ClaimDetailDocu
   }
 
   private onChange(dto: DocumentUploadDto) {
-    const key = {partnerId: this.props.partnerId, periodId: this.props.periodId, costCategoryId: this.props.costCategoryId};
+    const key = {
+      projectId: this.props.projectId,
+      partnerId: this.props.partnerId,
+      periodId: this.props.periodId,
+      costCategoryId: this.props.costCategoryId
+    };
     this.props.validate(key, dto);
   }
 
   private onSave(dto: DocumentUploadDto) {
     const claimDetailKey = {
+      projectId: this.props.projectId,
       partnerId: this.props.partnerId,
       periodId: this.props.periodId,
       costCategoryId: this.props.costCategoryId,
@@ -69,6 +75,7 @@ export class ClaimDetailDocumentsComponent extends ContainerBase<ClaimDetailDocu
 
   private onDelete(dto: DocumentSummaryDto) {
     const claimDetailKey = {
+      projectId: this.props.projectId,
       partnerId: this.props.partnerId,
       periodId: this.props.periodId,
       costCategoryId: this.props.costCategoryId,
@@ -135,8 +142,8 @@ export const ClaimDetailDocuments = definition.connect({
       project: Selectors.getProject(props.projectId).getPending(state),
       costCategories: Selectors.getCostCategories().getPending(state),
       documents: Selectors.getClaimDetailDocuments(props.partnerId, props.periodId, props.costCategoryId).getPending(state),
-      editor: Selectors.getClaimDetailDocumentEditor({partnerId: props.partnerId, periodId: props.periodId, costCategoryId: props.costCategoryId}).get(state),
-      deleteEditor: Selectors.getClaimDetailDocumentDeleteEditor(state, {partnerId: props.partnerId, periodId: props.periodId, costCategoryId: props.costCategoryId}).get(state),
+      editor: Selectors.getClaimDetailDocumentEditor({projectId: props.projectId, partnerId: props.partnerId, periodId: props.periodId, costCategoryId: props.costCategoryId}).get(state),
+      deleteEditor: Selectors.getClaimDetailDocumentDeleteEditor(state, {projectId: props.projectId, partnerId: props.partnerId, periodId: props.periodId, costCategoryId: props.costCategoryId}).get(state),
     };
   },
   withCallbacks: (dispatch) => ({
@@ -144,10 +151,10 @@ export const ClaimDetailDocuments = definition.connect({
       dispatch(Actions.updateClaimDetailDocumentEditor(claimDetailKey, dto)),
     deleteFile: (claimDetailKey, dto) =>
       dispatch(Actions.deleteClaimDetailDocument(claimDetailKey, dto, () =>
-        dispatch(Actions.loadClaimDetailDocuments(claimDetailKey.partnerId, claimDetailKey.periodId, claimDetailKey.costCategoryId)))),
+        dispatch(Actions.loadClaimDetailDocuments(claimDetailKey.projectId, claimDetailKey.partnerId, claimDetailKey.periodId, claimDetailKey.costCategoryId)))),
     uploadFile: (claimDetailKey, file) =>
       dispatch(Actions.uploadClaimDetailDocument(claimDetailKey, file, () =>
-        dispatch(Actions.loadClaimDetailDocuments(claimDetailKey.partnerId, claimDetailKey.periodId, claimDetailKey.costCategoryId))))
+        dispatch(Actions.loadClaimDetailDocuments(claimDetailKey.projectId, claimDetailKey.partnerId, claimDetailKey.periodId, claimDetailKey.costCategoryId))))
   })
 });
 
@@ -163,7 +170,7 @@ export const ClaimDetailDocumentsRoute = definition.route({
   getLoadDataActions: (params) => [
     Actions.loadCostCategories(),
     Actions.loadProject(params.projectId),
-    Actions.loadClaimDetailDocuments(params.partnerId, params.periodId, params.costCategoryId)
+    Actions.loadClaimDetailDocuments(params.projectId, params.partnerId, params.periodId, params.costCategoryId)
   ],
   accessControl: (auth, {projectId, partnerId}) => auth.forPartner(projectId, partnerId).hasRole(ProjectRole.FinancialContact),
   container: ClaimDetailDocuments
