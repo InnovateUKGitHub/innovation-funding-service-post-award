@@ -7,6 +7,7 @@ import { StandardErrorPage } from "@ui/components/standardErrorPage";
 import { RootState } from "@ui/redux";
 import { IClientConfig } from "@ui/redux/reducers/configReducer";
 import { Authorisation, IClientUser } from "@framework/types";
+import { udpatePageTitle } from "../redux/actions";
 
 interface IAppProps extends RouterState {
   dispatch: any;
@@ -37,6 +38,9 @@ class AppComponent extends React.Component<IAppProps, {}> {
     const route = matchRoute(this.props.route);
     const params = route.getParams(this.props.route!);
     const auth = new Authorisation(this.props.user.roleInfo);
+
+    this.props.dispatch(udpatePageTitle(route, params));
+
     if(route.getLoadDataActions) {
       const actions = route.getLoadDataActions(params, auth) || [];
       actions.forEach(a => this.props.dispatch(a));
@@ -47,7 +51,6 @@ class AppComponent extends React.Component<IAppProps, {}> {
     const route = matchRoute(this.props.route);
     const hasAccess = this.accessControl(route);
     const pageContent = hasAccess ? <route.container {...this.props} /> : <StandardErrorPage />;
-
     return (
       <div>
         <Header ifsRoot={this.props.config.ifsRoot} />

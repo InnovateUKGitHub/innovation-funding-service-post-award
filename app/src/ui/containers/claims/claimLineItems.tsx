@@ -67,7 +67,7 @@ export class ClaimLineItemsComponent extends ContainerBase<Params, Data, {}> {
     return (
       <ACC.Page
         backLink={<ACC.BackLink route={backLink}>Back to claim</ACC.BackLink>}
-        pageTitle={<ACC.Projects.Title pageTitle={`${costCategories.find(x => x.id === this.props.costCategoryId)!.name}`} project={project} />}
+        pageTitle={<ACC.Projects.Title project={project} />}
       >
         <ACC.Section>
           <ClaimLineItemsTable lineItems={claimDetails.lineItems} forecastDetail={forecastDetail} />
@@ -232,6 +232,13 @@ export const ClaimLineItemsRoute = definition.route({
   routePath: "/projects/:projectId/claims/:partnerId/details/:periodId/costs/:costCategoryId",
   getParams: (route) => getParams(route),
   getLoadDataActions: (params) => getLoadDataActions(params),
+  getTitle: (store, params) => {
+    const costCat = Selectors.getCostCatetory(params.costCategoryId).getPending(store).data;
+    return {
+      htmlTitle: costCat && costCat.name ? `View costs for ${costCat.name}` : "View costs",
+      displayTitle: costCat && costCat.name || "Line items"
+    };
+  },
   container: ClaimLineItems
 });
 
@@ -240,7 +247,15 @@ export const ReviewClaimLineItemsRoute = definition.route({
   routePath: "/projects/:projectId/claims/:partnerId/review/:periodId/costs/:costCategoryId",
   getParams: (route) => getParams(route),
   getLoadDataActions: (params) => getLoadDataActions(params),
-  accessControl: (auth, { projectId, partnerId }) => auth.forPartner(projectId, partnerId).hasAnyRoles(ProjectRole.FinancialContact, ProjectRole.ProjectManager)
-  || auth.forProject(projectId).hasRole(ProjectRole.MonitoringOfficer),
-  container: ClaimLineItems
+  accessControl: (auth, { projectId, partnerId }) =>
+    auth.forPartner(projectId, partnerId).hasAnyRoles(ProjectRole.FinancialContact, ProjectRole.ProjectManager) ||
+    auth.forProject(projectId).hasRole(ProjectRole.MonitoringOfficer),
+  getTitle: (store, params) => {
+    const costCatName = Selectors.getCostCatetory(params.costCategoryId).getPending(store).then(x => x && x.name).data;
+    return {
+      htmlTitle: costCatName ? `Review costs for ${costCatName}` : "Review costs",
+      displayTitle: costCatName || "Costs"
+    };
+  },
+  container: ClaimLineItems,
 });

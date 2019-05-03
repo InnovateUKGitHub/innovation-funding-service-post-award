@@ -23,7 +23,7 @@ class Component extends ContainerBaseWithState<{}, Props, {}, State> {
     const CurrentUserForm = TypedForm<typeof formData>();
     return (
       <div>
-        <Title title="Home page" />
+        <Title />
         <div className="govuk-grid-row">
           <div className="govuk-grid-column-full">
             <h2>Current user</h2>
@@ -57,5 +57,9 @@ export const HomeRoute = containerDefinition.route({
   routePath: "/",
   getParams: () => ({}),
   getLoadDataActions: () => [],
+  getTitle: () => ({
+    htmlTitle: "Home",
+    displayTitle: "Home"
+  }),
   container: Home
 });

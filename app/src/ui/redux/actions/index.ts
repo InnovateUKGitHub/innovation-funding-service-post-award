@@ -6,6 +6,7 @@ export * from "./documents";
 export * from "./forecasts";
 export * from "./navigation";
 export * from "./monitoringReports";
+export * from "./pageTitle";
 export * from "./partners";
 export * from "./projects";
 export * from "./root";

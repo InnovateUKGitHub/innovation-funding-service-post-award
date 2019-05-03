@@ -66,7 +66,7 @@ export class ClaimsDetailsComponent extends ContainerBase<Params, Data, {}> {
     return (
       <ACC.Page
         backLink={<ACC.BackLink route={backLink}>Back to project</ACC.BackLink>}
-        pageTitle={<ACC.Projects.Title pageTitle="Claim" project={data.project} />}
+        pageTitle={<ACC.Projects.Title project={data.project} />}
         tabs={<ACC.Claims.Navigation projectId={data.project.id} partnerId={data.partner.id} periodId={data.claim.periodId} currentRouteName={ClaimsDetailsRoute.routeName} />}
       >
         {this.renderTableSection(data)}
@@ -200,5 +200,11 @@ export const ClaimsDetailsRoute = definition.route({
     return [...standardActions, ...forcastActions];
   },
   accessControl: (auth, params) => auth.forProject(params.projectId).hasAnyRoles(ProjectRole.MonitoringOfficer, ProjectRole.ProjectManager) || auth.forPartner(params.projectId, params.partnerId).hasRole(ProjectRole.FinancialContact),
+  getTitle: (store, params) => {
+    return {
+      displayTitle: "Claim",
+      htmlTitle: "View claim - Innovation Funding Service"
+    };
+  },
   container: ClaimsDetails
 });

@@ -35,7 +35,7 @@ class LogComponent extends ContainerBase<Params, Data, Callbacks> {
     return (
       <ACC.Page
         backLink={<ACC.BackLink route={MonitoringReportDashboardRoute.getLink({ projectId: this.props.projectId })}>Back to monitoring reports</ACC.BackLink>}
-        pageTitle={<ACC.Projects.Title pageTitle="Monitoring report" project={project} />}
+        pageTitle={<ACC.Projects.Title project={project} />}
         tabs={<ACC.MonitoringReports.Navigation projectId={this.props.projectId} id={this.props.id} currentRouteName={MonitoringReportLogRoute.routeName} />}
       />
     );
@@ -61,5 +61,9 @@ export const MonitoringReportLogRoute = containerDefinition.route({
     Actions.loadMonitoringReport(params.projectId, params.id),
   ],
   container: MonitoringReportLog,
+  getTitle: (state, params) => ({
+    htmlTitle: "Logs - View monitoring report",
+    displayTitle: "Monitoring report"
+  }),
   accessControl: (auth, params, features) => features.monitoringReports && auth.forProject(params.projectId).hasRole(ProjectRole.MonitoringOfficer)
 });
