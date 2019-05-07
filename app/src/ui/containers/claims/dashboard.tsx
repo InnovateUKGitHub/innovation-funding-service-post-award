@@ -193,7 +193,7 @@ class Component extends ContainerBase<ClaimDashboardPageParams, Data, Callbacks>
 
   private renderCurrentClaims(data: ClaimDto[], tableQa: string, project: ProjectDto, partner: PartnerDto, previousClaims?: ClaimDto[]) {
     if (data.length) {
-      return this.renderClaimsTable(data, tableQa, project, partner);
+      return this.renderClaimsTable(data, tableQa, project, partner, "Open");
     }
 
     if (!!project.periodEndDate) {
@@ -210,13 +210,13 @@ class Component extends ContainerBase<ClaimDashboardPageParams, Data, Callbacks>
 
   private renderPreviousClaims(data: ClaimDto[], tableQa: string, project: ProjectDto, partner: PartnerDto) {
     if (data.length) {
-      return this.renderClaimsTable(data, tableQa, project, partner);
+      return this.renderClaimsTable(data, tableQa, project, partner, "Closed");
     }
 
     return <Acc.Renderers.SimpleString>You have not made any claims.</Acc.Renderers.SimpleString>;
   }
 
-  private renderClaimsTable(data: ClaimDto[], tableQa: string, project: ProjectDto, partner: PartnerDto) {
+  private renderClaimsTable(data: ClaimDto[], tableQa: string, project: ProjectDto, partner: PartnerDto, tableCaption?: string) {
     const ClaimTable = Acc.TypedTable<ClaimDto>();
 
     return (
@@ -225,6 +225,7 @@ class Component extends ContainerBase<ClaimDashboardPageParams, Data, Callbacks>
         className="govuk-!-font-size-16"
         bodyRowFlag={x => Acc.Claims.getClaimDetailsLinkType({ claim: x, project, partner }) === "edit" ? "edit" : null}
         qa={tableQa}
+        caption={tableCaption}
       >
         <ClaimTable.Custom
           header="Period"
@@ -240,7 +241,7 @@ class Component extends ContainerBase<ClaimDashboardPageParams, Data, Callbacks>
           qa="date"
           value={(x) => (x.paidDate || x.approvedDate || x.lastModifiedDate)}
         />
-        <ClaimTable.Custom header="" qa="link" value={(x) => <Acc.Claims.ClaimDetailsLink claim={x} project={project} partner={partner} />} />
+        <ClaimTable.Custom header="Action" hideHeader={true} qa="link" value={(x) => <Acc.Claims.ClaimDetailsLink claim={x} project={project} partner={partner} />} />
       </ClaimTable.Table>
     );
   }
