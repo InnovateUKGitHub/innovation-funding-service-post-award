@@ -41,15 +41,7 @@ class Controller extends ControllerBaseWithSummary<ClaimDetailsSummaryDto, Claim
   }
 
   public async saveClaimDetails(params: ApiParams<{ projectId: string, partnerId: string, periodId: number, costCategoryId: string, claimDetails: ClaimDetailsDto }>): Promise<ClaimDetailsDto> {
-
-    const {projectId, partnerId, costCategoryId, periodId, claimDetails } = params;
-    const validRequest = projectId && partnerId && costCategoryId && periodId &&
-      claimDetails.lineItems.every(x => x.periodId === periodId && x.partnerId === partnerId && x.costCategoryId === costCategoryId);
-
-    if (!validRequest) {
-      throw new BadRequestError("Request is missing required fields");
-    }
-
+    const { projectId, partnerId, costCategoryId, periodId, claimDetails } = params;
     const context = contextProvider.start(params);
     const saveLineItemsCommand = new SaveClaimDetails(projectId, partnerId, periodId, costCategoryId, claimDetails);
     await context.runCommand(saveLineItemsCommand);
