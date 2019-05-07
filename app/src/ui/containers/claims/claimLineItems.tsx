@@ -145,7 +145,7 @@ export class ClaimLineItemsComponent extends ContainerBase<Params, Data, {}> {
   private renderAdditionalInformation = (claimDetail: ClaimDetailsDto) => {
     if (!claimDetail.comments) return null;
     return (
-      <ACC.Section title="Additional information">
+      <ACC.Section title="Additional information" qa="additional-information">
         <ACC.Renderers.SimpleString>
           {claimDetail.comments}
         </ACC.Renderers.SimpleString>
