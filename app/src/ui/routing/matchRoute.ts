@@ -5,7 +5,7 @@ import { AsyncThunk, DataLoadAction } from "../redux/actions";
 import { ErrorNotFoundRoute } from "../containers";
 import { Authorisation } from "../../types";
 import { RootState } from "../redux";
-import { Title } from "../redux/reducers/pageTitleReducer";
+import { PageTitleState } from "../redux/reducers/pageTitleReducer";
 
 export interface MatchedRoute {
   name: string;
@@ -14,7 +14,7 @@ export interface MatchedRoute {
   getParams: (route: State) => {};
   getLoadDataActions: (params: {}, auth: Authorisation) => AsyncThunk<DataLoadAction | void>[];
   container: React.ComponentClass<any>;
-  getTitle: (store: RootState, params: {}) => Title;
+  getTitle: (store: RootState, params: {}) => PageTitleState;
 }
 
 export function matchRoute(route: State | null | undefined): MatchedRoute {
@@ -26,6 +26,6 @@ export function matchRoute(route: State | null | undefined): MatchedRoute {
     getLoadDataActions: found.getLoadDataActions as (params: {}, auth: Authorisation) => AsyncThunk<any>[],
     accessControl: found.accessControl as (auth: Authorisation, params: {}, features: IFeatureFlags) => boolean,
     container: found.container,
-    getTitle: found.getTitle as (store: RootState, params: {}) => Title
+    getTitle: found.getTitle as (store: RootState, params: {}) => PageTitleState
   };
 }

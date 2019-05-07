@@ -25,7 +25,7 @@ import { validationSummaryGuide } from "./validationSummaryGuide";
 import { Provider } from "react-redux";
 import { RouterProvider } from "react-router5";
 import { combineReducers, createStore } from "redux";
-import { Title } from "../redux/reducers/pageTitleReducer";
+import { PageTitleState } from "../redux/reducers/pageTitleReducer";
 import { rootReducer } from "../redux";
 
 const guides: IGuide[] = [

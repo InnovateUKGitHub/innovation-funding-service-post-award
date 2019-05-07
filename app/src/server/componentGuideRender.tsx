@@ -3,19 +3,19 @@ import { Request, Response } from "express";
 import { renderToString } from "react-dom/server";
 import { Guide } from "../ui/componentsGuide/guide";
 import * as colour from "../ui/styles/colours";
-import { Title } from "@framework/ui/redux/reducers/pageTitleReducer";
+import { PageTitleState } from "@framework/ui/redux/reducers/pageTitleReducer";
 import { combineReducers, createStore } from "redux";
 import { Provider } from "react-redux";
 import { Configuration } from "./features/common";
 
 export function componentGuideRender(req: Request, res: Response) {
-    const exampleTitle: Title = {
+    const exampleTitle: PageTitleState = {
         displayTitle: "Component guide example title",
         htmlTitle: "Display title",
     };
 
     const reducer = combineReducers({
-        title: (s: Title = exampleTitle) => s
+        title: (s: PageTitleState = exampleTitle) => s
     });
 
     const store = createStore(reducer, { title: exampleTitle });

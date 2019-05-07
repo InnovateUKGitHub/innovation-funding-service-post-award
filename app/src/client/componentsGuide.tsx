@@ -2,7 +2,7 @@ import React from "react";
 import ReactDom from "react-dom";
 import { Guide } from "../ui/componentsGuide/guide";
 import { Provider } from "react-redux";
-import { Title } from "@framework/ui/redux/reducers/pageTitleReducer";
+import { PageTitleState } from "@framework/ui/redux/reducers/pageTitleReducer";
 import { combineReducers, createStore } from "redux";
 
 function getGuide(): string {
@@ -20,13 +20,13 @@ function getGuide(): string {
     return "";
 }
 
-const exampleTitle: Title = {
+const exampleTitle: PageTitleState = {
     displayTitle: "Component guide example title",
     htmlTitle: "Example title",
 };
 
 const reducer = combineReducers({
-    title: (s: Title = exampleTitle) => s
+    title: (s: PageTitleState = exampleTitle) => s
 });
 
 const store = createStore(reducer, { title: exampleTitle });
