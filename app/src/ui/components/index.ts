@@ -2,6 +2,7 @@ import * as Renderers from "./renderers";
 import * as Projects from "./projects";
 import * as Claims from "./claims";
 import * as Inputs from "./inputs";
+import * as MonitoringReports from "./monitoringReports";
 
 export * from "./accordion";
 export * from "./accordionItem";
@@ -24,4 +25,4 @@ export * from "./validationError";
 export * from "./validationMessage";
 export * from "./validationSummary";
 
-export { Renderers, Projects, Claims, Inputs };
+export { Renderers, Projects, Claims, Inputs, MonitoringReports };
