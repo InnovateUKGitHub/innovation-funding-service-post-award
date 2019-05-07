@@ -1,4 +1,4 @@
-import { CommandBase, ValidationError } from "@server/features/common";
+import { BadRequestError, CommandBase, ValidationError } from "@server/features/common";
 import { Authorisation, IContext, ProjectRole } from "@framework/types";
 import { ClaimDetailsValidator } from "@ui/validators";
 import { isNumber } from "@util/NumberHelper";
@@ -20,13 +20,35 @@ export class SaveClaimDetails extends CommandBase<boolean> {
     return auth.forPartner(this.projectId, this.partnerId).hasRole(ProjectRole.FinancialContact);
   }
 
+  protected async Run(context: IContext) {
+    this.validateRequest();
+
+    const validationResult = new ClaimDetailsValidator(this.claimDetails, true);
+    if (!validationResult.isValid) {
+      throw new ValidationError(validationResult);
+    }
+
+    return Promise.all([
+      this.saveLineItems(context, this.claimDetails.lineItems),
+      this.saveClaimDetail(context, this.claimDetails)
+    ]).then(() => true);
+  }
+
+  private validateRequest() {
+    const validParams = this.projectId && this.partnerId && this.costCategoryId && this.periodId;
+    const validDto = this.claimDetails.lineItems.every(x => x.periodId === this.periodId && x.partnerId === this.partnerId && x.costCategoryId === this.costCategoryId);
+
+    if (!validParams || !validDto) {
+      throw new BadRequestError("Request is missing required fields");
+    }
+  }
+
   private async saveLineItems(context: IContext, lineItems: ClaimLineItemDto[]) {
     const existing = (await context.repositories.claimLineItems.getAllForCategory(this.partnerId, this.costCategoryId, this.periodId) || []);
     const filtered     = lineItems.filter(x => !!x.description || isNumber(x.value));
     const updateDtos   = filtered.filter(item => !!item.id);
     const insertDtos   = filtered.filter(item => !item.id);
     const persistedIds = updateDtos.map(x => x.id);
-
     const deleteItems = existing.filter(x => persistedIds.indexOf(x.Id) === -1).map(x => x.Id);
 
     const updateItems = updateDtos.map(x => ({
@@ -57,17 +79,5 @@ export class SaveClaimDetails extends CommandBase<boolean> {
     };
 
     return context.repositories.claimDetails.update(update);
-  }
-
-  protected async Run(context: IContext) {
-    const validationResult = new ClaimDetailsValidator(this.claimDetails, true);
-    if (!validationResult.isValid) {
-      throw new ValidationError(validationResult);
-    }
-
-    return Promise.all([
-      this.saveLineItems(context, this.claimDetails.lineItems),
-      this.saveClaimDetail(context, this.claimDetails)
-    ]).then(() => true);
   }
 }
