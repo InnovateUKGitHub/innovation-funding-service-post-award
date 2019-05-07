@@ -2,7 +2,6 @@ import { Stream } from "stream";
 import { TestRepository } from "./testRepository";
 import * as Repositories from "@server/repositories";
 import { Updatable } from "@server/repositories/salesforceRepositoryBase";
-import { ISalesforceClaimDetails, ISalesforceDocument } from "@server/repositories";
 import { FileUpload, IRepositories } from "@framework/types";
 
 class ProjectsTestRepository extends TestRepository<Repositories.ISalesforceProject> implements Repositories.IProjectRepository {
@@ -99,7 +98,7 @@ class ClaimDetailsTestRepository extends TestRepository<Repositories.ISalesforce
         return super.filterOne(x => x.Acc_ProjectParticipant__c === partnerId && x.Acc_ProjectPeriodNumber__c === periodId && x.Acc_CostCategory__c === costCategoryId);
     }
 
-    update(item: Updatable<ISalesforceClaimDetails>): Promise<boolean> {
+    update(item: Updatable<Repositories.ISalesforceClaimDetails>): Promise<boolean> {
         const index = this.Items.findIndex(x => x.Id === item.Id);
         if (index >= 0) {
           this.Items[index] = Object.assign(this.Items[index], item);
@@ -151,15 +150,15 @@ class DocumentsTestRepository extends TestRepository<any> implements Repositorie
     });
   }
 
-  getDocumentMetadata(documentId: string): Promise<ISalesforceDocument> {
+  getDocumentMetadata(documentId: string): Promise<Repositories.ISalesforceDocument> {
     return super.getOne(x => documentId === x[1].Id).then(x => x[1]);
   }
 
-  getDocumentsMetadata(documentIds: string[], filter?: DocumentFilter): Promise<ISalesforceDocument[]> {
+  getDocumentsMetadata(documentIds: string[], filter?: DocumentFilter): Promise<Repositories.ISalesforceDocument[]> {
     return super.getWhere(x => documentIds.indexOf(x[1].ContentDocumentId) > 1 && (!filter || filter.description === x[1].Description)).then(x => x.map(y => y[1]));
   }
 
-  getDocumentsMetedataByLinkedRecord(recordId: string, filter?: DocumentFilter): Promise<ISalesforceDocument[]> {
+  getDocumentsMetedataByLinkedRecord(recordId: string, filter?: DocumentFilter): Promise<Repositories.ISalesforceDocument[]> {
     return super.getWhere(x => x[0] === recordId && (!filter || x[1].Description === filter.description)).then(x => x.map(y => y[1]));
   }
 }
@@ -340,6 +339,21 @@ class MonitoringReportQuestionsRepository extends TestRepository<Repositories.IS
   }
 }
 
+class MonitoringReportTestStatusChangeRepository extends TestRepository<Repositories.ISalesforceMonitoringReportStatusChange> implements Repositories.IMonitoringReportStatusChangeRepository {
+  createStatusChange(statusChange: Partial<Repositories.ISalesforceMonitoringReportStatusChange>) {
+    return super.insertOne({
+      Id: (this.Items.length + 1).toString(),
+      Acc_MonitoringReport__c: statusChange.Acc_MonitoringReport__c!,
+      Acc_PreviousMonitoringReportStatus__c: statusChange.Acc_PreviousMonitoringReportStatus__c!,
+      Acc_NewMonitoringReportStatus__c: statusChange.Acc_NewMonitoringReportStatus__c!
+    });
+  }
+
+  getStatusChanges(monitoringReportId: string): Promise<Repositories.ISalesforceMonitoringReportStatusChange[]> {
+    return super.getWhere(x => x.Acc_MonitoringReport__c === monitoringReportId);
+  }
+}
+
 export interface ITestRepositories extends IRepositories {
     claims: ClaimsTestRepository;
     claimDetails: ClaimDetailsTestRepository;
@@ -370,6 +384,7 @@ export const createTestRepositories = (): ITestRepositories => {
         monitoringReportResponse: new MonitoringReportResponseTestRepository(),
         monitoringReportHeader: new MonitoringReportHeaderTestRepository(),
         monitoringReportQuestions: new MonitoringReportQuestionsRepository(),
+        monitoringReportStatusChange: new MonitoringReportTestStatusChangeRepository(),
         profileDetails: new ProfileDetailsTestRepository(),
         profileTotalPeriod: new ProfileTotalPeriodTestRepository(partnerRepository),
         profileTotalCostCategory: new ProfileTotalCostCategoryTestRepository(),
