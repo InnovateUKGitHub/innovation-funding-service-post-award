@@ -6,6 +6,7 @@ import { MonitoringReportDto } from "../../../../src/types/dtos/monitoringReport
 import { MonitoringReportStatus } from "../../../../src/types/constants/monitoringReportStatus";
 import { ISalesforceMonitoringReportHeader } from "@server/repositories";
 import { GetMonitoringReport } from "@server/features/monitoringReports/getMonitoringReport";
+import { CreateMonitoringReport } from "@server/features/monitoringReports/createMonitoringReport";
 
 describe("saveMonitoringReports", () => {
   it("should not save responses without an option id", async () => {
@@ -131,6 +132,26 @@ describe("saveMonitoringReports", () => {
     await context.runCommand(new SaveMonitoringReport(dto, true));
 
     expect(report.Acc_MonitoringReportStatus__c).toBe("Awaiting IUK Approval");
+  });
+
+  it("should create a status change if the report is submitted", async () => {
+    const context = new TestContext();
+    const report = context.testData.createMonitoringReportHeader(undefined, 1, { Acc_MonitoringReportStatus__c: "Draft" });
+
+    const dto = await getDto(context, report);
+
+    await context.runCommand(new SaveMonitoringReport(dto, true));
+    expect(context.repositories.monitoringReportStatusChange.Items.find(x => x.Acc_MonitoringReport__c === dto.headerId)).toBeDefined();
+  });
+
+  it("should not create a status change if the report is not submitted", async () => {
+    const context = new TestContext();
+    const report = context.testData.createMonitoringReportHeader(undefined, 1, { Acc_MonitoringReportStatus__c: "Draft" });
+
+    const dto = await getDto(context, report);
+
+    await context.runCommand(new SaveMonitoringReport(dto, false));
+    expect(context.repositories.monitoringReportStatusChange.Items).toHaveLength(0);
   });
 });
 
