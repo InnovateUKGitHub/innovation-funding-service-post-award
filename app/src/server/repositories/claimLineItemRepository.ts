@@ -1,5 +1,6 @@
 import SalesforceRepositoryBase, {Updatable} from "./salesforceRepositoryBase";
-import {RecordTypeRepository} from "./recordTypeRepository";
+import {IRecordTypeRepository, RecordTypeRepository} from "./recordTypeRepository";
+import { Connection } from "jsforce";
 
 export interface ISalesforceClaimLineItem {
   Id: string;
@@ -19,6 +20,11 @@ export interface IClaimLineItemRepository {
 }
 
 export class ClaimLineItemRepository extends SalesforceRepositoryBase<ISalesforceClaimLineItem> implements IClaimLineItemRepository {
+
+  constructor(private recordTypes: IRecordTypeRepository, getSalesforceConnection: () => Promise<Connection>) {
+    super(getSalesforceConnection);
+  }
+
   private readonly recordType: string = "Claims Line Item";
 
   protected readonly salesforceObjectName = "Acc_Claims__c";
@@ -51,12 +57,7 @@ export class ClaimLineItemRepository extends SalesforceRepositoryBase<ISalesforc
   }
 
   async insert(insert: Partial<ISalesforceClaimLineItem>[]) {
-    // ToDo: should this be cached?
-    const types = await new RecordTypeRepository(this.getSalesforceConnection).getAll();
-    const type = types.find(x => x.Name === this.recordType && x.SobjectType === this.salesforceObjectName);
-    if (!type) {
-      throw Error("Failed to find claim line item record type");
-    }
-    return super.insertAll(insert.map(item => ({...item, RecordTypeId: type.Id})));
+    const RecordTypeId = await this.recordTypes.get(this.salesforceObjectName, this.recordType).then(x => x.Id);
+    return super.insertAll(insert.map(item => Object.assign({}, item, { RecordTypeId })));
   }
 }
