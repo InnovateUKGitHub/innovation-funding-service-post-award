@@ -7,7 +7,7 @@ import { userReducer } from "./userReducer";
 import { messagesReducer } from "./messagesReducer";
 import { IClientUser } from "../../../types/IUser";
 import { configReducer, IClientConfig } from "./configReducer";
-import { pageTitleReducer, Title } from "./pageTitleReducer";
+import { pageTitleReducer, PageTitleState } from "./pageTitleReducer";
 
 export type DataState = ReturnType<typeof dataReducer>;
 export type DataStateKeys = keyof DataState;
@@ -24,7 +24,7 @@ export interface RootState {
   user: IClientUser;
   isClient: boolean;
   config: IClientConfig;
-  title: Title;
+  title: PageTitleState;
 }
 
 export const rootReducer = combineReducers<RootState>({
