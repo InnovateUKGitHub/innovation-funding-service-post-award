@@ -3,6 +3,7 @@ import { Link, Renderers, TypedTable } from "..";
 import { ClaimDto, PartnerDto, ProjectDto } from "../../../types";
 import { ILinkInfo } from "../../../types/ILinkInfo";
 import { CostsSummaryForPeriodValidator } from "@ui/validators";
+import { AccessibilityText } from "../renderers";
 
 interface Props {
   project: ProjectDto;
@@ -82,7 +83,7 @@ const renderFooters = (project: ProjectDto, partner: PartnerDto, claimsCosts: Co
       <tr key="1" className="govuk-table__row">
         <td className="govuk-table__cell govuk-table__cell--numeric govuk-!-font-weight-bold" colSpan={3}>Funding level</td>
         <td className="govuk-table__cell govuk-table__cell--numeric"><Renderers.Percentage fractionDigits={0} value={partner.awardRate} /></td>
-        <td className="govuk-table__cell" />
+        <td className="govuk-table__cell"><AccessibilityText>No data</AccessibilityText>/span></td>
       </tr>
     ),
     (
@@ -91,7 +92,7 @@ const renderFooters = (project: ProjectDto, partner: PartnerDto, claimsCosts: Co
         <td className="govuk-table__cell govuk-table__cell--numeric">
           <Renderers.Currency value={claimsCosts.reduce((total, item) => total + item.costsClaimedThisPeriod, 0) * partner.awardRate! / 100} />
         </td>
-        <td className="govuk-table__cell" />
+        <td className="govuk-table__cell"><AccessibilityText>No data</AccessibilityText></td>
       </tr>
     )
   ];
