@@ -1,4 +1,4 @@
-export class Cache<T> {
+export class Cache<T> implements ICache<T> {
   private readonly store: { [key: string]: T } = {};
   private readonly timeouts: { [key: string]: NodeJS.Timer } = {};
 
