@@ -46,7 +46,7 @@ class ClaimForecastComponent extends ContainerBase<ClaimForcastParams, PendingFo
         backLink={<ACC.BackLink route={PrepareClaimRoute.getLink({ periodId: this.props.periodId, projectId: this.props.projectId, partnerId: this.props.partnerId })}>Back to claim</ACC.BackLink>}
         error={editor.error}
         validator={editor.validator}
-        pageTitle={<ACC.Projects.Title pageTitle="Update forecast" project={combined.project} />}
+        pageTitle={<ACC.Projects.Title project={combined.project} />}
       >
         {this.renderOverheadsRate(combined.partner.overheadRate)}
         <ACC.Section qa="partner-name">
@@ -106,5 +106,11 @@ export const ClaimForecastRoute = definition.route({
   getParams: (route) => ({ projectId: route.params.projectId, partnerId: route.params.partnerId, periodId: parseInt(route.params.periodId, 10) }),
   getLoadDataActions: forecastDataLoadActions,
   container: ForecastClaim,
-  accessControl: (auth, { projectId, partnerId }) => auth.forPartner(projectId, partnerId).hasRole(ProjectRole.FinancialContact)
+  accessControl: (auth, { projectId, partnerId }) => auth.forPartner(projectId, partnerId).hasRole(ProjectRole.FinancialContact),
+  getTitle: (store, params) => {
+    return {
+      htmlTitle: "Update forecast",
+      displayTitle: "Update forecast"
+    };
+  }
 });

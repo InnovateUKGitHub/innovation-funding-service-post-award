@@ -25,7 +25,11 @@ export const ErrorRoute = containerDefinition.route({
   routePath: "/error",
   getParams: () => ({}),
   getLoadDataActions: () => [],
-  container: Error
+  container: Error,
+  getTitle: () => ({
+    htmlTitle: "Error",
+    displayTitle: "Something has gone wrong at our end"
+  })
 });
 
 const ErrorNotFound = containerDefinition.connect({
@@ -38,5 +42,9 @@ export const ErrorNotFoundRoute = containerDefinition.route({
   routePath: "/error-not-found",
   getParams: () => ({}),
   getLoadDataActions: () => [],
-  container: ErrorNotFound
+  container: ErrorNotFound,
+  getTitle: () => ({
+    htmlTitle: "Page not found",
+    displayTitle: "Page not found"
+  })
 });

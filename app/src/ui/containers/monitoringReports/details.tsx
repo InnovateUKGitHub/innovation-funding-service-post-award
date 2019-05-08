@@ -38,7 +38,7 @@ class DetailsComponent extends ContainerBase<Params, Data, Callbacks> {
     return (
       <ACC.Page
         backLink={<ACC.BackLink route={MonitoringReportDashboardRoute.getLink({ projectId: this.props.projectId })}>Back to monitoring reports</ACC.BackLink>}
-        pageTitle={<ACC.Projects.Title pageTitle="Monitoring report" project={project} />}
+        pageTitle={<ACC.Projects.Title project={project} />}
         tabs={<ACC.MonitoringReports.Navigation projectId={this.props.projectId} id={this.props.id} currentRouteName={MonitoringReportViewRoute.routeName} />}
       >
         <ACC.Section title={title}>
@@ -107,5 +107,9 @@ export const MonitoringReportViewRoute = containerDefinition.route({
     Actions.loadMonitoringReport(params.projectId, params.id),
   ],
   container: MonitoringReportView,
-  accessControl: (auth, params, features) => features.monitoringReports && auth.forProject(params.projectId).hasRole(ProjectRole.MonitoringOfficer)
+  accessControl: (auth, params, features) => features.monitoringReports && auth.forProject(params.projectId).hasRole(ProjectRole.MonitoringOfficer),
+  getTitle: (state, params) => ({
+    htmlTitle: "View monitoring report",
+    displayTitle: "Monitoring report"
+  })
 });

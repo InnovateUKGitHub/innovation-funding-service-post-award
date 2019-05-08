@@ -110,7 +110,7 @@ export class ClaimDetailDocumentsComponent extends ContainerBase<ClaimDetailDocu
         backLink={<ACC.BackLink route={back}>{`Back to ${costCategory.name.toLowerCase()}`}</ACC.BackLink>}
         error={(editor.error) || (deleteEditor.error)}
         validator={editor.validator}
-        pageTitle={<ACC.Projects.Title pageTitle={`${costCategory.name} documents`}  project={project} />}
+        pageTitle={<ACC.Projects.Title project={project} />}
       >
         {this.renderSection(documents)}
         <ACC.Section>
@@ -173,5 +173,12 @@ export const ClaimDetailDocumentsRoute = definition.route({
     Actions.loadClaimDetailDocuments(params.projectId, params.partnerId, params.periodId, params.costCategoryId)
   ],
   accessControl: (auth, {projectId, partnerId}) => auth.forPartner(projectId, partnerId).hasRole(ProjectRole.FinancialContact),
+  getTitle: (store, params) => {
+    const costCatName = Selectors.getCostCatetory(params.costCategoryId).getPending(store).then(x => x && x.name).data;
+    return {
+      htmlTitle: costCatName ? `Add documents for ${costCatName}` : "Add documents",
+      displayTitle: costCatName ? `${costCatName} documents` : "Claim documents"
+    };
+  },
   container: ClaimDetailDocuments
 });

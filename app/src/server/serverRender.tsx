@@ -1,18 +1,18 @@
 import React from "react";
 import { Request, Response } from "express";
 import { renderToString } from "react-dom/server";
-import { createStore, Dispatch, Store } from "redux";
+import { AnyAction, createStore, Dispatch, Store } from "redux";
 import { Provider } from "react-redux";
 import { RouterProvider } from "react-router5";
 import { constants as routerConstants, Router, State } from "router5";
 
-import { renderHtml } from "./html";
 import { rootReducer, RootState, setupInitialState, setupMiddleware } from "../ui/redux";
-import { configureRouter, matchRoute } from "../ui/routing";
-import { App } from "../ui/containers/app";
-import { AsyncThunk, handleEditorError, updateEditorAction } from "../ui/redux/actions/common";
-import { IAppError } from "../types/IAppError";
 import { errorHandlerRender } from "./errorHandlers";
+import { configureRouter, MatchedRoute, matchRoute } from "../ui/routing";
+import { App } from "../ui/containers/app";
+import { AsyncThunk, handleEditorError, udpatePageTitle, updateEditorAction } from "../ui/redux/actions";
+import { IAppError } from "../types/IAppError";
+import { renderHtml } from "./html";
 import { ForbiddenError, FormHandlerError, NotFoundError } from "./features/common/appError";
 import contextProvider from "./features/common/contextProvider";
 import { GetAllProjectRolesForUser } from "./features/projects/getAllProjectRolesForUser";
@@ -80,18 +80,31 @@ export async function serverRender(req: Request, res: Response, error?: IAppErro
     }
 
     await loadData(store.dispatch, store.getState, actions);
+    await dispatchPageTitleAction(matched, params, store);
     res.send(renderApp(router, store));
   }
   catch (e) {
 
     new Logger(req.session && req.session.user).error("Unable to render", e);
 
-    const errorName = e instanceof NotFoundError ? "errorNotFound" : "error";
-    const router = configureRouter();
-    const store = createStore(rootReducer, { router: { route: { name: errorName } } });
+    const routeState: State = {
+      name: e instanceof NotFoundError ? "errorNotFound" : "error",
+      params: {},
+      path: ""
+    };
 
+    const router = configureRouter();
+    const store = createStore(rootReducer, { router: { route: routeState } });
+    const matched = matchRoute(routeState);
+
+    await dispatchPageTitleAction(matched, {}, store);
     errorHandlerRender(res, renderApp(router, store), e);
   }
+}
+
+function dispatchPageTitleAction(route: MatchedRoute, params: {}, store: Store<RootState, AnyAction>) {
+  const action = udpatePageTitle(route, params);
+  return action(store.dispatch, store.getState, null);
 }
 
 // wrap callback in Promise so we use await for consistency
@@ -107,7 +120,7 @@ function startRouter(req: Request, router: Router): Promise<State> {
   });
 }
 
-function renderApp(router: Router, store: Store): string {
+function renderApp(router: Router, store: Store<RootState>): string {
   const html = renderToString(
     <Provider store={store}>
       <RouterProvider router={router}>
@@ -115,5 +128,8 @@ function renderApp(router: Router, store: Store): string {
       </RouterProvider>
     </Provider>
   );
-  return renderHtml(html, store.getState());
+
+  const state = store.getState();
+
+  return renderHtml(html, state.title.htmlTitle, state);
 }

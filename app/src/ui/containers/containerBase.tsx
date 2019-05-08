@@ -73,6 +73,10 @@ class ReduxContainerWrapper<TParams, TData, TCallbacks> {
         getParams: (route: RouteState) => TParams,
         getLoadDataActions: (params: TParams, auth: Authorisation) => AsyncThunk<any>[],
         accessControl?: (auth: Authorisation, params: TParams, features: IFeatureFlags) => boolean,
+        getTitle: (store: RootState, params: TParams) => {
+            htmlTitle: string;
+            displayTitle: string;
+        },
         container: React.ComponentClass<any> & { WrappedComponent: React.ComponentType<TParams & TData & TCallbacks & BaseProps> }
     }) {
         return {

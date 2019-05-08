@@ -44,7 +44,7 @@ class ViewForecastComponent extends ContainerBase<Params, PendingForecastData, C
     return (
       <ACC.Page
         backLink={<ACC.BackLink route={backLink}>{backText}</ACC.BackLink>}
-        pageTitle={<ACC.Projects.Title pageTitle="View project" project={data.project} />}
+        pageTitle={<ACC.Projects.Title project={data.project} />}
         tabs={this.renderTabs(isMoPm, data)}
       >
         {this.renderOverheadsRate(data.partner.overheadRate)}
@@ -117,5 +117,12 @@ export const ViewForecastRoute = definition.route({
   getLoadDataActions: forecastDataLoadActions,
   container: ViewForecast,
   accessControl: (auth, { projectId, partnerId }) => auth.forProject(projectId).hasAnyRoles(ProjectRole.ProjectManager, ProjectRole.MonitoringOfficer)
-  || auth.forPartner(projectId, partnerId).hasRole(ProjectRole.FinancialContact)
+  || auth.forPartner(projectId, partnerId).hasRole(ProjectRole.FinancialContact),
+  getTitle: (store, params) => {
+    return {
+      htmlTitle: "View forecast - View project",
+      displayTitle: "View project"
+    };
+  }
+
 });

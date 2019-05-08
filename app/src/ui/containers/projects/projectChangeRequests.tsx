@@ -7,7 +7,7 @@ import * as Selectors from "../../redux/selectors";
 import * as Actions from "../../redux/actions";
 import { ProjectDashboardRoute } from "@ui/containers";
 
-interface Callbacks {}
+interface Callbacks { }
 
 interface Data {
   projectDetails: Pending<ProjectDto>;
@@ -34,28 +34,28 @@ class ProjectChangeRequestsComponent extends ContainerBase<Params, Data, Callbac
     return <Acc.PageLoader pending={combined} render={x => this.renderContents(x)} />;
   }
 
-  private renderContents({projectDetails, partners}: CombinedData) {
+  private renderContents({ projectDetails, partners }: CombinedData) {
     return (
-        <Acc.Page
-          backLink={<Acc.BackLink route={ProjectDashboardRoute.getLink({})}>Back to all projects</Acc.BackLink>}
-          tabs={<Acc.Projects.ProjectNavigation project={projectDetails} currentRoute={ProjectChangeRequestsRoute.routeName} partners={partners}/>}
-          pageTitle={<Acc.Projects.Title pageTitle="View project" project={projectDetails}/>}
-        >
-            <Acc.Renderers.SimpleString>
-              If the project team wish to adjust the details of a project, for example, the allocation of funds across cost categories, the Project Manager must submit a project change request.
+      <Acc.Page
+        backLink={<Acc.BackLink route={ProjectDashboardRoute.getLink({})}>Back to all projects</Acc.BackLink>}
+        tabs={<Acc.Projects.ProjectNavigation project={projectDetails} currentRoute={ProjectChangeRequestsRoute.routeName} partners={partners} />}
+        pageTitle={<Acc.Projects.Title project={projectDetails} />}
+      >
+        <Acc.Renderers.SimpleString>
+          If the project team wish to adjust the details of a project, for example, the allocation of funds across cost categories, the Project Manager must submit a project change request.
             </Acc.Renderers.SimpleString>
-            <Acc.Renderers.SimpleString>
-              The Project Manager must follow these steps:
+        <Acc.Renderers.SimpleString>
+          The Project Manager must follow these steps:
             </Acc.Renderers.SimpleString>
 
-            <Acc.Renderers.SimpleString>
-              <ol className="govuk-list">
-                <li>1. Email the Monitoring Officer to ask for the project change request form and guidance.</li>
-                <li>2. Follow the guidance and complete the form.</li>
-                <li>3. Email it back to the Monitoring Officer to review.</li>
-              </ol>
-            </Acc.Renderers.SimpleString>
-        </Acc.Page>
+        <Acc.Renderers.SimpleString>
+          <ol className="govuk-list">
+            <li>1. Email the Monitoring Officer to ask for the project change request form and guidance.</li>
+            <li>2. Follow the guidance and complete the form.</li>
+            <li>3. Email it back to the Monitoring Officer to review.</li>
+          </ol>
+        </Acc.Renderers.SimpleString>
+      </Acc.Page>
     );
   }
 }
@@ -79,7 +79,11 @@ export const ProjectChangeRequestsRoute = containerDefinition.route({
   getLoadDataActions: (params) => [
     Actions.loadProject(params.projectId),
     Actions.loadPartnersForProject(params.projectId),
-],
+  ],
   container: ProjectChangeRequests,
+  getTitle: () => ({
+    htmlTitle: "Project change requests - View project",
+    displayTitle: "View project"
+  }),
   accessControl: (auth, { projectId }) => auth.forProject(projectId).hasAnyRoles(ProjectRole.FinancialContact, ProjectRole.ProjectManager, ProjectRole.MonitoringOfficer)
 });
