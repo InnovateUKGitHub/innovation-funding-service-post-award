@@ -45,7 +45,7 @@ const testSubmitError = () => {
   it("should preserve the editor validation", () => {
     const originalState = getRootState();
     const claimDto = createClaim();
-    const validator = new ClaimDtoValidator(claimDto, [], [createCostCategory()], true);
+    const validator = new ClaimDtoValidator(claimDto, claimDto.status, [], [createCostCategory()], true);
     originalState.editors.claim = {
       1: {
         data: claimDto,
@@ -74,7 +74,7 @@ const testSubmitError = () => {
   it("should delete the errors from other editors in the same store", () => {
     const originalState = getRootState();
     const claimDto = createClaim();
-    const validator = new ClaimDtoValidator(claimDto, [], [createCostCategory()], true);
+    const validator = new ClaimDtoValidator(claimDto, claimDto.status, [], [createCostCategory()], true);
     originalState.editors.claim = {
       1: {
         data: claimDto,
@@ -101,7 +101,7 @@ const testSubmitError = () => {
       1: {
         data: claimDto,
         error: { code: 1, message: "This is an existing error", results: null },
-        validator: new ClaimDtoValidator(claimDto, [], [createCostCategory()], true)
+        validator: new ClaimDtoValidator(claimDto, claimDto.status, [], [createCostCategory()], true)
       }
     };
     const action = {
@@ -121,7 +121,7 @@ const testSubmitSuccess = () => {
   it("should delete the editor", () => {
     const originalState = getRootState();
     const claimDto = createClaim();
-    const validator = new ClaimDtoValidator(claimDto, [], [createCostCategory()], true);
+    const validator = new ClaimDtoValidator(claimDto, claimDto.status, [], [createCostCategory()], true);
     originalState.editors.claim = {
       1: {
         data: claimDto,
@@ -142,7 +142,7 @@ const testSubmitSuccess = () => {
   it("should delete the errors from other editors in the same store", () => {
     const originalState = getRootState();
     const claimDto = createClaim();
-    const validator = new ClaimDtoValidator(claimDto, [], [createCostCategory()], true);
+    const validator = new ClaimDtoValidator(claimDto, claimDto.status, [], [createCostCategory()], true);
     originalState.editors.claim = {
       1: {
         data: claimDto,
@@ -166,7 +166,7 @@ const testSubmitSuccess = () => {
     originalState.editors.claim = {
       1: {
         data: claimDto,
-        validator: new ClaimDtoValidator(claimDto, [], [createCostCategory({name: "Materials"})], true),
+        validator: new ClaimDtoValidator(claimDto, claimDto.status, [], [createCostCategory({name: "Materials"})], true),
         error: { code: 1, message: "This is an existing error", results: null }
       }
     };
@@ -190,7 +190,7 @@ const testEditorUpdate = () => {
     originalState.editors.claim = {
       1: {
         data: claimDto,
-        validator: new ClaimDtoValidator(claimDto, [], [createCostCategory({name: "Materials"})], true),
+        validator: new ClaimDtoValidator(claimDto, claimDto.status, [], [createCostCategory({name: "Materials"})], true),
         error: { code: 1, message: "keep this error", results: null }
       }
     };
@@ -200,7 +200,7 @@ const testEditorUpdate = () => {
         id: "1",
         store: "claim",
         dto: claimDto,
-        validator: new ClaimDtoValidator(claimDto, [], [createCostCategory({name: "Materials"})], true)
+        validator: new ClaimDtoValidator(claimDto, claimDto.status, [], [createCostCategory({name: "Materials"})], true)
       }
     };
     const newState = editorsReducer("claim")(originalState.editors.claim, action);
@@ -213,7 +213,7 @@ const testEditorUpdate = () => {
     originalState.editors.claim = {
       1: {
         data: claimDto,
-        validator: new ClaimDtoValidator(claimDto, [], [createCostCategory({name: "Materials"})], true),
+        validator: new ClaimDtoValidator(claimDto, claimDto.status, [], [createCostCategory({name: "Materials"})], true),
         error: null
       }
     };
@@ -223,7 +223,7 @@ const testEditorUpdate = () => {
         id: "1",
         store: "claim",
         dto: updatedDto,
-        validator: new ClaimDtoValidator(claimDto, [], [createCostCategory({name: "Materials"})], true)
+        validator: new ClaimDtoValidator(claimDto, claimDto.status, [], [createCostCategory({name: "Materials"})], true)
       }
     };
     const newState = editorsReducer("claim")(originalState.editors.claim, action);

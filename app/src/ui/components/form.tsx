@@ -263,7 +263,20 @@ const FileUploadComponent = <T extends {}>(props: ExternalFieldProps<T, File>) =
   );
 };
 
-export const TypedForm = <T extends {}>() => ({
+export interface FormBuilder<T> {
+  Form: { new(): FormComponent<T> };
+  Fieldset: { new(): FieldsetComponent<T> };
+  String: React.SFC<ExternalFieldProps<T, string>>;
+  MultilineString: React.SFC<MultiStringFieldProps<T>>;
+  Numeric: React.SFC<NumericFieldProps<T>>;
+  Radio: React.SFC<RadioFieldProps<T>>;
+  Hidden: React.SFC<HiddenFieldProps<T>>;
+  Submit: React.SFC<SubmitProps>;
+  Button: React.SFC<ButtonProps>;
+  FileUpload: React.SFC<ExternalFieldProps<T, File>>;
+}
+
+export const TypedForm = <T extends {}>(): FormBuilder<T> => ({
     Form: FormComponent as { new(): FormComponent<T> },
     Fieldset: FieldsetComponent as { new(): FieldsetComponent<T> },
     String: StringField as React.SFC<ExternalFieldProps<T, string>>,
