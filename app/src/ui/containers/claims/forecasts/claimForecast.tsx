@@ -1,12 +1,11 @@
 import React from "react";
-import * as ACC from "../../../components";
-import * as Actions from "../../../redux/actions";
-import { ContainerBase, ReduxContainer } from "../../containerBase";
-import { ClaimsDashboardRoute } from "../dashboard";
-import { PrepareClaimRoute } from "../prepare";
-import { ForecastData, forecastDataLoadActions, PendingForecastData, renderWarning, withDataEditor, } from "./common";
-import { ProjectRole } from "../../../../types";
+import * as ACC from "@ui/components";
+import * as Actions from "@ui/redux/actions";
+import { AllClaimsDashboardRoute, ClaimsDashboardRoute, PrepareClaimRoute } from "@ui/containers";
+import { ContainerBase, ReduxContainer } from "@ui/containers/containerBase";
 import { isNumber } from "@util/NumberHelper";
+import { ProjectDto, ProjectRole } from "@framework/types";
+import { ForecastData, forecastDataLoadActions, PendingForecastData, renderWarning, withDataEditor, } from "./common";
 
 export interface ClaimForcastParams {
   projectId: string;
@@ -72,10 +71,18 @@ class ClaimForecastComponent extends ContainerBase<ClaimForcastParams, PendingFo
   }
 }
 
-const updateRedirect = (updateClaim: boolean, dispatch: any, projectId: string, partnerId: string, periodId: number) => {
-  return updateClaim
-    ? dispatch(Actions.navigateTo(ClaimsDashboardRoute.getLink({ projectId, partnerId })))
-    : dispatch(Actions.navigateTo(PrepareClaimRoute.getLink({ projectId, partnerId, periodId })));
+const updateRedirect = (updateClaim: boolean, dispatch: any, project: ProjectDto, partnerId: string, periodId: number) => {
+  const projectId = project.id;
+
+  if (!updateClaim) {
+    return dispatch(Actions.navigateTo(PrepareClaimRoute.getLink({ projectId, partnerId, periodId })));
+  }
+
+  if (project.roles & ProjectRole.ProjectManager && project.roles & ProjectRole.FinancialContact) {
+    return dispatch(Actions.navigateTo(AllClaimsDashboardRoute.getLink({ projectId })));
+  }
+
+  return dispatch(Actions.navigateTo(ClaimsDashboardRoute.getLink({ projectId, partnerId })));
 };
 
 const definition = ReduxContainer.for<ClaimForcastParams, PendingForecastData, Callbacks>(ClaimForecastComponent);
@@ -94,7 +101,7 @@ const ForecastClaim = definition.connect({
         data.claims,
         data.claimDetails,
         data.golCosts,
-        () => updateRedirect(updateClaim, dispatch, projectId, partnerId, periodId),
+        () => updateRedirect(updateClaim, dispatch, data.project, partnerId, periodId),
         message)
       )
   })
