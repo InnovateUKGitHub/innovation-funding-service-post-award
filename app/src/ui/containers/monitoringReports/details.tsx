@@ -33,7 +33,7 @@ class DetailsComponent extends ContainerBase<Params, Data, Callbacks> {
   }
 
   private renderContents(project: Dtos.ProjectDto, report: Dtos.MonitoringReportDto) {
-    const title = `Period ${report.periodId} - ${report.title}`;
+    const title = `Period ${report.periodId}: ${report.title}`;
 
     return (
       <ACC.Page
@@ -78,7 +78,7 @@ class DetailsComponent extends ContainerBase<Params, Data, Callbacks> {
     return (
       <div data-qa={`monitoring-report-${responseType}_${index}`} className="govuk-grid-row govuk-!-margin-top-1">
         <div className="govuk-grid-column-one-quarter">
-          <ACC.Renderers.SimpleString>{responseType}:</ACC.Renderers.SimpleString>
+          <ACC.Renderers.SimpleString>{responseType}</ACC.Renderers.SimpleString>
         </div>
         <div className="govuk-grid-column-three-quarters">
           <ACC.Renderers.SimpleString>{responseText}</ACC.Renderers.SimpleString>
