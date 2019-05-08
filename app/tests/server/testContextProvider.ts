@@ -11,6 +11,8 @@ import { TestData } from "./testData";
 import { TestClock } from "./testClock";
 import { TestLogger } from "./testLogger";
 import { TestUser } from "./testUser";
+import { ISalesforceRecordType } from "@server/repositories";
+import { TestConfig } from "./testConfig";
 
 export class TestContext implements IContext {
     constructor() {
@@ -30,49 +32,12 @@ export class TestContext implements IContext {
         };
     }
 
-    public config: IConfig = {
-        build: `test${Date.now()}`,
-        timeouts: {
-            costCategories: 720,
-            projectRoles: 720,
-            cookie: 1,
-            token: 1
-        },
-        certificates: {
-            salesforce: "./salesforce.cert",
-            shibboleth: "./shibboleth.cert",
-        },
-        features: {
-            monitoringReports: true,
-            projectDocuments: true,
-        },
-        logLevel: LogLevel.DEBUG,
-        prettyLogs: false,
-        salesforce: {
-            serivcePassword: "",
-            serivceToken: "",
-            clientId: "",
-            connectionUrl: "",
-            serivceUsername: "",
-        },
-        serverUrl: "http://localhost:8080",
-        sso: {
-            enabled: false,
-            providerUrl: "https://shibboleth.com",
-            signoutUrl: "https://shibboleth.com/Logout",
-        },
-        urls: {
-            ifsRoot: "",
-            ifsApplicationUrl: "",
-            ifsGrantLetterUrl: "",
-        },
-        cookieKey: "thekey",
-        standardOverheadRate: 20,
-    };
+    public config = new TestConfig();
 
     public caches: ICaches = {
         costCategories: new Cache<CostCategoryDto[]>(1),
         projectRoles: new Cache<{ [key: string]: IRoleInfo }>(1),
+        recordTypes: new Cache<ISalesforceRecordType[]>(1),
     };
 
     public runQuery<TResult>(query: QueryBase<TResult>): Promise<TResult> {

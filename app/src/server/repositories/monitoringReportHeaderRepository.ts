@@ -1,5 +1,7 @@
 import SalesforceRepositoryBase, { Updatable } from "./salesforceRepositoryBase";
 import { NotFoundError } from "../features/common";
+import { IRecordTypeRepository, RecordTypeRepository } from ".";
+import { Connection } from "jsforce";
 
 export interface ISalesforceMonitoringReportHeader {
   Id: string;
@@ -22,6 +24,10 @@ export interface IMonitoringReportHeaderRepository {
 }
 
 export class MonitoringReportHeaderRepository extends SalesforceRepositoryBase<ISalesforceMonitoringReportHeader> implements IMonitoringReportHeaderRepository {
+
+  constructor(private recordTypes: IRecordTypeRepository, getSalesforceConnection: () => Promise<Connection>) {
+    super(getSalesforceConnection);
+  }
 
   private readonly recordType: string = "Monitoring Header";
 
@@ -51,8 +57,9 @@ export class MonitoringReportHeaderRepository extends SalesforceRepositoryBase<I
     return super.updateItem(updateDto);
   }
 
-  create(item: Partial<ISalesforceMonitoringReportHeader>): Promise<string> {
-    return super.insertItem(item);
+  async create(item: Partial<ISalesforceMonitoringReportHeader>): Promise<string> {
+    const RecordTypeId = await this.recordTypes.get(this.salesforceObjectName, this.recordType).then(x => x.Id);
+    return super.insertItem(Object.assign({}, item, { RecordTypeId }));
   }
 
   async getAllForProject(projectId: string): Promise<ISalesforceMonitoringReportHeader[]> {
