@@ -83,7 +83,7 @@ const renderFooters = (project: ProjectDto, partner: PartnerDto, claimsCosts: Co
       <tr key="1" className="govuk-table__row">
         <td className="govuk-table__cell govuk-table__cell--numeric govuk-!-font-weight-bold" colSpan={3}>Funding level</td>
         <td className="govuk-table__cell govuk-table__cell--numeric"><Renderers.Percentage fractionDigits={0} value={partner.awardRate} /></td>
-        <td className="govuk-table__cell"><AccessibilityText>No data</AccessibilityText>/span></td>
+        <td className="govuk-table__cell"><AccessibilityText>No data</AccessibilityText></td>
       </tr>
     ),
     (
