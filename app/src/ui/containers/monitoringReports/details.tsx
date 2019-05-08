@@ -6,7 +6,7 @@ import * as ACC from "../../components";
 import * as Dtos from "../../../types";
 import { Pending } from "../../../shared/pending";
 import { MonitoringReportDashboardRoute } from "./dashboard";
-import { ProjectRole } from "../../../types";
+import { MonitoringReportQuestionDto, ProjectRole } from "../../../types";
 
 interface Params {
   projectId: string;
@@ -33,16 +33,6 @@ class DetailsComponent extends ContainerBase<Params, Data, Callbacks> {
   }
 
   private renderContents(project: Dtos.ProjectDto, report: Dtos.MonitoringReportDto) {
-    const Details = ACC.TypedDetails<Dtos.MonitoringReportDto>();
-    const fields = report.questions.map((q, i) => {
-      const response = q.options.find(x => x.id === q.optionId);
-      return ([
-        <Details.Heading label={report.questions[i].title} key={i} qa={`Question_${i}`} />,
-        report.questions[i].isScored ? <Details.String label="Score" value={x => `${(response && response.questionScore) || ""} - ${(response && response.questionText) || ""}`} key={i} qa={`Score_${i}`} /> : null,
-        report.questions[i].comments ? <Details.String label="Comments" value={x => report.questions[i].comments} key={i} qa={`Comments_${i}`} /> : null
-      ]);
-    }).reduce((a, b) => a.concat(b), []).filter(x => !!x);
-
     const title = `Period ${report.periodId} - ${report.title}`;
 
     return (
@@ -52,11 +42,48 @@ class DetailsComponent extends ContainerBase<Params, Data, Callbacks> {
         tabs={<ACC.MonitoringReports.Navigation projectId={this.props.projectId} id={this.props.id} currentRouteName={MonitoringReportViewRoute.routeName} />}
       >
         <ACC.Section title={title}>
-          <Details.Details qa="monitoring-report" data={report} labelWidth="Narrow">
-            {fields}
-          </Details.Details>
+          {this.renderResponses(report)}
         </ACC.Section>
       </ACC.Page>
+    );
+  }
+
+  private renderResponses(report: Dtos.MonitoringReportDto) {
+    return report.questions
+      .map((q, i) => this.renderResponse(q, i))
+      .reduce((a, b) => a.concat(b), [])
+      .filter(x => !!x);
+  }
+
+  private renderResponse(question: MonitoringReportQuestionDto, index: number) {
+    const response = question.options.find(x => x.id === question.optionId);
+    return [
+      this.renderQuestionTitle(question, index),
+      question.isScored ? this.renderQuestionResponse("Score", `${(response && response.questionScore) || ""} - ${(response && response.questionText) || ""}`, index) : null,
+      question.comments ? this.renderQuestionResponse("Comments", question.comments, index) : null,
+    ];
+  }
+
+  private renderQuestionTitle = (question: MonitoringReportQuestionDto, index: number) => {
+    return (
+      <div data-qa={`monitoring-report-Question_${index}`} className="govuk-grid-row govuk-!-margin-top-4" key={index}>
+        <div className={"govuk-grid-column-full"} data-qa={`Question_${index}`}>
+          <h4 className="govuk-heading-s">{question.title}</h4>
+        </div>
+      </div>
+    );
+  }
+
+  private renderQuestionResponse = (responseType: "Score" | "Comments", responseText: string | null, index: number) => {
+    return (
+      <div data-qa={`monitoring-report-${responseType}_${index}`} className="govuk-grid-row govuk-!-margin-top-1">
+        <div className="govuk-grid-column-one-quarter">
+          <ACC.Renderers.SimpleString>{responseType}:</ACC.Renderers.SimpleString>
+        </div>
+        <div className="govuk-grid-column-three-quarters">
+          <ACC.Renderers.SimpleString>{responseText}</ACC.Renderers.SimpleString>
+        </div>
+      </div>
     );
   }
 }
