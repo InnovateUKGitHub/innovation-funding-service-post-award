@@ -4,53 +4,54 @@ const defaultCacheTimeout: number = 720;
 
 export interface IConfig {
 
-    build: Readonly<string>;
+    readonly build: string;
 
-    timeouts: {
-        costCategories: Readonly<number>;
-        projectRoles: Readonly<number>;
-        token: Readonly<number>;
-        cookie: Readonly<number>;
+    readonly timeouts: {
+        readonly costCategories: number;
+        readonly projectRoles: number;
+        readonly recordTypes: number;
+        readonly token: number;
+        readonly cookie: number;
     };
 
-    certificates: {
-        salesforce: Readonly<string>;
-        shibboleth: Readonly<string>;
+    readonly certificates: {
+        salesforce: string;
+        shibboleth: string;
     };
 
-    features: IFeatureFlags;
+    readonly features: IFeatureFlags;
 
-    logLevel: Readonly<LogLevel>;
-    prettyLogs: Readonly<boolean>;
+    readonly logLevel: LogLevel;
+    readonly prettyLogs: boolean;
 
-    salesforce: {
-        clientId: Readonly<string>;
-        connectionUrl: Readonly<string>;
+    readonly salesforce: {
+        readonly clientId: string;
+        readonly connectionUrl: string;
         // ToDo: Remove
-        serivcePassword: Readonly<string>;
+        readonly serivcePassword: string;
         // ToDo: Remove
-        serivceToken: Readonly<string>;
+        readonly serivceToken: string;
         // ToDo: Remove
-        serivceUsername: Readonly<string>;
+        readonly serivceUsername: string;
     };
 
-    serverUrl: Readonly<string>;
+    readonly serverUrl: string;
 
-    sso: {
-        enabled: Readonly<boolean>;
-        providerUrl: Readonly<string>;
-        signoutUrl: Readonly<string>;
+    readonly sso: {
+        readonly enabled: boolean;
+        readonly providerUrl: string;
+        readonly signoutUrl: string;
     };
 
-    urls: {
-        ifsRoot: Readonly<string>;
-        ifsApplicationUrl: Readonly<string>;
-        ifsGrantLetterUrl: Readonly<string>;
+    readonly urls: {
+        readonly ifsRoot: string;
+        readonly ifsApplicationUrl: string;
+        readonly ifsGrantLetterUrl: string;
     };
 
-    cookieKey: Readonly<string>;
+    readonly cookieKey: string;
 
-    standardOverheadRate: Readonly<number>;
+    readonly standardOverheadRate: number;
 }
 
 const build = process.env.BUILD || `${Date.now()}`;
@@ -58,6 +59,7 @@ const build = process.env.BUILD || `${Date.now()}`;
 const timeouts = {
     costCategories: parseFloat(process.env.COST_CAT_TIMEOUT_MINUTES!) || defaultCacheTimeout,
     projectRoles: parseFloat(process.env.PROJ_ROLES_TIMEOUT_MINUTES!) || defaultCacheTimeout,
+    recordTypes: parseFloat(process.env.RECORD_TYPES_TIMEOUT_MINUTES!) || defaultCacheTimeout,
     token: parseFloat(process.env.TOKEN_TIMEOUT_MINUTES!) || 10,
     cookie: parseFloat(process.env.COOKIE_TIMEOUT_MINUTES!) || 10,
 };

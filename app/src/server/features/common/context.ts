@@ -1,18 +1,20 @@
+import { GetAllProjectRolesForUser, IRoleInfo } from "../projects/getAllProjectRolesForUser";
 import * as Repositories from "../../repositories";
-import { Cache, Clock, Configuration, IConfig, Logger } from "./";
 import { AppError, BadRequestError, ForbiddenError, NotFoundError, ValidationError } from "./appError";
 import * as Salesforce from "../../repositories/salesforceConnection";
 import { SalesforceInvalidFilterError } from "../../repositories/salesforceRepositoryBase";
-import { GetAllProjectRolesForUser, IRoleInfo } from "../projects/getAllProjectRolesForUser";
-import { ErrorCode, ICaches, IContext, IRunnable, ISessionUser, ISyncRunnable, } from "../../../types";
+import { Cache, Clock, Configuration, IConfig, Logger } from "./";
+import { ErrorCode, ICaches, IContext, IRepositories, IRunnable, ISessionUser, ISyncRunnable, } from "../../../types";
 import { QueryBase, SyncQueryBase } from "./queryBase";
 import { CommandBase, SyncCommandBase } from "./commandBase";
-import { DateTime } from "luxon";
 import { Timer } from "@framework/types/timer";
+import { ISalesforceRecordType } from "../../repositories";
 
+// obvs needs to be singleton
 const cachesImplementation: ICaches = {
   costCategories: new Cache<CostCategoryDto[]>(Configuration.timeouts.costCategories),
   projectRoles: new Cache<{ [key: string]: IRoleInfo }>(Configuration.timeouts.projectRoles),
+  recordTypes: new Cache<ISalesforceRecordType[]>(Configuration.timeouts.recordTypes),
 };
 
 const constructErrorResponse = <E extends Error>(error: E): AppError => {
@@ -44,33 +46,38 @@ export class Context implements IContext {
     };
 
     this.salesforceConnectionDetails = Object.assign(salesforceConfig, { currentUsername: this.user && this.user.email });
+
     this.logger = new Logger(user && user.email);
+
+    this.caches = cachesImplementation;
+
+    const recordTypesRepo = new Repositories.RecordTypeRepository(this.caches.recordTypes, () => this.getSalesforceConnection());
+
+    this.repositories = {
+      claims: new Repositories.ClaimRepository(() => this.getSalesforceConnection()),
+      claimDetails: new Repositories.ClaimDetailsRepository(() => this.getSalesforceConnection()),
+      claimTotalCostCategory: new Repositories.ClaimTotalCostCategoryRepository(() => this.getSalesforceConnection()),
+      claimLineItems: new Repositories.ClaimLineItemRepository(recordTypesRepo, () => this.getSalesforceConnection()),
+      costCategories: new Repositories.CostCategoryRepository(() => this.getSalesforceConnection()),
+      documents: new Repositories.DocumentsRepository(() => this.getSalesforceConnection()),
+      monitoringReportResponse: new Repositories.MonitoringReportResponseRepository(recordTypesRepo, () => this.getSalesforceConnection()),
+      monitoringReportHeader: new Repositories.MonitoringReportHeaderRepository(recordTypesRepo, () => this.getSalesforceConnection()),
+      monitoringReportQuestions: new Repositories.MonitoringReportQuestionsRepository(() => this.getSalesforceConnection()),
+      monitoringReportStatusChange: new Repositories.MonitoringReportStatusChangeRepository(() => this.getSalesforceConnection()),
+      profileDetails: new Repositories.ProfileDetailsRepository(() => this.getSalesforceConnection()),
+      profileTotalPeriod: new Repositories.ProfileTotalPeriodRepository(() => this.getSalesforceConnection()),
+      profileTotalCostCategory: new Repositories.ProfileTotalCostCategoryRepository(() => this.getSalesforceConnection()),
+      projects: new Repositories.ProjectRepository(() => this.getSalesforceConnection()),
+      partners: new Repositories.PartnerRepository(() => this.getSalesforceConnection()),
+      projectContacts: new Repositories.ProjectContactsRepository(() => this.getSalesforceConnection())
+    };
   }
 
-  // the connection details hane been left as delegates untill details of JWT Access token confirmed
-  public repositories = {
-    claims: new Repositories.ClaimRepository(() => this.getSalesforceConnection()),
-    claimDetails: new Repositories.ClaimDetailsRepository(() => this.getSalesforceConnection()),
-    claimTotalCostCategory: new Repositories.ClaimTotalCostCategoryRepository(() => this.getSalesforceConnection()),
-    claimLineItems: new Repositories.ClaimLineItemRepository(() => this.getSalesforceConnection()),
-    costCategories: new Repositories.CostCategoryRepository(() => this.getSalesforceConnection()),
-    documents: new Repositories.DocumentsRepository(() => this.getSalesforceConnection()),
-    monitoringReportResponse: new Repositories.MonitoringReportResponseRepository(() => this.getSalesforceConnection()),
-    monitoringReportHeader: new Repositories.MonitoringReportHeaderRepository(() => this.getSalesforceConnection()),
-    monitoringReportQuestions: new Repositories.MonitoringReportQuestionsRepository(() => this.getSalesforceConnection()),
-    monitoringReportStatusChange: new Repositories.MonitoringReportStatusChangeRepository(() => this.getSalesforceConnection()),
-    profileDetails: new Repositories.ProfileDetailsRepository(() => this.getSalesforceConnection()),
-    profileTotalPeriod: new Repositories.ProfileTotalPeriodRepository(() => this.getSalesforceConnection()),
-    profileTotalCostCategory: new Repositories.ProfileTotalCostCategoryRepository(() => this.getSalesforceConnection()),
-    projects: new Repositories.ProjectRepository(() => this.getSalesforceConnection()),
-    partners: new Repositories.PartnerRepository(() => this.getSalesforceConnection()),
-    projectContacts: new Repositories.ProjectContactsRepository(() => this.getSalesforceConnection())
-  };
-
+  public readonly repositories: IRepositories;
   public readonly logger: Logger;
   public readonly config: Readonly<IConfig>;
   public readonly clock = new Clock();
-  public readonly caches = cachesImplementation;
+  public readonly caches: ICaches;
 
   private readonly salesforceConnectionDetails: Salesforce.ISalesforceConnectionDetails;
 

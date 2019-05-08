@@ -5,6 +5,7 @@ import { Authorisation } from "./authorisation";
 import { QueryBase, SyncQueryBase } from "../server/features/common/queryBase";
 import { CommandBase, SyncCommandBase } from "../server/features/common/commandBase";
 import * as Repositories from "../server/repositories";
+import { ISalesforceRecordType } from "../server/repositories";
 
 export interface IRepositories {
   claims: Readonly<Repositories.IClaimRepository>;
@@ -44,8 +45,9 @@ export interface ITimer {
 }
 
 export interface ICaches {
-  costCategories: Readonly<Cache<CostCategoryDto[]>>;
-  projectRoles: Readonly<Cache<{ [key: string]: IRoleInfo }>>;
+  readonly costCategories: Cache<CostCategoryDto[]>;
+  readonly projectRoles: Cache<{ [key: string]: IRoleInfo }>;
+  readonly recordTypes: Cache<ISalesforceRecordType[]>;
 }
 
 export interface IRunnable<T> {
