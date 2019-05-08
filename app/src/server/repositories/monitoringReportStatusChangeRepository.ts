@@ -5,6 +5,8 @@ export interface ISalesforceMonitoringReportStatusChange {
   Acc_MonitoringReport__c: string;
   Acc_PreviousMonitoringReportStatus__c: string;
   Acc_NewMonitoringReportStatus__c: string;
+  LastModifiedById: string;
+  CreatedDate: string;
 }
 
 export interface IMonitoringReportStatusChangeRepository {
@@ -17,9 +19,11 @@ export class MonitoringReportStatusChangeRepository extends SalesforceRepository
   protected readonly salesforceObjectName = "Acc_StatusChange__c";
   protected readonly salesforceFieldNames = [
     "Id",
-    "Acc_MonitoringReport__c: string",
-    "Acc_PreviousMonitoringReportStatus__c: string",
-    "Acc_NewMonitoringReportStatus__c: string"
+    "Acc_MonitoringReport__c",
+    "Acc_PreviousMonitoringReportStatus__c",
+    "Acc_NewMonitoringReportStatus__c",
+    "LastModifiedById",
+    "CreatedDate"
   ];
 
   public createStatusChange(statusChange: Partial<ISalesforceMonitoringReportStatusChange>) {

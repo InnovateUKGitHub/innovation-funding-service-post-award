@@ -31,3 +31,12 @@ export interface MonitoringReportSummaryDto {
   periodId: number;
   lastUpdated: Date|null;
 }
+
+export interface MonitoringReportActivityDto {
+  id: string;
+  monitoringReport: string;
+  previousStatus: string;
+  newStatus: string;
+  lastModifiedBy: string;
+  createdDate: Date;
+}

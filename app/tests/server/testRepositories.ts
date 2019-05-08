@@ -339,13 +339,15 @@ class MonitoringReportQuestionsRepository extends TestRepository<Repositories.IS
   }
 }
 
-class MonitoringReportTestStatusChangeRepository extends TestRepository<Repositories.ISalesforceMonitoringReportStatusChange> implements Repositories.IMonitoringReportStatusChangeRepository {
+class MonitoringReportStatusChangeTestRepository extends TestRepository<Repositories.ISalesforceMonitoringReportStatusChange> implements Repositories.IMonitoringReportStatusChangeRepository {
   createStatusChange(statusChange: Partial<Repositories.ISalesforceMonitoringReportStatusChange>) {
     return super.insertOne({
       Id: (this.Items.length + 1).toString(),
       Acc_MonitoringReport__c: statusChange.Acc_MonitoringReport__c!,
       Acc_PreviousMonitoringReportStatus__c: statusChange.Acc_PreviousMonitoringReportStatus__c!,
-      Acc_NewMonitoringReportStatus__c: statusChange.Acc_NewMonitoringReportStatus__c!
+      Acc_NewMonitoringReportStatus__c: statusChange.Acc_NewMonitoringReportStatus__c!,
+      LastModifiedById: statusChange.LastModifiedById!,
+      CreatedDate: statusChange.CreatedDate!
     });
   }
 
@@ -363,6 +365,7 @@ export interface ITestRepositories extends IRepositories {
     monitoringReportHeader: MonitoringReportHeaderTestRepository;
     monitoringReportResponse: MonitoringReportResponseTestRepository;
     monitoringReportQuestions: MonitoringReportQuestionsRepository;
+    monitoringReportStatusChange: MonitoringReportStatusChangeTestRepository;
     profileDetails: ProfileDetailsTestRepository;
     profileTotalCostCategory: ProfileTotalCostCategoryTestRepository;
     profileTotalPeriod: ProfileTotalPeriodTestRepository;
@@ -384,7 +387,7 @@ export const createTestRepositories = (): ITestRepositories => {
         monitoringReportResponse: new MonitoringReportResponseTestRepository(),
         monitoringReportHeader: new MonitoringReportHeaderTestRepository(),
         monitoringReportQuestions: new MonitoringReportQuestionsRepository(),
-        monitoringReportStatusChange: new MonitoringReportTestStatusChangeRepository(),
+        monitoringReportStatusChange: new MonitoringReportStatusChangeTestRepository(),
         profileDetails: new ProfileDetailsTestRepository(),
         profileTotalPeriod: new ProfileTotalPeriodTestRepository(partnerRepository),
         profileTotalCostCategory: new ProfileTotalCostCategoryTestRepository(),
