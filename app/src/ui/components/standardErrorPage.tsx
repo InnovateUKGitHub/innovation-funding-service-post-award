@@ -4,7 +4,7 @@ import { ProjectDashboardRoute } from "../containers/projects";
 
 export const StandardErrorPage = () => (
   <ACC.Page
-    pageTitle={<ACC.Title title="Something has gone wrong at our end" />}
+    pageTitle={<ACC.Title />}
     backLink={null}
   >
     <ACC.Section>

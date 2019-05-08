@@ -22,3 +22,17 @@ export const dataStoreHelper = <T extends DataStateKeys, K extends string, TDto 
   get: state => getDataStoreItem(state, store, key) as any as IDataStore<TDto>,
   getPending: state => Pending.create(getDataStoreItem(state, store, key) as any as IDataStore<TDto>)
 });
+
+export const dataStoreHelperMap = <TOriginalDto, TResult>(dataSelector: IDataSelector<TOriginalDto>, map: (item: TOriginalDto) => TResult): IDataSelector<TResult> => ({
+  store: dataSelector.store,
+  key: dataSelector.key,
+  get: state => {
+    const innerResult = dataSelector.get(state);
+    return {
+      error: innerResult.error,
+      status: innerResult.status,
+      data: innerResult.data && map(innerResult.data)
+    };
+  },
+  getPending: state => dataSelector.getPending(state).then(x => map(x!))
+});

@@ -32,7 +32,7 @@ class ProjectForecastComponent extends ContainerBase<Params, Data, Callbacks> {
       <ACC.Page
         tabs={<ACC.Projects.ProjectNavigation project={project} currentRoute={ProjectForecastRoute.routeName} partners={partners}/>}
         backLink={<ACC.BackLink route={ProjectDashboardRoute.getLink({})}>Back to all projects</ACC.BackLink>}
-        pageTitle={<ACC.Projects.Title pageTitle="View project" project={project}/>}
+        pageTitle={<ACC.Projects.Title project={project}/>}
       >
         <ACC.Section qa="project-forecasts">
           <Table.Table data={partners} qa="partner-table">
@@ -68,5 +68,11 @@ export const ProjectForecastRoute = containerDefinition.route({
     Actions.loadProject(params.projectId),
     Actions.loadPartnersForProject(params.projectId),
   ],
+  getTitle: (store, params) => {
+    return {
+      htmlTitle: "View forecast - View project",
+      displayTitle: "View project"
+    };
+  },
   container: ProjectForecast
 });

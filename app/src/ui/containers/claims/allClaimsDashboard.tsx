@@ -63,7 +63,7 @@ class Component extends ContainerBase<Params, Data, {}> {
   renderContents({ projectDetails, partners, previousClaims, currentClaims }: CombinedData) {
     return (
       <Acc.Page
-        pageTitle={<Acc.Projects.Title pageTitle="View project" project={projectDetails}/>}
+        pageTitle={<Acc.Projects.Title project={projectDetails}/>}
         backLink={<Acc.BackLink route={ProjectDashboardRoute.getLink({})}>Back to all projects</Acc.BackLink>}
         tabs={<Acc.Projects.ProjectNavigation project={projectDetails} currentRoute={AllClaimsDashboardRoute.routeName} partners={partners}/>}
         messages={this.props.messages}
@@ -245,6 +245,12 @@ export const AllClaimsDashboardRoute = definition.route({
     Actions.loadPartnersForProject(params.projectId),
     Actions.loadClaimsForProject(params.projectId),
   ],
+  getTitle: (store) => {
+    return {
+      displayTitle: "View project",
+      htmlTitle: "Claims - View project"
+    };
+  },
   accessControl: (auth, { projectId }) => auth.forProject(projectId).hasAnyRoles(ProjectRole.MonitoringOfficer, ProjectRole.ProjectManager),
   container: AllClaimsDashboard
 });

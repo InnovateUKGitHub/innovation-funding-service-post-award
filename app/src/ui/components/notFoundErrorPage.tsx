@@ -4,7 +4,7 @@ import { HomeRoute, ProjectDashboardRoute } from "../containers";
 
 export const NotFoundErrorPage = () => (
   <ACC.Page
-    pageTitle={<ACC.Title title="Page not found" />}
+    pageTitle={<ACC.Title />}
     backLink={null}
   >
     <ACC.Section>

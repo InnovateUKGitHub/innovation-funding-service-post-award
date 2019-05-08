@@ -1,13 +1,13 @@
 import * as colour from "../ui/styles/colours";
 import { Configuration } from "../server/features/common";
 
-export function renderHtml(html: string, preloadedState: any = {}) {
+export function renderHtml(html: string, htmlTitle: string, preloadedState: any = {}) {
   return `
   <!DOCTYPE html>
   <html lang="en">
       <head>
           <meta charset="utf-8" />
-          <title>GOV.UK - Innovation Funding Service</title>
+          <title>${htmlTitle}</title>
           <meta name="viewport" content="width=device-width, initial-scale=1">
           <meta name="theme-color" content="${colour.GOVUK_COLOUR_BLACK}" />
 

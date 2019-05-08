@@ -57,7 +57,7 @@ class ProjectDocumentsComponent extends ContainerBase<ProjectDocumentPageParams,
 
     return (
       <ACC.Page
-        pageTitle={<ACC.Projects.Title pageTitle="View project" project={project}/>}
+        pageTitle={<ACC.Projects.Title project={project}/>}
         tabs={<ACC.Projects.ProjectNavigation project={project} currentRoute={ProjectDocumentsRoute.routeName} partners={partners}/>}
         validator={editor.validator}
         error={editor.error}
@@ -147,5 +147,9 @@ export const ProjectDocumentsRoute = container.route({
     Actions.loadPartnersForProject(params.projectId),
     Actions.loadProjectDocuments(params.projectId),
   ],
+  getTitle: () => ({
+    htmlTitle: "Project documents - View project",
+    displayTitle: "View project"
+  }),
   accessControl: (auth, { projectId }, features) => features.projectDocuments && auth.forProject(projectId).hasRole(ProjectRole.MonitoringOfficer)
 });

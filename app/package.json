@@ -5,7 +5,7 @@
   "scripts": {
     "clean": "rimraf ./dist",
     "start:server": "node ./dist/src/server/index.js",
-    "start:dev": "nodemon ./dist/src/server/index.js --watch ./dist/src/ --watch ./.env --watch ./public/build/bundle.js",
+    "start:dev": "nodemon ./dist/src/server/index.js --watch ./dist/src/ --watch ./.env --watch ./public/build/",
     "build:server": "rimraf dist/ && tsc",
     "watch:server": "npm run clean && tsc --watch",
     "build:client": "webpack --config webpack.client.prod.js",

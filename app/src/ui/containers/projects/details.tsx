@@ -54,7 +54,7 @@ class ProjectDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
         return (
             <ACC.Page
               backLink={this.renderBackLink(project, partners)}
-              pageTitle={<ACC.Projects.Title pageTitle="View project" project={project} />}
+              pageTitle={<ACC.Projects.Title project={project} />}
             >
                 {this.renderPartnersCosts(partners, project)}
                 <ACC.Section title="Project members">
@@ -143,5 +143,9 @@ export const ProjectDetailsRoute = containerDefinition.route({
         Actions.loadPartnersForProject(params.id),
     ],
     container: ProjectDetails,
+    getTitle: () => ({
+        htmlTitle: "Project details - View project",
+        displayTitle: "View project"
+    }),
     accessControl: (auth, { id }) => auth.forProject(id).hasAnyRoles(ProjectRole.FinancialContact, ProjectRole.ProjectManager, ProjectRole.MonitoringOfficer)
 });

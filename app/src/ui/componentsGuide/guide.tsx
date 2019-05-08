@@ -1,5 +1,5 @@
+import { renderersGuide } from "./renderersGuide";
 import * as React from "react";
-import { Header } from "../components";
 import { accordionGuide } from "./accordionGuide";
 import { claimWindowGuide } from "./claimWindowGuide";
 import { datesGuide } from "./datesGuide";
@@ -12,7 +12,7 @@ import { insetText } from "./insetTextGuide";
 import { linksListGuide } from "./linksListGuide";
 import { navigationArrowsGuide } from "./navigationArrowsGuide";
 import { projectMemberGuide } from "./projectMemberGuide";
-import { renderersGuide } from "./renderersGuide";
+import { Header } from "../components";
 import { sectionGuide } from "./sectionGuide";
 import { sectionPanelGuide } from "./sectionPanelGuide";
 import { tableGuide } from "./tableGuide";
@@ -22,6 +22,11 @@ import { titleGuide } from "./titleGuide";
 import { validationErrorGuide } from "./validationErrorGuide";
 import { validationMessageGuide } from "./validationMessageGuide";
 import { validationSummaryGuide } from "./validationSummaryGuide";
+import { Provider } from "react-redux";
+import { RouterProvider } from "react-router5";
+import { combineReducers, createStore } from "redux";
+import { PageTitleState } from "../redux/reducers/pageTitleReducer";
+import { rootReducer } from "../redux";
 
 const guides: IGuide[] = [
     accordionGuide,
@@ -55,9 +60,10 @@ interface Props {
 
 export class Guide extends React.Component<Props, {}> {
     render() {
+
         return (
             <div>
-                <Header ifsRoot={"https://apply-for-innovation-funding.service.gov.uk"}/>
+                <Header ifsRoot={"https://apply-for-innovation-funding.service.gov.uk"} />
                 <div className="govuk-width-container" style={{ maxWidth: "100%" }}>
                     <main className="govuk-main-wrapper" id="main-content" role="main" style={{ paddingLeft: "20px", paddingRight: "20px" }}>
                         <h1 className="govuk-heading-l">The Guide from the {this.props.source}?</h1>
@@ -76,7 +82,7 @@ export class Guide extends React.Component<Props, {}> {
     }
 
     private renderMenus() {
-        return <ul><li><a className="govuk-link" href="/components">Show All</a></li>{guides.map((x, i) => <li className="govuk-link" key={`guide-menu-${i}`}><a href={`/components?guide=${x.name}`}>{x.name}</a></li>)}</ul>;
+        return <ul><li><a className="govuk-link" href="/components#all">Show All</a></li>{guides.map((x, i) => <li className="govuk-link" key={`guide-menu-${i}`}><a href={`/components?guide=${x.name}`}>{x.name}</a></li>)}</ul>;
     }
 
     private renderGuides() {

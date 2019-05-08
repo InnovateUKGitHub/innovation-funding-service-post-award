@@ -85,7 +85,7 @@ export class PrepareComponent extends ContainerBase<PrepareClaimParams, Data, Ca
         backLink={<ACC.BackLink route={backLink}>Back to project</ACC.BackLink>}
         error={data.editor.error}
         validator={data.editor.validator}
-        pageTitle={<ACC.Projects.Title pageTitle="Claim" project={data.project} />}
+        pageTitle={<ACC.Projects.Title project={data.project} />}
         tabs={<ACC.Claims.Navigation projectId={data.project.id} partnerId={data.partner.id} periodId={data.claim.periodId} currentRouteName={ClaimsDetailsRoute.routeName} />}
         messages={this.props.messages || []}
       >
@@ -157,5 +157,11 @@ export const PrepareClaimRoute = definition.route({
     Actions.loadClaim(params.partnerId, params.periodId),
     Actions.loadCostsSummaryForPeriod(params.projectId, params.partnerId, params.periodId)
   ],
+  getTitle: (store, params) => {
+    return {
+      htmlTitle: "Edit claim",
+      displayTitle: "Claim"
+    };
+  },
   container: PrepareClaim
 });
