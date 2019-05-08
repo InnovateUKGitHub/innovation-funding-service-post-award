@@ -1,5 +1,5 @@
 import { TestContext } from "../../testContextProvider";
-import { ValidationError } from "@server/features/common/appError";
+import { BadRequestError, ValidationError } from "@server/features/common/appError";
 import * as Repositories from "@server/repositories";
 import { Authorisation, ProjectRole } from "@framework/types";
 import { mapClaimDetails } from "@server/features/claimDetails/mapClaimDetails";
@@ -11,10 +11,11 @@ describe("SaveClaimDetails", () => {
 
   it("should save the comments field", async () => {
     const context = new TestContext();
-    const {testData} = context;
-
-    const sfLineItem = testData.createClaimLineItem({persist: false}) as Repositories.ISalesforceClaimLineItem;
-    const sfClaimDetails = testData.createClaimDetail();
+    const project = context.testData.createProject();
+    const partner = context.testData.createPartner(project);
+    const costCategory = context.testData.createCostCategory();
+    const sfClaimDetails = context.testData.createClaimDetail(project, costCategory, partner);
+    const sfLineItem = context.testData.createClaimLineItem({ costCategory, partner, periodId: sfClaimDetails.Acc_ProjectPeriodNumber__c, persist: false }) as Repositories.ISalesforceClaimLineItem;
     const claimDetails = mapClaimDetails(sfClaimDetails, [sfLineItem], context);
 
     const dto = {
@@ -22,7 +23,7 @@ describe("SaveClaimDetails", () => {
       comments: "this is a comment"
     };
 
-    const command = new SaveClaimDetails("Project1", "Partner1", dto.periodId, dto.costCategoryId, dto);
+    const command = new SaveClaimDetails(project.Id, partner.Id, dto.periodId, dto.costCategoryId, dto);
     await context.runCommand(command);
 
     expect(context.repositories.claimDetails.Items).toHaveLength(1);
@@ -31,66 +32,84 @@ describe("SaveClaimDetails", () => {
 
   it("should return a validation error if the line items passed is missing a description", async () => {
     const context = new TestContext();
-    const {testData} = context;
-
-    const claimLineItem = testData.createClaimLineItem({
-      persist: false, update: (item) => {
+    const project = context.testData.createProject();
+    const partner = context.testData.createPartner(project);
+    const costCategory = context.testData.createCostCategory();
+    const claimDetails = context.testData.createClaimDetail(project, costCategory, partner);
+    const claimLineItem = context.testData.createClaimLineItem({
+      costCategory,
+      partner,
+      periodId: claimDetails.Acc_ProjectPeriodNumber__c,
+      persist: false,
+      update: (item) => {
         delete item.Acc_LineItemDescription__c;
       }
     });
 
     expect(context.repositories.claimLineItems.Items).toHaveLength(0);
+
     const lineItem = mapClaimLineItem()(claimLineItem as Repositories.ISalesforceClaimLineItem);
-    const claimDetails = testData.createClaimDetail();
+
     const dto: ClaimDetailsDto = {
       lineItems: [lineItem],
       id: claimDetails.Id,
       comments: claimDetails.Acc_ReasonForDifference__c
     } as ClaimDetailsDto;
 
-    const command = new SaveClaimDetails(claimDetails.Acc_ProjectParticipant__r.Acc_ProjectId__c, lineItem.partnerId, dto.periodId, dto.costCategoryId, dto);
+    const command = new SaveClaimDetails(project.Id, partner.Id, claimDetails.Acc_ProjectPeriodNumber__c, costCategory.Id, dto);
     await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
     expect(context.repositories.claimLineItems.Items).toHaveLength(0);
   });
 
   it("should return a validation error if the line items passed is missing a cost", async () => {
     const context = new TestContext();
-    const {testData} = context;
+    const project = context.testData.createProject();
+    const partner = context.testData.createPartner(project);
+    const costCategory = context.testData.createCostCategory();
+    const claimDetails = context.testData.createClaimDetail(project, costCategory, partner);
 
-    const claimLineItem = testData.createClaimLineItem({
-      persist: false, update: (item) => {
+    const claimLineItem = context.testData.createClaimLineItem({
+      costCategory,
+      partner,
+      periodId: claimDetails.Acc_ProjectPeriodNumber__c,
+      persist: false,
+      update: (item) => {
         delete item.Acc_LineItemCost__c;
       }
     });
-    expect(context.repositories.claimLineItems.Items).toHaveLength(0);
+
     const lineItem = mapClaimLineItem()(claimLineItem as Repositories.ISalesforceClaimLineItem);
-    const claimDetails = testData.createClaimDetail();
+
+    expect(context.repositories.claimLineItems.Items).toHaveLength(0);
+
     const dto: ClaimDetailsDto = {
       lineItems: [lineItem],
       id: claimDetails.Id,
       comments: claimDetails.Acc_ReasonForDifference__c
     } as ClaimDetailsDto;
 
-    const command = new SaveClaimDetails(claimDetails.Acc_ProjectParticipant__r.Acc_ProjectId__c, lineItem.partnerId, dto.periodId, dto.costCategoryId, dto);
+    const command = new SaveClaimDetails(project.Id, partner.Id, claimDetails.Acc_ProjectPeriodNumber__c, costCategory.Id, dto);
     await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
     expect(context.repositories.claimLineItems.Items).toHaveLength(0);
   });
 
   it("should insert new line items", async () => {
     const context = new TestContext();
-    const {testData} = context;
-
-    const claimDetails = testData.createClaimDetail();
-    const claimLineItem = testData.createClaimLineItem({persist: false});
-    expect(context.repositories.claimLineItems.Items).toHaveLength(0);
+    const project = context.testData.createProject();
+    const partner = context.testData.createPartner(project);
+    const costCategory = context.testData.createCostCategory();
+    const claimDetails = context.testData.createClaimDetail(project, costCategory, partner);
+    const claimLineItem = context.testData.createClaimLineItem({ costCategory, partner, periodId: claimDetails.Acc_ProjectPeriodNumber__c, persist: false});
     const lineItem = mapClaimLineItem()(claimLineItem as Repositories.ISalesforceClaimLineItem);
+
+    expect(context.repositories.claimLineItems.Items).toHaveLength(0);
 
     const dto: ClaimDetailsDto = {
       id: claimDetails.Id,
       lineItems: [lineItem]
     } as ClaimDetailsDto;
 
-    const command = new SaveClaimDetails(claimDetails.Acc_ProjectParticipant__r.Acc_ProjectId__c, lineItem.partnerId, dto.periodId, dto.costCategoryId, dto);
+    const command = new SaveClaimDetails(project.Id, partner.Id, claimDetails.Acc_ProjectPeriodNumber__c, costCategory.Id, dto);
     await context.runCommand(command);
 
     expect(context.repositories.claimLineItems.Items).toHaveLength(1);
@@ -99,16 +118,20 @@ describe("SaveClaimDetails", () => {
 
   it("should update existing line items", async () => {
     const context = new TestContext();
-    const {testData} = context;
-
-    const claimLineItem = testData.createClaimLineItem({persist: false});
+    const project = context.testData.createProject();
+    const partner = context.testData.createPartner(project);
+    const costCategory = context.testData.createCostCategory();
+    const claimDetails = context.testData.createClaimDetail(project, costCategory, partner);
+    const claimLineItem = context.testData.createClaimLineItem({ costCategory, partner, periodId: claimDetails.Acc_ProjectPeriodNumber__c, persist: false});
     const lineItem = mapClaimLineItem()(claimLineItem as Repositories.ISalesforceClaimLineItem);
+
     const dto: ClaimDetailsDto = {
       lineItems: [lineItem]
     } as ClaimDetailsDto;
 
-    const command = new SaveClaimDetails("", lineItem.partnerId, dto.periodId, dto.costCategoryId, dto);
     expect(context.repositories.claimLineItems.Items).toHaveLength(0);
+
+    const command = new SaveClaimDetails(project.Id, partner.Id, claimDetails.Acc_ProjectPeriodNumber__c, costCategory.Id, dto);
     await context.runCommand(command);
 
     expect(context.repositories.claimLineItems.Items).toHaveLength(1);
@@ -125,7 +148,7 @@ describe("SaveClaimDetails", () => {
       }]
     };
 
-    const command2 = new SaveClaimDetails("", lineItem.partnerId, dto.periodId, dto.costCategoryId, update);
+    const command2 = new SaveClaimDetails(project.Id, partner.Id, claimDetails.Acc_ProjectPeriodNumber__c, costCategory.Id, update);
     await context.runCommand(command2);
 
     expect(context.repositories.claimLineItems.Items).toHaveLength(1);
@@ -135,23 +158,17 @@ describe("SaveClaimDetails", () => {
       Acc_LineItemDescription__c: "new description!",
       Acc_LineItemCost__c: 1234
     });
-
   });
 
   it("should delete items not passed in", async () => {
     const context = new TestContext();
-    const {testData} = context;
-
-    const project = testData.createProject();
-    const partner = testData.createPartner();
-    const costCategory = testData.createCostCategory();
+    const project = context.testData.createProject();
+    const partner = context.testData.createPartner(project);
+    const costCategory = context.testData.createCostCategory();
     const periodId = 1;
-    const claimDetail = testData.createClaimDetail(project, costCategory, partner, periodId);
-
-    const claimLineItem1 = testData.createClaimLineItem({periodId, partner, costCategory, persist: false});
-    const claimLineItem2 = testData.createClaimLineItem({periodId, partner, costCategory, persist: false });
-
-    expect(context.repositories.claimLineItems.Items).toHaveLength(0);
+    const claimDetail = context.testData.createClaimDetail(project, costCategory, partner, periodId);
+    const claimLineItem1 = context.testData.createClaimLineItem({periodId, partner, costCategory, persist: false});
+    const claimLineItem2 = context.testData.createClaimLineItem({periodId, partner, costCategory, persist: false });
 
     const lineItem1 = mapClaimLineItem()(claimLineItem1 as Repositories.ISalesforceClaimLineItem);
     const lineItem2 = mapClaimLineItem()(claimLineItem2 as Repositories.ISalesforceClaimLineItem);
@@ -160,6 +177,8 @@ describe("SaveClaimDetails", () => {
       id: claimDetail.Id,
       lineItems: [lineItem1, lineItem2]
     } as ClaimDetailsDto;
+
+    expect(context.repositories.claimLineItems.Items).toHaveLength(0);
 
     const command = new SaveClaimDetails(project.Id, partner.Id, periodId, costCategory.Id, dto);
     await context.runCommand(command);
@@ -176,6 +195,7 @@ describe("SaveClaimDetails", () => {
         id: id1
       }]
     };
+
     const command2 = new SaveClaimDetails(project.Id, partner.Id, periodId, costCategory.Id, update);
     await context.runCommand(command2);
     expect(context.repositories.claimLineItems.Items).toHaveLength(1);
@@ -183,18 +203,18 @@ describe("SaveClaimDetails", () => {
       ...claimLineItem1,
       Id: id1
     });
-
   });
 
   test("expect comments to be updated", async () => {
     const context = new TestContext();
     const project = context.testData.createProject();
     const partner = context.testData.createPartner();
-    const claimDetail = context.testData.createClaimDetail(project, undefined, partner, 1, x => x.Acc_ReasonForDifference__c = "An old message" );
-    const claimDetails = mapClaimDetails(claimDetail, [],context);
+    const costCategory = context.testData.createCostCategory();
+    const claimDetail = context.testData.createClaimDetail(project, costCategory, partner, 1, x => x.Acc_ReasonForDifference__c = "An old message" );
+    const claimDetails = mapClaimDetails(claimDetail, [], context);
     claimDetails.comments = "A new message";
 
-    const command = new SaveClaimDetails("", partner.Id, 1, claimDetail.Acc_CostCategory__c, claimDetails);
+    const command = new SaveClaimDetails(project.Id, partner.Id, 1, costCategory.Id, claimDetails);
     await context.runCommand(command);
 
     expect(claimDetail.Acc_ReasonForDifference__c).toBe("A new message");
@@ -204,46 +224,136 @@ describe("SaveClaimDetails", () => {
     const context = new TestContext();
     const project = context.testData.createProject();
     const partner = context.testData.createPartner();
-    const claimDetail = context.testData.createClaimDetail(project, undefined, partner, undefined, x => x.Acc_ReasonForDifference__c = "An old message" );
-    const claimDetails = mapClaimDetails(claimDetail, [],context);
-
+    const costCategory = context.testData.createCostCategory();
+    const claimDetail = context.testData.createClaimDetail(project, costCategory, partner, undefined, x => x.Acc_ReasonForDifference__c = "An old message" );
+    const claimDetails = mapClaimDetails(claimDetail, [], context);
     claimDetails.comments = null;
 
-    const command = new SaveClaimDetails("", partner.Id, 1,claimDetail.Acc_CostCategory__c, claimDetails);
+    const command = new SaveClaimDetails(project.Id, partner.Id, 1, costCategory.Id, claimDetails);
     await context.runCommand(command);
 
     expect(claimDetail.Acc_ReasonForDifference__c).toBe(null);
   });
-});
 
-describe("accessControl", () => {
-  test("accessControl - Partner Finance contact passes", async () => {
-    const context = new TestContext();
-    const project = context.testData.createProject();
-    const partner = context.testData.createPartner();
-    const command = new SaveClaimDetails(project.Id, partner.Id, 1, "", {} as ClaimDetailsDto);
-    const auth    = new Authorisation({
-      [project.Id]: {
-        projectRoles: ProjectRole.Unknown,
-        partnerRoles: { [partner.Id]: ProjectRole.FinancialContact }
-      }
+  describe("validateRequest", () => {
+    test("invalid project id throws error", async () => {
+      const context = new TestContext();
+      const project = context.testData.createProject();
+      const partner = context.testData.createPartner();
+      const costCategory = context.testData.createCostCategory();
+      const claimDetail = context.testData.createClaimDetail(project, costCategory, partner, 1);
+      const claimDetails = mapClaimDetails(claimDetail, [], context);
+
+      const command = new SaveClaimDetails(null as any, partner.Id, 1, costCategory.Id, claimDetails);
+      await expect(context.runCommand(command)).rejects.toThrow(BadRequestError);
     });
 
-    expect(await context.runAccessControl(auth, command)).toBe(true);
+    test("invalid partner id throws error", async () => {
+      const context = new TestContext();
+      const project = context.testData.createProject();
+      const partner = context.testData.createPartner();
+      const costCategory = context.testData.createCostCategory();
+      const claimDetail = context.testData.createClaimDetail(project, costCategory, partner, 1);
+      const claimDetails = mapClaimDetails(claimDetail, [], context);
+
+      const command = new SaveClaimDetails(project.Id, null as any, 1, costCategory.Id, claimDetails);
+      await expect(context.runCommand(command)).rejects.toThrow(BadRequestError);
+    });
+
+    test("invalid periodId throws error", async () => {
+      const context = new TestContext();
+      const project = context.testData.createProject();
+      const partner = context.testData.createPartner();
+      const costCategory = context.testData.createCostCategory();
+      const claimDetail = context.testData.createClaimDetail(project, costCategory, partner, 1);
+      const claimDetails = mapClaimDetails(claimDetail, [], context);
+
+      const command = new SaveClaimDetails(project.Id, partner.Id, null as any, costCategory.Id, claimDetails);
+      await expect(context.runCommand(command)).rejects.toThrow(BadRequestError);
+    });
+
+    test("invalid costCategory id throws error", async () => {
+      const context = new TestContext();
+      const project = context.testData.createProject();
+      const partner = context.testData.createPartner();
+      const costCategory = context.testData.createCostCategory();
+      const claimDetail = context.testData.createClaimDetail(project, costCategory, partner, 1);
+      const claimDetails = mapClaimDetails(claimDetail, [], context);
+
+      const command = new SaveClaimDetails(project.Id, partner.Id, 1, null as any, claimDetails);
+      await expect(context.runCommand(command)).rejects.toThrow(BadRequestError);
+    });
+
+    test("lineItems mismatched periodId throws error", async () => {
+      const context = new TestContext();
+      const project = context.testData.createProject();
+      const partner = context.testData.createPartner();
+      const costCategory = context.testData.createCostCategory();
+      const claimDetail = context.testData.createClaimDetail(project, costCategory, partner, 1);
+      const lineItem = { periodId: 2 } as any;
+      const claimDetails = mapClaimDetails(claimDetail, [lineItem], context);
+
+      const command = new SaveClaimDetails(project.Id, partner.Id, 1, costCategory.Id, claimDetails);
+      await expect(context.runCommand(command)).rejects.toThrow(BadRequestError);
+    });
+
+    test("lineItems mismatched partner Id throws error", async () => {
+      const context = new TestContext();
+      const project = context.testData.createProject();
+      const partner = context.testData.createPartner();
+      const costCategory = context.testData.createCostCategory();
+      const claimDetail = context.testData.createClaimDetail(project, costCategory, partner, 1);
+      const lineItem = { partnerId: "invalid" } as any;
+      const claimDetails = mapClaimDetails(claimDetail, [lineItem], context);
+
+      const command = new SaveClaimDetails(project.Id, partner.Id, 1, costCategory.Id, claimDetails);
+      await expect(context.runCommand(command)).rejects.toThrow(BadRequestError);
+    });
+
+    test("lineItems mismatched costCategory Id throws error", async () => {
+      const context = new TestContext();
+      const project = context.testData.createProject();
+      const partner = context.testData.createPartner();
+      const costCategory = context.testData.createCostCategory();
+      const claimDetail = context.testData.createClaimDetail(project, costCategory, partner, 1);
+      const lineItem = { costCategoryId: "invalid" } as any;
+      const claimDetails = mapClaimDetails(claimDetail, [lineItem], context);
+
+      const command = new SaveClaimDetails(project.Id, partner.Id, 1, costCategory.Id, claimDetails);
+      await expect(context.runCommand(command)).rejects.toThrow(BadRequestError);
+    });
+
   });
 
-  test("accessControl - all other roles fail", async () => {
-    const context = new TestContext();
-    const project = context.testData.createProject();
-    const partner = context.testData.createPartner();
-    const command = new SaveClaimDetails(project.Id, partner.Id, 1, "",  {} as ClaimDetailsDto);
-    const auth    = new Authorisation({
-      [project.Id]: {
-        projectRoles: ProjectRole.FinancialContact | ProjectRole.MonitoringOfficer | ProjectRole.ProjectManager,
-        partnerRoles: { [partner.Id]: ProjectRole.MonitoringOfficer | ProjectRole.ProjectManager }
-      }
+  describe("accessControl", () => {
+    test("accessControl - Partner Finance contact passes", async () => {
+      const context = new TestContext();
+      const project = context.testData.createProject();
+      const partner = context.testData.createPartner();
+      const command = new SaveClaimDetails(project.Id, partner.Id, 1, "", {} as ClaimDetailsDto);
+      const auth    = new Authorisation({
+        [project.Id]: {
+          projectRoles: ProjectRole.Unknown,
+          partnerRoles: { [partner.Id]: ProjectRole.FinancialContact }
+        }
+      });
+
+      expect(await context.runAccessControl(auth, command)).toBe(true);
     });
 
-    expect(await context.runAccessControl(auth, command)).toBe(false);
+    test("accessControl - all other roles fail", async () => {
+      const context = new TestContext();
+      const project = context.testData.createProject();
+      const partner = context.testData.createPartner();
+      const command = new SaveClaimDetails(project.Id, partner.Id, 1, "",  {} as ClaimDetailsDto);
+      const auth    = new Authorisation({
+        [project.Id]: {
+          projectRoles: ProjectRole.FinancialContact | ProjectRole.MonitoringOfficer | ProjectRole.ProjectManager,
+          partnerRoles: { [partner.Id]: ProjectRole.MonitoringOfficer | ProjectRole.ProjectManager }
+        }
+      });
+
+      expect(await context.runAccessControl(auth, command)).toBe(false);
+    });
   });
 });
