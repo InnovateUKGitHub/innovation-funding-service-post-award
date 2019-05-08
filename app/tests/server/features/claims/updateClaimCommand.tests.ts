@@ -1,3 +1,4 @@
+// tslint:disable:no-big-function
 import { TestContext } from "../../testContextProvider";
 import { UpdateClaimCommand } from "@server/features/claims/updateClaim";
 import mapClaim from "@server/features/claims/mapClaim";
@@ -108,6 +109,7 @@ describe("UpdateClaimCommand", () => {
     const project = context.testData.createProject();
 
     dto.status = ClaimStatus.MO_QUERIED;
+    dto.comments = "Test comments";
 
     const command = new UpdateClaimCommand(project.Id, dto);
     await context.runCommand(command);
@@ -176,6 +178,35 @@ describe("UpdateClaimCommand", () => {
     await context.runCommand(command);
   });
 
+  it("when message is not set and claim status is changing to MO Quried expect validation excetion", async () => {
+    const context = new TestContext();
+    const partner = context.testData.createPartner();
+    const claim = context.testData.createClaim(partner);
+
+    const dto = mapClaim(context)(claim);
+    dto.status = ClaimStatus.MO_QUERIED;
+    dto.comments = "";
+
+    await expect(context.runCommand(new UpdateClaimCommand(partner.Acc_ProjectId__c, dto))).rejects.toThrow(ValidationError);
+
+    dto.comments = "Some comments";
+
+    await expect(context.runCommand(new UpdateClaimCommand(partner.Acc_ProjectId__c, dto))).resolves.toEqual(true);
+  });
+
+  it("when message is not set and claim status is already MO Quried expect no validation excetion", async () => {
+    const context = new TestContext();
+    const partner = context.testData.createPartner();
+    const claim = context.testData.createClaim(partner);
+    claim.Acc_ClaimStatus__c = ClaimStatus.MO_QUERIED;
+
+    const dto = mapClaim(context)(claim);
+    dto.status = ClaimStatus.MO_QUERIED;
+    dto.comments = "";
+
+    await expect(context.runCommand(new UpdateClaimCommand(partner.Acc_ProjectId__c, dto))).resolves.toEqual(true);
+  });
+
   it("when claim is over limits for any cost category expect exception", async () => {
     const context      = new TestContext();
     const testData     = context.testData;
@@ -184,7 +215,6 @@ describe("UpdateClaimCommand", () => {
     const claim        = testData.createClaim(partner, 2);
     const costCategory = testData.createCostCategory();
 
-    // TODO offer costs are currently hard coded to 10000
     testData.createClaimDetail(project, costCategory, partner, 1, (x) => { x.Acc_PeriodCostCategoryTotal__c = 1000000;});
     testData.createClaimDetail(project, costCategory, partner, 2, (x) => { x.Acc_PeriodCostCategoryTotal__c = 1000000;});
 

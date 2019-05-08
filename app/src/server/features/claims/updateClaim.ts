@@ -15,9 +15,10 @@ export class UpdateClaimCommand extends CommandBase<boolean> {
   }
 
   protected async Run(context: IContext) {
+    const existingStatus = await context.repositories.claims.get(this.claimDto.partnerId, this.claimDto.periodId).then(x => x.Acc_ClaimStatus__c);
     const costCategories = await context.runQuery(new GetCostCategoriesQuery());
     const details = await context.runQuery(new GetCostsSummaryForPeriodQuery(this.projectId, this.claimDto.partnerId, this.claimDto.periodId));
-    const result = new ClaimDtoValidator(this.claimDto, details, costCategories, true);
+    const result = new ClaimDtoValidator(this.claimDto, existingStatus, details, costCategories, true);
 
     if (!result.isValid) {
       throw new ValidationError(result);

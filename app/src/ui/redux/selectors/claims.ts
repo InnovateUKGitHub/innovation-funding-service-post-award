@@ -3,7 +3,7 @@ import { RootState } from "../reducers";
 import { ClaimDtoValidator } from "../../validators/claimDtoValidator";
 import { getCostCategories } from "./costCategories";
 import { getKey } from "../../../util/key";
-import { ClaimDto } from "../../../types";
+import { ClaimDto, ClaimStatus } from "../../../types";
 import { Pending } from "../../../shared/pending";
 import { ClaimDetailsValidator } from "@ui/validators";
 import { range } from "@shared/range";
@@ -26,9 +26,10 @@ export const getClaimEditor = (partnerId: string, periodId: number) => editorSto
 const createClaimEditorDto = (partnerId: string, periodId: number, store: RootState) => getClaim(partnerId, periodId).getPending(store);
 
 const createClaimValidator = (partnerId: string, periodId: number, claim: ClaimDto, store: RootState) => {
+  const originalStatus = getClaim(partnerId, periodId).getPending(store).then(x => x && x.status).data || ClaimStatus.UNKNOWN;
   const details = getCostsSummaryForPeriod(partnerId, periodId).getPending(store).data || [];
   const costCategories = getCostCategories().getPending(store).data || [];
-  return new ClaimDtoValidator(claim, details, costCategories, false);
+  return new ClaimDtoValidator(claim, originalStatus, details, costCategories, false);
 };
 
 export const claimDetailStore = "claimDetail";
