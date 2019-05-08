@@ -165,7 +165,7 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
             <LineItemTable.Custom header="Description" qa="cost-description" value={(x, i) => this.renderDescription(x, i, validationResults[i.row], editor)} />
             <LineItemTable.Custom header="Cost (£)" qa="cost-value" classSuffix="numeric" value={(x, i) => this.renderCost(x, i, validationResults[i.row], editor)} width={30} />
             {this.state.showAddRemove ?
-              <LineItemTable.Custom header="No data" hideHeader={true} qa="remove" value={(x, i) => <a href="" role="button" onClick={e => this.removeItem(x, i, e, editor)}>Remove</a>} width={1}/>
+              <LineItemTable.Custom header="Action" hideHeader={true} qa="remove" value={(x, i) => <a href="" role="button" onClick={e => this.removeItem(x, i, e, editor)}>Remove</a>} width={1}/>
               : null}
           </LineItemTable.Table>
         </LineItemForm.Fieldset>
