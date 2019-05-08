@@ -235,6 +235,25 @@ export class TestData {
     return response;
   }
 
+  public createMonitoringReportStatusChange(header?: Repositories.ISalesforceMonitoringReportHeader, partner?: Repositories.ISalesforcePartner): Repositories.ISalesforceMonitoringReportStatusChange {
+    header = header || this.createMonitoringReportHeader();
+    partner = partner || this.createPartner();
+
+    const seed = this.repositories.monitoringReportStatusChange.Items.length + 1;
+    const response: Repositories.ISalesforceMonitoringReportStatusChange = {
+      Id: `StatusChange: ${seed}`,
+      Acc_MonitoringReport__c: header.Id,
+      Acc_PreviousMonitoringReportStatus__c: "Draft",
+      Acc_NewMonitoringReportStatus__c: "Submitted to Monitoring Officer",
+      LastModifiedById: partner.Acc_AccountId__r.Name,
+      CreatedDate: DateTime.local().toISO()
+    };
+
+    this.repositories.monitoringReportStatusChange.Items.push(response);
+
+    return response;
+  }
+
   public createClaim(partner?: Repositories.ISalesforcePartner, periodId?: number, update?: (item: Repositories.ISalesforceClaim) => void): Repositories.ISalesforceClaim {
 
     partner = partner || this.createPartner();
