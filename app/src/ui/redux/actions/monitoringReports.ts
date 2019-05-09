@@ -6,10 +6,10 @@ import { MonitoringReportDtoValidator } from "../../validators/MonitoringReportD
 import { scrollToTheTopSmoothly } from "../../../util/windowHelpers";
 import { LoadingStatus } from "../../../shared/pending";
 
-export function loadMonitoringReport(projectId: string, id: string) {
+export function loadMonitoringReport(projectId: string, reportId: string) {
   return conditionalLoad(
-    getMonitoringReport(projectId, id),
-    params => ApiClient.monitoringReports.get({ projectId, id, ...params })
+    getMonitoringReport(projectId, reportId),
+    params => ApiClient.monitoringReports.get({ projectId, reportId, ...params })
   );
 }
 

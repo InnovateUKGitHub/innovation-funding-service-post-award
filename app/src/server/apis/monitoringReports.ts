@@ -4,16 +4,18 @@ import { GetMonitoringReport, GetMonitoringReportById } from "../features/monito
 import { SaveMonitoringReport } from "../features/monitoringReports/saveMonitoringReport";
 import { processDto } from "../../shared/processResponse";
 import { GetMonitoringReportsForProject } from "../features/monitoringReports/getMonitoringReportsForProject";
-import { MonitoringReportDto, MonitoringReportQuestionDto, MonitoringReportSummaryDto } from "../../types";
+import { MonitoringReportActivityDto, MonitoringReportDto, MonitoringReportQuestionDto, MonitoringReportSummaryDto } from "../../types";
 import { CreateMonitoringReport } from "@server/features/monitoringReports/createMonitoringReport";
 import { GetMonitoringReportActiveQuestions } from "@server/features/monitoringReports/getMonitoringReportActiveQuestions";
+import { GetMonitoringReportStatusChanges } from "@server/features/monitoringReports/getMonitoringReportStatusChanges";
 
 export interface IMonitoringReportsApi {
-  get: (params: ApiParams<{ projectId: string, id: string }>) => Promise<MonitoringReportDto>;
+  get: (params: ApiParams<{ projectId: string, reportId: string }>) => Promise<MonitoringReportDto>;
   saveMonitoringReport: (params: ApiParams<{ monitoringReportDto: MonitoringReportDto, submit: boolean }>) => Promise<MonitoringReportDto>;
   createMonitoringReport: (params: ApiParams<{ monitoringReportDto: MonitoringReportDto, submit: boolean }>) => Promise<MonitoringReportDto>;
   getAllForProject: (params: ApiParams<{ projectId: string }>) => Promise<MonitoringReportSummaryDto[]>;
   getActiveQuestions: (params: ApiParams<{}>) => Promise<MonitoringReportQuestionDto[]>;
+  getStatusChanges: (params: ApiParams<{ projectId: string, reportId: string }>) => Promise<MonitoringReportActivityDto[]>;
 }
 
 class Controller extends ControllerBaseWithSummary<MonitoringReportSummaryDto, MonitoringReportDto> implements IMonitoringReportsApi {
@@ -21,16 +23,17 @@ class Controller extends ControllerBaseWithSummary<MonitoringReportSummaryDto, M
   constructor() {
     super("monitoring-reports");
 
+    this.getCustom("/status-changes/:projectId/:reportId", (p) => ({ projectId: p.projectId, reportId: p.reportId}), p => this.getStatusChanges(p));
     this.getCustom("/questions", (p) => ({}), p => this.getActiveQuestions(p));
-    this.getItem("/:projectId/:id", (p) => ({ projectId: p.projectId, id: p.id }), (p) => this.get(p));
+    this.getItem("/:projectId/:reportId", (p) => ({ projectId: p.projectId, reportId: p.reportId }), (p) => this.get(p));
     this.putItem("/", (p, q, b) => ({ monitoringReportDto: processDto(b), submit: q.submit === "true" }), (p) => this.saveMonitoringReport(p));
     this.postItem("/", (p, q, b) => ({ monitoringReportDto: processDto(b), submit: q.submit === "true" }), (p) => this.createMonitoringReport(p));
     this.getItems("/", (p, q) => ({ projectId: q.projectId }), (p) => this.getAllForProject(p));
   }
 
-  public async get(params: ApiParams<{ projectId: string, id: string }>) {
-    const { projectId, id } = params;
-    const query = new GetMonitoringReportById(projectId, id);
+  public async get(params: ApiParams<{ projectId: string, reportId: string }>) {
+    const { projectId, reportId } = params;
+    const query = new GetMonitoringReportById(projectId, reportId);
     return contextProvider.start(params).runQuery(query);
   }
 
@@ -58,6 +61,12 @@ class Controller extends ControllerBaseWithSummary<MonitoringReportSummaryDto, M
 
   public getActiveQuestions(params: ApiParams<{}>) {
     return contextProvider.start(params).runQuery(new GetMonitoringReportActiveQuestions());
+  }
+
+  public getStatusChanges(params: ApiParams<{ projectId: string, reportId: string }>) {
+    const { projectId, reportId } = params;
+    const query = new GetMonitoringReportStatusChanges(projectId, reportId);
+    return contextProvider.start(params).runQuery(query);
   }
 }
 

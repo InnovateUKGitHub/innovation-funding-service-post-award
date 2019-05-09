@@ -37,6 +37,6 @@ export interface MonitoringReportActivityDto {
   monitoringReport: string;
   previousStatus: string;
   newStatus: string;
-  lastModifiedBy: string;
+  createdBy: string;
   createdDate: Date;
 }
