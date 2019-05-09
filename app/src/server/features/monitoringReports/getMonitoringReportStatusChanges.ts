@@ -20,7 +20,7 @@ export class GetMonitoringReportStatusChanges extends QueryBase<MonitoringReport
       monitoringReport: x.Acc_MonitoringReport__c,
       newStatus: x.Acc_NewMonitoringReportStatus__c,
       previousStatus: x.Acc_PreviousMonitoringReportStatus__c,
-      lastModifiedBy: x.LastModifiedById,
+      createdBy: x.CreatedById,
       createdDate: context.clock.parseRequiredSalesforceDateTime(x.CreatedDate)
     }));
   }
