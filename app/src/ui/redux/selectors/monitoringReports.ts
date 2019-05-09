@@ -13,6 +13,10 @@ export const getAllMonitoringReports = (projectId: string) => {
   return dataStoreHelper("monitoringReports", getKey(projectId));
 };
 
+export const getMonitoringReportStatusChanges = (reportId: string) => {
+  return dataStoreHelper("monitoringReportStatusChanges", getKey(reportId));
+};
+
 export const getMonitoringReportEditor = (projectId: string, id?: string ) => editorStoreHelper<MonitoringReportDto, MonitoringReportDtoValidator>(
   "monitoringReport",
   x => x.monitoringReport,

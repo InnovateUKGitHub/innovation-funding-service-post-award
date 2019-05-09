@@ -1,7 +1,8 @@
 import { QueryBase } from "@server/features/common";
-import { Authorisation, IContext, MonitoringReportActivityDto, ProjectRole } from "@framework/types";
+import { Authorisation, IContext, MonitoringReportStatusChangeDto, ProjectRole } from "@framework/types";
+import { dateComparator } from "@util/comparator";
 
-export class GetMonitoringReportStatusChanges extends QueryBase<MonitoringReportActivityDto[]> {
+export class GetMonitoringReportStatusChanges extends QueryBase<MonitoringReportStatusChangeDto[]> {
   constructor(
     private readonly projectId: string,
     private readonly reportId: string
@@ -10,18 +11,20 @@ export class GetMonitoringReportStatusChanges extends QueryBase<MonitoringReport
   }
 
   protected async accessControl(auth: Authorisation, context: IContext) {
+    // TODO validate report is actually for project passed in
     return context.config.features.monitoringReports && auth.forProject(this.projectId).hasRole(ProjectRole.MonitoringOfficer);
   }
 
-  protected async Run(context: IContext): Promise<MonitoringReportActivityDto[]> {
+  protected async Run(context: IContext): Promise<MonitoringReportStatusChangeDto[]> {
     const statusChanges = await context.repositories.monitoringReportStatusChange.getStatusChanges(this.reportId);
-    return statusChanges.map<MonitoringReportActivityDto>(x => ({
-      id: x.Id,
-      monitoringReport: x.Acc_MonitoringReport__c,
-      newStatus: x.Acc_NewMonitoringReportStatus__c,
-      previousStatus: x.Acc_PreviousMonitoringReportStatus__c,
-      createdBy: x.CreatedById,
-      createdDate: context.clock.parseRequiredSalesforceDateTime(x.CreatedDate)
-    }));
+    return statusChanges.map<MonitoringReportStatusChangeDto>(x => ({
+        id: x.Id,
+        monitoringReport: x.Acc_MonitoringReport__c,
+        newStatus: x.Acc_NewMonitoringReportStatus__c,
+        previousStatus: x.Acc_PreviousMonitoringReportStatus__c,
+        createdBy: x.CreatedBy.Name,
+        createdDate: context.clock.parseRequiredSalesforceDateTime(x.CreatedDate)
+      })
+    ).sort((a, b) => dateComparator(b.createdDate, a.createdDate));
   }
 }

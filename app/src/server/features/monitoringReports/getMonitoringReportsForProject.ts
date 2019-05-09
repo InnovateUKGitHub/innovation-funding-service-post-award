@@ -2,6 +2,7 @@ import { QueryBase } from "../common";
 import { Authorisation, IContext, ProjectRole } from "../../../types";
 import { MonitoringReportSummaryDto } from "../../../types/dtos/monitoringReportDto";
 import { mapMonitoringReportStatus } from "./mapMonitoringReportStatus";
+import { dateComparator } from "@util/comparator";
 
 export class GetMonitoringReportsForProject extends QueryBase<MonitoringReportSummaryDto[]> {
   constructor(
@@ -27,6 +28,11 @@ export class GetMonitoringReportsForProject extends QueryBase<MonitoringReportSu
       periodId: x.Acc_ProjectPeriodNumber__c,
       lastUpdated: context.clock.parseOptionalSalesforceDateTime(x.LastModifiedDate)
     }))
-    .sort((a, b) => b.periodId - a.periodId);
+    .sort((a, b) => {
+      if (b.periodId !== a.periodId) {
+        return b.periodId - a.periodId;
+      }
+      return dateComparator(b.lastUpdated!, a.lastUpdated!);
+    });
   }
 }

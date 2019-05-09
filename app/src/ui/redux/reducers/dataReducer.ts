@@ -8,11 +8,11 @@ import {
   IAppError,
   MonitoringReportDto,
   MonitoringReportQuestionDto,
+  MonitoringReportStatusChangeDto,
   MonitoringReportSummaryDto,
   PartnerDto,
-  ProjectDto,
-  ProjectRole
-} from "../../../types";
+  ProjectDto, ProjectRole
+} from "@framework/types";
 
 export interface IDataStore<T> {
   status: LoadingStatus;
@@ -65,6 +65,7 @@ export const dataReducer = combineReducers({
   monitoringReport: dataStoreReducer<MonitoringReportDto>("monitoringReport"),
   monitoringReports: dataStoreReducer<MonitoringReportSummaryDto[]>("monitoringReports"),
   monitoringReportQuestions: dataStoreReducer<MonitoringReportQuestionDto[]>("monitoringReportQuestions"),
+  monitoringReportStatusChanges: dataStoreReducer<MonitoringReportStatusChangeDto[]>("monitoringReportStatusChanges"),
   partner: dataStoreReducer<PartnerDto>("partner"),
   partners: dataStoreReducer<PartnerDto[]>("partners"),
   project: dataStoreReducer<ProjectDto>("project"),

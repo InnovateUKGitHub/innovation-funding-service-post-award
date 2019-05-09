@@ -25,8 +25,7 @@ export class CreateMonitoringReport extends CommandBase<string> {
       auth.forProject(this.monitoringReportDto.projectId).hasRole(ProjectRole.MonitoringOfficer);
   }
 
-  private async updateMonitoringReportStatus(context: IContext, headerId: string): Promise<void> {
-    if (!this.submit) return;
+  private async insertStatusChange(context: IContext, headerId: string): Promise<void> {
     await context.repositories.monitoringReportStatusChange.createStatusChange({
       Acc_MonitoringReport__c: headerId
     });
@@ -93,9 +92,12 @@ export class CreateMonitoringReport extends CommandBase<string> {
     }
 
     const headerId = await this.insertMonitoringReportHeader(context, project);
+    await this.insertStatusChange(context, headerId); // Insert status change for Draft
     await this.insertResponse(context, headerId);
     await this.updateMonitoringReportHeader(context, headerId);
-    await this.updateMonitoringReportStatus(context, headerId);
+    if (this.submit) {
+      await this.insertStatusChange(context, headerId); // Insert status change for Awaiting IUK Approval
+    }
 
     return headerId;
   }

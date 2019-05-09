@@ -48,7 +48,7 @@ export class SaveMonitoringReport extends CommandBase<boolean> {
     await context.repositories.monitoringReportHeader.update(update);
   }
 
-  private async updateMonitoringReportStatus(context: IContext): Promise<void> {
+  private async insertStatusChange(context: IContext): Promise<void> {
     if (!this.submit) return;
     await context.repositories.monitoringReportStatusChange.createStatusChange({
       Acc_MonitoringReport__c: this.monitoringReportDto.headerId
@@ -105,7 +105,7 @@ export class SaveMonitoringReport extends CommandBase<boolean> {
 
     await this.updateMonitoringReport(context);
     await this.updateHeader(context, project);
-    await this.updateMonitoringReportStatus(context);
+    await this.insertStatusChange(context);
     return true;
   }
 }

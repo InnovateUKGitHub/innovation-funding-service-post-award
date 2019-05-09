@@ -5,7 +5,9 @@ export interface ISalesforceMonitoringReportStatusChange {
   Acc_MonitoringReport__c: string;
   Acc_PreviousMonitoringReportStatus__c: string;
   Acc_NewMonitoringReportStatus__c: string;
-  CreatedById: string;
+  CreatedBy: {
+    Name: string;
+  };
   CreatedDate: string;
 }
 
@@ -22,7 +24,7 @@ export class MonitoringReportStatusChangeRepository extends SalesforceRepository
     "Acc_MonitoringReport__c",
     "Acc_PreviousMonitoringReportStatus__c",
     "Acc_NewMonitoringReportStatus__c",
-    "CreatedById",
+    "CreatedBy.Name",
     "CreatedDate"
   ];
 
