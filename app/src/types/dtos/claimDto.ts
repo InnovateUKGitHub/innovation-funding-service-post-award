@@ -19,3 +19,13 @@ export interface ClaimDto {
   allowIarEdit: boolean;
   overheadRate: number;
 }
+
+export interface ClaimStatusChangeDto {
+  id: string;
+  claimId: string;
+  previousStatus: string;
+  newStatus: string;
+  createdBy: string;
+  createdDate: Date;
+  comments: string;
+}

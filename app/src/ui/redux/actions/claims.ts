@@ -13,7 +13,14 @@ import {
   updateEditorAction,
   UpdateEditorAction
 } from "./common";
-import { findClaimsByPartner, findClaimsByProject, getClaim, getClaimEditor, getCurrentClaim } from "../selectors";
+import {
+  findClaimsByPartner,
+  findClaimsByProject,
+  getClaim,
+  getClaimEditor,
+  getClaimStatusChanges,
+  getCurrentClaim
+} from "../selectors";
 import { ClaimDto, ClaimStatus } from "../../../types";
 import { loadIarDocuments } from ".";
 import { scrollToTheTopSmoothly } from "../../../util/windowHelpers";
@@ -75,6 +82,11 @@ export function saveClaim(
 
 export function loadClaimsForPartner(partnerId: string) {
   return conditionalLoad(findClaimsByPartner(partnerId), params => ApiClient.claims.getAllByPartnerId({ partnerId, ...params }));
+}
+
+export function loadClaimStatusChanges(projectId: string, partnerId: string, periodId: number,) {
+  // TODO use api
+  return conditionalLoad(getClaimStatusChanges(projectId, partnerId, periodId), params => Promise.resolve([]));
 }
 
 export function loadIarDocumentsForCurrentClaim(partnerId: string): AsyncThunk<void, DataLoadAction> {
