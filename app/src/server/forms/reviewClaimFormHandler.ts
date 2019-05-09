@@ -36,6 +36,6 @@ export class ReviewClaimFormHandler extends FormHandlerBase<ReviewClaimParams, C
       }
 
     protected createValidationResult(params: ReviewClaimParams, dto: ClaimDto): Results<ClaimDto> {
-        return new ClaimDtoValidator(dto, [], [], false);
+        return new ClaimDtoValidator(dto, ClaimStatus.UNKNOWN, [], [], false);
     }
 }

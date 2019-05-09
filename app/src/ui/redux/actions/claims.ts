@@ -14,7 +14,7 @@ import {
   UpdateEditorAction
 } from "./common";
 import { findClaimsByPartner, findClaimsByProject, getClaim, getClaimEditor, getCurrentClaim } from "../selectors";
-import { ClaimDto } from "../../../types";
+import { ClaimDto, ClaimStatus } from "../../../types";
 import { loadIarDocuments } from ".";
 import { scrollToTheTopSmoothly } from "../../../util/windowHelpers";
 
@@ -31,7 +31,8 @@ export function validateClaim(partnerId: string, periodId: number, dto: ClaimDto
       const current = state.editors[selector.store][selector.key];
       showErrors = current && current.validator.showValidationErrors || false;
     }
-    const validator = new ClaimDtoValidator(dto, details, costCategories, showErrors);
+    const originalStatus = getClaim(partnerId, periodId).getPending(state).then(x => x && x.status).data || ClaimStatus.UNKNOWN;
+    const validator = new ClaimDtoValidator(dto, originalStatus, details, costCategories, showErrors);
 
     dispatch(updateEditorAction(selector.key, selector.store, dto, validator));
     return validator;
