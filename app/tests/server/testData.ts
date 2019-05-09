@@ -245,7 +245,7 @@ export class TestData {
       Acc_MonitoringReport__c: header.Id,
       Acc_PreviousMonitoringReportStatus__c: "Draft",
       Acc_NewMonitoringReportStatus__c: "Submitted to Monitoring Officer",
-      LastModifiedById: partner.Acc_AccountId__r.Name,
+      CreatedById: partner.Acc_AccountId__r.Name,
       CreatedDate: DateTime.local().toISO()
     };
 
