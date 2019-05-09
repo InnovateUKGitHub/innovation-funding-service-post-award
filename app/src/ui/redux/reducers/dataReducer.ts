@@ -2,7 +2,17 @@ import { combineReducers } from "redux";
 import { ActionTransitionStart, actionTypes } from "redux-router5";
 import { DataLoadAction } from "../actions/common";
 import { LoadingStatus } from "../../../shared/pending";
-import { ClaimDto, IAppError, MonitoringReportDto, MonitoringReportQuestionDto, MonitoringReportSummaryDto, PartnerDto, ProjectDto, ProjectRole } from "../../../types";
+import {
+  ClaimDto,
+  ClaimStatusChangeDto,
+  IAppError,
+  MonitoringReportDto,
+  MonitoringReportQuestionDto,
+  MonitoringReportSummaryDto,
+  PartnerDto,
+  ProjectDto,
+  ProjectRole
+} from "../../../types";
 
 export interface IDataStore<T> {
   status: LoadingStatus;
@@ -44,6 +54,7 @@ export const dataReducer = combineReducers({
   claim: dataStoreReducer<ClaimDto>("claim"),
   claimDetail: dataStoreReducer<ClaimDetailsDto>("claimDetail"),
   claimDetails: dataStoreReducer<ClaimDetailsSummaryDto[]>("claimDetails"),
+  claimStatusChanges: dataStoreReducer<ClaimStatusChangeDto[]>("claimStatusChanges"),
   costsSummary: dataStoreReducer<CostsSummaryForPeriodDto[]>("costsSummary"),
   contacts: dataStoreReducer<IContact[]>("contacts"),
   costCategories:dataStoreReducer<CostCategoryDto[]>("costCategories"),

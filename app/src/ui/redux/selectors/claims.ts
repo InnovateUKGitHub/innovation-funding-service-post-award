@@ -67,6 +67,9 @@ export const findClaimDetailsByPartner = (partnerId: string) => dataStoreHelper(
 export const costsSummaryForPeriodStore = "costsSummary";
 export const getCostsSummaryForPeriod = (partnerId: string, periodId: number) => dataStoreHelper(costsSummaryForPeriodStore, `partnerId=${partnerId}&periodId=${periodId}`);
 
+export const claimStatusChangesStore = "claimStatusChanges";
+export const getClaimStatusChanges = (projectId: string, partnerId: string, periodId: number) =>  dataStoreHelper(claimStatusChangesStore, getKey(projectId, partnerId, periodId));
+
 export const getCurrentClaim = (state: RootState, partnerId: string): Pending<ClaimDto | null> => {
   return findClaimsByPartner(partnerId)
     .getPending(state)

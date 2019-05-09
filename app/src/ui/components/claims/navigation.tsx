@@ -1,20 +1,27 @@
 import React from "react";
 import * as ACC from "../";
 import { ClaimsDetailsRoute } from "../../containers";
+import { ProjectDto, ProjectRole } from "@framework/types";
+import { ClaimLogRoute } from "@ui/containers/claims/logs";
 
 interface Props {
-    projectId: string;
-    partnerId: string;
-    periodId: number;
-    currentRouteName: string;
+  project: ProjectDto;
+  partnerId: string;
+  periodId: number;
+  currentRouteName: string;
 }
 
-export const Navigation: React.SFC<Props> = (props) => {
-    const detialsLink =  ClaimsDetailsRoute.getLink({ projectId: props.projectId, partnerId: props.partnerId, periodId: props.periodId });
-    const tabs: ACC.TabItem[] = [
-        { text: "Details", route: detialsLink, selected: detialsLink.routeName === props.currentRouteName },
-        { text: "Log", url: "#" },
-    ];
+export const Navigation: React.SFC<Props> = ({ project, partnerId, periodId, currentRouteName }) => {
+  const detialsLink = ClaimsDetailsRoute.getLink({ projectId: project.id, partnerId, periodId });
+  const tabs: ACC.TabItem[] = [
+    { text: "Details", route: detialsLink, selected: detialsLink.routeName === currentRouteName }
+  ];
 
-    return <ACC.Tabs tabList={tabs} />;
+  const isMO = !!(project.roles & ProjectRole.MonitoringOfficer);
+  if (isMO) {
+    const logLink = ClaimLogRoute.getLink({ projectId: project.id, partnerId, periodId });
+    tabs.push({ text: "Log", route: logLink, selected: logLink.routeName === currentRouteName });
+  }
+
+  return <ACC.Tabs tabList={tabs}/>;
 };
