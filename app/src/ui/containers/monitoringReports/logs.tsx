@@ -6,7 +6,7 @@ import * as ACC from "../../components";
 import * as Dtos from "../../../types";
 import { Pending } from "@shared/pending";
 import { MonitoringReportDashboardRoute } from "./dashboard";
-import { ProjectRole } from "../../../types";
+import { MonitoringReportStatusChangeDto, ProjectRole } from "../../../types";
 
 interface Params {
   projectId: string;
@@ -15,29 +15,43 @@ interface Params {
 
 interface Data {
   project: Pending<Dtos.ProjectDto>;
-  report: Pending<Dtos.MonitoringReportDto>;
+  statusChanges: Pending<Dtos.MonitoringReportStatusChangeDto[]>;
 }
 
-interface Callbacks {
-
-}
+interface Callbacks {}
 
 class LogComponent extends ContainerBase<Params, Data, Callbacks> {
   render() {
     const combined = Pending.combine({
-      report: this.props.report,
+      statusChanges: this.props.statusChanges,
       project: this.props.project
     });
-    return <ACC.PageLoader pending={combined} render={(data) => this.renderContents(data.project, data.report)} />;
+    return <ACC.PageLoader pending={combined} render={(data) => this.renderContents(data.project, data.statusChanges)} />;
   }
 
-  private renderContents(project: Dtos.ProjectDto, report: Dtos.MonitoringReportDto) {
+  private renderContents(project: Dtos.ProjectDto, statusChanges: Dtos.MonitoringReportStatusChangeDto[]) {
+
     return (
       <ACC.Page
         backLink={<ACC.BackLink route={MonitoringReportDashboardRoute.getLink({ projectId: this.props.projectId })}>Back to monitoring reports</ACC.BackLink>}
         pageTitle={<ACC.Projects.Title project={project} />}
         tabs={<ACC.MonitoringReports.Navigation projectId={this.props.projectId} id={this.props.id} currentRouteName={MonitoringReportLogRoute.routeName} />}
-      />
+      >
+        {this.renderLogTableSection(statusChanges)}
+      </ACC.Page>
+    );
+  }
+
+  private renderLogTableSection(statusChanges: Dtos.MonitoringReportStatusChangeDto[]) {
+    const Table = ACC.TypedTable<MonitoringReportStatusChangeDto>();
+    return (
+      <ACC.Section>
+        <Table.Table data={statusChanges} qa="monitoring-report-status-change-table">
+          <Table.ShortDateTime header="Date and time" qa="created-date" value={x => x.createdDate}/>
+          <Table.String header="Status update" qa="status-update" value={x => `${x.newStatus}`}/>
+          <Table.String header="Name" qa="created-by" value={x => x.createdBy}/>
+        </Table.Table>
+      </ACC.Section>
     );
   }
 }
@@ -47,7 +61,7 @@ const containerDefinition = ReduxContainer.for<Params, Data, Callbacks>(LogCompo
 export const MonitoringReportLog = containerDefinition.connect({
   withData: (state, props) => ({
     project: Selectors.getProject(props.projectId).getPending(state),
-    report: Selectors.getMonitoringReport(props.projectId, props.id).getPending(state),
+    statusChanges: Selectors.getMonitoringReportStatusChanges(props.id).getPending(state),
   }),
   withCallbacks: () => ({})
 });
@@ -58,7 +72,7 @@ export const MonitoringReportLogRoute = containerDefinition.route({
   getParams: (r) => ({ projectId: r.params.projectId, id: r.params.id }),
   getLoadDataActions: (params) => [
     Actions.loadProject(params.projectId),
-    Actions.loadMonitoringReport(params.projectId, params.id),
+    Actions.loadMonitoringReportStatusChanges(params.projectId, params.id),
   ],
   container: MonitoringReportLog,
   getTitle: (state, params) => ({

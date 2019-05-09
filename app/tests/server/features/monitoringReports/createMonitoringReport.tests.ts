@@ -88,7 +88,20 @@ describe("createMonitoringReports", () => {
     expect(context.repositories.monitoringReportHeader.Items[0].Acc_MonitoringReportStatus__c).toEqual("Awaiting IUK Approval");
   });
 
-  it("should create a status change if the report is submitted", async () => {
+  it("should create a status change for draft if the report is created", async () => {
+    const context = new TestContext();
+    const project = context.testData.createProject((x) => {
+      x.Acc_StartDate__c = "2018-01-01";
+      x.Acc_EndDate__c = "2030-01-01";
+      x.Acc_ClaimFrequency__c = "Monthly";
+    });
+
+    const dto = await getCreateDto(context, project);
+    const headerId = await context.runCommand(new CreateMonitoringReport(dto, false));
+    expect(context.repositories.monitoringReportStatusChange.Items.filter(x => x.Acc_MonitoringReport__c === headerId)).toHaveLength(1);
+  });
+
+  it("should create a status change for awaiting approval if the report is submitted", async () => {
     const context = new TestContext();
     const project = context.testData.createProject((x) => {
       x.Acc_StartDate__c = "2018-01-01";
@@ -98,22 +111,8 @@ describe("createMonitoringReports", () => {
 
     const dto = await getCreateDto(context, project);
     const headerId = await context.runCommand(new CreateMonitoringReport(dto, true));
-    expect(context.repositories.monitoringReportStatusChange.Items.find(x => x.Acc_MonitoringReport__c === headerId)).toBeDefined();
+    expect(context.repositories.monitoringReportStatusChange.Items.filter(x => x.Acc_MonitoringReport__c === headerId)).toHaveLength(2);
   });
-
-  it("should not create a status change if the report is not submitted", async () => {
-    const context = new TestContext();
-    const project = context.testData.createProject((x) => {
-      x.Acc_StartDate__c = "2018-01-01";
-      x.Acc_EndDate__c = "2030-01-01";
-      x.Acc_ClaimFrequency__c = "Monthly";
-    });
-
-    const dto = await getCreateDto(context, project);
-    await context.runCommand(new CreateMonitoringReport(dto, false));
-    expect(context.repositories.monitoringReportStatusChange.Items).toHaveLength(0);
-  });
-
 });
 
 async function getCreateDto(context: TestContext, project: ISalesforceProject): Promise<MonitoringReportDto> {

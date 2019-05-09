@@ -4,7 +4,12 @@ import { GetMonitoringReport, GetMonitoringReportById } from "../features/monito
 import { SaveMonitoringReport } from "../features/monitoringReports/saveMonitoringReport";
 import { processDto } from "../../shared/processResponse";
 import { GetMonitoringReportsForProject } from "../features/monitoringReports/getMonitoringReportsForProject";
-import { MonitoringReportActivityDto, MonitoringReportDto, MonitoringReportQuestionDto, MonitoringReportSummaryDto } from "../../types";
+import {
+  MonitoringReportDto,
+  MonitoringReportQuestionDto,
+  MonitoringReportStatusChangeDto,
+  MonitoringReportSummaryDto
+} from "../../types";
 import { CreateMonitoringReport } from "@server/features/monitoringReports/createMonitoringReport";
 import { GetMonitoringReportActiveQuestions } from "@server/features/monitoringReports/getMonitoringReportActiveQuestions";
 import { GetMonitoringReportStatusChanges } from "@server/features/monitoringReports/getMonitoringReportStatusChanges";
@@ -15,7 +20,7 @@ export interface IMonitoringReportsApi {
   createMonitoringReport: (params: ApiParams<{ monitoringReportDto: MonitoringReportDto, submit: boolean }>) => Promise<MonitoringReportDto>;
   getAllForProject: (params: ApiParams<{ projectId: string }>) => Promise<MonitoringReportSummaryDto[]>;
   getActiveQuestions: (params: ApiParams<{}>) => Promise<MonitoringReportQuestionDto[]>;
-  getStatusChanges: (params: ApiParams<{ projectId: string, reportId: string }>) => Promise<MonitoringReportActivityDto[]>;
+  getStatusChanges: (params: ApiParams<{ projectId: string, reportId: string }>) => Promise<MonitoringReportStatusChangeDto[]>;
 }
 
 class Controller extends ControllerBaseWithSummary<MonitoringReportSummaryDto, MonitoringReportDto> implements IMonitoringReportsApi {
