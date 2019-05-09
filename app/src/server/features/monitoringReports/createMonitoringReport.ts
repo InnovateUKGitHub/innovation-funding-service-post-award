@@ -1,10 +1,16 @@
-import { BadRequestError, CommandBase, ValidationError } from "../common";
-import { Authorisation, ClaimFrequency, IContext, MonitoringReportDto, ProjectRole, } from "@framework/types";
+import { DateTime } from "luxon";
+import {
+  Authorisation,
+  ClaimFrequency,
+  IContext,
+  MonitoringReportDto, ProjectDto,
+  ProjectRole,
+} from "@framework/types";
 import { ISalesforceMonitoringReportHeader, ISalesforceMonitoringReportResponse } from "@server/repositories";
 import { MonitoringReportDtoValidator } from "@framework/ui/validators/MonitoringReportDtoValidator";
-import { GetByIdQuery } from "../projects/getDetailsByIdQuery";
-import { GetMonitoringReportActiveQuestions } from "./getMonitoringReportActiveQuestions";
-import { DateTime } from "luxon";
+import { BadRequestError, CommandBase, ValidationError } from "@server/features/common";
+import { GetByIdQuery } from "@server/features/projects";
+import { GetMonitoringReportActiveQuestions } from "@server/features/monitoringReports/getMonitoringReportActiveQuestions";
 
 export class CreateMonitoringReport extends CommandBase<string> {
   constructor(
@@ -17,6 +23,54 @@ export class CreateMonitoringReport extends CommandBase<string> {
   protected async accessControl(auth: Authorisation, context: IContext) {
     return context.config.features.monitoringReports &&
       auth.forProject(this.monitoringReportDto.projectId).hasRole(ProjectRole.MonitoringOfficer);
+  }
+
+  private async updateMonitoringReportStatus(context: IContext, headerId: string): Promise<void> {
+    if (!this.submit) return;
+    await context.repositories.monitoringReportStatusChange.createStatusChange({
+      Acc_MonitoringReport__c: headerId
+    });
+  }
+
+  private async insertMonitoringReportHeader(context: IContext, project: ProjectDto): Promise<string> {
+    const periodId = this.monitoringReportDto.periodId;
+    const periodLength = project.claimFrequency === ClaimFrequency.Quarterly ? 3 : 1;
+
+    const startDate = DateTime.fromJSDate(project.startDate).setZone("Europe/London").plus({months : (periodId - 1) * periodLength });
+    const endDate = DateTime.fromJSDate(project.startDate).setZone("Europe/London").plus({months : (periodId) * periodLength, days: -1 });
+
+    const createRequest: Partial<ISalesforceMonitoringReportHeader> = {
+      Acc_Project__c: this.monitoringReportDto.projectId,
+      Acc_ProjectPeriodNumber__c: periodId,
+      Acc_PeriodStartDate__c: startDate.toFormat("yyyy-MM-dd"),
+      Acc_PeriodEndDate__c: endDate.toFormat("yyyy-MM-dd"),
+      Acc_MonitoringReportStatus__c: "Draft",
+      Name: this.monitoringReportDto.title,
+    };
+
+    return await context.repositories.monitoringReportHeader.create(createRequest);
+  }
+
+  private async updateMonitoringReportHeader(context: IContext, headerId: string): Promise<void> {
+    if(this.submit) {
+      // The status is updated after the response has been inserted
+      // This is in case the response insert fails:
+      // the header is left in draft status, allowing the user to try and re-submit
+      await context.repositories.monitoringReportHeader.update({
+        Id: headerId,
+        Acc_MonitoringReportStatus__c: "Awaiting IUK Approval"
+      });
+    }
+  }
+
+  private async insertResponse(context: IContext, headerId: string): Promise<void> {
+    const insertItems = this.monitoringReportDto.questions.filter(x => x.optionId).map<Partial<ISalesforceMonitoringReportResponse>>(insertDto => ({
+      Acc_MonitoringHeader__c: headerId,
+      Acc_Question__c: insertDto.optionId!,
+      Acc_QuestionComments__c: insertDto.comments
+    }));
+
+    await context.repositories.monitoringReportResponse.insert(insertItems);
   }
 
   protected async Run(context: IContext) {
@@ -38,37 +92,10 @@ export class CreateMonitoringReport extends CommandBase<string> {
       throw new ValidationError(validationResult);
     }
 
-    const periodId = this.monitoringReportDto.periodId;
-    const periodLength = project.claimFrequency === ClaimFrequency.Quarterly ? 3 : 1;
-
-    const startDate = DateTime.fromJSDate(project.startDate).setZone("Europe/London").plus({months : (periodId - 1) * periodLength });
-    const endDate = DateTime.fromJSDate(project.startDate).setZone("Europe/London").plus({months : (periodId) * periodLength, days: -1 });
-
-    const createRequest: Partial<ISalesforceMonitoringReportHeader> = {
-      Acc_Project__c: this.monitoringReportDto.projectId,
-      Acc_ProjectPeriodNumber__c: periodId,
-      Acc_PeriodStartDate__c: startDate.toFormat("yyyy-MM-dd"),
-      Acc_PeriodEndDate__c: endDate.toFormat("yyyy-MM-dd"),
-      Acc_MonitoringReportStatus__c: "Draft",
-      Name: this.monitoringReportDto.title,
-    };
-
-    const headerId = await context.repositories.monitoringReportHeader.create(createRequest);
-
-    const insertItems = this.monitoringReportDto.questions.filter(x => x.optionId).map<Partial<ISalesforceMonitoringReportResponse>>(insertDto => ({
-      Acc_MonitoringHeader__c: headerId,
-      Acc_Question__c: insertDto.optionId!,
-      Acc_QuestionComments__c: insertDto.comments
-    }));
-
-    await context.repositories.monitoringReportResponse.insert(insertItems);
-
-    if(this.submit) {
-      await context.repositories.monitoringReportHeader.update({
-        Id: headerId,
-        Acc_MonitoringReportStatus__c: "Awaiting IUK Approval"
-      });
-    }
+    const headerId = await this.insertMonitoringReportHeader(context, project);
+    await this.insertResponse(context, headerId);
+    await this.updateMonitoringReportHeader(context, headerId);
+    await this.updateMonitoringReportStatus(context, headerId);
 
     return headerId;
   }
