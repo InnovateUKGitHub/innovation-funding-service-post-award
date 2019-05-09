@@ -10,6 +10,7 @@ import { ReviewClaimLineItemsRoute } from "./claimLineItems";
 import { AllClaimsDashboardRoute, ClaimsDetailsRoute } from ".";
 import { ClaimDto, ClaimStatus, PartnerDto, ProjectDto, ProjectRole } from "../../../types";
 import { ForecastData, forecastDataLoadActions } from "./forecasts/common";
+import { FormBuilder } from "../../components";
 
 export interface ReviewClaimParams {
   projectId: string;
@@ -88,7 +89,7 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, Data, Callbacks> 
         </ACC.Section>
         <ACC.Section>
           <ACC.Accordion>
-            <ACC.AccordionItem  title="Forecast" qa="forecast-accordion">
+            <ACC.AccordionItem title="Forecast" qa="forecast-accordion">
               <ACC.Loader
                 pending={this.props.forecastData}
                 render={(forecastData) => (<ACC.Claims.ForecastTable data={forecastData} hideValidation={true} />)}
@@ -111,7 +112,7 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, Data, Callbacks> 
 
     return (
       <ACC.Section qa="claim-iar" title={"Independent accountant's report"}>
-        <ACC.DocumentSingle document={iarDocument} openNewWindow={true}/>
+        <ACC.DocumentSingle document={iarDocument} openNewWindow={true} />
       </ACC.Section>
     );
   }
@@ -119,8 +120,8 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, Data, Callbacks> 
   private renderForm(data: CombinedData) {
     const Form = ACC.TypedForm<ClaimDto>();
     const options: ACC.SelectOption[] = [
-      { id: ClaimStatus.MO_QUERIED, value: "Query claim"},
-      { id: ClaimStatus.AWAITING_IUK_APPROVAL, value: "Submit for approval"},
+      { id: ClaimStatus.MO_QUERIED, value: "Query claim" },
+      { id: ClaimStatus.AWAITING_IUK_APPROVAL, value: "Submit for approval" },
     ];
     const submitButtonLabel = this.getSubmitButtonLabel(data);
 
@@ -140,20 +141,45 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, Data, Callbacks> 
             validation={data.editor.validator.status}
             inline={true}
           />
+          {this.renderCommentsSection(Form, data.editor)}
           {!!submitButtonLabel ? <Form.Submit>{submitButtonLabel}</Form.Submit> : null}
         </Form.Fieldset>
       </Form.Form>
     );
   }
 
+  private renderCommentsSection(Form: FormBuilder<ClaimDto>, editor: IEditorStore<ClaimDto, ClaimDtoValidator>) {
+    // on client if the status hasnt yet been set by the readio buttons then dont show
+    // if server rendering we need to always show
+    if(!editor.data.status && this.props.isClient) {
+      return null;
+    }
+
+    return (
+      <Form.Fieldset heading={"Additional information"} qa="additional-info-form" headingQa="additional-info-heading">
+        <Form.MultilineString
+          label="additional-info"
+          labelHidden={true}
+          hint={"If you query the claim, you must explain what the partner needs to amend. If you approve the claim, you may add a comment to Innovate UK in support of the claim."}
+          name="comments"
+          value={m => m.comments}
+          update={(m, v) => m.comments = v}
+          validation={editor.validator.comments}
+          qa="info-text-area"
+        />
+      </Form.Fieldset>
+    );
+
+  }
+
   private getSubmitButtonLabel(data: CombinedData) {
     let label: string | null = "Submit";
 
-    if(this.props.isClient) {
-      if(data.editor.data.status === ClaimStatus.MO_QUERIED) {
+    if (this.props.isClient) {
+      if (data.editor.data.status === ClaimStatus.MO_QUERIED) {
         label = "Send Query";
       }
-      else if(data.editor.data.status !== ClaimStatus.AWAITING_IUK_APPROVAL) {
+      else if (data.editor.data.status !== ClaimStatus.AWAITING_IUK_APPROVAL) {
         label = null;
       }
     }
@@ -188,7 +214,7 @@ export const ReviewClaim = definition.connect({
     return {
       project: projectPending,
       partner: partnerPending,
-      costCategories:costCategoriesPending,
+      costCategories: costCategoriesPending,
       claim: claimPending,
       costsSummaryForPeriod: Selectors.getCostsSummaryForPeriod(props.partnerId, props.periodId).getPending(state),
       editor: Selectors.getClaimEditor(props.partnerId, props.periodId).get(state, (dto) => initEditor(dto)),
@@ -211,30 +237,30 @@ export const ReviewClaim = definition.connect({
     onChange: (partnerId, periodId, dto, details, costCategories) =>
       dispatch(Actions.validateClaim(partnerId, periodId, dto, details, costCategories)),
     onSave: (projectId, partnerId, periodId, dto, details, costCategories, message) =>
-      dispatch(Actions.saveClaim(projectId, partnerId, periodId, dto, details, costCategories, () => dispatch(Actions.navigateTo(AllClaimsDashboardRoute.getLink({projectId}))), message)),
+      dispatch(Actions.saveClaim(projectId, partnerId, periodId, dto, details, costCategories, () => dispatch(Actions.navigateTo(AllClaimsDashboardRoute.getLink({ projectId }))), message)),
   })
 });
 
 export const ReviewClaimRoute = definition.route({
-    routeName: "reviewClaim",
-    routePath: "/projects/:projectId/claims/:partnerId/review/:periodId",
-    getParams: (route) => ({ projectId: route.params.projectId, partnerId: route.params.partnerId, periodId: parseInt(route.params.periodId, 10) }),
-    getLoadDataActions: (params) => [
-        Actions.loadProject(params.projectId),
-        Actions.loadPartner(params.partnerId),
-        Actions.loadPartnersForProject(params.projectId),
-        Actions.loadCostCategories(),
-        Actions.loadClaim(params.partnerId, params.periodId),
-        Actions.loadCostsSummaryForPeriod(params.projectId, params.partnerId, params.periodId),
-        Actions.loadIarDocuments(params.partnerId, params.periodId),
-        ...forecastDataLoadActions(params)
-    ],
-    accessControl: (auth, { projectId }) => auth.forProject(projectId).hasRole(ProjectRole.MonitoringOfficer),
-    getTitle: (store, params) => {
-      return {
-        htmlTitle: "Review claim",
-        displayTitle: "Claim"
-      };
-    },
-    container: ReviewClaim
+  routeName: "reviewClaim",
+  routePath: "/projects/:projectId/claims/:partnerId/review/:periodId",
+  getParams: (route) => ({ projectId: route.params.projectId, partnerId: route.params.partnerId, periodId: parseInt(route.params.periodId, 10) }),
+  getLoadDataActions: (params) => [
+    Actions.loadProject(params.projectId),
+    Actions.loadPartner(params.partnerId),
+    Actions.loadPartnersForProject(params.projectId),
+    Actions.loadCostCategories(),
+    Actions.loadClaim(params.partnerId, params.periodId),
+    Actions.loadCostsSummaryForPeriod(params.projectId, params.partnerId, params.periodId),
+    Actions.loadIarDocuments(params.partnerId, params.periodId),
+    ...forecastDataLoadActions(params)
+  ],
+  accessControl: (auth, { projectId }) => auth.forProject(projectId).hasRole(ProjectRole.MonitoringOfficer),
+  getTitle: (store, params) => {
+    return {
+      htmlTitle: "Review claim",
+      displayTitle: "Claim"
+    };
+  },
+  container: ReviewClaim
 });

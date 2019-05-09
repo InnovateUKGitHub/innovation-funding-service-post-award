@@ -8,6 +8,7 @@ const COMMENTS_LENGTH_MAX = 1000;
 export class ClaimDtoValidator extends Results<ClaimDto>  {
     constructor(
       dto: ClaimDto,
+      private readonly originalStatus: ClaimStatus,
       private readonly details: CostsSummaryForPeriodDto[],
       private readonly costCategories: CostCategoryDto[],
       readonly showErrors: boolean
@@ -21,7 +22,10 @@ export class ClaimDtoValidator extends Results<ClaimDto>  {
 
     public id = Validation.required(this, this.model.id, "Id is required");
 
-    public comments = Validation.maxLength(this, this.model.comments, COMMENTS_LENGTH_MAX, `Comments must be a maximum of ${COMMENTS_LENGTH_MAX} characters`);
+    public comments = Validation.all(this,
+      () => this.model.status === ClaimStatus.MO_QUERIED && this.originalStatus !== ClaimStatus.MO_QUERIED ? Validation.required(this, this.model.comments, "Comments are required if querying a claim") : Validation.valid(this),
+      () => Validation.maxLength(this, this.model.comments, COMMENTS_LENGTH_MAX, `Comments must be a maximum of ${COMMENTS_LENGTH_MAX} characters`)
+    );
 
     public status: Result;
 

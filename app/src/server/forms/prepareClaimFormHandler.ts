@@ -43,6 +43,6 @@ export class PrepareClaimFormHandler extends FormHandlerBase<PrepareClaimParams,
   }
 
   protected createValidationResult(params: PrepareClaimParams, dto: ClaimDto): Results<ClaimDto> {
-    return new ClaimDtoValidator(dto, [], [], false);
+    return new ClaimDtoValidator(dto, ClaimStatus.UNKNOWN, [], [], false);
   }
 }
