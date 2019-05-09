@@ -67,7 +67,7 @@ export class ClaimsDetailsComponent extends ContainerBase<Params, Data, {}> {
       <ACC.Page
         backLink={<ACC.BackLink route={backLink}>Back to project</ACC.BackLink>}
         pageTitle={<ACC.Projects.Title project={data.project} />}
-        tabs={<ACC.Claims.Navigation projectId={data.project.id} partnerId={data.partner.id} periodId={data.claim.periodId} currentRouteName={ClaimsDetailsRoute.routeName} />}
+        tabs={<ACC.Claims.Navigation project={data.project} partnerId={data.partner.id} periodId={data.claim.periodId} currentRouteName={ClaimsDetailsRoute.routeName} />}
       >
         {this.renderTableSection(data)}
         {this.renderIarSection(data.claim, data.project, data.partner, data.iarDocument)}
