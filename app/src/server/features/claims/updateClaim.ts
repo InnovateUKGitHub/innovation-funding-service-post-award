@@ -1,6 +1,6 @@
 import { CommandBase, ValidationError } from "@server/features/common";
 import { ClaimDtoValidator } from "@ui/validators/claimDtoValidator";
-import { Authorisation, ClaimDto, IContext, ProjectRole } from "@framework/types";
+import { Authorisation, ClaimDto, ClaimStatus, IContext, ProjectRole } from "@framework/types";
 import { GetCostsSummaryForPeriodQuery } from "../claimDetails";
 import { GetCostCategoriesQuery } from "@server/features/claims/getCostCategoriesQuery";
 
@@ -24,12 +24,40 @@ export class UpdateClaimCommand extends CommandBase<boolean> {
       throw new ValidationError(result);
     }
 
-    const update = {
-      Id: this.claimDto.id,
-      Acc_ClaimStatus__c: this.claimDto.status,
-      Acc_LineItemDescription__c: this.claimDto.comments,
-    };
+    if(existingStatus !== this.claimDto.status) {
+      await context.repositories.claims.update({
+        Id: this.claimDto.id,
+        Acc_ClaimStatus__c: this.claimDto.status,
+        Acc_LineItemDescription__c: "",
+      });
 
-    return context.repositories.claims.update(update);
+      await context.repositories.claimStatusChanges.create({
+        Acc_Claim__c:this.claimDto.id,
+        Acc_ExternalComment__c: this.claimDto.comments,
+        Acc_NewClaimStatus__c: this.claimDto.status,
+        Acc_PreviousClaimStatus__c: existingStatus,
+        Acc_ParticipantVisibility__c: this.getChangeStatusVisibility(this.claimDto)
+      });
+    }
+    else {
+      await context.repositories.claims.update({
+        Id: this.claimDto.id,
+        Acc_ClaimStatus__c: this.claimDto.status,
+        Acc_LineItemDescription__c: this.claimDto.comments,
+      });
+    }
+
+    return true;
+  }
+
+  private participantVisibleStatus: ClaimStatus[] = [
+    ClaimStatus.DRAFT,
+    ClaimStatus.MO_QUERIED,
+    ClaimStatus.SUBMITTED,
+    ClaimStatus.AWAITING_IAR
+
+  ];
+  private getChangeStatusVisibility(claimDto: ClaimDto): boolean {
+    return this.participantVisibleStatus.indexOf(claimDto.status) !== -1;
   }
 }

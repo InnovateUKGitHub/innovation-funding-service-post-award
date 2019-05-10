@@ -356,10 +356,22 @@ class MonitoringReportStatusChangeTestRepository extends TestRepository<Reposito
   }
 }
 
+class ClaimStatusChangeTestRepository extends TestRepository<Repositories.ISalesforceClaimStatusChange> implements Repositories.IClaimStatusChangeRepository {
+  async create(statusChange: Partial<Repositories.ISalesforceClaimStatusChange>) {
+
+    const id = `NewStatusChange${(this.Items.length + 1)}`;
+
+    super.insertOne({...statusChange, Id: id} as Repositories.ISalesforceClaimStatusChange);
+
+    return id;
+  }
+}
+
 export interface ITestRepositories extends IRepositories {
     claims: ClaimsTestRepository;
     claimDetails: ClaimDetailsTestRepository;
     claimLineItems: ClaimLineItemsTestRepository;
+    claimStatusChanges: ClaimStatusChangeTestRepository;
     costCategories: CostCategoriesTestRepository;
     documents: DocumentsTestRepository;
     monitoringReportHeader: MonitoringReportHeaderTestRepository;
@@ -380,6 +392,7 @@ export const createTestRepositories = (): ITestRepositories => {
 
     return ({
         claims: new ClaimsTestRepository(partnerRepository),
+        claimStatusChanges: new ClaimStatusChangeTestRepository(),
         claimDetails: new ClaimDetailsTestRepository(),
         claimLineItems: new ClaimLineItemsTestRepository(),
         costCategories: new CostCategoriesTestRepository(),

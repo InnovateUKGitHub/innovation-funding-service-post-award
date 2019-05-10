@@ -3,7 +3,7 @@ import { BadRequestError, CommandBase, ValidationError } from "../common";
 import { GetAllForecastsForPartnerQuery } from "./getAllForecastsForPartnerQuery";
 import { ISalesforceProfileDetails } from "../../repositories";
 import { Updatable } from "../../repositories/salesforceRepositoryBase";
-import { GetAllForecastsGOLCostsQuery, GetAllForPartnerQuery, GetCostCategoriesQuery } from "../claims";
+import { GetAllForecastsGOLCostsQuery, GetAllForPartnerQuery, GetCostCategoriesQuery, UpdateClaimCommand } from "../claims";
 import { GetAllClaimDetailsByPartner } from "../claimDetails";
 import { GetByIdQuery as GetPartnerById } from "../partners";
 import { GetByIdQuery as GetProjectById } from "../projects";
@@ -92,9 +92,9 @@ export class UpdateForecastDetailsCommand extends CommandBase<boolean> {
       throw new BadRequestError("Unable to find current claim.");
     }
 
-    const status = this.nextClaimStatus(claim);
-    const update = { Id: claim.id, Acc_ClaimStatus__c: status };
-    return context.repositories.claims.update(update);
+    claim.status = this.nextClaimStatus(claim);
+    const updateClaimCommand = new UpdateClaimCommand(this.projectId, claim);
+    await context.runCommand(updateClaimCommand);
   }
 
   private nextClaimStatus(claim: ClaimDto) {

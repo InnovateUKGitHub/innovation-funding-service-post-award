@@ -1,4 +1,4 @@
-// tslint:disable:no-big-function
+// tslint:disable: no-big-function
 import { TestContext } from "../../testContextProvider";
 import { UpdateClaimCommand } from "@server/features/claims/updateClaim";
 import mapClaim from "@server/features/claims/mapClaim";
@@ -221,6 +221,111 @@ describe("UpdateClaimCommand", () => {
     const dto = mapClaim(context)(claim);
     const command = new UpdateClaimCommand(project.Id, dto);
     await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
+  });
+
+  it("when status has changed expect status change record created", async () => {
+    const context = new TestContext();
+    const project = context.testData.createProject();
+    const partner = context.testData.createPartner();
+    const claim = context.testData.createClaim(partner, 2);
+    claim.Acc_ClaimStatus__c = ClaimStatus.DRAFT;
+
+    const dto = mapClaim(context)(claim);
+
+    dto.status = ClaimStatus.SUBMITTED;
+
+    const command = new UpdateClaimCommand(project.Id, dto);
+
+    expect(context.repositories.claimStatusChanges.Items.length).toBe(0);
+
+    await context.runCommand(command);
+
+    expect(context.repositories.claimStatusChanges.Items.length).toBe(1);
+
+    const statusChange = context.repositories.claimStatusChanges.Items[0];
+
+    expect(statusChange.Acc_Claim__c).toEqual(claim.Id);
+    expect(statusChange.Acc_PreviousClaimStatus__c).toEqual(ClaimStatus.DRAFT);
+    expect(statusChange.Acc_NewClaimStatus__c).toEqual(ClaimStatus.SUBMITTED);
+  });
+
+  it("when status has not changed expect no status change record", async () => {
+    const context = new TestContext();
+    const project = context.testData.createProject();
+    const partner = context.testData.createPartner();
+    const claim = context.testData.createClaim(partner, 2);
+    claim.Acc_ClaimStatus__c = ClaimStatus.SUBMITTED;
+
+    const dto = mapClaim(context)(claim);
+
+    const command = new UpdateClaimCommand(project.Id, dto);
+
+    await context.runCommand(command);
+
+    expect(context.repositories.claimStatusChanges.Items.length).toBe(0);
+  });
+
+  it("when status has changed expect comments to be stored in status change record", async () => {
+    const context = new TestContext();
+    const project = context.testData.createProject();
+    const partner = context.testData.createPartner();
+    const claim = context.testData.createClaim(partner, 2);
+    claim.Acc_ClaimStatus__c = ClaimStatus.SUBMITTED;
+    claim.Acc_LineItemDescription__c = "Orignal Comments";
+
+    const dto = mapClaim(context)(claim);
+
+    dto.status = ClaimStatus.MO_QUERIED;
+
+    const command = new UpdateClaimCommand(project.Id, dto);
+
+    await context.runCommand(command);
+
+    expect(context.repositories.claimStatusChanges.Items.length).toBe(1);
+    expect(context.repositories.claimStatusChanges.Items[0].Acc_ExternalComment__c).toBe("Orignal Comments");
+    expect(claim.Acc_LineItemDescription__c).toBe("");
+
+  });
+
+  it("when status has changed to AWAITING_IUK_APPROVAL expect comment to not be external", async () => {
+    const context = new TestContext();
+    const project = context.testData.createProject();
+    const partner = context.testData.createPartner();
+    const claim = context.testData.createClaim(partner, 2);
+
+    claim.Acc_ClaimStatus__c = ClaimStatus.SUBMITTED;
+
+    const dto = mapClaim(context)(claim);
+
+    dto.status = ClaimStatus.AWAITING_IUK_APPROVAL;
+
+    const command = new UpdateClaimCommand(project.Id, dto);
+
+    await context.runCommand(command);
+
+    expect(context.repositories.claimStatusChanges.Items.length).toBe(1);
+    expect(context.repositories.claimStatusChanges.Items[0].Acc_ParticipantVisibility__c).toBe(false);
+  });
+
+  it("when status has changed to MO_QUERIED expect comment to be external", async () => {
+    const context = new TestContext();
+    const project = context.testData.createProject();
+    const partner = context.testData.createPartner();
+    const claim = context.testData.createClaim(partner, 2);
+
+    claim.Acc_ClaimStatus__c = ClaimStatus.SUBMITTED;
+
+    const dto = mapClaim(context)(claim);
+
+    dto.status = ClaimStatus.MO_QUERIED;
+    dto.comments= "Claim Queried";
+
+    const command = new UpdateClaimCommand(project.Id, dto);
+
+    await context.runCommand(command);
+
+    expect(context.repositories.claimStatusChanges.Items.length).toBe(1);
+    expect(context.repositories.claimStatusChanges.Items[0].Acc_ParticipantVisibility__c).toBe(true);
   });
 
 });
