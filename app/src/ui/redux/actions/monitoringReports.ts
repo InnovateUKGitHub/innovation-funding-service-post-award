@@ -1,6 +1,12 @@
 import { AsyncThunk, conditionalLoad, DataLoadAction, dataLoadAction, EditorAction, handleEditorError, messageSuccess, SyncThunk, UpdateEditorAction, updateEditorAction } from "./common";
 import { ApiClient } from "../../apiClient";
-import { getAllMonitoringReports, getMonitoringReport, getMonitoringReportEditor, getMonitoringReportQuestions } from "../selectors/monitoringReports";
+import {
+  getAllMonitoringReports,
+  getMonitoringReport,
+  getMonitoringReportEditor,
+  getMonitoringReportQuestions,
+  getMonitoringReportStatusChanges
+} from "../selectors/monitoringReports";
 import { MonitoringReportDto, MonitoringReportQuestionDto, ProjectDto } from "../../../types";
 import { MonitoringReportDtoValidator } from "../../validators/MonitoringReportDtoValidator";
 import { scrollToTheTopSmoothly } from "../../../util/windowHelpers";
@@ -10,6 +16,13 @@ export function loadMonitoringReport(projectId: string, reportId: string) {
   return conditionalLoad(
     getMonitoringReport(projectId, reportId),
     params => ApiClient.monitoringReports.get({ projectId, reportId, ...params })
+  );
+}
+
+export function loadMonitoringReportStatusChanges(projectId: string, reportId: string) {
+  return conditionalLoad(
+    getMonitoringReportStatusChanges(reportId),
+    params => ApiClient.monitoringReports.getStatusChanges({ projectId, reportId, ...params })
   );
 }
 
