@@ -32,7 +32,7 @@ export interface MonitoringReportSummaryDto {
   lastUpdated: Date|null;
 }
 
-export interface MonitoringReportActivityDto {
+export interface MonitoringReportStatusChangeDto {
   id: string;
   monitoringReport: string;
   previousStatus: string;
