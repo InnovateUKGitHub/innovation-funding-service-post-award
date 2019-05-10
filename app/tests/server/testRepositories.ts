@@ -357,6 +357,25 @@ class MonitoringReportStatusChangeTestRepository extends TestRepository<Reposito
 }
 
 class ClaimStatusChangeTestRepository extends TestRepository<Repositories.ISalesforceClaimStatusChange> implements Repositories.IClaimStatusChangeRepository {
+
+  constructor(private claimsRepository: ClaimsTestRepository) {
+    super();
+  }
+
+  getAll(): Promise<Repositories.ISalesforceClaimStatusChange[]> {
+    return super.getAll();
+  }
+
+  getAllForClaim(partnerId: string, periodId: number) {
+    const claim  = this.claimsRepository.Items.find(x => x.Acc_ProjectParticipant__r.Id === partnerId && x.Acc_ProjectPeriodNumber__c === periodId);
+    return super.getWhere(x => x.Acc_Claim__c === (claim && claim.Id));
+  }
+
+  getAllPartnerVisibleForClaim(partnerId: string, periodId: number): Promise<Repositories.ISalesforceClaimStatusChange[]> {
+    const claim  = this.claimsRepository.Items.find(x => x.Acc_ProjectParticipant__r.Id === partnerId && x.Acc_ProjectPeriodNumber__c === periodId);
+    return super.getWhere(x => x.Acc_Claim__c === (claim && claim.Id) && x.Acc_ParticipantVisibility__c);
+  }
+
   async create(statusChange: Partial<Repositories.ISalesforceClaimStatusChange>) {
 
     const id = `NewStatusChange${(this.Items.length + 1)}`;
@@ -365,6 +384,7 @@ class ClaimStatusChangeTestRepository extends TestRepository<Repositories.ISales
 
     return id;
   }
+
 }
 
 export interface ITestRepositories extends IRepositories {
@@ -390,9 +410,11 @@ export interface ITestRepositories extends IRepositories {
 export const createTestRepositories = (): ITestRepositories => {
     const partnerRepository = new PartnerTestRepository();
 
+    const claimsRepository = new ClaimsTestRepository(partnerRepository);
+
     return ({
-        claims: new ClaimsTestRepository(partnerRepository),
-        claimStatusChanges: new ClaimStatusChangeTestRepository(),
+        claims: claimsRepository,
+        claimStatusChanges: new ClaimStatusChangeTestRepository(claimsRepository),
         claimDetails: new ClaimDetailsTestRepository(),
         claimLineItems: new ClaimLineItemsTestRepository(),
         costCategories: new CostCategoriesTestRepository(),

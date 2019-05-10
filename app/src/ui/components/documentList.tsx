@@ -1,5 +1,6 @@
 import * as React from "react";
 import { LinksList, TypedForm } from "./";
+import { stringComparator } from "@framework/util/comparator";
 
 interface Props {
   documents: DocumentSummaryDto[];
@@ -12,11 +13,9 @@ const mapDocumentToLink = (document: DocumentSummaryDto, i: number) => ({
   qa: `document-${i}`,
 });
 
-const sorter = (a: DocumentSummaryDto, b: DocumentSummaryDto) => a.fileName.toLowerCase().localeCompare(b.fileName.toLowerCase());
-const sortDocuments = (documents: DocumentSummaryDto[]) => { documents.sort(sorter); };
-
 export const DocumentList: React.SFC<Props> = ({ documents = [], qa}: Props) => {
-  sortDocuments(documents);
+  // todo: should server not do this?
+  documents.sort((a,b) => stringComparator(a.fileName, b.fileName));
   return (
     <div data-qa={qa}>
       <LinksList openNewWindow={true} links={documents.map(mapDocumentToLink)}/>
@@ -29,7 +28,9 @@ interface PropsWithRemove extends Props {
 }
 
 export const DocumentListWithDelete: React.SFC<PropsWithRemove> = ({ documents = [], qa, onRemove }: PropsWithRemove) => {
-  sortDocuments(documents);
+  // todo: should server not do this?
+  documents.sort((a,b) => stringComparator(a.fileName, b.fileName));
+
   const Form = TypedForm<DocumentSummaryDto[]>();
   return (
     <div data-qa={qa}>
