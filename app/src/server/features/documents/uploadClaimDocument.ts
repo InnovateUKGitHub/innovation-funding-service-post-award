@@ -5,6 +5,7 @@ import mapClaim from "@server/features/claims/mapClaim";
 import { GetClaimDocumentsQuery } from "@server/features/documents/getClaimDocuments";
 import { DeleteDocumentCommand } from "@server/features/documents/deleteDocument";
 import { UploadDocumentCommand } from "@server/features/documents/uploadDocument";
+import { GetClaim, UpdateClaimCommand } from "../claims";
 
 export class UploadClaimDocumentCommand extends CommandBase<string> {
   constructor(private readonly claimKey: ClaimKey, private readonly file: FileUpload) {
@@ -25,8 +26,14 @@ export class UploadClaimDocumentCommand extends CommandBase<string> {
 
   private async postIarUpload(context: IContext, claim: ClaimDto) {
     if (claim.status !== ClaimStatus.AWAITING_IAR) return;
-    const updatedClaim = { Id: claim.id, Acc_ClaimStatus__c: ClaimStatus.AWAITING_IUK_APPROVAL };
-    await context.repositories.claims.update(updatedClaim);
+
+    claim.status = ClaimStatus.AWAITING_IUK_APPROVAL;
+
+    const projectId = await context.repositories.partners.getById(this.claimKey.partnerId).then(x => x.Acc_ProjectId__c);
+
+    const command = new  UpdateClaimCommand(projectId, claim);
+
+    await context.runCommand(command);
   }
 
   protected async Run(context: IContext) {
