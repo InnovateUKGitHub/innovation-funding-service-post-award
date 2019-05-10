@@ -3,7 +3,7 @@ import contextProvider from "../features/common/contextProvider";
 import { GetAllClaimsForProjectQuery, GetAllForPartnerQuery, GetClaim } from "../features/claims";
 import { UpdateClaimCommand } from "../features/claims/updateClaim";
 import { processDto } from "../../shared/processResponse";
-import { ClaimDto } from "../../types";
+import { ClaimDto, ClaimStatusChangeDto } from "../../types";
 import { BadRequestError } from "../features/common/appError";
 import { dateComparator } from "@framework/util/comparator";
 import { DateTime } from "luxon";
@@ -14,6 +14,7 @@ export interface IClaimsApi {
   getAllByPartnerId: (params: ApiParams<{ partnerId: string }>) => Promise<ClaimDto[]>;
   get: (params: ApiParams<{ partnerId: string, periodId: number }>) => Promise<ClaimDto | null>;
   update: (params: ApiParams<{ projectId: string, partnerId: string, periodId: number, claim: ClaimDto }>) => Promise<ClaimDto>;
+  getStatusChanges: (params: ApiParams<{ projectId: string, partnerId: string, periodId: number }>) => Promise<ClaimStatusChangeDto[]>;
 }
 
 class Controller extends ControllerBase<ClaimDto> implements IClaimsApi {
