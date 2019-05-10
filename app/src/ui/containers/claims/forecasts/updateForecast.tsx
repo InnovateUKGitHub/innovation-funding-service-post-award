@@ -1,8 +1,10 @@
 import React from "react";
-import * as ACC from "../../../components";
-import * as Actions from "../../../redux/actions";
-import { ContainerBase, ReduxContainer } from "../../containerBase";
+import * as ACC from "@ui/components";
+import * as Actions from "@ui/redux/actions";
+import { ContainerBase, ReduxContainer } from "@ui/containers/containerBase";
 import { ViewForecastRoute } from "./viewForecast";
+import { ProjectRole } from "@framework/types";
+import { isNumber } from "@util/NumberHelper";
 import {
   ForecastData,
   forecastDataLoadActions,
@@ -12,8 +14,6 @@ import {
   renderWarning,
   withDataEditor,
 } from "./common";
-import { ProjectRole } from "../../../../types";
-import { isNumber } from "@util/NumberHelper";
 
 interface Callbacks {
   onChange: (partnerId: string, data: ForecastDetailsDTO[], combined: ForecastData) => void;
@@ -54,7 +54,7 @@ class UpdateForecastComponent extends ContainerBase<Params, PendingForecastData,
         <ACC.Section title="" qa="partner-forecast" >
           {renderWarning(combined)}
           <Form.Form
-            data={editor.data}
+            editor={editor}
             onChange={data => this.handleChange(data, combined)}
             onSubmit={() => this.saveAndReturn(combined)}
             qa="partner-forecast-form"

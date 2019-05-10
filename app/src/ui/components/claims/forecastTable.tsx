@@ -1,11 +1,9 @@
 import React from "react";
 import classNames from "classnames";
-import * as ACC from "../../components";
-import { AccessibilityText, CondensedDateRange, Currency, Percentage } from "../../components/renderers";
-import { ForecastDetailsDtosValidator, ForecastDetailsDtoValidator } from "../../validators/forecastDetailsDtosValidator";
-import { IEditorStore } from "../../redux";
-import { ForecastData } from "../../containers/claims/forecasts/common";
-import { ErrorRoute } from "@framework/ui/containers";
+import * as ACC from "@ui/components";
+import { EditorStatus, IEditorStore } from "@ui/redux";
+import { ForecastDetailsDtosValidator, ForecastDetailsDtoValidator } from "@ui/validators";
+import { ForecastData } from "@ui/containers/claims/forecasts/common";
 
 interface TableRow {
   categoryId: string;
@@ -138,7 +136,7 @@ export class ForecastTable extends React.Component<Props> {
   }
 
   private renderDateRange(details: ClaimDetailsSummaryDto | ForecastDetailsDTO) {
-    return CondensedDateRange({ start: details.periodStart, end: details.periodEnd });
+    return ACC.Renderers.CondensedDateRange({ start: details.periodStart, end: details.periodEnd });
   }
 
   renderForecastCell(forecastRow: TableRow, period: string, index: Index, data: ForecastData) {
@@ -149,7 +147,7 @@ export class ForecastTable extends React.Component<Props> {
     const error = validator && validator.value;
 
     if ((costCategory && costCategory.isCalculated) || !editor || parseInt(period, 10) <= data.project.periodId) {
-      return <Currency value={value} />;
+      return <ACC.Renderers.Currency value={value} />;
     }
 
     return (
@@ -161,6 +159,7 @@ export class ForecastTable extends React.Component<Props> {
           ariaLabel={`${forecastRow.categoryName} Period ${period}`}
           onChange={val => this.updateItem(editor.data, forecastRow.categoryId, period, dto => dto.value = val!)}
           className="govuk-!-font-size-16"
+          disabled={editor.status === EditorStatus.Saving}
         />
       </span>
     );
@@ -198,7 +197,7 @@ export class ForecastTable extends React.Component<Props> {
     return [(
       <tr key="cHeader1" className="govuk-table__row govuk-body-s">
         <th className="govuk-table__header govuk-table__header--numeric">
-          <AccessibilityText>Cost categories</AccessibilityText>
+          <ACC.Renderers.AccessibilityText>Cost categories</ACC.Renderers.AccessibilityText>
         </th>
         {previous > 0 ? <th className="govuk-table__header govuk-table__header--numeric" colSpan={previous}>Previous costs</th> : null}
         {claimPeriod > 0 ? <th className="govuk-table__header govuk-table__header--numeric">Costs this period</th> : null}
@@ -213,13 +212,13 @@ export class ForecastTable extends React.Component<Props> {
         <th className="govuk-table__header">Period</th>
         {periods.map((p, i) => <th key={i} className="govuk-table__header" style={{textAlign: "right"}}>{p}</th>)}
         <th className="govuk-table__header">
-          <AccessibilityText>No data</AccessibilityText>
+          <ACC.Renderers.AccessibilityText>No data</ACC.Renderers.AccessibilityText>
         </th>
         <th className="govuk-table__header">
-          <AccessibilityText>No data</AccessibilityText>
+          <ACC.Renderers.AccessibilityText>No data</ACC.Renderers.AccessibilityText>
         </th>
         <th className="govuk-table__header">
-          <AccessibilityText>No data</AccessibilityText>
+          <ACC.Renderers.AccessibilityText>No data</ACC.Renderers.AccessibilityText>
         </th>
       </tr>
     )];
@@ -246,7 +245,7 @@ export class ForecastTable extends React.Component<Props> {
     cells.push(totals.map(this.renderTableFooterCell));
     cells.push((
       <td key="total_diff" className="govuk-table__cell govuk-table__cell--numeric acc-table__cell-top-border govuk-!-font-weight-regular">
-        <Percentage value={this.calculateDifference(golTotal, costTotal)} />
+        <ACC.Renderers.Percentage value={this.calculateDifference(golTotal, costTotal)} />
       </td>
     ));
 
@@ -255,7 +254,7 @@ export class ForecastTable extends React.Component<Props> {
 
   renderTableFooterCell = (total: number, key: number) => (
     <td key={key} className="govuk-table__cell govuk-table__cell--numeric acc-table__cell-top-border govuk-!-font-weight-regular">
-      <Currency value={total} />
+      <ACC.Renderers.Currency value={total} />
     </td>
   )
 }

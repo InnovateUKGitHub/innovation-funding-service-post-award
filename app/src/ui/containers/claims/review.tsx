@@ -1,16 +1,14 @@
-import { IEditorStore } from "../../redux";
 import React from "react";
-import { Pending } from "../../../shared/pending";
-import * as Actions from "../../redux/actions";
-import * as ACC from "../../components";
-import * as Selectors from "../../redux/selectors";
-import { ContainerBase, ReduxContainer } from "../containerBase";
-import { ClaimDtoValidator } from "../../validators/claimDtoValidator";
-import { ReviewClaimLineItemsRoute } from "./claimLineItems";
-import { AllClaimsDashboardRoute, ClaimsDetailsRoute } from ".";
-import { ClaimDto, ClaimStatus, PartnerDto, ProjectDto, ProjectRole } from "../../../types";
+import * as ACC from "@ui/components";
+import * as Actions from "@ui/redux/actions";
+import * as Selectors from "@ui/redux/selectors";
+import { IEditorStore } from "@ui/redux";
+import { ContainerBase, ReduxContainer } from "@ui/containers/containerBase";
+import { ClaimDtoValidator } from "@ui/validators/claimDtoValidator";
+import { Pending } from "@shared/pending";
+import { ClaimDto, ClaimStatus, PartnerDto, ProjectDto, ProjectRole } from "@framework/types";
+import { AllClaimsDashboardRoute, ClaimsDetailsRoute, ReviewClaimLineItemsRoute } from ".";
 import { ForecastData, forecastDataLoadActions } from "./forecasts/common";
-import { FormBuilder } from "../../components";
 
 export interface ReviewClaimParams {
   projectId: string;
@@ -127,7 +125,7 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, Data, Callbacks> 
 
     return (
       <Form.Form
-        data={data.editor.data}
+        editor={data.editor}
         onSubmit={() => this.onClaimSubmit(data)}
         onChange={(dto) => this.props.onChange(this.props.partnerId, this.props.periodId, dto, data.claimDetails, data.costCategories)}
         qa="review-form"
@@ -148,7 +146,7 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, Data, Callbacks> 
     );
   }
 
-  private renderCommentsSection(Form: FormBuilder<ClaimDto>, editor: IEditorStore<ClaimDto, ClaimDtoValidator>) {
+  private renderCommentsSection(Form: ACC.FormBuilder<ClaimDto>, editor: IEditorStore<ClaimDto, ClaimDtoValidator>) {
     // on client if the status hasnt yet been set by the readio buttons then dont show
     // if server rendering we need to always show
     if(!editor.data.status && this.props.isClient) {
