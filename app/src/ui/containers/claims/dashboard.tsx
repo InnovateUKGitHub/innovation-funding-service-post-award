@@ -107,7 +107,7 @@ class Component extends ContainerBase<ClaimDashboardPageParams, Data, Callbacks>
     return (
       <React.Fragment>
         <Acc.ValidationMessage messageType={messageType} message={message} />
-        <UploadForm.Form enctype="multipart" data={editor.data} onChange={(dto) => this.onChange(dto, claim.periodId)} qa="iar-upload-form">
+        <UploadForm.Form enctype="multipart" editor={editor} onChange={(dto) => this.onChange(dto, claim.periodId)} qa="iar-upload-form">
           <UploadForm.Fieldset>
             <UploadForm.FileUpload
               label="document"
