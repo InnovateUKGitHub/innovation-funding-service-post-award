@@ -26,7 +26,7 @@ describe("getAllForProjectQuery", () => {
       x.Acc_TrackingClaims__c = "Claim Due";
     });
 
-    const projectManger = context.testData.createProjectManager(project, undefined, partner);
+    const projectManger = context.testData.createProjectManager(project, partner);
     context.user.set({ email: projectManger.Acc_ContactId__r.Email });
 
     const result = await context.runQuery(new GetByIdQuery(partner.Id));
@@ -135,7 +135,7 @@ describe("getAllForProjectQuery", () => {
     });
 
     const projectContact1 = context.testData.createFinanceContact(project, partner, x => x.Acc_ContactId__r.Email = "financecontact@test.com");
-    const projectContact2 = context.testData.createProjectManager(project, x => x.Acc_ContactId__r.Email = "projectManager@test.com", partner);
+    const projectContact2 = context.testData.createProjectManager(project, partner, x => x.Acc_ContactId__r.Email = "projectManager@test.com");
 
     // now set user to the finance contact
     context.user.set({ email: projectContact1.Acc_ContactId__r.Email });
