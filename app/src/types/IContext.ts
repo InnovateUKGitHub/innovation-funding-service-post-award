@@ -9,6 +9,7 @@ import { ISalesforceRecordType } from "../server/repositories";
 
 export interface IRepositories {
   claims: Readonly<Repositories.IClaimRepository>;
+  claimStatusChanges: Readonly<Repositories.IClaimStatusChangeRepository>;
   claimDetails: Readonly<Repositories.IClaimDetailsRepository>;
   costCategories: Readonly<Repositories.ICostCategoryRepository>;
   documents: Readonly<Repositories.IDocumentsRepository>;

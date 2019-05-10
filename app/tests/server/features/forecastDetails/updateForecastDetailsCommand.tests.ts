@@ -4,6 +4,7 @@ import { UpdateForecastDetailsCommand } from "../../../../src/server/features/fo
 import { DateTime } from "luxon";
 import { ClaimFrequency, ClaimStatus } from "../../../../src/types";
 import { BadRequestError, ValidationError } from "../../../../src/server/features/common/appError";
+import { Claims } from "@framework/ui/components";
 
 describe("UpdateForecastDetailsCommand", () => {
   it("when id not set expect validation exception", async () => {
@@ -474,6 +475,32 @@ describe("UpdateForecastDetailsCommand", () => {
 
     expect(profileDetail1.Acc_LatestForecastCost__c).toBe(500);
     expect(profileDetail2.Acc_LatestForecastCost__c).toBe(100);
+
+  });
+
+  it("when submitted creates status change record", async () => {
+    const context = new TestContext();
+
+    const project = context.testData.createProject();
+    const partner = context.testData.createPartner(project);
+
+    const claim = context.testData.createClaim(partner, 1);
+    claim.Acc_ClaimStatus__c = ClaimStatus.DRAFT;
+    claim.Acc_LineItemDescription__c = "Original Comments";
+
+    const dto: ForecastDetailsDTO[] = [
+
+    ];
+
+    const command = new UpdateForecastDetailsCommand(partner.Acc_ProjectId__c, partner.Id, dto, true);
+
+    await context.runCommand(command);
+
+    expect(claim.Acc_ClaimStatus__c).toBe(ClaimStatus.SUBMITTED);
+    expect(claim.Acc_LineItemDescription__c).toBe("");
+
+    expect(context.repositories.claimStatusChanges.Items.length).toBe(1);
+    expect(context.repositories.claimStatusChanges.Items[0].Acc_ExternalComment__c).toBe("Original Comments");
 
   });
 });
