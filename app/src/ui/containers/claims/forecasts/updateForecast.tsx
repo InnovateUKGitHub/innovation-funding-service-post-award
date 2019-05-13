@@ -4,7 +4,7 @@ import * as Actions from "@ui/redux/actions";
 import { ContainerBase, ReduxContainer } from "@ui/containers/containerBase";
 import { ViewForecastRoute } from "./viewForecast";
 import { ProjectRole } from "@framework/types";
-import { isNumber } from "@util/NumberHelper";
+import { isNumber } from "@framework/util";
 import {
   ForecastData,
   forecastDataLoadActions,
