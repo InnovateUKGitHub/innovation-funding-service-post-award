@@ -14,7 +14,6 @@ export interface ClaimDto {
   paidDate: Date|null;
   isIarRequired: boolean;
   isApproved: boolean;
-  // ToDo: confirm field
   comments: string|null;
   allowIarEdit: boolean;
   overheadRate: number;
