@@ -203,7 +203,7 @@ export const ClaimsDetailsRoute = definition.route({
   getTitle: (store, params) => {
     return {
       displayTitle: "Claim",
-      htmlTitle: "View claim - Innovation Funding Service"
+      htmlTitle: "View claim"
     };
   },
   container: ClaimsDetails

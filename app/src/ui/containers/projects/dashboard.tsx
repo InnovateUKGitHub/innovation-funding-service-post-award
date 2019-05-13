@@ -263,7 +263,7 @@ export const ProjectDashboardRoute = definition.route({
     Actions.loadPartners()
   ],
   getTitle: () => ({
-    htmlTitle: "Projects - Innovation Funding Service",
+    htmlTitle: "Projects",
     displayTitle: "Projects"
   }),
   container: ProjectDashboard
