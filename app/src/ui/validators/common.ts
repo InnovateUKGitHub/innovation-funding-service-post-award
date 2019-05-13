@@ -2,7 +2,7 @@
 import { Results } from "../validation/results";
 import { Result } from "../validation/result";
 import { NestedResult } from "../validation/nestedResult";
-import { isNumber } from "../../util/NumberHelper";
+import { isNumber } from "@framework/util";
 
 // A helper for creating validation rules
 function rule<T>(test: (value: T) => boolean, defaultMessage: string, isRequired?: boolean): (results: Results<{}>, value: T, message?: string) => Result {
