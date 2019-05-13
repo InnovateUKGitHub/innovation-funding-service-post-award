@@ -17,7 +17,7 @@ import { TestConfig } from "./testConfig";
 export class TestContext implements IContext {
     constructor() {
         this.repositories = createTestRepositories();
-        this.testData = new TestData(this.repositories);
+        this.testData = new TestData(this.repositories, () => this.user);
     }
 
     public clock = new TestClock();

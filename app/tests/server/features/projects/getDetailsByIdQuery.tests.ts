@@ -72,13 +72,10 @@ describe("ProjectsGetDetailsByIdQuery", () => {
         const context = new TestContext();
         const email = "mo@test.com";
 
-        const project = context.testData.createProject();
-        context.testData.createProjectManager(project, x => {
-            x.Acc_ContactId__r.Email = email;
-        });
-
-        // login as fc
         context.user.set({ email });
+
+        const project = context.testData.createProject();
+        context.testData.createCurrentUserAsProjectManager(project);
 
         const result = await context.runQuery(new GetByIdQuery(project.Id));
         expect(result.roles).toBe(ProjectRole.ProjectManager);
@@ -88,12 +85,12 @@ describe("ProjectsGetDetailsByIdQuery", () => {
         const context = new TestContext();
         const email = "all@test.com";
 
-        const project = context.testData.createProject();
-        context.testData.createProjectManager(project, x => x.Acc_ContactId__r.Email = email);
-        context.testData.createMonitoringOfficer(project, x => x.Acc_ContactId__r.Email = email);
-        context.testData.createFinanceContact(project, undefined, x => x.Acc_ContactId__r.Email = email);
-
         context.user.set({ email });
+
+        const project = context.testData.createProject();
+        context.testData.createCurrentUserAsProjectManager(project);
+        context.testData.createCurrentUserAsMonitoringOfficer(project);
+        context.testData.createCurrentUserAsFinanceContact(project);
 
         const result = await context.runQuery(new GetByIdQuery(project.Id));
         expect(result.roles).toBe(ProjectRole.ProjectManager | ProjectRole.FinancialContact | ProjectRole.MonitoringOfficer);

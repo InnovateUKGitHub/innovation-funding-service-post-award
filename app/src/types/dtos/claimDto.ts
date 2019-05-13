@@ -27,5 +27,5 @@ export interface ClaimStatusChangeDto {
   newStatus: string;
   createdBy: string;
   createdDate: Date;
-  comments: string;
+  comments: string | null;
 }

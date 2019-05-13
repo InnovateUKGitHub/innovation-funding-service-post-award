@@ -85,8 +85,7 @@ export function loadClaimsForPartner(partnerId: string) {
 }
 
 export function loadClaimStatusChanges(projectId: string, partnerId: string, periodId: number,) {
-  // TODO use api
-  return conditionalLoad(getClaimStatusChanges(projectId, partnerId, periodId), params => Promise.resolve([]));
+  return conditionalLoad(getClaimStatusChanges(projectId, partnerId, periodId), params => ApiClient.claims.getStatusChanges({ projectId, partnerId, periodId, ...params}));
 }
 
 export function loadIarDocumentsForCurrentClaim(partnerId: string): AsyncThunk<void, DataLoadAction> {

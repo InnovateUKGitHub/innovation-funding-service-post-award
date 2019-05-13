@@ -44,17 +44,17 @@ describe("ProjectsGetAllQuery", () => {
       ProjectRole.FinancialContact | ProjectRole.MonitoringOfficer | ProjectRole.ProjectManager,
     ];
 
-    context.testData.createFinanceContact(projects[1], undefined, x => x.Acc_ContactId__r.Email = email);
+    context.testData.createCurrentUserAsFinanceContact(projects[1]);
 
-    context.testData.createMonitoringOfficer(projects[2], x => x.Acc_ContactId__r.Email = email);
+    context.testData.createCurrentUserAsMonitoringOfficer(projects[2]);
 
-    context.testData.createProjectManager(projects[3], x => x.Acc_ContactId__r.Email = email);
+    context.testData.createCurrentUserAsProjectManager(projects[3]);
 
-    context.testData.createFinanceContact(projects[4], undefined, x => x.Acc_ContactId__r.Email = email);
+    context.testData.createCurrentUserAsFinanceContact(projects[4]);
 
-    context.testData.createMonitoringOfficer(projects[4], x => x.Acc_ContactId__r.Email = email);
+    context.testData.createCurrentUserAsMonitoringOfficer(projects[4]);
 
-    context.testData.createProjectManager(projects[4], x => x.Acc_ContactId__r.Email = email);
+    context.testData.createCurrentUserAsProjectManager(projects[4]);
 
     const projects2 = await context.runQuery(new GetAllQuery());
     expect(projects2.length).toBe(5);

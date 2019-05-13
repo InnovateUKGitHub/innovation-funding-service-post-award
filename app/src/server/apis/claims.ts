@@ -3,20 +3,28 @@ import contextProvider from "../features/common/contextProvider";
 import { GetAllClaimsForProjectQuery, GetAllForPartnerQuery, GetClaim } from "../features/claims";
 import { UpdateClaimCommand } from "../features/claims/updateClaim";
 import { processDto } from "../../shared/processResponse";
-import { ClaimDto } from "../../types";
+import { ClaimDto, ClaimStatusChangeDto } from "../../types";
 import { BadRequestError } from "../features/common/appError";
+import { dateComparator } from "@framework/util/comparator";
+import { DateTime } from "luxon";
+import { GetClaimStatusChangesQuery } from "@server/features/claims/getClaimStatusChangesQuery";
 
 export interface IClaimsApi {
   getAllByProjectId: (params: ApiParams<{ projectId: string }>) => Promise<ClaimDto[]>;
   getAllByPartnerId: (params: ApiParams<{ partnerId: string }>) => Promise<ClaimDto[]>;
   get: (params: ApiParams<{ partnerId: string, periodId: number }>) => Promise<ClaimDto | null>;
   update: (params: ApiParams<{ projectId: string, partnerId: string, periodId: number, claim: ClaimDto }>) => Promise<ClaimDto>;
+  getStatusChanges: (params: ApiParams<{ projectId: string, partnerId: string, periodId: number }>) => Promise<ClaimStatusChangeDto[]>;
 }
 
 class Controller extends ControllerBase<ClaimDto> implements IClaimsApi {
 
   constructor() {
     super("claims");
+
+    // todo: remove once permissions sorted
+    this.getCustom("/status-changes/all", (p) => ({}), p => this.getAllStatusChanges(p));
+    this.getCustom("/:projectId/:partnerId/:periodId/status-changes", (p) => ({ projectId: p.projectId, partnerId: p.partnerId, periodId: parseInt(p.periodId, 10) }), p => this.getStatusChanges(p));
 
     this.getItems("/",
       (p, q) => ({ partnerId: q.partnerId, projectId: q.projectId }),
@@ -65,6 +73,18 @@ class Controller extends ControllerBase<ClaimDto> implements IClaimsApi {
 
     const query = new GetClaim(partnerId, periodId);
     return context.runQuery(query);
+  }
+
+  // todo: remove once permissions sorted
+  public async getAllStatusChanges(params: ApiParams<{}>) {
+    const data = await contextProvider.start(params).repositories.claimStatusChanges.getAll();
+    data.sort((a, b) => dateComparator(DateTime.fromISO(b.CreatedDate).toJSDate(), DateTime.fromISO(a.CreatedDate).toJSDate()));
+    return data;
+  }
+
+  public async getStatusChanges(params: ApiParams<{ projectId: string, partnerId: string, periodId: number, }>) {
+    const query = new GetClaimStatusChangesQuery(params.projectId, params.partnerId, params.periodId);
+    return contextProvider.start(params).runQuery(query);
   }
 }
 

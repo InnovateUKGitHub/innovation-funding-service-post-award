@@ -2,13 +2,13 @@
 import * as Repositories from "../../src/server/repositories";
 import { ISalesforceMonitoringReportQuestions, SalesforceRole } from "../../src/server/repositories";
 import { ITestRepositories } from "./testRepositories";
-import { ClaimStatus, ProjectDto } from "../../src/types";
+import { ClaimStatus, IClientUser, ProjectDto } from "../../src/types";
 import { MonitoringReportStatus } from "../../src/types/constants/monitoringReportStatus";
 import { range } from "@shared/range";
 import { DateTime } from "luxon";
 
 export class TestData {
-  constructor(private repositories: ITestRepositories) {
+  constructor(private repositories: ITestRepositories, private getCurrentUser: () => IClientUser ) {
 
   }
 
@@ -112,9 +112,8 @@ export class TestData {
     }
   }
 
-  private createProjectContact(project?: Repositories.ISalesforceProject, partner?: Repositories.ISalesforcePartner, role?: SalesforceRole, update?: (item: Repositories.ISalesforceProjectContact) => void) {
+  private createProjectContact(project: Repositories.ISalesforceProject, partner: Repositories.ISalesforcePartner|null, role?: SalesforceRole, update?: (item: Repositories.ISalesforceProjectContact) => void) {
 
-    project = project || this.createProject();
     role = role || "Monitoring officer";
     const roleName = this.getRoleName(role);
 
@@ -123,7 +122,7 @@ export class TestData {
     const newItem: Repositories.ISalesforceProjectContact = {
       Id: `ProjectContact${seed}`,
       Acc_ProjectId__c: project.Id,
-      Acc_AccountId__c: partner && partner.Acc_AccountId__r && partner.Acc_AccountId__r.Id,
+      Acc_AccountId__c: partner && partner.Acc_AccountId__r && partner.Acc_AccountId__r.Id || undefined,
       Acc_EmailOfSFContact__c: `projectcontact${seed}@text.com`,
       Acc_ContactId__r: {
         Id: "Contact" + seed,
@@ -143,18 +142,47 @@ export class TestData {
     return newItem;
   }
 
+  private assignToCurrentUser(item: Repositories.ISalesforceProjectContact) {
+    item.Acc_ContactId__r.Email = this.getCurrentUser().email;
+  }
+
   public createFinanceContact(project?: Repositories.ISalesforceProject, partner?: Repositories.ISalesforcePartner, update?: (item: Repositories.ISalesforceProjectContact) => void) {
     project = project || this.createProject();
     partner = partner || this.createPartner(project);
     return this.createProjectContact(project, partner, "Finance contact", update);
   }
 
-  public createMonitoringOfficer(project?: Repositories.ISalesforceProject, update?: (item: Repositories.ISalesforceProjectContact) => void) {
-    return this.createProjectContact(project, undefined, "Monitoring officer", update);
+  public createCurrentUserAsFinanceContact(project?: Repositories.ISalesforceProject, partner?: Repositories.ISalesforcePartner, update?: (item: Repositories.ISalesforceProjectContact) => void) {
+    return this.createFinanceContact(project, partner, item => {
+      this.assignToCurrentUser(item);
+      if(update) update(item);
+    });
   }
 
-  public createProjectManager(project?: Repositories.ISalesforceProject, update?: (item: Repositories.ISalesforceProjectContact) => void, partner?: Repositories.ISalesforcePartner) {
+  public createMonitoringOfficer(project?: Repositories.ISalesforceProject, update?: (item: Repositories.ISalesforceProjectContact) => void) {
+    project = project || this.createProject();
+    return this.createProjectContact(project, null, "Monitoring officer", update);
+  }
+
+  public createCurrentUserAsMonitoringOfficer(project?: Repositories.ISalesforceProject, update?: (item: Repositories.ISalesforceProjectContact) => void) {
+    return this.createMonitoringOfficer(project,  item => {
+      this.assignToCurrentUser(item);
+      if(update) update(item);
+    });
+  }
+
+  // tslint:disable-next-line
+  public createProjectManager(project?: Repositories.ISalesforceProject, partner?: Repositories.ISalesforcePartner, update?: (item: Repositories.ISalesforceProjectContact) => void) {
+    project = project || this.createProject();
+    partner = partner || this.createPartner(project);
     return this.createProjectContact(project, partner, "Project Manager", update);
+  }
+
+  public createCurrentUserAsProjectManager(project?: Repositories.ISalesforceProject, partner?: Repositories.ISalesforcePartner, update?: (item: Repositories.ISalesforceProjectContact) => void) {
+    return this.createProjectManager(project, partner, item => {
+      this.assignToCurrentUser(item);
+      if(update) update(item);
+    });
   }
 
   public createMonitoringReportQuestionSet(displayOrder: number, noOptions: number = 3, isActive: boolean = true): Repositories.ISalesforceMonitoringReportQuestions[] {
@@ -259,7 +287,7 @@ export class TestData {
     partner = partner || this.createPartner();
     periodId = periodId || 1;
 
-    let seed = this.repositories.claims.Items.length;
+    let seed = this.repositories.claims.Items.length + 1;
     let id = `Claim_${seed}`;
 
     while (this.repositories.claims.Items.some(x => x.Id === id)) {
@@ -364,6 +392,28 @@ export class TestData {
     if (persist) {
       this.repositories.claimLineItems.Items.push(newItem as Repositories.ISalesforceClaimLineItem);
     }
+    return newItem;
+  }
+
+  public createClaimStatusChange(claim: Repositories.ISalesforceClaim, update?: Partial<Repositories.ISalesforceClaimStatusChange>): Repositories.ISalesforceClaimStatusChange {
+    const seed = this.repositories.claimStatusChanges.Items.length + 1;
+    const newItem: Repositories.ISalesforceClaimStatusChange = {
+      Id: `ClaimStatusChange_${seed}`,
+      Acc_Claim__c: claim.Id,
+      Acc_PreviousClaimStatus__c: "Draft",
+      Acc_NewClaimStatus__c: "Submitted",
+      Acc_ExternalComment__c: "Comments",
+      Acc_ParticipantVisibility__c: true,
+      CreatedBy: {
+        Name: "CreatedBy_User"
+      },
+      CreatedDate: new Date().toISOString()
+    };
+
+    Object.assign(newItem, update);
+
+    this.repositories.claimStatusChanges.Items.push(newItem);
+
     return newItem;
   }
 
