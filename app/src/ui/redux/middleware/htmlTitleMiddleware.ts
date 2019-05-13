@@ -7,6 +7,6 @@ export const htmlTitleMiddleware = (store: MiddlewareAPI<Dispatch, RootState>) =
   next(action);
   const newTitle = store.getState().title.htmlTitle;
   if(originalTitle !== newTitle) {
-    document.title = newTitle + " - Innovation Funding Service";
+    document.title = newTitle;
   }
 };

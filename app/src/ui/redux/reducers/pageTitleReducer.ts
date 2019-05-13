@@ -7,9 +7,10 @@ export interface PageTitleState {
 
 export const pageTitleReducer = (state: PageTitleState = { displayTitle: "", htmlTitle: "" }, action: RootActions) => {
   if (action.type === "SET_PAGE_TITLE") {
-    if (action.payload.htmlTitle !== state.htmlTitle || action.payload.displayTitle !== state.displayTitle) {
-      return Object.assign({}, state, action.payload);
-    }
+    return {
+      displayTitle: action.payload.displayTitle || state.displayTitle,
+      htmlTitle: action.payload.htmlTitle + " - Innovation Funding Service"  || state.htmlTitle
+    };
   }
   return state;
 };
