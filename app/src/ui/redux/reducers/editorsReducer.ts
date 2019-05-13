@@ -1,18 +1,19 @@
 import { combineReducers } from "redux";
 import { actionTypes } from "redux-router5";
-import { RootActions } from "../actions";
-import { ClaimDtoValidator } from "../../validators/claimDtoValidator";
-import { Results } from "../../validation/results";
-import { ForecastDetailsDtosValidator } from "../../validators/forecastDetailsDtosValidator";
-import { DocumentUploadValidator } from "../../validators/documentUploadValidator";
-import { ClaimDto, MonitoringReportDto } from "../../../types";
-import { IAppError } from "../../../types/IAppError";
-import { MonitoringReportDtoValidator } from "../../validators/MonitoringReportDtoValidator";
-import { ClaimDetailsValidator } from "@ui/validators";
+import * as Validators from "@ui/validators";
+import { RootActions } from "@ui/redux/actions";
+import { Results } from "@ui/validation/results";
+import { ClaimDto, IAppError, MonitoringReportDto } from "@framework/types";
+
+export enum EditorStatus {
+  Editing = 1,
+  Saving = 2
+}
 
 export interface IEditorStore<TDto, TValidator> {
   data: TDto;
   validator: TValidator;
+  status?: EditorStatus;
   error?: IAppError | null;
 }
 
@@ -29,7 +30,7 @@ const getNewStateWithoutErrors = <TDto extends {}, TValidator extends Results<TD
 };
 
 export const editorsReducer = <TDto extends {}, TValidator extends Results<TDto>>(store: string) => (state: State<TDto, TValidator> = {}, action: RootActions) => {
-  if (action.type === "UPDATE_EDITOR" && action.payload.store === store) {
+  if (action.type === "EDITOR_UPDATE" && action.payload.store === store) {
     const result = { ...state };
     const originalEditor = result[action.payload.id];
     const newEditor: IEditorStore<TDto, TValidator> = {
@@ -41,11 +42,25 @@ export const editorsReducer = <TDto extends {}, TValidator extends Results<TDto>
 
     return result;
   }
+
+  if(action.type === "EDITOR_SUBMIT" && action.payload.store === store) {
+    const result = { ...state };
+    const originalEditor = result[action.payload.id];
+    const newEditor: IEditorStore<TDto, TValidator> = {
+      ...originalEditor,
+      status: EditorStatus.Saving
+    };
+    result[action.payload.id] = newEditor;
+
+    return result;
+  }
+
   if (action.type === "EDITOR_SUBMIT_SUCCESS") {
     const result = getNewStateWithoutErrors(state);
     if (action.payload.store === store) delete result[action.payload.id];
     return result;
   }
+
   if (action.type === "EDITOR_SUBMIT_ERROR") {
     const result = getNewStateWithoutErrors(state);
     const err = action.payload.error;
@@ -54,25 +69,26 @@ export const editorsReducer = <TDto extends {}, TValidator extends Results<TDto>
       const newEditor: IEditorStore<TDto, TValidator> = {
         ...originalEditor,
         data: action.payload.dto as TDto,
+        status: EditorStatus.Editing,
         error: { code: err.code, message: err.message, results: err.results }
       };
       result[action.payload.id] = newEditor;
     }
     return result;
   }
-  else if (action.type === actionTypes.TRANSITION_START && action.payload.previousRoute) {
+
+  if (action.type === actionTypes.TRANSITION_START && action.payload.previousRoute) {
     return {};
   }
-  else {
-    return state;
-  }
+
+  return state;
 };
 
 export const editorReducer = combineReducers({
-  claim: editorsReducer<ClaimDto, ClaimDtoValidator>("claim"),
-  claimDetail: editorsReducer<ClaimDetailsDto, ClaimDetailsValidator>("claimDetail"),
-  forecastDetails: editorsReducer<ForecastDetailsDTO[], ForecastDetailsDtosValidator>("forecastDetails"),
-  documents: editorsReducer<DocumentUploadDto, DocumentUploadValidator>("documents"),
+  claim: editorsReducer<ClaimDto, Validators.ClaimDtoValidator>("claim"),
+  claimDetail: editorsReducer<ClaimDetailsDto, Validators.ClaimDetailsValidator>("claimDetail"),
+  forecastDetails: editorsReducer<ForecastDetailsDTO[], Validators.ForecastDetailsDtosValidator>("forecastDetails"),
+  documents: editorsReducer<DocumentUploadDto, Validators.DocumentUploadValidator>("documents"),
   documentSummary: editorsReducer<DocumentSummaryDto[], Results<DocumentSummaryDto[]>>("documentSummary"),
-  monitoringReport: editorsReducer<MonitoringReportDto, MonitoringReportDtoValidator>("monitoringReport")
+  monitoringReport: editorsReducer<MonitoringReportDto, Validators.MonitoringReportDtoValidator>("monitoringReport")
 });

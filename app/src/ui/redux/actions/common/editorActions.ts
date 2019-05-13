@@ -1,16 +1,14 @@
-import {createAction} from "./createAction";
-import {Results} from "../../../validation/results";
-import { scrollToTheTopSmoothly } from "../../../../util/windowHelpers";
-import { ErrorCode, IAppError } from "../../../../types/IAppError";
+import { Results } from "@ui/validation/results";
+import { scrollToTheTopSmoothly } from "@util/windowHelpers";
+import { ErrorCode, IAppError } from "@framework/types/IAppError";
+import { createAction } from "./createAction";
 
-type UpdateEditorThunk = typeof updateEditorAction;
-type HandleSuccessThunk = typeof handleEditorSuccess;
-type HandleErrorThunk = typeof handleEditorError;
-export type UpdateEditorAction = ReturnType<UpdateEditorThunk>;
-export type HandleSuccessAction = ReturnType<HandleSuccessThunk>;
-export type HandleErrorAction = ReturnType<HandleErrorThunk>;
+export type UpdateEditorAction = ReturnType<typeof updateEditorAction>;
+export type EditorSubmitAction = ReturnType<typeof handleEditorSubmit>;
+export type EditorSuccessAction = ReturnType<typeof handleEditorSuccess>;
+export type EditorErrorAction = ReturnType<typeof handleEditorError>;
 
-export type EditorAction = UpdateEditorAction | HandleSuccessAction | HandleErrorAction;
+export type EditorAction = UpdateEditorAction | EditorSubmitAction | EditorSuccessAction | EditorErrorAction;
 
 export function updateEditorAction<T>(
   id: string,
@@ -19,24 +17,28 @@ export function updateEditorAction<T>(
   validator: Results<T> | null
 ) {
   const payload = {id, store, dto, validator};
-  return createAction("UPDATE_EDITOR", payload);
+  return createAction("EDITOR_UPDATE", payload);
 }
 
-export function handleEditorSuccess<T>(
-  id: string,
-  editorStore: string,
-) {
+export function handleEditorSubmit(id: string, store: string) {
+  return createAction("EDITOR_SUBMIT", { id, store });
+}
+
+export function handleEditorSuccess(id: string, editorStore: string) {
   return createAction("EDITOR_SUBMIT_SUCCESS", {id, store: editorStore});
 }
 
-export function handleEditorError<T>({id, store, dto, validation, error, scrollToTop = true}: {
-  id: string,
-  store: string,
-  dto: T,
-  validation: Results<T> | null,
-  error: IAppError,
-  scrollToTop?: boolean
-}) {
+interface HandleEditorErrorParams<T> {
+  id: string;
+  store: string;
+  dto: T;
+  validation: Results<T> | null;
+  error: IAppError;
+  scrollToTop?: boolean;
+}
+
+// TODO - refactor to be multiple parameters
+export function handleEditorError<T>({ id, store, dto, error, scrollToTop = true }: HandleEditorErrorParams<T>) {
   if (scrollToTop) scrollToTheTopSmoothly();
   if (error.code === ErrorCode.VALIDATION_ERROR) {
     return updateEditorAction(id, store, dto, error.results);
