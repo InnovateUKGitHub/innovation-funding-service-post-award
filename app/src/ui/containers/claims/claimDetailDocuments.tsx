@@ -114,7 +114,13 @@ export class ClaimDetailDocumentsComponent extends ContainerBase<ClaimDetailDocu
       >
         {this.renderSection(documents)}
         <ACC.Section>
-          <UploadForm.Form enctype="multipart" qa="claimDetailDocuments" data={editor.data} onSubmit={() => this.onSave(editor.data)} onChange={(dto) => this.onChange(dto)}>
+          <UploadForm.Form
+            enctype="multipart"
+            editor={editor}
+            onSubmit={() => this.onSave(editor.data)}
+            onChange={(dto) => this.onChange(dto)}
+            qa="claimDetailDocuments"
+          >
             <UploadForm.Fieldset heading="Upload">
               <UploadForm.FileUpload
                 label="Upload documents"

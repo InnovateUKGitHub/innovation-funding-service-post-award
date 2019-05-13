@@ -1,15 +1,19 @@
-import * as Selectors from "../../redux/selectors";
-import { Pending } from "../../../shared/pending";
-import * as Actions from "../../redux/actions";
-import * as ACC from "../../components";
 import React from "react";
-import { ContainerBase, ReduxContainer } from "../containerBase";
-import { IEditorStore } from "../../redux/reducers/editorsReducer";
-import { ClaimDtoValidator } from "../../validators/claimDtoValidator";
-import { AllClaimsDashboardRoute, ClaimForecastRoute, ClaimsDashboardRoute } from ".";
-import { EditClaimLineItemsRoute } from "./editClaimLineItems";
-import { ClaimsDetailsRoute } from "./details";
-import { ClaimDto, PartnerDto, ProjectDto, ProjectRole } from "../../../types";
+import * as ACC from "@ui/components";
+import * as Actions from "@ui/redux/actions";
+import * as Selectors from "@ui/redux/selectors";
+import { ContainerBase, ReduxContainer } from "@ui/containers/containerBase";
+import { IEditorStore } from "@ui/redux/reducers/editorsReducer";
+import { ClaimDtoValidator } from "@ui/validators/claimDtoValidator";
+import { Pending } from "@shared/pending";
+import { ClaimDto, PartnerDto, ProjectDto, ProjectRole } from "@framework/types";
+import {
+  AllClaimsDashboardRoute,
+  ClaimForecastRoute,
+  ClaimsDashboardRoute,
+  ClaimsDetailsRoute,
+  EditClaimLineItemsRoute
+} from ".";
 
 export interface PrepareClaimParams {
   projectId: string;
@@ -96,7 +100,11 @@ export class PrepareComponent extends ContainerBase<PrepareClaimParams, Data, Ca
             standardOverheadRate={this.props.standardOverheadRate}
             getLink={costCategoryId => EditClaimLineItemsRoute.getLink({ partnerId: this.props.partnerId, projectId: this.props.projectId, periodId: this.props.periodId, costCategoryId })}
           />
-          <Form.Form data={data.editor.data} onChange={(dto) => this.onChange(dto, data.claimDetails, data.costCategories)} onSubmit={() => this.saveAndProgress(data.editor.data, data.claimDetails, data.costCategories)}>
+          <Form.Form
+            editor={data.editor}
+            onChange={(dto) => this.onChange(dto, data.claimDetails, data.costCategories)}
+            onSubmit={() => this.saveAndProgress(data.editor.data, data.claimDetails, data.costCategories)}
+          >
             <Form.Fieldset heading={commentsLabel} qa="additional-info-form" headingQa="additional-info-heading">
               <Form.MultilineString label="additional-info" labelHidden={true} hint={commentsHint} name="comments" value={m => m.comments} update={(m, v) => m.comments = v} validation={data.editor.validator.comments} qa="info-text-area" />
             </Form.Fieldset>
