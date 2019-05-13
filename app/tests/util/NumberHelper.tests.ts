@@ -1,5 +1,5 @@
 import "jest";
-import { isNumber } from "../../src/util/NumberHelper";
+import { isNumber } from "@framework/util";
 
 describe("isNumber", () => {
     it("should return true if value is a number", () => {
