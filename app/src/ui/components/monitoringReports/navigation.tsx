@@ -1,6 +1,6 @@
 import React from "react";
 import * as ACC from "../";
-import { MonitoringReportCreateRoute, MonitoringReportLogRoute, MonitoringReportViewRoute, MonitoringReportPrepareRoute } from "@ui/containers";
+import { MonitoringReportLogRoute, MonitoringReportPrepareRoute, MonitoringReportViewRoute } from "@ui/containers";
 import { State } from "router5";
 import { connect } from "react-redux";
 import { RootState } from "@framework/ui/redux";
@@ -49,7 +49,7 @@ export const NavigationComponent: React.FunctionComponent<Props & Data> = (props
       route: MonitoringReportLogRoute.getLink({ id, projectId, action: "prepare" })
     });
   }
-  
+
   return <ACC.Tabs tabList={tabs} />;
 };
 
