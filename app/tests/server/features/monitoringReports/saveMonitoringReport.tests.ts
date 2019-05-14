@@ -3,10 +3,8 @@ import { TestContext } from "../../testContextProvider";
 import { SaveMonitoringReport } from "../../../../src/server/features/monitoringReports/saveMonitoringReport";
 import { BadRequestError, ValidationError } from "../../../../src/server/features/common";
 import { MonitoringReportDto } from "../../../../src/types/dtos/monitoringReportDto";
-import { MonitoringReportStatus } from "../../../../src/types/constants/monitoringReportStatus";
 import { ISalesforceMonitoringReportHeader } from "@server/repositories";
-import { GetMonitoringReport } from "@server/features/monitoringReports/getMonitoringReport";
-import { CreateMonitoringReport } from "@server/features/monitoringReports/createMonitoringReport";
+import { GetMonitoringReportById } from "@server/features/monitoringReports/getMonitoringReport";
 
 describe("saveMonitoringReports", () => {
   it("should not save responses without an option id", async () => {
@@ -283,5 +281,5 @@ describe("saveMonitoringReports validation", () => {
 });
 
 function getDto(context: TestContext, report: ISalesforceMonitoringReportHeader): Promise<MonitoringReportDto> {
-  return context.runQuery(new GetMonitoringReport(report.Acc_Project__c, report.Acc_ProjectPeriodNumber__c));
+  return context.runQuery(new GetMonitoringReportById(report.Acc_Project__c, report.Id));
 }
