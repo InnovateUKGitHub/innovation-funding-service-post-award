@@ -1,8 +1,8 @@
 // tslint:disable: no-duplicate-string no-big-function
 
 import { TestContext } from "../../testContextProvider";
-import { GetMonitoringReport } from "../../../../src/server/features/monitoringReports/getMonitoringReport";
 import { MonitoringReportStatus } from "../../../../src/types/constants/monitoringReportStatus";
+import { GetMonitoringReportById } from "@server/features/monitoringReports/getMonitoringReport";
 
 describe("GetMonitoringReport", () => {
 
@@ -18,7 +18,7 @@ describe("GetMonitoringReport", () => {
     testData.createMonitoringReportResponse(report, question1Options[0]);
     testData.createMonitoringReportResponse(report, question2Options[0]);
 
-    const query = new GetMonitoringReport(report.Acc_Project__c, report.Acc_ProjectPeriodNumber__c);
+    const query = new GetMonitoringReportById(report.Acc_Project__c, report.Id);
 
     const result = await context.runQuery(query);
     expect(result.questions).toHaveLength(2);
@@ -33,7 +33,7 @@ describe("GetMonitoringReport", () => {
 
     const report = testData.createMonitoringReportHeader();
 
-    const query = new GetMonitoringReport(report.Acc_Project__c, report.Acc_ProjectPeriodNumber__c);
+    const query = new GetMonitoringReportById(report.Acc_Project__c, report.Id);
 
     const result = await context.runQuery(query);
     expect(result.questions).toHaveLength(2);
@@ -47,7 +47,7 @@ describe("GetMonitoringReport", () => {
 
     const report = testData.createMonitoringReportHeader();
 
-    const query = new GetMonitoringReport(report.Acc_Project__c, report.Acc_ProjectPeriodNumber__c);
+    const query = new GetMonitoringReportById(report.Acc_Project__c, report.Id);
 
     const result = await context.runQuery(query);
 
@@ -73,7 +73,7 @@ describe("GetMonitoringReport", () => {
 
     const report = testData.createMonitoringReportHeader(project, expectedPeriodId, { Acc_MonitoringReportStatus__c: "Awaiting IUK Approval" });
 
-    const query = new GetMonitoringReport(report.Acc_Project__c, report.Acc_ProjectPeriodNumber__c);
+    const query = new GetMonitoringReportById(report.Acc_Project__c, report.Id);
 
     const result = await context.runQuery(query);
     expect(result.periodId).toBe(expectedPeriodId);
@@ -95,7 +95,7 @@ describe("GetMonitoringReport", () => {
 
     const question2Answer = testData.createMonitoringReportResponse(report, question2Options[2]);
 
-    const query = new GetMonitoringReport(report.Acc_Project__c, report.Acc_ProjectPeriodNumber__c);
+    const query = new GetMonitoringReportById(report.Acc_Project__c, report.Id);
     const result = await context.runQuery(query);
 
     expect(result.questions[0].responseId).toBeNull();
@@ -119,7 +119,7 @@ describe("GetMonitoringReport", () => {
 
     const report = testData.createMonitoringReportHeader();
 
-    const query = new GetMonitoringReport(report.Acc_Project__c, report.Acc_ProjectPeriodNumber__c);
+    const query = new GetMonitoringReportById(report.Acc_Project__c, report.Id);
 
     const result = await context.runQuery(query);
     expect(result.questions[0].displayOrder).toBe(3);
@@ -136,7 +136,7 @@ describe("GetMonitoringReport", () => {
     testData.createMonitoringReportQuestionSet(1, 5);
     const report = testData.createMonitoringReportHeader();
 
-    const query = new GetMonitoringReport(report.Acc_Project__c, report.Acc_ProjectPeriodNumber__c);
+    const query = new GetMonitoringReportById(report.Acc_Project__c, report.Id);
 
     const result = await context.runQuery(query);
 
@@ -154,7 +154,7 @@ describe("GetMonitoringReport", () => {
 
     const report = testData.createMonitoringReportHeader(undefined, undefined, { Acc_MonitoringReportStatus__c: "Draft" });
 
-    const query = new GetMonitoringReport(report.Acc_Project__c, report.Acc_ProjectPeriodNumber__c);
+    const query = new GetMonitoringReportById(report.Acc_Project__c, report.Id);
 
     const result = await context.runQuery(query);
 
@@ -171,13 +171,13 @@ describe("GetMonitoringReport", () => {
     const question2 = testData.createMonitoringReportQuestionSet(2, 3, false);
     const question3 = testData.createMonitoringReportQuestionSet(3, 3);
 
-    const report = testData.createMonitoringReportHeader(undefined, undefined, { Acc_MonitoringReportStatus__c: "Approved" });
+    const report = testData.createMonitoringReportHeader(undefined, undefined, { Acc_MonitoringReportStatus__c: "Awaiting IUK Approval" });
 
     testData.createMonitoringReportResponse(report, question1[1]);
     testData.createMonitoringReportResponse(report, question2[2]);
     testData.createMonitoringReportResponse(report, question3[0]);
 
-    const query = new GetMonitoringReport(report.Acc_Project__c, report.Acc_ProjectPeriodNumber__c);
+    const query = new GetMonitoringReportById(report.Acc_Project__c, report.Id);
 
     const result = await context.runQuery(query);
     expect(result.questions).toHaveLength(3);

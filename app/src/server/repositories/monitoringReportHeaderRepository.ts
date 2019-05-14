@@ -3,9 +3,10 @@ import { NotFoundError } from "../features/common";
 import { IRecordTypeRepository, RecordTypeRepository } from ".";
 import { Connection } from "jsforce";
 
+export type ISalesforceMonitoringReportStatus = "New" | "Draft" | "Awaiting IUK Approval" | "Approved" | "IUK Queried";
 export interface ISalesforceMonitoringReportHeader {
   Id: string;
-  Acc_MonitoringReportStatus__c: "New" | "Draft" | "Awaiting IUK Approval" | "Approved" | "IUK Queried";
+  Acc_MonitoringReportStatus__c: ISalesforceMonitoringReportStatus;
   MonitoringReportStatusName: string;
   Acc_Project__c: string;
   Acc_ProjectPeriodNumber__c: number;

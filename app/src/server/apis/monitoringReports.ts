@@ -1,6 +1,6 @@
 import { ApiParams, ControllerBaseWithSummary } from "./controllerBase";
 import contextProvider from "../features/common/contextProvider";
-import { GetMonitoringReport, GetMonitoringReportById } from "../features/monitoringReports/getMonitoringReport";
+import { GetMonitoringReportById } from "../features/monitoringReports/getMonitoringReport";
 import { SaveMonitoringReport } from "../features/monitoringReports/saveMonitoringReport";
 import { processDto } from "../../shared/processResponse";
 import { GetMonitoringReportsForProject } from "../features/monitoringReports/getMonitoringReportsForProject";
@@ -47,7 +47,7 @@ class Controller extends ControllerBaseWithSummary<MonitoringReportSummaryDto, M
     const context = contextProvider.start(params);
 
     await context.runCommand(new SaveMonitoringReport(monitoringReportDto, submit));
-    return context.runQuery(new GetMonitoringReport(monitoringReportDto.projectId, monitoringReportDto.periodId));
+    return context.runQuery(new GetMonitoringReportById(monitoringReportDto.projectId, monitoringReportDto.headerId));
   }
 
   public async createMonitoringReport(params: ApiParams<{ monitoringReportDto: MonitoringReportDto, submit: boolean }>) {
