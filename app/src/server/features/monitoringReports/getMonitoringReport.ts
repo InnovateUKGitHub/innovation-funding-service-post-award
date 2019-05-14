@@ -1,11 +1,7 @@
-import { BadRequestError, QueryBase } from "../common";
-import { Authorisation, IContext, ProjectRole } from "../../../types";
-import { MonitoringReportDto, MonitoringReportQuestionDto } from "../../../types/dtos/monitoringReportDto";
-import {
-  ISalesforceMonitoringReportHeader,
-  ISalesforceMonitoringReportResponse,
-  ISalesforceMonitoringReportStatus
-} from "@server/repositories";
+import { BadRequestError, QueryBase } from "@server/features/common";
+import { ISalesforceMonitoringReportHeader, ISalesforceMonitoringReportResponse, ISalesforceMonitoringReportStatus } from "@server/repositories";
+import { MonitoringReportDto, MonitoringReportQuestionDto, ProjectRole } from "@framework/dtos";
+import { Authorisation, IContext } from "@framework/types";
 import { GetMonitoringReportActiveQuestions } from "./getMonitoringReportActiveQuestions";
 import { GetMonitoringReportAnsweredQuestions } from "./getMonitoringReportAnsweredQuestions";
 import { mapMonitoringReportStatus } from "./mapMonitoringReportStatus";

@@ -3,7 +3,7 @@ import * as ACC from "../";
 import { ClaimLogRoute, ClaimsDetailsRoute, PrepareClaimRoute, ReviewClaimRoute } from "../../containers";
 import { ProjectDto } from "@framework/types";
 import { connect } from "react-redux";
-import { RootState } from "@framework/ui/redux";
+import { RootState } from "@ui/redux";
 import { State } from "router5";
 
 interface Props {

@@ -1,7 +1,7 @@
 // tslint:disable:no-identical-functions no-duplicate-string no-big-function
 import { TestContext } from "../../testContextProvider";
-import { GetPeriodInfoQuery } from "../../../../src/server/features/projects/getPeriodInfoQuery";
-import { ClaimFrequency } from "../../../../src/types";
+import { GetPeriodInfoQuery } from "@server/features/projects/getPeriodInfoQuery";
+import { ClaimFrequency } from "@framework/types";
 
 const mapTestData = (data: { [key: string]: any }[]) => {
   return data.map(item => Object.keys(item).map((k) => item[k]));

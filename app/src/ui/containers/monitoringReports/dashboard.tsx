@@ -1,15 +1,15 @@
-import * as Selectors from "../../redux/selectors";
 import React from "react";
-import * as Dtos from "../../../types";
-import { ContainerBase, ReduxContainer } from "../containerBase";
-import * as Actions from "../../redux/actions";
-import * as ACC from "../../components";
-import { Pending } from "../../../shared/pending";
-import { MonitoringReportCreateRoute, MonitoringReportPrepareRoute } from "./prepare";
-import { MonitoringReportViewRoute } from "./details";
-import { ProjectRole } from "../../../types";
+import * as ACC from "@ui/components";
+import * as Actions from "@ui/redux/actions";
+import * as Dtos from "@framework/dtos";
+import * as Selectors from "@ui/redux/selectors";
+import { ContainerBase, ReduxContainer } from "@ui/containers/containerBase";
+import { Pending } from "@shared/pending";
 import { ProjectDashboardRoute } from "@ui/containers";
-import { MonitoringReportStatus } from "@framework/types/constants/monitoringReportStatus";
+import { ProjectRole } from "@framework/types";
+import { MonitoringReportStatus } from "@framework/constants";
+import { MonitoringReportViewRoute } from "./details";
+import { MonitoringReportCreateRoute, MonitoringReportPrepareRoute } from "./prepare";
 
 interface Params {
   projectId: string;

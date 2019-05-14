@@ -1,7 +1,7 @@
 import { ApiParams, ControllerBase } from "./controllerBase";
 import contextProvider from "../features/common/contextProvider";
 import { GetAllForProjectQuery, GetAllQuery, GetByIdQuery } from "../features/partners";
-import { PartnerDto } from "../../types";
+import { PartnerDto } from "@framework/types";
 
 export interface IPartnersApi {
   getAll: (params: ApiParams<{}>) => Promise<PartnerDto[]>;

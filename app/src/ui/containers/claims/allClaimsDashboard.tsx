@@ -1,12 +1,12 @@
 import { ContainerBase, ReduxContainer } from "../containerBase";
 import * as Actions from "../../redux/actions";
 import { Pending } from "../../../shared/pending";
-import { ClaimDto, PartnerDto, ProjectDto, ProjectRole } from "../../../types/dtos";
+import { ClaimDto, PartnerDto, ProjectDto, ProjectRole } from "@framework/dtos";
 import * as Selectors from "../../redux/selectors";
 import React from "react";
 import * as Acc from "../../components";
 import { Accordion, AccordionItem } from "../../components";
-import { ClaimStatus } from "../../../types";
+import { ClaimStatus } from "@framework/types";
 import { DateTime } from "luxon";
 import { ProjectDashboardRoute } from "@ui/containers";
 

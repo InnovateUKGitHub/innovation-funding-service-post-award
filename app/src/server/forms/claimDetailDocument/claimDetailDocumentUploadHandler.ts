@@ -2,11 +2,11 @@ import { getClaimDetailDocumentEditor } from "../../../ui/redux/selectors";
 import { FormHandlerBase, IFormBody, IFormButton } from "../formHandlerBase";
 import { Results } from "../../../ui/validation/results";
 import { ClaimDetailDocumentsPageParams, ClaimDetailDocumentsRoute } from "../../../ui/containers";
-import { FileUpload } from "../../../types/FileUpload";
+import { FileUpload } from "@framework/types/FileUpload";
 import { UploadClaimDetailDocumentCommand } from "../../features/documents/uploadClaimDetailDocument";
 import { upload } from "../memoryStorage";
-import { ILinkInfo } from "../../../types/ILinkInfo";
-import { IContext } from "../../../types/IContext";
+import { ILinkInfo } from "@framework/types/ILinkInfo";
+import { IContext } from "@framework/types/IContext";
 
 export class ClaimDetailDocumentUploadHandler extends FormHandlerBase<ClaimDetailDocumentsPageParams, FileUpload> {
     constructor() {

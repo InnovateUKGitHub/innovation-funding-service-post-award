@@ -1,5 +1,5 @@
 import { Stream } from "stream";
-import { FileUpload } from "../../types/FileUpload";
+import { FileUpload } from "@framework/types/FileUpload";
 import SalesforceRepositoryBase from "./salesforceRepositoryBase";
 
 interface ISalesforceContentVersion {

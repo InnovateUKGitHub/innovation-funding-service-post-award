@@ -1,4 +1,4 @@
-import { LogLevel, parseLogLevel } from "../../../types/logLevel";
+import { LogLevel, parseLogLevel } from "@framework/types/logLevel";
 
 const defaultCacheTimeout: number = 720;
 

@@ -1,10 +1,7 @@
 import React from "react";
 import { Link as RouterLink } from "react-router5";
-import { RootState } from "../redux/reducers";
-import { IClientUser } from "../../types";
-import { ILinkInfo } from "../../types/ILinkInfo";
-import { connect as reduxConnect } from "react-redux";
-import { scrollToTheTopInstantly } from "../../util/windowHelpers";
+import { ILinkInfo } from "@framework/types/ILinkInfo";
+import { scrollToTheTopInstantly } from "@framework/util/windowHelpers";
 
 interface Props {
   id?: string;

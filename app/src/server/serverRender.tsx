@@ -6,18 +6,17 @@ import { Provider } from "react-redux";
 import { RouterProvider } from "react-router5";
 import { constants as routerConstants, Router, State } from "router5";
 
-import { rootReducer, RootState, setupInitialState, setupMiddleware } from "../ui/redux";
 import { errorHandlerRender } from "./errorHandlers";
-import { configureRouter, MatchedRoute, matchRoute } from "../ui/routing";
-import { App } from "../ui/containers/app";
-import { AsyncThunk, handleEditorError, udpatePageTitle, updateEditorAction } from "../ui/redux/actions";
-import { IAppError } from "../types/IAppError";
+import { rootReducer, RootState, setupInitialState, setupMiddleware } from "@ui/redux";
+import { configureRouter, MatchedRoute, matchRoute } from "@ui/routing";
+import { App } from "@ui/containers/app";
+import { AsyncThunk, handleEditorError, udpatePageTitle, updateEditorAction } from "@ui/redux/actions";
 import { renderHtml } from "./html";
 import { ForbiddenError, FormHandlerError, NotFoundError } from "./features/common/appError";
 import contextProvider from "./features/common/contextProvider";
 import { GetAllProjectRolesForUser } from "./features/projects/getAllProjectRolesForUser";
-import { Authorisation, IClientUser } from "../types";
 import { Logger } from "./features/common/logger";
+import { Authorisation, IAppError, IClientUser } from "@framework/types";
 
 async function loadData(dispatch: Dispatch, getState: () => RootState, dataCalls: AsyncThunk<any>[]): Promise<void> {
   const allPromises = dataCalls.map(action => action(dispatch, getState, null));

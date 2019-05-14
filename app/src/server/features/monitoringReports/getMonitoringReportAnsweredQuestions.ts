@@ -1,6 +1,6 @@
 import { QueryBase } from "../common";
-import { MonitoringReportQuestionDto } from "../../../types/dtos/monitoringReportDto";
-import { Authorisation, IContext } from "../../../types";
+import { MonitoringReportQuestionDto } from "@framework/dtos/monitoringReportDto";
+import { Authorisation, IContext } from "@framework/types";
 
 export class GetMonitoringReportAnsweredQuestions extends QueryBase<MonitoringReportQuestionDto[]> {
 

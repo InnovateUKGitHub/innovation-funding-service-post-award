@@ -3,10 +3,10 @@ import { ContainerBase, ReduxContainer } from "../containerBase";
 import * as Actions from "../../redux/actions";
 import * as Selectors from "../../redux/selectors";
 import * as ACC from "../../components";
-import * as Dtos from "../../../types";
+import * as Dtos from "@framework/types";
 import { Pending } from "../../../shared/pending";
 import { MonitoringReportDashboardRoute } from "./dashboard";
-import { MonitoringReportQuestionDto, ProjectRole } from "../../../types";
+import { MonitoringReportQuestionDto, ProjectRole } from "@framework/types";
 
 interface Params {
   projectId: string;

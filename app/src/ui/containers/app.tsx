@@ -5,9 +5,9 @@ import { MatchedRoute, matchRoute } from "@ui/routing";
 import { Footer, Header, PhaseBanner } from "@ui/components";
 import { StandardErrorPage } from "@ui/components/standardErrorPage";
 import { RootState } from "@ui/redux";
+import { udpatePageTitle } from "@ui/redux/actions";
 import { IClientConfig } from "@ui/redux/reducers/configReducer";
 import { Authorisation, IClientUser } from "@framework/types";
-import { udpatePageTitle } from "../redux/actions";
 
 interface IAppProps extends RouterState {
   dispatch: any;

@@ -1,5 +1,5 @@
 import { ISalesforceMonitoringReportHeader } from "@server/repositories";
-import { MonitoringReportStatus } from "@framework/types/constants/monitoringReportStatus";
+import { MonitoringReportStatus } from "@framework/constants";
 import { MonitoringReportStatusChangeDto } from "@framework/types";
 
 export function mapMonitoringReportStatus(report: ISalesforceMonitoringReportHeader | MonitoringReportStatusChangeDto) {

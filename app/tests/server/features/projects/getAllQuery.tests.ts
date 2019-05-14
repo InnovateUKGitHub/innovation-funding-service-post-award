@@ -1,7 +1,7 @@
 // tslint:disable:no-bitwise
 import { TestContext } from "../../testContextProvider";
-import { GetAllQuery } from "../../../../src/server/features/projects";
-import { ProjectRole } from "../../../../src/types";
+import { GetAllQuery } from "@server/features/projects";
+import { ProjectRole } from "@framework/types";
 
 describe("ProjectsGetAllQuery", () => {
   it("when valid returns all projects", async () => {

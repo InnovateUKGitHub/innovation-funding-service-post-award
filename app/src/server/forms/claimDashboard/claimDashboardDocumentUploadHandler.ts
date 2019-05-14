@@ -2,13 +2,13 @@ import { getClaimDocumentEditor } from "../../../ui/redux/selectors";
 import { FormHandlerBase, IFormBody, IFormButton } from "../formHandlerBase";
 import { Results } from "../../../ui/validation/results";
 import { ClaimDashboardPageParams, ClaimsDashboardRoute } from "../../../ui/containers";
-import { FileUpload } from "../../../types/FileUpload";
+import { FileUpload } from "@framework/types/FileUpload";
 import { UploadClaimDocumentCommand } from "../../features/documents/uploadClaimDocument";
-import { DocumentDescription } from "../../../types/constants";
 import { FileUploadValidator } from "../../../ui/validators/documentUploadValidator";
 import { upload } from "../memoryStorage";
-import { ILinkInfo } from "../../../types/ILinkInfo";
-import { IContext } from "../../../types/IContext";
+import { DocumentDescription } from "@framework/constants";
+import { ILinkInfo } from "@framework/types/ILinkInfo";
+import { IContext } from "@framework/types/IContext";
 
 interface Data {
   file: FileUpload;

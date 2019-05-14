@@ -1,7 +1,7 @@
 import { QueryBase } from "@server/features/common";
-import { Authorisation, IContext, MonitoringReportStatusChangeDto, ProjectRole } from "@framework/types";
-import { dateComparator } from "@util/comparator";
 import { mapMonitoringReportStatus } from "@server/features/monitoringReports/mapMonitoringReportStatus";
+import { Authorisation, IContext, MonitoringReportStatusChangeDto, ProjectRole } from "@framework/types";
+import { dateComparator } from "@framework/util";
 
 export class GetMonitoringReportStatusChanges extends QueryBase<MonitoringReportStatusChangeDto[]> {
   constructor(

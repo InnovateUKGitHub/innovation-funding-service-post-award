@@ -1,5 +1,5 @@
-import { ClaimDto } from "../../../src/types/dtos";
-import { ClaimStatus } from "../../../src/types/constants";
+import { ClaimStatus } from "@framework/constants";
+import { ClaimDto } from "@framework/dtos";
 
 export default (mod?: Partial<ClaimDto>): ClaimDto => {
   const template: ClaimDto = {

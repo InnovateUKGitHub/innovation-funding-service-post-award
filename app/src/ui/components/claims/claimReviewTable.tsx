@@ -1,7 +1,7 @@
 import React from "react";
 import { Link, TypedTable } from "..";
-import { ClaimDto, PartnerDto, ProjectDto } from "../../../types";
-import { ILinkInfo } from "../../../types/ILinkInfo";
+import { ClaimDto, PartnerDto, ProjectDto } from "@framework/types";
+import { ILinkInfo } from "@framework/types/ILinkInfo";
 import { CostsSummaryForPeriodValidator } from "@ui/validators";
 
 interface Props {

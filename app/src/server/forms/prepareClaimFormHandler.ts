@@ -1,13 +1,13 @@
 import { FormHandlerBase, IFormBody, IFormButton } from "./formHandlerBase";
 import { AllClaimsDashboardRoute, ClaimForecastRoute, ClaimsDashboardRoute, PrepareClaimParams, PrepareClaimRoute } from "../../ui/containers";
 import { Results } from "../../ui/validation/results";
-import { ClaimDto, ClaimStatus, ProjectRole } from "../../types";
+import { ClaimDto, ClaimStatus, ProjectRole } from "@framework/types";
 import { GetClaim } from "../features/claims";
 import { UpdateClaimCommand } from "../features/claims/updateClaim";
 import { ClaimDtoValidator } from "../../ui/validators/claimDtoValidator";
 import { getClaimEditor } from "../../ui/redux/selectors";
-import { ILinkInfo } from "../../types/ILinkInfo";
-import { IContext } from "../../types/IContext";
+import { ILinkInfo } from "@framework/types/ILinkInfo";
+import { IContext } from "@framework/types/IContext";
 import { GetAllProjectRolesForUser } from "../features/projects";
 
 export class PrepareClaimFormHandler extends FormHandlerBase<PrepareClaimParams, ClaimDto> {

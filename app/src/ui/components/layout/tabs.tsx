@@ -1,7 +1,7 @@
 import React from "react";
 import cn from "classnames";
 import { Link } from "../links";
-import { ILinkInfo } from "../../../types/ILinkInfo";
+import { ILinkInfo } from "@framework/types/ILinkInfo";
 
 export interface TabItem {
     text: string;

@@ -1,6 +1,6 @@
 import React from "react";
 import * as ACC from "..";
-import {PartnerDto} from "../../../types";
+import {PartnerDto} from "@framework/types";
 
 interface Props {
   partner: PartnerDto | null;

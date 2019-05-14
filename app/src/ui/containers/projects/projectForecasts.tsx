@@ -4,7 +4,7 @@ import * as ACC from "../../components";
 import { Pending } from "@shared/pending";
 import * as Actions from "../../redux/actions";
 import * as Selectors from "../../redux/selectors";
-import { PartnerDto, ProjectDto, ProjectRole } from "../../../types/dtos";
+import { PartnerDto, ProjectDto, ProjectRole } from "@framework/dtos";
 import { ViewForecastRoute } from "../claims";
 import { ProjectDashboardRoute } from "@ui/containers";
 

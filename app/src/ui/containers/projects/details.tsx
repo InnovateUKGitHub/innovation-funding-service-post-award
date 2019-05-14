@@ -4,10 +4,10 @@ import * as ACC from "../../components";
 import { Pending } from "../../../shared/pending";
 import * as Actions from "../../redux/actions";
 import * as Selectors from "../../redux/selectors";
-import { PartnerDto, ProjectDto, ProjectRole } from "../../../types";
+import { PartnerDto, ProjectDto, ProjectRole } from "@framework/types";
 import { AllClaimsDashboardRoute } from "../claims/allClaimsDashboard";
 import { ClaimsDashboardRoute } from "../claims/dashboard";
-import { AccessibilityText } from "@framework/ui/components/renderers";
+import { AccessibilityText } from "@ui/components/renderers";
 
 interface Data {
     projectDetails: Pending<ProjectDto>;

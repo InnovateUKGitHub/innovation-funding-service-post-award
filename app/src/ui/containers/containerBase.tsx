@@ -3,13 +3,11 @@ import React from "react";
 import { ThunkDispatch } from "redux-thunk";
 import { connect as reduxConnect } from "react-redux";
 import { State as RouteState } from "router5";
-import { RootState } from "../redux/reducers/rootReducer";
-import { RootActions } from "../redux/actions/root";
-import { matchRoute } from "../routing/matchRoute";
-import { AsyncThunk } from "../redux/actions";
-import { IClientUser } from "../../types/IUser";
-import { ILinkInfo } from "../../types/ILinkInfo";
-import { Authorisation } from "../../types";
+import { RootState } from "@ui/redux/reducers/rootReducer";
+import { RootActions } from "@ui/redux/actions/root";
+import { AsyncThunk } from "@ui/redux/actions";
+import { matchRoute } from "@ui/routing/matchRoute";
+import { Authorisation, IClientUser, ILinkInfo } from "@framework/types";
 
 interface BaseProps {
   messages: string[];

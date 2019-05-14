@@ -1,7 +1,7 @@
+import { RootState } from "@ui/redux/reducers";
+import { ForecastDetailsDtosValidator } from "@ui/validators/forecastDetailsDtosValidator";
+import { getKey } from "@framework/util/key";
 import { dataStoreHelper, editorStoreHelper } from "./common";
-import { getKey } from "../../../util/key";
-import { RootState } from "../reducers";
-import { ForecastDetailsDtosValidator } from "../../validators/forecastDetailsDtosValidator";
 import { findClaimDetailsByPartner, findClaimsByPartner } from "./claims";
 
 export const forecastDetailsStore = "forecastDetails";

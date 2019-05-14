@@ -13,7 +13,7 @@ import {
   PendingForecastData,
   renderWarning,
 } from "./common";
-import { PartnerDto, ProjectRole } from "../../../../types";
+import { PartnerDto, ProjectRole } from "@framework/types";
 import { ProjectDashboardRoute, ProjectForecastRoute } from "../../projects";
 import { Percentage, SimpleString } from "../../../components/renderers";
 import { isNumber } from "@framework/util";

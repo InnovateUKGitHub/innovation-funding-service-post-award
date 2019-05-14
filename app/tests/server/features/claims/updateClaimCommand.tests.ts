@@ -2,7 +2,7 @@
 import { TestContext } from "../../testContextProvider";
 import { UpdateClaimCommand } from "@server/features/claims/updateClaim";
 import mapClaim from "@server/features/claims/mapClaim";
-import { ClaimStatus } from "@framework/types/constants";
+import { ClaimStatus } from "@framework/constants";
 import { ValidationError } from "@server/features/common/appError";
 import { Authorisation, ProjectRole } from "@framework/types";
 

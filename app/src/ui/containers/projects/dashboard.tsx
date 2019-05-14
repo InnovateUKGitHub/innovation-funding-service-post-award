@@ -4,7 +4,7 @@ import * as ACC from "../../components";
 import { Pending } from "../../../shared/pending";
 import * as Actions from "../../redux/actions";
 import { ContainerBase, ReduxContainer } from "../containerBase";
-import { PartnerClaimStatus, PartnerDto, ProjectDto, ProjectRole, ProjectStatus } from "../../../types";
+import { PartnerClaimStatus, PartnerDto, ProjectDto, ProjectRole, ProjectStatus } from "@framework/types";
 import { DateTime } from "luxon";
 import * as colour from "../../styles/colours";
 import { HomeRoute } from "../home";
