@@ -8,7 +8,7 @@ import * as ACC from "../../components";
 import { DocumentList, NavigationArrows } from "../../components";
 import { State } from "router5";
 import { ReviewClaimRoute } from "./review";
-import { ClaimDto, ILinkInfo, PartnerDto, ProjectDto, ProjectRole } from "../../../types";
+import { ClaimDto, ILinkInfo, PartnerDto, ProjectDto, ProjectRole } from "@framework/types";
 import classNames from "classnames";
 
 interface Params {

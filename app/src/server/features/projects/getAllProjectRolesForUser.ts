@@ -1,6 +1,6 @@
 import { QueryBase } from "../common/queryBase";
 import { ISalesforcePartner, ISalesforceProjectContact, SalesforceProjectRole, SalesforceRole } from "../../repositories";
-import { Authorisation, IContext, ProjectRole } from "../../../types";
+import { Authorisation, IContext, ProjectRole } from "@framework/types";
 
 export interface IRoleInfo {
   projectRoles: ProjectRole;

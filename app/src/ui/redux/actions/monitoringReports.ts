@@ -2,7 +2,7 @@ import * as Actions from "@ui/redux/actions/common";
 import * as Selectors from "@ui/redux/selectors";
 import { ApiClient } from "@ui/apiClient";
 import { MonitoringReportDtoValidator } from "@ui/validators";
-import { scrollToTheTopSmoothly } from "@util/windowHelpers";
+import { scrollToTheTopSmoothly } from "@framework/util/windowHelpers";
 import { LoadingStatus } from "@shared/pending";
 import { MonitoringReportDto, MonitoringReportQuestionDto, ProjectDto } from "@framework/types";
 

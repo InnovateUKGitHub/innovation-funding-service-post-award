@@ -1,7 +1,7 @@
 import React from "react";
 import { ContainerBase, ReduxContainer } from "../containerBase";
 import * as Acc from "@ui/components";
-import { PartnerDto, ProjectDto, ProjectRole } from "../../../types/dtos";
+import { PartnerDto, ProjectDto, ProjectRole } from "@framework/dtos";
 import { Pending } from "@shared/pending";
 import * as Selectors from "../../redux/selectors";
 import * as Actions from "../../redux/actions";

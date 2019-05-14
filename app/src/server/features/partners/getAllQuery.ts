@@ -1,5 +1,5 @@
 import { QueryBase } from "../common";
-import { IContext, PartnerDto } from "../../../types";
+import { IContext, PartnerDto } from "@framework/types";
 import { GetAllProjectRolesForUser } from "../projects";
 import { MapToPartnerDtoCommand } from "./mapToPartnerDto";
 import { sortPartners } from "./sortPartners";

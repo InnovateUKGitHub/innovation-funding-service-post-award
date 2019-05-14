@@ -1,7 +1,7 @@
 import { GetAllQuery, GetByIdQuery } from "../features/projects";
 import { ApiParams, ControllerBase } from "./controllerBase";
 import contextProvider from "../features/common/contextProvider";
-import { ProjectDto } from "../../types";
+import { ProjectDto } from "@framework/types";
 
 export interface IProjectsApi {
   get: (params: ApiParams<{ projectId: string }>) => Promise<ProjectDto | null>;

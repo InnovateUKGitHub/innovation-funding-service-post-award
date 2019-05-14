@@ -3,7 +3,7 @@ import fs from "fs";
 import jwt from "jsonwebtoken";
 import { Cache } from "../features/common/cache";
 import { Configuration } from "../features/common";
-import { LogLevel } from "../../types/logLevel";
+import { LogLevel } from "@framework/types/logLevel";
 
 export interface ISalesforceTokenDetails {
   currentUsername: string;

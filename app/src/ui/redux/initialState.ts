@@ -1,6 +1,6 @@
 import { State as RouterState } from "router5";
 import { RootState } from "./reducers/rootReducer";
-import { IClientUser } from "../../types/IUser";
+import { IClientUser } from "@framework/types/IUser";
 import { IConfig } from "../../server/features/common";
 
 export function setupInitialState(route: RouterState | undefined, user: IClientUser, config: IConfig): RootState {

@@ -2,7 +2,7 @@
 import { TestContext } from "../../testContextProvider";
 import { UploadClaimDocumentCommand } from "@server/features/documents/uploadClaimDocument";
 import { BadRequestError, ValidationError } from "@server/features/common/appError";
-import { ClaimStatus, DocumentDescription } from "@framework/types/constants";
+import { ClaimStatus, DocumentDescription } from "@framework/constants";
 
 const validStatus = [
   ClaimStatus.DRAFT,

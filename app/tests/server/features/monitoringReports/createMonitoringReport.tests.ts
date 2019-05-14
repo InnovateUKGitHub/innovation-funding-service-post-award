@@ -2,9 +2,9 @@
 import { TestContext } from "../../testContextProvider";
 import { CreateMonitoringReport } from "@server/features/monitoringReports/createMonitoringReport";
 import { ISalesforceProject } from "@server/repositories";
-import { MonitoringReportDto } from "@framework/types";
 import { GetMonitoringReportActiveQuestions } from "@server/features/monitoringReports/getMonitoringReportActiveQuestions";
-import { MonitoringReportStatus } from "@framework/types/constants/monitoringReportStatus";
+import { MonitoringReportDto } from "@framework/types";
+import { MonitoringReportStatus } from "@framework/constants";
 
 describe("createMonitoringReports", () => {
 

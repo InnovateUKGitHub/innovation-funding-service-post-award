@@ -1,4 +1,4 @@
-import { Authorisation, IContext } from "../../../types";
+import { Authorisation, IContext } from "@framework/types";
 
 export abstract class CommandBase<T> {
   protected abstract Run(context: IContext): Promise<T>;

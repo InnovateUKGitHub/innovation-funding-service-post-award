@@ -1,6 +1,6 @@
 import React from "react";
 import * as ACC from "..";
-import {ClaimDto, PartnerDto} from "../../../types";
+import {ClaimDto, PartnerDto} from "@framework/types";
 
 interface Props {
   claim: ClaimDto | null;

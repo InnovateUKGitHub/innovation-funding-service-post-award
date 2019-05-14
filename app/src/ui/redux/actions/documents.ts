@@ -4,8 +4,8 @@ import { ApiClient } from "@ui/apiClient";
 import { Results } from "@ui/validation/results";
 import { DocumentUploadValidator } from "@ui/validators";
 import { LoadingStatus } from "@shared/pending";
-import { DocumentDescription } from "@framework/types/constants";
-import { scrollToTheTopSmoothly } from "@util/windowHelpers";
+import { DocumentDescription } from "@framework/constants";
+import { scrollToTheTopSmoothly } from "@framework/util/windowHelpers";
 
 export function loadClaimDetailDocuments(projectId: string, partnerId: string, periodId: number, costCategoryId: string) {
   return Actions.conditionalLoad(

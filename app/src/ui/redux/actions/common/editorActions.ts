@@ -1,5 +1,5 @@
 import { Results } from "@ui/validation/results";
-import { scrollToTheTopSmoothly } from "@util/windowHelpers";
+import { scrollToTheTopSmoothly } from "@framework/util/windowHelpers";
 import { ErrorCode, IAppError } from "@framework/types/IAppError";
 import { createAction } from "./createAction";
 

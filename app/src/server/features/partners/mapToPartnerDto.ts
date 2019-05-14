@@ -1,7 +1,7 @@
 import { DateTime } from "luxon";
 import { SyncCommandBase } from "../common/commandBase";
 import { ISalesforcePartner, SalesforceProjectRole } from "../../repositories/partnersRepository";
-import { PartnerClaimStatus, PartnerDto, ProjectRole } from "../../../types";
+import { PartnerClaimStatus, PartnerDto, ProjectRole } from "@framework/types";
 
 export class MapToPartnerDtoCommand extends SyncCommandBase<PartnerDto> {
     constructor(

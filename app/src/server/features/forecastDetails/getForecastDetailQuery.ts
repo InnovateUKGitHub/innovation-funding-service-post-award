@@ -1,5 +1,5 @@
 import { QueryBase } from "../common";
-import { IContext } from "../../../types";
+import { IContext } from "@framework/types";
 import mapForecastDetail from "./mapForecastDetail";
 
 export class GetForecastDetailQuery extends QueryBase<ForecastDetailsDTO> {

@@ -1,4 +1,4 @@
-import * as Containers from "../containers";
+import * as Containers from "@ui/containers";
 
 export type RouteKeys = keyof typeof routeConfig;
 

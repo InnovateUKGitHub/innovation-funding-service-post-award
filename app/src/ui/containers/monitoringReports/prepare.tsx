@@ -1,13 +1,14 @@
 import { MonitoringReportDashboardRoute } from "./dashboard";
 import React from "react";
 import * as ACC from "../../components/index";
-import { Pending } from "../../../shared/pending";
 import * as Actions from "../../redux/actions/index";
 import * as Selectors from "../../redux/selectors/index";
-import * as Dtos from "../../../types/dtos";
+import * as Dtos from "@framework/dtos";
+import { Pending } from "../../../shared/pending";
 import { ContainerBase, ReduxContainer } from "../containerBase";
 import { IEditorStore } from "../../redux";
 import { MonitoringReportDtoValidator } from "../../validators/MonitoringReportDtoValidator";
+
 export interface MonitoringReportPrepareParams {
   projectId: string;
   id?: string;

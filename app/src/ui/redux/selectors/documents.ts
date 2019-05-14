@@ -1,10 +1,10 @@
 import { dataStoreHelper, editorStoreHelper, IEditorSelector } from "./common";
-import { getKey } from "../../../util/key";
 import { LoadingStatus, Pending } from "../../../shared/pending";
 import {DocumentUploadValidator} from "../../validators/documentUploadValidator";
 import { IEditorStore, RootState } from "../reducers";
 import { getCurrentClaim } from "./claims";
-import { DocumentDescription } from "../../../types";
+import { getKey } from "@framework/util";
+import { DocumentDescription } from "@framework/types";
 import { Results } from "../../validation/results";
 
 export const documentStore = "documents";

@@ -4,7 +4,7 @@ import { ApiClient } from "@ui/apiClient";
 import { ClaimDtoValidator } from "@ui/validators";
 import { LoadingStatus } from "@shared/pending";
 import { ClaimDto, ClaimStatus } from "@framework/types";
-import { scrollToTheTopSmoothly } from "@util/windowHelpers";
+import { scrollToTheTopSmoothly } from "@framework/util/windowHelpers";
 import { loadIarDocuments } from "./documents";
 
 export function loadClaim(partnerId: string, periodId: number) {

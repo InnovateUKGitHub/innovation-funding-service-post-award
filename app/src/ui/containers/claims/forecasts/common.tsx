@@ -6,7 +6,7 @@ import * as Selectors from "../../../redux/selectors";
 import * as ACC from "../../../components";
 import { IEditorStore, RootState } from "../../../redux";
 import { Pending } from "../../../../shared/pending";
-import { ClaimDto, PartnerDto, ProjectDto, ProjectRole } from "../../../../types";
+import { ClaimDto, PartnerDto, ProjectDto, ProjectRole } from "@framework/types";
 import { ForecastDetailsDtosValidator } from "../../../validators/forecastDetailsDtosValidator";
 import { ValidationMessage } from "../../../components";
 import { State } from "router5";

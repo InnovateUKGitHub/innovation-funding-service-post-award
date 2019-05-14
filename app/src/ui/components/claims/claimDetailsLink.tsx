@@ -1,5 +1,5 @@
 import React from "react";
-import { ClaimDto, ClaimStatus, PartnerDto, ProjectDto, ProjectRole } from "../../../types";
+import { ClaimDto, ClaimStatus, PartnerDto, ProjectDto, ProjectRole } from "@framework/types";
 import { Link } from "..";
 import { ClaimsDetailsRoute, PrepareClaimRoute, ReviewClaimRoute } from "../../containers";
 

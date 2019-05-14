@@ -1,4 +1,4 @@
-import { Results } from "../ui/validation/results";
+import { Results } from "@ui/validation/results";
 
 export enum ErrorCode {
   UNKNOWN_ERROR = 1,

@@ -1,6 +1,6 @@
 import { QueryBase } from "@server/features/common";
 import { ISalesforceClaim, SalesforceProjectRole } from "@server/repositories";
-import { IComparer } from "@util/comparator";
+import { IComparer } from "@framework/util/comparator";
 import { ClaimDto, IContext } from "@framework/types";
 import mapClaim from "./mapClaim";
 

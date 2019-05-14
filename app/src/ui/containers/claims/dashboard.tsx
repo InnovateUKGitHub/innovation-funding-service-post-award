@@ -12,7 +12,7 @@ import {
 } from "../../redux/selectors";
 import * as Acc from "../../components";
 import { ContainerBase, ReduxContainer } from "../containerBase";
-import { ClaimDto, ClaimStatus, DocumentDescription, PartnerDto, ProjectDto, ProjectRole } from "../../../types";
+import { ClaimDto, ClaimStatus, DocumentDescription, PartnerDto, ProjectDto, ProjectRole } from "@framework/types";
 import { IEditorStore } from "../../redux/reducers";
 import { DocumentUploadValidator } from "../../validators/documentUploadValidator";
 import { DateTime } from "luxon";

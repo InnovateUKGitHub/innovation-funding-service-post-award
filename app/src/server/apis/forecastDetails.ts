@@ -1,7 +1,7 @@
+import contextProvider from "@server/features/common/contextProvider";
+import { GetAllForecastsForPartnerQuery, GetForecastDetailQuery, UpdateForecastDetailsCommand } from "@server/features/forecastDetails";
+import { processDto } from "@shared/processResponse";
 import { ApiParams, ControllerBase } from "./controllerBase";
-import contextProvider from "../features/common/contextProvider";
-import {GetAllForecastsForPartnerQuery, GetForecastDetailQuery, UpdateForecastDetailsCommand} from "../features/forecastDetails";
-import { processDto } from "../../shared/processResponse";
 
 export interface IForecastDetailsApi {
   getAllByPartnerId: (params: ApiParams<{ partnerId: string }>) => Promise<ForecastDetailsDTO[]>;

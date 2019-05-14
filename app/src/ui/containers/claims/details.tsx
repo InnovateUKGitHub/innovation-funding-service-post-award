@@ -12,7 +12,7 @@ import {
   PartnerDto,
   ProjectDto,
   ProjectRole
-} from "../../../types";
+} from "@framework/types";
 import { AllClaimsDashboardRoute } from "./allClaimsDashboard";
 import { SimpleString } from "../../components/renderers";
 import { ForecastData, forecastDataLoadActions } from "./forecasts/common";
