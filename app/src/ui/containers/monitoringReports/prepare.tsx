@@ -72,6 +72,7 @@ class PrepareMonitoringReportComponent extends ContainerBase<MonitoringReportPre
       <ACC.Page
         backLink={<ACC.BackLink route={MonitoringReportDashboardRoute.getLink({ projectId: this.props.projectId })}>Back to monitoring reports</ACC.BackLink>}
         pageTitle={<ACC.Projects.Title project={project} />}
+        tabs={<ACC.MonitoringReports.Navigation projectId={this.props.projectId} id={this.props.id!} currentRouteName={MonitoringReportCreateRoute.routeName} />}
         validator={editor.validator}
         error={editor.error}
       >

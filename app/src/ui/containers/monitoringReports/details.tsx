@@ -100,7 +100,7 @@ export const MonitoringReportView = containerDefinition.connect({
 
 export const MonitoringReportViewRoute = containerDefinition.route({
   routeName: "monitoringReportView",
-  routePath: "/projects/:projectId/monitoring-reports/:id",
+  routePath: "/projects/:projectId/monitoring-reports/:id/details",
   getParams: (r) => ({ projectId: r.params.projectId, id: r.params.id }),
   getLoadDataActions: (params) => [
     Actions.loadProject(params.projectId),
