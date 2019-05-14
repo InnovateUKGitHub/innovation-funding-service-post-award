@@ -3,7 +3,7 @@ import * as ACC from "@ui/components";
 import * as Actions from "@ui/redux/actions";
 import { AllClaimsDashboardRoute, ClaimsDashboardRoute, PrepareClaimRoute } from "@ui/containers";
 import { ContainerBase, ReduxContainer } from "@ui/containers/containerBase";
-import { isNumber } from "@util/NumberHelper";
+import { isNumber } from "@framework/util";
 import { ProjectDto, ProjectRole } from "@framework/types";
 import { ForecastData, forecastDataLoadActions, PendingForecastData, renderWarning, withDataEditor, } from "./common";
 

@@ -1,5 +1,6 @@
 export * from "./claimDetailsRepository";
 export * from "./claimLineItemRepository";
+export * from "./claimStatusChangeRepository";
 export * from "./claimTotalCostCategoryRepository";
 export * from "./claimsRepository";
 export * from "./costCategoriesRepository";

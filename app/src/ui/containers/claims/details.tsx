@@ -67,7 +67,7 @@ export class ClaimsDetailsComponent extends ContainerBase<Params, Data, {}> {
       <ACC.Page
         backLink={<ACC.BackLink route={backLink}>Back to project</ACC.BackLink>}
         pageTitle={<ACC.Projects.Title project={data.project} />}
-        tabs={<ACC.Claims.Navigation project={data.project} partnerId={data.partner.id} periodId={data.claim.periodId} currentRouteName={ClaimsDetailsRoute.routeName} />}
+        tabs={<ACC.Claims.Navigation project={data.project} partnerId={data.partner.id} periodId={data.claim.periodId} />}
       >
         {this.renderTableSection(data)}
         {this.renderIarSection(data.claim, data.project, data.partner, data.iarDocument)}
@@ -203,7 +203,7 @@ export const ClaimsDetailsRoute = definition.route({
   getTitle: (store, params) => {
     return {
       displayTitle: "Claim",
-      htmlTitle: "View claim - Innovation Funding Service"
+      htmlTitle: "View claim"
     };
   },
   container: ClaimsDetails

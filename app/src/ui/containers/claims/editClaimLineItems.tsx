@@ -4,12 +4,11 @@ import * as Actions from "@ui/redux/actions";
 import * as Selectors from "@ui/redux/selectors";
 import { Pending } from "@shared/pending";
 import { ProjectDto, ProjectRole } from "@framework/types";
-import { IEditorStore } from "@ui/redux";
+import { EditorStatus, IEditorStore } from "@ui/redux";
 import { ContainerBaseWithState, ContainerProps, ReduxContainer } from "@ui/containers/containerBase";
 import { ClaimDetailDocumentsRoute, PrepareClaimRoute } from "@ui/containers";
 import { DocumentList, ValidationMessage } from "@ui/components";
 import { ClaimDetailsValidator, ClaimLineItemDtoValidator } from "@ui/validators/claimDetailsValidator";
-import { AccessibilityText } from "@framework/ui/components/renderers";
 
 export interface EditClaimDetailsParams {
   projectId: string;
@@ -66,9 +65,7 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
   }
 
   // TODO fix back link
-  private renderContents(
-    { project, costCategories, documents, forecastDetail, claimDetails, editor }: CombinedData,
-  ) {
+  private renderContents({ project, costCategories, documents, forecastDetail, claimDetails, editor }: CombinedData) {
     const back = PrepareClaimRoute.getLink({ projectId: project.id, partnerId: this.props.partnerId, periodId: this.props.periodId });
     const costCategory = costCategories.find(x => x.id === this.props.costCategoryId)! || {};
 
@@ -88,32 +85,28 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
   }
 
   private renderCalculated(costCategory: CostCategoryDto, claimDetails: ClaimDetailsDto, forecastDetail: ForecastDetailsDTO, documents: DocumentSummaryDto[], editor: IEditorStore<ClaimDetailsDto, ClaimDetailsValidator> ) {
-
-    const data = {
-      ...editor.data,
-      lineItems: [{
-        costCategoryId: costCategory.id,
-        description: costCategory.name,
-        partnerId: this.props.partnerId,
-        periodId: this.props.periodId,
-        id: "",
-        value: claimDetails.value
-      }]
-    };
+    const mockItems = [{
+      costCategoryId: costCategory.id,
+      description: costCategory.name,
+      partnerId: this.props.partnerId,
+      periodId: this.props.periodId,
+      id: "",
+      value: claimDetails.value
+    }];
 
     const LineItemForm = ACC.TypedForm<ClaimDetailsDto>();
     const LineItemTable = ACC.TypedTable<ClaimLineItemDto>();
 
     return (
       <LineItemForm.Form
-        data={data}
+        editor={editor}
         onSubmit={() => this.props.save(this.props.projectId, this.props.partnerId, this.props.periodId, this.props.costCategoryId, editor.data)}
         qa="current-claim-summary-form"
       >
         <LineItemForm.Fieldset>
           <LineItemTable.Table
-            data={data.lineItems}
-            footers={this.renderFooters(data.lineItems, forecastDetail, false, editor)}
+            data={mockItems}
+            footers={this.renderFooters(mockItems, forecastDetail, false, editor)}
             qa="current-claim-summary-table"
           >
             <LineItemTable.String header="Description" qa="cost-description" value={(x, i) => x.description} />
@@ -150,7 +143,7 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
 
     return (
       <LineItemForm.Form
-        data={editor.data}
+        editor={editor}
         onSubmit={() => this.props.save(this.props.projectId, this.props.partnerId, this.props.periodId, this.props.costCategoryId, editor.data)}
         qa="current-claim-summary-form"
       >
@@ -207,7 +200,8 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
         <ACC.Inputs.NumberInput
           name={`value${index.row}`}
           value={item.value}
-          onChange={val => this.updateItem(index, editor, dto => (dto.value = val!))}
+          disabled={editor.status === EditorStatus.Saving}
+          onChange={val => this.updateItem(index, editor, dto => dto.value = val!)}
           ariaLabel={`value of claim line item ${index.row + 1}`}
         />
       </span>
@@ -221,7 +215,8 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
         <ACC.Inputs.TextInput
           name={`description${index.row}`}
           value={item.description}
-          onChange={val => this.updateItem(index, editor, dto => (dto.description = val!))}
+          disabled={editor.status === EditorStatus.Saving}
+          onChange={val => this.updateItem(index, editor, dto => dto.description = val!)}
           ariaLabel={`description of claim line item ${index.row + 1}`}
         />
       </span>
@@ -272,7 +267,7 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
       <tr key={2} className="govuk-table__row">
         <td className="govuk-table__cell govuk-table__cell--numeric govuk-!-font-weight-bold">Total costs</td>
         <td className="govuk-table__cell govuk-table__cell--numeric"><ACC.Renderers.Currency value={total} /></td>
-        {showAddRemove ? <td className="govuk-table__cell"><AccessibilityText>No data</AccessibilityText></td> : null}
+        {showAddRemove ? <td className="govuk-table__cell"><ACC.Renderers.AccessibilityText>No data</ACC.Renderers.AccessibilityText></td> : null}
       </tr>
     );
 
@@ -280,7 +275,7 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
       <tr key={3} className="govuk-table__row">
         <td className="govuk-table__cell govuk-table__cell--numeric govuk-!-font-weight-bold">Forecast costs</td>
         <td className="govuk-table__cell govuk-table__cell--numeric"><ACC.Renderers.Currency value={forecast} /></td>
-        {showAddRemove ? <td className="govuk-table__cell"><AccessibilityText>No data</AccessibilityText></td> : null}
+        {showAddRemove ? <td className="govuk-table__cell"><ACC.Renderers.AccessibilityText>No data</ACC.Renderers.AccessibilityText></td> : null}
       </tr>
     );
 
@@ -289,7 +284,7 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
         <tr key={4} className="govuk-table__row">
           <td className="govuk-table__cell govuk-table__cell--numeric govuk-!-font-weight-bold">Difference</td>
           <td className="govuk-table__cell govuk-table__cell--numeric"><ACC.Renderers.Percentage value={diff} /></td>
-          {showAddRemove ? <td className="govuk-table__cell"><AccessibilityText>No data</AccessibilityText></td> : null}
+          {showAddRemove ? <td className="govuk-table__cell"><ACC.Renderers.AccessibilityText>No data</ACC.Renderers.AccessibilityText></td> : null}
         </tr>
       );
     }

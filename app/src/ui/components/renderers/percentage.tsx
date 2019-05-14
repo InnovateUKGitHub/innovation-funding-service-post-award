@@ -1,6 +1,5 @@
 import React from "react";
-import {isNumber} from "../../../util/NumberHelper";
-import { SimpleString } from "./simpleString";
+import { isNumber } from "@framework/util";
 
 interface Props {
   value: number | null;

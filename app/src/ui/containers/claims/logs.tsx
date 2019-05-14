@@ -12,6 +12,7 @@ interface Params {
   projectId: string;
   partnerId: string;
   periodId: number;
+  action: "review" | "prepare" | "details";
 }
 
 interface Data {
@@ -19,7 +20,7 @@ interface Data {
   statusChanges: Pending<Dtos.ClaimStatusChangeDto[]>;
 }
 
-interface Callbacks {}
+interface Callbacks { }
 
 class LogComponent extends ContainerBase<Params, Data, Callbacks> {
   render() {
@@ -30,28 +31,56 @@ class LogComponent extends ContainerBase<Params, Data, Callbacks> {
     return <ACC.PageLoader pending={combined} render={(data) => this.renderContents(data.project, data.statusChanges)} />;
   }
 
-  private renderLogTable(statusChanges: Dtos.ClaimStatusChangeDto[]) {
-    const Table = ACC.TypedTable<Dtos.ClaimStatusChangeDto>();
-    return (
-      <Table.Table data={statusChanges} qa="claim-status-change-table">
-        <Table.ShortDateTime header="Date and time" qa="created-date" value={x => x.createdDate}/>
-        <Table.String header="Status update" qa="status-update" value={x => `${x.newStatus}`}/>
-        <Table.String header="Name" qa="created-by" value={x => x.createdBy}/>
-      </Table.Table>
-    );
-  }
-
   private renderContents(project: Dtos.ProjectDto, statusChanges: Dtos.ClaimStatusChangeDto[]) {
     return (
       <ACC.Page
         backLink={<ACC.BackLink route={AllClaimsDashboardRoute.getLink({ projectId: project.id })}>Back to project</ACC.BackLink>}
         pageTitle={<ACC.Projects.Title project={project} />}
-        tabs={<ACC.Claims.Navigation project={project} partnerId={this.props.partnerId} periodId={this.props.periodId} currentRouteName={ClaimLogRoute.routeName} />}
+        tabs={<ACC.Claims.Navigation project={project} partnerId={this.props.partnerId} periodId={this.props.periodId} />}
       >
         <ACC.Section>
-          {this.renderLogTable(statusChanges)}
+          {statusChanges.length ? this.renderLogTable(statusChanges) : null}
+          {!statusChanges.length ? <ACC.Renderers.SimpleString>There are no changes for this claim.</ACC.Renderers.SimpleString> : null}
         </ACC.Section>
       </ACC.Page>
+    );
+  }
+
+  private renderLogTable(statusChanges: Dtos.ClaimStatusChangeDto[]) {
+    return (
+      <div data-qa="claim-status-change-table" style={{ overflowX: "auto" }}>
+        <table className={"govuk-table"}>
+          <colgroup>
+            <col key="0" data-qa="col-created-date" />
+            <col key="1" data-qa="col-status-update" />
+            <col key="2" data-qa="col-created-by" />
+          </colgroup>
+          <thead className="govuk-table__head">
+            <tr className="govuk-table__row">
+              <th className="govuk-table__header" scope="col" key="0">Date and time</th>
+              <th className="govuk-table__header" scope="col" key="1">Status update</th>
+              <th className="govuk-table__header" scope="col" key="2">Name</th>
+            </tr>
+          </thead>
+          <tbody className="govuk-table__body">
+            {statusChanges.map((row, rowIndex) => this.renderLogRow(row, rowIndex))}
+          </tbody>
+        </table>
+      </div>
+    );
+  }
+
+  private renderLogRow(item: Dtos.ClaimStatusChangeDto, index: number) {
+    return (
+      <React.Fragment>
+        <tr className="govuk-table__row" key={`${index}_a`}>
+          <th className="govuk-table__cell" key="0"><ACC.Renderers.ShortDateTime value={item.createdDate} /></th>
+          <td className="govuk-table__cell" key="1">{item.newStatus}</td>
+          <td className="govuk-table__cell" key="2">{item.createdBy}</td>
+        </tr>
+        {/* {item.comments ? <tr className={"govuk-table__row"} key={`${index}_b`}><th className="govuk-table__cell" style={{borderBottom: "0px"}} key="0" colSpan={3}>Comments</th></tr> : null} */}
+        {item.comments ? <tr className={"govuk-table__row"} key={`${index}_b`}><td className="govuk-table__cell" key="0" colSpan={3}><span style={{whiteSpace:"pre-wrap"}}>{item.comments}</span></td></tr> : null}
+      </React.Fragment>
     );
   }
 }
@@ -68,8 +97,8 @@ export const ClaimLog = containerDefinition.connect({
 
 export const ClaimLogRoute = containerDefinition.route({
   routeName: "claimLog",
-  routePath: "/projects/:projectId/claims/:partnerId/review/:periodId/logs",
-  getParams: (r) => ({ projectId: r.params.projectId, partnerId: r.params.partnerId, periodId: parseInt(r.params.partnerId, 10), id: r.params.id }),
+  routePath: "/projects/:projectId/claims/:partnerId/:action/:periodId/logs",
+  getParams: (r) => ({ projectId: r.params.projectId, partnerId: r.params.partnerId, periodId: parseInt(r.params.periodId, 10), id: r.params.id, action: r.params.action }),
   getLoadDataActions: (params) => [
     Actions.loadProject(params.projectId),
     Actions.loadClaimStatusChanges(params.projectId, params.partnerId, params.periodId)
@@ -79,5 +108,7 @@ export const ClaimLogRoute = containerDefinition.route({
     htmlTitle: "Logs - View claim",
     displayTitle: "Claim"
   }),
-  accessControl: (auth, params, features) => auth.forProject(params.projectId).hasRole(ProjectRole.MonitoringOfficer)
+  accessControl: (auth, params, features) =>
+    auth.forProject(params.projectId).hasAnyRoles(ProjectRole.MonitoringOfficer) ||
+    auth.forPartner(params.projectId, params.partnerId).hasAnyRoles(ProjectRole.ProjectManager, ProjectRole.FinancialContact)
 });

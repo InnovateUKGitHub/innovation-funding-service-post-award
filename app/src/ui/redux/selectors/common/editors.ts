@@ -1,6 +1,6 @@
-import { EditorState, EditorStateKeys, IEditorStore, RootState } from "../../reducers";
-import { Results } from "../../../validation/results";
-import { LoadingStatus, Pending } from "../../../../shared/pending";
+import { EditorState, EditorStateKeys, EditorStatus, IEditorStore, RootState } from "@ui/redux/reducers";
+import { Results } from "@ui/validation/results";
+import { LoadingStatus, Pending } from "@shared/pending";
 
 export interface IEditorSelector<T, TVal extends Results<T>> {
   store: EditorStateKeys;
@@ -45,11 +45,11 @@ export const getNewEditor = <T, TVal extends Results<T>>(
     return Object.assign({}, newData!) as T;
   })
   .then(clonedData => innerInit(clonedData!))
-  .then(cloned => {
-    return ({
+  .then(cloned => ({
       data: cloned!,
+      state: EditorStatus.Editing,
       validator: getValidator(cloned!, store),
       error: null
-    });
-  });
+    })
+  );
 };

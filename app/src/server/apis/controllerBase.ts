@@ -122,7 +122,7 @@ export abstract class ControllerBaseWithSummary<TSummaryDto, TDto> {
           const contentType = result.fileType ? mimeTypes.lookup(result.fileType) : defaultContentType;
           const head = {
             "Content-Length": result.contentLength,
-            "Content-Type": contentType || defaultContentType,
+            "Content-Type": `${contentType || defaultContentType}; charset=utf-8`,
             "Content-Disposition": `filename="${result.fileName}"`
           };
           resp.writeHead(successStatus, head);
