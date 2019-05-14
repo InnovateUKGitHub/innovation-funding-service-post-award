@@ -108,5 +108,7 @@ export const ClaimLogRoute = containerDefinition.route({
     htmlTitle: "Logs - View claim",
     displayTitle: "Claim"
   }),
-  accessControl: (auth, params, features) => auth.forProject(params.projectId).hasRole(ProjectRole.MonitoringOfficer)
+  accessControl: (auth, params, features) =>
+    auth.forProject(params.projectId).hasAnyRoles(ProjectRole.MonitoringOfficer) ||
+    auth.forPartner(params.projectId, params.partnerId).hasAnyRoles(ProjectRole.ProjectManager, ProjectRole.FinancialContact)
 });
