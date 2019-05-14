@@ -8,7 +8,6 @@ import { RootState } from "@framework/ui/redux";
 interface Props {
   projectId: string;
   id: string;
-  currentRouteName: string;
 }
 
 interface Data {
