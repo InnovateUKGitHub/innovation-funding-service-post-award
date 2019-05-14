@@ -1,4 +1,5 @@
 import { PartnerDto } from "../../../types";
+import { stringComparator } from "@framework/util/comparator";
 
 export const sortPartners = (x: PartnerDto, y: PartnerDto) => {
   if(x.projectId > y.projectId) {
@@ -19,14 +20,5 @@ export const sortPartners = (x: PartnerDto, y: PartnerDto) => {
   }
 
   // both same so sort by name
-  if (x.name && y.name) {
-      return x.name.localeCompare(y.name);
-  }
-  else if (x.name) {
-      return -1;
-  }
-  else if (y.name) {
-      return 1;
-  }
-  return 0;
+  return stringComparator(x.name, y.name);
 };

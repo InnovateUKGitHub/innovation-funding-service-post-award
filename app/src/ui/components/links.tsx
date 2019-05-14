@@ -12,20 +12,9 @@ interface Props {
   className?: string;
 }
 
-interface Data {
-  user: IClientUser;
-  features: IFeatureFlags;
-}
-
-class LinkComponent extends React.Component<Props & Data> {
-  private userHasAccess(route: ILinkInfo) {
-    if (!route.accessControl) return true;
-    return route.accessControl(this.props.user, this.props.features);
-  }
-
+export class Link extends React.Component<Props> {
   render() {
     const { id, route, children, className } = this.props;
-    if (!this.userHasAccess(route)) return null;
 
     return (
       <RouterLink
@@ -40,9 +29,6 @@ class LinkComponent extends React.Component<Props & Data> {
     );
   }
 }
-export const Link = reduxConnect<Data, {}, Props, RootState>(
-  (state: RootState) => ({ user: state.user, features: state.config.features })
-)(LinkComponent);
 
 // TODO go back to same place in page (no scroll to top)
 export const BackLink: React.SFC<Props> = (props) => (

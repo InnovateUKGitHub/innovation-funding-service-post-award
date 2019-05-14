@@ -16,7 +16,7 @@ import {
 import { PartnerDto, ProjectRole } from "../../../../types";
 import { ProjectDashboardRoute, ProjectForecastRoute } from "../../projects";
 import { Percentage, SimpleString } from "../../../components/renderers";
-import { isNumber } from "@util/NumberHelper";
+import { isNumber } from "@framework/util";
 
 interface Callbacks {
   onSubmit: (params: Params) => void;

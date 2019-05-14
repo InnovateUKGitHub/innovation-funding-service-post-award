@@ -1,26 +1,32 @@
 import React, { CSSProperties } from "react";
-import { TextInput } from "./inputs/textInput";
-import { TextAreaInput } from "./inputs/textAreaInput";
-import { NumberInput } from "./inputs/numberInput";
 import classNames from "classnames";
-import { Result } from "../validation/result";
-import { ValidationError } from "./validationError";
-import { FileUpload, RadioList } from "./inputs";
-import { Button } from "./styledButton";
+import * as ACC from "@ui/components";
+import { Result } from "@ui/validation";
+import { EditorStatus, IEditorStore } from "@ui/redux";
 
-interface FormProps<T> {
-    data: T;
+interface SharedFormProps<T> {
     onChange?: (data: T) => void;
     onSubmit?: () => void;
     qa?: string;
     enctype?: "urlencoded" | "multipart";
 }
 
+interface EditorForm<T> extends SharedFormProps<T> {
+  editor: IEditorStore<T, any>;
+}
+
+interface DataForm<T> extends SharedFormProps<T> {
+  data: T;
+}
+
+type FormProps<T> = EditorForm<T> | DataForm<T>;
+
 interface FormChildProps<T> {
     key?: string;
     formData: T;
     onChange?: (data: T) => void;
     onSubmit?: () => void;
+    disabled: boolean;
     qa?: string;
 }
 
@@ -28,7 +34,8 @@ class FormComponent<T> extends React.Component<FormProps<T>, []> {
     render() {
         const childProps = (index: number): FormChildProps<T> => ({
             key: "formchild" + index,
-            formData: this.props.data,
+            formData: this.isEditor(this.props) ? this.props.editor.data : this.props.data,
+            disabled: this.isEditor(this.props) && this.props.editor.status === EditorStatus.Saving,
             onChange: this.props.onChange,
             onSubmit: this.props.onSubmit
         });
@@ -51,6 +58,10 @@ class FormComponent<T> extends React.Component<FormProps<T>, []> {
             this.props.onSubmit();
         }
     }
+
+    private isEditor(props: EditorForm<T> | DataForm<T>): props is EditorForm<T> {
+      return (props as EditorForm<T>).editor !== undefined;
+    }
 }
 
 interface FieldsetProps<T> {
@@ -66,6 +77,7 @@ class FieldsetComponent<T> extends React.Component<FieldsetProps<T>, []> {
         const childProps = (index: number): FormChildProps<T> => ({
             key: parentKey + "child" + index,
             formData: props.formData,
+            disabled: props.disabled,
             onChange: props.onChange,
             onSubmit: props.onSubmit
         });
@@ -83,9 +95,8 @@ class FieldsetComponent<T> extends React.Component<FieldsetProps<T>, []> {
     }
 }
 
-interface InternalFieldProps<T> {
-    field: (data: T) => React.ReactNode;
-    formData?: T;
+interface InternalFieldProps<T> extends FormChildProps<T> {
+  field: (data: T, disabled: boolean) => React.ReactNode;
 }
 
 interface HiddenFieldProps<TDto> {
@@ -116,22 +127,22 @@ class FieldComponent<T, TValue> extends React.Component<InternalFieldProps<T> & 
       <div data-qa={`field-${name}`} className={classNames("govuk-form-group", { "govuk-form-group--error": isValid })}>
         {!!label ? <label className={classNames("govuk-label", { "govuk-visually-hidden" : labelHidden, "govuk-label--m" : labelBold })} htmlFor={name}>{label}</label> : null}
         {hint ? <span id={createFieldHintId(this.props)} className="govuk-hint">{hint}</span> : null}
-        <ValidationError error={validation} />
-        {field(formData!)}
+        <ACC.ValidationError error={validation} />
+        {field(formData, this.props.disabled)}
       </div>
     );
   }
 }
 
 const handleSubmit = <TDto extends {}>(props: SubmitProps, e: React.MouseEvent<{}>) => {
-    const formProps = props as any as FormProps<TDto>;
+    const formProps = props as any as SharedFormProps<TDto>;
     if (formProps.onSubmit) {
         e.preventDefault();
         formProps.onSubmit();
     }
 };
 
-const handleOtherButton = <TDto extends {}>(props: ButtonProps, e: React.MouseEvent<{}>) => {
+const handleOtherButton = (props: ButtonProps, e: React.MouseEvent<{}>) => {
     if (props.onClick) {
         e.preventDefault();
         props.onClick();
@@ -148,11 +159,11 @@ const handleChange = <TDto extends {}, TValue extends {}>(props: ExternalFieldPr
     }
 };
 
-const StringField = <T extends {}>(props: ExternalFieldProps<T, string>) => {
+const StringField = <T extends {}>(props: ExternalFieldProps<T, string> & InternalFieldProps<T>) => {
   const TypedFieldComponent = FieldComponent as { new(): FieldComponent<T, string> };
   return (
     <TypedFieldComponent
-      field={(data => <TextInput name={props.name} value={props.value(data)} onChange={(val) => handleChange(props, val)} />)}
+      field={(data => <ACC.Inputs.TextInput name={props.name} value={props.value(data)} onChange={(val) => handleChange(props, val)} />)}
       {...props}
     />
   );
@@ -163,11 +174,11 @@ interface MultiStringFieldProps<T> extends ExternalFieldProps<T, string> {
   qa?: string;
 }
 
-const MultiStringField = <T extends {}>(props: MultiStringFieldProps<T>) => {
+const MultiStringField = <T extends {}>(props: MultiStringFieldProps<T> & InternalFieldProps<T>) => {
   const TypedFieldComponent = FieldComponent as { new(): FieldComponent<T, string> };
   return (
     <TypedFieldComponent
-      field={(data => <TextAreaInput name={props.name} value={props.value(data)} onChange={(val) => handleChange(props, val)} rows={props.rows} qa={props.qa} ariaDescribedBy={props.hint ? createFieldHintId(props) : undefined} />)}
+      field={((data, disabled) => <ACC.Inputs.TextAreaInput name={props.name} value={props.value(data)} onChange={(val) => handleChange(props, val)} rows={props.rows} qa={props.qa} ariaDescribedBy={props.hint ? createFieldHintId(props) : undefined} disabled={disabled} />)}
       {...props}
     />
   );
@@ -177,11 +188,11 @@ interface NumericFieldProps<T> extends ExternalFieldProps<T, number> {
   width?: "small" | "medium" | "normal";
 }
 
-const NumericField = <T extends {}>(props: NumericFieldProps<T>) => {
+const NumericField = <T extends {}>(props: NumericFieldProps<T> & InternalFieldProps<T>) => {
   const TypedFieldComponent = FieldComponent as { new(): FieldComponent<T, number> };
   return (
     <TypedFieldComponent
-      field={(data => <NumberInput name={props.name} value={props.value(data)} onChange={(val) => handleChange(props, val)} width={props.width} />)}
+      field={(data => <ACC.Inputs.NumberInput name={props.name} value={props.value(data)} onChange={(val) => handleChange(props, val)} width={props.width} />)}
       {...props}
     />
   );
@@ -197,67 +208,71 @@ interface RadioFieldProps<T extends {}> extends ExternalFieldProps<T, SelectOpti
     inline: boolean;
 }
 
-const RadioOptionsField = <T extends {}>(props: RadioFieldProps<T>) => {
+const RadioOptionsField = <T extends {}>(props: RadioFieldProps<T> & InternalFieldProps<T>) => {
   const TypedFieldComponent = FieldComponent as { new(): FieldComponent<T, SelectOption> };
   return (
     <TypedFieldComponent
-      field={(data) => <RadioList options={props.options} name={props.name} value={props.value(data)} inline={props.inline} onChange={(val) => handleChange(props, val)} />}
+      field={(data) => <ACC.Inputs.RadioList options={props.options} name={props.name} value={props.value(data)} inline={props.inline} onChange={(val) => handleChange(props, val)} />}
       {...props}
     />
   );
 };
 
-const HiddenField = <T extends {}>(props: HiddenFieldProps<T>) => {
+const HiddenField = <T extends {}>(props: HiddenFieldProps<T> & InternalFieldProps<T>) => {
   return (
-    <input type="hidden" name={props.name} value={props.value((props as any as InternalFieldProps<T>).formData!) || ""} />
+    <input type="hidden" name={props.name} value={props.value((props as any as InternalFieldProps<T>).formData) || ""} />
   );
 };
 
 interface SubmitProps {
-    disabled?: boolean;
-    styling?: "Link" | "Secondary" | "Primary";
-    className?: string;
-    style?: CSSProperties;
+  className?: string;
+  style?: CSSProperties;
+  styling?: "Link" | "Secondary" | "Primary";
 }
 
-const SubmitComponent: React.SFC<SubmitProps> = (props) => {
-    const { disabled, children, style, styling, className } = props;
-    const buttonProps = { disabled, style, className };
-    return <Button type="submit" name="button_default" styling={styling || "Primary"} onClick={(e) => handleSubmit(props, e)} {...buttonProps}>{children}</Button>;
-};
+const SubmitComponent = <T extends {}>(props: SubmitProps & InternalFieldProps<T>) => (
+  <ACC.Button
+    type="submit"
+    name="button_default"
+    className={props.className}
+    disabled={props.disabled}
+    style={props.style}
+    styling={props.styling || "Primary"}
+    onClick={(e) => handleSubmit(props, e)}
+  >
+    {(props as any).children}
+  </ACC.Button>
+);
 
 interface ButtonProps {
-    name: string;
-    onClick?: () => void;
-    styling?: "Link" | "Secondary" | "Primary";
-    className?: string;
-    style?: CSSProperties;
-    value?: string;
+  name: string;
+  className?: string;
+  style?: CSSProperties;
+  styling?: "Link" | "Secondary" | "Primary";
+  value?: string;
+  onClick?: () => void;
 }
 
-const ButtonComponent: React.SFC<ButtonProps> = (props) => {
-  const { name, children, style, styling, className, value } = props;
-  const buttonProps = { style, className };
+const ButtonComponent = <T extends {}>(props: ButtonProps & InternalFieldProps<T>) => (
+  <ACC.Button
+    type="submit"
+    name={`button_${props.name}`}
+    className={props.className}
+    disabled={props.disabled}
+    style={props.style}
+    styling={props.styling || "Secondary"}
+    value={props.value}
+    onClick={(e) => handleOtherButton(props, e)}
+  >
+    {(props as any).children}
+  </ACC.Button>
+);
 
-  return (
-    <Button
-      type="submit"
-      name={`button_${name}`}
-      styling={styling || "Secondary"}
-      value={value}
-      onClick={(e) => handleOtherButton(props, e)}
-      {...buttonProps}
-    >
-      {children}
-    </Button>
-  );
-};
-
-const FileUploadComponent = <T extends {}>(props: ExternalFieldProps<T, File>) => {
+const FileUploadComponent = <T extends {}>(props: ExternalFieldProps<T, File> & InternalFieldProps<T>) => {
   const TypedFieldComponent = FieldComponent as { new(): FieldComponent<T, File> };
   return (
     <TypedFieldComponent
-      field={((data) => <FileUpload value={props.value(data)} name={props.name} onChange={(val) => handleChange(props, val)} />)}
+      field={((data) => <ACC.Inputs.FileUpload value={props.value(data)} name={props.name} onChange={(val) => handleChange(props, val)} />)}
       {...props}
     />
   );
@@ -284,7 +299,7 @@ export const TypedForm = <T extends {}>(): FormBuilder<T> => ({
     Numeric: NumericField as React.SFC<NumericFieldProps<T>>,
     Radio: RadioOptionsField as React.SFC<RadioFieldProps<T>>,
     Hidden: HiddenField as React.SFC<HiddenFieldProps<T>>,
-    Submit: SubmitComponent,
-    Button: ButtonComponent,
+    Submit: SubmitComponent as React.SFC<SubmitProps>,
+    Button: ButtonComponent as React.SFC<ButtonProps>,
     FileUpload: FileUploadComponent as React.SFC<ExternalFieldProps<T, File>>,
 });
