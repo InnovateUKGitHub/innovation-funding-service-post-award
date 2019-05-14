@@ -1,10 +1,10 @@
 // tslint:disable:no-duplicate-string no-big-function
 import { TestContext } from "../../testContextProvider";
-import { SaveMonitoringReport } from "../../../../src/server/features/monitoringReports/saveMonitoringReport";
-import { BadRequestError, ValidationError } from "../../../../src/server/features/common";
-import { MonitoringReportDto } from "../../../../src/types/dtos/monitoringReportDto";
+import { SaveMonitoringReport } from "@server/features/monitoringReports/saveMonitoringReport";
+import { BadRequestError, ValidationError } from "@server/features/common";
 import { ISalesforceMonitoringReportHeader } from "@server/repositories";
 import { GetMonitoringReportById } from "@server/features/monitoringReports/getMonitoringReport";
+import { MonitoringReportDto } from "@framework/dtos";
 
 describe("saveMonitoringReports", () => {
   it("should not save responses without an option id", async () => {

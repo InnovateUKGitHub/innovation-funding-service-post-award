@@ -2,7 +2,7 @@ import React from "react";
 import ReactDom from "react-dom";
 import { Guide } from "../ui/componentsGuide/guide";
 import { Provider } from "react-redux";
-import { PageTitleState } from "@framework/ui/redux/reducers/pageTitleReducer";
+import { PageTitleState } from "@ui/redux/reducers/pageTitleReducer";
 import { combineReducers, createStore } from "redux";
 
 function getGuide(): string {

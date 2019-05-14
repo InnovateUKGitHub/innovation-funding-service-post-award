@@ -6,7 +6,7 @@ import { ForecastDetailsDtosValidator } from "../../ui/validators";
 import { GetAllForecastsForPartnerQuery, UpdateForecastDetailsCommand } from "../features/forecastDetails";
 import { GetAllProjectRolesForUser, GetByIdQuery } from "../features/projects";
 import { GetByIdQuery as GetPartnerByIdQuery } from "../features/partners";
-import { IContext, ILinkInfo, ProjectRole } from "../../types";
+import { IContext, ILinkInfo, ProjectRole } from "@framework/types";
 import { GetCostCategoriesForPartnerQuery } from "../features/claims/getCostCategoriesForPartnerQuery";
 
 export class ClaimForcastFormHandler extends FormHandlerBase<ClaimForcastParams, ForecastDetailsDTO[]> {

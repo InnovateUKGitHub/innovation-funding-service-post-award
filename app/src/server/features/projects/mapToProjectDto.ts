@@ -2,7 +2,7 @@
 import { CommandBase } from "../common";
 import { GetPeriodInfoQuery } from "./";
 import { ISalesforceProject } from "../../repositories/projectsRepository";
-import { ClaimFrequency, IContext, ProjectClaimTrackingStatus, ProjectDto, ProjectRole, ProjectStatus } from "../../../types";
+import { ClaimFrequency, IContext, ProjectClaimTrackingStatus, ProjectDto, ProjectRole, ProjectStatus } from "@framework/types";
 
 export class MapToProjectDtoCommand extends CommandBase<ProjectDto> {
   constructor(private readonly item: ISalesforceProject, private readonly roles: ProjectRole) {

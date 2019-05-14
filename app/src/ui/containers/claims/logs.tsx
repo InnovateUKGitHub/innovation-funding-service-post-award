@@ -1,12 +1,12 @@
 import React from "react";
-import { ContainerBase, ReduxContainer } from "../containerBase";
-import * as Actions from "../../redux/actions";
-import * as Selectors from "../../redux/selectors";
-import * as ACC from "../../components";
-import * as Dtos from "../../../types";
+import * as ACC from "@ui/components";
+import * as Actions from "@ui/redux/actions";
+import * as Selectors from "@ui/redux/selectors";
+import * as Dtos from "@framework/types";
 import { Pending } from "@shared/pending";
 import { AllClaimsDashboardRoute, ClaimsDashboardRoute } from "@ui/containers";
-import { ProjectRole } from "../../../types";
+import { ProjectRole } from "@framework/types";
+import { ContainerBase, ReduxContainer } from "../containerBase";
 
 interface Params {
   projectId: string;

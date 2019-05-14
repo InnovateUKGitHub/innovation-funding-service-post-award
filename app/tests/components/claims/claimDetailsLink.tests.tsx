@@ -4,15 +4,15 @@ import React from "react";
 import Adapter from "enzyme-adapter-react-16";
 import Enzyme, { mount } from "enzyme";
 import { ClaimDetailsLink } from "../../../src/ui/components/claims";
-import { ProjectRole } from "../../../src/types/dtos";
-import { ClaimStatus } from "../../../src/types/constants";
+import { ProjectRole } from "@framework/dtos";
+import { ClaimStatus } from "@framework/constants";
 import { createRouter } from "router5";
 import browserPluginFactory from "router5/plugins/browser";
 import { createStore } from "redux";
 import { rootReducer } from "../../../src/ui/redux/reducers";
 import { Provider } from "react-redux";
 import { RouterProvider } from "react-router5";
-import { IClientUser } from "../../../src/types";
+import { IClientUser } from "@framework/types";
 
 Enzyme.configure({ adapter: new Adapter() });
 

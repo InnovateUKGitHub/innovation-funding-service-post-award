@@ -1,9 +1,9 @@
-import { QueryBase } from "../common/queryBase";
-import { dateComparator, stringComparator } from "../../../util/comparator";
-import { ClaimStatusChangeDto, ProjectRole } from "@framework/types/dtos";
-import { Authorisation, IContext } from "@framework/types";
+import { QueryBase } from "@server/features/common";
+import { GetAllProjectRolesForUser } from "@server/features/projects";
 import { ISalesforceClaimStatusChange } from "@server/repositories";
-import { GetAllProjectRolesForUser } from "../projects";
+import { ClaimStatusChangeDto, ProjectRole } from "@framework/dtos";
+import { dateComparator, stringComparator } from "@framework/util/comparator";
+import { IContext } from "@framework/types";
 
 export class GetClaimStatusChangesQuery extends QueryBase<ClaimStatusChangeDto[]> {
   constructor(

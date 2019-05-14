@@ -1,14 +1,14 @@
 import { SaveMonitoringReport } from "../features/monitoringReports/saveMonitoringReport";
 import { FormHandlerBase, IFormBody, IFormButton } from "./formHandlerBase";
-import { IContext } from "../../types/IContext";
-import { MonitoringReportDto } from "../../types/dtos/monitoringReportDto";
+import { IContext } from "@framework/types/IContext";
+import { MonitoringReportDto } from "@framework/dtos/monitoringReportDto";
 import {
   MonitoringReportDashboardRoute,
   MonitoringReportPrepareParams,
   MonitoringReportPrepareRoute
 } from "../../ui/containers";
 import { MonitoringReportDtoValidator } from "../../ui/validators/MonitoringReportDtoValidator";
-import { ILinkInfo } from "../../types/ILinkInfo";
+import { ILinkInfo } from "@framework/types/ILinkInfo";
 import { getMonitoringReportEditor } from "../../ui/redux/selectors";
 import { GetMonitoringReportById } from "@server/features/monitoringReports/getMonitoringReport";
 

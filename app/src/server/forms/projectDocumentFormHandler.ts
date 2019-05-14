@@ -4,7 +4,7 @@ import { Results } from "../../ui/validation/results";
 import { ProjectDocumentPageParams, ProjectDocumentsRoute } from "../../ui/containers";
 import { UploadProjectDocumentCommand } from "../features/documents/uploadProjectDocument";
 import { upload } from "./memoryStorage";
-import { FileUpload, IContext, ILinkInfo } from "../../types";
+import { FileUpload, IContext, ILinkInfo } from "@framework/types";
 
 export class ProjectDocumentUploadHandler extends FormHandlerBase<ProjectDocumentPageParams, FileUpload> {
   constructor() {

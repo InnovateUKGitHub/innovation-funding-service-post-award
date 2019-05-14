@@ -1,8 +1,7 @@
 // tslint:disable:no-bitwise
 import { TestContext } from "../../testContextProvider";
-import { GetByIdQuery } from "../../../../src/server/features/projects/getDetailsByIdQuery";
-import { ProjectRole } from "../../../../src/types";
-import { SalesforceRole } from "../../../../src/server/repositories/projectContactsRepository";
+import { GetByIdQuery } from "@server/features/projects/getDetailsByIdQuery";
+import { ProjectRole } from "@framework/types";
 
 describe("ProjectsGetDetailsByIdQuery", () => {
     it("when exists expect item", async () => {

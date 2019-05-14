@@ -1,4 +1,4 @@
-import { IRoleInfo } from "../server/features/projects/getAllProjectRolesForUser";
+import { IRoleInfo } from "@server/features/projects/getAllProjectRolesForUser";
 
 export interface ISessionUser {
   email: string;

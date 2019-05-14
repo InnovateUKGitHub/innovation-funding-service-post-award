@@ -1,4 +1,4 @@
-import { IClientUser } from "../../src/types/IUser";
+import { IClientUser } from "@framework/types";
 
 export class TestUser implements IClientUser {
     constructor() {

@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "./";
-import { ILinkInfo } from "../../types";
+import { ILinkInfo } from "@framework/types";
 import {ArrowLeft} from "./svg/arrowLeft";
 import {ArrowRight} from "./svg/arrowRight";
 

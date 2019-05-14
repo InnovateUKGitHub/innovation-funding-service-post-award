@@ -3,10 +3,10 @@ import { ISession } from "../apis/controllerBase";
 import { configureRouter } from "../../ui/routing";
 import { Results } from "../../ui/validation/results";
 import contextProvider from "../features/common/contextProvider";
-import { FileUpload } from "../../types/FileUpload";
+import { FileUpload } from "@framework/types/FileUpload";
 import { FormHandlerError } from "../features/common/appError";
-import { ILinkInfo } from "../../types/ILinkInfo";
-import { IContext } from "../../types/IContext";
+import { ILinkInfo } from "@framework/types/ILinkInfo";
+import { IContext } from "@framework/types/IContext";
 
 interface RouteInfo<TParams> {
   routeName: string;

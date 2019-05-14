@@ -9,7 +9,7 @@ import {
   MonitoringReportQuestionDto,
   MonitoringReportStatusChangeDto,
   MonitoringReportSummaryDto
-} from "../../types";
+} from "@framework/types";
 import { CreateMonitoringReport } from "@server/features/monitoringReports/createMonitoringReport";
 import { GetMonitoringReportActiveQuestions } from "@server/features/monitoringReports/getMonitoringReportActiveQuestions";
 import { GetMonitoringReportStatusChanges } from "@server/features/monitoringReports/getMonitoringReportStatusChanges";

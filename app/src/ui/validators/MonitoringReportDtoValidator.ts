@@ -1,6 +1,6 @@
 import * as Validation from "./common";
 import { Results } from "../validation/results";
-import { MonitoringReportDto, MonitoringReportQuestionDto } from "../../types/dtos/monitoringReportDto";
+import { MonitoringReportDto, MonitoringReportQuestionDto } from "@framework/dtos";
 
 class QuestionValidator extends Results<MonitoringReportQuestionDto> {
   constructor(

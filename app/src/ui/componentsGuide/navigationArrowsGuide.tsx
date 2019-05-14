@@ -7,7 +7,7 @@ import { RouterProvider } from "react-router5";
 import createRouter from "router5";
 import browserPluginFactory from "router5/plugins/browser";
 import { ReviewClaimLineItemsRoute } from "../containers/claims";
-import { IClientUser, ProjectRole } from "../../types";
+import { IClientUser, ProjectRole } from "@framework/types";
 
 const route = { name: "test", path: "/test" } as any;
 const router = createRouter([route]).usePlugin(browserPluginFactory({ useHash: false }));

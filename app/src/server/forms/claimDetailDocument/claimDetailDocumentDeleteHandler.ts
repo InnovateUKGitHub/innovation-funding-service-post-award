@@ -8,8 +8,8 @@ import {
 } from "../../../ui/redux/selectors";
 import { DeleteDocumentCommand } from "../../features/documents/deleteDocument";
 import { Results } from "../../../ui/validation/results";
-import { ILinkInfo } from "../../../types/ILinkInfo";
-import { IContext } from "../../../types/IContext";
+import { ILinkInfo } from "@framework/types/ILinkInfo";
+import { IContext } from "@framework/types/IContext";
 
 interface Document {
   id: string;

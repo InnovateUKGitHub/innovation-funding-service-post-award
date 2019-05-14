@@ -1,4 +1,4 @@
-import { ProjectRole } from ".";
+import { ProjectRole } from "../dtos";
 
 export enum PartnerClaimStatus {
   Unknown = 0,

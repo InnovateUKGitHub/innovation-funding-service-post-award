@@ -1,7 +1,7 @@
 import { AsyncThunk, createAction } from "./createAction";
 import { LoadingStatus } from "../../../../shared/pending";
 import { IDataSelector } from "../../selectors/common";
-import { IClientUser } from "../../../../types/IUser";
+import { IClientUser } from "@framework/types";
 
 type DataLoadThunk = typeof dataLoadAction;
 export type DataLoadAction = ReturnType<DataLoadThunk>;

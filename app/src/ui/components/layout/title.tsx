@@ -1,6 +1,6 @@
 import React from "react";
 import { connect as reduxConnect } from "react-redux";
-import { RootState } from "@framework/ui/redux";
+import { RootState } from "@ui/redux";
 
 interface Props {
   caption?: string;

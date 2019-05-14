@@ -4,7 +4,7 @@ import { AppError, BadRequestError, ForbiddenError, NotFoundError, ValidationErr
 import * as Salesforce from "../../repositories/salesforceConnection";
 import { SalesforceInvalidFilterError } from "../../repositories/salesforceRepositoryBase";
 import { Cache, Clock, Configuration, IConfig, Logger } from "./";
-import { ErrorCode, ICaches, IContext, IRepositories, IRunnable, ISessionUser, ISyncRunnable, } from "../../../types";
+import { ErrorCode, ICaches, IContext, IRepositories, IRunnable, ISessionUser, ISyncRunnable, } from "@framework/types";
 import { QueryBase, SyncQueryBase } from "./queryBase";
 import { CommandBase, SyncCommandBase } from "./commandBase";
 import { Timer } from "@framework/types/timer";

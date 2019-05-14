@@ -5,9 +5,9 @@ import { GetDocumentQuery } from "../features/documents/getDocument";
 import { GetProjectDocumentsQuery } from "../features/documents/getProjectDocuments";
 import { UploadClaimDetailDocumentCommand } from "../features/documents/uploadClaimDetailDocument";
 import { DeleteDocumentCommand } from "../features/documents/deleteDocument";
-import { FileUpload } from "../../types/FileUpload";
 import {GetClaimDocumentsQuery} from "../features/documents/getClaimDocuments";
-import {DocumentDescription} from "../../types/constants";
+import { FileUpload } from "@framework/types";
+import { DocumentDescription } from "@framework/constants";
 import { UploadClaimDocumentCommand } from "../features/documents/uploadClaimDocument";
 import { UploadProjectDocumentCommand } from "../features/documents/uploadProjectDocument";
 

@@ -1,5 +1,5 @@
 import { Response } from "express";
-import { ErrorCode, IAppError } from "../types/IAppError";
+import { ErrorCode, IAppError } from "@framework/types";
 import { Logger } from "./features/common/logger";
 
 const Log = new Logger();

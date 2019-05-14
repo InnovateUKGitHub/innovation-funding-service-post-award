@@ -5,7 +5,7 @@ import { loadStatusReducer } from "./loadStatusReducer";
 import { editorReducer } from "./editorsReducer";
 import { userReducer } from "./userReducer";
 import { messagesReducer } from "./messagesReducer";
-import { IClientUser } from "../../../types/IUser";
+import { IClientUser } from "@framework/types/IUser";
 import { configReducer, IClientConfig } from "./configReducer";
 import { pageTitleReducer, PageTitleState } from "./pageTitleReducer";
 

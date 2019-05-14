@@ -1,11 +1,10 @@
+import { MonitoringReportDtoValidator } from "@ui/validators/MonitoringReportDtoValidator";
+import { RootState } from "@ui/redux/reducers/rootReducer";
+import { getKey } from "@framework/util/key";
+import { MonitoringReportDto, MonitoringReportQuestionDto } from "@framework/types";
+import { MonitoringReportStatus } from "@framework/constants";
 import { dataStoreHelper, editorStoreHelper } from "./common";
-import { getKey } from "../../../util/key";
-import { MonitoringReportDto, MonitoringReportOptionDto, MonitoringReportQuestionDto, ProjectDto } from "../../../types";
-import { MonitoringReportDtoValidator } from "../../validators/MonitoringReportDtoValidator";
-import { Pending } from "../../../shared/pending";
-import { RootState } from "../reducers/rootReducer";
 import { getProject } from "./projects";
-import { MonitoringReportStatus } from "@framework/types/constants/monitoringReportStatus";
 
 export const getMonitoringReport = (projectId: string, id: string) => dataStoreHelper("monitoringReport", getKey(projectId, id));
 

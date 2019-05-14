@@ -1,8 +1,8 @@
 // tslint:disable:no-identical-functions no-duplicate-string
 import { TestContext } from "../../testContextProvider";
-import { GetByIdQuery } from "../../../../src/server/features/partners/getByIdQuery";
-import { PartnerClaimStatus, PartnerDto, ProjectRole } from "../../../../src/types";
-import { SalesforceProjectRole } from "../../../../src/server/repositories";
+import { GetByIdQuery } from "@server/features/partners/getByIdQuery";
+import { SalesforceProjectRole } from "@server/repositories";
+import { PartnerClaimStatus, PartnerDto, ProjectRole } from "@framework/types";
 
 describe("getAllForProjectQuery", () => {
   it("when partner exists is mapped to DTO", async () => {

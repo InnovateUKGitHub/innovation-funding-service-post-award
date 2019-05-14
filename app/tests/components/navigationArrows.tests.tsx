@@ -11,7 +11,7 @@ import { RouterProvider } from "react-router5";
 import { Provider } from "react-redux";
 import createRouter from "router5";
 import browserPluginFactory from "router5/plugins/browser";
-import { IClientUser, ProjectRole } from "../../src/types";
+import { IClientUser, ProjectRole } from "@framework/types";
 
 Enzyme.configure({ adapter: new Adapter() });
 

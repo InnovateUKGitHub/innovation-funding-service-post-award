@@ -5,7 +5,7 @@ import { Pending } from "../../../shared/pending";
 import { EditClaimLineItemsRoute } from "./index";
 import * as Actions from "../../redux/actions";
 import * as Selectors from "../../redux/selectors";
-import { ProjectDto, ProjectRole } from "../../../types";
+import { ProjectDto, ProjectRole } from "@framework/types";
 import { IEditorStore } from "../../redux/reducers";
 import { DocumentUploadValidator } from "../../validators/documentUploadValidator";
 import { Results } from "../../validation/results";

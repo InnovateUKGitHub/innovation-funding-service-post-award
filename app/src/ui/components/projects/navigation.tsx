@@ -1,5 +1,5 @@
 import React from "react";
-import { PartnerDto, ProjectDto, ProjectRole } from "../../../types";
+import { PartnerDto, ProjectDto, ProjectRole } from "@framework/types";
 import { Section, TabItem, Tabs } from "../layout";
 import { Link } from "../links";
 import {

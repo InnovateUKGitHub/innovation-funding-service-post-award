@@ -1,5 +1,5 @@
 import { AsyncThunk, createAction } from "./common/createAction";
-import { MatchedRoute } from "@framework/ui/routing/matchRoute";
+import { MatchedRoute } from "@ui/routing/matchRoute";
 
 export type SetPageTitleAction = ReturnType<typeof setPageTitle>;
 const setPageTitle = (title: { displayTitle: string, htmlTitle: string }) => createAction("SET_PAGE_TITLE", title);

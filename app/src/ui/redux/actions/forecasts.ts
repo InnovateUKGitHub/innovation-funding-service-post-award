@@ -3,7 +3,7 @@ import * as Selectors from "@ui/redux/selectors";
 import { ApiClient } from "@ui/apiClient";
 import { ForecastDetailsDtosValidator } from "@ui/validators/forecastDetailsDtosValidator";
 import { LoadingStatus } from "@shared/pending";
-import { scrollToTheTopSmoothly } from "@util/windowHelpers";
+import { scrollToTheTopSmoothly } from "@framework/util/windowHelpers";
 import { ClaimDto } from "@framework/types";
 
 export function loadForecastDetailsForPartner(partnerId: string) {

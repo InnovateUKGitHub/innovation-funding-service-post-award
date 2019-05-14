@@ -3,7 +3,7 @@ import { Request, Response } from "express";
 import { renderToString } from "react-dom/server";
 import { Guide } from "../ui/componentsGuide/guide";
 import * as colour from "../ui/styles/colours";
-import { PageTitleState } from "@framework/ui/redux/reducers/pageTitleReducer";
+import { PageTitleState } from "@ui/redux/reducers/pageTitleReducer";
 import { combineReducers, createStore } from "redux";
 import { Provider } from "react-redux";
 import { Configuration } from "./features/common";

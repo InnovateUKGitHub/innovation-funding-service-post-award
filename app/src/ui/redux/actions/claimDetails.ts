@@ -2,7 +2,7 @@ import * as Actions from "@ui/redux/actions/common";
 import { ApiClient } from "@ui/apiClient";
 import { findClaimDetailsByPartner, getClaimDetails, getCostsSummaryForPeriod } from "@ui/redux/selectors";
 import { ClaimDetailsValidator } from "@ui/validators";
-import { scrollToTheTopSmoothly } from "@util/windowHelpers";
+import { scrollToTheTopSmoothly } from "@framework/util/windowHelpers";
 import { LoadingStatus } from "@shared/pending";
 
 export function loadClaimDetailsForPartner(partnerId: string) {

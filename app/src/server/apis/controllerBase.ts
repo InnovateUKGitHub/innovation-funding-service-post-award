@@ -2,9 +2,9 @@ import mimeTypes from "mime-types";
 import multer from "multer";
 import express, { Request, Response } from "express";
 
-import { FileUpload, IAppError, ISessionUser } from "../../types";
-import { NotFoundError } from "../features/common/appError";
-import { errorHandlerApi } from "../errorHandlers";
+import { FileUpload, IAppError, ISessionUser } from "@framework/types";
+import { NotFoundError } from "@server/features/common/appError";
+import { errorHandlerApi } from "@server/errorHandlers";
 
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
