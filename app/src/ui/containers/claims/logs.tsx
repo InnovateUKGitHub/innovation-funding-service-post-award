@@ -5,7 +5,7 @@ import * as Selectors from "../../redux/selectors";
 import * as ACC from "../../components";
 import * as Dtos from "../../../types";
 import { Pending } from "@shared/pending";
-import { AllClaimsDashboardRoute } from "@ui/containers";
+import { AllClaimsDashboardRoute, ClaimsDashboardRoute } from "@ui/containers";
 import { ProjectRole } from "../../../types";
 
 interface Params {
@@ -32,9 +32,13 @@ class LogComponent extends ContainerBase<Params, Data, Callbacks> {
   }
 
   private renderContents(project: Dtos.ProjectDto, statusChanges: Dtos.ClaimStatusChangeDto[]) {
+    const backRoute = project.roles === ProjectRole.FinancialContact
+      ? ClaimsDashboardRoute.getLink({ projectId: this.props.projectId, partnerId: this.props.partnerId })
+      : AllClaimsDashboardRoute.getLink({ projectId: project.id });
+
     return (
       <ACC.Page
-        backLink={<ACC.BackLink route={AllClaimsDashboardRoute.getLink({ projectId: project.id })}>Back to project</ACC.BackLink>}
+        backLink={<ACC.BackLink route={backRoute}>Back to project</ACC.BackLink>}
         pageTitle={<ACC.Projects.Title project={project} />}
         tabs={<ACC.Claims.Navigation project={project} partnerId={this.props.partnerId} periodId={this.props.periodId} />}
       >
@@ -72,14 +76,14 @@ class LogComponent extends ContainerBase<Params, Data, Callbacks> {
 
   private renderLogRow(item: Dtos.ClaimStatusChangeDto, index: number) {
     return (
-      <React.Fragment>
+      <React.Fragment key={index}>
         <tr className="govuk-table__row" key={`${index}_a`}>
           <th className="govuk-table__cell" key="0"><ACC.Renderers.ShortDateTime value={item.createdDate} /></th>
           <td className="govuk-table__cell" key="1">{item.newStatus}</td>
           <td className="govuk-table__cell" key="2">{item.createdBy}</td>
         </tr>
         {/* {item.comments ? <tr className={"govuk-table__row"} key={`${index}_b`}><th className="govuk-table__cell" style={{borderBottom: "0px"}} key="0" colSpan={3}>Comments</th></tr> : null} */}
-        {item.comments ? <tr className={"govuk-table__row"} key={`${index}_b`}><td className="govuk-table__cell" key="0" colSpan={3}><span style={{whiteSpace:"pre-wrap"}}>{item.comments}</span></td></tr> : null}
+        {item.comments ? <tr className={"govuk-table__row"} key={`${index}_b`}><td className="govuk-table__cell" key="0" colSpan={3}><span style={{ whiteSpace: "pre-wrap" }}>{item.comments}</span></td></tr> : null}
       </React.Fragment>
     );
   }
@@ -109,6 +113,6 @@ export const ClaimLogRoute = containerDefinition.route({
     displayTitle: "Claim"
   }),
   accessControl: (auth, params, features) =>
-    auth.forProject(params.projectId).hasAnyRoles(ProjectRole.MonitoringOfficer) ||
-    auth.forPartner(params.projectId, params.partnerId).hasAnyRoles(ProjectRole.ProjectManager, ProjectRole.FinancialContact)
+    auth.forProject(params.projectId).hasAnyRoles(ProjectRole.MonitoringOfficer, ProjectRole.ProjectManager) ||
+    auth.forPartner(params.projectId, params.partnerId).hasAnyRoles(ProjectRole.FinancialContact)
 });
