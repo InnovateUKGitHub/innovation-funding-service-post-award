@@ -1,20 +1,60 @@
 import React from "react";
 import * as ACC from "../";
-import { MonitoringReportLogRoute, MonitoringReportViewRoute } from "@ui/containers";
+import { MonitoringReportLogRoute, MonitoringReportPrepareRoute, MonitoringReportViewRoute } from "@ui/containers";
+import { State } from "router5";
+import { connect } from "react-redux";
+import { RootState } from "@framework/ui/redux";
 
 interface Props {
   projectId: string;
   id: string;
-  currentRouteName: string;
 }
 
-export const Navigation: React.FunctionComponent<Props> = (props) => {
-  const questionLink = MonitoringReportViewRoute.getLink({ projectId: props.projectId, id: props.id});
-  const logLink = MonitoringReportLogRoute.getLink({ projectId: props.projectId, id: props.id});
+interface Data {
+  currentRoute: State;
+}
 
-  const tabs: ACC.TabItem[] = [
-    { text: "Questions", route: questionLink, selected: questionLink.routeName === props.currentRouteName },
-    { text: "Log", route: logLink, selected: logLink.routeName === props.currentRouteName }
-  ];
+export const NavigationComponent: React.FunctionComponent<Props & Data> = (props) => {
+  const detailsTabText = "Questions";
+  const logTabText = "Log";
+
+  const { id, projectId } = props;
+  const action: "details" | "prepare" = props.currentRoute.params.action;
+
+  const tabs: ACC.TabItem[] = [];
+
+  if (props.currentRoute.name === MonitoringReportViewRoute.routeName || (props.currentRoute.name === MonitoringReportLogRoute.routeName && action === "details")) {
+    tabs.push({
+      text: detailsTabText,
+      selected: props.currentRoute.name === MonitoringReportViewRoute.routeName,
+      route: MonitoringReportViewRoute.getLink({ id, projectId })
+    });
+
+    tabs.push({
+      text: logTabText,
+      selected: props.currentRoute.name === MonitoringReportLogRoute.routeName,
+      route: MonitoringReportLogRoute.getLink({ id, projectId, action: "details" })
+    });
+  }
+  else if (props.currentRoute.name === MonitoringReportPrepareRoute.routeName || (props.currentRoute.name === MonitoringReportLogRoute.routeName && action === "prepare")) {
+    tabs.push({
+      text: detailsTabText,
+      selected: props.currentRoute.name === MonitoringReportPrepareRoute.routeName,
+      route: MonitoringReportPrepareRoute.getLink({ id, projectId })
+    });
+
+    tabs.push({
+      text: logTabText,
+      selected: props.currentRoute.name === MonitoringReportLogRoute.routeName,
+      route: MonitoringReportLogRoute.getLink({ id, projectId, action: "prepare" })
+    });
+  }
+
   return <ACC.Tabs tabList={tabs} />;
 };
+
+export const Navigation = connect<Data, {}, Props, RootState>(state => {
+  return {
+    currentRoute: state.router.route!
+  };
+})(NavigationComponent);

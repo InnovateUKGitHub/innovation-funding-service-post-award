@@ -11,6 +11,7 @@ import { MonitoringReportStatusChangeDto, ProjectRole } from "../../../types";
 interface Params {
   projectId: string;
   id: string;
+  action: "details" | "prepare";
 }
 
 interface Data {
@@ -35,7 +36,7 @@ class LogComponent extends ContainerBase<Params, Data, Callbacks> {
       <ACC.Page
         backLink={<ACC.BackLink route={MonitoringReportDashboardRoute.getLink({ projectId: this.props.projectId })}>Back to monitoring reports</ACC.BackLink>}
         pageTitle={<ACC.Projects.Title project={project} />}
-        tabs={<ACC.MonitoringReports.Navigation projectId={this.props.projectId} id={this.props.id} currentRouteName={MonitoringReportLogRoute.routeName} />}
+        tabs={<ACC.MonitoringReports.Navigation projectId={this.props.projectId} id={this.props.id} />}
       >
         {this.renderLogTableSection(statusChanges)}
       </ACC.Page>
@@ -68,8 +69,8 @@ export const MonitoringReportLog = containerDefinition.connect({
 
 export const MonitoringReportLogRoute = containerDefinition.route({
   routeName: "monitoringReportLog",
-  routePath: "/projects/:projectId/monitoring-reports/:id/logs",
-  getParams: (r) => ({ projectId: r.params.projectId, id: r.params.id }),
+  routePath: "/projects/:projectId/monitoring-reports/:id/:action/logs",
+  getParams: (r) => ({ projectId: r.params.projectId, id: r.params.id, action: r.params.action }),
   getLoadDataActions: (params) => [
     Actions.loadProject(params.projectId),
     Actions.loadMonitoringReportStatusChanges(params.projectId, params.id),
