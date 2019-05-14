@@ -1,9 +1,9 @@
 import React from "react";
-import * as ACC from "../";
-import { MonitoringReportLogRoute, MonitoringReportPrepareRoute, MonitoringReportViewRoute } from "@ui/containers";
 import { State } from "router5";
 import { connect } from "react-redux";
-import { RootState } from "@framework/ui/redux";
+import * as ACC from "@ui/components";
+import { MonitoringReportLogRoute, MonitoringReportPrepareRoute, MonitoringReportViewRoute } from "@ui/containers";
+import { RootState } from "@ui/redux";
 
 interface Props {
   projectId: string;

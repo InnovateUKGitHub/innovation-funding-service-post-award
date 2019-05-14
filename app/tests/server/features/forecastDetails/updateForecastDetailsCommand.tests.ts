@@ -1,10 +1,9 @@
 // tslint:disable: no-duplicate-string no-big-function no-identical-functions
-import { TestContext } from "../../testContextProvider";
-import { UpdateForecastDetailsCommand } from "../../../../src/server/features/forecastDetails";
 import { DateTime } from "luxon";
-import { ClaimFrequency, ClaimStatus } from "../../../../src/types";
-import { BadRequestError, ValidationError } from "../../../../src/server/features/common/appError";
-import { Claims } from "@framework/ui/components";
+import { TestContext } from "../../testContextProvider";
+import { UpdateForecastDetailsCommand } from "@server/features/forecastDetails";
+import { BadRequestError, ValidationError } from "@server/features/common/appError";
+import { ClaimFrequency, ClaimStatus } from "@framework/types";
 
 describe("UpdateForecastDetailsCommand", () => {
   it("when id not set expect validation exception", async () => {

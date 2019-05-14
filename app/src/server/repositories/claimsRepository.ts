@@ -1,5 +1,5 @@
 import SalesforceRepositoryBase, { Updatable } from "./salesforceRepositoryBase";
-import { ClaimStatus } from "../../types";
+import { ClaimStatus } from "@framework/types";
 import { BadRequestError } from "../features/common/appError";
 
 export interface ISalesforceClaim {

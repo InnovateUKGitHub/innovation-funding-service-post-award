@@ -1,6 +1,6 @@
 import { QueryBase } from "../common";
 import { GetAllProjectRolesForUser, MapToProjectDtoCommand } from "./";
-import { IContext, ProjectDto } from "../../../types";
+import { IContext, ProjectDto } from "@framework/types";
 
 export class GetAllQuery extends QueryBase<ProjectDto[]> {
   protected async Run(context: IContext) {

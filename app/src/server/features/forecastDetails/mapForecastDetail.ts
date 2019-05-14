@@ -1,5 +1,5 @@
 import { ISalesforceProfileDetails } from "../../repositories";
-import { IContext } from "../../../types";
+import { IContext } from "@framework/types";
 import { SALESFORCE_DATE_FORMAT } from "../common";
 
 export default (context: IContext) => (forecastDetail: ISalesforceProfileDetails): ForecastDetailsDTO => ({

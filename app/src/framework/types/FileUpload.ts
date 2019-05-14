@@ -1,4 +1,4 @@
-import { DocumentDescription } from "./constants/documentDescription";
+import { DocumentDescription } from "@framework/constants/documentDescription";
 
 export interface FileUpload {
   content: string;

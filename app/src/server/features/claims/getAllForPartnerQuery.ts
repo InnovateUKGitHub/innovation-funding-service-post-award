@@ -1,6 +1,6 @@
 import { QueryBase } from "../common/queryBase";
-import { dateComparator } from "../../../util/comparator";
-import { ClaimDto, IContext } from "../../../types";
+import { dateComparator } from "@framework/util/comparator";
+import { ClaimDto, IContext } from "@framework/types";
 import mapClaim from "./mapClaim";
 
 export class GetAllForPartnerQuery extends QueryBase<ClaimDto[]> {

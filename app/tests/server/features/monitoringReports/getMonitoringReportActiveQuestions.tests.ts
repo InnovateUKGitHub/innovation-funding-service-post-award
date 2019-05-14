@@ -1,7 +1,7 @@
 // tslint:disable: no-duplicate-string no-big-function
 
 import { TestContext } from "../../testContextProvider";
-import { GetMonitoringReportActiveQuestions } from "../../../../src/server/features/monitoringReports/getMonitoringReportActiveQuestions";
+import { GetMonitoringReportActiveQuestions } from "@server/features/monitoringReports/getMonitoringReportActiveQuestions";
 
 describe("GetMonitoringReportActiveQuestions", () => {
 

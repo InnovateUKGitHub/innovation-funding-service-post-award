@@ -1,11 +1,11 @@
-import { Cache, IClock, IConfig, ILogger } from "../server/features/common";
+import * as Repositories from "@server/repositories";
+import { Cache, IClock, IConfig, ILogger } from "@server/features/common";
+import { IRoleInfo } from "@server/features/projects/getAllProjectRolesForUser";
+import { QueryBase, SyncQueryBase } from "@server/features/common/queryBase";
+import { CommandBase, SyncCommandBase } from "@server/features/common/commandBase";
+import { ISalesforceRecordType } from "@server/repositories";
 import { ISessionUser } from "./IUser";
-import { IRoleInfo } from "../server/features/projects/getAllProjectRolesForUser";
 import { Authorisation } from "./authorisation";
-import { QueryBase, SyncQueryBase } from "../server/features/common/queryBase";
-import { CommandBase, SyncCommandBase } from "../server/features/common/commandBase";
-import * as Repositories from "../server/repositories";
-import { ISalesforceRecordType } from "../server/repositories";
 
 export interface IRepositories {
   claims: Readonly<Repositories.IClaimRepository>;

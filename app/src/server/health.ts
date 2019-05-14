@@ -4,7 +4,7 @@ import { salesforceConnectionWithToken } from "./repositories/salesforceConnecti
 import { CostCategoryRepository } from "./repositories";
 import { Logger } from "../server/features/common/logger";
 import { AppError } from "./features/common";
-import { ErrorCode } from "../types";
+import { ErrorCode } from "@framework/types";
 
 export const router = express.Router();
 

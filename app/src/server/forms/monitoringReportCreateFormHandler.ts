@@ -1,16 +1,15 @@
 import { FormHandlerBase, IFormBody, IFormButton } from "./formHandlerBase";
-import { MonitoringReportCreateRoute, MonitoringReportPrepareParams } from "@framework/ui/containers/monitoringReports/prepare";
-import { MonitoringReportDto } from "@framework/types/dtos";
-import { IContext, ILinkInfo } from "@framework/types";
 import { GetMonitoringReportActiveQuestions } from "@server/features/monitoringReports/getMonitoringReportActiveQuestions";
-import { MonitoringReportStatus } from "@framework/types/constants/monitoringReportStatus";
-import { MonitoringReportDtoValidator } from "@framework/ui/validators/MonitoringReportDtoValidator";
-import { getMonitoringReportEditor } from "@framework/ui/redux/selectors";
 import { CreateMonitoringReport } from "@server/features/monitoringReports/createMonitoringReport";
-import { MonitoringReportDashboardRoute } from "@framework/ui/containers/monitoringReports/dashboard";
+import { MonitoringReportDashboardRoute } from "@ui/containers/monitoringReports/dashboard";
+import { MonitoringReportCreateRoute, MonitoringReportPrepareParams } from "@ui/containers/monitoringReports/prepare";
+import { getMonitoringReportEditor } from "@ui/redux/selectors";
+import { MonitoringReportDtoValidator } from "@ui/validators/MonitoringReportDtoValidator";
+import { MonitoringReportStatus } from "@framework/constants";
+import { MonitoringReportDto } from "@framework/dtos";
+import { IContext, ILinkInfo } from "@framework/types";
 
 export class MonitoringReportCreateFormHandler extends FormHandlerBase<MonitoringReportPrepareParams, MonitoringReportDto> {
-
   constructor() {
     super(MonitoringReportCreateRoute, [ "save-draft", "save-submitted"]);
   }

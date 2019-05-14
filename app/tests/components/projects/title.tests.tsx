@@ -8,7 +8,7 @@ import browserPluginFactory from "router5/plugins/browser";
 import { Provider } from "react-redux";
 import { RouterProvider } from "react-router5";
 import { createStore } from "redux";
-import { rootReducer } from "@framework/ui/redux";
+import { rootReducer } from "@ui/redux";
 
 Enzyme.configure({ adapter: new Adapter() });
 

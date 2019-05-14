@@ -1,7 +1,7 @@
 // tslint:disable: no-duplicate-string no-big-function
 
 import { TestContext } from "../../testContextProvider";
-import { GetMonitoringReportAnsweredQuestions } from "../../../../src/server/features/monitoringReports/getMonitoringReportAnsweredQuestions";
+import { GetMonitoringReportAnsweredQuestions } from "@server/features/monitoringReports/getMonitoringReportAnsweredQuestions";
 
 describe("GetMonitoringReportAnsweredQuestions", () => {
   it("returns the questions for the ids passed in", async () => {

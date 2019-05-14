@@ -1,5 +1,5 @@
 import React from "react";
-import { IAppError } from "../../types/IAppError";
+import { IAppError } from "@framework/types/IAppError";
 
 interface Props {
   error?: IAppError | null;

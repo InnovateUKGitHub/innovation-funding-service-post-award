@@ -3,9 +3,9 @@ import "jest";
 import React from "react";
 import Enzyme, { mount } from "enzyme";
 import Adapter from "enzyme-adapter-react-16";
-import { PartnersAndFinanceContacts } from "../../src/ui/components/partnersAndFinanceContacts";
+import { PartnersAndFinanceContacts } from "@ui/components/partnersAndFinanceContacts";
 import { getColumnValues } from "./helpers/tableHelpers";
-import { PartnerDto } from "../../src/types";
+import { PartnerDto } from "@framework/types";
 
 Enzyme.configure({ adapter: new Adapter() });
 

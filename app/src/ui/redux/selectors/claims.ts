@@ -2,9 +2,9 @@ import { dataStoreHelper, editorStoreHelper } from "./common";
 import { RootState } from "../reducers";
 import { ClaimDtoValidator } from "../../validators/claimDtoValidator";
 import { getCostCategories } from "./costCategories";
-import { getKey } from "../../../util/key";
-import { ClaimDto, ClaimStatus } from "../../../types";
 import { Pending } from "../../../shared/pending";
+import { ClaimDto, ClaimStatus } from "@framework/types";
+import { getKey } from "@framework/util/key";
 import { ClaimDetailsValidator } from "@ui/validators";
 import { range } from "@shared/range";
 

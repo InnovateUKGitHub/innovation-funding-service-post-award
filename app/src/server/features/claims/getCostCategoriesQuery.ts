@@ -1,5 +1,5 @@
 import { QueryBase } from "../common/queryBase";
-import { IContext } from "../../../types";
+import { IContext } from "@framework/types";
 
 export class GetCostCategoriesQuery extends QueryBase<CostCategoryDto[]> {
   protected async Run(context: IContext) {

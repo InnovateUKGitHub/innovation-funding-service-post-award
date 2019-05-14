@@ -1,7 +1,7 @@
 import * as Validation from "./common";
 import { Results } from "../validation/results";
 import { Result } from "../validation/result";
-import { ClaimDto } from "../../types";
+import { ClaimDto } from "@framework/types";
 
 export class ForecastDetailsDtosValidator extends Results<ForecastDetailsDTO[]>  {
   public readonly items = Validation.optionalChild(this, this.model, x => new ForecastDetailsDtoValidator(x));

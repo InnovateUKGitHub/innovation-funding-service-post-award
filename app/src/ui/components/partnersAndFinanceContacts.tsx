@@ -1,6 +1,6 @@
 import React from "react";
 import { TypedTable } from "./table";
-import { PartnerDto } from "../../types";
+import { PartnerDto } from "@framework/types";
 
 interface Props {
   partners: PartnerDto[];

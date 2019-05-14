@@ -1,8 +1,8 @@
 // tslint:disable: no-duplicate-string no-big-function
 
 import { TestContext } from "../../testContextProvider";
-import { MonitoringReportStatus } from "../../../../src/types/constants/monitoringReportStatus";
 import { GetMonitoringReportById } from "@server/features/monitoringReports/getMonitoringReport";
+import { MonitoringReportStatus } from "@framework/constants";
 
 describe("GetMonitoringReport", () => {
 

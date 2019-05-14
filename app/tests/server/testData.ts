@@ -1,11 +1,10 @@
 // tslint:disable:no-duplicate-string
-import * as Repositories from "../../src/server/repositories";
-import { ISalesforceMonitoringReportQuestions, SalesforceRole } from "../../src/server/repositories";
-import { ITestRepositories } from "./testRepositories";
-import { ClaimStatus, IClientUser, ProjectDto } from "../../src/types";
-import { MonitoringReportStatus } from "../../src/types/constants/monitoringReportStatus";
-import { range } from "@shared/range";
 import { DateTime } from "luxon";
+import * as Repositories from "@server/repositories";
+import { ISalesforceMonitoringReportQuestions, SalesforceRole } from "@server/repositories";
+import { range } from "@shared/range";
+import { ClaimStatus, IClientUser } from "@framework/types";
+import { ITestRepositories } from "./testRepositories";
 
 export class TestData {
   constructor(private repositories: ITestRepositories, private getCurrentUser: () => IClientUser ) {

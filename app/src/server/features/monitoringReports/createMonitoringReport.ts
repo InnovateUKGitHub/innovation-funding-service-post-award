@@ -7,7 +7,7 @@ import {
   ProjectRole,
 } from "@framework/types";
 import { ISalesforceMonitoringReportHeader, ISalesforceMonitoringReportResponse } from "@server/repositories";
-import { MonitoringReportDtoValidator } from "@framework/ui/validators/MonitoringReportDtoValidator";
+import { MonitoringReportDtoValidator } from "@ui/validators/MonitoringReportDtoValidator";
 import { BadRequestError, CommandBase, ValidationError } from "@server/features/common";
 import { GetByIdQuery } from "@server/features/projects";
 import { GetMonitoringReportActiveQuestions } from "@server/features/monitoringReports/getMonitoringReportActiveQuestions";

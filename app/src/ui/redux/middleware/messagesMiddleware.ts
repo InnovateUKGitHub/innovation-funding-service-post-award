@@ -1,8 +1,8 @@
 import { Dispatch, MiddlewareAPI } from "redux";
-import { RootState } from "../reducers/rootReducer";
-import { RootActions } from "../actions/root";
-import { scrollToTheTopInstantly, scrollToTheTopSmoothly } from "../../../util/windowHelpers";
 import { actionTypes } from "redux-router5";
+import { RootState } from "@ui/redux/reducers/rootReducer";
+import { RootActions } from "@ui/redux/actions/root";
+import { scrollToTheTopInstantly } from "@framework/util";
 
 export const messagesMiddleware = (store: MiddlewareAPI<Dispatch, RootState>) => (next: Dispatch) => (action: RootActions) => {
   if(action.type === actionTypes.TRANSITION_SUCCESS) {

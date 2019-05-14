@@ -1,9 +1,8 @@
 // tslint:disable:no-identical-functions no-duplicate-string
 import "jest";
-import { DateTime } from "luxon";
 import { TestContext } from "../../testContextProvider";
-import { MapToProjectDtoCommand } from "../../../../src/server/features/projects/mapToProjectDto";
-import { ClaimFrequency, ProjectClaimTrackingStatus, ProjectDto, ProjectRole, ProjectStatus } from "../../../../src/types";
+import { MapToProjectDtoCommand } from "@server/features/projects/mapToProjectDto";
+import { ClaimFrequency, ProjectDto, ProjectRole, ProjectStatus } from "@framework/types";
 
 describe("MapToProjectDtoCommand", () => {
   it("when valid expect mapping", async () => {

@@ -6,8 +6,8 @@ import { GetByIdQuery } from "../features/projects";
 import { UpdateForecastRoute, ViewForecastRoute } from "../../ui/containers";
 import { getForecastDetailsEditor } from "../../ui/redux/selectors";
 import { ForecastDetailsDtosValidator } from "../../ui/validators";
-import { ILinkInfo } from "../../types/ILinkInfo";
-import { IContext } from "../../types/IContext";
+import { ILinkInfo } from "@framework/types/ILinkInfo";
+import { IContext } from "@framework/types/IContext";
 import { GetByIdQuery as GetPartnerByIdQuery } from "../features/partners";
 import { GetCostCategoriesForPartnerQuery } from "../features/claims/getCostCategoriesForPartnerQuery";
 

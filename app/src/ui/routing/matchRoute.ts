@@ -1,11 +1,11 @@
 import React from "react";
 import { State } from "router5";
 import { routeConfig, RouteKeys } from "./routeConfig";
-import { AsyncThunk, DataLoadAction } from "../redux/actions";
-import { ErrorNotFoundRoute } from "../containers";
-import { Authorisation } from "../../types";
-import { RootState } from "../redux";
-import { PageTitleState } from "../redux/reducers/pageTitleReducer";
+import { ErrorNotFoundRoute } from "@ui/containers";
+import { RootState } from "@ui/redux";
+import { AsyncThunk, DataLoadAction } from "@ui/redux/actions";
+import { PageTitleState } from "@ui/redux/reducers/pageTitleReducer";
+import { Authorisation } from "@framework/types";
 
 export interface MatchedRoute {
   name: string;

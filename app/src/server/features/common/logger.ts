@@ -1,5 +1,5 @@
 import { Configuration } from "./config";
-import { LogLevel } from "../../../types/logLevel";
+import { LogLevel } from "@framework/types/logLevel";
 import { AppError } from "./appError";
 import { DateTime } from "luxon";
 

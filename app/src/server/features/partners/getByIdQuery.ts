@@ -1,7 +1,7 @@
 import { QueryBase } from "../common";
 import { MapToPartnerDtoCommand } from "./mapToPartnerDto";
 import { GetAllProjectRolesForUser } from "../projects/getAllProjectRolesForUser";
-import { IContext, PartnerDto } from "../../../types";
+import { IContext, PartnerDto } from "@framework/types";
 
 export class GetByIdQuery extends QueryBase<PartnerDto> {
   constructor(private readonly partnerId: string) {

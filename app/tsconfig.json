@@ -17,9 +17,9 @@
     "paths": {
       "@server/*": ["src/server/*"],
       "@shared/*": ["src/shared/*"],
-      "@framework/*": ["src/*"],
+      "@framework/*": ["src/framework/*"],
       "@ui/*": ["src/ui/*"],
-      "@util/*": ["src/util/*"]
+      "@util/*": ["src/framework/util/*"]
     },
 
     // "composite": true,                     /* Enable project compilation */

@@ -1,13 +1,11 @@
 // tslint:disable: no-duplicate-string no-big-function
 
-import { TestContext } from "../../testContextProvider";
-import { GetMonitoringReportsForProject } from "../../../../src/server/features/monitoringReports/getMonitoringReportsForProject";
-import * as Repositories from "../../../../src/server/repositories";
-import { MonitoringReportStatus } from "../../../../src/types/constants/monitoringReportStatus";
 import { DateTime } from "luxon";
+import { TestContext } from "../../testContextProvider";
+import { GetMonitoringReportsForProject } from "@server/features/monitoringReports/getMonitoringReportsForProject";
+import { MonitoringReportStatus } from "@framework/constants";
 
 describe("GetMonitoringReportsForProject", () => {
-
   it("returns an object of the right shape", async () => {
     const context = new TestContext();
     const testData = context.testData;

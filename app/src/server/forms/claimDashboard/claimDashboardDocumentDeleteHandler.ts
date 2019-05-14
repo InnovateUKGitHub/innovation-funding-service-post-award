@@ -10,8 +10,8 @@ import { DeleteDocumentCommand } from "../../features/documents/deleteDocument";
 import { Results } from "../../../ui/validation/results";
 import { GetDocumentsSummaryQuery } from "../../features/documents/getDocumentsSummary";
 import { BadRequestError } from "../../features/common/appError";
-import { ILinkInfo } from "../../../types/ILinkInfo";
-import { IContext } from "../../../types/IContext";
+import { ILinkInfo } from "@framework/types/ILinkInfo";
+import { IContext } from "@framework/types/IContext";
 
 export class ClaimDashboardDocumentDeleteHandler extends FormHandlerBase<ClaimDashboardPageParams, DocumentSummaryDto> {
 
