@@ -39,7 +39,7 @@ class DetailsComponent extends ContainerBase<Params, Data, Callbacks> {
       <ACC.Page
         backLink={<ACC.BackLink route={MonitoringReportDashboardRoute.getLink({ projectId: this.props.projectId })}>Back to monitoring reports</ACC.BackLink>}
         pageTitle={<ACC.Projects.Title project={project} />}
-        tabs={<ACC.MonitoringReports.Navigation projectId={this.props.projectId} id={this.props.id} currentRouteName={MonitoringReportViewRoute.routeName} />}
+        tabs={<ACC.MonitoringReports.Navigation projectId={this.props.projectId} id={this.props.id} />}
       >
         <ACC.Section title={title}>
           {this.renderResponses(report)}
