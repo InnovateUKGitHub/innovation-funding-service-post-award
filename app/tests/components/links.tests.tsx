@@ -62,24 +62,6 @@ describe("Links", () => {
     });
   });
 
-  describe("Link with no access permission", () => {
-    it("should not render a link", () => {
-      const noAccessRoute = { routeName: "test", routeParams: { id : "exampleId"}, accessControl: () => false};
-      const noAccessRouter = createRouter([{name: noAccessRoute.routeName, path: "/test/:id" }]).usePlugin(browserPluginFactory({ useHash: false }));
-      const linkText = "someLinkText";
-      const result = (
-        <Provider store={createStore(rootReducer)}>
-          <RouterProvider router={noAccessRouter}>
-            <Links.Link route={noAccessRoute}>{linkText}</Links.Link>
-          </RouterProvider>
-        </Provider>
-      );
-      const wrapper = mount(result);
-      const html = wrapper.html();
-      expect(html).toBeNull();
-    });
-  });
-
   describe("BackLink", () => {
     it("should render a link with correct path", () => {
       const linkText = "someLinkText";
