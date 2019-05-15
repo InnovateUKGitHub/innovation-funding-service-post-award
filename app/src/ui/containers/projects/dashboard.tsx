@@ -196,7 +196,10 @@ class ProjectDashboardComponent extends ContainerBase<Props, Data, Callbacks> {
   private renderBadge(project: ProjectDto, partner: PartnerDto | null, section: Section) {
     const isOverdue = section === "open" ? this.getIsOverdue(project, partner) : false;
 
-    if (isOverdue) {
+    if (project.status === ProjectStatus.OnHold) {
+      return (<div className="govuk-body" style={{ color: colour.GOVUK_TEXT_COLOUR, fontWeight: "bold" }}>On hold</div>);
+    }
+    else if (isOverdue) {
       return (<div className="govuk-body" style={{ color: colour.GOVUK_ERROR_COLOUR, fontWeight: "bold" }}>Claim overdue</div>);
     }
     else if (section === "open") {
