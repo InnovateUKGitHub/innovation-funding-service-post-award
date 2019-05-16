@@ -34,39 +34,45 @@ const NavigationComponent: React.SFC<Props & Data> = (props: Props & Data) => {
     tabs.push({
       text: detailsTabText,
       selected: props.currentRoute.name === ClaimsDetailsRoute.routeName,
-      route: ClaimsDetailsRoute.getLink({ projectId, partnerId, periodId })
+      route: ClaimsDetailsRoute.getLink({ projectId, partnerId, periodId }),
+      qa: "ClaimDetailTab"
     });
 
     tabs.push({
       text:logTabText,
       selected: props.currentRoute.name === ClaimLogRoute.routeName,
-      route: ClaimLogRoute.getLink({ projectId, partnerId, periodId , action: "details" })
+      route: ClaimLogRoute.getLink({ projectId, partnerId, periodId , action: "details" }),
+      qa: "ClaimDetailLogTab"
     });
   }
   else if(props.currentRoute.name === PrepareClaimRoute.routeName|| (props.currentRoute.name === ClaimLogRoute.routeName && action === "prepare")) {
     tabs.push({
       text: detailsTabText,
       selected: props.currentRoute.name === PrepareClaimRoute.routeName,
-      route: PrepareClaimRoute.getLink({ projectId, partnerId, periodId })
+      route: PrepareClaimRoute.getLink({ projectId, partnerId, periodId }),
+      qa: "ClaimPrepareDetailTab"
     });
 
     tabs.push({
       text: logTabText,
       selected: props.currentRoute.name === ClaimLogRoute.routeName,
-      route: ClaimLogRoute.getLink({ projectId, partnerId, periodId , action: "prepare" })
+      route: ClaimLogRoute.getLink({ projectId, partnerId, periodId , action: "prepare" }),
+      qa: "ClaimPrepareLogTab"
     });
   }
   else if(props.currentRoute.name === ReviewClaimRoute.routeName|| (props.currentRoute.name === ClaimLogRoute.routeName && action === "review")) {
     tabs.push({
       text: detailsTabText,
       selected: props.currentRoute.name === ReviewClaimRoute.routeName,
-      route: ReviewClaimRoute.getLink({ projectId, partnerId, periodId })
+      route: ReviewClaimRoute.getLink({ projectId, partnerId, periodId }),
+      qa: "ClaimReviewDetailTab"
     });
 
     tabs.push({
       text: logTabText,
       selected: props.currentRoute.name === ClaimLogRoute.routeName,
-      route: ClaimLogRoute.getLink({ projectId, partnerId, periodId , action: "review" })
+      route: ClaimLogRoute.getLink({ projectId, partnerId, periodId , action: "review" }),
+      qa: "ClaimReviewLogTab"
     });
   }
 
