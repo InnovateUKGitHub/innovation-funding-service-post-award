@@ -11,4 +11,9 @@ export class NestedResult<T extends Results<{}>> extends Result {
             results.some(x => x.isRequired)
         );
     }
+
+    public log() {
+        if(this.isValid) return null;
+        return this.errorMessage! + "/n/t" + this.results.filter(x => !x.isValid).map(x => x.log()).join("/n/t");
+    }
 }

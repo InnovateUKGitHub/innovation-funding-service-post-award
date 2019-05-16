@@ -34,8 +34,6 @@ export class UpdateClaimCommand extends CommandBase<boolean> {
       await context.repositories.claimStatusChanges.create({
         Acc_Claim__c:this.claimDto.id,
         Acc_ExternalComment__c: this.claimDto.comments,
-        Acc_NewClaimStatus__c: this.claimDto.status,
-        Acc_PreviousClaimStatus__c: existingStatus,
         Acc_ParticipantVisibility__c: this.getChangeStatusVisibility(this.claimDto)
       });
     }

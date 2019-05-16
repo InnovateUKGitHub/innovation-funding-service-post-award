@@ -30,7 +30,7 @@ export class Result {
 
     public readonly key: string;
 
-    combine(other: Result) {
+    public combine(other: Result) {
         return new Result(
           null,
           this.showValidationErrors || other.showValidationErrors,
@@ -38,5 +38,10 @@ export class Result {
           this.errorMessage || other.errorMessage || "",
           this.isRequired || other.isRequired
         );
+    }
+
+    public log() {
+        if(this.isValid) return null;
+        return this.errorMessage!;
     }
 }
