@@ -110,7 +110,7 @@ const MonitoringReportPrepare = containerDefinition.connect({
     },
     onSave: (projectId, id, dto, project, submit) => {
       dispatch(Actions.saveMonitoringReport(projectId, id, dto, dto.questions, project, submit, () => {
-        dispatch(Actions.navigateTo(MonitoringReportDashboardRoute.getLink({ projectId })));
+        dispatch(Actions.navigateBackTo(MonitoringReportDashboardRoute.getLink({ projectId })));
       }));
     }
   })
