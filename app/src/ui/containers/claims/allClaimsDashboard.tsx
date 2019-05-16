@@ -154,7 +154,6 @@ class Component extends ContainerBase<Params, Data, {}> {
       <Acc.Section title={title} qa="current-claims-section" badge={badge} key={index} subsection={true}>
         <ClaimTable.Table
           data={currentInfo.claims}
-          className="govuk-!-font-size-16"
           bodyRowFlag={x => this.getBodyRowFlag(x, project, partners) ? "edit" : null}
           caption="Open"
           qa="current-claims-table"

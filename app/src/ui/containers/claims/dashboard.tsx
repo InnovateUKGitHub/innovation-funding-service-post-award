@@ -222,7 +222,6 @@ class Component extends ContainerBase<ClaimDashboardPageParams, Data, Callbacks>
     return (
       <ClaimTable.Table
         data={data}
-        className="govuk-!-font-size-16"
         bodyRowFlag={x => Acc.Claims.getClaimDetailsLinkType({ claim: x, project, partner }) === "edit" ? "edit" : null}
         qa={tableQa}
         caption={tableCaption}
