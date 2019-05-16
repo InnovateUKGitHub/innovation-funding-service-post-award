@@ -3,8 +3,8 @@ import * as Renderers from "./renderers";
 
 interface Props {
   periodId: number;
-  periodStartDate: Date;
-  periodEndDate: Date;
+  periodStartDate: Date | null;
+  periodEndDate: Date | null;
 }
 
 export const PeriodTitle: React.SFC<Props> = (props) => {

@@ -222,7 +222,6 @@ export class TestData {
 
     const newHeader: Repositories.ISalesforceMonitoringReportHeader = {
       Id: "Report Header " + seed,
-      Name: "Report Name " + seed,
       Acc_MonitoringReportStatus__c: "Draft",
       MonitoringReportStatusName: "Draft",
       Acc_Project__c: project.Id,
