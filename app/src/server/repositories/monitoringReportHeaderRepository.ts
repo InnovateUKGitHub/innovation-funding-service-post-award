@@ -22,6 +22,7 @@ export interface IMonitoringReportHeaderRepository {
   update(updateDto: Updatable<ISalesforceMonitoringReportHeader>): Promise<boolean>;
   create(updateDto: Partial<ISalesforceMonitoringReportHeader>): Promise<string>;
   getAllForProject(projectId: string): Promise<ISalesforceMonitoringReportHeader[]>;
+  delete(reportId: string): Promise<void>;
 }
 
 export class MonitoringReportHeaderRepository extends SalesforceRepositoryBase<ISalesforceMonitoringReportHeader> implements IMonitoringReportHeaderRepository {
@@ -65,5 +66,9 @@ export class MonitoringReportHeaderRepository extends SalesforceRepositoryBase<I
 
   async getAllForProject(projectId: string): Promise<ISalesforceMonitoringReportHeader[]> {
     return super.where(`Acc_Project__c = '${projectId}' AND RecordType.Name = '${this.recordType}'`);
+  }
+
+  async delete(reportId: string): Promise<void> {
+    return super.deleteItem(reportId);
   }
 }
