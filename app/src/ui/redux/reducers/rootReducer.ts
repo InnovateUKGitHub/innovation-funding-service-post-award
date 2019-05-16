@@ -8,6 +8,7 @@ import { messagesReducer } from "./messagesReducer";
 import { IClientUser } from "@framework/types/IUser";
 import { configReducer, IClientConfig } from "./configReducer";
 import { pageTitleReducer, PageTitleState } from "./pageTitleReducer";
+import { historyReducer } from "@ui/redux/reducers/historyReducer";
 
 export type DataState = ReturnType<typeof dataReducer>;
 export type DataStateKeys = keyof DataState;
@@ -19,6 +20,7 @@ export interface RootState {
   router: RouterState;
   data: DataState;
   editors: EditorState;
+  history: number;
   loadStatus: number;
   messages: MessagesState;
   user: IClientUser;
@@ -31,6 +33,7 @@ export const rootReducer = combineReducers<RootState>({
   router: router5Reducer,
   data: dataReducer,
   editors: editorReducer,
+  history: historyReducer,
   loadStatus: loadStatusReducer,
   messages: messagesReducer,
   user: userReducer,

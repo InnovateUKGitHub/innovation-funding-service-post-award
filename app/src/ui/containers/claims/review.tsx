@@ -7,8 +7,8 @@ import { ContainerBase, ReduxContainer } from "@ui/containers/containerBase";
 import { ClaimDtoValidator } from "@ui/validators/claimDtoValidator";
 import { Pending } from "@shared/pending";
 import { ClaimDto, ClaimStatus, PartnerDto, ProjectDto, ProjectRole } from "@framework/types";
-import { AllClaimsDashboardRoute, ClaimsDetailsRoute, ReviewClaimLineItemsRoute } from ".";
 import { ForecastData, forecastDataLoadActions } from "./forecasts/common";
+import { AllClaimsDashboardRoute, ReviewClaimLineItemsRoute } from "@ui/containers";
 
 export interface ReviewClaimParams {
   projectId: string;
@@ -235,7 +235,7 @@ export const ReviewClaim = definition.connect({
     onChange: (partnerId, periodId, dto, details, costCategories) =>
       dispatch(Actions.validateClaim(partnerId, periodId, dto, details, costCategories)),
     onSave: (projectId, partnerId, periodId, dto, details, costCategories, message) =>
-      dispatch(Actions.saveClaim(projectId, partnerId, periodId, dto, details, costCategories, () => dispatch(Actions.navigateTo(AllClaimsDashboardRoute.getLink({ projectId }))), message)),
+      dispatch(Actions.saveClaim(projectId, partnerId, periodId, dto, details, costCategories, () => dispatch(Actions.navigateBackTo(AllClaimsDashboardRoute.getLink({ projectId }))), message)),
   })
 });
 
