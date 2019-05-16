@@ -36,23 +36,16 @@ export class MonitoringReportDtoValidator extends Results<MonitoringReportDto> {
     super(model, show);
   }
 
-  public readonly title = Validation.all(this,
-    () => Validation.required(this, this.model.title, "Title is required"),
-    () => Validation.maxLength(this, this.model.title, 80, "Title must be less than 80 characters"),
-    );
-
   public readonly periodId = Validation.all(this,
     () => Validation.required(this, this.model.periodId, "Period is required"),
     () => Validation.integer(this, this.model.periodId, "Period must be a valid period"),
     () => Validation.isTrue(this, (this.model.periodId > 0 && this.model.periodId <= this.totalProjectPeriods), `Maximum period is ${this.totalProjectPeriods}`)
   );
 
-  public readonly responses = Validation.optionalChild(this, this.questions,
-    q => (
-      new QuestionValidator(
-        q,
-        this.model.questions.find(x => x.displayOrder === q.displayOrder) || {} as MonitoringReportQuestionDto,
-        this.showValidationErrors,
-        this.submit
-      )), "There are invalid responses.");
+  public readonly responses = Validation.optionalChild(
+    this,
+    this.questions,
+    q => new QuestionValidator(q, this.model.questions.find(x => x.displayOrder === q.displayOrder) || {} as MonitoringReportQuestionDto, this.showValidationErrors, this.submit),
+    "There are invalid responses."
+  );
 }

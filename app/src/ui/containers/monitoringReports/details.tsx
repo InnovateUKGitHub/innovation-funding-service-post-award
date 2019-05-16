@@ -33,7 +33,7 @@ class DetailsComponent extends ContainerBase<Params, Data, Callbacks> {
   }
 
   private renderContents(project: Dtos.ProjectDto, report: Dtos.MonitoringReportDto) {
-    const title = `Period ${report.periodId}: ${report.title}`;
+    const title = <ACC.PeriodTitle periodId={report.periodId} periodStartDate={report.startDate} periodEndDate={report.endDate} />;
 
     return (
       <ACC.Page

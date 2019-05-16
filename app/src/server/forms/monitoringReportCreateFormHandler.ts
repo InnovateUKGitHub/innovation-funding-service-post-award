@@ -25,7 +25,6 @@ export class MonitoringReportCreateFormHandler extends FormHandlerBase<Monitorin
     return {
       headerId: "",
       projectId: params.projectId,
-      title: body.title,
       periodId: parseInt(body.period, 10),
       questions,
       status: MonitoringReportStatus.Draft,

@@ -121,7 +121,6 @@ async function getCreateDto(context: TestContext, project: ISalesforceProject): 
   return {
     projectId: project.Id,
     headerId: "",
-    title: "The test report",
     status: MonitoringReportStatus.Draft,
     statusName: "Draft",
     startDate: null,
