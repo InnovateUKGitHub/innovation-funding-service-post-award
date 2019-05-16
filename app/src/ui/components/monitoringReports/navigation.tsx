@@ -27,26 +27,30 @@ export const NavigationComponent: React.FunctionComponent<Props & Data> = (props
     tabs.push({
       text: detailsTabText,
       selected: props.currentRoute.name === MonitoringReportViewRoute.routeName,
-      route: MonitoringReportViewRoute.getLink({ id, projectId })
+      route: MonitoringReportViewRoute.getLink({ id, projectId }),
+      qa: "MRDetailTab"
     });
 
     tabs.push({
       text: logTabText,
       selected: props.currentRoute.name === MonitoringReportLogRoute.routeName,
-      route: MonitoringReportLogRoute.getLink({ id, projectId, action: "details" })
+      route: MonitoringReportLogRoute.getLink({ id, projectId, action: "details" }),
+      qa: "MRDetailsLogTab"
     });
   }
   else if (props.currentRoute.name === MonitoringReportPrepareRoute.routeName || (props.currentRoute.name === MonitoringReportLogRoute.routeName && action === "prepare")) {
     tabs.push({
       text: detailsTabText,
       selected: props.currentRoute.name === MonitoringReportPrepareRoute.routeName,
-      route: MonitoringReportPrepareRoute.getLink({ id, projectId })
+      route: MonitoringReportPrepareRoute.getLink({ id, projectId }),
+      qa: "MRPrepareTab"
     });
 
     tabs.push({
       text: logTabText,
       selected: props.currentRoute.name === MonitoringReportLogRoute.routeName,
-      route: MonitoringReportLogRoute.getLink({ id, projectId, action: "prepare" })
+      route: MonitoringReportLogRoute.getLink({ id, projectId, action: "prepare" }),
+      qa: "MRPrepareLogTab"
     });
   }
 
