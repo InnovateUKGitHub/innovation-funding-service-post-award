@@ -13,12 +13,14 @@ import {
 import { CreateMonitoringReport } from "@server/features/monitoringReports/createMonitoringReport";
 import { GetMonitoringReportActiveQuestions } from "@server/features/monitoringReports/getMonitoringReportActiveQuestions";
 import { GetMonitoringReportStatusChanges } from "@server/features/monitoringReports/getMonitoringReportStatusChanges";
+import { DeleteMonitoringReportCommand } from "@server/features/monitoringReports/deleteMonitoringReport";
 
 export interface IMonitoringReportsApi {
-  get: (params: ApiParams<{ projectId: string, reportId: string }>) => Promise<MonitoringReportDto>;
-  saveMonitoringReport: (params: ApiParams<{ monitoringReportDto: MonitoringReportDto, submit: boolean }>) => Promise<MonitoringReportDto>;
   createMonitoringReport: (params: ApiParams<{ monitoringReportDto: MonitoringReportDto, submit: boolean }>) => Promise<MonitoringReportDto>;
+  get: (params: ApiParams<{ projectId: string, reportId: string }>) => Promise<MonitoringReportDto>;
   getAllForProject: (params: ApiParams<{ projectId: string }>) => Promise<MonitoringReportSummaryDto[]>;
+  saveMonitoringReport: (params: ApiParams<{ monitoringReportDto: MonitoringReportDto, submit: boolean }>) => Promise<MonitoringReportDto>;
+  deleteMonitoringReport: (params: ApiParams<{ projectId: string, reportId: string }>) => Promise<boolean>;
   getActiveQuestions: (params: ApiParams<{}>) => Promise<MonitoringReportQuestionDto[]>;
   getStatusChanges: (params: ApiParams<{ projectId: string, reportId: string }>) => Promise<MonitoringReportStatusChangeDto[]>;
 }
@@ -28,12 +30,13 @@ class Controller extends ControllerBaseWithSummary<MonitoringReportSummaryDto, M
   constructor() {
     super("monitoring-reports");
 
+    this.postItem("/", (p, q, b) => ({ monitoringReportDto: processDto(b), submit: q.submit === "true" }), (p) => this.createMonitoringReport(p));
+    this.getItem("/:projectId/:reportId", (p) => ({ projectId: p.projectId, reportId: p.reportId }), (p) => this.get(p));
+    this.getItems("/", (p, q) => ({ projectId: q.projectId }), (p) => this.getAllForProject(p));
+    this.putItem("/", (p, q, b) => ({ monitoringReportDto: processDto(b), submit: q.submit === "true" }), (p) => this.saveMonitoringReport(p));
+    this.deleteItem("/:projectId/:reportId", (p) => ({ projectId: p.projectId, reportId: p.reportId }), p => this.deleteMonitoringReport(p));
     this.getCustom("/status-changes/:projectId/:reportId", (p) => ({ projectId: p.projectId, reportId: p.reportId}), p => this.getStatusChanges(p));
     this.getCustom("/questions", (p) => ({}), p => this.getActiveQuestions(p));
-    this.getItem("/:projectId/:reportId", (p) => ({ projectId: p.projectId, reportId: p.reportId }), (p) => this.get(p));
-    this.putItem("/", (p, q, b) => ({ monitoringReportDto: processDto(b), submit: q.submit === "true" }), (p) => this.saveMonitoringReport(p));
-    this.postItem("/", (p, q, b) => ({ monitoringReportDto: processDto(b), submit: q.submit === "true" }), (p) => this.createMonitoringReport(p));
-    this.getItems("/", (p, q) => ({ projectId: q.projectId }), (p) => this.getAllForProject(p));
   }
 
   public async get(params: ApiParams<{ projectId: string, reportId: string }>) {
@@ -72,6 +75,14 @@ class Controller extends ControllerBaseWithSummary<MonitoringReportSummaryDto, M
     const { projectId, reportId } = params;
     const query = new GetMonitoringReportStatusChanges(projectId, reportId);
     return contextProvider.start(params).runQuery(query);
+  }
+
+  public async deleteMonitoringReport(params: ApiParams<{ projectId: string, reportId: string }>) {
+    const { projectId, reportId } = params;
+    const command = new DeleteMonitoringReportCommand(projectId, reportId);
+    await contextProvider.start(params).runCommand(command);
+
+    return true;
   }
 }
 
