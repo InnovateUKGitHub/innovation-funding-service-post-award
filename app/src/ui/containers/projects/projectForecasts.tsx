@@ -70,7 +70,7 @@ export const ProjectForecastRoute = containerDefinition.route({
   ],
   getTitle: (store, params) => {
     return {
-      htmlTitle: "View forecast - View project",
+      htmlTitle: "Forecasts - View project",
       displayTitle: "View project"
     };
   },
