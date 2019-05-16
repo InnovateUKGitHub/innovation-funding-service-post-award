@@ -1,9 +1,14 @@
 import { MonitoringReportStatus } from "../constants/monitoringReportStatus";
 
-export interface MonitoringReportOptionDto {
-  id: string;
-  questionText: string;
-  questionScore: number;
+export interface MonitoringReportSummaryDto {
+  projectId: string;
+  headerId: string;
+  status: MonitoringReportStatus;
+  statusName: string;
+  startDate: Date|null;
+  endDate: Date|null;
+  periodId: number;
+  lastUpdated: Date|null;
 }
 
 export interface MonitoringReportQuestionDto {
@@ -20,16 +25,10 @@ export interface MonitoringReportDto extends MonitoringReportSummaryDto {
   questions: MonitoringReportQuestionDto[];
 }
 
-export interface MonitoringReportSummaryDto {
-  projectId: string;
-  headerId: string;
-  title: string;
-  status: MonitoringReportStatus;
-  statusName: string;
-  startDate: Date|null;
-  endDate: Date|null;
-  periodId: number;
-  lastUpdated: Date|null;
+export interface MonitoringReportOptionDto {
+  id: string;
+  questionText: string;
+  questionScore: number;
 }
 
 export interface MonitoringReportStatusChangeDto {

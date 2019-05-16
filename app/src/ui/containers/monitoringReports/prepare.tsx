@@ -79,7 +79,6 @@ class PrepareMonitoringReportComponent extends ContainerBase<MonitoringReportPre
       >
         <ACC.Section>
           <ReportForm.Form data={editor.data} onChange={(dto) => this.props.onChange(dto.projectId, dto.headerId, dto, project)} >
-            <ReportForm.String label="Title" labelBold={true} name="title" value={x => x.title} update={(x, v) => x.title = v!} validation={editor.validator.title} />
             <ReportForm.Numeric label="Period" labelBold={true} width="small" name="period" value={x => x.periodId} update={(x, v) => x.periodId = v!} validation={editor.validator.periodId} />
             <ACC.Renderers.SimpleString>For each question score the project against the criteria from 1 to 5, providing a comment explaining your reason. Your Monitoring Portfolio Executive will return the report to you otherwise.</ACC.Renderers.SimpleString>
             {this.renderFormItems(editor)}

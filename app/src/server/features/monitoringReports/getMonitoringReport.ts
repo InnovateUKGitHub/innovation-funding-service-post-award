@@ -31,7 +31,6 @@ export class GetMonitoringReportById extends QueryBase<MonitoringReportDto> {
 
     return {
       headerId: header.Id,
-      title: header.Name,
       status: mapMonitoringReportStatus(header),
       statusName: header.MonitoringReportStatusName,
       projectId: header.Acc_Project__c,

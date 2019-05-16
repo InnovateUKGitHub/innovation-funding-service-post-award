@@ -83,7 +83,7 @@ class DashboardComponent extends ContainerBase<Params, Data, Callbacks> {
         bodyRowFlag={x => section !== "current" ? null : this.editStatuses.indexOf(x.status) >= 0 ? "edit" : null}
         qa={`${section}-reports-table`}
       >
-        <ReportsTable.String header={`Title`} qa="title" value={x => x.title} />
+        <ReportsTable.Custom header={`Title`} qa="title" value={x => <ACC.PeriodTitle periodId={x.periodId} periodStartDate={x.startDate} periodEndDate={x.endDate} />} />
         <ReportsTable.Number header={`Period`} qa="period" value={x => x.periodId} />
         <ReportsTable.String header={`Status`} qa="status" value={x => x.statusName} />
         <ReportsTable.ShortDateTime header={`Last updated`} qa="dateUpdated" value={x => x.lastUpdated} />
