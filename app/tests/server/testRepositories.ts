@@ -228,6 +228,10 @@ class MonitoringReportHeaderTestRepository extends TestRepository<Repositories.I
   getAllForProject(projectId: string): Promise<Repositories.ISalesforceMonitoringReportHeader[]> {
     return super.getWhere(x => x.Acc_Project__c === projectId);
   }
+
+  delete(reportId: string): Promise<void> {
+      return super.deleteItem(this.Items.find(x => x.Id === reportId));
+  }
 }
 
 class MonitoringReportResponseTestRepository extends TestRepository<Repositories.ISalesforceMonitoringReportResponse> implements Repositories.IMonitoringReportResponseRepository {
