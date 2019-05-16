@@ -176,18 +176,6 @@ describe("saveMonitoringReports validation", () => {
     await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
   });
 
-  it("should return a validation error when trying to save responses without a title", async () => {
-    const context = new TestContext();
-
-    const report = context.testData.createMonitoringReportHeader();
-    report.Name = null as any;
-    const dto = await getDto(context, report);
-
-    const command = new SaveMonitoringReport(dto, false);
-
-    await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
-  });
-
   it("should return a validation error if an invalid option is selected", async () => {
     const context = new TestContext();
 

@@ -1,16 +1,11 @@
 import { DateTime } from "luxon";
-import {
-  Authorisation,
-  ClaimFrequency,
-  IContext,
-  MonitoringReportDto, ProjectDto,
-  ProjectRole,
-} from "@framework/types";
 import { ISalesforceMonitoringReportHeader, ISalesforceMonitoringReportResponse } from "@server/repositories";
-import { MonitoringReportDtoValidator } from "@ui/validators/MonitoringReportDtoValidator";
 import { BadRequestError, CommandBase, ValidationError } from "@server/features/common";
 import { GetByIdQuery } from "@server/features/projects";
-import { GetMonitoringReportActiveQuestions } from "@server/features/monitoringReports/getMonitoringReportActiveQuestions";
+import { GetMonitoringReportActiveQuestions } from "@server/features/monitoringReports";
+import { MonitoringReportDtoValidator } from "@ui/validators";
+import { Authorisation, ClaimFrequency, IContext } from "@framework/types";
+import { MonitoringReportDto, ProjectDto, ProjectRole } from "@framework/dtos";
 
 export class CreateMonitoringReport extends CommandBase<string> {
   constructor(
@@ -43,8 +38,7 @@ export class CreateMonitoringReport extends CommandBase<string> {
       Acc_ProjectPeriodNumber__c: periodId,
       Acc_PeriodStartDate__c: startDate.toFormat("yyyy-MM-dd"),
       Acc_PeriodEndDate__c: endDate.toFormat("yyyy-MM-dd"),
-      Acc_MonitoringReportStatus__c: "Draft",
-      Name: this.monitoringReportDto.title,
+      Acc_MonitoringReportStatus__c: "Draft"
     };
 
     return await context.repositories.monitoringReportHeader.create(createRequest);

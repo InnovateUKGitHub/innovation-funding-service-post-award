@@ -35,7 +35,6 @@ export class SaveMonitoringReport extends CommandBase<boolean> {
 
     const update: Updatable<ISalesforceMonitoringReportHeader> = {
       Id: this.monitoringReportDto.headerId,
-      Name: this.monitoringReportDto.title,
       Acc_ProjectPeriodNumber__c: periodId,
       Acc_PeriodStartDate__c: startDate.toFormat("yyyy-MM-dd"),
       Acc_PeriodEndDate__c: endDate.toFormat("yyyy-MM-dd")

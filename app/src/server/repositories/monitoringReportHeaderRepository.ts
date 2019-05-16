@@ -12,7 +12,6 @@ export interface ISalesforceMonitoringReportHeader {
   Acc_ProjectPeriodNumber__c: number;
   Acc_PeriodStartDate__c: string;
   Acc_PeriodEndDate__c: string;
-  Name: string;
   LastModifiedDate: string;
 }
 
@@ -42,7 +41,6 @@ export class MonitoringReportHeaderRepository extends SalesforceRepositoryBase<I
     "Acc_ProjectPeriodNumber__c",
     "Acc_PeriodStartDate__c",
     "Acc_PeriodEndDate__c",
-    "Name",
     "LastModifiedDate"
   ];
 

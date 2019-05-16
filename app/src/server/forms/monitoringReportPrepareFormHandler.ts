@@ -21,7 +21,6 @@ export class MonitoringReportPrepareFormHandler extends FormHandlerBase<Monitori
   protected async getDto(context: IContext, params: MonitoringReportPrepareParams, button: IFormButton, body: IFormBody): Promise<MonitoringReportDto> {
     const query = new GetMonitoringReportById(params.projectId, params.id!);
     const dto = await context.runQuery(query);
-    dto.title = body.title;
     dto.periodId = parseInt(body.period, 10);
     dto.questions.forEach(q => {
       q.optionId = body[`question_${q.displayOrder}_options`];
