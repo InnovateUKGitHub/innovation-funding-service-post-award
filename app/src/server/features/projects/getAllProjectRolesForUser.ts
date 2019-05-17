@@ -7,16 +7,10 @@ export interface IRoleInfo {
   partnerRoles: { [key: string]: ProjectRole };
 }
 
-export function getEmptyRoleInfo(): IRoleInfo {
-  return ({
-    projectRoles: ProjectRole.Unknown,
-    partnerRoles: {}
-  });
-}
-
 export class GetAllProjectRolesForUser extends QueryBase<Authorisation> {
   public async Run(context: IContext): Promise<Authorisation> {
     const email = context.user && context.user.email;
+
     if (!email) {
       return new Authorisation({});
     }
@@ -24,12 +18,12 @@ export class GetAllProjectRolesForUser extends QueryBase<Authorisation> {
       return new Authorisation(await context.caches.projectRoles.fetchAsync(email, () => this.getServiceAccountRoles(context)));
     }
     else {
-      return new Authorisation(await context.caches.projectRoles.fetchAsync(email, () => this.getProjectRoles(context)));
+      return new Authorisation(await context.caches.projectRoles.fetchAsync(email, () => this.getProjectRoles(email, context)));
     }
   }
 
-  private async getProjectRoles(context: IContext) {
-    const contacts = await context.repositories.projectContacts.getAllForUser(context.user.email);
+  private async getProjectRoles(email: string, context: IContext) {
+    const contacts = await context.repositories.projectContacts.getAllForUser(email);
     const partners = await context.repositories.partners.getAll();
 
     // get all rows grouped by project into lookup
@@ -37,7 +31,7 @@ export class GetAllProjectRolesForUser extends QueryBase<Authorisation> {
       const newRole = this.getProjectRole(contact.Acc_Role__c);
 
       // get contact for project and if null initalise to empty and assign to allRoles
-      const roleInfo = allRoles[contact.Acc_ProjectId__c] = (allRoles[contact.Acc_ProjectId__c] || getEmptyRoleInfo());
+      const roleInfo = allRoles[contact.Acc_ProjectId__c] = (allRoles[contact.Acc_ProjectId__c] || this.getEmptyRoleInfo());
 
       roleInfo.projectRoles = roleInfo.projectRoles | newRole;
 
@@ -61,7 +55,6 @@ export class GetAllProjectRolesForUser extends QueryBase<Authorisation> {
     return role === ProjectRole.FinancialContact || (role === ProjectRole.ProjectManager && partner.Acc_ProjectRole__c === SalesforceProjectRole.ProjectLead);
   }
 
-  // TODO remove before live
   private async getServiceAccountRoles(context: IContext): Promise<{ [key: string]: IRoleInfo }> {
     const projects = await context.repositories.projects.getAll();
     const partners = await context.repositories.partners.getAll();
@@ -93,4 +86,12 @@ export class GetAllProjectRolesForUser extends QueryBase<Authorisation> {
         return ProjectRole.Unknown;
     }
   }
+
+  private getEmptyRoleInfo(): IRoleInfo {
+    return ({
+      projectRoles: ProjectRole.Unknown,
+      partnerRoles: {}
+    });
+  }
+
 }

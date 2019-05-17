@@ -19,4 +19,8 @@ export class Results<T> {
             this.isRequired = true;
         }
     }
+
+    public log() {
+        return this.errors.filter(x => !x.isValid).map(x => x.log()).join("/n");
+    }
 }

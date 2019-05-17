@@ -245,8 +245,6 @@ describe("UpdateClaimCommand", () => {
     const statusChange = context.repositories.claimStatusChanges.Items[0];
 
     expect(statusChange.Acc_Claim__c).toEqual(claim.Id);
-    expect(statusChange.Acc_PreviousClaimStatus__c).toEqual(ClaimStatus.DRAFT);
-    expect(statusChange.Acc_NewClaimStatus__c).toEqual(ClaimStatus.SUBMITTED);
   });
 
   it("when status has not changed expect no status change record", async () => {

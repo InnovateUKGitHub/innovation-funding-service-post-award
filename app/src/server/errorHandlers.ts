@@ -1,6 +1,7 @@
 import { Response } from "express";
 import { ErrorCode, IAppError } from "@framework/types";
 import { Logger } from "./features/common/logger";
+import { ValidationError } from "./features/common";
 
 const Log = new Logger();
 
@@ -9,6 +10,10 @@ const getErrorStatus = (err?: IAppError) => {
 
   switch (code) {
     case ErrorCode.VALIDATION_ERROR:
+      const validationError = err as ValidationError;
+      const message = validationError.results && validationError.results.log() || err && err.message || "";
+      Log.info("BAD_REQUEST_ERROR", message);
+      return 400;
     case ErrorCode.BAD_REQUEST_ERROR:
       Log.info("BAD_REQUEST_ERROR", err);
       return 400;
@@ -29,10 +34,10 @@ const getErrorStatus = (err?: IAppError) => {
 };
 
 export const errorHandlerApi = (res: Response, err?: IAppError) => {
-  const code    = !!err ? err.code : ErrorCode.UNKNOWN_ERROR;
+  const code = !!err ? err.code : ErrorCode.UNKNOWN_ERROR;
   const message = !!err ? err.message : "Something went wrong";
   const results = !!err ? err.results : null;
-  const status  = getErrorStatus(err);
+  const status = getErrorStatus(err);
 
   return res.status(status).json({ code, message, results });
 };
