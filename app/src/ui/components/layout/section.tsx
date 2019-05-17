@@ -3,6 +3,7 @@ import classNames from "classnames";
 import { SimpleString } from "../renderers";
 
 interface Props {
+  id?: string;
   title?: React.ReactNode;
   subtitle?: React.ReactNode;
   qa?: string;
@@ -30,14 +31,14 @@ const renderBadge = ({ badge }: Props) => !badge ? null : (<div className={class
 const renderContents = (children: React.ReactNode) => !children ? null : (<div className="govuk-grid-column-full govuk-!-margin-bottom-9">{children}</div>);
 
 export const Section: React.SFC<Props> = (props) => {
-  const { title, subtitle, badge, children } = props;
+  const { title, subtitle, badge, id, children } = props;
 
   if (!title && !subtitle && !badge && !children) {
     return null;
   }
 
   return (
-    <div className="govuk-grid-row" data-qa={props.qa}>
+    <div id={id} className="govuk-grid-row" data-qa={props.qa}>
       {renderTitles(props)}
       {renderBadge(props)}
       {renderContents(children)}
