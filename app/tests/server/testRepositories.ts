@@ -366,18 +366,9 @@ class ClaimStatusChangeTestRepository extends TestRepository<Repositories.ISales
     super();
   }
 
-  getAll(): Promise<Repositories.ISalesforceClaimStatusChange[]> {
-    return super.getAll();
-  }
-
   getAllForClaim(partnerId: string, periodId: number) {
     const claim  = this.claimsRepository.Items.find(x => x.Acc_ProjectParticipant__r.Id === partnerId && x.Acc_ProjectPeriodNumber__c === periodId);
     return super.getWhere(x => x.Acc_Claim__c === (claim && claim.Id));
-  }
-
-  getAllPartnerVisibleForClaim(partnerId: string, periodId: number): Promise<Repositories.ISalesforceClaimStatusChange[]> {
-    const claim  = this.claimsRepository.Items.find(x => x.Acc_ProjectParticipant__r.Id === partnerId && x.Acc_ProjectPeriodNumber__c === periodId);
-    return super.getWhere(x => x.Acc_Claim__c === (claim && claim.Id) && x.Acc_ParticipantVisibility__c);
   }
 
   async create(statusChange: Partial<Repositories.ISalesforceClaimStatusChange>) {

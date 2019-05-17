@@ -69,6 +69,13 @@ export class TestData {
     return newItem;
   }
 
+  public createLeadPartner(project?: Repositories.ISalesforceProject, update?: (item: Repositories.ISalesforcePartner) => void) {
+    return this.createPartner(project, x => {
+      x.Acc_ProjectRole__c = "Lead";
+      if(update) update(x);
+    });
+  }
+
   public createPartner(project?: Repositories.ISalesforceProject, update?: (item: Repositories.ISalesforcePartner) => void) {
     const seed = this.repositories.partners.Items.length + 1;
     project = project || this.createProject();

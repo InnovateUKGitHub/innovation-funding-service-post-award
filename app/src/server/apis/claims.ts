@@ -22,8 +22,6 @@ class Controller extends ControllerBase<ClaimDto> implements IClaimsApi {
   constructor() {
     super("claims");
 
-    // todo: remove once permissions sorted
-    this.getCustom("/status-changes/all", (p) => ({}), p => this.getAllStatusChanges(p));
     this.getCustom("/:projectId/:partnerId/:periodId/status-changes", (p) => ({ projectId: p.projectId, partnerId: p.partnerId, periodId: parseInt(p.periodId, 10) }), p => this.getStatusChanges(p));
 
     this.getItems("/",
@@ -73,13 +71,6 @@ class Controller extends ControllerBase<ClaimDto> implements IClaimsApi {
 
     const query = new GetClaim(partnerId, periodId);
     return context.runQuery(query);
-  }
-
-  // todo: remove once permissions sorted
-  public async getAllStatusChanges(params: ApiParams<{}>) {
-    const data = await contextProvider.start(params).repositories.claimStatusChanges.getAll();
-    data.sort((a, b) => dateComparator(DateTime.fromISO(b.CreatedDate).toJSDate(), DateTime.fromISO(a.CreatedDate).toJSDate()));
-    return data;
   }
 
   public async getStatusChanges(params: ApiParams<{ projectId: string, partnerId: string, periodId: number, }>) {

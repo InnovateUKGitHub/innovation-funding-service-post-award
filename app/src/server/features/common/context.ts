@@ -100,6 +100,9 @@ export class Context implements IContext {
     }
     catch (e) {
       this.logger.warn("Failed query", runnable.LogMessage(), e);
+      if(e instanceof ValidationError) {
+        this.logger.debug("Validation Error", e.results && e.results.log());
+      }
       throw constructErrorResponse(e);
     }
     finally {
