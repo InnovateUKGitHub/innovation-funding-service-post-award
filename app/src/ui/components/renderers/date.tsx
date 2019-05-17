@@ -86,7 +86,7 @@ export const ShortDateTime: React.SFC<{ value: Date | null }> = (props) => {
 
 const appendMeridian = (date: DateTime|null, format: string) => {
     if(date && date.isValid) {
-        return format + (date.hour > 12 ? "' pm'" : "' am'");
+        return format + (date.hour > 12 ? "'pm'" : "'am'");
     }
     return format;
 };
