@@ -71,7 +71,8 @@ export const FullDate: React.SFC<{ value: Date | null }> = (props) => {
 };
 
 export const FullDateTime: React.SFC<{ value: Date | null }> = (props) => {
-    return render(convertDateAndTime(props.value), "d MMMM yyyy, h:mm a");
+    const date = convertDateAndTime(props.value);
+    return render(date, appendMeridian(date, "d MMMM yyyy, h:mm"));
 };
 
 export const ShortDate: React.SFC<{ value: Date | null }> = (props) => {
@@ -79,5 +80,13 @@ export const ShortDate: React.SFC<{ value: Date | null }> = (props) => {
 };
 
 export const ShortDateTime: React.SFC<{ value: Date | null }> = (props) => {
-    return render(convertDateAndTime(props.value), "d MMM yyyy, h:mm a");
+    const date = convertDateAndTime(props.value);
+    return render(date, appendMeridian(date, "d MMM yyyy, h:mm"));
+};
+
+const appendMeridian = (date: DateTime|null, format: string) => {
+    if(date && date.isValid) {
+        return format + (date.hour > 12 ? "' pm'" : "' am'");
+    }
+    return format;
 };
