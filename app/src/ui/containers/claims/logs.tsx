@@ -43,47 +43,10 @@ class LogComponent extends ContainerBase<Params, Data, Callbacks> {
         tabs={<ACC.Claims.Navigation project={project} partnerId={this.props.partnerId} periodId={this.props.periodId} />}
       >
         <ACC.Section>
-          {statusChanges.length ? this.renderLogTable(statusChanges) : null}
+          {statusChanges.length ? <ACC.Logs qa="claim-status-change-table" data={statusChanges}/> : null}
           {!statusChanges.length ? <ACC.Renderers.SimpleString>There are no changes for this claim.</ACC.Renderers.SimpleString> : null}
         </ACC.Section>
       </ACC.Page>
-    );
-  }
-
-  private renderLogTable(statusChanges: Dtos.ClaimStatusChangeDto[]) {
-    return (
-      <div data-qa="claim-status-change-table" style={{ overflowX: "auto" }}>
-        <table className={"govuk-table"}>
-          <colgroup>
-            <col key="0" data-qa="col-created-date" />
-            <col key="1" data-qa="col-status-update" />
-            <col key="2" data-qa="col-created-by" />
-          </colgroup>
-          <thead className="govuk-table__head">
-            <tr className="govuk-table__row">
-              <th className="govuk-table__header" scope="col" key="0">Date and time</th>
-              <th className="govuk-table__header" scope="col" key="1">Status update</th>
-              <th className="govuk-table__header" scope="col" key="2">Name</th>
-            </tr>
-          </thead>
-          <tbody className="govuk-table__body">
-            {statusChanges.map((row, rowIndex) => this.renderLogRow(row, rowIndex))}
-          </tbody>
-        </table>
-      </div>
-    );
-  }
-
-  private renderLogRow(item: Dtos.ClaimStatusChangeDto, index: number) {
-    return (
-      <React.Fragment key={index}>
-        <tr className="govuk-table__row" key={`${index}_a`}>
-          <td className="govuk-table__cell" key="0"><ACC.Renderers.ShortDateTime value={item.createdDate} /></td>
-          <td className="govuk-table__cell" key="1">{item.newStatus}</td>
-          <td className="govuk-table__cell" key="2">{item.createdBy}</td>
-        </tr>
-        {item.comments ? <tr className={"govuk-table__row"} key={`${index}_b`}><td className="govuk-table__cell" key="0" colSpan={3}><h5>Comment</h5><span style={{ whiteSpace: "pre-wrap" }}>{item.comments}</span></td></tr> : null}
-      </React.Fragment>
     );
   }
 }
