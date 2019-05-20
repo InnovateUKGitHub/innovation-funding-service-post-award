@@ -10,6 +10,7 @@ import { emailGuide } from "./emailGuide";
 import { formGuide } from "./formGuide";
 import { insetText } from "./insetTextGuide";
 import { linksListGuide } from "./linksListGuide";
+import { logsGuide } from "./logsGuide";
 import { navigationArrowsGuide } from "./navigationArrowsGuide";
 import { projectMemberGuide } from "./projectMemberGuide";
 import { Header } from "../components";
@@ -35,6 +36,7 @@ const guides: IGuide[] = [
     formGuide,
     insetText,
     linksListGuide,
+    logsGuide,
     navigationArrowsGuide,
     projectMemberGuide,
     renderersGuide,
