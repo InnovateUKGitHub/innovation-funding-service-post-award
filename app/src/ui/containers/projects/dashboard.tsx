@@ -1,3 +1,4 @@
+import classNames from "classnames";
 import * as Selectors from "../../redux/selectors";
 import React from "react";
 import * as ACC from "../../components";
@@ -9,6 +10,7 @@ import { DateTime } from "luxon";
 import * as colour from "../../styles/colours";
 import { HomeRoute } from "../home";
 import { AllClaimsDashboardRoute, ClaimsDashboardRoute } from "../claims";
+import { StatisticsBox } from "../../components";
 
 interface Data {
   data: Pending<{
@@ -62,6 +64,7 @@ class ProjectDashboardComponent extends ContainerBase<Props, Data, Callbacks> {
 
     return (
       <React.Fragment>
+        {this.renderStatisticsSection(combinedData)}
         <ACC.ListSection title="Open claims" qa="open-claims" key={`section-open`}>
           {open.map((x, i) => this.renderProject(x.project, x.partner, "open", i))}
           {!open.length ? <ACC.ListItem><p className="govuk-body govuk-!-margin-0">You currently do not have any projects with open claims.</p></ACC.ListItem> : null}
@@ -76,12 +79,40 @@ class ProjectDashboardComponent extends ContainerBase<Props, Data, Callbacks> {
         </ACC.ListSection>
         {
           this.props.showHidden === true && upcoming.length ?
-            <ACC.ListSection title="Hidden" qa="hidden-claims" key={`section-hidden`}>
+          <ACC.ListSection title="Hidden" qa="hidden-claims" key={`section-hidden`}>
               {upcoming.map((x, i) => this.renderProject(x.project, x.partner, "archived", i))}
             </ACC.ListSection>
             : null
-        }
+          }
       </React.Fragment>
+    );
+  }
+
+  private renderStatisticsSection(combinedData: { project: ProjectDto; partner: PartnerDto | null; status: Section }[]) {
+    const projectsAsMO = combinedData.filter(x => x.project.roles & ProjectRole.MonitoringOfficer);
+    const claimsToReview = projectsAsMO.reduce((accumulator, currentValue) => accumulator + currentValue.project.claimsToReview, 0);
+    const pendingClaims = projectsAsMO.reduce((accumulator, currentValue) => accumulator + currentValue.project.claimsWithParticipant, 0);
+
+    const isMO = !!projectsAsMO.length;
+
+    if(!isMO) {
+      return null;
+    }
+
+    return (
+      <ACC.Section qa="requiring-action-section">
+        {this.renderStatisticsBox(0, "change request you need to review")}
+        {this.renderStatisticsBox(claimsToReview, "claims you need to review")}
+        {this.renderStatisticsBox(pendingClaims, "unsubmitted or queried claims")}
+      </ACC.Section>
+    );
+  }
+
+  private renderStatisticsBox(numberOfClaims: number, claimAction: string) {
+    return(
+      <div className={classNames("govuk-grid-column-one-third", "govuk-!-padding-left-0")} >
+        <StatisticsBox numberOfClaims={numberOfClaims} claimAction={claimAction} />
+      </div>
     );
   }
 
