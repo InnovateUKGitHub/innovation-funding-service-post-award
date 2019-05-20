@@ -78,12 +78,11 @@ class LogComponent extends ContainerBase<Params, Data, Callbacks> {
     return (
       <React.Fragment key={index}>
         <tr className="govuk-table__row" key={`${index}_a`}>
-          <th className="govuk-table__cell" key="0"><ACC.Renderers.ShortDateTime value={item.createdDate} /></th>
+          <td className="govuk-table__cell" key="0"><ACC.Renderers.ShortDateTime value={item.createdDate} /></td>
           <td className="govuk-table__cell" key="1">{item.newStatus}</td>
           <td className="govuk-table__cell" key="2">{item.createdBy}</td>
         </tr>
-        {/* {item.comments ? <tr className={"govuk-table__row"} key={`${index}_b`}><th className="govuk-table__cell" style={{borderBottom: "0px"}} key="0" colSpan={3}>Comments</th></tr> : null} */}
-        {item.comments ? <tr className={"govuk-table__row"} key={`${index}_b`}><td className="govuk-table__cell" key="0" colSpan={3}><span style={{ whiteSpace: "pre-wrap" }}>{item.comments}</span></td></tr> : null}
+        {item.comments ? <tr className={"govuk-table__row"} key={`${index}_b`}><td className="govuk-table__cell" key="0" colSpan={3}><h5>Comment</h5><span style={{ whiteSpace: "pre-wrap" }}>{item.comments}</span></td></tr> : null}
       </React.Fragment>
     );
   }

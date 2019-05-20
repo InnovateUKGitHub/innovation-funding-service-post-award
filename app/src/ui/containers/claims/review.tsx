@@ -175,7 +175,7 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, Data, Callbacks> 
 
     if (this.props.isClient) {
       if (data.editor.data.status === ClaimStatus.MO_QUERIED) {
-        label = "Send Query";
+        label = "Send query";
       }
       else if (data.editor.data.status !== ClaimStatus.AWAITING_IUK_APPROVAL) {
         label = null;
