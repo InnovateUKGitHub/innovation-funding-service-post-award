@@ -17,16 +17,12 @@ import { sectionGuide } from "./sectionGuide";
 import { sectionPanelGuide } from "./sectionPanelGuide";
 import { tableGuide } from "./tableGuide";
 import { tabsGuide } from "./tabsGuide";
+import { hashTabsGuide } from "@ui/componentsGuide/hashTabsGuide";
 import { textHint } from "./textHintGuide";
 import { titleGuide } from "./titleGuide";
 import { validationErrorGuide } from "./validationErrorGuide";
 import { validationMessageGuide } from "./validationMessageGuide";
 import { validationSummaryGuide } from "./validationSummaryGuide";
-import { Provider } from "react-redux";
-import { RouterProvider } from "react-router5";
-import { combineReducers, createStore } from "redux";
-import { PageTitleState } from "../redux/reducers/pageTitleReducer";
-import { rootReducer } from "../redux";
 
 const guides: IGuide[] = [
     accordionGuide,
@@ -45,6 +41,7 @@ const guides: IGuide[] = [
     sectionGuide,
     sectionPanelGuide,
     tabsGuide,
+    hashTabsGuide,
     tableGuide,
     textHint,
     titleGuide,
