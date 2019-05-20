@@ -248,7 +248,7 @@ interface ButtonProps {
   name: string;
   className?: string;
   style?: CSSProperties;
-  styling?: "Link" | "Secondary" | "Primary";
+  styling?: "Link" | "Secondary" | "Primary" | "Warning";
   value?: string;
   onClick?: () => void;
 }
