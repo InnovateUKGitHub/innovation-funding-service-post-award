@@ -102,3 +102,27 @@ export function loadMonitoringReportQuestions() {
     params => ApiClient.monitoringReports.getActiveQuestions({ ...params })
   );
 }
+
+export function deleteMonitoringReport(
+  monitoringReport: MonitoringReportDto,
+  onComplete: () => void,
+  message: string
+): Actions.AsyncThunk<void, Actions.DataLoadAction | Actions.EditorAction | Actions.messageSuccess> {
+  return (dispatch, getState) => {
+    const state = getState();
+    const selector = Selectors.getMonitoringReportDeleteEditor(monitoringReport.headerId, monitoringReport);
+
+    dispatch(Actions.handleEditorSubmit(selector.key, selector.store));
+
+    return ApiClient.monitoringReports.deleteMonitoringReport({reportId: monitoringReport.headerId, projectId: monitoringReport.projectId, user: state.user})
+      .then((result) => {
+        dispatch(Actions.dataLoadAction(selector.key, selector.store, LoadingStatus.Done, result));
+        dispatch(Actions.handleEditorSuccess(selector.key, selector.store));
+        dispatch(Actions.messageSuccess(message));
+        onComplete();
+      })
+      .catch((e: any) => {
+        dispatch(Actions.handleEditorError({ id: selector.key, store: selector.store, dto: monitoringReport, validation: null, error: e}));
+      });
+  };
+}

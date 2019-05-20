@@ -13,6 +13,7 @@ export const routeConfig = {
   home: Containers.HomeRoute,
   monitoringReportCreate: Containers.MonitoringReportCreateRoute,
   monitoringReportDashboard: Containers.MonitoringReportDashboardRoute,
+  monitoringReportDelete: Containers.MonitoringReportDeleteRoute,
   monitoringReportPrepare: Containers.MonitoringReportPrepareRoute,
   monitoringReportView: Containers.MonitoringReportViewRoute,
   prepareClaim: Containers.PrepareClaimRoute,
