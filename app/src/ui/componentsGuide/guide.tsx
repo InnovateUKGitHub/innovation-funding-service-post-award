@@ -18,6 +18,7 @@ import { sectionPanelGuide } from "./sectionPanelGuide";
 import { tableGuide } from "./tableGuide";
 import { tabsGuide } from "./tabsGuide";
 import { hashTabsGuide } from "@ui/componentsGuide/hashTabsGuide";
+import { statisticsBoxGuide } from "./statisticsBoxGuide";
 import { textHint } from "./textHintGuide";
 import { titleGuide } from "./titleGuide";
 import { validationErrorGuide } from "./validationErrorGuide";
@@ -40,6 +41,7 @@ const guides: IGuide[] = [
     renderersGuide,
     sectionGuide,
     sectionPanelGuide,
+    statisticsBoxGuide,
     tabsGuide,
     hashTabsGuide,
     tableGuide,
