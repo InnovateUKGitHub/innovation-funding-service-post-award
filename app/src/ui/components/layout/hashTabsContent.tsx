@@ -1,13 +1,5 @@
 import React from "react";
-import cn from "classnames";
-
-export interface HashTabItem {
-  text: string;
-  hash: string;
-  content: React.ReactNode;
-  default?: boolean;
-  qa?: string;
-}
+import { HashTabItem, Section } from "@ui/components";
 
 interface TabProps {
   tabList: HashTabItem[];
@@ -19,7 +11,7 @@ interface State {
   jsEnabled: boolean;
 }
 
-export class HashTabs extends React.PureComponent<TabProps, State> {
+export class HashTabsContent extends React.PureComponent<TabProps, State> {
 
   constructor(props: TabProps) {
     super(props);
@@ -44,34 +36,18 @@ export class HashTabs extends React.PureComponent<TabProps, State> {
   }
 
   render() {
-    const { tabList, qa } = this.props;
+    const { tabList } = this.props;
     if (tabList === null || !tabList.length) return null;
     const selected = this.findSelectedItem();
-    return (
-      <div className={`govuk-tabs govuk-!-margin-bottom-9`} data-qa={qa}>
-        <ul className="govuk-tabs__list" role="tablist">
-          {tabList.map((item, index) => this.renderItem(item, selected.hash === item.hash, index))}
-        </ul>
-      </div>
-    );
+    return this.state.jsEnabled ? this.renderSection(selected) : tabList.map(x => this.renderSection(x));
   }
 
-  private renderItem(item: HashTabItem, selected: boolean, index: number) {
-    const tab = this.renderTab(item, selected);
-    if (!tab) return null;
+  private renderSection(item: HashTabItem) {
     return (
-      <li role="tab" aria-selected={selected} className="govuk-tabs__list-item" key={`tab-${index}`} data-qa={item.qa}>
-        {tab}
-      </li>
+      <Section key={item.hash} id={item.hash} title={item.text}>
+        {item.content}
+      </Section>
     );
-  }
-
-  private renderTab(item: HashTabItem, selected: boolean) {
-    const classes = cn({
-      "govuk-tabs__tab": true,
-      "govuk-tabs__tab--selected": selected
-    });
-    return <a href={`#${item.hash}`} className={classes}>{item.text}</a>;
   }
 
   private findSelectedItem() {
