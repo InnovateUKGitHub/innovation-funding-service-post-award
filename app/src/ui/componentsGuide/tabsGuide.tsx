@@ -1,6 +1,5 @@
 import React from "react";
 import { Tabs } from "../components/layout";
-import { json } from "body-parser";
 
 const tabs = [
     {text: "Claims", url: "#"},
