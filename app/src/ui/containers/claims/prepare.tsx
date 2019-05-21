@@ -6,7 +6,7 @@ import { ContainerBase, ReduxContainer } from "@ui/containers/containerBase";
 import { IEditorStore } from "@ui/redux/reducers/editorsReducer";
 import { ClaimDtoValidator } from "@ui/validators/claimDtoValidator";
 import { Pending } from "@shared/pending";
-import { ClaimDto, PartnerDto, ProjectDto, ProjectRole } from "@framework/types";
+import { ClaimDto, ClaimStatusChangeDto, PartnerDto, ProjectDto, ProjectRole } from "@framework/types";
 import {
   AllClaimsDashboardRoute,
   ClaimForecastRoute,
@@ -29,6 +29,7 @@ interface Data {
   costsSummaryForPeriod: Pending<CostsSummaryForPeriodDto[]>;
   editor: Pending<IEditorStore<ClaimDto, ClaimDtoValidator>>;
   standardOverheadRate: number;
+  statusChanges: Pending<ClaimStatusChangeDto[]>;
 }
 
 interface Callbacks {
@@ -78,11 +79,13 @@ export class PrepareComponent extends ContainerBase<PrepareClaimParams, Data, Ca
   }
 
   private renderContents(data: CombinedData) {
-    const Form = ACC.TypedForm<ClaimDto>();
-    const commentsLabel = "Additional information";
-    const commentsHint = "Explain any difference between a category's forecast and its claim, and answer any queries after you submit your claim.";
     const isPmOrMo = (data.project.roles & (ProjectRole.ProjectManager | ProjectRole.MonitoringOfficer)) !== ProjectRole.Unknown;
     const backLink = isPmOrMo ? AllClaimsDashboardRoute.getLink({ projectId: data.project.id }) : ClaimsDashboardRoute.getLink({ projectId: data.project.id, partnerId: data.partner.id });
+
+    const tabs: ACC.HashTabItem[] = [
+      { text: "Details", hash: "details", content: this.renderDetailsTab(data), default: true },
+      { text: "Log", hash: "log", content: this.renderLogsTab() },
+    ];
 
     return (
       <ACC.Page
@@ -90,35 +93,59 @@ export class PrepareComponent extends ContainerBase<PrepareClaimParams, Data, Ca
         error={data.editor.error}
         validator={data.editor.validator}
         pageTitle={<ACC.Projects.Title project={data.project} />}
-        tabs={<ACC.Claims.Navigation project={data.project} partnerId={data.partner.id} periodId={data.claim.periodId} />}
+        tabs={<ACC.HashTabs tabList={tabs} />}
         messages={this.props.messages || []}
       >
-        <ACC.Section title={this.getClaimPeriodTitle(data)}>
-          <ACC.Claims.ClaimTable
-            {...data}
-            validation={data.editor.validator.claimDetails.results}
-            standardOverheadRate={this.props.standardOverheadRate}
-            getLink={costCategoryId => EditClaimLineItemsRoute.getLink({ partnerId: this.props.partnerId, projectId: this.props.projectId, periodId: this.props.periodId, costCategoryId })}
-          />
-          <Form.Form
-            editor={data.editor}
-            onChange={(dto) => this.onChange(dto, data.claimDetails, data.costCategories)}
-            onSubmit={() => this.saveAndProgress(data.editor.data, data.claimDetails, data.costCategories)}
-          >
-            <Form.Fieldset heading={commentsLabel} qa="additional-info-form" headingQa="additional-info-heading">
-              <Form.MultilineString label="additional-info" labelHidden={true} hint={commentsHint} name="comments" value={m => m.comments} update={(m, v) => m.comments = v} validation={data.editor.validator.comments} qa="info-text-area" />
-            </Form.Fieldset>
-            <Form.Fieldset qa="save-and-continue">
-              <Form.Submit>Review forecast</Form.Submit>
-            </Form.Fieldset>
-            <Form.Fieldset qa="save-and-return">
-              <Form.Button name="return" onClick={() => this.saveAndReturn(data.editor.data, data.claimDetails, data.costCategories, data.project)}>Save and return to project</Form.Button>
-            </Form.Fieldset>
-          </Form.Form>
-        </ACC.Section>
+        <ACC.HashTabsContent tabList={tabs} />
       </ACC.Page>
     );
   }
+
+  private renderDetailsTab(data: CombinedData) {
+    const Form = ACC.TypedForm<ClaimDto>();
+    const commentsLabel = "Additional information";
+    const commentsHint = "Explain any difference between a category's forecast and its claim, and answer any queries after you submit your claim.";
+
+    return (
+      <ACC.Section title={this.getClaimPeriodTitle(data)}>
+        <ACC.Claims.ClaimTable
+          {...data}
+          validation={data.editor.validator.claimDetails.results}
+          standardOverheadRate={this.props.standardOverheadRate}
+          getLink={costCategoryId => EditClaimLineItemsRoute.getLink({ partnerId: this.props.partnerId, projectId: this.props.projectId, periodId: this.props.periodId, costCategoryId })}
+        />
+        <Form.Form
+          editor={data.editor}
+          onChange={(dto) => this.onChange(dto, data.claimDetails, data.costCategories)}
+          onSubmit={() => this.saveAndProgress(data.editor.data, data.claimDetails, data.costCategories)}
+        >
+          <Form.Fieldset heading={commentsLabel} qa="additional-info-form" headingQa="additional-info-heading">
+            <Form.MultilineString label="additional-info" labelHidden={true} hint={commentsHint} name="comments" value={m => m.comments} update={(m, v) => m.comments = v} validation={data.editor.validator.comments} qa="info-text-area" />
+          </Form.Fieldset>
+          <Form.Fieldset qa="save-and-continue">
+            <Form.Submit>Review forecast</Form.Submit>
+          </Form.Fieldset>
+          <Form.Fieldset qa="save-and-return">
+            <Form.Button name="return" onClick={() => this.saveAndReturn(data.editor.data, data.claimDetails, data.costCategories, data.project)}>Save and return to project</Form.Button>
+          </Form.Fieldset>
+        </Form.Form>
+      </ACC.Section>
+    );
+  }
+
+  private renderLogsTab() {
+    return (
+      <ACC.Loader
+        pending={this.props.statusChanges}
+        render={(statusChanges) => (
+          <ACC.Section>
+            <ACC.Logs qa="claim-status-change-table" data={statusChanges} />
+          </ACC.Section>
+        )}
+      />
+    );
+  }
+
 }
 
 const progress = (dispatch: any, projectId: string, partnerId: string, periodId: number) => {
@@ -144,6 +171,7 @@ export const PrepareClaim = definition.connect({
     costsSummaryForPeriod: Selectors.getCostsSummaryForPeriod(props.partnerId, props.periodId).getPending(state),
     editor: Selectors.getClaimEditor(props.partnerId, props.periodId).get(state),
     standardOverheadRate: state.config.standardOverheadRate,
+    statusChanges: Selectors.getClaimStatusChanges(props.projectId, props.partnerId, props.periodId).getPending(state)
   }),
   withCallbacks: (dispatch) => ({
     onChange: (partnerId, periodId, dto, details, costCategories) => dispatch(Actions.validateClaim(partnerId, periodId, dto, details, costCategories)),
@@ -156,14 +184,15 @@ export const PrepareClaimRoute = definition.route({
   routeName: "prepareClaim",
   routePath: "/projects/:projectId/claims/:partnerId/prepare/:periodId",
   getParams: (route) => ({ projectId: route.params.projectId, partnerId: route.params.partnerId, periodId: parseInt(route.params.periodId, 10) }),
-  accessControl: (auth, {projectId, partnerId}) => auth.forPartner(projectId, partnerId).hasRole(ProjectRole.FinancialContact),
+  accessControl: (auth, { projectId, partnerId }) => auth.forPartner(projectId, partnerId).hasRole(ProjectRole.FinancialContact),
   getLoadDataActions: (params) => [
     Actions.loadProject(params.projectId),
     Actions.loadPartner(params.partnerId),
     Actions.loadPartnersForProject(params.projectId),
     Actions.loadCostCategories(),
     Actions.loadClaim(params.partnerId, params.periodId),
-    Actions.loadCostsSummaryForPeriod(params.projectId, params.partnerId, params.periodId)
+    Actions.loadCostsSummaryForPeriod(params.projectId, params.partnerId, params.periodId),
+    Actions.loadClaimStatusChanges(params.projectId, params.partnerId, params.periodId)
   ],
   getTitle: (store, params) => {
     return {
