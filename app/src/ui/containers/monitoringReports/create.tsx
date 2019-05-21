@@ -39,7 +39,6 @@ class CreateMonitoringReportComponent extends ContainerBase<MonitoringReportCrea
       <ACC.Page
         backLink={<ACC.BackLink route={MonitoringReportDashboardRoute.getLink({ projectId: this.props.projectId })}>Back to monitoring reports</ACC.BackLink>}
         pageTitle={<ACC.Projects.Title project={project} />}
-        tabs={<ACC.MonitoringReports.Navigation projectId={this.props.projectId} id={null as any} />}
         validator={editor.validator}
         error={editor.error}
       >
