@@ -84,7 +84,7 @@ export class PrepareComponent extends ContainerBase<PrepareClaimParams, Data, Ca
 
     const tabs: ACC.HashTabItem[] = [
       { text: "Details", hash: "details", content: this.renderDetailsTab(data), default: true },
-      { text: "Log", hash: "logs", content: this.renderLogsTab() },
+      { text: "Log", hash: "log", content: this.renderLogsTab() },
     ];
 
     return (
@@ -139,8 +139,7 @@ export class PrepareComponent extends ContainerBase<PrepareClaimParams, Data, Ca
         pending={this.props.statusChanges}
         render={(statusChanges) => (
           <ACC.Section>
-            {statusChanges.length ? <ACC.Logs qa="claim-status-change-table" data={statusChanges} /> : null}
-            {!statusChanges.length ? <ACC.Renderers.SimpleString>There are no changes for this claim.</ACC.Renderers.SimpleString> : null}
+            <ACC.Logs qa="claim-status-change-table" data={statusChanges} />
           </ACC.Section>
         )}
       />
