@@ -18,6 +18,7 @@ interface InternalColumnProps<T> {
   footer?: React.ReactNode;
   classSuffix?: "numeric";
   cellClassName?: (data: T, index: { column: number, row: number }) => string | null | undefined;
+  colClassName?: (col: number) => string;
   renderCell: (data: T, index: { column: number, row: number }) => React.ReactNode;
   mode?: columnMode;
   rowIndex?: number;
@@ -34,6 +35,7 @@ interface ExternalColumnProps<T, TResult> {
   header: React.ReactNode;
   value: (item: T, index: { column: number, row: number }) => TResult;
   cellClassName?: (data: T, index: { column: number, row: number }) => string | null | undefined;
+  colClassName?: (col: number) => string;
   footer?: React.ReactNode;
   qa: string;
   width?: number;
@@ -64,7 +66,7 @@ export class TableColumn<T> extends React.Component<InternalColumnProps<T>> {
       case "cell":
         return this.renderCell(this.props.dataItem!, this.props.columnIndex!, this.props.rowIndex!);
       case "header":
-        return this.renderHeader(this.props.columnIndex!, this.props.hideHeader!);
+        return this.renderHeader(this.props.columnIndex!);
       case "footer":
         return this.renderFooter(this.props.columnIndex!);
       case "col":
@@ -73,8 +75,12 @@ export class TableColumn<T> extends React.Component<InternalColumnProps<T>> {
     return null;
   }
 
-  renderHeader(column: number, hideHeader = false) {
-    const className = classNames("govuk-table__header", { ["govuk-table__header--" + this.props.classSuffix]: !!this.props.classSuffix });
+  renderHeader(column: number) {
+    const className = classNames(
+      "govuk-table__header",
+      this.props.colClassName && this.props.colClassName(column),
+      { ["govuk-table__header--" + this.props.classSuffix]: !!this.props.classSuffix }
+    );
     return <th className={className} scope="col" key={column}>{this.renderHeaderElement()}</th>;
   }
 
@@ -91,6 +97,7 @@ export class TableColumn<T> extends React.Component<InternalColumnProps<T>> {
     const className = classNames(
       "govuk-table__cell",
       this.props.cellClassName && this.props.cellClassName(data, { column, row }),
+      this.props.colClassName && this.props.colClassName(column),
       {["govuk-table__cell--" + this.props.classSuffix]: !!this.props.classSuffix}
     );
     return <td style={{paddingRight: this.props.paddingRight}} className={className} key={column}>{this.props.renderCell(data, { column, row })}</td>;
