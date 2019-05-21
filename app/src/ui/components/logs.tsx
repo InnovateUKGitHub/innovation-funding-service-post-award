@@ -5,7 +5,7 @@ export interface LogItem {
   newStatus: string;
   createdDate: Date;
   createdBy: string;
-  comments: string | null | undefined;
+  comments?: string | null;
 }
 
 export interface Props {
