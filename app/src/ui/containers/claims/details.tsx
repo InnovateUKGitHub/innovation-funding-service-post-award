@@ -8,10 +8,11 @@ import { ClaimLineItemsRoute } from "./claimLineItems";
 import { ClaimsDashboardRoute } from "./dashboard";
 import {
   ClaimDto,
+  ClaimStatusChangeDto,
   ILinkInfo,
   PartnerDto,
   ProjectDto,
-  ProjectRole
+  ProjectRole,
 } from "@framework/types";
 import { AllClaimsDashboardRoute } from "./allClaimsDashboard";
 import { SimpleString } from "../../components/renderers";
@@ -33,6 +34,7 @@ interface Data {
   iarDocument: Pending<DocumentSummaryDto | null>;
   standardOverheadRate: number;
   forecastData: Pending<ForecastData> | null;
+  statusChanges: Pending<ClaimStatusChangeDto[]>;
 }
 
 interface CombinedData {
@@ -63,16 +65,29 @@ export class ClaimsDetailsComponent extends ContainerBase<Params, Data, {}> {
     const isPmOrMo = (data.project.roles & (ProjectRole.ProjectManager | ProjectRole.MonitoringOfficer)) !== ProjectRole.Unknown;
     const backLink = isPmOrMo ? AllClaimsDashboardRoute.getLink({ projectId: data.project.id }) : ClaimsDashboardRoute.getLink({ projectId: data.project.id, partnerId: data.partner.id });
 
+    const tabs: ACC.HashTabItem[] = [
+      { text: "Details", hash: "details", content: this.renderDetailsTab(data), default: true },
+      { text: "Log", hash: "log", content: this.renderLogsTab() },
+    ];
+
     return (
       <ACC.Page
         backLink={<ACC.BackLink route={backLink}>Back to project</ACC.BackLink>}
         pageTitle={<ACC.Projects.Title project={data.project} />}
-        tabs={<ACC.Claims.Navigation project={data.project} partnerId={data.partner.id} periodId={data.claim.periodId} />}
+        tabs={<ACC.HashTabs tabList={tabs} />}
       >
+        <ACC.HashTabsContent tabList={tabs} />
+      </ACC.Page>
+    );
+  }
+
+  private renderDetailsTab(data: CombinedData) {
+    return (
+      <React.Fragment>
         {this.renderTableSection(data)}
         {this.renderIarSection(data.claim, data.project, data.partner, data.iarDocument)}
         {this.renderForecastSection()}
-      </ACC.Page>
+      </React.Fragment>
     );
   }
 
@@ -144,6 +159,18 @@ export class ClaimsDetailsComponent extends ContainerBase<Params, Data, {}> {
     return <ACC.Claims.ForecastTable data={forecastData} hideValidation={true} />;
   }
 
+  private renderLogsTab() {
+    return (
+      <ACC.Loader
+        pending={this.props.statusChanges}
+        render={(statusChanges) => (
+          <ACC.Section>
+            <ACC.Logs qa="claim-status-change-table" data={statusChanges} />
+          </ACC.Section>
+        )}
+      />
+    );
+  }
 }
 
 const definition = ReduxContainer.for<Params, Data, {}>(ClaimsDetailsComponent);
@@ -162,6 +189,7 @@ export const ClaimsDetails = definition.connect({
       costsSummaryForPeriod: Selectors.getCostsSummaryForPeriod(props.partnerId, props.periodId).getPending(state),
       iarDocument: Selectors.getIarDocument(state, props.partnerId, props.periodId),
       standardOverheadRate: state.config.standardOverheadRate,
+      statusChanges: Selectors.getClaimStatusChanges(props.projectId, props.partnerId, props.periodId).getPending(state),
       forecastData: isMoOrPM && !isFC ? Pending.combine({
         project: Selectors.getProject(props.projectId).getPending(state),
         partner: Selectors.getPartner(props.partnerId).getPending(state),
@@ -192,7 +220,8 @@ export const ClaimsDetailsRoute = definition.route({
       Actions.loadCostCategories(),
       Actions.loadClaim(params.partnerId, params.periodId),
       Actions.loadCostsSummaryForPeriod(params.projectId, params.partnerId, params.periodId),
-      Actions.loadIarDocuments(params.partnerId, params.periodId)
+      Actions.loadIarDocuments(params.partnerId, params.periodId),
+      Actions.loadClaimStatusChanges(params.projectId, params.partnerId, params.periodId)
     ];
 
     const forcastActions = isMoOrPM && !isFC ? forecastDataLoadActions(params) : [];

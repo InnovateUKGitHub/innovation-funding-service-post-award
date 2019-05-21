@@ -1,6 +1,7 @@
 export * from "./breadcrumbs";
 export * from "./footer";
 export * from "./hashTabs";
+export * from "./hashTabsContent";
 export * from "./header";
 export * from "./insetText";
 export * from "./page";

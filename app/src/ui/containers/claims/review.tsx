@@ -6,7 +6,7 @@ import { IEditorStore } from "@ui/redux";
 import { ContainerBase, ReduxContainer } from "@ui/containers/containerBase";
 import { ClaimDtoValidator } from "@ui/validators/claimDtoValidator";
 import { Pending } from "@shared/pending";
-import { ClaimDto, ClaimStatus, PartnerDto, ProjectDto, ProjectRole } from "@framework/types";
+import { ClaimDto, ClaimStatus, ClaimStatusChangeDto, PartnerDto, ProjectDto, ProjectRole } from "@framework/types";
 import { ForecastData, forecastDataLoadActions } from "./forecasts/common";
 import { AllClaimsDashboardRoute, ReviewClaimLineItemsRoute } from "@ui/containers";
 
@@ -27,6 +27,7 @@ interface Data {
   iarDocument: Pending<DocumentSummaryDto | null>;
   isClient: boolean;
   standardOverheadRate: number;
+  statusChanges: Pending<ClaimStatusChangeDto[]>;
 }
 
 interface Callbacks {
@@ -69,14 +70,28 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, Data, Callbacks> 
   }
 
   private renderContents(data: CombinedData) {
+
+    const tabs: ACC.HashTabItem[] = [
+      { text: "Details", hash: "details", content: this.renderDetailsTab(data), default: true },
+      { text: "Log", hash: "log", content: this.renderLogsTab() },
+    ];
+
     return (
       <ACC.Page
         backLink={<ACC.BackLink route={AllClaimsDashboardRoute.getLink({ projectId: data.project.id })}>Back to project</ACC.BackLink>}
         error={data.editor.error}
         validator={data.editor.validator}
         pageTitle={<ACC.Projects.Title project={data.project} />}
-        tabs={<ACC.Claims.Navigation project={data.project} partnerId={data.partner.id} periodId={data.claim.periodId} />}
+        tabs={<ACC.HashTabs tabList={tabs} />}
       >
+        <ACC.HashTabsContent tabList={tabs} />
+      </ACC.Page>
+    );
+  }
+
+  private renderDetailsTab(data: CombinedData) {
+    return (
+      <React.Fragment>
         <ACC.Section title={this.getClaimPeriodTitle(data)}>
           <ACC.Claims.ClaimReviewTable
             {...data}
@@ -97,7 +112,7 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, Data, Callbacks> 
         </ACC.Section>
         {this.renderIarSection(data.claim, data.iarDocument)}
         {this.renderForm(data)}
-      </ACC.Page>
+      </React.Fragment>
     );
   }
 
@@ -149,7 +164,7 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, Data, Callbacks> 
   private renderCommentsSection(Form: ACC.FormBuilder<ClaimDto>, editor: IEditorStore<ClaimDto, ClaimDtoValidator>) {
     // on client if the status hasnt yet been set by the readio buttons then dont show
     // if server rendering we need to always show
-    if(!editor.data.status && this.props.isClient) {
+    if (!editor.data.status && this.props.isClient) {
       return null;
     }
 
@@ -190,6 +205,19 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, Data, Callbacks> 
       dto.status = option.id;
     }
   }
+
+  private renderLogsTab() {
+    return (
+      <ACC.Loader
+        pending={this.props.statusChanges}
+        render={(statusChanges) => (
+          <ACC.Section>
+            <ACC.Logs qa="claim-status-change-table" data={statusChanges} />
+          </ACC.Section>
+        )}
+      />
+    );
+  }
 }
 
 const initEditor = (dto: ClaimDto) => {
@@ -218,6 +246,7 @@ export const ReviewClaim = definition.connect({
       editor: Selectors.getClaimEditor(props.partnerId, props.periodId).get(state, (dto) => initEditor(dto)),
       isClient: state.isClient,
       iarDocument: Selectors.getIarDocument(state, props.partnerId, props.periodId),
+      statusChanges: Selectors.getClaimStatusChanges(props.projectId, props.partnerId, props.periodId).getPending(state),
       forecastData: Pending.combine({
         project: projectPending,
         partner: partnerPending,
@@ -251,6 +280,7 @@ export const ReviewClaimRoute = definition.route({
     Actions.loadClaim(params.partnerId, params.periodId),
     Actions.loadCostsSummaryForPeriod(params.projectId, params.partnerId, params.periodId),
     Actions.loadIarDocuments(params.partnerId, params.periodId),
+    Actions.loadClaimStatusChanges(params.projectId, params.partnerId, params.periodId),
     ...forecastDataLoadActions(params)
   ],
   accessControl: (auth, { projectId }) => auth.forProject(projectId).hasRole(ProjectRole.MonitoringOfficer),
