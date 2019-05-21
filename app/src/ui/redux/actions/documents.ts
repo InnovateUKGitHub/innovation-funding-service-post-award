@@ -81,7 +81,8 @@ export function updateClaimDetailDocumentEditor(claimDetailKey: ClaimDetailKey, 
   };
 }
 
-export function uploadClaimDetailDocument(claimDetailKey: ClaimDetailKey, dto: DocumentUploadDto, onComplete: () => void): Actions.AsyncThunk<void, Actions.DataLoadAction | Actions.EditorAction> {
+export function uploadClaimDetailDocument(claimDetailKey: ClaimDetailKey, dto: DocumentUploadDto, onComplete: () => void, message: string
+): Actions.AsyncThunk<void, Actions.DataLoadAction | Actions.EditorAction | Actions.messageSuccess> {
   return (dispatch, getState) => {
     const state = getState();
     const selector = Selectors.getClaimDetailDocumentEditor(claimDetailKey);
@@ -96,9 +97,11 @@ export function uploadClaimDetailDocument(claimDetailKey: ClaimDetailKey, dto: D
     dispatch(Actions.handleEditorSubmit(selector.key, selector.store));
     dispatch(Actions.dataLoadAction(docsSelector.key, docsSelector.store, LoadingStatus.Stale, undefined));
 
+    // tslint:disable: no-identical-functions
     return ApiClient.documents.uploadClaimDetailDocument({ claimDetailKey, file: dto.file!, user: state.user })
       .then(() => {
         dispatch(Actions.handleEditorSuccess(selector.key, selector.store));
+        dispatch(Actions.messageSuccess(message));
         onComplete();
       }).catch((e: any) => {
         dispatch(Actions.handleEditorError({ id: selector.key, store: selector.store, dto, validation, error: e }));
