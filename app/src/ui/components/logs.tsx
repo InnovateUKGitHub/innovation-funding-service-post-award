@@ -15,6 +15,10 @@ export interface Props {
 
 export class Logs extends React.Component<Props> {
   render() {
+    if(!this.props.data || !this.props.data.length) {
+      return <ACC.Renderers.SimpleString>There are no changes.</ACC.Renderers.SimpleString>;
+    }
+
     return (
       <div data-qa={this.props.qa} style={{ overflowX: "auto" }}>
         <table className={"govuk-table"}>
