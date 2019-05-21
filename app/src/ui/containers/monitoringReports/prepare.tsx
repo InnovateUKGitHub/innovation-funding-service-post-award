@@ -40,11 +40,13 @@ class PrepareMonitoringReportComponent extends ContainerBase<MonitoringReportPre
       text: "Questions",
       hash: "details",
       default: true,
-      content: this.renderFormTab(project, editor)
+      content: this.renderFormTab(project, editor),
+      qa: "MRPrepareTab"
     }, {
       text: "Log",
       hash: "log",
-      content: this.renderLogTab()
+      content: this.renderLogTab(),
+      qa: "MRPrepareLogTab"
     }];
 
     return (
