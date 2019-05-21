@@ -9,8 +9,8 @@ export function navigateTo(routeInfo: ILinkInfo, replace: boolean = false) {
 // Use navigateBackTo when navigating back from a submitted form to avoid leaving the form url in the browser history.
 // Avoids the user landing back on the form if they click the back button
 export const navigateBackTo = (routeInfo: ILinkInfo): Actions.AsyncThunk<void> => (dispatch, getState): any => {
-  if (getState().history > 0) {
-    return window.history.back();
-  }
+  // if (getState().history > 0) {
+  //   return window.history.back();
+  // }
   return dispatch(navigateTo(routeInfo, true));
 };
