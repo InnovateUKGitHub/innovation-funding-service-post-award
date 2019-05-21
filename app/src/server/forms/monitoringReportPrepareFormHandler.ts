@@ -1,16 +1,14 @@
-import { SaveMonitoringReport } from "../features/monitoringReports/saveMonitoringReport";
-import { FormHandlerBase, IFormBody, IFormButton } from "./formHandlerBase";
-import { IContext } from "@framework/types/IContext";
+import { FormHandlerBase, IFormBody, IFormButton } from "@server/forms/formHandlerBase";
+import { IContext, ILinkInfo } from "@framework/types";
 import { MonitoringReportDto } from "@framework/dtos/monitoringReportDto";
 import {
   MonitoringReportDashboardRoute,
   MonitoringReportPrepareParams,
   MonitoringReportPrepareRoute
-} from "../../ui/containers";
-import { MonitoringReportDtoValidator } from "../../ui/validators/MonitoringReportDtoValidator";
-import { ILinkInfo } from "@framework/types/ILinkInfo";
-import { getMonitoringReportEditor } from "../../ui/redux/selectors";
-import { GetMonitoringReportById } from "@server/features/monitoringReports/getMonitoringReport";
+} from "@ui/containers";
+import { MonitoringReportDtoValidator } from "@ui/validators/MonitoringReportDtoValidator";
+import { getMonitoringReportEditor } from "@ui/redux/selectors";
+import { GetMonitoringReportById, SaveMonitoringReport } from "@server/features/monitoringReports";
 
 export class MonitoringReportPrepareFormHandler extends FormHandlerBase<MonitoringReportPrepareParams, MonitoringReportDto> {
 
@@ -19,7 +17,7 @@ export class MonitoringReportPrepareFormHandler extends FormHandlerBase<Monitori
   }
 
   protected async getDto(context: IContext, params: MonitoringReportPrepareParams, button: IFormButton, body: IFormBody): Promise<MonitoringReportDto> {
-    const query = new GetMonitoringReportById(params.projectId, params.id!);
+    const query = new GetMonitoringReportById(params.projectId, params.id);
     const dto = await context.runQuery(query);
     dto.periodId = parseInt(body.period, 10);
     dto.questions.forEach(q => {

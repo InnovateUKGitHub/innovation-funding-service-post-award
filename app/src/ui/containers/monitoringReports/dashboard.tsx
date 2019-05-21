@@ -9,7 +9,8 @@ import { ProjectDashboardRoute } from "@ui/containers";
 import { ProjectRole } from "@framework/types";
 import { MonitoringReportStatus } from "@framework/constants";
 import { MonitoringReportViewRoute } from "./details";
-import { MonitoringReportCreateRoute, MonitoringReportPrepareRoute } from "./prepare";
+import { MonitoringReportPrepareRoute } from "./prepare";
+import { MonitoringReportCreateRoute } from "./create";
 
 interface Params {
   projectId: string;
