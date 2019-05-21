@@ -16,6 +16,7 @@ interface Params {
 interface Data {
   project: Pending<Dtos.ProjectDto>;
   report: Pending<Dtos.MonitoringReportDto>;
+  statusChanges: Pending<Dtos.MonitoringReportStatusChangeDto[]>;
 }
 
 interface Callbacks {
@@ -33,26 +34,49 @@ class DetailsComponent extends ContainerBase<Params, Data, Callbacks> {
   }
 
   private renderContents(project: Dtos.ProjectDto, report: Dtos.MonitoringReportDto) {
-    const title = <ACC.PeriodTitle periodId={report.periodId} periodStartDate={report.startDate} periodEndDate={report.endDate} />;
+
+    const tabs = [{
+      text: "Questions",
+      hash: "details",
+      default: true,
+      content: this.renderResponses(report),
+      qa: "MRDetailTab"
+    }, {
+      text: "Log",
+      hash: "log",
+      content: this.renderLogTab(),
+      qa: "MRDetailsLogTab"
+    }];
 
     return (
       <ACC.Page
         backLink={<ACC.BackLink route={MonitoringReportDashboardRoute.getLink({ projectId: this.props.projectId })}>Back to monitoring reports</ACC.BackLink>}
         pageTitle={<ACC.Projects.Title project={project} />}
-        tabs={<ACC.MonitoringReports.Navigation projectId={this.props.projectId} id={this.props.id} />}
+        tabs={<ACC.HashTabs tabList={tabs}/>}
       >
-        <ACC.Section title={title}>
-          {this.renderResponses(report)}
-        </ACC.Section>
+        <ACC.HashTabsContent tabList={tabs}/>
       </ACC.Page>
     );
   }
 
+  private renderLogTab() {
+    return (
+      <ACC.Loader
+        pending={this.props.statusChanges}
+        render={(statusChanges) => <ACC.Section><ACC.Logs data={statusChanges} qa="monitoring-report-status-change-table"/></ACC.Section>}
+      />);
+  }
+
   private renderResponses(report: Dtos.MonitoringReportDto) {
-    return report.questions
-      .map((q, i) => this.renderResponse(q, i))
-      .reduce((a, b) => a.concat(b), [])
-      .filter(x => !!x);
+    const title = <ACC.PeriodTitle periodId={report.periodId} periodStartDate={report.startDate} periodEndDate={report.endDate} />;
+    return (
+      <ACC.Section title={title}>
+        {report.questions
+          .map((q, i) => this.renderResponse(q, i))
+          .reduce((a, b) => a.concat(b), [])
+          .filter(x => !!x)}
+      </ACC.Section>
+    );
   }
 
   private renderResponse(question: MonitoringReportQuestionDto, index: number) {
@@ -94,6 +118,7 @@ export const MonitoringReportView = containerDefinition.connect({
   withData: (state, props) => ({
     project: Selectors.getProject(props.projectId).getPending(state),
     report: Selectors.getMonitoringReport(props.projectId, props.id).getPending(state),
+    statusChanges: Selectors.getMonitoringReportStatusChanges(props.id).getPending(state),
   }),
   withCallbacks: () => ({})
 });
@@ -105,6 +130,7 @@ export const MonitoringReportViewRoute = containerDefinition.route({
   getLoadDataActions: (params) => [
     Actions.loadProject(params.projectId),
     Actions.loadMonitoringReport(params.projectId, params.id),
+    Actions.loadMonitoringReportStatusChanges(params.projectId, params.id),
   ],
   container: MonitoringReportView,
   accessControl: (auth, params, features) => features.monitoringReports && auth.forProject(params.projectId).hasRole(ProjectRole.MonitoringOfficer),
