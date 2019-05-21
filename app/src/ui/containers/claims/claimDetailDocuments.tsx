@@ -37,6 +37,7 @@ interface Callbacks {
   validate: (key: ClaimDetailKey, dto: DocumentUploadDto) => void;
   uploadFile: (key: ClaimDetailKey, dto: DocumentUploadDto) => void;
   deleteFile: (key: ClaimDetailKey, dto: DocumentSummaryDto) => void;
+  clearMessage: () => void;
 }
 
 export class ClaimDetailDocumentsComponent extends ContainerBase<ClaimDetailDocumentsPageParams, Data, Callbacks> {
@@ -60,6 +61,7 @@ export class ClaimDetailDocumentsComponent extends ContainerBase<ClaimDetailDocu
       periodId: this.props.periodId,
       costCategoryId: this.props.costCategoryId
     };
+    this.props.clearMessage();
     this.props.validate(key, dto);
   }
 
@@ -111,6 +113,7 @@ export class ClaimDetailDocumentsComponent extends ContainerBase<ClaimDetailDocu
         error={(editor.error) || (deleteEditor.error)}
         validator={editor.validator}
         pageTitle={<ACC.Projects.Title project={project} />}
+        messages={this.props.messages}
       >
         {this.renderSection(documents)}
         <ACC.Section>
@@ -153,6 +156,7 @@ export const ClaimDetailDocuments = definition.connect({
     };
   },
   withCallbacks: (dispatch) => ({
+    clearMessage: () => dispatch(Actions.removeMessages()),
     validate: (claimDetailKey, dto) =>
       dispatch(Actions.updateClaimDetailDocumentEditor(claimDetailKey, dto)),
     deleteFile: (claimDetailKey, dto) =>
@@ -160,7 +164,8 @@ export const ClaimDetailDocuments = definition.connect({
         dispatch(Actions.loadClaimDetailDocuments(claimDetailKey.projectId, claimDetailKey.partnerId, claimDetailKey.periodId, claimDetailKey.costCategoryId)))),
     uploadFile: (claimDetailKey, file) =>
       dispatch(Actions.uploadClaimDetailDocument(claimDetailKey, file, () =>
-        dispatch(Actions.loadClaimDetailDocuments(claimDetailKey.projectId, claimDetailKey.partnerId, claimDetailKey.periodId, claimDetailKey.costCategoryId))))
+        dispatch(Actions.loadClaimDetailDocuments(claimDetailKey.projectId, claimDetailKey.partnerId, claimDetailKey.periodId, claimDetailKey.costCategoryId)),
+          "Your document has been uploaded."))
   })
 });
 
