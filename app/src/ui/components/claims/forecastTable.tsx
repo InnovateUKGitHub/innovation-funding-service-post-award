@@ -28,6 +28,23 @@ interface Props {
 }
 
 export class ForecastTable extends React.Component<Props> {
+  componentDidMount() {
+    // hack into next event cycle as react is too fast for dom
+    setTimeout(() => {
+      const col1 = document.getElementsByClassName("sticky-col-right-1");
+      const col2 = document.getElementsByClassName("sticky-col-right-2");
+      const col3 = document.getElementsByClassName("sticky-col-right-3");
+
+      if(!col1.length || !col2.length) return;
+
+      const width1 = col1[0].getBoundingClientRect().width;
+      const width2 = col2[0].getBoundingClientRect().width;
+
+      Array.from(col2).forEach((x: any) => x.style.right = `${width1}px`);
+      Array.from(col3).forEach((x: any) => x.style.right = `${width1 + width2}px`);
+    });
+  }
+
   public render() {
     const { data, hideValidation } = this.props;
     // if there is no claim then we must be in period 1 ie, claim period 0
@@ -51,7 +68,7 @@ export class ForecastTable extends React.Component<Props> {
           "table__row--error": !hideValidation && x.validators.some(v => !v.isValid)
         })}
       >
-        <Table.String header="Month" value={x => x.categoryName} qa="category-name" />
+        <Table.String header="Month" value={x => x.categoryName} colClassName={() => "sticky-col sticky-col-left-1"} qa="category-name" />
 
         {claims.map((p, i) => <Table.Currency
           key={p}
@@ -71,9 +88,9 @@ export class ForecastTable extends React.Component<Props> {
           isDivider={i === forecasts.length - 1 ? "bold" : undefined}
         />)}
 
-        <Table.Currency header="No data" hideHeader={true} value={x => x.total} qa="category-total" isDivider="normal" />
-        <Table.Currency header="No data" hideHeader={true} value={x => x.golCosts} qa="category-gol-costs" isDivider="normal" />
-        <Table.Percentage header="No data" hideHeader={true} value={x => x.difference} qa="category-difference" />
+        <Table.Currency colClassName={() => "sticky-col sticky-col-right-3"} header="No data" hideHeader={true} value={x => x.total} qa="category-total" isDivider="normal" />
+        <Table.Currency colClassName={() => "sticky-col sticky-col-right-2"} header="No data" hideHeader={true} value={x => x.golCosts} qa="category-gol-costs" isDivider="normal" />
+        <Table.Percentage colClassName={() => "sticky-col sticky-col-right-1"} header="No data" hideHeader={true} value={x => x.difference} qa="category-difference" />
       </Table.Table>
     );
   }
@@ -196,28 +213,28 @@ export class ForecastTable extends React.Component<Props> {
 
     return [(
       <tr key="cHeader1" className="govuk-table__row govuk-body-s">
-        <th className="govuk-table__header govuk-table__header--numeric">
+        <th className="govuk-table__header govuk-table__header--numeric sticky-col sticky-col-left-1">
           <ACC.Renderers.AccessibilityText>Cost categories</ACC.Renderers.AccessibilityText>
         </th>
         {previous > 0 ? <th className="govuk-table__header govuk-table__header--numeric" colSpan={previous}>Previous costs</th> : null}
         {claimPeriod > 0 ? <th className="govuk-table__header govuk-table__header--numeric">Costs this period</th> : null}
         {forecasts ? <th className="govuk-table__header govuk-table__header--numeric" colSpan={periods.length - claimPeriod}>Forecast</th> : null}
-        <th className="govuk-table__header govuk-table__header--numeric">Total</th>
-        <th className="govuk-table__header govuk-table__header--numeric">Total eligible costs</th>
-        <th className="govuk-table__header govuk-table__header--numeric">Difference</th>
+        <th className="govuk-table__header govuk-table__header--numeric sticky-col sticky-col-right-3">Total</th>
+        <th className="govuk-table__header govuk-table__header--numeric sticky-col sticky-col-right-2">Total eligible costs</th>
+        <th className="govuk-table__header govuk-table__header--numeric sticky-col sticky-col-right-1">Difference</th>
       </tr>
     ),
     (
       <tr key="cHeader2" className="govuk-table__row govuk-body-s">
-        <th className="govuk-table__header">Period</th>
+        <th className="govuk-table__header sticky-col sticky-col-left-1">Period</th>
         {periods.map((p, i) => <th key={i} className="govuk-table__header" style={{textAlign: "right"}}>{p}</th>)}
-        <th className="govuk-table__header">
+        <th className="govuk-table__header sticky-col sticky-col-right-3">
           <ACC.Renderers.AccessibilityText>No data</ACC.Renderers.AccessibilityText>
         </th>
-        <th className="govuk-table__header">
+        <th className="govuk-table__header sticky-col sticky-col-right-2">
           <ACC.Renderers.AccessibilityText>No data</ACC.Renderers.AccessibilityText>
         </th>
-        <th className="govuk-table__header">
+        <th className="govuk-table__header sticky-col sticky-col-right-1">
           <ACC.Renderers.AccessibilityText>No data</ACC.Renderers.AccessibilityText>
         </th>
       </tr>
@@ -238,13 +255,12 @@ export class ForecastTable extends React.Component<Props> {
     const warning   = !!validator && validator.showValidationErrors && !validator.totalCosts.isValid;
     const warningId = !!validator && warning ? validator.totalCosts.key : "";
 
-    totals.push(costTotal);
-    totals.push(golTotal);
-
-    cells.push(<th key="th" className="govuk-table__cell govuk-!-font-weight-bold acc-table__cell-top-border">Total</th>);
-    cells.push(totals.map(this.renderTableFooterCell));
+    cells.push(<th key="th" className="govuk-table__cell govuk-!-font-weight-bold acc-table__cell-top-border sticky-col sticky-col-left-1">Total</th>);
+    cells.push(totals.map((value, index) => this.renderTableFooterCell(value, index)));
+    cells.push(this.renderTableFooterCell(costTotal, totals.length + 1, "sticky-col sticky-col-right-3"));
+    cells.push(this.renderTableFooterCell(golTotal, totals.length + 2, "sticky-col sticky-col-right-2"));
     cells.push((
-      <td key="total_diff" className="govuk-table__cell govuk-table__cell--numeric acc-table__cell-top-border govuk-!-font-weight-regular">
+      <td key="total_diff" className="govuk-table__cell govuk-table__cell--numeric acc-table__cell-top-border govuk-!-font-weight-regular sticky-col sticky-col-right-1">
         <ACC.Renderers.Percentage value={this.calculateDifference(golTotal, costTotal)} />
       </td>
     ));
@@ -252,8 +268,8 @@ export class ForecastTable extends React.Component<Props> {
     return [<tr id={warningId} key="footer1" className={classNames("govuk-table__row", "govuk-body-s", {"table__row--error": warning})}>{cells}</tr>];
   }
 
-  renderTableFooterCell = (total: number, key: number) => (
-    <td key={key} className="govuk-table__cell govuk-table__cell--numeric acc-table__cell-top-border govuk-!-font-weight-regular">
+  renderTableFooterCell = (total: number, key: number, className?: string) => (
+    <td key={key} className={`govuk-table__cell govuk-table__cell--numeric acc-table__cell-top-border govuk-!-font-weight-regular ${className}`}>
       <ACC.Renderers.Currency value={total} />
     </td>
   )
