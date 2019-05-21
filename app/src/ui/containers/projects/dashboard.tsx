@@ -23,7 +23,6 @@ interface Callbacks {
 }
 
 interface Props {
-  showHidden?: boolean;
 }
 
 type Section = "archived" | "open" | "awaiting" | "upcoming";
@@ -65,25 +64,10 @@ class ProjectDashboardComponent extends ContainerBase<Props, Data, Callbacks> {
     return (
       <React.Fragment>
         {this.renderStatisticsSection(combinedData)}
-        <ACC.ListSection title="Open claims" qa="open-claims" key={`section-open`}>
-          {open.map((x, i) => this.renderProject(x.project, x.partner, "open", i))}
-          {!open.length ? <ACC.ListItem><p className="govuk-body govuk-!-margin-0">You currently do not have any projects with open claims.</p></ACC.ListItem> : null}
-        </ACC.ListSection>
-        <ACC.ListSection title="Awaiting the next claim period" qa="next-claims" key={`section-closed`}>
-          {awaiting.map((x, i) => this.renderProject(x.project, x.partner, "awaiting", i))}
-          {!awaiting.length ? <ACC.ListItem><p className="govuk-body govuk-!-margin-0">You currently do not have any projects outside of the claims period.</p></ACC.ListItem> : null}
-        </ACC.ListSection>
-        <ACC.ListSection title="Archive" qa="archived-claims" key={`section-archived`}>
-          {archived.map((x, i) => this.renderProject(x.project, x.partner, "archived", i))}
-          {!archived.length ? <ACC.ListItem><p className="govuk-body govuk-!-margin-0">You currently do not have any archived projects.</p></ACC.ListItem> : null}
-        </ACC.ListSection>
-        {
-          this.props.showHidden === true && upcoming.length ?
-          <ACC.ListSection title="Hidden" qa="hidden-claims" key={`section-hidden`}>
-              {upcoming.map((x, i) => this.renderProject(x.project, x.partner, "archived", i))}
-            </ACC.ListSection>
-            : null
-          }
+        {this.renderProjectList(open, "Open claims", "open-claims", "section-open", "open", "You currently do not have any projects with open claims.")}
+        {this.renderProjectList(awaiting, "Awaiting the next claim period", "next-claims", "section-closed", "awaiting", "You currently do not have any projects outside of the claims period.")}
+        {upcoming.length ? this.renderProjectList(upcoming, "Upcoming projects", "upcoming-claims", "section-upcoming", "upcoming", "") : null}
+        {this.renderProjectList(archived, "Archive", "archived-claims", "section-archived", "archived", "You currently do not have any archived projects.")}
       </React.Fragment>
     );
   }
@@ -113,6 +97,15 @@ class ProjectDashboardComponent extends ContainerBase<Props, Data, Callbacks> {
       <div className={classNames("govuk-grid-column-one-third", "govuk-!-padding-left-0")} >
         <StatisticsBox numberOfClaims={numberOfClaims} claimAction={claimAction} />
       </div>
+    );
+  }
+
+  private renderProjectList(data: {project: ProjectDto, partner: PartnerDto | null, status: Section}[], title: string, qa: string, key: string, section: Section, noProjectsMessage: string) {
+    return (
+      <ACC.ListSection title={title} qa={qa} key={key}>
+        {data.map((x, i) => this.renderProject(x.project, x.partner, section, i))}
+        {!data.length ? <ACC.ListItem><p className="govuk-body govuk-!-margin-0">{noProjectsMessage}</p></ACC.ListItem> : null}
+      </ACC.ListSection>
     );
   }
 
@@ -163,6 +156,7 @@ class ProjectDashboardComponent extends ContainerBase<Props, Data, Callbacks> {
     return "none";
   }
 
+  // tslint:disable-next-line:cognitive-complexity
   private getMessages(project: ProjectDto, partner: PartnerDto | null, section: Section): React.ReactNode[] {
     const messages: React.ReactNode[] = [];
 
@@ -173,7 +167,7 @@ class ProjectDashboardComponent extends ContainerBase<Props, Data, Callbacks> {
       messages.push(`Period ${project.periodId} of ${project.totalPeriods}`);
     }
 
-    if (section === "archived") {
+    if (section === "archived" || section === "upcoming") {
       messages.push(<ACC.Renderers.LongDateRange start={project.startDate} end={project.endDate} />);
     }
 
@@ -243,11 +237,17 @@ class ProjectDashboardComponent extends ContainerBase<Props, Data, Callbacks> {
     return null;
   }
 
-  private renderLink(project: ProjectDto, partner: PartnerDto | null) {
+  private renderProjectTitle(project: ProjectDto, partner: PartnerDto | null, links: boolean) {
     const text = `${project.projectNumber}: ${project.title}`;
+
+    if (!links) {
+      return <p className="govuk-heading-s govuk-!-margin-bottom-2">{text}</p>;
+    }
+
     if (project.roles === ProjectRole.FinancialContact && partner) {
       return <ACC.Link route={ClaimsDashboardRoute.getLink({ projectId: project.id, partnerId: partner.id })}>{text}</ACC.Link>;
     }
+
     return <ACC.Link route={AllClaimsDashboardRoute.getLink({ projectId: project.id })}>{text}</ACC.Link>;
   }
 
@@ -260,7 +260,7 @@ class ProjectDashboardComponent extends ContainerBase<Props, Data, Callbacks> {
         <div className="govuk-grid-column-two-thirds" style={{ display: "inline-flex", alignItems: "center" }}>
           <div className={iconStatus !== "none" ? "govuk-!-margin-left-8" : ""}>
             <h3 className="govuk-heading-s govuk-!-margin-bottom-2">
-              {this.renderLink(project, partner)}
+              {this.renderProjectTitle(project, partner, section !== "upcoming")}
             </h3>
             {messages.map((content, i) => <p key={`message${i}`} className="govuk-body govuk-!-margin-bottom-0">{content}</p>)}
           </div>
@@ -288,10 +288,7 @@ export const ProjectDashboard = definition.connect({
 export const ProjectDashboardRoute = definition.route({
   routeName: "projectDashboard",
   routePath: "/projects/dashboard",
-  getParams: (route) => ({
-    useSalesforceStatus: route.params.useSalesforceStatus === "true",
-    showHidden: route.params.showHidden === "true"
-  }),
+  getParams: (route) => ({}),
   getLoadDataActions: (params) => [
     Actions.loadProjects(),
     Actions.loadPartners()
