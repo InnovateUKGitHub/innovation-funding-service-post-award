@@ -16,7 +16,6 @@ interface TabProps {
 
 interface State {
   hash: string;
-  jsEnabled: boolean;
 }
 
 export class HashTabs extends React.PureComponent<TabProps, State> {
@@ -25,12 +24,10 @@ export class HashTabs extends React.PureComponent<TabProps, State> {
     super(props);
     this.state = {
       hash: "#",
-      jsEnabled: false
     };
   }
 
   componentDidMount() {
-    this.setState({jsEnabled: true});
     this.setHash();
     window.addEventListener("hashchange", this.setHash, false);
   }
