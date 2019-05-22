@@ -85,17 +85,17 @@ class ProjectDashboardComponent extends ContainerBase<Props, Data, Callbacks> {
 
     return (
       <ACC.Section qa="requiring-action-section">
-        {this.renderStatisticsBox(0, "change request you need to review")}
-        {this.renderStatisticsBox(claimsToReview, "claims you need to review")}
-        {this.renderStatisticsBox(pendingClaims, "unsubmitted or queried claims")}
+        {this.renderStatisticsBox(0, "change request you need to review", "pcr")}
+        {this.renderStatisticsBox(claimsToReview, "claims you need to review", "review")}
+        {this.renderStatisticsBox(pendingClaims, "unsubmitted or queried claims", "queried")}
       </ACC.Section>
     );
   }
 
-  private renderStatisticsBox(numberOfClaims: number, claimAction: string) {
+  private renderStatisticsBox(numberOfClaims: number, claimAction: string, qa?: string) {
     return(
       <div className={classNames("govuk-grid-column-one-third", "govuk-!-padding-left-0")} >
-        <StatisticsBox numberOfClaims={numberOfClaims} claimAction={claimAction} />
+        <StatisticsBox numberOfClaims={numberOfClaims} claimAction={claimAction} qa={qa}/>
       </div>
     );
   }
