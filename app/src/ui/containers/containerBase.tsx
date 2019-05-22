@@ -10,8 +10,8 @@ import { matchRoute } from "@ui/routing/matchRoute";
 import { Authorisation, IClientUser, ILinkInfo } from "@framework/types";
 
 interface BaseProps {
-  messages: string[];
-  route: RouteState;
+    messages: string[];
+    route: RouteState;
 }
 
 export type ContainerProps<TParams, TData, TCallbacks> = TParams & TData & TCallbacks & BaseProps;
@@ -56,14 +56,14 @@ class ConnectWrapper<TParams, TData, TCallbacks> {
 
     public connect() {
         return reduxConnect<TData, TCallbacks, BaseProps & TParams, RootState>(
-          (state) => this.mapStateToProps(state),
-          (dispatch) => this.mapDispachToProps(dispatch)
+            (state) => this.mapStateToProps(state),
+            (dispatch) => this.mapDispachToProps(dispatch)
         )(this.component);
     }
 }
 
 class ReduxContainerWrapper<TParams, TData, TCallbacks> {
-    constructor(private readonly component: ContainerBaseClass<TParams, TData, TCallbacks>) {}
+    constructor(private readonly component: ContainerBaseClass<TParams, TData, TCallbacks>) { }
 
     public route(options: {
         routeName: string,
@@ -79,11 +79,35 @@ class ReduxContainerWrapper<TParams, TData, TCallbacks> {
     }) {
         return {
             getLink: (params: TParams): ILinkInfo => ({
-              routeName: options.routeName,
-              routeParams: params,
-              accessControl: (user: IClientUser, features: IFeatureFlags) => !options.accessControl || options.accessControl(new Authorisation(user.roleInfo), params, features) }),
+                routeName: options.routeName,
+                routeParams: this.convertToParameters(params),
+                accessControl: (user: IClientUser, features: IFeatureFlags) => !options.accessControl || options.accessControl(new Authorisation(user.roleInfo), params, features)
+            }),
             ...options,
         };
+    }
+
+    private convertToParameters(params: any) {
+        const result: { [key: string]: string } = {};
+
+        Object.keys(params || {}).forEach(key => {
+            result[key] = this.convertToParameter(params[key]);
+        });
+
+        return result;
+    }
+
+    private convertToParameter(p: any): string {
+        if (typeof (p) === "number") {
+            return p.toString();
+        }
+        if (typeof (p) === "boolean") {
+            return p.toString();
+        }
+        if (typeof (p) === "string") {
+            return p;
+        }
+        throw new Error(`Unable to convert parameter to a string : ${JSON.stringify(p)}`);
     }
 
     public connect(options: { withData: (state: RootState, params: TParams, auth: Authorisation) => TData, withCallbacks: (dispatch: ThunkDispatch<RootState, void, RootActions>) => TCallbacks }) {
