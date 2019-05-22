@@ -121,7 +121,17 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, Data, Callbacks> 
   }
 
   private renderIarSection(claim: ClaimDto, iarDocument?: DocumentSummaryDto | null) {
-    if (!claim.isIarRequired || !claim.isApproved || !iarDocument) return null;
+    if (!claim.isIarRequired || claim.status !== ClaimStatus.SUBMITTED) {
+      return null;
+    }
+
+    if (!iarDocument) {
+      return (
+        <ACC.Section qa="claim-iar" title={"Independent accountant's report"}>
+          <ACC.Renderers.SimpleString>A report has not been attached. This claim will not be sent to Innovate UK for approval until it is provided.</ACC.Renderers.SimpleString>
+        </ACC.Section>
+      );
+    }
 
     return (
       <ACC.Section qa="claim-iar" title={"Independent accountant's report"}>
