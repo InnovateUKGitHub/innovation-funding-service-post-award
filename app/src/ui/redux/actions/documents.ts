@@ -7,6 +7,8 @@ import { LoadingStatus } from "@shared/pending";
 import { DocumentDescription } from "@framework/constants";
 import { scrollToTheTopSmoothly } from "@framework/util/windowHelpers";
 
+type uploadProjectDocumentActions = Actions.AsyncThunk<void, Actions.DataLoadAction | Actions.EditorAction | Actions.messageSuccess>;
+
 export function loadClaimDetailDocuments(projectId: string, partnerId: string, periodId: number, costCategoryId: string) {
   return Actions.conditionalLoad(
     Selectors.getClaimDetailDocuments(partnerId, periodId, costCategoryId),
@@ -40,7 +42,7 @@ export function updateProjectDocumentEditor(projectId: string, dto: DocumentUplo
   };
 }
 
-export function uploadProjectDocument(projectId: string, dto: DocumentUploadDto, onComplete: () => void, message: string): Actions.AsyncThunk<void, Actions.DataLoadAction | Actions.EditorAction | Actions.messageSuccess> {
+export function uploadProjectDocument(projectId: string, dto: DocumentUploadDto, onComplete: () => void, message: string): uploadProjectDocumentActions {
   return (dispatch, getState) => {
     const state = getState();
     const selector = Selectors.getProjectDocumentEditor(projectId);
@@ -82,7 +84,7 @@ export function updateClaimDetailDocumentEditor(claimDetailKey: ClaimDetailKey, 
 }
 
 export function uploadClaimDetailDocument(claimDetailKey: ClaimDetailKey, dto: DocumentUploadDto, onComplete: () => void, message: string
-): Actions.AsyncThunk<void, Actions.DataLoadAction | Actions.EditorAction | Actions.messageSuccess> {
+): uploadProjectDocumentActions {
   return (dispatch, getState) => {
     const state = getState();
     const selector = Selectors.getClaimDetailDocumentEditor(claimDetailKey);
@@ -124,7 +126,7 @@ export function updateClaimDocumentEditor(claimKey: ClaimKey, dto: DocumentUploa
   };
 }
 
-export function uploadClaimDocument(claimKey: ClaimKey, dto: DocumentUploadDto, onComplete: () => void): Actions.AsyncThunk<void, Actions.DataLoadAction | Actions.EditorAction> {
+export function uploadClaimDocument(claimKey: ClaimKey, dto: DocumentUploadDto, onComplete: () => void, message: string): uploadProjectDocumentActions {
   return (dispatch, getState) => {
     const state = getState();
     const selector = Selectors.getClaimDocumentEditor(claimKey, dto.description);
@@ -145,6 +147,7 @@ export function uploadClaimDocument(claimKey: ClaimKey, dto: DocumentUploadDto, 
     return ApiClient.documents.uploadClaimDocument({ claimKey, file: dto.file!, description: dto.description, user: state.user })
       .then(() => {
         dispatch(Actions.handleEditorSuccess(selector.key, selector.store));
+        dispatch(Actions.messageSuccess(message));
         onComplete();
       }).catch((e: any) => {
         dispatch(Actions.handleEditorError({ id: selector.key, store: selector.store, dto, validation, error: e }));
@@ -183,6 +186,7 @@ export function deleteClaimDocument(claimKey: ClaimKey, dto: DocumentSummaryDto,
     return ApiClient.documents.deleteDocument({documentId: dto.id, user: state.user})
       .then(() => {
         dispatch(Actions.handleEditorSuccess(selector.key, selector.store));
+        dispatch(Actions.removeMessages());
         onComplete();
       }).catch((e: any) => {
         dispatch(Actions.handleEditorError({ id: selector.key, store: selector.store, dto, validation: null, error: e }));

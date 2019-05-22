@@ -46,7 +46,7 @@ interface CombinedData {
 
 interface Callbacks {
   validate: (key: ClaimKey, dto: DocumentUploadDto) => void;
-  uploadFile: (key: ClaimKey, dto: DocumentUploadDto) => void;
+  uploadFile: (key: ClaimKey, dto: DocumentUploadDto, message: string) => void;
   deleteFile: (key: ClaimKey, dto: DocumentSummaryDto) => void;
 }
 
@@ -85,9 +85,9 @@ class Component extends ContainerBase<ClaimDashboardPageParams, Data, Callbacks>
     this.props.validate(key, dto);
   }
 
-  private onSave(dto: DocumentUploadDto, periodId: number) {
+  private onSave(dto: DocumentUploadDto, periodId: number, message: string) {
     const key = { partnerId: this.props.partnerId, periodId };
-    this.props.uploadFile(key, dto);
+    this.props.uploadFile(key, dto, message);
   }
 
   private onDelete(claim: ClaimDto, dto: DocumentSummaryDto) {
@@ -120,7 +120,7 @@ class Component extends ContainerBase<ClaimDashboardPageParams, Data, Callbacks>
             <UploadForm.Hidden name="periodId" value={() => claim.periodId} />
             <UploadForm.Hidden name="description" value={() => DocumentDescription.IAR} />
           </UploadForm.Fieldset>
-          <UploadForm.Button name="upload" onClick={() => this.onSave(editor.data, claim.periodId)}>Upload</UploadForm.Button>
+          <UploadForm.Button name="upload" onClick={() => this.onSave(editor.data, claim.periodId, "Your IAR has been uploaded.")}>Upload</UploadForm.Button>
         </UploadForm.Form>
       </React.Fragment>
     );
@@ -263,9 +263,9 @@ export const ClaimsDashboard = definition.connect({
   withCallbacks: (dispatch) => ({
     validate: (claimKey, dto) =>
       dispatch(Actions.updateClaimDocumentEditor(claimKey, dto)),
-    uploadFile: (claimKey, file) =>
+    uploadFile: (claimKey, file, message) =>
       dispatch(Actions.uploadClaimDocument(claimKey, file, () =>
-        dispatch(Actions.loadIarDocumentsForCurrentClaim(claimKey.partnerId)))),
+        dispatch(Actions.loadIarDocumentsForCurrentClaim(claimKey.partnerId)), message)),
     deleteFile: (claimKey, file) =>
       dispatch(Actions.deleteClaimDocument(claimKey, file, () =>
         dispatch(Actions.loadIarDocumentsForCurrentClaim(claimKey.partnerId))))
