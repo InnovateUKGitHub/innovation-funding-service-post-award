@@ -16,7 +16,9 @@ export class MonitoringReportCreateFormHandler extends FormHandlerBase<Monitorin
     const questions = await context.runQuery(new GetMonitoringReportActiveQuestions());
 
     questions.forEach(q => {
-      q.optionId = body[`question_${q.displayOrder}_options`];
+      if(q.isScored) {
+        q.optionId = body[`question_${q.displayOrder}_options`];
+      }
       q.comments = body[`question_${q.displayOrder}_comments`];
     });
 
@@ -28,7 +30,6 @@ export class MonitoringReportCreateFormHandler extends FormHandlerBase<Monitorin
       status: MonitoringReportStatus.Draft,
       statusName: "",
       lastUpdated: null,
-      // ToDo: remove
       startDate: null,
       endDate: null,
     };

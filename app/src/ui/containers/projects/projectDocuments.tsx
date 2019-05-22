@@ -67,7 +67,7 @@ class ProjectDocumentsComponent extends ContainerBase<ProjectDocumentPageParams,
         <ACC.Section>
           <UploadForm.Form
             enctype="multipart"
-            data={editor.data}
+            editor={editor}
             onChange={dto => this.onFileChange(project.id, dto)}
             onSubmit={() => this.props.uploadFile(project.id, editor.data)}
             qa="projectDocumentUpload"
