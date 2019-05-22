@@ -9,11 +9,11 @@ Enzyme.configure({ adapter: new Adapter() });
 describe("StatisticsBox", () => {
   it("should render action message", () => {
     const wrapper = shallow(<StatisticsBox numberOfClaims={2} claimAction={"Review submitted claims"}/>).html();
-    expect(wrapper).toContain(`<div class="govuk-body govuk-!-margin-bottom-0" style="color:#6f777b">Review submitted claims</div>`);
+    expect(wrapper).toContain(`<div class="govuk-body govuk-!-margin-bottom-0">Review submitted claims</div>`);
   });
 
   it("should render number of actions", () => {
     const wrapper = shallow(<StatisticsBox numberOfClaims={2} claimAction={"Review submitted claims"}/>).html();
-    expect(wrapper).toContain(`<div class="govuk-heading-m">2</div>`);
+    expect(wrapper).toContain(`<div class="govuk-heading-l">2</div>`);
   });
 });
