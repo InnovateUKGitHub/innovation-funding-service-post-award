@@ -85,7 +85,6 @@ class DashboardComponent extends ContainerBase<Params, Data, Callbacks> {
         qa={`${section}-reports-table`}
       >
         <ReportsTable.Custom header={`Title`} qa="title" value={x => <ACC.PeriodTitle periodId={x.periodId} periodStartDate={x.startDate} periodEndDate={x.endDate} />} />
-        <ReportsTable.Number header={`Period`} qa="period" value={x => x.periodId} />
         <ReportsTable.String header={`Status`} qa="status" value={x => x.statusName} />
         <ReportsTable.ShortDateTime header={`Last updated`} qa="dateUpdated" value={x => x.lastUpdated} />
         <ReportsTable.Custom header="" qa="link" value={x => this.renderLink(project, x)} />
