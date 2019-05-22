@@ -84,8 +84,8 @@ class ProjectDashboardComponent extends ContainerBase<Props, Data, Callbacks> {
     }
 
     return (
-      <ACC.Section qa="requiring-action-section">
-        {this.renderStatisticsBox(0, "change request you need to review", "pcr")}
+      <ACC.Section qa="requiring-action-section" title="Overview">
+        {this.renderStatisticsBox(0, "change requests you need to review", "pcr")}
         {this.renderStatisticsBox(claimsToReview, "claims you need to review", "review")}
         {this.renderStatisticsBox(pendingClaims, "unsubmitted or queried claims", "queried")}
       </ACC.Section>
