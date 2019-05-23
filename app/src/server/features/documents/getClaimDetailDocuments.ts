@@ -1,5 +1,5 @@
 import { QueryBase } from "@server/features/common";
-import { IContext, Authorisation, ProjectRole } from "@framework/types";
+import { Authorisation, IContext, ProjectRole } from "@framework/types";
 import { GetDocumentsLinkedToRecordQuery } from "@server/features/documents/getAllForRecord";
 
 export class GetClaimDetailDocumentsQuery extends QueryBase<DocumentSummaryDto[]> {
