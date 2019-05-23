@@ -16,6 +16,7 @@ export default (context: IContext) => (claim: ISalesforceClaim, forecast?: ISale
   partnerId: claim.Acc_ProjectParticipant__r.Id,
   lastModifiedDate: DateTime.fromISO(claim.LastModifiedDate).toJSDate(),
   status: claim.Acc_ClaimStatus__c,
+  statusLabel: claim.ClaimStatusLabel,
   periodStartDate: context.clock.parse(claim.Acc_ProjectPeriodStartDate__c, SALESFORCE_DATE_FORMAT)!,
   periodEndDate: context.clock.parse(claim.Acc_ProjectPeriodEndDate__c,SALESFORCE_DATE_FORMAT)!,
   periodId: claim.Acc_ProjectPeriodNumber__c,

@@ -17,6 +17,7 @@ export default (mod?: Partial<ClaimDto>): ClaimDto => {
     periodId: 1,
     periodStartDate: new Date(),
     status: ClaimStatus.DRAFT,
+    statusLabel: ClaimStatus.DRAFT,
     totalCost: 0,
     overheadRate: 0,
   };
