@@ -21,7 +21,9 @@ export class MonitoringReportPrepareFormHandler extends FormHandlerBase<Monitori
     const dto = await context.runQuery(query);
     dto.periodId = parseInt(body.period, 10);
     dto.questions.forEach(q => {
-      q.optionId = body[`question_${q.displayOrder}_options`];
+      if (q.isScored) {
+        q.optionId = body[`question_${q.displayOrder}_options`];
+      }
       q.comments = body[`question_${q.displayOrder}_comments`];
     });
     return dto;

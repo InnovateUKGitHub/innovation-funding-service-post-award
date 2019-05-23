@@ -20,7 +20,7 @@ export class MonitoringReportFormComponent extends Component<Props> {
 
     return (
       <ACC.Section>
-        <ReportForm.Form data={editor.data} onChange={(dto) => this.props.onChange(dto, project)} >
+        <ReportForm.Form editor={editor} onChange={(dto) => this.props.onChange(dto, project)} >
           <ReportForm.Numeric label="Period" labelBold={true} width="small" name="period" value={x => x.periodId} update={(x, v) => x.periodId = v!} validation={editor.validator.periodId} />
           <ACC.Renderers.SimpleString>For each question score the project against the criteria from 1 to 5, providing a comment explaining your reason. Your Monitoring Portfolio Executive will return the report to you otherwise.</ACC.Renderers.SimpleString>
           {this.renderFormItems(editor)}
