@@ -1,5 +1,5 @@
 import { QueryBase } from "@server/features/common";
-import { IContext } from "@framework/types";
+import { IContext, Authorisation, ProjectRole } from "@framework/types";
 import { GetDocumentsLinkedToRecordQuery } from "@server/features/documents/getAllForRecord";
 
 export class GetClaimDetailDocumentsQuery extends QueryBase<DocumentSummaryDto[]> {
@@ -10,6 +10,11 @@ export class GetClaimDetailDocumentsQuery extends QueryBase<DocumentSummaryDto[]
     private readonly costCategoryId: string
   ) {
     super();
+  }
+
+  protected async accessControl(auth: Authorisation) {
+    return auth.forProject(this.projectId).hasRole(ProjectRole.MonitoringOfficer)
+    || auth.forPartner(this.projectId, this.partnerId).hasAnyRoles(ProjectRole.FinancialContact, ProjectRole.ProjectManager);
   }
 
   protected async Run(context: IContext) {
