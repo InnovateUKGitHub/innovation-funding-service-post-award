@@ -51,7 +51,7 @@ class ClaimForecastComponent extends ContainerBase<ClaimForcastParams, PendingFo
         <ACC.Section qa="partner-name">
           {renderWarning(combined)}
           <Form.Form
-            data={editor.data}
+            editor={editor}
             onChange={data => this.handleChange(data, combined)}
             onSubmit={() => this.saveAndReturn(combined, true, this.props.periodId, "You have submitted your claim for this period.")}
             qa="claim-forecast-form"
