@@ -5,6 +5,8 @@ import { MonitoringReportDto, MonitoringReportQuestionDto } from "@framework/typ
 import { MonitoringReportStatus } from "@framework/constants";
 import { dataStoreHelper, editorStoreHelper } from "./common";
 import { getProject } from "./projects";
+import { LoadingStatus, Pending } from "@shared/pending";
+import { Result, Results } from "@ui/validation";
 
 export const getMonitoringReport = (projectId: string, id: string) => dataStoreHelper("monitoringReport", getKey(projectId, id));
 
@@ -44,3 +46,11 @@ const getInitialValdiator = (projectId: string, monitoringReport: MonitoringRepo
 };
 
 export const getMonitoringReportQuestions = () => dataStoreHelper("monitoringReportQuestions", "all");
+
+export const getMonitoringReportDeleteEditor = (key: string, monitoringReport: MonitoringReportDto) => editorStoreHelper<MonitoringReportDto, Results<MonitoringReportDto>>(
+  "monitoringReport",
+  x => x.monitoringReport,
+  () => (Pending.create({status: LoadingStatus.Done, data: monitoringReport, error: null})),
+  () => new Results(monitoringReport, false),
+  key
+);
