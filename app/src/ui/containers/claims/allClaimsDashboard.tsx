@@ -162,7 +162,7 @@ class Component extends ContainerBase<Params, Data, {}> {
           <ClaimTable.Currency header="Forecast costs for period" qa="forecast-cost" value={(x) => x.forecastCost} />
           <ClaimTable.Currency header="Actual costs for period" qa="actual-cost" value={(x) => x.totalCost} />
           <ClaimTable.Currency header="Difference" qa="diff" value={(x) => x.forecastCost - x.totalCost} />
-          <ClaimTable.String header="Status" qa="status" value={(x) => x.status} />
+          <ClaimTable.String header="Status" qa="status" value={(x) => x.statusLabel} />
           <ClaimTable.ShortDate header="Date of last update" qa="last-update" value={x => x.paidDate || x.approvedDate || x.lastModifiedDate} />
           <ClaimTable.Custom header="Action" hideHeader={true} qa="link" value={(x) => <Acc.Claims.ClaimDetailsLink claim={x} project={project} partner={partners.find(p => p.id === x.partnerId)!} /> }/>
         </ClaimTable.Table>
@@ -206,7 +206,7 @@ class Component extends ContainerBase<Params, Data, {}> {
           <ClaimTable.Currency header="Forecast costs for period" qa="forecast-cost" value={(x) => x.forecastCost} />
           <ClaimTable.Currency header="Actual costs for period" qa="actual-cost" value={(x) => x.totalCost} />
           <ClaimTable.Currency header="Difference" qa="diff" value={(x) => x.forecastCost - x.totalCost} />
-          <ClaimTable.String header="Status" qa="status" value={(x) => x.status} />
+          <ClaimTable.String header="Status" qa="status" value={(x) => x.statusLabel} />
           <ClaimTable.ShortDate header="Date of last update" qa="last-update" value={x => x.paidDate || x.approvedDate || x.lastModifiedDate} />
           <ClaimTable.Custom header="Action" hideHeader={true} qa="link" value={(x) => <Acc.Claims.ClaimDetailsLink claim={x} project={project} partner={partner} />} />
         </ClaimTable.Table>
