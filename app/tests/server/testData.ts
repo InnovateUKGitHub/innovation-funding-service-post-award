@@ -313,6 +313,7 @@ export class TestData {
       Acc_ProjectPeriodEndDate__c: "2018-03-04",
       Acc_ApprovedDate__c: null,
       Acc_ClaimStatus__c: ClaimStatus.DRAFT,
+      ClaimStatusLabel: ClaimStatus.DRAFT,
       Acc_LineItemDescription__c: null,
       Acc_ProjectPeriodCost__c: 100,
       Acc_PaidDate__c: null,

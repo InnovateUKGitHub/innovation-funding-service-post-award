@@ -14,6 +14,7 @@ export interface ISalesforceClaim {
   };
   LastModifiedDate: string;
   Acc_ClaimStatus__c: ClaimStatus;
+  ClaimStatusLabel: string;
   Acc_ProjectPeriodStartDate__c: string;
   Acc_ProjectPeriodEndDate__c: string;
   Acc_ProjectPeriodNumber__c: number;
@@ -48,6 +49,7 @@ export class ClaimRepository extends SalesforceRepositoryBase<ISalesforceClaim> 
     "Acc_ProjectParticipant__r.Acc_AccountId__r.Name",
     "LastModifiedDate",
     "Acc_ClaimStatus__c",
+    "toLabel(Acc_ClaimStatus__c) ClaimStatusLabel",
     "Acc_ProjectPeriodStartDate__c",
     "Acc_ProjectPeriodEndDate__c",
     "Acc_ProjectPeriodNumber__c",
