@@ -20,6 +20,7 @@ describe("GetClaim", () => {
     expect(result.id).toBe(claim.Id);
     expect(result.partnerId).toBe(claim.Acc_ProjectParticipant__r.Id);
     expect(result.status).toBe(claim.Acc_ClaimStatus__c);
+    expect(result.statusLabel).toBe(claim.ClaimStatusLabel);
     expect(result.periodId).toBe(claim.Acc_ProjectPeriodNumber__c);
     expect(result.totalCost).toBe(claim.Acc_ProjectPeriodCost__c);
     expect(result.approvedDate).toBeNull();

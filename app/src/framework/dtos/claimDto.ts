@@ -5,6 +5,7 @@ export interface ClaimDto {
   partnerId: string;
   lastModifiedDate: Date;
   status: ClaimStatus;
+  statusLabel: string;
   periodStartDate: Date;
   periodEndDate: Date;
   periodId: number;
