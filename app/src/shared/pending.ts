@@ -30,10 +30,10 @@ export class Pending<T> {
      * @param noData - a function to use when no data present to return data T2
      * @return Pending<T2>
      */
-    then<T2>(map: (data: T | null | undefined, state?: LoadingStatus, error?: any) => T2, noData?: () => T2) {
+    then<T2>(map: (data: T, state?: LoadingStatus, error?: any) => T2, noData?: () => T2) {
         let newData: T2 | null | undefined = null;
-        if (this.state === LoadingStatus.Done || this.data || (this.data as any as number) === 0) {
-            newData = map(this.data, this.state, this.error);
+        if (Pending.canResolve([this])) {
+            newData = map(this.data!, this.state, this.error);
         }
         else if (noData) {
             newData = noData();
@@ -48,12 +48,25 @@ export class Pending<T> {
      * @param combineData - a function that takes both Pendings and returns the combined data
      * @return Pending<TR>
      */
-    and<T2, TR extends { [k: string]: Pending<T> | Pending<T2> }>(
+    and<T2, TR>(
       pending: Pending<T2>,
-      combineData: (pending1: Pending<T>, pending2: Pending<T2>) => TR
-    ): Pending<MapPendings<TR>> {
-      const combined = combineData(this, pending);
-      return Pending.combine(combined);
+      combineData: (pending1: T, pending2: T2) => TR
+    ): Pending<TR> {
+      const state = Pending.lowestState([this.state, pending.state]);
+      const data = Pending.canResolve([this, pending]) ? combineData(this.data!, pending.data!) : null;
+      const error = this.error || pending.error;
+      return new Pending(state, data, error);
+    }
+
+    /**
+     * create a new pending based of this pendings data
+     * @param next - delegate to create new pending
+     */
+    chain<T2>(next: (data: T) => Pending<T2>): Pending<T2> {
+        if(Pending.canResolve([this])) {
+            return next(this.data!);
+        }
+        return new Pending<T2>(this.state, null, this.error);
     }
 
     /**
@@ -64,7 +77,7 @@ export class Pending<T> {
       const keys = Object.keys(pendings);
       const errors = keys.map(k => pendings[k].error).find(x => !!x);
       const state = Pending.lowestState(keys.map(k => pendings[k].state));
-      const data = Pending.allComplete(keys.map(k => pendings[k]))
+      const data = Pending.canResolve(keys.map(k => pendings[k]))
         ? keys.reduce((combined, k) => Object.assign({}, combined, {[k]: pendings[k].data }), {}) as TR
         : null;
 
@@ -76,7 +89,7 @@ export class Pending<T> {
      * @param pendings - collection of pending objects to be checked
      * @return boolean
      */
-    private static allComplete(pendings: Pending<{}>[]) {
+    private static canResolve(pendings: Pending<{}>[]) {
         return pendings.every(p => {
             if (p.state !== LoadingStatus.Done && p.state !== LoadingStatus.Stale && (p.data === null || p.data === undefined)) {
                 return false;
@@ -101,7 +114,7 @@ export class Pending<T> {
      */
     static flatten<T>(pendings: Pending<T>[]): Pending<T[]> {
         const state = Pending.lowestState(pendings.map(x => x.state));
-        const data = Pending.allComplete(pendings) ? pendings.map(x => x.data!) : null;
+        const data = Pending.canResolve(pendings) ? pendings.map(x => x.data!) : null;
         const error = pendings.filter(x => !!x.error).map(x => x.error).shift();
         return new Pending<T[]>(state, data, error);
     }

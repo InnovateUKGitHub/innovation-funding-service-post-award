@@ -34,5 +34,5 @@ export const dataStoreHelperMap = <TOriginalDto, TResult>(dataSelector: IDataSel
       data: innerResult.data && map(innerResult.data)
     };
   },
-  getPending: state => dataSelector.getPending(state).then(x => map(x!))
+  getPending: state => dataSelector.getPending(state).then(x => map(x))
 });

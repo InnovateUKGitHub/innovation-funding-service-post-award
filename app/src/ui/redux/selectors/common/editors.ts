@@ -1,6 +1,7 @@
 import { EditorState, EditorStateKeys, EditorStatus, IEditorStore, RootState } from "@ui/redux/reducers";
 import { Results } from "@ui/validation/results";
-import { LoadingStatus, Pending } from "@shared/pending";
+import { Pending } from "@shared/pending";
+import { processDto } from "@shared/processResponse";
 
 export interface IEditorSelector<T, TVal extends Results<T>> {
   store: EditorStateKeys;
@@ -12,7 +13,7 @@ export const editorStoreHelper = <T extends {}, TVal extends Results<T>>(
   storeKey: EditorStateKeys,
   getEditorStore: (state: EditorState) => { [key: string]: IEditorStore<T, TVal> },
   getData: (store: RootState) => Pending<T>,
-  getValidator: (dto: T, store: RootState) => TVal,
+  getValidator: (dto: T, store: RootState) => Pending<TVal>,
   key: string
 ): IEditorSelector<T, TVal> => ({
   store: storeKey,
@@ -20,13 +21,13 @@ export const editorStoreHelper = <T extends {}, TVal extends Results<T>>(
   get: (store: RootState, initalise?: (dto: T) => void) => {
     const editor = getEditorStore(store.editors)[key];
 
-    return editor ? new Pending(LoadingStatus.Done, editor) : getNewEditor(getData, getValidator, store, initalise);
+    return editor ? Pending.done(editor) : getNewEditor(getData, getValidator, store, initalise);
   }
 });
 
 export const getNewEditor = <T, TVal extends Results<T>>(
   getData: (store: RootState) => Pending<T>,
-  getValidator: (dto: T, store: RootState) => TVal,
+  getValidator: (dto: T, store: RootState) => Pending<TVal>,
   store: RootState,
   initalise?: (dto: T) => void
 ): Pending<IEditorStore<T, TVal>> => {
@@ -38,18 +39,22 @@ export const getNewEditor = <T, TVal extends Results<T>>(
     return dto;
   };
 
-  return getData(store).then(newData => {
-    if(Array.isArray(newData)) {
-      return newData.map(x => x) as any as T;
-    }
-    return Object.assign({}, newData!) as T;
-  })
-  .then(clonedData => innerInit(clonedData!))
-  .then(cloned => ({
-      data: cloned!,
-      state: EditorStatus.Editing,
-      validator: getValidator(cloned!, store),
-      error: null
-    })
-  );
+  const data = getData(store)
+    .then(newData => processDto(newData) as T)
+    .then(x => innerInit(x))
+    ;
+
+  const validator = data.chain(x => getValidator(x, store));
+
+  const combined = Pending.combine({
+    data,
+    validator,
+  });
+
+  return combined.then(x => ({
+    data: x.data,
+    validator: x.validator,
+    status: EditorStatus.Editing,
+    error: null
+  }));
 };
