@@ -2,7 +2,7 @@ import { dataStoreHelper, editorStoreHelper } from "./common";
 import { RootState } from "../reducers";
 import { ClaimDtoValidator } from "../../validators/claimDtoValidator";
 import { getCostCategories } from "./costCategories";
-import { Pending } from "../../../shared/pending";
+import { LoadingStatus, Pending } from "../../../shared/pending";
 import { ClaimDto, ClaimStatus } from "@framework/types";
 import { getKey } from "@framework/util/key";
 import { ClaimDetailsValidator } from "@ui/validators";
@@ -26,10 +26,14 @@ export const getClaimEditor = (partnerId: string, periodId: number) => editorSto
 const createClaimEditorDto = (partnerId: string, periodId: number, store: RootState) => getClaim(partnerId, periodId).getPending(store);
 
 const createClaimValidator = (partnerId: string, periodId: number, claim: ClaimDto, store: RootState) => {
-  const originalStatus = getClaim(partnerId, periodId).getPending(store).then(x => x && x.status).data || ClaimStatus.UNKNOWN;
-  const details = getCostsSummaryForPeriod(partnerId, periodId).getPending(store).data || [];
-  const costCategories = getCostCategories().getPending(store).data || [];
-  return new ClaimDtoValidator(claim, originalStatus, details, costCategories, false);
+  const originalStatus = getClaim(partnerId, periodId).getPending(store).then(x => x.status);
+  const details = getCostsSummaryForPeriod(partnerId, periodId).getPending(store);
+  const costCategories = getCostCategories().getPending(store);
+  return Pending.combine({
+    originalStatus,
+    details,
+    costCategories
+  }).then(x => new ClaimDtoValidator(claim, x.originalStatus, x.details, x.costCategories, false));
 };
 
 export const claimDetailStore = "claimDetail";
@@ -40,13 +44,13 @@ export const getClaimDetailsEditor = (partnerId: string, periodId: number, costC
   claimDetailStore,
   x => x.claimDetail,
   (store) => createClaimDetailsEditorDto(partnerId, periodId, costCategoryId, store),
-  (claimLineItemForm) => new ClaimDetailsValidator(claimLineItemForm, false),
+  (claimLineItemForm) => Pending.done(new ClaimDetailsValidator(claimLineItemForm, false)),
   getClaimDetails(partnerId, periodId, costCategoryId).key
 );
 
 const createClaimDetailsEditorDto = (partnerId: string, periodId: number, costCategoryId: string, state: RootState): Pending<ClaimDetailsDto> => {
   return getClaimDetails(partnerId, periodId, costCategoryId).getPending(state).then((claimDetails) => {
-    const items = claimDetails!.lineItems || [];
+    const items = claimDetails.lineItems || [];
     // if rendering on client and has items saved then render them
     // else rendering on server or no items saved so render default number
     const lineItems = (items.length && state.isClient) || items.length > 10 ? items : range(state.isClient ? 2 : 10).map((lineItem, index) => items[index] || ({
@@ -55,7 +59,7 @@ const createClaimDetailsEditorDto = (partnerId: string, periodId: number, costCa
       periodId
     }));
     return {
-      ...claimDetails!,
+      ...claimDetails,
       lineItems
     };
   });
@@ -73,23 +77,23 @@ export const getClaimStatusChanges = (projectId: string, partnerId: string, peri
 export const getCurrentClaim = (state: RootState, partnerId: string): Pending<ClaimDto | null> => {
   return findClaimsByPartner(partnerId)
     .getPending(state)
-    .then(claims => (claims || []).find(x => !x.isApproved) || null);
+    .then(claims => claims.find(x => !x.isApproved) || null);
 };
 
 export const getProjectCurrentClaims = (state: RootState, projectId: string): Pending<ClaimDto[]> => {
   return findClaimsByProject(projectId)
     .getPending(state)
-    .then(claims => (claims || []).filter(x => !x.isApproved));
+    .then(claims => claims.filter(x => !x.isApproved));
 };
 
 export const getProjectPreviousClaims = (state: RootState, projectId: string): Pending<ClaimDto[]> => {
   return findClaimsByProject(projectId)
     .getPending(state)
-    .then(claims => (claims ||[]).filter(x => x.isApproved));
+    .then(claims => claims.filter(x => x.isApproved));
 };
 
 export const getPreviousClaims = (state: RootState, partnerId: string): Pending<ClaimDto[]> => {
   return findClaimsByPartner(partnerId)
     .getPending(state)
-    .then(claims => (claims ||[]).filter(x => x.isApproved));
+    .then(claims => claims.filter(x => x.isApproved));
 };
