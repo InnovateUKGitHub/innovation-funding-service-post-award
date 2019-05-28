@@ -1,8 +1,10 @@
 import { gzip } from "node-gzip";
 import { health } from "../server/health";
+import { Logger } from "./features/common";
 
 export const healthCheck = async () => {
-  const sfConnection = await health().then(res => res.response.salesforce);
+  const logger = new Logger("New relic health check");
+  const sfConnection = await health(logger).then(res => res.response.salesforce);
 
   const newRelicEventData = {
     eventType:"ACCHealthCheck",

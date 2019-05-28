@@ -1,10 +1,10 @@
-import { Logger } from "@server/features/common";
-import { ITimer } from "./IContext";
+import { ILogger } from "@server/features/common";
+import { ITimer } from "@framework/types";
 
 export class Timer implements ITimer {
   private start: Date;
 
-  constructor(private logger: Logger, private message: string) {
+  constructor(private logger: ILogger, private message: string) {
     this.start = new Date();
   }
 

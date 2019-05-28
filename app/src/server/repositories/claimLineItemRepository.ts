@@ -1,6 +1,7 @@
 import SalesforceRepositoryBase, {Updatable} from "./salesforceRepositoryBase";
 import {IRecordTypeRepository, RecordTypeRepository} from "./recordTypeRepository";
 import { Connection } from "jsforce";
+import { ILogger } from "@server/features/common";
 
 export interface ISalesforceClaimLineItem {
   Id: string;
@@ -21,8 +22,8 @@ export interface IClaimLineItemRepository {
 
 export class ClaimLineItemRepository extends SalesforceRepositoryBase<ISalesforceClaimLineItem> implements IClaimLineItemRepository {
 
-  constructor(private recordTypes: IRecordTypeRepository, getSalesforceConnection: () => Promise<Connection>) {
-    super(getSalesforceConnection);
+  constructor(private recordTypes: IRecordTypeRepository, getSalesforceConnection: () => Promise<Connection>, logger: ILogger) {
+    super(getSalesforceConnection, logger);
   }
 
   private readonly recordType: string = "Claims Line Item";

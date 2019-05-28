@@ -2,19 +2,14 @@ import { GetAllProjectRolesForUser, IRoleInfo } from "../projects/getAllProjectR
 import * as Repositories from "../../repositories";
 import { AppError, BadRequestError, ForbiddenError, NotFoundError, ValidationError } from "./appError";
 import * as Salesforce from "../../repositories/salesforceConnection";
-import { SalesforceInvalidFilterError } from "../../repositories/salesforceRepositoryBase";
-import { Cache, Clock, Configuration, IConfig, Logger } from "./";
-import { ErrorCode, ICaches, IContext, IRepositories, IRunnable, ISessionUser, ISyncRunnable, } from "@framework/types";
-import { QueryBase, SyncQueryBase } from "./queryBase";
-import { CommandBase, SyncCommandBase } from "./commandBase";
-import { Timer } from "@framework/types/timer";
-import { ISalesforceRecordType } from "../../repositories";
+import * as Common from "@server/features/common";
+import * as Framework from "@framework/types";
 
 // obvs needs to be singleton
-const cachesImplementation: ICaches = {
-  costCategories: new Cache<CostCategoryDto[]>(Configuration.timeouts.costCategories),
-  projectRoles: new Cache<{ [key: string]: IRoleInfo }>(Configuration.timeouts.projectRoles),
-  recordTypes: new Cache<ISalesforceRecordType[]>(Configuration.timeouts.recordTypes),
+const cachesImplementation: Framework.ICaches = {
+  costCategories: new Common.Cache<CostCategoryDto[]>(Common.Configuration.timeouts.costCategories),
+  projectRoles: new Common.Cache<{ [key: string]: IRoleInfo }>(Common.Configuration.timeouts.projectRoles),
+  recordTypes: new Common.Cache<Repositories.ISalesforceRecordType[]>(Common.Configuration.timeouts.recordTypes),
 };
 
 const constructErrorResponse = <E extends Error>(error: E): AppError => {
@@ -22,20 +17,20 @@ const constructErrorResponse = <E extends Error>(error: E): AppError => {
     return error;
   }
 
-  if (error instanceof Salesforce.SalesforceTokenError) {
-    return new AppError(ErrorCode.SECURITY_ERROR, error.message, error);
+  if (error instanceof Repositories.SalesforceTokenError) {
+    return new AppError(Framework.ErrorCode.SECURITY_ERROR, error.message, error);
   }
 
-  if (error instanceof SalesforceInvalidFilterError) {
+  if (error instanceof Repositories.SalesforceInvalidFilterError) {
     return new NotFoundError(undefined, error);
   }
 
-  return new AppError(ErrorCode.UNKNOWN_ERROR, error.message, error);
+  return new AppError(Framework.ErrorCode.UNKNOWN_ERROR, error.message, error);
 };
 
-export class Context implements IContext {
-  constructor(public readonly user: ISessionUser) {
-    this.config = Configuration;
+export class Context implements Framework.IContext {
+  constructor(public readonly user: Framework.ISessionUser) {
+    this.config = Common.Configuration;
 
     const salesforceConfig = {
       clientId: this.config.salesforce.clientId,
@@ -47,38 +42,38 @@ export class Context implements IContext {
 
     this.salesforceConnectionDetails = Object.assign(salesforceConfig, { currentUsername: this.user && this.user.email });
 
-    this.logger = new Logger(user && user.email);
+    this.logger = new Common.Logger(user && user.email);
 
     this.caches = cachesImplementation;
 
-    const recordTypesRepo = new Repositories.RecordTypeRepository(this.caches.recordTypes, () => this.getSalesforceConnection());
+    const recordTypesRepo = new Repositories.RecordTypeRepository(this.caches.recordTypes, () => this.getSalesforceConnection(), this.logger);
 
     this.repositories = {
-      claims: new Repositories.ClaimRepository(() => this.getSalesforceConnection()),
-      claimDetails: new Repositories.ClaimDetailsRepository(() => this.getSalesforceConnection()),
-      claimStatusChanges: new Repositories.ClaimStatusChangeRepository(() => this.getSalesforceConnection()),
-      claimTotalCostCategory: new Repositories.ClaimTotalCostCategoryRepository(() => this.getSalesforceConnection()),
-      claimLineItems: new Repositories.ClaimLineItemRepository(recordTypesRepo, () => this.getSalesforceConnection()),
-      costCategories: new Repositories.CostCategoryRepository(() => this.getSalesforceConnection()),
-      documents: new Repositories.DocumentsRepository(() => this.getSalesforceConnection()),
-      monitoringReportResponse: new Repositories.MonitoringReportResponseRepository(recordTypesRepo, () => this.getSalesforceConnection()),
-      monitoringReportHeader: new Repositories.MonitoringReportHeaderRepository(recordTypesRepo, () => this.getSalesforceConnection()),
-      monitoringReportQuestions: new Repositories.MonitoringReportQuestionsRepository(() => this.getSalesforceConnection()),
-      monitoringReportStatusChange: new Repositories.MonitoringReportStatusChangeRepository(() => this.getSalesforceConnection()),
-      profileDetails: new Repositories.ProfileDetailsRepository(() => this.getSalesforceConnection()),
-      profileTotalPeriod: new Repositories.ProfileTotalPeriodRepository(() => this.getSalesforceConnection()),
-      profileTotalCostCategory: new Repositories.ProfileTotalCostCategoryRepository(() => this.getSalesforceConnection()),
-      projects: new Repositories.ProjectRepository(() => this.getSalesforceConnection()),
-      partners: new Repositories.PartnerRepository(() => this.getSalesforceConnection()),
-      projectContacts: new Repositories.ProjectContactsRepository(() => this.getSalesforceConnection())
+      claims: new Repositories.ClaimRepository(() => this.getSalesforceConnection(), this.logger),
+      claimDetails: new Repositories.ClaimDetailsRepository(() => this.getSalesforceConnection(), this.logger),
+      claimStatusChanges: new Repositories.ClaimStatusChangeRepository(() => this.getSalesforceConnection(), this.logger),
+      claimTotalCostCategory: new Repositories.ClaimTotalCostCategoryRepository(() => this.getSalesforceConnection(), this.logger),
+      claimLineItems: new Repositories.ClaimLineItemRepository(recordTypesRepo, () => this.getSalesforceConnection(), this.logger),
+      costCategories: new Repositories.CostCategoryRepository(() => this.getSalesforceConnection(), this.logger),
+      documents: new Repositories.DocumentsRepository(() => this.getSalesforceConnection(), this.logger),
+      monitoringReportResponse: new Repositories.MonitoringReportResponseRepository(recordTypesRepo, () => this.getSalesforceConnection(), this.logger),
+      monitoringReportHeader: new Repositories.MonitoringReportHeaderRepository(recordTypesRepo, () => this.getSalesforceConnection(), this.logger),
+      monitoringReportQuestions: new Repositories.MonitoringReportQuestionsRepository(() => this.getSalesforceConnection(), this.logger),
+      monitoringReportStatusChange: new Repositories.MonitoringReportStatusChangeRepository(() => this.getSalesforceConnection(), this.logger),
+      profileDetails: new Repositories.ProfileDetailsRepository(() => this.getSalesforceConnection(), this.logger),
+      profileTotalPeriod: new Repositories.ProfileTotalPeriodRepository(() => this.getSalesforceConnection(), this.logger),
+      profileTotalCostCategory: new Repositories.ProfileTotalCostCategoryRepository(() => this.getSalesforceConnection(), this.logger),
+      projects: new Repositories.ProjectRepository(() => this.getSalesforceConnection(), this.logger),
+      partners: new Repositories.PartnerRepository(() => this.getSalesforceConnection(), this.logger),
+      projectContacts: new Repositories.ProjectContactsRepository(() => this.getSalesforceConnection(), this.logger)
     };
   }
 
-  public readonly repositories: IRepositories;
-  public readonly logger: Logger;
-  public readonly config: Readonly<IConfig>;
-  public readonly clock = new Clock();
-  public readonly caches: ICaches;
+  public readonly repositories: Framework.IRepositories;
+  public readonly logger: Common.ILogger;
+  public readonly config: Common.IConfig;
+  public readonly clock: Common.IClock = new Common.Clock();
+  public readonly caches: Framework.ICaches;
 
   private readonly salesforceConnectionDetails: Salesforce.ISalesforceConnectionDetails;
 
@@ -87,10 +82,10 @@ export class Context implements IContext {
   }
 
   public startTimer(message: string) {
-    return new Timer(this.logger, message);
+    return new Common.Timer(this.logger, message);
   }
 
-  private async runAsync<TResult>(runnable: IRunnable<TResult>): Promise<TResult> {
+  private async runAsync<TResult>(runnable: Framework.IAsyncRunnable<TResult>): Promise<TResult> {
     const timer = this.startTimer(runnable.constructor.name);
     try {
       const auth = await new GetAllProjectRolesForUser().Run(this);
@@ -110,7 +105,7 @@ export class Context implements IContext {
     }
   }
 
-  private runSync<TResult>(runnable: ISyncRunnable<TResult>): TResult {
+  private runSync<TResult>(runnable: Framework.ISyncRunnable<TResult>): TResult {
     const timer = this.startTimer(runnable.constructor.name);
     try {
       return runnable.Run(this);
@@ -124,26 +119,26 @@ export class Context implements IContext {
     }
   }
 
-  public runQuery<TResult>(query: QueryBase<TResult>): Promise<TResult> {
-    const runnable = (query as any) as IRunnable<TResult>;
+  public runQuery<TResult>(query: Common.QueryBase<TResult>): Promise<TResult> {
+    const runnable = (query as any) as Framework.IAsyncRunnable<TResult>;
     this.logger.info("Running async query", runnable.LogMessage());
     return this.runAsync(runnable);
   }
 
-  public runSyncQuery<TResult>(query: SyncQueryBase<TResult>): TResult {
-    const runnable = (query as any) as ISyncRunnable<TResult>;
+  public runSyncQuery<TResult>(query: Common.SyncQueryBase<TResult>): TResult {
+    const runnable = (query as any) as Framework.ISyncRunnable<TResult>;
     this.logger.info("Running sync query", runnable.LogMessage());
     return this.runSync(runnable);
   }
 
-  public runCommand<TResult>(command: CommandBase<TResult>): Promise<TResult> {
-    const runnable = (command as any) as IRunnable<TResult>;
+  public runCommand<TResult>(command: Common.CommandBase<TResult>): Promise<TResult> {
+    const runnable = (command as any) as Framework.IAsyncRunnable<TResult>;
     this.logger.info("Running async command", runnable.LogMessage());
     return this.runAsync(runnable);
   }
 
-  public runSyncCommand<TResult>(command: SyncCommandBase<TResult>): TResult {
-    const runnable = (command as any) as ISyncRunnable<TResult>;
+  public runSyncCommand<TResult>(command: Common.SyncCommandBase<TResult>): TResult {
+    const runnable = (command as any) as Framework.ISyncRunnable<TResult>;
     this.logger.info("Running sync command", runnable.LogMessage());
     return this.runSync(runnable);
   }
