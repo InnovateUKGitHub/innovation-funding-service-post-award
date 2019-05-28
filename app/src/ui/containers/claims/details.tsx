@@ -66,8 +66,8 @@ export class ClaimsDetailsComponent extends ContainerBase<Params, Data, {}> {
     const backLink = isPmOrMo ? AllClaimsDashboardRoute.getLink({ projectId: data.project.id }) : ClaimsDashboardRoute.getLink({ projectId: data.project.id, partnerId: data.partner.id });
 
     const tabs: ACC.HashTabItem[] = [
-      { text: "Details", hash: "details", content: this.renderDetailsTab(data), default: true },
-      { text: "Log", hash: "log", content: this.renderLogsTab() },
+      { text: "Details", hash: "details", content: this.renderDetailsTab(data), default: true, qa: "ClaimDetailTab" },
+      { text: "Log", hash: "log", content: this.renderLogsTab(), qa: "ClaimDetailLogTab" },
     ];
 
     return (
