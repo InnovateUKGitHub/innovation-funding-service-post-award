@@ -4,6 +4,7 @@ import { Stream } from "stream";
 import { ContentDocumentLinkRepository } from "@server/repositories/contentDocumentLinkRepository";
 import { ContentDocumentRepository } from "@server/repositories/contentDocumentRepository";
 import { ContentVersionRepository } from "@server/repositories/contentVersionRepository";
+import { ILogger } from "@server/features/common";
 
 export interface ISalesforceDocument {
   Id: string;
@@ -39,11 +40,12 @@ export class DocumentsRepository implements IDocumentsRepository {
   private contentDocumentRepository: ContentDocumentRepository;
 
   public constructor(
-    getSalesforceConnection: () => Promise<Connection>
+    getSalesforceConnection: () => Promise<Connection>,
+    logger: ILogger
   ) {
-    this.contentVersionRepository = new ContentVersionRepository(getSalesforceConnection);
-    this.contentDocumentLinkRepository = new ContentDocumentLinkRepository(getSalesforceConnection);
-    this.contentDocumentRepository = new ContentDocumentRepository(getSalesforceConnection);
+    this.contentVersionRepository = new ContentVersionRepository(getSalesforceConnection, logger);
+    this.contentDocumentLinkRepository = new ContentDocumentLinkRepository(getSalesforceConnection, logger);
+    this.contentDocumentRepository = new ContentDocumentRepository(getSalesforceConnection, logger);
   }
 
   public async insertDocument(document: FileUpload, recordId: string) {

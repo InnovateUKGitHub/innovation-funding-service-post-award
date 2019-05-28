@@ -1,6 +1,6 @@
 import SalesforceRepositoryBase, { Updatable } from "./salesforceRepositoryBase";
-import { NotFoundError } from "../features/common";
-import { IRecordTypeRepository, RecordTypeRepository } from ".";
+import { ILogger } from "../features/common";
+import { IRecordTypeRepository } from ".";
 import { Connection } from "jsforce";
 
 export type ISalesforceMonitoringReportStatus = "New" | "Draft" | "Awaiting IUK Approval" | "Approved" | "IUK Queried";
@@ -26,8 +26,8 @@ export interface IMonitoringReportHeaderRepository {
 
 export class MonitoringReportHeaderRepository extends SalesforceRepositoryBase<ISalesforceMonitoringReportHeader> implements IMonitoringReportHeaderRepository {
 
-  constructor(private recordTypes: IRecordTypeRepository, getSalesforceConnection: () => Promise<Connection>) {
-    super(getSalesforceConnection);
+  constructor(private recordTypes: IRecordTypeRepository, getSalesforceConnection: () => Promise<Connection>, logger: ILogger) {
+    super(getSalesforceConnection, logger);
   }
 
   private readonly recordType: string = "Monitoring Header";

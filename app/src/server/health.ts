@@ -2,21 +2,20 @@ import express from "express";
 import { Configuration } from "../server/features/common/config";
 import { salesforceConnectionWithToken } from "./repositories/salesforceConnection";
 import { CostCategoryRepository } from "./repositories";
-import { Logger } from "../server/features/common/logger";
+import { ILogger, Logger } from "../server/features/common/logger";
 import { AppError } from "./features/common";
 import { ErrorCode } from "@framework/types";
 
 export const router = express.Router();
 
 const endpoint = "/api/health";
-const logger = new Logger();
 
-export const health = async () => {
+export const health = async (logger: ILogger) => {
   const salesforce = await new CostCategoryRepository(() => salesforceConnectionWithToken({
     clientId: Configuration.salesforce.clientId,
     connectionUrl: Configuration.salesforce.connectionUrl,
     currentUsername: Configuration.salesforce.serivceUsername
-  }))
+  }), logger)
     .getAll()
     .then(_ => true)
     .catch(e => {
@@ -31,7 +30,8 @@ export const health = async () => {
 
 // health check endpoint tests dependencies ie slaesforce connection
 router.get(`${endpoint}/details`, async (req, res) => {
-  const result = await health();
+  const logger = new Logger("Health check");
+  const result = await health(logger);
   logger.debug("HEALTH CHECK COMPLETE", result);
   return res.status(result.status).send(result.response);
 });

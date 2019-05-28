@@ -1,16 +1,16 @@
 import { Connection, RecordResult } from "jsforce";
 import { Stream } from "stream";
-import { Logger } from "../features/common";
+import * as Errors from "@server/repositories/errors";
+import { ILogger } from "@server/features/common";
 
 export type Updatable<T> = Partial<T> & {
   Id: string
 };
 
 export default abstract class SalesforceRepositoryBase<T> {
-  private log = new Logger();
-
   public constructor(
-    protected getSalesforceConnection: () => Promise<Connection>
+    protected readonly getSalesforceConnection: () => Promise<Connection>,
+    protected readonly logger: ILogger
   ) { }
 
   protected abstract readonly salesforceObjectName: string;
@@ -67,7 +67,7 @@ export default abstract class SalesforceRepositoryBase<T> {
   protected async loadItem(filter: Partial<T> | string): Promise<T> {
     const result = await this.filterOne(filter);
     if (!result) {
-      throw new SalesforceInvalidFilterError();
+      throw new Errors.SalesforceInvalidFilterError();
     }
     return result;
   }
@@ -102,7 +102,7 @@ export default abstract class SalesforceRepositoryBase<T> {
         if (result.success) {
           return result.id;
         }
-        throw new SalesforceDataChangeError("Failed to insert to saleforce", this.getDataChangeErrorMessage(result));
+        throw new Errors.SalesforceDataChangeError("Failed to insert to saleforce", this.getDataChangeErrorMessage(result));
       })
       .catch(e => { throw this.constructError(e); })
       ;
@@ -116,7 +116,7 @@ export default abstract class SalesforceRepositoryBase<T> {
         if (results.every(x => x.success)) {
           return results.map(x => x.success ? x.id.toString() : "");
         }
-        throw new SalesforceDataChangeError("Failed to insert to saleforce", this.getDataChangeErrorMessages(results));
+        throw new Errors.SalesforceDataChangeError("Failed to insert to saleforce", this.getDataChangeErrorMessages(results));
       })
       .catch(e => { throw this.constructError(e); })
       ;
@@ -130,7 +130,7 @@ export default abstract class SalesforceRepositoryBase<T> {
         if (results.success) {
           return true;
         }
-        throw new SalesforceDataChangeError("Failed to update to saleforce", this.getDataChangeErrorMessage(results));
+        throw new Errors.SalesforceDataChangeError("Failed to update to saleforce", this.getDataChangeErrorMessage(results));
       })
       .catch(e => { throw this.constructError(e); })
       ;
@@ -138,13 +138,13 @@ export default abstract class SalesforceRepositoryBase<T> {
 
   protected async updateAll(updates: Updatable<T>[]): Promise<boolean> {
     const conn = await this.getSalesforceConnection();
-    return conn.sobject<Updatable<T>>(this.salesforceObjectName)
+    return conn.sobject<T>(this.salesforceObjectName)
       .update(updates)
       .then(results => {
         if (results.every(x => x.success)) {
           return true;
         }
-        throw new SalesforceDataChangeError("Failed to update to saleforce", this.getDataChangeErrorMessages(results));
+        throw new Errors.SalesforceDataChangeError("Failed to update to saleforce", this.getDataChangeErrorMessages(results));
       })
       .catch(e => { throw this.constructError(e); })
       ;
@@ -158,7 +158,7 @@ export default abstract class SalesforceRepositoryBase<T> {
         if (result.every(x => x.success)) {
           return;
         }
-        throw new SalesforceDataChangeError("Failed to delete from saleforce", this.getDataChangeErrorMessages(result));
+        throw new Errors.SalesforceDataChangeError("Failed to delete from saleforce", this.getDataChangeErrorMessages(result));
       })
       .catch(e => { throw this.constructError(e); });
   }
@@ -171,7 +171,7 @@ export default abstract class SalesforceRepositoryBase<T> {
         if (result.success) {
           return;
         }
-        throw new SalesforceDataChangeError("Failed to delete from saleforce", this.getDataChangeErrorMessage(result));
+        throw new Errors.SalesforceDataChangeError("Failed to delete from saleforce", this.getDataChangeErrorMessage(result));
       })
       .catch(e => { throw this.constructError(e); });
   }
@@ -181,25 +181,15 @@ export default abstract class SalesforceRepositoryBase<T> {
   }
 
   private constructError(e: any) {
-    this.log.error("Salesforce Error: ", e.errorCode, e.message);
+    this.logger.error("Salesforce Error: ", e.errorCode, e.message);
 
     if (e.errorCode === "ERROR_HTTP_503") {
-      throw new SalesforceUnavilableError(`Salesforce unavailable`);
+      throw new Errors.SalesforceUnavilableError(`Salesforce unavailable`);
     }
     if (e.errorCode === "INVALID_QUERY_FILTER_OPERATOR") {
-      throw new SalesforceInvalidFilterError(`Salesforce filter error`);
+      throw new Errors.SalesforceInvalidFilterError(`Salesforce filter error`);
     }
 
     return e instanceof Error ? e : new Error(e.errorCode + ": " + e.message);
-  }
-}
-
-export class SalesforceUnavilableError extends Error { }
-
-export class SalesforceInvalidFilterError extends Error { }
-
-export class SalesforceDataChangeError extends Error {
-  constructor(message: string, public errors: string[]) {
-    super(message);
   }
 }
