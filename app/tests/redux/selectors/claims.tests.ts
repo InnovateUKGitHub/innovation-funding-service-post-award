@@ -78,10 +78,6 @@ describe("claims by project", () => {
       const foundClaim = getProjectCurrentClaims(state, "4").data;
       expect(foundClaim).toEqual([]);
     });
-    it("should return an empty array when the project is not found", () => {
-      const foundClaim = getProjectCurrentClaims(state, "x").data;
-      expect(foundClaim).toEqual([]);
-    });
   });
   describe("getProjectPreviousClaims", () => {
 
@@ -118,16 +114,12 @@ describe("claims by project", () => {
     const state = Object.assign({}, rootState);
     state.data = Object.assign({}, state.data, { claims });
 
-    it("should return the open claim", () => {
+    it("should return the previous claims", () => {
       const foundClaim = getProjectPreviousClaims(state, "3").data;
       expect(foundClaim).toEqual([closedClaim]);
     });
-    it("should return null when there is no open claim", () => {
+    it("should return empty array when there is no open claims", () => {
       const foundClaim = getProjectPreviousClaims(state, "4").data;
-      expect(foundClaim).toEqual([]);
-    });
-    it("should return null when the project is not loaded", () => {
-      const foundClaim = getProjectPreviousClaims(state, "x").data;
       expect(foundClaim).toEqual([]);
     });
   });
