@@ -72,8 +72,8 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, Data, Callbacks> 
   private renderContents(data: CombinedData) {
 
     const tabs: ACC.HashTabItem[] = [
-      { text: "Details", hash: "details", content: this.renderDetailsTab(data), default: true },
-      { text: "Log", hash: "log", content: this.renderLogsTab() },
+      { text: "Details", hash: "details", content: this.renderDetailsTab(data), default: true, qa: "ClaimDetailTab" },
+      { text: "Log", hash: "log", content: this.renderLogsTab(), qa: "ClaimDetailLogTab" },
     ];
 
     return (
