@@ -94,7 +94,8 @@ export const MonitoringReportDeleteRoute = containerDefinition.route({
   }),
   getLoadDataActions: (params) => [
     Actions.loadProject(params.projectId),
-    Actions.loadMonitoringReport(params.projectId, params.id)
+    Actions.loadMonitoringReport(params.projectId, params.id),
+    Actions.loadMonitoringReportQuestions(),
   ],
   container: MonitoringReportDelete,
   getTitle: () => ({

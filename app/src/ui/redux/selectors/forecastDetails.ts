@@ -3,6 +3,7 @@ import { ForecastDetailsDtosValidator } from "@ui/validators/forecastDetailsDtos
 import { getKey } from "@framework/util/key";
 import { dataStoreHelper, editorStoreHelper } from "./common";
 import { findClaimDetailsByPartner, findClaimsByPartner } from "./claims";
+import { Pending } from "@shared/pending";
 
 export const forecastDetailsStore = "forecastDetails";
 export const findForecastDetailsByPartner = (partnerId: string) => dataStoreHelper(forecastDetailsStore, partnerId);
@@ -11,11 +12,15 @@ const forecastDetailStore = "forecastDetail";
 export const getForecastDetail = (partnerId: string, periodId: number, costCategoryId: string) => dataStoreHelper(forecastDetailStore, getKey(partnerId, periodId, costCategoryId));
 
 const createValidator = (partnerId: string, forecastDetails: ForecastDetailsDTO[], store: RootState) => {
-  // TODO - revist get vs getPending
-  const claims = findClaimsByPartner(partnerId).getPending(store).data || [];
-  const claimDetails   = findClaimDetailsByPartner(partnerId).getPending(store).data || [];
-  const golCosts       = findGolCostsByPartner(partnerId).getPending(store).data || [];
-  return new ForecastDetailsDtosValidator(forecastDetails, claims, claimDetails, golCosts, false);
+  const claims = findClaimsByPartner(partnerId).getPending(store);
+  const claimDetails = findClaimDetailsByPartner(partnerId).getPending(store);
+  const golCosts = findGolCostsByPartner(partnerId).getPending(store);
+
+  return Pending.combine({
+    claims,
+    claimDetails,
+    golCosts
+  }).then(x => new ForecastDetailsDtosValidator(forecastDetails, x.claims, x.claimDetails, x.golCosts, false));
 };
 
 export const getForecastDetailsEditor = (partnerId: string) => {
