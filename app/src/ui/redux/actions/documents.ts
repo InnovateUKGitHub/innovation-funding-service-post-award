@@ -126,7 +126,7 @@ export function updateClaimDocumentEditor(claimKey: ClaimKey, dto: DocumentUploa
   };
 }
 
-export function uploadClaimDocument(claimKey: ClaimKey, dto: DocumentUploadDto, onComplete: () => void, message: string): uploadProjectDocumentActions {
+export function uploadClaimDocument(claimKey: ClaimKey, dto: DocumentUploadDto, onComplete: () => void): uploadProjectDocumentActions {
   return (dispatch, getState) => {
     const state = getState();
     const selector = Selectors.getClaimDocumentEditor(claimKey, dto.description);
@@ -147,7 +147,6 @@ export function uploadClaimDocument(claimKey: ClaimKey, dto: DocumentUploadDto, 
     return ApiClient.documents.uploadClaimDocument({ claimKey, file: dto.file!, description: dto.description, user: state.user })
       .then(() => {
         dispatch(Actions.handleEditorSuccess(selector.key, selector.store));
-        dispatch(Actions.messageSuccess(message));
         onComplete();
       }).catch((e: any) => {
         dispatch(Actions.handleEditorError({ id: selector.key, store: selector.store, dto, validation, error: e }));
