@@ -1,5 +1,6 @@
 import SalesforceRepositoryBase from "./salesforceRepositoryBase";
 import { Connection } from "jsforce";
+import { ILogger } from "@server/features/common";
 
 export interface ISalesforceRecordType {
   Id: string;
@@ -15,8 +16,8 @@ export interface IRecordTypeRepository {
 
 export class RecordTypeRepository extends SalesforceRepositoryBase<ISalesforceRecordType> implements IRecordTypeRepository {
 
-  constructor(private cache: ICache<ISalesforceRecordType[]>, getSalesforceConnection: () => Promise<Connection>) {
-    super(getSalesforceConnection);
+  constructor(private cache: ICache<ISalesforceRecordType[]>, getSalesforceConnection: () => Promise<Connection>, logger: ILogger) {
+    super(getSalesforceConnection, logger);
   }
 
   protected readonly salesforceObjectName = "RecordType";
