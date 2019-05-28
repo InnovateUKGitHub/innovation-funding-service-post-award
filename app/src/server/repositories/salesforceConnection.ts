@@ -4,6 +4,7 @@ import jwt from "jsonwebtoken";
 import { Cache } from "../features/common/cache";
 import { Configuration } from "../features/common";
 import { LogLevel } from "@framework/types/logLevel";
+import { SalesforceTokenError } from "./errors";
 
 export interface ISalesforceTokenDetails {
   currentUsername: string;
@@ -98,10 +99,4 @@ interface ISalesforceTokenPayload {
   instance_url: string;
   id: string;
   token_type: "Bearer";
-}
-
-export class SalesforceTokenError extends Error {
-  constructor(message: string, public status: number) {
-    super(message);
-  }
 }

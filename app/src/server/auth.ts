@@ -91,9 +91,6 @@ router.use((req, res, next) => {
   else if (req.session && req.session.user && req.session.user.email) {
     next();
   }
-  else if (!Configuration.sso.enabled && req.url === "/") {
-    next();
-  }
   // if user not logged in but we arent using sso then set default user
   else if (!Configuration.sso.enabled) {
     req.session = req.session || {};

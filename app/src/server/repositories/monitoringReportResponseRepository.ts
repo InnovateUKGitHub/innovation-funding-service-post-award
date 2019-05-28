@@ -1,6 +1,6 @@
 import SalesforceRepositoryBase, { Updatable } from "./salesforceRepositoryBase";
-import { NotFoundError } from "../features/common";
-import { IRecordTypeRepository, RecordTypeRepository } from "./recordTypeRepository";
+import { ILogger } from "../features/common";
+import { IRecordTypeRepository } from "./recordTypeRepository";
 import { Connection } from "jsforce";
 
 export interface ISalesforceMonitoringReportResponse {
@@ -19,8 +19,8 @@ export interface IMonitoringReportResponseRepository {
 
 export class MonitoringReportResponseRepository extends SalesforceRepositoryBase<ISalesforceMonitoringReportResponse> implements IMonitoringReportResponseRepository {
 
-  constructor(private recordTypes: IRecordTypeRepository, getSalesforceConnection: () => Promise<Connection>) {
-    super(getSalesforceConnection);
+  constructor(private recordTypes: IRecordTypeRepository, getSalesforceConnection: () => Promise<Connection>, logger: ILogger) {
+    super(getSalesforceConnection, logger);
   }
 
   private readonly recordType: string = "Monitoring Answer";

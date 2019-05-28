@@ -51,7 +51,7 @@ export interface ICaches {
   readonly recordTypes: Cache<ISalesforceRecordType[]>;
 }
 
-export interface IRunnable<T> {
+export interface IAsyncRunnable<T> {
   Run: (context: IContext) => Promise<T>;
   LogMessage: () => any[];
   accessControl: (auth: Authorisation, context: IContext) => Promise<boolean>;
