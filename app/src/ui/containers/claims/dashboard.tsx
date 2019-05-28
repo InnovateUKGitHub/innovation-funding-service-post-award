@@ -11,7 +11,7 @@ import {
   getProject
 } from "../../redux/selectors";
 import * as Acc from "../../components";
-import { ContainerBase, ReduxContainer } from "../containerBase";
+import {ContainerBaseWithState, ContainerProps, ReduxContainer} from "../containerBase";
 import { ClaimDto, ClaimStatus, DocumentDescription, PartnerDto, ProjectDto, ProjectRole } from "@framework/types";
 import { IEditorStore } from "../../redux/reducers";
 import { DocumentUploadValidator } from "../../validators/documentUploadValidator";
@@ -46,11 +46,23 @@ interface CombinedData {
 
 interface Callbacks {
   validate: (key: ClaimKey, dto: DocumentUploadDto) => void;
-  uploadFile: (key: ClaimKey, dto: DocumentUploadDto, message: string) => void;
+  uploadFile: (key: ClaimKey, dto: DocumentUploadDto, onComplete: () => void) => void;
   deleteFile: (key: ClaimKey, dto: DocumentSummaryDto) => void;
 }
 
-class Component extends ContainerBase<ClaimDashboardPageParams, Data, Callbacks> {
+interface State {
+  showIarMessage: boolean;
+}
+
+class Component extends ContainerBaseWithState<ClaimDashboardPageParams, Data, Callbacks, State > {
+  constructor(props: ContainerProps<ClaimDashboardPageParams, Data, Callbacks>) {
+    super(props);
+
+    this.state = {
+      showIarMessage: false
+    };
+  }
+
   public render() {
     const combined = Pending.combine({
       document: this.props.document,
@@ -76,7 +88,10 @@ class Component extends ContainerBase<ClaimDashboardPageParams, Data, Callbacks>
     };
 
     return (
-      <Acc.DocumentSingle message={"An IAR has been added to this claim."} document={document} openNewWindow={true} renderRemove={() => claim.allowIarEdit && button()} />
+      <React.Fragment>
+          {this.state.showIarMessage ? <Acc.ValidationMessage messageType="success" message="You have attached an independent accountant's report (IAR)."/> : null}
+        <Acc.DocumentSingle message={"An IAR has been added to this claim."} document={document} openNewWindow={true} renderRemove={() => claim.allowIarEdit && button()} />
+      </React.Fragment>
     );
   }
 
@@ -85,9 +100,9 @@ class Component extends ContainerBase<ClaimDashboardPageParams, Data, Callbacks>
     this.props.validate(key, dto);
   }
 
-  private onSave(dto: DocumentUploadDto, periodId: number, message: string) {
+  private onSave(dto: DocumentUploadDto, periodId: number) {
     const key = { partnerId: this.props.partnerId, periodId };
-    this.props.uploadFile(key, dto, message);
+    this.props.uploadFile(key, dto, () => this.setState({showIarMessage: true}));
   }
 
   private onDelete(claim: ClaimDto, dto: DocumentSummaryDto) {
@@ -120,7 +135,7 @@ class Component extends ContainerBase<ClaimDashboardPageParams, Data, Callbacks>
             <UploadForm.Hidden name="periodId" value={() => claim.periodId} />
             <UploadForm.Hidden name="description" value={() => DocumentDescription.IAR} />
           </UploadForm.Fieldset>
-          <UploadForm.Button name="upload" onClick={() => this.onSave(editor.data, claim.periodId, "Your IAR has been uploaded.")}>Upload</UploadForm.Button>
+          <UploadForm.Button name="upload" onClick={() => this.onSave(editor.data, claim.periodId)}>Upload</UploadForm.Button>
         </UploadForm.Form>
       </React.Fragment>
     );
@@ -263,9 +278,11 @@ export const ClaimsDashboard = definition.connect({
   withCallbacks: (dispatch) => ({
     validate: (claimKey, dto) =>
       dispatch(Actions.updateClaimDocumentEditor(claimKey, dto)),
-    uploadFile: (claimKey, file, message) =>
-      dispatch(Actions.uploadClaimDocument(claimKey, file, () =>
-        dispatch(Actions.loadIarDocumentsForCurrentClaim(claimKey.partnerId)), message)),
+    uploadFile: (claimKey, file, onComplete) =>
+      dispatch(Actions.uploadClaimDocument(claimKey, file, () => {
+        dispatch(Actions.loadIarDocumentsForCurrentClaim(claimKey.partnerId));
+        onComplete();
+      })),
     deleteFile: (claimKey, file) =>
       dispatch(Actions.deleteClaimDocument(claimKey, file, () =>
         dispatch(Actions.loadIarDocumentsForCurrentClaim(claimKey.partnerId))))
