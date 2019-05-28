@@ -110,7 +110,7 @@ export function deleteMonitoringReport(
 ): Actions.AsyncThunk<void, Actions.DataLoadAction | Actions.EditorAction | Actions.messageSuccess> {
   return (dispatch, getState) => {
     const state = getState();
-    const selector = Selectors.getMonitoringReportDeleteEditor(monitoringReport.headerId, monitoringReport);
+    const selector = Selectors.getMonitoringReportEditor(monitoringReport.headerId);
 
     dispatch(Actions.handleEditorSubmit(selector.key, selector.store));
 

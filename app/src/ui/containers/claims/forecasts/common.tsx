@@ -58,7 +58,7 @@ export const withDataEditor = (state: RootState, props: Params): PendingForecast
     forecastDetails: Selectors.findForecastDetailsByPartner(props.partnerId).getPending(state),
     golCosts: Selectors.findGolCostsByPartner(props.partnerId).getPending(state),
     costCategories: Selectors.getCostCategories().getPending(state),
-    editor: Selectors.getForecastDetailsEditor(props.partnerId).get(state).then(x => x!),
+    editor: Selectors.getForecastDetailsEditor(props.partnerId).get(state),
   });
 
   return { combined };

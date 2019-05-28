@@ -18,14 +18,14 @@ export const getMonitoringReportStatusChanges = (reportId: string) => {
   return dataStoreHelper("monitoringReportStatusChanges", getKey(reportId));
 };
 
-export const getMonitoringReportEditor = (projectId: string, id?: string ) => editorStoreHelper<MonitoringReportDto, MonitoringReportDtoValidator>(
+export const getMonitoringReportEditor = (projectId: string, id?: string) => editorStoreHelper<MonitoringReportDto, MonitoringReportDtoValidator>(
   "monitoringReport",
   x => x.monitoringReport,
   (store) => {
-    if(id) {
+    if (id) {
       return getMonitoringReport(projectId, id).getPending(store);
     }
-    return getMonitoringReportQuestions().getPending(store).then(x => getCreateDto(projectId, x!));
+    return getMonitoringReportQuestions().getPending(store).then(x => getCreateDto(projectId, x));
   },
   (monitoringReport, store) => getInitialValdiator(projectId, monitoringReport, store),
   getKey(projectId, id || "new")
@@ -40,17 +40,10 @@ const getCreateDto = (projectId: string, questions: MonitoringReportQuestionDto[
 };
 
 const getInitialValdiator = (projectId: string, monitoringReport: MonitoringReportDto, store: RootState) => {
-  const currentPeriod = getProject(projectId).getPending(store).then(x => x && x.periodId).data || 1;
-  const orignalQuestions = getMonitoringReportQuestions().getPending(store).data || [];
-  return new MonitoringReportDtoValidator(monitoringReport, false, false, orignalQuestions, currentPeriod);
+  const currentPeriod = getProject(projectId).getPending(store).then(x => x.periodId);
+  const orignalQuestions = getMonitoringReportQuestions().getPending(store);
+
+  return currentPeriod.and(orignalQuestions, (p, q) => new MonitoringReportDtoValidator(monitoringReport, false, false, q, p));
 };
 
 export const getMonitoringReportQuestions = () => dataStoreHelper("monitoringReportQuestions", "all");
-
-export const getMonitoringReportDeleteEditor = (key: string, monitoringReport: MonitoringReportDto) => editorStoreHelper<MonitoringReportDto, Results<MonitoringReportDto>>(
-  "monitoringReport",
-  x => x.monitoringReport,
-  () => (Pending.create({status: LoadingStatus.Done, data: monitoringReport, error: null})),
-  () => new Results(monitoringReport, false),
-  key
-);
