@@ -55,6 +55,7 @@ class ProjectDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
             <ACC.Page
               backLink={this.renderBackLink(project, partners)}
               pageTitle={<ACC.Projects.Title project={project} />}
+              project={project}
             >
                 {this.renderPartnersCosts(partners, project)}
                 <ACC.Section title="Project members">

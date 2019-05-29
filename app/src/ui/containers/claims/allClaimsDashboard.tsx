@@ -67,6 +67,7 @@ class Component extends ContainerBase<Params, Data, {}> {
         backLink={<Acc.BackLink route={ProjectDashboardRoute.getLink({})}>Back to all projects</Acc.BackLink>}
         tabs={<Acc.Projects.ProjectNavigation project={projectDetails} currentRoute={AllClaimsDashboardRoute.routeName} partners={partners}/>}
         messages={this.props.messages}
+        project={projectDetails}
       >
         {this.renderSummary(projectDetails, partners.find(x => x.isLead)!)}
         <Acc.Section qa="current-claims-section" title="Open">

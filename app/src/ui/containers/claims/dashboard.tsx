@@ -169,6 +169,7 @@ class Component extends ContainerBaseWithState<ClaimDashboardPageParams, Data, C
         validator={validator}
         messages={this.props.messages}
         backLink={<Acc.BackLink route={ProjectDashboardRoute.getLink({})}>Back to all projects</Acc.BackLink>}
+        project={project}
       >
         <Acc.Section>
           <Acc.SectionPanel qa="claims-totals" title="History">
