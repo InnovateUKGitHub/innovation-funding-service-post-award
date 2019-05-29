@@ -6,11 +6,12 @@ import * as Selectors from "@ui/redux/selectors";
 import { ContainerBase, ReduxContainer } from "@ui/containers/containerBase";
 import { Pending } from "@shared/pending";
 import { ProjectDashboardRoute } from "@ui/containers";
-import { ProjectRole } from "@framework/types";
+import { ILinkInfo, ProjectRole } from "@framework/types";
 import { MonitoringReportStatus } from "@framework/constants";
 import { MonitoringReportViewRoute } from "./details";
 import { MonitoringReportPrepareRoute } from "./prepare";
 import { MonitoringReportCreateRoute } from "./create";
+import { MonitoringReportDeleteRoute } from "./delete";
 
 interface Params {
   projectId: string;
@@ -44,14 +45,14 @@ class DashboardComponent extends ContainerBase<Params, Data, Callbacks> {
     // loop though reports splitting them into open or archived
     const inital = { open: [], archived: [] };
     const reportSections = reports.reduce<{ open: Dtos.MonitoringReportSummaryDto[], archived: Dtos.MonitoringReportSummaryDto[] }>((result, report) => {
-        if (this.currentStatuses.indexOf(report.status) > -1) {
-          result.open.push(report);
-        }
-        else {
-          result.archived.push(report);
-        }
-        return result;
-      },
+      if (this.currentStatuses.indexOf(report.status) > -1) {
+        result.open.push(report);
+      }
+      else {
+        result.archived.push(report);
+      }
+      return result;
+    },
       inital
     );
 
@@ -85,19 +86,29 @@ class DashboardComponent extends ContainerBase<Params, Data, Callbacks> {
         bodyRowFlag={x => section !== "current" ? null : this.editStatuses.indexOf(x.status) >= 0 ? "edit" : null}
         qa={`${section}-reports-table`}
       >
-        <ReportsTable.Custom header={`Title`} qa="title" value={x => <ACC.PeriodTitle periodId={x.periodId} periodStartDate={x.startDate} periodEndDate={x.endDate} />} />
-        <ReportsTable.String header={`Status`} qa="status" value={x => x.statusName} />
-        <ReportsTable.ShortDateTime header={`Last updated`} qa="dateUpdated" value={x => x.lastUpdated} />
-        <ReportsTable.Custom header="" qa="link" value={x => this.renderLink(project, x)} />
+        <ReportsTable.Custom header="Title" qa="title" value={x => <ACC.PeriodTitle periodId={x.periodId} periodStartDate={x.startDate} periodEndDate={x.endDate} />} />
+        <ReportsTable.String header="Status" qa="status" value={x => x.statusName} />
+        <ReportsTable.ShortDateTime header="Last updated" qa="dateUpdated" value={x => x.lastUpdated} />
+        <ReportsTable.Custom header="Action" hideHeader={true} qa="link" value={x => this.renderLinks(x)} />
       </ReportsTable.Table>
     );
   }
 
-  private renderLink(project: Dtos.ProjectDto, report: Dtos.MonitoringReportSummaryDto) {
+  private renderLinks(report: Dtos.MonitoringReportSummaryDto) {
+    const links: { route: ILinkInfo, text: string }[] = [];
+
     if (this.editStatuses.indexOf(report.status) > -1) {
-      return <ACC.Link route={MonitoringReportPrepareRoute.getLink({ projectId: project.id, id: report.headerId })}>Edit report</ACC.Link>;
+      links.push({ route: MonitoringReportPrepareRoute.getLink({ projectId: report.projectId, id: report.headerId }), text: "Edit report" });
     }
-    return <ACC.Link route={MonitoringReportViewRoute.getLink({ projectId: project.id, id: report.headerId })}>View report</ACC.Link>;
+    else {
+      links.push({ route: MonitoringReportViewRoute.getLink({ projectId: report.projectId, id: report.headerId }), text: "View report" });
+    }
+
+    if (report.status === MonitoringReportStatus.Draft) {
+      links.push({ route: MonitoringReportDeleteRoute.getLink({ projectId: report.projectId, id: report.headerId }), text: "Delete report" });
+    }
+
+    return links.map((x,i) => <div key={i}><ACC.Link route={x.route}>{x.text}</ACC.Link></div>);
   }
 }
 
