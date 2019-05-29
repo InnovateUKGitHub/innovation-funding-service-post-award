@@ -13,7 +13,7 @@ interface Callbacks {
   deleteDocument: (dto: Dtos.MonitoringReportDto) => void;
 }
 
-interface Params {
+export interface MonitoringReportDeleteParams {
   projectId: string;
   id: string;
 }
@@ -23,7 +23,7 @@ interface Data {
   editor: Pending<IEditorStore<Dtos.MonitoringReportDto, MonitoringReportDtoValidator>>;
 }
 
-class DeleteVerificationComponent extends ContainerBase<Params, Data, Callbacks> {
+class DeleteVerificationComponent extends ContainerBase<MonitoringReportDeleteParams, Data, Callbacks> {
   render() {
     const combined = Pending.combine({
       editor: this.props.editor,
@@ -67,7 +67,7 @@ class DeleteVerificationComponent extends ContainerBase<Params, Data, Callbacks>
   }
 }
 
-const containerDefinition = ReduxContainer.for<Params, Data, Callbacks>(DeleteVerificationComponent);
+const containerDefinition = ReduxContainer.for<MonitoringReportDeleteParams, Data, Callbacks>(DeleteVerificationComponent);
 
 export const MonitoringReportDelete = containerDefinition.connect({
   withData: (state, props) => ({
