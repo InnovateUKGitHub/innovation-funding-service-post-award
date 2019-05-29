@@ -1,6 +1,6 @@
 // tslint:disable
 import { TestContext } from "../../testContextProvider";
-import { CreateMonitoringReport } from "@server/features/monitoringReports/createMonitoringReport";
+import { CreateMonitoringReportCommand } from "@server/features/monitoringReports/createMonitoringReport";
 import { ISalesforceProject } from "@server/repositories";
 import { GetMonitoringReportActiveQuestions } from "@server/features/monitoringReports/getMonitoringReportActiveQuestions";
 import { MonitoringReportDto } from "@framework/types";
@@ -21,7 +21,7 @@ describe("createMonitoringReports", () => {
 
     expect(context.repositories.monitoringReportHeader.Items.length).toBe(0);
 
-    const result = await context.runCommand(new CreateMonitoringReport(dto, false));
+    const result = await context.runCommand(new CreateMonitoringReportCommand(dto, false));
 
     expect(context.repositories.monitoringReportHeader.Items.length).toBe(1);
     expect(result).toEqual(context.repositories.monitoringReportHeader.Items[0].Id);
@@ -38,7 +38,7 @@ describe("createMonitoringReports", () => {
 
     const dto = await getCreateDto(context, project);
 
-    await context.runCommand(new CreateMonitoringReport(dto, false));
+    await context.runCommand(new CreateMonitoringReportCommand(dto, false));
 
     expect(context.repositories.monitoringReportHeader.Items[0].Acc_MonitoringReportStatus__c).toEqual("Draft");
   });
@@ -64,7 +64,7 @@ describe("createMonitoringReports", () => {
 
     expect(context.repositories.monitoringReportResponse.Items.length).toBe(0);
 
-    const headerId = await context.runCommand(new CreateMonitoringReport(dto, false));
+    const headerId = await context.runCommand(new CreateMonitoringReportCommand(dto, false));
 
     expect(context.repositories.monitoringReportResponse.Items.length).toBe(2);
     expect(context.repositories.monitoringReportResponse.Items.map(x => x.Acc_MonitoringHeader__c)).toEqual([headerId, headerId]);
@@ -83,7 +83,7 @@ describe("createMonitoringReports", () => {
 
     const dto = await getCreateDto(context, project);
 
-    await context.runCommand(new CreateMonitoringReport(dto, true));
+    await context.runCommand(new CreateMonitoringReportCommand(dto, true));
 
     expect(context.repositories.monitoringReportHeader.Items[0].Acc_MonitoringReportStatus__c).toEqual("Awaiting IUK Approval");
   });
@@ -97,7 +97,7 @@ describe("createMonitoringReports", () => {
     });
 
     const dto = await getCreateDto(context, project);
-    const headerId = await context.runCommand(new CreateMonitoringReport(dto, false));
+    const headerId = await context.runCommand(new CreateMonitoringReportCommand(dto, false));
     expect(context.repositories.monitoringReportStatusChange.Items.filter(x => x.Acc_MonitoringReport__c === headerId)).toHaveLength(1);
   });
 
@@ -110,7 +110,7 @@ describe("createMonitoringReports", () => {
     });
 
     const dto = await getCreateDto(context, project);
-    const headerId = await context.runCommand(new CreateMonitoringReport(dto, true));
+    const headerId = await context.runCommand(new CreateMonitoringReportCommand(dto, true));
     expect(context.repositories.monitoringReportStatusChange.Items.filter(x => x.Acc_MonitoringReport__c === headerId)).toHaveLength(2);
   });
 });

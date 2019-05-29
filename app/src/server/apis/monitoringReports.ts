@@ -10,7 +10,7 @@ import {
   MonitoringReportStatusChangeDto,
   MonitoringReportSummaryDto
 } from "@framework/types";
-import { CreateMonitoringReport } from "@server/features/monitoringReports/createMonitoringReport";
+import { CreateMonitoringReportCommand } from "@server/features/monitoringReports/createMonitoringReport";
 import { GetMonitoringReportActiveQuestions } from "@server/features/monitoringReports/getMonitoringReportActiveQuestions";
 import { GetMonitoringReportStatusChanges } from "@server/features/monitoringReports/getMonitoringReportStatusChanges";
 import { DeleteMonitoringReportCommand } from "@server/features/monitoringReports/deleteMonitoringReport";
@@ -57,7 +57,7 @@ class Controller extends ControllerBaseWithSummary<MonitoringReportSummaryDto, M
     const { monitoringReportDto, submit } = params;
     const context = contextProvider.start(params);
 
-    const id = await context.runCommand(new CreateMonitoringReport(monitoringReportDto, submit));
+    const id = await context.runCommand(new CreateMonitoringReportCommand(monitoringReportDto, submit));
     return context.runQuery(new GetMonitoringReportById(monitoringReportDto.projectId, id));
   }
 

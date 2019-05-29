@@ -2,12 +2,12 @@ import { DateTime } from "luxon";
 import { ISalesforceMonitoringReportHeader, ISalesforceMonitoringReportResponse } from "@server/repositories";
 import { BadRequestError, CommandBase, ValidationError } from "@server/features/common";
 import { GetByIdQuery } from "@server/features/projects";
-import { GetMonitoringReportActiveQuestions } from "@server/features/monitoringReports";
+import { GetMonitoringReportActiveQuestions } from "./getMonitoringReportActiveQuestions";
 import { MonitoringReportDtoValidator } from "@ui/validators";
 import { Authorisation, ClaimFrequency, IContext } from "@framework/types";
 import { MonitoringReportDto, ProjectDto, ProjectRole } from "@framework/dtos";
 
-export class CreateMonitoringReport extends CommandBase<string> {
+export class CreateMonitoringReportCommand extends CommandBase<string> {
   constructor(
     private readonly monitoringReportDto: MonitoringReportDto,
     private readonly submit: boolean
