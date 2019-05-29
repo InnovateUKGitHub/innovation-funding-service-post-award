@@ -59,7 +59,7 @@ export function saveClaim(
       return Promise.resolve();
     }
 
-    dispatch(Actions.handleEditorSubmit(selector.key, selector.store));
+    dispatch(Actions.handleEditorSubmit(selector.key, selector.store, claim, validation));
     // send a loading action with undefined as it will just update the status
     dispatch(Actions.dataLoadAction(selector.key, selector.store, LoadingStatus.Loading, undefined));
 

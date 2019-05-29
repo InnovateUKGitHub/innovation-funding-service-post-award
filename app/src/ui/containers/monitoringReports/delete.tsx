@@ -39,6 +39,7 @@ class DeleteVerificationComponent extends ContainerBase<MonitoringReportDeletePa
       <ACC.Page
         pageTitle={<ACC.Projects.Title project={project} />}
         backLink={<ACC.BackLink route={MonitoringReportDashboardRoute.getLink({ projectId: this.props.projectId })}>Back to monitoring reports</ACC.BackLink>}
+        error={editor.error}
       >
         <ACC.Section>
           <ACC.Renderers.SimpleString>All the information in the report will be permanently removed.</ACC.Renderers.SimpleString>

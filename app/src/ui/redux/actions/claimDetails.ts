@@ -67,7 +67,7 @@ export function saveClaimDetails(
       return Promise.resolve();
     }
 
-    dispatch(Actions.handleEditorSubmit(selector.key, selector.store));
+    dispatch(Actions.handleEditorSubmit(selector.key, selector.store, claimDetails, validation));
 
     return ApiClient.claimDetails.saveClaimDetails({ projectId, partnerId, costCategoryId, periodId, claimDetails, user: state.user })
       .then((result) => {

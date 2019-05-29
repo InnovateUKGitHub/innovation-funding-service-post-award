@@ -53,7 +53,7 @@ export function uploadProjectDocument(projectId: string, dto: DocumentUploadDto,
       return Promise.resolve();
     }
 
-    dispatch(Actions.handleEditorSubmit(selector.key, selector.store));
+    dispatch(Actions.handleEditorSubmit(selector.key, selector.store, dto, validation));
     dispatch(Actions.dataLoadAction(selector.key, selector.store, LoadingStatus.Stale, undefined));
 
     return ApiClient.documents.uploadProjectDocument({ projectId, file: dto.file!, user: state.user })
@@ -96,7 +96,7 @@ export function uploadClaimDetailDocument(claimDetailKey: ClaimDetailKey, dto: D
       return Promise.resolve();
     }
 
-    dispatch(Actions.handleEditorSubmit(selector.key, selector.store));
+    dispatch(Actions.handleEditorSubmit(selector.key, selector.store, dto, validation));
     dispatch(Actions.dataLoadAction(docsSelector.key, docsSelector.store, LoadingStatus.Stale, undefined));
 
     // tslint:disable: no-identical-functions
@@ -140,7 +140,7 @@ export function uploadClaimDocument(claimKey: ClaimKey, dto: DocumentUploadDto, 
     }
 
     // Uploading an IAR Document when the claim status is Awaiting IAR will update the status so the claims need to be reloaded.
-    dispatch(Actions.handleEditorSubmit(selector.key, selector.store));
+    dispatch(Actions.handleEditorSubmit(selector.key, selector.store, dto, validation));
     dispatch(Actions.dataLoadAction(claimsSelector.key, claimsSelector.store, LoadingStatus.Stale, undefined));
     dispatch(Actions.dataLoadAction(docsSelector.key, docsSelector.store, LoadingStatus.Stale, undefined));
 
@@ -160,7 +160,7 @@ export function deleteClaimDetailDocument(claimDetailKey: ClaimDetailKey, dto: D
     const docsSelector = Selectors.getClaimDetailDocuments(claimDetailKey.partnerId, claimDetailKey.periodId, claimDetailKey.costCategoryId);
     const selector = Selectors.getClaimDetailDocumentDeleteEditor(state, claimDetailKey);
 
-    dispatch(Actions.handleEditorSubmit(selector.key, selector.store));
+    dispatch(Actions.handleEditorSubmit(selector.key, selector.store, dto, null));
     dispatch(Actions.dataLoadAction(docsSelector.key, docsSelector.store, LoadingStatus.Stale, undefined));
 
     return ApiClient.documents.deleteDocument({ documentId: dto.id, user: state.user })
@@ -179,7 +179,7 @@ export function deleteClaimDocument(claimKey: ClaimKey, dto: DocumentSummaryDto,
     const selector = Selectors.getDocumentDeleteEditor(dto);
     const docsSelector = Selectors.getClaimDocuments(claimKey.partnerId, claimKey.periodId);
 
-    dispatch(Actions.handleEditorSubmit(selector.key, selector.store));
+    dispatch(Actions.handleEditorSubmit(selector.key, selector.store, dto, null));
     dispatch(Actions.dataLoadAction(docsSelector.key, docsSelector.store, LoadingStatus.Stale, undefined));
 
     return ApiClient.documents.deleteDocument({documentId: dto.id, user: state.user})
