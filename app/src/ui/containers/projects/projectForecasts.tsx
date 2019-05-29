@@ -33,6 +33,7 @@ class ProjectForecastComponent extends ContainerBase<Params, Data, Callbacks> {
         tabs={<ACC.Projects.ProjectNavigation project={project} currentRoute={ProjectForecastRoute.routeName} partners={partners}/>}
         backLink={<ACC.BackLink route={ProjectDashboardRoute.getLink({})}>Back to all projects</ACC.BackLink>}
         pageTitle={<ACC.Projects.Title project={project}/>}
+        project={project}
       >
         <ACC.Section qa="project-forecasts">
           <Table.Table data={partners} qa="partner-table">

@@ -61,6 +61,7 @@ class DashboardComponent extends ContainerBase<Params, Data, Callbacks> {
         pageTitle={<ACC.Projects.Title project={project} />}
         tabs={<ACC.Projects.ProjectNavigation project={project} currentRoute={MonitoringReportDashboardRoute.routeName} partners={partners} />}
         messages={this.props.messages}
+        project={project}
       >
         <ACC.Renderers.SimpleString>You should submit reports for this project according to the schedule agreed with your Monitoring Portfolio Executive.</ACC.Renderers.SimpleString>
         <ACC.Link route={MonitoringReportCreateRoute.getLink({ projectId: this.props.projectId })} className="govuk-button">Start a new report</ACC.Link>

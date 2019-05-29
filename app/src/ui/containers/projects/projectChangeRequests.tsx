@@ -40,6 +40,7 @@ class ProjectChangeRequestsComponent extends ContainerBase<Params, Data, Callbac
         backLink={<Acc.BackLink route={ProjectDashboardRoute.getLink({})}>Back to all projects</Acc.BackLink>}
         tabs={<Acc.Projects.ProjectNavigation project={projectDetails} currentRoute={ProjectChangeRequestsRoute.routeName} partners={partners} />}
         pageTitle={<Acc.Projects.Title project={projectDetails} />}
+        project={projectDetails}
       >
         <Acc.Renderers.SimpleString>
           If the project team wish to adjust the details of a project, for example, the allocation of funds across cost categories, the Project Manager must submit a project change request.
