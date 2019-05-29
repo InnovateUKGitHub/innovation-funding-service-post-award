@@ -1,5 +1,5 @@
 import React from "react";
-import * as ACC from "@ui/components";
+import * as Renderers from "@ui/components/renderers";
 
 export interface LogItem {
   newStatus: string;
@@ -16,7 +16,7 @@ export interface Props {
 export class Logs extends React.Component<Props> {
   render() {
     if(!this.props.data || !this.props.data.length) {
-      return <ACC.Renderers.SimpleString>There are no changes.</ACC.Renderers.SimpleString>;
+      return <Renderers.SimpleString>There are no changes.</Renderers.SimpleString>;
     }
 
     return (
@@ -46,25 +46,24 @@ export class Logs extends React.Component<Props> {
     return (
       <React.Fragment key={index}>
         <tr className="govuk-table__row" key={`${index}_a`}>
-          <td className="govuk-table__cell" key="0"><ACC.Renderers.ShortDateTime value={item.createdDate} /></td>
+          <td className="govuk-table__cell" key="0"><Renderers.ShortDateTime value={item.createdDate} /></td>
           <td className="govuk-table__cell" key="1">{item.newStatus}</td>
           <td className="govuk-table__cell" key="2">{item.createdBy}</td>
         </tr>
-        {this.renderComments(item, index)}
+        {this.renderCommentsRow(item, index)}
       </React.Fragment>
     );
   }
 
-  private renderComments(item: LogItem, index: number) {
+  private renderCommentsRow(item: LogItem, index: number) {
     if (!item.comments) {
       return null;
     }
 
     return (
       <tr className={"govuk-table__row"} key={`${index}_b`}>
-        <td className="govuk-table__cell" key="0" colSpan={3}>
-          <h5>Comment</h5>
-          <span style={{ whiteSpace: "pre-wrap" }}>{item.comments}</span>
+        <td className="govuk-table__cell govuk-!-padding-top-1" key="0" colSpan={3}>
+          <div className="govuk-inset-text govuk-!-margin-top-0" style={{ whiteSpace: "pre-wrap" }}>{item.comments}</div>
         </td>
       </tr>
     );
