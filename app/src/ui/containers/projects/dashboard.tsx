@@ -67,7 +67,7 @@ class ProjectDashboardComponent extends ContainerBase<Props, Data, Callbacks> {
         {this.renderProjectList(open, "Open claims", "open-claims", "section-open", "open", "You currently do not have any projects with open claims.")}
         {this.renderProjectList(awaiting, "Awaiting the next claim period", "next-claims", "section-closed", "awaiting", "You currently do not have any projects outside of the claims period.")}
         {upcoming.length ? this.renderProjectList(upcoming, "Upcoming projects", "upcoming-claims", "section-upcoming", "upcoming", "") : null}
-        {this.renderProjectList(archived, "Archive", "archived-claims", "section-archived", "archived", "You currently do not have any archived projects.")}
+        {archived.length ? this.renderProjectList(archived, "Archive", "archived-claims", "section-archived", "archived", "") : null}
       </React.Fragment>
     );
   }
