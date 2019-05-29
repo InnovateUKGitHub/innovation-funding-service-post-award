@@ -70,6 +70,7 @@ export abstract class FormHandlerBase<TParams, TDto, TValidation = {}> implement
       return;
     }
     catch (error) {
+      context.logger.error("Error handling form submission", error);
       const { key, store } = this.getStoreInfo(params, dto);
       throw new FormHandlerError(key, store, dto, this.createValidationResult(params, dto), error);
     }
