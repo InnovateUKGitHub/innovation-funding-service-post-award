@@ -11,15 +11,6 @@ export enum ProjectStatus {
     Terminated = 6
 }
 
-export enum ProjectClaimTrackingStatus {
-    Unknown = 0,
-    NoClaimsDue = 1,
-    ClaimsDue = 2,
-    ClaimsOverdue = 3,
-    ClaimsQueried = 4,
-    AllClaimsSubmitted = 5
-}
-
 export interface ProjectDto {
     id: string;
     title: string;
