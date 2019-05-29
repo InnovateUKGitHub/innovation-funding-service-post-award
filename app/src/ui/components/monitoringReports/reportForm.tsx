@@ -3,7 +3,6 @@ import { IEditorStore } from "@ui/redux";
 import * as Dtos from "@framework/dtos";
 import { MonitoringReportDtoValidator } from "@ui/validators";
 import React, { Component } from "react";
-import { MonitoringReportDeleteRoute } from "@ui/containers";
 
 interface Props {
   project: Dtos.ProjectDto;
@@ -31,7 +30,6 @@ export class MonitoringReportFormComponent extends Component<Props> {
           <ReportForm.Fieldset qa="save-and-return">
             <ReportForm.Button name="save-draft" onClick={() => this.props.onSave(editor.data, project, false)}>Save and return to project</ReportForm.Button>
           </ReportForm.Fieldset>
-          {editor.data.headerId ? <ACC.Link route={MonitoringReportDeleteRoute.getLink({projectId: editor.data.projectId, id: editor.data.headerId})} className="govuk-body">Delete report</ACC.Link> : null}
         </ReportForm.Form>
       </ACC.Section>
     );
