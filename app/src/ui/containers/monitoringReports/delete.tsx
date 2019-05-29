@@ -55,12 +55,6 @@ class DeleteVerificationComponent extends ContainerBase<MonitoringReportDeletePa
               </DeleteForm.Button>
             </DeleteForm.Fieldset>
           </DeleteForm.Form>
-          <ACC.Link
-            route={MonitoringReportPrepareRoute.getLink({projectId: editor.data.projectId, id: editor.data.headerId})}
-            className="govuk-body"
-          >
-            Return to draft report
-          </ACC.Link>
         </ACC.Section>
       </ACC.Page>
     );
