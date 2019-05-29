@@ -1,5 +1,5 @@
 import { FormHandlerBase, IFormBody, IFormButton } from "@server/forms/formHandlerBase";
-import { CreateMonitoringReport, GetMonitoringReportActiveQuestions } from "@server/features/monitoringReports";
+import { CreateMonitoringReportCommand, GetMonitoringReportActiveQuestions } from "@server/features/monitoringReports";
 import { MonitoringReportCreateParams, MonitoringReportCreateRoute, MonitoringReportDashboardRoute } from "@ui/containers/monitoringReports";
 import { getMonitoringReportEditor } from "@ui/redux/selectors";
 import { MonitoringReportDtoValidator } from "@ui/validators/MonitoringReportDtoValidator";
@@ -44,7 +44,7 @@ export class MonitoringReportCreateFormHandler extends FormHandlerBase<Monitorin
   }
 
   protected async run(context: IContext, params: MonitoringReportCreateParams, button: IFormButton, dto: MonitoringReportDto): Promise<ILinkInfo> {
-    const command = new CreateMonitoringReport(dto, button.name === "save-submitted");
+    const command = new CreateMonitoringReportCommand(dto, button.name === "save-submitted");
     await context.runCommand(command);
 
     return MonitoringReportDashboardRoute.getLink({ projectId: params.projectId });

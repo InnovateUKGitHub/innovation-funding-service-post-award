@@ -1,4 +1,5 @@
 export * from "./createMonitoringReport";
+export * from "./deleteMonitoringReport";
 export * from "./getMonitoringReport";
 export * from "./getMonitoringReportActiveQuestions";
 export * from "./getMonitoringReportAnsweredQuestions";
