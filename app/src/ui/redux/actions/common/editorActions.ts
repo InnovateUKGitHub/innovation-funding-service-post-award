@@ -20,8 +20,8 @@ export function updateEditorAction<T>(
   return createAction("EDITOR_UPDATE", payload);
 }
 
-export function handleEditorSubmit(id: string, store: string) {
-  return createAction("EDITOR_SUBMIT", { id, store });
+export function handleEditorSubmit<T>(id: string, store: string, dto: T, validator: Results<T> | null) {
+  return createAction("EDITOR_SUBMIT", { id, store, dto, validator });
 }
 
 export function handleEditorSuccess(id: string, editorStore: string) {
