@@ -63,6 +63,7 @@ class ProjectDocumentsComponent extends ContainerBase<ProjectDocumentPageParams,
         error={editor.error}
         messages={this.props.messages}
         backLink={<ACC.BackLink route={ProjectDashboardRoute.getLink({})}>Back to all projects</ACC.BackLink>}
+        project={project}
       >
         <ACC.Section>
           <UploadForm.Form
