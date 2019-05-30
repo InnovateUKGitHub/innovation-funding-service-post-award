@@ -6,10 +6,10 @@ import {
 import {
   getClaimDetailDocumentDeleteEditorStoreInfo
 } from "../../../ui/redux/selectors";
-import { DeleteDocumentCommand } from "../../features/documents/deleteDocument";
 import { Results } from "../../../ui/validation/results";
 import { ILinkInfo } from "@framework/types/ILinkInfo";
 import { IContext } from "@framework/types/IContext";
+import { DeleteClaimDetailDocumentCommand } from "@server/features/documents/deleteClaimDetailDocument";
 
 interface Document {
   id: string;
@@ -33,7 +33,7 @@ export class ClaimDetailDocumentDeleteHandler extends FormHandlerBase<ClaimDetai
   }
 
   protected async run(context: IContext, params: ClaimDetailDocumentsPageParams, button: IFormButton, dto: Document): Promise<ILinkInfo> {
-    const command = new DeleteDocumentCommand(dto.id);
+    const command = new DeleteClaimDetailDocumentCommand(dto.id, params);
     await context.runCommand(command);
     return ClaimDetailDocumentsRoute.getLink(params);
   }
