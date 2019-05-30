@@ -76,7 +76,7 @@ export function saveMonitoringReport(
     }
 
     // send a loading action with undefined as it will just update the status
-    dispatch(Actions.handleEditorSubmit(selector.key, selector.store));
+    dispatch(Actions.handleEditorSubmit(selector.key, selector.store, dto, validation));
     dispatch(Actions.dataLoadAction(selector.key, selector.store, LoadingStatus.Loading, undefined));
 
     const save = !id
@@ -110,13 +110,12 @@ export function deleteMonitoringReport(
 ): Actions.AsyncThunk<void, Actions.DataLoadAction | Actions.EditorAction | Actions.messageSuccess> {
   return (dispatch, getState) => {
     const state = getState();
-    const selector = Selectors.getMonitoringReportEditor(monitoringReport.headerId);
-
-    dispatch(Actions.handleEditorSubmit(selector.key, selector.store));
+    const selector = Selectors.getMonitoringReportEditor(monitoringReport.projectId, monitoringReport.headerId);
+    const validator = new MonitoringReportDtoValidator(monitoringReport, false, false, monitoringReport.questions, monitoringReport.periodId);
+    dispatch(Actions.handleEditorSubmit(selector.key, selector.store, monitoringReport, validator));
 
     return ApiClient.monitoringReports.deleteMonitoringReport({reportId: monitoringReport.headerId, projectId: monitoringReport.projectId, user: state.user})
-      .then((result) => {
-        dispatch(Actions.dataLoadAction(selector.key, selector.store, LoadingStatus.Done, result));
+      .then(() => {
         dispatch(Actions.handleEditorSuccess(selector.key, selector.store));
         dispatch(Actions.messageSuccess(message));
         onComplete();

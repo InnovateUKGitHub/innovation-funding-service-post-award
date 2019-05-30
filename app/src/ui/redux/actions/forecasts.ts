@@ -59,7 +59,7 @@ export function saveForecastDetails(
     }
 
     // send a loading action with undefined as it will just update the status
-    dispatch(Actions.handleEditorSubmit(selector.key, selector.store));
+    dispatch(Actions.handleEditorSubmit(selector.key, selector.store, forecasts, validation));
     dispatch(Actions.dataLoadAction(selector.key, selector.store, LoadingStatus.Loading, undefined));
 
     return ApiClient.forecastDetails.update({projectId, partnerId, forecasts, submit: updateClaim, user: state.user}).then(result => {
