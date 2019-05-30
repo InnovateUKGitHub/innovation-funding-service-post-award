@@ -27,6 +27,7 @@ export interface ISalesforceDocument {
 export interface IDocumentsRepository {
   insertDocument(document: FileUpload, recordId: string): Promise<string>;
   deleteDocument(documentId: string): Promise<void>;
+  isExistingDocument(documentId: string, recordId: string): Promise<boolean>;
   getDocumentContent(documentId: string): Promise<Stream>;
   getDocumentMetadata(documentId: string): Promise<ISalesforceDocument>;
   getDocumentsMetadata(documentIds: string[], filter?: DocumentFilter): Promise<ISalesforceDocument[]>;
@@ -67,6 +68,11 @@ export class DocumentsRepository implements IDocumentsRepository {
 
   public getDocumentMetadata(documentId: string) {
     return this.contentVersionRepository.getDocument(documentId);
+  }
+
+  public async isExistingDocument(documentId: string, recordId: string): Promise<boolean> {
+    const documentLink = await this.contentDocumentLinkRepository.get(documentId, recordId);
+    return !!documentLink;
   }
 
   public async getDocumentsMetedataByLinkedRecord(recordId: string, filter?: DocumentFilter) {

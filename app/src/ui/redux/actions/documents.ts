@@ -163,7 +163,7 @@ export function deleteClaimDetailDocument(claimDetailKey: ClaimDetailKey, dto: D
     dispatch(Actions.handleEditorSubmit(selector.key, selector.store, dto, null));
     dispatch(Actions.dataLoadAction(docsSelector.key, docsSelector.store, LoadingStatus.Stale, undefined));
 
-    return ApiClient.documents.deleteDocument({ documentId: dto.id, user: state.user })
+    return ApiClient.documents.deleteClaimDetailDocument({ documentId: dto.id, claimDetailKey, user: state.user })
       .then(() => {
         dispatch(Actions.handleEditorSuccess(selector.key, selector.store));
         onComplete();
