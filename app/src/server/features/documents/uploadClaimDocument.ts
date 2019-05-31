@@ -1,6 +1,6 @@
 import { BadRequestError, CommandBase, ValidationError } from "@server/features/common";
 import { FileUploadValidator } from "@ui/validators/documentUploadValidator";
-import { ClaimDto, ClaimStatus, DocumentDescription, FileUpload, IContext } from "@framework/types";
+import { Authorisation, ClaimDto, ClaimStatus, DocumentDescription, FileUpload, IContext, ProjectRole } from "@framework/types";
 import mapClaim from "@server/features/claims/mapClaim";
 import { GetClaimDocumentsQuery } from "@server/features/documents/getClaimDocuments";
 import { DeleteDocumentCommand } from "@server/features/documents/deleteDocument";
@@ -10,6 +10,10 @@ import { GetClaim, UpdateClaimCommand } from "../claims";
 export class UploadClaimDocumentCommand extends CommandBase<string> {
   constructor(private readonly claimKey: ClaimKey, private readonly file: FileUpload) {
     super();
+  }
+
+  protected async accessControl(auth: Authorisation, context: IContext) {
+      return auth.forPartner(this.claimKey.projectId, this.claimKey.partnerId).hasRole(ProjectRole.FinancialContact);
   }
 
   private validateIarUpload(claim: ClaimDto) {
