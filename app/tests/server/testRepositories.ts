@@ -140,6 +140,11 @@ class DocumentsTestRepository extends TestRepository<any> implements Repositorie
     return super.deleteItem(this.Items.find(x => x[1].Id === documentId));
   }
 
+  async isExistingDocument(documentId: string, linkedEntityId: string): Promise<boolean> {
+    const document = await super.getWhere(x => x[0] === linkedEntityId && x[1].Id === documentId);
+    return !!document;
+  }
+
   getDocumentContent(documentId: string): Promise<Stream> {
     return super.getOne(x => x[1].Id === documentId).then(x => {
       const s = new Stream.Readable();
