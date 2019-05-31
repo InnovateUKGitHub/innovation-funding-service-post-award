@@ -82,7 +82,7 @@ class Component extends ContainerBaseWithState<ClaimDashboardPageParams, Data, C
       const Form = Acc.TypedForm<DocumentSummaryDto>();
       return (
         <Form.Form data={document} qa="iar-delete-form">
-          <Form.Button name="delete" value={document.id} onClick={() => this.onDelete(claim, document)}>Remove</Form.Button>
+          <Form.Button name="delete" value={document.id} onClick={() => this.onDelete(claim, document, this.props.projectId)}>Remove</Form.Button>
         </Form.Form>
       );
     };
@@ -96,17 +96,17 @@ class Component extends ContainerBaseWithState<ClaimDashboardPageParams, Data, C
   }
 
   private onChange(dto: DocumentUploadDto, periodId: number) {
-    const key = { partnerId: this.props.partnerId, periodId };
+    const key = { projectId: this.props.projectId, partnerId: this.props.partnerId, periodId };
     this.props.validate(key, dto);
   }
 
   private onSave(dto: DocumentUploadDto, periodId: number) {
-    const key = { partnerId: this.props.partnerId, periodId };
+    const key = { projectId: this.props.projectId, partnerId: this.props.partnerId, periodId };
     this.props.uploadFile(key, dto, () => this.setState({showIarMessage: true}));
   }
 
-  private onDelete(claim: ClaimDto, dto: DocumentSummaryDto) {
-    this.props.deleteFile({ partnerId: claim.partnerId, periodId: claim.periodId }, dto);
+  private onDelete(claim: ClaimDto, dto: DocumentSummaryDto, projectId: string) {
+    this.props.deleteFile({ projectId, partnerId: claim.partnerId, periodId: claim.periodId }, dto);
   }
 
   private renderIarDocumentUpload(claim: ClaimDto, editor: IEditorStore<DocumentUploadDto, DocumentUploadValidator>) {
@@ -268,7 +268,7 @@ export const ClaimsDashboard = definition.connect({
   withData: (state, props) => {
     return ({
       document: getCurrentClaimIarDocument(state, props.partnerId),
-      editor: getCurrentClaimIarDocumentsEditor(state, props.partnerId),
+      editor: getCurrentClaimIarDocumentsEditor(state, props.projectId, props.partnerId),
       deleteEditor: getCurrentClaimIarDocumentsDeleteEditor(state, props.partnerId),
       projectDetails: getProject(props.projectId).getPending(state),
       partnerDetails: getPartner(props.partnerId).getPending(state),
@@ -281,12 +281,12 @@ export const ClaimsDashboard = definition.connect({
       dispatch(Actions.updateClaimDocumentEditor(claimKey, dto)),
     uploadFile: (claimKey, file, onComplete) =>
       dispatch(Actions.uploadClaimDocument(claimKey, file, () => {
-        dispatch(Actions.loadIarDocumentsForCurrentClaim(claimKey.partnerId));
+        dispatch(Actions.loadIarDocumentsForCurrentClaim(claimKey.projectId, claimKey.partnerId));
         onComplete();
       })),
     deleteFile: (claimKey, file) =>
       dispatch(Actions.deleteClaimDocument(claimKey, file, () =>
-        dispatch(Actions.loadIarDocumentsForCurrentClaim(claimKey.partnerId))))
+        dispatch(Actions.loadIarDocumentsForCurrentClaim(claimKey.projectId, claimKey.partnerId))))
   })
 });
 
@@ -307,7 +307,7 @@ export const ClaimsDashboardRoute = definition.route({
     Actions.loadProject(params.projectId),
     Actions.loadPartner(params.partnerId),
     Actions.loadClaimsForPartner(params.partnerId),
-    Actions.loadIarDocumentsForCurrentClaim(params.partnerId)
+    Actions.loadIarDocumentsForCurrentClaim(params.projectId, params.partnerId)
   ],
   getTitle: (store) => {
     return {

@@ -90,11 +90,11 @@ export function loadClaimStatusChanges(projectId: string, partnerId: string, per
   );
 }
 
-export function loadIarDocumentsForCurrentClaim(partnerId: string): Actions.AsyncThunk<void, Actions.DataLoadAction> {
+export function loadIarDocumentsForCurrentClaim(projectId: string, partnerId: string): Actions.AsyncThunk<void, Actions.DataLoadAction> {
   return (dispatch, getState) => {
     const claim = Selectors.getCurrentClaim(getState(), partnerId).data;
     if (claim) {
-      return loadIarDocuments(partnerId, claim.periodId)(dispatch, getState, null);
+      return loadIarDocuments(projectId, partnerId, claim.periodId)(dispatch, getState, null);
     }
     return Promise.resolve();
   };

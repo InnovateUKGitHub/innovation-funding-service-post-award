@@ -16,10 +16,10 @@ export function loadClaimDetailDocuments(projectId: string, partnerId: string, p
   );
 }
 
-export function loadIarDocuments(partnerId: string, periodId: number) {
+export function loadIarDocuments(projectId: string, partnerId: string, periodId: number) {
   return Actions.conditionalLoad(
     Selectors.getClaimDocuments(partnerId, periodId),
-    params => ApiClient.documents.getClaimDocuments({ partnerId, periodId, description: DocumentDescription.IAR, ...params})
+    params => ApiClient.documents.getClaimDocuments({ projectId, partnerId, periodId, description: DocumentDescription.IAR, ...params})
   );
 }
 
