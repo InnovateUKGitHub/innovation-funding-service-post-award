@@ -4,7 +4,7 @@ import React from "react";
 import * as ACC from "../../components";
 import { Pending } from "../../../shared/pending";
 import * as Actions from "../../redux/actions";
-import { ContainerBase, ReduxContainer } from "../containerBase";
+import { ContainerBaseWithState, ContainerProps, ReduxContainer } from "../containerBase";
 import { PartnerClaimStatus, PartnerDto, ProjectDto, ProjectRole, ProjectStatus } from "@framework/types";
 import { DateTime } from "luxon";
 import * as colour from "../../styles/colours";
@@ -25,10 +25,29 @@ interface Callbacks {
 interface Props {
 }
 
+interface State {
+  showClaimsToReview: boolean;
+  showClaimsWithParticipant: boolean;
+}
+
+interface ProjectData  {
+  project: ProjectDto;
+  partner: PartnerDto | null;
+  projectSection: Section;
+}
+
 type Section = "archived" | "open" | "awaiting" | "upcoming";
 type Icon = "warning" | "edit" | "none";
 
-class ProjectDashboardComponent extends ContainerBase<Props, Data, Callbacks> {
+class ProjectDashboardComponent extends ContainerBaseWithState<Props, Data, Callbacks, State> {
+
+  constructor(props: ContainerProps<Props, Data, Callbacks>) {
+    super(props);
+    this.state = {
+      showClaimsToReview: false,
+      showClaimsWithParticipant: false,
+    };
+  }
 
   render() {
     return <ACC.PageLoader pending={this.props.data} render={x => this.renderContent(x.projects, x.partners)} />;
@@ -48,31 +67,26 @@ class ProjectDashboardComponent extends ContainerBase<Props, Data, Callbacks> {
   private renderContents(projects: ProjectDto[], partners: PartnerDto[]) {
     const combinedData = projects.map(project => {
       const partner = partners.find(y => (y.projectId === project.id) && !!(y.roles & ProjectRole.FinancialContact)) || null;
-      const status = this.getProjectStatus(project, partner);
+      const projectSection = this.getProjectSection(project, partner);
       return {
         project,
         partner,
-        status
+        projectSection
       };
     });
-
-    const open = combinedData.filter(x => x.status === "open");
-    const awaiting = combinedData.filter(x => x.status === "awaiting");
-    const archived = combinedData.filter(x => x.status === "archived");
-    const upcoming = combinedData.filter(x => x.status === "upcoming");
 
     return (
       <React.Fragment>
         {this.renderStatisticsSection(combinedData)}
-        {this.renderProjectList(open, "Open claims", "open-claims", "section-open", "open", "You currently do not have any projects with open claims.")}
-        {this.renderProjectList(awaiting, "Awaiting the next claim period", "next-claims", "section-closed", "awaiting", "You currently do not have any projects outside of the claims period.")}
-        {upcoming.length ? this.renderProjectList(upcoming, "Upcoming projects", "upcoming-claims", "section-upcoming", "upcoming", "") : null}
-        {archived.length ? this.renderProjectList(archived, "Archive", "archived-claims", "section-archived", "archived", "") : null}
+        {this.renderProjectList(combinedData, "Open claims", "open-claims", "section-open", "open", "You currently do not have any projects with open claims.")}
+        {this.renderProjectList(combinedData, "Awaiting the next claim period", "next-claims", "section-closed", "awaiting", "You currently do not have any projects outside of the claims period.")}
+        {combinedData.filter(x => x.projectSection === "upcoming").length ? this.renderProjectList(combinedData, "Upcoming projects", "upcoming-claims", "section-upcoming", "upcoming", "") : null}
+        {combinedData.filter(x => x.projectSection === "archived").length ? this.renderProjectList(combinedData, "Archive", "archived-claims", "section-archived", "archived", ""): null}
       </React.Fragment>
     );
   }
 
-  private renderStatisticsSection(combinedData: { project: ProjectDto; partner: PartnerDto | null; status: Section }[]) {
+  private renderStatisticsSection(combinedData: ProjectData[]) {
     const projectsAsMO = combinedData.filter(x => x.project.roles & ProjectRole.MonitoringOfficer);
     const claimsToReview = projectsAsMO.reduce((accumulator, currentValue) => accumulator + currentValue.project.claimsToReview, 0);
     const pendingClaims = projectsAsMO.reduce((accumulator, currentValue) => accumulator + currentValue.project.claimsWithParticipant, 0);
@@ -85,31 +99,53 @@ class ProjectDashboardComponent extends ContainerBase<Props, Data, Callbacks> {
 
     return (
       <ACC.Section qa="requiring-action-section" title="Overview">
-        {this.renderStatisticsBox(0, "change requests you need to review", "pcr")}
-        {this.renderStatisticsBox(claimsToReview, "claims you need to review", "review")}
-        {this.renderStatisticsBox(pendingClaims, "unsubmitted or queried claims", "queried")}
+        {/* tslint:disable-next-line */}
+        {this.renderStatisticsBox(0, "change requests you need to review", () => {}, false, "pcr")}
+        {this.renderStatisticsBox(claimsToReview, "claims you need to review", () => {this.setState({ showClaimsToReview: !this.state.showClaimsToReview });}, this.state.showClaimsToReview, "review")}
+        {this.renderStatisticsBox(pendingClaims, "unsubmitted or queried claims", () => {this.setState({showClaimsWithParticipant: !this.state.showClaimsWithParticipant});}, this.state.showClaimsWithParticipant, "queried")}
       </ACC.Section>
     );
   }
 
-  private renderStatisticsBox(numberOfClaims: number, claimAction: string, qa?: string) {
+  private renderStatisticsBox(numberOfClaims: number, claimAction: string, filterFunction: () => void, buttonIsPressed: boolean, qa?: string) {
     return(
-      <div className={classNames("govuk-grid-column-one-third", "govuk-!-padding-left-0")} >
+      <div className={classNames("govuk-grid-column-one-third", "govuk-!-padding-left-0")} role={"button"} aria-pressed={buttonIsPressed} onClick={filterFunction}>
         <StatisticsBox numberOfClaims={numberOfClaims} claimAction={claimAction} qa={qa}/>
       </div>
     );
   }
 
-  private renderProjectList(data: {project: ProjectDto, partner: PartnerDto | null, status: Section}[], title: string, qa: string, key: string, section: Section, noProjectsMessage: string) {
+  private renderProjectList(data: ProjectData[], title: string, qa: string, key: string, section: Section, noProjectsMessage: string) {
+    const statusFiltered = data.filter(x => x.projectSection === section);
+    const stateFiltered = statusFiltered
+      .filter(x => !this.state.showClaimsToReview || x.project.claimsToReview > 0)
+      .filter(x => !this.state.showClaimsWithParticipant || x.project.claimsWithParticipant > 0);
     return (
       <ACC.ListSection title={title} qa={qa} key={key}>
-        {data.map((x, i) => this.renderProject(x.project, x.partner, section, i))}
-        {!data.length ? <ACC.ListItem><p className="govuk-body govuk-!-margin-0">{noProjectsMessage}</p></ACC.ListItem> : null}
+        {stateFiltered.map((x, i) => this.renderProject(x.project, x.partner, section, i))}
+        {this.renderNoPojectsMessage(stateFiltered, noProjectsMessage, statusFiltered)}
       </ACC.ListSection>
     );
   }
 
-  private getProjectStatus(project: ProjectDto, partner: PartnerDto | null): Section {
+  private renderNoPojectsMessage = (combinedFiltersData: ProjectData[], noProjectsMessage: string, statusFiltered: ProjectData[]) => {
+    if (!!combinedFiltersData.length) return null;
+    if (statusFiltered.length !== 0 && (this.state.showClaimsWithParticipant || this.state.showClaimsToReview )) {
+      return <ACC.ListItem><div className="govuk-body govuk-!-margin-0">{this.renderFilterNoProjectMessage()}</div></ACC.ListItem>;
+    }
+    return <ACC.ListItem><p className="govuk-body govuk-!-margin-0">{noProjectsMessage}</p></ACC.ListItem>;
+  }
+
+  private renderFilterNoProjectMessage = () => {
+    return (
+      <ul className="govuk-list">
+        <li>0 Project change requests to review.</li>
+        <li>0 Partner claims to review.</li>
+        <li>0 Partner claims pending.</li>
+      </ul>);
+  }
+
+  private getProjectSection(project: ProjectDto, partner: PartnerDto | null): Section {
     switch (project.status) {
       case ProjectStatus.Live:
       case ProjectStatus.FinalClaim:
