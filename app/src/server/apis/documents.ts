@@ -10,6 +10,7 @@ import { FileUpload } from "@framework/types";
 import { DocumentDescription } from "@framework/constants";
 import { UploadClaimDocumentCommand } from "../features/documents/uploadClaimDocument";
 import { UploadProjectDocumentCommand } from "../features/documents/uploadProjectDocument";
+import { DeleteClaimDetailDocumentCommand } from "@server/features/documents/deleteClaimDetailDocument";
 
 export interface IDocumentsApi {
   getClaimDocuments: (params: ApiParams<{partnerId: string, periodId: number, description: DocumentDescription}>) => Promise<DocumentSummaryDto[]>;
@@ -18,6 +19,7 @@ export interface IDocumentsApi {
   uploadClaimDetailDocument: (params: ApiParams<{claimDetailKey: ClaimDetailKey, file: FileUpload | File}>) => Promise<{ documentId: string }>;
   uploadClaimDocument: (params: ApiParams<{claimKey: ClaimKey, file: FileUpload | File, description?: string}>) => Promise<{ documentId: string }>;
   uploadProjectDocument: (params: ApiParams<{projectId: string, file: FileUpload | File, description?: string}>) => Promise<{ documentId: string }>;
+  deleteClaimDetailDocument: (params: ApiParams<{ documentId: string, claimDetailKey: ClaimDetailKey }>) => Promise<boolean>;
   deleteDocument: (params: ApiParams<{ documentId: string }>) => Promise<boolean>;
 }
 
@@ -29,6 +31,12 @@ class Controller extends ControllerBase<DocumentSummaryDto> implements IDocument
       "/claim-details/:projectId/:partnerId/:periodId/:costCategoryId",
       (p) => ({claimDetailKey: { projectId: p.projectId, partnerId: p.partnerId, periodId: parseInt(p.periodId, 10), costCategoryId: p.costCategoryId }}),
       p => this.getClaimDetailDocuments(p)
+    );
+
+    this.deleteItem(
+      "/claim-details/:projectId/:partnerId/:periodId/:costCategoryId/:documentId",
+      (p) => ({ documentId: p.documentId, claimDetailKey: { projectId: p.projectId, partnerId: p.partnerId, periodId: parseInt(p.periodId, 10), costCategoryId: p.costCategoryId } }),
+      p => this.deleteClaimDetailDocument(p)
     );
 
     this.getItems(
@@ -122,6 +130,13 @@ class Controller extends ControllerBase<DocumentSummaryDto> implements IDocument
   public async deleteDocument(params: ApiParams<{ documentId: string }>): Promise<boolean> {
     const { documentId } = params;
     const command = new DeleteDocumentCommand(documentId);
+    await contextProvider.start(params).runCommand(command);
+    return true;
+  }
+
+  public async deleteClaimDetailDocument(params: ApiParams<{ documentId: string, claimDetailKey: ClaimDetailKey }>): Promise<boolean> {
+    const { documentId, claimDetailKey } = params;
+    const command = new DeleteClaimDetailDocumentCommand(documentId, claimDetailKey);
     await contextProvider.start(params).runCommand(command);
     return true;
   }

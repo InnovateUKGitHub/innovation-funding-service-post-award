@@ -7,6 +7,7 @@ interface ISalesforceContentDocumentLink {
 }
 
 export interface IContentDocumentLinkRepository {
+  get(documentId: string, linkedEntityId: string): Promise<ISalesforceContentDocumentLink | null>;
   getAllForEntity(entityId: string): Promise<ISalesforceContentDocumentLink[]>;
   insertContentDocumentLink(contentDocumentId: string, linkedEntityId: string): Promise<string>;
 }
@@ -22,6 +23,10 @@ export class ContentDocumentLinkRepository extends SalesforceRepositoryBase<ISal
 
   public getAllForEntity(entityId: string): Promise<ISalesforceContentDocumentLink[]> {
     return super.where({ LinkedEntityId: entityId });
+  }
+
+  public get(documentId: string, linkedEntityId: string): Promise<ISalesforceContentDocumentLink | null> {
+    return super.filterOne({ LinkedEntityId: linkedEntityId, ContentDocumentId: documentId });
   }
 
   public insertContentDocumentLink(contentDocumentId: string, linkedEntityId: string) {
