@@ -29,14 +29,14 @@ export class ClaimDashboardDocumentUploadHandler extends FormHandlerBase<ClaimDa
   }
 
   protected async run(context: IContext, params: ClaimDashboardPageParams, button: IFormButton, dto: Data): Promise<ILinkInfo> {
-    const claimKey = { partnerId: params.partnerId, periodId: dto.periodId };
+    const claimKey = { projectId: params.projectId, partnerId: params.partnerId, periodId: dto.periodId };
     await context.runCommand(new UploadClaimDocumentCommand(claimKey, dto.file));
 
     return ClaimsDashboardRoute.getLink(params);
   }
 
   protected getStoreInfo(params: ClaimDashboardPageParams, dto: Data): { key: string, store: string } {
-    const claimKey = { partnerId: params.partnerId, periodId: dto.periodId };
+    const claimKey = { projectId: params.projectId, partnerId: params.partnerId, periodId: dto.periodId };
     const file = dto.file || {};
     return getClaimDocumentEditor(claimKey, file.description);
   }

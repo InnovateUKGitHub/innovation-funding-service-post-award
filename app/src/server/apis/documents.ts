@@ -13,7 +13,7 @@ import { UploadProjectDocumentCommand } from "../features/documents/uploadProjec
 import { DeleteClaimDetailDocumentCommand } from "@server/features/documents/deleteClaimDetailDocument";
 
 export interface IDocumentsApi {
-  getClaimDocuments: (params: ApiParams<{partnerId: string, periodId: number, description: DocumentDescription}>) => Promise<DocumentSummaryDto[]>;
+  getClaimDocuments: (params: ApiParams<{projectId: string, partnerId: string, periodId: number, description: DocumentDescription}>) => Promise<DocumentSummaryDto[]>;
   getClaimDetailDocuments: (params: ApiParams<{claimDetailKey: ClaimDetailKey}>) => Promise<DocumentSummaryDto[]>;
   getProjectDocuments: (params: ApiParams<{projectId: string}>) => Promise<DocumentSummaryDto[]>;
   uploadClaimDetailDocument: (params: ApiParams<{claimDetailKey: ClaimDetailKey, file: FileUpload | File}>) => Promise<{ documentId: string }>;
@@ -41,7 +41,7 @@ class Controller extends ControllerBase<DocumentSummaryDto> implements IDocument
 
     this.getItems(
       "/claims/:partnerId/:periodId/",
-      (p, q) => ({ partnerId: p.partnerId, periodId: parseInt(p.periodId, 10), description: q.description }),
+      (p, q) => ({ projectId: p.projectId, partnerId: p.partnerId, periodId: parseInt(p.periodId, 10), description: q.description }),
       p => this.getClaimDocuments(p)
     );
 
@@ -65,7 +65,7 @@ class Controller extends ControllerBase<DocumentSummaryDto> implements IDocument
 
     this.postAttachment(
       "/claims/:partnerId/:periodId",
-      (p, q, b, f) => ({ claimKey: { partnerId: p.partnerId, periodId: parseInt(p.periodId, 10), file: f }, file: { ...f, ...b }}),
+      (p, q, b, f) => ({ claimKey: { projectId: p.projectId, partnerId: p.partnerId, periodId: parseInt(p.periodId, 10), file: f }, file: { ...f, ...b }}),
       p => this.uploadClaimDocument(p)
     );
 
@@ -82,9 +82,9 @@ class Controller extends ControllerBase<DocumentSummaryDto> implements IDocument
     );
   }
 
-  public async getClaimDocuments(params: ApiParams<{partnerId: string, periodId: number, description: string}>) {
-    const { partnerId, periodId, description } = params;
-    const query = new GetClaimDocumentsQuery({partnerId, periodId}, {description});
+  public async getClaimDocuments(params: ApiParams<{projectId: string, partnerId: string, periodId: number, description: string}>) {
+    const { projectId, partnerId, periodId, description } = params;
+    const query = new GetClaimDocumentsQuery({projectId, partnerId, periodId}, {description});
     return contextProvider.start(params).runQuery(query);
   }
 

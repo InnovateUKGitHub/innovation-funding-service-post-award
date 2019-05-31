@@ -10,11 +10,13 @@ describe("GetClaimDocumentQuery", () => {
     context.testData.createDocument("12345", "cat", "jpg", DocumentDescription.IAR);
 
     const partner = context.testData.createPartner();
+    const project = context.testData.createProject();
     const claim = context.testData.createClaim(partner, 1, (item) => {
       item.Id = "12345";
     });
 
     const claimKey = {
+      projectId: project.Id,
       partnerId: claim.Acc_ProjectParticipant__r.Id,
       periodId: claim.Acc_ProjectPeriodNumber__c
     };
@@ -30,11 +32,13 @@ describe("GetClaimDocumentQuery", () => {
     context.testData.createDocument("12345", "cat2", "jpg", "hello world", DocumentDescription.IAR);
 
     const partner = context.testData.createPartner();
+    const project = context.testData.createProject();
     const claim = context.testData.createClaim(partner, 1, (item) => {
       item.Id = "12345";
     });
 
     const claimKey = {
+      projectId: project.Id,
       partnerId: claim.Acc_ProjectParticipant__r.Id,
       periodId: claim.Acc_ProjectPeriodNumber__c
     };

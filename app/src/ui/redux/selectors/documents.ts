@@ -57,12 +57,12 @@ const getDocumentsDeleteEditor = (key: string, documents: DocumentSummaryDto[]) 
   key
 );
 
-export const getCurrentClaimIarDocumentsEditor = (state: RootState, partnerId: string): Pending<IEditorStore<DocumentUploadDto, DocumentUploadValidator> | null> => {
+export const getCurrentClaimIarDocumentsEditor = (state: RootState, projectId: string, partnerId: string): Pending<IEditorStore<DocumentUploadDto, DocumentUploadValidator> | null> => {
   return getCurrentClaim(state, partnerId).then(claim => {
     if (!claim) {
       return null;
     }
-    const editorPending = getClaimDocumentEditor({ partnerId, periodId: claim.periodId }, DocumentDescription.IAR).get(state);
+    const editorPending = getClaimDocumentEditor({ projectId, partnerId, periodId: claim.periodId }, DocumentDescription.IAR).get(state);
     return editorPending.data || null;
   });
 };
