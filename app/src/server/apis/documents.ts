@@ -40,7 +40,7 @@ class Controller extends ControllerBase<DocumentSummaryDto> implements IDocument
     );
 
     this.getItems(
-      "/claims/:partnerId/:periodId/",
+      "/claims/:projectId/:partnerId/:periodId/",
       (p, q) => ({ projectId: p.projectId, partnerId: p.partnerId, periodId: parseInt(p.periodId, 10), description: q.description }),
       p => this.getClaimDocuments(p)
     );
@@ -64,7 +64,7 @@ class Controller extends ControllerBase<DocumentSummaryDto> implements IDocument
     );
 
     this.postAttachment(
-      "/claims/:partnerId/:periodId",
+      "/claims/:projectId/:partnerId/:periodId",
       (p, q, b, f) => ({ claimKey: { projectId: p.projectId, partnerId: p.partnerId, periodId: parseInt(p.periodId, 10), file: f }, file: { ...f, ...b }}),
       p => this.uploadClaimDocument(p)
     );

@@ -21,7 +21,7 @@ const clientApi: IApiClient = {
     getAll: (params) => ajaxJson("/api/cost-categories"),
   },
   documents: {
-    getClaimDocuments:(params) => ajaxJson(`/api/documents/claims/${params.partnerId}/${params.periodId}/?description=${params.description}`),
+    getClaimDocuments:(params) => ajaxJson(`/api/documents/claims/${params.projectId}/${params.partnerId}/${params.periodId}/?description=${params.description}`),
     getClaimDetailDocuments: ({ claimDetailKey }) => ajaxJson(`/api/documents/claim-details/${claimDetailKey.projectId}/${claimDetailKey.partnerId}/${claimDetailKey.periodId}/${claimDetailKey.costCategoryId}`),
     getProjectDocuments: (params) => ajaxJson(`/api/documents/projects/${params.projectId}`),
     deleteClaimDetailDocument: ({ documentId, claimDetailKey }) => ajaxJson(`/api/documents/claim-details/${claimDetailKey.projectId}/${claimDetailKey.partnerId}/${claimDetailKey.periodId}/${claimDetailKey.costCategoryId}/${documentId}`, { method: "DELETE" }),
@@ -35,7 +35,7 @@ const clientApi: IApiClient = {
       const formData = new FormData();
       formData.append("attachment", file as File);
       if (description) { formData.append("description", description); }
-      return ajaxPostFormData(`/api/documents/claims/${claimKey.partnerId}/${claimKey.periodId}`, formData);
+      return ajaxPostFormData(`/api/documents/claims/${claimKey.projectId}/${claimKey.partnerId}/${claimKey.periodId}`, formData);
     },
     uploadProjectDocument: ({ projectId, file, description }) => {
       const formData = new FormData();
