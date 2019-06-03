@@ -32,12 +32,14 @@ describe("UploadClaimDocumentCommand", () => {
     it("throw an exception if an IAR is not required", async () => {
       const context = new TestContext();
 
+      const project = context.testData.createProject();
       const claim = context.testData.createClaim(undefined, 1, (item) => {
         item.Acc_IARRequired__c = false;
         item.Acc_ClaimStatus__c = ClaimStatus.DRAFT;
       });
 
       const claimKey = {
+        projectId: project.Id,
         partnerId: claim.Acc_ProjectParticipant__r.Id,
         periodId: claim.Acc_ProjectPeriodNumber__c
       };
@@ -49,6 +51,7 @@ describe("UploadClaimDocumentCommand", () => {
     it("should throw an exception if file upload validation fails", async () => {
       const context = new TestContext();
       const partner = context.testData.createPartner();
+      const project = context.testData.createProject();
       const claim = context.testData.createClaim(partner, 1, (item) => {
         item.Acc_IARRequired__c = false;
         item.Acc_ClaimStatus__c = ClaimStatus.DRAFT;
@@ -61,6 +64,7 @@ describe("UploadClaimDocumentCommand", () => {
       };
 
       const claimKey = {
+        projectId: project.Id,
         partnerId: claim.Acc_ProjectParticipant__r.Id,
         periodId: claim.Acc_ProjectPeriodNumber__c
       };
@@ -72,11 +76,13 @@ describe("UploadClaimDocumentCommand", () => {
     it("should upload document if description is not IAR", async () => {
       const context = new TestContext();
       const partner = context.testData.createPartner();
+      const project = context.testData.createProject();
       const claim = context.testData.createClaim(partner, 1, (item) => {
         item.Acc_IARRequired__c = true;
         item.Acc_ClaimStatus__c = ClaimStatus.AWAITING_IAR;
       });
       const claimKey = {
+        projectId: project.Id,
         partnerId: claim.Acc_ProjectParticipant__r.Id,
         periodId: claim.Acc_ProjectPeriodNumber__c
       };
@@ -100,12 +106,14 @@ describe("UploadClaimDocumentCommand", () => {
       it("should update the claim status to AWAITING_IUK_APPROVAL", async () => {
         const context = new TestContext();
         const partner = context.testData.createPartner();
+        const project = context.testData.createProject();
         const claim = context.testData.createClaim(partner, 1, (item) => {
           item.Acc_IARRequired__c = true;
           item.Acc_ClaimStatus__c = ClaimStatus.AWAITING_IAR;
         });
 
         const claimKey = {
+          projectId: project.Id,
           partnerId: claim.Acc_ProjectParticipant__r.Id,
           periodId: claim.Acc_ProjectPeriodNumber__c
         };
@@ -118,12 +126,14 @@ describe("UploadClaimDocumentCommand", () => {
       it("should update the create a status change record", async () => {
         const context = new TestContext();
         const partner = context.testData.createPartner();
+        const project = context.testData.createProject();
         const claim = context.testData.createClaim(partner, 1, (item) => {
           item.Acc_IARRequired__c = true;
           item.Acc_ClaimStatus__c = ClaimStatus.AWAITING_IAR;
         });
 
         const claimKey = {
+          projectId: project.Id,
           partnerId: claim.Acc_ProjectParticipant__r.Id,
           periodId: claim.Acc_ProjectPeriodNumber__c
         };
@@ -141,12 +151,14 @@ describe("UploadClaimDocumentCommand", () => {
       it("should not update the claim status", async () => {
         const context = new TestContext();
         const partner = context.testData.createPartner();
+        const project = context.testData.createProject();
         const claim = context.testData.createClaim(partner, 1, (item) => {
           item.Acc_IARRequired__c = true;
           item.Acc_ClaimStatus__c = ClaimStatus.DRAFT;
         });
 
         const claimKey = {
+          projectId: project.Id,
           partnerId: claim.Acc_ProjectParticipant__r.Id,
           periodId: claim.Acc_ProjectPeriodNumber__c
         };
@@ -162,11 +174,13 @@ describe("UploadClaimDocumentCommand", () => {
         it("should upload an IAR claim document", async () => {
           const context = new TestContext();
           const partner = context.testData.createPartner();
+          const project = context.testData.createProject();
           const claim = context.testData.createClaim(partner, 1, (item) => {
             item.Acc_IARRequired__c = true;
             item.Acc_ClaimStatus__c = status;
           });
           const claimKey = {
+            projectId: project.Id,
             partnerId: claim.Acc_ProjectParticipant__r.Id,
             periodId: claim.Acc_ProjectPeriodNumber__c
           };
@@ -185,6 +199,7 @@ describe("UploadClaimDocumentCommand", () => {
         const context = new TestContext();
         const partner = context.testData.createPartner();
         const claimId = "12345";
+        const project = context.testData.createProject();
         const claim = context.testData.createClaim(partner, 1, item => {
           item.Id = claimId;
           item.Acc_IARRequired__c = true;
@@ -192,6 +207,7 @@ describe("UploadClaimDocumentCommand", () => {
         const originalDocumentId = context.testData.createDocument("12345", "cat", "jpg", "", DocumentDescription.IAR).ContentDocumentId;
 
         const claimKey = {
+          projectId: project.Id,
           partnerId: claim.Acc_ProjectParticipant__r.Id,
           periodId: claim.Acc_ProjectPeriodNumber__c
         };
@@ -213,12 +229,14 @@ describe("UploadClaimDocumentCommand", () => {
       it("should not upload a claim document with an IAR description when the claim is not in a valid status", async () => {
         const context = new TestContext();
         const partner = context.testData.createPartner();
+        const project = context.testData.createProject();
         const claim = context.testData.createClaim(partner, 1, (item) => {
           item.Acc_IARRequired__c = true;
           item.Acc_ClaimStatus__c = status;
         });
 
         const claimKey = {
+          projectId: project.Id,
           partnerId: claim.Acc_ProjectParticipant__r.Id,
           periodId: claim.Acc_ProjectPeriodNumber__c
         };
