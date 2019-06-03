@@ -82,6 +82,7 @@ class Component extends ContainerBaseWithState<ClaimDashboardPageParams, Data, C
       const Form = Acc.TypedForm<DocumentSummaryDto>();
       return (
         <Form.Form data={document} qa="iar-delete-form">
+          <Form.Hidden name="periodId" value={() => claim.periodId} />
           <Form.Button name="delete" value={document.id} onClick={() => this.onDelete(claim, document, this.props.projectId)}>Remove</Form.Button>
         </Form.Form>
       );
