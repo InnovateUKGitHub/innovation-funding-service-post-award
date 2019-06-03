@@ -289,7 +289,7 @@ export const ReviewClaimRoute = definition.route({
     Actions.loadCostCategories(),
     Actions.loadClaim(params.partnerId, params.periodId),
     Actions.loadCostsSummaryForPeriod(params.projectId, params.partnerId, params.periodId),
-    Actions.loadIarDocuments(params.partnerId, params.periodId),
+    Actions.loadIarDocuments(params.projectId, params.partnerId, params.periodId),
     Actions.loadClaimStatusChanges(params.projectId, params.partnerId, params.periodId),
     ...forecastDataLoadActions(params)
   ],
