@@ -28,9 +28,9 @@ export interface IDocumentsRepository {
   insertDocument(document: FileUpload, recordId: string): Promise<string>;
   deleteDocument(documentId: string): Promise<void>;
   isExistingDocument(documentId: string, recordId: string): Promise<boolean>;
-  getDocumentContent(documentId: string): Promise<Stream>;
-  getDocumentMetadata(documentId: string): Promise<ISalesforceDocument>;
-  getDocumentMetadataForEntityDocument(entityId: string, documentId: string): Promise<ISalesforceDocument|null>;
+  getDocumentContent(verionId: string): Promise<Stream>;
+  getDocumentMetadata(verionId: string): Promise<ISalesforceDocument>;
+  getDocumentMetadataForEntityDocument(entityId: string, verionId: string): Promise<ISalesforceDocument|null>;
   getDocumentsMetadata(documentIds: string[], filter?: DocumentFilter): Promise<ISalesforceDocument[]>;
   getDocumentsMetedataByLinkedRecord(recordId: string, filter?: DocumentFilter): Promise<ISalesforceDocument[]>;
 }
@@ -67,8 +67,8 @@ export class DocumentsRepository implements IDocumentsRepository {
     return this.contentVersionRepository.getDocuments(documentIds, filter);
   }
 
-  public getDocumentMetadata(documentId: string) {
-    return this.contentVersionRepository.getDocument(documentId);
+  public getDocumentMetadata(versionId: string) {
+    return this.contentVersionRepository.getDocument(versionId);
   }
 
   public async isExistingDocument(documentId: string, recordId: string): Promise<boolean> {
@@ -76,12 +76,12 @@ export class DocumentsRepository implements IDocumentsRepository {
     return !!documentLink;
   }
 
-  public async getDocumentMetadataForEntityDocument(entityId: string, documentId: string) {
-    const linkedDoc = await this.contentDocumentLinkRepository.get(documentId, entityId);
-    if(linkedDoc) {
-      return this.contentVersionRepository.getDocument(documentId);
-    }
-    return null;
+  public async getDocumentMetadataForEntityDocument(entityId: string, versionId: string) {
+    // todo: try to improve this in terms of numbers of calls
+    // however salesforce makes it difficult to do this !!!
+    const docIds = await this.contentDocumentLinkRepository.getAllForEntity(entityId).then(x => x.map(y => y.ContentDocumentId));
+    const versions = await this.contentVersionRepository.getDocuments(docIds);
+    return versions.find(x => x.Id === versionId) || null;
   }
 
   public async getDocumentsMetedataByLinkedRecord(recordId: string, filter?: DocumentFilter) {
@@ -92,7 +92,7 @@ export class DocumentsRepository implements IDocumentsRepository {
     return this.getDocumentsMetadata(linkedDocs.map(x => x.ContentDocumentId), filter);
   }
 
-  public getDocumentContent(documentId: string) {
-    return this.contentVersionRepository.getDocumentData(documentId);
+  public getDocumentContent(versionId: string) {
+    return this.contentVersionRepository.getDocumentData(versionId);
   }
 }
