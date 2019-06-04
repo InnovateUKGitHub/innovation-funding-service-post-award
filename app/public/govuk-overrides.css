@@ -147,7 +147,7 @@
   text-decoration: underline;
 }
 
-@media (min-width: 640px) {
+@media (min-width: 1024px) {
   .sticky-col {
     background: #ffffff;
     box-shadow: 1px 1px #bfc1c3;
