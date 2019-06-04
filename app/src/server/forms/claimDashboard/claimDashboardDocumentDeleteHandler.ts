@@ -6,35 +6,43 @@ import {
 import {
   getDocumentDeleteEditor
 } from "../../../ui/redux/selectors";
-import { DeleteDocumentCommand } from "../../features/documents/deleteDocument";
 import { Results } from "../../../ui/validation/results";
 import { GetDocumentsSummaryQuery } from "../../features/documents/getDocumentsSummary";
 import { BadRequestError } from "../../features/common/appError";
 import { ILinkInfo } from "@framework/types/ILinkInfo";
 import { IContext } from "@framework/types/IContext";
+import { DeleteClaimDocumentCommand } from "@server/features/documents/deleteClaimDocument";
 
-export class ClaimDashboardDocumentDeleteHandler extends FormHandlerBase<ClaimDashboardPageParams, DocumentSummaryDto> {
+interface DocumentWithPeriodId {
+  documentSummary: DocumentSummaryDto;
+  periodId: number;
+}
+export class ClaimDashboardDocumentDeleteHandler extends FormHandlerBase<ClaimDashboardPageParams, DocumentWithPeriodId> {
 
   constructor() {
     super(ClaimsDashboardRoute, ["delete"]);
   }
 
   protected async getDto(context: IContext, params: ClaimDashboardPageParams, button: IFormButton, body: IFormBody) {
+    const periodId = parseInt(body.periodId, 10);
     const dto = await context.runQuery(new GetDocumentsSummaryQuery([button.value]));
     if (!dto || !dto[0]) throw new BadRequestError("Document does not exist");
-    return dto[0];
+    return {
+      documentSummary: dto[0],
+      periodId
+    };
   }
 
-  protected createValidationResult(params: ClaimDashboardPageParams, dto: DocumentSummaryDto) {
-    return new Results(dto, false);
+  protected createValidationResult(params: ClaimDashboardPageParams, dto: DocumentWithPeriodId) {
+    return new Results(dto.documentSummary, false);
   }
 
-  protected getStoreInfo(params: ClaimDashboardPageParams, dto: DocumentSummaryDto): { key: string; store: string; } {
-    return getDocumentDeleteEditor(dto);
+  protected getStoreInfo(params: ClaimDashboardPageParams, dto: DocumentWithPeriodId): { key: string; store: string; } {
+    return getDocumentDeleteEditor(dto.documentSummary);
   }
 
-  protected async run(context: IContext, params: ClaimDashboardPageParams, button: IFormButton, dto: DocumentSummaryDto): Promise<ILinkInfo> {
-    const command = new DeleteDocumentCommand(dto.id);
+  protected async run(context: IContext, params: ClaimDashboardPageParams, button: IFormButton, dto: DocumentWithPeriodId): Promise<ILinkInfo> {
+    const command = new DeleteClaimDocumentCommand(dto.documentSummary.id, {projectId: params.projectId, partnerId: params.partnerId, periodId: dto.periodId}  );
     await context.runCommand(command);
     return ClaimsDashboardRoute.getLink(params);
   }
