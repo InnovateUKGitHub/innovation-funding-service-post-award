@@ -5,7 +5,8 @@ import { GetDocumentQuery } from "../features/documents/getDocument";
 import { GetProjectDocumentsQuery } from "../features/documents/getProjectDocuments";
 import { UploadClaimDetailDocumentCommand } from "../features/documents/uploadClaimDetailDocument";
 import { DeleteDocumentCommand } from "../features/documents/deleteDocument";
-import {GetClaimDocumentsQuery} from "../features/documents/getClaimDocuments";
+import { GetClaimDocumentsQuery } from "../features/documents/getClaimDocuments";
+import { GetClaimDocumentQuery } from "../features/documents/getClaimDocument";
 import { FileUpload } from "@framework/types";
 import { DocumentDescription } from "@framework/constants";
 import { UploadClaimDocumentCommand } from "../features/documents/uploadClaimDocument";
@@ -46,6 +47,12 @@ class Controller extends ControllerBase<DocumentSummaryDto> implements IDocument
       "/claims/:projectId/:partnerId/:periodId/",
       (p, q) => ({ projectId: p.projectId, partnerId: p.partnerId, periodId: parseInt(p.periodId, 10), description: q.description }),
       p => this.getClaimDocuments(p)
+    );
+
+    this.getAttachment(
+      "/claims/:projectId/:partnerId/:periodId/:documentId/content",
+      (p, q) => ({ projectId: p.projectId, partnerId: p.partnerId, periodId: parseInt(p.periodId, 10), documentId: p.documentId }),
+      p => this.getClaimDocument(p)
     );
 
     this.deleteItem(
@@ -100,6 +107,12 @@ class Controller extends ControllerBase<DocumentSummaryDto> implements IDocument
   public async getClaimDocuments(params: ApiParams<{projectId: string, partnerId: string, periodId: number, description: string}>) {
     const { projectId, partnerId, periodId, description } = params;
     const query = new GetClaimDocumentsQuery({projectId, partnerId, periodId}, {description});
+    return contextProvider.start(params).runQuery(query);
+  }
+
+  public async getClaimDocument(params: ApiParams<{projectId: string, partnerId: string, periodId: number, documentId: string}>) {
+    const { projectId, partnerId, periodId, documentId } = params;
+    const query = new GetClaimDocumentQuery({projectId, partnerId, periodId}, documentId);
     return contextProvider.start(params).runQuery(query);
   }
 
