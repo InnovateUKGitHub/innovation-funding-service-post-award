@@ -51,8 +51,8 @@ export class ContentVersionRepository extends SalesforceRepositoryBase<ISalesfor
     return super.where(queryString);
   }
 
-  public getDocument(id: string): Promise<ISalesforceContentVersion> {
-    return super.retrieve(id).then(x => {
+  public getDocument(versionId: string): Promise<ISalesforceContentVersion> {
+    return super.retrieve(versionId).then(x => {
       if (x === null) {
         throw Error("Document not found");
       }
@@ -70,7 +70,7 @@ export class ContentVersionRepository extends SalesforceRepositoryBase<ISalesfor
     });
   }
 
-  public getDocumentData(id: string): Promise<Stream> {
-    return super.getBlob(id, "VersionData");
+  public getDocumentData(versionId: string): Promise<Stream> {
+    return super.getBlob(versionId, "VersionData");
   }
 }
