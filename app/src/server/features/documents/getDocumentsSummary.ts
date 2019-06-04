@@ -9,6 +9,6 @@ export class GetDocumentsSummaryQuery extends QueryBase<DocumentSummaryDto[]> {
 
   protected async Run(context: IContext) {
     const documents = await context.repositories.documents.getDocumentsMetadata(this.documentIds, this.filter);
-    return documents.map<DocumentSummaryDto>(mapToDocumentSummaryDto);
+    return documents.map<DocumentSummaryDto>(x => mapToDocumentSummaryDto(x));
   }
 }

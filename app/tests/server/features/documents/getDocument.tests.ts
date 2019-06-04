@@ -4,14 +4,14 @@ import {GetDocumentQuery} from "../../../../src/server/features/documents/getDoc
 describe("GetDocumentQuery", () => {
   it("returns a stream", async () => {
     const context = new TestContext();
-    const document = context.testData.createDocument("12345", "cat", "jpg");
+    const document = context.testData.createDocument("12345", "cat", "jpg", "The test");
 
     const query = new GetDocumentQuery(document.Id);
     const result = await context.runQuery(query);
 
     expect(result).toBeDefined();
     expect(result.fileType).toBe("jpg");
-    expect(result.contentLength).toBe(2);
+    expect(result.contentLength).toBe("The test".length);
     const streamResponse = result.stream;
     expect(streamResponse).toBeDefined();
 

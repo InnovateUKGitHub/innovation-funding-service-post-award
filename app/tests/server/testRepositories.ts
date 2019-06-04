@@ -3,6 +3,7 @@ import { TestRepository } from "./testRepository";
 import * as Repositories from "@server/repositories";
 import { Updatable } from "@server/repositories/salesforceRepositoryBase";
 import { FileUpload, IRepositories } from "@framework/types";
+import { ISalesforceDocument } from "@server/repositories";
 
 class ProjectsTestRepository extends TestRepository<Repositories.ISalesforceProject> implements Repositories.IProjectRepository {
     getById(id: string) {
@@ -108,7 +109,7 @@ class ClaimDetailsTestRepository extends TestRepository<Repositories.ISalesforce
     }
 }
 
-class DocumentsTestRepository extends TestRepository<any> implements Repositories.IDocumentsRepository {
+class DocumentsTestRepository extends TestRepository<[string, ISalesforceDocument]> implements Repositories.IDocumentsRepository {
   async insertDocument({ content, fileName, description }: FileUpload, recordId: string): Promise<string> {
     const nameParts = fileName.split(".");
     const extension = nameParts.length > 1 ? nameParts[nameParts.length - 1] : null;
@@ -157,6 +158,10 @@ class DocumentsTestRepository extends TestRepository<any> implements Repositorie
 
   getDocumentMetadata(documentId: string): Promise<Repositories.ISalesforceDocument> {
     return super.getOne(x => documentId === x[1].Id).then(x => x[1]);
+  }
+
+  getDocumentMetadataForEntityDocument(entityId: string, documentId: string): Promise<Repositories.ISalesforceDocument | null> {
+    return super.filterOne(x => documentId === x[1].Id && x[0] === entityId).then(x => (x && x[1]));
   }
 
   getDocumentsMetadata(documentIds: string[], filter?: DocumentFilter): Promise<Repositories.ISalesforceDocument[]> {

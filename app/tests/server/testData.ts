@@ -1,7 +1,7 @@
 // tslint:disable:no-duplicate-string
 import { DateTime } from "luxon";
 import * as Repositories from "@server/repositories";
-import { ISalesforceMonitoringReportQuestions, SalesforceRole } from "@server/repositories";
+import { ISalesforceDocument, ISalesforceMonitoringReportQuestions, SalesforceRole } from "@server/repositories";
 import { range } from "@shared/range";
 import { ClaimStatus, IClientUser } from "@framework/types";
 import { ITestRepositories } from "./testRepositories";
@@ -453,15 +453,14 @@ export class TestData {
     return newItem;
   }
 
-  public createDocument(entityId: string, title: string, fileType: string | null, content: string = "", description?: string) {
+  public createDocument(entityId: string, title: string= "cat", fileType: string|null = "jpg", content: string = "", description?: string) {
     const id = "" + this.repositories.documents.Items.length + 1;
-    const item = {
+    const item: ISalesforceDocument = {
       Id: id,
       ContentDocumentId: id,
-      LinkedEntityId: entityId,
       Title: title,
       FileExtension: fileType,
-      ContentSize: 2,
+      ContentSize: content.length,
       FileType: fileType,
       ReasonForChange: "First upload",
       PathOnClient: fileType ? `${title}.${fileType}` : title,

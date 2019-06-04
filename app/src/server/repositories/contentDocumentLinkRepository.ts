@@ -1,6 +1,7 @@
 import SalesforceRepositoryBase from "./salesforceRepositoryBase";
 
 interface ISalesforceContentDocumentLink {
+  Id: string;
   ContentDocumentId: string;
   LinkedEntityId: string;
   ShareType: string;
@@ -17,6 +18,7 @@ export class ContentDocumentLinkRepository extends SalesforceRepositoryBase<ISal
   protected readonly salesforceObjectName = "ContentDocumentLink";
 
   protected readonly salesforceFieldNames = [
+    "Id",
     "ContentDocumentId",
     "LinkedEntityId"
   ];
