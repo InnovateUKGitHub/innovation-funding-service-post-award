@@ -11,6 +11,7 @@ import { DocumentDescription } from "@framework/constants";
 import { UploadClaimDocumentCommand } from "../features/documents/uploadClaimDocument";
 import { UploadProjectDocumentCommand } from "../features/documents/uploadProjectDocument";
 import { DeleteClaimDetailDocumentCommand } from "@server/features/documents/deleteClaimDetailDocument";
+import {DeleteClaimDocumentCommand} from "@server/features/documents/deleteClaimDocument";
 
 export interface IDocumentsApi {
   getClaimDocuments: (params: ApiParams<{projectId: string, partnerId: string, periodId: number, description: DocumentDescription}>) => Promise<DocumentSummaryDto[]>;
@@ -20,6 +21,7 @@ export interface IDocumentsApi {
   uploadClaimDocument: (params: ApiParams<{claimKey: ClaimKey, file: FileUpload | File, description?: string}>) => Promise<{ documentId: string }>;
   uploadProjectDocument: (params: ApiParams<{projectId: string, file: FileUpload | File, description?: string}>) => Promise<{ documentId: string }>;
   deleteClaimDetailDocument: (params: ApiParams<{ documentId: string, claimDetailKey: ClaimDetailKey }>) => Promise<boolean>;
+  deleteClaimDocument: (params: ApiParams<{ documentId: string, claimKey: ClaimKey }>) => Promise<boolean>;
   deleteDocument: (params: ApiParams<{ documentId: string }>) => Promise<boolean>;
 }
 
@@ -43,6 +45,12 @@ class Controller extends ControllerBase<DocumentSummaryDto> implements IDocument
       "/claims/:projectId/:partnerId/:periodId/",
       (p, q) => ({ projectId: p.projectId, partnerId: p.partnerId, periodId: parseInt(p.periodId, 10), description: q.description }),
       p => this.getClaimDocuments(p)
+    );
+
+    this.deleteItem(
+        "/claims/:projectId/:partnerId/:periodId/:documentId",
+        (p) => ({ documentId: p.documentId, claimKey: { projectId: p.projectId, partnerId: p.partnerId, periodId: parseInt(p.periodId, 10)}}),
+        p => this.deleteClaimDocument(p)
     );
 
     this.getItems(
@@ -138,6 +146,14 @@ class Controller extends ControllerBase<DocumentSummaryDto> implements IDocument
     const { documentId, claimDetailKey } = params;
     const command = new DeleteClaimDetailDocumentCommand(documentId, claimDetailKey);
     await contextProvider.start(params).runCommand(command);
+    return true;
+  }
+
+  public async deleteClaimDocument(params: ApiParams<{ documentId: string, claimKey: ClaimKey }>): Promise<boolean> {
+    const { documentId, claimKey } = params;
+    const command = new DeleteClaimDocumentCommand(documentId, claimKey);
+    await contextProvider.start(params).runCommand(command);
+
     return true;
   }
 }
