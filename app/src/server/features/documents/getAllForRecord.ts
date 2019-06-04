@@ -9,6 +9,6 @@ export class GetDocumentsLinkedToRecordQuery extends QueryBase<DocumentSummaryDt
 
   protected async Run(context: IContext) {
     const linkedDocs = await context.repositories.documents.getDocumentsMetedataByLinkedRecord(this.recordId, this.filter);
-    return linkedDocs.map(mapToDocumentSummaryDto);
+    return linkedDocs.map(x => mapToDocumentSummaryDto(x));
   }
 }
