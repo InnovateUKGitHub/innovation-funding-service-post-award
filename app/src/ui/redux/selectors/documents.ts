@@ -2,7 +2,7 @@ import { dataStoreHelper, editorStoreHelper, IEditorSelector } from "./common";
 import { LoadingStatus, Pending } from "../../../shared/pending";
 import { DocumentUploadValidator } from "../../validators/documentUploadValidator";
 import { IEditorStore, RootState } from "../reducers";
-import { getCurrentClaim } from "./claims";
+import { getCurrentClaim, getLeadPartnerCurrentClaim } from "./claims";
 import { getKey } from "@framework/util";
 import { DocumentDescription } from "@framework/types";
 import { Results } from "../../validation/results";
@@ -62,8 +62,15 @@ export const getCurrentClaimIarDocumentsEditor = (state: RootState, projectId: s
     if (!claim) {
       return null;
     }
-    const editorPending = getClaimDocumentEditor({ projectId, partnerId, periodId: claim.periodId }, DocumentDescription.IAR).get(state);
+    const editorPending = getClaimDocumentEditor({ projectId, partnerId: claim.partnerId, periodId: claim.periodId }, DocumentDescription.IAR).get(state);
     return editorPending.data || null;
+  });
+};
+
+export const getCurrentClaimIarDocumentsEditorForLeadPartner = (state: RootState, projectId: string): Pending<IEditorStore<DocumentUploadDto, DocumentUploadValidator> | null> => {
+  return getLeadPartnerCurrentClaim(state, projectId).chain(claim => {
+    if (!claim) return new Pending(LoadingStatus.Done, null);
+    return getClaimDocumentEditor({ projectId, partnerId: claim.partnerId, periodId: claim.periodId }, DocumentDescription.IAR).get(state);
   });
 };
 
@@ -81,6 +88,15 @@ export const getCurrentClaimIarDocumentsDeleteEditor = (state: RootState, partne
   });
 };
 
+export const getCurrentClaimIarDocumentsDeleteEditorForLeadPartner = (state: RootState, projectId: string): Pending<IEditorStore<DocumentSummaryDto[], Results<DocumentSummaryDto[]>> | null> => {
+  return getCurrentClaimIarDocumentForLeadPartner(state, projectId).chain(document => {
+    if (!document) {
+      return new Pending(LoadingStatus.Done, null);
+    }
+    return getDocumentDeleteEditor(document).get(state);
+  });
+};
+
 export const getIarDocument = (state: RootState, partnerId: string, periodId: number): Pending<DocumentSummaryDto | null> => {
   return getClaimDocuments(partnerId, periodId).getPending(state).then(documents => {
     return (documents && documents.find(x => x.description === DocumentDescription.IAR)) || null;
@@ -88,10 +104,17 @@ export const getIarDocument = (state: RootState, partnerId: string, periodId: nu
 };
 
 export const getCurrentClaimIarDocument = (state: RootState, partnerId: string): Pending<DocumentSummaryDto | null> => {
-  return getCurrentClaim(state, partnerId).then(claim => {
+  return getCurrentClaim(state, partnerId).chain(claim => {
     if (!claim) {
-      return null;
+      return new Pending(LoadingStatus.Done, null);
     }
-    return getIarDocument(state, partnerId, claim.periodId).data || null;
+    return getIarDocument(state, claim.partnerId, claim.periodId);
+  });
+};
+
+export const getCurrentClaimIarDocumentForLeadPartner = (state: RootState, projectId: string): Pending<DocumentSummaryDto | null> => {
+  return getLeadPartnerCurrentClaim(state, projectId).chain(claim => {
+    if (!claim) return new Pending(LoadingStatus.Done, null);
+    return  getIarDocument(state, claim.partnerId, claim.periodId);
   });
 };
