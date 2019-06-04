@@ -1,8 +1,8 @@
-import { QueryBase } from "@server/features/common";
 import { Authorisation, IContext, ProjectRole } from "@framework/types";
-import { GetDocumentsLinkedToRecordQuery } from "@server/features/documents/getAllForRecord";
+import { ISalesforceDocument } from "@server/repositories";
+import { DocumentsQueryBase } from "./documentsQueryBase";
 
-export class GetProjectDocumentsQuery extends QueryBase<DocumentSummaryDto[]> {
+export class GetProjectDocumentsQuery extends DocumentsQueryBase {
   constructor(private readonly projectId: string) {
     super();
   }
@@ -12,6 +12,10 @@ export class GetProjectDocumentsQuery extends QueryBase<DocumentSummaryDto[]> {
   }
 
   protected async Run(context: IContext) {
-    return context.runQuery(new GetDocumentsLinkedToRecordQuery(this.projectId));
+    return super.getDocumentsForEntityId(context, this.projectId);
+  }
+
+  getUrl(document: ISalesforceDocument) {
+    return `/api/documents/projects/${this.projectId}/${document.Id}/content`;
   }
 }

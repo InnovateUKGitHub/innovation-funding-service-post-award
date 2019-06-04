@@ -15,6 +15,50 @@ describe("GetProjectDocumentsQuery", () => {
     expect(docs).toHaveLength(2);
   });
 
+  it("should not return all documents associated with other projects", async () => {
+    const context = new TestContext();
+    const project1 = context.testData.createProject();
+    const project2 = context.testData.createProject();
+
+    context.testData.createDocument(project1.Id, "report1", "pdf");
+    context.testData.createDocument(project1.Id, "report2", "pdf");
+
+    const query = new GetProjectDocumentsQuery(project2.Id);
+    const docs = await context.runQuery(query);
+    expect(docs).toHaveLength(0);
+  });
+
+  it("should return corect properties", async () => {
+    const context = new TestContext();
+    const project = context.testData.createProject();
+
+    const expectedFileName = "report1";
+    const expectedExtention = "pdf";
+    const expectedDescription = "Expected Description";
+    const document = context.testData.createDocument(project.Id, expectedFileName, expectedExtention);
+    document.Description = expectedDescription;
+
+    const query = new GetProjectDocumentsQuery(project.Id);
+    const result = await context.runQuery(query).then(x => x[0]);
+
+    expect(result.id).toBe(document.Id);
+    expect(result.fileName).toBe(`${expectedFileName}.${expectedExtention}`);
+    expect(result.fileSize).toBe(document.ContentSize);
+    expect(result.description).toBe(document.Description);
+  });
+
+  it("should return corect url", async () => {
+    const context = new TestContext();
+    const project = context.testData.createProject();
+
+    const document = context.testData.createDocument(project.Id, "report1", "pdf");
+
+    const query = new GetProjectDocumentsQuery(project.Id);
+    const result = await context.runQuery(query).then(x => x[0]);
+
+    expect(result.link).toBe(`/api/documents/projects/${project.Id}/${document.Id}/content`);
+  });
+
   test("accessControl - Project Monitoring officer passes", async () => {
     const context = new TestContext();
     const project = context.testData.createProject();

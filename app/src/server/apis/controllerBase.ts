@@ -49,7 +49,7 @@ export abstract class ControllerBaseWithSummary<TSummaryDto, TDto> {
     return this;
   }
 
-  protected getAttachment<TParams>(path: string, getParams: GetParams<TParams>, run: Run<TParams, DocumentDto>) {
+  protected getAttachment<TParams>(path: string, getParams: GetParams<TParams>, run: Run<TParams, DocumentDto|null>) {
     this.router.get(path, this.attachmentHandler(200, getParams, run));
     return this;
   }
@@ -110,7 +110,7 @@ export abstract class ControllerBaseWithSummary<TSummaryDto, TDto> {
     };
   }
 
-  private attachmentHandler<TParams>(successStatus: number, getParams: GetParams<TParams>, run: Run<TParams, DocumentDto>) {
+  private attachmentHandler<TParams>(successStatus: number, getParams: GetParams<TParams>, run: Run<TParams, DocumentDto|null>) {
     return async (req: Request, resp: Response) => {
       const p = Object.assign({ user: req.session!.user as ISessionUser }, getParams(req.params || {}, req.query || {}, req.body || {}));
       run(p)

@@ -11,7 +11,8 @@ import { DocumentDescription } from "@framework/constants";
 import { UploadClaimDocumentCommand } from "../features/documents/uploadClaimDocument";
 import { UploadProjectDocumentCommand } from "../features/documents/uploadProjectDocument";
 import { DeleteClaimDetailDocumentCommand } from "@server/features/documents/deleteClaimDetailDocument";
-import {DeleteClaimDocumentCommand} from "@server/features/documents/deleteClaimDocument";
+import { DeleteClaimDocumentCommand } from "@server/features/documents/deleteClaimDocument";
+import { GetProjectDocumentQuery } from "@server/features/documents/getProjectDocument";
 
 export interface IDocumentsApi {
   getClaimDocuments: (params: ApiParams<{projectId: string, partnerId: string, periodId: number, description: DocumentDescription}>) => Promise<DocumentSummaryDto[]>;
@@ -60,6 +61,12 @@ class Controller extends ControllerBase<DocumentSummaryDto> implements IDocument
     );
 
     this.getAttachment(
+      "/projects/:projectId/:documentId/content",
+      (p) => ({projectId: p.projectId, documentId: p.documentId}),
+      p => this.getProjectDocument(p)
+    );
+
+    this.getAttachment(
       "/:documentId/content",
       (p) => ({ documentId: p.documentId }),
         p => this.getDocument(p)
@@ -105,6 +112,11 @@ class Controller extends ControllerBase<DocumentSummaryDto> implements IDocument
   public async getProjectDocuments(params: ApiParams<{ projectId: string }>) {
     const { projectId } = params;
     const query = new GetProjectDocumentsQuery(projectId);
+    return contextProvider.start(params).runQuery(query);
+  }
+
+  public async getProjectDocument(params: ApiParams<{ projectId: string, documentId: string }>) {
+    const query = new GetProjectDocumentQuery(params.projectId, params.documentId);
     return contextProvider.start(params).runQuery(query);
   }
 
