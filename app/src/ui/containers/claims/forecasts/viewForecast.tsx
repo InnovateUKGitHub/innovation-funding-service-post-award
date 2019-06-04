@@ -46,6 +46,7 @@ class ViewForecastComponent extends ContainerBase<Params, PendingForecastData, C
         backLink={<ACC.BackLink route={backLink}>{backText}</ACC.BackLink>}
         pageTitle={<ACC.Projects.Title project={data.project} />}
         tabs={this.renderTabs(isMoPm, data)}
+        project={data.project}
       >
         {this.renderOverheadsRate(data.partner.overheadRate)}
         <ACC.Section title={partnerName} qa="partner-name">
