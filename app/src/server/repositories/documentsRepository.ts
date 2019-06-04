@@ -30,6 +30,7 @@ export interface IDocumentsRepository {
   isExistingDocument(documentId: string, recordId: string): Promise<boolean>;
   getDocumentContent(documentId: string): Promise<Stream>;
   getDocumentMetadata(documentId: string): Promise<ISalesforceDocument>;
+  getDocumentMetadataForEntityDocument(entityId: string, documentId: string): Promise<ISalesforceDocument|null>;
   getDocumentsMetadata(documentIds: string[], filter?: DocumentFilter): Promise<ISalesforceDocument[]>;
   getDocumentsMetedataByLinkedRecord(recordId: string, filter?: DocumentFilter): Promise<ISalesforceDocument[]>;
 }
@@ -73,6 +74,14 @@ export class DocumentsRepository implements IDocumentsRepository {
   public async isExistingDocument(documentId: string, recordId: string): Promise<boolean> {
     const documentLink = await this.contentDocumentLinkRepository.get(documentId, recordId);
     return !!documentLink;
+  }
+
+  public async getDocumentMetadataForEntityDocument(entityId: string, documentId: string) {
+    const linkedDoc = await this.contentDocumentLinkRepository.get(documentId, entityId);
+    if(linkedDoc) {
+      return this.contentVersionRepository.getDocument(documentId);
+    }
+    return null;
   }
 
   public async getDocumentsMetedataByLinkedRecord(recordId: string, filter?: DocumentFilter) {
