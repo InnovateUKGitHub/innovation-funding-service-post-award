@@ -7,6 +7,7 @@ import { ClaimDto, ClaimStatus } from "@framework/types";
 import { getKey } from "@framework/util/key";
 import { ClaimDetailsValidator } from "@ui/validators";
 import { range } from "@shared/range";
+import { getLeadPartner } from "@ui/redux/selectors/partners";
 
 export const claimsStore = "claims";
 export const findClaimsByPartner = (partnerId: string) => dataStoreHelper(claimsStore, `partnerId=${partnerId}`);
@@ -75,9 +76,17 @@ export const claimStatusChangesStore = "claimStatusChanges";
 export const getClaimStatusChanges = (projectId: string, partnerId: string, periodId: number) =>  dataStoreHelper(claimStatusChangesStore, getKey(projectId, partnerId, periodId));
 
 export const getCurrentClaim = (state: RootState, partnerId: string): Pending<ClaimDto | null> => {
-  return findClaimsByPartner(partnerId)
-    .getPending(state)
-    .then(claims => claims.find(x => !x.isApproved) || null);
+  const pending = findClaimsByPartner(partnerId).getPending(state);
+  return pending.then(claims => claims.find(x => !x.isApproved) || null);
+};
+
+export const getLeadPartnerCurrentClaim = (state: RootState, projectId: string) => {
+  return getLeadPartner(state, projectId).chain(partner => {
+    if (!partner) {
+      return new Pending(LoadingStatus.Done, null);
+    }
+    return getProjectCurrentClaims(state, projectId).then(claims => claims.find(x => x.partnerId === partner.id));
+  });
 };
 
 export const getProjectCurrentClaims = (state: RootState, projectId: string): Pending<ClaimDto[]> => {

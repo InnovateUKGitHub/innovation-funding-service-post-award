@@ -100,6 +100,16 @@ export function loadIarDocumentsForCurrentClaim(projectId: string, partnerId: st
   };
 }
 
+export function loadIarDocumentsForLeadPartnerCurrentClaim(projectId: string): Actions.AsyncThunk<void, Actions.DataLoadAction> {
+  return (dispatch, getState) => {
+    const claim = Selectors.getLeadPartnerCurrentClaim(getState(), projectId).data;
+    if (claim) {
+      return loadIarDocuments(projectId, claim.partnerId, claim.periodId)(dispatch, getState, null);
+    }
+    return Promise.resolve();
+  };
+}
+
 export function loadClaimsForProject(projectId: string) {
   return Actions.conditionalLoad(
     Selectors.findClaimsByProject(projectId),
