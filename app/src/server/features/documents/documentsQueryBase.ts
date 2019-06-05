@@ -4,14 +4,17 @@ import { mapToDocumentSummaryDto } from "./mapToDocumentSummaryDto";
 import { ISalesforceDocument } from "@server/repositories";
 
 export abstract class DocumentsQueryBase extends QueryBase<DocumentSummaryDto[]> {
-  constructor() {
+  constructor(protected readonly filter?: DocumentFilter) {
     super();
   }
 
-  protected async getDocumentsForEntityId(context: IContext, recordId: string, filter?: DocumentFilter) {
-    const linkedDocs = await context.repositories.documents.getDocumentsMetedataByLinkedRecord(recordId, filter);
+  protected async Run(context: IContext): Promise<DocumentSummaryDto[]> {
+    const recordId = await this.getRecordId(context);
+    if(!recordId) return [];
+    const linkedDocs = await context.repositories.documents.getDocumentsMetedataByLinkedRecord(recordId, this.filter);
     return linkedDocs.map(x => mapToDocumentSummaryDto(x, this.getUrl(x)));
   }
 
-  abstract getUrl(document: ISalesforceDocument): string;
+  protected abstract getRecordId(context: IContext): Promise<string|null>;
+  protected abstract getUrl(document: ISalesforceDocument): string;
 }

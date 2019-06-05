@@ -5,15 +5,17 @@ import { Authorisation, ProjectRole } from "@framework/types";
 describe("GetClaimDetailDocumentsQuery", () => {
   it("returns objects of correct shape", async () => {
     const context = new TestContext();
-    const claimDetail = context.testData.createClaimDetail();
+    const project = context.testData.createProject();
+    const partner = context.testData.createPartner(project);
+    const claimDetail = context.testData.createClaimDetail(project, undefined, partner);
     const document = context.testData.createDocument(claimDetail.Id, "cat", "jpg");
 
-    const query = new GetClaimDetailDocumentsQuery("",  claimDetail.Acc_ProjectParticipant__c, claimDetail.Acc_ProjectPeriodNumber__c, claimDetail.Acc_CostCategory__c);
+    const query = new GetClaimDetailDocumentsQuery(project.Id, claimDetail.Acc_ProjectParticipant__c, claimDetail.Acc_ProjectPeriodNumber__c, claimDetail.Acc_CostCategory__c);
     const result = await context.runQuery(query);
     const item = result[0];
 
     expect(item.fileName).toBe("cat.jpg");
-    expect(item.link).toBe(`/api/documents/${document.Id}/content`);
+    expect(item.link).toBe(`/api/documents/claim-details/${project.Id}/${partner.Id}/${claimDetail.Acc_ProjectPeriodNumber__c}/${claimDetail.Acc_CostCategory__c}/${document.Id}/content`);
     expect(item.id).toBe(document.ContentDocumentId);
   });
 

@@ -1,8 +1,9 @@
+import { QueryBase } from "@server/features/common";
 import { Authorisation, IContext, ProjectRole } from "@framework/types";
 import { DocumentQueryBase } from "./documentQueryBase";
 
-export class GetClaimDocumentQuery extends DocumentQueryBase {
-  constructor(private readonly claimKey: ClaimKey, documentId: string) {
+export class GetClaimDetailDocumentQuery extends DocumentQueryBase {
+  constructor(private readonly claimKey: ClaimDetailKey, documentId: string) {
     super(documentId);
   }
 
@@ -12,6 +13,6 @@ export class GetClaimDocumentQuery extends DocumentQueryBase {
   }
 
   protected getRecordId(context: IContext): Promise<string | null> {
-    return context.repositories.claims.get(this.claimKey.partnerId, this.claimKey.periodId).then(x => x.Id);
+    return context.repositories.claimDetails.get(this.claimKey).then(x => x && x.Id);
   }
 }
