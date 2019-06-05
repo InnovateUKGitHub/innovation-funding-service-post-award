@@ -1,8 +1,8 @@
-import { QueryBase } from "@server/features/common";
 import { Authorisation, IContext, ProjectRole } from "@framework/types";
-import { GetDocumentsLinkedToRecordQuery } from "@server/features/documents/getAllForRecord";
+import { DocumentsQueryBase } from "./documentsQueryBase";
+import { ISalesforceDocument } from "@server/repositories";
 
-export class GetClaimDetailDocumentsQuery extends QueryBase<DocumentSummaryDto[]> {
+export class GetClaimDetailDocumentsQuery extends DocumentsQueryBase {
   constructor(
     private readonly projectId: string,
     private readonly partnerId: string,
@@ -14,10 +14,10 @@ export class GetClaimDetailDocumentsQuery extends QueryBase<DocumentSummaryDto[]
 
   protected async accessControl(auth: Authorisation) {
     return auth.forProject(this.projectId).hasRole(ProjectRole.MonitoringOfficer)
-    || auth.forPartner(this.projectId, this.partnerId).hasAnyRoles(ProjectRole.FinancialContact, ProjectRole.ProjectManager);
+      || auth.forPartner(this.projectId, this.partnerId).hasAnyRoles(ProjectRole.FinancialContact, ProjectRole.ProjectManager);
   }
 
-  protected async Run(context: IContext) {
+  protected getRecordId(context: IContext) {
     const key = {
       projectId: this.projectId,
       partnerId: this.partnerId,
@@ -25,12 +25,10 @@ export class GetClaimDetailDocumentsQuery extends QueryBase<DocumentSummaryDto[]
       costCategoryId: this.costCategoryId
     };
 
-    const claimDetail = await context.repositories.claimDetails.get(key);
+    return context.repositories.claimDetails.get(key).then(x => x && x.Id);
+  }
 
-    if (!claimDetail) {
-      return [];
-    }
-
-    return context.runQuery(new GetDocumentsLinkedToRecordQuery(claimDetail.Id));
+  protected getUrl(document: ISalesforceDocument) {
+    return `/api/documents/claim-details/${this.projectId}/${this.partnerId}/${this.periodId}/${this.costCategoryId}/${document.Id}/content`;
   }
 }

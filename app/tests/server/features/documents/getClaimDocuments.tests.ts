@@ -85,6 +85,21 @@ describe("GetClaimDocumentQuery", () => {
       return { context, query, project, claim };
     };
 
+    test("accessControl - FC can not get documents for other partner claim", async () => {
+      const { context, query, project } = setupAccessControlContext();
+
+      const partner2 = context.testData.createPartner(project);
+
+      const auth = new Authorisation({
+        [project.Id]: {
+          projectRoles: ProjectRole.FinancialContact,
+          partnerRoles: { [ partner2.Id ]: ProjectRole.FinancialContact}
+        }
+      });
+
+      expect(await context.runAccessControl(auth, query)).toBe(false);
+    });
+
     test("accessControl - FC can get documents for their claim", async () => {
       const { context, query, project, claim } = setupAccessControlContext();
 
@@ -111,17 +126,17 @@ describe("GetClaimDocumentQuery", () => {
       expect(await context.runAccessControl(auth, query)).toBe(true);
     });
 
-    test("accessControl - no one else can get documents for their claim", async () => {
+    test("accessControl - PM can get documents for their claim", async () => {
       const { context, query, project, claim } = setupAccessControlContext();
 
       const auth = new Authorisation({
         [project.Id]: {
-          projectRoles: ProjectRole.ProjectManager | ProjectRole.FinancialContact,
+          projectRoles: ProjectRole.ProjectManager,
           partnerRoles: { [claim.Acc_ProjectParticipant__r.Id]: ProjectRole.ProjectManager}
         }
       });
 
-      expect(await context.runAccessControl(auth, query)).toBe(false);
+      expect(await context.runAccessControl(auth, query)).toBe(true);
     });
   });
 });
