@@ -8,7 +8,7 @@ export const healthCheck = async () => {
 
   const newRelicEventData = {
     eventType:"ACCHealthCheck",
-    env:`${process.env.OPENSHIFT_BUILD_NAMESPACE}`,
+    env:`${process.env.NEW_RELIC_APP_NAME}`,
     sfConnection:`${sfConnection}`
   };
 
@@ -17,7 +17,7 @@ export const healthCheck = async () => {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      "X-Insert-Key": `${process.env.NEW_RELIC_APP_NAME}`,
+      "X-Insert-Key": `${process.env.NEW_RELIC_API_KEY}`,
       "Content-Encoding": "gzip"
     },
     body: compressedData
