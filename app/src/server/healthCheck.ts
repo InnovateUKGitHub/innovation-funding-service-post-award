@@ -8,7 +8,7 @@ export const healthCheck = async () => {
 
   const newRelicEventData = {
     eventType:"ACCHealthCheck",
-    env:`${process.env.OPENSHIFT_BUILD_NAMESPACE}`,
+    env:`${process.env.NEW_RELIC_APP_NAME}`,
     sfConnection:`${sfConnection}`
   };
 
