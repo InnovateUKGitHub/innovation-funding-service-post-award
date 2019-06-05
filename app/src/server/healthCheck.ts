@@ -17,7 +17,7 @@ export const healthCheck = async () => {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      "X-Insert-Key": `${process.env.NEW_RELIC_API_KEY}`,
+      "X-Insert-Key": `${process.env.NEW_RELIC_APP_NAME}`,
       "Content-Encoding": "gzip"
     },
     body: compressedData
