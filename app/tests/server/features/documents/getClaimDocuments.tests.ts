@@ -50,6 +50,22 @@ describe("GetClaimDocumentQuery", () => {
     expect(docs[0].description).toBe(DocumentDescription.IAR);
   });
 
+  it("should return the document url", async () => {
+    const context = new TestContext();
+
+    const project = context.testData.createProject();
+    const partner = context.testData.createPartner(project);
+    const claim = context.testData.createClaim(partner);
+
+    const document = context.testData.createDocument(claim.Id);
+
+    const query = new GetClaimDocumentsQuery({projectId: project.Id, partnerId: partner.Id, periodId: claim.Acc_ProjectPeriodNumber__c });
+    const result = await context.runQuery(query).then(x => x[0]);
+
+    expect(result.id).toBe(document.Id);
+    expect(result.link).toBe(`/api/documents/claims/${project.Id}/${partner.Id}/${claim.Acc_ProjectPeriodNumber__c}/${document.Id}/content`);
+  });
+
   describe("access control", () => {
 
     const setupAccessControlContext = () => {
