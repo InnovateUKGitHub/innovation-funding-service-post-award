@@ -1,5 +1,3 @@
-import { IDataStore } from "../ui/redux";
-
 type MapPendings<T> = {
   [P in keyof T]: T[P] extends Pending<infer U> ? U : never;
 };
@@ -117,20 +115,6 @@ export class Pending<T> {
         const data = Pending.canResolve(pendings) ? pendings.map(x => x.data!) : null;
         const error = pendings.filter(x => !!x.error).map(x => x.error).shift();
         return new Pending<T[]>(state, data, error);
-    }
-
-    static create<T>(stored: IDataStore<T> | null): Pending<T> {
-        let status = LoadingStatus.Preload;
-        let data = null;
-        let error = null;
-
-        if (!!stored) {
-            status = stored.status;
-            data = stored.data;
-            error = stored.error;
-        }
-
-        return new Pending<T>(status, data, error);
     }
 
     static lowestState(states: LoadingStatus[]) {

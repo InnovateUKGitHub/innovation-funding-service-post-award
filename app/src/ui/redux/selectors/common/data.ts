@@ -1,5 +1,5 @@
-import {DataState, DataStateKeys, IDataStore, RootState} from "../../reducers";
-import { Pending } from "../../../../shared/pending";
+import {DataState, DataStateKeys, IDataStore, RootState} from "@ui/redux/reducers";
+import { LoadingStatus, Pending } from "@shared/pending";
 
 type Infer<T> = T extends IDataStore<infer U> ? U : never;
 
@@ -20,7 +20,10 @@ export const dataStoreHelper = <T extends DataStateKeys, K extends string, TDto 
   store,
   key,
   get: state => getDataStoreItem(state, store, key) as any as IDataStore<TDto>,
-  getPending: state => Pending.create(getDataStoreItem(state, store, key) as any as IDataStore<TDto>)
+  getPending: state => {
+    const data = getDataStoreItem(state, store, key) as any as IDataStore<TDto>;
+    return new Pending(data && data.status || LoadingStatus.Preload, data && data.data, data && data.error);
+  }
 });
 
 export const dataStoreHelperMap = <TOriginalDto, TResult>(dataSelector: IDataSelector<TOriginalDto>, map: (item: TOriginalDto) => TResult): IDataSelector<TResult> => ({

@@ -154,6 +154,34 @@ export function uploadClaimDocument(claimKey: ClaimKey, dto: DocumentUploadDto, 
   };
 }
 
+export function uploadLeadPartnerClaimDocument(claimKey: ClaimKey, dto: DocumentUploadDto, onComplete: () => void): uploadProjectDocumentActions {
+  return (dispatch, getState) => {
+    const state = getState();
+    const selector = Selectors.getClaimDocumentEditor(claimKey, dto.description);
+    const docsSelector = Selectors.getClaimDocuments(claimKey.partnerId, claimKey.periodId);
+    const claimsSelector = Selectors.findPartnersByProject(claimKey.projectId);
+    const validation = updateClaimDocumentEditor(claimKey, dto, true)(dispatch, getState, null);
+
+    if (!validation.isValid) {
+      scrollToTheTopSmoothly();
+      return Promise.resolve();
+    }
+
+    // Uploading an IAR Document when the claim status is Awaiting IAR will update the status so the claims need to be reloaded.
+    dispatch(Actions.handleEditorSubmit(selector.key, selector.store, dto, validation));
+    dispatch(Actions.dataLoadAction(claimsSelector.key, claimsSelector.store, LoadingStatus.Stale, undefined));
+    dispatch(Actions.dataLoadAction(docsSelector.key, docsSelector.store, LoadingStatus.Stale, undefined));
+
+    return ApiClient.documents.uploadClaimDocument({ claimKey, file: dto.file!, description: dto.description, user: state.user })
+      .then(() => {
+        dispatch(Actions.handleEditorSuccess(selector.key, selector.store));
+        onComplete();
+      }).catch((e: any) => {
+        dispatch(Actions.handleEditorError({ id: selector.key, store: selector.store, dto, validation, error: e }));
+      });
+  };
+}
+
 export function deleteClaimDetailDocument(claimDetailKey: ClaimDetailKey, dto: DocumentSummaryDto, onComplete: () => void): Actions.AsyncThunk<void> {
   return (dispatch, getState) => {
     const state = getState();
