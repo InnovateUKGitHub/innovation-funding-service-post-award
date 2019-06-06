@@ -1,8 +1,10 @@
 import { QueryBase } from "@server/features/common";
 import { Authorisation, IContext, ProjectRole } from "@framework/types";
 import { GetDocumentsLinkedToRecordQuery } from "@server/features/documents/getAllForRecord";
+import { DocumentsQueryBase } from "./documentsQueryBase";
+import { ISalesforceDocument } from "@server/repositories";
 
-export class GetClaimDocumentsQuery extends QueryBase<DocumentSummaryDto[]> {
+export class GetClaimDocumentsQuery extends DocumentsQueryBase {
   constructor(private readonly claimKey: ClaimKey, private readonly filter?: DocumentFilter) {
     super();
   }
@@ -14,6 +16,10 @@ export class GetClaimDocumentsQuery extends QueryBase<DocumentSummaryDto[]> {
 
   protected async Run(context: IContext) {
     const claim = await context.repositories.claims.get(this.claimKey.partnerId, this.claimKey.periodId);
-    return context.runQuery(new GetDocumentsLinkedToRecordQuery(claim.Id, this.filter));
+    return super.getDocumentsForEntityId(context, claim.Id, this.filter);
+  }
+
+  getUrl(document: ISalesforceDocument): string {
+    return `/api/documents/claims/${this.claimKey.projectId}/${this.claimKey.partnerId}/${this.claimKey.periodId}/${document.Id}/content`;
   }
 }
