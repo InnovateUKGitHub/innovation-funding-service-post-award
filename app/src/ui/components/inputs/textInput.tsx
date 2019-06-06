@@ -35,6 +35,7 @@ export class TextInput extends BaseInput<TextInputProps, InputState> {
         onKeyUp={this.props.handleKeyTyped ? (e) => this.handleChange(e, false) : undefined}
         maxLength={this.props.maxLength}
         aria-label={this.props.ariaLabel}
+        placeholder={this.props.placeholder}
       />
     );
   }

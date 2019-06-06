@@ -43,6 +43,11 @@ describe("TextInput", () => {
     expect(wrapper.find("input").prop("maxLength")).toEqual(20);
   });
 
+  it("Renders placeholder", () => {
+    const wrapper = mount(<TextInput name="testName" placeholder="randomText"/>);
+    expect(wrapper.childAt(0).prop("placeholder")).toBe("randomText");
+  });
+
   it("Should update state when props change", () => {
     const wrapper = mount(<TextInput name="testName" maxLength={20} value="" />);
     wrapper.setProps({value: "test"});

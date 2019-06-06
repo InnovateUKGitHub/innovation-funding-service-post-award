@@ -453,7 +453,14 @@ export class TestData {
     return newItem;
   }
 
-  public createDocument(entityId: string, title: string= "cat", fileType: string|null = "jpg", content: string = "", description?: string) {
+  public createDocument(
+    entityId: string,
+    title: string= "cat",
+    fileType: string|null = "jpg",
+    content: string = "",
+    description?: string,
+    update?: (item: Repositories.ISalesforceDocument) => void
+  ) {
     const id = "" + this.repositories.documents.Items.length + 1;
     const item: ISalesforceDocument = {
       Id: id,
@@ -472,6 +479,11 @@ export class TestData {
         Username: "aUserId"
       }
     };
+
+    if (!!update) {
+      update(item);
+    }
+
     this.repositories.documents.Items.push([entityId, item]);
     return item;
   }
