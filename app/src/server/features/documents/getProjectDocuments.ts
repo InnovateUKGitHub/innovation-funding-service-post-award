@@ -11,11 +11,11 @@ export class GetProjectDocumentsQuery extends DocumentsQueryBase {
     return context.config.features.projectDocuments && auth.forProject(this.projectId).hasRole(ProjectRole.MonitoringOfficer);
   }
 
-  protected async Run(context: IContext) {
-    return super.getDocumentsForEntityId(context, this.projectId);
+  protected getRecordId(context: IContext) {
+    return Promise.resolve(this.projectId);
   }
 
-  getUrl(document: ISalesforceDocument) {
+  protected getUrl(document: ISalesforceDocument) {
     return `/api/documents/projects/${this.projectId}/${document.Id}/content`;
   }
 }
