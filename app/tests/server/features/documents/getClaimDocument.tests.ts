@@ -98,7 +98,7 @@ describe("GetClaimDocumentQuery", () => {
       expect(await context.runAccessControl(auth, query)).toBe(true);
     });
 
-    it("should not allow PM of project to run", async () => {
+    it("should not allow PM of other partner to run", async () => {
       const context = new TestContext();
 
       const project = context.testData.createProject();
@@ -110,6 +110,20 @@ describe("GetClaimDocumentQuery", () => {
 
       const auth = new Authorisation({ [project.Id]: { projectRoles: ProjectRole.ProjectManager, partnerRoles: {} } });
       expect(await context.runAccessControl(auth, query)).toBe(false);
+    });
+
+    it("should not allow PM of partner to run", async () => {
+      const context = new TestContext();
+
+      const project = context.testData.createProject();
+      const partner = context.testData.createPartner(project);
+      const claim = context.testData.createClaim(partner, 1);
+      const document = context.testData.createDocument(claim.Id);
+
+      const query = new GetClaimDocumentQuery({projectId: project.Id, partnerId: partner.Id, periodId: claim.Acc_ProjectPeriodNumber__c}, document.Id);
+
+      const auth = new Authorisation({ [project.Id]: { projectRoles: ProjectRole.ProjectManager, partnerRoles: { [partner.Id] : ProjectRole.ProjectManager } } });
+      expect(await context.runAccessControl(auth, query)).toBe(true);
     });
 
     it("should allow FC of partner to run", async () => {
@@ -126,7 +140,7 @@ describe("GetClaimDocumentQuery", () => {
       expect(await context.runAccessControl(auth, query)).toBe(true);
     });
 
-    it("should allow FC of other partner to run", async () => {
+    it("should not allow FC of other partner to run", async () => {
       const context = new TestContext();
 
       const project = context.testData.createProject();
