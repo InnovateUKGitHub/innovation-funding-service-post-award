@@ -138,5 +138,20 @@ describe("GetClaimDocumentQuery", () => {
 
       expect(await context.runAccessControl(auth, query)).toBe(true);
     });
+
+    test("accessControl - PM can get documents for other partners claim", async () => {
+      const { context, query, project } = setupAccessControlContext();
+
+      const partner2 = context.testData.createPartner(project);
+
+      const auth = new Authorisation({
+        [project.Id]: {
+          projectRoles: ProjectRole.ProjectManager,
+          partnerRoles: { [partner2.Id]: ProjectRole.ProjectManager}
+        }
+      });
+
+      expect(await context.runAccessControl(auth, query)).toBe(true);
+    });
   });
 });

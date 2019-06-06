@@ -13,8 +13,8 @@ export class GetClaimDetailDocumentsQuery extends DocumentsQueryBase {
   }
 
   protected async accessControl(auth: Authorisation) {
-    return auth.forProject(this.projectId).hasRole(ProjectRole.MonitoringOfficer)
-      || auth.forPartner(this.projectId, this.partnerId).hasAnyRoles(ProjectRole.FinancialContact, ProjectRole.ProjectManager);
+    return auth.forProject(this.projectId).hasAnyRoles(ProjectRole.MonitoringOfficer, ProjectRole.ProjectManager)
+      || auth.forPartner(this.projectId, this.partnerId).hasAnyRoles(ProjectRole.FinancialContact);
   }
 
   protected getRecordId(context: IContext) {
