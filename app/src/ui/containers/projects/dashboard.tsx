@@ -100,9 +100,9 @@ class ProjectDashboardComponent extends ContainerBaseWithState<Props, Data, Call
     return (
       <ACC.Section qa="requiring-action-section" title="Overview">
         {/* tslint:disable-next-line */}
-        {this.renderStatisticsBox(0, "change requests you need to review", () => {}, false, "pcr")}
-        {this.renderStatisticsBox(claimsToReview, "claims you need to review", () => {this.setState({ showClaimsToReview: !this.state.showClaimsToReview });}, this.state.showClaimsToReview, "review")}
-        {this.renderStatisticsBox(pendingClaims, "unsubmitted or queried claims", () => {this.setState({showClaimsWithParticipant: !this.state.showClaimsWithParticipant});}, this.state.showClaimsWithParticipant, "queried")}
+        {this.renderStatisticsBox(0, "Project change requests to review.", () => {}, false, "pcr")}
+        {this.renderStatisticsBox(claimsToReview, "Partner claims to review.", () => {this.setState({ showClaimsToReview: !this.state.showClaimsToReview });}, this.state.showClaimsToReview, "review")}
+        {this.renderStatisticsBox(pendingClaims, "Partner claims pending.", () => {this.setState({showClaimsWithParticipant: !this.state.showClaimsWithParticipant});}, this.state.showClaimsWithParticipant, "queried")}
       </ACC.Section>
     );
   }
