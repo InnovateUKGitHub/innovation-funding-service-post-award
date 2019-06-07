@@ -86,7 +86,7 @@ describe("GetClaimDetailDocumentsQuery", () => {
       expect(await context.runAccessControl(auth, query)).toBe(true);
     });
 
-    test("accessControl - Project Manager can get documents for other participant", async () => {
+    test("accessControl - Project Manager can not get documents for other participant", async () => {
 
       const { context, query, project } = setupAccessControlContext();
 
@@ -98,7 +98,7 @@ describe("GetClaimDetailDocumentsQuery", () => {
         }
       });
 
-      expect(await context.runAccessControl(auth, query)).toBe(true);
+      expect(await context.runAccessControl(auth, query)).toBe(false);
     });
 
     test("accessControl - Monitoring Officer can access documents for their project", async () => {
