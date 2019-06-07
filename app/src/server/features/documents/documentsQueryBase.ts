@@ -2,6 +2,7 @@ import { IContext } from "@framework/types";
 import { QueryBase } from "../common";
 import { mapToDocumentSummaryDto } from "./mapToDocumentSummaryDto";
 import { ISalesforceDocument } from "@server/repositories";
+import { dateComparator } from "@framework/util";
 
 export abstract class DocumentsQueryBase extends QueryBase<DocumentSummaryDto[]> {
   constructor(protected readonly filter?: DocumentFilter) {
@@ -12,7 +13,10 @@ export abstract class DocumentsQueryBase extends QueryBase<DocumentSummaryDto[]>
     const recordId = await this.getRecordId(context);
     if(!recordId) return [];
     const linkedDocs = await context.repositories.documents.getDocumentsMetedataByLinkedRecord(recordId, this.filter);
-    return linkedDocs.map(x => mapToDocumentSummaryDto(x, this.getUrl(x)));
+    return linkedDocs
+      .map(x => mapToDocumentSummaryDto(x, this.getUrl(x)))
+      .sort((a,b) => dateComparator(a.dateCreated, b.dateCreated) * -1)
+      ;
   }
 
   protected abstract getRecordId(context: IContext): Promise<string|null>;

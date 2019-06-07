@@ -1,5 +1,5 @@
 import React from "react";
-import { ContainerBase, ReduxContainer } from "../containerBase";
+import { ContainerBaseWithState, ContainerProps, ReduxContainer } from "../containerBase";
 import { PartnerDto, ProjectDto, ProjectRole } from "@framework/dtos";
 import { Pending } from "../../../shared/pending";
 import * as ACC from "../../components";
@@ -35,7 +35,19 @@ interface Callbacks {
   uploadFile: (projectId: string, dto: DocumentUploadDto) => void;
 }
 
-class ProjectDocumentsComponent extends ContainerBase<ProjectDocumentPageParams, Data, Callbacks> {
+interface State {
+  filterBoxText: string | null;
+}
+
+class ProjectDocumentsComponent extends ContainerBaseWithState<ProjectDocumentPageParams, Data, Callbacks, State> {
+
+  constructor(props: ContainerProps<ProjectDocumentPageParams, Data, Callbacks>) {
+    super(props);
+    this.state = {
+      filterBoxText: null
+    };
+  }
+
   render() {
     const combined = Pending.combine({
       project: this.props.project,
@@ -86,6 +98,9 @@ class ProjectDocumentsComponent extends ContainerBase<ProjectDocumentPageParams,
             <UploadForm.Submit styling="Secondary">Upload</UploadForm.Submit>
           </UploadForm.Form>
         </ACC.Section>
+        <ACC.Section>
+          <ACC.Inputs.TextInput name={"filter-box-text"} onChange={x => this.setState({ filterBoxText: x})} placeholder="Search"/>
+        </ACC.Section>
         {this.renderDocumentsTable(documents)}
       </ACC.Page>
     );
@@ -96,13 +111,21 @@ class ProjectDocumentsComponent extends ContainerBase<ProjectDocumentPageParams,
   }
 
   renderDocumentsTable(documents: DocumentSummaryDto[]) {
-    if (documents.length === 0) {
+    const filterText = this.state.filterBoxText;
+    const documentsToDisplay = filterText !== null
+      ? documents.filter(document => new RegExp(filterText, "gi").test(document.fileName))
+      : documents;
+
+    if (documentsToDisplay.length === 0 && documents.length === 0) {
       return <ACC.Renderers.SimpleString qa={"noDocuments"}>No documents uploaded.</ACC.Renderers.SimpleString>;
+    }
+    if (documentsToDisplay.length === 0 && documents.length > 0) {
+      return <ACC.Renderers.SimpleString qa={"noDocuments"}>No documents match.</ACC.Renderers.SimpleString>;
     }
     const ProjectDocumentsTable = ACC.TypedTable<DocumentSummaryDto>();
 
     return (
-      <ProjectDocumentsTable.Table data={documents} qa="project-documents">
+      <ProjectDocumentsTable.Table data={documentsToDisplay} qa="project-documents">
           <ProjectDocumentsTable.Custom  header="File name" qa="fileName" value={x => this.renderDocumentName(x)}/>
           <ProjectDocumentsTable.ShortDate header="Date uploaded" qa="dateUploaded" value={x => x.dateCreated}/>
           <ProjectDocumentsTable.Custom header="File size" qa="fileSize" value={x => this.renderFileSize(x.fileSize)}/>
