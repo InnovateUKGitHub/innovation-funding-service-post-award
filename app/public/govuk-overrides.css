@@ -54,6 +54,14 @@
   font-weight: 100;
 }
 
+.govuk-table__cell div {
+  padding-bottom: 4px;
+}
+
+.govuk-table__cell div:last-child {
+  padding-bottom: 0px;
+}
+
 .acc-table__cell-top-border {
   border-top: black 3px solid;
 }
