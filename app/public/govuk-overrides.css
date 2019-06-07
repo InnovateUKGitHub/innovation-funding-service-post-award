@@ -172,3 +172,7 @@
     right: 200px;
   }
 }
+
+.acc-section:last-child {
+  margin-bottom: 0!important;
+}
