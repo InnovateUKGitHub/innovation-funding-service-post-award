@@ -1,6 +1,7 @@
 import { TestContext } from "../../testContextProvider";
 import { GetProjectDocumentsQuery } from "@server/features/documents/getProjectDocuments";
 import { Authorisation, ProjectRole } from "@framework/types";
+import { DateTime } from "luxon";
 
 describe("GetProjectDocumentsQuery", () => {
   it("should return all documents associated with the project", async () => {
@@ -45,6 +46,23 @@ describe("GetProjectDocumentsQuery", () => {
     expect(result.fileName).toBe(`${expectedFileName}.${expectedExtention}`);
     expect(result.fileSize).toBe(document.ContentSize);
     expect(result.description).toBe(document.Description);
+  });
+
+  it("should sort document in descending date order", async () => {
+    const context = new TestContext();
+    const project = context.testData.createProject();
+
+    const documents = context.testData.range(3, i => {
+      return context.testData.createDocument(project.Id, undefined, undefined, undefined, undefined, x => {
+        x.CreatedDate = DateTime.local().minus({ days: 1 }).plus({ hours: i }).toISO();
+      });
+    });
+
+    const query = new GetProjectDocumentsQuery(project.Id);
+    const result = await context.runQuery(query);
+
+    const expected = documents.map(x => x.Id).reverse();
+    expect(result.map(x => x.id)).toEqual(expected);
   });
 
   it("should return corect url", async () => {
