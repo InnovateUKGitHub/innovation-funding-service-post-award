@@ -79,6 +79,6 @@ export class PartnerRepository extends SalesforceRepositoryBase<ISalesforcePartn
   }
 
   getAll() {
-    return super.all();
+    return super.where("Acc_ProjectId__r.Acc_ProjectStatus__c != 'Not set' AND Acc_ProjectId__r.Acc_ProjectStatus__c != 'PCL Creation Complete'");
   }
 }
