@@ -5,7 +5,6 @@ import { GetClaimDetailDocumentsQuery } from "../features/documents/getClaimDeta
 import { GetDocumentQuery } from "../features/documents/getDocument";
 import { GetProjectDocumentsQuery } from "../features/documents/getProjectDocuments";
 import { UploadClaimDetailDocumentCommand } from "../features/documents/uploadClaimDetailDocument";
-import { DeleteDocumentCommand } from "../features/documents/deleteDocument";
 import { GetClaimDocumentsQuery } from "../features/documents/getClaimDocuments";
 import { GetClaimDocumentQuery } from "../features/documents/getClaimDocument";
 import { FileUpload } from "@framework/types";
@@ -25,7 +24,6 @@ export interface IDocumentsApi {
   uploadProjectDocument: (params: ApiParams<{ projectId: string, file: FileUpload | File, description?: string }>) => Promise<{ documentId: string }>;
   deleteClaimDetailDocument: (params: ApiParams<{ documentId: string, claimDetailKey: ClaimDetailKey }>) => Promise<boolean>;
   deleteClaimDocument: (params: ApiParams<{ documentId: string, claimKey: ClaimKey }>) => Promise<boolean>;
-  deleteDocument: (params: ApiParams<{ documentId: string }>) => Promise<boolean>;
 }
 
 class Controller extends ControllerBase<DocumentSummaryDto> implements IDocumentsApi {
@@ -103,12 +101,6 @@ class Controller extends ControllerBase<DocumentSummaryDto> implements IDocument
       (p, q, b, f) => ({ projectId: p.projectId, file: f }),
       p => this.uploadProjectDocument(p)
     );
-
-    this.deleteItem(
-      "/:documentId",
-      (p) => ({ documentId: p.documentId }),
-      p => this.deleteDocument(p)
-    );
   }
 
   public async getClaimDocuments(params: ApiParams<{ projectId: string, partnerId: string, periodId: number, description: string }>) {
@@ -170,13 +162,6 @@ class Controller extends ControllerBase<DocumentSummaryDto> implements IDocument
     const insertedID = await contextProvider.start(params).runCommand(command);
 
     return { documentId: insertedID };
-  }
-
-  public async deleteDocument(params: ApiParams<{ documentId: string }>): Promise<boolean> {
-    const { documentId } = params;
-    const command = new DeleteDocumentCommand(documentId);
-    await contextProvider.start(params).runCommand(command);
-    return true;
   }
 
   public async deleteClaimDetailDocument(params: ApiParams<{ documentId: string, claimDetailKey: ClaimDetailKey }>): Promise<boolean> {

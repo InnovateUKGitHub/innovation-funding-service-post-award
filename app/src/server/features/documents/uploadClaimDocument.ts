@@ -1,9 +1,9 @@
 import { BadRequestError, CommandBase, ValidationError } from "@server/features/common";
+import { DeleteClaimDocumentCommand } from "@server/features/documents/deleteClaimDocument";
 import { FileUploadValidator } from "@ui/validators/documentUploadValidator";
 import { Authorisation, ClaimDto, ClaimStatus, DocumentDescription, FileUpload, IContext, ProjectRole } from "@framework/types";
 import mapClaim from "@server/features/claims/mapClaim";
 import { GetClaimDocumentsQuery } from "@server/features/documents/getClaimDocuments";
-import { DeleteDocumentCommand } from "@server/features/documents/deleteDocument";
 import { UploadDocumentCommand } from "@server/features/documents/uploadDocument";
 import { GetClaim, UpdateClaimCommand } from "../claims";
 
@@ -25,7 +25,7 @@ export class UploadClaimDocumentCommand extends CommandBase<string> {
   private async preIarUpload(context: IContext, claim: ClaimDto) {
     this.validateIarUpload(claim);
     const iarDocuments = await context.runQuery(new GetClaimDocumentsQuery(this.claimKey, { description: DocumentDescription.IAR }));
-    await Promise.all(iarDocuments.map(doc => context.runCommand(new DeleteDocumentCommand(doc.id))));
+    await Promise.all(iarDocuments.map(doc => context.runCommand(new DeleteClaimDocumentCommand(doc.id, this.claimKey))));
   }
 
   private async postIarUpload(context: IContext, claim: ClaimDto) {
