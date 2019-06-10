@@ -18,10 +18,12 @@ import { Configuration } from "../features/common";
 import { MonitoringReportCreateFormHandler } from "./monitoringReportCreateFormHandler";
 import { MonitoringReportDeleteFormHandler } from "./monitoringReportDeleteFormHandler";
 import { MonitoringReportPrepareFormHandler } from "./monitoringReportPrepareFormHandler";
+import { AllClaimDashboardDocumentUploadHandler } from "./allClaimsDashboard/allClaimsDashboardDocumentUploadHandler";
 
 export const formRouter = express.Router();
 
 const handlers: IFormHandler[] = [
+  new AllClaimDashboardDocumentUploadHandler(),
   new ClaimForcastFormHandler(),
   new EditClaimLineItemsFormHandler(),
   new PrepareClaimFormHandler(),
@@ -50,6 +52,7 @@ handlers.forEach(x => {
     try {
       await x.handle(req, res, next);
     } catch (e) {
+      console.log(e);
       return serverRender(req, res, e);
     }
   });

@@ -12,7 +12,7 @@ import { IEditorStore } from "@ui/redux";
 import { DocumentUploadValidator } from "@ui/validators";
 import { Results } from "@ui/validation";
 
-interface Params {
+export interface AllClaimsDashboardParams {
   projectId: string;
 }
 
@@ -56,9 +56,9 @@ interface State {
   showIarMessage: boolean;
 }
 
-class Component extends ContainerBaseWithState<Params, Data, Callbacks, State> {
+class Component extends ContainerBaseWithState<AllClaimsDashboardParams, Data, Callbacks, State> {
 
-  constructor(props: ContainerProps<Params, Data, Callbacks>) {
+  constructor(props: ContainerProps<AllClaimsDashboardParams, Data, Callbacks>) {
     super(props);
 
     this.state = {
@@ -343,6 +343,7 @@ class Component extends ContainerBaseWithState<Params, Data, Callbacks, State> {
               value={(data) => data.file}
               update={(dto, file) => dto.file = file}
             />
+            <UploadForm.Hidden name="partnerId" value={() => claim.partnerId} />
             <UploadForm.Hidden name="periodId" value={() => claim.periodId} />
             <UploadForm.Hidden name="description" value={() => DocumentDescription.IAR} />
           </UploadForm.Fieldset>
@@ -353,7 +354,7 @@ class Component extends ContainerBaseWithState<Params, Data, Callbacks, State> {
   }
 }
 
-const definition = ReduxContainer.for<Params, Data, Callbacks>(Component);
+const definition = ReduxContainer.for<AllClaimsDashboardParams, Data, Callbacks>(Component);
 
 export const AllClaimsDashboard = definition.connect({
   withData: (state, props) => ({
