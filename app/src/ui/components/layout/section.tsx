@@ -28,17 +28,17 @@ const renderTitles = ({ title, subtitle, badge, subsection }: Props) => {
 
 const renderBadge = ({ badge }: Props) => !badge ? null : (<div className={classNames("govuk-grid-column-one-quarter", "govuk-!-margin-bottom-5")}>{badge}</div>);
 
-const renderContents = (children: React.ReactNode) => !children ? null : (<div className="govuk-grid-column-full govuk-!-margin-bottom-9">{children}</div>);
+const renderContents = (children: React.ReactNode) => !children ? null : (<div className="govuk-grid-column-full">{children}</div>);
 
 export const Section: React.SFC<Props> = (props) => {
-  const { title, subtitle, badge, id, children } = props;
+  const { title, subtitle, badge, id, children, qa } = props;
 
   if (!title && !subtitle && !badge && !children) {
     return null;
   }
 
   return (
-    <div id={id} className="govuk-grid-row" data-qa={props.qa}>
+    <div id={id} className={"govuk-grid-row govuk-!-margin-bottom-9 acc-section"} data-qa={qa}>
       {renderTitles(props)}
       {renderBadge(props)}
       {renderContents(children)}
