@@ -20,6 +20,7 @@ interface Data {
   partners: Pending<PartnerDto[]>;
   documents: Pending<DocumentSummaryDto[]>;
   editor: Pending<IEditorStore<DocumentUploadDto, DocumentUploadValidator>>;
+  isClient: boolean;
 }
 
 interface CombinedData {
@@ -59,18 +60,18 @@ class ProjectDocumentsComponent extends ContainerBaseWithState<ProjectDocumentPa
     return <ACC.PageLoader pending={combined} render={x => this.renderContents(x)} />;
   }
 
-  private onFileChange(projectId: string, dto: {file: File | null}) {
+  private onFileChange(projectId: string, dto: { file: File | null }) {
     this.props.clearMessage();
     this.props.validate(projectId, dto);
   }
 
-  private renderContents({project, partners, documents, editor}: CombinedData) {
-    const UploadForm = ACC.TypedForm<{file: File | null}>();
+  private renderContents({ project, partners, documents, editor }: CombinedData) {
+    const UploadForm = ACC.TypedForm<{ file: File | null }>();
 
     return (
       <ACC.Page
-        pageTitle={<ACC.Projects.Title project={project}/>}
-        tabs={<ACC.Projects.ProjectNavigation project={project} currentRoute={ProjectDocumentsRoute.routeName} partners={partners}/>}
+        pageTitle={<ACC.Projects.Title project={project} />}
+        tabs={<ACC.Projects.ProjectNavigation project={project} currentRoute={ProjectDocumentsRoute.routeName} partners={partners} />}
         validator={editor.validator}
         error={editor.error}
         messages={this.props.messages}
@@ -98,10 +99,7 @@ class ProjectDocumentsComponent extends ContainerBaseWithState<ProjectDocumentPa
             <UploadForm.Submit styling="Secondary">Upload</UploadForm.Submit>
           </UploadForm.Form>
         </ACC.Section>
-        <ACC.Section>
-          <ACC.Inputs.TextInput name={"filter-box-text"} onChange={x => this.setState({ filterBoxText: x})} placeholder="Search"/>
-        </ACC.Section>
-        {this.renderDocumentsTable(documents)}
+        {this.renderDocumentsSection(documents)}
       </ACC.Page>
     );
   }
@@ -110,27 +108,58 @@ class ProjectDocumentsComponent extends ContainerBaseWithState<ProjectDocumentPa
     return <a target={"_blank"} href={document.link}>{document.fileName}</a>;
   }
 
-  renderDocumentsTable(documents: DocumentSummaryDto[]) {
+  renderDocumentsSection(documents: DocumentSummaryDto[]) {
     const filterText = this.state.filterBoxText;
-    const documentsToDisplay = filterText !== null
-      ? documents.filter(document => new RegExp(filterText, "gi").test(document.fileName))
+    const documentsToDisplay = filterText
+      ? documents.filter(document => {
+        const exp = new RegExp(filterText, "gi");
+        return exp.test(document.fileName) || exp.test(document.owner);
+      })
       : documents;
 
-    if (documentsToDisplay.length === 0 && documents.length === 0) {
+    if (documents.length === 0) {
       return <ACC.Renderers.SimpleString qa={"noDocuments"}>No documents uploaded.</ACC.Renderers.SimpleString>;
     }
-    if (documentsToDisplay.length === 0 && documents.length > 0) {
-      return <ACC.Renderers.SimpleString qa={"noDocuments"}>No documents match.</ACC.Renderers.SimpleString>;
+
+    if (documentsToDisplay.length === 0) {
+      return (
+        <React.Fragment>
+          {this.renderDocumentsFilter()}
+          <ACC.Renderers.SimpleString qa={"noDocuments"}>No documents match.</ACC.Renderers.SimpleString>
+        </React.Fragment>
+      );
     }
-    const ProjectDocumentsTable = ACC.TypedTable<DocumentSummaryDto>();
 
     return (
+      <React.Fragment>
+        {this.renderDocumentsFilter()}
+        {this.renderDocumentsTable(documentsToDisplay)}
+      </React.Fragment>
+    );
+  }
+
+  private renderDocumentsFilter() {
+    if (!this.props.isClient) {
+      return null;
+    }
+    const FilterForm = ACC.TypedForm<{ filterBoxText: string | null }>();
+
+    return (
+      <FilterForm.Form data={this.state} onChange={x => this.setState(x)}>
+        <FilterForm.String name="filter-box-text" labelHidden={true} value={x => x.filterBoxText} update={(x, v) => x.filterBoxText = v} placeholder="Search documents" />
+      </FilterForm.Form>
+    );
+  }
+
+  private renderDocumentsTable(documentsToDisplay: DocumentSummaryDto[]) {
+    const ProjectDocumentsTable = ACC.TypedTable<DocumentSummaryDto>();
+    return (
       <ProjectDocumentsTable.Table data={documentsToDisplay} qa="project-documents">
-          <ProjectDocumentsTable.Custom  header="File name" qa="fileName" value={x => this.renderDocumentName(x)}/>
-          <ProjectDocumentsTable.ShortDate header="Date uploaded" qa="dateUploaded" value={x => x.dateCreated}/>
-          <ProjectDocumentsTable.Custom header="File size" qa="fileSize" value={x => this.renderFileSize(x.fileSize)}/>
-          <ProjectDocumentsTable.Email header="Uploaded by" qa="uploadedBy" value={x => x.owner}/>
-        </ProjectDocumentsTable.Table>
+        <ProjectDocumentsTable.Custom header="File name" qa="fileName" value={x => this.renderDocumentName(x)} />
+        <ProjectDocumentsTable.ShortDate header="Date uploaded" qa="dateUploaded" value={x => x.dateCreated} />
+        <ProjectDocumentsTable.Custom header="File size" qa="fileSize" value={x => this.renderFileSize(x.fileSize)} />
+        <ProjectDocumentsTable.Email header="Uploaded by" qa="uploadedBy" value={x => x.owner} />
+      </ProjectDocumentsTable.Table>
     );
   }
 
@@ -139,7 +168,7 @@ class ProjectDocumentsComponent extends ContainerBaseWithState<ProjectDocumentPa
       minimumFractionDigits: 2,
       maximumFractionDigits: 2
     };
-    const valToRender = new Intl.NumberFormat("en-GB", options).format(fileSize/bytesInMegabyte);
+    const valToRender = new Intl.NumberFormat("en-GB", options).format(fileSize / bytesInMegabyte);
     return <span>{valToRender}MB</span>;
   }
 }
@@ -152,6 +181,7 @@ const ProjectDocuments = container.connect({
     partners: Selectors.findPartnersByProject(props.projectId).getPending(state),
     documents: Selectors.getProjectDocuments(props.projectId).getPending(state),
     editor: Selectors.getProjectDocumentEditor(props.projectId).get(state),
+    isClient: state.isClient
   }),
   withCallbacks: (dispatch) => ({
     clearMessage: () => dispatch(Actions.removeMessages()),
