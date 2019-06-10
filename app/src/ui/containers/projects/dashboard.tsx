@@ -13,10 +13,9 @@ import { AllClaimsDashboardRoute, ClaimsDashboardRoute } from "../claims";
 import { StatisticsBox } from "../../components";
 
 interface Data {
-  data: Pending<{
-    projects: ProjectDto[];
-    partners: PartnerDto[];
-  }>;
+  projects: Pending<ProjectDto[]>;
+  partners: Pending<PartnerDto[]>;
+  features: IFeatureFlags;
 }
 
 interface Callbacks {
@@ -26,6 +25,7 @@ interface Props {
 }
 
 interface State {
+  showRequestsToReview: boolean;
   showClaimsToReview: boolean;
   showClaimsWithParticipant: boolean;
 }
@@ -36,6 +36,11 @@ interface ProjectData  {
   projectSection: Section;
 }
 
+interface CombinedData {
+  projects: ProjectDto[];
+  partners: PartnerDto[];
+}
+
 type Section = "archived" | "open" | "awaiting" | "upcoming";
 type Icon = "warning" | "edit" | "none";
 
@@ -44,16 +49,22 @@ class ProjectDashboardComponent extends ContainerBaseWithState<Props, Data, Call
   constructor(props: ContainerProps<Props, Data, Callbacks>) {
     super(props);
     this.state = {
+      showRequestsToReview: false,
       showClaimsToReview: false,
       showClaimsWithParticipant: false,
     };
   }
 
   render() {
-    return <ACC.PageLoader pending={this.props.data} render={x => this.renderContent(x.projects, x.partners)} />;
+    const combined = Pending.combine({
+      projects: this.props.projects,
+      partners: this.props.partners,
+    });
+
+    return <ACC.PageLoader pending={combined} render={x => this.renderContent(x)} />;
   }
 
-  private renderContent(projects: ProjectDto[], partners: PartnerDto[]) {
+  private renderContent({projects, partners}: CombinedData ) {
     return (
       <ACC.Page
         backLink={<ACC.BackLink route={HomeRoute.getLink({})}>Back to dashboard</ACC.BackLink>}
@@ -88,6 +99,7 @@ class ProjectDashboardComponent extends ContainerBaseWithState<Props, Data, Call
 
   private renderStatisticsSection(combinedData: ProjectData[]) {
     const projectsAsMO = combinedData.filter(x => x.project.roles & ProjectRole.MonitoringOfficer);
+    const requestsToReview = 0;
     const claimsToReview = projectsAsMO.reduce((accumulator, currentValue) => accumulator + currentValue.project.claimsToReview, 0);
     const pendingClaims = projectsAsMO.reduce((accumulator, currentValue) => accumulator + currentValue.project.claimsWithParticipant, 0);
 
@@ -100,17 +112,27 @@ class ProjectDashboardComponent extends ContainerBaseWithState<Props, Data, Call
     return (
       <ACC.Section qa="requiring-action-section" title="Overview">
         {/* tslint:disable-next-line */}
-        {this.renderStatisticsBox(0, "Project change requests to review.", () => {}, false, "pcr")}
-        {this.renderStatisticsBox(claimsToReview, "Partner claims to review.", () => {this.setState({ showClaimsToReview: !this.state.showClaimsToReview });}, this.state.showClaimsToReview, "review")}
-        {this.renderStatisticsBox(pendingClaims, "Partner claims pending.", () => {this.setState({showClaimsWithParticipant: !this.state.showClaimsWithParticipant});}, this.state.showClaimsWithParticipant, "queried")}
+        <div className="govuk-grid-column-full govuk-statistics-section">
+          {this.renderStatisticsBox(requestsToReview, "Project change requests to review.", () => this.setState({showRequestsToReview: !this.state.showRequestsToReview}), this.state.showRequestsToReview, "pcr")}
+          {this.renderStatisticsBox(claimsToReview, "Partner claims to review.", () => this.setState({ showClaimsToReview: !this.state.showClaimsToReview }), this.state.showClaimsToReview, "review")}
+          {this.renderStatisticsBox(pendingClaims, "Partner claims pending.", () => this.setState({showClaimsWithParticipant: !this.state.showClaimsWithParticipant}), this.state.showClaimsWithParticipant, "queried")}
+        </div>
       </ACC.Section>
     );
   }
 
-  private renderStatisticsBox(numberOfClaims: number, claimAction: string, filterFunction: () => void, buttonIsPressed: boolean, qa?: string) {
+  private renderStatisticsBox(numberOfClaims: number, label: string, filterFunction: () => void, buttonIsPressed: boolean, qa?: string) {
+    if (this.props.features.projectFiltering && numberOfClaims > 0) {
+      return (
+        <button className={classNames("govuk-statistics-section__button", {"govuk-statistics-section__button--unselected": !buttonIsPressed})} aria-pressed={buttonIsPressed} onClick={filterFunction}>
+          <StatisticsBox number={numberOfClaims} label={label} qa={qa}/>
+        </button>
+      );
+    }
+
     return(
-      <div className={classNames("govuk-grid-column-one-third", "govuk-!-padding-left-0")} role={"button"} aria-pressed={buttonIsPressed} onClick={filterFunction}>
-        <StatisticsBox numberOfClaims={numberOfClaims} claimAction={claimAction} qa={qa}/>
+      <div>
+        <StatisticsBox number={numberOfClaims} label={label} qa={qa}/>
       </div>
     );
   }
@@ -313,10 +335,9 @@ const definition = ReduxContainer.for<Props, Data, Callbacks>(ProjectDashboardCo
 
 export const ProjectDashboard = definition.connect({
   withData: (state, props) => ({
-    data: Pending.combine({
-      projects: Selectors.getProjects().getPending(state),
-      partners: Selectors.getAllPartners().getPending(state),
-    }),
+    projects: Selectors.getProjects().getPending(state),
+    partners: Selectors.getAllPartners().getPending(state),
+    features: state.config.features
   }),
   withCallbacks: () => ({})
 });

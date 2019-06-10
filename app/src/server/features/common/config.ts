@@ -71,7 +71,8 @@ const certificates = {
 
 const features: IFeatureFlags = {
     monitoringReports: process.env.FEATURE_MONITORING_REPORTS === "true",
-    projectDocuments: process.env.FEATURE_PROJECT_DOCUMENTS === "true"
+    projectDocuments: process.env.FEATURE_PROJECT_DOCUMENTS === "true",
+    projectFiltering: process.env.FEATURE_PROJECT_FILTERING === "true",
 };
 
 const logLevel = parseLogLevel(process.env.LOG_LEVEL! || process.env.LOGLEVEL!);
