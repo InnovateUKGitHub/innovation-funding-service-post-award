@@ -113,6 +113,7 @@ interface ExternalFieldProps<TDto, TValue> {
     value: (data: TDto) => TValue | null | undefined;
     update: (data: TDto, value: TValue | null) => void;
     validation?: Result;
+    placeholder?: string;
 }
 
 // encapsulate logic for hint it generation
@@ -163,7 +164,7 @@ const StringField = <T extends {}>(props: ExternalFieldProps<T, string> & Intern
   const TypedFieldComponent = FieldComponent as { new(): FieldComponent<T, string> };
   return (
     <TypedFieldComponent
-      field={(data => <ACC.Inputs.TextInput name={props.name} value={props.value(data)} onChange={(val) => handleChange(props, val)} />)}
+      field={(data => <ACC.Inputs.TextInput name={props.name} value={props.value(data)} onChange={(val) => handleChange(props, val)} placeholder={props.placeholder} />)}
       {...props}
     />
   );
