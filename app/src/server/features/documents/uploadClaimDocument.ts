@@ -4,8 +4,7 @@ import { FileUploadValidator } from "@ui/validators/documentUploadValidator";
 import { Authorisation, ClaimDto, ClaimStatus, DocumentDescription, FileUpload, IContext, ProjectRole } from "@framework/types";
 import mapClaim from "@server/features/claims/mapClaim";
 import { GetClaimDocumentsQuery } from "@server/features/documents/getClaimDocuments";
-import { UploadDocumentCommand } from "@server/features/documents/uploadDocument";
-import { GetClaim, UpdateClaimCommand } from "../claims";
+import { UpdateClaimCommand } from "../claims";
 
 export class UploadClaimDocumentCommand extends CommandBase<string> {
   constructor(private readonly claimKey: ClaimKey, private readonly file: FileUpload) {
@@ -51,7 +50,7 @@ export class UploadClaimDocumentCommand extends CommandBase<string> {
 
     if (this.file.description === DocumentDescription.IAR) await this.preIarUpload(context, claim);
 
-    const documentId = await context.runCommand(new UploadDocumentCommand(this.file, claim.id));
+    const documentId = await context.repositories.documents.insertDocument(this.file, claim.id);
 
     if (this.file.description === DocumentDescription.IAR) await this.postIarUpload(context, claim);
 
