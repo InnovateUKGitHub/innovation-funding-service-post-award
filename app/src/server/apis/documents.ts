@@ -2,7 +2,6 @@ import { ApiParams, ControllerBase } from "./controllerBase";
 import contextProvider from "../features/common/contextProvider";
 import { GetClaimDetailDocumentQuery } from "../features/documents/getClaimDetailDocument";
 import { GetClaimDetailDocumentsQuery } from "../features/documents/getClaimDetailDocuments";
-import { GetDocumentQuery } from "../features/documents/getDocument";
 import { GetProjectDocumentsQuery } from "../features/documents/getProjectDocuments";
 import { UploadClaimDetailDocumentCommand } from "../features/documents/uploadClaimDetailDocument";
 import { GetClaimDocumentsQuery } from "../features/documents/getClaimDocuments";
@@ -78,12 +77,6 @@ class Controller extends ControllerBase<DocumentSummaryDto> implements IDocument
       p => this.getProjectDocument(p)
     );
 
-    this.getAttachment(
-      "/:documentId/content",
-      (p) => ({ documentId: p.documentId }),
-      p => this.getDocument(p)
-    );
-
     this.postAttachment(
       "/claim-details/:projectId/:partnerId/:periodId/:costCategoryId",
       (p, q, b, f) => ({ claimDetailKey: { projectId: p.projectId, partnerId: p.partnerId, periodId: parseInt(p.periodId, 10), costCategoryId: p.costCategoryId, file: f }, file: f }),
@@ -134,12 +127,6 @@ class Controller extends ControllerBase<DocumentSummaryDto> implements IDocument
 
   public async getProjectDocument(params: ApiParams<{ projectId: string, documentId: string }>) {
     const query = new GetProjectDocumentQuery(params.projectId, params.documentId);
-    return contextProvider.start(params).runQuery(query);
-  }
-
-  public async getDocument(params: ApiParams<{ documentId: string }>): Promise<DocumentDto> {
-    const { documentId } = params;
-    const query = new GetDocumentQuery(documentId);
     return contextProvider.start(params).runQuery(query);
   }
 
