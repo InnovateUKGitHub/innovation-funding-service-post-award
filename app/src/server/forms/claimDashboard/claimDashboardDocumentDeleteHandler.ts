@@ -1,22 +1,17 @@
-import { FormHandlerBase, IFormBody, IFormButton } from "../formHandlerBase";
-import {
-  ClaimDashboardPageParams,
-  ClaimsDashboardRoute
-} from "../../../ui/containers";
-import {
-  getDocumentDeleteEditor
-} from "../../../ui/redux/selectors";
-import { Results } from "../../../ui/validation/results";
-import { GetDocumentsSummaryQuery } from "../../features/documents/getDocumentsSummary";
-import { BadRequestError } from "../../features/common/appError";
-import { ILinkInfo } from "@framework/types/ILinkInfo";
-import { IContext } from "@framework/types/IContext";
+import { IContext, ILinkInfo } from "@framework/types";
 import { DeleteClaimDocumentCommand } from "@server/features/documents/deleteClaimDocument";
+import { GetClaimDocumentsQuery } from "@server/features/documents/getClaimDocuments";
+import { ClaimDashboardPageParams, ClaimsDashboardRoute } from "@ui/containers";
+import { BadRequestError } from "@server/features/common";
+import { getDocumentDeleteEditor } from "@ui/redux/selectors";
+import { Results } from "@ui/validation";
 
-interface DocumentWithPeriodId {
-  documentSummary: DocumentSummaryDto;
+import { FormHandlerBase, IFormBody, IFormButton } from "../formHandlerBase";
+
+interface DocumentWithPeriodId extends DocumentSummaryDto {
   periodId: number;
 }
+
 export class ClaimDashboardDocumentDeleteHandler extends FormHandlerBase<ClaimDashboardPageParams, DocumentWithPeriodId> {
 
   constructor() {
@@ -24,25 +19,27 @@ export class ClaimDashboardDocumentDeleteHandler extends FormHandlerBase<ClaimDa
   }
 
   protected async getDto(context: IContext, params: ClaimDashboardPageParams, button: IFormButton, body: IFormBody) {
+    // todo: should this come from a query rather than the form?
     const periodId = parseInt(body.periodId, 10);
-    const dto = await context.runQuery(new GetDocumentsSummaryQuery([button.value]));
-    if (!dto || !dto[0]) throw new BadRequestError("Document does not exist");
-    return {
-      documentSummary: dto[0],
-      periodId
-    };
+
+    const query = new GetClaimDocumentsQuery({ projectId: params.projectId, partnerId: params.partnerId, periodId });
+    const documentSummary = await context.runQuery(query).then(x => x && x.find(y => y.id === button.value));
+
+    if (!documentSummary) throw new BadRequestError("Document does not exist");
+
+    return {...documentSummary, periodId};
   }
 
   protected createValidationResult(params: ClaimDashboardPageParams, dto: DocumentWithPeriodId) {
-    return new Results(dto.documentSummary, false);
+    return new Results(dto, false);
   }
 
   protected getStoreInfo(params: ClaimDashboardPageParams, dto: DocumentWithPeriodId): { key: string; store: string; } {
-    return getDocumentDeleteEditor(dto.documentSummary);
+    return getDocumentDeleteEditor(dto);
   }
 
   protected async run(context: IContext, params: ClaimDashboardPageParams, button: IFormButton, dto: DocumentWithPeriodId): Promise<ILinkInfo> {
-    const command = new DeleteClaimDocumentCommand(dto.documentSummary.id, {projectId: params.projectId, partnerId: params.partnerId, periodId: dto.periodId}  );
+    const command = new DeleteClaimDocumentCommand(dto.id, { projectId: params.projectId, partnerId: params.partnerId, periodId: dto.periodId });
     await context.runCommand(command);
     return ClaimsDashboardRoute.getLink(params);
   }

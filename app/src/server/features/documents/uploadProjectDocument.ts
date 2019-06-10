@@ -1,7 +1,6 @@
 import { Authorisation, FileUpload, IContext, ProjectRole } from "@framework/types";
 import { CommandBase, ValidationError } from "@server/features/common";
 import { FileUploadValidator } from "@ui/validators/documentUploadValidator";
-import { UploadDocumentCommand } from "@server/features/documents/uploadDocument";
 
 export class UploadProjectDocumentCommand extends CommandBase<string> {
   constructor(
@@ -22,6 +21,6 @@ export class UploadProjectDocumentCommand extends CommandBase<string> {
       throw new ValidationError(result);
     }
 
-    return context.runCommand(new UploadDocumentCommand(this.file, this.projectId));
+    return context.repositories.documents.insertDocument(this.file, this.projectId);
   }
 }
