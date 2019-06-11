@@ -13,12 +13,12 @@ export class UploadClaimDetailDocumentCommand extends CommandBase<string> {
 
   protected async Run(context: IContext) {
     const claimDetail = await context.repositories.claimDetails.get(this.claimDetailKey);
-    const result = new FileUploadValidator(this.file, true);
 
     if (!claimDetail) {
       throw new BadRequestError("No Claim Detail");
     }
 
+    const result = new FileUploadValidator(this.file, true);
     if (!result.isValid) {
       throw new ValidationError(result);
     }
