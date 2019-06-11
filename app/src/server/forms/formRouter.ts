@@ -19,11 +19,13 @@ import { MonitoringReportCreateFormHandler } from "./monitoringReportCreateFormH
 import { MonitoringReportDeleteFormHandler } from "./monitoringReportDeleteFormHandler";
 import { MonitoringReportPrepareFormHandler } from "./monitoringReportPrepareFormHandler";
 import { AllClaimDashboardDocumentUploadHandler } from "./allClaimsDashboard/allClaimsDashboardDocumentUploadHandler";
+import { AllClaimDashboardDocumentDeleteHandler } from "./allClaimsDashboard/allClaimsDashboardDocumentDeleteHandler";
 
 export const formRouter = express.Router();
 
 const handlers: IFormHandler[] = [
   new AllClaimDashboardDocumentUploadHandler(),
+  new AllClaimDashboardDocumentDeleteHandler(),
   new ClaimForcastFormHandler(),
   new EditClaimLineItemsFormHandler(),
   new PrepareClaimFormHandler(),
