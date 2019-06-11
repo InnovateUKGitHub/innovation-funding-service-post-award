@@ -155,6 +155,29 @@
   text-decoration: underline;
 }
 
+.govuk-statistics-section {
+  display: flex;
+  justify-content: space-between;
+}
+
+.govuk-statistics-section__button {
+  width: 32%;
+  background: #f8f8f8;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+}
+
+.govuk-statistics-section__button--unselected {
+  background: none;
+  border: 1px solid #6f777b;
+}
+
+.govuk-statistics-section__button:active,
+.govuk-statistics-section__button--selected:active {
+  border: 5px solid orange;
+}
+
 @media (min-width: 1024px) {
   .sticky-col {
     background: #ffffff;
