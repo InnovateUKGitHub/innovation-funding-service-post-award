@@ -21,6 +21,7 @@ export class TestConfig implements IConfig {
   public features = {
     monitoringReports: true,
     projectDocuments: true,
+    projectFiltering: true
   };
 
   public logLevel = LogLevel.DEBUG;
