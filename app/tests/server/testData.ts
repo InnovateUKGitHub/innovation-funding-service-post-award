@@ -318,7 +318,7 @@ export class TestData {
       Acc_ApprovedDate__c: null,
       Acc_ClaimStatus__c: ClaimStatus.DRAFT,
       ClaimStatusLabel: ClaimStatus.DRAFT,
-      Acc_LineItemDescription__c: null,
+      Acc_ReasonForDifference__c: null,
       Acc_ProjectPeriodCost__c: 100,
       Acc_PaidDate__c: null,
       Acc_TotalCostsApproved__c: 100,
