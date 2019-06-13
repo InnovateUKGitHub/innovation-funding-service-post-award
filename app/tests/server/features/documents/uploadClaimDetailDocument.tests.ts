@@ -14,7 +14,7 @@ describe("UploadClaimDetailDocumentCommand", () => {
 
     const claimDetailKey = {
       projectId: project.Id,
-      partnerId: claimDetail.Acc_ProjectParticipant__c,
+      partnerId: claimDetail.Acc_ProjectParticipant__r.Id,
       periodId: claimDetail.Acc_ProjectPeriodNumber__c,
       costCategoryId: claimDetail.Acc_CostCategory__c,
     };
@@ -41,7 +41,7 @@ describe("UploadClaimDetailDocumentCommand", () => {
 
     const claimDetailKey = {
       projectId: project.Id,
-      partnerId: claimDetail.Acc_ProjectParticipant__c,
+      partnerId: claimDetail.Acc_ProjectParticipant__r.Id,
       periodId: claimDetail.Acc_ProjectPeriodNumber__c,
       costCategoryId: claimDetail.Acc_CostCategory__c,
     };
@@ -85,7 +85,7 @@ describe("UploadClaimDetailDocumentCommand", () => {
 
       const claimDetailKey = {
         projectId: project.Id,
-        partnerId: claimDetail.Acc_ProjectParticipant__c,
+        partnerId: claimDetail.Acc_ProjectParticipant__r.Id,
         periodId: claimDetail.Acc_ProjectPeriodNumber__c,
         costCategoryId: claimDetail.Acc_CostCategory__c,
       };

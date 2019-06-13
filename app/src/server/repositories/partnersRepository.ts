@@ -15,7 +15,10 @@ export interface ISalesforcePartner {
   Acc_ParticipantSize__c: string;
   Acc_ProjectRole__c: string;
   ProjectRoleName: string;
-  Acc_ProjectId__c: string;
+  Acc_ProjectId__r: {
+    Id: string,
+    Acc_CompetitionType__c: string,
+  };
   Acc_TotalParticipantGrant__c: number;
   Acc_TotalParticipantCosts__c: number;
   Acc_TotalParticipantCostsPaid__c: number;
@@ -55,7 +58,8 @@ export class PartnerRepository extends SalesforceRepositoryBase<ISalesforcePartn
     "Acc_Award_Rate__c",
     "Acc_ProjectRole__c",
     "toLabel(Acc_ProjectRole__c) ProjectRoleName",
-    "Acc_ProjectId__c",
+    "Acc_ProjectId__r.Id",
+    "Acc_ProjectId__r.Acc_CompetitionType__c",
     "Acc_TotalPaidCosts__c",
     "Acc_TotalFutureForecastsforParticipant__c",
     "Acc_ForecastLastModifiedDate__c",
@@ -67,7 +71,7 @@ export class PartnerRepository extends SalesforceRepositoryBase<ISalesforcePartn
   ];
 
   getAllByProjectId(projectId: string): Promise<ISalesforcePartner[]> {
-    return super.where({ Acc_ProjectId__c: projectId });
+    return super.where(`Acc_ProjectId__c = '${projectId}'`);
   }
 
   getById(partnerId: string): Promise<ISalesforcePartner> {

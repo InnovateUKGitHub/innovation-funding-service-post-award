@@ -69,7 +69,7 @@ export class GetAllProjectRolesForUser extends QueryBase<Authorisation> {
     }, {});
 
     return partners.reduce((roles, partner) => {
-      roles[partner.Acc_ProjectId__c].partnerRoles[partner.Id] = allRoles;
+      roles[partner.Acc_ProjectId__r.Id].partnerRoles[partner.Id] = allRoles;
       return roles;
     }, projectRoles);
   }
