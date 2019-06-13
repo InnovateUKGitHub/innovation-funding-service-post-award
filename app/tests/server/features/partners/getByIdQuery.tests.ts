@@ -24,6 +24,7 @@ describe("getAllForProjectQuery", () => {
       x.Acc_ClaimsUnderQuery__c = 20;
       x.Acc_ClaimsOverdue__c = 30;
       x.Acc_TrackingClaims__c = "Claim Due";
+      x.Acc_OverheadRate__c = 75;
     });
 
     const projectManger = context.testData.createProjectManager(project, partner);
@@ -42,6 +43,7 @@ describe("getAllForProjectQuery", () => {
       projectRoleName: "Lead",
       projectId: "Project1",
       organisationType: "Industrial",
+      competitionType: "SBRI",
       totalPaidCosts: 25555,
       totalParticipantGrant: 125000,
       totalParticipantCostsClaimed: 17474,
@@ -55,7 +57,7 @@ describe("getAllForProjectQuery", () => {
       claimsOverdue: 30,
       status: PartnerClaimStatus.ClaimDue,
       statusName: "Claim Due",
-      overheadRate: null
+      overheadRate: 75
     };
 
     expect(result).toEqual(expected);

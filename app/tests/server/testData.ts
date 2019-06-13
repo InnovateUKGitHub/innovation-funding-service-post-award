@@ -22,7 +22,7 @@ export class TestData {
       Id: `CostCat${seed}`,
       Acc_CostCategoryName__c: `Cost Category ${seed}`,
       Acc_DisplayOrder__c: seed,
-      Acc_CompetitionType__c: "Sector",
+      Acc_CompetitionType__c: "SBRI",
       Acc_OrganisationType__c: "Industrial",
       Acc_CostCategoryDescription__c: `Cost Category description ${seed}`,
       Acc_HintText__c: `Cost Category hint ${seed}`,
@@ -88,7 +88,10 @@ export class TestData {
       },
       Acc_ParticipantType__c: "Accedemic",
       Acc_ParticipantSize__c: "Large",
-      Acc_ProjectId__c: project.Id,
+      Acc_ProjectId__r:{
+        Id: project.Id,
+        Acc_CompetitionType__c: project.Acc_CompetitionType__c,
+      },
       Acc_TotalParticipantGrant__c: 125000,
       Acc_TotalParticipantCosts__c: 17474,
       Acc_TotalParticipantCostsPaid__c: 50000,
@@ -96,7 +99,8 @@ export class TestData {
       Acc_Cap_Limit__c: 50,
       Acc_Award_Rate__c: 50,
       Acc_ForecastLastModifiedDate__c: "",
-      Acc_OrganisationType__c: "Industrial"
+      Acc_OrganisationType__c: "Industrial",
+      Acc_OverheadRate__c: 20
 
     } as Repositories.ISalesforcePartner;
 
@@ -345,8 +349,8 @@ export class TestData {
       Id: `${partner.Id}_${periodId}_${costCategory.Id}`,
       Acc_CostCategory__c: costCategory.Id,
       Acc_ProjectPeriodNumber__c: periodId,
-      Acc_ProjectParticipant__c: partner.Id,
       Acc_ProjectParticipant__r: {
+        Id: partner.Id,
         Acc_ProjectId__c: project.Id
       },
       Acc_PeriodCostCategoryTotal__c: 1000,
@@ -363,41 +367,34 @@ export class TestData {
     return newItem;
   }
 
-  public createClaimLineItem(options: {
-    persist: boolean
+  public createClaimLineItem(
     costCategory?: Repositories.ISalesforceCostCategory,
     partner?: Repositories.ISalesforcePartner,
     periodId?: number,
     update?: (item: Partial<Repositories.ISalesforceClaimLineItem>) => void
-  } = {
-      persist: true,
-      periodId: 1
-    }): Partial<Repositories.ISalesforceClaimLineItem> {
-
-    let { costCategory, partner } = options;
-    const { update, periodId, persist } = options;
+    ): Repositories.ISalesforceClaimLineItem {
 
     const seed = this.repositories.claimLineItems.Items.length + 1;
     costCategory = costCategory || this.createCostCategory();
     partner = partner || this.createPartner();
+    periodId = periodId || 1;
 
-    const newItem: Partial<Repositories.ISalesforceClaimLineItem> = {
+    const newItem: Repositories.ISalesforceClaimLineItem = {
+      Id: `ClaimLineItem-${seed}`,
       Acc_CostCategory__c: costCategory.Id,
       Acc_ProjectPeriodNumber__c: periodId,
       Acc_ProjectParticipant__c: partner.Id,
       Acc_LineItemCost__c: 200,
-      Acc_LineItemDescription__c: "We hired a person to do a thing"
+      Acc_LineItemDescription__c: "We hired a person to do a thing",
+      RecordTypeId: "Claims Line Item"
     };
 
-    if (persist) {
-      newItem.Id = `ClaimLineItem-${seed}`;
-    }
     if (update) {
       update(newItem);
     }
-    if (persist) {
-      this.repositories.claimLineItems.Items.push(newItem as Repositories.ISalesforceClaimLineItem);
-    }
+
+    this.repositories.claimLineItems.Items.push(newItem);
+
     return newItem;
   }
 
@@ -444,7 +441,7 @@ export class TestData {
       Acc_ProjectPeriodEndDate__c: "2018-03-04",
     };
 
-    if (!!update) {
+    if (update) {
       update(newItem);
     }
 

@@ -30,6 +30,7 @@ export const ClaimReviewTable: React.FunctionComponent<Props> = (props) => {
       name: "Total",
       id: "",
       isCalculated: true,
+      hasRelated: false,
       competitionType: "Unknown",
       organisationType: "Unknown",
       description: "",

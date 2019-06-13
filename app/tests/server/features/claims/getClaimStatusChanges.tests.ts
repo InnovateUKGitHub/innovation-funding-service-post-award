@@ -12,7 +12,7 @@ describe("GetClaimStatusChanges", () => {
     const partner = context.testData.createPartner();
     const claim = context.testData.createClaim(partner);
 
-    const query = new GetClaimStatusChangesQuery(partner.Acc_ProjectId__c, partner.Id, claim.Acc_ProjectPeriodNumber__c);
+    const query = new GetClaimStatusChangesQuery(partner.Acc_ProjectId__r.Id, partner.Id, claim.Acc_ProjectPeriodNumber__c);
 
     const result = await context.runQuery(query);
 
@@ -30,7 +30,7 @@ describe("GetClaimStatusChanges", () => {
 
     const existing = context.testData.createClaimStatusChange(claim);
 
-    const query = new GetClaimStatusChangesQuery(partner.Acc_ProjectId__c, partner.Id, claim.Acc_ProjectPeriodNumber__c);
+    const query = new GetClaimStatusChangesQuery(partner.Acc_ProjectId__r.Id, partner.Id, claim.Acc_ProjectPeriodNumber__c);
 
     const result = await context.runQuery(query);
 
@@ -54,7 +54,7 @@ describe("GetClaimStatusChanges", () => {
 
     const existing = context.testData.range(10, i => context.testData.createClaimStatusChange(claim, { CreatedDate: DateTime.fromString("2000-01-01", "yyyy-MM-dd").plus({ days: i * 10 }).toISO() }));
 
-    const query = new GetClaimStatusChangesQuery(partner.Acc_ProjectId__c, partner.Id, claim.Acc_ProjectPeriodNumber__c);
+    const query = new GetClaimStatusChangesQuery(partner.Acc_ProjectId__r.Id, partner.Id, claim.Acc_ProjectPeriodNumber__c);
 
     const result = await context.runQuery(query);
 
@@ -76,7 +76,7 @@ describe("GetClaimStatusChanges", () => {
     const claim2Existing = context.testData.range(10, i => context.testData.createClaimStatusChange(claim2));
     context.testData.range(10, i => context.testData.createClaimStatusChange(claim3));
 
-    const query = new GetClaimStatusChangesQuery(partner.Acc_ProjectId__c, partner.Id, 2);
+    const query = new GetClaimStatusChangesQuery(partner.Acc_ProjectId__r.Id, partner.Id, 2);
 
     const result = await context.runQuery(query);
 
@@ -99,7 +99,7 @@ describe("GetClaimStatusChanges", () => {
 
     context.testData.createCurrentUserAsMonitoringOfficer(project);
 
-    const query = new GetClaimStatusChangesQuery(partner.Acc_ProjectId__c, partner.Id, 1);
+    const query = new GetClaimStatusChangesQuery(partner.Acc_ProjectId__r.Id, partner.Id, 1);
 
     const result = await context.runQuery(query);
 
@@ -121,7 +121,7 @@ describe("GetClaimStatusChanges", () => {
 
     context.testData.createCurrentUserAsProjectManager(project, partner);
 
-    const query = new GetClaimStatusChangesQuery(partner.Acc_ProjectId__c, partner.Id, 1);
+    const query = new GetClaimStatusChangesQuery(partner.Acc_ProjectId__r.Id, partner.Id, 1);
 
     const result = await context.runQuery(query);
 
@@ -167,7 +167,7 @@ describe("GetClaimStatusChanges", () => {
 
     context.testData.createCurrentUserAsFinanceContact(project, partner);
 
-    const query = new GetClaimStatusChangesQuery(partner.Acc_ProjectId__c, partner.Id, 1);
+    const query = new GetClaimStatusChangesQuery(partner.Acc_ProjectId__r.Id, partner.Id, 1);
 
     const result = await context.runQuery(query);
 
