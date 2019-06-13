@@ -32,4 +32,19 @@ describe("GetCostCategoriesQuery", () => {
 
     });
 
+    it("Returns Labour and Overheads correctly", async () => {
+        const context = new TestContext();
+        const names = ["Other 1", "Labour", "Other 2", "Overheads"];
+        names.forEach((name) => context.testData.createCostCategory(x => {
+            x.Acc_CostCategoryName__c = name;
+        }));
+
+        const query = new GetCostCategoriesQuery();
+        const result = await context.runQuery(query);
+
+        expect(result.map(x => x.isCalculated)).toEqual([false, false, false, true]);
+        expect(result.map(x => x.hasRelated)).toEqual([false, true, false, false]);
+
+    });
+
 });

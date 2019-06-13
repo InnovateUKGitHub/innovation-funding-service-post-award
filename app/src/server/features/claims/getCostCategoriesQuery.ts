@@ -16,8 +16,9 @@ export class GetCostCategoriesQuery extends QueryBase<CostCategoryDto[]> {
       name: x.Acc_CostCategoryName__c,
       competitionType: x.Acc_CompetitionType__c,
       organisationType: x.Acc_OrganisationType__c,
-      // TODO get from SF
+      // TODO get from SF -- this is nasty but no solution provided as yet from salesforce
       isCalculated: x.Acc_CostCategoryName__c === "Overheads",
+      hasRelated: x.Acc_CostCategoryName__c === "Labour",
       description: x.Acc_CostCategoryDescription__c,
       hintText: x.Acc_HintText__c
     }));

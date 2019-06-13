@@ -3,7 +3,8 @@ import { Authorisation, IContext, ProjectRole } from "@framework/types";
 import { ClaimDetailsValidator } from "@ui/validators";
 import { isNumber } from "@framework/util";
 import { Updatable } from "@server/repositories/salesforceRepositoryBase";
-import { ISalesforceClaimDetails } from "@server/repositories";
+import { ISalesforceClaimDetails, ISalesforceClaimLineItem } from "@server/repositories";
+import { GetCostCategoriesQuery } from "../claims";
 
 export class SaveClaimDetails extends CommandBase<boolean> {
   constructor(
@@ -30,6 +31,7 @@ export class SaveClaimDetails extends CommandBase<boolean> {
 
     return Promise.all([
       this.saveLineItems(context, this.claimDetails.lineItems),
+      this.saveAssociated(context, this.claimDetails.lineItems),
       this.saveClaimDetail(context, this.claimDetails)
     ]).then(() => true);
   }
@@ -46,18 +48,17 @@ export class SaveClaimDetails extends CommandBase<boolean> {
   private async saveLineItems(context: IContext, lineItems: ClaimLineItemDto[]) {
     const existing = (await context.repositories.claimLineItems.getAllForCategory(this.partnerId, this.costCategoryId, this.periodId) || []);
     const filtered     = lineItems.filter(x => !!x.description || isNumber(x.value));
+
     const updateDtos   = filtered.filter(item => !!item.id);
     const insertDtos   = filtered.filter(item => !item.id);
-    const persistedIds = updateDtos.map(x => x.id);
-    const deleteItems = existing.filter(x => persistedIds.indexOf(x.Id) === -1).map(x => x.Id);
 
-    const updateItems = updateDtos.map(x => ({
+    const updateItems: Updatable<ISalesforceClaimLineItem>[] = updateDtos.map(x => ({
       Id: x.id,
       Acc_LineItemDescription__c: x.description,
       Acc_LineItemCost__c: x.value
     }));
 
-    const insertItems = insertDtos.map(x => ({
+    const insertItems: Partial<ISalesforceClaimLineItem>[] = insertDtos.map(x => ({
       Acc_LineItemDescription__c: x.description,
       Acc_LineItemCost__c: x.value,
       Acc_ProjectParticipant__c: x.partnerId,
@@ -65,11 +66,58 @@ export class SaveClaimDetails extends CommandBase<boolean> {
       Acc_CostCategory__c: x.costCategoryId
     }));
 
+    const deleteItems = existing.filter(x => !updateDtos.some(y => x.Id === y.id));
+
     return Promise.all<boolean, string | string[], void>([
       context.repositories.claimLineItems.update(updateItems),
       context.repositories.claimLineItems.insert(insertItems),
-      context.repositories.claimLineItems.delete(deleteItems)
+      context.repositories.claimLineItems.delete(deleteItems.map(x => x.Id))
     ]).then(() => true);
+  }
+
+  private async saveAssociated(context: IContext, lineItems: ClaimLineItemDto[]) {
+    const costCategories = await context.runQuery(new GetCostCategoriesQuery());
+    const hasRelated = costCategories.find(x => x.id === this.costCategoryId)!.hasRelated;
+    if(!hasRelated) {
+      return;
+    }
+
+    const partner = await context.repositories.partners.getById(this.partnerId);
+
+    const relatedCost = lineItems.reduce((a,b) => a + b.value, 0) * partner.Acc_OverheadRate__c / 100;
+
+    const relatedCostCategory = costCategories.find(x => x.organisationType === partner.Acc_OrganisationType__c && x.competitionType === partner.Acc_ProjectId__r.Acc_CompetitionType__c && x.isCalculated);
+
+    if(!relatedCostCategory) {
+      return;
+    }
+
+    const existing = (await context.repositories.claimLineItems.getAllForCategory(this.partnerId, relatedCostCategory.id, this.periodId));
+
+    const description = `${relatedCostCategory.name} line item`;
+
+    if(existing.length > 0) {
+      await context.repositories.claimLineItems.update([{
+        Id: existing[0].Id,
+        Acc_LineItemDescription__c: description,
+        Acc_LineItemCost__c: relatedCost
+      }]);
+    }
+    else {
+      await context.repositories.claimLineItems.insert([{
+        Acc_LineItemDescription__c: description,
+        Acc_LineItemCost__c: relatedCost,
+        Acc_ProjectParticipant__c: this.partnerId,
+        Acc_ProjectPeriodNumber__c: this.periodId,
+        Acc_CostCategory__c: relatedCostCategory.id
+        }]);
+    }
+
+    if(existing.length > 1) {
+      const idsToDelete = existing.filter((x,i) => i > 0).map(x => x.Id);
+      await context.repositories.claimLineItems.delete(idsToDelete);
+    }
+
   }
 
   private async saveClaimDetail(context: IContext, claimDetail: ClaimDetailsDto) {

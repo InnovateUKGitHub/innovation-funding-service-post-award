@@ -3,11 +3,11 @@ import SalesforceRepositoryBase, { Updatable } from "./salesforceRepositoryBase"
 export interface ISalesforceClaimDetails {
   Id: string;
   Acc_ProjectParticipant__r: {
+    Id: string;
     Acc_ProjectId__c: string;
   };
   Acc_CostCategory__c: string;
   Acc_PeriodCostCategoryTotal__c: number;
-  Acc_ProjectParticipant__c: string;
   Acc_ProjectPeriodNumber__c: number;
   Acc_ProjectPeriodStartDate__c: string;
   Acc_ProjectPeriodEndDate__c: string;

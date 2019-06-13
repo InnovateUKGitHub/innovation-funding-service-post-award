@@ -32,9 +32,7 @@ export class UploadClaimDocumentCommand extends CommandBase<string> {
 
     claim.status = ClaimStatus.AWAITING_IUK_APPROVAL;
 
-    const projectId = await context.repositories.partners.getById(this.claimKey.partnerId).then(x => x.Acc_ProjectId__c);
-
-    const command = new  UpdateClaimCommand(projectId, claim);
+    const command = new  UpdateClaimCommand(this.claimKey.projectId, claim);
 
     await context.runCommand(command);
   }
