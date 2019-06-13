@@ -6,7 +6,7 @@ export interface ISalesforceMonitoringReportStatusChange {
   Acc_PreviousMonitoringReportStatus__c: string;
   Acc_NewMonitoringReportStatus__c: string;
   CreatedBy: {
-    Name: string;
+    CommunityNickname: string;
   };
   CreatedDate: string;
 }
@@ -17,14 +17,13 @@ export interface IMonitoringReportStatusChangeRepository {
 }
 
 export class MonitoringReportStatusChangeRepository extends SalesforceRepositoryBase<ISalesforceMonitoringReportStatusChange> implements IMonitoringReportStatusChangeRepository {
-
   protected readonly salesforceObjectName = "Acc_StatusChange__c";
   protected readonly salesforceFieldNames = [
     "Id",
     "Acc_MonitoringReport__c",
     "Acc_PreviousMonitoringReportStatus__c",
     "Acc_NewMonitoringReportStatus__c",
-    "CreatedBy.Name",
+    "CreatedBy.CommunityNickname",
     "CreatedDate"
   ];
 

@@ -8,7 +8,7 @@ export interface ISalesforceClaimStatusChange {
   Acc_ExternalComment__c: string | null;
   Acc_ParticipantVisibility__c: boolean;
   CreatedBy: {
-    Name: string;
+    CommunityNickname: string;
   };
   CreatedDate: string;
 }
@@ -30,7 +30,7 @@ export class ClaimStatusChangeRepository
     "Acc_NewClaimStatus__c",
     "Acc_ExternalComment__c",
     "Acc_ParticipantVisibility__c",
-    "CreatedBy.Name",
+    "CreatedBy.CommunityNickname",
     "CreatedDate",
   ];
 
