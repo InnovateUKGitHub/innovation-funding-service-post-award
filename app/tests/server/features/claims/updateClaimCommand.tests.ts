@@ -142,7 +142,7 @@ describe("UpdateClaimCommand", () => {
 
   it("when message updated expect item updated", async () => {
     const context = new TestContext();
-    const claim = context.testData.createClaim(null!, null!, x => x.Acc_LineItemDescription__c = "Original Message");
+    const claim = context.testData.createClaim(null!, null!, x => x.Acc_ReasonForDifference__c = "Original Message");
     const dto = mapClaim(context)(claim);
     const project = context.testData.createProject();
 
@@ -151,7 +151,7 @@ describe("UpdateClaimCommand", () => {
     const command = new UpdateClaimCommand(project.Id, dto);
     await context.runCommand(command);
 
-    expect(claim.Acc_LineItemDescription__c).toBe("A New Message");
+    expect(claim.Acc_ReasonForDifference__c).toBe("A New Message");
   });
 
   it("when message is over 1000 characters expect expection", async () => {
@@ -269,7 +269,7 @@ describe("UpdateClaimCommand", () => {
     const partner = context.testData.createPartner();
     const claim = context.testData.createClaim(partner, 2);
     claim.Acc_ClaimStatus__c = ClaimStatus.SUBMITTED;
-    claim.Acc_LineItemDescription__c = "Orignal Comments";
+    claim.Acc_ReasonForDifference__c = "Orignal Comments";
 
     const dto = mapClaim(context)(claim);
 
@@ -281,7 +281,7 @@ describe("UpdateClaimCommand", () => {
 
     expect(context.repositories.claimStatusChanges.Items.length).toBe(1);
     expect(context.repositories.claimStatusChanges.Items[0].Acc_ExternalComment__c).toBe("Orignal Comments");
-    expect(claim.Acc_LineItemDescription__c).toBe("");
+    expect(claim.Acc_ReasonForDifference__c).toBe("");
 
   });
 
