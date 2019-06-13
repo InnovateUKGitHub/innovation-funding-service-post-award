@@ -278,7 +278,7 @@ export class TestData {
       Acc_MonitoringReport__c: header.Id,
       Acc_PreviousMonitoringReportStatus__c: "Draft",
       Acc_NewMonitoringReportStatus__c: "Submitted to Monitoring Officer",
-      CreatedBy: { Name: partner.Acc_AccountId__r.Name },
+      CreatedBy: { CommunityNickname: partner.Acc_AccountId__r.Name },
       CreatedDate: DateTime.local().toISO()
     };
 
@@ -411,7 +411,7 @@ export class TestData {
       Acc_ExternalComment__c: "Comments",
       Acc_ParticipantVisibility__c: true,
       CreatedBy: {
-        Name: "CreatedBy_User"
+        CommunityNickname: "CreatedBy_User"
       },
       CreatedDate: new Date().toISOString()
     };
