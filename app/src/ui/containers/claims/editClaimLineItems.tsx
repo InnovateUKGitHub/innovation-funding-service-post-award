@@ -116,6 +116,9 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
         <LineItemForm.Fieldset>
           {this.renderDocuments(documents)}
         </LineItemForm.Fieldset>
+        <LineItemForm.Fieldset>
+          <LineItemForm.Button name="upload" onClick={() => this.props.saveAndUpload(this.props.projectId, this.props.partnerId, this.props.costCategoryId, this.props.periodId, editor.data)}>Upload and remove documents</LineItemForm.Button>
+        </LineItemForm.Fieldset>
         <LineItemForm.Fieldset heading={"Additional information"} qa="additional-info-form" headingQa="additional-info-heading">
           <LineItemForm.MultilineString
             label="additional-info"
@@ -126,9 +129,6 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
             update={(dto, v) => dto.comments = v}
             qa="info-text-area"
           />
-        </LineItemForm.Fieldset>
-        <LineItemForm.Fieldset>
-          <LineItemForm.Button name="upload" onClick={() => this.props.saveAndUpload(this.props.projectId, this.props.partnerId, this.props.costCategoryId, this.props.periodId, editor.data)}>Upload and remove documents</LineItemForm.Button>
         </LineItemForm.Fieldset>
         <LineItemForm.Submit>Save and return to claim</LineItemForm.Submit>
       </LineItemForm.Form>
@@ -165,6 +165,9 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
         <LineItemForm.Fieldset>
           {this.renderDocuments(documents)}
         </LineItemForm.Fieldset>
+        <LineItemForm.Fieldset>
+          <LineItemForm.Button name="upload" onClick={() => this.props.saveAndUpload(this.props.projectId, this.props.partnerId, this.props.costCategoryId, this.props.periodId, editor.data)}>Upload and remove documents</LineItemForm.Button>
+        </LineItemForm.Fieldset>
         <LineItemForm.Fieldset heading={"Additional information"} qa="additional-info-form" headingQa="additional-info-heading">
           <LineItemForm.MultilineString
             label="additional-info"
@@ -175,9 +178,6 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
             update={(data, v) => data.comments = v}
             qa="info-text-area"
           />
-        </LineItemForm.Fieldset>
-        <LineItemForm.Fieldset>
-          <LineItemForm.Button name="upload" onClick={() => this.props.saveAndUpload(this.props.projectId, this.props.partnerId, this.props.costCategoryId, this.props.periodId, editor.data)}>Upload and remove documents</LineItemForm.Button>
         </LineItemForm.Fieldset>
         <LineItemForm.Submit>Save and return to claim</LineItemForm.Submit>
       </LineItemForm.Form>
