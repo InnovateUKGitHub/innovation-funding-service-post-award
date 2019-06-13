@@ -10,7 +10,7 @@ describe("GetClaimDetailDocumentsQuery", () => {
     const claimDetail = context.testData.createClaimDetail(project, undefined, partner);
     const document = context.testData.createDocument(claimDetail.Id, "cat", "jpg");
 
-    const query = new GetClaimDetailDocumentsQuery(project.Id, claimDetail.Acc_ProjectParticipant__c, claimDetail.Acc_ProjectPeriodNumber__c, claimDetail.Acc_CostCategory__c);
+    const query = new GetClaimDetailDocumentsQuery(project.Id, claimDetail.Acc_ProjectParticipant__r.Id, claimDetail.Acc_ProjectPeriodNumber__c, claimDetail.Acc_CostCategory__c);
     const result = await context.runQuery(query);
     const item = result[0];
 
@@ -39,7 +39,7 @@ describe("GetClaimDetailDocumentsQuery", () => {
       const claimDetail = context.testData.createClaimDetail(project, costCat, partner );
 
       context.testData.createDocument(claimDetail.Id, "cat", "jpg");
-      const query = new GetClaimDetailDocumentsQuery(project.Id,  claimDetail.Acc_ProjectParticipant__c, claimDetail.Acc_ProjectPeriodNumber__c, claimDetail.Acc_CostCategory__c);
+      const query = new GetClaimDetailDocumentsQuery(project.Id,  claimDetail.Acc_ProjectParticipant__r.Id, claimDetail.Acc_ProjectPeriodNumber__c, claimDetail.Acc_CostCategory__c);
 
       return { context, query, project, claimDto };
     };

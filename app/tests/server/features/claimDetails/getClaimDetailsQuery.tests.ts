@@ -32,7 +32,7 @@ describe("GetClaimDetailsQuery", () => {
       x.Acc_ReasonForDifference__c = expectedComments;
     });
 
-    const query = new GetClaimDetailsQuery(partner.Acc_ProjectId__c, exectedParticipantId, expectedPeriod, exectedCostCategoryId);
+    const query = new GetClaimDetailsQuery(partner.Acc_ProjectId__r.Id, exectedParticipantId, expectedPeriod, exectedCostCategoryId);
     const result = await context.runQuery(query);
 
     expect(result).not.toBeNull();
@@ -77,12 +77,7 @@ describe("GetClaimDetailsQuery", () => {
       const costCat = testData.createCostCategory();
       testData.createClaimDetail(project, costCat, partner);
 
-      testData.createClaimLineItem({
-        persist: true,
-        costCategory: costCat,
-        partner,
-        periodId: period
-      });
+      testData.createClaimLineItem(costCat, partner, period);
 
       const query = new GetClaimDetailsQuery(project.Id, partner.Id, period, costCat.Id);
       const result = await context.runQuery(query);
@@ -104,19 +99,9 @@ describe("GetClaimDetailsQuery", () => {
       const costCat = testData.createCostCategory();
       testData.createClaimDetail(project, costCat, partner);
 
-      testData.createClaimLineItem({
-        persist: true,
-        costCategory: costCat,
-        partner,
-        periodId: period
-      });
+      testData.createClaimLineItem(costCat, partner, period);
 
-      testData.createClaimLineItem({
-        persist: true,
-        costCategory: costCat,
-        partner,
-        periodId: period
-      });
+      testData.createClaimLineItem(costCat, partner, period);
 
       testData.createClaim(partner, period);
       testData.createProfileTotalPeriod(partner, period);
@@ -149,7 +134,7 @@ describe("GetClaimDetailsQuery", () => {
       const project = context.testData.createProject();
       const partner = context.testData.createPartner();
       const command = new GetClaimDetailsQuery(project.Id, partner.Id, 1, "");
-      const auth    = new Authorisation({
+      const auth = new Authorisation({
         [project.Id]: {
           projectRoles: ProjectRole.MonitoringOfficer,
           partnerRoles: {}
@@ -164,7 +149,7 @@ describe("GetClaimDetailsQuery", () => {
       const project = context.testData.createProject();
       const partner = context.testData.createPartner();
       const command = new GetClaimDetailsQuery(project.Id, partner.Id, 1, "");
-      const auth    = new Authorisation({
+      const auth = new Authorisation({
         [project.Id]: {
           projectRoles: ProjectRole.Unknown,
           partnerRoles: { [partner.Id]: ProjectRole.FinancialContact }
@@ -179,7 +164,7 @@ describe("GetClaimDetailsQuery", () => {
       const project = context.testData.createProject();
       const partner = context.testData.createPartner();
       const command = new GetClaimDetailsQuery(project.Id, partner.Id, 1, "");
-      const auth    = new Authorisation({
+      const auth = new Authorisation({
         [project.Id]: {
           projectRoles: ProjectRole.Unknown,
           partnerRoles: { [partner.Id]: ProjectRole.ProjectManager }
@@ -194,7 +179,7 @@ describe("GetClaimDetailsQuery", () => {
       const project = context.testData.createProject();
       const partner = context.testData.createPartner();
       const command = new GetClaimDetailsQuery(project.Id, partner.Id, 1, "");
-      const auth    = new Authorisation({
+      const auth = new Authorisation({
         [project.Id]: {
           projectRoles: ProjectRole.FinancialContact | ProjectRole.ProjectManager,
           partnerRoles: { [partner.Id]: ProjectRole.MonitoringOfficer }

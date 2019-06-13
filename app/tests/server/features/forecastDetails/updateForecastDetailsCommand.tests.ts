@@ -46,7 +46,7 @@ describe("UpdateForecastDetailsCommand", () => {
       value: 501
     }];
 
-    const command = new UpdateForecastDetailsCommand(partner.Acc_ProjectId__c, partner.Id, dto, false);
+    const command = new UpdateForecastDetailsCommand(partner.Acc_ProjectId__r.Id, partner.Id, dto, false);
     await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
   });
 
@@ -97,7 +97,7 @@ describe("UpdateForecastDetailsCommand", () => {
       value: 500
     }];
 
-    const command = new UpdateForecastDetailsCommand(partner.Acc_ProjectId__c, partner.Id, dto, false);
+    const command = new UpdateForecastDetailsCommand(partner.Acc_ProjectId__r.Id, partner.Id, dto, false);
     await context.runCommand(command);
 
     expect(context.repositories.profileDetails.Items.find(x => x.Id === profileDetail.Id)!.Acc_LatestForecastCost__c).toBe(500);
@@ -132,7 +132,7 @@ describe("UpdateForecastDetailsCommand", () => {
       value: 100
     }];
 
-    const command = new UpdateForecastDetailsCommand(partner.Acc_ProjectId__c, partner.Id, dto, false);
+    const command = new UpdateForecastDetailsCommand(partner.Acc_ProjectId__r.Id, partner.Id, dto, false);
     await context.runCommand(command);
 
     expect(context.repositories.profileDetails.Items.find(x => x.Id === profileDetail.Id)!.Acc_LatestForecastCost__c).toBe(250);
@@ -162,7 +162,7 @@ describe("UpdateForecastDetailsCommand", () => {
     testData.createClaimDetail(project, costCat, partner, periodId - 1, x => x.Acc_PeriodCostCategoryTotal__c = 1000);
     testData.createProfileTotalCostCategory(costCat, partner, 1500);
 
-    const command = new UpdateForecastDetailsCommand(partner.Acc_ProjectId__c, partner.Id, dto, true);
+    const command = new UpdateForecastDetailsCommand(partner.Acc_ProjectId__r.Id, partner.Id, dto, true);
     await context.runCommand(command);
     expect(context.repositories.claims.Items.find(x => x.Id === claim.Id)!.Acc_ClaimStatus__c).toBe(ClaimStatus.SUBMITTED);
   });
@@ -192,7 +192,7 @@ describe("UpdateForecastDetailsCommand", () => {
     testData.createClaimDetail(project, costCat, partner, periodId - 1, x => x.Acc_PeriodCostCategoryTotal__c = 1000);
     testData.createProfileTotalCostCategory(costCat, partner, 1500);
 
-    const command = new UpdateForecastDetailsCommand(partner.Acc_ProjectId__c, partner.Id, dto, true);
+    const command = new UpdateForecastDetailsCommand(partner.Acc_ProjectId__r.Id, partner.Id, dto, true);
     await context.runCommand(command);
     expect(context.repositories.claims.Items.find(x => x.Id === claim.Id)!.Acc_ClaimStatus__c).toBe(ClaimStatus.SUBMITTED);
   });
@@ -222,7 +222,7 @@ describe("UpdateForecastDetailsCommand", () => {
     testData.createClaimDetail(project, costCat, partner, periodId - 1, x => x.Acc_PeriodCostCategoryTotal__c = 1000);
     testData.createProfileTotalCostCategory(costCat, partner, 1500);
 
-    const command = new UpdateForecastDetailsCommand(partner.Acc_ProjectId__c, partner.Id, dto, true);
+    const command = new UpdateForecastDetailsCommand(partner.Acc_ProjectId__r.Id, partner.Id, dto, true);
     await context.runCommand(command);
     expect(context.repositories.claims.Items.find(x => x.Id === claim.Id)!.Acc_ClaimStatus__c).toBe(ClaimStatus.AWAITING_IUK_APPROVAL);
   });
@@ -250,7 +250,7 @@ describe("UpdateForecastDetailsCommand", () => {
     testData.createClaimDetail(project, costCat, partner, periodId - 1, x => x.Acc_PeriodCostCategoryTotal__c = 1000);
     testData.createProfileTotalCostCategory(costCat, partner, 1500);
 
-    const command = new UpdateForecastDetailsCommand(partner.Acc_ProjectId__c, partner.Id, dto, true);
+    const command = new UpdateForecastDetailsCommand(partner.Acc_ProjectId__r.Id, partner.Id, dto, true);
     await context.runCommand(command);
     await expect(context.runCommand(command)).rejects.toThrow(BadRequestError);
   });
@@ -315,7 +315,7 @@ describe("UpdateForecastDetailsCommand", () => {
       value: profileDetail.Acc_LatestForecastCost__c + 1
     }];
 
-    const command = new UpdateForecastDetailsCommand(partner.Acc_ProjectId__c, partner.Id, update, false);
+    const command = new UpdateForecastDetailsCommand(partner.Acc_ProjectId__r.Id, partner.Id, update, false);
     await expect(context.runCommand(command)).rejects.toMatchObject(new BadRequestError("You can't update the forecast of approved periods."));
 
   });
@@ -351,7 +351,7 @@ describe("UpdateForecastDetailsCommand", () => {
 
     dtos[0].value++;
 
-    const command = new UpdateForecastDetailsCommand(partner.Acc_ProjectId__c, partner.Id, dtos, false);
+    const command = new UpdateForecastDetailsCommand(partner.Acc_ProjectId__r.Id, partner.Id, dtos, false);
     await expect(context.runCommand(command)).rejects.toMatchObject(new BadRequestError("You can't update the forecast of approved periods."));
 
   });
@@ -388,7 +388,7 @@ describe("UpdateForecastDetailsCommand", () => {
 
     dtos[1].value++;
 
-    const command = new UpdateForecastDetailsCommand(partner.Acc_ProjectId__c, partner.Id, dtos, false);
+    const command = new UpdateForecastDetailsCommand(partner.Acc_ProjectId__r.Id, partner.Id, dtos, false);
     await expect(context.runCommand(command)).resolves.toBe(true);
 
   });
@@ -425,7 +425,7 @@ describe("UpdateForecastDetailsCommand", () => {
 
     dtos[1].value++;
 
-    const command = new UpdateForecastDetailsCommand(partner.Acc_ProjectId__c, partner.Id, dtos, false);
+    const command = new UpdateForecastDetailsCommand(partner.Acc_ProjectId__r.Id, partner.Id, dtos, false);
     let error!: ValidationError;
 
     await context.runCommand(command).catch(e => error = e);
@@ -468,7 +468,7 @@ describe("UpdateForecastDetailsCommand", () => {
       value: 500
     }));
 
-    const command = new UpdateForecastDetailsCommand(partner.Acc_ProjectId__c, partner.Id, dtos, false);
+    const command = new UpdateForecastDetailsCommand(partner.Acc_ProjectId__r.Id, partner.Id, dtos, false);
 
     await context.runCommand(command);
 
@@ -491,7 +491,7 @@ describe("UpdateForecastDetailsCommand", () => {
 
     ];
 
-    const command = new UpdateForecastDetailsCommand(partner.Acc_ProjectId__c, partner.Id, dto, true);
+    const command = new UpdateForecastDetailsCommand(partner.Acc_ProjectId__r.Id, partner.Id, dto, true);
 
     await context.runCommand(command);
 

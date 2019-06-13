@@ -17,7 +17,7 @@ class ProjectsTestRepository extends TestRepository<Repositories.ISalesforceProj
 
 class PartnerTestRepository extends TestRepository<Repositories.ISalesforcePartner> implements Repositories.IPartnerRepository {
     getAllByProjectId(projectId: string) {
-        return super.getWhere(x => x.Acc_ProjectId__c === projectId);
+        return super.getWhere(x => x.Acc_ProjectId__r.Id === projectId);
     }
 
     getById(partnerId: string) {
@@ -60,7 +60,7 @@ class ClaimsTestRepository extends TestRepository<Repositories.ISalesforceClaim>
     }
 
     getAllByProjectId(projectId: string) {
-        const partnerIds = this.partnerRepository.Items.filter(x => x.Acc_ProjectId__c === projectId).map(x => x.Id);
+        const partnerIds = this.partnerRepository.Items.filter(x => x.Acc_ProjectId__r.Id === projectId).map(x => x.Id);
         return super.getWhere(x => partnerIds.indexOf(x.Acc_ProjectParticipant__r.Id) !== -1);
     }
 
@@ -84,19 +84,19 @@ class ClaimsTestRepository extends TestRepository<Repositories.ISalesforceClaim>
 
 class ClaimDetailsTestRepository extends TestRepository<Repositories.ISalesforceClaimDetails> implements Repositories.IClaimDetailsRepository {
     getAllByPartnerForPeriod(partnerId: string, periodId: number): Promise<Repositories.ISalesforceClaimDetails[]> {
-        return super.getWhere(x => x.Acc_ProjectParticipant__c === partnerId && x.Acc_ProjectPeriodNumber__c === periodId);
+        return super.getWhere(x => x.Acc_ProjectParticipant__r.Id === partnerId && x.Acc_ProjectPeriodNumber__c === periodId);
     }
 
     getAllByPartnerWithPeriodLt(partnerId: string, periodId: number): Promise<Repositories.ISalesforceClaimDetails[]> {
-        return super.getWhere(x => x.Acc_ProjectParticipant__c === partnerId && x.Acc_ProjectPeriodNumber__c < periodId);
+        return super.getWhere(x => x.Acc_ProjectParticipant__r.Id === partnerId && x.Acc_ProjectPeriodNumber__c < periodId);
     }
 
     getAllByPartner(partnerId: string): Promise<Repositories.ISalesforceClaimDetails[]> {
-        return super.getWhere(x => x.Acc_ProjectParticipant__c === partnerId);
+        return super.getWhere(x => x.Acc_ProjectParticipant__r.Id === partnerId);
     }
 
     get({ partnerId, periodId, costCategoryId }: ClaimDetailKey): Promise<Repositories.ISalesforceClaimDetails|null> {
-        return super.filterOne(x => x.Acc_ProjectParticipant__c === partnerId && x.Acc_ProjectPeriodNumber__c === periodId && x.Acc_CostCategory__c === costCategoryId);
+        return super.filterOne(x => x.Acc_ProjectParticipant__r.Id === partnerId && x.Acc_ProjectPeriodNumber__c === periodId && x.Acc_CostCategory__c === costCategoryId);
     }
 
     update(item: Updatable<Repositories.ISalesforceClaimDetails>): Promise<boolean> {
@@ -335,7 +335,7 @@ class ProfileTotalPeriodTestRepository extends TestRepository<Repositories.ISale
     }
 
     getAllByProjectId(projectId: string): Promise<Repositories.ISalesforceProfileTotalPeriod[]> {
-        const partnerIds = this.partnerRepository.Items.filter(x => x.Acc_ProjectId__c === projectId).map(x => x.Id);
+        const partnerIds = this.partnerRepository.Items.filter(x => x.Acc_ProjectId__r.Id === projectId).map(x => x.Id);
         return super.getWhere(x => partnerIds.indexOf(x.Acc_ProjectParticipant__c) !== -1);
     }
 
