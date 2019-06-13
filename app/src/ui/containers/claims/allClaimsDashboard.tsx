@@ -303,7 +303,7 @@ class Component extends ContainerBaseWithState<AllClaimsDashboardParams, Data, C
     return (
       <React.Fragment>
         {this.state.showIarMessage ? <Acc.ValidationMessage messageType="success" message="You have attached an independent accountant's report (IAR)."/> : null}
-        <Acc.DocumentSingle message={"An IAR has been added to this claim."} document={document} openNewWindow={true} renderRemove={() => claim.allowIarEdit && button()} />
+        <Acc.DocumentSingle document={document} openNewWindow={true} renderRemove={() => claim.allowIarEdit && button()} />
       </React.Fragment>
     );
   }
