@@ -30,15 +30,15 @@ describe("ValidationMessage", () => {
     expect(wrapper).toContain(`<span>Success message</span>`);
   });
 
-  it("should render a declare message", () => {
-    const wrapper = shallow(<ValidationMessage message="Declare message" messageType="declare" />).html();
-    expect(wrapper).toContain(`<span class=\"govuk-warning-text__assistive\">Declare</span>`);
-    expect(wrapper).toContain(`<span>Declare message</span>`);
+  it("should render a warning message", () => {
+    const wrapper = shallow(<ValidationMessage message="Warning message" messageType="warning" />).html();
+    expect(wrapper).toContain(`<span class=\"govuk-warning-text__assistive\">Warning</span>`);
+    expect(wrapper).toContain(`<span>Warning message</span>`);
   });
 
   it("should render a React Node", () => {
-    const wrapper = shallow(<ValidationMessage message={<div>Test</div>} messageType="declare" />).html();
-    expect(wrapper).toContain(`<span class=\"govuk-warning-text__assistive\">Declare</span>`);
+    const wrapper = shallow(<ValidationMessage message={<div>Test</div>} messageType="warning" />).html();
+    expect(wrapper).toContain(`<span class=\"govuk-warning-text__assistive\">Warning</span>`);
     expect(wrapper).toContain(`<span><div>Test</div></span>`);
   });
 });

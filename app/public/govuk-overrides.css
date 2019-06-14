@@ -95,6 +95,11 @@
 .acc-message__error {
   background-image: url("/assets/images/icon-alert.png");
 }
+
+.acc-message__warning {
+  background-image: url("/assets/images/icon-warning.png");
+}
+
 .acc-message__error.govuk-grid-row {
   border-color: #bfc1c3 #bfc1c3 #bfc1c3 #b10e1e;
   border-width: 1px 1px 1px 5px;

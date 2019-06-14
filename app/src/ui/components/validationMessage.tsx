@@ -2,7 +2,7 @@ import React from "react";
 import classnames from "classnames";
 import * as colour from "../styles/colours";
 
-type MessageType = "info" | "error" | "success" | "declare";
+type MessageType = "info" | "error" | "success" | "warning";
 
 interface Props {
     message: React.ReactNode;
@@ -33,10 +33,10 @@ const getMessageStyle = (messageType: MessageType): MessageStyle => {
       validationClass: "acc-message__success",
       validationText: "Success",
     };
-    case "declare": return {
+    case "warning": return {
       validationColour: colour.GOVUK_COLOUR_BLACK,
-      validationClass: "acc-message__declare",
-      validationText: "Declare",
+      validationClass: "acc-message__warning",
+      validationText: "Warning",
     };
   }
 };
