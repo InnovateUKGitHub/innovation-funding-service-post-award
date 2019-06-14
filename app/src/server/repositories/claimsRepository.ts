@@ -24,7 +24,7 @@ export interface ISalesforceClaim {
   Acc_TotalGrantApproved__c: number;
   Acc_ApprovedDate__c: string | null;
   Acc_PaidDate__c: string | null;
-  Acc_LineItemDescription__c: string | null;
+  Acc_ReasonForDifference__c: string | null;
   Acc_IARRequired__c: boolean;
 }
 
@@ -56,7 +56,7 @@ export class ClaimRepository extends SalesforceRepositoryBase<ISalesforceClaim> 
     "Acc_ProjectPeriodCost__c",
     "Acc_ApprovedDate__c",
     "Acc_PaidDate__c",
-    "Acc_LineItemDescription__c",
+    "Acc_ReasonForDifference__c",
     "Acc_IARRequired__c"
   ];
 

@@ -24,7 +24,7 @@ export default (context: IContext) => (claim: ISalesforceClaim, forecast?: ISale
   forecastCost: forecast && forecast.Acc_PeriodInitialForecastCost__c || 0,
   approvedDate: claim.Acc_ApprovedDate__c === null ? null : context.clock.parse(claim.Acc_ApprovedDate__c, SALESFORCE_DATE_FORMAT),
   paidDate: claim.Acc_PaidDate__c === null ? null : context.clock.parse(claim.Acc_PaidDate__c, SALESFORCE_DATE_FORMAT),
-  comments: claim.Acc_LineItemDescription__c,
+  comments: claim.Acc_ReasonForDifference__c,
   isIarRequired: claim.Acc_IARRequired__c,
   isApproved: [ClaimStatus.APPROVED, ClaimStatus.PAID].indexOf(claim.Acc_ClaimStatus__c) >= 0,
   allowIarEdit: STATUS_ALLOWING_IAR_EDIT.indexOf(claim.Acc_ClaimStatus__c) >= 0,

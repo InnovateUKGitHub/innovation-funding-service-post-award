@@ -485,7 +485,7 @@ describe("UpdateForecastDetailsCommand", () => {
 
     const claim = context.testData.createClaim(partner, 1);
     claim.Acc_ClaimStatus__c = ClaimStatus.DRAFT;
-    claim.Acc_LineItemDescription__c = "Original Comments";
+    claim.Acc_ReasonForDifference__c = "Original Comments";
 
     const dto: ForecastDetailsDTO[] = [
 
@@ -496,7 +496,7 @@ describe("UpdateForecastDetailsCommand", () => {
     await context.runCommand(command);
 
     expect(claim.Acc_ClaimStatus__c).toBe(ClaimStatus.SUBMITTED);
-    expect(claim.Acc_LineItemDescription__c).toBe("");
+    expect(claim.Acc_ReasonForDifference__c).toBe("");
 
     expect(context.repositories.claimStatusChanges.Items.length).toBe(1);
     expect(context.repositories.claimStatusChanges.Items[0].Acc_ExternalComment__c).toBe("Original Comments");
