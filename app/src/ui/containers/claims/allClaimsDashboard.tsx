@@ -148,7 +148,7 @@ class Component extends ContainerBaseWithState<AllClaimsDashboardParams, Data, C
         <PartnerSummaryDetails.Percentage label="Percentage of eligible costs claimed to date" qa="claimed-percentage" value={x => x.percentageParticipantCostsClaimed} />
         <PartnerSummaryDetails.Currency label="Costs paid to date" qa="paid-costs" value={x => x.totalPaidCosts || 0} />
         <PartnerSummaryDetails.Percentage label="Funding level" value={x => x.awardRate} qa="award-rate" fractionDigits={0} />
-        <PartnerSummaryDetails.Percentage label="Cap limit" value={x => x.capLimit} fractionDigits={0} qa="cap-limit" />
+        <PartnerSummaryDetails.Percentage label="Claim cap" value={x => x.capLimit} fractionDigits={0} qa="cap-limit" />
       </PartnerSummaryDetails.Details>
     );
   }

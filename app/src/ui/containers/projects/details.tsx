@@ -103,7 +103,7 @@ class ProjectDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
                     <PartnersTable.Currency header={<React.Fragment><span>Total eligible</span><br/><span>costs</span></React.Fragment>} qa="total-costs" value={x => x.totalParticipantGrant || 0} footer={<ACC.Renderers.Currency value={totalEligibleCosts} />} />
                     <PartnersTable.Currency header={<React.Fragment><span>Costs claimed</span><br/><span>to date</span></React.Fragment>} qa="costs-claimed" value={x => x.totalParticipantCostsClaimed || 0} footer={<ACC.Renderers.Currency value={totalClaimed} />} />
                     <PartnersTable.Percentage header={<React.Fragment><span>Percentage of eligible</span><br/><span>costs claimed to date</span></React.Fragment>} qa="percentage-claimed" value={x => x.percentageParticipantCostsClaimed || 0} footer={<ACC.Renderers.Percentage value={percentageClaimed} />} />
-                    <PartnersTable.Percentage header="Cap limit" qa="cap-limit" value={x => x.capLimit} fractionDigits={0} footer={<AccessibilityText>No data</AccessibilityText>}/>
+                    <PartnersTable.Percentage header="Claim cap" qa="cap-limit" value={x => x.capLimit} fractionDigits={0} footer={<AccessibilityText>No data</AccessibilityText>}/>
                 </PartnersTable.Table>
             </ACC.Section>
         );
