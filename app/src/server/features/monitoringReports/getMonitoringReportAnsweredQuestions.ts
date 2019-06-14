@@ -1,6 +1,6 @@
 import { QueryBase } from "../common";
 import { MonitoringReportQuestionDto } from "@framework/dtos/monitoringReportDto";
-import { Authorisation, IContext } from "@framework/types";
+import { IContext } from "@framework/types";
 
 export class GetMonitoringReportAnsweredQuestions extends QueryBase<MonitoringReportQuestionDto[]> {
 
@@ -8,10 +8,6 @@ export class GetMonitoringReportAnsweredQuestions extends QueryBase<MonitoringRe
     private readonly questionIds: string[]
   ) {
     super();
-  }
-
-  protected async accessControl(auth: Authorisation, context: IContext) {
-    return context.config.features.monitoringReports;
   }
 
   public async Run(context: IContext): Promise<MonitoringReportQuestionDto[]> {

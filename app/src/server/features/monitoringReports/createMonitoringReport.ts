@@ -15,9 +15,8 @@ export class CreateMonitoringReportCommand extends CommandBase<string> {
     super();
   }
 
-  protected async accessControl(auth: Authorisation, context: IContext) {
-    return context.config.features.monitoringReports &&
-      auth.forProject(this.monitoringReportDto.projectId).hasRole(ProjectRole.MonitoringOfficer);
+  protected async accessControl(auth: Authorisation) {
+    return auth.forProject(this.monitoringReportDto.projectId).hasRole(ProjectRole.MonitoringOfficer);
   }
 
   private async insertStatusChange(context: IContext, headerId: string): Promise<void> {
