@@ -25,7 +25,7 @@ describe("GetClaim", () => {
     expect(result.totalCost).toBe(claim.Acc_ProjectPeriodCost__c);
     expect(result.approvedDate).toBeNull();
     expect(result.paidDate).toBeNull();
-    expect(result.comments).toBe(claim.Acc_LineItemDescription__c);
+    expect(result.comments).toBe(claim.Acc_ReasonForDifference__c);
     expect(result.isIarRequired).toBe(claim.Acc_IARRequired__c);
     expect(result.isApproved).toBe(false);
     expect(result.overheadRate).toBe(claim.Acc_ProjectParticipant__r.Acc_OverheadRate__c);

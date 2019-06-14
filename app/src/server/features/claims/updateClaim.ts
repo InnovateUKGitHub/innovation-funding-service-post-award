@@ -28,7 +28,7 @@ export class UpdateClaimCommand extends CommandBase<boolean> {
       await context.repositories.claims.update({
         Id: this.claimDto.id,
         Acc_ClaimStatus__c: this.claimDto.status,
-        Acc_LineItemDescription__c: "",
+        Acc_ReasonForDifference__c: "",
       });
 
       await context.repositories.claimStatusChanges.create({
@@ -41,7 +41,7 @@ export class UpdateClaimCommand extends CommandBase<boolean> {
       await context.repositories.claims.update({
         Id: this.claimDto.id,
         Acc_ClaimStatus__c: this.claimDto.status,
-        Acc_LineItemDescription__c: this.claimDto.comments,
+        Acc_ReasonForDifference__c: this.claimDto.comments,
       });
     }
 
