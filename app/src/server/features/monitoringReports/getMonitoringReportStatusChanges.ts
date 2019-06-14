@@ -11,9 +11,9 @@ export class GetMonitoringReportStatusChanges extends QueryBase<MonitoringReport
     super();
   }
 
-  protected async accessControl(auth: Authorisation, context: IContext) {
+  protected async accessControl(auth: Authorisation) {
     // TODO validate report is actually for project passed in
-    return context.config.features.monitoringReports && auth.forProject(this.projectId).hasRole(ProjectRole.MonitoringOfficer);
+    return auth.forProject(this.projectId).hasRole(ProjectRole.MonitoringOfficer);
   }
 
   protected async Run(context: IContext): Promise<MonitoringReportStatusChangeDto[]> {
