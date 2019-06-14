@@ -10,7 +10,6 @@ interface DocumentSummaryDto {
   description?: string;
   fileSize: number;
   dateCreated: Date;
-  owner: string;
 }
 
 interface DocumentDto {

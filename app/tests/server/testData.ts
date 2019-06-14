@@ -270,7 +270,6 @@ export class TestData {
 
   public createMonitoringReportStatusChange(header?: Repositories.ISalesforceMonitoringReportHeader, partner?: Repositories.ISalesforcePartner): Repositories.ISalesforceMonitoringReportStatusChange {
     header = header || this.createMonitoringReportHeader();
-    partner = partner || this.createPartner();
 
     const seed = this.repositories.monitoringReportStatusChange.Items.length + 1;
     const response: Repositories.ISalesforceMonitoringReportStatusChange = {
@@ -278,7 +277,6 @@ export class TestData {
       Acc_MonitoringReport__c: header.Id,
       Acc_PreviousMonitoringReportStatus__c: "Draft",
       Acc_NewMonitoringReportStatus__c: "Submitted to Monitoring Officer",
-      CreatedBy: { CommunityNickname: partner.Acc_AccountId__r.Name },
       CreatedDate: DateTime.local().toISO()
     };
 
@@ -410,9 +408,6 @@ export class TestData {
       Acc_NewClaimStatus__c: "Submitted",
       Acc_ExternalComment__c: "Comments",
       Acc_ParticipantVisibility__c: true,
-      CreatedBy: {
-        CommunityNickname: "CreatedBy_User"
-      },
       CreatedDate: new Date().toISOString()
     };
 

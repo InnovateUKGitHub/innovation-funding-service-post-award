@@ -14,7 +14,6 @@ describe("GetMonitoringReportStatusChanges", () => {
     const query = new GetMonitoringReportStatusChanges(project.Id, report.Id);
     const result = await context.runQuery(query);
 
-    expect(result[0].createdBy).toBe(statusChange.CreatedBy.CommunityNickname);
     expect(result[0].previousStatus).toBe(statusChange.Acc_PreviousMonitoringReportStatus__c);
     expect(result[0].newStatus).toBe(statusChange.Acc_NewMonitoringReportStatus__c);
     expect(result[0].monitoringReport).toBe(report.Id);

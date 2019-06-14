@@ -38,7 +38,6 @@ describe("GetClaimStatusChanges", () => {
       id: existing.Id,
       claimId: existing.Acc_Claim__c,
       comments: existing.Acc_ExternalComment__c,
-      createdBy: existing.CreatedBy.CommunityNickname,
       createdDate: new Date(existing.CreatedDate),
       newStatus: existing.Acc_NewClaimStatus__c,
       previousStatus: existing.Acc_PreviousClaimStatus__c
