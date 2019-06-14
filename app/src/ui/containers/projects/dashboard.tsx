@@ -124,14 +124,14 @@ class ProjectDashboardComponent extends ContainerBaseWithState<Props, Data, Call
   private renderStatisticsBox(numberOfClaims: number, label: string, filterFunction: () => void, buttonIsPressed: boolean, qa?: string) {
     if (this.props.features.projectFiltering && numberOfClaims > 0) {
       return (
-        <button className={classNames("govuk-statistics-section__button", {"govuk-statistics-section__button--unselected": !buttonIsPressed})} aria-pressed={buttonIsPressed} onClick={filterFunction}>
+        <button className={classNames("govuk-statistics-section__details", "govuk-statistics-section__details--button", {"govuk-statistics-section__details--button--unselected": !buttonIsPressed})} aria-pressed={buttonIsPressed} onClick={filterFunction}>
           <StatisticsBox number={numberOfClaims} label={label} qa={qa}/>
         </button>
       );
     }
 
     return(
-      <div>
+      <div className="govuk-statistics-section__details">
         <StatisticsBox number={numberOfClaims} label={label} qa={qa}/>
       </div>
     );

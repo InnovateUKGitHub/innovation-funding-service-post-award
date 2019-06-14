@@ -14,6 +14,6 @@ describe("StatisticsBox", () => {
 
   it("should render number of actions", () => {
     const wrapper = shallow(<StatisticsBox number={2} label={"Review submitted claims"}/>).html();
-    expect(wrapper).toContain(`<div class="govuk-heading-l">2</div>`);
+    expect(wrapper).toContain(`<div class="govuk-heading-l govuk-!-margin-bottom-3">2</div>`);
   });
 });
