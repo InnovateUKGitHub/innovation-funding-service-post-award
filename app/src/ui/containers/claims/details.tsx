@@ -8,6 +8,7 @@ import { ClaimLineItemsRoute } from "./claimLineItems";
 import { ClaimsDashboardRoute } from "./dashboard";
 import {
   ClaimDto,
+  ClaimStatus,
   ClaimStatusChangeDto,
   ILinkInfo,
   PartnerDto,
@@ -86,7 +87,7 @@ export class ClaimsDetailsComponent extends ContainerBase<Params, Data, {}> {
       <React.Fragment>
         {this.renderTableSection(data)}
         {this.renderIarSection(data.claim, data.project, data.partner, data.iarDocument)}
-        {this.renderForecastSection()}
+        {this.renderForecastSection(data)}
       </React.Fragment>
     );
   }
@@ -139,8 +140,11 @@ export class ClaimsDetailsComponent extends ContainerBase<Params, Data, {}> {
     return <SimpleString>{iarDocument.fileName}</SimpleString>;
   }
 
-  private renderForecastSection() {
-    if (!this.props.forecastData) {
+  private renderForecastSection(data: CombinedData) {
+    const isArchived = data.claim.status === ClaimStatus.PAID || data.claim.status === ClaimStatus.APPROVED;
+    const isMO = data.project.roles & ProjectRole.MonitoringOfficer;
+
+    if (!this.props.forecastData || (isArchived && isMO)) {
       return null;
     }
 
