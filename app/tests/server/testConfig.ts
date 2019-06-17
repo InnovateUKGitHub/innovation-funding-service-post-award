@@ -19,6 +19,7 @@ export class TestConfig implements IConfig {
   };
 
   public features = {
+    documentFiltering: true,
     monitoringReports: true,
     projectDocuments: true,
     projectFiltering: true

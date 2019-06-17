@@ -21,6 +21,7 @@ interface Data {
   documents: Pending<DocumentSummaryDto[]>;
   editor: Pending<IEditorStore<DocumentUploadDto, DocumentUploadValidator>>;
   isClient: boolean;
+  features: IFeatureFlags;
 }
 
 interface CombinedData {
@@ -139,7 +140,7 @@ class ProjectDocumentsComponent extends ContainerBaseWithState<ProjectDocumentPa
   }
 
   private renderDocumentsFilter() {
-    if (!this.props.isClient) {
+    if (!this.props.isClient || !this.props.features.documentFiltering) {
       return null;
     }
     const FilterForm = ACC.TypedForm<{ filterBoxText: string | null }>();
@@ -182,7 +183,8 @@ const ProjectDocuments = container.connect({
     partners: Selectors.findPartnersByProject(props.projectId).getPending(state),
     documents: Selectors.getProjectDocuments(props.projectId).getPending(state),
     editor: Selectors.getProjectDocumentEditor(props.projectId).get(state),
-    isClient: state.isClient
+    isClient: state.isClient,
+    features: state.config.features
   }),
   withCallbacks: (dispatch) => ({
     clearMessage: () => dispatch(Actions.removeMessages()),
