@@ -13,8 +13,8 @@ export class GetMonitoringReportById extends QueryBase<MonitoringReportDto> {
     super();
   }
 
-  protected async accessControl(auth: Authorisation, context: IContext) {
-    return context.config.features.monitoringReports && auth.forProject(this.projectId).hasRole(ProjectRole.MonitoringOfficer);
+  protected async accessControl(auth: Authorisation) {
+    return auth.forProject(this.projectId).hasRole(ProjectRole.MonitoringOfficer);
   }
 
   protected async Run(context: IContext): Promise<MonitoringReportDto> {
