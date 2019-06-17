@@ -207,5 +207,5 @@ export const ProjectDocumentsRoute = container.route({
     htmlTitle: "Project documents - View project",
     displayTitle: "View project"
   }),
-  accessControl: (auth, { projectId }, features) => features.projectDocuments && auth.forProject(projectId).hasRole(ProjectRole.MonitoringOfficer)
+  accessControl: (auth, { projectId }) => auth.forProject(projectId).hasRole(ProjectRole.MonitoringOfficer)
 });
