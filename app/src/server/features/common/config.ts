@@ -70,6 +70,7 @@ const certificates = {
 };
 
 const features: IFeatureFlags = {
+    documentFiltering: process.env.FEATURE_DOCUMENT_FILTERING === "true",
     monitoringReports: process.env.FEATURE_MONITORING_REPORTS === "true",
     projectDocuments: process.env.FEATURE_PROJECT_DOCUMENTS === "true",
     projectFiltering: process.env.FEATURE_PROJECT_FILTERING === "true",
