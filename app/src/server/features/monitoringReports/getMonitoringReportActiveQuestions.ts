@@ -1,13 +1,9 @@
 import { QueryBase } from "../common";
 import { ISalesforceMonitoringReportQuestions } from "@server/repositories";
-import { Authorisation, IContext } from "@framework/types";
+import { IContext } from "@framework/types";
 import { MonitoringReportQuestionDto } from "@framework/dtos";
 
 export class GetMonitoringReportActiveQuestions extends QueryBase<MonitoringReportQuestionDto[]> {
-
-  protected async accessControl(auth: Authorisation, context: IContext) {
-    return context.config.features.monitoringReports;
-  }
 
   private async getQuestions(context: IContext) {
     const sfQuestions = await context.repositories.monitoringReportQuestions.getAll();

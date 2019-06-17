@@ -97,5 +97,5 @@ export const MonitoringReportDeleteRoute = containerDefinition.route({
     htmlTitle: "Delete monitoring report",
     displayTitle: "Monitoring report"
   }),
-  accessControl: (auth, { projectId }, features) => features.monitoringReports && auth.forProject(projectId).hasRole(Dtos.ProjectRole.MonitoringOfficer),
+  accessControl: (auth, { projectId }) => auth.forProject(projectId).hasRole(Dtos.ProjectRole.MonitoringOfficer),
 });

@@ -138,7 +138,7 @@ export const MonitoringReportDashboardRoute = containerDefinition.route({
     Actions.loadMonitoringReports(params.projectId)
   ],
   container: MonitoringReportDashboard,
-  accessControl: (auth, params, features) => features.monitoringReports && auth.forProject(params.projectId).hasRole(ProjectRole.MonitoringOfficer),
+  accessControl: (auth, params) => auth.forProject(params.projectId).hasRole(ProjectRole.MonitoringOfficer),
   getTitle: (store, params) => {
     return {
       htmlTitle: "Monitoring reports - View project",
