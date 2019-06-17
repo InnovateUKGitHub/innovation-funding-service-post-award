@@ -37,7 +37,6 @@ export class GetClaimStatusChangesQuery extends QueryBase<ClaimStatusChangeDto[]
       comments: canSeeHidden || (item.Acc_ParticipantVisibility__c && canSeePublic)  ? item.Acc_ExternalComment__c : "",
       previousStatus: item.Acc_PreviousClaimStatus__c,
       newStatus: item.Acc_NewClaimStatus__c,
-      createdBy: item.CreatedBy.CommunityNickname,
       createdDate: context.clock.parseRequiredSalesforceDateTime(item.CreatedDate),
     };
   }

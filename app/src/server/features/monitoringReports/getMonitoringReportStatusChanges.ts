@@ -24,7 +24,6 @@ export class GetMonitoringReportStatusChanges extends QueryBase<MonitoringReport
           monitoringReport: x.Acc_MonitoringReport__c,
           newStatus: x.Acc_NewMonitoringReportStatus__c,
           previousStatus: x.Acc_PreviousMonitoringReportStatus__c,
-          createdBy: x.CreatedBy.CommunityNickname,
           createdDate: context.clock.parseRequiredSalesforceDateTime(x.CreatedDate)
         })
       )
