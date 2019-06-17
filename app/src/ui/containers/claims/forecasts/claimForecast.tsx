@@ -47,9 +47,9 @@ class ClaimForecastComponent extends ContainerBase<ClaimForcastParams, PendingFo
         validator={editor.validator}
         pageTitle={<ACC.Projects.Title project={combined.project} />}
       >
-        {this.renderOverheadsRate(combined.partner.overheadRate)}
         <ACC.Section qa="partner-name">
           {renderWarning(combined)}
+          {this.renderOverheadsRate(combined.partner.overheadRate)}
           <Form.Form
             editor={editor}
             onChange={data => this.handleChange(data, combined)}
