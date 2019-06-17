@@ -76,7 +76,7 @@ export const MonitoringReportCreateRoute = containerDefinition.route({
   routeName: "monitoringReportCreate",
   routePath: "/projects/:projectId/monitoring-reports/create",
   getParams: (r) => ({ projectId: r.params.projectId }),
-  accessControl: (auth, { projectId }, features) => features.monitoringReports && auth.forProject(projectId).hasRole(Dtos.ProjectRole.MonitoringOfficer),
+  accessControl: (auth, { projectId }) => auth.forProject(projectId).hasRole(Dtos.ProjectRole.MonitoringOfficer),
   getLoadDataActions: (params) => [
     Actions.loadProject(params.projectId),
     Actions.loadMonitoringReportQuestions()

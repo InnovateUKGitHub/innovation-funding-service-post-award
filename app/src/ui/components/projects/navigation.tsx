@@ -21,13 +21,9 @@ interface Props {
   partners: PartnerDto[];
 }
 
-interface Data {
-  features: IFeatureFlags;
-}
-
-class ProjectNavigationComponent extends React.Component<Props & Data> {
+class ProjectNavigationComponent extends React.Component<Props> {
   render() {
-    const { currentRoute, features, project, partners } = this.props;
+    const { currentRoute, project, partners } = this.props;
     const projectId = project.id;
     const partnerId = partners.filter(x => x.roles & ProjectRole.FinancialContact).map(x => x.id)[0];
 
@@ -48,7 +44,7 @@ class ProjectNavigationComponent extends React.Component<Props & Data> {
       navigationTabs.push({ text: "Claims", route: claimsLink, selected: claimsLink.routeName === currentRoute, qa: "claimsTab" });
     }
 
-    if (features.monitoringReports && isMO) {
+    if (isMO) {
       const monitoringReportsLink = MonitoringReportDashboardRoute.getLink({ projectId });
       navigationTabs.push({ text: "Monitoring reports", route: monitoringReportsLink, selected: monitoringReportsLink.routeName === currentRoute, qa: "monitoringReportsTab" });
     }
@@ -65,7 +61,7 @@ class ProjectNavigationComponent extends React.Component<Props & Data> {
     const projectChangeRequestLink = ProjectChangeRequestsRoute.getLink({ projectId });
     navigationTabs.push({ text: "Project change requests", route: projectChangeRequestLink, selected: projectChangeRequestLink.routeName === currentRoute, qa: "changeRequestsTab" });
 
-    if (features.projectDocuments && isMO) {
+    if (isMO) {
       const projectDocumentsLink = ProjectDocumentsRoute.getLink({ projectId });
       navigationTabs.push({ text: "Documents", route: projectDocumentsLink, selected: projectDocumentsLink.routeName === currentRoute, qa: "documentsTab" });
     }
@@ -81,4 +77,4 @@ class ProjectNavigationComponent extends React.Component<Props & Data> {
   }
 }
 
-export const ProjectNavigation = connect<Data, {}, Props, RootState>((store) => ({ features: store.config.features }), () => ({}))(ProjectNavigationComponent);
+export const ProjectNavigation = connect<{}, {}, Props, RootState>(() => ({}), () => ({}))(ProjectNavigationComponent);

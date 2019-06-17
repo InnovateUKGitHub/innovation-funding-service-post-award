@@ -6,8 +6,8 @@ export class GetProjectDocumentQuery extends DocumentQueryBase {
     super(documentId);
   }
 
-  protected async accessControl(auth: Authorisation, context: IContext) {
-    return context.config.features.projectDocuments && auth.forProject(this.projectId).hasRole(ProjectRole.MonitoringOfficer);
+  protected async accessControl(auth: Authorisation) {
+    return auth.forProject(this.projectId).hasRole(ProjectRole.MonitoringOfficer);
   }
 
   protected getRecordId(context: IContext): Promise<string | null> {
