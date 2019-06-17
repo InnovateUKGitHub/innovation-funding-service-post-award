@@ -1,5 +1,6 @@
 interface IFeatureFlags {
-  monitoringReports: Readonly<boolean>;
-  projectDocuments: Readonly<boolean>;
-  projectFiltering: Readonly<boolean>;
+  readonly documentFiltering: boolean;
+  readonly monitoringReports: boolean;
+  readonly projectDocuments: boolean;
+  readonly projectFiltering: boolean;
 }
