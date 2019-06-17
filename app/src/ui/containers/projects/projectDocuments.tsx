@@ -112,8 +112,8 @@ class ProjectDocumentsComponent extends ContainerBaseWithState<ProjectDocumentPa
     const filterText = this.state.filterBoxText;
     const documentsToDisplay = filterText
       ? documents.filter(document => {
-        const exp = new RegExp(filterText, "gi");
-        return exp.test(document.fileName) || exp.test(document.owner);
+        const regex = new RegExp(filterText, "gi");
+        return regex.test(document.fileName);
       })
       : documents;
 
@@ -159,7 +159,6 @@ class ProjectDocumentsComponent extends ContainerBaseWithState<ProjectDocumentPa
         <ProjectDocumentsTable.Custom header="File name" qa="fileName" value={x => this.renderDocumentName(x)} />
         <ProjectDocumentsTable.ShortDate header="Date uploaded" qa="dateUploaded" value={x => x.dateCreated} />
         <ProjectDocumentsTable.Custom header="File size" qa="fileSize" value={x => this.renderFileSize(x.fileSize)} />
-        <ProjectDocumentsTable.Email header="Uploaded by" qa="uploadedBy" value={x => x.owner} />
       </ProjectDocumentsTable.Table>
     );
   }
