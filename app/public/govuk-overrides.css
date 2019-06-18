@@ -160,29 +160,33 @@
   text-decoration: underline;
 }
 
-.govuk-statistics-section {
+.acc-statistics-section {
   display: flex;
-  justify-content: space-between;
 }
 
-.govuk-statistics-section__details {
-  width: 32%;
+.acc-statistics-section__details {
   text-align: left;
   background: #f8f8f8;
   border: none;
+  height: 100%;
+  width: 100%;
+  padding: 0;
 }
 
-.govuk-statistics-section__details--button {
+.acc-statistics-section__details > div {
+  height: 100%;
+}
+
+.acc-statistics-section__details--button {
   cursor: pointer;
 }
 
-
-.govuk-statistics-section__details--button--unselected {
+.acc-statistics-section__details--button--unselected {
   background: none;
   border: 1px solid #6f777b;
 }
 
-.govuk-statistics-section__details--button:active {
+.acc-statistics-section__details--button:active {
   border: 5px solid orange;
 }
 
