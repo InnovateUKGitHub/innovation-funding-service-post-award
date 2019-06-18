@@ -6,6 +6,7 @@ export interface ISalesforceMonitoringReportQuestions {
   Acc_DisplayOrder__c: number;
   Acc_QuestionScore__c: number;
   Acc_QuestionText__c: string;
+  Acc_QuestionDescription__c: string;
   Acc_ActiveFlag__c: boolean;
   Acc_ScoredQuestion__c: boolean;
 }
@@ -23,6 +24,7 @@ export class MonitoringReportQuestionsRepository extends SalesforceRepositoryBas
     "Acc_DisplayOrder__c",
     "Acc_QuestionScore__c",
     "Acc_QuestionText__c",
+    "Acc_QuestionDescription__c",
     "Acc_ActiveFlag__c",
     "Acc_ScoredQuestion__c"
   ];

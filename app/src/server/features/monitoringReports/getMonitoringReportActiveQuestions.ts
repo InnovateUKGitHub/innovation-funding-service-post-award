@@ -27,6 +27,7 @@ export class GetMonitoringReportActiveQuestions extends QueryBase<MonitoringRepo
       optionId: !options[0].Acc_ScoredQuestion__c ? options[0].Id : null,
       responseId: null,
       comments: null,
+      description: options[0].Acc_QuestionDescription__c,
       isScored: options[0].Acc_ScoredQuestion__c,
       options: options
         .map(o => ({
