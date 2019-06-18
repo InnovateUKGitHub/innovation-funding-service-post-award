@@ -20,6 +20,7 @@ export class GetMonitoringReportAnsweredQuestions extends QueryBase<MonitoringRe
         optionId: null,
         responseId: null,
         comments: null,
+        description: x.Acc_QuestionDescription__c,
         isScored: x.Acc_ScoredQuestion__c,
         options: [{
           id: x.Id,
