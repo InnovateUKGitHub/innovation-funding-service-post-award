@@ -22,7 +22,7 @@ export class Tabs extends React.PureComponent<TabProps, {}> {
 
         if (tabList !== null && tabList.length) {
             return (
-                <div className={`govuk-tabs govuk-!-margin-bottom-9`} data-qa={qa}>
+                <div className={"govuk-tabs"} data-qa={qa}>
                     <ul className="govuk-tabs__list" role="tablist">
                         {tabList.map((item, index) => this.renderItem(item, index))}
                     </ul>

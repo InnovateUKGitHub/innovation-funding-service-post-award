@@ -17,18 +17,20 @@ export const Page: React.FunctionComponent<Props> = (props) => {
   const { pageTitle, backLink, error, validator, messages, tabs, children, project } = props;
   return (
     <div>
-      {backLink && (<ACC.Section>{backLink}</ACC.Section>)}
-      <ACC.Renderers.AriaLive>
-        <ACC.ErrorSummary error={error} />
-        <ACC.ValidationSummary validation={validator} compressed={false} />
-      </ACC.Renderers.AriaLive>
-      {pageTitle}
-      {renderOnHoldSection(project)}
-      {tabs}
-      <ACC.Renderers.AriaLive>
-        <ACC.Renderers.Messages messages={messages || []}/>
-      </ACC.Renderers.AriaLive>
-      {children}
+      {backLink && (<div className="govuk-grid-row"><div className="govuk-grid-column-full">{backLink}</div></div>)}
+      <main className="govuk-main-wrapper" id="main-content" role="main" >
+        <ACC.Renderers.AriaLive>
+          <ACC.ErrorSummary error={error} />
+          <ACC.ValidationSummary validation={validator} compressed={false} />
+        </ACC.Renderers.AriaLive>
+        {pageTitle}
+        {renderOnHoldSection(project)}
+        {tabs}
+        <ACC.Renderers.AriaLive>
+          <ACC.Renderers.Messages messages={messages || []}/>
+        </ACC.Renderers.AriaLive>
+        {children}
+      </main>
     </div>
   );
 };

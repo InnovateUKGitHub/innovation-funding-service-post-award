@@ -68,9 +68,11 @@ class ProjectNavigationComponent extends React.Component<Props> {
 
     return (
       <React.Fragment>
-        <Section qa="projectDetailsLink">
-          <Link className="govuk-!-font-size-19" route={ProjectDetailsRoute.getLink({ id: projectId })}>Contact details and project summary</Link>
-        </Section>
+        <div className="govuk-grid-row govuk-!-margin-bottom-6" data-qa="projectDetailsLink">
+          <div className="govuk-grid-column-full">
+            <Link className="govuk-!-font-size-19" route={ProjectDetailsRoute.getLink({ id: projectId })}>Contact details and project summary</Link>
+          </div>
+        </div>
         <Tabs tabList={navigationTabs} qa="project-navigation" />
       </React.Fragment>
     );
