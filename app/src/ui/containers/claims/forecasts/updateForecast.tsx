@@ -50,9 +50,9 @@ class UpdateForecastComponent extends ContainerBase<Params, PendingForecastData,
         validator={editor.validator}
         pageTitle={<ACC.Projects.Title project={combined.project} />}
       >
-        {this.renderOverheadsRate(combined.partner.overheadRate)}
         <ACC.Section title="" qa="partner-forecast" >
           {renderWarning(combined)}
+          {this.renderOverheadsRate(combined.partner.overheadRate)}
           <Form.Form
             editor={editor}
             onChange={data => this.handleChange(data, combined)}
