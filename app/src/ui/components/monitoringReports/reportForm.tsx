@@ -38,23 +38,30 @@ export class MonitoringReportFormComponent extends Component<Props> {
   private renderFormItems(editor: IEditorStore<Dtos.MonitoringReportDto, MonitoringReportDtoValidator>) {
     const { data, validator } = editor;
     const ReportForm = ACC.TypedForm<Dtos.MonitoringReportDto>();
+
     return data.questions.map((q, i) => {
-      const radioOptions = q.isScored ?
-        (q.options || []).map(y => ({ id: y.id, value: `${y.questionScore} - ${y.questionText}`, qa:`question-${q.displayOrder}-score-${y.questionScore}` }))
+      const radioOptions = q.isScored
+        ? (q.options || []).map(y => ({ id: y.id, value: `${y.questionScore} - ${y.questionText}`, qa:`question-${q.displayOrder}-score-${y.questionScore}` }))
         : [];
 
       return (
         <ReportForm.Fieldset heading={q.title} key={i}>
           <ReportForm.Hidden name={`question_${q.displayOrder}_reponse_id`} value={x => `${i}`} />
-          {radioOptions.length ? <ReportForm.Radio
-            name={`question_${q.displayOrder}_options`}
-            label={``}
-            inline={false}
-            options={radioOptions}
-            value={() => radioOptions.find(x => !!q.optionId && x.id === q.optionId)}
-            update={(x, value) => x.questions[i].optionId = value && value.id}
-            validation={validator.responses.results[i].score}
-          /> : null}
+          {
+            radioOptions.length ? (
+              <ReportForm.Radio
+                name={`question_${q.displayOrder}_options`}
+                label={``}
+                inline={false}
+                options={radioOptions}
+                value={() => radioOptions.find(x => !!q.optionId && x.id === q.optionId)}
+                update={(x, value) => x.questions[i].optionId = value && value.id}
+                validation={validator.responses.results[i].score}
+              />
+            ) : (
+              <ACC.Renderers.SimpleString>{q.description}</ACC.Renderers.SimpleString>
+            )
+          }
           <ReportForm.MultilineString
             name={`question_${q.displayOrder}_comments`}
             label="Comment"
