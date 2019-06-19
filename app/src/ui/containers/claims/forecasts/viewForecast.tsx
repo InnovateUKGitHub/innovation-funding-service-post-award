@@ -72,7 +72,7 @@ class ViewForecastComponent extends ContainerBase<Params, PendingForecastData, C
   private renderOverheadsRate(overheadRate: number | null) {
     if (!isNumber(overheadRate)) return null;
 
-    return <SimpleString>Overhead costs: <Percentage value={overheadRate}/></SimpleString>;
+    return <SimpleString qa="overhead-costs">Overhead costs: <Percentage value={overheadRate}/></SimpleString>;
   }
 
   private renderUpdateSection(partner: PartnerDto) {

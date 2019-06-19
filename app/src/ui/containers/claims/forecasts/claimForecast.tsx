@@ -33,7 +33,7 @@ class ClaimForecastComponent extends ContainerBase<ClaimForcastParams, PendingFo
   renderOverheadsRate(overheadRate: number | null) {
     if(!isNumber(overheadRate)) return null;
 
-    return <ACC.Renderers.SimpleString>Overhead costs: <ACC.Renderers.Percentage value={overheadRate}/></ACC.Renderers.SimpleString>;
+    return <ACC.Renderers.SimpleString qa="overhead-costs">Overhead costs: <ACC.Renderers.Percentage value={overheadRate}/></ACC.Renderers.SimpleString>;
   }
 
   renderContents(combined: ForecastData) {
