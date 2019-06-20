@@ -59,7 +59,7 @@ export class MonitoringReportFormComponent extends Component<Props> {
                 validation={validator.responses.results[i].score}
               />
             ) : (
-              <ACC.Renderers.SimpleString>{q.description}</ACC.Renderers.SimpleString>
+              <ACC.Renderers.SimpleString className="govuk-hint">{q.description}</ACC.Renderers.SimpleString>
             )
           }
           <ReportForm.MultilineString
