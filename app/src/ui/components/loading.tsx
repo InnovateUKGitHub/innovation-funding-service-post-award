@@ -63,7 +63,7 @@ export class Loader<T> extends React.Component<LoadingProps<T>, {}> {
     }
 
     private renderLoading(): React.ReactNode {
-        return !!this.props.renderLoading ? this.props.renderLoading() : <SimpleString>Loading...</SimpleString>;
+        return !!this.props.renderLoading ? this.props.renderLoading() : <SimpleString className="govuk-!-padding-top-5 govuk-!-padding-bottom-5">Loading...</SimpleString>;
     }
 
     private renderError(error: IAppError): React.ReactNode {
