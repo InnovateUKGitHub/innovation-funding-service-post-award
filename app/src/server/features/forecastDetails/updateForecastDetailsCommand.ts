@@ -3,10 +3,9 @@ import { ISalesforceProfileDetails } from "@server/repositories";
 import { Updatable } from "@server/repositories/salesforceRepositoryBase";
 import { GetAllForecastsGOLCostsQuery, GetAllForPartnerQuery, GetCostCategoriesQuery, UpdateClaimCommand } from "@server/features/claims";
 import { GetAllClaimDetailsByPartner } from "@server/features/claimDetails";
-import { GetByIdQuery as GetPartnerById } from "@server/features/partners";
 import { GetByIdQuery as GetProjectById } from "@server/features/projects";
 import { ForecastDetailsDtosValidator } from "@ui/validators/forecastDetailsDtosValidator";
-import { Authorisation, ClaimDto, ClaimStatus, IContext, PartnerDto, ProjectDto, ProjectRole } from "@framework/types";
+import { Authorisation, ClaimDto, ClaimStatus, IContext, ProjectRole } from "@framework/types";
 import { GetAllForecastsForPartnerQuery } from "./getAllForecastsForPartnerQuery";
 
 export class UpdateForecastDetailsCommand extends CommandBase<boolean> {
@@ -25,23 +24,57 @@ export class UpdateForecastDetailsCommand extends CommandBase<boolean> {
 
   protected async Run(context: IContext) {
 
-    const costCategories = await context.runQuery(new GetCostCategoriesQuery()).then(x => x.map<[string, boolean]>(y => [y.id, y.isCalculated])).then(x => new Map(x));
-    const partner = await context.runQuery(new GetPartnerById(this.partnerId));
-    const project = await context.runQuery(new GetProjectById(partner.projectId));
+    const project = await context.runQuery(new GetProjectById(this.projectId));
     const existing = await context.runQuery(new GetAllForecastsForPartnerQuery(this.partnerId));
 
-    const filteredForcasts = this.forecasts.filter(x => costCategories.get(x.costCategoryId) !== true);
-    const filteredExisting = existing.filter(x => costCategories.get(x.costCategoryId) !== true);
+    const preparedForecasts = await this.getPrepareForecastValues(context, project.periodId, existing);
 
     await this.testValidation(context);
-    await this.testPastForecastPeriodsHaveNotBeenUpdated(context, project, partner, filteredForcasts, filteredExisting);
-    await this.updateProfileDetails(context, filteredForcasts, filteredExisting);
+    await this.testPastForecastPeriodsHaveNotBeenUpdated(project.periodId, preparedForecasts, existing);
+    await this.updateProfileDetails(context, preparedForecasts, existing);
 
     if (this.submit) {
       await this.updateClaim(context);
     }
 
     return true;
+  }
+
+  private async getPrepareForecastValues(context: IContext, currentPeriodId: number, existing: ForecastDetailsDTO[]) {
+    // check to see if there are any calculated cost categories
+    const allCostCategories = await context.runQuery(new GetCostCategoriesQuery());
+    const calculatedCostCategoryIds = allCostCategories.filter(x => x.isCalculated).map(x => x.id);
+    const relatedCostCategoryIds = allCostCategories.filter(x => x.hasRelated).map(x => x.id);
+
+    if (this.forecasts.every(forecast => calculatedCostCategoryIds.indexOf(forecast.costCategoryId) === -1)) {
+      return Promise.resolve(this.forecasts);
+    }
+
+    const overheadRate = await context.repositories.partners.getById(this.partnerId).then(x => x.Acc_OverheadRate__c);
+
+    return this.forecasts.map(forecast => {
+      return Object.assign({}, forecast, {value : this.getForecastValue(forecast, currentPeriodId, overheadRate, calculatedCostCategoryIds, relatedCostCategoryIds, this.forecasts, existing)});
+    });
+  }
+
+  private getForecastValue(forecast: ForecastDetailsDTO, currentPeriodId: number, overheadRate: number, calculatedCostCategoryIds: string[], relatedCostCategoryIds: string[], sent: ForecastDetailsDTO[], existing: ForecastDetailsDTO[]) {
+    // if its for past period dont change
+    if (forecast.periodId <= currentPeriodId) {
+      return forecast.value;
+    }
+    // if its not calculated dont change
+    if (calculatedCostCategoryIds.indexOf(forecast.costCategoryId) === -1) {
+      return forecast.value;
+    }
+
+    // calculated - find the related update or if not sent then the existing related value
+    const related = [...sent, ...existing].find(x => relatedCostCategoryIds.indexOf(x.costCategoryId) !== -1 && forecast.periodId === x.periodId);
+
+    if (!related) {
+      throw new BadRequestError("Unable to calculate overheads");
+    }
+
+    return related.value * overheadRate / 100;
   }
 
   private async testValidation(context: IContext) {
@@ -56,12 +89,9 @@ export class UpdateForecastDetailsCommand extends CommandBase<boolean> {
     }
   }
 
-  private async testPastForecastPeriodsHaveNotBeenUpdated(context: IContext, project: ProjectDto, partner: PartnerDto, forcasts: ForecastDetailsDTO[], existing: ForecastDetailsDTO[]) {
-    const passed = existing.filter(x => x.periodId <= project.periodId)
-      .every(x => {
-        const forecast = forcasts.find(y => y.id === x.id);
-        return !!forecast && forecast.value === x.value;
-      });
+  private async testPastForecastPeriodsHaveNotBeenUpdated(periodId: number, forecasts: ForecastDetailsDTO[], existing: ForecastDetailsDTO[]) {
+    const passed = forecasts.filter(x => x.periodId <= periodId)
+      .every(x => !this.hasChanged(x, existing));
 
     if (!passed) {
       throw new BadRequestError("You can't update the forecast of approved periods.");
@@ -73,8 +103,8 @@ export class UpdateForecastDetailsCommand extends CommandBase<boolean> {
     return !existingItem || item.value !== existingItem.value;
   }
 
-  private async updateProfileDetails(context: IContext, forcasts: ForecastDetailsDTO[], existing: ForecastDetailsDTO[]) {
-    const updates = forcasts.filter(x => this.hasChanged(x, existing)).map<Updatable<ISalesforceProfileDetails>>(x => ({
+  private async updateProfileDetails(context: IContext, forecasts: ForecastDetailsDTO[], existing: ForecastDetailsDTO[]) {
+    const updates = forecasts.filter(x => this.hasChanged(x, existing)).map<Updatable<ISalesforceProfileDetails>>(x => ({
       Id: x.id,
       Acc_LatestForecastCost__c: x.value
     }));
