@@ -89,10 +89,10 @@ class ProjectDashboardComponent extends ContainerBaseWithState<Props, Data, Call
     return (
       <React.Fragment>
         {this.renderStatisticsSection(combinedData)}
-        {this.renderProjectList(combinedData, "Open claims", "open-claims", "section-open", "open", "You currently do not have any projects with open claims.")}
-        {this.renderProjectList(combinedData, "Awaiting the next claim period", "next-claims", "section-closed", "awaiting", "You currently do not have any projects outside of the claims period.")}
+        {this.renderProjectList(combinedData, "Projects with open claims", "open-claims", "section-open", "open", "You currently do not have any projects with open claims.")}
+        {this.renderProjectList(combinedData, "Projects awaiting the next claim period", "next-claims", "section-closed", "awaiting", "You currently do not have any projects outside of the claims period.")}
         {combinedData.filter(x => x.projectSection === "upcoming").length ? this.renderProjectList(combinedData, "Upcoming projects", "upcoming-claims", "section-upcoming", "upcoming", "") : null}
-        {combinedData.filter(x => x.projectSection === "archived").length ? this.renderProjectList(combinedData, "Archive", "archived-claims", "section-archived", "archived", ""): null}
+        {combinedData.filter(x => x.projectSection === "archived").length ? this.renderProjectList(combinedData, "Archived projects", "archived-claims", "section-archived", "archived", ""): null}
       </React.Fragment>
     );
   }
