@@ -125,7 +125,7 @@ describe("GetCostSummaryForPeriodQuery", () => {
     const costCategory = context.testData.createCostCategory();
     const value = 1234;
 
-    context.testData.createProfileTotalCostCategory(costCategory,partner, value);
+    context.testData.createProfileTotalCostCategory(costCategory, partner, value);
     context.testData.createClaimDetail(project, costCategory, partner, periodId);
 
     const query = new GetCostsSummaryForPeriodQuery(project.Id, partner.Id, periodId);
@@ -141,7 +141,7 @@ describe("GetCostSummaryForPeriodQuery", () => {
     const project = context.testData.createProject();
     const costCategory = context.testData.createCostCategory();
 
-    context.testData.createClaimDetail(project, costCategory, partner, periodId,x => x.Acc_PeriodCostCategoryTotal__c = null!);
+    context.testData.createClaimDetail(project, costCategory, partner, periodId, x => x.Acc_PeriodCostCategoryTotal__c = null!);
 
     const query = new GetCostsSummaryForPeriodQuery(project.Id, partner.Id, periodId);
     const result = await context.runQuery(query);
@@ -152,7 +152,7 @@ describe("GetCostSummaryForPeriodQuery", () => {
   it("should return correct cost claimed to date for cost category", async () => {
     const context = new TestContext();
     const periodId1 = 1;
-    const periodId2= 2;
+    const periodId2 = 2;
     const partner = context.testData.createPartner();
     const project = context.testData.createProject();
     const costCategory = context.testData.createCostCategory();
@@ -166,14 +166,44 @@ describe("GetCostSummaryForPeriodQuery", () => {
     expect(result[0].costsClaimedToDate).toBe(1234);
   });
 
+  test("Should return all cost categoried event if no details", async () => {
+    const context = new TestContext();
+
+    const project = context.testData.createProject();
+    const partner = context.testData.createPartner(project);
+
+    const expectedCostCategories = context.testData.range(3, i => context.testData.createCostCategory(x => {
+      x.Acc_CompetitionType__c = project.Acc_CompetitionType__c;
+      x.Acc_OrganisationType__c = partner.Acc_OrganisationType__c;
+    }));
+
+    // not expected cost categories as diff org
+    context.testData.range(3, i => context.testData.createCostCategory(x => {
+      x.Acc_CompetitionType__c = project.Acc_CompetitionType__c;
+      x.Acc_OrganisationType__c = partner.Acc_OrganisationType__c + "_";
+    }));
+
+    // not expected cost categories as diff comp
+    context.testData.range(3, i => context.testData.createCostCategory(x => {
+      x.Acc_CompetitionType__c = project.Acc_CompetitionType__c + "_";
+      x.Acc_OrganisationType__c = partner.Acc_OrganisationType__c;
+    }));
+
+    const query = new GetCostsSummaryForPeriodQuery(project.Id, partner.Id, 1);
+    const result = await context.runQuery(query);
+
+    expect(result.map(x => x.costCategoryId)).toEqual(expectedCostCategories.map(x => x.Id));
+
+  });
+
   test("accessControl - Partner Financial Contact passes", async () => {
-    const context  = new TestContext();
-    const project  = context.testData.createProject();
+    const context = new TestContext();
+    const project = context.testData.createProject();
     const partner = context.testData.createPartner();
     const periodId = 1;
 
     const query = new GetCostsSummaryForPeriodQuery(project.Id, partner.Id, periodId);
-    const auth     = new Authorisation({
+    const auth = new Authorisation({
       [project.Id]: {
         projectRoles: ProjectRole.Unknown,
         partnerRoles: { [partner.Id]: ProjectRole.FinancialContact }
@@ -184,32 +214,32 @@ describe("GetCostSummaryForPeriodQuery", () => {
   });
 
   test("accessControl - Project Manager passes", async () => {
-    const context  = new TestContext();
-    const project  = context.testData.createProject();
+    const context = new TestContext();
+    const project = context.testData.createProject();
     const partner = context.testData.createPartner();
     const periodId = 1;
     const query = new GetCostsSummaryForPeriodQuery(project.Id, partner.Id, periodId);
-    const auth     = new Authorisation({
+    const auth = new Authorisation({
       [project.Id]: {
         projectRoles: ProjectRole.ProjectManager,
-        partnerRoles: { }
+        partnerRoles: {}
       }
     });
 
     expect(await context.runAccessControl(auth, query)).toBe(true);
-});
+  });
 
   test("accessControl - Project Monitoring Officer passes", async () => {
-    const context  = new TestContext();
-    const project  = context.testData.createProject();
+    const context = new TestContext();
+    const project = context.testData.createProject();
     const partner = context.testData.createPartner();
     const periodId = 1;
 
     const query = new GetCostsSummaryForPeriodQuery(project.Id, partner.Id, periodId);
-    const auth     = new Authorisation({
+    const auth = new Authorisation({
       [project.Id]: {
         projectRoles: ProjectRole.MonitoringOfficer,
-        partnerRoles: { }
+        partnerRoles: {}
       }
     });
 
@@ -217,16 +247,16 @@ describe("GetCostSummaryForPeriodQuery", () => {
   });
 
   test("accessControl - Project Unkown fails", async () => {
-    const context  = new TestContext();
-    const project  = context.testData.createProject();
+    const context = new TestContext();
+    const project = context.testData.createProject();
     const partner = context.testData.createPartner();
     const periodId = 1;
 
     const query = new GetCostsSummaryForPeriodQuery(project.Id, partner.Id, periodId);
-    const auth     = new Authorisation({
+    const auth = new Authorisation({
       [project.Id]: {
         projectRoles: ProjectRole.Unknown,
-        partnerRoles: { }
+        partnerRoles: {}
       }
     });
 
@@ -234,16 +264,16 @@ describe("GetCostSummaryForPeriodQuery", () => {
   });
 
   test("accessControl - Project Financial Contact fails", async () => {
-    const context  = new TestContext();
-    const project  = context.testData.createProject();
+    const context = new TestContext();
+    const project = context.testData.createProject();
     const partner = context.testData.createPartner();
     const periodId = 1;
 
     const query = new GetCostsSummaryForPeriodQuery(project.Id, partner.Id, periodId);
-    const auth     = new Authorisation({
+    const auth = new Authorisation({
       [project.Id]: {
         projectRoles: ProjectRole.FinancialContact,
-        partnerRoles: { }
+        partnerRoles: {}
       }
     });
 
