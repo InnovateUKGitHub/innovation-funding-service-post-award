@@ -107,6 +107,12 @@ class ClaimDetailsTestRepository extends TestRepository<Repositories.ISalesforce
         }
         return Promise.resolve(false);
     }
+
+    insert(item: Partial<Repositories.ISalesforceClaimDetails>): Promise<string> {
+      const newId: string = `ClaimDetails-${this.Items.length}`;
+      this.Items.push({ ...item, Id: newId  } as Repositories.ISalesforceClaimDetails);
+      return Promise.resolve(newId);
+    }
 }
 
 class DocumentsTestRepository extends TestRepository<[string, ISalesforceDocument]> implements Repositories.IDocumentsRepository {
