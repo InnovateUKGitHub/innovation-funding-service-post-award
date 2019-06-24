@@ -62,7 +62,7 @@ export function email(results: Results<{}>, value: string, message?: string) {
 }
 
 export function isCurrency(results: Results<{}>, value: number|null, message?: string) {
-    const regex = /^-?[0-9]+(\.[0-9]{2})?$/i;
+    const regex = /^-?[0-9]+(\.[0-9]{1,2})?$/i;
     if(value === null || value === undefined) { return valid(results); }
     return isTrue(results, (!value) || regex.test(value.toString()), message || "Invalid amount");
 }
