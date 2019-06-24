@@ -219,3 +219,16 @@
 .acc-section:last-child {
   margin-bottom: 0!important;
 }
+
+/* overriding govuk styles so we always render content so bounding boxes are available */
+.js-enabled .acc-accordion__section-content {
+  height: 0;
+  overflow: hidden;
+  padding: 0;
+}
+
+.js-enabled .govuk-accordion__section--expanded .acc-accordion__section-content {
+  height: auto;
+  overflow: auto;
+  padding: 15px 0 15px 0;
+}
