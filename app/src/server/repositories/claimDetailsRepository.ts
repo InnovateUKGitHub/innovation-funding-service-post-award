@@ -1,4 +1,7 @@
 import SalesforceRepositoryBase, { Updatable } from "./salesforceRepositoryBase";
+import { IRecordTypeRepository } from ".";
+import { Connection } from "jsforce";
+import { ILogger } from "@server/features/common";
 
 export interface ISalesforceClaimDetails {
   Id: string;
@@ -20,9 +23,14 @@ export interface IClaimDetailsRepository {
   get(key: ClaimDetailKey): Promise<ISalesforceClaimDetails|null>;
   getAllByPartner(partnerId: string): Promise<ISalesforceClaimDetails[]>;
   update(item: Updatable<ISalesforceClaimDetails>): Promise<boolean>;
+  insert(insert: Partial<ISalesforceClaimDetails>): Promise<string>;
 }
 
 export class ClaimDetailsRepository extends SalesforceRepositoryBase<ISalesforceClaimDetails> implements IClaimDetailsRepository {
+
+  constructor(private recordTypes: IRecordTypeRepository, getSalesforceConnection: () => Promise<Connection>, logger: ILogger) {
+    super(getSalesforceConnection, logger);
+  }
 
   private readonly recordType: string = "Claims Detail";
 
@@ -81,4 +89,26 @@ export class ClaimDetailsRepository extends SalesforceRepositoryBase<ISalesforce
   update(item: Updatable<ISalesforceClaimDetails>) {
     return super.updateItem(item);
   }
+
+  async insert(item: Partial<ISalesforceClaimDetails>) {
+    const RecordTypeId = await this.recordTypes.get(this.salesforceObjectName, this.recordType).then(x => x.Id);
+    const salesforcUpdate: Partial<{
+      Acc_ProjectParticipant__c: string;
+      Acc_CostCategory__c: string;
+      Acc_PeriodCostCategoryTotal__c: number;
+      Acc_ProjectPeriodNumber__c: number;
+      Acc_ReasonForDifference__c: string|null;
+      RecordTypeId: string
+    }> = {
+      Acc_ProjectParticipant__c: item.Acc_ProjectParticipant__r && item.Acc_ProjectParticipant__r.Id,
+      Acc_CostCategory__c: item.Acc_CostCategory__c,
+      Acc_PeriodCostCategoryTotal__c: item.Acc_PeriodCostCategoryTotal__c,
+      Acc_ProjectPeriodNumber__c: item.Acc_ProjectPeriodNumber__c,
+      Acc_ReasonForDifference__c: item.Acc_ReasonForDifference__c,
+      RecordTypeId
+    };
+
+    return super.insertItem(salesforcUpdate);
+  }
+
 }

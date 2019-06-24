@@ -1,12 +1,9 @@
 import { TestContext } from "../../testContextProvider";
 import { BadRequestError, ValidationError } from "@server/features/common/appError";
-import * as Repositories from "@server/repositories";
 import { Authorisation, ProjectRole } from "@framework/types";
 import { mapClaimDetails } from "@server/features/claimDetails/mapClaimDetails";
 import { SaveClaimDetails } from "@server/features/claimDetails/saveClaimDetailsCommand";
-import mapClaimLineItem from "@server/features/claimDetails/mapClaimLineItem";
-import { ISalesforceClaimDetails, ISalesforceCostCategory, ISalesforcePartner } from "@server/repositories";
-import { isLVal } from "@babel/types";
+import { ISalesforceClaimDetails } from "@server/repositories";
 
 const createNewLineItem = (claimDetails: ISalesforceClaimDetails, value?: number, description?: string): ClaimLineItemDto => {
   return ({
@@ -215,6 +212,68 @@ describe("SaveClaimDetails", () => {
     expect(claimDetail.Acc_ReasonForDifference__c).toBe(null);
   });
 
+  test("if no claim detail will create claim detail with no line items", async () => {
+    const context = new TestContext();
+    const costCategory = context.testData.createCostCategory();
+
+    const partner = context.testData.createPartner();
+    const periodId = 1;
+
+    const dto: ClaimDetailsDto = {
+      id: null as any as string,
+      costCategoryId: costCategory.Id,
+      periodId,
+      value: 0,
+      comments: "Test comments",
+      periodStart: null,
+      periodEnd: null,
+      lineItems: [],
+    };
+
+    expect(context.repositories.claimDetails.Items.length).toBe(0);
+    expect(context.repositories.claimLineItems.Items.length).toBe(0);
+
+    const command = new SaveClaimDetails(partner.Acc_ProjectId__r.Id, partner.Id, periodId, costCategory.Id, dto);
+    await context.runCommand(command);
+
+    expect(context.repositories.claimDetails.Items.length).toBe(1);
+    expect(context.repositories.claimLineItems.Items.length).toBe(0);
+    expect(context.repositories.claimDetails.Items[0].Acc_CostCategory__c).toBe(costCategory.Id);
+    expect(context.repositories.claimDetails.Items[0].Acc_ReasonForDifference__c).toBe("Test comments");
+
+  });
+
+  test("if no claim detail will create claim detail with line items", async () => {
+    const context = new TestContext();
+    const costCategory = context.testData.createCostCategory();
+
+    const partner = context.testData.createPartner();
+    const periodId = 1;
+
+    const dto: ClaimDetailsDto = {
+      id: null as any,
+      costCategoryId: costCategory.Id,
+      periodId,
+      value: 0,
+      comments: null,
+      periodStart: null,
+      periodEnd: null,
+      lineItems: [
+        { id: null as any, costCategoryId: costCategory.Id, partnerId: partner.Id, periodId, value: 10, description: "First line item" },
+        { id: null as any, costCategoryId: costCategory.Id, partnerId: partner.Id, periodId, value: 10, description: "Second line item" },
+      ],
+    };
+
+    expect(context.repositories.claimLineItems.Items.length).toBe(0);
+
+    const command = new SaveClaimDetails(partner.Acc_ProjectId__r.Id, partner.Id, periodId, costCategory.Id, dto);
+    await context.runCommand(command);
+
+    expect(context.repositories.claimLineItems.Items.length).toBe(2);
+    expect(context.repositories.claimLineItems.Items[0].Acc_LineItemDescription__c).toBe("First line item");
+    expect(context.repositories.claimLineItems.Items[1].Acc_LineItemDescription__c).toBe("Second line item");
+  });
+
   describe("validateRequest", () => {
     test("invalid project id throws error", async () => {
       const context = new TestContext();
@@ -412,7 +471,6 @@ describe("SaveClaimDetails", () => {
       expect(overheadsLineItem.Acc_CostCategory__c).toBe(overheadsToExpect.Id);
       expect(overheadsLineItem.Acc_LineItemCost__c).toBe(0);
     });
-
   });
 
   describe("accessControl", () => {
