@@ -67,7 +67,7 @@ export default abstract class SalesforceRepositoryBase<T> {
   protected async loadItem(filter: Partial<T> | string): Promise<T> {
     const result = await this.filterOne(filter);
     if (!result) {
-      throw new Errors.SalesforceInvalidFilterError();
+      throw new Errors.SalesforceInvalidFilterError("Filter did not return a single item");
     }
     return result;
   }
@@ -102,7 +102,7 @@ export default abstract class SalesforceRepositoryBase<T> {
         if (result.success) {
           return result.id;
         }
-        throw new Errors.SalesforceDataChangeError("Failed to insert to saleforce", this.getDataChangeErrorMessage(result));
+        throw new Errors.SalesforceDataChangeError("Failed to insert to salesforce", this.getDataChangeErrorMessage(result));
       })
       .catch(e => { throw this.constructError(e); })
       ;
@@ -116,7 +116,7 @@ export default abstract class SalesforceRepositoryBase<T> {
         if (results.every(x => x.success)) {
           return results.map(x => x.success ? x.id.toString() : "");
         }
-        throw new Errors.SalesforceDataChangeError("Failed to insert to saleforce", this.getDataChangeErrorMessages(results));
+        throw new Errors.SalesforceDataChangeError("Failed to insert to salesforce", this.getDataChangeErrorMessages(results));
       })
       .catch(e => { throw this.constructError(e); })
       ;
@@ -130,7 +130,7 @@ export default abstract class SalesforceRepositoryBase<T> {
         if (results.success) {
           return true;
         }
-        throw new Errors.SalesforceDataChangeError("Failed to update to saleforce", this.getDataChangeErrorMessage(results));
+        throw new Errors.SalesforceDataChangeError("Failed to update salesforce", this.getDataChangeErrorMessage(results));
       })
       .catch(e => { throw this.constructError(e); })
       ;
@@ -144,7 +144,7 @@ export default abstract class SalesforceRepositoryBase<T> {
         if (results.every(x => x.success)) {
           return true;
         }
-        throw new Errors.SalesforceDataChangeError("Failed to update to saleforce", this.getDataChangeErrorMessages(results));
+        throw new Errors.SalesforceDataChangeError("Failed to update salesforce", this.getDataChangeErrorMessages(results));
       })
       .catch(e => { throw this.constructError(e); })
       ;
@@ -158,7 +158,7 @@ export default abstract class SalesforceRepositoryBase<T> {
         if (result.every(x => x.success)) {
           return;
         }
-        throw new Errors.SalesforceDataChangeError("Failed to delete from saleforce", this.getDataChangeErrorMessages(result));
+        throw new Errors.SalesforceDataChangeError("Failed to delete from salesforce", this.getDataChangeErrorMessages(result));
       })
       .catch(e => { throw this.constructError(e); });
   }
@@ -171,7 +171,7 @@ export default abstract class SalesforceRepositoryBase<T> {
         if (result.success) {
           return;
         }
-        throw new Errors.SalesforceDataChangeError("Failed to delete from saleforce", this.getDataChangeErrorMessage(result));
+        throw new Errors.SalesforceDataChangeError("Failed to delete from salesforce", this.getDataChangeErrorMessage(result));
       })
       .catch(e => { throw this.constructError(e); });
   }
