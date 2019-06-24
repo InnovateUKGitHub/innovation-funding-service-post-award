@@ -112,7 +112,7 @@ class ProjectDashboardComponent extends ContainerBaseWithState<Props, Data, Call
     return (
       <ACC.Section qa="requiring-action-section" title="Overview">
         {/* tslint:disable-next-line */}
-        <div className="govuk-grid-column-full govuk-statistics-section">
+        <div className="govuk-grid-row acc-statistics-section">
           {this.renderStatisticsBox(requestsToReview, "Project change requests to review.", () => this.setState({showRequestsToReview: !this.state.showRequestsToReview}), this.state.showRequestsToReview, "pcr")}
           {this.renderStatisticsBox(claimsToReview, "Partner claims to review.", () => this.setState({ showClaimsToReview: !this.state.showClaimsToReview }), this.state.showClaimsToReview, "review")}
           {this.renderStatisticsBox(pendingClaims, "Partner claims pending.", () => this.setState({showClaimsWithParticipant: !this.state.showClaimsWithParticipant}), this.state.showClaimsWithParticipant, "queried")}
@@ -123,16 +123,25 @@ class ProjectDashboardComponent extends ContainerBaseWithState<Props, Data, Call
 
   private renderStatisticsBox(numberOfClaims: number, label: string, filterFunction: () => void, buttonIsPressed: boolean, qa?: string) {
     if (this.props.features.projectFiltering && numberOfClaims > 0) {
+      // empty div needed to prevent focus on button becoming misaligned
       return (
-        <button className={classNames("govuk-statistics-section__details", "govuk-statistics-section__details--button", {"govuk-statistics-section__details--button--unselected": !buttonIsPressed})} aria-pressed={buttonIsPressed} onClick={filterFunction}>
-          <StatisticsBox number={numberOfClaims} label={label} qa={qa}/>
-        </button>
+        <div className="govuk-grid-column-one-third">
+          <button className={classNames("acc-statistics-section__details", "acc-statistics-section__details--button", {"acc-statistics-section__details--button--unselected": !buttonIsPressed})} aria-pressed={buttonIsPressed} onClick={() => filterFunction()}>
+            <div>
+              <StatisticsBox number={numberOfClaims} label={label} qa={qa}/>
+            </div>
+          </button>
+        </div>
       );
     }
 
     return(
-      <div className="govuk-statistics-section__details">
-        <StatisticsBox number={numberOfClaims} label={label} qa={qa}/>
+      <div className="govuk-grid-column-one-third">
+        <div className="acc-statistics-section__details">
+          <div>
+            <StatisticsBox number={numberOfClaims} label={label} qa={qa}/>
+          </div>
+        </div>
       </div>
     );
   }
