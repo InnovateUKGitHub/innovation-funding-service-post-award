@@ -87,7 +87,7 @@ const renderWarningMessage = (data: ForecastData) => {
       data.claimDetails.forEach(x => total += (x.costCategoryId === category.id && x.periodId <= currentPeriod) ? x.value : 0);
       forecasts.forEach(x => total += (x.costCategoryId === category.id && x.periodId > currentPeriod) ? x.value : 0);
 
-      if (!gol || gol.value < total) {
+      if (gol && gol.value < total) {
         categories.push(category.name);
       }
     });
