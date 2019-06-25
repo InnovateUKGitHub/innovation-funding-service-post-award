@@ -11,8 +11,8 @@ const createNewLineItem = (claimDetails: ISalesforceClaimDetails, value?: number
     costCategoryId: claimDetails.Acc_CostCategory__c,
     partnerId: claimDetails.Acc_ProjectParticipant__r.Id,
     periodId: claimDetails.Acc_ProjectPeriodNumber__c,
-    value: value||100,
-    description: description|| "A desciption"
+    value: value || 100,
+    description: description || "A desciption"
   });
 };
 
@@ -66,7 +66,7 @@ describe("SaveClaimDetails", () => {
     const claimDetails = context.testData.createClaimDetail(project, costCategory, partner);
 
     const lineItem = createNewLineItem(claimDetails);
-    lineItem.value= NaN;
+    lineItem.value = NaN;
 
     expect(context.repositories.claimLineItems.Items).toHaveLength(0);
 
@@ -89,7 +89,7 @@ describe("SaveClaimDetails", () => {
     const claimDetails = context.testData.createClaimDetail(project, costCategory, partner);
 
     const lineItem = createNewLineItem(claimDetails);
-    (lineItem as any).value= null;
+    (lineItem as any).value = null;
 
     expect(context.repositories.claimLineItems.Items).toHaveLength(0);
 
@@ -187,7 +187,7 @@ describe("SaveClaimDetails", () => {
     const project = context.testData.createProject();
     const partner = context.testData.createPartner();
     const costCategory = context.testData.createCostCategory();
-    const claimDetail = context.testData.createClaimDetail(project, costCategory, partner, 1, x => x.Acc_ReasonForDifference__c = "An old message" );
+    const claimDetail = context.testData.createClaimDetail(project, costCategory, partner, 1, x => x.Acc_ReasonForDifference__c = "An old message");
     const claimDetails = mapClaimDetails(claimDetail, [], context);
     claimDetails.comments = "A new message";
 
@@ -202,7 +202,7 @@ describe("SaveClaimDetails", () => {
     const project = context.testData.createProject();
     const partner = context.testData.createPartner();
     const costCategory = context.testData.createCostCategory();
-    const claimDetail = context.testData.createClaimDetail(project, costCategory, partner, 1, x => x.Acc_ReasonForDifference__c = "An old message" );
+    const claimDetail = context.testData.createClaimDetail(project, costCategory, partner, 1, x => x.Acc_ReasonForDifference__c = "An old message");
     const claimDetails = mapClaimDetails(claimDetail, [], context);
     claimDetails.comments = null;
 
@@ -471,6 +471,34 @@ describe("SaveClaimDetails", () => {
       expect(overheadsLineItem.Acc_CostCategory__c).toBe(overheadsToExpect.Id);
       expect(overheadsLineItem.Acc_LineItemCost__c).toBe(0);
     });
+
+    test("overheads calulation handle empty values", async () => {
+      const context = new TestContext();
+
+      const labour = context.testData.createCostCategory(x => x.Acc_CostCategoryName__c = "Labour");
+      const overheads = context.testData.createCostCategory(x => x.Acc_CostCategoryName__c = "Overheads");
+
+      const periodId = 1;
+      const project = context.testData.createProject();
+      const partner = context.testData.createPartner(project, x => x.Acc_OverheadRate__c = 20);
+
+      const dto = {
+        costCategoryId: labour.Id,
+        lineItems: [
+          { costCategoryId: labour.Id, partnerId: partner.Id, periodId, value: 200, description: "Line 1" },
+          { costCategoryId: labour.Id, partnerId: partner.Id, periodId, value: undefined, description: undefined },
+        ] as ClaimLineItemDto[]
+      } as ClaimDetailsDto;
+
+      const command = new SaveClaimDetails(partner.Acc_ProjectId__r.Id, partner.Id, periodId, labour.Id, dto);
+      await context.runCommand(command);
+
+      expect(context.repositories.claimLineItems.Items.length).toBe(2);
+      expect(context.repositories.claimLineItems.Items[0].Acc_CostCategory__c).toBe(labour.Id);
+      expect(context.repositories.claimLineItems.Items[1].Acc_CostCategory__c).toBe(overheads.Id);
+      expect(context.repositories.claimLineItems.Items[1].Acc_LineItemCost__c).toBe(200 * 0.2);
+
+    });
   });
 
   describe("accessControl", () => {
@@ -479,7 +507,7 @@ describe("SaveClaimDetails", () => {
       const project = context.testData.createProject();
       const partner = context.testData.createPartner();
       const command = new SaveClaimDetails(project.Id, partner.Id, 1, "", {} as ClaimDetailsDto);
-      const auth    = new Authorisation({
+      const auth = new Authorisation({
         [project.Id]: {
           projectRoles: ProjectRole.Unknown,
           partnerRoles: { [partner.Id]: ProjectRole.FinancialContact }
@@ -493,8 +521,8 @@ describe("SaveClaimDetails", () => {
       const context = new TestContext();
       const project = context.testData.createProject();
       const partner = context.testData.createPartner();
-      const command = new SaveClaimDetails(project.Id, partner.Id, 1, "",  {} as ClaimDetailsDto);
-      const auth    = new Authorisation({
+      const command = new SaveClaimDetails(project.Id, partner.Id, 1, "", {} as ClaimDetailsDto);
+      const auth = new Authorisation({
         [project.Id]: {
           projectRoles: ProjectRole.FinancialContact | ProjectRole.MonitoringOfficer | ProjectRole.ProjectManager,
           partnerRoles: { [partner.Id]: ProjectRole.MonitoringOfficer | ProjectRole.ProjectManager }
