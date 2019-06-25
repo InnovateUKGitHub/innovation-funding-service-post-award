@@ -1,7 +1,15 @@
 
-export class SalesforceUnavilableError extends Error { }
+export class SalesforceUnavilableError extends Error {
+    constructor(message: string) {
+      super(message);
+    }
+}
 
-export class SalesforceInvalidFilterError extends Error { }
+export class SalesforceInvalidFilterError extends Error {
+  constructor(message: string) {
+    super(message);
+  }
+}
 
 export class SalesforceDataChangeError extends Error {
   constructor(message: string, public errors: string[]) {
