@@ -85,8 +85,8 @@ export class SaveClaimDetails extends CommandBase<boolean> {
 
     const partner = await context.repositories.partners.getById(this.partnerId);
 
-    const labourTotal = lineItems.reduce((a, b) => a + b.value, 0) * partner.Acc_OverheadRate__c / 100;
-    const relatedCost = parseFloat(labourTotal.toFixed(2));
+    const labourTotal = lineItems.filter(x => !!x.value).reduce((a, b) => a + b.value, 0);
+    const relatedCost = parseFloat((labourTotal * partner.Acc_OverheadRate__c / 100).toFixed(2));
 
     const relatedCostCategory = costCategories.find(x => x.organisationType === partner.Acc_OrganisationType__c && x.competitionType === partner.Acc_ProjectId__r.Acc_CompetitionType__c && x.isCalculated);
 
