@@ -2,6 +2,7 @@ import React from "react";
 import { Link as RouterLink } from "react-router5";
 import { ILinkInfo } from "@framework/types/ILinkInfo";
 import { scrollToTheTopInstantly } from "@framework/util/windowHelpers";
+import classNames from "classnames";
 
 interface Props {
   id?: string;
@@ -32,7 +33,7 @@ export const BackLink: React.SFC<Props> = (props) => (
   <RouterLink
     routeName={props.route.routeName}
     routeParams={props.route.routeParams}
-    className={`govuk-back-link ${props.className}`}
+    className={classNames("govuk-back-link", props.className)}
   >
     {props.children}
   </RouterLink>

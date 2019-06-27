@@ -4,6 +4,7 @@ export interface IClientConfig {
   ifsRoot: string;
   features: IFeatureFlags;
   standardOverheadRate: number;
+  ssoEnabled: boolean;
 }
 
 export const configReducer = (state: IClientConfig  = {} as IClientConfig , action: RootActions) => {
