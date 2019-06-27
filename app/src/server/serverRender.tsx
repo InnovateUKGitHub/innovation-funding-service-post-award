@@ -17,6 +17,7 @@ import contextProvider from "./features/common/contextProvider";
 import { GetAllProjectRolesForUser } from "./features/projects/getAllProjectRolesForUser";
 import { Logger } from "./features/common/logger";
 import { Authorisation, IAppError, IClientUser } from "@framework/types";
+import { IClientConfig } from "@ui/redux/reducers/configReducer";
 
 async function loadData(dispatch: Dispatch, getState: () => RootState, dataCalls: AsyncThunk<any>[]): Promise<void> {
   const allPromises = dataCalls.map(action => action(dispatch, getState, null));
@@ -47,14 +48,20 @@ export async function serverRender(req: Request, res: Response, error?: IAppErro
     const roleInfo = await context.runQuery(new GetAllProjectRolesForUser()).then(x => x.permissions);
     const auth = new Authorisation(roleInfo);
     const user: IClientUser = { ...req.session!.user, roleInfo };
+    const clientConfig: IClientConfig = {
+      ifsRoot: context.config.urls.ifsRoot,
+      features: context.config.features,
+      standardOverheadRate: context.config.standardOverheadRate,
+      ssoEnabled: context.config.sso.enabled
+    };
 
-    const initialState = setupInitialState(route, user, context.config);
+    const initialState = setupInitialState(route, user, clientConfig);
     const middleware = setupMiddleware(router, false);
     const store = createStore(rootReducer, initialState, middleware);
     const matched = matchRoute(route);
     const params = matched && matched.getParams && matched.getParams(route) || {};
 
-    if (matched.accessControl && !matched.accessControl(auth, params, context.config.features)) {
+    if (matched.accessControl && !matched.accessControl(auth, params, clientConfig)) {
       throw new ForbiddenError();
     }
 

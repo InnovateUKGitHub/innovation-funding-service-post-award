@@ -8,6 +8,7 @@ import { RootActions } from "@ui/redux/actions/root";
 import { AsyncThunk } from "@ui/redux/actions";
 import { matchRoute } from "@ui/routing/matchRoute";
 import { Authorisation, IClientUser, ILinkInfo } from "@framework/types";
+import { IClientConfig } from "@ui/redux/reducers/configReducer";
 
 interface BaseProps {
     messages: string[];
@@ -70,7 +71,7 @@ class ReduxContainerWrapper<TParams, TData, TCallbacks> {
         routePath: string,
         getParams: (route: RouteState) => TParams,
         getLoadDataActions: (params: TParams, auth: Authorisation) => AsyncThunk<any>[],
-        accessControl?: (auth: Authorisation, params: TParams, features: IFeatureFlags) => boolean,
+        accessControl?: (auth: Authorisation, params: TParams, config: IClientConfig) => boolean,
         getTitle: (store: RootState, params: TParams) => {
             htmlTitle: string;
             displayTitle: string;
@@ -81,7 +82,7 @@ class ReduxContainerWrapper<TParams, TData, TCallbacks> {
             getLink: (params: TParams): ILinkInfo => ({
                 routeName: options.routeName,
                 routeParams: this.convertToParameters(params),
-                accessControl: (user: IClientUser, features: IFeatureFlags) => !options.accessControl || options.accessControl(new Authorisation(user.roleInfo), params, features)
+                accessControl: (user: IClientUser, config: IClientConfig) => !options.accessControl || options.accessControl(new Authorisation(user.roleInfo), params, config)
             }),
             ...options,
         };
