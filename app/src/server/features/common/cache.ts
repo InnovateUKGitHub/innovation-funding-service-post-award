@@ -23,7 +23,9 @@ export class Cache<T> implements ICache<T> {
   set(key: string, item: T): T {
     this.clear(key);
     this.store[key] = item;
-    this.timeouts[key] = setTimeout(() => this.clear(key), this.minutes * 60 * 1000);
+    if(this.minutes) {
+      this.timeouts[key] = setTimeout(() => this.clear(key), this.minutes * 60 * 1000);
+    }
     return item;
   }
 

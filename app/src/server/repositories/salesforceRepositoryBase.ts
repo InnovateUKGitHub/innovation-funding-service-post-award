@@ -2,12 +2,13 @@ import { Connection, RecordResult } from "jsforce";
 import { Stream } from "stream";
 import * as Errors from "@server/repositories/errors";
 import { ILogger } from "@server/features/common";
+import { ISalesforceMapper } from "./mappers/saleforceMapperBase";
 
 export type Updatable<T> = Partial<T> & {
   Id: string
 };
 
-export default abstract class SalesforceRepositoryBase<T> {
+export abstract class SalesforceRepositoryBaseWithMapping<TSalesforce, TEntity> {
   public constructor(
     protected readonly getSalesforceConnection: () => Promise<Connection>,
     protected readonly logger: ILogger
@@ -15,11 +16,13 @@ export default abstract class SalesforceRepositoryBase<T> {
 
   protected abstract readonly salesforceObjectName: string;
   protected abstract readonly salesforceFieldNames: string[];
+  protected abstract readonly mapper: ISalesforceMapper<TSalesforce, TEntity>;
 
-  protected async retrieve(id: string): Promise<T | null> {
+  protected async retrieve(id: string): Promise<TEntity | null> {
     try {
       const conn = await this.getSalesforceConnection();
-      return await conn.sobject<T>(this.salesforceObjectName).retrieve(id);
+      const salesforce = await conn.sobject<TSalesforce>(this.salesforceObjectName).retrieve(id);
+      return salesforce && this.mapper.map(salesforce);
     }
     catch (e) {
       if (e.errorCode === "MALFORMED_ID" || e.errorCode === "NOT_FOUND") {
@@ -31,7 +34,7 @@ export default abstract class SalesforceRepositoryBase<T> {
     }
   }
 
-  protected async all(): Promise<T[]> {
+  protected async all(): Promise<TEntity[]> {
     const conn = await this.getSalesforceConnection();
     const result = await conn.sobject(this.salesforceObjectName)
       .select(this.salesforceFieldNames)
@@ -40,7 +43,7 @@ export default abstract class SalesforceRepositoryBase<T> {
       .catch(e => { throw this.constructError(e); })
       ;
 
-    return result as T[];
+    return result as TEntity[];
   }
 
   protected async getBlob(id: string, fieldName: string): Promise<Stream> {
@@ -51,7 +54,7 @@ export default abstract class SalesforceRepositoryBase<T> {
       ;
   }
 
-  protected async where(filter: Partial<T> | string): Promise<T[]> {
+  protected async where(filter: Partial<TSalesforce> | string): Promise<TEntity[]> {
     const conn = await this.getSalesforceConnection();
     const result = await conn.sobject(this.salesforceObjectName)
       .select(this.salesforceFieldNames)
@@ -61,10 +64,10 @@ export default abstract class SalesforceRepositoryBase<T> {
       .catch(e => { throw this.constructError(e); })
       ;
 
-    return result as T[];
+    return result as TEntity[];
   }
 
-  protected async loadItem(filter: Partial<T> | string): Promise<T> {
+  protected async loadItem(filter: Partial<TSalesforce> | string): Promise<TEntity> {
     const result = await this.filterOne(filter);
     if (!result) {
       throw new Errors.SalesforceInvalidFilterError("Filter did not return a single item");
@@ -72,7 +75,7 @@ export default abstract class SalesforceRepositoryBase<T> {
     return result;
   }
 
-  protected async filterOne(filter: Partial<T> | string): Promise<T | null> {
+  protected async filterOne(filter: Partial<TSalesforce> | string): Promise<TEntity | null> {
     const conn = await this.getSalesforceConnection();
     const result = await conn.sobject(this.salesforceObjectName)
       .select(this.salesforceFieldNames)
@@ -83,7 +86,7 @@ export default abstract class SalesforceRepositoryBase<T> {
       .catch(e => { throw this.constructError(e); })
       ;
 
-    return result as T;
+    return result as TEntity;
   }
 
   private getDataChangeErrorMessage(result: RecordResult): string[] {
@@ -94,7 +97,7 @@ export default abstract class SalesforceRepositoryBase<T> {
     return results.map(x => !x.success ? x.errors : []).reduce<string[]>((a, b) => a.concat(b), []);
   }
 
-  protected async insertItem(inserts: Partial<T>): Promise<string> {
+  protected async insertItem(inserts: Partial<TSalesforce>): Promise<string> {
     const conn = await this.getSalesforceConnection();
     return conn.sobject(this.salesforceObjectName)
       .insert(inserts)
@@ -108,9 +111,9 @@ export default abstract class SalesforceRepositoryBase<T> {
       ;
   }
 
-  protected async insertAll(inserts: Partial<T>[]): Promise<string[]> {
+  protected async insertAll(inserts: Partial<TSalesforce>[]): Promise<string[]> {
     const conn = await this.getSalesforceConnection();
-    return conn.sobject<Partial<T>>(this.salesforceObjectName)
+    return conn.sobject<Partial<TSalesforce>>(this.salesforceObjectName)
       .insert(inserts)
       .then(results => {
         if (results.every(x => x.success)) {
@@ -122,7 +125,7 @@ export default abstract class SalesforceRepositoryBase<T> {
       ;
   }
 
-  protected async updateItem(updates: Updatable<T>): Promise<boolean> {
+  protected async updateItem(updates: Updatable<TSalesforce>): Promise<boolean> {
     const conn = await this.getSalesforceConnection();
     return conn.sobject(this.salesforceObjectName)
       .update(updates)
@@ -136,9 +139,9 @@ export default abstract class SalesforceRepositoryBase<T> {
       ;
   }
 
-  protected async updateAll(updates: Updatable<T>[]): Promise<boolean> {
+  protected async updateAll(updates: Updatable<TSalesforce>[]): Promise<boolean> {
     const conn = await this.getSalesforceConnection();
-    return conn.sobject<T>(this.salesforceObjectName)
+    return conn.sobject<TSalesforce>(this.salesforceObjectName)
       .update(updates)
       .then(results => {
         if (results.every(x => x.success)) {
@@ -176,8 +179,9 @@ export default abstract class SalesforceRepositoryBase<T> {
       .catch(e => { throw this.constructError(e); });
   }
 
-  private asArray(result: Partial<{}>[]): T[] {
-    return result as T[];
+  private asArray(result: Partial<{}>[]): TEntity[] {
+    const salesforce = result as TSalesforce[];
+    return salesforce.map(x => this.mapper.map(x));
   }
 
   private constructError(e: any) {
@@ -192,4 +196,12 @@ export default abstract class SalesforceRepositoryBase<T> {
 
     return e instanceof Error ? e : new Error(e.errorCode + ": " + e.message);
   }
+}
+
+class DefaultMapper<T> implements ISalesforceMapper<T, T> {
+  map(item: T) { return item; }
+}
+
+export default abstract class SalesforceRepositoryBase<T> extends SalesforceRepositoryBaseWithMapping<T, T> {
+  protected mapper = new DefaultMapper<T>();
 }
