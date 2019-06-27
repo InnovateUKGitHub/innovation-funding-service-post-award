@@ -4,12 +4,14 @@ import { AppError, BadRequestError, ForbiddenError, NotFoundError, ValidationErr
 import * as Salesforce from "../../repositories/salesforceConnection";
 import * as Common from "@server/features/common";
 import * as Framework from "@framework/types";
+import { PermissionGroup } from "@framework/entities/permissionGroup";
 
 // obvs needs to be singleton
 const cachesImplementation: Framework.ICaches = {
   costCategories: new Common.Cache<CostCategoryDto[]>(Common.Configuration.timeouts.costCategories),
   projectRoles: new Common.Cache<{ [key: string]: IRoleInfo }>(Common.Configuration.timeouts.projectRoles),
   recordTypes: new Common.Cache<Repositories.ISalesforceRecordType[]>(Common.Configuration.timeouts.recordTypes),
+  permissionGroups: new Common.Cache<PermissionGroup[]>(0 /* permanant cache */)
 };
 
 const constructErrorResponse = <E extends Error>(error: E): AppError => {
@@ -65,7 +67,8 @@ export class Context implements Framework.IContext {
       profileTotalCostCategory: new Repositories.ProfileTotalCostCategoryRepository(() => this.getSalesforceConnection(), this.logger),
       projects: new Repositories.ProjectRepository(() => this.getSalesforceConnection(), this.logger),
       partners: new Repositories.PartnerRepository(() => this.getSalesforceConnection(), this.logger),
-      projectContacts: new Repositories.ProjectContactsRepository(() => this.getSalesforceConnection(), this.logger)
+      projectContacts: new Repositories.ProjectContactsRepository(() => this.getSalesforceConnection(), this.logger),
+      permissionGroups: new Repositories.PermissionGroupRepository(() => this.getSalesforceConnection(), this.logger),
     };
   }
 
@@ -95,7 +98,7 @@ export class Context implements Framework.IContext {
     }
     catch (e) {
       this.logger.warn("Failed query", runnable.LogMessage(), e);
-      if(e instanceof ValidationError) {
+      if (e instanceof ValidationError) {
         this.logger.debug("Validation Error", e.results && e.results.log());
       }
       throw constructErrorResponse(e);
@@ -141,5 +144,16 @@ export class Context implements Framework.IContext {
     const runnable = (command as any) as Framework.ISyncRunnable<TResult>;
     this.logger.info("Running sync command", runnable.LogMessage());
     return this.runSync(runnable);
+  }
+
+  // allows context to be esculated to the system user
+  // use with discression!!!
+  public asSystemUser(): Framework.IContext {
+    const serviceUser = this.config.salesforce.serivceUsername;
+    if (this.user.email !== serviceUser) {
+      this.logger.info("Escalating to service user", this.user.email, serviceUser);
+      return new Context({ email: serviceUser });
+    }
+    return this;
   }
 }
