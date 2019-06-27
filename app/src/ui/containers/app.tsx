@@ -31,7 +31,7 @@ class AppComponent extends React.Component<IAppProps, {}> {
     if (!route.accessControl) return true;
     const params = route.getParams(this.props.route!);
     const auth = new Authorisation(this.props.user.roleInfo);
-    return route.accessControl(auth, params, this.props.config.features);
+    return route.accessControl(auth, params, this.props.config);
   }
 
   private loadData() {

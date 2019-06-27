@@ -3,6 +3,8 @@ import { Link, Title, TypedForm } from "../components";
 import { ContainerBaseWithState, ContainerProps, ReduxContainer, } from "./containerBase";
 import { ProjectDashboardRoute, } from ".";
 import { SimpleString } from "../components/renderers";
+import { Authorisation } from "@framework/types";
+import { IClientConfig } from "@ui/redux/reducers/configReducer";
 
 interface Props {
   userEmail: string;
@@ -61,5 +63,6 @@ export const HomeRoute = containerDefinition.route({
     htmlTitle: "Home",
     displayTitle: "Home"
   }),
-  container: Home
+  container: Home,
+  accessControl: (auth: Authorisation, params: {}, config: IClientConfig) => !config.ssoEnabled
 });

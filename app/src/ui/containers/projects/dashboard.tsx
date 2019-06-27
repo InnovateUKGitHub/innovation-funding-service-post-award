@@ -11,11 +11,12 @@ import * as colour from "../../styles/colours";
 import { HomeRoute } from "../home";
 import { AllClaimsDashboardRoute, ClaimsDashboardRoute } from "../claims";
 import { StatisticsBox } from "../../components";
+import { IClientConfig } from "@ui/redux/reducers/configReducer";
 
 interface Data {
   projects: Pending<ProjectDto[]>;
   partners: Pending<PartnerDto[]>;
-  features: IFeatureFlags;
+  config: IClientConfig;
 }
 
 interface Callbacks {
@@ -67,12 +68,20 @@ class ProjectDashboardComponent extends ContainerBaseWithState<Props, Data, Call
   private renderContent({projects, partners}: CombinedData ) {
     return (
       <ACC.Page
-        backLink={<ACC.BackLink route={HomeRoute.getLink({})}>Back to dashboard</ACC.BackLink>}
+        backLink={this.getBackLink()}
         pageTitle={<ACC.Title />}
       >
         {this.renderContents(projects, partners)}
       </ACC.Page>
     );
+  }
+
+  private getBackLink() {
+    const config = this.props.config;
+    if(config.ssoEnabled) {
+      return <a className="govuk-back-link" href={`${config.ifsRoot}/dashboard-selection`}>Back to dashboard</a>;
+    }
+    return <ACC.BackLink route={HomeRoute.getLink({})}>Back to home page</ACC.BackLink>;
   }
 
   private renderContents(projects: ProjectDto[], partners: PartnerDto[]) {
@@ -126,7 +135,7 @@ class ProjectDashboardComponent extends ContainerBaseWithState<Props, Data, Call
   }
 
   private renderStatisticsBox(numberOfClaims: number, label: string, filterFunction: () => void, buttonIsPressed: boolean, qa?: string) {
-    if (this.props.features.projectFiltering && numberOfClaims > 0) {
+    if (this.props.config.features.projectFiltering && numberOfClaims > 0) {
       // empty div needed to prevent focus on button becoming misaligned
       return (
         <div className="govuk-grid-column-one-third">
@@ -165,19 +174,7 @@ class ProjectDashboardComponent extends ContainerBaseWithState<Props, Data, Call
 
   private renderNoPojectsMessage = (combinedFiltersData: ProjectData[], noProjectsMessage: string, statusFiltered: ProjectData[]) => {
     if (!!combinedFiltersData.length) return null;
-    if (statusFiltered.length !== 0 && (this.state.showClaimsWithParticipant || this.state.showClaimsToReview )) {
-      return <ACC.ListItem><div className="govuk-body govuk-!-margin-0">{this.renderFilterNoProjectMessage()}</div></ACC.ListItem>;
-    }
     return <ACC.ListItem><p className="govuk-body govuk-!-margin-0">{noProjectsMessage}</p></ACC.ListItem>;
-  }
-
-  private renderFilterNoProjectMessage = () => {
-    return (
-      <ul className="govuk-list">
-        <li>0 Project change requests to review.</li>
-        <li>0 Partner claims to review.</li>
-        <li>0 Partner claims pending.</li>
-      </ul>);
   }
 
   private getProjectSection(project: ProjectDto, partner: PartnerDto | null): Section {
@@ -350,7 +347,7 @@ export const ProjectDashboard = definition.connect({
   withData: (state, props) => ({
     projects: Selectors.getProjects().getPending(state),
     partners: Selectors.getAllPartners().getPending(state),
-    features: state.config.features
+    config: state.config
   }),
   withCallbacks: () => ({})
 });
