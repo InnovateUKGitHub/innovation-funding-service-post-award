@@ -69,9 +69,18 @@ const certificates = {
     shibboleth: process.env.SHIBBOLETH_PRIVATE_KEY_FILE || "/etc/pki/AccPrivateKey.key",
 };
 
+const getFeatureFlagValue = (value: string | null | undefined, defaultValue: boolean) => {
+    if (value === undefined || value === null) {
+        return defaultValue;
+    }
+    return value === "true";
+};
+
+const defaultFeatureFlag = getFeatureFlagValue(process.env.FEATURE_DEFAULT, false);
+
 const features: IFeatureFlags = {
-    documentFiltering: process.env.FEATURE_DOCUMENT_FILTERING === "true",
-    projectFiltering: process.env.FEATURE_PROJECT_FILTERING === "true",
+    documentFiltering: getFeatureFlagValue(process.env.FEATURE_DOCUMENT_FILTERING, defaultFeatureFlag),
+    projectFiltering: getFeatureFlagValue(process.env.FEATURE_PROJECT_FILTERING, defaultFeatureFlag),
 };
 
 const logLevel = parseLogLevel(process.env.LOG_LEVEL! || process.env.LOGLEVEL!);
