@@ -11,6 +11,7 @@ export * from "./monitoringReportQuestionsRepository";
 export * from "./monitoringReportResponseRepository";
 export * from "./monitoringReportStatusChangeRepository";
 export * from "./partnersRepository";
+export * from "./permissionGroupsRepository";
 export * from "./profileDetailsRepository";
 export * from "./profilePeriodTotalRepositotry";
 export * from "./profileTotalCostCategoryRepository";
