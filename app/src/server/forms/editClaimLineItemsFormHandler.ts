@@ -12,7 +12,7 @@ import { SaveClaimDetails } from "@server/features/claimDetails/saveClaimDetails
 import { getClaimDetailsEditor } from "@ui/redux/selectors";
 import { ClaimDetailsValidator } from "@ui/validators/claimDetailsValidator";
 
-export class EditClaimLineItemsFormHandler extends FormHandlerBase<EditClaimDetailsParams, ClaimDetailsDto> {
+export class EditClaimLineItemsFormHandler extends FormHandlerBase<EditClaimDetailsParams, ClaimDetailsDto, ClaimDetailsValidator> {
 
   constructor() {
     super(EditClaimLineItemsRoute, ["upload", "default"]);

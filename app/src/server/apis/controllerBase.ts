@@ -2,12 +2,24 @@ import mimeTypes from "mime-types";
 import multer from "multer";
 import express, { Request, Response } from "express";
 
-import { FileUpload, IAppError, ISessionUser } from "@framework/types";
+import { IAppError, ISessionUser } from "@framework/types";
 import { NotFoundError } from "@server/features/common/appError";
 import { errorHandlerApi } from "@server/errorHandlers";
 
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
+
+export class ServerFileWrapper implements IFileWrapper {
+  constructor(file: Express.Multer.File) {
+    this.fileName = file.originalname;
+    this.size = file.size;
+    this.read = () => file.buffer.toString("base64");
+  }
+
+  public readonly fileName: string;
+  public readonly size: number;
+  public readonly read: () => string;
+}
 
 // this is the information extracted from an express request / session and stored in the redux store
 // it is the same shape client and server side allowing the client and server api calls to have the same shape
@@ -25,7 +37,8 @@ interface RequestQueryParams {
   [key: string]: string;
 }
 
-type GetParams<T> = (params: RequestUrlParams, query: RequestQueryParams, body?: any, file?: any) => T;
+type GetParams<T> = (params: RequestUrlParams, query: RequestQueryParams, body?: any) => T;
+type InnerGetParams<T> = (params: RequestUrlParams, query: RequestQueryParams, body: any, req: Express.Request) => T;
 type Run<T, TR> = (params: ApiParams<T>) => Promise<TR>;
 
 export abstract class ControllerBaseWithSummary<TSummaryDto, TDto> {
@@ -49,13 +62,22 @@ export abstract class ControllerBaseWithSummary<TSummaryDto, TDto> {
     return this;
   }
 
-  protected getAttachment<TParams>(path: string, getParams: GetParams<TParams>, run: Run<TParams, DocumentDto|null>) {
+  protected getAttachment<TParams>(path: string, getParams: GetParams<TParams>, run: Run<TParams, DocumentDto | null>) {
     this.router.get(path, this.attachmentHandler(200, getParams, run));
     return this;
   }
 
-  protected postAttachment<TParams>(path: string, getParams: GetParams<TParams>, run: Run<TParams, { documentId: string }>) {
-    this.router.post(path, upload.single("attachment"), this.executeMethod(201, getParams, run, false));
+  protected postAttachment<TParams>(path: string, getParams: GetParams<TParams>, run: Run<TParams & { document: DocumentUploadDto }, { documentId: string }>) {
+    const wrappedGetParams: InnerGetParams<TParams & { document: DocumentUploadDto }> = (params, query, body, req) => {
+      const p = getParams(params, query, body);
+
+      const file: IFileWrapper | null = req.file && new ServerFileWrapper(req.file);
+      const document: DocumentUploadDto | null = file && { file, description: body.description };
+
+      return { ...p, document };
+    };
+
+    this.router.post(path, upload.single("attachment"), this.executeMethod(201, wrappedGetParams, run, false));
   }
 
   protected putItem<TParams>(path: string, getParams: GetParams<TParams>, run: Run<TParams, TDto | null>) {
@@ -83,7 +105,7 @@ export abstract class ControllerBaseWithSummary<TSummaryDto, TDto> {
     return this;
   }
 
-  protected postCustom<TParams, TResponse>(path: string, successStatus: number|null, getParams: GetParams<TParams>, run: Run<TParams, TResponse>) {
+  protected postCustom<TParams, TResponse>(path: string, successStatus: number | null, getParams: GetParams<TParams>, run: Run<TParams, TResponse>) {
     this.router.post(path, this.executeMethod(successStatus || 201, getParams, run, false));
     return this;
   }
@@ -93,12 +115,11 @@ export abstract class ControllerBaseWithSummary<TSummaryDto, TDto> {
     return this;
   }
 
-  private executeMethod<TParams, TResponse>(successStatus: number, getParams: GetParams<TParams>, run: Run<TParams, TResponse | null>, allowNulls: boolean) {
-    type extendedRequest = Request & { file: Express.Multer.File };
+  private executeMethod<TParams, TResponse>(successStatus: number, getParams: InnerGetParams<TParams>, run: Run<TParams, TResponse | null>, allowNulls: boolean) {
+    return async (req: Request, resp: Response) => {
 
-    return async (req: extendedRequest, resp: Response) => {
-      const file: FileUpload | {} = req.file ? { fileName: req.file.originalname, content: req.file.buffer.toString("base64") } : {};
-      const p = Object.assign({ user: req.session!.user as ISessionUser }, getParams(req.params || {}, req.query || {}, req.body || {}, file));
+      const p = Object.assign({ user: req.session!.user as ISessionUser }, getParams(req.params || {}, req.query || {}, req.body || {}, req));
+
       run(p)
         .then(result => {
           if ((result === null || result === undefined) && allowNulls === false) {
@@ -110,7 +131,7 @@ export abstract class ControllerBaseWithSummary<TSummaryDto, TDto> {
     };
   }
 
-  private attachmentHandler<TParams>(successStatus: number, getParams: GetParams<TParams>, run: Run<TParams, DocumentDto|null>) {
+  private attachmentHandler<TParams>(successStatus: number, getParams: GetParams<TParams>, run: Run<TParams, DocumentDto | null>) {
     return async (req: Request, resp: Response) => {
       const p = Object.assign({ user: req.session!.user as ISessionUser }, getParams(req.params || {}, req.query || {}, req.body || {}));
       run(p)
@@ -133,5 +154,5 @@ export abstract class ControllerBaseWithSummary<TSummaryDto, TDto> {
   }
 }
 
-export abstract class ControllerBase<T> extends ControllerBaseWithSummary<T,T> {
+export abstract class ControllerBase<T> extends ControllerBaseWithSummary<T, T> {
 }

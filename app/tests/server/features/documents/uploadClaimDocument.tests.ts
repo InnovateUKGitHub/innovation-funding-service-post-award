@@ -22,12 +22,6 @@ for (const key in ClaimStatus) {
   }
 }
 
-const file = {
-  fileName: "fileName.txt",
-  content: "Some content",
-  description: DocumentDescription.IAR
-};
-
 describe("UploadClaimDocumentCommand", () => {
   describe("When an IAR is uploaded", () => {
     it("throw an exception if an IAR is not required", async () => {
@@ -45,7 +39,7 @@ describe("UploadClaimDocumentCommand", () => {
         periodId: claim.Acc_ProjectPeriodNumber__c
       };
 
-      const command = new UploadClaimDocumentCommand(claimKey, file);
+      const command = new UploadClaimDocumentCommand(claimKey, { file : context.testData.createFile(), description: DocumentDescription.IAR });
       await expect(context.runCommand(command)).rejects.toThrow(BadRequestError);
     });
 
@@ -88,19 +82,15 @@ describe("UploadClaimDocumentCommand", () => {
         periodId: claim.Acc_ProjectPeriodNumber__c
       };
 
-      const nonIARDocument = {
-        fileName: "fileName.txt",
-        content: "test content",
-        description: "any"
-      };
+      const nonIARDocument = context.testData.createFile("test content", "fileName.txt");
 
-      const command = new UploadClaimDocumentCommand(claimKey, nonIARDocument as any);
+      const command = new UploadClaimDocumentCommand(claimKey, {file: nonIARDocument, description: "test description"});
       const documentId = await context.runCommand(command);
       const document = await context.repositories.documents.getDocumentMetadata(documentId);
 
       expect(document.VersionData).toEqual(nonIARDocument.content);
       expect(document.PathOnClient).toEqual(nonIARDocument.fileName);
-      expect(document.Description).toEqual(nonIARDocument.description);
+      expect(document.Description).toEqual("test description");
     });
 
     describe("When the claim status is AWAITING_IAR", () => {
@@ -119,7 +109,7 @@ describe("UploadClaimDocumentCommand", () => {
           periodId: claim.Acc_ProjectPeriodNumber__c
         };
 
-        const command = new UploadClaimDocumentCommand(claimKey, file);
+        const command = new UploadClaimDocumentCommand(claimKey, { file: context.testData.createFile(), description: DocumentDescription.IAR });
         await context.runCommand(command);
         expect(context.repositories.claims.Items[0].Acc_ClaimStatus__c).toBe(ClaimStatus.AWAITING_IUK_APPROVAL);
       });
@@ -141,7 +131,9 @@ describe("UploadClaimDocumentCommand", () => {
 
         expect(context.repositories.claimStatusChanges.Items.length).toBe(0);
 
-        const command = new UploadClaimDocumentCommand(claimKey, file);
+        const file = context.testData.createFile();
+
+        const command = new UploadClaimDocumentCommand(claimKey, { file, description: DocumentDescription.IAR});
         await context.runCommand(command);
 
         expect(context.repositories.claimStatusChanges.Items.length).toBe(1);
@@ -164,7 +156,7 @@ describe("UploadClaimDocumentCommand", () => {
           periodId: claim.Acc_ProjectPeriodNumber__c
         };
 
-        const command = new UploadClaimDocumentCommand(claimKey, file);
+        const command = new UploadClaimDocumentCommand(claimKey,  { file: context.testData.createFile() });
         await context.runCommand(command);
         expect(context.repositories.claims.Items[0].Acc_ClaimStatus__c).toBe(ClaimStatus.DRAFT);
       });
@@ -186,13 +178,19 @@ describe("UploadClaimDocumentCommand", () => {
             periodId: claim.Acc_ProjectPeriodNumber__c
           };
 
-          const command = new UploadClaimDocumentCommand(claimKey, file);
+          const expectedContent = "The file";
+          const expectedFileName = "testfile.txt";
+          const expectedDescription = "The description";
+
+          const file = context.testData.createFile(expectedContent, expectedFileName);
+
+          const command = new UploadClaimDocumentCommand(claimKey, { file, description: expectedDescription });
           const documentId = await context.runCommand(command);
           const document = await context.repositories.documents.getDocumentMetadata(documentId);
 
-          expect(document.VersionData).toEqual(file.content);
-          expect(document.PathOnClient).toEqual(file.fileName);
-          expect(document.Description).toEqual(file.description);
+          expect(document.VersionData).toEqual(expectedContent);
+          expect(document.PathOnClient).toEqual(expectedFileName);
+          expect(document.Description).toEqual(expectedDescription);
         });
       });
 
@@ -216,7 +214,9 @@ describe("UploadClaimDocumentCommand", () => {
         expect(context.repositories.documents.Items).toHaveLength(1);
         expect(await context.repositories.documents.getDocumentMetadata(originalDocumentId)).toBeDefined();
 
-        const command = new UploadClaimDocumentCommand(claimKey, file);
+        const file = context.testData.createFile();
+
+        const command = new UploadClaimDocumentCommand(claimKey, { file, description: DocumentDescription.IAR });
         const newDocumentId = await context.runCommand(command);
 
         expect(context.repositories.documents.Items).toHaveLength(1);
@@ -242,7 +242,9 @@ describe("UploadClaimDocumentCommand", () => {
           periodId: claim.Acc_ProjectPeriodNumber__c
         };
 
-        const command = new UploadClaimDocumentCommand(claimKey, file);
+        const file = context.testData.createFile();
+
+        const command = new UploadClaimDocumentCommand(claimKey, { file, description: DocumentDescription.IAR });
         await expect(context.runCommand(command)).rejects.toThrow();
       });
     });
@@ -262,7 +264,9 @@ describe("UploadClaimDocumentCommand", () => {
               periodId: 1,
           };
 
-          const command = new UploadClaimDocumentCommand(claimKey, file);
+          const file = context.testData.createFile();
+
+          const command = new UploadClaimDocumentCommand(claimKey, { file });
 
           return {command, project, claim, context};
       };

@@ -52,7 +52,8 @@ export async function serverRender(req: Request, res: Response, error?: IAppErro
       ifsRoot: context.config.urls.ifsRoot,
       features: context.config.features,
       standardOverheadRate: context.config.standardOverheadRate,
-      ssoEnabled: context.config.sso.enabled
+      ssoEnabled: context.config.sso.enabled,
+      maxFileSize: context.config.maxFileSize
     };
 
     const initialState = setupInitialState(route, user, clientConfig);

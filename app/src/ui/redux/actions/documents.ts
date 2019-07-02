@@ -2,7 +2,7 @@ import * as Actions from "@ui/redux/actions/common";
 import * as Selectors from "@ui/redux/selectors";
 import { ApiClient } from "@ui/apiClient";
 import { Results } from "@ui/validation/results";
-import { DocumentUploadValidator } from "@ui/validators";
+import { DocumentUploadDtoValidator } from "@ui/validators";
 import { LoadingStatus } from "@shared/pending";
 import { DocumentDescription } from "@framework/constants";
 import { scrollToTheTopSmoothly } from "@framework/util/windowHelpers";
@@ -32,11 +32,11 @@ export function loadProjectDocuments(projectId: string) {
 
 export function updateProjectDocumentEditor(projectId: string, dto: DocumentUploadDto, showErrors: boolean = false): Actions.SyncThunk<Results<DocumentUploadDto>, Actions.UpdateEditorAction> {
   return (dispatch, getState) => {
-    const selector = Selectors.getProjectDocumentEditor(projectId);
     const state = getState();
+    const selector = Selectors.getProjectDocumentEditor(projectId, state.config.maxFileSize);
     const current = state.editors[selector.store][selector.key];
     const errors = showErrors || current && current.validator.showValidationErrors || false;
-    const validator = new DocumentUploadValidator(dto, errors);
+    const validator = new DocumentUploadDtoValidator(dto, state.config.maxFileSize, errors);
     dispatch(Actions.updateEditorAction(selector.key, selector.store, dto, validator));
     return validator;
   };
@@ -45,7 +45,7 @@ export function updateProjectDocumentEditor(projectId: string, dto: DocumentUplo
 export function uploadProjectDocument(projectId: string, dto: DocumentUploadDto, onComplete: () => void, message: string): uploadProjectDocumentActions {
   return (dispatch, getState) => {
     const state = getState();
-    const selector = Selectors.getProjectDocumentEditor(projectId);
+    const selector = Selectors.getProjectDocumentEditor(projectId, state.config.maxFileSize);
     const validation = updateProjectDocumentEditor(projectId, dto, true)(dispatch, getState, null);
 
     if(!validation.isValid) {
@@ -56,7 +56,7 @@ export function uploadProjectDocument(projectId: string, dto: DocumentUploadDto,
     dispatch(Actions.handleEditorSubmit(selector.key, selector.store, dto, validation));
     dispatch(Actions.dataLoadAction(selector.key, selector.store, LoadingStatus.Stale, undefined));
 
-    return ApiClient.documents.uploadProjectDocument({ projectId, file: dto.file!, user: state.user })
+    return ApiClient.documents.uploadProjectDocument({ projectId, document: dto, user: state.user })
       .then(() => {
         dispatch(Actions.handleEditorSuccess(selector.key, selector.store));
         dispatch(Actions.messageSuccess(message));
@@ -71,13 +71,13 @@ export function uploadProjectDocument(projectId: string, dto: DocumentUploadDto,
 // update editor with validation
 export function updateClaimDetailDocumentEditor(claimDetailKey: ClaimDetailKey, dto: DocumentUploadDto, showErrors?: boolean): Actions.SyncThunk<Results<DocumentUploadDto>, Actions.UpdateEditorAction> {
   return (dispatch, getState) => {
-    const selector = Selectors.getClaimDetailDocumentEditor(claimDetailKey);
     const state = getState();
+    const selector = Selectors.getClaimDetailDocumentEditor(claimDetailKey, state.config.maxFileSize);
     if (showErrors === null || showErrors === undefined) {
       const current = state.editors[selector.store][selector.key];
       showErrors = current && current.validator.showValidationErrors || false;
     }
-    const validator = new DocumentUploadValidator(dto, showErrors);
+    const validator = new DocumentUploadDtoValidator(dto, state.config.maxFileSize, showErrors);
     dispatch(Actions.updateEditorAction(selector.key, selector.store, dto, validator));
     return validator;
   };
@@ -87,7 +87,7 @@ export function uploadClaimDetailDocument(claimDetailKey: ClaimDetailKey, dto: D
 ): uploadProjectDocumentActions {
   return (dispatch, getState) => {
     const state = getState();
-    const selector = Selectors.getClaimDetailDocumentEditor(claimDetailKey);
+    const selector = Selectors.getClaimDetailDocumentEditor(claimDetailKey, state.config.maxFileSize);
     const docsSelector = Selectors.getClaimDetailDocuments(claimDetailKey.partnerId, claimDetailKey.periodId, claimDetailKey.costCategoryId);
     const validation = updateClaimDetailDocumentEditor(claimDetailKey, dto, true)(dispatch, getState, null);
 
@@ -100,7 +100,7 @@ export function uploadClaimDetailDocument(claimDetailKey: ClaimDetailKey, dto: D
     dispatch(Actions.dataLoadAction(docsSelector.key, docsSelector.store, LoadingStatus.Stale, undefined));
 
     // tslint:disable: no-identical-functions
-    return ApiClient.documents.uploadClaimDetailDocument({ claimDetailKey, file: dto.file!, user: state.user })
+    return ApiClient.documents.uploadClaimDetailDocument({ claimDetailKey, document: dto, user: state.user })
       .then(() => {
         dispatch(Actions.handleEditorSuccess(selector.key, selector.store));
         dispatch(Actions.messageSuccess(message));
@@ -114,13 +114,13 @@ export function uploadClaimDetailDocument(claimDetailKey: ClaimDetailKey, dto: D
 // update editor with validation
 export function updateClaimDocumentEditor(claimKey: ClaimKey, dto: DocumentUploadDto, showErrors?: boolean): Actions.SyncThunk<Results<DocumentUploadDto>, Actions.UpdateEditorAction> {
   return (dispatch, getState) => {
-    const selector = Selectors.getClaimDocumentEditor(claimKey, dto.description);
     const state = getState();
+    const selector = Selectors.getClaimDocumentEditor(claimKey, state.config.maxFileSize);
     if (showErrors === null || showErrors === undefined) {
       const current = state.editors[selector.store][selector.key];
       showErrors = current && current.validator.showValidationErrors || false;
     }
-    const validator = new DocumentUploadValidator(dto, showErrors);
+    const validator = new DocumentUploadDtoValidator(dto, state.config.maxFileSize, showErrors);
     dispatch(Actions.updateEditorAction(selector.key, selector.store, dto, validator));
     return validator;
   };
@@ -129,7 +129,7 @@ export function updateClaimDocumentEditor(claimKey: ClaimKey, dto: DocumentUploa
 export function uploadClaimDocument(claimKey: ClaimKey, dto: DocumentUploadDto, onComplete: () => void): uploadProjectDocumentActions {
   return (dispatch, getState) => {
     const state = getState();
-    const selector = Selectors.getClaimDocumentEditor(claimKey, dto.description);
+    const selector = Selectors.getClaimDocumentEditor(claimKey, state.config.maxFileSize);
     const docsSelector = Selectors.getClaimDocuments(claimKey.partnerId, claimKey.periodId);
     const claimsSelector = Selectors.findClaimsByPartner(claimKey.partnerId);
     const validation = updateClaimDocumentEditor(claimKey, dto, true)(dispatch, getState, null);
@@ -144,7 +144,7 @@ export function uploadClaimDocument(claimKey: ClaimKey, dto: DocumentUploadDto, 
     dispatch(Actions.dataLoadAction(claimsSelector.key, claimsSelector.store, LoadingStatus.Stale, undefined));
     dispatch(Actions.dataLoadAction(docsSelector.key, docsSelector.store, LoadingStatus.Stale, undefined));
 
-    return ApiClient.documents.uploadClaimDocument({ claimKey, file: dto.file!, description: dto.description, user: state.user })
+    return ApiClient.documents.uploadClaimDocument({ claimKey, document: dto, user: state.user })
       .then(() => {
         dispatch(Actions.handleEditorSuccess(selector.key, selector.store));
         onComplete();
@@ -157,7 +157,7 @@ export function uploadClaimDocument(claimKey: ClaimKey, dto: DocumentUploadDto, 
 export function uploadLeadPartnerClaimDocument(claimKey: ClaimKey, dto: DocumentUploadDto, onComplete: () => void): uploadProjectDocumentActions {
   return (dispatch, getState) => {
     const state = getState();
-    const selector = Selectors.getClaimDocumentEditor(claimKey, dto.description);
+    const selector = Selectors.getClaimDocumentEditor(claimKey, state.config.maxFileSize);
     const docsSelector = Selectors.getClaimDocuments(claimKey.partnerId, claimKey.periodId);
     const claimsSelector = Selectors.findPartnersByProject(claimKey.projectId);
     const validation = updateClaimDocumentEditor(claimKey, dto, true)(dispatch, getState, null);
@@ -172,7 +172,7 @@ export function uploadLeadPartnerClaimDocument(claimKey: ClaimKey, dto: Document
     dispatch(Actions.dataLoadAction(claimsSelector.key, claimsSelector.store, LoadingStatus.Stale, undefined));
     dispatch(Actions.dataLoadAction(docsSelector.key, docsSelector.store, LoadingStatus.Stale, undefined));
 
-    return ApiClient.documents.uploadClaimDocument({ claimKey, file: dto.file!, description: dto.description, user: state.user })
+    return ApiClient.documents.uploadClaimDocument({ claimKey, document: dto, user: state.user })
       .then(() => {
         dispatch(Actions.handleEditorSuccess(selector.key, selector.store));
         onComplete();

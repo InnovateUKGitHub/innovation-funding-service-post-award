@@ -2,8 +2,9 @@ import { Stream } from "stream";
 import { TestRepository } from "./testRepository";
 import * as Repositories from "@server/repositories";
 import { Updatable } from "@server/repositories/salesforceRepositoryBase";
-import { FileUpload, IRepositories } from "@framework/types";
+import { IRepositories } from "@framework/types";
 import { ISalesforceDocument } from "@server/repositories";
+import { TestFileWrapper } from "./testData";
 import { PermissionGroupIdenfifier } from "@framework/types/permisionGroupIndentifier";
 import { PermissionGroup } from "@framework/entities/permissionGroup";
 
@@ -118,8 +119,8 @@ class ClaimDetailsTestRepository extends TestRepository<Repositories.ISalesforce
 }
 
 class DocumentsTestRepository extends TestRepository<[string, ISalesforceDocument]> implements Repositories.IDocumentsRepository {
-  async insertDocument({ content, fileName, description }: FileUpload, recordId: string): Promise<string> {
-    const nameParts = fileName.split(".");
+  async insertDocument(file: TestFileWrapper, recordId: string, description: string): Promise<string> {
+    const nameParts = file.fileName.split(".");
     const extension = nameParts.length > 1 ? nameParts[nameParts.length - 1] : null;
     const title = nameParts[0];
 
@@ -133,9 +134,9 @@ class DocumentsTestRepository extends TestRepository<[string, ISalesforceDocumen
       ContentSize: 5,
       FileType: extension,
       ReasonForChange: "First upload",
-      PathOnClient: fileName,
+      PathOnClient: file.fileName,
       ContentLocation: "S",
-      VersionData: content,
+      VersionData: file.content,
       Description: description,
       CreatedDate: new Date().toISOString(),
       Owner: {

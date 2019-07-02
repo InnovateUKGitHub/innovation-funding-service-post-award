@@ -6,7 +6,6 @@ import { GetProjectDocumentsQuery } from "../features/documents/getProjectDocume
 import { UploadClaimDetailDocumentCommand } from "../features/documents/uploadClaimDetailDocument";
 import { GetClaimDocumentsQuery } from "../features/documents/getClaimDocuments";
 import { GetClaimDocumentQuery } from "../features/documents/getClaimDocument";
-import { FileUpload } from "@framework/types";
 import { DocumentDescription } from "@framework/constants";
 import { UploadClaimDocumentCommand } from "../features/documents/uploadClaimDocument";
 import { UploadProjectDocumentCommand } from "../features/documents/uploadProjectDocument";
@@ -18,9 +17,9 @@ export interface IDocumentsApi {
   getClaimDocuments: (params: ApiParams<{ projectId: string, partnerId: string, periodId: number, description: DocumentDescription }>) => Promise<DocumentSummaryDto[]>;
   getClaimDetailDocuments: (params: ApiParams<{ claimDetailKey: ClaimDetailKey }>) => Promise<DocumentSummaryDto[]>;
   getProjectDocuments: (params: ApiParams<{ projectId: string }>) => Promise<DocumentSummaryDto[]>;
-  uploadClaimDetailDocument: (params: ApiParams<{ claimDetailKey: ClaimDetailKey, file: FileUpload | File }>) => Promise<{ documentId: string }>;
-  uploadClaimDocument: (params: ApiParams<{ claimKey: ClaimKey, file: FileUpload | File, description?: string }>) => Promise<{ documentId: string }>;
-  uploadProjectDocument: (params: ApiParams<{ projectId: string, file: FileUpload | File, description?: string }>) => Promise<{ documentId: string }>;
+  uploadClaimDetailDocument: (params: ApiParams<{ claimDetailKey: ClaimDetailKey, document: DocumentUploadDto }>) => Promise<{ documentId: string }>;
+  uploadClaimDocument: (params: ApiParams<{ claimKey: ClaimKey, document: DocumentUploadDto }>) => Promise<{ documentId: string }>;
+  uploadProjectDocument: (params: ApiParams<{ projectId: string, document: DocumentUploadDto }>) => Promise<{ documentId: string }>;
   deleteClaimDetailDocument: (params: ApiParams<{ documentId: string, claimDetailKey: ClaimDetailKey }>) => Promise<boolean>;
   deleteClaimDocument: (params: ApiParams<{ documentId: string, claimKey: ClaimKey }>) => Promise<boolean>;
 }
@@ -79,19 +78,19 @@ class Controller extends ControllerBase<DocumentSummaryDto> implements IDocument
 
     this.postAttachment(
       "/claim-details/:projectId/:partnerId/:periodId/:costCategoryId",
-      (p, q, b, f) => ({ claimDetailKey: { projectId: p.projectId, partnerId: p.partnerId, periodId: parseInt(p.periodId, 10), costCategoryId: p.costCategoryId, file: f }, file: f }),
+      (p, q, b) => ({ claimDetailKey: { projectId: p.projectId, partnerId: p.partnerId, periodId: parseInt(p.periodId, 10), costCategoryId: p.costCategoryId }}),
       p => this.uploadClaimDetailDocument(p)
     );
 
     this.postAttachment(
       "/claims/:projectId/:partnerId/:periodId",
-      (p, q, b, f) => ({ claimKey: { projectId: p.projectId, partnerId: p.partnerId, periodId: parseInt(p.periodId, 10), file: f }, file: { ...f, ...b } }),
+      (p, q, b) => ({ claimKey: { projectId: p.projectId, partnerId: p.partnerId, periodId: parseInt(p.periodId, 10) } }),
       p => this.uploadClaimDocument(p)
     );
 
     this.postAttachment(
       "/projects/:projectId",
-      (p, q, b, f) => ({ projectId: p.projectId, file: f }),
+      (p, q, b) => ({ projectId: p.projectId }),
       p => this.uploadProjectDocument(p)
     );
   }
@@ -130,22 +129,22 @@ class Controller extends ControllerBase<DocumentSummaryDto> implements IDocument
     return contextProvider.start(params).runQuery(query);
   }
 
-  public async uploadClaimDetailDocument(params: ApiParams<{ claimDetailKey: ClaimDetailKey, file: FileUpload | File }>) {
-    const { claimDetailKey, file } = params;
-    const command = new UploadClaimDetailDocumentCommand(claimDetailKey, file as FileUpload);
+  public async uploadClaimDetailDocument(params: ApiParams<{ claimDetailKey: ClaimDetailKey, document: DocumentUploadDto }>) {
+    const { claimDetailKey, document } = params;
+    const command = new UploadClaimDetailDocumentCommand(claimDetailKey, document);
     const insertedID = await contextProvider.start(params).runCommand(command);
     return { documentId: insertedID };
   }
 
-  public async uploadClaimDocument(params: ApiParams<{ claimKey: ClaimKey, file: FileUpload | File }>) {
-    const { claimKey, file } = params;
-    const command = new UploadClaimDocumentCommand(claimKey, file as FileUpload);
+  public async uploadClaimDocument(params: ApiParams<{ claimKey: ClaimKey, document: DocumentUploadDto }>) {
+    const { claimKey, document } = params;
+    const command = new UploadClaimDocumentCommand(claimKey, document);
     const insertedID = await contextProvider.start(params).runCommand(command);
     return { documentId: insertedID };
   }
 
-  public async uploadProjectDocument(params: ApiParams<{ projectId: string, file: FileUpload | File }>) {
-    const command = new UploadProjectDocumentCommand(params.projectId, params.file as FileUpload);
+  public async uploadProjectDocument(params: ApiParams<{ projectId: string, document: DocumentUploadDto }>) {
+    const command = new UploadProjectDocumentCommand(params.projectId, params.document);
     const insertedID = await contextProvider.start(params).runCommand(command);
 
     return { documentId: insertedID };

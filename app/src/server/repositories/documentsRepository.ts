@@ -1,10 +1,10 @@
 import { Connection } from "jsforce";
-import { FileUpload } from "@framework/types";
 import { Stream } from "stream";
 import { ContentDocumentLinkRepository } from "@server/repositories/contentDocumentLinkRepository";
 import { ContentDocumentRepository } from "@server/repositories/contentDocumentRepository";
 import { ContentVersionRepository } from "@server/repositories/contentVersionRepository";
 import { ILogger } from "@server/features/common";
+import { ServerFileWrapper } from "@server/apis/controllerBase";
 
 export interface ISalesforceDocument {
   Id: string;
@@ -25,7 +25,7 @@ export interface ISalesforceDocument {
 }
 
 export interface IDocumentsRepository {
-  insertDocument(document: FileUpload, recordId: string): Promise<string>;
+  insertDocument(document: IFileWrapper, recordId: string, description?: string): Promise<string>;
   deleteDocument(documentId: string): Promise<void>;
   isExistingDocument(documentId: string, recordId: string): Promise<boolean>;
   getDocumentContent(verionId: string): Promise<Stream>;
@@ -50,8 +50,8 @@ export class DocumentsRepository implements IDocumentsRepository {
     this.contentDocumentRepository = new ContentDocumentRepository(getSalesforceConnection, logger);
   }
 
-  public async insertDocument(document: FileUpload, recordId: string) {
-    const contentVersionId = await this.contentVersionRepository.insertDocument(document);
+  public async insertDocument(document: IFileWrapper, recordId: string, description?: string) {
+    const contentVersionId = await this.contentVersionRepository.insertDocument(document as ServerFileWrapper, description);
     const contentVersion = await this.contentVersionRepository.getDocument(contentVersionId);
     const documentId = contentVersion.ContentDocumentId;
 

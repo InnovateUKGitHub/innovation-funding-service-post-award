@@ -1,47 +1,44 @@
 import { getClaimDocumentEditor } from "../../../ui/redux/selectors";
 import { FormHandlerBase, IFormBody, IFormButton } from "../formHandlerBase";
-import { Results } from "../../../ui/validation/results";
 import { ClaimDashboardPageParams, ClaimsDashboardRoute } from "../../../ui/containers";
-import { FileUpload } from "@framework/types/FileUpload";
 import { UploadClaimDocumentCommand } from "../../features/documents/uploadClaimDocument";
-import { FileUploadValidator } from "../../../ui/validators/documentUploadValidator";
 import { upload } from "../memoryStorage";
-import { DocumentDescription } from "@framework/constants";
 import { ILinkInfo } from "@framework/types/ILinkInfo";
 import { IContext } from "@framework/types/IContext";
+import { Configuration } from "@server/features/common";
+import { DocumentUploadDtoValidator } from "@ui/validators";
 
-interface Data {
-  file: FileUpload;
+interface Data extends DocumentUploadDto {
   periodId: number;
 }
 
-export class ClaimDashboardDocumentUploadHandler extends FormHandlerBase<ClaimDashboardPageParams, Data, FileUpload> {
+export class ClaimDashboardDocumentUploadHandler extends FormHandlerBase<ClaimDashboardPageParams, DocumentUploadDto, DocumentUploadDtoValidator> {
 
   constructor() {
     super(ClaimsDashboardRoute, ["upload"], [upload.single("attachment")]);
   }
 
-  protected async getDto(context: IContext, params: ClaimDashboardPageParams, button: IFormButton, body: IFormBody, file: FileUpload): Promise<Data> {
+  protected async getDto(context: IContext, params: ClaimDashboardPageParams, button: IFormButton, body: IFormBody, file: IFileWrapper): Promise<Data> {
     return {
-      file: { ...file, description: body.description as DocumentDescription },
+      file,
+      description: body.description,
       periodId: parseInt(body.periodId, 10)
     };
   }
 
   protected async run(context: IContext, params: ClaimDashboardPageParams, button: IFormButton, dto: Data): Promise<ILinkInfo> {
     const claimKey = { projectId: params.projectId, partnerId: params.partnerId, periodId: dto.periodId };
-    await context.runCommand(new UploadClaimDocumentCommand(claimKey, dto.file));
+    await context.runCommand(new UploadClaimDocumentCommand(claimKey, dto));
 
     return ClaimsDashboardRoute.getLink(params);
   }
 
   protected getStoreInfo(params: ClaimDashboardPageParams, dto: Data): { key: string, store: string } {
     const claimKey = { projectId: params.projectId, partnerId: params.partnerId, periodId: dto.periodId };
-    const file = dto.file || {};
-    return getClaimDocumentEditor(claimKey, file.description);
+    return getClaimDocumentEditor(claimKey, Configuration.maxFileSize);
   }
 
-  protected createValidationResult(params: ClaimDashboardPageParams, dto: Data): Results<FileUpload> {
-    return new FileUploadValidator(dto.file, false);
+  protected createValidationResult(params: ClaimDashboardPageParams, dto: Data) {
+    return new DocumentUploadDtoValidator(dto, Configuration.maxFileSize, false);
   }
 }

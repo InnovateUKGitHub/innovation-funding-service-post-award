@@ -19,12 +19,12 @@ describe("UploadClaimDetailDocumentCommand", () => {
       costCategoryId: claimDetail.Acc_CostCategory__c,
     };
 
-    const file = {
-      fileName: "fileName.txt",
-      content: "Some content1",
-    };
+    const expectedContent = "Some content1";
+    const expectedFileName = "fileName.txt";
 
-    const command = new UploadClaimDetailDocumentCommand(claimDetailKey, file);
+    const file = context.testData.createFile(expectedContent, expectedFileName);
+
+    const command = new UploadClaimDetailDocumentCommand(claimDetailKey, { file });
     const documentId = await context.runCommand(command);
     const document = await context.repositories.documents.getDocumentMetadata(documentId);
 
@@ -90,12 +90,9 @@ describe("UploadClaimDetailDocumentCommand", () => {
         costCategoryId: claimDetail.Acc_CostCategory__c,
       };
 
-      const file = {
-        fileName: "fileNameA.txt",
-        content: "Some content 2",
-      };
+      const file = context.testData.createFile();
 
-      const command = new UploadClaimDetailDocumentCommand(claimDetailKey, file);
+      const command = new UploadClaimDetailDocumentCommand(claimDetailKey, { file });
 
       return { command, project, claimDto, context };
     };

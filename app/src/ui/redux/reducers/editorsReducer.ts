@@ -90,7 +90,7 @@ export const editorReducer = combineReducers({
   claim: editorsReducer<ClaimDto, Validators.ClaimDtoValidator>("claim"),
   claimDetail: editorsReducer<ClaimDetailsDto, Validators.ClaimDetailsValidator>("claimDetail"),
   forecastDetails: editorsReducer<ForecastDetailsDTO[], Validators.ForecastDetailsDtosValidator>("forecastDetails"),
-  documents: editorsReducer<DocumentUploadDto, Validators.DocumentUploadValidator>("documents"),
+  documents: editorsReducer<DocumentUploadDto, Validators.DocumentUploadDtoValidator>("documents"),
   documentSummary: editorsReducer<DocumentSummaryDto[], Results<DocumentSummaryDto[]>>("documentSummary"),
   monitoringReport: editorsReducer<MonitoringReportDto, Validators.MonitoringReportDtoValidator>("monitoringReport")
 });

@@ -28,7 +28,7 @@ interface ISimpleEditorDto {
     description: string | null;
     value: number | null;
     option: { value: string, id: string } | null;
-    file: File | null;
+    file: IFileWrapper | null;
 }
 
 class SimpleForm extends React.Component<{}, { original: ISimpleEditorDto, editor: ISimpleEditorDto }> {

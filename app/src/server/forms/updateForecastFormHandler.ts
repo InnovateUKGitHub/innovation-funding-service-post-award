@@ -11,7 +11,7 @@ import { IContext } from "@framework/types/IContext";
 import { GetByIdQuery as GetPartnerByIdQuery } from "../features/partners";
 import { GetCostCategoriesForPartnerQuery } from "../features/claims/getCostCategoriesForPartnerQuery";
 
-export class UpdateForecastFormHandler extends FormHandlerBase<ForecastParams, ForecastDetailsDTO[]> {
+export class UpdateForecastFormHandler extends FormHandlerBase<ForecastParams, ForecastDetailsDTO[], ForecastDetailsDtosValidator> {
   constructor() {
     super(UpdateForecastRoute, ["default"]);
   }
@@ -43,7 +43,7 @@ export class UpdateForecastFormHandler extends FormHandlerBase<ForecastParams, F
     return getForecastDetailsEditor(params.partnerId);
   }
 
-  protected createValidationResult(params: ForecastParams, dto: ForecastDetailsDTO[]): Results<ForecastDetailsDTO[]> {
+  protected createValidationResult(params: ForecastParams, dto: ForecastDetailsDTO[]) {
     return new ForecastDetailsDtosValidator (dto, [], [], [], false);
   }
 }

@@ -27,6 +27,8 @@ export class TestConfig implements IConfig {
 
   public logLevel = LogLevel.DEBUG;
 
+  public maxFileSize = 100000;
+
   public prettyLogs = false;
 
   public salesforce = {

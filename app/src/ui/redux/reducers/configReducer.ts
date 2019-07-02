@@ -5,6 +5,7 @@ export interface IClientConfig {
   features: IFeatureFlags;
   standardOverheadRate: number;
   ssoEnabled: boolean;
+  maxFileSize: number;
 }
 
 export const configReducer = (state: IClientConfig  = {} as IClientConfig , action: RootActions) => {

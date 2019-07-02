@@ -7,7 +7,7 @@ import { MonitoringReportStatus } from "@framework/constants";
 import { MonitoringReportDto } from "@framework/dtos";
 import { IContext, ILinkInfo } from "@framework/types";
 
-export class MonitoringReportCreateFormHandler extends FormHandlerBase<MonitoringReportCreateParams, MonitoringReportDto> {
+export class MonitoringReportCreateFormHandler extends FormHandlerBase<MonitoringReportCreateParams, MonitoringReportDto, MonitoringReportDtoValidator> {
   constructor() {
     super(MonitoringReportCreateRoute, [ "save-draft", "save-submitted"]);
   }
