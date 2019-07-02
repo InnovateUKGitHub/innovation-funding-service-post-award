@@ -1,14 +1,18 @@
 import { BadRequestError, CommandBase, ValidationError } from "@server/features/common";
 import { DeleteClaimDocumentCommand } from "@server/features/documents/deleteClaimDocument";
-import { FileUploadValidator } from "@ui/validators/documentUploadValidator";
-import { Authorisation, ClaimDto, ClaimStatus, DocumentDescription, FileUpload, IContext, ProjectRole } from "@framework/types";
+import { DocumentUploadDtoValidator } from "@ui/validators/documentUploadValidator";
+import { Authorisation, ClaimDto, ClaimStatus, DocumentDescription, IContext, ProjectRole } from "@framework/types";
 import mapClaim from "@server/features/claims/mapClaim";
 import { GetClaimDocumentsQuery } from "@server/features/documents/getClaimDocuments";
 import { UpdateClaimCommand } from "../claims";
 
 export class UploadClaimDocumentCommand extends CommandBase<string> {
-  constructor(private readonly claimKey: ClaimKey, private readonly file: FileUpload) {
+  constructor(private readonly claimKey: ClaimKey, private readonly document: DocumentUploadDto) {
     super();
+  }
+
+  protected LogMessage() {
+    return [this.constructor.name, this.claimKey, this.document && this.document.file && this.document.file.fileName];
   }
 
   protected async accessControl(auth: Authorisation, context: IContext) {
@@ -38,7 +42,7 @@ export class UploadClaimDocumentCommand extends CommandBase<string> {
   }
 
   protected async Run(context: IContext) {
-    const result = new FileUploadValidator(this.file, true);
+    const result = new DocumentUploadDtoValidator(this.document, context.config.maxFileSize, true);
 
     if (!result.isValid) {
       throw new ValidationError(result);
@@ -46,11 +50,11 @@ export class UploadClaimDocumentCommand extends CommandBase<string> {
 
     const claim = await context.repositories.claims.get(this.claimKey.partnerId, this.claimKey.periodId).then(mapClaim(context));
 
-    if (this.file.description === DocumentDescription.IAR) await this.preIarUpload(context, claim);
+    if (this.document.description === DocumentDescription.IAR) await this.preIarUpload(context, claim);
 
-    const documentId = await context.repositories.documents.insertDocument(this.file, claim.id);
+    const documentId = await context.repositories.documents.insertDocument(this.document.file!, claim.id, this.document.description);
 
-    if (this.file.description === DocumentDescription.IAR) await this.postIarUpload(context, claim);
+    if (this.document.description === DocumentDescription.IAR) await this.postIarUpload(context, claim);
 
     return documentId;
   }

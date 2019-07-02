@@ -41,7 +41,7 @@ export class Server {
   }
 
   private requestLogger = (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    this.log.debug(req.url);
+    this.log.debug("request", req.url, req.method);
     next();
   }
 

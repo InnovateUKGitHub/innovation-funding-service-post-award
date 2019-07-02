@@ -4,7 +4,7 @@ import { GetClaimDocumentsQuery } from "@server/features/documents/getClaimDocum
 import { ClaimDashboardPageParams, ClaimsDashboardRoute } from "@ui/containers";
 import { BadRequestError } from "@server/features/common";
 import { getDocumentDeleteEditor } from "@ui/redux/selectors";
-import { Results } from "@ui/validation";
+import { Result, Results } from "@ui/validation";
 
 import { FormHandlerBase, IFormBody, IFormButton } from "../formHandlerBase";
 
@@ -12,7 +12,7 @@ interface DocumentWithPeriodId extends DocumentSummaryDto {
   periodId: number;
 }
 
-export class ClaimDashboardDocumentDeleteHandler extends FormHandlerBase<ClaimDashboardPageParams, DocumentWithPeriodId> {
+export class ClaimDashboardDocumentDeleteHandler extends FormHandlerBase<ClaimDashboardPageParams, DocumentWithPeriodId, Results<{}>> {
 
   constructor() {
     super(ClaimsDashboardRoute, ["delete"]);

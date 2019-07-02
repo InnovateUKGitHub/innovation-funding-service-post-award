@@ -14,7 +14,7 @@ import * as Acc from "../../components";
 import {ContainerBaseWithState, ContainerProps, ReduxContainer} from "../containerBase";
 import { ClaimDto, ClaimStatus, DocumentDescription, PartnerDto, ProjectDto, ProjectRole } from "@framework/types";
 import { IEditorStore } from "../../redux/reducers";
-import { DocumentUploadValidator } from "../../validators/documentUploadValidator";
+import { DocumentUploadDtoValidator } from "../../validators/documentUploadValidator";
 import { DateTime } from "luxon";
 import { Results } from "../../validation/results";
 import { ProjectDashboardRoute } from "@ui/containers";
@@ -30,7 +30,7 @@ interface Data {
   partnerDetails: Pending<PartnerDto>;
   previousClaims: Pending<ClaimDto[]>;
   currentClaim: Pending<ClaimDto | null>;
-  editor: Pending<IEditorStore<DocumentUploadDto, DocumentUploadValidator> | null>;
+  editor: Pending<IEditorStore<DocumentUploadDto, DocumentUploadDtoValidator> | null>;
   deleteEditor: Pending<IEditorStore<DocumentSummaryDto[], Results<DocumentSummaryDto[]>> | null>;
 }
 
@@ -40,7 +40,7 @@ interface CombinedData {
   partner: PartnerDto;
   previousClaims: ClaimDto[];
   currentClaim: ClaimDto | null;
-  editor: IEditorStore<DocumentUploadDto, DocumentUploadValidator> | null;
+  editor: IEditorStore<DocumentUploadDto, DocumentUploadDtoValidator> | null;
   deleteEditor: IEditorStore<DocumentSummaryDto[], Results<DocumentSummaryDto[]>> | null;
 }
 
@@ -110,11 +110,11 @@ class Component extends ContainerBaseWithState<ClaimDashboardPageParams, Data, C
     this.props.deleteFile({ projectId, partnerId: claim.partnerId, periodId: claim.periodId }, dto);
   }
 
-  private renderIarDocumentUpload(claim: ClaimDto, editor: IEditorStore<DocumentUploadDto, DocumentUploadValidator>) {
+  private renderIarDocumentUpload(claim: ClaimDto, editor: IEditorStore<DocumentUploadDto, DocumentUploadDtoValidator>) {
     if (!claim.allowIarEdit) {
       return null;
     }
-    const UploadForm = Acc.TypedForm<{ file: File | null }>();
+    const UploadForm = Acc.TypedForm<{ file: IFileWrapper | null }>();
     const isAwaitingIAR = claim.status === ClaimStatus.AWAITING_IAR;
     const message = isAwaitingIAR
       ? "Your most recent claim cannot be sent to us. You must attach an independent accountant's report (IAR)."
@@ -142,7 +142,7 @@ class Component extends ContainerBaseWithState<ClaimDashboardPageParams, Data, C
     );
   }
 
-  private renderIarDocumentSection(claim: ClaimDto, editor: IEditorStore<DocumentUploadDto, DocumentUploadValidator>, document: DocumentSummaryDto | null) {
+  private renderIarDocumentSection(claim: ClaimDto, editor: IEditorStore<DocumentUploadDto, DocumentUploadDtoValidator>, document: DocumentSummaryDto | null) {
     if (!claim.isIarRequired) {
       return null;
     }

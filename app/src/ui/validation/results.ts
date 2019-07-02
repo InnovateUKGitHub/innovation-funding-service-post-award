@@ -23,4 +23,6 @@ export class Results<T> {
     public log() {
         return this.errors.filter(x => !x.isValid).map(x => x.log()).join("/n");
     }
+
+    public inspect = () => this.log();
 }

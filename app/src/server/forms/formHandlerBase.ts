@@ -1,9 +1,8 @@
 import express, { RequestHandler } from "express";
-import { ISession } from "../apis/controllerBase";
+import { ISession, ServerFileWrapper } from "../apis/controllerBase";
 import { configureRouter } from "../../ui/routing";
 import { Results } from "../../ui/validation/results";
 import contextProvider from "../features/common/contextProvider";
-import { FileUpload } from "@framework/types/FileUpload";
 import { FormHandlerError } from "../features/common/appError";
 import { ILinkInfo } from "@framework/types/ILinkInfo";
 import { IContext } from "@framework/types/IContext";
@@ -28,7 +27,7 @@ export interface IFormBody {
   [key: string]: string;
 }
 
-export abstract class FormHandlerBase<TParams, TDto, TValidation = {}> implements IFormHandler {
+export abstract class FormHandlerBase<TParams, TDto, TValidation extends Results<{}>> implements IFormHandler {
   protected constructor(routeInfo: RouteInfo<TParams>, buttons: string[], middleware?: RequestHandler[]) {
     this.routePath = routeInfo.routePath.split("?")[0];
     this.routeName = routeInfo.routeName;
@@ -61,7 +60,7 @@ export abstract class FormHandlerBase<TParams, TDto, TValidation = {}> implement
     const session: ISession = { user: req.session!.user };
     const context = contextProvider.start(session);
 
-    const file = req.file && { fileName: req.file.originalname, content: req.file.buffer.toString("base64") };
+    const file: IFileWrapper | null = req.file && new ServerFileWrapper(req.file);
     const dto = await this.createDto(context, params, button, body, file);
 
     try {
@@ -76,7 +75,7 @@ export abstract class FormHandlerBase<TParams, TDto, TValidation = {}> implement
     }
   }
 
-  private async createDto(context: IContext, params: TParams, button: IFormButton, body: IFormBody, file?: FileUpload): Promise<TDto> {
+  private async createDto(context: IContext, params: TParams, button: IFormButton, body: IFormBody, file: IFileWrapper|null): Promise<TDto> {
     const defaultDto = {} as TDto;
     try {
       return await this.getDto(context, params, button, body, file) || defaultDto;
@@ -86,13 +85,13 @@ export abstract class FormHandlerBase<TParams, TDto, TValidation = {}> implement
     }
   }
 
-  protected abstract getDto(context: IContext, params: TParams, button: IFormButton, body: IFormBody, file?: FileUpload): Promise<TDto>;
+  protected abstract getDto(context: IContext, params: TParams, button: IFormButton, body: IFormBody, file: IFileWrapper|null): Promise<TDto>;
 
   protected abstract run(context: IContext, params: TParams, button: IFormButton, dto: TDto): Promise<ILinkInfo>;
 
   protected abstract getStoreInfo(params: TParams, dto: TDto): { key: string, store: string };
 
-  protected abstract createValidationResult(params: TParams, dto: TDto): Results<TDto | TValidation>;
+  protected abstract createValidationResult(params: TParams, dto: TDto): TValidation;
 
   protected redirect(link: ILinkInfo, res: express.Response) {
     const router = configureRouter();

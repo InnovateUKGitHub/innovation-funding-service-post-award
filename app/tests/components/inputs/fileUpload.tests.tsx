@@ -34,7 +34,7 @@ describe("FileInput", () => {
     });
 
     expect(onChange).toHaveBeenCalledTimes(1);
-    expect(onChange).toHaveBeenCalledWith("TextFile.txt");
+    expect(onChange).toHaveBeenCalledWith({ file: "TextFile.txt" });
   });
 
   it("Calls onChange on blur", () => {

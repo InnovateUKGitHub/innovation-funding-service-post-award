@@ -8,7 +8,7 @@ import { Results } from "../../ui/validation/results";
 import { ILinkInfo } from "@framework/types/ILinkInfo";
 import { IContext } from "@framework/types/IContext";
 
-export class ReviewClaimFormHandler extends FormHandlerBase<ReviewClaimParams, ClaimDto> {
+export class ReviewClaimFormHandler extends FormHandlerBase<ReviewClaimParams, ClaimDto, ClaimDtoValidator> {
     constructor() {
         super(ReviewClaimRoute, ["default"]);
     }
@@ -35,7 +35,7 @@ export class ReviewClaimFormHandler extends FormHandlerBase<ReviewClaimParams, C
         return getClaimEditor(params.partnerId, params.periodId);
       }
 
-    protected createValidationResult(params: ReviewClaimParams, dto: ClaimDto): Results<ClaimDto> {
+    protected createValidationResult(params: ReviewClaimParams, dto: ClaimDto) {
         return new ClaimDtoValidator(dto, ClaimStatus.UNKNOWN, [], [], false);
     }
 }

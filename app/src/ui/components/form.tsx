@@ -269,8 +269,8 @@ const ButtonComponent = <T extends {}>(props: ButtonProps & InternalFieldProps<T
   </ACC.Button>
 );
 
-const FileUploadComponent = <T extends {}>(props: ExternalFieldProps<T, File> & InternalFieldProps<T>) => {
-  const TypedFieldComponent = FieldComponent as { new(): FieldComponent<T, File> };
+const FileUploadComponent = <T extends {}>(props: ExternalFieldProps<T, IFileWrapper> & InternalFieldProps<T>) => {
+  const TypedFieldComponent = FieldComponent as { new(): FieldComponent<T, IFileWrapper> };
   return (
     <TypedFieldComponent
       field={((data) => <ACC.Inputs.FileUpload value={props.value(data)} name={props.name} onChange={(val) => handleChange(props, val)} />)}
@@ -289,7 +289,7 @@ export interface FormBuilder<T> {
   Hidden: React.SFC<HiddenFieldProps<T>>;
   Submit: React.SFC<SubmitProps>;
   Button: React.SFC<ButtonProps>;
-  FileUpload: React.SFC<ExternalFieldProps<T, File>>;
+  FileUpload: React.SFC<ExternalFieldProps<T, IFileWrapper>>;
 }
 
 export const TypedForm = <T extends {}>(): FormBuilder<T> => ({
@@ -302,5 +302,5 @@ export const TypedForm = <T extends {}>(): FormBuilder<T> => ({
     Hidden: HiddenField as React.SFC<HiddenFieldProps<T>>,
     Submit: SubmitComponent as React.SFC<SubmitProps>,
     Button: ButtonComponent as React.SFC<ButtonProps>,
-    FileUpload: FileUploadComponent as React.SFC<ExternalFieldProps<T, File>>,
+    FileUpload: FileUploadComponent as React.SFC<ExternalFieldProps<T, IFileWrapper>>,
 });
