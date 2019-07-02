@@ -11,6 +11,7 @@ import { TestLogger } from "./testLogger";
 import { TestUser } from "./testUser";
 import { ISalesforceRecordType } from "@server/repositories";
 import { TestConfig } from "./testConfig";
+import { PermissionGroup } from "@framework/entities/permissionGroup";
 
 export class TestContext implements IContext {
     constructor() {
@@ -34,6 +35,7 @@ export class TestContext implements IContext {
 
     public caches: ICaches = {
         costCategories: new Cache<CostCategoryDto[]>(1),
+        permissionGroups: new Cache<PermissionGroup[]>(1),
         projectRoles: new Cache<{ [key: string]: IRoleInfo }>(1),
         recordTypes: new Cache<ISalesforceRecordType[]>(1),
     };
@@ -57,5 +59,9 @@ export class TestContext implements IContext {
     // handle access control seperate to running the commands to keep tests focused on single areas
     public runAccessControl(auth: Authorisation, runnable: QueryBase<any> | CommandBase<any>): Promise<boolean> {
       return (runnable as any as IAsyncRunnable<any>).accessControl(auth, this);
+    }
+
+    public asSystemUser() {
+        return this;
     }
 }

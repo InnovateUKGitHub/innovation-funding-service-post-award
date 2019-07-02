@@ -6,25 +6,28 @@ import { CommandBase, SyncCommandBase } from "@server/features/common/commandBas
 import { ISalesforceRecordType } from "@server/repositories";
 import { ISessionUser } from "./IUser";
 import { Authorisation } from "./authorisation";
+import { PermissionGroup } from "@framework/entities/permissionGroup";
 
 export interface IRepositories {
-  claims: Readonly<Repositories.IClaimRepository>;
-  claimStatusChanges: Readonly<Repositories.IClaimStatusChangeRepository>;
-  claimDetails: Readonly<Repositories.IClaimDetailsRepository>;
-  costCategories: Readonly<Repositories.ICostCategoryRepository>;
-  documents: Readonly<Repositories.IDocumentsRepository>;
-  monitoringReportResponse: Readonly<Repositories.IMonitoringReportResponseRepository>;
-  monitoringReportHeader: Readonly<Repositories.IMonitoringReportHeaderRepository>;
-  monitoringReportQuestions: Readonly<Repositories.IMonitoringReportQuestionsRepository>;
-  monitoringReportStatusChange: Readonly<Repositories.IMonitoringReportStatusChangeRepository>;
-  profileDetails: Readonly<Repositories.IProfileDetailsRepository>;
-  profileTotalPeriod: Readonly<Repositories.IProfileTotalPeriodRepository>;
-  profileTotalCostCategory: Readonly<Repositories.IProfileTotalCostCategoryRepository>;
-  projects: Readonly<Repositories.IProjectRepository>;
-  partners: Readonly<Repositories.IPartnerRepository>;
-  projectContacts: Readonly<Repositories.IProjectContactsRepository>;
-  claimLineItems: Readonly<Repositories.IClaimLineItemRepository>;
-  claimTotalCostCategory: Readonly<Repositories.IClaimTotalCostCategoryRepository>;
+  readonly claims: Repositories.IClaimRepository;
+  readonly claimStatusChanges: Repositories.IClaimStatusChangeRepository;
+  readonly claimDetails: Repositories.IClaimDetailsRepository;
+  readonly costCategories: Repositories.ICostCategoryRepository;
+  readonly documents: Repositories.IDocumentsRepository;
+  readonly monitoringReportResponse: Repositories.IMonitoringReportResponseRepository;
+  readonly monitoringReportHeader: Repositories.IMonitoringReportHeaderRepository;
+  readonly monitoringReportQuestions: Repositories.IMonitoringReportQuestionsRepository;
+  readonly monitoringReportStatusChange: Repositories.IMonitoringReportStatusChangeRepository;
+  readonly profileDetails: Repositories.IProfileDetailsRepository;
+  readonly profileTotalPeriod: Repositories.IProfileTotalPeriodRepository;
+  readonly profileTotalCostCategory: Repositories.IProfileTotalCostCategoryRepository;
+  readonly projects: Repositories.IProjectRepository;
+  readonly partners: Repositories.IPartnerRepository;
+  readonly projectContacts: Repositories.IProjectContactsRepository;
+  readonly claimLineItems: Repositories.IClaimLineItemRepository;
+  readonly claimTotalCostCategory: Repositories.IClaimTotalCostCategoryRepository;
+  readonly permissionGroups: Repositories.IPermissionGroupRepository;
+
 }
 
 export interface IContext {
@@ -39,6 +42,7 @@ export interface IContext {
   logger: ILogger;
   user: ISessionUser;
   startTimer: (message: string) => ITimer;
+  asSystemUser: () => IContext;
 }
 
 export interface ITimer {
@@ -47,6 +51,7 @@ export interface ITimer {
 
 export interface ICaches {
   readonly costCategories: Cache<CostCategoryDto[]>;
+  readonly permissionGroups: Cache<PermissionGroup[]>;
   readonly projectRoles: Cache<{ [key: string]: IRoleInfo }>;
   readonly recordTypes: Cache<ISalesforceRecordType[]>;
 }
