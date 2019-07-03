@@ -12,7 +12,7 @@ interface Data extends DocumentSummaryDto {
   periodId: number;
 }
 
-export class AllClaimDashboardDocumentDeleteHandler extends FormHandlerBase<AllClaimsDashboardParams, Data> {
+export class AllClaimDashboardDocumentDeleteHandler extends FormHandlerBase<AllClaimsDashboardParams, Data, Results<{}>> {
 
   constructor() {
     super(AllClaimsDashboardRoute, ["delete"]);

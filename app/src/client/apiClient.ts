@@ -1,5 +1,6 @@
 import { IApiClient } from "../server/apis";
 import { processResponse } from "../shared/processResponse";
+import { ClientFileWrapper } from "@ui/components/inputs";
 
 const clientApi: IApiClient = {
   claims : {
@@ -26,26 +27,9 @@ const clientApi: IApiClient = {
     getProjectDocuments: (params) => ajaxJson(`/api/documents/projects/${params.projectId}`),
     deleteClaimDetailDocument: ({ documentId, claimDetailKey }) => ajaxJson(`/api/documents/claim-details/${claimDetailKey.projectId}/${claimDetailKey.partnerId}/${claimDetailKey.periodId}/${claimDetailKey.costCategoryId}/${documentId}`, { method: "DELETE" }),
     deleteClaimDocument: ({ documentId, claimKey }) => ajaxJson(`/api/documents/claims/${claimKey.projectId}/${claimKey.partnerId}/${claimKey.periodId}/${documentId}`, { method: "DELETE" }),
-    uploadClaimDetailDocument: ({ claimDetailKey, file }) => {
-      const formData = new FormData();
-      formData.append("attachment", file as File);
-      return ajaxPostFormData(`/api/documents/claim-details/${claimDetailKey.projectId}/${claimDetailKey.partnerId}/${claimDetailKey.periodId}/${claimDetailKey.costCategoryId}`, formData);
-    },
-    uploadClaimDocument: ({ claimKey, file, description }) => {
-      const formData = new FormData();
-      formData.append("attachment", file as File);
-      if (description) { formData.append("description", description); }
-      return ajaxPostFormData(`/api/documents/claims/${claimKey.projectId}/${claimKey.partnerId}/${claimKey.periodId}`, formData);
-    },
-    uploadProjectDocument: ({ projectId, file, description }) => {
-      const formData = new FormData();
-      formData.append("attachment", file as File);
-      if(!!description) {
-        formData.append("description", description);
-      }
-
-      return ajaxPostFormData(`/api/documents/projects/${projectId}`, formData);
-    }
+    uploadClaimDetailDocument: ({ claimDetailKey, document }) => ajaxPostFile(`/api/documents/claim-details/${claimDetailKey.projectId}/${claimDetailKey.partnerId}/${claimDetailKey.periodId}/${claimDetailKey.costCategoryId}`, document),
+    uploadClaimDocument: ({ claimKey, document }) => ajaxPostFile(`/api/documents/claims/${claimKey.projectId}/${claimKey.partnerId}/${claimKey.periodId}`, document),
+    uploadProjectDocument: ({ projectId, document }) => ajaxPostFile(`/api/documents/projects/${projectId}`, document)
   },
   forecastDetails: {
     getAllByPartnerId: (params) => ajaxJson(`/api/forecast-details/?partnerId=${params.partnerId}`),
@@ -126,6 +110,13 @@ const ajaxPost = <T>(url: string, body: {} = {}, opts?: RequestInit) => {
   });
 
   return ajaxJson<T>(url, options);
+};
+
+const ajaxPostFile = <T>(url: string, document: DocumentUploadDto) => {
+  const formData = new FormData();
+  formData.append("attachment", (document.file as ClientFileWrapper).file);
+  if (document.description) { formData.append("description", document.description); }
+  return ajaxPostFormData<T>(url, formData);
 };
 
 const ajaxPostFormData = <T>(url: string, formData: FormData, opts?: RequestInit) => {

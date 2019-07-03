@@ -10,7 +10,7 @@ import { MonitoringReportDtoValidator } from "@ui/validators/MonitoringReportDto
 import { getMonitoringReportEditor } from "@ui/redux/selectors";
 import { GetMonitoringReportById, SaveMonitoringReport } from "@server/features/monitoringReports";
 
-export class MonitoringReportPrepareFormHandler extends FormHandlerBase<MonitoringReportPrepareParams, MonitoringReportDto> {
+export class MonitoringReportPrepareFormHandler extends FormHandlerBase<MonitoringReportPrepareParams, MonitoringReportDto, MonitoringReportDtoValidator> {
 
   constructor() {
     super(MonitoringReportPrepareRoute, ["save-draft", "save-submitted"]);

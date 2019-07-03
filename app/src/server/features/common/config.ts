@@ -22,6 +22,9 @@ export interface IConfig {
     readonly features: IFeatureFlags;
 
     readonly logLevel: LogLevel;
+
+    readonly maxFileSize: number;
+
     readonly prettyLogs: boolean;
 
     readonly salesforce: {
@@ -52,6 +55,7 @@ export interface IConfig {
     readonly cookieKey: string;
 
     readonly standardOverheadRate: number;
+
 }
 
 const build = process.env.BUILD || `${Date.now()}`;
@@ -112,6 +116,8 @@ const cookieKey = process.env.COOKIE_KEY!;
 
 const standardOverheadRate = parseFloat(process.env.STANDARD_OVERHEAD_RATE!) || 20;
 
+const maxFileSize = parseInt(process.env.MAX_FILE_SIZE_IN_BYTES!, 10) || 10485760; // 10MB
+
 export const Configuration: IConfig = {
     build,
     cookieKey,
@@ -119,6 +125,7 @@ export const Configuration: IConfig = {
     certificates,
     features,
     logLevel,
+    maxFileSize,
     prettyLogs,
     salesforce,
     serverUrl,

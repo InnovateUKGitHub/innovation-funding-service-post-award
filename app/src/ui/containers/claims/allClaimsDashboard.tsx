@@ -9,7 +9,7 @@ import { ClaimDto, PartnerDto, ProjectDto, ProjectRole } from "@framework/dtos";
 import { ClaimStatus, DocumentDescription } from "@framework/types";
 import { ProjectDashboardRoute } from "@ui/containers";
 import { IEditorStore } from "@ui/redux";
-import { DocumentUploadValidator } from "@ui/validators";
+import { DocumentUploadDtoValidator } from "@ui/validators";
 import { Results } from "@ui/validation";
 
 export interface AllClaimsDashboardParams {
@@ -23,7 +23,7 @@ interface Data {
   previousClaims: Pending<ClaimDto[]>;
   document: Pending<DocumentSummaryDto | null>;
   deleteEditor: Pending<IEditorStore<DocumentSummaryDto[], Results<DocumentSummaryDto[]>> | null>;
-  editor: Pending<IEditorStore<DocumentUploadDto, DocumentUploadValidator> | null>;
+  editor: Pending<IEditorStore<DocumentUploadDto, DocumentUploadDtoValidator> | null>;
 }
 
 interface CombinedData {
@@ -36,7 +36,7 @@ interface CombinedData {
 interface IarCombinedData {
   document: DocumentSummaryDto | null;
   deleteEditor: IEditorStore<DocumentSummaryDto[], Results<DocumentSummaryDto[]>> | null;
-  editor: IEditorStore<DocumentUploadDto, DocumentUploadValidator> | null;
+  editor: IEditorStore<DocumentUploadDto, DocumentUploadDtoValidator> | null;
 }
 
 interface ProjectPeriod {
@@ -278,7 +278,7 @@ class Component extends ContainerBaseWithState<AllClaimsDashboardParams, Data, C
     return (<Acc.Loader pending={combined} render={({editor, document}: IarCombinedData) => this.renderIarDocumentSection(claim, editor, document)}/>);
   }
 
-  private renderIarDocumentSection(claim: ClaimDto, editor: IEditorStore<DocumentUploadDto, DocumentUploadValidator> | null, document: DocumentSummaryDto | null) {
+  private renderIarDocumentSection(claim: ClaimDto, editor: IEditorStore<DocumentUploadDto, DocumentUploadDtoValidator> | null, document: DocumentSummaryDto | null) {
     if (!editor) return null;
     return (
       <Acc.Section qa="current-claim-iar" title="Independent accountant's report">
@@ -322,11 +322,11 @@ class Component extends ContainerBaseWithState<AllClaimsDashboardParams, Data, C
     this.props.deleteFile({ projectId, partnerId: claim.partnerId, periodId: claim.periodId }, dto);
   }
 
-  private renderIarDocumentUpload(claim: ClaimDto, editor: IEditorStore<DocumentUploadDto, DocumentUploadValidator>) {
+  private renderIarDocumentUpload(claim: ClaimDto, editor: IEditorStore<DocumentUploadDto, DocumentUploadDtoValidator>) {
     if (!claim.allowIarEdit) {
       return null;
     }
-    const UploadForm = Acc.TypedForm<{ file: File | null }>();
+    const UploadForm = Acc.TypedForm<{ file: IFileWrapper | null }>();
     const isAwaitingIAR = claim.status === ClaimStatus.AWAITING_IAR;
     const message = isAwaitingIAR
       ? "Your most recent claim cannot be sent to us. You must attach an independent accountant's report (IAR)."

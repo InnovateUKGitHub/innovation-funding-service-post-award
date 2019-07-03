@@ -9,7 +9,7 @@ import { GetByIdQuery as GetPartnerByIdQuery } from "../features/partners";
 import { IContext, ILinkInfo, ProjectRole } from "@framework/types";
 import { GetCostCategoriesForPartnerQuery } from "../features/claims/getCostCategoriesForPartnerQuery";
 
-export class ClaimForcastFormHandler extends FormHandlerBase<ClaimForcastParams, ForecastDetailsDTO[]> {
+export class ClaimForcastFormHandler extends FormHandlerBase<ClaimForcastParams, ForecastDetailsDTO[], ForecastDetailsDtosValidator> {
   constructor() {
     super(ClaimForecastRoute, ["save", "default"]);
   }
@@ -55,7 +55,7 @@ export class ClaimForcastFormHandler extends FormHandlerBase<ClaimForcastParams,
     return getForecastDetailsEditor(params.partnerId);
   }
 
-  protected createValidationResult(params: ClaimForcastParams, dto: ForecastDetailsDTO[]): Results<ForecastDetailsDTO[]> {
+  protected createValidationResult(params: ClaimForcastParams, dto: ForecastDetailsDTO[]) {
     return new ForecastDetailsDtosValidator(dto, [], [], [], false);
   }
 

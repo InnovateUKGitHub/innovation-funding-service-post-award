@@ -6,10 +6,9 @@ import * as ACC from "../../components";
 import * as Selectors from "../../redux/selectors";
 import * as Actions from "../../redux/actions";
 import { IEditorStore } from "../../redux";
-import { DocumentUploadValidator } from "../../validators/documentUploadValidator";
+import { DocumentUploadDtoValidator } from "../../validators/documentUploadValidator";
 import { ProjectDashboardRoute } from "@ui/containers";
-
-const bytesInMegabyte = 1048576;
+import { getFileSize } from "@framework/util";
 
 export interface ProjectDocumentPageParams {
   projectId: string;
@@ -19,7 +18,7 @@ interface Data {
   project: Pending<ProjectDto>;
   partners: Pending<PartnerDto[]>;
   documents: Pending<DocumentSummaryDto[]>;
-  editor: Pending<IEditorStore<DocumentUploadDto, DocumentUploadValidator>>;
+  editor: Pending<IEditorStore<DocumentUploadDto, DocumentUploadDtoValidator>>;
   isClient: boolean;
   features: IFeatureFlags;
 }
@@ -28,7 +27,7 @@ interface CombinedData {
   project: ProjectDto;
   partners: PartnerDto[];
   documents: DocumentSummaryDto[];
-  editor: IEditorStore<DocumentUploadDto, DocumentUploadValidator>;
+  editor: IEditorStore<DocumentUploadDto, DocumentUploadDtoValidator>;
 }
 
 interface Callbacks {
@@ -61,13 +60,13 @@ class ProjectDocumentsComponent extends ContainerBaseWithState<ProjectDocumentPa
     return <ACC.PageLoader pending={combined} render={x => this.renderContents(x)} />;
   }
 
-  private onFileChange(projectId: string, dto: { file: File | null }) {
+  private onFileChange(projectId: string, dto: { file: IFileWrapper | null }) {
     this.props.clearMessage();
     this.props.validate(projectId, dto);
   }
 
   private renderContents({ project, partners, documents, editor }: CombinedData) {
-    const UploadForm = ACC.TypedForm<{ file: File | null }>();
+    const UploadForm = ACC.TypedForm<{ file: IFileWrapper | null }>();
 
     return (
       <ACC.Page
@@ -159,18 +158,9 @@ class ProjectDocumentsComponent extends ContainerBaseWithState<ProjectDocumentPa
       <ProjectDocumentsTable.Table data={documentsToDisplay} qa="project-documents">
         <ProjectDocumentsTable.Custom header="File name" qa="fileName" value={x => this.renderDocumentName(x)} />
         <ProjectDocumentsTable.ShortDate header="Date uploaded" qa="dateUploaded" value={x => x.dateCreated} />
-        <ProjectDocumentsTable.Custom header="File size" qa="fileSize" value={x => this.renderFileSize(x.fileSize)} />
+        <ProjectDocumentsTable.Custom header="File size" qa="fileSize" classSuffix="numeric" value={x => getFileSize(x.fileSize)} />
       </ProjectDocumentsTable.Table>
     );
-  }
-
-  renderFileSize(fileSize: number) {
-    const options = {
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2
-    };
-    const valToRender = new Intl.NumberFormat("en-GB", options).format(fileSize / bytesInMegabyte);
-    return <span>{valToRender}MB</span>;
   }
 }
 
@@ -181,7 +171,7 @@ const ProjectDocuments = container.connect({
     project: Selectors.getProject(props.projectId).getPending(state),
     partners: Selectors.findPartnersByProject(props.projectId).getPending(state),
     documents: Selectors.getProjectDocuments(props.projectId).getPending(state),
-    editor: Selectors.getProjectDocumentEditor(props.projectId).get(state),
+    editor: Selectors.getProjectDocumentEditor(props.projectId, state.config.maxFileSize).get(state),
     isClient: state.isClient,
     features: state.config.features
   }),
