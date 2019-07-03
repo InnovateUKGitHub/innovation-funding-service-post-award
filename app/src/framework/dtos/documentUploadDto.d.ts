@@ -1,4 +1,4 @@
 interface DocumentUploadDto {
-  file: File | null;
+  file: IFileWrapper | null;
   description?: string;
 }

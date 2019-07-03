@@ -1,6 +1,6 @@
 import { Stream } from "stream";
-import { FileUpload } from "@framework/types/FileUpload";
 import SalesforceRepositoryBase from "./salesforceRepositoryBase";
+import { ServerFileWrapper } from "@server/apis/controllerBase";
 
 interface ISalesforceContentVersion {
   Id: string;
@@ -24,7 +24,7 @@ export interface IContentVersionRepository {
   getDocuments(contentDocumentIds: string[], filter: DocumentFilter): Promise<ISalesforceContentVersion[]>;
   getDocument(id: string): Promise<ISalesforceContentVersion>;
   getDocumentData(id: string): Promise<Stream>;
-  insertDocument(file: FileUpload): Promise<string>;
+  insertDocument(file: IFileWrapper, description: string): Promise<string>;
 }
 
 export class ContentVersionRepository extends SalesforceRepositoryBase<ISalesforceContentVersion> implements IContentVersionRepository {
@@ -60,12 +60,12 @@ export class ContentVersionRepository extends SalesforceRepositoryBase<ISalesfor
     });
   }
 
-  public insertDocument({ content, fileName, description }: FileUpload) {
+  public insertDocument(document: ServerFileWrapper, description?: string) {
     return super.insertItem({
       ReasonForChange: "First Upload",
-      PathOnClient: fileName,
+      PathOnClient: document.fileName,
       ContentLocation: "S",
-      VersionData: content,
+      VersionData: document.read(),
       Description: description
     });
   }

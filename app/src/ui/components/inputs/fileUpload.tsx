@@ -2,11 +2,21 @@ import * as React from "react";
 import classNames from "classnames";
 import { BaseInput } from "./baseInput";
 
+export class ClientFileWrapper implements IFileWrapper {
+  constructor(public readonly file: File) {
+    this.fileName = file.name;
+    this.size = file.size;
+  }
+
+  public readonly size: number;
+  public readonly fileName: string;
+}
+
 interface FileUploadProps {
   name: string;
   disabled?: boolean;
-  onChange: (v: File | null) => void;
-  value: File | null | undefined;
+  onChange: (v: IFileWrapper | null) => void;
+  value: IFileWrapper | null | undefined;
 }
 
 export class FileUpload extends BaseInput<FileUploadProps, { value: File | null }> {
@@ -36,6 +46,7 @@ export class FileUpload extends BaseInput<FileUploadProps, { value: File | null 
   private handleChange(e: React.ChangeEvent<HTMLInputElement> | React.KeyboardEvent<HTMLInputElement>) {
     const files = (e.target as HTMLInputElement).files;
     const value = (files && files.length > 0 && files[0]) || null;
-    this.props.onChange(value);
+    const wrapped = value && new ClientFileWrapper(value);
+    this.props.onChange(wrapped);
   }
 }

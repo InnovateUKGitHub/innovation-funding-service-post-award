@@ -529,4 +529,16 @@ export class TestData {
 
     return newItem;
   }
+
+  public createFile(content: string = "Test File Content", fileName: string = "testFile.csv"): TestFileWrapper {
+    return new TestFileWrapper(fileName, content);
+  }
+}
+
+export class TestFileWrapper implements IFileWrapper {
+
+  constructor(public fileName: string, public content: string) {
+  }
+
+  public get size(): number { return this.content.length; }
 }

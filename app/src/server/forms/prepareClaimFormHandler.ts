@@ -10,7 +10,7 @@ import { ILinkInfo } from "@framework/types/ILinkInfo";
 import { IContext } from "@framework/types/IContext";
 import { GetAllProjectRolesForUser } from "../features/projects";
 
-export class PrepareClaimFormHandler extends FormHandlerBase<PrepareClaimParams, ClaimDto> {
+export class PrepareClaimFormHandler extends FormHandlerBase<PrepareClaimParams, ClaimDto, ClaimDtoValidator> {
   constructor() {
     super(PrepareClaimRoute, ["default", "return"]);
   }
@@ -42,7 +42,7 @@ export class PrepareClaimFormHandler extends FormHandlerBase<PrepareClaimParams,
     return getClaimEditor(params.partnerId, params.periodId);
   }
 
-  protected createValidationResult(params: PrepareClaimParams, dto: ClaimDto): Results<ClaimDto> {
+  protected createValidationResult(params: PrepareClaimParams, dto: ClaimDto) {
     return new ClaimDtoValidator(dto, ClaimStatus.UNKNOWN, [], [], false);
   }
 }

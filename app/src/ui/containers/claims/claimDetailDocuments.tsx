@@ -7,7 +7,7 @@ import * as Actions from "../../redux/actions";
 import * as Selectors from "../../redux/selectors";
 import { ProjectDto, ProjectRole } from "@framework/types";
 import { IEditorStore } from "../../redux/reducers";
-import { DocumentUploadValidator } from "../../validators/documentUploadValidator";
+import { DocumentUploadDtoValidator } from "../../validators/documentUploadValidator";
 import { Results } from "../../validation/results";
 
 export interface ClaimDetailDocumentsPageParams {
@@ -21,7 +21,7 @@ interface Data {
   project: Pending<ProjectDto>;
   costCategories: Pending<CostCategoryDto[]>;
   documents: Pending<DocumentSummaryDto[]>;
-  editor: Pending<IEditorStore<DocumentUploadDto, DocumentUploadValidator>>;
+  editor: Pending<IEditorStore<DocumentUploadDto, DocumentUploadDtoValidator>>;
   deleteEditor: Pending<IEditorStore<DocumentSummaryDto[], Results<DocumentSummaryDto[]>>>;
 }
 
@@ -29,7 +29,7 @@ interface CombinedData {
   project: ProjectDto;
   costCategories: CostCategoryDto[];
   documents: DocumentSummaryDto[];
-  editor: IEditorStore<DocumentUploadDto, DocumentUploadValidator>;
+  editor: IEditorStore<DocumentUploadDto, DocumentUploadDtoValidator>;
   deleteEditor: IEditorStore<DocumentSummaryDto[], Results<DocumentSummaryDto[]>>;
 }
 
@@ -105,7 +105,7 @@ export class ClaimDetailDocumentsComponent extends ContainerBase<ClaimDetailDocu
       costCategoryId: this.props.costCategoryId
     });
     const costCategory = costCategories.find(x => x.id === this.props.costCategoryId)! || {};
-    const UploadForm = ACC.TypedForm<{file: File | null }>();
+    const UploadForm = ACC.TypedForm<{file: IFileWrapper | null }>();
 
     return (
       <ACC.Page
@@ -151,7 +151,7 @@ export const ClaimDetailDocuments = definition.connect({
       project: Selectors.getProject(props.projectId).getPending(state),
       costCategories: Selectors.getCostCategories().getPending(state),
       documents: Selectors.getClaimDetailDocuments(props.partnerId, props.periodId, props.costCategoryId).getPending(state),
-      editor: Selectors.getClaimDetailDocumentEditor({projectId: props.projectId, partnerId: props.partnerId, periodId: props.periodId, costCategoryId: props.costCategoryId}).get(state),
+      editor: Selectors.getClaimDetailDocumentEditor({projectId: props.projectId, partnerId: props.partnerId, periodId: props.periodId, costCategoryId: props.costCategoryId}, state.config.maxFileSize).get(state),
       deleteEditor: Selectors.getClaimDetailDocumentDeleteEditor(state, {projectId: props.projectId, partnerId: props.partnerId, periodId: props.periodId, costCategoryId: props.costCategoryId}).get(state),
     };
   },

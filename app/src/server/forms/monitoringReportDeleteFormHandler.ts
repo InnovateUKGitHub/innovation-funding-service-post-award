@@ -6,8 +6,9 @@ import { MonitoringReportDtoValidator } from "@ui/validators";
 import { DeleteMonitoringReportCommand, GetMonitoringReportById} from "@server/features/monitoringReports";
 import { getMonitoringReportEditor } from "@ui/redux/selectors";
 import { MonitoringReportDashboardRoute } from "@ui/containers";
+import { Results } from "@ui/validation";
 
-export class MonitoringReportDeleteFormHandler extends FormHandlerBase<MonitoringReportDeleteParams, MonitoringReportDto> {
+export class MonitoringReportDeleteFormHandler extends FormHandlerBase<MonitoringReportDeleteParams, MonitoringReportDto, Results<{}>> {
 
   constructor() {
     super(MonitoringReportDeleteRoute, ["delete"]);

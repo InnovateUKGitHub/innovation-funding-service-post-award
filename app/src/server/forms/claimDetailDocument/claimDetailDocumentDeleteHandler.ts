@@ -15,7 +15,7 @@ interface Document {
   id: string;
 }
 
-export class ClaimDetailDocumentDeleteHandler extends FormHandlerBase<ClaimDetailDocumentsPageParams, Document> {
+export class ClaimDetailDocumentDeleteHandler extends FormHandlerBase<ClaimDetailDocumentsPageParams, Document, Results<{}>> {
 
   constructor() {
     super(ClaimDetailDocumentsRoute, ["delete"]);

@@ -1,13 +1,17 @@
-import { Authorisation, FileUpload, IContext, ProjectRole } from "@framework/types";
+import { Authorisation, IContext, ProjectRole } from "@framework/types";
 import { CommandBase, ValidationError } from "@server/features/common";
-import { FileUploadValidator } from "@ui/validators/documentUploadValidator";
+import { DocumentUploadDtoValidator } from "@ui/validators/documentUploadValidator";
 
 export class UploadProjectDocumentCommand extends CommandBase<string> {
   constructor(
     private readonly projectId: string,
-    private readonly file: FileUpload
+    private readonly document: DocumentUploadDto
   ) {
     super();
+  }
+
+  protected LogMessage() {
+    return [this.constructor.name, { projectId: this.projectId }, this.document && this.document.file && this.document.file.fileName];
   }
 
   protected async accessControl(auth: Authorisation) {
@@ -15,12 +19,12 @@ export class UploadProjectDocumentCommand extends CommandBase<string> {
   }
 
   protected async Run(context: IContext) {
-    const result = new FileUploadValidator(this.file, true);
+    const result = new DocumentUploadDtoValidator(this.document, context.config.maxFileSize, true);
 
     if (!result.isValid) {
       throw new ValidationError(result);
     }
 
-    return context.repositories.documents.insertDocument(this.file, this.projectId);
+    return context.repositories.documents.insertDocument(this.document.file!, this.projectId, this.document.description);
   }
 }

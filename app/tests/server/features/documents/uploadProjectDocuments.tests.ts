@@ -8,17 +8,17 @@ describe("UploadProjectDocumentCommand", () => {
     const context = new TestContext();
     const project = context.testData.createProject();
 
-    const file = {
-      fileName: "fileName.txt",
-      content: "Some content",
-    };
+    const content = "Some content";
+    const fileName = "test.csv";
 
-    const command = new UploadProjectDocumentCommand(project.Id, file);
+    const file = context.testData.createFile(content, fileName);
+
+    const command = new UploadProjectDocumentCommand(project.Id, {file});
     const documentId = await context.runCommand(command);
     const document = await context.repositories.documents.getDocumentMetadata(documentId);
 
-    expect(document.VersionData).toEqual(file.content);
-    expect(document.PathOnClient).toEqual(file.fileName);
+    expect(document.VersionData).toEqual(content);
+    expect(document.PathOnClient).toEqual(fileName);
   });
 
   it("should throw a validation exception", async () => {
