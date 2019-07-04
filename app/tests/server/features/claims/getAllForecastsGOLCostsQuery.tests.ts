@@ -13,7 +13,7 @@ describe("GetAllForecastsForPartnerQuery", () => {
     const result = await context.runQuery(query);
     const item   = result[0];
 
-    expect(item.costCategoryId).toBe(costCat.Id);
+    expect(item.costCategoryId).toBe(costCat.id);
     expect(item.value).toBe(100);
   });
 

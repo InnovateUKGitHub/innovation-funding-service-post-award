@@ -9,10 +9,10 @@ describe("GetForecastDetailQuery", () => {
     const partner = context.testData.createPartner();
     context.testData.createProfileDetail(costCat, partner);
 
-    const query  = new GetForecastDetailQuery(partner.Id, 1, costCat.Id);
+    const query  = new GetForecastDetailQuery(partner.Id, 1, costCat.id);
     const item = await context.runQuery(query);
 
-    expect(item.costCategoryId).toBe(costCat.Id);
+    expect(item.costCategoryId).toBe(costCat.id);
     expect(item.periodId).toBe(1);
     expect(item.value).toBe(1000);
   });
@@ -23,10 +23,10 @@ describe("GetForecastDetailQuery", () => {
     const partner = context.testData.createPartner();
     context.testData.createProfileDetail(costCat, partner);
 
-    const query  = new GetForecastDetailQuery("test", 1, costCat.Id);
+    const query  = new GetForecastDetailQuery("test", 1, costCat.id);
     const item = await context.runQuery(query);
 
-    expect(item.costCategoryId).toBe(costCat.Id);
+    expect(item.costCategoryId).toBe(costCat.id);
     expect(item.periodId).toBe(1);
     expect(item.value).toBe(0);
   });
