@@ -7,6 +7,7 @@ import { ISalesforceRecordType } from "@server/repositories";
 import { ISessionUser } from "./IUser";
 import { Authorisation } from "./authorisation";
 import { PermissionGroup } from "@framework/entities/permissionGroup";
+import { RecordType } from "@framework/entities/recordType";
 
 export interface IRepositories {
   readonly claims: Repositories.IClaimRepository;
@@ -27,7 +28,7 @@ export interface IRepositories {
   readonly claimLineItems: Repositories.IClaimLineItemRepository;
   readonly claimTotalCostCategory: Repositories.IClaimTotalCostCategoryRepository;
   readonly permissionGroups: Repositories.IPermissionGroupRepository;
-
+  readonly recordTypes: Repositories.IRecordTypeRepository;
 }
 
 export interface IContext {
@@ -53,7 +54,7 @@ export interface ICaches {
   readonly costCategories: Cache<CostCategoryDto[]>;
   readonly permissionGroups: Cache<PermissionGroup[]>;
   readonly projectRoles: Cache<{ [key: string]: IRoleInfo }>;
-  readonly recordTypes: Cache<ISalesforceRecordType[]>;
+  readonly recordTypes: Cache<RecordType[]>;
 }
 
 export interface IAsyncRunnable<T> {
