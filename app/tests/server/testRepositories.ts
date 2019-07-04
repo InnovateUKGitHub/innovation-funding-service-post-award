@@ -50,7 +50,7 @@ class ProjectContactTestRepository extends TestRepository<Repositories.ISalesfor
   }
 }
 
-class CostCategoriesTestRepository extends TestRepository<Repositories.ISalesforceCostCategory> implements Repositories.ICostCategoryRepository {
+class CostCategoriesTestRepository extends TestRepository<Entities.CostCategory> implements Repositories.ICostCategoryRepository {
   getAll() {
     return super.getAll();
   }
@@ -410,7 +410,7 @@ class PermissionGroupTestRepository implements Repositories.IPermissionGroupRepo
 }
 
 class RecordTypeTestRepository extends TestRepository<Entities.RecordType> implements Repositories.IRecordTypeRepository {
-    public getAll() {
+  public getAll() {
     return super.getAll();
   }
 }

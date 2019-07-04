@@ -7,10 +7,10 @@ describe("GetCostCategoriesForPartnerQuery", () => {
     const projectDto = { competitionType: "ABC" };
     const partnerDto = { organisationType: "123" };
 
-    ctx.testData.range(5, () => ctx.testData.createCostCategory(x => x.Acc_OrganisationType__c = partnerDto.organisationType));
-    ctx.testData.range(3, () => ctx.testData.createCostCategory(x => {
-      x.Acc_CompetitionType__c  = projectDto.competitionType;
-      x.Acc_OrganisationType__c = partnerDto.organisationType;
+    ctx.testData.range(5, () => ctx.testData.createCostCategory({ organisationType: partnerDto.organisationType }));
+    ctx.testData.range(3, () => ctx.testData.createCostCategory({
+      competitionType: projectDto.competitionType,
+      organisationType: partnerDto.organisationType,
     }));
 
     const query = new GetCostCategoriesForPartnerQuery(projectDto as any, partnerDto as any);
@@ -23,10 +23,10 @@ describe("GetCostCategoriesForPartnerQuery", () => {
     const projectDto = { competitionType: "ABC" };
     const partnerDto = { organisationType: "123" };
 
-    ctx.testData.range(5, () => ctx.testData.createCostCategory(x => x.Acc_CompetitionType__c  = projectDto.competitionType));
-    ctx.testData.range(13, () => ctx.testData.createCostCategory(x => {
-      x.Acc_CompetitionType__c  = projectDto.competitionType;
-      x.Acc_OrganisationType__c = partnerDto.organisationType;
+    ctx.testData.range(5, () => ctx.testData.createCostCategory({ competitionType: projectDto.competitionType}));
+    ctx.testData.range(13, () => ctx.testData.createCostCategory({
+      competitionType: projectDto.competitionType,
+      organisationType: partnerDto.organisationType,
     }));
 
     const query = new GetCostCategoriesForPartnerQuery(projectDto as any, partnerDto as any);

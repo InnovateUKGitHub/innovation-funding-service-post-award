@@ -15,20 +15,22 @@ export class TestData {
     return Array.from({ length: no }, (_, i) => create(i + 1, i));
   }
 
-  public createCostCategory(update?: (item: Repositories.ISalesforceCostCategory) => void): Repositories.ISalesforceCostCategory {
+  public createCostCategory(update?: Partial<Entites.CostCategory>): Entites.CostCategory {
     const seed = this.repositories.costCategories.Items.length + 1;
 
-    const newItem: Repositories.ISalesforceCostCategory = {
-      Id: `CostCat${seed}`,
-      Acc_CostCategoryName__c: `Cost Category ${seed}`,
-      Acc_DisplayOrder__c: seed,
-      Acc_CompetitionType__c: "SBRI",
-      Acc_OrganisationType__c: "Industrial",
-      Acc_CostCategoryDescription__c: `Cost Category description ${seed}`,
-      Acc_HintText__c: `Cost Category hint ${seed}`,
+    const newItem: Entites.CostCategory = {
+      id: `CostCat${seed}`,
+      name: `Cost Category ${seed}`,
+      displayOrder: seed,
+      competitionType: "SBRI",
+      organisationType: "Industrial",
+      description: `Cost Category description ${seed}`,
+      hintText: `Cost Category hint ${seed}`,
+      hasRelated: false,
+      isCalculated: false
     };
 
-    if (!!update) update(newItem);
+    if (!!update) Object.assign(newItem, update);
 
     this.repositories.costCategories.Items.push(newItem);
 
@@ -337,7 +339,7 @@ export class TestData {
 
   }
 
-  public createClaimDetail(project?: Repositories.ISalesforceProject, costCategory?: Repositories.ISalesforceCostCategory, partner?: Repositories.ISalesforcePartner, periodId?: number, update?: (item: Repositories.ISalesforceClaimDetails) => void): Repositories.ISalesforceClaimDetails {
+  public createClaimDetail(project?: Repositories.ISalesforceProject, costCategory?: Entites.CostCategory, partner?: Repositories.ISalesforcePartner, periodId?: number, update?: (item: Repositories.ISalesforceClaimDetails) => void): Repositories.ISalesforceClaimDetails {
 
     costCategory = costCategory || this.createCostCategory();
     partner = partner || this.createPartner();
@@ -345,8 +347,8 @@ export class TestData {
     periodId = periodId || 1;
 
     const newItem: Repositories.ISalesforceClaimDetails = {
-      Id: `${partner.Id}_${periodId}_${costCategory.Id}`,
-      Acc_CostCategory__c: costCategory.Id,
+      Id: `${partner.Id}_${periodId}_${costCategory.id}`,
+      Acc_CostCategory__c: costCategory.id,
       Acc_ProjectPeriodNumber__c: periodId,
       Acc_ProjectParticipant__r: {
         Id: partner.Id,
@@ -367,7 +369,7 @@ export class TestData {
   }
 
   public createClaimLineItem(
-    costCategory?: Repositories.ISalesforceCostCategory,
+    costCategory?: Entites.CostCategory,
     partner?: Repositories.ISalesforcePartner,
     periodId?: number,
     update?: (item: Partial<Repositories.ISalesforceClaimLineItem>) => void
@@ -380,7 +382,7 @@ export class TestData {
 
     const newItem: Repositories.ISalesforceClaimLineItem = {
       Id: `ClaimLineItem-${seed}`,
-      Acc_CostCategory__c: costCategory.Id,
+      Acc_CostCategory__c: costCategory.id,
       Acc_ProjectPeriodNumber__c: periodId,
       Acc_ProjectParticipant__c: partner.Id,
       Acc_LineItemCost__c: 200,
@@ -417,7 +419,7 @@ export class TestData {
   }
 
   public createProfileDetail(
-    costCategory?: Repositories.ISalesforceCostCategory,
+    costCategory?: Entites.CostCategory,
     partner?: Repositories.ISalesforcePartner,
     periodId?: number,
     update?: (item: Repositories.ISalesforceProfileDetails) => void
@@ -429,7 +431,7 @@ export class TestData {
     const seed = this.repositories.profileDetails.Items.length + 1;
     const newItem: Repositories.ISalesforceProfileDetails = {
       Id: `ProfileDetailsItem-${seed}`,
-      Acc_CostCategory__c: costCategory.Id,
+      Acc_CostCategory__c: costCategory.id,
       Acc_ProjectParticipant__c: partner.Id,
       Acc_ProjectPeriodNumber__c: periodId,
       Acc_LatestForecastCost__c: 1000,
@@ -482,7 +484,7 @@ export class TestData {
   }
 
   public createProfileTotalCostCategory(
-    costCategory?: Repositories.ISalesforceCostCategory,
+    costCategory?: Entites.CostCategory,
     partner?: Repositories.ISalesforcePartner,
     golCost?: number,
     update?: (item: Repositories.ISalesforceProfileTotalCostCategory) => void
@@ -492,7 +494,7 @@ export class TestData {
     golCost = golCost || 100;
 
     const newItem: Repositories.ISalesforceProfileTotalCostCategory = {
-      Acc_CostCategory__c: costCategory.Id,
+      Acc_CostCategory__c: costCategory.id,
       Acc_ProjectParticipant__c: partner.Id,
       Acc_CostCategoryGOLCost__c: golCost,
       Id: this.repositories.profileTotalCostCategory.Items.length + 1 + ""
