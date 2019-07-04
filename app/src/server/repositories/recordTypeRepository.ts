@@ -1,6 +1,8 @@
-import SalesforceRepositoryBase from "./salesforceRepositoryBase";
+import { SalesforceRepositoryBaseWithMapping } from "./salesforceRepositoryBase";
 import { Connection } from "jsforce";
 import { ILogger } from "@server/features/common";
+import { RecordType } from "@framework/entities";
+import { SalesforceRecordTypeMapper} from "./mappers/recordTypeMapper";
 
 export interface ISalesforceRecordType {
   Id: string;
@@ -9,16 +11,16 @@ export interface ISalesforceRecordType {
 }
 
 export interface IRecordTypeRepository {
-  getAll(): Promise<ISalesforceRecordType[]>;
-  getAllForObject(objectType: string): Promise<ISalesforceRecordType[]>;
-  get(objectType: string, recordTypeName: string): Promise<ISalesforceRecordType>;
+  getAll(): Promise<RecordType[]>;
 }
 
-export class RecordTypeRepository extends SalesforceRepositoryBase<ISalesforceRecordType> implements IRecordTypeRepository {
+export class RecordTypeRepository extends SalesforceRepositoryBaseWithMapping<ISalesforceRecordType, RecordType> implements IRecordTypeRepository {
 
-  constructor(private cache: ICache<ISalesforceRecordType[]>, getSalesforceConnection: () => Promise<Connection>, logger: ILogger) {
+  constructor(getSalesforceConnection: () => Promise<Connection>, logger: ILogger) {
     super(getSalesforceConnection, logger);
   }
+
+  protected mapper = new SalesforceRecordTypeMapper();
 
   protected readonly salesforceObjectName = "RecordType";
 
@@ -28,21 +30,7 @@ export class RecordTypeRepository extends SalesforceRepositoryBase<ISalesforceRe
     "SobjectType"
   ];
 
-  async getAll(): Promise<ISalesforceRecordType[]> {
-    return this.cache.fetchAsync("all", () => super.all());
-  }
-
-  async getAllForObject(objectType: string) {
-    return this.getAll().then(x => x.filter(y => y.SobjectType === objectType));
-  }
-
-  async get(objectType: string, recordTypeName: string) {
-    return this.getAll().then(x => {
-      const item = x.find(y => y.SobjectType === objectType && y.Name === recordTypeName);
-      if(!item) {
-        throw Error(`Failed to find record type of ${recordTypeName} for object ${objectType}`);
-      }
-      return item;
-    });
+  async getAll() {
+    return super.all();
   }
 }

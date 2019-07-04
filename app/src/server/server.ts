@@ -8,8 +8,8 @@ import { router as authRouter } from "./auth";
 import { router } from "./router";
 import contextProvider from "./features/common/contextProvider";
 import { GetPermissionGroupQuery } from "./features/general/getPermissionGroupsQuery";
-import { PermissionGroupIdenfifier } from "@framework/types/permisionGroupIndentifier";
-import { IContext } from "@framework/types";
+import { IContext, PermissionGroupIdenfifier } from "@framework/types";
+import { GetAllRecordTypesQuery } from "./features/general/getAllRecordTypesQuery";
 
 export class Server {
   private app: express.Express;
@@ -58,6 +58,7 @@ export class Server {
     if (context.config.serverUrl.startsWith("https://")) {
       // calls to query that prime caches doe as service user
       this.primeCache(context, "Permission group cache", () => context.runQuery(new GetPermissionGroupQuery(PermissionGroupIdenfifier.ClaimsTeam)));
+      this.primeCache(context, "Record type cache", () => context.runQuery(new GetAllRecordTypesQuery()));
     }
   }
 
