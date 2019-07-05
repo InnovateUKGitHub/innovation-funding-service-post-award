@@ -6,3 +6,4 @@ export * from "./IContext";
 export * from "./IContext";
 export * from "./ILinkInfo";
 export * from "./IUser";
+export * from "./permisionGroupIndentifier";

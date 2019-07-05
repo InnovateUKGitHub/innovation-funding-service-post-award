@@ -3,10 +3,9 @@ import { TestRepository } from "./testRepository";
 import * as Repositories from "@server/repositories";
 import { Updatable } from "@server/repositories/salesforceRepositoryBase";
 import { IRepositories } from "@framework/types";
-import { ISalesforceDocument } from "@server/repositories";
 import { TestFileWrapper } from "./testData";
 import { PermissionGroupIdenfifier } from "@framework/types/permisionGroupIndentifier";
-import { PermissionGroup } from "@framework/entities/permissionGroup";
+import * as Entities from "@framework/entities";
 
 class ProjectsTestRepository extends TestRepository<Repositories.ISalesforceProject> implements Repositories.IProjectRepository {
   getById(id: string) {
@@ -118,7 +117,7 @@ class ClaimDetailsTestRepository extends TestRepository<Repositories.ISalesforce
   }
 }
 
-class DocumentsTestRepository extends TestRepository<[string, ISalesforceDocument]> implements Repositories.IDocumentsRepository {
+class DocumentsTestRepository extends TestRepository<[string, Repositories.ISalesforceDocument]> implements Repositories.IDocumentsRepository {
   async insertDocument(file: TestFileWrapper, recordId: string, description: string): Promise<string> {
     const nameParts = file.fileName.split(".");
     const extension = nameParts.length > 1 ? nameParts[nameParts.length - 1] : null;
@@ -401,12 +400,18 @@ class ClaimStatusChangeTestRepository extends TestRepository<Repositories.ISales
 }
 
 class PermissionGroupTestRepository implements Repositories.IPermissionGroupRepository {
-  public Items: PermissionGroup[] = [
+  public Items: Entities.PermissionGroup[] = [
     { id: "ClaimsTeamID", identifier: PermissionGroupIdenfifier.ClaimsTeam, name: PermissionGroupIdenfifier[PermissionGroupIdenfifier.ClaimsTeam] }
   ];
 
   getAll() {
     return Promise.resolve(this.Items);
+  }
+}
+
+class RecordTypeTestRepository extends TestRepository<Entities.RecordType> implements Repositories.IRecordTypeRepository {
+    public getAll() {
+    return super.getAll();
   }
 }
 
@@ -429,6 +434,7 @@ export interface ITestRepositories extends IRepositories {
   projectContacts: ProjectContactTestRepository;
   claimTotalCostCategory: ClaimTotalCostTestRepository;
   permissionGroups: PermissionGroupTestRepository;
+  recordTypes: RecordTypeTestRepository;
 }
 
 export const createTestRepositories = (): ITestRepositories => {
@@ -454,6 +460,7 @@ export const createTestRepositories = (): ITestRepositories => {
     partners: partnerRepository,
     projectContacts: new ProjectContactTestRepository(),
     claimTotalCostCategory: new ClaimTotalCostTestRepository(),
-    permissionGroups: new PermissionGroupTestRepository()
+    permissionGroups: new PermissionGroupTestRepository(),
+    recordTypes: new RecordTypeTestRepository()
   });
 };
