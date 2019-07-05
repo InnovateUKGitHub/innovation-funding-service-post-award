@@ -28,7 +28,7 @@ export interface IClaimDetailsRepository {
 
 export class ClaimDetailsRepository extends SalesforceRepositoryBase<ISalesforceClaimDetails> implements IClaimDetailsRepository {
 
-  constructor(private recordTypes: IRecordTypeRepository, getSalesforceConnection: () => Promise<Connection>, logger: ILogger) {
+  constructor(private getRecordTypeId: (objectName: string, recordType: string) => Promise<string>, getSalesforceConnection: () => Promise<Connection>, logger: ILogger) {
     super(getSalesforceConnection, logger);
   }
 
@@ -91,7 +91,7 @@ export class ClaimDetailsRepository extends SalesforceRepositoryBase<ISalesforce
   }
 
   async insert(item: Partial<ISalesforceClaimDetails>) {
-    const RecordTypeId = await this.recordTypes.get(this.salesforceObjectName, this.recordType).then(x => x.Id);
+    const RecordTypeId = await this.getRecordTypeId(this.salesforceObjectName, this.recordType);
     const salesforcUpdate: Partial<{
       Acc_ProjectParticipant__c: string;
       Acc_CostCategory__c: string;

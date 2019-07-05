@@ -22,7 +22,7 @@ export interface IClaimLineItemRepository {
 
 export class ClaimLineItemRepository extends SalesforceRepositoryBase<ISalesforceClaimLineItem> implements IClaimLineItemRepository {
 
-  constructor(private recordTypes: IRecordTypeRepository, getSalesforceConnection: () => Promise<Connection>, logger: ILogger) {
+  constructor(private getRecordTypeId: (objectName: string, recordType: string) => Promise<string>, getSalesforceConnection: () => Promise<Connection>, logger: ILogger) {
     super(getSalesforceConnection, logger);
   }
 
@@ -58,7 +58,7 @@ export class ClaimLineItemRepository extends SalesforceRepositoryBase<ISalesforc
   }
 
   async insert(insert: Partial<ISalesforceClaimLineItem>[]) {
-    const RecordTypeId = await this.recordTypes.get(this.salesforceObjectName, this.recordType).then(x => x.Id);
+    const RecordTypeId = await this.getRecordTypeId(this.salesforceObjectName, this.recordType);
     return super.insertAll(insert.map(item => Object.assign({}, item, { RecordTypeId })));
   }
 }

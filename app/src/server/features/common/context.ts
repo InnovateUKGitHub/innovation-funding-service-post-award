@@ -4,14 +4,14 @@ import { AppError, BadRequestError, ForbiddenError, NotFoundError, ValidationErr
 import * as Salesforce from "../../repositories/salesforceConnection";
 import * as Common from "@server/features/common";
 import * as Framework from "@framework/types";
-import { PermissionGroup } from "@framework/entities/permissionGroup";
+import * as Entities from "@framework/entities";
 
 // obvs needs to be singleton
 const cachesImplementation: Framework.ICaches = {
   costCategories: new Common.Cache<CostCategoryDto[]>(Common.Configuration.timeouts.costCategories),
   projectRoles: new Common.Cache<{ [key: string]: IRoleInfo }>(Common.Configuration.timeouts.projectRoles),
-  recordTypes: new Common.Cache<Repositories.ISalesforceRecordType[]>(Common.Configuration.timeouts.recordTypes),
-  permissionGroups: new Common.Cache<PermissionGroup[]>(0 /* permanant cache */)
+  recordTypes: new Common.Cache<Entities.RecordType[]>(Common.Configuration.timeouts.recordTypes),
+  permissionGroups: new Common.Cache<Entities.PermissionGroup[]>(0 /* permanant cache */)
 };
 
 const constructErrorResponse = <E extends Error>(error: E): AppError => {
@@ -48,18 +48,16 @@ export class Context implements Framework.IContext {
 
     this.caches = cachesImplementation;
 
-    const recordTypesRepo = new Repositories.RecordTypeRepository(this.caches.recordTypes, () => this.getSalesforceConnection(), this.logger);
-
     this.repositories = {
       claims: new Repositories.ClaimRepository(() => this.getSalesforceConnection(), this.logger),
-      claimDetails: new Repositories.ClaimDetailsRepository(recordTypesRepo, () => this.getSalesforceConnection(), this.logger),
+      claimDetails: new Repositories.ClaimDetailsRepository((objectName, recordType) => this.getRecordTypeId(objectName, recordType), () => this.getSalesforceConnection(), this.logger),
       claimStatusChanges: new Repositories.ClaimStatusChangeRepository(() => this.getSalesforceConnection(), this.logger),
       claimTotalCostCategory: new Repositories.ClaimTotalCostCategoryRepository(() => this.getSalesforceConnection(), this.logger),
-      claimLineItems: new Repositories.ClaimLineItemRepository(recordTypesRepo, () => this.getSalesforceConnection(), this.logger),
+      claimLineItems: new Repositories.ClaimLineItemRepository((objectName, recordType) => this.getRecordTypeId(objectName, recordType), () => this.getSalesforceConnection(), this.logger),
       costCategories: new Repositories.CostCategoryRepository(() => this.getSalesforceConnection(), this.logger),
       documents: new Repositories.DocumentsRepository(() => this.getSalesforceConnection(), this.logger),
-      monitoringReportResponse: new Repositories.MonitoringReportResponseRepository(recordTypesRepo, () => this.getSalesforceConnection(), this.logger),
-      monitoringReportHeader: new Repositories.MonitoringReportHeaderRepository(recordTypesRepo, () => this.getSalesforceConnection(), this.logger),
+      monitoringReportResponse: new Repositories.MonitoringReportResponseRepository((objectName, recordType) => this.getRecordTypeId(objectName, recordType), () => this.getSalesforceConnection(), this.logger),
+      monitoringReportHeader: new Repositories.MonitoringReportHeaderRepository((objectName, recordType) => this.getRecordTypeId(objectName, recordType), () => this.getSalesforceConnection(), this.logger),
       monitoringReportQuestions: new Repositories.MonitoringReportQuestionsRepository(() => this.getSalesforceConnection(), this.logger),
       monitoringReportStatusChange: new Repositories.MonitoringReportStatusChangeRepository(() => this.getSalesforceConnection(), this.logger),
       profileDetails: new Repositories.ProfileDetailsRepository(() => this.getSalesforceConnection(), this.logger),
@@ -69,6 +67,7 @@ export class Context implements Framework.IContext {
       partners: new Repositories.PartnerRepository(() => this.getSalesforceConnection(), this.logger),
       projectContacts: new Repositories.ProjectContactsRepository(() => this.getSalesforceConnection(), this.logger),
       permissionGroups: new Repositories.PermissionGroupRepository(() => this.getSalesforceConnection(), this.logger),
+      recordTypes: new Repositories.RecordTypeRepository(() => this.getSalesforceConnection(), this.logger)
     };
   }
 
@@ -155,5 +154,13 @@ export class Context implements Framework.IContext {
       return new Context({ email: serviceUser });
     }
     return this;
+  }
+
+  // helper function for repositories that need record type ids
+  private async getRecordTypeId(objectName: string, recordType: string): Promise<string> {
+    // Needs to dynamically import otherwise can be a circular reference
+    const queryImport = await import("../general/getRecordTypeQuery");
+    const query = new queryImport.GetRecordTypeQuery(objectName, recordType);
+    return this.runQuery(query).then(x => x.id);
   }
 }

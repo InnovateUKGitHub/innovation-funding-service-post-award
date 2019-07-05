@@ -9,9 +9,8 @@ import { TestData } from "./testData";
 import { TestClock } from "./testClock";
 import { TestLogger } from "./testLogger";
 import { TestUser } from "./testUser";
-import { ISalesforceRecordType } from "@server/repositories";
 import { TestConfig } from "./testConfig";
-import { PermissionGroup } from "@framework/entities/permissionGroup";
+import * as Entities from "@framework/entities";
 
 export class TestContext implements IContext {
     constructor() {
@@ -35,9 +34,9 @@ export class TestContext implements IContext {
 
     public caches: ICaches = {
         costCategories: new Cache<CostCategoryDto[]>(1),
-        permissionGroups: new Cache<PermissionGroup[]>(1),
+        permissionGroups: new Cache<Entities.PermissionGroup[]>(1),
         projectRoles: new Cache<{ [key: string]: IRoleInfo }>(1),
-        recordTypes: new Cache<ISalesforceRecordType[]>(1),
+        recordTypes: new Cache<Entities.RecordType[]>(1),
     };
 
     public runQuery<TResult>(query: QueryBase<TResult>): Promise<TResult> {

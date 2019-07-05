@@ -19,7 +19,7 @@ export interface IMonitoringReportResponseRepository {
 
 export class MonitoringReportResponseRepository extends SalesforceRepositoryBase<ISalesforceMonitoringReportResponse> implements IMonitoringReportResponseRepository {
 
-  constructor(private recordTypes: IRecordTypeRepository, getSalesforceConnection: () => Promise<Connection>, logger: ILogger) {
+  constructor(private getRecordTypeId: (objectName: string, recordType: string) => Promise<string>, getSalesforceConnection: () => Promise<Connection>, logger: ILogger) {
     super(getSalesforceConnection, logger);
   }
 
@@ -48,7 +48,7 @@ export class MonitoringReportResponseRepository extends SalesforceRepositoryBase
   }
 
   async insert(records: Partial<ISalesforceMonitoringReportResponse>[]): Promise<string[]> {
-    const RecordTypeId = await this.recordTypes.get(this.salesforceObjectName, this.recordType).then(x => x.Id);
+    const RecordTypeId = await this.getRecordTypeId(this.salesforceObjectName, this.recordType);
     return super.insertAll(records.map(item => Object.assign({}, item, { RecordTypeId })));
   }
 }

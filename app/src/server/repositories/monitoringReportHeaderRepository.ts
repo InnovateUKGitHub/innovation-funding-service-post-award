@@ -26,7 +26,7 @@ export interface IMonitoringReportHeaderRepository {
 
 export class MonitoringReportHeaderRepository extends SalesforceRepositoryBase<ISalesforceMonitoringReportHeader> implements IMonitoringReportHeaderRepository {
 
-  constructor(private recordTypes: IRecordTypeRepository, getSalesforceConnection: () => Promise<Connection>, logger: ILogger) {
+  constructor(private getRecordTypeId: (objectName: string, recordType: string) => Promise<string>, getSalesforceConnection: () => Promise<Connection>, logger: ILogger) {
     super(getSalesforceConnection, logger);
   }
 
@@ -58,7 +58,7 @@ export class MonitoringReportHeaderRepository extends SalesforceRepositoryBase<I
   }
 
   async create(item: Partial<ISalesforceMonitoringReportHeader>): Promise<string> {
-    const RecordTypeId = await this.recordTypes.get(this.salesforceObjectName, this.recordType).then(x => x.Id);
+    const RecordTypeId = await this.getRecordTypeId(this.salesforceObjectName, this.recordType);
     return super.insertItem(Object.assign({}, item, { RecordTypeId }));
   }
 

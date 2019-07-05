@@ -1,7 +1,7 @@
 // tslint:disable:no-duplicate-string
 import { DateTime } from "luxon";
 import * as Repositories from "@server/repositories";
-import { ISalesforceDocument, ISalesforceMonitoringReportQuestions, SalesforceRole } from "@server/repositories";
+import * as Entites from "@framework/entities";
 import { range } from "@shared/range";
 import { ClaimStatus, IClientUser } from "@framework/types";
 import { ITestRepositories } from "./testRepositories";
@@ -111,7 +111,7 @@ export class TestData {
     return newItem;
   }
 
-  private getRoleName(role: SalesforceRole) {
+  private getRoleName(role: Repositories.SalesforceRole) {
     switch (role) {
       case "Finance contact":
         return "Finance Contact";
@@ -122,7 +122,7 @@ export class TestData {
     }
   }
 
-  private createProjectContact(project: Repositories.ISalesforceProject, partner: Repositories.ISalesforcePartner|null, role?: SalesforceRole, update?: (item: Repositories.ISalesforceProjectContact) => void) {
+  private createProjectContact(project: Repositories.ISalesforceProject, partner: Repositories.ISalesforcePartner|null, role?: Repositories.SalesforceRole, update?: (item: Repositories.ISalesforceProjectContact) => void) {
 
     role = role || "Monitoring officer";
     const roleName = this.getRoleName(role);
@@ -252,7 +252,7 @@ export class TestData {
     return newHeader;
   }
 
-  public createMonitoringReportResponse(header?: Repositories.ISalesforceMonitoringReportHeader, question?: ISalesforceMonitoringReportQuestions, update?: Partial<Repositories.ISalesforceMonitoringReportResponse>): Repositories.ISalesforceMonitoringReportResponse {
+  public createMonitoringReportResponse(header?: Repositories.ISalesforceMonitoringReportHeader, question?: Repositories.ISalesforceMonitoringReportQuestions, update?: Partial<Repositories.ISalesforceMonitoringReportResponse>): Repositories.ISalesforceMonitoringReportResponse {
     header = header || this.createMonitoringReportHeader();
     question = question || this.createMonitoringReportQuestion(this.repositories.monitoringReportQuestions.Items.reduce((a, b) => a > b.Acc_DisplayOrder__c ? a : b.Acc_DisplayOrder__c, 0));
 
@@ -455,7 +455,7 @@ export class TestData {
     update?: (item: Repositories.ISalesforceDocument) => void
   ) {
     const id = "" + this.repositories.documents.Items.length + 1;
-    const item: ISalesforceDocument = {
+    const item: Repositories.ISalesforceDocument = {
       Id: id,
       ContentDocumentId: id,
       Title: title,
@@ -532,6 +532,26 @@ export class TestData {
 
   public createFile(content: string = "Test File Content", fileName: string = "testFile.csv"): TestFileWrapper {
     return new TestFileWrapper(fileName, content);
+  }
+
+  public createRecordType(update?: Partial<Entites.RecordType>) {
+
+    const seed = this.repositories.recordTypes.Items.length + 1;
+
+    const newItem: Entites.RecordType = {
+      id:"RecordType " + seed,
+      type: "Type " + seed,
+      parent: "Parent " + seed,
+    };
+
+    if(update) {
+      Object.assign(newItem, update);
+    }
+
+    this.repositories.recordTypes.Items.push(newItem);
+
+    return newItem;
+
   }
 }
 
