@@ -52,7 +52,7 @@ describe("UpdateForecastDetailsCommand", () => {
     const dto: ForecastDetailsDTO[] = [{
       periodId,
       id: profileDetail.Acc_CostCategory__c,
-      costCategoryId: costCat.Id,
+      costCategoryId: costCat.id,
       periodStart: new Date(),
       periodEnd: new Date(),
       value: 501
@@ -76,7 +76,7 @@ describe("UpdateForecastDetailsCommand", () => {
     const dto: ForecastDetailsDTO[] = [{
       periodId,
       id: profileDetail.Id,
-      costCategoryId: costCat.Id,
+      costCategoryId: costCat.id,
       periodStart: new Date(),
       periodEnd: new Date(),
       value: 500
@@ -103,7 +103,7 @@ describe("UpdateForecastDetailsCommand", () => {
     const dto: ForecastDetailsDTO[] = [{
       periodId,
       id: profileDetail.Id,
-      costCategoryId: costCat.Id,
+      costCategoryId: costCat.id,
       periodStart: new Date(),
       periodEnd: new Date(),
       value: 500
@@ -130,7 +130,7 @@ describe("UpdateForecastDetailsCommand", () => {
     const dto: ForecastDetailsDTO[] = [{
       periodId,
       id: profileDetail.Id,
-      costCategoryId: costCat.Id,
+      costCategoryId: costCat.id,
       periodStart: new Date(),
       periodEnd: new Date(),
       value: 250
@@ -138,7 +138,7 @@ describe("UpdateForecastDetailsCommand", () => {
     {
       periodId: periodId + 1,
       id: profileDetail2.Id,
-      costCategoryId: costCat.Id,
+      costCategoryId: costCat.id,
       periodStart: new Date(),
       periodEnd: new Date(),
       value: 100
@@ -166,7 +166,7 @@ describe("UpdateForecastDetailsCommand", () => {
     const dto: ForecastDetailsDTO[] = [{
       periodId,
       id: profileDetail.Id,
-      costCategoryId: costCat.Id,
+      costCategoryId: costCat.id,
       periodStart: new Date(),
       periodEnd: new Date(),
       value: 500
@@ -196,7 +196,7 @@ describe("UpdateForecastDetailsCommand", () => {
     const dto: ForecastDetailsDTO[] = [{
       periodId,
       id: profileDetail.Id,
-      costCategoryId: costCat.Id,
+      costCategoryId: costCat.id,
       periodStart: new Date(),
       periodEnd: new Date(),
       value: 500
@@ -226,7 +226,7 @@ describe("UpdateForecastDetailsCommand", () => {
     const dto: ForecastDetailsDTO[] = [{
       periodId,
       id: profileDetail.Id,
-      costCategoryId: costCat.Id,
+      costCategoryId: costCat.id,
       periodStart: new Date(),
       periodEnd: new Date(),
       value: 500
@@ -254,7 +254,7 @@ describe("UpdateForecastDetailsCommand", () => {
     const dto: ForecastDetailsDTO[] = [{
       periodId,
       id: profileDetail.Id,
-      costCategoryId: costCat.Id,
+      costCategoryId: costCat.id,
       periodStart: new Date(),
       periodEnd: new Date(),
       value: 500
@@ -287,7 +287,7 @@ describe("UpdateForecastDetailsCommand", () => {
     const dto: ForecastDetailsDTO[] = [{
       periodId,
       id: profileDetail.Id,
-      costCategoryId: costCat.Id,
+      costCategoryId: costCat.id,
       periodStart: new Date(),
       periodEnd: new Date(),
       value: 500
@@ -477,8 +477,8 @@ describe("UpdateForecastDetailsCommand", () => {
   it("when labour updated overheads should be updated to value calulated from labour value", async () => {
     const context = new TestContext();
 
-    const labour = context.testData.createCostCategory(x => x.Acc_CostCategoryName__c = "Labour");
-    const overheads = context.testData.createCostCategory(x => x.Acc_CostCategoryName__c = "Overheads");
+    const labour = context.testData.createCostCategory({ hasRelated: true });
+    const overheads = context.testData.createCostCategory({ isCalculated: true });
 
     const project = context.testData.createProject();
     const partner = context.testData.createPartner(project);
@@ -506,8 +506,8 @@ describe("UpdateForecastDetailsCommand", () => {
   it("when multiple labour updated overheads should be updated to calulated value for correct period", async () => {
     const context = new TestContext();
 
-    const labour = context.testData.createCostCategory(x => x.Acc_CostCategoryName__c = "Labour");
-    const overheads = context.testData.createCostCategory(x => x.Acc_CostCategoryName__c = "Overheads");
+    const labour = context.testData.createCostCategory({ hasRelated: true });
+    const overheads = context.testData.createCostCategory({ isCalculated: true });
 
     const project = context.testData.createProject();
     const partner = context.testData.createPartner(project);
@@ -541,8 +541,8 @@ describe("UpdateForecastDetailsCommand", () => {
   it("when labour not supplied overheads should be updated to calculation from exising labour value", async () => {
     const context = new TestContext();
 
-    const labour = context.testData.createCostCategory(x => x.Acc_CostCategoryName__c = "Labour");
-    const overheads = context.testData.createCostCategory(x => x.Acc_CostCategoryName__c = "Overheads");
+    const labour = context.testData.createCostCategory({ hasRelated: true });
+    const overheads = context.testData.createCostCategory({ isCalculated: true });
 
     const project = context.testData.createProject();
     const partner = context.testData.createPartner(project);

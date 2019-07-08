@@ -8,7 +8,7 @@ describe("GetCostSummaryForPeriodQuery", () => {
     const context = new TestContext();
 
     const partner = context.testData.createPartner();
-    const costCategories = context.testData.range(5, _ => context.testData.createCostCategory(x => x.Acc_OrganisationType__c = "Industrial"));
+    const costCategories = context.testData.range(5, _ => context.testData.createCostCategory({ organisationType: "Industrial" }));
 
     const project = context.testData.createProject();
 
@@ -27,10 +27,10 @@ describe("GetCostSummaryForPeriodQuery", () => {
     const context = new TestContext();
 
     const partner = context.testData.createPartner();
-    const costCategories = context.testData.range(5, (_, i) => context.testData.createCostCategory(x => {
-      x.Acc_OrganisationType__c = "Industrial";
-      x.Acc_DisplayOrder__c = 5 - i;
-      x.Id = `costCategory_${5 - i}`;
+    const costCategories = context.testData.range(5, (_, i) => context.testData.createCostCategory({
+      organisationType: "Industrial",
+      displayOrder: 5 - i,
+      id: `costCategory_${5 - i}`,
     }));
 
     const project = context.testData.createProject();
@@ -50,8 +50,8 @@ describe("GetCostSummaryForPeriodQuery", () => {
     const context = new TestContext();
 
     const partner = context.testData.createPartner();
-    context.testData.range(3, _ => context.testData.createCostCategory(x => x.Acc_OrganisationType__c = "Academic"));
-    const costCategories = context.testData.range(5, _ => context.testData.createCostCategory(x => x.Acc_OrganisationType__c = "Industrial"));
+    context.testData.range(3, _ => context.testData.createCostCategory({ organisationType: "Academic" }));
+    const costCategories = context.testData.range(5, _ => context.testData.createCostCategory({ organisationType: "Industrial"}));
 
     const project = context.testData.createProject();
 
@@ -71,7 +71,7 @@ describe("GetCostSummaryForPeriodQuery", () => {
 
     const expectedCost = 25000;
 
-    const costCategory = context.testData.createCostCategory(x => x.Acc_OrganisationType__c = "Industrial");
+    const costCategory = context.testData.createCostCategory({ organisationType: "Industrial" });
     const partner = context.testData.createPartner();
     const periodId = 1;
 
@@ -84,7 +84,7 @@ describe("GetCostSummaryForPeriodQuery", () => {
     const result = await context.runQuery(query);
 
     expect(result.length).toBe(1);
-    expect(result[0].costCategoryId).toBe(costCategory.Id);
+    expect(result[0].costCategoryId).toBe(costCategory.id);
     expect(result[0].costsClaimedThisPeriod).toBe(expectedCost);
   });
 
@@ -94,8 +94,8 @@ describe("GetCostSummaryForPeriodQuery", () => {
     const expectedCost1 = 25000;
     const expectedCost2 = 35000;
 
-    const costCategory1 = context.testData.createCostCategory(x => x.Acc_OrganisationType__c = "Industrial");
-    const costCategory2 = context.testData.createCostCategory(x => x.Acc_OrganisationType__c = "Industrial");
+    const costCategory1 = context.testData.createCostCategory({ organisationType: "Industrial" });
+    const costCategory2 = context.testData.createCostCategory({ organisationType: "Industrial" });
 
     const partner = context.testData.createPartner();
     const periodId = 1;
@@ -110,10 +110,10 @@ describe("GetCostSummaryForPeriodQuery", () => {
     const result = await context.runQuery(query);
 
     expect(result.length).toBe(2);
-    expect(result[0].costCategoryId).toBe(costCategory1.Id);
+    expect(result[0].costCategoryId).toBe(costCategory1.id);
     expect(result[0].costsClaimedThisPeriod).toBe(expectedCost1);
 
-    expect(result[1].costCategoryId).toBe(costCategory2.Id);
+    expect(result[1].costCategoryId).toBe(costCategory2.id);
     expect(result[1].costsClaimedThisPeriod).toBe(expectedCost2);
   });
 
@@ -172,27 +172,27 @@ describe("GetCostSummaryForPeriodQuery", () => {
     const project = context.testData.createProject();
     const partner = context.testData.createPartner(project);
 
-    const expectedCostCategories = context.testData.range(3, i => context.testData.createCostCategory(x => {
-      x.Acc_CompetitionType__c = project.Acc_CompetitionType__c;
-      x.Acc_OrganisationType__c = partner.Acc_OrganisationType__c;
+    const expectedCostCategories = context.testData.range(3, i => context.testData.createCostCategory({
+      competitionType: project.Acc_CompetitionType__c,
+      organisationType: partner.Acc_OrganisationType__c,
     }));
 
     // not expected cost categories as diff org
-    context.testData.range(3, i => context.testData.createCostCategory(x => {
-      x.Acc_CompetitionType__c = project.Acc_CompetitionType__c;
-      x.Acc_OrganisationType__c = partner.Acc_OrganisationType__c + "_";
+    context.testData.range(3, i => context.testData.createCostCategory({
+      competitionType: project.Acc_CompetitionType__c,
+      organisationType: partner.Acc_OrganisationType__c + "_",
     }));
 
     // not expected cost categories as diff comp
-    context.testData.range(3, i => context.testData.createCostCategory(x => {
-      x.Acc_CompetitionType__c = project.Acc_CompetitionType__c + "_";
-      x.Acc_OrganisationType__c = partner.Acc_OrganisationType__c;
+    context.testData.range(3, i => context.testData.createCostCategory({
+      competitionType: project.Acc_CompetitionType__c + "_",
+      organisationType: partner.Acc_OrganisationType__c,
     }));
 
     const query = new GetCostsSummaryForPeriodQuery(project.Id, partner.Id, 1);
     const result = await context.runQuery(query);
 
-    expect(result.map(x => x.costCategoryId)).toEqual(expectedCostCategories.map(x => x.Id));
+    expect(result.map(x => x.costCategoryId)).toEqual(expectedCostCategories.map(x => x.id));
 
   });
 

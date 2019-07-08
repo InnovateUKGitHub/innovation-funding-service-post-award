@@ -16,9 +16,7 @@ describe("GetClaimDetailsQuery", () => {
     const expectedEndDate = expectedStartDate.plus({ days: 30 });
     const expectedComments = "comments";
 
-    const costCategory = context.testData.createCostCategory(x => {
-      x.Id = exectedCostCategoryId;
-    });
+    const costCategory = context.testData.createCostCategory({ id: exectedCostCategoryId });
     const project = context.testData.createProject();
     const partner = context.testData.createPartner(undefined, x => {
       x.Id = exectedParticipantId;
@@ -79,7 +77,7 @@ describe("GetClaimDetailsQuery", () => {
 
       testData.createClaimLineItem(costCat, partner, period);
 
-      const query = new GetClaimDetailsQuery(project.Id, partner.Id, period, costCat.Id);
+      const query = new GetClaimDetailsQuery(project.Id, partner.Id, period, costCat.id);
       const result = await context.runQuery(query);
       const item = result.lineItems[0];
 
@@ -106,7 +104,7 @@ describe("GetClaimDetailsQuery", () => {
       testData.createClaim(partner, period);
       testData.createProfileTotalPeriod(partner, period);
 
-      const query = new GetClaimDetailsQuery(project.Id, partner.Id, period, costCat.Id);
+      const query = new GetClaimDetailsQuery(project.Id, partner.Id, period, costCat.id);
       const result = await context.runQuery(query);
 
       expect(result.lineItems.length).toBe(2);
@@ -123,7 +121,7 @@ describe("GetClaimDetailsQuery", () => {
       const period = 1;
       const costCat = testData.createCostCategory();
 
-      const query = new GetClaimDetailsQuery(project.Id, partner.Id, period, costCat.Id);
+      const query = new GetClaimDetailsQuery(project.Id, partner.Id, period, costCat.id);
       const result = await context.runQuery(query);
 
       expect(result.lineItems).toEqual([]);
