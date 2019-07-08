@@ -1,4 +1,6 @@
-import SalesforceRepositoryBase from "./salesforceRepositoryBase";
+import { SalesforceRepositoryBaseWithMapping } from "./salesforceRepositoryBase";
+import { CostCategory } from "@framework/entities";
+import { SalesforceCostCategoryMapper } from "./mappers/costCategoryMapper";
 
 export interface ISalesforceCostCategory {
   Id: string;
@@ -11,10 +13,10 @@ export interface ISalesforceCostCategory {
 }
 
 export interface ICostCategoryRepository {
-  getAll(): Promise<ISalesforceCostCategory[]>;
+  getAll(): Promise<CostCategory[]>;
 }
 
-export class CostCategoryRepository extends SalesforceRepositoryBase<ISalesforceCostCategory> implements ICostCategoryRepository {
+export class CostCategoryRepository extends SalesforceRepositoryBaseWithMapping<ISalesforceCostCategory, CostCategory> implements ICostCategoryRepository {
 
   protected readonly salesforceObjectName = "Acc_CostCategory__c";
 
@@ -28,7 +30,9 @@ export class CostCategoryRepository extends SalesforceRepositoryBase<ISalesforce
     "Acc_HintText__c"
   ];
 
-  getAll(): Promise<ISalesforceCostCategory[]> {
+  protected mapper = new SalesforceCostCategoryMapper();
+
+  getAll() {
     return super.all();
   }
 }

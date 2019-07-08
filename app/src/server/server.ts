@@ -10,6 +10,7 @@ import contextProvider from "./features/common/contextProvider";
 import { GetPermissionGroupQuery } from "./features/general/getPermissionGroupsQuery";
 import { IContext, PermissionGroupIdenfifier } from "@framework/types";
 import { GetAllRecordTypesQuery } from "./features/general/getAllRecordTypesQuery";
+import { GetCostCategoriesQuery } from "./features/claims";
 
 export class Server {
   private app: express.Express;
@@ -59,6 +60,7 @@ export class Server {
       // calls to query that prime caches doe as service user
       this.primeCache(context, "Permission group cache", () => context.runQuery(new GetPermissionGroupQuery(PermissionGroupIdenfifier.ClaimsTeam)));
       this.primeCache(context, "Record type cache", () => context.runQuery(new GetAllRecordTypesQuery()));
+      this.primeCache(context, "Cost Categories cache", () => context.runQuery(new GetCostCategoriesQuery()));
     }
   }
 
