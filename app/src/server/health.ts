@@ -36,5 +36,8 @@ router.get(`${endpoint}/details`, async (req, res) => {
   return res.status(result.status).send(result.response);
 });
 
+// version endpoint
+router.get(`${endpoint}/version`, (req, res) => res.send(Configuration.build));
+
 // general ok endpoint
 router.get(endpoint, (req, res) => res.send(true));
