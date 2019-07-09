@@ -64,7 +64,7 @@ export function saveClaim(
     dispatch(Actions.dataLoadAction(selector.key, selector.store, LoadingStatus.Loading, undefined));
 
     return ApiClient.claims.update({ projectId, partnerId, periodId, claim, user: state.user }).then((result) => {
-      dispatch(Actions.dataLoadAction(selector.key, selector.store, LoadingStatus.Done, result));
+      dispatch(Actions.dataLoadAction(selector.key, selector.store, LoadingStatus.Updated, result));
       dispatch(Actions.handleEditorSuccess(selector.key, selector.store));
 
       if (message) dispatch(Actions.messageSuccess(message));

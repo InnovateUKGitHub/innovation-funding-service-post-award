@@ -71,7 +71,7 @@ export function saveClaimDetails(
 
     return ApiClient.claimDetails.saveClaimDetails({ projectId, partnerId, costCategoryId, periodId, claimDetails, user: state.user })
       .then((result) => {
-        dispatch(Actions.dataLoadAction(selector.key, selector.store, LoadingStatus.Done, result));
+        dispatch(Actions.dataLoadAction(selector.key, selector.store, LoadingStatus.Updated, result));
         dispatch(Actions.handleEditorSuccess(selector.key, selector.store));
         onComplete();
       })

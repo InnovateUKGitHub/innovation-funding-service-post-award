@@ -63,7 +63,7 @@ export function saveForecastDetails(
     dispatch(Actions.dataLoadAction(selector.key, selector.store, LoadingStatus.Loading, undefined));
 
     return ApiClient.forecastDetails.update({projectId, partnerId, forecasts, submit: updateClaim, user: state.user}).then(result => {
-      dispatch(Actions.dataLoadAction(selector.key, selector.store, LoadingStatus.Done, result));
+      dispatch(Actions.dataLoadAction(selector.key, selector.store, LoadingStatus.Updated, result));
       dispatch(Actions.handleEditorSuccess(selector.key, selector.store));
       dispatch(Actions.messageSuccess(message));
       onComplete();
