@@ -39,7 +39,7 @@ const dataStoreReducer = <TData extends {}>(storeKey: string) =>
     const result = Object.assign({}, state);
     Object.keys(result).forEach(itemKey => {
       const pending = result[itemKey];
-      if (pending.status === LoadingStatus.Done || pending.status === LoadingStatus.Failed) {
+      if (pending.status === LoadingStatus.Done || pending.status === LoadingStatus.Failed || pending.status === LoadingStatus.Updated) {
         result[itemKey] = { status: LoadingStatus.Stale, data: pending.data, error: pending.error };
       }
     });

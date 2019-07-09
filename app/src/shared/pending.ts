@@ -7,7 +7,8 @@ export enum LoadingStatus {
     Loading = 2, // A request has been made to the server, waiting for data.
     Done = 3,    // The server has responded, data ready to display.
     Failed = 4,  // The server returned an error, data may be... in any state.
-    Stale = 5    // The data is ready to display, but it is thought to be out of date.
+    Stale = 5,   // The data is ready to display, but it is thought to be out of date.
+    Updated = 6  // The data has been updated and is upto date
 }
 
 /**
@@ -89,7 +90,7 @@ export class Pending<T> {
      */
     private static canResolve(pendings: Pending<{}>[]) {
         return pendings.every(p => {
-            if (p.state !== LoadingStatus.Done && p.state !== LoadingStatus.Stale && (p.data === null || p.data === undefined)) {
+            if (p.state !== LoadingStatus.Done && p.state !== LoadingStatus.Stale && p.state !== LoadingStatus.Updated && (p.data === null || p.data === undefined)) {
                 return false;
             }
             return true;

@@ -26,6 +26,7 @@ export class Loader<T> extends React.Component<LoadingProps<T>, {}> {
                 return null;
             // request completed, call the given render function
             case LoadingStatus.Done:
+            case LoadingStatus.Updated:
                 result = this.renderDone(this.props.pending.data!, false);
                 break;
             // request is loading or data marked as stale
