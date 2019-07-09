@@ -11,7 +11,6 @@ import * as partners from "./partners";
 import * as projects from "./projects";
 import * as projectContacts from "./projectContacts";
 import * as users from "./users";
-import * as version from "./version";
 
 import { ControllerBase } from "./controllerBase";
 import { errorHandlerApi } from "../errorHandlers";
@@ -30,7 +29,6 @@ export interface IApiClient {
   projectContacts: projectContacts.IProjectContactsApi;
   partners: partners.IPartnersApi;
   users: users.IUserApi;
-  version: version.IVersionApi;
 }
 
 export const serverApis: IApiClient & { [key: string]: ControllerBase<{}> } = {
@@ -46,7 +44,6 @@ export const serverApis: IApiClient & { [key: string]: ControllerBase<{}> } = {
   projects: projects.controller,
   projectContacts: projectContacts.controller,
   users: users.controller,
-  version: version.controller,
 };
 
 export const router = express.Router();
