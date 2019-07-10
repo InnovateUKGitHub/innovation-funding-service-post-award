@@ -84,7 +84,7 @@ export function saveMonitoringReport(
       : ApiClient.monitoringReports.saveMonitoringReport({ monitoringReportDto: dto, submit, user: state.user });
 
     return save.then((result) => {
-      dispatch(Actions.dataLoadAction(selector.key, selector.store, LoadingStatus.Done, result));
+      dispatch(Actions.dataLoadAction(selector.key, selector.store, LoadingStatus.Updated, result));
       dispatch(Actions.handleEditorSuccess(selector.key, selector.store));
 
       if (message) dispatch(Actions.messageSuccess(message));
