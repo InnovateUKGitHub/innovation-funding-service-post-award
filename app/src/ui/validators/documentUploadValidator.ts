@@ -11,8 +11,8 @@ export class DocumentUploadDtoValidator extends Results<DocumentUploadDto> {
     const maxMessage = getFileSize(maxFileSize);
     this.file = Validation.all(this,
       () => Validation.required(this, model && model.file && model.file.fileName, "Choose a file to upload."),
-      () => Validation.isTrue(this, model.file!.size <= maxFileSize, `File is too big. Please upload a file less than ${maxMessage}.`),
-      () => Validation.isFalse(this, model.file!.size === 0, `File is empty. Please check the file you are uploading.`),
+      () => Validation.isTrue(this, model.file!.size <= maxFileSize, `The selected file must be smaller than ${maxMessage}.`),
+      () => Validation.isFalse(this, model.file!.size === 0, `File is empty. Please check the file you have selected.`),
     );
   }
 
