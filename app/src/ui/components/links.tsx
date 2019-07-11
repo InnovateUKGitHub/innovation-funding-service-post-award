@@ -12,14 +12,16 @@ interface Props {
 
 export class Link extends React.Component<Props> {
   render() {
-    const { id, route, children, className } = this.props;
+    const { id, route, children } = this.props;
+
+    const className = classNames("govuk-link", this.props.className);
 
     return (
       <RouterLink
         id={id}
         routeName={route.routeName}
         routeParams={route.routeParams}
-        className={`govuk-link ${className}`}
+        className={className}
         successCallback={scrollToTheTopInstantly}
       >
         {children}
