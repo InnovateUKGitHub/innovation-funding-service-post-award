@@ -232,3 +232,33 @@
   overflow: auto;
   padding: 15px 0 15px 0;
 }
+
+div.card-link-grid {
+  display: flex;
+  min-height: 200px;
+  padding-bottom: 30px;
+}
+
+div.card-link {
+  display: flex;
+  border-top: 5px solid #005ea5;
+  background: #f8f8f8;
+  height:100%;
+  width: 100%;
+}
+
+div.card-link:hover {
+  border-top: 5px solid #057ef2;
+}
+
+div.card-link > a {
+  height: 100%;
+  width: 100%;
+  display: inline-block;
+  padding: 0px 20px 0px 20px;
+}
+
+div.card-link > a:hover {
+  background: #005ea5;
+  color: #fff;
+}

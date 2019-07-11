@@ -23,6 +23,7 @@ export const routeConfig = {
   projectDetails: Containers.ProjectDetailsRoute,
   projectDocuments: Containers.ProjectDocumentsRoute,
   projectForecast: Containers.ProjectForecastRoute,
+  projectOverview: Containers.ProjectOverviewRoute,
   reviewClaim: Containers.ReviewClaimRoute,
   reviewClaimLineItems: Containers.ReviewClaimLineItemsRoute,
   updateForecast: Containers.UpdateForecastRoute,

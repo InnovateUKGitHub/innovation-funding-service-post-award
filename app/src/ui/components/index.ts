@@ -17,6 +17,7 @@ export * from "./linksList";
 export * from "./loading";
 export * from "./logs";
 export * from "./navigationArrows";
+export * from "./navigationCard";
 export * from "./monitoringReports";
 export * from "./partnersAndFinanceContacts";
 export * from "./periodTitle";
