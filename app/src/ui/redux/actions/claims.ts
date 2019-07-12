@@ -60,8 +60,6 @@ export function saveClaim(
     }
 
     dispatch(Actions.handleEditorSubmit(selector.key, selector.store, claim, validation));
-    // send a loading action with undefined as it will just update the status
-    dispatch(Actions.dataLoadAction(selector.key, selector.store, LoadingStatus.Loading, undefined));
 
     return ApiClient.claims.update({ projectId, partnerId, periodId, claim, user: state.user }).then((result) => {
       dispatch(Actions.dataLoadAction(selector.key, selector.store, LoadingStatus.Updated, result));
