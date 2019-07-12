@@ -75,9 +75,7 @@ export function saveMonitoringReport(
       return Promise.resolve();
     }
 
-    // send a loading action with undefined as it will just update the status
     dispatch(Actions.handleEditorSubmit(selector.key, selector.store, dto, validation));
-    dispatch(Actions.dataLoadAction(selector.key, selector.store, LoadingStatus.Loading, undefined));
 
     const save = !id
       ? ApiClient.monitoringReports.createMonitoringReport({monitoringReportDto: dto, submit, user: state.user })
