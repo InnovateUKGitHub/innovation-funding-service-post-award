@@ -43,7 +43,7 @@ class DeleteVerificationComponent extends ContainerBase<MonitoringReportDeletePa
       >
         <ACC.Section>
           <ACC.Renderers.SimpleString>All the information in the report will be permanently removed.</ACC.Renderers.SimpleString>
-          <DeleteForm.Form editor={editor}>
+          <DeleteForm.Form editor={editor} qa="monitoringReportDelete">
             <DeleteForm.Fieldset>
               <DeleteForm.Button
                 name="delete"
