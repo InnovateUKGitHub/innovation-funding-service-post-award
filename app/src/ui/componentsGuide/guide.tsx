@@ -12,6 +12,7 @@ import { insetText } from "./insetTextGuide";
 import { linksListGuide } from "./linksListGuide";
 import { logsGuide } from "./logsGuide";
 import { navigationArrowsGuide } from "./navigationArrowsGuide";
+import { navigationCardGuide } from "./navigationCardGuide";
 import { projectMemberGuide } from "./projectMemberGuide";
 import { Header } from "../components";
 import { sectionGuide } from "./sectionGuide";
@@ -39,6 +40,7 @@ const guides: IGuide[] = [
     linksListGuide,
     logsGuide,
     navigationArrowsGuide,
+    navigationCardGuide,
     projectMemberGuide,
     renderersGuide,
     sectionGuide,
