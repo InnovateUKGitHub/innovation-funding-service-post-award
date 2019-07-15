@@ -58,9 +58,8 @@ class DashboardComponent extends ContainerBase<Params, Data, Callbacks> {
 
     return (
       <ACC.Page
-        backLink={<ACC.BackLink route={ProjectDashboardRoute.getLink({})}>Back to all projects</ACC.BackLink>}
+        backLink={<ACC.Projects.ProjectBackLink project={project}/>}
         pageTitle={<ACC.Projects.Title project={project} />}
-        tabs={<ACC.Projects.ProjectNavigation project={project} currentRoute={MonitoringReportDashboardRoute.routeName} partners={partners} />}
         messages={this.props.messages}
         project={project}
       >
@@ -142,7 +141,7 @@ export const MonitoringReportDashboardRoute = containerDefinition.route({
   getTitle: (store, params) => {
     return {
       htmlTitle: "Monitoring reports - View project",
-      displayTitle: "View project"
+      displayTitle: "Monitoring reports"
     };
   }
 });

@@ -14,7 +14,7 @@ import {
   renderWarning,
 } from "./common";
 import { PartnerDto, ProjectRole } from "@framework/types";
-import { ProjectDashboardRoute, ProjectForecastRoute } from "../../projects";
+import { ProjectDashboardRoute, ProjectForecastRoute, ProjectOverviewRoute } from "../../projects";
 import { Percentage, SimpleString } from "../../../components/renderers";
 import { isNumber } from "@framework/util";
 
@@ -38,14 +38,13 @@ class ViewForecastComponent extends ContainerBase<Params, PendingForecastData, C
     // MO, PM & FC/PM should see partner name
     const isMoPm = !!(data.project.roles & (ProjectRole.ProjectManager | ProjectRole.MonitoringOfficer));
     const partnerName = isMoPm ? data.partner.name : null;
-    const backLink = isMoPm ? ProjectForecastRoute.getLink({ projectId: data.project.id }) : ProjectDashboardRoute.getLink({});
-    const backText = isMoPm ? "Back to project" : "Back to all projects";
+    const backLink = isMoPm ? ProjectForecastRoute.getLink({ projectId: data.project.id }) : ProjectOverviewRoute.getLink({ projectId: data.project.id });
+    const backText = isMoPm ? "Back to forecasts" : "Back to project";
 
     return (
       <ACC.Page
-        backLink={<ACC.BackLink route={backLink}>{backText}</ACC.BackLink>}
         pageTitle={<ACC.Projects.Title project={data.project} />}
-        tabs={this.renderTabs(isMoPm, data)}
+        backLink={<ACC.BackLink route={backLink}>{backText}</ACC.BackLink>}
         project={data.project}
       >
         <ACC.Section title={partnerName} qa="partner-name">
@@ -62,11 +61,6 @@ class ViewForecastComponent extends ContainerBase<Params, PendingForecastData, C
         </ACC.Section>
       </ACC.Page>
     );
-  }
-
-  // MO, PM & FC/PM should not see tabs
-  private renderTabs(isMoPm: boolean, data: ForecastData) {
-    return isMoPm ? null : <ACC.Projects.ProjectNavigation currentRoute={ViewForecastRoute.routeName} partners={[data.partner]} project={data.project} />;
   }
 
   private renderOverheadsRate(overheadRate: number | null) {
@@ -122,7 +116,7 @@ export const ViewForecastRoute = definition.route({
   getTitle: (store, params) => {
     return {
       htmlTitle: "View forecast - View project",
-      displayTitle: "View project"
+      displayTitle: "Forecast"
     };
   }
 
