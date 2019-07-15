@@ -91,14 +91,12 @@ class Component extends ContainerBaseWithState<AllClaimsDashboardParams, Data, C
     return (
       <Acc.Page
         pageTitle={<Acc.Projects.Title project={projectDetails}/>}
-        backLink={<Acc.BackLink route={ProjectDashboardRoute.getLink({})}>Back to all projects</Acc.BackLink>}
-        tabs={<Acc.Projects.ProjectNavigation project={projectDetails} currentRoute={AllClaimsDashboardRoute.routeName} partners={partners}/>}
+        backLink={<Acc.Projects.ProjectBackLink project={projectDetails}/>}
         validator={validator}
         error={error}
         messages={this.props.messages}
         project={projectDetails}
       >
-        {this.renderSummary(projectDetails, leadPartner)}
         <Acc.Section qa="current-claims-section" title="Open">
           {this.renderCurrentClaimsPerPeriod(currentClaims, projectDetails, partners)}
         </Acc.Section>
@@ -136,40 +134,6 @@ class Component extends ContainerBaseWithState<AllClaimsDashboardParams, Data, C
       );
     }
     return groupedClaims.map((x, i) => this.renderCurrentClaims(x, project, partners, i));
-  }
-
-  private renderLeadPartnerDetails(project: ProjectDto, partner?: PartnerDto) {
-    if (!partner || !(project.roles & ProjectRole.ProjectManager)) return null;
-    const PartnerSummaryDetails = Acc.TypedDetails<PartnerDto>();
-    return (
-      <PartnerSummaryDetails.Details data={partner} title={`${partner.name} history`} qa="lead-partner-summary">
-        <PartnerSummaryDetails.Currency label="Total eligible costs" qa="gol-costs" value={x => x.totalParticipantGrant} />
-        <PartnerSummaryDetails.Currency label="Eligible costs claimed to date" qa="claimed-costs" value={x => x.totalParticipantCostsClaimed || 0} />
-        <PartnerSummaryDetails.Percentage label="Percentage of eligible costs claimed to date" qa="claimed-percentage" value={x => x.percentageParticipantCostsClaimed} />
-        <PartnerSummaryDetails.Currency label="Costs paid to date" qa="paid-costs" value={x => x.totalPaidCosts || 0} />
-        <PartnerSummaryDetails.Percentage label="Funding level" value={x => x.awardRate} qa="award-rate" fractionDigits={0} />
-        <PartnerSummaryDetails.Percentage label="Claim cap" value={x => x.capLimit} fractionDigits={0} qa="cap-limit" />
-      </PartnerSummaryDetails.Details>
-    );
-  }
-
-  private renderSummary(project: ProjectDto, partner?: PartnerDto) {
-    const ProjectSummaryDetails = Acc.TypedDetails<ProjectDto>();
-
-    return (
-      <Acc.Section>
-        <Acc.SectionPanel qa="claims-summary">
-          <Acc.DualDetails>
-            <ProjectSummaryDetails.Details title="History" data={project} qa="project-summary">
-              <ProjectSummaryDetails.Currency label="Total eligible costs" qa="gol-costs" value={x => x.grantOfferLetterCosts} />
-              <ProjectSummaryDetails.Currency label="Eligible costs claimed to date" qa="claimed-costs" value={x => x.costsClaimedToDate || 0} />
-              <ProjectSummaryDetails.Percentage label="Percentage of eligible costs claimed to date" qa="claimed-percentage" value={x => x.claimedPercentage} />
-            </ProjectSummaryDetails.Details>
-            { this.renderLeadPartnerDetails(project, partner) }
-          </Acc.DualDetails>
-        </Acc.SectionPanel>
-      </Acc.Section>
-    );
   }
 
   private claimHasNotBeenSubmittedToInnovate(x: ClaimDto) {
@@ -403,7 +367,7 @@ export const AllClaimsDashboardRoute = definition.route({
   },
   getTitle: (store) => {
     return {
-      displayTitle: "View project",
+      displayTitle: "Claims",
       htmlTitle: "Claims - View project"
     };
   },

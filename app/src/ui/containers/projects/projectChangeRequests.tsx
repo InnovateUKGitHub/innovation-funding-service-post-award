@@ -37,9 +37,8 @@ class ProjectChangeRequestsComponent extends ContainerBase<Params, Data, Callbac
   private renderContents({ projectDetails, partners }: CombinedData) {
     return (
       <Acc.Page
-        backLink={<Acc.BackLink route={ProjectDashboardRoute.getLink({})}>Back to all projects</Acc.BackLink>}
-        tabs={<Acc.Projects.ProjectNavigation project={projectDetails} currentRoute={ProjectChangeRequestsRoute.routeName} partners={partners} />}
         pageTitle={<Acc.Projects.Title project={projectDetails} />}
+        backLink={<Acc.Projects.ProjectBackLink project={projectDetails} />}
         project={projectDetails}
       >
         <Acc.Renderers.SimpleString>
@@ -83,8 +82,8 @@ export const ProjectChangeRequestsRoute = containerDefinition.route({
   ],
   container: ProjectChangeRequests,
   getTitle: () => ({
-    htmlTitle: "Project change requests - View project",
-    displayTitle: "View project"
+    htmlTitle: "Project change requests",
+    displayTitle: "Project change requests"
   }),
   accessControl: (auth, { projectId }) => auth.forProject(projectId).hasAnyRoles(ProjectRole.FinancialContact, ProjectRole.ProjectManager, ProjectRole.MonitoringOfficer)
 });
