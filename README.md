@@ -36,4 +36,4 @@ You will only need to execute step 4 in future, unless code updates require you 
 5. Run `npm run test`
 6. After tests have completed the process will give you output location of the report
 
-Please note there is further documentation about the application in relevant subfolders, such as /testframework. Please consult these for more information.
+Please note there is further documentation about the application in relevant subfolders, such as /testframework.
