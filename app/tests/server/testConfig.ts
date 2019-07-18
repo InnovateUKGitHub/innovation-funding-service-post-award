@@ -19,10 +19,9 @@ export class TestConfig implements IConfig {
   };
 
   public features = {
+    calculateOverheads: true,
     documentFiltering: true,
-    monitoringReports: true,
-    projectDocuments: true,
-    projectFiltering: true
+    projectFiltering: true,
   };
 
   public logLevel = LogLevel.DEBUG;

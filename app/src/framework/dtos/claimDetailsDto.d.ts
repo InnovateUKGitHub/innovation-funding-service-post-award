@@ -1,4 +1,5 @@
 interface ClaimDetailsSummaryDto {
+  partnerId: string;
   costCategoryId: string;
   periodId: number;
   periodStart: Date | null;
