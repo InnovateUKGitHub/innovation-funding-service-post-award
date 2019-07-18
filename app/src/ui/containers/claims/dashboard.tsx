@@ -6,6 +6,7 @@ import {
   getCurrentClaimIarDocument,
   getCurrentClaimIarDocumentsDeleteEditor,
   getCurrentClaimIarDocumentsEditor,
+  getMaxFileSize,
   getPartner,
   getPreviousClaims,
   getProject
@@ -18,6 +19,7 @@ import { DocumentUploadDtoValidator } from "../../validators/documentUploadValid
 import { DateTime } from "luxon";
 import { Results } from "../../validation/results";
 import { ProjectDashboardRoute } from "@ui/containers";
+import { getFileSize } from "@framework/util/filesize";
 
 export interface ClaimDashboardPageParams {
   projectId: string;
@@ -26,6 +28,7 @@ export interface ClaimDashboardPageParams {
 
 interface Data {
   document: Pending<DocumentSummaryDto | null>;
+  maxFileSize: number;
   projectDetails: Pending<ProjectDto>;
   partnerDetails: Pending<PartnerDto>;
   previousClaims: Pending<ClaimDto[]>;
@@ -125,6 +128,14 @@ class Component extends ContainerBaseWithState<ClaimDashboardPageParams, Data, C
         <Acc.ValidationMessage messageType={messageType} message={message} />
         <UploadForm.Form enctype="multipart" editor={editor} onChange={(dto) => this.onChange(dto, claim.periodId)} qa="iar-upload-form">
           <UploadForm.Fieldset>
+            <Acc.Info summary="What should I include?">
+              <p>You must upload a single document from an independent accountant auditing the costs spent by you on this project. Your claim will not be sent to Innovate UK until this has been uploaded.</p>
+              <p>There is no restriction on the type of file you can upload.</p>
+              <p>The document must be:</p>
+              <ul>
+                <li>less than {getFileSize(this.props.maxFileSize)} in file size</li>
+              </ul>
+            </Acc.Info>
             <UploadForm.FileUpload
               label="document"
               labelHidden={true}
@@ -269,6 +280,7 @@ export const ClaimsDashboard = definition.connect({
   withData: (state, props) => {
     return ({
       document: getCurrentClaimIarDocument(state, props.partnerId),
+      maxFileSize: getMaxFileSize(state),
       editor: getCurrentClaimIarDocumentsEditor(state, props.projectId, props.partnerId),
       deleteEditor: getCurrentClaimIarDocumentsDeleteEditor(state, props.partnerId),
       projectDetails: getProject(props.projectId).getPending(state),
