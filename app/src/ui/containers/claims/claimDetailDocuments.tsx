@@ -1,14 +1,15 @@
 import React from "react";
 import { ContainerBase, ReduxContainer } from "../containerBase";
-import * as ACC from "../../components";
-import { Pending } from "../../../shared/pending";
+import * as ACC from "@ui/components";
+import { Pending } from "@shared/pending";
 import { EditClaimLineItemsRoute } from "./index";
-import * as Actions from "../../redux/actions";
-import * as Selectors from "../../redux/selectors";
+import * as Actions from "@ui/redux/actions";
+import * as Selectors from "@ui/redux/selectors";
 import { ProjectDto, ProjectRole } from "@framework/types";
-import { IEditorStore } from "../../redux/reducers";
-import { DocumentUploadDtoValidator } from "../../validators/documentUploadValidator";
-import { Results } from "../../validation/results";
+import { getFileSize } from "@framework/util";
+import { IEditorStore } from "@ui/redux/reducers";
+import { DocumentUploadDtoValidator } from "@ui/validators/documentUploadValidator";
+import { Results } from "@ui/validation/results";
 
 export interface ClaimDetailDocumentsPageParams {
   projectId: string;
@@ -19,6 +20,7 @@ export interface ClaimDetailDocumentsPageParams {
 
 interface Data {
   project: Pending<ProjectDto>;
+  maxFileSize: number;
   costCategories: Pending<CostCategoryDto[]>;
   documents: Pending<DocumentSummaryDto[]>;
   editor: Pending<IEditorStore<DocumentUploadDto, DocumentUploadDtoValidator>>;
@@ -125,6 +127,15 @@ export class ClaimDetailDocumentsComponent extends ContainerBase<ClaimDetailDocu
             qa="claimDetailDocuments"
           >
             <UploadForm.Fieldset heading="Upload">
+              <ACC.Info summary="What should I include?">
+                <p>You should upload documents that show evidence of the costs you are submitting for this cost category. It is likely that without any documents, your Monitoring Officer will not accept your claim.</p>
+                <p>There is no restriction on the type of file you can upload.</p>
+                <p>Each document must be:</p>
+                <ul>
+                  <li>less than {getFileSize(this.props.maxFileSize)} in file size</li>
+                  <li>given a unique file name that describes its contents</li>
+                </ul>
+              </ACC.Info>
               <UploadForm.FileUpload
                 label="Upload documents"
                 labelHidden={true}
@@ -132,7 +143,6 @@ export class ClaimDetailDocumentsComponent extends ContainerBase<ClaimDetailDocu
                 validation={editor.validator.file}
                 value={(data) => data.file}
                 update={(dto, file) => dto.file = file}
-                hint={<span>Give your files a name that describes their contents and includes today's date.<br/>For example, 'LabourCosts_2017-11-15'.</span>}
               />
             </UploadForm.Fieldset>
             <UploadForm.Submit>Upload documents</UploadForm.Submit>
@@ -149,6 +159,7 @@ export const ClaimDetailDocuments = definition.connect({
   withData: (state, props) => {
     return {
       project: Selectors.getProject(props.projectId).getPending(state),
+      maxFileSize: Selectors.getMaxFileSize(state),
       costCategories: Selectors.getCostCategories().getPending(state),
       documents: Selectors.getClaimDetailDocuments(props.partnerId, props.periodId, props.costCategoryId).getPending(state),
       editor: Selectors.getClaimDetailDocumentEditor({projectId: props.projectId, partnerId: props.partnerId, periodId: props.periodId, costCategoryId: props.costCategoryId}, state.config.maxFileSize).get(state),
