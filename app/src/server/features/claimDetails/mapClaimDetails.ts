@@ -5,6 +5,7 @@ import mapClaimLineItem from "@server/features/claimDetails/mapClaimLineItem";
 
 export function mapClaimDetailsSummary(salesforceClaimDetails: ISalesforceClaimDetails, context: IContext): ClaimDetailsSummaryDto {
   return ({
+    partnerId: salesforceClaimDetails.Acc_ProjectParticipant__r.Id,
     periodId: salesforceClaimDetails.Acc_ProjectPeriodNumber__c,
     periodStart: context.clock.parse(salesforceClaimDetails.Acc_ProjectPeriodStartDate__c, SALESFORCE_DATE_FORMAT),
     periodEnd: context.clock.parse(salesforceClaimDetails.Acc_ProjectPeriodEndDate__c, SALESFORCE_DATE_FORMAT),
