@@ -12,7 +12,7 @@ interface NavigationCardProps {
 export class NavigationCard extends React.Component<NavigationCardProps> {
   render() {
     return (
-      <div className="card-link">
+      <div className="card-link" data-qa={this.props.qa}>
         <Link route={this.props.route}>
           <h2>{this.props.label}</h2>
           {this.props.children}

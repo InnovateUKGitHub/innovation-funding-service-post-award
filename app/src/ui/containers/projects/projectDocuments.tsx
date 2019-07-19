@@ -71,11 +71,10 @@ class ProjectDocumentsComponent extends ContainerBaseWithState<ProjectDocumentPa
     return (
       <ACC.Page
         pageTitle={<ACC.Projects.Title project={project} />}
-        tabs={<ACC.Projects.ProjectNavigation project={project} currentRoute={ProjectDocumentsRoute.routeName} partners={partners} />}
+        backLink={<ACC.Projects.ProjectBackLink project={project} />}
         validator={editor.validator}
         error={editor.error}
         messages={this.props.messages}
-        backLink={<ACC.BackLink route={ProjectDashboardRoute.getLink({})}>Back to all projects</ACC.BackLink>}
         project={project}
       >
         <ACC.Section>
@@ -195,7 +194,7 @@ export const ProjectDocumentsRoute = container.route({
   ],
   getTitle: () => ({
     htmlTitle: "Project documents - View project",
-    displayTitle: "View project"
+    displayTitle: "Project documents"
   }),
   accessControl: (auth, { projectId }) => auth.forProject(projectId).hasRole(ProjectRole.MonitoringOfficer)
 });
