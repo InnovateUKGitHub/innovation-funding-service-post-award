@@ -24,7 +24,8 @@ describe("SaveClaimDetails", () => {
     const project = context.testData.createProject();
     const partner = context.testData.createPartner(project);
     const costCategory = context.testData.createCostCategory();
-    const sfClaimDetails = context.testData.createClaimDetail(project, costCategory, partner);
+    const periodId = 1;
+    const sfClaimDetails = context.testData.createClaimDetail(project, costCategory, partner, periodId);
 
     const dto = mapClaimDetails(sfClaimDetails, [], context);
     dto.comments = "this is a comment";
@@ -33,7 +34,7 @@ describe("SaveClaimDetails", () => {
     await context.runCommand(command);
 
     expect(context.repositories.claimDetails.Items).toHaveLength(1);
-    expect(context.repositories.claimDetails.Items.find(x => x.Id === dto.id)!.Acc_ReasonForDifference__c).toEqual("this is a comment");
+    expect(context.repositories.claimDetails.Items.find(x => x.Acc_CostCategory__c === costCategory.id && x.Acc_ProjectParticipant__r.Id === partner.Id && x.Acc_ProjectPeriodNumber__c === periodId)!.Acc_ReasonForDifference__c).toEqual("this is a comment");
   });
 
   it("should return a validation error if the line items passed is missing a description", async () => {
@@ -49,7 +50,6 @@ describe("SaveClaimDetails", () => {
 
     const dto: ClaimDetailsDto = {
       lineItems: [lineItem],
-      id: claimDetails.Id,
       comments: claimDetails.Acc_ReasonForDifference__c
     } as ClaimDetailsDto;
 
@@ -72,7 +72,6 @@ describe("SaveClaimDetails", () => {
 
     const dto: ClaimDetailsDto = {
       lineItems: [lineItem],
-      id: claimDetails.Id,
       comments: claimDetails.Acc_ReasonForDifference__c
     } as ClaimDetailsDto;
 
@@ -95,7 +94,6 @@ describe("SaveClaimDetails", () => {
 
     const dto: ClaimDetailsDto = {
       lineItems: [lineItem],
-      id: claimDetails.Id,
       comments: claimDetails.Acc_ReasonForDifference__c
     } as ClaimDetailsDto;
 
@@ -119,7 +117,6 @@ describe("SaveClaimDetails", () => {
     const lineItem = createNewLineItem(claimDetails, expectedValue, expectedDescription);
 
     const dto: ClaimDetailsDto = {
-      id: claimDetails.Id,
       lineItems: [lineItem]
     } as ClaimDetailsDto;
 
@@ -220,7 +217,6 @@ describe("SaveClaimDetails", () => {
     const periodId = 1;
 
     const dto: ClaimDetailsDto = {
-      id: null as any as string,
       costCategoryId: costCategory.id,
       periodId,
       value: 0,
@@ -251,7 +247,6 @@ describe("SaveClaimDetails", () => {
     const periodId = 1;
 
     const dto: ClaimDetailsDto = {
-      id: null as any,
       costCategoryId: costCategory.id,
       periodId,
       value: 0,

@@ -122,14 +122,18 @@ export class SaveClaimDetails extends CommandBase<boolean> {
 
   }
 
-  private saveClaimDetail(context: IContext, claimDetail: ClaimDetailsDto) {
-    if (claimDetail.id) {
+  private async saveClaimDetail(context: IContext, claimDetail: ClaimDetailsDto) {
+    const key: ClaimDetailKey = { projectId: this.projectId, partnerId: this.partnerId, periodId: this.periodId, costCategoryId: this.costCategoryId};
+    const existing = await context.repositories.claimDetails.get(key);
+    if (existing) {
+      context.logger.info("Updateing existing claim detail", key, existing.Id);
       return context.repositories.claimDetails.update({
-        Id: claimDetail.id,
+        Id: existing.Id,
         Acc_ReasonForDifference__c: claimDetail.comments,
       });
     }
     else {
+      context.logger.info("Createing new claim detail", key);
       return context.repositories.claimDetails.insert({
         Acc_ReasonForDifference__c: claimDetail.comments,
         Acc_ProjectParticipant__r: {
@@ -138,6 +142,7 @@ export class SaveClaimDetails extends CommandBase<boolean> {
         },
         Acc_ProjectPeriodNumber__c: this.periodId,
         Acc_CostCategory__c: this.costCategoryId,
+        Acc_PeriodCostCategoryTotal__c: 0
       });
     }
   }
