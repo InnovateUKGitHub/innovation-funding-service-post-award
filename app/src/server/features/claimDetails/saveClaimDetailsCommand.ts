@@ -32,16 +32,19 @@ export class SaveClaimDetails extends CommandBase<boolean> {
 
     await this.saveClaimDetail(context, this.claimDetails);
     await this.saveLineItems(context, this.claimDetails.lineItems);
-    await this.saveAssociated(context, this.claimDetails.lineItems);
+    if (context.config.features.calculateOverheads) {
+      await this.saveAssociated(context, this.claimDetails.lineItems);
+    }
 
     return true;
   }
 
   private validateRequest() {
     const validParams = this.projectId && this.partnerId && this.costCategoryId && this.periodId;
-    const validDto = this.claimDetails.lineItems.every(x => x.periodId === this.periodId && x.partnerId === this.partnerId && x.costCategoryId === this.costCategoryId);
+    const validDto = this.claimDetails.partnerId === this.partnerId && this.claimDetails.periodId === this.periodId && this.claimDetails.costCategoryId === this.costCategoryId;
+    const validLineItems = this.claimDetails.lineItems.every(x => x.periodId === this.periodId && x.partnerId === this.partnerId && x.costCategoryId === this.costCategoryId);
 
-    if (!validParams || !validDto) {
+    if (!validParams || !validDto || !validLineItems) {
       throw new BadRequestError("Request is missing required fields");
     }
   }
