@@ -241,17 +241,14 @@ div.card-link-grid {
 
 div.card-link {
   display: flex;
-  border-top: 5px solid #005ea5;
   background: #f8f8f8;
   height:100%;
   width: 100%;
 }
 
-div.card-link:hover {
-  border-top: 5px solid #057ef2;
-}
 
 div.card-link > a {
+  border-top: 5px solid #005ea5;
   height: 100%;
   width: 100%;
   display: inline-block;
@@ -259,6 +256,11 @@ div.card-link > a {
 }
 
 div.card-link > a:hover {
+  border-top: 5px solid #057ef2;
   background: #005ea5;
   color: #fff;
+}
+
+div.card-link > a:focus {
+  outline: 0px;
 }
