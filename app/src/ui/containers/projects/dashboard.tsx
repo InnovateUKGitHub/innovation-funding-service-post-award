@@ -12,6 +12,7 @@ import { HomeRoute } from "../home";
 import { AllClaimsDashboardRoute, ClaimsDashboardRoute } from "../claims";
 import { StatisticsBox } from "../../components";
 import { IClientConfig } from "@ui/redux/reducers/configReducer";
+import { ProjectOverviewRoute } from "./overview";
 
 interface Data {
   projects: Pending<ProjectDto[]>;
@@ -312,11 +313,7 @@ class ProjectDashboardComponent extends ContainerBaseWithState<Props, Data, Call
       return <p className="govuk-heading-s govuk-!-margin-bottom-2">{text}</p>;
     }
 
-    if (project.roles === ProjectRole.FinancialContact && partner) {
-      return <ACC.Link route={ClaimsDashboardRoute.getLink({ projectId: project.id, partnerId: partner.id })}>{text}</ACC.Link>;
-    }
-
-    return <ACC.Link route={AllClaimsDashboardRoute.getLink({ projectId: project.id })}>{text}</ACC.Link>;
+    return <ACC.Link route={ProjectOverviewRoute.getLink({ projectId: project.id })}>{text}</ACC.Link>;
   }
 
   private renderProject(project: ProjectDto, partner: PartnerDto | null, section: Section, index: number) {

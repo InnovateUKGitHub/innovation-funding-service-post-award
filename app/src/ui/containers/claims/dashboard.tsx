@@ -155,8 +155,6 @@ class Component extends ContainerBaseWithState<ClaimDashboardPageParams, Data, C
   }
 
   private renderContents({ currentClaim, partner, previousClaims, project, editor, document, deleteEditor }: CombinedData) {
-    const Details = Acc.TypedDetails<PartnerDto>();
-
     const claimsWindow = !!currentClaim && currentClaim.status === ClaimStatus.DRAFT ? <Acc.Claims.ClaimWindow periodEnd={currentClaim.periodEndDate} /> : null;
 
     const error = (editor && editor.error) || (deleteEditor && deleteEditor.error);
@@ -165,29 +163,12 @@ class Component extends ContainerBaseWithState<ClaimDashboardPageParams, Data, C
     return (
       <Acc.Page
         pageTitle={<Acc.Projects.Title project={project}/>}
+        backLink={<Acc.Projects.ProjectBackLink project={project}/>}
         error={error}
-        tabs={<Acc.Projects.ProjectNavigation project={project} currentRoute={ClaimsDashboardRoute.routeName} partners={[partner]}/>}
         validator={validator}
         messages={this.props.messages}
-        backLink={<Acc.BackLink route={ProjectDashboardRoute.getLink({})}>Back to all projects</Acc.BackLink>}
         project={project}
       >
-        <Acc.Section>
-          <Acc.SectionPanel qa="claims-totals" title="History">
-            <Acc.DualDetails displayDensity="Compact">
-              <Details.Details qa="claims-totals-col-0" data={partner}>
-                <Details.Currency label="Total eligible costs" qa="gol-costs" value={x => x.totalParticipantGrant} />
-                <Details.Currency label="Eligible costs claimed to date" qa="claimed-costs" value={x => x.totalParticipantCostsClaimed || 0} />
-                <Details.Percentage label="Percentage of eligible costs claimed to date" qa="percentage-costs" value={x => x.percentageParticipantCostsClaimed} />
-                <Details.Currency label="Costs paid to date" qa="paid-costs" value={x => x.totalPaidCosts || 0} />
-              </Details.Details>
-              <Details.Details qa="claims-totals-col-1" data={partner}>
-                <Details.Percentage label="Funding level" value={x => x.awardRate} qa="award-rate" fractionDigits={0} />
-                <Details.Percentage label="Claim cap" value={x => x.capLimit} fractionDigits={0} qa="cap-limit" />
-              </Details.Details>
-            </Acc.DualDetails>
-          </Acc.SectionPanel>
-        </Acc.Section>
         <Acc.Section qa="current-claims-section" title={"Open"} badge={claimsWindow}>
           {this.renderCurrentClaims(currentClaim ? [currentClaim] : [], "current-claims-table", project, partner, previousClaims)}
         </Acc.Section>
@@ -312,7 +293,7 @@ export const ClaimsDashboardRoute = definition.route({
   ],
   getTitle: (store) => {
     return {
-      displayTitle: "View project",
+      displayTitle: "Claims",
       htmlTitle: "Claims - View project"
     };
   },

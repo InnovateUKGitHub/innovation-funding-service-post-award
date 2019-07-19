@@ -5,8 +5,6 @@ import { Pending } from "../../../shared/pending";
 import * as Actions from "../../redux/actions";
 import * as Selectors from "../../redux/selectors";
 import { PartnerDto, ProjectDto, ProjectRole } from "@framework/types";
-import { AllClaimsDashboardRoute } from "../claims/allClaimsDashboard";
-import { ClaimsDashboardRoute } from "../claims/dashboard";
 import { AccessibilityText } from "@ui/components/renderers";
 
 interface Data {
@@ -53,7 +51,7 @@ class ProjectDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
 
         return (
             <ACC.Page
-              backLink={this.renderBackLink(project, partners)}
+              backLink={<ACC.Projects.ProjectBackLink project={project} />}
               pageTitle={<ACC.Projects.Title project={project} />}
               project={project}
             >
@@ -108,19 +106,6 @@ class ProjectDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
             </ACC.Section>
         );
     }
-
-    private renderBackLink(project: ProjectDto, partners: PartnerDto[]) {
-        const partnerId = partners.filter(x => x.roles & ProjectRole.FinancialContact).map(x => x.id)[0];
-        const isMOorPM = !!(project.roles & (ProjectRole.MonitoringOfficer | ProjectRole.ProjectManager));
-        const isFC = !!(project.roles & ProjectRole.FinancialContact);
-
-        if(isMOorPM) {
-            return <ACC.BackLink route={AllClaimsDashboardRoute.getLink({ projectId: project.id })}>Back to project</ACC.BackLink>;
-        }
-        else if (isFC) {
-            return <ACC.BackLink route={ClaimsDashboardRoute.getLink({ projectId: project.id, partnerId})}>Back to project</ACC.BackLink>;
-        }
-    }
 }
 
 const containerDefinition = ReduxContainer.for<Params, Data, Callbacks>(ProjectDetailsComponent);
@@ -145,8 +130,8 @@ export const ProjectDetailsRoute = containerDefinition.route({
     ],
     container: ProjectDetails,
     getTitle: () => ({
-        htmlTitle: "Project details - View project",
-        displayTitle: "View project"
+        htmlTitle: "Project details",
+        displayTitle: "Project details"
     }),
     accessControl: (auth, { id }) => auth.forProject(id).hasAnyRoles(ProjectRole.FinancialContact, ProjectRole.ProjectManager, ProjectRole.MonitoringOfficer)
 });
