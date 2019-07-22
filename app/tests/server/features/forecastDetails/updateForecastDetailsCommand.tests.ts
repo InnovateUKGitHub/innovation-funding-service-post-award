@@ -570,4 +570,35 @@ describe("UpdateForecastDetailsCommand", () => {
     expect(labourProfile2.Acc_LatestForecastCost__c).toBe(200);
     expect(overheadProfile2.Acc_LatestForecastCost__c).toBe(20);
   });
+
+  it("when overheads calculated in salesforece should not calculate overheads", async () => {
+    const context = new TestContext();
+    context.config.features.calculateOverheads = false;
+
+    const labour = context.testData.createCostCategory({ hasRelated: true });
+    const overheads = context.testData.createCostCategory({ isCalculated: true });
+
+    const project = context.testData.createProject();
+    const partner = context.testData.createPartner(project);
+    partner.Acc_OverheadRate__c = 10;
+
+    context.testData.createProfileTotalCostCategory(labour, partner, 1000);
+    context.testData.createProfileTotalCostCategory(overheads, partner, 100);
+
+    const labourProfile = context.testData.createProfileDetail(labour, partner, 1, x => x.Acc_LatestForecastCost__c = 100);
+    const overheadProfile = context.testData.createProfileDetail(overheads, partner, 1, x => x.Acc_LatestForecastCost__c = 10);
+
+    const dto: ForecastDetailsDTO[] = [
+      mapProfileValue(labourProfile, 1000),
+      mapProfileValue(overheadProfile, 10)
+    ];
+
+    const command = new UpdateForecastDetailsCommand(project.Id, partner.Id, dto, false);
+
+    await context.runCommand(command);
+
+    expect(labourProfile.Acc_LatestForecastCost__c).toBe(1000);
+    expect(overheadProfile.Acc_LatestForecastCost__c).toBe(10);
+  });
+
 });

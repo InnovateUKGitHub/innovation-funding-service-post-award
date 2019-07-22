@@ -53,17 +53,18 @@ export class UpdateForecastDetailsCommand extends CommandBase<boolean> {
     const overheadRate = await context.repositories.partners.getById(this.partnerId).then(x => x.Acc_OverheadRate__c);
 
     return this.forecasts.map(forecast => {
-      return Object.assign({}, forecast, {value : this.getForecastValue(forecast, currentPeriodId, overheadRate, calculatedCostCategoryIds, relatedCostCategoryIds, this.forecasts, existing)});
+      return Object.assign({}, forecast, {value : this.getForecastValue(context, forecast, currentPeriodId, overheadRate, calculatedCostCategoryIds, relatedCostCategoryIds, this.forecasts, existing)});
     });
   }
 
-  private getForecastValue(forecast: ForecastDetailsDTO, currentPeriodId: number, overheadRate: number, calculatedCostCategoryIds: string[], relatedCostCategoryIds: string[], sent: ForecastDetailsDTO[], existing: ForecastDetailsDTO[]) {
+  private getForecastValue(context: IContext, forecast: ForecastDetailsDTO, currentPeriodId: number, overheadRate: number, calculatedCostCategoryIds: string[], relatedCostCategoryIds: string[], sent: ForecastDetailsDTO[], existing: ForecastDetailsDTO[]) {
     // if its for past period dont change
     if (forecast.periodId <= currentPeriodId) {
       return forecast.value;
     }
+
     // if its not calculated dont change
-    if (calculatedCostCategoryIds.indexOf(forecast.costCategoryId) === -1) {
+    if (!context.config.features.calculateOverheads || calculatedCostCategoryIds.indexOf(forecast.costCategoryId) === -1) {
       return forecast.value;
     }
 
