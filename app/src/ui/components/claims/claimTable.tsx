@@ -42,7 +42,8 @@ export const ClaimTable: React.FunctionComponent<Props> = (props) => {
       remainingOfferCosts: props.claimDetails.reduce((total, item) => total + item.remainingOfferCosts, 0),
       costsClaimedThisPeriod: props.claimDetails.reduce((total, item) => total + item.costsClaimedThisPeriod, 0),
       costsClaimedToDate: props.claimDetails.reduce((total, item) => total + item.costsClaimedToDate, 0),
-      offerCosts: props.claimDetails.reduce((total, item) => total + item.offerCosts, 0),
+      offerTotal: props.claimDetails.reduce((total, item) => total + item.offerTotal, 0),
+      forecastThisPeriod: props.claimDetails.reduce((total, item) => total + item.forecastThisPeriod, 0),
     },
     isTotal: true
   });
@@ -57,7 +58,7 @@ export const ClaimTable: React.FunctionComponent<Props> = (props) => {
         cellClassName={x => x.isTotal ? "govuk-!-font-weight-bold" : null}
         value={(x, i) => renderCostCategory(props.claim, x.category, x.isTotal, props.standardOverheadRate, props.getLink, props.validation && props.validation[i.row])}
       />
-      <CostCategoriesTable.Currency header="Total eligible costs" qa="offerCosts" value={x => x.cost.offerCosts} />
+      <CostCategoriesTable.Currency header="Total eligible costs" qa="offerCosts" value={x => x.cost.offerTotal} />
       <CostCategoriesTable.Currency header="Eligible costs claimed to date" qa="claimedToDate" value={x => x.cost.costsClaimedToDate} />
       <CostCategoriesTable.Currency header="Costs claimed this period" qa="periodCosts" value={x => x.cost.costsClaimedThisPeriod} cellClassName={x => x.isTotal ? "govuk-!-font-weight-bold" : null} />
       <CostCategoriesTable.Currency header="Remaining eligible costs" qa="remainingCosts" value={x => x.cost.remainingOfferCosts} />

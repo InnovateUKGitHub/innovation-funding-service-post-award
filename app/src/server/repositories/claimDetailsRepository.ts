@@ -19,7 +19,6 @@ export interface ISalesforceClaimDetails {
 
 export interface IClaimDetailsRepository {
   getAllByPartnerForPeriod(partnerId: string, periodId: number): Promise<ISalesforceClaimDetails[]>;
-  getAllByPartnerWithPeriodLt(partnerId: string, periodId: number): Promise<ISalesforceClaimDetails[]>;
   get(key: ClaimDetailKey): Promise<ISalesforceClaimDetails|null>;
   getAllByPartner(partnerId: string): Promise<ISalesforceClaimDetails[]>;
   update(item: Updatable<ISalesforceClaimDetails>): Promise<boolean>;
@@ -69,16 +68,6 @@ export class ClaimDetailsRepository extends SalesforceRepositoryBase<ISalesforce
       AND Acc_ClaimStatus__c != 'New'
     `;
     return await super.filterOne(filter);
-  }
-
-  getAllByPartnerWithPeriodLt(partnerId: string, periodId: number): Promise<ISalesforceClaimDetails[]> {
-    const filter = `
-      Acc_ProjectParticipant__c = '${partnerId}'
-      AND RecordType.Name = '${this.recordType}'
-      AND Acc_ProjectPeriodNumber__c < ${periodId}
-      AND Acc_ClaimStatus__c != 'New'
-    `;
-    return super.where(filter);
   }
 
   getAllByPartner(partnerId: string): Promise<ISalesforceClaimDetails[]> {

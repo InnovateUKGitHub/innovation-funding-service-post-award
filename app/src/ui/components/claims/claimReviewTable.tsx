@@ -38,7 +38,8 @@ export const ClaimReviewTable: React.FunctionComponent<Props> = (props) => {
     },
     cost: {
       costCategoryId: "",
-      offerCosts: props.claimDetails.reduce((total, item) => total + item.offerCosts, 0),
+      forecastThisPeriod: props.claimDetails.reduce((total, item) => total + item.forecastThisPeriod, 0),
+      offerTotal: props.claimDetails.reduce((total, item) => total + item.offerTotal, 0),
       costsClaimedThisPeriod: props.claimDetails.reduce((total, item) => total + item.costsClaimedThisPeriod, 0),
       remainingOfferCosts: props.claimDetails.reduce((total, item) => total + item.remainingOfferCosts, 0),
       costsClaimedToDate: props.claimDetails.reduce((total, item) => total + item.costsClaimedToDate, 0),
@@ -48,8 +49,8 @@ export const ClaimReviewTable: React.FunctionComponent<Props> = (props) => {
 
   const CostCategoriesTable = TypedTable<typeof combinedData[0]>();
 
-  const diff = (x: typeof combinedData[0]) => x.cost.offerCosts - x.cost.costsClaimedThisPeriod;
-  const diffPercentage = (x: typeof combinedData[0]) => 100 * diff(x) / x.cost.offerCosts;
+  const diff = (x: typeof combinedData[0]) => x.cost.forecastThisPeriod - x.cost.costsClaimedThisPeriod;
+  const diffPercentage = (x: typeof combinedData[0]) => 100 * diff(x) / x.cost.forecastThisPeriod;
 
   return (
     <CostCategoriesTable.Table
@@ -63,7 +64,7 @@ export const ClaimReviewTable: React.FunctionComponent<Props> = (props) => {
         cellClassName={x => x.isTotal ? "govuk-!-font-weight-bold" : null}
         value={(x, i) => renderCostCategory(props.claim, x.category, x.isTotal, props.standardOverheadRate,props.getLink, props.validation && props.validation[i.row])}
       />
-      <CostCategoriesTable.Currency header="Forecast for period" qa="forecastForPeriod" value={x => x.cost.offerCosts}/>
+      <CostCategoriesTable.Currency header="Forecast for period" qa="forecastForPeriod" value={x => x.cost.forecastThisPeriod}/>
       <CostCategoriesTable.Currency
         header="Costs claimed this period"
         qa="costsThisPeriod"
