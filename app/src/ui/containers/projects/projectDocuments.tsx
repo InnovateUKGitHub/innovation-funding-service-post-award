@@ -19,6 +19,7 @@ interface Data {
   partners: Pending<PartnerDto[]>;
   documents: Pending<DocumentSummaryDto[]>;
   editor: Pending<IEditorStore<DocumentUploadDto, DocumentUploadDtoValidator>>;
+  maxFileSize: number;
   isClient: boolean;
   features: IFeatureFlags;
 }
@@ -86,6 +87,15 @@ class ProjectDocumentsComponent extends ContainerBaseWithState<ProjectDocumentPa
             qa="projectDocumentUpload"
           >
             <UploadForm.Fieldset heading="Upload">
+              <ACC.Info summary="What should I include?">
+                <p>You can upload and store any documents relevant for this project. Any documents added to the project by Innovate UK will also be visible here.</p>
+                <p>There is no restriction on the type of file you can upload.</p>
+                <p>Each document must be:</p>
+                <ul>
+                  <li>less than {getFileSize(this.props.maxFileSize)} in file size</li>
+                  <li>given a unique file name that describes its contents</li>
+                </ul>
+              </ACC.Info>
               <UploadForm.FileUpload
                 label="Upload documents"
                 name="attachment"
@@ -171,6 +181,7 @@ const ProjectDocuments = container.connect({
     partners: Selectors.findPartnersByProject(props.projectId).getPending(state),
     documents: Selectors.getProjectDocuments(props.projectId).getPending(state),
     editor: Selectors.getProjectDocumentEditor(props.projectId, state.config.maxFileSize).get(state),
+    maxFileSize: Selectors.getMaxFileSize(state),
     isClient: state.isClient,
     features: state.config.features
   }),
