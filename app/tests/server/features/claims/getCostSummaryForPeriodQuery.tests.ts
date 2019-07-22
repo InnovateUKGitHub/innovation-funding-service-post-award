@@ -123,15 +123,22 @@ describe("GetCostSummaryForPeriodQuery", () => {
     const partner = context.testData.createPartner();
     const project = context.testData.createProject();
     const costCategory = context.testData.createCostCategory();
-    const value = 1234;
+    const totalValue = 1234;
+    const forecastValue = 123;
+    const claimValue = 1200;
 
-    context.testData.createProfileTotalCostCategory(costCategory, partner, value);
-    context.testData.createClaimDetail(project, costCategory, partner, periodId);
+    context.testData.createProfileTotalCostCategory(costCategory, partner, totalValue);
+    context.testData.createProfileDetail(costCategory, partner, periodId, x => x.Acc_LatestForecastCost__c = forecastValue);
+    context.testData.createClaimDetail(project, costCategory, partner, periodId, x => x.Acc_PeriodCostCategoryTotal__c = claimValue);
 
     const query = new GetCostsSummaryForPeriodQuery(project.Id, partner.Id, periodId);
     const result = await context.runQuery(query);
 
-    expect(result[0].offerCosts).toBe(value);
+    expect(result[0].offerTotal).toBe(totalValue);
+    expect(result[0].forecastThisPeriod).toBe(forecastValue);
+    expect(result[0].costsClaimedThisPeriod).toBe(claimValue);
+    expect(result[0].costsClaimedToDate).toBe(0);
+    expect(result[0].remainingOfferCosts).toBe(totalValue - claimValue);
   });
 
   it("should default cost claimed to date to 0", async () => {

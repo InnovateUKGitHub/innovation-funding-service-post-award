@@ -1,6 +1,7 @@
 interface CostsSummaryForPeriodDto {
     costCategoryId: string;
-    offerCosts: number;
+    offerTotal: number;
+    forecastThisPeriod: number;
     costsClaimedToDate: number;
     costsClaimedThisPeriod: number;
     remainingOfferCosts: number;

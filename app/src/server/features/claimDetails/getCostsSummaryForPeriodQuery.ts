@@ -18,32 +18,35 @@ export class GetCostsSummaryForPeriodQuery extends QueryBase<CostsSummaryForPeri
 
   protected async Run(context: IContext) {
     const partner = await context.repositories.partners.getById(this.partnerId);
-    const claimDetailResults = await context.repositories.claimDetails.getAllByPartnerForPeriod(this.partnerId, this.periodId);
-    const totalCostCategoryResults = await context.repositories.claimDetails.getAllByPartnerWithPeriodLt(this.partnerId, this.periodId);
-    const totalForcastResults = await context.repositories.profileTotalCostCategory.getAllByPartnerId(this.partnerId);
+    const allClaimDetails = await context.repositories.claimDetails.getAllByPartner(this.partnerId);
+    const allForecastDetails = await context.repositories.profileDetails.getAllByPartner(this.partnerId);
+    const totalForecastResults = await context.repositories.profileTotalCostCategory.getAllByPartnerId(this.partnerId);
     const costCategories = await context.runQuery(new GetCostCategoriesQuery()).then(x => x.filter(y => y.organisationType === partner.Acc_OrganisationType__c && y.competitionType === partner.Acc_ProjectId__r.Acc_CompetitionType__c));
 
     return costCategories.map(costCategory => {
 
-      const forecast = totalForcastResults
-        .filter(y => y.Acc_CostCategory__c === costCategory.id)
-        .map(y => y.Acc_CostCategoryGOLCost__c)[0] || 0;
+      const forecastThisPeriod = allForecastDetails
+        .filter(y => y.Acc_CostCategory__c === costCategory.id && y.Acc_ProjectPeriodNumber__c === this.periodId)
+        .map(y => y.Acc_LatestForecastCost__c)[0] || 0;
 
-      const totalCostCategory = totalCostCategoryResults
-        .filter(y => y.Acc_CostCategory__c === costCategory.id)
-        .map(y => y.Acc_PeriodCostCategoryTotal__c)
-        .reduce((t, c) => t + c, 0);
+      const offerTotal = totalForecastResults
+        .filter(x => x.Acc_CostCategory__c === costCategory.id)
+        .map(x => x.Acc_CostCategoryGOLCost__c)[0] || 0;
 
-      const claimDetail = claimDetailResults.find(x => x.Acc_CostCategory__c === costCategory.id);
+      const costsClaimedToDate = allClaimDetails
+        .filter(y => y.Acc_CostCategory__c === costCategory.id && y.Acc_ProjectPeriodNumber__c < this.periodId)
+        .reduce((t, c) => t + c.Acc_PeriodCostCategoryTotal__c, 0);
 
-      const offerCosts = forecast || 0;
-      const costsClaimedThisPeriod = claimDetail && claimDetail.Acc_PeriodCostCategoryTotal__c || 0;
-      const costsClaimedToDate = totalCostCategory;
-      const remainingOfferCosts = offerCosts - totalCostCategory - costsClaimedThisPeriod;
+      const costsClaimedThisPeriod = allClaimDetails
+        .filter(x => x.Acc_CostCategory__c === costCategory.id && x.Acc_ProjectPeriodNumber__c === this.periodId)
+        .map(x => x.Acc_PeriodCostCategoryTotal__c)[0] || 0;
+
+      const remainingOfferCosts = offerTotal - costsClaimedToDate - costsClaimedThisPeriod;
 
       return ({
         costCategoryId: costCategory.id,
-        offerCosts,
+        offerTotal,
+        forecastThisPeriod,
         costsClaimedToDate,
         costsClaimedThisPeriod,
         remainingOfferCosts

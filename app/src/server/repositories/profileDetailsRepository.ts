@@ -25,7 +25,6 @@ const fields: FieldNames[] = [
 
 export interface IProfileDetailsRepository {
   getAllByPartner(partnerId: string): Promise<ISalesforceProfileDetails[]>;
-  getAllByPartnerWithPeriodGt(partnerId: string, periodId: number): Promise<ISalesforceProfileDetails[]>;
   getById(partnerId: string, periodId: number, costCategoryId: string): Promise<ISalesforceProfileDetails>;
   update(profileDetails: Updatable<ISalesforceProfileDetails>[]): Promise<boolean>;
 }
@@ -48,15 +47,6 @@ export class ProfileDetailsRepository extends SalesforceRepositoryBase<ISalesfor
 
   public async getAllByPartner(partnerId: string) {
     const filter = `Acc_ProjectParticipant__c = '${partnerId}' AND RecordType.Name = '${this.recordType}'`;
-    return super.where(filter);
-  }
-
-  public async getAllByPartnerWithPeriodGt(partnerId: string, periodId: number): Promise<ISalesforceProfileDetails[]> {
-    const filter = `
-      Acc_ProjectParticipant__c = '${partnerId}'
-      AND RecordType.Name = '${this.recordType}'
-      AND Acc_ProjectPeriodNumber__c >= ${periodId}
-    `;
     return super.where(filter);
   }
 

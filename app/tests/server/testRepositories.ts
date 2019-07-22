@@ -89,10 +89,6 @@ class ClaimDetailsTestRepository extends TestRepository<Repositories.ISalesforce
     return super.getWhere(x => x.Acc_ProjectParticipant__r.Id === partnerId && x.Acc_ProjectPeriodNumber__c === periodId);
   }
 
-  getAllByPartnerWithPeriodLt(partnerId: string, periodId: number): Promise<Repositories.ISalesforceClaimDetails[]> {
-    return super.getWhere(x => x.Acc_ProjectParticipant__r.Id === partnerId && x.Acc_ProjectPeriodNumber__c < periodId);
-  }
-
   getAllByPartner(partnerId: string): Promise<Repositories.ISalesforceClaimDetails[]> {
     return super.getWhere(x => x.Acc_ProjectParticipant__r.Id === partnerId);
   }
@@ -302,10 +298,6 @@ class ClaimTotalCostTestRepository extends TestRepository<Repositories.ISalesfor
 class ProfileDetailsTestRepository extends TestRepository<Repositories.ISalesforceProfileDetails> implements Repositories.IProfileDetailsRepository {
   getAllByPartner(partnerId: string) {
     return super.getWhere(x => x.Acc_ProjectParticipant__c === partnerId);
-  }
-
-  getAllByPartnerWithPeriodGt(partnerId: string, periodId: number) {
-    return super.getWhere(x => x.Acc_ProjectParticipant__c === partnerId && x.Acc_ProjectPeriodNumber__c > periodId);
   }
 
   getById(partnerId: string, periodId: number, costCategoryId: string) {

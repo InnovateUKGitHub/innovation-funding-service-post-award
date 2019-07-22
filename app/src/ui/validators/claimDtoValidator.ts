@@ -48,7 +48,7 @@ export class CostsSummaryForPeriodValidator extends Results<CostsSummaryForPerio
 
     costsClaimedThisPeriod = Validation.isFalse(
       this,
-      this.model.offerCosts < (this.model.costsClaimedToDate + this.model.costsClaimedThisPeriod),
+      this.model.offerTotal < (this.model.costsClaimedToDate + this.model.costsClaimedThisPeriod),
       this.costCategory
         ? `Your costs for ${this.costCategory.name} this period are more than your remaining grant offer letter costs. You must remove some costs before you can submit this claim.`
         : `Your costs for this period are more than your remaining grant offer letter costs. You must remove some costs before you can submit this claim.`
