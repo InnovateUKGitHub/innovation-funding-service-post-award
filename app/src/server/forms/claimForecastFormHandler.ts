@@ -1,6 +1,5 @@
 import { FormHandlerBase, IFormBody, IFormButton } from "./formHandlerBase";
-import { Results } from "../../ui/validation/results";
-import { AllClaimsDashboardRoute, ClaimForcastParams, ClaimForecastRoute, ClaimsDashboardRoute, PrepareClaimRoute } from "../../ui/containers";
+import { AllClaimsDashboardRoute, ClaimForecastParams, ClaimForecastRoute, ClaimsDashboardRoute, PrepareClaimRoute } from "../../ui/containers";
 import { getForecastDetailsEditor } from "../../ui/redux/selectors";
 import { ForecastDetailsDtosValidator } from "../../ui/validators";
 import { GetAllForecastsForPartnerQuery, UpdateForecastDetailsCommand } from "../features/forecastDetails";
@@ -9,12 +8,12 @@ import { GetByIdQuery as GetPartnerByIdQuery } from "../features/partners";
 import { IContext, ILinkInfo, ProjectRole } from "@framework/types";
 import { GetCostCategoriesForPartnerQuery } from "../features/claims/getCostCategoriesForPartnerQuery";
 
-export class ClaimForcastFormHandler extends FormHandlerBase<ClaimForcastParams, ForecastDetailsDTO[], ForecastDetailsDtosValidator> {
+export class ClaimForecastFormHandler extends FormHandlerBase<ClaimForecastParams, ForecastDetailsDTO[], ForecastDetailsDtosValidator> {
   constructor() {
     super(ClaimForecastRoute, ["save", "default"]);
   }
 
-  protected async getDto(context: IContext, params: ClaimForcastParams, button: IFormButton, body: IFormBody): Promise<ForecastDetailsDTO[]> {
+  protected async getDto(context: IContext, params: ClaimForecastParams, button: IFormButton, body: IFormBody): Promise<ForecastDetailsDTO[]> {
     const dto = await context.runQuery(new GetAllForecastsForPartnerQuery(params.partnerId));
     const project = await context.runQuery(new GetByIdQuery(params.projectId));
     const partner = await context.runQuery(new GetPartnerByIdQuery(params.partnerId));
@@ -33,7 +32,7 @@ export class ClaimForcastFormHandler extends FormHandlerBase<ClaimForcastParams,
     return dto;
   }
 
-  protected async run(context: IContext, params: ClaimForcastParams, button: IFormButton, dto: ForecastDetailsDTO[]): Promise<ILinkInfo> {
+  protected async run(context: IContext, params: ClaimForecastParams, button: IFormButton, dto: ForecastDetailsDTO[]): Promise<ILinkInfo> {
     const submit = button.name === "default";
     await context.runCommand(new UpdateForecastDetailsCommand(params.projectId, params.partnerId, dto, submit));
 
@@ -51,11 +50,11 @@ export class ClaimForcastFormHandler extends FormHandlerBase<ClaimForcastParams,
 
   }
 
-  protected getStoreInfo(params: ClaimForcastParams): { key: string; store: string; } {
+  protected getStoreInfo(params: ClaimForecastParams): { key: string; store: string; } {
     return getForecastDetailsEditor(params.partnerId);
   }
 
-  protected createValidationResult(params: ClaimForcastParams, dto: ForecastDetailsDTO[]) {
+  protected createValidationResult(params: ClaimForecastParams, dto: ForecastDetailsDTO[]) {
     return new ForecastDetailsDtosValidator(dto, [], [], [], false);
   }
 

@@ -152,14 +152,14 @@ export class ClaimsDetailsComponent extends ContainerBase<Params, Data, {}> {
       <ACC.Section>
         <ACC.Accordion>
           <ACC.AccordionItem title="Forecast" qa="forecast-accordion">
-            <ACC.Loader pending={this.props.forecastData} render={(x) => this.renderForcastTable(x)} />
+            <ACC.Loader pending={this.props.forecastData} render={(x) => this.renderForecastTable(x)} />
           </ACC.AccordionItem>
         </ACC.Accordion>
       </ACC.Section>
     );
   }
 
-  private renderForcastTable(forecastData: ForecastData) {
+  private renderForecastTable(forecastData: ForecastData) {
     return <ACC.Claims.ForecastTable data={forecastData} hideValidation={true} />;
   }
 
@@ -228,9 +228,9 @@ export const ClaimsDetailsRoute = definition.route({
       Actions.loadClaimStatusChanges(params.projectId, params.partnerId, params.periodId)
     ];
 
-    const forcastActions = isMoOrPM && !isFC ? forecastDataLoadActions(params) : [];
+    const forecastActions = isMoOrPM && !isFC ? forecastDataLoadActions(params) : [];
 
-    return [...standardActions, ...forcastActions];
+    return [...standardActions, ...forecastActions];
   },
   accessControl: (auth, params) => auth.forProject(params.projectId).hasAnyRoles(ProjectRole.MonitoringOfficer, ProjectRole.ProjectManager) || auth.forPartner(params.projectId, params.partnerId).hasRole(ProjectRole.FinancialContact),
   getTitle: (store, params) => {
