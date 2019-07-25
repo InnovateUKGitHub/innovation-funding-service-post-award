@@ -13,8 +13,8 @@ import {
   PendingForecastData,
   renderWarning,
 } from "./common";
-import { PartnerDto, ProjectRole } from "@framework/types";
-import { ProjectDashboardRoute, ProjectForecastRoute, ProjectOverviewRoute } from "../../projects";
+import { PartnerDto, ProjectDto, ProjectRole, ProjectStatus } from "@framework/types";
+import { ProjectForecastRoute, ProjectOverviewRoute } from "../../projects";
 import { Percentage, SimpleString } from "../../../components/renderers";
 import { isNumber } from "@framework/util";
 
@@ -56,7 +56,7 @@ class ViewForecastComponent extends ContainerBase<Params, PendingForecastData, C
           <ACC.Claims.ForecastTable data={data} hideValidation={isMoPm} />
         </ACC.Section>
         <ACC.Section>
-          {this.renderUpdateSection(data.partner)}
+          {this.renderUpdateSection(data.project, data.partner)}
           <ACC.Claims.ClaimLastModified partner={data.partner} />
         </ACC.Section>
       </ACC.Page>
@@ -69,8 +69,11 @@ class ViewForecastComponent extends ContainerBase<Params, PendingForecastData, C
     return <SimpleString qa="overhead-costs">Overhead costs: <Percentage value={overheadRate}/></SimpleString>;
   }
 
-  private renderUpdateSection(partner: PartnerDto) {
-    // TODO: Should this really be a form?
+  private renderUpdateSection(project: ProjectDto, partner: PartnerDto) {
+
+    if (project.status === ProjectStatus.OnHold) return;
+
+    // TODO: Should this really be a form? <---- Nope.
     const Form = ACC.TypedForm();
     if (partner.roles & ProjectRole.FinancialContact) {
       return (
