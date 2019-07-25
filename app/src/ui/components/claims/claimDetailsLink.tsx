@@ -1,5 +1,5 @@
 import React from "react";
-import { ClaimDto, ClaimStatus, PartnerDto, ProjectDto, ProjectRole } from "@framework/types";
+import { ClaimDto, ClaimStatus, PartnerDto, ProjectDto, ProjectRole, ProjectStatus } from "@framework/types";
 import { Link } from "..";
 import { ClaimsDetailsRoute, PrepareClaimRoute, ReviewClaimRoute } from "../../containers";
 
@@ -28,6 +28,9 @@ export const ClaimDetailsLink: React.SFC<Props> = (props) => {
 };
 
 export const getClaimDetailsLinkType = (props: Props): "edit" | "review" | "view" | "nothing" => {
+
+  if (props.project.status === ProjectStatus.OnHold) return "view";
+
   switch (props.claim.status) {
     case ClaimStatus.DRAFT:
       if (props.partner.roles & ProjectRole.FinancialContact) {
