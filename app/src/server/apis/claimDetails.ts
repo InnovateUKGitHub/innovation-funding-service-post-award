@@ -1,7 +1,6 @@
 import { ApiParams, ControllerBaseWithSummary } from "./controllerBase";
 import contextProvider from "@server/features/common/contextProvider";
 import { GetAllClaimDetailsByPartner, GetClaimDetailsQuery } from "@server/features/claimDetails";
-import { BadRequestError } from "@server/features/common";
 import { processDto } from "@shared/processResponse";
 import { SaveClaimDetails } from "@server/features/claimDetails/saveClaimDetailsCommand";
 

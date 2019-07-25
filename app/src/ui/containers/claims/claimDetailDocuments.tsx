@@ -158,7 +158,7 @@ const definition = ReduxContainer.for<ClaimDetailDocumentsPageParams, Data, Call
 export const ClaimDetailDocuments = definition.connect({
   withData: (state, props) => {
     return {
-      project: Selectors.getProject(props.projectId).getPending(state),
+      project: Selectors.getActiveProject(props.projectId, state),
       maxFileSize: Selectors.getMaxFileSize(state),
       costCategories: Selectors.getCostCategories().getPending(state),
       documents: Selectors.getClaimDetailDocuments(props.partnerId, props.periodId, props.costCategoryId).getPending(state),
