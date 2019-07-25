@@ -7,7 +7,6 @@ import * as Acc from "@ui/components";
 import { Pending } from "@shared/pending";
 import { ClaimDto, PartnerDto, ProjectDto, ProjectRole } from "@framework/dtos";
 import { ClaimStatus, DocumentDescription } from "@framework/types";
-import { ProjectDashboardRoute } from "@ui/containers";
 import { IEditorStore } from "@ui/redux";
 import { DocumentUploadDtoValidator } from "@ui/validators";
 import { Results } from "@ui/validation";
