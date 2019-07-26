@@ -6,6 +6,9 @@ import contextProvider from "../features/common/contextProvider";
 import { FormHandlerError } from "../features/common/appError";
 import { ILinkInfo } from "@framework/types/ILinkInfo";
 import { IContext } from "@framework/types/IContext";
+import { upload } from "./memoryStorage";
+import { Configuration } from "@server/features/common";
+import { isArray } from "util";
 
 interface RouteInfo<TParams> {
   routeName: string;
@@ -27,19 +30,17 @@ export interface IFormBody {
   [key: string]: string;
 }
 
-export abstract class FormHandlerBase<TParams, TDto, TValidation extends Results<{}>> implements IFormHandler {
-  protected constructor(routeInfo: RouteInfo<TParams>, buttons: string[], middleware?: RequestHandler[]) {
+abstract class FormHandlerBase<TParams, TDto, TValidation extends Results<{}>> implements IFormHandler {
+  protected constructor(routeInfo: RouteInfo<TParams>, buttons: string[]) {
     this.routePath = routeInfo.routePath.split("?")[0];
     this.routeName = routeInfo.routeName;
     this.getParams = routeInfo.getParams;
-    this.middleware = middleware || [];
     this.buttons = buttons;
   }
 
   public readonly routePath: string;
   public readonly routeName: string;
   public readonly buttons: string[];
-  public readonly middleware: RequestHandler[];
   private readonly getParams: (route: { name: string, path: string, params: any }) => TParams;
 
   public async handle(req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> {
@@ -60,8 +61,14 @@ export abstract class FormHandlerBase<TParams, TDto, TValidation extends Results
     const session: ISession = { user: req.session!.user };
     const context = contextProvider.start(session);
 
-    const file: IFileWrapper | null = req.file && new ServerFileWrapper(req.file);
-    const dto = await this.createDto(context, params, button, body, file);
+    let dto: TDto;
+    try {
+      dto = (await this.createDto(context, params, button, body, req)) || {} as TDto;
+    }
+    catch (error) {
+      context.logger.error("Error creating dto in form submission", error);
+      dto = {} as TDto;
+    }
 
     try {
       const link = await this.run(context, params, button, dto);
@@ -75,17 +82,7 @@ export abstract class FormHandlerBase<TParams, TDto, TValidation extends Results
     }
   }
 
-  private async createDto(context: IContext, params: TParams, button: IFormButton, body: IFormBody, file: IFileWrapper|null): Promise<TDto> {
-    const defaultDto = {} as TDto;
-    try {
-      return await this.getDto(context, params, button, body, file) || defaultDto;
-    }
-    catch(e) {
-      return defaultDto;
-    }
-  }
-
-  protected abstract getDto(context: IContext, params: TParams, button: IFormButton, body: IFormBody, file: IFileWrapper|null): Promise<TDto>;
+  protected abstract createDto(context: IContext, params: TParams, button: IFormButton, body: IFormBody, req: express.Request): Promise<TDto>;
 
   protected abstract run(context: IContext, params: TParams, button: IFormButton, dto: TDto): Promise<ILinkInfo>;
 
@@ -99,4 +96,40 @@ export abstract class FormHandlerBase<TParams, TDto, TValidation extends Results
     res.redirect(url);
     return;
   }
+
+  public abstract readonly middleware: RequestHandler[];
+}
+
+export abstract class StandardFormHandlerBase<TParams, TDto, TValidation extends Results<{}>> extends FormHandlerBase<TParams, TDto, TValidation> {
+
+  public readonly middleware = [];
+
+  protected async createDto(context: IContext, params: TParams, button: IFormButton, body: IFormBody, req: express.Request): Promise<TDto> {
+    return this.getDto(context, params, button, body);
+  }
+
+  protected abstract getDto(context: IContext, params: TParams, button: IFormButton, body: IFormBody): Promise<TDto>;
+}
+
+export abstract class SingleFileFormHandlerBase<TParams, TDto, TValidation extends Results<{}>> extends FormHandlerBase<TParams, TDto, TValidation> {
+  public readonly middleware = [upload.single("attachment")];
+
+  protected async createDto(context: IContext, params: TParams, button: IFormButton, body: IFormBody, req: express.Request): Promise<TDto> {
+    const file: IFileWrapper | null = req.file && new ServerFileWrapper(req.file);
+    return this.getDto(context, params, button, body, file);
+  }
+
+  protected abstract getDto(context: IContext, params: TParams, button: IFormButton, body: IFormBody, file: IFileWrapper|null): Promise<TDto>;
+}
+
+export abstract class MultipleFileFormHandlerBase<TParams, TDto, TValidation extends Results<{}>> extends FormHandlerBase<TParams, TDto, TValidation> {
+  public readonly middleware = [upload.array("attachment", Configuration.maxUploadFileCount)];
+
+  protected async createDto(context: IContext, params: TParams, button: IFormButton, body: IFormBody, req: express.Request): Promise<TDto> {
+    const files: IFileWrapper[] = isArray(req.files) ? req.files.map(x => new ServerFileWrapper(x)) : [];
+    return this.getDto(context, params, button, body, files);
+  }
+
+  protected abstract getDto(context: IContext, params: TParams, button: IFormButton, body: IFormBody, files: IFileWrapper[]): Promise<TDto>;
+
 }

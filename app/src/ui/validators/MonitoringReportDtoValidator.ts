@@ -46,6 +46,7 @@ export class MonitoringReportDtoValidator extends Results<MonitoringReportDto> {
     this,
     this.questions,
     q => new QuestionValidator(q, (this.model.questions || []).find(x => x.displayOrder === q.displayOrder) || {} as MonitoringReportQuestionDto, this.showValidationErrors, this.submit),
+    undefined,
     "There are invalid responses."
   );
 }

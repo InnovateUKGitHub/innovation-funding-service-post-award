@@ -26,7 +26,6 @@ const createValidator = (partnerId: string, forecastDetails: ForecastDetailsDTO[
 export const getForecastDetailsEditor = (partnerId: string) => {
   return editorStoreHelper<ForecastDetailsDTO[], ForecastDetailsDtosValidator>(
     forecastDetailsStore,
-    x => x.forecastDetails,
     store => findForecastDetailsByPartner(partnerId).getPending(store),
     (forecasts, store) => createValidator(partnerId, forecasts, store),
     getKey("partner", partnerId)

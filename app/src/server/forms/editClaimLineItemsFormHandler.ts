@@ -1,5 +1,5 @@
 import { GetClaimDetailsQuery } from "@server/features/claimDetails";
-import { FormHandlerBase, IFormBody, IFormButton } from "@server/forms/formHandlerBase";
+import { IFormBody, IFormButton, StandardFormHandlerBase } from "@server/forms/formHandlerBase";
 import {
   ClaimDetailDocumentsRoute,
   EditClaimDetailsParams,
@@ -12,7 +12,7 @@ import { SaveClaimDetails } from "@server/features/claimDetails/saveClaimDetails
 import { getClaimDetailsEditor } from "@ui/redux/selectors";
 import { ClaimDetailsValidator } from "@ui/validators/claimDetailsValidator";
 
-export class EditClaimLineItemsFormHandler extends FormHandlerBase<EditClaimDetailsParams, ClaimDetailsDto, ClaimDetailsValidator> {
+export class EditClaimLineItemsFormHandler extends StandardFormHandlerBase<EditClaimDetailsParams, ClaimDetailsDto, ClaimDetailsValidator> {
 
   constructor() {
     super(EditClaimLineItemsRoute, ["upload", "default"]);

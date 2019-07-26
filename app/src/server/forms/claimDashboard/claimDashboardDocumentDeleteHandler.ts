@@ -6,13 +6,13 @@ import { BadRequestError } from "@server/features/common";
 import { getDocumentDeleteEditor } from "@ui/redux/selectors";
 import { Result, Results } from "@ui/validation";
 
-import { FormHandlerBase, IFormBody, IFormButton } from "../formHandlerBase";
+import { IFormBody, IFormButton, StandardFormHandlerBase } from "../formHandlerBase";
 
 interface DocumentWithPeriodId extends DocumentSummaryDto {
   periodId: number;
 }
 
-export class ClaimDashboardDocumentDeleteHandler extends FormHandlerBase<ClaimDashboardPageParams, DocumentWithPeriodId, Results<{}>> {
+export class ClaimDashboardDocumentDeleteHandler extends StandardFormHandlerBase<ClaimDashboardPageParams, DocumentWithPeriodId, Results<{}>> {
 
   constructor() {
     super(ClaimsDashboardRoute, ["delete"]);
