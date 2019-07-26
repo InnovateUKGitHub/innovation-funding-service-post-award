@@ -1,17 +1,17 @@
+import { getForecastDetailsEditor } from "../../ui/redux/selectors";
 import { Params as ForecastParams } from "../../ui/containers/claims/forecasts/common";
-import { FormHandlerBase, IFormButton } from "./formHandlerBase";
 import { Results } from "../../ui/validation/results";
 import { GetAllForecastsForPartnerQuery, UpdateForecastDetailsCommand } from "../features/forecastDetails";
 import { GetByIdQuery } from "../features/projects";
 import { UpdateForecastRoute, ViewForecastRoute } from "../../ui/containers";
-import { getForecastDetailsEditor } from "../../ui/redux/selectors";
+import { IFormButton, StandardFormHandlerBase } from "./formHandlerBase";
 import { ForecastDetailsDtosValidator } from "../../ui/validators";
 import { ILinkInfo } from "@framework/types/ILinkInfo";
 import { IContext } from "@framework/types/IContext";
 import { GetByIdQuery as GetPartnerByIdQuery } from "../features/partners";
 import { GetCostCategoriesForPartnerQuery } from "../features/claims/getCostCategoriesForPartnerQuery";
 
-export class UpdateForecastFormHandler extends FormHandlerBase<ForecastParams, ForecastDetailsDTO[], ForecastDetailsDtosValidator> {
+export class UpdateForecastFormHandler extends StandardFormHandlerBase<ForecastParams, ForecastDetailsDTO[], ForecastDetailsDtosValidator> {
   constructor() {
     super(UpdateForecastRoute, ["default"]);
   }

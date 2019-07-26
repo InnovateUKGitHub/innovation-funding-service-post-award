@@ -5,14 +5,14 @@ import { AllClaimsDashboardParams, AllClaimsDashboardRoute } from "@ui/container
 import { getDocumentDeleteEditor } from "@ui/redux/selectors";
 import { Results } from "@ui/validation";
 import { IContext, ILinkInfo } from "@framework/types";
-import { FormHandlerBase, IFormBody, IFormButton } from "../formHandlerBase";
+import { IFormBody, IFormButton, StandardFormHandlerBase } from "../formHandlerBase";
 
 interface Data extends DocumentSummaryDto {
   partnerId: string;
   periodId: number;
 }
 
-export class AllClaimDashboardDocumentDeleteHandler extends FormHandlerBase<AllClaimsDashboardParams, Data, Results<{}>> {
+export class AllClaimDashboardDocumentDeleteHandler extends StandardFormHandlerBase<AllClaimsDashboardParams, Data, Results<{}>> {
 
   constructor() {
     super(AllClaimsDashboardRoute, ["delete"]);

@@ -1,4 +1,4 @@
-import { FormHandlerBase, IFormBody, IFormButton } from "../formHandlerBase";
+import { IFormBody, IFormButton, StandardFormHandlerBase } from "../formHandlerBase";
 import {
   ClaimDetailDocumentsPageParams,
   ClaimDetailDocumentsRoute
@@ -15,7 +15,7 @@ interface Document {
   id: string;
 }
 
-export class ClaimDetailDocumentDeleteHandler extends FormHandlerBase<ClaimDetailDocumentsPageParams, Document, Results<{}>> {
+export class ClaimDetailDocumentDeleteHandler extends StandardFormHandlerBase<ClaimDetailDocumentsPageParams, Document, Results<{}>> {
 
   constructor() {
     super(ClaimDetailDocumentsRoute, ["delete"]);

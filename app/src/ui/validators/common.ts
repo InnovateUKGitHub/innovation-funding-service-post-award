@@ -86,13 +86,13 @@ export function all(resultSet: Results<{}>, ...results: (() => Result)[]): Resul
 }
 
 // Validating lists of things, but does fail if list is empty.
-export function requiredChild<T, U extends Results<{}>>(parentResults: Results<{}>, model: T[], validateModel: (model: T) => U, emptyMessage?: string, summaryMessage?: string) {
+export function requiredChild<T, U extends Results<{}>>(parentResults: Results<{}>, model: T[], validateModel: (model: T) => U, validateAll?: Result, emptyMessage?: string, summaryMessage?: string) {
     const childResults = model ? model.map(m => validateModel(m)) : [];
-    return new NestedResult(parentResults, childResults, true, emptyMessage || "At least one is required", summaryMessage);
+    return new NestedResult(parentResults, childResults, validateAll, true, emptyMessage || "At least one is required", summaryMessage);
 }
 
 // Validating lists of things, but don't care if list is empty.
-export function optionalChild<T, U extends Results<{}>>(parentResults: Results<{}>, model: T[], validateModel: (model: T) => U , summaryMessage?: string) {
+export function optionalChild<T, U extends Results<{}>>(parentResults: Results<{}>, model: T[], validateModel: (model: T) => U, validateAll?: Result, summaryMessage?: string) {
     const childResults = model ? model.map(m => validateModel(m)) : [];
-    return new NestedResult(parentResults, childResults, false, "", summaryMessage);
+    return new NestedResult(parentResults, childResults, validateAll, false, "", summaryMessage);
 }

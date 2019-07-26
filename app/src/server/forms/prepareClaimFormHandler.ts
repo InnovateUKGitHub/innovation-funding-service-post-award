@@ -1,16 +1,16 @@
-import { FormHandlerBase, IFormBody, IFormButton } from "./formHandlerBase";
-import { AllClaimsDashboardRoute, ClaimForecastRoute, ClaimsDashboardRoute, PrepareClaimParams, PrepareClaimRoute } from "../../ui/containers";
+import { UpdateClaimCommand } from "../features/claims/updateClaim";
+import { IFormBody, IFormButton, StandardFormHandlerBase } from "./formHandlerBase";
 import { Results } from "../../ui/validation/results";
 import { ClaimDto, ClaimStatus, ProjectRole } from "@framework/types";
 import { GetClaim } from "../features/claims";
-import { UpdateClaimCommand } from "../features/claims/updateClaim";
+import { AllClaimsDashboardRoute, ClaimForecastRoute, ClaimsDashboardRoute, PrepareClaimParams, PrepareClaimRoute } from "../../ui/containers";
 import { ClaimDtoValidator } from "../../ui/validators/claimDtoValidator";
 import { getClaimEditor } from "../../ui/redux/selectors";
 import { ILinkInfo } from "@framework/types/ILinkInfo";
 import { IContext } from "@framework/types/IContext";
 import { GetAllProjectRolesForUser } from "../features/projects";
 
-export class PrepareClaimFormHandler extends FormHandlerBase<PrepareClaimParams, ClaimDto, ClaimDtoValidator> {
+export class PrepareClaimFormHandler extends StandardFormHandlerBase<PrepareClaimParams, ClaimDto, ClaimDtoValidator> {
   constructor() {
     super(PrepareClaimRoute, ["default", "return"]);
   }

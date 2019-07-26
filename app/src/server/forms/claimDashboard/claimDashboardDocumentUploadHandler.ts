@@ -1,5 +1,5 @@
 import { getClaimDocumentEditor } from "../../../ui/redux/selectors";
-import { FormHandlerBase, IFormBody, IFormButton } from "../formHandlerBase";
+import { IFormBody, IFormButton, SingleFileFormHandlerBase } from "../formHandlerBase";
 import { ClaimDashboardPageParams, ClaimsDashboardRoute } from "../../../ui/containers";
 import { UploadClaimDocumentCommand } from "../../features/documents/uploadClaimDocument";
 import { upload } from "../memoryStorage";
@@ -12,10 +12,10 @@ interface Data extends DocumentUploadDto {
   periodId: number;
 }
 
-export class ClaimDashboardDocumentUploadHandler extends FormHandlerBase<ClaimDashboardPageParams, DocumentUploadDto, DocumentUploadDtoValidator> {
+export class ClaimDashboardDocumentUploadHandler extends SingleFileFormHandlerBase<ClaimDashboardPageParams, DocumentUploadDto, DocumentUploadDtoValidator> {
 
   constructor() {
-    super(ClaimsDashboardRoute, ["upload"], [upload.single("attachment")]);
+    super(ClaimsDashboardRoute, ["upload"]);
   }
 
   protected async getDto(context: IContext, params: ClaimDashboardPageParams, button: IFormButton, body: IFormBody, file: IFileWrapper): Promise<Data> {

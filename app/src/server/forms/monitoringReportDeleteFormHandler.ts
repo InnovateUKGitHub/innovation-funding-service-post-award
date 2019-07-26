@@ -1,4 +1,4 @@
-import { FormHandlerBase, IFormBody, IFormButton } from "@server/forms/formHandlerBase";
+import { IFormBody, IFormButton, StandardFormHandlerBase } from "@server/forms/formHandlerBase";
 import { MonitoringReportDeleteParams, MonitoringReportDeleteRoute } from "@ui/containers/monitoringReports/delete";
 import { MonitoringReportDto } from "@framework/dtos";
 import { IContext, ILinkInfo } from "@framework/types";
@@ -8,7 +8,7 @@ import { getMonitoringReportEditor } from "@ui/redux/selectors";
 import { MonitoringReportDashboardRoute } from "@ui/containers";
 import { Results } from "@ui/validation";
 
-export class MonitoringReportDeleteFormHandler extends FormHandlerBase<MonitoringReportDeleteParams, MonitoringReportDto, Results<{}>> {
+export class MonitoringReportDeleteFormHandler extends StandardFormHandlerBase<MonitoringReportDeleteParams, MonitoringReportDto, Results<{}>> {
 
   constructor() {
     super(MonitoringReportDeleteRoute, ["delete"]);

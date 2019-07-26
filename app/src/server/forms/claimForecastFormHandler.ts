@@ -1,4 +1,5 @@
-import { FormHandlerBase, IFormBody, IFormButton } from "./formHandlerBase";
+import { IFormBody, IFormButton, StandardFormHandlerBase } from "./formHandlerBase";
+import { Results } from "../../ui/validation/results";
 import { AllClaimsDashboardRoute, ClaimForecastParams, ClaimForecastRoute, ClaimsDashboardRoute, PrepareClaimRoute } from "../../ui/containers";
 import { getForecastDetailsEditor } from "../../ui/redux/selectors";
 import { ForecastDetailsDtosValidator } from "../../ui/validators";
@@ -8,7 +9,7 @@ import { GetByIdQuery as GetPartnerByIdQuery } from "../features/partners";
 import { IContext, ILinkInfo, ProjectRole } from "@framework/types";
 import { GetCostCategoriesForPartnerQuery } from "../features/claims/getCostCategoriesForPartnerQuery";
 
-export class ClaimForecastFormHandler extends FormHandlerBase<ClaimForecastParams, ForecastDetailsDTO[], ForecastDetailsDtosValidator> {
+export class ClaimForecastFormHandler extends StandardFormHandlerBase<ClaimForecastParams, ForecastDetailsDTO[], ForecastDetailsDtosValidator> {
   constructor() {
     super(ClaimForecastRoute, ["save", "default"]);
   }

@@ -1,6 +1,6 @@
 import { dataStoreHelper, editorStoreHelper, IEditorSelector } from "./common";
 import { LoadingStatus, Pending } from "../../../shared/pending";
-import { DocumentUploadDtoValidator } from "../../validators/documentUploadValidator";
+import { DocumentUploadDtoValidator, MultipleDocumentUpdloadDtoValidator } from "../../validators/documentUploadValidator";
 import { IEditorStore, RootState } from "../reducers";
 import { getCurrentClaim, getLeadPartnerCurrentClaim } from "./claims";
 import { getKey } from "@framework/util";
@@ -16,17 +16,15 @@ export const getClaimDocuments = (partnerId: string, periodId: number) => dataSt
 
 export const getProjectDocuments = (projectId: string) => dataStoreHelper(documentStore, getKey("project", projectId));
 
-export const getProjectDocumentEditor = (projectId: string, maxFileSize: number) => editorStoreHelper<DocumentUploadDto, DocumentUploadDtoValidator>(
-  documentStore,
-  x => x.documents,
-  () => Pending.done({ file: null }),
-  (dto) => Pending.done(new DocumentUploadDtoValidator(dto, maxFileSize, false)),
+export const getProjectDocumentEditor = (projectId: string, config: { maxFileSize: number, maxUploadFileCount: number }) => editorStoreHelper<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>(
+  "multipleDocuments",
+  () => Pending.done({ files: [] }),
+  (dto) => Pending.done(new MultipleDocumentUpdloadDtoValidator(dto, config, false)),
   getKey("project", projectId)
 );
 
 export const getClaimDetailDocumentEditor = ({ partnerId, periodId, costCategoryId }: ClaimDetailKey, maxFileSize: number) => editorStoreHelper<DocumentUploadDto, DocumentUploadDtoValidator>(
   documentStore,
-  x => x.documents,
   () => Pending.done({ file: null }),
   (dto) => Pending.done(new DocumentUploadDtoValidator(dto, maxFileSize, false)),
   getKey("claim", "details", partnerId, periodId, costCategoryId)
@@ -43,7 +41,6 @@ export const getClaimDetailDocumentDeleteEditor = (state: RootState, { projectId
 
 export const getClaimDocumentEditor = ({ partnerId, periodId }: ClaimKey, maxFileSize: number) => editorStoreHelper<DocumentUploadDto, DocumentUploadDtoValidator>(
   documentStore,
-  x => x.documents,
   () => Pending.done({ file: null }),
   (dto) => Pending.done(new DocumentUploadDtoValidator(dto, maxFileSize, false)),
   getKey("claim", partnerId, periodId)
@@ -51,7 +48,6 @@ export const getClaimDocumentEditor = ({ partnerId, periodId }: ClaimKey, maxFil
 
 const getDocumentsDeleteEditor = (key: string, documents: DocumentSummaryDto[]) => editorStoreHelper<DocumentSummaryDto[], Results<DocumentSummaryDto[]>>(
   documentSummaryEditorStore,
-  x => x.documentSummary,
   () => Pending.done(documents),
   () => Pending.done(new Results(documents, false)),
   key

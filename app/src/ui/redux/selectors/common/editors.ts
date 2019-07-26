@@ -11,7 +11,6 @@ export interface IEditorSelector<T, TVal extends Results<T>> {
 
 export const editorStoreHelper = <T extends {}, TVal extends Results<T>>(
   storeKey: EditorStateKeys,
-  getEditorStore: (state: EditorState) => { [key: string]: IEditorStore<T, TVal> },
   getData: (store: RootState) => Pending<T>,
   getValidator: (dto: T, store: RootState) => Pending<TVal>,
   key: string
@@ -19,8 +18,7 @@ export const editorStoreHelper = <T extends {}, TVal extends Results<T>>(
   store: storeKey,
   key,
   get: (store: RootState, initalise?: (dto: T) => void) => {
-    const editor = getEditorStore(store.editors)[key];
-
+    const editor: IEditorStore<T, TVal> = store.editors[storeKey][key] as any;
     return editor ? Pending.done(editor) : getNewEditor(getData, getValidator, store, initalise);
   }
 });

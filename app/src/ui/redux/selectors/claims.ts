@@ -18,7 +18,6 @@ export const getClaim = (partnerId: string, periodId: number) => dataStoreHelper
 
 export const getClaimEditor = (partnerId: string, periodId: number) => editorStoreHelper<ClaimDto, ClaimDtoValidator>(
   claimStore,
-  x => x.claim,
   (store) => createClaimEditorDto(partnerId, periodId, store),
   (claim, store) => createClaimValidator(partnerId, periodId, claim, store),
   `${partnerId}_${periodId}`
@@ -43,7 +42,6 @@ export const getClaimDetails = (partnerId: string, periodId: number, costCategor
 
 export const getClaimDetailsEditor = (partnerId: string, periodId: number, costCategoryId: string) => editorStoreHelper<ClaimDetailsDto, ClaimDetailsValidator>(
   claimDetailStore,
-  x => x.claimDetail,
   (store) => createClaimDetailsEditorDto(partnerId, periodId, costCategoryId, store),
   (claimLineItemForm) => Pending.done(new ClaimDetailsValidator(claimLineItemForm, false)),
   getClaimDetails(partnerId, periodId, costCategoryId).key

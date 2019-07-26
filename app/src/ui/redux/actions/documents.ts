@@ -2,10 +2,11 @@ import * as Actions from "@ui/redux/actions/common";
 import * as Selectors from "@ui/redux/selectors";
 import { ApiClient } from "@ui/apiClient";
 import { Results } from "@ui/validation/results";
-import { DocumentUploadDtoValidator } from "@ui/validators";
+import { DocumentUploadDtoValidator, MultipleDocumentUpdloadDtoValidator } from "@ui/validators";
 import { LoadingStatus } from "@shared/pending";
 import { DocumentDescription } from "@framework/constants";
 import { scrollToTheTopSmoothly } from "@framework/util/windowHelpers";
+import { getProjectDocuments } from "@ui/redux/selectors";
 
 type uploadProjectDocumentActions = Actions.AsyncThunk<void, Actions.DataLoadAction | Actions.EditorAction | Actions.messageSuccess>;
 
@@ -30,22 +31,22 @@ export function loadProjectDocuments(projectId: string) {
   );
 }
 
-export function updateProjectDocumentEditor(projectId: string, dto: DocumentUploadDto, showErrors: boolean = false): Actions.SyncThunk<Results<DocumentUploadDto>, Actions.UpdateEditorAction> {
+export function updateProjectDocumentEditor(projectId: string, dto: MultipleDocumentUploadDto, showErrors: boolean = false): Actions.SyncThunk<Results<MultipleDocumentUploadDto>, Actions.UpdateEditorAction> {
   return (dispatch, getState) => {
     const state = getState();
-    const selector = Selectors.getProjectDocumentEditor(projectId, state.config.maxFileSize);
+    const selector = Selectors.getProjectDocumentEditor(projectId, state.config);
     const current = state.editors[selector.store][selector.key];
     const errors = showErrors || current && current.validator.showValidationErrors || false;
-    const validator = new DocumentUploadDtoValidator(dto, state.config.maxFileSize, errors);
+    const validator = new MultipleDocumentUpdloadDtoValidator(dto, state.config, errors);
     dispatch(Actions.updateEditorAction(selector.key, selector.store, dto, validator));
     return validator;
   };
 }
 
-export function uploadProjectDocument(projectId: string, dto: DocumentUploadDto, onComplete: () => void, message: string): uploadProjectDocumentActions {
+export function uploadProjectDocument(projectId: string, dto: MultipleDocumentUploadDto, onComplete: () => void, message: string): uploadProjectDocumentActions {
   return (dispatch, getState) => {
     const state = getState();
-    const selector = Selectors.getProjectDocumentEditor(projectId, state.config.maxFileSize);
+    const selector = Selectors.getProjectDocumentEditor(projectId, state.config);
     const validation = updateProjectDocumentEditor(projectId, dto, true)(dispatch, getState, null);
 
     if(!validation.isValid) {
@@ -54,10 +55,11 @@ export function uploadProjectDocument(projectId: string, dto: DocumentUploadDto,
     }
 
     dispatch(Actions.handleEditorSubmit(selector.key, selector.store, dto, validation));
-    dispatch(Actions.dataLoadAction(selector.key, selector.store, LoadingStatus.Stale, undefined));
 
-    return ApiClient.documents.uploadProjectDocument({ projectId, documents: {files: [dto.file!], description: dto.description}, user: state.user })
+    return ApiClient.documents.uploadProjectDocument({ projectId, documents: dto, user: state.user })
       .then(() => {
+        const dataStoreSelector = getProjectDocuments(projectId);
+        dispatch(Actions.dataLoadAction(dataStoreSelector.key, dataStoreSelector.store, LoadingStatus.Stale, undefined));
         dispatch(Actions.handleEditorSuccess(selector.key, selector.store));
         dispatch(Actions.messageSuccess(message));
         onComplete();

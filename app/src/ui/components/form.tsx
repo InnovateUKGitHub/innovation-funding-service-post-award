@@ -164,7 +164,7 @@ const StringField = <T extends {}>(props: ExternalFieldProps<T, string> & Intern
   const TypedFieldComponent = FieldComponent as { new(): FieldComponent<T, string> };
   return (
     <TypedFieldComponent
-      field={(data => <ACC.Inputs.TextInput name={props.name} value={props.value(data)} onChange={(val) => handleChange(props, val)} placeholder={props.placeholder} />)}
+      field={((data,disabled) => <ACC.Inputs.TextInput name={props.name} value={props.value(data)} onChange={(val) => handleChange(props, val)} placeholder={props.placeholder} disabled={disabled}/>)}
       {...props}
     />
   );
@@ -193,7 +193,7 @@ const NumericField = <T extends {}>(props: NumericFieldProps<T> & InternalFieldP
   const TypedFieldComponent = FieldComponent as { new(): FieldComponent<T, number> };
   return (
     <TypedFieldComponent
-      field={(data => <ACC.Inputs.NumberInput name={props.name} value={props.value(data)} onChange={(val) => handleChange(props, val)} width={props.width} />)}
+      field={((data,disabled) => <ACC.Inputs.NumberInput name={props.name} value={props.value(data)} onChange={(val) => handleChange(props, val)} width={props.width} disabled={disabled} />)}
       {...props}
     />
   );
@@ -213,7 +213,7 @@ const RadioOptionsField = <T extends {}>(props: RadioFieldProps<T> & InternalFie
   const TypedFieldComponent = FieldComponent as { new(): FieldComponent<T, SelectOption> };
   return (
     <TypedFieldComponent
-      field={(data) => <ACC.Inputs.RadioList options={props.options} name={props.name} value={props.value(data)} inline={props.inline} onChange={(val) => handleChange(props, val)} />}
+      field={(data, disabled) => <ACC.Inputs.RadioList options={props.options} name={props.name} value={props.value(data)} inline={props.inline} onChange={(val) => handleChange(props, val)} disabled={disabled} />}
       {...props}
     />
   );
@@ -273,7 +273,17 @@ const FileUploadComponent = <T extends {}>(props: ExternalFieldProps<T, IFileWra
   const TypedFieldComponent = FieldComponent as { new(): FieldComponent<T, IFileWrapper> };
   return (
     <TypedFieldComponent
-      field={((data) => <ACC.Inputs.FileUpload value={props.value(data)} name={props.name} onChange={(val) => handleChange(props, val)} />)}
+      field={((data, disabled) => <ACC.Inputs.FileUpload value={props.value(data)} name={props.name} onChange={(val) => handleChange(props, val)} disabled={disabled}  error={props.validation && !props.validation.isValid && props.validation.showValidationErrors}/>)}
+      {...props}
+    />
+  );
+};
+
+const MulipleFileUploadComponent = <T extends {}>(props: ExternalFieldProps<T, IFileWrapper[]> & InternalFieldProps<T>) => {
+  const TypedFieldComponent = FieldComponent as { new(): FieldComponent<T, IFileWrapper[]> };
+  return (
+    <TypedFieldComponent
+      field={((data, disabled) => <ACC.Inputs.MulipleFileUpload value={props.value(data)} name={props.name} onChange={(val) => handleChange(props, val)} disabled={disabled} error={props.validation && !props.validation.isValid && props.validation.showValidationErrors}/>)}
       {...props}
     />
   );
@@ -290,17 +300,19 @@ export interface FormBuilder<T> {
   Submit: React.SFC<SubmitProps>;
   Button: React.SFC<ButtonProps>;
   FileUpload: React.SFC<ExternalFieldProps<T, IFileWrapper>>;
+  MulipleFileUpload: React.SFC<ExternalFieldProps<T, IFileWrapper[]>>;
 }
 
 export const TypedForm = <T extends {}>(): FormBuilder<T> => ({
-    Form: FormComponent as { new(): FormComponent<T> },
-    Fieldset: FieldsetComponent as { new(): FieldsetComponent<T> },
-    String: StringField as React.SFC<ExternalFieldProps<T, string>>,
-    MultilineString: MultiStringField as React.SFC<MultiStringFieldProps<T>>,
-    Numeric: NumericField as React.SFC<NumericFieldProps<T>>,
-    Radio: RadioOptionsField as React.SFC<RadioFieldProps<T>>,
-    Hidden: HiddenField as React.SFC<HiddenFieldProps<T>>,
-    Submit: SubmitComponent as React.SFC<SubmitProps>,
-    Button: ButtonComponent as React.SFC<ButtonProps>,
-    FileUpload: FileUploadComponent as React.SFC<ExternalFieldProps<T, IFileWrapper>>,
+  Form: FormComponent as { new(): FormComponent<T> },
+  Fieldset: FieldsetComponent as { new(): FieldsetComponent<T> },
+  String: StringField as React.SFC<ExternalFieldProps<T, string>>,
+  MultilineString: MultiStringField as React.SFC<MultiStringFieldProps<T>>,
+  Numeric: NumericField as React.SFC<NumericFieldProps<T>>,
+  Radio: RadioOptionsField as React.SFC<RadioFieldProps<T>>,
+  Hidden: HiddenField as React.SFC<HiddenFieldProps<T>>,
+  Submit: SubmitComponent as React.SFC<SubmitProps>,
+  Button: ButtonComponent as React.SFC<ButtonProps>,
+  FileUpload: FileUploadComponent as React.SFC<ExternalFieldProps<T, IFileWrapper>>,
+  MulipleFileUpload: MulipleFileUploadComponent as React.SFC<ExternalFieldProps<T, IFileWrapper[]>>,
 });
