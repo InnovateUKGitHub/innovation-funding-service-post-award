@@ -6,6 +6,7 @@ export interface IClientConfig {
   standardOverheadRate: number;
   ssoEnabled: boolean;
   maxFileSize: number;
+  maxUploadFileCount: number;
 }
 
 export const configReducer = (state: IClientConfig  = {} as IClientConfig , action: RootActions) => {

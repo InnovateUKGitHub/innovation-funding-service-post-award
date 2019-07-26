@@ -562,5 +562,5 @@ export class TestFileWrapper implements IFileWrapper {
   constructor(public fileName: string, public content: string) {
   }
 
-  public get size(): number { return this.content.length; }
+  public get size(): number { return this.content && this.content.length || 0; }
 }
