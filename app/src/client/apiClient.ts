@@ -29,7 +29,7 @@ const clientApi: IApiClient = {
     deleteClaimDocument: ({ documentId, claimKey }) => ajaxJson(`/api/documents/claims/${claimKey.projectId}/${claimKey.partnerId}/${claimKey.periodId}/${documentId}`, { method: "DELETE" }),
     uploadClaimDetailDocument: ({ claimDetailKey, document }) => ajaxPostFile(`/api/documents/claim-details/${claimDetailKey.projectId}/${claimDetailKey.partnerId}/${claimDetailKey.periodId}/${claimDetailKey.costCategoryId}`, document),
     uploadClaimDocument: ({ claimKey, document }) => ajaxPostFile(`/api/documents/claims/${claimKey.projectId}/${claimKey.partnerId}/${claimKey.periodId}`, document),
-    uploadProjectDocument: ({ projectId, document }) => ajaxPostFile(`/api/documents/projects/${projectId}`, document)
+    uploadProjectDocument: ({ projectId, documents }) => ajaxPostFiles(`/api/documents/projects/${projectId}`, documents)
   },
   forecastDetails: {
     getAllByPartnerId: (params) => ajaxJson(`/api/forecast-details/?partnerId=${params.partnerId}`),
@@ -113,6 +113,15 @@ const ajaxPostFile = <T>(url: string, document: DocumentUploadDto) => {
   const formData = new FormData();
   formData.append("attachment", (document.file as ClientFileWrapper).file);
   if (document.description) { formData.append("description", document.description); }
+  return ajaxPostFormData<T>(url, formData);
+};
+
+const ajaxPostFiles = <T>(url: string, documents: MultipleDocumentUploadDto) => {
+  const formData = new FormData();
+  documents.files.forEach(file => {
+    formData.append("attachment", (file as ClientFileWrapper).file);
+  });
+  if (documents.description) { formData.append("description", documents.description); }
   return ajaxPostFormData<T>(url, formData);
 };
 

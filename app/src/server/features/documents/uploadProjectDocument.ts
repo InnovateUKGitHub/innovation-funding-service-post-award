@@ -1,17 +1,17 @@
 import { Authorisation, IContext, ProjectRole } from "@framework/types";
 import { CommandBase, ValidationError } from "@server/features/common";
-import { DocumentUploadDtoValidator } from "@ui/validators/documentUploadValidator";
+import { DocumentUploadDtoValidator, MultipleDocumentUpdloadDtoValidator } from "@ui/validators/documentUploadValidator";
 
-export class UploadProjectDocumentCommand extends CommandBase<string> {
+export class UploadProjectDocumentCommand extends CommandBase<string[]> {
   constructor(
     private readonly projectId: string,
-    private readonly document: DocumentUploadDto
+    private readonly documents: MultipleDocumentUploadDto
   ) {
     super();
   }
 
   protected LogMessage() {
-    return [this.constructor.name, { projectId: this.projectId }, this.document && this.document.file && this.document.file.fileName];
+    return [this.constructor.name, { projectId: this.projectId }, this.documents && this.documents.files && this.documents.files.map(x => x.fileName)];
   }
 
   protected async accessControl(auth: Authorisation) {
@@ -19,12 +19,19 @@ export class UploadProjectDocumentCommand extends CommandBase<string> {
   }
 
   protected async Run(context: IContext) {
-    const result = new DocumentUploadDtoValidator(this.document, context.config.maxFileSize, true);
+    const result = new MultipleDocumentUpdloadDtoValidator(this.documents, context.config.maxFileSize, context.config.maxUploadFileCount, true);
 
     if (!result.isValid) {
       throw new ValidationError(result);
     }
 
-    return context.repositories.documents.insertDocument(this.document.file!, this.projectId, this.document.description);
+    const results: string[] = [];
+
+    for (const document of this.documents.files.filter(x => x.fileName && x.size)) {
+      const id = await context.repositories.documents.insertDocument(document, this.projectId, this.documents.description);
+      results.push(id);
+    }
+
+    return results;
   }
 }

@@ -5,6 +5,7 @@ import express, { Request, Response } from "express";
 import { IAppError, ISessionUser } from "@framework/types";
 import { NotFoundError } from "@server/features/common/appError";
 import { errorHandlerApi } from "@server/errorHandlers";
+import { isArray } from "util";
 
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
@@ -78,6 +79,19 @@ export abstract class ControllerBaseWithSummary<TSummaryDto, TDto> {
     };
 
     this.router.post(path, upload.single("attachment"), this.executeMethod(201, wrappedGetParams, run, false));
+  }
+
+  protected postAttachments<TParams>(path: string, getParams: GetParams<TParams>, run: Run<TParams & { documents: MultipleDocumentUploadDto }, { documentIds: string[] }>) {
+    const wrappedGetParams: InnerGetParams<TParams & { documents: MultipleDocumentUploadDto }> = (params, query, body, req) => {
+      const p = getParams(params, query, body);
+
+      const files: IFileWrapper[] = isArray(req.files) ? req.files.map(x => new ServerFileWrapper(x)) : [];
+      const documents: MultipleDocumentUploadDto = { files, description: body.description };
+
+      return { ...p, documents };
+    };
+
+    this.router.post(path, upload.array("attachment", 10), this.executeMethod(201, wrappedGetParams, run, false));
   }
 
   protected putItem<TParams>(path: string, getParams: GetParams<TParams>, run: Run<TParams, TDto | null>) {

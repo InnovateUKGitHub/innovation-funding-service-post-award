@@ -56,7 +56,7 @@ export function uploadProjectDocument(projectId: string, dto: DocumentUploadDto,
     dispatch(Actions.handleEditorSubmit(selector.key, selector.store, dto, validation));
     dispatch(Actions.dataLoadAction(selector.key, selector.store, LoadingStatus.Stale, undefined));
 
-    return ApiClient.documents.uploadProjectDocument({ projectId, document: dto, user: state.user })
+    return ApiClient.documents.uploadProjectDocument({ projectId, documents: {files: [dto.file!], description: dto.description}, user: state.user })
       .then(() => {
         dispatch(Actions.handleEditorSuccess(selector.key, selector.store));
         dispatch(Actions.messageSuccess(message));
