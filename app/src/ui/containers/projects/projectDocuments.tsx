@@ -7,7 +7,6 @@ import * as Selectors from "../../redux/selectors";
 import * as Actions from "../../redux/actions";
 import { IEditorStore } from "../../redux";
 import { DocumentUploadDtoValidator } from "../../validators/documentUploadValidator";
-import { ProjectDashboardRoute } from "@ui/containers";
 import { getFileSize } from "@framework/util";
 
 export interface ProjectDocumentPageParams {

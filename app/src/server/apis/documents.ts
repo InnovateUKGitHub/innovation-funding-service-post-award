@@ -19,7 +19,7 @@ export interface IDocumentsApi {
   getProjectDocuments: (params: ApiParams<{ projectId: string }>) => Promise<DocumentSummaryDto[]>;
   uploadClaimDetailDocument: (params: ApiParams<{ claimDetailKey: ClaimDetailKey, document: DocumentUploadDto }>) => Promise<{ documentId: string }>;
   uploadClaimDocument: (params: ApiParams<{ claimKey: ClaimKey, document: DocumentUploadDto }>) => Promise<{ documentId: string }>;
-  uploadProjectDocument: (params: ApiParams<{ projectId: string, document: DocumentUploadDto }>) => Promise<{ documentId: string }>;
+  uploadProjectDocument: (params: ApiParams<{ projectId: string, documents: MultipleDocumentUploadDto }>) => Promise<{ documentIds: string[] }>;
   deleteClaimDetailDocument: (params: ApiParams<{ documentId: string, claimDetailKey: ClaimDetailKey }>) => Promise<boolean>;
   deleteClaimDocument: (params: ApiParams<{ documentId: string, claimKey: ClaimKey }>) => Promise<boolean>;
 }
@@ -88,7 +88,7 @@ class Controller extends ControllerBase<DocumentSummaryDto> implements IDocument
       p => this.uploadClaimDocument(p)
     );
 
-    this.postAttachment(
+    this.postAttachments(
       "/projects/:projectId",
       (p, q, b) => ({ projectId: p.projectId }),
       p => this.uploadProjectDocument(p)
@@ -143,11 +143,11 @@ class Controller extends ControllerBase<DocumentSummaryDto> implements IDocument
     return { documentId: insertedID };
   }
 
-  public async uploadProjectDocument(params: ApiParams<{ projectId: string, document: DocumentUploadDto }>) {
-    const command = new UploadProjectDocumentCommand(params.projectId, params.document);
-    const insertedID = await contextProvider.start(params).runCommand(command);
+  public async uploadProjectDocument(params: ApiParams<{ projectId: string, documents: MultipleDocumentUploadDto }>) {
+    const command = new UploadProjectDocumentCommand(params.projectId, params.documents);
+    const insertedIDs = await contextProvider.start(params).runCommand(command);
 
-    return { documentId: insertedID };
+    return { documentIds: insertedIDs };
   }
 
   public async deleteClaimDetailDocument(params: ApiParams<{ documentId: string, claimDetailKey: ClaimDetailKey }>): Promise<boolean> {

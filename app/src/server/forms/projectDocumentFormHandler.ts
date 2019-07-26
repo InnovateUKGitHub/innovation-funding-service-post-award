@@ -4,21 +4,22 @@ import { ProjectDocumentPageParams, ProjectDocumentsRoute } from "../../ui/conta
 import { UploadProjectDocumentCommand } from "../features/documents/uploadProjectDocument";
 import { upload } from "./memoryStorage";
 import { Configuration } from "@server/features/common";
-import { DocumentUploadDtoValidator } from "@ui/validators";
+import { MultipleDocumentUpdloadDtoValidator } from "@ui/validators";
 import { IContext, ILinkInfo } from "@framework/types";
 
-export class ProjectDocumentUploadHandler extends FormHandlerBase<ProjectDocumentPageParams, DocumentUploadDto, DocumentUploadDtoValidator> {
+export class ProjectDocumentUploadHandler extends FormHandlerBase<ProjectDocumentPageParams, MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator> {
   constructor() {
     super(ProjectDocumentsRoute, ["default"], [upload.single("attachment")]);
   }
 
-  protected async getDto(context: IContext, params: ProjectDocumentPageParams, button: IFormButton, body: IFormBody, file: IFileWrapper): Promise<DocumentUploadDto> {
+  protected async getDto(context: IContext, params: ProjectDocumentPageParams, button: IFormButton, body: IFormBody, file: IFileWrapper): Promise<MultipleDocumentUploadDto> {
     return {
-      file
+      files: [file],
+      description: body.description
     };
   }
 
-  protected async run(context: IContext, params: ProjectDocumentPageParams, button: IFormButton, dto: DocumentUploadDto): Promise<ILinkInfo> {
+  protected async run(context: IContext, params: ProjectDocumentPageParams, button: IFormButton, dto: MultipleDocumentUploadDto): Promise<ILinkInfo> {
     await context.runCommand(new UploadProjectDocumentCommand(params.projectId, dto));
     return ProjectDocumentsRoute.getLink(params);
   }
@@ -27,7 +28,7 @@ export class ProjectDocumentUploadHandler extends FormHandlerBase<ProjectDocumen
     return getProjectDocumentEditor(params.projectId, Configuration.maxFileSize);
   }
 
-  protected createValidationResult(params: ProjectDocumentPageParams, dto: DocumentUploadDto) {
-    return new DocumentUploadDtoValidator(dto, Configuration.maxFileSize, false);
+  protected createValidationResult(params: ProjectDocumentPageParams, dto: MultipleDocumentUploadDto) {
+    return new MultipleDocumentUpdloadDtoValidator(dto, Configuration.maxFileSize, Configuration.maxUploadFileCount, false);
   }
 }
