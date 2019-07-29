@@ -7,17 +7,18 @@ import { isNumber } from "@framework/util";
 import { ProjectDto, ProjectRole } from "@framework/types";
 import { ForecastData, forecastDataLoadActions, PendingForecastData, renderWarning, withDataEditor, } from "./common";
 
-export interface ClaimForcastParams {
+export interface ClaimForecastParams {
   projectId: string;
   partnerId: string;
   periodId: number;
 }
+
 interface Callbacks {
   onChange: (partnerId: string, data: ForecastDetailsDTO[], combined: ForecastData) => void;
   saveAndReturn: (updateClaim: boolean, projectId: string, partnerId: string, periodId: number, data: ForecastData, message: string) => void;
 }
 
-class ClaimForecastComponent extends ContainerBase<ClaimForcastParams, PendingForecastData, Callbacks> {
+class ClaimForecastComponent extends ContainerBase<ClaimForecastParams, PendingForecastData, Callbacks> {
   render() {
     return <ACC.PageLoader pending={this.props.combined} render={data => this.renderContents(data)} />;
   }
@@ -85,7 +86,7 @@ const updateRedirect = (updateClaim: boolean, dispatch: any, project: ProjectDto
   return dispatch(Actions.navigateTo(ClaimsDashboardRoute.getLink({ projectId, partnerId })));
 };
 
-const definition = ReduxContainer.for<ClaimForcastParams, PendingForecastData, Callbacks>(ClaimForecastComponent);
+const definition = ReduxContainer.for<ClaimForecastParams, PendingForecastData, Callbacks>(ClaimForecastComponent);
 
 const ForecastClaim = definition.connect({
   withData: (state, props) => withDataEditor(state, props),

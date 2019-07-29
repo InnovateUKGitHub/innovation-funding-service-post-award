@@ -6,7 +6,6 @@ import * as Actions from "../../redux/actions";
 import * as Selectors from "../../redux/selectors";
 import { PartnerDto, ProjectDto, ProjectRole } from "@framework/dtos";
 import { ViewForecastRoute } from "../claims";
-import { ProjectDashboardRoute } from "@ui/containers";
 
 interface Data {
   projectDetails: Pending<ProjectDto>;

@@ -242,7 +242,7 @@ const definition = ReduxContainer.for<ReviewClaimParams, Data, Callbacks>(Review
 // ToDo: sort out with data as its a mess!
 export const ReviewClaim = definition.connect({
   withData: (state, props): Data => {
-    const projectPending = Selectors.getProject(props.projectId).getPending(state);
+    const projectPending = Selectors.getActiveProject(props.projectId, state);
     const partnerPending = Selectors.getPartner(props.partnerId).getPending(state);
     const costCategoriesPending = Selectors.getCostCategories().getPending(state);
     const claimPending = Selectors.getClaim(props.partnerId, props.periodId).getPending(state);
