@@ -307,7 +307,7 @@ const definition = ReduxContainer.for<EditClaimDetailsParams, Data, Callbacks>(E
 export const EditClaimLineItems = definition.connect({
   withData: (state, props) => {
     return {
-      project: Selectors.getProject(props.projectId).getPending(state),
+      project: Selectors.getActiveProject(props.projectId, state),
       claimDetails: Selectors.getClaimDetails(props.partnerId, props.periodId, props.costCategoryId).getPending(state),
       costCategories: Selectors.getCostCategories().getPending(state),
       forecastDetail: Selectors.getForecastDetail(props.partnerId, props.periodId, props.costCategoryId).getPending(state),

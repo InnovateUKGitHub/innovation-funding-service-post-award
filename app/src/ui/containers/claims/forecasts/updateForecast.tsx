@@ -21,6 +21,7 @@ interface Callbacks {
 }
 
 class UpdateForecastComponent extends ContainerBase<Params, PendingForecastData, Callbacks> {
+
   public render() {
     return <ACC.PageLoader pending={this.props.combined} render={data => this.renderContents(data)} />;
   }

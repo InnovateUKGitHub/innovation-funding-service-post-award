@@ -11,7 +11,6 @@ import {
   AllClaimsDashboardRoute,
   ClaimForecastRoute,
   ClaimsDashboardRoute,
-  ClaimsDetailsRoute,
   EditClaimLineItemsRoute
 } from ".";
 
@@ -164,7 +163,7 @@ const definition = ReduxContainer.for<PrepareClaimParams, Data, Callbacks>(Prepa
 
 export const PrepareClaim = definition.connect({
   withData: (state, props): Data => ({
-    project: Selectors.getProject(props.projectId).getPending(state),
+    project: Selectors.getActiveProject(props.projectId, state),
     partner: Selectors.getPartner(props.partnerId).getPending(state),
     costCategories: Selectors.getCostCategories().getPending(state),
     claim: Selectors.getClaim(props.partnerId, props.periodId).getPending(state),

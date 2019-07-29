@@ -1,13 +1,12 @@
 import React from "react";
 
 import { ContainerBase, ReduxContainer } from "../containerBase";
-
 import * as Actions from "@ui/redux/actions";
 import { MonitoringReportDashboardRoute } from "../monitoringReports";
 import * as Selectors from "@ui/redux/selectors";
 import * as Dtos from "@framework/dtos";
 import { Pending } from "@shared/pending";
-import { IClientUser, ILinkInfo, PartnerDto, ProjectDto, ProjectRole } from "@framework/types";
+import { IClientUser, PartnerDto, ProjectDto, ProjectRole } from "@framework/types";
 import { ProjectDashboardRoute } from "./dashboard";
 import { AllClaimsDashboardRoute, ClaimsDashboardRoute, ViewForecastRoute } from "../claims";
 import * as ACC from "@ui/components";
@@ -16,7 +15,6 @@ import { ProjectChangeRequestsRoute } from "./projectChangeRequests";
 import { ProjectDocumentsRoute } from "./projectDocuments";
 import { ProjectDetailsRoute } from "./details";
 import { IClientConfig } from "@ui/redux/reducers/configReducer";
-import { link } from "fs";
 import { NavigationCard } from "@ui/components";
 
 interface Data {
@@ -154,7 +152,7 @@ class ProjectOverviewComponent extends ContainerBase<Params, Data, {}> {
       { text: "Details", link: ProjectDetailsRoute.getLink({ id: projectId }) },
     ].filter(x => x.link.accessControl(this.props.user, this.props.config));
 
-    // special case if not fc shouldnt have link to ViewForecastRoute from this page... the view forecast route has permission from the project forcasts route
+    // special case if not fc shouldnt have link to ViewForecastRoute from this page... the view forecast route has permission from the project forecasts route
     if(projectRole & (ProjectRole.MonitoringOfficer | ProjectRole.ProjectManager)) {
       links = links.filter(x => x.link.routeName !== ViewForecastRoute.routeName);
     }

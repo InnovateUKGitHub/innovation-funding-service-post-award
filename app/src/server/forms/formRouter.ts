@@ -1,6 +1,6 @@
 import { BadRequestHandler } from "./badRequestHandler";
 import express from "express";
-import { ClaimForcastFormHandler } from "./claimForcastFormHandler";
+import { ClaimForecastFormHandler } from "./claimForecastFormHandler";
 import { EditClaimLineItemsFormHandler } from "./editClaimLineItemsFormHandler";
 import { HomeFormHandler } from "./homeFormHandler";
 import { PrepareClaimFormHandler } from "./prepareClaimFormHandler";
@@ -26,7 +26,7 @@ export const formRouter = express.Router();
 const handlers: IFormHandler[] = [
   new AllClaimDashboardDocumentUploadHandler(),
   new AllClaimDashboardDocumentDeleteHandler(),
-  new ClaimForcastFormHandler(),
+  new ClaimForecastFormHandler(),
   new EditClaimLineItemsFormHandler(),
   new PrepareClaimFormHandler(),
   new ReviewClaimFormHandler(),

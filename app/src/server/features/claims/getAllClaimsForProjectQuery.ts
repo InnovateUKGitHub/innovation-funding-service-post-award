@@ -11,10 +11,10 @@ export class GetAllClaimsForProjectQuery extends QueryBase<ClaimDto[]> {
 
   protected async Run(context: IContext) {
     const claims = await context.repositories.claims.getAllByProjectId(this.projectId);
-    const forcasts = await context.repositories.profileTotalPeriod.getAllByProjectId(this.projectId);
+    const forecasts = await context.repositories.profileTotalPeriod.getAllByProjectId(this.projectId);
     const joined = claims.map(claim => ({
       claim,
-      forecast: forcasts.find(x => x.Acc_ProjectParticipant__c === claim.Acc_ProjectParticipant__r.Id && x.Acc_ProjectPeriodNumber__c === claim.Acc_ProjectPeriodNumber__c)
+      forecast: forecasts.find(x => x.Acc_ProjectParticipant__c === claim.Acc_ProjectParticipant__r.Id && x.Acc_ProjectPeriodNumber__c === claim.Acc_ProjectPeriodNumber__c)
     }));
     joined.sort(claimSorter);
 
