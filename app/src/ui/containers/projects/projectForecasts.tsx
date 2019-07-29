@@ -37,8 +37,8 @@ class ProjectForecastComponent extends ContainerBase<Params, Data, Callbacks> {
           <Table.Table data={partners} qa="partner-table">
             <Table.String header="Partner" value={x => x.name + (x.isLead ? " (Lead)" : "")} qa="partner" />
             <Table.Currency header="Total eligible costs" value={x => x.totalParticipantGrant} qa="grant-offered" />
-            <Table.Currency header="Forecasts and costs" value={x => x.totalFutureForecastsForParticipants} qa="forecasts-and-costs" />
-            <Table.Currency header="Underspend" value={x => Math.abs(x.totalParticipantGrant! - x.totalFutureForecastsForParticipants!)} qa="underspend" />
+            <Table.Currency header="Forecasts and costs" value={x => (x.totalFutureForecastsForParticipants || 0) + (x.totalCostsSubmitted || 0)} qa="forecasts-and-costs" />
+            <Table.Currency header="Underspend" value={x => x.totalParticipantGrant! - (x.totalFutureForecastsForParticipants || 0) - (x.totalCostsSubmitted || 0)} qa="underspend" />
             <Table.ShortDate header="Date of last update" value={x => x.forecastLastModifiedDate} qa="last-updated" />
             <Table.Link header="Action" hideHeader={true} value={x => ViewForecastRoute.getLink({ projectId: this.props.projectId, partnerId: x.id })} content="View forecast" qa="view-partner-forecast" />
           </Table.Table>

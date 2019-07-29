@@ -25,6 +25,7 @@ describe("getAllForProjectQuery", () => {
       x.Acc_ClaimsOverdue__c = 30;
       x.Acc_TrackingClaims__c = "Claim Due";
       x.Acc_OverheadRate__c = 75;
+      x.Acc_TotalCostsSubmitted__c = 100;
     });
 
     const projectManger = context.testData.createProjectManager(project, partner);
@@ -51,6 +52,7 @@ describe("getAllForProjectQuery", () => {
       awardRate: 50,
       capLimit: 50,
       totalFutureForecastsForParticipants: 1002,
+      totalCostsSubmitted: 100,
       roles: ProjectRole.ProjectManager,
       forecastLastModifiedDate: null,
       claimsWithParticipant: 20,
