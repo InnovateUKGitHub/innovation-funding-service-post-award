@@ -3,7 +3,7 @@ import { UploadClaimDocumentCommand } from "@server/features/documents/uploadCla
 import { AllClaimsDashboardParams, AllClaimsDashboardRoute } from "@ui/containers";
 import { DocumentUploadDtoValidator } from "@ui/validators/documentUploadValidator";
 import { IContext, ILinkInfo } from "@framework/types";
-import { FormHandlerBase, IFormBody, IFormButton } from "../formHandlerBase";
+import { IFormBody, IFormButton, SingleFileFormHandlerBase } from "../formHandlerBase";
 import { upload } from "../memoryStorage";
 import { Configuration } from "@server/features/common";
 
@@ -12,9 +12,9 @@ interface Data extends DocumentUploadDto {
   periodId: number;
 }
 
-export class AllClaimDashboardDocumentUploadHandler extends FormHandlerBase<AllClaimsDashboardParams, Data, DocumentUploadDtoValidator> {
+export class AllClaimDashboardDocumentUploadHandler extends SingleFileFormHandlerBase<AllClaimsDashboardParams, Data, DocumentUploadDtoValidator> {
   constructor() {
-    super(AllClaimsDashboardRoute, ["upload"], [upload.single("attachment")]);
+    super(AllClaimsDashboardRoute, ["upload"]);
   }
 
   protected async getDto(context: IContext, params: AllClaimsDashboardParams, button: IFormButton, body: IFormBody, file: IFileWrapper): Promise<Data> {

@@ -37,6 +37,7 @@ export class RadioList extends BaseInput<RadioListProps, {}> {
           onChange={e => this.onChange(item)}
           checked={selected}
           aria-checked={selected}
+          disabled={this.props.disabled}
         />
         <label className="govuk-label govuk-radios__label" htmlFor={`${this.props.name}_${item.id}`}>{item.value}</label>
       </div>

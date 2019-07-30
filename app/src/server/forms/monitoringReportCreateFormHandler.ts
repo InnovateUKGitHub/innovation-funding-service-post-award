@@ -1,4 +1,4 @@
-import { FormHandlerBase, IFormBody, IFormButton } from "@server/forms/formHandlerBase";
+import { IFormBody, IFormButton, StandardFormHandlerBase } from "@server/forms/formHandlerBase";
 import { CreateMonitoringReportCommand, GetMonitoringReportActiveQuestions } from "@server/features/monitoringReports";
 import { MonitoringReportCreateParams, MonitoringReportCreateRoute, MonitoringReportDashboardRoute } from "@ui/containers/monitoringReports";
 import { getMonitoringReportEditor } from "@ui/redux/selectors";
@@ -7,7 +7,7 @@ import { MonitoringReportStatus } from "@framework/constants";
 import { MonitoringReportDto } from "@framework/dtos";
 import { IContext, ILinkInfo } from "@framework/types";
 
-export class MonitoringReportCreateFormHandler extends FormHandlerBase<MonitoringReportCreateParams, MonitoringReportDto, MonitoringReportDtoValidator> {
+export class MonitoringReportCreateFormHandler extends StandardFormHandlerBase<MonitoringReportCreateParams, MonitoringReportDto, MonitoringReportDtoValidator> {
   constructor() {
     super(MonitoringReportCreateRoute, [ "save-draft", "save-submitted"]);
   }

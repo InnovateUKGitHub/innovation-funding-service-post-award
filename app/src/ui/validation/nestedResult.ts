@@ -2,12 +2,12 @@ import { Results } from "./results";
 import { Result } from "./result";
 
 export class NestedResult<T extends Results<{}>> extends Result {
-    constructor(parentResults: Results<{}>, public readonly results: T[], isRequired: boolean, emptyMessage: string, summaryMessage: string | undefined) {
+    constructor(parentResults: Results<{}>, public readonly results: T[], public summaryValidaion: Result | undefined, isRequired: boolean, emptyMessage: string, summaryMessage: string | undefined) {
         super(
             parentResults,
             parentResults.showValidationErrors,
-            results && results.length ? results.every(x => x.isValid) : !isRequired,
-            results && results.length ? summaryMessage || "Validation failed" : emptyMessage,
+            summaryValidaion && !summaryValidaion.isValid ? false : results && results.length ? results.every(x => x.isValid) : !isRequired,
+            summaryValidaion && !summaryValidaion.isValid ? summaryValidaion.errorMessage : results && results.length ? summaryMessage || "Validation failed" : emptyMessage,
             results.some(x => x.isRequired)
         );
     }
