@@ -1,4 +1,4 @@
-import { FormHandlerBase, IFormBody, IFormButton } from "./formHandlerBase";
+import { IFormBody, IFormButton, StandardFormHandlerBase } from "./formHandlerBase";
 import { AllClaimsDashboardRoute, ReviewClaimParams, ReviewClaimRoute, } from "../../ui/containers";
 import { ClaimDto, ClaimStatus } from "@framework/types";
 import { GetClaim, UpdateClaimCommand } from "../features/claims";
@@ -8,7 +8,7 @@ import { Results } from "../../ui/validation/results";
 import { ILinkInfo } from "@framework/types/ILinkInfo";
 import { IContext } from "@framework/types/IContext";
 
-export class ReviewClaimFormHandler extends FormHandlerBase<ReviewClaimParams, ClaimDto, ClaimDtoValidator> {
+export class ReviewClaimFormHandler extends StandardFormHandlerBase<ReviewClaimParams, ClaimDto, ClaimDtoValidator> {
     constructor() {
         super(ReviewClaimRoute, ["default"]);
     }

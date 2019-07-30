@@ -6,6 +6,7 @@ import { IAppError, ISessionUser } from "@framework/types";
 import { NotFoundError } from "@server/features/common/appError";
 import { errorHandlerApi } from "@server/errorHandlers";
 import { isArray } from "util";
+import { Configuration } from "@server/features/common";
 
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
@@ -91,7 +92,7 @@ export abstract class ControllerBaseWithSummary<TSummaryDto, TDto> {
       return { ...p, documents };
     };
 
-    this.router.post(path, upload.array("attachment", 10), this.executeMethod(201, wrappedGetParams, run, false));
+    this.router.post(path, upload.array("attachment", Configuration.maxUploadFileCount), this.executeMethod(201, wrappedGetParams, run, false));
   }
 
   protected putItem<TParams>(path: string, getParams: GetParams<TParams>, run: Run<TParams, TDto | null>) {

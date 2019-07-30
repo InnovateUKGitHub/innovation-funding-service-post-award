@@ -20,7 +20,6 @@ export const getMonitoringReportStatusChanges = (reportId: string) => {
 
 export const getMonitoringReportEditor = (projectId: string, id?: string) => editorStoreHelper<MonitoringReportDto, MonitoringReportDtoValidator>(
   "monitoringReport",
-  x => x.monitoringReport,
   (store) => {
     if (id) {
       return getMonitoringReport(projectId, id).getPending(store);

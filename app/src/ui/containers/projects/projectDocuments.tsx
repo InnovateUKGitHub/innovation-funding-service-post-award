@@ -6,7 +6,7 @@ import * as ACC from "../../components";
 import * as Selectors from "../../redux/selectors";
 import * as Actions from "../../redux/actions";
 import { IEditorStore } from "../../redux";
-import { DocumentUploadDtoValidator } from "../../validators/documentUploadValidator";
+import { MultipleDocumentUpdloadDtoValidator } from "../../validators/documentUploadValidator";
 import { getFileSize } from "@framework/util";
 
 export interface ProjectDocumentPageParams {
@@ -17,7 +17,7 @@ interface Data {
   project: Pending<ProjectDto>;
   partners: Pending<PartnerDto[]>;
   documents: Pending<DocumentSummaryDto[]>;
-  editor: Pending<IEditorStore<DocumentUploadDto, DocumentUploadDtoValidator>>;
+  editor: Pending<IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>>;
   maxFileSize: number;
   isClient: boolean;
   features: IFeatureFlags;
@@ -27,13 +27,13 @@ interface CombinedData {
   project: ProjectDto;
   partners: PartnerDto[];
   documents: DocumentSummaryDto[];
-  editor: IEditorStore<DocumentUploadDto, DocumentUploadDtoValidator>;
+  editor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>;
 }
 
 interface Callbacks {
   clearMessage: () => void;
-  validate: (projectId: string, dto: DocumentUploadDto) => void;
-  uploadFile: (projectId: string, dto: DocumentUploadDto) => void;
+  validate: (projectId: string, dto: MultipleDocumentUploadDto) => void;
+  uploadFile: (projectId: string, dto: MultipleDocumentUploadDto) => void;
 }
 
 interface State {
@@ -60,13 +60,13 @@ class ProjectDocumentsComponent extends ContainerBaseWithState<ProjectDocumentPa
     return <ACC.PageLoader pending={combined} render={x => this.renderContents(x)} />;
   }
 
-  private onFileChange(projectId: string, dto: { file: IFileWrapper | null }) {
+  private onFileChange(projectId: string, dto: MultipleDocumentUploadDto) {
     this.props.clearMessage();
     this.props.validate(projectId, dto);
   }
 
   private renderContents({ project, partners, documents, editor }: CombinedData) {
-    const UploadForm = ACC.TypedForm<{ file: IFileWrapper | null }>();
+    const UploadForm = ACC.TypedForm<MultipleDocumentUploadDto>();
 
     return (
       <ACC.Page
@@ -95,13 +95,13 @@ class ProjectDocumentsComponent extends ContainerBaseWithState<ProjectDocumentPa
                   <li>given a unique file name that describes its contents</li>
                 </ul>
               </ACC.Info>
-              <UploadForm.FileUpload
+              <UploadForm.MulipleFileUpload
                 label="Upload documents"
                 name="attachment"
                 labelHidden={true}
-                value={data => data.file}
-                update={(dto, file) => dto.file = file}
-                validation={editor.validator.file}
+                value={data => data.files}
+                update={(dto, files) => dto.files = files || []}
+                validation={editor.validator.files}
               />
             </UploadForm.Fieldset>
             <UploadForm.Submit styling="Secondary">Upload</UploadForm.Submit>
@@ -112,11 +112,11 @@ class ProjectDocumentsComponent extends ContainerBaseWithState<ProjectDocumentPa
     );
   }
 
-  renderDocumentName(document: DocumentSummaryDto) {
+  private renderDocumentName(document: DocumentSummaryDto) {
     return <a target={"_blank"} href={document.link}>{document.fileName}</a>;
   }
 
-  renderDocumentsSection(documents: DocumentSummaryDto[]) {
+  private renderDocumentsSection(documents: DocumentSummaryDto[]) {
     const filterText = this.state.filterBoxText;
     const documentsToDisplay = filterText
       ? documents.filter(document => {
@@ -179,7 +179,7 @@ const ProjectDocuments = container.connect({
     project: Selectors.getProject(props.projectId).getPending(state),
     partners: Selectors.findPartnersByProject(props.projectId).getPending(state),
     documents: Selectors.getProjectDocuments(props.projectId).getPending(state),
-    editor: Selectors.getProjectDocumentEditor(props.projectId, state.config.maxFileSize).get(state),
+    editor: Selectors.getProjectDocumentEditor(props.projectId, state.config).get(state),
     maxFileSize: Selectors.getMaxFileSize(state),
     isClient: state.isClient,
     features: state.config.features
@@ -187,8 +187,10 @@ const ProjectDocuments = container.connect({
   withCallbacks: (dispatch) => ({
     clearMessage: () => dispatch(Actions.removeMessages()),
     validate: (projectId, dto) => dispatch(Actions.updateProjectDocumentEditor(projectId, dto)),
-    uploadFile: (projectId, dto) => dispatch(Actions.uploadProjectDocument(projectId, dto,
-      () => dispatch(Actions.loadProjectDocuments(projectId)), "Your document has been uploaded."))
+    uploadFile: (projectId, dto) => {
+      const successMessage = dto.files.length === 1 ? `Your document has been uploaded.` : `${dto.files.length} documents have been uploaded.`;
+      dispatch(Actions.uploadProjectDocument(projectId, dto, () => dispatch(Actions.loadProjectDocuments(projectId)), successMessage));
+    }
   })
 });
 
