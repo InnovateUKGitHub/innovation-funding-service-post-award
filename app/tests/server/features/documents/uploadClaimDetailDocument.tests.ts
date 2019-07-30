@@ -24,9 +24,9 @@ describe("UploadClaimDetailDocumentCommand", () => {
 
     const file = context.testData.createFile(expectedContent, expectedFileName);
 
-    const command = new UploadClaimDetailDocumentCommand(claimDetailKey, { file });
+    const command = new UploadClaimDetailDocumentCommand(claimDetailKey, { files : [file] });
     const documentId = await context.runCommand(command);
-    const document = await context.repositories.documents.getDocumentMetadata(documentId);
+    const document = await context.repositories.documents.getDocumentMetadata(documentId[0]);
 
     expect(document.VersionData).toEqual(file.content);
     expect(document.PathOnClient).toEqual(file.fileName);
@@ -92,7 +92,7 @@ describe("UploadClaimDetailDocumentCommand", () => {
 
       const file = context.testData.createFile();
 
-      const command = new UploadClaimDetailDocumentCommand(claimDetailKey, { file });
+      const command = new UploadClaimDetailDocumentCommand(claimDetailKey, { files: [file] });
 
       return { command, project, claimDto, context };
     };

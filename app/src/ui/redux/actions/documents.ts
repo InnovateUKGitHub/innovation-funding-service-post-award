@@ -102,7 +102,7 @@ export function uploadClaimDetailDocument(claimDetailKey: ClaimDetailKey, dto: D
     dispatch(Actions.dataLoadAction(docsSelector.key, docsSelector.store, LoadingStatus.Stale, undefined));
 
     // tslint:disable: no-identical-functions
-    return ApiClient.documents.uploadClaimDetailDocument({ claimDetailKey, document: dto, user: state.user })
+    return ApiClient.documents.uploadClaimDetailDocuments({ claimDetailKey, documents: {files: [dto.file!], description: dto.description}, user: state.user })
       .then(() => {
         dispatch(Actions.handleEditorSuccess(selector.key, selector.store));
         dispatch(Actions.messageSuccess(message));
