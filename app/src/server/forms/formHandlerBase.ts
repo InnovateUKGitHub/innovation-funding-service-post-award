@@ -123,7 +123,7 @@ export abstract class SingleFileFormHandlerBase<TParams, TDto, TValidation exten
 }
 
 export abstract class MultipleFileFormHandlerBase<TParams, TDto, TValidation extends Results<{}>> extends FormHandlerBase<TParams, TDto, TValidation> {
-  public readonly middleware = [upload.array("attachment", Configuration.maxUploadFileCount)];
+  public readonly middleware = [upload.array("attachment")];
 
   protected async createDto(context: IContext, params: TParams, button: IFormButton, body: IFormBody, req: express.Request): Promise<TDto> {
     const files: IFileWrapper[] = isArray(req.files) ? req.files.map(x => new ServerFileWrapper(x)) : [];

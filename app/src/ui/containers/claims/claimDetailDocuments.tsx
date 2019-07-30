@@ -8,7 +8,7 @@ import * as Selectors from "@ui/redux/selectors";
 import { ProjectDto, ProjectRole } from "@framework/types";
 import { getFileSize } from "@framework/util";
 import { IEditorStore } from "@ui/redux/reducers";
-import { DocumentUploadDtoValidator } from "@ui/validators/documentUploadValidator";
+import { MultipleDocumentUpdloadDtoValidator } from "@ui/validators/documentUploadValidator";
 import { Results } from "@ui/validation/results";
 
 export interface ClaimDetailDocumentsPageParams {
@@ -23,7 +23,7 @@ interface Data {
   maxFileSize: number;
   costCategories: Pending<CostCategoryDto[]>;
   documents: Pending<DocumentSummaryDto[]>;
-  editor: Pending<IEditorStore<DocumentUploadDto, DocumentUploadDtoValidator>>;
+  editor: Pending<IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>>;
   deleteEditor: Pending<IEditorStore<DocumentSummaryDto[], Results<DocumentSummaryDto[]>>>;
 }
 
@@ -31,13 +31,13 @@ interface CombinedData {
   project: ProjectDto;
   costCategories: CostCategoryDto[];
   documents: DocumentSummaryDto[];
-  editor: IEditorStore<DocumentUploadDto, DocumentUploadDtoValidator>;
+  editor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>;
   deleteEditor: IEditorStore<DocumentSummaryDto[], Results<DocumentSummaryDto[]>>;
 }
 
 interface Callbacks {
-  validate: (key: ClaimDetailKey, dto: DocumentUploadDto) => void;
-  uploadFile: (key: ClaimDetailKey, dto: DocumentUploadDto) => void;
+  validate: (key: ClaimDetailKey, dto: MultipleDocumentUploadDto) => void;
+  uploadFile: (key: ClaimDetailKey, dto: MultipleDocumentUploadDto) => void;
   deleteFile: (key: ClaimDetailKey, dto: DocumentSummaryDto) => void;
   clearMessage: () => void;
 }
@@ -56,7 +56,7 @@ export class ClaimDetailDocumentsComponent extends ContainerBase<ClaimDetailDocu
     return <ACC.PageLoader pending={combined} render={(data) => this.renderContents(data)} />;
   }
 
-  private onChange(dto: DocumentUploadDto) {
+  private onChange(dto: MultipleDocumentUploadDto) {
     const key = {
       projectId: this.props.projectId,
       partnerId: this.props.partnerId,
@@ -67,7 +67,7 @@ export class ClaimDetailDocumentsComponent extends ContainerBase<ClaimDetailDocu
     this.props.validate(key, dto);
   }
 
-  private onSave(dto: DocumentUploadDto) {
+  private onSave(dto: MultipleDocumentUploadDto) {
     const claimDetailKey = {
       projectId: this.props.projectId,
       partnerId: this.props.partnerId,
@@ -107,7 +107,7 @@ export class ClaimDetailDocumentsComponent extends ContainerBase<ClaimDetailDocu
       costCategoryId: this.props.costCategoryId
     });
     const costCategory = costCategories.find(x => x.id === this.props.costCategoryId)! || {};
-    const UploadForm = ACC.TypedForm<{file: IFileWrapper | null }>();
+    const UploadForm = ACC.TypedForm<MultipleDocumentUploadDto>();
 
     return (
       <ACC.Page
@@ -136,13 +136,13 @@ export class ClaimDetailDocumentsComponent extends ContainerBase<ClaimDetailDocu
                   <li>given a unique file name that describes its contents</li>
                 </ul>
               </ACC.Info>
-              <UploadForm.FileUpload
+              <UploadForm.MulipleFileUpload
                 label="Upload documents"
                 labelHidden={true}
                 name="attachment"
-                validation={editor.validator.file}
-                value={(data) => data.file}
-                update={(dto, file) => dto.file = file}
+                validation={editor.validator.files}
+                value={(data) => data.files}
+                update={(dto, files) => dto.files = files || []}
               />
             </UploadForm.Fieldset>
             <UploadForm.Submit>Upload documents</UploadForm.Submit>
@@ -162,7 +162,7 @@ export const ClaimDetailDocuments = definition.connect({
       maxFileSize: Selectors.getMaxFileSize(state),
       costCategories: Selectors.getCostCategories().getPending(state),
       documents: Selectors.getClaimDetailDocuments(props.partnerId, props.periodId, props.costCategoryId).getPending(state),
-      editor: Selectors.getClaimDetailDocumentEditor({projectId: props.projectId, partnerId: props.partnerId, periodId: props.periodId, costCategoryId: props.costCategoryId}, state.config.maxFileSize).get(state),
+      editor: Selectors.getClaimDetailDocumentEditor({projectId: props.projectId, partnerId: props.partnerId, periodId: props.periodId, costCategoryId: props.costCategoryId}, state.config).get(state),
       deleteEditor: Selectors.getClaimDetailDocumentDeleteEditor(state, {projectId: props.projectId, partnerId: props.partnerId, periodId: props.periodId, costCategoryId: props.costCategoryId}).get(state),
     };
   },
