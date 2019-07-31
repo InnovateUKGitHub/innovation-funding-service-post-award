@@ -172,12 +172,14 @@ export const ClaimDetailDocuments = definition.connect({
       dispatch(Actions.updateClaimDetailDocumentEditor(claimDetailKey, dto)),
     deleteFile: (claimDetailKey, dto) =>
       dispatch(Actions.deleteClaimDetailDocument(claimDetailKey, dto, () =>
-        dispatch(Actions.loadClaimDetailDocuments(claimDetailKey.projectId, claimDetailKey.partnerId, claimDetailKey.periodId, claimDetailKey.costCategoryId)))),
-    uploadFile: (claimDetailKey, file) =>
-      dispatch(Actions.uploadClaimDetailDocument(claimDetailKey, file, () =>
-        dispatch(Actions.loadClaimDetailDocuments(claimDetailKey.projectId, claimDetailKey.partnerId, claimDetailKey.periodId, claimDetailKey.costCategoryId)),
-          "Your document has been uploaded."))
-  })
+        dispatch(Actions.loadClaimDetailDocuments(claimDetailKey)))),
+    uploadFile: (claimDetailKey, dto) => {
+      const successMessage = dto.files.length === 1 ? `Your document has been uploaded.` : `${dto.files.length} documents have been uploaded.`;
+      dispatch(Actions.uploadClaimDetailDocument(claimDetailKey, dto,
+        () => dispatch(Actions.loadClaimDetailDocuments(claimDetailKey)),
+        successMessage));
+      }
+    })
 });
 
 export const ClaimDetailDocumentsRoute = definition.route({
@@ -192,7 +194,7 @@ export const ClaimDetailDocumentsRoute = definition.route({
   getLoadDataActions: (params) => [
     Actions.loadCostCategories(),
     Actions.loadProject(params.projectId),
-    Actions.loadClaimDetailDocuments(params.projectId, params.partnerId, params.periodId, params.costCategoryId)
+    Actions.loadClaimDetailDocuments({projectId: params.projectId, partnerId: params.partnerId, periodId: params.periodId, costCategoryId: params.costCategoryId})
   ],
   accessControl: (auth, {projectId, partnerId}) => auth.forPartner(projectId, partnerId).hasRole(ProjectRole.FinancialContact),
   getTitle: (store, params) => {
