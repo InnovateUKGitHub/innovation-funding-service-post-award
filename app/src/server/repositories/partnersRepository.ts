@@ -25,7 +25,7 @@ export interface ISalesforcePartner {
   Acc_Cap_Limit__c: number;
   Acc_Award_Rate__c: number;
   Acc_TotalPaidCosts__c: number;
-  Acc_TotalFutureForecastsforParticipant__c: number;
+  Acc_TotalFutureForecastsForParticipant__c: number;
   Acc_ForecastLastModifiedDate__c: string;
   Acc_ClaimsForReview__c: number;
   Acc_ClaimsOverdue__c: number;
@@ -61,7 +61,7 @@ export class PartnerRepository extends SalesforceRepositoryBase<ISalesforcePartn
     "Acc_ProjectId__r.Id",
     "Acc_ProjectId__r.Acc_CompetitionType__c",
     "Acc_TotalPaidCosts__c",
-    "Acc_TotalFutureForecastsforParticipant__c",
+    "Acc_TotalFutureForecastsForParticipant__c",
     "Acc_ForecastLastModifiedDate__c",
     "Acc_ClaimsForReview__c",
     "Acc_ClaimsOverdue__c",
