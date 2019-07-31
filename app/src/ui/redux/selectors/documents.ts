@@ -23,10 +23,10 @@ export const getProjectDocumentEditor = (projectId: string, config: { maxFileSiz
   getKey("project", projectId)
 );
 
-export const getClaimDetailDocumentEditor = ({ partnerId, periodId, costCategoryId }: ClaimDetailKey, maxFileSize: number) => editorStoreHelper<DocumentUploadDto, DocumentUploadDtoValidator>(
-  documentStore,
-  () => Pending.done({ file: null }),
-  (dto) => Pending.done(new DocumentUploadDtoValidator(dto, maxFileSize, false)),
+export const getClaimDetailDocumentEditor = ({ partnerId, periodId, costCategoryId }: ClaimDetailKey, config: { maxFileSize: number, maxUploadFileCount: number }) => editorStoreHelper<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>(
+  "multipleDocuments",
+  () => Pending.done({ files: [] }),
+  (dto) => Pending.done(new MultipleDocumentUpdloadDtoValidator(dto, config, false)),
   getKey("claim", "details", partnerId, periodId, costCategoryId)
 );
 

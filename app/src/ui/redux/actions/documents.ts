@@ -10,10 +10,10 @@ import { getProjectDocuments } from "@ui/redux/selectors";
 
 type uploadProjectDocumentActions = Actions.AsyncThunk<void, Actions.DataLoadAction | Actions.EditorAction | Actions.messageSuccess>;
 
-export function loadClaimDetailDocuments(projectId: string, partnerId: string, periodId: number, costCategoryId: string) {
+export function loadClaimDetailDocuments(claimDetailKey: ClaimDetailKey) {
   return Actions.conditionalLoad(
-    Selectors.getClaimDetailDocuments(partnerId, periodId, costCategoryId),
-    params => ApiClient.documents.getClaimDetailDocuments({ claimDetailKey: {projectId, partnerId, periodId, costCategoryId}, ...params})
+    Selectors.getClaimDetailDocuments(claimDetailKey.partnerId, claimDetailKey.periodId, claimDetailKey.costCategoryId),
+    params => ApiClient.documents.getClaimDetailDocuments({ claimDetailKey, ...params})
   );
 }
 
@@ -62,6 +62,7 @@ export function uploadProjectDocument(projectId: string, dto: MultipleDocumentUp
         dispatch(Actions.dataLoadAction(dataStoreSelector.key, dataStoreSelector.store, LoadingStatus.Stale, undefined));
         dispatch(Actions.handleEditorSuccess(selector.key, selector.store));
         dispatch(Actions.messageSuccess(message));
+        scrollToTheTopSmoothly();
         onComplete();
       })
       .catch(e => {
@@ -71,25 +72,25 @@ export function uploadProjectDocument(projectId: string, dto: MultipleDocumentUp
 }
 
 // update editor with validation
-export function updateClaimDetailDocumentEditor(claimDetailKey: ClaimDetailKey, dto: DocumentUploadDto, showErrors?: boolean): Actions.SyncThunk<Results<DocumentUploadDto>, Actions.UpdateEditorAction> {
+export function updateClaimDetailDocumentEditor(claimDetailKey: ClaimDetailKey, dto: MultipleDocumentUploadDto, showErrors?: boolean): Actions.SyncThunk<Results<MultipleDocumentUploadDto>, Actions.UpdateEditorAction> {
   return (dispatch, getState) => {
     const state = getState();
-    const selector = Selectors.getClaimDetailDocumentEditor(claimDetailKey, state.config.maxFileSize);
+    const selector = Selectors.getClaimDetailDocumentEditor(claimDetailKey, state.config);
     if (showErrors === null || showErrors === undefined) {
       const current = state.editors[selector.store][selector.key];
       showErrors = current && current.validator.showValidationErrors || false;
     }
-    const validator = new DocumentUploadDtoValidator(dto, state.config.maxFileSize, showErrors);
+    const validator = new MultipleDocumentUpdloadDtoValidator(dto, state.config, showErrors);
     dispatch(Actions.updateEditorAction(selector.key, selector.store, dto, validator));
     return validator;
   };
 }
 
-export function uploadClaimDetailDocument(claimDetailKey: ClaimDetailKey, dto: DocumentUploadDto, onComplete: () => void, message: string
+export function uploadClaimDetailDocument(claimDetailKey: ClaimDetailKey, dto: MultipleDocumentUploadDto, onComplete: () => void, message: string
 ): uploadProjectDocumentActions {
   return (dispatch, getState) => {
     const state = getState();
-    const selector = Selectors.getClaimDetailDocumentEditor(claimDetailKey, state.config.maxFileSize);
+    const selector = Selectors.getClaimDetailDocumentEditor(claimDetailKey, state.config);
     const docsSelector = Selectors.getClaimDetailDocuments(claimDetailKey.partnerId, claimDetailKey.periodId, claimDetailKey.costCategoryId);
     const validation = updateClaimDetailDocumentEditor(claimDetailKey, dto, true)(dispatch, getState, null);
 
@@ -99,13 +100,14 @@ export function uploadClaimDetailDocument(claimDetailKey: ClaimDetailKey, dto: D
     }
 
     dispatch(Actions.handleEditorSubmit(selector.key, selector.store, dto, validation));
-    dispatch(Actions.dataLoadAction(docsSelector.key, docsSelector.store, LoadingStatus.Stale, undefined));
 
     // tslint:disable: no-identical-functions
-    return ApiClient.documents.uploadClaimDetailDocuments({ claimDetailKey, documents: {files: [dto.file!], description: dto.description}, user: state.user })
+    return ApiClient.documents.uploadClaimDetailDocuments({ claimDetailKey, documents: dto, user: state.user })
       .then(() => {
+        dispatch(Actions.dataLoadAction(docsSelector.key, docsSelector.store, LoadingStatus.Stale, undefined));
         dispatch(Actions.handleEditorSuccess(selector.key, selector.store));
         dispatch(Actions.messageSuccess(message));
+        scrollToTheTopSmoothly();
         onComplete();
       }).catch((e: any) => {
         dispatch(Actions.handleEditorError({ id: selector.key, store: selector.store, dto, validation, error: e }));
