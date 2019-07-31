@@ -10,10 +10,10 @@ import { getProjectDocuments } from "@ui/redux/selectors";
 
 type uploadProjectDocumentActions = Actions.AsyncThunk<void, Actions.DataLoadAction | Actions.EditorAction | Actions.messageSuccess>;
 
-export function loadClaimDetailDocuments(projectId: string, partnerId: string, periodId: number, costCategoryId: string) {
+export function loadClaimDetailDocuments(claimDetailKey: ClaimDetailKey) {
   return Actions.conditionalLoad(
-    Selectors.getClaimDetailDocuments(partnerId, periodId, costCategoryId),
-    params => ApiClient.documents.getClaimDetailDocuments({ claimDetailKey: {projectId, partnerId, periodId, costCategoryId}, ...params})
+    Selectors.getClaimDetailDocuments(claimDetailKey.partnerId, claimDetailKey.periodId, claimDetailKey.costCategoryId),
+    params => ApiClient.documents.getClaimDetailDocuments({ claimDetailKey, ...params})
   );
 }
 
@@ -62,6 +62,7 @@ export function uploadProjectDocument(projectId: string, dto: MultipleDocumentUp
         dispatch(Actions.dataLoadAction(dataStoreSelector.key, dataStoreSelector.store, LoadingStatus.Stale, undefined));
         dispatch(Actions.handleEditorSuccess(selector.key, selector.store));
         dispatch(Actions.messageSuccess(message));
+        scrollToTheTopSmoothly();
         onComplete();
       })
       .catch(e => {
@@ -106,6 +107,7 @@ export function uploadClaimDetailDocument(claimDetailKey: ClaimDetailKey, dto: M
         dispatch(Actions.dataLoadAction(docsSelector.key, docsSelector.store, LoadingStatus.Stale, undefined));
         dispatch(Actions.handleEditorSuccess(selector.key, selector.store));
         dispatch(Actions.messageSuccess(message));
+        scrollToTheTopSmoothly();
         onComplete();
       }).catch((e: any) => {
         dispatch(Actions.handleEditorError({ id: selector.key, store: selector.store, dto, validation, error: e }));
