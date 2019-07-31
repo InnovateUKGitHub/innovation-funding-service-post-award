@@ -32,6 +32,33 @@ describe("UploadClaimDetailDocumentCommand", () => {
     expect(document.PathOnClient).toEqual(file.fileName);
   });
 
+  it("should upload multiple documents", async () => {
+    const context = new TestContext();
+    const costCat = context.testData.createCostCategory();
+    const project = context.testData.createProject();
+    const partner = context.testData.createPartner();
+    const claimDetail = context.testData.createClaimDetail(project, costCat, partner, 1);
+
+    const claimDetailKey = {
+      projectId: project.Id,
+      partnerId: claimDetail.Acc_ProjectParticipant__r.Id,
+      periodId: claimDetail.Acc_ProjectPeriodNumber__c,
+      costCategoryId: claimDetail.Acc_CostCategory__c,
+    };
+
+    const files = context.testData.range(3, () => context.testData.createFile());
+
+    const command = new UploadClaimDetailDocumentCommand(claimDetailKey, { files });
+    const documentIds = await context.runCommand(command);
+
+    expect(documentIds.length).toBe(3);
+
+    // check stored docs
+    const documents = await context.repositories.documents.Items.map(x => x[1]);
+    expect(documents.map(x => x.VersionData)).toEqual(files.map(x => x.content));
+    expect(documents.map(x => x.PathOnClient)).toEqual(files.map(x => x.fileName));
+  });
+
   test("invalid filename should throw a validation exception", async () => {
     const context = new TestContext();
     const costCat = context.testData.createCostCategory();
@@ -46,12 +73,10 @@ describe("UploadClaimDetailDocumentCommand", () => {
       costCategoryId: claimDetail.Acc_CostCategory__c,
     };
 
-    const file = {
-      fileName: undefined,
-      content: "Some content2",
-    };
+    const file = context.testData.createFile();
+    file.fileName = "";
 
-    const command = new UploadClaimDetailDocumentCommand(claimDetailKey, file as any);
+    const command = new UploadClaimDetailDocumentCommand(claimDetailKey, {files: [file]});
     await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
   });
 
@@ -59,17 +84,15 @@ describe("UploadClaimDetailDocumentCommand", () => {
     const context = new TestContext();
 
     const claimDetailKey = {
+      projectId: "",
       partnerId: "",
-      periodId: "",
+      periodId: NaN,
       costCategoryId: ""
     };
 
-    const file = {
-      fileName: "undefined.txt",
-      content: "Some content3",
-    };
+    const file = context.testData.createFile();
 
-    const command = new UploadClaimDetailDocumentCommand(claimDetailKey as any, file as any);
+    const command = new UploadClaimDetailDocumentCommand(claimDetailKey, {files: [file]});
     await expect(context.runCommand(command)).rejects.toThrow(BadRequestError);
   });
 
