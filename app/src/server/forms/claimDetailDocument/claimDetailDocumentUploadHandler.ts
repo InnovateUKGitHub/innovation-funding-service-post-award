@@ -22,7 +22,7 @@ export class ClaimDetailDocumentUploadHandler extends SingleFileFormHandlerBase<
     protected async run(context: IContext, params: ClaimDetailDocumentsPageParams, button: IFormButton, dto: DocumentUploadDto): Promise<ILinkInfo> {
         const claimDetailKey = { projectId: params.projectId, partnerId: params.partnerId, periodId: params.periodId, costCategoryId: params.costCategoryId };
 
-        await context.runCommand(new UploadClaimDetailDocumentCommand(claimDetailKey, dto));
+        await context.runCommand(new UploadClaimDetailDocumentCommand(claimDetailKey, {files: [dto.file!], description: dto.description }));
 
         return ClaimDetailDocumentsRoute.getLink(params);
     }

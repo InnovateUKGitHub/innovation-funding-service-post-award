@@ -1,17 +1,17 @@
 import { BadRequestError, CommandBase, ValidationError } from "@server/features/common";
-import { DocumentUploadDtoValidator } from "@ui/validators/documentUploadValidator";
+import { DocumentUploadDtoValidator, MultipleDocumentUpdloadDtoValidator } from "@ui/validators/documentUploadValidator";
 import { Authorisation, IContext, ProjectRole } from "@framework/types";
 
-export class UploadClaimDetailDocumentCommand extends CommandBase<string> {
+export class UploadClaimDetailDocumentCommand extends CommandBase<string[]> {
   constructor(
     private readonly claimDetailKey: ClaimDetailKey,
-    private readonly document: DocumentUploadDto
+    private readonly documents: MultipleDocumentUploadDto
     ) {
     super();
   }
 
   protected LogMessage() {
-    return ["UploadClaimDetailDocumentCommand", this.claimDetailKey, this.document && this.document.file && this.document.file.fileName];
+    return ["UploadClaimDetailDocumentCommand", this.claimDetailKey, this.documents && this.documents.files && this.documents.files.map(x => x.fileName)];
   }
 
   protected async accessControl(auth: Authorisation) {
@@ -25,11 +25,18 @@ export class UploadClaimDetailDocumentCommand extends CommandBase<string> {
       throw new BadRequestError("No Claim Detail");
     }
 
-    const result = new DocumentUploadDtoValidator(this.document, context.config.maxFileSize, true);
+    const result = new MultipleDocumentUpdloadDtoValidator(this.documents, context.config, true);
     if (!result.isValid) {
       throw new ValidationError(result);
     }
 
-    return context.repositories.documents.insertDocument(this.document.file!, claimDetail.Id, this.document.description);
+    const results: string[] = [];
+
+    for (const document of this.documents.files.filter(x => x.fileName && x.size)) {
+      const id = await context.repositories.documents.insertDocument(document, claimDetail.Id, this.documents.description);
+      results.push(id);
+    }
+
+    return results;
   }
 }
