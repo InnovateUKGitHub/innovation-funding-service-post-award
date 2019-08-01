@@ -28,6 +28,7 @@ export interface PartnerDto {
   percentageParticipantCostsClaimed: number | null;
   capLimit: number | null;
   totalFutureForecastsForParticipants: number | null;
+  totalCostsSubmitted: number | null;
   roles: ProjectRole;
   forecastLastModifiedDate: Date | null;
   claimsOverdue: number | null;
