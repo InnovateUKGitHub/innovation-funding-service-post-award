@@ -3,7 +3,7 @@ import { DateTime } from "luxon";
 import * as Repositories from "@server/repositories";
 import * as Entites from "@framework/entities";
 import { range } from "@shared/range";
-import { ClaimStatus, IClientUser } from "@framework/types";
+import { ClaimStatus, IClientUser, ProjectRole } from "@framework/types";
 import { ITestRepositories } from "./testRepositories";
 
 export class TestData {
@@ -82,7 +82,7 @@ export class TestData {
     const seed = this.repositories.partners.Items.length + 1;
     project = project || this.createProject();
 
-    const newItem = {
+    const newItem: Repositories.ISalesforcePartner = {
       Id: `Partner${seed}`,
       Acc_AccountId__r: {
         Id: `AccountId${seed}`,
@@ -102,9 +102,16 @@ export class TestData {
       Acc_Award_Rate__c: 50,
       Acc_ForecastLastModifiedDate__c: "",
       Acc_OrganisationType__c: "Industrial",
-      Acc_OverheadRate__c: 20
-
-    } as Repositories.ISalesforcePartner;
+      Acc_OverheadRate__c: 20,
+      Acc_ClaimsForReview__c:0,
+      Acc_ClaimsOverdue__c:0,
+      Acc_ClaimsUnderQuery__c:0,
+      Acc_ProjectRole__c: "Unknown",
+      ProjectRoleName: "Unknown",
+      Acc_TotalCostsSubmitted__c: 0,
+      Acc_TotalFutureForecastsForParticipant__c: 0,
+      Acc_TrackingClaims__c: ""
+    };
 
     if (!!update) update(newItem);
 
