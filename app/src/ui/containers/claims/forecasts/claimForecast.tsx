@@ -57,7 +57,7 @@ class ClaimForecastComponent extends ContainerBase<ClaimForecastParams, PendingF
             onSubmit={() => this.saveAndReturn(combined, true, this.props.periodId, "You have submitted your claim for this period.")}
             qa="claim-forecast-form"
           >
-            <ACC.Claims.ForecastTable data={combined} />
+            <ACC.Claims.ForecastTable data={combined} isSubmitting={true} />
             <Form.Fieldset>
               <Form.Submit>Submit forecast and claim</Form.Submit>
               <ACC.Claims.ClaimLastModified partner={combined.partner} />
