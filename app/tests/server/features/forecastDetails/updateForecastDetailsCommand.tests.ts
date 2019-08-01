@@ -283,7 +283,6 @@ describe("UpdateForecastDetailsCommand", () => {
     const partner = testData.createPartner(project);
     const costCat = testData.createCostCategory();
     const profileDetail = testData.createProfileDetail(costCat, partner, periodId, x => x.Acc_LatestForecastCost__c = 123);
-    const partnerId = profileDetail.Acc_ProjectParticipant__c;
     const dto: ForecastDetailsDTO[] = [{
       periodId,
       id: profileDetail.Id,
@@ -295,8 +294,42 @@ describe("UpdateForecastDetailsCommand", () => {
     testData.createClaimDetail(project, costCat, partner, periodId - 1, x => x.Acc_PeriodCostCategoryTotal__c = 1000);
     testData.createProfileTotalCostCategory(costCat, partner, 1500);
 
-    const command = new UpdateForecastDetailsCommand(project.Id, partnerId, dto, false);
+    const command = new UpdateForecastDetailsCommand(project.Id, partner.Id, dto, false);
     await expect(context.runCommand(command)).rejects.toMatchObject(new BadRequestError("You can't update the forecast of approved periods."));
+  });
+
+  it("when updating forecast amd submitting for period equal to project period id, expect detail to be updated", async () => {
+    const context = new TestContext();
+    const testData = context.testData;
+
+    const projectPeriodId = 2;
+    const claimPeriodId = 1;
+    const startDate = DateTime.local().minus({ months: 1 }).set({day: 1});
+    const endDate = startDate.plus({ months: 6 });
+
+    const project = testData.createProject(x => {
+      x.Acc_ClaimFrequency__c = "Monthly";
+      x.Acc_StartDate__c = startDate.toFormat("yyyy-MM-dd");
+      x.Acc_EndDate__c = endDate.toFormat("yyyy-MM-dd");
+    });
+    const partner = testData.createPartner(project);
+    const costCat = testData.createCostCategory();
+    const previousProfileDetail = testData.createProfileDetail(costCat, partner, claimPeriodId, x => x.Acc_LatestForecastCost__c = 123);
+    const currentProfileDetail = testData.createProfileDetail(costCat, partner, projectPeriodId, x => x.Acc_LatestForecastCost__c = 123);
+
+    const dto: ForecastDetailsDTO[] = [
+      mapProfileValue(previousProfileDetail),
+      mapProfileValue(currentProfileDetail, 246)
+    ];
+
+    testData.createClaimDetail(project, costCat, partner, claimPeriodId, x => x.Acc_PeriodCostCategoryTotal__c = 123);
+    testData.createClaim(partner, claimPeriodId, x => x.Acc_ClaimStatus__c = ClaimStatus.DRAFT);
+    testData.createProfileTotalCostCategory(costCat, partner, 1500);
+
+    const command = new UpdateForecastDetailsCommand(project.Id, partner.Id, dto, true);
+    await context.runCommand(command);
+
+    expect(currentProfileDetail.Acc_LatestForecastCost__c).toEqual(246);
   });
 
   it("when project in period 2 and period 1 updated expect exception", async () => {
