@@ -25,6 +25,7 @@ interface Props {
   hideValidation?: boolean;
   data: ForecastData;
   onChange?: (data: ForecastDetailsDTO[]) => void;
+  isSubmitting?: boolean;
 }
 
 export class ForecastTable extends React.Component<Props> {
@@ -46,7 +47,7 @@ export class ForecastTable extends React.Component<Props> {
   }
 
   public render() {
-    const { data, hideValidation } = this.props;
+    const { data, hideValidation, isSubmitting } = this.props;
     // if there is no claim then we must be in period 1 ie, claim period 0
     const periodId  = !!data.claim ? Math.min(data.project.periodId, data.claim.periodId) : 0;
     const parsed    = this.parseClaimData(data, periodId, data.project.totalPeriods);
@@ -81,7 +82,7 @@ export class ForecastTable extends React.Component<Props> {
         {forecasts.map((p, i) => <Table.Custom
           key={p}
           header={intervals[p]}
-          value={(x, index) => this.renderForecastCell(x, p, index, data)}
+          value={(x, index) => this.renderForecastCell(x, parseInt(p, 10), index, data, isSubmitting || false)}
           cellClassName={() => "govuk-table__cell--numeric"}
           classSuffix="numeric"
           qa={"category-forecast" + i}
@@ -177,14 +178,14 @@ export class ForecastTable extends React.Component<Props> {
     return ACC.Renderers.CondensedDateRange({ start: details.periodStart, end: details.periodEnd });
   }
 
-  private renderForecastCell(forecastRow: TableRow, period: string, index: Index, data: ForecastData) {
+  private renderForecastCell(forecastRow: TableRow, periodId: number, index: Index, data: ForecastData, isSubmitting: boolean) {
     const editor = data.editor;
-    const value = forecastRow.forecasts[period];
+    const value = forecastRow.forecasts[periodId];
     const costCategory = data.costCategories.find(x => x.id === forecastRow.categoryId);
     const validator = forecastRow.validators[index.column - 1];
     const error = validator && validator.value;
 
-    if ((costCategory && costCategory.isCalculated) || !editor || parseInt(period, 10) <= data.project.periodId) {
+    if ((costCategory && costCategory.isCalculated) || !editor || periodId < data.project.periodId || (periodId === data.project.periodId && !isSubmitting)) {
       return <ACC.Renderers.Currency value={value} />;
     }
 
@@ -192,10 +193,10 @@ export class ForecastTable extends React.Component<Props> {
       <span>
         <ACC.Inputs.NumberInput
           id={error && !error.isValid ? error.key : ""}
-          name={`value_${period}_${forecastRow.categoryId}`}
+          name={`value_${periodId}_${forecastRow.categoryId}`}
           value={value}
-          ariaLabel={`${forecastRow.categoryName} Period ${period}`}
-          onChange={val => this.updateItem(editor.data, forecastRow.categoryId, period, dto => dto.value = val!)}
+          ariaLabel={`${forecastRow.categoryName} Period ${periodId}`}
+          onChange={val => this.updateItem(editor.data, forecastRow.categoryId, periodId, dto => dto.value = val!)}
           className="govuk-!-font-size-16"
           disabled={editor.status === EditorStatus.Saving}
         />
@@ -203,8 +204,8 @@ export class ForecastTable extends React.Component<Props> {
     );
   }
 
-  private updateItem(data: ForecastDetailsDTO[], categoryId: string, period: string, update: (item: ForecastDetailsDTO) => void) {
-    const item = data.find(x => x.costCategoryId === categoryId && x.periodId === parseInt(period, 10));
+  private updateItem(data: ForecastDetailsDTO[], categoryId: string, periodId: number, update: (item: ForecastDetailsDTO) => void) {
+    const item = data.find(x => x.costCategoryId === categoryId && x.periodId === periodId);
 
     if (!!item) {
       update(item);
