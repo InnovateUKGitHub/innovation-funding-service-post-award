@@ -23,14 +23,13 @@ export class UpdateForecastDetailsCommand extends CommandBase<boolean> {
   }
 
   protected async Run(context: IContext) {
-
     const project = await context.runQuery(new GetProjectById(this.projectId));
     const existing = await context.runQuery(new GetAllForecastsForPartnerQuery(this.partnerId));
 
     const preparedForecasts = await this.getPrepareForecastValues(context, project.periodId, existing);
 
     await this.testValidation(context);
-    await this.testPastForecastPeriodsHaveNotBeenUpdated(project.periodId, preparedForecasts, existing);
+    await this.testPastForecastPeriodsHaveNotBeenUpdated(project.periodId, preparedForecasts, existing, this.submit);
     await this.updateProfileDetails(context, preparedForecasts, existing);
 
     if (this.submit) {
@@ -90,11 +89,18 @@ export class UpdateForecastDetailsCommand extends CommandBase<boolean> {
     }
   }
 
-  private async testPastForecastPeriodsHaveNotBeenUpdated(periodId: number, forecasts: ForecastDetailsDTO[], existing: ForecastDetailsDTO[]) {
-    const passed = forecasts.filter(x => x.periodId <= periodId)
-      .every(x => !this.hasChanged(x, existing));
+  private async testPastForecastPeriodsHaveNotBeenUpdated(periodId: number, forecasts: ForecastDetailsDTO[], existing: ForecastDetailsDTO[], submit: boolean) {
+    const allUpdatesAllowed = forecasts.every(x => {
+      if (submit && x.periodId === periodId) {
+        return true;
+      }
+      if (x.periodId > periodId) {
+        return true;
+      }
+      return !this.hasChanged(x, existing);
+    });
 
-    if (!passed) {
+    if (!allUpdatesAllowed) {
       throw new BadRequestError("You can't update the forecast of approved periods.");
     }
   }
