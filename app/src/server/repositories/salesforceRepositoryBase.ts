@@ -194,7 +194,7 @@ export abstract class SalesforceRepositoryBaseWithMapping<TSalesforce, TEntity> 
       throw new Errors.SalesforceInvalidFilterError(`Salesforce filter error`);
     }
 
-    return e instanceof Error ? e : new Error(e.errorCode + ": " + e.message);
+    return e instanceof Error ? e : new Error(`${e.errorCode}: ${e.message}`);
   }
 }
 

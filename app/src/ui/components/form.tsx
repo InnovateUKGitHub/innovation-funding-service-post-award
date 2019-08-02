@@ -161,9 +161,8 @@ const handleChange = <TDto extends {}, TValue extends {}>(props: ExternalFieldPr
 };
 
 const StringField = <T extends {}>(props: ExternalFieldProps<T, string> & InternalFieldProps<T>) => {
-  const TypedFieldComponent = FieldComponent as { new(): FieldComponent<T, string> };
   return (
-    <TypedFieldComponent
+    <FieldComponent
       field={((data,disabled) => <ACC.Inputs.TextInput name={props.name} value={props.value(data)} onChange={(val) => handleChange(props, val)} placeholder={props.placeholder} disabled={disabled}/>)}
       {...props}
     />
@@ -176,9 +175,8 @@ interface MultiStringFieldProps<T> extends ExternalFieldProps<T, string> {
 }
 
 const MultiStringField = <T extends {}>(props: MultiStringFieldProps<T> & InternalFieldProps<T>) => {
-  const TypedFieldComponent = FieldComponent as { new(): FieldComponent<T, string> };
   return (
-    <TypedFieldComponent
+    <FieldComponent
       field={((data, disabled) => <ACC.Inputs.TextAreaInput name={props.name} value={props.value(data)} onChange={(val) => handleChange(props, val)} rows={props.rows} qa={props.qa} ariaDescribedBy={props.hint ? createFieldHintId(props) : undefined} disabled={disabled} />)}
       {...props}
     />
@@ -270,9 +268,8 @@ const ButtonComponent = <T extends {}>(props: ButtonProps & InternalFieldProps<T
 );
 
 const FileUploadComponent = <T extends {}>(props: ExternalFieldProps<T, IFileWrapper> & InternalFieldProps<T>) => {
-  const TypedFieldComponent = FieldComponent as { new(): FieldComponent<T, IFileWrapper> };
   return (
-    <TypedFieldComponent
+    <FieldComponent
       field={((data, disabled) => <ACC.Inputs.FileUpload value={props.value(data)} name={props.name} onChange={(val) => handleChange(props, val)} disabled={disabled}  error={props.validation && !props.validation.isValid && props.validation.showValidationErrors}/>)}
       {...props}
     />
@@ -280,9 +277,8 @@ const FileUploadComponent = <T extends {}>(props: ExternalFieldProps<T, IFileWra
 };
 
 const MulipleFileUploadComponent = <T extends {}>(props: ExternalFieldProps<T, IFileWrapper[]> & InternalFieldProps<T>) => {
-  const TypedFieldComponent = FieldComponent as { new(): FieldComponent<T, IFileWrapper[]> };
   return (
-    <TypedFieldComponent
+    <FieldComponent
       field={((data, disabled) => <ACC.Inputs.MulipleFileUpload value={props.value(data)} name={props.name} onChange={(val) => handleChange(props, val)} disabled={disabled} error={props.validation && !props.validation.isValid && props.validation.showValidationErrors}/>)}
       {...props}
     />
