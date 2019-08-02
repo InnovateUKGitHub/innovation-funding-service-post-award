@@ -15,7 +15,9 @@ export interface IMonitoringReportQuestionsRepository {
   getAll(): Promise<ISalesforceMonitoringReportQuestions[]>;
 }
 
-export class MonitoringReportQuestionsRepository extends SalesforceRepositoryBase<ISalesforceMonitoringReportQuestions> implements IMonitoringReportQuestionsRepository {
+export class MonitoringReportQuestionsRepository
+  extends SalesforceRepositoryBase<ISalesforceMonitoringReportQuestions>
+  implements IMonitoringReportQuestionsRepository {
   protected readonly salesforceObjectName = "Acc_MonitoringQuestion__c";
 
   protected readonly salesforceFieldNames = [
@@ -29,7 +31,7 @@ export class MonitoringReportQuestionsRepository extends SalesforceRepositoryBas
     "Acc_ScoredQuestion__c"
   ];
 
-  public async getAll(): Promise<ISalesforceMonitoringReportQuestions[]> {
-    return await super.all();
+  public getAll(): Promise<ISalesforceMonitoringReportQuestions[]> {
+    return super.all();
   }
 }

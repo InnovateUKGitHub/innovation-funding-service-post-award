@@ -2,9 +2,9 @@ import { ILogger } from "@server/features/common";
 import { ITimer } from "@framework/types";
 
 export class Timer implements ITimer {
-  private start: Date;
+  private readonly start: Date;
 
-  constructor(private logger: ILogger, private message: string) {
+  constructor(private readonly logger: ILogger, private readonly message: string) {
     this.start = new Date();
   }
 

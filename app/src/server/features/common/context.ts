@@ -48,26 +48,30 @@ export class Context implements Framework.IContext {
 
     this.caches = cachesImplementation;
 
+    // use fat arrow so this is bound - extracted to shorten line length
+    const connectionCallback = () => this.getSalesforceConnection();
+    const recordTypeCallback = (objectName: string, recordType: string) => this.getRecordTypeId(objectName, recordType);
+
     this.repositories = {
-      claims: new Repositories.ClaimRepository(() => this.getSalesforceConnection(), this.logger),
-      claimDetails: new Repositories.ClaimDetailsRepository((objectName, recordType) => this.getRecordTypeId(objectName, recordType), () => this.getSalesforceConnection(), this.logger),
-      claimStatusChanges: new Repositories.ClaimStatusChangeRepository(() => this.getSalesforceConnection(), this.logger),
-      claimTotalCostCategory: new Repositories.ClaimTotalCostCategoryRepository(() => this.getSalesforceConnection(), this.logger),
-      claimLineItems: new Repositories.ClaimLineItemRepository((objectName, recordType) => this.getRecordTypeId(objectName, recordType), () => this.getSalesforceConnection(), this.logger),
-      costCategories: new Repositories.CostCategoryRepository(() => this.getSalesforceConnection(), this.logger),
-      documents: new Repositories.DocumentsRepository(() => this.getSalesforceConnection(), this.logger),
-      monitoringReportResponse: new Repositories.MonitoringReportResponseRepository((objectName, recordType) => this.getRecordTypeId(objectName, recordType), () => this.getSalesforceConnection(), this.logger),
-      monitoringReportHeader: new Repositories.MonitoringReportHeaderRepository((objectName, recordType) => this.getRecordTypeId(objectName, recordType), () => this.getSalesforceConnection(), this.logger),
-      monitoringReportQuestions: new Repositories.MonitoringReportQuestionsRepository(() => this.getSalesforceConnection(), this.logger),
-      monitoringReportStatusChange: new Repositories.MonitoringReportStatusChangeRepository(() => this.getSalesforceConnection(), this.logger),
-      profileDetails: new Repositories.ProfileDetailsRepository(() => this.getSalesforceConnection(), this.logger),
-      profileTotalPeriod: new Repositories.ProfileTotalPeriodRepository(() => this.getSalesforceConnection(), this.logger),
-      profileTotalCostCategory: new Repositories.ProfileTotalCostCategoryRepository(() => this.getSalesforceConnection(), this.logger),
-      projects: new Repositories.ProjectRepository(() => this.getSalesforceConnection(), this.logger),
-      partners: new Repositories.PartnerRepository(() => this.getSalesforceConnection(), this.logger),
-      projectContacts: new Repositories.ProjectContactsRepository(() => this.getSalesforceConnection(), this.logger),
-      permissionGroups: new Repositories.PermissionGroupRepository(() => this.getSalesforceConnection(), this.logger),
-      recordTypes: new Repositories.RecordTypeRepository(() => this.getSalesforceConnection(), this.logger)
+      claims: new Repositories.ClaimRepository(connectionCallback, this.logger),
+      claimDetails: new Repositories.ClaimDetailsRepository(recordTypeCallback, connectionCallback, this.logger),
+      claimStatusChanges: new Repositories.ClaimStatusChangeRepository(connectionCallback, this.logger),
+      claimTotalCostCategory: new Repositories.ClaimTotalCostCategoryRepository(connectionCallback, this.logger),
+      claimLineItems: new Repositories.ClaimLineItemRepository(recordTypeCallback, connectionCallback, this.logger),
+      costCategories: new Repositories.CostCategoryRepository(connectionCallback, this.logger),
+      documents: new Repositories.DocumentsRepository(connectionCallback, this.logger),
+      monitoringReportResponse: new Repositories.MonitoringReportResponseRepository(recordTypeCallback, connectionCallback, this.logger),
+      monitoringReportHeader: new Repositories.MonitoringReportHeaderRepository(recordTypeCallback, connectionCallback, this.logger),
+      monitoringReportQuestions: new Repositories.MonitoringReportQuestionsRepository(connectionCallback, this.logger),
+      monitoringReportStatusChange: new Repositories.MonitoringReportStatusChangeRepository(connectionCallback, this.logger),
+      profileDetails: new Repositories.ProfileDetailsRepository(connectionCallback, this.logger),
+      profileTotalPeriod: new Repositories.ProfileTotalPeriodRepository(connectionCallback, this.logger),
+      profileTotalCostCategory: new Repositories.ProfileTotalCostCategoryRepository(connectionCallback, this.logger),
+      projects: new Repositories.ProjectRepository(connectionCallback, this.logger),
+      partners: new Repositories.PartnerRepository(connectionCallback, this.logger),
+      projectContacts: new Repositories.ProjectContactsRepository(connectionCallback, this.logger),
+      permissionGroups: new Repositories.PermissionGroupRepository(connectionCallback, this.logger),
+      recordTypes: new Repositories.RecordTypeRepository(connectionCallback, this.logger)
     };
   }
 

@@ -57,7 +57,7 @@ export class ClaimDetailsRepository extends SalesforceRepositoryBase<ISalesforce
     return super.where(filter);
   }
 
-  async get(claimDetailKey: ClaimDetailKey): Promise<ISalesforceClaimDetails|null> {
+  get(claimDetailKey: ClaimDetailKey): Promise<ISalesforceClaimDetails|null> {
     const { projectId, partnerId, periodId, costCategoryId } = claimDetailKey;
     const filter = `
       Acc_ProjectParticipant__r.Acc_ProjectId__c = '${projectId}'
@@ -67,7 +67,7 @@ export class ClaimDetailsRepository extends SalesforceRepositoryBase<ISalesforce
       AND Acc_CostCategory__c = '${costCategoryId}'
       AND Acc_ClaimStatus__c != 'New'
     `;
-    return await super.filterOne(filter);
+    return super.filterOne(filter);
   }
 
   getAllByPartner(partnerId: string): Promise<ISalesforceClaimDetails[]> {
