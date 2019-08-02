@@ -88,7 +88,7 @@ export class PrepareComponent extends ContainerBase<PrepareClaimParams, Data, Ca
 
     return (
       <ACC.Page
-        backLink={<ACC.BackLink route={backLink}>Back to project</ACC.BackLink>}
+        backLink={<ACC.BackLink route={backLink}>Back to claims</ACC.BackLink>}
         error={data.editor.error}
         validator={data.editor.validator}
         pageTitle={<ACC.Projects.Title project={data.project} />}

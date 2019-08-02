@@ -73,7 +73,7 @@ export class ClaimsDetailsComponent extends ContainerBase<Params, Data, {}> {
 
     return (
       <ACC.Page
-        backLink={<ACC.BackLink route={backLink}>Back to project</ACC.BackLink>}
+        backLink={<ACC.BackLink route={backLink}>Back to claims</ACC.BackLink>}
         pageTitle={<ACC.Projects.Title project={data.project} />}
         tabs={<ACC.HashTabs tabList={tabs} />}
       >
