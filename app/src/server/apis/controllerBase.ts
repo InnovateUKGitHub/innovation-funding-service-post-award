@@ -5,7 +5,6 @@ import express, { Request, Response } from "express";
 import { IAppError, ISessionUser } from "@framework/types";
 import { NotFoundError } from "@server/features/common/appError";
 import { errorHandlerApi } from "@server/errorHandlers";
-import { isArray } from "util";
 import { Configuration } from "@server/features/common";
 
 const storage = multer.memoryStorage();
@@ -86,7 +85,7 @@ export abstract class ControllerBaseWithSummary<TSummaryDto, TDto> {
     const wrappedGetParams: InnerGetParams<TParams & { documents: MultipleDocumentUploadDto }> = (params, query, body, req) => {
       const p = getParams(params, query, body);
 
-      const files: IFileWrapper[] = isArray(req.files) ? req.files.map(x => new ServerFileWrapper(x)) : [];
+      const files: IFileWrapper[] = Array.isArray(req.files) ? req.files.map(x => new ServerFileWrapper(x)) : [];
       const documents: MultipleDocumentUploadDto = { files, description: body.description };
 
       return { ...p, documents };

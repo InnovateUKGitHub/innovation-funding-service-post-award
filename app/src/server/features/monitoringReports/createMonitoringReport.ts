@@ -40,7 +40,7 @@ export class CreateMonitoringReportCommand extends CommandBase<string> {
       Acc_MonitoringReportStatus__c: "Draft"
     };
 
-    return await context.repositories.monitoringReportHeader.create(createRequest);
+    return context.repositories.monitoringReportHeader.create(createRequest);
   }
 
   private async updateMonitoringReportHeader(context: IContext, headerId: string): Promise<void> {

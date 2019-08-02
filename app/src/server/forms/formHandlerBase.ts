@@ -7,8 +7,6 @@ import { FormHandlerError } from "../features/common/appError";
 import { ILinkInfo } from "@framework/types/ILinkInfo";
 import { IContext } from "@framework/types/IContext";
 import { upload } from "./memoryStorage";
-import { Configuration } from "@server/features/common";
-import { isArray } from "util";
 
 interface RouteInfo<TParams> {
   routeName: string;
@@ -126,7 +124,7 @@ export abstract class MultipleFileFormHandlerBase<TParams, TDto, TValidation ext
   public readonly middleware = [upload.array("attachment")];
 
   protected async createDto(context: IContext, params: TParams, button: IFormButton, body: IFormBody, req: express.Request): Promise<TDto> {
-    const files: IFileWrapper[] = isArray(req.files) ? req.files.map(x => new ServerFileWrapper(x)) : [];
+    const files: IFileWrapper[] = Array.isArray(req.files) ? req.files.map(x => new ServerFileWrapper(x)) : [];
     return this.getDto(context, params, button, body, files);
   }
 

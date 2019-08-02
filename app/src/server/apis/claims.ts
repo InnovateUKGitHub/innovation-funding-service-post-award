@@ -13,8 +13,8 @@ export interface IClaimsApi {
   getAllByProjectId: (params: ApiParams<{ projectId: string }>) => Promise<ClaimDto[]>;
   getAllByPartnerId: (params: ApiParams<{ partnerId: string }>) => Promise<ClaimDto[]>;
   get: (params: ApiParams<{ partnerId: string, periodId: number }>) => Promise<ClaimDto | null>;
-  update: (params: ApiParams<{ projectId: string, partnerId: string, periodId: number, claim: ClaimDto }>) => Promise<ClaimDto>;
-  getStatusChanges: (params: ApiParams<{ projectId: string, partnerId: string, periodId: number }>) => Promise<ClaimStatusChangeDto[]>;
+  update: (params: ApiParams<ClaimKey & { claim: ClaimDto }>) => Promise<ClaimDto>;
+  getStatusChanges: (params: ApiParams<ClaimKey>) => Promise<ClaimStatusChangeDto[]>;
 }
 
 class Controller extends ControllerBase<ClaimDto> implements IClaimsApi {
@@ -22,7 +22,13 @@ class Controller extends ControllerBase<ClaimDto> implements IClaimsApi {
   constructor() {
     super("claims");
 
-    this.getCustom("/:projectId/:partnerId/:periodId/status-changes", (p) => ({ projectId: p.projectId, partnerId: p.partnerId, periodId: parseInt(p.periodId, 10) }), p => this.getStatusChanges(p));
+    this.getCustom("/:projectId/:partnerId/:periodId/status-changes",
+      (p) => ({
+        projectId: p.projectId,
+        partnerId: p.partnerId,
+        periodId: parseInt(p.periodId, 10)
+      }),
+      p => this.getStatusChanges(p));
 
     this.getItems("/",
       (p, q) => ({ partnerId: q.partnerId, projectId: q.projectId }),
