@@ -7,7 +7,7 @@ export class GetAllRecordTypesQuery extends QueryBase<RecordType[]> {
     super();
   }
 
-  protected async Run(context: IContext): Promise<RecordType[]> {
-    return await context.caches.recordTypes.fetchAsync("all", () => context.repositories.recordTypes.getAll());
+  protected Run(context: IContext): Promise<RecordType[]> {
+    return context.caches.recordTypes.fetchAsync("all", () => context.repositories.recordTypes.getAll());
   }
 }
