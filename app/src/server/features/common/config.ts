@@ -84,7 +84,7 @@ const getFeatureFlagValue = (value: string | null | undefined, defaultValue: boo
 const defaultFeatureFlag = getFeatureFlagValue(process.env.FEATURE_DEFAULT, false);
 
 const features: IFeatureFlags = {
-    calculateOverheads: getFeatureFlagValue(process.env.FEATURE_CALCULATE_OVERHEADS, true),
+    calculateOverheads: getFeatureFlagValue(process.env.FEATURE_CALCULATE_OVERHEADS, false),
     documentFiltering: getFeatureFlagValue(process.env.FEATURE_DOCUMENT_FILTERING, defaultFeatureFlag),
     projectFiltering: getFeatureFlagValue(process.env.FEATURE_PROJECT_FILTERING, defaultFeatureFlag),
 };
