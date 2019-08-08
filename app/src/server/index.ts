@@ -4,6 +4,7 @@ DotEnv.config();
 import "module-alias/register";
 import "isomorphic-fetch";
 import "isomorphic-form-data";
+import { Command } from "commander";
 
 import { Server } from "./server";
 import { healthCheck } from "./healthCheck";
@@ -14,6 +15,16 @@ if (process.env.NEW_RELIC_ENABLED === "true") {
   setInterval(healthCheck, 60000);
 }
 
+const program = new Command();
+program.option("--secure", "Run in HTTPS mode");
+program.parse(process.argv);
+
 const port = parseInt(process.env.PORT!, 10) || 8080;
+
+if (program.secure && process.env.SERVER_URL) {
+  process.env.SERVER_URL = process.env.SERVER_URL.replace("http://", "https://");
+}
+
 const server = new Server(port);
-server.start();
+// Use HTTPS if --secure flag set
+server.start(program.secure);
