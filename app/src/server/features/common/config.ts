@@ -119,7 +119,7 @@ const cookieKey = process.env.COOKIE_KEY!;
 const standardOverheadRate = parseFloat(process.env.STANDARD_OVERHEAD_RATE!) || 20;
 
 const maxFileSize = parseInt(process.env.MAX_FILE_SIZE_IN_BYTES!, 10) || 10485760; // 10MB
-const maxUploadFileCount = parseInt(process.env.MAX_UPLOAD_FILE_COUNT!, 10) || 5;
+const maxUploadFileCount = parseInt(process.env.MAX_UPLOAD_FILE_COUNT!, 10) || 10;
 
 export const Configuration: IConfig = {
     build,
