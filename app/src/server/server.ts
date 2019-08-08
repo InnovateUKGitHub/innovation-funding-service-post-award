@@ -1,4 +1,6 @@
 import express from "express";
+import https from "https";
+import fs from "fs";
 import cors from "cors";
 import bodyParser from "body-parser";
 import { Configuration, Logger } from "./features/common";
@@ -25,11 +27,26 @@ export class Server {
     this.routing();
   }
 
-  public start() {
-    this.app.listen(this.port);
+  public start(secure: boolean) {
+    if (secure) {
+      this.startHTTPS();
+    } else {
+      this.app.listen(this.port);
+    }
+
     this.log.info(`Listening at ${process.env.SERVER_URL}`);
     this.log.info("Configuration", Configuration);
     setTimeout(() => this.primeCaches());
+  }
+
+  public startHTTPS() {
+    const privateKey  = fs.readFileSync("security/AccLocalDevKey.key", "utf8");
+    const certificate = fs.readFileSync("security/AccLocalDevCert.crt", "utf8");
+
+    const credentials = {key: privateKey, cert: certificate};
+    const httpsServer = https.createServer(credentials, this.app);
+
+    httpsServer.listen(this.port);
   }
 
   private middleware() {

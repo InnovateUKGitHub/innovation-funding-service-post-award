@@ -23,6 +23,19 @@ The path is to the file containing your key so will need to change accordingly. 
 
 You will only need to execute step 4 in future, unless code updates require you to install new dependencies - ask a developer.
 
+### SSO Development
+Developing locally for single sign-on (SSO) requires a HTTPS server to be run on local host. You will need the certificate and private key stored under `/security` as `AccLocalDevCert.crt` and `AccLocalDevKey.key` respectively.
+
+The following key-values will need to be set in your .env file.
+```
+USE_SSO=true
+SERVER_URL=http://localhost:8080
+SSO_PROVIDER_URL=https://auth-acc-ifsdev.apps.org-env-0.org.innovateuk.ukri.org/idp/profile/SAML2/Redirect/SSO
+SSO_SIGNOUT_URL=https://acc-ifsdev.apps.org-env-0.org.innovateuk.ukri.org/Logout
+IFS_ROOT=https://acc-ifsdev.apps.org-env-0.org.innovateuk.ukri.org
+```
+Then run `npm run start:dev -- --secure`. The site will be available on `https://localhost:8080` with SSO enabled.
+
 ## Run unit tests
  1. Ensure the server is running with `npm run start:server`
  2. Run `npm run tests`
