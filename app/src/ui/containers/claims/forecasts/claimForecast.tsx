@@ -49,6 +49,9 @@ class ClaimForecastComponent extends ContainerBase<ClaimForecastParams, PendingF
         pageTitle={<ACC.Projects.Title project={combined.project} />}
       >
         <ACC.Section qa="partner-name">
+          <ACC.Renderers.AriaLive>
+            <ACC.ValidationMessage messageType="info" message={`This is your last chance to change the forecast for period ${combined.project.periodId}.`} />
+          </ACC.Renderers.AriaLive>
           {renderWarning(combined)}
           {this.renderOverheadsRate(combined.partner.overheadRate)}
           <Form.Form
