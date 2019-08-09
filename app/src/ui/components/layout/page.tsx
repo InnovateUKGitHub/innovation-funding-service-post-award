@@ -39,7 +39,7 @@ const renderOnHoldSection = (project: ProjectDto | undefined) => {
   if (!!project && project.status === ProjectStatus.OnHold) {
     return (
       <ACC.Section>
-        <ACC.ValidationMessage messageType={"info"} message={"This project is on hold. Please speak to your Monitoring Officer."} qa={"on-hold-info-message"}/>
+        <ACC.ValidationMessage messageType={"info"} message={"This project is on hold. Contact Innovate UK for more information."} qa={"on-hold-info-message"}/>
       </ACC.Section>
     );
   }
