@@ -238,8 +238,8 @@ export class ForecastTable extends React.Component<Props> {
         <th className="govuk-table__header govuk-table__header--numeric sticky-col sticky-col-left-1">
           <ACC.Renderers.AccessibilityText>Cost categories</ACC.Renderers.AccessibilityText>
         </th>
-        {previous > 0 ? <th className="govuk-table__header govuk-table__header--numeric" colSpan={previous}>Previous costs</th> : null}
-        {claimPeriod > 0 ? <th className="govuk-table__header govuk-table__header--numeric">Costs this period</th> : null}
+        {previous > 0 ? <th className="govuk-table__header govuk-table__header--numeric" colSpan={previous}>Costs claimed</th> : null}
+        {claimPeriod > 0 ? <th className="govuk-table__header govuk-table__header--numeric">Costs you are claiming</th> : null}
         {forecasts ? <th className="govuk-table__header govuk-table__header--numeric" colSpan={periods.length - claimPeriod}>Forecast</th> : null}
         <th className="govuk-table__header govuk-table__header--numeric sticky-col sticky-col-right-3">Total</th>
         <th className="govuk-table__header govuk-table__header--numeric sticky-col sticky-col-right-2">Total eligible costs</th>
