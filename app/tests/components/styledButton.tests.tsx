@@ -24,8 +24,7 @@ describe("StyledButton", () => {
   it("should be styled as a link when given a link styling", () => {
     const wrapper = shallow(<Button styling="Link" />);
     expect(wrapper.prop("className")).toEqual("govuk-link");
-    expect(wrapper.prop("style")).toEqual({
-      color: "#005ea5",
+    expect(wrapper.prop("style")).toMatchObject({
       cursor: "pointer",
       textDecoration: "underline",
       backgroundColor: "inherit",

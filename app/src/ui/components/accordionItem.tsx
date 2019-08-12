@@ -63,7 +63,7 @@ export class AccordionItem extends React.Component<Props, State> {
     }
     return (
       <React.Fragment>
-        <button type="button" className="govuk-accordion__section-button" aria-expanded={this.state.accordionOpen} data-qa={`${this.props.qa}-button`}>{this.props.title}</button>
+        <button data-module="govuk-button" type="button" className="govuk-accordion__section-button" aria-expanded={this.state.accordionOpen} data-qa={`${this.props.qa}-button`}>{this.props.title}</button>
         <span className="govuk-accordion__icon" aria-hidden={!this.state.accordionOpen}/>
       </React.Fragment>
     );

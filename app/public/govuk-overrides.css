@@ -1,3 +1,7 @@
+.govuk-link:focus {
+  box-shadow: 0 0 #fd0, 0 4px #0b0c0c;
+}
+
 .govuk-table__cell:not(:first-child):not(:last-child),
 .govuk-table__header:not(:first-child):not(:last-child) {
   padding: 10px 10px;
