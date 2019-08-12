@@ -64,5 +64,5 @@ const getButtonStyling = ({styling, className, style}: StyledButtonProps) => {
 export const Button: React.SFC<StyledButtonProps> = (props) => {
   const { className, styling, style, children, ...rest } = props;
   const buttonStyling = getButtonStyling({className, styling, style});
-  return <button {...buttonStyling} {...rest}>{children}</button>;
+  return <button data-module="govuk-button" {...buttonStyling} {...rest}>{children}</button>;
 };
