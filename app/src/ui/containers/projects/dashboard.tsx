@@ -313,7 +313,7 @@ class ProjectDashboardComponent extends ContainerBaseWithState<Props, Data, Call
       return <p className="govuk-heading-s govuk-!-margin-bottom-2">{text}</p>;
     }
 
-    return <ACC.Link route={ProjectOverviewRoute.getLink({ projectId: project.id })}>{text}</ACC.Link>;
+    return <ACC.Link className={"blockLink"} route={ProjectOverviewRoute.getLink({ projectId: project.id })}>{text}</ACC.Link>;
   }
 
   private renderProject(project: ProjectDto, partner: PartnerDto | null, section: Section, index: number) {

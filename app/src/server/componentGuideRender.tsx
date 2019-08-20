@@ -67,11 +67,9 @@ const renderGuide = (html: string) => {
             </script>
             <a href="#main-content" class="govuk-skip-link">Skip to main content</a>
             <div id="root">${html}</div>
+            <script src="/govuk-frontend-3.0.0.min.js"></script>
             <script src="/build/vendor.js?build=${Configuration.build}"></script>
             <script src="/build/componentsGuide.js?build=${Configuration.build}"></script>
-            <script>
-                // window.GOVUKFrontend.initAll()
-            </script>
         </body>
     </html>
     `;

@@ -48,9 +48,7 @@ class ViewForecastComponent extends ContainerBase<Params, PendingForecastData, C
         project={data.project}
       >
         <ACC.Section title={partnerName} qa="partner-name">
-          <ACC.Renderers.AriaLive>
-            <ACC.Renderers.Messages messages={this.props.messages} />
-          </ACC.Renderers.AriaLive>
+          <ACC.Renderers.Messages messages={this.props.messages} />
           {renderWarning(data)}
           {this.renderOverheadsRate(data.partner.overheadRate)}
           <ACC.Claims.ForecastTable data={data} hideValidation={isMoPm} />

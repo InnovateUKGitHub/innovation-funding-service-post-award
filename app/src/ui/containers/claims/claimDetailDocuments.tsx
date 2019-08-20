@@ -115,8 +115,8 @@ export class ClaimDetailDocumentsComponent extends ContainerBase<ClaimDetailDocu
         error={(editor.error) || (deleteEditor.error)}
         validator={editor.validator}
         pageTitle={<ACC.Projects.Title project={project} />}
-        messages={this.props.messages}
       >
+        <ACC.Renderers.Messages messages={this.props.messages}/>
         {this.renderSection(documents)}
         <ACC.Section>
           <UploadForm.Form

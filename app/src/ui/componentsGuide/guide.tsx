@@ -22,6 +22,7 @@ import { tableGuide } from "./tableGuide";
 import { tabsGuide } from "./tabsGuide";
 import { hashTabsGuide } from "@ui/componentsGuide/hashTabsGuide";
 import { statisticsBoxGuide } from "./statisticsBoxGuide";
+import { buttonGuide } from "./styledButtonGuide";
 import { textHint } from "./textHintGuide";
 import { titleGuide } from "./titleGuide";
 import { validationErrorGuide } from "./validationErrorGuide";
@@ -30,6 +31,7 @@ import { validationSummaryGuide } from "./validationSummaryGuide";
 
 const guides: IGuide[] = [
     accordionGuide,
+    buttonGuide,
     claimWindowGuide,
     datesGuide,
     detailsGuide,
