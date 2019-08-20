@@ -13,42 +13,22 @@ const govukButton = "govuk-button";
 
 const getLinkButtonStyling = (className?: string, style?: CSSProperties) => {
   const linkStyles = classNames(className, "govuk-link");
-  const linkStyle: CSSProperties = {
-    color: GOVUK_LINK_COLOUR,
-    cursor: "pointer",
-    textDecoration: "underline",
-    backgroundColor: "inherit",
-    border: "none",
-    boxSizing: "unset",
-    ...style
-  };
-  return { className: linkStyles, style: linkStyle };
+  return { className: linkStyles, style };
 };
 
 const getPrimaryButtonStyling = (className?: string, style?: CSSProperties) => {
   const linkStyles = classNames(className, govukButton);
-  const linkStyle: CSSProperties = { ...style };
-  return { className: linkStyles, style: linkStyle };
+  return { className: linkStyles, style };
 };
 
 const getSecondaryButtonStyling = (className?: string, style?: CSSProperties) => {
-  const linkStyles = classNames(className, govukButton);
-  const linkStyle: CSSProperties = {
-    background: "buttonface",
-    color: "buttontext",
-    ...style
-  };
-  return { className: linkStyles, style: linkStyle };
+  const linkStyles = classNames(className, govukButton, "govuk-button--secondary");
+  return { className: linkStyles, style };
 };
 
 const getWarningButtonStyling = (className?: string, style?: CSSProperties) => {
-  const linkStyles = classNames(className, govukButton);
-  const linkStyle: CSSProperties = {
-    background: GOVUK_ERROR_COLOUR,
-    color: "white",
-    ...style
-  };
-  return { className: linkStyles, style: linkStyle };
+  const linkStyles = classNames(className, govukButton, "govuk-button--warning");
+  return { className: linkStyles, style };
 };
 
 const getButtonStyling = ({styling, className, style}: StyledButtonProps) => {

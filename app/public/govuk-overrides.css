@@ -1,7 +1,3 @@
-.govuk-link:focus {
-  box-shadow: 0 0 #fd0, 0 4px #0b0c0c;
-}
-
 .govuk-table__cell:not(:first-child):not(:last-child),
 .govuk-table__header:not(:first-child):not(:last-child) {
   padding: 10px 10px;
@@ -267,4 +263,24 @@ div.card-link > a:hover {
 
 div.card-link > a:focus {
   outline: 0px;
+}
+
+button.govuk-link {
+  color:#1d70b8;
+  cursor:pointer;
+  text-decoration:underline;
+  background-color:inherit;
+  border:none;
+  box-sizing:unset;
+}
+
+button.govuk-link:focus {
+  border-color: #fd0;
+  color: #0b0c0c;
+  background-color: #fd0;
+  box-shadow: 0 2px 0 #0b0c0c;
+}
+
+a.blockLink {
+  display: block;
 }

@@ -13,7 +13,7 @@ export const tabsGuide: IGuide = {
     options: [
         {
             name: "Simple",
-            comments: "Renders Tabs",
+            comments: "Renders Tabs as page navigation can either do route or url navigation. This is discouraged by gov design guidelines but requried for initial wireframes",
             example: `<Tabs tabList={${JSON.stringify(tabs)}}/>`,
             render: () => <Tabs tabList={tabs}/>
         }

@@ -44,9 +44,6 @@ export function renderHtml(html: string, htmlTitle: string, preloadedState: any 
           <script src="/govuk-frontend-3.0.0.min.js"></script>
           <script src="/build/vendor.js?build=${Configuration.build}"></script>
           <script src="/build/bundle.js?build=${Configuration.build}"></script>
-          <script>
-              window.GOVUKFrontend.initAll()
-          </script>
       </body>
   </html>
 `;

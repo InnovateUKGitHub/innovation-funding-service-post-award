@@ -52,9 +52,8 @@ class DetailsComponent extends ContainerBase<Params, Data, Callbacks> {
       <ACC.Page
         backLink={<ACC.BackLink route={MonitoringReportDashboardRoute.getLink({ projectId: this.props.projectId })}>Back to monitoring reports</ACC.BackLink>}
         pageTitle={<ACC.Projects.Title project={project} />}
-        tabs={<ACC.HashTabs tabList={tabs}/>}
       >
-        <ACC.HashTabsContent tabList={tabs}/>
+        <ACC.HashTabs tabList={tabs}/>
       </ACC.Page>
     );
   }
@@ -63,7 +62,7 @@ class DetailsComponent extends ContainerBase<Params, Data, Callbacks> {
     return (
       <ACC.Loader
         pending={this.props.statusChanges}
-        render={(statusChanges) => <ACC.Section><ACC.Logs data={statusChanges} qa="monitoring-report-status-change-table"/></ACC.Section>}
+        render={(statusChanges) => <ACC.Section title="Log"><ACC.Logs data={statusChanges} qa="monitoring-report-status-change-table"/></ACC.Section>}
       />);
   }
 

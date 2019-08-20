@@ -82,7 +82,7 @@ export class PrepareComponent extends ContainerBase<PrepareClaimParams, Data, Ca
     const backLink = isPmOrMo ? AllClaimsDashboardRoute.getLink({ projectId: data.project.id }) : ClaimsDashboardRoute.getLink({ projectId: data.project.id, partnerId: data.partner.id });
 
     const tabs: ACC.HashTabItem[] = [
-      { text: "Details", hash: "details", content: this.renderDetailsTab(data), default: true, qa: "ClaimDetailTab"},
+      { text: "Details", hash: "details", content: this.renderDetailsTab(data), qa: "ClaimDetailTab"},
       { text: "Log", hash: "log", content: this.renderLogsTab(), qa: "ClaimDetailLogTab" },
     ];
 
@@ -92,10 +92,8 @@ export class PrepareComponent extends ContainerBase<PrepareClaimParams, Data, Ca
         error={data.editor.error}
         validator={data.editor.validator}
         pageTitle={<ACC.Projects.Title project={data.project} />}
-        tabs={<ACC.HashTabs tabList={tabs} />}
-        messages={this.props.messages || []}
       >
-        <ACC.HashTabsContent tabList={tabs} />
+        <ACC.HashTabs tabList={tabs} messages={this.props.messages}/>
       </ACC.Page>
     );
   }
@@ -137,7 +135,7 @@ export class PrepareComponent extends ContainerBase<PrepareClaimParams, Data, Ca
       <ACC.Loader
         pending={this.props.statusChanges}
         render={(statusChanges) => (
-          <ACC.Section>
+          <ACC.Section title="Log">
             <ACC.Logs qa="claim-status-change-table" data={statusChanges} />
           </ACC.Section>
         )}

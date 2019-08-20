@@ -11,25 +11,20 @@ describe("StyledButton", () => {
   it("should be styled as a primary button when given a primary styling", () => {
     const wrapper = shallow(<Button styling="Primary" />);
     expect(wrapper.prop("className")).toEqual("govuk-button");
-    expect(wrapper.prop("style")).toEqual({});
-
   });
 
   it("should be styled as a secondary button when given a secondary styling", () => {
     const wrapper = shallow(<Button styling="Secondary" />);
-    expect(wrapper.prop("className")).toEqual("govuk-button");
-    expect(wrapper.prop("style")).toEqual({background: "buttonface", color: "buttontext"});
+    expect(wrapper.prop("className")).toEqual("govuk-button govuk-button--secondary");
+  });
+
+  it("should be styled as a warning button when given a warning styling", () => {
+    const wrapper = shallow(<Button styling="Warning" />);
+    expect(wrapper.prop("className")).toEqual("govuk-button govuk-button--warning");
   });
 
   it("should be styled as a link when given a link styling", () => {
     const wrapper = shallow(<Button styling="Link" />);
     expect(wrapper.prop("className")).toEqual("govuk-link");
-    expect(wrapper.prop("style")).toMatchObject({
-      cursor: "pointer",
-      textDecoration: "underline",
-      backgroundColor: "inherit",
-      border: "none",
-      boxSizing: "unset",
-    });
   });
 });

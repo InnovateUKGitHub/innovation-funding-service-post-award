@@ -177,9 +177,9 @@ class Component extends ContainerBaseWithState<ClaimDashboardPageParams, Data, C
         backLink={<Acc.Projects.ProjectBackLink project={project}/>}
         error={error}
         validator={validator}
-        messages={this.props.messages}
         project={project}
       >
+        <Acc.Renderers.Messages messages={this.props.messages}/>
         <Acc.Section qa="current-claims-section" title={"Open"} badge={claimsWindow}>
           {this.renderCurrentClaims(currentClaim ? [currentClaim] : [], "current-claims-table", project, partner, previousClaims)}
         </Acc.Section>

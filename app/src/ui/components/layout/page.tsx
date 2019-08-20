@@ -6,15 +6,13 @@ import * as ACC from "@ui/components";
 interface Props {
   backLink: React.ReactNode | null;
   pageTitle: React.ReactNode;
-  tabs?: React.ReactNode;
   error?: IAppError | null;
   validator?: Results<any> | null;
-  messages?: string[];
   project?: ProjectDto;
 }
 
 export const Page: React.FunctionComponent<Props> = (props) => {
-  const { pageTitle, backLink, error, validator, messages, tabs, children, project } = props;
+  const { pageTitle, backLink, error, validator, children, project } = props;
   return (
     <div>
       {backLink && (<div className="govuk-grid-row"><div className="govuk-grid-column-full">{backLink}</div></div>)}
@@ -25,10 +23,6 @@ export const Page: React.FunctionComponent<Props> = (props) => {
         </ACC.Renderers.AriaLive>
         {pageTitle}
         {renderOnHoldSection(project)}
-        {tabs}
-        <ACC.Renderers.AriaLive>
-          <ACC.Renderers.Messages messages={messages || []}/>
-        </ACC.Renderers.AriaLive>
         {children}
       </main>
     </div>

@@ -67,7 +67,7 @@ export class ClaimsDetailsComponent extends ContainerBase<Params, Data, {}> {
     const backLink = isPmOrMo ? AllClaimsDashboardRoute.getLink({ projectId: data.project.id }) : ClaimsDashboardRoute.getLink({ projectId: data.project.id, partnerId: data.partner.id });
 
     const tabs: ACC.HashTabItem[] = [
-      { text: "Details", hash: "details", content: this.renderDetailsTab(data), default: true, qa: "ClaimDetailTab" },
+      { text: "Details", hash: "details", content: this.renderDetailsTab(data), qa: "ClaimDetailTab" },
       { text: "Log", hash: "log", content: this.renderLogsTab(), qa: "ClaimDetailLogTab" },
     ];
 
@@ -75,9 +75,8 @@ export class ClaimsDetailsComponent extends ContainerBase<Params, Data, {}> {
       <ACC.Page
         backLink={<ACC.BackLink route={backLink}>Back to claims</ACC.BackLink>}
         pageTitle={<ACC.Projects.Title project={data.project} />}
-        tabs={<ACC.HashTabs tabList={tabs} />}
       >
-        <ACC.HashTabsContent tabList={tabs} />
+        <ACC.HashTabs tabList={tabs} />
       </ACC.Page>
     );
   }
@@ -168,7 +167,7 @@ export class ClaimsDetailsComponent extends ContainerBase<Params, Data, {}> {
       <ACC.Loader
         pending={this.props.statusChanges}
         render={(statusChanges) => (
-          <ACC.Section>
+          <ACC.Section title="Log">
             <ACC.Logs qa="claim-status-change-table" data={statusChanges} />
           </ACC.Section>
         )}
