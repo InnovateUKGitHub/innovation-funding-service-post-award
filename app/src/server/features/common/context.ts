@@ -64,6 +64,8 @@ export class Context implements Framework.IContext {
       monitoringReportHeader: new Repositories.MonitoringReportHeaderRepository(recordTypeCallback, connectionCallback, this.logger),
       monitoringReportQuestions: new Repositories.MonitoringReportQuestionsRepository(connectionCallback, this.logger),
       monitoringReportStatusChange: new Repositories.MonitoringReportStatusChangeRepository(connectionCallback, this.logger),
+      pcrItems: new Repositories.PCRItemRepository(),
+      pcrs: new Repositories.PCRRepository(),
       profileDetails: new Repositories.ProfileDetailsRepository(connectionCallback, this.logger),
       profileTotalPeriod: new Repositories.ProfileTotalPeriodRepository(connectionCallback, this.logger),
       profileTotalCostCategory: new Repositories.ProfileTotalCostCategoryRepository(connectionCallback, this.logger),
