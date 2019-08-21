@@ -85,5 +85,5 @@ export const ProjectChangeRequestsRoute = containerDefinition.route({
     htmlTitle: "Project change requests",
     displayTitle: "Project change requests"
   }),
-  accessControl: (auth, { projectId }) => auth.forProject(projectId).hasAnyRoles(ProjectRole.FinancialContact, ProjectRole.ProjectManager, ProjectRole.MonitoringOfficer)
+  accessControl: (auth, { projectId }, config) => !config.features.pcrsEnabled && auth.forProject(projectId).hasAnyRoles(ProjectRole.FinancialContact, ProjectRole.ProjectManager, ProjectRole.MonitoringOfficer)
 });
