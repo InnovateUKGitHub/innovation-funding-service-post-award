@@ -3,7 +3,7 @@ import { DateTime } from "luxon";
 import * as Repositories from "@server/repositories";
 import * as Entites from "@framework/entities";
 import { range } from "@shared/range";
-import { ClaimStatus, IClientUser, ProjectRole } from "@framework/types";
+import { ClaimStatus, IClientUser } from "@framework/types";
 import { ITestRepositories } from "./testRepositories";
 
 export class TestData {
@@ -561,6 +561,52 @@ export class TestData {
 
     return newItem;
 
+  }
+
+  public createPCR(project?: Repositories.ISalesforceProject, update?: Partial<Entites.PCR>) {
+    const seed = this.repositories.pcrs.Items.length + 1;
+
+    project = project || this.createProject();
+
+    const newItem: Entites.PCR = {
+      id: `PCR_${seed}`,
+      projectId: project.Id,
+      comments: "",
+      number: seed,
+      reasoningStatus: Entites.PCRItemStatus.Unknown,
+      status: Entites.PCRStatus.Unknown,
+      started: new Date(),
+      updated: new Date()
+    };
+
+    if(update) {
+      Object.assign(newItem, update);
+    }
+
+    this.repositories.pcrs.Items.push(newItem);
+
+    return newItem;
+  }
+
+  public createPCRItem(pcr?: Entites.PCR, update?: Partial<Entites.PCRItem>) {
+    const seed = this.repositories.pcrItems.Items.length + 1;
+
+    pcr = pcr || this.createPCR();
+
+    const newItem: Entites.PCRItem = {
+      id: `PCR_Item_${seed}`,
+      pcrId: pcr.id,
+      itemType: Entites.PCRItemType.Unknown,
+      status: Entites.PCRItemStatus.Unknown,
+    };
+
+    if(update) {
+      Object.assign(newItem, update);
+    }
+
+    this.repositories.pcrItems.Items.push(newItem);
+
+    return newItem;
   }
 }
 
