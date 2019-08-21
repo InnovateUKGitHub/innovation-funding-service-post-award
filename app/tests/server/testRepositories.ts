@@ -407,6 +407,26 @@ class RecordTypeTestRepository extends TestRepository<Entities.RecordType> imple
   }
 }
 
+class PCRTestRepository extends TestRepository<Entities.PCR> implements Repositories.IPcrRepository {
+  getAllByProjectId(projectId: string): Promise<Entities.PCR[]> {
+    return super.getWhere(x => x.projectId === projectId);
+  }
+
+  getById(id: string): Promise<Entities.PCR> {
+    return super.getOne(x => x.id === id);
+  }
+}
+
+class PCRItemTestRepository extends TestRepository<Entities.PCRItem> implements Repositories.IPcrItemRepository {
+  getAllByPcrId(pcrId: string): Promise<Entities.PCRItem[]> {
+    return super.getWhere(x => x.pcrId === pcrId);
+  }
+
+  getById(id: string): Promise<Entities.PCRItem> {
+    return super.getOne(x => x.id === id);
+  }
+}
+
 export interface ITestRepositories extends IRepositories {
   claims: ClaimsTestRepository;
   claimDetails: ClaimDetailsTestRepository;
@@ -418,6 +438,8 @@ export interface ITestRepositories extends IRepositories {
   monitoringReportResponse: MonitoringReportResponseTestRepository;
   monitoringReportQuestions: MonitoringReportQuestionsRepository;
   monitoringReportStatusChange: MonitoringReportStatusChangeTestRepository;
+  pcrItems: PCRItemTestRepository;
+  pcrs: PCRTestRepository;
   profileDetails: ProfileDetailsTestRepository;
   profileTotalCostCategory: ProfileTotalCostCategoryTestRepository;
   profileTotalPeriod: ProfileTotalPeriodTestRepository;
@@ -445,6 +467,8 @@ export const createTestRepositories = (): ITestRepositories => {
     monitoringReportHeader: new MonitoringReportHeaderTestRepository(),
     monitoringReportQuestions: new MonitoringReportQuestionsRepository(),
     monitoringReportStatusChange: new MonitoringReportStatusChangeTestRepository(),
+    pcrItems: new PCRItemTestRepository(),
+    pcrs: new PCRTestRepository(),
     profileDetails: new ProfileDetailsTestRepository(),
     profileTotalPeriod: new ProfileTotalPeriodTestRepository(partnerRepository),
     profileTotalCostCategory: new ProfileTotalCostCategoryTestRepository(),
