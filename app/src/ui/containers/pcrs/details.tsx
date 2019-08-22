@@ -9,6 +9,7 @@ import * as Selectors from "../../redux/selectors";
 import { Pending } from "@shared/pending";
 import { PCRItemStatus, PCRItemType, PCRStatus } from "@framework/entities";
 import { PCRsDashboardRoute } from "./dashboard";
+import { PCRItemDetailsRoute } from "./itemDetails";
 
 interface PCRItemDto {
   id: string;
@@ -32,7 +33,6 @@ interface PCRDto {
 }
 
 const fakeItemTypes = ["Scope", "Duration", "Cost", "Partner"];
-const fakeStatus = ["Approved", "Draft", "Submitted to MO", "Queried", "Submitted to IUK"];
 
 const fakePcr: PCRDto = {
   comments: "Some comments",
@@ -97,8 +97,8 @@ class PCRDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
           </dl>
         </ACC.Section>
         <ol className="app-task-list">
-          {this.renderItem(1, "Give more details", "Reasoning for Innovate UK", pcr.reasoningStatusName)}
-          {pcr.items.map((x, i) => this.renderItem(i + 2, x.typeName, "Provide your files", x.statusName))}
+          {this.renderItem("Reasoning", 1, "Give more details", "Reasoning for Innovate UK", pcr.reasoningStatusName)}
+          {pcr.items.map((x, i) => this.renderItem(x.id, i + 2, x.typeName, "Provide your files", x.statusName))}
         </ol>
       </ACC.Page>
     );
@@ -114,13 +114,13 @@ class PCRDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
     }, []);
   }
 
-  private renderItem(step: number, title: string, text: string, status: string) {
+  private renderItem(id: string, step: number, title: string, text: string, status: string) {
     return (
       <li>
         <h2 className="app-task-list__section"><span className="app-task-list__section-number">{step}.</span>&nbsp;{title}</h2>
         <ul className="app-task-list__items">
           <li className="app-task-list__item">
-            <span className="app-task-list__task-name"><a href={`#${step}`} className="govuk-link">{text}</a></span>
+            <span className="app-task-list__task-name"><ACC.Link route={PCRItemDetailsRoute.getLink({projectId: this.props.projectId, pcrId: this.props.pcrId, itemId: id })}>{text}</ACC.Link></span>
             <span className="app-task-list__task-completed">{status}</span>
           </li>
         </ul>
@@ -151,8 +151,8 @@ export const PCRDetailsRoute = definition.route({
     Actions.loadProject(params.projectId)
   ],
   getTitle: () => ({
-    htmlTitle: "Project change request",
-    displayTitle: "Project change request"
+    htmlTitle: "Project change request details",
+    displayTitle: "Project change request details"
   }),
   container: PCRDetails,
   accessControl: (auth, { projectId }, config) => config.features.pcrsEnabled && auth.forProject(projectId).hasAnyRoles(ProjectRole.ProjectManager, ProjectRole.MonitoringOfficer)
