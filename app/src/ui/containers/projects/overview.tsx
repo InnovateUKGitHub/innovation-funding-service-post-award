@@ -16,7 +16,7 @@ import { ProjectDocumentsRoute } from "./projectDocuments";
 import { ProjectDetailsRoute } from "./details";
 import { IClientConfig } from "@ui/redux/reducers/configReducer";
 import { NavigationCard } from "@ui/components";
-import { PCRsDashboardRoute } from "../pcrs";
+import { PCRsDashboardRoute } from "../pcrs/dashboard";
 
 interface Data {
   projectDetails: Pending<Dtos.ProjectDto>;
