@@ -22,6 +22,7 @@ export class TestConfig implements IConfig {
     calculateOverheads: true,
     documentFiltering: true,
     projectFiltering: true,
+    pcrsEnabled: true
   };
 
   public logLevel = LogLevel.DEBUG;
