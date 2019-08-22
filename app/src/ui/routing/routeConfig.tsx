@@ -19,6 +19,7 @@ export const routeConfig = {
   prepareClaim: Containers.PrepareClaimRoute,
   prepareClaimLineItems: Containers.EditClaimLineItemsRoute,
   projectChangeRequests: Containers.ProjectChangeRequestsRoute,
+  pcrDetails: Containers.PCRDetailsRoute,
   pcrsDashboard: Containers.PCRsDashboardRoute,
   projectDashboard: Containers.ProjectDashboardRoute,
   projectDetails: Containers.ProjectDetailsRoute,

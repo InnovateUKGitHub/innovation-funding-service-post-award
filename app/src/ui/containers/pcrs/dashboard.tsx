@@ -8,19 +8,33 @@ import * as Selectors from "../../redux/selectors";
 import { Pending } from "@shared/pending";
 import { range } from "@shared/range";
 import { DateTime } from "luxon";
-import { PCRItemType, PCRItemStatus } from "@framework/entities";
+import { PCRItemType, PCRStatus } from "@framework/entities";
+import { PCRDetailsRoute } from "./details";
 
-interface PCRDto {
+interface PCRSummaryDto {
+  id: string;
   requestNumber: number;
-  items:{
+  items: {
     type: PCRItemType;
     typeName: string;
-  }[],
+  }[];
   started: Date;
   lastUpdated: Date;
-  status: PCRItemStatus;
+  status: PCRStatus;
   statusName: string;
 }
+
+const fakeItemTypes = ["Scope", "Duration", "Cost", "Partner"];
+const fakeStatus = ["Approved", "Draft", "Submitted to MO", "Queried", "Submitted to IUK"];
+const fakePcrs = range(10).map<PCRSummaryDto>((x, i) => ({
+  id: `Pcr-${x}`,
+  requestNumber: x,
+  items: range((x % fakeItemTypes.length) + 1).map(y => ({ typeName: fakeItemTypes[y % (fakeItemTypes.length - 1)], type: PCRItemType.Unknown })),
+  started: DateTime.local().minus({ months: 1 }).plus({ days: x }).toJSDate(),
+  lastUpdated: DateTime.local().minus({ months: 1 }).plus({ days: x + 15 }).toJSDate(),
+  statusName: fakeStatus[i % 5],
+  status: PCRStatus.Unknown,
+})).reverse();
 
 interface Params {
   projectId: string;
@@ -28,7 +42,7 @@ interface Params {
 
 interface Data {
   project: Pending<ProjectDto>;
-  pcrs: Pending<PCRDto[]>;
+  pcrs: Pending<PCRSummaryDto[]>;
 }
 
 interface Callbacks {
@@ -36,12 +50,12 @@ interface Callbacks {
 
 class PCRsDashboardComponent extends ContainerBase<Params, Data, Callbacks> {
   render() {
-    const combined = Pending.combine({project: this.props.project, pcrs: this.props.pcrs});
+    const combined = Pending.combine({ project: this.props.project, pcrs: this.props.pcrs });
 
     return <ACC.PageLoader pending={combined} render={x => this.renderContents(x.project, x.pcrs)} />;
   }
 
-  private renderContents(project: ProjectDto, pcrs: PCRDto[]) {
+  private renderContents(project: ProjectDto, pcrs: PCRSummaryDto[]) {
     const active = pcrs.filter(x => x.statusName !== "Approved");
     const archived = pcrs.filter(x => x.statusName === "Approved");
 
@@ -63,43 +77,33 @@ class PCRsDashboardComponent extends ContainerBase<Params, Data, Callbacks> {
     );
   }
 
-  private renderTable(pcrs: PCRDto[], qa: string) {
-    const PCRTable = ACC.TypedTable<PCRDto>();
+  private renderTable(pcrs: PCRSummaryDto[], qa: string) {
+    const PCRTable = ACC.TypedTable<PCRSummaryDto>();
 
     return (
       <PCRTable.Table data={pcrs} qa={qa}>
-        <PCRTable.Custom qa="number" header="Request number" value={x => x.requestNumber}/>
-        <PCRTable.Custom qa="types" header="Types" value={x => this.renderTypes(x.items)}/>
-        <PCRTable.ShortDate qa="started" header="Started" value={x => x.started}/>
-        <PCRTable.String qa="stauts" header="Status" value={x => x.statusName}/>
-        <PCRTable.ShortDate qa="lastUpdated" header="Last updated" value={x => x.lastUpdated}/>
+        <PCRTable.Custom qa="number" header="Request number" value={x => x.requestNumber} />
+        <PCRTable.Custom qa="types" header="Types" value={x => this.renderTypes(x.items)} />
+        <PCRTable.ShortDate qa="started" header="Started" value={x => x.started} />
+        <PCRTable.String qa="stauts" header="Status" value={x => x.statusName} />
+        <PCRTable.ShortDate qa="lastUpdated" header="Last updated" value={x => x.lastUpdated} />
+        <PCRTable.Link qa="actions" header="Actions" hideHeader={true} value={x => PCRDetailsRoute.getLink({ projectId: this.props.projectId, pcrId: x.id })} content="View" />
       </PCRTable.Table>
     );
   }
 
   renderTypes(items: { type: PCRItemType; typeName: string; }[]): React.ReactNode {
     return items.map(x => x.typeName).reduce<React.ReactNode[]>((a, b, index) => {
-      if(index> 0){
-        a.push(<br/>);
+      if (index > 0) {
+        a.push(<br />);
       }
       a.push(b);
       return a;
-    },[])
+    }, []);
   }
-
 }
 
 const definition = ReduxContainer.for<Params, Data, Callbacks>(PCRsDashboardComponent);
-const fakeItemTypes = ["Scope", "Duration", "Cost", "Partner"];
-const fakeStatus = ["Approved", "Draft", "Submitted to MO", "Queried", "Submitted to IUK"];
-const fakePcrs = range(10).map<PCRDto>((x,i) => ({
-  requestNumber:x,
-  items: range((x % fakeItemTypes.length) + 1).map(y => ({typeName:fakeItemTypes[y % (fakeItemTypes.length - 1)], type:  PCRItemType.Unknown})),
-  started: DateTime.local().minus({months: 1}).plus({days:x}).toJSDate(),
-  lastUpdated: DateTime.local().minus({months: 1}).plus({days:x + 15}).toJSDate(),
-  statusName: fakeStatus[i % 5],
-  status: PCRItemStatus.Unknown,
-})).reverse();
 
 export const PCRsDashboard = definition.connect({
   withData: (state, params) => ({
