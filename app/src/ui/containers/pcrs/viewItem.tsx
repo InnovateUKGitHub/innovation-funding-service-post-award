@@ -7,35 +7,8 @@ import * as ACC from "../../components";
 import * as Actions from "../../redux/actions";
 import * as Selectors from "../../redux/selectors";
 import { Pending } from "@shared/pending";
-import { PCR, PCRItemStatus, PCRItemType, PCRStatus } from "@framework/entities";
 import { PCRDetailsRoute } from "./details";
-import { range } from "@shared/range";
-
-interface PCRItemDto {
-  id: string;
-  type: PCRItemType;
-  typeName: string;
-  status: PCRItemStatus;
-  statusName: string;
-}
-
-const fakeItemTypes = ["Scope", "Duration", "Cost", "Partner"];
-
-const fakePcrItem: PCRItemDto = {
-  id: `PCR-Item-Id`,
-  status: PCRItemStatus.Unknown,
-  statusName: "To do",
-  type: PCRItemType.Unknown,
-  typeName: "Scope",
-};
-
-const fakeDocuments: DocumentSummaryDto[] = range(3).map<DocumentSummaryDto>(x => ({
-  id: `Doc${x}`,
-  fileName: `doc${x}.txt`,
-  fileSize: 0,
-  link: "#",
-  dateCreated: new  Date(),
-}));
+import { fakeDocuments, fakePcr, PCRItemDto } from "./fakePcrs";
 
 interface Params {
   projectId: string;
@@ -90,7 +63,7 @@ const definition = ReduxContainer.for<Params, Data, Callbacks>(PCRViewItemCompon
 export const PCRViewItem = definition.connect({
   withData: (state, params) => ({
     project: Selectors.getProject(params.projectId).getPending(state),
-    pcrItem: Pending.done(fakePcrItem),
+    pcrItem: Pending.done(fakePcr.items[0]),
     files: Pending.done(fakeDocuments)
   }),
   withCallbacks: () => ({})

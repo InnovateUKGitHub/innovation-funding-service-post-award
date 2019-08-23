@@ -1,40 +1,16 @@
 import React from "react";
 
+import { Pending } from "@shared/pending";
 import { ContainerBase, ReduxContainer } from "../containerBase";
-import { ProjectDto, ProjectRole } from "@framework/types";
 import * as ACC from "../../components";
 import * as Actions from "../../redux/actions";
 import * as Selectors from "../../redux/selectors";
-import { Pending } from "@shared/pending";
+import { ProjectDto, ProjectRole } from "@framework/types";
 import { range } from "@shared/range";
 import { DateTime } from "luxon";
 import { PCRItemType, PCRStatus } from "@framework/entities";
 import { PCRDetailsRoute } from "./details";
-
-interface PCRSummaryDto {
-  id: string;
-  requestNumber: number;
-  items: {
-    type: PCRItemType;
-    typeName: string;
-  }[];
-  started: Date;
-  lastUpdated: Date;
-  status: PCRStatus;
-  statusName: string;
-}
-
-const fakeItemTypes = ["Scope", "Duration", "Cost", "Partner"];
-const fakeStatus = ["Approved", "Draft", "Submitted to MO", "Queried", "Submitted to IUK"];
-const fakePcrs = range(10).map<PCRSummaryDto>((x, i) => ({
-  id: `Pcr-${x}`,
-  requestNumber: x,
-  items: range((x % fakeItemTypes.length) + 1).map(y => ({ typeName: fakeItemTypes[y % (fakeItemTypes.length - 1)], type: PCRItemType.Unknown })),
-  started: DateTime.local().minus({ months: 1 }).plus({ days: x }).toJSDate(),
-  lastUpdated: DateTime.local().minus({ months: 1 }).plus({ days: x + 15 }).toJSDate(),
-  statusName: fakeStatus[i % 5],
-  status: PCRStatus.Unknown,
-})).reverse();
+import { fakePcrs, PCRSummaryDto } from "./fakePcrs";
 
 interface Params {
   projectId: string;

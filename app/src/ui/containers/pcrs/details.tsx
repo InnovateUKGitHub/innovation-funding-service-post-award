@@ -7,52 +7,10 @@ import * as ACC from "../../components";
 import * as Actions from "../../redux/actions";
 import * as Selectors from "../../redux/selectors";
 import { Pending } from "@shared/pending";
-import { PCRItemStatus, PCRItemType, PCRStatus } from "@framework/entities";
 import { PCRsDashboardRoute } from "./dashboard";
 import { PCRViewItemRoute } from "./viewItem";
 import { PCRViewReasoningRoute } from "./viewReasoning";
-
-interface PCRItemDto {
-  id: string;
-  type: PCRItemType;
-  typeName: string;
-  status: PCRItemStatus;
-  statusName: string;
-}
-
-interface PCRDto {
-  id: string;
-  requestNumber: number;
-  items: PCRItemDto[];
-  started: Date;
-  lastUpdated: Date;
-  status: PCRStatus;
-  statusName: string;
-  comments: string;
-  reasoningStatus: PCRItemStatus;
-  reasoningStatusName: string;
-}
-
-const fakeItemTypes = ["Scope", "Duration", "Cost", "Partner"];
-
-const fakePcr: PCRDto = {
-  comments: "Some comments",
-  id: "PCR-ID",
-  lastUpdated: new Date(),
-  reasoningStatus: PCRItemStatus.Unknown,
-  reasoningStatusName: "To do",
-  requestNumber: 1,
-  started: new Date(),
-  status: PCRStatus.Unknown,
-  statusName: "PCR Status",
-  items: fakeItemTypes.map((x, i) => ({
-    id: `PCR-Item-${i + 1}`,
-    status: PCRItemStatus.Unknown,
-    statusName: "To do",
-    type: PCRItemType.Unknown,
-    typeName: x,
-  }))
-};
+import { fakePcr, PCRDto, PCRItemDto } from "./fakePcrs";
 
 interface Params {
   projectId: string;
@@ -99,7 +57,7 @@ class PCRDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
         </ACC.Section>
         <ol className="app-task-list">
           {this.renderReasoning(pcr)}
-          {pcr.items.map((x, i) => this.renderItem(pcr, x, i+1))}
+          {pcr.items.map((x, i) => this.renderItem(x, i+1))}
         </ol>
       </ACC.Page>
     );
@@ -119,7 +77,7 @@ class PCRDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
     return this.renderListItem(1, "Give more details", "Reasoning for Innovate UK", pcr.reasoningStatusName, PCRViewReasoningRoute.getLink({projectId: this.props.projectId, pcrId: this.props.pcrId}));
   }
 
-  private renderItem(pcr: PCRDto, item: PCRItemDto, step: number) {
+  private renderItem(item: PCRItemDto, step: number) {
     return this.renderListItem(step, item.typeName, "Provide your files", item.statusName, PCRViewItemRoute.getLink({projectId: this.props.projectId, pcrId: this.props.pcrId, itemId: item.id}));
   }
 
