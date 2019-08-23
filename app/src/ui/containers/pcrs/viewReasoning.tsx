@@ -9,6 +9,7 @@ import * as Selectors from "../../redux/selectors";
 import { Pending } from "@shared/pending";
 import { PCRDetailsRoute } from "./details";
 import { fakeDocuments, fakePcr, PCRDto } from "./fakePcrs";
+import { PCRViewItemRoute } from "./viewItem";
 
 interface Params {
   projectId: string;
@@ -57,6 +58,7 @@ class PCRViewReasoningComponent extends ContainerBase<Params, Data, Callbacks> {
             </div>
           </dl>
         </ACC.Section>
+        <ACC.NavigationArrows nextLink={{label: pcr.items[0].typeName, route: PCRViewItemRoute.getLink({projectId: this.props.projectId, pcrId: this.props.pcrId, itemId: pcr.items[0].id })}}/>
       </ACC.Page>
     );
   }
