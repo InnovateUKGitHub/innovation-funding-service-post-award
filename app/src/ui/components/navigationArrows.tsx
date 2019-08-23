@@ -5,8 +5,8 @@ import {ArrowLeft} from "./svg/arrowLeft";
 import {ArrowRight} from "./svg/arrowRight";
 
 interface Props {
-  previousLink: {label: string, route: ILinkInfo} | null;
-  nextLink: {label: string, route: ILinkInfo} | null;
+  previousLink?: {label: string, route: ILinkInfo} | null;
+  nextLink?: {label: string, route: ILinkInfo} | null;
 }
 
 export class NavigationArrows extends React.Component<Props> {
@@ -20,7 +20,7 @@ export class NavigationArrows extends React.Component<Props> {
   }
 
   private renderLeftHalf() {
-    if (this.props.previousLink === null) return null;
+    if (!this.props.previousLink) return null;
     return (
       <Link route={this.props.previousLink.route} className="govuk-navigation-arrows__button">
         <ArrowLeft className="govuk-navigation-arrows__button__arrow" />
@@ -33,7 +33,7 @@ export class NavigationArrows extends React.Component<Props> {
   }
 
   private renderRightHalf() {
-    if (this.props.nextLink === null) return null;
+    if (!this.props.nextLink) return null;
     return (
       <Link route={this.props.nextLink.route} className="govuk-navigation-arrows__button">
         <ArrowRight className="govuk-navigation-arrows__button__arrow" />

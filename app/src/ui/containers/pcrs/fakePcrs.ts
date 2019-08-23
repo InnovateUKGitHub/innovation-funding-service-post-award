@@ -61,7 +61,7 @@ export const fakePcr: PCRDto = {
   items: fakeItemTypes.map((x, i) => ({
     id: `PCR-Item-${i + 1}`,
     status: PCRItemStatus.Unknown,
-    statusName: "To do",
+    statusName: i % 2 ? "To do" : "Complete",
     type: PCRItemType.Unknown,
     typeName: x,
   }))
