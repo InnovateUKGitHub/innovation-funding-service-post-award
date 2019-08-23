@@ -1,4 +1,4 @@
-import { PCR, PCRItemStatus, PCRStatus } from "@framework/entities/pcr";
+import { PCR, PCRItemStatus, PCRItemType, PCRStatus } from "@framework/entities/pcr";
 import { range } from "@shared/range";
 import { DateTime } from "luxon";
 import { SalesforceInvalidFilterError } from "./errors";
@@ -8,15 +8,20 @@ export interface IPcrRepository {
   getById(id: string): Promise<PCR>;
 }
 
+const fakeItemTypes = ["Scope", "Duration", "Cost", "Partner"];
+const fakePcrStatus = ["Approved", "Draft", "Submitted to MO", "Queried", "Submitted to IUK"];
+
 const fakeData = range(10).map<PCR>(x => ({
   id: `PCR-${x}`,
   projectId: "ProjectID",
   number: x,
   comments: "",
   reasoningStatus: PCRItemStatus.Unknown,
-  started: DateTime.local().setZone("").minus({days:x}).toJSDate(),
-  status: PCRStatus.Unknown,
-  updated: DateTime.local().setZone("").minus({days:x}).toJSDate()
+  started: DateTime.local().setZone("Europe/London").startOf("day").minus({days:x}).toJSDate(),
+  status: (x % fakePcrStatus.length) + 1 as PCRStatus,
+  statusName: fakePcrStatus[(x) % fakePcrStatus.length],
+  updated: DateTime.local().setZone("Europe/London").startOf("day").minus({days:x}).toJSDate(),
+  items: fakeItemTypes.map((type,i) => ({itemType: i + 1 as PCRItemType, itemTypeName: type }))
 }));
 
 export class PCRRepository implements IPcrRepository {
