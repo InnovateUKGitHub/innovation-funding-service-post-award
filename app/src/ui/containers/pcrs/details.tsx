@@ -1,7 +1,7 @@
 import React, { ReactNode } from "react";
 
 import { ContainerBase, ReduxContainer } from "../containerBase";
-import { ProjectDto, ProjectRole } from "@framework/types";
+import { ILinkInfo, ProjectDto, ProjectRole } from "@framework/types";
 
 import * as ACC from "../../components";
 import * as Actions from "../../redux/actions";
@@ -9,7 +9,8 @@ import * as Selectors from "../../redux/selectors";
 import { Pending } from "@shared/pending";
 import { PCRItemStatus, PCRItemType, PCRStatus } from "@framework/entities";
 import { PCRsDashboardRoute } from "./dashboard";
-import { PCRItemDetailsRoute } from "./itemDetails";
+import { PCRViewItemRoute } from "./viewItem";
+import { PCRViewReasoningRoute } from "./viewReasoning";
 
 interface PCRItemDto {
   id: string;
@@ -97,8 +98,8 @@ class PCRDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
           </dl>
         </ACC.Section>
         <ol className="app-task-list">
-          {this.renderItem("Reasoning", 1, "Give more details", "Reasoning for Innovate UK", pcr.reasoningStatusName)}
-          {pcr.items.map((x, i) => this.renderItem(x.id, i + 2, x.typeName, "Provide your files", x.statusName))}
+          {this.renderReasoning(pcr)}
+          {pcr.items.map((x, i) => this.renderItem(pcr, x, i+1))}
         </ol>
       </ACC.Page>
     );
@@ -114,20 +115,27 @@ class PCRDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
     }, []);
   }
 
-  private renderItem(id: string, step: number, title: string, text: string, status: string) {
+  private renderReasoning(pcr: PCRDto) {
+    return this.renderListItem(1, "Give more details", "Reasoning for Innovate UK", pcr.reasoningStatusName, PCRViewReasoningRoute.getLink({projectId: this.props.projectId, pcrId: this.props.pcrId}));
+  }
+
+  private renderItem(pcr: PCRDto, item: PCRItemDto, step: number) {
+    return this.renderListItem(step, item.typeName, "Provide your files", item.statusName, PCRViewItemRoute.getLink({projectId: this.props.projectId, pcrId: this.props.pcrId, itemId: item.id}));
+  }
+
+  private renderListItem(step: number, title: string, text: string, status: string, route: ILinkInfo) {
     return (
-      <li>
+      <li key={step}>
         <h2 className="app-task-list__section"><span className="app-task-list__section-number">{step}.</span>&nbsp;{title}</h2>
         <ul className="app-task-list__items">
           <li className="app-task-list__item">
-            <span className="app-task-list__task-name"><ACC.Link route={PCRItemDetailsRoute.getLink({projectId: this.props.projectId, pcrId: this.props.pcrId, itemId: id })}>{text}</ACC.Link></span>
+            <span className="app-task-list__task-name"><ACC.Link route={route}>{text}</ACC.Link></span>
             <span className="app-task-list__task-completed">{status}</span>
           </li>
         </ul>
       </li>
     );
   }
-
 }
 
 const definition = ReduxContainer.for<Params, Data, Callbacks>(PCRDetailsComponent);
