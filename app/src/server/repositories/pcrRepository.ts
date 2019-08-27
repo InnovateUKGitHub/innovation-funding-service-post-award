@@ -5,7 +5,7 @@ import { SalesforceInvalidFilterError } from "./errors";
 
 export interface IPcrRepository {
   getAllByProjectId(projectId: string): Promise<PCR[]>;
-  getById(id: string): Promise<PCR>;
+  getById(projectId: string, id: string): Promise<PCR>;
 }
 
 const fakeItemTypes = ["Scope", "Duration", "Cost", "Partner"];
@@ -17,21 +17,23 @@ const fakeData = range(10).map<PCR>(x => ({
   number: x,
   comments: "",
   reasoningStatus: PCRItemStatus.Unknown,
-  started: DateTime.local().setZone("Europe/London").startOf("day").minus({days:x}).toJSDate(),
+  started: DateTime.local().setZone("Europe/London").startOf("day").minus({ days: x }).toJSDate(),
   status: (x % fakePcrStatus.length) + 1 as PCRStatus,
   statusName: fakePcrStatus[(x) % fakePcrStatus.length],
-  updated: DateTime.local().setZone("Europe/London").startOf("day").minus({days:x}).toJSDate(),
-  items: fakeItemTypes.map((type,i) => ({itemType: i + 1 as PCRItemType, itemTypeName: type }))
+  updated: DateTime.local().setZone("Europe/London").startOf("day").minus({ days: x }).toJSDate(),
+  reasoning: "",
+  reasoningStatusName: fakePcrStatus[(x + 1) % fakePcrStatus.length],
+  items: fakeItemTypes.map((type, i) => ({ itemType: i + 1 as PCRItemType, itemTypeName: type }))
 }));
 
 export class PCRRepository implements IPcrRepository {
   getAllByProjectId(projectId: string): Promise<PCR[]> {
-    return Promise.resolve(fakeData.map(x => ({...x, projectId})));
+    return Promise.resolve(fakeData.map(x => ({ ...x, projectId })));
   }
 
-  getById(id: string): Promise<PCR> {
+  getById(projectId: string, id: string): Promise<PCR> {
     const result = fakeData.find(x => x.id === id);
-    if(!result) {
+    if (!result) {
       throw new SalesforceInvalidFilterError("PCR NOT FOUND");
     }
     return Promise.resolve(result);
