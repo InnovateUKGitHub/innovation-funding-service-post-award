@@ -17,13 +17,20 @@ export interface PCR {
   started: Date;
   updated: Date;
   status: PCRStatus;
+  statusName: string;
   reasoningStatus: PCRItemStatus;
   comments: string;
+  items: {
+    itemType: PCRItemType;
+    itemTypeName: string;
+  }[];
 }
 
 export interface PCRItem {
   id: string;
   pcrId: string;
   itemType: PCRItemType;
+  itemTypeName: string;
   status: PCRItemStatus;
+  statusName: string;
 }
