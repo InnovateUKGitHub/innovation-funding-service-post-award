@@ -423,8 +423,8 @@ class PCRTestRepository extends TestRepository<{pcr: Entities.PCR, items: Entiti
     return super.getWhere(x => x.pcr.projectId === projectId).then(x => x.map(y => this.convertToPcr(y)));
   }
 
-  getById(id: string): Promise<Entities.PCR> {
-    return super.getOne(x => x.pcr.id === id).then(x => this.convertToPcr(x));
+  getById(projectId: string, id: string): Promise<Entities.PCR> {
+    return super.getOne(x => x.pcr.projectId === projectId && x.pcr.id === id).then(x => this.convertToPcr(x));
   }
 
   getAllItemsByPcrId(pcrId: string): Promise<Entities.PCRItem[]> {
