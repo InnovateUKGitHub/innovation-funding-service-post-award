@@ -578,6 +578,8 @@ export class TestData {
       statusName: Entites.PCRStatus[Entites.PCRStatus.Unknown],
       started: new Date(),
       updated: new Date(),
+      reasoning: "",
+      reasoningStatusName: Entites.PCRItemStatus[Entites.PCRItemStatus.Unknown],
       items: []
     };
 
@@ -591,7 +593,7 @@ export class TestData {
   }
 
   public createPCRItem(pcr?: Entites.PCR, update?: Partial<Entites.PCRItem>) {
-    const seed = this.repositories.pcrItems.Items.length + 1;
+    const seed = this.repositories.pcrItems.Items.reduce((c, x) => c + x.items.length, 0) + 1;
 
     pcr = pcr || this.createPCR();
 

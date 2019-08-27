@@ -19,6 +19,8 @@ export interface PCR {
   status: PCRStatus;
   statusName: string;
   reasoningStatus: PCRItemStatus;
+  reasoningStatusName: string;
+  reasoning: string;
   comments: string;
   items: {
     itemType: PCRItemType;
