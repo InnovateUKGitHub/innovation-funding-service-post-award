@@ -575,15 +575,17 @@ export class TestData {
       number: seed,
       reasoningStatus: Entites.PCRItemStatus.Unknown,
       status: Entites.PCRStatus.Unknown,
+      statusName: Entites.PCRStatus[Entites.PCRStatus.Unknown],
       started: new Date(),
-      updated: new Date()
+      updated: new Date(),
+      items: []
     };
 
     if(update) {
       Object.assign(newItem, update);
     }
 
-    this.repositories.pcrs.Items.push(newItem);
+    this.repositories.pcrs.Items.push({ pcr: newItem, items: [] });
 
     return newItem;
   }
@@ -597,14 +599,18 @@ export class TestData {
       id: `PCR_Item_${seed}`,
       pcrId: pcr.id,
       itemType: Entites.PCRItemType.Unknown,
+      itemTypeName: "Item Type Name",
       status: Entites.PCRItemStatus.Unknown,
+      statusName: "Item Status Name",
     };
 
     if(update) {
       Object.assign(newItem, update);
     }
 
-    this.repositories.pcrItems.Items.push(newItem);
+    const pair = this.repositories.pcrs.Items.find(x => x.pcr.id === pcr!.id)!;
+
+    pair.items.push(newItem);
 
     return newItem;
   }

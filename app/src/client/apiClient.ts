@@ -48,6 +48,9 @@ const clientApi: IApiClient = {
     getActiveQuestions: (params) => ajax(`/api/monitoring-reports/questions`),
     getStatusChanges: (params) => ajax(`/api/monitoring-reports/status-changes/${params.projectId}/${params.reportId}`),
   },
+  pcrs: {
+    getAll: (params) => ajax(`/api/pcrs?projectId=${params.projectId}`)
+  },
   projects: {
     get: (params) => ajaxJson(`/api/projects/${params.projectId}`),
     getAll: (params) => ajaxJson("/api/projects"),
