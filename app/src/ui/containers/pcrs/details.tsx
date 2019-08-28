@@ -1,4 +1,4 @@
-import React, { ReactNode } from "react";
+import React from "react";
 
 import { ContainerBase, ReduxContainer } from "../containerBase";
 import { ILinkInfo, ProjectDto, ProjectRole } from "@framework/types";
@@ -56,15 +56,15 @@ class PCRDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
           </dl>
         </ACC.Section>
         <ol className="app-task-list">
-          {this.renderReasoning(pcr)}
           {pcr.items.map((x, i) => this.renderItem(x, i+1))}
+          {this.renderReasoning(pcr)}
         </ol>
       </ACC.Page>
     );
   }
 
   private renderTypes(pcr: PCRDto): React.ReactNode {
-    return pcr.items.map(x => x.typeName).reduce<ReactNode[]>((result, current, index) => {
+    return pcr.items.map(x => x.typeName).reduce<React.ReactNode[]>((result, current, index) => {
       if (index > 0) {
         result.push(<br />);
       }
@@ -74,7 +74,7 @@ class PCRDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
   }
 
   private renderReasoning(pcr: PCRDto) {
-    return this.renderListItem(1, "Give more details", "Reasoning for Innovate UK", pcr.reasoningStatusName, PCRViewReasoningRoute.getLink({projectId: this.props.projectId, pcrId: this.props.pcrId}));
+    return this.renderListItem(pcr.items.length + 1, "Give more details", "Reasoning for Innovate UK", pcr.reasoningStatusName, PCRViewReasoningRoute.getLink({projectId: this.props.projectId, pcrId: this.props.pcrId}));
   }
 
   private renderItem(item: PCRItemDto, step: number) {

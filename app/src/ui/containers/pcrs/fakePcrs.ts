@@ -34,13 +34,33 @@ export interface PCRItemDto {
   statusName: string;
 }
 
-const fakeItemTypes = ["Scope", "Duration", "Cost", "Partner"];
+export interface PCRItemTypeDto {
+  id: PCRItemType;
+  name: string;
+  order: number;
+}
+
+export const fakeItemTypes = [
+  { id: PCRItemType.SinglePartnerFinancialVirement, name: "Financial Virement", order: 1 },
+  { id: PCRItemType.PartnerAddition, name: "Partner Addition", order: 2 },
+  { id: PCRItemType.PartnerWithdrawal, name: "Partner Withdrawal", order: 3 },
+  { id: PCRItemType.TimeExtension, name: "Time Extension", order: 4 },
+  { id: PCRItemType.ProjectSuspension, name: "Project Suspension", order: 5 },
+  { id: PCRItemType.ScopeChange, name: "Scope Change", order: 6 },
+  { id: PCRItemType.ProjectTermination, name: "Project Termination", order: 7 },
+];
+
 const fakePcrStatus = ["Approved", "Draft", "Submitted to MO", "Queried", "Submitted to IUK"];
 
 export const fakePcrs = range(10).map<PCRSummaryDto>((x, i) => ({
   id: `Pcr-${x}`,
   requestNumber: x,
-  items: range((x % fakeItemTypes.length) + 1).map(y => ({ typeName: fakeItemTypes[y % (fakeItemTypes.length - 1)], type: PCRItemType.Unknown })),
+  items: fakeItemTypes.map(y => {
+    return {
+      typeName: y.name,
+      type: y.id
+    };
+  }),
   started: DateTime.local().minus({ months: 1 }).plus({ days: x }).toJSDate(),
   lastUpdated: DateTime.local().minus({ months: 1 }).plus({ days: x + 15 }).toJSDate(),
   statusName: fakePcrStatus[i % 5],
@@ -62,8 +82,8 @@ export const fakePcr: PCRDto = {
     id: `PCR-Item-${i + 1}`,
     status: PCRItemStatus.Unknown,
     statusName: i % 2 ? "To do" : "Complete",
-    type: PCRItemType.Unknown,
-    typeName: x,
+    type: x.id,
+    typeName: x.name,
   }))
 };
 
