@@ -31,3 +31,9 @@ export interface PCRItemDto {
   status: PCRItemStatus;
   statusName: string;
 }
+
+export interface PCRItemTypeDto {
+  id: PCRItemType;
+  name: string;
+  order: number;
+}
