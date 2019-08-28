@@ -217,6 +217,20 @@ const RadioOptionsField = <T extends {}>(props: RadioFieldProps<T> & InternalFie
   );
 };
 
+interface CheckboxFieldProps<T extends {}> extends ExternalFieldProps<T, SelectOption[]> {
+  options: SelectOption[];
+}
+
+const CheckboxOptionsField = <T extends {}>(props: CheckboxFieldProps<T> & InternalFieldProps<T>) => {
+  const TypedFieldComponent = FieldComponent as { new(): FieldComponent<T, SelectOption[]> };
+  return (
+    <TypedFieldComponent
+      field={(data, disabled) => <ACC.Inputs.CheckboxList options={props.options} name={props.name} value={props.value(data)} onChange={(val) => handleChange(props, val)} disabled={disabled} />}
+      {...props}
+    />
+  );
+};
+
 const HiddenField = <T extends {}>(props: HiddenFieldProps<T> & InternalFieldProps<T>) => {
   return (
     <input type="hidden" name={props.name} value={props.value((props as any as InternalFieldProps<T>).formData) || ""} />
@@ -292,6 +306,7 @@ export interface FormBuilder<T> {
   MultilineString: React.SFC<MultiStringFieldProps<T>>;
   Numeric: React.SFC<NumericFieldProps<T>>;
   Radio: React.SFC<RadioFieldProps<T>>;
+  Checkboxes: React.SFC<CheckboxFieldProps<T>>;
   Hidden: React.SFC<HiddenFieldProps<T>>;
   Submit: React.SFC<SubmitProps>;
   Button: React.SFC<ButtonProps>;
@@ -306,6 +321,7 @@ export const TypedForm = <T extends {}>(): FormBuilder<T> => ({
   MultilineString: MultiStringField as React.SFC<MultiStringFieldProps<T>>,
   Numeric: NumericField as React.SFC<NumericFieldProps<T>>,
   Radio: RadioOptionsField as React.SFC<RadioFieldProps<T>>,
+  Checkboxes: CheckboxOptionsField as React.SFC<CheckboxFieldProps<T>>,
   Hidden: HiddenField as React.SFC<HiddenFieldProps<T>>,
   Submit: SubmitComponent as React.SFC<SubmitProps>,
   Button: ButtonComponent as React.SFC<ButtonProps>,

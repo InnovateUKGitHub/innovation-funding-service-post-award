@@ -11,6 +11,7 @@ import { DateTime } from "luxon";
 import { PCRItemType, PCRStatus } from "@framework/entities";
 import { PCRDetailsRoute } from "./details";
 import { fakePcrs, PCRSummaryDto } from "./fakePcrs";
+import { PCRCreateRoute } from "./create";
 
 interface Params {
   projectId: string;
@@ -43,6 +44,7 @@ class PCRsDashboardComponent extends ContainerBase<Params, Data, Callbacks> {
       >
         <ACC.Section>
           {this.renderTable(active, "pcrs-active")}
+          <ACC.Link route={PCRCreateRoute.getLink({ projectId: this.props.projectId })} className="govuk-button">Start a new request</ACC.Link>
         </ACC.Section>
         <ACC.Accordion>
           <ACC.AccordionItem title="Past requests">
