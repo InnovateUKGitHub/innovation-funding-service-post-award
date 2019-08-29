@@ -8,13 +8,15 @@ export enum PCRItemStatus {
 
 export enum PCRItemType {
   Unknown = 0,
-  FinancialVirement = 1,
-  PartnerAddition = 2,
-  PartnerWithdrawal = 3,
-  TimeExtension = 4,
-  ProjectSuspension = 5,
-  ScopeChange = 6,
-  ProjectTermination  = 7,
+  AccountNameChange = 10,
+  PartnerAddition = 20,
+  PartnerWithdrawal = 30,
+  ProjectSuspension = 40,
+  ProjectTermination = 50,
+  MultiplePartnerFinancialVirement = 60,
+  SinglePartnerFinancialVirement = 70,
+  ScopeChange = 80,
+  TimeExtension = 90,
 }
 
 export interface PCR {

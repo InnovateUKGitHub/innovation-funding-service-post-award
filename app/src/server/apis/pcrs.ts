@@ -28,9 +28,9 @@ class Controller extends ControllerBaseWithSummary<PCRSummaryDto, PCRDto> implem
     return contextProvider.start(params).runQuery(query);
   }
 
-  async getTypes(params: ApiParams<{}>): Promise<PCRItemTypeDto[]> {
+  getTypes(params: ApiParams<{}>): Promise<PCRItemTypeDto[]> {
     const query = new GetPCRItemTypesQuery();
-    return contextProvider.start(params).runSyncQuery(query);
+    return contextProvider.start(params).runQuery(query);
   }
 }
 
