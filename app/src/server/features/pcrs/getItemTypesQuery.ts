@@ -1,26 +1,46 @@
-import { QueryBase, SyncQueryBase } from "../common";
+import { QueryBase } from "../common";
 import { PCRItemTypeDto } from "@framework/dtos/pcrDtos";
 import { IContext } from "@framework/types";
-import { PCRItemType } from "@framework/entities";
-import { isNumber } from "util";
-import { numberComparator } from "@framework/util";
+import { PCRItemType, RecordType } from "@framework/entities";
+import { GetAllRecordTypesQuery } from "../general/getAllRecordTypesQuery";
 
-const metavalues = [
-  { id: PCRItemType.FinancialVirement, name: "Financial Virement", order: 1 },
-  { id: PCRItemType.PartnerAddition, name: "Partner Addition", order: 2 },
-  { id: PCRItemType.PartnerWithdrawal, name: "Partner Withdrawal", order: 3 },
-  { id: PCRItemType.TimeExtension, name: "Time Extension", order: 4 },
-  { id: PCRItemType.ProjectSuspension, name: "Project Suspension", order: 5 },
-  { id: PCRItemType.ScopeChange, name: "Scope Change", order: 6 },
-  { id: PCRItemType.ProjectTermination, name: "Project Termination", order: 7 },
+interface MetaValue {
+  id: PCRItemType;
+  typeName: string;
+  displayName?: string;
+  enabled?: boolean;
+}
+
+const metavalues: MetaValue[] = [
+  { id: PCRItemType.AccountNameChange, typeName: "Account Name Change" },
+  { id: PCRItemType.PartnerAddition, typeName: "Partner Addition", },
+  { id: PCRItemType.PartnerWithdrawal, typeName: "Partner Withdrawal", },
+  { id: PCRItemType.ProjectSuspension, typeName: "Project Suspension", },
+  { id: PCRItemType.ProjectTermination, typeName: "Project Termination", },
+  { id: PCRItemType.MultiplePartnerFinancialVirement, typeName: "Multiple Partner Financial Virement", },
+  { id: PCRItemType.SinglePartnerFinancialVirement, typeName: "Single Partner Financial Virement", },
+  { id: PCRItemType.ScopeChange, typeName: "Scope Change", },
+  { id: PCRItemType.TimeExtension, typeName: "Time Extension", },
 ];
 
-export class GetPCRItemTypesQuery extends SyncQueryBase<PCRItemTypeDto[]> {
-  protected Run(context: IContext): PCRItemTypeDto[] {
-    const result = [...metavalues];
+export class GetPCRItemTypesQuery extends QueryBase<PCRItemTypeDto[]> {
+  protected async Run(context: IContext) {
 
-    result.sort((a,b) => numberComparator(a.order, b.order));
+    const recordTypes = (await context.runQuery(new GetAllRecordTypesQuery()))
+      .filter(x => x.parent === "Acc_ProjectChangeRequest__c");
 
-    return result;
+    /// meta values controlls order
+    return metavalues
+      .map<PCRItemTypeDto>(x => ({
+        id: x.id,
+        displayName: x.displayName || x.typeName,
+        enabled: x.enabled === undefined ? true : x.enabled,
+        recordTypeId: this.findRecordType(x.typeName, recordTypes)
+      }));
+  }
+
+  private findRecordType(typeName: string, recordTypes: RecordType[]): string {
+    const result = recordTypes.find(y => y.type === typeName);
+    return result && result.id || "Unknown";
   }
 }
