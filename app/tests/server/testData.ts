@@ -5,7 +5,7 @@ import * as Entites from "@framework/entities";
 import { range } from "@shared/range";
 import { ClaimStatus, IClientUser } from "@framework/types";
 import { ITestRepositories } from "./testRepositories";
-import { PcrRecordTypeMetaValues } from "@server/features/pcrs/getItemTypesQuery";
+import { PCRRecordTypeMetaValues } from "@server/features/pcrs/getItemTypesQuery";
 
 export class TestData {
   constructor(private repositories: ITestRepositories, private getCurrentUser: () => IClientUser ) {
@@ -564,8 +564,8 @@ export class TestData {
 
   }
 
-  public createPcrRecordTypes() {
-    return PcrRecordTypeMetaValues.map(x => (
+  public createPCRRecordTypes() {
+    return PCRRecordTypeMetaValues.map(x => (
       this.createRecordType({
         parent: "Acc_ProjectChangeRequest__c",
         type: x.typeName

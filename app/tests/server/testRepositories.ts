@@ -408,9 +408,9 @@ class RecordTypeTestRepository extends TestRepository<Entities.RecordType> imple
   }
 }
 
-class PCRTestRepository extends TestRepository<Entities.PCR> implements Repositories.IPcrRepository {
+class PCRTestRepository extends TestRepository<Entities.PCR> implements Repositories.IPCRRepository {
 
-  private convertToPcrSummary(pcr: Entities.PCR): PCRSummary {
+  private convertToSummary(pcr: Entities.PCR): PCRSummary {
     return {
       id: pcr.id,
       number: pcr.number,
@@ -424,7 +424,7 @@ class PCRTestRepository extends TestRepository<Entities.PCR> implements Reposito
   }
 
   getAllByProjectId(projectId: string): Promise<Entities.PCRSummary[]> {
-    return super.getWhere(x => x.projectId === projectId).then(x => x.map(y => this.convertToPcrSummary(y)));
+    return super.getWhere(x => x.projectId === projectId).then(x => x.map(y => this.convertToSummary(y)));
   }
 
   getById(projectId: string, id: string): Promise<Entities.PCR> {
