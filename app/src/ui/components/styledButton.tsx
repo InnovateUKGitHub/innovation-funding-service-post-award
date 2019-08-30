@@ -19,27 +19,27 @@ export class Button extends React.PureComponent<StyledButtonProps, {}> {
     }
   }
 
-  getLinkButtonStyling(className?: string, style?: CSSProperties) {
+  private getLinkButtonStyling(className?: string, style?: CSSProperties) {
+    const linkStyles = classNames(className, "govuk-link");
+    return { className: linkStyles, style };
+  }
+
+  private getPrimaryButtonStyling(className?: string, style?: CSSProperties) {
     const linkStyles = classNames(className, this.govukButton);
     return { className: linkStyles, style };
   }
 
-  getPrimaryButtonStyling(className?: string, style?: CSSProperties) {
-    const linkStyles = classNames(className, this.govukButton);
-    return { className: linkStyles, style };
-  }
-
-  getSecondaryButtonStyling(className?: string, style?: CSSProperties) {
+  private getSecondaryButtonStyling(className?: string, style?: CSSProperties) {
     const linkStyles = classNames(className, this.govukButton, "govuk-button--secondary");
     return { className: linkStyles, style };
   }
 
-  getWarningButtonStyling(className?: string, style?: CSSProperties) {
+  private getWarningButtonStyling(className?: string, style?: CSSProperties) {
     const linkStyles = classNames(className, this.govukButton, "govuk-button--warning");
     return { className: linkStyles, style };
   }
 
-  getButtonStyling({ styling, className, style }: StyledButtonProps) {
+  private getButtonStyling({ styling, className, style }: StyledButtonProps) {
     switch (styling) {
       case "Warning": return this.getWarningButtonStyling(className, style);
       case "Link": return this.getLinkButtonStyling(className, style);
