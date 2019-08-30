@@ -28,7 +28,7 @@ export abstract class RepositoryBase {
     return e instanceof Error ? e : new Error(`${e.errorCode}: ${e.message}`);
   }
 
-  protected executeArray<T>(query: Query<Partial<T>[]>): Promise<T[]> {
+  protected executeArray<T>(query: Query<{}>): Promise<T[]> {
     return new Promise<T[]>((res, rej) => {
       query.execute(undefined, (err, records) => {
         if(err) {

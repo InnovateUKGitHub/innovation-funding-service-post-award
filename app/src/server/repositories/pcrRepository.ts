@@ -67,12 +67,12 @@ export class PCRRepository extends RepositoryBase implements IPCRRepository {
   async getAllByProjectId(projectId: string): Promise<PCRSummary[]> {
     const conn = await this.getSalesforceConnection();
 
-    const query = conn.sobject<ISalesforcePCRSummary>(this.salesforceObjectName)
+    const query = conn.sobject(this.salesforceObjectName)
       .select(this.standardFields)
       .where(`Acc_Project_Participant__r.Acc_ProjectId__c='${projectId}'`)
       ;
 
-    const data = await this.executeArray(query);
+    const data = await this.executeArray<ISalesforcePCRSummary>(query);
 
     const headerId = await this.getRecordTypeId(this.salesforceObjectName, "Request Header");
 
@@ -83,12 +83,12 @@ export class PCRRepository extends RepositoryBase implements IPCRRepository {
   async getById(projectId: string, id: string): Promise<PCR> {
     const conn = await this.getSalesforceConnection();
 
-    const query = conn.sobject<ISalesforcePCR>(this.salesforceObjectName)
+    const query = conn.sobject(this.salesforceObjectName)
       .select(this.itemFields)
       .where(`Acc_Project_Participant__r.Acc_ProjectId__c='${projectId}' AND (Id = '${id}' OR Acc_RequestHeader__c = '${id}')`)
       ;
 
-    const data = await this.executeArray(query);
+    const data = await this.executeArray<ISalesforcePCR>(query);
 
     const headerId = await this.getRecordTypeId(this.salesforceObjectName, "Request Header");
 
