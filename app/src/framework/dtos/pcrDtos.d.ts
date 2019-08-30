@@ -34,6 +34,7 @@ export interface PCRItemDto {
 
 export interface PCRItemTypeDto {
   id: PCRItemType;
-  name: string;
-  order: number;
+  displayName: string;
+  recordTypeId: string;
+  enabled: boolean;
 }
