@@ -5,6 +5,7 @@ import * as Entites from "@framework/entities";
 import { range } from "@shared/range";
 import { ClaimStatus, IClientUser } from "@framework/types";
 import { ITestRepositories } from "./testRepositories";
+import { PcrRecordTypeMetaValues } from "@server/features/pcrs/getItemTypesQuery";
 
 export class TestData {
   constructor(private repositories: ITestRepositories, private getCurrentUser: () => IClientUser ) {
@@ -563,6 +564,15 @@ export class TestData {
 
   }
 
+  public createPcrRecordTypes() {
+    return PcrRecordTypeMetaValues.map(x => (
+      this.createRecordType({
+        parent: "Acc_ProjectChangeRequest__c",
+        type: x.typeName
+      })
+    ));
+  }
+
   public createPCR(project?: Repositories.ISalesforceProject, update?: Partial<Entites.PCR>) {
     const seed = this.repositories.pcrs.Items.length + 1;
 
@@ -587,21 +597,20 @@ export class TestData {
       Object.assign(newItem, update);
     }
 
-    this.repositories.pcrs.Items.push({ pcr: newItem, items: [] });
+    this.repositories.pcrs.Items.push(newItem);
 
     return newItem;
   }
 
-  public createPCRItem(pcr?: Entites.PCR, update?: Partial<Entites.PCRItem>) {
-    const seed = this.repositories.pcrItems.Items.reduce((c, x) => c + x.items.length, 0) + 1;
+  public createPCRItem(pcr: Entites.PCR, recordType: Entites.RecordType, update?: Partial<Entites.PCRItem>) {
+    const seed = this.repositories.pcrs.Items.reduce((c, x) => c + x.items.length, 0) + 1;
 
     pcr = pcr || this.createPCR();
 
     const newItem: Entites.PCRItem = {
       id: `PCR_Item_${seed}`,
       pcrId: pcr.id,
-      itemType: Entites.PCRItemType.Unknown,
-      itemTypeName: "Item Type Name",
+      recordTypeId: recordType.id,
       status: Entites.PCRItemStatus.Unknown,
       statusName: "Item Status Name",
     };
@@ -610,9 +619,7 @@ export class TestData {
       Object.assign(newItem, update);
     }
 
-    const pair = this.repositories.pcrs.Items.find(x => x.pcr.id === pcr!.id)!;
-
-    pair.items.push(newItem);
+    pcr.items.push(newItem);
 
     return newItem;
   }

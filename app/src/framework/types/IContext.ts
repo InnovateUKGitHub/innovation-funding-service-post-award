@@ -3,7 +3,6 @@ import { Cache, IClock, IConfig, ILogger } from "@server/features/common";
 import { IRoleInfo } from "@server/features/projects/getAllProjectRolesForUser";
 import { QueryBase, SyncQueryBase } from "@server/features/common/queryBase";
 import { CommandBase, SyncCommandBase } from "@server/features/common/commandBase";
-import { ISalesforceRecordType } from "@server/repositories";
 import { ISessionUser } from "./IUser";
 import { Authorisation } from "./authorisation";
 import { PermissionGroup } from "@framework/entities/permissionGroup";
@@ -19,7 +18,6 @@ export interface IRepositories {
   readonly monitoringReportHeader: Repositories.IMonitoringReportHeaderRepository;
   readonly monitoringReportQuestions: Repositories.IMonitoringReportQuestionsRepository;
   readonly monitoringReportStatusChange: Repositories.IMonitoringReportStatusChangeRepository;
-  readonly pcrItems: Repositories.IPcrItemRepository;
   readonly pcrs: Repositories.IPcrRepository;
   readonly profileDetails: Repositories.IProfileDetailsRepository;
   readonly profileTotalPeriod: Repositories.IProfileTotalPeriodRepository;
