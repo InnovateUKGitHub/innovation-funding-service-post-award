@@ -1,4 +1,4 @@
-import { Connection, RecordResult } from "jsforce";
+import { Connection, Query, RecordResult } from "jsforce";
 import { Stream } from "stream";
 import * as Errors from "@server/repositories/errors";
 import { ILogger } from "@server/features/common";
@@ -8,11 +8,48 @@ export type Updatable<T> = Partial<T> & {
   Id: string
 };
 
-export abstract class SalesforceRepositoryBaseWithMapping<TSalesforce, TEntity> {
+export abstract class RepositoryBase {
   public constructor(
     protected readonly getSalesforceConnection: () => Promise<Connection>,
     protected readonly logger: ILogger
-  ) { }
+  ) {
+  }
+
+  protected constructError(e: any) {
+    this.logger.error("Salesforce Error: ", e.errorCode, e.message);
+
+    if (e.errorCode === "ERROR_HTTP_503") {
+      throw new Errors.SalesforceUnavilableError(`Salesforce unavailable`);
+    }
+    if (e.errorCode === "INVALID_QUERY_FILTER_OPERATOR") {
+      throw new Errors.SalesforceInvalidFilterError(`Salesforce filter error`);
+    }
+
+    return e instanceof Error ? e : new Error(`${e.errorCode}: ${e.message}`);
+  }
+
+  protected executeArray<T>(query: Query<Partial<T>[]>): Promise<T[]> {
+    return new Promise<T[]>((res, rej) => {
+      query.execute(undefined, (err, records) => {
+        if(err) {
+          rej(this.constructError(err));
+        }
+        else {
+          // there is an error in the typeings of result so need to cast here
+          res(records as any as T[]);
+        }
+      });
+    });
+  }
+}
+
+export abstract class SalesforceRepositoryBaseWithMapping<TSalesforce, TEntity> extends RepositoryBase {
+  public constructor(
+    getSalesforceConnection: () => Promise<Connection>,
+    logger: ILogger
+  ) {
+    super(getSalesforceConnection, logger);
+  }
 
   protected abstract readonly salesforceObjectName: string;
   protected abstract readonly salesforceFieldNames: string[];
@@ -39,7 +76,7 @@ export abstract class SalesforceRepositoryBaseWithMapping<TSalesforce, TEntity> 
     const result = await conn.sobject(this.salesforceObjectName)
       .select(this.salesforceFieldNames)
       .execute()
-      .then(x => this.asArray(x))
+      .then(x => this.map(x))
       .catch(e => { throw this.constructError(e); })
       ;
 
@@ -60,7 +97,7 @@ export abstract class SalesforceRepositoryBaseWithMapping<TSalesforce, TEntity> 
       .select(this.salesforceFieldNames)
       .where(filter)
       .execute()
-      .then(x => this.asArray(x))
+      .then(x => this.map(x))
       .catch(e => { throw this.constructError(e); })
       ;
 
@@ -82,7 +119,7 @@ export abstract class SalesforceRepositoryBaseWithMapping<TSalesforce, TEntity> 
       .where(filter)
       .limit(1)
       .execute()
-      .then(x => this.asArray(x).pop())
+      .then(x => this.map(x).pop())
       .catch(e => { throw this.constructError(e); })
       ;
 
@@ -179,22 +216,9 @@ export abstract class SalesforceRepositoryBaseWithMapping<TSalesforce, TEntity> 
       .catch(e => { throw this.constructError(e); });
   }
 
-  private asArray(result: Partial<{}>[]): TEntity[] {
+  private map(result: Partial<{}>[]): TEntity[] {
     const salesforce = result as TSalesforce[];
     return salesforce.map(x => this.mapper.map(x));
-  }
-
-  protected constructError(e: any) {
-    this.logger.error("Salesforce Error: ", e.errorCode, e.message);
-
-    if (e.errorCode === "ERROR_HTTP_503") {
-      throw new Errors.SalesforceUnavilableError(`Salesforce unavailable`);
-    }
-    if (e.errorCode === "INVALID_QUERY_FILTER_OPERATOR") {
-      throw new Errors.SalesforceInvalidFilterError(`Salesforce filter error`);
-    }
-
-    return e instanceof Error ? e : new Error(`${e.errorCode}: ${e.message}`);
   }
 }
 

@@ -7,6 +7,7 @@ export interface PCRBaseDto {
   lastUpdated: Date;
   status: PCRStatus;
   statusName: string;
+  projectId: string;
 }
 
 export interface PCRSummaryDto extends PCRBaseDto {
