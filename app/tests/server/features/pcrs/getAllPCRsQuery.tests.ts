@@ -97,7 +97,7 @@ describe("GetAllPCRsQuery", () => {
   test("pcrs items are returned as expected", async () => {
     const context = new TestContext();
 
-    const recordTypes = context.testData.createPcrRecordTypes();
+    const recordTypes = context.testData.createPCRRecordTypes();
 
     const pcr = context.testData.createPCR();
     context.testData.range(recordTypes.length, (x,i) => context.testData.createPCRItem(pcr, recordTypes[i]));

@@ -60,7 +60,7 @@ describe("GetPCRByIdQuery", () => {
   test("returns all items", async () => {
     const context = new TestContext();
 
-    const recordTypes = context.testData.createPcrRecordTypes();
+    const recordTypes = context.testData.createPCRRecordTypes();
 
     const pcr = context.testData.createPCR();
     const items = context.testData.range(3, (x,i) => context.testData.createPCRItem(pcr, recordTypes[i]));
@@ -76,7 +76,7 @@ describe("GetPCRByIdQuery", () => {
   test("maps all item fields", async () => {
     const context = new TestContext();
 
-    const recordType = context.testData.createPcrRecordTypes()[4];
+    const recordType = context.testData.createPCRRecordTypes()[4];
 
     const pcr = context.testData.createPCR();
 

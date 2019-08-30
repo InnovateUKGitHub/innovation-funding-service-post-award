@@ -7,7 +7,7 @@ import { Connection } from "jsforce";
 import { ILogger } from "@server/features/common/logger";
 import { SalesforcePCRDetailedMapper, SalesforcePCRSummaryMapper } from "./mappers/pcrSummaryMapper";
 
-export interface IPcrRepository {
+export interface IPCRRepository {
   getAllByProjectId(projectId: string): Promise<PCRSummary[]>;
   getById(projectId: string, id: string): Promise<PCR>;
 }
@@ -36,7 +36,7 @@ export interface ISalesforcePCR extends ISalesforcePCRSummary {
   Acc_Comments__c: string;
 }
 
-export class PCRRepository extends RepositoryBase implements IPcrRepository {
+export class PCRRepository extends RepositoryBase implements IPCRRepository {
   constructor(private getRecordTypeId: (objectName: string, recordType: string) => Promise<string>, getSalesforceConnection: () => Promise<Connection>, logger: ILogger) {
     super(getSalesforceConnection, logger);
   }
