@@ -18,6 +18,7 @@ import { projectMemberGuide } from "./projectMemberGuide";
 import { Header } from "../components";
 import { sectionGuide } from "./sectionGuide";
 import { sectionPanelGuide } from "./sectionPanelGuide";
+import { summaryListGuide } from "./summaryListGuide";
 import { tableGuide } from "./tableGuide";
 import { tabsGuide } from "./tabsGuide";
 import { hashTabsGuide } from "@ui/componentsGuide/hashTabsGuide";
@@ -48,6 +49,7 @@ const guides: IGuide[] = [
     sectionGuide,
     sectionPanelGuide,
     statisticsBoxGuide,
+    summaryListGuide,
     tabsGuide,
     hashTabsGuide,
     tableGuide,
