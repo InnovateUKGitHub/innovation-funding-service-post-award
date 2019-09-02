@@ -1,10 +1,10 @@
 import { ApiParams, ControllerBase } from "./controllerBase";
 import contextProvider from "../features/common/contextProvider";
 import { GetClaimDetailDocumentQuery } from "../features/documents/getClaimDetailDocument";
-import { GetClaimDetailDocumentsQuery } from "../features/documents/getClaimDetailDocuments";
-import { GetProjectDocumentsQuery } from "../features/documents/getProjectDocuments";
+import { GetClaimDetailDocumentsQuery } from "../features/documents/getClaimDetailDocumentsSummary";
+import { GetProjectDocumentsQuery } from "../features/documents/getProjectDocumentsSummary";
 import { UploadClaimDetailDocumentCommand } from "../features/documents/uploadClaimDetailDocument";
-import { GetClaimDocumentsQuery } from "../features/documents/getClaimDocuments";
+import { GetClaimDocumentsQuery } from "../features/documents/getClaimDocumentsSummary";
 import { GetClaimDocumentQuery } from "../features/documents/getClaimDocument";
 import { DocumentDescription } from "@framework/constants";
 import { UploadClaimDocumentCommand } from "../features/documents/uploadClaimDocument";

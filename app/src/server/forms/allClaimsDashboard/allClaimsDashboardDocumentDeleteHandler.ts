@@ -1,5 +1,5 @@
 import { DeleteClaimDocumentCommand } from "@server/features/documents/deleteClaimDocument";
-import { GetClaimDocumentsQuery } from "@server/features/documents/getClaimDocuments";
+import { GetClaimDocumentsQuery } from "@server/features/documents/getClaimDocumentsSummary";
 import { BadRequestError } from "@server/features/common";
 import { AllClaimsDashboardParams, AllClaimsDashboardRoute } from "@ui/containers";
 import { getDocumentDeleteEditor } from "@ui/redux/selectors";
