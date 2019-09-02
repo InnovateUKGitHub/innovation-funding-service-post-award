@@ -1,7 +1,7 @@
 // tslint:disable:no-duplicate-string
 import "jest";
-import { Header } from "../../../src/ui/components/layout/header";
-
+import React from "react";
+import { Header } from "@ui/components";
 import Enzyme, { shallow } from "enzyme";
 import Adapter from "enzyme-adapter-react-16";
 
@@ -11,8 +11,8 @@ describe("Header", () => {
     const ifsRoot = "https://example.apply-for-innovation-funding.service.gov.uk";
 
     it("header shoud contain Innovation Funding Service link", () => {
-        const result = Header({ ifsRoot });
-        const wrapper = shallow(result!);
+        const result = <Header ifsRoot={ifsRoot} />;
+        const wrapper = shallow(result);
         const link = wrapper.find("a[data-qa='service-name']");
         expect(link).not.toBeNull();
         expect(link.text()).toBe("Innovation Funding Service");
@@ -21,8 +21,8 @@ describe("Header", () => {
     });
 
     it("header shoud contain dashboard link", () => {
-        const result = Header({ ifsRoot });
-        const wrapper = shallow(result!);
+        const result = <Header ifsRoot={ifsRoot} />;
+        const wrapper = shallow(result);
         const link = wrapper.find("a[data-qa='nav-dashboard']");
         expect(link).not.toBeNull();
         expect(link.text()).toBe("Dashboard");
@@ -31,8 +31,8 @@ describe("Header", () => {
     });
 
     it("header shoud contain profile link", () => {
-        const result = Header({ ifsRoot });
-        const wrapper = shallow(result!);
+        const result = <Header ifsRoot={ifsRoot} />;
+        const wrapper = shallow(result);
         const link = wrapper.find("a[data-qa='nav-profile']");
         expect(link).not.toBeNull();
         expect(link.text()).toBe("Profile");
@@ -41,8 +41,8 @@ describe("Header", () => {
     });
 
     it("header shoud contain logout link", () => {
-        const result = Header({ ifsRoot });
-        const wrapper = shallow(result!);
+        const result = <Header ifsRoot={ifsRoot} />;
+        const wrapper = shallow(result);
         const link = wrapper.find("a[data-qa='nav-sign-out']");
         expect(link).not.toBeNull();
         expect(link.text()).toBe("Sign out");

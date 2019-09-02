@@ -72,7 +72,7 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, Data, Callbacks> 
   private renderContents(data: CombinedData) {
 
     const tabs: ACC.HashTabItem[] = [
-      { text: "Details", hash: "details", content: this.renderDetailsTab(data), default: true, qa: "ClaimDetailTab" },
+      { text: "Details", hash: "details", content: this.renderDetailsTab(data), qa: "ClaimDetailTab" },
       { text: "Log", hash: "log", content: this.renderLogsTab(), qa: "ClaimDetailLogTab" },
     ];
 
@@ -82,9 +82,8 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, Data, Callbacks> 
         error={data.editor.error}
         validator={data.editor.validator}
         pageTitle={<ACC.Projects.Title project={data.project} />}
-        tabs={<ACC.HashTabs tabList={tabs} />}
       >
-        <ACC.HashTabsContent tabList={tabs} />
+        <ACC.HashTabs tabList={tabs} />
       </ACC.Page>
     );
   }
@@ -221,7 +220,7 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, Data, Callbacks> 
       <ACC.Loader
         pending={this.props.statusChanges}
         render={(statusChanges) => (
-          <ACC.Section>
+          <ACC.Section title="Log">
             <ACC.Logs qa="claim-status-change-table" data={statusChanges} />
           </ACC.Section>
         )}

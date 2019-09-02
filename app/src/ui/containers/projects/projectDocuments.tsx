@@ -74,9 +74,9 @@ class ProjectDocumentsComponent extends ContainerBaseWithState<ProjectDocumentPa
         backLink={<ACC.Projects.ProjectBackLink project={project} />}
         validator={editor.validator}
         error={editor.error}
-        messages={this.props.messages}
         project={project}
       >
+        <ACC.Renderers.Messages messages={this.props.messages}/>
         <ACC.Section>
           <UploadForm.Form
             enctype="multipart"
@@ -113,7 +113,7 @@ class ProjectDocumentsComponent extends ContainerBaseWithState<ProjectDocumentPa
   }
 
   private renderDocumentName(document: DocumentSummaryDto) {
-    return <a target={"_blank"} href={document.link}>{document.fileName}</a>;
+    return <a target={"_blank"} href={document.link} className="govuk-link">{document.fileName}</a>;
   }
 
   private renderDocumentsSection(documents: DocumentSummaryDto[]) {
