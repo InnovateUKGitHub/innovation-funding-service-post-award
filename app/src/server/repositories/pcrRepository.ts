@@ -74,9 +74,9 @@ export class PCRRepository extends RepositoryBase implements IPCRRepository {
 
     const data = await this.executeArray<ISalesforcePCRSummary>(query);
 
-    const headerId = await this.getRecordTypeId(this.salesforceObjectName, "Request Header");
+    const headerRecordTypeId = await this.getRecordTypeId(this.salesforceObjectName, "Request Header");
 
-    const mapper = new SalesforcePCRSummaryMapper(headerId);
+    const mapper = new SalesforcePCRSummaryMapper(headerRecordTypeId);
     return mapper.map(data);
   }
 
@@ -90,9 +90,9 @@ export class PCRRepository extends RepositoryBase implements IPCRRepository {
 
     const data = await this.executeArray<ISalesforcePCR>(query);
 
-    const headerId = await this.getRecordTypeId(this.salesforceObjectName, "Request Header");
+    const headerRecordTypeId = await this.getRecordTypeId(this.salesforceObjectName, "Request Header");
 
-    const mapper = new SalesforcePCRDetailedMapper(headerId);
+    const mapper = new SalesforcePCRDetailedMapper(headerRecordTypeId);
     return mapper.map(data);
   }
 }

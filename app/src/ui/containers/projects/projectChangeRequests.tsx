@@ -85,5 +85,6 @@ export const ProjectChangeRequestsRoute = containerDefinition.route({
     htmlTitle: "Project change requests",
     displayTitle: "Project change requests"
   }),
+  // only show page untill pcrs are enabled - this is a holding page untill then...
   accessControl: (auth, { projectId }, config) => !config.features.pcrsEnabled && auth.forProject(projectId).hasAnyRoles(ProjectRole.FinancialContact, ProjectRole.ProjectManager, ProjectRole.MonitoringOfficer)
 });

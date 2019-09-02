@@ -19,35 +19,35 @@ export class GetPCRByIdQuery extends QueryBase<PCRDto> {
     return this.map(item, itemTypes);
   }
 
-  private map(item: PCR, itemTypes: PCRItemTypeDto[]): PCRDto {
+  private map(pcr: PCR, itemTypes: PCRItemTypeDto[]): PCRDto {
     return {
-      id: item.id,
-      requestNumber: item.number,
-      started: item.started,
-      lastUpdated: item.updated,
-      status: item.status,
-      statusName: item.statusName,
-      comments: item.comments,
-      reasoningStatus: item.reasoningStatus,
-      reasoningStatusName: item.reasoningStatusName,
-      reasoningComments: item.reasoning,
-      projectId: item.projectId,
-      items: this.mapItems(item.items, itemTypes)
+      id: pcr.id,
+      requestNumber: pcr.number,
+      started: pcr.started,
+      lastUpdated: pcr.updated,
+      status: pcr.status,
+      statusName: pcr.statusName,
+      comments: pcr.comments,
+      reasoningStatus: pcr.reasoningStatus,
+      reasoningStatusName: pcr.reasoningStatusName,
+      reasoningComments: pcr.reasoning,
+      projectId: pcr.projectId,
+      items: this.mapItems(pcr.items, itemTypes)
     };
   }
 
-  private mapItems(items: PCRItem[], itemTypes: PCRItemTypeDto[]): PCRItemDto[] {
-    const filtered = itemTypes.filter(itemType => items.some(x => x.recordTypeId === itemType.recordTypeId));
-    return filtered.map(itemType => this.mapItem(items.find(x => x.recordTypeId === itemType.recordTypeId)!, itemType));
+  private mapItems(pcrs: PCRItem[], itemTypes: PCRItemTypeDto[]): PCRItemDto[] {
+    const filtered = itemTypes.filter(itemType => pcrs.some(x => x.recordTypeId === itemType.recordTypeId));
+    return filtered.map(itemType => this.mapItem(pcrs.find(x => x.recordTypeId === itemType.recordTypeId)!, itemType));
   }
 
-  private mapItem(item: PCRItem, itemType: PCRItemTypeDto): PCRItemDto {
+  private mapItem(pcr: PCRItem, itemType: PCRItemTypeDto): PCRItemDto {
     return {
-      id: item.id,
+      id: pcr.id,
       type: itemType.id,
       typeName: itemType.displayName,
-      status: item.status,
-      statusName: item.statusName
+      status: pcr.status,
+      statusName: pcr.statusName
     };
   }
 }

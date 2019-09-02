@@ -25,14 +25,14 @@ export class CheckboxList extends BaseInput<CheckboxListProps, {}> {
   }
 
   renderOption(name: string, item: CheckboxOptionProps, index: number): any {
-    const selected = this.props.value ? !!this.props.value.find(x => x.id === item.id) : true;
+    const selected = this.props.value ? !!this.props.value.find(x => x.id === item.id) : false;
     return (
       <div className="govuk-checkboxes__item" key={`option` + index}>
         <input
           data-qa={item.qa}
           className="govuk-checkboxes__input"
-          id={`${this.props.name}_${item.id}`}
-          name={this.props.name}
+          id={`${name}_${item.id}`}
+          name={name}
           type="checkbox"
           value={item.id}
           onChange={e => this.onChange(item, e.target.checked)}
@@ -40,7 +40,7 @@ export class CheckboxList extends BaseInput<CheckboxListProps, {}> {
           aria-checked={selected}
           disabled={this.props.disabled}
         />
-        <label className="govuk-label govuk-checkboxes__label" htmlFor={`${this.props.name}_${item.id}`}>{item.value}</label>
+        <label className="govuk-label govuk-checkboxes__label" htmlFor={`${name}_${item.id}`}>{item.value}</label>
       </div>
     );
   }

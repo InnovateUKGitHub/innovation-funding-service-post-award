@@ -1,4 +1,4 @@
-import { PCRStatus, PCRItemType, PCRItemStatus } from "@framework/entities";
+import { PCRItemStatus, PCRItemType, PCRStatus, } from "@framework/entities";
 
 export interface PCRBaseDto {
   id: string;
