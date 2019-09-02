@@ -33,8 +33,9 @@ class PCRsDashboardComponent extends ContainerBase<Params, Data, Callbacks> {
   }
 
   private renderContents(project: ProjectDto, pcrs: PCRSummaryDto[]) {
-    const active = pcrs.filter(x => x.statusName !== "Approved");
-    const archived = pcrs.filter(x => x.statusName === "Approved");
+    const archivedStatuses = [PCRStatus.Approved, PCRStatus.Withdrawn, ];
+    const active = pcrs.filter(x => archivedStatuses.indexOf(x.status) === -1);
+    const archived = pcrs.filter(x => archivedStatuses.indexOf(x.status) !== -1);
 
     return (
       <ACC.Page

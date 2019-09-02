@@ -18,8 +18,6 @@ export class SalesforcePCRDetailedMapper extends SalesforceBaseMapper<ISalesforc
       throw new NotFoundError();
     }
 
-    console.log("heder", header);
-
     const summary = this.summaryMapper.map([header])[0];
 
     return {

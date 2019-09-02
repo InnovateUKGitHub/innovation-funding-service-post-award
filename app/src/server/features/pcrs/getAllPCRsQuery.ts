@@ -22,18 +22,18 @@ export class GetAllPCRsQuery extends QueryBase<PCRSummaryDto[]> {
     return data.map(x => this.map(x, pcrItemTypes));
   }
 
-  private map(item: PCRSummary, pcrItemTypes: PCRItemTypeDto[]): PCRSummaryDto {
+  private map(pcr: PCRSummary, pcrItemTypes: PCRItemTypeDto[]): PCRSummaryDto {
     // find the item types to inculde
-    const filteredItemTypes = pcrItemTypes.filter(pcrItemType => item.items.some(x => x.recordTypeId === pcrItemType.recordTypeId));
+    const filteredItemTypes = pcrItemTypes.filter(pcrItemType => pcr.items.some(x => x.recordTypeId === pcrItemType.recordTypeId));
 
     return {
-      id: item.id,
-      requestNumber: item.number,
-      started: item.started,
-      lastUpdated: item.updated,
-      status: item.status,
-      statusName: item.statusName,
-      projectId: item.projectId,
+      id: pcr.id,
+      requestNumber: pcr.number,
+      started: pcr.started,
+      lastUpdated: pcr.updated,
+      status: pcr.status,
+      statusName: pcr.statusName,
+      projectId: pcr.projectId,
       items: filteredItemTypes.map(x => ({
         type: x.id,
         typeName: x.displayName
