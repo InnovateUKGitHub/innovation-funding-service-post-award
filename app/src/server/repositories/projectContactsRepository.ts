@@ -22,7 +22,6 @@ export interface IProjectContactsRepository {
 }
 
 export class ProjectContactsRepository extends SalesforceRepositoryBase<ISalesforceProjectContact> implements IProjectContactsRepository {
-
   protected readonly salesforceObjectName = "Acc_ProjectContactLink__c";
 
   protected readonly salesforceFieldNames = [
@@ -41,10 +40,15 @@ export class ProjectContactsRepository extends SalesforceRepositoryBase<ISalesfo
     return this.where(`Acc_ProjectId__c = '${projectId}' AND Acc_Role__c != 'Innovation lead'`);
   }
 
-  getAllForUser(email: string): Promise<ISalesforceProjectContact[]> {
-    // ToDo: see if we can/should get access to the login rather than the email...
-    // It may be correct to use the contact email - salesforce are expecting the contact email to always equal the user login
-    // only a problem if they dont
-    return this.where(`Acc_ContactId__r.Email = '${email}'`);
+  async getAllForUser(email: string): Promise<ISalesforceProjectContact[]> {
+    const conn = await this.getSalesforceConnection();
+    const userResult: {ContactId: string} = await conn.sobject("User")
+      .select(["ContactId"])
+      .where(`Username = '${email}'`)
+      .execute()
+      .then(x => x.pop() as {ContactId: string})
+      .catch(e => this.constructError(e)) as any;
+
+    return this.where(`Acc_ContactId__c = '${userResult.ContactId}'`);
   }
 }

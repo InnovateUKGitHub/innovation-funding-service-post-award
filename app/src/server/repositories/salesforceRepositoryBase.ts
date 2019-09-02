@@ -184,7 +184,7 @@ export abstract class SalesforceRepositoryBaseWithMapping<TSalesforce, TEntity> 
     return salesforce.map(x => this.mapper.map(x));
   }
 
-  private constructError(e: any) {
+  protected constructError(e: any) {
     this.logger.error("Salesforce Error: ", e.errorCode, e.message);
 
     if (e.errorCode === "ERROR_HTTP_503") {
