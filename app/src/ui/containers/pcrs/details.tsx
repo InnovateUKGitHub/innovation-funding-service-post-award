@@ -10,7 +10,7 @@ import { Pending } from "@shared/pending";
 import { PCRsDashboardRoute } from "./dashboard";
 import { PCRViewItemRoute } from "./viewItem";
 import { PCRViewReasoningRoute } from "./viewReasoning";
-import { fakePcr, PCRDto, PCRItemDto } from "./fakePcrs";
+import { PCRDto, PCRItemDto } from "@framework/dtos/pcrDtos";
 
 interface Params {
   projectId: string;
@@ -101,7 +101,7 @@ const definition = ReduxContainer.for<Params, Data, Callbacks>(PCRDetailsCompone
 export const PCRDetails = definition.connect({
   withData: (state, params) => ({
     project: Selectors.getProject(params.projectId).getPending(state),
-    pcr: Pending.done(fakePcr)
+    pcr: Selectors.getPcr(params.projectId, params.pcrId).getPending(state),
   }),
   withCallbacks: () => ({})
 });
@@ -114,7 +114,8 @@ export const PCRDetailsRoute = definition.route({
     pcrId: route.params.pcrId,
   }),
   getLoadDataActions: (params) => [
-    Actions.loadProject(params.projectId)
+    Actions.loadProject(params.projectId),
+    Actions.loadPcr(params.projectId, params.pcrId),
   ],
   getTitle: () => ({
     htmlTitle: "Project change request details",

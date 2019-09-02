@@ -2,17 +2,8 @@ import { combineReducers } from "redux";
 import { ActionTransitionStart, actionTypes } from "redux-router5";
 import { DataLoadAction } from "../actions/common";
 import { LoadingStatus } from "../../../shared/pending";
-import {
-  ClaimDto,
-  ClaimStatusChangeDto,
-  IAppError,
-  MonitoringReportDto,
-  MonitoringReportQuestionDto,
-  MonitoringReportStatusChangeDto,
-  MonitoringReportSummaryDto,
-  PartnerDto,
-  ProjectDto, ProjectRole
-} from "@framework/types";
+import * as Dtos from "@framework/dtos";
+import { IAppError } from "@framework/types";
 
 export interface IDataStore<T> {
   status: LoadingStatus;
@@ -50,11 +41,11 @@ const dataStoreReducer = <TData extends {}>(storeKey: string) =>
 };
 
 export const dataReducer = combineReducers({
-  claims: dataStoreReducer<ClaimDto[]>("claims"),
-  claim: dataStoreReducer<ClaimDto>("claim"),
+  claims: dataStoreReducer<Dtos.ClaimDto[]>("claims"),
+  claim: dataStoreReducer<Dtos.ClaimDto>("claim"),
   claimDetail: dataStoreReducer<ClaimDetailsDto>("claimDetail"),
   claimDetails: dataStoreReducer<ClaimDetailsSummaryDto[]>("claimDetails"),
-  claimStatusChanges: dataStoreReducer<ClaimStatusChangeDto[]>("claimStatusChanges"),
+  claimStatusChanges: dataStoreReducer<Dtos.ClaimStatusChangeDto[]>("claimStatusChanges"),
   costsSummary: dataStoreReducer<CostsSummaryForPeriodDto[]>("costsSummary"),
   contacts: dataStoreReducer<IContact[]>("contacts"),
   costCategories:dataStoreReducer<CostCategoryDto[]>("costCategories"),
@@ -62,14 +53,17 @@ export const dataReducer = combineReducers({
   forecastDetails: dataStoreReducer<ForecastDetailsDTO[]>("forecastDetails"),
   forecastDetail: dataStoreReducer<ForecastDetailsDTO>("forecastDetail"),
   forecastGolCosts: dataStoreReducer<GOLCostDto[]>("forecastGolCosts"),
-  monitoringReport: dataStoreReducer<MonitoringReportDto>("monitoringReport"),
-  monitoringReports: dataStoreReducer<MonitoringReportSummaryDto[]>("monitoringReports"),
-  monitoringReportQuestions: dataStoreReducer<MonitoringReportQuestionDto[]>("monitoringReportQuestions"),
-  monitoringReportStatusChanges: dataStoreReducer<MonitoringReportStatusChangeDto[]>("monitoringReportStatusChanges"),
-  partner: dataStoreReducer<PartnerDto>("partner"),
-  partners: dataStoreReducer<PartnerDto[]>("partners"),
-  project: dataStoreReducer<ProjectDto>("project"),
-  projects: dataStoreReducer<ProjectDto[]>("projects"),
+  monitoringReport: dataStoreReducer<Dtos.MonitoringReportDto>("monitoringReport"),
+  monitoringReports: dataStoreReducer<Dtos.MonitoringReportSummaryDto[]>("monitoringReports"),
+  monitoringReportQuestions: dataStoreReducer<Dtos.MonitoringReportQuestionDto[]>("monitoringReportQuestions"),
+  monitoringReportStatusChanges: dataStoreReducer<Dtos.MonitoringReportStatusChangeDto[]>("monitoringReportStatusChanges"),
+  partner: dataStoreReducer<Dtos.PartnerDto>("partner"),
+  partners: dataStoreReducer<Dtos.PartnerDto[]>("partners"),
+  pcrs: dataStoreReducer<Dtos.PCRSummaryDto[]>("pcrs"),
+  pcr: dataStoreReducer<Dtos.PCRDto>("pcr"),
+  pcrTypes: dataStoreReducer<Dtos.PCRItemTypeDto[]>("pcrTypes"),
+  project: dataStoreReducer<Dtos.ProjectDto>("project"),
+  projects: dataStoreReducer<Dtos.ProjectDto[]>("projects"),
   projectContacts: dataStoreReducer<ProjectContactDto[]>("projectContacts"),
-  user: dataStoreReducer<{[key: string]: ProjectRole}>("user")
+  user: dataStoreReducer<{[key: string]: Dtos.ProjectRole}>("user")
 });
