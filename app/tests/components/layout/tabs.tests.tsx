@@ -24,7 +24,7 @@ describe("Tabs", () => {
 
     it("should render the selected tab", () => {
         const wrapper = Enzyme.shallow(<Tabs tabList={aTabList} />);
-        expect(wrapper.html()).toContain(`<a href="#" class="govuk-tabs__tab govuk-tabs__tab--selected">Project change requests</a>`);
+        expect(wrapper.html()).toContain(`<li role="tab" aria-selected="true" class="govuk-tabs__list-item govuk-tabs__list-item--selected">`);
     });
 
     it("should render the unselected tab", () => {

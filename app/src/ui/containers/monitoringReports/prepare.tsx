@@ -55,9 +55,8 @@ class PrepareMonitoringReportComponent extends ContainerBase<MonitoringReportPre
         pageTitle={<ACC.Projects.Title project={project} />}
         validator={editor.validator}
         error={editor.error}
-        tabs={<ACC.HashTabs tabList={tabs}/>}
       >
-        <ACC.HashTabsContent tabList={tabs}/>
+        <ACC.HashTabs tabList={tabs}/>
       </ACC.Page>
     );
   }
@@ -77,7 +76,7 @@ class PrepareMonitoringReportComponent extends ContainerBase<MonitoringReportPre
     return (
       <ACC.Loader
         pending={this.props.statusChanges}
-        render={(statusChanges) => <ACC.Section><ACC.Logs data={statusChanges} qa="monitoring-report-status-change-table"/></ACC.Section>}
+        render={(statusChanges) => <ACC.Section title="Log"><ACC.Logs data={statusChanges} qa="monitoring-report-status-change-table"/></ACC.Section>}
       />);
   }
 }

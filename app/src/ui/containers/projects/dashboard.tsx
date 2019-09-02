@@ -140,7 +140,7 @@ class ProjectDashboardComponent extends ContainerBaseWithState<Props, Data, Call
       // empty div needed to prevent focus on button becoming misaligned
       return (
         <div className="govuk-grid-column-one-third">
-          <button className={classNames("acc-statistics-section__details", "acc-statistics-section__details--button", {"acc-statistics-section__details--button--unselected": !buttonIsPressed})} aria-pressed={buttonIsPressed} onClick={() => filterFunction()}>
+          <button data-module="govuk-button" className={classNames("acc-statistics-section__details", "acc-statistics-section__details--button", {"acc-statistics-section__details--button--unselected": !buttonIsPressed})} aria-pressed={buttonIsPressed} onClick={() => filterFunction()}>
             <div>
               <StatisticsBox number={numberOfClaims} label={label} qa={qa}/>
             </div>
@@ -313,7 +313,7 @@ class ProjectDashboardComponent extends ContainerBaseWithState<Props, Data, Call
       return <p className="govuk-heading-s govuk-!-margin-bottom-2">{text}</p>;
     }
 
-    return <ACC.Link route={ProjectOverviewRoute.getLink({ projectId: project.id })}>{text}</ACC.Link>;
+    return <ACC.Link className={"blockLink"} route={ProjectOverviewRoute.getLink({ projectId: project.id })}>{text}</ACC.Link>;
   }
 
   private renderProject(project: ProjectDto, partner: PartnerDto | null, section: Section, index: number) {

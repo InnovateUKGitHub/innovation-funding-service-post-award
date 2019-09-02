@@ -4,19 +4,19 @@ export const GOVUK_TEXT_COLOUR = "#0b0c0c";
 export const GOVUK_SECONDARY_TEXT_COLOUR = "#6f777b";
 
 // BORDER
-export const GOVUK_BORDER_COLOUR = "#bfc1c3";
+export const GOVUK_BORDER_COLOUR = "#b1b4b6";
 
 // STATUS
-export const  GOVUK_COLOUR_BLUE = "#005ea5";
-export const  GOVUK_ERROR_COLOUR = "#b10e1e";
+export const  GOVUK_COLOUR_BLUE = "#1d70b8";
+export const  GOVUK_ERROR_COLOUR = "#d4351c";
 
 // GREYSCALE
 export const GOVUK_COLOUR_BLACK = "#0b0c0c";
-export const GOVUK_COLOUR_GREY_3 = "#dee0e2";
-export const GOVUK_COLOUR_GREY_4 = "#f8f8f8";
+export const GOVUK_COLOUR_GREY_3 = "#f3f2f1";
+export const GOVUK_COLOUR_GREY_4 = "#f3f2f1";
 
 // LINKS
-export const GOVUK_LINK_COLOUR = "#005ea5";
+export const GOVUK_LINK_COLOUR = "#1d70b8";
 
 // EXTENDED COLOURS
-export const GOVUK_COLOUR_GREEN = "#006435";
+export const GOVUK_COLOUR_GREEN = "#00703c";

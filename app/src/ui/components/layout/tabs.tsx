@@ -33,20 +33,25 @@ export class Tabs extends React.PureComponent<TabProps, {}> {
     }
 
     private renderItem(item: TabItem, index: number) {
-        const tab = this.renderTab(item);
-        if (!tab) return null;
-        return (
-            <li role="tab" aria-selected={item.selected} className="govuk-tabs__list-item" key={`tab-${index}`} data-qa={item.qa}>
-                {tab}
-            </li>
-        );
+      const tab = this.renderTab(item);
+
+      if (!tab) return null;
+
+      const classes = cn(
+        "govuk-tabs__list-item",
+        {
+          "govuk-tabs__list-item--selected": item.selected
+        }
+      );
+      return (
+          <li role="tab" aria-selected={item.selected} className={classes} key={`tab-${index}`} data-qa={item.qa}>
+              {tab}
+          </li>
+      );
     }
 
     private renderTab(item: TabItem) {
-        const classes = cn({
-          "govuk-tabs__tab": true,
-          "govuk-tabs__tab--selected": item.selected
-        });
+        const classes = cn("govuk-tabs__tab");
 
         if (item.route) {
             return <Link className={classes} route={item.route}>{item.text}</Link>;

@@ -19,11 +19,11 @@ export function renderHtml(html: string, htmlTitle: string, preloadedState: any 
           <link rel="apple-touch-icon" href="/assets/images/govuk-apple-touch-icon.png">
 
           <!--[if !IE 8]><!-->
-          <link href="/govuk-frontend-2.12.0.min.css" rel="stylesheet" />
+          <link href="/govuk-frontend-3.0.0.min.css" rel="stylesheet" />
           <!--<![endif]-->
 
           <!--[if IE 8]>
-          <link href="/govuk-frontend-ie8-2.12.0.min.css" rel="stylesheet" />
+          <link href="/govuk-frontend-ie8-3.0.0.min.css" rel="stylesheet" />
           <![endif]-->
           <link href="/govuk-overrides.css?build=${Configuration.build}" rel="stylesheet" />
 
@@ -41,12 +41,9 @@ export function renderHtml(html: string, htmlTitle: string, preloadedState: any 
             document.body.className = document.body.className + ' js-enabled';
             window.__PRELOADED_STATE__ = ${JSON.stringify(preloadedState).replace(/</g, "\\u003c")}
           </script>
-          <script src="/govuk-frontend-2.12.0.min.js"></script>
+          <script src="/govuk-frontend-3.0.0.min.js"></script>
           <script src="/build/vendor.js?build=${Configuration.build}"></script>
           <script src="/build/bundle.js?build=${Configuration.build}"></script>
-          <script>
-              window.GOVUKFrontend.initAll()
-          </script>
       </body>
   </html>
 `;
