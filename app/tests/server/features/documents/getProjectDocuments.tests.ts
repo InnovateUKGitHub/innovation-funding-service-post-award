@@ -1,5 +1,5 @@
 import { TestContext } from "../../testContextProvider";
-import { GetProjectDocumentsQuery } from "@server/features/documents/getProjectDocuments";
+import { GetProjectDocumentsQuery } from "@server/features/documents/getProjectDocumentsSummary";
 import { Authorisation, ProjectRole } from "@framework/types";
 import { DateTime } from "luxon";
 

@@ -4,7 +4,7 @@ import { mapToDocumentSummaryDto } from "./mapToDocumentSummaryDto";
 import { ISalesforceDocument } from "@server/repositories";
 import { dateComparator } from "@framework/util";
 
-export abstract class DocumentsQueryBase extends QueryBase<DocumentSummaryDto[]> {
+export abstract class DocumentsSummaryQueryBase extends QueryBase<DocumentSummaryDto[]> {
   constructor(protected readonly filter?: DocumentFilter) {
     super();
   }

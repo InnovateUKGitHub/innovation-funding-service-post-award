@@ -1,6 +1,6 @@
 import { IContext, ILinkInfo } from "@framework/types";
 import { DeleteClaimDocumentCommand } from "@server/features/documents/deleteClaimDocument";
-import { GetClaimDocumentsQuery } from "@server/features/documents/getClaimDocuments";
+import { GetClaimDocumentsQuery } from "@server/features/documents/getClaimDocumentsSummary";
 import { ClaimDashboardPageParams, ClaimsDashboardRoute } from "@ui/containers";
 import { BadRequestError } from "@server/features/common";
 import { getDocumentDeleteEditor } from "@ui/redux/selectors";
