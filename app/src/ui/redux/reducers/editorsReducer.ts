@@ -4,6 +4,7 @@ import * as Validators from "@ui/validators";
 import { RootActions } from "@ui/redux/actions";
 import { Results } from "@ui/validation/results";
 import { ClaimDto, IAppError, MonitoringReportDto } from "@framework/types";
+import { PCRDto } from "@framework/dtos/pcrDtos";
 
 export enum EditorStatus {
   Editing = 1,
@@ -93,5 +94,6 @@ export const editorReducer = combineReducers({
   documents: editorsReducer<DocumentUploadDto, Validators.DocumentUploadDtoValidator>("documents"),
   multipleDocuments: editorsReducer<MultipleDocumentUploadDto, Validators.MultipleDocumentUpdloadDtoValidator>("multipleDocuments"),
   documentSummary: editorsReducer<DocumentSummaryDto[], Results<DocumentSummaryDto[]>>("documentSummary"),
-  monitoringReport: editorsReducer<MonitoringReportDto, Validators.MonitoringReportDtoValidator>("monitoringReport")
+  monitoringReport: editorsReducer<MonitoringReportDto, Validators.MonitoringReportDtoValidator>("monitoringReport"),
+  pcr: editorsReducer<PCRDto, Results<PCRDto>>("pcr"),
 });

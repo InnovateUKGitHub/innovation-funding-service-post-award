@@ -10,8 +10,8 @@ import { range } from "@shared/range";
 import { DateTime } from "luxon";
 import { PCRItemType, PCRStatus } from "@framework/entities";
 import { PCRDetailsRoute } from "./details";
-import { fakePcrs, PCRSummaryDto } from "./fakePcrs";
 import { PCRCreateRoute } from "./create";
+import { PCRSummaryDto } from "@framework/dtos/pcrDtos";
 
 interface Params {
   projectId: string;
@@ -86,7 +86,7 @@ const definition = ReduxContainer.for<Params, Data, Callbacks>(PCRsDashboardComp
 export const PCRsDashboard = definition.connect({
   withData: (state, params) => ({
     project: Selectors.getProject(params.projectId).getPending(state),
-    pcrs: Pending.done(fakePcrs)
+    pcrs: Selectors.getAllPcrs(params.projectId).getPending(state)
   }),
   withCallbacks: () => ({})
 });
@@ -98,7 +98,8 @@ export const PCRsDashboardRoute = definition.route({
     projectId: route.params.projectId,
   }),
   getLoadDataActions: (params) => [
-    Actions.loadProject(params.projectId)
+    Actions.loadProject(params.projectId),
+    Actions.loadPcrs(params.projectId),
   ],
   getTitle: () => ({
     htmlTitle: "Project change requests",

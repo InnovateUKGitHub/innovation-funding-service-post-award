@@ -1,65 +1,38 @@
 import React from "react";
-import { ContainerBaseWithState, ContainerProps, ReduxContainer } from "../containerBase";
+import { ContainerBase, ReduxContainer } from "../containerBase";
 
 import * as ACC from "../../components";
 import * as Actions from "../../redux/actions";
 import * as Selectors from "../../redux/selectors";
+import * as Dtos from "@framework/dtos";
 import { Pending } from "@shared/pending";
-import { ProjectDto, ProjectRole } from "@framework/dtos";
-import { EditorStatus, IEditorStore } from "@ui/redux";
-import { fakeItemTypes, PCRDto, PCRItemDto, PCRItemTypeDto } from "./fakePcrs";
-import { Results } from "@ui/validation";
-import { PCRItemStatus, PCRStatus } from "@framework/entities";
+import { IEditorStore } from "@ui/redux";
+import { PCRItemStatus } from "@framework/entities/pcr";
 import { PCRsDashboardRoute } from "./dashboard";
+import { Results } from "@ui/validation";
 
 interface Params {
   projectId: string;
 }
 
 interface Data {
-  project: Pending<ProjectDto>;
-  itemTypes: Pending<PCRItemTypeDto[]>;
+  project: Pending<Dtos.ProjectDto>;
+  itemTypes: Pending<Dtos.PCRItemTypeDto[]>;
+  pcr: Pending<IEditorStore<Dtos.PCRDto, Results<{}>>>;
 }
 
 interface Callbacks {
 
 }
 
-interface State {
-  pcr: PCRDto;
-}
-class PCRCreateComponent extends ContainerBaseWithState<Params, Data, Callbacks, State> {
-  constructor(props: ContainerProps<Params, Data, Callbacks>) {
-    super(props);
-    this.state = {
-      pcr: {
-        id: "",
-        comments: "",
-        lastUpdated: null as any,
-        reasoningComments: "",
-        reasoningStatus: PCRItemStatus.Unknown,
-        reasoningStatusName: "",
-        requestNumber: 0,
-        started: null as any,
-        status: PCRStatus.Unknown,
-        statusName: "",
-        items: [],
-      }
-    };
-  }
+class PCRCreateComponent extends ContainerBase<Params, Data, Callbacks> {
 
   render() {
-    const pcr = Pending.done<IEditorStore<PCRDto, Results<{}>>>({
-      data: this.state.pcr,
-      status: EditorStatus.Editing,
-      validator: new Results(this.state.pcr, false)
-    });
-
-    const combined = Pending.combine({ project: this.props.project, pcr, itemTypes: this.props.itemTypes });
+    const combined = Pending.combine({ project: this.props.project, pcr: this.props.pcr, itemTypes: this.props.itemTypes });
     return <ACC.PageLoader pending={combined} render={d => this.renderContents(d.project, d.pcr, d.itemTypes)} />;
   }
 
-  private renderContents(project: ProjectDto, pcr: IEditorStore<PCRDto, Results<{}>>, itemTypes: PCRItemTypeDto[]) {
+  private renderContents(project: Dtos.ProjectDto, pcr: IEditorStore<Dtos.PCRDto, Results<{}>>, itemTypes: Dtos.PCRItemTypeDto[]) {
     return (
       <ACC.Page
         backLink={<ACC.BackLink route={PCRsDashboardRoute.getLink({ projectId: this.props.projectId })}>Back to project change requests</ACC.BackLink>}
@@ -74,19 +47,19 @@ class PCRCreateComponent extends ContainerBaseWithState<Params, Data, Callbacks,
     );
   }
 
-  private createNewOption(itemType: PCRItemTypeDto): PCRItemDto {
+  private createNewOption(itemType: Dtos.PCRItemTypeDto): Dtos.PCRItemDto {
     return {
       id: "",
       type: itemType.id,
-      typeName: itemType.name,
+      typeName: itemType.displayName,
       status: PCRItemStatus.Unknown,
       statusName: ""
     };
   }
 
-  private renderForm(pcr: IEditorStore<PCRDto, Results<{}>>, itemTypes: PCRItemTypeDto[]): React.ReactNode {
-    const PCRForm = ACC.TypedForm<PCRDto>();
-    const options = itemTypes.map<ACC.SelectOption>(x => ({ id: x.id.toString(), value: x.name }));
+  private renderForm(pcr: IEditorStore<Dtos.PCRDto, Results<{}>>, itemTypes: Dtos.PCRItemTypeDto[]): React.ReactNode {
+    const PCRForm = ACC.TypedForm<Dtos.PCRDto>();
+    const options = itemTypes.map<ACC.SelectOption>(x => ({ id: x.id.toString(), value: x.displayName }));
     const selected = options.filter(x => pcr.data.items.some(y => y.type.toString() === x.id));
 
     return (
@@ -100,7 +73,7 @@ class PCRCreateComponent extends ContainerBaseWithState<Params, Data, Callbacks,
             update={(model, selectedValue) => {
               model.items = itemTypes
                 .filter(x => (selectedValue || []).some(y => y.id === x.id.toString()))
-                .map<PCRItemDto>(x => model.items.find(y => x.id === y.type) || this.createNewOption(x));
+                .map<Dtos.PCRItemDto>(x => model.items.find(y => x.id === y.type) || this.createNewOption(x));
             }}
           />
         </PCRForm.Fieldset>
@@ -114,7 +87,8 @@ const definition = ReduxContainer.for<Params, Data, Callbacks>(PCRCreateComponen
 export const PCRCreate = definition.connect({
   withData: (state, params) => ({
     project: Selectors.getProject(params.projectId).getPending(state),
-    itemTypes: Pending.done(fakeItemTypes),
+    itemTypes: Selectors.getAllPcrTypes().getPending(state),
+    pcr: Selectors.getPcrEditor(params.projectId).get(state)
   }),
   withCallbacks: () => ({})
 });
@@ -126,12 +100,13 @@ export const PCRCreateRoute = definition.route({
     projectId: route.params.projectId,
   }),
   getLoadDataActions: (params) => [
-    Actions.loadProject(params.projectId)
+    Actions.loadProject(params.projectId),
+    Actions.loadPcrTypes(),
   ],
   getTitle: () => ({
     htmlTitle: "Start a new request",
     displayTitle: "Start a new request"
   }),
   container: PCRCreate,
-  accessControl: (auth, { projectId }, config) => config.features.pcrsEnabled && auth.forProject(projectId).hasAnyRoles(ProjectRole.ProjectManager)
+  accessControl: (auth, { projectId }, config) => config.features.pcrsEnabled && auth.forProject(projectId).hasAnyRoles(Dtos.ProjectRole.ProjectManager)
 });

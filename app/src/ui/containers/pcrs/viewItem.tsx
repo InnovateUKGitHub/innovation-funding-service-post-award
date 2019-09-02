@@ -8,8 +8,9 @@ import * as Actions from "../../redux/actions";
 import * as Selectors from "../../redux/selectors";
 import { LoadingStatus, Pending } from "@shared/pending";
 import { PCRDetailsRoute } from "./details";
-import { fakeDocuments, fakePcr, PCRDto, PCRItemDto } from "./fakePcrs";
+import { fakeDocuments } from "./fakePcrs";
 import { PCRViewReasoningRoute } from "./viewReasoning";
+import { PCRDto, PCRItemDto } from "@framework/dtos/pcrDtos";
 
 interface Params {
   projectId: string;
@@ -62,16 +63,16 @@ class PCRViewItemComponent extends ContainerBase<Params, Data, Callbacks> {
 
   private  renderArrows(pcr: PCRDto, pcrItem: PCRItemDto): React.ReactNode {
     const index = pcr.items.findIndex(x => x.id === pcrItem.id);
-    const prev = this.getLinkForItem(pcr.items[index - 1], true);
-    const next = this.getLinkForItem(pcr.items[index + 1], false);
+    const prev = this.getLinkForItem(pcr.items[index - 1], false);
+    const next = this.getLinkForItem(pcr.items[index + 1], true);
     return <ACC.NavigationArrows previousLink={prev} nextLink={next}/>;
   }
 
-  private getLinkForItem(pcrItem: PCRItemDto, isPrev: boolean) {
-    if(!pcrItem && !isPrev) {
+  private getLinkForItem(pcrItem: PCRItemDto, isLast: boolean) {
+    if(!pcrItem && !isLast) {
       return null;
     }
-    if(!pcrItem && isPrev) {
+    if(!pcrItem && isLast) {
       return { label: "Reasoning", route: PCRViewReasoningRoute.getLink({pcrId: this.props.pcrId, projectId: this.props.projectId})};
     }
     return {
@@ -83,16 +84,11 @@ class PCRViewItemComponent extends ContainerBase<Params, Data, Callbacks> {
 
 const definition = ReduxContainer.for<Params, Data, Callbacks>(PCRViewItemComponent);
 
-const getPcrItem = (id: string) => {
-  const item = fakePcr.items.find(x => x.id === id);
-  return new Pending<PCRItemDto>(item ? LoadingStatus.Done : LoadingStatus.Failed, item, !item ? new Error("Invaid id") : null);
-};
-
 export const PCRViewItem = definition.connect({
   withData: (state, params) => ({
     project: Selectors.getProject(params.projectId).getPending(state),
-    pcr: Pending.done(fakePcr),
-    pcrItem: getPcrItem(params.itemId),
+    pcr: Selectors.getPcr(params.projectId, params.pcrId).getPending(state),
+    pcrItem: Selectors.getPcrItem(params.projectId, params.pcrId, params.itemId).getPending(state),
     files: Pending.done(fakeDocuments)
   }),
   withCallbacks: () => ({})
@@ -107,7 +103,8 @@ export const PCRViewItemRoute = definition.route({
     itemId: route.params.itemId
   }),
   getLoadDataActions: (params) => [
-    Actions.loadProject(params.projectId)
+    Actions.loadProject(params.projectId),
+    Actions.loadPcr(params.projectId, params.pcrId)
   ],
   getTitle: () => ({
     htmlTitle: "Project change request item",

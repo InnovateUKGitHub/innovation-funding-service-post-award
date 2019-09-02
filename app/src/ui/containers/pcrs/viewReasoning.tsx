@@ -8,8 +8,9 @@ import * as Actions from "../../redux/actions";
 import * as Selectors from "../../redux/selectors";
 import { Pending } from "@shared/pending";
 import { PCRDetailsRoute } from "./details";
-import { fakeDocuments, fakePcr, PCRDto } from "./fakePcrs";
 import { PCRViewItemRoute } from "./viewItem";
+import { PCRDto } from "@framework/dtos/pcrDtos";
+import { fakeDocuments } from "./fakePcrs";
 
 interface Params {
   projectId: string;
@@ -33,6 +34,8 @@ class PCRViewReasoningComponent extends ContainerBase<Params, Data, Callbacks> {
   }
 
   private renderContents(project: ProjectDto, pcr: PCRDto, files: DocumentSummaryDto[]) {
+    const lastItem = pcr.items[pcr.items.length - 1];
+
     return (
       <ACC.Page
         backLink={<ACC.BackLink route={PCRDetailsRoute.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId })}>Back to project change request details</ACC.BackLink>}
@@ -58,7 +61,7 @@ class PCRViewReasoningComponent extends ContainerBase<Params, Data, Callbacks> {
             </div>
           </dl>
         </ACC.Section>
-        <ACC.NavigationArrows nextLink={{label: pcr.items[0].typeName, route: PCRViewItemRoute.getLink({projectId: this.props.projectId, pcrId: this.props.pcrId, itemId: pcr.items[0].id })}}/>
+        <ACC.NavigationArrows previousLink={{label: lastItem.typeName, route: PCRViewItemRoute.getLink({projectId: this.props.projectId, pcrId: this.props.pcrId, itemId: lastItem.id })}}/>
       </ACC.Page>
     );
   }
@@ -69,7 +72,7 @@ const definition = ReduxContainer.for<Params, Data, Callbacks>(PCRViewReasoningC
 export const PCRViewReasoning = definition.connect({
   withData: (state, params) => ({
     project: Selectors.getProject(params.projectId).getPending(state),
-    pcr: Pending.done(fakePcr),
+    pcr: Selectors.getPcr(params.projectId, params.pcrId).getPending(state),
     files: Pending.done(fakeDocuments)
   }),
   withCallbacks: () => ({})
@@ -83,7 +86,8 @@ export const PCRViewReasoningRoute = definition.route({
     pcrId: route.params.pcrId
   }),
   getLoadDataActions: (params) => [
-    Actions.loadProject(params.projectId)
+    Actions.loadProject(params.projectId),
+    Actions.loadPcr(params.projectId, params.pcrId)
   ],
   getTitle: () => ({
     htmlTitle: "Project change request reasoning",
