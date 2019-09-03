@@ -3,7 +3,7 @@ import { DeleteClaimDocumentCommand } from "@server/features/documents/deleteCla
 import { DocumentUploadDtoValidator } from "@ui/validators/documentUploadValidator";
 import { Authorisation, ClaimDto, ClaimStatus, DocumentDescription, IContext, ProjectRole } from "@framework/types";
 import mapClaim from "@server/features/claims/mapClaim";
-import { GetClaimDocumentsQuery } from "@server/features/documents/getClaimDocuments";
+import { GetClaimDocumentsQuery } from "@server/features/documents/getClaimDocumentsSummary";
 import { UpdateClaimCommand } from "../claims";
 
 export class UploadClaimDocumentCommand extends CommandBase<string> {

@@ -1,5 +1,5 @@
 import { TestContext } from "../../testContextProvider";
-import { GetClaimDocumentsQuery } from "@server/features/documents/getClaimDocuments";
+import { GetClaimDocumentsQuery } from "@server/features/documents/getClaimDocumentsSummary";
 import { DocumentDescription } from "@framework/constants";
 import { Authorisation, ProjectRole } from "@framework/types";
 

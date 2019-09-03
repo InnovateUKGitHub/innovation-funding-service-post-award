@@ -1,8 +1,8 @@
 import { Authorisation, IContext, ProjectRole } from "@framework/types";
 import { ISalesforceDocument } from "@server/repositories";
-import { DocumentsQueryBase } from "./documentsQueryBase";
+import { DocumentsSummaryQueryBase } from "./documentsSummaryQueryBase";
 
-export class GetProjectDocumentsQuery extends DocumentsQueryBase {
+export class GetProjectDocumentsQuery extends DocumentsSummaryQueryBase {
   constructor(private readonly projectId: string) {
     super();
   }
