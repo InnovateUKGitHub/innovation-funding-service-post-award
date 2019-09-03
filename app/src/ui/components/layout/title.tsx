@@ -3,6 +3,7 @@ import { connect as reduxConnect } from "react-redux";
 import { RootState } from "@ui/redux";
 
 interface Props {
+  title?: string;
   caption?: string;
 }
 
@@ -16,7 +17,7 @@ class TitleComponent extends React.Component<Props & Data> {
     return (
       <div data-qa="page-title">
         {this.renderCaption()}
-        <h1 className="govuk-heading-xl clearFix">{this.props.storePageTitle}</h1>
+        <h1 className="govuk-heading-xl clearFix">{this.props.title || this.props.storePageTitle}</h1>
       </div>
     );
   }
