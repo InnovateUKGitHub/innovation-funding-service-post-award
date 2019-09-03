@@ -1,5 +1,5 @@
 import { TestContext } from "../../testContextProvider";
-import { GetClaimDetailDocumentsQuery } from "@server/features/documents/getClaimDetailDocuments";
+import { GetClaimDetailDocumentsQuery } from "@server/features/documents/getClaimDetailDocumentsSummary";
 import { Authorisation, ProjectRole } from "@framework/types";
 
 describe("GetClaimDetailDocumentsQuery", () => {
