@@ -1,8 +1,9 @@
 import { QueryBase } from "../common";
-import { PCRSummaryDto } from "@framework/dtos/pcrDtos";
+import { PCRItemDto, PCRItemTypeDto, PCRSummaryDto } from "@framework/dtos/pcrDtos";
 import { Authorisation, IContext, ProjectRole } from "@framework/types";
 import { numberComparator } from "@framework/util";
-import { PCR, PCRStatus } from "@framework/entities";
+import { PCR, PCRStatus, PCRSummary } from "@framework/entities";
+import { GetPCRItemTypesQuery } from "./getItemTypesQuery";
 
 export class GetAllPCRsQuery extends QueryBase<PCRSummaryDto[]> {
   constructor(private projectId: string) {
@@ -15,22 +16,27 @@ export class GetAllPCRsQuery extends QueryBase<PCRSummaryDto[]> {
   }
 
   protected async Run(context: IContext): Promise<PCRSummaryDto[]> {
+    const pcrItemTypes = await context.runQuery(new GetPCRItemTypesQuery());
     const data = await context.repositories.pcrs.getAllByProjectId(this.projectId);
     data.sort((a,b) => numberComparator(a.number,b.number) * -1);
-    return data.map(y => this.map(y));
+    return data.map(x => this.map(x, pcrItemTypes));
   }
 
-  private map(item: PCR): PCRSummaryDto {
+  private map(pcr: PCRSummary, pcrItemTypes: PCRItemTypeDto[]): PCRSummaryDto {
+    // find the item types to inculde
+    const filteredItemTypes = pcrItemTypes.filter(pcrItemType => pcr.items.some(x => x.recordTypeId === pcrItemType.recordTypeId));
+
     return {
-      id: item.id,
-      requestNumber: item.number,
-      started: item.started,
-      lastUpdated: item.updated,
-      status: item.status,
-      statusName: item.statusName,
-      items: item.items.map(x => ({
-        type: x.itemType,
-        typeName: x.itemTypeName
+      id: pcr.id,
+      requestNumber: pcr.number,
+      started: pcr.started,
+      lastUpdated: pcr.updated,
+      status: pcr.status,
+      statusName: pcr.statusName,
+      projectId: pcr.projectId,
+      items: filteredItemTypes.map(x => ({
+        type: x.id,
+        typeName: x.displayName
       }))
     };
   }

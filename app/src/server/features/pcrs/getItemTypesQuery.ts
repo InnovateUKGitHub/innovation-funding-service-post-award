@@ -4,14 +4,15 @@ import { IContext } from "@framework/types";
 import { PCRItemType, RecordType } from "@framework/entities";
 import { GetAllRecordTypesQuery } from "../general/getAllRecordTypesQuery";
 
-interface MetaValue {
+interface IMetaValue {
   id: PCRItemType;
   typeName: string;
   displayName?: string;
   enabled?: boolean;
 }
 
-const metavalues: MetaValue[] = [
+// todo: this might sit better in the pcr repository... leave for now
+export const PCRRecordTypeMetaValues: IMetaValue[] = [
   { id: PCRItemType.AccountNameChange, typeName: "Account Name Change" },
   { id: PCRItemType.PartnerAddition, typeName: "Partner Addition", },
   { id: PCRItemType.PartnerWithdrawal, typeName: "Partner Withdrawal", },
@@ -30,7 +31,7 @@ export class GetPCRItemTypesQuery extends QueryBase<PCRItemTypeDto[]> {
       .filter(x => x.parent === "Acc_ProjectChangeRequest__c");
 
     /// meta values controlls order
-    return metavalues
+    return PCRRecordTypeMetaValues
       .map<PCRItemTypeDto>(x => ({
         id: x.id,
         displayName: x.displayName || x.typeName,

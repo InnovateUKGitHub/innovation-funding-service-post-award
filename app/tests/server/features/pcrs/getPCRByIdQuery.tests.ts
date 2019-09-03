@@ -60,8 +60,10 @@ describe("GetPCRByIdQuery", () => {
   test("returns all items", async () => {
     const context = new TestContext();
 
+    const recordTypes = context.testData.createPCRRecordTypes();
+
     const pcr = context.testData.createPCR();
-    const items = context.testData.range(3, (x) => context.testData.createPCRItem(pcr));
+    const items = context.testData.range(3, (x,i) => context.testData.createPCRItem(pcr, recordTypes[i]));
 
     const query = new GetPCRByIdQuery(pcr.projectId, pcr.id);
     const result = await context.runQuery(query);
@@ -74,11 +76,11 @@ describe("GetPCRByIdQuery", () => {
   test("maps all item fields", async () => {
     const context = new TestContext();
 
+    const recordType = context.testData.createPCRRecordTypes()[4];
+
     const pcr = context.testData.createPCR();
 
-    const item = context.testData.createPCRItem(pcr, {
-      itemType: 44,
-      itemTypeName: "Expected Item Type",
+    const item = context.testData.createPCRItem(pcr, recordType, {
       status: 98,
       statusName: "Expected Status"
     });
@@ -87,9 +89,9 @@ describe("GetPCRByIdQuery", () => {
     const result = await context.runQuery(query).then(x => x.items[0]);
 
     expect(result.id).toBe(item.id);
-    expect(result.type).toBe(44);
-    expect(result.typeName).toBe("Expected Item Type"),
-      expect(result.status).toBe(98);
+    expect(result.type).toBe(50);
+    expect(result.typeName).toBe(recordType.type),
+    expect(result.status).toBe(98);
     expect(result.statusName).toBe("Expected Status");
   });
 

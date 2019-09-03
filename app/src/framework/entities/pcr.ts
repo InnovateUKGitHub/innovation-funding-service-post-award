@@ -1,9 +1,23 @@
 export enum PCRStatus {
   Unknown = 0,
+  Draft= 1,
+  SubmittedToMonitoringOfficer= 2,
+  QueriedByMonitoringOfficer= 3,
+  SubmittedToInnovationLead= 4,
+  QueriedByInnovateUK= 5,
+  InExternalReview= 6,
+  InReviewWithInnovateUK= 7,
+  Rejected= 8,
+  Withdrawn= 9,
+  Approved= 10,
+  Actioned= 11,
 }
 
 export enum PCRItemStatus {
   Unknown = 0,
+  ToDo = 1,
+  Incomplete = 2,
+  Complete = 3
 }
 
 export enum PCRItemType {
@@ -31,17 +45,24 @@ export interface PCR {
   reasoningStatusName: string;
   reasoning: string;
   comments: string;
-  items: {
-    itemType: PCRItemType;
-    itemTypeName: string;
-  }[];
+  items: PCRItem[];
+}
+
+export interface PCRSummary {
+  id: string;
+  projectId: string;
+  number: number;
+  started: Date;
+  updated: Date;
+  status: PCRStatus;
+  statusName: string;
+  items: {recordTypeId: string}[];
 }
 
 export interface PCRItem {
   id: string;
+  recordTypeId: string;
   pcrId: string;
-  itemType: PCRItemType;
-  itemTypeName: string;
   status: PCRItemStatus;
   statusName: string;
 }
