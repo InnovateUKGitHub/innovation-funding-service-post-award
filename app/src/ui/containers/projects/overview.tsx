@@ -16,6 +16,7 @@ import { ProjectDocumentsRoute } from "./projectDocuments";
 import { ProjectDetailsRoute } from "./details";
 import { IClientConfig } from "@ui/redux/reducers/configReducer";
 import { NavigationCard } from "@ui/components";
+import { PCRsDashboardRoute } from "../pcrs/dashboard";
 
 interface Data {
   projectDetails: Pending<Dtos.ProjectDto>;
@@ -148,6 +149,7 @@ class ProjectOverviewComponent extends ContainerBase<Params, Data, {}> {
       { text: "Forecasts", link: ProjectForecastRoute.getLink({ projectId }) },
       { text: "Forecast", link: ViewForecastRoute.getLink({ projectId, partnerId }) },
       { text: "Project change requests", link: ProjectChangeRequestsRoute.getLink({ projectId }) },
+      { text: "Project change requests", link: PCRsDashboardRoute.getLink({ projectId }) },
       { text: "Documents", link: ProjectDocumentsRoute.getLink({ projectId }) },
       { text: "Details", link: ProjectDetailsRoute.getLink({ id: projectId }) },
     ].filter(x => x.link.accessControl(this.props.user, this.props.config));

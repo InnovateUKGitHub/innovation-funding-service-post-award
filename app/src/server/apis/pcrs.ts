@@ -7,6 +7,8 @@ import { GetPCRItemTypesQuery } from "@server/features/pcrs/getItemTypesQuery";
 
 export interface IPCRsApi {
   getAll: (params: ApiParams<{ projectId: string }>) => Promise<PCRSummaryDto[]>;
+  get: (params: ApiParams<{ projectId: string, id: string }>) => Promise<PCRDto>;
+  getTypes: (params: ApiParams<{ }>) => Promise<PCRItemTypeDto[]>;
 }
 
 class Controller extends ControllerBaseWithSummary<PCRSummaryDto, PCRDto> implements IPCRsApi {

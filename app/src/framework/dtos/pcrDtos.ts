@@ -1,4 +1,4 @@
-import { PCRStatus, PCRItemType, PCRItemStatus } from "@framework/entities";
+import { PCRItemStatus, PCRItemType, PCRStatus, } from "@framework/entities";
 
 export interface PCRBaseDto {
   id: string;
@@ -7,6 +7,7 @@ export interface PCRBaseDto {
   lastUpdated: Date;
   status: PCRStatus;
   statusName: string;
+  projectId: string;
 }
 
 export interface PCRSummaryDto extends PCRBaseDto {

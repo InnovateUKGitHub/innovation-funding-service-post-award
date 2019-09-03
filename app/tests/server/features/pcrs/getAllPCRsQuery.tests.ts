@@ -97,17 +97,17 @@ describe("GetAllPCRsQuery", () => {
   test("pcrs items are returned as expected", async () => {
     const context = new TestContext();
 
+    const recordTypes = context.testData.createPCRRecordTypes();
+
     const pcr = context.testData.createPCR();
-    const expected = context.testData.range(3, x => context.testData.createPCRItem(pcr, {
-      itemType: x as PCRItemType,
-      itemTypeName: `Exected Type ${x}`
-    }));
+    context.testData.range(recordTypes.length, (x,i) => context.testData.createPCRItem(pcr, recordTypes[i]));
 
     const query = new GetAllPCRsQuery(pcr.projectId);
 
     const result = await context.runQuery(query).then(x => x[0]);
+    const expectedTypes = recordTypes.map((x,i) => (i + 1) * 10 as PCRItemType);
 
-    expect(result.items.map(x => x.type)).toEqual(expected.map(x => x.itemType));
-    expect(result.items.map(x => x.typeName)).toEqual(expected.map(x => x.itemTypeName));
+    expect(result.items.map(x => x.type)).toEqual(expectedTypes);
+    expect(result.items.map(x => x.typeName)).toEqual(recordTypes.map(x => x.type));
   });
 });

@@ -6,7 +6,7 @@ import { IRepositories } from "@framework/types";
 import { TestFileWrapper } from "./testData";
 import { PermissionGroupIdenfifier } from "@framework/types/permisionGroupIndentifier";
 import * as Entities from "@framework/entities";
-import { PCR } from "@framework/entities";
+import { PCR, PCRSummary } from "@framework/entities";
 
 class ProjectsTestRepository extends TestRepository<Repositories.ISalesforceProject> implements Repositories.IProjectRepository {
   getById(id: string) {
@@ -408,36 +408,27 @@ class RecordTypeTestRepository extends TestRepository<Entities.RecordType> imple
   }
 }
 
-/// This is unusal as the IPcrRepository needs some information from the IPcrItemRepository
-/// so the test repo impliments both the IPcrRepository and the IPcrItemRepository
-/// this may change as the salesforce repo takes shape but the easaiest way for now to structure the test data.
-class PCRTestRepository extends TestRepository<{pcr: Entities.PCR, items: Entities.PCRItem[]}> implements Repositories.IPcrRepository, Repositories.IPcrItemRepository {
-  private convertToPcr(pair: {pcr: Entities.PCR, items: Entities.PCRItem[]}): PCR {
+class PCRTestRepository extends TestRepository<Entities.PCR> implements Repositories.IPCRRepository {
+
+  private convertToSummary(pcr: Entities.PCR): PCRSummary {
     return {
-      ...pair.pcr,
-      items: pair.items.map(x => ({ itemType: x.itemType, itemTypeName:x.itemTypeName}))
+      id: pcr.id,
+      number: pcr.number,
+      projectId: pcr.projectId,
+      started: pcr.started,
+      status: pcr.status,
+      statusName: pcr.statusName,
+      updated: pcr.updated,
+      items: pcr.items.map(x => ({recordTypeId: x.recordTypeId}))
     };
   }
 
-  getAllByProjectId(projectId: string): Promise<Entities.PCR[]> {
-    return super.getWhere(x => x.pcr.projectId === projectId).then(x => x.map(y => this.convertToPcr(y)));
+  getAllByProjectId(projectId: string): Promise<Entities.PCRSummary[]> {
+    return super.getWhere(x => x.projectId === projectId).then(x => x.map(y => this.convertToSummary(y)));
   }
 
   getById(projectId: string, id: string): Promise<Entities.PCR> {
-    return super.getOne(x => x.pcr.projectId === projectId && x.pcr.id === id).then(x => this.convertToPcr(x));
-  }
-
-  getAllItemsByPcrId(pcrId: string): Promise<Entities.PCRItem[]> {
-    return super.getOne(x => x.pcr.id === pcrId).then(x => x.items);
-  }
-
-  getItemById(id: string): Promise<Entities.PCRItem> {
-    const flattened = this.Items.reduce<Entities.PCRItem[]>((a,b) => a.concat(b.items), []);
-    const result = flattened.find(x => x.id === id);
-    if(result) {
-      return Promise.resolve(result);
-    }
-    return Promise.reject(new Error("Not found"));
+    return super.getOne(x => x.projectId === projectId && x.id === id);
   }
 }
 
@@ -452,7 +443,6 @@ export interface ITestRepositories extends IRepositories {
   monitoringReportResponse: MonitoringReportResponseTestRepository;
   monitoringReportQuestions: MonitoringReportQuestionsRepository;
   monitoringReportStatusChange: MonitoringReportStatusChangeTestRepository;
-  pcrItems: PCRTestRepository;
   pcrs: PCRTestRepository;
   profileDetails: ProfileDetailsTestRepository;
   profileTotalCostCategory: ProfileTotalCostCategoryTestRepository;
@@ -483,7 +473,6 @@ export const createTestRepositories = (): ITestRepositories => {
     monitoringReportHeader: new MonitoringReportHeaderTestRepository(),
     monitoringReportQuestions: new MonitoringReportQuestionsRepository(),
     monitoringReportStatusChange: new MonitoringReportStatusChangeTestRepository(),
-    pcrItems: pcrs,
     pcrs,
     profileDetails: new ProfileDetailsTestRepository(),
     profileTotalPeriod: new ProfileTotalPeriodTestRepository(partnerRepository),
