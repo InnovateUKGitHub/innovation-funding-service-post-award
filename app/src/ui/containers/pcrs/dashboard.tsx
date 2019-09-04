@@ -6,12 +6,11 @@ import * as ACC from "../../components";
 import * as Actions from "../../redux/actions";
 import * as Selectors from "../../redux/selectors";
 import { ProjectDto, ProjectRole } from "@framework/types";
-import { range } from "@shared/range";
-import { DateTime } from "luxon";
 import { PCRItemType, PCRStatus } from "@framework/entities";
 import { PCRDetailsRoute } from "./details";
 import { PCRCreateRoute } from "./create";
 import { PCRSummaryDto } from "@framework/dtos/pcrDtos";
+import { PCRPrepareRoute } from "./prepare";
 
 interface Params {
   projectId: string;
@@ -66,7 +65,7 @@ class PCRsDashboardComponent extends ContainerBase<Params, Data, Callbacks> {
         <PCRTable.ShortDate qa="started" header="Started" value={x => x.started} />
         <PCRTable.String qa="stauts" header="Status" value={x => x.statusName} />
         <PCRTable.ShortDate qa="lastUpdated" header="Last updated" value={x => x.lastUpdated} />
-        <PCRTable.Link qa="actions" header="Actions" hideHeader={true} value={x => PCRDetailsRoute.getLink({ projectId: this.props.projectId, pcrId: x.id })} content="View" />
+        <PCRTable.Custom qa="actions" header="Actions" hideHeader={true} value={x => this.renderLinks(x)} />
       </PCRTable.Table>
     );
   }
@@ -80,6 +79,17 @@ class PCRsDashboardComponent extends ContainerBase<Params, Data, Callbacks> {
       return a;
     }, []);
   }
+
+  renderLinks(pcr: PCRSummaryDto): React.ReactNode {
+    return (
+      <React.Fragment>
+        <ACC.Link route={PCRDetailsRoute.getLink({pcrId: pcr.id, projectId: pcr.projectId})}>View</ACC.Link>
+        <br/>
+        <ACC.Link route={PCRPrepareRoute.getLink({pcrId: pcr.id, projectId: pcr.projectId})}>Prepare</ACC.Link>
+      </React.Fragment>
+    );
+  }
+
 }
 
 const definition = ReduxContainer.for<Params, Data, Callbacks>(PCRsDashboardComponent);
