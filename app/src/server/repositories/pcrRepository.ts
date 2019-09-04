@@ -1,14 +1,12 @@
-import { PCR, PCRItemStatus, PCRItemType, PCRStatus, PCRSummary } from "@framework/entities/pcr";
-import { range } from "@shared/range";
-import { DateTime } from "luxon";
-import { SalesforceInvalidFilterError } from "./errors";
-import { RepositoryBase } from "./salesforceRepositoryBase";
+import { PCR } from "@framework/entities/pcr";
+import SalesforceRepositoryBase from "./salesforceRepositoryBase";
 import { Connection } from "jsforce";
 import { ILogger } from "@server/features/common/logger";
-import { SalesforcePCRDetailedMapper, SalesforcePCRSummaryMapper } from "./mappers/pcrSummaryMapper";
+import { SalesforcePCRMapper } from "./mappers/pcrSummaryMapper";
+import { NotFoundError } from "@server/features/common";
 
 export interface IPCRRepository {
-  getAllByProjectId(projectId: string): Promise<PCRSummary[]>;
+  getAllByProjectId(projectId: string): Promise<PCR[]>;
   getById(projectId: string, id: string): Promise<PCR>;
 }
 
@@ -36,14 +34,14 @@ export interface ISalesforcePCR extends ISalesforcePCRSummary {
   Acc_Comments__c: string;
 }
 
-export class PCRRepository extends RepositoryBase implements IPCRRepository {
+export class PCRRepository extends SalesforceRepositoryBase<ISalesforcePCR> implements IPCRRepository {
   constructor(private getRecordTypeId: (objectName: string, recordType: string) => Promise<string>, getSalesforceConnection: () => Promise<Connection>, logger: ILogger) {
     super(getSalesforceConnection, logger);
   }
 
-  private salesforceObjectName = "Acc_ProjectChangeRequest__c";
+  protected salesforceObjectName = "Acc_ProjectChangeRequest__c";
 
-  private standardFields: string[]= [
+  protected salesforceFieldNames: string[] = [
     "Id",
     "Acc_RequestHeader__c",
     "Acc_RequestNumber__c",
@@ -53,46 +51,30 @@ export class PCRRepository extends RepositoryBase implements IPCRRepository {
     "LastModifiedDate",
     "RecordTypeId",
     "Acc_Project_Participant__r.Id",
-    "Acc_Project_Participant__r.Acc_ProjectId__c"
-  ];
-
-  private itemFields = [
+    "Acc_Project_Participant__r.Acc_ProjectId__c",
     "Acc_Reasoning__c",
     "Acc_MarkedAsComplete__c",
     "toLabel(Acc_MarkedAsComplete__c) MarkedAsCompleteName",
     "Acc_Comments__c",
-    ...this.standardFields
   ];
 
-  async getAllByProjectId(projectId: string): Promise<PCRSummary[]> {
-    const conn = await this.getSalesforceConnection();
-
-    const query = conn.sobject(this.salesforceObjectName)
-      .select(this.standardFields)
-      .where(`Acc_Project_Participant__r.Acc_ProjectId__c='${projectId}'`)
-      ;
-
-    const data = await this.executeArray<ISalesforcePCRSummary>(query);
-
+  async getAllByProjectId(projectId: string): Promise<PCR[]> {
     const headerRecordTypeId = await this.getRecordTypeId(this.salesforceObjectName, "Request Header");
-
-    const mapper = new SalesforcePCRSummaryMapper(headerRecordTypeId);
+    const data = await super.where(`Acc_Project_Participant__r.Acc_ProjectId__c='${projectId}'`);
+    const mapper = new SalesforcePCRMapper(headerRecordTypeId);
     return mapper.map(data);
   }
 
   async getById(projectId: string, id: string): Promise<PCR> {
-    const conn = await this.getSalesforceConnection();
-
-    const query = conn.sobject(this.salesforceObjectName)
-      .select(this.itemFields)
-      .where(`Acc_Project_Participant__r.Acc_ProjectId__c='${projectId}' AND (Id = '${id}' OR Acc_RequestHeader__c = '${id}')`)
-      ;
-
-    const data = await this.executeArray<ISalesforcePCR>(query);
+    const data = await super.where(`Acc_Project_Participant__r.Acc_ProjectId__c='${projectId}' AND (Id = '${id}' OR Acc_RequestHeader__c = '${id}')`);
 
     const headerRecordTypeId = await this.getRecordTypeId(this.salesforceObjectName, "Request Header");
 
-    const mapper = new SalesforcePCRDetailedMapper(headerRecordTypeId);
-    return mapper.map(data);
+    const mapper = new SalesforcePCRMapper(headerRecordTypeId);
+    const mapped = mapper.map(data).pop();
+    if (!mapped) {
+      throw new NotFoundError();
+    }
+    return mapped;
   }
 }
