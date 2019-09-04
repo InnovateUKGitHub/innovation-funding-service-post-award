@@ -48,17 +48,6 @@ export interface PCR {
   items: PCRItem[];
 }
 
-export interface PCRSummary {
-  id: string;
-  projectId: string;
-  number: number;
-  started: Date;
-  updated: Date;
-  status: PCRStatus;
-  statusName: string;
-  items: {recordTypeId: string}[];
-}
-
 export interface PCRItem {
   id: string;
   recordTypeId: string;
