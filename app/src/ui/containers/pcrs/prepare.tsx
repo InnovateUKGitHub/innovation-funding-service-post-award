@@ -8,8 +8,8 @@ import * as Actions from "../../redux/actions";
 import * as Selectors from "../../redux/selectors";
 import { Pending } from "@shared/pending";
 import { PCRsDashboardRoute } from "./dashboard";
-import { PCRViewItemRoute } from "./viewItem";
-import { PCRViewReasoningRoute } from "./viewReasoning";
+import { PCRPrepareItemRoute } from "./prepareItem";
+import { PCRPrepareReasoningRoute } from "./prepareReasoning";
 import { PCRDto, PCRItemDto } from "@framework/dtos/pcrDtos";
 
 interface Params {
@@ -25,7 +25,7 @@ interface Data {
 interface Callbacks {
 }
 
-class PCRDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
+class PCRPrepareComponent extends ContainerBase<Params, Data, Callbacks> {
   render() {
     const combined = Pending.combine({ project: this.props.project, pcr: this.props.pcr });
 
@@ -74,11 +74,11 @@ class PCRDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
   }
 
   private renderReasoning(pcr: PCRDto) {
-    return this.renderListItem(pcr.items.length + 1, "View more details", "Reasoning for Innovate UK", pcr.reasoningStatusName, PCRViewReasoningRoute.getLink({projectId: this.props.projectId, pcrId: this.props.pcrId}));
+    return this.renderListItem(pcr.items.length + 1, "Give more details", "Reasoning for Innovate UK", pcr.reasoningStatusName, PCRPrepareReasoningRoute.getLink({projectId: this.props.projectId, pcrId: this.props.pcrId}));
   }
 
   private renderItem(item: PCRItemDto, step: number) {
-    return this.renderListItem(step, item.typeName, "View files", item.statusName, PCRViewItemRoute.getLink({projectId: this.props.projectId, pcrId: this.props.pcrId, itemId: item.id}));
+    return this.renderListItem(step, item.typeName, "Provide your files", item.statusName, PCRPrepareItemRoute.getLink({projectId: this.props.projectId, pcrId: this.props.pcrId, itemId: item.id}));
   }
 
   private renderListItem(step: number, title: string, text: string, status: string, route: ILinkInfo) {
@@ -96,9 +96,9 @@ class PCRDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
   }
 }
 
-const definition = ReduxContainer.for<Params, Data, Callbacks>(PCRDetailsComponent);
+const definition = ReduxContainer.for<Params, Data, Callbacks>(PCRPrepareComponent);
 
-export const PCRDetails = definition.connect({
+export const PCRPrepare = definition.connect({
   withData: (state, params) => ({
     project: Selectors.getProject(params.projectId).getPending(state),
     pcr: Selectors.getPcr(params.projectId, params.pcrId).getPending(state),
@@ -106,9 +106,9 @@ export const PCRDetails = definition.connect({
   withCallbacks: () => ({})
 });
 
-export const PCRDetailsRoute = definition.route({
-  routeName: "pcrDetails",
-  routePath: "/projects/:projectId/pcrs/:pcrId/details",
+export const PCRPrepareRoute = definition.route({
+  routeName: "pcrPrepare",
+  routePath: "/projects/:projectId/pcrs/:pcrId/prepare",
   getParams: (route) => ({
     projectId: route.params.projectId,
     pcrId: route.params.pcrId,
@@ -118,9 +118,9 @@ export const PCRDetailsRoute = definition.route({
     Actions.loadPcr(params.projectId, params.pcrId),
   ],
   getTitle: () => ({
-    htmlTitle: "Project change request details",
-    displayTitle: "Project change request details"
+    htmlTitle: "Prepare project change request",
+    displayTitle: "Prepare project change request"
   }),
-  container: PCRDetails,
-  accessControl: (auth, { projectId }, config) => config.features.pcrsEnabled && auth.forProject(projectId).hasAnyRoles(ProjectRole.ProjectManager, ProjectRole.MonitoringOfficer)
+  container: PCRPrepare,
+  accessControl: (auth, { projectId }, config) => config.features.pcrsEnabled && auth.forProject(projectId).hasRole(ProjectRole.ProjectManager)
 });
