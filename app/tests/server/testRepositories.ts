@@ -6,7 +6,6 @@ import { IRepositories } from "@framework/types";
 import { TestFileWrapper } from "./testData";
 import { PermissionGroupIdenfifier } from "@framework/types/permisionGroupIndentifier";
 import * as Entities from "@framework/entities";
-import { PCR, PCRSummary } from "@framework/entities";
 
 class ProjectsTestRepository extends TestRepository<Repositories.ISalesforceProject> implements Repositories.IProjectRepository {
   getById(id: string) {
@@ -410,21 +409,8 @@ class RecordTypeTestRepository extends TestRepository<Entities.RecordType> imple
 
 class PCRTestRepository extends TestRepository<Entities.PCR> implements Repositories.IPCRRepository {
 
-  private convertToSummary(pcr: Entities.PCR): PCRSummary {
-    return {
-      id: pcr.id,
-      number: pcr.number,
-      projectId: pcr.projectId,
-      started: pcr.started,
-      status: pcr.status,
-      statusName: pcr.statusName,
-      updated: pcr.updated,
-      items: pcr.items.map(x => ({recordTypeId: x.recordTypeId}))
-    };
-  }
-
-  getAllByProjectId(projectId: string): Promise<Entities.PCRSummary[]> {
-    return super.getWhere(x => x.projectId === projectId).then(x => x.map(y => this.convertToSummary(y)));
+  getAllByProjectId(projectId: string): Promise<Entities.PCR[]> {
+    return super.getWhere(x => x.projectId === projectId);
   }
 
   getById(projectId: string, id: string): Promise<Entities.PCR> {

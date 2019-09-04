@@ -2,7 +2,7 @@ import { QueryBase } from "../common";
 import { PCRItemDto, PCRItemTypeDto, PCRSummaryDto } from "@framework/dtos/pcrDtos";
 import { Authorisation, IContext, ProjectRole } from "@framework/types";
 import { numberComparator } from "@framework/util";
-import { PCR, PCRStatus, PCRSummary } from "@framework/entities";
+import { PCR, PCRStatus } from "@framework/entities";
 import { GetPCRItemTypesQuery } from "./getItemTypesQuery";
 
 export class GetAllPCRsQuery extends QueryBase<PCRSummaryDto[]> {
@@ -22,7 +22,7 @@ export class GetAllPCRsQuery extends QueryBase<PCRSummaryDto[]> {
     return data.map(x => this.map(x, pcrItemTypes));
   }
 
-  private map(pcr: PCRSummary, pcrItemTypes: PCRItemTypeDto[]): PCRSummaryDto {
+  private map(pcr: PCR, pcrItemTypes: PCRItemTypeDto[]): PCRSummaryDto {
     // find the item types to inculde
     const filteredItemTypes = pcrItemTypes.filter(pcrItemType => pcr.items.some(x => x.recordTypeId === pcrItemType.recordTypeId));
 

@@ -1,70 +1,14 @@
 import { SalesforceBaseMapper } from "./saleforceMapperBase";
-import { PCR, PCRItemStatus, PCRStatus, PCRSummary } from "@framework/entities";
+import { PCR, PCRItem, PCRItemStatus, PCRStatus } from "@framework/entities";
 import { ISalesforcePCR, ISalesforcePCRSummary } from "../pcrRepository";
 import { NotFoundError } from "@server/features/common";
 
-export class SalesforcePCRDetailedMapper extends SalesforceBaseMapper<ISalesforcePCR[], PCR> {
-  constructor(private readonly headerRecordTypeId: string) {
-    super();
-    this.summaryMapper = new SalesforcePCRSummaryMapper(headerRecordTypeId);
-  }
-
-  private summaryMapper: SalesforcePCRSummaryMapper;
-
-  public map(items: ISalesforcePCR[]): PCR {
-    const header = items.find(x => x.RecordTypeId === this.headerRecordTypeId);
-
-    if (!header) {
-      throw new NotFoundError();
-    }
-
-    const summary = this.summaryMapper.map([header])[0];
-
-    return {
-      id: summary.id,
-      projectId: summary.projectId,
-      number: summary.number,
-      started: summary.started,
-      updated: summary.updated,
-      status: summary.status,
-      statusName: summary.statusName,
-
-      reasoning: header.Acc_Reasoning__c,
-      reasoningStatus: this.mapStatus(header.Acc_MarkedasComplete__c),
-      reasoningStatusName: header.MarkedAsCompleteName,
-      comments: header.Acc_Comments__c,
-
-      items: items.filter(x => x.RecordTypeId !== this.headerRecordTypeId).map(x => ({
-        id: x.Id,
-        pcrId: header.Id,
-        recordTypeId: x.RecordTypeId,
-        status: this.mapStatus(x.Acc_MarkedasComplete__c),
-        statusName: x.MarkedAsCompleteName
-      }))
-    };
-  }
-
-  private mapStatus(status: string): PCRItemStatus {
-    switch (status) {
-      case "To Do":
-        return PCRItemStatus.ToDo;
-      case "Incomplete":
-        return PCRItemStatus.Incomplete;
-      case "Complete":
-        return PCRItemStatus.Complete;
-      default:
-        return PCRItemStatus.Unknown;
-    }
-  }
-}
-
-export class SalesforcePCRSummaryMapper extends SalesforceBaseMapper<ISalesforcePCRSummary[], PCRSummary[]> {
+export class SalesforcePCRMapper extends SalesforceBaseMapper<ISalesforcePCR[], PCR[]> {
   constructor(private readonly headerRecordTypeId: string) {
     super();
   }
 
-  public map(items: ISalesforcePCRSummary[]): PCRSummary[] {
-
+  public map(items: ISalesforcePCR[]): PCR[] {
     const headers = items.filter(x => x.RecordTypeId === this.headerRecordTypeId);
 
     return headers.map(header => ({
@@ -75,8 +19,22 @@ export class SalesforcePCRSummaryMapper extends SalesforceBaseMapper<ISalesforce
       updated: this.clock.parseRequiredSalesforceDateTime(header.LastModifiedDate),
       status: this.mapStatus(header.Acc_Status__c),
       statusName: header.StatusName,
-      items: items.filter(x => x.Acc_RequestHeader__c === header.Id).map(x => ({ recordTypeId: x.RecordTypeId }))
+      reasoning: header.Acc_Reasoning__c,
+      reasoningStatus: this.mapItemStatus(header.Acc_MarkedasComplete__c),
+      reasoningStatusName: header.MarkedAsCompleteName,
+      comments: header.Acc_Comments__c,
+      items: items.filter(x => x.Acc_RequestHeader__c === header.Id).map(x => this.mapItem(header, x))
     }));
+  }
+
+  private mapItem(header: ISalesforcePCR, pcrItem: ISalesforcePCR): PCRItem {
+    return {
+      id: pcrItem.Id,
+      pcrId: header.Id,
+      recordTypeId: pcrItem.RecordTypeId,
+      status: this.mapItemStatus(pcrItem.Acc_MarkedasComplete__c),
+      statusName: pcrItem.MarkedAsCompleteName
+    };
   }
 
   private mapStatus(status: string): PCRStatus {
@@ -105,6 +63,19 @@ export class SalesforcePCRSummaryMapper extends SalesforceBaseMapper<ISalesforce
         return PCRStatus.Actioned;
       default:
         return PCRStatus.Unknown;
+    }
+  }
+
+  private mapItemStatus(status: string): PCRItemStatus {
+    switch (status) {
+      case "To Do":
+        return PCRItemStatus.ToDo;
+      case "Incomplete":
+        return PCRItemStatus.Incomplete;
+      case "Complete":
+        return PCRItemStatus.Complete;
+      default:
+        return PCRItemStatus.Unknown;
     }
   }
 }
