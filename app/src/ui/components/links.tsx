@@ -10,11 +10,16 @@ interface Props {
   className?: string;
 }
 
-export class Link extends React.Component<Props> {
-  render() {
-    const { id, route, children } = this.props;
+interface StyledLinkProps extends Props {
+  styling?: "Link" | "SecondaryButton";
+}
 
-    const className = classNames("govuk-link", this.props.className);
+export class Link extends React.Component<StyledLinkProps> {
+  render() {
+    const { id, route, styling, children } = this.props;
+
+    const baseClass = styling === "SecondaryButton" ? "govuk-button govuk-button--secondary" : "govuk-link";
+    const className = classNames(baseClass, this.props.className);
 
     return (
       <RouterLink
