@@ -79,7 +79,7 @@ describe("GetProjectDocumentQuery", () => {
       expect(await context.runAccessControl(auth, query)).toBe(false);
     });
 
-    it("should allow MO of another project to run", async () => {
+    it("should not allow MO of another project to run", async () => {
       const context = new TestContext();
 
       const project1 = context.testData.createProject();
