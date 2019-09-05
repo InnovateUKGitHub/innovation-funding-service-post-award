@@ -27,6 +27,7 @@ export const routeConfig = {
   pcrPrepareReasoning: Containers.PCRPrepareReasoningRoute,
   pcrViewItem: Containers.PCRViewItemRoute,
   pcrViewReasoning: Containers.PCRViewReasoningRoute,
+  projectChangeRequestItemUpload: Containers.ProjectChangeRequestItemUploadRoute,
   projectDashboard: Containers.ProjectDashboardRoute,
   projectDetails: Containers.ProjectDetailsRoute,
   projectDocuments: Containers.ProjectDocumentsRoute,
