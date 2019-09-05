@@ -22,7 +22,7 @@ describe("GetPCRItemTypesQuery", () => {
     const query = new GetPCRItemTypesQuery();
     const result = await context.runQuery(query);
 
-    expect(result.map(x => x.id)).toEqual(expectedIds);
+    expect(result.map(x => x.type)).toEqual(expectedIds);
   });
 
   test("popultates item type fields", async () => {
@@ -33,7 +33,7 @@ describe("GetPCRItemTypesQuery", () => {
     const query = new GetPCRItemTypesQuery();
     const result = await context.runQuery(query).then(x => x[2]);
 
-    expect(result.id).toEqual(PCRItemType.PartnerWithdrawal);
+    expect(result.type).toEqual(PCRItemType.PartnerWithdrawal);
     expect(result.enabled).toEqual(true);
     expect(result.recordTypeId).toEqual(recordType.id);
     expect(result.displayName).toEqual("Partner Withdrawal");

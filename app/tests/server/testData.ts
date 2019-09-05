@@ -611,6 +611,7 @@ export class TestData {
       id: `PCR_Item_${seed}`,
       pcrId: pcr.id,
       recordTypeId: recordType.id,
+      projectId: pcr.projectId,
       status: Entites.PCRItemStatus.Unknown,
       statusName: "Item Status Name",
     };
