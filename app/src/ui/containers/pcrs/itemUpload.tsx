@@ -27,6 +27,12 @@ interface CombinedData {
   documents: DocumentSummaryDto[];
 }
 
+interface CombinedData {
+  project: ProjectDto;
+  editor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>;
+  documents: DocumentSummaryDto[];
+}
+
 interface Callbacks {}
 
 class ProjectChangeRequestItemUploadContainer extends ContainerBase<Params, Data, Callbacks> {
