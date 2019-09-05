@@ -1,4 +1,4 @@
-import { PCR } from "@framework/entities/pcr";
+import { PCR, PCRItemStatus, PCRStatus } from "@framework/entities/pcr";
 import SalesforceRepositoryBase from "./salesforceRepositoryBase";
 import { Connection } from "jsforce";
 import { ILogger } from "@server/features/common/logger";
@@ -6,6 +6,7 @@ import { SalesforcePCRMapper } from "./mappers/pcrSummaryMapper";
 import { NotFoundError } from "@server/features/common";
 
 export interface IPCRRepository {
+  updatePcr(pcr: PCR): Promise<void>;
   getAllByProjectId(projectId: string): Promise<PCR[]>;
   getById(projectId: string, id: string): Promise<PCR>;
 }
@@ -76,5 +77,57 @@ export class PCRRepository extends SalesforceRepositoryBase<ISalesforcePCR> impl
       throw new NotFoundError();
     }
     return mapped;
+  }
+
+  async updatePcr(pcr: PCR) {
+    await super.updateItem({
+      Id: pcr.id,
+      Acc_Comments__c: pcr.comments,
+      Acc_MarkedasComplete__c: this.mapItemStatus(pcr.reasoningStatus),
+      Acc_Reasoning__c: pcr.reasoning,
+      Acc_Status__c: this.mapStatus(pcr.status),
+    });
+  }
+
+  private mapStatus(status: PCRStatus): string {
+    switch (status) {
+      case PCRStatus.Draft:
+        return "Draft";
+      case PCRStatus.SubmittedToMonitoringOfficer:
+        return "Submitted to Monitoring Officer";
+      case PCRStatus.QueriedByMonitoringOfficer:
+        return "Queried by Monitoring Officer";
+      case PCRStatus.SubmittedToInnovationLead:
+        return "Submitted to Innovation Lead";
+      case PCRStatus.QueriedByInnovateUK:
+        return "Queried by Innovate UK";
+      case PCRStatus.InExternalReview:
+        return "In External Review";
+      case PCRStatus.InReviewWithInnovateUK:
+        return "In Review with Innovate UK";
+      case PCRStatus.Rejected:
+        return "Rejected";
+      case PCRStatus.Withdrawn:
+        return "Withdrawn";
+      case PCRStatus.Approved:
+        return "Approved";
+      case PCRStatus.Actioned:
+        return "Actioned";
+      default:
+        return "";
+    }
+  }
+
+  private mapItemStatus(status: PCRItemStatus): string {
+    switch (status) {
+      case PCRItemStatus.ToDo:
+        return "To Do";
+      case PCRItemStatus.Incomplete:
+        return "Incomplete";
+      case PCRItemStatus.Complete:
+        return "Complete";
+      default:
+        return "";
+    }
   }
 }
