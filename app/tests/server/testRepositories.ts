@@ -420,6 +420,12 @@ class PCRTestRepository extends TestRepository<Entities.PCR> implements Reposito
   updatePcr(pcr: Entities.PCR): Promise<void> {
     return Promise.resolve();
   }
+
+  async createProjectChangeRequest(projectChangeRequest: Entities.ProjectChangeRequestForCreate): Promise<string> {
+    const id = `ProjectChangeRequest${(this.Items.length + 1)}`;
+    await super.insertOne({id, ...projectChangeRequest} as Entities.PCR);
+    return id;
+  }
 }
 
 export interface ITestRepositories extends IRepositories {

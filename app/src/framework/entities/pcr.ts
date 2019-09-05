@@ -33,25 +33,33 @@ export enum PCRItemType {
   TimeExtension = 90,
 }
 
-export interface PCR {
-  id: string;
+export interface ProjectChangeRequestForCreate {
   projectId: string;
+  status: PCRStatus;
+  reasoningStatus: PCRItemStatus;
+  items: ProjectChangeRequestItemForCreate[];
+}
+
+export interface PCR extends ProjectChangeRequestForCreate {
+  id: string;
   number: number;
   started: Date;
   updated: Date;
-  status: PCRStatus;
   statusName: string;
-  reasoningStatus: PCRItemStatus;
   reasoningStatusName: string;
   reasoning: string;
   comments: string;
   items: PCRItem[];
 }
 
-export interface PCRItem {
-  id: string;
+export interface ProjectChangeRequestItemForCreate {
   recordTypeId: string;
-  pcrId: string;
   status: PCRItemStatus;
+  projectId: string;
+}
+
+export interface PCRItem extends ProjectChangeRequestItemForCreate {
+  id: string;
   statusName: string;
+  pcrId: string;
 }
