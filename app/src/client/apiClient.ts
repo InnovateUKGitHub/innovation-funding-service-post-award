@@ -49,6 +49,7 @@ const clientApi: IApiClient = {
     getStatusChanges: (params) => ajax(`/api/monitoring-reports/status-changes/${params.projectId}/${params.reportId}`),
   },
   pcrs: {
+    create: (params) => ajaxPost(`/api/pcrs?projectId=${params.projectId}`, params.projectChangeRequestDto),
     getAll: (params) => ajax(`/api/pcrs?projectId=${params.projectId}`),
     get: (params) => ajax(`/api/pcrs/${params.projectId}/${params.id}`),
     getTypes: (params) => ajax(`/api/pcrs/types`),

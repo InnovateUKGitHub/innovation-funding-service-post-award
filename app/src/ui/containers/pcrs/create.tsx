@@ -10,6 +10,8 @@ import { IEditorStore } from "@ui/redux";
 import { PCRItemStatus } from "@framework/entities/pcr";
 import { PCRsDashboardRoute } from "./dashboard";
 import { Results } from "@ui/validation";
+import { PCRDto } from "@framework/dtos";
+import { PCRPrepareRoute } from "@ui/containers";
 
 interface Params {
   projectId: string;
@@ -22,7 +24,7 @@ interface Data {
 }
 
 interface Callbacks {
-
+  create: (projectId: string, dto: PCRDto) => void;
 }
 
 class PCRCreateComponent extends ContainerBase<Params, Data, Callbacks> {
@@ -63,21 +65,25 @@ class PCRCreateComponent extends ContainerBase<Params, Data, Callbacks> {
     const selected = options.filter(x => pcr.data.items.some(y => y.type.toString() === x.id));
 
     return (
-      <PCRForm.Form editor={pcr} onChange={x => this.setState({ pcr: x })}>
-        <PCRForm.Fieldset heading="Select request types">
-          <PCRForm.Checkboxes
-            hint="You can select more that one."
-            options={options}
-            name="type"
-            value={x => selected}
-            update={(model, selectedValue) => {
-              model.items = itemTypes
-                .filter(x => (selectedValue || []).some(y => y.id === x.id.toString()))
-                .map<Dtos.PCRItemDto>(x => model.items.find(y => x.id === y.type) || this.createNewOption(x));
-            }}
-          />
-        </PCRForm.Fieldset>
-      </PCRForm.Form>
+      <React.Fragment>
+        <PCRForm.Form editor={pcr} onSubmit={() => this.props.create(this.props.projectId, pcr.data)} onChange={x => this.setState({ pcr: x })}>
+          <PCRForm.Fieldset heading="Select request types">
+            <PCRForm.Checkboxes
+              hint="You can select more that one."
+              options={options}
+              name="type"
+              value={x => selected}
+              update={(model, selectedValue) => {
+                model.items = itemTypes
+                  .filter(x => (selectedValue || []).some(y => y.id === x.id.toString()))
+                  .map<Dtos.PCRItemDto>(x => model.items.find(y => x.id === y.type) || this.createNewOption(x));
+              }}
+            />
+          </PCRForm.Fieldset>
+          <PCRForm.Submit>Create Request</PCRForm.Submit>
+        </PCRForm.Form>
+        <ACC.Link styling="SecondaryButton" route={PCRsDashboardRoute.getLink({ projectId: this.props.projectId })}>Cancel</ACC.Link>
+      </React.Fragment>
     );
   }
 }
@@ -90,7 +96,11 @@ export const PCRCreate = definition.connect({
     itemTypes: Selectors.getAllPcrTypes().getPending(state),
     pcr: Selectors.getPcrEditor(params.projectId).get(state)
   }),
-  withCallbacks: () => ({})
+  withCallbacks: (dispatch) => ({
+    create: (projectId: string, dto: PCRDto) =>
+      dispatch(Actions.createProjectChangeRequest(projectId, dto, (created: PCRDto) =>
+        dispatch(Actions.navigateTo(PCRPrepareRoute.getLink({ projectId: dto.projectId, pcrId: created.id })))))
+  })
 });
 
 export const PCRCreateRoute = definition.route({
