@@ -24,6 +24,7 @@ export * from "./periodTitle";
 export * from "./projectMember";
 export * from "./statisticsBox";
 export * from "./styledButton";
+export * from "./summaryList";
 export * from "./table";
 export * from "./validationError";
 export * from "./validationMessage";
