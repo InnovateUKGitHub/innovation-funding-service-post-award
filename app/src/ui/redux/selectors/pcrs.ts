@@ -4,6 +4,7 @@ import { RootState } from "../reducers";
 import { PCRDto } from "@framework/dtos/pcrDtos";
 import { Results } from "@ui/validation";
 import { Pending } from "@shared/pending";
+import { PCRDtoValidator } from "@ui/validators/pcrDtoValidator";
 
 export const getAllPcrTypes = () => dataStoreHelper("pcrTypes", "all");
 export const getAllPcrs = (projectId: string) => dataStoreHelper("pcrs", projectId);
@@ -16,7 +17,7 @@ const createPcr = (projectId: string): Partial<PCRDto> => ({
   items: []
 });
 
-export const getPcrEditor = (projectId: string, id?: string) => editorStoreHelper<PCRDto, Results<PCRDto>>(
+export const getPcrEditor = (projectId: string, id?: string) => editorStoreHelper<PCRDto, PCRDtoValidator>(
   "pcr",
   (store) => {
     if (id) {
@@ -24,6 +25,6 @@ export const getPcrEditor = (projectId: string, id?: string) => editorStoreHelpe
     }
     return Pending.done(createPcr(projectId) as PCRDto);
   },
-  (dto, store) => Pending.done(new Results(dto, false)),
+  (dto, store) => Pending.done(new PCRDtoValidator(dto, false)),
   getKey(projectId, id || "new")
 );

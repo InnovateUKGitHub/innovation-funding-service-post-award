@@ -11,6 +11,10 @@ import { PCRsDashboardRoute } from "./dashboard";
 import { PCRPrepareItemRoute } from "./prepareItem";
 import { PCRPrepareReasoningRoute } from "./prepareReasoning";
 import { PCRDto, PCRItemDto } from "@framework/dtos/pcrDtos";
+import { IEditorStore } from "@ui/redux";
+import { PCRDtoValidator } from "@ui/validators/pcrDtoValidator";
+import { PCRStatus } from "@framework/entities";
+import { navigateTo } from "../../redux/actions";
 
 interface Params {
   projectId: string;
@@ -20,24 +24,38 @@ interface Params {
 interface Data {
   project: Pending<ProjectDto>;
   pcr: Pending<PCRDto>;
+  editor: Pending<IEditorStore<PCRDto, PCRDtoValidator>>;
 }
 
 interface Callbacks {
+  onChange: (projectId: string, pcrId: string, dto: PCRDto) => void;
+  onSave: (projectId: string, pcrId: string, dto: PCRDto) => void;
 }
 
 class PCRPrepareComponent extends ContainerBase<Params, Data, Callbacks> {
   render() {
-    const combined = Pending.combine({ project: this.props.project, pcr: this.props.pcr });
+    const combined = Pending.combine({ project: this.props.project, pcr: this.props.pcr, editor: this.props.editor});
 
-    return <ACC.PageLoader pending={combined} render={x => this.renderContents(x.project, x.pcr)} />;
+    return <ACC.PageLoader pending={combined} render={x => this.renderContents(x.project, x.pcr, x.editor)} />;
   }
 
-  private renderContents(project: ProjectDto, pcr: PCRDto) {
+  private onSave(dto: PCRDto, submit: boolean) {
+    if(submit) {
+      dto.status = PCRStatus.SubmittedToMonitoringOfficer;
+    }
+    this.props.onSave(this.props.projectId, this.props.pcrId, dto);
+  }
+
+  private renderContents(project: ProjectDto, pcr: PCRDto, editor: IEditorStore<PCRDto, PCRDtoValidator>) {
+    const Form = ACC.TypedForm<PCRDto>();
+
     return (
       <ACC.Page
         backLink={<ACC.BackLink route={PCRsDashboardRoute.getLink({ projectId: this.props.projectId })}>Back to project change requests</ACC.BackLink>}
         pageTitle={<ACC.Projects.Title project={project} />}
         project={project}
+        validator={editor.validator}
+        error={editor.error}
       >
         <ACC.Section title="Details">
           <dl className="govuk-summary-list">
@@ -59,6 +77,27 @@ class PCRPrepareComponent extends ContainerBase<Params, Data, Callbacks> {
           {pcr.items.map((x, i) => this.renderItem(x, i+1))}
           {this.renderReasoning(pcr)}
         </ol>
+        <Form.Form
+          editor={editor}
+          onChange={dto => this.props.onChange(pcr.projectId, pcr.id, dto)}
+          onSubmit={() => this.onSave(editor.data, true)}
+        >
+          <Form.Fieldset heading="Add comments for your monitoring officer">
+            <Form.MultilineString
+              name="comments"
+              hint="Leave this field empty if there is nothing to add."
+              value={x=> x.comments}
+              update={(m,v) => m.comments = v || ""}
+              validation={editor.validator.comments}
+            />
+          </Form.Fieldset>
+          <Form.Fieldset qa="save-and-submit">
+            <Form.Submit>Submit request to monitoring officer</Form.Submit>
+          </Form.Fieldset>
+          <Form.Fieldset qa="save-and-return">
+            <Form.Button name="return" onClick={() => this.onSave(editor.data, false)}>Save and return to project</Form.Button>
+          </Form.Fieldset>
+        </Form.Form>
       </ACC.Page>
     );
   }
@@ -102,8 +141,12 @@ export const PCRPrepare = definition.connect({
   withData: (state, params) => ({
     project: Selectors.getProject(params.projectId).getPending(state),
     pcr: Selectors.getPcr(params.projectId, params.pcrId).getPending(state),
+    editor: Selectors.getPcrEditor(params.projectId, params.pcrId).get(state)
   }),
-  withCallbacks: () => ({})
+  withCallbacks: (dispatch) => ({
+    onChange: (projectId: string, pcrId: string, dto: PCRDto) => dispatch(Actions.validatePCR(projectId, pcrId, dto)),
+    onSave: (projectId: string, pcrId: string, dto: PCRDto) => dispatch(Actions.savePCR(projectId, pcrId, dto, () => dispatch(navigateTo(PCRsDashboardRoute.getLink({projectId})))))
+  })
 });
 
 export const PCRPrepareRoute = definition.route({
