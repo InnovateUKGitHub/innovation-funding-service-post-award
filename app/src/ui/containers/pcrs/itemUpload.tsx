@@ -27,13 +27,11 @@ interface CombinedData {
   documents: DocumentSummaryDto[];
 }
 
-interface CombinedData {
-  project: ProjectDto;
-  editor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>;
-  documents: DocumentSummaryDto[];
+interface Callbacks {
+  clearMessage: () => void;
+  validate: (projectChangeRequestItemId: string, dto: MultipleDocumentUploadDto) => void;
+  uploadFile: (projectId: string, projectChangeRequestItemId: string, dto: MultipleDocumentUploadDto) => void;
 }
-
-interface Callbacks {}
 
 class ProjectChangeRequestItemUploadContainer extends ContainerBase<Params, Data, Callbacks> {
   render() {
@@ -44,6 +42,11 @@ class ProjectChangeRequestItemUploadContainer extends ContainerBase<Params, Data
     });
 
     return <ACC.PageLoader pending={combined} render={x => this.renderContents(x)}/>;
+  }
+
+  private onFormChange(projectChangeRequestItemId: string, dto: MultipleDocumentUploadDto) {
+    this.props.clearMessage();
+    this.props.validate(projectChangeRequestItemId, dto);
   }
 
   private renderDocumentList(documents: DocumentSummaryDto[]) {
@@ -60,7 +63,10 @@ class ProjectChangeRequestItemUploadContainer extends ContainerBase<Params, Data
         backLink={<ACC.BackLink route={PCRDetailsRoute.getLink({projectId: this.props.projectId, pcrId: this.props.projectChangeRequestId})}>Back to request</ACC.BackLink>}
         project={project}
         pageTitle={<ACC.Projects.Title project={project} />}
+        validator={editor.validator}
+        error={editor.error}
       >
+        <ACC.Renderers.Messages messages={this.props.messages}/>
         <ACC.Section>
           <div className="govuk-body">
             <p>
@@ -81,6 +87,8 @@ class ProjectChangeRequestItemUploadContainer extends ContainerBase<Params, Data
           <UploadForm.Form
             enctype="multipart"
             editor={editor}
+            onSubmit={() => this.props.uploadFile(this.props.projectId, this.props.itemId, editor.data)}
+            onChange={(dto) => this.onFormChange(this.props.itemId, dto)}
             qa="projectChangeRequestItemUpload"
           >
             <UploadForm.Fieldset heading="Upload">
@@ -113,7 +121,14 @@ export const ProjectChangeRequestItemUpload = definition.connect({
     editor: Selectors.getProjectChangeRequestItemDocumentEditor(params.itemId, state.config).get(state),
     documents: Selectors.getProjectChangeRequestItemDocuments(params.itemId).getPending(state)
   }),
-  withCallbacks: () => ({})
+  withCallbacks: (dispatch) => ({
+    clearMessage: () => dispatch(Actions.removeMessages()),
+    validate: (projectChangeRequestItemId, dto ) => dispatch(Actions.updateProjectChangeRequestItemDocumentEditor(projectChangeRequestItemId, dto, false)),
+    uploadFile: (projectId, projectChangeRequestItemId, dto) => {
+      const successMessage = dto.files.length === 1 ? `Your document has been uploaded.` : `${dto.files.length} documents have been uploaded.`;
+      dispatch(Actions.uploadProjectChangeRequestItemDocument(projectId, projectChangeRequestItemId, dto, () => dispatch(Actions.loadProjectChangeRequestItemDocuments(projectId, projectChangeRequestItemId)), successMessage));
+    }
+  })
 });
 
 export const ProjectChangeRequestItemUploadRoute = definition.route({
