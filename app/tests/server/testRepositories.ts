@@ -416,6 +416,10 @@ class PCRTestRepository extends TestRepository<Entities.PCR> implements Reposito
   getById(projectId: string, id: string): Promise<Entities.PCR> {
     return super.getOne(x => x.projectId === projectId && x.id === id);
   }
+
+  updatePcr(pcr: Entities.PCR): Promise<void> {
+    return Promise.resolve();
+  }
 }
 
 export interface ITestRepositories extends IRepositories {
