@@ -9,6 +9,7 @@ interface ItemProps {
   label: React.ReactNode;
   content: React.ReactNode;
   action?: React.ReactNode;
+  qa?: string;
 }
 export const SummaryList: React.FunctionComponent<ListProps> = (props) => {
   const classNames = cn({
@@ -26,7 +27,7 @@ export const SummaryList: React.FunctionComponent<ListProps> = (props) => {
 export const SummaryListItem: React.FunctionComponent<ItemProps> = (props) => {
 
   return (
-    <div className="govuk-summary-list__row">
+    <div className="govuk-summary-list__row" data-qa={props.qa}>
       <dt className="govuk-summary-list__key">{props.label}</dt>
       <dd className="govuk-summary-list__value">{props.content}</dd>
       <dd className="govuk-summary-list__actions">
