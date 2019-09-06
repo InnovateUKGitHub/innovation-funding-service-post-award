@@ -58,20 +58,10 @@ class PCRPrepareComponent extends ContainerBase<Params, Data, Callbacks> {
         error={editor.error}
       >
         <ACC.Section title="Details">
-          <dl className="govuk-summary-list">
-            <div className="govuk-summary-list__row">
-              <dt className="govuk-summary-list__key">Number</dt>
-              <dd className="govuk-summary-list__value">{pcr.requestNumber}</dd>
-              <dd className="govuk-summary-list__actions"/>
-            </div>
-            <div className="govuk-summary-list__row">
-              <dt className="govuk-summary-list__key">Types</dt>
-              <dd className="govuk-summary-list__value">{this.renderTypes(pcr)}</dd>
-              <dd className="govuk-summary-list__actions">
-                <a className="govuk-link" href="#type">Add type</a>
-              </dd>
-            </div>
-          </dl>
+          <ACC.SummaryList>
+            <ACC.SummaryListItem label="Number" content={pcr.requestNumber} qa="numberRow" />
+            <ACC.SummaryListItem label="Types" content={this.renderTypes(pcr)} action={<a className="govuk-link" href="#type">Add type</a>} qa="typesRow"/>
+          </ACC.SummaryList>
         </ACC.Section>
         <ol className="app-task-list">
           {pcr.items.map((x, i) => this.renderItem(x, i+1))}
