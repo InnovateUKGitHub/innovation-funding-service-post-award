@@ -23,4 +23,12 @@ describe("SummaryList", () => {
         );
         expect(output.containsMatchingElement(<a href="#test">Test</a>)).toBe(true);
     });
+    it("Renders with correct qa", () => {
+      const output = mount(
+        <SummaryList>
+          <SummaryListItem qa="testQa" label="Label" content="Content" action={<a href="#test">Test</a>}/>
+        </SummaryList>
+      );
+      expect(output.find("div").prop("data-qa")).toEqual("testQa");
+    });
 });
