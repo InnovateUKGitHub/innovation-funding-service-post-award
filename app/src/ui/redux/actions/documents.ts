@@ -6,7 +6,7 @@ import { DocumentUploadDtoValidator, MultipleDocumentUpdloadDtoValidator } from 
 import { LoadingStatus } from "@shared/pending";
 import { DocumentDescription } from "@framework/constants";
 import { scrollToTheTopSmoothly } from "@framework/util/windowHelpers";
-import { getProjectDocuments } from "@ui/redux/selectors";
+import { getProjectChangeRequestItemDocuments, getProjectDocuments } from "@ui/redux/selectors";
 
 type uploadProjectDocumentActions = Actions.AsyncThunk<void, Actions.DataLoadAction | Actions.EditorAction | Actions.messageSuccess>;
 
@@ -40,7 +40,7 @@ export function updateProjectChangeRequestItemDocumentEditor(projectChangeReques
 export function loadProjectChangeRequestItemDocuments(projectId: string, projectChangeRequestItemId: string) {
   return Actions.conditionalLoad(
     Selectors.getProjectChangeRequestItemDocuments(projectChangeRequestItemId),
-    params => ApiClient.documents.getProjectChangeRequestDocuments({projectId, projectChangeRequestItemId, ...params})
+    params => ApiClient.documents.getProjectChangeRequestItemDocuments({projectId, projectChangeRequestItemId, ...params})
   );
 }
 
@@ -60,6 +60,34 @@ export function updateProjectDocumentEditor(projectId: string, dto: MultipleDocu
     const validator = new MultipleDocumentUpdloadDtoValidator(dto, state.config, errors);
     dispatch(Actions.updateEditorAction(selector.key, selector.store, dto, validator));
     return validator;
+  };
+}
+
+export function uploadProjectChangeRequestItemDocument(projectId: string, projectChangeRequestItemId: string, dto: MultipleDocumentUploadDto, onComplete: () => void, message: string): uploadProjectDocumentActions {
+  return (dispatch, getState) => {
+    const state = getState();
+    const selector = Selectors.getProjectChangeRequestItemDocumentEditor(projectChangeRequestItemId, state.config);
+    const validation = updateProjectChangeRequestItemDocumentEditor(projectChangeRequestItemId, dto, true)(dispatch, getState, null);
+
+    if (!validation.isValid) {
+      scrollToTheTopSmoothly();
+      return Promise.resolve();
+    }
+
+    dispatch(Actions.handleEditorSubmit(selector.key,selector.store, dto, validation));
+
+    return ApiClient.documents.uploadProjectChangeRequestItemDocument({projectId, projectChangeRequestItemId, documents: dto, user: state.user})
+      .then(() => {
+        const dataStoreSelector = getProjectChangeRequestItemDocuments(projectChangeRequestItemId);
+        dispatch(Actions.dataLoadAction(dataStoreSelector.key, dataStoreSelector.store, LoadingStatus.Stale, undefined));
+        dispatch(Actions.handleEditorSuccess(selector.key, selector.store));
+        dispatch(Actions.messageSuccess(message));
+        scrollToTheTopSmoothly();
+        onComplete();
+      })
+      .catch((e) => {
+        dispatch(Actions.handleEditorError({ id: selector.key, store: selector.store, dto, validation, error: e }));
+      });
   };
 }
 
