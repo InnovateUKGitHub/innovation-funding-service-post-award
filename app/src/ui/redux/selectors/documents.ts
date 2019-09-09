@@ -16,6 +16,8 @@ export const getClaimDocuments = (partnerId: string, periodId: number) => dataSt
 
 export const getProjectDocuments = (projectId: string) => dataStoreHelper(documentStore, getKey("project", projectId));
 
+export const getProjectChangeRequestItemDocuments = (projectChangeRequestItemId: string) => dataStoreHelper(documentStore, getKey("projectChangeRequestItem", projectChangeRequestItemId));
+
 export const getProjectDocumentEditor = (projectId: string, config: { maxFileSize: number, maxUploadFileCount: number }) => editorStoreHelper<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>(
   "multipleDocuments",
   () => Pending.done({ files: [] }),
