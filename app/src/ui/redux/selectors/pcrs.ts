@@ -3,6 +3,7 @@ import { getKey } from "@framework/util/key";
 import { RootState } from "../reducers";
 import { PCRDto } from "@framework/dtos/pcrDtos";
 import { Results } from "@ui/validation";
+import { MultipleDocumentUpdloadDtoValidator } from "@ui/validators";
 import { Pending } from "@shared/pending";
 import { PCRDtoValidator } from "@ui/validators/pcrDtoValidator";
 
@@ -27,4 +28,11 @@ export const getPcrEditor = (projectId: string, id?: string) => editorStoreHelpe
   },
   (dto, store) => Pending.done(new PCRDtoValidator(dto, false)),
   getKey(projectId, id || "new")
+);
+
+export const getProjectChangeRequestItemDocumentEditor = (projectChangeRequestItemId: string, config: { maxFileSize: number, maxUploadFileCount: number }) => editorStoreHelper<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>(
+  "multipleDocuments",
+  () => Pending.done({ files: [] }),
+  (dto) => Pending.done(new MultipleDocumentUpdloadDtoValidator(dto, config, false)),
+  getKey("projectChangeRequestItem", projectChangeRequestItemId)
 );

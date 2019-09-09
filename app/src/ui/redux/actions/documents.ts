@@ -24,6 +24,26 @@ export function loadIarDocuments(projectId: string, partnerId: string, periodId:
   );
 }
 
+export function updateProjectChangeRequestItemDocumentEditor(projectChangeRequestItemId: string, dto: MultipleDocumentUploadDto, showErrors: boolean = false): Actions.SyncThunk<Results<MultipleDocumentUploadDto>, Actions.UpdateEditorAction> {
+  return (dispatch, getState) => {
+    const state = getState();
+    const selector = Selectors.getProjectChangeRequestItemDocumentEditor(projectChangeRequestItemId, state.config);
+    const current = state.editors[selector.store][selector.key];
+    const errors = showErrors || current && current.validator.showValidationErrors || false;
+    const validator = new MultipleDocumentUpdloadDtoValidator(dto, state.config, errors);
+    dispatch(Actions.updateEditorAction(selector.key, selector.store, dto, validator));
+
+    return validator;
+  };
+}
+
+export function loadProjectChangeRequestItemDocuments(projectId: string, projectChangeRequestItemId: string) {
+  return Actions.conditionalLoad(
+    Selectors.getProjectChangeRequestItemDocuments(projectChangeRequestItemId),
+    params => ApiClient.documents.getProjectChangeRequestDocuments({projectId, projectChangeRequestItemId, ...params})
+  );
+}
+
 export function loadProjectDocuments(projectId: string) {
   return Actions.conditionalLoad(
     Selectors.getProjectDocuments(projectId),
