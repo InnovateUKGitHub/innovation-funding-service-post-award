@@ -36,9 +36,18 @@ export const getClaimDetailDocumentDeleteEditorStoreInfo = ({ partnerId, periodI
   return getDocumentsDeleteEditor(getKey("claimDetail", partnerId, periodId, costCategoryId), documents);
 };
 
+export const getProjectChangeRequestItemDocumentDeleteEditorStoreInfo = (projectChangeRequestItemId: string, documents: DocumentSummaryDto[]) => {
+  return getDocumentsDeleteEditor(getKey("projectChangeRequestItem", projectChangeRequestItemId), documents);
+};
+
 export const getClaimDetailDocumentDeleteEditor = (state: RootState, { projectId, partnerId, periodId, costCategoryId }: ClaimDetailKey): IEditorSelector<DocumentSummaryDto[], Results<DocumentSummaryDto[]>> => {
   const documents = getClaimDetailDocuments(partnerId, periodId, costCategoryId).get(state).data;
   return getClaimDetailDocumentDeleteEditorStoreInfo({ projectId, partnerId, periodId, costCategoryId }, documents || []);
+};
+
+export const getProjectChangeRequestItemDocumentDeleteEditor = (state: RootState, projectChangeRequestItemId: string): IEditorSelector<DocumentSummaryDto[], Results<DocumentSummaryDto[]>> => {
+  const documents = getProjectChangeRequestItemDocuments(projectChangeRequestItemId).get(state).data;
+  return getProjectChangeRequestItemDocumentDeleteEditorStoreInfo(projectChangeRequestItemId, documents || []);
 };
 
 export const getClaimDocumentEditor = ({ partnerId, periodId }: ClaimKey, maxFileSize: number) => editorStoreHelper<DocumentUploadDto, DocumentUploadDtoValidator>(
