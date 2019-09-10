@@ -11,6 +11,7 @@ import { TestLogger } from "./testLogger";
 import { TestUser } from "./testUser";
 import { TestConfig } from "./testConfig";
 import * as Entities from "@framework/entities";
+import { ValidationError } from "@server/features/common";
 
 export class TestContext implements IContext {
     constructor() {
@@ -40,11 +41,20 @@ export class TestContext implements IContext {
     };
 
     public runQuery<TResult>(query: QueryBase<TResult>): Promise<TResult> {
-        return ((query as any) as IAsyncRunnable<TResult>).Run(this);
+        return ((query as any) as IAsyncRunnable<TResult>)
+            .Run(this)
+            ;
     }
 
     public runCommand<TResult>(command: CommandBase<TResult>): Promise<TResult> {
-        return ((command as any) as IAsyncRunnable<TResult>).Run(this);
+        return ((command as any) as IAsyncRunnable<TResult>)
+            .Run(this)
+            .catch(e => {
+                if (e instanceof ValidationError) {
+                    this.logger.debug("Validation ERROR", [e.results]);
+                }
+                throw e;
+            });
     }
 
     public runSyncQuery<TResult>(query: SyncQueryBase<TResult>): TResult {
@@ -57,7 +67,7 @@ export class TestContext implements IContext {
 
     // handle access control seperate to running the commands to keep tests focused on single areas
     public runAccessControl(auth: Authorisation, runnable: QueryBase<any> | CommandBase<any>): Promise<boolean> {
-      return (runnable as any as IAsyncRunnable<any>).accessControl(auth, this);
+        return (runnable as any as IAsyncRunnable<any>).accessControl(auth, this);
     }
 
     public asSystemUser() {

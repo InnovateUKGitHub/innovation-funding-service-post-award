@@ -96,3 +96,7 @@ export function optionalChild<T, U extends Results<{}>>(parentResults: Results<{
     const childResults = model ? model.map(m => validateModel(m)) : [];
     return new NestedResult(parentResults, childResults, validateAll, false, "", summaryMessage);
 }
+
+export function permitedValues<T>(results: Results<{}>, value: T, permitted: T[], message?: string) {
+    return isTrue(results, permitted.indexOf(value) >= 0, message || "Value is not permited");
+}
