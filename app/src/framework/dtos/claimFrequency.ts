@@ -1,4 +1,4 @@
-// TODO move to constants
+// @TODO move to constants
 export enum ClaimFrequency {
   "Unknown" = 0,
   "Monthly" = 1,

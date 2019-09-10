@@ -35,7 +35,7 @@ export class Link extends React.Component<StyledLinkProps> {
   }
 }
 
-// TODO go back to same place in page (no scroll to top)
+// @TODO go back to same place in page (no scroll to top)
 export const BackLink: React.SFC<Props> = (props) => (
   <RouterLink
     routeName={props.route.routeName}

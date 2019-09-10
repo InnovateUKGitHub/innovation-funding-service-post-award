@@ -22,7 +22,7 @@ export class GetClaimDetailsQuery extends QueryBase<ClaimDetailsDto> {
     const lineItems = await context.repositories.claimLineItems.getAllForCategory(this.partnerId, this.costCategoryId, this.periodId) || [];
 
     if (!claimDetail) {
-      // todo: throw once overheads renenabled?
+      // @TODO: throw once overheads renenabled?
       return ({
         partnerId: this.partnerId,
         costCategoryId: this.costCategoryId,
@@ -31,7 +31,7 @@ export class GetClaimDetailsQuery extends QueryBase<ClaimDetailsDto> {
         periodEnd: null,
         value: 0,
         comments: null,
-        lineItems: [] // TODO move clientside logic here?
+        lineItems: [] // @TODO move clientside logic here?
       });
     }
     return mapClaimDetails(claimDetail, lineItems, context);
