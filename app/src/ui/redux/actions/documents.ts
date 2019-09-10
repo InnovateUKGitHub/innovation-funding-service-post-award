@@ -6,7 +6,7 @@ import { DocumentUploadDtoValidator, MultipleDocumentUpdloadDtoValidator } from 
 import { LoadingStatus } from "@shared/pending";
 import { DocumentDescription } from "@framework/constants";
 import { scrollToTheTopSmoothly } from "@framework/util/windowHelpers";
-import { getProjectChangeRequestItemDocuments, getProjectDocuments } from "@ui/redux/selectors";
+import { getProjectChangeRequestDocumentsOrItemDocuments, getProjectDocuments } from "@ui/redux/selectors";
 
 type uploadProjectDocumentActions = Actions.AsyncThunk<void, Actions.DataLoadAction | Actions.EditorAction | Actions.messageSuccess>;
 
@@ -24,10 +24,10 @@ export function loadIarDocuments(projectId: string, partnerId: string, periodId:
   );
 }
 
-export function updateProjectChangeRequestItemDocumentEditor(projectChangeRequestItemId: string, dto: MultipleDocumentUploadDto, showErrors: boolean = false): Actions.SyncThunk<Results<MultipleDocumentUploadDto>, Actions.UpdateEditorAction> {
+export function updateProjectChangeRequestDocumentOrItemDocumentEditor(projectChangeRequestIdOrItemId: string, dto: MultipleDocumentUploadDto, showErrors: boolean = false): Actions.SyncThunk<Results<MultipleDocumentUploadDto>, Actions.UpdateEditorAction> {
   return (dispatch, getState) => {
     const state = getState();
-    const selector = Selectors.getProjectChangeRequestItemDocumentEditor(projectChangeRequestItemId, state.config);
+    const selector = Selectors.getProjectChangeRequestDocumentOrItemDocumentEditor(projectChangeRequestIdOrItemId, state.config);
     const current = state.editors[selector.store][selector.key];
     const errors = showErrors || current && current.validator.showValidationErrors || false;
     const validator = new MultipleDocumentUpdloadDtoValidator(dto, state.config, errors);
@@ -37,10 +37,10 @@ export function updateProjectChangeRequestItemDocumentEditor(projectChangeReques
   };
 }
 
-export function loadProjectChangeRequestItemDocuments(projectId: string, projectChangeRequestItemId: string) {
+export function loadProjectChangeRequestDocumentsOrItemDocuments(projectId: string, projectChangeRequestIdOrItemId: string) {
   return Actions.conditionalLoad(
-    Selectors.getProjectChangeRequestItemDocuments(projectChangeRequestItemId),
-    params => ApiClient.documents.getProjectChangeRequestItemDocuments({projectId, projectChangeRequestItemId, ...params})
+    Selectors.getProjectChangeRequestDocumentsOrItemDocuments(projectChangeRequestIdOrItemId),
+    params => ApiClient.documents.getProjectChangeRequestDocumentsOrItemDocuments({projectId, projectChangeRequestIdOrItemId, ...params})
   );
 }
 
@@ -63,11 +63,11 @@ export function updateProjectDocumentEditor(projectId: string, dto: MultipleDocu
   };
 }
 
-export function uploadProjectChangeRequestItemDocument(projectId: string, projectChangeRequestItemId: string, dto: MultipleDocumentUploadDto, onComplete: () => void, message: string): uploadProjectDocumentActions {
+export function uploadProjectChangeRequestDocumentOrItemDocument(projectId: string, projectChangeRequestIdOrItemId: string, dto: MultipleDocumentUploadDto, onComplete: () => void, message: string): uploadProjectDocumentActions {
   return (dispatch, getState) => {
     const state = getState();
-    const selector = Selectors.getProjectChangeRequestItemDocumentEditor(projectChangeRequestItemId, state.config);
-    const validation = updateProjectChangeRequestItemDocumentEditor(projectChangeRequestItemId, dto, true)(dispatch, getState, null);
+    const selector = Selectors.getProjectChangeRequestDocumentOrItemDocumentEditor(projectChangeRequestIdOrItemId, state.config);
+    const validation = updateProjectChangeRequestDocumentOrItemDocumentEditor(projectChangeRequestIdOrItemId, dto, true)(dispatch, getState, null);
 
     if (!validation.isValid) {
       scrollToTheTopSmoothly();
@@ -76,9 +76,9 @@ export function uploadProjectChangeRequestItemDocument(projectId: string, projec
 
     dispatch(Actions.handleEditorSubmit(selector.key,selector.store, dto, validation));
 
-    return ApiClient.documents.uploadProjectChangeRequestItemDocument({projectId, projectChangeRequestItemId, documents: dto, user: state.user})
+    return ApiClient.documents.uploadProjectChangeRequestDocumentOrItemDocument({projectId, projectChangeRequestIdOrItemId, documents: dto, user: state.user})
       .then(() => {
-        const dataStoreSelector = getProjectChangeRequestItemDocuments(projectChangeRequestItemId);
+        const dataStoreSelector = getProjectChangeRequestDocumentsOrItemDocuments(projectChangeRequestIdOrItemId);
         dispatch(Actions.dataLoadAction(dataStoreSelector.key, dataStoreSelector.store, LoadingStatus.Stale, undefined));
         dispatch(Actions.handleEditorSuccess(selector.key, selector.store));
         dispatch(Actions.messageSuccess(message));
@@ -234,16 +234,16 @@ export function uploadLeadPartnerClaimDocument(claimKey: ClaimKey, dto: Document
   };
 }
 
-export function deleteProjectChangeRequestItemDocument(projectId: string, projectChangeRequestItemId: string, dto: DocumentSummaryDto, onComplete: () => void): Actions.AsyncThunk<void> {
+export function deleteProjectChangeRequestDocumentOrItemDocument(projectId: string, projectChangeRequestIdOrItemId: string, dto: DocumentSummaryDto, onComplete: () => void): Actions.AsyncThunk<void> {
   return (dispatch, getState) => {
     const state = getState();
-    const docsSelector = Selectors.getProjectChangeRequestItemDocuments(projectChangeRequestItemId);
-    const selector = Selectors.getProjectChangeRequestItemDocumentDeleteEditor(state, projectChangeRequestItemId);
+    const docsSelector = Selectors.getProjectChangeRequestDocumentsOrItemDocuments(projectChangeRequestIdOrItemId);
+    const selector = Selectors.getProjectChangeRequestDocumentOrItemDocumentDeleteEditor(state, projectChangeRequestIdOrItemId);
 
     dispatch(Actions.handleEditorSubmit(selector.key, selector.store, dto, null));
     dispatch(Actions.dataLoadAction(docsSelector.key, docsSelector.store, LoadingStatus.Stale, undefined));
 
-    return ApiClient.documents.deleteProjectChangeRequestItemDocument({documentId: dto.id, projectId, projectChangeRequestItemId, user: state.user})
+    return ApiClient.documents.deleteProjectChangeRequestDocumentOrItemDocument({documentId: dto.id, projectId, projectChangeRequestIdOrItemId, user: state.user})
       .then(() => {
         dispatch(Actions.handleEditorSuccess(selector.key, selector.store));
         onComplete();

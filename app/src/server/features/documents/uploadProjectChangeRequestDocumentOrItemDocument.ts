@@ -1,8 +1,10 @@
 import { Authorisation, IContext, ProjectRole } from "@framework/types";
 import { CommandBase, ValidationError } from "@server/features/common";
+import { GetProjectChangeRequestDocumentOrItemDocumentQuery } from "@server/features/documents/getProjectChangeRequestDocumentOrItemDocument";
 import { MultipleDocumentUpdloadDtoValidator } from "@ui/validators";
+// Uses either project change request Id or project change request item Id, as both cn be used as the entity Id of the document
 
-export class UploadProjectChangeRequestItemDocumentCommand extends CommandBase<string[]> {
+export class UploadProjectChangeRequestDocumentOrItemDocumentCommand extends CommandBase<string[]> {
   constructor(private readonly projectId: string, private readonly projectChangeRequestIdOrItemId: string, private readonly documents: MultipleDocumentUploadDto) {
     super();
   }

@@ -29,9 +29,9 @@ interface CombinedData {
 
 interface Callbacks {
   clearMessage: () => void;
-  validate: (projectChangeRequestItemId: string, dto: MultipleDocumentUploadDto) => void;
-  uploadFile: (projectId: string, projectChangeRequestItemId: string, dto: MultipleDocumentUploadDto) => void;
-  deleteFile: (projectId: string, projectChangeRequestItemId: string, dto: DocumentSummaryDto) => void;
+  validate: (projectChangeRequestIdOrItemId: string, dto: MultipleDocumentUploadDto) => void;
+  uploadFile: (projectId: string, projectChangeRequestIdOrItemId: string, dto: MultipleDocumentUploadDto) => void;
+  deleteFile: (projectId: string, projectChangeRequestIdOrItemId: string, dto: DocumentSummaryDto) => void;
 }
 
 class ProjectChangeRequestItemUploadContainer extends ContainerBase<Params, Data, Callbacks> {
@@ -45,9 +45,9 @@ class ProjectChangeRequestItemUploadContainer extends ContainerBase<Params, Data
     return <ACC.PageLoader pending={combined} render={x => this.renderContents(x)}/>;
   }
 
-  private onFormChange(projectChangeRequestItemId: string, dto: MultipleDocumentUploadDto) {
+  private onFormChange(projectChangeRequestIdOrItemId: string, dto: MultipleDocumentUploadDto) {
     this.props.clearMessage();
-    this.props.validate(projectChangeRequestItemId, dto);
+    this.props.validate(projectChangeRequestIdOrItemId, dto);
   }
 
   private renderDocumentList(documents: DocumentSummaryDto[]) {
@@ -119,19 +119,19 @@ const definition = ReduxContainer.for<Params, Data, Callbacks>(ProjectChangeRequ
 export const ProjectChangeRequestItemUpload = definition.connect({
   withData: (state, params) => ({
     project: Selectors.getProject(params.projectId).getPending(state),
-    editor: Selectors.getProjectChangeRequestItemDocumentEditor(params.itemId, state.config).get(state),
-    documents: Selectors.getProjectChangeRequestItemDocuments(params.itemId).getPending(state)
+    editor: Selectors.getProjectChangeRequestDocumentOrItemDocumentEditor(params.itemId, state.config).get(state),
+    documents: Selectors.getProjectChangeRequestDocumentsOrItemDocuments(params.itemId).getPending(state)
   }),
   withCallbacks: (dispatch) => ({
     clearMessage: () => dispatch(Actions.removeMessages()),
-    validate: (projectChangeRequestItemId, dto ) => dispatch(Actions.updateProjectChangeRequestItemDocumentEditor(projectChangeRequestItemId, dto, false)),
-    uploadFile: (projectId, projectChangeRequestItemId, dto) => {
+    validate: (projectChangeRequestIdOrItemId, dto ) => dispatch(Actions.updateProjectChangeRequestDocumentOrItemDocumentEditor(projectChangeRequestIdOrItemId, dto, false)),
+    uploadFile: (projectId, projectChangeRequestIdOrItemId, dto) => {
       const successMessage = dto.files.length === 1 ? `Your document has been uploaded.` : `${dto.files.length} documents have been uploaded.`;
-      dispatch(Actions.uploadProjectChangeRequestItemDocument(projectId, projectChangeRequestItemId, dto, () => dispatch(Actions.loadProjectChangeRequestItemDocuments(projectId, projectChangeRequestItemId)), successMessage));
+      dispatch(Actions.uploadProjectChangeRequestDocumentOrItemDocument(projectId, projectChangeRequestIdOrItemId, dto, () => dispatch(Actions.loadProjectChangeRequestDocumentsOrItemDocuments(projectId, projectChangeRequestIdOrItemId)), successMessage));
     },
-    deleteFile: (projectId, projectChangeRequestItemId, dto) =>
-      dispatch(Actions.deleteProjectChangeRequestItemDocument(projectId, projectChangeRequestItemId, dto, () =>
-        dispatch(Actions.loadProjectChangeRequestItemDocuments(projectId, projectChangeRequestItemId))))
+    deleteFile: (projectId, projectChangeRequestIdOrItemId, dto) =>
+      dispatch(Actions.deleteProjectChangeRequestDocumentOrItemDocument(projectId, projectChangeRequestIdOrItemId, dto, () =>
+        dispatch(Actions.loadProjectChangeRequestDocumentsOrItemDocuments(projectId, projectChangeRequestIdOrItemId))))
   })
 });
 
@@ -146,7 +146,7 @@ export const ProjectChangeRequestItemUploadRoute = definition.route({
   getLoadDataActions: (params) => [
     Actions.loadProject(params.projectId),
     Actions.loadPcr(params.projectId, params.projectChangeRequestId),
-    Actions.loadProjectChangeRequestItemDocuments(params.projectId, params.itemId)
+    Actions.loadProjectChangeRequestDocumentsOrItemDocuments(params.projectId, params.itemId)
   ],
   getTitle: (store, params) => {
     const projectChangeRequestItem = Selectors.getPcrItem(params.projectId, params.projectChangeRequestId, params.itemId).getPending(store).then(x => x && x.typeName).data;
