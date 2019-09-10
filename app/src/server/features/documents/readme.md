@@ -14,7 +14,7 @@
 |                               | PM (own partner)      | Yes   | Yes      | No     | No
 |                               | PM (other partner)    | No    | No       | No     | No
 |                               | FC                    | Yes   | Yes      | Yes    | Yes
-| Project change request docs   | MO                    | Yes   | Yes      | Yes    | No
+| Project change request docs   | MO                    | Yes   | Yes      | No     | No
 |                               | PM (own partner)      | Yes   | Yes      | Yes    | Yes
 |                               | PM (other partner)    | No    | No       | No     | No
 |                               | FC                    | Yes   | No       | No     | No

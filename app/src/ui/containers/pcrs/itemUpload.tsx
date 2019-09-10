@@ -27,7 +27,12 @@ interface CombinedData {
   documents: DocumentSummaryDto[];
 }
 
-interface Callbacks {}
+interface Callbacks {
+  clearMessage: () => void;
+  validate: (projectChangeRequestIdOrItemId: string, dto: MultipleDocumentUploadDto) => void;
+  uploadFile: (projectId: string, projectChangeRequestIdOrItemId: string, dto: MultipleDocumentUploadDto) => void;
+  deleteFile: (projectId: string, projectChangeRequestIdOrItemId: string, dto: DocumentSummaryDto) => void;
+}
 
 class ProjectChangeRequestItemUploadContainer extends ContainerBase<Params, Data, Callbacks> {
   render() {
@@ -40,9 +45,14 @@ class ProjectChangeRequestItemUploadContainer extends ContainerBase<Params, Data
     return <ACC.PageLoader pending={combined} render={x => this.renderContents(x)}/>;
   }
 
+  private onFormChange(projectChangeRequestIdOrItemId: string, dto: MultipleDocumentUploadDto) {
+    this.props.clearMessage();
+    this.props.validate(projectChangeRequestIdOrItemId, dto);
+  }
+
   private renderDocumentList(documents: DocumentSummaryDto[]) {
     return documents.length > 0
-      ? <ACC.DocumentList documents={documents} qa="supporting-documents" />
+      ? <ACC.DocumentListWithDelete onRemove={(document) => this.props.deleteFile(this.props.projectId, this.props.itemId, document)} documents={documents} qa="supporting-documents" />
       : <ACC.ValidationMessage messageType="info" message="No files uploaded"/>;
   }
 
@@ -54,7 +64,10 @@ class ProjectChangeRequestItemUploadContainer extends ContainerBase<Params, Data
         backLink={<ACC.BackLink route={PCRDetailsRoute.getLink({projectId: this.props.projectId, pcrId: this.props.projectChangeRequestId})}>Back to request</ACC.BackLink>}
         project={project}
         pageTitle={<ACC.Projects.Title project={project} />}
+        validator={editor.validator}
+        error={editor.error}
       >
+        <ACC.Renderers.Messages messages={this.props.messages}/>
         <ACC.Section>
           <div className="govuk-body">
             <p>
@@ -75,6 +88,8 @@ class ProjectChangeRequestItemUploadContainer extends ContainerBase<Params, Data
           <UploadForm.Form
             enctype="multipart"
             editor={editor}
+            onSubmit={() => this.props.uploadFile(this.props.projectId, this.props.itemId, editor.data)}
+            onChange={(dto) => this.onFormChange(this.props.itemId, dto)}
             qa="projectChangeRequestItemUpload"
           >
             <UploadForm.Fieldset heading="Upload">
@@ -104,10 +119,20 @@ const definition = ReduxContainer.for<Params, Data, Callbacks>(ProjectChangeRequ
 export const ProjectChangeRequestItemUpload = definition.connect({
   withData: (state, params) => ({
     project: Selectors.getProject(params.projectId).getPending(state),
-    editor: Selectors.getProjectChangeRequestItemDocumentEditor(params.itemId, state.config).get(state),
-    documents: Selectors.getProjectChangeRequestItemDocuments(params.itemId).getPending(state)
+    editor: Selectors.getProjectChangeRequestDocumentOrItemDocumentEditor(params.itemId, state.config).get(state),
+    documents: Selectors.getProjectChangeRequestDocumentsOrItemDocuments(params.itemId).getPending(state)
   }),
-  withCallbacks: () => ({})
+  withCallbacks: (dispatch) => ({
+    clearMessage: () => dispatch(Actions.removeMessages()),
+    validate: (projectChangeRequestIdOrItemId, dto ) => dispatch(Actions.updateProjectChangeRequestDocumentOrItemDocumentEditor(projectChangeRequestIdOrItemId, dto, false)),
+    uploadFile: (projectId, projectChangeRequestIdOrItemId, dto) => {
+      const successMessage = dto.files.length === 1 ? `Your document has been uploaded.` : `${dto.files.length} documents have been uploaded.`;
+      dispatch(Actions.uploadProjectChangeRequestDocumentOrItemDocument(projectId, projectChangeRequestIdOrItemId, dto, () => dispatch(Actions.loadProjectChangeRequestDocumentsOrItemDocuments(projectId, projectChangeRequestIdOrItemId)), successMessage));
+    },
+    deleteFile: (projectId, projectChangeRequestIdOrItemId, dto) =>
+      dispatch(Actions.deleteProjectChangeRequestDocumentOrItemDocument(projectId, projectChangeRequestIdOrItemId, dto, () =>
+        dispatch(Actions.loadProjectChangeRequestDocumentsOrItemDocuments(projectId, projectChangeRequestIdOrItemId))))
+  })
 });
 
 export const ProjectChangeRequestItemUploadRoute = definition.route({
@@ -121,7 +146,7 @@ export const ProjectChangeRequestItemUploadRoute = definition.route({
   getLoadDataActions: (params) => [
     Actions.loadProject(params.projectId),
     Actions.loadPcr(params.projectId, params.projectChangeRequestId),
-    Actions.loadProjectChangeRequestItemDocuments(params.projectId, params.itemId)
+    Actions.loadProjectChangeRequestDocumentsOrItemDocuments(params.projectId, params.itemId)
   ],
   getTitle: (store, params) => {
     const projectChangeRequestItem = Selectors.getPcrItem(params.projectId, params.projectChangeRequestId, params.itemId).getPending(store).then(x => x && x.typeName).data;

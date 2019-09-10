@@ -1,9 +1,10 @@
+import { DeleteProjectChangeRequestDocumentOrItemDocument } from "@server/features/documents/deleteProjectChangeRequestDocumentOrItemDocument";
 import { ApiParams, ControllerBase } from "./controllerBase";
 import contextProvider from "../features/common/contextProvider";
 import { GetClaimDetailDocumentQuery } from "../features/documents/getClaimDetailDocument";
 import { GetClaimDetailDocumentsQuery } from "../features/documents/getClaimDetailDocumentsSummary";
-import { GetProjectChangeRequestDocumentsSummaryQuery } from "@server/features/documents/getProjectChangeRequestDocumentsSummary";
-import { GetProjectChangeRequestDocumentQuery } from "@server/features/documents/getProjectChangeRequestDocument";
+import { GetProjectChangeRequestDocumentOrItemDocumentsSummaryQuery } from "@server/features/documents/getProjectChangeRequestDocumentOrItemDocumentsSummary";
+import { GetProjectChangeRequestDocumentOrItemDocumentQuery } from "@server/features/documents/getProjectChangeRequestDocumentOrItemDocument";
 import { GetProjectDocumentsQuery } from "../features/documents/getProjectDocumentsSummary";
 import { UploadClaimDetailDocumentCommand } from "../features/documents/uploadClaimDetailDocument";
 import { GetClaimDocumentsQuery } from "../features/documents/getClaimDocumentsSummary";
@@ -14,17 +15,20 @@ import { UploadProjectDocumentCommand } from "../features/documents/uploadProjec
 import { DeleteClaimDetailDocumentCommand } from "@server/features/documents/deleteClaimDetailDocument";
 import { DeleteClaimDocumentCommand } from "@server/features/documents/deleteClaimDocument";
 import { GetProjectDocumentQuery } from "@server/features/documents/getProjectDocument";
+import { UploadProjectChangeRequestDocumentOrItemDocumentCommand } from "@server/features/documents/uploadProjectChangeRequestDocumentOrItemDocument";
 
 export interface IDocumentsApi {
   getClaimDocuments: (params: ApiParams<{ projectId: string, partnerId: string, periodId: number, description: DocumentDescription }>) => Promise<DocumentSummaryDto[]>;
   getClaimDetailDocuments: (params: ApiParams<{ claimDetailKey: ClaimDetailKey }>) => Promise<DocumentSummaryDto[]>;
-  getProjectChangeRequestDocuments: (params: ApiParams<{ projectId: string, projectChangeRequestItemId: string }>) => Promise<DocumentSummaryDto[]>;
+  getProjectChangeRequestDocumentsOrItemDocuments: (params: ApiParams<{ projectId: string, projectChangeRequestIdOrItemId: string }>) => Promise<DocumentSummaryDto[]>;
   getProjectDocuments: (params: ApiParams<{ projectId: string }>) => Promise<DocumentSummaryDto[]>;
   uploadClaimDetailDocuments: (params: ApiParams<{ claimDetailKey: ClaimDetailKey, documents: MultipleDocumentUploadDto }>) => Promise<{ documentIds: string[] }>;
   uploadClaimDocument: (params: ApiParams<{ claimKey: ClaimKey, document: DocumentUploadDto }>) => Promise<{ documentId: string }>;
+  uploadProjectChangeRequestDocumentOrItemDocument: (params: ApiParams<{ projectId: string, projectChangeRequestIdOrItemId: string, documents: MultipleDocumentUploadDto }>) => Promise<{ documentIds: string[] }>;
   uploadProjectDocument: (params: ApiParams<{ projectId: string, documents: MultipleDocumentUploadDto }>) => Promise<{ documentIds: string[] }>;
   deleteClaimDetailDocument: (params: ApiParams<{ documentId: string, claimDetailKey: ClaimDetailKey }>) => Promise<boolean>;
   deleteClaimDocument: (params: ApiParams<{ documentId: string, claimKey: ClaimKey }>) => Promise<boolean>;
+  deleteProjectChangeRequestDocumentOrItemDocument: (params: ApiParams<{documentId: string, projectId: string, projectChangeRequestIdOrItemId: string}>) => Promise<boolean>;
 }
 
 class Controller extends ControllerBase<DocumentSummaryDto> implements IDocumentsApi {
@@ -80,15 +84,21 @@ class Controller extends ControllerBase<DocumentSummaryDto> implements IDocument
     );
 
     this.getItems(
-      "/pcrs/:projectChangeRequestItemId",
-      (p) => ({ projectId: p.projectId, projectChangeRequestItemId: p.projectChangeRequestItemId }),
-      p => this.getProjectChangeRequestDocuments(p)
+      "/projectChangeRequests/:projectId/:projectChangeRequestIdOrItemId",
+      (p) => ({ projectId: p.projectId, projectChangeRequestIdOrItemId: p.projectChangeRequestIdOrItemId }),
+      p => this.getProjectChangeRequestDocumentsOrItemDocuments(p)
     );
 
     this.getAttachment(
-      "/pcrs/:projectChangeRequestItemId/:documentId/content",
-      (p) => ({ projectId: p.projectId, projectChangeRequestItemId: p.projectChangeRequestItemId, documentId: p.documentId }),
-      p => this.getProjectChangeRequestDocument(p)
+      "/projectChangeRequests/:projectId/:projectChangeRequestIdOrItemId/:documentId/content",
+      (p) => ({ projectId: p.projectId, projectChangeRequestIdOrItemId: p.projectChangeRequestIdOrItemId, documentId: p.documentId }),
+      p => this.getProjectChangeRequestDocumentOrItemDocument(p)
+    );
+
+    this.deleteItem(
+      "/projectChangeRequests/:projectId/:projectChangeRequestIdOrItemId/:documentId",
+      (p) => ({documentId: p.documentId, projectId: p.projectId, projectChangeRequestIdOrItemId: p.projectChangeRequestIdOrItemId}),
+      p => this.deleteProjectChangeRequestDocumentOrItemDocument(p)
     );
 
     this.postAttachments(
@@ -107,6 +117,12 @@ class Controller extends ControllerBase<DocumentSummaryDto> implements IDocument
       "/projects/:projectId",
       (p, q, b) => ({ projectId: p.projectId }),
       p => this.uploadProjectDocument(p)
+    );
+
+    this.postAttachments(
+      "/projectChangeRequestItems/:projectId/:projectChangeRequestIdOrItemId",
+      (p) => ({ projectId: p.projectId, projectChangeRequestIdOrItemId: p.projectChangeRequestIdOrItemId }),
+      p => this.uploadProjectChangeRequestDocumentOrItemDocument(p)
     );
   }
 
@@ -144,14 +160,20 @@ class Controller extends ControllerBase<DocumentSummaryDto> implements IDocument
     return contextProvider.start(params).runQuery(query);
   }
 
-  public async getProjectChangeRequestDocuments(params: ApiParams<{ projectId: string, projectChangeRequestItemId: string }>) {
-    const query = new GetProjectChangeRequestDocumentsSummaryQuery(params.projectId, params.projectChangeRequestItemId);
+  public async getProjectChangeRequestDocumentsOrItemDocuments(params: ApiParams<{ projectId: string, projectChangeRequestIdOrItemId: string }>) {
+    const query = new GetProjectChangeRequestDocumentOrItemDocumentsSummaryQuery(params.projectId, params.projectChangeRequestIdOrItemId);
     return contextProvider.start(params).runQuery(query);
   }
 
-  public async getProjectChangeRequestDocument(params: ApiParams<{ projectId: string, projectChangeRequestItemId: string, documentId: string }>) {
-    const query = new GetProjectChangeRequestDocumentQuery(params.projectId, params.projectChangeRequestItemId, params.documentId);
+  public async getProjectChangeRequestDocumentOrItemDocument(params: ApiParams<{ projectId: string, projectChangeRequestIdOrItemId: string, documentId: string }>) {
+    const query = new GetProjectChangeRequestDocumentOrItemDocumentQuery(params.projectId, params.projectChangeRequestIdOrItemId, params.documentId);
     return contextProvider.start(params).runQuery(query);
+  }
+
+  public async deleteProjectChangeRequestDocumentOrItemDocument(params: ApiParams<{ projectId: string, projectChangeRequestIdOrItemId: string, documentId: string }>) {
+    const command = new DeleteProjectChangeRequestDocumentOrItemDocument(params.documentId, params.projectId, params.projectChangeRequestIdOrItemId);
+    await contextProvider.start(params).runCommand(command);
+    return true;
   }
 
   public async uploadClaimDetailDocuments(params: ApiParams<{ claimDetailKey: ClaimDetailKey, documents: MultipleDocumentUploadDto }>) {
@@ -166,6 +188,13 @@ class Controller extends ControllerBase<DocumentSummaryDto> implements IDocument
     const command = new UploadClaimDocumentCommand(claimKey, document);
     const insertedID = await contextProvider.start(params).runCommand(command);
     return { documentId: insertedID };
+  }
+
+  public async uploadProjectChangeRequestDocumentOrItemDocument(params: ApiParams<{ projectId: string, projectChangeRequestIdOrItemId: string, documents: MultipleDocumentUploadDto }>) {
+    const command = new UploadProjectChangeRequestDocumentOrItemDocumentCommand(params.projectId, params.projectChangeRequestIdOrItemId, params.documents);
+    const insertedIds = await contextProvider.start(params).runCommand(command);
+
+    return {documentIds: insertedIds};
   }
 
   public async uploadProjectDocument(params: ApiParams<{ projectId: string, documents: MultipleDocumentUploadDto }>) {

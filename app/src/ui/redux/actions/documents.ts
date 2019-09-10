@@ -6,7 +6,7 @@ import { DocumentUploadDtoValidator, MultipleDocumentUpdloadDtoValidator } from 
 import { LoadingStatus } from "@shared/pending";
 import { DocumentDescription } from "@framework/constants";
 import { scrollToTheTopSmoothly } from "@framework/util/windowHelpers";
-import { getProjectDocuments } from "@ui/redux/selectors";
+import { getProjectChangeRequestDocumentsOrItemDocuments, getProjectDocuments } from "@ui/redux/selectors";
 
 type uploadProjectDocumentActions = Actions.AsyncThunk<void, Actions.DataLoadAction | Actions.EditorAction | Actions.messageSuccess>;
 
@@ -24,10 +24,10 @@ export function loadIarDocuments(projectId: string, partnerId: string, periodId:
   );
 }
 
-export function updateProjectChangeRequestItemDocumentEditor(projectChangeRequestItemId: string, dto: MultipleDocumentUploadDto, showErrors: boolean = false): Actions.SyncThunk<Results<MultipleDocumentUploadDto>, Actions.UpdateEditorAction> {
+export function updateProjectChangeRequestDocumentOrItemDocumentEditor(projectChangeRequestIdOrItemId: string, dto: MultipleDocumentUploadDto, showErrors: boolean = false): Actions.SyncThunk<Results<MultipleDocumentUploadDto>, Actions.UpdateEditorAction> {
   return (dispatch, getState) => {
     const state = getState();
-    const selector = Selectors.getProjectChangeRequestItemDocumentEditor(projectChangeRequestItemId, state.config);
+    const selector = Selectors.getProjectChangeRequestDocumentOrItemDocumentEditor(projectChangeRequestIdOrItemId, state.config);
     const current = state.editors[selector.store][selector.key];
     const errors = showErrors || current && current.validator.showValidationErrors || false;
     const validator = new MultipleDocumentUpdloadDtoValidator(dto, state.config, errors);
@@ -37,10 +37,10 @@ export function updateProjectChangeRequestItemDocumentEditor(projectChangeReques
   };
 }
 
-export function loadProjectChangeRequestItemDocuments(projectId: string, projectChangeRequestItemId: string) {
+export function loadProjectChangeRequestDocumentsOrItemDocuments(projectId: string, projectChangeRequestIdOrItemId: string) {
   return Actions.conditionalLoad(
-    Selectors.getProjectChangeRequestItemDocuments(projectChangeRequestItemId),
-    params => ApiClient.documents.getProjectChangeRequestDocuments({projectId, projectChangeRequestItemId, ...params})
+    Selectors.getProjectChangeRequestDocumentsOrItemDocuments(projectChangeRequestIdOrItemId),
+    params => ApiClient.documents.getProjectChangeRequestDocumentsOrItemDocuments({projectId, projectChangeRequestIdOrItemId, ...params})
   );
 }
 
@@ -60,6 +60,34 @@ export function updateProjectDocumentEditor(projectId: string, dto: MultipleDocu
     const validator = new MultipleDocumentUpdloadDtoValidator(dto, state.config, errors);
     dispatch(Actions.updateEditorAction(selector.key, selector.store, dto, validator));
     return validator;
+  };
+}
+
+export function uploadProjectChangeRequestDocumentOrItemDocument(projectId: string, projectChangeRequestIdOrItemId: string, dto: MultipleDocumentUploadDto, onComplete: () => void, message: string): uploadProjectDocumentActions {
+  return (dispatch, getState) => {
+    const state = getState();
+    const selector = Selectors.getProjectChangeRequestDocumentOrItemDocumentEditor(projectChangeRequestIdOrItemId, state.config);
+    const validation = updateProjectChangeRequestDocumentOrItemDocumentEditor(projectChangeRequestIdOrItemId, dto, true)(dispatch, getState, null);
+
+    if (!validation.isValid) {
+      scrollToTheTopSmoothly();
+      return Promise.resolve();
+    }
+
+    dispatch(Actions.handleEditorSubmit(selector.key,selector.store, dto, validation));
+
+    return ApiClient.documents.uploadProjectChangeRequestDocumentOrItemDocument({projectId, projectChangeRequestIdOrItemId, documents: dto, user: state.user})
+      .then(() => {
+        const dataStoreSelector = getProjectChangeRequestDocumentsOrItemDocuments(projectChangeRequestIdOrItemId);
+        dispatch(Actions.dataLoadAction(dataStoreSelector.key, dataStoreSelector.store, LoadingStatus.Stale, undefined));
+        dispatch(Actions.handleEditorSuccess(selector.key, selector.store));
+        dispatch(Actions.messageSuccess(message));
+        scrollToTheTopSmoothly();
+        onComplete();
+      })
+      .catch((e) => {
+        dispatch(Actions.handleEditorError({ id: selector.key, store: selector.store, dto, validation, error: e }));
+      });
   };
 }
 
@@ -202,6 +230,25 @@ export function uploadLeadPartnerClaimDocument(claimKey: ClaimKey, dto: Document
         onComplete();
       }).catch((e: any) => {
         dispatch(Actions.handleEditorError({ id: selector.key, store: selector.store, dto, validation, error: e }));
+      });
+  };
+}
+
+export function deleteProjectChangeRequestDocumentOrItemDocument(projectId: string, projectChangeRequestIdOrItemId: string, dto: DocumentSummaryDto, onComplete: () => void): Actions.AsyncThunk<void> {
+  return (dispatch, getState) => {
+    const state = getState();
+    const docsSelector = Selectors.getProjectChangeRequestDocumentsOrItemDocuments(projectChangeRequestIdOrItemId);
+    const selector = Selectors.getProjectChangeRequestDocumentOrItemDocumentDeleteEditor(state, projectChangeRequestIdOrItemId);
+
+    dispatch(Actions.handleEditorSubmit(selector.key, selector.store, dto, null));
+    dispatch(Actions.dataLoadAction(docsSelector.key, docsSelector.store, LoadingStatus.Stale, undefined));
+
+    return ApiClient.documents.deleteProjectChangeRequestDocumentOrItemDocument({documentId: dto.id, projectId, projectChangeRequestIdOrItemId, user: state.user})
+      .then(() => {
+        dispatch(Actions.handleEditorSuccess(selector.key, selector.store));
+        onComplete();
+      }).catch((e) => {
+        dispatch(Actions.handleEditorError({id: selector.key, store: selector.store, dto, validation: null, error: e}));
       });
   };
 }

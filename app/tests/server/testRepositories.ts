@@ -426,6 +426,11 @@ class PCRTestRepository extends TestRepository<Entities.PCR> implements Reposito
     await super.insertOne({id, ...projectChangeRequest} as Entities.PCR);
     return id;
   }
+
+  isExisting(projectId: string, projectChangeRequestId: string): Promise<boolean> {
+    const data = super.filterOne(x => x.projectId === projectId  && x.id === projectChangeRequestId);
+    return Promise.resolve(!!data);
+  }
 }
 
 export interface ITestRepositories extends IRepositories {
