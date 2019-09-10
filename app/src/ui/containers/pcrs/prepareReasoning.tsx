@@ -10,6 +10,10 @@ import { Pending } from "@shared/pending";
 import { PCRPrepareRoute } from "./prepare";
 import { PCRDto } from "@framework/dtos/pcrDtos";
 import { fakeDocuments } from "./fakePcrs";
+import { IEditorStore } from "@ui/redux";
+import { PCRDtoValidator } from "@ui/validators/pcrDtoValidator";
+import { PCRItemStatus, PCRStatus, } from "@framework/entities";
+import { navigateTo } from "../../redux/actions";
 
 interface Params {
   projectId: string;
@@ -19,44 +23,67 @@ interface Params {
 interface Data {
   project: Pending<ProjectDto>;
   pcr: Pending<PCRDto>;
+  editor: Pending<IEditorStore<PCRDto, PCRDtoValidator>>;
   files: Pending<DocumentSummaryDto[]>;
 }
 
 interface Callbacks {
+  onChange: (projectId: string, pcrId: string, dto: PCRDto) => void;
+  onSave: (projectId: string, pcrId: string, dto: PCRDto) => void;
 }
 
 class PCRViewReasoningComponent extends ContainerBase<Params, Data, Callbacks> {
   render() {
-    const combined = Pending.combine({ project: this.props.project, pcr: this.props.pcr, files: this.props.files });
+    const combined = Pending.combine({ project: this.props.project, pcr: this.props.pcr, editor: this.props.editor, files: this.props.files });
 
-    return <ACC.PageLoader pending={combined} render={x => this.renderContents(x.project, x.pcr, x.files)} />;
+    return <ACC.PageLoader pending={combined} render={x => this.renderContents(x.project, x.pcr, x.editor, x.files)} />;
   }
 
-  private renderContents(project: ProjectDto, pcr: PCRDto, files: DocumentSummaryDto[]) {
+  private renderTypes(pcr: PCRDto): React.ReactNode {
+    return pcr.items.map(x => x.typeName).reduce<React.ReactNode[]>((result, current, index) => {
+      if (index > 0) {
+        result.push(<br />);
+      }
+      result.push(current);
+      return result;
+    }, []);
+  }
+
+  private renderContents(project: ProjectDto, pcr: PCRDto, editor: IEditorStore<PCRDto, PCRDtoValidator>, files: DocumentSummaryDto[]) {
+    const Form = ACC.TypedForm<PCRDto>();
+    const reasoningHint = <ACC.Renderers.SimpleString>You must explain each change. Be brief and write clearly.</ACC.Renderers.SimpleString>;
+
+    const options: ACC.SelectOption[] = [
+      { id: "true", value: "This is ready to submit" }
+    ];
+
     return (
       <ACC.Page
         backLink={<ACC.BackLink route={PCRPrepareRoute.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId })}>Back to prepare project change request</ACC.BackLink>}
         pageTitle={<ACC.Projects.Title project={project} />}
         project={project}
+        validator={editor.validator}
+        error={editor.error}
       >
-        <ACC.Section title="Details">
-          <dl className="govuk-summary-list">
-            <div className="govuk-summary-list__row">
-              <dt className="govuk-summary-list__key">Type</dt>
-              <dd className="govuk-summary-list__value">Reasoning for Innovate UK</dd>
-              <dd className="govuk-summary-list__actions"/>
-            </div>
-            <div className="govuk-summary-list__row">
-              <dt className="govuk-summary-list__key">Comments</dt>
-              <dd className="govuk-summary-list__value">{pcr.reasoningComments}</dd>
-              <dd className="govuk-summary-list__actions"/>
-            </div>
-            <div className="govuk-summary-list__row">
-              <dt className="govuk-summary-list__key">Files</dt>
-              <dd className="govuk-summary-list__value"><ACC.DocumentList documents={files} qa="docs" /></dd>
-              <dd className="govuk-summary-list__actions"/>
-            </div>
-          </dl>
+        <ACC.Section>
+          <ACC.SummaryList>
+            <ACC.SummaryListItem label="Number" content={pcr.requestNumber} qa="numberRow" />
+            <ACC.SummaryListItem label="Types" content={this.renderTypes(pcr)} qa="typesRow" />
+          </ACC.SummaryList>
+        </ACC.Section>
+
+        <ACC.Section>
+          <Form.Form
+            editor={editor}
+            onChange={dto => this.props.onChange(pcr.projectId, pcr.id, dto)}
+            onSubmit={() => this.props.onSave(this.props.projectId, this.props.pcrId, editor.data)}
+          >
+            <Form.MultilineString name="reason" label="Reason" labelHidden={true} hint={reasoningHint} qa="reason" value={m => m.reasoningComments} update={(m, v) => m.reasoningComments = v || ""} />
+            <Form.Fieldset heading="Mark as complete">
+              <Form.Checkboxes name="reasoningStatus" options={options} value={m => m.reasoningStatus === PCRItemStatus.Complete ? [options[0]] : []} update={(m, v) => m.reasoningStatus = (v && v.some(x => x.id === "true")) ? PCRItemStatus.Complete : PCRItemStatus.Incomplete} />
+              <Form.Submit>Save and return to request</Form.Submit>
+            </Form.Fieldset>
+          </Form.Form>
         </ACC.Section>
       </ACC.Page>
     );
@@ -69,9 +96,13 @@ export const PCRPrepareReasoning = definition.connect({
   withData: (state, params) => ({
     project: Selectors.getProject(params.projectId).getPending(state),
     pcr: Selectors.getPcr(params.projectId, params.pcrId).getPending(state),
+    editor: Selectors.getPcrEditor(params.projectId, params.pcrId).get(state),
     files: Pending.done(fakeDocuments)
   }),
-  withCallbacks: () => ({})
+  withCallbacks: (dispatch) => ({
+    onChange: (projectId: string, pcrId: string, dto: PCRDto) => dispatch(Actions.validatePCR(projectId, pcrId, dto)),
+    onSave: (projectId: string, pcrId: string, dto: PCRDto) => dispatch(Actions.savePCR(projectId, pcrId, dto, () => dispatch(navigateTo(PCRPrepareRoute.getLink({ projectId, pcrId })))))
+  })
 });
 
 export const PCRPrepareReasoningRoute = definition.route({
@@ -86,8 +117,8 @@ export const PCRPrepareReasoningRoute = definition.route({
     Actions.loadPcr(params.projectId, params.pcrId)
   ],
   getTitle: () => ({
-    htmlTitle: "Prepare project change request reasoning",
-    displayTitle: "Project change request reasoning"
+    htmlTitle: "Provide reasoning to Innovate UK",
+    displayTitle: "Provide reasoning to Innovate UK"
   }),
   container: PCRPrepareReasoning,
   accessControl: (auth, { projectId }, config) => config.features.pcrsEnabled && auth.forProject(projectId).hasRole(ProjectRole.ProjectManager)
