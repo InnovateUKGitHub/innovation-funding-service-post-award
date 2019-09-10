@@ -19,7 +19,7 @@ export class ClaimDashboardDocumentDeleteHandler extends StandardFormHandlerBase
   }
 
   protected async getDto(context: IContext, params: ClaimDashboardPageParams, button: IFormButton, body: IFormBody) {
-    // todo: should this come from a query rather than the form?
+    // @TODO: should this come from a query rather than the form?
     const periodId = parseInt(body.periodId, 10);
 
     const query = new GetClaimDocumentsQuery({ projectId: params.projectId, partnerId: params.partnerId, periodId });

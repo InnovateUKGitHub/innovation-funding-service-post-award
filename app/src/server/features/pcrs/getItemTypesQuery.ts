@@ -11,7 +11,7 @@ interface IMetaValue {
   enabled?: boolean;
 }
 
-// todo: this might sit better in the pcr repository... leave for now
+// @TODO: this might sit better in the pcr repository... leave for now
 export const PCRRecordTypeMetaValues: IMetaValue[] = [
   { type: PCRItemType.AccountNameChange, typeName: "Account Name Change" },
   { type: PCRItemType.PartnerAddition, typeName: "Partner Addition", },

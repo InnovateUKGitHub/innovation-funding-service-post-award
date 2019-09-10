@@ -71,7 +71,7 @@ class ViewForecastComponent extends ContainerBase<Params, PendingForecastData, C
 
     if (project.status === ProjectStatus.OnHold) return;
 
-    // TODO: Should this really be a form? <---- Nope.
+    // @TODO: Should this really be a form? <---- Nope.
     const Form = ACC.TypedForm();
     if (partner.roles & ProjectRole.FinancialContact) {
       return (

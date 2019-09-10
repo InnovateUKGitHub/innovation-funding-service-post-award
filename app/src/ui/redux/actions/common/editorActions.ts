@@ -37,7 +37,7 @@ interface HandleEditorErrorParams<T> {
   scrollToTop?: boolean;
 }
 
-// TODO - refactor to be multiple parameters
+// @TODO - refactor to be multiple parameters
 export function handleEditorError<T>({ id, store, dto, error, scrollToTop = true }: HandleEditorErrorParams<T>) {
   if (scrollToTop) scrollToTheTopSmoothly();
   if (error.code === ErrorCode.VALIDATION_ERROR) {

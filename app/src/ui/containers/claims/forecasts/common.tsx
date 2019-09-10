@@ -48,7 +48,7 @@ export const forecastDataLoadActions = (p: Params) => [
 ];
 
 export const withDataEditor = (state: RootState, props: Params): PendingForecastData => {
-  // TODO: Really need to look at this data load and make it more efficient and require less data!
+  // @TODO: Really need to look at this data load and make it more efficient and require less data!
   const combined = Pending.combine({
     project: Selectors.getActiveProject(props.projectId, state),
     partner: Selectors.getPartner(props.partnerId).getPending(state),
