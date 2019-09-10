@@ -1,12 +1,13 @@
 import { ApiClient } from "../../apiClient";
 import { conditionalLoad } from "./common";
-import { getAllPcrs, getAllPcrTypes, getPcr, getPcrEditor } from "../selectors/pcrs";
+import { getAllPcrs, getAllPcrTypes, getPcr, getPcrEditor, getPcrEditorForCreate } from "../selectors/pcrs";
 import { PCRDto } from "@framework/dtos";
 import * as Actions from "@ui/redux/actions/common";
 import { scrollToTheTopSmoothly } from "@framework/util";
 import { LoadingStatus } from "@shared/pending";
-import { Results } from "@ui/validation";
 import { PCRDtoValidator } from "@ui/validators/pcrDtoValidator";
+import * as Selectors from "@ui/redux/selectors";
+import { ProjectChangeRequestDtoValidatorForCreate } from "@ui/validators/projectChangeRequestDtoValidatorForCreate";
 
 export function loadPcrTypes() {
   return conditionalLoad(getAllPcrTypes(), params => ApiClient.pcrs.getTypes({ ...params }));
@@ -64,29 +65,46 @@ export function savePCR(projectId: string, pcrId: string, dto: PCRDto, onComplet
   };
 }
 
-export function createProjectChangeRequest(projectId: string, projectChangeRequestDto: PCRDto, onComplete: (dto: PCRDto) => void): Actions.SyncThunk<void, Actions.EditorAction | Actions.DataLoadAction> {
+// update editor with validation
+export function validateProjectChangeRequestForCreate(projectId: string, dto: PCRDto, showErrors?: boolean): Actions.SyncThunk<ProjectChangeRequestDtoValidatorForCreate, Actions.UpdateEditorAction> {
+  return (dispatch, getState) => {
+    const selector = getPcrEditorForCreate(projectId);
+    const state = getState();
+
+    if (showErrors === null || showErrors === undefined) {
+      const current = state.editors[selector.store][selector.key];
+      showErrors = current && current.validator.showValidationErrors || false;
+    }
+    const itemTypes = Selectors.getAllPcrTypes().getPending(state).data;
+    const validator = new ProjectChangeRequestDtoValidatorForCreate(dto, itemTypes!, showErrors);
+
+    dispatch(Actions.updateEditorAction(selector.key, selector.store, dto, validator));
+    return validator;
+  };
+}
+
+export function createProjectChangeRequest(projectId: string, dto: PCRDto, onComplete: (dto: PCRDto) => void): Actions.SyncThunk<void, Actions.EditorAction | Actions.DataLoadAction> {
   return (dispatch, getState) => {
     const state = getState();
-    const selector = getPcrEditor(projectId);
-    const validation = new Results(projectChangeRequestDto, false);
+    const selector = getPcrEditorForCreate(projectId);
 
-    // TODO use real validator
+    const validation = validateProjectChangeRequestForCreate(projectId, dto, true)(dispatch, getState, null);
 
     if (!validation.isValid) {
       scrollToTheTopSmoothly();
       return Promise.resolve();
     }
 
-    dispatch(Actions.handleEditorSubmit(selector.key, selector.store, projectChangeRequestDto, validation));
+    dispatch(Actions.handleEditorSubmit(selector.key, selector.store, dto, validation));
 
-    return ApiClient.pcrs.create({ projectId, projectChangeRequestDto, user: state.user })
+    return ApiClient.pcrs.create({ projectId, projectChangeRequestDto: dto, user: state.user })
       .then((result) => {
         dispatch(Actions.dataLoadAction(selector.key, selector.store, LoadingStatus.Updated, result));
         dispatch(Actions.handleEditorSuccess(selector.key, selector.store));
         onComplete(result);
       })
       .catch((e) => {
-        dispatch(Actions.handleEditorError({ id: selector.key, store: selector.store, dto: projectChangeRequestDto, validation, error: e }));
+        dispatch(Actions.handleEditorError({ id: selector.key, store: selector.store, dto, validation, error: e }));
       });
   };
 }

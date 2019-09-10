@@ -1,4 +1,11 @@
-import { PCR, PCRItemStatus, PCRStatus } from "@framework/entities/pcr";
+import {
+  PCR,
+  PCRItem,
+  PCRItemStatus,
+  PCRStatus,
+  ProjectChangeRequestForCreate,
+  ProjectChangeRequestItemForCreate
+} from "@framework/entities/pcr";
 import SalesforceRepositoryBase from "./salesforceRepositoryBase";
 import { Connection } from "jsforce";
 import { ILogger } from "@server/features/common/logger";
@@ -6,12 +13,13 @@ import { SalesforcePCRMapper } from "./mappers/pcrSummaryMapper";
 import { NotFoundError } from "@server/features/common";
 
 export interface IPCRRepository {
+  createProjectChangeRequest(projectChangeRequest: ProjectChangeRequestForCreate): Promise<string>;
   updatePcr(pcr: PCR): Promise<void>;
   getAllByProjectId(projectId: string): Promise<PCR[]>;
   getById(projectId: string, id: string): Promise<PCR>;
 }
 
-export interface ISalesforcePCRSummary {
+export interface ISalesforcePCR {
   Id: string;
   Acc_RequestHeader__c: string;
   Acc_RequestNumber__c: number;
@@ -20,13 +28,11 @@ export interface ISalesforcePCRSummary {
   CreatedDate: string;
   LastModifiedDate: string;
   RecordTypeId: string;
+  Acc_Project_Participant__c: string;
   Acc_Project_Participant__r: {
     Id: string;
     Acc_ProjectId__c: string;
   };
-}
-
-export interface ISalesforcePCR extends ISalesforcePCRSummary {
   Acc_Reasoning__c: string;
   // careful there is a typo in the salesforce setup
   // will probably change to Acc_MarkedAsComplete__c in the future!!
@@ -41,6 +47,7 @@ export class PCRRepository extends SalesforceRepositoryBase<ISalesforcePCR> impl
   }
 
   protected salesforceObjectName = "Acc_ProjectChangeRequest__c";
+  private recordType = "Request Header";
 
   protected salesforceFieldNames: string[] = [
     "Id",
@@ -60,7 +67,7 @@ export class PCRRepository extends SalesforceRepositoryBase<ISalesforcePCR> impl
   ];
 
   async getAllByProjectId(projectId: string): Promise<PCR[]> {
-    const headerRecordTypeId = await this.getRecordTypeId(this.salesforceObjectName, "Request Header");
+    const headerRecordTypeId = await this.getRecordTypeId(this.salesforceObjectName, this.recordType);
     const data = await super.where(`Acc_Project_Participant__r.Acc_ProjectId__c='${projectId}'`);
     const mapper = new SalesforcePCRMapper(headerRecordTypeId);
     return mapper.map(data);
@@ -69,7 +76,7 @@ export class PCRRepository extends SalesforceRepositoryBase<ISalesforcePCR> impl
   async getById(projectId: string, id: string): Promise<PCR> {
     const data = await super.where(`Acc_Project_Participant__r.Acc_ProjectId__c='${projectId}' AND (Id = '${id}' OR Acc_RequestHeader__c = '${id}')`);
 
-    const headerRecordTypeId = await this.getRecordTypeId(this.salesforceObjectName, "Request Header");
+    const headerRecordTypeId = await this.getRecordTypeId(this.salesforceObjectName, this.recordType);
 
     const mapper = new SalesforcePCRMapper(headerRecordTypeId);
     const mapped = mapper.map(data).pop();
@@ -87,6 +94,25 @@ export class PCRRepository extends SalesforceRepositoryBase<ISalesforcePCR> impl
       Acc_Reasoning__c: pcr.reasoning,
       Acc_Status__c: this.mapStatus(pcr.status),
     });
+  }
+
+  async createProjectChangeRequest(projectChangeRequest: ProjectChangeRequestForCreate) {
+    const headerRecordTypeId = await this.getRecordTypeId(this.salesforceObjectName, this.recordType);
+    // Insert header
+    const id = await super.insertItem({
+      RecordTypeId: headerRecordTypeId,
+      Acc_MarkedasComplete__c: this.mapItemStatus(projectChangeRequest.reasoningStatus),
+      Acc_Status__c: this.mapStatus(projectChangeRequest.status),
+      Acc_Project_Participant__c: projectChangeRequest.projectId,
+    });
+    // Insert sub-items
+    await super.insertAll(projectChangeRequest.items.map(x => ({
+      Acc_RequestHeader__c: id,
+      RecordTypeId: x.recordTypeId,
+      Acc_MarkedasComplete__c: this.mapItemStatus(x.status),
+      Acc_Project_Participant__c: x.projectId,
+    })));
+    return id;
   }
 
   private mapStatus(status: PCRStatus): string {
@@ -118,7 +144,7 @@ export class PCRRepository extends SalesforceRepositoryBase<ISalesforcePCR> impl
     }
   }
 
-  private mapItemStatus(status: PCRItemStatus): string {
+  private mapItemStatus(status?: PCRItemStatus): string {
     switch (status) {
       case PCRItemStatus.ToDo:
         return "To Do";

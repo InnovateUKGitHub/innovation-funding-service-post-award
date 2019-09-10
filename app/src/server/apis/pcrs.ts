@@ -6,6 +6,7 @@ import { GetPCRByIdQuery } from "@server/features/pcrs/getPCRByIdQuery";
 import { GetPCRItemTypesQuery } from "@server/features/pcrs/getItemTypesQuery";
 import { processDto } from "@shared/processResponse";
 import { UpdatePCRCommand } from "@server/features/pcrs/updatePcrCommand";
+import { CreateProjectChangeRequestCommand } from "@server/features/pcrs/createProjectChangeRequestCommand";
 
 export interface IPCRsApi {
   create: (params: ApiParams<{ projectId: string, projectChangeRequestDto: PCRDto }>) => Promise<PCRDto>;
@@ -21,7 +22,7 @@ class Controller extends ControllerBaseWithSummary<PCRSummaryDto, PCRDto> implem
 
     super.getItems("/", (p, q) => ({ projectId: q.projectId }), (p) => this.getAll(p));
     super.getItem("/:projectId/:id", (p, q) => ({ projectId: p.projectId, id: p.id }), (p) => this.get(p));
-    super.postItem("/:projectId", (p, q, b) => ({ projectId: q.projectId, projectChangeRequestDto: processDto(b) }), (p) => this.create(p));
+    super.postItem("/:projectId", (p, q, b) => ({ projectId: p.projectId, projectChangeRequestDto: processDto(b) }), (p) => this.create(p));
     super.getCustom("/types", () => ({}), p => this.getTypes(p));
     super.putItem("/:projectId/:id", (p, q, b) => ({ projectId: p.projectId, id: p.id, pcr: processDto(b) }), (p) => this.update(p));
   }
@@ -36,9 +37,10 @@ class Controller extends ControllerBaseWithSummary<PCRSummaryDto, PCRDto> implem
     return contextProvider.start(params).runQuery(query);
   }
 
-  create({projectId, projectChangeRequestDto}: ApiParams<{ projectId: string, projectChangeRequestDto: PCRDto}>): Promise<PCRDto> {
-    // TODO write command
-    return Promise.resolve({...projectChangeRequestDto, id: "1"});
+  async create(params: ApiParams<{ projectId: string, projectChangeRequestDto: PCRDto}>): Promise<PCRDto> {
+    const context = contextProvider.start(params);
+    const id = await context.runCommand(new CreateProjectChangeRequestCommand(params.projectId, params.projectChangeRequestDto));
+    return context.runQuery(new GetPCRByIdQuery(params.projectId, id));
   }
 
   getTypes(params: ApiParams<{}>): Promise<PCRItemTypeDto[]> {

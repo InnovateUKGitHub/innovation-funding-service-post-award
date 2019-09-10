@@ -1,7 +1,6 @@
 import { SalesforceBaseMapper } from "./saleforceMapperBase";
 import { PCR, PCRItem, PCRItemStatus, PCRStatus } from "@framework/entities";
-import { ISalesforcePCR, ISalesforcePCRSummary } from "../pcrRepository";
-import { NotFoundError } from "@server/features/common";
+import { ISalesforcePCR } from "../pcrRepository";
 
 export class SalesforcePCRMapper extends SalesforceBaseMapper<ISalesforcePCR[], PCR[]> {
   constructor(private readonly headerRecordTypeId: string) {
@@ -31,6 +30,7 @@ export class SalesforcePCRMapper extends SalesforceBaseMapper<ISalesforcePCR[], 
     return {
       id: pcrItem.Id,
       pcrId: header.Id,
+      projectId: header.Acc_Project_Participant__c,
       recordTypeId: pcrItem.RecordTypeId,
       status: this.mapItemStatus(pcrItem.Acc_MarkedasComplete__c),
       statusName: pcrItem.MarkedAsCompleteName
