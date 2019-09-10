@@ -34,16 +34,20 @@ interface Callbacks {
 
 class PCRPrepareComponent extends ContainerBase<Params, Data, Callbacks> {
   render() {
-    const combined = Pending.combine({ project: this.props.project, pcr: this.props.pcr, editor: this.props.editor});
+    const combined = Pending.combine({ project: this.props.project, pcr: this.props.pcr, editor: this.props.editor });
 
     return <ACC.PageLoader pending={combined} render={x => this.renderContents(x.project, x.pcr, x.editor)} />;
   }
 
-  private onSave(dto: PCRDto, submit: boolean) {
-    if(submit) {
-      dto.status = PCRStatus.SubmittedToMonitoringOfficer;
+  private onSave(editor: IEditorStore<PCRDto, PCRDtoValidator>, original: PCRDto, submit: boolean) {
+    if (submit) {
+      editor.data.status = PCRStatus.SubmittedToMonitoringOfficer;
     }
-    this.props.onSave(this.props.projectId, this.props.pcrId, dto);
+    else {
+      // not submitting so set status to the original status
+      editor.data.status = original.status;
+    }
+    this.props.onSave(this.props.projectId, this.props.pcrId, editor.data);
   }
 
   private renderContents(project: ProjectDto, pcr: PCRDto, editor: IEditorStore<PCRDto, PCRDtoValidator>) {
@@ -60,24 +64,24 @@ class PCRPrepareComponent extends ContainerBase<Params, Data, Callbacks> {
         <ACC.Section title="Details">
           <ACC.SummaryList>
             <ACC.SummaryListItem label="Number" content={pcr.requestNumber} qa="numberRow" />
-            <ACC.SummaryListItem label="Types" content={this.renderTypes(pcr)} action={<a className="govuk-link" href="#type">Add type</a>} qa="typesRow"/>
+            <ACC.SummaryListItem label="Types" content={this.renderTypes(pcr)} action={<a className="govuk-link" href="#type">Add type</a>} qa="typesRow" />
           </ACC.SummaryList>
         </ACC.Section>
         <ol className="app-task-list">
-          {pcr.items.map((x, i) => this.renderItem(x, i+1))}
+          {pcr.items.map((x, i) => this.renderItem(x, i + 1))}
           {this.renderReasoning(pcr)}
         </ol>
         <Form.Form
           editor={editor}
           onChange={dto => this.props.onChange(pcr.projectId, pcr.id, dto)}
-          onSubmit={() => this.onSave(editor.data, true)}
+          onSubmit={() => this.onSave(editor, pcr, true)}
         >
           <Form.Fieldset heading="Add comments for your monitoring officer">
             <Form.MultilineString
               name="comments"
               hint="Leave this field empty if there is nothing to add."
-              value={x=> x.comments}
-              update={(m,v) => m.comments = v || ""}
+              value={x => x.comments}
+              update={(m, v) => m.comments = v || ""}
               validation={editor.validator.comments}
             />
           </Form.Fieldset>
@@ -85,7 +89,7 @@ class PCRPrepareComponent extends ContainerBase<Params, Data, Callbacks> {
             <Form.Submit>Submit request to monitoring officer</Form.Submit>
           </Form.Fieldset>
           <Form.Fieldset qa="save-and-return">
-            <Form.Button name="return" onClick={() => this.onSave(editor.data, false)}>Save and return to project</Form.Button>
+            <Form.Button name="return" onClick={() => this.onSave(editor, pcr, false)}>Save and return to project</Form.Button>
           </Form.Fieldset>
         </Form.Form>
       </ACC.Page>
@@ -103,11 +107,11 @@ class PCRPrepareComponent extends ContainerBase<Params, Data, Callbacks> {
   }
 
   private renderReasoning(pcr: PCRDto) {
-    return this.renderListItem(pcr.items.length + 1, "Give more details", "Reasoning for Innovate UK", pcr.reasoningStatusName, PCRPrepareReasoningRoute.getLink({projectId: this.props.projectId, pcrId: this.props.pcrId}));
+    return this.renderListItem(pcr.items.length + 1, "Give more details", "Reasoning for Innovate UK", pcr.reasoningStatusName, PCRPrepareReasoningRoute.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId }));
   }
 
   private renderItem(item: PCRItemDto, step: number) {
-    return this.renderListItem(step, item.typeName, "Provide your files", item.statusName, PCRPrepareItemRoute.getLink({projectId: this.props.projectId, pcrId: this.props.pcrId, itemId: item.id}));
+    return this.renderListItem(step, item.typeName, "Provide your files", item.statusName, PCRPrepareItemRoute.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId, itemId: item.id }));
   }
 
   private renderListItem(step: number, title: string, text: string, status: string, route: ILinkInfo) {
@@ -135,7 +139,7 @@ export const PCRPrepare = definition.connect({
   }),
   withCallbacks: (dispatch) => ({
     onChange: (projectId: string, pcrId: string, dto: PCRDto) => dispatch(Actions.validatePCR(projectId, pcrId, dto)),
-    onSave: (projectId: string, pcrId: string, dto: PCRDto) => dispatch(Actions.savePCR(projectId, pcrId, dto, () => dispatch(navigateTo(PCRsDashboardRoute.getLink({projectId})))))
+    onSave: (projectId: string, pcrId: string, dto: PCRDto) => dispatch(Actions.savePCR(projectId, pcrId, dto, () => dispatch(navigateTo(PCRsDashboardRoute.getLink({ projectId })))))
   })
 });
 
