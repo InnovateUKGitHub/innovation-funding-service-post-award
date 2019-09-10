@@ -12,7 +12,7 @@ export class GetMonitoringReportStatusChanges extends QueryBase<MonitoringReport
   }
 
   protected async accessControl(auth: Authorisation) {
-    // TODO validate report is actually for project passed in
+    // @TODO: validate report is actually for project passed in
     return auth.forProject(this.projectId).hasRole(ProjectRole.MonitoringOfficer);
   }
 

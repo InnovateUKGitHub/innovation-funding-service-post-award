@@ -77,7 +77,7 @@ export class DocumentsRepository implements IDocumentsRepository {
   }
 
   public async getDocumentMetadataForEntityDocument(entityId: string, versionId: string) {
-    // todo: try to improve this in terms of numbers of calls
+    // @TODO: try to improve this in terms of numbers of calls
     // however salesforce makes it difficult to do this !!!
     const docIds = await this.contentDocumentLinkRepository.getAllForEntity(entityId).then(x => x.map(y => y.ContentDocumentId));
     const versions = await this.contentVersionRepository.getDocuments(docIds);

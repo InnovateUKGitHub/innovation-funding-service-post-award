@@ -64,7 +64,7 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
     return <ACC.PageLoader pending={combined} render={(data) => this.renderContents(data)} />;
   }
 
-  // TODO fix back link
+  // @TODO fix back link
   private renderContents({ project, costCategories, documents, forecastDetail, claimDetails, editor }: CombinedData) {
     const back = PrepareClaimRoute.getLink({ projectId: project.id, partnerId: this.props.partnerId, periodId: this.props.periodId });
     const costCategory = costCategories.find(x => x.id === this.props.costCategoryId)! || {};
@@ -249,7 +249,7 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
 
   private renderFooters(data: ClaimLineItemDto[], forecastDetail: ForecastDetailsDTO, showAddRemove: boolean, editor: IEditorStore<ClaimDetailsDto, ClaimDetailsValidator>) {
     const total = data.reduce((t, item) => t + (item.value || 0), 0);
-    // TODO remove multiply by 100
+    // @TODO remove multiply by 100
     const forecast = forecastDetail.value;
     const diff = 100 * (forecast - total) / forecast;
 

@@ -80,7 +80,7 @@ const getHeaders = () => {
 };
 
 const ajax = <T>(url: string, opts?: RequestInit): Promise<T> => {
-  // TODO - ENV.URL?
+  // @TODO - ENV.URL?
   const base = "";
   const options = Object.assign({ credentials: "same-origin" as RequestCredentials }, opts);
 

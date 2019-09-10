@@ -166,7 +166,7 @@ const ClaimLineItemsTable: React.SFC<{ lineItems: ClaimLineItemDto[], forecastDe
   const total = lineItems.reduce((count, item) => count + (item.value || 0), 0);
   const forecast = forecastDetail.value;
 
-  // TODO remove multiply by 100
+  // @TODO remove multiply by 100
   const diff = 100 * (forecast - total) / forecast;
 
   return (
