@@ -31,6 +31,7 @@ interface Callbacks {
   clearMessage: () => void;
   validate: (projectChangeRequestItemId: string, dto: MultipleDocumentUploadDto) => void;
   uploadFile: (projectId: string, projectChangeRequestItemId: string, dto: MultipleDocumentUploadDto) => void;
+  deleteFile: (projectId: string, projectChangeRequestItemId: string, dto: DocumentSummaryDto) => void;
 }
 
 class ProjectChangeRequestItemUploadContainer extends ContainerBase<Params, Data, Callbacks> {
@@ -51,7 +52,7 @@ class ProjectChangeRequestItemUploadContainer extends ContainerBase<Params, Data
 
   private renderDocumentList(documents: DocumentSummaryDto[]) {
     return documents.length > 0
-      ? <ACC.DocumentList documents={documents} qa="supporting-documents" />
+      ? <ACC.DocumentListWithDelete onRemove={(document) => this.props.deleteFile(this.props.projectId, this.props.itemId, document)} documents={documents} qa="supporting-documents" />
       : <ACC.ValidationMessage messageType="info" message="No files uploaded"/>;
   }
 
@@ -127,7 +128,10 @@ export const ProjectChangeRequestItemUpload = definition.connect({
     uploadFile: (projectId, projectChangeRequestItemId, dto) => {
       const successMessage = dto.files.length === 1 ? `Your document has been uploaded.` : `${dto.files.length} documents have been uploaded.`;
       dispatch(Actions.uploadProjectChangeRequestItemDocument(projectId, projectChangeRequestItemId, dto, () => dispatch(Actions.loadProjectChangeRequestItemDocuments(projectId, projectChangeRequestItemId)), successMessage));
-    }
+    },
+    deleteFile: (projectId, projectChangeRequestItemId, dto) =>
+      dispatch(Actions.deleteProjectChangeRequestItemDocument(projectId, projectChangeRequestItemId, dto, () =>
+        dispatch(Actions.loadProjectChangeRequestItemDocuments(projectId, projectChangeRequestItemId))))
   })
 });
 

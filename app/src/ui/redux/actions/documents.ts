@@ -234,6 +234,25 @@ export function uploadLeadPartnerClaimDocument(claimKey: ClaimKey, dto: Document
   };
 }
 
+export function deleteProjectChangeRequestItemDocument(projectId: string, projectChangeRequestItemId: string, dto: DocumentSummaryDto, onComplete: () => void): Actions.AsyncThunk<void> {
+  return (dispatch, getState) => {
+    const state = getState();
+    const docsSelector = Selectors.getProjectChangeRequestItemDocuments(projectChangeRequestItemId);
+    const selector = Selectors.getProjectChangeRequestItemDocumentDeleteEditor(state, projectChangeRequestItemId);
+
+    dispatch(Actions.handleEditorSubmit(selector.key, selector.store, dto, null));
+    dispatch(Actions.dataLoadAction(docsSelector.key, docsSelector.store, LoadingStatus.Stale, undefined));
+
+    return ApiClient.documents.deleteProjectChangeRequestItemDocument({documentId: dto.id, projectId, projectChangeRequestItemId, user: state.user})
+      .then(() => {
+        dispatch(Actions.handleEditorSuccess(selector.key, selector.store));
+        onComplete();
+      }).catch((e) => {
+        dispatch(Actions.handleEditorError({id: selector.key, store: selector.store, dto, validation: null, error: e}));
+      });
+  };
+}
+
 export function deleteClaimDetailDocument(claimDetailKey: ClaimDetailKey, dto: DocumentSummaryDto, onComplete: () => void): Actions.AsyncThunk<void> {
   return (dispatch, getState) => {
     const state = getState();
