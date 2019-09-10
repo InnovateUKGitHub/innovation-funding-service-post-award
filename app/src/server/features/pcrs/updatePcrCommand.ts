@@ -1,26 +1,38 @@
 import { BadRequestError, CommandBase, ValidationError } from "../common";
-import { PCRDto } from "@framework/dtos";
+import { PCRDto, ProjectRole } from "@framework/dtos";
 import { PCRDtoValidator } from "@ui/validators/pcrDtoValidator";
-import { IContext } from "@framework/types";
+import { Authorisation, IContext } from "@framework/types";
+import { GetAllProjectRolesForUser } from "../projects";
+import { mapToPcrDto } from "./mapToPCRDto";
+import { GetPCRItemTypesQuery } from "./getItemTypesQuery";
 
 export class UpdatePCRCommand extends CommandBase<boolean> {
   constructor(private projectId: string, private id: string, private pcr: PCRDto) {
     super();
   }
 
+  protected async accessControl(auth: Authorisation, context: IContext) {
+    return auth.forProject(this.projectId).hasAnyRoles(ProjectRole.ProjectManager, ProjectRole.MonitoringOfficer);
+  }
+
   protected async Run(context: IContext): Promise<boolean> {
-    if(this.projectId !== this.pcr.projectId || this.id !== this.pcr.id) {
+    if (this.projectId !== this.pcr.projectId || this.id !== this.pcr.id) {
       throw new BadRequestError();
     }
 
-    const validationResult = new PCRDtoValidator(this.pcr, true);
+    const projectRoles = await context.runQuery(new GetAllProjectRolesForUser()).then(x => x.forProject(this.projectId).getRoles());
+    const itemTypes = await context.runQuery(new GetPCRItemTypesQuery());
+
+    const original = await context.repositories.pcrs.getById(this.pcr.projectId, this.pcr.id);
+
+    const originalDto = mapToPcrDto(original, itemTypes);
+
+    const validationResult = new PCRDtoValidator(this.pcr, projectRoles, originalDto, true);
 
     if (!validationResult.isValid) {
 
       throw new ValidationError(validationResult);
     }
-
-    const original = await context.repositories.pcrs.getById(this.pcr.projectId, this.pcr.id);
 
     original.comments = this.pcr.comments;
     original.status = this.pcr.status;

@@ -8,6 +8,7 @@ import { LoadingStatus } from "@shared/pending";
 import { PCRDtoValidator } from "@ui/validators/pcrDtoValidator";
 import * as Selectors from "@ui/redux/selectors";
 import { ProjectChangeRequestDtoValidatorForCreate } from "@ui/validators/projectChangeRequestDtoValidatorForCreate";
+import { Authorisation } from "@framework/types";
 
 export function loadPcrTypes() {
   return conditionalLoad(getAllPcrTypes(), params => ApiClient.pcrs.getTypes({ ...params }));
@@ -31,7 +32,10 @@ export function validatePCR(projectId: string, pcrId: string, dto: PCRDto, showE
       const current = state.editors[selector.store][selector.key];
       showErrors = current && current.validator.showValidationErrors || false;
     }
-    const validator = new PCRDtoValidator(dto, showErrors);
+
+    const projectRoles = new Authorisation(state.user.roleInfo).forProject(projectId).getRoles();
+    const original = getPcr(projectId, pcrId).get(state);
+    const validator = new PCRDtoValidator(dto, projectRoles, original.data, showErrors);
 
     dispatch(Actions.updateEditorAction(selector.key, selector.store, dto, validator));
     return validator;
