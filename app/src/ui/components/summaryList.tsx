@@ -3,6 +3,7 @@ import cn from "classnames";
 
 interface ListProps {
   noBorders?: boolean;
+  qa?: string;
 }
 
 interface ItemProps {
@@ -18,7 +19,7 @@ export const SummaryList: React.FunctionComponent<ListProps> = (props) => {
   });
 
   return (
-    <dl className={classNames}>
+    <dl className={classNames} data-qa={props.qa}>
       {props.children}
     </dl>
   );
