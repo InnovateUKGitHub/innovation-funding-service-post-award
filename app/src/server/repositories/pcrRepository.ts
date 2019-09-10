@@ -17,6 +17,7 @@ export interface IPCRRepository {
   updatePcr(pcr: PCR): Promise<void>;
   getAllByProjectId(projectId: string): Promise<PCR[]>;
   getById(projectId: string, id: string): Promise<PCR>;
+  isExisting(projectid: string, projectChangeRequestId: string): Promise<boolean>;
 }
 
 export interface ISalesforcePCR {
@@ -84,6 +85,12 @@ export class PCRRepository extends SalesforceRepositoryBase<ISalesforcePCR> impl
       throw new NotFoundError();
     }
     return mapped;
+  }
+
+  async isExisting(projectId: string, projectChangeRequestId: string): Promise<boolean> {
+    const data = await super.filterOne(`Acc_Project_Participant__r.Acc_ProjectId__c='${projectId}' AND Id = '${projectChangeRequestId}'`);
+
+    return !!data;
   }
 
   async updatePcr(pcr: PCR) {

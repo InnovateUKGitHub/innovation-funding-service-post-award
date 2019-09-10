@@ -1,13 +1,12 @@
 // tslint:disable no-duplicate-string
 import * as Entites from "@framework/entities";
 import { Authorisation, ProjectRole } from "@framework/types";
-import { GetProjectChangeRequestDocumentsSummaryQuery } from "@server/features/documents/getProjectChangeRequestDocumentsSummary";
+import { GetProjectChangeRequestDocumentOrItemDocumentQuery } from "@server/features/documents/getProjectChangeRequestDocumentOrItemDocument";
 import { TestContext } from "../../testContextProvider";
 
-describe("GetProjectDocumentsSummaryQuery", () => {
-  it("should return all documents associated with the project change request item", async () => {
+describe("GetProjectChangeRequestDocumentOrItemDocumentQuery", () => {
+  it("should return result if item document exists", async () => {
     const context = new TestContext();
-
     const project = context.testData.createProject();
     const pcr = context.testData.createPCR(project);
     const pcrRecordType: Entites.RecordType = {
@@ -17,41 +16,38 @@ describe("GetProjectDocumentsSummaryQuery", () => {
     };
     const pcrItem = context.testData.createPCRItem(pcr, pcrRecordType);
 
-    context.testData.createDocument(pcrItem.id, "PCR doc 1", "txt");
-    context.testData.createDocument(pcrItem.id, "PCR doc 2", "txt");
+    const document = context.testData.createDocument(pcrItem.id, "PCR Document", "txt", "Why I want more money");
 
-    const query = new GetProjectChangeRequestDocumentsSummaryQuery(project.Id, pcrItem.id);
-    const documents = await context.runQuery(query);
-    expect(documents).toHaveLength(2);
+    const query = new GetProjectChangeRequestDocumentOrItemDocumentQuery(project.Id, pcrItem.id, document.Id);
+    const result = await context.runQuery(query).then(x => x!);
+
+    expect(result).not.toBeNull();
+    expect(result.fileName).toBe("PCR Document.txt");
+    expect(result.fileType).toBe("txt");
+    expect(result.contentLength).toBe("Why I want more money".length);
+    expect(result.stream).not.toBeNull();
   });
 
-  it("should not return any documents from other project change request items", async () => {
+  it("should return result if project change request document exists", async () => {
     const context = new TestContext();
-
     const project = context.testData.createProject();
     const pcr = context.testData.createPCR(project);
-    const pcr2 = context.testData.createPCR(project);
-    const pcrRecordType: Entites.RecordType = {
-      id: "id_1",
-      parent: pcr.id,
-      type: "type"
-    };
-    const pcrItem = context.testData.createPCRItem(pcr, pcrRecordType);
-    const pcrItem2 = context.testData.createPCRItem(pcr2, pcrRecordType);
 
-    context.testData.createDocument(pcrItem.id, "PCR doc 1", "txt");
-    context.testData.createDocument(pcrItem.id, "PCR doc 2", "txt");
+    const document = context.testData.createDocument(pcr.id, "PCR Document", "txt", "Why I want more money");
 
-    const query = new GetProjectChangeRequestDocumentsSummaryQuery(project.Id, pcrItem2.id);
-    const documents = await context.runQuery(query);
+    const query = new GetProjectChangeRequestDocumentOrItemDocumentQuery(project.Id, pcr.id, document.Id);
+    const result = await context.runQuery(query).then(x => x!);
 
-    expect(documents).toHaveLength(0);
+    expect(result).not.toBeNull();
+    expect(result.fileName).toBe("PCR Document.txt");
+    expect(result.fileType).toBe("txt");
+    expect(result.contentLength).toBe("Why I want more money".length);
+    expect(result.stream).not.toBeNull();
   });
 
-  it("should return correct properties", async () => {
+  it("should return null if the document doesn't exist", async () => {
     const context = new TestContext();
     const project = context.testData.createProject();
-
     const pcr = context.testData.createPCR(project);
     const pcrRecordType: Entites.RecordType = {
       id: "id_1",
@@ -60,25 +56,14 @@ describe("GetProjectDocumentsSummaryQuery", () => {
     };
     const pcrItem = context.testData.createPCRItem(pcr, pcrRecordType);
 
-    const expectedFileName = "PCR1";
-    const expectedExtension = "txt";
-    const expectedContent = "Expected content";
-    const expectedDescription = "This is a PCR";
+    const query = new GetProjectChangeRequestDocumentOrItemDocumentQuery(project.Id, pcrItem.id, "Pretend ID");
+    const result = await context.runQuery(query).then(x => x!);
 
-    const document = context.testData.createDocument(pcrItem.id, expectedFileName, expectedExtension, expectedContent, expectedDescription);
-
-    const query = new GetProjectChangeRequestDocumentsSummaryQuery(project.Id, pcrItem.id);
-    const result = await context.runQuery(query).then(x => x[0]);
-
-    expect(result.id).toBe(document.Id);
-    expect(result.fileName).toBe(`${expectedFileName}.${expectedExtension}`);
-    expect(result.fileSize).toBe(document.ContentSize);
-    expect(result.description).toBe(document.Description);
+    expect(result).toBe(null);
   });
 
-  it("should return correct URL", async () => {
+  it("should return null if document belongs to another PCR item", async () => {
     const context = new TestContext();
-
     const project = context.testData.createProject();
     const pcr = context.testData.createPCR(project);
     const pcrRecordType: Entites.RecordType = {
@@ -87,13 +72,14 @@ describe("GetProjectDocumentsSummaryQuery", () => {
       type: "type"
     };
     const pcrItem = context.testData.createPCRItem(pcr, pcrRecordType);
+    const pcrItem2 = context.testData.createPCRItem(pcr, pcrRecordType);
 
-    const document = context.testData.createDocument(pcrItem.id, "PCR doc 1", "txt");
+    const document = context.testData.createDocument(pcrItem.id, "PCR Document", "txt", "Why I want more managers");
 
-    const query = new GetProjectChangeRequestDocumentsSummaryQuery(project.Id, pcrItem.id);
-    const result = await context.runQuery(query).then(x => x[0]);
+    const query = new GetProjectChangeRequestDocumentOrItemDocumentQuery(project.Id, pcrItem2.id, document.Id);
+    const result = await context.runQuery(query).then(x => x!);
 
-    expect(result.link).toBe(`/api/documents/projectChangeRequests/${pcrItem.id}/${document.Id}/content`);
+    expect(result).toBe(null);
   });
 
   describe("authorisation", () => {
@@ -109,7 +95,9 @@ describe("GetProjectDocumentsSummaryQuery", () => {
       };
       const pcrItem = context.testData.createPCRItem(pcr, pcrRecordType);
 
-      const query = new GetProjectChangeRequestDocumentsSummaryQuery(project.Id, pcrItem.id);
+      const document = context.testData.createDocument(pcrItem.id, "PCR Document", "txt", "Why I want more projects");
+
+      const query = new GetProjectChangeRequestDocumentOrItemDocumentQuery(project.Id, pcrItem.id, document.Id);
 
       const auth = new Authorisation({[project.Id]: {projectRoles: ProjectRole.MonitoringOfficer, partnerRoles: {}}});
       expect(await context.runAccessControl(auth, query)).toBe(true);
@@ -127,7 +115,9 @@ describe("GetProjectDocumentsSummaryQuery", () => {
       };
       const pcrItem = context.testData.createPCRItem(pcr, pcrRecordType);
 
-      const query = new GetProjectChangeRequestDocumentsSummaryQuery(project.Id, pcrItem.id);
+      const document = context.testData.createDocument(pcrItem.id, "PCR Document", "txt", "Why I want more projects");
+
+      const query = new GetProjectChangeRequestDocumentOrItemDocumentQuery(project.Id, pcrItem.id, document.Id);
 
       const auth = new Authorisation({[project.Id]: {projectRoles: ProjectRole.ProjectManager, partnerRoles: {}}});
       expect(await context.runAccessControl(auth, query)).toBe(true);
@@ -145,7 +135,9 @@ describe("GetProjectDocumentsSummaryQuery", () => {
       };
       const pcrItem = context.testData.createPCRItem(pcr, pcrRecordType);
 
-      const query = new GetProjectChangeRequestDocumentsSummaryQuery(project.Id, pcrItem.id);
+      const document = context.testData.createDocument(pcrItem.id, "PCR Document", "txt", "Why I want more projects");
+
+      const query = new GetProjectChangeRequestDocumentOrItemDocumentQuery(project.Id, pcrItem.id, document.Id);
 
       const auth = new Authorisation({[project.Id]: {projectRoles: ProjectRole.FinancialContact, partnerRoles: {}}});
       expect(await context.runAccessControl(auth, query)).toBe(false);
@@ -164,7 +156,9 @@ describe("GetProjectDocumentsSummaryQuery", () => {
       };
       const pcrItem = context.testData.createPCRItem(pcr, pcrRecordType);
 
-      const query = new GetProjectChangeRequestDocumentsSummaryQuery(project.Id, pcrItem.id);
+      const document = context.testData.createDocument(pcrItem.id, "PCR Document", "txt", "Why I want more projects");
+
+      const query = new GetProjectChangeRequestDocumentOrItemDocumentQuery(project.Id, pcrItem.id, document.Id);
 
       const auth = new Authorisation({[project2.Id]: {projectRoles: ProjectRole.MonitoringOfficer, partnerRoles: {}}});
       expect(await context.runAccessControl(auth, query)).toBe(false);
@@ -183,7 +177,9 @@ describe("GetProjectDocumentsSummaryQuery", () => {
       };
       const pcrItem = context.testData.createPCRItem(pcr, pcrRecordType);
 
-      const query = new GetProjectChangeRequestDocumentsSummaryQuery(project.Id, pcrItem.id);
+      const document = context.testData.createDocument(pcrItem.id, "PCR Document", "txt", "Why I want more projects");
+
+      const query = new GetProjectChangeRequestDocumentOrItemDocumentQuery(project.Id, pcrItem.id, document.Id);
 
       const auth = new Authorisation({[project2.Id]: {projectRoles: ProjectRole.ProjectManager, partnerRoles: {}}});
       expect(await context.runAccessControl(auth, query)).toBe(false);
