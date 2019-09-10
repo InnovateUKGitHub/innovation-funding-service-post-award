@@ -583,13 +583,13 @@ export class TestData {
       projectId: project.Id,
       comments: "",
       number: seed,
-      reasoningStatus: Entites.PCRItemStatus.Unknown,
       status: Entites.PCRStatus.Unknown,
       statusName: Entites.PCRStatus[Entites.PCRStatus.Unknown],
       started: new Date(),
       updated: new Date(),
-      reasoning: "",
-      reasoningStatusName: Entites.PCRItemStatus[Entites.PCRItemStatus.Unknown],
+      reasoningStatus: Entites.PCRItemStatus.Complete,
+      reasoning: "Test Reasoning",
+      reasoningStatusName: Entites.PCRItemStatus[Entites.PCRItemStatus.Complete],
       items: []
     };
 

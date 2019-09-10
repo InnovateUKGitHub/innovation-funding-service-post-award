@@ -13,10 +13,12 @@ export interface ILogger {
 export class Logger implements ILogger {
   private readonly level: LogLevel;
   private readonly identifier: string | undefined;
+  private readonly pretty: boolean;
 
-  constructor(identifier?: string, logLevel?: LogLevel) {
+  constructor(identifier?: string, logLevel?: LogLevel, pretty?: boolean) {
     this.identifier = identifier;
     this.level = logLevel || Configuration.logLevel;
+    this.pretty = pretty !== undefined ? pretty : Configuration.prettyLogs;
   }
 
   debug(message: string, ...params: any[]) {
@@ -44,7 +46,7 @@ export class Logger implements ILogger {
         message,
         params
       };
-      const output = Configuration.prettyLogs ? JSON.stringify(item, null, 2) : JSON.stringify(item);
+      const output = this.pretty ? JSON.stringify(item, null, 2) : JSON.stringify(item);
       console.log(output);
     }
   }
