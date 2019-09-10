@@ -1,7 +1,8 @@
 import { Authorisation, IContext, ProjectRole } from "@framework/types";
 import { DocumentQueryBase } from "@server/features/documents/documentQueryBase";
+// Uses either project change request Id or project change request item Id, as both cn be used as the entity Id of the document
 
-export class GetProjectChangeRequestDocumentQuery extends DocumentQueryBase {
+export class GetProjectChangeRequestDocumentOrItemDocumentQuery extends DocumentQueryBase {
   constructor(private readonly projectId: string, private readonly projectChangeRequestIdOrItemId: string, documentId: string) {
     super(documentId);
   }

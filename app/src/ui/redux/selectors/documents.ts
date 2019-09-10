@@ -16,7 +16,7 @@ export const getClaimDocuments = (partnerId: string, periodId: number) => dataSt
 
 export const getProjectDocuments = (projectId: string) => dataStoreHelper(documentStore, getKey("project", projectId));
 
-export const getProjectChangeRequestItemDocuments = (projectChangeRequestItemId: string) => dataStoreHelper(documentStore, getKey("projectChangeRequestItem", projectChangeRequestItemId));
+export const getProjectChangeRequestDocumentsOrItemDocuments = (projectChangeRequestIdOrItemId: string) => dataStoreHelper(documentStore, getKey("projectChangeRequestItem", projectChangeRequestIdOrItemId));
 
 export const getProjectDocumentEditor = (projectId: string, config: { maxFileSize: number, maxUploadFileCount: number }) => editorStoreHelper<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>(
   "multipleDocuments",
@@ -36,8 +36,8 @@ export const getClaimDetailDocumentDeleteEditorStoreInfo = ({ partnerId, periodI
   return getDocumentsDeleteEditor(getKey("claimDetail", partnerId, periodId, costCategoryId), documents);
 };
 
-export const getProjectChangeRequestItemDocumentDeleteEditorStoreInfo = (projectChangeRequestItemId: string, documents: DocumentSummaryDto[]) => {
-  return getDocumentsDeleteEditor(getKey("projectChangeRequestItem", projectChangeRequestItemId), documents);
+export const getProjectChangeRequestDocumentOrItemDocumentDeleteEditorStoreInfo = (projectChangeRequestIdOrItemId: string, documents: DocumentSummaryDto[]) => {
+  return getDocumentsDeleteEditor(getKey("projectChangeRequestItem", projectChangeRequestIdOrItemId), documents);
 };
 
 export const getClaimDetailDocumentDeleteEditor = (state: RootState, { projectId, partnerId, periodId, costCategoryId }: ClaimDetailKey): IEditorSelector<DocumentSummaryDto[], Results<DocumentSummaryDto[]>> => {
@@ -45,9 +45,9 @@ export const getClaimDetailDocumentDeleteEditor = (state: RootState, { projectId
   return getClaimDetailDocumentDeleteEditorStoreInfo({ projectId, partnerId, periodId, costCategoryId }, documents || []);
 };
 
-export const getProjectChangeRequestItemDocumentDeleteEditor = (state: RootState, projectChangeRequestItemId: string): IEditorSelector<DocumentSummaryDto[], Results<DocumentSummaryDto[]>> => {
-  const documents = getProjectChangeRequestItemDocuments(projectChangeRequestItemId).get(state).data;
-  return getProjectChangeRequestItemDocumentDeleteEditorStoreInfo(projectChangeRequestItemId, documents || []);
+export const getProjectChangeRequestDocumentOrItemDocumentDeleteEditor = (state: RootState, projectChangeRequestIdOrItemId: string): IEditorSelector<DocumentSummaryDto[], Results<DocumentSummaryDto[]>> => {
+  const documents = getProjectChangeRequestDocumentsOrItemDocuments(projectChangeRequestIdOrItemId).get(state).data;
+  return getProjectChangeRequestDocumentOrItemDocumentDeleteEditorStoreInfo(projectChangeRequestIdOrItemId, documents || []);
 };
 
 export const getClaimDocumentEditor = ({ partnerId, periodId }: ClaimKey, maxFileSize: number) => editorStoreHelper<DocumentUploadDto, DocumentUploadDtoValidator>(

@@ -1,11 +1,11 @@
 // tslint:disable: no-duplicate-string
 import * as Entites from "@framework/entities";
 import { Authorisation, ProjectRole } from "@framework/types";
-import { DeleteProjectChangeRequestItemDocument } from "@server/features/documents/deleteProjectChangeRequestItemDocument";
+import { DeleteProjectChangeRequestDocumentOrItemDocument } from "@server/features/documents/deleteProjectChangeRequestDocumentOrItemDocument";
 import { TestContext } from "../../testContextProvider";
 
-describe("DeleteProjectChangeRequestItemCommand", () => {
-  it("should upload and then delete a document", async () => {
+describe("DeleteProjectChangeRequestDocumentOrItemCommand", () => {
+  it("should delete an item document", async () => {
     const context = new TestContext();
     const document = context.testData.createDocument("3", "title", "jpg", "some content");
     const project = context.testData.createProject();
@@ -17,7 +17,18 @@ describe("DeleteProjectChangeRequestItemCommand", () => {
     };
     const projectChangeRequestItem = context.testData.createPCRItem(projectChangeRequest, recordType);
 
-    const deleteCommand = new DeleteProjectChangeRequestItemDocument(document.ContentDocumentId, project.Id, projectChangeRequestItem.id);
+    const deleteCommand = new DeleteProjectChangeRequestDocumentOrItemDocument(document.ContentDocumentId, project.Id, projectChangeRequestItem.id);
+    await context.runCommand(deleteCommand);
+    expect(context.repositories.documents.Items).toHaveLength(0);
+  });
+
+  it("should delete a project change request document", async () => {
+    const context = new TestContext();
+    const document = context.testData.createDocument("3", "title", "jpg", "some content");
+    const project = context.testData.createProject();
+    const projectChangeRequest = context.testData.createPCR(project);
+
+    const deleteCommand = new DeleteProjectChangeRequestDocumentOrItemDocument(document.ContentDocumentId, project.Id, projectChangeRequest.id);
     await context.runCommand(deleteCommand);
     expect(context.repositories.documents.Items).toHaveLength(0);
   });
@@ -37,7 +48,7 @@ describe("DeleteProjectChangeRequestItemCommand", () => {
       const document = context.testData.createDocument("3", "title", "jpg", "some content");
       expect(context.repositories.documents.Items).toHaveLength(1);
 
-      const command = new DeleteProjectChangeRequestItemDocument(document.ContentDocumentId, project.Id, projectChangeRequestItem.id);
+      const command = new DeleteProjectChangeRequestDocumentOrItemDocument(document.ContentDocumentId, project.Id, projectChangeRequestItem.id);
 
       const auth = new Authorisation({
         [project.Id]: {
@@ -64,7 +75,7 @@ describe("DeleteProjectChangeRequestItemCommand", () => {
       const document = context.testData.createDocument("3", "title", "jpg", "some content");
       expect(context.repositories.documents.Items).toHaveLength(1);
 
-      const command = new DeleteProjectChangeRequestItemDocument(document.ContentDocumentId, project.Id, projectChangeRequestItem.id);
+      const command = new DeleteProjectChangeRequestDocumentOrItemDocument(document.ContentDocumentId, project.Id, projectChangeRequestItem.id);
 
       const auth = new Authorisation({
         [project.Id]: {

@@ -1,7 +1,8 @@
 import { Authorisation, IContext, ProjectRole } from "@framework/types";
 import { CommandBase } from "@server/features/common";
+// Uses either project change request Id or project change request item Id, as both cn be used as the entity Id of the document
 
-export class DeleteProjectChangeRequestItemDocument extends CommandBase<void> {
+export class DeleteProjectChangeRequestDocumentOrItemDocument extends CommandBase<void> {
   constructor(private readonly documentId: string, private readonly projectId: string, private readonly projectChangeRequestIdOrItemId: string) {
     super();
   }
