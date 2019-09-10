@@ -238,7 +238,7 @@ const initEditor = (dto: ClaimDto) => {
 
 const definition = ReduxContainer.for<ReviewClaimParams, Data, Callbacks>(ReviewComponent);
 
-// ToDo: sort out with data as its a mess!
+// @TODO: sort out with data as its a mess!
 export const ReviewClaim = definition.connect({
   withData: (state, props): Data => {
     const projectPending = Selectors.getActiveProject(props.projectId, state);

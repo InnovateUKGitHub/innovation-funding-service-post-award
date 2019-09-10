@@ -14,7 +14,7 @@ const mapDocumentToLink = (document: DocumentSummaryDto, i: number) => ({
 });
 
 export const DocumentList: React.SFC<Props> = ({ documents = [], qa}: Props) => {
-  // todo: should server not do this?
+  // @TODO: should server not do this?
   documents.sort((a,b) => stringComparator(a.fileName, b.fileName));
   return (
     <div data-qa={qa}>
@@ -28,7 +28,7 @@ interface PropsWithRemove extends Props {
 }
 
 export const DocumentListWithDelete: React.SFC<PropsWithRemove> = ({ documents = [], qa, onRemove }: PropsWithRemove) => {
-  // todo: should server not do this?
+  // @TODO: should server not do this?
   documents.sort((a,b) => stringComparator(a.fileName, b.fileName));
 
   const Form = TypedForm<DocumentSummaryDto[]>();

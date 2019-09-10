@@ -2,7 +2,7 @@ import { QueryBase } from "@server/features/common";
 import { ClaimDto, IContext } from "@framework/types";
 import mapClaim from "./mapClaim";
 
-// TODO - nullable or throw to be decided
+// @TODO - nullable or throw to be decided
 export class GetClaim extends QueryBase<ClaimDto> {
   constructor(private readonly partnerId: string, private readonly periodId: number) {
     super();

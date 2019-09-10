@@ -129,9 +129,9 @@ describe("getAllForProjectQuery", () => {
     await expect(context.runQuery(new GetByIdQuery("fakePartnerId"))).rejects.toThrow();
   });
 
-  it("when user is finance contact expect role set", async () => { // TODO separete into 2 separate tests
+  // @TODO: Separate into two different tests
+  it("when user is finance contact expect role set", async () => {
     const context = new TestContext();
-
     const project = context.testData.createProject();
     const partner = context.testData.createPartner(project, x => {
       x.Acc_ProjectRole__c = SalesforceProjectRole.ProjectLead;

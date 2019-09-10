@@ -39,10 +39,10 @@ export class CreateProjectChangeRequestCommand extends CommandBase<string> {
     if (this.projectChangeRequestDto.projectId !== this.projectId) {
       throw new BadRequestError("Project type does not match change request project type");
     }
-    // ** TODO remove this hack when projectId field is added to project change request object in SF
+    // @TODO remove this hack when projectId field is added to project change request object in SF
     const partner = await context.runQuery(new GetAllForProjectQuery(this.projectId));
     this.projectChangeRequestDto.projectId = partner[0].id;
-    // **
+    //
 
     const itemTypes = await context.runQuery(new GetPCRItemTypesQuery());
     const validationResult = new ProjectChangeRequestDtoValidatorForCreate(this.projectChangeRequestDto, itemTypes,true);

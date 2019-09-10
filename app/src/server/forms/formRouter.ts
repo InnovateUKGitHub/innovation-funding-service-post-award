@@ -44,7 +44,7 @@ const handlers: IFormHandler[] = [
   new ProjectDocumentUploadHandler(),
 ];
 
-// Todo remove once we have local sso in dev
+// @TODO remove once we have local sso in dev
 if (!Configuration.sso.enabled) {
   handlers.push(new HomeFormHandler());
 }

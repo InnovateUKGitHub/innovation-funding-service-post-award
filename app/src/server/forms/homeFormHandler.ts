@@ -4,7 +4,7 @@ import { configureRouter } from "../../ui/routing";
 import { HomeRoute } from "../../ui/containers";
 import { Configuration } from "../features/common/config";
 
-// ToDo: Remove as provides a back door to set the current user.....
+// @TODO: Remove as provides a back door to set the current user.....
 export class HomeFormHandler implements IFormHandler {
 
   public readonly routePath = HomeRoute.routePath;

@@ -31,11 +31,11 @@ export interface IConfig {
     readonly salesforce: {
         readonly clientId: string;
         readonly connectionUrl: string;
-        // ToDo: Remove
+        // @TODO: Remove
         readonly serivcePassword: string;
-        // ToDo: Remove
+        // @TODO: Remove
         readonly serivceToken: string;
-        // ToDo: Remove
+        // @TODO: Remove
         readonly serivceUsername: string;
     };
 
