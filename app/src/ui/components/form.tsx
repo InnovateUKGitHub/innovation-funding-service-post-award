@@ -17,6 +17,7 @@ interface EditorForm<T> extends SharedFormProps<T> {
 
 interface DataForm<T> extends SharedFormProps<T> {
   data: T;
+  isSaving?: boolean;
 }
 
 type FormProps<T> = EditorForm<T> | DataForm<T>;
@@ -35,7 +36,7 @@ class FormComponent<T> extends React.Component<FormProps<T>, []> {
         const childProps = (index: number): FormChildProps<T> => ({
             key: "formchild" + index,
             formData: this.isEditor(this.props) ? this.props.editor.data : this.props.data,
-            disabled: this.isEditor(this.props) && this.props.editor.status === EditorStatus.Saving,
+            disabled: this.isEditor(this.props) ? this.props.editor.status === EditorStatus.Saving : (this.props.isSaving || false),
             onChange: this.props.onChange,
             onSubmit: this.props.onSubmit
         });

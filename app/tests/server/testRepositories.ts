@@ -421,6 +421,14 @@ class PCRTestRepository extends TestRepository<Entities.PCR> implements Reposito
     return Promise.resolve();
   }
 
+  updatePcrItems(pcr: Entities.PCR, pcrItems: Entities.PCRItem[]) {
+    pcr.items = pcr.items.map(existingItem => {
+      const updatedItem = pcrItems.find(x => x.id === existingItem.id);
+      return updatedItem || existingItem;
+    });
+    return Promise.resolve();
+  }
+
   async createProjectChangeRequest(projectChangeRequest: Entities.ProjectChangeRequestForCreate): Promise<string> {
     const id = `ProjectChangeRequest${(this.Items.length + 1)}`;
     await super.insertOne({id, ...projectChangeRequest} as Entities.PCR);
@@ -461,8 +469,6 @@ export const createTestRepositories = (): ITestRepositories => {
 
   const claimsRepository = new ClaimsTestRepository(partnerRepository);
 
-  const pcrs = new PCRTestRepository();
-
   return ({
     claims: claimsRepository,
     claimStatusChanges: new ClaimStatusChangeTestRepository(claimsRepository),
@@ -474,7 +480,7 @@ export const createTestRepositories = (): ITestRepositories => {
     monitoringReportHeader: new MonitoringReportHeaderTestRepository(),
     monitoringReportQuestions: new MonitoringReportQuestionsRepository(),
     monitoringReportStatusChange: new MonitoringReportStatusChangeTestRepository(),
-    pcrs,
+    pcrs: new PCRTestRepository(),
     profileDetails: new ProfileDetailsTestRepository(),
     profileTotalPeriod: new ProfileTotalPeriodTestRepository(partnerRepository),
     profileTotalCostCategory: new ProfileTotalCostCategoryTestRepository(),
