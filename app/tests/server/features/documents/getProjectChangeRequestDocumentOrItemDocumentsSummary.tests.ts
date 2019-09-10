@@ -107,7 +107,7 @@ describe("GetProjectChangeRequestDocumentOrItemDocumentsSummaryQuery", () => {
     const query = new GetProjectChangeRequestDocumentOrItemDocumentsSummaryQuery(project.Id, pcrItem.id);
     const result = await context.runQuery(query).then(x => x[0]);
 
-    expect(result.link).toBe(`/api/documents/projectChangeRequests/${pcrItem.id}/${document.Id}/content`);
+    expect(result.link).toBe(`/api/documents/projectChangeRequests/${project.Id}/${pcrItem.id}/${document.Id}/content`);
   });
 
   describe("authorisation", () => {
