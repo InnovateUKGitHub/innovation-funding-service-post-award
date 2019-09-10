@@ -1,6 +1,5 @@
 import SalesforceRepositoryBase, { Updatable } from "./salesforceRepositoryBase";
 import { ILogger } from "../features/common";
-import { IRecordTypeRepository } from ".";
 import { Connection } from "jsforce";
 
 export type ISalesforceMonitoringReportStatus = "New" | "Draft" | "Awaiting IUK Approval" | "Approved" | "IUK Queried";

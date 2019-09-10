@@ -5,7 +5,7 @@ import { PCRItemType, RecordType } from "@framework/entities";
 import { GetAllRecordTypesQuery } from "../general/getAllRecordTypesQuery";
 
 interface IMetaValue {
-  id: PCRItemType;
+  type: PCRItemType;
   typeName: string;
   displayName?: string;
   enabled?: boolean;
@@ -13,15 +13,15 @@ interface IMetaValue {
 
 // todo: this might sit better in the pcr repository... leave for now
 export const PCRRecordTypeMetaValues: IMetaValue[] = [
-  { id: PCRItemType.AccountNameChange, typeName: "Account Name Change" },
-  { id: PCRItemType.PartnerAddition, typeName: "Partner Addition", },
-  { id: PCRItemType.PartnerWithdrawal, typeName: "Partner Withdrawal", },
-  { id: PCRItemType.ProjectSuspension, typeName: "Project Suspension", },
-  { id: PCRItemType.ProjectTermination, typeName: "Project Termination", },
-  { id: PCRItemType.MultiplePartnerFinancialVirement, typeName: "Multiple Partner Financial Virement", },
-  { id: PCRItemType.SinglePartnerFinancialVirement, typeName: "Single Partner Financial Virement", },
-  { id: PCRItemType.ScopeChange, typeName: "Scope Change", },
-  { id: PCRItemType.TimeExtension, typeName: "Time Extension", },
+  { type: PCRItemType.AccountNameChange, typeName: "Account Name Change" },
+  { type: PCRItemType.PartnerAddition, typeName: "Partner Addition", },
+  { type: PCRItemType.PartnerWithdrawal, typeName: "Partner Withdrawal", },
+  { type: PCRItemType.ProjectSuspension, typeName: "Project Suspension", },
+  { type: PCRItemType.ProjectTermination, typeName: "Project Termination", },
+  { type: PCRItemType.MultiplePartnerFinancialVirement, typeName: "Multiple Partner Financial Virement", },
+  { type: PCRItemType.SinglePartnerFinancialVirement, typeName: "Single Partner Financial Virement", },
+  { type: PCRItemType.ScopeChange, typeName: "Scope Change", },
+  { type: PCRItemType.TimeExtension, typeName: "Time Extension", },
 ];
 
 export class GetPCRItemTypesQuery extends QueryBase<PCRItemTypeDto[]> {
@@ -33,7 +33,7 @@ export class GetPCRItemTypesQuery extends QueryBase<PCRItemTypeDto[]> {
     /// meta values controlls order
     return PCRRecordTypeMetaValues
       .map<PCRItemTypeDto>(x => ({
-        id: x.id,
+        type: x.type,
         displayName: x.displayName || x.typeName,
         enabled: x.enabled === undefined ? true : x.enabled,
         recordTypeId: this.findRecordType(x.typeName, recordTypes)

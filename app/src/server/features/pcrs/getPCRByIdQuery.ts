@@ -44,7 +44,8 @@ export class GetPCRByIdQuery extends QueryBase<PCRDto> {
   private mapItem(pcr: PCRItem, itemType: PCRItemTypeDto): PCRItemDto {
     return {
       id: pcr.id,
-      type: itemType.id,
+      type: itemType.type,
+      recordTypeId: itemType.recordTypeId,
       typeName: itemType.displayName,
       status: pcr.status,
       statusName: pcr.statusName

@@ -13,13 +13,14 @@ export class UpdatePCRCommand extends CommandBase<boolean> {
       throw new BadRequestError();
     }
 
-    const original = await context.repositories.pcrs.getById(this.pcr.projectId, this.pcr.id);
-
     const validationResult = new PCRDtoValidator(this.pcr, true);
 
     if (!validationResult.isValid) {
+
       throw new ValidationError(validationResult);
     }
+
+    const original = await context.repositories.pcrs.getById(this.pcr.projectId, this.pcr.id);
 
     original.comments = this.pcr.comments;
     original.status = this.pcr.status;

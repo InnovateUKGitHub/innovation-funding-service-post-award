@@ -1,5 +1,4 @@
 import { IFormBody, IFormButton, StandardFormHandlerBase } from "./formHandlerBase";
-import { Results } from "../../ui/validation/results";
 import { AllClaimsDashboardRoute, ClaimForecastParams, ClaimForecastRoute, ClaimsDashboardRoute, PrepareClaimRoute } from "../../ui/containers";
 import { getForecastDetailsEditor } from "../../ui/redux/selectors";
 import { ForecastDetailsDtosValidator } from "../../ui/validators";

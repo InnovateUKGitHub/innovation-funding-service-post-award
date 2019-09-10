@@ -9,41 +9,42 @@ import { Pending } from "@shared/pending";
 import { IEditorStore } from "@ui/redux";
 import { PCRItemStatus } from "@framework/entities/pcr";
 import { PCRsDashboardRoute } from "./dashboard";
-import { Results } from "@ui/validation";
 import { PCRDto } from "@framework/dtos";
 import { PCRPrepareRoute } from "@ui/containers";
+import { ProjectChangeRequestDtoValidatorForCreate } from "@ui/validators/projectChangeRequestDtoValidatorForCreate";
 
-interface Params {
+export interface CreateProjectChangeRequestParams {
   projectId: string;
 }
 
 interface Data {
   project: Pending<Dtos.ProjectDto>;
   itemTypes: Pending<Dtos.PCRItemTypeDto[]>;
-  pcr: Pending<IEditorStore<Dtos.PCRDto, Results<{}>>>;
+  editor: Pending<IEditorStore<Dtos.PCRDto, ProjectChangeRequestDtoValidatorForCreate>>;
 }
 
 interface Callbacks {
   create: (projectId: string, dto: PCRDto) => void;
 }
 
-class PCRCreateComponent extends ContainerBase<Params, Data, Callbacks> {
+class PCRCreateComponent extends ContainerBase<CreateProjectChangeRequestParams, Data, Callbacks> {
 
   render() {
-    const combined = Pending.combine({ project: this.props.project, pcr: this.props.pcr, itemTypes: this.props.itemTypes });
+    const combined = Pending.combine({ project: this.props.project, pcr: this.props.editor, itemTypes: this.props.itemTypes });
     return <ACC.PageLoader pending={combined} render={d => this.renderContents(d.project, d.pcr, d.itemTypes)} />;
   }
 
-  private renderContents(project: Dtos.ProjectDto, pcr: IEditorStore<Dtos.PCRDto, Results<{}>>, itemTypes: Dtos.PCRItemTypeDto[]) {
+  private renderContents(project: Dtos.ProjectDto, editor: IEditorStore<Dtos.PCRDto, ProjectChangeRequestDtoValidatorForCreate>, itemTypes: Dtos.PCRItemTypeDto[]) {
     return (
       <ACC.Page
         backLink={<ACC.BackLink route={PCRsDashboardRoute.getLink({ projectId: this.props.projectId })}>Back to project change requests</ACC.BackLink>}
         pageTitle={<ACC.Projects.Title project={project} />}
         project={project}
+        validator={editor.validator}
+        error={editor.error}
       >
         <ACC.Section>
-          <ACC.ValidationMessage message={"You must discuss all project change requests with your monitoring officer before you submit."} messageType="warning"/>
-          {this.renderForm(pcr, itemTypes)}
+          {this.renderForm(editor, itemTypes)}
         </ACC.Section>
       </ACC.Page>
     );
@@ -52,31 +53,33 @@ class PCRCreateComponent extends ContainerBase<Params, Data, Callbacks> {
   private createNewOption(itemType: Dtos.PCRItemTypeDto): Dtos.PCRItemDto {
     return {
       id: "",
-      type: itemType.id,
+      type: itemType.type,
+      recordTypeId: itemType.recordTypeId,
       typeName: itemType.displayName,
-      status: PCRItemStatus.Unknown,
+      status: PCRItemStatus.ToDo,
       statusName: ""
     };
   }
 
-  private renderForm(pcr: IEditorStore<Dtos.PCRDto, Results<{}>>, itemTypes: Dtos.PCRItemTypeDto[]): React.ReactNode {
+  private renderForm(pcrEditor: IEditorStore<Dtos.PCRDto, ProjectChangeRequestDtoValidatorForCreate>, itemTypes: Dtos.PCRItemTypeDto[]): React.ReactNode {
     const PCRForm = ACC.TypedForm<Dtos.PCRDto>();
-    const options = itemTypes.map<ACC.SelectOption>(x => ({ id: x.id.toString(), value: x.displayName }));
-    const selected = options.filter(x => pcr.data.items.some(y => y.type.toString() === x.id));
+    const options = itemTypes.map<ACC.SelectOption>(x => ({ id: x.type.toString(), value: x.displayName }));
+    const selected = options.filter(x => pcrEditor.data.items.some(y => y.type.toString() === x.id));
 
     return (
       <React.Fragment>
-        <PCRForm.Form editor={pcr} onSubmit={() => this.props.create(this.props.projectId, pcr.data)} onChange={x => this.setState({ pcr: x })}>
+        <PCRForm.Form editor={pcrEditor} onSubmit={() => this.props.create(this.props.projectId, pcrEditor.data)} onChange={x => this.setState({ pcr: x })}>
           <PCRForm.Fieldset heading="Select request types">
             <PCRForm.Checkboxes
-              hint="You can select more that one."
+              hint="You can select more than one."
               options={options}
-              name="type"
+              name="types"
+              validation={pcrEditor.validator.types}
               value={x => selected}
               update={(model, selectedValue) => {
                 model.items = itemTypes
-                  .filter(x => (selectedValue || []).some(y => y.id === x.id.toString()))
-                  .map<Dtos.PCRItemDto>(x => model.items.find(y => x.id === y.type) || this.createNewOption(x));
+                  .filter(x => (selectedValue || []).some(y => y.id === x.type.toString()))
+                  .map<Dtos.PCRItemDto>(x => model.items.find(y => x.type === y.type) || this.createNewOption(x));
               }}
             />
           </PCRForm.Fieldset>
@@ -88,13 +91,13 @@ class PCRCreateComponent extends ContainerBase<Params, Data, Callbacks> {
   }
 }
 
-const definition = ReduxContainer.for<Params, Data, Callbacks>(PCRCreateComponent);
+const definition = ReduxContainer.for<CreateProjectChangeRequestParams, Data, Callbacks>(PCRCreateComponent);
 
 export const PCRCreate = definition.connect({
   withData: (state, params) => ({
     project: Selectors.getProject(params.projectId).getPending(state),
     itemTypes: Selectors.getAllPcrTypes().getPending(state),
-    pcr: Selectors.getPcrEditor(params.projectId).get(state)
+    editor: Selectors.getPcrEditorForCreate(params.projectId).get(state)
   }),
   withCallbacks: (dispatch) => ({
     create: (projectId: string, dto: PCRDto) =>
