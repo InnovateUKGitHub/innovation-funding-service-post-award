@@ -11,7 +11,7 @@ const alignTextLeftStyle: React.CSSProperties = {
   textAlign: "left",
 };
 
-export const ValidationError: React.SFC<Props> = ({ error }) => {
+export const ValidationError: React.FunctionComponent<Props> = ({ error }) => {
   if (!error || error.isValid || !error.showValidationErrors) {
     return null;
   }
@@ -20,17 +20,21 @@ export const ValidationError: React.SFC<Props> = ({ error }) => {
   // if nested there are the results and summary errors to add as well
   const children = error instanceof NestedResult ? (error as NestedResult<Results<{}>>).results : [];
   const associated = error instanceof NestedResult ? (error as NestedResult<Results<{}>>).summaryValidaion : null;
-  const messageIds = children.filter(x => !x.isValid && x.showValidationErrors).map(x => x.errors).reduce((a, b) => a.concat(b), []).map(x => x.key);
+  const validations = children.filter(x => !x.isValid && x.showValidationErrors).map(x => x.errors).reduce((a, b) => a.concat(b), []);
 
-  if(associated && !associated.isValid && associated.showValidationErrors) {
-    messageIds.push(associated.key);
+  if (associated && !associated.isValid && associated.showValidationErrors) {
+    validations.push(associated);
   }
-  messageIds.push(error.key);
+  validations.push(error);
 
   return (
     <React.Fragment>
-      {messageIds.map(key => <a id={key} key={key} aria-hidden="true"/>)}
+      {validations.map((r) => <ValidationErrorAnchor result={r} key={r.key}/>)}
       <span style={alignTextLeftStyle} className="govuk-error-message">{error.errorMessage}</span>
     </React.Fragment>
   );
+};
+
+const ValidationErrorAnchor: React.FunctionComponent<{ result: Result }> = ({ result }) => {
+  return <a id={result.key} key={result.key} aria-hidden="true" />;
 };

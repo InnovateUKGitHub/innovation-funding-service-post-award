@@ -8,7 +8,7 @@ import { ITestRepositories } from "./testRepositories";
 import { PCRRecordTypeMetaValues } from "@server/features/pcrs/getItemTypesQuery";
 
 export class TestData {
-  constructor(private repositories: ITestRepositories, private getCurrentUser: () => IClientUser ) {
+  constructor(private repositories: ITestRepositories, private getCurrentUser: () => IClientUser) {
 
   }
 
@@ -75,7 +75,7 @@ export class TestData {
   public createLeadPartner(project?: Repositories.ISalesforceProject, update?: (item: Repositories.ISalesforcePartner) => void) {
     return this.createPartner(project, x => {
       x.Acc_ProjectRole__c = "Lead";
-      if(update) update(x);
+      if (update) update(x);
     });
   }
 
@@ -91,7 +91,7 @@ export class TestData {
       },
       Acc_ParticipantType__c: "Accedemic",
       Acc_ParticipantSize__c: "Large",
-      Acc_ProjectId__r:{
+      Acc_ProjectId__r: {
         Id: project.Id,
         Acc_CompetitionType__c: project.Acc_CompetitionType__c,
       },
@@ -104,9 +104,9 @@ export class TestData {
       Acc_ForecastLastModifiedDate__c: "",
       Acc_OrganisationType__c: "Industrial",
       Acc_OverheadRate__c: 20,
-      Acc_ClaimsForReview__c:0,
-      Acc_ClaimsOverdue__c:0,
-      Acc_ClaimsUnderQuery__c:0,
+      Acc_ClaimsForReview__c: 0,
+      Acc_ClaimsOverdue__c: 0,
+      Acc_ClaimsUnderQuery__c: 0,
       Acc_ProjectRole__c: "Unknown",
       ProjectRoleName: "Unknown",
       Acc_TotalCostsSubmitted__c: 0,
@@ -132,7 +132,7 @@ export class TestData {
     }
   }
 
-  private createProjectContact(project: Repositories.ISalesforceProject, partner: Repositories.ISalesforcePartner|null, role?: Repositories.SalesforceRole, update?: (item: Repositories.ISalesforceProjectContact) => void) {
+  private createProjectContact(project: Repositories.ISalesforceProject, partner: Repositories.ISalesforcePartner | null, role?: Repositories.SalesforceRole, update?: (item: Repositories.ISalesforceProjectContact) => void) {
 
     role = role || "Monitoring officer";
     const roleName = this.getRoleName(role);
@@ -175,7 +175,7 @@ export class TestData {
   public createCurrentUserAsFinanceContact(project?: Repositories.ISalesforceProject, partner?: Repositories.ISalesforcePartner, update?: (item: Repositories.ISalesforceProjectContact) => void) {
     return this.createFinanceContact(project, partner, item => {
       this.assignToCurrentUser(item);
-      if(update) update(item);
+      if (update) update(item);
     });
   }
 
@@ -185,9 +185,9 @@ export class TestData {
   }
 
   public createCurrentUserAsMonitoringOfficer(project?: Repositories.ISalesforceProject, update?: (item: Repositories.ISalesforceProjectContact) => void) {
-    return this.createMonitoringOfficer(project,  item => {
+    return this.createMonitoringOfficer(project, item => {
       this.assignToCurrentUser(item);
-      if(update) update(item);
+      if (update) update(item);
     });
   }
 
@@ -201,7 +201,7 @@ export class TestData {
   public createCurrentUserAsProjectManager(project?: Repositories.ISalesforceProject, partner?: Repositories.ISalesforcePartner, update?: (item: Repositories.ISalesforceProjectContact) => void) {
     return this.createProjectManager(project, partner, item => {
       this.assignToCurrentUser(item);
-      if(update) update(item);
+      if (update) update(item);
     });
   }
 
@@ -381,7 +381,7 @@ export class TestData {
     partner?: Repositories.ISalesforcePartner,
     periodId?: number,
     update?: (item: Partial<Repositories.ISalesforceClaimLineItem>) => void
-    ): Repositories.ISalesforceClaimLineItem {
+  ): Repositories.ISalesforceClaimLineItem {
 
     const seed = this.repositories.claimLineItems.Items.length + 1;
     costCategory = costCategory || this.createCostCategory();
@@ -458,8 +458,8 @@ export class TestData {
 
   public createDocument(
     entityId: string,
-    title: string= "cat",
-    fileType: string|null = "jpg",
+    title: string = "cat",
+    fileType: string | null = "jpg",
     content: string = "",
     description?: string,
     update?: (item: Repositories.ISalesforceDocument) => void
@@ -549,12 +549,12 @@ export class TestData {
     const seed = this.repositories.recordTypes.Items.length + 1;
 
     const newItem: Entites.RecordType = {
-      id:"RecordType " + seed,
+      id: "RecordType " + seed,
       type: "Type " + seed,
       parent: "Parent " + seed,
     };
 
-    if(update) {
+    if (update) {
       Object.assign(newItem, update);
     }
 
@@ -565,12 +565,14 @@ export class TestData {
   }
 
   public createPCRRecordTypes() {
-    return PCRRecordTypeMetaValues.map(x => (
-      this.createRecordType({
-        parent: "Acc_ProjectChangeRequest__c",
+    return PCRRecordTypeMetaValues.map(x => {
+      const parent = "Acc_ProjectChangeRequest__c";
+      const existing = this.repositories.recordTypes.Items.find(r => r.parent === parent && r.type === x.typeName);
+      return existing || this.createRecordType({
+        parent,
         type: x.typeName
-      })
-    ));
+      });
+    });
   }
 
   public createPCR(project?: Repositories.ISalesforceProject, update?: Partial<Entites.PCR>) {
@@ -593,7 +595,7 @@ export class TestData {
       items: []
     };
 
-    if(update) {
+    if (update) {
       Object.assign(newItem, update);
     }
 
@@ -602,21 +604,25 @@ export class TestData {
     return newItem;
   }
 
-  public createPCRItem(pcr: Entites.PCR, recordType: Entites.RecordType, update?: Partial<Entites.PCRItem>) {
+  public createPCRItem(pcr: Entites.PCR, recordType?: Entites.RecordType, update?: Partial<Entites.PCRItem>) {
     const seed = this.repositories.pcrs.Items.reduce((c, x) => c + x.items.length, 0) + 1;
-
     pcr = pcr || this.createPCR();
+    recordType = recordType || this.createPCRRecordTypes().find(x => pcr.items.every(y => x.id !== y.recordTypeId));
+
+    if(!recordType) {
+      throw new Error("Unable to create pcr item as pcr already has all the record types");
+    }
 
     const newItem: Entites.PCRItem = {
       id: `PCR_Item_${seed}`,
       pcrId: pcr.id,
       recordTypeId: recordType.id,
       projectId: pcr.projectId,
-      status: Entites.PCRItemStatus.Unknown,
-      statusName: "Item Status Name",
+      status: Entites.PCRItemStatus.Complete,
+      statusName: "Complete",
     };
 
-    if(update) {
+    if (update) {
       Object.assign(newItem, update);
     }
 
