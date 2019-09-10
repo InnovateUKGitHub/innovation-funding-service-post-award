@@ -7,6 +7,7 @@ import { Pending } from "@shared/pending";
 import { PCRDtoValidator } from "@ui/validators/pcrDtoValidator";
 import { ProjectChangeRequestDtoValidatorForCreate } from "@ui/validators/projectChangeRequestDtoValidatorForCreate";
 import { PCRItemStatus, PCRStatus } from "@framework/entities";
+import { Authorisation } from "@framework/types";
 
 export const getAllPcrTypes = () => dataStoreHelper("pcrTypes", "all");
 export const getAllPcrs = (projectId: string) => dataStoreHelper("pcrs", projectId);
@@ -23,10 +24,11 @@ const createPcr = (projectId: string): Partial<PCRDto> => ({
 
 export const getPcrEditor = (projectId: string, id: string) => editorStoreHelper<PCRDto, PCRDtoValidator>(
   "pcr",
-  (store) => {
-    return getPcr(projectId, id).getPending(store);
+  (store) => getPcr(projectId, id).getPending(store),
+  (dto, store) => {
+    const projectRole = new Authorisation(store.user.roleInfo).forProject(projectId).getRoles();
+    return getPcr(projectId, id).getPending(store).then(original => new PCRDtoValidator(dto, projectRole, original, false));
   },
-  (dto, store) => Pending.done(new PCRDtoValidator(dto, false)),
   getKey(projectId, id)
 );
 
