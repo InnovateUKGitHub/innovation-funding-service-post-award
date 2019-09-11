@@ -20,6 +20,6 @@ export class GetProjectChangeRequestDocumentOrItemDocumentsSummaryQuery extends 
   }
 
   protected getUrl(document: ISalesforceDocument) {
-    return `/api/documents/projectChangeRequests/${this.projectChangeRequestIdOrItemId}/${document.Id}/content`;
+    return `/api/documents/projectChangeRequests/${this.projectId}/${this.projectChangeRequestIdOrItemId}/${document.Id}/content`;
   }
 }
