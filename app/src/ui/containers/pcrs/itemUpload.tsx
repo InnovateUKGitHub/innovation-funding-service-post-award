@@ -119,7 +119,7 @@ const definition = ReduxContainer.for<Params, Data, Callbacks>(ProjectChangeRequ
 export const ProjectChangeRequestItemUpload = definition.connect({
   withData: (state, params) => ({
     project: Selectors.getProject(params.projectId).getPending(state),
-    editor: Selectors.getProjectChangeRequestDocumentOrItemDocumentEditor(params.itemId, state.config).get(state),
+    editor: Selectors.getProjectChangeRequestDocumentOrItemDocumentEditor(params.itemId).get(state),
     documents: Selectors.getProjectChangeRequestDocumentsOrItemDocuments(params.itemId).getPending(state)
   }),
   withCallbacks: (dispatch) => ({

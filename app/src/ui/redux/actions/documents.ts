@@ -27,7 +27,7 @@ export function loadIarDocuments(projectId: string, partnerId: string, periodId:
 export function updateProjectChangeRequestDocumentOrItemDocumentEditor(projectChangeRequestIdOrItemId: string, dto: MultipleDocumentUploadDto, showErrors: boolean = false): Actions.SyncThunk<Results<MultipleDocumentUploadDto>, Actions.UpdateEditorAction> {
   return (dispatch, getState) => {
     const state = getState();
-    const selector = Selectors.getProjectChangeRequestDocumentOrItemDocumentEditor(projectChangeRequestIdOrItemId, state.config);
+    const selector = Selectors.getProjectChangeRequestDocumentOrItemDocumentEditor(projectChangeRequestIdOrItemId);
     const current = state.editors[selector.store][selector.key];
     const errors = showErrors || current && current.validator.showValidationErrors || false;
     const validator = new MultipleDocumentUpdloadDtoValidator(dto, state.config, errors);
@@ -54,7 +54,7 @@ export function loadProjectDocuments(projectId: string) {
 export function updateProjectDocumentEditor(projectId: string, dto: MultipleDocumentUploadDto, showErrors: boolean = false): Actions.SyncThunk<Results<MultipleDocumentUploadDto>, Actions.UpdateEditorAction> {
   return (dispatch, getState) => {
     const state = getState();
-    const selector = Selectors.getProjectDocumentEditor(projectId, state.config);
+    const selector = Selectors.getProjectDocumentEditor(projectId);
     const current = state.editors[selector.store][selector.key];
     const errors = showErrors || current && current.validator.showValidationErrors || false;
     const validator = new MultipleDocumentUpdloadDtoValidator(dto, state.config, errors);
@@ -66,7 +66,7 @@ export function updateProjectDocumentEditor(projectId: string, dto: MultipleDocu
 export function uploadProjectChangeRequestDocumentOrItemDocument(projectId: string, projectChangeRequestIdOrItemId: string, dto: MultipleDocumentUploadDto, onComplete: () => void, message: string): uploadProjectDocumentActions {
   return (dispatch, getState) => {
     const state = getState();
-    const selector = Selectors.getProjectChangeRequestDocumentOrItemDocumentEditor(projectChangeRequestIdOrItemId, state.config);
+    const selector = Selectors.getProjectChangeRequestDocumentOrItemDocumentEditor(projectChangeRequestIdOrItemId);
     const validation = updateProjectChangeRequestDocumentOrItemDocumentEditor(projectChangeRequestIdOrItemId, dto, true)(dispatch, getState, null);
 
     if (!validation.isValid) {
@@ -94,7 +94,7 @@ export function uploadProjectChangeRequestDocumentOrItemDocument(projectId: stri
 export function uploadProjectDocument(projectId: string, dto: MultipleDocumentUploadDto, onComplete: () => void, message: string): uploadProjectDocumentActions {
   return (dispatch, getState) => {
     const state = getState();
-    const selector = Selectors.getProjectDocumentEditor(projectId, state.config);
+    const selector = Selectors.getProjectDocumentEditor(projectId);
     const validation = updateProjectDocumentEditor(projectId, dto, true)(dispatch, getState, null);
 
     if(!validation.isValid) {
