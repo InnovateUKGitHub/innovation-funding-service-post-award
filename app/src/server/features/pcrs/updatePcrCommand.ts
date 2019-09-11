@@ -41,6 +41,29 @@ export class UpdatePCRCommand extends CommandBase<boolean> {
 
     await context.repositories.pcrs.updatePcr(original);
 
+    const paired = this.pcr.items.map(item => ({
+      item,
+      originalItem: original.items.find(x => x.id === item.id)
+    }));
+
+    const itemsToUpdate = paired
+      // exclude new items
+      .filter(x => !!x.originalItem)
+      // sort out typeings as filter dosnt remove undefined from types
+      .map(x => ({
+        item: x.item,
+        originalItem: x.originalItem!
+      }))
+      // filter those that need updating
+      .filter(x => x.item.status !== x.originalItem.status)
+      // update the status
+      .map(x => ({ ...x.originalItem, status: x.item.status }))
+      ;
+
+    if(itemsToUpdate.length) {
+      await context.repositories.pcrs.updatePcrItems(original, itemsToUpdate);
+    }
+
     return true;
   }
 }
