@@ -31,7 +31,7 @@ export abstract class RepositoryBase {
   protected executeArray<T>(query: Query<{}>): Promise<T[]> {
     return new Promise<T[]>((res, rej) => {
       query.execute(undefined, (err, records) => {
-        if(err) {
+        if (err) {
           rej(this.constructError(err));
         }
         else {
@@ -149,6 +149,10 @@ export abstract class SalesforceRepositoryBaseWithMapping<TSalesforce, TEntity> 
   }
 
   protected async insertAll(inserts: Partial<TSalesforce>[]): Promise<string[]> {
+    if (!inserts.length) {
+      return [];
+    }
+
     const conn = await this.getSalesforceConnection();
     return conn.sobject<Partial<TSalesforce>>(this.salesforceObjectName)
       .insert(inserts)
@@ -177,6 +181,10 @@ export abstract class SalesforceRepositoryBaseWithMapping<TSalesforce, TEntity> 
   }
 
   protected async updateAll(updates: Updatable<TSalesforce>[]): Promise<boolean> {
+    if (!updates.length) {
+      return true;
+    }
+
     const conn = await this.getSalesforceConnection();
     return conn.sobject<TSalesforce>(this.salesforceObjectName)
       .update(updates)
@@ -191,6 +199,9 @@ export abstract class SalesforceRepositoryBaseWithMapping<TSalesforce, TEntity> 
   }
 
   protected async deleteAll(ids: string[]): Promise<void> {
+    if (!ids.length) {
+      return;
+    }
     const conn = await this.getSalesforceConnection();
 
     return conn.sobject(this.salesforceObjectName).delete(ids)
