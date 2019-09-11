@@ -50,7 +50,8 @@ export class SaveClaimDetails extends CommandBase<boolean> {
   }
 
   private async saveLineItems(context: IContext, lineItems: ClaimLineItemDto[]) {
-    const existing = (await context.repositories.claimLineItems.getAllForCategory(this.partnerId, this.costCategoryId, this.periodId) || []);
+    const existingLineItmes = await context.repositories.claimLineItems.getAllForCategory(this.partnerId, this.costCategoryId, this.periodId);
+
     const filtered = lineItems.filter(x => !!x.description || isNumber(x.value));
 
     const updateDtos = filtered.filter(item => !!item.id);
@@ -70,13 +71,11 @@ export class SaveClaimDetails extends CommandBase<boolean> {
       Acc_CostCategory__c: x.costCategoryId
     }));
 
-    const deleteItems = existing.filter(x => !updateDtos.some(y => x.Id === y.id));
+    const deleteItems = existingLineItmes.filter(x => !updateDtos.some(y => x.Id === y.id)).map(x => x.Id);
 
-    return Promise.all<boolean, string | string[], void>([
-      context.repositories.claimLineItems.update(updateItems),
-      context.repositories.claimLineItems.insert(insertItems),
-      context.repositories.claimLineItems.delete(deleteItems.map(x => x.Id))
-    ]).then(() => true);
+    await context.repositories.claimLineItems.delete(deleteItems);
+    await context.repositories.claimLineItems.update(updateItems);
+    await context.repositories.claimLineItems.insert(insertItems);
   }
 
   private async saveAssociated(context: IContext, lineItems: ClaimLineItemDto[]) {
@@ -122,22 +121,15 @@ export class SaveClaimDetails extends CommandBase<boolean> {
       const idsToDelete = existing.filter((x, i) => i > 0).map(x => x.Id);
       await context.repositories.claimLineItems.delete(idsToDelete);
     }
-
   }
 
   private async saveClaimDetail(context: IContext, claimDetail: ClaimDetailsDto) {
-    const key: ClaimDetailKey = { projectId: this.projectId, partnerId: this.partnerId, periodId: this.periodId, costCategoryId: this.costCategoryId};
+    const key: ClaimDetailKey = { projectId: this.projectId, partnerId: this.partnerId, periodId: this.periodId, costCategoryId: this.costCategoryId };
     const existing = await context.repositories.claimDetails.get(key);
-    if (existing) {
-      context.logger.info("Updateing existing claim detail", key, existing.Id);
-      return context.repositories.claimDetails.update({
-        Id: existing.Id,
-        Acc_ReasonForDifference__c: claimDetail.comments,
-      });
-    }
-    else {
+
+    if (!existing) {
       context.logger.info("Createing new claim detail", key);
-      return context.repositories.claimDetails.insert({
+      await context.repositories.claimDetails.insert({
         Acc_ReasonForDifference__c: claimDetail.comments,
         Acc_ProjectParticipant__r: {
           Id: this.partnerId,
@@ -146,6 +138,13 @@ export class SaveClaimDetails extends CommandBase<boolean> {
         Acc_ProjectPeriodNumber__c: this.periodId,
         Acc_CostCategory__c: this.costCategoryId,
         Acc_PeriodCostCategoryTotal__c: 0
+      });
+    }
+    else if (existing.Acc_ReasonForDifference__c !== claimDetail.comments) {
+      context.logger.info("Updateing existing claim detail", key, existing.Id);
+      await context.repositories.claimDetails.update({
+        Id: existing.Id,
+        Acc_ReasonForDifference__c: claimDetail.comments,
       });
     }
   }
