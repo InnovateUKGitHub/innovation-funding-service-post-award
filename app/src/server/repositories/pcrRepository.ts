@@ -15,6 +15,7 @@ import { NotFoundError } from "@server/features/common";
 export interface IPCRRepository {
   createProjectChangeRequest(projectChangeRequest: ProjectChangeRequestForCreate): Promise<string>;
   updatePcr(pcr: PCR): Promise<void>;
+  updatePcrItems(pcr: PCR, items: PCRItem[]): Promise<void>;
   getAllByProjectId(projectId: string): Promise<PCR[]>;
   getById(projectId: string, id: string): Promise<PCR>;
   isExisting(projectid: string, projectChangeRequestId: string): Promise<boolean>;
@@ -101,6 +102,13 @@ export class PCRRepository extends SalesforceRepositoryBase<ISalesforcePCR> impl
       Acc_Reasoning__c: pcr.reasoning,
       Acc_Status__c: this.mapStatus(pcr.status),
     });
+  }
+
+  async updatePcrItems(pcr: PCR, items: PCRItem[]) {
+    await super.updateAll(items.map(x => ({
+      Id: x.id,
+      Acc_MarkedasComplete__c: this.mapItemStatus(x.status),
+    })));
   }
 
   async createProjectChangeRequest(projectChangeRequest: ProjectChangeRequestForCreate) {

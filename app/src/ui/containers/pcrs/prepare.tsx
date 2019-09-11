@@ -12,9 +12,10 @@ import { PCRPrepareItemRoute } from "./prepareItem";
 import { PCRPrepareReasoningRoute } from "./prepareReasoning";
 import { PCRDto, PCRItemDto } from "@framework/dtos/pcrDtos";
 import { IEditorStore } from "@ui/redux";
-import { PCRDtoValidator } from "@ui/validators/pcrDtoValidator";
+import { PCRDtoValidator, PCRItemDtoValidator } from "@ui/validators/pcrDtoValidator";
 import { PCRStatus } from "@framework/entities";
 import { navigateTo } from "../../redux/actions";
+import { Result } from "@ui/validation";
 
 interface Params {
   projectId: string;
@@ -68,8 +69,8 @@ class PCRPrepareComponent extends ContainerBase<Params, Data, Callbacks> {
           </ACC.SummaryList>
         </ACC.Section>
         <ol className="app-task-list">
-          {pcr.items.map((x, i) => this.renderItem(x, i + 1))}
-          {this.renderReasoning(pcr)}
+          {pcr.items.map((x, i) => this.renderItem(x, i + 1, editor.validator.items.results[i]))}
+          {this.renderReasoning(pcr, editor.validator)}
         </ol>
         <Form.Form
           editor={editor}
@@ -106,18 +107,19 @@ class PCRPrepareComponent extends ContainerBase<Params, Data, Callbacks> {
     }, []);
   }
 
-  private renderReasoning(pcr: PCRDto) {
-    return this.renderListItem(pcr.items.length + 1, "Give more details", "Reasoning for Innovate UK", pcr.reasoningStatusName, PCRPrepareReasoningRoute.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId }));
+  private renderReasoning(pcr: PCRDto, validation: PCRDtoValidator) {
+    return this.renderListItem(pcr.items.length + 1, "Give more details", "Reasoning for Innovate UK", pcr.reasoningStatusName, PCRPrepareReasoningRoute.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId }), [validation.reasoningStatus, validation.reasoningComments]);
   }
 
-  private renderItem(item: PCRItemDto, step: number) {
-    return this.renderListItem(step, item.typeName, "Provide your files", item.statusName, PCRPrepareItemRoute.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId, itemId: item.id }));
+  private renderItem(item: PCRItemDto, step: number, validation: PCRItemDtoValidator) {
+    return this.renderListItem(step, item.typeName, "Provide your files", item.statusName, PCRPrepareItemRoute.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId, itemId: item.id }), validation.errors);
   }
 
-  private renderListItem(step: number, title: string, text: string, status: string, route: ILinkInfo) {
+  private renderListItem(step: number, title: string, text: string, status: string, route: ILinkInfo, validation: Result[]) {
     return (
       <li key={step}>
         <h2 className="app-task-list__section"><span className="app-task-list__section-number">{step}.</span>&nbsp;{title}</h2>
+        {validation.map((v) => <ACC.ValidationError error={v} key={v.key} />)}
         <ul className="app-task-list__items">
           <li className="app-task-list__item">
             <span className="app-task-list__task-name"><ACC.Link route={route}>{text}</ACC.Link></span>

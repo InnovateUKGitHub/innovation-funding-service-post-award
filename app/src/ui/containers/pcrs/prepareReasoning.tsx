@@ -12,7 +12,7 @@ import { PCRDto } from "@framework/dtos/pcrDtos";
 import { fakeDocuments } from "./fakePcrs";
 import { IEditorStore } from "@ui/redux";
 import { PCRDtoValidator } from "@ui/validators/pcrDtoValidator";
-import { PCRItemStatus, PCRStatus, } from "@framework/entities";
+import { PCRItemStatus } from "@framework/entities";
 import { navigateTo } from "../../redux/actions";
 
 interface Params {
@@ -75,18 +75,44 @@ class PCRViewReasoningComponent extends ContainerBase<Params, Data, Callbacks> {
         <ACC.Section>
           <Form.Form
             editor={editor}
-            onChange={dto => this.props.onChange(pcr.projectId, pcr.id, dto)}
-            onSubmit={() => this.props.onSave(this.props.projectId, this.props.pcrId, editor.data)}
+            onChange={dto => this.onChange(dto)}
+            onSubmit={() => this.onSave(editor.data)}
           >
-            <Form.MultilineString name="reason" label="Reason" labelHidden={true} hint={reasoningHint} qa="reason" value={m => m.reasoningComments} update={(m, v) => m.reasoningComments = v || ""} />
+            <Form.MultilineString
+              name="reason"
+              label="Reason"
+              labelHidden={true}
+              hint={reasoningHint}
+              qa="reason"
+              value={m => m.reasoningComments}
+              update={(m, v) => m.reasoningComments = v || ""}
+              validation={editor.validator.reasoningComments}
+            />
             <Form.Fieldset heading="Mark as complete">
-              <Form.Checkboxes name="reasoningStatus" options={options} value={m => m.reasoningStatus === PCRItemStatus.Complete ? [options[0]] : []} update={(m, v) => m.reasoningStatus = (v && v.some(x => x.id === "true")) ? PCRItemStatus.Complete : PCRItemStatus.Incomplete} />
+              <Form.Checkboxes
+                name="reasoningStatus"
+                options={options}
+                value={m => m.reasoningStatus === PCRItemStatus.Complete ? [options[0]] : []}
+                update={(m, v) => m.reasoningStatus = (v && v.some(x => x.id === "true")) ? PCRItemStatus.Complete : PCRItemStatus.Incomplete}
+                validation={editor.validator.reasoningStatus}
+              />
               <Form.Submit>Save and return to request</Form.Submit>
             </Form.Fieldset>
           </Form.Form>
         </ACC.Section>
       </ACC.Page>
     );
+  }
+
+  private onChange(dto: PCRDto): void {
+    this.props.onChange(this.props.projectId, this.props.pcrId, dto);
+  }
+
+  private onSave(dto: PCRDto): void {
+    if (dto.reasoningStatus === PCRItemStatus.ToDo) {
+      dto.reasoningStatus = PCRItemStatus.Incomplete;
+    }
+    this.props.onSave(this.props.projectId, this.props.pcrId, dto);
   }
 }
 

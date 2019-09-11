@@ -8,9 +8,12 @@ import * as Actions from "../../redux/actions";
 import * as Selectors from "../../redux/selectors";
 import { Pending } from "@shared/pending";
 import { fakeDocuments } from "./fakePcrs";
-import { PCRViewReasoningRoute } from "./viewReasoning";
 import { PCRDto, PCRItemDto } from "@framework/dtos/pcrDtos";
 import { PCRPrepareRoute } from "./prepare";
+import { EditorStatus,IEditorStore,  } from "@ui/redux";
+import { PCRDtoValidator } from "@ui/validators/pcrDtoValidator";
+import { PCRItemStatus } from "@framework/entities";
+import { navigateTo } from "../../redux/actions";
 
 interface Params {
   projectId: string;
@@ -23,54 +26,92 @@ interface Data {
   pcr: Pending<PCRDto>;
   pcrItem: Pending<PCRItemDto>;
   files: Pending<DocumentSummaryDto[]>;
+  editor: Pending<IEditorStore<PCRDto, PCRDtoValidator>>;
 }
 
 interface Callbacks {
+  onChange: (projectId: string, pcrId: string, dto: PCRDto) => void;
+  onSave: (projectId: string, pcrId: string, dto: PCRDto) => void;
 }
 
 class PCRPrepareItemComponent extends ContainerBase<Params, Data, Callbacks> {
   render() {
-    const combined = Pending.combine({ project: this.props.project, pcr: this.props.pcr, pcrItem: this.props.pcrItem, files: this.props.files });
+    const combined = Pending.combine({ project: this.props.project, pcr: this.props.pcr, pcrItem: this.props.pcrItem, editor: this.props.editor, files: this.props.files });
 
-    return <ACC.PageLoader pending={combined} render={x => this.renderContents(x.project, x.pcr, x.pcrItem, x.files)} />;
+    return <ACC.PageLoader pending={combined} render={x => this.renderContents(x.project, x.pcr, x.pcrItem, x.editor, x.files)} />;
   }
 
-  private renderContents(project: ProjectDto, pcr: PCRDto, pcrItem: PCRItemDto, files: DocumentSummaryDto[]) {
+  private renderTypes(pcr: PCRDto): React.ReactNode {
+    return pcr.items.map(x => x.typeName).reduce<React.ReactNode[]>((result, current, index) => {
+      if (index > 0) {
+        result.push(<br />);
+      }
+      result.push(current);
+      return result;
+    }, []);
+  }
+
+  private renderContents(project: ProjectDto, pcr: PCRDto, pcrItem: PCRItemDto, editor: IEditorStore<PCRDto, PCRDtoValidator>, files: DocumentSummaryDto[]) {
+    const Form = ACC.TypedForm<PCRItemDto>();
+
+    const options: ACC.SelectOption[] = [
+      { id: "true", value: "This is ready to submit" }
+    ];
+
+    const index = pcr.items.findIndex(x => x.id === pcrItem.id);
+
     return (
       <ACC.Page
         backLink={<ACC.BackLink route={PCRPrepareRoute.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId })}>Back to prepare project change request</ACC.BackLink>}
         pageTitle={<ACC.Projects.Title project={project} />}
         project={project}
+        error={editor.error}
+        validator={editor.validator}
       >
-        <ACC.Section title="Details">
-          <dl className="govuk-summary-list">
-            <div className="govuk-summary-list__row">
-              <dt className="govuk-summary-list__key">Type</dt>
-              <dd className="govuk-summary-list__value">{pcrItem.typeName}</dd>
-              <dd className="govuk-summary-list__actions"/>
-            </div>
-            <div className="govuk-summary-list__row">
-              <dt className="govuk-summary-list__key">Files</dt>
-              <dd className="govuk-summary-list__value"><ACC.DocumentList documents={files} qa="docs" /></dd>
-              <dd className="govuk-summary-list__actions"/>
-            </div>
-          </dl>
+        <ACC.Section>
+          <ACC.SummaryList>
+            <ACC.SummaryListItem label="Number" content={pcr.requestNumber} qa="numberRow" />
+            <ACC.SummaryListItem label="Types" content={this.renderTypes(pcr)} qa="typesRow" />
+          </ACC.SummaryList>
         </ACC.Section>
+
+        <ACC.Section>
+          <Form.Form
+            data={editor.data.items[index]}
+            isSaving={editor.status === EditorStatus.Saving}
+            onChange={dto => this.onChange(editor.data, dto)}
+            onSubmit={() => this.onSave(editor.data)}
+          >
+            <Form.Fieldset heading="Mark as complete">
+              <Form.Checkboxes
+                name="itemStatus"
+                options={options}
+                value={m => m.status === PCRItemStatus.Complete ? [options[0]] : []}
+                update={(m, v) => m.status = (v && v.some(x => x.id === "true")) ? PCRItemStatus.Complete : PCRItemStatus.Incomplete}
+                validation={editor.validator.items.results[index].status}
+              />
+              <Form.Submit>Save and return to request</Form.Submit>
+            </Form.Fieldset>
+          </Form.Form>
+        </ACC.Section>
+
       </ACC.Page>
     );
   }
 
-  private getLinkForItem(pcrItem: PCRItemDto, isLast: boolean) {
-    if(!pcrItem && !isLast) {
-      return null;
+  private onChange(dto: PCRDto, itemDto: PCRItemDto): void {
+    const index = dto.items.findIndex(x => x.id === this.props.itemId);
+    dto.items[index] = itemDto;
+    this.props.onChange(this.props.projectId, this.props.pcrId, dto);
+  }
+
+  private onSave(dto: PCRDto): void {
+    // if the status is todo and we are saving should change it to incomplete
+    const index = dto.items.findIndex(x => x.id === this.props.itemId);
+    if (dto.items[index].status === PCRItemStatus.ToDo) {
+      dto.items[index].status = PCRItemStatus.Incomplete;
     }
-    if(!pcrItem && isLast) {
-      return { label: "Reasoning", route: PCRViewReasoningRoute.getLink({pcrId: this.props.pcrId, projectId: this.props.projectId})};
-    }
-    return {
-      label: pcrItem.typeName,
-      route: PCRPrepareItemRoute.getLink({pcrId: this.props.pcrId, projectId: this.props.projectId, itemId: pcrItem.id})
-    };
+    this.props.onSave(this.props.projectId, this.props.pcrId, dto);
   }
 }
 
@@ -81,9 +122,13 @@ export const PCRPrepareItem = definition.connect({
     project: Selectors.getProject(params.projectId).getPending(state),
     pcr: Selectors.getPcr(params.projectId, params.pcrId).getPending(state),
     pcrItem: Selectors.getPcrItem(params.projectId, params.pcrId, params.itemId).getPending(state),
+    editor: Selectors.getPcrEditor(params.projectId, params.pcrId).get(state),
     files: Pending.done(fakeDocuments)
   }),
-  withCallbacks: () => ({})
+  withCallbacks: (dispatch) => ({
+    onChange: (projectId: string, pcrId: string, dto: PCRDto) => dispatch(Actions.validatePCR(projectId, pcrId, dto)),
+    onSave: (projectId: string, pcrId: string, dto: PCRDto) => dispatch(Actions.savePCR(projectId, pcrId, dto, () => dispatch(navigateTo(PCRPrepareRoute.getLink({ projectId, pcrId })))))
+  })
 });
 
 export const PCRPrepareItemRoute = definition.route({
@@ -98,10 +143,13 @@ export const PCRPrepareItemRoute = definition.route({
     Actions.loadProject(params.projectId),
     Actions.loadPcr(params.projectId, params.pcrId)
   ],
-  getTitle: () => ({
-    htmlTitle: "Project change request item",
-    displayTitle: "Project change request item"
-  }),
+  getTitle: (store, params) => {
+    const typeName = Selectors.getPcrItem(params.projectId, params.pcrId, params.itemId).getPending(store).then(x => x.typeName).data;
+    return {
+      htmlTitle: typeName ? `Prepare ${typeName}` : "Prepare project change request item",
+      displayTitle: typeName ? `Prepare ${typeName}` : "Prepare project change request item",
+    };
+  },
   container: PCRPrepareItem,
   accessControl: (auth, { projectId }, config) => config.features.pcrsEnabled && auth.forProject(projectId).hasRole(ProjectRole.ProjectManager)
 });

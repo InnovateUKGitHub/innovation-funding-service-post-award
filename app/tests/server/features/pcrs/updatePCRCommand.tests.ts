@@ -52,6 +52,7 @@ describe("UpdatePCRCommand", () => {
 
       const project = context.testData.createProject();
       const pcr = context.testData.createPCR(project, { status: from });
+      context.testData.createPCRItem(pcr);
 
       context.testData.createCurrentUserAsProjectManager(project);
 
@@ -76,6 +77,7 @@ describe("UpdatePCRCommand", () => {
 
       const project = context.testData.createProject();
       const pcr = context.testData.createPCR(project, { status, reasoningStatus: PCRItemStatus.Complete, comments: "Comments", reasoning: "Reasoning" });
+      context.testData.createPCRItem(pcr);
 
       context.testData.createCurrentUserAsProjectManager(project);
 
@@ -101,6 +103,7 @@ describe("UpdatePCRCommand", () => {
 
       const project = context.testData.createProject();
       const pcr = context.testData.createPCR(project, { status, reasoningStatus: PCRItemStatus.Complete, comments: "Comments", reasoning: "Reasoning" });
+      context.testData.createPCRItem(pcr);
 
       context.testData.createCurrentUserAsProjectManager(project);
 
@@ -113,6 +116,32 @@ describe("UpdatePCRCommand", () => {
 
       await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
     });
+
+    test("updates item status", async () => {
+      const context = new TestContext();
+
+      const project = context.testData.createProject();
+      const pcr = context.testData.createPCR(project, { status: PCRStatus.Draft, reasoningStatus: PCRItemStatus.Complete });
+      const recordTypes = context.testData.range(3, x => context.testData.createRecordType({ parent: "Acc_ProjectChangeRequest__c"}));
+      recordTypes[0].type = "Partner Withdrawal";
+      recordTypes[1].type = "Project Suspension";
+      recordTypes[2].type = "Scope Change";
+
+      recordTypes.forEach(r => context.testData.createPCRItem(pcr, r, {status : PCRItemStatus.Incomplete}));
+
+      context.testData.createCurrentUserAsProjectManager(project);
+
+      const dto = await context.runQuery(new GetPCRByIdQuery(pcr.projectId, pcr.id));
+      expect(dto.items.length).toBe(3);
+
+      dto.items[1].status = PCRItemStatus.Complete;
+
+      const command = new UpdatePCRCommand(project.Id, pcr.id, dto);
+
+      await context.runCommand(command);
+
+      expect(pcr.items.map(x => x.status)).toEqual([PCRItemStatus.Incomplete, PCRItemStatus.Complete, PCRItemStatus.Incomplete ]);
+    })
   });
 
   describe("mo updates", () => {
@@ -126,6 +155,7 @@ describe("UpdatePCRCommand", () => {
 
       const project = context.testData.createProject();
       const pcr = context.testData.createPCR(project, { status: from });
+      context.testData.createPCRItem(pcr);
 
       context.testData.createCurrentUserAsMonitoringOfficer(project);
 
@@ -145,10 +175,10 @@ describe("UpdatePCRCommand", () => {
 
     test.each(validEditStatus.map<[string, PCRStatus]>(x => [PCRStatus[x], x]))("can update when %s", async (label, status) => {
       const context = new TestContext();
-      context.logger.outputToConsole = true;
 
       const project = context.testData.createProject();
       const pcr = context.testData.createPCR(project, { status, reasoningStatus: PCRItemStatus.Complete, comments: "Comments", reasoning: "Reasoning" });
+      context.testData.createPCRItem(pcr);
 
       context.testData.createCurrentUserAsMonitoringOfficer(project);
 
@@ -188,6 +218,7 @@ describe("UpdatePCRCommand", () => {
 
     const project = context.testData.createProject();
     const pcr = context.testData.createPCR(project, { status: PCRStatus.Draft });
+    context.testData.createPCRItem(pcr);
 
     context.testData.createCurrentUserAsProjectManager(project);
 
@@ -210,6 +241,7 @@ describe("UpdatePCRCommand", () => {
 
     const project = context.testData.createProject();
     const pcr = context.testData.createPCR(project, { status: PCRStatus.Draft });
+    context.testData.createPCRItem(pcr);
 
     context.testData.createCurrentUserAsProjectManager(project);
 
@@ -227,6 +259,7 @@ describe("UpdatePCRCommand", () => {
 
     const project = context.testData.createProject();
     const pcr = context.testData.createPCR(project, { status: PCRStatus.SubmittedToMonitoringOfficer });
+    context.testData.createPCRItem(pcr);
 
     context.testData.createCurrentUserAsMonitoringOfficer(project);
 
