@@ -41,9 +41,9 @@ export const getPcrEditorForCreate = (projectId: string) => editorStoreHelper<PC
   getKey(projectId, "new")
 );
 
-export const getProjectChangeRequestDocumentOrItemDocumentEditor = (projectChangeRequestItemId: string, config: { maxFileSize: number, maxUploadFileCount: number }) => editorStoreHelper<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>(
+export const getProjectChangeRequestDocumentOrItemDocumentEditor = (projectChangeRequestItemId: string) => editorStoreHelper<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>(
   "multipleDocuments",
   () => Pending.done({ files: [] }),
-  (dto) => Pending.done(new MultipleDocumentUpdloadDtoValidator(dto, config, false)),
+  (dto, state) => Pending.done(new MultipleDocumentUpdloadDtoValidator(dto, state.config, false)),
   getKey("projectChangeRequestItem", projectChangeRequestItemId)
 );

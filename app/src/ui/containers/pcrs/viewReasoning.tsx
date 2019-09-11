@@ -10,7 +10,6 @@ import { Pending } from "@shared/pending";
 import { PCRDetailsRoute } from "./details";
 import { PCRViewItemRoute } from "./viewItem";
 import { PCRDto } from "@framework/dtos/pcrDtos";
-import { fakeDocuments } from "./fakePcrs";
 
 interface Params {
   projectId: string;
@@ -73,7 +72,7 @@ export const PCRViewReasoning = definition.connect({
   withData: (state, params) => ({
     project: Selectors.getProject(params.projectId).getPending(state),
     pcr: Selectors.getPcr(params.projectId, params.pcrId).getPending(state),
-    files: Pending.done(fakeDocuments)
+    files: Selectors.getProjectChangeRequestDocumentsOrItemDocuments(params.pcrId).getPending(state),
   }),
   withCallbacks: () => ({})
 });
@@ -87,7 +86,8 @@ export const PCRViewReasoningRoute = definition.route({
   }),
   getLoadDataActions: (params) => [
     Actions.loadProject(params.projectId),
-    Actions.loadPcr(params.projectId, params.pcrId)
+    Actions.loadPcr(params.projectId, params.pcrId),
+    Actions.loadProjectChangeRequestDocumentsOrItemDocuments(params.projectId, params.pcrId),
   ],
   getTitle: () => ({
     htmlTitle: "Project change request reasoning",

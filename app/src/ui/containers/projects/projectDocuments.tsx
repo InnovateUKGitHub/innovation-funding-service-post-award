@@ -179,7 +179,7 @@ const ProjectDocuments = container.connect({
     project: Selectors.getProject(props.projectId).getPending(state),
     partners: Selectors.findPartnersByProject(props.projectId).getPending(state),
     documents: Selectors.getProjectDocuments(props.projectId).getPending(state),
-    editor: Selectors.getProjectDocumentEditor(props.projectId, state.config).get(state),
+    editor: Selectors.getProjectDocumentEditor(props.projectId).get(state),
     maxFileSize: Selectors.getMaxFileSize(state),
     isClient: state.isClient,
     features: state.config.features
