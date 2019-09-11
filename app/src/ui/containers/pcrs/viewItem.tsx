@@ -43,18 +43,10 @@ class PCRViewItemComponent extends ContainerBase<Params, Data, Callbacks> {
         project={project}
       >
         <ACC.Section title="Details">
-          <dl className="govuk-summary-list">
-            <div className="govuk-summary-list__row">
-              <dt className="govuk-summary-list__key">Type</dt>
-              <dd className="govuk-summary-list__value">{pcrItem.typeName}</dd>
-              <dd className="govuk-summary-list__actions"/>
-            </div>
-            <div className="govuk-summary-list__row">
-              <dt className="govuk-summary-list__key">Files</dt>
-              <dd className="govuk-summary-list__value"><ACC.DocumentList documents={files} qa="docs" /></dd>
-              <dd className="govuk-summary-list__actions"/>
-            </div>
-          </dl>
+          <ACC.SummaryList qa="pcr_viewItem">
+            <ACC.SummaryListItem label="Type" content={pcrItem.typeName} qa="type"/>
+            <ACC.SummaryListItem label="Files" content={<ACC.DocumentList documents={files} qa="docs" />} qa="files"/>
+          </ACC.SummaryList>
         </ACC.Section>
         {this.renderArrows(pcr, pcrItem)}
       </ACC.Page>
