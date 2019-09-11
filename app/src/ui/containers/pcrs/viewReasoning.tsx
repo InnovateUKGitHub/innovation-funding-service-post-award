@@ -43,23 +43,11 @@ class PCRViewReasoningComponent extends ContainerBase<Params, Data, Callbacks> {
         project={project}
       >
         <ACC.Section title="Details">
-          <dl className="govuk-summary-list">
-            <div className="govuk-summary-list__row">
-              <dt className="govuk-summary-list__key">Type</dt>
-              <dd className="govuk-summary-list__value">Reasoning for Innovate UK</dd>
-              <dd className="govuk-summary-list__actions"/>
-            </div>
-            <div className="govuk-summary-list__row">
-              <dt className="govuk-summary-list__key">Comments</dt>
-              <dd className="govuk-summary-list__value">{pcr.reasoningComments}</dd>
-              <dd className="govuk-summary-list__actions"/>
-            </div>
-            <div className="govuk-summary-list__row">
-              <dt className="govuk-summary-list__key">Files</dt>
-              <dd className="govuk-summary-list__value"><ACC.DocumentList documents={files} qa="docs" /></dd>
-              <dd className="govuk-summary-list__actions"/>
-            </div>
-          </dl>
+          <ACC.SummaryList qa="pcr_reasoning">
+            <ACC.SummaryListItem label="Type" content="Reasoning for Innovate UK" qa="type"/>
+            <ACC.SummaryListItem label="Comments" content={pcr.reasoningComments} qa="comments"/>
+            <ACC.SummaryListItem label="Files" content={<ACC.DocumentList documents={files} qa="docs" />} qa="files"/>
+          </ACC.SummaryList>
         </ACC.Section>
         <ACC.NavigationArrows previousLink={{label: lastItem.typeName, route: PCRViewItemRoute.getLink({projectId: this.props.projectId, pcrId: this.props.pcrId, itemId: lastItem.id })}}/>
       </ACC.Page>
