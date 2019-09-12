@@ -1,14 +1,13 @@
-import React, { ReactNode } from "react";
+import React from "react";
 
 import { ContainerBase, ReduxContainer } from "../containerBase";
-import { ILinkInfo, ProjectDto, ProjectRole } from "@framework/types";
+import { ProjectDto, ProjectRole } from "@framework/types";
 
 import * as ACC from "../../components";
 import * as Actions from "../../redux/actions";
 import * as Selectors from "../../redux/selectors";
-import { LoadingStatus, Pending } from "@shared/pending";
+import { Pending } from "@shared/pending";
 import { PCRDetailsRoute } from "./details";
-import { fakeDocuments } from "./fakePcrs";
 import { PCRViewReasoningRoute } from "./viewReasoning";
 import { PCRDto, PCRItemDto } from "@framework/dtos/pcrDtos";
 
@@ -81,7 +80,7 @@ export const PCRViewItem = definition.connect({
     project: Selectors.getProject(params.projectId).getPending(state),
     pcr: Selectors.getPcr(params.projectId, params.pcrId).getPending(state),
     pcrItem: Selectors.getPcrItem(params.projectId, params.pcrId, params.itemId).getPending(state),
-    files: Pending.done(fakeDocuments)
+    files: Selectors.getProjectChangeRequestDocumentsOrItemDocuments(params.itemId).getPending(state),
   }),
   withCallbacks: () => ({})
 });
@@ -96,7 +95,8 @@ export const PCRViewItemRoute = definition.route({
   }),
   getLoadDataActions: (params) => [
     Actions.loadProject(params.projectId),
-    Actions.loadPcr(params.projectId, params.pcrId)
+    Actions.loadPcr(params.projectId, params.pcrId),
+    Actions.loadProjectChangeRequestDocumentsOrItemDocuments(params.projectId, params.itemId)
   ],
   getTitle: () => ({
     htmlTitle: "Project change request item",
