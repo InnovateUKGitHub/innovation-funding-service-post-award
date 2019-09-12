@@ -83,9 +83,13 @@ class PCRsDashboardComponent extends ContainerBase<Params, Data, Callbacks> {
   renderLinks(pcr: PCRSummaryDto): React.ReactNode {
     return (
       <React.Fragment>
-        <ACC.Link route={PCRDetailsRoute.getLink({pcrId: pcr.id, projectId: pcr.projectId})}>View</ACC.Link>
+        <span data-qa="pcrViewLink">
+          <ACC.Link route={PCRDetailsRoute.getLink({pcrId: pcr.id, projectId: pcr.projectId})}>View</ACC.Link>
+        </span>
         <br/>
-        <ACC.Link route={PCRPrepareRoute.getLink({pcrId: pcr.id, projectId: pcr.projectId})}>Prepare</ACC.Link>
+        <span data-qa="pcrPrepareLink">
+          <ACC.Link route={PCRPrepareRoute.getLink({pcrId: pcr.id, projectId: pcr.projectId})}>Prepare</ACC.Link>
+        </span>
       </React.Fragment>
     );
   }
