@@ -42,7 +42,7 @@ class PCRsDashboardComponent extends ContainerBase<Params, Data, Callbacks> {
         pageTitle={<ACC.Projects.Title project={project} />}
         project={project}
       >
-        <ACC.Section>
+        <ACC.Section qa="pcr-table">
           {this.renderTable(active, "pcrs-active")}
           <ACC.Link route={PCRCreateRoute.getLink({ projectId: this.props.projectId })} className="govuk-button">Start a new request</ACC.Link>
         </ACC.Section>
