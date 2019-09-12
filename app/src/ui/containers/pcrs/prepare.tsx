@@ -16,6 +16,8 @@ import { PCRDtoValidator, PCRItemDtoValidator } from "@ui/validators/pcrDtoValid
 import { PCRStatus } from "@framework/entities";
 import { navigateTo } from "../../redux/actions";
 import { Result } from "@ui/validation";
+import { Link } from "../../components";
+import { ProjectChangeRequestAddTypeRoute } from "@ui/containers";
 
 interface Params {
   projectId: string;
@@ -65,7 +67,7 @@ class PCRPrepareComponent extends ContainerBase<Params, Data, Callbacks> {
         <ACC.Section title="Details">
           <ACC.SummaryList>
             <ACC.SummaryListItem label="Number" content={pcr.requestNumber} qa="numberRow" />
-            <ACC.SummaryListItem label="Types" content={this.renderTypes(pcr)} action={<a className="govuk-link" href="#type">Add type</a>} qa="typesRow" />
+            <ACC.SummaryListItem label="Types" content={this.renderTypes(pcr)} action={<Link route={ProjectChangeRequestAddTypeRoute.getLink({ projectId: this.props.projectId, projectChangeRequestId: this.props.pcrId })}>Add Type</Link>} qa="typesRow" />
           </ACC.SummaryList>
         </ACC.Section>
         <ol className="app-task-list">

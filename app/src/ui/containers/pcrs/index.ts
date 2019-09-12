@@ -1,4 +1,5 @@
 export * from "./create";
+export * from "./addType";
 export * from "./dashboard";
 export * from "./details";
 export * from "./itemUpload";
