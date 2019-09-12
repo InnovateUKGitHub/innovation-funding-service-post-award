@@ -10,10 +10,8 @@ import { Pending } from "@shared/pending";
 import { PCRPrepareRoute } from "./prepare";
 import { PCRDto } from "@framework/dtos/pcrDtos";
 import { IEditorStore } from "@ui/redux";
-import { PCRDtoValidator } from "@ui/validators/pcrDtoValidator";
 import { PCRItemStatus } from "@framework/entities";
-import { navigateTo } from "../../redux/actions";
-import { MultipleDocumentUpdloadDtoValidator } from "@ui/validators";
+import { MultipleDocumentUpdloadDtoValidator, PCRDtoValidator } from "@ui/validators";
 
 interface Params {
   projectId: string;
@@ -74,8 +72,8 @@ class PCRViewReasoningComponent extends ContainerBase<Params, Data, Callbacks> {
         backLink={<ACC.BackLink route={PCRPrepareRoute.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId })}>Back to prepare project change request</ACC.BackLink>}
         pageTitle={<ACC.Projects.Title project={project} />}
         project={project}
-        validator={editor.validator}
-        error={editor.error}
+        validator={[editor.validator, documentsEditor.validator]}
+        error={editor.error || documentsEditor.error}
       >
         <ACC.Renderers.Messages messages={this.props.messages} />
         <ACC.Section>
@@ -172,15 +170,16 @@ export const PCRPrepareReasoning = definition.connect({
   }),
   withCallbacks: (dispatch) => ({
     onChange: (projectId: string, pcrId: string, dto: PCRDto) => dispatch(Actions.validatePCR(projectId, pcrId, dto)),
-    onSave: (projectId: string, pcrId: string, dto: PCRDto) => dispatch(Actions.savePCR(projectId, pcrId, dto, () => dispatch(navigateTo(PCRPrepareRoute.getLink({ projectId, pcrId }))))),
-    onFilesChange: (pcrId, dto) => dispatch(Actions.updateProjectChangeRequestDocumentOrItemDocumentEditor(pcrId, dto, false)),
-    onFilesSave: (projectId, pcrId, dto) => {
+    onSave: (projectId: string, pcrId: string, dto: PCRDto) => dispatch(Actions.savePCR(projectId, pcrId, dto, () => dispatch(Actions.navigateTo(PCRPrepareRoute.getLink({ projectId, pcrId }))))),
+    onFilesChange: (pcrId, dto) => {
       dispatch(Actions.removeMessages());
+      dispatch(Actions.updateProjectChangeRequestDocumentOrItemDocumentEditor(pcrId, dto, false));
+    },
+    onFilesSave: (projectId, pcrId, dto) => {
       const successMessage = dto.files.length === 1 ? `Your document has been uploaded.` : `${dto.files.length} documents have been uploaded.`;
       dispatch(Actions.uploadProjectChangeRequestDocumentOrItemDocument(projectId, pcrId, dto, () => dispatch(Actions.loadProjectChangeRequestDocumentsOrItemDocuments(projectId, pcrId)), successMessage));
     },
     onFileDelete: (projectId, pcrId, dto) => {
-      dispatch(Actions.removeMessages());
       dispatch(Actions.deleteProjectChangeRequestDocumentOrItemDocument(projectId, pcrId, dto, () => {
         dispatch(Actions.messageSuccess("Your document has been removed."));
         dispatch(Actions.loadProjectChangeRequestDocumentsOrItemDocuments(projectId, pcrId));

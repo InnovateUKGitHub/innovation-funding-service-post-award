@@ -18,8 +18,8 @@ import { IEditorStore } from "../../redux/reducers";
 import { DocumentUploadDtoValidator } from "../../validators/documentUploadValidator";
 import { DateTime } from "luxon";
 import { Results } from "../../validation/results";
-import { ProjectDashboardRoute } from "@ui/containers";
 import { getFileSize } from "@framework/util/filesize";
+import { filterEmpty } from "@framework/util/arrayHelpers";
 
 export interface ClaimDashboardPageParams {
   projectId: string;
@@ -169,14 +169,14 @@ class Component extends ContainerBaseWithState<ClaimDashboardPageParams, Data, C
     const claimsWindow = !!currentClaim && currentClaim.status === ClaimStatus.DRAFT ? <Acc.Claims.ClaimWindow periodEnd={currentClaim.periodEndDate} /> : null;
 
     const error = (editor && editor.error) || (deleteEditor && deleteEditor.error);
-    const validator = (editor && editor.validator) || (deleteEditor && deleteEditor.validator);
+    const validators = filterEmpty([editor && editor.validator, deleteEditor && deleteEditor.validator]);
 
     return (
       <Acc.Page
         pageTitle={<Acc.Projects.Title project={project}/>}
         backLink={<Acc.Projects.ProjectBackLink project={project}/>}
         error={error}
-        validator={validator}
+        validator={validators}
         project={project}
       >
         <Acc.Renderers.Messages messages={this.props.messages}/>

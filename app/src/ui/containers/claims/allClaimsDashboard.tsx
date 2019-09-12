@@ -11,6 +11,7 @@ import { IEditorStore } from "@ui/redux";
 import { DocumentUploadDtoValidator } from "@ui/validators";
 import { Results } from "@ui/validation";
 import { getFileSize } from "@framework/util/filesize";
+import { filterEmpty } from "@framework/util/arrayHelpers";
 
 export interface AllClaimsDashboardParams {
   projectId: string;
@@ -85,7 +86,7 @@ class Component extends ContainerBaseWithState<AllClaimsDashboardParams, Data, C
     const deleteEditor = this.props.deleteEditor && this.props.deleteEditor.data;
 
     const error = (editor && editor.error) || (deleteEditor && deleteEditor.error);
-    const validator = (editor && editor.validator) || (deleteEditor && deleteEditor.validator);
+    const validators = filterEmpty([editor && editor.validator,  deleteEditor && deleteEditor.validator]);
 
     const isFC = (projectDetails.roles & ProjectRole.FinancialContact) !== ProjectRole.Unknown;
 
@@ -93,7 +94,7 @@ class Component extends ContainerBaseWithState<AllClaimsDashboardParams, Data, C
       <Acc.Page
         pageTitle={<Acc.Projects.Title project={projectDetails}/>}
         backLink={<Acc.Projects.ProjectBackLink project={projectDetails}/>}
-        validator={validator}
+        validator={validators}
         error={error}
         project={projectDetails}
       >
