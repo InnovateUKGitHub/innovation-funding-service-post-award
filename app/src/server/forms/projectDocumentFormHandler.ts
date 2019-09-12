@@ -24,7 +24,7 @@ export class ProjectDocumentUploadHandler extends MultipleFileFormHandlerBase<Pr
   }
 
   protected getStoreInfo(params: ProjectDocumentPageParams, dto: MultipleDocumentUploadDto): { key: string; store: string; } {
-    return getProjectDocumentEditor(params.projectId, Configuration);
+    return getProjectDocumentEditor(params.projectId);
   }
 
   protected createValidationResult(params: ProjectDocumentPageParams, dto: MultipleDocumentUploadDto): MultipleDocumentUpdloadDtoValidator {

@@ -18,10 +18,10 @@ export const getProjectDocuments = (projectId: string) => dataStoreHelper(docume
 
 export const getProjectChangeRequestDocumentsOrItemDocuments = (projectChangeRequestIdOrItemId: string) => dataStoreHelper(documentStore, getKey("projectChangeRequestItem", projectChangeRequestIdOrItemId));
 
-export const getProjectDocumentEditor = (projectId: string, config: { maxFileSize: number, maxUploadFileCount: number }) => editorStoreHelper<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>(
+export const getProjectDocumentEditor = (projectId: string) => editorStoreHelper<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>(
   "multipleDocuments",
   () => Pending.done({ files: [] }),
-  (dto) => Pending.done(new MultipleDocumentUpdloadDtoValidator(dto, config, false)),
+  (dto, store) => Pending.done(new MultipleDocumentUpdloadDtoValidator(dto, store.config, false)),
   getKey("project", projectId)
 );
 

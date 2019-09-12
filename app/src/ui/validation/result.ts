@@ -1,7 +1,6 @@
 import { Results } from "./results";
 
 interface ResultsInternal {
-    _showValidationErrors: boolean;
     add(result: Result): void;
 }
 
