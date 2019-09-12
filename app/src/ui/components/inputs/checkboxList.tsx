@@ -1,12 +1,11 @@
 import * as React from "react";
 import { BaseInput } from "./baseInput";
 import classNames from "classnames";
-import { HtmlAttributes } from "csstype";
-import { objectExpression } from "@babel/types";
 
 interface CheckboxOptionProps {
   id: string;
   value: string;
+  disabled?: boolean;
   qa?: string;
 }
 
@@ -38,7 +37,7 @@ export class CheckboxList extends BaseInput<CheckboxListProps, {}> {
           onChange={e => this.onChange(item, e.target.checked)}
           checked={selected}
           aria-checked={selected}
-          disabled={this.props.disabled}
+          disabled={this.props.disabled || item.disabled}
         />
         <label className="govuk-label govuk-checkboxes__label" htmlFor={`${name}_${item.id}`}>{item.value}</label>
       </div>
