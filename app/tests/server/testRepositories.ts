@@ -431,13 +431,17 @@ class PCRTestRepository extends TestRepository<Entities.PCR> implements Reposito
 
   async createProjectChangeRequest(projectChangeRequest: Entities.ProjectChangeRequestForCreate): Promise<string> {
     const id = `ProjectChangeRequest${(this.Items.length + 1)}`;
-    await super.insertOne({id, ...projectChangeRequest} as Entities.PCR);
+    await super.insertOne({ id, ...projectChangeRequest } as Entities.PCR);
     return id;
   }
 
   isExisting(projectId: string, projectChangeRequestId: string): Promise<boolean> {
-    const data = super.filterOne(x => x.projectId === projectId  && x.id === projectChangeRequestId);
+    const data = super.filterOne(x => x.projectId === projectId && x.id === projectChangeRequestId);
     return Promise.resolve(!!data);
+  }
+
+  delete(item: Entities.PCR) {
+    return super.deleteItem(item);
   }
 }
 

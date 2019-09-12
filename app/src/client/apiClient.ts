@@ -56,7 +56,9 @@ const clientApi: IApiClient = {
     getAll: (params) => ajax(`/api/pcrs?projectId=${params.projectId}`),
     get: (params) => ajax(`/api/pcrs/${params.projectId}/${params.id}`),
     getTypes: (params) => ajax(`/api/pcrs/types`),
-    update: (params) => ajaxPut(`/api/pcrs/${params.projectId}/${params.id}`, params.pcr)
+    update: (params) => ajaxPut(`/api/pcrs/${params.projectId}/${params.id}`, params.pcr),
+    delete: (params) => ajaxDelete(`/api/pcrs/${params.projectId}/${params.id}`)
+
   },
   projects: {
     get: (params) => ajaxJson(`/api/projects/${params.projectId}`),
@@ -119,6 +121,14 @@ const ajaxPost = <T>(url: string, body: {} = {}, opts?: RequestInit) => {
   return ajaxJson<T>(url, options);
 };
 
+const ajaxDelete = <T>(url: string, opts?: RequestInit): Promise<T> => {
+  const options: RequestInit = Object.assign({}, opts, {
+    method: "DELETE",
+  });
+
+  return ajaxJson<T>(url, options);
+};
+
 const ajaxPostFile = <T>(url: string, document: DocumentUploadDto) => {
   const formData = new FormData();
   formData.append("attachment", (document.file as ClientFileWrapper).file);
@@ -144,7 +154,7 @@ const ajaxPostFormData = <T>(url: string, formData: FormData, opts?: RequestInit
 };
 
 // tslint:disable: no-identical-functions
-const ajaxPut = <T>(url: string, body: {} = {}, opts?: RequestInit) => {
+const ajaxPut = <T>(url: string, body: {}, opts?: RequestInit) => {
   const options: RequestInit = Object.assign({}, opts, {
     method: "PUT",
     body: JSON.stringify(body)
