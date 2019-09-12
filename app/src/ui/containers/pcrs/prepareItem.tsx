@@ -7,13 +7,11 @@ import * as ACC from "../../components";
 import * as Actions from "../../redux/actions";
 import * as Selectors from "../../redux/selectors";
 import { Pending } from "@shared/pending";
-import { PCRDto, PCRItemDto } from "@framework/dtos/pcrDtos";
+import { PCRDto, PCRItemDto } from "@framework/dtos";
 import { PCRPrepareRoute } from "./prepare";
 import { EditorStatus, IEditorStore, } from "@ui/redux";
-import { PCRDtoValidator } from "@ui/validators/pcrDtoValidator";
 import { PCRItemStatus } from "@framework/entities";
-import { navigateTo } from "../../redux/actions";
-import { MultipleDocumentUpdloadDtoValidator } from "@ui/validators";
+import { MultipleDocumentUpdloadDtoValidator, PCRDtoValidator } from "@ui/validators";
 
 interface Params {
   projectId: string;
@@ -77,8 +75,8 @@ class PCRPrepareItemComponent extends ContainerBase<Params, Data, Callbacks> {
         backLink={<ACC.BackLink route={PCRPrepareRoute.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId })}>Back to prepare project change request</ACC.BackLink>}
         pageTitle={<ACC.Projects.Title project={project} />}
         project={project}
-        error={editor.error}
-        validator={editor.validator}
+        error={editor.error || documentsEditor.error}
+        validator={[editor.validator, documentsEditor.validator]}
       >
         <ACC.Renderers.Messages messages={this.props.messages} />
 
@@ -174,15 +172,16 @@ export const PCRPrepareItem = definition.connect({
   }),
   withCallbacks: (dispatch) => ({
     onChange: (projectId: string, pcrId: string, dto: PCRDto) => dispatch(Actions.validatePCR(projectId, pcrId, dto)),
-    onSave: (projectId: string, pcrId: string, dto: PCRDto) => dispatch(Actions.savePCR(projectId, pcrId, dto, () => dispatch(navigateTo(PCRPrepareRoute.getLink({ projectId, pcrId }))))),
-    onFilesChange: (pcrId, itemId, dto) => dispatch(Actions.updateProjectChangeRequestDocumentOrItemDocumentEditor(itemId, dto, false)),
-    onFilesSave: (projectId, pcrId, itemId, dto) => {
+    onSave: (projectId: string, pcrId: string, dto: PCRDto) => dispatch(Actions.savePCR(projectId, pcrId, dto, () => dispatch(Actions.navigateTo(PCRPrepareRoute.getLink({ projectId, pcrId }))))),
+    onFilesChange: (pcrId, itemId, dto) => {
       dispatch(Actions.removeMessages());
+      dispatch(Actions.updateProjectChangeRequestDocumentOrItemDocumentEditor(itemId, dto, false));
+    },
+    onFilesSave: (projectId, pcrId, itemId, dto) => {
       const successMessage = dto.files.length === 1 ? `Your document has been uploaded.` : `${dto.files.length} documents have been uploaded.`;
       dispatch(Actions.uploadProjectChangeRequestDocumentOrItemDocument(projectId, itemId, dto, () => dispatch(Actions.loadProjectChangeRequestDocumentsOrItemDocuments(projectId, itemId)), successMessage));
     },
     onFileDelete: (projectId, pcrId, itemId, dto) => {
-      dispatch(Actions.removeMessages());
       dispatch(Actions.deleteProjectChangeRequestDocumentOrItemDocument(projectId, itemId, dto, () => {
         dispatch(Actions.messageSuccess("Your document has been removed."));
         dispatch(Actions.loadProjectChangeRequestDocumentsOrItemDocuments(projectId, itemId));

@@ -1,24 +1,22 @@
 import React from "react";
-import { Results } from "../validation/results";
-import { NestedResult } from "../validation/nestedResult";
-import { Result } from "../validation/result";
+import { IValidationResult, NestedResult, Result, Results } from "../validation";
+import { flatten } from "@framework/util/arrayHelpers";
 
 interface Props {
-  validation?: Results<{}> | null;
+  validation?: IValidationResult | null;
   compressed?: boolean;
 }
 
 export const ValidationSummary: React.SFC<Props> = ({ validation, compressed }) => {
   const results: Result[] = [];
-  if(validation && validation.showValidationErrors && validation.errors) {
-      validation.errors.forEach(x => {
+  if(validation && validation.errors) {
+      validation.errors.filter(x => !x.isValid && x.showValidationErrors).forEach(x => {
         // nested results have collection of items that may have errored
         // if we are not compressed we want to show each of them
         // need to find all invalid children and flatten them
         if(x instanceof NestedResult && compressed !== true && x.results.length) {
-            const childErrors = x.results.map(y => y as Results<{}>).filter(y => !y.isValid).map(y => y.errors);
-            const flattendErrors = childErrors.reduce((a, b) => a.concat(...b), []);
-            flattendErrors.forEach(e => results.push(e));
+            const childErrors = flatten((x as NestedResult<Results<{}>>).results.filter(y => !y.isValid).map(y => y.errors));
+            childErrors.forEach(e => results.push(e));
         }
         else {
             results.push(x);

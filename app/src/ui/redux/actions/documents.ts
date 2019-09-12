@@ -8,19 +8,19 @@ import { DocumentDescription } from "@framework/constants";
 import { scrollToTheTopSmoothly } from "@framework/util/windowHelpers";
 import { getProjectChangeRequestDocumentsOrItemDocuments, getProjectDocuments } from "@ui/redux/selectors";
 
-type uploadProjectDocumentActions = Actions.AsyncThunk<void, Actions.DataLoadAction | Actions.EditorAction | Actions.messageSuccess>;
+type uploadProjectDocumentActions = Actions.AsyncThunk<void, Actions.DataLoadAction | Actions.EditorAction | Actions.messageSuccess | Actions.removeMessages>;
 
 export function loadClaimDetailDocuments(claimDetailKey: ClaimDetailKey) {
   return Actions.conditionalLoad(
     Selectors.getClaimDetailDocuments(claimDetailKey.partnerId, claimDetailKey.periodId, claimDetailKey.costCategoryId),
-    params => ApiClient.documents.getClaimDetailDocuments({ claimDetailKey, ...params})
+    params => ApiClient.documents.getClaimDetailDocuments({ claimDetailKey, ...params })
   );
 }
 
 export function loadIarDocuments(projectId: string, partnerId: string, periodId: number) {
   return Actions.conditionalLoad(
     Selectors.getClaimDocuments(partnerId, periodId),
-    params => ApiClient.documents.getClaimDocuments({ projectId, partnerId, periodId, description: DocumentDescription.IAR, ...params})
+    params => ApiClient.documents.getClaimDocuments({ projectId, partnerId, periodId, description: DocumentDescription.IAR, ...params })
   );
 }
 
@@ -40,14 +40,14 @@ export function updateProjectChangeRequestDocumentOrItemDocumentEditor(projectCh
 export function loadProjectChangeRequestDocumentsOrItemDocuments(projectId: string, projectChangeRequestIdOrItemId: string) {
   return Actions.conditionalLoad(
     Selectors.getProjectChangeRequestDocumentsOrItemDocuments(projectChangeRequestIdOrItemId),
-    params => ApiClient.documents.getProjectChangeRequestDocumentsOrItemDocuments({projectId, projectChangeRequestIdOrItemId, ...params})
+    params => ApiClient.documents.getProjectChangeRequestDocumentsOrItemDocuments({ projectId, projectChangeRequestIdOrItemId, ...params })
   );
 }
 
 export function loadProjectDocuments(projectId: string) {
   return Actions.conditionalLoad(
     Selectors.getProjectDocuments(projectId),
-    params => ApiClient.documents.getProjectDocuments({projectId, ...params})
+    params => ApiClient.documents.getProjectDocuments({ projectId, ...params })
   );
 }
 
@@ -65,6 +65,8 @@ export function updateProjectDocumentEditor(projectId: string, dto: MultipleDocu
 
 export function uploadProjectChangeRequestDocumentOrItemDocument(projectId: string, projectChangeRequestIdOrItemId: string, dto: MultipleDocumentUploadDto, onComplete: () => void, message: string): uploadProjectDocumentActions {
   return (dispatch, getState) => {
+    dispatch(Actions.removeMessages());
+
     const state = getState();
     const selector = Selectors.getProjectChangeRequestDocumentOrItemDocumentEditor(projectChangeRequestIdOrItemId);
     const validation = updateProjectChangeRequestDocumentOrItemDocumentEditor(projectChangeRequestIdOrItemId, dto, true)(dispatch, getState, null);
@@ -74,9 +76,9 @@ export function uploadProjectChangeRequestDocumentOrItemDocument(projectId: stri
       return Promise.resolve();
     }
 
-    dispatch(Actions.handleEditorSubmit(selector.key,selector.store, dto, validation));
+    dispatch(Actions.handleEditorSubmit(selector.key, selector.store, dto, validation));
 
-    return ApiClient.documents.uploadProjectChangeRequestDocumentOrItemDocument({projectId, projectChangeRequestIdOrItemId, documents: dto, user: state.user})
+    return ApiClient.documents.uploadProjectChangeRequestDocumentOrItemDocument({ projectId, projectChangeRequestIdOrItemId, documents: dto, user: state.user })
       .then(() => {
         const dataStoreSelector = getProjectChangeRequestDocumentsOrItemDocuments(projectChangeRequestIdOrItemId);
         dispatch(Actions.dataLoadAction(dataStoreSelector.key, dataStoreSelector.store, LoadingStatus.Stale, undefined));
@@ -93,11 +95,13 @@ export function uploadProjectChangeRequestDocumentOrItemDocument(projectId: stri
 
 export function uploadProjectDocument(projectId: string, dto: MultipleDocumentUploadDto, onComplete: () => void, message: string): uploadProjectDocumentActions {
   return (dispatch, getState) => {
+    dispatch(Actions.removeMessages());
+
     const state = getState();
     const selector = Selectors.getProjectDocumentEditor(projectId);
     const validation = updateProjectDocumentEditor(projectId, dto, true)(dispatch, getState, null);
 
-    if(!validation.isValid) {
+    if (!validation.isValid) {
       scrollToTheTopSmoothly();
       return Promise.resolve();
     }
@@ -137,6 +141,8 @@ export function updateClaimDetailDocumentEditor(claimDetailKey: ClaimDetailKey, 
 export function uploadClaimDetailDocument(claimDetailKey: ClaimDetailKey, dto: MultipleDocumentUploadDto, onComplete: () => void, message: string
 ): uploadProjectDocumentActions {
   return (dispatch, getState) => {
+    dispatch(Actions.removeMessages());
+
     const state = getState();
     const selector = Selectors.getClaimDetailDocumentEditor(claimDetailKey, state.config);
     const docsSelector = Selectors.getClaimDetailDocuments(claimDetailKey.partnerId, claimDetailKey.periodId, claimDetailKey.costCategoryId);
@@ -164,7 +170,7 @@ export function uploadClaimDetailDocument(claimDetailKey: ClaimDetailKey, dto: M
 }
 
 // update editor with validation
-export function updateClaimDocumentEditor(claimKey: ClaimKey, dto: DocumentUploadDto, showErrors?: boolean): Actions.SyncThunk<Results<DocumentUploadDto>, Actions.UpdateEditorAction> {
+export function updateClaimDocumentEditor(claimKey: ClaimKey, dto: DocumentUploadDto, showErrors?: boolean): Actions.SyncThunk<Results<DocumentUploadDto>, Actions.UpdateEditorAction | Actions.removeMessages> {
   return (dispatch, getState) => {
     const state = getState();
     const selector = Selectors.getClaimDocumentEditor(claimKey, state.config.maxFileSize);
@@ -180,6 +186,8 @@ export function updateClaimDocumentEditor(claimKey: ClaimKey, dto: DocumentUploa
 
 export function uploadClaimDocument(claimKey: ClaimKey, dto: DocumentUploadDto, onComplete: () => void): uploadProjectDocumentActions {
   return (dispatch, getState) => {
+    dispatch(Actions.removeMessages());
+
     const state = getState();
     const selector = Selectors.getClaimDocumentEditor(claimKey, state.config.maxFileSize);
     const docsSelector = Selectors.getClaimDocuments(claimKey.partnerId, claimKey.periodId);
@@ -208,6 +216,8 @@ export function uploadClaimDocument(claimKey: ClaimKey, dto: DocumentUploadDto, 
 
 export function uploadLeadPartnerClaimDocument(claimKey: ClaimKey, dto: DocumentUploadDto, onComplete: () => void): uploadProjectDocumentActions {
   return (dispatch, getState) => {
+    dispatch(Actions.removeMessages());
+
     const state = getState();
     const selector = Selectors.getClaimDocumentEditor(claimKey, state.config.maxFileSize);
     const docsSelector = Selectors.getClaimDocuments(claimKey.partnerId, claimKey.periodId);
@@ -236,6 +246,8 @@ export function uploadLeadPartnerClaimDocument(claimKey: ClaimKey, dto: Document
 
 export function deleteProjectChangeRequestDocumentOrItemDocument(projectId: string, projectChangeRequestIdOrItemId: string, dto: DocumentSummaryDto, onComplete: () => void): Actions.AsyncThunk<void> {
   return (dispatch, getState) => {
+    dispatch(Actions.removeMessages());
+
     const state = getState();
     const docsSelector = Selectors.getProjectChangeRequestDocumentsOrItemDocuments(projectChangeRequestIdOrItemId);
     const selector = Selectors.getProjectChangeRequestDocumentOrItemDocumentDeleteEditor(state, projectChangeRequestIdOrItemId);
@@ -243,18 +255,20 @@ export function deleteProjectChangeRequestDocumentOrItemDocument(projectId: stri
     dispatch(Actions.handleEditorSubmit(selector.key, selector.store, dto, null));
     dispatch(Actions.dataLoadAction(docsSelector.key, docsSelector.store, LoadingStatus.Stale, undefined));
 
-    return ApiClient.documents.deleteProjectChangeRequestDocumentOrItemDocument({documentId: dto.id, projectId, projectChangeRequestIdOrItemId, user: state.user})
+    return ApiClient.documents.deleteProjectChangeRequestDocumentOrItemDocument({ documentId: dto.id, projectId, projectChangeRequestIdOrItemId, user: state.user })
       .then(() => {
         dispatch(Actions.handleEditorSuccess(selector.key, selector.store));
         onComplete();
       }).catch((e) => {
-        dispatch(Actions.handleEditorError({id: selector.key, store: selector.store, dto, validation: null, error: e}));
+        dispatch(Actions.handleEditorError({ id: selector.key, store: selector.store, dto, validation: null, error: e }));
       });
   };
 }
 
 export function deleteClaimDetailDocument(claimDetailKey: ClaimDetailKey, dto: DocumentSummaryDto, onComplete: () => void): Actions.AsyncThunk<void> {
   return (dispatch, getState) => {
+    dispatch(Actions.removeMessages());
+
     const state = getState();
     const docsSelector = Selectors.getClaimDetailDocuments(claimDetailKey.partnerId, claimDetailKey.periodId, claimDetailKey.costCategoryId);
     const selector = Selectors.getClaimDetailDocumentDeleteEditor(state, claimDetailKey);
@@ -278,13 +292,13 @@ export function deleteClaimDocument(claimKey: ClaimKey, dto: DocumentSummaryDto,
     const selector = Selectors.getDocumentDeleteEditor(dto);
     const docsSelector = Selectors.getClaimDocuments(claimKey.partnerId, claimKey.periodId);
 
+    dispatch(Actions.removeMessages());
     dispatch(Actions.handleEditorSubmit(selector.key, selector.store, dto, null));
     dispatch(Actions.dataLoadAction(docsSelector.key, docsSelector.store, LoadingStatus.Stale, undefined));
 
-    return ApiClient.documents.deleteClaimDocument({documentId: dto.id, claimKey, user: state.user})
+    return ApiClient.documents.deleteClaimDocument({ documentId: dto.id, claimKey, user: state.user })
       .then(() => {
         dispatch(Actions.handleEditorSuccess(selector.key, selector.store));
-        dispatch(Actions.removeMessages());
         onComplete();
       }).catch((e: any) => {
         dispatch(Actions.handleEditorError({ id: selector.key, store: selector.store, dto, validation: null, error: e }));
