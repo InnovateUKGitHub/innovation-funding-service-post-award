@@ -74,7 +74,7 @@ class PCRCreateComponent extends ContainerBase<CreateProjectChangeRequestParams,
               hint="You can select more than one."
               options={options}
               name="types"
-              validation={pcrEditor.validator.types}
+              validation={pcrEditor.validator.items}
               value={x => selected}
               update={(model, selectedValue) => {
                 model.items = itemTypes
