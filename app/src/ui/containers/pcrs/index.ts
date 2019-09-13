@@ -7,5 +7,6 @@ export * from "./itemUpload";
 export * from "./prepare";
 export * from "./prepareItem";
 export * from "./prepareReasoning";
+export * from "./review";
 export * from "./viewItem";
 export * from "./viewReasoning";

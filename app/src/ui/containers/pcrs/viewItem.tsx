@@ -8,8 +8,11 @@ import * as Actions from "../../redux/actions";
 import * as Selectors from "../../redux/selectors";
 import { Pending } from "@shared/pending";
 import { PCRDetailsRoute } from "./details";
-import { PCRViewReasoningRoute } from "./viewReasoning";
+import { PCRReviewReasoningRoute, PCRViewReasoningRoute } from "./viewReasoning";
 import { PCRDto, PCRItemDto } from "@framework/dtos/pcrDtos";
+import { State as RouteState } from "router5";
+import { RootState } from "@ui/redux";
+import { PCRReviewRoute } from "./review";
 
 interface Params {
   projectId: string;
@@ -22,6 +25,7 @@ interface Data {
   pcr: Pending<PCRDto>;
   pcrItem: Pending<PCRItemDto>;
   files: Pending<DocumentSummaryDto[]>;
+  isReviewing: boolean;
 }
 
 interface Callbacks {
@@ -35,9 +39,14 @@ class PCRViewItemComponent extends ContainerBase<Params, Data, Callbacks> {
   }
 
   private renderContents(project: ProjectDto, pcr: PCRDto, pcrItem: PCRItemDto, files: DocumentSummaryDto[]) {
+    const backLink = this.props.isReviewing ?
+      <ACC.BackLink route={PCRReviewRoute.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId })}>Back to review project change request</ACC.BackLink> :
+      <ACC.BackLink route={PCRDetailsRoute.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId })}>Back to project change request details</ACC.BackLink>
+      ;
+
     return (
       <ACC.Page
-        backLink={<ACC.BackLink route={PCRDetailsRoute.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId })}>Back to project change request details</ACC.BackLink>}
+        backLink={backLink}
         pageTitle={<ACC.Projects.Title project={project} />}
         project={project}
       >
@@ -63,9 +72,22 @@ class PCRViewItemComponent extends ContainerBase<Params, Data, Callbacks> {
     if(!pcrItem && !isLast) {
       return null;
     }
+
+    if(!pcrItem && isLast && this.props.isReviewing) {
+      return { label: "Reasoning", route: PCRReviewReasoningRoute.getLink({pcrId: this.props.pcrId, projectId: this.props.projectId})};
+    }
+
     if(!pcrItem && isLast) {
       return { label: "Reasoning", route: PCRViewReasoningRoute.getLink({pcrId: this.props.pcrId, projectId: this.props.projectId})};
     }
+
+    if(this.props.isReviewing) {
+      return {
+        label: pcrItem.typeName,
+        route: PCRReviewItemRoute.getLink({pcrId: this.props.pcrId, projectId: this.props.projectId, itemId: pcrItem.id})
+      };
+    }
+
     return {
       label: pcrItem.typeName,
       route: PCRViewItemRoute.getLink({pcrId: this.props.pcrId, projectId: this.props.projectId, itemId: pcrItem.id})
@@ -75,33 +97,58 @@ class PCRViewItemComponent extends ContainerBase<Params, Data, Callbacks> {
 
 const definition = ReduxContainer.for<Params, Data, Callbacks>(PCRViewItemComponent);
 
+const withData = (isReviewing: boolean) => (state: RootState, params: Params) => ({
+  project: Selectors.getProject(params.projectId).getPending(state),
+  pcr: Selectors.getPcr(params.projectId, params.pcrId).getPending(state),
+  pcrItem: Selectors.getPcrItem(params.projectId, params.pcrId, params.itemId).getPending(state),
+  files: Selectors.getProjectChangeRequestDocumentsOrItemDocuments(params.itemId).getPending(state),
+  isReviewing
+});
+
+const getParams = (route: RouteState): Params => ({
+  projectId: route.params.projectId,
+  pcrId: route.params.pcrId,
+  itemId: route.params.itemId
+});
+
+const loadDataActions = (params: Params) => ([
+  Actions.loadProject(params.projectId),
+  Actions.loadPcr(params.projectId, params.pcrId),
+  Actions.loadProjectChangeRequestDocumentsOrItemDocuments(params.projectId, params.itemId)
+]);
+
 export const PCRViewItem = definition.connect({
-  withData: (state, params) => ({
-    project: Selectors.getProject(params.projectId).getPending(state),
-    pcr: Selectors.getPcr(params.projectId, params.pcrId).getPending(state),
-    pcrItem: Selectors.getPcrItem(params.projectId, params.pcrId, params.itemId).getPending(state),
-    files: Selectors.getProjectChangeRequestDocumentsOrItemDocuments(params.itemId).getPending(state),
-  }),
+  withData: withData(false),
   withCallbacks: () => ({})
 });
 
 export const PCRViewItemRoute = definition.route({
   routeName: "pcrViewItem",
   routePath: "/projects/:projectId/pcrs/:pcrId/details/item/:itemId",
-  getParams: (route) => ({
-    projectId: route.params.projectId,
-    pcrId: route.params.pcrId,
-    itemId: route.params.itemId
-  }),
-  getLoadDataActions: (params) => [
-    Actions.loadProject(params.projectId),
-    Actions.loadPcr(params.projectId, params.pcrId),
-    Actions.loadProjectChangeRequestDocumentsOrItemDocuments(params.projectId, params.itemId)
-  ],
+  getParams,
+  getLoadDataActions: loadDataActions,
   getTitle: () => ({
     htmlTitle: "Project change request item",
     displayTitle: "Project change request item"
   }),
   container: PCRViewItem,
   accessControl: (auth, { projectId }, config) => config.features.pcrsEnabled && auth.forProject(projectId).hasAnyRoles(ProjectRole.ProjectManager, ProjectRole.MonitoringOfficer)
+});
+
+export const PCRReviewItem = definition.connect({
+  withData: withData(true),
+  withCallbacks: () => ({})
+});
+
+export const PCRReviewItemRoute = definition.route({
+  routeName: "pcrReviewItem",
+  routePath: "/projects/:projectId/pcrs/:pcrId/review/item/:itemId",
+  getParams,
+  getLoadDataActions: loadDataActions,
+  getTitle: () => ({
+    htmlTitle: "Review project change request item",
+    displayTitle: "Review project change request item"
+  }),
+  container: PCRReviewItem,
+  accessControl: (auth, { projectId }, config) => config.features.pcrsEnabled && auth.forProject(projectId).hasRole(ProjectRole.MonitoringOfficer)
 });
