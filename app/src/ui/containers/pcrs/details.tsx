@@ -42,7 +42,7 @@ class PCRDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
         <ACC.Section title="Details">
           <ACC.SummaryList qa="pcr_details">
             <ACC.SummaryListItem label="Number" content={pcr.requestNumber} qa="numberRow" />
-            <ACC.SummaryListItem label="Types" content={this.renderTypes(pcr)} action={<a className="govuk-link" href="#type">Add type</a>} qa="typesRow"/>
+            <ACC.SummaryListItem label="Types" content={this.renderTypes(pcr)} qa="typesRow"/>
           </ACC.SummaryList>
         </ACC.Section>
         <ol className="app-task-list">

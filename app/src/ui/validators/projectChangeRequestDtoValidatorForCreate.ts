@@ -11,7 +11,7 @@ export class ProjectChangeRequestDtoValidatorForCreate extends Results<PCRDto> {
     super(model, showValidationErrors);
   }
 
-  types = Validation.requiredChild(
+  items = Validation.requiredChild(
     this,
     this.model.items,
     q => new ProjectChangeRequestItemValidatorForCreate(q, this.showValidationErrors, this.recordTypes),
