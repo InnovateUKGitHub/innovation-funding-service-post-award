@@ -1,3 +1,9 @@
+import { ProjectChangeRequestItemDocumentDeleteHandler } from "@server/forms/projectChangeRequest/projectChangeRequestItemDocumentDeleteHandler";
+import { ProjectChangeRequestItemDocumentUploadHandler } from "@server/forms/projectChangeRequest/projectChangeRequestItemDocumentUploadHandler";
+import { ProjectChangeRequestItemUpdateHandler } from "@server/forms/projectChangeRequest/projectChangeRequestItemUpdateHandler";
+import { ProjectChangeRequestReasoningDocumentDeleteHandler } from "@server/forms/projectChangeRequest/projectChangeRequestReasoningDocumentDeleteHandler";
+import { ProjectChangeRequestReasoningDocumentUploadHandler } from "@server/forms/projectChangeRequest/projectChangeRequestReasoningDocumentUploadHandler";
+import { ProjectChangeRequestReasoningUpdateHandler } from "@server/forms/projectChangeRequest/projectChangeRequestReasoningUpdateHandler";
 import { BadRequestHandler } from "./badRequestHandler";
 import express from "express";
 import { ClaimForecastFormHandler } from "./claimForecastFormHandler";
@@ -41,6 +47,12 @@ const handlers: IFormHandler[] = [
   new MonitoringReportDeleteFormHandler(),
   new MonitoringReportPrepareFormHandler(),
   new ProjectChangeRequestCreateFormHandler(),
+  new ProjectChangeRequestItemDocumentDeleteHandler(),
+  new ProjectChangeRequestItemDocumentUploadHandler(),
+  new ProjectChangeRequestItemUpdateHandler(),
+  new ProjectChangeRequestReasoningDocumentDeleteHandler(),
+  new ProjectChangeRequestReasoningDocumentUploadHandler(),
+  new ProjectChangeRequestReasoningUpdateHandler(),
   new ProjectDocumentUploadHandler(),
 ];
 

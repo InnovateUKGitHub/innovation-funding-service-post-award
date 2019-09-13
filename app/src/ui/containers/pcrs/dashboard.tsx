@@ -10,9 +10,9 @@ import { ContainerBase, ReduxContainer } from "../containerBase";
 import { PCRDetailsRoute } from "./details";
 import { PCRCreateRoute } from "./create";
 import { PCRSummaryDto } from "@framework/dtos/pcrDtos";
-import { PCRPrepareRoute } from "./prepare";
 import { PCRDeleteRoute } from "./delete";
 import { PCRReviewRoute } from "./review";
+import { ProjectChangeRequestPrepareRoute } from "./prepare";
 
 interface Params {
   projectId: string;
@@ -89,7 +89,7 @@ class PCRsDashboardComponent extends ContainerBase<Params, Data, Callbacks> {
     const prepareStatus = [PCRStatus.Draft, PCRStatus.QueriedByMonitoringOfficer, PCRStatus.QueriedByInnovateUK];
 
     if(prepareStatus.indexOf(pcr.status) >= 0 && project.roles & ProjectRole.ProjectManager) {
-      links.push({route: PCRPrepareRoute.getLink({pcrId: pcr.id, projectId: pcr.projectId}), text: "Prepare", qa:"pcrPrepareLink"});
+      links.push({route: ProjectChangeRequestPrepareRoute.getLink({pcrId: pcr.id, projectId: pcr.projectId}), text: "Prepare", qa:"pcrPrepareLink"});
     }
     else if(pcr.status === PCRStatus.SubmittedToMonitoringOfficer && project.roles & ProjectRole.ProjectManager) {
       links.push({route: PCRReviewRoute.getLink({pcrId: pcr.id, projectId: pcr.projectId}), text: "Review", qa:"pcrReviewLink"});

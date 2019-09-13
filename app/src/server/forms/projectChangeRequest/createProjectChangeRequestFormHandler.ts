@@ -1,5 +1,5 @@
 import { IFormBody, IFormButton, StandardFormHandlerBase } from "@server/forms/formHandlerBase";
-import { CreateProjectChangeRequestParams, PCRCreateRoute, PCRPrepareRoute, } from "@ui/containers";
+import { CreateProjectChangeRequestParams, PCRCreateRoute, ProjectChangeRequestPrepareRoute, } from "@ui/containers";
 import { PCRDto, PCRItemDto } from "@framework/dtos";
 import { IContext, ILinkInfo } from "@framework/types";
 import { getPcrEditorForCreate } from "@ui/redux/selectors";
@@ -32,7 +32,7 @@ export class ProjectChangeRequestCreateFormHandler extends StandardFormHandlerBa
 
   protected async run(context: IContext, params: CreateProjectChangeRequestParams, button: IFormButton, dto: PCRDto): Promise<ILinkInfo> {
     const id = await context.runCommand(new CreateProjectChangeRequestCommand(params.projectId, dto));
-    return PCRPrepareRoute.getLink({projectId: params.projectId, pcrId: id});
+    return ProjectChangeRequestPrepareRoute.getLink({projectId: params.projectId, pcrId: id});
   }
 
   protected getStoreInfo(params: CreateProjectChangeRequestParams): { key: string; store: string; } {
