@@ -1,5 +1,5 @@
 import { PCRDto, PCRItemDto, PCRItemTypeDto, ProjectRole } from "@framework/dtos";
-import { Results } from "../validation/results";
+import { Result, Results } from "../validation";
 import * as Validation from "./common";
 import { PCRItemStatus, PCRStatus } from "@framework/entities";
 
@@ -48,11 +48,15 @@ export class PCRDtoValidator extends Results<PCRDto> {
 
   private maxCommentsLength = 1000;
 
-  private validateComments() {
+  private validateComments(): Result {
     const isPM = !!(this.role & ProjectRole.ProjectManager);
     const isMO = !!(this.role & ProjectRole.MonitoringOfficer);
     if ((isPM && this.projectManagerCanEdit) || (isMO && this.monitoringOfficerCanEdit)) {
-      return Validation.maxLength(this, this.model.comments, this.maxCommentsLength, `Comments can be a maximum of ${this.maxCommentsLength} characters`);
+      const statusRequiringComments = isMO ? [PCRStatus.SubmittedToInnovationLead, PCRStatus.QueriedByMonitoringOfficer] : [];
+      return Validation.all(this,
+        () => statusRequiringComments.indexOf(this.model.status) >= 0 ? Validation.required(this, this.model.comments, "Comments are required") : Validation.valid(this),
+        () => Validation.maxLength(this, this.model.comments, this.maxCommentsLength, `Comments can be a maximum of ${this.maxCommentsLength} characters`),
+      );
     }
     return Validation.isTrue(this, this.model.comments === this.original.comments, "Cannot update comments");
   }
@@ -76,7 +80,7 @@ export class PCRDtoValidator extends Results<PCRDto> {
     }
 
     return Validation.all(this,
-      () => Validation.permitedValues(this, this.model.status, permittedStatus, `Cannot update status`),
+      () => Validation.permitedValues(this, this.model.status, permittedStatus, `Set a valid status`),
     );
   }
 

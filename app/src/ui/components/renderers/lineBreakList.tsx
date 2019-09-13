@@ -5,13 +5,14 @@ interface Props {
 }
 
 export const LineBreakList: React.FunctionComponent<Props> = ({ items }) => {
-  let separator: ReactNode | null = null;
   return (
     <React.Fragment>
       {
         items.reduce<ReactNode[]>((result, item, index) => {
-          result.push([separator, item]);
-          separator = <br key={`separator${index}`}/>;
+          if(index > 0) {
+            result.push(<br key={`separator${index}`}/>);
+          }
+          result.push(item);
           return result;
         }, [])
       }
