@@ -65,7 +65,7 @@ class PCRPrepareComponent extends ContainerBase<Params, Data, Callbacks> {
         error={editor.error}
       >
         <ACC.Section title="Details">
-          <ACC.SummaryList>
+          <ACC.SummaryList qa="pcrDetails">
             <ACC.SummaryListItem label="Number" content={pcr.requestNumber} qa="numberRow" />
             <ACC.SummaryListItem label="Types" content={this.renderTypes(pcr)} action={<Link route={ProjectChangeRequestAddTypeRoute.getLink({ projectId: this.props.projectId, projectChangeRequestId: this.props.pcrId })}>Add Type</Link>} qa="typesRow" />
           </ACC.SummaryList>

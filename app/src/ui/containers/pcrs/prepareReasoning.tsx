@@ -77,7 +77,7 @@ class PCRViewReasoningComponent extends ContainerBase<Params, Data, Callbacks> {
       >
         <ACC.Renderers.Messages messages={this.props.messages} />
         <ACC.Section>
-          <ACC.SummaryList>
+          <ACC.SummaryList qa="pcrDetails">
             <ACC.SummaryListItem label="Number" content={pcr.requestNumber} qa="numberRow" />
             <ACC.SummaryListItem label="Types" content={this.renderTypes(pcr)} qa="typesRow" />
           </ACC.SummaryList>
