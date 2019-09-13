@@ -19,6 +19,7 @@ export interface IPCRRepository {
   getAllByProjectId(projectId: string): Promise<PCR[]>;
   getById(projectId: string, id: string): Promise<PCR>;
   isExisting(projectid: string, projectChangeRequestId: string): Promise<boolean>;
+  delete(pcr: PCR): Promise<void>;
 }
 
 export interface ISalesforcePCR {
@@ -128,6 +129,10 @@ export class PCRRepository extends SalesforceRepositoryBase<ISalesforcePCR> impl
       Acc_Project_Participant__c: x.projectId,
     })));
     return id;
+  }
+
+  async delete(item: PCR) {
+    return super.deleteAll([item.id, ... item.items.map(x => x.id)]);
   }
 
   private mapStatus(status: PCRStatus): string {

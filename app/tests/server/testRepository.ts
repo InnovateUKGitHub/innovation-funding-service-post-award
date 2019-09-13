@@ -1,4 +1,5 @@
 import {Updatable} from "../../src/server/repositories/salesforceRepositoryBase";
+import { NotFoundError } from "@server/features/common";
 
 export abstract class TestRepository<T> {
   Items: T[] = [];
@@ -10,7 +11,7 @@ export abstract class TestRepository<T> {
         resolve(found);
       }
       else {
-        reject(new Error("NOT FOUND"));
+        reject(new NotFoundError("NOT FOUND"));
       }
     });
   }
