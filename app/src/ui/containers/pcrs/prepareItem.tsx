@@ -8,12 +8,12 @@ import * as Actions from "../../redux/actions";
 import * as Selectors from "../../redux/selectors";
 import { Pending } from "@shared/pending";
 import { PCRDto, PCRItemDto } from "@framework/dtos";
-import { PCRPrepareRoute } from "./prepare";
+import { ProjectChangeRequestPrepareRoute } from "./prepare";
 import { EditorStatus, IEditorStore, } from "@ui/redux";
 import { PCRItemStatus } from "@framework/entities";
 import { MultipleDocumentUpdloadDtoValidator, PCRDtoValidator } from "@ui/validators";
 
-interface Params {
+export interface ProjectChangeRequestPrepareItemParams {
   projectId: string;
   pcrId: string;
   itemId: string;
@@ -36,7 +36,7 @@ interface Callbacks {
   onFileDelete: (projectId: string, pcrId: string, itemId: string, dto: DocumentSummaryDto) => void;
 }
 
-class PCRPrepareItemComponent extends ContainerBase<Params, Data, Callbacks> {
+class PCRPrepareItemComponent extends ContainerBase<ProjectChangeRequestPrepareItemParams, Data, Callbacks> {
   render() {
     const combined = Pending.combine({
       project: this.props.project,
@@ -69,10 +69,9 @@ class PCRPrepareItemComponent extends ContainerBase<Params, Data, Callbacks> {
     ];
 
     const index = pcr.items.findIndex(x => x.id === pcrItem.id);
-
     return (
       <ACC.Page
-        backLink={<ACC.BackLink route={PCRPrepareRoute.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId })}>Back to prepare project change request</ACC.BackLink>}
+        backLink={<ACC.BackLink route={ProjectChangeRequestPrepareRoute.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId })}>Back to prepare project change request</ACC.BackLink>}
         pageTitle={<ACC.Projects.Title project={project} />}
         project={project}
         error={editor.error || documentsEditor.error}
@@ -106,7 +105,7 @@ class PCRPrepareItemComponent extends ContainerBase<Params, Data, Callbacks> {
                 validation={documentsEditor.validator.files}
               />
             </UploadForm.Fieldset>
-            <UploadForm.Submit styling="Secondary">Upload</UploadForm.Submit>
+            <UploadForm.Button name="uploadFile">Upload</UploadForm.Button>
           </UploadForm.Form>
         </ACC.Section>
         <ACC.Section title="Files uploaded">
@@ -159,7 +158,7 @@ class PCRPrepareItemComponent extends ContainerBase<Params, Data, Callbacks> {
   }
 }
 
-const definition = ReduxContainer.for<Params, Data, Callbacks>(PCRPrepareItemComponent);
+const definition = ReduxContainer.for<ProjectChangeRequestPrepareItemParams, Data, Callbacks>(PCRPrepareItemComponent);
 
 export const PCRPrepareItem = definition.connect({
   withData: (state, params) => ({
@@ -172,7 +171,7 @@ export const PCRPrepareItem = definition.connect({
   }),
   withCallbacks: (dispatch) => ({
     onChange: (projectId: string, pcrId: string, dto: PCRDto) => dispatch(Actions.validatePCR(projectId, pcrId, dto)),
-    onSave: (projectId: string, pcrId: string, dto: PCRDto) => dispatch(Actions.savePCR(projectId, pcrId, dto, () => dispatch(Actions.navigateTo(PCRPrepareRoute.getLink({ projectId, pcrId }))))),
+    onSave: (projectId: string, pcrId: string, dto: PCRDto) => dispatch(Actions.savePCR(projectId, pcrId, dto, () => dispatch(Actions.navigateTo(ProjectChangeRequestPrepareRoute.getLink({ projectId, pcrId }))))),
     onFilesChange: (pcrId, itemId, dto) => {
       dispatch(Actions.removeMessages());
       dispatch(Actions.updateProjectChangeRequestDocumentOrItemDocumentEditor(itemId, dto, false));
@@ -190,8 +189,8 @@ export const PCRPrepareItem = definition.connect({
   })
 });
 
-export const PCRPrepareItemRoute = definition.route({
-  routeName: "pcrPrepareItem",
+export const ProjectChangeRequestPrepareItemRoute = definition.route({
+  routeName: "projectChangeRequestPrepareItem",
   routePath: "/projects/:projectId/pcrs/:pcrId/prepare/item/:itemId",
   getParams: (route) => ({
     projectId: route.params.projectId,

@@ -7,13 +7,13 @@ import * as ACC from "../../components";
 import * as Actions from "../../redux/actions";
 import * as Selectors from "../../redux/selectors";
 import { Pending } from "@shared/pending";
-import { PCRPrepareRoute } from "./prepare";
+import { ProjectChangeRequestPrepareRoute } from "./prepare";
 import { PCRDto } from "@framework/dtos/pcrDtos";
 import { IEditorStore } from "@ui/redux";
 import { PCRItemStatus } from "@framework/entities";
 import { MultipleDocumentUpdloadDtoValidator, PCRDtoValidator } from "@ui/validators";
 
-interface Params {
+export interface ProjectChangeRequestPrepareReasoningParams {
   projectId: string;
   pcrId: string;
 }
@@ -34,7 +34,7 @@ interface Callbacks {
   onFileDelete: (projectId: string, pcrId: string, dto: DocumentSummaryDto) => void;
 }
 
-class PCRViewReasoningComponent extends ContainerBase<Params, Data, Callbacks> {
+class PCRViewReasoningComponent extends ContainerBase<ProjectChangeRequestPrepareReasoningParams, Data, Callbacks> {
   render() {
     const combined = Pending.combine({
       project: this.props.project,
@@ -69,7 +69,7 @@ class PCRViewReasoningComponent extends ContainerBase<Params, Data, Callbacks> {
 
     return (
       <ACC.Page
-        backLink={<ACC.BackLink route={PCRPrepareRoute.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId })}>Back to prepare project change request</ACC.BackLink>}
+        backLink={<ACC.BackLink route={ProjectChangeRequestPrepareRoute.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId })}>Back to prepare project change request</ACC.BackLink>}
         pageTitle={<ACC.Projects.Title project={project} />}
         project={project}
         validator={[editor.validator, documentsEditor.validator]}
@@ -102,7 +102,7 @@ class PCRViewReasoningComponent extends ContainerBase<Params, Data, Callbacks> {
                 validation={documentsEditor.validator.files}
               />
             </UploadForm.Fieldset>
-            <UploadForm.Submit styling="Secondary">Upload</UploadForm.Submit>
+            <UploadForm.Button name="uploadFile">Upload</UploadForm.Button>
           </UploadForm.Form>
         </ACC.Section>
         <ACC.Section title="Files uploaded">
@@ -115,7 +115,7 @@ class PCRViewReasoningComponent extends ContainerBase<Params, Data, Callbacks> {
             onSubmit={() => this.onSave(editor.data)}
           >
             <PCRForm.MultilineString
-              name="reason"
+              name="reasoningComments"
               label="Reason"
               labelHidden={true}
               hint={reasoningHint}
@@ -158,7 +158,7 @@ class PCRViewReasoningComponent extends ContainerBase<Params, Data, Callbacks> {
   }
 }
 
-const definition = ReduxContainer.for<Params, Data, Callbacks>(PCRViewReasoningComponent);
+const definition = ReduxContainer.for<ProjectChangeRequestPrepareReasoningParams, Data, Callbacks>(PCRViewReasoningComponent);
 
 export const PCRPrepareReasoning = definition.connect({
   withData: (state, params) => ({
@@ -170,7 +170,7 @@ export const PCRPrepareReasoning = definition.connect({
   }),
   withCallbacks: (dispatch) => ({
     onChange: (projectId: string, pcrId: string, dto: PCRDto) => dispatch(Actions.validatePCR(projectId, pcrId, dto)),
-    onSave: (projectId: string, pcrId: string, dto: PCRDto) => dispatch(Actions.savePCR(projectId, pcrId, dto, () => dispatch(Actions.navigateTo(PCRPrepareRoute.getLink({ projectId, pcrId }))))),
+    onSave: (projectId: string, pcrId: string, dto: PCRDto) => dispatch(Actions.savePCR(projectId, pcrId, dto, () => dispatch(Actions.navigateTo(ProjectChangeRequestPrepareRoute.getLink({ projectId, pcrId }))))),
     onFilesChange: (pcrId, dto) => {
       dispatch(Actions.removeMessages());
       dispatch(Actions.updateProjectChangeRequestDocumentOrItemDocumentEditor(pcrId, dto, false));
@@ -188,8 +188,8 @@ export const PCRPrepareReasoning = definition.connect({
   })
 });
 
-export const PCRPrepareReasoningRoute = definition.route({
-  routeName: "pcrPrepareReasoning",
+export const ProjectChangeRequestPrepareReasoningRoute = definition.route({
+  routeName: "projectChangeRequestPrepareReasoning",
   routePath: "/projects/:projectId/pcrs/:pcrId/prepare/reasoning",
   getParams: (route) => ({
     projectId: route.params.projectId,
