@@ -3,14 +3,14 @@ import cn from "classnames";
 
 interface ListProps {
   noBorders?: boolean;
-  qa?: string;
+  qa: string;
 }
 
 interface ItemProps {
   label: React.ReactNode;
   content: React.ReactNode;
   action?: React.ReactNode;
-  qa?: string;
+  qa: string;
 }
 export const SummaryList: React.FunctionComponent<ListProps> = (props) => {
   const classNames = cn({

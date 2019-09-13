@@ -9,11 +9,11 @@ export const summaryListGuide: IGuide = {
       comments: "Renders information in a summary list, with action",
       example: `
         <SummaryList>
-          <SummaryListItem label="Name" content="Sarah Philips" action={<a href="#Name">Change</a>} />
+          <SummaryListItem label="Name" content="Sarah Philips" action={<a href="#Name">Change</a>} qa="dob"/>
         </SummaryList>`,
       render: () => (
-        <SummaryList>
-          <SummaryListItem label="Name" content="Sarah Philips" action={<a href="#Name">Change</a>} />
+        <SummaryList qa="list-example">
+          <SummaryListItem label="Name" content="Sarah Philips" action={<a href="#Name">Change</a>} qa="dob"/>
         </SummaryList>
       )
     },
@@ -21,12 +21,12 @@ export const summaryListGuide: IGuide = {
       name: "Single, with no action",
       comments: "Renders information in a summary list, with no action",
       example: `
-        <SummaryList>
+        <SummaryList qa="list-example">
           <SummaryListItem label="Date of birth" content="5 January 1978" />
         </SummaryList>`,
       render: () => (
-        <SummaryList>
-          <SummaryListItem label="Date of birth" content="5 January 1978" />
+        <SummaryList qa="list-example">
+          <SummaryListItem label="Date of birth" content="5 January 1978" qa="dob"/>
         </SummaryList>
       )
     },
@@ -34,12 +34,12 @@ export const summaryListGuide: IGuide = {
       name: "Single, with no action, no borders",
       comments: "Renders information in a summary list, with no action or borders",
       example: `
-        <SummaryList noBorders={true}>
-          <SummaryListItem label="Contact details" content="07700 900457"/>
+        <SummaryList noBorders={true} qa="list-example">
+          <SummaryListItem label="Contact details" content="07700 900457" qa="contact"/>
         </SummaryList>`,
       render: () => (
-        <SummaryList noBorders={true}>
-          <SummaryListItem label="Contact details" content="07700 900457" />
+        <SummaryList noBorders={true} qa="list-example">
+          <SummaryListItem label="Contact details" content="07700 900457" qa="contact"/>
         </SummaryList>
       )
     },
@@ -47,16 +47,16 @@ export const summaryListGuide: IGuide = {
       name: "Multiple, with actions",
       comments: "Renders multiple sets of information in a summary list",
       example: `
-        <SummaryList>
-          <SummaryListItem label="Name" content="Sarah Philips" action={<a href="#ChangeName">Change name</a>} />
-          <SummaryListItem label="Date of birth" content="5 January 1978" action={<a href="#ChangeBirth">Change date of birth</a>} />
-          <SummaryListItem label="Contact information" content="72 Guild Street" action={<a href="#ChangeContact">Change contact information</a>} />
+        <SummaryList qa="list-example">
+          <SummaryListItem label="Name" content="Sarah Philips" qa="name" action={<a href="#ChangeName">Change name</a>} />
+          <SummaryListItem label="Date of birth" content="5 January 1978" qa="dob" action={<a href="#ChangeBirth">Change date of birth</a>} />
+          <SummaryListItem label="Contact information" content="72 Guild Street" qa="contact" action={<a href="#ChangeContact">Change contact information</a>} />
         </SummaryList>`,
       render: () => (
-        <SummaryList>
-          <SummaryListItem label="Name" content="Sarah Philips" action={<a href="#ChangeName">Change name</a>} />
-          <SummaryListItem label="Date of birth" content="5 January 1978" action={<a href="#ChangeBirth">Change date of birth</a>} />
-          <SummaryListItem label="Contact information" content="72 Guild Street" action={<a href="#ChangeContact">Change contact information</a>} />
+        <SummaryList qa="list-example">
+          <SummaryListItem label="Name" content="Sarah Philips" qa="name" action={<a href="#ChangeName">Change name</a>} />
+          <SummaryListItem label="Date of birth" content="5 January 1978" qa="dob" action={<a href="#ChangeBirth">Change date of birth</a>} />
+          <SummaryListItem label="Contact information" content="72 Guild Street" qa="contact" action={<a href="#ChangeContact">Change contact information</a>} />
         </SummaryList>
       )
     }
