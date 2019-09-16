@@ -27,7 +27,10 @@ export const getPcrEditor = (projectId: string, id: string) => editorStoreHelper
   (store) => getPcr(projectId, id).getPending(store),
   (dto, store) => {
     const projectRole = new Authorisation(store.user.roleInfo).forProject(projectId).getRoles();
-    return getPcr(projectId, id).getPending(store).then(original => new PCRDtoValidator(dto, projectRole, original, false));
+    return Pending.combine({
+      original: getPcr(projectId, id).getPending(store),
+      recordTypes: getAllPcrTypes().getPending(store)
+    }).then(({original, recordTypes}) => new PCRDtoValidator(dto, projectRole, original, recordTypes, false));
   },
   getKey(projectId, id)
 );

@@ -1,10 +1,10 @@
-import { PCRDto, PCRItemDto, ProjectRole } from "@framework/dtos";
+import { PCRDto, PCRItemDto, PCRItemTypeDto, ProjectRole } from "@framework/dtos";
 import { Results } from "../validation/results";
 import * as Validation from "./common";
 import { PCRItemStatus, PCRStatus } from "@framework/entities";
 
 export class PCRDtoValidator extends Results<PCRDto> {
-  constructor(model: PCRDto, private role: ProjectRole, private original: PCRDto, showValidationErrors: boolean) {
+  constructor(model: PCRDto, private role: ProjectRole, private original: PCRDto, private readonly recordTypes: PCRItemTypeDto[], showValidationErrors: boolean) {
     super(model, showValidationErrors);
   }
 
@@ -54,14 +54,14 @@ export class PCRDtoValidator extends Results<PCRDto> {
     if ((isPM && this.projectManagerCanEdit) || (isMO && this.monitoringOfficerCanEdit)) {
       return Validation.maxLength(this, this.model.comments, this.maxCommentsLength, `Comments can be a maximum of ${this.maxCommentsLength} characters`);
     }
-    return Validation.isTrue(this, this.model.comments === this.original.comments, "Cannnot update comments");
+    return Validation.isTrue(this, this.model.comments === this.original.comments, "Cannot update comments");
   }
 
   private validateReasoningComments() {
     if (this.role & ProjectRole.ProjectManager && this.projectManagerCanEdit) {
       return Validation.maxLength(this, this.model.reasoningComments, this.maxCommentsLength, `Reasoning can be a maximum of ${this.maxCommentsLength} characters`);
     }
-    return Validation.isTrue(this, this.model.reasoningComments === this.original.reasoningComments, "Cannnot update reasoning");
+    return Validation.isTrue(this, this.model.reasoningComments === this.original.reasoningComments, "Cannot update reasoning");
   }
 
   private validateStatus() {
@@ -76,7 +76,7 @@ export class PCRDtoValidator extends Results<PCRDto> {
     }
 
     return Validation.all(this,
-      () => Validation.permitedValues(this, this.model.status, permittedStatus, `Cannnot update status`),
+      () => Validation.permitedValues(this, this.model.status, permittedStatus, `Cannot update status`),
     );
   }
 
@@ -93,7 +93,13 @@ export class PCRDtoValidator extends Results<PCRDto> {
     );
   }
 
-  items = Validation.requiredChild(this, this.model.items, item => new PCRItemDtoValidator(item, this.role, this.model.status, this.showValidationErrors));
+  items = Validation.requiredChild(
+    this,
+    this.model.items,
+      item => new PCRItemDtoValidator(item, this.role, this.model.status, this.recordTypes, this.showValidationErrors),
+    Validation.hasNoDuplicates(this, (this.model.items || []).map(x => x.recordTypeId), "No duplicate items allowed"),
+   "You must select at least one of the types"
+  );
 
   comments = this.validateComments();
   status = this.validateStatus();
@@ -102,7 +108,7 @@ export class PCRDtoValidator extends Results<PCRDto> {
 }
 
 export class PCRItemDtoValidator extends Results<PCRItemDto> {
-  constructor(model: PCRItemDto, private role: ProjectRole, private pcrStatus: PCRStatus, showValidationErrors: boolean) {
+  constructor(model: PCRItemDto, private role: ProjectRole, private pcrStatus: PCRStatus, private readonly recordTypes: PCRItemTypeDto[], showValidationErrors: boolean) {
     super(model, showValidationErrors);
   }
 
@@ -120,4 +126,8 @@ export class PCRItemDtoValidator extends Results<PCRItemDto> {
   }
 
   status = this.validateStatus();
+
+  type = Validation.isTrue(this, this.recordTypes
+    .map(x => x.recordTypeId)
+    .indexOf(this.model.recordTypeId) >= 0, "Not a valid change request item");
 }

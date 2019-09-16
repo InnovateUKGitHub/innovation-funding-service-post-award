@@ -86,7 +86,7 @@ class PCRCreateComponent extends ContainerBase<ProjectChangeRequestAddTypeParams
               }}
             />
           </PCRForm.Fieldset>
-          {/*<PCRForm.Submit>Add types</PCRForm.Submit>*/}
+          <PCRForm.Submit>Add types</PCRForm.Submit>
         </PCRForm.Form>
         <ACC.Link styling="SecondaryButton" route={PCRsDashboardRoute.getLink({ projectId: this.props.projectId })}>Cancel</ACC.Link>
       </React.Fragment>

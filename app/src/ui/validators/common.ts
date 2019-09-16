@@ -42,6 +42,11 @@ export function exactLength(results: Results<{}>, value: string, length: number,
     return isTrue(results, (!value) || value.length === length, message || `Must be exactly ${length} characters`);
 }
 
+export function hasNoDuplicates<T>(results: Results<{}>, values: T[], message: string) {
+  const hasDuplicate = !!values.find((val, i) => values.indexOf(val) !== i);
+  return isFalse(results, hasDuplicate, message);
+}
+
 export function alphanumeric(results: Results<{}>, value: string, message?: string) {
     const regex = new RegExp(/^[a-z0-9]+$/i);
     return isTrue(results, (!value) || regex.test(value), message || "Only  numbers and letters allowed");
