@@ -6,7 +6,6 @@ import * as Actions from "@ui/redux/actions/common";
 import { scrollToTheTopSmoothly } from "@framework/util";
 import { LoadingStatus } from "@shared/pending";
 import { PCRDtoValidator } from "@ui/validators/pcrDtoValidator";
-import * as Selectors from "@ui/redux/selectors";
 import { ProjectChangeRequestDtoValidatorForCreate } from "@ui/validators/projectChangeRequestDtoValidatorForCreate";
 import { Authorisation } from "@framework/types";
 
@@ -35,7 +34,8 @@ export function validatePCR(projectId: string, pcrId: string, dto: PCRDto, showE
 
     const projectRoles = new Authorisation(state.user.roleInfo).forProject(projectId).getRoles();
     const original = getPcr(projectId, pcrId).get(state);
-    const validator = new PCRDtoValidator(dto, projectRoles, original.data, showErrors);
+    const itemTypes = getAllPcrTypes().get(state).data;
+    const validator = new PCRDtoValidator(dto, projectRoles, original.data, itemTypes, showErrors);
 
     dispatch(Actions.updateEditorAction(selector.key, selector.store, dto, validator));
     return validator;
@@ -79,8 +79,8 @@ export function validateProjectChangeRequestForCreate(projectId: string, dto: PC
       const current = state.editors[selector.store][selector.key];
       showErrors = current && current.validator.showValidationErrors || false;
     }
-    const itemTypes = Selectors.getAllPcrTypes().getPending(state).data;
-    const validator = new ProjectChangeRequestDtoValidatorForCreate(dto, itemTypes!, showErrors);
+    const itemTypes = getAllPcrTypes().get(state).data;
+    const validator = new ProjectChangeRequestDtoValidatorForCreate(dto, itemTypes, showErrors);
 
     dispatch(Actions.updateEditorAction(selector.key, selector.store, dto, validator));
     return validator;

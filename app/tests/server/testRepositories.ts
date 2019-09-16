@@ -429,9 +429,25 @@ class PCRTestRepository extends TestRepository<Entities.PCR> implements Reposito
     return Promise.resolve();
   }
 
+  private mapItemsForCreate(headerId: string, pcr: Entities.ProjectChangeRequestForCreate, items: Entities.ProjectChangeRequestItemForCreate[]) {
+    const itemLength = pcr.items ? items.length : 0;
+    return items.map((x, i) => {
+      const itemId = `ProjectChangeRequest-${headerId}-Item-${itemLength + i}`;
+      return { pcrId: headerId, statusName:"", id: itemId, ...x };
+    });
+  }
+
+  async insertItems(headerId: string, items: Entities.ProjectChangeRequestItemForCreate[]): Promise<void> {
+    const pcr = await super.getOne(x => x.id === headerId);
+    const insert = this.mapItemsForCreate(headerId, pcr, items);
+    if (!pcr.items) pcr.items = [];
+    pcr.items.push(...insert);
+  }
+
   async createProjectChangeRequest(projectChangeRequest: Entities.ProjectChangeRequestForCreate): Promise<string> {
-    const id = `ProjectChangeRequest${(this.Items.length + 1)}`;
-    await super.insertOne({ id, ...projectChangeRequest } as Entities.PCR);
+    const id = `ProjectChangeRequest${(this.Items.length)}`;
+    const items = this.mapItemsForCreate(id, projectChangeRequest, projectChangeRequest.items);
+    await super.insertOne({ id, items, ...projectChangeRequest} as Entities.PCR);
     return id;
   }
 
