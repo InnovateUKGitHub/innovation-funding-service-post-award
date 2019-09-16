@@ -220,6 +220,7 @@ describe("UpdatePCRCommand", () => {
 
       const dto = await context.runQuery(new GetPCRByIdQuery(pcr.projectId, pcr.id));
       dto.status = to;
+      dto.comments = "Some comments";
 
       const command = new UpdatePCRCommand(project.Id, pcr.id, dto);
 
@@ -313,6 +314,24 @@ describe("UpdatePCRCommand", () => {
     expect(pcr.status).toBe(PCRStatus.SubmittedToMonitoringOfficer);
   });
 
+  test("if user is PM can update status from Quried by Innovate to Submitted to Innovate", async () => {
+    const context = new TestContext();
+
+    const project = context.testData.createProject();
+    const pcr = context.testData.createPCR(project, { status: PCRStatus.QueriedByInnovateUK });
+    context.testData.createPCRItem(pcr);
+
+    context.testData.createCurrentUserAsProjectManager(project);
+
+    const dto = await context.runQuery(new GetPCRByIdQuery(pcr.projectId, pcr.id));
+
+    dto.status = PCRStatus.SubmittedToInnovationLead;
+
+    await context.runCommand(new UpdatePCRCommand(pcr.projectId, pcr.id, dto));
+
+    expect(pcr.status).toBe(PCRStatus.SubmittedToInnovationLead);
+  });
+
   test("if user is MO can update status to QueriedByMonitoringOfficer ", async () => {
     const context = new TestContext();
 
@@ -325,6 +344,7 @@ describe("UpdatePCRCommand", () => {
     const dto = await context.runQuery(new GetPCRByIdQuery(pcr.projectId, pcr.id));
 
     dto.status = PCRStatus.QueriedByMonitoringOfficer;
+    dto.comments = "Test Comments"
 
     await context.runCommand(new UpdatePCRCommand(pcr.projectId, pcr.id, dto));
 

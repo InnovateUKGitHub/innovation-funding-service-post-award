@@ -8,8 +8,8 @@ import * as Actions from "../../redux/actions";
 import * as Selectors from "../../redux/selectors";
 import { Pending } from "@shared/pending";
 import { PCRsDashboardRoute } from "./dashboard";
-import { PCRPrepareItemRoute } from "./prepareItem";
-import { PCRPrepareReasoningRoute } from "./prepareReasoning";
+import { PCRReviewItemRoute } from "./viewItem";
+import { PCRReviewReasoningRoute } from "./viewReasoning";
 import { PCRDto, PCRItemDto } from "@framework/dtos/pcrDtos";
 import { IEditorStore } from "@ui/redux";
 import { PCRDtoValidator, PCRItemDtoValidator } from "@ui/validators/pcrDtoValidator";
@@ -35,29 +35,22 @@ interface Callbacks {
   onSave: (projectId: string, pcrId: string, dto: PCRDto) => void;
 }
 
-class PCRPrepareComponent extends ContainerBase<Params, Data, Callbacks> {
+class PCRReviewComponent extends ContainerBase<Params, Data, Callbacks> {
   render() {
     const combined = Pending.combine({ project: this.props.project, pcr: this.props.pcr, editor: this.props.editor });
 
     return <ACC.PageLoader pending={combined} render={x => this.renderContents(x.project, x.pcr, x.editor)} />;
   }
 
-  private onSave(editor: IEditorStore<PCRDto, PCRDtoValidator>, original: PCRDto, submit: boolean) {
-    if (submit && original.status === PCRStatus.QueriedByInnovateUK) {
-      editor.data.status = PCRStatus.SubmittedToInnovationLead;
-    }
-    else if (submit) {
-      editor.data.status = PCRStatus.SubmittedToMonitoringOfficer;
-    }
-    else {
-      // not submitting so set status to the original status
-      editor.data.status = original.status;
-    }
-    this.props.onSave(this.props.projectId, this.props.pcrId, editor.data);
-  }
-
   private renderContents(project: ProjectDto, pcr: PCRDto, editor: IEditorStore<PCRDto, PCRDtoValidator>) {
     const Form = ACC.TypedForm<PCRDto>();
+
+    const options: ACC.SelectOption[] = [
+      { id: PCRStatus.QueriedByMonitoringOfficer.toString(), value: "Query with project manager" },
+      { id: PCRStatus.SubmittedToInnovationLead.toString(), value: "Send to Innovate UK for approval" },
+    ];
+
+    const selected = options.find(x => x.id === editor.data.status.toString());
 
     return (
       <ACC.Page
@@ -68,9 +61,9 @@ class PCRPrepareComponent extends ContainerBase<Params, Data, Callbacks> {
         error={editor.error}
       >
         <ACC.Section title="Details">
-          <ACC.SummaryList qa="pcr-prepare">
+          <ACC.SummaryList qa="pcrDetails">
             <ACC.SummaryListItem label="Number" content={pcr.requestNumber} qa="numberRow" />
-            <ACC.SummaryListItem label="Types" content={this.renderTypes(pcr)} action={<Link route={ProjectChangeRequestAddTypeRoute.getLink({ projectId: this.props.projectId, projectChangeRequestId: this.props.pcrId })}>Add Type</Link>} qa="typesRow" />
+            <ACC.SummaryListItem label="Types" content={this.renderTypes(pcr)} qa="typesRow" />
           </ACC.SummaryList>
         </ACC.Section>
         <ol className="app-task-list">
@@ -80,23 +73,28 @@ class PCRPrepareComponent extends ContainerBase<Params, Data, Callbacks> {
         <Form.Form
           editor={editor}
           onChange={dto => this.props.onChange(pcr.projectId, pcr.id, dto)}
-          onSubmit={() => this.onSave(editor, pcr, true)}
+          onSubmit={() => this.props.onSave(pcr.projectId, pcr.id, editor.data)}
         >
-          <Form.Fieldset heading="Add comments for your monitoring officer">
+          <Form.Fieldset heading="How do you want to proceed?">
+            <Form.Radio
+              name="status"
+              inline={false}
+              options={options}
+              value={x => selected}
+              update={(m, v) => m.status = parseInt(v && v.id || "", 10) || PCRStatus.Unknown}
+              validation={editor.validator.status}
+            />
             <Form.MultilineString
-              name="comments"
-              hint="Leave this field empty if there is nothing to add."
-              value={x => x.comments}
-              update={(m, v) => m.comments = v || ""}
+              name="coments"
+              label="Add your comments"
+              hint="If ou query the request, you must explain what the partner needs to amend. If you are sending it to Innovate UK, you must say whether you recomment the request for approval and why."
+              value={m => m.comments}
+              update={(m, v) => m.comments = (v || "")}
               validation={editor.validator.comments}
-              qa="info-text-area"
             />
           </Form.Fieldset>
           <Form.Fieldset qa="save-and-submit">
-            <Form.Submit>Submit request to monitoring officer</Form.Submit>
-          </Form.Fieldset>
-          <Form.Fieldset qa="save-and-return">
-            <Form.Button name="return" onClick={() => this.onSave(editor, pcr, false)}>Save and return to project</Form.Button>
+            <Form.Submit>Submit</Form.Submit>
           </Form.Fieldset>
         </Form.Form>
       </ACC.Page>
@@ -114,11 +112,11 @@ class PCRPrepareComponent extends ContainerBase<Params, Data, Callbacks> {
   }
 
   private renderReasoning(pcr: PCRDto, validation: PCRDtoValidator) {
-    return this.renderListItem(pcr.items.length + 1, "Give more details", "Reasoning for Innovate UK", pcr.reasoningStatusName, PCRPrepareReasoningRoute.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId }), [validation.reasoningStatus, validation.reasoningComments]);
+    return this.renderListItem(pcr.items.length + 1, "Give more details", "Reasoning for Innovate UK", pcr.reasoningStatusName, PCRReviewReasoningRoute.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId }), [validation.reasoningStatus, validation.reasoningComments]);
   }
 
   private renderItem(item: PCRItemDto, step: number, validation: PCRItemDtoValidator) {
-    return this.renderListItem(step, item.typeName, "Provide your files", item.statusName, PCRPrepareItemRoute.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId, itemId: item.id }), validation.errors);
+    return this.renderListItem(step, item.typeName, "Provide your files", item.statusName, PCRReviewItemRoute.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId, itemId: item.id }), validation.errors);
   }
 
   private renderListItem(step: number, title: string, text: string, status: string, route: ILinkInfo, validation: Result[]) {
@@ -137,13 +135,14 @@ class PCRPrepareComponent extends ContainerBase<Params, Data, Callbacks> {
   }
 }
 
-const definition = ReduxContainer.for<Params, Data, Callbacks>(PCRPrepareComponent);
+const definition = ReduxContainer.for<Params, Data, Callbacks>(PCRReviewComponent);
 
-export const PCRPrepare = definition.connect({
+export const PCRReview = definition.connect({
   withData: (state, params) => ({
     project: Selectors.getProject(params.projectId).getPending(state),
     pcr: Selectors.getPcr(params.projectId, params.pcrId).getPending(state),
-    editor: Selectors.getPcrEditor(params.projectId, params.pcrId).get(state)
+    // initalise editor pcr status to unknown to force state selection via form
+    editor: Selectors.getPcrEditor(params.projectId, params.pcrId).get(state, x => x.status = PCRStatus.Unknown)
   }),
   withCallbacks: (dispatch) => ({
     onChange: (projectId: string, pcrId: string, dto: PCRDto) => dispatch(Actions.validatePCR(projectId, pcrId, dto)),
@@ -151,9 +150,9 @@ export const PCRPrepare = definition.connect({
   })
 });
 
-export const PCRPrepareRoute = definition.route({
-  routeName: "pcrPrepare",
-  routePath: "/projects/:projectId/pcrs/:pcrId/prepare",
+export const PCRReviewRoute = definition.route({
+  routeName: "pcrReview",
+  routePath: "/projects/:projectId/pcrs/:pcrId/review",
   getParams: (route) => ({
     projectId: route.params.projectId,
     pcrId: route.params.pcrId,
@@ -163,9 +162,9 @@ export const PCRPrepareRoute = definition.route({
     Actions.loadPcr(params.projectId, params.pcrId),
   ],
   getTitle: () => ({
-    htmlTitle: "Prepare project change request",
-    displayTitle: "Prepare project change request"
+    htmlTitle: "Review project change request",
+    displayTitle: "Review project change request"
   }),
-  container: PCRPrepare,
-  accessControl: (auth, { projectId }, config) => config.features.pcrsEnabled && auth.forProject(projectId).hasRole(ProjectRole.ProjectManager)
+  container: PCRReview,
+  accessControl: (auth, { projectId }, config) => config.features.pcrsEnabled && auth.forProject(projectId).hasRole(ProjectRole.MonitoringOfficer)
 });
