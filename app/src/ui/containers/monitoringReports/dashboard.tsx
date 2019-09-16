@@ -95,20 +95,20 @@ class DashboardComponent extends ContainerBase<Params, Data, Callbacks> {
   }
 
   private renderLinks(report: Dtos.MonitoringReportSummaryDto) {
-    const links: { route: ILinkInfo, text: string }[] = [];
+    const links: { route: ILinkInfo, text: string, qa: string;}[] = [];
 
     if (this.editStatuses.indexOf(report.status) > -1) {
-      links.push({ route: MonitoringReportPrepareRoute.getLink({ projectId: report.projectId, id: report.headerId }), text: "Edit report" });
+      links.push({ route: MonitoringReportPrepareRoute.getLink({ projectId: report.projectId, id: report.headerId }), text: "Edit report", qa:"editLink" });
     }
     else {
-      links.push({ route: MonitoringReportViewRoute.getLink({ projectId: report.projectId, id: report.headerId }), text: "View report" });
+      links.push({ route: MonitoringReportViewRoute.getLink({ projectId: report.projectId, id: report.headerId }), text: "View report", qa: "viewLink" });
     }
 
     if (report.status === MonitoringReportStatus.Draft) {
-      links.push({ route: MonitoringReportDeleteRoute.getLink({ projectId: report.projectId, id: report.headerId }), text: "Delete report" });
+      links.push({ route: MonitoringReportDeleteRoute.getLink({ projectId: report.projectId, id: report.headerId }), text: "Delete report", qa:"deleteLink" });
     }
 
-    return links.map((x,i) => <div key={i}><ACC.Link route={x.route}>{x.text}</ACC.Link></div>);
+    return links.map((x,i) => <div key={i} data-qa={x.qa}><ACC.Link route={x.route}>{x.text}</ACC.Link></div>);
   }
 }
 

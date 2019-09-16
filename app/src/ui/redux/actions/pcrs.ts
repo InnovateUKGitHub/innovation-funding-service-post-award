@@ -112,3 +112,27 @@ export function createProjectChangeRequest(projectId: string, dto: PCRDto, onCom
       });
   };
 }
+
+export function deletePCR(projectId: string, pcrId: string, dto: PCRDto, onComplete: () => void, message?: string): Actions.AsyncThunk<void, Actions.DataLoadAction | Actions.EditorAction | Actions.messageSuccess> {
+  return (dispatch, getState) => {
+    const state = getState();
+    const selector = Selectors.getPcrEditor(projectId, pcrId);
+
+    const projectRoles = new Authorisation(state.user.roleInfo).forProject(projectId).getRoles();
+
+    const validator = new PCRDtoValidator(dto, projectRoles, dto, true);
+    dispatch(Actions.handleEditorSubmit(selector.key, selector.store, dto, validator));
+
+    return ApiClient.pcrs.delete({projectId, id: pcrId, user: state.user })
+      .then(() => {
+        dispatch(Actions.handleEditorSuccess(selector.key, selector.store));
+        if(message) {
+          dispatch(Actions.messageSuccess(message));
+        }
+        onComplete();
+      })
+      .catch((e: any) => {
+        dispatch(Actions.handleEditorError({ id: selector.key, store: selector.store, dto, validation: validator, error: e}));
+      });
+  };
+}
