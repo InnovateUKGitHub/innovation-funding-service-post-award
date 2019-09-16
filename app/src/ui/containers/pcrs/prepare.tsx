@@ -65,7 +65,7 @@ class PCRPrepareComponent extends ContainerBase<Params, Data, Callbacks> {
         error={editor.error}
       >
         <ACC.Section title="Details">
-          <ACC.SummaryList qa="pcrDetails">
+          <ACC.SummaryList qa="pcr-prepare">
             <ACC.SummaryListItem label="Number" content={pcr.requestNumber} qa="numberRow" />
             <ACC.SummaryListItem label="Types" content={this.renderTypes(pcr)} action={<Link route={ProjectChangeRequestAddTypeRoute.getLink({ projectId: this.props.projectId, projectChangeRequestId: this.props.pcrId })}>Add Type</Link>} qa="typesRow" />
           </ACC.SummaryList>
@@ -86,6 +86,7 @@ class PCRPrepareComponent extends ContainerBase<Params, Data, Callbacks> {
               value={x => x.comments}
               update={(m, v) => m.comments = v || ""}
               validation={editor.validator.comments}
+              qa="info-text-area"
             />
           </Form.Fieldset>
           <Form.Fieldset qa="save-and-submit">
