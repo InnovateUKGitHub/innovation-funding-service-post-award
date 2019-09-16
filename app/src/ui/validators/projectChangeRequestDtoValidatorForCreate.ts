@@ -15,7 +15,7 @@ export class ProjectChangeRequestDtoValidatorForCreate extends Results<PCRDto> {
     this,
     this.model.items,
     q => new ProjectChangeRequestItemValidatorForCreate(q, this.showValidationErrors, this.recordTypes),
-    undefined,
+    Validation.hasNoDuplicates(this, (this.model.items || []).map(x => x.type), "No duplicate items allowed"),
     "You must select at least one of the types"
   );
 
