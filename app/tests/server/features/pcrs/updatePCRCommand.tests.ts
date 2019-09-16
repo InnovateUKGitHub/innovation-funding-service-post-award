@@ -117,6 +117,26 @@ describe("UpdatePCRCommand", () => {
       await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
     });
 
+    test("reasonsing comments are required when reasoning status is complete", async () => {
+      const context = new TestContext();
+      const project = context.testData.createProject();
+      const pcr = context.testData.createPCR(project, {status: PCRStatus.Draft});
+      context.testData.createPCRItem(pcr);
+
+      context.testData.createCurrentUserAsProjectManager(project);
+
+      const dto = await context.runQuery(new GetPCRByIdQuery(pcr.projectId, pcr.id));
+
+      dto.reasoningComments = ""
+      dto.reasoningStatus = PCRItemStatus.Complete;
+
+      await expect(context.runCommand(new UpdatePCRCommand(project.Id, pcr.id, dto))).rejects.toThrow(ValidationError);
+
+      dto.reasoningComments = "Test Comments"
+
+      await expect(context.runCommand(new UpdatePCRCommand(project.Id, pcr.id, dto))).resolves.toBe(true);
+    });
+
     test("updates item status", async () => {
       const context = new TestContext();
 
@@ -141,7 +161,7 @@ describe("UpdatePCRCommand", () => {
       await context.runCommand(command);
 
       expect(pcr.items.map(x => x.status)).toEqual([PCRItemStatus.Incomplete, PCRItemStatus.Complete, PCRItemStatus.Incomplete ]);
-    })
+    });
 
     test("adds items", async () => {
       const context = new TestContext();
