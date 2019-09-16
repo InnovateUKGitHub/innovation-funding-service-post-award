@@ -4,7 +4,7 @@ import { UpdatePCRCommand } from "@server/features/pcrs/updatePcrCommand";
 import { PCRItemStatus, PCRStatus } from "@framework/entities";
 import { GetPCRByIdQuery } from "@server/features/pcrs/getPCRByIdQuery";
 import { ValidationError } from "@server/features/common";
-import { Authorisation, PCRDto, ProjectRole } from "@framework/types";
+import { Authorisation, PCRDto, PCRItemDto, ProjectRole } from "@framework/types";
 import { getAllEnumValues } from "@shared/enumHelper";
 
 describe("UpdatePCRCommand", () => {
@@ -141,6 +141,65 @@ describe("UpdatePCRCommand", () => {
       await context.runCommand(command);
 
       expect(pcr.items.map(x => x.status)).toEqual([PCRItemStatus.Incomplete, PCRItemStatus.Complete, PCRItemStatus.Incomplete ]);
+    })
+
+    test("adds items", async () => {
+      const context = new TestContext();
+
+      const project = context.testData.createProject();
+      context.testData.createPartner(project);
+      const pcr = context.testData.createPCR(project, { status: PCRStatus.Draft, reasoningStatus: PCRItemStatus.Complete });
+      const recordTypes = context.testData.range(3, x => context.testData.createRecordType({ parent: "Acc_ProjectChangeRequest__c"}));
+      recordTypes[0].type = "Partner Withdrawal";
+      recordTypes[1].type = "Project Suspension";
+      recordTypes[2].type = "Scope Change";
+
+      context.testData.createPCRItem(pcr, recordTypes[0], {status : PCRItemStatus.Incomplete});
+      context.testData.createPCRItem(pcr, recordTypes[1], {status : PCRItemStatus.Incomplete});
+
+      context.testData.createCurrentUserAsProjectManager(project);
+
+      const dto = await context.runQuery(new GetPCRByIdQuery(pcr.projectId, pcr.id));
+      expect(dto.items.length).toBe(2);
+
+      dto.items.push({
+        status: PCRItemStatus.ToDo,
+        recordTypeId: recordTypes[2].id
+      } as PCRItemDto);
+
+      const command = new UpdatePCRCommand(project.Id, pcr.id, dto);
+
+      await context.runCommand(command);
+
+      expect(pcr.items.length).toBe(3);
+    })
+
+    it("does not allow duplicate item types", async () => {
+      const context = new TestContext();
+
+      const project = context.testData.createProject();
+      context.testData.createPartner(project);
+      const pcr = context.testData.createPCR(project, { status: PCRStatus.Draft, reasoningStatus: PCRItemStatus.Complete });
+      const recordTypes = context.testData.range(3, x => context.testData.createRecordType({ parent: "Acc_ProjectChangeRequest__c"}));
+      recordTypes[0].type = "Partner Withdrawal";
+      recordTypes[1].type = "Project Suspension";
+
+      context.testData.createPCRItem(pcr, recordTypes[0], {status : PCRItemStatus.Incomplete});
+      context.testData.createPCRItem(pcr, recordTypes[1], {status : PCRItemStatus.Incomplete});
+
+      context.testData.createCurrentUserAsProjectManager(project);
+
+      const dto = await context.runQuery(new GetPCRByIdQuery(pcr.projectId, pcr.id));
+      expect(dto.items.length).toBe(2);
+
+      dto.items.push({
+        status: PCRItemStatus.ToDo,
+        recordTypeId: recordTypes[1].id
+      } as PCRItemDto);
+
+      const command = new UpdatePCRCommand(project.Id, pcr.id, dto);
+
+      await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
     })
   });
 

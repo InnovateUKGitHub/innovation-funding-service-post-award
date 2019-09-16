@@ -18,6 +18,7 @@ export interface IPCRRepository {
   updatePcrItems(pcr: PCR, items: PCRItem[]): Promise<void>;
   getAllByProjectId(projectId: string): Promise<PCR[]>;
   getById(projectId: string, id: string): Promise<PCR>;
+  insertItems(headerId: string, items: ProjectChangeRequestItemForCreate[]): Promise<void>;
   isExisting(projectid: string, projectChangeRequestId: string): Promise<boolean>;
   delete(pcr: PCR): Promise<void>;
 }
@@ -122,13 +123,17 @@ export class PCRRepository extends SalesforceRepositoryBase<ISalesforcePCR> impl
       Acc_Project_Participant__c: projectChangeRequest.projectId,
     });
     // Insert sub-items
-    await super.insertAll(projectChangeRequest.items.map(x => ({
-      Acc_RequestHeader__c: id,
+    await this.insertItems(id, projectChangeRequest.items);
+    return id;
+  }
+
+  async insertItems(headerId: string, items: ProjectChangeRequestItemForCreate[]) {
+    await super.insertAll(items.map(x => ({
+      Acc_RequestHeader__c: headerId,
       RecordTypeId: x.recordTypeId,
       Acc_MarkedasComplete__c: this.mapItemStatus(x.status),
       Acc_Project_Participant__c: x.projectId,
     })));
-    return id;
   }
 
   async delete(item: PCR) {

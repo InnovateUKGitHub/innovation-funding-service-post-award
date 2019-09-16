@@ -5,6 +5,8 @@ import { Authorisation, IContext } from "@framework/types";
 import { GetAllProjectRolesForUser } from "../projects";
 import { mapToPcrDto } from "./mapToPCRDto";
 import { GetPCRItemTypesQuery } from "./getItemTypesQuery";
+import { ProjectChangeRequestItemForCreate } from "@framework/entities";
+import { GetAllForProjectQuery } from "@server/features/partners";
 
 export class UpdatePCRCommand extends CommandBase<boolean> {
   constructor(private projectId: string, private id: string, private pcr: PCRDto) {
@@ -27,7 +29,7 @@ export class UpdatePCRCommand extends CommandBase<boolean> {
 
     const originalDto = mapToPcrDto(original, itemTypes);
 
-    const validationResult = new PCRDtoValidator(this.pcr, projectRoles, originalDto, true);
+    const validationResult = new PCRDtoValidator(this.pcr, projectRoles, originalDto, itemTypes, true);
 
     if (!validationResult.isValid) {
 
@@ -48,20 +50,36 @@ export class UpdatePCRCommand extends CommandBase<boolean> {
 
     const itemsToUpdate = paired
       // exclude new items
-      .filter(x => !!x.originalItem)
-      // sort out typeings as filter dosnt remove undefined from types
-      .map(x => ({
-        item: x.item,
-        originalItem: x.originalItem!
-      }))
-      // filter those that need updating
-      .filter(x => x.item.status !== x.originalItem.status)
-      // update the status
-      .map(x => ({ ...x.originalItem, status: x.item.status }))
-      ;
+        .filter(x => !!x.originalItem)
+        // sort out typeings as filter dosnt remove undefined from types
+        .map(x => ({
+          item: x.item,
+          originalItem: x.originalItem!
+        }))
+        // filter those that need updating
+        .filter(x => x.item.status !== x.originalItem.status)
+        // update the status
+        .map(x => ({ ...x.originalItem, status: x.item.status }))
+    ;
 
-    if(itemsToUpdate.length) {
+    if (itemsToUpdate.length) {
       await context.repositories.pcrs.updatePcrItems(original, itemsToUpdate);
+    }
+
+    const itemsToInsert: ProjectChangeRequestItemForCreate[] = paired
+      .filter(x => !x.originalItem)
+      .map(x => ({
+        recordTypeId: x.item.recordTypeId,
+        status: x.item.status,
+        projectId: this.projectId,
+      }));
+
+    if (itemsToInsert.length) {
+      // @TODO remove this hack when projectId field is added to project change request object in SF
+      const partner = await context.runQuery(new GetAllForProjectQuery(this.projectId));
+      itemsToInsert.forEach(x => x.projectId = partner[0].id);
+      //
+      await context.repositories.pcrs.insertItems(this.id, itemsToInsert);
     }
 
     return true;
