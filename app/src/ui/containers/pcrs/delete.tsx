@@ -50,7 +50,7 @@ class PCRDeleteComponent extends ContainerBase<Params, Data, Callbacks> {
       >
 
         <ACC.Section title="Details">
-          <ACC.ValidationMessage messageType="error" message="All the information will be permanantly deleted." />
+          <ACC.ValidationMessage messageType="error" message="All the information will be permanently deleted." />
           <ACC.SummaryList qa="pcr_viewItem">
             <ACC.SummaryListItem label="Request number" content={pcr.requestNumber} qa="requestNumber" />
             <ACC.SummaryListItem label="Types" content={<ACC.Renderers.LineBreakList items={pcr.items.map(x => x.typeName)} />} qa="types" />
