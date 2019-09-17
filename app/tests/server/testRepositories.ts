@@ -407,7 +407,7 @@ class RecordTypeTestRepository extends TestRepository<Entities.RecordType> imple
   }
 }
 
-class PCRTestRepository extends TestRepository<Entities.PCR> implements Repositories.IPCRRepository {
+class PCRTestRepository extends TestRepository<Entities.PCR> implements Repositories.IProjectChangeRequestRepository {
 
   getAllByProjectId(projectId: string): Promise<Entities.PCR[]> {
     return super.getWhere(x => x.projectId === projectId);
@@ -417,11 +417,11 @@ class PCRTestRepository extends TestRepository<Entities.PCR> implements Reposito
     return super.getOne(x => x.projectId === projectId && x.id === id);
   }
 
-  updatePcr(pcr: Entities.PCR): Promise<void> {
+  updateProjectChangeRequest(pcr: Entities.PCR): Promise<void> {
     return Promise.resolve();
   }
 
-  updatePcrItems(pcr: Entities.PCR, pcrItems: Entities.PCRItem[]) {
+  updateItems(pcr: Entities.PCR, pcrItems: Entities.PCRItem[]) {
     pcr.items = pcr.items.map(existingItem => {
       const updatedItem = pcrItems.find(x => x.id === existingItem.id);
       return updatedItem || existingItem;
