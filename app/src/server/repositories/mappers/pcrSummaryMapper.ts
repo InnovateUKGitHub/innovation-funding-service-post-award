@@ -1,6 +1,6 @@
 import { SalesforceBaseMapper } from "./saleforceMapperBase";
 import { PCR, PCRItem, PCRItemStatus, PCRStatus } from "@framework/entities";
-import { ISalesforcePCR } from "../pcrRepository";
+import { ISalesforcePCR } from "../projectChangeRequestRepository";
 
 export class SalesforcePCRMapper extends SalesforceBaseMapper<ISalesforcePCR[], PCR[]> {
   constructor(private readonly headerRecordTypeId: string) {
