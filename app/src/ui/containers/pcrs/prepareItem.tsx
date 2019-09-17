@@ -10,7 +10,7 @@ import { Pending } from "@shared/pending";
 import { PCRDto, PCRItemDto } from "@framework/dtos";
 import { ProjectChangeRequestPrepareRoute } from "./prepare";
 import { EditorStatus, IEditorStore, } from "@ui/redux";
-import { PCRItemStatus } from "@framework/entities";
+import { ProjectChangeRequestItemStatus } from "@framework/entities";
 import { MultipleDocumentUpdloadDtoValidator, PCRDtoValidator } from "@ui/validators";
 
 export interface ProjectChangeRequestPrepareItemParams {
@@ -123,8 +123,8 @@ class PCRPrepareItemComponent extends ContainerBase<ProjectChangeRequestPrepareI
               <Form.Checkboxes
                 name="itemStatus"
                 options={options}
-                value={m => m.status === PCRItemStatus.Complete ? [options[0]] : []}
-                update={(m, v) => m.status = (v && v.some(x => x.id === "true")) ? PCRItemStatus.Complete : PCRItemStatus.Incomplete}
+                value={m => m.status === ProjectChangeRequestItemStatus.Complete ? [options[0]] : []}
+                update={(m, v) => m.status = (v && v.some(x => x.id === "true")) ? ProjectChangeRequestItemStatus.Complete : ProjectChangeRequestItemStatus.Incomplete}
                 validation={editor.validator.items.results[index].status}
               />
               <Form.Submit>Save and return to request</Form.Submit>
@@ -151,8 +151,8 @@ class PCRPrepareItemComponent extends ContainerBase<ProjectChangeRequestPrepareI
   private onSave(dto: PCRDto): void {
     // if the status is todo and we are saving should change it to incomplete
     const index = dto.items.findIndex(x => x.id === this.props.itemId);
-    if (dto.items[index].status === PCRItemStatus.ToDo) {
-      dto.items[index].status = PCRItemStatus.Incomplete;
+    if (dto.items[index].status === ProjectChangeRequestItemStatus.ToDo) {
+      dto.items[index].status = ProjectChangeRequestItemStatus.Incomplete;
     }
     this.props.onSave(this.props.projectId, this.props.pcrId, dto);
   }

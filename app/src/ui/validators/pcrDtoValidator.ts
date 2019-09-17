@@ -1,45 +1,45 @@
 import { PCRDto, PCRItemDto, PCRItemTypeDto, ProjectRole } from "@framework/dtos";
 import { Result, Results } from "../validation";
 import * as Validation from "./common";
-import { PCRItemStatus, PCRStatus } from "@framework/entities";
+import { ProjectChangeRequestItemStatus, ProjectChangeRequestStatus } from "@framework/entities";
 
 export class PCRDtoValidator extends Results<PCRDto> {
   constructor(model: PCRDto, private role: ProjectRole, private original: PCRDto, private readonly recordTypes: PCRItemTypeDto[], showValidationErrors: boolean) {
     super(model, showValidationErrors);
   }
 
-  private projectManagerPermittedStatus = new Map<PCRStatus, PCRStatus[]>([
+  private projectManagerPermittedStatus = new Map<ProjectChangeRequestStatus, ProjectChangeRequestStatus[]>([
     [
-      PCRStatus.Draft,
+      ProjectChangeRequestStatus.Draft,
       [
-        PCRStatus.Draft,
-        PCRStatus.SubmittedToMonitoringOfficer,
+        ProjectChangeRequestStatus.Draft,
+        ProjectChangeRequestStatus.SubmittedToMonitoringOfficer,
       ]
     ],
     [
-      PCRStatus.QueriedByMonitoringOfficer,
+      ProjectChangeRequestStatus.QueriedByMonitoringOfficer,
       [
-        PCRStatus.QueriedByMonitoringOfficer,
-        PCRStatus.SubmittedToMonitoringOfficer,
+        ProjectChangeRequestStatus.QueriedByMonitoringOfficer,
+        ProjectChangeRequestStatus.SubmittedToMonitoringOfficer,
       ]
     ],
     [
-      PCRStatus.QueriedByInnovateUK,
+      ProjectChangeRequestStatus.QueriedByInnovateUK,
       [
-        PCRStatus.QueriedByInnovateUK,
-        PCRStatus.SubmittedToInnovationLead,
+        ProjectChangeRequestStatus.QueriedByInnovateUK,
+        ProjectChangeRequestStatus.SubmittedToInnovationLead,
       ]
     ]
   ]);
 
   private projectManagerCanEdit = !!this.projectManagerPermittedStatus.get(this.original.status);
 
-  private monitoringOfficerPermittedStatus = new Map<PCRStatus, PCRStatus[]>([
+  private monitoringOfficerPermittedStatus = new Map<ProjectChangeRequestStatus, ProjectChangeRequestStatus[]>([
     [
-      PCRStatus.SubmittedToMonitoringOfficer, [
-        PCRStatus.SubmittedToMonitoringOfficer,
-        PCRStatus.QueriedByMonitoringOfficer,
-        PCRStatus.SubmittedToInnovationLead,
+      ProjectChangeRequestStatus.SubmittedToMonitoringOfficer, [
+        ProjectChangeRequestStatus.SubmittedToMonitoringOfficer,
+        ProjectChangeRequestStatus.QueriedByMonitoringOfficer,
+        ProjectChangeRequestStatus.SubmittedToInnovationLead,
       ]
     ]
   ]);
@@ -52,7 +52,7 @@ export class PCRDtoValidator extends Results<PCRDto> {
     const isPM = !!(this.role & ProjectRole.ProjectManager);
     const isMO = !!(this.role & ProjectRole.MonitoringOfficer);
     if ((isPM && this.projectManagerCanEdit) || (isMO && this.monitoringOfficerCanEdit)) {
-      const statusRequiringComments = isMO ? [PCRStatus.SubmittedToInnovationLead, PCRStatus.QueriedByMonitoringOfficer] : [];
+      const statusRequiringComments = isMO ? [ProjectChangeRequestStatus.SubmittedToInnovationLead, ProjectChangeRequestStatus.QueriedByMonitoringOfficer] : [];
       return Validation.all(this,
         () => statusRequiringComments.indexOf(this.model.status) >= 0 ? Validation.required(this, this.model.comments, "Comments are required") : Validation.valid(this),
         () => Validation.maxLength(this, this.model.comments, this.maxCommentsLength, `Comments can be a maximum of ${this.maxCommentsLength} characters`),
@@ -64,7 +64,7 @@ export class PCRDtoValidator extends Results<PCRDto> {
   private validateReasoningComments() {
     if (this.role & ProjectRole.ProjectManager && this.projectManagerCanEdit) {
       return Validation.all(this,
-        () => this.model.reasoningStatus === PCRItemStatus.Complete ? Validation.required(this, this.model.reasoningComments, "Reasoning is required") : Validation.valid(this),
+        () => this.model.reasoningStatus === ProjectChangeRequestItemStatus.Complete ? Validation.required(this, this.model.reasoningComments, "Reasoning is required") : Validation.valid(this),
         () => Validation.maxLength(this, this.model.reasoningComments, this.maxCommentsLength, `Reasoning can be a maximum of ${this.maxCommentsLength} characters`),
       );
     }
@@ -73,7 +73,7 @@ export class PCRDtoValidator extends Results<PCRDto> {
 
   private validateStatus() {
 
-    const permittedStatus: PCRStatus[] = [];
+    const permittedStatus: ProjectChangeRequestStatus[] = [];
     if (this.role & ProjectRole.ProjectManager) {
       permittedStatus.push(...this.projectManagerPermittedStatus.get(this.original.status) || []);
     }
@@ -89,14 +89,14 @@ export class PCRDtoValidator extends Results<PCRDto> {
 
   private validateReasonStatus() {
     const permittedStatus = [
-      PCRItemStatus.ToDo,
-      PCRItemStatus.Incomplete,
-      PCRItemStatus.Complete,
+      ProjectChangeRequestItemStatus.ToDo,
+      ProjectChangeRequestItemStatus.Incomplete,
+      ProjectChangeRequestItemStatus.Complete,
     ];
 
     return Validation.all(this,
       () => Validation.permitedValues(this, this.model.reasoningStatus, permittedStatus, "Invalid reasoning status"),
-      () => Validation.isTrue(this, this.model.reasoningStatus === PCRItemStatus.Complete || this.model.status === PCRStatus.Draft, "Reasoning must be complete")
+      () => Validation.isTrue(this, this.model.reasoningStatus === ProjectChangeRequestItemStatus.Complete || this.model.status === ProjectChangeRequestStatus.Draft, "Reasoning must be complete")
     );
   }
 
@@ -115,20 +115,20 @@ export class PCRDtoValidator extends Results<PCRDto> {
 }
 
 export class PCRItemDtoValidator extends Results<PCRItemDto> {
-  constructor(model: PCRItemDto, private role: ProjectRole, private pcrStatus: PCRStatus, private readonly recordTypes: PCRItemTypeDto[], showValidationErrors: boolean) {
+  constructor(model: PCRItemDto, private role: ProjectRole, private pcrStatus: ProjectChangeRequestStatus, private readonly recordTypes: PCRItemTypeDto[], showValidationErrors: boolean) {
     super(model, showValidationErrors);
   }
 
   validateStatus() {
     const permittedStatus = [
-      PCRItemStatus.ToDo,
-      PCRItemStatus.Incomplete,
-      PCRItemStatus.Complete,
+      ProjectChangeRequestItemStatus.ToDo,
+      ProjectChangeRequestItemStatus.Incomplete,
+      ProjectChangeRequestItemStatus.Complete,
     ];
 
     return Validation.all(this,
       () => Validation.permitedValues(this, this.model.status, permittedStatus, "Invalid status"),
-      () => Validation.isTrue(this, this.model.status === PCRItemStatus.Complete || this.pcrStatus === PCRStatus.Draft, `${this.model.typeName} must be complete`)
+      () => Validation.isTrue(this, this.model.status === ProjectChangeRequestItemStatus.Complete || this.pcrStatus === ProjectChangeRequestStatus.Draft, `${this.model.typeName} must be complete`)
     );
   }
 

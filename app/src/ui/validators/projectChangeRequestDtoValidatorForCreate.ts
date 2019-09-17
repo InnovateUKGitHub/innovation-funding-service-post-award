@@ -1,7 +1,7 @@
 import { PCRDto, PCRItemDto, PCRItemTypeDto } from "@framework/dtos";
 import { Results } from "../validation/results";
 import * as Validation from "./common";
-import { PCRItemStatus, PCRStatus } from "@framework/entities";
+import { ProjectChangeRequestItemStatus, ProjectChangeRequestStatus } from "@framework/entities";
 
 export class ProjectChangeRequestDtoValidatorForCreate extends Results<PCRDto> {
   constructor(
@@ -19,8 +19,8 @@ export class ProjectChangeRequestDtoValidatorForCreate extends Results<PCRDto> {
     "You must select at least one of the types"
   );
 
-  status = Validation.isTrue(this, this.model.status === PCRStatus.Draft, "Can only create a new Draft PCR");
-  reasoningStatus = Validation.isTrue(this, this.model.reasoningStatus === PCRItemStatus.ToDo, "Reasoning status should be To Do");
+  status = Validation.isTrue(this, this.model.status === ProjectChangeRequestStatus.Draft, "Can only create a new Draft PCR");
+  reasoningStatus = Validation.isTrue(this, this.model.reasoningStatus === ProjectChangeRequestItemStatus.ToDo, "Reasoning status should be To Do");
 }
 
 class ProjectChangeRequestItemValidatorForCreate extends Results<PCRItemDto> {
@@ -35,5 +35,5 @@ class ProjectChangeRequestItemValidatorForCreate extends Results<PCRItemDto> {
     .map(x => x.type)
     .indexOf(this.model.type) >= 0, "Not a valid change request item");
 
-  status = Validation.isTrue(this, this.model.status === PCRItemStatus.ToDo, "Status should be To Do");
+  status = Validation.isTrue(this, this.model.status === ProjectChangeRequestItemStatus.ToDo, "Status should be To Do");
 }

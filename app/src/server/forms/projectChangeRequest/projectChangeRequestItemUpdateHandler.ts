@@ -1,4 +1,4 @@
-import { PCRItemStatus, PCRItemType } from "@framework/entities";
+import { ProjectChangeRequestItemStatus, ProjectChangeRequestItemTypeEntity } from "@framework/entities";
 import { IContext, ILinkInfo, PCRDto, PCRItemTypeDto, ProjectRole } from "@framework/types";
 import { BadRequestError } from "@server/features/common";
 import { GetPCRItemTypesQuery } from "@server/features/pcrs/getItemTypesQuery";
@@ -25,7 +25,7 @@ export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBa
       throw new BadRequestError();
     }
 
-    item.status = body.itemStatus === "true" ? PCRItemStatus.Complete : PCRItemStatus.Incomplete;
+    item.status = body.itemStatus === "true" ? ProjectChangeRequestItemStatus.Complete : ProjectChangeRequestItemStatus.Incomplete;
 
     return dto;
   }
@@ -41,7 +41,7 @@ export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBa
 
   protected createValidationResult(params: ProjectChangeRequestPrepareItemParams, dto: PCRDto) {
     const projectChangeRequestItemTypes: PCRItemTypeDto[] = [{
-      type: PCRItemType.AccountNameChange,
+      type: ProjectChangeRequestItemTypeEntity.AccountNameChange,
       displayName: "",
       recordTypeId: "",
       enabled: false

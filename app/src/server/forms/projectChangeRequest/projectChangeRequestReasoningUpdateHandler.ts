@@ -1,4 +1,4 @@
-import { PCRItemStatus, PCRItemType } from "@framework/entities";
+import { ProjectChangeRequestItemStatus, ProjectChangeRequestItemTypeEntity } from "@framework/entities";
 import { IContext, ILinkInfo, PCRDto, PCRItemTypeDto, ProjectRole } from "@framework/types";
 import { GetPCRByIdQuery } from "@server/features/pcrs/getPCRByIdQuery";
 import { UpdatePCRCommand } from "@server/features/pcrs/updatePcrCommand";
@@ -16,7 +16,7 @@ export class ProjectChangeRequestReasoningUpdateHandler extends StandardFormHand
     const dto = await context.runQuery(new GetPCRByIdQuery(params.projectId, params.pcrId));
 
     dto.reasoningComments = body.reasoningComments;
-    dto.reasoningStatus = body.reasoningStatus === "true" ? PCRItemStatus.Complete : PCRItemStatus.Incomplete;
+    dto.reasoningStatus = body.reasoningStatus === "true" ? ProjectChangeRequestItemStatus.Complete : ProjectChangeRequestItemStatus.Incomplete;
 
     return dto;
   }
@@ -32,7 +32,7 @@ export class ProjectChangeRequestReasoningUpdateHandler extends StandardFormHand
 
   protected createValidationResult(params: ProjectChangeRequestPrepareReasoningParams, dto: PCRDto) {
     const projectChangeRequestItemTypes: PCRItemTypeDto[] = [{
-      type: PCRItemType.AccountNameChange,
+      type: ProjectChangeRequestItemTypeEntity.AccountNameChange,
       displayName: "",
       recordTypeId: "",
       enabled: false

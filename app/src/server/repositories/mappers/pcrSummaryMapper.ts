@@ -1,13 +1,13 @@
 import { SalesforceBaseMapper } from "./saleforceMapperBase";
-import { PCR, PCRItem, PCRItemStatus, PCRStatus } from "@framework/entities";
+import { ProjectChangeRequestEntity, ProjectChangeRequestItemEntity, ProjectChangeRequestItemStatus, ProjectChangeRequestStatus } from "@framework/entities";
 import { ISalesforcePCR } from "../projectChangeRequestRepository";
 
-export class SalesforcePCRMapper extends SalesforceBaseMapper<ISalesforcePCR[], PCR[]> {
+export class SalesforcePCRMapper extends SalesforceBaseMapper<ISalesforcePCR[], ProjectChangeRequestEntity[]> {
   constructor(private readonly headerRecordTypeId: string) {
     super();
   }
 
-  public map(items: ISalesforcePCR[]): PCR[] {
+  public map(items: ISalesforcePCR[]): ProjectChangeRequestEntity[] {
     const headers = items.filter(x => x.RecordTypeId === this.headerRecordTypeId);
 
     return headers.map(header => ({
@@ -26,7 +26,7 @@ export class SalesforcePCRMapper extends SalesforceBaseMapper<ISalesforcePCR[], 
     }));
   }
 
-  private mapItem(header: ISalesforcePCR, pcrItem: ISalesforcePCR): PCRItem {
+  private mapItem(header: ISalesforcePCR, pcrItem: ISalesforcePCR): ProjectChangeRequestItemEntity {
     return {
       id: pcrItem.Id,
       pcrId: header.Id,
@@ -37,45 +37,45 @@ export class SalesforcePCRMapper extends SalesforceBaseMapper<ISalesforcePCR[], 
     };
   }
 
-  private mapStatus(status: string): PCRStatus {
+  private mapStatus(status: string): ProjectChangeRequestStatus {
     switch (status) {
       case "Draft":
-        return PCRStatus.Draft;
+        return ProjectChangeRequestStatus.Draft;
       case "Submitted to Monitoring Officer":
-        return PCRStatus.SubmittedToMonitoringOfficer;
+        return ProjectChangeRequestStatus.SubmittedToMonitoringOfficer;
       case "Queried by Monitoring Officer":
-        return PCRStatus.QueriedByMonitoringOfficer;
+        return ProjectChangeRequestStatus.QueriedByMonitoringOfficer;
       case "Submitted to Innovation Lead":
-        return PCRStatus.SubmittedToInnovationLead;
+        return ProjectChangeRequestStatus.SubmittedToInnovationLead;
       case "Queried by Innovate UK":
-        return PCRStatus.QueriedByInnovateUK;
+        return ProjectChangeRequestStatus.QueriedByInnovateUK;
       case "In External Review":
-        return PCRStatus.InExternalReview;
+        return ProjectChangeRequestStatus.InExternalReview;
       case "In Review with Innovate UK":
-        return PCRStatus.InReviewWithInnovateUK;
+        return ProjectChangeRequestStatus.InReviewWithInnovateUK;
       case "Rejected":
-        return PCRStatus.Rejected;
+        return ProjectChangeRequestStatus.Rejected;
       case "Withdrawn":
-        return PCRStatus.Withdrawn;
+        return ProjectChangeRequestStatus.Withdrawn;
       case "Approved":
-        return PCRStatus.Approved;
+        return ProjectChangeRequestStatus.Approved;
       case "Actioned":
-        return PCRStatus.Actioned;
+        return ProjectChangeRequestStatus.Actioned;
       default:
-        return PCRStatus.Unknown;
+        return ProjectChangeRequestStatus.Unknown;
     }
   }
 
-  private mapItemStatus(status: string): PCRItemStatus {
+  private mapItemStatus(status: string): ProjectChangeRequestItemStatus {
     switch (status) {
       case "To Do":
-        return PCRItemStatus.ToDo;
+        return ProjectChangeRequestItemStatus.ToDo;
       case "Incomplete":
-        return PCRItemStatus.Incomplete;
+        return ProjectChangeRequestItemStatus.Incomplete;
       case "Complete":
-        return PCRItemStatus.Complete;
+        return ProjectChangeRequestItemStatus.Complete;
       default:
-        return PCRItemStatus.Unknown;
+        return ProjectChangeRequestItemStatus.Unknown;
     }
   }
 }

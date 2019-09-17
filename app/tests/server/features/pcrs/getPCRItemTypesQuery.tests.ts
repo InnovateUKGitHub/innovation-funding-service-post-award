@@ -1,22 +1,22 @@
 // tslint:disable:no-identical-functions no-duplicate-string
 import { TestContext } from "../../testContextProvider";
 import { GetPCRItemTypesQuery } from "@server/features/pcrs/getItemTypesQuery";
-import { PCRItemType } from "@framework/entities/pcr";
+import { ProjectChangeRequestItemTypeEntity } from "@framework/entities";
 
 describe("GetPCRItemTypesQuery", () => {
   test("returns all item types", async () => {
     const context = new TestContext();
 
     const expectedIds = [
-      PCRItemType.AccountNameChange,
-      PCRItemType.PartnerAddition,
-      PCRItemType.PartnerWithdrawal,
-      PCRItemType.ProjectSuspension,
-      PCRItemType.ProjectTermination,
-      PCRItemType.MultiplePartnerFinancialVirement,
-      PCRItemType.SinglePartnerFinancialVirement,
-      PCRItemType.ScopeChange,
-      PCRItemType.TimeExtension
+      ProjectChangeRequestItemTypeEntity.AccountNameChange,
+      ProjectChangeRequestItemTypeEntity.PartnerAddition,
+      ProjectChangeRequestItemTypeEntity.PartnerWithdrawal,
+      ProjectChangeRequestItemTypeEntity.ProjectSuspension,
+      ProjectChangeRequestItemTypeEntity.ProjectTermination,
+      ProjectChangeRequestItemTypeEntity.MultiplePartnerFinancialVirement,
+      ProjectChangeRequestItemTypeEntity.SinglePartnerFinancialVirement,
+      ProjectChangeRequestItemTypeEntity.ScopeChange,
+      ProjectChangeRequestItemTypeEntity.TimeExtension
     ];
 
     const query = new GetPCRItemTypesQuery();
@@ -33,7 +33,7 @@ describe("GetPCRItemTypesQuery", () => {
     const query = new GetPCRItemTypesQuery();
     const result = await context.runQuery(query).then(x => x[2]);
 
-    expect(result.type).toEqual(PCRItemType.PartnerWithdrawal);
+    expect(result.type).toEqual(ProjectChangeRequestItemTypeEntity.PartnerWithdrawal);
     expect(result.enabled).toEqual(true);
     expect(result.recordTypeId).toEqual(recordType.id);
     expect(result.displayName).toEqual("Partner Withdrawal");

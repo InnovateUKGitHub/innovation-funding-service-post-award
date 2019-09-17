@@ -407,21 +407,21 @@ class RecordTypeTestRepository extends TestRepository<Entities.RecordType> imple
   }
 }
 
-class PCRTestRepository extends TestRepository<Entities.PCR> implements Repositories.IProjectChangeRequestRepository {
+class PCRTestRepository extends TestRepository<Entities.ProjectChangeRequestEntity> implements Repositories.IProjectChangeRequestRepository {
 
-  getAllByProjectId(projectId: string): Promise<Entities.PCR[]> {
+  getAllByProjectId(projectId: string): Promise<Entities.ProjectChangeRequestEntity[]> {
     return super.getWhere(x => x.projectId === projectId);
   }
 
-  getById(projectId: string, id: string): Promise<Entities.PCR> {
+  getById(projectId: string, id: string): Promise<Entities.ProjectChangeRequestEntity> {
     return super.getOne(x => x.projectId === projectId && x.id === id);
   }
 
-  updateProjectChangeRequest(pcr: Entities.PCR): Promise<void> {
+  updateProjectChangeRequest(pcr: Entities.ProjectChangeRequestEntity): Promise<void> {
     return Promise.resolve();
   }
 
-  updateItems(pcr: Entities.PCR, pcrItems: Entities.PCRItem[]) {
+  updateItems(pcr: Entities.ProjectChangeRequestEntity, pcrItems: Entities.ProjectChangeRequestItemEntity[]) {
     pcr.items = pcr.items.map(existingItem => {
       const updatedItem = pcrItems.find(x => x.id === existingItem.id);
       return updatedItem || existingItem;
@@ -429,7 +429,7 @@ class PCRTestRepository extends TestRepository<Entities.PCR> implements Reposito
     return Promise.resolve();
   }
 
-  private mapItemsForCreate(headerId: string, pcr: Entities.ProjectChangeRequestForCreate, items: Entities.ProjectChangeRequestItemForCreate[]) {
+  private mapItemsForCreate(headerId: string, pcr: Entities.ProjectChangeRequestForCreateEntity, items: Entities.ProjectChangeRequestItemForCreateEntity[]) {
     const itemLength = pcr.items ? items.length : 0;
     return items.map((x, i) => {
       const itemId = `ProjectChangeRequest-${headerId}-Item-${itemLength + i}`;
@@ -437,17 +437,17 @@ class PCRTestRepository extends TestRepository<Entities.PCR> implements Reposito
     });
   }
 
-  async insertItems(headerId: string, items: Entities.ProjectChangeRequestItemForCreate[]): Promise<void> {
+  async insertItems(headerId: string, items: Entities.ProjectChangeRequestItemForCreateEntity[]): Promise<void> {
     const pcr = await super.getOne(x => x.id === headerId);
     const insert = this.mapItemsForCreate(headerId, pcr, items);
     if (!pcr.items) pcr.items = [];
     pcr.items.push(...insert);
   }
 
-  async createProjectChangeRequest(projectChangeRequest: Entities.ProjectChangeRequestForCreate): Promise<string> {
+  async createProjectChangeRequest(projectChangeRequest: Entities.ProjectChangeRequestForCreateEntity): Promise<string> {
     const id = `ProjectChangeRequest${(this.Items.length)}`;
     const items = this.mapItemsForCreate(id, projectChangeRequest, projectChangeRequest.items);
-    await super.insertOne({ id, items, ...projectChangeRequest} as Entities.PCR);
+    await super.insertOne({ id, items, ...projectChangeRequest} as Entities.ProjectChangeRequestEntity);
     return id;
   }
 
@@ -456,7 +456,7 @@ class PCRTestRepository extends TestRepository<Entities.PCR> implements Reposito
     return Promise.resolve(!!data);
   }
 
-  delete(item: Entities.PCR) {
+  delete(item: Entities.ProjectChangeRequestEntity) {
     return super.deleteItem(item);
   }
 }
@@ -472,7 +472,7 @@ export interface ITestRepositories extends IRepositories {
   monitoringReportResponse: MonitoringReportResponseTestRepository;
   monitoringReportQuestions: MonitoringReportQuestionsRepository;
   monitoringReportStatusChange: MonitoringReportStatusChangeTestRepository;
-  pcrs: PCRTestRepository;
+  projectChangeRequests: PCRTestRepository;
   profileDetails: ProfileDetailsTestRepository;
   profileTotalCostCategory: ProfileTotalCostCategoryTestRepository;
   profileTotalPeriod: ProfileTotalPeriodTestRepository;
@@ -500,7 +500,7 @@ export const createTestRepositories = (): ITestRepositories => {
     monitoringReportHeader: new MonitoringReportHeaderTestRepository(),
     monitoringReportQuestions: new MonitoringReportQuestionsRepository(),
     monitoringReportStatusChange: new MonitoringReportStatusChangeTestRepository(),
-    pcrs: new PCRTestRepository(),
+    projectChangeRequests: new PCRTestRepository(),
     profileDetails: new ProfileDetailsTestRepository(),
     profileTotalPeriod: new ProfileTotalPeriodTestRepository(partnerRepository),
     profileTotalCostCategory: new ProfileTotalCostCategoryTestRepository(),

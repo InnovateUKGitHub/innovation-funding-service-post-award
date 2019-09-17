@@ -1,11 +1,11 @@
 import {
-  PCR,
-  PCRItem,
-  PCRItemStatus,
-  PCRStatus,
-  ProjectChangeRequestForCreate,
-  ProjectChangeRequestItemForCreate
-} from "@framework/entities/pcr";
+  ProjectChangeRequestEntity,
+  ProjectChangeRequestForCreateEntity,
+  ProjectChangeRequestItemEntity,
+  ProjectChangeRequestItemForCreateEntity,
+  ProjectChangeRequestItemStatus,
+  ProjectChangeRequestStatus
+} from "@framework/entities";
 import SalesforceRepositoryBase from "./salesforceRepositoryBase";
 import { Connection } from "jsforce";
 import { ILogger } from "@server/features/common/logger";
@@ -13,14 +13,14 @@ import { SalesforcePCRMapper } from "./mappers/pcrSummaryMapper";
 import { NotFoundError } from "@server/features/common";
 
 export interface IProjectChangeRequestRepository {
-  createProjectChangeRequest(projectChangeRequest: ProjectChangeRequestForCreate): Promise<string>;
-  updateProjectChangeRequest(pcr: PCR): Promise<void>;
-  updateItems(pcr: PCR, items: PCRItem[]): Promise<void>;
-  getAllByProjectId(projectId: string): Promise<PCR[]>;
-  getById(projectId: string, id: string): Promise<PCR>;
-  insertItems(headerId: string, items: ProjectChangeRequestItemForCreate[]): Promise<void>;
+  createProjectChangeRequest(projectChangeRequest: ProjectChangeRequestForCreateEntity): Promise<string>;
+  updateProjectChangeRequest(pcr: ProjectChangeRequestEntity): Promise<void>;
+  updateItems(pcr: ProjectChangeRequestEntity, items: ProjectChangeRequestItemEntity[]): Promise<void>;
+  getAllByProjectId(projectId: string): Promise<ProjectChangeRequestEntity[]>;
+  getById(projectId: string, id: string): Promise<ProjectChangeRequestEntity>;
+  insertItems(headerId: string, items: ProjectChangeRequestItemForCreateEntity[]): Promise<void>;
   isExisting(projectId: string, projectChangeRequestId: string): Promise<boolean>;
-  delete(pcr: PCR): Promise<void>;
+  delete(pcr: ProjectChangeRequestEntity): Promise<void>;
 }
 
 export interface ISalesforcePCR {
@@ -70,14 +70,14 @@ export class ProjectChangeRequestRepository extends SalesforceRepositoryBase<ISa
     "Acc_Comments__c",
   ];
 
-  async getAllByProjectId(projectId: string): Promise<PCR[]> {
+  async getAllByProjectId(projectId: string): Promise<ProjectChangeRequestEntity[]> {
     const headerRecordTypeId = await this.getRecordTypeId(this.salesforceObjectName, this.recordType);
     const data = await super.where(`Acc_Project_Participant__r.Acc_ProjectId__c='${projectId}'`);
     const mapper = new SalesforcePCRMapper(headerRecordTypeId);
     return mapper.map(data);
   }
 
-  async getById(projectId: string, id: string): Promise<PCR> {
+  async getById(projectId: string, id: string): Promise<ProjectChangeRequestEntity> {
     const data = await super.where(`Acc_Project_Participant__r.Acc_ProjectId__c='${projectId}' AND (Id = '${id}' OR Acc_RequestHeader__c = '${id}')`);
 
     const headerRecordTypeId = await this.getRecordTypeId(this.salesforceObjectName, this.recordType);
@@ -96,7 +96,7 @@ export class ProjectChangeRequestRepository extends SalesforceRepositoryBase<ISa
     return !!data;
   }
 
-  async updateProjectChangeRequest(pcr: PCR) {
+  async updateProjectChangeRequest(pcr: ProjectChangeRequestEntity) {
     await super.updateItem({
       Id: pcr.id,
       Acc_Comments__c: pcr.comments,
@@ -106,14 +106,14 @@ export class ProjectChangeRequestRepository extends SalesforceRepositoryBase<ISa
     });
   }
 
-  async updateItems(pcr: PCR, items: PCRItem[]) {
+  async updateItems(pcr: ProjectChangeRequestEntity, items: ProjectChangeRequestItemEntity[]) {
     await super.updateAll(items.map(x => ({
       Id: x.id,
       Acc_MarkedasComplete__c: this.mapItemStatus(x.status),
     })));
   }
 
-  async createProjectChangeRequest(projectChangeRequest: ProjectChangeRequestForCreate) {
+  async createProjectChangeRequest(projectChangeRequest: ProjectChangeRequestForCreateEntity) {
     const headerRecordTypeId = await this.getRecordTypeId(this.salesforceObjectName, this.recordType);
     // Insert header
     const id = await super.insertItem({
@@ -127,7 +127,7 @@ export class ProjectChangeRequestRepository extends SalesforceRepositoryBase<ISa
     return id;
   }
 
-  async insertItems(headerId: string, items: ProjectChangeRequestItemForCreate[]) {
+  async insertItems(headerId: string, items: ProjectChangeRequestItemForCreateEntity[]) {
     await super.insertAll(items.map(x => ({
       Acc_RequestHeader__c: headerId,
       RecordTypeId: x.recordTypeId,
@@ -136,46 +136,46 @@ export class ProjectChangeRequestRepository extends SalesforceRepositoryBase<ISa
     })));
   }
 
-  async delete(item: PCR) {
+  async delete(item: ProjectChangeRequestEntity) {
     return super.deleteAll([item.id, ... item.items.map(x => x.id)]);
   }
 
-  private mapStatus(status: PCRStatus): string {
+  private mapStatus(status: ProjectChangeRequestStatus): string {
     switch (status) {
-      case PCRStatus.Draft:
+      case ProjectChangeRequestStatus.Draft:
         return "Draft";
-      case PCRStatus.SubmittedToMonitoringOfficer:
+      case ProjectChangeRequestStatus.SubmittedToMonitoringOfficer:
         return "Submitted to Monitoring Officer";
-      case PCRStatus.QueriedByMonitoringOfficer:
+      case ProjectChangeRequestStatus.QueriedByMonitoringOfficer:
         return "Queried by Monitoring Officer";
-      case PCRStatus.SubmittedToInnovationLead:
+      case ProjectChangeRequestStatus.SubmittedToInnovationLead:
         return "Submitted to Innovation Lead";
-      case PCRStatus.QueriedByInnovateUK:
+      case ProjectChangeRequestStatus.QueriedByInnovateUK:
         return "Queried by Innovate UK";
-      case PCRStatus.InExternalReview:
+      case ProjectChangeRequestStatus.InExternalReview:
         return "In External Review";
-      case PCRStatus.InReviewWithInnovateUK:
+      case ProjectChangeRequestStatus.InReviewWithInnovateUK:
         return "In Review with Innovate UK";
-      case PCRStatus.Rejected:
+      case ProjectChangeRequestStatus.Rejected:
         return "Rejected";
-      case PCRStatus.Withdrawn:
+      case ProjectChangeRequestStatus.Withdrawn:
         return "Withdrawn";
-      case PCRStatus.Approved:
+      case ProjectChangeRequestStatus.Approved:
         return "Approved";
-      case PCRStatus.Actioned:
+      case ProjectChangeRequestStatus.Actioned:
         return "Actioned";
       default:
         return "";
     }
   }
 
-  private mapItemStatus(status?: PCRItemStatus): string {
+  private mapItemStatus(status?: ProjectChangeRequestItemStatus): string {
     switch (status) {
-      case PCRItemStatus.ToDo:
+      case ProjectChangeRequestItemStatus.ToDo:
         return "To Do";
-      case PCRItemStatus.Incomplete:
+      case ProjectChangeRequestItemStatus.Incomplete:
         return "Incomplete";
-      case PCRItemStatus.Complete:
+      case ProjectChangeRequestItemStatus.Complete:
         return "Complete";
       default:
         return "";
