@@ -8,8 +8,8 @@ import * as Actions from "../../redux/actions";
 import * as Selectors from "../../redux/selectors";
 import { Pending } from "@shared/pending";
 import { PCRsDashboardRoute } from "./dashboard";
-import { PCRPrepareItemRoute } from "./prepareItem";
-import { PCRPrepareReasoningRoute } from "./prepareReasoning";
+import { ProjectChangeRequestPrepareItemRoute } from "./prepareItem";
+import { ProjectChangeRequestPrepareReasoningRoute } from "./prepareReasoning";
 import { PCRDto, PCRItemDto } from "@framework/dtos/pcrDtos";
 import { IEditorStore } from "@ui/redux";
 import { PCRDtoValidator, PCRItemDtoValidator } from "@ui/validators/pcrDtoValidator";
@@ -19,7 +19,7 @@ import { Result } from "@ui/validation";
 import { Link } from "../../components";
 import { ProjectChangeRequestAddTypeRoute } from "@ui/containers";
 
-interface Params {
+export interface ProjectChangeRequestPrepareParams {
   projectId: string;
   pcrId: string;
 }
@@ -35,7 +35,7 @@ interface Callbacks {
   onSave: (projectId: string, pcrId: string, dto: PCRDto) => void;
 }
 
-class PCRPrepareComponent extends ContainerBase<Params, Data, Callbacks> {
+class PCRPrepareComponent extends ContainerBase<ProjectChangeRequestPrepareParams, Data, Callbacks> {
   render() {
     const combined = Pending.combine({ project: this.props.project, pcr: this.props.pcr, editor: this.props.editor });
 
@@ -114,11 +114,11 @@ class PCRPrepareComponent extends ContainerBase<Params, Data, Callbacks> {
   }
 
   private renderReasoning(pcr: PCRDto, validation: PCRDtoValidator) {
-    return this.renderListItem(pcr.items.length + 1, "Give more details", "Reasoning for Innovate UK", pcr.reasoningStatusName, PCRPrepareReasoningRoute.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId }), [validation.reasoningStatus, validation.reasoningComments]);
+    return this.renderListItem(pcr.items.length + 1, "Give more details", "Reasoning for Innovate UK", pcr.reasoningStatusName, ProjectChangeRequestPrepareReasoningRoute.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId }), [validation.reasoningStatus, validation.reasoningComments]);
   }
 
   private renderItem(item: PCRItemDto, step: number, validation: PCRItemDtoValidator) {
-    return this.renderListItem(step, item.typeName, "Provide your files", item.statusName, PCRPrepareItemRoute.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId, itemId: item.id }), validation.errors);
+    return this.renderListItem(step, item.typeName, "Provide your files", item.statusName, ProjectChangeRequestPrepareItemRoute.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId, itemId: item.id }), validation.errors);
   }
 
   private renderListItem(step: number, title: string, text: string, status: string, route: ILinkInfo, validation: Result[]) {
@@ -137,7 +137,7 @@ class PCRPrepareComponent extends ContainerBase<Params, Data, Callbacks> {
   }
 }
 
-const definition = ReduxContainer.for<Params, Data, Callbacks>(PCRPrepareComponent);
+const definition = ReduxContainer.for<ProjectChangeRequestPrepareParams, Data, Callbacks>(PCRPrepareComponent);
 
 export const PCRPrepare = definition.connect({
   withData: (state, params) => ({
@@ -151,7 +151,7 @@ export const PCRPrepare = definition.connect({
   })
 });
 
-export const PCRPrepareRoute = definition.route({
+export const ProjectChangeRequestPrepareRoute = definition.route({
   routeName: "pcrPrepare",
   routePath: "/projects/:projectId/pcrs/:pcrId/prepare",
   getParams: (route) => ({
