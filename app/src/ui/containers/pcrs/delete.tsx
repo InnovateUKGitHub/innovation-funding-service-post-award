@@ -60,7 +60,7 @@ class PCRDeleteComponent extends ContainerBase<Params, Data, Callbacks> {
         </ACC.Section>
 
         <ACC.Section>
-          <DeleteForm.Form editor={editor}>
+          <DeleteForm.Form editor={editor} qa="pcrDelete">
             <DeleteForm.Button name="delete" styling="Warning" onClick={() => this.props.onDelete(this.props.projectId, this.props.pcrId, editor.data)}>Delete request</DeleteForm.Button>
           </DeleteForm.Form>
         </ACC.Section>
