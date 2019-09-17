@@ -1,7 +1,7 @@
 import { GetAllPCRsQuery } from "@server/features/pcrs/getAllPCRsQuery";
 import { CreateProjectChangeRequestCommand } from "@server/features/pcrs/createProjectChangeRequestCommand";
 import { TestContext } from "../../testContextProvider";
-import { PCRItemStatus, PCRStatus } from "@framework/entities";
+import { ProjectChangeRequestItemStatus, ProjectChangeRequestStatus } from "@framework/entities";
 import { PCRDto, ProjectRole } from "@framework/dtos";
 import { ValidationError } from "@server/features/common";
 import { Authorisation } from "@framework/types";
@@ -14,8 +14,8 @@ describe("GetAllPCRsQuery", () => {
     await context.testData.createPartner(project);
     const command = new CreateProjectChangeRequestCommand(project.Id, {
       projectId: project.Id,
-      status: PCRStatus.Draft,
-      reasoningStatus: PCRItemStatus.ToDo
+      status: ProjectChangeRequestStatus.Draft,
+      reasoningStatus: ProjectChangeRequestItemStatus.ToDo
     } as any as PCRDto);
 
     await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
@@ -26,8 +26,8 @@ describe("GetAllPCRsQuery", () => {
     await context.testData.createPartner(project);
     const command = new CreateProjectChangeRequestCommand(project.Id, {
       projectId: project.Id,
-      status: PCRStatus.Draft,
-      reasoningStatus: PCRItemStatus.Complete
+      status: ProjectChangeRequestStatus.Draft,
+      reasoningStatus: ProjectChangeRequestItemStatus.Complete
     } as any as PCRDto);
 
     await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
@@ -38,8 +38,8 @@ describe("GetAllPCRsQuery", () => {
     await context.testData.createPartner(project);
     const command = new CreateProjectChangeRequestCommand(project.Id, {
       projectId: project.Id,
-      status: PCRStatus.Approved,
-      reasoningStatus: PCRItemStatus.ToDo
+      status: ProjectChangeRequestStatus.Approved,
+      reasoningStatus: ProjectChangeRequestItemStatus.ToDo
     } as any as PCRDto);
 
     await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
@@ -51,25 +51,25 @@ describe("GetAllPCRsQuery", () => {
     const recordTypes = context.testData.createPCRRecordTypes();
     const command = new CreateProjectChangeRequestCommand(project.Id, {
       projectId: project.Id,
-      status: PCRStatus.Draft,
-      reasoningStatus: PCRItemStatus.ToDo,
+      status: ProjectChangeRequestStatus.Draft,
+      reasoningStatus: ProjectChangeRequestItemStatus.ToDo,
       items: [{
         type: PCRRecordTypeMetaValues.find(x => x.typeName === recordTypes[0].type)!.type,
-        status: PCRItemStatus.ToDo
+        status: ProjectChangeRequestItemStatus.ToDo
       }]
     } as any as PCRDto);
 
     const id = await context.runCommand(command);
-    const newPCR = context.repositories.pcrs.Items.find(x => x.id === id)!;
+    const newPCR = context.repositories.projectChangeRequests.Items.find(x => x.id === id)!;
     expect(newPCR).toBeDefined();
     expect(newPCR.items).toHaveLength(1);
     expect(newPCR).toEqual({
       id,
       projectId: partner.Id, // TODO remove this hackery when SF projectId field added to pcr object
-      status: PCRStatus.Draft,
-      reasoningStatus: PCRItemStatus.ToDo,
+      status: ProjectChangeRequestStatus.Draft,
+      reasoningStatus: ProjectChangeRequestItemStatus.ToDo,
       items: [{
-        status: PCRItemStatus.ToDo,
+        status: ProjectChangeRequestItemStatus.ToDo,
         projectId: partner.Id, // TODO remove this hackery when SF projectId field added to pcr object
         recordTypeId: recordTypes[0].id,
       }]
@@ -82,11 +82,11 @@ describe("GetAllPCRsQuery", () => {
     const recordTypes = context.testData.createPCRRecordTypes();
     const command = new CreateProjectChangeRequestCommand(project.Id, {
       projectId: project.Id,
-      status: PCRStatus.Draft,
-      reasoningStatus: PCRItemStatus.ToDo,
+      status: ProjectChangeRequestStatus.Draft,
+      reasoningStatus: ProjectChangeRequestItemStatus.ToDo,
       items: [{
         type: recordTypes[0].type,
-        status: PCRItemStatus.ToDo,
+        status: ProjectChangeRequestItemStatus.ToDo,
         recordTypeId: recordTypes[0].id
       }]
     } as any as PCRDto);
@@ -105,11 +105,11 @@ describe("GetAllPCRsQuery", () => {
     const recordTypes = context.testData.createPCRRecordTypes();
     const command = new CreateProjectChangeRequestCommand(project.Id, {
       projectId: project.Id,
-      status: PCRStatus.Draft,
-      reasoningStatus: PCRItemStatus.ToDo,
+      status: ProjectChangeRequestStatus.Draft,
+      reasoningStatus: ProjectChangeRequestItemStatus.ToDo,
       items: [{
         type: recordTypes[0].type,
-        status: PCRItemStatus.ToDo,
+        status: ProjectChangeRequestItemStatus.ToDo,
         recordTypeId: recordTypes[0].id
       }]
     } as any as PCRDto);

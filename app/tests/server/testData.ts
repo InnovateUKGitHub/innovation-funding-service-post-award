@@ -575,23 +575,23 @@ export class TestData {
     });
   }
 
-  public createPCR(project?: Repositories.ISalesforceProject, update?: Partial<Entites.PCR>) {
-    const seed = this.repositories.pcrs.Items.length + 1;
+  public createPCR(project?: Repositories.ISalesforceProject, update?: Partial<Entites.ProjectChangeRequestEntity>) {
+    const seed = this.repositories.projectChangeRequests.Items.length + 1;
 
     project = project || this.createProject();
 
-    const newItem: Entites.PCR = {
+    const newItem: Entites.ProjectChangeRequestEntity = {
       id: `PCR_${seed}`,
       projectId: project.Id,
       comments: "",
       number: seed,
-      status: Entites.PCRStatus.Unknown,
-      statusName: Entites.PCRStatus[Entites.PCRStatus.Unknown],
+      status: Entites.ProjectChangeRequestStatus.Unknown,
+      statusName: Entites.ProjectChangeRequestStatus[Entites.ProjectChangeRequestStatus.Unknown],
       started: new Date(),
       updated: new Date(),
-      reasoningStatus: Entites.PCRItemStatus.Complete,
+      reasoningStatus: Entites.ProjectChangeRequestItemStatus.Complete,
       reasoning: "Test Reasoning",
-      reasoningStatusName: Entites.PCRItemStatus[Entites.PCRItemStatus.Complete],
+      reasoningStatusName: Entites.ProjectChangeRequestItemStatus[Entites.ProjectChangeRequestItemStatus.Complete],
       items: []
     };
 
@@ -599,13 +599,13 @@ export class TestData {
       Object.assign(newItem, update);
     }
 
-    this.repositories.pcrs.Items.push(newItem);
+    this.repositories.projectChangeRequests.Items.push(newItem);
 
     return newItem;
   }
 
-  public createPCRItem(pcr: Entites.PCR, recordType?: Entites.RecordType, update?: Partial<Entites.PCRItem>) {
-    const seed = this.repositories.pcrs.Items.reduce((c, x) => c + x.items.length, 0) + 1;
+  public createPCRItem(pcr: Entites.ProjectChangeRequestEntity, recordType?: Entites.RecordType, update?: Partial<Entites.ProjectChangeRequestItemEntity>) {
+    const seed = this.repositories.projectChangeRequests.Items.reduce((c, x) => c + x.items.length, 0) + 1;
     pcr = pcr || this.createPCR();
     recordType = recordType || this.createPCRRecordTypes().find(x => pcr.items.every(y => x.id !== y.recordTypeId));
 
@@ -613,12 +613,12 @@ export class TestData {
       throw new Error("Unable to create pcr item as pcr already has all the record types");
     }
 
-    const newItem: Entites.PCRItem = {
+    const newItem: Entites.ProjectChangeRequestItemEntity = {
       id: `PCR_Item_${seed}`,
       pcrId: pcr.id,
       recordTypeId: recordType.id,
       projectId: pcr.projectId,
-      status: Entites.PCRItemStatus.Complete,
+      status: Entites.ProjectChangeRequestItemStatus.Complete,
       statusName: "Complete",
     };
 

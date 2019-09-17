@@ -9,7 +9,7 @@ export class GetProjectChangeRequestDocumentOrItemDocumentsSummaryQuery extends 
   }
 
   protected async accessControl(auth: Authorisation, context: IContext) {
-    const projectChangeRequestExists = await context.repositories.pcrs.isExisting(this.projectId, this.projectChangeRequestIdOrItemId);
+    const projectChangeRequestExists = await context.repositories.projectChangeRequests.isExisting(this.projectId, this.projectChangeRequestIdOrItemId);
     if (!projectChangeRequestExists) return false;
 
     return auth.forProject(this.projectId).hasAnyRoles(ProjectRole.ProjectManager, ProjectRole.MonitoringOfficer);

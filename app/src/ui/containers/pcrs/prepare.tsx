@@ -13,7 +13,7 @@ import { ProjectChangeRequestPrepareReasoningRoute } from "./prepareReasoning";
 import { PCRDto, PCRItemDto } from "@framework/dtos/pcrDtos";
 import { IEditorStore } from "@ui/redux";
 import { PCRDtoValidator, PCRItemDtoValidator } from "@ui/validators/pcrDtoValidator";
-import { PCRStatus } from "@framework/entities";
+import { ProjectChangeRequestStatus } from "@framework/entities";
 import { navigateTo } from "../../redux/actions";
 import { Result } from "@ui/validation";
 import { Link } from "../../components";
@@ -43,11 +43,11 @@ class PCRPrepareComponent extends ContainerBase<ProjectChangeRequestPrepareParam
   }
 
   private onSave(editor: IEditorStore<PCRDto, PCRDtoValidator>, original: PCRDto, submit: boolean) {
-    if (submit && original.status === PCRStatus.QueriedByInnovateUK) {
-      editor.data.status = PCRStatus.SubmittedToInnovationLead;
+    if (submit && original.status === ProjectChangeRequestStatus.QueriedByInnovateUK) {
+      editor.data.status = ProjectChangeRequestStatus.SubmittedToInnovationLead;
     }
     else if (submit) {
-      editor.data.status = PCRStatus.SubmittedToMonitoringOfficer;
+      editor.data.status = ProjectChangeRequestStatus.SubmittedToMonitoringOfficer;
     }
     else {
       // not submitting so set status to the original status

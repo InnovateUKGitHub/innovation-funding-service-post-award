@@ -2,7 +2,7 @@
 import { TestContext } from "../../testContextProvider";
 import { GetAllPCRsQuery } from "@server/features/pcrs/getAllPCRsQuery";
 import { DateTime } from "luxon";
-import { PCRItemType, PCRStatus } from "@framework/entities";
+import { ProjectChangeRequestItemTypeEntity, ProjectChangeRequestStatus } from "@framework/entities";
 
 describe("GetAllPCRsQuery", () => {
   test("when project has no pcrs then empty list returned", async () => {
@@ -52,7 +52,7 @@ describe("GetAllPCRsQuery", () => {
       started: DateTime.fromFormat("1 april 2013", "d MMM yyyy").toJSDate(),
       updated: DateTime.fromFormat("1 october 2013", "d MMM yyyy").toJSDate(),
       number: 531,
-      status: 55 as PCRStatus,
+      status: 55 as ProjectChangeRequestStatus,
       statusName: "Expected Status"
     });
 
@@ -77,7 +77,7 @@ describe("GetAllPCRsQuery", () => {
       started: DateTime.fromFormat("1 april 2013", "d MMM yyyy").toJSDate(),
       updated: DateTime.fromFormat("1 october 2013", "d MMM yyyy").toJSDate(),
       number: 531,
-      status: 55 as PCRStatus,
+      status: 55 as ProjectChangeRequestStatus,
       statusName: "Expected Status"
     });
 
@@ -105,7 +105,7 @@ describe("GetAllPCRsQuery", () => {
     const query = new GetAllPCRsQuery(pcr.projectId);
 
     const result = await context.runQuery(query).then(x => x[0]);
-    const expectedTypes = recordTypes.map((x,i) => (i + 1) * 10 as PCRItemType);
+    const expectedTypes = recordTypes.map((x,i) => (i + 1) * 10 as ProjectChangeRequestItemTypeEntity);
 
     expect(result.items.map(x => x.type)).toEqual(expectedTypes);
     expect(result.items.map(x => x.typeName)).toEqual(recordTypes.map(x => x.type));

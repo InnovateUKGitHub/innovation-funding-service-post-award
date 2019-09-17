@@ -6,8 +6,8 @@ import * as Actions from "../../redux/actions";
 import * as Selectors from "../../redux/selectors";
 import * as Dtos from "@framework/dtos";
 import { Pending } from "@shared/pending";
-import { IDataStore, IEditorStore } from "@ui/redux";
-import { PCRItemStatus } from "@framework/entities/pcr";
+import { IEditorStore } from "@ui/redux";
+import { ProjectChangeRequestItemStatus } from "@framework/entities";
 import { PCRsDashboardRoute } from "./dashboard";
 import { ProjectChangeRequestPrepareRoute } from "@ui/containers";
 import { PCRDtoValidator } from "@ui/validators/pcrDtoValidator";
@@ -57,7 +57,7 @@ class PCRCreateComponent extends ContainerBase<ProjectChangeRequestAddTypeParams
       id: "",
       type: itemType.type,
       typeName: itemType.displayName,
-      status: PCRItemStatus.ToDo,
+      status: ProjectChangeRequestItemStatus.ToDo,
       statusName: ""
     };
   }
