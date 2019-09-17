@@ -198,7 +198,8 @@ export const PCRPrepareReasoningRoute = definition.route({
   getLoadDataActions: (params) => [
     Actions.loadProject(params.projectId),
     Actions.loadPcr(params.projectId, params.pcrId),
-    Actions.loadProjectChangeRequestDocumentsOrItemDocuments(params.projectId, params.pcrId)
+    Actions.loadProjectChangeRequestDocumentsOrItemDocuments(params.projectId, params.pcrId),
+    Actions.loadPcrTypes(),
   ],
   getTitle: () => ({
     htmlTitle: "Provide reasoning to Innovate UK",
