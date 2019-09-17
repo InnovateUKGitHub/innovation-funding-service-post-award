@@ -56,7 +56,6 @@ class PCRCreateComponent extends ContainerBase<ProjectChangeRequestAddTypeParams
     return {
       id: "",
       type: itemType.type,
-      recordTypeId: itemType.recordTypeId,
       typeName: itemType.displayName,
       status: PCRItemStatus.ToDo,
       statusName: ""

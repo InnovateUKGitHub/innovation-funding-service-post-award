@@ -5,6 +5,7 @@ import { PCRItemStatus, PCRStatus } from "@framework/entities";
 import { PCRDto, ProjectRole } from "@framework/dtos";
 import { ValidationError } from "@server/features/common";
 import { Authorisation } from "@framework/types";
+import { PCRRecordTypeMetaValues } from "@server/features/pcrs/getItemTypesQuery";
 
 describe("GetAllPCRsQuery", () => {
   it("should throw a validation error if no items are added", async () => {
@@ -53,9 +54,8 @@ describe("GetAllPCRsQuery", () => {
       status: PCRStatus.Draft,
       reasoningStatus: PCRItemStatus.ToDo,
       items: [{
-        type: recordTypes[0].type,
-        status: PCRItemStatus.ToDo,
-        recordTypeId: recordTypes[0].id
+        type: PCRRecordTypeMetaValues.find(x => x.typeName === recordTypes[0].type)!.type,
+        status: PCRItemStatus.ToDo
       }]
     } as any as PCRDto);
 
@@ -69,9 +69,9 @@ describe("GetAllPCRsQuery", () => {
       status: PCRStatus.Draft,
       reasoningStatus: PCRItemStatus.ToDo,
       items: [{
-        projectId: partner.Id, // TODO remove this hackery when SF projectId field added to pcr object
         status: PCRItemStatus.ToDo,
-        recordTypeId: recordTypes[0].id
+        projectId: partner.Id, // TODO remove this hackery when SF projectId field added to pcr object
+        recordTypeId: recordTypes[0].id,
       }]
     });
   });

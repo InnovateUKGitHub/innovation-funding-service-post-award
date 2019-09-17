@@ -23,7 +23,6 @@ const mapItems = (pcrs: PCRItem[], itemTypes: PCRItemTypeDto[]): PCRItemDto[] =>
 
 const mapItem = (pcr: PCRItem, itemType: PCRItemTypeDto): PCRItemDto => ({
   id: pcr.id,
-  recordTypeId: pcr.recordTypeId,
   type: itemType.type,
   typeName: itemType.displayName,
   status: pcr.status,
