@@ -1,7 +1,7 @@
-import { PCR, PCRItem } from "@framework/entities";
+import { ProjectChangeRequestEntity, ProjectChangeRequestItemEntity } from "@framework/entities";
 import { PCRDto, PCRItemDto, PCRItemTypeDto } from "@framework/dtos";
 
-export const mapToPcrDto = (pcr: PCR, itemTypes: PCRItemTypeDto[]): PCRDto => ({
+export const mapToPcrDto = (pcr: ProjectChangeRequestEntity, itemTypes: PCRItemTypeDto[]): PCRDto => ({
   id: pcr.id,
   requestNumber: pcr.number,
   started: pcr.started,
@@ -16,12 +16,12 @@ export const mapToPcrDto = (pcr: PCR, itemTypes: PCRItemTypeDto[]): PCRDto => ({
   items: mapItems(pcr.items, itemTypes)
 });
 
-const mapItems = (pcrs: PCRItem[], itemTypes: PCRItemTypeDto[]): PCRItemDto[] => {
+const mapItems = (pcrs: ProjectChangeRequestItemEntity[], itemTypes: PCRItemTypeDto[]): PCRItemDto[] => {
   const filtered = itemTypes.filter(itemType => pcrs.some(x => x.recordTypeId === itemType.recordTypeId));
   return filtered.map(itemType => mapItem(pcrs.find(x => x.recordTypeId === itemType.recordTypeId)!, itemType));
 };
 
-const mapItem = (pcr: PCRItem, itemType: PCRItemTypeDto): PCRItemDto => ({
+const mapItem = (pcr: ProjectChangeRequestItemEntity, itemType: PCRItemTypeDto): PCRItemDto => ({
   id: pcr.id,
   type: itemType.type,
   typeName: itemType.displayName,

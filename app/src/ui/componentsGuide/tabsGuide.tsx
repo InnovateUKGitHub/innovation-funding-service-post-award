@@ -5,7 +5,7 @@ const tabs = [
     {text: "Claims", url: "#"},
     {text: "Forecasts", url: "#", selected:true},
     {text: "Project Details", url: "#"},
-    {text: "PCR", url: "#"},
+    {text: "ProjectChangeRequestEntity", url: "#"},
 ];
 
 export const tabsGuide: IGuide = {

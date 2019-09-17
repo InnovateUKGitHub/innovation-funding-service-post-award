@@ -5,7 +5,7 @@ import { Authorisation, IContext } from "@framework/types";
 import { GetAllProjectRolesForUser } from "../projects";
 import { mapToPcrDto } from "./mapToPCRDto";
 import { GetPCRItemTypesQuery } from "./getItemTypesQuery";
-import { ProjectChangeRequestItemForCreate } from "@framework/entities";
+import { ProjectChangeRequestItemForCreateEntity } from "@framework/entities";
 import { GetAllForProjectQuery } from "@server/features/partners";
 
 export class UpdatePCRCommand extends CommandBase<boolean> {
@@ -25,7 +25,7 @@ export class UpdatePCRCommand extends CommandBase<boolean> {
     const projectRoles = await context.runQuery(new GetAllProjectRolesForUser()).then(x => x.forProject(this.projectId).getRoles());
     const itemTypes = await context.runQuery(new GetPCRItemTypesQuery());
 
-    const original = await context.repositories.pcrs.getById(this.pcr.projectId, this.pcr.id);
+    const original = await context.repositories.projectChangeRequests.getById(this.pcr.projectId, this.pcr.id);
 
     const originalDto = mapToPcrDto(original, itemTypes);
 
@@ -40,7 +40,7 @@ export class UpdatePCRCommand extends CommandBase<boolean> {
     original.reasoning = this.pcr.reasoningComments;
     original.reasoningStatus = this.pcr.reasoningStatus;
 
-    await context.repositories.pcrs.updateProjectChangeRequest(original);
+    await context.repositories.projectChangeRequests.updateProjectChangeRequest(original);
 
     const paired = this.pcr.items.map(item => ({
       item,
@@ -62,10 +62,10 @@ export class UpdatePCRCommand extends CommandBase<boolean> {
     ;
 
     if (itemsToUpdate.length) {
-      await context.repositories.pcrs.updateItems(original, itemsToUpdate);
+      await context.repositories.projectChangeRequests.updateItems(original, itemsToUpdate);
     }
 
-    const itemsToInsert: ProjectChangeRequestItemForCreate[] = paired
+    const itemsToInsert: ProjectChangeRequestItemForCreateEntity[] = paired
       .filter(x => !x.originalItem)
       .map(x => ({
         recordTypeId: itemTypes.find(t => t.type === x.item.type)!.recordTypeId,
@@ -78,7 +78,7 @@ export class UpdatePCRCommand extends CommandBase<boolean> {
       const partner = await context.runQuery(new GetAllForProjectQuery(this.projectId));
       itemsToInsert.forEach(x => x.projectId = partner[0].id);
       //
-      await context.repositories.pcrs.insertItems(this.id, itemsToInsert);
+      await context.repositories.projectChangeRequests.insertItems(this.id, itemsToInsert);
     }
 
     return true;

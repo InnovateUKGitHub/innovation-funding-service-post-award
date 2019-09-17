@@ -6,7 +6,7 @@ import { MultipleDocumentUpdloadDtoValidator } from "@ui/validators";
 import { Pending } from "@shared/pending";
 import { PCRDtoValidator } from "@ui/validators/pcrDtoValidator";
 import { ProjectChangeRequestDtoValidatorForCreate } from "@ui/validators/projectChangeRequestDtoValidatorForCreate";
-import { PCRItemStatus, PCRStatus } from "@framework/entities";
+import { ProjectChangeRequestItemStatus, ProjectChangeRequestStatus } from "@framework/entities";
 import { Authorisation } from "@framework/types";
 
 export const getAllPcrTypes = () => dataStoreHelper("pcrTypes", "all");
@@ -17,8 +17,8 @@ export const getPcrItem = (projectId: string, id: string, itemId: string) => ({ 
 
 const createPcr = (projectId: string): Partial<PCRDto> => ({
   projectId,
-  status: PCRStatus.Draft,
-  reasoningStatus: PCRItemStatus.ToDo,
+  status: ProjectChangeRequestStatus.Draft,
+  reasoningStatus: ProjectChangeRequestItemStatus.ToDo,
   items: []
 });
 

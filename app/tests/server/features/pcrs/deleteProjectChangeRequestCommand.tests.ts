@@ -2,7 +2,7 @@ import { TestContext } from "../../testContextProvider";
 import { Authorisation, ProjectRole } from "@framework/types";
 import { DeleteProjectChangeRequestCommand } from "@server/features/pcrs/deleteProjectChangeRequestCommand";
 import { BadRequestError, NotFoundError } from "@server/features/common";
-import { PCRStatus } from "@framework/entities";
+import { ProjectChangeRequestStatus } from "@framework/entities";
 import { getAllEnumValues } from "@shared/enumHelper";
 
 describe("DeleteProjectChangeRequestCommand", () => {
@@ -70,20 +70,20 @@ describe("DeleteProjectChangeRequestCommand", () => {
     const context = new TestContext();
 
     const project = context.testData.createProject();
-    const pcr = context.testData.createPCR(project, {status: PCRStatus.Draft});
+    const pcr = context.testData.createPCR(project, {status: ProjectChangeRequestStatus.Draft});
 
     const command = new DeleteProjectChangeRequestCommand(project.Id, pcr.id);
 
-    expect(context.repositories.pcrs.Items.length).toBe(1);
+    expect(context.repositories.projectChangeRequests.Items.length).toBe(1);
 
     await context.runCommand(command);
 
-    expect(context.repositories.pcrs.Items.length).toBe(0);
+    expect(context.repositories.projectChangeRequests.Items.length).toBe(0);
   });
 
-  const allStatusNotDraft = getAllEnumValues<PCRStatus>(PCRStatus).filter(x => x !== PCRStatus.Draft && x !== PCRStatus.Unknown);
+  const allStatusNotDraft = getAllEnumValues<ProjectChangeRequestStatus>(ProjectChangeRequestStatus).filter(x => x !== ProjectChangeRequestStatus.Draft && x !== ProjectChangeRequestStatus.Unknown);
 
-  it.each(allStatusNotDraft.map(x => [PCRStatus[x], x]))("cannot delete pcr in %s status", async (statusName: string, status: PCRStatus) => {
+  it.each(allStatusNotDraft.map(x => [ProjectChangeRequestStatus[x], x]))("cannot delete pcr in %s status", async (statusName: string, status: ProjectChangeRequestStatus) => {
     const context = new TestContext();
     const pcr = context.testData.createPCR(undefined, {status});
 

@@ -1,11 +1,11 @@
 import { QueryBase } from "../common";
 import { PCRItemTypeDto } from "@framework/dtos/pcrDtos";
 import { IContext } from "@framework/types";
-import { PCRItemType, RecordType } from "@framework/entities";
+import { ProjectChangeRequestItemTypeEntity, RecordType } from "@framework/entities";
 import { GetAllRecordTypesQuery } from "../general/getAllRecordTypesQuery";
 
 interface IMetaValue {
-  type: PCRItemType;
+  type: ProjectChangeRequestItemTypeEntity;
   typeName: string;
   displayName?: string;
   enabled?: boolean;
@@ -13,15 +13,15 @@ interface IMetaValue {
 
 // @TODO: this might sit better in the pcr repository... leave for now
 export const PCRRecordTypeMetaValues: IMetaValue[] = [
-  { type: PCRItemType.AccountNameChange, typeName: "Account Name Change" },
-  { type: PCRItemType.PartnerAddition, typeName: "Partner Addition", },
-  { type: PCRItemType.PartnerWithdrawal, typeName: "Partner Withdrawal", },
-  { type: PCRItemType.ProjectSuspension, typeName: "Project Suspension", },
-  { type: PCRItemType.ProjectTermination, typeName: "Project Termination", },
-  { type: PCRItemType.MultiplePartnerFinancialVirement, typeName: "Multiple Partner Financial Virement", },
-  { type: PCRItemType.SinglePartnerFinancialVirement, typeName: "Single Partner Financial Virement", },
-  { type: PCRItemType.ScopeChange, typeName: "Scope Change", },
-  { type: PCRItemType.TimeExtension, typeName: "Time Extension", },
+  { type: ProjectChangeRequestItemTypeEntity.AccountNameChange, typeName: "Account Name Change" },
+  { type: ProjectChangeRequestItemTypeEntity.PartnerAddition, typeName: "Partner Addition", },
+  { type: ProjectChangeRequestItemTypeEntity.PartnerWithdrawal, typeName: "Partner Withdrawal", },
+  { type: ProjectChangeRequestItemTypeEntity.ProjectSuspension, typeName: "Project Suspension", },
+  { type: ProjectChangeRequestItemTypeEntity.ProjectTermination, typeName: "Project Termination", },
+  { type: ProjectChangeRequestItemTypeEntity.MultiplePartnerFinancialVirement, typeName: "Multiple Partner Financial Virement", },
+  { type: ProjectChangeRequestItemTypeEntity.SinglePartnerFinancialVirement, typeName: "Single Partner Financial Virement", },
+  { type: ProjectChangeRequestItemTypeEntity.ScopeChange, typeName: "Scope Change", },
+  { type: ProjectChangeRequestItemTypeEntity.TimeExtension, typeName: "Time Extension", },
 ];
 
 export class GetPCRItemTypesQuery extends QueryBase<PCRItemTypeDto[]> {

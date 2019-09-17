@@ -1,18 +1,18 @@
-import { PCRItemStatus, PCRItemType, PCRStatus, } from "@framework/entities";
+import { ProjectChangeRequestItemStatus, ProjectChangeRequestItemTypeEntity, ProjectChangeRequestStatus, } from "@framework/entities";
 
 export interface PCRBaseDto {
   id: string;
   requestNumber: number;
   started: Date;
   lastUpdated: Date;
-  status: PCRStatus;
+  status: ProjectChangeRequestStatus;
   statusName: string;
   projectId: string;
 }
 
 export interface PCRSummaryDto extends PCRBaseDto {
   items: {
-    type: PCRItemType;
+    type: ProjectChangeRequestItemTypeEntity;
     typeName: string;
   }[];
 }
@@ -20,21 +20,21 @@ export interface PCRSummaryDto extends PCRBaseDto {
 export interface PCRDto extends PCRBaseDto {
   items: PCRItemDto[];
   comments: string;
-  reasoningStatus: PCRItemStatus;
+  reasoningStatus: ProjectChangeRequestItemStatus;
   reasoningStatusName: string;
   reasoningComments: string;
 }
 
 export interface PCRItemDto {
   id: string;
-  type: PCRItemType;
+  type: ProjectChangeRequestItemTypeEntity;
   typeName: string;
-  status: PCRItemStatus;
+  status: ProjectChangeRequestItemStatus;
   statusName: string;
 }
 
 export interface PCRItemTypeDto {
-  type: PCRItemType;
+  type: ProjectChangeRequestItemTypeEntity;
   displayName: string;
   recordTypeId: string;
   enabled: boolean;

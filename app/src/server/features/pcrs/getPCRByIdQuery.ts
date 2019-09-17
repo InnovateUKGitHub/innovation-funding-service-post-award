@@ -15,7 +15,7 @@ export class GetPCRByIdQuery extends QueryBase<PCRDto> {
 
   protected async Run(context: IContext): Promise<PCRDto> {
     const itemTypes = await context.runQuery(new GetPCRItemTypesQuery());
-    const item = await context.repositories.pcrs.getById(this.projectId, this.id);
+    const item = await context.repositories.projectChangeRequests.getById(this.projectId, this.id);
     return mapToPcrDto(item, itemTypes);
   }
 }

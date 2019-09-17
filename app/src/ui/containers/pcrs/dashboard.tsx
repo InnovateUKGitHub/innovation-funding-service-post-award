@@ -1,6 +1,6 @@
 import React from "react";
 
-import { PCRItemType, PCRStatus } from "@framework/entities";
+import { ProjectChangeRequestItemTypeEntity, ProjectChangeRequestStatus } from "@framework/entities";
 import { Pending } from "@shared/pending";
 import * as ACC from "../../components";
 import * as Actions from "../../redux/actions";
@@ -34,7 +34,7 @@ class PCRsDashboardComponent extends ContainerBase<Params, Data, Callbacks> {
   }
 
   private renderContents(project: ProjectDto, pcrs: PCRSummaryDto[]) {
-    const archivedStatuses = [PCRStatus.Approved, PCRStatus.Withdrawn, PCRStatus.Rejected, PCRStatus.Actioned];
+    const archivedStatuses = [ProjectChangeRequestStatus.Approved, ProjectChangeRequestStatus.Withdrawn, ProjectChangeRequestStatus.Rejected, ProjectChangeRequestStatus.Actioned];
     const active = pcrs.filter(x => archivedStatuses.indexOf(x.status) === -1);
     const archived = pcrs.filter(x => archivedStatuses.indexOf(x.status) !== -1);
 
@@ -73,7 +73,7 @@ class PCRsDashboardComponent extends ContainerBase<Params, Data, Callbacks> {
     );
   }
 
-  private renderTypes(items: { type: PCRItemType; typeName: string; }[]): React.ReactNode {
+  private renderTypes(items: { type: ProjectChangeRequestItemTypeEntity; typeName: string; }[]): React.ReactNode {
     return items.map(x => x.typeName).reduce<React.ReactNode[]>((a, b, index) => {
       if (index > 0) {
         a.push(<br />);
@@ -86,19 +86,19 @@ class PCRsDashboardComponent extends ContainerBase<Params, Data, Callbacks> {
   private renderLinks(project: ProjectDto, pcr: PCRSummaryDto): React.ReactNode {
     const links: { route: ILinkInfo, text: string, qa: string; }[] = [];
 
-    const prepareStatus = [PCRStatus.Draft, PCRStatus.QueriedByMonitoringOfficer, PCRStatus.QueriedByInnovateUK];
+    const prepareStatus = [ProjectChangeRequestStatus.Draft, ProjectChangeRequestStatus.QueriedByMonitoringOfficer, ProjectChangeRequestStatus.QueriedByInnovateUK];
 
     if(prepareStatus.indexOf(pcr.status) >= 0 && project.roles & ProjectRole.ProjectManager) {
       links.push({route: ProjectChangeRequestPrepareRoute.getLink({pcrId: pcr.id, projectId: pcr.projectId}), text: "Prepare", qa:"pcrPrepareLink"});
     }
-    else if(pcr.status === PCRStatus.SubmittedToMonitoringOfficer && project.roles & ProjectRole.ProjectManager) {
+    else if(pcr.status === ProjectChangeRequestStatus.SubmittedToMonitoringOfficer && project.roles & ProjectRole.ProjectManager) {
       links.push({route: PCRReviewRoute.getLink({pcrId: pcr.id, projectId: pcr.projectId}), text: "Review", qa:"pcrReviewLink"});
     }
     else {
       links.push({route: PCRDetailsRoute.getLink({pcrId: pcr.id, projectId: pcr.projectId}), text: "View", qa:"pcrViewLink"});
     }
 
-    if(pcr.status === PCRStatus.Draft && project.roles & ProjectRole.ProjectManager) {
+    if(pcr.status === ProjectChangeRequestStatus.Draft && project.roles & ProjectRole.ProjectManager) {
       links.push({route: PCRDeleteRoute.getLink({pcrId: pcr.id, projectId: pcr.projectId}), text: "Delete", qa:"pcrDeleteLink"});
     }
 

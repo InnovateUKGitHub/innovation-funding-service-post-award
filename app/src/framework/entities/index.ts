@@ -1,4 +1,4 @@
 export * from "./costCategory";
-export * from "./pcr";
+export * from "./projectChangeRequest";
 export * from "./permissionGroup";
 export * from "./recordType";
