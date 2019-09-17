@@ -13,7 +13,7 @@ import { PCRReviewReasoningRoute } from "./viewReasoning";
 import { PCRDto, PCRItemDto } from "@framework/dtos/pcrDtos";
 import { IEditorStore } from "@ui/redux";
 import { PCRDtoValidator, PCRItemDtoValidator } from "@ui/validators/pcrDtoValidator";
-import { PCRStatus } from "@framework/entities";
+import { ProjectChangeRequestStatus } from "@framework/entities";
 import { navigateTo } from "../../redux/actions";
 import { Result } from "@ui/validation";
 
@@ -44,8 +44,8 @@ class PCRReviewComponent extends ContainerBase<PCRReviewParams, Data, Callbacks>
     const Form = ACC.TypedForm<PCRDto>();
 
     const options: ACC.SelectOption[] = [
-      { id: PCRStatus.QueriedByMonitoringOfficer.toString(), value: "Query with project manager" },
-      { id: PCRStatus.SubmittedToInnovationLead.toString(), value: "Send to Innovate UK for approval" },
+      { id: ProjectChangeRequestStatus.QueriedByMonitoringOfficer.toString(), value: "Query with project manager" },
+      { id: ProjectChangeRequestStatus.SubmittedToInnovationLead.toString(), value: "Send to Innovate UK for approval" },
     ];
 
     const selected = options.find(x => x.id === editor.data.status.toString());
@@ -79,7 +79,7 @@ class PCRReviewComponent extends ContainerBase<PCRReviewParams, Data, Callbacks>
               inline={false}
               options={options}
               value={x => selected}
-              update={(m, v) => m.status = parseInt(v && v.id || "", 10) || PCRStatus.Unknown}
+              update={(m, v) => m.status = parseInt(v && v.id || "", 10) || ProjectChangeRequestStatus.Unknown}
               validation={editor.validator.status}
             />
             <Form.MultilineString
@@ -140,7 +140,7 @@ export const PCRReview = definition.connect({
     project: Selectors.getProject(params.projectId).getPending(state),
     pcr: Selectors.getPcr(params.projectId, params.pcrId).getPending(state),
     // initalise editor pcr status to unknown to force state selection via form
-    editor: Selectors.getPcrEditor(params.projectId, params.pcrId).get(state, x => x.status = PCRStatus.Unknown)
+    editor: Selectors.getPcrEditor(params.projectId, params.pcrId).get(state, x => x.status = ProjectChangeRequestStatus.Unknown)
   }),
   withCallbacks: (dispatch) => ({
     onChange: (projectId: string, pcrId: string, dto: PCRDto) => dispatch(Actions.validatePCR(projectId, pcrId, dto)),

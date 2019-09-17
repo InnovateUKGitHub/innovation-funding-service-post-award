@@ -8,7 +8,7 @@ export class DeleteProjectChangeRequestDocumentOrItemDocument extends CommandBas
   }
 
   async accessControl(auth: Authorisation, context: IContext) {
-    const projectChangeRequestExists = await context.repositories.pcrs.isExisting(this.projectId, this.projectChangeRequestIdOrItemId);
+    const projectChangeRequestExists = await context.repositories.projectChangeRequests.isExisting(this.projectId, this.projectChangeRequestIdOrItemId);
     if (!projectChangeRequestExists) return false;
 
     const documentExists = await context.repositories.documents.isExistingDocument(this.documentId, this.projectChangeRequestIdOrItemId);

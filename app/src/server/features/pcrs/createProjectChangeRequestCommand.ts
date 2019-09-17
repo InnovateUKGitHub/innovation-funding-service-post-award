@@ -18,7 +18,7 @@ export class CreateProjectChangeRequestCommand extends CommandBase<string> {
   }
 
   private async insertProjectChangeRequest(context: IContext, projectChangeRequestDto: PCRDto, itemTypes: PCRItemTypeDto[]): Promise<string> {
-    return context.repositories.pcrs.createProjectChangeRequest({
+    return context.repositories.projectChangeRequests.createProjectChangeRequest({
       projectId: projectChangeRequestDto.projectId,
       reasoningStatus: projectChangeRequestDto.reasoningStatus,
       status: projectChangeRequestDto.status,
