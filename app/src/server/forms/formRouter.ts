@@ -27,6 +27,9 @@ import { MonitoringReportPrepareFormHandler } from "./monitoringReportPrepareFor
 import { AllClaimDashboardDocumentUploadHandler } from "./allClaimsDashboard/allClaimsDashboardDocumentUploadHandler";
 import { AllClaimDashboardDocumentDeleteHandler } from "./allClaimsDashboard/allClaimsDashboardDocumentDeleteHandler";
 import { ProjectChangeRequestCreateFormHandler } from "@server/forms/projectChangeRequest/createProjectChangeRequestFormHandler";
+import { ProjectChangeRequestReviewFormHandler } from "./projectChangeRequest/reviewProjectChangeRequestFormHandler";
+import { ProjectChangeRequestPrepareFormHandler } from "./projectChangeRequest/prepareProjectChangeRequestFormHandler";
+import { ProjectChangeRequestDeleteFormHandler } from "./projectChangeRequest/deleteProjectChangeRequestFormHandler";
 
 export const formRouter = express.Router();
 
@@ -47,12 +50,15 @@ const handlers: IFormHandler[] = [
   new MonitoringReportDeleteFormHandler(),
   new MonitoringReportPrepareFormHandler(),
   new ProjectChangeRequestCreateFormHandler(),
+  new ProjectChangeRequestDeleteFormHandler(),
   new ProjectChangeRequestItemDocumentDeleteHandler(),
   new ProjectChangeRequestItemDocumentUploadHandler(),
   new ProjectChangeRequestItemUpdateHandler(),
+  new ProjectChangeRequestPrepareFormHandler(),
   new ProjectChangeRequestReasoningDocumentDeleteHandler(),
   new ProjectChangeRequestReasoningDocumentUploadHandler(),
   new ProjectChangeRequestReasoningUpdateHandler(),
+  new ProjectChangeRequestReviewFormHandler(),
   new ProjectDocumentUploadHandler(),
 ];
 

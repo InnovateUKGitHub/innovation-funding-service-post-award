@@ -12,7 +12,7 @@ import { PCRDto } from "@framework/dtos/pcrDtos";
 import { IEditorStore } from "@ui/redux";
 import { PCRDtoValidator } from "@ui/validators";
 
-interface Params {
+export interface PCRDeleteParams {
   projectId: string;
   pcrId: string;
 }
@@ -27,7 +27,7 @@ interface Callbacks {
   onDelete: (projectId: string, pcrId: string, dto: PCRDto) => void;
 }
 
-class PCRDeleteComponent extends ContainerBase<Params, Data, Callbacks> {
+class PCRDeleteComponent extends ContainerBase<PCRDeleteParams, Data, Callbacks> {
   render() {
     const combined = Pending.combine({
       project: this.props.project,
@@ -69,7 +69,7 @@ class PCRDeleteComponent extends ContainerBase<Params, Data, Callbacks> {
   }
 }
 
-const definition = ReduxContainer.for<Params, Data, Callbacks>(PCRDeleteComponent);
+const definition = ReduxContainer.for<PCRDeleteParams, Data, Callbacks>(PCRDeleteComponent);
 
 export const PCRDelete = definition.connect({
   withData: (state, params) => ({
