@@ -161,6 +161,7 @@ export const PCRPrepareRoute = definition.route({
   getLoadDataActions: (params) => [
     Actions.loadProject(params.projectId),
     Actions.loadPcr(params.projectId, params.pcrId),
+    Actions.loadPcrTypes(),
   ],
   getTitle: () => ({
     htmlTitle: "Prepare project change request",
