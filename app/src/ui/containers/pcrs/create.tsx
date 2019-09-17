@@ -10,7 +10,7 @@ import { IEditorStore } from "@ui/redux";
 import { PCRItemStatus } from "@framework/entities/pcr";
 import { PCRsDashboardRoute } from "./dashboard";
 import { PCRDto } from "@framework/dtos";
-import { PCRPrepareRoute } from "@ui/containers";
+import { ProjectChangeRequestPrepareRoute } from "@ui/containers";
 import { ProjectChangeRequestDtoValidatorForCreate } from "@ui/validators/projectChangeRequestDtoValidatorForCreate";
 
 export interface CreateProjectChangeRequestParams {
@@ -102,7 +102,7 @@ export const PCRCreate = definition.connect({
   withCallbacks: (dispatch) => ({
     create: (projectId: string, dto: PCRDto) =>
       dispatch(Actions.createProjectChangeRequest(projectId, dto, (created: PCRDto) =>
-        dispatch(Actions.navigateTo(PCRPrepareRoute.getLink({ projectId: dto.projectId, pcrId: created.id })))))
+        dispatch(Actions.navigateTo(ProjectChangeRequestPrepareRoute.getLink({ projectId: dto.projectId, pcrId: created.id })))))
   })
 });
 

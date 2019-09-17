@@ -9,7 +9,7 @@ import { Pending } from "@shared/pending";
 import { IDataStore, IEditorStore } from "@ui/redux";
 import { PCRItemStatus } from "@framework/entities/pcr";
 import { PCRsDashboardRoute } from "./dashboard";
-import { PCRPrepareRoute } from "@ui/containers";
+import { ProjectChangeRequestPrepareRoute } from "@ui/containers";
 import { PCRDtoValidator } from "@ui/validators/pcrDtoValidator";
 import { PCRDto, ProjectRole } from "@framework/dtos";
 
@@ -106,7 +106,7 @@ export const ProjectChangeRequestAddTypes = definition.connect({
   withCallbacks: (dispatch) => ({
     saveProjectChangeRequest: (projectId: string, projectChangeRequestId: string, dto: Dtos.PCRDto) =>
       dispatch(Actions.savePCR(projectId, projectChangeRequestId, dto, () =>
-        dispatch(Actions.navigateTo(PCRPrepareRoute.getLink({ projectId: dto.projectId, pcrId: projectChangeRequestId })))))
+        dispatch(Actions.navigateTo(ProjectChangeRequestPrepareRoute.getLink({ projectId: dto.projectId, pcrId: projectChangeRequestId })))))
   })
 });
 
