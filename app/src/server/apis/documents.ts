@@ -120,7 +120,7 @@ class Controller extends ControllerBase<DocumentSummaryDto> implements IDocument
     );
 
     this.postAttachments(
-      "/projectChangeRequestItems/:projectId/:projectChangeRequestIdOrItemId",
+      "/projectChangeRequests/:projectId/:projectChangeRequestIdOrItemId",
       (p) => ({ projectId: p.projectId, projectChangeRequestIdOrItemId: p.projectChangeRequestIdOrItemId }),
       p => this.uploadProjectChangeRequestDocumentOrItemDocument(p)
     );
