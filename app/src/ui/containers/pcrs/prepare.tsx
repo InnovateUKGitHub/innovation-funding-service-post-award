@@ -161,7 +161,7 @@ export const ProjectChangeRequestPrepareRoute = definition.route({
   getLoadDataActions: (params) => [
     Actions.loadProject(params.projectId),
     Actions.loadPcr(params.projectId, params.pcrId),
-    Actions.loadPcrTypes(),
+    Actions.loadPcrTypes()
   ],
   getTitle: () => ({
     htmlTitle: "Prepare project change request",

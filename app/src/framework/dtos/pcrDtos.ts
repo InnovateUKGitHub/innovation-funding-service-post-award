@@ -28,7 +28,6 @@ export interface PCRDto extends PCRBaseDto {
 export interface PCRItemDto {
   id: string;
   type: PCRItemType;
-  recordTypeId: string;
   typeName: string;
   status: PCRItemStatus;
   statusName: string;

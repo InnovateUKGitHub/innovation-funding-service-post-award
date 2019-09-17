@@ -4,6 +4,11 @@ import { ProjectChangeRequestItemUpdateHandler } from "@server/forms/projectChan
 import { ProjectChangeRequestReasoningDocumentDeleteHandler } from "@server/forms/projectChangeRequest/projectChangeRequestReasoningDocumentDeleteHandler";
 import { ProjectChangeRequestReasoningDocumentUploadHandler } from "@server/forms/projectChangeRequest/projectChangeRequestReasoningDocumentUploadHandler";
 import { ProjectChangeRequestReasoningUpdateHandler } from "@server/forms/projectChangeRequest/projectChangeRequestReasoningUpdateHandler";
+import { ProjectChangeRequestCreateFormHandler } from "@server/forms/projectChangeRequest/createProjectChangeRequestFormHandler";
+import { ProjectChangeRequestReviewFormHandler } from "./projectChangeRequest/reviewProjectChangeRequestFormHandler";
+import { ProjectChangeRequestPrepareFormHandler } from "./projectChangeRequest/prepareProjectChangeRequestFormHandler";
+import { ProjectChangeRequestDeleteFormHandler } from "./projectChangeRequest/deleteProjectChangeRequestFormHandler";
+import { ProjectChangeRequestAddTypeFormHandler } from "@server/forms/projectChangeRequest/projectChangeRequestAddTypeFormHandler";
 import { BadRequestHandler } from "./badRequestHandler";
 import express from "express";
 import { ClaimForecastFormHandler } from "./claimForecastFormHandler";
@@ -26,10 +31,6 @@ import { MonitoringReportDeleteFormHandler } from "./monitoringReportDeleteFormH
 import { MonitoringReportPrepareFormHandler } from "./monitoringReportPrepareFormHandler";
 import { AllClaimDashboardDocumentUploadHandler } from "./allClaimsDashboard/allClaimsDashboardDocumentUploadHandler";
 import { AllClaimDashboardDocumentDeleteHandler } from "./allClaimsDashboard/allClaimsDashboardDocumentDeleteHandler";
-import { ProjectChangeRequestCreateFormHandler } from "@server/forms/projectChangeRequest/createProjectChangeRequestFormHandler";
-import { ProjectChangeRequestReviewFormHandler } from "./projectChangeRequest/reviewProjectChangeRequestFormHandler";
-import { ProjectChangeRequestPrepareFormHandler } from "./projectChangeRequest/prepareProjectChangeRequestFormHandler";
-import { ProjectChangeRequestDeleteFormHandler } from "./projectChangeRequest/deleteProjectChangeRequestFormHandler";
 
 export const formRouter = express.Router();
 
@@ -49,6 +50,7 @@ const handlers: IFormHandler[] = [
   new MonitoringReportCreateFormHandler(),
   new MonitoringReportDeleteFormHandler(),
   new MonitoringReportPrepareFormHandler(),
+  new ProjectChangeRequestAddTypeFormHandler(),
   new ProjectChangeRequestCreateFormHandler(),
   new ProjectChangeRequestDeleteFormHandler(),
   new ProjectChangeRequestItemDocumentDeleteHandler(),
