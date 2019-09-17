@@ -1,5 +1,5 @@
 import { BadRequestError, CommandBase, ValidationError } from "@server/features/common";
-import { PCRDto, ProjectRole } from "@framework/dtos";
+import { PCRDto, PCRItemTypeDto, ProjectRole } from "@framework/dtos";
 import { Authorisation, IContext } from "@framework/types";
 import { GetPCRItemTypesQuery } from "@server/features/pcrs/getItemTypesQuery";
 import { ProjectChangeRequestDtoValidatorForCreate } from "@ui/validators/projectChangeRequestDtoValidatorForCreate";
@@ -17,14 +17,14 @@ export class CreateProjectChangeRequestCommand extends CommandBase<string> {
     return auth.forProject(this.projectId).hasRole(ProjectRole.ProjectManager);
   }
 
-  private async insertProjectChangeRequest(context: IContext, projectChangeRequestDto: PCRDto): Promise<string> {
+  private async insertProjectChangeRequest(context: IContext, projectChangeRequestDto: PCRDto, itemTypes: PCRItemTypeDto[]): Promise<string> {
     return context.repositories.pcrs.createProjectChangeRequest({
       projectId: projectChangeRequestDto.projectId,
       reasoningStatus: projectChangeRequestDto.reasoningStatus,
       status: projectChangeRequestDto.status,
       items: projectChangeRequestDto.items.map(x => ({
         projectId: projectChangeRequestDto.projectId,
-        recordTypeId: x.recordTypeId,
+        recordTypeId: itemTypes.find(t => t.type === x.type)!.recordTypeId,
         status: x.status
       }))
     });
@@ -46,10 +46,11 @@ export class CreateProjectChangeRequestCommand extends CommandBase<string> {
 
     const itemTypes = await context.runQuery(new GetPCRItemTypesQuery());
     const validationResult = new ProjectChangeRequestDtoValidatorForCreate(this.projectChangeRequestDto, itemTypes,true);
+
     if (!validationResult.isValid) {
       throw new ValidationError(validationResult);
     }
 
-    return this.insertProjectChangeRequest(context, this.projectChangeRequestDto);
+    return this.insertProjectChangeRequest(context, this.projectChangeRequestDto, itemTypes);
   }
 }

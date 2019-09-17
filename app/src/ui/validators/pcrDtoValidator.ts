@@ -104,7 +104,7 @@ export class PCRDtoValidator extends Results<PCRDto> {
     this,
     this.model.items,
       item => new PCRItemDtoValidator(item, this.role, this.model.status, this.recordTypes, this.showValidationErrors),
-    Validation.hasNoDuplicates(this, (this.model.items || []).map(x => x.recordTypeId), "No duplicate items allowed"),
+    Validation.hasNoDuplicates(this, (this.model.items || []).map(x => x.type), "No duplicate items allowed"),
    "You must select at least one of the types"
   );
 
@@ -135,6 +135,6 @@ export class PCRItemDtoValidator extends Results<PCRItemDto> {
   status = this.validateStatus();
 
   type = Validation.isTrue(this, this.recordTypes
-    .map(x => x.recordTypeId)
-    .indexOf(this.model.recordTypeId) >= 0, "Not a valid change request item");
+    .map(x => x.type)
+    .indexOf(this.model.type) >= 0, "Not a valid change request item");
 }
