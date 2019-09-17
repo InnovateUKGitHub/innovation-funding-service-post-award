@@ -63,7 +63,10 @@ export class PCRDtoValidator extends Results<PCRDto> {
 
   private validateReasoningComments() {
     if (this.role & ProjectRole.ProjectManager && this.projectManagerCanEdit) {
-      return Validation.maxLength(this, this.model.reasoningComments, this.maxCommentsLength, `Reasoning can be a maximum of ${this.maxCommentsLength} characters`);
+      return Validation.all(this,
+        () => this.model.reasoningStatus === PCRItemStatus.Complete ? Validation.required(this, this.model.reasoningComments, "Reasoning is required") : Validation.valid(this),
+        () => Validation.maxLength(this, this.model.reasoningComments, this.maxCommentsLength, `Reasoning can be a maximum of ${this.maxCommentsLength} characters`),
+      );
     }
     return Validation.isTrue(this, this.model.reasoningComments === this.original.reasoningComments, "Cannot update reasoning");
   }
