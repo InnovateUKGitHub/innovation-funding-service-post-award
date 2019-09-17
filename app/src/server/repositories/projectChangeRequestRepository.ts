@@ -12,14 +12,14 @@ import { ILogger } from "@server/features/common/logger";
 import { SalesforcePCRMapper } from "./mappers/pcrSummaryMapper";
 import { NotFoundError } from "@server/features/common";
 
-export interface IPCRRepository {
+export interface IProjectChangeRequestRepository {
   createProjectChangeRequest(projectChangeRequest: ProjectChangeRequestForCreate): Promise<string>;
-  updatePcr(pcr: PCR): Promise<void>;
-  updatePcrItems(pcr: PCR, items: PCRItem[]): Promise<void>;
+  updateProjectChangeRequest(pcr: PCR): Promise<void>;
+  updateItems(pcr: PCR, items: PCRItem[]): Promise<void>;
   getAllByProjectId(projectId: string): Promise<PCR[]>;
   getById(projectId: string, id: string): Promise<PCR>;
   insertItems(headerId: string, items: ProjectChangeRequestItemForCreate[]): Promise<void>;
-  isExisting(projectid: string, projectChangeRequestId: string): Promise<boolean>;
+  isExisting(projectId: string, projectChangeRequestId: string): Promise<boolean>;
   delete(pcr: PCR): Promise<void>;
 }
 
@@ -45,7 +45,7 @@ export interface ISalesforcePCR {
   Acc_Comments__c: string;
 }
 
-export class PCRRepository extends SalesforceRepositoryBase<ISalesforcePCR> implements IPCRRepository {
+export class ProjectChangeRequestRepository extends SalesforceRepositoryBase<ISalesforcePCR> implements IProjectChangeRequestRepository {
   constructor(private getRecordTypeId: (objectName: string, recordType: string) => Promise<string>, getSalesforceConnection: () => Promise<Connection>, logger: ILogger) {
     super(getSalesforceConnection, logger);
   }
@@ -96,7 +96,7 @@ export class PCRRepository extends SalesforceRepositoryBase<ISalesforcePCR> impl
     return !!data;
   }
 
-  async updatePcr(pcr: PCR) {
+  async updateProjectChangeRequest(pcr: PCR) {
     await super.updateItem({
       Id: pcr.id,
       Acc_Comments__c: pcr.comments,
@@ -106,7 +106,7 @@ export class PCRRepository extends SalesforceRepositoryBase<ISalesforcePCR> impl
     });
   }
 
-  async updatePcrItems(pcr: PCR, items: PCRItem[]) {
+  async updateItems(pcr: PCR, items: PCRItem[]) {
     await super.updateAll(items.map(x => ({
       Id: x.id,
       Acc_MarkedasComplete__c: this.mapItemStatus(x.status),

@@ -40,7 +40,7 @@ export class UpdatePCRCommand extends CommandBase<boolean> {
     original.reasoning = this.pcr.reasoningComments;
     original.reasoningStatus = this.pcr.reasoningStatus;
 
-    await context.repositories.pcrs.updatePcr(original);
+    await context.repositories.pcrs.updateProjectChangeRequest(original);
 
     const paired = this.pcr.items.map(item => ({
       item,
@@ -62,7 +62,7 @@ export class UpdatePCRCommand extends CommandBase<boolean> {
     ;
 
     if (itemsToUpdate.length) {
-      await context.repositories.pcrs.updatePcrItems(original, itemsToUpdate);
+      await context.repositories.pcrs.updateItems(original, itemsToUpdate);
     }
 
     const itemsToInsert: ProjectChangeRequestItemForCreate[] = paired
