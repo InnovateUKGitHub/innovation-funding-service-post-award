@@ -16,10 +16,8 @@ import { PCRDtoValidator, PCRItemDtoValidator } from "@ui/validators/pcrDtoValid
 import { PCRStatus } from "@framework/entities";
 import { navigateTo } from "../../redux/actions";
 import { Result } from "@ui/validation";
-import { Link } from "../../components";
-import { ProjectChangeRequestAddTypeRoute } from "@ui/containers";
 
-interface Params {
+export interface PCRReviewParams {
   projectId: string;
   pcrId: string;
 }
@@ -35,7 +33,7 @@ interface Callbacks {
   onSave: (projectId: string, pcrId: string, dto: PCRDto) => void;
 }
 
-class PCRReviewComponent extends ContainerBase<Params, Data, Callbacks> {
+class PCRReviewComponent extends ContainerBase<PCRReviewParams, Data, Callbacks> {
   render() {
     const combined = Pending.combine({ project: this.props.project, pcr: this.props.pcr, editor: this.props.editor });
 
@@ -85,7 +83,7 @@ class PCRReviewComponent extends ContainerBase<Params, Data, Callbacks> {
               validation={editor.validator.status}
             />
             <Form.MultilineString
-              name="coments"
+              name="comments"
               label="Add your comments"
               hint="If ou query the request, you must explain what the partner needs to amend. If you are sending it to Innovate UK, you must say whether you recomment the request for approval and why."
               value={m => m.comments}
@@ -135,7 +133,7 @@ class PCRReviewComponent extends ContainerBase<Params, Data, Callbacks> {
   }
 }
 
-const definition = ReduxContainer.for<Params, Data, Callbacks>(PCRReviewComponent);
+const definition = ReduxContainer.for<PCRReviewParams, Data, Callbacks>(PCRReviewComponent);
 
 export const PCRReview = definition.connect({
   withData: (state, params) => ({
