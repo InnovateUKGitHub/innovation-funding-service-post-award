@@ -1,11 +1,12 @@
 // tslint:disable
 import { TestContext } from "../../testContextProvider";
 import { UpdatePCRCommand } from "@server/features/pcrs/updatePcrCommand";
-import { PCRItemStatus, PCRStatus } from "@framework/entities";
+import { PCRItemStatus, PCRItemType, PCRStatus } from "@framework/entities";
 import { GetPCRByIdQuery } from "@server/features/pcrs/getPCRByIdQuery";
 import { ValidationError } from "@server/features/common";
 import { Authorisation, PCRDto, PCRItemDto, ProjectRole } from "@framework/types";
 import { getAllEnumValues } from "@shared/enumHelper";
+import { PCRRecordTypeMetaValues } from "@server/features/pcrs/getItemTypesQuery";
 
 describe("UpdatePCRCommand", () => {
   describe("Access control", () => {
@@ -184,7 +185,7 @@ describe("UpdatePCRCommand", () => {
 
       dto.items.push({
         status: PCRItemStatus.ToDo,
-        recordTypeId: recordTypes[2].id
+        type: PCRRecordTypeMetaValues.find(x => x.typeName === recordTypes[2].type)!.type,
       } as PCRItemDto);
 
       const command = new UpdatePCRCommand(project.Id, pcr.id, dto);
@@ -214,7 +215,7 @@ describe("UpdatePCRCommand", () => {
 
       dto.items.push({
         status: PCRItemStatus.ToDo,
-        recordTypeId: recordTypes[1].id
+        type: recordTypes[2].type as any as PCRItemType
       } as PCRItemDto);
 
       const command = new UpdatePCRCommand(project.Id, pcr.id, dto);

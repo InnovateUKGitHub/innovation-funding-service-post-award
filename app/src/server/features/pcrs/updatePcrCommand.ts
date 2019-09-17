@@ -68,7 +68,7 @@ export class UpdatePCRCommand extends CommandBase<boolean> {
     const itemsToInsert: ProjectChangeRequestItemForCreate[] = paired
       .filter(x => !x.originalItem)
       .map(x => ({
-        recordTypeId: x.item.recordTypeId,
+        recordTypeId: itemTypes.find(t => t.type === x.item.type)!.recordTypeId,
         status: x.item.status,
         projectId: this.projectId,
       }));
