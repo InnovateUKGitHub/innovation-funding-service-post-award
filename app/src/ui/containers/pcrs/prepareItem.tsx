@@ -201,7 +201,8 @@ export const PCRPrepareItemRoute = definition.route({
   getLoadDataActions: (params) => [
     Actions.loadProject(params.projectId),
     Actions.loadPcr(params.projectId, params.pcrId),
-    Actions.loadProjectChangeRequestDocumentsOrItemDocuments(params.projectId, params.itemId)
+    Actions.loadProjectChangeRequestDocumentsOrItemDocuments(params.projectId, params.itemId),
+    Actions.loadPcrTypes(),
   ],
   getTitle: (store, params) => {
     const typeName = Selectors.getPcrItem(params.projectId, params.pcrId, params.itemId).getPending(store).then(x => x.typeName).data;

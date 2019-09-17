@@ -99,7 +99,8 @@ export const PCRDeleteRoute = definition.route({
   }),
   getLoadDataActions: (params) => [
     Actions.loadProject(params.projectId),
-    Actions.loadPcr(params.projectId, params.pcrId)
+    Actions.loadPcr(params.projectId, params.pcrId),
+    Actions.loadPcrTypes(),
   ],
   getTitle: () => ({
     htmlTitle: "Delete project change request",
