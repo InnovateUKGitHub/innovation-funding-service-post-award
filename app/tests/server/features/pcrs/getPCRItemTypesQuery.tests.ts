@@ -28,7 +28,7 @@ describe("GetPCRItemTypesQuery", () => {
   test("popultates item type fields", async () => {
     const context = new TestContext();
 
-    const recordType = context.testData.createRecordType({type: "Partner Withdrawal", parent: "Acc_ProjectChangeRequest__c"});
+    const recordType = context.testData.createRecordType({type: "Remove a partner", parent: "Acc_ProjectChangeRequest__c"});
 
     const query = new GetPCRItemTypesQuery();
     const result = await context.runQuery(query).then(x => x[2]);
@@ -36,6 +36,6 @@ describe("GetPCRItemTypesQuery", () => {
     expect(result.type).toEqual(ProjectChangeRequestItemTypeEntity.PartnerWithdrawal);
     expect(result.enabled).toEqual(true);
     expect(result.recordTypeId).toEqual(recordType.id);
-    expect(result.displayName).toEqual("Partner Withdrawal");
+    expect(result.displayName).toEqual("Remove a partner");
   });
 });
