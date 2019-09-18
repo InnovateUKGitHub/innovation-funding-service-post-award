@@ -19,7 +19,7 @@ export interface ISalesforcePartner {
     Id: string,
     Acc_CompetitionType__c: string,
   };
-  Acc_TotalParticipantGrant__c: number;
+  Acc_TotalParticipantCosts__c: number;
   Acc_TotalApprovedCosts__c: number;
   Acc_Cap_Limit__c: number;
   Acc_Award_Rate__c: number;
@@ -52,7 +52,7 @@ export class PartnerRepository extends SalesforceRepositoryBase<ISalesforcePartn
     "Acc_OrganisationType__c",
     "Acc_ParticipantType__c",
     "Acc_ParticipantSize__c",
-    //"Acc_TotalParticipantGrant__c",
+    "Acc_TotalParticipantCosts__c",
     "Acc_TotalApprovedCosts__c",
     "Acc_Cap_Limit__c",
     "Acc_Award_Rate__c",

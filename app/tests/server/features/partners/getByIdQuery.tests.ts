@@ -12,7 +12,7 @@ describe("getAllForProjectQuery", () => {
 
     const partner = context.testData.createPartner(project, x => {
       x.Acc_AccountId__r.Name = "Expected name";
-      x.Acc_TotalParticipantGrant__c = 125000;
+      x.Acc_TotalParticipantCosts__c = 125000;
       x.Acc_TotalApprovedCosts__c = 17474;
       x.Acc_TotalPaidCosts__c = 25555;
       x.Acc_Award_Rate__c = 50;
@@ -71,7 +71,7 @@ describe("getAllForProjectQuery", () => {
     const project = context.testData.createProject();
     const partner = context.testData.createPartner(project, x => {
       x.Acc_AccountId__r.Name = "Expected name";
-      x.Acc_TotalParticipantGrant__c = 10000;
+      x.Acc_TotalParticipantCosts__c = 10000;
       x.Acc_TotalApprovedCosts__c = 1000;
       x.Acc_Award_Rate__c = 50;
       x.Acc_Cap_Limit__c = 50;
@@ -91,7 +91,7 @@ describe("getAllForProjectQuery", () => {
     const project = context.testData.createProject();
     const partner = context.testData.createPartner(project, x => {
       x.Acc_AccountId__r.Name = "Expected name";
-      x.Acc_TotalParticipantGrant__c = null!;
+      x.Acc_TotalParticipantCosts__c = null!;
       x.Acc_TotalApprovedCosts__c = 1000;
       x.Acc_Award_Rate__c = 50;
       x.Acc_Cap_Limit__c = 50;
@@ -111,7 +111,7 @@ describe("getAllForProjectQuery", () => {
     const project = context.testData.createProject();
     const partner = context.testData.createPartner(project, x => {
       x.Acc_AccountId__r.Name = "Expected name";
-      x.Acc_TotalParticipantGrant__c = 10000;
+      x.Acc_TotalParticipantCosts__c = 10000;
       x.Acc_TotalApprovedCosts__c = null as any;
       x.Acc_Award_Rate__c = 50;
       x.Acc_Cap_Limit__c = 50;

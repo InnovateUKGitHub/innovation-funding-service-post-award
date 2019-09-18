@@ -95,7 +95,7 @@ export class TestData {
         Id: project.Id,
         Acc_CompetitionType__c: project.Acc_CompetitionType__c,
       },
-      Acc_TotalParticipantGrant__c: 125000,
+      Acc_TotalParticipantCosts__c: 125000,
       Acc_TotalApprovedCosts__c: 17474,
       Acc_TotalPaidCosts__c: 25000,
       Acc_Cap_Limit__c: 50,
