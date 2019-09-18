@@ -39,7 +39,7 @@ class PCRCreateComponent extends ContainerBase<ProjectChangeRequestAddTypeParams
   private renderContents(project: Dtos.ProjectDto, editor: IEditorStore<Dtos.PCRDto, PCRDtoValidator>, original: PCRDto, itemTypes: Dtos.PCRItemTypeDto[]) {
     return (
       <ACC.Page
-        backLink={<ACC.BackLink route={PCRsDashboardRoute.getLink({ projectId: this.props.projectId })}>Back to project change requests</ACC.BackLink>}
+        backLink={<ACC.BackLink route={ProjectChangeRequestPrepareRoute.getLink({ projectId: this.props.projectId, pcrId: this.props.projectChangeRequestId })}>Back to project change requests</ACC.BackLink>}
         pageTitle={<ACC.Projects.Title project={project} />}
         project={project}
         validator={editor.validator}
@@ -87,7 +87,7 @@ class PCRCreateComponent extends ContainerBase<ProjectChangeRequestAddTypeParams
           </PCRForm.Fieldset>
           <PCRForm.Submit>Add types</PCRForm.Submit>
         </PCRForm.Form>
-        <ACC.Link styling="SecondaryButton" route={PCRsDashboardRoute.getLink({ projectId: this.props.projectId })}>Cancel</ACC.Link>
+        <ACC.Link styling="SecondaryButton" route={ProjectChangeRequestPrepareRoute.getLink({ projectId: this.props.projectId, pcrId: this.props.projectChangeRequestId })}>Cancel</ACC.Link>
       </React.Fragment>
     );
   }
