@@ -85,7 +85,7 @@ class PCRReviewComponent extends ContainerBase<PCRReviewParams, Data, Callbacks>
             <Form.MultilineString
               name="comments"
               label="Add your comments"
-              hint="If ou query the request, you must explain what the partner needs to amend. If you are sending it to Innovate UK, you must say whether you recomment the request for approval and why."
+              hint="If you query the request, you must explain what the partner needs to amend. If you are sending it to Innovate UK, you must say that you recommend the request for approval and why."
               value={m => m.comments}
               update={(m, v) => m.comments = (v || "")}
               validation={editor.validator.comments}
