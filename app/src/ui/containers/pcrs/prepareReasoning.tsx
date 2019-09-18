@@ -77,7 +77,7 @@ class PCRViewReasoningComponent extends ContainerBase<ProjectChangeRequestPrepar
       >
         <ACC.Renderers.Messages messages={this.props.messages} />
         <ACC.Section>
-          <ACC.SummaryList qa="pcrDetails">
+          <ACC.SummaryList qa="pcr-prepareReasoning">
             <ACC.SummaryListItem label="Number" content={pcr.requestNumber} qa="numberRow" />
             <ACC.SummaryListItem label="Types" content={this.renderTypes(pcr)} qa="typesRow" />
           </ACC.SummaryList>
@@ -108,7 +108,7 @@ class PCRViewReasoningComponent extends ContainerBase<ProjectChangeRequestPrepar
         <ACC.Section title="Files uploaded">
           {this.renderDocumentList(documents)}
         </ACC.Section>
-        <ACC.Section>
+        <ACC.Section qa="reasoning-save-and-return">
           <PCRForm.Form
             editor={editor}
             onChange={dto => this.onChange(dto)}
