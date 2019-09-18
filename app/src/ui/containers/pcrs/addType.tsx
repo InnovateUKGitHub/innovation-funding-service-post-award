@@ -45,7 +45,7 @@ class PCRCreateComponent extends ContainerBase<ProjectChangeRequestAddTypeParams
         validator={editor.validator}
         error={editor.error}
       >
-        <ACC.Section>
+        <ACC.Section qa="pcr-AddType">
           {this.renderForm(editor, original, itemTypes)}
         </ACC.Section>
       </ACC.Page>
@@ -70,7 +70,7 @@ class PCRCreateComponent extends ContainerBase<ProjectChangeRequestAddTypeParams
 
     return (
       <React.Fragment>
-        <PCRForm.Form editor={pcrEditor} onSubmit={() => this.props.saveProjectChangeRequest(this.props.projectId, this.props.projectChangeRequestId, pcrEditor.data)} onChange={x => this.setState({ pcr: x })}>
+        <PCRForm.Form editor={pcrEditor} onSubmit={() => this.props.saveProjectChangeRequest(this.props.projectId, this.props.projectChangeRequestId, pcrEditor.data)} onChange={x => this.setState({ pcr: x })} qa="pcr-AddTypeForm">
           <PCRForm.Fieldset heading="Select request types">
             <PCRForm.Checkboxes
               hint="You can select more than one."
