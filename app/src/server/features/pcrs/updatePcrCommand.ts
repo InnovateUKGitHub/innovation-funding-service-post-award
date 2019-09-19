@@ -71,13 +71,10 @@ export class UpdatePCRCommand extends CommandBase<boolean> {
         recordTypeId: itemTypes.find(t => t.type === x.item.type)!.recordTypeId,
         status: x.item.status,
         projectId: this.projectId,
+        partnerId: original.partnerId,
       }));
 
     if (itemsToInsert.length) {
-      // @TODO remove this hack when projectId field is added to project change request object in SF
-      const partner = await context.runQuery(new GetAllForProjectQuery(this.projectId));
-      itemsToInsert.forEach(x => x.projectId = partner[0].id);
-      //
       await context.repositories.projectChangeRequests.insertItems(this.id, itemsToInsert);
     }
 
