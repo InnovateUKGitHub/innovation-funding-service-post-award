@@ -1,6 +1,5 @@
 import React from "react";
 import classNames from "classnames";
-import * as colour from "../styles/colours";
 
 interface Props {
     number: number;

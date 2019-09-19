@@ -10,18 +10,8 @@ import { rootReducer } from "@ui/redux";
 import { HomeRoute } from "@ui/containers/home";
 import { SimpleString } from "@ui/components/renderers";
 
-const route = { name: "test", routeName: "routeName", path: "/test" } as any;
+const route = { name: "home", routeName: "home", path: "/" } as any;
 const router = createRouter([route]).usePlugin(browserPluginFactory({ useHash: false }));
-
-const preloadedState: IClientUser = {
-  email: "iuk.accproject@bjss.com.bjsspoc2",
-  roleInfo: {
-    a0C0Q000001tr5yUAA: {
-      projectRoles: ProjectRole.MonitoringOfficer,
-      partnerRoles: {}
-    }
-  }
-};
 
 export const navigationCardGuide: IGuide = {
   name: "Navigation card",
