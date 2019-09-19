@@ -11,6 +11,7 @@ import { PCRsDashboardRoute } from "./dashboard";
 import { PCRViewItemRoute } from "./viewItem";
 import { PCRViewReasoningRoute } from "./viewReasoning";
 import { PCRDto, PCRItemDto } from "@framework/dtos/pcrDtos";
+import { HashTabItem } from "../../components";
 
 interface Params {
   projectId: string;
@@ -32,25 +33,55 @@ class PCRDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
     return <ACC.PageLoader pending={combined} render={x => this.renderContents(x.project, x.pcr)} />;
   }
 
-  private renderContents(project: ProjectDto, pcr: PCRDto) {
+  private renderContents(project: ProjectDto, projectChangeRequest: PCRDto) {
+    const tabs = [{
+      text: "Details",
+      hash: "details",
+      default: true,
+      content: this.renderDetailsTab(projectChangeRequest),
+      qa: "ProjectChangeRequestDetailsTab"
+    }, {
+      text: "Log",
+      hash: "log",
+      content: this.renderLogTab(),
+      qa: "ProjectChangeRequestLogTab"
+    }]
+
     return (
       <ACC.Page
         backLink={<ACC.BackLink route={PCRsDashboardRoute.getLink({ projectId: this.props.projectId })}>Back to project change requests</ACC.BackLink>}
         pageTitle={<ACC.Projects.Title project={project} />}
         project={project}
       >
+        <ACC.HashTabs tabList={tabs} />
+      </ACC.Page>
+    );
+  }
+
+  private renderDetailsTab(projectChangeRequest: PCRDto ) {
+    return (
+      <React.Fragment>
         <ACC.Section title="Details">
           <ACC.SummaryList qa="pcr_details">
-            <ACC.SummaryListItem label="Number" content={pcr.requestNumber} qa="numberRow" />
-            <ACC.SummaryListItem label="Types" content={this.renderTypes(pcr)} qa="typesRow"/>
+            <ACC.SummaryListItem label="Number" content={projectChangeRequest.requestNumber} qa="numberRow" />
+            <ACC.SummaryListItem label="Types" content={this.renderTypes(projectChangeRequest)} qa="typesRow" />
           </ACC.SummaryList>
         </ACC.Section>
         <ol className="app-task-list">
-          {pcr.items.map((x, i) => this.renderItem(x, i+1))}
-          {this.renderReasoning(pcr)}
+          {projectChangeRequest.items.map((x, i) => this.renderItem(x, i+1))}
+          {this.renderReasoning(projectChangeRequest)}
         </ol>
-      </ACC.Page>
+      </React.Fragment>
     );
+  }
+
+  private renderLogTab() {
+    return (
+      <ACC.Section title="Log">
+        
+      </ACC.Section>
+    )
+
   }
 
   private renderTypes(pcr: PCRDto): React.ReactNode {
