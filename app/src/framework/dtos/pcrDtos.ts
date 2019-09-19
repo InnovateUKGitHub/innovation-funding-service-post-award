@@ -39,3 +39,12 @@ export interface PCRItemTypeDto {
   recordTypeId: string;
   enabled: boolean;
 }
+
+export interface ProjectChangeRequestStatusChangeDto {
+  id: string;
+  projectChangeRequest: string;
+  name: string;
+  previousStatus: string;
+  newStatus: string;
+  createdDate: Date;
+}

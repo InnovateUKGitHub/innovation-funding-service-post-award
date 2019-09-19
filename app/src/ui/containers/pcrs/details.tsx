@@ -10,7 +10,7 @@ import { Pending } from "@shared/pending";
 import { PCRsDashboardRoute } from "./dashboard";
 import { PCRViewItemRoute } from "./viewItem";
 import { PCRViewReasoningRoute } from "./viewReasoning";
-import { PCRDto, PCRItemDto } from "@framework/dtos/pcrDtos";
+import { PCRDto, PCRItemDto, ProjectChangeRequestStatusChangeDto } from "@framework/dtos/pcrDtos";
 import { HashTabItem } from "../../components";
 
 interface Params {
@@ -76,9 +76,18 @@ class PCRDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
   }
 
   private renderLogTab() {
+    const fakeData: ProjectChangeRequestStatusChangeDto[] = [{
+      id: "id_1",
+      projectChangeRequest: "projectChangeRequest1",
+      name: "Michael Myers",
+      previousStatus: "Draft",
+      newStatus: "Complete",
+      createdDate: new Date()
+    }]
+
     return (
       <ACC.Section title="Log">
-        
+        <ACC.Logs data={fakeData} qa="projectChangeRequestStatusChangeTable" />        
       </ACC.Section>
     )
 
