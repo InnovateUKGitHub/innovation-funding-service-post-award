@@ -79,11 +79,8 @@ class PCRPrepareItemComponent extends ContainerBase<ProjectChangeRequestPrepareI
       >
         <ACC.Renderers.Messages messages={this.props.messages} />
 
-        <ACC.Section>
-          <ACC.SummaryList qa="pcrDetails">
-            <ACC.SummaryListItem label="Number" content={pcr.requestNumber} qa="numberRow" />
-            <ACC.SummaryListItem label="Types" content={this.renderTypes(pcr)} qa="typesRow" />
-          </ACC.SummaryList>
+        <ACC.Section qa="guidance">
+          <ACC.Renderers.SimpleString>{pcrItem.guidance}</ACC.Renderers.SimpleString>
         </ACC.Section>
 
         <ACC.Section>

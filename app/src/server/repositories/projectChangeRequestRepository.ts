@@ -25,6 +25,7 @@ export interface IProjectChangeRequestRepository {
 
 export interface ISalesforcePCR {
   Id: string;
+  Acc_Guidance__c: string;
   Acc_RequestHeader__c: string;
   Acc_RequestNumber__c: number;
   Acc_Status__c: string;
@@ -52,6 +53,7 @@ export class ProjectChangeRequestRepository extends SalesforceRepositoryBase<ISa
 
   protected salesforceFieldNames: string[] = [
     "Id",
+    "Acc_Guidance__c",
     "Acc_RequestHeader__c",
     "Acc_RequestNumber__c",
     "Acc_Status__c",
@@ -115,6 +117,7 @@ export class ProjectChangeRequestRepository extends SalesforceRepositoryBase<ISa
     // Insert header
     const id = await super.insertItem({
       RecordTypeId: headerRecordTypeId,
+      Acc_Guidance__c: "Please provide documents to support your request", // TODO remove this when populated by SF
       Acc_MarkedasComplete__c: this.mapItemStatus(projectChangeRequest.reasoningStatus),
       Acc_Status__c: this.mapStatus(projectChangeRequest.status),
       Acc_Project_Participant__c: projectChangeRequest.partnerId,
@@ -129,6 +132,7 @@ export class ProjectChangeRequestRepository extends SalesforceRepositoryBase<ISa
     await super.insertAll(items.map(x => ({
       Acc_RequestHeader__c: headerId,
       RecordTypeId: x.recordTypeId,
+      Acc_Guidance__c: "Please provide documents to support your request", // TODO remove this when populated by SF
       Acc_MarkedasComplete__c: this.mapItemStatus(x.status),
       Acc_Project_Participant__c: x.partnerId,
       Acc_Project__c: x.projectId,

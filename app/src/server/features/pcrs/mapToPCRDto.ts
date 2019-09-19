@@ -3,6 +3,7 @@ import { PCRDto, PCRItemDto, PCRItemTypeDto } from "@framework/dtos";
 
 export const mapToPcrDto = (pcr: ProjectChangeRequestEntity, itemTypes: PCRItemTypeDto[]): PCRDto => ({
   id: pcr.id,
+  guidance: pcr.guidance,
   requestNumber: pcr.number,
   started: pcr.started,
   lastUpdated: pcr.updated,
@@ -23,6 +24,7 @@ const mapItems = (pcrs: ProjectChangeRequestItemEntity[], itemTypes: PCRItemType
 
 const mapItem = (pcr: ProjectChangeRequestItemEntity, itemType: PCRItemTypeDto): PCRItemDto => ({
   id: pcr.id,
+  guidance: pcr.guidance,
   type: itemType.type,
   typeName: itemType.displayName,
   status: pcr.status,
