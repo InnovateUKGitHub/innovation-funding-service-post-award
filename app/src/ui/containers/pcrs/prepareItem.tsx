@@ -118,6 +118,7 @@ class PCRPrepareItemComponent extends ContainerBase<ProjectChangeRequestPrepareI
             isSaving={editor.status === EditorStatus.Saving}
             onChange={dto => this.onChange(editor.data, dto)}
             onSubmit={() => this.onSave(editor.data)}
+            qa="itemStatus"
           >
             <Form.Fieldset heading="Mark as complete">
               <Form.Checkboxes
