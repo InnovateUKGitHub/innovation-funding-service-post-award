@@ -72,6 +72,7 @@ class PCRReviewComponent extends ContainerBase<PCRReviewParams, Data, Callbacks>
           editor={editor}
           onChange={dto => this.props.onChange(pcr.projectId, pcr.id, dto)}
           onSubmit={() => this.props.onSave(pcr.projectId, pcr.id, editor.data)}
+          qa="pcr-review-form"
         >
           <Form.Fieldset heading="How do you want to proceed?">
             <Form.Radio
