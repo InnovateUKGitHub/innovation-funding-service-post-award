@@ -33,10 +33,7 @@ export interface ISalesforcePCR {
   LastModifiedDate: string;
   RecordTypeId: string;
   Acc_Project_Participant__c: string;
-  Acc_Project_Participant__r: {
-    Id: string;
-    Acc_ProjectId__c: string;
-  };
+  Acc_Project__c: string;
   Acc_Reasoning__c: string;
   // careful there is a typo in the salesforce setup
   // will probably change to Acc_MarkedAsComplete__c in the future!!
@@ -62,8 +59,8 @@ export class ProjectChangeRequestRepository extends SalesforceRepositoryBase<ISa
     "CreatedDate",
     "LastModifiedDate",
     "RecordTypeId",
-    "Acc_Project_Participant__r.Id",
-    "Acc_Project_Participant__r.Acc_ProjectId__c",
+    "Acc_Project_Participant__c",
+    "Acc_Project__c",
     "Acc_Reasoning__c",
     "Acc_MarkedAsComplete__c",
     "toLabel(Acc_MarkedAsComplete__c) MarkedAsCompleteName",
@@ -78,7 +75,7 @@ export class ProjectChangeRequestRepository extends SalesforceRepositoryBase<ISa
   }
 
   async getById(projectId: string, id: string): Promise<ProjectChangeRequestEntity> {
-    const data = await super.where(`Acc_Project_Participant__r.Acc_ProjectId__c='${projectId}' AND (Id = '${id}' OR Acc_RequestHeader__c = '${id}')`);
+    const data = await super.where(`Acc_Project__c='${projectId}' AND (Id = '${id}' OR Acc_RequestHeader__c = '${id}')`);
 
     const headerRecordTypeId = await this.getRecordTypeId(this.salesforceObjectName, this.recordType);
 
@@ -91,7 +88,7 @@ export class ProjectChangeRequestRepository extends SalesforceRepositoryBase<ISa
   }
 
   async isExisting(projectId: string, projectChangeRequestId: string): Promise<boolean> {
-    const data = await super.filterOne(`Acc_Project_Participant__r.Acc_ProjectId__c='${projectId}' AND Id = '${projectChangeRequestId}'`);
+    const data = await super.filterOne(`Acc_Project__c='${projectId}' AND Id = '${projectChangeRequestId}'`);
 
     return !!data;
   }
@@ -120,7 +117,8 @@ export class ProjectChangeRequestRepository extends SalesforceRepositoryBase<ISa
       RecordTypeId: headerRecordTypeId,
       Acc_MarkedasComplete__c: this.mapItemStatus(projectChangeRequest.reasoningStatus),
       Acc_Status__c: this.mapStatus(projectChangeRequest.status),
-      Acc_Project_Participant__c: projectChangeRequest.projectId,
+      Acc_Project_Participant__c: projectChangeRequest.partnerId,
+      Acc_Project__c: projectChangeRequest.projectId,
     });
     // Insert sub-items
     await this.insertItems(id, projectChangeRequest.items);
@@ -132,7 +130,8 @@ export class ProjectChangeRequestRepository extends SalesforceRepositoryBase<ISa
       Acc_RequestHeader__c: headerId,
       RecordTypeId: x.recordTypeId,
       Acc_MarkedasComplete__c: this.mapItemStatus(x.status),
-      Acc_Project_Participant__c: x.projectId,
+      Acc_Project_Participant__c: x.partnerId,
+      Acc_Project__c: x.projectId,
     })));
   }
 

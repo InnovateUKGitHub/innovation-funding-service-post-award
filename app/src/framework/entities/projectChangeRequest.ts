@@ -35,6 +35,7 @@ export enum ProjectChangeRequestItemTypeEntity {
 
 export interface ProjectChangeRequestForCreateEntity {
   projectId: string;
+  partnerId: string;
   status: ProjectChangeRequestStatus;
   reasoningStatus: ProjectChangeRequestItemStatus;
   items: ProjectChangeRequestItemForCreateEntity[];
@@ -55,6 +56,7 @@ export interface ProjectChangeRequestEntity extends ProjectChangeRequestForCreat
 export interface ProjectChangeRequestItemForCreateEntity {
   recordTypeId: string;
   status: ProjectChangeRequestItemStatus;
+  partnerId: string;
   projectId: string;
 }
 
