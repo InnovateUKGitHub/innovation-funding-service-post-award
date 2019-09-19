@@ -1,7 +1,7 @@
 import React from "react";
 
 import { ContainerBase, ReduxContainer } from "../containerBase";
-import { ILinkInfo, ProjectDto, ProjectRole } from "@framework/types";
+import { ProjectDto, ProjectRole } from "@framework/types";
 
 import * as ACC from "../../components";
 import * as Actions from "../../redux/actions";
@@ -10,8 +10,8 @@ import { Pending } from "@shared/pending";
 import { PCRsDashboardRoute } from "./dashboard";
 import { PCRViewItemRoute } from "./viewItem";
 import { PCRViewReasoningRoute } from "./viewReasoning";
-import { PCRDto, PCRItemDto, ProjectChangeRequestStatusChangeDto } from "@framework/dtos/pcrDtos";
-import { HashTabItem } from "../../components";
+import { Task, TaskList, TaskListSection } from "@ui/components/taskList";
+import { PCRDto, ProjectChangeRequestStatusChangeDto } from "@framework/dtos/pcrDtos";
 
 interface Params {
   projectId: string;
@@ -61,16 +61,33 @@ class PCRDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
   private renderDetailsTab(projectChangeRequest: PCRDto ) {
     return (
       <React.Fragment>
+
         <ACC.Section title="Details">
           <ACC.SummaryList qa="pcr_details">
             <ACC.SummaryListItem label="Number" content={projectChangeRequest.requestNumber} qa="numberRow" />
             <ACC.SummaryListItem label="Types" content={this.renderTypes(projectChangeRequest)} qa="typesRow" />
           </ACC.SummaryList>
         </ACC.Section>
-        <ol className="app-task-list">
-          {projectChangeRequest.items.map((x, i) => this.renderItem(x, i+1))}
-          {this.renderReasoning(projectChangeRequest)}
-        </ol>
+
+        <TaskList>
+          {projectChangeRequest.items.map((x, i) => (
+            <TaskListSection step={i + 1} title={x.typeName}>
+              <Task
+                name="View files"
+                status={x.statusName}
+                route={PCRViewItemRoute.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId, itemId: x.id })}
+              />
+            </TaskListSection>
+          ))}
+          <TaskListSection step={projectChangeRequest.items.length + 1} title={"View more details"}>
+            <Task
+              name="Reasoning for Innovate UK"
+              status={projectChangeRequest.reasoningStatusName}
+              route={PCRViewReasoningRoute.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId })}
+            />
+          </TaskListSection>
+        </TaskList>
+
       </React.Fragment>
     );
   }
@@ -100,28 +117,6 @@ class PCRDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
       result.push(current);
       return result;
     }, []);
-  }
-
-  private renderReasoning(pcr: PCRDto) {
-    return this.renderListItem(pcr.items.length + 1, "View more details", "Reasoning for Innovate UK", pcr.reasoningStatusName, PCRViewReasoningRoute.getLink({projectId: this.props.projectId, pcrId: this.props.pcrId}));
-  }
-
-  private renderItem(item: PCRItemDto, step: number) {
-    return this.renderListItem(step, item.typeName, "View files", item.statusName, PCRViewItemRoute.getLink({projectId: this.props.projectId, pcrId: this.props.pcrId, itemId: item.id}));
-  }
-
-  private renderListItem(step: number, title: string, text: string, status: string, route: ILinkInfo) {
-    return (
-      <li key={step}>
-        <h2 className="app-task-list__section"><span className="app-task-list__section-number">{step}.</span>&nbsp;{title}</h2>
-        <ul className="app-task-list__items">
-          <li className="app-task-list__item">
-            <span className="app-task-list__task-name"><ACC.Link route={route}>{text}</ACC.Link></span>
-            <span className="app-task-list__task-completed">{status}</span>
-          </li>
-        </ul>
-      </li>
-    );
   }
 }
 

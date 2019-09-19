@@ -10,12 +10,12 @@ import { Pending } from "@shared/pending";
 import { PCRsDashboardRoute } from "./dashboard";
 import { PCRReviewItemRoute } from "./viewItem";
 import { PCRReviewReasoningRoute } from "./viewReasoning";
-import { PCRDto, PCRItemDto } from "@framework/dtos/pcrDtos";
+import { PCRDto } from "@framework/dtos/pcrDtos";
 import { IEditorStore } from "@ui/redux";
-import { PCRDtoValidator, PCRItemDtoValidator } from "@ui/validators/pcrDtoValidator";
+import { PCRDtoValidator } from "@ui/validators/pcrDtoValidator";
 import { ProjectChangeRequestStatus } from "@framework/entities";
 import { navigateTo } from "../../redux/actions";
-import { Result } from "@ui/validation";
+import { Task, TaskList, TaskListSection } from "@ui/components/taskList";
 
 export interface PCRReviewParams {
   projectId: string;
@@ -64,10 +64,26 @@ class PCRReviewComponent extends ContainerBase<PCRReviewParams, Data, Callbacks>
             <ACC.SummaryListItem label="Types" content={this.renderTypes(pcr)} qa="typesRow" />
           </ACC.SummaryList>
         </ACC.Section>
-        <ol className="app-task-list">
-          {pcr.items.map((x, i) => this.renderItem(x, i + 1, editor.validator.items.results[i]))}
-          {this.renderReasoning(pcr, editor.validator)}
-        </ol>
+
+        <TaskList>
+          {pcr.items.map((x, i) => (
+            <TaskListSection step={i + 1} title={x.typeName}>
+              <Task
+                name="View files"
+                status={x.statusName}
+                route={PCRReviewItemRoute.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId, itemId: x.id })}
+              />
+            </TaskListSection>
+          ))}
+          <TaskListSection step={pcr.items.length + 1} title={"View more details"}>
+            <Task
+              name="Reasoning for Innovate UK"
+              status={pcr.reasoningStatusName}
+              route={PCRReviewReasoningRoute.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId })}
+            />
+          </TaskListSection>
+        </TaskList>
+
         <Form.Form
           editor={editor}
           onChange={dto => this.props.onChange(pcr.projectId, pcr.id, dto)}
@@ -108,29 +124,6 @@ class PCRReviewComponent extends ContainerBase<PCRReviewParams, Data, Callbacks>
       result.push(current);
       return result;
     }, []);
-  }
-
-  private renderReasoning(pcr: PCRDto, validation: PCRDtoValidator) {
-    return this.renderListItem(pcr.items.length + 1, "Give more details", "Reasoning for Innovate UK", pcr.reasoningStatusName, PCRReviewReasoningRoute.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId }), [validation.reasoningStatus, validation.reasoningComments]);
-  }
-
-  private renderItem(item: PCRItemDto, step: number, validation: PCRItemDtoValidator) {
-    return this.renderListItem(step, item.typeName, "Provide your files", item.statusName, PCRReviewItemRoute.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId, itemId: item.id }), validation.errors);
-  }
-
-  private renderListItem(step: number, title: string, text: string, status: string, route: ILinkInfo, validation: Result[]) {
-    return (
-      <li key={step}>
-        <h2 className="app-task-list__section"><span className="app-task-list__section-number">{step}.</span>&nbsp;{title}</h2>
-        {validation.map((v) => <ACC.ValidationError error={v} key={v.key} />)}
-        <ul className="app-task-list__items">
-          <li className="app-task-list__item">
-            <span className="app-task-list__task-name"><ACC.Link route={route}>{text}</ACC.Link></span>
-            <span className="app-task-list__task-completed">{status}</span>
-          </li>
-        </ul>
-      </li>
-    );
   }
 }
 
