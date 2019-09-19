@@ -49,6 +49,7 @@ export interface ProjectChangeRequestEntity extends ProjectChangeRequestForCreat
   statusName: string;
   reasoningStatusName: string;
   reasoning: string;
+  guidance: string;
   comments: string;
   items: ProjectChangeRequestItemEntity[];
 }
@@ -63,5 +64,6 @@ export interface ProjectChangeRequestItemForCreateEntity {
 export interface ProjectChangeRequestItemEntity extends ProjectChangeRequestItemForCreateEntity {
   id: string;
   statusName: string;
+  guidance: string;
   pcrId: string;
 }

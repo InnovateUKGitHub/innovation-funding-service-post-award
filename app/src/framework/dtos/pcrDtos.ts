@@ -10,25 +10,27 @@ export interface PCRBaseDto {
   projectId: string;
 }
 
+export interface PCRItemSummaryDto {
+  type: ProjectChangeRequestItemTypeEntity;
+  typeName: string;
+}
+
 export interface PCRSummaryDto extends PCRBaseDto {
-  items: {
-    type: ProjectChangeRequestItemTypeEntity;
-    typeName: string;
-  }[];
+  items: PCRItemSummaryDto[];
 }
 
 export interface PCRDto extends PCRBaseDto {
   items: PCRItemDto[];
   comments: string;
+  guidance: string;
   reasoningStatus: ProjectChangeRequestItemStatus;
   reasoningStatusName: string;
   reasoningComments: string;
 }
 
-export interface PCRItemDto {
+export interface PCRItemDto extends PCRItemSummaryDto {
   id: string;
-  type: ProjectChangeRequestItemTypeEntity;
-  typeName: string;
+  guidance: string;
   status: ProjectChangeRequestItemStatus;
   statusName: string;
 }

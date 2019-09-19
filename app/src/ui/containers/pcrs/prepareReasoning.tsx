@@ -76,11 +76,16 @@ class PCRViewReasoningComponent extends ContainerBase<ProjectChangeRequestPrepar
         error={editor.error || documentsEditor.error}
       >
         <ACC.Renderers.Messages messages={this.props.messages} />
+
         <ACC.Section>
           <ACC.SummaryList qa="pcr-prepareReasoning">
             <ACC.SummaryListItem label="Number" content={pcr.requestNumber} qa="numberRow" />
             <ACC.SummaryListItem label="Types" content={this.renderTypes(pcr)} qa="typesRow" />
           </ACC.SummaryList>
+        </ACC.Section>
+
+        <ACC.Section qa="guidance">
+          <ACC.Renderers.SimpleString>{pcr.guidance}</ACC.Renderers.SimpleString>
         </ACC.Section>
 
         <ACC.Section>
@@ -105,9 +110,11 @@ class PCRViewReasoningComponent extends ContainerBase<ProjectChangeRequestPrepar
             <UploadForm.Button name="uploadFile">Upload</UploadForm.Button>
           </UploadForm.Form>
         </ACC.Section>
+
         <ACC.Section title="Files uploaded">
           {this.renderDocumentList(documents)}
         </ACC.Section>
+
         <ACC.Section qa="reasoning-save-and-return">
           <PCRForm.Form
             editor={editor}

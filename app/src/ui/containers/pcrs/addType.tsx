@@ -55,6 +55,7 @@ class PCRCreateComponent extends ContainerBase<ProjectChangeRequestAddTypeParams
   private createNewOption(itemType: Dtos.PCRItemTypeDto): Dtos.PCRItemDto {
     return {
       id: "",
+      guidance: "",
       type: itemType.type,
       typeName: itemType.displayName,
       status: ProjectChangeRequestItemStatus.ToDo,
