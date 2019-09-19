@@ -45,7 +45,7 @@ class PCRDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
       hash: "log",
       content: this.renderLogTab(),
       qa: "ProjectChangeRequestLogTab"
-    }]
+    }];
 
     return (
       <ACC.Page
@@ -83,14 +83,13 @@ class PCRDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
       previousStatus: "Draft",
       newStatus: "Complete",
       createdDate: new Date()
-    }]
+    }];
 
     return (
       <ACC.Section title="Log">
-        <ACC.Logs data={fakeData} qa="projectChangeRequestStatusChangeTable" />        
+        <ACC.Logs data={fakeData} qa="projectChangeRequestStatusChangeTable" />
       </ACC.Section>
-    )
-
+    );
   }
 
   private renderTypes(pcr: PCRDto): React.ReactNode {
