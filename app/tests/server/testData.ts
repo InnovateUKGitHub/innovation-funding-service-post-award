@@ -582,6 +582,7 @@ export class TestData {
     const newItem: Entites.ProjectChangeRequestEntity = {
       id: `PCR_${seed}`,
       projectId: project.Id,
+      partnerId: "",
       comments: "",
       number: seed,
       status: Entites.ProjectChangeRequestStatus.Unknown,
@@ -617,6 +618,7 @@ export class TestData {
       pcrId: pcr.id,
       recordTypeId: recordType.id,
       projectId: pcr.projectId,
+      partnerId: "",
       status: Entites.ProjectChangeRequestItemStatus.Complete,
       statusName: "Complete",
     };

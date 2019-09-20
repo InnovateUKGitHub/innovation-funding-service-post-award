@@ -65,12 +65,14 @@ describe("GetAllPCRsQuery", () => {
     expect(newPCR.items).toHaveLength(1);
     expect(newPCR).toEqual({
       id,
-      projectId: partner.Id, // TODO remove this hackery when SF projectId field added to pcr object
+      projectId: project.Id,
+      partnerId: partner.Id,
       status: ProjectChangeRequestStatus.Draft,
       reasoningStatus: ProjectChangeRequestItemStatus.ToDo,
       items: [{
         status: ProjectChangeRequestItemStatus.ToDo,
-        projectId: partner.Id, // TODO remove this hackery when SF projectId field added to pcr object
+        projectId: project.Id,
+        partnerId: partner.Id,
         recordTypeId: recordTypes[0].id,
       }]
     });
