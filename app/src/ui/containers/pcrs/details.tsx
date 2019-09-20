@@ -11,7 +11,7 @@ import { PCRsDashboardRoute } from "./dashboard";
 import { PCRViewItemRoute } from "./viewItem";
 import { PCRViewReasoningRoute } from "./viewReasoning";
 import { Task, TaskList, TaskListSection } from "@ui/components/taskList";
-import { PCRDto, ProjectChangeRequestStatusChangeDto } from "@framework/dtos/pcrDtos";
+import { PCRDto, PCRItemDto, ProjectChangeRequestStatusChangeDto } from "@framework/dtos/pcrDtos";
 
 interface Params {
   projectId: string;
@@ -96,10 +96,11 @@ class PCRDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
     const fakeData: ProjectChangeRequestStatusChangeDto[] = [{
       id: "id_1",
       projectChangeRequest: "projectChangeRequest1",
-      name: "Michael Myers",
       previousStatus: "Draft",
       newStatus: "Complete",
-      createdDate: new Date()
+      createdDate: new Date(),
+      participantVisibility: true,
+      comments: "These are comments"
     }];
 
     return (

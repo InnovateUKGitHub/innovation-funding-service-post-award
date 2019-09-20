@@ -2,6 +2,7 @@ import { ApiClient } from "../../apiClient";
 import { conditionalLoad } from "./common";
 import { getAllPcrs, getAllPcrTypes, getPcr, getPcrEditor, getPcrEditorForCreate } from "../selectors/pcrs";
 import { PCRDto } from "@framework/dtos";
+import * as Selectors from "@ui/redux/selectors";
 import * as Actions from "@ui/redux/actions/common";
 import { scrollToTheTopSmoothly } from "@framework/util";
 import { LoadingStatus } from "@shared/pending";
@@ -19,6 +20,13 @@ export function loadPcrs(projectId: string) {
 
 export function loadPcr(projectId: string, id: string) {
   return conditionalLoad(getPcr(projectId, id), params => ApiClient.pcrs.get({ projectId, id, ...params }));
+}
+
+export function loadProjectChangeRequestStatusChanges(projectId: string, projectChangeRequestId: string) {
+  return Actions.conditionalLoad(
+    Selectors.getProjectChangeRequestStatusChanges(projectChangeRequestId),
+    params => ApiClient.pcrs.getStatusChanges({ projectId, projectChangeRequestId, ...params })
+  );
 }
 
 // update editor with validation
