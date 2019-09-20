@@ -57,8 +57,8 @@ const clientApi: IApiClient = {
     get: (params) => ajax(`/api/pcrs/${params.projectId}/${params.id}`),
     getTypes: (params) => ajax(`/api/pcrs/types`),
     update: (params) => ajaxPut(`/api/pcrs/${params.projectId}/${params.id}`, params.pcr),
-    delete: (params) => ajaxDelete(`/api/pcrs/${params.projectId}/${params.id}`)
-
+    delete: (params) => ajaxDelete(`/api/pcrs/${params.projectId}/${params.id}`),
+    getStatusChanges: (params) => ajax(`/api/pcrs/status-changes/${params.projectId}/${params.projectChangeRequestId}`)
   },
   projects: {
     get: (params) => ajaxJson(`/api/projects/${params.projectId}`),

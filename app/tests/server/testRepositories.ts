@@ -6,6 +6,7 @@ import { IRepositories } from "@framework/types";
 import { TestFileWrapper } from "./testData";
 import { PermissionGroupIdenfifier } from "@framework/types/permisionGroupIndentifier";
 import * as Entities from "@framework/entities";
+import { ProjectChangeRequestStatusChangeRepository } from "@server/repositories";
 
 class ProjectsTestRepository extends TestRepository<Repositories.ISalesforceProject> implements Repositories.IProjectRepository {
   getById(id: string) {
@@ -461,6 +462,24 @@ class PCRTestRepository extends TestRepository<Entities.ProjectChangeRequestEnti
   }
 }
 
+class ProjectChangeRequestStatusChangeTestRepository extends TestRepository<Repositories.ISalesforceProjectChangeRequestStatusChange> implements Repositories.IProjectChangeRequestStatusChangeRepository {
+  createStatusChange(statusChange: Partial<Repositories.ISalesforceProjectChangeRequestStatusChange>) {
+    return super.insertOne({
+      Id: (this.Items.length + 1).toString(),
+      Acc_ProjectChangeRequest__c: statusChange.Acc_ProjectChangeRequest__c!,
+      Acc_PreviousProjectChangeRequestStatus__c: statusChange.Acc_PreviousProjectChangeRequestStatus__c!,
+      Acc_NewProjectChangeRequestStatus__c: statusChange.Acc_NewProjectChangeRequestStatus__c!,
+      CreatedDate: statusChange.CreatedDate!,
+      Acc_ParticipantVisibility__c: statusChange.Acc_ParticipantVisibility__c!,
+      Acc_ExternalComment__c: statusChange.Acc_ExternalComment__c!
+    });
+  }
+
+  getStatusChanges(projectId: string, projectChangeRequestId: string): Promise<Repositories.ISalesforceProjectChangeRequestStatusChange[]> {
+    return super.getWhere(x => x.Acc_ProjectChangeRequest__c === projectChangeRequestId);
+  }
+}
+
 export interface ITestRepositories extends IRepositories {
   claims: ClaimsTestRepository;
   claimDetails: ClaimDetailsTestRepository;
@@ -473,6 +492,7 @@ export interface ITestRepositories extends IRepositories {
   monitoringReportQuestions: MonitoringReportQuestionsRepository;
   monitoringReportStatusChange: MonitoringReportStatusChangeTestRepository;
   projectChangeRequests: PCRTestRepository;
+  projectChangeRequestStatusChange: ProjectChangeRequestStatusChangeTestRepository;
   profileDetails: ProfileDetailsTestRepository;
   profileTotalCostCategory: ProfileTotalCostCategoryTestRepository;
   profileTotalPeriod: ProfileTotalPeriodTestRepository;
@@ -505,6 +525,7 @@ export const createTestRepositories = (): ITestRepositories => {
     profileTotalPeriod: new ProfileTotalPeriodTestRepository(partnerRepository),
     profileTotalCostCategory: new ProfileTotalCostCategoryTestRepository(),
     projects: new ProjectsTestRepository(),
+    projectChangeRequestStatusChange: new ProjectChangeRequestStatusChangeTestRepository(),
     partners: partnerRepository,
     projectContacts: new ProjectContactTestRepository(),
     claimTotalCostCategory: new ClaimTotalCostTestRepository(),
