@@ -13,15 +13,16 @@ interface IMetaValue {
 
 // @TODO: this might sit better in the pcr repository... leave for now
 export const PCRRecordTypeMetaValues: IMetaValue[] = [
-  { type: ProjectChangeRequestItemTypeEntity.AccountNameChange, typeName: "Account Name Change" },
-  { type: ProjectChangeRequestItemTypeEntity.PartnerAddition, typeName: "Partner Addition", },
-  { type: ProjectChangeRequestItemTypeEntity.PartnerWithdrawal, typeName: "Partner Withdrawal", },
-  { type: ProjectChangeRequestItemTypeEntity.ProjectSuspension, typeName: "Project Suspension", },
-  { type: ProjectChangeRequestItemTypeEntity.ProjectTermination, typeName: "Project Termination", },
-  { type: ProjectChangeRequestItemTypeEntity.MultiplePartnerFinancialVirement, typeName: "Multiple Partner Financial Virement", },
-  { type: ProjectChangeRequestItemTypeEntity.SinglePartnerFinancialVirement, typeName: "Single Partner Financial Virement", },
-  { type: ProjectChangeRequestItemTypeEntity.ScopeChange, typeName: "Scope Change", },
-  { type: ProjectChangeRequestItemTypeEntity.TimeExtension, typeName: "Time Extension", },
+  { type: ProjectChangeRequestItemTypeEntity.AccountNameChange, typeName: "Change a partner's name" },
+  { type: ProjectChangeRequestItemTypeEntity.PartnerAddition, typeName: "Add a partner", },
+  { type: ProjectChangeRequestItemTypeEntity.PartnerWithdrawal, typeName: "Remove a partner", },
+  { type: ProjectChangeRequestItemTypeEntity.ProjectSuspension, typeName: "Put project on hold", },
+  { type: ProjectChangeRequestItemTypeEntity.ProjectTermination, typeName: "End the project early", },
+  { type: ProjectChangeRequestItemTypeEntity.MultiplePartnerFinancialVirement, typeName: "Reallocate several partners' project cost", },
+  { type: ProjectChangeRequestItemTypeEntity.SinglePartnerFinancialVirement, typeName: "Reallocate one partner's project costs", },
+  { type: ProjectChangeRequestItemTypeEntity.ScopeChange, typeName: "Change project scope", },
+  { type: ProjectChangeRequestItemTypeEntity.TimeExtension, typeName: "Change project duration", },
+  // "Financial Virement"
 ];
 
 export class GetPCRItemTypesQuery extends QueryBase<PCRItemTypeDto[]> {

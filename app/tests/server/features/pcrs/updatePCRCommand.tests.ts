@@ -144,9 +144,9 @@ describe("UpdatePCRCommand", () => {
       const project = context.testData.createProject();
       const pcr = context.testData.createPCR(project, { status: ProjectChangeRequestStatus.Draft, reasoningStatus: ProjectChangeRequestItemStatus.Complete });
       const recordTypes = context.testData.range(3, x => context.testData.createRecordType({ parent: "Acc_ProjectChangeRequest__c"}));
-      recordTypes[0].type = "Partner Withdrawal";
-      recordTypes[1].type = "Project Suspension";
-      recordTypes[2].type = "Scope Change";
+      recordTypes[0].type = "Remove a partner";
+      recordTypes[1].type = "Put project on hold";
+      recordTypes[2].type = "Change project scope";
 
       recordTypes.forEach(r => context.testData.createPCRItem(pcr, r, {status : ProjectChangeRequestItemStatus.Incomplete}));
 
@@ -171,9 +171,9 @@ describe("UpdatePCRCommand", () => {
       context.testData.createPartner(project);
       const pcr = context.testData.createPCR(project, { status: ProjectChangeRequestStatus.Draft, reasoningStatus: ProjectChangeRequestItemStatus.Complete });
       const recordTypes = context.testData.range(3, x => context.testData.createRecordType({ parent: "Acc_ProjectChangeRequest__c"}));
-      recordTypes[0].type = "Partner Withdrawal";
-      recordTypes[1].type = "Project Suspension";
-      recordTypes[2].type = "Scope Change";
+      recordTypes[0].type = "Remove a partner";
+      recordTypes[1].type = "Put project on hold";
+      recordTypes[2].type = "Change project scope";
 
       context.testData.createPCRItem(pcr, recordTypes[0], {status : ProjectChangeRequestItemStatus.Incomplete});
       context.testData.createPCRItem(pcr, recordTypes[1], {status : ProjectChangeRequestItemStatus.Incomplete});
@@ -202,8 +202,8 @@ describe("UpdatePCRCommand", () => {
       context.testData.createPartner(project);
       const pcr = context.testData.createPCR(project, { status: ProjectChangeRequestStatus.Draft, reasoningStatus: ProjectChangeRequestItemStatus.Complete });
       const recordTypes = context.testData.range(3, x => context.testData.createRecordType({ parent: "Acc_ProjectChangeRequest__c"}));
-      recordTypes[0].type = "Partner Withdrawal";
-      recordTypes[1].type = "Project Suspension";
+      recordTypes[0].type = "Remove a partner";
+      recordTypes[1].type = "Put project on hold";
 
       context.testData.createPCRItem(pcr, recordTypes[0], {status : ProjectChangeRequestItemStatus.Incomplete});
       context.testData.createPCRItem(pcr, recordTypes[1], {status : ProjectChangeRequestItemStatus.Incomplete});
