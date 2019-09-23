@@ -52,7 +52,11 @@ class PCRViewReasoningComponent extends ContainerBase<Params, Data, Callbacks> {
           <ACC.SummaryList qa="pcr_reasoning">
             <ACC.SummaryListItem label="Type" content="Reasoning for Innovate UK" qa="type" />
             <ACC.SummaryListItem label="Comments" content={pcr.reasoningComments} qa="comments" />
-            <ACC.SummaryListItem label="Files" content={<ACC.DocumentList documents={files} qa="docs" />} qa="files" />
+            <ACC.SummaryListItem
+              label="Files"
+              content={files.length ? <ACC.DocumentList documents={files} qa="docs" /> : "No documents attached"}
+              qa="files"
+            />
           </ACC.SummaryList>
         </ACC.Section>
         <ACC.NavigationArrows previousLink={this.getLink(lastItem)} />
