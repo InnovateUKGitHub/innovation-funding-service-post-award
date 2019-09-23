@@ -78,7 +78,9 @@ const UpdateForecast = definition.connect({
   withData: (state, props) => withDataEditor(state, props),
   withCallbacks: dispatch => ({
     onChange: (partnerId, data, combined) => dispatch(Actions.validateForecastDetails(partnerId, data, combined.claims, combined.claimDetails, combined.golCosts)),
-    saveAndReturn: (updateClaim, projectId, partnerId, data) => dispatch(Actions.saveForecastDetails(updateClaim, projectId, partnerId, data.editor!.data, data.claims, data.claimDetails, data.golCosts, () => dispatch(Actions.navigateTo(ViewForecastRoute.getLink({ projectId, partnerId }))), "Your forecast has been updated."))
+    saveAndReturn: (updateClaim, projectId, partnerId, data) =>
+      dispatch(Actions.saveForecastDetails(updateClaim, projectId, partnerId, data.editor!.data, data.claims, data.claimDetails, data.golCosts, () =>
+        dispatch(Actions.navigateTo(ViewForecastRoute.getLink({ projectId, partnerId }))), "Your forecast has been updated."))
   })
 });
 
