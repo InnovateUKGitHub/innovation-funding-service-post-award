@@ -47,7 +47,7 @@ class PCRsDashboardComponent extends ContainerBase<Params, Data, Callbacks> {
         <ACC.Renderers.Messages messages={this.props.messages}/>
         <ACC.Section qa="pcr-table">
           {this.renderTable(project, active, "pcrs-active")}
-          <ACC.Link route={PCRCreateRoute.getLink({ projectId: this.props.projectId })} className="govuk-button">Start a new request</ACC.Link>
+          {this.renderStartANewRequestLink(project)}
         </ACC.Section>
         <ACC.Accordion>
           <ACC.AccordionItem title="Past requests">
@@ -55,6 +55,16 @@ class PCRsDashboardComponent extends ContainerBase<Params, Data, Callbacks> {
           </ACC.AccordionItem>
         </ACC.Accordion>
       </ACC.Page>
+    );
+  }
+
+  private renderStartANewRequestLink(project: ProjectDto) {
+    const isPm = !!(project.roles & ProjectRole.ProjectManager);
+
+    if (!isPm) return null;
+
+    return (
+      <ACC.Link route={PCRCreateRoute.getLink({ projectId: this.props.projectId })} className="govuk-button">Start a new request</ACC.Link>
     );
   }
 
@@ -91,10 +101,10 @@ class PCRsDashboardComponent extends ContainerBase<Params, Data, Callbacks> {
     if(prepareStatus.indexOf(pcr.status) >= 0 && project.roles & ProjectRole.ProjectManager) {
       links.push({route: ProjectChangeRequestPrepareRoute.getLink({pcrId: pcr.id, projectId: pcr.projectId}), text: "Prepare", qa:"pcrPrepareLink"});
     }
-    else if(pcr.status === ProjectChangeRequestStatus.SubmittedToMonitoringOfficer && project.roles & ProjectRole.ProjectManager) {
+    else if(pcr.status === ProjectChangeRequestStatus.SubmittedToMonitoringOfficer && project.roles & ProjectRole.MonitoringOfficer) {
       links.push({route: PCRReviewRoute.getLink({pcrId: pcr.id, projectId: pcr.projectId}), text: "Review", qa:"pcrReviewLink"});
     }
-    else {
+    else if((project.roles & ProjectRole.ProjectManager | project.roles & ProjectRole.MonitoringOfficer)) {
       links.push({route: PCRDetailsRoute.getLink({pcrId: pcr.id, projectId: pcr.projectId}), text: "View", qa:"pcrViewLink"});
     }
 
