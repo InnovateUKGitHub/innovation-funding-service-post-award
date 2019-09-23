@@ -53,7 +53,11 @@ class PCRViewItemComponent extends ContainerBase<Params, Data, Callbacks> {
         <ACC.Section title="Details">
           <ACC.SummaryList qa="pcr_viewItem">
             <ACC.SummaryListItem label="Type" content={pcrItem.typeName} qa="type"/>
-            <ACC.SummaryListItem label="Files" content={<ACC.DocumentList documents={files} qa="docs" />} qa="files"/>
+            <ACC.SummaryListItem
+              label="Files"
+              qa="files"
+              content={files.length ? <ACC.DocumentList documents={files} qa="docs" /> : "No documents attached"}
+            />
           </ACC.SummaryList>
         </ACC.Section>
         {this.renderArrows(pcr, pcrItem)}
