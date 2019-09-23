@@ -15,7 +15,7 @@ export interface ClaimForecastParams {
 
 interface Callbacks {
   onChange: (partnerId: string, data: ForecastDetailsDTO[], combined: ForecastData) => void;
-  saveAndReturn: (updateClaim: boolean, projectId: string, partnerId: string, periodId: number, data: ForecastData, message: string) => void;
+  saveAndReturn: (updateClaim: boolean, projectId: string, partnerId: string, periodId: number, data: ForecastData, message?: string) => void;
 }
 
 class ClaimForecastComponent extends ContainerBase<ClaimForecastParams, PendingForecastData, Callbacks> {
@@ -23,7 +23,7 @@ class ClaimForecastComponent extends ContainerBase<ClaimForecastParams, PendingF
     return <ACC.PageLoader pending={this.props.combined} render={data => this.renderContents(data)} />;
   }
 
-  saveAndReturn(data: ForecastData, updateClaim: boolean, periodId: number, message: string) {
+  saveAndReturn(data: ForecastData, updateClaim: boolean, periodId: number, message?: string) {
     this.props.saveAndReturn(updateClaim, this.props.projectId, this.props.partnerId, periodId, data, message);
   }
 
@@ -66,7 +66,7 @@ class ClaimForecastComponent extends ContainerBase<ClaimForecastParams, PendingF
               <ACC.Claims.ClaimLastModified partner={combined.partner} />
             </Form.Fieldset>
             <Form.Fieldset qa="save-button">
-              <Form.Button name="save" onClick={() => this.saveAndReturn(combined, false, this.props.periodId, "You have saved your claim.")}>Save and return to claim</Form.Button>
+              <Form.Button name="save" onClick={() => this.saveAndReturn(combined, false, this.props.periodId)}>Save and return to claim</Form.Button>
             </Form.Fieldset>
           </Form.Form>
         </ACC.Section>

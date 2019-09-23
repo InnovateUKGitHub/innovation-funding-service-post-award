@@ -45,7 +45,7 @@ export function saveForecastDetails(
   claimDetails: ClaimDetailsSummaryDto[],
   golCosts: GOLCostDto[],
   onComplete: () => void,
-  message: string
+  message?: string
 ): Actions.AsyncThunk<void, Actions.DataLoadAction | Actions.EditorAction | Actions.messageSuccess> {
   return (dispatch, getState) => {
     const state = getState();
@@ -63,7 +63,7 @@ export function saveForecastDetails(
     return ApiClient.forecastDetails.update({projectId, partnerId, forecasts, submit: updateClaim, user: state.user}).then(result => {
       dispatch(Actions.dataLoadAction(selector.key, selector.store, LoadingStatus.Updated, result));
       dispatch(Actions.handleEditorSuccess(selector.key, selector.store));
-      dispatch(Actions.messageSuccess(message));
+      if (message) dispatch(Actions.messageSuccess(message));
       onComplete();
     })
     .catch((e) => {
