@@ -10,7 +10,7 @@ import { Pending } from "@shared/pending";
 import { PCRsDashboardRoute } from "./dashboard";
 import { PCRReviewItemRoute } from "./viewItem";
 import { PCRReviewReasoningRoute } from "./viewReasoning";
-import { PCRDto } from "@framework/dtos/pcrDtos";
+import { PCRDto, ProjectChangeRequestStatusChangeDto } from "@framework/dtos/pcrDtos";
 import { IEditorStore } from "@ui/redux";
 import { PCRDtoValidator } from "@ui/validators/pcrDtoValidator";
 import { ProjectChangeRequestStatus } from "@framework/entities";
@@ -26,6 +26,7 @@ interface Data {
   project: Pending<ProjectDto>;
   pcr: Pending<PCRDto>;
   editor: Pending<IEditorStore<PCRDto, PCRDtoValidator>>;
+  statusChanges: Pending<ProjectChangeRequestStatusChangeDto[]>;
 }
 
 interface Callbacks {
@@ -40,15 +41,19 @@ class PCRReviewComponent extends ContainerBase<PCRReviewParams, Data, Callbacks>
     return <ACC.PageLoader pending={combined} render={x => this.renderContents(x.project, x.pcr, x.editor)} />;
   }
 
-  private renderContents(project: ProjectDto, pcr: PCRDto, editor: IEditorStore<PCRDto, PCRDtoValidator>) {
-    const Form = ACC.TypedForm<PCRDto>();
-
-    const options: ACC.SelectOption[] = [
-      { id: ProjectChangeRequestStatus.QueriedByMonitoringOfficer.toString(), value: "Query with project manager" },
-      { id: ProjectChangeRequestStatus.SubmittedToInnovationLead.toString(), value: "Send to Innovate UK for approval" },
-    ];
-
-    const selected = options.find(x => x.id === editor.data.status.toString());
+  private renderContents(project: ProjectDto, projectChangeRequest: PCRDto, editor: IEditorStore<PCRDto, PCRDtoValidator>) {
+    const tabs = [{
+      text: "Details",
+      hash: "details",
+      default: true,
+      content: this.renderDetailsTab(projectChangeRequest, editor),
+      qa: "ProjectChangeRequestDetailsTab"
+    }, {
+      text: "Log",
+      hash: "log",
+      content: this.renderLogTab(),
+      qa: "ProjectChangeRequestLogTab"
+    }];
 
     return (
       <ACC.Page
@@ -58,15 +63,30 @@ class PCRReviewComponent extends ContainerBase<PCRReviewParams, Data, Callbacks>
         validator={editor.validator}
         error={editor.error}
       >
+        <ACC.HashTabs tabList={tabs} />
+      </ACC.Page>
+    );
+  }
+
+  private renderDetailsTab(projectChangeRequest: PCRDto, editor: IEditorStore<PCRDto, PCRDtoValidator>) {
+    const Form = ACC.TypedForm<PCRDto>();
+
+    const options: ACC.SelectOption[] = [
+      { id: ProjectChangeRequestStatus.QueriedByMonitoringOfficer.toString(), value: "Query with project manager" },
+      { id: ProjectChangeRequestStatus.SubmittedToInnovationLead.toString(), value: "Send to Innovate UK for approval" },
+    ];
+
+    const selected = options.find(x => x.id === editor.data.status.toString());
+    return (
+      <React.Fragment>
         <ACC.Section title="Details">
           <ACC.SummaryList qa="pcrDetails">
-            <ACC.SummaryListItem label="Number" content={pcr.requestNumber} qa="numberRow" />
-            <ACC.SummaryListItem label="Types" content={this.renderTypes(pcr)} qa="typesRow" />
+            <ACC.SummaryListItem label="Number" content={projectChangeRequest.requestNumber} qa="numberRow" />
+            <ACC.SummaryListItem label="Types" content={this.renderTypes(projectChangeRequest)} qa="typesRow" />
           </ACC.SummaryList>
         </ACC.Section>
-
         <TaskList>
-          {pcr.items.map((x, i) => (
+          {projectChangeRequest.items.map((x, i) => (
             <TaskListSection step={i + 1} title={x.typeName}>
               <Task
                 name="View files"
@@ -75,19 +95,18 @@ class PCRReviewComponent extends ContainerBase<PCRReviewParams, Data, Callbacks>
               />
             </TaskListSection>
           ))}
-          <TaskListSection step={pcr.items.length + 1} title={"View more details"}>
+          <TaskListSection step={projectChangeRequest.items.length + 1} title={"View more details"}>
             <Task
               name="Reasoning for Innovate UK"
-              status={pcr.reasoningStatusName}
+              status={projectChangeRequest.reasoningStatusName}
               route={PCRReviewReasoningRoute.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId })}
             />
           </TaskListSection>
         </TaskList>
-
         <Form.Form
           editor={editor}
-          onChange={dto => this.props.onChange(pcr.projectId, pcr.id, dto)}
-          onSubmit={() => this.props.onSave(pcr.projectId, pcr.id, editor.data)}
+          onChange={dto => this.props.onChange(projectChangeRequest.projectId, projectChangeRequest.id, dto)}
+          onSubmit={() => this.props.onSave(projectChangeRequest.projectId, projectChangeRequest.id, editor.data)}
           qa="pcr-review-form"
         >
           <Form.Fieldset heading="How do you want to proceed?">
@@ -112,7 +131,16 @@ class PCRReviewComponent extends ContainerBase<PCRReviewParams, Data, Callbacks>
             <Form.Submit>Submit</Form.Submit>
           </Form.Fieldset>
         </Form.Form>
-      </ACC.Page>
+      </React.Fragment>
+    );
+  }
+
+  private renderLogTab() {
+    return (
+      <ACC.Loader
+        pending={this.props.statusChanges}
+        render={(statusChanges) => <ACC.Section title="Log"><ACC.Logs data={statusChanges} qa="projectChangeRequestStatusChangeTable" /></ACC.Section>}
+      />
     );
   }
 
@@ -134,7 +162,8 @@ export const PCRReview = definition.connect({
     project: Selectors.getProject(params.projectId).getPending(state),
     pcr: Selectors.getPcr(params.projectId, params.pcrId).getPending(state),
     // initalise editor pcr status to unknown to force state selection via form
-    editor: Selectors.getPcrEditor(params.projectId, params.pcrId).get(state, x => x.status = ProjectChangeRequestStatus.Unknown)
+    editor: Selectors.getPcrEditor(params.projectId, params.pcrId).get(state, x => x.status = ProjectChangeRequestStatus.Unknown),
+    statusChanges: Selectors.getProjectChangeRequestStatusChanges(params.pcrId).getPending(state)
   }),
   withCallbacks: (dispatch) => ({
     onChange: (projectId: string, pcrId: string, dto: PCRDto) => dispatch(Actions.validatePCR(projectId, pcrId, dto)),
@@ -153,6 +182,7 @@ export const PCRReviewRoute = definition.route({
     Actions.loadProject(params.projectId),
     Actions.loadPcr(params.projectId, params.pcrId),
     Actions.loadPcrTypes(),
+    Actions.loadProjectChangeRequestStatusChanges(params.projectId, params.pcrId)
   ],
   getTitle: () => ({
     htmlTitle: "Review project change request",

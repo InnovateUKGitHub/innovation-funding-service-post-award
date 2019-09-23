@@ -11,7 +11,7 @@ import { PCRsDashboardRoute } from "./dashboard";
 import { PCRViewItemRoute } from "./viewItem";
 import { PCRViewReasoningRoute } from "./viewReasoning";
 import { Task, TaskList, TaskListSection } from "@ui/components/taskList";
-import { PCRDto, PCRItemDto, ProjectChangeRequestStatusChangeDto } from "@framework/dtos/pcrDtos";
+import { PCRDto, ProjectChangeRequestStatusChangeDto } from "@framework/dtos/pcrDtos";
 
 interface Params {
   projectId: string;
@@ -21,6 +21,7 @@ interface Params {
 interface Data {
   project: Pending<ProjectDto>;
   pcr: Pending<PCRDto>;
+  statusChanges: Pending<ProjectChangeRequestStatusChangeDto[]>;
 }
 
 interface Callbacks {
@@ -68,7 +69,6 @@ class PCRDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
             <ACC.SummaryListItem label="Types" content={this.renderTypes(projectChangeRequest)} qa="typesRow" />
           </ACC.SummaryList>
         </ACC.Section>
-
         <TaskList>
           {projectChangeRequest.items.map((x, i) => (
             <TaskListSection step={i + 1} title={x.typeName}>
@@ -87,26 +87,16 @@ class PCRDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
             />
           </TaskListSection>
         </TaskList>
-
       </React.Fragment>
     );
   }
 
   private renderLogTab() {
-    const fakeData: ProjectChangeRequestStatusChangeDto[] = [{
-      id: "id_1",
-      projectChangeRequest: "projectChangeRequest1",
-      previousStatus: "Draft",
-      newStatus: "Complete",
-      createdDate: new Date(),
-      participantVisibility: true,
-      comments: "These are comments"
-    }];
-
     return (
-      <ACC.Section title="Log">
-        <ACC.Logs data={fakeData} qa="projectChangeRequestStatusChangeTable" />
-      </ACC.Section>
+      <ACC.Loader
+        pending={this.props.statusChanges}
+        render={(statusChanges) => <ACC.Section title="Log"><ACC.Logs data={statusChanges} qa="projectChangeRequestStatusChangeTable" /></ACC.Section>}
+      />
     );
   }
 
@@ -127,6 +117,7 @@ export const PCRDetails = definition.connect({
   withData: (state, params) => ({
     project: Selectors.getProject(params.projectId).getPending(state),
     pcr: Selectors.getPcr(params.projectId, params.pcrId).getPending(state),
+    statusChanges: Selectors.getProjectChangeRequestStatusChanges(params.pcrId).getPending(state)
   }),
   withCallbacks: () => ({})
 });
@@ -141,6 +132,7 @@ export const PCRDetailsRoute = definition.route({
   getLoadDataActions: (params) => [
     Actions.loadProject(params.projectId),
     Actions.loadPcr(params.projectId, params.pcrId),
+    Actions.loadProjectChangeRequestStatusChanges(params.projectId, params.pcrId)
   ],
   getTitle: () => ({
     htmlTitle: "Project change request details",

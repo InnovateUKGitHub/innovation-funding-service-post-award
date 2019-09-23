@@ -33,29 +33,6 @@ export class ProjectChangeRequestStatusChangeRepository extends SalesforceReposi
   }
 
   public getStatusChanges(projectId: string, projectChangeRequestId: string): Promise<ISalesforceProjectChangeRequestStatusChange[]> {
-    super.where(`Acc_ProjectChangeRequest__c = '${projectChangeRequestId}' AND Acc_ProjectChangeRequest__c.Acc_Project__c = '${projectId}'`);
-
-    const fakeStatusChanges: ISalesforceProjectChangeRequestStatusChange[] = [
-      {
-        Id: "StatusChange 1",
-        Acc_ProjectChangeRequest__c: "projectChangeRequest1",
-        Acc_NewProjectChangeRequestStatus__c: "Submitted to Monitoring Officer",
-        Acc_PreviousProjectChangeRequestStatus__c: "Draft",
-        CreatedDate: DateTime.local().toISO(),
-        Acc_ExternalComment__c: "This is a comment",
-        Acc_ParticipantVisibility__c: true,
-      },
-      {
-        Id: "StatusChange 2",
-        Acc_ProjectChangeRequest__c: "projectChangeRequest2",
-        Acc_NewProjectChangeRequestStatus__c: "Queried by Monitoring Officer",
-        Acc_PreviousProjectChangeRequestStatus__c: "Withdrawn",
-        CreatedDate: DateTime.local().minus({ days: 150 }).toISO(),
-        Acc_ExternalComment__c: "This is a comment",
-        Acc_ParticipantVisibility__c: false,
-      }
-    ];
-
-    return Promise.resolve(fakeStatusChanges);
+    return super.where(`Acc_ProjectChangeRequest__c = '${projectChangeRequestId}' AND Acc_ProjectChangeRequest__r.Acc_Project__c = '${projectId}'`);
   }
 }
