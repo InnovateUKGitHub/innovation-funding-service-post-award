@@ -69,7 +69,7 @@ export class ProjectChangeRequestRepository extends SalesforceRepositoryBase<ISa
 
   async getAllByProjectId(projectId: string): Promise<ProjectChangeRequestEntity[]> {
     const headerRecordTypeId = await this.getRecordTypeId(this.salesforceObjectName, this.recordType);
-    const data = await super.where(`Acc_Project_Participant__r.Acc_ProjectId__c='${projectId}'`);
+    const data = await super.where(`Acc_Project__c='${projectId}'`);
     const mapper = new SalesforcePCRMapper(headerRecordTypeId);
     return mapper.map(data);
   }
