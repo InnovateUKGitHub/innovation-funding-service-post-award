@@ -152,7 +152,7 @@ const TableComponent = <T extends {}>(props: TableProps<T> & { data: T[]; valida
       case "warning": return "table__row--warning";
       case "error":   return "table__row--error";
       case "info":    return "table__row--info";
-      case "edit":    return "table__row--info table__row--icon";
+      case "edit":    return "table__row--info";
       default:        return "";
     }
   });
