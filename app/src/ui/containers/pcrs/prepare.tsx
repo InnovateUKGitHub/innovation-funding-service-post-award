@@ -1,7 +1,7 @@
 import React from "react";
 
 import { ContainerBase, ReduxContainer } from "../containerBase";
-import { ILinkInfo, ProjectDto, ProjectRole } from "@framework/types";
+import { ProjectDto, ProjectRole } from "@framework/types";
 
 import * as ACC from "../../components";
 import * as Actions from "../../redux/actions";
@@ -10,14 +10,14 @@ import { Pending } from "@shared/pending";
 import { PCRsDashboardRoute } from "./dashboard";
 import { ProjectChangeRequestPrepareItemRoute } from "./prepareItem";
 import { ProjectChangeRequestPrepareReasoningRoute } from "./prepareReasoning";
-import { PCRDto, PCRItemDto } from "@framework/dtos/pcrDtos";
+import { PCRDto } from "@framework/dtos/pcrDtos";
 import { IEditorStore } from "@ui/redux";
-import { PCRDtoValidator, PCRItemDtoValidator } from "@ui/validators/pcrDtoValidator";
+import { PCRDtoValidator } from "@ui/validators/pcrDtoValidator";
 import { ProjectChangeRequestStatus } from "@framework/entities";
 import { navigateTo } from "../../redux/actions";
-import { Result } from "@ui/validation";
 import { Link } from "../../components";
 import { ProjectChangeRequestAddTypeRoute } from "@ui/containers";
+import { Task, TaskList, TaskListSection } from "@ui/components/taskList";
 
 export interface ProjectChangeRequestPrepareParams {
   projectId: string;
@@ -73,10 +73,26 @@ class PCRPrepareComponent extends ContainerBase<ProjectChangeRequestPrepareParam
             <ACC.SummaryListItem label="Types" content={this.renderTypes(pcr)} action={<Link route={ProjectChangeRequestAddTypeRoute.getLink({ projectId: this.props.projectId, projectChangeRequestId: this.props.pcrId })}>Add Type</Link>} qa="typesRow" />
           </ACC.SummaryList>
         </ACC.Section>
-        <ol className="app-task-list">
-          {pcr.items.map((x, i) => this.renderItem(x, i + 1, editor.validator.items.results[i]))}
-          {this.renderReasoning(pcr, editor.validator)}
-        </ol>
+
+        <TaskList>
+          {pcr.items.map((x, i) => (
+            <TaskListSection step={i + 1} title={x.typeName} validation={editor.validator.items.results[i].errors}>
+              <Task
+                name="Provide your files"
+                status={x.statusName}
+                route={ProjectChangeRequestPrepareItemRoute.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId, itemId: x.id })}
+              />
+            </TaskListSection>
+          ))}
+          <TaskListSection step={pcr.items.length + 1} title={"Give more details"} validation={[editor.validator.reasoningStatus, editor.validator.reasoningComments]}>
+            <Task
+              name="Reasoning for Innovate UK"
+              status={pcr.reasoningStatusName}
+              route={ProjectChangeRequestPrepareReasoningRoute.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId })}
+            />
+          </TaskListSection>
+        </TaskList>
+
         <Form.Form
           editor={editor}
           onChange={dto => this.props.onChange(pcr.projectId, pcr.id, dto)}
@@ -113,28 +129,6 @@ class PCRPrepareComponent extends ContainerBase<ProjectChangeRequestPrepareParam
     }, []);
   }
 
-  private renderReasoning(pcr: PCRDto, validation: PCRDtoValidator) {
-    return this.renderListItem(pcr.items.length + 1, "Give more details", "Reasoning for Innovate UK", pcr.reasoningStatusName, ProjectChangeRequestPrepareReasoningRoute.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId }), [validation.reasoningStatus, validation.reasoningComments]);
-  }
-
-  private renderItem(item: PCRItemDto, step: number, validation: PCRItemDtoValidator) {
-    return this.renderListItem(step, item.typeName, "Provide your files", item.statusName, ProjectChangeRequestPrepareItemRoute.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId, itemId: item.id }), validation.errors);
-  }
-
-  private renderListItem(step: number, title: string, text: string, status: string, route: ILinkInfo, validation: Result[]) {
-    return (
-      <li key={step}>
-        <h2 className="app-task-list__section"><span className="app-task-list__section-number">{step}.</span>&nbsp;{title}</h2>
-        {validation.map((v) => <ACC.ValidationError error={v} key={v.key} />)}
-        <ul className="app-task-list__items">
-          <li className="app-task-list__item">
-            <span className="app-task-list__task-name"><ACC.Link route={route}>{text}</ACC.Link></span>
-            <span className="app-task-list__task-completed">{status}</span>
-          </li>
-        </ul>
-      </li>
-    );
-  }
 }
 
 const definition = ReduxContainer.for<ProjectChangeRequestPrepareParams, Data, Callbacks>(PCRPrepareComponent);
