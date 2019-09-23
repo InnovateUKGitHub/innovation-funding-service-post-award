@@ -10,7 +10,7 @@ import { Pending } from "@shared/pending";
 import { PCRsDashboardRoute } from "./dashboard";
 import { ProjectChangeRequestPrepareItemRoute } from "./prepareItem";
 import { ProjectChangeRequestPrepareReasoningRoute } from "./prepareReasoning";
-import { PCRDto } from "@framework/dtos/pcrDtos";
+import { PCRDto, ProjectChangeRequestStatusChangeDto } from "@framework/dtos/pcrDtos";
 import { IEditorStore } from "@ui/redux";
 import { PCRDtoValidator } from "@ui/validators/pcrDtoValidator";
 import { ProjectChangeRequestStatus } from "@framework/entities";
@@ -28,6 +28,7 @@ interface Data {
   project: Pending<ProjectDto>;
   pcr: Pending<PCRDto>;
   editor: Pending<IEditorStore<PCRDto, PCRDtoValidator>>;
+  statusChanges: Pending<ProjectChangeRequestStatusChangeDto[]>;
 }
 
 interface Callbacks {
@@ -56,8 +57,19 @@ class PCRPrepareComponent extends ContainerBase<ProjectChangeRequestPrepareParam
     this.props.onSave(this.props.projectId, this.props.pcrId, editor.data);
   }
 
-  private renderContents(project: ProjectDto, pcr: PCRDto, editor: IEditorStore<PCRDto, PCRDtoValidator>) {
-    const Form = ACC.TypedForm<PCRDto>();
+  private renderContents(project: ProjectDto, projectChangeRequest: PCRDto, editor: IEditorStore<PCRDto, PCRDtoValidator>) {
+    const tabs = [{
+      text: "Details",
+      hash: "details",
+      default: true,
+      content: this.renderDetailsTab(projectChangeRequest, editor),
+      qa: "ProjectChangeRequestDetailsTab"
+    }, {
+      text: "Log",
+      hash: "log",
+      content: this.renderLogTab(),
+      qa: "ProjectChangeRequestLogTab"
+    }];
 
     return (
       <ACC.Page
@@ -67,15 +79,23 @@ class PCRPrepareComponent extends ContainerBase<ProjectChangeRequestPrepareParam
         validator={editor.validator}
         error={editor.error}
       >
+        <ACC.HashTabs tabList={tabs} />
+      </ACC.Page>
+    );
+  }
+
+  private renderDetailsTab(projectChangeRequest: PCRDto, editor: IEditorStore<PCRDto, PCRDtoValidator>) {
+    const Form = ACC.TypedForm<PCRDto>();
+    return (
+      <React.Fragment>
         <ACC.Section title="Details">
           <ACC.SummaryList qa="pcr-prepare">
-            <ACC.SummaryListItem label="Number" content={pcr.requestNumber} qa="numberRow" />
-            <ACC.SummaryListItem label="Types" content={this.renderTypes(pcr)} action={<Link route={ProjectChangeRequestAddTypeRoute.getLink({ projectId: this.props.projectId, projectChangeRequestId: this.props.pcrId })}>Add Type</Link>} qa="typesRow" />
+            <ACC.SummaryListItem label="Number" content={projectChangeRequest.requestNumber} qa="numberRow" />
+            <ACC.SummaryListItem label="Types" content={this.renderTypes(projectChangeRequest)} action={<Link route={ProjectChangeRequestAddTypeRoute.getLink({ projectId: this.props.projectId, projectChangeRequestId: this.props.pcrId })}>Add Type</Link>} qa="typesRow" />
           </ACC.SummaryList>
         </ACC.Section>
-
         <TaskList>
-          {pcr.items.map((x, i) => (
+          {projectChangeRequest.items.map((x, i) => (
             <TaskListSection step={i + 1} title={x.typeName} validation={editor.validator.items.results[i].errors}>
               <Task
                 name="Provide your files"
@@ -84,19 +104,18 @@ class PCRPrepareComponent extends ContainerBase<ProjectChangeRequestPrepareParam
               />
             </TaskListSection>
           ))}
-          <TaskListSection step={pcr.items.length + 1} title={"Give more details"} validation={[editor.validator.reasoningStatus, editor.validator.reasoningComments]}>
+          <TaskListSection step={projectChangeRequest.items.length + 1} title={"Give more details"} validation={[editor.validator.reasoningStatus, editor.validator.reasoningComments]}>
             <Task
               name="Reasoning for Innovate UK"
-              status={pcr.reasoningStatusName}
+              status={projectChangeRequest.reasoningStatusName}
               route={ProjectChangeRequestPrepareReasoningRoute.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId })}
             />
           </TaskListSection>
         </TaskList>
-
         <Form.Form
           editor={editor}
-          onChange={dto => this.props.onChange(pcr.projectId, pcr.id, dto)}
-          onSubmit={() => this.onSave(editor, pcr, true)}
+          onChange={dto => this.props.onChange(projectChangeRequest.projectId, projectChangeRequest.id, dto)}
+          onSubmit={() => this.onSave(editor, projectChangeRequest, true)}
         >
           <Form.Fieldset heading="Add comments for your monitoring officer">
             <Form.MultilineString
@@ -112,10 +131,19 @@ class PCRPrepareComponent extends ContainerBase<ProjectChangeRequestPrepareParam
             <Form.Submit>Submit request to monitoring officer</Form.Submit>
           </Form.Fieldset>
           <Form.Fieldset qa="save-and-return">
-            <Form.Button name="return" onClick={() => this.onSave(editor, pcr, false)}>Save and return to project</Form.Button>
+            <Form.Button name="return" onClick={() => this.onSave(editor, projectChangeRequest, false)}>Save and return to project</Form.Button>
           </Form.Fieldset>
         </Form.Form>
-      </ACC.Page>
+      </React.Fragment>
+    );
+  }
+
+  private renderLogTab() {
+    return (
+      <ACC.Loader
+        pending={this.props.statusChanges}
+        render={(statusChanges) => <ACC.Section title="Log"><ACC.Logs data={statusChanges} qa="projectChangeRequestStatusChangeTable" /></ACC.Section>}
+      />
     );
   }
 
@@ -137,7 +165,8 @@ export const PCRPrepare = definition.connect({
   withData: (state, params) => ({
     project: Selectors.getProject(params.projectId).getPending(state),
     pcr: Selectors.getPcr(params.projectId, params.pcrId).getPending(state),
-    editor: Selectors.getPcrEditor(params.projectId, params.pcrId).get(state)
+    editor: Selectors.getPcrEditor(params.projectId, params.pcrId).get(state),
+    statusChanges: Selectors.getProjectChangeRequestStatusChanges(params.pcrId).getPending(state)
   }),
   withCallbacks: (dispatch) => ({
     onChange: (projectId: string, pcrId: string, dto: PCRDto) => dispatch(Actions.validatePCR(projectId, pcrId, dto)),
@@ -155,7 +184,8 @@ export const ProjectChangeRequestPrepareRoute = definition.route({
   getLoadDataActions: (params) => [
     Actions.loadProject(params.projectId),
     Actions.loadPcr(params.projectId, params.pcrId),
-    Actions.loadPcrTypes()
+    Actions.loadPcrTypes(),
+    Actions.loadProjectChangeRequestStatusChanges(params.projectId, params.pcrId)
   ],
   getTitle: () => ({
     htmlTitle: "Prepare project change request",
