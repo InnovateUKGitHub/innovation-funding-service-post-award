@@ -50,3 +50,7 @@ export const getProjectChangeRequestDocumentOrItemDocumentEditor = (projectChang
   (dto, state) => Pending.done(new MultipleDocumentUpdloadDtoValidator(dto, state.config, false)),
   getKey("projectChangeRequestItem", projectChangeRequestItemId)
 );
+
+export const getProjectChangeRequestStatusChanges = (projectChangeRequestId: string) => {
+  return dataStoreHelper("projectChangeRequestStatusChanges", getKey(projectChangeRequestId));
+};

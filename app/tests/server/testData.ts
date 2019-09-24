@@ -631,6 +631,25 @@ export class TestData {
 
     return newItem;
   }
+
+  public createProjectChangeRequestStatusChange(projectChangeRequest: Entites.ProjectChangeRequestEntity, participantVisibility: boolean): Repositories.ISalesforceProjectChangeRequestStatusChange {
+    const seed = this.repositories.projectChangeRequestStatusChange.Items.length + 1;
+
+    const response: Repositories.ISalesforceProjectChangeRequestStatusChange = {
+      Id: `StatusChange: ${seed}`,
+      Acc_ProjectChangeRequest__c: projectChangeRequest.id,
+      Acc_PreviousProjectChangeRequestStatus__c: "Draft",
+      Acc_NewProjectChangeRequestStatus__c: "Submitted to Monitoring Officer",
+      CreatedDate: DateTime.local().toISO(),
+      Acc_ExternalComment__c: "This is a comment",
+      Acc_ParticipantVisibility__c: participantVisibility
+    };
+
+    this.repositories.projectChangeRequestStatusChange.Items.push(response);
+
+    return response;
+  }
+
 }
 
 export class TestFileWrapper implements IFileWrapper {
