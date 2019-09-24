@@ -1,7 +1,7 @@
 // tslint:disable:no-duplicate-string
 import contextProvider from "@server/features/common/contextProvider";
 import { ApiParams, ControllerBaseWithSummary } from "./controllerBase";
-import { PCRDto, PCRItemTypeDto, PCRSummaryDto } from "@framework/dtos/pcrDtos";
+import { PCRDto, PCRItemTypeDto, PCRSummaryDto, ProjectChangeRequestStatusChangeDto } from "@framework/dtos/pcrDtos";
 import { GetAllPCRsQuery } from "@server/features/pcrs/getAllPCRsQuery";
 import { GetPCRByIdQuery } from "@server/features/pcrs/getPCRByIdQuery";
 import { GetPCRItemTypesQuery } from "@server/features/pcrs/getItemTypesQuery";
@@ -9,6 +9,7 @@ import { processDto } from "@shared/processResponse";
 import { UpdatePCRCommand } from "@server/features/pcrs/updatePcrCommand";
 import { CreateProjectChangeRequestCommand } from "@server/features/pcrs/createProjectChangeRequestCommand";
 import { DeleteProjectChangeRequestCommand } from "@server/features/pcrs/deleteProjectChangeRequestCommand";
+import { GetProjectChangeRequestStatusChanges } from "@server/features/pcrs/getProjectChangeRequestStatusChanges";
 
 export interface IPCRsApi {
   create: (params: ApiParams<{ projectId: string, projectChangeRequestDto: PCRDto }>) => Promise<PCRDto>;
@@ -17,6 +18,7 @@ export interface IPCRsApi {
   getTypes: (params: ApiParams<{}>) => Promise<PCRItemTypeDto[]>;
   update: (params: ApiParams<{projectId: string; id: string; pcr: PCRDto;}>) => Promise<PCRDto>;
   delete: (params: ApiParams<{projectId: string; id: string; }>) => Promise<boolean>;
+  getStatusChanges: (params: ApiParams<{projectId: string, projectChangeRequestId: string }>) => Promise<ProjectChangeRequestStatusChangeDto[]>;
 }
 
 class Controller extends ControllerBaseWithSummary<PCRSummaryDto, PCRDto> implements IPCRsApi {
@@ -29,6 +31,7 @@ class Controller extends ControllerBaseWithSummary<PCRSummaryDto, PCRDto> implem
     super.getCustom("/types", () => ({}), p => this.getTypes(p));
     super.putItem("/:projectId/:id", (p, q, b) => ({ projectId: p.projectId, id: p.id, pcr: processDto(b) }), (p) => this.update(p));
     super.deleteItem("/:projectId/:id", (p, q) => ({ projectId: p.projectId, id: p.id }), (p) => this.delete(p));
+    this.getCustom("/status-changes/:projectId/:projectChangeRequestId", (p) => ({projectId: p.projectId, projectChangeRequestId: p.projectChangeRequestId}), p => this.getStatusChanges(p));
   }
 
   getAll(params: ApiParams<{ projectId: string }>): Promise<PCRSummaryDto[]> {
@@ -61,6 +64,11 @@ class Controller extends ControllerBaseWithSummary<PCRSummaryDto, PCRDto> implem
   delete(params: ApiParams<{ projectId: string, id: string }>): Promise<boolean> {
     const command = new DeleteProjectChangeRequestCommand(params.projectId, params.id);
     return contextProvider.start(params).runCommand(command);
+  }
+
+  public getStatusChanges(params: ApiParams<{ projectId: string, projectChangeRequestId: string }>) {
+    const query = new GetProjectChangeRequestStatusChanges(params.projectId, params.projectChangeRequestId);
+    return contextProvider.start(params).runQuery(query);
   }
 }
 

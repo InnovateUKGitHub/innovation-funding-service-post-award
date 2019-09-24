@@ -64,6 +64,7 @@ export const dataReducer = combineReducers({
   pcrTypes: dataStoreReducer<Dtos.PCRItemTypeDto[]>("pcrTypes"),
   project: dataStoreReducer<Dtos.ProjectDto>("project"),
   projects: dataStoreReducer<Dtos.ProjectDto[]>("projects"),
+  projectChangeRequestStatusChanges: dataStoreReducer<Dtos.ProjectChangeRequestStatusChangeDto[]>("projectChangeRequestStatusChanges"),
   projectContacts: dataStoreReducer<ProjectContactDto[]>("projectContacts"),
   user: dataStoreReducer<{[key: string]: Dtos.ProjectRole}>("user")
 });

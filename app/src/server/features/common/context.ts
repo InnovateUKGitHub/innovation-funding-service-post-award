@@ -70,6 +70,7 @@ export class Context implements Framework.IContext {
       profileTotalCostCategory: new Repositories.ProfileTotalCostCategoryRepository(connectionCallback, this.logger),
       projects: new Repositories.ProjectRepository(connectionCallback, this.logger),
       partners: new Repositories.PartnerRepository(connectionCallback, this.logger),
+      projectChangeRequestStatusChange: new Repositories.ProjectChangeRequestStatusChangeRepository(connectionCallback, this.logger),
       projectContacts: new Repositories.ProjectContactsRepository(connectionCallback, this.logger),
       permissionGroups: new Repositories.PermissionGroupRepository(connectionCallback, this.logger),
       recordTypes: new Repositories.RecordTypeRepository(connectionCallback, this.logger)
