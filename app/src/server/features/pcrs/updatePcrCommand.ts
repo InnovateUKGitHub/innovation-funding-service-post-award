@@ -5,11 +5,10 @@ import { Authorisation, IContext } from "@framework/types";
 import { GetAllProjectRolesForUser } from "../projects";
 import { mapToPcrDto } from "./mapToPCRDto";
 import { GetPCRItemTypesQuery } from "./getItemTypesQuery";
-import { ProjectChangeRequestItemForCreateEntity } from "@framework/entities";
-import { GetAllForProjectQuery } from "@server/features/partners";
+import { ProjectChangeRequestItemForCreateEntity, ProjectChangeRequestStatus } from "@framework/entities";
 
 export class UpdatePCRCommand extends CommandBase<boolean> {
-  constructor(private projectId: string, private id: string, private pcr: PCRDto) {
+  constructor(private projectId: string, private projectChangeRequestId: string, private pcr: PCRDto) {
     super();
   }
 
@@ -17,8 +16,16 @@ export class UpdatePCRCommand extends CommandBase<boolean> {
     return auth.forProject(this.projectId).hasAnyRoles(ProjectRole.ProjectManager, ProjectRole.MonitoringOfficer);
   }
 
+  private async insertStatusChange(context: IContext, projectChangeRequestId: string): Promise<void> {
+    if (this.pcr.status === ProjectChangeRequestStatus.Draft) return;
+
+    await context.repositories.projectChangeRequestStatusChange.createStatusChange({
+      Acc_ProjectChangeRequest__c: projectChangeRequestId
+    });
+  }
+
   protected async Run(context: IContext): Promise<boolean> {
-    if (this.projectId !== this.pcr.projectId || this.id !== this.pcr.id) {
+    if (this.projectId !== this.pcr.projectId || this.projectChangeRequestId !== this.pcr.id) {
       throw new BadRequestError();
     }
 
@@ -75,9 +82,10 @@ export class UpdatePCRCommand extends CommandBase<boolean> {
       }));
 
     if (itemsToInsert.length) {
-      await context.repositories.projectChangeRequests.insertItems(this.id, itemsToInsert);
+      await context.repositories.projectChangeRequests.insertItems(this.projectChangeRequestId, itemsToInsert);
     }
 
+    await this.insertStatusChange(context, this.projectChangeRequestId);
     return true;
   }
 }
