@@ -13,7 +13,8 @@ export class ProjectChangeRequestCreateFormHandler extends StandardFormHandlerBa
   }
 
   protected async getDto(context: IContext, params: CreateProjectChangeRequestParams, button: IFormButton, body: IFormBody): Promise<PCRDto> {
-    const types = body.type as any as string[];
+
+    const types: string[] = body.types ? Array.isArray(body.types) ? body.types : [body.types] : [];
 
     const items: Partial<PCRItemDto>[] = types.map((x: string) => ({
       type: parseInt(x, 10),
