@@ -13,6 +13,7 @@ export interface ITaskListItem {
   step: number;
   title: string;
   validation?: Result[];
+  qa?: string
 }
 
 export const Task: React.FunctionComponent<ITask> = ({ route, name, status }) => {
@@ -24,9 +25,9 @@ export const Task: React.FunctionComponent<ITask> = ({ route, name, status }) =>
   );
 };
 
-export const TaskListSection: React.FunctionComponent<ITaskListItem> = ({ step, title, validation, children }) => {
+export const TaskListSection: React.FunctionComponent<ITaskListItem> = ({ step, title, validation, children, qa}) => {
   return (
-    <li key={step}>
+    <li key={step} data-qa={qa}>
       <h2 className="app-task-list__section"><span className="app-task-list__section-number">{step}.</span>&nbsp;{title}</h2>
       {validation && validation.map((v) => <ACC.ValidationError error={v} key={v.key}/>)}
       <ul className="app-task-list__items">
@@ -36,9 +37,9 @@ export const TaskListSection: React.FunctionComponent<ITaskListItem> = ({ step, 
   );
 };
 
-export const TaskList: React.FunctionComponent<{}> = ({ children }) => {
+export const TaskList: React.FunctionComponent<{qa?: string;}> = ({ qa, children }) => {
   return (
-    <ol className="app-task-list">
+    <ol className="app-task-list" data-qa={qa}>
       {children}
     </ol>
   );
