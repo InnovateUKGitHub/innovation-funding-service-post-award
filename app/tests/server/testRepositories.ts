@@ -434,7 +434,13 @@ class PCRTestRepository extends TestRepository<Entities.ProjectChangeRequestEnti
     const itemLength = pcr.items ? items.length : 0;
     return items.map((x, i) => {
       const itemId = `ProjectChangeRequest-${headerId}-Item-${itemLength + i}`;
-      return { pcrId: headerId, statusName:"", id: itemId, ...x };
+      return {
+        id: itemId,
+        pcrId: headerId,
+        guidance: "This is some hardcoded guidance",
+        statusName:"",
+        ...x
+      };
     });
   }
 

@@ -20,6 +20,7 @@ export class SalesforcePCRMapper extends SalesforceBaseMapper<ISalesforcePCR[], 
       status: this.mapStatus(header.Acc_Status__c),
       statusName: header.StatusName,
       reasoning: header.Acc_Reasoning__c,
+      guidance: header.Acc_Guidance__c,
       reasoningStatus: this.mapItemStatus(header.Acc_MarkedasComplete__c),
       reasoningStatusName: header.MarkedAsCompleteName,
       comments: header.Acc_Comments__c,
@@ -35,6 +36,7 @@ export class SalesforcePCRMapper extends SalesforceBaseMapper<ISalesforcePCR[], 
       partnerId: header.Acc_Project__c,
       recordTypeId: pcrItem.RecordTypeId,
       status: this.mapItemStatus(pcrItem.Acc_MarkedasComplete__c),
+      guidance: pcrItem.Acc_Guidance__c,
       statusName: pcrItem.MarkedAsCompleteName
     };
   }
