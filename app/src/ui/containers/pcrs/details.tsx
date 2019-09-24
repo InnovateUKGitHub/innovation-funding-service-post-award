@@ -69,9 +69,14 @@ class PCRDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
             <ACC.SummaryListItem label="Types" content={this.renderTypes(projectChangeRequest)} qa="typesRow" />
           </ACC.SummaryList>
         </ACC.Section>
+<<<<<<< HEAD
         <TaskList>
+=======
+
+        <TaskList qa="taskList">
+>>>>>>> Add test related with task list
           {projectChangeRequest.items.map((x, i) => (
-            <TaskListSection step={i + 1} title={x.typeName}>
+            <TaskListSection step={i + 1} title={x.typeName} qa={`task-${i}`}>
               <Task
                 name="View files"
                 status={x.statusName}
@@ -79,7 +84,7 @@ class PCRDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
               />
             </TaskListSection>
           ))}
-          <TaskListSection step={projectChangeRequest.items.length + 1} title={"View more details"}>
+          <TaskListSection step={projectChangeRequest.items.length + 1} title={"View more details"} qa="reasoning">
             <Task
               name="Reasoning for Innovate UK"
               status={projectChangeRequest.reasoningStatusName}
