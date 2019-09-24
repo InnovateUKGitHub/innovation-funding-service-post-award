@@ -21,7 +21,7 @@ export class ProjectChangeRequestAddTypeFormHandler extends StandardFormHandlerB
     const dto = await context.runQuery(new GetPCRByIdQuery(params.projectId, params.projectChangeRequestId));
 
     const originalTypes = dto.items.map(x => x.type);
-    const formValuesAsArray = (Array.isArray(body.types) ? body.types : [body.types]) as any[] as string[];
+    const formValuesAsArray: string[] = body.types ? Array.isArray(body.types) ? body.types : [body.types] : [];
 
     const formTypes = formValuesAsArray.map(x => parseInt(x, 10));
     const newItems = formTypes
