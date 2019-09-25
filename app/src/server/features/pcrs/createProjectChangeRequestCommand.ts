@@ -32,6 +32,12 @@ export class CreateProjectChangeRequestCommand extends CommandBase<string> {
     });
   }
 
+  private async insertStatusChange(context: IContext, projectChangeRequestId: string): Promise<void> {
+    await context.repositories.projectChangeRequestStatusChange.createStatusChange({
+      Acc_ProjectChangeRequest__c: projectChangeRequestId
+    });
+  }
+
   protected async Run(context: IContext) {
 
     if (this.projectChangeRequestDto.id) {
@@ -52,6 +58,8 @@ export class CreateProjectChangeRequestCommand extends CommandBase<string> {
       throw new ValidationError(validationResult);
     }
 
-    return this.insertProjectChangeRequest(context, this.projectChangeRequestDto, partnerId, itemTypes);
+    const projectChangeRequestId = await this.insertProjectChangeRequest(context, this.projectChangeRequestDto, partnerId, itemTypes);
+    await this.insertStatusChange(context, projectChangeRequestId);
+    return projectChangeRequestId;
   }
 }
