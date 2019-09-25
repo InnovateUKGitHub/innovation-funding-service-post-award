@@ -620,6 +620,7 @@ export class TestData {
       guidance: "This is some hardcoded guidance",
       recordTypeId: recordType.id,
       projectId: pcr.projectId,
+      projectEndDate: new Date(),
       partnerId: "",
       status: Entites.ProjectChangeRequestItemStatus.Complete,
       statusName: "Complete",

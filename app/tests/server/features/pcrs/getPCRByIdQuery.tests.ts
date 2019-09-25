@@ -2,6 +2,9 @@
 import { TestContext } from "../../testContextProvider";
 import { GetPCRByIdQuery } from "@server/features/pcrs/getPCRByIdQuery";
 import { DateTime } from "luxon";
+import { ProjectChangeRequestItemTypeEntity } from "@framework/entities";
+import { PCRRecordTypeMetaValues } from "@server/features/pcrs/getItemTypesQuery";
+import { PCRItemForTimeExtensionDto } from "@framework/dtos";
 
 describe("GetPCRByIdQuery", () => {
   test("when id not found then exception is thrown", async () => {
@@ -97,6 +100,26 @@ describe("GetPCRByIdQuery", () => {
     expect(result.typeName).toBe(recordType.type);
     expect(result.status).toBe(98);
     expect(result.statusName).toBe("Expected Status");
+  });
+
+  test("maps fields for time extension", async () => {
+    const context = new TestContext();
+
+    const timeExtensionType = PCRRecordTypeMetaValues.find(x => x.type === ProjectChangeRequestItemTypeEntity.TimeExtension)!;
+    const recordType = context.testData.createPCRRecordTypes().find(x => x.type === timeExtensionType.typeName);
+
+    const pcr = context.testData.createPCR();
+
+    const endDate = new Date();
+    const item = context.testData.createPCRItem(pcr, recordType, {
+      projectEndDate: endDate
+    });
+
+    const query = new GetPCRByIdQuery(pcr.projectId, pcr.id);
+    const result = await context.runQuery(query).then(x => x.items[0] as PCRItemForTimeExtensionDto);
+
+    expect(result.id).toBe(item.id);
+    expect(result.projectEndDate).toBe(endDate);
   });
 
   test("when project id not found then exception is thrown", async () => {

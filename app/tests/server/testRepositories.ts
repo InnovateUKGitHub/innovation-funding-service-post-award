@@ -6,7 +6,7 @@ import { IRepositories } from "@framework/types";
 import { TestFileWrapper } from "./testData";
 import { PermissionGroupIdenfifier } from "@framework/types/permisionGroupIndentifier";
 import * as Entities from "@framework/entities";
-import { ProjectChangeRequestStatusChangeRepository } from "@server/repositories";
+import { ProjectChangeRequestEntity } from "@framework/entities";
 
 class ProjectsTestRepository extends TestRepository<Repositories.ISalesforceProject> implements Repositories.IProjectRepository {
   getById(id: string) {
@@ -439,6 +439,7 @@ class PCRTestRepository extends TestRepository<Entities.ProjectChangeRequestEnti
         pcrId: headerId,
         guidance: "This is some hardcoded guidance",
         statusName:"",
+        projectEndDate: new Date(),
         ...x
       };
     });
