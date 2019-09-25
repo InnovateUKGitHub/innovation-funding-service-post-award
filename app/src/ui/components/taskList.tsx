@@ -13,7 +13,7 @@ export interface ITaskListItem {
   step: number;
   title: string;
   validation?: Result[];
-  qa?: string
+  qa?: string;
 }
 
 export const Task: React.FunctionComponent<ITask> = ({ route, name, status }) => {
