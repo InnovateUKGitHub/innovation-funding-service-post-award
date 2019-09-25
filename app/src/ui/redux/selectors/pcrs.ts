@@ -1,7 +1,7 @@
 import { dataStoreHelper, editorStoreHelper } from "./common";
 import { getKey } from "@framework/util/key";
 import { RootState } from "../reducers";
-import { PCRDto } from "@framework/dtos/pcrDtos";
+import { PCRDto, PCRItemForTimeExtensionDto } from "@framework/dtos/pcrDtos";
 import { MultipleDocumentUpdloadDtoValidator } from "@ui/validators";
 import { Pending } from "@shared/pending";
 import { PCRDtoValidator } from "@ui/validators/pcrDtoValidator";
@@ -14,6 +14,10 @@ export const getAllPcrs = (projectId: string) => dataStoreHelper("pcrs", project
 export const getPcr = (projectId: string, id: string) => dataStoreHelper("pcr", getKey(projectId, id));
 
 export const getPcrItem = (projectId: string, id: string, itemId: string) => ({ getPending: (store: RootState) => getPcr(projectId, id).getPending(store).then(x => x.items.find(y => y.id === itemId)!) });
+
+export const getPcrItemForTimeExtension = (state: RootState, projectId: string, id: string, itemId: string): Pending<PCRItemForTimeExtensionDto> => {
+  return getPcrItem(projectId, id, itemId).getPending(state).then(x => x as PCRItemForTimeExtensionDto);
+};
 
 const createPcr = (projectId: string): Partial<PCRDto> => ({
   projectId,
