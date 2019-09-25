@@ -94,9 +94,10 @@ class PCRPrepareComponent extends ContainerBase<ProjectChangeRequestPrepareParam
             <ACC.SummaryListItem label="Types" content={this.renderTypes(projectChangeRequest)} action={<Link route={ProjectChangeRequestAddTypeRoute.getLink({ projectId: this.props.projectId, projectChangeRequestId: this.props.pcrId })}>Add Type</Link>} qa="typesRow" />
           </ACC.SummaryList>
         </ACC.Section>
-        <TaskList>
+
+        <TaskList qa="taskList">
           {projectChangeRequest.items.map((x, i) => (
-            <TaskListSection step={i + 1} title={x.typeName} validation={editor.validator.items.results[i].errors}>
+            <TaskListSection step={i + 1} title={x.typeName} validation={editor.validator.items.results[i].errors} qa={`task-${i}`}>
               <Task
                 name="Provide your files"
                 status={x.statusName}
@@ -104,7 +105,7 @@ class PCRPrepareComponent extends ContainerBase<ProjectChangeRequestPrepareParam
               />
             </TaskListSection>
           ))}
-          <TaskListSection step={projectChangeRequest.items.length + 1} title={"Give more details"} validation={[editor.validator.reasoningStatus, editor.validator.reasoningComments]}>
+          <TaskListSection step={projectChangeRequest.items.length + 1} title={"Give more details"} validation={[editor.validator.reasoningStatus, editor.validator.reasoningComments]} qa="reasoning">
             <Task
               name="Reasoning for Innovate UK"
               status={projectChangeRequest.reasoningStatusName}
