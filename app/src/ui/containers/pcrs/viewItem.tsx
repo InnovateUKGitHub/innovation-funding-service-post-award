@@ -52,6 +52,7 @@ class PCRViewItemComponent extends ContainerBase<Params, Data, Callbacks> {
       >
         <ACC.Section title="Details">
           <ACC.SummaryList qa="pcr_viewItem">
+            <ACC.SummaryListItem label="Number" content={pcr.requestNumber} qa="numberRow" />
             <ACC.SummaryListItem label="Type" content={pcrItem.typeName} qa="type"/>
             <ACC.SummaryListItem
               label="Files"
@@ -131,10 +132,13 @@ export const PCRViewItemRoute = definition.route({
   routePath: "/projects/:projectId/pcrs/:pcrId/details/item/:itemId",
   getParams,
   getLoadDataActions: loadDataActions,
-  getTitle: () => ({
-    htmlTitle: "Project change request item",
-    displayTitle: "Project change request item"
-  }),
+  getTitle: (store, params) => {
+    const typeName = Selectors.getPcrItem(params.projectId, params.pcrId, params.itemId).getPending(store).then(x => x.typeName).data;
+    return {
+      htmlTitle: typeName ? `${typeName}` : "Project change request item",
+      displayTitle: typeName ? `${typeName}` : "Project change request item",
+    };
+  },
   container: PCRViewItem,
   accessControl: (auth, { projectId }, config) => config.features.pcrsEnabled && auth.forProject(projectId).hasAnyRoles(ProjectRole.ProjectManager, ProjectRole.MonitoringOfficer)
 });
@@ -149,10 +153,13 @@ export const PCRReviewItemRoute = definition.route({
   routePath: "/projects/:projectId/pcrs/:pcrId/review/item/:itemId",
   getParams,
   getLoadDataActions: loadDataActions,
-  getTitle: () => ({
-    htmlTitle: "Review project change request item",
-    displayTitle: "Review project change request item"
-  }),
+  getTitle: (store, params) => {
+    const typeName = Selectors.getPcrItem(params.projectId, params.pcrId, params.itemId).getPending(store).then(x => x.typeName).data;
+    return {
+      htmlTitle: typeName ? `Review ${typeName}` : "Review project change request item",
+      displayTitle: typeName ? `Review ${typeName}` : "Review project change request item",
+    };
+  },
   container: PCRReviewItem,
   accessControl: (auth, { projectId }, config) => config.features.pcrsEnabled && auth.forProject(projectId).hasRole(ProjectRole.MonitoringOfficer)
 });
