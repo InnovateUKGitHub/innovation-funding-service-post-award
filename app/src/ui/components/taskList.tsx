@@ -2,11 +2,12 @@ import React from "react";
 import { ILinkInfo } from "@framework/types";
 import { Result } from "@ui/validation";
 import * as ACC from "@ui/components/index";
+import classNames from "classnames";
 
 interface ITask {
   name: string;
   route: ILinkInfo;
-  status: string;
+  status: "To do" | "Complete" | "Incomplete";
 }
 
 export interface ITaskListItem {
@@ -17,10 +18,14 @@ export interface ITaskListItem {
 }
 
 export const Task: React.FunctionComponent<ITask> = ({ route, name, status }) => {
+  const actionClasses = classNames({
+    "app-task-list__task-action" : true,
+    "app-task-list__task-action--completed": status === "Complete",
+  });
   return (
     <li className="app-task-list__item">
       <span className="app-task-list__task-name"><ACC.Link route={route}>{name}</ACC.Link></span>
-      <span className="app-task-list__task-completed">{status}</span>
+      <span className={actionClasses}>{status}</span>
     </li>
   );
 };

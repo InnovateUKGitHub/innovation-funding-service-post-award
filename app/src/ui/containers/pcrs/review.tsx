@@ -1,7 +1,7 @@
 import React from "react";
 
 import { ContainerBase, ReduxContainer } from "../containerBase";
-import { ILinkInfo, ProjectDto, ProjectRole } from "@framework/types";
+import { ProjectDto, ProjectRole } from "@framework/types";
 
 import * as ACC from "../../components";
 import * as Actions from "../../redux/actions";
@@ -13,7 +13,7 @@ import { PCRReviewReasoningRoute } from "./viewReasoning";
 import { PCRDto, ProjectChangeRequestStatusChangeDto } from "@framework/dtos/pcrDtos";
 import { IEditorStore } from "@ui/redux";
 import { PCRDtoValidator } from "@ui/validators/pcrDtoValidator";
-import { ProjectChangeRequestStatus } from "@framework/entities";
+import { ProjectChangeRequestItemStatus, ProjectChangeRequestStatus } from "@framework/entities";
 import { navigateTo } from "../../redux/actions";
 import { Task, TaskList, TaskListSection } from "@ui/components/taskList";
 
@@ -81,8 +81,8 @@ class PCRReviewComponent extends ContainerBase<PCRReviewParams, Data, Callbacks>
       <React.Fragment>
         <ACC.Section title="Details">
           <ACC.SummaryList qa="pcrDetails">
-            <ACC.SummaryListItem label="Number" content={projectChangeRequest.requestNumber} qa="numberRow" />
-            <ACC.SummaryListItem label="Types" content={this.renderTypes(projectChangeRequest)} qa="typesRow" />
+            <ACC.SummaryListItem label="Request number" content={projectChangeRequest.requestNumber} qa="numberRow" />
+            <ACC.SummaryListItem label="Types" content={<ACC.Renderers.LineBreakList items={projectChangeRequest.items.map(x => x.typeName)}/>} qa="typesRow" />
           </ACC.SummaryList>
         </ACC.Section>
         <TaskList qa="taskList">
@@ -90,7 +90,7 @@ class PCRReviewComponent extends ContainerBase<PCRReviewParams, Data, Callbacks>
             <TaskListSection step={i + 1} title={x.typeName} qa={`task-${i}`}>
               <Task
                 name="View files"
-                status={x.statusName}
+                status={this.getTaskStatus(x.status)}
                 route={PCRReviewItemRoute.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId, itemId: x.id })}
               />
             </TaskListSection>
@@ -98,7 +98,7 @@ class PCRReviewComponent extends ContainerBase<PCRReviewParams, Data, Callbacks>
           <TaskListSection step={projectChangeRequest.items.length + 1} title={"View more details"} qa="reasoning">
             <Task
               name="Reasoning for Innovate UK"
-              status={projectChangeRequest.reasoningStatusName}
+              status={this.getTaskStatus(projectChangeRequest.reasoningStatus)}
               route={PCRReviewReasoningRoute.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId })}
             />
           </TaskListSection>
@@ -135,6 +135,18 @@ class PCRReviewComponent extends ContainerBase<PCRReviewParams, Data, Callbacks>
     );
   }
 
+  getTaskStatus(status: ProjectChangeRequestItemStatus): "To do" | "Complete" | "Incomplete" {
+    switch (status) {
+      case ProjectChangeRequestItemStatus.Complete:
+        return "Complete";
+      case ProjectChangeRequestItemStatus.Incomplete:
+        return "Incomplete";
+      case ProjectChangeRequestItemStatus.ToDo:
+      default:
+        return "To do";
+    }
+  }
+
   private renderLogTab() {
     return (
       <ACC.Loader
@@ -142,16 +154,6 @@ class PCRReviewComponent extends ContainerBase<PCRReviewParams, Data, Callbacks>
         render={(statusChanges) => <ACC.Section title="Log"><ACC.Logs data={statusChanges} qa="projectChangeRequestStatusChangeTable" /></ACC.Section>}
       />
     );
-  }
-
-  private renderTypes(pcr: PCRDto): React.ReactNode {
-    return pcr.items.map(x => x.typeName).reduce<React.ReactNode[]>((result, current, index) => {
-      if (index > 0) {
-        result.push(<br />);
-      }
-      result.push(current);
-      return result;
-    }, []);
   }
 }
 
@@ -185,8 +187,8 @@ export const PCRReviewRoute = definition.route({
     Actions.loadProjectChangeRequestStatusChanges(params.projectId, params.pcrId)
   ],
   getTitle: () => ({
-    htmlTitle: "Review project change request",
-    displayTitle: "Review project change request"
+    htmlTitle: "Request",
+    displayTitle: "Request"
   }),
   container: PCRReview,
   accessControl: (auth, { projectId }, config) => config.features.pcrsEnabled && auth.forProject(projectId).hasRole(ProjectRole.MonitoringOfficer)
