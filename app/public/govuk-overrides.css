@@ -95,10 +95,13 @@
 .acc-message__error {
   background-image: url("/assets/images/icon-alert.png");
 }
-
 .acc-message__warning {
   background-image: url("/assets/images/icon-warning.png");
 }
+.acc-message__alert {
+  background-image: url("/assets/images/icon-alert.png");
+}
+
 
 .acc-message__error.govuk-grid-row {
   border-color: #bfc1c3 #bfc1c3 #bfc1c3 #b10e1e;
@@ -414,15 +417,20 @@ a.blockLink {
   }
 }
 
-.app-task-list__task-completed {
+.app-task-list__task-action {
   margin-top: 10px;
   margin-bottom: 5px;
 }
 
 @media (min-width: 28.125em) {
-  .app-task-list__task-completed {
+  .app-task-list__task-action {
     float: right;
     margin-top: 0;
     margin-bottom: 0;
+    font-weight: bold;
   }
+}
+
+.app-task-list__task-action--completed{
+  color: #00703c;
 }

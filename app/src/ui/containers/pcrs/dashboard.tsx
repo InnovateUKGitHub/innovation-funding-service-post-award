@@ -64,7 +64,7 @@ class PCRsDashboardComponent extends ContainerBase<Params, Data, Callbacks> {
     if (!isPm) return null;
 
     return (
-      <ACC.Link route={PCRCreateRoute.getLink({ projectId: this.props.projectId })} className="govuk-button">Start a new request</ACC.Link>
+      <ACC.Link route={PCRCreateRoute.getLink({ projectId: this.props.projectId })} className="govuk-button">Create request</ACC.Link>
     );
   }
 
@@ -74,7 +74,7 @@ class PCRsDashboardComponent extends ContainerBase<Params, Data, Callbacks> {
     return (
       <PCRTable.Table data={pcrs} qa={qa}>
         <PCRTable.Custom qa="number" header="Request number" value={x => x.requestNumber} />
-        <PCRTable.Custom qa="types" header="Types" value={x => this.renderTypes(x.items)} />
+        <PCRTable.Custom qa="types" header="Types" value={x => <ACC.Renderers.LineBreakList items={x.items.map(y => y.typeName)}/>} />
         <PCRTable.ShortDate qa="started" header="Started" value={x => x.started} />
         <PCRTable.String qa="stauts" header="Status" value={x => x.statusName} />
         <PCRTable.ShortDate qa="lastUpdated" header="Last updated" value={x => x.lastUpdated} />
@@ -83,23 +83,13 @@ class PCRsDashboardComponent extends ContainerBase<Params, Data, Callbacks> {
     );
   }
 
-  private renderTypes(items: { type: ProjectChangeRequestItemTypeEntity; typeName: string; }[]): React.ReactNode {
-    return items.map(x => x.typeName).reduce<React.ReactNode[]>((a, b, index) => {
-      if (index > 0) {
-        a.push(<br />);
-      }
-      a.push(b);
-      return a;
-    }, []);
-  }
-
   private renderLinks(project: ProjectDto, pcr: PCRSummaryDto): React.ReactNode {
     const links: { route: ILinkInfo, text: string, qa: string; }[] = [];
 
     const prepareStatus = [ProjectChangeRequestStatus.Draft, ProjectChangeRequestStatus.QueriedByMonitoringOfficer, ProjectChangeRequestStatus.QueriedByInnovateUK];
 
     if(prepareStatus.indexOf(pcr.status) >= 0 && project.roles & ProjectRole.ProjectManager) {
-      links.push({route: ProjectChangeRequestPrepareRoute.getLink({pcrId: pcr.id, projectId: pcr.projectId}), text: "Prepare", qa:"pcrPrepareLink"});
+      links.push({route: ProjectChangeRequestPrepareRoute.getLink({pcrId: pcr.id, projectId: pcr.projectId}), text: "Edit", qa:"pcrPrepareLink"});
     }
     else if(pcr.status === ProjectChangeRequestStatus.SubmittedToMonitoringOfficer && project.roles & ProjectRole.MonitoringOfficer) {
       links.push({route: PCRReviewRoute.getLink({pcrId: pcr.id, projectId: pcr.projectId}), text: "Review", qa:"pcrReviewLink"});
