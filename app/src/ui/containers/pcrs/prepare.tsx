@@ -1,10 +1,12 @@
-import React from "react";
+import React, { ReactNode } from "react";
 
 import { ContainerBase, ReduxContainer } from "../containerBase";
-import { ProjectDto, ProjectRole } from "@framework/types";
+import { PCRItemDto, ProjectDto, ProjectRole } from "@framework/types";
 
 import * as ACC from "../../components";
+import { Link } from "../../components";
 import * as Actions from "../../redux/actions";
+import { navigateTo } from "../../redux/actions";
 import * as Selectors from "../../redux/selectors";
 import { Pending } from "@shared/pending";
 import { PCRsDashboardRoute } from "./dashboard";
@@ -13,10 +15,8 @@ import { ProjectChangeRequestPrepareReasoningRoute } from "./prepareReasoning";
 import { PCRDto, ProjectChangeRequestStatusChangeDto } from "@framework/dtos/pcrDtos";
 import { IEditorStore } from "@ui/redux";
 import { PCRDtoValidator } from "@ui/validators/pcrDtoValidator";
-import { ProjectChangeRequestStatus } from "@framework/entities";
-import { navigateTo } from "../../redux/actions";
-import { Link } from "../../components";
-import { ProjectChangeRequestAddTypeRoute } from "@ui/containers";
+import { ProjectChangeRequestItemTypeEntity, ProjectChangeRequestStatus } from "@framework/entities";
+import { ProjectChangeRequestAddTypeRoute, ProjectChangeRequestPrepareItemForTimeExtensionRoute } from "@ui/containers";
 import { Task, TaskList, TaskListSection } from "@ui/components/taskList";
 
 export interface ProjectChangeRequestPrepareParams {
@@ -84,6 +84,28 @@ class PCRPrepareComponent extends ContainerBase<ProjectChangeRequestPrepareParam
     );
   }
 
+  private getItemTasks(item: PCRItemDto) {
+    // tslint:disable:no-small-switch TODO remove this when more added
+    switch (item.type) {
+      case ProjectChangeRequestItemTypeEntity.TimeExtension:
+        return (
+          <Task
+            name="Set new end date for project"
+            status={item.statusName}
+            route={ProjectChangeRequestPrepareItemForTimeExtensionRoute.getLink({projectId: this.props.projectId, pcrId: this.props.pcrId, itemId: item.id })}
+          />
+        );
+      default:
+        return (
+          <Task
+            name="Provide your files"
+            status={item.statusName}
+            route={ProjectChangeRequestPrepareItemRoute.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId, itemId: item.id })}
+          />
+        );
+    }
+  }
+
   private renderDetailsTab(projectChangeRequest: PCRDto, editor: IEditorStore<PCRDto, PCRDtoValidator>) {
     const Form = ACC.TypedForm<PCRDto>();
     return (
@@ -96,15 +118,13 @@ class PCRPrepareComponent extends ContainerBase<ProjectChangeRequestPrepareParam
         </ACC.Section>
 
         <TaskList qa="taskList">
-          {projectChangeRequest.items.map((x, i) => (
-            <TaskListSection step={i + 1} title={x.typeName} validation={editor.validator.items.results[i].errors} qa={`task-${i}`}>
-              <Task
-                name="Provide your files"
-                status={x.statusName}
-                route={ProjectChangeRequestPrepareItemRoute.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId, itemId: x.id })}
-              />
-            </TaskListSection>
-          ))}
+          {projectChangeRequest.items.map((x, i) => {
+            return (
+              <TaskListSection key={i} step={i + 1} title={x.typeName} validation={editor.validator.items.results[i].errors} qa={`task-${i}`}>
+                { this.getItemTasks(x)}
+              </TaskListSection>
+            );
+          })}
           <TaskListSection step={projectChangeRequest.items.length + 1} title={"Give more details"} validation={[editor.validator.reasoningStatus, editor.validator.reasoningComments]} qa="reasoning">
             <Task
               name="Reasoning for Innovate UK"

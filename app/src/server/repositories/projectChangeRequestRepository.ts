@@ -9,7 +9,7 @@ import {
 import SalesforceRepositoryBase from "./salesforceRepositoryBase";
 import { Connection } from "jsforce";
 import { ILogger } from "@server/features/common/logger";
-import { SalesforcePCRMapper } from "./mappers/pcrSummaryMapper";
+import { SalesforcePCRMapper } from "./mappers/projectChangeRequestMapper";
 import { NotFoundError } from "@server/features/common";
 
 export interface IProjectChangeRequestRepository {
@@ -41,6 +41,7 @@ export interface ISalesforcePCR {
   Acc_MarkedasComplete__c: string;
   MarkedAsCompleteName: string;
   Acc_Comments__c: string;
+  Acc_NewProjectEndDate__c: string;
 }
 
 export class ProjectChangeRequestRepository extends SalesforceRepositoryBase<ISalesforcePCR> implements IProjectChangeRequestRepository {
@@ -65,6 +66,7 @@ export class ProjectChangeRequestRepository extends SalesforceRepositoryBase<ISa
     "Acc_Project__c",
     "Acc_Reasoning__c",
     "Acc_MarkedAsComplete__c",
+    "Acc_NewProjectEndDate__c",
     "toLabel(Acc_MarkedAsComplete__c) MarkedAsCompleteName",
     "Acc_Comments__c",
   ];
