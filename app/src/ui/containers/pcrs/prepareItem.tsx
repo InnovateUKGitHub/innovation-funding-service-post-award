@@ -50,16 +50,6 @@ class PCRPrepareItemComponent extends ContainerBase<ProjectChangeRequestPrepareI
     return <ACC.PageLoader pending={combined} render={x => this.renderContents(x.project, x.pcr, x.pcrItem, x.editor, x.files, x.filesEditor)} />;
   }
 
-  private renderTypes(pcr: PCRDto): React.ReactNode {
-    return pcr.items.map(x => x.typeName).reduce<React.ReactNode[]>((result, current, index) => {
-      if (index > 0) {
-        result.push(<br />);
-      }
-      result.push(current);
-      return result;
-    }, []);
-  }
-
   private renderContents(project: ProjectDto, pcr: PCRDto, pcrItem: PCRItemDto, editor: IEditorStore<PCRDto, PCRDtoValidator>, documents: DocumentSummaryDto[], documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>) {
     const Form = ACC.TypedForm<PCRItemDto>();
     const UploadForm = ACC.TypedForm<MultipleDocumentUploadDto>();
@@ -94,7 +84,7 @@ class PCRPrepareItemComponent extends ContainerBase<ProjectChangeRequestPrepareI
             <UploadForm.Fieldset heading="Upload">
               <ACC.Renderers.SimpleString>You can upload up to 10 files of any type, as long as their combined file size is less than 10MB.</ACC.Renderers.SimpleString>
               <UploadForm.MulipleFileUpload
-                label="Upload documents"
+                label="Upload files"
                 name="attachment"
                 labelHidden={true}
                 value={data => data.files}
@@ -204,8 +194,8 @@ export const ProjectChangeRequestPrepareItemRoute = definition.route({
   getTitle: (store, params) => {
     const typeName = Selectors.getPcrItem(params.projectId, params.pcrId, params.itemId).getPending(store).then(x => x.typeName).data;
     return {
-      htmlTitle: typeName ? `Prepare ${typeName}` : "Prepare project change request item",
-      displayTitle: typeName ? `Prepare ${typeName}` : "Prepare project change request item",
+      htmlTitle: typeName ? `Upload files to ${typeName}` : "Upload files to project change request item",
+      displayTitle: typeName ? `Upload files to ${typeName}` : "Upload files to project change request item",
     };
   },
   container: PCRPrepareItem,
