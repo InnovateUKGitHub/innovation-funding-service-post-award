@@ -66,4 +66,5 @@ export interface ProjectChangeRequestItemEntity extends ProjectChangeRequestItem
   statusName: string;
   guidance: string;
   pcrId: string;
+  projectEndDate: Date | null;
 }
