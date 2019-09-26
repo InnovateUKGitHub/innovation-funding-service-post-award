@@ -12,6 +12,7 @@ import { PCRViewItemRoute } from "./viewItem";
 import { PCRViewReasoningRoute } from "./viewReasoning";
 import { Task, TaskList, TaskListSection } from "@ui/components/taskList";
 import { PCRDto, ProjectChangeRequestStatusChangeDto } from "@framework/dtos/pcrDtos";
+import { ProjectChangeRequestItemStatus } from "@framework/entities";
 
 interface Params {
   projectId: string;
@@ -65,8 +66,8 @@ class PCRDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
 
         <ACC.Section title="Details">
           <ACC.SummaryList qa="pcr_details">
-            <ACC.SummaryListItem label="Number" content={projectChangeRequest.requestNumber} qa="numberRow" />
-            <ACC.SummaryListItem label="Types" content={this.renderTypes(projectChangeRequest)} qa="typesRow" />
+            <ACC.SummaryListItem label="Request number" content={projectChangeRequest.requestNumber} qa="numberRow" />
+            <ACC.SummaryListItem label="Types" content={<ACC.Renderers.LineBreakList items={projectChangeRequest.items.map(x => x.typeName)}/>} qa="typesRow" />
           </ACC.SummaryList>
         </ACC.Section>
         <TaskList qa="taskList">
@@ -74,7 +75,7 @@ class PCRDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
             <TaskListSection step={i + 1} title={x.typeName} qa={`task-${i}`}>
               <Task
                 name="View files"
-                status={x.statusName}
+                status={this.getTaskStatus(x.status)}
                 route={PCRViewItemRoute.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId, itemId: x.id })}
               />
             </TaskListSection>
@@ -82,13 +83,25 @@ class PCRDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
           <TaskListSection step={projectChangeRequest.items.length + 1} title={"View more details"} qa="reasoning">
             <Task
               name="Reasoning for Innovate UK"
-              status={projectChangeRequest.reasoningStatusName}
+              status={this.getTaskStatus(projectChangeRequest.reasoningStatus)}
               route={PCRViewReasoningRoute.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId })}
             />
           </TaskListSection>
         </TaskList>
       </React.Fragment>
     );
+  }
+
+  private getTaskStatus(status: ProjectChangeRequestItemStatus): "To do" | "Complete" | "Incomplete" {
+    switch (status) {
+      case ProjectChangeRequestItemStatus.Complete:
+        return "Complete";
+      case ProjectChangeRequestItemStatus.Incomplete:
+        return "Incomplete";
+      case ProjectChangeRequestItemStatus.ToDo:
+      default:
+        return "To do";
+    }
   }
 
   private renderLogTab() {
@@ -98,16 +111,6 @@ class PCRDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
         render={(statusChanges) => <ACC.Section title="Log"><ACC.Logs data={statusChanges} qa="projectChangeRequestStatusChangeTable" /></ACC.Section>}
       />
     );
-  }
-
-  private renderTypes(pcr: PCRDto): React.ReactNode {
-    return pcr.items.map(x => x.typeName).reduce<React.ReactNode[]>((result, current, index) => {
-      if (index > 0) {
-        result.push(<br />);
-      }
-      result.push(current);
-      return result;
-    }, []);
   }
 }
 
@@ -135,8 +138,8 @@ export const PCRDetailsRoute = definition.route({
     Actions.loadProjectChangeRequestStatusChanges(params.projectId, params.pcrId)
   ],
   getTitle: () => ({
-    htmlTitle: "Project change request details",
-    displayTitle: "Project change request details"
+    htmlTitle: "Request",
+    displayTitle: "Request"
   }),
   container: PCRDetails,
   accessControl: (auth, { projectId }, config) => config.features.pcrsEnabled && auth.forProject(projectId).hasAnyRoles(ProjectRole.ProjectManager, ProjectRole.MonitoringOfficer)

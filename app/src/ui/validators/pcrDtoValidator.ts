@@ -64,7 +64,7 @@ export class PCRDtoValidator extends Results<PCRDto> {
   private validateReasoningComments() {
     if (this.role & ProjectRole.ProjectManager && this.projectManagerCanEdit) {
       return Validation.all(this,
-        () => this.model.reasoningStatus === ProjectChangeRequestItemStatus.Complete ? Validation.required(this, this.model.reasoningComments, "Reasoning is required") : Validation.valid(this),
+        () => this.model.reasoningStatus === ProjectChangeRequestItemStatus.Complete ? Validation.required(this, this.model.reasoningComments, "Enter reasoning for the request") : Validation.valid(this),
         () => Validation.maxLength(this, this.model.reasoningComments, this.maxCommentsLength, `Reasoning can be a maximum of ${this.maxCommentsLength} characters`),
       );
     }
@@ -103,9 +103,9 @@ export class PCRDtoValidator extends Results<PCRDto> {
   items = Validation.requiredChild(
     this,
     this.model.items,
-      item => new PCRItemDtoValidator(item, this.role, this.model.status, this.recordTypes, this.showValidationErrors),
+    item => new PCRItemDtoValidator(item, this.role, this.original.items.find(x => x.id === item.id)!, this.model.status, this.recordTypes, this.showValidationErrors),
     Validation.hasNoDuplicates(this, (this.model.items || []).map(x => x.type), "No duplicate items allowed"),
-   "You must select at least one of the types"
+    "You must select at least one of the types"
   );
 
   comments = this.validateComments();
@@ -115,7 +115,7 @@ export class PCRDtoValidator extends Results<PCRDto> {
 }
 
 export class PCRItemDtoValidator extends Results<PCRItemDto> {
-  constructor(model: PCRItemDto, private role: ProjectRole, private pcrStatus: ProjectChangeRequestStatus, private readonly recordTypes: PCRItemTypeDto[], showValidationErrors: boolean) {
+  constructor(model: PCRItemDto, private role: ProjectRole, private original: PCRItemDto, private pcrStatus: ProjectChangeRequestStatus, private readonly recordTypes: PCRItemTypeDto[], showValidationErrors: boolean) {
     super(model, showValidationErrors);
   }
 
@@ -128,7 +128,14 @@ export class PCRItemDtoValidator extends Results<PCRItemDto> {
 
     return Validation.all(this,
       () => Validation.permitedValues(this, this.model.status, permittedStatus, "Invalid status"),
-      () => Validation.isTrue(this, this.model.status === ProjectChangeRequestItemStatus.Complete || this.pcrStatus === ProjectChangeRequestStatus.Draft, `${this.model.typeName} must be complete`)
+      () => this.role & ProjectRole.ProjectManager ?
+        Validation.isTrue(this,
+          this.model.status === ProjectChangeRequestItemStatus.Complete ||
+          this.pcrStatus === ProjectChangeRequestStatus.Draft ||
+          this.pcrStatus === ProjectChangeRequestStatus.QueriedByInnovateUK ||
+          this.pcrStatus === ProjectChangeRequestStatus.QueriedByMonitoringOfficer
+          , `${this.model.typeName} must be complete`)
+        : Validation.isTrue(this, this.model.status === this.original.status, "Cannot update item status")
     );
   }
 

@@ -1,10 +1,9 @@
-import React, { ReactNode } from "react";
+import React from "react";
 
 import { ContainerBase, ReduxContainer } from "../containerBase";
 import { PCRItemDto, ProjectDto, ProjectRole } from "@framework/types";
 
 import * as ACC from "../../components";
-import { Link } from "../../components";
 import * as Actions from "../../redux/actions";
 import { navigateTo } from "../../redux/actions";
 import * as Selectors from "../../redux/selectors";
@@ -15,9 +14,9 @@ import { ProjectChangeRequestPrepareReasoningRoute } from "./prepareReasoning";
 import { PCRDto, ProjectChangeRequestStatusChangeDto } from "@framework/dtos/pcrDtos";
 import { IEditorStore } from "@ui/redux";
 import { PCRDtoValidator } from "@ui/validators/pcrDtoValidator";
-import { ProjectChangeRequestItemTypeEntity, ProjectChangeRequestStatus } from "@framework/entities";
-import { ProjectChangeRequestAddTypeRoute, ProjectChangeRequestPrepareItemForTimeExtensionRoute } from "@ui/containers";
-import { Task, TaskList, TaskListSection } from "@ui/components/taskList";
+import { ProjectChangeRequestItemStatus, ProjectChangeRequestItemTypeEntity, ProjectChangeRequestStatus } from "@framework/entities";
+import { ProjectChangeRequestAddTypeRoute } from "@ui/containers";
+import { ProjectChangeRequestPrepareItemForTimeExtensionRoute } from "./prepareItemForTimeExtension";
 
 export interface ProjectChangeRequestPrepareParams {
   projectId: string;
@@ -89,17 +88,17 @@ class PCRPrepareComponent extends ContainerBase<ProjectChangeRequestPrepareParam
     switch (item.type) {
       case ProjectChangeRequestItemTypeEntity.TimeExtension:
         return (
-          <Task
+          <ACC.Task
             name="Set new end date for project"
-            status={item.statusName}
+            status={this.getTaskStatus(item.status)}
             route={ProjectChangeRequestPrepareItemForTimeExtensionRoute.getLink({projectId: this.props.projectId, pcrId: this.props.pcrId, itemId: item.id })}
           />
         );
       default:
         return (
-          <Task
-            name="Provide your files"
-            status={item.statusName}
+          <ACC.Task
+            name="Upload files"
+            status={this.getTaskStatus(item.status)}
             route={ProjectChangeRequestPrepareItemRoute.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId, itemId: item.id })}
           />
         );
@@ -112,27 +111,27 @@ class PCRPrepareComponent extends ContainerBase<ProjectChangeRequestPrepareParam
       <React.Fragment>
         <ACC.Section title="Details">
           <ACC.SummaryList qa="pcr-prepare">
-            <ACC.SummaryListItem label="Number" content={projectChangeRequest.requestNumber} qa="numberRow" />
-            <ACC.SummaryListItem label="Types" content={this.renderTypes(projectChangeRequest)} action={<Link route={ProjectChangeRequestAddTypeRoute.getLink({ projectId: this.props.projectId, projectChangeRequestId: this.props.pcrId })}>Add Type</Link>} qa="typesRow" />
+            <ACC.SummaryListItem label="Request number" content={projectChangeRequest.requestNumber} qa="numberRow" />
+            <ACC.SummaryListItem label="Types" content={<ACC.Renderers.LineBreakList items={projectChangeRequest.items.map(x => x.typeName)}/>} action={<ACC.Link route={ProjectChangeRequestAddTypeRoute.getLink({ projectId: this.props.projectId, projectChangeRequestId: this.props.pcrId })}>Add Type</ACC.Link>} qa="typesRow" />
           </ACC.SummaryList>
         </ACC.Section>
 
-        <TaskList qa="taskList">
+        <ACC.TaskList qa="taskList">
           {projectChangeRequest.items.map((x, i) => {
             return (
-              <TaskListSection key={i} step={i + 1} title={x.typeName} validation={editor.validator.items.results[i].errors} qa={`task-${i}`}>
+              <ACC.TaskListSection key={i} step={i + 1} title={x.typeName} validation={editor.validator.items.results[i].errors} qa={`task-${i}`}>
                 { this.getItemTasks(x)}
-              </TaskListSection>
+              </ACC.TaskListSection>
             );
           })}
-          <TaskListSection step={projectChangeRequest.items.length + 1} title={"Give more details"} validation={[editor.validator.reasoningStatus, editor.validator.reasoningComments]} qa="reasoning">
-            <Task
-              name="Reasoning for Innovate UK"
-              status={projectChangeRequest.reasoningStatusName}
+          <ACC.TaskListSection step={projectChangeRequest.items.length + 1} title={"Give more details"} validation={[editor.validator.reasoningStatus, editor.validator.reasoningComments]} qa="reasoning">
+            <ACC.Task
+              name="Provide reasoning to Innovate UK"
+              status={this.getTaskStatus(projectChangeRequest.reasoningStatus)}
               route={ProjectChangeRequestPrepareReasoningRoute.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId })}
             />
-          </TaskListSection>
-        </TaskList>
+          </ACC.TaskListSection>
+        </ACC.TaskList>
         <Form.Form
           editor={editor}
           onChange={dto => this.props.onChange(projectChangeRequest.projectId, projectChangeRequest.id, dto)}
@@ -152,11 +151,23 @@ class PCRPrepareComponent extends ContainerBase<ProjectChangeRequestPrepareParam
             <Form.Submit>Submit request to monitoring officer</Form.Submit>
           </Form.Fieldset>
           <Form.Fieldset qa="save-and-return">
-            <Form.Button name="return" onClick={() => this.onSave(editor, projectChangeRequest, false)}>Save and return to project</Form.Button>
+            <Form.Button name="return" onClick={() => this.onSave(editor, projectChangeRequest, false)}>Save and return to requests</Form.Button>
           </Form.Fieldset>
         </Form.Form>
       </React.Fragment>
     );
+  }
+
+  private getTaskStatus(status: ProjectChangeRequestItemStatus): "To do" | "Complete" | "Incomplete" {
+    switch (status) {
+      case ProjectChangeRequestItemStatus.Complete:
+        return "Complete";
+      case ProjectChangeRequestItemStatus.Incomplete:
+        return "Incomplete";
+      case ProjectChangeRequestItemStatus.ToDo:
+      default:
+        return "To do";
+    }
   }
 
   private renderLogTab() {
@@ -167,17 +178,6 @@ class PCRPrepareComponent extends ContainerBase<ProjectChangeRequestPrepareParam
       />
     );
   }
-
-  private renderTypes(pcr: PCRDto): React.ReactNode {
-    return pcr.items.map(x => x.typeName).reduce<React.ReactNode[]>((result, current, index) => {
-      if (index > 0) {
-        result.push(<br />);
-      }
-      result.push(current);
-      return result;
-    }, []);
-  }
-
 }
 
 const definition = ReduxContainer.for<ProjectChangeRequestPrepareParams, Data, Callbacks>(PCRPrepareComponent);
@@ -209,8 +209,8 @@ export const ProjectChangeRequestPrepareRoute = definition.route({
     Actions.loadProjectChangeRequestStatusChanges(params.projectId, params.pcrId)
   ],
   getTitle: () => ({
-    htmlTitle: "Prepare project change request",
-    displayTitle: "Prepare project change request"
+    htmlTitle: "Request",
+    displayTitle: "Request"
   }),
   container: PCRPrepare,
   accessControl: (auth, { projectId }, config) => config.features.pcrsEnabled && auth.forProject(projectId).hasRole(ProjectRole.ProjectManager)

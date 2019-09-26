@@ -47,16 +47,6 @@ class PCRViewReasoningComponent extends ContainerBase<ProjectChangeRequestPrepar
     return <ACC.PageLoader pending={combined} render={x => this.renderContents(x.project, x.pcr, x.editor, x.files, x.filesEditor)} />;
   }
 
-  private renderTypes(pcr: PCRDto): React.ReactNode {
-    return pcr.items.map(x => x.typeName).reduce<React.ReactNode[]>((result, current, index) => {
-      if (index > 0) {
-        result.push(<br />);
-      }
-      result.push(current);
-      return result;
-    }, []);
-  }
-
   private renderContents(project: ProjectDto, pcr: PCRDto, editor: IEditorStore<PCRDto, PCRDtoValidator>, documents: DocumentSummaryDto[], documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>) {
     const PCRForm = ACC.TypedForm<PCRDto>();
     const UploadForm = ACC.TypedForm<MultipleDocumentUploadDto>();
@@ -79,8 +69,8 @@ class PCRViewReasoningComponent extends ContainerBase<ProjectChangeRequestPrepar
 
         <ACC.Section>
           <ACC.SummaryList qa="pcr-prepareReasoning">
-            <ACC.SummaryListItem label="Number" content={pcr.requestNumber} qa="numberRow" />
-            <ACC.SummaryListItem label="Types" content={this.renderTypes(pcr)} qa="typesRow" />
+            <ACC.SummaryListItem label="Request number" content={pcr.requestNumber} qa="numberRow" />
+            <ACC.SummaryListItem label="Types" content={<ACC.Renderers.LineBreakList items={pcr.items.map(x => x.typeName)}/>} qa="typesRow" />
           </ACC.SummaryList>
         </ACC.Section>
 
@@ -96,7 +86,7 @@ class PCRViewReasoningComponent extends ContainerBase<ProjectChangeRequestPrepar
             onChange={(dto) => this.props.onFilesChange(this.props.pcrId, dto)}
             qa="projectChangeRequestItemUpload"
           >
-            <UploadForm.Fieldset heading="Upload">
+            <UploadForm.Fieldset heading="Supporting information">
               <ACC.Renderers.SimpleString>You can upload up to 10 files of any type, as long as their combined file size is less than 10MB.</ACC.Renderers.SimpleString>
               <UploadForm.MulipleFileUpload
                 label="Upload documents"

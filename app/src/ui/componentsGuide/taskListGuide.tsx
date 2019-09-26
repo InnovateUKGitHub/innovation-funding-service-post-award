@@ -98,7 +98,7 @@ export const taskListGuide: IGuide = {
               >
                 <Task
                   name="View files"
-                  status="To Do"
+                  status="To do"
                   route={HomeRoute.getLink({})}
                 />
               </TaskListSection>

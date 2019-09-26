@@ -26,6 +26,7 @@ export * from "./statisticsBox";
 export * from "./styledButton";
 export * from "./summaryList";
 export * from "./table";
+export * from "./taskList";
 export * from "./validationError";
 export * from "./validationMessage";
 export * from "./validationSummary";

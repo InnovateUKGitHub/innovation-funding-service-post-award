@@ -52,7 +52,7 @@ class PCRViewItemComponent extends ContainerBase<Params, Data, Callbacks> {
       >
         <ACC.Section title="Details">
           <ACC.SummaryList qa="pcr_viewItem">
-            <ACC.SummaryListItem label="Number" content={pcr.requestNumber} qa="numberRow" />
+            <ACC.SummaryListItem label="Request number" content={pcr.requestNumber} qa="numberRow" />
             <ACC.SummaryListItem label="Type" content={pcrItem.typeName} qa="type"/>
             <ACC.SummaryListItem
               label="Files"

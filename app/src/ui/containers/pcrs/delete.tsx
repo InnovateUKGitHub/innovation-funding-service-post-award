@@ -49,8 +49,8 @@ class PCRDeleteComponent extends ContainerBase<PCRDeleteParams, Data, Callbacks>
         validator={editor.validator}
       >
 
-        <ACC.Section title="Details">
-          <ACC.ValidationMessage messageType="error" message="All the information will be permanently deleted." />
+        <ACC.Section>
+          <ACC.ValidationMessage messageType="alert" message="All the information will be permanently deleted." />
           <ACC.SummaryList qa="pcr_viewItem">
             <ACC.SummaryListItem label="Request number" content={pcr.requestNumber} qa="requestNumber" />
             <ACC.SummaryListItem label="Types" content={<ACC.Renderers.LineBreakList items={pcr.items.map(x => x.typeName)} />} qa="types" />
@@ -103,8 +103,8 @@ export const PCRDeleteRoute = definition.route({
     Actions.loadPcrTypes(),
   ],
   getTitle: () => ({
-    htmlTitle: "Delete project change request",
-    displayTitle: "Delete project change request"
+    htmlTitle: "Delete draft request",
+    displayTitle: "Delete draft request"
   }),
   container: PCRDelete,
   accessControl: (auth, { projectId }, config) => config.features.pcrsEnabled && auth.forProject(projectId).hasRole(ProjectRole.ProjectManager)
