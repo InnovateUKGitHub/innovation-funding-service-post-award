@@ -16,11 +16,17 @@ export class UpdatePCRCommand extends CommandBase<boolean> {
     return auth.forProject(this.projectId).hasAnyRoles(ProjectRole.ProjectManager, ProjectRole.MonitoringOfficer);
   }
 
-  private async insertStatusChange(context: IContext, projectChangeRequestId: string): Promise<void> {
-    if (this.pcr.status === ProjectChangeRequestStatus.Draft) return;
+  private async insertStatusChange(context: IContext, projectChangeRequestId: string, comments: string, originalStatus: ProjectChangeRequestStatus, newStatus: ProjectChangeRequestStatus): Promise<void> {
+    const shouldPmSee = (
+      (newStatus === ProjectChangeRequestStatus.SubmittedToMonitoringOfficer)
+      || (newStatus === ProjectChangeRequestStatus.QueriedByMonitoringOfficer)
+      || (newStatus === ProjectChangeRequestStatus.SubmittedToInnovationLead && originalStatus === ProjectChangeRequestStatus.QueriedByInnovateUK)
+    );
 
     await context.repositories.projectChangeRequestStatusChange.createStatusChange({
-      Acc_ProjectChangeRequest__c: projectChangeRequestId
+      Acc_ProjectChangeRequest__c: projectChangeRequestId,
+      Acc_ExternalComment__c: comments,
+      Acc_ParticipantVisibility__c: shouldPmSee
     });
   }
 
@@ -32,9 +38,9 @@ export class UpdatePCRCommand extends CommandBase<boolean> {
     const projectRoles = await context.runQuery(new GetAllProjectRolesForUser()).then(x => x.forProject(this.projectId).getRoles());
     const itemTypes = await context.runQuery(new GetPCRItemTypesQuery());
 
-    const original = await context.repositories.projectChangeRequests.getById(this.pcr.projectId, this.pcr.id);
+    const entityToUpdate = await context.repositories.projectChangeRequests.getById(this.pcr.projectId, this.pcr.id);
 
-    const originalDto = mapToPcrDto(original, itemTypes);
+    const originalDto = mapToPcrDto(entityToUpdate, itemTypes);
 
     const validationResult = new PCRDtoValidator(this.pcr, projectRoles, originalDto, itemTypes, true);
 
@@ -42,16 +48,22 @@ export class UpdatePCRCommand extends CommandBase<boolean> {
       throw new ValidationError(validationResult);
     }
 
-    original.comments = this.pcr.comments;
-    original.status = this.pcr.status;
-    original.reasoning = this.pcr.reasoningComments;
-    original.reasoningStatus = this.pcr.reasoningStatus;
+    if (entityToUpdate.status !== this.pcr.status) {
+      this.insertStatusChange(context, this.projectChangeRequestId, this.pcr.comments, entityToUpdate.status, this.pcr.status);
+      entityToUpdate.comments = "";
+    } else  {
+      entityToUpdate.comments = this.pcr.comments;
+    }
 
-    await context.repositories.projectChangeRequests.updateProjectChangeRequest(original);
+    entityToUpdate.status = this.pcr.status;
+    entityToUpdate.reasoning = this.pcr.reasoningComments;
+    entityToUpdate.reasoningStatus = this.pcr.reasoningStatus;
+
+    await context.repositories.projectChangeRequests.updateProjectChangeRequest(entityToUpdate);
 
     const paired = this.pcr.items.map(item => ({
       item,
-      originalItem: original.items.find(x => x.id === item.id)
+      originalItem: entityToUpdate.items.find(x => x.id === item.id)
     }));
 
     const itemsToUpdate = paired
@@ -69,7 +81,7 @@ export class UpdatePCRCommand extends CommandBase<boolean> {
     ;
 
     if (itemsToUpdate.length) {
-      await context.repositories.projectChangeRequests.updateItems(original, itemsToUpdate);
+      await context.repositories.projectChangeRequests.updateItems(entityToUpdate, itemsToUpdate);
     }
 
     const itemsToInsert: ProjectChangeRequestItemForCreateEntity[] = paired
@@ -78,14 +90,13 @@ export class UpdatePCRCommand extends CommandBase<boolean> {
         recordTypeId: itemTypes.find(t => t.type === x.item.type)!.recordTypeId,
         status: x.item.status,
         projectId: this.projectId,
-        partnerId: original.partnerId,
+        partnerId: entityToUpdate.partnerId,
       }));
 
     if (itemsToInsert.length) {
       await context.repositories.projectChangeRequests.insertItems(this.projectChangeRequestId, itemsToInsert);
     }
 
-    await this.insertStatusChange(context, this.projectChangeRequestId);
     return true;
   }
 }
