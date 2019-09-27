@@ -34,6 +34,7 @@ export const routeConfig = {
   pcrViewReasoning: Containers.PCRViewReasoningRoute,
   pcrsDashboard: Containers.PCRsDashboardRoute,
   projectChangeRequestItemUpload: Containers.ProjectChangeRequestItemUploadRoute,
+  projectChangeRequestViewItemForTimeExtension: Containers.ProjectChangeRequestViewItemForTimeExtensionRoute,
   projectDashboard: Containers.ProjectDashboardRoute,
   projectDetails: Containers.ProjectDetailsRoute,
   projectDocuments: Containers.ProjectDocumentsRoute,
