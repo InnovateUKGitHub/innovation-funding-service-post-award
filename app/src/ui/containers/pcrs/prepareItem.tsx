@@ -55,7 +55,7 @@ class PCRPrepareItemComponent extends ContainerBase<ProjectChangeRequestPrepareI
     const UploadForm = ACC.TypedForm<MultipleDocumentUploadDto>();
 
     const options: ACC.SelectOption[] = [
-      { id: "true", value: "This is ready to submit" }
+      { id: "true", value: "This is ready to submit." }
     ];
 
     const index = pcr.items.findIndex(x => x.id === pcrItem.id);
