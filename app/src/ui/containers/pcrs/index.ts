@@ -10,4 +10,5 @@ export * from "./prepareItemForTimeExtension";
 export * from "./prepareReasoning";
 export * from "./review";
 export * from "./viewItem";
+export * from "./viewItemForTimeExtension";
 export * from "./viewReasoning";

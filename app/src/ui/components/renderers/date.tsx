@@ -84,6 +84,18 @@ export const ShortDateTime: React.SFC<{ value: Date | null }> = (props) => {
     return render(date, appendMeridian(date, "d MMM yyyy, h:mm"));
 };
 
+export const Duration: React.FunctionComponent<{ startDate: Date | null, endDate: Date | null }> = (props) => {
+    const startDateLuxon = convertDateAndTime(props.startDate);
+    const endDateLuxon = convertDateAndTime(props.endDate);
+
+    if ((startDateLuxon && startDateLuxon.isValid) && (endDateLuxon && endDateLuxon.isValid)) {
+        const duration = endDateLuxon.plus({days: 1}).diff(startDateLuxon, "months").toObject();
+
+        return <span>{`${duration.months} ${duration.months === 1 ? "month" : "months"}`}</span>;
+    }
+    return null;
+};
+
 const appendMeridian = (date: DateTime|null, format: string) => {
     if(date && date.isValid) {
         return format + (date.hour > 12 ? "'pm'" : "'am'");
