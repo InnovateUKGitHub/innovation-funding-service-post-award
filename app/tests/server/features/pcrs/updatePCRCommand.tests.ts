@@ -4,7 +4,7 @@ import { UpdatePCRCommand } from "@server/features/pcrs/updatePcrCommand";
 import { ProjectChangeRequestItemStatus, ProjectChangeRequestItemTypeEntity, ProjectChangeRequestStatus } from "@framework/entities";
 import { GetPCRByIdQuery } from "@server/features/pcrs/getPCRByIdQuery";
 import { ValidationError } from "@server/features/common";
-import { Authorisation, PCRDto, PCRItemDto, ProjectRole } from "@framework/types";
+import { Authorisation, PCRDto, PCRItemDto, ProjectRole, PCRStandardItemDto } from "@framework/types";
 import { getAllEnumValues } from "@shared/enumHelper";
 import { PCRRecordTypeMetaValues } from "@server/features/pcrs/getItemTypesQuery";
 
@@ -186,7 +186,7 @@ describe("UpdatePCRCommand", () => {
       dto.items.push({
         status: ProjectChangeRequestItemStatus.ToDo,
         type: PCRRecordTypeMetaValues.find(x => x.typeName === recordTypes[2].type)!.type,
-      } as PCRItemDto);
+      } as PCRStandardItemDto);
 
       const command = new UpdatePCRCommand(project.Id, pcr.id, dto);
 
@@ -201,9 +201,7 @@ describe("UpdatePCRCommand", () => {
       const project = context.testData.createProject();
       context.testData.createPartner(project);
       const pcr = context.testData.createPCR(project, { status: ProjectChangeRequestStatus.Draft, reasoningStatus: ProjectChangeRequestItemStatus.Complete });
-      const recordTypes = context.testData.range(3, x => context.testData.createRecordType({ parent: "Acc_ProjectChangeRequest__c"}));
-      recordTypes[0].type = "Remove a partner";
-      recordTypes[1].type = "Put project on hold";
+      const recordTypes = context.testData.createPCRRecordTypes();
 
       context.testData.createPCRItem(pcr, recordTypes[0], {status : ProjectChangeRequestItemStatus.Incomplete});
       context.testData.createPCRItem(pcr, recordTypes[1], {status : ProjectChangeRequestItemStatus.Incomplete});
@@ -214,9 +212,8 @@ describe("UpdatePCRCommand", () => {
       expect(dto.items.length).toBe(2);
 
       dto.items.push({
-        status: ProjectChangeRequestItemStatus.ToDo,
-        type: recordTypes[2].type as any as ProjectChangeRequestItemTypeEntity
-      } as PCRItemDto);
+        ...dto.items[1],
+      });
 
       const command = new UpdatePCRCommand(project.Id, pcr.id, dto);
 

@@ -1,11 +1,11 @@
 import { BadRequestError, CommandBase, ValidationError } from "../common";
-import { PCRDto, ProjectRole } from "@framework/dtos";
+import { PCRDto, PCRItemDto, PCRItemForTimeExtensionDto, PCRItemSummaryDto, PCRStandardItemDto, ProjectRole } from "@framework/dtos";
 import { PCRDtoValidator } from "@ui/validators/pcrDtoValidator";
 import { Authorisation, IContext } from "@framework/types";
 import { GetAllProjectRolesForUser } from "../projects";
 import { mapToPcrDto } from "./mapToPCRDto";
 import { GetPCRItemTypesQuery } from "./getItemTypesQuery";
-import { ProjectChangeRequestItemForCreateEntity, ProjectChangeRequestStatus } from "@framework/entities";
+import { ProjectChangeRequestItemEntity, ProjectChangeRequestItemForCreateEntity, ProjectChangeRequestItemStatus, ProjectChangeRequestItemTypeEntity, ProjectChangeRequestStatus } from "@framework/entities";
 
 export class UpdatePCRCommand extends CommandBase<boolean> {
   constructor(private projectId: string, private projectChangeRequestId: string, private pcr: PCRDto) {
@@ -68,17 +68,14 @@ export class UpdatePCRCommand extends CommandBase<boolean> {
 
     const itemsToUpdate = paired
       // exclude new items
-        .filter(x => !!x.originalItem)
-        // sort out typeings as filter dosnt remove undefined from types
-        .map(x => ({
-          item: x.item,
-          originalItem: x.originalItem!
-        }))
-        // filter those that need updating
-        .filter(x => x.item.status !== x.originalItem.status)
-        // update the status
-        .map(x => ({ ...x.originalItem, status: x.item.status }))
-    ;
+      .filter(x => !!x.originalItem)
+      // get any updates
+      .map(x => this.getItemUpdates(x.originalItem!, x.item))
+      // filter those that need updating
+      .filter(x => x.hasChanged)
+      // get the new item
+      .map(x => x.result)
+      ;
 
     if (itemsToUpdate.length) {
       await context.repositories.projectChangeRequests.updateItems(entityToUpdate, itemsToUpdate);
@@ -98,5 +95,24 @@ export class UpdatePCRCommand extends CommandBase<boolean> {
     }
 
     return true;
+  }
+
+  private getItemUpdates(item: ProjectChangeRequestItemEntity, dto: (PCRStandardItemDto | PCRItemForTimeExtensionDto)): { result: ProjectChangeRequestItemEntity, hasChanged: boolean } {
+    let hasChanged = false;
+    const result = { ...item };
+
+    if (result.status !== dto.status) {
+      result.status = dto.status;
+      hasChanged = true;
+    }
+
+    if (dto.type === ProjectChangeRequestItemTypeEntity.TimeExtension) {
+      if (result.projectEndDate !== dto.projectEndDate) {
+        result.projectEndDate = dto.projectEndDate;
+        hasChanged = true;
+      }
+    }
+
+    return { hasChanged, result };
   }
 }

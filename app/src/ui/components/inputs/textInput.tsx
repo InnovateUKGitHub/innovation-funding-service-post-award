@@ -26,7 +26,7 @@ export class TextInput extends BaseInput<TextInputProps, InputState> {
       <input
         id={this.props.name}
         type="text"
-        className={classNames("govuk-input")}
+        className={classNames("govuk-input", { "govuk-input--error": this.props.hasError === true })}
         name={this.props.name}
         value={this.state.value}
         disabled={!!this.props.disabled}

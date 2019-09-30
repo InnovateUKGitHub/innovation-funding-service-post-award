@@ -1,6 +1,6 @@
 import { IFormBody, IFormButton, StandardFormHandlerBase } from "@server/forms/formHandlerBase";
 import { CreateProjectChangeRequestParams, PCRCreateRoute, ProjectChangeRequestPrepareRoute, } from "@ui/containers";
-import { PCRDto, PCRItemDto } from "@framework/dtos";
+import { PCRDto, PCRItemDto, PCRStandardItemDto } from "@framework/dtos";
 import { IContext, ILinkInfo } from "@framework/types";
 import { getPcrEditorForCreate } from "@ui/redux/selectors";
 import { CreateProjectChangeRequestCommand } from "@server/features/pcrs/createProjectChangeRequestCommand";
@@ -25,7 +25,7 @@ export class ProjectChangeRequestCreateFormHandler extends StandardFormHandlerBa
       status: ProjectChangeRequestStatus.Draft,
       reasoningStatus: ProjectChangeRequestItemStatus.ToDo,
       projectId: params.projectId,
-      items: items as PCRItemDto[]
+      items: items as PCRStandardItemDto[]
     };
 
     return dto as PCRDto;
