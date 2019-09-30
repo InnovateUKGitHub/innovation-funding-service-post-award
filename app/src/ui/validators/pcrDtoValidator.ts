@@ -115,11 +115,27 @@ export class PCRDtoValidator extends Results<PCRDto> {
 }
 
 export class PCRItemDtoValidator extends Results<PCRItemDto> {
-  constructor(model: PCRItemDto, private role: ProjectRole, private original: PCRItemDto, private pcrStatus: ProjectChangeRequestStatus, private readonly recordTypes: PCRItemTypeDto[], showValidationErrors: boolean) {
+  constructor(model: PCRItemDto,
+              private role: ProjectRole,
+              private original: PCRItemDto,
+              private pcrStatus: ProjectChangeRequestStatus,
+              private readonly recordTypes: PCRItemTypeDto[],
+              showValidationErrors: boolean) {
+
     super(model, showValidationErrors);
   }
 
-  validateStatus() {
+  private validateTypes() {
+    return Validation.all(this,
+      () => Validation.isTrue(this, this.recordTypes
+        .map(x => x.type)
+        .indexOf(this.model.type) >= 0, "Not a valid change request item"),
+      // If role is not Project Manager then can not add new type
+      () => Validation.isTrue(this, !!(this.role & ProjectRole.ProjectManager) || !!this.original, "Cannot add type")
+    );
+  }
+
+  private validateStatus() {
     const permittedStatus = [
       ProjectChangeRequestItemStatus.ToDo,
       ProjectChangeRequestItemStatus.Incomplete,
@@ -135,13 +151,11 @@ export class PCRItemDtoValidator extends Results<PCRItemDto> {
           this.pcrStatus === ProjectChangeRequestStatus.QueriedByInnovateUK ||
           this.pcrStatus === ProjectChangeRequestStatus.QueriedByMonitoringOfficer
           , `${this.model.typeName} must be complete`)
-        : Validation.isTrue(this, this.model.status === this.original.status, "Cannot update item status")
+        : Validation.isTrue(this, !this.original || this.model.status === this.original.status, "Cannot update item status")
     );
   }
 
   status = this.validateStatus();
 
-  type = Validation.isTrue(this, this.recordTypes
-    .map(x => x.type)
-    .indexOf(this.model.type) >= 0, "Not a valid change request item");
+  type = this.validateTypes();
 }
