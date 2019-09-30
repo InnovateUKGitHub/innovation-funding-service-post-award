@@ -41,7 +41,7 @@ export interface ISalesforcePCR {
   Acc_MarkedasComplete__c: string;
   MarkedAsCompleteName: string;
   Acc_Comments__c: string;
-  Acc_NewProjectEndDate__c: string;
+  Acc_NewProjectEndDate__c: string|null;
 }
 
 export class ProjectChangeRequestRepository extends SalesforceRepositoryBase<ISalesforcePCR> implements IProjectChangeRequestRepository {
@@ -111,6 +111,7 @@ export class ProjectChangeRequestRepository extends SalesforceRepositoryBase<ISa
     await super.updateAll(items.map(x => ({
       Id: x.id,
       Acc_MarkedasComplete__c: this.mapItemStatus(x.status),
+      Acc_NewProjectEndDate__c: x.projectEndDate && x.projectEndDate.toLocaleDateString()
     })));
   }
 

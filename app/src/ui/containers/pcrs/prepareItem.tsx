@@ -7,11 +7,11 @@ import * as ACC from "../../components";
 import * as Actions from "../../redux/actions";
 import * as Selectors from "../../redux/selectors";
 import { Pending } from "@shared/pending";
-import { PCRDto, PCRItemDto } from "@framework/dtos";
+import { PCRDto, PCRItemDto, PCRStandardItemDto } from "@framework/dtos";
 import { ProjectChangeRequestPrepareRoute } from "./prepare";
 import { EditorStatus, IEditorStore, } from "@ui/redux";
 import { ProjectChangeRequestItemStatus } from "@framework/entities";
-import { MultipleDocumentUpdloadDtoValidator, PCRDtoValidator } from "@ui/validators";
+import { MultipleDocumentUpdloadDtoValidator, PCRDtoValidator, PCRStandardItemDtoValdiator } from "@ui/validators";
 
 export interface ProjectChangeRequestPrepareItemParams {
   projectId: string;
@@ -22,7 +22,7 @@ export interface ProjectChangeRequestPrepareItemParams {
 interface Data {
   project: Pending<ProjectDto>;
   pcr: Pending<PCRDto>;
-  pcrItem: Pending<PCRItemDto>;
+  pcrItem: Pending<PCRStandardItemDto>;
   editor: Pending<IEditorStore<PCRDto, PCRDtoValidator>>;
   files: Pending<DocumentSummaryDto[]>;
   filesEditor: Pending<IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>>;
@@ -51,14 +51,15 @@ class PCRPrepareItemComponent extends ContainerBase<ProjectChangeRequestPrepareI
   }
 
   private renderContents(project: ProjectDto, pcr: PCRDto, pcrItem: PCRItemDto, editor: IEditorStore<PCRDto, PCRDtoValidator>, documents: DocumentSummaryDto[], documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>) {
-    const Form = ACC.TypedForm<PCRItemDto>();
+    const Form = ACC.TypedForm<PCRStandardItemDto>();
     const UploadForm = ACC.TypedForm<MultipleDocumentUploadDto>();
 
     const options: ACC.SelectOption[] = [
       { id: "true", value: "This is ready to submit." }
     ];
 
-    const index = pcr.items.findIndex(x => x.id === pcrItem.id);
+    const item = pcr.items.find(x => x.id === pcrItem.id) as PCRStandardItemDto;
+    const validator = editor.validator.items.results.find(x => x.model.id === pcrItem.id) as PCRStandardItemDtoValdiator;
     return (
       <ACC.Page
         backLink={<ACC.BackLink route={ProjectChangeRequestPrepareRoute.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId })}>Back to prepare project change request</ACC.BackLink>}
@@ -101,7 +102,7 @@ class PCRPrepareItemComponent extends ContainerBase<ProjectChangeRequestPrepareI
 
         <ACC.Section>
           <Form.Form
-            data={editor.data.items[index]}
+            data={item}
             isSaving={editor.status === EditorStatus.Saving}
             onChange={dto => this.onChange(editor.data, dto)}
             onSubmit={() => this.onSave(editor.data)}
@@ -113,7 +114,7 @@ class PCRPrepareItemComponent extends ContainerBase<ProjectChangeRequestPrepareI
                 options={options}
                 value={m => m.status === ProjectChangeRequestItemStatus.Complete ? [options[0]] : []}
                 update={(m, v) => m.status = (v && v.some(x => x.id === "true")) ? ProjectChangeRequestItemStatus.Complete : ProjectChangeRequestItemStatus.Incomplete}
-                validation={editor.validator.items.results[index].status}
+                validation={validator.status}
               />
               <Form.Submit>Save and return to request</Form.Submit>
             </Form.Fieldset>
@@ -130,7 +131,7 @@ class PCRPrepareItemComponent extends ContainerBase<ProjectChangeRequestPrepareI
       : <ACC.ValidationMessage messageType="info" message="No files uploaded" />;
   }
 
-  private onChange(dto: PCRDto, itemDto: PCRItemDto): void {
+  private onChange(dto: PCRDto, itemDto: PCRStandardItemDto): void {
     const index = dto.items.findIndex(x => x.id === this.props.itemId);
     dto.items[index] = itemDto;
     this.props.onChange(this.props.projectId, this.props.pcrId, dto);
@@ -152,7 +153,7 @@ export const PCRPrepareItem = definition.connect({
   withData: (state, params) => ({
     project: Selectors.getProject(params.projectId).getPending(state),
     pcr: Selectors.getPcr(params.projectId, params.pcrId).getPending(state),
-    pcrItem: Selectors.getPcrItem(params.projectId, params.pcrId, params.itemId).getPending(state),
+    pcrItem: Selectors.getPcrStandardItem(state, params.projectId, params.pcrId, params.itemId),
     editor: Selectors.getPcrEditor(params.projectId, params.pcrId).get(state),
     files: Selectors.getProjectChangeRequestDocumentsOrItemDocuments(params.itemId).getPending(state),
     filesEditor: Selectors.getProjectChangeRequestDocumentOrItemDocumentEditor(params.itemId).get(state),
