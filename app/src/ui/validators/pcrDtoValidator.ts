@@ -1,6 +1,7 @@
-import { PCRDto, PCRItemDto, PCRItemForTimeExtensionDto, PCRItemTypeDto, PCRStandardItemDto, ProjectRole } from "@framework/dtos";
+import { DateTime } from "luxon";
 import { Result, Results } from "../validation";
 import * as Validation from "./common";
+import { PCRDto, PCRItemDto, PCRItemForTimeExtensionDto, PCRItemTypeDto, PCRStandardItemDto, ProjectRole } from "@framework/dtos";
 import { ProjectChangeRequestItemStatus, ProjectChangeRequestItemTypeEntity, ProjectChangeRequestStatus } from "@framework/entities";
 
 export class PCRDtoValidator extends Results<PCRDto> {
@@ -197,7 +198,8 @@ export class PCRTimeExtentionItemDtoValidator extends PCRBaseItemDtoValidator<PC
     if (this.canEdit) {
       return Validation.all(this,
         () => isComplete ? Validation.required(this, this.model.projectEndDate, "Enter a project end date") : Validation.valid(this),
-        () => Validation.isDate(this, this.model.projectEndDate, "Please enter a valid date")
+        () => Validation.isDate(this, this.model.projectEndDate, "Please enter a valid date"),
+        () => this.model.projectEndDate ? Validation.isTrue(this, DateTime.fromJSDate(this.model.projectEndDate).plus({days: 1}).day === 1, "The date must be at the end of a month") : Validation.valid(this)
       );
     }
     else {
