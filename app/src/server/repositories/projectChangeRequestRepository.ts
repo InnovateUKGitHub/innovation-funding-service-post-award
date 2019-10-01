@@ -1,3 +1,5 @@
+import { Connection } from "jsforce";
+import { DateTime } from "luxon";
 import {
   ProjectChangeRequestEntity,
   ProjectChangeRequestForCreateEntity,
@@ -7,7 +9,6 @@ import {
   ProjectChangeRequestStatus
 } from "@framework/entities";
 import SalesforceRepositoryBase from "./salesforceRepositoryBase";
-import { Connection } from "jsforce";
 import { ILogger } from "@server/features/common/logger";
 import { SalesforcePCRMapper } from "./mappers/projectChangeRequestMapper";
 import { NotFoundError } from "@server/features/common";
@@ -111,7 +112,7 @@ export class ProjectChangeRequestRepository extends SalesforceRepositoryBase<ISa
     await super.updateAll(items.map(x => ({
       Id: x.id,
       Acc_MarkedasComplete__c: this.mapItemStatus(x.status),
-      Acc_NewProjectEndDate__c: x.projectEndDate && x.projectEndDate.toLocaleDateString()
+      Acc_NewProjectEndDate__c: x.projectEndDate && DateTime.fromJSDate(x.projectEndDate).toFormat("yyyy-MM-dd"),
     })));
   }
 

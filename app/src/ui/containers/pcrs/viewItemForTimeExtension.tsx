@@ -1,11 +1,14 @@
+import { Pending } from "@shared/pending";
 import React from "react";
-import * as ACC from "@ui/components";
 import * as Actions from "@ui/redux/actions";
 import * as Selectors from "@ui/redux/selectors";
 import { PCRDto, PCRItemForTimeExtensionDto, ProjectDto, ProjectRole } from "@framework/dtos";
-import { Pending } from "@shared/pending";
-import { PCRReviewRoute, PCRViewReasoningRoute } from "@ui/containers";
+import * as ACC from "@ui/components";
+import { PCRDetailsRoute, PCRReviewRoute } from "@ui/containers";
 import { ContainerBase, ReduxContainer } from "@ui/containers/containerBase";
+import { RootState } from "@ui/redux";
+import { State as RouteState } from "router5";
+import { NavigationArrowsForPCRs } from "./navigationArrows";
 
 interface Params {
   projectId: string;
@@ -17,6 +20,7 @@ interface Data {
   project: Pending<ProjectDto>;
   projectChangeRequest: Pending<PCRDto>;
   projectChangeRequestItem: Pending<PCRItemForTimeExtensionDto>;
+  isReviewing: boolean;
 }
 
 interface Callbacks {
@@ -34,9 +38,13 @@ class ProjectChangeRequestViewItemForTimeExtensionComponent extends ContainerBas
   }
 
   private renderContents(project: ProjectDto, projectChangeRequest: PCRDto, projectChangeRequestItem: PCRItemForTimeExtensionDto) {
+    const backLink = this.props.isReviewing ?
+      <ACC.BackLink route={PCRReviewRoute.getLink({ projectId: this.props.projectId, pcrId: this.props.projectChangeRequestId })}>Back to review project change request</ACC.BackLink> :
+      <ACC.BackLink route={PCRDetailsRoute.getLink({ projectId: this.props.projectId, pcrId: this.props.projectChangeRequestId })}>Back to view project change request</ACC.BackLink>;
+
     return (
       <ACC.Page
-        backLink={<ACC.BackLink route={PCRReviewRoute.getLink({ projectId: this.props.projectId, pcrId: this.props.projectChangeRequestId })}>Back to review project change request</ACC.BackLink>}
+        backLink={backLink}
         pageTitle={<ACC.Projects.Title project={project} />}
       >
         <ACC.Section title="Details">
@@ -47,39 +55,70 @@ class ProjectChangeRequestViewItemForTimeExtensionComponent extends ContainerBas
             <ACC.SummaryListItem label="New duration" content={<ACC.Renderers.Duration startDate={project.startDate} endDate={projectChangeRequestItem.projectEndDate} />} qa="newDuration"/>
           </ACC.SummaryList>
         </ACC.Section>
-        <ACC.NavigationArrows previousLink={null} nextLink={{label: "Reasoning", route: PCRViewReasoningRoute.getLink({pcrId: this.props.projectChangeRequestId, projectId: this.props.projectId})}}/>
+        <NavigationArrowsForPCRs pcr={projectChangeRequest} currentItem={projectChangeRequestItem} isReviewing={this.props.isReviewing}/>
       </ACC.Page>
     );
   }
 }
 
+const getParams = (route: RouteState): Params => ({
+  projectId: route.params.projectId,
+  projectChangeRequestId: route.params.projectChangeRequestId,
+  projectChangeRequestItemId: route.params.projectChangeRequestItemId
+});
+
+const withData = (isReviewing: boolean) => (state: RootState, params: Params): Data => ({
+  project: Selectors.getProject(params.projectId).getPending(state),
+  projectChangeRequest: Selectors.getPcr(params.projectId, params.projectChangeRequestId).getPending(state),
+  projectChangeRequestItem: Selectors.getPcrItemForTimeExtension(state, params.projectId, params.projectChangeRequestId, params.projectChangeRequestItemId),
+  isReviewing
+});
+
+const loadDataActions = (params: Params) => ([
+  Actions.loadProject(params.projectId),
+  Actions.loadPcr(params.projectId, params.projectChangeRequestId),
+]);
+
 const definition = ReduxContainer.for<Params, Data, Callbacks>(ProjectChangeRequestViewItemForTimeExtensionComponent);
 
-export const ProjectChangeRequestViewItemForTimeExtension = definition.connect({
-  withData: (state, params) => ({
-    project: Selectors.getProject(params.projectId).getPending(state),
-    projectChangeRequest: Selectors.getPcr(params.projectId, params.projectChangeRequestId).getPending(state),
-    projectChangeRequestItem: Selectors.getPcrItemForTimeExtension(state, params.projectId, params.projectChangeRequestId, params.projectChangeRequestItemId)
-  }),
+const ProjectChangeRequestViewItemForTimeExtension = definition.connect({
+  withData: withData(false),
   withCallbacks: () => ({})
 });
 
 export const ProjectChangeRequestViewItemForTimeExtensionRoute = definition.route({
   routeName: "projectChangeRequestViewItemForTimeExtension",
-  routePath: "/projects/:projectId/pcrs/:pcrId/details/timeExtension/:itemId",
-  getParams: (route) => ({
-    projectId: route.params.projectId,
-    projectChangeRequestId: route.params.pcrId,
-    projectChangeRequestItemId: route.params.itemId
-  }),
-  getLoadDataActions: (params) => [
-    Actions.loadProject(params.projectId),
-    Actions.loadPcr(params.projectId, params.projectChangeRequestId)
-  ],
-  getTitle: () => ({
-    htmlTitle: "View time extension details",
-    displayTitle: "View time extension details"
-  }),
+  routePath: "/projects/:projectId/pcrs/:projectChangeRequestId/details/timeExtension/:projectChangeRequestItemId",
+  getParams,
+  getLoadDataActions: loadDataActions,
+  getTitle: (store, params) => {
+    const typeName = Selectors.getPcrItem(params.projectId, params.projectChangeRequestId, params.projectChangeRequestItemId).getPending(store).then(x => x.typeName).data;
+    return {
+      htmlTitle: typeName ? `${typeName}` : "Project change request item",
+      displayTitle: typeName ? `${typeName}` : "Project change request item",
+    };
+  },
   container: ProjectChangeRequestViewItemForTimeExtension,
   accessControl: (auth, {projectId}, config) => config.features.pcrsEnabled && auth.forProject(projectId).hasAnyRoles(ProjectRole.MonitoringOfficer || ProjectRole.ProjectManager)
+});
+
+const ProjectChangeRequestReviewItemForTimeExtension = definition.connect({
+  withData: withData(true),
+  withCallbacks: () => ({})
+});
+
+export const ProjectChangeRequestReviewItemForTimeExtensionRoute = definition.route({
+  routeName: "projectChangeRequestReviewItemForTimeExtension",
+  routePath: "/projects/:projectId/pcrs/:projectChangeRequestId/review/timeExtension/:projectChangeRequestItemId",
+  getParams,
+  getLoadDataActions: loadDataActions,
+  getTitle: (store, params) => {
+    const typeName = Selectors.getPcrItem(params.projectId, params.projectChangeRequestId, params.projectChangeRequestItemId).getPending(store).then(x => x.typeName).data;
+    return {
+      htmlTitle: typeName ? `Review ${typeName}` : "Review project change request item",
+      displayTitle: typeName ? `Review ${typeName}` : "Review project change request item",
+    };
+  },
+  container: ProjectChangeRequestReviewItemForTimeExtension,
+  accessControl: (auth, {projectId}, config) => config.features.pcrsEnabled && auth.forProject(projectId).hasAnyRoles(ProjectRole.MonitoringOfficer)
 });
