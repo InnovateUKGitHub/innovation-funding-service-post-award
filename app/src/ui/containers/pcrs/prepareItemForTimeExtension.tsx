@@ -10,8 +10,8 @@ import { Pending } from "@shared/pending";
 import { PCRDto, PCRItemDto } from "@framework/dtos";
 import { ProjectChangeRequestPrepareRoute } from "./prepare";
 import { EditorStatus, IEditorStore, } from "@ui/redux";
-import { ProjectChangeRequestItemStatus } from "@framework/entities";
-import { PCRDtoValidator } from "@ui/validators";
+import { ProjectChangeRequestItemStatus, ProjectChangeRequestItemTypeEntity } from "@framework/entities";
+import { PCRDtoValidator, PCRTimeExtentionItemDtoValidator } from "@ui/validators";
 
 export interface ProjectChangeRequestPrepareItemForTimeExtensionParams {
   projectId: string;
@@ -43,14 +43,18 @@ class PCRPrepareItemForTimeExtensionComponent extends ContainerBase<ProjectChang
     return <ACC.PageLoader pending={combined} render={x => this.renderContents(x.project, x.pcr, x.pcrItem, x.editor)} />;
   }
 
-  private renderContents(project: ProjectDto, pcr: PCRDto, pcrItem: PCRItemDto, editor: IEditorStore<PCRDto, PCRDtoValidator>) {
-    const Form = ACC.TypedForm<PCRItemDto>();
+  private renderContents(project: ProjectDto, pcr: PCRDto, pcrItem: PCRItemForTimeExtensionDto, editor: IEditorStore<PCRDto, PCRDtoValidator>) {
+    const Form = ACC.TypedForm<PCRItemForTimeExtensionDto>();
 
     const options: ACC.SelectOption[] = [
       { id: "true", value: "This is ready to submit" }
     ];
 
     const index = pcr.items.findIndex(x => x.id === pcrItem.id);
+
+    const editItem = editor.data.items[index] as PCRItemForTimeExtensionDto;
+    const validator = editor.validator.items.results[index] as PCRTimeExtentionItemDtoValidator;
+
     return (
       <ACC.Page
         backLink={<ACC.BackLink route={ProjectChangeRequestPrepareRoute.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId })}>Back to prepare project change request</ACC.BackLink>}
@@ -67,19 +71,35 @@ class PCRPrepareItemForTimeExtensionComponent extends ContainerBase<ProjectChang
 
         <ACC.Section>
           <Form.Form
-            data={editor.data.items[index]}
+            data={editItem}
             isSaving={editor.status === EditorStatus.Saving}
             onChange={dto => this.onChange(editor.data, dto)}
             onSubmit={() => this.onSave(editor.data)}
             qa="itemStatus"
           >
+            <Form.Fieldset heading="Current end date">
+              <Form.Custom
+                name="currentEndDate"
+                value={m => <ACC.Renderers.SimpleString><ACC.Renderers.FullDate value={project.periodEndDate}/></ACC.Renderers.SimpleString>}
+                update={(m,v) => { return; }}
+              />
+            </Form.Fieldset>
+            <Form.Fieldset heading="Set a new end date">
+              <Form.Date
+                name="endDate"
+                value={m => m.projectEndDate}
+                update={(m,v) => m.projectEndDate = v}
+                validation={validator.projectEndDate}
+                hint={"The date must be at the end of a month, for example 31 01 2021"}
+              />
+            </Form.Fieldset>
             <Form.Fieldset heading="Mark as complete">
               <Form.Checkboxes
                 name="itemStatus"
                 options={options}
                 value={m => m.status === ProjectChangeRequestItemStatus.Complete ? [options[0]] : []}
                 update={(m, v) => m.status = (v && v.some(x => x.id === "true")) ? ProjectChangeRequestItemStatus.Complete : ProjectChangeRequestItemStatus.Incomplete}
-                validation={editor.validator.items.results[index].status}
+                validation={validator.status}
               />
               <Form.Submit>Save and return to request</Form.Submit>
             </Form.Fieldset>
@@ -90,7 +110,7 @@ class PCRPrepareItemForTimeExtensionComponent extends ContainerBase<ProjectChang
     );
   }
 
-  private onChange(dto: PCRDto, itemDto: PCRItemDto): void {
+  private onChange(dto: PCRDto, itemDto: PCRItemForTimeExtensionDto): void {
     const index = dto.items.findIndex(x => x.id === this.props.itemId);
     dto.items[index] = itemDto;
     this.props.onChange(this.props.projectId, this.props.pcrId, dto);

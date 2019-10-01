@@ -1,12 +1,12 @@
 import { dataStoreHelper, editorStoreHelper } from "./common";
 import { getKey } from "@framework/util/key";
 import { RootState } from "../reducers";
-import { PCRDto, PCRItemForTimeExtensionDto } from "@framework/dtos/pcrDtos";
+import { PCRDto, PCRItemForTimeExtensionDto, PCRStandardItemDto } from "@framework/dtos/pcrDtos";
 import { MultipleDocumentUpdloadDtoValidator } from "@ui/validators";
-import { Pending } from "@shared/pending";
+import { LoadingStatus, Pending } from "@shared/pending";
 import { PCRDtoValidator } from "@ui/validators/pcrDtoValidator";
 import { ProjectChangeRequestDtoValidatorForCreate } from "@ui/validators/projectChangeRequestDtoValidatorForCreate";
-import { ProjectChangeRequestItemStatus, ProjectChangeRequestStatus } from "@framework/entities";
+import { ProjectChangeRequestItemStatus, ProjectChangeRequestItemTypeEntity, ProjectChangeRequestStatus } from "@framework/entities";
 import { Authorisation } from "@framework/types";
 
 export const getAllPcrTypes = () => dataStoreHelper("pcrTypes", "all");
@@ -16,7 +16,30 @@ export const getPcr = (projectId: string, id: string) => dataStoreHelper("pcr", 
 export const getPcrItem = (projectId: string, id: string, itemId: string) => ({ getPending: (store: RootState) => getPcr(projectId, id).getPending(store).then(x => x.items.find(y => y.id === itemId)!) });
 
 export const getPcrItemForTimeExtension = (state: RootState, projectId: string, id: string, itemId: string): Pending<PCRItemForTimeExtensionDto> => {
-  return getPcrItem(projectId, id, itemId).getPending(state).then(x => x as PCRItemForTimeExtensionDto);
+  return getPcrItem(projectId, id, itemId).getPending(state).chain(x => {
+    if (x.type === ProjectChangeRequestItemTypeEntity.TimeExtension) {
+      return Pending.done(x);
+    }
+    return new Pending<PCRItemForTimeExtensionDto>(LoadingStatus.Failed, null, new Error("Item not a Time Extension"));
+  });
+};
+
+export const getPcrStandardItem = (state: RootState, projectId: string, id: string, itemId: string): Pending<PCRStandardItemDto> => {
+  return getPcrItem(projectId, id, itemId).getPending(state).chain(x => {
+    switch (x.type) {
+      case ProjectChangeRequestItemTypeEntity.AccountNameChange:
+      case ProjectChangeRequestItemTypeEntity.MultiplePartnerFinancialVirement:
+      case ProjectChangeRequestItemTypeEntity.PartnerAddition:
+      case ProjectChangeRequestItemTypeEntity.PartnerWithdrawal:
+      case ProjectChangeRequestItemTypeEntity.ProjectSuspension:
+      case ProjectChangeRequestItemTypeEntity.ProjectTermination:
+      case ProjectChangeRequestItemTypeEntity.ScopeChange:
+      case ProjectChangeRequestItemTypeEntity.SinglePartnerFinancialVirement:
+        return Pending.done(x);
+      default:
+        return new Pending<PCRStandardItemDto>(LoadingStatus.Failed, null, new Error("Item not a Standard Type"));
+    }
+  });
 };
 
 const createPcr = (projectId: string): Partial<PCRDto> => ({
@@ -34,7 +57,7 @@ export const getPcrEditor = (projectId: string, id: string) => editorStoreHelper
     return Pending.combine({
       original: getPcr(projectId, id).getPending(store),
       recordTypes: getAllPcrTypes().getPending(store)
-    }).then(({original, recordTypes}) => new PCRDtoValidator(dto, projectRole, original, recordTypes, false));
+    }).then(({ original, recordTypes }) => new PCRDtoValidator(dto, projectRole, original, recordTypes, false));
   },
   getKey(projectId, id)
 );

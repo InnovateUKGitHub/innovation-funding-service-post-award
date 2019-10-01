@@ -5,8 +5,8 @@ import { NestedResult } from "../validation/nestedResult";
 import { isNumber } from "@framework/util";
 
 // A helper for creating validation rules
-function rule<T>(test: (value: T) => boolean, defaultMessage: string, isRequired?: boolean): (results: Results<{}>, value: T, message?: string) => Result {
-    return (results: Results<{}>, value: T, message?: string) => {
+function rule<T>(test: (value: T|null) => boolean, defaultMessage: string, isRequired?: boolean): (results: Results<{}>, value: T|null, message?: string) => Result {
+    return (results: Results<{}>, value: T|null, message?: string) => {
         return new Result(results, results.showValidationErrors, test(value), message || defaultMessage, !!isRequired);
     };
 }

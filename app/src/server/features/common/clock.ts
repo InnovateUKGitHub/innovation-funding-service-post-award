@@ -18,7 +18,7 @@ export class Clock implements IClock {
     return new Date();
   }
 
-  parseOptionalSalesforceDate(value: string): Date | null {
+  parseOptionalSalesforceDate(value: string| null): Date | null {
     if (!value) return null;
     const result = DateTime.fromFormat(value, SALESFORCE_DATE_FORMAT).setZone("Europe/London");
     if (!result.isValid) {
@@ -35,7 +35,7 @@ export class Clock implements IClock {
     return result;
   }
 
-  parseOptionalSalesforceDateTime(value: string): Date | null {
+  parseOptionalSalesforceDateTime(value: string|null): Date | null {
     if (!value) return null;
     const result = DateTime.fromISO(value);
     if (!result.isValid) {

@@ -1,17 +1,16 @@
 import React from "react";
 import { ContainerBase, ReduxContainer } from "../containerBase";
 
-import * as ACC from "../../components";
-import * as Actions from "../../redux/actions";
-import * as Selectors from "../../redux/selectors";
+import * as ACC from "@ui/components";
+import * as Actions from "@ui/redux/actions";
+import * as Selectors from "@ui/redux/selectors";
 import * as Dtos from "@framework/dtos";
 import { Pending } from "@shared/pending";
 import { IEditorStore } from "@ui/redux";
-import { ProjectChangeRequestItemStatus } from "@framework/entities";
-import { PCRsDashboardRoute } from "./dashboard";
+import { ProjectChangeRequestItemStatus, ProjectChangeRequestItemTypeEntity } from "@framework/entities";
 import { ProjectChangeRequestPrepareRoute } from "@ui/containers";
 import { PCRDtoValidator } from "@ui/validators/pcrDtoValidator";
-import { PCRDto, ProjectRole } from "@framework/dtos";
+import { PCRDto, PCRItemDto, PCRItemForTimeExtensionDto, PCRStandardItemDto, ProjectRole } from "@framework/dtos";
 
 export interface ProjectChangeRequestAddTypeParams {
   projectId: string;
@@ -52,20 +51,43 @@ class PCRCreateComponent extends ContainerBase<ProjectChangeRequestAddTypeParams
     );
   }
 
-  private createNewOption(itemType: Dtos.PCRItemTypeDto): Dtos.PCRItemDto {
-    return {
+  private createNewOption(itemType: Dtos.PCRItemTypeDto): (PCRStandardItemDto | PCRItemForTimeExtensionDto) {
+    const baseFields: PCRItemDto = {
       id: "",
       guidance: "",
-      type: itemType.type,
+      type: ProjectChangeRequestItemTypeEntity.Unknown,
       typeName: itemType.displayName,
       status: ProjectChangeRequestItemStatus.ToDo,
-      statusName: ""
+      statusName: "",
     };
+
+    switch (itemType.type) {
+      case ProjectChangeRequestItemTypeEntity.AccountNameChange:
+      case ProjectChangeRequestItemTypeEntity.MultiplePartnerFinancialVirement:
+      case ProjectChangeRequestItemTypeEntity.PartnerAddition:
+      case ProjectChangeRequestItemTypeEntity.PartnerWithdrawal:
+      case ProjectChangeRequestItemTypeEntity.ProjectSuspension:
+      case ProjectChangeRequestItemTypeEntity.ProjectTermination:
+      case ProjectChangeRequestItemTypeEntity.ScopeChange:
+      case ProjectChangeRequestItemTypeEntity.SinglePartnerFinancialVirement:
+        return {
+          ...baseFields,
+          type: itemType.type
+        };
+      case ProjectChangeRequestItemTypeEntity.TimeExtension:
+        return {
+          ...baseFields,
+          type: itemType.type,
+          projectEndDate: null
+        };
+      default:
+        throw new Error("Item type not handled");
+    }
   }
 
   private renderForm(pcrEditor: IEditorStore<Dtos.PCRDto, PCRDtoValidator>, original: PCRDto, itemTypes: Dtos.PCRItemTypeDto[]): React.ReactNode {
     const PCRForm = ACC.TypedForm<Dtos.PCRDto>();
-    const preselectedItems = original.items.map(x => x.type);
+    const preselectedItems: ProjectChangeRequestItemTypeEntity[] = original.items.map(x => x.type);
     const options = itemTypes.map<ACC.SelectOption>(x => ({ id: x.type.toString(), value: x.displayName, disabled: preselectedItems.indexOf(x.type) >= 0 }));
     const selected = options.filter(x => pcrEditor.data.items.some(y => y.type.toString() === x.id));
 
@@ -82,7 +104,7 @@ class PCRCreateComponent extends ContainerBase<ProjectChangeRequestAddTypeParams
               update={(model, selectedValue) => {
                 model.items = itemTypes
                   .filter(x => (selectedValue || []).some(y => y.id === x.type.toString()))
-                  .map<Dtos.PCRItemDto>(x => model.items.find(y => x.type === y.type) || this.createNewOption(x));
+                  .map(x => model.items.find(y => x.type === y.type) || this.createNewOption(x));
               }}
             />
           </PCRForm.Fieldset>
