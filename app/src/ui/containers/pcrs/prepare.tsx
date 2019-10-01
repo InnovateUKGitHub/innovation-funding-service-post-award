@@ -91,7 +91,7 @@ class PCRPrepareComponent extends ContainerBase<ProjectChangeRequestPrepareParam
           <ACC.Task
             name="Set new end date for project"
             status={this.getTaskStatus(item.status)}
-            route={ProjectChangeRequestPrepareItemForTimeExtensionRoute.getLink({projectId: this.props.projectId, pcrId: this.props.pcrId, itemId: item.id })}
+            route={ProjectChangeRequestPrepareItemForTimeExtensionRoute.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId, itemId: item.id })}
           />
         );
       default:
@@ -112,18 +112,16 @@ class PCRPrepareComponent extends ContainerBase<ProjectChangeRequestPrepareParam
         <ACC.Section title="Details">
           <ACC.SummaryList qa="pcr-prepare">
             <ACC.SummaryListItem label="Request number" content={projectChangeRequest.requestNumber} qa="numberRow" />
-            <ACC.SummaryListItem label="Types" content={<ACC.Renderers.LineBreakList items={projectChangeRequest.items.map(x => x.typeName)}/>} action={<ACC.Link route={ProjectChangeRequestAddTypeRoute.getLink({ projectId: this.props.projectId, projectChangeRequestId: this.props.pcrId })}>Add types</ACC.Link>} qa="typesRow" />
+            <ACC.SummaryListItem label="Types" content={<ACC.Renderers.LineBreakList items={projectChangeRequest.items.map(x => x.typeName)} />} action={<ACC.Link route={ProjectChangeRequestAddTypeRoute.getLink({ projectId: this.props.projectId, projectChangeRequestId: this.props.pcrId })}>Add types</ACC.Link>} qa="typesRow" />
           </ACC.SummaryList>
         </ACC.Section>
 
         <ACC.TaskList qa="taskList">
-          {projectChangeRequest.items.map((x, i) => {
-            return (
-              <ACC.TaskListSection key={i} step={i + 1} title={x.typeName} validation={editor.validator.items.results[i].errors} qa={`task-${i}`}>
-                { this.getItemTasks(x)}
-              </ACC.TaskListSection>
-            );
-          })}
+          {projectChangeRequest.items.map((x, i) => (
+            <ACC.TaskListSection key={i} step={i + 1} title={x.typeName} validation={editor.validator.items.results[i].errors} qa={`task-${i}`}>
+              {this.getItemTasks(x)}
+            </ACC.TaskListSection>
+          ))}
           <ACC.TaskListSection step={projectChangeRequest.items.length + 1} title={"Give more details"} validation={[editor.validator.reasoningStatus, editor.validator.reasoningComments]} qa="reasoning">
             <ACC.Task
               name="Provide reasoning to Innovate UK"
