@@ -1,18 +1,18 @@
 import React from "react";
 
 import { ContainerBase, ReduxContainer } from "../containerBase";
-import { ILinkInfo, ProjectDto, ProjectRole } from "@framework/types";
+import { ProjectDto, ProjectRole } from "@framework/types";
 
 import * as ACC from "../../components";
 import * as Actions from "../../redux/actions";
 import * as Selectors from "../../redux/selectors";
 import { Pending } from "@shared/pending";
 import { PCRDetailsRoute } from "./details";
-import { PCRReviewItemRoute, PCRViewItemRoute } from "./viewItem";
-import { PCRDto, PCRItemDto } from "@framework/dtos/pcrDtos";
+import { PCRDto } from "@framework/dtos/pcrDtos";
 import { RootState } from "@ui/redux";
 import { State as RouteState } from "router5";
 import { PCRReviewRoute } from "./review";
+import { NavigationArrowsForPCRs } from "./navigationArrows";
 
 interface Params {
   projectId: string;
@@ -37,7 +37,6 @@ class PCRViewReasoningComponent extends ContainerBase<Params, Data, Callbacks> {
   }
 
   private renderContents(project: ProjectDto, pcr: PCRDto, files: DocumentSummaryDto[]) {
-    const lastItem = pcr.items[pcr.items.length - 1];
     const backLink = this.props.isReviewing ?
       <ACC.BackLink route={PCRReviewRoute.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId })}>Back to review project change request</ACC.BackLink> :
       <ACC.BackLink route={PCRDetailsRoute.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId })}>Back to project change request details</ACC.BackLink>
@@ -60,23 +59,9 @@ class PCRViewReasoningComponent extends ContainerBase<Params, Data, Callbacks> {
             />
           </ACC.SummaryList>
         </ACC.Section>
-        <ACC.NavigationArrows previousLink={this.getLink(lastItem)} />
+        <NavigationArrowsForPCRs pcr={pcr} currentItem={null} isReviewing={this.props.isReviewing}/>
       </ACC.Page>
     );
-  }
-
-  private getLink(pcrItem: PCRItemDto): { label: string, route: ILinkInfo } {
-    if (this.props.isReviewing) {
-      return {
-        label: pcrItem.typeName,
-        route: PCRReviewItemRoute.getLink({ pcrId: this.props.pcrId, projectId: this.props.projectId, itemId: pcrItem.id })
-      };
-    }
-
-    return {
-      label: pcrItem.typeName,
-      route: PCRViewItemRoute.getLink({ pcrId: this.props.pcrId, projectId: this.props.projectId, itemId: pcrItem.id })
-    };
   }
 }
 

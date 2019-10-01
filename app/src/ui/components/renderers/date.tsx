@@ -89,9 +89,10 @@ export const Duration: React.FunctionComponent<{ startDate: Date | null, endDate
     const endDateLuxon = convertDateAndTime(props.endDate);
 
     if ((startDateLuxon && startDateLuxon.isValid) && (endDateLuxon && endDateLuxon.isValid)) {
-        const duration = endDateLuxon.plus({days: 1}).diff(startDateLuxon, "months").toObject();
+        const duration = endDateLuxon.diff(startDateLuxon).as("months");
+        const months = Math.ceil(duration || 0);
 
-        return <span>{`${duration.months} ${duration.months === 1 ? "month" : "months"}`}</span>;
+        return <span>{`${months} ${months === 1 ? "month" : "months"}`}</span>;
     }
     return null;
 };

@@ -4,15 +4,15 @@ import { ContainerBase, ReduxContainer } from "../containerBase";
 import { ProjectDto, ProjectRole } from "@framework/types";
 
 import * as ACC from "../../components";
-import * as Actions from "../../redux/actions";
 import * as Selectors from "../../redux/selectors";
+import * as Actions from "@ui/redux/actions";
 import { Pending } from "@shared/pending";
 import { PCRsDashboardRoute } from "./dashboard";
+import { ProjectChangeRequestViewItemForTimeExtensionRoute } from "./viewItemForTimeExtension";
 import { PCRViewItemRoute } from "./viewItem";
 import { PCRViewReasoningRoute } from "./viewReasoning";
-import { Task, TaskList, TaskListSection } from "@ui/components/taskList";
-import { PCRDto, ProjectChangeRequestStatusChangeDto } from "@framework/dtos/pcrDtos";
-import { ProjectChangeRequestItemStatus } from "@framework/entities";
+import { PCRDto, PCRItemDto, ProjectChangeRequestStatusChangeDto } from "@framework/dtos/pcrDtos";
+import { ProjectChangeRequestItemStatus, ProjectChangeRequestItemTypeEntity } from "@framework/entities";
 
 interface Params {
   projectId: string;
@@ -70,26 +70,44 @@ class PCRDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
             <ACC.SummaryListItem label="Types" content={<ACC.Renderers.LineBreakList items={projectChangeRequest.items.map(x => x.typeName)}/>} qa="typesRow" />
           </ACC.SummaryList>
         </ACC.Section>
-        <TaskList qa="taskList">
+        <ACC.TaskList qa="taskList">
           {projectChangeRequest.items.map((x, i) => (
-            <TaskListSection step={i + 1} title={x.typeName} qa={`task-${i}`}>
-              <Task
-                name="View files"
-                status={this.getTaskStatus(x.status)}
-                route={PCRViewItemRoute.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId, itemId: x.id })}
-              />
-            </TaskListSection>
+            <ACC.TaskListSection key={i} step={i + 1} title={x.typeName} qa={`task-${i}`}>
+              {this.getItemTasks(x)}
+            </ACC.TaskListSection>
           ))}
-          <TaskListSection step={projectChangeRequest.items.length + 1} title={"View more details"} qa="reasoning">
-            <Task
+          <ACC.TaskListSection step={projectChangeRequest.items.length + 1} title={"View more details"} qa="reasoning">
+            <ACC.Task
               name="Reasoning for Innovate UK"
               status={this.getTaskStatus(projectChangeRequest.reasoningStatus)}
               route={PCRViewReasoningRoute.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId })}
             />
-          </TaskListSection>
-        </TaskList>
+          </ACC.TaskListSection>
+        </ACC.TaskList>
       </React.Fragment>
     );
+  }
+
+  private getItemTasks(item: PCRItemDto) {
+    // tslint:disable:no-small-switch TODO remove this when more added
+    switch (item.type) {
+      case ProjectChangeRequestItemTypeEntity.TimeExtension:
+        return (
+          <ACC.Task
+            name="View new end date for project"
+            status={this.getTaskStatus(item.status)}
+            route={ProjectChangeRequestViewItemForTimeExtensionRoute.getLink({ projectId: this.props.projectId, projectChangeRequestId: this.props.pcrId, projectChangeRequestItemId: item.id })}
+          />
+        );
+      default:
+        return (
+          <ACC.Task
+            name="View files"
+            status={this.getTaskStatus(item.status)}
+            route={PCRViewItemRoute.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId, itemId: item.id })}
+          />
+        );
+    }
   }
 
   private getTaskStatus(status: ProjectChangeRequestItemStatus): "To do" | "Complete" | "Incomplete" {

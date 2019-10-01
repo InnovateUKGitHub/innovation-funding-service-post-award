@@ -53,7 +53,7 @@ export class PCRDtoValidator extends Results<PCRDto> {
     const isPM = !!(this.role & ProjectRole.ProjectManager);
     const isMO = !!(this.role & ProjectRole.MonitoringOfficer);
     if ((isPM && this.projectManagerCanEdit) || (isMO && this.monitoringOfficerCanEdit)) {
-      const statusRequiringComments = isMO ? [ProjectChangeRequestStatus.SubmittedToInnovationLead, ProjectChangeRequestStatus.QueriedByMonitoringOfficer] : [];
+      const statusRequiringComments = isMO && this.monitoringOfficerCanEdit ? [ProjectChangeRequestStatus.SubmittedToInnovationLead, ProjectChangeRequestStatus.QueriedByMonitoringOfficer] : [];
       return Validation.all(this,
         () => statusRequiringComments.indexOf(this.model.status) >= 0 ? Validation.required(this, this.model.comments, "Comments are required") : Validation.valid(this),
         () => Validation.maxLength(this, this.model.comments, this.maxCommentsLength, `Comments can be a maximum of ${this.maxCommentsLength} characters`),
@@ -201,7 +201,7 @@ export class PCRTimeExtentionItemDtoValidator extends PCRBaseItemDtoValidator<PC
       );
     }
     else {
-      return Validation.isTrue(this, this.model.projectEndDate === this.original.projectEndDate, "Project end date cannot be changed.");
+      return Validation.isTrue(this, (!this.model.projectEndDate && !this.original.projectEndDate) || (this.model.projectEndDate && this.original.projectEndDate && this.model.projectEndDate.getTime() === this.original.projectEndDate.getTime()), "Project end date cannot be changed.");
     }
   }
 

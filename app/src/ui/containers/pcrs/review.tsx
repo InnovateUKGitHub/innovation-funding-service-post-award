@@ -3,19 +3,19 @@ import React from "react";
 import { ContainerBase, ReduxContainer } from "../containerBase";
 import { ProjectDto, ProjectRole } from "@framework/types";
 
-import * as ACC from "../../components";
-import * as Actions from "../../redux/actions";
-import * as Selectors from "../../redux/selectors";
+import * as ACC from "@ui/components";
+import * as Actions from "@ui/redux/actions";
+import * as Selectors from "@ui/redux/selectors";
 import { Pending } from "@shared/pending";
 import { PCRsDashboardRoute } from "./dashboard";
 import { PCRReviewItemRoute } from "./viewItem";
 import { PCRReviewReasoningRoute } from "./viewReasoning";
-import { PCRDto, ProjectChangeRequestStatusChangeDto } from "@framework/dtos/pcrDtos";
+import { ProjectChangeRequestReviewItemForTimeExtensionRoute } from "./viewItemForTimeExtension";
+import { PCRDto, PCRItemDto, ProjectChangeRequestStatusChangeDto } from "@framework/dtos/pcrDtos";
 import { IEditorStore } from "@ui/redux";
 import { PCRDtoValidator } from "@ui/validators/pcrDtoValidator";
-import { ProjectChangeRequestItemStatus, ProjectChangeRequestStatus } from "@framework/entities";
+import { ProjectChangeRequestItemStatus, ProjectChangeRequestItemTypeEntity, ProjectChangeRequestStatus } from "@framework/entities";
 import { navigateTo } from "../../redux/actions";
-import { Task, TaskList, TaskListSection } from "@ui/components/taskList";
 
 export interface PCRReviewParams {
   projectId: string;
@@ -85,24 +85,20 @@ class PCRReviewComponent extends ContainerBase<PCRReviewParams, Data, Callbacks>
             <ACC.SummaryListItem label="Types" content={<ACC.Renderers.LineBreakList items={projectChangeRequest.items.map(x => x.typeName)}/>} qa="typesRow" />
           </ACC.SummaryList>
         </ACC.Section>
-        <TaskList qa="taskList">
+        <ACC.TaskList qa="taskList">
           {projectChangeRequest.items.map((x, i) => (
-            <TaskListSection step={i + 1} title={x.typeName} qa={`task-${i}`}>
-              <Task
-                name="View files"
-                status={this.getTaskStatus(x.status)}
-                route={PCRReviewItemRoute.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId, itemId: x.id })}
-              />
-            </TaskListSection>
+            <ACC.TaskListSection key={i} step={i + 1} title={x.typeName} validation={editor.validator.items.results[i].errors} qa={`task-${i}`}>
+              {this.getItemTasks(x)}
+            </ACC.TaskListSection>
           ))}
-          <TaskListSection step={projectChangeRequest.items.length + 1} title={"View more details"} qa="reasoning">
-            <Task
+          <ACC.TaskListSection step={projectChangeRequest.items.length + 1} title={"View more details"} qa="reasoning">
+            <ACC.Task
               name="Reasoning for Innovate UK"
               status={this.getTaskStatus(projectChangeRequest.reasoningStatus)}
               route={PCRReviewReasoningRoute.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId })}
             />
-          </TaskListSection>
-        </TaskList>
+          </ACC.TaskListSection>
+        </ACC.TaskList>
         <Form.Form
           editor={editor}
           onChange={dto => this.props.onChange(projectChangeRequest.projectId, projectChangeRequest.id, dto)}
@@ -133,6 +129,28 @@ class PCRReviewComponent extends ContainerBase<PCRReviewParams, Data, Callbacks>
         </Form.Form>
       </React.Fragment>
     );
+  }
+
+  private getItemTasks(item: PCRItemDto) {
+    // tslint:disable:no-small-switch TODO remove this when more added
+    switch (item.type) {
+      case ProjectChangeRequestItemTypeEntity.TimeExtension:
+        return (
+          <ACC.Task
+            name="View new end date for project"
+            status={this.getTaskStatus(item.status)}
+            route={ProjectChangeRequestReviewItemForTimeExtensionRoute.getLink({ projectId: this.props.projectId, projectChangeRequestId: this.props.pcrId, projectChangeRequestItemId: item.id })}
+          />
+        );
+      default:
+        return (
+          <ACC.Task
+            name="View files"
+            status={this.getTaskStatus(item.status)}
+            route={PCRReviewItemRoute.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId, itemId: item.id })}
+          />
+        );
+    }
   }
 
   getTaskStatus(status: ProjectChangeRequestItemStatus): "To do" | "Complete" | "Incomplete" {
