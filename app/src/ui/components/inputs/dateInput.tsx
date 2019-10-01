@@ -35,9 +35,9 @@ export class DateInput extends BaseInput<DateInputProps, State> {
   }
 
   render() {
-    const dayName = `${this.props.name}-day`;
-    const monthName = `${this.props.name}-month`;
-    const yearName = `${this.props.name}-year`;
+    const dayName = `${this.props.name}_day`;
+    const monthName = `${this.props.name}_month`;
+    const yearName = `${this.props.name}_year`;
 
     const inputClass = classNames(
       "govuk-input",
