@@ -33,6 +33,17 @@ export enum ProjectChangeRequestItemTypeEntity {
   TimeExtension = 90,
 }
 
+export type ProjectChangeRequestStandardItemTypes = (
+  ProjectChangeRequestItemTypeEntity.AccountNameChange|
+  ProjectChangeRequestItemTypeEntity.PartnerAddition|
+  ProjectChangeRequestItemTypeEntity.PartnerWithdrawal|
+  ProjectChangeRequestItemTypeEntity.ProjectSuspension|
+  ProjectChangeRequestItemTypeEntity.ProjectTermination|
+  ProjectChangeRequestItemTypeEntity.MultiplePartnerFinancialVirement|
+  ProjectChangeRequestItemTypeEntity.SinglePartnerFinancialVirement|
+  ProjectChangeRequestItemTypeEntity.ScopeChange
+  );
+
 export interface ProjectChangeRequestForCreateEntity {
   projectId: string;
   partnerId: string;

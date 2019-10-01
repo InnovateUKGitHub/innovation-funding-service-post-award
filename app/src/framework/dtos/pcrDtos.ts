@@ -1,4 +1,4 @@
-import { ProjectChangeRequestItemStatus, ProjectChangeRequestItemTypeEntity, ProjectChangeRequestStatus, } from "@framework/entities";
+import { ProjectChangeRequestItemStatus, ProjectChangeRequestItemTypeEntity, ProjectChangeRequestStandardItemTypes, ProjectChangeRequestStatus, } from "@framework/entities";
 
 export interface PCRBaseDto {
   id: string;
@@ -20,7 +20,7 @@ export interface PCRSummaryDto extends PCRBaseDto {
 }
 
 export interface PCRDto extends PCRBaseDto {
-  items: (PCRItemDto | PCRItemForTimeExtensionDto)[];
+  items: (PCRStandardItemDto | PCRItemForTimeExtensionDto)[];
   comments: string;
   guidance: string;
   reasoningStatus: ProjectChangeRequestItemStatus;
@@ -35,7 +35,12 @@ export interface PCRItemDto extends PCRItemSummaryDto {
   statusName: string;
 }
 
+export interface PCRStandardItemDto extends PCRItemDto {
+  type: ProjectChangeRequestStandardItemTypes;
+}
+
 export interface PCRItemForTimeExtensionDto extends PCRItemDto {
+  type: ProjectChangeRequestItemTypeEntity.TimeExtension;
   projectEndDate: Date | null;
 }
 

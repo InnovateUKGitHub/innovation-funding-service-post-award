@@ -26,7 +26,7 @@ export class TextAreaInput extends BaseInput<TextAreaInputProps, InputState> {
       <textarea
         id={this.props.name}
         name={this.props.name}
-        className={classNames("govuk-textarea")}
+        className={classNames("govuk-textarea", { "govuk-input--error": this.props.hasError === true })}
         rows={this.props.rows || 5}
         value={this.state.value}
         disabled={!!this.props.disabled}

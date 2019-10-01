@@ -1,9 +1,10 @@
-import { PCRDto, PCRItemDto, PCRItemTypeDto, ProjectRole } from "@framework/dtos";
+import { PCRDto, PCRItemDto, PCRItemForTimeExtensionDto, PCRItemTypeDto, PCRStandardItemDto, ProjectRole } from "@framework/dtos";
 import { Result, Results } from "../validation";
 import * as Validation from "./common";
-import { ProjectChangeRequestItemStatus, ProjectChangeRequestStatus } from "@framework/entities";
+import { ProjectChangeRequestItemStatus, ProjectChangeRequestItemTypeEntity, ProjectChangeRequestStatus } from "@framework/entities";
 
 export class PCRDtoValidator extends Results<PCRDto> {
+
   constructor(model: PCRDto, private role: ProjectRole, private original: PCRDto, private readonly recordTypes: PCRItemTypeDto[], showValidationErrors: boolean) {
     super(model, showValidationErrors);
   }
@@ -100,28 +101,49 @@ export class PCRDtoValidator extends Results<PCRDto> {
     );
   }
 
-  items = Validation.requiredChild(
+  private getItemValidator(item: PCRStandardItemDto | PCRItemForTimeExtensionDto) {
+    const canEdit = (this.role & ProjectRole.ProjectManager) ? this.projectManagerCanEdit : false;
+    switch (item.type) {
+      case ProjectChangeRequestItemTypeEntity.TimeExtension:
+        return new PCRTimeExtentionItemDtoValidator(item, canEdit, this.role, this.original.items.find(x => x.id === item.id) as PCRItemForTimeExtensionDto, this.model.status, this.recordTypes, this.showValidationErrors);
+      case ProjectChangeRequestItemTypeEntity.AccountNameChange:
+      case ProjectChangeRequestItemTypeEntity.MultiplePartnerFinancialVirement:
+      case ProjectChangeRequestItemTypeEntity.PartnerAddition:
+      case ProjectChangeRequestItemTypeEntity.PartnerWithdrawal:
+      case ProjectChangeRequestItemTypeEntity.ProjectSuspension:
+      case ProjectChangeRequestItemTypeEntity.ProjectTermination:
+      case ProjectChangeRequestItemTypeEntity.ScopeChange:
+      case ProjectChangeRequestItemTypeEntity.SinglePartnerFinancialVirement:
+        return new PCRStandardItemDtoValdiator(item, canEdit, this.role, this.original.items.find(x => x.id === item.id) as PCRStandardItemDto, this.model.status, this.recordTypes, this.showValidationErrors);
+      default:
+        throw new Error("PCR Type not implimented");
+    }
+  }
+
+  public comments = this.validateComments();
+  public status = this.validateStatus();
+  public reasoningComments = this.validateReasoningComments();
+  public reasoningStatus = this.validateReasonStatus();
+
+  public items = Validation.requiredChild(
     this,
     this.model.items,
-    item => new PCRItemDtoValidator(item, this.role, this.original.items.find(x => x.id === item.id)!, this.model.status, this.recordTypes, this.showValidationErrors),
+    item => this.getItemValidator(item),
     Validation.hasNoDuplicates(this, (this.model.items || []).map(x => x.type), "No duplicate items allowed"),
     "You must select at least one of the types"
   );
-
-  comments = this.validateComments();
-  status = this.validateStatus();
-  reasoningComments = this.validateReasoningComments();
-  reasoningStatus = this.validateReasonStatus();
 }
 
-export class PCRItemDtoValidator extends Results<PCRItemDto> {
-  constructor(model: PCRItemDto,
-              private role: ProjectRole,
-              private original: PCRItemDto,
-              private pcrStatus: ProjectChangeRequestStatus,
-              private readonly recordTypes: PCRItemTypeDto[],
-              showValidationErrors: boolean) {
-
+export class PCRBaseItemDtoValidator<T extends PCRItemDto> extends Results<T> {
+  constructor(
+    model: T,
+    protected readonly canEdit: boolean,
+    protected readonly role: ProjectRole,
+    protected readonly original: T,
+    protected readonly pcrStatus: ProjectChangeRequestStatus,
+    protected readonly recordTypes: PCRItemTypeDto[],
+    showValidationErrors: boolean
+  ) {
     super(model, showValidationErrors);
   }
 
@@ -142,20 +164,46 @@ export class PCRItemDtoValidator extends Results<PCRItemDto> {
       ProjectChangeRequestItemStatus.Complete,
     ];
 
+    const statusWhenNotReqiredToBeComplete = [
+      ProjectChangeRequestStatus.Draft,
+      ProjectChangeRequestStatus.QueriedByInnovateUK,
+      ProjectChangeRequestStatus.QueriedByMonitoringOfficer,
+    ];
+
     return Validation.all(this,
       () => Validation.permitedValues(this, this.model.status, permittedStatus, "Invalid status"),
       () => this.role & ProjectRole.ProjectManager ?
         Validation.isTrue(this,
-          this.model.status === ProjectChangeRequestItemStatus.Complete ||
-          this.pcrStatus === ProjectChangeRequestStatus.Draft ||
-          this.pcrStatus === ProjectChangeRequestStatus.QueriedByInnovateUK ||
-          this.pcrStatus === ProjectChangeRequestStatus.QueriedByMonitoringOfficer
+          this.model.status === ProjectChangeRequestItemStatus.Complete || (statusWhenNotReqiredToBeComplete.indexOf(this.pcrStatus) >= 0)
           , `${this.model.typeName} must be complete`)
         : Validation.isTrue(this, !this.original || this.model.status === this.original.status, "Cannot update item status")
     );
   }
 
-  status = this.validateStatus();
+  public status = this.validateStatus();
 
-  type = this.validateTypes();
+  public type = this.validateTypes();
+}
+
+export class PCRStandardItemDtoValdiator extends PCRBaseItemDtoValidator<PCRStandardItemDto> {
+
+}
+
+export class PCRTimeExtentionItemDtoValidator extends PCRBaseItemDtoValidator<PCRItemForTimeExtensionDto> {
+  private validateEndDate() {
+
+    const isComplete = this.model.status === ProjectChangeRequestItemStatus.Complete;
+
+    if (this.canEdit) {
+      return Validation.all(this,
+        () => isComplete ? Validation.required(this, this.model.projectEndDate, "Enter a project end date") : Validation.valid(this),
+        () => Validation.isDate(this, this.model.projectEndDate, "Please enter a valid date")
+      );
+    }
+    else {
+      return Validation.isTrue(this, this.model.projectEndDate === this.original.projectEndDate, "Project end date cannot be changed.");
+    }
+  }
+
+  projectEndDate = this.validateEndDate();
 }

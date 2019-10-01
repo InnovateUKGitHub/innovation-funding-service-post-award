@@ -9,7 +9,7 @@ import { Pending } from "@shared/pending";
 import { IEditorStore } from "@ui/redux";
 import { ProjectChangeRequestItemStatus } from "@framework/entities";
 import { PCRsDashboardRoute } from "./dashboard";
-import { PCRDto } from "@framework/dtos";
+import { PCRDto, PCRStandardItemDto } from "@framework/dtos";
 import { ProjectChangeRequestPrepareRoute } from "@ui/containers";
 import { ProjectChangeRequestDtoValidatorForCreate } from "@ui/validators/projectChangeRequestDtoValidatorForCreate";
 
@@ -50,7 +50,7 @@ class PCRCreateComponent extends ContainerBase<CreateProjectChangeRequestParams,
     );
   }
 
-  private createNewOption(itemType: Dtos.PCRItemTypeDto): Dtos.PCRItemDto {
+  private createNewOption(itemType: Dtos.PCRItemTypeDto) {
     return {
       id: "",
       guidance: "",
@@ -58,7 +58,7 @@ class PCRCreateComponent extends ContainerBase<CreateProjectChangeRequestParams,
       typeName: itemType.displayName,
       status: ProjectChangeRequestItemStatus.ToDo,
       statusName: ""
-    };
+    } as PCRStandardItemDto;
   }
 
   private renderForm(pcrEditor: IEditorStore<Dtos.PCRDto, ProjectChangeRequestDtoValidatorForCreate>, itemTypes: Dtos.PCRItemTypeDto[]): React.ReactNode {
@@ -79,7 +79,7 @@ class PCRCreateComponent extends ContainerBase<CreateProjectChangeRequestParams,
               update={(model, selectedValue) => {
                 model.items = itemTypes
                   .filter(x => (selectedValue || []).some(y => y.id === x.type.toString()))
-                  .map<Dtos.PCRItemDto>(x => model.items.find(y => x.type === y.type) || this.createNewOption(x));
+                  .map(x => model.items.find(y => x.type === y.type) || this.createNewOption(x));
               }}
             />
           </PCRForm.Fieldset>

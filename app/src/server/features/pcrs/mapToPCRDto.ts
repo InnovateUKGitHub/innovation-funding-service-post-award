@@ -1,9 +1,10 @@
 import {
   ProjectChangeRequestEntity,
   ProjectChangeRequestItemEntity,
-  ProjectChangeRequestItemTypeEntity
+  ProjectChangeRequestItemTypeEntity,
+  ProjectChangeRequestStandardItemTypes
 } from "@framework/entities";
-import { PCRDto, PCRItemDto, PCRItemForTimeExtensionDto, PCRItemTypeDto } from "@framework/dtos";
+import { PCRDto, PCRItemDto, PCRItemForTimeExtensionDto, PCRItemTypeDto, PCRStandardItemDto } from "@framework/dtos";
 
 export const mapToPcrDto = (pcr: ProjectChangeRequestEntity, itemTypes: PCRItemTypeDto[]): PCRDto => ({
   id: pcr.id,
@@ -21,31 +22,45 @@ export const mapToPcrDto = (pcr: ProjectChangeRequestEntity, itemTypes: PCRItemT
   items: mapItems(pcr.items, itemTypes)
 });
 
-const mapItems = (pcrs: ProjectChangeRequestItemEntity[], itemTypes: PCRItemTypeDto[]): PCRItemDto[] => {
+const mapItems = (pcrs: ProjectChangeRequestItemEntity[], itemTypes: PCRItemTypeDto[]) => {
   const filtered = itemTypes.filter(itemType => pcrs.some(x => x.recordTypeId === itemType.recordTypeId));
   return filtered.map(itemType => mapItem(pcrs.find(x => x.recordTypeId === itemType.recordTypeId)!, itemType));
 };
 
-const mapItem = (pcr: ProjectChangeRequestItemEntity, itemType: PCRItemTypeDto): PCRItemDto => {
+const mapItem = (pcr: ProjectChangeRequestItemEntity, itemType: PCRItemTypeDto) => {
   // tslint:disable:no-small-switch TODO remove this when more added
   switch (itemType.type) {
     case ProjectChangeRequestItemTypeEntity.TimeExtension:
-      return mapItemForTimeExtension(pcr, itemType);
+      return mapItemForTimeExtension(pcr, itemType.displayName, itemType.type);
+    case ProjectChangeRequestItemTypeEntity.AccountNameChange:
+    case ProjectChangeRequestItemTypeEntity.MultiplePartnerFinancialVirement:
+    case ProjectChangeRequestItemTypeEntity.PartnerAddition:
+    case ProjectChangeRequestItemTypeEntity.PartnerWithdrawal:
+    case ProjectChangeRequestItemTypeEntity.ProjectSuspension:
+    case ProjectChangeRequestItemTypeEntity.ProjectTermination:
+    case ProjectChangeRequestItemTypeEntity.ScopeChange:
+    case ProjectChangeRequestItemTypeEntity.SinglePartnerFinancialVirement:
+      return mapStandardItem(pcr, itemType.displayName, itemType.type);
     default:
-      return mapBaseItem(pcr, itemType);
+      throw new Error("Type not handled");
   }
 };
 
-const mapBaseItem = (pcr: ProjectChangeRequestItemEntity, itemType: PCRItemTypeDto): PCRItemDto => ({
+const mapBaseItem = (pcr: ProjectChangeRequestItemEntity, typeName: string) => ({
   id: pcr.id,
   guidance: pcr.guidance,
-  type: itemType.type,
-  typeName: itemType.displayName,
+  typeName,
   status: pcr.status,
   statusName: pcr.statusName
 });
 
-const mapItemForTimeExtension = (pcr: ProjectChangeRequestItemEntity, itemType: PCRItemTypeDto): PCRItemForTimeExtensionDto => ({
-  ...mapBaseItem(pcr, itemType),
-  projectEndDate: pcr.projectEndDate
+const mapStandardItem = (pcr: ProjectChangeRequestItemEntity, typeName: string, type: ProjectChangeRequestStandardItemTypes): PCRStandardItemDto => ({
+  ...mapBaseItem(pcr, typeName),
+  type
+});
+
+const mapItemForTimeExtension = (pcr: ProjectChangeRequestItemEntity, typeName: string, type: ProjectChangeRequestItemTypeEntity.TimeExtension): PCRItemForTimeExtensionDto => ({
+  ...mapBaseItem(pcr, typeName),
+  projectEndDate: pcr.projectEndDate,
+  type
 });

@@ -11,4 +11,5 @@ interface InputProps<T> {
     placeholder?: string;
     ariaLabel?: string;
     ariaDescribedBy?: string;
+    hasError?: boolean;
 }

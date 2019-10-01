@@ -4,7 +4,7 @@ import {
   ProjectChangeRequestAddTypeRoute,
   ProjectChangeRequestPrepareRoute,
 } from "@ui/containers";
-import { PCRDto, PCRItemDto, ProjectRole } from "@framework/dtos";
+import { PCRDto, PCRItemDto, PCRStandardItemDto, ProjectRole } from "@framework/dtos";
 import { IContext, ILinkInfo } from "@framework/types";
 import { getPcrEditor } from "@ui/redux/selectors";
 import { ProjectChangeRequestItemStatus } from "@framework/entities";
@@ -29,7 +29,7 @@ export class ProjectChangeRequestAddTypeFormHandler extends StandardFormHandlerB
       .map(x => ({
         type: x,
         status: ProjectChangeRequestItemStatus.ToDo,
-      } as PCRItemDto));
+      } as PCRStandardItemDto));
 
     return {
       ...dto,
