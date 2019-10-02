@@ -6,6 +6,7 @@ import { ErrorCode, IAppError, ISessionUser } from "@framework/types";
 import { NotFoundError } from "@server/features/common/appError";
 import { getErrorResponse, getErrorStatus } from "@server/errorHandlers";
 import { Configuration } from "@server/features/common";
+import { stat } from "fs";
 
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
