@@ -75,6 +75,7 @@ export class Context implements Framework.IContext {
       permissionGroups: new Repositories.PermissionGroupRepository(connectionCallback, this.logger),
       recordTypes: new Repositories.RecordTypeRepository(connectionCallback, this.logger)
     };
+
   }
 
   public readonly repositories: Framework.IRepositories;
@@ -93,11 +94,23 @@ export class Context implements Framework.IContext {
     return new Common.Timer(this.logger, message);
   }
 
+  private authorisation: Framework.Authorisation | null = null;
+
+  private getAuthorisation() {
+    if (this.authorisation) {
+      return Promise.resolve(this.authorisation);
+    }
+    return new GetAllProjectRolesForUser().Run(this).then(x => {
+      this.authorisation = x;
+      return x;
+    });
+  }
+
   private async runAsync<TResult>(runnable: Framework.IAsyncRunnable<TResult>): Promise<TResult> {
     const timer = this.startTimer(runnable.constructor.name);
     try {
-      const auth = await new GetAllProjectRolesForUser().Run(this);
-      if (!(await runnable.accessControl(auth, this))) throw new ForbiddenError();
+      const authorisation = await this.getAuthorisation();
+      if (!(await runnable.accessControl(authorisation, this))) throw new ForbiddenError();
       // await the run because of the finally
       return await runnable.Run(this);
     }
