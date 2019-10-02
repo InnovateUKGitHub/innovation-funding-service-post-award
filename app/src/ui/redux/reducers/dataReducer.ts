@@ -1,5 +1,5 @@
 import { combineReducers } from "redux";
-import { ActionTransitionStart, actionTypes } from "redux-router5";
+import { ActionTransitionSuccess, actionTypes } from "redux-router5";
 import { DataLoadAction } from "../actions/common";
 import { LoadingStatus } from "../../../shared/pending";
 import * as Dtos from "@framework/dtos";
@@ -12,7 +12,7 @@ export interface IDataStore<T> {
 }
 
 const dataStoreReducer = <TData extends {}>(storeKey: string) =>
-  (state: { [key: string]: IDataStore<TData> } = {}, action: DataLoadAction | ActionTransitionStart) => {
+  (state: { [key: string]: IDataStore<TData> } = {}, action: DataLoadAction | ActionTransitionSuccess) => {
   if (action.type === "DATA_LOAD" && action.payload.store === storeKey) {
     const existing = state[action.payload.id];
     const err = action.payload.error;
@@ -26,7 +26,7 @@ const dataStoreReducer = <TData extends {}>(storeKey: string) =>
     return Object.assign({}, state, { [action.payload.id]: pending });
   }
 
-  if (action.type === actionTypes.TRANSITION_START && action.payload.previousRoute !== null) {
+  if (action.type === actionTypes.TRANSITION_SUCCESS && action.payload.previousRoute !== null) {
     const result = Object.assign({}, state);
     Object.keys(result).forEach(itemKey => {
       const pending = result[itemKey];

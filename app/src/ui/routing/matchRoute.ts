@@ -2,7 +2,7 @@ import React from "react";
 import { State } from "router5";
 import { routeConfig, RouteKeys } from "./routeConfig";
 import { ErrorNotFoundRoute } from "@ui/containers";
-import { RootState } from "@ui/redux";
+import { IStores, RootState } from "@ui/redux";
 import { AsyncThunk, DataLoadAction } from "@ui/redux/actions";
 import { PageTitleState } from "@ui/redux/reducers/pageTitleReducer";
 import { Authorisation } from "@framework/types";
@@ -14,8 +14,8 @@ export interface MatchedRoute {
   accessControl?: (auth: Authorisation, params: {}, config: IClientConfig) => boolean;
   getParams: (route: State) => {};
   getLoadDataActions: (params: {}, auth: Authorisation) => AsyncThunk<DataLoadAction | void>[];
-  container: React.ComponentClass<any>;
-  getTitle: (store: RootState, params: {}) => PageTitleState;
+  container: React.ComponentClass<any> | React.FunctionComponent<any>;
+  getTitle: (store: RootState, params: {}, stores: IStores) => PageTitleState;
 }
 
 export function matchRoute(route: State | null | undefined): MatchedRoute {
