@@ -6,7 +6,7 @@ import { PartnerDto } from "@framework/types";
 export interface IPartnersApi {
   getAll: (params: ApiParams<{}>) => Promise<PartnerDto[]>;
   getAllByProjectId: (params: ApiParams<{ projectId: string }>) => Promise<PartnerDto[]>;
-  get: (params: ApiParams<{ partnerId: string }>) => Promise<PartnerDto | null>;
+  get: (params: ApiParams<{ partnerId: string }>) => Promise<PartnerDto>;
 }
 
 class Controller extends ControllerBase<PartnerDto> implements IPartnersApi {

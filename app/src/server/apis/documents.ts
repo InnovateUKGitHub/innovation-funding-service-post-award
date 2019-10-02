@@ -18,7 +18,7 @@ import { GetProjectDocumentQuery } from "@server/features/documents/getProjectDo
 import { UploadProjectChangeRequestDocumentOrItemDocumentCommand } from "@server/features/documents/uploadProjectChangeRequestDocumentOrItemDocument";
 
 export interface IDocumentsApi {
-  getClaimDocuments: (params: ApiParams<{ projectId: string, partnerId: string, periodId: number, description: DocumentDescription }>) => Promise<DocumentSummaryDto[]>;
+  getClaimDocuments: (params: ApiParams<{ projectId: string, partnerId: string, periodId: number, description?: DocumentDescription }>) => Promise<DocumentSummaryDto[]>;
   getClaimDetailDocuments: (params: ApiParams<{ claimDetailKey: ClaimDetailKey }>) => Promise<DocumentSummaryDto[]>;
   getProjectChangeRequestDocumentsOrItemDocuments: (params: ApiParams<{ projectId: string, projectChangeRequestIdOrItemId: string }>) => Promise<DocumentSummaryDto[]>;
   getProjectDocuments: (params: ApiParams<{ projectId: string }>) => Promise<DocumentSummaryDto[]>;
@@ -126,9 +126,9 @@ class Controller extends ControllerBase<DocumentSummaryDto> implements IDocument
     );
   }
 
-  public async getClaimDocuments(params: ApiParams<{ projectId: string, partnerId: string, periodId: number, description: string }>) {
+  public async getClaimDocuments(params: ApiParams<{ projectId: string, partnerId: string, periodId: number, description?: string }>) {
     const { projectId, partnerId, periodId, description } = params;
-    const query = new GetClaimDocumentsQuery({ projectId, partnerId, periodId }, { description });
+    const query = new GetClaimDocumentsQuery({ projectId, partnerId, periodId }, description ? { description }: undefined);
     return contextProvider.start(params).runQuery(query);
   }
 
