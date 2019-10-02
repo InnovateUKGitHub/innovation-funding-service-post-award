@@ -6,7 +6,6 @@ import { Provider } from "react-redux";
 import { RouterProvider } from "react-router5";
 import { constants as routerConstants, Router, State } from "router5";
 
-import { errorHandlerRender } from "./errorHandlers";
 import { rootReducer, RootState, setupInitialState, setupMiddleware } from "@ui/redux";
 import { configureRouter, MatchedRoute, matchRoute } from "@ui/routing";
 import { App } from "@ui/containers/app";
@@ -18,6 +17,7 @@ import { GetAllProjectRolesForUser } from "./features/projects/getAllProjectRole
 import { Logger } from "./features/common/logger";
 import { Authorisation, IAppError, IClientUser } from "@framework/types";
 import { IClientConfig } from "@ui/redux/reducers/configReducer";
+import { getErrorStatus } from "./errorHandlers";
 
 async function loadData(dispatch: Dispatch, getState: () => RootState, dataCalls: AsyncThunk<any>[]): Promise<void> {
   const allPromises = dataCalls.map(action => action(dispatch, getState, null));
@@ -106,7 +106,7 @@ export async function serverRender(req: Request, res: Response, error?: IAppErro
     const matched = matchRoute(routeState);
 
     await dispatchPageTitleAction(matched, {}, store);
-    errorHandlerRender(res, renderApp(router, store), e);
+    res.status(getErrorStatus(e)).send(renderApp(router, store));
   }
 }
 

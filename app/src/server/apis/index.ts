@@ -14,8 +14,8 @@ import * as projectContacts from "./projectContacts";
 import * as users from "./users";
 
 import { ControllerBase } from "./controllerBase";
-import { errorHandlerApi } from "../errorHandlers";
 import { NotFoundError } from "../features/common/appError";
+import { getErrorResponse, getErrorStatus } from "@server/errorHandlers";
 
 export interface IApiClient {
   claimDetails: claimDetails.IClaimDetailsApi;
@@ -55,4 +55,7 @@ Object.keys(serverApis)
   .map(key => ({ path: serverApis[key].path, controller: serverApis[key] }))
   .forEach(item => router.use("/" + item.path, item.controller.router));
 
-router.all("*", (req, res) => errorHandlerApi(res, new NotFoundError()));
+router.all("*", (req, res) => {
+  const error = new NotFoundError();
+  res.status(getErrorStatus(error)).json(getErrorResponse(error));
+});

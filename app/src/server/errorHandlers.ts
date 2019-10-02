@@ -5,7 +5,7 @@ import { ValidationError } from "./features/common";
 
 const Log = new Logger();
 
-const getErrorStatus = (err?: IAppError) => {
+export const getErrorStatus = (err?: IAppError) => {
   const code = !!err ? err.code : ErrorCode.UNKNOWN_ERROR;
 
   switch (code) {
@@ -33,16 +33,10 @@ const getErrorStatus = (err?: IAppError) => {
   }
 };
 
-export const errorHandlerApi = (res: Response, err?: IAppError) => {
+export const getErrorResponse = (err: IAppError) => {
   const code = !!err ? err.code : ErrorCode.UNKNOWN_ERROR;
   const message = !!err ? err.message : "Something went wrong";
   const results = !!err ? err.results : null;
-  const status = getErrorStatus(err);
 
-  return res.status(status).json({ code, message, results });
-};
-
-export const errorHandlerRender = (res: Response, html: string, err?: IAppError) => {
-  const status = getErrorStatus(err);
-  return res.status(status).send(html);
+  return { code, message, results };
 };

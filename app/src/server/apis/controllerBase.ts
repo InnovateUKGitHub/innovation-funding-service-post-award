@@ -2,9 +2,9 @@ import mimeTypes from "mime-types";
 import multer from "multer";
 import express, { Request, Response } from "express";
 
-import { IAppError, ISessionUser } from "@framework/types";
+import { ErrorCode, IAppError, ISessionUser } from "@framework/types";
 import { NotFoundError } from "@server/features/common/appError";
-import { errorHandlerApi } from "@server/errorHandlers";
+import { getErrorResponse, getErrorStatus } from "@server/errorHandlers";
 import { Configuration } from "@server/features/common";
 
 const storage = multer.memoryStorage();
@@ -141,7 +141,7 @@ export abstract class ControllerBaseWithSummary<TSummaryDto, TDto> {
           }
           resp.status(successStatus).send(result);
         })
-        .catch((e: IAppError) => errorHandlerApi(resp, e));
+        .catch((e: IAppError) => this.handleError(resp, e));
     };
   }
 
@@ -163,8 +163,12 @@ export abstract class ControllerBaseWithSummary<TSummaryDto, TDto> {
           resp.writeHead(successStatus, head);
           return result.stream.pipe(resp);
         })
-        .catch((e: IAppError) => errorHandlerApi(resp, e));
+        .catch((e: IAppError) => this.handleError(resp, e));
     };
+  }
+
+  private handleError(res: Response, err: IAppError) {
+    return res.status(getErrorStatus(err)).json(getErrorResponse(err));
   }
 }
 
