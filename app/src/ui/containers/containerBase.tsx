@@ -10,9 +10,10 @@ import { matchRoute } from "@ui/routing/matchRoute";
 import { Authorisation, IClientUser, ILinkInfo } from "@framework/types";
 import { IClientConfig } from "@ui/redux/reducers/configReducer";
 
-interface BaseProps {
+export interface BaseProps {
     messages: string[];
     route: RouteState;
+    config: IClientConfig;
 }
 
 export type ContainerProps<TParams, TData, TCallbacks> = TParams & TData & TCallbacks & BaseProps;
@@ -48,7 +49,7 @@ class ConnectWrapper<TParams, TData, TCallbacks> {
         const messages = state.messages.map(x => x.message);
         const route = state.router.route!;
 
-        return Object.assign(data, params, { messages, route });
+        return Object.assign(data, params, { messages, route, config: state.config });
     }
 
     private mapDispachToProps(dispatch: ThunkDispatch<RootState, void, RootActions>) {
