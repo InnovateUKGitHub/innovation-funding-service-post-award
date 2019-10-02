@@ -5,14 +5,6 @@ import { IConfig } from "../../server/features/common";
 import { IClientConfig } from "./reducers/configReducer";
 
 export function setupInitialState(route: RouterState | undefined, user: IClientUser, config: IClientConfig): RootState {
-  if(!route) {
-    route = {
-      name: "error",
-      params: {},
-      path: "/path"
-    };
-  }
-
   return {
     user,
     router: { route },

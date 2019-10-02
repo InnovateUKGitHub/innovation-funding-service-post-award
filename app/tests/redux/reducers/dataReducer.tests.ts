@@ -2,7 +2,7 @@ import { actionTypes } from "redux-router5";
 import { dataReducer } from "../../../src/ui/redux/reducers";
 import { LoadingStatus } from "../../../src/shared/pending";
 
-const navigate = (): any => ({ type: actionTypes.TRANSITION_START, payload: { previousRoute: "" } });
+const navigate = (): any => ({ type: actionTypes.TRANSITION_SUCCESS, payload: { previousRoute: "" } });
 
 const claimDataAction = (id: any, data: any, status: number = 1, error: any = {}): any => ({
   type: "DATA_LOAD",

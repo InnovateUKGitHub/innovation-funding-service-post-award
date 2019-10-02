@@ -1,35 +1,23 @@
 import React from "react";
 import { Request, Response } from "express";
 import { renderToString } from "react-dom/server";
-import { AnyAction, createStore, Dispatch, Store } from "redux";
+import { AnyAction, createStore, Store } from "redux";
 import { Provider } from "react-redux";
 import { RouterProvider } from "react-router5";
 import { constants as routerConstants, Router, State } from "router5";
 
-import { rootReducer, RootState, setupInitialState, setupMiddleware } from "@ui/redux";
+import { createStores, IStores, rootReducer, RootState, setupInitialState, setupMiddleware, StoresProvider } from "@ui/redux";
 import { configureRouter, MatchedRoute, matchRoute } from "@ui/routing";
 import { App } from "@ui/containers/app";
-import { AsyncThunk, handleEditorError, udpatePageTitle, updateEditorAction } from "@ui/redux/actions";
+import * as Actions from "@ui/redux/actions";
 import { renderHtml } from "./html";
 import { ForbiddenError, FormHandlerError, NotFoundError } from "./features/common/appError";
 import contextProvider from "./features/common/contextProvider";
 import { GetAllProjectRolesForUser } from "./features/projects/getAllProjectRolesForUser";
 import { Logger } from "./features/common/logger";
-import { Authorisation, IAppError, IClientUser } from "@framework/types";
+import { ErrorCode, IAppError, IClientUser, IContext } from "@framework/types";
 import { IClientConfig } from "@ui/redux/reducers/configReducer";
 import { getErrorStatus } from "./errorHandlers";
-
-async function loadData(dispatch: Dispatch, getState: () => RootState, dataCalls: AsyncThunk<any>[]): Promise<void> {
-  const allPromises = dataCalls.map(action => action(dispatch, getState, null));
-  const loadingCount = getState().loadStatus;
-
-  // nothing is loading so safe to return and then render
-  if (loadingCount === 0) {
-    return Promise.resolve();
-  }
-  // something is loading so wait for that to finish and then try again
-  return Promise.all(allPromises).then(() => loadData(dispatch, getState, dataCalls));
-}
 
 export async function serverRender(req: Request, res: Response, error?: IAppError): Promise<void> {
   try {
@@ -45,51 +33,39 @@ export async function serverRender(req: Request, res: Response, error?: IAppErro
     }
 
     const context = contextProvider.start({ user: req.session!.user });
-    const roleInfo = await context.runQuery(new GetAllProjectRolesForUser()).then(x => x.permissions);
-    const auth = new Authorisation(roleInfo);
-    const user: IClientUser = { ...req.session!.user, roleInfo };
-    const clientConfig: IClientConfig = {
-      ifsRoot: context.config.urls.ifsRoot,
-      features: context.config.features,
-      standardOverheadRate: context.config.standardOverheadRate,
-      ssoEnabled: context.config.sso.enabled,
-      maxFileSize: context.config.maxFileSize,
-      maxUploadFileCount: context.config.maxUploadFileCount
-    };
+    const auth = await context.runQuery(new GetAllProjectRolesForUser());
+    const user: IClientUser = { ...req.session!.user, roleInfo: auth.permissions };
+    const clientConfig = getClientConfig(context);
 
     const initialState = setupInitialState(route, user, clientConfig);
     const middleware = setupMiddleware(router, false);
     const store = createStore(rootReducer, initialState, middleware);
+
+    const stores = createStores(
+      () => store.getState(),
+      (action) => process.nextTick(() => store.dispatch(action as AnyAction))
+    );
+
     const matched = matchRoute(route);
-    const params = matched && matched.getParams && matched.getParams(route) || {};
+    const params = matched.getParams(route);
 
     if (matched.accessControl && !matched.accessControl(auth, params, clientConfig)) {
       throw new ForbiddenError();
     }
 
-    const actions = matched && matched.getLoadDataActions && matched.getLoadDataActions(params, auth) || [];
+    // ToDo remove once we no longer need to get LoadDataActions
+    const actions = matched.getLoadDataActions && matched.getLoadDataActions(params, auth) || [];
 
-    if (error) {
-      actions.push((dispatch) => {
-        dispatch(updateEditorAction(error.key, error.store, error.dto, error.result));
-        return Promise.resolve();
-      });
-      actions.push((dispatch) => {
-        dispatch(handleEditorError({
-          id: error.key,
-          dto: error.dto,
-          validation: error.result,
-          error: error.error,
-          store: error.store,
-          scrollToTop: false
-        }));
-        return Promise.resolve();
-      });
-    }
+    await loadAllData(store, () => {
+      // send all the data actions round the dispatch loop
+      actions.forEach(x => store.dispatch(x as any));
+      // render the app to cause any other actions to go round the loop
+      renderApp(router, store, stores);
+    });
 
-    await loadData(store.dispatch, store.getState, actions);
-    await dispatchPageTitleAction(matched, params, store);
-    res.send(renderApp(router, store));
+    onComplete(store, stores, matched, params, error);
+
+    res.send(renderApp(router, store, stores));
   }
   catch (e) {
 
@@ -101,19 +77,69 @@ export async function serverRender(req: Request, res: Response, error?: IAppErro
       path: ""
     };
 
+    const initalState = {
+      router: { route: routeState }
+    };
+
     const router = configureRouter();
-    const store = createStore(rootReducer, { router: { route: routeState } });
+    const store = createStore(rootReducer, initalState);
+    const stores = createStores(
+      () => store.getState(),
+      (action) => process.nextTick(() => store.dispatch(action as AnyAction))
+    );
+
     const matched = matchRoute(routeState);
 
-    await dispatchPageTitleAction(matched, {}, store);
-    res.status(getErrorStatus(e)).send(renderApp(router, store));
+    store.dispatch(Actions.setPageTitle(matched.getTitle(store.getState(), routeState.params, stores)));
+
+    res.status(getErrorStatus(e)).send(renderApp(router, store, stores));
   }
 }
 
-function dispatchPageTitleAction(route: MatchedRoute, params: {}, store: Store<RootState, AnyAction>) {
-  const action = udpatePageTitle(route, params);
-  return action(store.dispatch, store.getState, null);
+function loadAllData(store: Store, render: () => void): Promise<void> {
+  return new Promise((resolve, reject) => {
+    const unsub = store.subscribe(() => {
+      if (store.getState().loadStatus === 0) {
+        // render the app to cause any other actions to go round the loop
+        render();
+
+        // queue to see if all data loads are finished
+        // if they havnt finished it is preusmed a promise is still to resolve
+        // casuing another store changed event
+        process.nextTick(() => {
+          if (store.getState().loadStatus === 0) {
+            unsub();
+            resolve();
+          }
+        });
+      }
+    });
+
+    // inital action to kick of callbacks
+    store.dispatch(Actions.initaliseAction());
+  });
 }
+
+const onComplete = (store: Store, stores: IStores, matched: MatchedRoute, params: {}, error: FormHandlerError | undefined) => {
+  // validation errror occoured so add it into store as validation error
+  if (error && error.code === ErrorCode.VALIDATION_ERROR) {
+    store.dispatch(Actions.updateEditorAction(error.key, error.store, error.dto, error.error.results));
+  }
+  // some other validation errror occoured so add it into store as actual error
+  // need to pair with the submit action to keep count in sync
+  else if (error) {
+    store.dispatch(Actions.handleEditorSubmit(error.key, error.store, error.dto, error.result));
+    store.dispatch(Actions.handleEditorError({
+      id: error.key,
+      dto: error.dto,
+      validation: error.result,
+      error: error.error,
+      store: error.store,
+      scrollToTop: false
+    }));
+  }
+  store.dispatch(Actions.setPageTitle(matched.getTitle(store.getState(), params, stores)));
+};
 
 // wrap callback in Promise so we use await for consistency
 function startRouter(req: Request, router: Router): Promise<State> {
@@ -128,11 +154,14 @@ function startRouter(req: Request, router: Router): Promise<State> {
   });
 }
 
-function renderApp(router: Router, store: Store<RootState>): string {
+function renderApp(router: Router, store: Store<RootState>, stores: IStores): string {
+
   const html = renderToString(
     <Provider store={store}>
       <RouterProvider router={router}>
-        <App />
+        <StoresProvider value={stores}>
+          <App store={store} />
+        </StoresProvider>
       </RouterProvider>
     </Provider>
   );
@@ -140,4 +169,15 @@ function renderApp(router: Router, store: Store<RootState>): string {
   const state = store.getState();
 
   return renderHtml(html, state.title.htmlTitle, state);
+}
+
+function getClientConfig(context: IContext): IClientConfig {
+  return {
+    ifsRoot: context.config.urls.ifsRoot,
+    features: context.config.features,
+    standardOverheadRate: context.config.standardOverheadRate,
+    ssoEnabled: context.config.sso.enabled,
+    maxFileSize: context.config.maxFileSize,
+    maxUploadFileCount: context.config.maxUploadFileCount
+  };
 }
