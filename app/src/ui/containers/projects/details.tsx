@@ -1,11 +1,10 @@
 import React from "react";
-import { ContainerBase, ReduxContainer } from "../containerBase";
+import { BaseProps, ContainerBase, defineRoute } from "../containerBase";
 import * as ACC from "../../components";
 import { Pending } from "../../../shared/pending";
-import * as Actions from "../../redux/actions";
-import * as Selectors from "../../redux/selectors";
 import { PartnerDto, ProjectDto, ProjectRole } from "@framework/types";
 import { AccessibilityText } from "@ui/components/renderers";
+import { StoresConsumer } from "@ui/redux";
 
 interface Data {
     projectDetails: Pending<ProjectDto>;
@@ -108,27 +107,26 @@ class ProjectDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
     }
 }
 
-const containerDefinition = ReduxContainer.for<Params, Data, Callbacks>(ProjectDetailsComponent);
+const ProjectDetailsContainer = (props: Params & BaseProps) => (
+    <StoresConsumer>
+        {
+            stores => (
+                <ProjectDetailsComponent
+                    projectDetails={stores.projects.getById(props.id)}
+                    partners={stores.partners.getPartnersForProject(props.id)}
+                    contacts={stores.contacts.getAllByProjectId(props.id)}
+                    {...props}
+                />
+            )
+        }
+    </StoresConsumer>
+);
 
-export const ProjectDetails = containerDefinition.connect({
-    withData: (state, props) => ({
-        contacts: Selectors.findContactsByProject(props.id).getPending(state),
-        partners: Selectors.findPartnersByProject(props.id).getPending(state),
-        projectDetails: Selectors.getProject(props.id).getPending(state)
-    }),
-    withCallbacks: () => ({})
-});
-
-export const ProjectDetailsRoute = containerDefinition.route({
+export const ProjectDetailsRoute = defineRoute({
     routeName: "projectDetails",
     routePath: "/projects/:id/details",
+    container: ProjectDetailsContainer,
     getParams: (r) => ({ id: r.params.id }),
-    getLoadDataActions: (params) => [
-        Actions.loadProject(params.id),
-        Actions.loadContactsForProject(params.id),
-        Actions.loadPartnersForProject(params.id),
-    ],
-    container: ProjectDetails,
     getTitle: () => ({
         htmlTitle: "Project details",
         displayTitle: "Project details"
