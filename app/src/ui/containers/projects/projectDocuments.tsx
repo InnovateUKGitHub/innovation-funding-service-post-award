@@ -1,13 +1,12 @@
 import React from "react";
-import { ContainerBaseWithState, ContainerProps, ReduxContainer } from "../containerBase";
+import { BaseProps, ContainerBaseWithState, ContainerProps, defineRoute } from "../containerBase";
 import { PartnerDto, ProjectDto, ProjectRole } from "@framework/dtos";
 import { Pending } from "../../../shared/pending";
 import * as ACC from "../../components";
-import * as Selectors from "../../redux/selectors";
-import * as Actions from "../../redux/actions";
 import { IEditorStore } from "../../redux";
 import { MultipleDocumentUpdloadDtoValidator } from "../../validators/documentUploadValidator";
 import { getFileSize } from "@framework/util";
+import { StoresConsumer } from "@ui/redux";
 
 export interface ProjectDocumentPageParams {
   projectId: string;
@@ -18,9 +17,7 @@ interface Data {
   partners: Pending<PartnerDto[]>;
   documents: Pending<DocumentSummaryDto[]>;
   editor: Pending<IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>>;
-  maxFileSize: number;
   isClient: boolean;
-  features: IFeatureFlags;
 }
 
 interface CombinedData {
@@ -31,9 +28,7 @@ interface CombinedData {
 }
 
 interface Callbacks {
-  clearMessage: () => void;
-  validate: (projectId: string, dto: MultipleDocumentUploadDto) => void;
-  uploadFile: (projectId: string, dto: MultipleDocumentUploadDto) => void;
+  onChange: (save: boolean, dto: MultipleDocumentUploadDto) => void;
 }
 
 interface State {
@@ -60,11 +55,6 @@ class ProjectDocumentsComponent extends ContainerBaseWithState<ProjectDocumentPa
     return <ACC.PageLoader pending={combined} render={x => this.renderContents(x)} />;
   }
 
-  private onFileChange(projectId: string, dto: MultipleDocumentUploadDto) {
-    this.props.clearMessage();
-    this.props.validate(projectId, dto);
-  }
-
   private renderContents({ project, partners, documents, editor }: CombinedData) {
     const UploadForm = ACC.TypedForm<MultipleDocumentUploadDto>();
 
@@ -76,13 +66,13 @@ class ProjectDocumentsComponent extends ContainerBaseWithState<ProjectDocumentPa
         error={editor.error}
         project={project}
       >
-        <ACC.Renderers.Messages messages={this.props.messages}/>
+        <ACC.Renderers.Messages messages={this.props.messages} />
         <ACC.Section>
           <UploadForm.Form
             enctype="multipart"
             editor={editor}
-            onChange={dto => this.onFileChange(project.id, dto)}
-            onSubmit={() => this.props.uploadFile(project.id, editor.data)}
+            onChange={dto => this.props.onChange(false, dto)}
+            onSubmit={() => this.props.onChange(true, editor.data)}
             qa="projectDocumentUpload"
           >
             <UploadForm.Fieldset heading="Upload">
@@ -91,7 +81,7 @@ class ProjectDocumentsComponent extends ContainerBaseWithState<ProjectDocumentPa
                 <p>There is no restriction on the type of file you can upload.</p>
                 <p>Each document must be:</p>
                 <ul>
-                  <li>less than {getFileSize(this.props.maxFileSize)} in file size</li>
+                  <li>less than {getFileSize(this.props.config.maxFileSize)} in file size</li>
                   <li>given a unique file name that describes its contents</li>
                 </ul>
               </ACC.Info>
@@ -147,14 +137,14 @@ class ProjectDocumentsComponent extends ContainerBaseWithState<ProjectDocumentPa
   }
 
   private renderDocumentsFilter() {
-    if (!this.props.isClient || !this.props.features.documentFiltering) {
+    if (!this.props.isClient || !this.props.config.features.documentFiltering) {
       return null;
     }
     const FilterForm = ACC.TypedForm<{ filterBoxText: string | null }>();
 
     return (
       // tslint:disable-next-line:no-empty
-      <FilterForm.Form data={this.state} onSubmit={() => {}} onChange={x => this.setState(x)} qa="document-search-form">
+      <FilterForm.Form data={this.state} onSubmit={() => { }} onChange={x => this.setState(x)} qa="document-search-form">
         <FilterForm.String name="document-filter" labelHidden={true} value={x => x.filterBoxText} update={(x, v) => x.filterBoxText = v} placeholder="Search documents" />
       </FilterForm.Form>
     );
@@ -172,38 +162,31 @@ class ProjectDocumentsComponent extends ContainerBaseWithState<ProjectDocumentPa
   }
 }
 
-const container = ReduxContainer.for<ProjectDocumentPageParams, Data, Callbacks>(ProjectDocumentsComponent);
+const ProjectDocumentsContainer = (props: ProjectDocumentPageParams & BaseProps) => (
+  <StoresConsumer>
+    {stores => (
+      <ProjectDocumentsComponent
+        project={stores.projects.getById(props.projectId)}
+        partners={stores.partners.getPartnersForProject(props.projectId)}
+        documents={stores.documents.getProjectDocuments(props.projectId)}
+        isClient={stores.config.isClient()}
+        editor={stores.documents.getProjectDocumentEditor(props.projectId)}
+        onChange={(saving, dto) => {
+          stores.messages.clearMessages();
+          const successMessage = dto.files.length === 1 ? `Your document has been uploaded.` : `${dto.files.length} documents have been uploaded.`;
+          stores.documents.updateProjectDocumentsEditor(saving, props.projectId, dto, successMessage);
+        }}
+        {...props}
+      />
+    )}
+  </StoresConsumer>
+);
 
-const ProjectDocuments = container.connect({
-  withData: (state, props) => ({
-    project: Selectors.getProject(props.projectId).getPending(state),
-    partners: Selectors.findPartnersByProject(props.projectId).getPending(state),
-    documents: Selectors.getProjectDocuments(props.projectId).getPending(state),
-    editor: Selectors.getProjectDocumentEditor(props.projectId).get(state),
-    maxFileSize: Selectors.getMaxFileSize(state),
-    isClient: state.isClient,
-    features: state.config.features
-  }),
-  withCallbacks: (dispatch) => ({
-    clearMessage: () => dispatch(Actions.removeMessages()),
-    validate: (projectId, dto) => dispatch(Actions.updateProjectDocumentEditor(projectId, dto)),
-    uploadFile: (projectId, dto) => {
-      const successMessage = dto.files.length === 1 ? `Your document has been uploaded.` : `${dto.files.length} documents have been uploaded.`;
-      dispatch(Actions.uploadProjectDocument(projectId, dto, () => dispatch(Actions.loadProjectDocuments(projectId)), successMessage));
-    }
-  })
-});
-
-export const ProjectDocumentsRoute = container.route({
+export const ProjectDocumentsRoute = defineRoute({
   routeName: "projectDocuments",
   routePath: "/projects/:projectId/documents",
-  container: ProjectDocuments,
+  container: ProjectDocumentsContainer,
   getParams: (route) => ({ projectId: route.params.projectId }),
-  getLoadDataActions: (params) => [
-    Actions.loadProject(params.projectId),
-    Actions.loadPartnersForProject(params.projectId),
-    Actions.loadProjectDocuments(params.projectId),
-  ],
   getTitle: () => ({
     htmlTitle: "Project documents - View project",
     displayTitle: "Project documents"

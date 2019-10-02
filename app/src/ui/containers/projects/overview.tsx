@@ -1,22 +1,21 @@
 import React from "react";
 
-import { ContainerBase, ReduxContainer } from "../containerBase";
-import * as Actions from "@ui/redux/actions";
-import { MonitoringReportDashboardRoute } from "../monitoringReports";
-import * as Selectors from "@ui/redux/selectors";
+import { ProjectForecastRoute } from "./projectForecasts";
+import { BaseProps, ContainerBase, defineRoute } from "../containerBase";
 import * as Dtos from "@framework/dtos";
 import { Pending } from "@shared/pending";
 import { IClientUser, PartnerDto, ProjectDto, ProjectRole } from "@framework/types";
 import { ProjectDashboardRoute } from "./dashboard";
 import { AllClaimsDashboardRoute, ClaimsDashboardRoute, ViewForecastRoute } from "../claims";
 import * as ACC from "@ui/components";
-import { ProjectForecastRoute } from "./projectForecasts";
+import { MonitoringReportDashboardRoute } from "../monitoringReports";
 import { ProjectChangeRequestsRoute } from "./projectChangeRequests";
 import { ProjectDocumentsRoute } from "./projectDocuments";
 import { ProjectDetailsRoute } from "./details";
 import { IClientConfig } from "@ui/redux/reducers/configReducer";
 import { NavigationCard } from "@ui/components";
 import { PCRsDashboardRoute } from "../pcrs/dashboard";
+import { StoresConsumer } from "@ui/redux";
 
 interface Data {
   projectDetails: Pending<Dtos.ProjectDto>;
@@ -60,15 +59,15 @@ class ProjectOverviewComponent extends ContainerBase<Params, Data, {}> {
   }
 
   private renderProjectOveriewDetails(project: ProjectDto, partner: PartnerDto) {
-    if((project.roles & ProjectRole.ProjectManager) && partner) {
+    if ((project.roles & ProjectRole.ProjectManager) && partner) {
       return this.renderPMOverviewDetails(project, partner);
     }
 
-    if((project.roles & ProjectRole.MonitoringOfficer)) {
+    if ((project.roles & ProjectRole.MonitoringOfficer)) {
       return this.renderMOOverviewDetails(project);
     }
 
-    if((project.roles & ProjectRole.FinancialContact) && partner) {
+    if ((project.roles & ProjectRole.FinancialContact) && partner) {
       return this.renderFCOverviewDetails(partner);
     }
 
@@ -155,7 +154,7 @@ class ProjectOverviewComponent extends ContainerBase<Params, Data, {}> {
     ].filter(x => x.link.accessControl(this.props.user, this.props.config));
 
     // special case if not fc shouldnt have link to ViewForecastRoute from this page... the view forecast route has permission from the project forecasts route
-    if(projectRole & (ProjectRole.MonitoringOfficer | ProjectRole.ProjectManager)) {
+    if (projectRole & (ProjectRole.MonitoringOfficer | ProjectRole.ProjectManager)) {
       links = links.filter(x => x.link.routeName !== ViewForecastRoute.routeName);
     }
 
@@ -167,32 +166,31 @@ class ProjectOverviewComponent extends ContainerBase<Params, Data, {}> {
   }
 }
 
-const containerDefinition = ReduxContainer.for<Params, Data, {}>(ProjectOverviewComponent);
+const ProjectOverviewContainer = (props: Params & BaseProps) => {
+  return (
+    <StoresConsumer>
+      {
+        stores =>
+          <ProjectOverviewComponent
+            projectDetails={stores.projects.getById(props.projectId)}
+            partners={stores.partners.getPartnersForProject(props.projectId)}
+            contacts={stores.contacts.getAllByProjectId(props.projectId)}
+            user={stores.users.getCurrentUser()}
+            {...props}
+          />
+      }
+    </StoresConsumer>
+  );
+};
 
-export const ProjectOverview = containerDefinition.connect({
-  withData: (state, props) => ({
-    contacts: Selectors.findContactsByProject(props.projectId).getPending(state),
-    partners: Selectors.findPartnersByProject(props.projectId).getPending(state),
-    projectDetails: Selectors.getProject(props.projectId).getPending(state),
-    config: state.config,
-    user: state.user
-  }),
-  withCallbacks: () => ({})
-});
-
-export const ProjectOverviewRoute = containerDefinition.route({
+export const ProjectOverviewRoute = defineRoute({
   routeName: "projectOverview",
   routePath: "/projects/:projectId/overview",
   getParams: (r) => ({ projectId: r.params.projectId }),
-  getLoadDataActions: (params) => [
-    Actions.loadProject(params.projectId),
-    Actions.loadContactsForProject(params.projectId),
-    Actions.loadPartnersForProject(params.projectId),
-  ],
-  container: ProjectOverview,
+  container: ProjectOverviewContainer,
+  accessControl: (auth, params) => auth.forProject(params.projectId).hasAnyRoles(ProjectRole.FinancialContact, ProjectRole.ProjectManager, ProjectRole.MonitoringOfficer),
   getTitle: () => ({
     htmlTitle: "Project overview",
     displayTitle: "Project overview"
   }),
-  accessControl: (auth, { projectId }) => auth.forProject(projectId).hasAnyRoles(ProjectRole.FinancialContact, ProjectRole.ProjectManager, ProjectRole.MonitoringOfficer)
 });

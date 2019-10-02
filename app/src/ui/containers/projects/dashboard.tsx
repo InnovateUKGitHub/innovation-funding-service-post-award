@@ -1,29 +1,21 @@
+import { DateTime } from "luxon";
 import classNames from "classnames";
-import * as Selectors from "../../redux/selectors";
-import React from "react";
 import * as ACC from "../../components";
 import { Pending } from "../../../shared/pending";
-import * as Actions from "../../redux/actions";
-import { ContainerBaseWithState, ContainerProps, ReduxContainer } from "../containerBase";
+import { BaseProps, ContainerBaseWithState, ContainerProps, defineRoute } from "../containerBase";
 import { PartnerClaimStatus, PartnerDto, ProjectDto, ProjectRole, ProjectStatus } from "@framework/types";
-import { DateTime } from "luxon";
+import React from "react";
 import * as colour from "../../styles/colours";
 import { HomeRoute } from "../home";
-import { AllClaimsDashboardRoute, ClaimsDashboardRoute } from "../claims";
 import { StatisticsBox } from "../../components";
 import { IClientConfig } from "@ui/redux/reducers/configReducer";
 import { ProjectOverviewRoute } from "./overview";
+import { StoresConsumer } from "@ui/redux";
 
 interface Data {
   projects: Pending<ProjectDto[]>;
   partners: Pending<PartnerDto[]>;
   config: IClientConfig;
-}
-
-interface Callbacks {
-}
-
-interface Props {
 }
 
 interface State {
@@ -32,7 +24,7 @@ interface State {
   showClaimsWithParticipant: boolean;
 }
 
-interface ProjectData  {
+interface ProjectData {
   project: ProjectDto;
   partner: PartnerDto | null;
   projectSection: Section;
@@ -46,9 +38,9 @@ interface CombinedData {
 type Section = "archived" | "open" | "awaiting" | "upcoming";
 type Icon = "warning" | "edit" | "none";
 
-class ProjectDashboardComponent extends ContainerBaseWithState<Props, Data, Callbacks, State> {
+class ProjectDashboardComponent extends ContainerBaseWithState<{}, Data, {}, State> {
 
-  constructor(props: ContainerProps<Props, Data, Callbacks>) {
+  constructor(props: ContainerProps<{}, Data, {}>) {
     super(props);
     this.state = {
       showRequestsToReview: false,
@@ -66,7 +58,7 @@ class ProjectDashboardComponent extends ContainerBaseWithState<Props, Data, Call
     return <ACC.PageLoader pending={combined} render={x => this.renderContent(x)} />;
   }
 
-  private renderContent({projects, partners}: CombinedData ) {
+  private renderContent({ projects, partners }: CombinedData) {
     return (
       <ACC.Page
         backLink={this.getBackLink()}
@@ -79,7 +71,7 @@ class ProjectDashboardComponent extends ContainerBaseWithState<Props, Data, Call
 
   private getBackLink() {
     const config = this.props.config;
-    if(config.ssoEnabled) {
+    if (config.ssoEnabled) {
       return <a className="govuk-back-link" href={`${config.ifsRoot}/dashboard-selection`}>Back to dashboard</a>;
     }
     return <ACC.BackLink route={HomeRoute.getLink({})}>Back to home page</ACC.BackLink>;
@@ -102,7 +94,7 @@ class ProjectDashboardComponent extends ContainerBaseWithState<Props, Data, Call
         {this.renderProjectList(combinedData, "Projects with open claims", "open-claims", "section-open", "open", "You currently do not have any projects with open claims.")}
         {this.renderProjectList(combinedData, "Projects awaiting the next claim period", "next-claims", "section-closed", "awaiting", "You currently do not have any projects outside of the claims period.")}
         {combinedData.filter(x => x.projectSection === "upcoming").length ? this.renderProjectList(combinedData, "Upcoming projects", "upcoming-claims", "section-upcoming", "upcoming", "") : null}
-        {combinedData.filter(x => x.projectSection === "archived").length ? this.renderProjectList(combinedData, "Archived projects", "archived-claims", "section-archived", "archived", ""): null}
+        {combinedData.filter(x => x.projectSection === "archived").length ? this.renderProjectList(combinedData, "Archived projects", "archived-claims", "section-archived", "archived", "") : null}
       </React.Fragment>
     );
   }
@@ -115,7 +107,7 @@ class ProjectDashboardComponent extends ContainerBaseWithState<Props, Data, Call
 
     const isMO = !!projectsAsMO.length;
 
-    if(!isMO) {
+    if (!isMO) {
       return null;
     }
 
@@ -127,9 +119,9 @@ class ProjectDashboardComponent extends ContainerBaseWithState<Props, Data, Call
       <ACC.Section qa="requiring-action-section" title="Overview">
         {/* tslint:disable-next-line */}
         <div className="govuk-grid-row acc-statistics-section">
-          {this.renderStatisticsBox(requestsToReview, requestsToReviewText, () => this.setState({showRequestsToReview: !this.state.showRequestsToReview}), this.state.showRequestsToReview, "pcr")}
+          {this.renderStatisticsBox(requestsToReview, requestsToReviewText, () => this.setState({ showRequestsToReview: !this.state.showRequestsToReview }), this.state.showRequestsToReview, "pcr")}
           {this.renderStatisticsBox(claimsToReview, claimsToReviewText, () => this.setState({ showClaimsToReview: !this.state.showClaimsToReview }), this.state.showClaimsToReview, "review")}
-          {this.renderStatisticsBox(pendingClaims, pendingClaimsText, () => this.setState({showClaimsWithParticipant: !this.state.showClaimsWithParticipant}), this.state.showClaimsWithParticipant, "queried")}
+          {this.renderStatisticsBox(pendingClaims, pendingClaimsText, () => this.setState({ showClaimsWithParticipant: !this.state.showClaimsWithParticipant }), this.state.showClaimsWithParticipant, "queried")}
         </div>
       </ACC.Section>
     );
@@ -140,20 +132,20 @@ class ProjectDashboardComponent extends ContainerBaseWithState<Props, Data, Call
       // empty div needed to prevent focus on button becoming misaligned
       return (
         <div className="govuk-grid-column-one-third">
-          <button data-module="govuk-button" className={classNames("acc-statistics-section__details", "acc-statistics-section__details--button", {"acc-statistics-section__details--button--unselected": !buttonIsPressed})} aria-pressed={buttonIsPressed} onClick={() => filterFunction()}>
+          <button data-module="govuk-button" className={classNames("acc-statistics-section__details", "acc-statistics-section__details--button", { "acc-statistics-section__details--button--unselected": !buttonIsPressed })} aria-pressed={buttonIsPressed} onClick={() => filterFunction()}>
             <div>
-              <StatisticsBox number={numberOfClaims} label={label} qa={qa}/>
+              <StatisticsBox number={numberOfClaims} label={label} qa={qa} />
             </div>
           </button>
         </div>
       );
     }
 
-    return(
+    return (
       <div className="govuk-grid-column-one-third">
         <div className="acc-statistics-section__details">
           <div>
-            <StatisticsBox number={numberOfClaims} label={label} qa={qa}/>
+            <StatisticsBox number={numberOfClaims} label={label} qa={qa} />
           </div>
         </div>
       </div>
@@ -338,28 +330,27 @@ class ProjectDashboardComponent extends ContainerBaseWithState<Props, Data, Call
   }
 }
 
-const definition = ReduxContainer.for<Props, Data, Callbacks>(ProjectDashboardComponent);
+const ProjectDashboardContainer = (props: BaseProps) => (
+  <StoresConsumer>
+    {
+      stores => (
+        <ProjectDashboardComponent
+          projects={stores.projects.getProjects()}
+          partners={stores.partners.getAll()}
+          {...props}
+        />
+      )
+    }
+  </StoresConsumer>
+);
 
-export const ProjectDashboard = definition.connect({
-  withData: (state, props) => ({
-    projects: Selectors.getProjects().getPending(state),
-    partners: Selectors.getAllPartners().getPending(state),
-    config: state.config
-  }),
-  withCallbacks: () => ({})
-});
-
-export const ProjectDashboardRoute = definition.route({
+export const ProjectDashboardRoute = defineRoute({
   routeName: "projectDashboard",
   routePath: "/projects/dashboard",
-  getParams: (route) => ({}),
-  getLoadDataActions: (params) => [
-    Actions.loadProjects(),
-    Actions.loadPartners()
-  ],
+  container: ProjectDashboardContainer,
+  getParams: () => ({}),
   getTitle: () => ({
     htmlTitle: "Projects",
     displayTitle: "Projects"
   }),
-  container: ProjectDashboard
 });

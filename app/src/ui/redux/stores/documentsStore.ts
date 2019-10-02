@@ -23,7 +23,7 @@ export class DocumentsStore extends StoreBase {
     return this.buildKey("pcrs", projectId, pcrOrPCrItemId);
   }
 
-  public projectDocuments(projectId: string) {
+  public getProjectDocuments(projectId: string) {
     return this.getData("documents", this.getProjectDocumentsKey(projectId), p => ApiClient.documents.getProjectDocuments({ projectId, ...p }));
   }
 
