@@ -14,13 +14,13 @@ export function updateEditorAction<T>(
   id: string,
   store: string,
   dto: T,
-  validator: Results<T> | null
+  validator: Results<{}> | null
 ) {
   const payload = {id, store, dto, validator};
   return createAction("EDITOR_UPDATE", payload);
 }
 
-export function handleEditorSubmit<T>(id: string, store: string, dto: T, validator: Results<T> | null) {
+export function handleEditorSubmit<T>(id: string, store: string, dto: T, validator: Results<{}> | null) {
   return createAction("EDITOR_SUBMIT", { id, store, dto, validator });
 }
 
@@ -32,7 +32,7 @@ interface HandleEditorErrorParams<T> {
   id: string;
   store: string;
   dto: T;
-  validation: Results<T> | null;
+  validation: Results<{}> | null;
   error: IAppError;
   scrollToTop?: boolean;
 }
