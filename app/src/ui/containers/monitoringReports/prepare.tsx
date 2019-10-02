@@ -1,13 +1,12 @@
 import React from "react";
 import * as ACC from "@ui/components";
-import * as Actions from "@ui/redux/actions/index";
-import * as Selectors from "@ui/redux/selectors/index";
 import * as Dtos from "@framework/dtos";
 import { Pending } from "@shared/pending";
-import { IEditorStore } from "@ui/redux";
 import { MonitoringReportDtoValidator } from "@ui/validators";
-import { ContainerBase, ReduxContainer } from "@ui/containers/containerBase";
+import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerBase";
 import { MonitoringReportDashboardRoute } from "@ui/containers";
+import { MonitoringReportDto } from "@framework/dtos";
+import { IEditorStore, IStores, StoresConsumer } from "@ui/redux";
 
 export interface MonitoringReportPrepareParams {
   projectId: string;
@@ -21,8 +20,7 @@ interface Data {
 }
 
 interface Callbacks {
-  onChange: (dto: Dtos.MonitoringReportDto, project: Dtos.ProjectDto) => void;
-  onSave: (dto: Dtos.MonitoringReportDto, project: Dtos.ProjectDto, submit: boolean) => void;
+  onChange: (save: boolean, dto: Dtos.MonitoringReportDto, submit?: boolean) => void;
 }
 
 class PrepareMonitoringReportComponent extends ContainerBase<MonitoringReportPrepareParams, Data, Callbacks> {
@@ -65,9 +63,8 @@ class PrepareMonitoringReportComponent extends ContainerBase<MonitoringReportPre
     return (
       <ACC.MonitoringReportFormComponent
         editor={editor}
-        project={project}
-        onChange={this.props.onChange}
-        onSave={this.props.onSave}
+        onChange={(dto) => this.props.onChange(false, dto)}
+        onSave={(dto, submit) => this.props.onChange(true, dto, submit)}
       />
     );
   }
@@ -81,37 +78,31 @@ class PrepareMonitoringReportComponent extends ContainerBase<MonitoringReportPre
   }
 }
 
-const containerDefinition = ReduxContainer.for<MonitoringReportPrepareParams, Data, Callbacks>(PrepareMonitoringReportComponent);
-
-const MonitoringReportPrepare = containerDefinition.connect({
-  withData: (state, props) => ({
-    project: Selectors.getProject(props.projectId).getPending(state),
-    editor: Selectors.getMonitoringReportEditor(props.projectId, props.id).get(state),
-    statusChanges: Selectors.getMonitoringReportStatusChanges(props.id).getPending(state),
-  }),
-  withCallbacks: (dispatch) => ({
-    onChange: (dto, project) => {
-      dispatch(Actions.validateMonitoringReport(dto.projectId, dto.headerId, dto, dto.questions, project));
-    },
-    onSave: (dto, project, submit) => {
-      dispatch(Actions.saveMonitoringReport(dto.projectId, dto.headerId, dto, dto.questions, project, submit, () => {
-        dispatch(Actions.navigateBackTo(MonitoringReportDashboardRoute.getLink({ projectId: dto.projectId })));
-      }));
+const PrepareMonitoringReportContainer = (props: MonitoringReportPrepareParams & BaseProps) => (
+  <StoresConsumer>
+    {
+      stores => (
+        <PrepareMonitoringReportComponent
+          project={stores.projects.getById(props.projectId)}
+          statusChanges={stores.monitoringReports.getStatusChanges(props.projectId, props.id)}
+          editor={stores.monitoringReports.getUpdateMonitoringReportEditor(props.projectId, props.id)}
+          onChange={(save, dto, submit) => {
+            stores.monitoringReports.updateMonitoringReportEditor(save, props.projectId, dto, submit, () => {
+              stores.navigation.navigateTo(MonitoringReportDashboardRoute.getLink({ projectId: dto.projectId }));
+            });
+          }}
+          {...props}
+        />
+      )
     }
-  })
-});
+  </StoresConsumer>
+);
 
-export const MonitoringReportPrepareRoute = containerDefinition.route({
+export const MonitoringReportPrepareRoute = defineRoute({
   routeName: "monitoringReportPrepare",
   routePath: "/projects/:projectId/monitoring-reports/:id/prepare",
+  container: PrepareMonitoringReportContainer,
   getParams: (r) => ({ projectId: r.params.projectId, id: r.params.id }),
   accessControl: (auth, { projectId }) => auth.forProject(projectId).hasRole(Dtos.ProjectRole.MonitoringOfficer),
-  getLoadDataActions: (params) => [
-    Actions.loadProject(params.projectId),
-    Actions.loadMonitoringReportQuestions(),
-    Actions.loadMonitoringReport(params.projectId, params.id),
-    Actions.loadMonitoringReportStatusChanges(params.projectId, params.id),
-  ],
   getTitle: () => ({ htmlTitle: "Edit monitoring report", displayTitle: "Monitoring report" }),
-  container: MonitoringReportPrepare,
 });

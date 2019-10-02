@@ -1,17 +1,15 @@
-import React from "react";
-import * as ACC from "@ui/components";
-import * as Actions from "@ui/redux/actions";
-import * as Dtos from "@framework/dtos";
-import * as Selectors from "@ui/redux/selectors";
-import { ContainerBase, ReduxContainer } from "@ui/containers/containerBase";
-import { Pending } from "@shared/pending";
-import { ProjectDashboardRoute } from "@ui/containers";
-import { ILinkInfo, ProjectRole } from "@framework/types";
 import { MonitoringReportStatus } from "@framework/constants";
+import React from "react";
+import * as Dtos from "@framework/dtos";
+import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerBase";
+import { Pending } from "@shared/pending";
+import { ILinkInfo, ProjectRole } from "@framework/types";
+import * as ACC from "@ui/components";
 import { MonitoringReportViewRoute } from "./details";
 import { MonitoringReportPrepareRoute } from "./prepare";
 import { MonitoringReportCreateRoute } from "./create";
 import { MonitoringReportDeleteRoute } from "./delete";
+import { StoresConsumer } from "@ui/redux";
 
 interface Params {
   projectId: string;
@@ -58,11 +56,11 @@ class DashboardComponent extends ContainerBase<Params, Data, Callbacks> {
 
     return (
       <ACC.Page
-        backLink={<ACC.Projects.ProjectBackLink project={project}/>}
+        backLink={<ACC.Projects.ProjectBackLink project={project} />}
         pageTitle={<ACC.Projects.Title project={project} />}
         project={project}
       >
-        <ACC.Renderers.Messages messages={this.props.messages}/>
+        <ACC.Renderers.Messages messages={this.props.messages} />
         <ACC.Renderers.SimpleString>You should submit reports for this project according to the schedule agreed with your Monitoring Portfolio Executive.</ACC.Renderers.SimpleString>
         <ACC.Link route={MonitoringReportCreateRoute.getLink({ projectId: this.props.projectId })} className="govuk-button">Start a new report</ACC.Link>
         <ACC.Section title={"Open"}>
@@ -95,50 +93,44 @@ class DashboardComponent extends ContainerBase<Params, Data, Callbacks> {
   }
 
   private renderLinks(report: Dtos.MonitoringReportSummaryDto) {
-    const links: { route: ILinkInfo, text: string, qa: string;}[] = [];
+    const links: { route: ILinkInfo, text: string, qa: string; }[] = [];
 
     if (this.editStatuses.indexOf(report.status) > -1) {
-      links.push({ route: MonitoringReportPrepareRoute.getLink({ projectId: report.projectId, id: report.headerId }), text: "Edit report", qa:"editLink" });
+      links.push({ route: MonitoringReportPrepareRoute.getLink({ projectId: report.projectId, id: report.headerId }), text: "Edit report", qa: "editLink" });
     }
     else {
       links.push({ route: MonitoringReportViewRoute.getLink({ projectId: report.projectId, id: report.headerId }), text: "View report", qa: "viewLink" });
     }
 
     if (report.status === MonitoringReportStatus.Draft) {
-      links.push({ route: MonitoringReportDeleteRoute.getLink({ projectId: report.projectId, id: report.headerId }), text: "Delete report", qa:"deleteLink" });
+      links.push({ route: MonitoringReportDeleteRoute.getLink({ projectId: report.projectId, id: report.headerId }), text: "Delete report", qa: "deleteLink" });
     }
 
-    return links.map((x,i) => <div key={i} data-qa={x.qa}><ACC.Link route={x.route}>{x.text}</ACC.Link></div>);
+    return links.map((x, i) => <div key={i} data-qa={x.qa}><ACC.Link route={x.route}>{x.text}</ACC.Link></div>);
   }
 }
 
-const containerDefinition = ReduxContainer.for<Params, Data, Callbacks>(DashboardComponent);
+const DashboardContainer = (props: Params & BaseProps) => (
+  <StoresConsumer>
+    {stores => (
+      <DashboardComponent
+        project={stores.projects.getById(props.projectId)}
+        partners={stores.partners.getPartnersForProject(props.projectId)}
+        reports={stores.monitoringReports.getAllForProject(props.projectId)}
+        {...props}
+      />
 
-export const MonitoringReportDashboard = containerDefinition.connect({
-  withData: (state, props) => {
-    return {
-      project: Selectors.getProject(props.projectId).getPending(state),
-      partners: Selectors.findPartnersByProject(props.projectId).getPending(state),
-      reports: Selectors.getAllMonitoringReports(props.projectId).getPending(state),
-    };
-  },
-  withCallbacks: () => {
-    return {};
-  }
-});
+    )}
+  </StoresConsumer>
+);
 
-export const MonitoringReportDashboardRoute = containerDefinition.route({
+export const MonitoringReportDashboardRoute = defineRoute({
   routeName: "monitoringReportDashboard",
   routePath: "/projects/:projectId/monitoring-reports",
   getParams: (r) => ({ projectId: r.params.projectId, periodId: parseInt(r.params.periodId, 10) }),
-  getLoadDataActions: (params) => [
-    Actions.loadProject(params.projectId),
-    Actions.loadPartnersForProject(params.projectId),
-    Actions.loadMonitoringReports(params.projectId)
-  ],
-  container: MonitoringReportDashboard,
+  container: DashboardContainer,
   accessControl: (auth, params) => auth.forProject(params.projectId).hasRole(ProjectRole.MonitoringOfficer),
-  getTitle: (store, params) => {
+  getTitle: () => {
     return {
       htmlTitle: "Monitoring reports - View project",
       displayTitle: "Monitoring reports"
