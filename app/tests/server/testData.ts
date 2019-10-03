@@ -621,6 +621,8 @@ export class TestData {
       recordTypeId: recordType.id,
       projectId: pcr.projectId,
       projectEndDate: new Date(),
+      projectSummary: "",
+      publicDescription: "",
       partnerId: "",
       status: Entites.ProjectChangeRequestItemStatus.Complete,
       statusName: "Complete",

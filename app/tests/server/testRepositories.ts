@@ -440,6 +440,8 @@ class PCRTestRepository extends TestRepository<Entities.ProjectChangeRequestEnti
         guidance: "This is some hardcoded guidance",
         statusName:"",
         projectEndDate: new Date(),
+        projectSummary: "",
+        publicDescription: "",
         ...x
       };
     });
