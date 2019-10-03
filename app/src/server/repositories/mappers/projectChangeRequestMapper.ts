@@ -38,7 +38,9 @@ export class SalesforcePCRMapper extends SalesforceBaseMapper<ISalesforcePCR[], 
       status: this.mapItemStatus(pcrItem.Acc_MarkedasComplete__c),
       guidance: pcrItem.Acc_Guidance__c,
       statusName: pcrItem.MarkedAsCompleteName,
+      publicDescription: pcrItem.Acc_NewPublicDescription__c,
       projectEndDate: this.clock.parseOptionalSalesforceDate(pcrItem.Acc_NewProjectEndDate__c),
+      projectSummary: pcrItem.Acc_NewProjectSummary__c,
     };
   }
 
