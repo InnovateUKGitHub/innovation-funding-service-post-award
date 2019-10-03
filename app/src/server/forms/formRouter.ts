@@ -31,7 +31,6 @@ import { MonitoringReportDeleteFormHandler } from "./monitoringReportDeleteFormH
 import { MonitoringReportPrepareFormHandler } from "./monitoringReportPrepareFormHandler";
 import { AllClaimDashboardDocumentUploadHandler } from "./allClaimsDashboard/allClaimsDashboardDocumentUploadHandler";
 import { AllClaimDashboardDocumentDeleteHandler } from "./allClaimsDashboard/allClaimsDashboardDocumentDeleteHandler";
-import { ProjectChangeRequestItemForTimeExtensionUpdateHandler } from "@server/forms/projectChangeRequest/projectChangeRequestItemForTimeExtensionUpdateHandler";
 
 export const formRouter = express.Router();
 
@@ -56,7 +55,6 @@ const handlers: IFormHandler[] = [
   new ProjectChangeRequestDeleteFormHandler(),
   new ProjectChangeRequestItemDocumentDeleteHandler(),
   new ProjectChangeRequestItemDocumentUploadHandler(),
-  new ProjectChangeRequestItemForTimeExtensionUpdateHandler(),
   new ProjectChangeRequestItemUpdateHandler(),
   new ProjectChangeRequestPrepareFormHandler(),
   new ProjectChangeRequestReasoningDocumentDeleteHandler(),

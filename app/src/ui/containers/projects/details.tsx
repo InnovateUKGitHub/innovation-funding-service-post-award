@@ -28,15 +28,15 @@ interface CombinedData {
 class ProjectDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
     render() {
         const combined = Pending.combine({
-          project: this.props.projectDetails,
-          partners: this.props.partners,
-          contacts: this.props.contacts,
+            project: this.props.projectDetails,
+            partners: this.props.partners,
+            contacts: this.props.contacts,
         });
 
         return <ACC.PageLoader pending={combined} render={x => this.renderContents(x)} />;
     }
 
-    private renderContents({project, partners, contacts}: CombinedData) {
+    private renderContents({ project, partners, contacts }: CombinedData) {
         const DetailsSection = ACC.TypedDetails<ProjectDto>();
 
         const monitoringOfficer = contacts.find(x => x.role === "Monitoring officer");
@@ -50,9 +50,9 @@ class ProjectDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
 
         return (
             <ACC.Page
-              backLink={<ACC.Projects.ProjectBackLink project={project} />}
-              pageTitle={<ACC.Projects.Title project={project} />}
-              project={project}
+                backLink={<ACC.Projects.ProjectBackLink project={project} />}
+                pageTitle={<ACC.Projects.Title project={project} />}
+                project={project}
             >
                 {this.renderPartnersCosts(partners, project)}
                 <ACC.Section title="Project members">
@@ -97,10 +97,10 @@ class ProjectDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
             <ACC.Section title="Cost claimed status" qa="cost-claimed-status">
                 <PartnersTable.Table qa="cost-claimed" data={partners} caption="Cost claimed status">
                     <PartnersTable.String header="Partner" qa="partner-name" value={x => x.isLead ? `${x.name} (Lead)` : x.name} footer="Total" />
-                    <PartnersTable.Currency header={<React.Fragment><span>Total eligible</span><br/><span>costs</span></React.Fragment>} qa="total-costs" value={x => x.totalParticipantGrant || 0} footer={<ACC.Renderers.Currency value={totalEligibleCosts} />} />
-                    <PartnersTable.Currency header={<React.Fragment><span>Costs claimed</span><br/><span>to date</span></React.Fragment>} qa="costs-claimed" value={x => x.totalParticipantCostsClaimed || 0} footer={<ACC.Renderers.Currency value={totalClaimed} />} />
-                    <PartnersTable.Percentage header={<React.Fragment><span>Percentage of eligible</span><br/><span>costs claimed to date</span></React.Fragment>} qa="percentage-claimed" value={x => x.percentageParticipantCostsClaimed || 0} footer={<ACC.Renderers.Percentage value={percentageClaimed} />} />
-                    <PartnersTable.Percentage header="Claim cap" qa="cap-limit" value={x => x.capLimit} fractionDigits={0} footer={<AccessibilityText>No data</AccessibilityText>}/>
+                    <PartnersTable.Currency header={<React.Fragment><span>Total eligible</span><br /><span>costs</span></React.Fragment>} qa="total-costs" value={x => x.totalParticipantGrant || 0} footer={<ACC.Renderers.Currency value={totalEligibleCosts} />} />
+                    <PartnersTable.Currency header={<React.Fragment><span>Costs claimed</span><br /><span>to date</span></React.Fragment>} qa="costs-claimed" value={x => x.totalParticipantCostsClaimed || 0} footer={<ACC.Renderers.Currency value={totalClaimed} />} />
+                    <PartnersTable.Percentage header={<React.Fragment><span>Percentage of eligible</span><br /><span>costs claimed to date</span></React.Fragment>} qa="percentage-claimed" value={x => x.percentageParticipantCostsClaimed || 0} footer={<ACC.Renderers.Percentage value={percentageClaimed} />} />
+                    <PartnersTable.Percentage header="Claim cap" qa="cap-limit" value={x => x.capLimit} fractionDigits={0} footer={<AccessibilityText>No data</AccessibilityText>} />
                 </PartnersTable.Table>
             </ACC.Section>
         );

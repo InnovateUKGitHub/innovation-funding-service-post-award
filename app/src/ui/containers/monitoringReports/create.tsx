@@ -5,8 +5,7 @@ import { Pending } from "@shared/pending";
 import { MonitoringReportDtoValidator } from "@ui/validators";
 import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerBase";
 import { MonitoringReportDashboardRoute } from "@ui/containers";
-import { MonitoringReportDto } from "@framework/dtos";
-import { IEditorStore, IStores, StoresConsumer } from "@ui/redux";
+import { IEditorStore, StoresConsumer } from "@ui/redux";
 
 export interface MonitoringReportCreateParams {
   projectId: string;
