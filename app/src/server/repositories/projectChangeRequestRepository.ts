@@ -34,12 +34,14 @@ export interface ISalesforcePCR {
   CreatedDate: string;
   LastModifiedDate: string;
   RecordTypeId: string;
+  Acc_Reasoning__c: string;
   Acc_Project_Participant__c: string;
   Acc_Project__c: string;
-  Acc_Reasoning__c: string;
   // careful there is a typo in the salesforce setup
   // will probably change to Acc_MarkedAsComplete__c in the future!!
   Acc_MarkedasComplete__c: string;
+  Acc_NewProjectSummary__c: string;
+  Acc_NewPublicDescription__c: string;
   MarkedAsCompleteName: string;
   Acc_Comments__c: string;
   Acc_NewProjectEndDate__c: string|null;
@@ -65,6 +67,8 @@ export class ProjectChangeRequestRepository extends SalesforceRepositoryBase<ISa
     "RecordTypeId",
     "Acc_Project_Participant__c",
     "Acc_Project__c",
+    "Acc_NewProjectSummary__c",
+    "Acc_NewPublicDescription__c",
     "Acc_Reasoning__c",
     "Acc_MarkedAsComplete__c",
     "Acc_NewProjectEndDate__c",

@@ -4,7 +4,14 @@ import {
   ProjectChangeRequestItemTypeEntity,
   ProjectChangeRequestStandardItemTypes
 } from "@framework/entities";
-import { PCRDto, PCRItemDto, PCRItemForTimeExtensionDto, PCRItemTypeDto, PCRStandardItemDto } from "@framework/dtos";
+import {
+  PCRDto,
+  PCRItemDto,
+  PCRItemForScopeChangeDto,
+  PCRItemForTimeExtensionDto,
+  PCRItemTypeDto,
+  PCRStandardItemDto
+} from "@framework/dtos";
 
 export const mapToPcrDto = (pcr: ProjectChangeRequestEntity, itemTypes: PCRItemTypeDto[]): PCRDto => ({
   id: pcr.id,
@@ -28,17 +35,17 @@ const mapItems = (pcrs: ProjectChangeRequestItemEntity[], itemTypes: PCRItemType
 };
 
 const mapItem = (pcr: ProjectChangeRequestItemEntity, itemType: PCRItemTypeDto) => {
-  // tslint:disable:no-small-switch TODO remove this when more added
   switch (itemType.type) {
     case ProjectChangeRequestItemTypeEntity.TimeExtension:
       return mapItemForTimeExtension(pcr, itemType.displayName, itemType.type);
+    case ProjectChangeRequestItemTypeEntity.ScopeChange:
+      return mapItemForScopeChange(pcr, itemType.displayName, itemType.type);
     case ProjectChangeRequestItemTypeEntity.AccountNameChange:
     case ProjectChangeRequestItemTypeEntity.MultiplePartnerFinancialVirement:
     case ProjectChangeRequestItemTypeEntity.PartnerAddition:
     case ProjectChangeRequestItemTypeEntity.PartnerWithdrawal:
     case ProjectChangeRequestItemTypeEntity.ProjectSuspension:
     case ProjectChangeRequestItemTypeEntity.ProjectTermination:
-    case ProjectChangeRequestItemTypeEntity.ScopeChange:
     case ProjectChangeRequestItemTypeEntity.SinglePartnerFinancialVirement:
       return mapStandardItem(pcr, itemType.displayName, itemType.type);
     default:
@@ -62,5 +69,12 @@ const mapStandardItem = (pcr: ProjectChangeRequestItemEntity, typeName: string, 
 const mapItemForTimeExtension = (pcr: ProjectChangeRequestItemEntity, typeName: string, type: ProjectChangeRequestItemTypeEntity.TimeExtension): PCRItemForTimeExtensionDto => ({
   ...mapBaseItem(pcr, typeName),
   projectEndDate: pcr.projectEndDate,
+  type
+});
+
+const mapItemForScopeChange = (pcr: ProjectChangeRequestItemEntity, typeName: string, type: ProjectChangeRequestItemTypeEntity.ScopeChange): PCRItemForScopeChangeDto => ({
+  ...mapBaseItem(pcr, typeName),
+  projectSummary: pcr.projectSummary,
+  publicDescription: pcr.publicDescription,
   type
 });
