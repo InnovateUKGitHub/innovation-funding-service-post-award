@@ -1,11 +1,10 @@
 import React from "react";
-import { ContainerBase, ReduxContainer } from "../containerBase";
+import { BaseProps, ContainerBase, defineRoute } from "../containerBase";
 import * as ACC from "../../components";
 import { Pending } from "@shared/pending";
-import * as Actions from "../../redux/actions";
-import * as Selectors from "../../redux/selectors";
 import { PartnerDto, ProjectDto, ProjectRole } from "@framework/dtos";
 import { ViewForecastRoute } from "../claims";
+import { StoresConsumer } from "@ui/redux";
 
 interface Data {
   projectDetails: Pending<ProjectDto>;
@@ -48,30 +47,28 @@ class ProjectForecastComponent extends ContainerBase<Params, Data, Callbacks> {
   }
 }
 
-const containerDefinition = ReduxContainer.for<Params, Data, Callbacks>(ProjectForecastComponent);
+const ProjectForecastContainer = (props: Params & BaseProps) => (
+  <StoresConsumer>
+    {stores => (
+      <ProjectForecastComponent
+        projectDetails={stores.projects.getById(props.projectId)}
+        partners={stores.partners.getPartnersForProject(props.projectId)}
+        {...props}
+      />
+    )}
+  </StoresConsumer>
+);
 
-const ProjectForecast = containerDefinition.connect({
-  withData: (state, props) => ({
-    partners: Selectors.findPartnersByProject(props.projectId).getPending(state),
-    projectDetails: Selectors.getProject(props.projectId).getPending(state)
-  }),
-  withCallbacks: () => ({})
-});
-
-export const ProjectForecastRoute = containerDefinition.route({
+export const ProjectForecastRoute = defineRoute({
   routeName: "projectForecasts",
   routePath: "/projects/:projectId/forecasts",
+  container: ProjectForecastContainer,
   getParams: (r) => ({ projectId: r.params.projectId }),
   accessControl: (auth, { projectId }) => auth.forProject(projectId).hasAnyRoles(ProjectRole.MonitoringOfficer, ProjectRole.ProjectManager),
-  getLoadDataActions: (params) => [
-    Actions.loadProject(params.projectId),
-    Actions.loadPartnersForProject(params.projectId),
-  ],
-  getTitle: (store, params) => {
+  getTitle: () => {
     return {
       htmlTitle: "Forecasts - View project",
       displayTitle: "Forecasts"
     };
   },
-  container: ProjectForecast
 });
