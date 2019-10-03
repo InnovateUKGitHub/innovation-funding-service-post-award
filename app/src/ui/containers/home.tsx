@@ -1,12 +1,13 @@
 import React from "react";
 import { Link, Title, TypedForm } from "../components";
-import { ContainerBaseWithState, ContainerProps, ReduxContainer, } from "./containerBase";
+import { BaseProps, ContainerBaseWithState, ContainerProps, defineRoute, } from "./containerBase";
 import { ProjectDashboardRoute, } from ".";
 import { SimpleString } from "../components/renderers";
 import { Authorisation } from "@framework/types";
 import { IClientConfig } from "@ui/redux/reducers/configReducer";
+import { StoresConsumer } from "@ui/redux";
 
-interface Props {
+interface Data {
   userEmail: string;
 }
 
@@ -14,8 +15,8 @@ interface State {
   email: string;
 }
 
-class Component extends ContainerBaseWithState<{}, Props, {}, State> {
-  constructor(props: ContainerProps<{}, Props, {}>) {
+class Component extends ContainerBaseWithState<{}, Data, {}, State> {
+  constructor(props: ContainerProps<{}, Data, {}>) {
     super(props);
     this.state = { email: props.userEmail };
   }
@@ -47,22 +48,22 @@ class Component extends ContainerBaseWithState<{}, Props, {}, State> {
   }
 }
 
-const containerDefinition = ReduxContainer.for<{}, Props, {}>(Component);
+const HomeContainer = (props: BaseProps) => (
+  <StoresConsumer>
+    {
+      stores => <Component userEmail={stores.users.getCurrentUser().email} {...props}/>
+    }
+  </StoresConsumer>
+);
 
-export const Home = containerDefinition.connect({
-  withData: (store) => ({ userEmail: store.user.email }),
-  withCallbacks: () => ({})
-});
-
-export const HomeRoute = containerDefinition.route({
+export const HomeRoute = defineRoute({
   routeName: "home",
   routePath: "/",
+  container: HomeContainer,
   getParams: () => ({}),
-  getLoadDataActions: () => [],
+  accessControl: (auth: Authorisation, params: {}, config: IClientConfig) => !config.ssoEnabled,
   getTitle: () => ({
     htmlTitle: "Home",
     displayTitle: "Home"
   }),
-  container: Home,
-  accessControl: (auth: Authorisation, params: {}, config: IClientConfig) => !config.ssoEnabled
 });

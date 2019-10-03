@@ -9,6 +9,7 @@ import { AsyncThunk } from "@ui/redux/actions";
 import { matchRoute } from "@ui/routing/matchRoute";
 import { Authorisation, IClientUser, ILinkInfo } from "@framework/types";
 import { IClientConfig } from "@ui/redux/reducers/configReducer";
+import { IStores } from "@ui/redux";
 
 export interface BaseProps {
     messages: string[];
@@ -48,8 +49,9 @@ class ConnectWrapper<TParams, TData, TCallbacks> {
         const data = this.withData(state, params, auth);
         const messages = state.messages.map(x => x.message);
         const route = state.router.route!;
+        const config = state.config;
 
-        return Object.assign(data, params, { messages, route, config: state.config });
+        return Object.assign(data, params, { messages, route, config});
     }
 
     private mapDispachToProps(dispatch: ThunkDispatch<RootState, void, RootActions>) {
@@ -77,39 +79,16 @@ class ReduxContainerWrapper<TParams, TData, TCallbacks> {
             htmlTitle: string;
             displayTitle: string;
         },
-        container: React.ComponentClass<any> & { WrappedComponent: React.ComponentType<TParams & TData & TCallbacks & BaseProps> }
+        container: (React.ComponentClass<any> & { WrappedComponent: React.ComponentType<TParams & TData & TCallbacks & BaseProps> }) | React.FunctionComponent<TParams & BaseProps>,
     }) {
         return {
             getLink: (params: TParams): ILinkInfo => ({
                 routeName: options.routeName,
-                routeParams: this.convertToParameters(params),
+                routeParams: convertToParameters(params),
                 accessControl: (user: IClientUser, config: IClientConfig) => !options.accessControl || options.accessControl(new Authorisation(user.roleInfo), params, config)
             }),
             ...options,
         };
-    }
-
-    private convertToParameters(params: any) {
-        const result: { [key: string]: string } = {};
-
-        Object.keys(params || {}).forEach(key => {
-            result[key] = this.convertToParameter(params[key]);
-        });
-
-        return result;
-    }
-
-    private convertToParameter(p: any): string {
-        if (typeof (p) === "number") {
-            return p.toString();
-        }
-        if (typeof (p) === "boolean") {
-            return p.toString();
-        }
-        if (typeof (p) === "string") {
-            return p;
-        }
-        throw new Error(`Unable to convert parameter to a string : ${JSON.stringify(p)}`);
     }
 
     public connect(options: { withData: (state: RootState, params: TParams, auth: Authorisation) => TData, withCallbacks: (dispatch: ThunkDispatch<RootState, void, RootActions>) => TCallbacks }) {
@@ -121,4 +100,57 @@ export class ReduxContainer {
     static for<TParams = {}, TData = {}, TCallbacks = {}>(component: ContainerBaseClass<TParams, TData, TCallbacks>) {
         return new ReduxContainerWrapper<TParams, TData, TCallbacks>(component);
     }
+}
+
+interface IRouteOptions<TParams> {
+    routeName: string;
+    routePath: string;
+    getParams: (route: RouteState) => TParams;
+    accessControl?: (auth: Authorisation, params: TParams, config: IClientConfig) => boolean;
+    getTitle: (store: RootState, params: TParams, stores: IStores) => {
+        htmlTitle: string;
+        displayTitle: string;
+    };
+    container: React.FunctionComponent<TParams & BaseProps>;
+}
+
+interface IRouteDefinition<TParams> extends IRouteOptions<TParams> {
+    getLink: (params: TParams) => ILinkInfo;
+    getLoadDataActions: () => never[];
+}
+
+export function defineRoute<TParams>(options: IRouteOptions<TParams>): IRouteDefinition<TParams> {
+    return {
+        ...options,
+        getLoadDataActions: () => [],
+        getLink: (params) => ({
+            routeName: options.routeName,
+            routeParams: convertToParameters(params),
+            accessControl: (user: IClientUser, config: IClientConfig) => !options.accessControl || options.accessControl(new Authorisation(user.roleInfo), params, config)
+        })
+    };
+}
+
+function convertToParameters(params: any) {
+    const result: { [key: string]: string } = {};
+
+    Object.keys(params || {}).forEach(key => {
+        result[key] = convertToParameter(params[key]);
+    });
+
+    return result;
+}
+
+function convertToParameter(p: any): string {
+
+    if (typeof (p) === "number") {
+        return p.toString();
+    }
+    if (typeof (p) === "boolean") {
+        return p.toString();
+    }
+    if (typeof (p) === "string") {
+        return p;
+    }
+    throw new Error(`Unable to convert parameter to a string : ${JSON.stringify(p)}`);
 }

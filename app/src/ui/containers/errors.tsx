@@ -1,48 +1,32 @@
 import React from "react";
-import { ContainerBase, ReduxContainer } from "./containerBase";
+import { BaseProps, defineRoute } from "./containerBase";
 import { StandardErrorPage } from "../components/standardErrorPage";
 import { NotFoundErrorPage } from "../components/notFoundErrorPage";
 
-interface Data {
+interface Params {
   errorType: "standard" | "notFound";
 }
 
-class Component extends ContainerBase<{}, Data> {
-  render() {
-    return this.props.errorType === "notFound" ? <NotFoundErrorPage /> : <StandardErrorPage />;
-  }
-}
+const ErrorContainer = (props: Params & BaseProps) => (
+  props.errorType === "notFound" ? <NotFoundErrorPage /> : <StandardErrorPage />
+);
 
-const containerDefinition = ReduxContainer.for<{}, Data, {}>(Component);
-
-const Error = containerDefinition.connect({
-  withData: () => ({ errorType: "standard" }),
-  withCallbacks: () => ({})
-});
-
-export const ErrorRoute = containerDefinition.route({
+export const ErrorRoute = defineRoute<Params>({
   routeName: "error",
   routePath: "/error",
-  getParams: () => ({}),
-  getLoadDataActions: () => [],
-  container: Error,
+  container: ErrorContainer,
+  getParams: () => ({ errorType: "standard" }),
   getTitle: () => ({
     htmlTitle: "Error",
     displayTitle: "Something has gone wrong at our end"
   })
 });
 
-const ErrorNotFound = containerDefinition.connect({
-  withData: () => ({ errorType: "notFound" }),
-  withCallbacks: () => ({})
-});
-
-export const ErrorNotFoundRoute = containerDefinition.route({
+export const ErrorNotFoundRoute = defineRoute<Params>({
   routeName: "errorNotFound",
   routePath: "/error-not-found",
-  getParams: () => ({}),
-  getLoadDataActions: () => [],
-  container: ErrorNotFound,
+  getParams: () => ({errorType: "notFound"}),
+  container: ErrorContainer,
   getTitle: () => ({
     htmlTitle: "Page not found",
     displayTitle: "Page not found"
