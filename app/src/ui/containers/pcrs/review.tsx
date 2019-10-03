@@ -8,7 +8,6 @@ import { Pending } from "@shared/pending";
 import { PCRsDashboardRoute } from "./dashboard";
 import { PCRReviewItemRoute } from "./viewItem";
 import { PCRReviewReasoningRoute } from "./viewReasoning";
-import { ProjectChangeRequestReviewItemForTimeExtensionRoute } from "./viewItemForTimeExtension";
 import { PCRDto, PCRItemDto, ProjectChangeRequestStatusChangeDto } from "@framework/dtos/pcrDtos";
 import { IEditorStore, StoresConsumer } from "@ui/redux";
 import { PCRDtoValidator } from "@ui/validators/pcrDtoValidator";
@@ -128,28 +127,33 @@ class PCRReviewComponent extends ContainerBase<PCRReviewParams, Data, Callbacks>
   }
 
   private getItemTasks(item: PCRItemDto) {
-    // tslint:disable:no-small-switch TODO remove this when more added
-    switch (item.type) {
-      case ProjectChangeRequestItemTypeEntity.TimeExtension:
-        return (
-          <ACC.Task
-            name="View new end date for project"
-            status={this.getTaskStatus(item.status)}
-            route={ProjectChangeRequestReviewItemForTimeExtensionRoute.getLink({ projectId: this.props.projectId, projectChangeRequestId: this.props.pcrId, projectChangeRequestItemId: item.id })}
-          />
-        );
-      default:
-        return (
-          <ACC.Task
-            name="View files"
-            status={this.getTaskStatus(item.status)}
-            route={PCRReviewItemRoute.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId, itemId: item.id })}
-          />
-        );
-    }
+      return (
+        <ACC.Task
+          name={this.getTaskText(item)}
+          status={this.getTaskStatus(item.status)}
+          route={PCRReviewItemRoute.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId, itemId: item.id })}
+        />
+      );
   }
 
-  getTaskStatus(status: ProjectChangeRequestItemStatus): "To do" | "Complete" | "Incomplete" {
+  private getTaskText(item: PCRItemDto): string {
+    switch (item.type) {
+      case ProjectChangeRequestItemTypeEntity.TimeExtension:
+        return "View new end date for project";
+      case ProjectChangeRequestItemTypeEntity.AccountNameChange:
+      case ProjectChangeRequestItemTypeEntity.MultiplePartnerFinancialVirement:
+      case ProjectChangeRequestItemTypeEntity.PartnerAddition:
+      case ProjectChangeRequestItemTypeEntity.PartnerWithdrawal:
+      case ProjectChangeRequestItemTypeEntity.ProjectSuspension:
+      case ProjectChangeRequestItemTypeEntity.ProjectTermination:
+      case ProjectChangeRequestItemTypeEntity.ScopeChange:
+      case ProjectChangeRequestItemTypeEntity.SinglePartnerFinancialVirement:
+        return "View files";
+    }
+    return "Text not set";
+  }
+
+  private getTaskStatus(status: ProjectChangeRequestItemStatus): "To do" | "Complete" | "Incomplete" {
     switch (status) {
       case ProjectChangeRequestItemStatus.Complete:
         return "Complete";
