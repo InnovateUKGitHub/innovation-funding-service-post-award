@@ -1,15 +1,13 @@
 import React from "react";
 
-import { ContainerBase, ReduxContainer } from "../containerBase";
+import { BaseProps, ContainerBase, defineRoute } from "../containerBase";
 import { ProjectDto, ProjectRole } from "@framework/types";
 
 import * as ACC from "../../components";
-import * as Actions from "../../redux/actions";
-import * as Selectors from "../../redux/selectors";
 import { Pending } from "@shared/pending";
 import { PCRDto, PCRItemDto, PCRStandardItemDto } from "@framework/dtos";
 import { ProjectChangeRequestPrepareRoute } from "./prepare";
-import { EditorStatus, IEditorStore, } from "@ui/redux";
+import { EditorStatus, IEditorStore, StoresConsumer, } from "@ui/redux";
 import { ProjectChangeRequestItemStatus } from "@framework/entities";
 import { MultipleDocumentUpdloadDtoValidator, PCRDtoValidator, PCRStandardItemDtoValdiator } from "@ui/validators";
 
@@ -29,11 +27,9 @@ interface Data {
 }
 
 interface Callbacks {
-  onChange: (projectId: string, pcrId: string, dto: PCRDto) => void;
-  onSave: (projectId: string, pcrId: string, dto: PCRDto) => void;
-  onFilesChange: (pcrId: string, itemId: string, dto: MultipleDocumentUploadDto) => void;
-  onFilesSave: (projectId: string, pcrId: string, itemId: string, dto: MultipleDocumentUploadDto) => void;
-  onFileDelete: (projectId: string, pcrId: string, itemId: string, dto: DocumentSummaryDto) => void;
+  onChange: (save: boolean, dto: PCRDto) => void;
+  onFilesChange: (save: boolean, dto: MultipleDocumentUploadDto) => void;
+  onFileDelete: (dto: MultipleDocumentUploadDto, document: DocumentSummaryDto) => void;
 }
 
 class PCRPrepareItemComponent extends ContainerBase<ProjectChangeRequestPrepareItemParams, Data, Callbacks> {
@@ -78,8 +74,8 @@ class PCRPrepareItemComponent extends ContainerBase<ProjectChangeRequestPrepareI
           <UploadForm.Form
             enctype="multipart"
             editor={documentsEditor}
-            onSubmit={() => this.props.onFilesSave(this.props.projectId, this.props.pcrId, this.props.itemId, documentsEditor.data)}
-            onChange={(dto) => this.props.onFilesChange(this.props.pcrId, this.props.itemId, dto)}
+            onSubmit={() => this.props.onFilesChange(true, documentsEditor.data)}
+            onChange={(dto) => this.props.onFilesChange(false, dto)}
             qa="projectChangeRequestItemUpload"
           >
             <UploadForm.Fieldset heading="Upload">
@@ -97,7 +93,7 @@ class PCRPrepareItemComponent extends ContainerBase<ProjectChangeRequestPrepareI
           </UploadForm.Form>
         </ACC.Section>
         <ACC.Section title="Files uploaded">
-          {this.renderDocumentList(documents)}
+          {this.renderDocumentList(documents, documentsEditor)}
         </ACC.Section>
 
         <ACC.Section>
@@ -125,16 +121,16 @@ class PCRPrepareItemComponent extends ContainerBase<ProjectChangeRequestPrepareI
     );
   }
 
-  private renderDocumentList(documents: DocumentSummaryDto[]) {
+  private renderDocumentList(documents: DocumentSummaryDto[], documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>) {
     return documents.length > 0
-      ? <ACC.DocumentListWithDelete onRemove={(document) => this.props.onFileDelete(this.props.projectId, this.props.pcrId, this.props.itemId, document)} documents={documents} qa="supporting-documents" />
+      ? <ACC.DocumentListWithDelete onRemove={(document) => this.props.onFileDelete(documentsEditor.data, document)} documents={documents} qa="supporting-documents" />
       : <ACC.ValidationMessage messageType="info" message="No files uploaded" />;
   }
 
   private onChange(dto: PCRDto, itemDto: PCRStandardItemDto): void {
     const index = dto.items.findIndex(x => x.id === this.props.itemId);
     dto.items[index] = itemDto;
-    this.props.onChange(this.props.projectId, this.props.pcrId, dto);
+    this.props.onChange(false, dto);
   }
 
   private onSave(dto: PCRDto): void {
@@ -143,62 +139,56 @@ class PCRPrepareItemComponent extends ContainerBase<ProjectChangeRequestPrepareI
     if (dto.items[index].status === ProjectChangeRequestItemStatus.ToDo) {
       dto.items[index].status = ProjectChangeRequestItemStatus.Incomplete;
     }
-    this.props.onSave(this.props.projectId, this.props.pcrId, dto);
+    this.props.onChange(true, dto);
   }
 }
 
-const definition = ReduxContainer.for<ProjectChangeRequestPrepareItemParams, Data, Callbacks>(PCRPrepareItemComponent);
-
-export const PCRPrepareItem = definition.connect({
-  withData: (state, params) => ({
-    project: Selectors.getProject(params.projectId).getPending(state),
-    pcr: Selectors.getPcr(params.projectId, params.pcrId).getPending(state),
-    pcrItem: Selectors.getPcrStandardItem(state, params.projectId, params.pcrId, params.itemId),
-    editor: Selectors.getPcrEditor(params.projectId, params.pcrId).get(state),
-    files: Selectors.getProjectChangeRequestDocumentsOrItemDocuments(params.itemId).getPending(state),
-    filesEditor: Selectors.getProjectChangeRequestDocumentOrItemDocumentEditor(params.itemId).get(state),
-  }),
-  withCallbacks: (dispatch) => ({
-    onChange: (projectId: string, pcrId: string, dto: PCRDto) => dispatch(Actions.validatePCR(projectId, pcrId, dto)),
-    onSave: (projectId: string, pcrId: string, dto: PCRDto) => dispatch(Actions.savePCR(projectId, pcrId, dto, () => dispatch(Actions.navigateTo(ProjectChangeRequestPrepareRoute.getLink({ projectId, pcrId }))))),
-    onFilesChange: (pcrId, itemId, dto) => {
-      dispatch(Actions.removeMessages());
-      dispatch(Actions.updateProjectChangeRequestDocumentOrItemDocumentEditor(itemId, dto, false));
-    },
-    onFilesSave: (projectId, pcrId, itemId, dto) => {
-      const successMessage = dto.files.length === 1 ? `Your document has been uploaded.` : `${dto.files.length} documents have been uploaded.`;
-      dispatch(Actions.uploadProjectChangeRequestDocumentOrItemDocument(projectId, itemId, dto, () => dispatch(Actions.loadProjectChangeRequestDocumentsOrItemDocuments(projectId, itemId)), successMessage));
-    },
-    onFileDelete: (projectId, pcrId, itemId, dto) => {
-      dispatch(Actions.deleteProjectChangeRequestDocumentOrItemDocument(projectId, itemId, dto, () => {
-        dispatch(Actions.messageSuccess("Your document has been removed."));
-        dispatch(Actions.loadProjectChangeRequestDocumentsOrItemDocuments(projectId, itemId));
-      }));
+const PCRPrepareItemContainer = (props: ProjectChangeRequestPrepareItemParams & BaseProps) => (
+  <StoresConsumer>
+    {
+      stores => (
+        <PCRPrepareItemComponent
+          project={stores.projects.getById(props.projectId)}
+          pcr={stores.projectChangeRequests.getById(props.projectId, props.pcrId)}
+          pcrItem={stores.projectChangeRequests.getStandardItemById(props.projectId, props.pcrId, props.itemId)}
+          editor={stores.projectChangeRequests.getPcrUpdateEditor(props.projectId, props.pcrId)}
+          files={stores.documents.pcrOrPcrItemDocuments(props.projectId, props.itemId)}
+          filesEditor={stores.documents.getPcrOrPcrItemDocumentsEditor(props.projectId, props.itemId)}
+          onChange={(save, dto) => {
+            stores.messages.clearMessages();
+            stores.projectChangeRequests.updatePcrEditor(save, props.projectId, dto, "Your document has been removed.", () => stores.navigation.navigateTo(ProjectChangeRequestPrepareRoute.getLink({ projectId: props.projectId, pcrId: props.pcrId })));
+          }}
+          onFilesChange={(save,dto) => {
+            stores.messages.clearMessages();
+            const successMessage = dto.files.length === 1 ? `Your document has been uploaded.` : `${dto.files.length} documents have been uploaded.`;
+            stores.documents.updatePcrOrPcrItemDocumentsEditor(save, props.projectId, props.itemId, dto, successMessage);
+          }}
+          onFileDelete={(dto, document) => {
+            stores.messages.clearMessages();
+            stores.documents.deletePcrOrPcrItemDocumentsEditor(props.projectId, props.itemId, dto, document, "Your document has been removed.");
+          }}
+          {...props}
+        />
+      )
     }
-  })
-});
+  </StoresConsumer>
+);
 
-export const ProjectChangeRequestPrepareItemRoute = definition.route({
+export const ProjectChangeRequestPrepareItemRoute = defineRoute({
   routeName: "projectChangeRequestPrepareItem",
   routePath: "/projects/:projectId/pcrs/:pcrId/prepare/item/:itemId",
+  container: PCRPrepareItemContainer,
   getParams: (route) => ({
     projectId: route.params.projectId,
     pcrId: route.params.pcrId,
     itemId: route.params.itemId
   }),
-  getLoadDataActions: (params) => [
-    Actions.loadProject(params.projectId),
-    Actions.loadPcr(params.projectId, params.pcrId),
-    Actions.loadProjectChangeRequestDocumentsOrItemDocuments(params.projectId, params.itemId),
-    Actions.loadPcrTypes(),
-  ],
-  getTitle: (store, params) => {
-    const typeName = Selectors.getPcrItem(params.projectId, params.pcrId, params.itemId).getPending(store).then(x => x.typeName).data;
+  getTitle: (store, params, stores) => {
+    const typeName = stores.projectChangeRequests.getItemById(params.projectId, params.pcrId, params.itemId).then(x => x.typeName).data;
     return {
       htmlTitle: typeName ? `Upload files to ${typeName}` : "Upload files to project change request item",
       displayTitle: typeName ? `Upload files to ${typeName}` : "Upload files to project change request item",
     };
   },
-  container: PCRPrepareItem,
   accessControl: (auth, { projectId }, config) => config.features.pcrsEnabled && auth.forProject(projectId).hasRole(ProjectRole.ProjectManager)
 });

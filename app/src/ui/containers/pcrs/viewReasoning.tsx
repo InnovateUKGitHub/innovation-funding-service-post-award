@@ -1,16 +1,14 @@
 import React from "react";
 
-import { ContainerBase, ReduxContainer } from "../containerBase";
-import { ProjectDto, ProjectRole } from "@framework/types";
+import { BaseProps, ContainerBase, defineRoute, ReduxContainer } from "../containerBase";
+import { ILinkInfo, ProjectDto, ProjectRole } from "@framework/types";
 
 import * as ACC from "../../components";
-import * as Actions from "../../redux/actions";
-import * as Selectors from "../../redux/selectors";
 import { Pending } from "@shared/pending";
 import { PCRDetailsRoute } from "./details";
-import { PCRDto } from "@framework/dtos/pcrDtos";
-import { RootState } from "@ui/redux";
-import { State as RouteState } from "router5";
+import { PCRReviewItemRoute, PCRViewItemRoute } from "./viewItem";
+import { PCRDto, PCRItemDto } from "@framework/dtos/pcrDtos";
+import { StoresConsumer } from "@ui/redux";
 import { PCRReviewRoute } from "./review";
 import { NavigationArrowsForPCRs } from "./navigationArrows";
 
@@ -65,58 +63,48 @@ class PCRViewReasoningComponent extends ContainerBase<Params, Data, Callbacks> {
   }
 }
 
-const definition = ReduxContainer.for<Params, Data, Callbacks>(PCRViewReasoningComponent);
+const PCRViewReasoningContainer = (props: Params & BaseProps & { isReviewing: boolean }) => (
+  <StoresConsumer>
+    {
+      stores => (
+        <PCRViewReasoningComponent
+          project={stores.projects.getById(props.projectId)}
+          pcr={stores.projectChangeRequests.getById(props.projectId, props.pcrId)}
+          files={stores.documents.pcrOrPcrItemDocuments(props.projectId, props.pcrId)}
+          isReviewing={false}
+          {...props}
+        />
+      )
+    }
+  </StoresConsumer>
+);
 
-const withData = (isReviewing: boolean) => (state: RootState, params: Params) => ({
-  project: Selectors.getProject(params.projectId).getPending(state),
-  pcr: Selectors.getPcr(params.projectId, params.pcrId).getPending(state),
-  files: Selectors.getProjectChangeRequestDocumentsOrItemDocuments(params.pcrId).getPending(state),
-  isReviewing
-});
-
-const getParams = (route: RouteState): Params => ({
-  projectId: route.params.projectId,
-  pcrId: route.params.pcrId
-});
-
-const loadDataActions = (params: Params) => ([
-  Actions.loadProject(params.projectId),
-  Actions.loadPcr(params.projectId, params.pcrId),
-  Actions.loadProjectChangeRequestDocumentsOrItemDocuments(params.projectId, params.pcrId),
-]);
-
-export const PCRViewReasoning = definition.connect({
-  withData: withData(false),
-  withCallbacks: () => ({})
-});
-
-export const PCRViewReasoningRoute = definition.route({
+export const PCRViewReasoningRoute = defineRoute<Params>({
   routeName: "pcrViewReasoning",
   routePath: "/projects/:projectId/pcrs/:pcrId/details/reasoning",
-  getParams,
-  getLoadDataActions: loadDataActions,
+  getParams: (route) => ({
+    projectId: route.params.projectId,
+    pcrId: route.params.pcrId
+  }),
+  container: (params) => <PCRViewReasoningContainer isReviewing={false} {...params} />,
   getTitle: () => ({
     htmlTitle: "Project change request reasoning",
     displayTitle: "Project change request reasoning"
   }),
-  container: PCRViewReasoning,
   accessControl: (auth, { projectId }, config) => config.features.pcrsEnabled && auth.forProject(projectId).hasAnyRoles(ProjectRole.ProjectManager, ProjectRole.MonitoringOfficer)
 });
 
-export const PCRReviewReasoning = definition.connect({
-  withData: withData(true),
-  withCallbacks: () => ({})
-});
-
-export const PCRReviewReasoningRoute = definition.route({
+export const PCRReviewReasoningRoute = defineRoute<Params>({
   routeName: "pcrReviewReasoning",
   routePath: "/projects/:projectId/pcrs/:pcrId/review/reasoning",
-  getParams,
-  getLoadDataActions: loadDataActions,
+  container: (params) => <PCRViewReasoningContainer isReviewing={true} {...params} />,
+  getParams: (route) => ({
+    projectId: route.params.projectId,
+    pcrId: route.params.pcrId
+  }),
   getTitle: () => ({
     htmlTitle: "Review project change request reasoning",
     displayTitle: "Review project change request reasoning"
   }),
-  container: PCRReviewReasoning,
-  accessControl: (auth, { projectId }, config) => config.features.pcrsEnabled && auth.forProject(projectId).hasAnyRoles(ProjectRole.ProjectManager, ProjectRole.MonitoringOfficer)
+  accessControl: (auth, { projectId }, config) => config.features.pcrsEnabled && auth.forProject(projectId).hasAnyRoles(ProjectRole.MonitoringOfficer)
 });

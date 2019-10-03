@@ -1,16 +1,14 @@
 import React from "react";
 
-import { ContainerBase, ReduxContainer } from "../containerBase";
-import { PCRItemForTimeExtensionDto, ProjectDto, ProjectRole } from "@framework/types";
+import { BaseProps, ContainerBase, defineRoute } from "../containerBase";
+import { ProjectRole } from "@framework/types";
 
 import * as ACC from "../../components";
-import * as Actions from "../../redux/actions";
-import * as Selectors from "../../redux/selectors";
 import { Pending } from "@shared/pending";
-import { PCRDto, PCRItemDto } from "@framework/dtos";
+import { PCRDto, PCRItemForTimeExtensionDto, ProjectDto } from "@framework/dtos";
 import { ProjectChangeRequestPrepareRoute } from "./prepare";
-import { EditorStatus, IEditorStore, } from "@ui/redux";
-import { ProjectChangeRequestItemStatus, ProjectChangeRequestItemTypeEntity } from "@framework/entities";
+import { EditorStatus, IEditorStore, StoresConsumer, } from "@ui/redux";
+import { ProjectChangeRequestItemStatus } from "@framework/entities";
 import { PCRDtoValidator, PCRTimeExtentionItemDtoValidator } from "@ui/validators";
 
 export interface ProjectChangeRequestPrepareItemForTimeExtensionParams {
@@ -27,8 +25,7 @@ interface Data {
 }
 
 interface Callbacks {
-  onChange: (projectId: string, pcrId: string, dto: PCRDto) => void;
-  onSave: (projectId: string, pcrId: string, dto: PCRDto) => void;
+  onChange: (saving: boolean, dto: PCRDto) => void;
 }
 
 class PCRPrepareItemForTimeExtensionComponent extends ContainerBase<ProjectChangeRequestPrepareItemForTimeExtensionParams, Data, Callbacks> {
@@ -80,15 +77,15 @@ class PCRPrepareItemForTimeExtensionComponent extends ContainerBase<ProjectChang
             <Form.Fieldset heading="Current end date">
               <Form.Custom
                 name="currentEndDate"
-                value={m => <ACC.Renderers.SimpleString><ACC.Renderers.FullDate value={project.periodEndDate}/></ACC.Renderers.SimpleString>}
-                update={(m,v) => { return; }}
+                value={m => <ACC.Renderers.SimpleString><ACC.Renderers.FullDate value={project.periodEndDate} /></ACC.Renderers.SimpleString>}
+                update={(m, v) => { return; }}
               />
             </Form.Fieldset>
             <Form.Fieldset heading="Set a new end date">
               <Form.Date
                 name="endDate"
                 value={m => m.projectEndDate}
-                update={(m,v) => m.projectEndDate = v}
+                update={(m, v) => m.projectEndDate = v}
                 validation={validator.projectEndDate}
                 hint={"The date must be at the end of a month, for example 31 01 2021"}
               />
@@ -113,7 +110,7 @@ class PCRPrepareItemForTimeExtensionComponent extends ContainerBase<ProjectChang
   private onChange(dto: PCRDto, itemDto: PCRItemForTimeExtensionDto): void {
     const index = dto.items.findIndex(x => x.id === this.props.itemId);
     dto.items[index] = itemDto;
-    this.props.onChange(this.props.projectId, this.props.pcrId, dto);
+    this.props.onChange(false, dto);
   }
 
   private onSave(dto: PCRDto): void {
@@ -122,47 +119,42 @@ class PCRPrepareItemForTimeExtensionComponent extends ContainerBase<ProjectChang
     if (dto.items[index].status === ProjectChangeRequestItemStatus.ToDo) {
       dto.items[index].status = ProjectChangeRequestItemStatus.Incomplete;
     }
-    this.props.onSave(this.props.projectId, this.props.pcrId, dto);
+    this.props.onChange(true, dto);
   }
 }
 
-const definition = ReduxContainer.for<ProjectChangeRequestPrepareItemForTimeExtensionParams, Data, Callbacks>(PCRPrepareItemForTimeExtensionComponent);
+const PCRPrepareItemForTimeExtensionContainer = (props: ProjectChangeRequestPrepareItemForTimeExtensionParams & BaseProps) => (
+  <StoresConsumer>
+    {stores => (
+      <PCRPrepareItemForTimeExtensionComponent
+        project={stores.projects.getById(props.projectId)}
+        pcr={stores.projectChangeRequests.getById(props.projectId, props.pcrId)}
+        pcrItem={stores.projectChangeRequests.getTimeExtentionItemById(props.projectId, props.pcrId, props.itemId)}
+        editor={stores.projectChangeRequests.getPcrUpdateEditor(props.projectId, props.pcrId)}
+        onChange={(saving, dto) => stores.projectChangeRequests.updatePcrEditor(saving, props.projectId, dto, undefined,
+          () => stores.navigation.navigateTo(ProjectChangeRequestPrepareRoute.getLink({ projectId: props.projectId, pcrId: props.pcrId }))
+        )}
+        {...props}
+      />
+    )}
+  </StoresConsumer>
+);
 
-export const PCRPrepareItemForTimeExtension = definition.connect({
-  withData: (state, params) => ({
-    project: Selectors.getProject(params.projectId).getPending(state),
-    pcr: Selectors.getPcr(params.projectId, params.pcrId).getPending(state),
-    pcrItem: Selectors.getPcrItemForTimeExtension(state, params.projectId, params.pcrId, params.itemId),
-    editor: Selectors.getPcrEditor(params.projectId, params.pcrId).get(state)
-  }),
-  withCallbacks: (dispatch) => ({
-    onChange: (projectId: string, pcrId: string, dto: PCRDto) => dispatch(Actions.validatePCR(projectId, pcrId, dto)),
-    onSave: (projectId: string, pcrId: string, dto: PCRDto) =>
-      dispatch(Actions.savePCR(projectId, pcrId, dto, () =>
-        dispatch(Actions.navigateTo(ProjectChangeRequestPrepareRoute.getLink({ projectId, pcrId }))))),
-  })
-});
-
-export const ProjectChangeRequestPrepareItemForTimeExtensionRoute = definition.route({
+export const ProjectChangeRequestPrepareItemForTimeExtensionRoute = defineRoute({
   routeName: "projectChangeRequestPrepareItemForTimeExtension",
   routePath: "/projects/:projectId/pcrs/:pcrId/prepare/time-extension/:itemId",
+  container: PCRPrepareItemForTimeExtensionContainer,
   getParams: (route) => ({
     projectId: route.params.projectId,
     pcrId: route.params.pcrId,
     itemId: route.params.itemId
   }),
-  getLoadDataActions: (params) => [
-    Actions.loadProject(params.projectId),
-    Actions.loadPcr(params.projectId, params.pcrId),
-    Actions.loadPcrTypes(),
-  ],
-  getTitle: (store, params) => {
-    const typeName = Selectors.getPcrItem(params.projectId, params.pcrId, params.itemId).getPending(store).then(x => x.typeName).data;
+  getTitle: (store, params, stores) => {
+    const typeName = stores.projectChangeRequests.getItemById(params.projectId, params.pcrId, params.itemId).then(x => x.typeName).data;
     return {
       htmlTitle: typeName ? `Prepare ${typeName}` : "Prepare project change request item",
       displayTitle: typeName ? `Prepare ${typeName}` : "Prepare project change request item",
     };
   },
-  container: PCRPrepareItemForTimeExtension,
   accessControl: (auth, { projectId }, config) => config.features.pcrsEnabled && auth.forProject(projectId).hasRole(ProjectRole.ProjectManager)
 });

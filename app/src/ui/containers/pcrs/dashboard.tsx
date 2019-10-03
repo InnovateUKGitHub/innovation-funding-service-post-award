@@ -1,18 +1,17 @@
 import React from "react";
 
-import { ProjectChangeRequestItemTypeEntity, ProjectChangeRequestStatus } from "@framework/entities";
-import { Pending } from "@shared/pending";
-import * as ACC from "../../components";
-import * as Actions from "../../redux/actions";
-import * as Selectors from "../../redux/selectors";
-import { ILinkInfo, ProjectDto, ProjectRole } from "@framework/types";
-import { ContainerBase, ReduxContainer } from "../containerBase";
 import { PCRDetailsRoute } from "./details";
+import { ProjectChangeRequestItemTypeEntity, ProjectChangeRequestStatus } from "@framework/entities";
+import * as ACC from "../../components";
+import { ILinkInfo, ProjectDto, ProjectRole } from "@framework/types";
+import { BaseProps, ContainerBase, defineRoute } from "../containerBase";
+import { Pending } from "@shared/pending";
 import { PCRCreateRoute } from "./create";
 import { PCRSummaryDto } from "@framework/dtos/pcrDtos";
 import { PCRDeleteRoute } from "./delete";
 import { PCRReviewRoute } from "./review";
 import { ProjectChangeRequestPrepareRoute } from "./prepare";
+import { StoresConsumer } from "@ui/redux";
 
 interface Params {
   projectId: string;
@@ -44,7 +43,7 @@ class PCRsDashboardComponent extends ContainerBase<Params, Data, Callbacks> {
         pageTitle={<ACC.Projects.Title project={project} />}
         project={project}
       >
-        <ACC.Renderers.Messages messages={this.props.messages}/>
+        <ACC.Renderers.Messages messages={this.props.messages} />
         <ACC.Section qa="pcr-table">
           {this.renderTable(project, active, "pcrs-active")}
           {this.renderStartANewRequestLink(project)}
@@ -106,30 +105,30 @@ class PCRsDashboardComponent extends ContainerBase<Params, Data, Callbacks> {
   }
 }
 
-const definition = ReduxContainer.for<Params, Data, Callbacks>(PCRsDashboardComponent);
+const PCRsDashboardContainer = (props: Params & BaseProps) => (
+  <StoresConsumer>
+    {
+      stores => (
+        <PCRsDashboardComponent
+          project={stores.projects.getById(props.projectId)}
+          pcrs={ stores.projectChangeRequests.getAllForProject(props.projectId)}
+          {...props}
+        />
+      )
+    }
+  </StoresConsumer>
+);
 
-export const PCRsDashboard = definition.connect({
-  withData: (state, params) => ({
-    project: Selectors.getProject(params.projectId).getPending(state),
-    pcrs: Selectors.getAllPcrs(params.projectId).getPending(state)
-  }),
-  withCallbacks: () => ({})
-});
-
-export const PCRsDashboardRoute = definition.route({
+export const PCRsDashboardRoute = defineRoute({
   routeName: "pcrsDashboard",
   routePath: "/projects/:projectId/pcrs/dashboard",
+  container: PCRsDashboardContainer,
   getParams: (route) => ({
     projectId: route.params.projectId,
   }),
-  getLoadDataActions: (params) => [
-    Actions.loadProject(params.projectId),
-    Actions.loadPcrs(params.projectId),
-  ],
   getTitle: () => ({
     htmlTitle: "Project change requests",
     displayTitle: "Project change requests"
   }),
-  container: PCRsDashboard,
   accessControl: (auth, { projectId }, config) => config.features.pcrsEnabled && auth.forProject(projectId).hasAnyRoles(ProjectRole.FinancialContact, ProjectRole.ProjectManager, ProjectRole.MonitoringOfficer)
 });

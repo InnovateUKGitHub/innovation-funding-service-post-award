@@ -1,14 +1,14 @@
-import { LoadingStatus, Pending } from "@shared/pending";
 import { StoreBase } from "./storeBase";
+import { PCRDto, PCRItemForTimeExtensionDto, PCRStandardItemDto } from "@framework/dtos";
 import { PCRDtoValidator } from "@ui/validators";
 import { ProjectsStore } from "./projectsStore";
 import { RootState } from "../reducers";
 import { ApiClient } from "@ui/apiClient";
-import { PCRDto } from "@framework/dtos";
+import { LoadingStatus, Pending } from "@shared/pending";
 import { ActionsUnion, dataLoadAction, messageSuccess } from "../actions";
 import { ILinkInfo } from "@framework/types";
 import { ProjectChangeRequestDtoValidatorForCreate } from "@ui/validators/projectChangeRequestDtoValidatorForCreate";
-import { ProjectChangeRequestItemStatus, ProjectChangeRequestStatus } from "@framework/entities";
+import { ProjectChangeRequestItemStatus, ProjectChangeRequestItemTypeEntity, ProjectChangeRequestStandardItemTypes, ProjectChangeRequestStatus } from "@framework/entities";
 import { NotFoundError } from "@server/features/common";
 
 export class ProjectChangeRequestStore extends StoreBase {
@@ -40,6 +40,37 @@ export class ProjectChangeRequestStore extends StoreBase {
     });
   }
 
+  getStandardItemById(projectId: string, pcrId: string, itemId: string) {
+    return this.getItemById(projectId, pcrId, itemId).chain(item => {
+      if (
+        item.type === ProjectChangeRequestItemTypeEntity.AccountNameChange ||
+        item.type === ProjectChangeRequestItemTypeEntity.MultiplePartnerFinancialVirement ||
+        item.type === ProjectChangeRequestItemTypeEntity.PartnerAddition ||
+        item.type === ProjectChangeRequestItemTypeEntity.PartnerWithdrawal ||
+        item.type === ProjectChangeRequestItemTypeEntity.ProjectSuspension ||
+        item.type === ProjectChangeRequestItemTypeEntity.ProjectTermination ||
+        item.type === ProjectChangeRequestItemTypeEntity.ScopeChange ||
+        item.type === ProjectChangeRequestItemTypeEntity.SinglePartnerFinancialVirement
+      ) {
+        return Pending.done(item);
+      }
+      else {
+        return new Pending<PCRStandardItemDto>(LoadingStatus.Failed, null, new NotFoundError("Item is incorrect type"));
+      }
+    });
+  }
+
+  getTimeExtentionItemById(projectId: string, pcrId: string, itemId: string) {
+    return this.getItemById(projectId, pcrId, itemId).chain(item => {
+      if(item.type === ProjectChangeRequestItemTypeEntity.TimeExtension) {
+        return Pending.done(item);
+      }
+      else {
+        return new Pending<PCRItemForTimeExtensionDto>(LoadingStatus.Failed, null, new NotFoundError("Item is incorrect type"));
+      }
+    });
+  }
+
   getAllForProject(projectId: string) {
     return this.getData("pcrs", projectId, p => ApiClient.pcrs.getAll({ projectId, ...p }));
   }
@@ -53,7 +84,7 @@ export class ProjectChangeRequestStore extends StoreBase {
       "pcr",
       this.getKeyForRequest(projectId),
       () => Pending.done<PCRDto>({
-        id:"",
+        id: "",
         projectId,
         status: ProjectChangeRequestStatus.Draft,
         statusName: "",
@@ -89,13 +120,13 @@ export class ProjectChangeRequestStore extends StoreBase {
       this.getKeyForRequest(projectId, dto.id),
       dto,
       (showErrors) => dto.id ? this.getValidator(projectId, dto, showErrors) : this.getCreateValidator(dto, showErrors),
-      p => dto.id ? ApiClient.pcrs.update({ projectId, id: dto.id, pcr: dto, ...p }) : ApiClient.pcrs.create({projectId, projectChangeRequestDto: dto, ...p}),
+      p => dto.id ? ApiClient.pcrs.update({ projectId, id: dto.id, pcr: dto, ...p }) : ApiClient.pcrs.create({ projectId, projectChangeRequestDto: dto, ...p }),
       (result) => {
         this.queue(dataLoadAction(this.getKeyForRequest(projectId, result.id), "pcr", LoadingStatus.Updated, result));
         if (message) {
           this.queue(messageSuccess(message));
         }
-        if(onComplete) {
+        if (onComplete) {
           onComplete(result);
         }
       }
@@ -104,7 +135,7 @@ export class ProjectChangeRequestStore extends StoreBase {
 
   private getValidator(projectId: string, dto: PCRDto, showErrors: boolean): any {
     return Pending.combine({
-      projectRoles:this.projectStore.getById(projectId).then(x => x.roles),
+      projectRoles: this.projectStore.getById(projectId).then(x => x.roles),
       original: this.getById(projectId, dto.id),
       itemTypes: this.getAllPcrTypes(),
     }).then(x => new PCRDtoValidator(dto, x.projectRoles, x.original, x.itemTypes, showErrors));
@@ -122,10 +153,10 @@ export class ProjectChangeRequestStore extends StoreBase {
       () => this.createValidator(projectId, pcrId, dto, false),
       (p) => ApiClient.pcrs.delete({ projectId, id: pcrId, ...p }),
       () => {
-        if(message) {
+        if (message) {
           this.queue(messageSuccess(message));
         }
-        if(onComplete) {
+        if (onComplete) {
           onComplete();
         }
       }
@@ -133,7 +164,7 @@ export class ProjectChangeRequestStore extends StoreBase {
   }
 
   getStatusChanges(projectId: string, projectChangeRequestId: string) {
-    return this.getData("projectChangeRequestStatusChanges", this.getKeyForRequest(projectId, projectChangeRequestId), p => ApiClient.pcrs.getStatusChanges({projectId, projectChangeRequestId, ...p}));
+    return this.getData("projectChangeRequestStatusChanges", this.getKeyForRequest(projectId, projectChangeRequestId), p => ApiClient.pcrs.getStatusChanges({ projectId, projectChangeRequestId, ...p }));
   }
 
 }

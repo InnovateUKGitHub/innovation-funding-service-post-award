@@ -1,18 +1,15 @@
 import React from "react";
 
-import { ContainerBase, ReduxContainer } from "../containerBase";
+import { BaseProps, ContainerBase, defineRoute } from "../containerBase";
 import { PCRItemDto, ProjectDto, ProjectRole } from "@framework/types";
 
 import * as ACC from "../../components";
-import * as Actions from "../../redux/actions";
-import { navigateTo } from "../../redux/actions";
-import * as Selectors from "../../redux/selectors";
 import { Pending } from "@shared/pending";
 import { PCRsDashboardRoute } from "./dashboard";
 import { ProjectChangeRequestPrepareItemRoute } from "./prepareItem";
 import { ProjectChangeRequestPrepareReasoningRoute } from "./prepareReasoning";
 import { PCRDto, ProjectChangeRequestStatusChangeDto } from "@framework/dtos/pcrDtos";
-import { IEditorStore } from "@ui/redux";
+import { IEditorStore, StoresConsumer } from "@ui/redux";
 import { PCRDtoValidator } from "@ui/validators/pcrDtoValidator";
 import { ProjectChangeRequestItemStatus, ProjectChangeRequestItemTypeEntity, ProjectChangeRequestStatus } from "@framework/entities";
 import { ProjectChangeRequestAddTypeRoute } from "@ui/containers";
@@ -31,8 +28,7 @@ interface Data {
 }
 
 interface Callbacks {
-  onChange: (projectId: string, pcrId: string, dto: PCRDto) => void;
-  onSave: (projectId: string, pcrId: string, dto: PCRDto) => void;
+  onChange: (save: boolean, dto: PCRDto) => void;
 }
 
 class PCRPrepareComponent extends ContainerBase<ProjectChangeRequestPrepareParams, Data, Callbacks> {
@@ -43,17 +39,18 @@ class PCRPrepareComponent extends ContainerBase<ProjectChangeRequestPrepareParam
   }
 
   private onSave(editor: IEditorStore<PCRDto, PCRDtoValidator>, original: PCRDto, submit: boolean) {
+    const dto = editor.data;
     if (submit && original.status === ProjectChangeRequestStatus.QueriedByInnovateUK) {
-      editor.data.status = ProjectChangeRequestStatus.SubmittedToInnovationLead;
+      dto.status = ProjectChangeRequestStatus.SubmittedToInnovationLead;
     }
     else if (submit) {
-      editor.data.status = ProjectChangeRequestStatus.SubmittedToMonitoringOfficer;
+      dto.status = ProjectChangeRequestStatus.SubmittedToMonitoringOfficer;
     }
     else {
       // not submitting so set status to the original status
-      editor.data.status = original.status;
+      dto.status = original.status;
     }
-    this.props.onSave(this.props.projectId, this.props.pcrId, editor.data);
+    this.props.onChange(true, dto);
   }
 
   private renderContents(project: ProjectDto, projectChangeRequest: PCRDto, editor: IEditorStore<PCRDto, PCRDtoValidator>) {
@@ -132,7 +129,7 @@ class PCRPrepareComponent extends ContainerBase<ProjectChangeRequestPrepareParam
         </ACC.TaskList>
         <Form.Form
           editor={editor}
-          onChange={dto => this.props.onChange(projectChangeRequest.projectId, projectChangeRequest.id, dto)}
+          onChange={dto => this.props.onChange(false, dto)}
           onSubmit={() => this.onSave(editor, projectChangeRequest, true)}
         >
           <Form.Fieldset heading="Add comments for your monitoring officer">
@@ -178,38 +175,34 @@ class PCRPrepareComponent extends ContainerBase<ProjectChangeRequestPrepareParam
   }
 }
 
-const definition = ReduxContainer.for<ProjectChangeRequestPrepareParams, Data, Callbacks>(PCRPrepareComponent);
+const PCRPrepareContainer = (props: ProjectChangeRequestPrepareParams & BaseProps) => (
+  <StoresConsumer>
+    {
+      stores => (
+        <PCRPrepareComponent
+          project={stores.projects.getById(props.projectId)}
+          pcr={stores.projectChangeRequests.getById(props.projectId, props.pcrId)}
+          statusChanges={stores.projectChangeRequests.getStatusChanges(props.projectId, props.pcrId)}
+          editor={stores.projectChangeRequests.getPcrUpdateEditor(props.projectId, props.pcrId)}
+          onChange={(saving: boolean, dto: PCRDto) => stores.projectChangeRequests.updatePcrEditor(saving, props.projectId, dto, undefined, () => stores.navigation.navigateTo(PCRsDashboardRoute.getLink({ projectId: props.projectId })))}
+          {...props}
+        />
+      )
+    }
+  </StoresConsumer>
+);
 
-export const PCRPrepare = definition.connect({
-  withData: (state, params) => ({
-    project: Selectors.getProject(params.projectId).getPending(state),
-    pcr: Selectors.getPcr(params.projectId, params.pcrId).getPending(state),
-    editor: Selectors.getPcrEditor(params.projectId, params.pcrId).get(state),
-    statusChanges: Selectors.getProjectChangeRequestStatusChanges(params.pcrId).getPending(state)
-  }),
-  withCallbacks: (dispatch) => ({
-    onChange: (projectId: string, pcrId: string, dto: PCRDto) => dispatch(Actions.validatePCR(projectId, pcrId, dto)),
-    onSave: (projectId: string, pcrId: string, dto: PCRDto) => dispatch(Actions.savePCR(projectId, pcrId, dto, () => dispatch(navigateTo(PCRsDashboardRoute.getLink({ projectId })))))
-  })
-});
-
-export const ProjectChangeRequestPrepareRoute = definition.route({
+export const ProjectChangeRequestPrepareRoute = defineRoute({
   routeName: "pcrPrepare",
   routePath: "/projects/:projectId/pcrs/:pcrId/prepare",
+  container: PCRPrepareContainer,
   getParams: (route) => ({
     projectId: route.params.projectId,
     pcrId: route.params.pcrId,
   }),
-  getLoadDataActions: (params) => [
-    Actions.loadProject(params.projectId),
-    Actions.loadPcr(params.projectId, params.pcrId),
-    Actions.loadPcrTypes(),
-    Actions.loadProjectChangeRequestStatusChanges(params.projectId, params.pcrId)
-  ],
   getTitle: () => ({
     htmlTitle: "Request",
     displayTitle: "Request"
   }),
-  container: PCRPrepare,
   accessControl: (auth, { projectId }, config) => config.features.pcrsEnabled && auth.forProject(projectId).hasRole(ProjectRole.ProjectManager)
 });

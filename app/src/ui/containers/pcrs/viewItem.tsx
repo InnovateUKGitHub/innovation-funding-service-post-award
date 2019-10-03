@@ -1,6 +1,6 @@
 import React from "react";
 
-import { ContainerBase, ReduxContainer } from "../containerBase";
+import { BaseProps, ContainerBase, defineRoute } from "../containerBase";
 import { ProjectDto, ProjectRole } from "@framework/types";
 
 import * as ACC from "../../components";
@@ -9,8 +9,7 @@ import * as Selectors from "../../redux/selectors";
 import { Pending } from "@shared/pending";
 import { PCRDetailsRoute } from "./details";
 import { PCRDto, PCRItemDto } from "@framework/dtos/pcrDtos";
-import { State as RouteState } from "router5";
-import { RootState } from "@ui/redux";
+import { StoresConsumer } from "@ui/redux";
 import { PCRReviewRoute } from "./review";
 import { NavigationArrowsForPCRs } from "./navigationArrows";
 
@@ -67,66 +66,54 @@ class PCRViewItemComponent extends ContainerBase<Params, Data, Callbacks> {
   }
 }
 
-const definition = ReduxContainer.for<Params, Data, Callbacks>(PCRViewItemComponent);
+const PCRViewItemContainer = (props: Params & BaseProps & { isReviewing: boolean }) => (
+  <StoresConsumer>
+    {
+      stores => (
+        <PCRViewItemComponent
+          project={stores.projects.getById(props.projectId)}
+          pcr={stores.projectChangeRequests.getById(props.projectId, props.pcrId)}
+          pcrItem={stores.projectChangeRequests.getItemById(props.projectId, props.pcrId, props.itemId)}
+          files={stores.documents.pcrOrPcrItemDocuments(props.projectId, props.itemId)}
+          isReviewing={false}
+          {...props}
+        />
+      )
+    }
+  </StoresConsumer>
+);
 
-const withData = (isReviewing: boolean) => (state: RootState, params: Params) => ({
-  project: Selectors.getProject(params.projectId).getPending(state),
-  pcr: Selectors.getPcr(params.projectId, params.pcrId).getPending(state),
-  pcrItem: Selectors.getPcrItem(params.projectId, params.pcrId, params.itemId).getPending(state),
-  files: Selectors.getProjectChangeRequestDocumentsOrItemDocuments(params.itemId).getPending(state),
-  isReviewing
-});
-
-const getParams = (route: RouteState): Params => ({
-  projectId: route.params.projectId,
-  pcrId: route.params.pcrId,
-  itemId: route.params.itemId
-});
-
-const loadDataActions = (params: Params) => ([
-  Actions.loadProject(params.projectId),
-  Actions.loadPcr(params.projectId, params.pcrId),
-  Actions.loadProjectChangeRequestDocumentsOrItemDocuments(params.projectId, params.itemId)
-]);
-
-export const PCRViewItem = definition.connect({
-  withData: withData(false),
-  withCallbacks: () => ({})
-});
-
-export const PCRViewItemRoute = definition.route({
+export const PCRViewItemRoute = defineRoute<Params>({
   routeName: "pcrViewItem",
   routePath: "/projects/:projectId/pcrs/:pcrId/details/item/:itemId",
-  getParams,
-  getLoadDataActions: loadDataActions,
-  getTitle: (store, params) => {
-    const typeName = Selectors.getPcrItem(params.projectId, params.pcrId, params.itemId).getPending(store).then(x => x.typeName).data;
-    return {
-      htmlTitle: typeName ? `${typeName}` : "Project change request item",
-      displayTitle: typeName ? `${typeName}` : "Project change request item",
-    };
-  },
-  container: PCRViewItem,
+  container: (params) => <PCRViewItemContainer isReviewing={false} {...params} />,
+  getParams: route => ({
+    projectId: route.params.projectId,
+    pcrId: route.params.pcrId,
+    itemId: route.params.itemId
+  }),
+  getTitle: () => ({
+    htmlTitle: "Project change request item",
+    displayTitle: "Project change request item"
+  }),
   accessControl: (auth, { projectId }, config) => config.features.pcrsEnabled && auth.forProject(projectId).hasAnyRoles(ProjectRole.ProjectManager, ProjectRole.MonitoringOfficer)
 });
 
-export const PCRReviewItem = definition.connect({
-  withData: withData(true),
-  withCallbacks: () => ({})
-});
-
-export const PCRReviewItemRoute = definition.route({
+export const PCRReviewItemRoute = defineRoute<Params>({
   routeName: "pcrReviewItem",
   routePath: "/projects/:projectId/pcrs/:pcrId/review/item/:itemId",
-  getParams,
-  getLoadDataActions: loadDataActions,
-  getTitle: (store, params) => {
-    const typeName = Selectors.getPcrItem(params.projectId, params.pcrId, params.itemId).getPending(store).then(x => x.typeName).data;
+  container: (params) => <PCRViewItemContainer isReviewing={true} {...params} />,
+  getParams: route => ({
+    projectId: route.params.projectId,
+    pcrId: route.params.pcrId,
+    itemId: route.params.itemId
+  }),
+  getTitle: (store, params, stores) => {
+    const typeName = stores.projectChangeRequests.getItemById(params.projectId, params.pcrId, params.itemId).then(x => x.typeName).data;
     return {
       htmlTitle: typeName ? `Review ${typeName}` : "Review project change request item",
       displayTitle: typeName ? `Review ${typeName}` : "Review project change request item",
     };
   },
-  container: PCRReviewItem,
   accessControl: (auth, { projectId }, config) => config.features.pcrsEnabled && auth.forProject(projectId).hasRole(ProjectRole.MonitoringOfficer)
 });

@@ -1,11 +1,9 @@
 import React from "react";
 
-import { ContainerBase, ReduxContainer } from "../containerBase";
+import { BaseProps, ContainerBase, defineRoute } from "../containerBase";
 import { ProjectDto, ProjectRole } from "@framework/types";
 
 import * as ACC from "../../components";
-import * as Selectors from "../../redux/selectors";
-import * as Actions from "@ui/redux/actions";
 import { Pending } from "@shared/pending";
 import { PCRsDashboardRoute } from "./dashboard";
 import { ProjectChangeRequestViewItemForTimeExtensionRoute } from "./viewItemForTimeExtension";
@@ -13,6 +11,7 @@ import { PCRViewItemRoute } from "./viewItem";
 import { PCRViewReasoningRoute } from "./viewReasoning";
 import { PCRDto, PCRItemDto, ProjectChangeRequestStatusChangeDto } from "@framework/dtos/pcrDtos";
 import { ProjectChangeRequestItemStatus, ProjectChangeRequestItemTypeEntity } from "@framework/entities";
+import { StoresConsumer } from "@ui/redux";
 
 interface Params {
   projectId: string;
@@ -132,33 +131,30 @@ class PCRDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
   }
 }
 
-const definition = ReduxContainer.for<Params, Data, Callbacks>(PCRDetailsComponent);
+const PCRDetailsContainer = (props: Params&BaseProps) => (
+  <StoresConsumer>
+    {stores => (
+      <PCRDetailsComponent
+        project={stores.projects.getById(props.projectId)}
+        pcr={stores.projectChangeRequests.getById(props.projectId, props.pcrId)}
+        statusChanges={stores.projectChangeRequests.getStatusChanges(props.projectId, props.pcrId)}
+        {...props}
+      />
+    )}
+  </StoresConsumer>
+);
 
-export const PCRDetails = definition.connect({
-  withData: (state, params) => ({
-    project: Selectors.getProject(params.projectId).getPending(state),
-    pcr: Selectors.getPcr(params.projectId, params.pcrId).getPending(state),
-    statusChanges: Selectors.getProjectChangeRequestStatusChanges(params.pcrId).getPending(state)
-  }),
-  withCallbacks: () => ({})
-});
-
-export const PCRDetailsRoute = definition.route({
+export const PCRDetailsRoute = defineRoute({
   routeName: "pcrDetails",
   routePath: "/projects/:projectId/pcrs/:pcrId/details",
+  container: PCRDetailsContainer,
   getParams: (route) => ({
     projectId: route.params.projectId,
     pcrId: route.params.pcrId,
   }),
-  getLoadDataActions: (params) => [
-    Actions.loadProject(params.projectId),
-    Actions.loadPcr(params.projectId, params.pcrId),
-    Actions.loadProjectChangeRequestStatusChanges(params.projectId, params.pcrId)
-  ],
   getTitle: () => ({
     htmlTitle: "Request",
     displayTitle: "Request"
   }),
-  container: PCRDetails,
   accessControl: (auth, { projectId }, config) => config.features.pcrsEnabled && auth.forProject(projectId).hasAnyRoles(ProjectRole.ProjectManager, ProjectRole.MonitoringOfficer)
 });
