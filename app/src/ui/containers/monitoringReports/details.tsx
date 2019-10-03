@@ -1,12 +1,11 @@
 import React from "react";
-import { ContainerBase, ReduxContainer } from "../containerBase";
-import * as Actions from "../../redux/actions";
-import * as Selectors from "../../redux/selectors";
+import { BaseProps, ContainerBase, defineRoute } from "../containerBase";
 import * as ACC from "../../components";
 import * as Dtos from "@framework/types";
 import { Pending } from "../../../shared/pending";
 import { MonitoringReportDashboardRoute } from "./dashboard";
 import { MonitoringReportQuestionDto, ProjectRole } from "@framework/types";
+import { StoresConsumer } from "@ui/redux";
 
 interface Params {
   projectId: string;
@@ -53,7 +52,7 @@ class DetailsComponent extends ContainerBase<Params, Data, Callbacks> {
         backLink={<ACC.BackLink route={MonitoringReportDashboardRoute.getLink({ projectId: this.props.projectId })}>Back to monitoring reports</ACC.BackLink>}
         pageTitle={<ACC.Projects.Title project={project} />}
       >
-        <ACC.HashTabs tabList={tabs}/>
+        <ACC.HashTabs tabList={tabs} />
       </ACC.Page>
     );
   }
@@ -62,7 +61,7 @@ class DetailsComponent extends ContainerBase<Params, Data, Callbacks> {
     return (
       <ACC.Loader
         pending={this.props.statusChanges}
-        render={(statusChanges) => <ACC.Section title="Log"><ACC.Logs data={statusChanges} qa="monitoring-report-status-change-table"/></ACC.Section>}
+        render={(statusChanges) => <ACC.Section title="Log"><ACC.Logs data={statusChanges} qa="monitoring-report-status-change-table" /></ACC.Section>}
       />);
   }
 
@@ -111,29 +110,28 @@ class DetailsComponent extends ContainerBase<Params, Data, Callbacks> {
   }
 }
 
-const containerDefinition = ReduxContainer.for<Params, Data, Callbacks>(DetailsComponent);
+const DetailsContainer = (props: Params & BaseProps) => (
+  <StoresConsumer>
+    {
+      stores => (
+        <DetailsComponent
+          project={stores.projects.getById(props.projectId)}
+          report={stores.monitoringReports.getById(props.projectId, props.id)}
+          statusChanges={stores.monitoringReports.getStatusChanges(props.projectId, props.id)}
+          {...props}
+        />
+      )
+    }
+  </StoresConsumer>
+);
 
-export const MonitoringReportView = containerDefinition.connect({
-  withData: (state, props) => ({
-    project: Selectors.getProject(props.projectId).getPending(state),
-    report: Selectors.getMonitoringReport(props.projectId, props.id).getPending(state),
-    statusChanges: Selectors.getMonitoringReportStatusChanges(props.id).getPending(state),
-  }),
-  withCallbacks: () => ({})
-});
-
-export const MonitoringReportViewRoute = containerDefinition.route({
+export const MonitoringReportViewRoute = defineRoute({
   routeName: "monitoringReportView",
   routePath: "/projects/:projectId/monitoring-reports/:id/details",
   getParams: (r) => ({ projectId: r.params.projectId, id: r.params.id }),
-  getLoadDataActions: (params) => [
-    Actions.loadProject(params.projectId),
-    Actions.loadMonitoringReport(params.projectId, params.id),
-    Actions.loadMonitoringReportStatusChanges(params.projectId, params.id),
-  ],
-  container: MonitoringReportView,
+  container: DetailsContainer,
   accessControl: (auth, params) => auth.forProject(params.projectId).hasRole(ProjectRole.MonitoringOfficer),
-  getTitle: (state, params) => ({
+  getTitle: () => ({
     htmlTitle: "View monitoring report",
     displayTitle: "Monitoring report"
   })
