@@ -69,12 +69,10 @@ class PCRDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
           </ACC.SummaryList>
         </ACC.Section>
         <ACC.TaskList qa="taskList">
-          {projectChangeRequest.items.map((x, i) => (
-            <ACC.TaskListSection key={i} step={i + 1} title={x.typeName} qa={`task-${i}`}>
-              {this.getItemTasks(x)}
-            </ACC.TaskListSection>
-          ))}
-          <ACC.TaskListSection step={projectChangeRequest.items.length + 1} title={"View more details"} qa="reasoning">
+          <ACC.TaskListSection step={1} title="What do you want to do?" qa="WhatDoYouWantToDo">
+            {projectChangeRequest.items.map((x) => this.getItemTasks(x))}
+          </ACC.TaskListSection>
+          <ACC.TaskListSection step={2} title="View more details" qa="reasoning">
             <ACC.Task
               name="Reasoning for Innovate UK"
               status={this.getTaskStatus(projectChangeRequest.reasoningStatus)}
@@ -89,28 +87,11 @@ class PCRDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
   private getItemTasks(item: PCRItemDto) {
     return (
       <ACC.Task
-        name={this.getTaskText(item)}
+        name={item.typeName}
         status={this.getTaskStatus(item.status)}
         route={PCRViewItemRoute.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId, itemId: item.id })}
       />
     );
-  }
-
-  private getTaskText(item: PCRItemDto): string {
-    switch (item.type) {
-      case ProjectChangeRequestItemTypeEntity.TimeExtension:
-        return "View new end date for project";
-      case ProjectChangeRequestItemTypeEntity.AccountNameChange:
-      case ProjectChangeRequestItemTypeEntity.MultiplePartnerFinancialVirement:
-      case ProjectChangeRequestItemTypeEntity.PartnerAddition:
-      case ProjectChangeRequestItemTypeEntity.PartnerWithdrawal:
-      case ProjectChangeRequestItemTypeEntity.ProjectSuspension:
-      case ProjectChangeRequestItemTypeEntity.ProjectTermination:
-      case ProjectChangeRequestItemTypeEntity.ScopeChange:
-      case ProjectChangeRequestItemTypeEntity.SinglePartnerFinancialVirement:
-        return "View files";
-    }
-    return "Text not set";
   }
 
   private getTaskStatus(status: ProjectChangeRequestItemStatus): "To do" | "Complete" | "Incomplete" {
