@@ -82,12 +82,13 @@ class PCRPrepareItemForTimeExtensionComponent extends ContainerBase<ProjectChang
               />
             </Form.Fieldset>
             <Form.Fieldset heading="Set a new end date">
-              <Form.Date
+              <Form.MonthYear
                 name="endDate"
                 value={m => m.projectEndDate}
                 update={(m, v) => m.projectEndDate = v}
                 validation={validator.projectEndDate}
                 hint={"The date must be at the end of a month, for example 31 01 2021"}
+                startOrEnd="end"
               />
             </Form.Fieldset>
             <Form.Fieldset heading="Mark as complete">
