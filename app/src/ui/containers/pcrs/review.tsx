@@ -1,21 +1,18 @@
 import React from "react";
 
-import { ContainerBase, ReduxContainer } from "../containerBase";
+import { BaseProps, ContainerBase, defineRoute } from "../containerBase";
 import { ProjectDto, ProjectRole } from "@framework/types";
 
 import * as ACC from "@ui/components";
-import * as Actions from "@ui/redux/actions";
-import * as Selectors from "@ui/redux/selectors";
 import { Pending } from "@shared/pending";
 import { PCRsDashboardRoute } from "./dashboard";
 import { PCRReviewItemRoute } from "./viewItem";
 import { PCRReviewReasoningRoute } from "./viewReasoning";
 import { ProjectChangeRequestReviewItemForTimeExtensionRoute } from "./viewItemForTimeExtension";
 import { PCRDto, PCRItemDto, ProjectChangeRequestStatusChangeDto } from "@framework/dtos/pcrDtos";
-import { IEditorStore } from "@ui/redux";
+import { IEditorStore, StoresConsumer } from "@ui/redux";
 import { PCRDtoValidator } from "@ui/validators/pcrDtoValidator";
 import { ProjectChangeRequestItemStatus, ProjectChangeRequestItemTypeEntity, ProjectChangeRequestStatus } from "@framework/entities";
-import { navigateTo } from "../../redux/actions";
 
 export interface PCRReviewParams {
   projectId: string;
@@ -30,8 +27,7 @@ interface Data {
 }
 
 interface Callbacks {
-  onChange: (projectId: string, pcrId: string, dto: PCRDto) => void;
-  onSave: (projectId: string, pcrId: string, dto: PCRDto) => void;
+  onChange: (save: boolean, dto: PCRDto) => void;
 }
 
 class PCRReviewComponent extends ContainerBase<PCRReviewParams, Data, Callbacks> {
@@ -101,8 +97,8 @@ class PCRReviewComponent extends ContainerBase<PCRReviewParams, Data, Callbacks>
         </ACC.TaskList>
         <Form.Form
           editor={editor}
-          onChange={dto => this.props.onChange(projectChangeRequest.projectId, projectChangeRequest.id, dto)}
-          onSubmit={() => this.props.onSave(projectChangeRequest.projectId, projectChangeRequest.id, editor.data)}
+          onChange={dto => this.props.onChange(false, dto)}
+          onSubmit={() => this.props.onChange(true, editor.data)}
           qa="pcr-review-form"
         >
           <Form.Fieldset heading="How do you want to proceed?">
@@ -175,39 +171,33 @@ class PCRReviewComponent extends ContainerBase<PCRReviewParams, Data, Callbacks>
   }
 }
 
-const definition = ReduxContainer.for<PCRReviewParams, Data, Callbacks>(PCRReviewComponent);
+const PCRReviewContainer = (props: PCRReviewParams & BaseProps) => (
+  <StoresConsumer>
+    {stores => (
+      <PCRReviewComponent
+        project={stores.projects.getById(props.projectId)}
+        pcr={stores.projectChangeRequests.getById(props.projectId, props.pcrId)}
+        statusChanges={stores.projectChangeRequests.getStatusChanges(props.projectId, props.pcrId)}
+        // initalise editor pcr status to unknown to force state selection via form
+        editor={stores.projectChangeRequests.getPcrUpdateEditor(props.projectId, props.pcrId, x => x.status = ProjectChangeRequestStatus.Unknown)}
+        onChange={(save, dto) => stores.projectChangeRequests.updatePcrEditor(save, props.projectId, dto, undefined, () => stores.navigation.navigateTo(PCRsDashboardRoute.getLink({ projectId: props.projectId })))}
+        {...props}
+      />
+    )}
+  </StoresConsumer>
+);
 
-export const PCRReview = definition.connect({
-  withData: (state, params) => ({
-    project: Selectors.getProject(params.projectId).getPending(state),
-    pcr: Selectors.getPcr(params.projectId, params.pcrId).getPending(state),
-    // initalise editor pcr status to unknown to force state selection via form
-    editor: Selectors.getPcrEditor(params.projectId, params.pcrId).get(state, x => x.status = ProjectChangeRequestStatus.Unknown),
-    statusChanges: Selectors.getProjectChangeRequestStatusChanges(params.pcrId).getPending(state)
-  }),
-  withCallbacks: (dispatch) => ({
-    onChange: (projectId: string, pcrId: string, dto: PCRDto) => dispatch(Actions.validatePCR(projectId, pcrId, dto)),
-    onSave: (projectId: string, pcrId: string, dto: PCRDto) => dispatch(Actions.savePCR(projectId, pcrId, dto, () => dispatch(navigateTo(PCRsDashboardRoute.getLink({ projectId })))))
-  })
-});
-
-export const PCRReviewRoute = definition.route({
+export const PCRReviewRoute = defineRoute({
   routeName: "pcrReview",
   routePath: "/projects/:projectId/pcrs/:pcrId/review",
+  container: PCRReviewContainer,
   getParams: (route) => ({
     projectId: route.params.projectId,
     pcrId: route.params.pcrId,
   }),
-  getLoadDataActions: (params) => [
-    Actions.loadProject(params.projectId),
-    Actions.loadPcr(params.projectId, params.pcrId),
-    Actions.loadPcrTypes(),
-    Actions.loadProjectChangeRequestStatusChanges(params.projectId, params.pcrId)
-  ],
   getTitle: () => ({
     htmlTitle: "Request",
     displayTitle: "Request"
   }),
-  container: PCRReview,
   accessControl: (auth, { projectId }, config) => config.features.pcrsEnabled && auth.forProject(projectId).hasRole(ProjectRole.MonitoringOfficer)
 });

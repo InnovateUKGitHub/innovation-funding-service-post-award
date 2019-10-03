@@ -1,15 +1,13 @@
 import React from "react";
 
-import { ContainerBase, ReduxContainer } from "../containerBase";
+import { BaseProps, ContainerBase, defineRoute } from "../containerBase";
 import { ProjectDto, ProjectRole } from "@framework/types";
 
 import * as ACC from "../../components";
-import * as Actions from "../../redux/actions";
-import * as Selectors from "../../redux/selectors";
 import { Pending } from "@shared/pending";
 import { PCRsDashboardRoute } from "./dashboard";
 import { PCRDto } from "@framework/dtos/pcrDtos";
-import { IEditorStore } from "@ui/redux";
+import { IEditorStore, StoresConsumer } from "@ui/redux";
 import { PCRDtoValidator } from "@ui/validators";
 
 export interface PCRDeleteParams {
@@ -69,43 +67,31 @@ class PCRDeleteComponent extends ContainerBase<PCRDeleteParams, Data, Callbacks>
   }
 }
 
-const definition = ReduxContainer.for<PCRDeleteParams, Data, Callbacks>(PCRDeleteComponent);
+const PCRDeleteContainer = (props: PCRDeleteParams & BaseProps) => (
+  <StoresConsumer>
+    {stores => (
+      <PCRDeleteComponent
+        project={stores.projects.getById(props.projectId)}
+        pcr={stores.projectChangeRequests.getById(props.projectId, props.pcrId)}
+        editor={stores.projectChangeRequests.getPcrUpdateEditor(props.projectId, props.pcrId)}
+        onDelete={(projectId, pcrId, dto) => stores.projectChangeRequests.deletePcr(projectId, pcrId, dto, "Project change request has been deleted", () => stores.navigation.navigateTo(PCRsDashboardRoute.getLink({ projectId })))}
+        {...props}
+      />
+    )}
+  </StoresConsumer>
+);
 
-export const PCRDelete = definition.connect({
-  withData: (state, params) => ({
-    project: Selectors.getProject(params.projectId).getPending(state),
-    pcr: Selectors.getPcr(params.projectId, params.pcrId).getPending(state),
-    editor: Selectors.getPcrEditor(params.projectId, params.pcrId).get(state),
-  }),
-  withCallbacks: (dispatch) => ({
-    onDelete: (projectId: string, pcrId: string, dto: PCRDto) => dispatch(
-      Actions.deletePCR(
-        projectId,
-        pcrId,
-        dto,
-        () => dispatch(Actions.navigateBackTo(PCRsDashboardRoute.getLink({ projectId }))),
-        "Project change request has been deleted"
-      )
-    )
-  })
-});
-
-export const PCRDeleteRoute = definition.route({
+export const PCRDeleteRoute = defineRoute({
   routeName: "pcrDelete",
   routePath: "/projects/:projectId/pcrs/:pcrId/delete",
+  container: PCRDeleteContainer,
   getParams: (route) => ({
     projectId: route.params.projectId,
     pcrId: route.params.pcrId,
   }),
-  getLoadDataActions: (params) => [
-    Actions.loadProject(params.projectId),
-    Actions.loadPcr(params.projectId, params.pcrId),
-    Actions.loadPcrTypes(),
-  ],
   getTitle: () => ({
     htmlTitle: "Delete draft request",
     displayTitle: "Delete draft request"
   }),
-  container: PCRDelete,
   accessControl: (auth, { projectId }, config) => config.features.pcrsEnabled && auth.forProject(projectId).hasRole(ProjectRole.ProjectManager)
 });
