@@ -1,15 +1,13 @@
 import React from "react";
 
-import { ContainerBase, ReduxContainer } from "../containerBase";
+import { BaseProps, ContainerBase, defineRoute } from "../containerBase";
 import { ProjectDto, ProjectRole } from "@framework/types";
 
 import * as ACC from "../../components";
-import * as Actions from "../../redux/actions";
-import * as Selectors from "../../redux/selectors";
 import { Pending } from "@shared/pending";
 import { ProjectChangeRequestPrepareRoute } from "./prepare";
 import { PCRDto } from "@framework/dtos/pcrDtos";
-import { IEditorStore } from "@ui/redux";
+import { IEditorStore, StoresConsumer } from "@ui/redux";
 import { ProjectChangeRequestItemStatus } from "@framework/entities";
 import { MultipleDocumentUpdloadDtoValidator, PCRDtoValidator } from "@ui/validators";
 
@@ -27,14 +25,12 @@ interface Data {
 }
 
 interface Callbacks {
-  onChange: (projectId: string, pcrId: string, dto: PCRDto) => void;
-  onSave: (projectId: string, pcrId: string, dto: PCRDto) => void;
-  onFilesChange: (pcrId: string, dto: MultipleDocumentUploadDto) => void;
-  onFilesSave: (projectId: string, pcrId: string, dto: MultipleDocumentUploadDto) => void;
-  onFileDelete: (projectId: string, pcrId: string, dto: DocumentSummaryDto) => void;
+  onChange: (save: boolean, dto: PCRDto) => void;
+  onFilesChange: (save: boolean, dto: MultipleDocumentUploadDto) => void;
+  onFileDelete: (dto: MultipleDocumentUploadDto, document: DocumentSummaryDto) => void;
 }
 
-class PCRViewReasoningComponent extends ContainerBase<ProjectChangeRequestPrepareReasoningParams, Data, Callbacks> {
+class PCRPrepareReasoningComponent extends ContainerBase<ProjectChangeRequestPrepareReasoningParams, Data, Callbacks> {
   render() {
     const combined = Pending.combine({
       project: this.props.project,
@@ -82,8 +78,8 @@ class PCRViewReasoningComponent extends ContainerBase<ProjectChangeRequestPrepar
           <UploadForm.Form
             enctype="multipart"
             editor={documentsEditor}
-            onSubmit={() => this.props.onFilesSave(this.props.projectId, this.props.pcrId, documentsEditor.data)}
-            onChange={(dto) => this.props.onFilesChange(this.props.pcrId, dto)}
+            onSubmit={() => this.props.onFilesChange(true, documentsEditor.data)}
+            onChange={(dto) => this.props.onFilesChange(false, dto)}
             qa="projectChangeRequestItemUpload"
           >
             <UploadForm.Fieldset heading="Supporting information">
@@ -102,7 +98,7 @@ class PCRViewReasoningComponent extends ContainerBase<ProjectChangeRequestPrepar
         </ACC.Section>
 
         <ACC.Section title="Files uploaded">
-          {this.renderDocumentList(documents)}
+          {this.renderDocumentList(documents, documentsEditor.data)}
         </ACC.Section>
 
         <ACC.Section qa="reasoning-save-and-return">
@@ -137,71 +133,63 @@ class PCRViewReasoningComponent extends ContainerBase<ProjectChangeRequestPrepar
     );
   }
 
-  private renderDocumentList(documents: DocumentSummaryDto[]) {
+  private renderDocumentList(documents: DocumentSummaryDto[], dto: MultipleDocumentUploadDto) {
     return documents.length > 0
-      ? <ACC.DocumentListWithDelete onRemove={(document) => this.props.onFileDelete(this.props.projectId, this.props.pcrId, document)} documents={documents} qa="supporting-documents" />
+      ? <ACC.DocumentListWithDelete onRemove={(document) => this.props.onFileDelete(dto, document)} documents={documents} qa="supporting-documents" />
       : <ACC.ValidationMessage messageType="info" message="No files uploaded" />;
   }
 
   private onChange(dto: PCRDto): void {
-    this.props.onChange(this.props.projectId, this.props.pcrId, dto);
+    this.props.onChange(false, dto);
   }
 
   private onSave(dto: PCRDto): void {
     if (dto.reasoningStatus === ProjectChangeRequestItemStatus.ToDo) {
       dto.reasoningStatus = ProjectChangeRequestItemStatus.Incomplete;
     }
-    this.props.onSave(this.props.projectId, this.props.pcrId, dto);
+    this.props.onChange(true, dto);
   }
 }
 
-const definition = ReduxContainer.for<ProjectChangeRequestPrepareReasoningParams, Data, Callbacks>(PCRViewReasoningComponent);
+const PCRPrepareReasoningContainer = (props: ProjectChangeRequestPrepareReasoningParams & BaseProps) => (
+  <StoresConsumer>
+    {stores => (
+      <PCRPrepareReasoningComponent
+        project={stores.projects.getById(props.projectId)}
+        pcr={stores.projectChangeRequests.getById(props.projectId, props.pcrId)}
+        editor={stores.projectChangeRequests.getPcrUpdateEditor(props.projectId, props.pcrId)}
+        files={stores.documents.pcrOrPcrItemDocuments(props.projectId, props.pcrId)}
+        filesEditor={stores.documents.getPcrOrPcrItemDocumentsEditor(props.projectId, props.pcrId)}
+        onChange={(save, dto) => {
+          stores.messages.clearMessages();
+          stores.projectChangeRequests.updatePcrEditor(save, props.projectId, dto, undefined, ({ projectId, id }) => stores.navigation.navigateTo(ProjectChangeRequestPrepareRoute.getLink({ projectId, pcrId: id })));
+        }}
+        onFilesChange={(save, dto) => {
+          stores.messages.clearMessages();
+          const successMessage = dto.files.length === 1 ? `Your document has been uploaded.` : `${dto.files.length} documents have been uploaded.`;
+          stores.documents.updatePcrOrPcrItemDocumentsEditor(save, props.projectId, props.pcrId, dto, successMessage);
+        }}
+        onFileDelete={(dto, document) => {
+          stores.messages.clearMessages();
+          stores.documents.deletePcrOrPcrItemDocumentsEditor(props.projectId, props.pcrId, dto, document, "Your document has been removed.");
+        }}
+        {...props}
+      />
+    )}
+  </StoresConsumer>
+);
 
-export const PCRPrepareReasoning = definition.connect({
-  withData: (state, params) => ({
-    project: Selectors.getProject(params.projectId).getPending(state),
-    pcr: Selectors.getPcr(params.projectId, params.pcrId).getPending(state),
-    editor: Selectors.getPcrEditor(params.projectId, params.pcrId).get(state),
-    files: Selectors.getProjectChangeRequestDocumentsOrItemDocuments(params.pcrId).getPending(state),
-    filesEditor: Selectors.getProjectChangeRequestDocumentOrItemDocumentEditor(params.pcrId).get(state),
-  }),
-  withCallbacks: (dispatch) => ({
-    onChange: (projectId: string, pcrId: string, dto: PCRDto) => dispatch(Actions.validatePCR(projectId, pcrId, dto)),
-    onSave: (projectId: string, pcrId: string, dto: PCRDto) => dispatch(Actions.savePCR(projectId, pcrId, dto, () => dispatch(Actions.navigateTo(ProjectChangeRequestPrepareRoute.getLink({ projectId, pcrId }))))),
-    onFilesChange: (pcrId, dto) => {
-      dispatch(Actions.removeMessages());
-      dispatch(Actions.updateProjectChangeRequestDocumentOrItemDocumentEditor(pcrId, dto, false));
-    },
-    onFilesSave: (projectId, pcrId, dto) => {
-      const successMessage = dto.files.length === 1 ? `Your document has been uploaded.` : `${dto.files.length} documents have been uploaded.`;
-      dispatch(Actions.uploadProjectChangeRequestDocumentOrItemDocument(projectId, pcrId, dto, () => dispatch(Actions.loadProjectChangeRequestDocumentsOrItemDocuments(projectId, pcrId)), successMessage));
-    },
-    onFileDelete: (projectId, pcrId, dto) => {
-      dispatch(Actions.deleteProjectChangeRequestDocumentOrItemDocument(projectId, pcrId, dto, () => {
-        dispatch(Actions.messageSuccess("Your document has been removed."));
-        dispatch(Actions.loadProjectChangeRequestDocumentsOrItemDocuments(projectId, pcrId));
-      }));
-    }
-  })
-});
-
-export const ProjectChangeRequestPrepareReasoningRoute = definition.route({
+export const ProjectChangeRequestPrepareReasoningRoute = defineRoute({
   routeName: "projectChangeRequestPrepareReasoning",
   routePath: "/projects/:projectId/pcrs/:pcrId/prepare/reasoning",
+  container: PCRPrepareReasoningContainer,
   getParams: (route) => ({
     projectId: route.params.projectId,
     pcrId: route.params.pcrId
   }),
-  getLoadDataActions: (params) => [
-    Actions.loadProject(params.projectId),
-    Actions.loadPcr(params.projectId, params.pcrId),
-    Actions.loadProjectChangeRequestDocumentsOrItemDocuments(params.projectId, params.pcrId),
-    Actions.loadPcrTypes(),
-  ],
   getTitle: () => ({
     htmlTitle: "Provide reasoning to Innovate UK",
     displayTitle: "Provide reasoning to Innovate UK"
   }),
-  container: PCRPrepareReasoning,
   accessControl: (auth, { projectId }, config) => config.features.pcrsEnabled && auth.forProject(projectId).hasRole(ProjectRole.ProjectManager)
 });

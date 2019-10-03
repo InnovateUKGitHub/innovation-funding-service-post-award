@@ -1,12 +1,10 @@
 import React from "react";
-import { ContainerBase, ReduxContainer } from "../containerBase";
+import { BaseProps, ContainerBase, defineRoute } from "../containerBase";
 
 import * as ACC from "@ui/components";
-import * as Actions from "@ui/redux/actions";
-import * as Selectors from "@ui/redux/selectors";
 import * as Dtos from "@framework/dtos";
 import { Pending } from "@shared/pending";
-import { IEditorStore } from "@ui/redux";
+import { IEditorStore, StoresConsumer } from "@ui/redux";
 import { ProjectChangeRequestItemStatus, ProjectChangeRequestItemTypeEntity } from "@framework/entities";
 import { ProjectChangeRequestPrepareRoute } from "@ui/containers";
 import { PCRDtoValidator } from "@ui/validators/pcrDtoValidator";
@@ -25,10 +23,10 @@ interface Data {
 }
 
 interface Callbacks {
-  saveProjectChangeRequest: (projectId: string, projectChangeRequestId: string, dto: Dtos.PCRDto) => void;
+  onChange: (saving: boolean, dto: Dtos.PCRDto) => void;
 }
 
-class PCRCreateComponent extends ContainerBase<ProjectChangeRequestAddTypeParams, Data, Callbacks> {
+class PCRAddTypeComponent extends ContainerBase<ProjectChangeRequestAddTypeParams, Data, Callbacks> {
 
   render() {
     const combined = Pending.combine({ project: this.props.project, editor: this.props.editor, projectChangeRequest: this.props.projectChangeRequest, itemTypes: this.props.itemTypes });
@@ -93,7 +91,7 @@ class PCRCreateComponent extends ContainerBase<ProjectChangeRequestAddTypeParams
 
     return (
       <React.Fragment>
-        <PCRForm.Form editor={pcrEditor} onSubmit={() => this.props.saveProjectChangeRequest(this.props.projectId, this.props.projectChangeRequestId, pcrEditor.data)} onChange={x => this.setState({ pcr: x })} qa="pcr-AddTypeForm">
+        <PCRForm.Form editor={pcrEditor} onSubmit={() => this.props.onChange(true, pcrEditor.data)} onChange={dto => this.props.onChange(false, dto)} qa="pcr-AddTypeForm">
           <PCRForm.Fieldset heading="Select request types">
             <PCRForm.Checkboxes
               hint="You can select more than one."
@@ -116,38 +114,32 @@ class PCRCreateComponent extends ContainerBase<ProjectChangeRequestAddTypeParams
   }
 }
 
-const definition = ReduxContainer.for<ProjectChangeRequestAddTypeParams, Data, Callbacks>(PCRCreateComponent);
+const PCRAddTypeContainer = (props: ProjectChangeRequestAddTypeParams & BaseProps) => (
+  <StoresConsumer>
+    {stores => (
+      <PCRAddTypeComponent
+        project={stores.projects.getById(props.projectId)}
+        itemTypes={stores.projectChangeRequests.getAllPcrTypes()}
+        projectChangeRequest={stores.projectChangeRequests.getById(props.projectId, props.projectChangeRequestId)}
+        editor={stores.projectChangeRequests.getPcrUpdateEditor(props.projectId, props.projectChangeRequestId)}
+        onChange={(saving, dto) => stores.projectChangeRequests.updatePcrEditor(saving, props.projectId, dto, undefined, () => stores.navigation.navigateTo(ProjectChangeRequestPrepareRoute.getLink({ projectId: props.projectId, pcrId: props.projectChangeRequestId })))}
+        {...props}
+      />
+    )}
+  </StoresConsumer>
+);
 
-export const ProjectChangeRequestAddTypes = definition.connect({
-  withData: (state, params) => ({
-    project: Selectors.getProject(params.projectId).getPending(state),
-    itemTypes: Selectors.getAllPcrTypes().getPending(state),
-    editor: Selectors.getPcrEditor(params.projectId, params.projectChangeRequestId).get(state),
-    projectChangeRequest: Selectors.getPcr(params.projectId, params.projectChangeRequestId).getPending(state)
-  }),
-  withCallbacks: (dispatch) => ({
-    saveProjectChangeRequest: (projectId: string, projectChangeRequestId: string, dto: Dtos.PCRDto) =>
-      dispatch(Actions.savePCR(projectId, projectChangeRequestId, dto, () =>
-        dispatch(Actions.navigateTo(ProjectChangeRequestPrepareRoute.getLink({ projectId: dto.projectId, pcrId: projectChangeRequestId })))))
-  })
-});
-
-export const ProjectChangeRequestAddTypeRoute = definition.route({
+export const ProjectChangeRequestAddTypeRoute = defineRoute({
   routeName: "projectChangeRequestAddType",
   routePath: "/projects/:projectId/pcrs/:projectChangeRequestId/prepare/add",
+  container: PCRAddTypeContainer,
   getParams: (route) => ({
     projectId: route.params.projectId,
     projectChangeRequestId: route.params.projectChangeRequestId,
   }),
-  getLoadDataActions: (params) => [
-    Actions.loadProject(params.projectId),
-    Actions.loadPcrTypes(),
-    Actions.loadPcr(params.projectId, params.projectChangeRequestId),
-  ],
   getTitle: () => ({
     htmlTitle: "Add types",
     displayTitle: "Add types"
   }),
-  container: ProjectChangeRequestAddTypes,
   accessControl: (auth, { projectId }, config) => config.features.pcrsEnabled && auth.forProject(projectId).hasRole(ProjectRole.ProjectManager)
 });
