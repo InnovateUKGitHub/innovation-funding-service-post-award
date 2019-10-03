@@ -1,11 +1,9 @@
 import React from "react";
-import { ContainerBase, ReduxContainer } from "../containerBase";
+import { BaseProps, ContainerBase, defineRoute } from "../containerBase";
 import * as Acc from "@ui/components";
 import { PartnerDto, ProjectDto, ProjectRole } from "@framework/dtos";
 import { Pending } from "@shared/pending";
-import * as Selectors from "../../redux/selectors";
-import * as Actions from "../../redux/actions";
-import { ProjectDashboardRoute } from "@ui/containers";
+import { StoresConsumer } from "@ui/redux";
 
 interface Callbacks { }
 
@@ -60,27 +58,25 @@ class ProjectChangeRequestsComponent extends ContainerBase<Params, Data, Callbac
   }
 }
 
-const containerDefinition = ReduxContainer.for<Params, Data, Callbacks>(ProjectChangeRequestsComponent);
+const ProjectChangeRequestsContainer = (props: Params & BaseProps) => (
+  <StoresConsumer>
+    {stores => (
+      <ProjectChangeRequestsComponent
+        projectDetails={stores.projects.getById(props.projectId)}
+        partners={stores.partners.getPartnersForProject(props.projectId)}
+        {...props}
+      />
+    )}
+  </StoresConsumer>
+);
 
-export const ProjectChangeRequests = containerDefinition.connect({
-  withData: (state, props) => ({
-    projectDetails: Selectors.getProject(props.projectId).getPending(state),
-    partners: Selectors.findPartnersByProject(props.projectId).getPending(state),
-  }),
-  withCallbacks: () => ({})
-});
-
-export const ProjectChangeRequestsRoute = containerDefinition.route({
+export const ProjectChangeRequestsRoute = defineRoute({
   routeName: "projectChangeRequests",
   routePath: "/projects/:projectId/changeRequests",
   getParams: (route) => ({
     projectId: route.params.projectId,
   }),
-  getLoadDataActions: (params) => [
-    Actions.loadProject(params.projectId),
-    Actions.loadPartnersForProject(params.projectId),
-  ],
-  container: ProjectChangeRequests,
+  container: ProjectChangeRequestsContainer,
   getTitle: () => ({
     htmlTitle: "Project change requests",
     displayTitle: "Project change requests"
