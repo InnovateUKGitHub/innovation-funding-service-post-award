@@ -5,15 +5,11 @@ import { PCRItemDto, ProjectDto, ProjectRole } from "@framework/types";
 
 import * as ACC from "../../components";
 import { Pending } from "@shared/pending";
-import { PCRsDashboardRoute } from "./dashboard";
-import { ProjectChangeRequestPrepareItemRoute } from "./prepareItem";
-import { ProjectChangeRequestPrepareReasoningRoute } from "./prepareReasoning";
 import { PCRDto, ProjectChangeRequestStatusChangeDto } from "@framework/dtos/pcrDtos";
 import { IEditorStore, StoresConsumer } from "@ui/redux";
 import { PCRDtoValidator } from "@ui/validators/pcrDtoValidator";
 import { ProjectChangeRequestItemStatus, ProjectChangeRequestItemTypeEntity, ProjectChangeRequestStatus } from "@framework/entities";
-import { ProjectChangeRequestAddTypeRoute } from "@ui/containers";
-import { ProjectChangeRequestPrepareItemForTimeExtensionRoute } from "./prepareItemForTimeExtension";
+import { PCRsDashboardRoute, ProjectChangeRequestAddTypeRoute, ProjectChangeRequestPrepareItemRoute, ProjectChangeRequestPrepareReasoningRoute } from "@ui/containers";
 
 export interface ProjectChangeRequestPrepareParams {
   projectId: string;
@@ -80,28 +76,6 @@ class PCRPrepareComponent extends ContainerBase<ProjectChangeRequestPrepareParam
     );
   }
 
-  private getItemTasks(item: PCRItemDto) {
-    // tslint:disable:no-small-switch TODO remove this when more added
-    switch (item.type) {
-      case ProjectChangeRequestItemTypeEntity.TimeExtension:
-        return (
-          <ACC.Task
-            name="Set new end date for project"
-            status={this.getTaskStatus(item.status)}
-            route={ProjectChangeRequestPrepareItemForTimeExtensionRoute.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId, itemId: item.id })}
-          />
-        );
-      default:
-        return (
-          <ACC.Task
-            name="Upload files"
-            status={this.getTaskStatus(item.status)}
-            route={ProjectChangeRequestPrepareItemRoute.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId, itemId: item.id })}
-          />
-        );
-    }
-  }
-
   private renderDetailsTab(projectChangeRequest: PCRDto, editor: IEditorStore<PCRDto, PCRDtoValidator>) {
     const Form = ACC.TypedForm<PCRDto>();
     return (
@@ -151,6 +125,33 @@ class PCRPrepareComponent extends ContainerBase<ProjectChangeRequestPrepareParam
         </Form.Form>
       </React.Fragment>
     );
+  }
+
+  private getItemTasks(item: PCRItemDto) {
+    return (
+      <ACC.Task
+        name={this.getTaskText(item)}
+        status={this.getTaskStatus(item.status)}
+        route={ProjectChangeRequestPrepareItemRoute.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId, itemId: item.id })}
+      />
+    );
+  }
+
+  private getTaskText(item: PCRItemDto): string {
+    switch (item.type) {
+      case ProjectChangeRequestItemTypeEntity.TimeExtension:
+        return "Set new end date for project";
+      case ProjectChangeRequestItemTypeEntity.AccountNameChange:
+      case ProjectChangeRequestItemTypeEntity.MultiplePartnerFinancialVirement:
+      case ProjectChangeRequestItemTypeEntity.PartnerAddition:
+      case ProjectChangeRequestItemTypeEntity.PartnerWithdrawal:
+      case ProjectChangeRequestItemTypeEntity.ProjectSuspension:
+      case ProjectChangeRequestItemTypeEntity.ProjectTermination:
+      case ProjectChangeRequestItemTypeEntity.ScopeChange:
+      case ProjectChangeRequestItemTypeEntity.SinglePartnerFinancialVirement:
+        return "Upload files";
+    }
+    return "Text not set";
   }
 
   private getTaskStatus(status: ProjectChangeRequestItemStatus): "To do" | "Complete" | "Incomplete" {

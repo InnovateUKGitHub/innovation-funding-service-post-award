@@ -6,7 +6,6 @@ import { ProjectDto, ProjectRole } from "@framework/types";
 import * as ACC from "../../components";
 import { Pending } from "@shared/pending";
 import { PCRsDashboardRoute } from "./dashboard";
-import { ProjectChangeRequestViewItemForTimeExtensionRoute } from "./viewItemForTimeExtension";
 import { PCRViewItemRoute } from "./viewItem";
 import { PCRViewReasoningRoute } from "./viewReasoning";
 import { PCRDto, PCRItemDto, ProjectChangeRequestStatusChangeDto } from "@framework/dtos/pcrDtos";
@@ -59,14 +58,14 @@ class PCRDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
     );
   }
 
-  private renderDetailsTab(projectChangeRequest: PCRDto ) {
+  private renderDetailsTab(projectChangeRequest: PCRDto) {
     return (
       <React.Fragment>
 
         <ACC.Section title="Details">
           <ACC.SummaryList qa="pcr_details">
             <ACC.SummaryListItem label="Request number" content={projectChangeRequest.requestNumber} qa="numberRow" />
-            <ACC.SummaryListItem label="Types" content={<ACC.Renderers.LineBreakList items={projectChangeRequest.items.map(x => x.typeName)}/>} qa="typesRow" />
+            <ACC.SummaryListItem label="Types" content={<ACC.Renderers.LineBreakList items={projectChangeRequest.items.map(x => x.typeName)} />} qa="typesRow" />
           </ACC.SummaryList>
         </ACC.Section>
         <ACC.TaskList qa="taskList">
@@ -88,25 +87,30 @@ class PCRDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
   }
 
   private getItemTasks(item: PCRItemDto) {
-    // tslint:disable:no-small-switch TODO remove this when more added
+    return (
+      <ACC.Task
+        name={this.getTaskText(item)}
+        status={this.getTaskStatus(item.status)}
+        route={PCRViewItemRoute.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId, itemId: item.id })}
+      />
+    );
+  }
+
+  private getTaskText(item: PCRItemDto): string {
     switch (item.type) {
       case ProjectChangeRequestItemTypeEntity.TimeExtension:
-        return (
-          <ACC.Task
-            name="View new end date for project"
-            status={this.getTaskStatus(item.status)}
-            route={ProjectChangeRequestViewItemForTimeExtensionRoute.getLink({ projectId: this.props.projectId, projectChangeRequestId: this.props.pcrId, projectChangeRequestItemId: item.id })}
-          />
-        );
-      default:
-        return (
-          <ACC.Task
-            name="View files"
-            status={this.getTaskStatus(item.status)}
-            route={PCRViewItemRoute.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId, itemId: item.id })}
-          />
-        );
+        return "View new end date for project";
+      case ProjectChangeRequestItemTypeEntity.AccountNameChange:
+      case ProjectChangeRequestItemTypeEntity.MultiplePartnerFinancialVirement:
+      case ProjectChangeRequestItemTypeEntity.PartnerAddition:
+      case ProjectChangeRequestItemTypeEntity.PartnerWithdrawal:
+      case ProjectChangeRequestItemTypeEntity.ProjectSuspension:
+      case ProjectChangeRequestItemTypeEntity.ProjectTermination:
+      case ProjectChangeRequestItemTypeEntity.ScopeChange:
+      case ProjectChangeRequestItemTypeEntity.SinglePartnerFinancialVirement:
+        return "View files";
     }
+    return "Text not set";
   }
 
   private getTaskStatus(status: ProjectChangeRequestItemStatus): "To do" | "Complete" | "Incomplete" {
@@ -131,7 +135,7 @@ class PCRDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
   }
 }
 
-const PCRDetailsContainer = (props: Params&BaseProps) => (
+const PCRDetailsContainer = (props: Params & BaseProps) => (
   <StoresConsumer>
     {stores => (
       <PCRDetailsComponent

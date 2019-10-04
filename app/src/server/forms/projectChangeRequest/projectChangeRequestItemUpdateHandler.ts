@@ -7,6 +7,7 @@ import { IFormBody, IFormButton, StandardFormHandlerBase } from "@server/forms/f
 import { ProjectChangeRequestPrepareItemParams, ProjectChangeRequestPrepareItemRoute, ProjectChangeRequestPrepareRoute } from "@ui/containers";
 import { getPcrEditor } from "@ui/redux/selectors";
 import { PCRDtoValidator } from "@ui/validators";
+import { DateTime } from "luxon";
 
 export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBase<ProjectChangeRequestPrepareItemParams, PCRDto, PCRDtoValidator> {
   constructor() {
@@ -24,6 +25,11 @@ export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBa
 
     item.status = body.itemStatus === "true" ? ProjectChangeRequestItemStatus.Complete : ProjectChangeRequestItemStatus.Incomplete;
 
+    if (item.type === ProjectChangeRequestItemTypeEntity.TimeExtension) {
+      const projectEndDate = DateTime.fromFormat(`${body.endDate_month}/${body.endDate_year}`, "M/yyyy").endOf("month").startOf("day");
+      item.projectEndDate = projectEndDate.toJSDate();
+    }
+
     return dto;
   }
 
@@ -37,12 +43,6 @@ export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBa
   }
 
   protected createValidationResult(params: ProjectChangeRequestPrepareItemParams, dto: PCRDto) {
-    const projectChangeRequestItemTypes: PCRItemTypeDto[] = [{
-      type: ProjectChangeRequestItemTypeEntity.AccountNameChange,
-      displayName: "",
-      recordTypeId: "",
-      enabled: false
-    }];
-    return new PCRDtoValidator(dto, ProjectRole.Unknown, dto, projectChangeRequestItemTypes, false);
+    return new PCRDtoValidator(dto, ProjectRole.Unknown, dto, [], false);
   }
 }
