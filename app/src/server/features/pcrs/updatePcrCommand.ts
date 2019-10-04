@@ -1,5 +1,11 @@
 import { BadRequestError, CommandBase, ValidationError } from "../common";
-import { PCRDto, PCRItemForTimeExtensionDto, PCRStandardItemDto, ProjectRole } from "@framework/dtos";
+import {
+  PCRDto,
+  PCRItemForScopeChangeDto,
+  PCRItemForTimeExtensionDto,
+  PCRStandardItemDto,
+  ProjectRole, TypedPcrItemDto
+} from "@framework/dtos";
 import { PCRDtoValidator } from "@ui/validators/pcrDtoValidator";
 import { Authorisation, IContext } from "@framework/types";
 import { GetAllProjectRolesForUser } from "../projects";
@@ -54,7 +60,7 @@ export class UpdatePCRCommand extends CommandBase<boolean> {
     }
 
     if (entityToUpdate.status !== this.pcr.status) {
-      this.insertStatusChange(context, this.projectChangeRequestId, this.pcr.comments, entityToUpdate.status, this.pcr.status);
+      await this.insertStatusChange(context, this.projectChangeRequestId, this.pcr.comments, entityToUpdate.status, this.pcr.status);
       entityToUpdate.comments = "";
     } else  {
       entityToUpdate.comments = this.pcr.comments;
@@ -102,7 +108,7 @@ export class UpdatePCRCommand extends CommandBase<boolean> {
     return true;
   }
 
-  private getItemUpdates(item: ProjectChangeRequestItemEntity, dto: (PCRStandardItemDto | PCRItemForTimeExtensionDto)): { result: ProjectChangeRequestItemEntity, hasChanged: boolean } {
+  private getItemUpdates(item: ProjectChangeRequestItemEntity, dto: (TypedPcrItemDto)): { result: ProjectChangeRequestItemEntity, hasChanged: boolean } {
     let hasChanged = false;
     const result = { ...item };
 
@@ -114,6 +120,12 @@ export class UpdatePCRCommand extends CommandBase<boolean> {
     if (dto.type === ProjectChangeRequestItemTypeEntity.TimeExtension) {
       if (result.projectEndDate !== dto.projectEndDate) {
         result.projectEndDate = dto.projectEndDate;
+        hasChanged = true;
+      }
+    } else if (dto.type === ProjectChangeRequestItemTypeEntity.ScopeChange) {
+      if (result.projectSummary !== dto.projectSummary || result.publicDescription !== dto.publicDescription) {
+        result.projectSummary = dto.projectSummary;
+        result.publicDescription = dto.publicDescription;
         hasChanged = true;
       }
     }

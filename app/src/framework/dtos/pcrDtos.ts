@@ -20,7 +20,7 @@ export interface PCRSummaryDto extends PCRBaseDto {
 }
 
 export interface PCRDto extends PCRBaseDto {
-  items: (PCRStandardItemDto | PCRItemForTimeExtensionDto | PCRItemForScopeChangeDto)[];
+  items: (TypedPcrItemDto)[];
   comments: string;
   guidance: string;
   reasoningStatus: ProjectChangeRequestItemStatus;
@@ -34,6 +34,8 @@ export interface PCRItemDto extends PCRItemSummaryDto {
   status: ProjectChangeRequestItemStatus;
   statusName: string;
 }
+
+export type TypedPcrItemDto = PCRStandardItemDto | PCRItemForTimeExtensionDto | PCRItemForScopeChangeDto;
 
 export interface PCRStandardItemDto extends PCRItemDto {
   type: ProjectChangeRequestStandardItemTypes;

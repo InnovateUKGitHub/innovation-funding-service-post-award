@@ -3,14 +3,14 @@ import React from "react";
 import * as ACC from "@ui/components";
 import * as Dtos from "@framework/dtos";
 import { EditorStatus, IEditorStore, StoresConsumer } from "@ui/redux";
-import { MultipleDocumentUpdloadDtoValidator, PCRDtoValidator, PCRStandardItemDtoValdiator } from "@ui/validators";
+import { MultipleDocumentUpdloadDtoValidator, PCRStandardItemDtoValidator } from "@ui/validators";
 import { ProjectChangeRequestItemStatus } from "@framework/entities";
 import { Pending } from "@shared/pending";
 
 interface Props {
   projectChangeRequest: Dtos.PCRDto;
   projectChangeRequestItem: Dtos.PCRStandardItemDto;
-  validator: PCRStandardItemDtoValdiator;
+  validator: PCRStandardItemDtoValidator;
   status: EditorStatus;
   onChange: (dto: Dtos.PCRStandardItemDto) => void;
   onSave: () => void;

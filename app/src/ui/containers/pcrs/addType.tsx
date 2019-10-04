@@ -8,7 +8,14 @@ import { IEditorStore, StoresConsumer } from "@ui/redux";
 import { ProjectChangeRequestItemStatus, ProjectChangeRequestItemTypeEntity } from "@framework/entities";
 import { ProjectChangeRequestPrepareRoute } from "@ui/containers";
 import { PCRDtoValidator } from "@ui/validators/pcrDtoValidator";
-import { PCRDto, PCRItemDto, PCRItemForTimeExtensionDto, PCRStandardItemDto, ProjectRole } from "@framework/dtos";
+import {
+  PCRDto,
+  PCRItemDto,
+  PCRItemForScopeChangeDto,
+  PCRItemForTimeExtensionDto,
+  PCRStandardItemDto,
+  ProjectRole, TypedPcrItemDto
+} from "@framework/dtos";
 
 export interface ProjectChangeRequestAddTypeParams {
   projectId: string;
@@ -49,7 +56,7 @@ class PCRAddTypeComponent extends ContainerBase<ProjectChangeRequestAddTypeParam
     );
   }
 
-  private createNewOption(itemType: Dtos.PCRItemTypeDto): (PCRStandardItemDto | PCRItemForTimeExtensionDto) {
+  private createNewOption(itemType: Dtos.PCRItemTypeDto): (TypedPcrItemDto) {
     const baseFields: PCRItemDto = {
       id: "",
       guidance: "",
@@ -66,7 +73,6 @@ class PCRAddTypeComponent extends ContainerBase<ProjectChangeRequestAddTypeParam
       case ProjectChangeRequestItemTypeEntity.PartnerWithdrawal:
       case ProjectChangeRequestItemTypeEntity.ProjectSuspension:
       case ProjectChangeRequestItemTypeEntity.ProjectTermination:
-      case ProjectChangeRequestItemTypeEntity.ScopeChange:
       case ProjectChangeRequestItemTypeEntity.SinglePartnerFinancialVirement:
         return {
           ...baseFields,
@@ -77,6 +83,13 @@ class PCRAddTypeComponent extends ContainerBase<ProjectChangeRequestAddTypeParam
           ...baseFields,
           type: itemType.type,
           projectEndDate: null
+        };
+      case ProjectChangeRequestItemTypeEntity.ScopeChange:
+        return {
+          ...baseFields,
+          type: itemType.type,
+          publicDescription: "",
+          projectSummary: ""
         };
       default:
         throw new Error("Item type not handled");
