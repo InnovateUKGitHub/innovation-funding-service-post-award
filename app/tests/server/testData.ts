@@ -626,6 +626,8 @@ export class TestData {
       partnerId: "",
       status: Entites.ProjectChangeRequestItemStatus.Complete,
       statusName: "Complete",
+      suspensionStartDate: null,
+      suspensionEndDate: null,
     };
 
     if (update) {
