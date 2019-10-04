@@ -8,7 +8,6 @@ import { ProjectChangeRequestPrepareItemParams, ProjectChangeRequestPrepareItemR
 import { getPcrEditor } from "@ui/redux/selectors";
 import { PCRDtoValidator } from "@ui/validators";
 import { DateTime } from "luxon";
-import { exportDefaultSpecifier } from "@babel/types";
 
 export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBase<ProjectChangeRequestPrepareItemParams, PCRDto, PCRDtoValidator> {
   constructor() {
@@ -27,8 +26,8 @@ export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBa
     item.status = body.itemStatus === "true" ? ProjectChangeRequestItemStatus.Complete : ProjectChangeRequestItemStatus.Incomplete;
 
     if (item.type === ProjectChangeRequestItemTypeEntity.TimeExtension) {
-      const day = DateTime.fromFormat(body.endDate_month, "M").endOf("month").get("day");
-      item.projectEndDate = DateTime.fromFormat(`${day}/${body.endDate_month}/${body.endDate_year}`, "d/M/yyyy").toJSDate();
+      const projectEndDate = DateTime.fromFormat(`${body.endDate_month}/${body.endDate_year}`, "M/yyyy").endOf("month").startOf("day");
+      item.projectEndDate = projectEndDate.toJSDate();
     }
 
     return dto;
