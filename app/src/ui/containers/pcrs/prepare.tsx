@@ -86,14 +86,11 @@ class PCRPrepareComponent extends ContainerBase<ProjectChangeRequestPrepareParam
             <ACC.SummaryListItem label="Types" content={<ACC.Renderers.LineBreakList items={projectChangeRequest.items.map(x => x.typeName)} />} action={<ACC.Link route={ProjectChangeRequestAddTypeRoute.getLink({ projectId: this.props.projectId, projectChangeRequestId: this.props.pcrId })}>Add types</ACC.Link>} qa="typesRow" />
           </ACC.SummaryList>
         </ACC.Section>
-
         <ACC.TaskList qa="taskList">
-          {projectChangeRequest.items.map((x, i) => (
-            <ACC.TaskListSection key={i} step={i + 1} title={x.typeName} validation={editor.validator.items.results[i].errors} qa={`task-${i}`}>
-              {this.getItemTasks(x)}
-            </ACC.TaskListSection>
-          ))}
-          <ACC.TaskListSection step={projectChangeRequest.items.length + 1} title={"Give more details"} validation={[editor.validator.reasoningStatus, editor.validator.reasoningComments]} qa="reasoning">
+          <ACC.TaskListSection step={1} title="What do you want to do?" qa="WhatDoYouWantToDo">
+            {projectChangeRequest.items.map((x, i) => this.getItemTasks(x, editor, i))}
+          </ACC.TaskListSection>
+          <ACC.TaskListSection step={2} title="Give more details" validation={[editor.validator.reasoningStatus, editor.validator.reasoningComments]} qa="reasoning">
             <ACC.Task
               name="Provide reasoning to Innovate UK"
               status={this.getTaskStatus(projectChangeRequest.reasoningStatus)}
@@ -127,31 +124,16 @@ class PCRPrepareComponent extends ContainerBase<ProjectChangeRequestPrepareParam
     );
   }
 
-  private getItemTasks(item: PCRItemDto) {
+  private getItemTasks(item: PCRItemDto, editor: IEditorStore<PCRDto, PCRDtoValidator>, index: number) {
+    const validationErrors = editor.validator.items.results[index].errors;
     return (
       <ACC.Task
-        name={this.getTaskText(item)}
+        name={item.typeName}
         status={this.getTaskStatus(item.status)}
         route={ProjectChangeRequestPrepareItemRoute.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId, itemId: item.id })}
+        validation={validationErrors}
       />
     );
-  }
-
-  private getTaskText(item: PCRItemDto): string {
-    switch (item.type) {
-      case ProjectChangeRequestItemTypeEntity.TimeExtension:
-        return "Set new end date for project";
-      case ProjectChangeRequestItemTypeEntity.AccountNameChange:
-      case ProjectChangeRequestItemTypeEntity.MultiplePartnerFinancialVirement:
-      case ProjectChangeRequestItemTypeEntity.PartnerAddition:
-      case ProjectChangeRequestItemTypeEntity.PartnerWithdrawal:
-      case ProjectChangeRequestItemTypeEntity.ProjectSuspension:
-      case ProjectChangeRequestItemTypeEntity.ProjectTermination:
-      case ProjectChangeRequestItemTypeEntity.ScopeChange:
-      case ProjectChangeRequestItemTypeEntity.SinglePartnerFinancialVirement:
-        return "Upload files";
-    }
-    return "Text not set";
   }
 
   private getTaskStatus(status: ProjectChangeRequestItemStatus): "To do" | "Complete" | "Incomplete" {
