@@ -226,16 +226,16 @@ export class MonthYearInput extends BaseInput<MonthYearInputProps, MonthYearStat
 
   private onChange(month: string, year: string) {
     this.setState({ month, year });
-    this.debounce(() => this.sendUpdate(month), 500);
+    this.debounce(() => this.sendUpdate(), 500);
   }
 
-  private sendUpdate(monthInput: string) {
-    const monthDateTime = DateTime.fromFormat(monthInput, "M");
-    const day = this.props.startOrEnd === "start" ? "01" : monthDateTime.endOf("month").get("day");
-
+  private sendUpdate() {
     if (this.props.onChange) {
       const { month, year } = this.state;
-      const result = DateTime.fromFormat(`${day}/${month}/${year}`, "d/M/yyyy");
+      const { startOrEnd } = this.props;
+
+      const date = DateTime.fromFormat(`${month}/${year}`, "M/yyyy");
+      const result = startOrEnd === "start" ? date.startOf("month").startOf("day") : date.endOf("month").startOf("day");
 
       if (result.isValid) {
         this.props.onChange(result.toJSDate());

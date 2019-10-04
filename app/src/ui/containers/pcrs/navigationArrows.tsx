@@ -39,13 +39,6 @@ const getLinkForReviewingItem = (pcrItem: PCRStandardItemDto | PCRItemForTimeExt
     return { label: "Reasoning", route: Routes.PCRReviewReasoningRoute.getLink({ pcrId, projectId }) };
   }
 
-  if (pcrItem.type === ProjectChangeRequestItemTypeEntity.TimeExtension) {
-    return {
-      label: pcrItem.typeName,
-      route: Routes.ProjectChangeRequestReviewItemForTimeExtensionRoute.getLink({ projectChangeRequestId: pcrId, projectId, projectChangeRequestItemId: pcrItem.id })
-    };
-  }
-
   return {
     label: pcrItem.typeName,
     route: Routes.PCRReviewItemRoute.getLink({ pcrId, projectId, itemId: pcrItem.id })
@@ -59,13 +52,6 @@ const getLinkForViewingItem = (pcrItem: PCRStandardItemDto | PCRItemForTimeExten
 
   if (!pcrItem) {
     return { label: "Reasoning", route: Routes.PCRViewReasoningRoute.getLink({ pcrId, projectId }) };
-  }
-
-  if (pcrItem.type === ProjectChangeRequestItemTypeEntity.TimeExtension) {
-    return {
-      label: pcrItem.typeName,
-      route: Routes.ProjectChangeRequestViewItemForTimeExtensionRoute.getLink({ projectChangeRequestId: pcrId, projectId, projectChangeRequestItemId: pcrItem.id })
-    };
   }
 
   return {
