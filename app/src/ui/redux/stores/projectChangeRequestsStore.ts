@@ -49,7 +49,6 @@ export class ProjectChangeRequestStore extends StoreBase {
         item.type === ProjectChangeRequestItemTypeEntity.PartnerWithdrawal ||
         item.type === ProjectChangeRequestItemTypeEntity.ProjectSuspension ||
         item.type === ProjectChangeRequestItemTypeEntity.ProjectTermination ||
-        item.type === ProjectChangeRequestItemTypeEntity.ScopeChange ||
         item.type === ProjectChangeRequestItemTypeEntity.SinglePartnerFinancialVirement
       ) {
         return Pending.done(item);
