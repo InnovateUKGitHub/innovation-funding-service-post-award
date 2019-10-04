@@ -17,6 +17,7 @@ export interface ProjectDto {
     startDate: Date;
     endDate: Date;
     summary: string;
+    description: string;
     applicationUrl?: string | null;
     grantOfferLetterUrl?: string | null;
     projectNumber: string;

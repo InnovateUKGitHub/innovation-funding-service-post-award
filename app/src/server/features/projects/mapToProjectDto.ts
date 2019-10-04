@@ -23,6 +23,7 @@ export class MapToProjectDtoCommand extends CommandBase<ProjectDto> {
       id: this.item.Id,
       title: this.item.Acc_ProjectTitle__c,
       summary: this.item.Acc_ProjectSummary__c,
+      description: this.item.Acc_PublicDescription__c,
       projectNumber: this.item.Acc_ProjectNumber__c,
       applicationUrl: this.getIFSUrl(this.item, context.config.urls.ifsApplicationUrl),
       grantOfferLetterUrl: this.getIFSUrl(this.item, context.config.urls.ifsGrantLetterUrl),

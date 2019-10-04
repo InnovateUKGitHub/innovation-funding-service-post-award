@@ -1,5 +1,5 @@
 import { ProjectChangeRequestItemStatus, ProjectChangeRequestItemTypeEntity } from "@framework/entities";
-import { IContext, ILinkInfo, PCRDto, PCRItemTypeDto, ProjectRole } from "@framework/types";
+import { IContext, ILinkInfo, PCRDto, ProjectRole } from "@framework/types";
 import { BadRequestError } from "@server/features/common";
 import { GetPCRByIdQuery } from "@server/features/pcrs/getPCRByIdQuery";
 import { UpdatePCRCommand } from "@server/features/pcrs/updatePcrCommand";
@@ -28,6 +28,11 @@ export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBa
     if (item.type === ProjectChangeRequestItemTypeEntity.TimeExtension) {
       const projectEndDate = DateTime.fromFormat(`${body.endDate_month}/${body.endDate_year}`, "M/yyyy").endOf("month").startOf("day");
       item.projectEndDate = projectEndDate.toJSDate();
+    }
+
+    if(item.type === ProjectChangeRequestItemTypeEntity.ScopeChange) {
+      item.publicDescription = body.description || "";
+      item.projectSummary = body.summary || "";
     }
 
     return dto;
