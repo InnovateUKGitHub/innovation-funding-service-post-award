@@ -40,8 +40,7 @@ export type ProjectChangeRequestStandardItemTypes = (
   ProjectChangeRequestItemTypeEntity.ProjectSuspension|
   ProjectChangeRequestItemTypeEntity.ProjectTermination|
   ProjectChangeRequestItemTypeEntity.MultiplePartnerFinancialVirement|
-  ProjectChangeRequestItemTypeEntity.SinglePartnerFinancialVirement|
-  ProjectChangeRequestItemTypeEntity.ScopeChange
+  ProjectChangeRequestItemTypeEntity.SinglePartnerFinancialVirement
   );
 
 export interface ProjectChangeRequestForCreateEntity {

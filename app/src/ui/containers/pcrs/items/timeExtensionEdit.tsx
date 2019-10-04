@@ -2,13 +2,13 @@ import React from "react";
 import * as ACC from "@ui/components";
 import { EditorStatus } from "@ui/redux";
 import { PCRItemForTimeExtensionDto, ProjectDto } from "@framework/dtos";
-import { PCRTimeExtentionItemDtoValidator } from "@ui/validators";
+import { PCRTimeExtensionItemDtoValidator } from "@ui/validators";
 import { ProjectChangeRequestItemStatus } from "@framework/entities";
 
 interface Props {
   project: ProjectDto;
   projectChangeRequestItem: PCRItemForTimeExtensionDto;
-  validator: PCRTimeExtentionItemDtoValidator;
+  validator: PCRTimeExtensionItemDtoValidator;
   status: EditorStatus;
   onChange: (dto: PCRItemForTimeExtensionDto) => void;
   onSave: () => void;

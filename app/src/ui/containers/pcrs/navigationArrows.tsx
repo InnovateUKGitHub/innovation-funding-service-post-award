@@ -1,6 +1,12 @@
 import React from "react";
 import * as ACC from "@ui/components";
-import { PCRDto, PCRItemDto, PCRItemForTimeExtensionDto, PCRStandardItemDto } from "@framework/dtos";
+import {
+  PCRDto,
+  PCRItemDto,
+  PCRItemForScopeChangeDto,
+  PCRItemForTimeExtensionDto,
+  PCRStandardItemDto, TypedPcrItemDto
+} from "@framework/dtos";
 import * as Routes from "@ui/containers";
 import { ProjectChangeRequestItemTypeEntity } from "@framework/entities/projectChangeRequest";
 
@@ -30,7 +36,7 @@ export const NavigationArrowsForPCRs = (props: Props) => {
   );
 };
 
-const getLinkForReviewingItem = (pcrItem: PCRStandardItemDto | PCRItemForTimeExtensionDto, projectId: string, pcrId: string, allowReasoningLink: boolean) => {
+const getLinkForReviewingItem = (pcrItem: TypedPcrItemDto, projectId: string, pcrId: string, allowReasoningLink: boolean) => {
   if (!pcrItem && !allowReasoningLink) {
     return null;
   }
@@ -45,7 +51,7 @@ const getLinkForReviewingItem = (pcrItem: PCRStandardItemDto | PCRItemForTimeExt
   };
 };
 
-const getLinkForViewingItem = (pcrItem: PCRStandardItemDto | PCRItemForTimeExtensionDto, projectId: string, pcrId: string, allowReasoning: boolean) => {
+const getLinkForViewingItem = (pcrItem: TypedPcrItemDto, projectId: string, pcrId: string, allowReasoning: boolean) => {
   if (!pcrItem && !allowReasoning) {
     return null;
   }

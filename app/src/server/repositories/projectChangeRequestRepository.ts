@@ -40,8 +40,8 @@ export interface ISalesforcePCR {
   // careful there is a typo in the salesforce setup
   // will probably change to Acc_MarkedAsComplete__c in the future!!
   Acc_MarkedasComplete__c: string;
-  Acc_NewProjectSummary__c: string;
-  Acc_NewPublicDescription__c: string;
+  Acc_NewProjectSummary__c: string|null;
+  Acc_NewPublicDescription__c: string|null;
   MarkedAsCompleteName: string;
   Acc_Comments__c: string;
   Acc_NewProjectEndDate__c: string|null;
@@ -117,6 +117,8 @@ export class ProjectChangeRequestRepository extends SalesforceRepositoryBase<ISa
       Id: x.id,
       Acc_MarkedasComplete__c: this.mapItemStatus(x.status),
       Acc_NewProjectEndDate__c: x.projectEndDate && DateTime.fromJSDate(x.projectEndDate).toFormat("yyyy-MM-dd"),
+      Acc_NewProjectSummary__c: x.projectSummary,
+      Acc_NewPublicDescription__c: x.publicDescription,
     })));
   }
 

@@ -1,12 +1,24 @@
 // tslint:disable
 import { TestContext } from "../../testContextProvider";
 import { UpdatePCRCommand } from "@server/features/pcrs/updatePcrCommand";
-import { ProjectChangeRequestItemStatus, ProjectChangeRequestStatus } from "@framework/entities";
+import {
+  ProjectChangeRequestItemStatus,
+  ProjectChangeRequestItemTypeEntity,
+  ProjectChangeRequestStatus
+} from "@framework/entities";
 import { GetPCRByIdQuery } from "@server/features/pcrs/getPCRByIdQuery";
 import { ValidationError } from "@server/features/common";
-import { Authorisation, PCRDto, PCRItemForTimeExtensionDto, PCRStandardItemDto, ProjectRole } from "@framework/types";
+import {
+  Authorisation,
+  PCRDto,
+  PCRItemForScopeChangeDto,
+  PCRItemForTimeExtensionDto,
+  PCRStandardItemDto,
+  ProjectRole
+} from "@framework/types";
 import { getAllEnumValues } from "@shared/enumHelper";
 import { PCRRecordTypeMetaValues } from "@server/features/pcrs/getItemTypesQuery";
+import * as Entites from "@framework/entities";
 
 describe("UpdatePCRCommand", () => {
   describe("Access control", () => {
@@ -291,6 +303,60 @@ describe("UpdatePCRCommand", () => {
 
   });
 
+  describe("Scope Change", () => {
+    test("returns bad request if no summary or description is sent when the item is complete", async () => {
+      const context = new TestContext();
+
+      const project = context.testData.createProject();
+      context.testData.createCurrentUserAsProjectManager(project);
+      const projectChangeRequest = context.testData.createPCR(project, {status: ProjectChangeRequestStatus.Draft});
+      const recordTypes = context.testData.createPCRRecordTypes();
+
+      const scopeChangeTypeName = PCRRecordTypeMetaValues.find(x => x.type === ProjectChangeRequestItemTypeEntity.ScopeChange)!.typeName;
+
+      const recordType = recordTypes.find(x => x.type === scopeChangeTypeName);
+      context.testData.createPCRItem(projectChangeRequest, recordType, {
+        status: Entites.ProjectChangeRequestItemStatus.Complete
+      });
+
+      const dto = await context.runQuery(new GetPCRByIdQuery(projectChangeRequest.projectId, projectChangeRequest.id));
+      const item = dto.items[0] as PCRItemForScopeChangeDto;
+
+      item.publicDescription = null as any;
+      item.projectSummary = null as any;
+      await expect(context.runCommand(new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto))).rejects.toThrow(ValidationError);
+
+      item.status = Entites.ProjectChangeRequestItemStatus.Incomplete;
+      await expect(context.runCommand(new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto))).resolves.toBe(true);
+    });
+
+    test("saves the public description and project summary", async () => {
+      const context = new TestContext();
+
+      const project = context.testData.createProject();
+      context.testData.createCurrentUserAsProjectManager(project);
+      const projectChangeRequest = context.testData.createPCR(project, {status: ProjectChangeRequestStatus.Draft});
+      const recordTypes = context.testData.createPCRRecordTypes();
+
+      const scopeChangeTypeName = PCRRecordTypeMetaValues.find(x => x.type === ProjectChangeRequestItemTypeEntity.ScopeChange)!.typeName;
+
+      const recordType = recordTypes.find(x => x.type === scopeChangeTypeName);
+      context.testData.createPCRItem(projectChangeRequest, recordType);
+
+      const dto = await context.runQuery(new GetPCRByIdQuery(projectChangeRequest.projectId, projectChangeRequest.id));
+      const item = dto.items[0] as PCRItemForScopeChangeDto;
+
+      item.publicDescription = "A marvelous description";
+      item.projectSummary = "An inspirational summary";
+      await context.runCommand(new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto));
+
+      const updatedDto = await context.runQuery(new GetPCRByIdQuery(projectChangeRequest.projectId, projectChangeRequest.id));
+      const updatedScopeChangeItem = updatedDto.items[0] as PCRItemForScopeChangeDto;
+      expect(updatedScopeChangeItem.publicDescription).toEqual("A marvelous description");
+      expect(updatedScopeChangeItem.projectSummary).toEqual("An inspirational summary");
+    });
+  });
+
   describe("Time extension", () => {
     test("returns bad request if no date is sent", async () => {
       const context = new TestContext();
@@ -445,7 +511,7 @@ describe("UpdatePCRCommand", () => {
     const dto = await context.runQuery(new GetPCRByIdQuery(pcr.projectId, pcr.id));
 
     dto.status = ProjectChangeRequestStatus.QueriedByMonitoringOfficer;
-    dto.comments = "Test Comments"
+    dto.comments = "Test Comments";
 
     await context.runCommand(new UpdatePCRCommand(pcr.projectId, pcr.id, dto));
 
