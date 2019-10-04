@@ -6,7 +6,7 @@ import {
 } from "@framework/entities";
 import {
   PCRDto,
-  PCRItemDto,
+  PCRItemDto, PCRItemForProjectSuspensionDto,
   PCRItemForScopeChangeDto,
   PCRItemForTimeExtensionDto,
   PCRItemTypeDto,
@@ -40,11 +40,12 @@ const mapItem = (pcr: ProjectChangeRequestItemEntity, itemType: PCRItemTypeDto) 
       return mapItemForTimeExtension(pcr, itemType.displayName, itemType.type);
     case ProjectChangeRequestItemTypeEntity.ScopeChange:
       return mapItemForScopeChange(pcr, itemType.displayName, itemType.type);
+    case ProjectChangeRequestItemTypeEntity.ProjectSuspension:
+      return mapItemForProjectSuspension(pcr, itemType.displayName, itemType.type);
     case ProjectChangeRequestItemTypeEntity.AccountNameChange:
     case ProjectChangeRequestItemTypeEntity.MultiplePartnerFinancialVirement:
     case ProjectChangeRequestItemTypeEntity.PartnerAddition:
     case ProjectChangeRequestItemTypeEntity.PartnerWithdrawal:
-    case ProjectChangeRequestItemTypeEntity.ProjectSuspension:
     case ProjectChangeRequestItemTypeEntity.ProjectTermination:
     case ProjectChangeRequestItemTypeEntity.SinglePartnerFinancialVirement:
       return mapStandardItem(pcr, itemType.displayName, itemType.type);
@@ -76,5 +77,12 @@ const mapItemForScopeChange = (pcr: ProjectChangeRequestItemEntity, typeName: st
   ...mapBaseItem(pcr, typeName),
   projectSummary: pcr.projectSummary,
   publicDescription: pcr.publicDescription,
+  type
+});
+
+const mapItemForProjectSuspension = (pcr: ProjectChangeRequestItemEntity, typeName: string, type: ProjectChangeRequestItemTypeEntity.ProjectSuspension): PCRItemForProjectSuspensionDto => ({
+  ...mapBaseItem(pcr, typeName),
+  suspensionStartDate: pcr.suspensionStartDate,
+  suspensionEndDate: pcr.suspensionEndDate,
   type
 });

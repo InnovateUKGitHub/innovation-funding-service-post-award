@@ -70,11 +70,13 @@ class PCRPrepareItemComponent extends ContainerBase<ProjectChangeRequestPrepareI
       switch (item.type) {
         case ProjectChangeRequestItemTypeEntity.TimeExtension:
            return <Items.TimeExtensionEdit project={project} projectChangeRequestItem={item} validator={validator as PCRTimeExtensionItemDtoValidator} status={status} onChange={itemDto => this.onChange(editor.data, itemDto)} onSave={() => this.onSave(editor.data)}/>;
+        case ProjectChangeRequestItemTypeEntity.ProjectSuspension:
+          // TODO
+          return "To be implemented";
         case ProjectChangeRequestItemTypeEntity.AccountNameChange:
         case ProjectChangeRequestItemTypeEntity.MultiplePartnerFinancialVirement:
         case ProjectChangeRequestItemTypeEntity.PartnerAddition:
         case ProjectChangeRequestItemTypeEntity.PartnerWithdrawal:
-        case ProjectChangeRequestItemTypeEntity.ProjectSuspension:
         case ProjectChangeRequestItemTypeEntity.ProjectTermination:
         case ProjectChangeRequestItemTypeEntity.SinglePartnerFinancialVirement:
           return <Items.StandardItemEdit projectChangeRequest={pcr} projectChangeRequestItem={item} validator={validator as PCRStandardItemDtoValidator} status={status} onChange={itemDto => this.onChange(editor.data, itemDto)} onSave={() => this.onSave(editor.data)} />;

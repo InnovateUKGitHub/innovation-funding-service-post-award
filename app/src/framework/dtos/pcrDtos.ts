@@ -35,7 +35,11 @@ export interface PCRItemDto extends PCRItemSummaryDto {
   statusName: string;
 }
 
-export type TypedPcrItemDto = PCRStandardItemDto | PCRItemForTimeExtensionDto | PCRItemForScopeChangeDto;
+export type TypedPcrItemDto =
+  PCRStandardItemDto |
+  PCRItemForTimeExtensionDto |
+  PCRItemForScopeChangeDto |
+  PCRItemForProjectSuspensionDto;
 
 export interface PCRStandardItemDto extends PCRItemDto {
   type: ProjectChangeRequestStandardItemTypes;
@@ -50,6 +54,12 @@ export interface PCRItemForScopeChangeDto extends PCRItemDto {
   type: ProjectChangeRequestItemTypeEntity.ScopeChange;
   publicDescription: string | null;
   projectSummary: string | null;
+}
+
+export interface PCRItemForProjectSuspensionDto extends PCRItemDto {
+  type: ProjectChangeRequestItemTypeEntity.ProjectSuspension;
+  suspensionStartDate: Date | null;
+  suspensionEndDate: Date | null;
 }
 
 export interface PCRItemTypeDto {

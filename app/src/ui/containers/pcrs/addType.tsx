@@ -71,7 +71,6 @@ class PCRAddTypeComponent extends ContainerBase<ProjectChangeRequestAddTypeParam
       case ProjectChangeRequestItemTypeEntity.MultiplePartnerFinancialVirement:
       case ProjectChangeRequestItemTypeEntity.PartnerAddition:
       case ProjectChangeRequestItemTypeEntity.PartnerWithdrawal:
-      case ProjectChangeRequestItemTypeEntity.ProjectSuspension:
       case ProjectChangeRequestItemTypeEntity.ProjectTermination:
       case ProjectChangeRequestItemTypeEntity.SinglePartnerFinancialVirement:
         return {
@@ -90,6 +89,13 @@ class PCRAddTypeComponent extends ContainerBase<ProjectChangeRequestAddTypeParam
           type: itemType.type,
           publicDescription: "",
           projectSummary: ""
+        };
+      case ProjectChangeRequestItemTypeEntity.ProjectSuspension:
+        return {
+          ...baseFields,
+          type: itemType.type,
+          suspensionStartDate: null,
+          suspensionEndDate: null
         };
       default:
         throw new Error("Item type not handled");

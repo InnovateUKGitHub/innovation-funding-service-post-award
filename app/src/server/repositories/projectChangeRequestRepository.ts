@@ -45,6 +45,8 @@ export interface ISalesforcePCR {
   MarkedAsCompleteName: string;
   Acc_Comments__c: string;
   Acc_NewProjectEndDate__c: string|null;
+  Acc_SuspensionStarts__c: string|null;
+  Acc_SuspensionEnds__c: string|null;
 }
 
 export class ProjectChangeRequestRepository extends SalesforceRepositoryBase<ISalesforcePCR> implements IProjectChangeRequestRepository {
@@ -74,6 +76,8 @@ export class ProjectChangeRequestRepository extends SalesforceRepositoryBase<ISa
     "Acc_NewProjectEndDate__c",
     "toLabel(Acc_MarkedAsComplete__c) MarkedAsCompleteName",
     "Acc_Comments__c",
+    "Acc_SuspensionStarts__c",
+    "Acc_SuspensionEnds__c"
   ];
 
   async getAllByProjectId(projectId: string): Promise<ProjectChangeRequestEntity[]> {
@@ -112,13 +116,18 @@ export class ProjectChangeRequestRepository extends SalesforceRepositoryBase<ISa
     });
   }
 
+  // TODO maybe put in base class
+  private toOptionalSFDate = (jsDate: Date | null) => jsDate && DateTime.fromJSDate(jsDate).toFormat("yyyy-MM-dd");
+
   async updateItems(pcr: ProjectChangeRequestEntity, items: ProjectChangeRequestItemEntity[]) {
     await super.updateAll(items.map(x => ({
       Id: x.id,
       Acc_MarkedasComplete__c: this.mapItemStatus(x.status),
-      Acc_NewProjectEndDate__c: x.projectEndDate && DateTime.fromJSDate(x.projectEndDate).toFormat("yyyy-MM-dd"),
+      Acc_NewProjectEndDate__c: this.toOptionalSFDate(x.projectEndDate),
       Acc_NewProjectSummary__c: x.projectSummary,
       Acc_NewPublicDescription__c: x.publicDescription,
+      Acc_SuspensionStarts__c: this.toOptionalSFDate(x.suspensionStartDate),
+      Acc_SuspensionEnds__c: this.toOptionalSFDate(x.suspensionEndDate),
     })));
   }
 

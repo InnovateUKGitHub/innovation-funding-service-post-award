@@ -4,7 +4,7 @@ import { GetPCRByIdQuery } from "@server/features/pcrs/getPCRByIdQuery";
 import { DateTime } from "luxon";
 import { ProjectChangeRequestItemTypeEntity } from "@framework/entities";
 import { PCRRecordTypeMetaValues } from "@server/features/pcrs/getItemTypesQuery";
-import { PCRItemForScopeChangeDto, PCRItemForTimeExtensionDto } from "@framework/dtos";
+import { PCRItemForProjectSuspensionDto, PCRItemForScopeChangeDto, PCRItemForTimeExtensionDto } from "@framework/dtos";
 
 describe("GetPCRByIdQuery", () => {
   test("when id not found then exception is thrown", async () => {
@@ -144,6 +144,30 @@ describe("GetPCRByIdQuery", () => {
     expect(result.id).toBe(item.id);
     expect(result.projectSummary).toBe(projectSummary);
     expect(result.publicDescription).toBe(publicDescription);
+  });
+
+  test("maps fields for project suspension", async () => {
+    const context = new TestContext();
+
+    const scopeChangeType = PCRRecordTypeMetaValues.find(x => x.type === ProjectChangeRequestItemTypeEntity.ProjectSuspension)!;
+    const recordType = context.testData.createPCRRecordTypes().find(x => x.type === scopeChangeType.typeName);
+
+    const pcr = context.testData.createPCR();
+
+    const suspensionStartDate = DateTime.local().plus({ years: 1 }).startOf("month").toJSDate();
+    const suspensionEndDate = DateTime.local().plus({ years: 2 }).endOf("month").toJSDate();
+
+    const item = context.testData.createPCRItem(pcr, recordType, {
+      suspensionStartDate,
+      suspensionEndDate
+    });
+
+    const query = new GetPCRByIdQuery(pcr.projectId, pcr.id);
+    const result = await context.runQuery(query).then(x => x.items[0] as PCRItemForProjectSuspensionDto);
+
+    expect(result.id).toBe(item.id);
+    expect(result.suspensionStartDate!.toISOString()).toBe(suspensionStartDate.toISOString());
+    expect(result.suspensionEndDate!.toISOString()).toBe(suspensionEndDate.toISOString());
   });
 
   test("when project id not found then exception is thrown", async () => {
