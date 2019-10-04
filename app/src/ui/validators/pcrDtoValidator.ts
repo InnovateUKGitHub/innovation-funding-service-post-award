@@ -1,7 +1,15 @@
 import { DateTime } from "luxon";
 import { Result, Results } from "../validation";
 import * as Validation from "./common";
-import { PCRDto, PCRItemDto, PCRItemForTimeExtensionDto, PCRItemTypeDto, PCRStandardItemDto, ProjectRole } from "@framework/dtos";
+import {
+  PCRDto,
+  PCRItemDto,
+  PCRItemForScopeChangeDto,
+  PCRItemForTimeExtensionDto,
+  PCRItemTypeDto,
+  PCRStandardItemDto,
+  ProjectRole, TypedPcrItemDto
+} from "@framework/dtos";
 import { ProjectChangeRequestItemStatus, ProjectChangeRequestItemTypeEntity, ProjectChangeRequestStatus } from "@framework/entities";
 
 export class PCRDtoValidator extends Results<PCRDto> {
@@ -102,20 +110,21 @@ export class PCRDtoValidator extends Results<PCRDto> {
     );
   }
 
-  private getItemValidator(item: PCRStandardItemDto | PCRItemForTimeExtensionDto) {
+  private getItemValidator(item: TypedPcrItemDto) {
     const canEdit = (this.role & ProjectRole.ProjectManager) ? this.projectManagerCanEdit : false;
     switch (item.type) {
       case ProjectChangeRequestItemTypeEntity.TimeExtension:
-        return new PCRTimeExtentionItemDtoValidator(item, canEdit, this.role, this.original.items.find(x => x.id === item.id) as PCRItemForTimeExtensionDto, this.model.status, this.recordTypes, this.showValidationErrors);
+        return new PCRTimeExtensionItemDtoValidator(item, canEdit, this.role, this.original.items.find(x => x.id === item.id) as PCRItemForTimeExtensionDto, this.model.status, this.recordTypes, this.showValidationErrors);
+      case ProjectChangeRequestItemTypeEntity.ScopeChange:
+        return new PCRScopeChangeItemDtoValidator(item, canEdit, this.role, this.original.items.find(x => x.id === item.id) as PCRItemForScopeChangeDto, this.model.status, this.recordTypes, this.showValidationErrors);
       case ProjectChangeRequestItemTypeEntity.AccountNameChange:
       case ProjectChangeRequestItemTypeEntity.MultiplePartnerFinancialVirement:
       case ProjectChangeRequestItemTypeEntity.PartnerAddition:
       case ProjectChangeRequestItemTypeEntity.PartnerWithdrawal:
       case ProjectChangeRequestItemTypeEntity.ProjectSuspension:
       case ProjectChangeRequestItemTypeEntity.ProjectTermination:
-      case ProjectChangeRequestItemTypeEntity.ScopeChange:
       case ProjectChangeRequestItemTypeEntity.SinglePartnerFinancialVirement:
-        return new PCRStandardItemDtoValdiator(item, canEdit, this.role, this.original.items.find(x => x.id === item.id) as PCRStandardItemDto, this.model.status, this.recordTypes, this.showValidationErrors);
+        return new PCRStandardItemDtoValidator(item, canEdit, this.role, this.original.items.find(x => x.id === item.id) as PCRStandardItemDto, this.model.status, this.recordTypes, this.showValidationErrors);
       default:
         throw new Error("PCR Type not implimented");
     }
@@ -186,11 +195,11 @@ export class PCRBaseItemDtoValidator<T extends PCRItemDto> extends Results<T> {
   public type = this.validateTypes();
 }
 
-export class PCRStandardItemDtoValdiator extends PCRBaseItemDtoValidator<PCRStandardItemDto> {
+export class PCRStandardItemDtoValidator extends PCRBaseItemDtoValidator<PCRStandardItemDto> {
 
 }
 
-export class PCRTimeExtentionItemDtoValidator extends PCRBaseItemDtoValidator<PCRItemForTimeExtensionDto> {
+export class PCRTimeExtensionItemDtoValidator extends PCRBaseItemDtoValidator<PCRItemForTimeExtensionDto> {
   private validateEndDate() {
 
     const isComplete = this.model.status === ProjectChangeRequestItemStatus.Complete;
@@ -208,4 +217,27 @@ export class PCRTimeExtentionItemDtoValidator extends PCRBaseItemDtoValidator<PC
   }
 
   projectEndDate = this.validateEndDate();
+}
+
+export class PCRScopeChangeItemDtoValidator extends PCRBaseItemDtoValidator<PCRItemForScopeChangeDto> {
+  private validateProjectSummary() {
+    const isComplete = this.model.status === ProjectChangeRequestItemStatus.Complete;
+
+    if (this.canEdit) {
+      return isComplete ? Validation.required(this, this.model.projectSummary, "Enter a project summary") : Validation.valid(this);
+    }
+    return Validation.isTrue(this, (this.model.projectSummary === this.original.projectSummary), "Project summary cannot be changed.");
+  }
+
+  private validatePublicDescription() {
+    const isComplete = this.model.status === ProjectChangeRequestItemStatus.Complete;
+
+    if (this.canEdit) {
+      return isComplete ? Validation.required(this, this.model.publicDescription, "Enter a public description") : Validation.valid(this);
+    }
+    return Validation.isTrue(this, (this.model.publicDescription === this.original.publicDescription), "Public description cannot be changed.");
+  }
+
+  projectSummary = this.validateProjectSummary();
+  publicDescription = this.validatePublicDescription();
 }

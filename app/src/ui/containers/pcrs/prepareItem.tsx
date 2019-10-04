@@ -9,8 +9,8 @@ import { PCRDto, PCRItemDto, PCRItemForTimeExtensionDto, PCRStandardItemDto } fr
 import { ProjectChangeRequestPrepareRoute } from "@ui/containers";
 import { EditorStatus, IEditorStore, StoresConsumer, } from "@ui/redux";
 import { ProjectChangeRequestItemStatus, ProjectChangeRequestItemTypeEntity } from "@framework/entities";
-import { PCRDtoValidator, PCRStandardItemDtoValdiator, PCRTimeExtentionItemDtoValidator } from "@ui/validators";
 import * as Items from "./items";
+import { PCRDtoValidator, PCRStandardItemDtoValidator, PCRTimeExtensionItemDtoValidator } from "@ui/validators";
 
 export interface ProjectChangeRequestPrepareItemParams {
   projectId: string;
@@ -69,16 +69,15 @@ class PCRPrepareItemComponent extends ContainerBase<ProjectChangeRequestPrepareI
     if (item) {
       switch (item.type) {
         case ProjectChangeRequestItemTypeEntity.TimeExtension:
-           return <Items.TimeExtensionEdit project={project} projectChangeRequestItem={item} validator={validator as PCRTimeExtentionItemDtoValidator}  status={status} onChange={itemDto => this.onChange(editor.data, itemDto)} onSave={() => this.onSave(editor.data)}/>;
+           return <Items.TimeExtensionEdit project={project} projectChangeRequestItem={item} validator={validator as PCRTimeExtensionItemDtoValidator} status={status} onChange={itemDto => this.onChange(editor.data, itemDto)} onSave={() => this.onSave(editor.data)}/>;
         case ProjectChangeRequestItemTypeEntity.AccountNameChange:
         case ProjectChangeRequestItemTypeEntity.MultiplePartnerFinancialVirement:
         case ProjectChangeRequestItemTypeEntity.PartnerAddition:
         case ProjectChangeRequestItemTypeEntity.PartnerWithdrawal:
         case ProjectChangeRequestItemTypeEntity.ProjectSuspension:
         case ProjectChangeRequestItemTypeEntity.ProjectTermination:
-        case ProjectChangeRequestItemTypeEntity.ScopeChange:
         case ProjectChangeRequestItemTypeEntity.SinglePartnerFinancialVirement:
-          return <Items.StandardItemEdit projectChangeRequest={pcr} projectChangeRequestItem={item} validator={validator as PCRStandardItemDtoValdiator} status={status} onChange={itemDto => this.onChange(editor.data, itemDto)} onSave={() => this.onSave(editor.data)} />;
+          return <Items.StandardItemEdit projectChangeRequest={pcr} projectChangeRequestItem={item} validator={validator as PCRStandardItemDtoValidator} status={status} onChange={itemDto => this.onChange(editor.data, itemDto)} onSave={() => this.onSave(editor.data)} />;
       }
     }
     return <ACC.ValidationMessage messageType="error" message="Type not handled" />;
