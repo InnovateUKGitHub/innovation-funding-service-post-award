@@ -8,6 +8,7 @@ interface ITask {
   name: string;
   route: ILinkInfo;
   status: "To do" | "Complete" | "Incomplete";
+  validation?: Result[];
 }
 
 export interface ITaskListItem {
@@ -17,13 +18,14 @@ export interface ITaskListItem {
   qa?: string;
 }
 
-export const Task: React.FunctionComponent<ITask> = ({ route, name, status }) => {
+export const Task: React.FunctionComponent<ITask> = ({ route, name, status, validation }) => {
   const actionClasses = classNames({
     "app-task-list__task-action" : true,
     "app-task-list__task-action--completed": status === "Complete",
   });
   return (
     <li className="app-task-list__item">
+      {validation && validation.map((v) => <ACC.ValidationError error={v} key={v.key}/>)}
       <span className="app-task-list__task-name"><ACC.Link route={route}>{name}</ACC.Link></span>
       <span className={actionClasses}>{status}</span>
     </li>
@@ -34,8 +36,8 @@ export const TaskListSection: React.FunctionComponent<ITaskListItem> = ({ step, 
   return (
     <li key={step} data-qa={qa}>
       <h2 className="app-task-list__section"><span className="app-task-list__section-number">{step}.</span>&nbsp;{title}</h2>
-      {validation && validation.map((v) => <ACC.ValidationError error={v} key={v.key}/>)}
       <ul className="app-task-list__items">
+        {validation && validation.map((v) => <ACC.ValidationError error={v} key={v.key}/>)}
         {children}
       </ul>
     </li>
