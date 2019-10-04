@@ -19,6 +19,7 @@ describe("MapToProjectDtoCommand", () => {
       startDate: startDate.set({ hour: 0, minute: 0, second: 0, millisecond: 0 }).toJSDate(),
       endDate: endDate.set({ hour: 0, minute: 0, second: 0, millisecond: 0 }).toJSDate(),
       summary: "Expected summary",
+      description: "Expected description",
       projectNumber: "Expected project number",
       competitionType: "SBRI",
       claimFrequency: ClaimFrequency.Quarterly,
@@ -45,6 +46,7 @@ describe("MapToProjectDtoCommand", () => {
     const salesforce = context.testData.createProject(x => {
       x.Id = expected.id;
       x.Acc_ProjectSummary__c = expected.summary;
+      x.Acc_PublicDescription__c = expected.description;
       x.Acc_ProjectTitle__c = expected.title;
       x.Acc_StartDate__c = startDate.toFormat("yyyy-MM-dd");
       x.Acc_EndDate__c = endDate.toFormat("yyyy-MM-dd");
