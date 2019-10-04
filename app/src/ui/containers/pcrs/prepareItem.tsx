@@ -5,12 +5,12 @@ import { ProjectDto, ProjectRole } from "@framework/types";
 
 import * as ACC from "@ui/components";
 import { Pending } from "@shared/pending";
-import { PCRDto, PCRItemDto, PCRItemForTimeExtensionDto, PCRStandardItemDto } from "@framework/dtos";
+import { PCRDto, PCRItemDto, TypedPcrItemDto } from "@framework/dtos";
 import { ProjectChangeRequestPrepareRoute } from "@ui/containers";
 import { EditorStatus, IEditorStore, StoresConsumer, } from "@ui/redux";
 import { ProjectChangeRequestItemStatus, ProjectChangeRequestItemTypeEntity } from "@framework/entities";
 import * as Items from "./items";
-import { PCRDtoValidator, PCRStandardItemDtoValidator, PCRTimeExtensionItemDtoValidator } from "@ui/validators";
+import * as Validators from "@ui/validators/pcrDtoValidator";
 
 export interface ProjectChangeRequestPrepareItemParams {
   projectId: string;
@@ -22,7 +22,7 @@ interface Data {
   project: Pending<ProjectDto>;
   pcr: Pending<PCRDto>;
   pcrItem: Pending<PCRItemDto>;
-  editor: Pending<IEditorStore<PCRDto, PCRDtoValidator>>;
+  editor: Pending<IEditorStore<PCRDto, Validators.PCRDtoValidator>>;
 }
 
 interface Callbacks {
@@ -41,7 +41,7 @@ class PCRPrepareItemComponent extends ContainerBase<ProjectChangeRequestPrepareI
     return <ACC.PageLoader pending={combined} render={x => this.renderContents(x.project, x.pcr, x.pcrItem, x.editor)} />;
   }
 
-  private renderContents(project: ProjectDto, pcr: PCRDto, pcrItem: PCRItemDto, editor: IEditorStore<PCRDto, PCRDtoValidator>) {
+  private renderContents(project: ProjectDto, pcr: PCRDto, pcrItem: PCRItemDto, editor: IEditorStore<PCRDto, Validators.PCRDtoValidator>) {
     return (
       <ACC.Page
         backLink={<ACC.BackLink route={ProjectChangeRequestPrepareRoute.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId })}>Back to prepare project change request</ACC.BackLink>}
@@ -62,30 +62,29 @@ class PCRPrepareItemComponent extends ContainerBase<ProjectChangeRequestPrepareI
     );
   }
 
-  renderForm(project: ProjectDto, pcr: PCRDto, editor: IEditorStore<PCRDto, PCRDtoValidator>): React.ReactNode {
+  renderForm(project: ProjectDto, pcr: PCRDto, editor: IEditorStore<PCRDto, Validators.PCRDtoValidator>): React.ReactNode {
     const status = editor.status || EditorStatus.Editing;
     const item = editor.data.items.find(x => x.id === this.props.itemId);
     const validator = editor.validator.items.results.find(x => x.model.id === this.props.itemId)!;
     if (item) {
       switch (item.type) {
         case ProjectChangeRequestItemTypeEntity.TimeExtension:
-           return <Items.TimeExtensionEdit project={project} projectChangeRequestItem={item} validator={validator as PCRTimeExtensionItemDtoValidator} status={status} onChange={itemDto => this.onChange(editor.data, itemDto)} onSave={() => this.onSave(editor.data)}/>;
-        case ProjectChangeRequestItemTypeEntity.ProjectSuspension:
-          // TODO
-          return "To be implemented";
+          return <Items.TimeExtensionEdit project={project} projectChangeRequestItem={item} validator={validator as Validators.PCRTimeExtensionItemDtoValidator} status={status} onChange={itemDto => this.onChange(editor.data, itemDto)} onSave={() => this.onSave(editor.data)} />;
+        case ProjectChangeRequestItemTypeEntity.ScopeChange:
+          return <Items.ScopeChangeEdit project={project} projectChangeRequestItem={item} validator={validator as Validators.PCRScopeChangeItemDtoValidator} status={status} onChange={itemDto => this.onChange(editor.data, itemDto)} onSave={() => this.onSave(editor.data)} />;
         case ProjectChangeRequestItemTypeEntity.AccountNameChange:
         case ProjectChangeRequestItemTypeEntity.MultiplePartnerFinancialVirement:
         case ProjectChangeRequestItemTypeEntity.PartnerAddition:
         case ProjectChangeRequestItemTypeEntity.PartnerWithdrawal:
         case ProjectChangeRequestItemTypeEntity.ProjectTermination:
         case ProjectChangeRequestItemTypeEntity.SinglePartnerFinancialVirement:
-          return <Items.StandardItemEdit projectChangeRequest={pcr} projectChangeRequestItem={item} validator={validator as PCRStandardItemDtoValidator} status={status} onChange={itemDto => this.onChange(editor.data, itemDto)} onSave={() => this.onSave(editor.data)} />;
+          return <Items.StandardItemEdit projectChangeRequest={pcr} projectChangeRequestItem={item} validator={validator as Validators.PCRStandardItemDtoValidator} status={status} onChange={itemDto => this.onChange(editor.data, itemDto)} onSave={() => this.onSave(editor.data)} />;
       }
     }
     return <ACC.ValidationMessage messageType="error" message="Type not handled" />;
   }
 
-  private onChange(dto: PCRDto, itemDto: PCRStandardItemDto|PCRItemForTimeExtensionDto): void {
+  private onChange(dto: PCRDto, itemDto: TypedPcrItemDto): void {
     const index = dto.items.findIndex(x => x.id === this.props.itemId);
     dto.items[index] = itemDto;
     this.props.onChange(false, dto);
