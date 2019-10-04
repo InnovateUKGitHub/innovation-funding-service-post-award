@@ -33,11 +33,11 @@ export enum ProjectChangeRequestItemTypeEntity {
   TimeExtension = 90,
 }
 
+// TODO Move to pcrDtos
 export type ProjectChangeRequestStandardItemTypes = (
   ProjectChangeRequestItemTypeEntity.AccountNameChange|
   ProjectChangeRequestItemTypeEntity.PartnerAddition|
   ProjectChangeRequestItemTypeEntity.PartnerWithdrawal|
-  ProjectChangeRequestItemTypeEntity.ProjectSuspension|
   ProjectChangeRequestItemTypeEntity.ProjectTermination|
   ProjectChangeRequestItemTypeEntity.MultiplePartnerFinancialVirement|
   ProjectChangeRequestItemTypeEntity.SinglePartnerFinancialVirement
@@ -79,4 +79,6 @@ export interface ProjectChangeRequestItemEntity extends ProjectChangeRequestItem
   projectEndDate: Date | null;
   publicDescription: string | null;
   projectSummary: string | null;
+  suspensionStartDate: Date | null;
+  suspensionEndDate: Date | null;
 }
