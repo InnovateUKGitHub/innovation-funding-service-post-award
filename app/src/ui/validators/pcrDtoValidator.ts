@@ -3,7 +3,7 @@ import { Result, Results } from "../validation";
 import * as Validation from "./common";
 import {
   PCRDto,
-  PCRItemDto,
+  PCRItemDto, PCRItemForProjectSuspensionDto,
   PCRItemForScopeChangeDto,
   PCRItemForTimeExtensionDto,
   PCRItemTypeDto,
@@ -117,16 +117,17 @@ export class PCRDtoValidator extends Results<PCRDto> {
         return new PCRTimeExtensionItemDtoValidator(item, canEdit, this.role, this.original.items.find(x => x.id === item.id) as PCRItemForTimeExtensionDto, this.model.status, this.recordTypes, this.showValidationErrors);
       case ProjectChangeRequestItemTypeEntity.ScopeChange:
         return new PCRScopeChangeItemDtoValidator(item, canEdit, this.role, this.original.items.find(x => x.id === item.id) as PCRItemForScopeChangeDto, this.model.status, this.recordTypes, this.showValidationErrors);
+      case ProjectChangeRequestItemTypeEntity.ProjectSuspension:
+        return new PCRProjectSuspensionItemDtoValidator(item, canEdit, this.role, this.original.items.find(x => x.id === item.id) as PCRItemForProjectSuspensionDto, this.model.status, this.recordTypes, this.showValidationErrors);
       case ProjectChangeRequestItemTypeEntity.AccountNameChange:
       case ProjectChangeRequestItemTypeEntity.MultiplePartnerFinancialVirement:
       case ProjectChangeRequestItemTypeEntity.PartnerAddition:
       case ProjectChangeRequestItemTypeEntity.PartnerWithdrawal:
-      case ProjectChangeRequestItemTypeEntity.ProjectSuspension:
       case ProjectChangeRequestItemTypeEntity.ProjectTermination:
       case ProjectChangeRequestItemTypeEntity.SinglePartnerFinancialVirement:
         return new PCRStandardItemDtoValidator(item, canEdit, this.role, this.original.items.find(x => x.id === item.id) as PCRStandardItemDto, this.model.status, this.recordTypes, this.showValidationErrors);
       default:
-        throw new Error("PCR Type not implimented");
+        throw new Error("PCR Type not implemented");
     }
   }
 
@@ -217,6 +218,39 @@ export class PCRTimeExtensionItemDtoValidator extends PCRBaseItemDtoValidator<PC
   }
 
   projectEndDate = this.validateEndDate();
+}
+
+export class PCRProjectSuspensionItemDtoValidator extends PCRBaseItemDtoValidator<PCRItemForProjectSuspensionDto> {
+
+  private isComplete = this.model.status === ProjectChangeRequestItemStatus.Complete;
+
+  private validateSuspensionStartDate() {
+    if (this.canEdit) {
+      return Validation.all(this,
+        () => this.isComplete ? Validation.required(this, this.model.suspensionStartDate, "Enter a project suspension start date") : Validation.valid(this),
+        () => Validation.isDate(this, this.model.suspensionStartDate, "Please enter a valid suspension start date"),
+        () => this.model.suspensionStartDate ? Validation.isTrue(this, DateTime.fromJSDate(this.model.suspensionStartDate).day === 1, "The date must be at the start of the month") : Validation.valid(this)
+      );
+    }
+    else {
+      return Validation.isTrue(this, (!this.model.suspensionStartDate && !this.original.suspensionStartDate) || (this.model.suspensionStartDate && this.original.suspensionStartDate && this.model.suspensionStartDate.getTime() === this.original.suspensionStartDate.getTime()), "Project suspension start date cannot be changed.");
+    }
+  }
+
+  private validateSuspensionEndDate() {
+    if (this.canEdit) {
+      return Validation.all(this,
+        () => Validation.isDate(this, this.model.suspensionEndDate, "Please enter a valid suspension end date"),
+        () => this.model.suspensionEndDate ? Validation.isTrue(this, DateTime.fromJSDate(this.model.suspensionEndDate).plus({days: 1}).day === 1, "The date must be at the end of the month") : Validation.valid(this)
+      );
+    }
+    else {
+      return Validation.isTrue(this, (!this.model.suspensionEndDate && !this.original.suspensionEndDate) || (this.model.suspensionEndDate && this.original.suspensionEndDate && this.model.suspensionEndDate.getTime() === this.original.suspensionEndDate.getTime()), "Project suspension end date cannot be changed.");
+    }
+  }
+
+  suspensionStartDate = this.validateSuspensionStartDate();
+  suspensionEndDate = this.validateSuspensionEndDate();
 }
 
 export class PCRScopeChangeItemDtoValidator extends PCRBaseItemDtoValidator<PCRItemForScopeChangeDto> {

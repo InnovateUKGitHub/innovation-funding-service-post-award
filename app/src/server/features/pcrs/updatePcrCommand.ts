@@ -128,6 +128,12 @@ export class UpdatePCRCommand extends CommandBase<boolean> {
         result.publicDescription = dto.publicDescription;
         hasChanged = true;
       }
+    } else if (dto.type === ProjectChangeRequestItemTypeEntity.ProjectSuspension) {
+      if (result.suspensionStartDate !== dto.suspensionStartDate || result.suspensionEndDate !== dto.suspensionEndDate) {
+        result.suspensionStartDate = dto.suspensionStartDate;
+        result.suspensionEndDate = dto.suspensionEndDate;
+        hasChanged = true;
+      }
     }
 
     return { hasChanged, result };

@@ -1,6 +1,8 @@
 // tslint:disable
+import { DateTime } from "luxon";
 import { TestContext } from "../../testContextProvider";
 import { UpdatePCRCommand } from "@server/features/pcrs/updatePcrCommand";
+import * as Entites from "@framework/entities";
 import {
   ProjectChangeRequestItemStatus,
   ProjectChangeRequestItemTypeEntity,
@@ -11,6 +13,7 @@ import { ValidationError } from "@server/features/common";
 import {
   Authorisation,
   PCRDto,
+  PCRItemForProjectSuspensionDto,
   PCRItemForScopeChangeDto,
   PCRItemForTimeExtensionDto,
   PCRStandardItemDto,
@@ -18,7 +21,6 @@ import {
 } from "@framework/types";
 import { getAllEnumValues } from "@shared/enumHelper";
 import { PCRRecordTypeMetaValues } from "@server/features/pcrs/getItemTypesQuery";
-import * as Entites from "@framework/entities";
 
 describe("UpdatePCRCommand", () => {
   describe("Access control", () => {
@@ -157,7 +159,7 @@ describe("UpdatePCRCommand", () => {
       const pcr = context.testData.createPCR(project, { status: ProjectChangeRequestStatus.Draft, reasoningStatus: ProjectChangeRequestItemStatus.Complete });
       const recordTypes = context.testData.range(3, x => context.testData.createRecordType({ parent: "Acc_ProjectChangeRequest__c"}));
       recordTypes[0].type = "Remove a partner";
-      recordTypes[1].type = "Put project on hold";
+      recordTypes[1].type = "Add a partner";
       recordTypes[2].type = "Change project scope";
 
       recordTypes.forEach(r => context.testData.createPCRItem(pcr, r, {status : ProjectChangeRequestItemStatus.Incomplete}));
@@ -173,7 +175,7 @@ describe("UpdatePCRCommand", () => {
 
       await context.runCommand(command);
 
-      expect(pcr.items.map(x => x.status)).toEqual([ProjectChangeRequestItemStatus.Incomplete, ProjectChangeRequestItemStatus.Complete, ProjectChangeRequestItemStatus.Incomplete ]);
+      expect(pcr.items.map(x => x.status).sort()).toEqual([ProjectChangeRequestItemStatus.Incomplete, ProjectChangeRequestItemStatus.Complete, ProjectChangeRequestItemStatus.Incomplete ].sort());
     });
 
     test("adds items", async () => {
@@ -437,6 +439,113 @@ describe("UpdatePCRCommand", () => {
       const updated = await context.runQuery(new GetPCRByIdQuery(projectChangeRequest.projectId, projectChangeRequest.id));
       const updatedItem = updated.items[0] as PCRItemForTimeExtensionDto;
       await expect(updatedItem.projectEndDate).toEqual(new Date("2020/01/31"));
+    })
+  });
+
+  describe("Project Suspension", () => {
+    test("returns bad request if no start date is sent", async () => {
+      const context = new TestContext();
+
+      const project = context.testData.createProject();
+      context.testData.createCurrentUserAsProjectManager(project);
+      const projectChangeRequest = context.testData.createPCR(project, {status: ProjectChangeRequestStatus.Draft});
+      const recordTypes = context.testData.createPCRRecordTypes();
+
+      const projectSuspensionType = PCRRecordTypeMetaValues.find(x => x.type === ProjectChangeRequestItemTypeEntity.ProjectSuspension)!;
+
+      const recordType = recordTypes.find(x => x.type === projectSuspensionType.typeName);
+      context.testData.createPCRItem(projectChangeRequest, recordType, {status: ProjectChangeRequestItemStatus.Complete});
+
+      const dto = await context.runQuery(new GetPCRByIdQuery(projectChangeRequest.projectId, projectChangeRequest.id));
+      const item = dto.items[0] as PCRItemForProjectSuspensionDto;
+
+      item.suspensionStartDate = null;
+      await expect(context.runCommand(new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto))).rejects.toThrow(ValidationError);
+    });
+
+    test("returns bad request if invalid date is sent", async () => {
+      const context = new TestContext();
+
+      const project = context.testData.createProject();
+      context.testData.createCurrentUserAsProjectManager(project);
+      const projectChangeRequest = context.testData.createPCR(project, {status: ProjectChangeRequestStatus.Draft});
+      const recordTypes = context.testData.createPCRRecordTypes();
+
+      const projectSuspensionType = PCRRecordTypeMetaValues.find(x => x.type === ProjectChangeRequestItemTypeEntity.ProjectSuspension)!;
+
+      const recordType = recordTypes.find(x => x.type === projectSuspensionType.typeName);
+      context.testData.createPCRItem(projectChangeRequest, recordType, {status: ProjectChangeRequestItemStatus.Incomplete});
+
+      const dto = await context.runQuery(new GetPCRByIdQuery(projectChangeRequest.projectId, projectChangeRequest.id));
+      const item = dto.items[0] as PCRItemForProjectSuspensionDto;
+      item.suspensionStartDate = new Date("bad, bad date");
+      await expect(context.runCommand(new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto))).rejects.toThrow(ValidationError);
+    });
+
+    test("returns bad request if start date is not start of month", async () => {
+      const context = new TestContext();
+
+      const project = context.testData.createProject();
+      context.testData.createCurrentUserAsProjectManager(project);
+      const projectChangeRequest = context.testData.createPCR(project, {status: ProjectChangeRequestStatus.Draft});
+      const recordTypes = context.testData.createPCRRecordTypes();
+
+      const projectSuspensionType = PCRRecordTypeMetaValues.find(x => x.type === ProjectChangeRequestItemTypeEntity.ProjectSuspension)!;
+
+      const recordType = recordTypes.find(x => x.type === projectSuspensionType.typeName);
+      context.testData.createPCRItem(projectChangeRequest, recordType, {status: ProjectChangeRequestItemStatus.Incomplete});
+
+      const dto = await context.runQuery(new GetPCRByIdQuery(projectChangeRequest.projectId, projectChangeRequest.id));
+      const item = dto.items[0] as PCRItemForProjectSuspensionDto;
+      item.suspensionStartDate = DateTime.local().plus({ years: 1 }).startOf("month").plus({days: 1}).toJSDate();
+      await expect(context.runCommand(new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto))).rejects.toThrow(ValidationError);
+    });
+
+    test("returns bad request if end date is not end of month", async () => {
+      const context = new TestContext();
+
+      const project = context.testData.createProject();
+      context.testData.createCurrentUserAsProjectManager(project);
+      const projectChangeRequest = context.testData.createPCR(project, {status: ProjectChangeRequestStatus.Draft});
+      const recordTypes = context.testData.createPCRRecordTypes();
+
+      const projectSuspensionType = PCRRecordTypeMetaValues.find(x => x.type === ProjectChangeRequestItemTypeEntity.ProjectSuspension)!;
+
+      const recordType = recordTypes.find(x => x.type === projectSuspensionType.typeName);
+      context.testData.createPCRItem(projectChangeRequest, recordType, {status: ProjectChangeRequestItemStatus.Incomplete});
+
+      const dto = await context.runQuery(new GetPCRByIdQuery(projectChangeRequest.projectId, projectChangeRequest.id));
+      const item = dto.items[0] as PCRItemForProjectSuspensionDto;
+      item.suspensionEndDate = DateTime.local().plus({ years: 1 }).endOf("month").minus({days: 1}).toJSDate();
+      await expect(context.runCommand(new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto))).rejects.toThrow(ValidationError);
+    });
+
+    test("updates suspension start date and end date", async () => {
+      const context = new TestContext();
+
+      const project = context.testData.createProject();
+      context.testData.createCurrentUserAsProjectManager(project);
+      const projectChangeRequest = context.testData.createPCR(project, {status: ProjectChangeRequestStatus.Draft});
+      const recordTypes = context.testData.createPCRRecordTypes();
+
+      const projectSuspensionType = PCRRecordTypeMetaValues.find(x => x.type === ProjectChangeRequestItemTypeEntity.ProjectSuspension)!;
+
+      const recordType = recordTypes.find(x => x.type === projectSuspensionType.typeName);
+      context.testData.createPCRItem(projectChangeRequest, recordType, {status: ProjectChangeRequestItemStatus.Incomplete});
+
+      const dto = await context.runQuery(new GetPCRByIdQuery(projectChangeRequest.projectId, projectChangeRequest.id));
+      const item = dto.items[0] as PCRItemForProjectSuspensionDto;
+      const startDate = DateTime.local().plus({ years: 1 }).startOf("month").toJSDate();
+      const endDate = DateTime.local().plus({ years: 2 }).endOf("month").toJSDate();
+      item.suspensionStartDate = startDate;
+      item.suspensionEndDate = endDate;
+
+      await expect(context.runCommand(new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto))).resolves.toBe(true);
+
+      const updated = await context.runQuery(new GetPCRByIdQuery(projectChangeRequest.projectId, projectChangeRequest.id));
+      const updatedItem = updated.items[0] as PCRItemForProjectSuspensionDto;
+      await expect(updatedItem.suspensionStartDate!.toISOString()).toEqual(startDate.toISOString());
+      await expect(updatedItem.suspensionEndDate!.toISOString()).toEqual(endDate.toISOString());
     })
   });
 

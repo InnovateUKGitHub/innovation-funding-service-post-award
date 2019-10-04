@@ -442,6 +442,8 @@ class PCRTestRepository extends TestRepository<Entities.ProjectChangeRequestEnti
         projectEndDate: new Date(),
         projectSummary: "",
         publicDescription: "",
+        suspensionStartDate: null,
+        suspensionEndDate: null,
         ...x
       };
     });
