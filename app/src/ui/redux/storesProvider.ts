@@ -7,12 +7,18 @@ export const createStores = (getState: () => RootState, dispatch: (action: RootA
   const projects = new Stores.ProjectsStore(getState, dispatch);
   const partners = new Stores.PartnersStore(getState, dispatch);
   const claims = new Stores.ClaimsStore(getState, dispatch);
+  const claimDetails = new Stores.ClaimsDetailsStore(getState, dispatch);
+  const forecastGolCosts = new Stores.ForecastGolCostsStore(getState, dispatch);
 
   return {
+    claimDetails,
     claims,
     config: new Stores.ConfigStore(getState, dispatch),
     contacts: new Stores.ContactsStore(getState, dispatch),
+    costCategories: new Stores.CostCategoriesStore(getState, dispatch),
     documents: new Stores.DocumentsStore(partners, claims, getState, dispatch),
+    forecastDetails: new Stores.ForecastDetailsStore(claims, claimDetails, forecastGolCosts, getState, dispatch),
+    forecastGolCosts,
     messages: new Stores.MsssagesStore(getState, dispatch),
     monitoringReports: new Stores.MonitoringReportsStore(projects, getState, dispatch),
     navigation: new Stores.NavigationStore(getState, dispatch),

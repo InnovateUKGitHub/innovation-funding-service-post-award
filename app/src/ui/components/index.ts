@@ -3,6 +3,7 @@ import * as Projects from "./projects";
 import * as Claims from "./claims";
 import * as Inputs from "./inputs";
 import * as MonitoringReports from "./monitoringReports";
+import * as Forecasts from "./forecasts";
 
 export * from "./accordion";
 export * from "./accordionItem";
@@ -31,4 +32,11 @@ export * from "./validationError";
 export * from "./validationMessage";
 export * from "./validationSummary";
 
-export { Renderers, Projects, Claims, Inputs, MonitoringReports };
+export {
+  Claims,
+  Inputs,
+  Forecasts,
+  MonitoringReports,
+  Projects,
+  Renderers,
+ };
