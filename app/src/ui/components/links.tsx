@@ -11,15 +11,18 @@ interface Props {
 }
 
 interface StyledLinkProps extends Props {
-  styling?: "Link" | "SecondaryButton";
+  styling?: "Link" | "PrimaryButton" | "SecondaryButton";
 }
 
 export class Link extends React.Component<StyledLinkProps> {
   render() {
-    const { id, route, styling, children } = this.props;
-
-    const baseClass = styling === "SecondaryButton" ? "govuk-button govuk-button--secondary" : "govuk-link";
-    const className = classNames(baseClass, this.props.className);
+    const { id, route, children } = this.props;
+    const styling = this.props.styling || "Link";
+    const className = classNames({
+      "govuk-link" : styling === "Link",
+      "govuk-button" : styling === "PrimaryButton" || styling === "SecondaryButton",
+      "govuk-button--secondary" : styling === "SecondaryButton",
+    }, this.props.className);
 
     return (
       <RouterLink

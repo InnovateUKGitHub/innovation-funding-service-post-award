@@ -135,8 +135,8 @@ class ProjectOverviewComponent extends ContainerBase<Params, Data, {}> {
       { text: "Claims", link: routes.allClaimsDashboard.getLink({ projectId }) },
       { text: "Claims", link: routes.claimsDashboard.getLink({ projectId, partnerId }) },
       { text: "Monitoring reports", link: routes.monitoringReportDashboard.getLink({ projectId }) },
-      { text: "Forecasts", link: routes.projectForecast.getLink({ projectId }) },
-      { text: "Forecast", link: routes.viewForecast.getLink({ projectId, partnerId }) },
+      { text: "Forecasts", link: routes.forecastDashboard.getLink({ projectId }) },
+      { text: "Forecast", link: routes.forecastDetails.getLink({ projectId, partnerId }) },
       { text: "Project change requests", link: routes.projectChangeRequests.getLink({ projectId }) },
       { text: "Project change requests", link: routes.pcrsDashboard.getLink({ projectId }) },
       { text: "Documents", link: routes.projectDocuments.getLink({ projectId }) },
@@ -146,7 +146,7 @@ class ProjectOverviewComponent extends ContainerBase<Params, Data, {}> {
 
     // special case if not fc shouldnt have link to ViewForecastRoute from this page... the view forecast route has permission from the project forecasts route
     if (projectRole & (ProjectRole.MonitoringOfficer | ProjectRole.ProjectManager)) {
-      links = links.filter(x => x.link.routeName !== routes.viewForecast.routeName);
+      links = links.filter(x => x.link.routeName !== routes.forecastDetails.routeName);
     }
 
     return (

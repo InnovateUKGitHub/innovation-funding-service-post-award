@@ -1,10 +1,9 @@
+import { IFormButton, StandardFormHandlerBase } from "./formHandlerBase";
 import { getForecastDetailsEditor } from "../../ui/redux/selectors";
-import { Params as ForecastParams } from "../../ui/containers/claims/forecasts/common";
-import { Results } from "../../ui/validation/results";
 import { GetAllForecastsForPartnerQuery, UpdateForecastDetailsCommand } from "../features/forecastDetails";
 import { GetByIdQuery } from "../features/projects";
-import { UpdateForecastRoute, ViewForecastRoute } from "../../ui/containers";
-import { IFormButton, StandardFormHandlerBase } from "./formHandlerBase";
+import { ForecastDetailsRoute, UpdateForecastRoute } from "../../ui/containers";
+import { Params as ForecastParams } from "../../ui/containers/claims/forecasts/common";
 import { ForecastDetailsDtosValidator } from "../../ui/validators";
 import { ILinkInfo } from "@framework/types/ILinkInfo";
 import { IContext } from "@framework/types/IContext";
@@ -36,7 +35,7 @@ export class UpdateForecastFormHandler extends StandardFormHandlerBase<ForecastP
 
   protected async run(context: IContext, params: ForecastParams, button: IFormButton, dto: ForecastDetailsDTO[]): Promise<ILinkInfo> {
     await context.runCommand(new UpdateForecastDetailsCommand(params.projectId, params.partnerId, dto, false));
-    return ViewForecastRoute.getLink(params);
+    return ForecastDetailsRoute.getLink(params);
 }
 
   protected getStoreInfo(params: ForecastParams): { key: string; store: string; } {

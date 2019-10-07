@@ -16,7 +16,6 @@ import { EditClaimLineItemsFormHandler } from "./editClaimLineItemsFormHandler";
 import { HomeFormHandler } from "./homeFormHandler";
 import { PrepareClaimFormHandler } from "./prepareClaimFormHandler";
 import { ReviewClaimFormHandler } from "./reviewClaimFormHandler";
-import { ViewForecastFormHandler } from "./viewForecastFormHandler";
 import { UpdateForecastFormHandler } from "./updateForecastFormHandler";
 import { IFormHandler } from "./formHandlerBase";
 import { serverRender } from "../serverRender";
@@ -42,7 +41,6 @@ const handlers: IFormHandler[] = [
   new PrepareClaimFormHandler(),
   new ReviewClaimFormHandler(),
   new UpdateForecastFormHandler(),
-  new ViewForecastFormHandler(),
   new ClaimDetailDocumentDeleteHandler(),
   new ClaimDetailDocumentUploadHandler(),
   new ClaimDashboardDocumentDeleteHandler(),

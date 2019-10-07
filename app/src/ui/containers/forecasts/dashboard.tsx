@@ -38,7 +38,7 @@ class ProjectForecastComponent extends ContainerBase<Params, Data, Callbacks> {
             <Table.Currency header="Forecasts and costs" value={x => (x.totalFutureForecastsForParticipants || 0) + (x.totalCostsSubmitted || 0)} qa="forecasts-and-costs" />
             <Table.Currency header="Underspend" value={x => x.totalParticipantGrant! - (x.totalFutureForecastsForParticipants || 0) - (x.totalCostsSubmitted || 0)} qa="underspend" />
             <Table.ShortDate header="Date of last update" value={x => x.forecastLastModifiedDate} qa="last-updated" />
-            <Table.Link header="Action" hideHeader={true} value={x => this.props.routes.viewForecast.getLink({ projectId: this.props.projectId, partnerId: x.id })} content="View forecast" qa="view-partner-forecast" />
+            <Table.Link header="Action" hideHeader={true} value={x => this.props.routes.forecastDetails.getLink({ projectId: this.props.projectId, partnerId: x.id })} content="View forecast" qa="view-partner-forecast" />
           </Table.Table>
         </ACC.Section>
       </ACC.Page>
@@ -46,7 +46,7 @@ class ProjectForecastComponent extends ContainerBase<Params, Data, Callbacks> {
   }
 }
 
-const ProjectForecastContainer = (props: Params & BaseProps) => (
+const ForecastDashboardContainer = (props: Params & BaseProps) => (
   <StoresConsumer>
     {stores => (
       <ProjectForecastComponent
@@ -58,10 +58,10 @@ const ProjectForecastContainer = (props: Params & BaseProps) => (
   </StoresConsumer>
 );
 
-export const ProjectForecastRoute = defineRoute({
+export const ForecastDashboardRoute = defineRoute({
   routeName: "projectForecasts",
   routePath: "/projects/:projectId/forecasts",
-  container: ProjectForecastContainer,
+  container: ForecastDashboardContainer,
   getParams: (r) => ({ projectId: r.params.projectId }),
   accessControl: (auth, { projectId }) => auth.forProject(projectId).hasAnyRoles(ProjectRole.MonitoringOfficer, ProjectRole.ProjectManager),
   getTitle: () => {
