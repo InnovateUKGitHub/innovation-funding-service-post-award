@@ -17,12 +17,12 @@ export class ForecastDetailsDtosValidator extends Results<ForecastDetailsDTO[]> 
     super(forecasts, showErrors);
 
     // infer period id from all the claim details we have
-    const periodId           = claims.reduce((prev, item) => item.periodId > prev ? item.periodId : prev, 0);
-    const totalGolCosts      = golCosts.reduce((total, current) => total += current.value, 0);
-    const totalClaimCosts    = claimDetails.filter(x => x.periodId <= periodId).reduce((total, current) => total += current.value, 0);
+    const periodId = claims.reduce((prev, item) => item.periodId > prev ? item.periodId : prev, 0);
+    const totalGolCosts = golCosts.reduce((total, current) => total += current.value, 0);
+    const totalClaimCosts = claimDetails.filter(x => x.periodId <= periodId).reduce((total, current) => total += current.value, 0);
     const totalForecastCosts = forecasts.filter(x => x.periodId > periodId).reduce((total, current) => total += current.value, 0);
 
-    if( this.items.isValid) {
+    if (this.items.isValid) {
       this.totalCosts = Validation.isTrue(this, totalForecastCosts + totalClaimCosts <= totalGolCosts, "Your overall total cannot be higher than your total eligible costs.");
     } else {
       this.totalCosts = Validation.valid(this);
@@ -36,5 +36,8 @@ export class ForecastDetailsDtoValidator extends Results<ForecastDetailsDTO> {
   }
 
   public id = Validation.required(this, this.model.id, "Id is required");
-  public value = Validation.number(this, this.model.value, "Forecast must be a number.");
+  public value = Validation.all(this,
+    () => Validation.required(this, this.model.value, "Forecast is required."),
+    () => Validation.number(this, this.model.value, "Forecast must be a number.")
+  );
 }
