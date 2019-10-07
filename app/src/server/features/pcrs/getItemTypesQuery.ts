@@ -9,20 +9,20 @@ interface IMetaValue {
   typeName: string;
   displayName?: string;
   enabled?: boolean;
+  files?: string[];
 }
 
 // @TODO: this might sit better in the pcr repository... leave for now
 export const PCRRecordTypeMetaValues: IMetaValue[] = [
-  { type: ProjectChangeRequestItemTypeEntity.AccountNameChange, typeName: "Change a partner's name" },
-  { type: ProjectChangeRequestItemTypeEntity.PartnerAddition, typeName: "Add a partner", },
+  { type: ProjectChangeRequestItemTypeEntity.AccountNameChange, typeName: "Change a partner's name", },
+  { type: ProjectChangeRequestItemTypeEntity.PartnerAddition, typeName: "Add a partner", files: ["partner_addition.xlsx"] },
   { type: ProjectChangeRequestItemTypeEntity.PartnerWithdrawal, typeName: "Remove a partner", },
   { type: ProjectChangeRequestItemTypeEntity.ProjectSuspension, typeName: "Put project on hold", },
   { type: ProjectChangeRequestItemTypeEntity.ProjectTermination, typeName: "End the project early", },
-  { type: ProjectChangeRequestItemTypeEntity.MultiplePartnerFinancialVirement, typeName: "Reallocate several partners' project cost", },
-  { type: ProjectChangeRequestItemTypeEntity.SinglePartnerFinancialVirement, typeName: "Reallocate one partner's project costs", },
+  { type: ProjectChangeRequestItemTypeEntity.MultiplePartnerFinancialVirement, typeName: "Reallocate several partners' project cost", files: ["partner_finance_form.xls"]},
+  { type: ProjectChangeRequestItemTypeEntity.SinglePartnerFinancialVirement, typeName: "Reallocate one partner's project costs", files: ["partner_finance_form.xls"]},
   { type: ProjectChangeRequestItemTypeEntity.ScopeChange, typeName: "Change project scope", },
   { type: ProjectChangeRequestItemTypeEntity.TimeExtension, typeName: "Change project duration", },
-  // "Financial Virement"
 ];
 
 export class GetPCRItemTypesQuery extends QueryBase<PCRItemTypeDto[]> {
@@ -33,11 +33,12 @@ export class GetPCRItemTypesQuery extends QueryBase<PCRItemTypeDto[]> {
 
     /// meta values controlls order
     return PCRRecordTypeMetaValues
-      .map<PCRItemTypeDto>(x => ({
-        type: x.type,
-        displayName: x.displayName || x.typeName,
-        enabled: x.enabled === undefined ? true : x.enabled,
-        recordTypeId: this.findRecordType(x.typeName, recordTypes)
+      .map<PCRItemTypeDto>(metaInfo => ({
+        type: metaInfo.type,
+        displayName: metaInfo.displayName || metaInfo.typeName,
+        enabled: metaInfo.enabled === undefined ? true : metaInfo.enabled,
+        recordTypeId: this.findRecordType(metaInfo.typeName, recordTypes),
+        files: metaInfo.files && metaInfo.files.map(file => ({ name: file, relativeUrl: `/assets/pcr_templates/${file}` })) || []
       }));
   }
 

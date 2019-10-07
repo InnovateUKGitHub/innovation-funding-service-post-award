@@ -5,7 +5,7 @@ import { ProjectDto, ProjectRole } from "@framework/types";
 
 import * as ACC from "@ui/components";
 import { Pending } from "@shared/pending";
-import { PCRDto, PCRItemDto, TypedPcrItemDto } from "@framework/dtos";
+import { PCRDto, PCRItemDto, PCRItemTypeDto, TypedPcrItemDto } from "@framework/dtos";
 import { ProjectChangeRequestPrepareRoute } from "@ui/containers";
 import { EditorStatus, IEditorStore, StoresConsumer, } from "@ui/redux";
 import { ProjectChangeRequestItemStatus, ProjectChangeRequestItemTypeEntity } from "@framework/entities";
@@ -22,6 +22,7 @@ interface Data {
   project: Pending<ProjectDto>;
   pcr: Pending<PCRDto>;
   pcrItem: Pending<PCRItemDto>;
+  pcrItemType: Pending<PCRItemTypeDto>;
   editor: Pending<IEditorStore<PCRDto, Validators.PCRDtoValidator>>;
 }
 
@@ -35,13 +36,14 @@ class PCRPrepareItemComponent extends ContainerBase<ProjectChangeRequestPrepareI
       project: this.props.project,
       pcr: this.props.pcr,
       pcrItem: this.props.pcrItem,
+      pcrItemType: this.props.pcrItemType,
       editor: this.props.editor,
     });
 
-    return <ACC.PageLoader pending={combined} render={x => this.renderContents(x.project, x.pcr, x.pcrItem, x.editor)} />;
+    return <ACC.PageLoader pending={combined} render={x => this.renderContents(x.project, x.pcr, x.pcrItem, x.pcrItemType, x.editor)} />;
   }
 
-  private renderContents(project: ProjectDto, pcr: PCRDto, pcrItem: PCRItemDto, editor: IEditorStore<PCRDto, Validators.PCRDtoValidator>) {
+  private renderContents(project: ProjectDto, pcr: PCRDto, pcrItem: PCRItemDto, pcrItemType: PCRItemTypeDto,editor: IEditorStore<PCRDto, Validators.PCRDtoValidator>) {
     return (
       <ACC.Page
         backLink={<ACC.BackLink route={ProjectChangeRequestPrepareRoute.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId })}>Back to prepare project change request</ACC.BackLink>}
@@ -56,9 +58,22 @@ class PCRPrepareItemComponent extends ContainerBase<ProjectChangeRequestPrepareI
           <ACC.Renderers.SimpleString>{pcrItem.guidance}</ACC.Renderers.SimpleString>
         </ACC.Section>
 
+        {this.renderTemplateLinks(pcrItemType)}
+
         {this.renderForm(project, pcr, editor)}
 
       </ACC.Page>
+    );
+  }
+
+  private renderTemplateLinks(itemType: PCRItemTypeDto) {
+    if(!itemType.files || !itemType.files.length) {
+      return null;
+    }
+    return(
+      <ACC.Section title="Templates" qa="templates">
+        <ACC.LinksList links={itemType.files.map(x => ({text: x.name, url: x.relativeUrl}))}/>
+      </ACC.Section>
     );
   }
 
@@ -108,6 +123,7 @@ const PCRPrepareItemContainer = (props: ProjectChangeRequestPrepareItemParams & 
           project={stores.projects.getById(props.projectId)}
           pcr={stores.projectChangeRequests.getById(props.projectId, props.pcrId)}
           pcrItem={stores.projectChangeRequests.getItemById(props.projectId, props.pcrId, props.itemId)}
+          pcrItemType={stores.projectChangeRequests.getPcrTypeForItem(props.projectId, props.pcrId, props.itemId)}
           editor={stores.projectChangeRequests.getPcrUpdateEditor(props.projectId, props.pcrId)}
           onChange={(save, dto) => {
             stores.messages.clearMessages();
@@ -132,8 +148,8 @@ export const ProjectChangeRequestPrepareItemRoute = defineRoute({
   getTitle: (store, params, stores) => {
     const typeName = stores.projectChangeRequests.getItemById(params.projectId, params.pcrId, params.itemId).then(x => x.typeName).data;
     return {
-      htmlTitle: typeName ? `Upload files to ${typeName}` : "Upload files to project change request item",
-      displayTitle: typeName ? `Upload files to ${typeName}` : "Upload files to project change request item",
+      htmlTitle: typeName || "Prepare project change request item",
+      displayTitle: typeName || "Prepare project change request item",
     };
   },
   accessControl: (auth, { projectId }, config) => config.features.pcrsEnabled && auth.forProject(projectId).hasRole(ProjectRole.ProjectManager)
