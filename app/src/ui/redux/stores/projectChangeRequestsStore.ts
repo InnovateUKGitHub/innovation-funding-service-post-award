@@ -61,7 +61,7 @@ export class ProjectChangeRequestStore extends StoreBase {
 
   getTimeExtentionItemById(projectId: string, pcrId: string, itemId: string) {
     return this.getItemById(projectId, pcrId, itemId).chain(item => {
-      if(item.type === ProjectChangeRequestItemTypeEntity.TimeExtension) {
+      if (item.type === ProjectChangeRequestItemTypeEntity.TimeExtension) {
         return Pending.done(item);
       }
       else {
@@ -76,6 +76,20 @@ export class ProjectChangeRequestStore extends StoreBase {
 
   getAllPcrTypes() {
     return this.getData("pcrTypes", "all", p => ApiClient.pcrs.getTypes({ ...p }));
+  }
+
+  getPcrTypeForItem(projectId: string, pcrId: string, itemId: string) {
+    const data = Pending.combine({
+      itemTypes: this.getAllPcrTypes(),
+      pcrItem: this.getItemById(projectId, pcrId, itemId)
+    });
+
+    return data.chain(result => {
+      const itemType = result.itemTypes.find(x => x.type === result.pcrItem.type);
+      const status = itemType ? LoadingStatus.Done : LoadingStatus.Failed;
+      const error = itemType ? null : new NotFoundError("Unable to find item type");
+      return new Pending(status, itemType, error);
+    });
   }
 
   getPcrCreateEditor(projectId: string, init?: (dto: PCRDto) => void) {
