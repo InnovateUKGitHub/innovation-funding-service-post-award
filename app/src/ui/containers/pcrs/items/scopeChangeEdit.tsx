@@ -43,6 +43,7 @@ export const ScopeChangeEdit = (props: Props) => {
             value={m => m.publicDescription}
             update={(m, v) => m.publicDescription = v}
             validation={props.validator.publicDescription}
+            qa="newDescription"
           />
         </Form.Fieldset>
         <Form.Fieldset heading="Published public summary">
@@ -58,6 +59,7 @@ export const ScopeChangeEdit = (props: Props) => {
             value={m => m.projectSummary}
             update={(m, v) => m.projectSummary = v}
             validation={props.validator.projectSummary}
+            qa="newSummary"
           />
         </Form.Fieldset>
         <Form.Fieldset heading="Mark as complete">
