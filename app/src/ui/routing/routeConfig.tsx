@@ -10,6 +10,7 @@ export const routeConfig = {
   claimForecast: Containers.ClaimForecastRoute,
   claimLineItems: Containers.ClaimLineItemsRoute,
   error: Containers.ErrorRoute,
+  financeSummary: Containers.FinanceSummaryRoute,
   home: Containers.HomeRoute,
   monitoringReportCreate: Containers.MonitoringReportCreateRoute,
   monitoringReportDashboard: Containers.MonitoringReportDashboardRoute,

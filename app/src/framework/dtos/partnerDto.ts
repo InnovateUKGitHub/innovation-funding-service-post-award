@@ -35,6 +35,11 @@ export interface PartnerDto {
   claimsWithParticipant: number | null;
   status: PartnerClaimStatus;
   statusName: string;
+  totalCostsAwarded: number | null;
+  auditReportFrequencyName: string;
+  totalPrepayment: number | null;
+  percentageParticipantCostsSubmitted: number | null;
+  totalFundingDueToReceive: number | null;
 
   overheadRate: number | null;
 }
