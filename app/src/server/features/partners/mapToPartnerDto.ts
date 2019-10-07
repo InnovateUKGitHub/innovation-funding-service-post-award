@@ -41,7 +41,12 @@ export class MapToPartnerDtoCommand extends SyncCommandBase<PartnerDto> {
             claimsWithParticipant: this.valueIfPermission(this.item.Acc_ClaimsUnderQuery__c),
             status: this.getClaimStatus(this.item.Acc_TrackingClaims__c),
             statusName: this.item.Acc_TrackingClaims__c || "",
-            overheadRate: this.valueIfPermission(this.item.Acc_OverheadRate__c) || null
+            overheadRate: this.valueIfPermission(this.item.Acc_OverheadRate__c) || null,
+            totalCostsAwarded: this.item.Acc_TotalCostsAwarded__c,
+            auditReportFrequencyName: this.item.AuditReportFrequencyName,
+            totalPrepayment: this.item.Acc_TotalPrepayment__c,
+            percentageParticipantCostsSubmitted: this.valueIfPermission(this.calcPercentageClaimed(this.item.Acc_TotalParticipantCosts__c, this.item.Acc_TotalCostsSubmitted__c)),
+            totalFundingDueToReceive: this.valueIfPermission(this.item.Acc_TotalParticipantCosts__c * this.item.Acc_Award_Rate__c / 100)
         };
     }
 

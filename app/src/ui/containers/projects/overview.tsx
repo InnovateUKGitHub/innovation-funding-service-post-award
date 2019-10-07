@@ -16,6 +16,7 @@ import { IClientConfig } from "@ui/redux/reducers/configReducer";
 import { NavigationCard } from "@ui/components";
 import { PCRsDashboardRoute } from "../pcrs/dashboard";
 import { StoresConsumer } from "@ui/redux";
+import { FinanceSummaryRoute } from "@ui/containers";
 
 interface Data {
   projectDetails: Pending<Dtos.ProjectDto>;
@@ -151,6 +152,7 @@ class ProjectOverviewComponent extends ContainerBase<Params, Data, {}> {
       { text: "Project change requests", link: PCRsDashboardRoute.getLink({ projectId }) },
       { text: "Documents", link: ProjectDocumentsRoute.getLink({ projectId }) },
       { text: "Details", link: ProjectDetailsRoute.getLink({ id: projectId }) },
+      { text: "Finance summary", link: FinanceSummaryRoute.getLink({ projectId, partnerId }) },
     ].filter(x => x.link.accessControl(this.props.user, this.props.config));
 
     // special case if not fc shouldnt have link to ViewForecastRoute from this page... the view forecast route has permission from the project forecasts route

@@ -26,6 +26,9 @@ describe("getAllForProjectQuery", () => {
       x.Acc_TrackingClaims__c = "Claim Due";
       x.Acc_OverheadRate__c = 75;
       x.Acc_TotalCostsSubmitted__c = 100;
+      x.AuditReportFrequencyName = "Never, for this project";
+      x.Acc_TotalCostsAwarded__c = 100000;
+      x.Acc_TotalPrepayment__c = 500;
     });
 
     const projectManger = context.testData.createProjectManager(project, partner);
@@ -59,7 +62,12 @@ describe("getAllForProjectQuery", () => {
       claimsOverdue: 30,
       status: PartnerClaimStatus.ClaimDue,
       statusName: "Claim Due",
-      overheadRate: 75
+      overheadRate: 75,
+      auditReportFrequencyName: "Never, for this project",
+      totalCostsAwarded: 100000,
+      totalPrepayment: 500,
+      totalFundingDueToReceive: 62500,
+      percentageParticipantCostsSubmitted: 0.08
     };
 
     expect(result).toEqual(expected);
