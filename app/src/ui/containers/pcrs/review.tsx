@@ -23,6 +23,7 @@ interface Data {
   pcr: Pending<PCRDto>;
   editor: Pending<IEditorStore<PCRDto, PCRDtoValidator>>;
   statusChanges: Pending<ProjectChangeRequestStatusChangeDto[]>;
+  editableItemTypes: Pending<ProjectChangeRequestItemTypeEntity[]>;
 }
 
 interface Callbacks {
@@ -31,17 +32,17 @@ interface Callbacks {
 
 class PCRReviewComponent extends ContainerBase<PCRReviewParams, Data, Callbacks> {
   render() {
-    const combined = Pending.combine({ project: this.props.project, pcr: this.props.pcr, editor: this.props.editor });
+    const combined = Pending.combine({ project: this.props.project, pcr: this.props.pcr, editor: this.props.editor, editableItemTypes: this.props.editableItemTypes });
 
-    return <ACC.PageLoader pending={combined} render={x => this.renderContents(x.project, x.pcr, x.editor)} />;
+    return <ACC.PageLoader pending={combined} render={x => this.renderContents(x.project, x.pcr, x.editor, x.editableItemTypes)} />;
   }
 
-  private renderContents(project: ProjectDto, projectChangeRequest: PCRDto, editor: IEditorStore<PCRDto, PCRDtoValidator>) {
+  private renderContents(project: ProjectDto, projectChangeRequest: PCRDto, editor: IEditorStore<PCRDto, PCRDtoValidator>, editableItemTypes: ProjectChangeRequestItemTypeEntity[]) {
     const tabs = [{
       text: "Details",
       hash: "details",
       default: true,
-      content: this.renderDetailsTab(projectChangeRequest, editor),
+      content: this.renderDetailsTab(projectChangeRequest, editor, editableItemTypes),
       qa: "ProjectChangeRequestDetailsTab"
     }, {
       text: "Log",
@@ -63,7 +64,7 @@ class PCRReviewComponent extends ContainerBase<PCRReviewParams, Data, Callbacks>
     );
   }
 
-  private renderDetailsTab(projectChangeRequest: PCRDto, editor: IEditorStore<PCRDto, PCRDtoValidator>) {
+  private renderDetailsTab(projectChangeRequest: PCRDto, editor: IEditorStore<PCRDto, PCRDtoValidator>, editableItemTypes: ProjectChangeRequestItemTypeEntity[]) {
     const Form = ACC.TypedForm<PCRDto>();
 
     const options: ACC.SelectOption[] = [
@@ -81,16 +82,8 @@ class PCRReviewComponent extends ContainerBase<PCRReviewParams, Data, Callbacks>
           </ACC.SummaryList>
         </ACC.Section>
         <ACC.TaskList qa="taskList">
-          <ACC.TaskListSection step={1} title="What do you want to do?" qa="WhatDoYouWantToDo">
-            {projectChangeRequest.items.map((x, i) => this.getItemTasks(x, editor, i))}
-          </ACC.TaskListSection>
-          <ACC.TaskListSection step={2} title="View more details" qa="reasoning">
-            <ACC.Task
-              name="Reasoning for Innovate UK"
-              status={this.getTaskStatus(projectChangeRequest.reasoningStatus)}
-              route={PCRReviewReasoningRoute.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId })}
-            />
-          </ACC.TaskListSection>
+          {this.renderTaskListActions(projectChangeRequest, editor, editableItemTypes)}
+          {this.renderTaskListReasoning(projectChangeRequest, editableItemTypes)}
         </ACC.TaskList>
         <Form.Form
           editor={editor}
@@ -124,8 +117,34 @@ class PCRReviewComponent extends ContainerBase<PCRReviewParams, Data, Callbacks>
     );
   }
 
+  private renderTaskListActions(projectChangeRequest: PCRDto, editor: IEditorStore<PCRDto, PCRDtoValidator>, editableItemTypes: ProjectChangeRequestItemTypeEntity[]) {
+    if (!editableItemTypes.length) return null;
+    const editableItems = projectChangeRequest.items.filter(x => editableItemTypes.indexOf(x.type) > -1);
+
+    return (
+      <ACC.TaskListSection step={1} title="What do you want to do?" qa="WhatDoYouWantToDo">
+        {editableItems.map((x, i) => this.getItemTasks(x, editor, i))}
+      </ACC.TaskListSection>
+    );
+  }
+
+  private renderTaskListReasoning(projectChangeRequest: PCRDto, editableItemTypes: ProjectChangeRequestItemTypeEntity[]) {
+    const editableItems = projectChangeRequest.items.filter(x => editableItemTypes.indexOf(x.type) > -1);
+    const stepCount = editableItems.length ? 2 : 1;
+
+    return (
+      <ACC.TaskListSection step={stepCount} title="View more details" qa="reasoning">
+        <ACC.Task
+          name="Reasoning for Innovate UK"
+          status={this.getTaskStatus(projectChangeRequest.reasoningStatus)}
+          route={PCRReviewReasoningRoute.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId })}
+        />
+      </ACC.TaskListSection>
+    );
+  }
   private getItemTasks(item: PCRItemDto, editor: IEditorStore<PCRDto, PCRDtoValidator>, index: number) {
     const validationErrors = editor.validator.items.results[index].errors;
+
     return (
       <ACC.Task
         name={item.typeName}
@@ -168,6 +187,7 @@ const PCRReviewContainer = (props: PCRReviewParams & BaseProps) => (
         // initalise editor pcr status to unknown to force state selection via form
         editor={stores.projectChangeRequests.getPcrUpdateEditor(props.projectId, props.pcrId, x => x.status = ProjectChangeRequestStatus.Unknown)}
         onChange={(save, dto) => stores.projectChangeRequests.updatePcrEditor(save, props.projectId, dto, undefined, () => stores.navigation.navigateTo(PCRsDashboardRoute.getLink({ projectId: props.projectId })))}
+        editableItemTypes={stores.projectChangeRequests.getEditableItemTypes(props.projectId, props.pcrId)}
         {...props}
       />
     )}

@@ -92,7 +92,6 @@ class PCRPrepareItemComponent extends ContainerBase<ProjectChangeRequestPrepareI
         case ProjectChangeRequestItemTypeEntity.MultiplePartnerFinancialVirement:
         case ProjectChangeRequestItemTypeEntity.PartnerAddition:
         case ProjectChangeRequestItemTypeEntity.PartnerWithdrawal:
-        case ProjectChangeRequestItemTypeEntity.ProjectTermination:
         case ProjectChangeRequestItemTypeEntity.SinglePartnerFinancialVirement:
           return <Items.StandardItemEdit projectChangeRequest={pcr} projectChangeRequestItem={item} validator={validator as Validators.PCRStandardItemDtoValidator} status={status} onChange={itemDto => this.onChange(editor.data, itemDto)} onSave={() => this.onSave(editor.data)} />;
       }

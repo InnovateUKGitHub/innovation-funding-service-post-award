@@ -1,35 +1,31 @@
 import React from "react";
 import * as ACC from "@ui/components";
-import {
-  PCRDto,
-  PCRItemDto,
-  PCRItemForScopeChangeDto,
-  PCRItemForTimeExtensionDto,
-  PCRStandardItemDto, TypedPcrItemDto
-} from "@framework/dtos";
+import { PCRDto, PCRItemDto, TypedPcrItemDto } from "@framework/dtos";
 import * as Routes from "@ui/containers";
-import { ProjectChangeRequestItemTypeEntity } from "@framework/entities/projectChangeRequest";
+import { ProjectChangeRequestItemTypeEntity } from "@framework/entities";
 
 interface Props {
   currentItem: PCRItemDto | null;
   pcr: PCRDto;
   isReviewing: boolean;
+  editableItemTypes: ProjectChangeRequestItemTypeEntity[];
 }
 
 export const NavigationArrowsForPCRs = (props: Props) => {
-  const { pcr, currentItem, isReviewing } = props;
+  const { pcr, currentItem, isReviewing, editableItemTypes } = props;
+  const pcrItems = pcr.items.filter(x => editableItemTypes.indexOf(x.type) > 1);
 
   // if current item is null then you are looking at reasoning so you want a previous link to the last item ie current index is length
-  const currentIndex = currentItem ? pcr.items.findIndex(x => x.id === currentItem.id) : pcr.items.length;
+  const currentIndex = currentItem ? pcrItems.findIndex(x => x.id === currentItem.id) : pcrItems.length;
 
   const prev = isReviewing ?
-    getLinkForReviewingItem(pcr.items[currentIndex - 1], pcr.projectId, pcr.id, false) :
-    getLinkForViewingItem(pcr.items[currentIndex - 1], pcr.projectId, pcr.id, false);
+    getLinkForReviewingItem(pcrItems[currentIndex - 1], pcr.projectId, pcr.id, false) :
+    getLinkForViewingItem(pcrItems[currentIndex - 1], pcr.projectId, pcr.id, false);
 
   // if current item is null then you are looking at reasoning so you do not want a next link
   const next = isReviewing ?
-    getLinkForReviewingItem(pcr.items[currentIndex + 1], pcr.projectId, pcr.id, !!currentItem) :
-    getLinkForViewingItem(pcr.items[currentIndex + 1], pcr.projectId, pcr.id, !!currentItem);
+    getLinkForReviewingItem(pcrItems[currentIndex + 1], pcr.projectId, pcr.id, !!currentItem) :
+    getLinkForViewingItem(pcrItems[currentIndex + 1], pcr.projectId, pcr.id, !!currentItem);
 
   return (
     <ACC.NavigationArrows previousLink={prev} nextLink={next} />

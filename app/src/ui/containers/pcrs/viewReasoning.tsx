@@ -11,6 +11,7 @@ import { PCRDto, PCRItemDto } from "@framework/dtos/pcrDtos";
 import { StoresConsumer } from "@ui/redux";
 import { PCRReviewRoute } from "./review";
 import { NavigationArrowsForPCRs } from "./navigationArrows";
+import { ProjectChangeRequestItemTypeEntity } from "@framework/entities";
 
 interface Params {
   projectId: string;
@@ -22,6 +23,7 @@ interface Data {
   pcr: Pending<PCRDto>;
   files: Pending<DocumentSummaryDto[]>;
   isReviewing: boolean;
+  editableItemTypes: Pending<ProjectChangeRequestItemTypeEntity[]>;
 }
 
 interface Callbacks {
@@ -29,12 +31,12 @@ interface Callbacks {
 
 class PCRViewReasoningComponent extends ContainerBase<Params, Data, Callbacks> {
   render() {
-    const combined = Pending.combine({ project: this.props.project, pcr: this.props.pcr, files: this.props.files });
+    const combined = Pending.combine({ project: this.props.project, pcr: this.props.pcr, files: this.props.files, editableItemTypes: this.props.editableItemTypes });
 
-    return <ACC.PageLoader pending={combined} render={x => this.renderContents(x.project, x.pcr, x.files)} />;
+    return <ACC.PageLoader pending={combined} render={x => this.renderContents(x.project, x.pcr, x.files, x.editableItemTypes)} />;
   }
 
-  private renderContents(project: ProjectDto, pcr: PCRDto, files: DocumentSummaryDto[]) {
+  private renderContents(project: ProjectDto, pcr: PCRDto, files: DocumentSummaryDto[], editableItemTypes: ProjectChangeRequestItemTypeEntity[]) {
     const backLink = this.props.isReviewing ?
       <ACC.BackLink route={PCRReviewRoute.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId })}>Back to review project change request</ACC.BackLink> :
       <ACC.BackLink route={PCRDetailsRoute.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId })}>Back to project change request details</ACC.BackLink>
@@ -57,7 +59,7 @@ class PCRViewReasoningComponent extends ContainerBase<Params, Data, Callbacks> {
             />
           </ACC.SummaryList>
         </ACC.Section>
-        <NavigationArrowsForPCRs pcr={pcr} currentItem={null} isReviewing={this.props.isReviewing}/>
+        <NavigationArrowsForPCRs pcr={pcr} currentItem={null} isReviewing={this.props.isReviewing} editableItemTypes={editableItemTypes}/>
       </ACC.Page>
     );
   }
@@ -72,6 +74,7 @@ const PCRViewReasoningContainer = (props: Params & BaseProps & { isReviewing: bo
           pcr={stores.projectChangeRequests.getById(props.projectId, props.pcrId)}
           files={stores.documents.pcrOrPcrItemDocuments(props.projectId, props.pcrId)}
           isReviewing={false}
+          editableItemTypes={stores.projectChangeRequests.getEditableItemTypes(props.projectId, props.pcrId)}
           {...props}
         />
       )

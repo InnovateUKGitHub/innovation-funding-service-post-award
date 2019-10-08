@@ -6,7 +6,9 @@ import {
 } from "@framework/entities";
 import {
   PCRDto,
-  PCRItemDto, PCRItemForAccountNameChangeDto, PCRItemForProjectSuspensionDto,
+  PCRItemForAccountNameChangeDto,
+  PCRItemForProjectSuspensionDto,
+  PCRItemForProjectTerminationDto,
   PCRItemForScopeChangeDto,
   PCRItemForTimeExtensionDto,
   PCRItemTypeDto,
@@ -42,12 +44,13 @@ const mapItem = (pcr: ProjectChangeRequestItemEntity, itemType: PCRItemTypeDto) 
       return mapItemForScopeChange(pcr, itemType.displayName, itemType.type);
     case ProjectChangeRequestItemTypeEntity.ProjectSuspension:
       return mapItemForProjectSuspension(pcr, itemType.displayName, itemType.type);
+    case ProjectChangeRequestItemTypeEntity.ProjectTermination:
+      return mapItemForTermination(pcr, itemType.displayName, itemType.type);
     case ProjectChangeRequestItemTypeEntity.AccountNameChange:
       return mapItemForAccountNameChange(pcr, itemType.displayName, itemType.type);
     case ProjectChangeRequestItemTypeEntity.MultiplePartnerFinancialVirement:
     case ProjectChangeRequestItemTypeEntity.PartnerAddition:
     case ProjectChangeRequestItemTypeEntity.PartnerWithdrawal:
-    case ProjectChangeRequestItemTypeEntity.ProjectTermination:
     case ProjectChangeRequestItemTypeEntity.SinglePartnerFinancialVirement:
       return mapStandardItem(pcr, itemType.displayName, itemType.type);
     default:
@@ -64,6 +67,11 @@ const mapBaseItem = (pcr: ProjectChangeRequestItemEntity, typeName: string) => (
 });
 
 const mapStandardItem = (pcr: ProjectChangeRequestItemEntity, typeName: string, type: ProjectChangeRequestStandardItemTypes): PCRStandardItemDto => ({
+  ...mapBaseItem(pcr, typeName),
+  type
+});
+
+const mapItemForTermination = (pcr: ProjectChangeRequestItemEntity, typeName: string, type: ProjectChangeRequestItemTypeEntity.ProjectTermination): PCRItemForProjectTerminationDto => ({
   ...mapBaseItem(pcr, typeName),
   type
 });
