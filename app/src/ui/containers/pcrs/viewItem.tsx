@@ -24,6 +24,7 @@ interface Data {
   pcr: Pending<PCRDto>;
   pcrItem: Pending<PCRItemDto>;
   isReviewing: boolean;
+  editableItemTypes: Pending<ProjectChangeRequestItemTypeEntity[]>;
 }
 
 interface Callbacks {
@@ -31,12 +32,12 @@ interface Callbacks {
 
 class PCRViewItemComponent extends ContainerBase<Params, Data, Callbacks> {
   render() {
-    const combined = Pending.combine({ project: this.props.project, pcr: this.props.pcr, pcrItem: this.props.pcrItem });
+    const combined = Pending.combine({ project: this.props.project, pcr: this.props.pcr, pcrItem: this.props.pcrItem, editableItemTypes: this.props.editableItemTypes });
 
-    return <ACC.PageLoader pending={combined} render={x => this.renderContents(x.project, x.pcr, x.pcrItem)} />;
+    return <ACC.PageLoader pending={combined} render={x => this.renderContents(x.project, x.pcr, x.pcrItem, x.editableItemTypes)} />;
   }
 
-  private renderContents(project: ProjectDto, pcr: PCRDto, pcrItem: PCRItemDto) {
+  private renderContents(project: ProjectDto, pcr: PCRDto, pcrItem: PCRItemDto, editableItemTypes: ProjectChangeRequestItemTypeEntity[]) {
     const backLink = this.props.isReviewing ?
       <ACC.BackLink route={PCRReviewRoute.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId })}>Back to review project change request</ACC.BackLink> :
       <ACC.BackLink route={PCRDetailsRoute.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId })}>Back to project change request details</ACC.BackLink>
@@ -51,7 +52,7 @@ class PCRViewItemComponent extends ContainerBase<Params, Data, Callbacks> {
         <ACC.Section title="Details">
           {this.renderItem(project, pcr)}
         </ACC.Section>
-        <NavigationArrowsForPCRs pcr={pcr} currentItem={pcrItem} isReviewing={this.props.isReviewing} />
+        <NavigationArrowsForPCRs pcr={pcr} currentItem={pcrItem} isReviewing={this.props.isReviewing} editableItemTypes={editableItemTypes} />
       </ACC.Page>
     );
   }
@@ -69,7 +70,6 @@ class PCRViewItemComponent extends ContainerBase<Params, Data, Callbacks> {
         case ProjectChangeRequestItemTypeEntity.MultiplePartnerFinancialVirement:
         case ProjectChangeRequestItemTypeEntity.PartnerAddition:
         case ProjectChangeRequestItemTypeEntity.PartnerWithdrawal:
-        case ProjectChangeRequestItemTypeEntity.ProjectTermination:
         case ProjectChangeRequestItemTypeEntity.SinglePartnerFinancialVirement:
           return <Items.StandardItemView projectChangeRequest={pcr} projectChangeRequestItem={item} />;
       }
@@ -86,6 +86,7 @@ const PCRViewItemContainer = (props: Params & BaseProps & { isReviewing: boolean
           project={stores.projects.getById(props.projectId)}
           pcr={stores.projectChangeRequests.getById(props.projectId, props.pcrId)}
           pcrItem={stores.projectChangeRequests.getItemById(props.projectId, props.pcrId, props.itemId)}
+          editableItemTypes={stores.projectChangeRequests.getEditableItemTypes(props.projectId, props.pcrId)}
           isReviewing={false}
           {...props}
         />
