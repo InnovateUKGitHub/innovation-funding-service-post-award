@@ -52,7 +52,12 @@ class ProjectOverviewComponent extends ContainerBase<Params, Data, {}> {
         pageTitle={<ACC.Projects.Title project={project} />}
         project={project}
       >
-        {this.renderProjectOveriewDetails(project, partner)}
+        <ACC.Section
+          title={`Project period ${project.periodId} of ${project.totalPeriods}`}
+          subtitle={<ACC.Renderers.ShortDateRange start={project.periodStartDate} end={project.periodEndDate} />}
+        >
+          {this.renderProjectOveriewDetails(project, partner)}
+        </ACC.Section>
         {this.renderLinks(projectId, partner && partner.id || partners[0].id, project.roles)}
       </ACC.Page>
     );
@@ -79,17 +84,12 @@ class ProjectOverviewComponent extends ContainerBase<Params, Data, {}> {
 
     return (
       <ACC.Section>
-        <ACC.SectionPanel qa="claims-totals" title="History">
+        <ACC.SectionPanel qa="claims-totals" title={`${partner.name} costs to date`}>
           <ACC.DualDetails displayDensity="Compact">
             <PartnerSummaryDetails.Details qa="claims-totals-col-0" data={partner}>
               <PartnerSummaryDetails.Currency label="Total eligible costs" qa="gol-costs" value={x => x.totalParticipantGrant} />
               <PartnerSummaryDetails.Currency label="Eligible costs claimed to date" qa="claimed-costs" value={x => x.totalParticipantCostsClaimed || 0} />
               <PartnerSummaryDetails.Percentage label="Percentage of eligible costs claimed to date" qa="percentage-costs" value={x => x.percentageParticipantCostsClaimed} />
-              <PartnerSummaryDetails.Currency label="Costs paid to date" qa="paid-costs" value={x => x.totalPaidCosts || 0} />
-            </PartnerSummaryDetails.Details>
-            <PartnerSummaryDetails.Details qa="claims-totals-col-1" data={partner}>
-              <PartnerSummaryDetails.Percentage label="Funding level" value={x => x.awardRate} qa="award-rate" fractionDigits={0} />
-              <PartnerSummaryDetails.Percentage label="Claim cap" value={x => x.capLimit} fractionDigits={0} qa="cap-limit" />
             </PartnerSummaryDetails.Details>
           </ACC.DualDetails>
         </ACC.SectionPanel>
@@ -104,18 +104,15 @@ class ProjectOverviewComponent extends ContainerBase<Params, Data, {}> {
       <ACC.Section>
         <ACC.SectionPanel qa="claims-summary">
           <ACC.DualDetails>
-            <ProjectSummaryDetails.Details title="History" data={project} qa="project-summary">
+            <ProjectSummaryDetails.Details title="Project costs to date" data={project} qa="project-summary">
               <ProjectSummaryDetails.Currency label="Total eligible costs" qa="gol-costs" value={x => x.grantOfferLetterCosts} />
               <ProjectSummaryDetails.Currency label="Eligible costs claimed to date" qa="claimed-costs" value={x => x.costsClaimedToDate || 0} />
               <ProjectSummaryDetails.Percentage label="Percentage of eligible costs claimed to date" qa="claimed-percentage" value={x => x.claimedPercentage} />
             </ProjectSummaryDetails.Details>
-            <PartnerSummaryDetails.Details data={partner} title={`${partner.name} history`} qa="lead-partner-summary">
+            <PartnerSummaryDetails.Details data={partner} title={`${partner.name} costs to date`} qa="lead-partner-summary">
               <PartnerSummaryDetails.Currency label="Total eligible costs" qa="gol-costs" value={x => x.totalParticipantGrant} />
               <PartnerSummaryDetails.Currency label="Eligible costs claimed to date" qa="claimed-costs" value={x => x.totalParticipantCostsClaimed || 0} />
               <PartnerSummaryDetails.Percentage label="Percentage of eligible costs claimed to date" qa="claimed-percentage" value={x => x.percentageParticipantCostsClaimed} />
-              <PartnerSummaryDetails.Currency label="Costs paid to date" qa="paid-costs" value={x => x.totalPaidCosts || 0} />
-              <PartnerSummaryDetails.Percentage label="Funding level" value={x => x.awardRate} qa="award-rate" fractionDigits={0} />
-              <PartnerSummaryDetails.Percentage label="Claim cap" value={x => x.capLimit} fractionDigits={0} qa="cap-limit" />
             </PartnerSummaryDetails.Details>
           </ACC.DualDetails>
         </ACC.SectionPanel>
@@ -129,7 +126,7 @@ class ProjectOverviewComponent extends ContainerBase<Params, Data, {}> {
       <ACC.Section>
         <ACC.SectionPanel qa="claims-summary">
           <ACC.DualDetails>
-            <ProjectSummaryDetails.Details title="History" data={project} qa="project-summary">
+            <ProjectSummaryDetails.Details title="Project costs to date" data={project} qa="project-summary">
               <ProjectSummaryDetails.Currency label="Total eligible costs" qa="gol-costs" value={x => x.grantOfferLetterCosts} />
               <ProjectSummaryDetails.Currency label="Eligible costs claimed to date" qa="claimed-costs" value={x => x.costsClaimedToDate || 0} />
               <ProjectSummaryDetails.Percentage label="Percentage of eligible costs claimed to date" qa="claimed-percentage" value={x => x.claimedPercentage} />
