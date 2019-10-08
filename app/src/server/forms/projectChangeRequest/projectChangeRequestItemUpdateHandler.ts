@@ -1,5 +1,5 @@
 import { ProjectChangeRequestItemStatus, ProjectChangeRequestItemTypeEntity } from "@framework/entities";
-import { IContext, ILinkInfo, PCRDto, ProjectRole } from "@framework/types";
+import { IContext, ILinkInfo, ProjectRole } from "@framework/types";
 import { BadRequestError } from "@server/features/common";
 import { GetPCRByIdQuery } from "@server/features/pcrs/getPCRByIdQuery";
 import { UpdatePCRCommand } from "@server/features/pcrs/updatePcrCommand";
@@ -8,13 +8,14 @@ import { ProjectChangeRequestPrepareItemParams, ProjectChangeRequestPrepareItemR
 import { getPcrEditor } from "@ui/redux/selectors";
 import { PCRDtoValidator } from "@ui/validators";
 import { DateTime } from "luxon";
+import * as Dtos from "@framework/dtos";
 
-export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBase<ProjectChangeRequestPrepareItemParams, PCRDto, PCRDtoValidator> {
+export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBase<ProjectChangeRequestPrepareItemParams, Dtos.PCRDto, PCRDtoValidator> {
   constructor() {
     super(ProjectChangeRequestPrepareItemRoute, ["default"]);
   }
 
-  protected async getDto(context: IContext, params: ProjectChangeRequestPrepareItemParams, button: IFormButton, body: IFormBody): Promise<PCRDto> {
+  protected async getDto(context: IContext, params: ProjectChangeRequestPrepareItemParams, button: IFormButton, body: IFormBody): Promise<Dtos.PCRDto> {
     const dto = await context.runQuery(new GetPCRByIdQuery(params.projectId, params.pcrId));
 
     const item = dto.items.find(x => x.id === params.itemId);
@@ -26,19 +27,53 @@ export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBa
     item.status = body.itemStatus === "true" ? ProjectChangeRequestItemStatus.Complete : ProjectChangeRequestItemStatus.Incomplete;
 
     if (item.type === ProjectChangeRequestItemTypeEntity.TimeExtension) {
-      const projectEndDate = DateTime.fromFormat(`${body.endDate_month}/${body.endDate_year}`, "M/yyyy").endOf("month").startOf("day");
-      item.projectEndDate = projectEndDate.toJSDate();
+      this.updateTimeExtension(item, body);
     }
 
-    if(item.type === ProjectChangeRequestItemTypeEntity.ScopeChange) {
-      item.publicDescription = body.description || "";
-      item.projectSummary = body.summary || "";
+    if (item.type === ProjectChangeRequestItemTypeEntity.ScopeChange) {
+      this.updateScopeChange(item, body);
+    }
+
+    if (item.type === ProjectChangeRequestItemTypeEntity.ProjectSuspension) {
+      this.updateProjectSuspension(item, body);
     }
 
     return dto;
   }
 
-  protected async run(context: IContext, params: ProjectChangeRequestPrepareItemParams, button: IFormButton, dto: PCRDto): Promise<ILinkInfo> {
+  private updateProjectSuspension(item: Dtos.PCRItemForProjectSuspensionDto, body: IFormBody) {
+    if (body.suspensionStartDate_month || body.suspensionStartDate_year) {
+      const suspensionStartDate = DateTime.fromFormat(`${body.suspensionStartDate_month}/${body.suspensionStartDate_year}`, "M/yyyy").startOf("month").startOf("day");
+      item.suspensionStartDate = suspensionStartDate.toJSDate();
+    }
+    else {
+      item.suspensionStartDate = null;
+    }
+    if (body.suspensionEndDate_month || body.suspensionEndDate_year) {
+      const suspensionEndDate = DateTime.fromFormat(`${body.suspensionEndDate_month}/${body.suspensionEndDate_year}`, "M/yyyy").endOf("month").startOf("day");
+      item.suspensionEndDate = suspensionEndDate.toJSDate();
+    }
+    else {
+      item.suspensionEndDate = null;
+    }
+  }
+
+  private updateScopeChange(item: Dtos.PCRItemForScopeChangeDto, body: IFormBody) {
+    item.publicDescription = body.description || "";
+    item.projectSummary = body.summary || "";
+  }
+
+  private updateTimeExtension(item: Dtos.PCRItemForTimeExtensionDto, body: IFormBody) {
+    if (body.endDate_month || body.endDate_year) {
+      const projectEndDate = DateTime.fromFormat(`${body.endDate_month}/${body.endDate_year}`, "M/yyyy").endOf("month").startOf("day");
+      item.projectEndDate = projectEndDate.toJSDate();
+    }
+    else {
+      item.projectEndDate = null;
+    }
+  }
+
+  protected async run(context: IContext, params: ProjectChangeRequestPrepareItemParams, button: IFormButton, dto: Dtos.PCRDto): Promise<ILinkInfo> {
     await context.runCommand(new UpdatePCRCommand(params.projectId, params.pcrId, dto));
     return ProjectChangeRequestPrepareRoute.getLink(params);
   }
@@ -47,7 +82,7 @@ export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBa
     return getPcrEditor(params.projectId, params.pcrId);
   }
 
-  protected createValidationResult(params: ProjectChangeRequestPrepareItemParams, dto: PCRDto) {
+  protected createValidationResult(params: ProjectChangeRequestPrepareItemParams, dto: Dtos.PCRDto) {
     return new PCRDtoValidator(dto, ProjectRole.Unknown, dto, [], false);
   }
 }
