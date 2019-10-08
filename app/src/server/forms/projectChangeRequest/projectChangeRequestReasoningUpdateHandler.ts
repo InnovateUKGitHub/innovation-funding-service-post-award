@@ -35,7 +35,8 @@ export class ProjectChangeRequestReasoningUpdateHandler extends StandardFormHand
       type: ProjectChangeRequestItemTypeEntity.AccountNameChange,
       displayName: "",
       recordTypeId: "",
-      enabled: false
+      enabled: false,
+      files:[]
     }];
     return new PCRDtoValidator(dto, ProjectRole.Unknown, dto, projectChangeRequestItemTypes, false);
   }
