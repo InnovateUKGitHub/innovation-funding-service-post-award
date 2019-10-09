@@ -4,6 +4,7 @@ import { IFormBody, IFormButton, StandardFormHandlerBase } from "@server/forms/f
 import { ProjectChangeRequestPrepareItemFilesRoute, ProjectChangeRequestPrepareItemParams, ProjectChangeRequestPrepareItemRoute } from "@ui/containers";
 import { getProjectChangeRequestDocumentOrItemDocumentDeleteEditorStoreInfo } from "@ui/redux/selectors";
 import { Results } from "@ui/validation";
+import { getKey } from "@framework/util";
 
 interface Document {
   id: string;
@@ -23,7 +24,10 @@ export class ProjectChangeRequestItemDocumentDeleteHandler extends StandardFormH
   }
 
   protected getStoreInfo(params: ProjectChangeRequestPrepareItemParams): {key: string, store: string} {
-    return getProjectChangeRequestDocumentOrItemDocumentDeleteEditorStoreInfo(params.itemId, []);
+    return {
+      key: getKey("pcrs", params.projectId, params.itemId),
+      store:"multipleDocuments"
+    };
   }
 
   protected async run(context: IContext, params: ProjectChangeRequestPrepareItemParams, button: IFormButton, dto: Document): Promise<ILinkInfo> {

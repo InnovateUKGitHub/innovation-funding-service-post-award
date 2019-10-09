@@ -4,23 +4,19 @@ import * as ACC from "@ui/components";
 
 import { BaseProps, ContainerBase, defineRoute } from "../containerBase";
 import { Pending } from "@shared/pending";
-import { PCRDto, PCRItemDto, PCRItemTypeDto, ProjectDto, ProjectRole } from "@framework/dtos";
+import { PCRDto, ProjectDto, ProjectRole } from "@framework/dtos";
 import { IEditorStore, StoresConsumer } from "@ui/redux";
 import { MultipleDocumentUpdloadDtoValidator } from "@ui/validators";
-import { ProjectChangeRequestPrepareItemRoute } from "./prepareItem";
-import { ProjectChangeRequestItemTypeEntity } from "@framework/entities";
+import { ProjectChangeRequestPrepareReasoningRoute } from ".";
 
 interface Params {
   projectId: string;
   pcrId: string;
-  itemId: string;
 }
 
 interface Data {
   project: Pending<ProjectDto>;
   pcr: Pending<PCRDto>;
-  pcrItem: Pending<PCRItemDto>;
-  pcrItemType: Pending<PCRItemTypeDto>;
   documents: Pending<DocumentSummaryDto[]>;
   documentsEditor: Pending<IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>>;
 }
@@ -30,53 +26,36 @@ interface Callbacks {
   onDelete: (dto: MultipleDocumentUploadDto, document: DocumentSummaryDto) => void;
 }
 
-class PrepareItemFilesComponent extends ContainerBase<Params, Data, Callbacks> {
+class PrepareReasoningFilesComponent extends ContainerBase<Params, Data, Callbacks> {
   render() {
     const combined = Pending.combine({
       project: this.props.project,
       pcr: this.props.pcr,
-      pcrItem: this.props.pcrItem,
-      pcrItemType: this.props.pcrItemType,
       documents: this.props.documents,
       documentsEditor: this.props.documentsEditor,
     });
 
-    return <ACC.PageLoader pending={combined} render={x => this.renderContents(x.project, x.pcr, x.pcrItem, x.pcrItemType, x.documents, x.documentsEditor)} />;
+    return <ACC.PageLoader pending={combined} render={x => this.renderContents(x.project, x.pcr, x.documents, x.documentsEditor)} />;
 
   }
 
-  private renderContents(project: ProjectDto, pcr: PCRDto, pcrItem: PCRItemDto, pcrItemType: PCRItemTypeDto, documents: DocumentSummaryDto[], documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>): React.ReactNode {
+  private renderContents(project: ProjectDto, pcr: PCRDto, documents: DocumentSummaryDto[], documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>): React.ReactNode {
     return (
       <ACC.Page
-        backLink={<ACC.BackLink route={ProjectChangeRequestPrepareItemRoute.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId, itemId: this.props.itemId })}>Back to {pcrItem.typeName}</ACC.BackLink>}
+        backLink={<ACC.BackLink route={ProjectChangeRequestPrepareReasoningRoute.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId })}>Back to provide reasoning</ACC.BackLink>}
         pageTitle={<ACC.Projects.Title project={project} />}
         project={project}
         error={documentsEditor.error}
         validator={documentsEditor.validator}
       >
         <ACC.Renderers.Messages messages={this.props.messages}/>
-        {this.renderTemplateLinks(pcrItemType)}
         {this.renderFiles(documentsEditor, documents)}
-        {this.renderForm(pcrItem, documentsEditor)}
+        {this.renderForm(documentsEditor)}
       </ACC.Page>
     );
   }
 
-  private renderForm(pcrItem: PCRItemDto, documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>): React.ReactNode {
-    switch (pcrItem.type) {
-      case ProjectChangeRequestItemTypeEntity.AccountNameChange:
-      case ProjectChangeRequestItemTypeEntity.PartnerAddition:
-      case ProjectChangeRequestItemTypeEntity.PartnerWithdrawal:
-      case ProjectChangeRequestItemTypeEntity.ProjectTermination:
-      case ProjectChangeRequestItemTypeEntity.MultiplePartnerFinancialVirement:
-      case ProjectChangeRequestItemTypeEntity.SinglePartnerFinancialVirement:
-        return this.renderMultipleUploads(documentsEditor);
-      default:
-        return <ACC.ValidationMessage message="Cannot upload documents to this item" messageType="error" />;
-    }
-  }
-
-  private renderMultipleUploads(documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>) {
+  private renderForm(documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>): React.ReactNode {
     const UploadForm = ACC.TypedForm<MultipleDocumentUploadDto>();
     return (
       <ACC.Section>
@@ -104,17 +83,6 @@ class PrepareItemFilesComponent extends ContainerBase<Params, Data, Callbacks> {
     );
   }
 
-  private renderTemplateLinks(itemType: PCRItemTypeDto) {
-    if(!itemType.files || !itemType.files.length) {
-      return null;
-    }
-    return(
-      <ACC.Section title="Templates" qa="templates">
-        <ACC.LinksList links={itemType.files.map(x => ({text: x.name, url: x.relativeUrl}))}/>
-      </ACC.Section>
-    );
-  }
-
   private renderFiles(documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>, documents: DocumentSummaryDto[]) {
     if (documents.length) {
       return (
@@ -131,25 +99,23 @@ class PrepareItemFilesComponent extends ContainerBase<Params, Data, Callbacks> {
   }
 }
 
-const PrepareItemFilesContainer = (props: Params & BaseProps) => (
+const PrepareReasoningFilesContainer = (props: Params & BaseProps) => (
   <StoresConsumer>
     {
       stores => (
-        <PrepareItemFilesComponent
+        <PrepareReasoningFilesComponent
           project={stores.projects.getById(props.projectId)}
           pcr={stores.projectChangeRequests.getById(props.projectId, props.pcrId)}
-          pcrItem={stores.projectChangeRequests.getItemById(props.projectId, props.pcrId, props.itemId)}
-          pcrItemType={stores.projectChangeRequests.getPcrTypeForItem(props.projectId, props.pcrId, props.itemId)}
-          documents={stores.documents.pcrOrPcrItemDocuments(props.projectId, props.itemId)}
-          documentsEditor={stores.documents.getPcrOrPcrItemDocumentsEditor(props.projectId, props.itemId)}
+          documents={stores.documents.pcrOrPcrItemDocuments(props.projectId, props.pcrId)}
+          documentsEditor={stores.documents.getPcrOrPcrItemDocumentsEditor(props.projectId, props.pcrId)}
           onChange={(saving, dto) => {
             stores.messages.clearMessages();
             const successMessage = dto.files.length === 1 ? `Your document has been uploaded.` : `${dto.files.length} documents have been uploaded.`;
-            stores.documents.updatePcrOrPcrItemDocumentsEditor(saving, props.projectId, props.itemId, dto, successMessage);
+            stores.documents.updatePcrOrPcrItemDocumentsEditor(saving, props.projectId, props.pcrId, dto, successMessage);
           }}
           onDelete={(dto, document) => {
             stores.messages.clearMessages();
-            stores.documents.deletePcrOrPcrItemDocumentsEditor(props.projectId, props.itemId, dto, document, "Your document has been removed.");
+            stores.documents.deletePcrOrPcrItemDocumentsEditor(props.projectId, props.pcrId, dto, document, "Your document has been removed.");
           }}
           {...props}
         />
@@ -158,21 +124,17 @@ const PrepareItemFilesContainer = (props: Params & BaseProps) => (
   </StoresConsumer>
 );
 
-export const ProjectChangeRequestPrepareItemFilesRoute = defineRoute({
-  routeName: "prepare-item-files",
-  routePath: "/projects/:projectId/pcrs/:pcrId/prepare/item/:itemId/files",
-  container: PrepareItemFilesContainer,
+export const ProjectChangeRequestPrepareReasoningFilesRoute = defineRoute({
+  routeName: "prepare-reasoning-files",
+  routePath: "/projects/:projectId/pcrs/:pcrId/prepare/reasoning/files",
+  container: PrepareReasoningFilesContainer,
   getParams: (route) => ({
     projectId: route.params.projectId,
     pcrId: route.params.pcrId,
-    itemId: route.params.itemId
   }),
-  getTitle: (store, params, stores) => {
-    const typeName = stores.projectChangeRequests.getItemById(params.projectId, params.pcrId, params.itemId).then(x => x.typeName).data;
-    return {
-      htmlTitle: typeName ? `Upload files to ${typeName}` : "Upload files to project change request item",
-      displayTitle: typeName ? `Upload files to ${typeName}` : "Upload files to project change request item",
-    };
-  },
+  getTitle: () => ({
+    htmlTitle: "Upload files to provide reasoning to Innovate UK",
+    displayTitle: "Upload files to provide reasoning to Innovate UK"
+  }),
   accessControl: (auth, { projectId }, config) => config.features.pcrsEnabled && auth.forProject(projectId).hasRole(ProjectRole.ProjectManager)
 });
