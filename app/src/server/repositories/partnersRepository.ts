@@ -32,6 +32,10 @@ export interface ISalesforcePartner {
   Acc_TrackingClaims__c: string;
   Acc_OverheadRate__c: number;
   Acc_TotalCostsSubmitted__c: number;
+  Acc_TotalCostsAwarded__c: number;
+  Acc_AuditReportFrequency__c: string;
+  AuditReportFrequencyName: string;
+  Acc_TotalPrepayment__c: number;
 }
 
 export interface IPartnerRepository {
@@ -69,6 +73,11 @@ export class PartnerRepository extends SalesforceRepositoryBase<ISalesforcePartn
     "Acc_TrackingClaims__c",
     "Acc_OverheadRate__c",
     "Acc_TotalCostsSubmitted__c",
+    "Acc_TotalCostsAwarded__c",
+    "Acc_AuditReportFrequency__c",
+    "toLabel(Acc_AuditReportFrequency__c) AuditReportFrequencyName",
+    "Acc_TotalPrepayment__c",
+    "Acc_TotalParticipantGrant__c"
   ];
 
   getAllByProjectId(projectId: string): Promise<ISalesforcePartner[]> {
