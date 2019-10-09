@@ -30,36 +30,26 @@ export const ScopeChangeEdit = (props: Props) => {
         onSubmit={() => props.onSave()}
         qa="scopeChange"
       >
-        <Form.Fieldset heading="Published public description">
-          <Form.Custom
-            name="currentDescription"
-            value={m => <ACC.Renderers.SimpleString>{props.project.description}</ACC.Renderers.SimpleString>}
-            update={(m, v) => { return; }}
-          />
-        </Form.Fieldset>
         <Form.Fieldset heading="Proposed public description">
+          <ACC.Info summary="Published public description"><ACC.Renderers.SimpleString multiline={true}>{props.project.description}</ACC.Renderers.SimpleString></ACC.Info>
           <Form.MultilineString
             name="description"
             value={m => m.publicDescription}
             update={(m, v) => m.publicDescription = v}
             validation={props.validator.publicDescription}
             qa="newDescription"
-          />
-        </Form.Fieldset>
-        <Form.Fieldset heading="Published public summary">
-          <Form.Custom
-            name="currentSummary"
-            value={m => <ACC.Renderers.SimpleString>{props.project.summary}</ACC.Renderers.SimpleString>}
-            update={(m, v) => { return; }}
+            rows={15}
           />
         </Form.Fieldset>
         <Form.Fieldset heading="Proposed public summary">
+          <ACC.Info summary="Published public summary"><ACC.Renderers.SimpleString multiline={true}>{props.project.summary}</ACC.Renderers.SimpleString></ACC.Info>
           <Form.MultilineString
             name="summary"
             value={m => m.projectSummary}
             update={(m, v) => m.projectSummary = v}
             validation={props.validator.projectSummary}
             qa="newSummary"
+            rows={15}
           />
         </Form.Fieldset>
         <Form.Fieldset heading="Mark as complete">
