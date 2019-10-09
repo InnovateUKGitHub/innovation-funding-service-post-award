@@ -10,6 +10,7 @@ import { PCRDto } from "@framework/dtos/pcrDtos";
 import { IEditorStore, StoresConsumer } from "@ui/redux";
 import { ProjectChangeRequestItemStatus } from "@framework/entities";
 import { MultipleDocumentUpdloadDtoValidator, PCRDtoValidator } from "@ui/validators";
+import { ProjectChangeRequestPrepareReasoningFilesRoute } from "./prepareReasoningFiles";
 
 export interface ProjectChangeRequestPrepareReasoningParams {
   projectId: string;
@@ -21,13 +22,10 @@ interface Data {
   pcr: Pending<PCRDto>;
   editor: Pending<IEditorStore<PCRDto, PCRDtoValidator>>;
   files: Pending<DocumentSummaryDto[]>;
-  filesEditor: Pending<IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>>;
 }
 
 interface Callbacks {
   onChange: (save: boolean, dto: PCRDto) => void;
-  onFilesChange: (save: boolean, dto: MultipleDocumentUploadDto) => void;
-  onFileDelete: (dto: MultipleDocumentUploadDto, document: DocumentSummaryDto) => void;
 }
 
 class PCRPrepareReasoningComponent extends ContainerBase<ProjectChangeRequestPrepareReasoningParams, Data, Callbacks> {
@@ -37,17 +35,20 @@ class PCRPrepareReasoningComponent extends ContainerBase<ProjectChangeRequestPre
       pcr: this.props.pcr,
       editor: this.props.editor,
       files: this.props.files,
-      filesEditor: this.props.filesEditor,
     });
 
-    return <ACC.PageLoader pending={combined} render={x => this.renderContents(x.project, x.pcr, x.editor, x.files, x.filesEditor)} />;
+    return <ACC.PageLoader pending={combined} render={x => this.renderContents(x.project, x.pcr, x.editor, x.files)} />;
   }
 
-  private renderContents(project: ProjectDto, pcr: PCRDto, editor: IEditorStore<PCRDto, PCRDtoValidator>, documents: DocumentSummaryDto[], documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>) {
+  private renderContents(project: ProjectDto, pcr: PCRDto, editor: IEditorStore<PCRDto, PCRDtoValidator>, documents: DocumentSummaryDto[]) {
     const PCRForm = ACC.TypedForm<PCRDto>();
-    const UploadForm = ACC.TypedForm<MultipleDocumentUploadDto>();
 
-    const reasoningHint = <ACC.Renderers.SimpleString>You must explain each change. Be brief and write clearly.</ACC.Renderers.SimpleString>;
+    const reasoningHint = (
+      <ACC.Renderers.SimpleString>
+        You must explain each change. Be brief and write clearly.<br />
+        If you are requesting a reallocation of project costs, you must justify each change to your costs.
+      </ACC.Renderers.SimpleString>
+    );
 
     const options: ACC.SelectOption[] = [
       { id: "true", value: "This is ready to submit" }
@@ -58,47 +59,20 @@ class PCRPrepareReasoningComponent extends ContainerBase<ProjectChangeRequestPre
         backLink={<ACC.BackLink route={ProjectChangeRequestPrepareRoute.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId })}>Back to prepare project change request</ACC.BackLink>}
         pageTitle={<ACC.Projects.Title project={project} />}
         project={project}
-        validator={[editor.validator, documentsEditor.validator]}
-        error={editor.error || documentsEditor.error}
+        validator={[editor.validator]}
+        error={editor.error}
       >
         <ACC.Renderers.Messages messages={this.props.messages} />
 
         <ACC.Section>
           <ACC.SummaryList qa="pcr-prepareReasoning">
             <ACC.SummaryListItem label="Request number" content={pcr.requestNumber} qa="numberRow" />
-            <ACC.SummaryListItem label="Types" content={<ACC.Renderers.LineBreakList items={pcr.items.map(x => x.typeName)}/>} qa="typesRow" />
+            <ACC.SummaryListItem label="Types" content={<ACC.Renderers.LineBreakList items={pcr.items.map(x => x.typeName)} />} qa="typesRow" />
           </ACC.SummaryList>
         </ACC.Section>
 
         <ACC.Section qa="guidance">
           <ACC.Renderers.SimpleString>{pcr.guidance}</ACC.Renderers.SimpleString>
-        </ACC.Section>
-
-        <ACC.Section>
-          <UploadForm.Form
-            enctype="multipart"
-            editor={documentsEditor}
-            onSubmit={() => this.props.onFilesChange(true, documentsEditor.data)}
-            onChange={(dto) => this.props.onFilesChange(false, dto)}
-            qa="projectChangeRequestItemUpload"
-          >
-            <UploadForm.Fieldset heading="Supporting information">
-              <ACC.Renderers.SimpleString>You can upload up to 10 files of any type, as long as their combined file size is less than 10MB.</ACC.Renderers.SimpleString>
-              <UploadForm.MulipleFileUpload
-                label="Upload documents"
-                name="attachment"
-                labelHidden={true}
-                value={data => data.files}
-                update={(dto, files) => dto.files = files || []}
-                validation={documentsEditor.validator.files}
-              />
-            </UploadForm.Fieldset>
-            <UploadForm.Button name="uploadFile">Upload</UploadForm.Button>
-          </UploadForm.Form>
-        </ACC.Section>
-
-        <ACC.Section title="Files uploaded">
-          {this.renderDocumentList(documents, documentsEditor.data)}
         </ACC.Section>
 
         <ACC.Section qa="reasoning-save-and-return">
@@ -107,16 +81,27 @@ class PCRPrepareReasoningComponent extends ContainerBase<ProjectChangeRequestPre
             onChange={dto => this.onChange(dto)}
             onSubmit={() => this.onSave(editor.data)}
           >
-            <PCRForm.MultilineString
-              name="reasoningComments"
-              label="Reason"
-              labelHidden={true}
-              hint={reasoningHint}
-              qa="reason"
-              value={m => m.reasoningComments}
-              update={(m, v) => m.reasoningComments = v || ""}
-              validation={editor.validator.reasoningComments}
-            />
+            <PCRForm.Fieldset heading="Reasoning">
+              <PCRForm.MultilineString
+                name="reasoningComments"
+                label="Reasoning"
+                labelHidden={true}
+                hint={reasoningHint}
+                qa="reason"
+                value={m => m.reasoningComments}
+                update={(m, v) => m.reasoningComments = v || ""}
+                validation={editor.validator.reasoningComments}
+                rows={15}
+              />
+            </PCRForm.Fieldset>
+            <ACC.Section title="Files uploaded">
+              {
+                documents.length > 0 ?
+                  <ACC.DocumentList documents={documents} qa="supporting-documents" /> :
+                  <ACC.ValidationMessage messageType="info" message="No files uploaded" />
+              }
+              <ACC.Link styling="SecondaryButton" route={ProjectChangeRequestPrepareReasoningFilesRoute.getLink({ projectId: pcr.projectId, pcrId: pcr.id })}>Upload and remove documents</ACC.Link>
+            </ACC.Section>
             <PCRForm.Fieldset heading="Mark as complete">
               <PCRForm.Checkboxes
                 name="reasoningStatus"
@@ -131,12 +116,6 @@ class PCRPrepareReasoningComponent extends ContainerBase<ProjectChangeRequestPre
         </ACC.Section>
       </ACC.Page>
     );
-  }
-
-  private renderDocumentList(documents: DocumentSummaryDto[], dto: MultipleDocumentUploadDto) {
-    return documents.length > 0
-      ? <ACC.DocumentListWithDelete onRemove={(document) => this.props.onFileDelete(dto, document)} documents={documents} qa="supporting-documents" />
-      : <ACC.ValidationMessage messageType="info" message="No files uploaded" />;
   }
 
   private onChange(dto: PCRDto): void {
@@ -159,19 +138,9 @@ const PCRPrepareReasoningContainer = (props: ProjectChangeRequestPrepareReasonin
         pcr={stores.projectChangeRequests.getById(props.projectId, props.pcrId)}
         editor={stores.projectChangeRequests.getPcrUpdateEditor(props.projectId, props.pcrId)}
         files={stores.documents.pcrOrPcrItemDocuments(props.projectId, props.pcrId)}
-        filesEditor={stores.documents.getPcrOrPcrItemDocumentsEditor(props.projectId, props.pcrId)}
         onChange={(save, dto) => {
           stores.messages.clearMessages();
           stores.projectChangeRequests.updatePcrEditor(save, props.projectId, dto, undefined, ({ projectId, id }) => stores.navigation.navigateTo(ProjectChangeRequestPrepareRoute.getLink({ projectId, pcrId: id })));
-        }}
-        onFilesChange={(save, dto) => {
-          stores.messages.clearMessages();
-          const successMessage = dto.files.length === 1 ? `Your document has been uploaded.` : `${dto.files.length} documents have been uploaded.`;
-          stores.documents.updatePcrOrPcrItemDocumentsEditor(save, props.projectId, props.pcrId, dto, successMessage);
-        }}
-        onFileDelete={(dto, document) => {
-          stores.messages.clearMessages();
-          stores.documents.deletePcrOrPcrItemDocumentsEditor(props.projectId, props.pcrId, dto, document, "Your document has been removed.");
         }}
         {...props}
       />
