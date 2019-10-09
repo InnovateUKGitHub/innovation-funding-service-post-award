@@ -111,7 +111,6 @@ class ProjectDashboardComponent extends ContainerBaseWithState<{}, Data, {}, Sta
       return null;
     }
 
-    const requestsToReviewText = requestsToReview === 1 ? "change request you need to review" : "change requests you need to review";
     const claimsToReviewText = claimsToReview === 1 ? "claim you need to review" : "claims you need to review";
     const pendingClaimsText = pendingClaims === 1 ? "unsubmitted or queried claim" : "unsubmitted or queried claims";
 
@@ -119,7 +118,6 @@ class ProjectDashboardComponent extends ContainerBaseWithState<{}, Data, {}, Sta
       <ACC.Section qa="requiring-action-section" title="Overview">
         {/* tslint:disable-next-line */}
         <div className="govuk-grid-row acc-statistics-section">
-          {this.renderStatisticsBox(requestsToReview, requestsToReviewText, () => this.setState({ showRequestsToReview: !this.state.showRequestsToReview }), this.state.showRequestsToReview, "pcr")}
           {this.renderStatisticsBox(claimsToReview, claimsToReviewText, () => this.setState({ showClaimsToReview: !this.state.showClaimsToReview }), this.state.showClaimsToReview, "review")}
           {this.renderStatisticsBox(pendingClaims, pendingClaimsText, () => this.setState({ showClaimsWithParticipant: !this.state.showClaimsWithParticipant }), this.state.showClaimsWithParticipant, "queried")}
         </div>
@@ -131,7 +129,7 @@ class ProjectDashboardComponent extends ContainerBaseWithState<{}, Data, {}, Sta
     if (this.props.config.features.projectFiltering && numberOfClaims > 0) {
       // empty div needed to prevent focus on button becoming misaligned
       return (
-        <div className="govuk-grid-column-one-third">
+        <div className="govuk-grid-column-one-half">
           <button data-module="govuk-button" className={classNames("acc-statistics-section__details", "acc-statistics-section__details--button", { "acc-statistics-section__details--button--unselected": !buttonIsPressed })} aria-pressed={buttonIsPressed} onClick={() => filterFunction()}>
             <div>
               <StatisticsBox number={numberOfClaims} label={label} qa={qa} />
@@ -142,7 +140,7 @@ class ProjectDashboardComponent extends ContainerBaseWithState<{}, Data, {}, Sta
     }
 
     return (
-      <div className="govuk-grid-column-one-third">
+      <div className="govuk-grid-column-one-half">
         <div className="acc-statistics-section__details">
           <div>
             <StatisticsBox number={numberOfClaims} label={label} qa={qa} />
