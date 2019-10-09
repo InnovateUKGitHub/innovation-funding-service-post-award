@@ -5,6 +5,7 @@ import { IFormBody, IFormButton, MultipleFileFormHandlerBase } from "@server/for
 import { ProjectChangeRequestPrepareItemFilesRoute, ProjectChangeRequestPrepareItemParams, ProjectChangeRequestPrepareItemRoute } from "@ui/containers";
 import { getProjectChangeRequestDocumentOrItemDocumentEditor } from "@ui/redux/selectors";
 import { MultipleDocumentUpdloadDtoValidator } from "@ui/validators";
+import { getKey } from "@framework/util";
 
 export class ProjectChangeRequestItemDocumentUploadHandler extends MultipleFileFormHandlerBase<ProjectChangeRequestPrepareItemParams, MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator> {
   constructor() {
@@ -25,7 +26,10 @@ export class ProjectChangeRequestItemDocumentUploadHandler extends MultipleFileF
   }
 
   protected getStoreInfo(params: ProjectChangeRequestPrepareItemParams): { key: string, store: string } {
-    return getProjectChangeRequestDocumentOrItemDocumentEditor(params.itemId);
+    return {
+      key: getKey("pcrs", params.projectId, params.itemId),
+      store:"multipleDocuments"
+    };
   }
 
   protected createValidationResult(params: ProjectChangeRequestPrepareItemParams, dto: MultipleDocumentUploadDto) {
