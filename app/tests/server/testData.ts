@@ -110,7 +110,11 @@ export class TestData {
       ProjectRoleName: "Unknown",
       Acc_TotalCostsSubmitted__c: 0,
       Acc_TotalFutureForecastsForParticipant__c: 0,
-      Acc_TrackingClaims__c: ""
+      Acc_TrackingClaims__c: "",
+      Acc_AuditReportFrequency__c: "Never, for this project",
+      AuditReportFrequencyName: "Never, for this project",
+      Acc_TotalCostsAwarded__c: 100000,
+      Acc_TotalPrepayment__c: 500
     };
 
     if (!!update) update(newItem);
