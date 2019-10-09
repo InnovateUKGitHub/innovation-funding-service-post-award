@@ -5,6 +5,7 @@ export * from "./details";
 export * from "./delete";
 export * from "./prepare";
 export * from "./prepareItem";
+export * from "./prepareItemFiles";
 export * from "./prepareReasoning";
 export * from "./review";
 export * from "./viewItem";

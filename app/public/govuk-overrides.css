@@ -1,3 +1,4 @@
+
 .govuk-table__cell:not(:first-child):not(:last-child),
 .govuk-table__header:not(:first-child):not(:last-child) {
   padding: 10px 10px;
@@ -433,4 +434,8 @@ a.blockLink {
 
 .app-task-list__task-action--completed{
   color: #00703c;
+}
+
+p.govuk-body--multiline {
+  white-space: pre-line;
 }

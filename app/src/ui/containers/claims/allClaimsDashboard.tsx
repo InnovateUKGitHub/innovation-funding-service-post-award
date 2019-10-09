@@ -86,19 +86,19 @@ class Component extends ContainerBaseWithState<AllClaimsDashboardParams, Data, C
     const deleteEditor = this.props.deleteEditor && this.props.deleteEditor.data;
 
     const error = (editor && editor.error) || (deleteEditor && deleteEditor.error);
-    const validators = filterEmpty([editor && editor.validator,  deleteEditor && deleteEditor.validator]);
+    const validators = filterEmpty([editor && editor.validator, deleteEditor && deleteEditor.validator]);
 
     const isFC = (projectDetails.roles & ProjectRole.FinancialContact) !== ProjectRole.Unknown;
 
     return (
       <Acc.Page
-        pageTitle={<Acc.Projects.Title project={projectDetails}/>}
-        backLink={<Acc.Projects.ProjectBackLink project={projectDetails}/>}
+        pageTitle={<Acc.Projects.Title project={projectDetails} />}
+        backLink={<Acc.Projects.ProjectBackLink project={projectDetails} />}
         validator={validators}
         error={error}
         project={projectDetails}
       >
-        <Acc.Renderers.Messages messages={this.props.messages}/>
+        <Acc.Renderers.Messages messages={this.props.messages} />
         <Acc.Section qa="current-claims-section" title="Open">
           {this.renderCurrentClaimsPerPeriod(currentClaims, projectDetails, partners)}
         </Acc.Section>
@@ -132,7 +132,7 @@ class Component extends ContainerBaseWithState<AllClaimsDashboardParams, Data, C
       return (
         <Acc.Renderers.SimpleString qa="notificationMessage">
           There are no open claims. The next claim period begins <Acc.Renderers.FullDate value={date} />.
-          </Acc.Renderers.SimpleString>
+        </Acc.Renderers.SimpleString>
       );
     }
     return groupedClaims.map((x, i) => this.renderCurrentClaims(x, project, partners, i));
@@ -174,15 +174,15 @@ class Component extends ContainerBaseWithState<AllClaimsDashboardParams, Data, C
           <ClaimTable.Currency header="Difference" qa="diff" value={(x) => x.forecastCost - x.totalCost} />
           <ClaimTable.String header="Status" qa="status" value={(x) => x.statusLabel} />
           <ClaimTable.ShortDate header="Date of last update" qa="last-update" value={x => x.paidDate || x.approvedDate || x.lastModifiedDate} />
-          <ClaimTable.Custom header="Action" hideHeader={true} qa="link" value={(x) => <Acc.Claims.ClaimDetailsLink claim={x} project={project} partner={partners.find(p => p.id === x.partnerId)!} /> }/>
+          <ClaimTable.Custom header="Action" hideHeader={true} qa="link" value={(x) => <Acc.Claims.ClaimDetailsLink claim={x} project={project} partner={partners.find(p => p.id === x.partnerId)!} />} />
         </ClaimTable.Table>
       </Acc.Section>
     );
   }
 
   getBodyRowFlag(claim: ClaimDto, project: ProjectDto, partners: PartnerDto[]) {
-    const partner  = partners.find(x => x.id === claim.partnerId);
-    if(!partner) return false;
+    const partner = partners.find(x => x.id === claim.partnerId);
+    if (!partner) return false;
 
     const linkType = Acc.Claims.getClaimDetailsLinkType({ claim, project, partner });
     return linkType === "edit" || linkType === "review";
@@ -241,7 +241,7 @@ class Component extends ContainerBaseWithState<AllClaimsDashboardParams, Data, C
       deleteEditor: this.props.deleteEditor,
     });
 
-    return (<Acc.Loader pending={combined} render={({editor, document}: IarCombinedData) => this.renderIarDocumentSection(claim, editor, document)}/>);
+    return (<Acc.Loader pending={combined} render={({ editor, document }: IarCombinedData) => this.renderIarDocumentSection(claim, editor, document)} />);
   }
 
   private renderIarDocumentSection(claim: ClaimDto, editor: IEditorStore<DocumentUploadDto, DocumentUploadDtoValidator> | null, document: DocumentSummaryDto | null) {
@@ -268,7 +268,7 @@ class Component extends ContainerBaseWithState<AllClaimsDashboardParams, Data, C
 
     return (
       <React.Fragment>
-        {this.state.showIarMessage ? <Acc.ValidationMessage messageType="success" message="You have attached an independent accountant's report (IAR)."/> : null}
+        {this.state.showIarMessage ? <Acc.ValidationMessage messageType="success" message="You have attached an independent accountant's report (IAR)." /> : null}
         <Acc.DocumentSingle document={document} openNewWindow={true} renderRemove={() => claim.allowIarEdit && button()} />
       </React.Fragment>
     );
@@ -281,7 +281,7 @@ class Component extends ContainerBaseWithState<AllClaimsDashboardParams, Data, C
 
   private saveIar(dto: DocumentUploadDto, partnerId: string, periodId: number) {
     const key = { projectId: this.props.projectId, partnerId, periodId };
-    this.props.uploadFile(key, dto, () => this.setState({showIarMessage: true}));
+    this.props.uploadFile(key, dto, () => this.setState({ showIarMessage: true }));
   }
 
   private deleteIar(claim: ClaimDto, dto: DocumentSummaryDto, projectId: string) {
