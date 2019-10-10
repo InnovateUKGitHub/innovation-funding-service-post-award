@@ -93,7 +93,7 @@ class PrepareReasoningFilesComponent extends ContainerBase<Params, Data, Callbac
     }
     return (
       <ACC.Section  title="Files uploaded">
-        <p className="govuk-body-m govuk-!-margin-bottom-0 govuk-!-margin-right-2">No documents uploaded.</p>
+        <ACC.Renderers.SimpleString>No documents uploaded.</ACC.Renderers.SimpleString>
       </ACC.Section>
     );
   }
