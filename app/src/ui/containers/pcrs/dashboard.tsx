@@ -45,12 +45,12 @@ class PCRsDashboardComponent extends ContainerBase<Params, Data, Callbacks> {
       >
         <ACC.Renderers.Messages messages={this.props.messages} />
         <ACC.Section qa="pcr-table">
-          {this.renderTable(project, active, "pcrs-active")}
+          {this.renderTable(project, active, "pcrs-active", "You have no ongoing requests.")}
           {this.renderStartANewRequestLink(project)}
         </ACC.Section>
         <ACC.Accordion>
           <ACC.AccordionItem title="Past requests">
-            {this.renderTable(project, archived, "pcrs-archived")}
+            {this.renderTable(project, archived, "pcrs-archived", "You have no past requests.")}
           </ACC.AccordionItem>
         </ACC.Accordion>
       </ACC.Page>
@@ -67,8 +67,12 @@ class PCRsDashboardComponent extends ContainerBase<Params, Data, Callbacks> {
     );
   }
 
-  private renderTable(project: ProjectDto, pcrs: PCRSummaryDto[], qa: string) {
+  private renderTable(project: ProjectDto, pcrs: PCRSummaryDto[], qa: string, message: string) {
     const PCRTable = ACC.TypedTable<PCRSummaryDto>();
+
+    if (!pcrs.length) {
+      return <ACC.Renderers.SimpleString children={message}/>;
+    }
 
     return (
       <PCRTable.Table data={pcrs} qa={qa}>

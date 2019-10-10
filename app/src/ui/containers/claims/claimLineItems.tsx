@@ -84,7 +84,7 @@ export class ClaimLineItemsComponent extends ContainerBase<Params, Data, {}> {
   private renderDocumentList(documents: DocumentSummaryDto[]) {
     return documents.length > 0
       ? <DocumentList documents={documents} qa="supporting-documents"/>
-      : <p className="govuk-body-m govuk-!-margin-bottom-0 govuk-!-margin-right-2">No documents uploaded.</p>;
+      : <ACC.Renderers.SimpleString>No documents uploaded.</ACC.Renderers.SimpleString>;
   }
 
   private getLinks(costCategories: CostCategoryDto[], project: ProjectDto, partner: PartnerDto, claim: ClaimDto, pages: {getLink: (params: Params) => ILinkInfo}) {
