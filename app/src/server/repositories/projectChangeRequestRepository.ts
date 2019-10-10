@@ -35,11 +35,12 @@ export interface ISalesforcePCR {
   LastModifiedDate: string;
   RecordTypeId: string;
   Acc_Reasoning__c: string;
-  Acc_Project_Participant__c: string;
+  Acc_Project_Participant__c: string | null;
   Acc_Project__c: string;
   // careful there is a typo in the salesforce setup
   // will probably change to Acc_MarkedAsComplete__c in the future!!
   Acc_MarkedasComplete__c: string;
+  Acc_NewOrganisationName__c: string|null;
   Acc_NewProjectSummary__c: string|null;
   Acc_NewPublicDescription__c: string|null;
   MarkedAsCompleteName: string;
@@ -69,6 +70,7 @@ export class ProjectChangeRequestRepository extends SalesforceRepositoryBase<ISa
     "RecordTypeId",
     "Acc_Project_Participant__c",
     "Acc_Project__c",
+    "Acc_NewOrganisationName__c",
     "Acc_NewProjectSummary__c",
     "Acc_NewPublicDescription__c",
     "Acc_Reasoning__c",
@@ -128,6 +130,8 @@ export class ProjectChangeRequestRepository extends SalesforceRepositoryBase<ISa
       Acc_NewPublicDescription__c: x.publicDescription,
       Acc_SuspensionStarts__c: this.toOptionalSFDate(x.suspensionStartDate),
       Acc_SuspensionEnds__c: this.toOptionalSFDate(x.suspensionEndDate),
+      Acc_NewOrganisationName__c: x.accountName,
+      Acc_Project_Participant__c: x.partnerId
     })));
   }
 
@@ -139,7 +143,6 @@ export class ProjectChangeRequestRepository extends SalesforceRepositoryBase<ISa
       Acc_Guidance__c: "Please provide documents to support your request", // TODO remove this when populated by SF
       Acc_MarkedasComplete__c: this.mapItemStatus(projectChangeRequest.reasoningStatus),
       Acc_Status__c: this.mapStatus(projectChangeRequest.status),
-      Acc_Project_Participant__c: projectChangeRequest.partnerId,
       Acc_Project__c: projectChangeRequest.projectId,
     });
     // Insert sub-items
@@ -153,7 +156,6 @@ export class ProjectChangeRequestRepository extends SalesforceRepositoryBase<ISa
       RecordTypeId: x.recordTypeId,
       Acc_Guidance__c: "Please provide documents to support your request", // TODO remove this when populated by SF
       Acc_MarkedasComplete__c: this.mapItemStatus(x.status),
-      Acc_Project_Participant__c: x.partnerId,
       Acc_Project__c: x.projectId,
     })));
   }
