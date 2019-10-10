@@ -2,8 +2,9 @@ import { DateTime } from "luxon";
 import { Result, Results } from "../validation";
 import * as Validation from "./common";
 import {
+  PartnerDto,
   PCRDto,
-  PCRItemDto, PCRItemForProjectSuspensionDto,
+  PCRItemDto, PCRItemForAccountNameChangeDto, PCRItemForProjectSuspensionDto,
   PCRItemForScopeChangeDto,
   PCRItemForTimeExtensionDto,
   PCRItemTypeDto,
@@ -14,7 +15,7 @@ import { ProjectChangeRequestItemStatus, ProjectChangeRequestItemTypeEntity, Pro
 
 export class PCRDtoValidator extends Results<PCRDto> {
 
-  constructor(model: PCRDto, private role: ProjectRole, private original: PCRDto, private readonly recordTypes: PCRItemTypeDto[], showValidationErrors: boolean) {
+  constructor(model: PCRDto, private role: ProjectRole, private original: PCRDto, private readonly recordTypes: PCRItemTypeDto[], showValidationErrors: boolean, private partners?: PartnerDto[]) {
     super(model, showValidationErrors);
   }
 
@@ -120,6 +121,7 @@ export class PCRDtoValidator extends Results<PCRDto> {
       case ProjectChangeRequestItemTypeEntity.ProjectSuspension:
         return new PCRProjectSuspensionItemDtoValidator(item, canEdit, this.role, this.original.items.find(x => x.id === item.id) as PCRItemForProjectSuspensionDto, this.model.status, this.recordTypes, this.showValidationErrors);
       case ProjectChangeRequestItemTypeEntity.AccountNameChange:
+        return new PCRAccountNameChangeItemDtoValidator(item, canEdit, this.role, this.original.items.find(x => x.id === item.id) as PCRItemForAccountNameChangeDto, this.model.status, this.recordTypes, this.showValidationErrors, this.partners);
       case ProjectChangeRequestItemTypeEntity.MultiplePartnerFinancialVirement:
       case ProjectChangeRequestItemTypeEntity.PartnerAddition:
       case ProjectChangeRequestItemTypeEntity.PartnerWithdrawal:
@@ -274,4 +276,45 @@ export class PCRScopeChangeItemDtoValidator extends PCRBaseItemDtoValidator<PCRI
 
   projectSummary = this.validateProjectSummary();
   publicDescription = this.validatePublicDescription();
+}
+
+export class PCRAccountNameChangeItemDtoValidator extends PCRBaseItemDtoValidator<PCRItemForAccountNameChangeDto> {
+
+  constructor(
+    model: PCRItemForAccountNameChangeDto,
+    protected readonly canEdit: boolean,
+    protected readonly role: ProjectRole,
+    protected readonly original: PCRItemForAccountNameChangeDto,
+    protected readonly pcrStatus: ProjectChangeRequestStatus,
+    protected readonly recordTypes: PCRItemTypeDto[],
+    showValidationErrors: boolean,
+    protected readonly partners?: PartnerDto[],
+  ) {
+    super(model, canEdit, role, original, pcrStatus, recordTypes, showValidationErrors);
+  }
+
+  private validateAccountName() {
+    const isComplete = this.model.status === ProjectChangeRequestItemStatus.Complete;
+
+    if (this.canEdit) {
+      return isComplete ? Validation.required(this, this.model.accountName, "Enter a new partner name") : Validation.valid(this);
+    }
+
+    return Validation.isTrue(this, (this.model.accountName === this.original.accountName), "Partner name cannot be changed.");
+  }
+
+  private validatePartnerId() {
+    const isComplete = this.model.status === ProjectChangeRequestItemStatus.Complete;
+    if (!this.canEdit) {
+      return Validation.isTrue(this, (this.model.partnerId === this.original.partnerId), "Partner cannot be changed.");
+    }
+
+    return Validation.all(this,
+      () => isComplete ? Validation.required(this, this.model.partnerId, "Select partner to change") : Validation.valid(this),
+      () => this.partners && this.model.partnerId ? Validation.permitedValues(this, this.model.partnerId, this.partners.map(x => x.id), "Invalid partner for project") : Validation.valid(this)
+    );
+  }
+
+  accountName = this.validateAccountName();
+  partnerId = this.validatePartnerId();
 }

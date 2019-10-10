@@ -582,7 +582,6 @@ export class TestData {
     const newItem: Entites.ProjectChangeRequestEntity = {
       id: `PCR_${seed}`,
       projectId: project.Id,
-      partnerId: "",
       guidance: "This is some hardcoded guidance",
       comments: "",
       number: seed,
@@ -617,6 +616,7 @@ export class TestData {
     const newItem: Entites.ProjectChangeRequestItemEntity = {
       id: `PCR_Item_${seed}`,
       pcrId: pcr.id,
+      accountName: "",
       guidance: "This is some hardcoded guidance",
       recordTypeId: recordType.id,
       projectId: pcr.projectId,

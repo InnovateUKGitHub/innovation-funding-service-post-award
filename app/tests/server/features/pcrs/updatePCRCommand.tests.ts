@@ -12,7 +12,7 @@ import { GetPCRByIdQuery } from "@server/features/pcrs/getPCRByIdQuery";
 import { ValidationError } from "@server/features/common";
 import {
   Authorisation,
-  PCRDto,
+  PCRDto, PCRItemForAccountNameChangeDto,
   PCRItemForProjectSuspensionDto,
   PCRItemForScopeChangeDto,
   PCRItemForTimeExtensionDto,
@@ -67,7 +67,11 @@ describe("UpdatePCRCommand", () => {
 
       const project = context.testData.createProject();
       const pcr = context.testData.createPCR(project, { status: from });
-      context.testData.createPCRItem(pcr);
+      const recordTypes = context.testData.createPCRRecordTypes();
+      const projectTerminationType = PCRRecordTypeMetaValues.find(x => x.type === ProjectChangeRequestItemTypeEntity.ProjectTermination)!;
+      const recordType = recordTypes.find(x => x.type === projectTerminationType.typeName);
+
+      context.testData.createPCRItem(pcr, recordType);
 
       context.testData.createCurrentUserAsProjectManager(project);
 
@@ -92,7 +96,11 @@ describe("UpdatePCRCommand", () => {
 
       const project = context.testData.createProject();
       const pcr = context.testData.createPCR(project, { status, reasoningStatus: ProjectChangeRequestItemStatus.Complete, comments: "Comments", reasoning: "Reasoning" });
-      context.testData.createPCRItem(pcr);
+      const recordTypes = context.testData.createPCRRecordTypes();
+      const projectTerminationType = PCRRecordTypeMetaValues.find(x => x.type === ProjectChangeRequestItemTypeEntity.ProjectTermination)!;
+      const recordType = recordTypes.find(x => x.type === projectTerminationType.typeName);
+
+      context.testData.createPCRItem(pcr, recordType);
 
       context.testData.createCurrentUserAsProjectManager(project);
 
@@ -118,7 +126,11 @@ describe("UpdatePCRCommand", () => {
 
       const project = context.testData.createProject();
       const pcr = context.testData.createPCR(project, { status, reasoningStatus: ProjectChangeRequestItemStatus.Complete, comments: "Comments", reasoning: "Reasoning" });
-      context.testData.createPCRItem(pcr);
+      const recordTypes = context.testData.createPCRRecordTypes();
+      const projectTerminationType = PCRRecordTypeMetaValues.find(x => x.type === ProjectChangeRequestItemTypeEntity.ProjectTermination)!;
+      const recordType = recordTypes.find(x => x.type === projectTerminationType.typeName);
+
+      context.testData.createPCRItem(pcr, recordType);
 
       context.testData.createCurrentUserAsProjectManager(project);
 
@@ -132,22 +144,22 @@ describe("UpdatePCRCommand", () => {
       await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
     });
 
-    test("reasonsing comments are required when reasoning status is complete", async () => {
+    test("reasoning comments are required when reasoning status is complete", async () => {
       const context = new TestContext();
       const project = context.testData.createProject();
       const pcr = context.testData.createPCR(project, {status: ProjectChangeRequestStatus.Draft});
-      context.testData.createPCRItem(pcr);
+      context.testData.createPCRItem(pcr, undefined, { status: Entites.ProjectChangeRequestItemStatus.ToDo });
 
       context.testData.createCurrentUserAsProjectManager(project);
 
       const dto = await context.runQuery(new GetPCRByIdQuery(pcr.projectId, pcr.id));
 
-      dto.reasoningComments = ""
+      dto.reasoningComments = "";
       dto.reasoningStatus = ProjectChangeRequestItemStatus.Complete;
 
       await expect(context.runCommand(new UpdatePCRCommand(project.Id, pcr.id, dto))).rejects.toThrow(ValidationError);
 
-      dto.reasoningComments = "Test Comments"
+      dto.reasoningComments = "Test Comments";
 
       await expect(context.runCommand(new UpdatePCRCommand(project.Id, pcr.id, dto))).resolves.toBe(true);
     });
@@ -549,12 +561,102 @@ describe("UpdatePCRCommand", () => {
     })
   });
 
+  describe("Account Name Change", () => {
+    test("returns bad request if partnerId and account name are not sent", async () => {
+      const context = new TestContext();
+
+      const project = context.testData.createProject();
+      const partner = context.testData.createPartner(project);
+      context.testData.createCurrentUserAsProjectManager(project);
+      const projectChangeRequest = context.testData.createPCR(project, {status: ProjectChangeRequestStatus.Draft});
+      const recordTypes = context.testData.createPCRRecordTypes();
+
+      const projectSuspensionType = PCRRecordTypeMetaValues.find(x => x.type === ProjectChangeRequestItemTypeEntity.AccountNameChange)!;
+
+      const recordType = recordTypes.find(x => x.type === projectSuspensionType.typeName);
+      context.testData.createPCRItem(projectChangeRequest, recordType, {status: ProjectChangeRequestItemStatus.Complete});
+
+      const dto = await context.runQuery(new GetPCRByIdQuery(projectChangeRequest.projectId, projectChangeRequest.id));
+      const item = dto.items[0] as PCRItemForAccountNameChangeDto;
+
+      item.accountName = null;
+      item.partnerId = partner.Id;
+      await expect(context.runCommand(new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto))).rejects.toThrow(ValidationError);
+
+      item.accountName = "New Name Goes Here";
+      item.partnerId = null;
+      await expect(context.runCommand(new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto))).rejects.toThrow(ValidationError);
+
+      item.accountName = "New Name Goes Here";
+      item.partnerId = partner.Id;
+      await expect(context.runCommand(new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto))).resolves.toBe(true);
+    });
+
+    test("returns bad request if partner does not belong to project", async () => {
+      const context = new TestContext();
+
+      const project = context.testData.createProject();
+      const projectPartner = context.testData.createPartner(project);
+      const otherPartner = context.testData.createPartner();
+      context.testData.createCurrentUserAsProjectManager(project);
+      const projectChangeRequest = context.testData.createPCR(project, {status: ProjectChangeRequestStatus.Draft});
+      const recordTypes = context.testData.createPCRRecordTypes();
+
+      const projectSuspensionType = PCRRecordTypeMetaValues.find(x => x.type === ProjectChangeRequestItemTypeEntity.AccountNameChange)!;
+
+      const recordType = recordTypes.find(x => x.type === projectSuspensionType.typeName);
+      context.testData.createPCRItem(projectChangeRequest, recordType, {status: ProjectChangeRequestItemStatus.Complete});
+
+      const dto = await context.runQuery(new GetPCRByIdQuery(projectChangeRequest.projectId, projectChangeRequest.id));
+      const item = dto.items[0] as PCRItemForAccountNameChangeDto;
+
+      item.accountName = "New Name Goes Here";
+      item.partnerId = otherPartner.Id;
+      await expect(context.runCommand(new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto))).rejects.toThrow(ValidationError);
+
+      item.accountName = "New Name Goes Here";
+      item.partnerId = projectPartner.Id;
+      await expect(context.runCommand(new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto))).resolves.toBe(true);
+    });
+
+    test("updates account name and partner", async () => {
+      const context = new TestContext();
+
+      const project = context.testData.createProject();
+      const partner = context.testData.createPartner(project);
+      context.testData.createCurrentUserAsProjectManager(project);
+      const projectChangeRequest = context.testData.createPCR(project, {status: ProjectChangeRequestStatus.Draft});
+      const recordTypes = context.testData.createPCRRecordTypes();
+
+      const accountNameChangeType = PCRRecordTypeMetaValues.find(x => x.type === ProjectChangeRequestItemTypeEntity.AccountNameChange)!;
+
+      const recordType = recordTypes.find(x => x.type === accountNameChangeType.typeName);
+      context.testData.createPCRItem(projectChangeRequest, recordType, {status: ProjectChangeRequestItemStatus.Complete});
+
+      const dto = await context.runQuery(new GetPCRByIdQuery(projectChangeRequest.projectId, projectChangeRequest.id));
+      const item = dto.items[0] as PCRItemForAccountNameChangeDto;
+
+      item.accountName = "New Name Goes Here";
+      item.partnerId = partner.Id;
+      await expect(context.runCommand(new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto))).resolves.toBe(true);
+
+      const updated = await context.runQuery(new GetPCRByIdQuery(projectChangeRequest.projectId, projectChangeRequest.id));
+      const updatedItem = updated.items[0] as PCRItemForAccountNameChangeDto;
+      await expect(updatedItem.accountName).toEqual("New Name Goes Here");
+      await expect(updatedItem.partnerId).toEqual(partner.Id);
+    })
+  });
+
   test("updates pcr fields if pm", async () => {
     const context = new TestContext();
 
     const project = context.testData.createProject();
     const pcr = context.testData.createPCR(project, { status: ProjectChangeRequestStatus.Draft });
-    context.testData.createPCRItem(pcr);
+    const recordTypes = context.testData.createPCRRecordTypes();
+    const projectTerminationType = PCRRecordTypeMetaValues.find(x => x.type === ProjectChangeRequestItemTypeEntity.ProjectTermination)!;
+    const recordType = recordTypes.find(x => x.type === projectTerminationType.typeName);
+
+    context.testData.createPCRItem(pcr, recordType);
 
     context.testData.createCurrentUserAsProjectManager(project);
 
@@ -569,7 +671,6 @@ describe("UpdatePCRCommand", () => {
     expect(pcr.comments).toBe(dto.comments);
     expect(pcr.reasoning).toBe(dto.reasoningComments);
     expect(pcr.reasoningStatus).toBe(dto.reasoningStatus);
-
   });
 
   test("if user is PM can update status from Draft to Submitted to MO ", async () => {
@@ -577,7 +678,12 @@ describe("UpdatePCRCommand", () => {
 
     const project = context.testData.createProject();
     const pcr = context.testData.createPCR(project, { status: ProjectChangeRequestStatus.Draft });
-    context.testData.createPCRItem(pcr);
+
+    const recordTypes = context.testData.createPCRRecordTypes();
+    const projectTerminationType = PCRRecordTypeMetaValues.find(x => x.type === ProjectChangeRequestItemTypeEntity.ProjectTermination)!;
+    const recordType = recordTypes.find(x => x.type === projectTerminationType.typeName);
+
+    context.testData.createPCRItem(pcr, recordType);
 
     context.testData.createCurrentUserAsProjectManager(project);
 
@@ -595,7 +701,12 @@ describe("UpdatePCRCommand", () => {
 
     const project = context.testData.createProject();
     const pcr = context.testData.createPCR(project, { status: ProjectChangeRequestStatus.QueriedByInnovateUK });
-    context.testData.createPCRItem(pcr);
+
+    const recordTypes = context.testData.createPCRRecordTypes();
+    const projectTerminationType = PCRRecordTypeMetaValues.find(x => x.type === ProjectChangeRequestItemTypeEntity.ProjectTermination)!;
+    const recordType = recordTypes.find(x => x.type === projectTerminationType.typeName);
+
+    context.testData.createPCRItem(pcr, recordType);
 
     context.testData.createCurrentUserAsProjectManager(project);
 

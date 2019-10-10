@@ -6,7 +6,6 @@ import { IRepositories } from "@framework/types";
 import { TestFileWrapper } from "./testData";
 import { PermissionGroupIdenfifier } from "@framework/types/permisionGroupIndentifier";
 import * as Entities from "@framework/entities";
-import { ProjectChangeRequestEntity } from "@framework/entities";
 
 class ProjectsTestRepository extends TestRepository<Repositories.ISalesforceProject> implements Repositories.IProjectRepository {
   getById(id: string) {
@@ -437,6 +436,8 @@ class PCRTestRepository extends TestRepository<Entities.ProjectChangeRequestEnti
       return {
         id: itemId,
         pcrId: headerId,
+        partnerId: "",
+        accountName: "",
         guidance: "This is some hardcoded guidance",
         statusName:"",
         projectEndDate: new Date(),
