@@ -66,7 +66,6 @@ describe("GetAllPCRsQuery", () => {
     expect(newPCR).toEqual({
       id,
       projectId: project.Id,
-      partnerId: partner.Id,
       status: ProjectChangeRequestStatus.Draft,
       reasoningStatus: ProjectChangeRequestItemStatus.ToDo,
       items: [{

@@ -27,7 +27,6 @@ export const getPcrItemForTimeExtension = (state: RootState, projectId: string, 
 export const getPcrStandardItem = (state: RootState, projectId: string, id: string, itemId: string): Pending<PCRStandardItemDto> => {
   return getPcrItem(projectId, id, itemId).getPending(state).chain(x => {
     switch (x.type) {
-      case ProjectChangeRequestItemTypeEntity.AccountNameChange:
       case ProjectChangeRequestItemTypeEntity.MultiplePartnerFinancialVirement:
       case ProjectChangeRequestItemTypeEntity.PartnerAddition:
       case ProjectChangeRequestItemTypeEntity.PartnerWithdrawal:

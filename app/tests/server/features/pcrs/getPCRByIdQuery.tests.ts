@@ -4,7 +4,12 @@ import { GetPCRByIdQuery } from "@server/features/pcrs/getPCRByIdQuery";
 import { DateTime } from "luxon";
 import { ProjectChangeRequestItemTypeEntity } from "@framework/entities";
 import { PCRRecordTypeMetaValues } from "@server/features/pcrs/getItemTypesQuery";
-import { PCRItemForProjectSuspensionDto, PCRItemForScopeChangeDto, PCRItemForTimeExtensionDto } from "@framework/dtos";
+import {
+  PCRItemForAccountNameChangeDto,
+  PCRItemForProjectSuspensionDto,
+  PCRItemForScopeChangeDto,
+  PCRItemForTimeExtensionDto
+} from "@framework/dtos";
 
 describe("GetPCRByIdQuery", () => {
   test("when id not found then exception is thrown", async () => {
@@ -146,11 +151,36 @@ describe("GetPCRByIdQuery", () => {
     expect(result.publicDescription).toBe(publicDescription);
   });
 
+  test("maps fields for account name change", async () => {
+    const context = new TestContext();
+
+    const accountNameChangeType = PCRRecordTypeMetaValues.find(x => x.type === ProjectChangeRequestItemTypeEntity.AccountNameChange)!;
+    const project = context.testData.createProject();
+    const partner = context.testData.createPartner(project);
+    const recordType = context.testData.createPCRRecordTypes().find(x => x.type === accountNameChangeType.typeName);
+
+    const pcr = context.testData.createPCR(project);
+
+    const accountName = "Projectus Partnerus The Bestus";
+
+    const item = context.testData.createPCRItem(pcr, recordType, {
+      accountName,
+      partnerId: partner.Id
+    });
+
+    const query = new GetPCRByIdQuery(pcr.projectId, pcr.id);
+    const result = await context.runQuery(query).then(x => x.items[0] as PCRItemForAccountNameChangeDto);
+
+    expect(result.id).toBe(item.id);
+    expect(result.accountName).toBe(accountName);
+    expect(result.partnerId).toBe(partner.Id);
+  });
+
   test("maps fields for project suspension", async () => {
     const context = new TestContext();
 
-    const scopeChangeType = PCRRecordTypeMetaValues.find(x => x.type === ProjectChangeRequestItemTypeEntity.ProjectSuspension)!;
-    const recordType = context.testData.createPCRRecordTypes().find(x => x.type === scopeChangeType.typeName);
+    const projectSuspensionType = PCRRecordTypeMetaValues.find(x => x.type === ProjectChangeRequestItemTypeEntity.ProjectSuspension)!;
+    const recordType = context.testData.createPCRRecordTypes().find(x => x.type === projectSuspensionType.typeName);
 
     const pcr = context.testData.createPCR();
 

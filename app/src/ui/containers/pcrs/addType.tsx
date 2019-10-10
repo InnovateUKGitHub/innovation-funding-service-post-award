@@ -11,10 +11,8 @@ import { PCRDtoValidator } from "@ui/validators/pcrDtoValidator";
 import {
   PCRDto,
   PCRItemDto,
-  PCRItemForScopeChangeDto,
-  PCRItemForTimeExtensionDto,
-  PCRStandardItemDto,
-  ProjectRole, TypedPcrItemDto
+  ProjectRole,
+  TypedPcrItemDto
 } from "@framework/dtos";
 
 export interface ProjectChangeRequestAddTypeParams {
@@ -67,7 +65,6 @@ class PCRAddTypeComponent extends ContainerBase<ProjectChangeRequestAddTypeParam
     };
 
     switch (itemType.type) {
-      case ProjectChangeRequestItemTypeEntity.AccountNameChange:
       case ProjectChangeRequestItemTypeEntity.MultiplePartnerFinancialVirement:
       case ProjectChangeRequestItemTypeEntity.PartnerAddition:
       case ProjectChangeRequestItemTypeEntity.PartnerWithdrawal:
@@ -76,6 +73,13 @@ class PCRAddTypeComponent extends ContainerBase<ProjectChangeRequestAddTypeParam
         return {
           ...baseFields,
           type: itemType.type
+        };
+      case ProjectChangeRequestItemTypeEntity.AccountNameChange:
+        return {
+          ...baseFields,
+          type: itemType.type,
+          partnerId: null,
+          accountName: null
         };
       case ProjectChangeRequestItemTypeEntity.TimeExtension:
         return {

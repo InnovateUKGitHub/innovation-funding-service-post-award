@@ -6,7 +6,7 @@ import {
 } from "@framework/entities";
 import {
   PCRDto,
-  PCRItemDto, PCRItemForProjectSuspensionDto,
+  PCRItemDto, PCRItemForAccountNameChangeDto, PCRItemForProjectSuspensionDto,
   PCRItemForScopeChangeDto,
   PCRItemForTimeExtensionDto,
   PCRItemTypeDto,
@@ -43,6 +43,7 @@ const mapItem = (pcr: ProjectChangeRequestItemEntity, itemType: PCRItemTypeDto) 
     case ProjectChangeRequestItemTypeEntity.ProjectSuspension:
       return mapItemForProjectSuspension(pcr, itemType.displayName, itemType.type);
     case ProjectChangeRequestItemTypeEntity.AccountNameChange:
+      return mapItemForAccountNameChange(pcr, itemType.displayName, itemType.type);
     case ProjectChangeRequestItemTypeEntity.MultiplePartnerFinancialVirement:
     case ProjectChangeRequestItemTypeEntity.PartnerAddition:
     case ProjectChangeRequestItemTypeEntity.PartnerWithdrawal:
@@ -84,5 +85,12 @@ const mapItemForProjectSuspension = (pcr: ProjectChangeRequestItemEntity, typeNa
   ...mapBaseItem(pcr, typeName),
   suspensionStartDate: pcr.suspensionStartDate,
   suspensionEndDate: pcr.suspensionEndDate,
+  type
+});
+
+const mapItemForAccountNameChange = (pcr: ProjectChangeRequestItemEntity, typeName: string, type: ProjectChangeRequestItemTypeEntity.AccountNameChange): PCRItemForAccountNameChangeDto => ({
+  ...mapBaseItem(pcr, typeName),
+  accountName: pcr.accountName,
+  partnerId: pcr.partnerId,
   type
 });

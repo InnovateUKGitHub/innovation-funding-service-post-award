@@ -1,11 +1,5 @@
 import { BadRequestError, CommandBase, ValidationError } from "../common";
-import {
-  PCRDto,
-  PCRItemForScopeChangeDto,
-  PCRItemForTimeExtensionDto,
-  PCRStandardItemDto,
-  ProjectRole, TypedPcrItemDto
-} from "@framework/dtos";
+import { PCRDto, ProjectRole, TypedPcrItemDto } from "@framework/dtos";
 import { PCRDtoValidator } from "@ui/validators/pcrDtoValidator";
 import { Authorisation, IContext } from "@framework/types";
 import { GetAllProjectRolesForUser } from "../projects";
@@ -17,6 +11,7 @@ import {
   ProjectChangeRequestItemTypeEntity,
   ProjectChangeRequestStatus
 } from "@framework/entities";
+import { GetAllForProjectQuery } from "@server/features/partners";
 
 export class UpdatePCRCommand extends CommandBase<boolean> {
   constructor(private projectId: string, private projectChangeRequestId: string, private pcr: PCRDto) {
@@ -50,10 +45,11 @@ export class UpdatePCRCommand extends CommandBase<boolean> {
     const itemTypes = await context.runQuery(new GetPCRItemTypesQuery());
 
     const entityToUpdate = await context.repositories.projectChangeRequests.getById(this.pcr.projectId, this.pcr.id);
+    const partners = await context.runQuery(new GetAllForProjectQuery(this.projectId));
 
     const originalDto = mapToPcrDto(entityToUpdate, itemTypes);
 
-    const validationResult = new PCRDtoValidator(this.pcr, projectRoles, originalDto, itemTypes, true);
+    const validationResult = new PCRDtoValidator(this.pcr, projectRoles, originalDto, itemTypes, true, partners);
 
     if (!validationResult.isValid) {
       throw new ValidationError(validationResult);
@@ -81,11 +77,13 @@ export class UpdatePCRCommand extends CommandBase<boolean> {
       // exclude new items
       .filter(x => !!x.originalItem)
       // get any updates
-      .map(x => this.getItemUpdates(x.originalItem!, x.item))
+      .map(x => {
+        const updates = this.getItemUpdates(x.originalItem!, x.item);
+        return updates ? { ...x.originalItem!, ...updates } : null;
+      })
       // filter those that need updating
-      .filter(x => x.hasChanged)
-      // get the new item
-      .map(x => x.result)
+      .filter(x => !!x)
+      .map<ProjectChangeRequestItemEntity>(x => x!)
       ;
 
     if (itemsToUpdate.length) {
@@ -98,7 +96,6 @@ export class UpdatePCRCommand extends CommandBase<boolean> {
         recordTypeId: itemTypes.find(t => t.type === x.item.type)!.recordTypeId,
         status: x.item.status,
         projectId: this.projectId,
-        partnerId: entityToUpdate.partnerId,
       }));
 
     if (itemsToInsert.length) {
@@ -108,34 +105,33 @@ export class UpdatePCRCommand extends CommandBase<boolean> {
     return true;
   }
 
-  private getItemUpdates(item: ProjectChangeRequestItemEntity, dto: (TypedPcrItemDto)): { result: ProjectChangeRequestItemEntity, hasChanged: boolean } {
-    let hasChanged = false;
-    const result = { ...item };
+  private getItemUpdates(item: ProjectChangeRequestItemEntity, dto: (TypedPcrItemDto)): Partial<ProjectChangeRequestItemEntity> | null {
 
-    if (result.status !== dto.status) {
-      result.status = dto.status;
-      hasChanged = true;
+    const init = item.status !== dto.status ? { status: dto.status } : null;
+
+    switch (dto.type) {
+      case ProjectChangeRequestItemTypeEntity.TimeExtension:
+        if (item.projectEndDate !== dto.projectEndDate) {
+          return { ...init, projectEndDate: dto.projectEndDate };
+        }
+        break;
+      case ProjectChangeRequestItemTypeEntity.ScopeChange:
+        if (item.projectSummary !== dto.projectSummary || item.publicDescription !== dto.publicDescription) {
+          return { ...init, projectSummary: dto.projectSummary, publicDescription: dto.publicDescription };
+        }
+        break;
+      case ProjectChangeRequestItemTypeEntity.ProjectSuspension:
+        if (item.suspensionStartDate !== dto.suspensionStartDate || item.suspensionEndDate !== dto.suspensionEndDate) {
+          return { ...init, suspensionStartDate: dto.suspensionStartDate, suspensionEndDate: dto.suspensionEndDate };
+        }
+        break;
+      case ProjectChangeRequestItemTypeEntity.AccountNameChange:
+        if (item.accountName !== dto.accountName || item.partnerId !== dto.partnerId) {
+          return { ...init, accountName: dto.accountName, partnerId: dto.partnerId };
+        }
+        break;
     }
 
-    if (dto.type === ProjectChangeRequestItemTypeEntity.TimeExtension) {
-      if (result.projectEndDate !== dto.projectEndDate) {
-        result.projectEndDate = dto.projectEndDate;
-        hasChanged = true;
-      }
-    } else if (dto.type === ProjectChangeRequestItemTypeEntity.ScopeChange) {
-      if (result.projectSummary !== dto.projectSummary || result.publicDescription !== dto.publicDescription) {
-        result.projectSummary = dto.projectSummary;
-        result.publicDescription = dto.publicDescription;
-        hasChanged = true;
-      }
-    } else if (dto.type === ProjectChangeRequestItemTypeEntity.ProjectSuspension) {
-      if (result.suspensionStartDate !== dto.suspensionStartDate || result.suspensionEndDate !== dto.suspensionEndDate) {
-        result.suspensionStartDate = dto.suspensionStartDate;
-        result.suspensionEndDate = dto.suspensionEndDate;
-        hasChanged = true;
-      }
-    }
-
-    return { hasChanged, result };
+    return init;
   }
 }
