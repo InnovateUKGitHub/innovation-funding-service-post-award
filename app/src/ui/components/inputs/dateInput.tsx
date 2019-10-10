@@ -123,7 +123,10 @@ export class FullDateInput extends BaseInput<FullDateInputProps, FullDateState> 
   private sendUpdate() {
     if (this.props.onChange) {
       const { day, month, year } = this.state;
-      const result = DateTime.fromFormat(`${day}/${month}/${year}`, "d/M/yyyy");
+
+      const result = DateTime
+        .fromFormat(`${day}/${month}/${year}`, "d/M/yyyy")
+        .set({hour: 12, minute: 0, second: 0, millisecond: 0});
 
       if (result.isValid) {
         this.props.onChange(result.toJSDate());
@@ -235,7 +238,9 @@ export class MonthYearInput extends BaseInput<MonthYearInputProps, MonthYearStat
       const { startOrEnd } = this.props;
 
       const date = DateTime.fromFormat(`${month}/${year}`, "M/yyyy");
-      const result = startOrEnd === "start" ? date.startOf("month").startOf("day") : date.endOf("month").startOf("day");
+
+      const result = (startOrEnd === "start" ? date.startOf("month") : date.endOf("month"))
+        .set({hour: 12, minute: 0, second: 0, millisecond: 0});
 
       if (result.isValid) {
         this.props.onChange(result.toJSDate());
