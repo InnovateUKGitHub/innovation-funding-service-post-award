@@ -35,7 +35,6 @@ export enum ProjectChangeRequestItemTypeEntity {
 
 // TODO Move to pcrDtos
 export type ProjectChangeRequestStandardItemTypes = (
-  ProjectChangeRequestItemTypeEntity.AccountNameChange|
   ProjectChangeRequestItemTypeEntity.PartnerAddition|
   ProjectChangeRequestItemTypeEntity.PartnerWithdrawal|
   ProjectChangeRequestItemTypeEntity.ProjectTermination|
@@ -45,7 +44,6 @@ export type ProjectChangeRequestStandardItemTypes = (
 
 export interface ProjectChangeRequestForCreateEntity {
   projectId: string;
-  partnerId: string;
   status: ProjectChangeRequestStatus;
   reasoningStatus: ProjectChangeRequestItemStatus;
   items: ProjectChangeRequestItemForCreateEntity[];
@@ -67,7 +65,6 @@ export interface ProjectChangeRequestEntity extends ProjectChangeRequestForCreat
 export interface ProjectChangeRequestItemForCreateEntity {
   recordTypeId: string;
   status: ProjectChangeRequestItemStatus;
-  partnerId: string;
   projectId: string;
 }
 
@@ -76,8 +73,10 @@ export interface ProjectChangeRequestItemEntity extends ProjectChangeRequestItem
   statusName: string;
   guidance: string;
   pcrId: string;
+  partnerId: string | null;
   projectEndDate: Date | null;
   publicDescription: string | null;
+  accountName: string | null;
   projectSummary: string | null;
   suspensionStartDate: Date | null;
   suspensionEndDate: Date | null;
