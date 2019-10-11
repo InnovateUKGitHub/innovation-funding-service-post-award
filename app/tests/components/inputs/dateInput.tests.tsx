@@ -120,7 +120,7 @@ describe("MonthYearInput", () => {
 
     await new Promise(resolve => setTimeout(() => resolve(), 500));
 
-    expect(onChangeMock).toBeCalledWith(new Date("2019/11/01"));
+    expect(onChangeMock).toBeCalledWith(new Date("2019-11-01T12:00:00"));
     done();
   });
 
@@ -137,7 +137,7 @@ describe("MonthYearInput", () => {
 
     await new Promise(resolve => setTimeout(() => resolve(), 500));
 
-    expect(onChangeMock).toBeCalledWith(new Date("2019/11/30"));
+    expect(onChangeMock).toBeCalledWith(new Date("2019-11-30T12:00:00"));
     done();
   });
 });
