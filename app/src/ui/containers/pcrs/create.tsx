@@ -5,9 +5,8 @@ import * as ACC from "../../components";
 import * as Dtos from "@framework/dtos";
 import { Pending } from "@shared/pending";
 import { IEditorStore, StoresConsumer } from "@ui/redux";
-import { ProjectChangeRequestItemStatus } from "@framework/entities";
+import { ProjectChangeRequestItemStatus, ProjectChangeRequestItemTypeEntity } from "@framework/entities";
 import { PCRsDashboardRoute } from "./dashboard";
-import { PCRDto, PCRStandardItemDto } from "@framework/dtos";
 import { ProjectChangeRequestPrepareRoute } from "@ui/containers";
 import { ProjectChangeRequestDtoValidatorForCreate } from "@ui/validators/projectChangeRequestDtoValidatorForCreate";
 
@@ -19,20 +18,21 @@ interface Data {
   project: Pending<Dtos.ProjectDto>;
   itemTypes: Pending<Dtos.PCRItemTypeDto[]>;
   editor: Pending<IEditorStore<Dtos.PCRDto, ProjectChangeRequestDtoValidatorForCreate>>;
+  editableItemTypes: Pending<ProjectChangeRequestItemTypeEntity[]>;
 }
 
 interface Callbacks {
-  onChange: (saving: boolean, dto: PCRDto) => void;
+  onChange: (saving: boolean, dto: Dtos.PCRDto) => void;
 }
 
 class PCRCreateComponent extends ContainerBase<CreateProjectChangeRequestParams, Data, Callbacks> {
 
   render() {
-    const combined = Pending.combine({ project: this.props.project, pcr: this.props.editor, itemTypes: this.props.itemTypes });
-    return <ACC.PageLoader pending={combined} render={d => this.renderContents(d.project, d.pcr, d.itemTypes)} />;
+    const combined = Pending.combine({ project: this.props.project, pcr: this.props.editor, itemTypes: this.props.itemTypes, editableItemTypes: this.props.editableItemTypes });
+    return <ACC.PageLoader pending={combined} render={d => this.renderContents(d.project, d.pcr, d.itemTypes, d.editableItemTypes)} />;
   }
 
-  private renderContents(project: Dtos.ProjectDto, editor: IEditorStore<Dtos.PCRDto, ProjectChangeRequestDtoValidatorForCreate>, itemTypes: Dtos.PCRItemTypeDto[]) {
+  private renderContents(project: Dtos.ProjectDto, editor: IEditorStore<Dtos.PCRDto, ProjectChangeRequestDtoValidatorForCreate>, itemTypes: Dtos.PCRItemTypeDto[], editableItemTypes: ProjectChangeRequestItemTypeEntity[]) {
     return (
       <ACC.Page
         backLink={<ACC.BackLink route={PCRsDashboardRoute.getLink({ projectId: this.props.projectId })}>Back to project change requests</ACC.BackLink>}
@@ -42,24 +42,24 @@ class PCRCreateComponent extends ContainerBase<CreateProjectChangeRequestParams,
         error={editor.error}
       >
         <ACC.Section qa="pcr-create">
-          {this.renderForm(editor, itemTypes)}
+          {this.renderForm(editor, itemTypes, editableItemTypes)}
         </ACC.Section>
       </ACC.Page>
     );
   }
 
-  private createNewOption(itemType: Dtos.PCRItemTypeDto) {
+  private createNewOption(itemType: Dtos.PCRItemTypeDto, editableItemTypes: ProjectChangeRequestItemTypeEntity[]) {
     return {
       id: "",
       guidance: "",
       type: itemType.type,
       typeName: itemType.displayName,
-      status: ProjectChangeRequestItemStatus.ToDo,
+      status: editableItemTypes.indexOf(itemType.type) > -1 ? ProjectChangeRequestItemStatus.ToDo : ProjectChangeRequestItemStatus.Complete,
       statusName: ""
-    } as PCRStandardItemDto;
+    } as Dtos.PCRStandardItemDto;
   }
 
-  private renderForm(pcrEditor: IEditorStore<Dtos.PCRDto, ProjectChangeRequestDtoValidatorForCreate>, itemTypes: Dtos.PCRItemTypeDto[]): React.ReactNode {
+  private renderForm(pcrEditor: IEditorStore<Dtos.PCRDto, ProjectChangeRequestDtoValidatorForCreate>, itemTypes: Dtos.PCRItemTypeDto[], editableItemTypes: ProjectChangeRequestItemTypeEntity[]): React.ReactNode {
     const PCRForm = ACC.TypedForm<Dtos.PCRDto>();
     const options = itemTypes.map<ACC.SelectOption>(x => ({ id: x.type.toString(), value: x.displayName }));
     const selected = options.filter(x => pcrEditor.data.items.some(y => y.type.toString() === x.id));
@@ -77,7 +77,7 @@ class PCRCreateComponent extends ContainerBase<CreateProjectChangeRequestParams,
               update={(model, selectedValue) => {
                 model.items = itemTypes
                   .filter(x => (selectedValue || []).some(y => y.id === x.type.toString()))
-                  .map(x => model.items.find(y => x.type === y.type) || this.createNewOption(x));
+                  .map(x => model.items.find(y => x.type === y.type) || this.createNewOption(x, editableItemTypes));
               }}
             />
           </PCRForm.Fieldset>
@@ -98,6 +98,7 @@ const PCRCreateContainer = (props: CreateProjectChangeRequestParams & BaseProps)
           itemTypes={stores.projectChangeRequests.getAllPcrTypes()}
           editor={stores.projectChangeRequests.getPcrCreateEditor(props.projectId)}
           onChange={(saving, dto) => stores.projectChangeRequests.updatePcrEditor(saving, props.projectId, dto, undefined, (created) => stores.navigation.navigateTo(ProjectChangeRequestPrepareRoute.getLink({ projectId: dto.projectId, pcrId: created.id })))}
+          editableItemTypes={stores.projectChangeRequests.getEditableItemTypes(props.projectId, null)}
           {...props}
         />
       )

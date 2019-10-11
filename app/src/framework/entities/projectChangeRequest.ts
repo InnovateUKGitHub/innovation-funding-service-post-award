@@ -37,7 +37,6 @@ export enum ProjectChangeRequestItemTypeEntity {
 export type ProjectChangeRequestStandardItemTypes = (
   ProjectChangeRequestItemTypeEntity.PartnerAddition|
   ProjectChangeRequestItemTypeEntity.PartnerWithdrawal|
-  ProjectChangeRequestItemTypeEntity.ProjectTermination|
   ProjectChangeRequestItemTypeEntity.MultiplePartnerFinancialVirement|
   ProjectChangeRequestItemTypeEntity.SinglePartnerFinancialVirement
   );

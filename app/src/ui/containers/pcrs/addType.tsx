@@ -8,12 +8,6 @@ import { IEditorStore, StoresConsumer } from "@ui/redux";
 import { ProjectChangeRequestItemStatus, ProjectChangeRequestItemTypeEntity } from "@framework/entities";
 import { ProjectChangeRequestPrepareRoute } from "@ui/containers";
 import { PCRDtoValidator } from "@ui/validators/pcrDtoValidator";
-import {
-  PCRDto,
-  PCRItemDto,
-  ProjectRole,
-  TypedPcrItemDto
-} from "@framework/dtos";
 
 export interface ProjectChangeRequestAddTypeParams {
   projectId: string;
@@ -38,7 +32,7 @@ class PCRAddTypeComponent extends ContainerBase<ProjectChangeRequestAddTypeParam
     return <ACC.PageLoader pending={combined} render={d => this.renderContents(d.project, d.editor, d.projectChangeRequest, d.itemTypes)} />;
   }
 
-  private renderContents(project: Dtos.ProjectDto, editor: IEditorStore<Dtos.PCRDto, PCRDtoValidator>, original: PCRDto, itemTypes: Dtos.PCRItemTypeDto[]) {
+  private renderContents(project: Dtos.ProjectDto, editor: IEditorStore<Dtos.PCRDto, PCRDtoValidator>, original: Dtos.PCRDto, itemTypes: Dtos.PCRItemTypeDto[]) {
     return (
       <ACC.Page
         backLink={<ACC.BackLink route={ProjectChangeRequestPrepareRoute.getLink({ projectId: this.props.projectId, pcrId: this.props.projectChangeRequestId })}>Back to project change requests</ACC.BackLink>}
@@ -54,8 +48,8 @@ class PCRAddTypeComponent extends ContainerBase<ProjectChangeRequestAddTypeParam
     );
   }
 
-  private createNewOption(itemType: Dtos.PCRItemTypeDto): (TypedPcrItemDto) {
-    const baseFields: PCRItemDto = {
+  private createNewOption(itemType: Dtos.PCRItemTypeDto): (Dtos.TypedPcrItemDto) {
+    const baseFields: Dtos.PCRItemDto = {
       id: "",
       guidance: "",
       type: ProjectChangeRequestItemTypeEntity.Unknown,
@@ -68,7 +62,6 @@ class PCRAddTypeComponent extends ContainerBase<ProjectChangeRequestAddTypeParam
       case ProjectChangeRequestItemTypeEntity.MultiplePartnerFinancialVirement:
       case ProjectChangeRequestItemTypeEntity.PartnerAddition:
       case ProjectChangeRequestItemTypeEntity.PartnerWithdrawal:
-      case ProjectChangeRequestItemTypeEntity.ProjectTermination:
       case ProjectChangeRequestItemTypeEntity.SinglePartnerFinancialVirement:
         return {
           ...baseFields,
@@ -101,12 +94,18 @@ class PCRAddTypeComponent extends ContainerBase<ProjectChangeRequestAddTypeParam
           suspensionStartDate: null,
           suspensionEndDate: null
         };
+      case ProjectChangeRequestItemTypeEntity.ProjectTermination:
+        return {
+          ...baseFields,
+          type: itemType.type,
+          status: ProjectChangeRequestItemStatus.Complete,
+        };
       default:
         throw new Error("Item type not handled");
     }
   }
 
-  private renderForm(pcrEditor: IEditorStore<Dtos.PCRDto, PCRDtoValidator>, original: PCRDto, itemTypes: Dtos.PCRItemTypeDto[]): React.ReactNode {
+  private renderForm(pcrEditor: IEditorStore<Dtos.PCRDto, PCRDtoValidator>, original: Dtos.PCRDto, itemTypes: Dtos.PCRItemTypeDto[]): React.ReactNode {
     const PCRForm = ACC.TypedForm<Dtos.PCRDto>();
     const preselectedItems: ProjectChangeRequestItemTypeEntity[] = original.items.map(x => x.type);
     const options = itemTypes.map<ACC.SelectOption>(x => ({ id: x.type.toString(), value: x.displayName, disabled: preselectedItems.indexOf(x.type) >= 0 }));
@@ -164,5 +163,5 @@ export const ProjectChangeRequestAddTypeRoute = defineRoute({
     htmlTitle: "Add types",
     displayTitle: "Add types"
   }),
-  accessControl: (auth, { projectId }, config) => config.features.pcrsEnabled && auth.forProject(projectId).hasRole(ProjectRole.ProjectManager)
+  accessControl: (auth, { projectId }, config) => config.features.pcrsEnabled && auth.forProject(projectId).hasRole(Dtos.ProjectRole.ProjectManager)
 });

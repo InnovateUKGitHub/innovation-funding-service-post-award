@@ -5,13 +5,19 @@ import {
   PartnerDto,
   PCRDto,
   PCRItemDto, PCRItemForAccountNameChangeDto, PCRItemForProjectSuspensionDto,
+  PCRItemForProjectTerminationDto,
   PCRItemForScopeChangeDto,
   PCRItemForTimeExtensionDto,
   PCRItemTypeDto,
   PCRStandardItemDto,
-  ProjectRole, TypedPcrItemDto
+  ProjectRole,
+  TypedPcrItemDto
 } from "@framework/dtos";
-import { ProjectChangeRequestItemStatus, ProjectChangeRequestItemTypeEntity, ProjectChangeRequestStatus } from "@framework/entities";
+import {
+  ProjectChangeRequestItemStatus,
+  ProjectChangeRequestItemTypeEntity,
+  ProjectChangeRequestStatus
+} from "@framework/entities";
 
 export class PCRDtoValidator extends Results<PCRDto> {
 
@@ -120,12 +126,13 @@ export class PCRDtoValidator extends Results<PCRDto> {
         return new PCRScopeChangeItemDtoValidator(item, canEdit, this.role, this.original.items.find(x => x.id === item.id) as PCRItemForScopeChangeDto, this.model.status, this.recordTypes, this.showValidationErrors);
       case ProjectChangeRequestItemTypeEntity.ProjectSuspension:
         return new PCRProjectSuspensionItemDtoValidator(item, canEdit, this.role, this.original.items.find(x => x.id === item.id) as PCRItemForProjectSuspensionDto, this.model.status, this.recordTypes, this.showValidationErrors);
+      case ProjectChangeRequestItemTypeEntity.ProjectTermination:
+        return new PCRProjectTerminationItemDtoValidator(item, canEdit, this.role, this.original.items.find(x => x.id === item.id) as PCRItemForProjectTerminationDto, this.model.status, this.recordTypes, this.showValidationErrors);
       case ProjectChangeRequestItemTypeEntity.AccountNameChange:
         return new PCRAccountNameChangeItemDtoValidator(item, canEdit, this.role, this.original.items.find(x => x.id === item.id) as PCRItemForAccountNameChangeDto, this.model.status, this.recordTypes, this.showValidationErrors, this.partners);
       case ProjectChangeRequestItemTypeEntity.MultiplePartnerFinancialVirement:
       case ProjectChangeRequestItemTypeEntity.PartnerAddition:
       case ProjectChangeRequestItemTypeEntity.PartnerWithdrawal:
-      case ProjectChangeRequestItemTypeEntity.ProjectTermination:
       case ProjectChangeRequestItemTypeEntity.SinglePartnerFinancialVirement:
         return new PCRStandardItemDtoValidator(item, canEdit, this.role, this.original.items.find(x => x.id === item.id) as PCRStandardItemDto, this.model.status, this.recordTypes, this.showValidationErrors);
       default:
@@ -220,6 +227,10 @@ export class PCRTimeExtensionItemDtoValidator extends PCRBaseItemDtoValidator<PC
   }
 
   projectEndDate = this.validateEndDate();
+}
+
+export class PCRProjectTerminationItemDtoValidator extends PCRBaseItemDtoValidator<PCRItemForProjectTerminationDto> {
+
 }
 
 export class PCRProjectSuspensionItemDtoValidator extends PCRBaseItemDtoValidator<PCRItemForProjectSuspensionDto> {
