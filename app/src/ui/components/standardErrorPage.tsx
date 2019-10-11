@@ -1,15 +1,18 @@
 import React from "react";
-import * as ACC from "./index";
+import { Page } from "./layout/page";
+import { Title } from "./layout/title";
+import { Section } from "./layout/section";
+import { SimpleString } from "./renderers/simpleString";
 
 export const StandardErrorPage = () => (
-  <ACC.Page
-    pageTitle={<ACC.Title title="Something has gone wrong at our end"/>}
+  <Page
+    pageTitle={<Title title="Something has gone wrong at our end"/>}
     backLink={null}
   >
-    <ACC.Section>
-      <ACC.Renderers.SimpleString>
+    <Section>
+      <SimpleString>
         You can either go back to the page you were previously on or go back to your <a href="/projects/dashboard">dashboard</a>.
-      </ACC.Renderers.SimpleString>
-    </ACC.Section>
-  </ACC.Page>
+      </SimpleString>
+    </Section>
+  </Page>
 );

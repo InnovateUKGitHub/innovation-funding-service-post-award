@@ -47,7 +47,7 @@ class ConnectWrapper<TParams, TData, TCallbacks> {
     private mapStateToProps(state: RootState, routes: IRoutes): TData & TParams & BaseProps {
         const matched = matchRoute(state.router.route);
         const auth = new Authorisation(state.user.roleInfo);
-        const params = (matched.getParams && matched.getParams(state.router.route!) || {}) as TParams;
+        const params = (matched && matched.getParams && matched.getParams(state.router.route!) || {}) as TParams;
         const data = this.withData(state, params, auth);
         const messages = state.messages.map(x => x.message);
         const route = state.router.route!;

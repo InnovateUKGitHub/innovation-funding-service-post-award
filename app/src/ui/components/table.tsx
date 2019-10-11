@@ -5,11 +5,12 @@ import { Email } from "./renderers/email";
 import { Currency } from "./renderers/currency";
 import classNames from "classnames";
 import { Percentage } from "./renderers/percentage";
-import { Link } from ".";
+import { Link } from "./links";
 import * as colour from "../styles/colours";
 import { Results } from "../validation/results";
 import { ILinkInfo } from "@framework/types/ILinkInfo";
-import { AccessibilityText } from "./renderers";
+import { AccessibilityText } from "./renderers/accessibilityText";
+
 type dividerTypes = "normal" | "bold";
 type columnMode = "cell" | "header" | "footer" | "col";
 interface InternalColumnProps<T> {

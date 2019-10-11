@@ -1,8 +1,9 @@
 import React from "react";
-import { Link, TypedTable } from "..";
 import { ClaimDto, PartnerDto, ProjectDto } from "@framework/types";
 import { ILinkInfo } from "@framework/types/ILinkInfo";
 import { CostsSummaryForPeriodValidator } from "@ui/validators";
+import { TypedTable } from "../table";
+import { Link } from "../links";
 
 interface Props {
   project: ProjectDto;

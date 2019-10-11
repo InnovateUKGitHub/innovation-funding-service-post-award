@@ -1,5 +1,5 @@
 import React from "react";
-import { ClaimWindow } from "../components/claims";
+import { ClaimWindow } from "../components/claims/claimWindow";
 import { DateTime } from "luxon";
 
 const beforePeriodEndDate = DateTime.local().plus({months:1}).set({ day: 1 }).minus({days:1});

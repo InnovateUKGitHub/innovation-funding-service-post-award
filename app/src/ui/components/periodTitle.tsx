@@ -1,5 +1,5 @@
 import React from "react";
-import * as Renderers from "./renderers";
+import { ShortDateRange } from "./renderers/date";
 
 interface Props {
   periodId: number;
@@ -10,7 +10,7 @@ interface Props {
 export const PeriodTitle: React.SFC<Props> = (props) => {
   return (
     <React.Fragment>
-      Period {props.periodId}: <Renderers.ShortDateRange start={props.periodStartDate} end={props.periodEndDate} />
+      Period {props.periodId}: <ShortDateRange start={props.periodStartDate} end={props.periodEndDate} />
     </React.Fragment>
   );
 };

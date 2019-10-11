@@ -1,5 +1,5 @@
 import React from "react";
-import { Title } from "../components/layout";
+import { Title } from "../components/layout/title";
 
 export const titleGuide: IGuide = {
     name: "Title",

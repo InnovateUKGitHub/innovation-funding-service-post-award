@@ -1,5 +1,6 @@
 import React from "react";
-import * as Renderers from "@ui/components/renderers";
+import { SimpleString } from "./renderers/simpleString";
+import { ShortDateTime } from "./renderers/date";
 
 export interface LogItem {
   newStatus: string;
@@ -15,7 +16,7 @@ export interface Props {
 export class Logs extends React.Component<Props> {
   render() {
     if(!this.props.data || !this.props.data.length) {
-      return <Renderers.SimpleString>There are no changes.</Renderers.SimpleString>;
+      return <SimpleString>There are no changes.</SimpleString>;
     }
 
     return (
@@ -44,7 +45,7 @@ export class Logs extends React.Component<Props> {
     return (
       <React.Fragment key={index}>
         <tr className="govuk-table__row" key={`${index}_a`}>
-          <td className="govuk-table__cell" key="0"><Renderers.ShortDateTime value={item.createdDate} /></td>
+          <td className="govuk-table__cell" key="0"><ShortDateTime value={item.createdDate} /></td>
           <td className="govuk-table__cell" key="1">{item.newStatus}</td>
         </tr>
         {this.renderCommentsRow(item, index)}

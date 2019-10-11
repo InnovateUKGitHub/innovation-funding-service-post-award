@@ -2,7 +2,8 @@ import React from "react";
 import { Link, Renderers, TypedTable } from "..";
 import { ClaimDto, ILinkInfo, PartnerDto, ProjectDto } from "@framework/types";
 import { CostsSummaryForPeriodValidator } from "@ui/validators";
-import { AccessibilityText } from "../renderers";
+import { AccessibilityText } from "../renderers/accessibilityText";
+import { Currency } from "../renderers/currency";
 
 interface Props {
   project: ProjectDto;
@@ -91,7 +92,7 @@ const renderFooters = (project: ProjectDto, partner: PartnerDto, claimsCosts: Co
       <tr key="2" className="govuk-table__row">
         <td className="govuk-table__cell govuk-table__cell--numeric govuk-!-font-weight-bold" colSpan={3}>Costs to be paid this period</td>
         <td className="govuk-table__cell govuk-table__cell--numeric">
-          <Renderers.Currency value={claimsCosts.reduce((total, item) => total + item.costsClaimedThisPeriod, 0) * partner.awardRate! / 100} />
+          <Currency value={claimsCosts.reduce((total, item) => total + item.costsClaimedThisPeriod, 0) * partner.awardRate! / 100} />
         </td>
         <td className="govuk-table__cell"><AccessibilityText>No data</AccessibilityText></td>
       </tr>

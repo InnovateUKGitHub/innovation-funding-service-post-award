@@ -1,9 +1,14 @@
 import React from "react";
 import classNames from "classnames";
-import * as ACC from "@ui/components";
 import { EditorStatus, IEditorStore } from "@ui/redux";
 import { ForecastDetailsDtosValidator, ForecastDetailsDtoValidator } from "@ui/validators";
 import { ForecastData } from "@ui/containers/claims/forecasts/common";
+import { TypedTable } from "../table";
+import { CondensedDateRange } from "../renderers/date";
+import { Currency } from "../renderers/currency";
+import { NumberInput } from "../inputs/numberInput";
+import { AccessibilityText } from "../renderers/accessibilityText";
+import { Percentage } from "../renderers/percentage";
 
 interface TableRow {
   categoryId: string;
@@ -52,7 +57,7 @@ export class ForecastTable extends React.Component<Props> {
     // if there is no claim then we must be in period 1 ie, claim period 0
     const periodId = !!data.claim ? Math.min(data.project.periodId, data.claim.periodId) : 0;
     const parsed = this.parseClaimData(data, editor, periodId, data.project.totalPeriods);
-    const Table = ACC.TypedTable<typeof parsed[0]>();
+    const Table = TypedTable<typeof parsed[0]>();
     const intervals = this.calculateClaimPeriods(data);
     const claims = Object.keys(parsed[0].claims);
     const forecasts = Object.keys(parsed[0].forecasts);
@@ -176,7 +181,7 @@ export class ForecastTable extends React.Component<Props> {
   }
 
   private renderDateRange(details: ClaimDetailsSummaryDto | ForecastDetailsDTO) {
-    return ACC.Renderers.CondensedDateRange({ start: details.periodStart, end: details.periodEnd });
+    return <CondensedDateRange start={details.periodStart} end={details.periodEnd}/>;
   }
 
   private renderForecastCell(forecastRow: TableRow, periodId: number, index: Index, data: ForecastData, editor: IEditorStore<ForecastDetailsDTO[], ForecastDetailsDtosValidator>|undefined, isSubmitting: boolean) {
@@ -186,12 +191,12 @@ export class ForecastTable extends React.Component<Props> {
     const error = validator && validator.value;
 
     if ((costCategory && costCategory.isCalculated) || !editor || periodId < data.project.periodId || (periodId === data.project.periodId && !isSubmitting)) {
-      return <ACC.Renderers.Currency value={value} />;
+      return <Currency value={value} />;
     }
 
     return (
       <span>
-        <ACC.Inputs.NumberInput
+        <NumberInput
           id={error && !error.isValid ? error.key : ""}
           name={`value_${periodId}_${forecastRow.categoryId}`}
           value={value}
@@ -236,7 +241,7 @@ export class ForecastTable extends React.Component<Props> {
     return [(
       <tr key="cHeader1" className="govuk-table__row govuk-body-s">
         <th className="govuk-table__header govuk-table__header--numeric sticky-col sticky-col-left-1">
-          <ACC.Renderers.AccessibilityText>Cost categories</ACC.Renderers.AccessibilityText>
+          <AccessibilityText>Cost categories</AccessibilityText>
         </th>
         {previous > 0 ? <th className="govuk-table__header govuk-table__header--numeric" colSpan={previous}>Costs claimed</th> : null}
         {claimPeriod > 0 ? <th className="govuk-table__header govuk-table__header--numeric">Costs you are claiming</th> : null}
@@ -251,13 +256,13 @@ export class ForecastTable extends React.Component<Props> {
         <th className="govuk-table__header sticky-col sticky-col-left-1">Period</th>
         {periods.map((p, i) => <th key={i} className="govuk-table__header" style={{ textAlign: "right" }}>{p}</th>)}
         <th className="govuk-table__header sticky-col sticky-col-right-3">
-          <ACC.Renderers.AccessibilityText>No data</ACC.Renderers.AccessibilityText>
+          <AccessibilityText>No data</AccessibilityText>
         </th>
         <th className="govuk-table__header sticky-col sticky-col-right-2">
-          <ACC.Renderers.AccessibilityText>No data</ACC.Renderers.AccessibilityText>
+          <AccessibilityText>No data</AccessibilityText>
         </th>
         <th className="govuk-table__header sticky-col sticky-col-right-1">
-          <ACC.Renderers.AccessibilityText>No data</ACC.Renderers.AccessibilityText>
+          <AccessibilityText>No data</AccessibilityText>
         </th>
       </tr>
     )];
@@ -282,7 +287,7 @@ export class ForecastTable extends React.Component<Props> {
     cells.push(this.renderTableFooterCell(golTotal, totals.length + 2, "sticky-col sticky-col-right-2"));
     cells.push((
       <td key="total_diff" className="govuk-table__cell govuk-table__cell--numeric acc-table__cell-top-border govuk-!-font-weight-regular sticky-col sticky-col-right-1">
-        <ACC.Renderers.Percentage value={this.calculateDifference(golTotal, costTotal)} />
+        <Percentage value={this.calculateDifference(golTotal, costTotal)} />
       </td>
     ));
 
@@ -291,7 +296,7 @@ export class ForecastTable extends React.Component<Props> {
 
   private renderTableFooterCell = (total: number, key: number, className?: string) => (
     <td key={key} className={`govuk-table__cell govuk-table__cell--numeric acc-table__cell-top-border govuk-!-font-weight-regular ${className}`}>
-      <ACC.Renderers.Currency value={total} />
+      <Currency value={total} />
     </td>
   )
 }
