@@ -140,7 +140,6 @@ export class ProjectChangeRequestRepository extends SalesforceRepositoryBase<ISa
     // Insert header
     const id = await super.insertItem({
       RecordTypeId: headerRecordTypeId,
-      Acc_Guidance__c: "Please provide documents to support your request", // TODO remove this when populated by SF
       Acc_MarkedasComplete__c: this.mapItemStatus(projectChangeRequest.reasoningStatus),
       Acc_Status__c: this.mapStatus(projectChangeRequest.status),
       Acc_Project__c: projectChangeRequest.projectId,
@@ -154,7 +153,6 @@ export class ProjectChangeRequestRepository extends SalesforceRepositoryBase<ISa
     await super.insertAll(items.map(x => ({
       Acc_RequestHeader__c: headerId,
       RecordTypeId: x.recordTypeId,
-      Acc_Guidance__c: "Please provide documents to support your request", // TODO remove this when populated by SF
       Acc_MarkedasComplete__c: this.mapItemStatus(x.status),
       Acc_Project__c: x.projectId,
     })));
