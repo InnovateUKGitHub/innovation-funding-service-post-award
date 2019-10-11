@@ -5,7 +5,7 @@ import * as ACC from "@ui/components";
 import * as Dtos from "@framework/dtos";
 import { Pending } from "@shared/pending";
 import { IEditorStore, StoresConsumer } from "@ui/redux";
-import { ProjectChangeRequestItemStatus, ProjectChangeRequestItemTypeEntity } from "@framework/entities";
+import { ProjectChangeRequestItemTypeEntity } from "@framework/entities";
 import { ProjectChangeRequestPrepareRoute } from "@ui/containers";
 import { PCRDtoValidator } from "@ui/validators/pcrDtoValidator";
 
@@ -23,6 +23,7 @@ interface Data {
 
 interface Callbacks {
   onChange: (saving: boolean, dto: Dtos.PCRDto) => void;
+  createNewChangeRequestItem: (itemType: Dtos.PCRItemTypeDto) => (Dtos.TypedPcrItemDto);
 }
 
 class PCRAddTypeComponent extends ContainerBase<ProjectChangeRequestAddTypeParams, Data, Callbacks> {
@@ -48,63 +49,6 @@ class PCRAddTypeComponent extends ContainerBase<ProjectChangeRequestAddTypeParam
     );
   }
 
-  private createNewOption(itemType: Dtos.PCRItemTypeDto): (Dtos.TypedPcrItemDto) {
-    const baseFields: Dtos.PCRItemDto = {
-      id: "",
-      guidance: "",
-      type: ProjectChangeRequestItemTypeEntity.Unknown,
-      typeName: itemType.displayName,
-      status: ProjectChangeRequestItemStatus.ToDo,
-      statusName: "",
-    };
-
-    switch (itemType.type) {
-      case ProjectChangeRequestItemTypeEntity.MultiplePartnerFinancialVirement:
-      case ProjectChangeRequestItemTypeEntity.PartnerAddition:
-      case ProjectChangeRequestItemTypeEntity.PartnerWithdrawal:
-      case ProjectChangeRequestItemTypeEntity.SinglePartnerFinancialVirement:
-        return {
-          ...baseFields,
-          type: itemType.type
-        };
-      case ProjectChangeRequestItemTypeEntity.AccountNameChange:
-        return {
-          ...baseFields,
-          type: itemType.type,
-          partnerId: null,
-          accountName: null
-        };
-      case ProjectChangeRequestItemTypeEntity.TimeExtension:
-        return {
-          ...baseFields,
-          type: itemType.type,
-          projectEndDate: null
-        };
-      case ProjectChangeRequestItemTypeEntity.ScopeChange:
-        return {
-          ...baseFields,
-          type: itemType.type,
-          publicDescription: "",
-          projectSummary: ""
-        };
-      case ProjectChangeRequestItemTypeEntity.ProjectSuspension:
-        return {
-          ...baseFields,
-          type: itemType.type,
-          suspensionStartDate: null,
-          suspensionEndDate: null
-        };
-      case ProjectChangeRequestItemTypeEntity.ProjectTermination:
-        return {
-          ...baseFields,
-          type: itemType.type,
-          status: ProjectChangeRequestItemStatus.Complete,
-        };
-      default:
-        throw new Error("Item type not handled");
-    }
-  }
-
   private renderForm(pcrEditor: IEditorStore<Dtos.PCRDto, PCRDtoValidator>, original: Dtos.PCRDto, itemTypes: Dtos.PCRItemTypeDto[]): React.ReactNode {
     const PCRForm = ACC.TypedForm<Dtos.PCRDto>();
     const preselectedItems: ProjectChangeRequestItemTypeEntity[] = original.items.map(x => x.type);
@@ -124,7 +68,7 @@ class PCRAddTypeComponent extends ContainerBase<ProjectChangeRequestAddTypeParam
               update={(model, selectedValue) => {
                 model.items = itemTypes
                   .filter(x => (selectedValue || []).some(y => y.id === x.type.toString()))
-                  .map(x => model.items.find(y => x.type === y.type) || this.createNewOption(x));
+                  .map(x => model.items.find(y => x.type === y.type) || this.props.createNewChangeRequestItem(x));
               }}
             />
           </PCRForm.Fieldset>
@@ -145,6 +89,7 @@ const PCRAddTypeContainer = (props: ProjectChangeRequestAddTypeParams & BaseProp
         projectChangeRequest={stores.projectChangeRequests.getById(props.projectId, props.projectChangeRequestId)}
         editor={stores.projectChangeRequests.getPcrUpdateEditor(props.projectId, props.projectChangeRequestId)}
         onChange={(saving, dto) => stores.projectChangeRequests.updatePcrEditor(saving, props.projectId, dto, undefined, () => stores.navigation.navigateTo(ProjectChangeRequestPrepareRoute.getLink({ projectId: props.projectId, pcrId: props.projectChangeRequestId })))}
+        createNewChangeRequestItem={(itemType: Dtos.PCRItemTypeDto) => stores.projectChangeRequests.createNewChangeRequestItem(itemType)}
         {...props}
       />
     )}

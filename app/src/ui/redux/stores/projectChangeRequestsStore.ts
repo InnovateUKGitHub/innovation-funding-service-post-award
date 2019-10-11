@@ -13,6 +13,7 @@ import {
   ProjectChangeRequestStatus
 } from "@framework/entities";
 import { NotFoundError } from "@server/features/common";
+import * as Dtos from "@framework/dtos";
 
 export class ProjectChangeRequestStore extends StoreBase {
   constructor(private projectStore: ProjectsStore, getState: () => RootState, queue: (action: any) => void) {
@@ -31,11 +32,11 @@ export class ProjectChangeRequestStore extends StoreBase {
     }).then(({ projectRole, original, recordTypes }) => new PCRDtoValidator(dto, projectRole, original, recordTypes, show));
   }
 
-  getById(projectId: string, pcrId: string) {
+  public getById(projectId: string, pcrId: string) {
     return this.getData("pcr", this.getKeyForRequest(projectId, pcrId), p => ApiClient.pcrs.get({ projectId, id: pcrId, ...p }));
   }
 
-  getItemById(projectId: string, pcrId: string, itemId: string) {
+  public getItemById(projectId: string, pcrId: string, itemId: string) {
     return this.getById(projectId, pcrId).chain(pcr => {
       const item = pcr.items.find(x => x.id === itemId);
       const error = !item ? new NotFoundError("Item has not bee found in project change request") : null;
@@ -43,7 +44,7 @@ export class ProjectChangeRequestStore extends StoreBase {
     });
   }
 
-  getEditableItemTypes(projectId: string, projectChangeRequestId: string | null) {
+  public getEditableItemTypes(projectId: string, projectChangeRequestId: string | null) {
     const nonEditableTypes: ProjectChangeRequestItemTypeEntity[] = [
       ProjectChangeRequestItemTypeEntity.ProjectTermination
     ];
@@ -59,7 +60,7 @@ export class ProjectChangeRequestStore extends StoreBase {
       .then(x => x.filter(y => nonEditableTypes.indexOf(y) === -1));
   }
 
-  getStandardItemById(projectId: string, pcrId: string, itemId: string) {
+  public getStandardItemById(projectId: string, pcrId: string, itemId: string) {
     return this.getItemById(projectId, pcrId, itemId).chain(item => {
       if (
         item.type === ProjectChangeRequestItemTypeEntity.AccountNameChange ||
@@ -78,7 +79,7 @@ export class ProjectChangeRequestStore extends StoreBase {
     });
   }
 
-  getTimeExtentionItemById(projectId: string, pcrId: string, itemId: string) {
+  public getTimeExtensionItemById(projectId: string, pcrId: string, itemId: string) {
     return this.getItemById(projectId, pcrId, itemId).chain(item => {
       if (item.type === ProjectChangeRequestItemTypeEntity.TimeExtension) {
         return Pending.done(item);
@@ -89,15 +90,15 @@ export class ProjectChangeRequestStore extends StoreBase {
     });
   }
 
-  getAllForProject(projectId: string) {
+  public getAllForProject(projectId: string) {
     return this.getData("pcrs", projectId, p => ApiClient.pcrs.getAll({ projectId, ...p }));
   }
 
-  getAllPcrTypes() {
+  public getAllPcrTypes() {
     return this.getData("pcrTypes", "all", p => ApiClient.pcrs.getTypes({ ...p }));
   }
 
-  getPcrTypeForItem(projectId: string, pcrId: string, itemId: string) {
+  public getPcrTypeForItem(projectId: string, pcrId: string, itemId: string) {
     const data = Pending.combine({
       itemTypes: this.getAllPcrTypes(),
       pcrItem: this.getItemById(projectId, pcrId, itemId)
@@ -111,7 +112,7 @@ export class ProjectChangeRequestStore extends StoreBase {
     });
   }
 
-  getPcrCreateEditor(projectId: string, init?: (dto: PCRDto) => void) {
+  public getPcrCreateEditor(projectId: string, init?: (dto: PCRDto) => void) {
     return this.getEditor(
       "pcr",
       this.getKeyForRequest(projectId),
@@ -135,7 +136,7 @@ export class ProjectChangeRequestStore extends StoreBase {
     );
   }
 
-  getPcrUpdateEditor(projectId: string, pcrId: string, init?: (dto: PCRDto) => void) {
+  public getPcrUpdateEditor(projectId: string, pcrId: string, init?: (dto: PCRDto) => void) {
     return this.getEditor(
       "pcr",
       this.getKeyForRequest(projectId, pcrId),
@@ -145,7 +146,7 @@ export class ProjectChangeRequestStore extends StoreBase {
     );
   }
 
-  updatePcrEditor(saving: boolean, projectId: string, dto: PCRDto, message?: string, onComplete?: (result: PCRDto) => void) {
+  public updatePcrEditor(saving: boolean, projectId: string, dto: PCRDto, message?: string, onComplete?: (result: PCRDto) => void) {
     this.updateEditor(
       saving,
       "pcr",
@@ -165,6 +166,63 @@ export class ProjectChangeRequestStore extends StoreBase {
     );
   }
 
+  public createNewChangeRequestItem(itemType: Dtos.PCRItemTypeDto): (Dtos.TypedPcrItemDto) {
+    const baseFields: Dtos.PCRItemDto = {
+      id: "",
+      guidance: "",
+      type: ProjectChangeRequestItemTypeEntity.Unknown,
+      typeName: itemType.displayName,
+      status: ProjectChangeRequestItemStatus.ToDo,
+      statusName: "",
+    };
+
+    switch (itemType.type) {
+      case ProjectChangeRequestItemTypeEntity.MultiplePartnerFinancialVirement:
+      case ProjectChangeRequestItemTypeEntity.PartnerAddition:
+      case ProjectChangeRequestItemTypeEntity.PartnerWithdrawal:
+      case ProjectChangeRequestItemTypeEntity.SinglePartnerFinancialVirement:
+        return {
+          ...baseFields,
+          type: itemType.type
+        };
+      case ProjectChangeRequestItemTypeEntity.AccountNameChange:
+        return {
+          ...baseFields,
+          type: itemType.type,
+          partnerId: null,
+          accountName: null
+        };
+      case ProjectChangeRequestItemTypeEntity.TimeExtension:
+        return {
+          ...baseFields,
+          type: itemType.type,
+          projectEndDate: null
+        };
+      case ProjectChangeRequestItemTypeEntity.ScopeChange:
+        return {
+          ...baseFields,
+          type: itemType.type,
+          publicDescription: "",
+          projectSummary: ""
+        };
+      case ProjectChangeRequestItemTypeEntity.ProjectSuspension:
+        return {
+          ...baseFields,
+          type: itemType.type,
+          suspensionStartDate: null,
+          suspensionEndDate: null
+        };
+      case ProjectChangeRequestItemTypeEntity.ProjectTermination:
+        return {
+          ...baseFields,
+          type: itemType.type,
+          status: ProjectChangeRequestItemStatus.Complete,
+        };
+      default:
+        throw new Error("Item type not handled");
+    }
+  }
+
   private getValidator(projectId: string, dto: PCRDto, showErrors: boolean): any {
     return Pending.combine({
       projectRoles: this.projectStore.getById(projectId).then(x => x.roles),
@@ -177,7 +235,7 @@ export class ProjectChangeRequestStore extends StoreBase {
     return this.getAllPcrTypes().then(itemTypes => new ProjectChangeRequestDtoValidatorForCreate(dto, itemTypes, showErrors));
   }
 
-  deletePcr(projectId: string, pcrId: string, dto: PCRDto, message?: string, onComplete?: () => void): void {
+  public deletePcr(projectId: string, pcrId: string, dto: PCRDto, message?: string, onComplete?: () => void): void {
     this.deleteEditor(
       "pcr",
       this.getKeyForRequest(projectId, pcrId),
@@ -195,7 +253,7 @@ export class ProjectChangeRequestStore extends StoreBase {
     );
   }
 
-  getStatusChanges(projectId: string, projectChangeRequestId: string) {
+  public getStatusChanges(projectId: string, projectChangeRequestId: string) {
     return this.getData("projectChangeRequestStatusChanges", this.getKeyForRequest(projectId, projectChangeRequestId), p => ApiClient.pcrs.getStatusChanges({ projectId, projectChangeRequestId, ...p }));
   }
 
