@@ -1,7 +1,7 @@
 // tslint:disable:no-duplicate-string
 import "jest";
 import React from "react";
-import { Header } from "@ui/components";
+import { Header } from "@ui/components/layout/header";
 import Enzyme, { shallow } from "enzyme";
 import Adapter from "enzyme-adapter-react-16";
 

@@ -1,5 +1,5 @@
 import React from "react";
-import { Tabs } from "../components/layout";
+import { Tabs } from "../components/layout/tabs";
 
 const tabs = [
     {text: "Claims", url: "#"},

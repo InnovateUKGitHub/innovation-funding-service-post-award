@@ -2,7 +2,7 @@ import "jest";
 import React from "react";
 import Enzyme, { mount } from "enzyme";
 import Adapter from "enzyme-adapter-react-16";
-import { ListItem, ListSection } from "../../../src/ui/components/layout";
+import { ListItem, ListSection } from "../../../src/ui/components/layout/listSection";
 
 Enzyme.configure({ adapter: new Adapter() });
 

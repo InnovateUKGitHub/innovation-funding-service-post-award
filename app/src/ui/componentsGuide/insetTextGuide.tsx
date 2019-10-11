@@ -1,5 +1,5 @@
 import React from "react";
-import { InsetText } from "../components/layout";
+import { InsetText } from "../components/layout/insetText";
 
 export const insetText: IGuide = {
     name: "InsetText",

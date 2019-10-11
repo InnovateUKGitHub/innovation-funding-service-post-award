@@ -20,6 +20,7 @@ import { DateTime } from "luxon";
 import { Results } from "../../validation/results";
 import { getFileSize } from "@framework/util/filesize";
 import { filterEmpty } from "@framework/util/arrayHelpers";
+import { getClaimDetailsLinkType } from "@ui/components/claims/claimDetailsLink";
 
 export interface ClaimDashboardPageParams {
   projectId: string;
@@ -231,7 +232,7 @@ class Component extends ContainerBaseWithState<ClaimDashboardPageParams, Data, C
     return (
       <ClaimTable.Table
         data={data}
-        bodyRowFlag={x => Acc.Claims.getClaimDetailsLinkType({ claim: x, project, partner }) === "edit" ? "edit" : null}
+        bodyRowFlag={x => getClaimDetailsLinkType({ claim: x, project, partner }) === "edit" ? "edit" : null}
         qa={tableQa}
         caption={tableCaption}
       >

@@ -1,8 +1,10 @@
-import * as ACC from "@ui/components";
 import { IEditorStore } from "@ui/redux";
 import * as Dtos from "@framework/dtos";
 import { MonitoringReportDtoValidator } from "@ui/validators";
 import React, { Component } from "react";
+import { TypedForm } from "../form";
+import { Section } from "../layout/section";
+import { SimpleString } from "../renderers/simpleString";
 
 interface Props {
   editor: IEditorStore<Dtos.MonitoringReportDto, MonitoringReportDtoValidator>;
@@ -14,15 +16,15 @@ export class MonitoringReportFormComponent extends Component<Props> {
 
   public render() {
     const {editor} = this.props;
-    const ReportForm = ACC.TypedForm<Dtos.MonitoringReportDto>();
+    const ReportForm = TypedForm<Dtos.MonitoringReportDto>();
 
     return (
-      <ACC.Section>
+      <Section>
         <ReportForm.Form editor={editor} onChange={(dto) => this.props.onChange(dto)} qa="monitoringReportCreateForm" >
           <ReportForm.Numeric label="Period" labelBold={true} width="small" name="period" value={x => x.periodId} update={(x, v) => x.periodId = v!} validation={editor.validator.periodId} />
-          <ACC.Renderers.SimpleString>For each question score the project against the criteria from 1 to 5, providing a comment explaining your reason. Your Monitoring Portfolio Executive will return the report to you otherwise.</ACC.Renderers.SimpleString>
+          <SimpleString>For each question score the project against the criteria from 1 to 5, providing a comment explaining your reason. Your Monitoring Portfolio Executive will return the report to you otherwise.</SimpleString>
           {this.renderFormItems(editor)}
-          <ACC.Renderers.SimpleString>By submitting this report, you certify that from the project monitoring documents shown to you, this report represents your best opinion of the current progress of this project.</ACC.Renderers.SimpleString>
+          <SimpleString>By submitting this report, you certify that from the project monitoring documents shown to you, this report represents your best opinion of the current progress of this project.</SimpleString>
           <ReportForm.Fieldset qa="save-and-submit">
             <ReportForm.Button name="save-submitted" styling="Primary" onClick={() => this.props.onSave(editor.data, true)}>Submit report</ReportForm.Button>
           </ReportForm.Fieldset>
@@ -30,13 +32,13 @@ export class MonitoringReportFormComponent extends Component<Props> {
             <ReportForm.Button name="save-draft" onClick={() => this.props.onSave(editor.data, false)}>Save and return to project</ReportForm.Button>
           </ReportForm.Fieldset>
         </ReportForm.Form>
-      </ACC.Section>
+      </Section>
     );
   }
 
   private renderFormItems(editor: IEditorStore<Dtos.MonitoringReportDto, MonitoringReportDtoValidator>) {
     const { data, validator } = editor;
-    const ReportForm = ACC.TypedForm<Dtos.MonitoringReportDto>();
+    const ReportForm = TypedForm<Dtos.MonitoringReportDto>();
 
     return data.questions.map((q, i) => {
       const radioOptions = q.isScored
@@ -58,7 +60,7 @@ export class MonitoringReportFormComponent extends Component<Props> {
                 validation={validator.responses.results[i].score}
               />
             ) : (
-              <ACC.Renderers.SimpleString className="govuk-hint">{q.description}</ACC.Renderers.SimpleString>
+              <SimpleString className="govuk-hint">{q.description}</SimpleString>
             )
           }
           <ReportForm.MultilineString

@@ -2,7 +2,7 @@ import "jest";
 import React from "react";
 import Enzyme, { mount, shallow } from "enzyme";
 import Adapter from "enzyme-adapter-react-16";
-import { NumberInput } from "../../../src/ui/components/inputs";
+import { NumberInput } from "../../../src/ui/components/inputs/numberInput";
 
 Enzyme.configure({ adapter: new Adapter() });
 

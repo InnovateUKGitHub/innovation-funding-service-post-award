@@ -3,7 +3,7 @@ import "jest";
 import React from "react";
 import Enzyme, { mount } from "enzyme";
 import Adapter from "enzyme-adapter-react-16";
-import { FileUpload } from "../../../src/ui/components/inputs";
+import { FileUpload } from "../../../src/ui/components/inputs/fileUpload";
 
 Enzyme.configure({ adapter: new Adapter() });
 

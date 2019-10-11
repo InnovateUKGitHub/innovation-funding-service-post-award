@@ -2,7 +2,7 @@ import "jest";
 import React from "react";
 import Enzyme, { shallow } from "enzyme";
 import Adapter from "enzyme-adapter-react-16";
-import { TextHint } from "../../../src/ui/components/layout";
+import { TextHint } from "../../../src/ui/components/layout/textHint";
 
 Enzyme.configure({ adapter: new Adapter() });
 

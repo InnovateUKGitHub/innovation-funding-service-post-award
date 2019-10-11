@@ -1,5 +1,5 @@
 import React from "react";
-import { HashTabItem, HashTabs } from "../components/layout";
+import { HashTabItem, HashTabs } from "../components/layout/hashTabs";
 
 const simpleTabs: HashTabItem[] = [
   { text: "Claims", hash: "simple1", content: <div>Claims content 1</div> },

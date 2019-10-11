@@ -52,7 +52,7 @@ class DashboardComponent extends ContainerBase<Params, Data, Callbacks> {
 
     return (
       <ACC.Page
-        backLink={<ACC.Projects.ProjectBackLink project={project} routes={this.props.routes}/>}
+        backLink={<ACC.Projects.ProjectBackLink project={project} routes={this.props.routes} />}
         pageTitle={<ACC.Projects.Title project={project} />}
         project={project}
       >

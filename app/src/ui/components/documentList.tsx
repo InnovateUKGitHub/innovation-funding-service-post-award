@@ -1,6 +1,7 @@
 import * as React from "react";
-import { LinksList, TypedForm } from "./";
 import { stringComparator } from "@framework/util/comparator";
+import { LinksList } from "./linksList";
+import { TypedForm } from "./form";
 
 interface Props {
   documents: DocumentSummaryDto[];
