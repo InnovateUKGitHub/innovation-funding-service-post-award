@@ -40,7 +40,8 @@ export type TypedPcrItemDto =
   PCRItemForTimeExtensionDto |
   PCRItemForScopeChangeDto |
   PCRItemForProjectSuspensionDto |
-  PCRItemForAccountNameChangeDto;
+  PCRItemForAccountNameChangeDto |
+  PCRItemForProjectTerminationDto;
 
 export interface PCRStandardItemDto extends PCRItemDto {
   type: ProjectChangeRequestStandardItemTypes;
@@ -67,6 +68,10 @@ export interface PCRItemForAccountNameChangeDto extends PCRItemDto {
   type: ProjectChangeRequestItemTypeEntity.AccountNameChange;
   accountName: string | null;
   partnerId: string | null;
+}
+
+export interface PCRItemForProjectTerminationDto extends PCRItemDto {
+  type: ProjectChangeRequestItemTypeEntity.ProjectTermination;
 }
 
 export interface PCRItemTypeDto {

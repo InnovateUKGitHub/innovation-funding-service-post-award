@@ -21,6 +21,7 @@ interface Data {
   project: Pending<ProjectDto>;
   pcr: Pending<PCRDto>;
   statusChanges: Pending<ProjectChangeRequestStatusChangeDto[]>;
+  editableItemTypes: Pending<ProjectChangeRequestItemTypeEntity[]>;
 }
 
 interface Callbacks {
@@ -28,17 +29,17 @@ interface Callbacks {
 
 class PCRDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
   render() {
-    const combined = Pending.combine({ project: this.props.project, pcr: this.props.pcr });
+    const combined = Pending.combine({ project: this.props.project, pcr: this.props.pcr, editableItemTypes: this.props.editableItemTypes });
 
-    return <ACC.PageLoader pending={combined} render={x => this.renderContents(x.project, x.pcr)} />;
+    return <ACC.PageLoader pending={combined} render={x => this.renderContents(x.project, x.pcr, x.editableItemTypes)} />;
   }
 
-  private renderContents(project: ProjectDto, projectChangeRequest: PCRDto) {
+  private renderContents(project: ProjectDto, projectChangeRequest: PCRDto, editableItemTypes: ProjectChangeRequestItemTypeEntity[]) {
     const tabs = [{
       text: "Details",
       hash: "details",
       default: true,
-      content: this.renderDetailsTab(projectChangeRequest),
+      content: this.renderDetailsTab(projectChangeRequest, editableItemTypes),
       qa: "ProjectChangeRequestDetailsTab"
     }, {
       text: "Log",
@@ -58,7 +59,7 @@ class PCRDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
     );
   }
 
-  private renderDetailsTab(projectChangeRequest: PCRDto) {
+  private renderDetailsTab(projectChangeRequest: PCRDto, editableItemTypes: ProjectChangeRequestItemTypeEntity[] ) {
     return (
       <React.Fragment>
 
@@ -69,18 +70,36 @@ class PCRDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
           </ACC.SummaryList>
         </ACC.Section>
         <ACC.TaskList qa="taskList">
-          <ACC.TaskListSection step={1} title="What do you want to do?" qa="WhatDoYouWantToDo">
-            {projectChangeRequest.items.map((x) => this.getItemTasks(x))}
-          </ACC.TaskListSection>
-          <ACC.TaskListSection step={2} title="View more details" qa="reasoning">
-            <ACC.Task
-              name="Reasoning for Innovate UK"
-              status={this.getTaskStatus(projectChangeRequest.reasoningStatus)}
-              route={PCRViewReasoningRoute.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId })}
-            />
-          </ACC.TaskListSection>
+          {this.renderTaskListActions(projectChangeRequest, editableItemTypes)}
+          {this.renderTaskListReasoning(projectChangeRequest, editableItemTypes)}
         </ACC.TaskList>
       </React.Fragment>
+    );
+  }
+
+  private renderTaskListActions(projectChangeRequest: PCRDto, editableItemTypes: ProjectChangeRequestItemTypeEntity[]) {
+    if (!editableItemTypes.length) return null;
+    const editableItems = projectChangeRequest.items.filter(x => editableItemTypes.indexOf(x.type) > -1);
+
+    return (
+      <ACC.TaskListSection step={1} title="What do you want to do?" qa="WhatDoYouWantToDo">
+        {editableItems.map((x) => this.getItemTasks(x))}
+      </ACC.TaskListSection>
+    );
+  }
+
+  private renderTaskListReasoning(projectChangeRequest: PCRDto, editableItemTypes: ProjectChangeRequestItemTypeEntity[]) {
+    const editableItems = projectChangeRequest.items.filter(x => editableItemTypes.indexOf(x.type) > -1);
+    const stepCount = editableItems.length ? 2 : 1;
+
+    return (
+      <ACC.TaskListSection step={stepCount} title="View more details" qa="reasoning">
+        <ACC.Task
+          name="Reasoning for Innovate UK"
+          status={this.getTaskStatus(projectChangeRequest.reasoningStatus)}
+          route={PCRViewReasoningRoute.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId })}
+        />
+      </ACC.TaskListSection>
     );
   }
 
@@ -123,6 +142,7 @@ const PCRDetailsContainer = (props: Params & BaseProps) => (
         project={stores.projects.getById(props.projectId)}
         pcr={stores.projectChangeRequests.getById(props.projectId, props.pcrId)}
         statusChanges={stores.projectChangeRequests.getStatusChanges(props.projectId, props.pcrId)}
+        editableItemTypes={stores.projectChangeRequests.getEditableItemTypes(props.projectId, props.pcrId)}
         {...props}
       />
     )}

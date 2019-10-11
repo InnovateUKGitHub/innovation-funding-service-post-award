@@ -34,6 +34,4 @@ class ProjectChangeRequestItemValidatorForCreate extends Results<PCRItemDto> {
   type = Validation.isTrue(this, this.recordTypes
     .map(x => x.type)
     .indexOf(this.model.type) >= 0, "Not a valid change request item");
-
-  status = Validation.isTrue(this, this.model.status === ProjectChangeRequestItemStatus.ToDo, "Status should be To Do");
 }

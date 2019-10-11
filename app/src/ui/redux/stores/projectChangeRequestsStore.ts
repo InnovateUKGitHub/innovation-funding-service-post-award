@@ -5,10 +5,13 @@ import { ProjectsStore } from "./projectsStore";
 import { RootState } from "../reducers";
 import { ApiClient } from "@ui/apiClient";
 import { LoadingStatus, Pending } from "@shared/pending";
-import { ActionsUnion, dataLoadAction, messageSuccess } from "../actions";
-import { ILinkInfo } from "@framework/types";
+import { dataLoadAction, messageSuccess } from "../actions";
 import { ProjectChangeRequestDtoValidatorForCreate } from "@ui/validators/projectChangeRequestDtoValidatorForCreate";
-import { ProjectChangeRequestItemStatus, ProjectChangeRequestItemTypeEntity, ProjectChangeRequestStandardItemTypes, ProjectChangeRequestStatus } from "@framework/entities";
+import {
+  ProjectChangeRequestItemStatus,
+  ProjectChangeRequestItemTypeEntity,
+  ProjectChangeRequestStatus
+} from "@framework/entities";
 import { NotFoundError } from "@server/features/common";
 
 export class ProjectChangeRequestStore extends StoreBase {
@@ -38,6 +41,22 @@ export class ProjectChangeRequestStore extends StoreBase {
       const error = !item ? new NotFoundError("Item has not bee found in project change request") : null;
       return new Pending(item ? LoadingStatus.Done : LoadingStatus.Failed, item, error);
     });
+  }
+
+  getEditableItemTypes(projectId: string, projectChangeRequestId: string | null) {
+    const nonEditableTypes: ProjectChangeRequestItemTypeEntity[] = [
+      ProjectChangeRequestItemTypeEntity.ProjectTermination
+    ];
+
+    if (!projectChangeRequestId) {
+      return this.getAllPcrTypes()
+        .then(x => x.map(y => y.type))
+        .then(x => x.filter(y => nonEditableTypes.indexOf(y) === -1));
+    }
+
+    return this.getById(projectId, projectChangeRequestId).then(x => x.items)
+      .then(x => x.map(y => y.type))
+      .then(x => x.filter(y => nonEditableTypes.indexOf(y) === -1));
   }
 
   getStandardItemById(projectId: string, pcrId: string, itemId: string) {

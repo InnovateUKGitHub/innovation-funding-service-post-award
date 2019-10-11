@@ -30,7 +30,6 @@ export const getPcrStandardItem = (state: RootState, projectId: string, id: stri
       case ProjectChangeRequestItemTypeEntity.MultiplePartnerFinancialVirement:
       case ProjectChangeRequestItemTypeEntity.PartnerAddition:
       case ProjectChangeRequestItemTypeEntity.PartnerWithdrawal:
-      case ProjectChangeRequestItemTypeEntity.ProjectTermination:
       case ProjectChangeRequestItemTypeEntity.SinglePartnerFinancialVirement:
         return Pending.done(x);
       default:
