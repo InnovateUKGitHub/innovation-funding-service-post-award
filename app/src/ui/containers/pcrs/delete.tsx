@@ -74,7 +74,7 @@ const PCRDeleteContainer = (props: PCRDeleteParams & BaseProps) => (
         project={stores.projects.getById(props.projectId)}
         pcr={stores.projectChangeRequests.getById(props.projectId, props.pcrId)}
         editor={stores.projectChangeRequests.getPcrUpdateEditor(props.projectId, props.pcrId)}
-        onDelete={(projectId, pcrId, dto) => stores.projectChangeRequests.deletePcr(projectId, pcrId, dto, "Project change request has been deleted", () => stores.navigation.navigateTo(PCRsDashboardRoute.getLink({ projectId })))}
+        onDelete={(projectId, pcrId, dto) => stores.projectChangeRequests.deletePcr(projectId, pcrId, dto, "The project change request has been deleted.", () => stores.navigation.navigateTo(PCRsDashboardRoute.getLink({ projectId })))}
         {...props}
       />
     )}
