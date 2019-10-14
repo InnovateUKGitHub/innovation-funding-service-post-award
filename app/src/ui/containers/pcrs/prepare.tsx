@@ -9,7 +9,6 @@ import { PCRDto, ProjectChangeRequestStatusChangeDto } from "@framework/dtos/pcr
 import { IEditorStore, StoresConsumer } from "@ui/redux";
 import { PCRDtoValidator } from "@ui/validators/pcrDtoValidator";
 import { ProjectChangeRequestItemStatus, ProjectChangeRequestItemTypeEntity, ProjectChangeRequestStatus } from "@framework/entities";
-import { PCRsDashboardRoute, ProjectChangeRequestAddTypeRoute, ProjectChangeRequestPrepareItemRoute, ProjectChangeRequestPrepareReasoningRoute } from "@ui/containers";
 
 export interface ProjectChangeRequestPrepareParams {
   projectId: string;
@@ -66,7 +65,7 @@ class PCRPrepareComponent extends ContainerBase<ProjectChangeRequestPrepareParam
 
     return (
       <ACC.Page
-        backLink={<ACC.BackLink route={PCRsDashboardRoute.getLink({ projectId: this.props.projectId })}>Back to project change requests</ACC.BackLink>}
+        backLink={<ACC.BackLink route={this.props.routes.pcrsDashboard.getLink({ projectId: this.props.projectId })}>Back to project change requests</ACC.BackLink>}
         pageTitle={<ACC.Projects.Title project={project} />}
         project={project}
         validator={editor.validator}
@@ -84,7 +83,7 @@ class PCRPrepareComponent extends ContainerBase<ProjectChangeRequestPrepareParam
         <ACC.Section title="Details">
           <ACC.SummaryList qa="pcr-prepare">
             <ACC.SummaryListItem label="Request number" content={projectChangeRequest.requestNumber} qa="numberRow" />
-            <ACC.SummaryListItem label="Types" content={<ACC.Renderers.LineBreakList items={projectChangeRequest.items.map(x => x.typeName)} />} action={<ACC.Link route={ProjectChangeRequestAddTypeRoute.getLink({ projectId: this.props.projectId, projectChangeRequestId: this.props.pcrId })}>Add types</ACC.Link>} qa="typesRow" />
+            <ACC.SummaryListItem label="Types" content={<ACC.Renderers.LineBreakList items={projectChangeRequest.items.map(x => x.typeName)} />} action={<ACC.Link route={this.props.routes.ProjectChangeRequestAddType.getLink({ projectId: this.props.projectId, projectChangeRequestId: this.props.pcrId })}>Add types</ACC.Link>} qa="typesRow" />
           </ACC.SummaryList>
         </ACC.Section>
         <ACC.TaskList qa="taskList">
@@ -137,7 +136,7 @@ class PCRPrepareComponent extends ContainerBase<ProjectChangeRequestPrepareParam
         <ACC.Task
           name="Provide reasoning to Innovate UK"
           status={this.getTaskStatus(projectChangeRequest.reasoningStatus)}
-          route={ProjectChangeRequestPrepareReasoningRoute.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId })}
+          route={this.props.routes.pcrPrepareReasoning.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId })}
         />
       </ACC.TaskListSection>
     );
@@ -150,7 +149,7 @@ class PCRPrepareComponent extends ContainerBase<ProjectChangeRequestPrepareParam
       <ACC.Task
         name={item.typeName}
         status={this.getTaskStatus(item.status)}
-        route={ProjectChangeRequestPrepareItemRoute.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId, itemId: item.id })}
+        route={this.props.routes.pcrPrepareItem.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId, itemId: item.id })}
         validation={validationErrors}
       />
     );
@@ -187,7 +186,7 @@ const PCRPrepareContainer = (props: ProjectChangeRequestPrepareParams & BaseProp
           pcr={stores.projectChangeRequests.getById(props.projectId, props.pcrId)}
           statusChanges={stores.projectChangeRequests.getStatusChanges(props.projectId, props.pcrId)}
           editor={stores.projectChangeRequests.getPcrUpdateEditor(props.projectId, props.pcrId)}
-          onChange={(saving: boolean, dto: PCRDto) => stores.projectChangeRequests.updatePcrEditor(saving, props.projectId, dto, undefined, () => stores.navigation.navigateTo(PCRsDashboardRoute.getLink({ projectId: props.projectId })))}
+          onChange={(saving: boolean, dto: PCRDto) => stores.projectChangeRequests.updatePcrEditor(saving, props.projectId, dto, undefined, () => stores.navigation.navigateTo(props.routes.pcrsDashboard.getLink({ projectId: props.projectId })))}
           editableItemTypes={stores.projectChangeRequests.getEditableItemTypes(props.projectId, props.pcrId)}
           {...props}
         />

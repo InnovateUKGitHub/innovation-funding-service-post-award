@@ -5,9 +5,6 @@ import { ProjectDto, ProjectRole } from "@framework/types";
 
 import * as ACC from "@ui/components";
 import { Pending } from "@shared/pending";
-import { PCRsDashboardRoute } from "./dashboard";
-import { PCRReviewItemRoute } from "./viewItem";
-import { PCRReviewReasoningRoute } from "./viewReasoning";
 import { PCRDto, PCRItemDto, ProjectChangeRequestStatusChangeDto } from "@framework/dtos/pcrDtos";
 import { IEditorStore, StoresConsumer } from "@ui/redux";
 import { PCRDtoValidator } from "@ui/validators/pcrDtoValidator";
@@ -53,7 +50,7 @@ class PCRReviewComponent extends ContainerBase<PCRReviewParams, Data, Callbacks>
 
     return (
       <ACC.Page
-        backLink={<ACC.BackLink route={PCRsDashboardRoute.getLink({ projectId: this.props.projectId })}>Back to project change requests</ACC.BackLink>}
+        backLink={<ACC.BackLink route={this.props.routes.pcrsDashboard.getLink({ projectId: this.props.projectId })}>Back to project change requests</ACC.BackLink>}
         pageTitle={<ACC.Projects.Title project={project} />}
         project={project}
         validator={editor.validator}
@@ -137,7 +134,7 @@ class PCRReviewComponent extends ContainerBase<PCRReviewParams, Data, Callbacks>
         <ACC.Task
           name="Reasoning for Innovate UK"
           status={this.getTaskStatus(projectChangeRequest.reasoningStatus)}
-          route={PCRReviewReasoningRoute.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId })}
+          route={this.props.routes.pcrReviewReasoning.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId })}
         />
       </ACC.TaskListSection>
     );
@@ -149,7 +146,7 @@ class PCRReviewComponent extends ContainerBase<PCRReviewParams, Data, Callbacks>
       <ACC.Task
         name={item.typeName}
         status={this.getTaskStatus(item.status)}
-        route={PCRReviewItemRoute.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId, itemId: item.id })}
+        route={this.props.routes.pcrReviewItem.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId, itemId: item.id })}
         validation={validationErrors}
       />
     );
@@ -186,7 +183,7 @@ const PCRReviewContainer = (props: PCRReviewParams & BaseProps) => (
         statusChanges={stores.projectChangeRequests.getStatusChanges(props.projectId, props.pcrId)}
         // initalise editor pcr status to unknown to force state selection via form
         editor={stores.projectChangeRequests.getPcrUpdateEditor(props.projectId, props.pcrId, x => x.status = ProjectChangeRequestStatus.Unknown)}
-        onChange={(save, dto) => stores.projectChangeRequests.updatePcrEditor(save, props.projectId, dto, undefined, () => stores.navigation.navigateTo(PCRsDashboardRoute.getLink({ projectId: props.projectId })))}
+        onChange={(save, dto) => stores.projectChangeRequests.updatePcrEditor(save, props.projectId, dto, undefined, () => stores.navigation.navigateTo(props.routes.pcrsDashboard.getLink({ projectId: props.projectId })))}
         editableItemTypes={stores.projectChangeRequests.getEditableItemTypes(props.projectId, props.pcrId)}
         {...props}
       />

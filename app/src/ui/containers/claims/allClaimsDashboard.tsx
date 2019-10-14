@@ -93,7 +93,7 @@ class Component extends ContainerBaseWithState<AllClaimsDashboardParams, Data, C
     return (
       <Acc.Page
         pageTitle={<Acc.Projects.Title project={projectDetails} />}
-        backLink={<Acc.Projects.ProjectBackLink project={projectDetails} />}
+        backLink={<Acc.Projects.ProjectBackLink project={projectDetails} routes={this.props.routes}/>}
         validator={validators}
         error={error}
         project={projectDetails}
@@ -174,7 +174,7 @@ class Component extends ContainerBaseWithState<AllClaimsDashboardParams, Data, C
           <ClaimTable.Currency header="Difference" qa="diff" value={(x) => x.forecastCost - x.totalCost} />
           <ClaimTable.String header="Status" qa="status" value={(x) => x.statusLabel} />
           <ClaimTable.ShortDate header="Date of last update" qa="last-update" value={x => x.paidDate || x.approvedDate || x.lastModifiedDate} />
-          <ClaimTable.Custom header="Action" hideHeader={true} qa="link" value={(x) => <Acc.Claims.ClaimDetailsLink claim={x} project={project} partner={partners.find(p => p.id === x.partnerId)!} />} />
+          <ClaimTable.Custom header="Action" hideHeader={true} qa="link" value={(x) => <Acc.Claims.ClaimDetailsLink claim={x} project={project} partner={partners.find(p => p.id === x.partnerId)!} routes={this.props.routes} />} />
         </ClaimTable.Table>
       </Acc.Section>
     );
@@ -218,7 +218,7 @@ class Component extends ContainerBaseWithState<AllClaimsDashboardParams, Data, C
           <ClaimTable.Currency header="Difference" qa="diff" value={(x) => x.forecastCost - x.totalCost} />
           <ClaimTable.String header="Status" qa="status" value={(x) => x.statusLabel} />
           <ClaimTable.ShortDate header="Date of last update" qa="last-update" value={x => x.paidDate || x.approvedDate || x.lastModifiedDate} />
-          <ClaimTable.Custom header="Action" hideHeader={true} qa="link" value={(x) => <Acc.Claims.ClaimDetailsLink claim={x} project={project} partner={partner} />} />
+          <ClaimTable.Custom header="Action" hideHeader={true} qa="link" value={(x) => <Acc.Claims.ClaimDetailsLink claim={x} project={project} partner={partner} routes={this.props.routes}/>} />
         </ClaimTable.Table>
       </div>
     );

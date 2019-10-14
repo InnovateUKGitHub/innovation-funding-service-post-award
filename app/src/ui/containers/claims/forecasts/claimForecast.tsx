@@ -1,11 +1,11 @@
 import React from "react";
 import * as ACC from "@ui/components";
 import * as Actions from "@ui/redux/actions";
-import { AllClaimsDashboardRoute, ClaimsDashboardRoute, PrepareClaimRoute } from "@ui/containers";
 import { ContainerBase, ReduxContainer } from "@ui/containers/containerBase";
 import { isNumber } from "@framework/util";
 import { ProjectDto, ProjectRole } from "@framework/types";
 import { ForecastData, forecastDataLoadActions, PendingForecastData, renderWarning, withDataEditor, } from "./common";
+import { IRoutes } from "@ui/routing";
 
 export interface ClaimForecastParams {
   projectId: string;
@@ -15,7 +15,7 @@ export interface ClaimForecastParams {
 
 interface Callbacks {
   onChange: (partnerId: string, data: ForecastDetailsDTO[], combined: ForecastData) => void;
-  saveAndReturn: (updateClaim: boolean, projectId: string, partnerId: string, periodId: number, data: ForecastData, message?: string) => void;
+  saveAndReturn: (updateClaim: boolean, projectId: string, partnerId: string, periodId: number, data: ForecastData, message: string|undefined) => void;
 }
 
 class ClaimForecastComponent extends ContainerBase<ClaimForecastParams, PendingForecastData, Callbacks> {
@@ -43,7 +43,7 @@ class ClaimForecastComponent extends ContainerBase<ClaimForecastParams, PendingF
 
     return (
       <ACC.Page
-        backLink={<ACC.BackLink route={PrepareClaimRoute.getLink({ periodId: this.props.periodId, projectId: this.props.projectId, partnerId: this.props.partnerId })}>Back to claim</ACC.BackLink>}
+        backLink={<ACC.BackLink route={this.props.routes.prepareClaim.getLink({ periodId: this.props.periodId, projectId: this.props.projectId, partnerId: this.props.partnerId })}>Back to claim</ACC.BackLink>}
         error={editor.error}
         validator={editor.validator}
         pageTitle={<ACC.Projects.Title project={combined.project} />}
@@ -75,25 +75,25 @@ class ClaimForecastComponent extends ContainerBase<ClaimForecastParams, PendingF
   }
 }
 
-const updateRedirect = (updateClaim: boolean, dispatch: any, project: ProjectDto, partnerId: string, periodId: number) => {
+const updateRedirect = (updateClaim: boolean, dispatch: any, project: ProjectDto, partnerId: string, periodId: number, routes: IRoutes) => {
   const projectId = project.id;
 
   if (!updateClaim) {
-    return dispatch(Actions.navigateTo(PrepareClaimRoute.getLink({ projectId, partnerId, periodId })));
+    return dispatch(Actions.navigateTo(routes.prepareClaim.getLink({ projectId, partnerId, periodId })));
   }
 
   if (project.roles & ProjectRole.ProjectManager && project.roles & ProjectRole.FinancialContact) {
-    return dispatch(Actions.navigateTo(AllClaimsDashboardRoute.getLink({ projectId })));
+    return dispatch(Actions.navigateTo(routes.allClaimsDashboard.getLink({ projectId })));
   }
 
-  return dispatch(Actions.navigateTo(ClaimsDashboardRoute.getLink({ projectId, partnerId })));
+  return dispatch(Actions.navigateTo(routes.claimsDashboard.getLink({ projectId, partnerId })));
 };
 
 const definition = ReduxContainer.for<ClaimForecastParams, PendingForecastData, Callbacks>(ClaimForecastComponent);
 
 const ForecastClaim = definition.connect({
   withData: (state, props) => withDataEditor(state, props),
-  withCallbacks: (dispatch) => ({
+  withCallbacks: (dispatch, routes) => ({
     onChange: (partnerId, data, combined) =>
       dispatch(Actions.validateForecastDetails(partnerId, data, combined.claims, combined.claimDetails, combined.golCosts)),
     saveAndReturn: (updateClaim, projectId, partnerId, periodId, data, message) =>
@@ -105,7 +105,7 @@ const ForecastClaim = definition.connect({
         data.claims,
         data.claimDetails,
         data.golCosts,
-        () => updateRedirect(updateClaim, dispatch, data.project, partnerId, periodId),
+        () => updateRedirect(updateClaim, dispatch, data.project, partnerId, periodId, routes),
         message)
       )
   })

@@ -1,16 +1,11 @@
 import React from "react";
 
-import { PCRDetailsRoute } from "./details";
-import { ProjectChangeRequestItemTypeEntity, ProjectChangeRequestStatus } from "@framework/entities";
+import { ProjectChangeRequestStatus } from "@framework/entities";
 import * as ACC from "../../components";
 import { ILinkInfo, ProjectDto, ProjectRole } from "@framework/types";
 import { BaseProps, ContainerBase, defineRoute } from "../containerBase";
 import { Pending } from "@shared/pending";
-import { PCRCreateRoute } from "./create";
 import { PCRSummaryDto } from "@framework/dtos/pcrDtos";
-import { PCRDeleteRoute } from "./delete";
-import { PCRReviewRoute } from "./review";
-import { ProjectChangeRequestPrepareRoute } from "./prepare";
 import { StoresConsumer } from "@ui/redux";
 
 interface Params {
@@ -39,7 +34,7 @@ class PCRsDashboardComponent extends ContainerBase<Params, Data, Callbacks> {
 
     return (
       <ACC.Page
-        backLink={<ACC.Projects.ProjectBackLink project={project} />}
+        backLink={<ACC.Projects.ProjectBackLink project={project} routes={this.props.routes} />}
         pageTitle={<ACC.Projects.Title project={project} />}
         project={project}
       >
@@ -63,7 +58,7 @@ class PCRsDashboardComponent extends ContainerBase<Params, Data, Callbacks> {
     if (!isPm) return null;
 
     return (
-      <ACC.Link route={PCRCreateRoute.getLink({ projectId: this.props.projectId })} className="govuk-button">Create request</ACC.Link>
+      <ACC.Link route={this.props.routes.pcrCreate.getLink({ projectId: this.props.projectId })} className="govuk-button">Create request</ACC.Link>
     );
   }
 
@@ -92,17 +87,17 @@ class PCRsDashboardComponent extends ContainerBase<Params, Data, Callbacks> {
     const prepareStatus = [ProjectChangeRequestStatus.Draft, ProjectChangeRequestStatus.QueriedByMonitoringOfficer, ProjectChangeRequestStatus.QueriedByInnovateUK];
 
     if(prepareStatus.indexOf(pcr.status) >= 0 && project.roles & ProjectRole.ProjectManager) {
-      links.push({route: ProjectChangeRequestPrepareRoute.getLink({pcrId: pcr.id, projectId: pcr.projectId}), text: "Edit", qa:"pcrPrepareLink"});
+      links.push({route: this.props.routes.pcrPrepare.getLink({pcrId: pcr.id, projectId: pcr.projectId}), text: "Edit", qa:"pcrPrepareLink"});
     }
     else if(pcr.status === ProjectChangeRequestStatus.SubmittedToMonitoringOfficer && project.roles & ProjectRole.MonitoringOfficer) {
-      links.push({route: PCRReviewRoute.getLink({pcrId: pcr.id, projectId: pcr.projectId}), text: "Review", qa:"pcrReviewLink"});
+      links.push({route: this.props.routes.pcrReview.getLink({pcrId: pcr.id, projectId: pcr.projectId}), text: "Review", qa:"pcrReviewLink"});
     }
     else if((project.roles & ProjectRole.ProjectManager | project.roles & ProjectRole.MonitoringOfficer)) {
-      links.push({route: PCRDetailsRoute.getLink({pcrId: pcr.id, projectId: pcr.projectId}), text: "View", qa:"pcrViewLink"});
+      links.push({route: this.props.routes.pcrDetails.getLink({pcrId: pcr.id, projectId: pcr.projectId}), text: "View", qa:"pcrViewLink"});
     }
 
     if(pcr.status === ProjectChangeRequestStatus.Draft && project.roles & ProjectRole.ProjectManager) {
-      links.push({route: PCRDeleteRoute.getLink({pcrId: pcr.id, projectId: pcr.projectId}), text: "Delete", qa:"pcrDeleteLink"});
+      links.push({route: this.props.routes.pcrDelete.getLink({pcrId: pcr.id, projectId: pcr.projectId}), text: "Delete", qa:"pcrDeleteLink"});
     }
 
     return links.map((x,i) => <div key={i} data-qa={x.qa}><ACC.Link route={x.route}>{x.text}</ACC.Link></div>);

@@ -5,10 +5,8 @@ import { ProjectDto, ProjectRole } from "@framework/types";
 
 import * as ACC from "../../components";
 import { Pending } from "@shared/pending";
-import { PCRDetailsRoute } from "./details";
 import { PCRDto, PCRItemDto } from "@framework/dtos/pcrDtos";
 import { StoresConsumer } from "@ui/redux";
-import { PCRReviewRoute } from "./review";
 import { NavigationArrowsForPCRs } from "./navigationArrows";
 import { ProjectChangeRequestItemTypeEntity } from "@framework/entities";
 import * as Items from "./items";
@@ -39,8 +37,8 @@ class PCRViewItemComponent extends ContainerBase<Params, Data, Callbacks> {
 
   private renderContents(project: ProjectDto, pcr: PCRDto, pcrItem: PCRItemDto, editableItemTypes: ProjectChangeRequestItemTypeEntity[]) {
     const backLink = this.props.isReviewing ?
-      <ACC.BackLink route={PCRReviewRoute.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId })}>Back to review project change request</ACC.BackLink> :
-      <ACC.BackLink route={PCRDetailsRoute.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId })}>Back to project change request details</ACC.BackLink>
+      <ACC.BackLink route={this.props.routes.pcrReview.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId })}>Back to review project change request</ACC.BackLink> :
+      <ACC.BackLink route={this.props.routes.pcrDetails.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId })}>Back to project change request details</ACC.BackLink>
       ;
 
     return (
@@ -52,7 +50,7 @@ class PCRViewItemComponent extends ContainerBase<Params, Data, Callbacks> {
         <ACC.Section title="Details">
           {this.renderItem(project, pcr)}
         </ACC.Section>
-        <NavigationArrowsForPCRs pcr={pcr} currentItem={pcrItem} isReviewing={this.props.isReviewing} editableItemTypes={editableItemTypes} />
+        <NavigationArrowsForPCRs pcr={pcr} currentItem={pcrItem} isReviewing={this.props.isReviewing} editableItemTypes={editableItemTypes} routes={this.props.routes} />
       </ACC.Page>
     );
   }

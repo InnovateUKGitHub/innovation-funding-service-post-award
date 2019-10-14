@@ -5,10 +5,6 @@ import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerB
 import { Pending } from "@shared/pending";
 import { ILinkInfo, ProjectRole } from "@framework/types";
 import * as ACC from "@ui/components";
-import { MonitoringReportViewRoute } from "./details";
-import { MonitoringReportPrepareRoute } from "./prepare";
-import { MonitoringReportCreateRoute } from "./create";
-import { MonitoringReportDeleteRoute } from "./delete";
 import { StoresConsumer } from "@ui/redux";
 
 interface Params {
@@ -56,13 +52,13 @@ class DashboardComponent extends ContainerBase<Params, Data, Callbacks> {
 
     return (
       <ACC.Page
-        backLink={<ACC.Projects.ProjectBackLink project={project} />}
+        backLink={<ACC.Projects.ProjectBackLink project={project} routes={this.props.routes}/>}
         pageTitle={<ACC.Projects.Title project={project} />}
         project={project}
       >
         <ACC.Renderers.Messages messages={this.props.messages} />
         <ACC.Renderers.SimpleString>You should submit reports for this project according to the schedule agreed with your Monitoring Portfolio Executive.</ACC.Renderers.SimpleString>
-        <ACC.Link route={MonitoringReportCreateRoute.getLink({ projectId: this.props.projectId })} className="govuk-button">Start a new report</ACC.Link>
+        <ACC.Link route={this.props.routes.monitoringReportCreate.getLink({ projectId: this.props.projectId })} className="govuk-button">Start a new report</ACC.Link>
         <ACC.Section title={"Open"}>
           {reportSections.open.length ? this.renderTable(project, reportSections.open, "current") : null}
           {!reportSections.open.length ? <ACC.Renderers.SimpleString>There are no open reports.</ACC.Renderers.SimpleString> : null}
@@ -96,14 +92,14 @@ class DashboardComponent extends ContainerBase<Params, Data, Callbacks> {
     const links: { route: ILinkInfo, text: string, qa: string; }[] = [];
 
     if (this.editStatuses.indexOf(report.status) > -1) {
-      links.push({ route: MonitoringReportPrepareRoute.getLink({ projectId: report.projectId, id: report.headerId }), text: "Edit report", qa: "editLink" });
+      links.push({ route: this.props.routes.monitoringReportPrepare.getLink({ projectId: report.projectId, id: report.headerId }), text: "Edit report", qa: "editLink" });
     }
     else {
-      links.push({ route: MonitoringReportViewRoute.getLink({ projectId: report.projectId, id: report.headerId }), text: "View report", qa: "viewLink" });
+      links.push({ route: this.props.routes.monitoringReportView.getLink({ projectId: report.projectId, id: report.headerId }), text: "View report", qa: "viewLink" });
     }
 
     if (report.status === MonitoringReportStatus.Draft) {
-      links.push({ route: MonitoringReportDeleteRoute.getLink({ projectId: report.projectId, id: report.headerId }), text: "Delete report", qa: "deleteLink" });
+      links.push({ route: this.props.routes.monitoringReportDelete.getLink({ projectId: report.projectId, id: report.headerId }), text: "Delete report", qa: "deleteLink" });
     }
 
     return links.map((x, i) => <div key={i} data-qa={x.qa}><ACC.Link route={x.route}>{x.text}</ACC.Link></div>);

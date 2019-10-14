@@ -7,7 +7,6 @@ import { Pending } from "@shared/pending";
 import { PCRDto, ProjectDto, ProjectRole } from "@framework/dtos";
 import { IEditorStore, StoresConsumer } from "@ui/redux";
 import { MultipleDocumentUpdloadDtoValidator } from "@ui/validators";
-import { ProjectChangeRequestPrepareReasoningRoute } from ".";
 
 interface Params {
   projectId: string;
@@ -42,7 +41,7 @@ class PrepareReasoningFilesComponent extends ContainerBase<Params, Data, Callbac
   private renderContents(project: ProjectDto, pcr: PCRDto, documents: DocumentSummaryDto[], documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>): React.ReactNode {
     return (
       <ACC.Page
-        backLink={<ACC.BackLink route={ProjectChangeRequestPrepareReasoningRoute.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId })}>Back to provide reasoning</ACC.BackLink>}
+        backLink={<ACC.BackLink route={this.props.routes.pcrPrepareReasoning.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId })}>Back to provide reasoning</ACC.BackLink>}
         pageTitle={<ACC.Projects.Title project={project} />}
         project={project}
         error={documentsEditor.error}

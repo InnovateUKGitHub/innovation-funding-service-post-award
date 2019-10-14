@@ -8,7 +8,6 @@ import { ClaimDtoValidator } from "@ui/validators/claimDtoValidator";
 import { Pending } from "@shared/pending";
 import { ClaimDto, ClaimStatus, ClaimStatusChangeDto, PartnerDto, ProjectDto, ProjectRole } from "@framework/types";
 import { ForecastData, forecastDataLoadActions } from "./forecasts/common";
-import { AllClaimsDashboardRoute, ReviewClaimLineItemsRoute } from "@ui/containers";
 
 export interface ReviewClaimParams {
   projectId: string;
@@ -78,7 +77,7 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, Data, Callbacks> 
 
     return (
       <ACC.Page
-        backLink={<ACC.BackLink route={AllClaimsDashboardRoute.getLink({ projectId: data.project.id })}>Back to claims</ACC.BackLink>}
+        backLink={<ACC.BackLink route={this.props.routes.allClaimsDashboard.getLink({ projectId: data.project.id })}>Back to claims</ACC.BackLink>}
         error={data.editor.error}
         validator={data.editor.validator}
         pageTitle={<ACC.Projects.Title project={data.project} />}
@@ -116,7 +115,7 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, Data, Callbacks> 
   }
 
   private getClaimLineItemLink(costCategoryId: string) {
-    return ReviewClaimLineItemsRoute.getLink({ partnerId: this.props.partnerId, projectId: this.props.projectId, periodId: this.props.periodId, costCategoryId });
+    return this.props.routes.reviewClaimLineItems.getLink({ partnerId: this.props.partnerId, projectId: this.props.projectId, periodId: this.props.periodId, costCategoryId });
   }
 
   private renderIarSection(claim: ClaimDto, iarDocument?: DocumentSummaryDto | null) {
@@ -269,11 +268,11 @@ export const ReviewClaim = definition.connect({
       standardOverheadRate: state.config.standardOverheadRate
     };
   },
-  withCallbacks: (dispatch) => ({
+  withCallbacks: (dispatch, routes) => ({
     onChange: (partnerId, periodId, dto, details, costCategories) =>
       dispatch(Actions.validateClaim(partnerId, periodId, dto, details, costCategories)),
     onSave: (projectId, partnerId, periodId, dto, details, costCategories, message) =>
-      dispatch(Actions.saveClaim(projectId, partnerId, periodId, dto, details, costCategories, () => dispatch(Actions.navigateBackTo(AllClaimsDashboardRoute.getLink({ projectId }))), message)),
+      dispatch(Actions.saveClaim(projectId, partnerId, periodId, dto, details, costCategories, () => dispatch(Actions.navigateBackTo(routes.allClaimsDashboard.getLink({ projectId }))), message)),
   })
 });
 
