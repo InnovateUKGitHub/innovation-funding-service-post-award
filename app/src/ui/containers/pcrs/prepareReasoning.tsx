@@ -71,9 +71,7 @@ class PCRPrepareReasoningComponent extends ContainerBase<ProjectChangeRequestPre
           </ACC.SummaryList>
         </ACC.Section>
 
-        <ACC.Section qa="guidance">
-          <ACC.Renderers.SimpleString>{pcr.guidance}</ACC.Renderers.SimpleString>
-        </ACC.Section>
+        { this.renderGuidanceSection(pcr) }
 
         <ACC.Section qa="reasoning-save-and-return">
           <PCRForm.Form
@@ -115,6 +113,15 @@ class PCRPrepareReasoningComponent extends ContainerBase<ProjectChangeRequestPre
           </PCRForm.Form>
         </ACC.Section>
       </ACC.Page>
+    );
+  }
+
+  private renderGuidanceSection(pcr: PCRDto) {
+    if (!pcr.guidance) return null;
+    return (
+      <ACC.Section qa="guidance">
+        <ACC.Renderers.SimpleString>{pcr.guidance}</ACC.Renderers.SimpleString>
+      </ACC.Section>
     );
   }
 
