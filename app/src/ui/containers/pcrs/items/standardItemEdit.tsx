@@ -2,17 +2,17 @@ import React from "react";
 
 import * as ACC from "@ui/components";
 import * as Dtos from "@framework/dtos";
-import { EditorStatus, IEditorStore, StoresConsumer } from "@ui/redux";
-import { MultipleDocumentUpdloadDtoValidator, PCRStandardItemDtoValidator } from "@ui/validators";
+import { EditorStatus, StoresConsumer } from "@ui/redux";
+import { PCRStandardItemDtoValidator } from "@ui/validators";
 import { ProjectChangeRequestItemStatus } from "@framework/entities";
-import { Pending } from "@shared/pending";
-import { ProjectChangeRequestPrepareItemFilesRoute } from "../prepareItemFiles";
+import { IRoutes } from "@ui/routing";
 
 interface Props {
   projectChangeRequest: Dtos.PCRDto;
   projectChangeRequestItem: Dtos.PCRStandardItemDto;
   validator: PCRStandardItemDtoValidator;
   status: EditorStatus;
+  routes: IRoutes;
   onChange: (dto: Dtos.PCRStandardItemDto) => void;
   onSave: () => void;
 }
@@ -36,7 +36,7 @@ const InnerStandardItemEdit = (props: Props & InnerProps) => {
             <ACC.DocumentList documents={props.documents} qa="supporting-documents" /> :
             <ACC.ValidationMessage messageType="info" message="No files uploaded" />
         }
-        <ACC.Link styling="SecondaryButton" route={ProjectChangeRequestPrepareItemFilesRoute.getLink({projectId: props.projectChangeRequest.projectId, pcrId: props.projectChangeRequest.id, itemId: props.projectChangeRequestItem.id})}>Upload and remove documents</ACC.Link>
+        <ACC.Link styling="SecondaryButton" route={props.routes.pcrPrepareFiles.getLink({projectId: props.projectChangeRequest.projectId, pcrId: props.projectChangeRequest.id, itemId: props.projectChangeRequestItem.id})}>Upload and remove documents</ACC.Link>
       </ACC.Section>
 
       <ACC.Section>

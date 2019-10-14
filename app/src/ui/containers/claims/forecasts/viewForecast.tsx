@@ -4,7 +4,6 @@ import * as Actions from "../../../redux/actions";
 import * as Selectors from "../../../redux/selectors";
 import { Pending } from "../../../../shared/pending";
 import { ContainerBase, ReduxContainer } from "../../containerBase";
-import { UpdateForecastRoute } from "./updateForecast";
 import {
   ForecastData,
   forecastDataLoadActions,
@@ -14,7 +13,6 @@ import {
   renderWarning,
 } from "./common";
 import { PartnerDto, ProjectDto, ProjectRole, ProjectStatus } from "@framework/types";
-import { ProjectForecastRoute, ProjectOverviewRoute } from "../../projects";
 import { Percentage, SimpleString } from "../../../components/renderers";
 import { isNumber } from "@framework/util";
 
@@ -38,7 +36,7 @@ class ViewForecastComponent extends ContainerBase<Params, PendingForecastData, C
     // MO, PM & FC/PM should see partner name
     const isMoPm = !!(data.project.roles & (ProjectRole.ProjectManager | ProjectRole.MonitoringOfficer));
     const partnerName = isMoPm ? data.partner.name : null;
-    const backLink = isMoPm ? ProjectForecastRoute.getLink({ projectId: data.project.id }) : ProjectOverviewRoute.getLink({ projectId: data.project.id });
+    const backLink = isMoPm ? this.props.routes.projectForecast.getLink({ projectId: data.project.id }) : this.props.routes.projectOverview.getLink({ projectId: data.project.id });
     const backText = isMoPm ? "Back to forecasts" : "Back to project";
 
     return (
@@ -101,8 +99,8 @@ const ViewForecast = definition.connect({
 
     return { combined };
   },
-  withCallbacks: dispatch => ({
-    onSubmit: (p: Params) => dispatch(Actions.navigateTo(UpdateForecastRoute.getLink(p)))
+  withCallbacks: (dispatch, routes) => ({
+    onSubmit: (p: Params) => dispatch(Actions.navigateTo(routes.updateForecast.getLink(p)))
   })
 });
 

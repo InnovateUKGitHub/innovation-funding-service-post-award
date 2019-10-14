@@ -5,12 +5,10 @@ import { ProjectDto, ProjectRole } from "@framework/types";
 
 import * as ACC from "../../components";
 import { Pending } from "@shared/pending";
-import { ProjectChangeRequestPrepareRoute } from "./prepare";
 import { PCRDto } from "@framework/dtos/pcrDtos";
 import { IEditorStore, StoresConsumer } from "@ui/redux";
 import { ProjectChangeRequestItemStatus } from "@framework/entities";
-import { MultipleDocumentUpdloadDtoValidator, PCRDtoValidator } from "@ui/validators";
-import { ProjectChangeRequestPrepareReasoningFilesRoute } from "./prepareReasoningFiles";
+import { PCRDtoValidator } from "@ui/validators";
 
 export interface ProjectChangeRequestPrepareReasoningParams {
   projectId: string;
@@ -56,7 +54,7 @@ class PCRPrepareReasoningComponent extends ContainerBase<ProjectChangeRequestPre
 
     return (
       <ACC.Page
-        backLink={<ACC.BackLink route={ProjectChangeRequestPrepareRoute.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId })}>Back to prepare project change request</ACC.BackLink>}
+        backLink={<ACC.BackLink route={this.props.routes.pcrPrepare.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId })}>Back to prepare project change request</ACC.BackLink>}
         pageTitle={<ACC.Projects.Title project={project} />}
         project={project}
         validator={[editor.validator]}
@@ -98,7 +96,7 @@ class PCRPrepareReasoningComponent extends ContainerBase<ProjectChangeRequestPre
                   <ACC.DocumentList documents={documents} qa="supporting-documents" /> :
                   <ACC.ValidationMessage messageType="info" message="No files uploaded" />
               }
-              <ACC.Link styling="SecondaryButton" route={ProjectChangeRequestPrepareReasoningFilesRoute.getLink({ projectId: pcr.projectId, pcrId: pcr.id })}>Upload and remove documents</ACC.Link>
+              <ACC.Link styling="SecondaryButton" route={this.props.routes.pcrPrepareReasoningFiles.getLink({ projectId: pcr.projectId, pcrId: pcr.id })}>Upload and remove documents</ACC.Link>
             </ACC.Section>
             <PCRForm.Fieldset heading="Mark as complete">
               <PCRForm.Checkboxes
@@ -147,7 +145,7 @@ const PCRPrepareReasoningContainer = (props: ProjectChangeRequestPrepareReasonin
         files={stores.documents.pcrOrPcrItemDocuments(props.projectId, props.pcrId)}
         onChange={(save, dto) => {
           stores.messages.clearMessages();
-          stores.projectChangeRequests.updatePcrEditor(save, props.projectId, dto, undefined, ({ projectId, id }) => stores.navigation.navigateTo(ProjectChangeRequestPrepareRoute.getLink({ projectId, pcrId: id })));
+          stores.projectChangeRequests.updatePcrEditor(save, props.projectId, dto, undefined, ({ projectId, id }) => stores.navigation.navigateTo(props.routes.pcrPrepare.getLink({ projectId, pcrId: id })));
         }}
         {...props}
       />

@@ -10,11 +10,13 @@ import { matchRoute } from "@ui/routing/matchRoute";
 import { Authorisation, IClientUser, ILinkInfo } from "@framework/types";
 import { IClientConfig } from "@ui/redux/reducers/configReducer";
 import { IStores } from "@ui/redux";
+import { IRoutes, routeConfig } from "@ui/routing/routeConfig";
 
 export interface BaseProps {
     messages: string[];
     route: RouteState;
     config: IClientConfig;
+    routes: IRoutes;
 }
 
 export type ContainerProps<TParams, TData, TCallbacks> = TParams & TData & TCallbacks & BaseProps;
@@ -39,10 +41,10 @@ class ConnectWrapper<TParams, TData, TCallbacks> {
     constructor(
         private readonly component: ContainerBaseClass<TParams, TData, TCallbacks>,
         private readonly withData: (state: RootState, params: TParams, auth: Authorisation) => TData,
-        private readonly withCallbacks: (dispatch: (action: AsyncThunk<any>) => void) => TCallbacks
+        private readonly withCallbacks: (dispatch: (action: AsyncThunk<any>) => void, routes: IRoutes) => TCallbacks
     ) { }
 
-    private mapStateToProps(state: RootState): TData & TParams & BaseProps {
+    private mapStateToProps(state: RootState, routes: IRoutes): TData & TParams & BaseProps {
         const matched = matchRoute(state.router.route);
         const auth = new Authorisation(state.user.roleInfo);
         const params = (matched.getParams && matched.getParams(state.router.route!) || {}) as TParams;
@@ -51,17 +53,17 @@ class ConnectWrapper<TParams, TData, TCallbacks> {
         const route = state.router.route!;
         const config = state.config;
 
-        return Object.assign(data, params, { messages, route, config});
+        return Object.assign(data, params, { messages, route, config, routes});
     }
 
-    private mapDispachToProps(dispatch: ThunkDispatch<RootState, void, RootActions>) {
-        return this.withCallbacks(dispatch);
+    private mapDispachToProps(dispatch: ThunkDispatch<RootState, void, RootActions>, routes: IRoutes) {
+        return this.withCallbacks(dispatch, routes);
     }
 
     public connect() {
         return reduxConnect<TData, TCallbacks, BaseProps & TParams, RootState>(
-            (state) => this.mapStateToProps(state),
-            (dispatch) => this.mapDispachToProps(dispatch)
+            (state) => this.mapStateToProps(state, routeConfig),
+            (dispatch) => this.mapDispachToProps(dispatch, routeConfig)
         )(this.component);
     }
 }
@@ -91,7 +93,7 @@ class ReduxContainerWrapper<TParams, TData, TCallbacks> {
         };
     }
 
-    public connect(options: { withData: (state: RootState, params: TParams, auth: Authorisation) => TData, withCallbacks: (dispatch: ThunkDispatch<RootState, void, RootActions>) => TCallbacks }) {
+    public connect(options: { withData: (state: RootState, params: TParams, auth: Authorisation) => TData, withCallbacks: (dispatch: ThunkDispatch<RootState, void, RootActions>, routes: IRoutes) => TCallbacks }) {
         return new ConnectWrapper(this.component, options.withData, options.withCallbacks).connect();
     }
 }

@@ -6,7 +6,6 @@ import * as Dtos from "@framework/dtos";
 import { Pending } from "@shared/pending";
 import { IEditorStore, StoresConsumer } from "@ui/redux";
 import { ProjectChangeRequestItemTypeEntity } from "@framework/entities";
-import { ProjectChangeRequestPrepareRoute } from "@ui/containers";
 import { PCRDtoValidator } from "@ui/validators/pcrDtoValidator";
 
 export interface ProjectChangeRequestAddTypeParams {
@@ -36,7 +35,7 @@ class PCRAddTypeComponent extends ContainerBase<ProjectChangeRequestAddTypeParam
   private renderContents(project: Dtos.ProjectDto, editor: IEditorStore<Dtos.PCRDto, PCRDtoValidator>, original: Dtos.PCRDto, itemTypes: Dtos.PCRItemTypeDto[]) {
     return (
       <ACC.Page
-        backLink={<ACC.BackLink route={ProjectChangeRequestPrepareRoute.getLink({ projectId: this.props.projectId, pcrId: this.props.projectChangeRequestId })}>Back to project change requests</ACC.BackLink>}
+        backLink={<ACC.BackLink route={this.props.routes.pcrPrepare.getLink({ projectId: this.props.projectId, pcrId: this.props.projectChangeRequestId })}>Back to project change requests</ACC.BackLink>}
         pageTitle={<ACC.Projects.Title project={project} />}
         project={project}
         validator={editor.validator}
@@ -74,7 +73,7 @@ class PCRAddTypeComponent extends ContainerBase<ProjectChangeRequestAddTypeParam
           </PCRForm.Fieldset>
           <PCRForm.Submit>Add to request</PCRForm.Submit>
         </PCRForm.Form>
-        <ACC.Link styling="SecondaryButton" route={ProjectChangeRequestPrepareRoute.getLink({ projectId: this.props.projectId, pcrId: this.props.projectChangeRequestId })}>Cancel</ACC.Link>
+        <ACC.Link styling="SecondaryButton" route={this.props.routes.pcrPrepare.getLink({ projectId: this.props.projectId, pcrId: this.props.projectChangeRequestId })}>Cancel</ACC.Link>
       </React.Fragment>
     );
   }
@@ -88,7 +87,7 @@ const PCRAddTypeContainer = (props: ProjectChangeRequestAddTypeParams & BaseProp
         itemTypes={stores.projectChangeRequests.getAllPcrTypes()}
         projectChangeRequest={stores.projectChangeRequests.getById(props.projectId, props.projectChangeRequestId)}
         editor={stores.projectChangeRequests.getPcrUpdateEditor(props.projectId, props.projectChangeRequestId)}
-        onChange={(saving, dto) => stores.projectChangeRequests.updatePcrEditor(saving, props.projectId, dto, undefined, () => stores.navigation.navigateTo(ProjectChangeRequestPrepareRoute.getLink({ projectId: props.projectId, pcrId: props.projectChangeRequestId })))}
+        onChange={(saving, dto) => stores.projectChangeRequests.updatePcrEditor(saving, props.projectId, dto, undefined, () => stores.navigation.navigateTo(props.routes.pcrPrepare.getLink({ projectId: props.projectId, pcrId: props.projectChangeRequestId })))}
         createNewChangeRequestItem={(itemType: Dtos.PCRItemTypeDto) => stores.projectChangeRequests.createNewChangeRequestItem(itemType)}
         {...props}
       />

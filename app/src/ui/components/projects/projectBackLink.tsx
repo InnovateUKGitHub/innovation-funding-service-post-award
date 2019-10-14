@@ -1,7 +1,13 @@
 import React from "react";
 import { BackLink } from "../links";
-
-import { ProjectOverviewRoute } from "@ui/containers/projects/overview";
 import { ProjectDto } from "@framework/dtos";
+import { IRoutes } from "@ui/routing";
 
-export const ProjectBackLink = (props: {project: ProjectDto}) => <BackLink route={ProjectOverviewRoute.getLink({ projectId: props.project.id})}>Back to project</BackLink>;
+interface Props {
+  project: ProjectDto;
+  routes: IRoutes;
+}
+
+export const ProjectBackLink = (props: Props) => (
+  <BackLink route={props.routes.projectOverview.getLink({ projectId: props.project.id })}>Back to project</BackLink>
+);

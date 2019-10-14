@@ -4,8 +4,7 @@ import { Pending } from "../../../shared/pending";
 import * as Actions from "../../redux/actions";
 import * as Selectors from "../../redux/selectors";
 import { ContainerBase, ReduxContainer } from "../containerBase";
-import { ClaimLineItemsRoute } from "./claimLineItems";
-import { ClaimsDashboardRoute } from "./dashboard";
+
 import {
   ClaimDto,
   ClaimStatus,
@@ -15,7 +14,6 @@ import {
   ProjectDto,
   ProjectRole,
 } from "@framework/types";
-import { AllClaimsDashboardRoute } from "./allClaimsDashboard";
 import { SimpleString } from "../../components/renderers";
 import { ForecastData, forecastDataLoadActions } from "./forecasts/common";
 
@@ -64,7 +62,7 @@ export class ClaimsDetailsComponent extends ContainerBase<Params, Data, {}> {
 
   private renderContents(data: CombinedData) {
     const isPmOrMo = (data.project.roles & (ProjectRole.ProjectManager | ProjectRole.MonitoringOfficer)) !== ProjectRole.Unknown;
-    const backLink = isPmOrMo ? AllClaimsDashboardRoute.getLink({ projectId: data.project.id }) : ClaimsDashboardRoute.getLink({ projectId: data.project.id, partnerId: data.partner.id });
+    const backLink = isPmOrMo ? this.props.routes.allClaimsDashboard.getLink({ projectId: data.project.id }) : this.props.routes.claimsDashboard.getLink({ projectId: data.project.id, partnerId: data.partner.id });
 
     const tabs: ACC.HashTabItem[] = [
       { text: "Details", hash: "details", content: this.renderDetailsTab(data), qa: "ClaimDetailTab" },
@@ -117,7 +115,7 @@ export class ClaimsDetailsComponent extends ContainerBase<Params, Data, {}> {
     const isFC = !!(partner.roles & ProjectRole.FinancialContact);
 
     if (isMo || isPartnerPM || isFC) {
-      return ClaimLineItemsRoute.getLink({ partnerId: this.props.partnerId, projectId: this.props.projectId, periodId: this.props.periodId, costCategoryId });
+      return this.props.routes.claimLineItems.getLink({ partnerId: this.props.partnerId, projectId: this.props.projectId, periodId: this.props.periodId, costCategoryId });
     }
     return null;
   }

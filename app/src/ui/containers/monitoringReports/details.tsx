@@ -3,7 +3,6 @@ import { BaseProps, ContainerBase, defineRoute } from "../containerBase";
 import * as ACC from "../../components";
 import * as Dtos from "@framework/types";
 import { Pending } from "../../../shared/pending";
-import { MonitoringReportDashboardRoute } from "./dashboard";
 import { MonitoringReportQuestionDto, ProjectRole } from "@framework/types";
 import { StoresConsumer } from "@ui/redux";
 
@@ -49,7 +48,7 @@ class DetailsComponent extends ContainerBase<Params, Data, Callbacks> {
 
     return (
       <ACC.Page
-        backLink={<ACC.BackLink route={MonitoringReportDashboardRoute.getLink({ projectId: this.props.projectId })}>Back to monitoring reports</ACC.BackLink>}
+        backLink={<ACC.BackLink route={this.props.routes.monitoringReportDashboard.getLink({ projectId: this.props.projectId })}>Back to monitoring reports</ACC.BackLink>}
         pageTitle={<ACC.Projects.Title project={project} />}
       >
         <ACC.HashTabs tabList={tabs} />

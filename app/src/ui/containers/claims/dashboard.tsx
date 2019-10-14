@@ -174,7 +174,7 @@ class Component extends ContainerBaseWithState<ClaimDashboardPageParams, Data, C
     return (
       <Acc.Page
         pageTitle={<Acc.Projects.Title project={project}/>}
-        backLink={<Acc.Projects.ProjectBackLink project={project}/>}
+        backLink={<Acc.Projects.ProjectBackLink project={project} routes={this.props.routes}/>}
         error={error}
         validator={validators}
         project={project}
@@ -249,7 +249,7 @@ class Component extends ContainerBaseWithState<ClaimDashboardPageParams, Data, C
           qa="date"
           value={(x) => (x.paidDate || x.approvedDate || x.lastModifiedDate)}
         />
-        <ClaimTable.Custom header="Action" hideHeader={true} qa="link" value={(x) => <Acc.Claims.ClaimDetailsLink claim={x} project={project} partner={partner} />} />
+        <ClaimTable.Custom header="Action" hideHeader={true} qa="link" value={(x) => <Acc.Claims.ClaimDetailsLink claim={x} project={project} partner={partner} routes={this.props.routes} />} />
       </ClaimTable.Table>
     );
   }

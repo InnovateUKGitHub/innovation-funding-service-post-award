@@ -1,6 +1,6 @@
 import express from "express";
 import { IFormHandler } from "./formHandlerBase";
-import { configureRouter } from "../../ui/routing";
+import { configureRouter, routeConfig } from "../../ui/routing";
 import { HomeRoute } from "../../ui/containers";
 import { Configuration } from "../features/common/config";
 
@@ -24,7 +24,7 @@ export class HomeFormHandler implements IFormHandler {
       req.session!.user.email = dto.user;
     }
 
-    const router = configureRouter();
+    const router = configureRouter(routeConfig);
     const url = router.buildPath(HomeRoute.routeName, {});
     res.redirect(url);
     return;

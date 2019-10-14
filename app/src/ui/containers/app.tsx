@@ -1,9 +1,9 @@
-import { udpatePageTitle } from "@ui/redux/actions";
 import React from "react";
-import { MatchedRoute, matchRoute } from "@ui/routing";
+import { IStores, StoresConsumer } from "@ui/redux";
+import { udpatePageTitle } from "@ui/redux/actions";
+import { IRoutes, MatchedRoute, matchRoute } from "@ui/routing";
 import { Footer, Header, PhaseBanner } from "@ui/components";
 import { StandardErrorPage } from "@ui/components/standardErrorPage";
-import { IStores, StoresConsumer } from "@ui/redux";
 import { IClientConfig } from "@ui/redux/reducers/configReducer";
 import { Authorisation, IClientUser } from "@framework/types";
 import { BaseProps } from "./containerBase";
@@ -21,6 +21,7 @@ interface IAppProps {
   stores: IStores;
   // @todo see if we can remove once load data removed
   route: RouteState;
+  routes: IRoutes;
 }
 
 class AppComponent extends React.Component<IAppProps, {}> {
@@ -61,6 +62,7 @@ class AppComponent extends React.Component<IAppProps, {}> {
     const propsToPass: BaseProps = {
       messages: this.props.messages,
       route: this.props.route,
+      routes: this.props.routes,
       config: this.props.config,
     };
     const pageContent = hasAccess ? <route.container {...propsToPass} {...params} /> : <StandardErrorPage />;
@@ -77,7 +79,7 @@ class AppComponent extends React.Component<IAppProps, {}> {
   }
 }
 
-export class App extends React.Component<{ store: Store }, { marker: {}}> {
+export class App extends React.Component<{ store: Store, routes: IRoutes }, { marker: {}}> {
   constructor(props: any) {
     super(props);
     // whenever the store changes force a rerender this will flow down to container level
@@ -97,6 +99,7 @@ export class App extends React.Component<{ store: Store }, { marker: {}}> {
             messages={stores.messages.messages()}
             dispatch={this.props.store.dispatch}
             route={stores.navigation.getRoute()}
+            routes={this.props.routes}
           />
         )}
       </StoresConsumer>

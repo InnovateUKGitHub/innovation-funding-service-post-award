@@ -1,6 +1,5 @@
 import React from "react";
 import * as ACC from "./index";
-import { HomeRoute, ProjectDashboardRoute } from "../containers";
 
 export const NotFoundErrorPage = () => (
   <ACC.Page
@@ -9,7 +8,7 @@ export const NotFoundErrorPage = () => (
   >
     <ACC.Section>
       <ACC.Renderers.SimpleString qa="errorMessage">
-        Please check the web address or search term you entered for any errors. You can return to <a href={ProjectDashboardRoute.routePath}>your dashboard</a> or go back to the <ACC.Link route={HomeRoute.getLink({})}>Innovate UK homepage</ACC.Link>.
+        Please check the web address or search term you entered for any errors. You can return to <a href="/projects/dashboard">your dashboard</a> or go back to the <a href="/">Innovate UK homepage</a>.
       </ACC.Renderers.SimpleString>
     </ACC.Section>
   </ACC.Page>
