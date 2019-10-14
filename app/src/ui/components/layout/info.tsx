@@ -2,6 +2,7 @@ import React from "react";
 
 interface InfoProps {
   summary: string;
+  qa?: string;
 }
 
 export class Info extends React.PureComponent<InfoProps, {}> {
@@ -17,7 +18,7 @@ export class Info extends React.PureComponent<InfoProps, {}> {
 
   render() {
     return (
-      <details data-module="govuk-details" className="govuk-details" ref={(e) => this.elem = e}>
+      <details data-module="govuk-details" className="govuk-details" ref={(e) => this.elem = e} data-qa={this.props.qa}>
         <summary className="govuk-details__summary">
           <span className="govuk-details__summary-text">{this.props.summary}</span>
         </summary>

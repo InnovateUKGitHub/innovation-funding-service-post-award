@@ -13,7 +13,7 @@ interface Props {
 
 export const NavigationArrowsForPCRs = (props: Props) => {
   const { pcr, currentItem, isReviewing, editableItemTypes } = props;
-  const pcrItems = pcr.items.filter(x => editableItemTypes.indexOf(x.type) > 1);
+  const pcrItems = pcr.items.filter(x => editableItemTypes.indexOf(x.type) >= 0);
 
   // if current item is null then you are looking at reasoning so you want a previous link to the last item ie current index is length
   const currentIndex = currentItem ? pcrItems.findIndex(x => x.id === currentItem.id) : pcrItems.length;

@@ -10,10 +10,14 @@ interface Props {
 }
 
 export const ScopeChangeView = (props: Props) => (
-  <ACC.SummaryList qa="scopeChangeSummary">
-    <ACC.SummaryListItem label="Original public description" content={<ACC.Renderers.SimpleString multiline={true}>{props.project.description}</ACC.Renderers.SimpleString>} qa="currentDescription" />
-    <ACC.SummaryListItem label="Original public summary" content={<ACC.Renderers.SimpleString multiline={true}>{props.project.summary}</ACC.Renderers.SimpleString>} qa="currentSummary" />
-    <ACC.SummaryListItem label="New public description" content={<ACC.Renderers.SimpleString multiline={true}>{props.projectChangeRequestItem.publicDescription}</ACC.Renderers.SimpleString>} qa="newDescription" />
-    <ACC.SummaryListItem label="New public summary" content={<ACC.Renderers.SimpleString multiline={true}>{props.projectChangeRequestItem.projectSummary}</ACC.Renderers.SimpleString>} qa="newSummary" />
-  </ACC.SummaryList>
+  <React.Fragment>
+    <ACC.SectionPanel title="New public description" qa="newDescription">
+      <ACC.Renderers.SimpleString multiline={true}>{props.projectChangeRequestItem.publicDescription}</ACC.Renderers.SimpleString>
+      <ACC.Info summary="Published public description" qa="currentDescription"><ACC.Renderers.SimpleString multiline={true}>{props.project.description}</ACC.Renderers.SimpleString></ACC.Info>
+    </ACC.SectionPanel>
+    <ACC.SectionPanel title="New public summary" qa="newSummary">
+      <ACC.Renderers.SimpleString multiline={true}>{props.projectChangeRequestItem.projectSummary}</ACC.Renderers.SimpleString>
+      <ACC.Info summary="Published public summary" qa="currentSummary"><ACC.Renderers.SimpleString multiline={true}>{props.project.summary}</ACC.Renderers.SimpleString></ACC.Info>
+    </ACC.SectionPanel>
+  </React.Fragment>
 );
