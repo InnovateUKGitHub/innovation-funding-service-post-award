@@ -297,7 +297,7 @@ class Component extends ContainerBaseWithState<AllClaimsDashboardParams, Data, C
     const message = isAwaitingIAR
       ? "Your most recent claim cannot be sent to us. You must attach an independent accountant's report (IAR)."
       : "You must attach an independent accountant's report (IAR) for your most recent claim to receive your payment.";
-    const messageType = isAwaitingIAR ? "error" : "warning";
+    const messageType = isAwaitingIAR ? "alert" : "warning";
     return (
       <React.Fragment>
         <Acc.ValidationMessage messageType={messageType} message={message} />
