@@ -1,22 +1,14 @@
 import React from "react";
 
-import { ProjectForecastRoute } from "./projectForecasts";
 import { BaseProps, ContainerBase, defineRoute } from "../containerBase";
 import * as Dtos from "@framework/dtos";
 import { Pending } from "@shared/pending";
 import { IClientUser, PartnerDto, ProjectDto, ProjectRole } from "@framework/types";
-import { ProjectDashboardRoute } from "./dashboard";
-import { AllClaimsDashboardRoute, ClaimsDashboardRoute, ViewForecastRoute } from "../claims";
 import * as ACC from "@ui/components";
-import { MonitoringReportDashboardRoute } from "../monitoringReports";
-import { ProjectChangeRequestsRoute } from "./projectChangeRequests";
-import { ProjectDocumentsRoute } from "./projectDocuments";
-import { ProjectDetailsRoute } from "./details";
 import { IClientConfig } from "@ui/redux/reducers/configReducer";
 import { NavigationCard } from "@ui/components";
-import { PCRsDashboardRoute } from "../pcrs/dashboard";
 import { StoresConsumer } from "@ui/redux";
-import { FinanceSummaryRoute } from "@ui/containers";
+import { IRoutes } from "@ui/routing";
 
 interface Data {
   projectDetails: Pending<Dtos.ProjectDto>;
@@ -49,7 +41,7 @@ class ProjectOverviewComponent extends ContainerBase<Params, Data, {}> {
 
     return (
       <ACC.Page
-        backLink={<ACC.BackLink route={ProjectDashboardRoute.getLink({})}>Back to projects</ACC.BackLink>}
+        backLink={<ACC.BackLink route={this.props.routes.projectDashboard.getLink({})}>Back to projects</ACC.BackLink>}
         pageTitle={<ACC.Projects.Title project={project} />}
         project={project}
       >
@@ -59,7 +51,7 @@ class ProjectOverviewComponent extends ContainerBase<Params, Data, {}> {
         >
           {this.renderProjectOveriewDetails(project, partner)}
         </ACC.Section>
-        {this.renderLinks(projectId, partner && partner.id || partners[0].id, project.roles)}
+        {this.renderLinks(projectId, partner && partner.id || partners[0].id, project.roles, this.props.routes)}
       </ACC.Page>
     );
   }
@@ -138,23 +130,23 @@ class ProjectOverviewComponent extends ContainerBase<Params, Data, {}> {
     );
   }
 
-  private renderLinks(projectId: string, partnerId: string, projectRole: ProjectRole) {
+  private renderLinks(projectId: string, partnerId: string, projectRole: ProjectRole, routes: IRoutes) {
     let links = [
-      { text: "Claims", link: AllClaimsDashboardRoute.getLink({ projectId }) },
-      { text: "Claims", link: ClaimsDashboardRoute.getLink({ projectId, partnerId }) },
-      { text: "Monitoring reports", link: MonitoringReportDashboardRoute.getLink({ projectId }) },
-      { text: "Forecasts", link: ProjectForecastRoute.getLink({ projectId }) },
-      { text: "Forecast", link: ViewForecastRoute.getLink({ projectId, partnerId }) },
-      { text: "Project change requests", link: ProjectChangeRequestsRoute.getLink({ projectId }) },
-      { text: "Project change requests", link: PCRsDashboardRoute.getLink({ projectId }) },
-      { text: "Documents", link: ProjectDocumentsRoute.getLink({ projectId }) },
-      { text: "Details", link: ProjectDetailsRoute.getLink({ id: projectId }) },
-      { text: "Finance summary", link: FinanceSummaryRoute.getLink({ projectId, partnerId }) },
+      { text: "Claims", link: routes.allClaimsDashboard.getLink({ projectId }) },
+      { text: "Claims", link: routes.claimsDashboard.getLink({ projectId, partnerId }) },
+      { text: "Monitoring reports", link: routes.monitoringReportDashboard.getLink({ projectId }) },
+      { text: "Forecasts", link: routes.projectForecast.getLink({ projectId }) },
+      { text: "Forecast", link: routes.viewForecast.getLink({ projectId, partnerId }) },
+      { text: "Project change requests", link: routes.projectChangeRequests.getLink({ projectId }) },
+      { text: "Project change requests", link: routes.pcrsDashboard.getLink({ projectId }) },
+      { text: "Documents", link: routes.projectDocuments.getLink({ projectId }) },
+      { text: "Details", link: routes.projectDetails.getLink({ id: projectId }) },
+      { text: "Finance summary", link: routes.financeSummary.getLink({ projectId, partnerId }) },
     ].filter(x => x.link.accessControl(this.props.user, this.props.config));
 
     // special case if not fc shouldnt have link to ViewForecastRoute from this page... the view forecast route has permission from the project forecasts route
     if (projectRole & (ProjectRole.MonitoringOfficer | ProjectRole.ProjectManager)) {
-      links = links.filter(x => x.link.routeName !== ViewForecastRoute.routeName);
+      links = links.filter(x => x.link.routeName !== routes.viewForecast.routeName);
     }
 
     return (

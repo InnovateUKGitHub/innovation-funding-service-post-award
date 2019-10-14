@@ -6,9 +6,9 @@ import { Pending } from "@shared/pending";
 import { ProjectDto, ProjectRole } from "@framework/types";
 import { EditorStatus, IEditorStore } from "@ui/redux";
 import { ContainerBaseWithState, ContainerProps, ReduxContainer } from "@ui/containers/containerBase";
-import { ClaimDetailDocumentsRoute, PrepareClaimRoute } from "@ui/containers";
 import { DocumentList, ValidationMessage } from "@ui/components";
 import { ClaimDetailsValidator, ClaimLineItemDtoValidator } from "@ui/validators/claimDetailsValidator";
+import { IRoutes } from "@ui/routing";
 
 export interface EditClaimDetailsParams {
   projectId: string;
@@ -66,7 +66,7 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
 
   // @TODO fix back link
   private renderContents({ project, costCategories, documents, forecastDetail, claimDetails, editor }: CombinedData) {
-    const back = PrepareClaimRoute.getLink({ projectId: project.id, partnerId: this.props.partnerId, periodId: this.props.periodId });
+    const back = this.props.routes.prepareClaim.getLink({ projectId: project.id, partnerId: this.props.partnerId, periodId: this.props.periodId });
     const costCategory = costCategories.find(x => x.id === this.props.costCategoryId)! || {};
 
     return (
@@ -294,12 +294,12 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
 
 }
 
-const afterSave = (dispatch: any, projectId: string, partnerId: string, periodId: number) => {
-  dispatch(Actions.navigateTo(PrepareClaimRoute.getLink({ projectId, periodId, partnerId })));
+const afterSave = (dispatch: any, projectId: string, partnerId: string, periodId: number, routes: IRoutes) => {
+  dispatch(Actions.navigateTo(routes.prepareClaim.getLink({ projectId, periodId, partnerId })));
 };
 
-const redirectToUploadPage = (dispatch: any, projectId: string, partnerId: string, costCategoryId: string, periodId: number) => {
-  dispatch(Actions.navigateTo(ClaimDetailDocumentsRoute.getLink({ projectId, partnerId, costCategoryId, periodId })));
+const redirectToUploadPage = (dispatch: any, projectId: string, partnerId: string, costCategoryId: string, periodId: number, routes: IRoutes) => {
+  dispatch(Actions.navigateTo(routes.claimDetailDocuments.getLink({ projectId, partnerId, costCategoryId, periodId })));
 };
 
 const definition = ReduxContainer.for<EditClaimDetailsParams, Data, Callbacks>(EditClaimLineItemsComponent);
@@ -315,15 +315,15 @@ export const EditClaimLineItems = definition.connect({
       documents: Selectors.getClaimDetailDocuments(props.partnerId, props.periodId, props.costCategoryId).getPending(state)
     };
   },
-  withCallbacks: (dispatch) => ({
+  withCallbacks: (dispatch, routes) => ({
     validate: (partnerId: string, periodId: number, costCategoryId: string, dto: ClaimDetailsDto) =>
       dispatch(Actions.validateClaimDetails(partnerId, periodId, costCategoryId, dto)),
     save: (projectId: string, partnerId: string, periodId: number, costCategoryId: string, dto: ClaimDetailsDto) =>
       dispatch(Actions.saveClaimDetails(projectId, partnerId, periodId, costCategoryId, dto, () =>
-        afterSave(dispatch, projectId, partnerId, periodId))),
+        afterSave(dispatch, projectId, partnerId, periodId, routes))),
     saveAndUpload: (projectId: string, partnerId: string, costCategoryId: string, periodId: number, dto: ClaimDetailsDto) =>
       dispatch(Actions.saveClaimDetails(projectId, partnerId, periodId, costCategoryId, dto, () =>
-        redirectToUploadPage(dispatch, projectId, partnerId, costCategoryId, periodId))),
+        redirectToUploadPage(dispatch, projectId, partnerId, costCategoryId, periodId, routes))),
   })
 });
 

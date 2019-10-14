@@ -1,13 +1,11 @@
 import React from "react";
 import { ContainerBase, ReduxContainer } from "../containerBase";
 import { Pending } from "../../../shared/pending";
-import { ClaimsDetailsRoute } from "./details";
 import * as Actions from "../../redux/actions";
 import * as Selectors from "../../redux/selectors";
 import * as ACC from "../../components";
 import { DocumentList, NavigationArrows } from "../../components";
 import { State } from "router5";
-import { ReviewClaimRoute } from "./review";
 import { ClaimDto, ILinkInfo, PartnerDto, ProjectDto, ProjectRole } from "@framework/types";
 import classNames from "classnames";
 
@@ -56,13 +54,15 @@ export class ClaimLineItemsComponent extends ContainerBase<Params, Data, {}> {
 
   private renderContents({ project, partner, claimDetails, costCategories, forecastDetail, documents, claim }: CombinedData) {
     const params: Params = {
-      partnerId : this.props.partnerId,
+      partnerId: this.props.partnerId,
       costCategoryId: this.props.costCategoryId,
-      periodId : this.props.periodId,
+      periodId: this.props.periodId,
       projectId: this.props.projectId
     };
 
-    const backLink = this.props.route.name === ReviewClaimLineItemsRoute.routeName ? ReviewClaimRoute.getLink(params) : ClaimsDetailsRoute.getLink(params);
+    const backLink = this.props.route.name === ReviewClaimLineItemsRoute.routeName ?
+      this.props.routes.reviewClaim.getLink(params) :
+      this.props.routes.claimDetails.getLink(params);
 
     return (
       <ACC.Page
@@ -87,7 +87,7 @@ export class ClaimLineItemsComponent extends ContainerBase<Params, Data, {}> {
       : <ACC.Renderers.SimpleString>No documents uploaded.</ACC.Renderers.SimpleString>;
   }
 
-  private getLinks(costCategories: CostCategoryDto[], project: ProjectDto, partner: PartnerDto, claim: ClaimDto, pages: {getLink: (params: Params) => ILinkInfo}) {
+  private getLinks(costCategories: CostCategoryDto[], project: ProjectDto, partner: PartnerDto, claim: ClaimDto, pages: { getLink: (params: Params) => ILinkInfo }) {
     const periodId = this.props.periodId;
     const costCategoriesToUse = costCategories
       .filter(x => x.competitionType === project.competitionType && x.organisationType === partner.organisationType)
@@ -139,7 +139,7 @@ export class ClaimLineItemsComponent extends ContainerBase<Params, Data, {}> {
     const arrowLinks = this.getLinks(costCategories, project, partner, claim, route);
     if (arrowLinks === null) return null;
 
-    return <NavigationArrows nextLink={arrowLinks.nextLink} previousLink={arrowLinks.previousLink}/>;
+    return <NavigationArrows nextLink={arrowLinks.nextLink} previousLink={arrowLinks.previousLink} />;
   }
 
   private renderAdditionalInformation = (claimDetail: ClaimDetailsDto) => {
@@ -159,7 +159,7 @@ const ClaimLineItemsTable: React.SFC<{ lineItems: ClaimLineItemDto[], forecastDe
   const renderFooterRow = (row: { key: string, title: string, value: React.ReactNode, qa: string, isBold?: boolean }) => (
     <tr key={row.key} className="govuk-table__row" data-qa={row.qa}>
       <th className="govuk-table__cell govuk-table__cell--numeric govuk-!-font-weight-bold">{row.title}</th>
-      <td className={classNames("govuk-table__cell", "govuk-table__cell--numeric", {"govuk-!-font-weight-bold": row.isBold})}>{row.value}</td>
+      <td className={classNames("govuk-table__cell", "govuk-table__cell--numeric", { "govuk-!-font-weight-bold": row.isBold })}>{row.value}</td>
     </tr>
   );
 
@@ -211,11 +211,11 @@ export const ClaimLineItems = definition.connect({
 });
 
 const getParams = (route: State): Params => ({
-    projectId: route.params.projectId,
-    partnerId: route.params.partnerId,
-    costCategoryId: route.params.costCategoryId,
-    periodId: parseInt(route.params.periodId, 10)
-  });
+  projectId: route.params.projectId,
+  partnerId: route.params.partnerId,
+  costCategoryId: route.params.costCategoryId,
+  periodId: parseInt(route.params.periodId, 10)
+});
 
 const getLoadDataActions = (params: Params): Actions.AsyncThunk<any>[] => [
   Actions.loadProject(params.projectId),
@@ -223,7 +223,7 @@ const getLoadDataActions = (params: Params): Actions.AsyncThunk<any>[] => [
   Actions.loadCostCategories(),
   Actions.loadForecastDetail(params.partnerId, params.periodId, params.costCategoryId),
   Actions.loadClaimDetails(params.projectId, params.partnerId, params.periodId, params.costCategoryId),
-  Actions.loadClaimDetailDocuments({projectId: params.projectId, partnerId: params.partnerId, periodId: params.periodId, costCategoryId: params.costCategoryId}),
+  Actions.loadClaimDetailDocuments({ projectId: params.projectId, partnerId: params.partnerId, periodId: params.periodId, costCategoryId: params.costCategoryId }),
   Actions.loadClaim(params.partnerId, params.periodId),
 ];
 

@@ -1,15 +1,12 @@
 import React from "react";
 
 import { BaseProps, ContainerBase, defineRoute, ReduxContainer } from "../containerBase";
-import { ILinkInfo, ProjectDto, ProjectRole } from "@framework/types";
+import { ProjectDto, ProjectRole } from "@framework/types";
 
 import * as ACC from "../../components";
 import { Pending } from "@shared/pending";
-import { PCRDetailsRoute } from "./details";
-import { PCRReviewItemRoute, PCRViewItemRoute } from "./viewItem";
-import { PCRDto, PCRItemDto } from "@framework/dtos/pcrDtos";
+import { PCRDto } from "@framework/dtos/pcrDtos";
 import { StoresConsumer } from "@ui/redux";
-import { PCRReviewRoute } from "./review";
 import { NavigationArrowsForPCRs } from "./navigationArrows";
 import { ProjectChangeRequestItemTypeEntity } from "@framework/entities";
 
@@ -38,8 +35,8 @@ class PCRViewReasoningComponent extends ContainerBase<Params, Data, Callbacks> {
 
   private renderContents(project: ProjectDto, pcr: PCRDto, files: DocumentSummaryDto[], editableItemTypes: ProjectChangeRequestItemTypeEntity[]) {
     const backLink = this.props.isReviewing ?
-      <ACC.BackLink route={PCRReviewRoute.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId })}>Back to review project change request</ACC.BackLink> :
-      <ACC.BackLink route={PCRDetailsRoute.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId })}>Back to project change request details</ACC.BackLink>
+      <ACC.BackLink route={this.props.routes.pcrReview.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId })}>Back to review project change request</ACC.BackLink> :
+      <ACC.BackLink route={this.props.routes.pcrDetails.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId })}>Back to project change request details</ACC.BackLink>
       ;
     return (
       <ACC.Page
@@ -59,7 +56,7 @@ class PCRViewReasoningComponent extends ContainerBase<Params, Data, Callbacks> {
             />
           </ACC.SummaryList>
         </ACC.Section>
-        <NavigationArrowsForPCRs pcr={pcr} currentItem={null} isReviewing={this.props.isReviewing} editableItemTypes={editableItemTypes}/>
+        <NavigationArrowsForPCRs pcr={pcr} currentItem={null} isReviewing={this.props.isReviewing} editableItemTypes={editableItemTypes} routes={this.props.routes}/>
       </ACC.Page>
     );
   }

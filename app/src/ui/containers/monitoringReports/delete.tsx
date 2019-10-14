@@ -2,7 +2,6 @@ import React from "react";
 import * as ACC from "@ui/components";
 import * as Dtos from "@framework/dtos";
 import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerBase";
-import { MonitoringReportDashboardRoute } from "@ui/containers";
 import { MonitoringReportDtoValidator } from "@ui/validators/MonitoringReportDtoValidator";
 import { IEditorStore } from "@ui/redux";
 import { Pending } from "@shared/pending";
@@ -37,7 +36,7 @@ class DeleteVerificationComponent extends ContainerBase<MonitoringReportDeletePa
     return (
       <ACC.Page
         pageTitle={<ACC.Projects.Title project={project} />}
-        backLink={<ACC.BackLink route={MonitoringReportDashboardRoute.getLink({ projectId: this.props.projectId })}>Back to monitoring reports</ACC.BackLink>}
+        backLink={<ACC.BackLink route={this.props.routes.monitoringReportDashboard.getLink({ projectId: this.props.projectId })}>Back to monitoring reports</ACC.BackLink>}
         error={editor.error}
       >
         <ACC.Section>
@@ -68,7 +67,7 @@ const DeleteVerificationContainer = (props: MonitoringReportDeleteParams&BasePro
         <DeleteVerificationComponent
           project={stores.projects.getById(props.projectId)}
           editor={stores.monitoringReports.getUpdateMonitoringReportEditor(props.projectId, props.id)}
-          delete={(dto) => stores.monitoringReports.deleteReport(props.projectId, props.id, dto, "You have deleted the monitoring report.", () => stores.navigation.navigateTo(MonitoringReportDashboardRoute.getLink({ projectId: dto.projectId })))}
+          delete={(dto) => stores.monitoringReports.deleteReport(props.projectId, props.id, dto, "You have deleted the monitoring report.", () => stores.navigation.navigateTo(props.routes.monitoringReportDashboard.getLink({ projectId: dto.projectId })))}
           {...props}
         />
       )

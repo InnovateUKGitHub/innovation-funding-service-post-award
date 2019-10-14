@@ -13,11 +13,13 @@ import { rootReducer } from "../../../src/ui/redux/reducers";
 import { Provider } from "react-redux";
 import { RouterProvider } from "react-router5";
 import { IClientUser } from "@framework/types";
+import { routeConfig } from "@ui/routing/routeConfig";
+import { configureRouter } from "@ui/routing";
 
 Enzyme.configure({ adapter: new Adapter() });
 
-const route = {routeName: "test", routeParams: { id : "exampleId"}, accessControl: () => true};
-const router = createRouter([{name: route.routeName, path: "/test/:id" }]).usePlugin(browserPluginFactory({ useHash: false }));
+const routes = routeConfig;
+const router = configureRouter(routes);
 
 const partnerId = "a0B0Q000001eWRHUA2";
 const projectId = "a0C0Q000001uK5VUAU";
@@ -41,7 +43,7 @@ describe("ClaimDetailsLink", () => {
       const wrapper = mount(
         <Provider store={createStore(rootReducer, {user: preloadedState})}>
           <RouterProvider router={router}>
-            <ClaimDetailsLink claim={{id: claimId, periodId: 3, status: ClaimStatus.SUBMITTED} as any} project={{id: projectId, roles: ProjectRole.MonitoringOfficer} as any} partner={{id: partnerId} as any}/>
+            <ClaimDetailsLink claim={{id: claimId, periodId: 3, status: ClaimStatus.SUBMITTED} as any} project={{id: projectId, roles: ProjectRole.MonitoringOfficer} as any} partner={{id: partnerId} as any} routes={routes}/>
           </RouterProvider>
         </Provider>
       );
@@ -54,7 +56,7 @@ describe("ClaimDetailsLink", () => {
       const wrapper = mount(
         <Provider store={createStore(rootReducer, {user: preloadedState})}>
           <RouterProvider router={router}>
-            <ClaimDetailsLink claim={{id: claimId, periodId: 3, status: ClaimStatus.MO_QUERIED} as any} project={{id: projectId} as any} partner={{id: partnerId, roles: ProjectRole.Unknown} as any}/>
+            <ClaimDetailsLink claim={{id: claimId, periodId: 3, status: ClaimStatus.MO_QUERIED} as any} project={{id: projectId} as any} partner={{id: partnerId, roles: ProjectRole.Unknown} as any} routes={routes}/>
           </RouterProvider>
         </Provider>
       );
@@ -65,7 +67,7 @@ describe("ClaimDetailsLink", () => {
       const wrapper = mount(
         <Provider store={createStore(rootReducer, {user: preloadedState})}>
           <RouterProvider router={router}>
-            <ClaimDetailsLink claim={{id: claimId, periodId: 3, status: ClaimStatus.INNOVATE_QUERIED} as any} project={{id: projectId} as any} partner={{id: partnerId, roles: ProjectRole.Unknown} as any}/>
+            <ClaimDetailsLink claim={{id: claimId, periodId: 3, status: ClaimStatus.INNOVATE_QUERIED} as any} project={{id: projectId} as any} partner={{id: partnerId, roles: ProjectRole.Unknown} as any} routes={routes}/>
           </RouterProvider>
         </Provider>
       );
@@ -78,7 +80,7 @@ describe("ClaimDetailsLink", () => {
       const wrapper = mount(
         <Provider store={createStore(rootReducer, {user: preloadedState})}>
           <RouterProvider router={router}>
-            <ClaimDetailsLink claim={{id: claimId, periodId: 3, status: ClaimStatus.MO_QUERIED} as any} project={{id: projectId} as any} partner={{id: partnerId, roles: ProjectRole.FinancialContact} as any}/>
+            <ClaimDetailsLink claim={{id: claimId, periodId: 3, status: ClaimStatus.MO_QUERIED} as any} project={{id: projectId} as any} partner={{id: partnerId, roles: ProjectRole.FinancialContact} as any} routes={routes}/>
           </RouterProvider>
         </Provider>
       );
@@ -89,7 +91,7 @@ describe("ClaimDetailsLink", () => {
       const wrapper = mount(
         <Provider store={createStore(rootReducer, {user: preloadedState})}>
           <RouterProvider router={router}>
-            <ClaimDetailsLink claim={{id: claimId, periodId: 3, status: ClaimStatus.INNOVATE_QUERIED} as any} project={{id: projectId} as any} partner={{id: partnerId, roles: ProjectRole.FinancialContact} as any}/>
+            <ClaimDetailsLink claim={{id: claimId, periodId: 3, status: ClaimStatus.INNOVATE_QUERIED} as any} project={{id: projectId} as any} partner={{id: partnerId, roles: ProjectRole.FinancialContact} as any} routes={routes}/>
           </RouterProvider>
         </Provider>
       );
@@ -100,7 +102,7 @@ describe("ClaimDetailsLink", () => {
       const wrapper = mount(
         <Provider store={createStore(rootReducer, {user: preloadedState})}>
           <RouterProvider router={router}>
-            <ClaimDetailsLink claim={{id: claimId, periodId: 3, status: ClaimStatus.DRAFT} as any} project={{id: projectId} as any} partner={{id: partnerId, roles: ProjectRole.FinancialContact} as any}/>
+            <ClaimDetailsLink claim={{id: claimId, periodId: 3, status: ClaimStatus.DRAFT} as any} project={{id: projectId} as any} partner={{id: partnerId, roles: ProjectRole.FinancialContact} as any} routes={routes}/>
           </RouterProvider>
         </Provider>
       );
@@ -112,7 +114,7 @@ describe("ClaimDetailsLink", () => {
     const wrapper = mount(
       <Provider store={createStore(rootReducer, {user: preloadedState})}>
         <RouterProvider router={router}>
-          <ClaimDetailsLink claim={{id: claimId, periodId: 3} as any} project={{id: projectId} as any} partner={{id: partnerId} as any}/>
+          <ClaimDetailsLink claim={{id: claimId, periodId: 3} as any} project={{id: projectId} as any} partner={{id: partnerId} as any} routes={routes}/>
         </RouterProvider>
       </Provider>
     );
@@ -123,7 +125,7 @@ describe("ClaimDetailsLink", () => {
     const wrapper = mount(
       <Provider store={createStore(rootReducer, {user: preloadedState})}>
         <RouterProvider router={router}>
-          <ClaimDetailsLink claim={{id: claimId, periodId: 3, status: ClaimStatus.DRAFT} as any} project={{id: projectId} as any} partner={{id: partnerId} as any}/>
+          <ClaimDetailsLink claim={{id: claimId, periodId: 3, status: ClaimStatus.DRAFT} as any} project={{id: projectId} as any} partner={{id: partnerId} as any} routes={routes}/>
         </RouterProvider>
       </Provider>
     );

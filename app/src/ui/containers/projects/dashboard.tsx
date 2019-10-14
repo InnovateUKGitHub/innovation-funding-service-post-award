@@ -6,10 +6,8 @@ import { BaseProps, ContainerBaseWithState, ContainerProps, defineRoute } from "
 import { PartnerClaimStatus, PartnerDto, ProjectDto, ProjectRole, ProjectStatus } from "@framework/types";
 import React from "react";
 import * as colour from "../../styles/colours";
-import { HomeRoute } from "../home";
 import { StatisticsBox } from "../../components";
 import { IClientConfig } from "@ui/redux/reducers/configReducer";
-import { ProjectOverviewRoute } from "./overview";
 import { StoresConsumer } from "@ui/redux";
 
 interface Data {
@@ -74,7 +72,7 @@ class ProjectDashboardComponent extends ContainerBaseWithState<{}, Data, {}, Sta
     if (config.ssoEnabled) {
       return <a className="govuk-back-link" href={`${config.ifsRoot}/dashboard-selection`}>Back to dashboard</a>;
     }
-    return <ACC.BackLink route={HomeRoute.getLink({})}>Back to home page</ACC.BackLink>;
+    return <ACC.BackLink route={this.props.routes.home.getLink({})}>Back to home page</ACC.BackLink>;
   }
 
   private renderContents(projects: ProjectDto[], partners: PartnerDto[]) {
@@ -303,7 +301,7 @@ class ProjectDashboardComponent extends ContainerBaseWithState<{}, Data, {}, Sta
       return <p className="govuk-heading-s govuk-!-margin-bottom-2">{text}</p>;
     }
 
-    return <ACC.Link className={"blockLink"} route={ProjectOverviewRoute.getLink({ projectId: project.id })}>{text}</ACC.Link>;
+    return <ACC.Link className={"blockLink"} route={this.props.routes.projectOverview.getLink({ projectId: project.id })}>{text}</ACC.Link>;
   }
 
   private renderProject(project: ProjectDto, partner: PartnerDto | null, section: Section, index: number) {

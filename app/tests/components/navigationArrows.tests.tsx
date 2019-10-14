@@ -4,20 +4,21 @@ import React from "react";
 import Enzyme, { mount } from "enzyme";
 import Adapter from "enzyme-adapter-react-16";
 import { NavigationArrows } from "../../src/ui/components";
-import { ReviewClaimLineItemsRoute } from "../../src/ui/containers/claims";
 import { createStore } from "redux";
 import { rootReducer } from "../../src/ui/redux/reducers";
 import { RouterProvider } from "react-router5";
 import { Provider } from "react-redux";
-import createRouter from "router5";
-import browserPluginFactory from "router5/plugins/browser";
 import { IClientUser, ProjectRole } from "@framework/types";
+import { configureRouter, routeConfig } from "@ui/routing";
 
 Enzyme.configure({ adapter: new Adapter() });
 
+const routes = routeConfig;
+const router = configureRouter(routes);
+
 const previousLink = {
   label: "Overheads",
-  route: ReviewClaimLineItemsRoute.getLink({
+  route: routes.reviewClaimLineItems.getLink({
     partnerId: "a0B0Q000001e3HdUAI",
     projectId: "a0C0Q000001tr5yUAA",
     periodId: 2,
@@ -27,16 +28,13 @@ const previousLink = {
 
 const nextLink = {
   label: "Labour",
-  route: ReviewClaimLineItemsRoute.getLink({
+  route: routes.reviewClaimLineItems.getLink({
     partnerId: "a0B0Q000001e3HdUAI",
     projectId: "a0C0Q000001tr5yUAA",
     periodId: 2,
     costCategoryId: "a060Q000000oAYYQA2"
   })
 };
-
-const route = { name: "test", path: "/test" } as any;
-const router = createRouter([route]).usePlugin(browserPluginFactory({ useHash: false }));
 
 const preloadedState: IClientUser = {
   email: "iuk.accproject@bjss.com.bjsspoc2",
@@ -47,14 +45,15 @@ const preloadedState: IClientUser = {
     }
   }
 };
+
 describe("NavigationArrows", () => {
   it("renders only the next arrow if no previous link is given", () => {
     const wrapper = mount(
-  <Provider store={createStore(rootReducer, {user: preloadedState})}>
-          <RouterProvider router={router}>
-            <NavigationArrows previousLink={null} nextLink={nextLink}/>
-          </RouterProvider>
-        </Provider>
+      <Provider store={createStore(rootReducer, { user: preloadedState })}>
+        <RouterProvider router={router}>
+          <NavigationArrows previousLink={null} nextLink={nextLink} />
+        </RouterProvider>
+      </Provider>
     );
 
     expect(wrapper.find("a").length).toEqual(1);
@@ -64,9 +63,9 @@ describe("NavigationArrows", () => {
 
   it("renders the previous and the next arrow", () => {
     const wrapper = mount(
-<Provider store={createStore(rootReducer, {user: preloadedState})}>
+      <Provider store={createStore(rootReducer, { user: preloadedState })}>
         <RouterProvider router={router}>
-          <NavigationArrows previousLink={previousLink} nextLink={nextLink}/>
+          <NavigationArrows previousLink={previousLink} nextLink={nextLink} />
         </RouterProvider>
       </Provider>
     );
@@ -82,9 +81,9 @@ describe("NavigationArrows", () => {
 
   it("renders only the previous arrow if no next link is given", () => {
     const wrapper = mount(
-<Provider store={createStore(rootReducer, {user: preloadedState})}>
+      <Provider store={createStore(rootReducer, { user: preloadedState })}>
         <RouterProvider router={router}>
-          <NavigationArrows previousLink={previousLink} nextLink={null}/>
+          <NavigationArrows previousLink={previousLink} nextLink={null} />
         </RouterProvider>
       </Provider>
     );
@@ -96,9 +95,9 @@ describe("NavigationArrows", () => {
 
   it("renders no arrows if no links are given", () => {
     const wrapper = mount(
-<Provider store={createStore(rootReducer, {user: preloadedState})}>
+      <Provider store={createStore(rootReducer, { user: preloadedState })}>
         <RouterProvider router={router}>
-          <NavigationArrows previousLink={null} nextLink={null}/>
+          <NavigationArrows previousLink={null} nextLink={null} />
         </RouterProvider>
       </Provider>
     );

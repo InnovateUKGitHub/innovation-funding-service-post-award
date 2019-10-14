@@ -5,9 +5,6 @@ import { ProjectDto, ProjectRole } from "@framework/types";
 
 import * as ACC from "../../components";
 import { Pending } from "@shared/pending";
-import { PCRsDashboardRoute } from "./dashboard";
-import { PCRViewItemRoute } from "./viewItem";
-import { PCRViewReasoningRoute } from "./viewReasoning";
 import { PCRDto, PCRItemDto, ProjectChangeRequestStatusChangeDto } from "@framework/dtos/pcrDtos";
 import { ProjectChangeRequestItemStatus, ProjectChangeRequestItemTypeEntity } from "@framework/entities";
 import { StoresConsumer } from "@ui/redux";
@@ -50,7 +47,7 @@ class PCRDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
 
     return (
       <ACC.Page
-        backLink={<ACC.BackLink route={PCRsDashboardRoute.getLink({ projectId: this.props.projectId })}>Back to project change requests</ACC.BackLink>}
+        backLink={<ACC.BackLink route={this.props.routes.pcrsDashboard.getLink({ projectId: this.props.projectId })}>Back to project change requests</ACC.BackLink>}
         pageTitle={<ACC.Projects.Title project={project} />}
         project={project}
       >
@@ -97,7 +94,7 @@ class PCRDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
         <ACC.Task
           name="Reasoning for Innovate UK"
           status={this.getTaskStatus(projectChangeRequest.reasoningStatus)}
-          route={PCRViewReasoningRoute.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId })}
+          route={this.props.routes.pcrViewReasoning.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId })}
         />
       </ACC.TaskListSection>
     );
@@ -108,7 +105,7 @@ class PCRDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
       <ACC.Task
         name={item.typeName}
         status={this.getTaskStatus(item.status)}
-        route={PCRViewItemRoute.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId, itemId: item.id })}
+        route={this.props.routes.pcrViewItem.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId, itemId: item.id })}
       />
     );
   }

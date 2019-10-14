@@ -6,7 +6,7 @@ import { hydrate } from "react-dom";
 
 import { Polyfill } from "./polyfill";
 
-import { configureRouter } from "@ui/routing";
+import { configureRouter, routeConfig } from "@ui/routing";
 import { createStores, rootReducer, setupMiddleware, StoresProvider } from "@ui/redux";
 import { App } from "../ui/containers/app";
 import { processDto } from "../shared/processResponse";
@@ -17,7 +17,8 @@ import { RootActionsOrThunk } from "@ui/redux/actions";
 const serverState = processDto((window as any).__PRELOADED_STATE__);
 serverState.isClient = true;
 
-const router = configureRouter();
+const routes = routeConfig;
+const router = configureRouter(routes);
 const middleware = setupMiddleware(router, true);
 const store = createStore(rootReducer, serverState, middleware);
 
@@ -40,7 +41,7 @@ Polyfill().then(() => router.start(() => hydrate((
   <Provider store={store}>
     <RouterProvider router={router}>
       <StoresProvider value={getStores()}>
-        <App store={store}/>
+        <App store={store} routes={routes}/>
       </StoresProvider>
     </RouterProvider>
   </Provider>),

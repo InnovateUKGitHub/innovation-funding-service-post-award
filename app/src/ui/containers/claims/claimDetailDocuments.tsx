@@ -2,7 +2,6 @@ import React from "react";
 import { ContainerBase, ReduxContainer } from "../containerBase";
 import * as ACC from "@ui/components";
 import { Pending } from "@shared/pending";
-import { EditClaimLineItemsRoute } from "./index";
 import * as Actions from "@ui/redux/actions";
 import * as Selectors from "@ui/redux/selectors";
 import { ProjectDto, ProjectRole } from "@framework/types";
@@ -100,7 +99,7 @@ export class ClaimDetailDocumentsComponent extends ContainerBase<ClaimDetailDocu
   }
 
   private renderContents({project, costCategories, documents, editor, deleteEditor}: CombinedData) {
-    const back = EditClaimLineItemsRoute.getLink({
+    const back = this.props.routes.prepareClaimLineItems.getLink({
       projectId: project.id,
       partnerId: this.props.partnerId,
       periodId: this.props.periodId,

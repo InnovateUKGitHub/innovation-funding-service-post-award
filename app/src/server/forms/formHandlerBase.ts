@@ -1,6 +1,6 @@
 import express, { RequestHandler } from "express";
 import { ISession, ServerFileWrapper } from "../apis/controllerBase";
-import { configureRouter } from "../../ui/routing";
+import { configureRouter, routeConfig } from "../../ui/routing";
 import { Results } from "../../ui/validation/results";
 import contextProvider from "../features/common/contextProvider";
 import { FormHandlerError } from "../features/common/appError";
@@ -89,7 +89,7 @@ abstract class FormHandlerBase<TParams, TDto, TValidation extends Results<{}>> i
   protected abstract createValidationResult(params: TParams, dto: TDto): TValidation;
 
   protected redirect(link: ILinkInfo, res: express.Response) {
-    const router = configureRouter();
+    const router = configureRouter(routeConfig);
     const url = router.buildPath(link.routeName, link.routeParams);
     res.redirect(url);
     return;

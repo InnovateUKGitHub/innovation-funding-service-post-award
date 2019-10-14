@@ -7,7 +7,6 @@ import { Pending } from "@shared/pending";
 import { PCRDto, PCRItemDto, PCRItemTypeDto, ProjectDto, ProjectRole } from "@framework/dtos";
 import { IEditorStore, StoresConsumer } from "@ui/redux";
 import { MultipleDocumentUpdloadDtoValidator } from "@ui/validators";
-import { ProjectChangeRequestPrepareItemRoute } from "./prepareItem";
 import { ProjectChangeRequestItemTypeEntity } from "@framework/entities";
 
 interface Params {
@@ -48,7 +47,7 @@ class PrepareItemFilesComponent extends ContainerBase<Params, Data, Callbacks> {
   private renderContents(project: ProjectDto, pcr: PCRDto, pcrItem: PCRItemDto, pcrItemType: PCRItemTypeDto, documents: DocumentSummaryDto[], documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>): React.ReactNode {
     return (
       <ACC.Page
-        backLink={<ACC.BackLink route={ProjectChangeRequestPrepareItemRoute.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId, itemId: this.props.itemId })}>Back to {pcrItem.typeName}</ACC.BackLink>}
+        backLink={<ACC.BackLink route={this.props.routes.pcrPrepareItem.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId, itemId: this.props.itemId })}>Back to {pcrItem.typeName}</ACC.BackLink>}
         pageTitle={<ACC.Projects.Title project={project} />}
         project={project}
         error={documentsEditor.error}
