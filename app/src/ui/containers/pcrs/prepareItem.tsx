@@ -54,15 +54,22 @@ class PCRPrepareItemComponent extends ContainerBase<ProjectChangeRequestPrepareI
       >
         <ACC.Renderers.Messages messages={this.props.messages} />
 
-        <ACC.Section qa="guidance">
-          <ACC.Renderers.SimpleString>{pcrItem.guidance}</ACC.Renderers.SimpleString>
-        </ACC.Section>
+        {this.renderGuidanceSection(pcrItem)}
 
         {this.renderTemplateLinks(pcrItemType)}
 
         {this.renderForm(project, pcr, editor)}
 
       </ACC.Page>
+    );
+  }
+
+  private renderGuidanceSection(pcr: PCRItemDto) {
+    if (!pcr.guidance) return null;
+    return (
+      <ACC.Section qa="guidance">
+        <ACC.Renderers.SimpleString>{pcr.guidance}</ACC.Renderers.SimpleString>
+      </ACC.Section>
     );
   }
 
