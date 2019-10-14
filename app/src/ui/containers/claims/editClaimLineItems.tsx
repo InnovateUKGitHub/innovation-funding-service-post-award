@@ -188,7 +188,7 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
     return (
       <ACC.Section title="Supporting documents" subtitle={documents.length > 0 ? "All documents open in a new window." : ""} qa="supporting-documents-section">
         <ValidationMessage message="If you are unsure what evidence to provide, speak to your Monitoring Officer. They will use these documents when reviewing your claim." messageType="info" />
-        {documents.length > 0 ? <DocumentList documents={documents} qa="supporting-documents" /> : <p className="govuk-body-m govuk-!-margin-bottom-0 govuk-!-margin-right-2">No documents uploaded.</p>}
+        {documents.length > 0 ? <DocumentList documents={documents} qa="supporting-documents" /> : <ACC.Renderers.SimpleString>No documents uploaded.</ACC.Renderers.SimpleString>}
       </ACC.Section>
     );
   }
