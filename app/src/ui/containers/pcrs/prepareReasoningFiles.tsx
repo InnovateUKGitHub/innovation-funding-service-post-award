@@ -77,7 +77,7 @@ class PrepareReasoningFilesComponent extends ContainerBase<Params, Data, Callbac
               validation={documentsEditor.validator.files}
             />
           </UploadForm.Fieldset>
-          <UploadForm.Button name="uploadFile">Upload</UploadForm.Button>
+          <UploadForm.Button name="uploadFile" styling="Primary">Upload documents</UploadForm.Button>
         </UploadForm.Form>
       </ACC.Section>
     );
