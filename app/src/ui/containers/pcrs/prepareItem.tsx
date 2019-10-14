@@ -6,7 +6,6 @@ import { ProjectDto, ProjectRole } from "@framework/types";
 import * as ACC from "@ui/components";
 import { Pending } from "@shared/pending";
 import { PCRDto, PCRItemDto, PCRItemTypeDto, TypedPcrItemDto } from "@framework/dtos";
-import { ProjectChangeRequestPrepareRoute } from "@ui/containers";
 import { EditorStatus, IEditorStore, StoresConsumer, } from "@ui/redux";
 import { ProjectChangeRequestItemStatus, ProjectChangeRequestItemTypeEntity } from "@framework/entities";
 import * as Items from "./items";
@@ -46,7 +45,7 @@ class PCRPrepareItemComponent extends ContainerBase<ProjectChangeRequestPrepareI
   private renderContents(project: ProjectDto, pcr: PCRDto, pcrItem: PCRItemDto, pcrItemType: PCRItemTypeDto,editor: IEditorStore<PCRDto, Validators.PCRDtoValidator>) {
     return (
       <ACC.Page
-        backLink={<ACC.BackLink route={ProjectChangeRequestPrepareRoute.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId })}>Back to prepare project change request</ACC.BackLink>}
+        backLink={<ACC.BackLink route={this.props.routes.pcrPrepare.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId })}>Back to prepare project change request</ACC.BackLink>}
         pageTitle={<ACC.Projects.Title project={project} />}
         project={project}
         error={editor.error}
@@ -102,7 +101,7 @@ class PCRPrepareItemComponent extends ContainerBase<ProjectChangeRequestPrepareI
         case ProjectChangeRequestItemTypeEntity.PartnerAddition:
         case ProjectChangeRequestItemTypeEntity.PartnerWithdrawal:
         case ProjectChangeRequestItemTypeEntity.SinglePartnerFinancialVirement:
-          return <Items.StandardItemEdit projectChangeRequest={pcr} projectChangeRequestItem={item} validator={validator as Validators.PCRStandardItemDtoValidator} status={status} onChange={itemDto => this.onChange(editor.data, itemDto)} onSave={() => this.onSave(editor.data)} />;
+          return <Items.StandardItemEdit projectChangeRequest={pcr} projectChangeRequestItem={item} validator={validator as Validators.PCRStandardItemDtoValidator} status={status} onChange={itemDto => this.onChange(editor.data, itemDto)} onSave={() => this.onSave(editor.data)} routes={this.props.routes} />;
       }
     }
     return <ACC.ValidationMessage messageType="error" message="Type not handled" />;
@@ -136,7 +135,7 @@ const PCRPrepareItemContainer = (props: ProjectChangeRequestPrepareItemParams & 
           editor={stores.projectChangeRequests.getPcrUpdateEditor(props.projectId, props.pcrId)}
           onChange={(save, dto) => {
             stores.messages.clearMessages();
-            stores.projectChangeRequests.updatePcrEditor(save, props.projectId, dto, "Your document has been removed.", () => stores.navigation.navigateTo(ProjectChangeRequestPrepareRoute.getLink({ projectId: props.projectId, pcrId: props.pcrId })));
+            stores.projectChangeRequests.updatePcrEditor(save, props.projectId, dto, "Your document has been removed.", () => stores.navigation.navigateTo(props.routes.pcrPrepare.getLink({ projectId: props.projectId, pcrId: props.pcrId })));
           }}
           {...props}
         />

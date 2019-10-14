@@ -4,7 +4,6 @@ import * as Dtos from "@framework/dtos";
 import { Pending } from "@shared/pending";
 import { MonitoringReportDtoValidator } from "@ui/validators";
 import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerBase";
-import { MonitoringReportDashboardRoute } from "@ui/containers";
 import { IEditorStore, StoresConsumer } from "@ui/redux";
 
 export interface MonitoringReportCreateParams {
@@ -34,7 +33,7 @@ class CreateMonitoringReportComponent extends ContainerBase<MonitoringReportCrea
 
     return (
       <ACC.Page
-        backLink={<ACC.BackLink route={MonitoringReportDashboardRoute.getLink({ projectId: this.props.projectId })}>Back to monitoring reports</ACC.BackLink>}
+        backLink={<ACC.BackLink route={this.props.routes.monitoringReportDashboard.getLink({ projectId: this.props.projectId })}>Back to monitoring reports</ACC.BackLink>}
         pageTitle={<ACC.Projects.Title project={project} />}
         validator={editor.validator}
         error={editor.error}
@@ -58,7 +57,7 @@ const MonitoringReportCreateContainer = (props: MonitoringReportCreateParams&Bas
           editor={stores.monitoringReports.getCreateMonitoringReportEditor(props.projectId)}
           onChange={(save, dto, submit) => {
             stores.monitoringReports.updateMonitoringReportEditor(save, props.projectId, dto, submit, () => {
-              stores.navigation.navigateTo(MonitoringReportDashboardRoute.getLink({ projectId: dto.projectId }));
+              stores.navigation.navigateTo(props.routes.monitoringReportDashboard.getLink({ projectId: dto.projectId }));
             });
           }}
           {...props}

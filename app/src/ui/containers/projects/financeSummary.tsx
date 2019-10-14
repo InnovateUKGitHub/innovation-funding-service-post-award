@@ -3,7 +3,6 @@ import * as ACC from "@ui/components";
 import { PartnerDto, ProjectDto, ProjectRole } from "@framework/dtos";
 import { Pending } from "@shared/pending";
 import { TypedTable } from "@ui/components";
-import { ProjectOverviewRoute } from "@ui/containers";
 import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerBase";
 import { StoresConsumer } from "@ui/redux";
 
@@ -34,7 +33,7 @@ class FinanceSummaryComponent extends ContainerBase<Params, Data, Callbacks> {
   private renderContents(project: ProjectDto, partners: PartnerDto[]) {
     return (
       <ACC.Page
-        backLink={<ACC.BackLink route={ProjectOverviewRoute.getLink({ projectId: this.props.projectId })}>Back to project overview</ACC.BackLink>}
+        backLink={<ACC.BackLink route={this.props.routes.projectOverview.getLink({ projectId: this.props.projectId })}>Back to project overview</ACC.BackLink>}
         pageTitle={<ACC.Projects.Title project={project} />}
         project={project}
       >

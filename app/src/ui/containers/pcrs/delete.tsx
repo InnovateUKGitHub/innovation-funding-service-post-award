@@ -5,7 +5,6 @@ import { ProjectDto, ProjectRole } from "@framework/types";
 
 import * as ACC from "../../components";
 import { Pending } from "@shared/pending";
-import { PCRsDashboardRoute } from "./dashboard";
 import { PCRDto } from "@framework/dtos/pcrDtos";
 import { IEditorStore, StoresConsumer } from "@ui/redux";
 import { PCRDtoValidator } from "@ui/validators";
@@ -40,7 +39,7 @@ class PCRDeleteComponent extends ContainerBase<PCRDeleteParams, Data, Callbacks>
     const DeleteForm = ACC.TypedForm<PCRDto>();
     return (
       <ACC.Page
-        backLink={<ACC.BackLink route={PCRsDashboardRoute.getLink({ projectId: this.props.projectId })}>Back to project change requests</ACC.BackLink>}
+        backLink={<ACC.BackLink route={this.props.routes.pcrsDashboard.getLink({ projectId: this.props.projectId })}>Back to project change requests</ACC.BackLink>}
         pageTitle={<ACC.Projects.Title project={project} />}
         project={project}
         error={editor.error}
@@ -74,7 +73,7 @@ const PCRDeleteContainer = (props: PCRDeleteParams & BaseProps) => (
         project={stores.projects.getById(props.projectId)}
         pcr={stores.projectChangeRequests.getById(props.projectId, props.pcrId)}
         editor={stores.projectChangeRequests.getPcrUpdateEditor(props.projectId, props.pcrId)}
-        onDelete={(projectId, pcrId, dto) => stores.projectChangeRequests.deletePcr(projectId, pcrId, dto, "The project change request has been deleted.", () => stores.navigation.navigateTo(PCRsDashboardRoute.getLink({ projectId })))}
+        onDelete={(projectId, pcrId, dto) => stores.projectChangeRequests.deletePcr(projectId, pcrId, dto, "The project change request has been deleted.", () => stores.navigation.navigateTo(props.routes.pcrsDashboard.getLink({ projectId })))}
         {...props}
       />
     )}

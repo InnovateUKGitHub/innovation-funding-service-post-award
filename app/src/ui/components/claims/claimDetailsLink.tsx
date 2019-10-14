@@ -1,7 +1,7 @@
 import React from "react";
 import { ClaimDto, ClaimStatus, PartnerDto, ProjectDto, ProjectRole, ProjectStatus } from "@framework/types";
 import { Link } from "..";
-import { ClaimsDetailsRoute, PrepareClaimRoute, ReviewClaimRoute } from "../../containers";
+import { IRoutes } from "@ui/routing";
 
 interface Props {
   claim: ClaimDto;
@@ -9,25 +9,28 @@ interface Props {
   partner: PartnerDto;
 }
 
-export const ClaimDetailsLink: React.SFC<Props> = (props) => {
+interface PropsWithRoutes extends Props {
+  routes: IRoutes;
+}
+export const ClaimDetailsLink: React.SFC<PropsWithRoutes> = (props) => {
   const linkProps = { projectId: props.project.id, partnerId: props.partner.id, periodId: props.claim.periodId };
 
   switch (getClaimDetailsLinkType(props)) {
     case "edit":
-      return <Link route={PrepareClaimRoute.getLink(linkProps)}>Edit claim</Link>;
+      return <Link route={props.routes.prepareClaim.getLink(linkProps)}>Edit claim</Link>;
 
     case "review":
-      return <Link route={ReviewClaimRoute.getLink(linkProps)}>Review claim</Link>;
+      return <Link route={props.routes.reviewClaim.getLink(linkProps)}>Review claim</Link>;
 
     case "view":
-      return <Link route={ClaimsDetailsRoute.getLink(linkProps)}>View claim</Link>;
+      return <Link route={props.routes.claimDetails.getLink(linkProps)}>View claim</Link>;
 
     default:
       return null;
   }
 };
 
-export const getClaimDetailsLinkType = (props: Props): "edit" | "review" | "view" | "nothing" => {
+export const getClaimDetailsLinkType = (props: {claim: ClaimDto; project: ProjectDto; partner: PartnerDto;}): "edit" | "review" | "view" | "nothing" => {
 
   if (props.project.status === ProjectStatus.OnHold) return "view";
 

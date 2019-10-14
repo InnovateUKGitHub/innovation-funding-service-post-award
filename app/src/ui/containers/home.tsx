@@ -1,7 +1,6 @@
 import React from "react";
 import { Link, Title, TypedForm } from "../components";
 import { BaseProps, ContainerBaseWithState, ContainerProps, defineRoute, } from "./containerBase";
-import { ProjectDashboardRoute, } from ".";
 import { SimpleString } from "../components/renderers";
 import { Authorisation } from "@framework/types";
 import { IClientConfig } from "@ui/redux/reducers/configReducer";
@@ -39,7 +38,7 @@ class Component extends ContainerBaseWithState<{}, Data, {}, State> {
         </div>
         <div className="govuk-grid-row">
           <div className="govuk-grid-column-one-third">
-            <h2><Link route={ProjectDashboardRoute.getLink({})}>Projects</Link></h2>
+            <h2><Link route={this.props.routes.projectDashboard.getLink({})}>Projects</Link></h2>
             <SimpleString>Projects dashboard</SimpleString>
           </div>
         </div>

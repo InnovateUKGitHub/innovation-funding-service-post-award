@@ -6,13 +6,13 @@ import { Provider } from "react-redux";
 import { RouterProvider } from "react-router5";
 import { constants as routerConstants, Router, State } from "router5";
 
+import contextProvider from "./features/common/contextProvider";
 import { createStores, IStores, rootReducer, RootState, setupInitialState, setupMiddleware, StoresProvider } from "@ui/redux";
-import { configureRouter, MatchedRoute, matchRoute } from "@ui/routing";
 import { App } from "@ui/containers/app";
 import * as Actions from "@ui/redux/actions";
 import { renderHtml } from "./html";
 import { ForbiddenError, FormHandlerError, NotFoundError } from "./features/common/appError";
-import contextProvider from "./features/common/contextProvider";
+import { configureRouter, IRoutes, MatchedRoute, matchRoute, routeConfig } from "@ui/routing";
 import { GetAllProjectRolesForUser } from "./features/projects/getAllProjectRolesForUser";
 import { Logger } from "./features/common/logger";
 import { ErrorCode, IAppError, IClientUser, IContext } from "@framework/types";
@@ -25,7 +25,8 @@ export async function serverRender(req: Request, res: Response, error?: IAppErro
       throw error;
     }
 
-    const router = configureRouter();
+    const routes = routeConfig;
+    const router = configureRouter(routes);
     const route = await startRouter(req, router);
 
     if (route && route.name === routerConstants.UNKNOWN_ROUTE) {
@@ -60,12 +61,12 @@ export async function serverRender(req: Request, res: Response, error?: IAppErro
       // send all the data actions round the dispatch loop
       actions.forEach(x => store.dispatch(x as any));
       // render the app to cause any other actions to go round the loop
-      renderApp(router, store, stores);
+      renderApp(router, store, stores, routes);
     });
 
     onComplete(store, stores, matched, params, error);
 
-    res.send(renderApp(router, store, stores));
+    res.send(renderApp(router, store, stores, routes));
   }
   catch (e) {
 
@@ -81,7 +82,8 @@ export async function serverRender(req: Request, res: Response, error?: IAppErro
       router: { route: routeState }
     };
 
-    const router = configureRouter();
+    const routes = routeConfig;
+    const router = configureRouter(routes);
     const store = createStore(rootReducer, initalState);
     const stores = createStores(
       () => store.getState(),
@@ -92,7 +94,7 @@ export async function serverRender(req: Request, res: Response, error?: IAppErro
 
     store.dispatch(Actions.setPageTitle(matched.getTitle(store.getState(), routeState.params, stores)));
 
-    res.status(getErrorStatus(e)).send(renderApp(router, store, stores));
+    res.status(getErrorStatus(e)).send(renderApp(router, store, stores, routes));
   }
 }
 
@@ -154,13 +156,13 @@ function startRouter(req: Request, router: Router): Promise<State> {
   });
 }
 
-function renderApp(router: Router, store: Store<RootState>, stores: IStores): string {
+function renderApp(router: Router, store: Store<RootState>, stores: IStores, routes: IRoutes): string {
 
   const html = renderToString(
     <Provider store={store}>
       <RouterProvider router={router}>
         <StoresProvider value={stores}>
-          <App store={store} />
+          <App store={store} routes={routes}/>
         </StoresProvider>
       </RouterProvider>
     </Provider>
