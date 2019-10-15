@@ -39,12 +39,12 @@ export const NameChangeView = (props: Props) => (
   <StoresConsumer>
     {
       stores => {
-        const combinded = Pending.combine({
+        const combined = Pending.combine({
           documents: stores.documents.pcrOrPcrItemDocuments(props.projectChangeRequest.projectId, props.projectChangeRequestItem.id),
           partner : props.projectChangeRequestItem.partnerId ? stores.partners.getById(props.projectChangeRequestItem.partnerId) : Pending.done(null)
         });
         return <ACC.Loader
-          pending={combinded}
+          pending={combined}
           render={data => <InnerContainer documents={data.documents} partner={data.partner} {...props}/>}
         />
       }
