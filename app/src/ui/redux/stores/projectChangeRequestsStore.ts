@@ -6,7 +6,6 @@ import { RootState } from "../reducers";
 import { ApiClient } from "@ui/apiClient";
 import { LoadingStatus, Pending } from "@shared/pending";
 import { dataLoadAction, messageSuccess } from "../actions";
-import { ProjectChangeRequestDtoValidatorForCreate } from "@ui/validators/projectChangeRequestDtoValidatorForCreate";
 import {
   ProjectChangeRequestItemStatus,
   ProjectChangeRequestItemTypeEntity,
@@ -22,14 +21,6 @@ export class ProjectChangeRequestStore extends StoreBase {
 
   private getKeyForRequest(projectId: string, pcrId?: string) {
     return this.buildKey(projectId, pcrId || "new");
-  }
-
-  private createValidator(projectId: string, pcrId: string, dto: PCRDto, show: boolean) {
-    return Pending.combine({
-      projectRole: this.projectStore.getById(projectId).then(x => x.roles),
-      original: this.getById(projectId, pcrId),
-      recordTypes: this.getAllPcrTypes()
-    }).then(({ projectRole, original, recordTypes }) => new PCRDtoValidator(dto, projectRole, original, recordTypes, show));
   }
 
   public getById(projectId: string, pcrId: string) {
@@ -132,7 +123,7 @@ export class ProjectChangeRequestStore extends StoreBase {
         items: []
       }),
       init,
-      (dto) => this.getCreateValidator(dto, false)
+      (dto) => this.getValidator(projectId, dto, false)
     );
   }
 
@@ -142,7 +133,7 @@ export class ProjectChangeRequestStore extends StoreBase {
       this.getKeyForRequest(projectId, pcrId),
       () => this.getById(projectId, pcrId),
       init,
-      (dto) => this.createValidator(projectId, pcrId, dto, false)
+      (dto) => this.getValidator(projectId, dto, false)
     );
   }
 
@@ -152,7 +143,7 @@ export class ProjectChangeRequestStore extends StoreBase {
       "pcr",
       this.getKeyForRequest(projectId, dto.id),
       dto,
-      (showErrors) => dto.id ? this.getValidator(projectId, dto, showErrors) : this.getCreateValidator(dto, showErrors),
+      (showErrors) => this.getValidator(projectId, dto, showErrors),
       p => dto.id ? ApiClient.pcrs.update({ projectId, id: dto.id, pcr: dto, ...p }) : ApiClient.pcrs.create({ projectId, projectChangeRequestDto: dto, ...p }),
       (result) => {
         this.queue(dataLoadAction(this.getKeyForRequest(projectId, result.id), "pcr", LoadingStatus.Updated, result));
@@ -226,13 +217,9 @@ export class ProjectChangeRequestStore extends StoreBase {
   private getValidator(projectId: string, dto: PCRDto, showErrors: boolean): any {
     return Pending.combine({
       projectRoles: this.projectStore.getById(projectId).then(x => x.roles),
-      original: this.getById(projectId, dto.id),
+      original: dto.id ? this.getById(projectId, dto.id) : Pending.done(undefined),
       itemTypes: this.getAllPcrTypes(),
-    }).then(x => new PCRDtoValidator(dto, x.projectRoles, x.original, x.itemTypes, showErrors));
-  }
-
-  private getCreateValidator(dto: PCRDto, showErrors: boolean): any {
-    return this.getAllPcrTypes().then(itemTypes => new ProjectChangeRequestDtoValidatorForCreate(dto, itemTypes, showErrors));
+    }).then(x => new PCRDtoValidator(dto, x.projectRoles, x.itemTypes, showErrors, x.original));
   }
 
   public deletePcr(projectId: string, pcrId: string, dto: PCRDto, message?: string, onComplete?: () => void): void {
@@ -240,7 +227,7 @@ export class ProjectChangeRequestStore extends StoreBase {
       "pcr",
       this.getKeyForRequest(projectId, pcrId),
       dto,
-      () => this.createValidator(projectId, pcrId, dto, false),
+      () => this.getValidator(projectId, dto, false),
       (p) => ApiClient.pcrs.delete({ projectId, id: pcrId, ...p }),
       () => {
         if (message) {

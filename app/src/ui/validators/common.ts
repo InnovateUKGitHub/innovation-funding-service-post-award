@@ -19,12 +19,20 @@ export function inValid(resultSet: Results<{}>, message: string, isRequired?: bo
     return new Result(resultSet, resultSet.showValidationErrors, false, message, isRequired || false);
 }
 
-export let required = rule<any>((value) => {
+export const required = rule<any>((value) => {
     if (value === null || value === undefined) { return false; }
     if (value.__proto__ === ("" as any).__proto__) { return value.trim().length > 0; }
     if (value instanceof Array) { return value.length > 0; }
     return true;
 }, "Required", true);
+
+export function isUnchanged(results: Results<{}>, value: string|Date|null|undefined, originalValue: string|Date|null|undefined, message?: string) {
+  if (!originalValue) return isTrue(results, !value, message || "Value can not be changed");
+  if (value instanceof Date && originalValue instanceof Date) return isTrue(results, value.getTime() === originalValue.getTime(), message || "Value can not be changed");
+  if (typeof value !== typeof originalValue) return inValid(results, message || "Value can not be changed");
+  if (typeof value === "string") return isTrue(results, value === originalValue, message || "Value can not be changed");
+  return inValid(results, message || "Value can not be changed");
+}
 
 export const isTrue = rule<boolean>((value) => value === null || value === undefined || value === true, "Should be true");
 export const isFalse = rule<boolean>((value) => value === null || value === undefined || value === false, "Should be false");

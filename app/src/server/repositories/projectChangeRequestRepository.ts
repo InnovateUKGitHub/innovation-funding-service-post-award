@@ -119,7 +119,7 @@ export class ProjectChangeRequestRepository extends SalesforceRepositoryBase<ISa
   }
 
   // TODO maybe put in base class
-  private toOptionalSFDate = (jsDate: Date | null) => jsDate && DateTime.fromJSDate(jsDate).toFormat("yyyy-MM-dd");
+  private toOptionalSFDate = (jsDate?: Date | null) => jsDate && DateTime.fromJSDate(jsDate).toFormat("yyyy-MM-dd");
 
   async updateItems(pcr: ProjectChangeRequestEntity, items: ProjectChangeRequestItemEntity[]) {
     await super.updateAll(items.map(x => ({

@@ -65,6 +65,13 @@ export interface ProjectChangeRequestItemForCreateEntity {
   recordTypeId: string;
   status: ProjectChangeRequestItemStatus;
   projectId: string;
+  projectEndDate?: Date | null;
+  publicDescription?: string | null;
+  accountName?: string | null;
+  projectSummary?: string | null;
+  suspensionStartDate?: Date | null;
+  suspensionEndDate?: Date | null;
+  partnerId?: string | null;
 }
 
 export interface ProjectChangeRequestItemEntity extends ProjectChangeRequestItemForCreateEntity {
@@ -72,11 +79,4 @@ export interface ProjectChangeRequestItemEntity extends ProjectChangeRequestItem
   statusName: string;
   guidance: string;
   pcrId: string;
-  partnerId: string | null;
-  projectEndDate: Date | null;
-  publicDescription: string | null;
-  accountName: string | null;
-  projectSummary: string | null;
-  suspensionStartDate: Date | null;
-  suspensionEndDate: Date | null;
 }
