@@ -49,7 +49,7 @@ export class UpdatePCRCommand extends CommandBase<boolean> {
 
     const originalDto = mapToPcrDto(entityToUpdate, itemTypes);
 
-    const validationResult = new PCRDtoValidator(this.pcr, projectRoles, originalDto, itemTypes, true, partners);
+    const validationResult = new PCRDtoValidator(this.pcr, projectRoles, itemTypes, true, originalDto, partners);
 
     if (!validationResult.isValid) {
       throw new ValidationError(validationResult);

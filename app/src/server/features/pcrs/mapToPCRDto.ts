@@ -78,27 +78,27 @@ const mapItemForTermination = (pcr: ProjectChangeRequestItemEntity, typeName: st
 
 const mapItemForTimeExtension = (pcr: ProjectChangeRequestItemEntity, typeName: string, type: ProjectChangeRequestItemTypeEntity.TimeExtension): PCRItemForTimeExtensionDto => ({
   ...mapBaseItem(pcr, typeName),
-  projectEndDate: pcr.projectEndDate,
+  projectEndDate: pcr.projectEndDate || null,
   type
 });
 
 const mapItemForScopeChange = (pcr: ProjectChangeRequestItemEntity, typeName: string, type: ProjectChangeRequestItemTypeEntity.ScopeChange): PCRItemForScopeChangeDto => ({
   ...mapBaseItem(pcr, typeName),
-  projectSummary: pcr.projectSummary,
-  publicDescription: pcr.publicDescription,
+  projectSummary: pcr.projectSummary || null,
+  publicDescription: pcr.publicDescription || null,
   type
 });
 
 const mapItemForProjectSuspension = (pcr: ProjectChangeRequestItemEntity, typeName: string, type: ProjectChangeRequestItemTypeEntity.ProjectSuspension): PCRItemForProjectSuspensionDto => ({
   ...mapBaseItem(pcr, typeName),
-  suspensionStartDate: pcr.suspensionStartDate,
-  suspensionEndDate: pcr.suspensionEndDate,
+  suspensionStartDate: pcr.suspensionStartDate || null,
+  suspensionEndDate: pcr.suspensionEndDate || null,
   type
 });
 
 const mapItemForAccountNameChange = (pcr: ProjectChangeRequestItemEntity, typeName: string, type: ProjectChangeRequestItemTypeEntity.AccountNameChange): PCRItemForAccountNameChangeDto => ({
   ...mapBaseItem(pcr, typeName),
-  accountName: pcr.accountName,
-  partnerId: pcr.partnerId,
+  accountName: pcr.accountName || null,
+  partnerId: pcr.partnerId || null,
   type
 });

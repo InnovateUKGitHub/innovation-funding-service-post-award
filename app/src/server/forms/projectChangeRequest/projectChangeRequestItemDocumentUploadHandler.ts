@@ -2,8 +2,7 @@ import { IContext, ILinkInfo } from "@framework/types";
 import { Configuration } from "@server/features/common";
 import { UploadProjectChangeRequestDocumentOrItemDocumentCommand } from "@server/features/documents/uploadProjectChangeRequestDocumentOrItemDocument";
 import { IFormBody, IFormButton, MultipleFileFormHandlerBase } from "@server/forms/formHandlerBase";
-import { ProjectChangeRequestPrepareItemFilesRoute, ProjectChangeRequestPrepareItemParams, ProjectChangeRequestPrepareItemRoute } from "@ui/containers";
-import { getProjectChangeRequestDocumentOrItemDocumentEditor } from "@ui/redux/selectors";
+import { ProjectChangeRequestPrepareItemFilesRoute, ProjectChangeRequestPrepareItemParams } from "@ui/containers";
 import { MultipleDocumentUpdloadDtoValidator } from "@ui/validators";
 import { getKey } from "@framework/util";
 

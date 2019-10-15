@@ -7,7 +7,6 @@ import * as Actions from "@ui/redux/actions/common";
 import { scrollToTheTopSmoothly } from "@framework/util";
 import { LoadingStatus } from "@shared/pending";
 import { PCRDtoValidator } from "@ui/validators/pcrDtoValidator";
-import { ProjectChangeRequestDtoValidatorForCreate } from "@ui/validators/projectChangeRequestDtoValidatorForCreate";
 import { Authorisation } from "@framework/types";
 
 export function loadPcrTypes() {
@@ -43,7 +42,7 @@ export function validatePCR(projectId: string, pcrId: string, dto: PCRDto, showE
     const projectRoles = new Authorisation(state.user.roleInfo).forProject(projectId).getRoles();
     const original = getPcr(projectId, pcrId).get(state);
     const itemTypes = getAllPcrTypes().get(state).data;
-    const validator = new PCRDtoValidator(dto, projectRoles, original.data, itemTypes, showErrors);
+    const validator = new PCRDtoValidator(dto, projectRoles, itemTypes, showErrors, original.data);
 
     dispatch(Actions.updateEditorAction(selector.key, selector.store, dto, validator));
     return validator;
@@ -78,7 +77,7 @@ export function savePCR(projectId: string, pcrId: string, dto: PCRDto, onComplet
 }
 
 // update editor with validation
-export function validateProjectChangeRequestForCreate(projectId: string, dto: PCRDto, showErrors?: boolean): Actions.SyncThunk<ProjectChangeRequestDtoValidatorForCreate, Actions.UpdateEditorAction> {
+export function validateProjectChangeRequestForCreate(projectId: string, dto: PCRDto, showErrors?: boolean): Actions.SyncThunk<PCRDtoValidator, Actions.UpdateEditorAction> {
   return (dispatch, getState) => {
     const selector = getPcrEditorForCreate(projectId);
     const state = getState();
@@ -88,7 +87,8 @@ export function validateProjectChangeRequestForCreate(projectId: string, dto: PC
       showErrors = current && current.validator.showValidationErrors || false;
     }
     const itemTypes = getAllPcrTypes().get(state).data;
-    const validator = new ProjectChangeRequestDtoValidatorForCreate(dto, itemTypes, showErrors);
+    const projectRoles = new Authorisation(state.user.roleInfo).forProject(projectId).getRoles();
+    const validator = new PCRDtoValidator(dto, projectRoles, itemTypes, showErrors);
 
     dispatch(Actions.updateEditorAction(selector.key, selector.store, dto, validator));
     return validator;
@@ -129,7 +129,7 @@ export function deletePCR(projectId: string, pcrId: string, dto: PCRDto, onCompl
     const projectRoles = new Authorisation(state.user.roleInfo).forProject(projectId).getRoles();
     const itemTypes = getAllPcrTypes().get(state).data;
 
-    const validator = new PCRDtoValidator(dto, projectRoles, dto, itemTypes, true);
+    const validator = new PCRDtoValidator(dto, projectRoles, itemTypes, true, dto);
     dispatch(Actions.handleEditorSubmit(selector.key, selector.store, dto, validator));
 
     return ApiClient.pcrs.delete({projectId, id: pcrId, user: state.user })
