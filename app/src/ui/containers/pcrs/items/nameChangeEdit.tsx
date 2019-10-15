@@ -37,7 +37,7 @@ const InnerContainer = (props: Props & InnerProps) => {
 
   return (
     <ACC.Section>
-      <Form.Form
+      <Form.Form qa="changePartnerNameForm"
         data={props.projectChangeRequestItem}
         isSaving={props.status === EditorStatus.Saving}
         onChange={dto => props.onChange(dto)}
