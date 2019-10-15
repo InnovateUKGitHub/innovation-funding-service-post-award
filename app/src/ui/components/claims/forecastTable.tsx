@@ -24,6 +24,7 @@ interface Index {
 interface Props {
   hideValidation?: boolean;
   data: ForecastData;
+  editor?: IEditorStore<ForecastDetailsDTO[], ForecastDetailsDtosValidator>;
   onChange?: (data: ForecastDetailsDTO[]) => void;
   isSubmitting?: boolean;
 }
@@ -47,22 +48,22 @@ export class ForecastTable extends React.Component<Props> {
   }
 
   public render() {
-    const { data, hideValidation, isSubmitting } = this.props;
+    const { data, hideValidation, isSubmitting, editor } = this.props;
     // if there is no claim then we must be in period 1 ie, claim period 0
-    const periodId  = !!data.claim ? Math.min(data.project.periodId, data.claim.periodId) : 0;
-    const parsed    = this.parseClaimData(data, periodId, data.project.totalPeriods);
-    const Table     = ACC.TypedTable<typeof parsed[0]>();
+    const periodId = !!data.claim ? Math.min(data.project.periodId, data.claim.periodId) : 0;
+    const parsed = this.parseClaimData(data, editor, periodId, data.project.totalPeriods);
+    const Table = ACC.TypedTable<typeof parsed[0]>();
     const intervals = this.calculateClaimPeriods(data);
-    const claims    = Object.keys(parsed[0].claims);
+    const claims = Object.keys(parsed[0].claims);
     const forecasts = Object.keys(parsed[0].forecasts);
-    const periods   = claims.concat(forecasts);
+    const periods = claims.concat(forecasts);
 
     return (
       <Table.Table
         data={parsed}
         qa="forecast-table"
         headers={this.renderTableHeaders(periods, periodId)}
-        footers={this.renderTableFooters(periods, parsed, data.editor)}
+        footers={this.renderTableFooters(periods, parsed, this.props.hideValidation !== true && editor ? editor.validator: undefined)}
         headerRowClass="govuk-body-s govuk-table__header--light"
         bodyRowClass={x => classNames("govuk-body-s", {
           "table__row--warning": !hideValidation && x.total > x.golCosts,
@@ -82,7 +83,7 @@ export class ForecastTable extends React.Component<Props> {
         {forecasts.map((p, i) => <Table.Custom
           key={p}
           header={intervals[p]}
-          value={(x, index) => this.renderForecastCell(x, parseInt(p, 10), index, data, isSubmitting || false)}
+          value={(x, index) => this.renderForecastCell(x, parseInt(p, 10), index, data, editor, isSubmitting || false)}
           cellClassName={() => "govuk-table__cell--numeric"}
           classSuffix="numeric"
           qa={"category-forecast" + i}
@@ -96,47 +97,47 @@ export class ForecastTable extends React.Component<Props> {
     );
   }
 
-  private parseClaimData(data: ForecastData, periodId: number, totalPeriods: number | null) {
+  private parseClaimData(data: ForecastData, editor: IEditorStore<ForecastDetailsDTO[], ForecastDetailsDtosValidator>|undefined, periodId: number, totalPeriods: number | null) {
     const tableRows: TableRow[] = [];
-    const forecasts = !!data.editor ? data.editor.data : data.forecastDetails;
+    const forecasts = !!editor ? editor.data : data.forecastDetails;
     const costCategories = data.costCategories.filter(x => x.competitionType === data.project.competitionType && x.organisationType === data.partner.organisationType);
 
     costCategories.forEach(category => {
-        const validators = data.editor && data.editor.validator.items.results
-          .filter(x => x.model.costCategoryId === category.id)
-          .sort((a, b) => a.model.periodId - b.model.periodId);
+      const validators = editor && editor.validator.items.results
+        .filter(x => x.model.costCategoryId === category.id)
+        .sort((a, b) => a.model.periodId - b.model.periodId);
 
-        const row: TableRow = {
-          categoryId: category.id,
-          categoryName: category.name,
-          claims: {},
-          forecasts: {},
-          golCosts: 0,
-          total: 0,
-          difference: 0,
-          validators: validators || []
-        };
+      const row: TableRow = {
+        categoryId: category.id,
+        categoryName: category.name,
+        claims: {},
+        forecasts: {},
+        golCosts: 0,
+        total: 0,
+        difference: 0,
+        validators: validators || []
+      };
 
-        let currentPeriodId = 1;
+      let currentPeriodId = 1;
 
-        while (currentPeriodId <= periodId) {
-          this.addClaimDetailInfoToRow(currentPeriodId, category, data.claimDetails, row);
+      while (currentPeriodId <= periodId) {
+        this.addClaimDetailInfoToRow(currentPeriodId, category, data.claimDetails, row);
+        currentPeriodId++;
+      }
+
+      if (totalPeriods) {
+        while (currentPeriodId <= totalPeriods) {
+          this.addForecastInfoToRow(currentPeriodId, category, forecasts, row);
           currentPeriodId++;
         }
+      }
 
-        if (totalPeriods) {
-          while (currentPeriodId <= totalPeriods) {
-            this.addForecastInfoToRow(currentPeriodId, category, forecasts, row);
-            currentPeriodId++;
-          }
-        }
+      const gol = data.golCosts.find(x => x.costCategoryId === category.id);
+      row.golCosts = !!gol ? gol.value : 0;
+      row.difference = this.calculateDifference(row.golCosts, row.total);
 
-        const gol = data.golCosts.find(x => x.costCategoryId === category.id);
-        row.golCosts = !!gol ? gol.value : 0;
-        row.difference = this.calculateDifference(row.golCosts, row.total);
-
-        tableRows.push(row);
-      });
+      tableRows.push(row);
+    });
 
     return tableRows;
   }
@@ -178,8 +179,7 @@ export class ForecastTable extends React.Component<Props> {
     return ACC.Renderers.CondensedDateRange({ start: details.periodStart, end: details.periodEnd });
   }
 
-  private renderForecastCell(forecastRow: TableRow, periodId: number, index: Index, data: ForecastData, isSubmitting: boolean) {
-    const editor = data.editor;
+  private renderForecastCell(forecastRow: TableRow, periodId: number, index: Index, data: ForecastData, editor: IEditorStore<ForecastDetailsDTO[], ForecastDetailsDtosValidator>|undefined, isSubmitting: boolean) {
     const value = forecastRow.forecasts[periodId];
     const costCategory = data.costCategories.find(x => x.id === forecastRow.categoryId);
     const validator = forecastRow.validators[index.column - 1];
@@ -263,7 +263,7 @@ export class ForecastTable extends React.Component<Props> {
     )];
   }
 
-  private renderTableFooters(periods: string[], parsed: TableRow[], editor?: IEditorStore<ForecastDetailsDTO[], ForecastDetailsDtosValidator>) {
+  private renderTableFooters(periods: string[], parsed: TableRow[], validator: ForecastDetailsDtosValidator|undefined) {
     const cells = [];
     const costTotal = parsed.reduce((total, item) => total + item.total, 0);
     const golTotal = parsed.reduce((total, item) => total + item.golCosts, 0);
@@ -273,7 +273,6 @@ export class ForecastTable extends React.Component<Props> {
       return total + value;
     }, 0));
 
-    const validator = !this.props.hideValidation && !!editor ? editor.validator : false;
     const warning = !!validator && validator.showValidationErrors && !validator.totalCosts.isValid;
     const warningId = !!validator && warning ? validator.totalCosts.key : "";
 

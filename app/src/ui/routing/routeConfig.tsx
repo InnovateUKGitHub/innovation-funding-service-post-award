@@ -38,12 +38,12 @@ export const routeConfig: IRoutes = {
   projectDashboard: Containers.ProjectDashboardRoute,
   projectDetails: Containers.ProjectDetailsRoute,
   projectDocuments: Containers.ProjectDocumentsRoute,
-  projectForecast: Containers.ProjectForecastRoute,
   projectOverview: Containers.ProjectOverviewRoute,
   reviewClaim: Containers.ReviewClaimRoute,
   reviewClaimLineItems: Containers.ReviewClaimLineItemsRoute,
-  updateForecast: Containers.UpdateForecastRoute,
-  viewForecast: Containers.ViewForecastRoute,
+  forecastDashboard: Containers.ForecastDashboardRoute,
+  forecastDetails: Containers.ForecastDetailsRoute,
+  forecastUpdate: Containers.UpdateForecastRoute,
 };
 
 // export type IRoutes = typeof routeConfig;
@@ -83,10 +83,10 @@ export interface IRoutes {
   projectDashboard: typeof Containers.ProjectDashboardRoute;
   projectDetails: typeof Containers.ProjectDetailsRoute;
   projectDocuments: typeof Containers.ProjectDocumentsRoute;
-  projectForecast: typeof Containers.ProjectForecastRoute;
   projectOverview: typeof Containers.ProjectOverviewRoute;
   reviewClaim: typeof Containers.ReviewClaimRoute;
   reviewClaimLineItems: typeof  Containers.ReviewClaimLineItemsRoute;
-  updateForecast: typeof Containers.UpdateForecastRoute;
-  viewForecast: typeof Containers.ViewForecastRoute;
+  forecastDashboard: typeof Containers.ForecastDashboardRoute;
+  forecastDetails: typeof Containers.ForecastDetailsRoute;
+  forecastUpdate: typeof Containers.UpdateForecastRoute;
 }
