@@ -5,7 +5,6 @@ import { PCRDto, PCRItemForTimeExtensionDto, PCRStandardItemDto } from "@framewo
 import { MultipleDocumentUpdloadDtoValidator } from "@ui/validators";
 import { LoadingStatus, Pending } from "@shared/pending";
 import { PCRDtoValidator } from "@ui/validators/pcrDtoValidator";
-import { ProjectChangeRequestDtoValidatorForCreate } from "@ui/validators/projectChangeRequestDtoValidatorForCreate";
 import { ProjectChangeRequestItemStatus, ProjectChangeRequestItemTypeEntity, ProjectChangeRequestStatus } from "@framework/entities";
 import { Authorisation } from "@framework/types";
 
@@ -53,17 +52,20 @@ export const getPcrEditor = (projectId: string, id: string) => editorStoreHelper
     return Pending.combine({
       original: getPcr(projectId, id).getPending(store),
       recordTypes: getAllPcrTypes().getPending(store)
-    }).then(({ original, recordTypes }) => new PCRDtoValidator(dto, projectRole, original, recordTypes, false));
+    }).then(({ original, recordTypes }) => new PCRDtoValidator(dto, projectRole, recordTypes, false, original));
   },
   getKey(projectId, id)
 );
 
-export const getPcrEditorForCreate = (projectId: string) => editorStoreHelper<PCRDto, ProjectChangeRequestDtoValidatorForCreate>(
+export const getPcrEditorForCreate = (projectId: string) => editorStoreHelper<PCRDto, PCRDtoValidator>(
   "pcr",
   (store) => {
     return Pending.done(createPcr(projectId) as PCRDto);
   },
-  (dto, store) => Pending.done(new ProjectChangeRequestDtoValidatorForCreate(dto, [], false)),
+  (dto, store) => {
+    const projectRole = new Authorisation(store.user.roleInfo).forProject(projectId).getRoles();
+    return getAllPcrTypes().getPending(store).then((recordTypes) => new PCRDtoValidator(dto, projectRole, recordTypes, false));
+  },
   getKey(projectId, "new")
 );
 

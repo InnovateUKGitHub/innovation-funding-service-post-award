@@ -34,6 +34,7 @@ export const ProjectSuspensionEdit = (props: Props) => {
           <Form.MonthYear
             name="suspensionStartDate"
             value={m => m.suspensionStartDate}
+            validation={props.validator.suspensionStartDate}
             update={(m, v) => m.suspensionStartDate = v}
             hint="This will happen on the first day of the month."
             startOrEnd="start"
@@ -43,6 +44,7 @@ export const ProjectSuspensionEdit = (props: Props) => {
           <Form.MonthYear
             name="suspensionEndDate"
             value={m => m.suspensionEndDate}
+            validation={props.validator.suspensionEndDate}
             update={(m, v) => m.suspensionEndDate = v}
             hint="This will happen on the last day of the month."
             startOrEnd="end"
