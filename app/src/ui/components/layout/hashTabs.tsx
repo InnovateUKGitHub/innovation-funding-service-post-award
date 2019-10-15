@@ -92,7 +92,7 @@ export class HashTabs extends React.PureComponent<TabProps, State> {
   private renderTabContents(item: HashTabItem, selected: boolean, index: number) {
     const classes = cn("govuk-tabs__panel", {"govuk-tabs__panel--hidden": !selected});
     return (
-      <section key={item.hash} id={item.hash} title={item.text} className={classes}>
+      <section key={item.hash} id={item.hash} className={classes}>
         {this.props.messages !== undefined ? <Messages messages={this.props.messages}/> : null}
         {item.content}
       </section>
