@@ -38,6 +38,9 @@ export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBa
       this.updateProjectSuspension(item, body);
     }
 
+    if (item.type === ProjectChangeRequestItemTypeEntity.AccountNameChange) {
+      this.updateNameChange(item, body);
+    }
     return dto;
   }
 
@@ -78,6 +81,11 @@ export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBa
     return ProjectChangeRequestPrepareRoute.getLink(params);
   }
 
+  private updateNameChange(item: Dtos.PCRItemForAccountNameChangeDto, body: IFormBody) {
+    item.partnerId = body.partnerId;
+    item.accountName = body.accountName;
+  }
+  
   protected getStoreInfo(params: ProjectChangeRequestPrepareItemParams): { key: string, store: string } {
     return getPcrEditor(params.projectId, params.pcrId);
   }
