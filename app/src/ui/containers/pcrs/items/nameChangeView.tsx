@@ -43,10 +43,10 @@ export const NameChangeView = (props: Props) => (
           documents: stores.documents.pcrOrPcrItemDocuments(props.projectChangeRequest.projectId, props.projectChangeRequestItem.id),
           partner : props.projectChangeRequestItem.partnerId ? stores.partners.getById(props.projectChangeRequestItem.partnerId) : Pending.done(null)
         });
-        return <ACC.Loader
+        return (<ACC.Loader
           pending={combined}
           render={data => <InnerContainer documents={data.documents} partner={data.partner} {...props}/>}
-        />
+        />);
       }
     }
   </StoresConsumer>
