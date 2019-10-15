@@ -26,6 +26,6 @@ export class ProjectChangeRequestDeleteFormHandler extends StandardFormHandlerBa
   }
 
   protected createValidationResult(params: PCRDeleteParams, dto: PCRDto) {
-    return new PCRDtoValidator(dto, ProjectRole.Unknown, dto, [], false);
+    return new PCRDtoValidator(dto, ProjectRole.Unknown, [], false, dto);
   }
 }

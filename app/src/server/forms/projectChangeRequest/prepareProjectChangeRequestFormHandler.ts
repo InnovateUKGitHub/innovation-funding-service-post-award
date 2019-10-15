@@ -34,6 +34,6 @@ export class ProjectChangeRequestPrepareFormHandler extends StandardFormHandlerB
   }
 
   protected createValidationResult(params: ProjectChangeRequestPrepareParams, dto: PCRDto) {
-    return new PCRDtoValidator(dto, ProjectRole.Unknown, dto, [], false);
+    return new PCRDtoValidator(dto, ProjectRole.Unknown, [], false, dto);
   }
 }

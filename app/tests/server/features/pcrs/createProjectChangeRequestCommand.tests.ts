@@ -1,7 +1,11 @@
 import { GetAllPCRsQuery } from "@server/features/pcrs/getAllPCRsQuery";
 import { CreateProjectChangeRequestCommand } from "@server/features/pcrs/createProjectChangeRequestCommand";
 import { TestContext } from "../../testContextProvider";
-import { ProjectChangeRequestItemStatus, ProjectChangeRequestStatus } from "@framework/entities";
+import {
+  ProjectChangeRequestItemStatus,
+  ProjectChangeRequestItemTypeEntity,
+  ProjectChangeRequestStatus
+} from "@framework/entities";
 import { PCRDto, ProjectRole } from "@framework/dtos";
 import { ValidationError } from "@server/features/common";
 import { Authorisation } from "@framework/types";
@@ -47,15 +51,21 @@ describe("GetAllPCRsQuery", () => {
   it("should add a new project change request to the repo", async () => {
     const context = new TestContext();
     const project = context.testData.createProject();
+    context.testData.createCurrentUserAsProjectManager(project);
     const partner = context.testData.createPartner(project);
     const recordTypes = context.testData.createPCRRecordTypes();
+
+    const itemType = PCRRecordTypeMetaValues.find(x => x.type === ProjectChangeRequestItemTypeEntity.AccountNameChange)!;
+
     const command = new CreateProjectChangeRequestCommand(project.Id, {
       projectId: project.Id,
       status: ProjectChangeRequestStatus.Draft,
       reasoningStatus: ProjectChangeRequestItemStatus.ToDo,
       items: [{
-        type: PCRRecordTypeMetaValues.find(x => x.typeName === recordTypes[0].type)!.type,
-        status: ProjectChangeRequestItemStatus.ToDo
+        type: itemType.type,
+        status: ProjectChangeRequestItemStatus.ToDo,
+        accountName: "Frida",
+        partnerId: partner.Id
       }]
     } as any as PCRDto);
 
@@ -72,7 +82,8 @@ describe("GetAllPCRsQuery", () => {
         status: ProjectChangeRequestItemStatus.ToDo,
         projectId: project.Id,
         partnerId: partner.Id,
-        recordTypeId: recordTypes[0].id,
+        accountName: "Frida",
+        recordTypeId: recordTypes.find(x => x.type === itemType.typeName)!.id,
       }]
     });
   });
