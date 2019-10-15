@@ -14,4 +14,11 @@ export class ClaimsStore extends StoreBase {
     return this.getAllClaimsForProject(projectId).then(x => x.filter(claim => !claim.isApproved));
   }
 
+  getAllClaimsForPartner(partnerId: string) {
+    return this.getData("claims", partnerId, p => ApiClient.claims.getAllByPartnerId({partnerId, ...p}));
+  }
+
+  getActiveClaimForPartner(partnerId: string) {
+    return this.getAllClaimsForPartner(partnerId).then(x => x.find( y => !y.isApproved) || null);
+  }
 }

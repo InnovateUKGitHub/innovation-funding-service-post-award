@@ -1,11 +1,15 @@
 import React from "react";
 import * as ACC from "@ui/components";
 import * as Actions from "@ui/redux/actions";
+import * as Selectors from "@ui/redux/selectors";
 import { ContainerBase, ReduxContainer } from "@ui/containers/containerBase";
 import { isNumber } from "@framework/util";
 import { ProjectDto, ProjectRole } from "@framework/types";
-import { ForecastData, forecastDataLoadActions, PendingForecastData, renderWarning, withDataEditor, } from "./common";
+import { ForecastData, forecastDataLoadActions} from "./common";
 import { IRoutes } from "@ui/routing";
+import { Pending } from "@shared/pending";
+import { ForecastDetailsDtosValidator } from "@ui/validators";
+import { IEditorStore } from "@ui/redux";
 
 export interface ClaimForecastParams {
   projectId: string;
@@ -13,18 +17,24 @@ export interface ClaimForecastParams {
   periodId: number;
 }
 
-interface Callbacks {
-  onChange: (partnerId: string, data: ForecastDetailsDTO[], combined: ForecastData) => void;
-  saveAndReturn: (updateClaim: boolean, projectId: string, partnerId: string, periodId: number, data: ForecastData, message: string|undefined) => void;
+interface Data {
+  data: Pending<ForecastData>;
+  editor: Pending<IEditorStore<ForecastDetailsDTO[], ForecastDetailsDtosValidator>>;
 }
 
-class ClaimForecastComponent extends ContainerBase<ClaimForecastParams, PendingForecastData, Callbacks> {
+interface Callbacks {
+  onChange: (partnerId: string, data: ForecastDetailsDTO[], combined: ForecastData) => void;
+  saveAndReturn: (updateClaim: boolean, projectId: string, partnerId: string, periodId: number, data: ForecastDetailsDTO[], combined: ForecastData, message?: string) => void;
+}
+
+class ClaimForecastComponent extends ContainerBase<ClaimForecastParams, Data, Callbacks> {
   render() {
-    return <ACC.PageLoader pending={this.props.combined} render={data => this.renderContents(data)} />;
+    const combined = Pending.combine({ data: this.props.data, editor: this.props.editor });
+    return <ACC.PageLoader pending={combined} render={x => this.renderContents(x.data, x.editor)} />;
   }
 
-  saveAndReturn(data: ForecastData, updateClaim: boolean, periodId: number, message?: string) {
-    this.props.saveAndReturn(updateClaim, this.props.projectId, this.props.partnerId, periodId, data, message);
+  saveAndReturn(data: ForecastDetailsDTO[], combined: ForecastData, updateClaim: boolean, periodId: number, message?: string) {
+    this.props.saveAndReturn(updateClaim, this.props.projectId, this.props.partnerId, periodId, data, combined, message);
   }
 
   handleChange(data: ForecastDetailsDTO[], combined: ForecastData) {
@@ -32,14 +42,13 @@ class ClaimForecastComponent extends ContainerBase<ClaimForecastParams, PendingF
   }
 
   renderOverheadsRate(overheadRate: number | null) {
-    if(!isNumber(overheadRate)) return null;
+    if (!isNumber(overheadRate)) return null;
 
-    return <ACC.Renderers.SimpleString qa="overhead-costs">Overhead costs: <ACC.Renderers.Percentage value={overheadRate}/></ACC.Renderers.SimpleString>;
+    return <ACC.Renderers.SimpleString qa="overhead-costs">Overhead costs: <ACC.Renderers.Percentage value={overheadRate} /></ACC.Renderers.SimpleString>;
   }
 
-  renderContents(combined: ForecastData) {
+  renderContents(combined: ForecastData, editor: IEditorStore<ForecastDetailsDTO[], ForecastDetailsDtosValidator>) {
     const Form = ACC.TypedForm<ForecastDetailsDTO[]>();
-    const editor = combined.editor!;
 
     return (
       <ACC.Page
@@ -52,21 +61,21 @@ class ClaimForecastComponent extends ContainerBase<ClaimForecastParams, PendingF
           <ACC.Renderers.AriaLive>
             <ACC.ValidationMessage messageType="info" message={`This is your last chance to change the forecast for period ${combined.project.periodId}.`} />
           </ACC.Renderers.AriaLive>
-          {renderWarning(combined)}
+          <ACC.Forecasts.Warning {...combined} editor={editor}/>
           {this.renderOverheadsRate(combined.partner.overheadRate)}
           <Form.Form
             editor={editor}
             onChange={data => this.handleChange(data, combined)}
-            onSubmit={() => this.saveAndReturn(combined, true, this.props.periodId, "You have submitted your claim for this period.")}
+            onSubmit={() => this.saveAndReturn(editor.data, combined, true, this.props.periodId, "You have submitted your claim for this period.")}
             qa="claim-forecast-form"
           >
-            <ACC.Claims.ForecastTable data={combined} isSubmitting={true} />
+            <ACC.Claims.ForecastTable data={combined} editor={editor} isSubmitting={true} />
             <Form.Fieldset>
               <Form.Submit>Submit forecast and claim</Form.Submit>
               <ACC.Claims.ClaimLastModified partner={combined.partner} />
             </Form.Fieldset>
             <Form.Fieldset qa="save-button">
-              <Form.Button name="save" onClick={() => this.saveAndReturn(combined, false, this.props.periodId)}>Save and return to claim</Form.Button>
+              <Form.Button name="save" onClick={() => this.saveAndReturn(editor.data, combined, false, this.props.periodId)}>Save and return to claim</Form.Button>
             </Form.Fieldset>
           </Form.Form>
         </ACC.Section>
@@ -89,25 +98,40 @@ const updateRedirect = (updateClaim: boolean, dispatch: any, project: ProjectDto
   return dispatch(Actions.navigateTo(routes.claimsDashboard.getLink({ projectId, partnerId })));
 };
 
-const definition = ReduxContainer.for<ClaimForecastParams, PendingForecastData, Callbacks>(ClaimForecastComponent);
+const definition = ReduxContainer.for<ClaimForecastParams, Data, Callbacks>(ClaimForecastComponent);
 
 const ForecastClaim = definition.connect({
-  withData: (state, props) => withDataEditor(state, props),
+  withData: (state, props) => ({
+    data: Pending.combine({
+      project: Selectors.getActiveProject(props.projectId, state),
+      partner: Selectors.getPartner(props.partnerId).getPending(state),
+      claim: Selectors.getCurrentClaim(state, props.partnerId),
+      claims: Selectors.findClaimsByPartner(props.partnerId).getPending(state),
+      claimDetails: Selectors.findClaimDetailsByPartner(props.partnerId).getPending(state),
+      forecastDetails: Selectors.findForecastDetailsByPartner(props.partnerId).getPending(state),
+      golCosts: Selectors.findGolCostsByPartner(props.partnerId).getPending(state),
+      costCategories: Selectors.getCostCategories().getPending(state),
+    }),
+    editor: Selectors.getForecastDetailsEditor(props.partnerId).get(state),
+  }),
   withCallbacks: (dispatch, routes) => ({
-    onChange: (partnerId, data, combined) =>
-      dispatch(Actions.validateForecastDetails(partnerId, data, combined.claims, combined.claimDetails, combined.golCosts)),
-    saveAndReturn: (updateClaim, projectId, partnerId, periodId, data, message) =>
+    onChange: (partnerId, data, combined) => {
+      dispatch(Actions.validateForecastDetails(partnerId, data, combined.claims, combined.claimDetails, combined.golCosts));
+    },
+    saveAndReturn: (updateClaim, projectId, partnerId, periodId, data, combined, message) => {
       dispatch(Actions.saveForecastDetails(
         updateClaim,
         projectId,
         partnerId,
-        data.editor!.data,
-        data.claims,
-        data.claimDetails,
-        data.golCosts,
-        () => updateRedirect(updateClaim, dispatch, data.project, partnerId, periodId, routes),
-        message)
-      )
+        data,
+        combined.claims,
+        combined.claimDetails,
+        combined.golCosts,
+        () => updateRedirect(updateClaim, dispatch, combined.project, partnerId, periodId, routes),
+        message
+        )
+      );
+    }
   })
 });
 
