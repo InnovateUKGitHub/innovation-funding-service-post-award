@@ -1,17 +1,20 @@
 import React from "react";
 import * as ACC from "@ui/components";
-import { PartnerDto, PCRItemForAccountNameChangeDto, ProjectDto } from "@framework/dtos";
+import { PartnerDto, PCRDto, PCRItemForAccountNameChangeDto, ProjectDto } from "@framework/dtos";
 import { ProjectChangeRequestItemStatus } from "@framework/entities";
 import { Pending } from "@shared/pending";
 import { DocumentList } from "@ui/components";
 import { EditorStatus, StoresConsumer } from "@ui/redux";
+import { IRoutes } from "@ui/routing";
 import { PCRAccountNameChangeItemDtoValidator } from "@ui/validators";
 
 interface Props {
   project: ProjectDto;
+  projectChangeRequest: PCRDto;
   projectChangeRequestItem: PCRItemForAccountNameChangeDto;
   validator: PCRAccountNameChangeItemDtoValidator;
   status: EditorStatus;
+  routes: IRoutes;
   onChange: (dto: PCRItemForAccountNameChangeDto) => void;
   onSave: () => void;
 }
@@ -60,12 +63,12 @@ const InnerContainer = (props: Props & InnerProps) => {
         </Form.Fieldset>
         <Form.Fieldset heading="Change of name certificate">
           {props.documents.length > 0 ? <DocumentList documents={props.documents} qa="supporting-documents" /> : <ACC.Renderers.SimpleString>No documents uploaded.</ACC.Renderers.SimpleString>}
-          <Form.Button
-            name="upload"
-            styling="Secondary"
+          <ACC.Link
+            styling="SecondaryButton"
+            route={props.routes.pcrPrepareFiles.getLink({projectId: props.project.id, pcrId: props.projectChangeRequest.id, itemId: props.projectChangeRequestItem.id})}
           >
             Upload and remove certificate
-          </Form.Button>
+          </ACC.Link>
         </Form.Fieldset>
         <Form.Fieldset heading="Mark as complete">
           <Form.Checkboxes
