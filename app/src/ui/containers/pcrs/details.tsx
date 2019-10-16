@@ -6,8 +6,8 @@ import { ProjectDto, ProjectRole } from "@framework/types";
 import * as ACC from "../../components";
 import { Pending } from "@shared/pending";
 import { PCRDto, PCRItemDto, ProjectChangeRequestStatusChangeDto } from "@framework/dtos/pcrDtos";
-import { ProjectChangeRequestItemStatus, ProjectChangeRequestItemTypeEntity } from "@framework/entities";
 import { StoresConsumer } from "@ui/redux";
+import { PCRItemStatus, PCRItemType } from "@framework/constants";
 
 interface Params {
   projectId: string;
@@ -18,7 +18,7 @@ interface Data {
   project: Pending<ProjectDto>;
   pcr: Pending<PCRDto>;
   statusChanges: Pending<ProjectChangeRequestStatusChangeDto[]>;
-  editableItemTypes: Pending<ProjectChangeRequestItemTypeEntity[]>;
+  editableItemTypes: Pending<PCRItemType[]>;
 }
 
 interface Callbacks {
@@ -31,7 +31,7 @@ class PCRDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
     return <ACC.PageLoader pending={combined} render={x => this.renderContents(x.project, x.pcr, x.editableItemTypes)} />;
   }
 
-  private renderContents(project: ProjectDto, projectChangeRequest: PCRDto, editableItemTypes: ProjectChangeRequestItemTypeEntity[]) {
+  private renderContents(project: ProjectDto, projectChangeRequest: PCRDto, editableItemTypes: PCRItemType[]) {
     const tabs = [{
       text: "Details",
       hash: "details",
@@ -56,7 +56,7 @@ class PCRDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
     );
   }
 
-  private renderDetailsTab(projectChangeRequest: PCRDto, editableItemTypes: ProjectChangeRequestItemTypeEntity[] ) {
+  private renderDetailsTab(projectChangeRequest: PCRDto, editableItemTypes: PCRItemType[] ) {
     return (
       <React.Fragment>
 
@@ -74,7 +74,7 @@ class PCRDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
     );
   }
 
-  private renderTaskListActions(projectChangeRequest: PCRDto, editableItemTypes: ProjectChangeRequestItemTypeEntity[]) {
+  private renderTaskListActions(projectChangeRequest: PCRDto, editableItemTypes: PCRItemType[]) {
     if (!editableItemTypes.length) return null;
     const editableItems = projectChangeRequest.items.filter(x => editableItemTypes.indexOf(x.type) > -1);
 
@@ -85,7 +85,7 @@ class PCRDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
     );
   }
 
-  private renderTaskListReasoning(projectChangeRequest: PCRDto, editableItemTypes: ProjectChangeRequestItemTypeEntity[]) {
+  private renderTaskListReasoning(projectChangeRequest: PCRDto, editableItemTypes: PCRItemType[]) {
     const editableItems = projectChangeRequest.items.filter(x => editableItemTypes.indexOf(x.type) > -1);
     const stepCount = editableItems.length ? 2 : 1;
 
@@ -110,13 +110,13 @@ class PCRDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
     );
   }
 
-  private getTaskStatus(status: ProjectChangeRequestItemStatus): "To do" | "Complete" | "Incomplete" {
+  private getTaskStatus(status: PCRItemStatus): "To do" | "Complete" | "Incomplete" {
     switch (status) {
-      case ProjectChangeRequestItemStatus.Complete:
+      case PCRItemStatus.Complete:
         return "Complete";
-      case ProjectChangeRequestItemStatus.Incomplete:
+      case PCRItemStatus.Incomplete:
         return "Incomplete";
-      case ProjectChangeRequestItemStatus.ToDo:
+      case PCRItemStatus.ToDo:
       default:
         return "To do";
     }

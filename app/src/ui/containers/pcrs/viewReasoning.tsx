@@ -1,6 +1,6 @@
 import React from "react";
 
-import { BaseProps, ContainerBase, defineRoute, ReduxContainer } from "../containerBase";
+import { BaseProps, ContainerBase, defineRoute } from "../containerBase";
 import { ProjectDto, ProjectRole } from "@framework/types";
 
 import * as ACC from "../../components";
@@ -8,7 +8,7 @@ import { Pending } from "@shared/pending";
 import { PCRDto } from "@framework/dtos/pcrDtos";
 import { StoresConsumer } from "@ui/redux";
 import { NavigationArrowsForPCRs } from "./navigationArrows";
-import { ProjectChangeRequestItemTypeEntity } from "@framework/entities";
+import { PCRItemType } from "@framework/constants";
 
 interface Params {
   projectId: string;
@@ -20,7 +20,7 @@ interface Data {
   pcr: Pending<PCRDto>;
   files: Pending<DocumentSummaryDto[]>;
   isReviewing: boolean;
-  editableItemTypes: Pending<ProjectChangeRequestItemTypeEntity[]>;
+  editableItemTypes: Pending<PCRItemType[]>;
 }
 
 interface Callbacks {
@@ -33,7 +33,7 @@ class PCRViewReasoningComponent extends ContainerBase<Params, Data, Callbacks> {
     return <ACC.PageLoader pending={combined} render={x => this.renderContents(x.project, x.pcr, x.files, x.editableItemTypes)} />;
   }
 
-  private renderContents(project: ProjectDto, pcr: PCRDto, files: DocumentSummaryDto[], editableItemTypes: ProjectChangeRequestItemTypeEntity[]) {
+  private renderContents(project: ProjectDto, pcr: PCRDto, files: DocumentSummaryDto[], editableItemTypes: PCRItemType[]) {
     const backLink = this.props.isReviewing ?
       <ACC.BackLink route={this.props.routes.pcrReview.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId })}>Back to review project change request</ACC.BackLink> :
       <ACC.BackLink route={this.props.routes.pcrDetails.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId })}>Back to project change request details</ACC.BackLink>

@@ -6,13 +6,13 @@ import { RootState } from "../reducers";
 import { ApiClient } from "@ui/apiClient";
 import { LoadingStatus, Pending } from "@shared/pending";
 import { dataLoadAction, messageSuccess } from "../actions";
-import {
-  ProjectChangeRequestItemStatus,
-  ProjectChangeRequestItemTypeEntity,
-  ProjectChangeRequestStatus
-} from "@framework/entities";
 import { NotFoundError } from "@server/features/common";
 import * as Dtos from "@framework/dtos";
+import {
+  PCRItemStatus,
+  PCRItemType,
+  PCRStatus
+} from "@framework/constants";
 
 export class ProjectChangeRequestStore extends StoreBase {
   constructor(private projectStore: ProjectsStore, getState: () => RootState, queue: (action: any) => void) {
@@ -36,8 +36,8 @@ export class ProjectChangeRequestStore extends StoreBase {
   }
 
   public getEditableItemTypes(projectId: string, projectChangeRequestId: string | null) {
-    const nonEditableTypes: ProjectChangeRequestItemTypeEntity[] = [
-      ProjectChangeRequestItemTypeEntity.ProjectTermination
+    const nonEditableTypes: PCRItemType[] = [
+      PCRItemType.ProjectTermination
     ];
 
     if (!projectChangeRequestId) {
@@ -54,13 +54,13 @@ export class ProjectChangeRequestStore extends StoreBase {
   public getStandardItemById(projectId: string, pcrId: string, itemId: string) {
     return this.getItemById(projectId, pcrId, itemId).chain(item => {
       if (
-        item.type === ProjectChangeRequestItemTypeEntity.AccountNameChange ||
-        item.type === ProjectChangeRequestItemTypeEntity.MultiplePartnerFinancialVirement ||
-        item.type === ProjectChangeRequestItemTypeEntity.PartnerAddition ||
-        item.type === ProjectChangeRequestItemTypeEntity.PartnerWithdrawal ||
-        item.type === ProjectChangeRequestItemTypeEntity.ProjectSuspension ||
-        item.type === ProjectChangeRequestItemTypeEntity.ProjectTermination ||
-        item.type === ProjectChangeRequestItemTypeEntity.SinglePartnerFinancialVirement
+        item.type === PCRItemType.AccountNameChange ||
+        item.type === PCRItemType.MultiplePartnerFinancialVirement ||
+        item.type === PCRItemType.PartnerAddition ||
+        item.type === PCRItemType.PartnerWithdrawal ||
+        item.type === PCRItemType.ProjectSuspension ||
+        item.type === PCRItemType.ProjectTermination ||
+        item.type === PCRItemType.SinglePartnerFinancialVirement
       ) {
         return Pending.done(item);
       }
@@ -72,7 +72,7 @@ export class ProjectChangeRequestStore extends StoreBase {
 
   public getTimeExtensionItemById(projectId: string, pcrId: string, itemId: string) {
     return this.getItemById(projectId, pcrId, itemId).chain(item => {
-      if (item.type === ProjectChangeRequestItemTypeEntity.TimeExtension) {
+      if (item.type === PCRItemType.TimeExtension) {
         return Pending.done(item);
       }
       else {
@@ -110,11 +110,11 @@ export class ProjectChangeRequestStore extends StoreBase {
       () => Pending.done<PCRDto>({
         id: "",
         projectId,
-        status: ProjectChangeRequestStatus.Draft,
+        status: PCRStatus.Draft,
         statusName: "",
         comments: "",
         reasoningComments: "",
-        reasoningStatus: ProjectChangeRequestItemStatus.ToDo,
+        reasoningStatus: PCRItemStatus.ToDo,
         reasoningStatusName: "",
         guidance: "",
         requestNumber: NaN,
@@ -162,51 +162,51 @@ export class ProjectChangeRequestStore extends StoreBase {
       id: "",
       guidance: "",
       typeName: itemType.displayName,
-      status: ProjectChangeRequestItemStatus.ToDo,
+      status: PCRItemStatus.ToDo,
       statusName: "",
     };
 
     switch (itemType.type) {
-      case ProjectChangeRequestItemTypeEntity.MultiplePartnerFinancialVirement:
-      case ProjectChangeRequestItemTypeEntity.PartnerAddition:
-      case ProjectChangeRequestItemTypeEntity.PartnerWithdrawal:
-      case ProjectChangeRequestItemTypeEntity.SinglePartnerFinancialVirement:
+      case PCRItemType.MultiplePartnerFinancialVirement:
+      case PCRItemType.PartnerAddition:
+      case PCRItemType.PartnerWithdrawal:
+      case PCRItemType.SinglePartnerFinancialVirement:
         return {
           ...baseFields,
           type: itemType.type
         };
-      case ProjectChangeRequestItemTypeEntity.AccountNameChange:
+      case PCRItemType.AccountNameChange:
         return {
           ...baseFields,
           type: itemType.type,
           partnerId: null,
           accountName: null
         };
-      case ProjectChangeRequestItemTypeEntity.TimeExtension:
+      case PCRItemType.TimeExtension:
         return {
           ...baseFields,
           type: itemType.type,
           projectEndDate: null
         };
-      case ProjectChangeRequestItemTypeEntity.ScopeChange:
+      case PCRItemType.ScopeChange:
         return {
           ...baseFields,
           type: itemType.type,
           publicDescription: "",
           projectSummary: ""
         };
-      case ProjectChangeRequestItemTypeEntity.ProjectSuspension:
+      case PCRItemType.ProjectSuspension:
         return {
           ...baseFields,
           type: itemType.type,
           suspensionStartDate: null,
           suspensionEndDate: null
         };
-      case ProjectChangeRequestItemTypeEntity.ProjectTermination:
+      case PCRItemType.ProjectTermination:
         return {
           ...baseFields,
           type: itemType.type,
-          status: ProjectChangeRequestItemStatus.Complete,
+          status: PCRItemStatus.Complete,
         };
       default:
         throw new Error("Item type not handled");

@@ -5,8 +5,12 @@ import { PCRDto, PCRItemForTimeExtensionDto, PCRStandardItemDto } from "@framewo
 import { MultipleDocumentUpdloadDtoValidator } from "@ui/validators";
 import { LoadingStatus, Pending } from "@shared/pending";
 import { PCRDtoValidator } from "@ui/validators/pcrDtoValidator";
-import { ProjectChangeRequestItemStatus, ProjectChangeRequestItemTypeEntity, ProjectChangeRequestStatus } from "@framework/entities";
 import { Authorisation } from "@framework/types";
+import {
+  PCRItemStatus,
+  PCRItemType,
+  PCRStatus
+} from "@framework/constants";
 
 export const getAllPcrTypes = () => dataStoreHelper("pcrTypes", "all");
 export const getAllPcrs = (projectId: string) => dataStoreHelper("pcrs", projectId);
@@ -16,7 +20,7 @@ export const getPcrItem = (projectId: string, id: string, itemId: string) => ({ 
 
 export const getPcrItemForTimeExtension = (state: RootState, projectId: string, id: string, itemId: string): Pending<PCRItemForTimeExtensionDto> => {
   return getPcrItem(projectId, id, itemId).getPending(state).chain(x => {
-    if (x.type === ProjectChangeRequestItemTypeEntity.TimeExtension) {
+    if (x.type === PCRItemType.TimeExtension) {
       return Pending.done(x);
     }
     return new Pending<PCRItemForTimeExtensionDto>(LoadingStatus.Failed, null, new Error("Item not a Time Extension"));
@@ -26,10 +30,10 @@ export const getPcrItemForTimeExtension = (state: RootState, projectId: string, 
 export const getPcrStandardItem = (state: RootState, projectId: string, id: string, itemId: string): Pending<PCRStandardItemDto> => {
   return getPcrItem(projectId, id, itemId).getPending(state).chain(x => {
     switch (x.type) {
-      case ProjectChangeRequestItemTypeEntity.MultiplePartnerFinancialVirement:
-      case ProjectChangeRequestItemTypeEntity.PartnerAddition:
-      case ProjectChangeRequestItemTypeEntity.PartnerWithdrawal:
-      case ProjectChangeRequestItemTypeEntity.SinglePartnerFinancialVirement:
+      case PCRItemType.MultiplePartnerFinancialVirement:
+      case PCRItemType.PartnerAddition:
+      case PCRItemType.PartnerWithdrawal:
+      case PCRItemType.SinglePartnerFinancialVirement:
         return Pending.done(x);
       default:
         return new Pending<PCRStandardItemDto>(LoadingStatus.Failed, null, new Error("Item not a Standard Type"));
@@ -39,8 +43,8 @@ export const getPcrStandardItem = (state: RootState, projectId: string, id: stri
 
 const createPcr = (projectId: string): Partial<PCRDto> => ({
   projectId,
-  status: ProjectChangeRequestStatus.Draft,
-  reasoningStatus: ProjectChangeRequestItemStatus.ToDo,
+  status: PCRStatus.Draft,
+  reasoningStatus: PCRItemStatus.ToDo,
   items: []
 });
 
