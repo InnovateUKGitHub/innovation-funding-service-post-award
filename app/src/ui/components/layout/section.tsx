@@ -11,11 +11,11 @@ interface Props {
   subsection?: boolean;
 }
 
-const renderTitles = ({ title, subtitle, badge, subsection }: Props) => {
+const renderTitles = ({ title, subtitle, badge, subsection }: Props, isEmpty: boolean) => {
   // if nothing to render at top then we return null if there is a badge but no titles we still need to render the div with three quarters
   if (!title && !subtitle && !badge) return null;
 
-  const classes = classNames({ "govuk-grid-column-full": !badge, "govuk-grid-column-three-quarters": !!badge }, "govuk-!-margin-bottom-5");
+  const classes = classNames({ "govuk-grid-column-full": !badge, "govuk-grid-column-three-quarters": !!badge, "govuk-!-margin-bottom-5" : !isEmpty }, );
   const Header =  subsection ? "h3" : "h2";
   const headerClasses = { "govuk-!-margin-bottom-2": !!subtitle, "govuk-heading-m": !subsection, "govuk-heading-s": !!subsection };
 
@@ -32,15 +32,21 @@ const renderBadge = ({ badge }: Props) => !badge ? null : (<div className={class
 const renderContents = (children: React.ReactNode) => !children ? null : (<div className="govuk-grid-column-full">{children}</div>);
 
 export const Section: React.SFC<Props> = (props) => {
-  const { title, subtitle, badge, id, children, qa } = props;
+  const { title, subtitle, badge, id, children, qa, subsection } = props;
+  const className = classNames({
+    "govuk-grid-row": true,
+    "govuk-!-margin-bottom-9": !subsection,
+    "govuk-!-margin-bottom-3": !!subsection,
+    "acc-section": true
+  });
 
   if (!title && !subtitle && !badge && !children) {
     return null;
   }
 
   return (
-    <div id={id} className={"govuk-grid-row govuk-!-margin-bottom-9 acc-section"} data-qa={qa}>
-      {renderTitles(props)}
+    <div id={id} className={className} data-qa={qa}>
+      {renderTitles(props, !children)}
       {renderBadge(props)}
       {renderContents(children)}
     </div>

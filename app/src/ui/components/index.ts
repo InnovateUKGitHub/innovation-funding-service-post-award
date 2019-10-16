@@ -22,7 +22,7 @@ export * from "./navigationCard";
 export * from "./monitoringReports";
 export * from "./partnersAndFinanceContacts";
 export * from "./periodTitle";
-export * from "./projectMember";
+export * from "./projectContact";
 export * from "./statisticsBox";
 export * from "./styledButton";
 export * from "./summaryList";
