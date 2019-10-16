@@ -1,6 +1,6 @@
 import * as React from "react";
 import classNames from "classnames";
-import { SimpleString } from "../renderers";
+import { SimpleString } from "../renderers/simpleString";
 
 interface Props {
   id?: string;

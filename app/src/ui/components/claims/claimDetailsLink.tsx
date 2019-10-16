@@ -1,7 +1,7 @@
 import React from "react";
 import { ClaimDto, ClaimStatus, PartnerDto, ProjectDto, ProjectRole, ProjectStatus } from "@framework/types";
-import { Link } from "..";
 import { IRoutes } from "@ui/routing";
+import { Link } from "../links";
 
 interface Props {
   claim: ClaimDto;
@@ -12,6 +12,7 @@ interface Props {
 interface PropsWithRoutes extends Props {
   routes: IRoutes;
 }
+
 export const ClaimDetailsLink: React.SFC<PropsWithRoutes> = (props) => {
   const linkProps = { projectId: props.project.id, partnerId: props.partner.id, periodId: props.claim.periodId };
 

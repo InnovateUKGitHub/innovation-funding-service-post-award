@@ -1,6 +1,5 @@
 import React from "react";
 import { ILinkInfo } from "@framework/types";
-import classNames from "classnames";
 import { Link } from "./links";
 
 interface NavigationCardProps {

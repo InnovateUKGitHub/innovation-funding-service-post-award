@@ -1,6 +1,5 @@
 import React from "react";
-import { connect as reduxConnect } from "react-redux";
-import { RootState } from "@ui/redux";
+import { StoresConsumer } from "@ui/redux";
 
 interface Props {
   title?: string;
@@ -21,16 +20,15 @@ class TitleComponent extends React.Component<Props & Data> {
       </div>
     );
   }
+
   private renderCaption() {
     const { caption } = this.props;
     return caption ? <span className="govuk-caption-xl">{caption}</span> : null;
   }
 }
 
-export const Title = reduxConnect<Data, {}, Props, RootState>(
-  (state: RootState) => {
-    return {
-      storePageTitle: state.title.displayTitle
-    };
-  }
-)(TitleComponent);
+export const Title = (props: Props) => (
+  <StoresConsumer>
+    {stores => <TitleComponent storePageTitle={stores.navigation.getPageTitle().displayTitle} {...props}/>}
+  </StoresConsumer>
+);

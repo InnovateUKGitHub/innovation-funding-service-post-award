@@ -1,15 +1,18 @@
 import React from "react";
-import * as ACC from "./index";
+import { Page } from "./layout/page";
+import { Title } from "./layout/title";
+import { Section } from "./layout/section";
+import { SimpleString } from "./renderers/simpleString";
 
 export const NotFoundErrorPage = () => (
-  <ACC.Page
-    pageTitle={<ACC.Title title="Page not found"/>}
+  <Page
+    pageTitle={<Title title="Page not found"/>}
     backLink={null}
   >
-    <ACC.Section>
-      <ACC.Renderers.SimpleString qa="errorMessage">
+    <Section>
+      <SimpleString qa="errorMessage">
         Please check the web address or search term you entered for any errors. You can return to <a href="/projects/dashboard">your dashboard</a> or go back to the <a href="/">Innovate UK homepage</a>.
-      </ACC.Renderers.SimpleString>
-    </ACC.Section>
-  </ACC.Page>
+      </SimpleString>
+    </Section>
+  </Page>
 );

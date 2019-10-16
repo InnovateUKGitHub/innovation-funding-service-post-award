@@ -2,8 +2,8 @@
 import "jest";
 import React from "react";
 import Adapter from "enzyme-adapter-react-16";
-import Enzyme, {mount, render, shallow} from "enzyme";
-import {ClaimPeriodDate} from "../../../src/ui/components/claims";
+import Enzyme, {mount, shallow} from "enzyme";
+import {ClaimPeriodDate} from "../../../src/ui/components/claims/claimPeriodDate";
 
 Enzyme.configure({ adapter: new Adapter() });
 

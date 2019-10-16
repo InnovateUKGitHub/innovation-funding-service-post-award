@@ -3,7 +3,7 @@ import "jest";
 import React from "react";
 import Enzyme, { mount } from "enzyme";
 import Adapter from "enzyme-adapter-react-16";
-import { RadioList} from "../../../src/ui/components/inputs";
+import { RadioList} from "../../../src/ui/components/inputs/radioList";
 import { range } from "../../../src/shared/range";
 
 Enzyme.configure({ adapter: new Adapter() });

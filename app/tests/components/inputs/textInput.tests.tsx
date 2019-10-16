@@ -3,7 +3,7 @@ import "jest";
 import React from "react";
 import Enzyme, { mount } from "enzyme";
 import Adapter from "enzyme-adapter-react-16";
-import { TextInput } from "../../../src/ui/components/inputs";
+import { TextInput } from "../../../src/ui/components/inputs/textInput";
 
 Enzyme.configure({ adapter: new Adapter() });
 

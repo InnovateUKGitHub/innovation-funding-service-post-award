@@ -1,9 +1,16 @@
+import { TextAreaInput } from "./inputs/textAreaInput";
 import React, { CSSProperties } from "react";
-import classNames from "classnames";
-import * as ACC from "@ui/components";
 import { Result } from "@ui/validation";
 import { EditorStatus, IEditorStore } from "@ui/redux";
-import { DateTime } from "luxon";
+import { ValidationError } from "./validationError";
+import { TextInput } from "./inputs/textInput";
+import classNames from "classnames";
+import { NumberInput } from "./inputs/numberInput";
+import { RadioList } from "./inputs/radioList";
+import { CheckboxList } from "./inputs/checkboxList";
+import { FileUpload, MulipleFileUpload } from "./inputs/fileUpload";
+import { FullDateInput, MonthYearInput } from "./inputs/dateInput";
+import { Button } from "./styledButton";
 
 interface SharedFormProps<T> {
     onChange?: (data: T) => void;
@@ -130,7 +137,7 @@ class FieldComponent<T, TValue> extends React.Component<InternalFieldProps<T> & 
       <div data-qa={`field-${name}`} className={classNames("govuk-form-group", { "govuk-form-group--error": hasError })}>
         {!!label ? <label className={classNames("govuk-label", { "govuk-visually-hidden" : labelHidden, "govuk-label--m" : labelBold })} htmlFor={name}>{label}</label> : null}
         {hint ? <span id={createFieldHintId(this.props)} className="govuk-hint">{hint}</span> : null}
-        <ACC.ValidationError error={validation} />
+        <ValidationError error={validation} />
         {field(formData, this.props.disabled, hasError)}
       </div>
     );
@@ -165,7 +172,7 @@ const handleChange = <TDto extends {}, TValue extends {}>(props: ExternalFieldPr
 const StringField = <T extends {}>(props: ExternalFieldProps<T, string> & InternalFieldProps<T>) => {
   return (
     <FieldComponent
-      field={((data,disabled) => <ACC.Inputs.TextInput name={props.name} value={props.value(data, disabled)} onChange={(val) => handleChange(props, val)} placeholder={props.placeholder} disabled={disabled}/>)}
+      field={((data,disabled) => <TextInput name={props.name} value={props.value(data, disabled)} onChange={(val) => handleChange(props, val)} placeholder={props.placeholder} disabled={disabled}/>)}
       {...props}
     />
   );
@@ -179,7 +186,7 @@ interface MultiStringFieldProps<T> extends ExternalFieldProps<T, string> {
 const MultiStringField = <T extends {}>(props: MultiStringFieldProps<T> & InternalFieldProps<T>) => {
   return (
     <FieldComponent
-      field={((data, disabled) => <ACC.Inputs.TextAreaInput name={props.name} value={props.value(data, disabled)} onChange={(val) => handleChange(props, val)} rows={props.rows} qa={props.qa} ariaDescribedBy={props.hint ? createFieldHintId(props) : undefined} disabled={disabled} />)}
+      field={((data, disabled) => <TextAreaInput name={props.name} value={props.value(data, disabled)} onChange={(val) => handleChange(props, val)} rows={props.rows} qa={props.qa} ariaDescribedBy={props.hint ? createFieldHintId(props) : undefined} disabled={disabled} />)}
       {...props}
     />
   );
@@ -193,7 +200,7 @@ const NumericField = <T extends {}>(props: NumericFieldProps<T> & InternalFieldP
   const TypedFieldComponent = FieldComponent as { new(): FieldComponent<T, number> };
   return (
     <TypedFieldComponent
-      field={((data,disabled) => <ACC.Inputs.NumberInput name={props.name} value={props.value(data, disabled)} onChange={(val) => handleChange(props, val)} width={props.width} disabled={disabled} />)}
+      field={((data,disabled) => <NumberInput name={props.name} value={props.value(data, disabled)} onChange={(val) => handleChange(props, val)} width={props.width} disabled={disabled} />)}
       {...props}
     />
   );
@@ -213,7 +220,7 @@ const RadioOptionsField = <T extends {}>(props: RadioFieldProps<T> & InternalFie
   const TypedFieldComponent = FieldComponent as { new(): FieldComponent<T, SelectOption> };
   return (
     <TypedFieldComponent
-      field={(data, disabled) => <ACC.Inputs.RadioList options={props.options} name={props.name} value={props.value(data, disabled)} inline={props.inline} onChange={(val) => handleChange(props, val)} disabled={disabled} />}
+      field={(data, disabled) => <RadioList options={props.options} name={props.name} value={props.value(data, disabled)} inline={props.inline} onChange={(val) => handleChange(props, val)} disabled={disabled} />}
       {...props}
     />
   );
@@ -227,7 +234,7 @@ const CheckboxOptionsField = <T extends {}>(props: CheckboxFieldProps<T> & Inter
   const TypedFieldComponent = FieldComponent as { new(): FieldComponent<T, SelectOption[]> };
   return (
     <TypedFieldComponent
-      field={(data, disabled) => <ACC.Inputs.CheckboxList options={props.options} name={props.name} value={props.value(data, disabled)} onChange={(val) => handleChange(props, val)} disabled={disabled} />}
+      field={(data, disabled) => <CheckboxList options={props.options} name={props.name} value={props.value(data, disabled)} onChange={(val) => handleChange(props, val)} disabled={disabled} />}
       {...props}
     />
   );
@@ -246,7 +253,7 @@ interface SubmitProps {
 }
 
 const SubmitComponent = <T extends {}>(props: SubmitProps & InternalFieldProps<T>) => (
-  <ACC.Button
+  <Button
     type="submit"
     name="button_default"
     className={props.className}
@@ -256,7 +263,7 @@ const SubmitComponent = <T extends {}>(props: SubmitProps & InternalFieldProps<T
     onClick={(e) => handleSubmit(props, e)}
   >
     {(props as any).children}
-  </ACC.Button>
+  </Button>
 );
 
 interface ButtonProps {
@@ -269,7 +276,7 @@ interface ButtonProps {
 }
 
 const ButtonComponent = <T extends {}>(props: ButtonProps & InternalFieldProps<T>) => (
-  <ACC.Button
+  <Button
     type="submit"
     name={`button_${props.name}`}
     className={props.className}
@@ -280,13 +287,13 @@ const ButtonComponent = <T extends {}>(props: ButtonProps & InternalFieldProps<T
     onClick={(e) => handleOtherButton(props, e)}
   >
     {(props as any).children}
-  </ACC.Button>
+  </Button>
 );
 
 const FileUploadComponent = <T extends {}>(props: ExternalFieldProps<T, IFileWrapper> & InternalFieldProps<T>) => {
   return (
     <FieldComponent
-      field={((data, disabled, hasError) => <ACC.Inputs.FileUpload value={props.value(data, disabled)} name={props.name} onChange={(val) => handleChange(props, val)} disabled={disabled} error={hasError}/>)}
+      field={((data, disabled, hasError) => <FileUpload value={props.value(data, disabled)} name={props.name} onChange={(val) => handleChange(props, val)} disabled={disabled} error={hasError}/>)}
       {...props}
     />
   );
@@ -295,7 +302,7 @@ const FileUploadComponent = <T extends {}>(props: ExternalFieldProps<T, IFileWra
 const MulipleFileUploadComponent = <T extends {}>(props: ExternalFieldProps<T, IFileWrapper[]> & InternalFieldProps<T>) => {
   return (
     <FieldComponent
-      field={((data, disabled, hasError) => <ACC.Inputs.MulipleFileUpload value={props.value(data, disabled)} name={props.name} onChange={(val) => handleChange(props, val)} disabled={disabled} error={hasError}/>)}
+      field={((data, disabled, hasError) => <MulipleFileUpload value={props.value(data, disabled)} name={props.name} onChange={(val) => handleChange(props, val)} disabled={disabled} error={hasError}/>)}
       {...props}
     />
   );
@@ -305,7 +312,7 @@ const FullDateComponent = <T extends {}>(props: ExternalFieldProps<T, Date> & In
   return (
     <FieldComponent
       field={(data, disabled, hasError) => (
-        <ACC.Inputs.FullDateInput
+        <FullDateInput
           name={props.name}
           disabled={disabled}
           value={props.value(data, disabled)}
@@ -327,7 +334,7 @@ const MonthYearComponent = <T extends {}>(props: MonthYearProps<T, Date> & Inter
   return (
     <FieldComponent
       field={(data, disabled, hasError) => (
-        <ACC.Inputs.MonthYearInput
+        <MonthYearInput
           name={props.name}
           disabled={disabled}
           value={props.value(data, disabled)}
