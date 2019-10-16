@@ -20,7 +20,7 @@ interface Data {
 
 interface Callbacks {
   onChange: (saving: boolean, dto: Dtos.PCRDto) => void;
-  createNewChangeRequestItem: (itemType: Dtos.PCRItemTypeDto) => (Dtos.TypedPcrItemDto);
+  createNewChangeRequestItem: (itemType: Dtos.PCRItemTypeDto) => (Dtos.PCRItemDto);
 }
 
 class PCRCreateComponent extends ContainerBase<CreateProjectChangeRequestParams, Data, Callbacks> {

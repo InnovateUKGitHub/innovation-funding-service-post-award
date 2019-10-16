@@ -12,8 +12,7 @@ import {
   PCRItemForTimeExtensionDto,
   PCRItemTypeDto,
   PCRStandardItemDto,
-  ProjectRole,
-  TypedPcrItemDto
+  ProjectRole
 } from "@framework/dtos";
 import {
   ProjectChangeRequestItemStatus,
@@ -134,7 +133,7 @@ export class PCRDtoValidator extends Results<PCRDto> {
     );
   }
 
-  private getItemValidator(item: TypedPcrItemDto) {
+  private getItemValidator(item: PCRItemDto) {
     const canEdit = (this.role & ProjectRole.ProjectManager) ? this.projectManagerCanEdit : false;
     const originalItem = this.original && this.original.items.find(x => x.id === item.id);
     switch (item.type) {

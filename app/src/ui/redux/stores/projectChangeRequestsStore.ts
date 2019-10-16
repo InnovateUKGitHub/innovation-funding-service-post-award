@@ -157,11 +157,10 @@ export class ProjectChangeRequestStore extends StoreBase {
     );
   }
 
-  public createNewChangeRequestItem(itemType: Dtos.PCRItemTypeDto): (Dtos.TypedPcrItemDto) {
-    const baseFields: Dtos.PCRItemDto = {
+  public createNewChangeRequestItem(itemType: Dtos.PCRItemTypeDto): (Dtos.PCRItemDto) {
+    const baseFields = {
       id: "",
       guidance: "",
-      type: ProjectChangeRequestItemTypeEntity.Unknown,
       typeName: itemType.displayName,
       status: ProjectChangeRequestItemStatus.ToDo,
       statusName: "",
