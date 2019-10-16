@@ -86,7 +86,7 @@ describe("GetPCRByIdQuery", () => {
   test("maps all item fields", async () => {
     const context = new TestContext();
 
-    const recordType = context.testData.createPCRRecordTypes()[4];
+    const recordType = context.testData.createPCRRecordTypes().find(x => x.type === "Change project scope");
 
     const pcr = context.testData.createPCR();
 
@@ -101,8 +101,8 @@ describe("GetPCRByIdQuery", () => {
 
     expect(result.id).toBe(item.id);
     expect(result.guidance).toBe("This is some hardcoded guidance");
-    expect(result.type).toBe(50);
-    expect(result.typeName).toBe(recordType.type);
+    expect(result.type).toBe(ProjectChangeRequestItemTypeEntity.ScopeChange);
+    expect(result.typeName).toBe(recordType!.type);
     expect(result.status).toBe(98);
     expect(result.statusName).toBe("Expected Status");
   });
