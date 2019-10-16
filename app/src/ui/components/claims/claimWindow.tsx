@@ -1,5 +1,5 @@
 import React from "react";
-import { ShortDate } from "../renderers";
+import { ShortDate } from "../renderers/date";
 import { DateTime } from "luxon";
 
 interface Props {

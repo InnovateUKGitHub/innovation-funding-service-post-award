@@ -1,5 +1,5 @@
 import React from "react";
-import { TextHint} from "../components/layout";
+import { TextHint} from "../components/layout/textHint";
 
 export const textHint: IGuide = {
   name: "TextHint",

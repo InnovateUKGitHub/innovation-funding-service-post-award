@@ -1,16 +1,7 @@
 import * as React from "react";
 import classNames from "classnames";
 import { BaseInput } from "./baseInput";
-
-export class ClientFileWrapper implements IFileWrapper {
-  constructor(public readonly file: File) {
-    this.fileName = file.name;
-    this.size = file.size;
-  }
-
-  public readonly size: number;
-  public readonly fileName: string;
-}
+import { ClientFileWrapper } from "../../../client/clientFileWrapper";
 
 interface FileUploadProps {
   name: string;

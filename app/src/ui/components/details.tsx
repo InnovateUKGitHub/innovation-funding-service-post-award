@@ -1,6 +1,8 @@
 import * as React from "react";
 import classnames from "classnames";
-import { Currency, FullDate, FullDateTime, Percentage } from "./renderers";
+import { Currency } from "./renderers/currency";
+import { FullDate, FullDateTime } from "./renderers/date";
+import { Percentage } from "./renderers/percentage";
 
 interface DetailsProps {
     displayDensity?: "Compact" | "Comfortable";

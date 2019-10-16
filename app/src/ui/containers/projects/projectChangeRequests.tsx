@@ -36,7 +36,7 @@ class ProjectChangeRequestsComponent extends ContainerBase<Params, Data, Callbac
     return (
       <Acc.Page
         pageTitle={<Acc.Projects.Title project={projectDetails} />}
-        backLink={<Acc.Projects.ProjectBackLink project={projectDetails} routes={this.props.routes}/>}
+        backLink={<Acc.Projects.ProjectBackLink project={projectDetails} routes={this.props.routes} />}
         project={projectDetails}
       >
         <Acc.Renderers.SimpleString>

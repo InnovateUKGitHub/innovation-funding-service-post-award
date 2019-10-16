@@ -3,11 +3,8 @@ import "jest";
 import React from "react";
 import Adapter from "enzyme-adapter-react-16";
 import Enzyme, { mount } from "enzyme";
-import { ClaimDetailsLink } from "../../../src/ui/components/claims";
 import { ProjectRole } from "@framework/dtos";
 import { ClaimStatus } from "@framework/constants";
-import { createRouter } from "router5";
-import browserPluginFactory from "router5/plugins/browser";
 import { createStore } from "redux";
 import { rootReducer } from "../../../src/ui/redux/reducers";
 import { Provider } from "react-redux";
@@ -15,6 +12,7 @@ import { RouterProvider } from "react-router5";
 import { IClientUser } from "@framework/types";
 import { routeConfig } from "@ui/routing/routeConfig";
 import { configureRouter } from "@ui/routing";
+import { ClaimDetailsLink } from "@ui/components/claims/claimDetailsLink";
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -41,11 +39,9 @@ describe("ClaimDetailsLink", () => {
   describe("as a monitoring officer", () => {
     it("should render a Review Claim link when claim is submitted", () => {
       const wrapper = mount(
-        <Provider store={createStore(rootReducer, {user: preloadedState})}>
           <RouterProvider router={router}>
             <ClaimDetailsLink claim={{id: claimId, periodId: 3, status: ClaimStatus.SUBMITTED} as any} project={{id: projectId, roles: ProjectRole.MonitoringOfficer} as any} partner={{id: partnerId} as any} routes={routes}/>
           </RouterProvider>
-        </Provider>
       );
       expect(wrapper.text()).toEqual("Review claim");
     });
