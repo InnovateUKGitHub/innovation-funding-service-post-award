@@ -22,7 +22,7 @@ interface Data {
 
 interface Callbacks {
   onChange: (saving: boolean, dto: Dtos.PCRDto) => void;
-  createNewChangeRequestItem: (itemType: Dtos.PCRItemTypeDto) => (Dtos.TypedPcrItemDto);
+  createNewChangeRequestItem: (itemType: Dtos.PCRItemTypeDto) => (Dtos.PCRItemDto);
 }
 
 class PCRAddTypeComponent extends ContainerBase<ProjectChangeRequestAddTypeParams, Data, Callbacks> {
