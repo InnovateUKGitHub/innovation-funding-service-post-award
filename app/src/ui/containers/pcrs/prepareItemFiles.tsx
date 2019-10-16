@@ -7,7 +7,7 @@ import { Pending } from "@shared/pending";
 import { PCRDto, PCRItemDto, PCRItemTypeDto, ProjectDto, ProjectRole } from "@framework/dtos";
 import { IEditorStore, StoresConsumer } from "@ui/redux";
 import { MultipleDocumentUpdloadDtoValidator } from "@ui/validators";
-import { ProjectChangeRequestItemTypeEntity } from "@framework/entities";
+import { PCRItemType } from "@framework/constants";
 
 interface Params {
   projectId: string;
@@ -63,12 +63,12 @@ class PrepareItemFilesComponent extends ContainerBase<Params, Data, Callbacks> {
 
   private renderForm(pcrItem: PCRItemDto, documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>): React.ReactNode {
     switch (pcrItem.type) {
-      case ProjectChangeRequestItemTypeEntity.AccountNameChange:
-      case ProjectChangeRequestItemTypeEntity.PartnerAddition:
-      case ProjectChangeRequestItemTypeEntity.PartnerWithdrawal:
-      case ProjectChangeRequestItemTypeEntity.ProjectTermination:
-      case ProjectChangeRequestItemTypeEntity.MultiplePartnerFinancialVirement:
-      case ProjectChangeRequestItemTypeEntity.SinglePartnerFinancialVirement:
+      case PCRItemType.AccountNameChange:
+      case PCRItemType.PartnerAddition:
+      case PCRItemType.PartnerWithdrawal:
+      case PCRItemType.ProjectTermination:
+      case PCRItemType.MultiplePartnerFinancialVirement:
+      case PCRItemType.SinglePartnerFinancialVirement:
         return this.renderMultipleUploads(documentsEditor);
       default:
         return <ACC.ValidationMessage message="Cannot upload documents to this item" messageType="error" />;

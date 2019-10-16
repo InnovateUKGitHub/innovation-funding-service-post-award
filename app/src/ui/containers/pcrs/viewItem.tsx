@@ -8,8 +8,8 @@ import { Pending } from "@shared/pending";
 import { PCRDto, PCRItemDto } from "@framework/dtos/pcrDtos";
 import { StoresConsumer } from "@ui/redux";
 import { NavigationArrowsForPCRs } from "./navigationArrows";
-import { ProjectChangeRequestItemTypeEntity } from "@framework/entities";
 import * as Items from "./items";
+import { PCRItemType } from "@framework/constants";
 
 interface Params {
   projectId: string;
@@ -22,7 +22,7 @@ interface Data {
   pcr: Pending<PCRDto>;
   pcrItem: Pending<PCRItemDto>;
   isReviewing: boolean;
-  editableItemTypes: Pending<ProjectChangeRequestItemTypeEntity[]>;
+  editableItemTypes: Pending<PCRItemType[]>;
 }
 
 interface Callbacks {
@@ -35,7 +35,7 @@ class PCRViewItemComponent extends ContainerBase<Params, Data, Callbacks> {
     return <ACC.PageLoader pending={combined} render={x => this.renderContents(x.project, x.pcr, x.pcrItem, x.editableItemTypes)} />;
   }
 
-  private renderContents(project: ProjectDto, pcr: PCRDto, pcrItem: PCRItemDto, editableItemTypes: ProjectChangeRequestItemTypeEntity[]) {
+  private renderContents(project: ProjectDto, pcr: PCRDto, pcrItem: PCRItemDto, editableItemTypes: PCRItemType[]) {
     const backLink = this.props.isReviewing ?
       <ACC.BackLink route={this.props.routes.pcrReview.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId })}>Back to review project change request</ACC.BackLink> :
       <ACC.BackLink route={this.props.routes.pcrDetails.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId })}>Back to project change request details</ACC.BackLink>
@@ -59,18 +59,18 @@ class PCRViewItemComponent extends ContainerBase<Params, Data, Callbacks> {
     const item = pcr.items.find(x => x.id === this.props.itemId);
     if (item) {
       switch (item.type) {
-        case ProjectChangeRequestItemTypeEntity.TimeExtension:
+        case PCRItemType.TimeExtension:
           return <Items.TimeExtensionView project={project} projectChangeRequest={pcr} projectChangeRequestItem={item} />;
-        case ProjectChangeRequestItemTypeEntity.ScopeChange:
+        case PCRItemType.ScopeChange:
           return <Items.ScopeChangeView project={project} projectChangeRequest={pcr} projectChangeRequestItem={item} />;
-        case ProjectChangeRequestItemTypeEntity.ProjectSuspension:
+        case PCRItemType.ProjectSuspension:
             return <Items.ProjectSuspensionView project={project} projectChangeRequest={pcr} projectChangeRequestItem={item} />;
-        case ProjectChangeRequestItemTypeEntity.AccountNameChange:
+        case PCRItemType.AccountNameChange:
           return <Items.NameChangeView projectChangeRequest={pcr} projectChangeRequestItem={item} />;
-        case ProjectChangeRequestItemTypeEntity.MultiplePartnerFinancialVirement:
-        case ProjectChangeRequestItemTypeEntity.PartnerAddition:
-        case ProjectChangeRequestItemTypeEntity.PartnerWithdrawal:
-        case ProjectChangeRequestItemTypeEntity.SinglePartnerFinancialVirement:
+        case PCRItemType.MultiplePartnerFinancialVirement:
+        case PCRItemType.PartnerAddition:
+        case PCRItemType.PartnerWithdrawal:
+        case PCRItemType.SinglePartnerFinancialVirement:
           return <Items.StandardItemView projectChangeRequest={pcr} projectChangeRequestItem={item} />;
       }
     }

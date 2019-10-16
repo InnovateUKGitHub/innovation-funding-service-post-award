@@ -7,9 +7,9 @@ import * as ACC from "@ui/components";
 import { Pending } from "@shared/pending";
 import { PCRDto, PCRItemDto, PCRItemTypeDto } from "@framework/dtos";
 import { EditorStatus, IEditorStore, StoresConsumer, } from "@ui/redux";
-import { ProjectChangeRequestItemStatus, ProjectChangeRequestItemTypeEntity } from "@framework/entities";
 import * as Items from "./items";
 import * as Validators from "@ui/validators/pcrDtoValidator";
+import { PCRItemStatus, PCRItemType } from "@framework/constants";
 
 export interface ProjectChangeRequestPrepareItemParams {
   projectId: string;
@@ -89,18 +89,18 @@ class PCRPrepareItemComponent extends ContainerBase<ProjectChangeRequestPrepareI
     const validator = editor.validator.items.results.find(x => x.model.id === this.props.itemId)!;
     if (item) {
       switch (item.type) {
-        case ProjectChangeRequestItemTypeEntity.TimeExtension:
+        case PCRItemType.TimeExtension:
           return <Items.TimeExtensionEdit project={project} projectChangeRequestItem={item} validator={validator as Validators.PCRTimeExtensionItemDtoValidator} status={status} onChange={itemDto => this.onChange(editor.data, itemDto)} onSave={() => this.onSave(editor.data)} />;
-        case ProjectChangeRequestItemTypeEntity.ScopeChange:
+        case PCRItemType.ScopeChange:
           return <Items.ScopeChangeEdit project={project} projectChangeRequestItem={item} validator={validator as Validators.PCRScopeChangeItemDtoValidator} status={status} onChange={itemDto => this.onChange(editor.data, itemDto)} onSave={() => this.onSave(editor.data)} />;
-        case ProjectChangeRequestItemTypeEntity.ProjectSuspension:
+        case PCRItemType.ProjectSuspension:
           return <Items.ProjectSuspensionEdit project={project} projectChangeRequestItem={item} validator={validator as Validators.PCRProjectSuspensionItemDtoValidator} status={status} onChange={itemDto => this.onChange(editor.data, itemDto)} onSave={() => this.onSave(editor.data)} />;
-        case ProjectChangeRequestItemTypeEntity.AccountNameChange:
+        case PCRItemType.AccountNameChange:
           return <Items.NameChangeEdit project={project} projectChangeRequest={pcr} projectChangeRequestItem={item} validator={validator as Validators.PCRAccountNameChangeItemDtoValidator} status={status} onChange={itemDto => this.onChange(editor.data, itemDto)} onSave={() => this.onSave(editor.data)} routes={this.props.routes} />;
-        case ProjectChangeRequestItemTypeEntity.MultiplePartnerFinancialVirement:
-        case ProjectChangeRequestItemTypeEntity.PartnerAddition:
-        case ProjectChangeRequestItemTypeEntity.PartnerWithdrawal:
-        case ProjectChangeRequestItemTypeEntity.SinglePartnerFinancialVirement:
+        case PCRItemType.MultiplePartnerFinancialVirement:
+        case PCRItemType.PartnerAddition:
+        case PCRItemType.PartnerWithdrawal:
+        case PCRItemType.SinglePartnerFinancialVirement:
           return <Items.StandardItemEdit projectChangeRequest={pcr} projectChangeRequestItem={item} validator={validator as Validators.PCRStandardItemDtoValidator} status={status} onChange={itemDto => this.onChange(editor.data, itemDto)} onSave={() => this.onSave(editor.data)} routes={this.props.routes} />;
       }
     }
@@ -116,8 +116,8 @@ class PCRPrepareItemComponent extends ContainerBase<ProjectChangeRequestPrepareI
   private onSave(dto: PCRDto): void {
     // if the status is todo and we are saving should change it to incomplete
     const index = dto.items.findIndex(x => x.id === this.props.itemId);
-    if (dto.items[index].status === ProjectChangeRequestItemStatus.ToDo) {
-      dto.items[index].status = ProjectChangeRequestItemStatus.Incomplete;
+    if (dto.items[index].status === PCRItemStatus.ToDo) {
+      dto.items[index].status = PCRItemStatus.Incomplete;
     }
     this.props.onChange(true, dto);
   }

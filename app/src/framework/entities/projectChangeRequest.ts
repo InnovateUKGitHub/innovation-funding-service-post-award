@@ -1,50 +1,12 @@
-export enum ProjectChangeRequestStatus {
-  Unknown = 0,
-  Draft= 1,
-  SubmittedToMonitoringOfficer= 2,
-  QueriedByMonitoringOfficer= 3,
-  SubmittedToInnovationLead= 4,
-  QueriedByInnovateUK= 5,
-  InExternalReview= 6,
-  InReviewWithInnovateUK= 7,
-  Rejected= 8,
-  Withdrawn= 9,
-  Approved= 10,
-  Actioned= 11,
-}
-
-export enum ProjectChangeRequestItemStatus {
-  Unknown = 0,
-  ToDo = 1,
-  Incomplete = 2,
-  Complete = 3
-}
-
-export enum ProjectChangeRequestItemTypeEntity {
-  Unknown = 0,
-  AccountNameChange = 10,
-  PartnerAddition = 20,
-  PartnerWithdrawal = 30,
-  ProjectSuspension = 40,
-  ProjectTermination = 50,
-  MultiplePartnerFinancialVirement = 60,
-  SinglePartnerFinancialVirement = 70,
-  ScopeChange = 80,
-  TimeExtension = 90,
-}
-
-// TODO Move to pcrDtos
-export type ProjectChangeRequestStandardItemTypes = (
-  ProjectChangeRequestItemTypeEntity.PartnerAddition|
-  ProjectChangeRequestItemTypeEntity.PartnerWithdrawal|
-  ProjectChangeRequestItemTypeEntity.MultiplePartnerFinancialVirement|
-  ProjectChangeRequestItemTypeEntity.SinglePartnerFinancialVirement
-  );
+import {
+  PCRItemStatus,
+  PCRStatus
+} from "@framework/constants";
 
 export interface ProjectChangeRequestForCreateEntity {
   projectId: string;
-  status: ProjectChangeRequestStatus;
-  reasoningStatus: ProjectChangeRequestItemStatus;
+  status: PCRStatus;
+  reasoningStatus: PCRItemStatus;
   items: ProjectChangeRequestItemForCreateEntity[];
 }
 
@@ -63,7 +25,7 @@ export interface ProjectChangeRequestEntity extends ProjectChangeRequestForCreat
 
 export interface ProjectChangeRequestItemForCreateEntity {
   recordTypeId: string;
-  status: ProjectChangeRequestItemStatus;
+  status: PCRItemStatus;
   projectId: string;
   projectEndDate?: Date | null;
   publicDescription?: string | null;

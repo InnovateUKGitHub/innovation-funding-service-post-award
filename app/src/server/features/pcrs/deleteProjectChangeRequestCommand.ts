@@ -1,6 +1,6 @@
 import { BadRequestError, CommandBase } from "../common";
 import { Authorisation, IContext, ProjectRole } from "@framework/types";
-import { ProjectChangeRequestStatus } from "@framework/entities";
+import { PCRStatus } from "@framework/constants";
 
 export class DeleteProjectChangeRequestCommand extends CommandBase<boolean> {
   constructor(private projectId: string, private pcrId: string) {
@@ -14,7 +14,7 @@ export class DeleteProjectChangeRequestCommand extends CommandBase<boolean> {
   protected async Run(context: IContext): Promise<boolean> {
     const existing = await context.repositories.projectChangeRequests.getById(this.projectId, this.pcrId);
 
-    if(existing.status !== ProjectChangeRequestStatus.Draft) {
+    if(existing.status !== PCRStatus.Draft) {
       throw new BadRequestError("Can only delete draft project change requests");
     }
     await context.repositories.projectChangeRequests.delete(existing);

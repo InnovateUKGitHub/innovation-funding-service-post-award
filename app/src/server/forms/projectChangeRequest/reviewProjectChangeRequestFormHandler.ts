@@ -6,7 +6,7 @@ import { getPcrEditor } from "@ui/redux/selectors";
 import { PCRDtoValidator } from "@ui/validators";
 import { GetPCRByIdQuery } from "@server/features/pcrs/getPCRByIdQuery";
 import { UpdatePCRCommand } from "@server/features/pcrs/updatePcrCommand";
-import { ProjectChangeRequestStatus } from "@framework/entities";
+import { PCRStatus } from "@framework/constants";
 
 export class ProjectChangeRequestReviewFormHandler extends StandardFormHandlerBase<PCRReviewParams, PCRDto, PCRDtoValidator> {
   constructor() {
@@ -16,7 +16,7 @@ export class ProjectChangeRequestReviewFormHandler extends StandardFormHandlerBa
   protected async getDto(context: IContext, params: PCRReviewParams, button: IFormButton, body: IFormBody): Promise<PCRDto> {
     const dto = await context.runQuery(new GetPCRByIdQuery(params.projectId, params.pcrId));
     dto.comments = body.comments;
-    dto.status = parseInt(body.status, 10) || ProjectChangeRequestStatus.Unknown;
+    dto.status = parseInt(body.status, 10) || PCRStatus.Unknown;
 
     return dto;
   }

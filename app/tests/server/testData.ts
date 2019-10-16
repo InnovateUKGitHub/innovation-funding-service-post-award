@@ -6,6 +6,7 @@ import { range } from "@shared/range";
 import { ClaimStatus, IClientUser } from "@framework/types";
 import { ITestRepositories } from "./testRepositories";
 import { PCRRecordTypeMetaValues } from "@server/features/pcrs/getItemTypesQuery";
+import { PCRItemStatus, PCRStatus } from "@framework/constants";
 
 export class TestData {
   constructor(private repositories: ITestRepositories, private getCurrentUser: () => IClientUser) {
@@ -589,13 +590,13 @@ export class TestData {
       guidance: "This is some hardcoded guidance",
       comments: "",
       number: seed,
-      status: Entites.ProjectChangeRequestStatus.Unknown,
-      statusName: Entites.ProjectChangeRequestStatus[Entites.ProjectChangeRequestStatus.Unknown],
+      status: PCRStatus.Unknown,
+      statusName: PCRStatus[PCRStatus.Unknown],
       started: new Date(),
       updated: new Date(),
-      reasoningStatus: Entites.ProjectChangeRequestItemStatus.Complete,
+      reasoningStatus: PCRItemStatus.Complete,
       reasoning: "Test Reasoning",
-      reasoningStatusName: Entites.ProjectChangeRequestItemStatus[Entites.ProjectChangeRequestItemStatus.Complete],
+      reasoningStatusName: PCRItemStatus[PCRItemStatus.Complete],
       items: []
     };
 
@@ -628,7 +629,7 @@ export class TestData {
       projectSummary: "",
       publicDescription: "",
       partnerId: "",
-      status: Entites.ProjectChangeRequestItemStatus.Complete,
+      status: PCRItemStatus.Complete,
       statusName: "Complete",
       suspensionStartDate: null,
       suspensionEndDate: null,

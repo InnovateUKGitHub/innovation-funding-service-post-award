@@ -5,13 +5,12 @@ import {
   ProjectChangeRequestForCreateEntity,
   ProjectChangeRequestItemEntity,
   ProjectChangeRequestItemForCreateEntity,
-  ProjectChangeRequestItemStatus,
-  ProjectChangeRequestStatus
 } from "@framework/entities";
 import SalesforceRepositoryBase from "./salesforceRepositoryBase";
 import { ILogger } from "@server/features/common/logger";
 import { SalesforcePCRMapper } from "./mappers/projectChangeRequestMapper";
 import { NotFoundError } from "@server/features/common";
+import { PCRItemStatus, PCRStatus } from "@framework/constants";
 
 export interface IProjectChangeRequestRepository {
   createProjectChangeRequest(projectChangeRequest: ProjectChangeRequestForCreateEntity): Promise<string>;
@@ -162,42 +161,42 @@ export class ProjectChangeRequestRepository extends SalesforceRepositoryBase<ISa
     return super.deleteAll([item.id, ... item.items.map(x => x.id)]);
   }
 
-  private mapStatus(status: ProjectChangeRequestStatus): string {
+  private mapStatus(status: PCRStatus): string {
     switch (status) {
-      case ProjectChangeRequestStatus.Draft:
+      case PCRStatus.Draft:
         return "Draft";
-      case ProjectChangeRequestStatus.SubmittedToMonitoringOfficer:
+      case PCRStatus.SubmittedToMonitoringOfficer:
         return "Submitted to Monitoring Officer";
-      case ProjectChangeRequestStatus.QueriedByMonitoringOfficer:
+      case PCRStatus.QueriedByMonitoringOfficer:
         return "Queried by Monitoring Officer";
-      case ProjectChangeRequestStatus.SubmittedToInnovationLead:
+      case PCRStatus.SubmittedToInnovationLead:
         return "Submitted to Innovation Lead";
-      case ProjectChangeRequestStatus.QueriedByInnovateUK:
+      case PCRStatus.QueriedByInnovateUK:
         return "Queried by Innovate UK";
-      case ProjectChangeRequestStatus.InExternalReview:
+      case PCRStatus.InExternalReview:
         return "In External Review";
-      case ProjectChangeRequestStatus.InReviewWithInnovateUK:
+      case PCRStatus.InReviewWithInnovateUK:
         return "In Review with Innovate UK";
-      case ProjectChangeRequestStatus.Rejected:
+      case PCRStatus.Rejected:
         return "Rejected";
-      case ProjectChangeRequestStatus.Withdrawn:
+      case PCRStatus.Withdrawn:
         return "Withdrawn";
-      case ProjectChangeRequestStatus.Approved:
+      case PCRStatus.Approved:
         return "Approved";
-      case ProjectChangeRequestStatus.Actioned:
+      case PCRStatus.Actioned:
         return "Actioned";
       default:
         return "";
     }
   }
 
-  private mapItemStatus(status?: ProjectChangeRequestItemStatus): string {
+  private mapItemStatus(status?: PCRItemStatus): string {
     switch (status) {
-      case ProjectChangeRequestItemStatus.ToDo:
+      case PCRItemStatus.ToDo:
         return "To Do";
-      case ProjectChangeRequestItemStatus.Incomplete:
+      case PCRItemStatus.Incomplete:
         return "Incomplete";
-      case ProjectChangeRequestItemStatus.Complete:
+      case PCRItemStatus.Complete:
         return "Complete";
       default:
         return "";

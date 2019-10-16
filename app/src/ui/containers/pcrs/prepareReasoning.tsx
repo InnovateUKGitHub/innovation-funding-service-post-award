@@ -7,8 +7,8 @@ import * as ACC from "../../components";
 import { Pending } from "@shared/pending";
 import { PCRDto } from "@framework/dtos/pcrDtos";
 import { IEditorStore, StoresConsumer } from "@ui/redux";
-import { ProjectChangeRequestItemStatus } from "@framework/entities";
 import { PCRDtoValidator } from "@ui/validators";
+import { PCRItemStatus } from "@framework/constants";
 
 export interface ProjectChangeRequestPrepareReasoningParams {
   projectId: string;
@@ -102,8 +102,8 @@ class PCRPrepareReasoningComponent extends ContainerBase<ProjectChangeRequestPre
               <PCRForm.Checkboxes
                 name="reasoningStatus"
                 options={options}
-                value={m => m.reasoningStatus === ProjectChangeRequestItemStatus.Complete ? [options[0]] : []}
-                update={(m, v) => m.reasoningStatus = (v && v.some(x => x.id === "true")) ? ProjectChangeRequestItemStatus.Complete : ProjectChangeRequestItemStatus.Incomplete}
+                value={m => m.reasoningStatus === PCRItemStatus.Complete ? [options[0]] : []}
+                update={(m, v) => m.reasoningStatus = (v && v.some(x => x.id === "true")) ? PCRItemStatus.Complete : PCRItemStatus.Incomplete}
                 validation={editor.validator.reasoningStatus}
               />
               <PCRForm.Submit>Save and return to request</PCRForm.Submit>
@@ -128,8 +128,8 @@ class PCRPrepareReasoningComponent extends ContainerBase<ProjectChangeRequestPre
   }
 
   private onSave(dto: PCRDto): void {
-    if (dto.reasoningStatus === ProjectChangeRequestItemStatus.ToDo) {
-      dto.reasoningStatus = ProjectChangeRequestItemStatus.Incomplete;
+    if (dto.reasoningStatus === PCRItemStatus.ToDo) {
+      dto.reasoningStatus = PCRItemStatus.Incomplete;
     }
     this.props.onChange(true, dto);
   }

@@ -2,8 +2,8 @@ import { TestContext } from "../../testContextProvider";
 import { Authorisation, ProjectRole } from "@framework/types";
 import { DeleteProjectChangeRequestCommand } from "@server/features/pcrs/deleteProjectChangeRequestCommand";
 import { BadRequestError, NotFoundError } from "@server/features/common";
-import { ProjectChangeRequestStatus } from "@framework/entities";
 import { getAllEnumValues } from "@shared/enumHelper";
+import { PCRStatus } from "@framework/constants";
 
 describe("DeleteProjectChangeRequestCommand", () => {
   describe("authorisation", () => {
@@ -70,7 +70,7 @@ describe("DeleteProjectChangeRequestCommand", () => {
     const context = new TestContext();
 
     const project = context.testData.createProject();
-    const pcr = context.testData.createPCR(project, {status: ProjectChangeRequestStatus.Draft});
+    const pcr = context.testData.createPCR(project, {status: PCRStatus.Draft});
 
     const command = new DeleteProjectChangeRequestCommand(project.Id, pcr.id);
 
@@ -81,9 +81,9 @@ describe("DeleteProjectChangeRequestCommand", () => {
     expect(context.repositories.projectChangeRequests.Items.length).toBe(0);
   });
 
-  const allStatusNotDraft = getAllEnumValues<ProjectChangeRequestStatus>(ProjectChangeRequestStatus).filter(x => x !== ProjectChangeRequestStatus.Draft && x !== ProjectChangeRequestStatus.Unknown);
+  const allStatusNotDraft = getAllEnumValues<PCRStatus>(PCRStatus).filter(x => x !== PCRStatus.Draft && x !== PCRStatus.Unknown);
 
-  it.each(allStatusNotDraft.map(x => [ProjectChangeRequestStatus[x], x]))("cannot delete pcr in %s status", async (statusName: string, status: ProjectChangeRequestStatus) => {
+  it.each(allStatusNotDraft.map(x => [PCRStatus[x], x]))("cannot delete pcr in %s status", async (statusName: string, status: PCRStatus) => {
     const context = new TestContext();
     const pcr = context.testData.createPCR(undefined, {status});
 
