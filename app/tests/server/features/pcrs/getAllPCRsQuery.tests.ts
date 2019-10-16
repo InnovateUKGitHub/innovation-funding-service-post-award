@@ -2,7 +2,7 @@
 import { TestContext } from "../../testContextProvider";
 import { GetAllPCRsQuery } from "@server/features/pcrs/getAllPCRsQuery";
 import { DateTime } from "luxon";
-import { ProjectChangeRequestItemTypeEntity, ProjectChangeRequestStatus } from "@framework/entities";
+import { PCRItemType, PCRStatus } from "@framework/constants";
 
 describe("GetAllPCRsQuery", () => {
   test("when project has no pcrs then empty list returned", async () => {
@@ -52,7 +52,7 @@ describe("GetAllPCRsQuery", () => {
       started: DateTime.fromFormat("1 april 2013", "d MMM yyyy").toJSDate(),
       updated: DateTime.fromFormat("1 october 2013", "d MMM yyyy").toJSDate(),
       number: 531,
-      status: 55 as ProjectChangeRequestStatus,
+      status: 55 as PCRStatus,
       statusName: "Expected Status"
     });
 
@@ -77,7 +77,7 @@ describe("GetAllPCRsQuery", () => {
       started: DateTime.fromFormat("1 april 2013", "d MMM yyyy").toJSDate(),
       updated: DateTime.fromFormat("1 october 2013", "d MMM yyyy").toJSDate(),
       number: 531,
-      status: 55 as ProjectChangeRequestStatus,
+      status: 55 as PCRStatus,
       statusName: "Expected Status"
     });
 
@@ -107,15 +107,15 @@ describe("GetAllPCRsQuery", () => {
     const result = await context.runQuery(query).then(x => x[0]);
 
     const expectedTypes = [
-      ProjectChangeRequestItemTypeEntity.SinglePartnerFinancialVirement,
-      ProjectChangeRequestItemTypeEntity.MultiplePartnerFinancialVirement,
-      ProjectChangeRequestItemTypeEntity.PartnerWithdrawal,
-      ProjectChangeRequestItemTypeEntity.PartnerAddition,
-      ProjectChangeRequestItemTypeEntity.ScopeChange,
-      ProjectChangeRequestItemTypeEntity.TimeExtension,
-      ProjectChangeRequestItemTypeEntity.AccountNameChange,
-      ProjectChangeRequestItemTypeEntity.ProjectSuspension,
-      ProjectChangeRequestItemTypeEntity.ProjectTermination,
+      PCRItemType.SinglePartnerFinancialVirement,
+      PCRItemType.MultiplePartnerFinancialVirement,
+      PCRItemType.PartnerWithdrawal,
+      PCRItemType.PartnerAddition,
+      PCRItemType.ScopeChange,
+      PCRItemType.TimeExtension,
+      PCRItemType.AccountNameChange,
+      PCRItemType.ProjectSuspension,
+      PCRItemType.ProjectTermination,
     ];
 
     expect(result.items.map(x => x.type)).toEqual(expectedTypes);

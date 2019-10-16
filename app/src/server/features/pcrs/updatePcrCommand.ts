@@ -7,11 +7,10 @@ import { mapToPcrDto } from "./mapToPCRDto";
 import { GetPCRItemTypesQuery } from "./getItemTypesQuery";
 import {
   ProjectChangeRequestItemEntity,
-  ProjectChangeRequestItemForCreateEntity,
-  ProjectChangeRequestItemTypeEntity,
-  ProjectChangeRequestStatus
+  ProjectChangeRequestItemForCreateEntity
 } from "@framework/entities";
 import { GetAllForProjectQuery } from "@server/features/partners";
+import { PCRItemType, PCRStatus } from "@framework/constants";
 
 export class UpdatePCRCommand extends CommandBase<boolean> {
   constructor(private projectId: string, private projectChangeRequestId: string, private pcr: PCRDto) {
@@ -22,11 +21,11 @@ export class UpdatePCRCommand extends CommandBase<boolean> {
     return auth.forProject(this.projectId).hasAnyRoles(ProjectRole.ProjectManager, ProjectRole.MonitoringOfficer);
   }
 
-  private async insertStatusChange(context: IContext, projectChangeRequestId: string, comments: string, originalStatus: ProjectChangeRequestStatus, newStatus: ProjectChangeRequestStatus): Promise<void> {
+  private async insertStatusChange(context: IContext, projectChangeRequestId: string, comments: string, originalStatus: PCRStatus, newStatus: PCRStatus): Promise<void> {
     const shouldPmSee = (
-      (newStatus === ProjectChangeRequestStatus.SubmittedToMonitoringOfficer)
-      || (newStatus === ProjectChangeRequestStatus.QueriedByMonitoringOfficer)
-      || (newStatus === ProjectChangeRequestStatus.SubmittedToInnovationLead && originalStatus === ProjectChangeRequestStatus.QueriedByInnovateUK)
+      (newStatus === PCRStatus.SubmittedToMonitoringOfficer)
+      || (newStatus === PCRStatus.QueriedByMonitoringOfficer)
+      || (newStatus === PCRStatus.SubmittedToInnovationLead && originalStatus === PCRStatus.QueriedByInnovateUK)
     );
 
     await context.repositories.projectChangeRequestStatusChange.createStatusChange({
@@ -110,22 +109,22 @@ export class UpdatePCRCommand extends CommandBase<boolean> {
     const init = item.status !== dto.status ? { status: dto.status } : null;
 
     switch (dto.type) {
-      case ProjectChangeRequestItemTypeEntity.TimeExtension:
+      case PCRItemType.TimeExtension:
         if (item.projectEndDate !== dto.projectEndDate) {
           return { ...init, projectEndDate: dto.projectEndDate };
         }
         break;
-      case ProjectChangeRequestItemTypeEntity.ScopeChange:
+      case PCRItemType.ScopeChange:
         if (item.projectSummary !== dto.projectSummary || item.publicDescription !== dto.publicDescription) {
           return { ...init, projectSummary: dto.projectSummary, publicDescription: dto.publicDescription };
         }
         break;
-      case ProjectChangeRequestItemTypeEntity.ProjectSuspension:
+      case PCRItemType.ProjectSuspension:
         if (item.suspensionStartDate !== dto.suspensionStartDate || item.suspensionEndDate !== dto.suspensionEndDate) {
           return { ...init, suspensionStartDate: dto.suspensionStartDate, suspensionEndDate: dto.suspensionEndDate };
         }
         break;
-      case ProjectChangeRequestItemTypeEntity.AccountNameChange:
+      case PCRItemType.AccountNameChange:
         if (item.accountName !== dto.accountName || item.partnerId !== dto.partnerId) {
           return { ...init, accountName: dto.accountName, partnerId: dto.partnerId };
         }

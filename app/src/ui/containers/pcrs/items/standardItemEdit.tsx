@@ -4,8 +4,8 @@ import * as ACC from "@ui/components";
 import * as Dtos from "@framework/dtos";
 import { EditorStatus, StoresConsumer } from "@ui/redux";
 import { PCRStandardItemDtoValidator } from "@ui/validators";
-import { ProjectChangeRequestItemStatus } from "@framework/entities";
 import { IRoutes } from "@ui/routing";
+import { PCRItemStatus } from "@framework/constants";
 
 interface Props {
   projectChangeRequest: Dtos.PCRDto;
@@ -51,8 +51,8 @@ const InnerStandardItemEdit = (props: Props & InnerProps) => {
             <Form.Checkboxes
               name="itemStatus"
               options={options}
-              value={m => m.status === ProjectChangeRequestItemStatus.Complete ? [options[0]] : []}
-              update={(m, v) => m.status = (v && v.some(x => x.id === "true")) ? ProjectChangeRequestItemStatus.Complete : ProjectChangeRequestItemStatus.Incomplete}
+              value={m => m.status === PCRItemStatus.Complete ? [options[0]] : []}
+              update={(m, v) => m.status = (v && v.some(x => x.id === "true")) ? PCRItemStatus.Complete : PCRItemStatus.Incomplete}
               validation={props.validator.status}
             />
             <Form.Submit>Save and return to request</Form.Submit>

@@ -8,7 +8,11 @@ import { Pending } from "@shared/pending";
 import { PCRDto, ProjectChangeRequestStatusChangeDto } from "@framework/dtos/pcrDtos";
 import { IEditorStore, StoresConsumer } from "@ui/redux";
 import { PCRDtoValidator } from "@ui/validators/pcrDtoValidator";
-import { ProjectChangeRequestItemStatus, ProjectChangeRequestItemTypeEntity, ProjectChangeRequestStatus } from "@framework/entities";
+import {
+  PCRItemStatus,
+  PCRItemType,
+  PCRStatus
+} from "@framework/constants";
 
 export interface ProjectChangeRequestPrepareParams {
   projectId: string;
@@ -20,7 +24,7 @@ interface Data {
   pcr: Pending<PCRDto>;
   editor: Pending<IEditorStore<PCRDto, PCRDtoValidator>>;
   statusChanges: Pending<ProjectChangeRequestStatusChangeDto[]>;
-  editableItemTypes: Pending<ProjectChangeRequestItemTypeEntity[]>;
+  editableItemTypes: Pending<PCRItemType[]>;
 }
 
 interface Callbacks {
@@ -36,11 +40,11 @@ class PCRPrepareComponent extends ContainerBase<ProjectChangeRequestPrepareParam
 
   private onSave(editor: IEditorStore<PCRDto, PCRDtoValidator>, original: PCRDto, submit: boolean) {
     const dto = editor.data;
-    if (submit && original.status === ProjectChangeRequestStatus.QueriedByInnovateUK) {
-      dto.status = ProjectChangeRequestStatus.SubmittedToInnovationLead;
+    if (submit && original.status === PCRStatus.QueriedByInnovateUK) {
+      dto.status = PCRStatus.SubmittedToInnovationLead;
     }
     else if (submit) {
-      dto.status = ProjectChangeRequestStatus.SubmittedToMonitoringOfficer;
+      dto.status = PCRStatus.SubmittedToMonitoringOfficer;
     }
     else {
       // not submitting so set status to the original status
@@ -49,7 +53,7 @@ class PCRPrepareComponent extends ContainerBase<ProjectChangeRequestPrepareParam
     this.props.onChange(true, dto);
   }
 
-  private renderContents(project: ProjectDto, projectChangeRequest: PCRDto, editor: IEditorStore<PCRDto, PCRDtoValidator>, editableItemTypes: ProjectChangeRequestItemTypeEntity[]) {
+  private renderContents(project: ProjectDto, projectChangeRequest: PCRDto, editor: IEditorStore<PCRDto, PCRDtoValidator>, editableItemTypes: PCRItemType[]) {
     const tabs = [{
       text: "Details",
       hash: "details",
@@ -76,7 +80,7 @@ class PCRPrepareComponent extends ContainerBase<ProjectChangeRequestPrepareParam
     );
   }
 
-  private renderDetailsTab(projectChangeRequest: PCRDto, editor: IEditorStore<PCRDto, PCRDtoValidator>, editableItemTypes: ProjectChangeRequestItemTypeEntity[]) {
+  private renderDetailsTab(projectChangeRequest: PCRDto, editor: IEditorStore<PCRDto, PCRDtoValidator>, editableItemTypes: PCRItemType[]) {
     const Form = ACC.TypedForm<PCRDto>();
     return (
       <React.Fragment>
@@ -116,7 +120,7 @@ class PCRPrepareComponent extends ContainerBase<ProjectChangeRequestPrepareParam
     );
   }
 
-  private renderTaskListActions(projectChangeRequest: PCRDto, editor: IEditorStore<PCRDto, PCRDtoValidator>, editableItemTypes: ProjectChangeRequestItemTypeEntity[]) {
+  private renderTaskListActions(projectChangeRequest: PCRDto, editor: IEditorStore<PCRDto, PCRDtoValidator>, editableItemTypes: PCRItemType[]) {
     if (!editableItemTypes.length) return null;
     const editableItems = projectChangeRequest.items.filter(x => editableItemTypes.indexOf(x.type) > -1);
 
@@ -127,7 +131,7 @@ class PCRPrepareComponent extends ContainerBase<ProjectChangeRequestPrepareParam
     );
   }
 
-  private renderTaskListReasoning(projectChangeRequest: PCRDto, editor: IEditorStore<PCRDto, PCRDtoValidator>, editableItemTypes: ProjectChangeRequestItemTypeEntity[]) {
+  private renderTaskListReasoning(projectChangeRequest: PCRDto, editor: IEditorStore<PCRDto, PCRDtoValidator>, editableItemTypes: PCRItemType[]) {
     const editableItems = projectChangeRequest.items.filter(x => editableItemTypes.indexOf(x.type) > -1);
     const stepCount = editableItems.length ? 2 : 1;
 
@@ -155,13 +159,13 @@ class PCRPrepareComponent extends ContainerBase<ProjectChangeRequestPrepareParam
     );
   }
 
-  private getTaskStatus(status: ProjectChangeRequestItemStatus): "To do" | "Complete" | "Incomplete" {
+  private getTaskStatus(status: PCRItemStatus): "To do" | "Complete" | "Incomplete" {
     switch (status) {
-      case ProjectChangeRequestItemStatus.Complete:
+      case PCRItemStatus.Complete:
         return "Complete";
-      case ProjectChangeRequestItemStatus.Incomplete:
+      case PCRItemStatus.Incomplete:
         return "Incomplete";
-      case ProjectChangeRequestItemStatus.ToDo:
+      case PCRItemStatus.ToDo:
       default:
         return "To do";
     }

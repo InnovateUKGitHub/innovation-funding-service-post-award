@@ -2,7 +2,6 @@
 import { TestContext } from "../../testContextProvider";
 import { GetPCRByIdQuery } from "@server/features/pcrs/getPCRByIdQuery";
 import { DateTime } from "luxon";
-import { ProjectChangeRequestItemTypeEntity } from "@framework/entities";
 import { PCRRecordTypeMetaValues } from "@server/features/pcrs/getItemTypesQuery";
 import {
   PCRItemForAccountNameChangeDto,
@@ -10,6 +9,7 @@ import {
   PCRItemForScopeChangeDto,
   PCRItemForTimeExtensionDto
 } from "@framework/dtos";
+import { PCRItemType } from "@framework/constants";
 
 describe("GetPCRByIdQuery", () => {
   test("when id not found then exception is thrown", async () => {
@@ -101,7 +101,7 @@ describe("GetPCRByIdQuery", () => {
 
     expect(result.id).toBe(item.id);
     expect(result.guidance).toBe("This is some hardcoded guidance");
-    expect(result.type).toBe(ProjectChangeRequestItemTypeEntity.ScopeChange);
+    expect(result.type).toBe(PCRItemType.ScopeChange);
     expect(result.typeName).toBe(recordType!.type);
     expect(result.status).toBe(98);
     expect(result.statusName).toBe("Expected Status");
@@ -110,7 +110,7 @@ describe("GetPCRByIdQuery", () => {
   test("maps fields for time extension", async () => {
     const context = new TestContext();
 
-    const timeExtensionType = PCRRecordTypeMetaValues.find(x => x.type === ProjectChangeRequestItemTypeEntity.TimeExtension)!;
+    const timeExtensionType = PCRRecordTypeMetaValues.find(x => x.type === PCRItemType.TimeExtension)!;
     const recordType = context.testData.createPCRRecordTypes().find(x => x.type === timeExtensionType.typeName);
 
     const pcr = context.testData.createPCR();
@@ -130,7 +130,7 @@ describe("GetPCRByIdQuery", () => {
   test("maps fields for scope change", async () => {
     const context = new TestContext();
 
-    const scopeChangeType = PCRRecordTypeMetaValues.find(x => x.type === ProjectChangeRequestItemTypeEntity.ScopeChange)!;
+    const scopeChangeType = PCRRecordTypeMetaValues.find(x => x.type === PCRItemType.ScopeChange)!;
     const recordType = context.testData.createPCRRecordTypes().find(x => x.type === scopeChangeType.typeName);
 
     const pcr = context.testData.createPCR();
@@ -154,7 +154,7 @@ describe("GetPCRByIdQuery", () => {
   test("maps fields for account name change", async () => {
     const context = new TestContext();
 
-    const accountNameChangeType = PCRRecordTypeMetaValues.find(x => x.type === ProjectChangeRequestItemTypeEntity.AccountNameChange)!;
+    const accountNameChangeType = PCRRecordTypeMetaValues.find(x => x.type === PCRItemType.AccountNameChange)!;
     const project = context.testData.createProject();
     const partner = context.testData.createPartner(project);
     const recordType = context.testData.createPCRRecordTypes().find(x => x.type === accountNameChangeType.typeName);
@@ -179,7 +179,7 @@ describe("GetPCRByIdQuery", () => {
   test("maps fields for project suspension", async () => {
     const context = new TestContext();
 
-    const projectSuspensionType = PCRRecordTypeMetaValues.find(x => x.type === ProjectChangeRequestItemTypeEntity.ProjectSuspension)!;
+    const projectSuspensionType = PCRRecordTypeMetaValues.find(x => x.type === PCRItemType.ProjectSuspension)!;
     const recordType = context.testData.createPCRRecordTypes().find(x => x.type === projectSuspensionType.typeName);
 
     const pcr = context.testData.createPCR();

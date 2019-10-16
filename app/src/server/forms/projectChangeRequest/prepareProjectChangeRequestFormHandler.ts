@@ -6,7 +6,7 @@ import { getPcrEditor } from "@ui/redux/selectors";
 import { PCRDtoValidator } from "@ui/validators";
 import { GetPCRByIdQuery } from "@server/features/pcrs/getPCRByIdQuery";
 import { UpdatePCRCommand } from "@server/features/pcrs/updatePcrCommand";
-import { ProjectChangeRequestStatus } from "@framework/entities";
+import { PCRStatus } from "@framework/constants";
 
 export class ProjectChangeRequestPrepareFormHandler extends StandardFormHandlerBase<ProjectChangeRequestPrepareParams, PCRDto, PCRDtoValidator> {
   constructor() {
@@ -18,7 +18,7 @@ export class ProjectChangeRequestPrepareFormHandler extends StandardFormHandlerB
     dto.comments = body.comments;
 
     if(button.name === "default") {
-      dto.status = dto.status === ProjectChangeRequestStatus.QueriedByInnovateUK ? ProjectChangeRequestStatus.SubmittedToInnovationLead : ProjectChangeRequestStatus.SubmittedToMonitoringOfficer;
+      dto.status = dto.status === PCRStatus.QueriedByInnovateUK ? PCRStatus.SubmittedToInnovationLead : PCRStatus.SubmittedToMonitoringOfficer;
     }
 
     return dto;

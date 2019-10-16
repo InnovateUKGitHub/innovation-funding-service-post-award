@@ -5,8 +5,8 @@ import * as ACC from "@ui/components";
 import * as Dtos from "@framework/dtos";
 import { Pending } from "@shared/pending";
 import { IEditorStore, StoresConsumer } from "@ui/redux";
-import { ProjectChangeRequestItemTypeEntity } from "@framework/entities";
 import { PCRDtoValidator } from "@ui/validators/pcrDtoValidator";
+import { PCRItemType } from "@framework/constants";
 
 export interface ProjectChangeRequestAddTypeParams {
   projectId: string;
@@ -50,7 +50,7 @@ class PCRAddTypeComponent extends ContainerBase<ProjectChangeRequestAddTypeParam
 
   private renderForm(pcrEditor: IEditorStore<Dtos.PCRDto, PCRDtoValidator>, original: Dtos.PCRDto, itemTypes: Dtos.PCRItemTypeDto[]): React.ReactNode {
     const PCRForm = ACC.TypedForm<Dtos.PCRDto>();
-    const preselectedItems: ProjectChangeRequestItemTypeEntity[] = original.items.map(x => x.type);
+    const preselectedItems: PCRItemType[] = original.items.map(x => x.type);
     const options = itemTypes.map<ACC.SelectOption>(x => ({ id: x.type.toString(), value: x.displayName, disabled: preselectedItems.indexOf(x.type) >= 0 }));
     const selected = options.filter(x => pcrEditor.data.items.some(y => y.type.toString() === x.id));
 

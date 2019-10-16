@@ -4,8 +4,8 @@ import { PCRDto, PCRItemDto, PCRStandardItemDto, ProjectRole } from "@framework/
 import { IContext, ILinkInfo } from "@framework/types";
 import { getPcrEditorForCreate } from "@ui/redux/selectors";
 import { CreateProjectChangeRequestCommand } from "@server/features/pcrs/createProjectChangeRequestCommand";
-import { ProjectChangeRequestItemStatus, ProjectChangeRequestStatus } from "@framework/entities";
 import { PCRDtoValidator } from "@ui/validators";
+import { PCRItemStatus, PCRStatus } from "@framework/constants";
 
 export class ProjectChangeRequestCreateFormHandler extends StandardFormHandlerBase<CreateProjectChangeRequestParams, PCRDto, PCRDtoValidator> {
   constructor() {
@@ -18,12 +18,12 @@ export class ProjectChangeRequestCreateFormHandler extends StandardFormHandlerBa
 
     const items: Partial<PCRItemDto>[] = types.map((x: string) => ({
       type: parseInt(x, 10),
-      status: ProjectChangeRequestItemStatus.ToDo,
+      status: PCRItemStatus.ToDo,
     }));
 
     const dto: Partial<PCRDto> = {
-      status: ProjectChangeRequestStatus.Draft,
-      reasoningStatus: ProjectChangeRequestItemStatus.ToDo,
+      status: PCRStatus.Draft,
+      reasoningStatus: PCRItemStatus.ToDo,
       projectId: params.projectId,
       items: items as PCRStandardItemDto[]
     };

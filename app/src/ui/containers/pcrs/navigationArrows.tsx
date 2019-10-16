@@ -1,14 +1,14 @@
 import React from "react";
 import * as ACC from "@ui/components";
 import { PCRDto, PCRItemDto } from "@framework/dtos";
-import { ProjectChangeRequestItemTypeEntity } from "@framework/entities";
 import { IRoutes } from "@ui/routing";
+import { PCRItemType } from "@framework/constants";
 
 interface Props {
   currentItem: PCRItemDto | null;
   pcr: PCRDto;
   isReviewing: boolean;
-  editableItemTypes: ProjectChangeRequestItemTypeEntity[];
+  editableItemTypes: PCRItemType[];
   routes: IRoutes;
 }
 
