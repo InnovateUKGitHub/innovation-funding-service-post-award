@@ -18,6 +18,20 @@ export const sectionGuide: IGuide = {
             render: () => <Section title="Section title" subtitle="The sub title" />
         },
         {
+            name: "Section with a subsection",
+            comments: "Renders a section and a subsection",
+            example: `
+                <Section title="Section title" subtitle="The subtitle" >
+                  <Section title="Subsection title" subtitle="Subsection subtitle" subsection={true} />
+                </Section>
+            `,
+            render: () => (
+              <Section title="Section title" subtitle="The subtitle" >
+                  <Section title="Subsection title" subtitle="Subsection subtitle" subsection={true} />
+              </Section>
+              )
+        },
+        {
             name: "With badge",
             comments: "Renders a badge to the right of the title",
             example: `<Section title="Section title" badge={<h3>The badge</h3>} />`,
