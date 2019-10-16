@@ -85,7 +85,7 @@ export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBa
     item.partnerId = body.partnerId;
     item.accountName = body.accountName;
   }
-  
+
   protected getStoreInfo(params: ProjectChangeRequestPrepareItemParams): { key: string, store: string } {
     return getPcrEditor(params.projectId, params.pcrId);
   }
