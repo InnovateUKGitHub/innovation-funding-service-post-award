@@ -7,10 +7,10 @@ import {
 import { PCRDto, PCRStandardItemDto, ProjectRole } from "@framework/dtos";
 import { IContext, ILinkInfo } from "@framework/types";
 import { getPcrEditor } from "@ui/redux/selectors";
-import { ProjectChangeRequestItemStatus } from "@framework/entities";
 import { PCRDtoValidator } from "@ui/validators";
 import { UpdatePCRCommand } from "@server/features/pcrs/updatePcrCommand";
 import { GetPCRByIdQuery } from "@server/features/pcrs/getPCRByIdQuery";
+import { PCRItemStatus } from "@framework/constants";
 
 export class ProjectChangeRequestAddTypeFormHandler extends StandardFormHandlerBase<ProjectChangeRequestAddTypeParams, PCRDto, PCRDtoValidator> {
   constructor() {
@@ -28,7 +28,7 @@ export class ProjectChangeRequestAddTypeFormHandler extends StandardFormHandlerB
       .filter(x => originalTypes.indexOf(x) < 0)
       .map(x => ({
         type: x,
-        status: ProjectChangeRequestItemStatus.ToDo,
+        status: PCRItemStatus.ToDo,
       } as PCRStandardItemDto));
 
     return {

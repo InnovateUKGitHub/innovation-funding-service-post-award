@@ -1,12 +1,12 @@
 import React from "react";
 import * as ACC from "@ui/components";
 import { PartnerDto, PCRDto, PCRItemForAccountNameChangeDto, ProjectDto } from "@framework/dtos";
-import { ProjectChangeRequestItemStatus } from "@framework/entities";
 import { Pending } from "@shared/pending";
 import { DocumentList } from "@ui/components";
 import { EditorStatus, StoresConsumer } from "@ui/redux";
 import { IRoutes } from "@ui/routing";
 import { PCRAccountNameChangeItemDtoValidator } from "@ui/validators";
+import { PCRItemStatus } from "@framework/constants";
 
 interface Props {
   project: ProjectDto;
@@ -75,8 +75,8 @@ const InnerContainer = (props: Props & InnerProps) => {
           <Form.Checkboxes
             name="itemStatus"
             options={[{ id: "true", value: "This is ready to submit." }]}
-            value={x => x.status === ProjectChangeRequestItemStatus.Complete ? isCompleteOptions : []}
-            update={(x, value) => x.status = (value && value.some(y => y.id === "true")) ? ProjectChangeRequestItemStatus.Complete : ProjectChangeRequestItemStatus.Incomplete}
+            value={x => x.status === PCRItemStatus.Complete ? isCompleteOptions : []}
+            update={(x, value) => x.status = (value && value.some(y => y.id === "true")) ? PCRItemStatus.Complete : PCRItemStatus.Incomplete}
           />
           <Form.Submit>Save and return to request</Form.Submit>
         </Form.Fieldset>

@@ -1,4 +1,3 @@
-import { ProjectChangeRequestItemStatus, ProjectChangeRequestItemTypeEntity } from "@framework/entities";
 import { IContext, ILinkInfo, ProjectRole } from "@framework/types";
 import { BadRequestError } from "@server/features/common";
 import { GetPCRByIdQuery } from "@server/features/pcrs/getPCRByIdQuery";
@@ -9,6 +8,7 @@ import { getPcrEditor } from "@ui/redux/selectors";
 import { PCRDtoValidator } from "@ui/validators";
 import { DateTime } from "luxon";
 import * as Dtos from "@framework/dtos";
+import { PCRItemStatus, PCRItemType } from "@framework/constants";
 
 export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBase<ProjectChangeRequestPrepareItemParams, Dtos.PCRDto, PCRDtoValidator> {
   constructor() {
@@ -24,21 +24,21 @@ export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBa
       throw new BadRequestError();
     }
 
-    item.status = body.itemStatus === "true" ? ProjectChangeRequestItemStatus.Complete : ProjectChangeRequestItemStatus.Incomplete;
+    item.status = body.itemStatus === "true" ? PCRItemStatus.Complete : PCRItemStatus.Incomplete;
 
-    if (item.type === ProjectChangeRequestItemTypeEntity.TimeExtension) {
+    if (item.type === PCRItemType.TimeExtension) {
       this.updateTimeExtension(item, body);
     }
 
-    if (item.type === ProjectChangeRequestItemTypeEntity.ScopeChange) {
+    if (item.type === PCRItemType.ScopeChange) {
       this.updateScopeChange(item, body);
     }
 
-    if (item.type === ProjectChangeRequestItemTypeEntity.ProjectSuspension) {
+    if (item.type === PCRItemType.ProjectSuspension) {
       this.updateProjectSuspension(item, body);
     }
 
-    if (item.type === ProjectChangeRequestItemTypeEntity.AccountNameChange) {
+    if (item.type === PCRItemType.AccountNameChange) {
       this.updateNameChange(item, body);
     }
     return dto;

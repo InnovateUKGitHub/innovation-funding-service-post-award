@@ -2,12 +2,10 @@ import { BadRequestError, CommandBase, ValidationError } from "@server/features/
 import { PCRDto, PCRItemDto, PCRItemTypeDto, ProjectRole } from "@framework/dtos";
 import { Authorisation, IContext } from "@framework/types";
 import { GetPCRItemTypesQuery } from "@server/features/pcrs/getItemTypesQuery";
-import {
-  ProjectChangeRequestItemForCreateEntity,
-  ProjectChangeRequestItemTypeEntity
-} from "@framework/entities";
+import { ProjectChangeRequestItemForCreateEntity } from "@framework/entities";
 import { PCRDtoValidator } from "@ui/validators";
 import { GetAllProjectRolesForUser } from "@server/features/projects";
+import { PCRItemType } from "@framework/constants";
 
 export class CreateProjectChangeRequestCommand extends CommandBase<string> {
   constructor(
@@ -66,13 +64,13 @@ export class CreateProjectChangeRequestCommand extends CommandBase<string> {
       status: itemDto.status
     };
     switch (itemDto.type) {
-      case ProjectChangeRequestItemTypeEntity.TimeExtension:
+      case PCRItemType.TimeExtension:
           return { ...init, projectEndDate: itemDto.projectEndDate };
-      case ProjectChangeRequestItemTypeEntity.ScopeChange:
+      case PCRItemType.ScopeChange:
           return { ...init, projectSummary: itemDto.projectSummary, publicDescription: itemDto.publicDescription };
-      case ProjectChangeRequestItemTypeEntity.ProjectSuspension:
+      case PCRItemType.ProjectSuspension:
           return { ...init, suspensionStartDate: itemDto.suspensionStartDate, suspensionEndDate: itemDto.suspensionEndDate };
-      case ProjectChangeRequestItemTypeEntity.AccountNameChange:
+      case PCRItemType.AccountNameChange:
           return { ...init, accountName: itemDto.accountName, partnerId: itemDto.partnerId };
       default:
         return init;

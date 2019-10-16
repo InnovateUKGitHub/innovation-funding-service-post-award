@@ -5,7 +5,7 @@ import * as Dtos from "@framework/dtos";
 import { Pending } from "@shared/pending";
 import { IEditorStore, StoresConsumer } from "@ui/redux";
 import { PCRDtoValidator } from "@ui/validators";
-import { ProjectChangeRequestItemTypeEntity } from "@framework/entities";
+import { PCRItemType } from "@framework/constants";
 
 export interface CreateProjectChangeRequestParams {
   projectId: string;
@@ -15,7 +15,7 @@ interface Data {
   project: Pending<Dtos.ProjectDto>;
   itemTypes: Pending<Dtos.PCRItemTypeDto[]>;
   editor: Pending<IEditorStore<Dtos.PCRDto, PCRDtoValidator>>;
-  editableItemTypes: Pending<ProjectChangeRequestItemTypeEntity[]>;
+  editableItemTypes: Pending<PCRItemType[]>;
 }
 
 interface Callbacks {

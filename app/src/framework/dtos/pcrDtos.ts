@@ -1,17 +1,21 @@
-import { ProjectChangeRequestItemStatus, ProjectChangeRequestItemTypeEntity, ProjectChangeRequestStandardItemTypes, ProjectChangeRequestStatus, } from "@framework/entities";
+import {
+  PCRItemStatus,
+  PCRItemType,
+  PCRStatus
+} from "@framework/constants";
 
 interface PCRBaseDto {
   id: string;
   requestNumber: number;
   started: Date;
   lastUpdated: Date;
-  status: ProjectChangeRequestStatus;
+  status: PCRStatus;
   statusName: string;
   projectId: string;
 }
 
 export interface PCRItemSummaryDto {
-  type: ProjectChangeRequestItemTypeEntity;
+  type: PCRItemType;
   typeName: string;
 }
 
@@ -23,7 +27,7 @@ export interface PCRDto extends PCRBaseDto {
   items: (PCRItemDto)[];
   comments: string;
   guidance: string;
-  reasoningStatus: ProjectChangeRequestItemStatus;
+  reasoningStatus: PCRItemStatus;
   reasoningStatusName: string;
   reasoningComments: string;
 }
@@ -31,7 +35,7 @@ export interface PCRDto extends PCRBaseDto {
 interface PCRItemBaseDto extends PCRItemSummaryDto {
   id: string;
   guidance: string;
-  status: ProjectChangeRequestItemStatus;
+  status: PCRItemStatus;
   statusName: string;
 }
 
@@ -43,39 +47,46 @@ export type PCRItemDto =
   PCRItemForAccountNameChangeDto |
   PCRItemForProjectTerminationDto;
 
+export type ProjectChangeRequestStandardItemTypes = (
+  PCRItemType.PartnerAddition|
+  PCRItemType.PartnerWithdrawal|
+  PCRItemType.MultiplePartnerFinancialVirement|
+  PCRItemType.SinglePartnerFinancialVirement
+  );
+
 export interface PCRStandardItemDto extends PCRItemBaseDto {
   type: ProjectChangeRequestStandardItemTypes;
 }
 
 export interface PCRItemForTimeExtensionDto extends PCRItemBaseDto {
-  type: ProjectChangeRequestItemTypeEntity.TimeExtension;
+  type: PCRItemType.TimeExtension;
   projectEndDate: Date | null;
 }
 
 export interface PCRItemForScopeChangeDto extends PCRItemBaseDto {
-  type: ProjectChangeRequestItemTypeEntity.ScopeChange;
+  type: PCRItemType.ScopeChange;
   publicDescription: string | null;
   projectSummary: string | null;
 }
 
 export interface PCRItemForProjectSuspensionDto extends PCRItemBaseDto {
-  type: ProjectChangeRequestItemTypeEntity.ProjectSuspension;
+  type: PCRItemType.ProjectSuspension;
   suspensionStartDate: Date | null;
   suspensionEndDate: Date | null;
 }
 
 export interface PCRItemForAccountNameChangeDto extends PCRItemBaseDto {
-  type: ProjectChangeRequestItemTypeEntity.AccountNameChange;
+  type: PCRItemType.AccountNameChange;
   accountName: string | null;
   partnerId: string | null;
 }
 
 export interface PCRItemForProjectTerminationDto extends PCRItemBaseDto {
-  type: ProjectChangeRequestItemTypeEntity.ProjectTermination;
+  type: PCRItemType.ProjectTermination;
 }
 
 export interface PCRItemTypeDto {
-  type: ProjectChangeRequestItemTypeEntity;
+  type: PCRItemType;
   displayName: string;
   recordTypeId: string;
   enabled: boolean;

@@ -3,7 +3,7 @@ import * as ACC from "@ui/components";
 import { EditorStatus } from "@ui/redux";
 import { PCRItemForScopeChangeDto, ProjectDto } from "@framework/dtos";
 import { PCRScopeChangeItemDtoValidator } from "@ui/validators";
-import { ProjectChangeRequestItemStatus } from "@framework/entities";
+import { PCRItemStatus } from "@framework/constants";
 
 interface Props {
   project: ProjectDto;
@@ -56,8 +56,8 @@ export const ScopeChangeEdit = (props: Props) => {
           <Form.Checkboxes
             name="itemStatus"
             options={options}
-            value={m => m.status === ProjectChangeRequestItemStatus.Complete ? [options[0]] : []}
-            update={(m, v) => m.status = (v && v.some(x => x.id === "true")) ? ProjectChangeRequestItemStatus.Complete : ProjectChangeRequestItemStatus.Incomplete}
+            value={m => m.status === PCRItemStatus.Complete ? [options[0]] : []}
+            update={(m, v) => m.status = (v && v.some(x => x.id === "true")) ? PCRItemStatus.Complete : PCRItemStatus.Incomplete}
             validation={props.validator.status}
           />
           <Form.Submit>Save and return to request</Form.Submit>

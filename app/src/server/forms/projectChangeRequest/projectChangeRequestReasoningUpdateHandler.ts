@@ -1,4 +1,3 @@
-import { ProjectChangeRequestItemStatus, ProjectChangeRequestItemTypeEntity } from "@framework/entities";
 import { IContext, ILinkInfo, PCRDto, PCRItemTypeDto, ProjectRole } from "@framework/types";
 import { GetPCRByIdQuery } from "@server/features/pcrs/getPCRByIdQuery";
 import { UpdatePCRCommand } from "@server/features/pcrs/updatePcrCommand";
@@ -6,6 +5,7 @@ import { IFormBody, IFormButton, StandardFormHandlerBase } from "@server/forms/f
 import { ProjectChangeRequestPrepareReasoningParams, ProjectChangeRequestPrepareReasoningRoute, ProjectChangeRequestPrepareRoute } from "@ui/containers";
 import { getPcrEditor } from "@ui/redux/selectors";
 import { PCRDtoValidator } from "@ui/validators";
+import { PCRItemStatus, PCRItemType } from "@framework/constants";
 
 export class ProjectChangeRequestReasoningUpdateHandler extends StandardFormHandlerBase<ProjectChangeRequestPrepareReasoningParams, PCRDto, PCRDtoValidator> {
   constructor() {
@@ -16,7 +16,7 @@ export class ProjectChangeRequestReasoningUpdateHandler extends StandardFormHand
     const dto = await context.runQuery(new GetPCRByIdQuery(params.projectId, params.pcrId));
 
     dto.reasoningComments = body.reasoningComments;
-    dto.reasoningStatus = body.reasoningStatus === "true" ? ProjectChangeRequestItemStatus.Complete : ProjectChangeRequestItemStatus.Incomplete;
+    dto.reasoningStatus = body.reasoningStatus === "true" ? PCRItemStatus.Complete : PCRItemStatus.Incomplete;
 
     return dto;
   }
@@ -32,7 +32,7 @@ export class ProjectChangeRequestReasoningUpdateHandler extends StandardFormHand
 
   protected createValidationResult(params: ProjectChangeRequestPrepareReasoningParams, dto: PCRDto) {
     const projectChangeRequestItemTypes: PCRItemTypeDto[] = [{
-      type: ProjectChangeRequestItemTypeEntity.AccountNameChange,
+      type: PCRItemType.AccountNameChange,
       displayName: "",
       recordTypeId: "",
       enabled: false,

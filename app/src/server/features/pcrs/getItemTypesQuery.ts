@@ -1,28 +1,29 @@
 import { QueryBase } from "../common";
 import { PCRItemTypeDto } from "@framework/dtos/pcrDtos";
 import { IContext } from "@framework/types";
-import { ProjectChangeRequestItemTypeEntity, RecordType } from "@framework/entities";
 import { GetAllRecordTypesQuery } from "../general/getAllRecordTypesQuery";
+import { PCRItemType } from "@framework/constants";
+import { RecordType } from "@framework/entities";
 
 interface IMetaValue {
-  type: ProjectChangeRequestItemTypeEntity;
+  type: PCRItemType;
   typeName: string;
   displayName?: string;
   enabled?: boolean;
   files?: string[];
 }
 
-// @TODO: this might sit better in the pcr repository... leave for now
+// @TODO: this might sit better in the pcr repository (or constants?) ... leave for now
 export const PCRRecordTypeMetaValues: IMetaValue[] = [
-  { type: ProjectChangeRequestItemTypeEntity.SinglePartnerFinancialVirement, typeName: "Reallocate one partner's project costs", files: ["partner_finance_form.xls"]},
-  { type: ProjectChangeRequestItemTypeEntity.MultiplePartnerFinancialVirement, typeName: "Reallocate several partners' project cost", files: ["partner_finance_form.xls"]},
-  { type: ProjectChangeRequestItemTypeEntity.PartnerWithdrawal, typeName: "Remove a partner", },
-  { type: ProjectChangeRequestItemTypeEntity.PartnerAddition, typeName: "Add a partner", files: ["partner_addition.xlsx"] },
-  { type: ProjectChangeRequestItemTypeEntity.ScopeChange, typeName: "Change project scope", },
-  { type: ProjectChangeRequestItemTypeEntity.TimeExtension, typeName: "Change project duration", },
-  { type: ProjectChangeRequestItemTypeEntity.AccountNameChange, typeName: "Change a partner's name", },
-  { type: ProjectChangeRequestItemTypeEntity.ProjectSuspension, typeName: "Put project on hold", },
-  { type: ProjectChangeRequestItemTypeEntity.ProjectTermination, typeName: "End the project early", },
+  { type: PCRItemType.SinglePartnerFinancialVirement, typeName: "Reallocate one partner's project costs", files: ["partner_finance_form.xls"]},
+  { type: PCRItemType.MultiplePartnerFinancialVirement, typeName: "Reallocate several partners' project cost", files: ["partner_finance_form.xls"]},
+  { type: PCRItemType.PartnerWithdrawal, typeName: "Remove a partner", },
+  { type: PCRItemType.PartnerAddition, typeName: "Add a partner", files: ["partner_addition.xlsx"] },
+  { type: PCRItemType.ScopeChange, typeName: "Change project scope", },
+  { type: PCRItemType.TimeExtension, typeName: "Change project duration", },
+  { type: PCRItemType.AccountNameChange, typeName: "Change a partner's name", },
+  { type: PCRItemType.ProjectSuspension, typeName: "Put project on hold", },
+  { type: PCRItemType.ProjectTermination, typeName: "End the project early", },
 ];
 
 export class GetPCRItemTypesQuery extends QueryBase<PCRItemTypeDto[]> {
@@ -31,7 +32,7 @@ export class GetPCRItemTypesQuery extends QueryBase<PCRItemTypeDto[]> {
     const recordTypes = (await context.runQuery(new GetAllRecordTypesQuery()))
       .filter(x => x.parent === "Acc_ProjectChangeRequest__c");
 
-    /// meta values controlls order
+    /// meta values controls order
     return PCRRecordTypeMetaValues
       .map<PCRItemTypeDto>(metaInfo => ({
         type: metaInfo.type,
