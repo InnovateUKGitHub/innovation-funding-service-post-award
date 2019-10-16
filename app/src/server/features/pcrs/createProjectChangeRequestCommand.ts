@@ -1,5 +1,5 @@
 import { BadRequestError, CommandBase, ValidationError } from "@server/features/common";
-import { PCRDto, PCRItemTypeDto, ProjectRole, TypedPcrItemDto } from "@framework/dtos";
+import { PCRDto, PCRItemDto, PCRItemTypeDto, ProjectRole } from "@framework/dtos";
 import { Authorisation, IContext } from "@framework/types";
 import { GetPCRItemTypesQuery } from "@server/features/pcrs/getItemTypesQuery";
 import {
@@ -59,7 +59,7 @@ export class CreateProjectChangeRequestCommand extends CommandBase<string> {
     return projectChangeRequestId;
   }
 
-  private mapItem(dto: PCRDto, itemDto: TypedPcrItemDto, itemTypes: PCRItemTypeDto[]): ProjectChangeRequestItemForCreateEntity {
+  private mapItem(dto: PCRDto, itemDto: PCRItemDto, itemTypes: PCRItemTypeDto[]): ProjectChangeRequestItemForCreateEntity {
     const init = {
       projectId: dto.projectId,
       recordTypeId: itemTypes.find(t => t.type === itemDto.type)!.recordTypeId,

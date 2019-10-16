@@ -1,6 +1,6 @@
 import React from "react";
 import * as ACC from "@ui/components";
-import { PCRDto, PCRItemDto, TypedPcrItemDto } from "@framework/dtos";
+import { PCRDto, PCRItemDto } from "@framework/dtos";
 import { ProjectChangeRequestItemTypeEntity } from "@framework/entities";
 import { IRoutes } from "@ui/routing";
 
@@ -33,7 +33,7 @@ export const NavigationArrowsForPCRs = (props: Props) => {
   );
 };
 
-const getLinkForReviewingItem = (routes: IRoutes, pcrItem: TypedPcrItemDto, projectId: string, pcrId: string, allowReasoningLink: boolean) => {
+const getLinkForReviewingItem = (routes: IRoutes, pcrItem: PCRItemDto, projectId: string, pcrId: string, allowReasoningLink: boolean) => {
   if (!pcrItem && !allowReasoningLink) {
     return null;
   }
@@ -48,7 +48,7 @@ const getLinkForReviewingItem = (routes: IRoutes, pcrItem: TypedPcrItemDto, proj
   };
 };
 
-const getLinkForViewingItem = (routes: IRoutes, pcrItem: TypedPcrItemDto, projectId: string, pcrId: string, allowReasoning: boolean) => {
+const getLinkForViewingItem = (routes: IRoutes, pcrItem: PCRItemDto, projectId: string, pcrId: string, allowReasoning: boolean) => {
   if (!pcrItem && !allowReasoning) {
     return null;
   }
