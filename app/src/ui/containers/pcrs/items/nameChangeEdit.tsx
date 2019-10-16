@@ -38,6 +38,7 @@ const InnerContainer = (props: Props & InnerProps) => {
   return (
     <ACC.Section>
       <Form.Form
+        qa="changePartnerNameForm"
         data={props.projectChangeRequestItem}
         isSaving={props.status === EditorStatus.Saving}
         onChange={dto => props.onChange(dto)}
@@ -45,7 +46,7 @@ const InnerContainer = (props: Props & InnerProps) => {
       >
         <Form.Fieldset heading="Select partner">
           <Form.Radio
-            name="partnerSelect"
+            name="partnerId"
             options={partnerOptions}
             inline={false}
             value={() => selectedPartnerOption}
@@ -56,7 +57,7 @@ const InnerContainer = (props: Props & InnerProps) => {
           <Form.String
             label="Enter new name"
             labelHidden={true}
-            name="enterNewName"
+            name="accountName"
             value={x => x.accountName}
             update={(x, value) => x.accountName = value}
           />

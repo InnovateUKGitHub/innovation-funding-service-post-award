@@ -38,6 +38,9 @@ export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBa
       this.updateProjectSuspension(item, body);
     }
 
+    if (item.type === ProjectChangeRequestItemTypeEntity.AccountNameChange) {
+      this.updateNameChange(item, body);
+    }
     return dto;
   }
 
@@ -76,6 +79,11 @@ export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBa
   protected async run(context: IContext, params: ProjectChangeRequestPrepareItemParams, button: IFormButton, dto: Dtos.PCRDto): Promise<ILinkInfo> {
     await context.runCommand(new UpdatePCRCommand(params.projectId, params.pcrId, dto));
     return ProjectChangeRequestPrepareRoute.getLink(params);
+  }
+
+  private updateNameChange(item: Dtos.PCRItemForAccountNameChangeDto, body: IFormBody) {
+    item.partnerId = body.partnerId;
+    item.accountName = body.accountName;
   }
 
   protected getStoreInfo(params: ProjectChangeRequestPrepareItemParams): { key: string, store: string } {
