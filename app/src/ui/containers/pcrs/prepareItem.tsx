@@ -5,7 +5,7 @@ import { ProjectDto, ProjectRole } from "@framework/types";
 
 import * as ACC from "@ui/components";
 import { Pending } from "@shared/pending";
-import { PCRDto, PCRItemDto, PCRItemTypeDto, TypedPcrItemDto } from "@framework/dtos";
+import { PCRDto, PCRItemDto, PCRItemTypeDto } from "@framework/dtos";
 import { EditorStatus, IEditorStore, StoresConsumer, } from "@ui/redux";
 import { ProjectChangeRequestItemStatus, ProjectChangeRequestItemTypeEntity } from "@framework/entities";
 import * as Items from "./items";
@@ -107,7 +107,7 @@ class PCRPrepareItemComponent extends ContainerBase<ProjectChangeRequestPrepareI
     return <ACC.ValidationMessage messageType="error" message="Type not handled" />;
   }
 
-  private onChange(dto: PCRDto, itemDto: TypedPcrItemDto): void {
+  private onChange(dto: PCRDto, itemDto: PCRItemDto): void {
     const index = dto.items.findIndex(x => x.id === this.props.itemId);
     dto.items[index] = itemDto;
     this.props.onChange(false, dto);

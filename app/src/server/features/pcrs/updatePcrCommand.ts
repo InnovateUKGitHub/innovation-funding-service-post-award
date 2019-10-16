@@ -1,5 +1,5 @@
 import { BadRequestError, CommandBase, ValidationError } from "../common";
-import { PCRDto, ProjectRole, TypedPcrItemDto } from "@framework/dtos";
+import { PCRDto, PCRItemDto, ProjectRole } from "@framework/dtos";
 import { PCRDtoValidator } from "@ui/validators/pcrDtoValidator";
 import { Authorisation, IContext } from "@framework/types";
 import { GetAllProjectRolesForUser } from "../projects";
@@ -105,7 +105,7 @@ export class UpdatePCRCommand extends CommandBase<boolean> {
     return true;
   }
 
-  private getItemUpdates(item: ProjectChangeRequestItemEntity, dto: (TypedPcrItemDto)): Partial<ProjectChangeRequestItemEntity> | null {
+  private getItemUpdates(item: ProjectChangeRequestItemEntity, dto: (PCRItemDto)): Partial<ProjectChangeRequestItemEntity> | null {
 
     const init = item.status !== dto.status ? { status: dto.status } : null;
 
