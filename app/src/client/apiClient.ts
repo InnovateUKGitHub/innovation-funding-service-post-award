@@ -1,6 +1,6 @@
 import { IApiClient } from "../server/apis";
 import { processResponse } from "../shared/processResponse";
-import { ClientFileWrapper } from "@ui/components/inputs/fileUpload";
+import { ClientFileWrapper } from "./clientFileWrapper";
 
 const clientApi: IApiClient = {
   claims : {
