@@ -48,7 +48,9 @@ export class MapToProjectDtoCommand extends CommandBase<ProjectDto> {
       claimsOverdue: this.item.Acc_ClaimsOverdue__c,
       claimsToReview: this.item.Acc_ClaimsForReview__c,
       claimsWithParticipant: this.item.Acc_ClaimsUnderQuery__c,
-      numberOfOpenClaims: this.item.Acc_NumberOfOpenClaims__c
+      numberOfOpenClaims: this.item.Acc_NumberOfOpenClaims__c,
+      durationInMonths: this.item.Acc_Duration__c,
+      numberOfPeriods: this.item.Acc_NumberofPeriods__c,
     };
 
     return Promise.resolve(dto);

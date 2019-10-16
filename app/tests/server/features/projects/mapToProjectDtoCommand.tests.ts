@@ -40,7 +40,9 @@ describe("MapToProjectDtoCommand", () => {
       claimsToReview: 2,
       status: ProjectStatus.Live,
       statusName: "Live",
-      numberOfOpenClaims: 10
+      numberOfOpenClaims: 10,
+      numberOfPeriods: 5,
+      durationInMonths: 15
     };
 
     const salesforce = context.testData.createProject(x => {
@@ -60,6 +62,8 @@ describe("MapToProjectDtoCommand", () => {
       x.Acc_ClaimsUnderQuery__c = expected.claimsWithParticipant;
       x.Acc_ClaimsForReview__c = expected.claimsToReview;
       x.Acc_NumberOfOpenClaims__c = expected.numberOfOpenClaims;
+      x.Acc_NumberofPeriods__c = expected.numberOfPeriods;
+      x.Acc_Duration__c = expected.durationInMonths;
     });
 
     const result = await context.runCommand(new MapToProjectDtoCommand(salesforce, ProjectRole.Unknown));
