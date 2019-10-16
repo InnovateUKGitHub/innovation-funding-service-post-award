@@ -14,15 +14,15 @@ interface IMetaValue {
 
 // @TODO: this might sit better in the pcr repository... leave for now
 export const PCRRecordTypeMetaValues: IMetaValue[] = [
-  { type: ProjectChangeRequestItemTypeEntity.AccountNameChange, typeName: "Change a partner's name", },
-  { type: ProjectChangeRequestItemTypeEntity.PartnerAddition, typeName: "Add a partner", files: ["partner_addition.xlsx"] },
-  { type: ProjectChangeRequestItemTypeEntity.PartnerWithdrawal, typeName: "Remove a partner", },
-  { type: ProjectChangeRequestItemTypeEntity.ProjectSuspension, typeName: "Put project on hold", },
-  { type: ProjectChangeRequestItemTypeEntity.ProjectTermination, typeName: "End the project early", },
-  { type: ProjectChangeRequestItemTypeEntity.MultiplePartnerFinancialVirement, typeName: "Reallocate several partners' project cost", files: ["partner_finance_form.xls"]},
   { type: ProjectChangeRequestItemTypeEntity.SinglePartnerFinancialVirement, typeName: "Reallocate one partner's project costs", files: ["partner_finance_form.xls"]},
+  { type: ProjectChangeRequestItemTypeEntity.MultiplePartnerFinancialVirement, typeName: "Reallocate several partners' project cost", files: ["partner_finance_form.xls"]},
+  { type: ProjectChangeRequestItemTypeEntity.PartnerWithdrawal, typeName: "Remove a partner", },
+  { type: ProjectChangeRequestItemTypeEntity.PartnerAddition, typeName: "Add a partner", files: ["partner_addition.xlsx"] },
   { type: ProjectChangeRequestItemTypeEntity.ScopeChange, typeName: "Change project scope", },
   { type: ProjectChangeRequestItemTypeEntity.TimeExtension, typeName: "Change project duration", },
+  { type: ProjectChangeRequestItemTypeEntity.AccountNameChange, typeName: "Change a partner's name", },
+  { type: ProjectChangeRequestItemTypeEntity.ProjectSuspension, typeName: "Put project on hold", },
+  { type: ProjectChangeRequestItemTypeEntity.ProjectTermination, typeName: "End the project early", },
 ];
 
 export class GetPCRItemTypesQuery extends QueryBase<PCRItemTypeDto[]> {

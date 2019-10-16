@@ -8,15 +8,15 @@ describe("GetPCRItemTypesQuery", () => {
     const context = new TestContext();
 
     const expectedIds = [
-      ProjectChangeRequestItemTypeEntity.AccountNameChange,
-      ProjectChangeRequestItemTypeEntity.PartnerAddition,
+      ProjectChangeRequestItemTypeEntity.SinglePartnerFinancialVirement,
+      ProjectChangeRequestItemTypeEntity.MultiplePartnerFinancialVirement,
       ProjectChangeRequestItemTypeEntity.PartnerWithdrawal,
+      ProjectChangeRequestItemTypeEntity.PartnerAddition,
+      ProjectChangeRequestItemTypeEntity.ScopeChange,
+      ProjectChangeRequestItemTypeEntity.TimeExtension,
+      ProjectChangeRequestItemTypeEntity.AccountNameChange,
       ProjectChangeRequestItemTypeEntity.ProjectSuspension,
       ProjectChangeRequestItemTypeEntity.ProjectTermination,
-      ProjectChangeRequestItemTypeEntity.MultiplePartnerFinancialVirement,
-      ProjectChangeRequestItemTypeEntity.SinglePartnerFinancialVirement,
-      ProjectChangeRequestItemTypeEntity.ScopeChange,
-      ProjectChangeRequestItemTypeEntity.TimeExtension
     ];
 
     const query = new GetPCRItemTypesQuery();

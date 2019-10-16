@@ -105,7 +105,18 @@ describe("GetAllPCRsQuery", () => {
     const query = new GetAllPCRsQuery(pcr.projectId);
 
     const result = await context.runQuery(query).then(x => x[0]);
-    const expectedTypes = recordTypes.map((x,i) => (i + 1) * 10 as ProjectChangeRequestItemTypeEntity);
+
+    const expectedTypes = [
+      ProjectChangeRequestItemTypeEntity.SinglePartnerFinancialVirement,
+      ProjectChangeRequestItemTypeEntity.MultiplePartnerFinancialVirement,
+      ProjectChangeRequestItemTypeEntity.PartnerWithdrawal,
+      ProjectChangeRequestItemTypeEntity.PartnerAddition,
+      ProjectChangeRequestItemTypeEntity.ScopeChange,
+      ProjectChangeRequestItemTypeEntity.TimeExtension,
+      ProjectChangeRequestItemTypeEntity.AccountNameChange,
+      ProjectChangeRequestItemTypeEntity.ProjectSuspension,
+      ProjectChangeRequestItemTypeEntity.ProjectTermination,
+    ];
 
     expect(result.items.map(x => x.type)).toEqual(expectedTypes);
     expect(result.items.map(x => x.typeName)).toEqual(recordTypes.map(x => x.type));
