@@ -1,12 +1,12 @@
 import React from "react";
 import { Page } from "./layout/page";
-import { Title } from "./layout/title";
 import { Section } from "./layout/section";
 import { SimpleString } from "./renderers/simpleString";
+import { PageTitle } from "@ui/components/layout";
 
 export const StandardErrorPage = () => (
   <Page
-    pageTitle={<Title title="Something has gone wrong at our end"/>}
+    pageTitle={<PageTitle title="Something has gone wrong at our end" />}
     backLink={null}
   >
     <Section>

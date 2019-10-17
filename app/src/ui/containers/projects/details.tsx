@@ -61,7 +61,7 @@ class ProjectDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
                 <ACC.Section title="Project members">
                     <ACC.ProjectContact contact={monitoringOfficer} qa="monitoring-officer" />
                     <ACC.ProjectContact contact={projectManager} partner={projectManagerPartner} qa="project-manager" />
-                    <ACC.Section subsection={true} title="Finance contacts">
+                    <ACC.Section title="Finance contacts">
                         <ACC.PartnersAndFinanceContacts contacts={contacts} partners={partners} />
                     </ACC.Section>
                 </ACC.Section>

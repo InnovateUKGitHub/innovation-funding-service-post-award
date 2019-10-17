@@ -41,11 +41,6 @@ describe("Section", () => {
         expect(wrapper.text()).toContain(badge);
     });
 
-    it("should the render h3 subsection", () => {
-        const output = Enzyme.mount(<Section title={"aTitle"} subsection={true}/>).html();
-        expect(output).toContain("<h3");
-    });
-
     it("should the render h2 subsection", () => {
         const output = Enzyme.mount(<Section title={"aTitle"}/>).html();
         expect(output).toContain("<h2");

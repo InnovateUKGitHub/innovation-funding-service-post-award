@@ -64,22 +64,22 @@ class FinanceSummaryComponent extends ContainerBase<Params, Data, Callbacks> {
             <FinanceSummaryTable.Currency header="Costs claimed to date" qa="CostsClaimedToDate" value={x => x.totalCostsSubmitted} />
             <FinanceSummaryTable.Percentage header="Percentage of costs claimed to date" qa="PercentageOfCostsClaimedToDate" value={x => x.percentageParticipantCostsSubmitted} />
           </FinanceSummaryTable.Table>
-        </ACC.Section>
-        <ACC.Section title="Partner finance details">
-          <FinanceSummaryTable.Table data={partnersToShow} qa="PartnerFinanceDetails">
-            <FinanceSummaryTable.String header={null} qa="Partner" value={x => x.isLead ? `${x.name} (Lead)` : x.name} />
-            <FinanceSummaryTable.Currency header="Total eligible costs" qa="TotalEligibleCosts" value={x => x.totalParticipantGrant} />
-            <FinanceSummaryTable.Percentage header="Funding level" qa="FundingLevel" value={x => x.awardRate} />
-            <FinanceSummaryTable.Currency header="Total grant" qa="TotalGrant" value={x => x.totalFundingDueToReceive} />
-            <FinanceSummaryTable.Currency header="Total grant paid in advance" qa="TotalGrantPaidInAdvance" value={x => x.totalPrepayment} />
-            <FinanceSummaryTable.Percentage header="Claim cap" qa="ClaimCap" value={x => x.capLimit} />
-          </FinanceSummaryTable.Table>
-        </ACC.Section>
-        <ACC.Section title="When an independent accountant's report is needed">
-          <FinanceSummaryTable.Table data={partnersToShow} qa="WhenAnIarIsNeeded" >
-            <FinanceSummaryTable.String header={null} value={x => x.isLead ? `${x.name} (Lead)` : x.name} qa="Partner" />
-            <FinanceSummaryTable.String header={null} value={x => x.auditReportFrequencyName} qa="Frequency" />
-          </FinanceSummaryTable.Table>
+          <ACC.Section title="Partner finance details">
+            <FinanceSummaryTable.Table data={partnersToShow} qa="PartnerFinanceDetails">
+              <FinanceSummaryTable.String header={null} qa="Partner" value={x => x.isLead ? `${x.name} (Lead)` : x.name} />
+              <FinanceSummaryTable.Currency header="Total eligible costs" qa="TotalEligibleCosts" value={x => x.totalParticipantGrant} />
+              <FinanceSummaryTable.Percentage header="Funding level" qa="FundingLevel" value={x => x.awardRate} />
+              <FinanceSummaryTable.Currency header="Total grant" qa="TotalGrant" value={x => x.totalFundingDueToReceive} />
+              <FinanceSummaryTable.Currency header="Total grant paid in advance" qa="TotalGrantPaidInAdvance" value={x => x.totalPrepayment} />
+              <FinanceSummaryTable.Percentage header="Claim cap" qa="ClaimCap" value={x => x.capLimit} />
+            </FinanceSummaryTable.Table>
+            <ACC.Section title="When an independent accountant's report is needed">
+              <FinanceSummaryTable.Table data={partnersToShow} qa="WhenAnIarIsNeeded" >
+                <FinanceSummaryTable.String header={null} value={x => x.isLead ? `${x.name} (Lead)` : x.name} qa="Partner" />
+                <FinanceSummaryTable.String header={null} value={x => x.auditReportFrequencyName} qa="Frequency" />
+              </FinanceSummaryTable.Table>
+            </ACC.Section>
+          </ACC.Section>
         </ACC.Section>
       </React.Fragment>
     );
