@@ -77,7 +77,6 @@ export class PartnerRepository extends SalesforceRepositoryBase<ISalesforcePartn
     "Acc_AuditReportFrequency__c",
     "toLabel(Acc_AuditReportFrequency__c) AuditReportFrequencyName",
     "Acc_TotalPrepayment__c",
-    "Acc_TotalParticipantGrant__c"
   ];
 
   getAllByProjectId(projectId: string): Promise<ISalesforcePartner[]> {
