@@ -15,6 +15,7 @@ import { logsGuide } from "./logsGuide";
 import { navigationArrowsGuide } from "./navigationArrowsGuide";
 import { navigationCardGuide } from "./navigationCardGuide";
 import { projectContactGuide } from "./projectContactGuide";
+import { pageTitleGuide } from "./pageTitleGuide";
 import { Header } from "../components";
 import { sectionGuide } from "./sectionGuide";
 import { sectionPanelGuide } from "./sectionPanelGuide";
@@ -25,7 +26,6 @@ import { hashTabsGuide } from "@ui/componentsGuide/hashTabsGuide";
 import { statisticsBoxGuide } from "./statisticsBoxGuide";
 import { buttonGuide } from "./styledButtonGuide";
 import { textHint } from "./textHintGuide";
-import { titleGuide } from "./titleGuide";
 import { validationErrorGuide } from "./validationErrorGuide";
 import { validationMessageGuide } from "./validationMessageGuide";
 import { validationSummaryGuide } from "./validationSummaryGuide";
@@ -48,6 +48,7 @@ const guides: IGuide[] = [
     navigationArrowsGuide,
     navigationCardGuide,
     projectContactGuide,
+    pageTitleGuide,
     renderersGuide,
     sectionGuide,
     sectionPanelGuide,
@@ -58,7 +59,6 @@ const guides: IGuide[] = [
     tableGuide,
     taskListGuide,
     textHint,
-    titleGuide,
     validationMessageGuide,
     validationErrorGuide,
     validationSummaryGuide
