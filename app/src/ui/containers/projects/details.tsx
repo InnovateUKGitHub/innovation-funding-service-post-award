@@ -3,7 +3,6 @@ import { BaseProps, ContainerBase, defineRoute } from "../containerBase";
 import * as ACC from "../../components";
 import { Pending } from "../../../shared/pending";
 import { PartnerDto, ProjectDto, ProjectRole } from "@framework/types";
-import { AccessibilityText } from "@ui/components/renderers";
 import { StoresConsumer } from "@ui/redux";
 
 interface Data {
@@ -39,6 +38,7 @@ class ProjectDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
     private renderContents({ project, partners, contacts }: CombinedData) {
         const monitoringOfficer = contacts.find(x => x.role === "Monitoring officer");
         const projectManager = contacts.find(x => x.role === "Project Manager");
+        const projectManagerPartner = projectManager ? partners.find(x => x.accountId === projectManager.accountId) : null;
 
         // project links are not currenly required but will be added back
         // const links = [
@@ -52,14 +52,20 @@ class ProjectDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
                 pageTitle={<ACC.Projects.Title project={project} />}
                 project={project}
             >
-                {this.renderPartnersCosts(partners, project)}
+
+                <ACC.Section
+                    title={`Project period ${project.periodId} of ${project.totalPeriods}`}
+                    subtitle={<ACC.Renderers.ShortDateRange start={project.startDate} end={project.endDate} />}
+                />
+
                 <ACC.Section title="Project members">
-                    <ACC.ProjectMember member={monitoringOfficer} qa="monitoring-officer" />
-                    <ACC.ProjectMember member={projectManager} qa="project-manager" />
+                    <ACC.ProjectContact contact={monitoringOfficer} qa="monitoring-officer" />
+                    <ACC.ProjectContact contact={projectManager} partner={projectManagerPartner} qa="project-manager" />
                     <ACC.Section subsection={true} title="Finance contacts">
                         <ACC.PartnersAndFinanceContacts contacts={contacts} partners={partners} />
                     </ACC.Section>
                 </ACC.Section>
+
                 <ACC.Section title="Project information" qa="project-details">
                     <ACC.SummaryList qa="project-information">
                         <ACC.SummaryListItem label="Project start date" qa="start-date" content={<ACC.Renderers.FullDate value={project.startDate} />} />
@@ -77,31 +83,6 @@ class ProjectDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
                 </ACC.Section>
                 */}
             </ACC.Page>
-        );
-    }
-
-    private renderPartnersCosts(partners: PartnerDto[], project: ProjectDto) {
-        const requiredRoles = ProjectRole.ProjectManager | ProjectRole.MonitoringOfficer;
-
-        if ((requiredRoles & project.roles) === ProjectRole.Unknown) {
-            return null;
-        }
-
-        const PartnersTable = ACC.TypedTable<PartnerDto>();
-        const totalEligibleCosts = partners.reduce((val, partner) => val += partner.totalParticipantGrant || 0, 0) || null;
-        const totalClaimed = partners.reduce((val, partner) => val += partner.totalParticipantCostsClaimed || 0, 0);
-        const percentageClaimed = totalEligibleCosts ? 100 * totalClaimed / totalEligibleCosts : 0;
-
-        return (
-            <ACC.Section title="Cost claimed status" qa="cost-claimed-status">
-                <PartnersTable.Table qa="cost-claimed" data={partners} caption="Cost claimed status">
-                    <PartnersTable.String header="Partner" qa="partner-name" value={x => x.isLead ? `${x.name} (Lead)` : x.name} footer="Total" />
-                    <PartnersTable.Currency header={<React.Fragment><span>Total eligible</span><br /><span>costs</span></React.Fragment>} qa="total-costs" value={x => x.totalParticipantGrant || 0} footer={<ACC.Renderers.Currency value={totalEligibleCosts} />} />
-                    <PartnersTable.Currency header={<React.Fragment><span>Costs claimed</span><br /><span>to date</span></React.Fragment>} qa="costs-claimed" value={x => x.totalParticipantCostsClaimed || 0} footer={<ACC.Renderers.Currency value={totalClaimed} />} />
-                    <PartnersTable.Percentage header={<React.Fragment><span>Percentage of eligible</span><br /><span>costs claimed to date</span></React.Fragment>} qa="percentage-claimed" value={x => x.percentageParticipantCostsClaimed || 0} footer={<ACC.Renderers.Percentage value={percentageClaimed} />} />
-                    <PartnersTable.Percentage header="Claim cap" qa="cap-limit" value={x => x.capLimit} fractionDigits={0} footer={<AccessibilityText>No data</AccessibilityText>} />
-                </PartnersTable.Table>
-            </ACC.Section>
         );
     }
 }

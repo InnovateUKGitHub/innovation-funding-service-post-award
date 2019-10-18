@@ -14,7 +14,7 @@ import { linksListGuide } from "./linksListGuide";
 import { logsGuide } from "./logsGuide";
 import { navigationArrowsGuide } from "./navigationArrowsGuide";
 import { navigationCardGuide } from "./navigationCardGuide";
-import { projectMemberGuide } from "./projectMemberGuide";
+import { projectContactGuide } from "./projectContactGuide";
 import { Header } from "../components";
 import { sectionGuide } from "./sectionGuide";
 import { sectionPanelGuide } from "./sectionPanelGuide";
@@ -47,7 +47,7 @@ const guides: IGuide[] = [
     logsGuide,
     navigationArrowsGuide,
     navigationCardGuide,
-    projectMemberGuide,
+    projectContactGuide,
     renderersGuide,
     sectionGuide,
     sectionPanelGuide,
