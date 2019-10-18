@@ -1,6 +1,6 @@
 import React from "react";
 import {Accordion} from "../components/accordion";
-import {DocumentList, ProjectMember} from "../components";
+import {DocumentList, ProjectContact} from "../components";
 import {AccordionItem} from "../components/accordionItem";
 
 const documents = [
@@ -38,7 +38,7 @@ export const accordionGuide: IGuide = {
             <DocumentList documents={documents} qa=\"documentList\"/>
         </AccordionItem>
         <AccordionItem title=\"Section 2\">
-            <ProjectMember member={{name: \"Ms A Bloggs\", email: \"a.bloggs@tem\", role: \"Team lead\"}} qa=\"teamMember\"/>
+            <ProjectContact contact={{name: \"Ms A Bloggs\", email: \"a.bloggs@tem\", role: \"Team lead\"}} qa=\"teamMember\"/>
         </AccordionItem>
       </Accordion>`,
       render: () => (
@@ -47,7 +47,7 @@ export const accordionGuide: IGuide = {
             <DocumentList documents={documents} qa="documentList"/>
           </AccordionItem>
           <AccordionItem title="Section 2">
-            <ProjectMember member={{name: "Ms A Bloggs", email: "a.bloggs@test.com", roleName: "Team lead"}} qa="teamMember"/>
+            <ProjectContact contact={{id:"1", role:"Finance contact", projectId:"1", name: "Ms A Bloggs", email: "a.bloggs@test.com", roleName: "Team lead" }} qa="teamMember"/>
           </AccordionItem>
         </Accordion>
       )
