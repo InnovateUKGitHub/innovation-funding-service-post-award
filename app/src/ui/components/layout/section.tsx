@@ -17,10 +17,11 @@ const renderTitles = ({ title, subtitle, badge, subsection }: Props) => {
 
   const classes = classNames({ "govuk-grid-column-full": !badge, "govuk-grid-column-three-quarters": !!badge }, "govuk-!-margin-bottom-5");
   const Header =  subsection ? "h3" : "h2";
+  const headerClasses = { "govuk-!-margin-bottom-2": !!subtitle, "govuk-heading-m": !subsection, "govuk-heading-s": !!subsection };
 
   return (
     <div className={classes}>
-      {!!title ? <Header className={classNames("govuk-heading-m", { "govuk-!-margin-bottom-2": !!subtitle })}>{title}</Header> : null}
+      {!!title ? <Header className={classNames(headerClasses)}>{title}</Header> : null}
       {!!subtitle ? <SimpleString>{subtitle}</SimpleString> : null}
     </div>
   );

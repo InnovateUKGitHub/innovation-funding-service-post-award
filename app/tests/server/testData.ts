@@ -64,6 +64,8 @@ export class TestData {
       Acc_TotalProjectCosts__c: 0,
       Acc_TrackingClaimStatus__c: "",
       ClaimStatusName: "",
+      Acc_NumberofPeriods__c: 5,
+      Acc_Duration__c: 15
     };
 
     if (!!update) update(newItem);

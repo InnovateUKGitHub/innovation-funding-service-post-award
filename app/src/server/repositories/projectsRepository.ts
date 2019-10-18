@@ -22,6 +22,8 @@ export interface ISalesforceProject {
   Acc_TrackingClaimStatus__c: string;
   ClaimStatusName: string;
   Acc_NumberOfOpenClaims__c: number;
+  Acc_Duration__c: number;
+  Acc_NumberofPeriods__c: number;
 }
 
 export interface IProjectRepository {
@@ -54,7 +56,9 @@ export class ProjectRepository extends SalesforceRepositoryBase<ISalesforceProje
     "Acc_ClaimsUnderQuery__c",
     "Acc_TrackingClaimStatus__c",
     "toLabel(Acc_TrackingClaimStatus__c) ClaimStatusName",
-    "Acc_NumberOfOpenClaims__c"
+    "Acc_NumberOfOpenClaims__c",
+    "Acc_Duration__c",
+    "Acc_NumberofPeriods__c",
   ];
 
   getById(id: string) {
