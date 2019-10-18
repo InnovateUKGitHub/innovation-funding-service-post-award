@@ -37,8 +37,6 @@ class ProjectDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
     }
 
     private renderContents({ project, partners, contacts }: CombinedData) {
-        const DetailsSection = ACC.TypedDetails<ProjectDto>();
-
         const monitoringOfficer = contacts.find(x => x.role === "Monitoring officer");
         const projectManager = contacts.find(x => x.role === "Project Manager");
 
@@ -58,17 +56,18 @@ class ProjectDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
                 <ACC.Section title="Project members">
                     <ACC.ProjectMember member={monitoringOfficer} qa="monitoring-officer" />
                     <ACC.ProjectMember member={projectManager} qa="project-manager" />
-
-                    <ACC.PartnersAndFinanceContacts contacts={contacts} partners={partners} />
-
+                    <ACC.Section subsection={true} title="Finance contacts">
+                        <ACC.PartnersAndFinanceContacts contacts={contacts} partners={partners} />
+                    </ACC.Section>
                 </ACC.Section>
-
                 <ACC.Section title="Project information" qa="project-details">
-                    <DetailsSection.Details labelWidth="Narrow" data={project} qa="project-details">
-                        <DetailsSection.Date label="Project start date" qa="start-date" value={x => x.startDate} />
-                        <DetailsSection.Date label="Project end date" qa="end-date" value={x => x.endDate} />
-                        <DetailsSection.MultilineString label="Project summary" qa="summary" value={x => x.summary} />
-                    </DetailsSection.Details>
+                    <ACC.SummaryList qa="project-information">
+                        <ACC.SummaryListItem label="Project start date" qa="start-date" content={<ACC.Renderers.FullDate value={project.startDate} />} />
+                        <ACC.SummaryListItem label="Project end date" qa="end-date" content={<ACC.Renderers.FullDate value={project.endDate} />} />
+                        <ACC.SummaryListItem label="Duration" qa="duration" content={`${project.durationInMonths} ${project.durationInMonths === 1 ? "month" : "months"}`} />
+                        <ACC.SummaryListItem label="Number of periods" qa="periods" content={project.numberOfPeriods} />
+                        <ACC.SummaryListItem label="Project scope statement" qa="scope" content={project.summary} />
+                    </ACC.SummaryList>
                 </ACC.Section>
 
                 {/*

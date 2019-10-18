@@ -16,9 +16,9 @@ export const PartnersAndFinanceContacts: React.SFC<Props> = (props) => {
 
   return (
     <PartnersTable.Table qa="partner-details" data={partnersAndContactsData}>
+      <PartnersTable.String header="Name" value={x => x.financeContact && x.financeContact.name || ""} qa="fc-name" />
       <PartnersTable.String header="Partner" value={x => x.partner.isLead ? `${x.partner.name} (Lead)` : x.partner.name} qa="partner-name"/>
       <PartnersTable.String header="Partner type" value={x => x.partner.type} qa="partner-type"/>
-      <PartnersTable.String header="Finance Contact" value={x => x.financeContact && x.financeContact.name || ""} qa="fc-name" />
       <PartnersTable.Email header="Email" value={x => x.financeContact && x.financeContact.email || ""} qa="fc-email" />
     </PartnersTable.Table>
   );

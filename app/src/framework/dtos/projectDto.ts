@@ -47,6 +47,8 @@ export interface ProjectDto {
     claimsOverdue: number;
     claimsWithParticipant: number;
     numberOfOpenClaims: number;
+    durationInMonths: number;
+    numberOfPeriods: number;
 }
 
 export enum ProjectRole {
