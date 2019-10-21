@@ -25,7 +25,7 @@ const InnerStandardItemEdit = (props: Props & InnerProps) => {
   const Form = ACC.TypedForm<Dtos.PCRStandardItemDto>();
 
   const options: ACC.SelectOption[] = [
-    { id: "true", value: "This is ready to submit." }
+    { id: "true", value: "I have finished making changes." }
   ];
 
   return (

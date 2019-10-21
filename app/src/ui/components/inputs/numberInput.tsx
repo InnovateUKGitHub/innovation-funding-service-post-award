@@ -30,7 +30,6 @@ export class NumberInput extends BaseInput<NumberInputProps, NumberInputState> {
   public render() {
     const className = classNames(
       "govuk-input",
-      "govuk-table__cell--numeric",
       {
         "govuk-input--error": this.state.invalid,
         "govuk-!-width-one-quarter": this.props.width === "small",

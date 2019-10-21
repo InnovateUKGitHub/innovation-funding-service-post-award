@@ -17,8 +17,8 @@ const InnerContainer = (props: Props & InnerProps) => {
   return (
     <React.Fragment>
       <ACC.SummaryList qa="nameChangeSummaryList">
-        <ACC.SummaryListItem label="Current partner name" content={props.projectChangeRequestItem.partnerNameSnapshot} qa="currentPartnerName" />
-        <ACC.SummaryListItem label="New partner name" content={props.projectChangeRequestItem.accountName} qa="newPartnerName" />
+        <ACC.SummaryListItem label="Existing name" content={props.projectChangeRequestItem.partnerNameSnapshot} qa="currentPartnerName" />
+        <ACC.SummaryListItem label="Proposed name" content={props.projectChangeRequestItem.accountName} qa="newPartnerName" />
       </ACC.SummaryList>
       <ACC.Section title="Change of name certificate" subtitle={props.documents.length > 0 ? "All documents open in a new window." : ""} >
         {renderDocuments(props.documents)}
@@ -30,7 +30,7 @@ const InnerContainer = (props: Props & InnerProps) => {
 const renderDocuments = (documents: DocumentSummaryDto[]) => {
   return documents.length > 0
     ? <ACC.DocumentList documents={documents} qa="documentsList"/>
-    : <ACC.Renderers.SimpleString>No documents uploaded.</ACC.Renderers.SimpleString>;
+    : <ACC.ValidationMessage message="No documents uploaded." messageType="info" />;
 };
 
 export const NameChangeView = (props: Props) => (

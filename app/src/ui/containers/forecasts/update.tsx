@@ -50,8 +50,8 @@ class UpdateForecastComponent extends ContainerBase<Params, Data, Callbacks> {
           >
             <ACC.Claims.ForecastTable data={combined} editor={editor} />
             <Form.Fieldset>
+            <ACC.Claims.ClaimLastModified partner={combined.partner} />
               <Form.Submit>Submit</Form.Submit>
-              <ACC.Claims.ClaimLastModified partner={combined.partner} />
             </Form.Fieldset>
           </Form.Form>
         </ACC.Section>
