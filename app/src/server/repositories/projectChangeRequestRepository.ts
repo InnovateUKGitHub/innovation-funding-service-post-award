@@ -47,6 +47,9 @@ export interface ISalesforcePCR {
   Acc_NewProjectEndDate__c: string|null;
   Acc_SuspensionStarts__c: string|null;
   Acc_SuspensionEnds__c: string|null;
+  Acc_PublicDescriptionSnapshot__c: string|null;
+  Acc_ProjectSummarySnapshot__c: string|null;
+  Acc_ExistingPartnerName__c: string|null;
 }
 
 export class ProjectChangeRequestRepository extends SalesforceRepositoryBase<ISalesforcePCR> implements IProjectChangeRequestRepository {
@@ -78,7 +81,10 @@ export class ProjectChangeRequestRepository extends SalesforceRepositoryBase<ISa
     "toLabel(Acc_MarkedAsComplete__c) MarkedAsCompleteName",
     "Acc_Comments__c",
     "Acc_SuspensionStarts__c",
-    "Acc_SuspensionEnds__c"
+    "Acc_SuspensionEnds__c",
+    "Acc_PublicDescriptionSnapshot__c",
+    "Acc_ProjectSummarySnapshot__c",
+    "Acc_ExistingPartnerName__c",
   ];
 
   async getAllByProjectId(projectId: string): Promise<ProjectChangeRequestEntity[]> {
