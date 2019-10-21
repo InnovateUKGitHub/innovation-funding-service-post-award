@@ -1,12 +1,12 @@
 import React from "react";
 import { Page } from "./layout/page";
-import { Title } from "./layout/title";
 import { Section } from "./layout/section";
 import { SimpleString } from "./renderers/simpleString";
+import { PageTitle } from "@ui/components/layout";
 
 export const NotFoundErrorPage = () => (
   <Page
-    pageTitle={<Title title="Page not found"/>}
+    pageTitle={<PageTitle title="Page not found" />}
     backLink={null}
   >
     <Section>

@@ -1,6 +1,6 @@
 import "jest";
 import React from "react";
-import { Title } from "../../../src/ui/components/layout/title";
+import { PageTitle } from "../../../src/ui/components/layout/pageTitle";
 
 import Enzyme, { mount } from "enzyme";
 import Adapter from "enzyme-adapter-react-16";
@@ -8,7 +8,7 @@ import { IStores, StoresProvider } from "@ui/redux";
 
 Enzyme.configure({ adapter: new Adapter() });
 
-describe("Title", () => {
+describe("PageTitle", () => {
     const stores: IStores = {
         navigation: {
             getPageTitle: () => ({ displayTitle: "a test title", htmlTitle: "" })
@@ -19,7 +19,7 @@ describe("Title", () => {
 
         const result = (
             <StoresProvider value={stores}>
-                <Title/>
+                <PageTitle/>
             </StoresProvider>
         );
 
@@ -29,24 +29,10 @@ describe("Title", () => {
             .toBeTruthy();
     });
 
-    it("should render title from props", () => {
-
-        const result = (
-            <StoresProvider value={stores}>
-                <Title title="The custom title"/>
-            </StoresProvider>
-        );
-
-        const wrapper = mount(result);
-        expect(wrapper
-            .containsMatchingElement(<h1 className="govuk-heading-xl clearFix">The custom title</h1>))
-            .toBeTruthy();
-    });
-
     it("should render caption", () => {
         const result = (
             <StoresProvider value={stores}>
-                <Title caption="a test caption" />
+                <PageTitle caption="a test caption" />
             </StoresProvider>
         );
 
@@ -60,7 +46,7 @@ describe("Title", () => {
 
         const result = (
             <StoresProvider value={stores}>
-                <Title />
+                <PageTitle />
             </StoresProvider>
         );
 

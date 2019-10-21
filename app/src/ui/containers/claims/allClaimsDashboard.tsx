@@ -102,8 +102,8 @@ class Component extends ContainerBaseWithState<AllClaimsDashboardParams, Data, C
         <Acc.Renderers.Messages messages={this.props.messages} />
         <Acc.Section qa="current-claims-section" title="Open">
           {this.renderCurrentClaimsPerPeriod(currentClaims, projectDetails, partners)}
+          {isFC && leadPartner && this.renderIarDocumentSectionLoader(currentClaims.find(x => x.partnerId === leadPartner.id))}
         </Acc.Section>
-        {isFC && leadPartner && this.renderIarDocumentSectionLoader(currentClaims.find(x => x.partnerId === leadPartner.id))}
         <Acc.Section qa="closed-claims-section" title="Closed">
           {this.renderPreviousClaimsSections(projectDetails, partners, previousClaims)}
         </Acc.Section>
@@ -162,7 +162,7 @@ class Component extends ContainerBaseWithState<AllClaimsDashboardParams, Data, C
     const badge = hasClaimNotYetSubmittedToInnovate && <Acc.Claims.ClaimWindow periodEnd={currentInfo.end} />;
 
     return (
-      <Acc.Section title={title} qa="current-claims-section" badge={badge} key={index} subsection={true}>
+      <Acc.Section title={title} qa="current-claims-section" badge={badge} key={index} >
         <ClaimTable.Table
           data={currentInfo.claims}
           bodyRowFlag={x => this.getBodyRowFlag(x, project, partners) ? "edit" : null}

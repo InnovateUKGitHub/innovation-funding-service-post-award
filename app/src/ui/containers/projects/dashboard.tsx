@@ -60,7 +60,7 @@ class ProjectDashboardComponent extends ContainerBaseWithState<{}, Data, {}, Sta
     return (
       <ACC.Page
         backLink={this.getBackLink()}
-        pageTitle={<ACC.Title />}
+        pageTitle={<ACC.PageTitle />}
       >
         {this.renderContents(projects, partners)}
       </ACC.Page>
