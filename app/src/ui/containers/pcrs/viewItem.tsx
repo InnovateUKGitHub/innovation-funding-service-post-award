@@ -62,7 +62,7 @@ class PCRViewItemComponent extends ContainerBase<Params, Data, Callbacks> {
         case PCRItemType.TimeExtension:
           return <Items.TimeExtensionView project={project} projectChangeRequest={pcr} projectChangeRequestItem={item} />;
         case PCRItemType.ScopeChange:
-          return <Items.ScopeChangeView project={project} projectChangeRequest={pcr} projectChangeRequestItem={item} />;
+          return <Items.ScopeChangeView projectChangeRequest={pcr} projectChangeRequestItem={item} />;
         case PCRItemType.ProjectSuspension:
             return <Items.ProjectSuspensionView project={project} projectChangeRequest={pcr} projectChangeRequestItem={item} />;
         case PCRItemType.AccountNameChange:

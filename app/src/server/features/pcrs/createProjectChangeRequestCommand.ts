@@ -67,11 +67,11 @@ export class CreateProjectChangeRequestCommand extends CommandBase<string> {
       case PCRItemType.TimeExtension:
           return { ...init, projectEndDate: itemDto.projectEndDate };
       case PCRItemType.ScopeChange:
-          return { ...init, projectSummary: itemDto.projectSummary, publicDescription: itemDto.publicDescription, publicDescriptionSnapshot: itemDto.publicDescriptionSnapshot, projectSummarySnapshot: itemDto.projectSummarySnapshot };
+          return { ...init, projectSummary: itemDto.projectSummary, publicDescription: itemDto.publicDescription };
       case PCRItemType.ProjectSuspension:
           return { ...init, suspensionStartDate: itemDto.suspensionStartDate, suspensionEndDate: itemDto.suspensionEndDate };
       case PCRItemType.AccountNameChange:
-          return { ...init, accountName: itemDto.accountName, partnerId: itemDto.partnerId, existingPartnerName: itemDto.existingPartnerName };
+          return { ...init, accountName: itemDto.accountName, partnerId: itemDto.partnerId };
       default:
         return init;
     }

@@ -6,7 +6,6 @@ import { PCRScopeChangeItemDtoValidator } from "@ui/validators";
 import { PCRItemStatus } from "@framework/constants";
 
 interface Props {
-  project: ProjectDto;
   projectChangeRequestItem: PCRItemForScopeChangeDto;
   validator: PCRScopeChangeItemDtoValidator;
   status: EditorStatus;
@@ -31,7 +30,7 @@ export const ScopeChangeEdit = (props: Props) => {
         qa="scopeChange"
       >
         <Form.Fieldset heading="Proposed public description">
-          <ACC.Info summary="Published public description"><ACC.Renderers.SimpleString multiline={true}>{props.project.description}</ACC.Renderers.SimpleString></ACC.Info>
+          <ACC.Info summary="Published public description"><ACC.Renderers.SimpleString multiline={true}>{props.projectChangeRequestItem.publicDescriptionSnapshot}</ACC.Renderers.SimpleString></ACC.Info>
           <Form.MultilineString
             name="description"
             value={m => m.publicDescription}
@@ -42,7 +41,7 @@ export const ScopeChangeEdit = (props: Props) => {
           />
         </Form.Fieldset>
         <Form.Fieldset heading="Proposed public summary">
-          <ACC.Info summary="Published public summary"><ACC.Renderers.SimpleString multiline={true}>{props.project.summary}</ACC.Renderers.SimpleString></ACC.Info>
+          <ACC.Info summary="Published public summary"><ACC.Renderers.SimpleString multiline={true}>{props.projectChangeRequestItem.projectSummarySnapshot}</ACC.Renderers.SimpleString></ACC.Info>
           <Form.MultilineString
             name="summary"
             value={m => m.projectSummary}
