@@ -47,6 +47,9 @@ export class SalesforcePCRMapper extends SalesforceBaseMapper<ISalesforcePCR[], 
       projectSummary: pcrItem.Acc_NewProjectSummary__c,
       suspensionStartDate: this.clock.parseOptionalSalesforceDate(pcrItem.Acc_SuspensionStarts__c),
       suspensionEndDate: this.clock.parseOptionalSalesforceDate(pcrItem.Acc_SuspensionEnds__c),
+      publicDescriptionSnapshot: pcrItem.Acc_PublicDescriptionSnapshot__c,
+      projectSummarySnapshot: pcrItem.Acc_ProjectSummarySnapshot__c,
+      partnerNameSnapshot: pcrItem.Acc_ExistingPartnerName__c,
     };
   }
 

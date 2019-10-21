@@ -1,4 +1,4 @@
-// tslint:disable:no-identical-functions no-duplicate-string
+// tslint:disable:no-identical-functions no-duplicate-string no-big-function
 import { TestContext } from "../../testContextProvider";
 import { GetPCRByIdQuery } from "@server/features/pcrs/getPCRByIdQuery";
 import { DateTime } from "luxon";
@@ -137,10 +137,14 @@ describe("GetPCRByIdQuery", () => {
 
     const projectSummary = "This is a summary of the project";
     const publicDescription = "This is a public description";
+    const projectSummarySnapshot = "This is a summary snapshot";
+    const publicDescriptionSnapshot = "This is a description snapshot";
 
     const item = context.testData.createPCRItem(pcr, recordType, {
       projectSummary,
-      publicDescription
+      publicDescription,
+      projectSummarySnapshot,
+      publicDescriptionSnapshot,
     });
 
     const query = new GetPCRByIdQuery(pcr.projectId, pcr.id);
@@ -149,6 +153,8 @@ describe("GetPCRByIdQuery", () => {
     expect(result.id).toBe(item.id);
     expect(result.projectSummary).toBe(projectSummary);
     expect(result.publicDescription).toBe(publicDescription);
+    expect(result.publicDescriptionSnapshot).toBe(publicDescriptionSnapshot);
+    expect(result.projectSummarySnapshot).toBe(projectSummarySnapshot);
   });
 
   test("maps fields for account name change", async () => {
@@ -162,10 +168,12 @@ describe("GetPCRByIdQuery", () => {
     const pcr = context.testData.createPCR(project);
 
     const accountName = "Projectus Partnerus The Bestus";
+    const partnerNameSnapshot = "Projectus Monitoringus the Officerus";
 
     const item = context.testData.createPCRItem(pcr, recordType, {
       accountName,
-      partnerId: partner.Id
+      partnerNameSnapshot,
+      partnerId: partner.Id,
     });
 
     const query = new GetPCRByIdQuery(pcr.projectId, pcr.id);
@@ -173,6 +181,7 @@ describe("GetPCRByIdQuery", () => {
 
     expect(result.id).toBe(item.id);
     expect(result.accountName).toBe(accountName);
+    expect(result.partnerNameSnapshot).toBe(partnerNameSnapshot);
     expect(result.partnerId).toBe(partner.Id);
   });
 

@@ -85,6 +85,8 @@ const mapItemForScopeChange = (pcr: ProjectChangeRequestItemEntity, typeName: st
   ...mapBaseItem(pcr, typeName),
   projectSummary: pcr.projectSummary || null,
   publicDescription: pcr.publicDescription || null,
+  projectSummarySnapshot: pcr.projectSummarySnapshot || null,
+  publicDescriptionSnapshot: pcr.publicDescriptionSnapshot || null,
   type
 });
 
@@ -99,5 +101,6 @@ const mapItemForAccountNameChange = (pcr: ProjectChangeRequestItemEntity, typeNa
   ...mapBaseItem(pcr, typeName),
   accountName: pcr.accountName || null,
   partnerId: pcr.partnerId || null,
+  partnerNameSnapshot: pcr.partnerNameSnapshot || null,
   type
 });
