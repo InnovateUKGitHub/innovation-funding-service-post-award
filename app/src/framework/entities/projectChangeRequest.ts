@@ -34,9 +34,6 @@ export interface ProjectChangeRequestItemForCreateEntity {
   suspensionStartDate?: Date | null;
   suspensionEndDate?: Date | null;
   partnerId?: string | null;
-  publicDescriptionSnapshot?: string | null;
-  projectSummarySnapshot?: string | null;
-  existingPartnerName?: string | null;
 }
 
 export interface ProjectChangeRequestItemEntity extends ProjectChangeRequestItemForCreateEntity {
