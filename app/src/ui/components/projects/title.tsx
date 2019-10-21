@@ -1,6 +1,6 @@
 import React from "react";
 import { ProjectDto } from "@framework/types";
-import { Title as PageTitle } from "../layout/title";
+import { PageTitle } from "../layout/pageTitle";
 
 interface Props {
   project: ProjectDto;

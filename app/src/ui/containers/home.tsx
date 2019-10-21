@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, Title, TypedForm } from "../components";
+import { Link, PageTitle, TypedForm } from "../components";
 import { BaseProps, ContainerBaseWithState, ContainerProps, defineRoute, } from "./containerBase";
 import { SimpleString } from "../components/renderers";
 import { Authorisation } from "@framework/types";
@@ -25,7 +25,7 @@ class Component extends ContainerBaseWithState<{}, Data, {}, State> {
     const CurrentUserForm = TypedForm<typeof formData>();
     return (
       <div>
-        <Title />
+        <PageTitle />
         <div className="govuk-grid-row">
           <div className="govuk-grid-column-full">
             <h2>Current user</h2>

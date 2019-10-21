@@ -10,7 +10,7 @@ interface Data {
   storePageTitle: string;
 }
 
-class TitleComponent extends React.Component<Props & Data> {
+class PageTitleComponent extends React.Component<Props & Data> {
   render() {
 
     return (
@@ -27,8 +27,8 @@ class TitleComponent extends React.Component<Props & Data> {
   }
 }
 
-export const Title = (props: Props) => (
+export const PageTitle = (props: Props) => (
   <StoresConsumer>
-    {stores => <TitleComponent storePageTitle={stores.navigation.getPageTitle().displayTitle} {...props}/>}
+    {stores => <PageTitleComponent storePageTitle={stores.navigation.getPageTitle().displayTitle} {...props}/>}
   </StoresConsumer>
 );
