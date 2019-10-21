@@ -180,7 +180,8 @@ export class ProjectChangeRequestStore extends StoreBase {
           ...baseFields,
           type: itemType.type,
           partnerId: null,
-          accountName: null
+          accountName: null,
+          partnerNameSnapshot: ""
         };
       case PCRItemType.TimeExtension:
         return {
@@ -193,7 +194,9 @@ export class ProjectChangeRequestStore extends StoreBase {
           ...baseFields,
           type: itemType.type,
           publicDescription: "",
-          projectSummary: ""
+          projectSummary: "",
+          projectSummarySnapshot: "",
+          publicDescriptionSnapshot: "",
         };
       case PCRItemType.ProjectSuspension:
         return {

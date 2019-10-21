@@ -67,6 +67,8 @@ export interface PCRItemForScopeChangeDto extends PCRItemBaseDto {
   type: PCRItemType.ScopeChange;
   publicDescription: string | null;
   projectSummary: string | null;
+  publicDescriptionSnapshot: string | null;
+  projectSummarySnapshot: string | null;
 }
 
 export interface PCRItemForProjectSuspensionDto extends PCRItemBaseDto {
@@ -79,6 +81,7 @@ export interface PCRItemForAccountNameChangeDto extends PCRItemBaseDto {
   type: PCRItemType.AccountNameChange;
   accountName: string | null;
   partnerId: string | null;
+  partnerNameSnapshot: string | null;
 }
 
 export interface PCRItemForProjectTerminationDto extends PCRItemBaseDto {

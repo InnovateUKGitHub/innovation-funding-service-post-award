@@ -41,4 +41,7 @@ export interface ProjectChangeRequestItemEntity extends ProjectChangeRequestItem
   statusName: string;
   guidance: string;
   pcrId: string;
+  publicDescriptionSnapshot?: string | null;
+  projectSummarySnapshot?: string | null;
+  partnerNameSnapshot?: string | null;
 }
