@@ -635,6 +635,9 @@ export class TestData {
       statusName: "Complete",
       suspensionStartDate: null,
       suspensionEndDate: null,
+      projectSummarySnapshot: "",
+      publicDescriptionSnapshot: "",
+      partnerNameSnapshot: ""
     };
 
     if (update) {
