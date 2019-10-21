@@ -42,6 +42,7 @@ class ViewForecastComponent extends ContainerBase<Params, Data, {}> {
         <ACC.Section qa="viewForecastUpdate">
           {this.renderUpdateSection(data.project, data.partner)}
           <ACC.Claims.ClaimLastModified partner={data.partner} />
+          {this.renderUpdateSection(data.project, data.partner)}
         </ACC.Section>
       </ACC.Page>
     );

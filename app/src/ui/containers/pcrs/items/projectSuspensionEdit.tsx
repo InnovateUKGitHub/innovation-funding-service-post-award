@@ -18,7 +18,7 @@ export const ProjectSuspensionEdit = (props: Props) => {
   const Form = ACC.TypedForm<PCRItemForProjectSuspensionDto>();
 
   const options: ACC.SelectOption[] = [
-    { id: "true", value: "This is ready to submit." }
+    { id: "true", value: "I have finished making changes." }
   ];
 
   return (
@@ -30,7 +30,7 @@ export const ProjectSuspensionEdit = (props: Props) => {
         onSubmit={() => props.onSave()}
         qa="projectSuspension"
       >
-        <Form.Fieldset heading="Project pauses">
+        <Form.Fieldset heading="First day of pause">
           <Form.MonthYear
             name="suspensionStartDate"
             value={m => m.suspensionStartDate}
@@ -40,7 +40,7 @@ export const ProjectSuspensionEdit = (props: Props) => {
             startOrEnd="start"
           />
         </Form.Fieldset>
-        <Form.Fieldset heading="Project restarts (if known)">
+        <Form.Fieldset heading="Last day of pause (if known)">
           <Form.MonthYear
             name="suspensionEndDate"
             value={m => m.suspensionEndDate}

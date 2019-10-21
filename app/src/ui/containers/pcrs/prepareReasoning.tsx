@@ -49,12 +49,12 @@ class PCRPrepareReasoningComponent extends ContainerBase<ProjectChangeRequestPre
     );
 
     const options: ACC.SelectOption[] = [
-      { id: "true", value: "This is ready to submit" }
+      { id: "true", value: "I have finished making changes." }
     ];
 
     return (
       <ACC.Page
-        backLink={<ACC.BackLink route={this.props.routes.pcrPrepare.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId })}>Back to prepare project change request</ACC.BackLink>}
+        backLink={<ACC.BackLink route={this.props.routes.pcrPrepare.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId })}>Back to request</ACC.BackLink>}
         pageTitle={<ACC.Projects.Title project={project} />}
         project={project}
         validator={[editor.validator]}

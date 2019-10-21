@@ -41,7 +41,7 @@ class PrepareReasoningFilesComponent extends ContainerBase<Params, Data, Callbac
   private renderContents(project: ProjectDto, pcr: PCRDto, documents: DocumentSummaryDto[], documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>): React.ReactNode {
     return (
       <ACC.Page
-        backLink={<ACC.BackLink route={this.props.routes.pcrPrepareReasoning.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId })}>Back to provide reasoning</ACC.BackLink>}
+        backLink={<ACC.BackLink route={this.props.routes.pcrPrepareReasoning.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId })}>Back to request</ACC.BackLink>}
         pageTitle={<ACC.Projects.Title project={project} />}
         project={project}
         error={documentsEditor.error}
@@ -92,7 +92,7 @@ class PrepareReasoningFilesComponent extends ContainerBase<Params, Data, Callbac
     }
     return (
       <ACC.Section  title="Files uploaded">
-        <ACC.Renderers.SimpleString>No documents uploaded.</ACC.Renderers.SimpleString>
+        <ACC.ValidationMessage message="No documents uploaded." messageType="info" />
       </ACC.Section>
     );
   }

@@ -11,7 +11,7 @@ interface Props {
 
 export const ProjectSuspensionView = (props: Props) => (
   <ACC.SummaryList qa="projectSuspension">
-    <ACC.SummaryListItem label="Start date" content={<ACC.Renderers.ShortDate value={props.projectChangeRequestItem.suspensionStartDate}/>} qa="startDate" />
-    <ACC.SummaryListItem label="End date" content={props.projectChangeRequestItem.suspensionEndDate ? <ACC.Renderers.ShortDate value={props.projectChangeRequestItem.suspensionEndDate}/> : "Not set"} qa="endDate" />
+    <ACC.SummaryListItem label="First day of pause" content={<ACC.Renderers.ShortDate value={props.projectChangeRequestItem.suspensionStartDate}/>} qa="startDate" />
+    <ACC.SummaryListItem label="Last day of pause (if known)" content={props.projectChangeRequestItem.suspensionEndDate ? <ACC.Renderers.ShortDate value={props.projectChangeRequestItem.suspensionEndDate}/> : "Not set"} qa="endDate" />
   </ACC.SummaryList>
 );
