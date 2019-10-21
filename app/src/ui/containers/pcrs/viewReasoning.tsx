@@ -88,6 +88,7 @@ export const PCRViewReasoningRoute = defineRoute<Params>({
   }),
   container: (params) => <PCRViewReasoningContainer isReviewing={false} {...params} />,
   getTitle: () => ({
+    // tslint:disable-next-line no-duplicate-string
     htmlTitle: "Reasoning for Innovate UK",
     displayTitle: "Reasoning for Innovate UK"
   }),

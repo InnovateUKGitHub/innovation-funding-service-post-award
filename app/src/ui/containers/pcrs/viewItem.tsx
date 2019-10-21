@@ -121,6 +121,7 @@ export const PCRReviewItemRoute = defineRoute<Params>({
     pcrId: route.params.pcrId,
     itemId: route.params.itemId
   }),
+  // tslint:disable-next-line no-identical-functions
   getTitle: (store, params, stores) => {
     const typeName = stores.projectChangeRequests.getItemById(params.projectId, params.pcrId, params.itemId).then(x => x.typeName).data;
     return {
