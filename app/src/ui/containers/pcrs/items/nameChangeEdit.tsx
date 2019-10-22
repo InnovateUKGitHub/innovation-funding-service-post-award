@@ -33,7 +33,7 @@ const InnerContainer = (props: Props & InnerProps) => {
     }
   ));
   const selectedPartnerOption = partnerOptions.find(x => x.id === props.projectChangeRequestItem.partnerId);
-  const isCompleteOptions = [{ id: "true", value: "This is ready to submit." }];
+  const isCompleteOptions = [{ id: "true", value: "I have finished making changes." }];
 
   return (
     <ACC.Section>
@@ -63,7 +63,7 @@ const InnerContainer = (props: Props & InnerProps) => {
           />
         </Form.Fieldset>
         <Form.Fieldset heading="Change of name certificate">
-          {props.documents.length > 0 ? <DocumentList documents={props.documents} qa="supporting-documents" /> : <ACC.Renderers.SimpleString>No documents uploaded.</ACC.Renderers.SimpleString>}
+          {props.documents.length > 0 ? <DocumentList documents={props.documents} qa="supporting-documents" /> : <ACC.ValidationMessage message="No documents uploaded." messageType="info" />}
           <ACC.Link
             styling="SecondaryButton"
             route={props.routes.pcrPrepareFiles.getLink({projectId: props.project.id, pcrId: props.projectChangeRequest.id, itemId: props.projectChangeRequestItem.id})}
@@ -74,7 +74,7 @@ const InnerContainer = (props: Props & InnerProps) => {
         <Form.Fieldset heading="Mark as complete">
           <Form.Checkboxes
             name="itemStatus"
-            options={[{ id: "true", value: "This is ready to submit." }]}
+            options={[{ id: "true", value: "I have finished making changes." }]}
             value={x => x.status === PCRItemStatus.Complete ? isCompleteOptions : []}
             update={(x, value) => x.status = (value && value.some(y => y.id === "true")) ? PCRItemStatus.Complete : PCRItemStatus.Incomplete}
           />

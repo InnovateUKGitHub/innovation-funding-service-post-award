@@ -78,12 +78,8 @@ class ProjectDocumentsComponent extends ContainerBaseWithState<ProjectDocumentPa
             <UploadForm.Fieldset heading="Upload">
               <ACC.Info summary="What should I include?">
                 <p>You can upload and store any documents relevant for this project. Any documents added to the project by Innovate UK will also be visible here.</p>
-                <p>There is no restriction on the type of file you can upload.</p>
-                <p>Each document must be:</p>
-                <ul>
-                  <li>less than {getFileSize(this.props.config.maxFileSize)} in file size</li>
-                  <li>given a unique file name that describes its contents</li>
-                </ul>
+                <p>You can upload up to 10 files of any type at one time, as long as their combined size is less than {getFileSize(this.props.config.maxFileSize)}.</p>
+                <p>There is no limit to the number of files you can upload in total.</p>
               </ACC.Info>
               <UploadForm.MulipleFileUpload
                 label="Upload documents"
@@ -116,7 +112,7 @@ class ProjectDocumentsComponent extends ContainerBaseWithState<ProjectDocumentPa
       : documents;
 
     if (documents.length === 0) {
-      return <ACC.Renderers.SimpleString qa={"noDocuments"}>No documents uploaded.</ACC.Renderers.SimpleString>;
+      return <ACC.ValidationMessage qa={"noDocuments"} message="No documents uploaded." messageType="info" />;
     }
 
     if (documentsToDisplay.length === 0) {

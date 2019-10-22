@@ -57,7 +57,7 @@ class DashboardComponent extends ContainerBase<Params, Data, Callbacks> {
         project={project}
       >
         <ACC.Renderers.Messages messages={this.props.messages} />
-        <ACC.Renderers.SimpleString>You should submit reports for this project according to the schedule agreed with your Monitoring Portfolio Executive.</ACC.Renderers.SimpleString>
+        <ACC.Renderers.SimpleString>You should submit reports for this project according to the schedule agreed with Innovate UK.</ACC.Renderers.SimpleString>
         <ACC.Link route={this.props.routes.monitoringReportCreate.getLink({ projectId: this.props.projectId })} className="govuk-button">Start a new report</ACC.Link>
         <ACC.Section title={"Open"}>
           {reportSections.open.length ? this.renderTable(project, reportSections.open, "current") : null}

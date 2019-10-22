@@ -99,10 +99,10 @@ class PCRPrepareComponent extends ContainerBase<ProjectChangeRequestPrepareParam
           onChange={dto => this.props.onChange(false, dto)}
           onSubmit={() => this.onSave(editor, projectChangeRequest, true)}
         >
-          <Form.Fieldset heading="Add comments for your monitoring officer">
+          <Form.Fieldset heading="Add comments">
             <Form.MultilineString
               name="comments"
-              hint="Leave this field empty if there is nothing to add."
+              hint="If you want to explain anything to your monitoring officer or to Innovate UK, add it here."
               value={x => x.comments}
               update={(m, v) => m.comments = v || ""}
               validation={editor.validator.comments}
@@ -110,7 +110,7 @@ class PCRPrepareComponent extends ContainerBase<ProjectChangeRequestPrepareParam
             />
           </Form.Fieldset>
           <Form.Fieldset qa="save-and-submit">
-            <Form.Submit>Submit request to monitoring officer</Form.Submit>
+            <Form.Submit>Submit request</Form.Submit>
           </Form.Fieldset>
           <Form.Fieldset qa="save-and-return">
             <Form.Button name="return" onClick={() => this.onSave(editor, projectChangeRequest, false)}>Save and return to requests</Form.Button>
@@ -125,7 +125,7 @@ class PCRPrepareComponent extends ContainerBase<ProjectChangeRequestPrepareParam
     const editableItems = projectChangeRequest.items.filter(x => editableItemTypes.indexOf(x.type) > -1);
 
     return (
-      <ACC.TaskListSection step={1} title="What do you want to do?" qa="WhatDoYouWantToDo">
+      <ACC.TaskListSection step={1} title="Give us information" qa="WhatDoYouWantToDo">
         {editableItems.map((x, i) => this.getItemTasks(x, editor, i))}
       </ACC.TaskListSection>
     );
@@ -136,7 +136,7 @@ class PCRPrepareComponent extends ContainerBase<ProjectChangeRequestPrepareParam
     const stepCount = editableItems.length ? 2 : 1;
 
     return (
-      <ACC.TaskListSection step={stepCount} title="Give more details" validation={[editor.validator.reasoningStatus, editor.validator.reasoningComments]} qa="reasoning">
+      <ACC.TaskListSection step={stepCount} title="Explain why you want to make the changes" validation={[editor.validator.reasoningStatus, editor.validator.reasoningComments]} qa="reasoning">
         <ACC.Task
           name="Provide reasoning to Innovate UK"
           status={this.getTaskStatus(projectChangeRequest.reasoningStatus)}

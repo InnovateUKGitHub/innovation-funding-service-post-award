@@ -35,8 +35,8 @@ class PCRViewReasoningComponent extends ContainerBase<Params, Data, Callbacks> {
 
   private renderContents(project: ProjectDto, pcr: PCRDto, files: DocumentSummaryDto[], editableItemTypes: PCRItemType[]) {
     const backLink = this.props.isReviewing ?
-      <ACC.BackLink route={this.props.routes.pcrReview.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId })}>Back to review project change request</ACC.BackLink> :
-      <ACC.BackLink route={this.props.routes.pcrDetails.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId })}>Back to project change request details</ACC.BackLink>
+      <ACC.BackLink route={this.props.routes.pcrReview.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId })}>Back to request</ACC.BackLink> :
+      <ACC.BackLink route={this.props.routes.pcrDetails.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId })}>Back to request</ACC.BackLink>
       ;
     return (
       <ACC.Page
@@ -44,7 +44,7 @@ class PCRViewReasoningComponent extends ContainerBase<Params, Data, Callbacks> {
         pageTitle={<ACC.Projects.Title project={project} />}
         project={project}
       >
-        <ACC.Section title="Details">
+        <ACC.Section>
           <ACC.SummaryList qa="pcr_reasoning">
             <ACC.SummaryListItem label="Request number" content={pcr.requestNumber} qa="numberRow" />
             <ACC.SummaryListItem label="Types" content={<ACC.Renderers.LineBreakList items={pcr.items.map(x => x.typeName)}/>} qa="typesRow" />
@@ -88,8 +88,9 @@ export const PCRViewReasoningRoute = defineRoute<Params>({
   }),
   container: (params) => <PCRViewReasoningContainer isReviewing={false} {...params} />,
   getTitle: () => ({
-    htmlTitle: "Project change request reasoning",
-    displayTitle: "Project change request reasoning"
+    // tslint:disable-next-line no-duplicate-string
+    htmlTitle: "Reasoning for Innovate UK",
+    displayTitle: "Reasoning for Innovate UK"
   }),
   accessControl: (auth, { projectId }, config) => config.features.pcrsEnabled && auth.forProject(projectId).hasAnyRoles(ProjectRole.ProjectManager, ProjectRole.MonitoringOfficer)
 });
@@ -103,8 +104,8 @@ export const PCRReviewReasoningRoute = defineRoute<Params>({
     pcrId: route.params.pcrId
   }),
   getTitle: () => ({
-    htmlTitle: "Review project change request reasoning",
-    displayTitle: "Review project change request reasoning"
+    htmlTitle: "Reasoning for Innovate UK",
+    displayTitle: "Reasoning for Innovate UK"
   }),
   accessControl: (auth, { projectId }, config) => config.features.pcrsEnabled && auth.forProject(projectId).hasAnyRoles(ProjectRole.MonitoringOfficer)
 });

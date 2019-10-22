@@ -18,7 +18,7 @@ export const TimeExtensionEdit = (props: Props) => {
   const Form = ACC.TypedForm<PCRItemForTimeExtensionDto>();
 
   const options: ACC.SelectOption[] = [
-    { id: "true", value: "This is ready to submit." }
+    { id: "true", value: "I have finished making changes." }
   ];
 
   return (

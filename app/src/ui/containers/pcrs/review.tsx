@@ -69,8 +69,8 @@ class PCRReviewComponent extends ContainerBase<PCRReviewParams, Data, Callbacks>
     const Form = ACC.TypedForm<PCRDto>();
 
     const options: ACC.SelectOption[] = [
-      { id: PCRStatus.QueriedByMonitoringOfficer.toString(), value: "Query with project manager" },
-      { id: PCRStatus.SubmittedToInnovationLead.toString(), value: "Send to Innovate UK for approval" },
+      { id: PCRStatus.QueriedByMonitoringOfficer.toString(), value: "Query the request" },
+      { id: PCRStatus.SubmittedToInnovationLead.toString(), value: "Send for approval" },
     ];
 
     const selected = options.find(x => x.id === editor.data.status.toString());
@@ -101,10 +101,12 @@ class PCRReviewComponent extends ContainerBase<PCRReviewParams, Data, Callbacks>
               update={(m, v) => m.status = parseInt(v && v.id || "", 10) || PCRStatus.Unknown}
               validation={editor.validator.status}
             />
+          </Form.Fieldset>
+          <Form.Fieldset heading="Add your comments">
             <Form.MultilineString
               name="comments"
-              label="Add your comments"
-              hint="If you query the request, you must explain what the partner needs to amend. If you are sending it to Innovate UK, you must say that you recommend the request for approval and why."
+              label=""
+              hint="If you query the request, you must explain what the partner needs to amend. If you are sending it to Innovate UK, you must say whether you approve of the request, giving a reason why."
               value={m => m.comments}
               update={(m, v) => m.comments = (v || "")}
               validation={editor.validator.comments}

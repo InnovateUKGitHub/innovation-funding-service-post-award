@@ -95,8 +95,8 @@ export class PrepareComponent extends ContainerBase<PrepareClaimParams, Data, Ca
 
   private renderDetailsTab(data: CombinedData) {
     const Form = ACC.TypedForm<ClaimDto>();
-    const commentsLabel = "Additional information";
-    const commentsHint = "Explain any difference between a category's forecast and its claim, and answer any queries after you submit your claim.";
+    const commentsLabel = "Add comments";
+    const commentsHint = "If you want to explain anything to your monitoring officer or to Innovate UK, add it here.";
 
     return (
       <ACC.Section title={this.getClaimPeriodTitle(data)}>

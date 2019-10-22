@@ -45,7 +45,7 @@ class PCRPrepareItemComponent extends ContainerBase<ProjectChangeRequestPrepareI
   private renderContents(project: ProjectDto, pcr: PCRDto, pcrItem: PCRItemDto, pcrItemType: PCRItemTypeDto,editor: IEditorStore<PCRDto, Validators.PCRDtoValidator>) {
     return (
       <ACC.Page
-        backLink={<ACC.BackLink route={this.props.routes.pcrPrepare.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId })}>Back to prepare project change request</ACC.BackLink>}
+        backLink={<ACC.BackLink route={this.props.routes.pcrPrepare.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId })}>Back to request</ACC.BackLink>}
         pageTitle={<ACC.Projects.Title project={project} />}
         project={project}
         error={editor.error}
