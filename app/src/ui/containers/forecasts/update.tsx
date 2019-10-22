@@ -40,7 +40,7 @@ class UpdateForecastComponent extends ContainerBase<Params, Data, Callbacks> {
         pageTitle={<ACC.Projects.Title project={combined.project} />}
       >
         <ACC.Section title="" qa="partner-forecast" >
-          <ACC.Forecasts.Warning {...combined} editor={editor}/>
+          <ACC.Forecasts.Warning {...combined} editor={editor} />
           {this.renderOverheadsRate(combined.partner.overheadRate)}
           <Form.Form
             editor={editor}
@@ -50,7 +50,7 @@ class UpdateForecastComponent extends ContainerBase<Params, Data, Callbacks> {
           >
             <ACC.Claims.ForecastTable data={combined} editor={editor} />
             <Form.Fieldset>
-            <ACC.Claims.ClaimLastModified partner={combined.partner} />
+              <ACC.Claims.ClaimLastModified partner={combined.partner} />
               <Form.Submit>Submit</Form.Submit>
             </Form.Fieldset>
           </Form.Form>
