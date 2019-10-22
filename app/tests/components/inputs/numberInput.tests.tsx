@@ -25,6 +25,7 @@ describe("NumberInput", () => {
   it("Renders with basic classNames", () => {
     const output = shallow(<NumberInput name="number test" />);
     expect(output.prop("className")).toContain("govuk-input");
+    expect(output.prop("className")).toContain("govuk-table__cell--numeric");
   });
 
   it("Renders with given className", () => {
