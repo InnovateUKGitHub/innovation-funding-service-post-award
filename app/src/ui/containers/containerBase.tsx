@@ -1,4 +1,4 @@
-// tslint:disable
+// tslint: disable
 import React from "react";
 import { ThunkDispatch } from "redux-thunk";
 import { connect as reduxConnect } from "react-redux";
