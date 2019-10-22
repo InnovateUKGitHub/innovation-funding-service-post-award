@@ -17,7 +17,7 @@ export const ScopeChangeEdit = (props: Props) => {
   const Form = ACC.TypedForm<PCRItemForScopeChangeDto>();
 
   const options: ACC.SelectOption[] = [
-    { id: "true", value: "This is ready to submit." }
+    { id: "true", value: "I have finished making changes." }
   ];
 
   return (
@@ -40,8 +40,8 @@ export const ScopeChangeEdit = (props: Props) => {
             rows={15}
           />
         </Form.Fieldset>
-        <Form.Fieldset heading="Proposed public summary">
-          <ACC.Info summary="Published public summary"><ACC.Renderers.SimpleString multiline={true}>{props.projectChangeRequestItem.projectSummarySnapshot}</ACC.Renderers.SimpleString></ACC.Info>
+        <Form.Fieldset heading="Proposed project summary">
+          <ACC.Info summary="Published project summary"><ACC.Renderers.SimpleString multiline={true}>{props.projectChangeRequestItem.projectSummarySnapshot}</ACC.Renderers.SimpleString></ACC.Info>
           <Form.MultilineString
             name="summary"
             value={m => m.projectSummary}

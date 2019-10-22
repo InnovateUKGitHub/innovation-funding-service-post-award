@@ -15,22 +15,22 @@ interface InnerProps {
 
 const InnerContainer = (props: Props & InnerProps) => {
   return (
-    <React.Fragment>
+    <ACC.Section title="Partner details">
       <ACC.SummaryList qa="nameChangeSummaryList">
-        <ACC.SummaryListItem label="Current partner name" content={props.projectChangeRequestItem.partnerNameSnapshot} qa="currentPartnerName" />
-        <ACC.SummaryListItem label="New partner name" content={props.projectChangeRequestItem.accountName} qa="newPartnerName" />
+        <ACC.SummaryListItem label="Existing name" content={props.projectChangeRequestItem.partnerNameSnapshot} qa="currentPartnerName" />
+        <ACC.SummaryListItem label="Proposed name" content={props.projectChangeRequestItem.accountName} qa="newPartnerName" />
       </ACC.SummaryList>
       <ACC.Section title="Change of name certificate" subtitle={props.documents.length > 0 ? "All documents open in a new window." : ""} >
         {renderDocuments(props.documents)}
       </ACC.Section>
-    </React.Fragment>
+    </ACC.Section>
   );
 };
 
 const renderDocuments = (documents: DocumentSummaryDto[]) => {
   return documents.length > 0
-    ? <ACC.DocumentList documents={documents} qa="documentsList"/>
-    : <ACC.Renderers.SimpleString>No documents uploaded.</ACC.Renderers.SimpleString>;
+    ? <ACC.DocumentList documents={documents} qa="documentsList" />
+    : <ACC.ValidationMessage message="No documents uploaded." messageType="info" />;
 };
 
 export const NameChangeView = (props: Props) => (
@@ -39,7 +39,7 @@ export const NameChangeView = (props: Props) => (
       stores => {
         return (<ACC.Loader
           pending={stores.documents.pcrOrPcrItemDocuments(props.projectChangeRequest.projectId, props.projectChangeRequestItem.id)}
-          render={documents => <InnerContainer documents={documents} {...props}/>}
+          render={documents => <InnerContainer documents={documents} {...props} />}
         />);
       }
     }

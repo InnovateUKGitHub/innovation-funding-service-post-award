@@ -93,7 +93,7 @@ export class ClaimDetailDocumentsComponent extends ContainerBase<ClaimDetailDocu
       </ACC.Section>
     ) : (
       <ACC.Section>
-        <ACC.Renderers.SimpleString>No documents uploaded.</ACC.Renderers.SimpleString>
+        <ACC.ValidationMessage message="No documents uploaded." messageType="info" />
       </ACC.Section>
     );
   }
@@ -127,7 +127,7 @@ export class ClaimDetailDocumentsComponent extends ContainerBase<ClaimDetailDocu
           >
             <UploadForm.Fieldset heading="Upload">
               <ACC.Info summary="What should I include?">
-                <p>You should upload documents that show evidence of the costs you are submitting for this cost category. It is likely that without any documents, your Monitoring Officer will not accept your claim.</p>
+                <p>You should upload documents that show evidence of the costs you are submitting for this cost category. It is likely that without any documents, your monitoring officer will not accept your claim.</p>
                 <p>There is no restriction on the type of file you can upload.</p>
                 <p>Each document must be:</p>
                 <ul>

@@ -140,7 +140,7 @@ class ProjectOverviewComponent extends ContainerBase<Params, Data, {}> {
       { text: "Project change requests", link: routes.projectChangeRequests.getLink({ projectId }) },
       { text: "Project change requests", link: routes.pcrsDashboard.getLink({ projectId }) },
       { text: "Documents", link: routes.projectDocuments.getLink({ projectId }) },
-      { text: "Details", link: routes.projectDetails.getLink({ id: projectId }) },
+      { text: "Project details", link: routes.projectDetails.getLink({ id: projectId }) },
       { text: "Finance summary", link: routes.financeSummary.getLink({ projectId, partnerId }) },
     ].filter(x => x.link.accessControl(this.props.user, this.props.config));
 

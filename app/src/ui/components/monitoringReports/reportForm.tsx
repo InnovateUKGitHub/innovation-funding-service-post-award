@@ -22,7 +22,7 @@ export class MonitoringReportFormComponent extends Component<Props> {
       <Section>
         <ReportForm.Form editor={editor} onChange={(dto) => this.props.onChange(dto)} qa="monitoringReportCreateForm" >
           <ReportForm.Numeric label="Period" labelBold={true} width="small" name="period" value={x => x.periodId} update={(x, v) => x.periodId = v!} validation={editor.validator.periodId} />
-          <SimpleString>For each question score the project against the criteria from 1 to 5, providing a comment explaining your reason. Your Monitoring Portfolio Executive will return the report to you otherwise.</SimpleString>
+          <SimpleString>For each question score the project against the criteria from 1 to 5, providing a comment explaining your reason. Innovate UK will return the report to you otherwise.</SimpleString>
           {this.renderFormItems(editor)}
           <SimpleString>By submitting this report, you certify that from the project monitoring documents shown to you, this report represents your best opinion of the current progress of this project.</SimpleString>
           <ReportForm.Fieldset qa="save-and-submit">

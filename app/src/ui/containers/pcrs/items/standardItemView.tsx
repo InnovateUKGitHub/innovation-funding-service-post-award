@@ -16,7 +16,7 @@ interface InnerProps {
 const InnerContainer = (props: Props & InnerProps) => (
   <ACC.SummaryList qa="pcr_viewItem">
     <ACC.SummaryListItem label="Request number" content={props.projectChangeRequest.requestNumber} qa="numberRow" />
-    <ACC.SummaryListItem label="Type" content={props.projectChangeRequestItem.typeName} qa="type"/>
+    <ACC.SummaryListItem label="Type" content={props.projectChangeRequestItem.typeName} qa="type" />
     <ACC.SummaryListItem
       label="Files"
       qa="files"
@@ -31,7 +31,7 @@ export const StandardItemView = (props: Props) => (
       stores => (
         <ACC.Loader
           pending={stores.documents.pcrOrPcrItemDocuments(props.projectChangeRequest.projectId, props.projectChangeRequestItem.id)}
-          render={files => <InnerContainer files={files} {...props}/>}
+          render={files => <InnerContainer files={files} {...props} />}
         />
       )
     }

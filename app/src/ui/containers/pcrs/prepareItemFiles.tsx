@@ -124,7 +124,7 @@ class PrepareItemFilesComponent extends ContainerBase<Params, Data, Callbacks> {
     }
     return (
       <ACC.Section  title="Files uploaded">
-        <ACC.Renderers.SimpleString>No documents uploaded.</ACC.Renderers.SimpleString>
+        <ACC.ValidationMessage message="No documents uploaded." messageType="info" />
       </ACC.Section>
     );
   }

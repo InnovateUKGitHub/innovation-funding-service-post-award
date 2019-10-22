@@ -7,8 +7,8 @@ export const validationMessageGuide: IGuide = {
       {
         name: "Info message",
         comments: "Renders an info message and a caption if present",
-        example: "<ValidationMessage message={\"If you are unsure what evidence to provide, speak to your Monitoring Officer. They will use these documents when reviewing your claim.\"} messageType={\"info\"}/>",
-        render: () => <ValidationMessage message={"If you are unsure what evidence to provide, speak to your Monitoring Officer. They will use these documents when reviewing your claim."} messageType={"info"}/>
+        example: "<ValidationMessage message={\"If you are unsure what evidence to provide, speak to your monitoring officer. They will use these documents when reviewing your claim.\"} messageType={\"info\"}/>",
+        render: () => <ValidationMessage message={"If you are unsure what evidence to provide, speak to your monitoring officer. They will use these documents when reviewing your claim."} messageType={"info"}/>
       },
       {
         name: "Error",
