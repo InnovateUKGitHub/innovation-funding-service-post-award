@@ -67,7 +67,7 @@ class DetailsComponent extends ContainerBase<Params, Data, Callbacks> {
   private renderResponses(report: Dtos.MonitoringReportDto) {
     const title = <ACC.PeriodTitle periodId={report.periodId} periodStartDate={report.startDate} periodEndDate={report.endDate} />;
     return (
-      <ACC.Section title={title}>
+      <ACC.Section title={title} qa="monitoringReportViewSection">
         {report.questions
           .map((q, i) => this.renderResponse(q, i))
           .reduce((a, b) => a.concat(b), [])
