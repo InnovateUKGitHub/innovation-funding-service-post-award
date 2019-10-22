@@ -44,7 +44,7 @@ class PCRViewReasoningComponent extends ContainerBase<Params, Data, Callbacks> {
         pageTitle={<ACC.Projects.Title project={project} />}
         project={project}
       >
-        <ACC.Section title="">
+        <ACC.Section>
           <ACC.SummaryList qa="pcr_reasoning">
             <ACC.SummaryListItem label="Request number" content={pcr.requestNumber} qa="numberRow" />
             <ACC.SummaryListItem label="Types" content={<ACC.Renderers.LineBreakList items={pcr.items.map(x => x.typeName)}/>} qa="typesRow" />

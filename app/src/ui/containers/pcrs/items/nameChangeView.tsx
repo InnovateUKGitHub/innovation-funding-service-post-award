@@ -29,19 +29,21 @@ const InnerContainer = (props: Props & InnerProps) => {
 
 const renderDocuments = (documents: DocumentSummaryDto[]) => {
   return documents.length > 0
-    ? <ACC.DocumentList documents={documents} qa="documentsList"/>
+    ? <ACC.DocumentList documents={documents} qa="documentsList" />
     : <ACC.ValidationMessage message="No documents uploaded." messageType="info" />;
 };
 
 export const NameChangeView = (props: Props) => (
-  <StoresConsumer>
-    {
-      stores => {
-        return (<ACC.Loader
-          pending={stores.documents.pcrOrPcrItemDocuments(props.projectChangeRequest.projectId, props.projectChangeRequestItem.id)}
-          render={documents => <InnerContainer documents={documents} {...props}/>}
-        />);
+  <ACC.Section title="Partner details">
+    <StoresConsumer>
+      {
+        stores => {
+          return (<ACC.Loader
+            pending={stores.documents.pcrOrPcrItemDocuments(props.projectChangeRequest.projectId, props.projectChangeRequestItem.id)}
+            render={documents => <InnerContainer documents={documents} {...props} />}
+          />);
+        }
       }
-    }
-  </StoresConsumer>
+    </StoresConsumer>
+  </ACC.Section>
 );

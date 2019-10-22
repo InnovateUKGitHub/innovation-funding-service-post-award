@@ -58,18 +58,18 @@ class PCRViewItemComponent extends ContainerBase<Params, Data, Callbacks> {
     if (item) {
       switch (item.type) {
         case PCRItemType.TimeExtension:
-          return <ACC.Section> <Items.TimeExtensionView project={project} projectChangeRequest={pcr} projectChangeRequestItem={item} /> </ACC.Section>;
+          return <Items.TimeExtensionView project={project} projectChangeRequest={pcr} projectChangeRequestItem={item} />;
         case PCRItemType.ScopeChange:
           return <Items.ScopeChangeView projectChangeRequest={pcr} projectChangeRequestItem={item} />;
         case PCRItemType.ProjectSuspension:
-          return <ACC.Section title="Partner details"> <Items.ProjectSuspensionView project={project} projectChangeRequest={pcr} projectChangeRequestItem={item} /> </ACC.Section>;
+          return <Items.ProjectSuspensionView project={project} projectChangeRequest={pcr} projectChangeRequestItem={item} />;
         case PCRItemType.AccountNameChange:
-          return <ACC.Section title="Partner details"> <Items.NameChangeView projectChangeRequest={pcr} projectChangeRequestItem={item} /> </ACC.Section>;
+          return <Items.NameChangeView projectChangeRequest={pcr} projectChangeRequestItem={item} />;
         case PCRItemType.MultiplePartnerFinancialVirement:
         case PCRItemType.PartnerAddition:
         case PCRItemType.PartnerWithdrawal:
         case PCRItemType.SinglePartnerFinancialVirement:
-          return <ACC.Section> <Items.StandardItemView projectChangeRequest={pcr} projectChangeRequestItem={item} /> </ACC.Section>;
+          return <Items.StandardItemView projectChangeRequest={pcr} projectChangeRequestItem={item} />;
       }
     }
     return <ACC.ValidationMessage messageType="error" message="Type not handled" />;

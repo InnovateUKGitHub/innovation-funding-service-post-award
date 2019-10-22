@@ -40,13 +40,8 @@ export const ScopeChangeEdit = (props: Props) => {
             rows={15}
           />
         </Form.Fieldset>
-<<<<<<< HEAD
-        <Form.Fieldset heading="Proposed public summary">
-          <ACC.Info summary="Published public summary"><ACC.Renderers.SimpleString multiline={true}>{props.projectChangeRequestItem.projectSummarySnapshot}</ACC.Renderers.SimpleString></ACC.Info>
-=======
         <Form.Fieldset heading="Proposed project summary">
-          <ACC.Info summary="Published project summary"><ACC.Renderers.SimpleString multiline={true}>{props.project.summary}</ACC.Renderers.SimpleString></ACC.Info>
->>>>>>> All content changes have been applied.
+          <ACC.Info summary="Published project summary"><ACC.Renderers.SimpleString multiline={true}>{props.projectChangeRequestItem.projectSummarySnapshot}</ACC.Renderers.SimpleString></ACC.Info>
           <Form.MultilineString
             name="summary"
             value={m => m.projectSummary}

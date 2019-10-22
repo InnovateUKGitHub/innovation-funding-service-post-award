@@ -10,15 +10,13 @@ interface Props {
 
 export const ScopeChangeView = (props: Props) => (
   <React.Fragment>
-    <ACC.Section>
-      <ACC.SectionPanel title="New public description" qa="newDescription">
+      <ACC.Section title="New public description" qa="newDescription">
         <ACC.Renderers.SimpleString multiline={true}>{props.projectChangeRequestItem.publicDescription}</ACC.Renderers.SimpleString>
         <ACC.Info summary="Published public description" qa="currentDescription"><ACC.Renderers.SimpleString multiline={true}>{props.projectChangeRequestItem.publicDescriptionSnapshot}</ACC.Renderers.SimpleString></ACC.Info>
-      </ACC.SectionPanel>
-      <ACC.SectionPanel title="New project summary" qa="newSummary">
+      </ACC.Section>
+      <ACC.Section title="New project summary" qa="newSummary">
         <ACC.Renderers.SimpleString multiline={true}>{props.projectChangeRequestItem.projectSummary}</ACC.Renderers.SimpleString>
         <ACC.Info summary="Published project summary" qa="currentSummary"><ACC.Renderers.SimpleString multiline={true}>{props.projectChangeRequestItem.projectSummarySnapshot}</ACC.Renderers.SimpleString></ACC.Info>
-      </ACC.SectionPanel>
-    </ACC.Section>
+      </ACC.Section>
   </React.Fragment>
 );
