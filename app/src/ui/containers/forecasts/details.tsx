@@ -39,7 +39,7 @@ class ViewForecastComponent extends ContainerBase<Params, Data, {}> {
           {this.renderOverheadsRate(data.partner.overheadRate)}
           <ACC.Claims.ForecastTable data={data} hideValidation={isMoPm} />
         </ACC.Section>
-        <ACC.Section>
+        <ACC.Section qa="viewForecastUpdate">
           {this.renderUpdateSection(data.project, data.partner)}
           <ACC.Claims.ClaimLastModified partner={data.partner} />
         </ACC.Section>
