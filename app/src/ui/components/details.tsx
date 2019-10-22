@@ -1,3 +1,4 @@
+// tslint:disable
 import * as React from "react";
 import classnames from "classnames";
 import { Currency } from "./renderers/currency";
@@ -108,7 +109,7 @@ export class FieldComponent<T> extends React.Component<InternalFieldProps<T>, {}
 }
 
 const CustomField = <T extends {}>(props: ExternalFieldProps<T, React.ReactNode>) => {
-    const TypedField = FieldComponent as { new(): FieldComponent<T> };
+    const TypedField = FieldComponent as  new() => FieldComponent<T> ;
     return <TypedField {...props} render={(item) => props.value(item)} />;
 };
 
