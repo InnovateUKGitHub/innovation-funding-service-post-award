@@ -1,4 +1,3 @@
-// tslint:disable
 import { TextAreaInput } from "./inputs/textAreaInput";
 import React, { CSSProperties } from "react";
 import { Result } from "@ui/validation";

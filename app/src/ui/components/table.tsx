@@ -1,4 +1,4 @@
-// tslint:disable 
+// tslint:disable:max-classes-per-file
 import React from "react";
 import { FullDate, ShortDate, ShortDateTime } from "./renderers/date";
 import { Email } from "./renderers/email";
