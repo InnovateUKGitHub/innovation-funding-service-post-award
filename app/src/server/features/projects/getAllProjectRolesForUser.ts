@@ -39,8 +39,8 @@ export class GetAllProjectRolesForUser extends QueryBase<Authorisation> {
         roleInfo.partnerRoles[partner.Id] = roleInfo.partnerRoles[partner.Id] | ProjectRole.Unknown;
         // if this is a partner level contact then add it at the partner level too
         if (this.isPartnerContact(contact, partner) && this.isPartnerLevelRole(newRole, partner)) {
-            roleInfo.partnerRoles[partner.Id] = roleInfo.partnerRoles[partner.Id] | newRole;
-          }
+          roleInfo.partnerRoles[partner.Id] = roleInfo.partnerRoles[partner.Id] | newRole;
+        }
       });
 
       return allRoles;
@@ -69,7 +69,10 @@ export class GetAllProjectRolesForUser extends QueryBase<Authorisation> {
     }, {});
 
     return partners.reduce((roles, partner) => {
-      roles[partner.Acc_ProjectId__r.Id].partnerRoles[partner.Id] = allRoles;
+      // get or create new project level roles record
+      const project = roles[partner.Acc_ProjectId__r.Id] || (roles[partner.Acc_ProjectId__r.Id] = { projectRoles: allRoles, partnerRoles: {}});
+      // set current partner level to all
+      project.partnerRoles[partner.Id] = allRoles;
       return roles;
     }, projectRoles);
   }
