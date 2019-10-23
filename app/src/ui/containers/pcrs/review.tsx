@@ -79,7 +79,7 @@ class PCRReviewComponent extends ContainerBase<PCRReviewParams, Data, Callbacks>
         <ACC.Section title="Details">
           <ACC.SummaryList qa="pcrDetails">
             <ACC.SummaryListItem label="Request number" content={projectChangeRequest.requestNumber} qa="numberRow" />
-            <ACC.SummaryListItem label="Types" content={<ACC.Renderers.LineBreakList items={projectChangeRequest.items.map(x => x.typeName)}/>} qa="typesRow" />
+            <ACC.SummaryListItem label="Types" content={<ACC.Renderers.LineBreakList items={projectChangeRequest.items.map(x => x.typeName)} />} qa="typesRow" />
           </ACC.SummaryList>
         </ACC.Section>
         <ACC.TaskList qa="taskList">
@@ -102,7 +102,7 @@ class PCRReviewComponent extends ContainerBase<PCRReviewParams, Data, Callbacks>
               validation={editor.validator.status}
             />
           </Form.Fieldset>
-          <Form.Fieldset heading="Add your comments">
+          <Form.Fieldset heading="Add your comments" isSubQuestion={true}>
             <Form.MultilineString
               name="comments"
               label=""

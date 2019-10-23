@@ -13,10 +13,10 @@ import { FullDateInput, MonthYearInput } from "./inputs/dateInput";
 import { Button } from "./styledButton";
 
 interface SharedFormProps<T> {
-    onChange?: (data: T) => void;
-    onSubmit?: () => void;
-    qa?: string;
-    enctype?: "urlencoded" | "multipart";
+  onChange?: (data: T) => void;
+  onSubmit?: () => void;
+  qa?: string;
+  enctype?: "urlencoded" | "multipart";
 }
 
 interface EditorForm<T> extends SharedFormProps<T> {
@@ -31,98 +31,107 @@ interface DataForm<T> extends SharedFormProps<T> {
 type FormProps<T> = EditorForm<T> | DataForm<T>;
 
 interface FormChildProps<T> {
-    key?: string;
-    formData: T;
-    onChange?: (data: T) => void;
-    onSubmit?: () => void;
-    disabled: boolean;
-    qa?: string;
+  key?: string;
+  formData: T;
+  onChange?: (data: T) => void;
+  onSubmit?: () => void;
+  disabled: boolean;
+  qa?: string;
 }
 
 class FormComponent<T> extends React.Component<FormProps<T>, []> {
-    render() {
-        const childProps = (index: number): FormChildProps<T> => ({
-            key: "formchild" + index,
-            formData: this.isEditor(this.props) ? this.props.editor.data : this.props.data,
-            disabled: this.isEditor(this.props) ? this.props.editor.status === EditorStatus.Saving : (this.props.isSaving || false),
-            onChange: this.props.onChange,
-            onSubmit: this.props.onSubmit
-        });
+  render() {
+    const childProps = (index: number): FormChildProps<T> => ({
+      key: "formchild" + index,
+      formData: this.isEditor(this.props) ? this.props.editor.data : this.props.data,
+      disabled: this.isEditor(this.props) ? this.props.editor.status === EditorStatus.Saving : (this.props.isSaving || false),
+      onChange: this.props.onChange,
+      onSubmit: this.props.onSubmit
+    });
 
-        const childrenWithData = React.Children.map(this.props.children, (child, index) => child && React.cloneElement(child as any, childProps(index)));
-        return (
-            <form encType={this.mapEncType()} method="post" action="" onSubmit={(e) => this.onSubmit(e)} data-qa={this.props.qa}>
-                {childrenWithData}
-            </form>
-        );
-    }
+    const childrenWithData = React.Children.map(this.props.children, (child, index) => child && React.cloneElement(child as any, childProps(index)));
+    return (
+      <form encType={this.mapEncType()} method="post" action="" onSubmit={(e) => this.onSubmit(e)} data-qa={this.props.qa}>
+        {childrenWithData}
+      </form>
+    );
+  }
 
-    private mapEncType() {
-      return this.props.enctype === "multipart" ? "multipart/form-data" : "application/x-www-form-urlencoded";
-    }
+  private mapEncType() {
+    return this.props.enctype === "multipart" ? "multipart/form-data" : "application/x-www-form-urlencoded";
+  }
 
-    private onSubmit(e: React.SyntheticEvent<HTMLFormElement>) {
-        if (this.props.onSubmit) {
-            e.preventDefault();
-            this.props.onSubmit();
-        }
+  private onSubmit(e: React.SyntheticEvent<HTMLFormElement>) {
+    if (this.props.onSubmit) {
+      e.preventDefault();
+      this.props.onSubmit();
     }
+  }
 
-    private isEditor(props: EditorForm<T> | DataForm<T>): props is EditorForm<T> {
-      return (props as EditorForm<T>).editor !== undefined;
-    }
+  private isEditor(props: EditorForm<T> | DataForm<T>): props is EditorForm<T> {
+    return (props as EditorForm<T>).editor !== undefined;
+  }
 }
 
 interface FieldsetProps<T> {
-    heading?: React.ReactNode;
-    qa?: string;
-    headingQa?: string;
+  heading?: React.ReactNode;
+  qa?: string;
+  headingQa?: string;
+  isSubQuestion?: boolean;
 }
 
 class FieldsetComponent<T> extends React.Component<FieldsetProps<T>, []> {
-    render() {
-        const props = this.props as any as FieldsetProps<T> & FormChildProps<T>;
-        const parentKey = "fieldset";
-        const childProps = (index: number): FormChildProps<T> => ({
-            key: parentKey + "child" + index,
-            formData: props.formData,
-            disabled: props.disabled,
-            onChange: props.onChange,
-            onSubmit: props.onSubmit
-        });
+  render() {
+    const props = this.props as any as FieldsetProps<T> & FormChildProps<T>;
+    const parentKey = "fieldset";
+    const childProps = (index: number): FormChildProps<T> => ({
+      key: parentKey + "child" + index,
+      formData: props.formData,
+      disabled: props.disabled,
+      onChange: props.onChange,
+      onSubmit: props.onSubmit
+    });
 
-        const childrenWithData = React.Children.map(this.props.children, (child, index) => child && React.cloneElement(child as any, childProps(index)));
+    const childrenWithData = React.Children.map(this.props.children, (child, index) => child && React.cloneElement(child as any, childProps(index)));
 
-        return (
-            <fieldset className="govuk-fieldset" data-qa={this.props.qa}>
-                <legend className="govuk-fieldset__legend govuk-fieldset__legend--m">
-                    {this.props.heading ? <h2 className="govuk-fieldset__heading" data-qa={this.props.headingQa}>{this.props.heading}</h2> : null}
-                </legend>
-                {childrenWithData}
-            </fieldset>
-        );
-    }
+    const legendClassName = classNames({
+      "govuk-fieldset__legend": true,
+      "govuk-fieldset__legend--s": this.props.isSubQuestion,
+      "govuk-fieldset__legend--m": !this.props.isSubQuestion,
+    });
+
+    const Header = this.props.isSubQuestion ? "h3" : "h2";
+
+    return (
+      <fieldset className="govuk-fieldset" data-qa={this.props.qa}>
+        <legend className={legendClassName}>
+          {this.props.heading ? <Header className="govuk-fieldset__heading" data-qa={this.props.headingQa}>{this.props.heading}</Header> : null}
+        </legend>
+        {childrenWithData}
+      </fieldset>
+    );
+  }
 }
 
 interface InternalFieldProps<T> extends FormChildProps<T> {
-  field: (data: T, disabled: boolean, hasError: boolean|undefined) => React.ReactNode;
+  field: (data: T, disabled: boolean, hasError: boolean | undefined) => React.ReactNode;
 }
 
 interface HiddenFieldProps<TDto> {
-    name: string;
-    value: (data: TDto) => string | number | null | undefined;
+  name: string;
+  value: (data: TDto) => string | number | null | undefined;
 }
 
 interface ExternalFieldProps<TDto, TValue> {
-    label?: React.ReactNode;
-    labelBold?: boolean;
-    labelHidden?: boolean;
-    hint?: React.ReactNode;
-    name: string;
-    value: (data: TDto, disabled: boolean) => TValue | null | undefined;
-    update: (data: TDto, value: TValue | null) => void;
-    validation?: Result;
-    placeholder?: string;
+  label?: React.ReactNode;
+  labelBold?: boolean;
+  labelHidden?: boolean;
+  hint?: React.ReactNode;
+  name: string;
+  value: (data: TDto, disabled: boolean) => TValue | null | undefined;
+  update: (data: TDto, value: TValue | null) => void;
+  validation?: Result;
+  placeholder?: string;
 }
 
 // encapsulate logic for hint it generation
@@ -135,7 +144,7 @@ class FieldComponent<T, TValue> extends React.Component<InternalFieldProps<T> & 
 
     return (
       <div data-qa={`field-${name}`} className={classNames("govuk-form-group", { "govuk-form-group--error": hasError })}>
-        {!!label ? <label className={classNames("govuk-label", { "govuk-visually-hidden" : labelHidden, "govuk-label--m" : labelBold })} htmlFor={name}>{label}</label> : null}
+        {!!label ? <label className={classNames("govuk-label", { "govuk-visually-hidden": labelHidden, "govuk-label--m": labelBold })} htmlFor={name}>{label}</label> : null}
         {hint ? <span id={createFieldHintId(this.props)} className="govuk-hint">{hint}</span> : null}
         <ValidationError error={validation} />
         {field(formData, this.props.disabled, hasError)}
@@ -145,34 +154,34 @@ class FieldComponent<T, TValue> extends React.Component<InternalFieldProps<T> & 
 }
 
 const handleSubmit = <TDto extends {}>(props: SubmitProps, e: React.MouseEvent<{}>) => {
-    const formProps = props as any as SharedFormProps<TDto>;
-    if (formProps.onSubmit) {
-        e.preventDefault();
-        formProps.onSubmit();
-    }
+  const formProps = props as any as SharedFormProps<TDto>;
+  if (formProps.onSubmit) {
+    e.preventDefault();
+    formProps.onSubmit();
+  }
 };
 
 const handleOtherButton = (props: ButtonProps, e: React.MouseEvent<{}>) => {
-    if (props.onClick) {
-        e.preventDefault();
-        props.onClick();
-    }
+  if (props.onClick) {
+    e.preventDefault();
+    props.onClick();
+  }
 };
 
 const handleChange = <TDto extends {}, TValue extends {}>(props: ExternalFieldProps<TDto, TValue>, value: TValue | null) => {
-    const formProps = props as any as FormChildProps<TDto>;
-    const data = formProps.formData;
-    props.update(data, value);
+  const formProps = props as any as FormChildProps<TDto>;
+  const data = formProps.formData;
+  props.update(data, value);
 
-    if (!!formProps.onChange) {
-        formProps.onChange(data);
-    }
+  if (!!formProps.onChange) {
+    formProps.onChange(data);
+  }
 };
 
 const StringField = <T extends {}>(props: ExternalFieldProps<T, string> & InternalFieldProps<T>) => {
   return (
     <FieldComponent
-      field={((data,disabled) => <TextInput name={props.name} value={props.value(data, disabled)} onChange={(val) => handleChange(props, val)} placeholder={props.placeholder} disabled={disabled}/>)}
+      field={((data, disabled) => <TextInput name={props.name} value={props.value(data, disabled)} onChange={(val) => handleChange(props, val)} placeholder={props.placeholder} disabled={disabled} />)}
       {...props}
     />
   );
@@ -200,20 +209,20 @@ const NumericField = <T extends {}>(props: NumericFieldProps<T> & InternalFieldP
   const TypedFieldComponent = FieldComponent as { new(): FieldComponent<T, number> };
   return (
     <TypedFieldComponent
-      field={((data,disabled) => <NumberInput name={props.name} value={props.value(data, disabled)} onChange={(val) => handleChange(props, val)} width={props.width} disabled={disabled} />)}
+      field={((data, disabled) => <NumberInput name={props.name} value={props.value(data, disabled)} onChange={(val) => handleChange(props, val)} width={props.width} disabled={disabled} />)}
       {...props}
     />
   );
 };
 
 export interface SelectOption {
-    id: string;
-    value: string;
+  id: string;
+  value: string;
 }
 
 interface RadioFieldProps<T extends {}> extends ExternalFieldProps<T, SelectOption> {
-    options: SelectOption[];
-    inline: boolean;
+  options: SelectOption[];
+  inline: boolean;
 }
 
 const RadioOptionsField = <T extends {}>(props: RadioFieldProps<T> & InternalFieldProps<T>) => {
@@ -293,7 +302,7 @@ const ButtonComponent = <T extends {}>(props: ButtonProps & InternalFieldProps<T
 const FileUploadComponent = <T extends {}>(props: ExternalFieldProps<T, IFileWrapper> & InternalFieldProps<T>) => {
   return (
     <FieldComponent
-      field={((data, disabled, hasError) => <FileUpload value={props.value(data, disabled)} name={props.name} onChange={(val) => handleChange(props, val)} disabled={disabled} error={hasError}/>)}
+      field={((data, disabled, hasError) => <FileUpload value={props.value(data, disabled)} name={props.name} onChange={(val) => handleChange(props, val)} disabled={disabled} error={hasError} />)}
       {...props}
     />
   );
@@ -302,7 +311,7 @@ const FileUploadComponent = <T extends {}>(props: ExternalFieldProps<T, IFileWra
 const MulipleFileUploadComponent = <T extends {}>(props: ExternalFieldProps<T, IFileWrapper[]> & InternalFieldProps<T>) => {
   return (
     <FieldComponent
-      field={((data, disabled, hasError) => <MulipleFileUpload value={props.value(data, disabled)} name={props.name} onChange={(val) => handleChange(props, val)} disabled={disabled} error={hasError}/>)}
+      field={((data, disabled, hasError) => <MulipleFileUpload value={props.value(data, disabled)} name={props.name} onChange={(val) => handleChange(props, val)} disabled={disabled} error={hasError} />)}
       {...props}
     />
   );
@@ -352,7 +361,7 @@ const MonthYearComponent = <T extends {}>(props: MonthYearProps<T, Date> & Inter
 const CustomComponent = <T extends {}>(props: ExternalFieldProps<T, React.ReactNode> & InternalFieldProps<T>) => {
   return (
     <FieldComponent
-      field={(data, disabled) => props.value(data,disabled)}
+      field={(data, disabled) => props.value(data, disabled)}
       {...props}
     />
   );
@@ -371,7 +380,7 @@ export interface FormBuilder<T> {
   Button: React.SFC<ButtonProps>;
   FileUpload: React.SFC<ExternalFieldProps<T, IFileWrapper>>;
   MulipleFileUpload: React.SFC<ExternalFieldProps<T, IFileWrapper[]>>;
-  Date: React.SFC<ExternalFieldProps<T,Date>>;
+  Date: React.SFC<ExternalFieldProps<T, Date>>;
   MonthYear: React.FunctionComponent<MonthYearProps<T, Date>>;
   Custom: React.SFC<ExternalFieldProps<T, React.ReactNode>>;
 }
@@ -389,7 +398,7 @@ export const TypedForm = <T extends {}>(): FormBuilder<T> => ({
   Button: ButtonComponent as React.SFC<ButtonProps>,
   FileUpload: FileUploadComponent as React.SFC<ExternalFieldProps<T, IFileWrapper>>,
   MulipleFileUpload: MulipleFileUploadComponent as React.SFC<ExternalFieldProps<T, IFileWrapper[]>>,
-  Date: FullDateComponent as React.SFC<ExternalFieldProps<T,Date>>,
-  MonthYear: MonthYearComponent as React.SFC<MonthYearProps<T,Date>>,
+  Date: FullDateComponent as React.SFC<ExternalFieldProps<T, Date>>,
+  MonthYear: MonthYearComponent as React.SFC<MonthYearProps<T, Date>>,
   Custom: CustomComponent as React.SFC<ExternalFieldProps<T, React.ReactNode>>
 });
