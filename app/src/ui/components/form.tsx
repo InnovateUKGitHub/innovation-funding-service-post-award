@@ -94,15 +94,18 @@ class FieldsetComponent<T> extends React.Component<FieldsetProps<T>, []> {
 
     const childrenWithData = React.Children.map(this.props.children, (child, index) => child && React.cloneElement(child as any, childProps(index)));
 
+    const legendClassName = classNames({
+      "govuk-fieldset__legend": true,
+      "govuk-fieldset__legend--s": this.props.isSubQuestion,
+      "govuk-fieldset__legend--m": !this.props.isSubQuestion,
+    });
+
+    const Header = this.props.isSubQuestion ? "h3" : "h2";
+
     return (
       <fieldset className="govuk-fieldset" data-qa={this.props.qa}>
-        <legend className={this.props.isSubQuestion === true ? "govuk-fieldset__legend govuk-fieldset__legend--s" : "govuk-fieldset__legend govuk-fieldset__legend--m"}>
-          {this.props.heading ?
-            (this.props.isSubQuestion === true ?
-              <h3 className="govuk-fieldset__heading" data-qa={this.props.headingQa}>{this.props.heading}</h3> :
-              <h2 className="govuk-fieldset__heading" data-qa={this.props.headingQa}>{this.props.heading}</h2>)
-            : null
-          }
+        <legend className={legendClassName}>
+          {this.props.heading ? <Header className="govuk-fieldset__heading" data-qa={this.props.headingQa}>{this.props.heading}</Header> : null}
         </legend>
         {childrenWithData}
       </fieldset>
