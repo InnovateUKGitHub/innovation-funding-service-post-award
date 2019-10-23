@@ -35,7 +35,7 @@ class PCRAddTypeComponent extends ContainerBase<ProjectChangeRequestAddTypeParam
   private renderContents(project: Dtos.ProjectDto, editor: IEditorStore<Dtos.PCRDto, PCRDtoValidator>, original: Dtos.PCRDto, itemTypes: Dtos.PCRItemTypeDto[]) {
     return (
       <ACC.Page
-        backLink={<ACC.BackLink route={this.props.routes.pcrPrepare.getLink({ projectId: this.props.projectId, pcrId: this.props.projectChangeRequestId })}>Back to project change requests</ACC.BackLink>}
+        backLink={<ACC.BackLink route={this.props.routes.pcrPrepare.getLink({ projectId: this.props.projectId, pcrId: this.props.projectChangeRequestId })}>Back to requests</ACC.BackLink>}
         pageTitle={<ACC.Projects.Title project={project} />}
         project={project}
         validator={editor.validator}
