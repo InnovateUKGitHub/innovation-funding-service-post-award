@@ -1,5 +1,4 @@
 import SalesforceRepositoryBase from "./salesforceRepositoryBase";
-import { Connection } from "jsforce";
 
 export interface ISalesforceProfileTotalPeriod {
   LastModifiedDate: string;
