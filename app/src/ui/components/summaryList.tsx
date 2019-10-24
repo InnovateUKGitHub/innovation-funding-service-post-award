@@ -28,14 +28,12 @@ export const SummaryList: React.FunctionComponent<ListProps> = (props) => {
   const Header = "h2";
 
   return (
-    <React.Fragment>
-      <legend className={headerNames}>
-        {props.heading ? <Header className="govuk-fieldset__heading">{props.heading}</Header> : null}
-      </legend>
       <dl className={classNames} data-qa={props.qa}>
+        <legend className={headerNames}>
+          {props.heading ? <Header className="govuk-fieldset__heading">{props.heading}</Header> : null}
+        </legend>
         {props.children}
       </dl>
-    </React.Fragment>
   );
 };
 
