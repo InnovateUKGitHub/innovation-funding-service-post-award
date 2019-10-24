@@ -30,7 +30,9 @@ export class CreateProjectChangeRequestCommand extends CommandBase<string> {
 
   private async insertStatusChange(context: IContext, projectChangeRequestId: string): Promise<void> {
     await context.repositories.projectChangeRequestStatusChange.createStatusChange({
-      Acc_ProjectChangeRequest__c: projectChangeRequestId
+      Acc_ProjectChangeRequest__c: projectChangeRequestId,
+      Acc_ExternalComment__c: "",
+      Acc_ParticipantVisibility__c: true,
     });
   }
 

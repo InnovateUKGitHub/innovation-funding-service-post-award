@@ -54,18 +54,15 @@ export class UpdatePCRCommand extends CommandBase<boolean> {
       throw new ValidationError(validationResult);
     }
 
-    if (entityToUpdate.status !== this.pcr.status) {
-      await this.insertStatusChange(context, this.projectChangeRequestId, this.pcr.comments, entityToUpdate.status, this.pcr.status);
-      entityToUpdate.comments = "";
-    } else  {
-      entityToUpdate.comments = this.pcr.comments;
-    }
-
     entityToUpdate.status = this.pcr.status;
     entityToUpdate.reasoning = this.pcr.reasoningComments;
     entityToUpdate.reasoningStatus = this.pcr.reasoningStatus;
-
+    entityToUpdate.comments = originalDto.status === this.pcr.status ? this.pcr.comments : "";
     await context.repositories.projectChangeRequests.updateProjectChangeRequest(entityToUpdate);
+
+    if(originalDto.status !== this.pcr.status) {
+      await this.insertStatusChange(context, this.projectChangeRequestId, this.pcr.comments, originalDto.status, this.pcr.status);
+    }
 
     const paired = this.pcr.items.map(item => ({
       item,
