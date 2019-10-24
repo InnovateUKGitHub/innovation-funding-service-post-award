@@ -2,7 +2,7 @@ import { Stream } from "stream";
 import { TestRepository } from "./testRepository";
 import * as Repositories from "@server/repositories";
 import { Updatable } from "@server/repositories/salesforceRepositoryBase";
-import { IRepositories } from "@framework/types";
+import { IRepositories, PCRStatus } from "@framework/types";
 import { TestFileWrapper } from "./testData";
 import { PermissionGroupIdenfifier } from "@framework/types/permisionGroupIndentifier";
 import * as Entities from "@framework/entities";
@@ -409,12 +409,17 @@ class RecordTypeTestRepository extends TestRepository<Entities.RecordType> imple
 
 class PCRTestRepository extends TestRepository<Entities.ProjectChangeRequestEntity> implements Repositories.IProjectChangeRequestRepository {
 
+  public PreviousStatus: { [key: string]: PCRStatus } = {};
+
   getAllByProjectId(projectId: string): Promise<Entities.ProjectChangeRequestEntity[]> {
     return super.getWhere(x => x.projectId === projectId);
   }
 
   getById(projectId: string, id: string): Promise<Entities.ProjectChangeRequestEntity> {
-    return super.getOne(x => x.projectId === projectId && x.id === id);
+    return super.getOne(x => x.projectId === projectId && x.id === id).then(x => {
+      this.PreviousStatus[x.id] = x.status;
+      return x;
+    });
   }
 
   updateProjectChangeRequest(pcr: Entities.ProjectChangeRequestEntity): Promise<void> {
@@ -439,7 +444,7 @@ class PCRTestRepository extends TestRepository<Entities.ProjectChangeRequestEnti
         partnerId: "",
         accountName: "",
         guidance: "This is some hardcoded guidance",
-        statusName:"",
+        statusName: "",
         projectEndDate: new Date(),
         projectSummary: "",
         publicDescription: "",
@@ -463,7 +468,7 @@ class PCRTestRepository extends TestRepository<Entities.ProjectChangeRequestEnti
   async createProjectChangeRequest(projectChangeRequest: Entities.ProjectChangeRequestForCreateEntity): Promise<string> {
     const id = `ProjectChangeRequest${(this.Items.length)}`;
     const items = this.mapItemsForCreate(id, projectChangeRequest, projectChangeRequest.items);
-    await super.insertOne({ id, items, ...projectChangeRequest} as Entities.ProjectChangeRequestEntity);
+    await super.insertOne({ id, items, ...projectChangeRequest } as Entities.ProjectChangeRequestEntity);
     return id;
   }
 
@@ -478,15 +483,21 @@ class PCRTestRepository extends TestRepository<Entities.ProjectChangeRequestEnti
 }
 
 class ProjectChangeRequestStatusChangeTestRepository extends TestRepository<Repositories.ISalesforceProjectChangeRequestStatusChange> implements Repositories.IProjectChangeRequestStatusChangeRepository {
-  createStatusChange(statusChange: Partial<Repositories.ISalesforceProjectChangeRequestStatusChange>) {
+  constructor(private pcrRepository: PCRTestRepository) {
+    super();
+  }
+
+  createStatusChange(statusChange: Repositories.ICreateProjectChangeRequestStatusChange) {
+    const originalStatus = this.pcrRepository.PreviousStatus[statusChange.Acc_ProjectChangeRequest__c];
+    const newStatus = this.pcrRepository.Items.find(x => x.id === statusChange.Acc_ProjectChangeRequest__c)!.status;
     return super.insertOne({
       Id: (this.Items.length + 1).toString(),
-      Acc_ProjectChangeRequest__c: statusChange.Acc_ProjectChangeRequest__c!,
-      Acc_PreviousProjectChangeRequestStatus__c: statusChange.Acc_PreviousProjectChangeRequestStatus__c!,
-      Acc_NewProjectChangeRequestStatus__c: statusChange.Acc_NewProjectChangeRequestStatus__c!,
-      CreatedDate: statusChange.CreatedDate!,
-      Acc_ParticipantVisibility__c: statusChange.Acc_ParticipantVisibility__c!,
-      Acc_ExternalComment__c: statusChange.Acc_ExternalComment__c!
+      Acc_ProjectChangeRequest__c: statusChange.Acc_ProjectChangeRequest__c,
+      Acc_PreviousProjectChangeRequestStatus__c: PCRStatus[originalStatus],
+      Acc_NewProjectChangeRequestStatus__c: PCRStatus[newStatus],
+      CreatedDate: new Date().toISOString(),
+      Acc_ParticipantVisibility__c: statusChange.Acc_ParticipantVisibility__c,
+      Acc_ExternalComment__c: statusChange.Acc_ExternalComment__c
     });
   }
 
@@ -524,6 +535,8 @@ export const createTestRepositories = (): ITestRepositories => {
 
   const claimsRepository = new ClaimsTestRepository(partnerRepository);
 
+  const projectChangeRequests = new PCRTestRepository();
+
   return ({
     claims: claimsRepository,
     claimStatusChanges: new ClaimStatusChangeTestRepository(claimsRepository),
@@ -535,12 +548,12 @@ export const createTestRepositories = (): ITestRepositories => {
     monitoringReportHeader: new MonitoringReportHeaderTestRepository(),
     monitoringReportQuestions: new MonitoringReportQuestionsRepository(),
     monitoringReportStatusChange: new MonitoringReportStatusChangeTestRepository(),
-    projectChangeRequests: new PCRTestRepository(),
     profileDetails: new ProfileDetailsTestRepository(),
     profileTotalPeriod: new ProfileTotalPeriodTestRepository(partnerRepository),
     profileTotalCostCategory: new ProfileTotalCostCategoryTestRepository(),
     projects: new ProjectsTestRepository(),
-    projectChangeRequestStatusChange: new ProjectChangeRequestStatusChangeTestRepository(),
+    projectChangeRequests,
+    projectChangeRequestStatusChange: new ProjectChangeRequestStatusChangeTestRepository(projectChangeRequests),
     partners: partnerRepository,
     projectContacts: new ProjectContactTestRepository(),
     claimTotalCostCategory: new ClaimTotalCostTestRepository(),
