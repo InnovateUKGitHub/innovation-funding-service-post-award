@@ -137,7 +137,9 @@ function convertToParameters(params: any) {
     const result: { [key: string]: string } = {};
 
     Object.keys(params || {}).forEach(key => {
-        result[key] = convertToParameter(params[key]);
+        if (params[key] !== undefined) {
+          result[key] = convertToParameter(params[key]);
+        }
     });
 
     return result;

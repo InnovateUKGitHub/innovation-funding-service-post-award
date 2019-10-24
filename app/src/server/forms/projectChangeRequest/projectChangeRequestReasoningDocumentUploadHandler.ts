@@ -2,13 +2,13 @@ import { IContext, ILinkInfo } from "@framework/types";
 import { Configuration } from "@server/features/common";
 import { UploadProjectChangeRequestDocumentOrItemDocumentCommand } from "@server/features/documents/uploadProjectChangeRequestDocumentOrItemDocument";
 import { IFormBody, IFormButton, MultipleFileFormHandlerBase } from "@server/forms/formHandlerBase";
-import { ProjectChangeRequestPrepareReasoningFilesRoute, ProjectChangeRequestPrepareReasoningParams } from "@ui/containers";
+import { PCRPrepareReasoningRoute, ProjectChangeRequestPrepareReasoningParams } from "@ui/containers";
 import { MultipleDocumentUpdloadDtoValidator } from "@ui/validators";
 import { getKey } from "@framework/util";
 
 export class ProjectChangeRequestReasoningDocumentUploadHandler extends MultipleFileFormHandlerBase<ProjectChangeRequestPrepareReasoningParams, MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator> {
   constructor() {
-    super(ProjectChangeRequestPrepareReasoningFilesRoute, ["uploadFile"]);
+    super(PCRPrepareReasoningRoute, ["uploadFile"]);
   }
 
   protected async getDto(context: IContext, params: ProjectChangeRequestPrepareReasoningParams, button: IFormButton, body: IFormBody, files: IFileWrapper[]): Promise<MultipleDocumentUploadDto> {
@@ -21,7 +21,7 @@ export class ProjectChangeRequestReasoningDocumentUploadHandler extends Multiple
   protected async run(context: IContext, params: ProjectChangeRequestPrepareReasoningParams, button: IFormButton, dto: MultipleDocumentUploadDto): Promise<ILinkInfo> {
     await context.runCommand(new UploadProjectChangeRequestDocumentOrItemDocumentCommand(params.projectId, params.pcrId, dto));
 
-    return ProjectChangeRequestPrepareReasoningFilesRoute.getLink(params);
+    return PCRPrepareReasoningRoute.getLink(params);
   }
 
   protected getStoreInfo(params: ProjectChangeRequestPrepareReasoningParams): { key: string, store: string } {

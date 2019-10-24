@@ -2,28 +2,57 @@ import { IContext, ILinkInfo, PCRDto, PCRItemTypeDto, ProjectRole } from "@frame
 import { GetPCRByIdQuery } from "@server/features/pcrs/getPCRByIdQuery";
 import { UpdatePCRCommand } from "@server/features/pcrs/updatePcrCommand";
 import { IFormBody, IFormButton, StandardFormHandlerBase } from "@server/forms/formHandlerBase";
-import { ProjectChangeRequestPrepareReasoningParams, ProjectChangeRequestPrepareReasoningRoute, ProjectChangeRequestPrepareRoute } from "@ui/containers";
+import {
+  PCRPrepareReasoningRoute,
+  ProjectChangeRequestPrepareReasoningParams,
+  ProjectChangeRequestPrepareRoute
+} from "@ui/containers";
 import { getPcrEditor } from "@ui/redux/selectors";
 import { PCRDtoValidator } from "@ui/validators";
 import { PCRItemStatus, PCRItemType } from "@framework/constants";
+import { reasoningWorkflowSteps } from "@ui/containers/pcrs/reasoning/workflowMetadata";
 
 export class ProjectChangeRequestReasoningUpdateHandler extends StandardFormHandlerBase<ProjectChangeRequestPrepareReasoningParams, PCRDto, PCRDtoValidator> {
   constructor() {
-    super(ProjectChangeRequestPrepareReasoningRoute, ["default"]);
+    super(PCRPrepareReasoningRoute, ["default", "filesStep", "reasoningStep"]);
   }
 
   protected async getDto(context: IContext, params: ProjectChangeRequestPrepareReasoningParams, button: IFormButton, body: IFormBody): Promise<PCRDto> {
     const dto = await context.runQuery(new GetPCRByIdQuery(params.projectId, params.pcrId));
 
-    dto.reasoningComments = body.reasoningComments;
-    dto.reasoningStatus = body.reasoningStatus === "true" ? PCRItemStatus.Complete : PCRItemStatus.Incomplete;
+    if (button.name === "default") {
+      // If the summary take the status from the form body
+      dto.reasoningStatus = body.reasoningStatus === "true" ? PCRItemStatus.Complete : PCRItemStatus.Incomplete;
+    } else {
+      // If submitting a step, set the item status to Incomplete
+      dto.reasoningStatus = PCRItemStatus.Incomplete;
+    }
+
+    if (button.name === "reasoningStep") {
+      dto.reasoningComments = body.reasoningComments;
+    }
 
     return dto;
   }
 
   protected async run(context: IContext, params: ProjectChangeRequestPrepareReasoningParams, button: IFormButton, dto: PCRDto): Promise<ILinkInfo> {
     await context.runCommand(new UpdatePCRCommand(params.projectId, params.pcrId, dto));
-    return ProjectChangeRequestPrepareRoute.getLink(params);
+
+    // If on the summary
+    if (!params.step) {
+      // go back to the prepare page
+      return ProjectChangeRequestPrepareRoute.getLink({
+        projectId: params.projectId,
+        pcrId: params.pcrId
+      });
+    }
+    // If on the last step go to the summary
+    // If not on the last step go to the next step
+    return PCRPrepareReasoningRoute.getLink({
+      projectId: params.projectId,
+      pcrId: params.pcrId,
+      step: params.step === reasoningWorkflowSteps.length ? undefined : params.step + 1
+    });
   }
 
   protected getStoreInfo(params: ProjectChangeRequestPrepareReasoningParams): { key: string, store: string } {
