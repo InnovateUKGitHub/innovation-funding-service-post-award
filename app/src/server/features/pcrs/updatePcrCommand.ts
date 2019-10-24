@@ -108,7 +108,7 @@ export class UpdatePCRCommand extends CommandBase<boolean> {
     switch (dto.type) {
       case PCRItemType.TimeExtension:
         if (item.projectEndDate !== dto.projectEndDate) {
-          return { ...init, projectEndDate: dto.projectEndDate };
+          return { ...init, projectEndDate: dto.projectEndDate, projectDuration: dto.projectDuration };
         }
         break;
       case PCRItemType.ScopeChange:
