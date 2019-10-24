@@ -45,6 +45,9 @@ export interface ISalesforcePCR {
   MarkedAsCompleteName: string;
   Acc_Comments__c: string;
   Acc_NewProjectEndDate__c: string|null;
+  Acc_ExistingEndDate__c: string|null;
+  Acc_NewProjectDuration__c: number|null;
+  Acc_ExistingProjectDuration__c: number|null;
   Acc_SuspensionStarts__c: string|null;
   Acc_SuspensionEnds__c: string|null;
   Acc_PublicDescriptionSnapshot__c: string|null;
@@ -78,6 +81,9 @@ export class ProjectChangeRequestRepository extends SalesforceRepositoryBase<ISa
     "Acc_Reasoning__c",
     "Acc_MarkedAsComplete__c",
     "Acc_NewProjectEndDate__c",
+    "Acc_ExistingEndDate__c",
+    "Acc_NewProjectDuration__c",
+    "Acc_ExistingProjectDuration__c",
     "toLabel(Acc_MarkedAsComplete__c) MarkedAsCompleteName",
     "Acc_Comments__c",
     "Acc_SuspensionStarts__c",
@@ -131,6 +137,7 @@ export class ProjectChangeRequestRepository extends SalesforceRepositoryBase<ISa
       Id: x.id,
       Acc_MarkedasComplete__c: this.mapItemStatus(x.status),
       Acc_NewProjectEndDate__c: this.toOptionalSFDate(x.projectEndDate),
+      Acc_NewProjectDuration__C: x.projectDuration,
       Acc_NewProjectSummary__c: x.projectSummary,
       Acc_NewPublicDescription__c: x.publicDescription,
       Acc_SuspensionStarts__c: this.toOptionalSFDate(x.suspensionStartDate),
