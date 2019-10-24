@@ -97,6 +97,13 @@ export const Duration: React.FunctionComponent<{ startDate: Date | null, endDate
     return null;
 };
 
+export const MonthsDuration: React.FunctionComponent<{ months: number | null }> = (props) => {
+    if (props.months) {
+        return <span>{`${props.months} ${props.months === 1 ? "month" : "months"}`}</span>;
+    }
+    return null;
+};
+
 const appendMeridian = (date: DateTime|null, format: string) => {
     if(date && date.isValid) {
         return format + (date.hour > 12 ? "'pm'" : "'am'");

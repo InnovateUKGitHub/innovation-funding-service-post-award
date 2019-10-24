@@ -10,10 +10,14 @@ interface Props {
 }
 
 export const TimeExtensionView = (props: Props) => (
-    <ACC.SummaryList qa="timeExtensionSummaryList">
-      <ACC.SummaryListItem label="Current end date" content={<ACC.Renderers.ShortDate value={props.projectChangeRequestItem.projectEndDateSnapshot} />} qa="currentEndDate" />
-      <ACC.SummaryListItem label="Current duration" content={<ACC.Renderers.Duration startDate={props.project.startDate} endDate={props.projectChangeRequestItem.projectEndDateSnapshot} />} qa="currentDuration" />
-      <ACC.SummaryListItem label="New end date" content={<ACC.Renderers.ShortDate value={props.projectChangeRequestItem.projectEndDate} />} qa="newEndDate" />
-      <ACC.SummaryListItem label="New duration" content={<ACC.Renderers.Duration startDate={props.project.startDate} endDate={props.projectChangeRequestItem.projectEndDate} />} qa="newDuration" />
-    </ACC.SummaryList>
+  <React.Fragment>
+      <ACC.SummaryList qa="existingProjectDetails" heading="Existing project details">
+        <ACC.SummaryListItem label="Start and end date" content={<React.Fragment><ACC.Renderers.ShortDate value={props.project.startDate} />{" to "}<ACC.Renderers.ShortDate value={props.projectChangeRequestItem.projectEndDateSnapshot} /></React.Fragment>} qa="currentStartToEndDate" />
+        <ACC.SummaryListItem label="Duration" content={<ACC.Renderers.MonthsDuration months={props.projectChangeRequestItem.projectDurationSnapshot} />} qa="currentDuration" />
+      </ACC.SummaryList>
+      <ACC.SummaryList qa="proposedProjectDetails" heading="Proposed project details">
+        <ACC.SummaryListItem label="Start and end date" content={<React.Fragment><ACC.Renderers.ShortDate value={props.project.startDate} />{" to "}<ACC.Renderers.ShortDate value={props.projectChangeRequestItem.projectEndDate} /></React.Fragment>} qa="newStartToEndDate" />
+        <ACC.SummaryListItem label="Duration" content={<ACC.Renderers.MonthsDuration months={props.projectChangeRequestItem.projectDuration} />} qa="newDuration" />
+      </ACC.SummaryList>
+  </React.Fragment>
 );
