@@ -33,7 +33,7 @@ export const TimeExtensionEdit = (props: Props) => {
         <Form.Fieldset heading="Current end date">
           <Form.Custom
             name="currentEndDate"
-            value={m => <ACC.Renderers.SimpleString><ACC.Renderers.FullDate value={props.project.endDate} /></ACC.Renderers.SimpleString>}
+            value={m => <ACC.Renderers.SimpleString><ACC.Renderers.FullDate value={m.projectEndDateSnapshot} /></ACC.Renderers.SimpleString>}
             update={(m, v) => { return; }}
           />
         </Form.Fieldset>
