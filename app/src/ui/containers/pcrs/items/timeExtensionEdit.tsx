@@ -4,6 +4,7 @@ import { EditorStatus } from "@ui/redux";
 import { PCRItemForTimeExtensionDto, ProjectDto } from "@framework/dtos";
 import { PCRTimeExtensionItemDtoValidator } from "@ui/validators";
 import { PCRItemStatus } from "@framework/constants";
+import { DateTime } from "luxon";
 
 interface Props {
   project: ProjectDto;
@@ -30,22 +31,30 @@ export const TimeExtensionEdit = (props: Props) => {
         onSubmit={() => props.onSave()}
         qa="itemStatus"
       >
-        <Form.Fieldset heading="Current end date">
-          <Form.Custom
-            name="currentEndDate"
-            value={m => <ACC.Renderers.SimpleString><ACC.Renderers.FullDate value={m.projectEndDateSnapshot} /></ACC.Renderers.SimpleString>}
-            update={(m, v) => { return; }}
+        <ACC.SummaryList qa="existingProjectDetailsSummaryList" heading="Existing project details">
+          <ACC.SummaryListItem label="Start date" content={<ACC.Renderers.ShortDate value={props.project.startDate} />} qa="currentStartDate" />
+          <ACC.SummaryListItem label="End date" content={<ACC.Renderers.ShortDate value={props.projectChangeRequestItem.projectEndDateSnapshot} />} qa="currentEndDate" />
+          <ACC.SummaryListItem label="Duration" content={<ACC.Renderers.MonthsDuration months={props.projectChangeRequestItem.projectDurationSnapshot} />} qa="currentDuration" />
+        </ACC.SummaryList>
+        <Form.Fieldset heading="Proposed project details">
+          <Form.Numeric
+            name="timeExtension"
+            width="small"
+            value={m => (m.projectDuration) ? (m.projectDuration - props.project.durationInMonths) : (null)}
+            update={(m, val) => (val && m.projectEndDateSnapshot && m.projectDurationSnapshot) ? (
+              m.projectDuration = m.projectDurationSnapshot + val,
+              m.projectEndDate = DateTime.fromJSDate(m.projectEndDateSnapshot).plus({
+                months: m.projectDuration
+              }).toJSDate()
+            ) : null
+            }
+            hint="Enter the number of months you want to extend your project by"
           />
-        </Form.Fieldset>
-        <Form.Fieldset heading="Set a new end date">
-          <Form.MonthYear
-            name="endDate"
-            value={m => m.projectEndDate}
-            update={(m, v) => m.projectEndDate = v}
-            validation={props.validator.projectEndDate}
-            hint={"The date must be at the end of a month, for example 31 01 2021"}
-            startOrEnd="end"
-          />
+          <ACC.SummaryList qa="newProjectDetailsSummaryList">
+            <ACC.SummaryListItem label="Start date" content={<ACC.Renderers.ShortDate value={props.project.startDate} />} qa="currentStartDate" />
+            <ACC.SummaryListItem label="End date" content={<ACC.Renderers.ShortDate value={props.projectChangeRequestItem.projectEndDate} />} qa="currentEndDate" />
+            <ACC.SummaryListItem label="Duration" content={<ACC.Renderers.MonthsDuration months={props.projectChangeRequestItem.projectDuration} />} qa="currentDuration" />
+          </ACC.SummaryList>
         </Form.Fieldset>
         <Form.Fieldset heading="Mark as complete">
           <Form.Checkboxes

@@ -4,6 +4,7 @@ import cn from "classnames";
 interface ListProps {
   noBorders?: boolean;
   qa: string;
+  heading?: React.ReactNode;
 }
 
 interface ItemProps {
@@ -18,10 +19,23 @@ export const SummaryList: React.FunctionComponent<ListProps> = (props) => {
     "govuk-summary-list--no-border": props.noBorders
   });
 
+  const headerNames = cn({
+    "govuk-fieldset": true,
+    "govuk-fieldset__legend": true,
+    "govuk-fieldset__legend--m": true
+  });
+
+  const Header = "h2";
+
   return (
-    <dl className={classNames} data-qa={props.qa}>
-      {props.children}
-    </dl>
+    <React.Fragment>
+      <legend className={headerNames}>
+        {props.heading ? <Header className="govuk-fieldset__heading">{props.heading}</Header> : null}
+      </legend>
+      <dl className={classNames} data-qa={props.qa}>
+        {props.children}
+      </dl>
+    </React.Fragment>
   );
 };
 
