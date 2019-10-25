@@ -147,12 +147,16 @@ class PCRPrepareComponent extends ContainerBase<ProjectChangeRequestPrepareParam
 
   private getItemTasks(item: PCRItemDto, editor: IEditorStore<PCRDto, PCRDtoValidator>, index: number) {
     const validationErrors = editor.validator.items.results[index].errors;
-
     return (
       <ACC.Task
         name={item.typeName}
         status={this.getTaskStatus(item.status)}
-        route={this.props.routes.pcrPrepareItem.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId, itemId: item.id })}
+        route={this.props.routes.pcrPrepareItem.getLink({
+          projectId: this.props.projectId,
+          pcrId: this.props.pcrId,
+          itemId: item.id,
+          step: item.status === PCRItemStatus.ToDo ? 1 : undefined
+        })}
         validation={validationErrors}
       />
     );

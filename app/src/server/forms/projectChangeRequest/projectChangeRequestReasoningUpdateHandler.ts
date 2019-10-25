@@ -20,13 +20,7 @@ export class ProjectChangeRequestReasoningUpdateHandler extends StandardFormHand
   protected async getDto(context: IContext, params: ProjectChangeRequestPrepareReasoningParams, button: IFormButton, body: IFormBody): Promise<PCRDto> {
     const dto = await context.runQuery(new GetPCRByIdQuery(params.projectId, params.pcrId));
 
-    if (button.name === "default") {
-      // If the summary take the status from the form body
-      dto.reasoningStatus = body.reasoningStatus === "true" ? PCRItemStatus.Complete : PCRItemStatus.Incomplete;
-    } else {
-      // If submitting a step, set the item status to Incomplete
-      dto.reasoningStatus = PCRItemStatus.Incomplete;
-    }
+    dto.reasoningStatus = body.reasoningStatus === "true" ? PCRItemStatus.Complete : PCRItemStatus.Incomplete;
 
     if (button.name === "reasoningStep") {
       dto.reasoningComments = body.reasoningComments;
