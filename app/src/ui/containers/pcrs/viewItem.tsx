@@ -1,8 +1,6 @@
 import React from "react";
-
-import { BaseProps, ContainerBase, defineRoute } from "../containerBase";
-import { ProjectDto, ProjectRole } from "@framework/types";
-
+import { BaseProps, ContainerBase } from "../containerBase";
+import { ProjectDto } from "@framework/types";
 import * as ACC from "../../components";
 import { Pending } from "@shared/pending";
 import { PCRDto, PCRItemDto } from "@framework/dtos/pcrDtos";
@@ -32,24 +30,15 @@ class PCRViewItemComponent extends ContainerBase<Params, Data, Callbacks> {
   render() {
     const combined = Pending.combine({ project: this.props.project, pcr: this.props.pcr, pcrItem: this.props.pcrItem, editableItemTypes: this.props.editableItemTypes });
 
-    return <ACC.PageLoader pending={combined} render={x => this.renderContents(x.project, x.pcr, x.pcrItem, x.editableItemTypes)} />;
+    return <ACC.Loader pending={combined} render={x => this.renderContents(x.project, x.pcr, x.pcrItem, x.editableItemTypes)} />;
   }
 
   private renderContents(project: ProjectDto, pcr: PCRDto, pcrItem: PCRItemDto, editableItemTypes: PCRItemType[]) {
-    const backLink = this.props.isReviewing ?
-      <ACC.BackLink route={this.props.routes.pcrReview.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId })}>Back to request</ACC.BackLink> :
-      <ACC.BackLink route={this.props.routes.pcrDetails.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId })}>Back to request</ACC.BackLink>
-      ;
-
     return (
-      <ACC.Page
-        backLink={backLink}
-        pageTitle={<ACC.Projects.Title project={project} />}
-        project={project}
-      >
-          {this.renderItem(project, pcr)}
+      <React.Fragment>
+        {this.renderItem(project, pcr)}
         <NavigationArrowsForPCRs pcr={pcr} currentItem={pcrItem} isReviewing={this.props.isReviewing} editableItemTypes={editableItemTypes} routes={this.props.routes} />
-      </ACC.Page>
+      </React.Fragment>
     );
   }
 
@@ -63,8 +52,6 @@ class PCRViewItemComponent extends ContainerBase<Params, Data, Callbacks> {
           return <Items.ScopeChangeView projectChangeRequest={pcr} projectChangeRequestItem={item} />;
         case PCRItemType.ProjectSuspension:
           return <Items.ProjectSuspensionView project={project} projectChangeRequest={pcr} projectChangeRequestItem={item} />;
-        case PCRItemType.AccountNameChange:
-          return <Items.NameChangeView projectChangeRequest={pcr} projectChangeRequestItem={item} />;
         case PCRItemType.MultiplePartnerFinancialVirement:
         case PCRItemType.PartnerAddition:
         case PCRItemType.PartnerWithdrawal:
@@ -76,7 +63,7 @@ class PCRViewItemComponent extends ContainerBase<Params, Data, Callbacks> {
   }
 }
 
-const PCRViewItemContainer = (props: Params & BaseProps & { isReviewing: boolean }) => (
+export const PCRViewItemContainer = (props: Params & BaseProps & { isReviewing: boolean }) => (
   <StoresConsumer>
     {
       stores => (
@@ -92,42 +79,3 @@ const PCRViewItemContainer = (props: Params & BaseProps & { isReviewing: boolean
     }
   </StoresConsumer>
 );
-
-export const PCRViewItemRoute = defineRoute<Params>({
-  routeName: "pcrViewItem",
-  routePath: "/projects/:projectId/pcrs/:pcrId/details/item/:itemId",
-  container: (params) => <PCRViewItemContainer isReviewing={false} {...params} />,
-  getParams: route => ({
-    projectId: route.params.projectId,
-    pcrId: route.params.pcrId,
-    itemId: route.params.itemId
-  }),
-  getTitle: (store, params, stores) => {
-    const typeName = stores.projectChangeRequests.getItemById(params.projectId, params.pcrId, params.itemId).then(x => x.typeName).data;
-    return {
-      htmlTitle: typeName ? `${typeName}` : "View project change request item",
-      displayTitle: typeName ? `${typeName}` : "View project change request item",
-    };
-  },
-  accessControl: (auth, { projectId }, config) => config.features.pcrsEnabled && auth.forProject(projectId).hasAnyRoles(ProjectRole.ProjectManager, ProjectRole.MonitoringOfficer)
-});
-
-export const PCRReviewItemRoute = defineRoute<Params>({
-  routeName: "pcrReviewItem",
-  routePath: "/projects/:projectId/pcrs/:pcrId/review/item/:itemId",
-  container: (params) => <PCRViewItemContainer isReviewing={true} {...params} />,
-  getParams: route => ({
-    projectId: route.params.projectId,
-    pcrId: route.params.pcrId,
-    itemId: route.params.itemId
-  }),
-  // tslint:disable-next-line no-identical-functions
-  getTitle: (store, params, stores) => {
-    const typeName = stores.projectChangeRequests.getItemById(params.projectId, params.pcrId, params.itemId).then(x => x.typeName).data;
-    return {
-      htmlTitle: typeName ? `${typeName}` : "Review project change request item",
-      displayTitle: typeName ? `${typeName}` : "Review project change request item",
-    };
-  },
-  accessControl: (auth, { projectId }, config) => config.features.pcrsEnabled && auth.forProject(projectId).hasRole(ProjectRole.MonitoringOfficer)
-});

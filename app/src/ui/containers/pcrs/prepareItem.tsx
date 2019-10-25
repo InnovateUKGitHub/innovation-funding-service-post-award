@@ -1,7 +1,7 @@
 import React from "react";
 
-import { BaseProps, ContainerBase, defineRoute } from "../containerBase";
-import { ProjectDto, ProjectRole } from "@framework/types";
+import { BaseProps, ContainerBase } from "../containerBase";
+import { ProjectDto } from "@framework/types";
 
 import * as ACC from "@ui/components";
 import { Pending } from "@shared/pending";
@@ -11,7 +11,7 @@ import * as Items from "./items";
 import * as Validators from "@ui/validators/pcrDtoValidator";
 import { PCRItemStatus, PCRItemType } from "@framework/constants";
 
-export interface ProjectChangeRequestPrepareItemParams {
+interface ProjectChangeRequestPrepareItemParams {
   projectId: string;
   pcrId: string;
   itemId: string;
@@ -39,27 +39,16 @@ class PCRPrepareItemComponent extends ContainerBase<ProjectChangeRequestPrepareI
       editor: this.props.editor,
     });
 
-    return <ACC.PageLoader pending={combined} render={x => this.renderContents(x.project, x.pcr, x.pcrItem, x.pcrItemType, x.editor)} />;
+    return <ACC.Loader pending={combined} render={x => this.renderContents(x.project, x.pcr, x.pcrItem, x.pcrItemType, x.editor)} />;
   }
 
-  private renderContents(project: ProjectDto, pcr: PCRDto, pcrItem: PCRItemDto, pcrItemType: PCRItemTypeDto,editor: IEditorStore<PCRDto, Validators.PCRDtoValidator>) {
+  private renderContents(project: ProjectDto, pcr: PCRDto, pcrItem: PCRItemDto, pcrItemType: PCRItemTypeDto, editor: IEditorStore<PCRDto, Validators.PCRDtoValidator>) {
     return (
-      <ACC.Page
-        backLink={<ACC.BackLink route={this.props.routes.pcrPrepare.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId })}>Back to request</ACC.BackLink>}
-        pageTitle={<ACC.Projects.Title project={project} />}
-        project={project}
-        error={editor.error}
-        validator={[editor.validator]}
-      >
-        <ACC.Renderers.Messages messages={this.props.messages} />
-
+      <React.Fragment>
         {this.renderGuidanceSection(pcrItem)}
-
         {this.renderTemplateLinks(pcrItemType)}
-
         {this.renderForm(project, pcr, editor)}
-
-      </ACC.Page>
+      </React.Fragment>
     );
   }
 
@@ -95,8 +84,6 @@ class PCRPrepareItemComponent extends ContainerBase<ProjectChangeRequestPrepareI
           return <Items.ScopeChangeEdit projectChangeRequestItem={item} validator={validator as Validators.PCRScopeChangeItemDtoValidator} status={status} onChange={itemDto => this.onChange(editor.data, itemDto)} onSave={() => this.onSave(editor.data)} />;
         case PCRItemType.ProjectSuspension:
           return <Items.ProjectSuspensionEdit project={project} projectChangeRequestItem={item} validator={validator as Validators.PCRProjectSuspensionItemDtoValidator} status={status} onChange={itemDto => this.onChange(editor.data, itemDto)} onSave={() => this.onSave(editor.data)} />;
-        case PCRItemType.AccountNameChange:
-          return <Items.NameChangeEdit project={project} projectChangeRequest={pcr} projectChangeRequestItem={item} validator={validator as Validators.PCRAccountNameChangeItemDtoValidator} status={status} onChange={itemDto => this.onChange(editor.data, itemDto)} onSave={() => this.onSave(editor.data)} routes={this.props.routes} />;
         case PCRItemType.MultiplePartnerFinancialVirement:
         case PCRItemType.PartnerAddition:
         case PCRItemType.PartnerWithdrawal:
@@ -123,7 +110,7 @@ class PCRPrepareItemComponent extends ContainerBase<ProjectChangeRequestPrepareI
   }
 }
 
-const PCRPrepareItemContainer = (props: ProjectChangeRequestPrepareItemParams & BaseProps) => (
+export const PCRPrepareItemContainer = (props: ProjectChangeRequestPrepareItemParams & BaseProps) => (
   <StoresConsumer>
     {
       stores => (
@@ -143,22 +130,3 @@ const PCRPrepareItemContainer = (props: ProjectChangeRequestPrepareItemParams & 
     }
   </StoresConsumer>
 );
-
-export const ProjectChangeRequestPrepareItemRoute = defineRoute({
-  routeName: "projectChangeRequestPrepareItem",
-  routePath: "/projects/:projectId/pcrs/:pcrId/prepare/item/:itemId",
-  container: PCRPrepareItemContainer,
-  getParams: (route) => ({
-    projectId: route.params.projectId,
-    pcrId: route.params.pcrId,
-    itemId: route.params.itemId
-  }),
-  getTitle: (store, params, stores) => {
-    const typeName = stores.projectChangeRequests.getItemById(params.projectId, params.pcrId, params.itemId).then(x => x.typeName).data;
-    return {
-      htmlTitle: typeName || "Prepare project change request item",
-      displayTitle: typeName || "Prepare project change request item",
-    };
-  },
-  accessControl: (auth, { projectId }, config) => config.features.pcrsEnabled && auth.forProject(projectId).hasRole(ProjectRole.ProjectManager)
-});
