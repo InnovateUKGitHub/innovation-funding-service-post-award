@@ -213,7 +213,7 @@ export const PCRReviewReasoningRoute = defineRoute<ProjectChangeRequestPrepareRe
 
 export const PCRPrepareReasoningRoute = defineRoute<ProjectChangeRequestPrepareReasoningParams>({
   routeName: "pcrPrepareReasoning",
-  routePath: "/projects/:projectId/pcrs/:pcrId/prepare/reasoning/?:step",
+  routePath: "/projects/:projectId/pcrs/:pcrId/prepare/reasoning?:step",
   container: (props) => <PCRReasoningWorkflowContainer mode="prepare" {...props}/>,
   getParams: (route) => ({
     projectId: route.params.projectId,

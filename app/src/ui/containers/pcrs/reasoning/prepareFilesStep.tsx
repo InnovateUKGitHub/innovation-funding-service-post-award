@@ -42,7 +42,7 @@ class PrepareReasoningFilesStepComponent extends ContainerBase<ReasoningStepProp
     const UploadForm = ACC.TypedForm<MultipleDocumentUploadDto>();
     const PCRForm = ACC.TypedForm<PCRDto>();
     return (
-      <ACC.Section>
+      <ACC.Section qa="uploadFileSection">
         <UploadForm.Form
           enctype="multipart"
           editor={documentsEditor}
@@ -63,6 +63,7 @@ class PrepareReasoningFilesStepComponent extends ContainerBase<ReasoningStepProp
           </UploadForm.Fieldset>
           <UploadForm.Button name="uploadFile" styling="Secondary">Upload documents</UploadForm.Button>
         </UploadForm.Form>
+<<<<<<< HEAD
 
         <PCRForm.Form
           editor={this.props.editor}
@@ -72,6 +73,9 @@ class PrepareReasoningFilesStepComponent extends ContainerBase<ReasoningStepProp
           <PCRForm.Button name="filesStep" styling="Primary" onClick={() => this.props.onSave(this.props.editor.data)}>Save and continue</PCRForm.Button>
         </PCRForm.Form>
 
+=======
+        <ACC.Button styling="Primary" name="button_save" onClick={() => this.props.onSave(editor.data)}>Save and continue</ACC.Button>
+>>>>>>> 3864563e6... Tests for 2 step reasoning page
       </ACC.Section>
     );
   }
