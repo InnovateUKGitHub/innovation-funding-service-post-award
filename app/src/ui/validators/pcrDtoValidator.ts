@@ -227,21 +227,22 @@ export class PCRStandardItemDtoValidator extends PCRBaseItemDtoValidator<PCRStan
 }
 
 export class PCRTimeExtensionItemDtoValidator extends PCRBaseItemDtoValidator<PCRItemForTimeExtensionDto> {
-  private validateEndDate() {
+  private validateProjectDuration() {
     if (!this.canEdit) {
-      return Validation.isUnchanged(this, this.model.projectEndDate, this.original && this.original.projectEndDate, "Project end date cannot be changed.");
+      return Validation.isUnchanged(this, this.model.projectDuration, this.original && this.original.projectDuration, "Project end date cannot be changed.");
     }
 
     const isComplete = this.model.status === PCRItemStatus.Complete;
 
     return Validation.all(this,
-      () => isComplete ? Validation.required(this, this.model.projectEndDate, "Enter a project end date") : Validation.valid(this),
-      () => Validation.isDate(this, this.model.projectEndDate, "Please enter a valid date"),
-      () => this.model.projectEndDate ? Validation.isTrue(this, DateTime.fromJSDate(this.model.projectEndDate).plus({days: 1}).day === 1, "The date must be at the end of a month") : Validation.valid(this)
+      () => isComplete ? Validation.required(this, this.model.projectDuration , "Please enter the number of months you want to extend your project by") : Validation.valid(this),
+      () => Validation.number(this, this.model.projectDuration! , "Please enter a number of months you want to extend your project by"),
+      () => Validation.isTrue(this, this.model.projectDuration! > this.model.projectDurationSnapshot!, "Please enter a number that increases the project duration"),
+      () => this.model.projectDuration ? Validation.isTrue(this, Number.isInteger(this.model.projectDuration), "Please enter a whole number of months") : Validation.valid(this)
     );
   }
 
-  projectEndDate = this.validateEndDate();
+  projectDuration = this.validateProjectDuration();
 }
 
 export class PCRProjectTerminationItemDtoValidator extends PCRBaseItemDtoValidator<PCRItemForProjectTerminationDto> {

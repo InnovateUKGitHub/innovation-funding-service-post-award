@@ -115,16 +115,25 @@ describe("GetPCRByIdQuery", () => {
 
     const pcr = context.testData.createPCR();
 
-    const endDate = new Date();
+    const projectEndDate = new Date("2019/10/31");
+    const projectEndDateSnapshot = new Date("2019/11/30");
+    const projectDuration = 5;
+    const projectDurationSnapshot = 4;
     const item = context.testData.createPCRItem(pcr, recordType, {
-      projectEndDate: endDate
+      projectEndDate,
+      projectEndDateSnapshot,
+      projectDuration,
+      projectDurationSnapshot,
     });
 
     const query = new GetPCRByIdQuery(pcr.projectId, pcr.id);
     const result = await context.runQuery(query).then(x => x.items[0] as PCRItemForTimeExtensionDto);
 
     expect(result.id).toBe(item.id);
-    expect(result.projectEndDate).toBe(endDate);
+    expect(result.projectEndDate).toBe(projectEndDate);
+    expect(result.projectEndDateSnapshot).toBe(projectEndDateSnapshot);
+    expect(result.projectDuration).toBe(projectDuration);
+    expect(result.projectDurationSnapshot).toBe(projectDurationSnapshot);
   });
 
   test("maps fields for scope change", async () => {
