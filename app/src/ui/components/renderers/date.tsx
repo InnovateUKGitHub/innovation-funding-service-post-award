@@ -94,7 +94,6 @@ export const Duration: React.FunctionComponent<{ startDate: Date | null, endDate
 
         return <span>{`${months} ${months === 1 ? "month" : "months"}`}</span>;
     }
-
     return null;
 };
 
