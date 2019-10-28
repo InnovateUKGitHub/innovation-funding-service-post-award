@@ -12,4 +12,5 @@ interface InputProps<T> {
     ariaLabel?: string;
     ariaDescribedBy?: string;
     hasError?: boolean;
+    debounce?: boolean;
 }

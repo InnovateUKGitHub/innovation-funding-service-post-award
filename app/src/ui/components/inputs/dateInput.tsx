@@ -56,14 +56,11 @@ export class FullDateInput extends BaseInput<FullDateInputProps, FullDateState> 
             <input
               className={classNames(inputClass, "govuk-input--width-2")}
               name={dayName}
-              type="number"
+              type="text"
               pattern="[0-9]*"
               disabled={!!this.props.disabled}
               aria-label={this.props.ariaLabel && `${this.props.ariaLabel} day`}
               aria-describedby={this.props.ariaDescribedBy}
-              aria-valuemin={1}
-              aria-valuemax={31}
-              aria-valuenow={getIfNumber(this.state.day)}
               value={this.state.day}
               onChange={e => this.onChange(e.currentTarget.value, this.state.month, this.state.year)}
             />
@@ -77,14 +74,11 @@ export class FullDateInput extends BaseInput<FullDateInputProps, FullDateState> 
             <input
               className={classNames(inputClass, "govuk-input--width-2")}
               name={monthName}
-              type="number"
+              type="text"
               pattern="[0-9]*"
               disabled={!!this.props.disabled}
               aria-label={this.props.ariaLabel && `${this.props.ariaLabel} month`}
               aria-describedby={this.props.ariaDescribedBy}
-              aria-valuemin={1}
-              aria-valuemax={12}
-              aria-valuenow={getIfNumber(this.state.month)}
               value={this.state.month}
               onChange={e => this.onChange(this.state.day, e.currentTarget.value, this.state.year)}
             />
@@ -98,14 +92,11 @@ export class FullDateInput extends BaseInput<FullDateInputProps, FullDateState> 
             <input
               className={classNames(inputClass, "govuk-input--width-4")}
               name={yearName}
-              type="number"
+              type="text"
               pattern="[0-9]*"
               disabled={!!this.props.disabled}
               aria-label={this.props.ariaLabel && `${this.props.ariaLabel} year`}
               aria-describedby={this.props.ariaDescribedBy}
-              aria-valuemin={1000}
-              aria-valuemax={3000}
-              aria-valuenow={getIfNumber(this.state.year)}
               value={this.state.year}
               onChange={e => this.onChange(this.state.day, this.state.month, e.currentTarget.value)}
             />
@@ -117,7 +108,7 @@ export class FullDateInput extends BaseInput<FullDateInputProps, FullDateState> 
 
   private onChange(day: string, month: string, year: string) {
     this.setState({ day, month, year });
-    this.debounce(() => this.sendUpdate(), 500);
+    this.debounce(() => this.sendUpdate(), true, 500);
   }
 
   private sendUpdate() {
@@ -189,14 +180,11 @@ export class MonthYearInput extends BaseInput<MonthYearInputProps, MonthYearStat
             <input
               className={classNames(inputClass, "govuk-input--width-2")}
               name={monthName}
-              type="number"
+              type="text"
               pattern="[0-9]*"
               disabled={!!this.props.disabled}
               aria-label={this.props.ariaLabel && `${this.props.ariaLabel} month`}
               aria-describedby={this.props.ariaDescribedBy}
-              aria-valuemin={1}
-              aria-valuemax={12}
-              aria-valuenow={getIfNumber(this.state.month)}
               value={this.state.month}
               onChange={e => this.onChange(e.currentTarget.value, this.state.year)}
             />
@@ -210,14 +198,11 @@ export class MonthYearInput extends BaseInput<MonthYearInputProps, MonthYearStat
             <input
               className={classNames(inputClass, "govuk-input--width-4")}
               name={yearName}
-              type="number"
+              type="text"
               pattern="[0-9]*"
               disabled={!!this.props.disabled}
               aria-label={this.props.ariaLabel && `${this.props.ariaLabel} year`}
               aria-describedby={this.props.ariaDescribedBy}
-              aria-valuemin={1000}
-              aria-valuemax={3000}
-              aria-valuenow={getIfNumber(this.state.year)}
               value={this.state.year}
               onChange={e => this.onChange(this.state.month, e.currentTarget.value)}
             />
@@ -229,7 +214,7 @@ export class MonthYearInput extends BaseInput<MonthYearInputProps, MonthYearStat
 
   private onChange(month: string, year: string) {
     this.setState({ month, year });
-    this.debounce(() => this.sendUpdate(), 500);
+    this.debounce(() => this.sendUpdate(), true, 500);
   }
 
   private sendUpdate() {
@@ -253,12 +238,4 @@ export class MonthYearInput extends BaseInput<MonthYearInputProps, MonthYearStat
       }
     }
   }
-}
-
-function getIfNumber(value: string) {
-  const result = parseInt(value, 10);
-  if (!isNaN(result)) {
-    return result;
-  }
-  return undefined;
 }

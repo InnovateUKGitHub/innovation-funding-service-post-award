@@ -61,11 +61,11 @@ export class NumberInput extends BaseInput<NumberInputProps, NumberInputState> {
     };
   }
 
-  private handleChange(e: React.ChangeEvent<HTMLInputElement>, debounce: boolean) {
+  private handleChange(e: React.ChangeEvent<HTMLInputElement>, allowDebounce: boolean) {
     const value = e.currentTarget.value;
     if (this.state.value !== value) {
       this.setState({ value });
-      debounce ? this.debounce(() => this.changeNow(value), 250) : this.changeNow(value);
+      this.debounce(() => this.changeNow(value), allowDebounce);
     }
   }
 

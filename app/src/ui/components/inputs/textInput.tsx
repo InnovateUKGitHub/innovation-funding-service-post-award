@@ -44,7 +44,7 @@ export class TextInput extends BaseInput<TextInputProps, InputState> {
     const value = e.currentTarget.value;
     if (this.state.value !== value) {
       this.setState({ value });
-      debounce ? this.debounce(() => this.changeNow(value)) : this.changeNow(value);
+      this.debounce(() => this.changeNow(value), debounce);
     }
   }
 

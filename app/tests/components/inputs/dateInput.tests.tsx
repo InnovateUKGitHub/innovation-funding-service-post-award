@@ -46,22 +46,22 @@ describe("FullDateInput", () => {
     expect(wrapper.state("year")).toEqual("2018");
   });
 
-  it("Doesn't update component state with invalid values", () => {
-    const wrapper = mount(<FullDateInput name="testName" />);
+  it("Invalid date causes onchange with NaN date", () => {
+    let lastUpdate: Date|null = null;
 
-    const dayInput = wrapper.find("input").first();
-    const monthInput = wrapper.find("input").at(1);
+    const wrapper = mount(<FullDateInput name="testName" onChange={jest.fn(v => lastUpdate = v)} debounce={false} />);
+    wrapper.setState({
+      day: "wrong",
+      month: "invalid",
+      year: "date",
+    });
+
     const yearInput = wrapper.find("input").last();
-    (dayInput.instance() as any).value = "wrong";
-    dayInput.simulate("change");
-    (monthInput.instance() as any).value = "invalid";
-    monthInput.simulate("change");
-    (yearInput.instance() as any).value = "not OK";
+
     yearInput.simulate("change");
 
-    expect(wrapper.state("day")).toEqual("");
-    expect(wrapper.state("month")).toEqual("");
-    expect(wrapper.state("year")).toEqual("");
+    expect(lastUpdate).not.toBeNull();
+    expect(lastUpdate!.getTime()).toBeNaN();
   });
 });
 
@@ -93,7 +93,7 @@ describe("MonthYearInput", () => {
     expect(wrapper.state("year")).toEqual("2018");
   });
 
-  it("Doesn't update component state with invalid values", () => {
+  it("Update component state with invalid values", () => {
     const wrapper = mount(<MonthYearInput name="testName" startOrEnd="start" />);
 
     const monthInput = wrapper.find("input").first();
@@ -103,41 +103,37 @@ describe("MonthYearInput", () => {
     (yearInput.instance() as any).value = "not OK";
     yearInput.simulate("change");
 
-    expect(wrapper.state("month")).toEqual("");
-    expect(wrapper.state("year")).toEqual("");
+    expect(wrapper.state("month")).toEqual("invalid");
+    expect(wrapper.state("year")).toEqual("not OK");
   });
 
-  it("Sets the date to the first day of the month", async (done) => {
-    const onChangeMock = jest.fn();
-    const wrapper = mount(<MonthYearInput name="testName" startOrEnd="start" onChange={onChangeMock} />);
+  it("Sets the date to the first day of the month", () => {
+    let lastUpdate: Date|null = null;
 
-    const monthInput = wrapper.find("input").first();
-    (monthInput.instance() as any).value = "11";
-    monthInput.simulate("change");
-    const yearInput = wrapper.find("input").last();
-    (yearInput.instance() as any).value = "2019";
-    yearInput.simulate("change");
+    const wrapper = mount(<MonthYearInput name="testName" startOrEnd="start" onChange={jest.fn(x => lastUpdate = x)} debounce={false}/>);
 
-    await new Promise(resolve => setTimeout(() => resolve(), 500));
+    wrapper.setState({
+      month : "11",
+      year: "2019"
+    });
 
-    expect(onChangeMock).toBeCalledWith(new Date("2019-11-01T12:00:00"));
-    done();
+    wrapper.find("input").first().simulate("change");
+
+    expect(lastUpdate).toEqual(new Date("2019-11-01T12:00:00"));
   });
 
-  it("Sets the date to the last day of the month", async (done) => {
-    const onChangeMock = jest.fn();
-    const wrapper = mount(<MonthYearInput name="testName" startOrEnd="end" onChange={onChangeMock} />);
+  it("Sets the date to the last day of the month", () => {
+    let lastUpdate: Date|null = null;
 
-    const monthInput = wrapper.find("input").first();
-    (monthInput.instance() as any).value = "11";
-    monthInput.simulate("change");
-    const yearInput = wrapper.find("input").last();
-    (yearInput.instance() as any).value = "2019";
-    yearInput.simulate("change");
+    const wrapper = mount(<MonthYearInput name="testName" startOrEnd="end" onChange={jest.fn(x => lastUpdate = x)} debounce={false} />);
 
-    await new Promise(resolve => setTimeout(() => resolve(), 500));
+    wrapper.setState({
+      month : "11",
+      year: "2019"
+    });
 
-    expect(onChangeMock).toBeCalledWith(new Date("2019-11-30T12:00:00"));
-    done();
+    wrapper.find("input").first().simulate("change");
+
+    expect(lastUpdate).toEqual(new Date("2019-11-30T12:00:00"));
   });
 });

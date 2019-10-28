@@ -40,11 +40,11 @@ export class TextAreaInput extends BaseInput<TextAreaInputProps, InputState> {
     );
   }
 
-  private handleChange(e: React.ChangeEvent<HTMLTextAreaElement>, debounce: boolean) {
+  private handleChange(e: React.ChangeEvent<HTMLTextAreaElement>, allowDebounce: boolean) {
     const value = e.currentTarget.value;
     if (this.state.value !== value) {
       this.setState({ value });
-      debounce ? this.debounce(() => this.changeNow(value)) : this.changeNow(value);
+      this.debounce(() => this.changeNow(value), allowDebounce);
     }
   }
 
