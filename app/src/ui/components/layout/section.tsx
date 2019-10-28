@@ -8,6 +8,7 @@ interface Props {
   subtitle?: React.ReactNode;
   qa?: string;
   badge?: React.ReactNode;
+  className?: string;
 }
 
 type headerOptions = "h4"|"h3"|"h2"|"h1";
@@ -51,11 +52,12 @@ const renderBadge = ({ badge }: Props) => !badge ? null : (<div className={class
 const renderContents = (children: React.ReactNode) => !children ? null : (<div className="govuk-grid-column-full">{children}</div>);
 
 export const Section: React.SFC<Props> = (props) => {
-  const { title, subtitle, badge, id, children, qa } = props;
-  const className = classNames({
-    "govuk-grid-row": true,
-    "acc-section": true
-  });
+  const { title, subtitle, badge, id, children, qa, className } = props;
+  const sectionClassName = classNames(
+    "govuk-grid-row",
+    "acc-section",
+    className
+  );
 
   if (!title && !subtitle && !badge && !children) {
     return null;
@@ -64,7 +66,7 @@ export const Section: React.SFC<Props> = (props) => {
   return (
     <SectionContext.Consumer>
       {header => (
-        <div id={id} className={className} data-qa={qa}>
+        <div id={id} className={sectionClassName} data-qa={qa}>
           {renderTitles(props, !children, header)}
           {renderBadge(props)}
           <SectionContext.Provider value={!props.title ? header : getNextHeader(header)}>
