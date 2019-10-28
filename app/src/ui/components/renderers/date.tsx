@@ -94,13 +94,8 @@ export const Duration: React.FunctionComponent<{ startDate: Date | null, endDate
 
         return <span>{`${months} ${months === 1 ? "month" : "months"}`}</span>;
     }
-    return null;
-};
 
-export const MonthsDuration: React.FunctionComponent<{ months: number | null }> = (props) => {
-    return props.months
-    ? <span>{`${props.months} ${props.months === 1 ? "month" : "months"}`}</span>
-    : null;
+    return null;
 };
 
 const appendMeridian = (date: DateTime|null, format: string) => {
