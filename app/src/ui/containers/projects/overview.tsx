@@ -46,6 +46,7 @@ class ProjectOverviewComponent extends ContainerBase<Params, Data, {}> {
         project={project}
       >
         <ACC.Section
+          className="govuk-!-padding-bottom-6"
           title={`Project period ${project.periodId} of ${project.totalPeriods}`}
           subtitle={<ACC.Renderers.ShortDateRange start={project.periodStartDate} end={project.periodEndDate} />}
         >
@@ -76,17 +77,15 @@ class ProjectOverviewComponent extends ContainerBase<Params, Data, {}> {
     const PartnerSummaryDetails = ACC.TypedDetails<PartnerDto>();
 
     return (
-      <ACC.Section>
-        <ACC.SectionPanel qa="claims-totals" title={`${partner.name} costs to date`}>
-          <ACC.DualDetails displayDensity="Compact">
-            <PartnerSummaryDetails.Details qa="claims-totals-col-0" data={partner}>
-              <PartnerSummaryDetails.Currency label="Total eligible costs" qa="gol-costs" value={x => x.totalParticipantGrant} />
-              <PartnerSummaryDetails.Currency label="Eligible costs claimed to date" qa="claimed-costs" value={x => x.totalParticipantCostsClaimed || 0} />
-              <PartnerSummaryDetails.Percentage label="Percentage of eligible costs claimed to date" qa="percentage-costs" value={x => x.percentageParticipantCostsClaimed} />
-            </PartnerSummaryDetails.Details>
-          </ACC.DualDetails>
-        </ACC.SectionPanel>
-      </ACC.Section>
+      <ACC.SectionPanel qa="claims-totals" title={`${partner.name} costs to date`}>
+        <ACC.DualDetails displayDensity="Compact">
+          <PartnerSummaryDetails.Details qa="claims-totals-col-0" data={partner}>
+            <PartnerSummaryDetails.Currency label="Total eligible costs" qa="gol-costs" value={x => x.totalParticipantGrant} />
+            <PartnerSummaryDetails.Currency label="Eligible costs claimed to date" qa="claimed-costs" value={x => x.totalParticipantCostsClaimed || 0} />
+            <PartnerSummaryDetails.Percentage label="Percentage of eligible costs claimed to date" qa="percentage-costs" value={x => x.percentageParticipantCostsClaimed} />
+          </PartnerSummaryDetails.Details>
+        </ACC.DualDetails>
+      </ACC.SectionPanel>
     );
   }
 
@@ -94,39 +93,35 @@ class ProjectOverviewComponent extends ContainerBase<Params, Data, {}> {
     const ProjectSummaryDetails = ACC.TypedDetails<ProjectDto>();
     const PartnerSummaryDetails = ACC.TypedDetails<PartnerDto>();
     return (
-      <ACC.Section>
-        <ACC.SectionPanel qa="claims-summary">
-          <ACC.DualDetails>
-            <ProjectSummaryDetails.Details title="Project costs to date" data={project} qa="project-summary">
-              <ProjectSummaryDetails.Currency label="Total eligible costs" qa="gol-costs" value={x => x.grantOfferLetterCosts} />
-              <ProjectSummaryDetails.Currency label="Eligible costs claimed to date" qa="claimed-costs" value={x => x.costsClaimedToDate || 0} />
-              <ProjectSummaryDetails.Percentage label="Percentage of eligible costs claimed to date" qa="claimed-percentage" value={x => x.claimedPercentage} />
-            </ProjectSummaryDetails.Details>
-            <PartnerSummaryDetails.Details data={partner} title={`${partner.name} costs to date`} qa="lead-partner-summary">
-              <PartnerSummaryDetails.Currency label="Total eligible costs" qa="gol-costs" value={x => x.totalParticipantGrant} />
-              <PartnerSummaryDetails.Currency label="Eligible costs claimed to date" qa="claimed-costs" value={x => x.totalParticipantCostsClaimed || 0} />
-              <PartnerSummaryDetails.Percentage label="Percentage of eligible costs claimed to date" qa="claimed-percentage" value={x => x.percentageParticipantCostsClaimed} />
-            </PartnerSummaryDetails.Details>
-          </ACC.DualDetails>
-        </ACC.SectionPanel>
-      </ACC.Section>
+      <ACC.SectionPanel qa="claims-summary">
+        <ACC.DualDetails>
+          <ProjectSummaryDetails.Details title="Project costs to date" data={project} qa="project-summary">
+            <ProjectSummaryDetails.Currency label="Total eligible costs" qa="gol-costs" value={x => x.grantOfferLetterCosts} />
+            <ProjectSummaryDetails.Currency label="Eligible costs claimed to date" qa="claimed-costs" value={x => x.costsClaimedToDate || 0} />
+            <ProjectSummaryDetails.Percentage label="Percentage of eligible costs claimed to date" qa="claimed-percentage" value={x => x.claimedPercentage} />
+          </ProjectSummaryDetails.Details>
+          <PartnerSummaryDetails.Details data={partner} title={`${partner.name} costs to date`} qa="lead-partner-summary">
+            <PartnerSummaryDetails.Currency label="Total eligible costs" qa="gol-costs" value={x => x.totalParticipantGrant} />
+            <PartnerSummaryDetails.Currency label="Eligible costs claimed to date" qa="claimed-costs" value={x => x.totalParticipantCostsClaimed || 0} />
+            <PartnerSummaryDetails.Percentage label="Percentage of eligible costs claimed to date" qa="claimed-percentage" value={x => x.percentageParticipantCostsClaimed} />
+          </PartnerSummaryDetails.Details>
+        </ACC.DualDetails>
+      </ACC.SectionPanel>
     );
   }
 
   private renderMOOverviewDetails(project: ProjectDto) {
     const ProjectSummaryDetails = ACC.TypedDetails<ProjectDto>();
     return (
-      <ACC.Section>
-        <ACC.SectionPanel qa="claims-summary">
-          <ACC.DualDetails>
-            <ProjectSummaryDetails.Details title="Project costs to date" data={project} qa="project-summary">
-              <ProjectSummaryDetails.Currency label="Total eligible costs" qa="gol-costs" value={x => x.grantOfferLetterCosts} />
-              <ProjectSummaryDetails.Currency label="Eligible costs claimed to date" qa="claimed-costs" value={x => x.costsClaimedToDate || 0} />
-              <ProjectSummaryDetails.Percentage label="Percentage of eligible costs claimed to date" qa="claimed-percentage" value={x => x.claimedPercentage} />
-            </ProjectSummaryDetails.Details>
-          </ACC.DualDetails>
-        </ACC.SectionPanel>
-      </ACC.Section>
+      <ACC.SectionPanel qa="claims-summary">
+        <ACC.DualDetails>
+          <ProjectSummaryDetails.Details title="Project costs to date" data={project} qa="project-summary">
+            <ProjectSummaryDetails.Currency label="Total eligible costs" qa="gol-costs" value={x => x.grantOfferLetterCosts} />
+            <ProjectSummaryDetails.Currency label="Eligible costs claimed to date" qa="claimed-costs" value={x => x.costsClaimedToDate || 0} />
+            <ProjectSummaryDetails.Percentage label="Percentage of eligible costs claimed to date" qa="claimed-percentage" value={x => x.claimedPercentage} />
+          </ProjectSummaryDetails.Details>
+        </ACC.DualDetails>
+      </ACC.SectionPanel>
     );
   }
 
