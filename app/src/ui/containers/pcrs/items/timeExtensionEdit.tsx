@@ -22,6 +22,17 @@ export const TimeExtensionEdit = (props: Props) => {
     { id: "true", value: "I have finished making changes." }
   ];
 
+  const updateItem = (item: PCRItemForTimeExtensionDto, value: number|null ) => {
+    item.projectExtension = value;
+
+    if(value && item.projectEndDateSnapshot && item.projectDurationSnapshot) {
+      item.projectDuration = item.projectDurationSnapshot + value;
+      item.projectEndDate = DateTime.fromJSDate(item.projectEndDateSnapshot).plus({
+        months: item.projectDuration
+      }).toJSDate();
+    }
+  };
+
   return (
     <ACC.Section>
       <Form.Form
@@ -39,16 +50,10 @@ export const TimeExtensionEdit = (props: Props) => {
         <Form.Fieldset heading="Proposed project details">
           <Form.Numeric
             name="timeExtension"
-            width="small"
-            value={m => (m.projectDuration) ? (m.projectDuration - props.project.durationInMonths) : (null)}
-            update={(m, val) => (val && m.projectEndDateSnapshot && m.projectDurationSnapshot) ? (
-              m.projectDuration = m.projectDurationSnapshot + val,
-              m.projectEndDate = DateTime.fromJSDate(m.projectEndDateSnapshot).plus({
-                months: m.projectDuration
-              }).toJSDate()
-            ) : null
-            }
             hint="Enter the number of months you want to extend your project by"
+            width="small"
+            value={m => (m.projectDuration) ? (m.projectDuration - props.project.durationInMonths) : null}
+            update={(m, val) => updateItem(m, val)}
           />
           <ACC.SummaryList qa="newProjectDetailsSummaryList">
             <ACC.SummaryListItem label="Start date" content={<ACC.Renderers.ShortDate value={props.project.startDate} />} qa="currentStartDate" />

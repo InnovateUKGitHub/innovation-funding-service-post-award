@@ -19,6 +19,7 @@ import {
   PCRItemType,
   PCRStatus
 } from "@framework/constants";
+import { isTrue } from "./common";
 
 export class PCRDtoValidator extends Results<PCRDto> {
 
@@ -235,8 +236,9 @@ export class PCRTimeExtensionItemDtoValidator extends PCRBaseItemDtoValidator<PC
     const isComplete = this.model.status === PCRItemStatus.Complete;
 
     return Validation.all(this,
-      () => isComplete ? Validation.required(this, this.model.projectEndDate, "Enter a project end date") : Validation.valid(this),
-      () => Validation.isDate(this, this.model.projectEndDate, "Please enter a valid date"),
+      () => isComplete ? Validation.required(this, this.model.projectExtension, "Please enter the number of months you want to extend your project by") : Validation.valid(this),
+      () => Validation.isTrue(this, this.model.projectExtension! > 0, "Please enter a positive number of months"),
+      () => this.model.projectExtension ? Validation.isTrue(this, Number.isInteger(this.model.projectExtension), "Please enter a whole number of months") : Validation.valid(this),
       () => this.model.projectEndDate ? Validation.isTrue(this, DateTime.fromJSDate(this.model.projectEndDate).plus({days: 1}).day === 1, "The date must be at the end of a month") : Validation.valid(this)
     );
   }

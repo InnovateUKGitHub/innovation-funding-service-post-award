@@ -426,7 +426,7 @@ describe("UpdatePCRCommand", () => {
   });
 
   describe("Time extension", () => {
-    test("returns bad request if no date is sent", async () => {
+    test("returns bad request if no project extension is sent", async () => {
       const context = new TestContext();
 
       const project = context.testData.createProject();
@@ -439,14 +439,16 @@ describe("UpdatePCRCommand", () => {
       const dto = await context.runQuery(new GetPCRByIdQuery(projectChangeRequest.projectId, projectChangeRequest.id));
       const item = dto.items[0] as PCRItemForTimeExtensionDto;
 
-      item.projectEndDate = null;
+      item.projectExtension = null;
       await expect(context.runCommand(new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto))).rejects.toThrow(ValidationError);
 
       item.projectEndDate = new Date("2020/01/31");
+      item.projectExtension = 3;
+
       await expect(context.runCommand(new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto))).resolves.toBe(true);
     });
 
-    test("returns bad request if invalid date is sent", async () => {
+    test("returns bad request if invalid project extension is sent", async () => {
       const context = new TestContext();
 
       const project = context.testData.createProject();
@@ -459,10 +461,14 @@ describe("UpdatePCRCommand", () => {
       const dto = await context.runQuery(new GetPCRByIdQuery(projectChangeRequest.projectId, projectChangeRequest.id));
       const item = dto.items[0] as PCRItemForTimeExtensionDto;
 
-      item.projectEndDate = new Date("This is an invalid date");
+      item.projectExtension = -5;
+      await expect(context.runCommand(new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto))).rejects.toThrow(ValidationError);
+
+      item.projectExtension = 1.5;
       await expect(context.runCommand(new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto))).rejects.toThrow(ValidationError);
 
       item.projectEndDate = new Date("2020/01/31");
+      item.projectExtension = 5;
       await expect(context.runCommand(new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto))).resolves.toBe(true);
     });
 
@@ -480,6 +486,7 @@ describe("UpdatePCRCommand", () => {
       const item = dto.items[0] as PCRItemForTimeExtensionDto;
 
       item.projectEndDate = new Date("2020/01/01");
+      item.projectExtension = 4;
       await expect(context.runCommand(new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto))).rejects.toThrow(ValidationError);
 
       item.projectEndDate = new Date("2020/01/31");
@@ -499,6 +506,7 @@ describe("UpdatePCRCommand", () => {
       const dto = await context.runQuery(new GetPCRByIdQuery(projectChangeRequest.projectId, projectChangeRequest.id));
       const item = dto.items[0] as PCRItemForTimeExtensionDto;
 
+      item.projectExtension = 5;
       item.projectEndDate = new Date("2020/01/31");
       await expect(context.runCommand(new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto))).resolves.toBe(true);
 
