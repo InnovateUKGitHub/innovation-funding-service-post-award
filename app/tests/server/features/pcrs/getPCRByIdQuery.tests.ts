@@ -119,13 +119,11 @@ describe("GetPCRByIdQuery", () => {
     const projectEndDateSnapshot = new Date("2019/11/30");
     const projectDuration = 5;
     const projectDurationSnapshot = 4;
-    const projectExtension = 3;
     const item = context.testData.createPCRItem(pcr, recordType, {
       projectEndDate,
       projectEndDateSnapshot,
       projectDuration,
       projectDurationSnapshot,
-      projectExtension,
     });
 
     const query = new GetPCRByIdQuery(pcr.projectId, pcr.id);
@@ -136,7 +134,6 @@ describe("GetPCRByIdQuery", () => {
     expect(result.projectEndDateSnapshot).toBe(projectEndDateSnapshot);
     expect(result.projectDuration).toBe(projectDuration);
     expect(result.projectDurationSnapshot).toBe(projectDurationSnapshot);
-    expect(result.projectExtension).toBe(projectExtension);
   });
 
   test("maps fields for scope change", async () => {

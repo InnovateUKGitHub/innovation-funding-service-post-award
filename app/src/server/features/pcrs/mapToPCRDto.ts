@@ -81,7 +81,6 @@ const mapItemForTimeExtension = (pcr: ProjectChangeRequestItemEntity, typeName: 
   projectEndDateSnapshot: pcr.projectEndDateSnapshot || null,
   projectDuration: pcr.projectDuration || null,
   projectDurationSnapshot: pcr.projectDurationSnapshot || null,
-  projectExtension: pcr.projectExtension || null,
   type
 });
 

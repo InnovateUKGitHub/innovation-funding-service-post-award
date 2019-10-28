@@ -47,5 +47,4 @@ export interface ProjectChangeRequestItemEntity extends ProjectChangeRequestItem
   partnerNameSnapshot?: string | null;
   projectEndDateSnapshot?: Date | null;
   projectDurationSnapshot?: number | null;
-  projectExtension?: number | null;
 }
