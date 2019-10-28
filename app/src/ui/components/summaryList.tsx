@@ -4,7 +4,6 @@ import cn from "classnames";
 interface ListProps {
   noBorders?: boolean;
   qa: string;
-  heading?: React.ReactNode;
 }
 
 interface ItemProps {
