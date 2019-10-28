@@ -63,7 +63,6 @@ export interface PCRItemForTimeExtensionDto extends PCRItemBaseDto {
   projectEndDate: Date | null;
   projectEndDateSnapshot: Date | null;
   projectDuration: number | null;
-  projectExtension: number | null;
   projectDurationSnapshot: number | null;
 }
 
