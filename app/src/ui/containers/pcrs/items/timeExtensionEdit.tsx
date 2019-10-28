@@ -5,6 +5,8 @@ import { PCRItemForTimeExtensionDto, ProjectDto } from "@framework/dtos";
 import { PCRTimeExtensionItemDtoValidator } from "@ui/validators";
 import { PCRItemStatus } from "@framework/constants";
 import { DateTime } from "luxon";
+import { isNumber } from "util";
+import { AccessibilityText } from "@ui/components/renderers";
 
 interface Props {
   project: ProjectDto;
@@ -22,16 +24,15 @@ export const TimeExtensionEdit = (props: Props) => {
     { id: "true", value: "I have finished making changes." }
   ];
 
-  const updateItem = (item: PCRItemForTimeExtensionDto, value: number|null ) => {
-    item.projectExtension = value;
+  const displayProposedProjectDetails: boolean = isNumber(props.projectChangeRequestItem.projectDuration) && Number.isInteger(props.projectChangeRequestItem.projectDuration) && (props.projectChangeRequestItem.projectDuration > props.projectChangeRequestItem.projectDurationSnapshot!);
 
-    if(value && item.projectEndDateSnapshot && item.projectDurationSnapshot) {
-      item.projectDuration = item.projectDurationSnapshot + value;
-      item.projectEndDate = DateTime.fromJSDate(item.projectEndDateSnapshot).plus({
-        months: item.projectDuration
-      }).toJSDate();
-    }
-  };
+  const originalProjectEndDate: Date = DateTime.fromJSDate(props.project.startDate).plus({
+    months: props.projectChangeRequestItem.projectDurationSnapshot!
+  }).endOf("month").toJSDate();
+
+  const proposedProjectEndDate: Date = DateTime.fromJSDate(props.project.startDate).plus({
+    months: props.projectChangeRequestItem.projectDuration!
+  }).endOf("month").toJSDate();
 
   return (
     <ACC.Section>
@@ -42,24 +43,31 @@ export const TimeExtensionEdit = (props: Props) => {
         onSubmit={() => props.onSave()}
         qa="itemStatus"
       >
-        <ACC.SummaryList qa="existingProjectDetailsSummaryList" heading="Existing project details">
+        <Form.Fieldset heading="Existing project details">
+          <Form.Custom label="Start and end date" name="currentDates" value={(m) => <ACC.Renderers.SimpleString><ACC.Renderers.ShortDateRange start={props.project.startDate} end={originalProjectEndDate} /></ACC.Renderers.SimpleString>} update={()=> { return; }}/>
+          <Form.Custom label="Duration" name="current Duration" value={(m) => <ACC.Renderers.SimpleString><ACC.Renderers.Duration startDate={props.project.startDate} endDate={originalProjectEndDate} /></ACC.Renderers.SimpleString>} update={()=> { return; }}/>
+        </Form.Fieldset>
+        {/* <ACC.SummaryList qa="existingProjectDetailsSummaryList" heading="Existing project details">
           <ACC.SummaryListItem label="Start date" content={<ACC.Renderers.ShortDate value={props.project.startDate} />} qa="currentStartDate" />
-          <ACC.SummaryListItem label="End date" content={<ACC.Renderers.ShortDate value={props.projectChangeRequestItem.projectEndDateSnapshot} />} qa="currentEndDate" />
-          <ACC.SummaryListItem label="Duration" content={<ACC.Renderers.MonthsDuration months={props.projectChangeRequestItem.projectDurationSnapshot} />} qa="currentDuration" />
-        </ACC.SummaryList>
+          <ACC.SummaryListItem label="End date" content={<ACC.Renderers.ShortDate value={props.project.endDate} />} qa="currentEndDate" />
+          <ACC.SummaryListItem label="Duration" content={<ACC.Renderers.Duration startDate={props.project.startDate} endDate={originalProjectEndDate} />} qa="currentDuration" />
+        </ACC.SummaryList> */}
         <Form.Fieldset heading="Proposed project details">
           <Form.Numeric
             name="timeExtension"
             hint="Enter the number of months you want to extend your project by"
             width="small"
             value={m => (m.projectDuration) ? (m.projectDuration - props.project.durationInMonths) : null}
-            update={(m, val) => updateItem(m, val)}
+            update={(m, val) => m.projectDuration = (val || val === 0 ? m.projectDurationSnapshot! + val : val)}
+            validation={props.validator.projectDuration}
           />
-          <ACC.SummaryList qa="newProjectDetailsSummaryList">
+          <Form.Custom label="Start and end date" name="proposedDates" value={(m) => <ACC.Renderers.SimpleString><ACC.Renderers.ShortDateRange start={props.project.startDate} end={displayProposedProjectDetails ? proposedProjectEndDate : null} /></ACC.Renderers.SimpleString>} update={()=> { return; }}/>
+          <Form.Custom label="Duration" name="proposedDuration" value={(m) => <ACC.Renderers.SimpleString><ACC.Renderers.Duration startDate={props.project.startDate} endDate={displayProposedProjectDetails ? proposedProjectEndDate : null} /></ACC.Renderers.SimpleString>} update={()=> { return; }}/>
+          {/* <ACC.SummaryList qa="newProjectDetailsSummaryList">
             <ACC.SummaryListItem label="Start date" content={<ACC.Renderers.ShortDate value={props.project.startDate} />} qa="currentStartDate" />
-            <ACC.SummaryListItem label="End date" content={<ACC.Renderers.ShortDate value={props.projectChangeRequestItem.projectEndDate} />} qa="currentEndDate" />
-            <ACC.SummaryListItem label="Duration" content={<ACC.Renderers.MonthsDuration months={props.projectChangeRequestItem.projectDuration} />} qa="currentDuration" />
-          </ACC.SummaryList>
+            <ACC.SummaryListItem label="End date" content={<ACC.Renderers.ShortDate value={displayProposedProjectDetails ? proposedProjectEndDate : null} />} qa="currentEndDate" />
+            <ACC.SummaryListItem label="Duration" content={<ACC.Renderers.Duration startDate={props.project.startDate} endDate={displayProposedProjectDetails ? proposedProjectEndDate : null} />} qa="currentDuration" />
+          </ACC.SummaryList> */}
         </Form.Fieldset>
         <Form.Fieldset heading="Mark as complete">
           <Form.Checkboxes

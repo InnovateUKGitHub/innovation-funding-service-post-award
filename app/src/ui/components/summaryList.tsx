@@ -14,28 +14,15 @@ interface ItemProps {
   qa: string;
 }
 export const SummaryList: React.FunctionComponent<ListProps> = (props) => {
-  const classNames = cn(
-    "govuk-summary-list",
-    {
-      "govuk-summary-list--no-border": props.noBorders
-    }
-  );
-
-  const headerNames = cn(
-    "govuk-fieldset",
-    "govuk-fieldset__legend",
-    "govuk-fieldset__legend--m",
-  );
-
-  const Header = "h2";
+  const classNames = cn({
+    "govuk-summary-list": true,
+    "govuk-summary-list--no-border": props.noBorders
+  });
 
   return (
-      <dl className={classNames} data-qa={props.qa}>
-        <legend className={headerNames}>
-          {props.heading ? <Header className="govuk-fieldset__heading">{props.heading}</Header> : null}
-        </legend>
-        {props.children}
-      </dl>
+    <dl className={classNames} data-qa={props.qa}>
+      {props.children}
+    </dl>
   );
 };
 

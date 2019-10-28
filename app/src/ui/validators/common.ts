@@ -26,7 +26,7 @@ export const required = rule<any>((value) => {
     return true;
 }, "Required", true);
 
-export function isUnchanged(results: Results<{}>, value: string|Date|null|undefined, originalValue: string|Date|null|undefined, message?: string) {
+export function isUnchanged(results: Results<{}>, value: number|string|Date|null|undefined, originalValue: number|string|Date|null|undefined, message?: string) {
   if (!originalValue) return isTrue(results, !value, message || "Value can not be changed");
   if (value instanceof Date && originalValue instanceof Date) return isTrue(results, value.getTime() === originalValue.getTime(), message || "Value can not be changed");
   if (typeof value !== typeof originalValue) return inValid(results, message || "Value can not be changed");
