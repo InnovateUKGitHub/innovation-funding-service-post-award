@@ -1,6 +1,6 @@
 import React from "react";
 
-export abstract class BaseInput<TProps, TState> extends React.Component<TProps, TState> {
+export abstract class BaseInput<TProps extends { debounce?: boolean }, TState> extends React.Component<TProps, TState> {
     private timeoutId: number | null = null;
 
     protected cancelTimeout() {
@@ -11,8 +11,13 @@ export abstract class BaseInput<TProps, TState> extends React.Component<TProps, 
         }
     }
 
-    protected debounce(action: () => void, timeout: number = 250) {
+    protected debounce(action: () => void, allowDebounce: boolean, timeout: number = 250) {
         this.cancelTimeout();
-        this.timeoutId = window.setTimeout(action, timeout);
+        if (allowDebounce === false || this.props.debounce === false) {
+            action();
+        }
+        else {
+            this.timeoutId = window.setTimeout(action, timeout);
+        }
     }
 }

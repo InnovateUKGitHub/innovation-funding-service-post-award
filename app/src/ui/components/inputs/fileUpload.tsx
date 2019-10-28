@@ -11,7 +11,7 @@ interface FileUploadProps {
   error?: boolean;
 }
 
-export class FileUpload extends BaseInput<FileUploadProps, { value: File | null }> {
+export class FileUpload extends React.Component<FileUploadProps, { value: File | null }> {
   private fileInput: HTMLInputElement | null = null;
 
   public componentWillReceiveProps(nextProps: FileUploadProps) {
