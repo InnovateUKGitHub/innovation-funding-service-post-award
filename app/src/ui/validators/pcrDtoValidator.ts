@@ -237,7 +237,7 @@ export class PCRTimeExtensionItemDtoValidator extends PCRBaseItemDtoValidator<PC
     return Validation.all(this,
       () => isComplete ? Validation.required(this, this.model.projectDuration , "Please enter the number of months you want to extend your project by") : Validation.valid(this),
       () => Validation.number(this, this.model.projectDuration! , "Please enter a number of months you want to extend your project by"),
-      () => Validation.isTrue(this, this.model.projectDuration! > this.model.projectDurationSnapshot!, "Please enter a number that increases the project duration"),
+      () => this.model.projectDuration ? Validation.isTrue(this, this.model.projectDuration > (this.model.projectDurationSnapshot || 0), "Please enter a number that increases the project duration") : Validation.valid(this),
       () => this.model.projectDuration ? Validation.isTrue(this, Number.isInteger(this.model.projectDuration), "Please enter a whole number of months") : Validation.valid(this)
     );
   }
