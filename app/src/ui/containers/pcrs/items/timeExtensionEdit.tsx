@@ -47,11 +47,6 @@ export const TimeExtensionEdit = (props: Props) => {
           <Form.Custom label="Start and end date" name="currentDates" value={(m) => <ACC.Renderers.SimpleString><ACC.Renderers.ShortDateRange start={props.project.startDate} end={originalProjectEndDate} /></ACC.Renderers.SimpleString>} update={()=> { return; }}/>
           <Form.Custom label="Duration" name="current Duration" value={(m) => <ACC.Renderers.SimpleString><ACC.Renderers.Duration startDate={props.project.startDate} endDate={originalProjectEndDate} /></ACC.Renderers.SimpleString>} update={()=> { return; }}/>
         </Form.Fieldset>
-        {/* <ACC.SummaryList qa="existingProjectDetailsSummaryList" heading="Existing project details">
-          <ACC.SummaryListItem label="Start date" content={<ACC.Renderers.ShortDate value={props.project.startDate} />} qa="currentStartDate" />
-          <ACC.SummaryListItem label="End date" content={<ACC.Renderers.ShortDate value={props.project.endDate} />} qa="currentEndDate" />
-          <ACC.SummaryListItem label="Duration" content={<ACC.Renderers.Duration startDate={props.project.startDate} endDate={originalProjectEndDate} />} qa="currentDuration" />
-        </ACC.SummaryList> */}
         <Form.Fieldset heading="Proposed project details">
           <Form.Numeric
             name="timeExtension"
@@ -63,11 +58,6 @@ export const TimeExtensionEdit = (props: Props) => {
           />
           <Form.Custom label="Start and end date" name="proposedDates" value={(m) => <ACC.Renderers.SimpleString><ACC.Renderers.ShortDateRange start={props.project.startDate} end={displayProposedProjectDetails ? proposedProjectEndDate : null} /></ACC.Renderers.SimpleString>} update={()=> { return; }}/>
           <Form.Custom label="Duration" name="proposedDuration" value={(m) => <ACC.Renderers.SimpleString><ACC.Renderers.Duration startDate={props.project.startDate} endDate={displayProposedProjectDetails ? proposedProjectEndDate : null} /></ACC.Renderers.SimpleString>} update={()=> { return; }}/>
-          {/* <ACC.SummaryList qa="newProjectDetailsSummaryList">
-            <ACC.SummaryListItem label="Start date" content={<ACC.Renderers.ShortDate value={props.project.startDate} />} qa="currentStartDate" />
-            <ACC.SummaryListItem label="End date" content={<ACC.Renderers.ShortDate value={displayProposedProjectDetails ? proposedProjectEndDate : null} />} qa="currentEndDate" />
-            <ACC.SummaryListItem label="Duration" content={<ACC.Renderers.Duration startDate={props.project.startDate} endDate={displayProposedProjectDetails ? proposedProjectEndDate : null} />} qa="currentDuration" />
-          </ACC.SummaryList> */}
         </Form.Fieldset>
         <Form.Fieldset heading="Mark as complete">
           <Form.Checkboxes
