@@ -229,7 +229,7 @@ export class PCRStandardItemDtoValidator extends PCRBaseItemDtoValidator<PCRStan
 export class PCRTimeExtensionItemDtoValidator extends PCRBaseItemDtoValidator<PCRItemForTimeExtensionDto> {
   private validateProjectDuration() {
     if (!this.canEdit) {
-      return Validation.isUnchanged(this, this.model.projectDuration, this.original && this.original.projectDuration, "Project end date cannot be changed.");
+      return Validation.isUnchanged(this, this.model.projectDuration, this.original && this.original.projectDuration, "Project duration cannot be changed.");
     }
 
     const isComplete = this.model.status === PCRItemStatus.Complete;
