@@ -22,7 +22,7 @@ export const TimeExtensionView = (props: Props) => {
 
   return (
     <React.Fragment>
-    <ACC.Section title="Existing project details">
+      <ACC.Section title="Existing project details">
         <ACC.SummaryList qa="existingProjectDetails">
           <ACC.SummaryListItem label="Start and end date" content={<ACC.Renderers.ShortDateRange start={props.project.startDate} end={originalProjectEndDate} />} qa="currentStartToEndDate" />
           <ACC.SummaryListItem label="Duration" content={<ACC.Renderers.Duration startDate={props.project.startDate} endDate={originalProjectEndDate} />} qa="currentDuration" />
