@@ -66,15 +66,7 @@ export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBa
     item.projectSummary = body.summary || "";
   }
 
-  private updateTimeExtension(item: Dtos.PCRItemForTimeExtensionDto, body: IFormBody) {
-    if (body.endDate_month || body.endDate_year) {
-      const projectEndDate = DateTime.fromFormat(`${body.endDate_month}/${body.endDate_year}`, "M/yyyy").endOf("month").startOf("day");
-      item.projectEndDate = projectEndDate.toJSDate();
-    }
-    else {
-      item.projectEndDate = null;
-    }
-  }
+  private updateTimeExtension(item: Dtos.PCRItemForTimeExtensionDto, body: IFormBody) {}
 
   protected async run(context: IContext, params: ProjectChangeRequestPrepareItemParams, button: IFormButton, dto: Dtos.PCRDto): Promise<ILinkInfo> {
     await context.runCommand(new UpdatePCRCommand(params.projectId, params.pcrId, dto));
