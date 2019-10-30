@@ -6,7 +6,8 @@ export enum ErrorCode {
   VALIDATION_ERROR = 3,
   REQUEST_ERROR = 4,
   BAD_REQUEST_ERROR = 5,
-  FORBIDDEN_ERROR = 6
+  FORBIDDEN_ERROR = 6,
+  UNAUTHENTICATED_ERROR = 7
 }
 
 export interface IAppError {

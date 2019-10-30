@@ -53,3 +53,9 @@ export class ValidationError extends AppError {
     this.results = results;
   }
 }
+
+export class UnauthenticatedError extends AppError {
+  constructor() {
+    super(ErrorCode.UNAUTHENTICATED_ERROR, "User not authenticated");
+  }
+}
