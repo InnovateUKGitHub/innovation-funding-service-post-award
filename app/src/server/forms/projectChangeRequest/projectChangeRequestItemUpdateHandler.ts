@@ -26,6 +26,10 @@ export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBa
 
     item.status = body.itemStatus === "true" ? PCRItemStatus.Complete : PCRItemStatus.Incomplete;
 
+    if (item.type === PCRItemType.TimeExtension) {
+      this.updateTimeExtension(item, body);
+    }
+
     if (item.type === PCRItemType.ScopeChange) {
       this.updateScopeChange(item, body);
     }
@@ -60,6 +64,15 @@ export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBa
   private updateScopeChange(item: Dtos.PCRItemForScopeChangeDto, body: IFormBody) {
     item.publicDescription = body.description || "";
     item.projectSummary = body.summary || "";
+  }
+
+  private updateTimeExtension(item: Dtos.PCRItemForTimeExtensionDto, body: IFormBody) {
+    if (body.projectDuration) {
+      item.projectDuration = Number(body.projectDuration);
+    }
+    else {
+      item.projectDuration = null;
+    }
   }
 
   protected async run(context: IContext, params: ProjectChangeRequestPrepareItemParams, button: IFormButton, dto: Dtos.PCRDto): Promise<ILinkInfo> {
