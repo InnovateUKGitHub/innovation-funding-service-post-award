@@ -67,7 +67,7 @@ export class CreateProjectChangeRequestCommand extends CommandBase<string> {
     };
     switch (itemDto.type) {
       case PCRItemType.TimeExtension:
-          return { ...init, };
+          return { ...init, projectDuration: itemDto.projectDuration };
       case PCRItemType.ScopeChange:
           return { ...init, projectSummary: itemDto.projectSummary, publicDescription: itemDto.publicDescription };
       case PCRItemType.ProjectSuspension:
