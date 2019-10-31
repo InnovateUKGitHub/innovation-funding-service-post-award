@@ -7,7 +7,7 @@ import * as ACC from "../../components";
 import { Pending } from "@shared/pending";
 import { PCRDto, PCRItemDto, ProjectChangeRequestStatusChangeDto } from "@framework/dtos/pcrDtos";
 import { StoresConsumer } from "@ui/redux";
-import { PCRItemStatus, PCRItemType } from "@framework/constants";
+import { PCRItemStatus, PCRItemType, PCRStatus } from "@framework/constants";
 
 interface Params {
   projectId: string;
@@ -101,14 +101,16 @@ class PCRDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
   }
 
   private renderDraftComments(project: ProjectDto, projectChangeRequest: PCRDto) {
-    return ((project.roles & ProjectRole.MonitoringOfficer) && projectChangeRequest.comments) ?
-      (
+    if ((project.roles & ProjectRole.MonitoringOfficer) && projectChangeRequest.comments && (projectChangeRequest.status === PCRStatus.Draft || projectChangeRequest.status === PCRStatus.QueriedByMonitoringOfficer)) {
+      return (
         <ACC.Section title="Comments">
           <ACC.Renderers.SimpleString multiline={true}>
             {projectChangeRequest.comments}
           </ACC.Renderers.SimpleString>
         </ACC.Section>
-      ) : null;
+      );
+    }
+    return null;
   }
 
   private getItemTasks(item: PCRItemDto) {
