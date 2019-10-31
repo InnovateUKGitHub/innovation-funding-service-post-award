@@ -67,8 +67,8 @@ export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBa
   }
 
   private updateTimeExtension(item: Dtos.PCRItemForTimeExtensionDto, body: IFormBody) {
-    if (body.projectDuration) {
-      item.projectDuration = Number(body.projectDuration);
+    if (body.timeExtension && item.projectDurationSnapshot) {
+      item.projectDuration = item.projectDurationSnapshot + Number(body.timeExtension);
     }
     else {
       item.projectDuration = null;
