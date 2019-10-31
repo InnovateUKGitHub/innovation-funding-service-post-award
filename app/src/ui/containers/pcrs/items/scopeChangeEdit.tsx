@@ -30,7 +30,7 @@ export const ScopeChangeEdit = (props: Props) => {
         qa="scopeChange"
       >
         <Form.Fieldset heading="Proposed public description">
-          <ACC.Info summary="Published public description"><ACC.Renderers.SimpleString multiline={true}>{props.projectChangeRequestItem.publicDescriptionSnapshot}</ACC.Renderers.SimpleString></ACC.Info>
+          <ACC.Info summary="Published public description"><ACC.Renderers.SimpleString multiline={true}>{props.projectChangeRequestItem.publicDescriptionSnapshot || "No public description available."}</ACC.Renderers.SimpleString></ACC.Info>
           <Form.MultilineString
             name="description"
             value={m => m.publicDescription}
@@ -41,7 +41,7 @@ export const ScopeChangeEdit = (props: Props) => {
           />
         </Form.Fieldset>
         <Form.Fieldset heading="Proposed project summary">
-          <ACC.Info summary="Published project summary"><ACC.Renderers.SimpleString multiline={true}>{props.projectChangeRequestItem.projectSummarySnapshot}</ACC.Renderers.SimpleString></ACC.Info>
+          <ACC.Info summary="Published project summary"><ACC.Renderers.SimpleString multiline={true}>{props.projectChangeRequestItem.projectSummarySnapshot || "No project summary available."}</ACC.Renderers.SimpleString></ACC.Info>
           <Form.MultilineString
             name="summary"
             value={m => m.projectSummary}
