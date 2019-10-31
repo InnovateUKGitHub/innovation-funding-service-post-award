@@ -68,7 +68,7 @@ class PCRDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
             {this.renderTaskListActions(projectChangeRequest, editableItemTypes)}
             {this.renderTaskListReasoning(projectChangeRequest, editableItemTypes)}
           </ACC.TaskList>
-          {this.renderDraftComments(project, projectChangeRequest)}
+          {this.renderCommentsFromPM(project, projectChangeRequest)}
         </ACC.Section>
       </React.Fragment>
     );
@@ -100,7 +100,7 @@ class PCRDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
     );
   }
 
-  private renderDraftComments(project: ProjectDto, projectChangeRequest: PCRDto) {
+  private renderCommentsFromPM(project: ProjectDto, projectChangeRequest: PCRDto) {
     if ((project.roles & ProjectRole.MonitoringOfficer) && projectChangeRequest.comments && (projectChangeRequest.status === PCRStatus.Draft || projectChangeRequest.status === PCRStatus.QueriedByMonitoringOfficer)) {
       return (
         <ACC.Section title="Comments">
