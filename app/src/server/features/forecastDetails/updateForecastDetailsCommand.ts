@@ -27,9 +27,12 @@ export class UpdateForecastDetailsCommand extends CommandBase<boolean> {
     const existing = await context.runQuery(new GetAllForecastsForPartnerQuery(this.partnerId));
 
     const preparedForecasts = await this.getPrepareForecastValues(context, project.periodId, existing);
+    const claims = await context.runQuery(new GetAllForPartnerQuery(this.partnerId));
+    const claimDetails = await context.runQuery(new GetAllClaimDetailsByPartner(this.partnerId));
+    const golCosts = await context.runQuery(new GetAllForecastsGOLCostsQuery(this.partnerId));
 
-    await this.testValidation(context);
-    await this.testPastForecastPeriodsHaveNotBeenUpdated(project.periodId, preparedForecasts, existing, this.submit);
+    await this.testValidation(claims, claimDetails, golCosts);
+    await this.testPastForecastPeriodsHaveNotBeenUpdated(project.periodId, preparedForecasts, existing);
     await this.updateProfileDetails(context, preparedForecasts, existing);
 
     if (this.submit) {
@@ -77,10 +80,7 @@ export class UpdateForecastDetailsCommand extends CommandBase<boolean> {
     return related.value * overheadRate / 100;
   }
 
-  private async testValidation(context: IContext) {
-    const claims = await context.runQuery(new GetAllForPartnerQuery(this.partnerId));
-    const claimDetails = await context.runQuery(new GetAllClaimDetailsByPartner(this.partnerId));
-    const golCosts = await context.runQuery(new GetAllForecastsGOLCostsQuery(this.partnerId));
+  private async testValidation(claims: ClaimDto[], claimDetails: ClaimDetailsSummaryDto[], golCosts: GOLCostDto[]) {
     const showErrors = true;
     const validation = new ForecastDetailsDtosValidator(this.forecasts, claims, claimDetails, golCosts, showErrors);
 
@@ -89,12 +89,9 @@ export class UpdateForecastDetailsCommand extends CommandBase<boolean> {
     }
   }
 
-  private async testPastForecastPeriodsHaveNotBeenUpdated(periodId: number, forecasts: ForecastDetailsDTO[], existing: ForecastDetailsDTO[], submit: boolean) {
+  private async testPastForecastPeriodsHaveNotBeenUpdated(periodId: number, forecasts: ForecastDetailsDTO[], existing: ForecastDetailsDTO[]) {
     const allUpdatesAllowed = forecasts.every(x => {
-      if (submit && x.periodId === periodId) {
-        return true;
-      }
-      if (x.periodId > periodId) {
+      if (x.periodId >= periodId) {
         return true;
       }
       return !this.hasChanged(x, existing);
