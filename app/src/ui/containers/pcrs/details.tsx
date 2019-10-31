@@ -36,7 +36,7 @@ class PCRDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
       text: "Details",
       hash: "details",
       default: true,
-      content: this.renderDetailsTab(projectChangeRequest, editableItemTypes),
+      content: this.renderDetailsTab(project, projectChangeRequest, editableItemTypes),
       qa: "ProjectChangeRequestDetailsTab"
     }, {
       text: "Log",
@@ -56,20 +56,20 @@ class PCRDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
     );
   }
 
-  private renderDetailsTab(projectChangeRequest: PCRDto, editableItemTypes: PCRItemType[] ) {
+  private renderDetailsTab(project: ProjectDto, projectChangeRequest: PCRDto, editableItemTypes: PCRItemType[]) {
     return (
       <React.Fragment>
-
         <ACC.Section title="Details">
           <ACC.SummaryList qa="pcr_details">
             <ACC.SummaryListItem label="Request number" content={projectChangeRequest.requestNumber} qa="numberRow" />
             <ACC.SummaryListItem label="Types" content={<ACC.Renderers.LineBreakList items={projectChangeRequest.items.map(x => x.typeName)} />} qa="typesRow" />
           </ACC.SummaryList>
+          <ACC.TaskList qa="taskList">
+            {this.renderTaskListActions(projectChangeRequest, editableItemTypes)}
+            {this.renderTaskListReasoning(projectChangeRequest, editableItemTypes)}
+          </ACC.TaskList>
+          {this.renderDraftComments(project, projectChangeRequest)}
         </ACC.Section>
-        <ACC.TaskList qa="taskList">
-          {this.renderTaskListActions(projectChangeRequest, editableItemTypes)}
-          {this.renderTaskListReasoning(projectChangeRequest, editableItemTypes)}
-        </ACC.TaskList>
       </React.Fragment>
     );
   }
@@ -98,6 +98,17 @@ class PCRDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
         />
       </ACC.TaskListSection>
     );
+  }
+
+  private renderDraftComments(project: ProjectDto, projectChangeRequest: PCRDto) {
+    return ((project.roles & ProjectRole.MonitoringOfficer) && projectChangeRequest.comments) ?
+      (
+        <ACC.Section title="Comments">
+          <ACC.Renderers.SimpleString multiline={true}>
+            {projectChangeRequest.comments}
+          </ACC.Renderers.SimpleString>
+        </ACC.Section>
+      ) : null;
   }
 
   private getItemTasks(item: PCRItemDto) {
