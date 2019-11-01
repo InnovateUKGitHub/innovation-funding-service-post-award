@@ -62,7 +62,8 @@ const mapBaseItem = (pcr: ProjectChangeRequestItemEntity, typeName: string) => (
   guidance: pcr.guidance,
   typeName,
   status: pcr.status,
-  statusName: pcr.statusName
+  statusName: pcr.statusName,
+  shortName: pcr.shortName,
 });
 
 const mapStandardItem = (pcr: ProjectChangeRequestItemEntity, typeName: string, type: ProjectChangeRequestStandardItemTypes): PCRStandardItemDto => ({
