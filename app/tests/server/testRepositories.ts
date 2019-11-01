@@ -453,6 +453,7 @@ class PCRTestRepository extends TestRepository<Entities.ProjectChangeRequestEnti
         projectSummarySnapshot: "",
         publicDescriptionSnapshot: "",
         existingPartnerName: "",
+        shortName: "",
         ...x
       };
     });

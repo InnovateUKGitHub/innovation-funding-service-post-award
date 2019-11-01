@@ -53,6 +53,7 @@ export interface ISalesforcePCR {
   Acc_PublicDescriptionSnapshot__c: string|null;
   Acc_ProjectSummarySnapshot__c: string|null;
   Acc_ExistingPartnerName__c: string|null;
+  Acc_Nickname__c: string|null;
 }
 
 export class ProjectChangeRequestRepository extends SalesforceRepositoryBase<ISalesforcePCR> implements IProjectChangeRequestRepository {
@@ -91,6 +92,7 @@ export class ProjectChangeRequestRepository extends SalesforceRepositoryBase<ISa
     "Acc_PublicDescriptionSnapshot__c",
     "Acc_ProjectSummarySnapshot__c",
     "Acc_ExistingPartnerName__c",
+    "Acc_Nickname__c",
   ];
 
   async getAllByProjectId(projectId: string): Promise<ProjectChangeRequestEntity[]> {
