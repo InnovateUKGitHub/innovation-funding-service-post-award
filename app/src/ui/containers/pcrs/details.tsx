@@ -7,7 +7,7 @@ import * as ACC from "../../components";
 import { Pending } from "@shared/pending";
 import { PCRDto, PCRItemDto, ProjectChangeRequestStatusChangeDto } from "@framework/dtos/pcrDtos";
 import { StoresConsumer } from "@ui/redux";
-import { PCRItemStatus, PCRItemType } from "@framework/constants";
+import { PCRItemStatus, PCRItemType, PCRStatus } from "@framework/constants";
 
 interface Params {
   projectId: string;
@@ -36,7 +36,7 @@ class PCRDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
       text: "Details",
       hash: "details",
       default: true,
-      content: this.renderDetailsTab(projectChangeRequest, editableItemTypes),
+      content: this.renderDetailsTab(project, projectChangeRequest, editableItemTypes),
       qa: "ProjectChangeRequestDetailsTab"
     }, {
       text: "Log",
@@ -56,20 +56,20 @@ class PCRDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
     );
   }
 
-  private renderDetailsTab(projectChangeRequest: PCRDto, editableItemTypes: PCRItemType[] ) {
+  private renderDetailsTab(project: ProjectDto, projectChangeRequest: PCRDto, editableItemTypes: PCRItemType[]) {
     return (
       <React.Fragment>
-
         <ACC.Section title="Details">
           <ACC.SummaryList qa="pcr_details">
             <ACC.SummaryListItem label="Request number" content={projectChangeRequest.requestNumber} qa="numberRow" />
             <ACC.SummaryListItem label="Types" content={<ACC.Renderers.LineBreakList items={projectChangeRequest.items.map(x => x.typeName)} />} qa="typesRow" />
           </ACC.SummaryList>
+          <ACC.TaskList qa="taskList">
+            {this.renderTaskListActions(projectChangeRequest, editableItemTypes)}
+            {this.renderTaskListReasoning(projectChangeRequest, editableItemTypes)}
+          </ACC.TaskList>
+          {this.renderCommentsFromPM(project, projectChangeRequest)}
         </ACC.Section>
-        <ACC.TaskList qa="taskList">
-          {this.renderTaskListActions(projectChangeRequest, editableItemTypes)}
-          {this.renderTaskListReasoning(projectChangeRequest, editableItemTypes)}
-        </ACC.TaskList>
       </React.Fragment>
     );
   }
@@ -98,6 +98,19 @@ class PCRDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
         />
       </ACC.TaskListSection>
     );
+  }
+
+  private renderCommentsFromPM(project: ProjectDto, projectChangeRequest: PCRDto) {
+    if ((project.roles & ProjectRole.MonitoringOfficer) && projectChangeRequest.comments && (projectChangeRequest.status === PCRStatus.Draft || projectChangeRequest.status === PCRStatus.QueriedByMonitoringOfficer)) {
+      return (
+        <ACC.Section title="Comments">
+          <ACC.Renderers.SimpleString multiline={true}>
+            {projectChangeRequest.comments}
+          </ACC.Renderers.SimpleString>
+        </ACC.Section>
+      );
+    }
+    return null;
   }
 
   private getItemTasks(item: PCRItemDto) {
