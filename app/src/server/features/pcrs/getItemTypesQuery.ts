@@ -15,8 +15,8 @@ interface IMetaValue {
 
 // @TODO: this might sit better in the pcr repository (or constants?) ... leave for now
 export const PCRRecordTypeMetaValues: IMetaValue[] = [
-  { type: PCRItemType.SinglePartnerFinancialVirement, typeName: "Reallocate one partner's project costs", files: ["partner_finance_form.xls"]},
-  { type: PCRItemType.MultiplePartnerFinancialVirement, typeName: "Reallocate several partners' project cost", files: ["partner_finance_form.xls"]},
+  { type: PCRItemType.SinglePartnerFinancialVirement, typeName: "Reallocate one partner's project costs", files: ["reallocate-project-costs.xlsx"]},
+  { type: PCRItemType.MultiplePartnerFinancialVirement, typeName: "Reallocate several partners' project cost", files: ["reallocate-project-costs.xlsx"]},
   { type: PCRItemType.PartnerWithdrawal, typeName: "Remove a partner", },
   { type: PCRItemType.PartnerAddition, typeName: "Add a partner", files: ["partner_addition.xlsx"] },
   { type: PCRItemType.ScopeChange, typeName: "Change project scope", },
