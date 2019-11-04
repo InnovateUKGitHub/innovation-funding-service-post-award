@@ -1,11 +1,10 @@
 import * as ACC from "../../components";
 import React from "react";
 import { Pending } from "../../../shared/pending";
-import * as Actions from "../../redux/actions";
-import * as Selectors from "../../redux/selectors";
-import { ContainerBase, ReduxContainer } from "../containerBase";
+import { BaseProps, ContainerBase, defineRoute } from "../containerBase";
 
 import {
+  Authorisation,
   ClaimDto,
   ClaimStatus,
   ClaimStatusChangeDto,
@@ -15,7 +14,7 @@ import {
   ProjectRole,
 } from "@framework/types";
 import { SimpleString } from "../../components/renderers";
-import { ForecastData, forecastDataLoadActions } from "./forecasts/common";
+import { StoresConsumer } from "@ui/redux";
 
 interface Params {
   projectId: string;
@@ -24,15 +23,13 @@ interface Params {
 }
 
 interface Data {
-  id: string;
   project: Pending<ProjectDto>;
   partner: Pending<PartnerDto>;
   costCategories: Pending<CostCategoryDto[]>;
   claim: Pending<ClaimDto>;
   costsSummaryForPeriod: Pending<CostsSummaryForPeriodDto[]>;
   iarDocument: Pending<DocumentSummaryDto | null>;
-  standardOverheadRate: number;
-  forecastData: Pending<ForecastData> | null;
+  forecastData: Pending<ACC.Claims.ForecastData> | null;
   statusChanges: Pending<ClaimStatusChangeDto[]>;
 }
 
@@ -101,10 +98,10 @@ export class ClaimsDetailsComponent extends ContainerBase<Params, Data, {}> {
     const isFC = (data.partner.roles & ProjectRole.FinancialContact) === ProjectRole.FinancialContact;
 
     if (isFC) {
-      return <ACC.Claims.ClaimTable getLink={x => this.getLink(x, data.project, data.partner)} standardOverheadRate={this.props.standardOverheadRate} {...data} />;
+      return <ACC.Claims.ClaimTable getLink={x => this.getLink(x, data.project, data.partner)} standardOverheadRate={this.props.config.standardOverheadRate} {...data} />;
     }
 
-    return <ACC.Claims.ClaimReviewTable getLink={x => this.getLink(x, data.project, data.partner)} standardOverheadRate={this.props.standardOverheadRate} {...data} />;
+    return <ACC.Claims.ClaimReviewTable getLink={x => this.getLink(x, data.project, data.partner)} standardOverheadRate={this.props.config.standardOverheadRate} {...data} />;
   }
 
   private getLink(costCategoryId: string, project: ProjectDto, partner: PartnerDto): ILinkInfo | null {
@@ -156,7 +153,7 @@ export class ClaimsDetailsComponent extends ContainerBase<Params, Data, {}> {
     );
   }
 
-  private renderForecastTable(forecastData: ForecastData) {
+  private renderForecastTable(forecastData: ACC.Claims.ForecastData) {
     return <ACC.Claims.ForecastTable data={forecastData} hideValidation={true} />;
   }
 
@@ -174,67 +171,56 @@ export class ClaimsDetailsComponent extends ContainerBase<Params, Data, {}> {
   }
 }
 
-const definition = ReduxContainer.for<Params, Data, {}>(ClaimsDetailsComponent);
+const ClaimsDetailsContainer = (props: Params & BaseProps) => (
+  <StoresConsumer>
+    {
+      stores => {
+        const auth = stores.users.getCurrentUserAuthorisation();
+        const isMoOrPM = auth.forProject(props.projectId).hasAnyRoles(ProjectRole.MonitoringOfficer, ProjectRole.ProjectManager);
+        const isFC = auth.forPartner(props.projectId, props.partnerId).hasRole(ProjectRole.FinancialContact);
 
-export const ClaimsDetails = definition.connect({
-  withData: (state, props, auth) => {
-    const isMoOrPM = auth.forProject(props.projectId).hasAnyRoles(ProjectRole.MonitoringOfficer, ProjectRole.ProjectManager);
-    const isFC = auth.forPartner(props.projectId, props.partnerId).hasRole(ProjectRole.FinancialContact);
+        const project = stores.projects.getById(props.projectId);
+        const partner = stores.partners.getById(props.partnerId);
+        const costCategories = stores.costCategories.getAll();
+        const claim = stores.claims.get(props.partnerId, props.periodId);
 
-    return {
-      id: props.projectId,
-      project: Selectors.getProject(props.projectId).getPending(state),
-      partner: Selectors.getPartner(props.partnerId).getPending(state),
-      costCategories: Selectors.getCostCategories().getPending(state),
-      claim: Selectors.getClaim(props.partnerId, props.periodId).getPending(state),
-      costsSummaryForPeriod: Selectors.getCostsSummaryForPeriod(props.partnerId, props.periodId).getPending(state),
-      iarDocument: Selectors.getIarDocument(state, props.partnerId, props.periodId),
-      standardOverheadRate: state.config.standardOverheadRate,
-      statusChanges: Selectors.getClaimStatusChanges(props.projectId, props.partnerId, props.periodId).getPending(state),
-      forecastData: isMoOrPM && !isFC ? Pending.combine({
-        project: Selectors.getProject(props.projectId).getPending(state),
-        partner: Selectors.getPartner(props.partnerId).getPending(state),
-        claim: Selectors.getClaim(props.partnerId, props.periodId).getPending(state),
-        claims: Selectors.findClaimsByPartner(props.partnerId).getPending(state),
-        claimDetails: Selectors.findClaimDetailsByPartner(props.partnerId).getPending(state),
-        forecastDetails: Selectors.findForecastDetailsByPartner(props.partnerId).getPending(state),
-        golCosts: Selectors.findGolCostsByPartner(props.partnerId).getPending(state),
-        costCategories: Selectors.getCostCategories().getPending(state),
-      }) : null
-    };
-  },
-  withCallbacks: () => ({})
-});
+        const forecastData: Pending<ACC.Claims.ForecastData> | null = isMoOrPM && !isFC ? Pending.combine({
+          project,
+          partner,
+          claim,
+          claims: stores.claims.getAllClaimsForPartner(props.partnerId),
+          claimDetails: stores.claimDetails.getAllByPartner(props.partnerId),
+          forecastDetails: stores.forecastDetails.getAllByPartner(props.partnerId),
+          golCosts: stores.forecastGolCosts.getAllByPartner(props.partnerId),
+          costCategories,
+        }) : null;
 
-export const ClaimsDetailsRoute = definition.route({
+        return (
+          <ClaimsDetailsComponent
+            project={project}
+            partner={partner}
+            costCategories={costCategories}
+            claim={claim}
+            forecastData={forecastData}
+            statusChanges={stores.claims.getStatusChanges(props.projectId, props.partnerId, props.periodId)}
+            costsSummaryForPeriod={stores.costsSummaries.getForPeriod(props.projectId, props.partnerId, props.periodId)}
+            iarDocument={stores.claimDocuments.getIarDocument(props.projectId, props.partnerId, props.periodId)}
+            {...props}
+          />
+        );
+      }
+    }
+  </StoresConsumer>
+);
+
+export const ClaimsDetailsRoute = defineRoute({
   routeName: "claimDetails",
   routePath: "/projects/:projectId/claims/:partnerId/details/:periodId",
+  container: ClaimsDetailsContainer,
   getParams: (route) => ({ projectId: route.params.projectId, partnerId: route.params.partnerId, periodId: parseInt(route.params.periodId, 10) }),
-  getLoadDataActions: (params, auth) => {
-    const isMoOrPM = auth.forProject(params.projectId).hasAnyRoles(ProjectRole.MonitoringOfficer, ProjectRole.ProjectManager);
-    const isFC = auth.forPartner(params.projectId, params.partnerId).hasRole(ProjectRole.FinancialContact);
-
-    const standardActions = [
-      Actions.loadProject(params.projectId),
-      Actions.loadPartnersForProject(params.projectId),
-      Actions.loadPartner(params.partnerId),
-      Actions.loadCostCategories(),
-      Actions.loadClaim(params.partnerId, params.periodId),
-      Actions.loadCostsSummaryForPeriod(params.projectId, params.partnerId, params.periodId),
-      Actions.loadIarDocuments(params.projectId, params.partnerId, params.periodId),
-      Actions.loadClaimStatusChanges(params.projectId, params.partnerId, params.periodId)
-    ];
-
-    const forecastActions = isMoOrPM && !isFC ? forecastDataLoadActions(params) : [];
-
-    return [...standardActions, ...forecastActions];
-  },
   accessControl: (auth, params) => auth.forProject(params.projectId).hasAnyRoles(ProjectRole.MonitoringOfficer, ProjectRole.ProjectManager) || auth.forPartner(params.projectId, params.partnerId).hasRole(ProjectRole.FinancialContact),
-  getTitle: (store, params) => {
-    return {
-      displayTitle: "Claim",
-      htmlTitle: "View claim"
-    };
-  },
-  container: ClaimsDetails
+  getTitle: () => ({
+    displayTitle: "Claim",
+    htmlTitle: "View claim"
+  }),
 });

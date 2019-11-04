@@ -1,26 +1,14 @@
-import React from "react";
-import { Pending } from "../../../shared/pending";
-import * as Actions from "../../redux/actions";
-import {
-  getCurrentClaim,
-  getCurrentClaimIarDocument,
-  getCurrentClaimIarDocumentsDeleteEditor,
-  getCurrentClaimIarDocumentsEditor,
-  getMaxFileSize,
-  getPartner,
-  getPreviousClaims,
-  getProject
-} from "../../redux/selectors";
-import * as Acc from "../../components";
-import {ContainerBaseWithState, ContainerProps, ReduxContainer} from "../containerBase";
-import { ClaimDto, ClaimStatus, DocumentDescription, PartnerDto, ProjectDto, ProjectRole } from "@framework/types";
 import { IEditorStore } from "../../redux/reducers";
+import React from "react";
+import * as Acc from "../../components";
+import { BaseProps, ContainerBaseWithState, ContainerProps, defineRoute } from "../containerBase";
+import { ClaimDto, ClaimStatus, DocumentDescription, PartnerDto, ProjectDto, ProjectRole } from "@framework/types";
+import { Pending } from "../../../shared/pending";
 import { DocumentUploadDtoValidator } from "../../validators/documentUploadValidator";
 import { DateTime } from "luxon";
-import { Results } from "../../validation/results";
 import { getFileSize } from "@framework/util/filesize";
-import { filterEmpty } from "@framework/util/arrayHelpers";
 import { getClaimDetailsLinkType } from "@ui/components/claims/claimDetailsLink";
+import { StoresConsumer } from "@ui/redux";
 
 export interface ClaimDashboardPageParams {
   projectId: string;
@@ -29,36 +17,23 @@ export interface ClaimDashboardPageParams {
 
 interface Data {
   document: Pending<DocumentSummaryDto | null>;
-  maxFileSize: number;
   projectDetails: Pending<ProjectDto>;
   partnerDetails: Pending<PartnerDto>;
   previousClaims: Pending<ClaimDto[]>;
   currentClaim: Pending<ClaimDto | null>;
   editor: Pending<IEditorStore<DocumentUploadDto, DocumentUploadDtoValidator> | null>;
-  deleteEditor: Pending<IEditorStore<DocumentSummaryDto[], Results<DocumentSummaryDto[]>> | null>;
-}
-
-interface CombinedData {
-  document: DocumentSummaryDto | null;
-  project: ProjectDto;
-  partner: PartnerDto;
-  previousClaims: ClaimDto[];
-  currentClaim: ClaimDto | null;
-  editor: IEditorStore<DocumentUploadDto, DocumentUploadDtoValidator> | null;
-  deleteEditor: IEditorStore<DocumentSummaryDto[], Results<DocumentSummaryDto[]>> | null;
 }
 
 interface Callbacks {
-  validate: (key: ClaimKey, dto: DocumentUploadDto) => void;
-  uploadFile: (key: ClaimKey, dto: DocumentUploadDto, onComplete: () => void) => void;
-  deleteFile: (key: ClaimKey, dto: DocumentSummaryDto) => void;
+  onIarChange: (saving: boolean, periodId: number, dto: DocumentUploadDto, onSucess?: () => void) => void;
+  onIarDelete: (periodId: number, dto: DocumentUploadDto, document: DocumentSummaryDto, onSucess?: () => void) => void;
 }
 
 interface State {
   showIarMessage: boolean;
 }
 
-class Component extends ContainerBaseWithState<ClaimDashboardPageParams, Data, Callbacks, State > {
+class Component extends ContainerBaseWithState<ClaimDashboardPageParams, Data, Callbacks, State> {
   constructor(props: ContainerProps<ClaimDashboardPageParams, Data, Callbacks>) {
     super(props);
 
@@ -69,49 +44,45 @@ class Component extends ContainerBaseWithState<ClaimDashboardPageParams, Data, C
 
   public render() {
     const combined = Pending.combine({
-      document: this.props.document,
       project: this.props.projectDetails,
       partner: this.props.partnerDetails,
       previousClaims: this.props.previousClaims,
       currentClaim: this.props.currentClaim,
-      editor: this.props.editor,
-      deleteEditor: this.props.deleteEditor,
     });
 
-    return <Acc.PageLoader pending={combined} render={(x) => this.renderContents(x)} />;
+    return <Acc.PageLoader pending={combined} render={(x) => this.renderContents(x.project, x.partner, x.currentClaim, x.previousClaims)} />;
   }
 
-  private renderIarDocument(claim: ClaimDto, document: DocumentSummaryDto) {
+  private renderIarDocument(claim: ClaimDto, editor: IEditorStore<DocumentUploadDto, DocumentUploadDtoValidator>, document: DocumentSummaryDto) {
     const button = () => {
-      const Form = Acc.TypedForm<DocumentSummaryDto>();
+      const Form = Acc.TypedForm<DocumentUploadDto>();
       return (
-        <Form.Form data={document} qa="iar-delete-form">
+        <Form.Form editor={editor} qa="iar-delete-form">
           <Form.Hidden name="periodId" value={() => claim.periodId} />
-          <Form.Button name="delete" value={document.id} onClick={() => this.onDelete(claim, document, this.props.projectId)}>Remove</Form.Button>
+          <Form.Button name="delete" value={document.id} onClick={() => this.onDelete(claim, editor.data, document, this.props.projectId)}>Remove</Form.Button>
         </Form.Form>
       );
     };
 
     return (
       <React.Fragment>
-          {this.state.showIarMessage ? <Acc.ValidationMessage messageType="success" message="You have attached an independent accountant's report (IAR)."/> : null}
+        {this.state.showIarMessage ? <Acc.ValidationMessage messageType="success" message="You have attached an independent accountant's report (IAR)." /> : null}
         <Acc.DocumentSingle document={document} openNewWindow={true} renderRemove={() => claim.allowIarEdit && button()} />
       </React.Fragment>
     );
   }
 
   private onChange(dto: DocumentUploadDto, periodId: number) {
-    const key = { projectId: this.props.projectId, partnerId: this.props.partnerId, periodId };
-    this.props.validate(key, dto);
+    this.setState({ showIarMessage: false });
+    this.props.onIarChange(false, periodId, dto);
   }
 
   private onSave(dto: DocumentUploadDto, periodId: number) {
-    const key = { projectId: this.props.projectId, partnerId: this.props.partnerId, periodId };
-    this.props.uploadFile(key, dto, () => this.setState({showIarMessage: true}));
+    this.props.onIarChange(true, periodId, dto, () => this.setState({ showIarMessage: true }));
   }
 
-  private onDelete(claim: ClaimDto, dto: DocumentSummaryDto, projectId: string) {
-    this.props.deleteFile({ projectId, partnerId: claim.partnerId, periodId: claim.periodId }, dto);
+  private onDelete(claim: ClaimDto, dto: DocumentUploadDto, document: DocumentSummaryDto, projectId: string) {
+    this.props.onIarDelete(claim.periodId, dto, document, () => this.setState({ showIarMessage: false }));
   }
 
   private renderIarDocumentUpload(claim: ClaimDto, editor: IEditorStore<DocumentUploadDto, DocumentUploadDtoValidator>) {
@@ -134,7 +105,7 @@ class Component extends ContainerBaseWithState<ClaimDashboardPageParams, Data, C
               <p>There is no restriction on the type of file you can upload.</p>
               <p>The document must be:</p>
               <ul>
-                <li>less than {getFileSize(this.props.maxFileSize)} in file size</li>
+                <li>less than {getFileSize(this.props.config.maxFileSize)} in file size</li>
               </ul>
             </Acc.Info>
             <UploadForm.FileUpload
@@ -154,37 +125,46 @@ class Component extends ContainerBaseWithState<ClaimDashboardPageParams, Data, C
     );
   }
 
-  private renderIarDocumentSection(claim: ClaimDto, editor: IEditorStore<DocumentUploadDto, DocumentUploadDtoValidator>, document: DocumentSummaryDto | null) {
-    if (!claim.isIarRequired) {
-      return null;
-    }
+  private renderIarDocumentSectionLoader() {
+    const combined = Pending.combine({
+      claim: this.props.currentClaim,
+      document: this.props.document,
+      editor: this.props.editor
+    });
 
     return (
+      <Acc.Loader pending={combined} render={data => this.renderIarDocumentSection(data.claim, data.editor, data.document)} />
+    );
+  }
+
+  private renderIarDocumentSection(claim: ClaimDto | null, editor: IEditorStore<DocumentUploadDto, DocumentUploadDtoValidator> | null, document: DocumentSummaryDto | null) {
+    if (!claim || !claim.isIarRequired || !editor) {
+      return null;
+    }
+    return (
       <Acc.Section qa="current-claim-iar" title="Independent accountant's report">
-        {document ? this.renderIarDocument(claim, document) : this.renderIarDocumentUpload(claim, editor)}
+        {document ? this.renderIarDocument(claim, editor, document) : this.renderIarDocumentUpload(claim, editor)}
       </Acc.Section>
     );
   }
 
-  private renderContents({ currentClaim, partner, previousClaims, project, editor, document, deleteEditor }: CombinedData) {
+  private renderContents(project: ProjectDto, partner: PartnerDto, currentClaim: ClaimDto | null, previousClaims: ClaimDto[], ) {
     const claimsWindow = !!currentClaim && currentClaim.status === ClaimStatus.DRAFT ? <Acc.Claims.ClaimWindow periodEnd={currentClaim.periodEndDate} /> : null;
-
-    const error = (editor && editor.error) || (deleteEditor && deleteEditor.error);
-    const validators = filterEmpty([editor && editor.validator, deleteEditor && deleteEditor.validator]);
+    const editor = this.props.editor.data;
 
     return (
       <Acc.Page
-        pageTitle={<Acc.Projects.Title project={project}/>}
-        backLink={<Acc.Projects.ProjectBackLink project={project} routes={this.props.routes}/>}
-        error={error}
-        validator={validators}
+        pageTitle={<Acc.Projects.Title project={project} />}
+        backLink={<Acc.Projects.ProjectBackLink project={project} routes={this.props.routes} />}
+        error={editor && editor.error}
+        validator={editor && editor.validator}
         project={project}
       >
-        <Acc.Renderers.Messages messages={this.props.messages}/>
+        <Acc.Renderers.Messages messages={this.props.messages} />
         <Acc.Section qa="current-claims-section" title={"Open"} badge={claimsWindow}>
           {this.renderCurrentClaims(currentClaim ? [currentClaim] : [], "current-claims-table", project, partner, previousClaims)}
         </Acc.Section>
-        {currentClaim && editor && this.renderIarDocumentSection(currentClaim, editor, document)}
+        {this.renderIarDocumentSectionLoader()}
         <Acc.Section qa="previous-claims-section" title="Closed">
           {this.renderPreviousClaims(previousClaims, "previous-claims-table", project, partner)}
         </Acc.Section>
@@ -193,7 +173,7 @@ class Component extends ContainerBaseWithState<ClaimDashboardPageParams, Data, C
   }
 
   private renderNextPeriodStartDate(endDate: Date) {
-    const date = DateTime.fromJSDate(endDate).plus({days: 1}).toJSDate();
+    const date = DateTime.fromJSDate(endDate).plus({ days: 1 }).toJSDate();
     return (
       <Acc.Renderers.SimpleString>
         You have no open claims. The next claim period begins <Acc.Renderers.FullDate value={date} />.
@@ -256,59 +236,40 @@ class Component extends ContainerBaseWithState<ClaimDashboardPageParams, Data, C
   }
 }
 
-const definition = ReduxContainer.for<ClaimDashboardPageParams, Data, Callbacks>(Component);
+const Container = (props: ClaimDashboardPageParams & BaseProps) => (
+  <StoresConsumer>
+    {stores => (
+      <Component
+        projectDetails={stores.projects.getById(props.projectId)}
+        partnerDetails={stores.partners.getById(props.partnerId)}
+        previousClaims={stores.claims.getInactiveClaimsForPartner(props.partnerId)}
+        currentClaim={stores.claims.getActiveClaimForPartner(props.partnerId)}
+        document={stores.claimDocuments.getCurrentClaimIarForPartner(props.projectId, props.partnerId)}
+        editor={stores.claimDocuments.getIarEditorForCurrentPartnerClaim(props.projectId, props.partnerId)}
+        onIarChange={(saving, periodId, dto, onSuccess) => stores.claimDocuments.updateIAREditor(saving, props.projectId, props.partnerId, periodId, dto, undefined, onSuccess)}
+        onIarDelete={(periodId, dto, document, onSuccess) => stores.claimDocuments.deleteIARDocument(props.projectId, props.partnerId, periodId, dto, document, undefined, onSuccess)}
+        {...props}
+      />
+    )}
+  </StoresConsumer>
+);
 
-export const ClaimsDashboard = definition.connect({
-  withData: (state, props) => {
-    return ({
-      document: getCurrentClaimIarDocument(state, props.partnerId),
-      maxFileSize: getMaxFileSize(state),
-      editor: getCurrentClaimIarDocumentsEditor(state, props.projectId, props.partnerId),
-      deleteEditor: getCurrentClaimIarDocumentsDeleteEditor(state, props.partnerId),
-      projectDetails: getProject(props.projectId).getPending(state),
-      partnerDetails: getPartner(props.partnerId).getPending(state),
-      currentClaim: getCurrentClaim(state, props.partnerId),
-      previousClaims: getPreviousClaims(state, props.partnerId)
-    });
-  },
-  withCallbacks: (dispatch) => ({
-    validate: (claimKey, dto) =>
-      dispatch(Actions.updateClaimDocumentEditor(claimKey, dto)),
-    uploadFile: (claimKey, file, onComplete) =>
-      dispatch(Actions.uploadClaimDocument(claimKey, file, () => {
-        dispatch(Actions.loadIarDocumentsForCurrentClaim(claimKey.projectId, claimKey.partnerId));
-        onComplete();
-      })),
-    deleteFile: (claimKey, file) =>
-      dispatch(Actions.deleteClaimDocument(claimKey, file, () =>
-        dispatch(Actions.loadIarDocumentsForCurrentClaim(claimKey.projectId, claimKey.partnerId))))
-  })
-});
-
-export const ClaimsDashboardRoute = definition.route({
+export const ClaimsDashboardRoute = defineRoute({
   routeName: "claimsDashboard",
   routePath: "/projects/:projectId/claims/?partnerId",
+  container: Container,
   getParams: (route) => ({
     projectId: route.params.projectId,
     partnerId: route.params.partnerId
   }),
-  accessControl: (auth, {projectId, partnerId}) => {
-    const isFC = auth.forPartner(projectId, partnerId).hasRole(ProjectRole.FinancialContact);
-    const isMoOrPm = auth.forProject(projectId).hasAnyRoles(ProjectRole.MonitoringOfficer, ProjectRole.ProjectManager);
+  accessControl: (auth, params) => {
+    const isFC = auth.forPartner(params.projectId, params.partnerId).hasRole(ProjectRole.FinancialContact);
+    const isMoOrPm = auth.forProject(params.projectId).hasAnyRoles(ProjectRole.MonitoringOfficer, ProjectRole.ProjectManager);
 
     return isFC && !isMoOrPm;
   },
-  getLoadDataActions: (params) => [
-    Actions.loadProject(params.projectId),
-    Actions.loadPartner(params.partnerId),
-    Actions.loadClaimsForPartner(params.partnerId),
-    Actions.loadIarDocumentsForCurrentClaim(params.projectId, params.partnerId)
-  ],
-  getTitle: (store) => {
-    return {
-      displayTitle: "Claims",
-      htmlTitle: "Claims - View project"
-    };
-  },
-  container: ClaimsDashboard
+  getTitle: () => ({
+    displayTitle: "Claims",
+    htmlTitle: "Claims - View project"
+  })
 });

@@ -3,7 +3,6 @@ import * as ACC from "@ui/components";
 import { BaseProps, ContainerBase, defineRoute } from "../containerBase";
 import { PartnerDto, ProjectDto, ProjectRole, ProjectStatus } from "@framework/dtos";
 import { Pending } from "@shared/pending";
-import { ForecastData } from "../claims/forecasts/common";
 import { StoresConsumer } from "@ui/redux";
 
 interface Params {
@@ -12,7 +11,7 @@ interface Params {
 }
 
 interface Data {
-  data: Pending<ForecastData>;
+  data: Pending<ACC.Claims.ForecastData>;
 }
 
 class ViewForecastComponent extends ContainerBase<Params, Data, {}> {
@@ -20,7 +19,7 @@ class ViewForecastComponent extends ContainerBase<Params, Data, {}> {
     return <ACC.PageLoader pending={this.props.data} render={data => this.renderContents(data)} />;
   }
 
-  public renderContents(data: ForecastData) {
+  public renderContents(data: ACC.Claims.ForecastData) {
     // MO, PM & FC/PM should see partner name
     const isMoPm = !!(data.project.roles & (ProjectRole.ProjectManager | ProjectRole.MonitoringOfficer));
     const partnerName = isMoPm ? data.partner.name : null;
