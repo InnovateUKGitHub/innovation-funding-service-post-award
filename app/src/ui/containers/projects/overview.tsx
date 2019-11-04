@@ -62,10 +62,6 @@ class ProjectOverviewComponent extends ContainerBase<Params, Data, {}> {
       return this.renderPMOverviewDetails(project, partner);
     }
 
-    if ((project.roles & ProjectRole.MonitoringOfficer)) {
-      return this.renderMOOverviewDetails(project);
-    }
-
     if ((project.roles & ProjectRole.FinancialContact) && partner) {
       return this.renderFCOverviewDetails(partner);
     }
@@ -105,21 +101,6 @@ class ProjectOverviewComponent extends ContainerBase<Params, Data, {}> {
             <PartnerSummaryDetails.Currency label="Eligible costs claimed to date" qa="claimed-costs" value={x => x.totalParticipantCostsClaimed || 0} />
             <PartnerSummaryDetails.Percentage label="Percentage of eligible costs claimed to date" qa="claimed-percentage" value={x => x.percentageParticipantCostsClaimed} />
           </PartnerSummaryDetails.Details>
-        </ACC.DualDetails>
-      </ACC.SectionPanel>
-    );
-  }
-
-  private renderMOOverviewDetails(project: ProjectDto) {
-    const ProjectSummaryDetails = ACC.TypedDetails<ProjectDto>();
-    return (
-      <ACC.SectionPanel qa="claims-summary">
-        <ACC.DualDetails>
-          <ProjectSummaryDetails.Details title="Project costs to date" data={project} qa="project-summary">
-            <ProjectSummaryDetails.Currency label="Total eligible costs" qa="gol-costs" value={x => x.grantOfferLetterCosts} />
-            <ProjectSummaryDetails.Currency label="Eligible costs claimed to date" qa="claimed-costs" value={x => x.costsClaimedToDate || 0} />
-            <ProjectSummaryDetails.Percentage label="Percentage of eligible costs claimed to date" qa="claimed-percentage" value={x => x.claimedPercentage} />
-          </ProjectSummaryDetails.Details>
         </ACC.DualDetails>
       </ACC.SectionPanel>
     );
