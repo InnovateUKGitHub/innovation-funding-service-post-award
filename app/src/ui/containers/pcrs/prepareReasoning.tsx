@@ -65,7 +65,7 @@ class PCRPrepareReasoningComponent extends ContainerBase<ProjectChangeRequestPre
         <ACC.Section>
           <ACC.SummaryList qa="pcr-prepareReasoning">
             <ACC.SummaryListItem label="Request number" content={pcr.requestNumber} qa="numberRow" />
-            <ACC.SummaryListItem label="Types" content={<ACC.Renderers.LineBreakList items={pcr.items.map(x => x.typeName)} />} qa="typesRow" />
+            <ACC.SummaryListItem label="Types" content={<ACC.Renderers.LineBreakList items={pcr.items.map(x => x.shortName)} />} qa="typesRow" />
           </ACC.SummaryList>
         </ACC.Section>
 
