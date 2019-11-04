@@ -202,6 +202,38 @@ describe("Duration", () => {
     expect(wrapper.text()).toEqual("4 months");
   });
 
+  it("should render correctly if difference is between a shorter month & a longer month", () => {
+    const start = new Date("2019/02/01");
+    const end = new Date("2019/10/31");
+
+    const wrapper = shallow(<Duration startDate={start} endDate={end} />);
+    expect(wrapper.text()).toEqual("9 months");
+  });
+
+  it("should render correctly if difference is between a longer month & a shorter month", () => {
+    const start = new Date("2019/10/01");
+    const end = new Date("2020/02/28");
+
+    const wrapper = shallow(<Duration startDate={start} endDate={end} />);
+    expect(wrapper.text()).toEqual("5 months");
+  });
+
+  it("should render correctly if difference is between a shorter month & a longer month, over a really long time period", () => {
+    const start = new Date("2019/02/01");
+    const end = new Date("3019/10/31");
+
+    const wrapper = shallow(<Duration startDate={start} endDate={end} />);
+    expect(wrapper.text()).toEqual("12009 months");
+  });
+
+  it("should render correctly if difference is between a longer month & a shorter month, over a really long time period", () => {
+    const start = new Date("2019/10/01");
+    const end = new Date("3020/02/28");
+
+    const wrapper = shallow(<Duration startDate={start} endDate={end} />);
+    expect(wrapper.text()).toEqual("12005 months");
+  });
+
   it("should round up if more than 0.5 months", () => {
     const start = new Date("Sun Sep 01 2019 00:00:00 GMT+0100 (British Summer Time)");
     const end = new Date("Tue Dec 25 2019 00:00:00 GMT+0000 (Greenwich Mean Time)");
@@ -210,11 +242,19 @@ describe("Duration", () => {
     expect(wrapper.text()).toEqual("4 months");
   });
 
-  it("should round down if more than 0.5 months", () => {
+  it("should round up if less than 0.5 months", () => {
     const start = new Date("Sun Sep 01 2019 00:00:00 GMT+0100 (British Summer Time)");
     const end = new Date("Tue Dec 10 2019 00:00:00 GMT+0000 (Greenwich Mean Time)");
 
     const wrapper = shallow(<Duration startDate={start} endDate={end} />);
-    expect(wrapper.text()).toEqual("3 months");
+    expect(wrapper.text()).toEqual("4 months");
+  });
+
+  it("should give 13 months if the dates are exactly 1 year apart", () => {
+    const start = new Date("2019/01/01");
+    const end = new Date("2020/01/01");
+
+    const wrapper = shallow(<Duration startDate={start} endDate={end} />);
+    expect(wrapper.text()).toEqual("13 months");
   });
 });
