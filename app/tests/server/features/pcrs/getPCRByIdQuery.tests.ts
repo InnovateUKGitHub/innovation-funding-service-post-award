@@ -93,7 +93,8 @@ describe("GetPCRByIdQuery", () => {
     const item = context.testData.createPCRItem(pcr, recordType, {
       status: 98,
       statusName: "Expected Status",
-      guidance: "This is some hardcoded guidance"
+      guidance: "This is some hardcoded guidance",
+      shortName: "If a nickname is what people call you for short, then your full name is your nicholas name"
     });
 
     const query = new GetPCRByIdQuery(pcr.projectId, pcr.id);
@@ -105,6 +106,7 @@ describe("GetPCRByIdQuery", () => {
     expect(result.typeName).toBe(recordType!.type);
     expect(result.status).toBe(98);
     expect(result.statusName).toBe("Expected Status");
+    expect(result.shortName).toBe("If a nickname is what people call you for short, then your full name is your nicholas name");
   });
 
   test("maps fields for time extension", async () => {

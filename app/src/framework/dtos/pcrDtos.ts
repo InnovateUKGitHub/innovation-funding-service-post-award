@@ -17,6 +17,7 @@ interface PCRBaseDto {
 export interface PCRItemSummaryDto {
   type: PCRItemType;
   typeName: string;
+  shortName: string;
 }
 
 export interface PCRSummaryDto extends PCRBaseDto {
