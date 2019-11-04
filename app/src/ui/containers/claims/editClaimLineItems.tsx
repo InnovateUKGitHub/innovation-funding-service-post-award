@@ -1,14 +1,11 @@
 import React from "react";
 import * as ACC from "@ui/components";
-import * as Actions from "@ui/redux/actions";
-import * as Selectors from "@ui/redux/selectors";
 import { Pending } from "@shared/pending";
 import { ProjectDto, ProjectRole } from "@framework/types";
-import { EditorStatus, IEditorStore } from "@ui/redux";
-import { ContainerBaseWithState, ContainerProps, ReduxContainer } from "@ui/containers/containerBase";
+import { EditorStatus, IEditorStore, StoresConsumer } from "@ui/redux";
+import { BaseProps, ContainerBaseWithState, ContainerProps, defineRoute } from "@ui/containers/containerBase";
 import { DocumentList, ValidationMessage } from "@ui/components";
 import { ClaimDetailsValidator, ClaimLineItemDtoValidator } from "@ui/validators/claimDetailsValidator";
-import { IRoutes } from "@ui/routing";
 
 export interface EditClaimDetailsParams {
   projectId: string;
@@ -36,9 +33,7 @@ interface CombinedData {
 }
 
 interface Callbacks {
-  validate: (partnerId: string, periodId: number, costCategoryId: string, dto: ClaimDetailsDto) => void;
-  save: (projectId: string, partnerId: string, periodId: number, costCategoryId: string, dto: ClaimDetailsDto) => void;
-  saveAndUpload: (projectId: string, partnerId: string, costCategoryId: string, periodId: number, dto: ClaimDetailsDto) => void;
+  onUpdate: (saving: boolean, dto: ClaimDetailsDto, goToUpdload?: boolean) =>  void;
 }
 
 export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClaimDetailsParams, Data, Callbacks, { showAddRemove: boolean }> {
@@ -100,7 +95,7 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
     return (
       <LineItemForm.Form
         editor={editor}
-        onSubmit={() => this.props.save(this.props.projectId, this.props.partnerId, this.props.periodId, this.props.costCategoryId, editor.data)}
+        onSubmit={() => this.props.onUpdate(true, editor.data, false)}
         qa="current-claim-summary-form"
       >
         <LineItemForm.Fieldset>
@@ -117,7 +112,7 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
           {this.renderDocuments(documents)}
         </LineItemForm.Fieldset>
         <LineItemForm.Fieldset>
-          <LineItemForm.Button name="upload" onClick={() => this.props.saveAndUpload(this.props.projectId, this.props.partnerId, this.props.costCategoryId, this.props.periodId, editor.data)}>Upload and remove documents</LineItemForm.Button>
+          <LineItemForm.Button name="upload" onClick={() => this.props.onUpdate(true, editor.data, true)}>Upload and remove documents</LineItemForm.Button>
         </LineItemForm.Fieldset>
         <LineItemForm.Fieldset heading={"Additional information"} qa="additional-info-form" headingQa="additional-info-heading">
           <LineItemForm.MultilineString
@@ -144,7 +139,7 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
     return (
       <LineItemForm.Form
         editor={editor}
-        onSubmit={() => this.props.save(this.props.projectId, this.props.partnerId, this.props.periodId, this.props.costCategoryId, editor.data)}
+        onSubmit={() => this.props.onUpdate(true, editor.data, false)}
         qa="current-claim-summary-form"
       >
         <LineItemForm.Hidden name="itemCount" value={x => x.lineItems.length} />
@@ -166,7 +161,7 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
           {this.renderDocuments(documents)}
         </LineItemForm.Fieldset>
         <LineItemForm.Fieldset>
-          <LineItemForm.Button name="upload" onClick={() => this.props.saveAndUpload(this.props.projectId, this.props.partnerId, this.props.costCategoryId, this.props.periodId, editor.data)}>Upload and remove documents</LineItemForm.Button>
+          <LineItemForm.Button name="upload" onClick={() => this.props.onUpdate(true, editor.data, true)}>Upload and remove documents</LineItemForm.Button>
         </LineItemForm.Fieldset>
         <LineItemForm.Fieldset heading={"Additional information"} qa="additional-info-form" headingQa="additional-info-heading">
           <LineItemForm.MultilineString
@@ -227,7 +222,7 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
     e.preventDefault();
     const dto = editor.data;
     dto.lineItems.splice(i.row, 1);
-    this.props.validate(this.props.partnerId, this.props.periodId, this.props.costCategoryId, dto);
+    this.props.onUpdate(false, dto);
   }
 
   addItem(e: React.SyntheticEvent<HTMLAnchorElement>, editor: IEditorStore<ClaimDetailsDto, ClaimDetailsValidator>) {
@@ -238,13 +233,13 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
       periodId: this.props.periodId,
       costCategoryId: this.props.costCategoryId
     } as ClaimLineItemDto);
-    this.props.validate(this.props.partnerId, this.props.periodId, this.props.costCategoryId, dto);
+    this.props.onUpdate(false, dto);
   }
 
   updateItem(i: { column: number; row: number; }, editor: IEditorStore<ClaimDetailsDto, ClaimDetailsValidator>, update: (item: ClaimLineItemDto) => void) {
     const dto = editor.data;
     update(dto.lineItems[i.row]);
-    this.props.validate(this.props.partnerId, this.props.periodId, this.props.costCategoryId, dto);
+    this.props.onUpdate(false, dto);
   }
 
   private renderFooters(data: ClaimLineItemDto[], forecastDetail: ForecastDetailsDTO, showAddRemove: boolean, editor: IEditorStore<ClaimDetailsDto, ClaimDetailsValidator>) {
@@ -294,59 +289,47 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
 
 }
 
-const afterSave = (dispatch: any, projectId: string, partnerId: string, periodId: number, routes: IRoutes) => {
-  dispatch(Actions.navigateTo(routes.prepareClaim.getLink({ projectId, periodId, partnerId })));
+const getDestination = (props: EditClaimDetailsParams & BaseProps, goToUpload: boolean|undefined) => {
+  if(goToUpload) {
+    return props.routes.claimDetailDocuments.getLink({projectId: props.projectId, partnerId: props.partnerId, periodId: props.periodId, costCategoryId: props.costCategoryId});
+  }
+  else {
+    return props.routes.prepareClaim.getLink({projectId: props.projectId, partnerId: props.partnerId, periodId: props.periodId});
+  }
 };
 
-const redirectToUploadPage = (dispatch: any, projectId: string, partnerId: string, costCategoryId: string, periodId: number, routes: IRoutes) => {
-  dispatch(Actions.navigateTo(routes.claimDetailDocuments.getLink({ projectId, partnerId, costCategoryId, periodId })));
-};
+const EditClaimLineItemsContainer = (props: EditClaimDetailsParams & BaseProps) => (
+  <StoresConsumer>
+    {
+      stores => (
+        <EditClaimLineItemsComponent
+          project={stores.projects.getById(props.projectId)}
+          claimDetails={stores.claimDetails.get(props.projectId, props.partnerId, props.periodId, props.costCategoryId)}
+          costCategories={stores.costCategories.getAll()}
+          forecastDetail={stores.forecastDetails.get(props.partnerId, props.periodId, props.costCategoryId)}
+          documents={stores.claimDetailDocuments.getClaimDetailDocuments(props.projectId, props.partnerId, props.periodId, props.costCategoryId)}
+          editor={stores.claimDetails.getClaimDetailsEditor(props.projectId, props.partnerId, props.periodId, props.costCategoryId)}
+          onUpdate={(saving, dto, goToUpload) => stores.claimDetails.updateClaimDetailsEditor(saving, props.projectId, props.partnerId, props.periodId, props.costCategoryId, dto, () => stores.navigation.navigateTo(getDestination(props, goToUpload)))}
+          {...props}
+        />
+      )
+    }
+  </StoresConsumer>
+);
 
-const definition = ReduxContainer.for<EditClaimDetailsParams, Data, Callbacks>(EditClaimLineItemsComponent);
-
-export const EditClaimLineItems = definition.connect({
-  withData: (state, props) => {
-    return {
-      project: Selectors.getActiveProject(props.projectId, state),
-      claimDetails: Selectors.getClaimDetails(props.partnerId, props.periodId, props.costCategoryId).getPending(state),
-      costCategories: Selectors.getCostCategories().getPending(state),
-      forecastDetail: Selectors.getForecastDetail(props.partnerId, props.periodId, props.costCategoryId).getPending(state),
-      editor: Selectors.getClaimDetailsEditor(props.partnerId, props.periodId, props.costCategoryId).get(state),
-      documents: Selectors.getClaimDetailDocuments(props.partnerId, props.periodId, props.costCategoryId).getPending(state)
-    };
-  },
-  withCallbacks: (dispatch, routes) => ({
-    validate: (partnerId: string, periodId: number, costCategoryId: string, dto: ClaimDetailsDto) =>
-      dispatch(Actions.validateClaimDetails(partnerId, periodId, costCategoryId, dto)),
-    save: (projectId: string, partnerId: string, periodId: number, costCategoryId: string, dto: ClaimDetailsDto) =>
-      dispatch(Actions.saveClaimDetails(projectId, partnerId, periodId, costCategoryId, dto, () =>
-        afterSave(dispatch, projectId, partnerId, periodId, routes))),
-    saveAndUpload: (projectId: string, partnerId: string, costCategoryId: string, periodId: number, dto: ClaimDetailsDto) =>
-      dispatch(Actions.saveClaimDetails(projectId, partnerId, periodId, costCategoryId, dto, () =>
-        redirectToUploadPage(dispatch, projectId, partnerId, costCategoryId, periodId, routes))),
-  })
-});
-
-export const EditClaimLineItemsRoute = definition.route({
+export const EditClaimLineItemsRoute = defineRoute({
   routeName: "claimLineItemEdit",
   routePath: "/projects/:projectId/claims/:partnerId/prepare/:periodId/costs/:costCategoryId",
+  container: EditClaimLineItemsContainer,
   getParams: (route) => ({
     projectId: route.params.projectId,
     partnerId: route.params.partnerId,
     costCategoryId: route.params.costCategoryId,
     periodId: parseInt(route.params.periodId, 10)
   }),
-  getLoadDataActions: (params) => [
-    Actions.loadProject(params.projectId),
-    Actions.loadCostCategories(),
-    Actions.loadClaimDetails(params.projectId, params.partnerId, params.periodId, params.costCategoryId),
-    Actions.loadForecastDetail(params.partnerId, params.periodId, params.costCategoryId),
-    Actions.loadClaimDetailDocuments({projectId: params.projectId, partnerId: params.partnerId, periodId: params.periodId, costCategoryId: params.costCategoryId})
-  ],
-  container: EditClaimLineItems,
   accessControl: (auth, params) => auth.forPartner(params.projectId, params.partnerId).hasRole(ProjectRole.FinancialContact),
-  getTitle: (store, params) => {
-    const costCatName = Selectors.getCostCatetory(params.costCategoryId).getPending(store).then(x => x!.name).data;
+  getTitle: (store, params, stores) => {
+    const costCatName =  stores.costCategories.get(params.costCategoryId).then(x => x.name).data;
     return {
       htmlTitle: costCatName ? `Add costs for ${costCatName}` : "Add costs",
       displayTitle: costCatName || "Costs"
