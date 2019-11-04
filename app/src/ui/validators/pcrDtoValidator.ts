@@ -127,9 +127,10 @@ export class PCRDtoValidator extends Results<PCRDto> {
       PCRItemStatus.Complete,
     ];
 
+    const preparePcrStatus = [PCRStatus.Draft, PCRStatus.QueriedByMonitoringOfficer, PCRStatus.QueriedByInnovateUK];
     return Validation.all(this,
       () => Validation.permitedValues(this, this.model.reasoningStatus, permittedStatus, "Invalid reasoning status"),
-      () => Validation.isTrue(this, this.model.reasoningStatus === PCRItemStatus.Complete || this.model.status === PCRStatus.Draft, "Reasoning must be complete")
+      () => Validation.isTrue(this, this.model.reasoningStatus === PCRItemStatus.Complete || preparePcrStatus.indexOf(this.model.status) >= 0, "Reasoning must be complete")
     );
   }
 

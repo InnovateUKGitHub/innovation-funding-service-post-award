@@ -1,18 +1,11 @@
 import React from "react";
-
 import { BaseProps, ContainerBase, defineRoute } from "../containerBase";
-import { PCRItemDto, ProjectDto, ProjectRole } from "@framework/types";
-
+import { PCRItemDto, PCRItemStatus, PCRItemType, PCRStatus, ProjectDto, ProjectRole } from "@framework/types";
 import * as ACC from "../../components";
 import { Pending } from "@shared/pending";
 import { PCRDto, ProjectChangeRequestStatusChangeDto } from "@framework/dtos/pcrDtos";
 import { IEditorStore, StoresConsumer } from "@ui/redux";
 import { PCRDtoValidator } from "@ui/validators/pcrDtoValidator";
-import {
-  PCRItemStatus,
-  PCRItemType,
-  PCRStatus
-} from "@framework/constants";
 
 export interface ProjectChangeRequestPrepareParams {
   projectId: string;
@@ -135,12 +128,18 @@ class PCRPrepareComponent extends ContainerBase<ProjectChangeRequestPrepareParam
     const editableItems = projectChangeRequest.items.filter(x => editableItemTypes.indexOf(x.type) > -1);
     const stepCount = editableItems.length ? 2 : 1;
 
+    const route = this.props.routes.pcrPrepareReasoning.getLink({
+      projectId: this.props.projectId,
+      pcrId: this.props.pcrId,
+      step: projectChangeRequest.reasoningStatus === PCRItemStatus.ToDo ? 1 : undefined
+    });
+
     return (
       <ACC.TaskListSection step={stepCount} title="Explain why you want to make the changes" validation={[editor.validator.reasoningStatus, editor.validator.reasoningComments]} qa="reasoning">
         <ACC.Task
           name="Provide reasoning to Innovate UK"
           status={this.getTaskStatus(projectChangeRequest.reasoningStatus)}
-          route={this.props.routes.pcrPrepareReasoning.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId })}
+          route={route}
         />
       </ACC.TaskListSection>
     );
