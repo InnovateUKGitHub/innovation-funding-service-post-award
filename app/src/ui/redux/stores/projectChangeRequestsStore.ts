@@ -164,6 +164,7 @@ export class ProjectChangeRequestStore extends StoreBase {
       typeName: itemType.displayName,
       status: PCRItemStatus.ToDo,
       statusName: "",
+      shortName: "",
     };
 
     switch (itemType.type) {

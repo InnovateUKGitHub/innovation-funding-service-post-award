@@ -53,6 +53,7 @@ export class SalesforcePCRMapper extends SalesforceBaseMapper<ISalesforcePCR[], 
       publicDescriptionSnapshot: pcrItem.Acc_PublicDescriptionSnapshot__c,
       projectSummarySnapshot: pcrItem.Acc_ProjectSummarySnapshot__c,
       partnerNameSnapshot: pcrItem.Acc_ExistingPartnerName__c,
+      shortName: pcrItem.Acc_Nickname__c || "",
     };
   }
 
