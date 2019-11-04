@@ -89,11 +89,15 @@ export const Duration: React.FunctionComponent<{ startDate: Date | null, endDate
     const endDateLuxon = convertDateAndTime(props.endDate);
 
     if ((startDateLuxon && startDateLuxon.isValid) && (endDateLuxon && endDateLuxon.isValid)) {
-        const duration = endDateLuxon.diff(startDateLuxon).as("months");
-        const months = Math.round(duration);
+        const startOfNextMonthAfterEnd = endDateLuxon.plus({months: 1}).startOf("month");
+        const startOfStartMonth = startDateLuxon.startOf("month");
+        const monthsFromYears = ((startOfNextMonthAfterEnd.year - startOfStartMonth.year) * 12);
+        const remainingMonths = startOfNextMonthAfterEnd.month - startOfStartMonth.month;
+        const months = monthsFromYears + remainingMonths;
 
         return <span>{`${months} ${months === 1 ? "month" : "months"}`}</span>;
     }
+
     return null;
 };
 
