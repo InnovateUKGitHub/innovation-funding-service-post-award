@@ -92,7 +92,7 @@ router.use((req, res, next) => {
     next();
   }
   // if user not logged in but we arent using sso then set default user
-  else if (!Configuration.sso.enabled) {
+  else if (!Configuration.sso.enabled && req.method === "GET") {
     req.session = req.session || {};
     req.session.user = req.session.user || {};
     req.session.user.email = Configuration.salesforce.serivceUsername;
