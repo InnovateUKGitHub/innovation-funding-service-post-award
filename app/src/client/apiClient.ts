@@ -1,6 +1,7 @@
 import { IApiClient } from "../server/apis";
 import { processResponse } from "../shared/processResponse";
 import { ClientFileWrapper } from "./clientFileWrapper";
+import { UnauthenticatedError } from "@server/features/common/appError";
 
 const clientApi: IApiClient = {
   claims : {
@@ -96,8 +97,11 @@ const ajax = <T>(url: string, opts?: RequestInit): Promise<T> => {
     if(response.status === 401 && (options.method || "GET") === "GET") {
       window.location.reload();
       return new Promise<T>(() => {
-        // Nothing to return as we never want this to return!
+        // Nothing to return as we never want to use this result!
       });
+    }
+    else if(response.status === 401) {
+      return Promise.reject(new UnauthenticatedError());
     }
 
     return response.json()
