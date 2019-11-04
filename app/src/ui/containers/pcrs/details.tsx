@@ -63,7 +63,7 @@ class PCRDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
         <ACC.Section title="Details">
           <ACC.SummaryList qa="pcr_details">
             <ACC.SummaryListItem label="Request number" content={projectChangeRequest.requestNumber} qa="numberRow" />
-            <ACC.SummaryListItem label="Types" content={<ACC.Renderers.LineBreakList items={projectChangeRequest.items.map(x => x.typeName)} />} qa="typesRow" />
+            <ACC.SummaryListItem label="Types" content={<ACC.Renderers.LineBreakList items={projectChangeRequest.items.map(x => x.shortName)} />} qa="typesRow" />
           </ACC.SummaryList>
         </ACC.Section>
         <ACC.TaskList qa="taskList">
@@ -103,7 +103,7 @@ class PCRDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
   private getItemTasks(item: PCRItemDto) {
     return (
       <ACC.Task
-        name={item.typeName}
+        name={item.shortName}
         status={this.getTaskStatus(item.status)}
         route={this.props.routes.pcrViewItem.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId, itemId: item.id })}
       />

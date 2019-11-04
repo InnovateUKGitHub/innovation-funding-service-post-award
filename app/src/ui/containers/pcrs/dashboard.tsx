@@ -71,7 +71,7 @@ class PCRsDashboardComponent extends ContainerBase<Params, Data, Callbacks> {
     return (
       <PCRTable.Table data={pcrs} qa={qa}>
         <PCRTable.Custom qa="number" header="Request number" value={x => x.requestNumber} />
-        <PCRTable.Custom qa="types" header="Types" value={x => <ACC.Renderers.LineBreakList items={x.items.map(y => y.typeName)}/>} />
+        <PCRTable.Custom qa="types" header="Types" value={x => <ACC.Renderers.LineBreakList items={x.items.map(y => y.shortName)}/>} />
         <PCRTable.ShortDate qa="started" header="Started" value={x => x.started} />
         <PCRTable.String qa="stauts" header="Status" value={x => x.statusName} />
         <PCRTable.ShortDate qa="lastUpdated" header="Last updated" value={x => x.lastUpdated} />

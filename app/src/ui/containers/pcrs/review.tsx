@@ -79,7 +79,7 @@ class PCRReviewComponent extends ContainerBase<PCRReviewParams, Data, Callbacks>
         <ACC.Section title="Details">
           <ACC.SummaryList qa="pcrDetails">
             <ACC.SummaryListItem label="Request number" content={projectChangeRequest.requestNumber} qa="numberRow" />
-            <ACC.SummaryListItem label="Types" content={<ACC.Renderers.LineBreakList items={projectChangeRequest.items.map(x => x.typeName)} />} qa="typesRow" />
+            <ACC.SummaryListItem label="Types" content={<ACC.Renderers.LineBreakList items={projectChangeRequest.items.map(x => x.shortName)} />} qa="typesRow" />
           </ACC.SummaryList>
         </ACC.Section>
         <ACC.TaskList qa="taskList">
@@ -150,7 +150,7 @@ class PCRReviewComponent extends ContainerBase<PCRReviewParams, Data, Callbacks>
 
     return (
       <ACC.Task
-        name={item.typeName}
+        name={item.shortName}
         status={this.getTaskStatus(item.status)}
         route={this.props.routes.pcrReviewItem.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId, itemId: item.id })}
         validation={validationErrors}
