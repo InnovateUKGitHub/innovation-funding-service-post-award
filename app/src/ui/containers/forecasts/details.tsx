@@ -33,7 +33,7 @@ class ViewForecastComponent extends ContainerBase<Params, Data, {}> {
         backLink={<ACC.BackLink route={backLink}>{backText}</ACC.BackLink>}
         project={data.project}
       >
-        <ACC.Section title={partnerName} qa="partner-name">
+        <ACC.Section title={partnerName} qa="partner-name" className="govuk-!-padding-bottom-3">
           <ACC.Renderers.Messages messages={this.props.messages} />
           <ACC.Forecasts.Warning {...data}/>
           {this.renderOverheadsRate(data.partner.overheadRate)}

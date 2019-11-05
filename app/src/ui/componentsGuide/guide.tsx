@@ -30,6 +30,7 @@ import { validationErrorGuide } from "./validationErrorGuide";
 import { validationMessageGuide } from "./validationMessageGuide";
 import { validationSummaryGuide } from "./validationSummaryGuide";
 import { taskListGuide } from "@ui/componentsGuide/taskListGuide";
+import { numericInputGuide } from "@ui/componentsGuide/numericInputGuide";
 
 const guides: IGuide[] = [
     accordionGuide,
@@ -47,6 +48,7 @@ const guides: IGuide[] = [
     logsGuide,
     navigationArrowsGuide,
     navigationCardGuide,
+    numericInputGuide,
     projectContactGuide,
     pageTitleGuide,
     renderersGuide,

@@ -2,10 +2,12 @@ import React from "react";
 import classNames from "classnames";
 import { BaseInput } from "./baseInput";
 
+export type numberInputWidths = "full" | "three-quarters" | "two-thirds" | "one-half" | "one-third" | "one-quarter" | 2|3|4|5|10|20;
+
 interface NumberInputProps extends InputProps<number> {
   id?: string;
   className?: string;
-  width?: "small" | "medium" | "normal";
+  width?: numberInputWidths;
 }
 
 interface NumberInputState extends InputState {
@@ -33,8 +35,8 @@ export class NumberInput extends BaseInput<NumberInputProps, NumberInputState> {
       "govuk-table__cell--numeric",
       {
         "govuk-input--error": this.state.invalid,
-        "govuk-!-width-one-quarter": this.props.width === "small",
-        "govuk-!-width-one-half": this.props.width === "medium"
+        [`govuk-input--width-${this.props.width}`]: typeof this.props.width === "number",
+        [`govuk-!-width-full-${this.props.width}`]: typeof this.props.width === "string",
       },
       this.props.className
     );

@@ -135,11 +135,12 @@ class PCRPrepareComponent extends ContainerBase<ProjectChangeRequestPrepareParam
     });
 
     return (
-      <ACC.TaskListSection step={stepCount} title="Explain why you want to make the changes" validation={[editor.validator.reasoningStatus, editor.validator.reasoningComments]} qa="reasoning">
+      <ACC.TaskListSection step={stepCount} title="Explain why you want to make the changes" qa="reasoning">
         <ACC.Task
           name="Provide reasoning to Innovate UK"
           status={this.getTaskStatus(projectChangeRequest.reasoningStatus)}
           route={route}
+          validation={[editor.validator.reasoningStatus, editor.validator.reasoningComments]}
         />
       </ACC.TaskListSection>
     );
