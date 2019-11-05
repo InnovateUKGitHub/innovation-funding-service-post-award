@@ -42,7 +42,7 @@ class PrepareReasoningFilesStepComponent extends ContainerBase<ReasoningStepProp
     const UploadForm = ACC.TypedForm<MultipleDocumentUploadDto>();
     const PCRForm = ACC.TypedForm<PCRDto>();
     return (
-      <ACC.Section>
+      <ACC.Section qa="uploadFileSection">
         <UploadForm.Form
           enctype="multipart"
           editor={documentsEditor}
