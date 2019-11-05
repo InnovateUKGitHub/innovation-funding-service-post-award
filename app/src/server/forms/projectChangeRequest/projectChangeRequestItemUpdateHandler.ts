@@ -67,12 +67,11 @@ export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBa
   }
 
   private updateTimeExtension(item: Dtos.PCRItemForTimeExtensionDto, body: IFormBody) {
-    if (body.endDate_month || body.endDate_year) {
-      const projectEndDate = DateTime.fromFormat(`${body.endDate_month}/${body.endDate_year}`, "M/yyyy").endOf("month").startOf("day");
-      item.projectEndDate = projectEndDate.toJSDate();
+    if (body.timeExtension && item.projectDurationSnapshot) {
+      item.projectDuration = item.projectDurationSnapshot + Number(body.timeExtension);
     }
     else {
-      item.projectEndDate = null;
+      item.projectDuration = null;
     }
   }
 

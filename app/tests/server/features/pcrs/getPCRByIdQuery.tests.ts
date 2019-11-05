@@ -116,14 +116,9 @@ describe("GetPCRByIdQuery", () => {
     const recordType = context.testData.createPCRRecordTypes().find(x => x.type === timeExtensionType.typeName);
 
     const pcr = context.testData.createPCR();
-
-    const projectEndDate = new Date("2019/10/31");
-    const projectEndDateSnapshot = new Date("2019/11/30");
     const projectDuration = 5;
     const projectDurationSnapshot = 4;
     const item = context.testData.createPCRItem(pcr, recordType, {
-      projectEndDate,
-      projectEndDateSnapshot,
       projectDuration,
       projectDurationSnapshot,
     });
@@ -132,8 +127,6 @@ describe("GetPCRByIdQuery", () => {
     const result = await context.runQuery(query).then(x => x.items[0] as PCRItemForTimeExtensionDto);
 
     expect(result.id).toBe(item.id);
-    expect(result.projectEndDate).toBe(projectEndDate);
-    expect(result.projectEndDateSnapshot).toBe(projectEndDateSnapshot);
     expect(result.projectDuration).toBe(projectDuration);
     expect(result.projectDurationSnapshot).toBe(projectDurationSnapshot);
   });
