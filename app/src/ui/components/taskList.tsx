@@ -24,8 +24,10 @@ export const Task: React.FunctionComponent<ITask> = ({ route, name, status, vali
     "app-task-list__task-action" : true,
     "app-task-list__task-action--completed": status === "Complete",
   });
+  const hasError = validation && validation.find(x => !x.isValid);
+
   return (
-    <li className="app-task-list__item">
+    <li className={classNames("app-task-list__item", {"app-task-list__item--error": hasError})}>
       {validation && validation.map((v) => <ValidationError error={v} key={v.key}/>)}
       <span className="app-task-list__task-name"><Link route={route}>{name}</Link></span>
       <span className={actionClasses}>{status}</span>

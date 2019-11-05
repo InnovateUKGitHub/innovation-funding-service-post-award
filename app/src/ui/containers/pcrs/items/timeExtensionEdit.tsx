@@ -51,7 +51,7 @@ export const TimeExtensionEdit = (props: Props) => {
           <Form.Numeric
             name="timeExtension"
             hint="Enter the number of months you want to extend your project by"
-            width="small"
+            width="one-quarter"
             value={m => (m.projectDuration) ? (m.projectDuration - props.project.durationInMonths) : null}
             update={(m, val) => m.projectDuration = (val || val === 0 ? m.projectDurationSnapshot! + val : val)}
             validation={props.validator.projectDuration}
