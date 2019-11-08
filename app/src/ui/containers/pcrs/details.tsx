@@ -116,7 +116,7 @@ class PCRDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
   private getItemTasks(item: PCRItemDto) {
     return (
       <ACC.Task
-        name={item.shortName}
+        name={item.typeName}
         status={this.getTaskStatus(item.status)}
         route={this.props.routes.pcrViewItem.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId, itemId: item.id })}
       />
