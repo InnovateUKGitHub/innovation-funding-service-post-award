@@ -150,7 +150,7 @@ class PCRPrepareComponent extends ContainerBase<ProjectChangeRequestPrepareParam
 
     return (
       <ACC.Task
-        name={item.shortName}
+        name={item.typeName}
         status={this.getTaskStatus(item.status)}
         route={this.props.routes.pcrPrepareItem.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId, itemId: item.id })}
         validation={validationErrors}
