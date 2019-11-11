@@ -97,16 +97,16 @@ export const PCRPrepareReasoningFilesStep = (props: ReasoningStepProps) => (
     {
       stores => (
         <PrepareReasoningFilesStepComponent
-          documents={stores.documents.pcrOrPcrItemDocuments(props.projectId, props.pcrId)}
-          documentsEditor={stores.documents.getPcrOrPcrItemDocumentsEditor(props.projectId, props.pcrId)}
+          documents={stores.projectChangeRequestDocuments.pcrOrPcrItemDocuments(props.projectId, props.pcrId)}
+          documentsEditor={stores.projectChangeRequestDocuments.getPcrOrPcrItemDocumentsEditor(props.projectId, props.pcrId)}
           onFileChange={(saving, dto) => {
             stores.messages.clearMessages();
             const successMessage = dto.files.length === 1 ? `Your document has been uploaded.` : `${dto.files.length} documents have been uploaded.`;
-            stores.documents.updatePcrOrPcrItemDocumentsEditor(saving, props.projectId, props.pcrId, dto, successMessage);
+            stores.projectChangeRequestDocuments.updatePcrOrPcrItemDocumentsEditor(saving, props.projectId, props.pcrId, dto, successMessage);
           }}
           onFileDelete={(dto, document) => {
             stores.messages.clearMessages();
-            stores.documents.deletePcrOrPcrItemDocumentsEditor(props.projectId, props.pcrId, dto, document, "Your document has been removed.");
+            stores.projectChangeRequestDocuments.deletePcrOrPcrItemDocumentsEditor(props.projectId, props.pcrId, dto, document, "Your document has been removed.");
           }}
           {...props}
         />

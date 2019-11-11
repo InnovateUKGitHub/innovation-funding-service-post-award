@@ -164,13 +164,13 @@ const ProjectDocumentsContainer = (props: ProjectDocumentPageParams & BaseProps)
       <ProjectDocumentsComponent
         project={stores.projects.getById(props.projectId)}
         partners={stores.partners.getPartnersForProject(props.projectId)}
-        documents={stores.documents.getProjectDocuments(props.projectId)}
+        documents={stores.projectDocuments.getProjectDocuments(props.projectId)}
         isClient={stores.config.isClient()}
-        editor={stores.documents.getProjectDocumentEditor(props.projectId)}
+        editor={stores.projectDocuments.getProjectDocumentEditor(props.projectId)}
         onChange={(saving, dto) => {
           stores.messages.clearMessages();
           const successMessage = dto.files.length === 1 ? `Your document has been uploaded.` : `${dto.files.length} documents have been uploaded.`;
-          stores.documents.updateProjectDocumentsEditor(saving, props.projectId, dto, successMessage);
+          stores.projectDocuments.updateProjectDocumentsEditor(saving, props.projectId, dto, successMessage);
         }}
         {...props}
       />

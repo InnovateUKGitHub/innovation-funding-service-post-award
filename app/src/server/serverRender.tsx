@@ -125,7 +125,7 @@ function loadAllData(store: Store, render: () => void): Promise<void> {
 const onComplete = (store: Store, stores: IStores, matched: MatchedRoute, params: {}, error: FormHandlerError | undefined) => {
   // validation errror occoured so add it into store as validation error
   if (error && error.code === ErrorCode.VALIDATION_ERROR) {
-    store.dispatch(Actions.updateEditorAction(error.key, error.store, error.dto, error.error.results));
+    store.dispatch(Actions.updateEditorAction(error.key, error.store, error.dto, error.error.results!));
   }
   // some other validation errror occoured so add it into store as actual error
   // need to pair with the submit action to keep count in sync
