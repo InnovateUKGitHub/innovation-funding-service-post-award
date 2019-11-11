@@ -25,7 +25,7 @@ export const routeConfig: IRoutes = {
   pcrDetails: Containers.PCRDetailsRoute,
   pcrDelete: Containers.PCRDeleteRoute,
   pcrPrepare: Containers.ProjectChangeRequestPrepareRoute,
-  pcrPrepareItem: Containers.ProjectChangeRequestPrepareItemRoute,
+  pcrPrepareItem: Containers.PCRPrepareItemRoute,
   pcrPrepareFiles: Containers.ProjectChangeRequestPrepareItemFilesRoute,
   pcrPrepareReasoning: Containers.PCRPrepareReasoningRoute,
   pcrReview: Containers.PCRReviewRoute,
@@ -69,7 +69,7 @@ export interface IRoutes {
   pcrDetails: typeof Containers.PCRDetailsRoute;
   pcrDelete: typeof Containers.PCRDeleteRoute;
   pcrPrepare: typeof Containers.ProjectChangeRequestPrepareRoute;
-  pcrPrepareItem: typeof Containers.ProjectChangeRequestPrepareItemRoute;
+  pcrPrepareItem: typeof Containers.PCRPrepareItemRoute;
   pcrPrepareFiles: typeof Containers.ProjectChangeRequestPrepareItemFilesRoute;
   pcrPrepareReasoning: typeof Containers.PCRPrepareReasoningRoute;
   pcrReview: typeof Containers.PCRReviewRoute;

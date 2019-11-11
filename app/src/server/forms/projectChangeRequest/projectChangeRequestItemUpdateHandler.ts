@@ -3,16 +3,22 @@ import { BadRequestError } from "@server/features/common";
 import { GetPCRByIdQuery } from "@server/features/pcrs/getPCRByIdQuery";
 import { UpdatePCRCommand } from "@server/features/pcrs/updatePcrCommand";
 import { IFormBody, IFormButton, StandardFormHandlerBase } from "@server/forms/formHandlerBase";
-import { ProjectChangeRequestPrepareItemParams, ProjectChangeRequestPrepareItemRoute, ProjectChangeRequestPrepareRoute } from "@ui/containers";
+import {
+  PCRPrepareItemRoute,
+  ProjectChangeRequestPrepareItemParams,
+  ProjectChangeRequestPrepareRoute
+} from "@ui/containers";
 import { getPcrEditor } from "@ui/redux/selectors";
 import { PCRDtoValidator } from "@ui/validators";
 import { DateTime } from "luxon";
 import * as Dtos from "@framework/dtos";
 import { PCRItemStatus, PCRItemType } from "@framework/constants";
+import { ICallableWorkflow } from "@ui/containers/pcrs/workflow";
+import { AccountNameChangeStep, AccountNameChangeWorkflow } from "@ui/containers/pcrs/nameChange";
 
 export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBase<ProjectChangeRequestPrepareItemParams, Dtos.PCRDto, PCRDtoValidator> {
   constructor() {
-    super(ProjectChangeRequestPrepareItemRoute, ["default"]);
+    super(PCRPrepareItemRoute, ["default"]);
   }
 
   protected async getDto(context: IContext, params: ProjectChangeRequestPrepareItemParams, button: IFormButton, body: IFormBody): Promise<Dtos.PCRDto> {
@@ -25,6 +31,8 @@ export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBa
     }
 
     item.status = body.itemStatus === "true" ? PCRItemStatus.Complete : PCRItemStatus.Incomplete;
+
+    const workflow = this.getWorkflow(params, dto);
 
     if (item.type === PCRItemType.TimeExtension) {
       this.updateTimeExtension(item, body);
@@ -39,7 +47,7 @@ export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBa
     }
 
     if (item.type === PCRItemType.AccountNameChange) {
-      this.updateNameChange(item, body);
+      this.updateNameChange(item, body, workflow!);
     }
     return dto;
   }
@@ -75,14 +83,37 @@ export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBa
     }
   }
 
-  protected async run(context: IContext, params: ProjectChangeRequestPrepareItemParams, button: IFormButton, dto: Dtos.PCRDto): Promise<ILinkInfo> {
-    await context.runCommand(new UpdatePCRCommand(params.projectId, params.pcrId, dto));
-    return ProjectChangeRequestPrepareRoute.getLink(params);
+  private getWorkflow(params: ProjectChangeRequestPrepareItemParams, dto: Dtos.PCRDto): ICallableWorkflow|null {
+    const item = dto.items.find(x => x.id === params.itemId)!;
+    if (item.type === PCRItemType.AccountNameChange) {
+      return new AccountNameChangeWorkflow(params.step as AccountNameChangeStep["stepNumber"]);
+    }
+    return null;
   }
 
-  private updateNameChange(item: Dtos.PCRItemForAccountNameChangeDto, body: IFormBody) {
-    item.partnerId = body.partnerId;
-    item.accountName = body.accountName;
+  protected async run(context: IContext, params: ProjectChangeRequestPrepareItemParams, button: IFormButton, dto: Dtos.PCRDto): Promise<ILinkInfo> {
+    await context.runCommand(new UpdatePCRCommand(params.projectId, params.pcrId, dto));
+
+    const workflow = this.getWorkflow(params, dto);
+
+    if (!workflow || workflow.isOnSummary()) {
+      return ProjectChangeRequestPrepareRoute.getLink(params);
+    }
+
+    return PCRPrepareItemRoute.getLink({
+      projectId: params.projectId,
+      pcrId: params.pcrId,
+      itemId: params.itemId,
+      step: workflow.nextStep(),
+    });
+  }
+
+  private updateNameChange(item: Dtos.PCRItemForAccountNameChangeDto, body: IFormBody, workflow: ICallableWorkflow) {
+    const step = workflow.getStep();
+    if (step && step.stepName === "partnerNameStep") {
+      item.partnerId = body.partnerId;
+      item.accountName = body.accountName;
+    }
   }
 
   protected getStoreInfo(params: ProjectChangeRequestPrepareItemParams): { key: string, store: string } {
