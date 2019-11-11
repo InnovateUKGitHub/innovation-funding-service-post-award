@@ -297,10 +297,6 @@ button.govuk-link:focus {
   box-shadow: 0 2px 0 #0b0c0c;
 }
 
-a.blockLink {
-  display: block;
-}
-
 .app-task-list {
   list-style-type: none;
   padding-left: 0;
