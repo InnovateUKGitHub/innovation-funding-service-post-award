@@ -8,7 +8,6 @@ import { PCRItemForAccountNameChangeDto } from "@framework/dtos";
 
 interface InnerProps {
   documents: DocumentSummaryDto[];
-  documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>;
   onFileChange: (saving: boolean, dto: MultipleDocumentUploadDto) => void;
   onFileDelete: (dto: MultipleDocumentUploadDto, document: DocumentSummaryDto) => void;
 }
@@ -82,18 +81,12 @@ export const PCRPrepareItemFilesStep = (props: StepProps<PCRItemForAccountNameCh
     <StoresConsumer>
       {
         stores => {
-          const combined = Pending.combine({
-            documents: stores.projectChangeRequestDocuments.pcrOrPcrItemDocuments(props.project.id, props.pcrItem.id),
-            documentsEditor: stores.projectChangeRequestDocuments.getPcrOrPcrItemDocumentsEditor(props.project.id, props.pcrItem.id)
-          });
-
           return <ACC.Loader
-            pending={combined}
-            render={x => (
+            pending={stores.projectChangeRequestDocuments.pcrOrPcrItemDocuments(props.project.id, props.pcrItem.id)}
+            render={documents => (
               <Component
                 {...props}
-                documentsEditor={x.documentsEditor}
-                documents={x.documents}
+                documents={documents}
                 onFileChange={(saving, dto) => {
                   stores.messages.clearMessages();
                   const successMessage = dto.files.length === 1 ? `Your document has been uploaded.` : `${dto.files.length} documents have been uploaded.`;
