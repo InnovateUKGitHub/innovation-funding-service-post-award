@@ -1,7 +1,7 @@
 import { LoadingStatus, Pending } from "@shared/pending";
 import { DataState, DataStateKeys, EditorState, EditorStateKeys, EditorStatus, IDataStore, IEditorStore, RootState } from "../reducers";
 import { IClientUser, ILinkInfo } from "@framework/types";
-import { DataLoadAction, dataLoadAction, EditorErrorAction, EditorSubmitAction, EditorSuccessAction, handleEditorError, handleEditorSubmit, handleEditorSuccess, navigateTo, RootActions, RootActionsOrThunk, UpdateEditorAction, updateEditorAction } from "../actions";
+import { DataLoadAction, dataLoadAction, EditorErrorAction, EditorSubmitAction, EditorSuccessAction, handleEditorError, handleEditorSubmit, handleEditorSuccess, navigateTo, resetEditor, RootActions, RootActionsOrThunk, UpdateEditorAction, updateEditorAction } from "../actions";
 import { getKey, scrollToTheTopSmoothly } from "@framework/util";
 import { processDto } from "@shared/processResponse";
 import { AnyAction } from "redux";
@@ -164,5 +164,9 @@ export class StoreBase {
         onComplete(result);
       }
     }));
+  }
+
+  protected resetEditor<T extends EditorStateKeys, K extends string>(store: T, key: K) {
+    this.queue(resetEditor(key, store));
   }
 }

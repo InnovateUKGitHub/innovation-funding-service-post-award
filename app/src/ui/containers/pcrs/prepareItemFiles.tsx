@@ -139,16 +139,16 @@ const PrepareItemFilesContainer = (props: Params & BaseProps) => (
           pcr={stores.projectChangeRequests.getById(props.projectId, props.pcrId)}
           pcrItem={stores.projectChangeRequests.getItemById(props.projectId, props.pcrId, props.itemId)}
           pcrItemType={stores.projectChangeRequests.getPcrTypeForItem(props.projectId, props.pcrId, props.itemId)}
-          documents={stores.documents.pcrOrPcrItemDocuments(props.projectId, props.itemId)}
-          documentsEditor={stores.documents.getPcrOrPcrItemDocumentsEditor(props.projectId, props.itemId)}
+          documents={stores.projectChangeRequestDocuments.pcrOrPcrItemDocuments(props.projectId, props.itemId)}
+          documentsEditor={stores.projectChangeRequestDocuments.getPcrOrPcrItemDocumentsEditor(props.projectId, props.itemId)}
           onChange={(saving, dto) => {
             stores.messages.clearMessages();
             const successMessage = dto.files.length === 1 ? `Your document has been uploaded.` : `${dto.files.length} documents have been uploaded.`;
-            stores.documents.updatePcrOrPcrItemDocumentsEditor(saving, props.projectId, props.itemId, dto, successMessage);
+            stores.projectChangeRequestDocuments.updatePcrOrPcrItemDocumentsEditor(saving, props.projectId, props.itemId, dto, successMessage);
           }}
           onDelete={(dto, document) => {
             stores.messages.clearMessages();
-            stores.documents.deletePcrOrPcrItemDocumentsEditor(props.projectId, props.itemId, dto, document, "Your document has been removed.");
+            stores.projectChangeRequestDocuments.deletePcrOrPcrItemDocumentsEditor(props.projectId, props.itemId, dto, document, "Your document has been removed.");
           }}
           {...props}
         />

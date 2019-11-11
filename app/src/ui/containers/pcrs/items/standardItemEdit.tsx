@@ -69,7 +69,7 @@ export const StandardItemEdit = (props: Props) => (
     {stores => {
       const projectId = props.projectChangeRequest.projectId;
       const itemId = props.projectChangeRequestItem.id;
-      const pendingDocuments = stores.documents.pcrOrPcrItemDocuments(projectId, itemId);
+      const pendingDocuments = stores.projectChangeRequestDocuments.pcrOrPcrItemDocuments(projectId, itemId);
 
       return (
         <ACC.Loader
