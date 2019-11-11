@@ -12,7 +12,7 @@ import * as ACC from "../../components";
 import { Pending } from "@shared/pending";
 import { PCRDto } from "@framework/dtos/pcrDtos";
 import { EditorStatus, IEditorStore, IStores, RootState, StoresConsumer } from "@ui/redux";
-import { PCRDtoValidator } from "@ui/validators";
+import { MultipleDocumentUpdloadDtoValidator, PCRDtoValidator } from "@ui/validators";
 import { NavigationArrowsForPCRs } from "@ui/containers/pcrs/navigationArrows";
 import { ICallableStep, ICallableWorkflow } from "@ui/containers/pcrs/workflow";
 import { PCRPrepareItemContainer, PCRViewItemContainer } from "@ui/containers";
@@ -29,6 +29,7 @@ interface Data {
   pcr: Pending<PCRDto>;
   pcrItem: Pending<PCRItemDto>;
   editor: Pending<IEditorStore<PCRDto, PCRDtoValidator>>;
+  documentsEditor: Pending<IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>>;
   editableItemTypes: Pending<PCRItemType[]>;
   mode: "prepare" | "review" | "view";
   workflow: Pending<ICallableWorkflow|null>;
@@ -46,11 +47,12 @@ class Component extends ContainerBase<ProjectChangeRequestPrepareItemParams, Dat
       pcr: this.props.pcr,
       pcrItem: this.props.pcrItem,
       editor: this.props.editor,
+      documentsEditor: this.props.documentsEditor,
       editableItemTypes: this.props.editableItemTypes,
       workflow: this.props.workflow
     });
 
-    return <ACC.PageLoader pending={combined} render={x => this.renderContents(x.project, x.editor, x.pcr, x.pcrItem, x.editableItemTypes, x.workflow)}/>;
+    return <ACC.PageLoader pending={combined} render={x => this.renderContents(x.project, x.editor, x.documentsEditor, x.pcr, x.pcrItem, x.editableItemTypes, x.workflow)}/>;
   }
 
   private getStepLink(workflow: ICallableWorkflow, stepName: string) {
@@ -62,17 +64,17 @@ class Component extends ContainerBase<ProjectChangeRequestPrepareItemParams, Dat
     });
   }
 
-  private renderContents(project: ProjectDto, editor: IEditorStore<PCRDto, PCRDtoValidator>, pcr: PCRDto, pcrItem: PCRItemDto, editableItemTypes: PCRItemType[], workflow: ICallableWorkflow|null) {
+  private renderContents(project: ProjectDto, editor: IEditorStore<PCRDto, PCRDtoValidator>, documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>, pcr: PCRDto, pcrItem: PCRItemDto, editableItemTypes: PCRItemType[], workflow: ICallableWorkflow|null) {
     return (
       <ACC.Page
         backLink={this.getBackLink()}
         pageTitle={<ACC.Projects.Title project={project}/>}
         project={project}
-        validator={[editor.validator]}
-        error={editor.error}
+        validator={[editor.validator, documentsEditor.validator]}
+        error={editor.error || documentsEditor.error}
       >
         <ACC.Renderers.Messages messages={this.props.messages}/>
-        {workflow && this.renderWorkflow(workflow, pcr, pcrItem, project, editor, editableItemTypes)}
+        {workflow && this.renderWorkflow(workflow, pcr, pcrItem, project, editor, documentsEditor, editableItemTypes)}
         {!workflow && this.renderSinglePageForm()}
       </ACC.Page>
     );
@@ -88,11 +90,11 @@ class Component extends ContainerBase<ProjectChangeRequestPrepareItemParams, Dat
     return <ACC.BackLink route={this.props.routes.pcrDetails.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId })}>Back to request</ACC.BackLink>;
   }
 
-  private renderWorkflow(workflow: ICallableWorkflow, pcr: PCRDto, pcrItem: PCRItemDto, project: ProjectDto, editor: IEditorStore<PCRDto, PCRDtoValidator>, editableItemTypes: PCRItemType[]) {
+  private renderWorkflow(workflow: ICallableWorkflow, pcr: PCRDto, pcrItem: PCRItemDto, project: ProjectDto, editor: IEditorStore<PCRDto, PCRDtoValidator>, documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>, editableItemTypes: PCRItemType[]) {
     return (
       <React.Fragment>
         {this.props.mode === "prepare" && this.props.step === 1 && this.renderGuidanceSection(pcrItem)}
-        {this.props.mode === "prepare" && !workflow.isOnSummary() && this.renderStep(workflow, project, pcr, editor)}
+        {this.props.mode === "prepare" && !workflow.isOnSummary() && this.renderStep(workflow, project, pcr, editor, documentsEditor)}
         {workflow.isOnSummary() && this.renderSummarySection(workflow, pcr, pcrItem, editor, editableItemTypes)}
       </React.Fragment>
     );
@@ -119,13 +121,14 @@ class Component extends ContainerBase<ProjectChangeRequestPrepareItemParams, Dat
     );
   }
 
-  private renderStep(workflow: ICallableWorkflow, project: ProjectDto, pcr: PCRDto, editor: IEditorStore<PCRDto, PCRDtoValidator>) {
+  private renderStep(workflow: ICallableWorkflow, project: ProjectDto, pcr: PCRDto, editor: IEditorStore<PCRDto, PCRDtoValidator>, documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>) {
     const pcrItem = editor.data.items.find(x => x.id === this.props.itemId)!;
     const validator = editor.validator.items.results.find(x => x.model.id === pcrItem.id)!;
     const status = editor.status || EditorStatus.Editing;
     return workflow.stepRender({
       pcr,
       pcrItem,
+      documentsEditor,
       project,
       validator,
       status,
@@ -230,6 +233,7 @@ const PCRItemContainer = (props: ProjectChangeRequestPrepareItemParams & BasePro
         pcrItem={stores.projectChangeRequests.getItemById(props.projectId, props.pcrId, props.itemId)}
         pcr={stores.projectChangeRequests.getById(props.projectId, props.pcrId)}
         editor={stores.projectChangeRequests.getPcrUpdateEditor(props.projectId, props.pcrId)}
+        documentsEditor={stores.projectChangeRequestDocuments.getPcrOrPcrItemDocumentsEditor(props.projectId, props.itemId)}
         editableItemTypes={stores.projectChangeRequests.getEditableItemTypes(props.projectId, props.pcrId)}
         onSave={(dto, link) => {
           stores.messages.clearMessages();

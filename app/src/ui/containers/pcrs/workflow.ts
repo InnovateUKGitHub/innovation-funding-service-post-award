@@ -1,14 +1,15 @@
 import React from "react";
 import { Results } from "@ui/validation";
 import { PCRDto, PCRItemDto, ProjectDto } from "@framework/dtos";
-import { EditorStatus } from "@ui/redux";
-import { PCRBaseItemDtoValidator } from "@ui/validators";
+import { EditorStatus, IEditorStore } from "@ui/redux";
+import { MultipleDocumentUpdloadDtoValidator, PCRBaseItemDtoValidator } from "@ui/validators";
 import { ILinkInfo } from "@framework/types";
 
 export interface StepProps<T, TVal extends Results<T>> {
   project: ProjectDto;
   pcr: PCRDto;
   pcrItem: T;
+  documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>;
   validator: TVal;
   status: EditorStatus;
   onChange: (dto: T) => void;
@@ -19,6 +20,7 @@ export interface ICallableStepProps {
   project: ProjectDto;
   pcr: PCRDto;
   pcrItem: PCRItemDto;
+  documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>;
   validator: PCRBaseItemDtoValidator<PCRItemDto>;
   status: EditorStatus;
   onChange: (dto: PCRItemDto) => void;
