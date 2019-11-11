@@ -61,7 +61,14 @@ export const editorsReducer = <TDto extends {}, TValidator extends Results<TDto>
 
   if (action.type === "EDITOR_SUBMIT_SUCCESS") {
     const result = getNewStateWithoutErrors(state);
-    if (action.payload.store === store) delete result[action.payload.id];
+    if (action.payload.store === store) {
+      const originalEditor = result[action.payload.id];
+      const newEditor: IEditorStore<TDto, TValidator> = {
+        ...originalEditor,
+        status: EditorStatus.Editing
+      };
+      result[action.payload.id] = newEditor;
+    }
     return result;
   }
 
@@ -78,6 +85,12 @@ export const editorsReducer = <TDto extends {}, TValidator extends Results<TDto>
       };
       result[action.payload.id] = newEditor;
     }
+    return result;
+  }
+
+  if(action.type === "EDITOR_RESET" && action.payload.store === store) {
+    const result = getNewStateWithoutErrors(state);
+    delete result[action.payload.id];
     return result;
   }
 

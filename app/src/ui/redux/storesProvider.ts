@@ -11,18 +11,21 @@ export const createStores = (getState: () => RootState, dispatch: (action: RootA
   const forecastGolCosts = new Stores.ForecastGolCostsStore(getState, dispatch);
 
   return {
+    claimDetailDocuments: new Stores.ClaimDetailDocumentsStore(getState, dispatch),
     claimDetails,
+    claimDocuments: new Stores.ClaimDocumentsStore(partners, claims, getState, dispatch),
     claims,
     config: new Stores.ConfigStore(getState, dispatch),
     contacts: new Stores.ContactsStore(getState, dispatch),
     costCategories: new Stores.CostCategoriesStore(getState, dispatch),
-    documents: new Stores.DocumentsStore(partners, claims, getState, dispatch),
     forecastDetails: new Stores.ForecastDetailsStore(claims, claimDetails, forecastGolCosts, getState, dispatch),
     forecastGolCosts,
     messages: new Stores.MsssagesStore(getState, dispatch),
     monitoringReports: new Stores.MonitoringReportsStore(projects, getState, dispatch),
     navigation: new Stores.NavigationStore(getState, dispatch),
+    projectChangeRequestDocuments: new Stores.ProjectChangeRequestDocumentsStore(getState, dispatch),
     projectChangeRequests: new Stores.ProjectChangeRequestStore(projects, getState, dispatch),
+    projectDocuments: new Stores.ProjectDocumentsStore(getState, dispatch),
     projects,
     partners,
     users: new Stores.UserStore(getState, dispatch),

@@ -83,8 +83,8 @@ export const PCRPrepareItemFilesStep = (props: StepProps<PCRItemForAccountNameCh
       {
         stores => {
           const combined = Pending.combine({
-            documents: stores.documents.pcrOrPcrItemDocuments(props.project.id, props.pcrItem.id),
-            documentsEditor: stores.documents.getPcrOrPcrItemDocumentsEditor(props.project.id, props.pcrItem.id)
+            documents: stores.projectChangeRequestDocuments.pcrOrPcrItemDocuments(props.project.id, props.pcrItem.id),
+            documentsEditor: stores.projectChangeRequestDocuments.getPcrOrPcrItemDocumentsEditor(props.project.id, props.pcrItem.id)
           });
 
           return <ACC.Loader
@@ -97,11 +97,11 @@ export const PCRPrepareItemFilesStep = (props: StepProps<PCRItemForAccountNameCh
                 onFileChange={(saving, dto) => {
                   stores.messages.clearMessages();
                   const successMessage = dto.files.length === 1 ? `Your document has been uploaded.` : `${dto.files.length} documents have been uploaded.`;
-                  stores.documents.updatePcrOrPcrItemDocumentsEditor(saving, props.project.id, props.pcrItem.id, dto, successMessage);
+                  stores.projectChangeRequestDocuments.updatePcrOrPcrItemDocumentsEditor(saving, props.project.id, props.pcrItem.id, dto, successMessage);
                 }}
                 onFileDelete={(dto, document) => {
                   stores.messages.clearMessages();
-                  stores.documents.deletePcrOrPcrItemDocumentsEditor(props.project.id, props.pcrItem.id, dto, document, "Your document has been removed.");
+                  stores.projectChangeRequestDocuments.deletePcrOrPcrItemDocumentsEditor(props.project.id, props.pcrItem.id, dto, document, "Your document has been removed.");
                 }}
               />
             )}

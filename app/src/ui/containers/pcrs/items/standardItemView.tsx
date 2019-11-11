@@ -30,7 +30,7 @@ export const StandardItemView = (props: Props) => (
     {
       stores => (
         <ACC.Loader
-          pending={stores.documents.pcrOrPcrItemDocuments(props.projectChangeRequest.projectId, props.projectChangeRequestItem.id)}
+          pending={stores.projectChangeRequestDocuments.pcrOrPcrItemDocuments(props.projectChangeRequest.projectId, props.projectChangeRequestItem.id)}
           render={files => <InnerContainer files={files} {...props} />}
         />
       )

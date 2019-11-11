@@ -102,7 +102,7 @@ export const PCRReasoningSummary = (props: Props & BaseProps) => (
   <StoresConsumer>
     {stores => (
       <PCRReasoningSummaryComponent
-        files={stores.documents.pcrOrPcrItemDocuments(props.projectId, props.pcrId)}
+        files={stores.projectChangeRequestDocuments.pcrOrPcrItemDocuments(props.projectId, props.pcrId)}
         editableItemTypes={stores.projectChangeRequests.getEditableItemTypes(props.projectId, props.pcrId)}
         {...props}
       />
