@@ -13,5 +13,5 @@ export enum ErrorCode {
 export interface IAppError {
   code: ErrorCode;
   message: string;
-  results: Results<{}> | null;
+  results?: Results<{}> | null;
 }

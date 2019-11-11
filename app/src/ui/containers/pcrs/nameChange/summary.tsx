@@ -37,7 +37,7 @@ export const NameChangeSummary = (props: SummaryProps<PCRItemForAccountNameChang
     {
       stores => {
         return (<ACC.Loader
-          pending={stores.documents.pcrOrPcrItemDocuments(props.projectId, props.pcrItem.id)}
+          pending={stores.projectChangeRequestDocuments.pcrOrPcrItemDocuments(props.projectId, props.pcrItem.id)}
           render={documents => <Component documents={documents} {...props} />}
         />);
       }
