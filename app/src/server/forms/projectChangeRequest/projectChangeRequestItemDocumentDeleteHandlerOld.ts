@@ -2,7 +2,7 @@ import { IContext, ILinkInfo } from "@framework/types";
 import { DeleteProjectChangeRequestDocumentOrItemDocument } from "@server/features/documents/deleteProjectChangeRequestDocumentOrItemDocument";
 import { IFormBody, IFormButton, StandardFormHandlerBase } from "@server/forms/formHandlerBase";
 import {
-  PCRPrepareItemRoute,
+  ProjectChangeRequestPrepareItemFilesRoute,
   ProjectChangeRequestPrepareItemParams
 } from "@ui/containers";
 import { Results } from "@ui/validation";
@@ -12,9 +12,9 @@ interface Document {
   id: string;
 }
 
-export class ProjectChangeRequestItemDocumentDeleteHandler extends StandardFormHandlerBase<ProjectChangeRequestPrepareItemParams, Document, Results<{}>> {
+export class ProjectChangeRequestItemDocumentDeleteHandlerOld extends StandardFormHandlerBase<ProjectChangeRequestPrepareItemParams, Document, Results<{}>> {
   constructor() {
-    super(PCRPrepareItemRoute, ["delete"]);
+    super(ProjectChangeRequestPrepareItemFilesRoute, ["delete"]);
   }
 
   protected getDto(context: IContext, params: ProjectChangeRequestPrepareItemParams, button: IFormButton, body: IFormBody) {
@@ -35,7 +35,7 @@ export class ProjectChangeRequestItemDocumentDeleteHandler extends StandardFormH
   protected async run(context: IContext, params: ProjectChangeRequestPrepareItemParams, button: IFormButton, dto: Document): Promise<ILinkInfo> {
     const command = new DeleteProjectChangeRequestDocumentOrItemDocument(dto.id, params.projectId, params.itemId);
     await context.runCommand(command);
-    return PCRPrepareItemRoute.getLink(params);
+    return ProjectChangeRequestPrepareItemFilesRoute.getLink(params);
   }
 
 }

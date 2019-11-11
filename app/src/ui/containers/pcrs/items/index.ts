@@ -1,5 +1,3 @@
-export * from "./nameChangeEdit";
-export * from "./nameChangeView";
 export * from "./projectSuspensionEdit";
 export * from "./projectSuspensionView";
 export * from "./scopeChangeEdit";
