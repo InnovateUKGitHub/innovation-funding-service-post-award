@@ -406,6 +406,11 @@ button.govuk-link:focus {
   padding-bottom: 10px;
 }
 
+.app-task-list__item--error {
+  border-left: 5px solid #d4351c;
+  padding-left: 10px;
+}
+
 .app-task-list__item:after {
   content: "";
   display: block;
