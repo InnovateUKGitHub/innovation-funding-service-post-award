@@ -5,7 +5,7 @@ import { EditorStatus, IEditorStore } from "@ui/redux";
 import { ValidationError } from "./validationError";
 import { TextInput } from "./inputs/textInput";
 import classNames from "classnames";
-import { NumberInput } from "./inputs/numberInput";
+import { NumberInput, numberInputWidths } from "./inputs/numberInput";
 import { RadioList } from "./inputs/radioList";
 import { CheckboxList } from "./inputs/checkboxList";
 import { FileUpload, MulipleFileUpload } from "./inputs/fileUpload";
@@ -202,7 +202,7 @@ const MultiStringField = <T extends {}>(props: MultiStringFieldProps<T> & Intern
 };
 
 interface NumericFieldProps<T> extends ExternalFieldProps<T, number> {
-  width?: "small" | "medium" | "normal";
+  width?: numberInputWidths;
 }
 
 const NumericField = <T extends {}>(props: NumericFieldProps<T> & InternalFieldProps<T>) => {
