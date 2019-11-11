@@ -13,11 +13,11 @@ interface Props {
 export const TimeExtensionView = (props: Props) => {
 
   const originalProjectEndDate = (props.project.startDate && props.projectChangeRequestItem.projectDurationSnapshot) ? DateTime.fromJSDate(props.project.startDate).plus({
-    months: props.projectChangeRequestItem.projectDurationSnapshot
+    months: props.projectChangeRequestItem.projectDurationSnapshot -1
   }).endOf("month").toJSDate() : null;
 
   const newProjectEndDate = (props.project.startDate && props.projectChangeRequestItem.projectDuration) ? DateTime.fromJSDate(props.project.startDate).plus({
-    months: props.projectChangeRequestItem.projectDuration
+    months: props.projectChangeRequestItem.projectDuration -1
   }).endOf("month").toJSDate() : null;
 
   return (
