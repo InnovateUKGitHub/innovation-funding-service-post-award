@@ -36,7 +36,7 @@ export class NumberInput extends BaseInput<NumberInputProps, NumberInputState> {
       {
         "govuk-input--error": this.state.invalid,
         [`govuk-input--width-${this.props.width}`]: typeof this.props.width === "number",
-        [`govuk-!-width-full-${this.props.width}`]: typeof this.props.width === "string",
+        [`govuk-!-width-${this.props.width}`]: typeof this.props.width === "string",
       },
       this.props.className
     );
