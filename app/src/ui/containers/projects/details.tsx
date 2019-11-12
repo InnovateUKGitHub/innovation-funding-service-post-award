@@ -72,7 +72,7 @@ class ProjectDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
                         <ACC.SummaryListItem label="Project end date" qa="end-date" content={<ACC.Renderers.FullDate value={project.endDate} />} />
                         <ACC.SummaryListItem label="Duration" qa="duration" content={`${project.durationInMonths} ${project.durationInMonths === 1 ? "month" : "months"}`} />
                         <ACC.SummaryListItem label="Number of periods" qa="periods" content={project.numberOfPeriods} />
-                        <ACC.SummaryListItem label="Project scope statement" qa="scope" content={project.summary} />
+                        <ACC.SummaryListItem label="Project scope statement" qa="scope" content={<ACC.Renderers.SimpleString multiline={true}>{project.summary}</ACC.Renderers.SimpleString>} />
                     </ACC.SummaryList>
                 </ACC.Section>
 

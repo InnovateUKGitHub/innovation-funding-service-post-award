@@ -46,7 +46,7 @@ class PCRReasoningSummaryComponent extends ContainerBase<Props, Data> {
             <ACC.SummaryListItem label="Types" content={<ACC.Renderers.LineBreakList items={pcr.items.map(x => x.shortName)}/>} qa="typesRow"/>
             <ACC.SummaryListItem
               label="Comments"
-              content={pcr.reasoningComments}
+              content={<ACC.Renderers.SimpleString multiline={true}>{pcr.reasoningComments}</ACC.Renderers.SimpleString>}
               qa="comments"
               validation={editor.validator.reasoningComments}
               action={mode === "prepare" && <ACC.Link id={editor.validator.reasoningComments.key} route={getStepLink("reasoningStep")}>Edit</ACC.Link>}
