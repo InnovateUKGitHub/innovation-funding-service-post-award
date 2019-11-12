@@ -20,6 +20,21 @@ export const ScopeChangeEdit = (props: Props) => {
     { id: "true", value: "I have finished making changes." }
   ];
 
+  const renderGuidanceText = () => (
+    <ACC.Renderers.SimpleString>
+      Your public description is published in line with government practice on openness and transparency of public-funded activities. It should describe your project in a way that will be easy for a non-specialist to understand. Do not include any information that is confidential, for example, intellectual property or patent details.
+      <br/>
+      <br/>
+      Your project summary should provide a clear overview of the whole project, including:
+        <ul className="govuk-list govuk-list--bullet">
+          <li>your vision for the project</li>
+          <li>key objectives</li>
+          <li>main areas of focus</li>
+          <li>details of how it is innovative</li>
+        </ul>
+    </ACC.Renderers.SimpleString>
+  );
+
   return (
     <ACC.Section>
       <Form.Form
@@ -29,6 +44,7 @@ export const ScopeChangeEdit = (props: Props) => {
         onSubmit={() => props.onSave()}
         qa="scopeChange"
       >
+        {renderGuidanceText()}
         <Form.Fieldset heading="Proposed public description">
           <ACC.Info summary="Published public description"><ACC.Renderers.SimpleString multiline={true}>{props.projectChangeRequestItem.publicDescriptionSnapshot || "No public description available."}</ACC.Renderers.SimpleString></ACC.Info>
           <Form.MultilineString

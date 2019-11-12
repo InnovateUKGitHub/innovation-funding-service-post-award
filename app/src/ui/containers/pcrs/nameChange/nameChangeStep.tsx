@@ -19,6 +19,8 @@ const InnerContainer = (props: StepProps<PCRItemForAccountNameChangeDto, PCRAcco
   ));
   const selectedPartnerOption = partnerOptions.find(x => x.id === props.pcrItem.partnerId);
 
+  const guidanceText = "This will change the partner's name in all projects they are claiming funding for. You must upload a change of name certificate from Companies House as evidence of the change.";
+
   return (
     <ACC.Section>
       <Form.Form
@@ -28,6 +30,7 @@ const InnerContainer = (props: StepProps<PCRItemForAccountNameChangeDto, PCRAcco
         onSubmit={() => props.onSave()}
         onChange={dto => props.onChange(dto)}
       >
+        <ACC.Renderers.SimpleString>{guidanceText}</ACC.Renderers.SimpleString>
         <Form.Fieldset heading="Select partner">
           <Form.Radio
             name="partnerId"
