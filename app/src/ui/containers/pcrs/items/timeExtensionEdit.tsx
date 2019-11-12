@@ -27,11 +27,11 @@ export const TimeExtensionEdit = (props: Props) => {
   const displayProposedProjectDetails: boolean = isNumber(props.projectChangeRequestItem.projectDuration) && Number.isInteger(props.projectChangeRequestItem.projectDuration) && (props.projectChangeRequestItem.projectDuration > props.projectChangeRequestItem.projectDurationSnapshot!);
 
   const originalProjectEndDate: Date = DateTime.fromJSDate(props.project.startDate).plus({
-    months: props.projectChangeRequestItem.projectDurationSnapshot!
+    months: props.projectChangeRequestItem.projectDurationSnapshot! -1
   }).endOf("month").toJSDate();
 
   const proposedProjectEndDate: Date = DateTime.fromJSDate(props.project.startDate).plus({
-    months: props.projectChangeRequestItem.projectDuration!
+    months: props.projectChangeRequestItem.projectDuration! -1
   }).endOf("month").toJSDate();
 
   return (
@@ -45,7 +45,7 @@ export const TimeExtensionEdit = (props: Props) => {
       >
         <Form.Fieldset heading="Existing project details">
           <Form.Custom label="Start and end date" name="currentDates" value={(m) => <ACC.Renderers.SimpleString><ACC.Renderers.ShortDateRange start={props.project.startDate} end={originalProjectEndDate} /></ACC.Renderers.SimpleString>} update={()=> { return; }}/>
-          <Form.Custom label="Duration" name="current Duration" value={(m) => <ACC.Renderers.SimpleString><ACC.Renderers.Duration startDate={props.project.startDate} endDate={originalProjectEndDate} /></ACC.Renderers.SimpleString>} update={()=> { return; }}/>
+          <Form.Custom label="Duration" name="currentDuration" value={(m) => <ACC.Renderers.SimpleString><ACC.Renderers.Duration startDate={props.project.startDate} endDate={originalProjectEndDate} /></ACC.Renderers.SimpleString>} update={()=> { return; }}/>
         </Form.Fieldset>
         <Form.Fieldset heading="Proposed project details">
           <Form.Numeric
