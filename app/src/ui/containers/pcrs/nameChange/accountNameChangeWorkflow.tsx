@@ -17,11 +17,11 @@ export class AccountNameChangeWorkflow extends WorkFlow<PCRItemForAccountNameCha
     super({  steps: [{
         stepName: "partnerNameStep",
         stepNumber: 1,
-        stepRender: (props) => <NameChangeStep validator={props.validator} {...props}/>
+        stepRender: (props) => <NameChangeStep {...props}/>
       }, {
         stepName: "filesStep",
         stepNumber: 2,
-        stepRender: (props) => <PCRPrepareItemFilesStep validator={props.validator} {...props}/>
+        stepRender: (props) => <PCRPrepareItemFilesStep {...props}/>
       }],
       summaryRender: (props) => {
         const {projectId, validator, pcrItem, pcr, mode, onSave, getStepLink} = props;
