@@ -589,7 +589,6 @@ export class TestData {
     const newItem: Entites.ProjectChangeRequestEntity = {
       id: `PCR_${seed}`,
       projectId: project.Id,
-      guidance: "This is some hardcoded guidance",
       comments: "",
       number: seed,
       status: PCRStatus.Unknown,
@@ -624,7 +623,6 @@ export class TestData {
       id: `PCR_Item_${seed}`,
       pcrId: pcr.id,
       accountName: "",
-      guidance: "This is some hardcoded guidance",
       recordTypeId: recordType.id,
       projectId: pcr.projectId,
       projectDuration: null,

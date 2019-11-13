@@ -443,7 +443,6 @@ class PCRTestRepository extends TestRepository<Entities.ProjectChangeRequestEnti
         pcrId: headerId,
         partnerId: "",
         accountName: "",
-        guidance: "This is some hardcoded guidance",
         statusName: "",
         projectEndDate: new Date(),
         projectSummary: "",
