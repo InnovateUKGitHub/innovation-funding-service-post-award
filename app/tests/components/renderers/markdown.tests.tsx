@@ -31,11 +31,11 @@ describe("Markdown", () => {
     expect(result.html()).toBeNull();
   });
 
-  it("should leave normal strings as they are", () => {
+  it("should handle normal strings", () => {
     const expected = "content";
     const result = mount(<Markdown value={expected}/>);
 
-    expect(result.childAt(0).html()).toBe("content");
+    expect(result.html()).toContain("<p>content</p>");
   });
 
   it("should convert headings", () => {
