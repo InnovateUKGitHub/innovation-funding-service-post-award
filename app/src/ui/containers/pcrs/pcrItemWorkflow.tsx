@@ -116,7 +116,7 @@ class Component extends ContainerBase<ProjectChangeRequestPrepareItemParams, Dat
     if (!pcrItem.guidance) return null;
     return (
       <ACC.Section qa="guidance">
-        <ACC.Renderers.SimpleString>{pcrItem.guidance}</ACC.Renderers.SimpleString>
+        <ACC.Renderers.Markdown value={pcrItem.guidance}/>
       </ACC.Section>
     );
   }
