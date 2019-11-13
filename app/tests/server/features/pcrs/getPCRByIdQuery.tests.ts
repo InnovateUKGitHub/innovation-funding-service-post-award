@@ -44,7 +44,6 @@ describe("GetPCRByIdQuery", () => {
       reasoningStatus: 55,
       reasoningStatusName: "Expected Reasoning Status",
       comments: "Expected comments",
-      guidance: "This is some hardcoded guidance",
       started: expectedStartDate,
       updated: expectedUpdatedDate,
       status: 33,
@@ -55,7 +54,6 @@ describe("GetPCRByIdQuery", () => {
     const result = await context.runQuery(query);
 
     expect(result.requestNumber).toBe(5);
-    expect(result.guidance).toBe("This is some hardcoded guidance");
     expect(result.reasoningComments).toBe("Expected reasoning");
     expect(result.reasoningStatus).toBe(55);
     expect(result.reasoningStatusName).toBe("Expected Reasoning Status");
@@ -93,7 +91,6 @@ describe("GetPCRByIdQuery", () => {
     const item = context.testData.createPCRItem(pcr, recordType, {
       status: 98,
       statusName: "Expected Status",
-      guidance: "This is some hardcoded guidance",
       shortName: "If a nickname is what people call you for short, then your full name is your nicholas name"
     });
 
@@ -101,7 +98,7 @@ describe("GetPCRByIdQuery", () => {
     const result = await context.runQuery(query).then(x => x.items[0]);
 
     expect(result.id).toBe(item.id);
-    expect(result.guidance).toBe("This is some hardcoded guidance");
+    expect(result.guidance).toBe(PCRRecordTypeMetaValues.find(x => x.type === PCRItemType.ScopeChange)!.guidance);
     expect(result.type).toBe(PCRItemType.ScopeChange);
     expect(result.typeName).toBe(recordType!.type);
     expect(result.status).toBe(98);
@@ -159,6 +156,7 @@ describe("GetPCRByIdQuery", () => {
     expect(result.publicDescription).toBe(publicDescription);
     expect(result.publicDescriptionSnapshot).toBe(publicDescriptionSnapshot);
     expect(result.projectSummarySnapshot).toBe(projectSummarySnapshot);
+    expect(result.guidance).toBe(PCRRecordTypeMetaValues.find(x => x.type === PCRItemType.ScopeChange)!.guidance);
   });
 
   test("maps fields for account name change", async () => {
@@ -187,6 +185,7 @@ describe("GetPCRByIdQuery", () => {
     expect(result.accountName).toBe(accountName);
     expect(result.partnerNameSnapshot).toBe(partnerNameSnapshot);
     expect(result.partnerId).toBe(partner.Id);
+    expect(result.guidance).toBe((PCRRecordTypeMetaValues.find(x => x.type === PCRItemType.AccountNameChange)!.guidance));
   });
 
   test("maps fields for project suspension", async () => {
