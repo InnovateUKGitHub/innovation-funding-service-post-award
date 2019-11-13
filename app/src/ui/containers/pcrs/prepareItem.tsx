@@ -56,7 +56,7 @@ class PCRPrepareItemComponent extends ContainerBase<ProjectChangeRequestPrepareI
     if (!pcr.guidance) return null;
     return (
       <ACC.Section qa="guidance">
-        <ACC.Renderers.SimpleString>{pcr.guidance}</ACC.Renderers.SimpleString>
+        <ACC.Renderers.Markdown value={pcr.guidance}/>
       </ACC.Section>
     );
   }
