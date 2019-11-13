@@ -127,12 +127,14 @@ class PCRReasoningWorkflowComponent extends ContainerBase<ProjectChangeRequestPr
   }
 
   private renderGuidanceSection(pcr: PCRDto) {
-    if (!pcr.guidance) return null;
-    return (
-      <ACC.Section qa="guidance">
-        <ACC.Renderers.SimpleString>{pcr.guidance}</ACC.Renderers.SimpleString>
-      </ACC.Section>
-    );
+    return null;
+    // ToDo clarify what guidance on a reasoning page should be.
+    // if (!pcr.guidance) return null;
+    // return (
+    //   <ACC.Section qa="guidance">
+    //     <ACC.Renderers.SimpleString>{pcr.guidance}</ACC.Renderers.SimpleString>
+    //   </ACC.Section>
+    // );
   }
 
   private onSave(dto: PCRDto) {

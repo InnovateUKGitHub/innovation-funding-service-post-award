@@ -13,10 +13,10 @@ import {
   PCRStandardItemDto, ProjectChangeRequestStandardItemTypes
 } from "@framework/dtos";
 import { PCRItemType } from "@framework/constants";
+import { PCRRecordTypeMetaValues } from "@server/features/pcrs/getItemTypesQuery";
 
 export const mapToPcrDto = (pcr: ProjectChangeRequestEntity, itemTypes: PCRItemTypeDto[]): PCRDto => ({
   id: pcr.id,
-  guidance: pcr.guidance,
   requestNumber: pcr.number,
   started: pcr.started,
   lastUpdated: pcr.updated,
@@ -57,9 +57,9 @@ const mapItem = (pcr: ProjectChangeRequestItemEntity, itemType: PCRItemTypeDto) 
   }
 };
 
-const mapBaseItem = (pcr: ProjectChangeRequestItemEntity, typeName: string) => ({
+const mapBaseItem = (pcr: ProjectChangeRequestItemEntity, typeName: string, type: PCRItemType) => ({
   id: pcr.id,
-  guidance: pcr.guidance,
+  guidance: PCRRecordTypeMetaValues.find(x => x.type === type)!.guidance,
   typeName,
   status: pcr.status,
   statusName: pcr.statusName,
@@ -67,24 +67,24 @@ const mapBaseItem = (pcr: ProjectChangeRequestItemEntity, typeName: string) => (
 });
 
 const mapStandardItem = (pcr: ProjectChangeRequestItemEntity, typeName: string, type: ProjectChangeRequestStandardItemTypes): PCRStandardItemDto => ({
-  ...mapBaseItem(pcr, typeName),
+  ...mapBaseItem(pcr, typeName, type),
   type
 });
 
 const mapItemForTermination = (pcr: ProjectChangeRequestItemEntity, typeName: string, type: PCRItemType.ProjectTermination): PCRItemForProjectTerminationDto => ({
-  ...mapBaseItem(pcr, typeName),
+  ...mapBaseItem(pcr, typeName, type),
   type
 });
 
 const mapItemForTimeExtension = (pcr: ProjectChangeRequestItemEntity, typeName: string, type: PCRItemType.TimeExtension): PCRItemForTimeExtensionDto => ({
-  ...mapBaseItem(pcr, typeName),
+  ...mapBaseItem(pcr, typeName, type),
   projectDuration: pcr.projectDuration || null,
   projectDurationSnapshot: pcr.projectDurationSnapshot || null,
   type
 });
 
 const mapItemForScopeChange = (pcr: ProjectChangeRequestItemEntity, typeName: string, type: PCRItemType.ScopeChange): PCRItemForScopeChangeDto => ({
-  ...mapBaseItem(pcr, typeName),
+  ...mapBaseItem(pcr, typeName, type),
   projectSummary: pcr.projectSummary || null,
   publicDescription: pcr.publicDescription || null,
   projectSummarySnapshot: pcr.projectSummarySnapshot || null,
@@ -93,14 +93,14 @@ const mapItemForScopeChange = (pcr: ProjectChangeRequestItemEntity, typeName: st
 });
 
 const mapItemForProjectSuspension = (pcr: ProjectChangeRequestItemEntity, typeName: string, type: PCRItemType.ProjectSuspension): PCRItemForProjectSuspensionDto => ({
-  ...mapBaseItem(pcr, typeName),
+  ...mapBaseItem(pcr, typeName, type),
   suspensionStartDate: pcr.suspensionStartDate || null,
   suspensionEndDate: pcr.suspensionEndDate || null,
   type
 });
 
 const mapItemForAccountNameChange = (pcr: ProjectChangeRequestItemEntity, typeName: string, type: PCRItemType.AccountNameChange): PCRItemForAccountNameChangeDto => ({
-  ...mapBaseItem(pcr, typeName),
+  ...mapBaseItem(pcr, typeName, type),
   accountName: pcr.accountName || null,
   partnerId: pcr.partnerId || null,
   partnerNameSnapshot: pcr.partnerNameSnapshot || null,
