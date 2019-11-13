@@ -1,6 +1,9 @@
-import { renderersGuide } from "./renderersGuide";
 import * as React from "react";
+
+import { Header } from "../components/layout/header";
+
 import { accordionGuide } from "./accordionGuide";
+import { buttonGuide } from "./styledButtonGuide";
 import { claimWindowGuide } from "./claimWindowGuide";
 import { datesGuide } from "./datesGuide";
 import { detailsGuide } from "./detailsGuide";
@@ -8,29 +11,28 @@ import { documentListGuide } from "./documentListGuide";
 import { documentSingleGuide } from "./documentSingleGuide";
 import { emailGuide } from "./emailGuide";
 import { formGuide } from "./formGuide";
+import { hashTabsGuide } from "./hashTabsGuide";
 import { insetText } from "./insetTextGuide";
 import { info } from "./infoGuide";
 import { linksListGuide } from "./linksListGuide";
 import { logsGuide } from "./logsGuide";
 import { navigationArrowsGuide } from "./navigationArrowsGuide";
 import { navigationCardGuide } from "./navigationCardGuide";
+import { numericInputGuide } from "./numericInputGuide";
 import { projectContactGuide } from "./projectContactGuide";
 import { pageTitleGuide } from "./pageTitleGuide";
-import { Header } from "../components";
+import { renderersGuide } from "./renderersGuide";
 import { sectionGuide } from "./sectionGuide";
 import { sectionPanelGuide } from "./sectionPanelGuide";
+import { statisticsBoxGuide } from "./statisticsBoxGuide";
 import { summaryListGuide } from "./summaryListGuide";
 import { tableGuide } from "./tableGuide";
 import { tabsGuide } from "./tabsGuide";
-import { hashTabsGuide } from "@ui/componentsGuide/hashTabsGuide";
-import { statisticsBoxGuide } from "./statisticsBoxGuide";
-import { buttonGuide } from "./styledButtonGuide";
+import { taskListGuide } from "./taskListGuide";
 import { textHint } from "./textHintGuide";
 import { validationErrorGuide } from "./validationErrorGuide";
 import { validationMessageGuide } from "./validationMessageGuide";
 import { validationSummaryGuide } from "./validationSummaryGuide";
-import { taskListGuide } from "@ui/componentsGuide/taskListGuide";
-import { numericInputGuide } from "@ui/componentsGuide/numericInputGuide";
 
 const guides: IGuide[] = [
     accordionGuide,
