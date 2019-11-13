@@ -27,7 +27,6 @@ export interface PCRSummaryDto extends PCRBaseDto {
 export interface PCRDto extends PCRBaseDto {
   items: (PCRItemDto)[];
   comments: string;
-  guidance: string;
   reasoningStatus: PCRItemStatus;
   reasoningStatusName: string;
   reasoningComments: string;
@@ -35,7 +34,7 @@ export interface PCRDto extends PCRBaseDto {
 
 interface PCRItemBaseDto extends PCRItemSummaryDto {
   id: string;
-  guidance: string;
+  guidance?: string;
   status: PCRItemStatus;
   statusName: string;
 }

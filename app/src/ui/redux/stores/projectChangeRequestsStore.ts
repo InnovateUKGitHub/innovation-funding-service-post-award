@@ -127,7 +127,6 @@ export class ProjectChangeRequestStore extends StoreBase {
         reasoningComments: "",
         reasoningStatus: PCRItemStatus.ToDo,
         reasoningStatusName: "",
-        guidance: "",
         requestNumber: NaN,
         started: new Date(),
         lastUpdated: new Date(),

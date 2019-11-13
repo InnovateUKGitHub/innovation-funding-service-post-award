@@ -25,7 +25,6 @@ export interface IProjectChangeRequestRepository {
 
 export interface ISalesforcePCR {
   Id: string;
-  Acc_Guidance__c: string;
   Acc_RequestHeader__c: string;
   Acc_RequestNumber__c: number;
   Acc_Status__c: string;
@@ -64,7 +63,6 @@ export class ProjectChangeRequestRepository extends SalesforceRepositoryBase<ISa
 
   protected salesforceFieldNames: string[] = [
     "Id",
-    "Acc_Guidance__c",
     "Acc_RequestHeader__c",
     "Acc_RequestNumber__c",
     "Acc_Status__c",
