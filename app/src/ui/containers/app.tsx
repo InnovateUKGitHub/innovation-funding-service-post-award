@@ -11,59 +11,46 @@ import { Store } from "redux";
 import { State as RouteState } from "router5";
 
 interface IAppProps {
-  // @todo see if we can remove dispatch once load data removed from route
+  // @todo see if we can remove and replace with a callback to set page title
   dispatch: any;
   loadStatus: number;
-  user: IClientUser;
   config: IClientConfig;
   messages: string[];
-  // @todo see if we can remove and replace with a callback to set page title
+  isClient: boolean;
   stores: IStores;
-  // @todo see if we can remove once load data removed
   route: RouteState;
   routes: IRoutes;
 }
 
 class AppComponent extends React.Component<IAppProps, {}> {
-  public componentDidMount() {
-    this.loadData();
-  }
-
   public componentDidUpdate(prevProps: Readonly<IAppProps>) {
     if (prevProps.route !== this.props.route || (this.props.loadStatus === 0 && prevProps.loadStatus !== 0)) {
-      this.loadData();
+      this.updateTitle();
     }
   }
 
-  private accessControl(route: MatchedRoute) {
+  private accessControl(route: MatchedRoute, params: {}) {
     if (!route.accessControl) return true;
-    const params = route.getParams(this.props.route);
-    const auth = new Authorisation(this.props.user.roleInfo);
+    const auth = this.props.stores.users.getCurrentUserAuthorisation();
     return route.accessControl(auth, params, this.props.config);
   }
 
-  private loadData() {
+  private updateTitle() {
     const route = matchRoute(this.props.route);
     const params = route.getParams(this.props.route);
-    const auth = new Authorisation(this.props.user.roleInfo);
-
     this.props.dispatch(udpatePageTitle(route, params, this.props.stores));
-
-    if (route.getLoadDataActions) {
-      const actions = route.getLoadDataActions(params, auth) || [];
-      actions.forEach(a => this.props.dispatch(a));
-    }
   }
 
   public render() {
     const route = matchRoute(this.props.route);
-    const hasAccess = this.accessControl(route);
     const params = route.getParams(this.props.route);
+    const hasAccess = this.accessControl(route, params);
     const propsToPass: BaseProps = {
       messages: this.props.messages,
       route: this.props.route,
       routes: this.props.routes,
       config: this.props.config,
+      isClient: this.props.isClient
     };
     const pageContent = hasAccess ? <route.container {...propsToPass} {...params} /> : <StandardErrorPage />;
     return (
@@ -94,8 +81,8 @@ export class App extends React.Component<{ store: Store, routes: IRoutes }, { ma
           <AppComponent
             stores={stores}
             loadStatus={stores.navigation.getLoadStatus()}
-            user={stores.users.getCurrentUser()}
             config={stores.config.getConfig()}
+            isClient={stores.config.isClient()}
             messages={stores.messages.messages()}
             dispatch={this.props.store.dispatch}
             route={stores.navigation.getRoute()}

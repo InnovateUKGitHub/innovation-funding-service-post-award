@@ -54,12 +54,7 @@ export async function serverRender(req: Request, res: Response, error?: IAppErro
       throw new ForbiddenError();
     }
 
-    // ToDo remove once we no longer need to get LoadDataActions
-    const actions = matched.getLoadDataActions && matched.getLoadDataActions(params, auth) || [];
-
     await loadAllData(store, () => {
-      // send all the data actions round the dispatch loop
-      actions.forEach(x => store.dispatch(x as any));
       // render the app to cause any other actions to go round the loop
       renderApp(router, store, stores, routes);
     });

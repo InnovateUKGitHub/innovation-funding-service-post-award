@@ -6,15 +6,14 @@ import { isNumber } from "@framework/util";
 import { Pending } from "@shared/pending";
 import { IEditorStore, StoresConsumer } from "@ui/redux";
 import { ForecastDetailsDtosValidator } from "@ui/validators";
-import { ForecastData } from "../claims/forecasts/common";
 
-interface Params {
+export interface Params {
   projectId: string;
   partnerId: string;
 }
 
 interface Data {
-  data: Pending<ForecastData>;
+  data: Pending<ACC.Claims.ForecastData>;
   editor: Pending<IEditorStore<ForecastDetailsDTO[], ForecastDetailsDtosValidator>>;
 }
 
@@ -29,7 +28,7 @@ class UpdateForecastComponent extends ContainerBase<Params, Data, Callbacks> {
     return <ACC.PageLoader pending={combined} render={x => this.renderContents(x.data, x.editor)} />;
   }
 
-  public renderContents(combined: ForecastData, editor: IEditorStore<ForecastDetailsDTO[], ForecastDetailsDtosValidator>) {
+  public renderContents(combined: ACC.Claims.ForecastData, editor: IEditorStore<ForecastDetailsDTO[], ForecastDetailsDtosValidator>) {
     const Form = ACC.TypedForm<ForecastDetailsDTO[]>();
 
     return (

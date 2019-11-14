@@ -102,13 +102,13 @@ class Component extends ContainerBase<ProjectChangeRequestPrepareItemParams, Dat
 
   private renderSinglePageForm() {
     if (this.props.mode === "prepare") {
-      return <PCRPrepareItemContainer messages={this.props.messages} route={this.props.route} routes={this.props.routes} config={this.props.config} projectId={this.props.projectId} pcrId={this.props.pcrId} itemId={this.props.itemId} />;
+      return <PCRPrepareItemContainer messages={this.props.messages} route={this.props.route} routes={this.props.routes} config={this.props.config} projectId={this.props.projectId} pcrId={this.props.pcrId} itemId={this.props.itemId} isClient={this.props.isClient} />;
     }
     if (this.props.mode === "review") {
-      return <PCRViewItemContainer messages={this.props.messages} route={this.props.route} routes={this.props.routes} config={this.props.config} projectId={this.props.projectId} pcrId={this.props.pcrId} itemId={this.props.itemId} isReviewing={true}/>;
+      return <PCRViewItemContainer messages={this.props.messages} route={this.props.route} routes={this.props.routes} config={this.props.config} projectId={this.props.projectId} pcrId={this.props.pcrId} itemId={this.props.itemId} isReviewing={true} isClient={this.props.isClient}/>;
     }
     if (this.props.mode === "view") {
-      return <PCRViewItemContainer messages={this.props.messages} route={this.props.route} routes={this.props.routes} config={this.props.config} projectId={this.props.projectId} pcrId={this.props.pcrId} itemId={this.props.itemId} isReviewing={false}/>;
+      return <PCRViewItemContainer messages={this.props.messages} route={this.props.route} routes={this.props.routes} config={this.props.config} projectId={this.props.projectId} pcrId={this.props.pcrId} itemId={this.props.itemId} isReviewing={false} isClient={this.props.isClient}/>;
     }
   }
 

@@ -1,14 +1,25 @@
+import { CondensedDateRange } from "../renderers/date";
 import React from "react";
-import classNames from "classnames";
 import { EditorStatus, IEditorStore } from "@ui/redux";
 import { ForecastDetailsDtosValidator, ForecastDetailsDtoValidator } from "@ui/validators";
-import { ForecastData } from "@ui/containers/claims/forecasts/common";
 import { TypedTable } from "../table";
-import { CondensedDateRange } from "../renderers/date";
+import classNames from "classnames";
 import { Currency } from "../renderers/currency";
 import { NumberInput } from "../inputs/numberInput";
 import { AccessibilityText } from "../renderers/accessibilityText";
 import { Percentage } from "../renderers/percentage";
+import { ClaimDto, PartnerDto, ProjectDto } from "@framework/dtos";
+
+export interface ForecastData {
+  project: ProjectDto;
+  partner: PartnerDto;
+  claim: ClaimDto | null;
+  claims: ClaimDto[];
+  claimDetails: ClaimDetailsSummaryDto[];
+  forecastDetails: ForecastDetailsDTO[];
+  golCosts: GOLCostDto[];
+  costCategories: CostCategoryDto[];
+}
 
 interface TableRow {
   categoryId: string;

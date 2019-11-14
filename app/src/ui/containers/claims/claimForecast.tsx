@@ -1,0 +1,143 @@
+import React from "react";
+import * as ACC from "@ui/components";
+import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerBase";
+import { isNumber } from "@framework/util";
+import { ClaimDto, PartnerDto, ProjectDto, ProjectRole } from "@framework/types";
+import { Pending } from "@shared/pending";
+import { ForecastDetailsDtosValidator } from "@ui/validators";
+import { IEditorStore, IStores, StoresConsumer } from "@ui/redux";
+
+export interface ClaimForecastParams {
+  projectId: string;
+  partnerId: string;
+  periodId: number;
+}
+
+interface Data {
+  project: Pending<ProjectDto>;
+  partner: Pending<PartnerDto>;
+  claim: Pending<ClaimDto | null>;
+  claims: Pending<ClaimDto[]>;
+  claimDetails: Pending<ClaimDetailsSummaryDto[]>;
+  forecastDetails: Pending<ForecastDetailsDTO[]>;
+  golCosts: Pending<GOLCostDto[]>;
+  costCategories: Pending<CostCategoryDto[]>;
+  editor: Pending<IEditorStore<ForecastDetailsDTO[], ForecastDetailsDtosValidator>>;
+}
+
+interface Callbacks {
+  onUpdate: (saving: boolean, dto: ForecastDetailsDTO[], updateClaim: boolean) => void;
+}
+
+class ClaimForecastComponent extends ContainerBase<ClaimForecastParams, Data, Callbacks> {
+  render() {
+
+    const combinedForcastData = Pending.combine({
+      project: this.props.project,
+      partner: this.props.partner,
+      claim: this.props.claim,
+      claims: this.props.claims,
+      claimDetails: this.props.claimDetails,
+      forecastDetails: this.props.forecastDetails,
+      golCosts: this.props.golCosts,
+      costCategories: this.props.costCategories,
+    });
+
+    const combined = Pending.combine({ data: combinedForcastData, editor: this.props.editor });
+    return <ACC.PageLoader pending={combined} render={x => this.renderContents(x.data, x.editor)} />;
+  }
+
+  renderOverheadsRate(overheadRate: number | null) {
+    if (!isNumber(overheadRate)) return null;
+
+    return <ACC.Renderers.SimpleString qa="overhead-costs">Overhead costs: <ACC.Renderers.Percentage value={overheadRate} /></ACC.Renderers.SimpleString>;
+  }
+
+  renderContents(combined: ACC.Claims.ForecastData, editor: IEditorStore<ForecastDetailsDTO[], ForecastDetailsDtosValidator>) {
+    const Form = ACC.TypedForm<ForecastDetailsDTO[]>();
+
+    return (
+      <ACC.Page
+        backLink={<ACC.BackLink route={this.props.routes.prepareClaim.getLink({ periodId: this.props.periodId, projectId: this.props.projectId, partnerId: this.props.partnerId })}>Back to claim</ACC.BackLink>}
+        error={editor.error}
+        validator={editor.validator}
+        pageTitle={<ACC.Projects.Title project={combined.project} />}
+      >
+        <ACC.Section qa="partner-name">
+          <ACC.Renderers.AriaLive>
+            <ACC.ValidationMessage messageType="info" message={`This is your last chance to change the forecast for period ${combined.project.periodId}.`} />
+          </ACC.Renderers.AriaLive>
+          <ACC.Forecasts.Warning {...combined} editor={editor} />
+          {this.renderOverheadsRate(combined.partner.overheadRate)}
+          <Form.Form
+            editor={editor}
+            onChange={data => this.props.onUpdate(false, data, false)}
+            onSubmit={() => this.props.onUpdate(true, editor.data, true)}
+            qa="claim-forecast-form"
+          >
+            <ACC.Claims.ForecastTable data={combined} editor={editor} isSubmitting={true} />
+            <Form.Fieldset>
+              <ACC.Claims.ClaimLastModified partner={combined.partner} />
+              <Form.Submit>Submit forecast and claim</Form.Submit>
+            </Form.Fieldset>
+            <Form.Fieldset qa="save-button">
+              <Form.Button name="save" onClick={() => this.props.onUpdate(true, editor.data, false)}>Save and return to claim</Form.Button>
+            </Form.Fieldset>
+          </Form.Form>
+        </ACC.Section>
+      </ACC.Page>
+    );
+  }
+}
+
+const afterUpdate = (submitClaim: boolean, props: ClaimForecastParams & BaseProps, stores: IStores) => {
+
+  const { routes, projectId, partnerId, periodId } = props;
+
+  if (!submitClaim) {
+    stores.navigation.navigateTo(routes.prepareClaim.getLink({ projectId, partnerId, periodId }));
+  }
+  else if (stores.users.getCurrentUserAuthorisation().forProject(projectId).hasRole(ProjectRole.ProjectManager)) {
+    stores.navigation.navigateTo(routes.allClaimsDashboard.getLink({ projectId }));
+  }
+  else {
+    stores.navigation.navigateTo(routes.claimsDashboard.getLink({ projectId, partnerId }));
+  }
+};
+
+const ClaimForcastContainer = (props: ClaimForecastParams & BaseProps) => (
+  <StoresConsumer>
+    {
+      stores => (
+        <ClaimForecastComponent
+          project={stores.projects.getById(props.projectId)}
+          partner={stores.partners.getById(props.partnerId)}
+          claim={stores.claims.getActiveClaimForPartner(props.partnerId)}
+          claims={stores.claims.getAllClaimsForPartner(props.partnerId)}
+          claimDetails={stores.claimDetails.getAllByPartner(props.partnerId)}
+          forecastDetails={stores.forecastDetails.getAllByPartner(props.partnerId)}
+          golCosts={stores.forecastGolCosts.getAllByPartner(props.partnerId)}
+          costCategories={stores.costCategories.getAll()}
+          editor={stores.forecastDetails.getForecastEditor(props.partnerId)}
+          onUpdate={(saving, dto, submitClaim) => {
+            const message = submitClaim ? "You have submitted your claim for this period." : undefined;
+            stores.forecastDetails.updateForcastEditor(saving, props.projectId, props.partnerId, dto, submitClaim, message, () => afterUpdate(submitClaim, props, stores));
+          }}
+          {...props}
+        />
+      )
+    }
+  </StoresConsumer>
+);
+
+export const ClaimForecastRoute = defineRoute({
+  routeName: "claimForecast",
+  routePath: "/projects/:projectId/claims/:partnerId/forecast/:periodId",
+  container: ClaimForcastContainer,
+  getParams: (route) => ({ projectId: route.params.projectId, partnerId: route.params.partnerId, periodId: parseInt(route.params.periodId, 10) }),
+  accessControl: (auth, { projectId, partnerId }) => auth.forPartner(projectId, partnerId).hasRole(ProjectRole.FinancialContact),
+  getTitle: () => ({
+    htmlTitle: "Update forecast",
+    displayTitle: "Update forecast"
+  })
+});

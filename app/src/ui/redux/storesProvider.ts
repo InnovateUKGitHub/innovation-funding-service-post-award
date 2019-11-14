@@ -4,9 +4,12 @@ import * as Stores from "./stores";
 import { RootActionsOrThunk } from "./actions";
 
 export const createStores = (getState: () => RootState, dispatch: (action: RootActionsOrThunk) => void) => {
+  const costCategories = new Stores.CostCategoriesStore(getState, dispatch);
   const projects = new Stores.ProjectsStore(getState, dispatch);
   const partners = new Stores.PartnersStore(getState, dispatch);
-  const claims = new Stores.ClaimsStore(getState, dispatch);
+  const costsSummaries = new Stores.CostSummeriesStore(getState, dispatch);
+
+  const claims = new Stores.ClaimsStore(costsSummaries, costCategories, getState, dispatch);
   const claimDetails = new Stores.ClaimsDetailsStore(getState, dispatch);
   const forecastGolCosts = new Stores.ForecastGolCostsStore(getState, dispatch);
 
@@ -17,7 +20,8 @@ export const createStores = (getState: () => RootState, dispatch: (action: RootA
     claims,
     config: new Stores.ConfigStore(getState, dispatch),
     contacts: new Stores.ContactsStore(getState, dispatch),
-    costCategories: new Stores.CostCategoriesStore(getState, dispatch),
+    costCategories,
+    costsSummaries,
     forecastDetails: new Stores.ForecastDetailsStore(claims, claimDetails, forecastGolCosts, getState, dispatch),
     forecastGolCosts,
     messages: new Stores.MsssagesStore(getState, dispatch),
