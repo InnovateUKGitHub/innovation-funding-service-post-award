@@ -2,7 +2,7 @@ import React from "react";
 import classNames from "classnames";
 import { BaseInput } from "./baseInput";
 
-export type numberInputWidths = "full" | "three-quarters" | "two-thirds" | "one-half" | "one-third" | "one-quarter" | 2|3|4|5|10|20;
+export type numberInputWidths = "full" | "three-quarters" | "two-thirds" | "one-half" | "one-third" | "one-quarter" | 2 | 3 | 4 | 5 | 10 | 20;
 
 interface NumberInputProps extends InputProps<number> {
   id?: string;
@@ -57,8 +57,23 @@ export class NumberInput extends BaseInput<NumberInputProps, NumberInputState> {
   }
 
   private getStateFromProps(props: NumberInputProps): NumberInputState {
+    let value: string | null = null;
+    if (props.value === null || props.value === undefined) {
+      value = "";
+    }
+    else if (Number.isInteger(props.value)) {
+      value = props.value.toString();
+    }
+    else if (Number(props.value)) {
+      // handle floating point numbers
+      value = Number(props.value.toFixed(6)).toString();
+    }
+    else {
+      value = props.value.toString();
+    }
+
     return {
-      value: props.value || props.value === 0 ? props.value.toString() : "",
+      value,
       invalid: !!props.value && isNaN(props.value)
     };
   }
