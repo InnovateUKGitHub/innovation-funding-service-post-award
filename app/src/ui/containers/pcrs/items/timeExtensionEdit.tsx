@@ -27,11 +27,11 @@ export const TimeExtensionEdit = (props: Props) => {
   const displayProposedProjectDetails: boolean = isNumber(props.projectChangeRequestItem.projectDuration) && Number.isInteger(props.projectChangeRequestItem.projectDuration) && (props.projectChangeRequestItem.projectDuration > props.projectChangeRequestItem.projectDurationSnapshot!);
 
   const originalProjectEndDate: Date = DateTime.fromJSDate(props.project.startDate).plus({
-    months: props.projectChangeRequestItem.projectDurationSnapshot!
+    months: props.projectChangeRequestItem.projectDurationSnapshot! -1
   }).endOf("month").toJSDate();
 
   const proposedProjectEndDate: Date = DateTime.fromJSDate(props.project.startDate).plus({
-    months: props.projectChangeRequestItem.projectDuration!
+    months: props.projectChangeRequestItem.projectDuration! -1
   }).endOf("month").toJSDate();
 
   return (
