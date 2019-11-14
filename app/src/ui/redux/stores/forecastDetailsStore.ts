@@ -18,6 +18,10 @@ export class ForecastDetailsStore extends StoreBase {
     super(getState, queue);
   }
 
+  public get(partnerId: string, periodId: number, costCategoryId: string) {
+    return this.getData("forecastDetail", this.buildKey(partnerId, periodId, costCategoryId), p => ApiClient.forecastDetails.get({partnerId, periodId, costCategoryId, ...p}));
+  }
+
   public getAllByPartner(partnerId: string) {
     return this.getData("forecastDetails", partnerId, p => ApiClient.forecastDetails.getAllByPartnerId({ partnerId, ...p }));
   }

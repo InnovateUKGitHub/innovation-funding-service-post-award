@@ -11,7 +11,7 @@ interface Props {
   backLink: React.ReactNode | null;
   pageTitle: React.ReactNode;
   error?: IAppError | null;
-  validator?: Results<{}> | Results<{}>[];
+  validator?: Results<{}> | Results<{}>[] | null;
   project?: ProjectDto;
 }
 

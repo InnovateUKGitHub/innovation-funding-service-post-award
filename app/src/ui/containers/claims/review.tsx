@@ -1,13 +1,10 @@
 import React from "react";
 import * as ACC from "@ui/components";
-import * as Actions from "@ui/redux/actions";
-import * as Selectors from "@ui/redux/selectors";
-import { IEditorStore } from "@ui/redux";
-import { ContainerBase, ReduxContainer } from "@ui/containers/containerBase";
+import { IEditorStore, StoresConsumer } from "@ui/redux";
+import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerBase";
 import { ClaimDtoValidator } from "@ui/validators/claimDtoValidator";
 import { Pending } from "@shared/pending";
 import { ClaimDto, ClaimStatus, ClaimStatusChangeDto, PartnerDto, ProjectDto, ProjectRole } from "@framework/types";
-import { ForecastData, forecastDataLoadActions } from "./forecasts/common";
 
 export interface ReviewClaimParams {
   projectId: string;
@@ -20,18 +17,18 @@ interface Data {
   partner: Pending<PartnerDto>;
   costCategories: Pending<CostCategoryDto[]>;
   claim: Pending<ClaimDto>;
+  claims: Pending<ClaimDto[]>;
+  claimDetails: Pending<ClaimDetailsSummaryDto[]>;
   costsSummaryForPeriod: Pending<CostsSummaryForPeriodDto[]>;
-  editor: Pending<IEditorStore<ClaimDto, ClaimDtoValidator>>;
-  forecastData: Pending<ForecastData>;
+  forecastDetails: Pending<ForecastDetailsDTO[]>;
+  golCosts: Pending<GOLCostDto[]>;
   iarDocument: Pending<DocumentSummaryDto | null>;
-  isClient: boolean;
-  standardOverheadRate: number;
   statusChanges: Pending<ClaimStatusChangeDto[]>;
+  editor: Pending<IEditorStore<ClaimDto, ClaimDtoValidator>>;
 }
 
 interface Callbacks {
-  onChange: (partnerId: string, periodId: number, dto: ClaimDto, details: CostsSummaryForPeriodDto[], costCategories: CostCategoryDto[]) => void;
-  onSave: (projectId: string, partnerId: string, periodId: number, dto: ClaimDto, details: CostsSummaryForPeriodDto[], costCategories: CostCategoryDto[], message: string) => void;
+  onUpdate: (saving: boolean, dto: ClaimDto) => void;
 }
 
 interface CombinedData {
@@ -63,11 +60,6 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, Data, Callbacks> 
     return <ACC.Claims.ClaimPeriodDate claim={data.claim} partner={data.partner} />;
   }
 
-  private onClaimSubmit(data: CombinedData) {
-    const message = data.editor.data.status === ClaimStatus.MO_QUERIED ? "You have queried this claim." : "You have approved this claim.";
-    this.props.onSave(this.props.projectId, this.props.partnerId, this.props.periodId, data.editor.data, data.claimDetails, data.costCategories, message);
-  }
-
   private renderContents(data: CombinedData) {
 
     const tabs: ACC.HashTabItem[] = [
@@ -93,24 +85,41 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, Data, Callbacks> 
         <ACC.Section title={this.getClaimPeriodTitle(data)}>
           <ACC.Claims.ClaimReviewTable
             {...data}
-            standardOverheadRate={this.props.standardOverheadRate}
+            standardOverheadRate={this.props.config.standardOverheadRate}
             validation={data.editor.validator.claimDetails.results}
             getLink={costCategoryId => this.getClaimLineItemLink(costCategoryId)}
           />
         </ACC.Section>
-        <ACC.Section>
-          <ACC.Accordion>
-            <ACC.AccordionItem title="Forecast" qa="forecast-accordion">
-              <ACC.Loader
-                pending={this.props.forecastData}
-                render={(forecastData) => (<ACC.Claims.ForecastTable data={forecastData} hideValidation={true} />)}
-              />
-            </ACC.AccordionItem>
-          </ACC.Accordion>
-        </ACC.Section>
+        {this.renderForecastSection()}
         {this.renderIarSection(data.claim, data.iarDocument)}
         {this.renderForm(data)}
       </React.Fragment>
+    );
+  }
+
+  private renderForecastSection() {
+    const pendingForcastData: Pending<ACC.Claims.ForecastData> = Pending.combine({
+      project: this.props.project,
+      partner: this.props.partner,
+      claim: this.props.claim,
+      claims: this.props.claims,
+      claimDetails: this.props.claimDetails,
+      forecastDetails: this.props.forecastDetails,
+      golCosts: this.props.golCosts,
+      costCategories: this.props.costCategories
+    });
+
+    return (
+      <ACC.Section>
+        <ACC.Accordion>
+          <ACC.AccordionItem title="Forecast" qa="forecast-accordion">
+            <ACC.Loader
+              pending={pendingForcastData}
+              render={(forecastData) => (<ACC.Claims.ForecastTable data={forecastData} hideValidation={true} />)}
+            />
+          </ACC.AccordionItem>
+        </ACC.Accordion>
+      </ACC.Section>
     );
   }
 
@@ -149,8 +158,8 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, Data, Callbacks> 
     return (
       <Form.Form
         editor={data.editor}
-        onSubmit={() => this.onClaimSubmit(data)}
-        onChange={(dto) => this.props.onChange(this.props.partnerId, this.props.periodId, dto, data.claimDetails, data.costCategories)}
+        onSubmit={() => this.props.onUpdate(true, data.editor.data)}
+        onChange={(dto) => this.props.onUpdate(false, dto)}
         qa="review-form"
       >
         <Form.Fieldset heading="How do you want to proceed with this claim?">
@@ -235,68 +244,42 @@ const initEditor = (dto: ClaimDto) => {
   }
 };
 
-const definition = ReduxContainer.for<ReviewClaimParams, Data, Callbacks>(ReviewComponent);
+const ReviewContainer = (props: ReviewClaimParams & BaseProps) => (
+  <StoresConsumer>
+    {
+      stores => (
+        <ReviewComponent
+          project={stores.projects.getById(props.projectId)}
+          partner={stores.partners.getById(props.partnerId)}
+          costCategories={stores.costCategories.getAll()}
+          claim={stores.claims.get(props.partnerId, props.periodId)}
+          claims={stores.claims.getAllClaimsForPartner(props.partnerId)}
+          costsSummaryForPeriod={stores.costsSummaries.getForPeriod(props.projectId, props.partnerId, props.periodId)}
+          claimDetails={stores.claimDetails.getAllByPartner(props.partnerId)}
+          forecastDetails={stores.forecastDetails.getAllByPartner(props.partnerId)}
+          golCosts={stores.forecastGolCosts.getAllByPartner(props.partnerId)}
+          iarDocument={stores.claimDocuments.getIarDocument(props.projectId, props.partnerId, props.periodId)}
+          statusChanges={stores.claims.getStatusChanges(props.projectId, props.partnerId, props.periodId)}
+          editor={stores.claims.getClaimEditor(props.projectId, props.partnerId, props.periodId, initEditor)}
+          onUpdate={(saving, dto) => {
+            const message = dto.status === ClaimStatus.MO_QUERIED ? "You have queried this claim." : "You have approved this claim.";
+            stores.claims.updateClaimEditor(saving, props.projectId, props.partnerId, props.periodId, dto, message, () => stores.navigation.navigateTo(props.routes.allClaimsDashboard.getLink({ projectId: props.projectId })));
+          }}
+          {...props}
+        />
+      )
+    }
+  </StoresConsumer>
+);
 
-// @TODO: sort out with data as its a mess!
-export const ReviewClaim = definition.connect({
-  withData: (state, props): Data => {
-    const projectPending = Selectors.getActiveProject(props.projectId, state);
-    const partnerPending = Selectors.getPartner(props.partnerId).getPending(state);
-    const costCategoriesPending = Selectors.getCostCategories().getPending(state);
-    const claimPending = Selectors.getClaim(props.partnerId, props.periodId).getPending(state);
-    const claimsPending = Selectors.findClaimsByPartner(props.partnerId).getPending(state);
-    return {
-      project: projectPending,
-      partner: partnerPending,
-      costCategories: costCategoriesPending,
-      claim: claimPending,
-      costsSummaryForPeriod: Selectors.getCostsSummaryForPeriod(props.partnerId, props.periodId).getPending(state),
-      editor: Selectors.getClaimEditor(props.partnerId, props.periodId).get(state, (dto) => initEditor(dto)),
-      isClient: state.isClient,
-      iarDocument: Selectors.getIarDocument(state, props.partnerId, props.periodId),
-      statusChanges: Selectors.getClaimStatusChanges(props.projectId, props.partnerId, props.periodId).getPending(state),
-      forecastData: Pending.combine({
-        project: projectPending,
-        partner: partnerPending,
-        claim: claimPending,
-        claims: claimsPending,
-        claimDetails: Selectors.findClaimDetailsByPartner(props.partnerId).getPending(state),
-        forecastDetails: Selectors.findForecastDetailsByPartner(props.partnerId).getPending(state),
-        golCosts: Selectors.findGolCostsByPartner(props.partnerId).getPending(state),
-        costCategories: costCategoriesPending,
-      }),
-      standardOverheadRate: state.config.standardOverheadRate
-    };
-  },
-  withCallbacks: (dispatch, routes) => ({
-    onChange: (partnerId, periodId, dto, details, costCategories) =>
-      dispatch(Actions.validateClaim(partnerId, periodId, dto, details, costCategories)),
-    onSave: (projectId, partnerId, periodId, dto, details, costCategories, message) =>
-      dispatch(Actions.saveClaim(projectId, partnerId, periodId, dto, details, costCategories, () => dispatch(Actions.navigateBackTo(routes.allClaimsDashboard.getLink({ projectId }))), message)),
-  })
-});
-
-export const ReviewClaimRoute = definition.route({
+export const ReviewClaimRoute = defineRoute({
   routeName: "reviewClaim",
   routePath: "/projects/:projectId/claims/:partnerId/review/:periodId",
+  container: ReviewContainer,
   getParams: (route) => ({ projectId: route.params.projectId, partnerId: route.params.partnerId, periodId: parseInt(route.params.periodId, 10) }),
-  getLoadDataActions: (params) => [
-    Actions.loadProject(params.projectId),
-    Actions.loadPartner(params.partnerId),
-    Actions.loadPartnersForProject(params.projectId),
-    Actions.loadCostCategories(),
-    Actions.loadClaim(params.partnerId, params.periodId),
-    Actions.loadCostsSummaryForPeriod(params.projectId, params.partnerId, params.periodId),
-    Actions.loadIarDocuments(params.projectId, params.partnerId, params.periodId),
-    Actions.loadClaimStatusChanges(params.projectId, params.partnerId, params.periodId),
-    ...forecastDataLoadActions(params)
-  ],
   accessControl: (auth, { projectId }) => auth.forProject(projectId).hasRole(ProjectRole.MonitoringOfficer),
-  getTitle: (store, params) => {
-    return {
-      htmlTitle: "Review claim",
-      displayTitle: "Claim"
-    };
-  },
-  container: ReviewClaim
+  getTitle: () => ({
+    htmlTitle: "Review claim",
+    displayTitle: "Claim"
+  }),
 });

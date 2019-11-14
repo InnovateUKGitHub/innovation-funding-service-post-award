@@ -12,7 +12,7 @@ import { GetClaimStatusChangesQuery } from "@server/features/claims/getClaimStat
 export interface IClaimsApi {
   getAllByProjectId: (params: ApiParams<{ projectId: string }>) => Promise<ClaimDto[]>;
   getAllByPartnerId: (params: ApiParams<{ partnerId: string }>) => Promise<ClaimDto[]>;
-  get: (params: ApiParams<{ partnerId: string, periodId: number }>) => Promise<ClaimDto | null>;
+  get: (params: ApiParams<{ partnerId: string, periodId: number }>) => Promise<ClaimDto>;
   update: (params: ApiParams<ClaimKey & { claim: ClaimDto }>) => Promise<ClaimDto>;
   getStatusChanges: (params: ApiParams<ClaimKey>) => Promise<ClaimStatusChangeDto[]>;
 }

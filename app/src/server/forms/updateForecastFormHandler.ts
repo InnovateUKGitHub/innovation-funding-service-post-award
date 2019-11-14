@@ -1,20 +1,20 @@
+import { ILinkInfo } from "@framework/types/ILinkInfo";
 import { IFormButton, StandardFormHandlerBase } from "./formHandlerBase";
-import { getForecastDetailsEditor } from "../../ui/redux/selectors";
 import { GetAllForecastsForPartnerQuery, UpdateForecastDetailsCommand } from "../features/forecastDetails";
 import { GetByIdQuery } from "../features/projects";
-import { ForecastDetailsRoute, UpdateForecastRoute } from "../../ui/containers";
-import { Params as ForecastParams } from "../../ui/containers/claims/forecasts/common";
 import { ForecastDetailsDtosValidator } from "../../ui/validators";
-import { ILinkInfo } from "@framework/types/ILinkInfo";
+import { getForecastDetailsEditor } from "../../ui/redux/selectors";
 import { IContext } from "@framework/types/IContext";
 import { GetByIdQuery as GetPartnerByIdQuery } from "../features/partners";
 import { GetCostCategoriesForPartnerQuery } from "../features/claims/getCostCategoriesForPartnerQuery";
+import { Params, UpdateForecastRoute } from "@ui/containers/forecasts/update";
+import { ForecastDetailsRoute } from "@ui/containers/forecasts/details";
 
-export class UpdateForecastFormHandler extends StandardFormHandlerBase<ForecastParams, ForecastDetailsDTO[], ForecastDetailsDtosValidator> {
+export class UpdateForecastFormHandler extends StandardFormHandlerBase<Params, ForecastDetailsDTO[], ForecastDetailsDtosValidator> {
   constructor() {
     super(UpdateForecastRoute, ["default"]);
   }
-  protected async getDto(context: IContext, params: ForecastParams, button: IFormButton, body: { [key: string]: string; }): Promise<ForecastDetailsDTO[]> {
+  protected async getDto(context: IContext, params: Params, button: IFormButton, body: { [key: string]: string; }): Promise<ForecastDetailsDTO[]> {
     const dto = await context.runQuery(new GetAllForecastsForPartnerQuery(params.partnerId));
     const project = await context.runQuery(new GetByIdQuery(params.projectId));
     const partner = await context.runQuery(new GetPartnerByIdQuery(params.partnerId));
@@ -25,24 +25,24 @@ export class UpdateForecastFormHandler extends StandardFormHandlerBase<ForecastP
       .map(x => x.id);
 
     dto.forEach(x => {
-        if (x.periodId > project.periodId && costCategoriesIdsToUpdate.indexOf(x.costCategoryId) >= 0) {
-            x.value = parseFloat(body[`value_${x.periodId}_${x.costCategoryId}`]);
-        }
+      if (x.periodId > project.periodId && costCategoriesIdsToUpdate.indexOf(x.costCategoryId) >= 0) {
+        x.value = parseFloat(body[`value_${x.periodId}_${x.costCategoryId}`]);
+      }
     });
 
     return dto;
   }
 
-  protected async run(context: IContext, params: ForecastParams, button: IFormButton, dto: ForecastDetailsDTO[]): Promise<ILinkInfo> {
+  protected async run(context: IContext, params: Params, button: IFormButton, dto: ForecastDetailsDTO[]): Promise<ILinkInfo> {
     await context.runCommand(new UpdateForecastDetailsCommand(params.projectId, params.partnerId, dto, false));
     return ForecastDetailsRoute.getLink(params);
-}
+  }
 
-  protected getStoreInfo(params: ForecastParams): { key: string; store: string; } {
+  protected getStoreInfo(params: Params): { key: string; store: string; } {
     return getForecastDetailsEditor(params.partnerId);
   }
 
-  protected createValidationResult(params: ForecastParams, dto: ForecastDetailsDTO[]) {
-    return new ForecastDetailsDtosValidator (dto, [], [], [], false);
+  protected createValidationResult(params: Params, dto: ForecastDetailsDTO[]) {
+    return new ForecastDetailsDtosValidator(dto, [], [], [], false);
   }
 }

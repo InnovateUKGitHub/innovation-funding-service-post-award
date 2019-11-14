@@ -1,13 +1,12 @@
 import React from "react";
-import { ContainerBase, ReduxContainer } from "../containerBase";
+import { BaseProps, ContainerBase, defineRoute } from "../containerBase";
 import { Pending } from "../../../shared/pending";
-import * as Actions from "../../redux/actions";
-import * as Selectors from "../../redux/selectors";
 import * as ACC from "../../components";
 import { DocumentList, NavigationArrows } from "../../components";
 import { State } from "router5";
 import { ClaimDto, ILinkInfo, PartnerDto, ProjectDto, ProjectRole } from "@framework/types";
 import classNames from "classnames";
+import { StoresConsumer } from "@ui/redux";
 
 interface Params {
   projectId: string;
@@ -24,7 +23,6 @@ interface Data {
   forecastDetail: Pending<ForecastDetailsDTO>;
   documents: Pending<DocumentSummaryDto[]>;
   claim: Pending<ClaimDto>;
-  standardOverheadRate: number;
 }
 
 interface CombinedData {
@@ -91,7 +89,7 @@ export class ClaimLineItemsComponent extends ContainerBase<Params, Data, {}> {
     const periodId = this.props.periodId;
     const costCategoriesToUse = costCategories
       .filter(x => x.competitionType === project.competitionType && x.organisationType === partner.organisationType)
-      .filter(x => !x.isCalculated || claim.overheadRate > this.props.standardOverheadRate);
+      .filter(x => !x.isCalculated || claim.overheadRate > this.props.config.standardOverheadRate);
     const currentCostCategory = costCategoriesToUse.find(x => x.id === this.props.costCategoryId);
 
     if (currentCostCategory === undefined) return null;
@@ -194,21 +192,24 @@ const ClaimLineItemsTable: React.SFC<{ lineItems: ClaimLineItemDto[], forecastDe
   );
 };
 
-const definition = ReduxContainer.for<Params, Data, {}>(ClaimLineItemsComponent);
-
-export const ClaimLineItems = definition.connect({
-  withData: (state, props) => ({
-    project: Selectors.getProject(props.projectId).getPending(state),
-    partner: Selectors.getPartner(props.partnerId).getPending(state),
-    claimDetails: Selectors.getClaimDetails(props.partnerId, props.periodId, props.costCategoryId).getPending(state),
-    costCategories: Selectors.getCostCategories().getPending(state),
-    forecastDetail: Selectors.getForecastDetail(props.partnerId, props.periodId, props.costCategoryId).getPending(state),
-    documents: Selectors.getClaimDetailDocuments(props.partnerId, props.periodId, props.costCategoryId).getPending(state),
-    claim: Selectors.getClaim(props.partnerId, props.periodId).getPending(state),
-    standardOverheadRate: state.config.standardOverheadRate,
-  }),
-  withCallbacks: () => ({})
-});
+const ClaimLineItemsContainer = (props: Params & BaseProps) => (
+  <StoresConsumer>
+    {
+      stores => (
+        <ClaimLineItemsComponent
+          project={stores.projects.getById(props.projectId)}
+          partner={stores.partners.getById(props.partnerId)}
+          claimDetails={stores.claimDetails.get(props.projectId, props.partnerId, props.periodId, props.costCategoryId)}
+          costCategories={stores.costCategories.getAll()}
+          forecastDetail={stores.forecastDetails.get(props.partnerId, props.periodId, props.costCategoryId)}
+          claim={stores.claims.get(props.partnerId, props.periodId)}
+          documents={stores.claimDetailDocuments.getClaimDetailDocuments(props.projectId, props.partnerId, props.periodId, props.costCategoryId)}
+          {...props}
+        />
+      )
+    }
+  </StoresConsumer>
+);
 
 const getParams = (route: State): Params => ({
   projectId: route.params.projectId,
@@ -217,45 +218,33 @@ const getParams = (route: State): Params => ({
   periodId: parseInt(route.params.periodId, 10)
 });
 
-const getLoadDataActions = (params: Params): Actions.AsyncThunk<any>[] => [
-  Actions.loadProject(params.projectId),
-  Actions.loadPartner(params.partnerId),
-  Actions.loadCostCategories(),
-  Actions.loadForecastDetail(params.partnerId, params.periodId, params.costCategoryId),
-  Actions.loadClaimDetails(params.projectId, params.partnerId, params.periodId, params.costCategoryId),
-  Actions.loadClaimDetailDocuments({ projectId: params.projectId, partnerId: params.partnerId, periodId: params.periodId, costCategoryId: params.costCategoryId }),
-  Actions.loadClaim(params.partnerId, params.periodId),
-];
-
-export const ClaimLineItemsRoute = definition.route({
+export const ClaimLineItemsRoute = defineRoute({
   routeName: "claimLineItemsView",
   routePath: "/projects/:projectId/claims/:partnerId/details/:periodId/costs/:costCategoryId",
+  container: ClaimLineItemsContainer,
   getParams: (route) => getParams(route),
-  getLoadDataActions: (params) => getLoadDataActions(params),
-  getTitle: (store, params) => {
-    const costCat = Selectors.getCostCatetory(params.costCategoryId).getPending(store).data;
+  getTitle: (store, params, stores) => {
+    const costCatName = stores.costCategories.get(params.costCategoryId).then(x => x.name).data;
     return {
-      htmlTitle: costCat && costCat.name ? `View costs for ${costCat.name}` : "View costs",
-      displayTitle: costCat && costCat.name || "Line items"
+      htmlTitle: costCatName ? `View costs for ${costCatName}` : "View costs",
+      displayTitle: costCatName || "Line items"
     };
   },
-  container: ClaimLineItems
 });
 
-export const ReviewClaimLineItemsRoute = definition.route({
+export const ReviewClaimLineItemsRoute = defineRoute({
   routeName: "claimLineItemsReview",
   routePath: "/projects/:projectId/claims/:partnerId/review/:periodId/costs/:costCategoryId",
+  container: ClaimLineItemsContainer,
   getParams: (route) => getParams(route),
-  getLoadDataActions: (params) => getLoadDataActions(params),
   accessControl: (auth, { projectId, partnerId }) =>
     auth.forPartner(projectId, partnerId).hasAnyRoles(ProjectRole.FinancialContact, ProjectRole.ProjectManager) ||
     auth.forProject(projectId).hasRole(ProjectRole.MonitoringOfficer),
-  getTitle: (store, params) => {
-    const costCatName = Selectors.getCostCatetory(params.costCategoryId).getPending(store).then(x => x && x.name).data;
+  getTitle: (store, params, stores) => {
+    const costCatName = stores.costCategories.get(params.costCategoryId).then(x => x.name).data;
     return {
       htmlTitle: costCatName ? `Review costs for ${costCatName}` : "Review costs",
       displayTitle: costCatName || "Costs"
     };
   },
-  container: ClaimLineItems,
 });

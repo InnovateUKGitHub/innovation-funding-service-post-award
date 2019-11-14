@@ -11,12 +11,7 @@ export type EditorResetAction = ReturnType<typeof resetEditor>;
 
 export type EditorAction = UpdateEditorAction | EditorSubmitAction | EditorSuccessAction | EditorErrorAction | EditorResetAction;
 
-export function updateEditorAction<T>(
-  id: string,
-  store: string,
-  dto: T,
-  validator: Results<{}> | null
-) {
+export function updateEditorAction<T>(id: string, store: string, dto: T, validator: Results<{}> | null) {
   const payload = {id, store, dto, validator};
   return createAction("EDITOR_UPDATE", payload);
 }
@@ -25,7 +20,7 @@ export function handleEditorSubmit<T>(id: string, store: string, dto: T, validat
   return createAction("EDITOR_SUBMIT", { id, store, dto, validator });
 }
 
-export function handleEditorSuccess<T>(id: string, editorStore: string) {
+export function handleEditorSuccess(id: string, editorStore: string) {
   return createAction("EDITOR_SUBMIT_SUCCESS", {id, store: editorStore});
 }
 

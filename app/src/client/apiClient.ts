@@ -23,7 +23,7 @@ const clientApi: IApiClient = {
     getAll: (params) => ajaxJson("/api/cost-categories"),
   },
   documents: {
-    getClaimDocuments:(params) => ajaxJson(`/api/documents/claims/${params.projectId}/${params.partnerId}/${params.periodId}/?description=${params.description}`),
+    getClaimDocuments:(params) => ajaxJson(`/api/documents/claims/${params.projectId}/${params.partnerId}/${params.periodId}/?description=${params.description||""}`),
     getClaimDetailDocuments: ({ claimDetailKey }) => ajaxJson(`/api/documents/claim-details/${claimDetailKey.projectId}/${claimDetailKey.partnerId}/${claimDetailKey.periodId}/${claimDetailKey.costCategoryId}`),
     getProjectChangeRequestDocumentsOrItemDocuments: (params) => ajaxJson(`/api/documents/projectChangeRequests/${params.projectId}/${params.projectChangeRequestIdOrItemId}`),
     getProjectDocuments: (params) => ajaxJson(`/api/documents/projects/${params.projectId}`),
