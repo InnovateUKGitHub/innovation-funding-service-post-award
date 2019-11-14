@@ -88,75 +88,31 @@ class ProjectDashboardComponent extends ContainerBaseWithState<{}, Data, {}, Sta
 
     return (
       <React.Fragment>
-        {this.renderStatisticsSection(combinedData)}
-        {this.renderProjectList(combinedData, "Projects with open claims", "open-claims", "section-open", "open", "You currently do not have any projects with open claims.")}
-        {this.renderProjectList(combinedData, "Projects awaiting the next claim period", "next-claims", "section-closed", "awaiting", "You currently do not have any projects outside of the claims period.")}
-        {combinedData.filter(x => x.projectSection === "upcoming").length ? this.renderProjectList(combinedData, "Upcoming projects", "upcoming-claims", "section-upcoming", "upcoming", "") : null}
-        {combinedData.filter(x => x.projectSection === "archived").length ? this.renderProjectList(combinedData, "Archived projects", "archived-claims", "section-archived", "archived", "") : null}
+        {this.renderProjectList(combinedData, "open-projects", "section-open", ["open", "awaiting"], "You currently do not have any open projects.")}
+        <ACC.Accordion>
+          <ACC.AccordionItem
+            title="Upcoming Projects"
+            children={combinedData.filter(x => x.projectSection === "upcoming").length ? this.renderProjectList(combinedData, "upcoming-projects", "section-upcoming", ["upcoming"], "") : null}
+          />
+          <ACC.AccordionItem
+            title="Archived Projects"
+            children={combinedData.filter(x => x.projectSection === "archived").length ? this.renderProjectList(combinedData, "archived-projects", "section-archived", ["archived"], "") : null}
+          />
+        </ACC.Accordion>
       </React.Fragment>
     );
   }
 
-  private renderStatisticsSection(combinedData: ProjectData[]) {
-    const projectsAsMO = combinedData.filter(x => x.project.roles & ProjectRole.MonitoringOfficer);
-    const claimsToReview = projectsAsMO.reduce((accumulator, currentValue) => accumulator + currentValue.project.claimsToReview, 0);
-    const pendingClaims = projectsAsMO.reduce((accumulator, currentValue) => accumulator + currentValue.project.claimsWithParticipant, 0);
-
-    const isMO = !!projectsAsMO.length;
-
-    if (!isMO) {
-      return null;
-    }
-
-    const claimsToReviewText = claimsToReview === 1 ? "claim you need to review" : "claims you need to review";
-    const pendingClaimsText = pendingClaims === 1 ? "unsubmitted or queried claim" : "unsubmitted or queried claims";
-
-    return (
-      <ACC.Section qa="requiring-action-section" title="Overview" className="govuk-!-padding-bottom-6">
-        {/* tslint:disable-next-line */}
-        <div className="govuk-grid-row acc-statistics-section">
-          {this.renderStatisticsBox(claimsToReview, claimsToReviewText, () => this.setState({ showClaimsToReview: !this.state.showClaimsToReview }), this.state.showClaimsToReview, "review")}
-          {this.renderStatisticsBox(pendingClaims, pendingClaimsText, () => this.setState({ showClaimsWithParticipant: !this.state.showClaimsWithParticipant }), this.state.showClaimsWithParticipant, "queried")}
-        </div>
-      </ACC.Section>
-    );
-  }
-
-  private renderStatisticsBox(numberOfClaims: number, label: string, filterFunction: () => void, buttonIsPressed: boolean, qa?: string) {
-    if (this.props.config.features.projectFiltering && numberOfClaims > 0) {
-      // empty div needed to prevent focus on button becoming misaligned
-      return (
-        <div className="govuk-grid-column-one-half">
-          <button data-module="govuk-button" className={classNames("acc-statistics-section__details", "acc-statistics-section__details--button", { "acc-statistics-section__details--button--unselected": !buttonIsPressed })} aria-pressed={buttonIsPressed} onClick={() => filterFunction()}>
-            <div>
-              <StatisticsBox number={numberOfClaims} label={label} qa={qa} />
-            </div>
-          </button>
-        </div>
-      );
-    }
-
-    return (
-      <div className="govuk-grid-column-one-half">
-        <div className="acc-statistics-section__details">
-          <div>
-            <StatisticsBox number={numberOfClaims} label={label} qa={qa} />
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  private renderProjectList(data: ProjectData[], title: string, qa: string, key: string, section: Section, noProjectsMessage: string) {
-    const statusFiltered = data.filter(x => x.projectSection === section);
+  private renderProjectList(data: ProjectData[], qa: string, key: string, section: Section[], noProjectsMessage: string) {
+    const statusFiltered = data.filter(x => section.indexOf(x.projectSection) !== -1);
     const stateFiltered = statusFiltered
       .filter(x => !this.state.showClaimsToReview || x.project.claimsToReview > 0)
       .filter(x => !this.state.showClaimsWithParticipant || x.project.claimsWithParticipant > 0);
     return (
-      <ACC.ListSection title={title} qa={qa} key={key}>
-        {stateFiltered.map((x, i) => this.renderProject(x.project, x.partner, section, i))}
+      <ACC.Section qa={qa} key={key}>
+        {stateFiltered.map((x, i) => this.renderProject(x.project, x.partner, x.projectSection, i))}
         {this.renderNoPojectsMessage(stateFiltered, noProjectsMessage, statusFiltered)}
-      </ACC.ListSection>
+      </ACC.Section>
     );
   }
 
