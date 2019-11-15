@@ -42,44 +42,44 @@ const renderDateRange = ( start: DateTime | null, end: DateTime | null, format: 
     );
 };
 
-export const CondensedDateRange: React.SFC<{ start: Date | null, end: Date | null }> = props => {
+export const CondensedDateRange: React.FunctionComponent<{ start: Date | null, end: Date | null }> = props => {
     return renderDateRange(convertDateOnly(props.start), convertDateOnly(props.end), "MMM", true);
 };
 
-export const LongDateRange: React.SFC<{ start: Date | null, end: Date | null }> = props => {
+export const LongDateRange: React.FunctionComponent<{ start: Date | null, end: Date | null }> = props => {
     return renderDateRange(convertDateOnly(props.start), convertDateOnly(props.end), "d MMMM");
 };
 
-export const ShortDateRange: React.SFC<{ start: Date | null, end: Date | null }> = props => {
+export const ShortDateRange: React.FunctionComponent<{ start: Date | null, end: Date | null }> = props => {
     return renderDateRange(convertDateOnly(props.start), convertDateOnly(props.end), "d MMM");
 };
 
-export const ShortMonth: React.SFC<{ value: Date | null }> = (props) => {
+export const ShortMonth: React.FunctionComponent<{ value: Date | null }> = (props) => {
     return render(convertDateOnly(props.value), "MMM");
 };
 
-export const DayAndLongMonth: React.SFC<{ value: Date | null }> = (props) => {
+export const DayAndLongMonth: React.FunctionComponent<{ value: Date | null }> = (props) => {
     return render(convertDateOnly(props.value), "d MMMM");
 };
 
-export const LongYear: React.SFC<{ value: Date | null }> = (props) => {
+export const LongYear: React.FunctionComponent<{ value: Date | null }> = (props) => {
     return render(convertDateOnly(props.value), "yyyy");
 };
 
-export const FullDate: React.SFC<{ value: Date | null }> = (props) => {
+export const FullDate: React.FunctionComponent<{ value: Date | null }> = (props) => {
     return render(convertDateOnly(props.value), "d MMMM yyyy");
 };
 
-export const FullDateTime: React.SFC<{ value: Date | null }> = (props) => {
+export const FullDateTime: React.FunctionComponent<{ value: Date | null }> = (props) => {
     const date = convertDateAndTime(props.value);
     return render(date, appendMeridian(date, "d MMMM yyyy, h:mm"));
 };
 
-export const ShortDate: React.SFC<{ value: Date | null }> = (props) => {
+export const ShortDate: React.FunctionComponent<{ value: Date | null }> = (props) => {
     return render(convertDateOnly(props.value), "d MMM yyyy");
 };
 
-export const ShortDateTime: React.SFC<{ value: Date | null }> = (props) => {
+export const ShortDateTime: React.FunctionComponent<{ value: Date | null }> = (props) => {
     const date = convertDateAndTime(props.value);
     return render(date, appendMeridian(date, "d MMM yyyy, h:mm"));
 };
@@ -99,6 +99,20 @@ export const Duration: React.FunctionComponent<{ startDate: Date | null, endDate
     }
 
     return null;
+};
+
+export const Months: React.FunctionComponent<{months: number | null }> = (props) => {
+    if (props.months || props.months === 0) {
+        return <span>{`${props.months} ${props.months === 1 ? "month" : "months"}`}</span>;
+    }
+    return null;
+};
+
+export const ShortDateRangeFromDuration = (props: { startDate: Date|null, months: number|null}) => {
+    const startDateLuxon = convertDateAndTime(props.startDate);
+    const isValidDuration = (props.months) && Number.isInteger(props.months);
+    const endDate = startDateLuxon && isValidDuration ? startDateLuxon.plus({months: props.months! - 1}).endOf("month").toJSDate() : null;
+    return <ShortDateRange start={props.startDate} end={endDate}/>;
 };
 
 const appendMeridian = (date: DateTime|null, format: string) => {
