@@ -12,11 +12,13 @@ import { TestUser } from "./testUser";
 import { TestConfig } from "./testConfig";
 import * as Entities from "@framework/entities";
 import { ValidationError } from "@server/features/common";
+import { TestStore } from "./testStore";
 
 export class TestContext implements IContext {
     constructor() {
         this.repositories = createTestRepositories();
         this.testData = new TestData(this.repositories, () => this.user);
+        this.testStore = new TestStore(this);
     }
 
     public clock = new TestClock();
@@ -24,6 +26,7 @@ export class TestContext implements IContext {
     public repositories: ITestRepositories;
     public user = new TestUser();
     public testData: TestData;
+    public testStore: TestStore;
 
     public startTimer = (message: string) => {
         return {

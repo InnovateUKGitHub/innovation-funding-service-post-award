@@ -141,7 +141,7 @@ class ProjectDocumentsComponent extends ContainerBaseWithState<ProjectDocumentPa
     return (
       // tslint:disable-next-line:no-empty
       <FilterForm.Form data={this.state} onSubmit={() => { }} onChange={x => this.setState(x)} qa="document-search-form">
-        <FilterForm.String name="document-filter" labelHidden={true} value={x => x.filterBoxText} update={(x, v) => x.filterBoxText = v} placeholder="Search documents" />
+        <FilterForm.Search name="document-filter" labelHidden={true} value={x => x.filterBoxText} update={(x, v) => x.filterBoxText = v} placeholder="Search documents" />
       </FilterForm.Form>
     );
   }
