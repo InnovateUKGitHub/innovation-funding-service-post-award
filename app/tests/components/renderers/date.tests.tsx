@@ -1,9 +1,9 @@
 // tslint:disable:no-duplicate-string no-identical-functions
 import "jest";
 import React from "react";
-import { CondensedDateRange, Duration, FullDate, FullDateTime, LongDateRange, ShortDate, ShortDateRange, ShortDateTime } from "../../../src/ui/components/renderers/date";
+import { CondensedDateRange, Duration, FullDate, FullDateTime, LongDateRange, Months, ShortDate, ShortDateRange, ShortDateRangeFromDuration, ShortDateTime } from "../../../src/ui/components/renderers/date";
 import Adapter from "enzyme-adapter-react-16";
-import Enzyme, { shallow } from "enzyme";
+import Enzyme, { mount, shallow } from "enzyme";
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -256,5 +256,74 @@ describe("Duration", () => {
 
     const wrapper = shallow(<Duration startDate={start} endDate={end} />);
     expect(wrapper.text()).toEqual("13 months");
+  });
+});
+
+describe("Months", () => {
+  it("should render null if months not provided", () => {
+    const wrapper = mount(<Months months={null}/>);
+    expect(wrapper.text()).toBeNull();
+  });
+
+  it("should render null if months is NaN", () => {
+    const wrapper = mount(<Months months={NaN}/>);
+    expect(wrapper.text()).toBeNull();
+  });
+
+  it("should render 0 months", () => {
+    const wrapper = mount(<Months months={0}/>);
+    expect(wrapper.text()).toContain("0 months");
+  });
+
+  it("should render 1 month", () => {
+    const wrapper = mount(<Months months={1}/>);
+    expect(wrapper.text()).toContain("1 month");
+  });
+
+  it("should render 2 months", () => {
+    const wrapper = mount(<Months months={2}/>);
+    expect(wrapper.text()).toContain("2 months");
+  });
+});
+
+describe("ShortDateRangeFromDuration", () => {
+  it("should render null if start date not provided", () => {
+    const wrapper = mount(<ShortDateRangeFromDuration startDate={null} months={1}/>);
+    expect(wrapper.text()).toBeNull();
+  });
+
+  it("should render null if start date invalid", () => {
+    const wrapper = mount(<ShortDateRangeFromDuration startDate={new Date("invalid")} months={1}/>);
+    expect(wrapper.text()).toBeNull();
+  });
+
+  it("should render null if months not provided", () => {
+    const wrapper = mount(<ShortDateRangeFromDuration startDate={new Date()} months={null}/>);
+    expect(wrapper.text()).toBeNull();
+  });
+
+  it("should render null if months is invalid", () => {
+    const wrapper = mount(<ShortDateRangeFromDuration startDate={new Date()} months={NaN}/>);
+    expect(wrapper.text()).toBeNull();
+  });
+
+  it("should render null if months is 0", () => {
+    const wrapper = mount(<ShortDateRangeFromDuration startDate={new Date("2012/09/1")} months={0}/>);
+    expect(wrapper.text()).toBeNull();
+  });
+
+  it("should render correct date range if months is 1", () => {
+    const wrapper = mount(<ShortDateRangeFromDuration startDate={new Date("2012/09/1")} months={1}/>);
+    expect(wrapper.text()).toEqual("1 Sep to 30 Sep 2012");
+  });
+
+  it("should render correct date range if months is 12", () => {
+    const wrapper = mount(<ShortDateRangeFromDuration startDate={new Date("2012/09/1")} months={12}/>);
+    expect(wrapper.text()).toEqual("1 Sep 2012 to 31 Aug 2013");
+  });
+
+  it("should render correct date range if months is 4", () => {
+    const wrapper = mount(<ShortDateRangeFromDuration startDate={new Date("2012/09/1")} months={4}/>);
+    expect(wrapper.text()).toEqual("1 Sep to 31 Dec 2012");
   });
 });

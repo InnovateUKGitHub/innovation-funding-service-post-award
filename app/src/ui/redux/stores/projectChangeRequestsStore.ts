@@ -199,7 +199,7 @@ export class ProjectChangeRequestStore extends StoreBase {
           ...baseFields,
           type: itemType.type,
           projectDuration: null,
-          projectDurationSnapshot: null,
+          projectDurationSnapshot: 0,
         };
       case PCRItemType.ScopeChange:
         return {

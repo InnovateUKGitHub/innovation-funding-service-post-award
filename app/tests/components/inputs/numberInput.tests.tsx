@@ -159,4 +159,10 @@ describe("NumberInput", () => {
     expect(output.state("value")).toBe("abc1");
     expect(output.state("invalid")).toBe(true);
   });
+
+  it("Handles floating point numbers", () => {
+    const output = mount(<NumberInput name="number test" value={(2.2 - 1)} />);
+    expect((output.find("input").instance() as any).value).toBe("1.2");
+
+  });
 });
