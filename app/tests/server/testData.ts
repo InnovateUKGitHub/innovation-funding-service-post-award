@@ -55,7 +55,7 @@ export class TestData {
       Acc_GOLTotalCostAwarded__c: 0,
       Acc_IFSApplicationId__c: 0,
       Acc_NumberOfOpenClaims__c: 0,
-      Acc_ProjectNumber__c: "",
+      Acc_ProjectNumber__c: seed.toString(),
       Acc_ProjectSource__c: "",
       Acc_ProjectStatus__c: "",
       ProjectStatusName: "",
@@ -64,9 +64,9 @@ export class TestData {
       Acc_TotalProjectCosts__c: 0,
       Acc_TrackingClaimStatus__c: "",
       ClaimStatusName: "",
+      Acc_LeadParticipantName__c: "",
       Acc_NumberofPeriods__c: 5,
       Acc_Duration__c: 15,
-      Acc_LeadParticipantName__c: "",
     };
 
     if (!!update) update(newItem);
