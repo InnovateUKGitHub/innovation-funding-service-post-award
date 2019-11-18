@@ -9,6 +9,7 @@ import * as colour from "../../styles/colours";
 import { StatisticsBox } from "../../components";
 import { IClientConfig } from "@ui/redux/reducers/configReducer";
 import { StoresConsumer } from "@ui/redux";
+import { SimpleString } from "@ui/components/renderers";
 
 interface Data {
   projects: Pending<ProjectDto[]>;
@@ -85,37 +86,40 @@ class ProjectDashboardComponent extends ContainerBaseWithState<{}, Data, {}, Sta
       };
     });
 
+    const openProjects = combinedData.filter(x => x.projectSection === "open" || x.projectSection === "awaiting");
+    const upcomingProjects = combinedData.filter(x => x.projectSection === "upcoming");
+    const archivedProjects = combinedData.filter(x => x.projectSection === "archived");
+
     return (
       <React.Fragment>
-        {this.renderProjectList(combinedData, "open-projects", "section-open", ["open", "awaiting"], "You currently do not have any open projects.")}
+        {this.renderProjectList(openProjects, "open-projects", "section-open", "You currently do not have any open projects.")}
         <ACC.Accordion>
           <ACC.AccordionItem title="Upcoming Projects">
-            {combinedData.filter(x => x.projectSection === "upcoming").length ? this.renderProjectList(combinedData, "upcoming-projects", "section-upcoming", ["upcoming"], "") : null}
+            {this.renderProjectList(upcomingProjects, "upcoming-projects", "section-upcoming", "You do not have any upcoming projects.")}
           </ACC.AccordionItem>
           <ACC.AccordionItem title="Archived Projects">
-            {combinedData.filter(x => x.projectSection === "archived").length ? this.renderProjectList(combinedData, "archived-projects", "section-archived", ["archived"], "") : null}
+            {this.renderProjectList(archivedProjects, "archived-projects", "section-archived", "You do not have any archived projects.")}
           </ACC.AccordionItem>
         </ACC.Accordion>
       </React.Fragment>
     );
   }
 
-  private renderProjectList(data: ProjectData[], qa: string, key: string, section: Section[], noProjectsMessage: string) {
-    const statusFiltered = data.filter(x => section.indexOf(x.projectSection) !== -1);
-    const stateFiltered = statusFiltered
+  private renderProjectList(data: ProjectData[], qa: string, key: string, noProjectsMessage: string) {
+    const stateFiltered = data
       .filter(x => !this.state.showClaimsToReview || x.project.claimsToReview > 0)
       .filter(x => !this.state.showClaimsWithParticipant || x.project.claimsWithParticipant > 0);
     return (
       <ACC.Section qa={qa} key={key}>
         {stateFiltered.map((x, i) => this.renderProject(x.project, x.partner, x.projectSection, i))}
-        {this.renderNoPojectsMessage(stateFiltered, noProjectsMessage, statusFiltered)}
+        {this.renderNoPojectsMessage(stateFiltered, noProjectsMessage, data)}
       </ACC.Section>
     );
   }
 
   private renderNoPojectsMessage = (combinedFiltersData: ProjectData[], noProjectsMessage: string, statusFiltered: ProjectData[]) => {
     if (!!combinedFiltersData.length) return null;
-    return <ACC.ListItem><p className="govuk-body govuk-!-margin-0">{noProjectsMessage}</p></ACC.ListItem>;
+    return <SimpleString children={noProjectsMessage} />;
   }
 
   private getProjectSection(project: ProjectDto, partner: PartnerDto | null): Section {
