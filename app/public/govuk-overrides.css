@@ -239,7 +239,7 @@
 /* overriding govuk styles so we always render content so bounding boxes are available */
 .js-enabled .acc-accordion__section-content {
   height: 0;
-  overflow: hidden;
+  overflow: auto;
   padding: 0;
 }
 
@@ -247,6 +247,11 @@
   height: auto;
   overflow: auto;
   padding: 15px 0 15px 0;
+}
+
+.acc-accordion__section-content .govuk-grid-row .acc-section {
+  margin-right: 0px;
+  margin-left: -15px;
 }
 
 div.card-link-grid {
