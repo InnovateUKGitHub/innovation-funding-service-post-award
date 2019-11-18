@@ -239,7 +239,7 @@
 /* overriding govuk styles so we always render content so bounding boxes are available */
 .js-enabled .acc-accordion__section-content {
   height: 0;
-  overflow: auto;
+  overflow: hidden;
   padding: 0;
 }
 
