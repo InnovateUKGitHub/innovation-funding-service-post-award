@@ -34,7 +34,6 @@ interface CombinedData {
 }
 
 type Section = "archived" | "open" | "awaiting" | "upcoming";
-type Icon = "warning" | "edit" | "none";
 
 class ProjectDashboardComponent extends ContainerBaseWithState<{}, Data, {}, State> {
 
@@ -90,14 +89,12 @@ class ProjectDashboardComponent extends ContainerBaseWithState<{}, Data, {}, Sta
       <React.Fragment>
         {this.renderProjectList(combinedData, "open-projects", "section-open", ["open", "awaiting"], "You currently do not have any open projects.")}
         <ACC.Accordion>
-          <ACC.AccordionItem
-            title="Upcoming Projects"
-            children={combinedData.filter(x => x.projectSection === "upcoming").length ? this.renderProjectList(combinedData, "upcoming-projects", "section-upcoming", ["upcoming"], "") : null}
-          />
-          <ACC.AccordionItem
-            title="Archived Projects"
-            children={combinedData.filter(x => x.projectSection === "archived").length ? this.renderProjectList(combinedData, "archived-projects", "section-archived", ["archived"], "") : null}
-          />
+          <ACC.AccordionItem title="Upcoming Projects">
+            {combinedData.filter(x => x.projectSection === "upcoming").length ? this.renderProjectList(combinedData, "upcoming-projects", "section-upcoming", ["upcoming"], "") : null}
+          </ACC.AccordionItem>
+          <ACC.AccordionItem title="Archived Projects">
+            {combinedData.filter(x => x.projectSection === "archived").length ? this.renderProjectList(combinedData, "archived-projects", "section-archived", ["archived"], "") : null}
+          </ACC.AccordionItem>
         </ACC.Accordion>
       </React.Fragment>
     );
@@ -142,30 +139,6 @@ class ProjectDashboardComponent extends ContainerBaseWithState<{}, Data, {}, Sta
       default:
         return "upcoming";
     }
-  }
-
-  private getIconStatus(project: ProjectDto, partner: PartnerDto | null): Icon {
-    // if fc return warning if overdue or iar required
-    if (partner && ((partner.claimsOverdue! > 0) || partner.status === PartnerClaimStatus.IARRequired)) {
-      return "warning";
-    }
-
-    // mo or pm return warning if any claims overdue
-    if ((project.roles & (ProjectRole.MonitoringOfficer | ProjectRole.ProjectManager)) && project.claimsOverdue > 0) {
-      return "warning";
-    }
-
-    // if fc return edit if claim is not submitted
-    if (partner && (partner.status !== PartnerClaimStatus.ClaimSubmitted && partner.status !== PartnerClaimStatus.NoClaimsDue)) {
-      return "edit";
-    }
-
-    // if mo return edit if claims to review
-    if ((project.roles & ProjectRole.MonitoringOfficer) && project.claimsToReview > 0) {
-      return "edit";
-    }
-
-    return "none";
   }
 
   // tslint:disable-next-line:cognitive-complexity
@@ -260,13 +233,12 @@ class ProjectDashboardComponent extends ContainerBaseWithState<{}, Data, {}, Sta
   }
 
   private renderProject(project: ProjectDto, partner: PartnerDto | null, section: Section, index: number) {
-    const iconStatus = section === "open" ? this.getIconStatus(project, partner) : "none";
     const messages: React.ReactNode[] = this.getMessages(project, partner, section);
 
     return (
-      <ACC.ListItem icon={iconStatus} key={`project_${index}`} qa={`project-${project.projectNumber}`}>
+      <ACC.ListItem key={`project_${index}`} qa={`project-${project.projectNumber}`}>
         <div className="govuk-grid-column-two-thirds" style={{ display: "inline-flex", alignItems: "center" }}>
-          <div className={iconStatus !== "none" ? "govuk-!-margin-left-8" : ""}>
+          <div>
             <h3 className="govuk-heading-s govuk-!-margin-bottom-2">
               {this.renderProjectTitle(project, partner, section !== "upcoming")}
             </h3>
