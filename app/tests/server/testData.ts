@@ -65,7 +65,8 @@ export class TestData {
       Acc_TrackingClaimStatus__c: "",
       ClaimStatusName: "",
       Acc_NumberofPeriods__c: 5,
-      Acc_Duration__c: 15
+      Acc_Duration__c: 15,
+      Acc_LeadParticipantName__c: "",
     };
 
     if (!!update) update(newItem);
