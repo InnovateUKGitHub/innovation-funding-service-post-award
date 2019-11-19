@@ -37,13 +37,13 @@ describe("MapToProjectDtoCommand", () => {
       claimWindowEnd: context.clock.parse("2009-01-30 23:59:00", "yyyy-MM-dd hh:mm:ss"),
       claimsOverdue: 5,
       claimsWithParticipant: 1,
+      leadPartnerName: "Heathcliff",
       claimsToReview: 2,
       status: ProjectStatus.Live,
       statusName: "Live",
       numberOfOpenClaims: 10,
       numberOfPeriods: 5,
-      durationInMonths: 15,
-      leadPartnerName: "Expected lead partner"
+      durationInMonths: 15
     };
 
     const salesforce = context.testData.createProject(x => {

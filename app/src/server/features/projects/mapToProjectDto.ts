@@ -39,6 +39,7 @@ export class MapToProjectDtoCommand extends CommandBase<ProjectDto> {
       periodId: periodInfo.current,
       periodStartDate: periodInfo.startDate,
       periodEndDate: periodInfo.endDate,
+      // TODO use either totalPeriods OR numberOfPeriods
       totalPeriods: periodInfo.total,
       claimWindowStart: periodInfo.currentClaimWindowStart,
       claimWindowEnd: periodInfo.currentClaimWindowEnd,

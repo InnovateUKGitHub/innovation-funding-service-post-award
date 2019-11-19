@@ -11,7 +11,6 @@ import { createStores, rootReducer, setupMiddleware, StoresProvider } from "@ui/
 import { App } from "../ui/containers/app";
 import { processDto } from "../shared/processResponse";
 import * as Actions from "@ui/redux/actions";
-import { RootActionsOrThunk } from "@ui/redux/actions";
 
 // get servers store to initalise client store
 const serverState = processDto((window as any).__PRELOADED_STATE__);

@@ -52,7 +52,7 @@ export class FullDateInput extends BaseInput<FullDateInputProps, FullDateState> 
           <div className="govuk-form-group">
             <label className="govuk-label govuk-date-input__label" htmlFor={dayName}>
               Day
-          </label>
+            </label>
             <input
               className={classNames(inputClass, "govuk-input--width-2")}
               name={dayName}
