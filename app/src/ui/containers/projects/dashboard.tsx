@@ -1,15 +1,10 @@
-import { DateTime } from "luxon";
-import classNames from "classnames";
-import * as ACC from "../../components";
-import { Pending } from "../../../shared/pending";
-import { BaseProps, ContainerBaseWithState, ContainerProps, defineRoute } from "../containerBase";
-import { PartnerClaimStatus, PartnerDto, ProjectDto, ProjectRole, ProjectStatus } from "@framework/types";
 import React from "react";
-import * as colour from "../../styles/colours";
-import { StatisticsBox } from "../../components";
-import { IClientConfig } from "@ui/redux/reducers/configReducer";
+import * as ACC from "../../components";
+import { PartnerClaimStatus, PartnerDto, ProjectDto, ProjectRole, ProjectStatus } from "@framework/types";
 import { StoresConsumer } from "@ui/redux";
-import { SimpleString } from "@ui/components/renderers";
+import { IClientConfig } from "@ui/redux/reducers/configReducer";
+import { Pending } from "@shared/pending";
+import { BaseProps, ContainerBaseWithState, ContainerProps, defineRoute } from "../containerBase";
 
 interface Data {
   projects: Pending<ProjectDto[]>;
@@ -112,14 +107,14 @@ class ProjectDashboardComponent extends ContainerBaseWithState<{}, Data, {}, Sta
     return (
       <ACC.Section qa={qa} key={key}>
         {stateFiltered.map((x, i) => this.renderProject(x.project, x.partner, x.projectSection, i))}
-        {this.renderNoPojectsMessage(stateFiltered, noProjectsMessage, data)}
+        {this.renderNoPojectsMessage(stateFiltered, noProjectsMessage)}
       </ACC.Section>
     );
   }
 
-  private renderNoPojectsMessage = (combinedFiltersData: ProjectData[], noProjectsMessage: string, statusFiltered: ProjectData[]) => {
+  private renderNoPojectsMessage = (combinedFiltersData: ProjectData[], noProjectsMessage: string) => {
     if (!!combinedFiltersData.length) return null;
-    return <SimpleString children={noProjectsMessage} />;
+    return <ACC.Renderers.SimpleString>{noProjectsMessage}</ACC.Renderers.SimpleString>;
   }
 
   private getProjectSection(project: ProjectDto, partner: PartnerDto | null): Section {
@@ -145,88 +140,90 @@ class ProjectDashboardComponent extends ContainerBaseWithState<{}, Data, {}, Sta
     }
   }
 
-  // tslint:disable-next-line:cognitive-complexity
-  private getMessages(project: ProjectDto, partner: PartnerDto | null, section: Section): React.ReactNode[] {
-    const messages: React.ReactNode[] = [];
-
-    const isMo = !!(project.roles & ProjectRole.MonitoringOfficer);
-    const isPM = !!(project.roles & ProjectRole.ProjectManager);
-
-    if (section === "open" || section === "awaiting") {
-      messages.push(`Period ${project.periodId} of ${project.totalPeriods}`);
+  private isActionRequired(project: ProjectDto, partner: PartnerDto | null, section: Section): boolean {
+    if(section === "archived" || section === "upcoming") {
+      return false;
     }
 
-    if (section === "archived" || section === "upcoming") {
-      messages.push(<ACC.Renderers.LongDateRange start={project.startDate} end={project.endDate} />);
+    // if fc return warning if overdue or iar required
+    if (partner && ((partner.claimsOverdue! > 0) || partner.status === PartnerClaimStatus.IARRequired)) {
+      return true;
     }
 
-    if (section === "open") {
-      if (isMo) {
-        messages.push(`Claims you need to review: ${project.claimsToReview}`);
-      }
-
-      switch (partner && partner.status) {
-        case PartnerClaimStatus.ClaimDue:
-        case PartnerClaimStatus.ClaimsOverdue:
-          messages.push(`You need to submit your claim.`);
-          break;
-        case PartnerClaimStatus.ClaimSubmitted:
-          messages.push(`You have submitted your claim.`);
-          break;
-        case PartnerClaimStatus.ClaimQueried:
-          messages.push(`Your claim has been queried. Please respond.`);
-          break;
-        case PartnerClaimStatus.IARRequired:
-          messages.push(`You need to submit your IAR.`);
-          break;
-      }
-
-      if (isMo || isPM) {
-        messages.push(`Unsubmitted or queried claims: ${project.claimsWithParticipant}`);
-      }
-    }
-
-    if (section === "archived") {
-      if (project.status === ProjectStatus.Terminated) {
-        messages.push("Terminated.");
-      }
-    }
-
-    return messages;
-  }
-
-  private getIsOverdue(project: ProjectDto, partner: PartnerDto | null): boolean {
+    // mo or pm return warning if any claims overdue
     if ((project.roles & (ProjectRole.MonitoringOfficer | ProjectRole.ProjectManager)) && project.claimsOverdue > 0) {
       return true;
     }
 
-    if (partner && partner.claimsOverdue! > 0) {
+    // if fc return edit if claim is not submitted
+    if (partner && (partner.status !== PartnerClaimStatus.ClaimSubmitted && partner.status !== PartnerClaimStatus.NoClaimsDue)) {
+      return true;
+    }
+
+    // if mo return edit if claims to review
+    if ((project.roles & ProjectRole.MonitoringOfficer) && project.claimsToReview > 0) {
       return true;
     }
 
     return false;
   }
 
-  private renderBadge(project: ProjectDto, partner: PartnerDto | null, section: Section) {
-    const isOverdue = section === "open" ? this.getIsOverdue(project, partner) : false;
+  private getRightHandMessages(project: ProjectDto, partner: PartnerDto | null, section: Section): React.ReactNode[] {
+    const messages: React.ReactNode[] = [];
 
-    if (project.status === ProjectStatus.OnHold) {
-      return (<div className="govuk-body" style={{ color: colour.GOVUK_TEXT_COLOUR, fontWeight: "bold" }}>On hold</div>);
-    }
-    else if (isOverdue) {
-      return (<div className="govuk-body" style={{ color: colour.GOVUK_ERROR_COLOUR, fontWeight: "bold" }}>Claim overdue</div>);
-    }
-    else if (section === "open") {
-      return <ACC.Claims.ClaimWindow periodEnd={DateTime.fromJSDate(project.claimWindowStart!).setZone("Europe/London").minus({ days: 1 }).toJSDate()} />;
-    }
-    else if (section === "awaiting") {
-      return <ACC.Claims.ClaimWindow periodEnd={project.periodEndDate!} />;
+    if (section === "archived") messages.push(project.statusName);
+
+    if (section === "open" || section === "awaiting") {
+      const isMo = !!(project.roles & ProjectRole.MonitoringOfficer);
+      const isFc = !!(project.roles & ProjectRole.FinancialContact);
+
+      if(project.status === ProjectStatus.OnHold) {
+        messages.push("On hold");
+      }
+
+      if (isMo) {
+        messages.push(`Claims to review: ${project.claimsToReview}`);
+      }
+
+      if (isFc) {
+        switch (partner && partner.status) {
+          case PartnerClaimStatus.ClaimDue:
+            messages.push(`You need to submit your claim.`);
+            break;
+          case PartnerClaimStatus.ClaimQueried:
+            messages.push(`Your claim has been queried. Please respond.`);
+            break;
+          case PartnerClaimStatus.IARRequired:
+            messages.push(`You need to submit your IAR.`);
+            break;
+        }
+      }
     }
 
-    return null;
+    return messages;
   }
 
-  private renderProjectTitle(project: ProjectDto, partner: PartnerDto | null, links: boolean) {
+  private getLeftHandMessages(project: ProjectDto, section: Section): React.ReactNode[] {
+    const messages: React.ReactNode[] = [];
+
+    if (section === "upcoming") messages.push(<ACC.Renderers.ShortDateRange start={project.startDate} end={project.endDate} />);
+
+    if (section === "archived") messages.push(project.leadPartnerName);
+
+    if (section === "open" || section === "awaiting") {
+      messages.push(project.leadPartnerName);
+      messages.push(
+        <React.Fragment>
+          {`Period ${project.periodId} of ${project.totalPeriods}`}
+          &nbsp;(<ACC.Renderers.ShortDateRange start={project.periodStartDate} end={project.periodEndDate} />)
+        </React.Fragment>
+      );
+    }
+
+    return messages;
+  }
+
+  private renderProjectTitle(project: ProjectDto, links: boolean) {
     const text = `${project.projectNumber}: ${project.title}`;
 
     if (!links) {
@@ -237,20 +234,22 @@ class ProjectDashboardComponent extends ContainerBaseWithState<{}, Data, {}, Sta
   }
 
   private renderProject(project: ProjectDto, partner: PartnerDto | null, section: Section, index: number) {
-    const messages: React.ReactNode[] = this.getMessages(project, partner, section);
+    const actionRequired = this.isActionRequired(project, partner, section);
+    const rightHandMessages: React.ReactNode[] = this.getRightHandMessages(project, partner, section);
+    const leftHandMessages: React.ReactNode[] = this.getLeftHandMessages(project, section);
 
     return (
-      <ACC.ListItem key={`project_${index}`} qa={`project-${project.projectNumber}`}>
-        <div className="govuk-grid-column-two-thirds" style={{ display: "inline-flex", alignItems: "center" }}>
+      <ACC.ListItem actionRequired={actionRequired} key={`project_${index}`} qa={`project-${project.projectNumber}`}>
+        <div className="govuk-grid-column-one-half" style={{ display: "inline-flex", alignItems: "center" }}>
           <div>
             <h3 className="govuk-heading-s govuk-!-margin-bottom-2">
-              {this.renderProjectTitle(project, partner, section !== "upcoming")}
+              {this.renderProjectTitle(project, section !== "upcoming")}
             </h3>
-            {messages.map((content, i) => <p key={`message${i}`} className="govuk-body govuk-!-margin-bottom-0">{content}</p>)}
+            {leftHandMessages.map((content, i) => <div key={`leftMessage${i}`} className="govuk-body govuk-!-margin-bottom-0">{content}</div>)}
           </div>
         </div>
-        <div className="govuk-grid-column-one-third govuk-!-margin-top-2" style={{ display: "inline-flex", alignItems: "center", justifyContent: "center" }}>
-          {this.renderBadge(project, partner, section)}
+        <div className="govuk-grid-column-one-half govuk-!-margin-top-2" style={{ textAlign: "right" }}>
+          {rightHandMessages.map((content, i) => <div key={`rightMessage${i}`} className="govuk-body govuk-!-margin-bottom-0">{content}</div>)}
         </div>
       </ACC.ListItem>
     );
