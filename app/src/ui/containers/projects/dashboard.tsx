@@ -9,6 +9,7 @@ import * as colour from "../../styles/colours";
 import { StatisticsBox } from "../../components";
 import { IClientConfig } from "@ui/redux/reducers/configReducer";
 import { StoresConsumer } from "@ui/redux";
+import { SimpleString } from "@ui/components/renderers";
 
 interface Data {
   projects: Pending<ProjectDto[]>;
@@ -34,7 +35,6 @@ interface CombinedData {
 }
 
 type Section = "archived" | "open" | "awaiting" | "upcoming";
-type Icon = "warning" | "edit" | "none";
 
 class ProjectDashboardComponent extends ContainerBaseWithState<{}, Data, {}, State> {
 
@@ -86,83 +86,40 @@ class ProjectDashboardComponent extends ContainerBaseWithState<{}, Data, {}, Sta
       };
     });
 
+    const openProjects = combinedData.filter(x => x.projectSection === "open" || x.projectSection === "awaiting");
+    const upcomingProjects = combinedData.filter(x => x.projectSection === "upcoming");
+    const archivedProjects = combinedData.filter(x => x.projectSection === "archived");
+
     return (
       <React.Fragment>
-        {this.renderStatisticsSection(combinedData)}
-        {this.renderProjectList(combinedData, "Projects with open claims", "open-claims", "section-open", "open", "You currently do not have any projects with open claims.")}
-        {this.renderProjectList(combinedData, "Projects awaiting the next claim period", "next-claims", "section-closed", "awaiting", "You currently do not have any projects outside of the claims period.")}
-        {combinedData.filter(x => x.projectSection === "upcoming").length ? this.renderProjectList(combinedData, "Upcoming projects", "upcoming-claims", "section-upcoming", "upcoming", "") : null}
-        {combinedData.filter(x => x.projectSection === "archived").length ? this.renderProjectList(combinedData, "Archived projects", "archived-claims", "section-archived", "archived", "") : null}
+        {this.renderProjectList(openProjects, "open-projects", "section-open", "You currently do not have any open projects.")}
+        <ACC.Accordion>
+          <ACC.AccordionItem title="Upcoming Projects">
+            {this.renderProjectList(upcomingProjects, "upcoming-projects", "section-upcoming", "You do not have any upcoming projects.")}
+          </ACC.AccordionItem>
+          <ACC.AccordionItem title="Archived Projects">
+            {this.renderProjectList(archivedProjects, "archived-projects", "section-archived", "You do not have any archived projects.")}
+          </ACC.AccordionItem>
+        </ACC.Accordion>
       </React.Fragment>
     );
   }
 
-  private renderStatisticsSection(combinedData: ProjectData[]) {
-    const projectsAsMO = combinedData.filter(x => x.project.roles & ProjectRole.MonitoringOfficer);
-    const claimsToReview = projectsAsMO.reduce((accumulator, currentValue) => accumulator + currentValue.project.claimsToReview, 0);
-    const pendingClaims = projectsAsMO.reduce((accumulator, currentValue) => accumulator + currentValue.project.claimsWithParticipant, 0);
-
-    const isMO = !!projectsAsMO.length;
-
-    if (!isMO) {
-      return null;
-    }
-
-    const claimsToReviewText = claimsToReview === 1 ? "claim you need to review" : "claims you need to review";
-    const pendingClaimsText = pendingClaims === 1 ? "unsubmitted or queried claim" : "unsubmitted or queried claims";
-
-    return (
-      <ACC.Section qa="requiring-action-section" title="Overview" className="govuk-!-padding-bottom-6">
-        {/* tslint:disable-next-line */}
-        <div className="govuk-grid-row acc-statistics-section">
-          {this.renderStatisticsBox(claimsToReview, claimsToReviewText, () => this.setState({ showClaimsToReview: !this.state.showClaimsToReview }), this.state.showClaimsToReview, "review")}
-          {this.renderStatisticsBox(pendingClaims, pendingClaimsText, () => this.setState({ showClaimsWithParticipant: !this.state.showClaimsWithParticipant }), this.state.showClaimsWithParticipant, "queried")}
-        </div>
-      </ACC.Section>
-    );
-  }
-
-  private renderStatisticsBox(numberOfClaims: number, label: string, filterFunction: () => void, buttonIsPressed: boolean, qa?: string) {
-    if (this.props.config.features.projectFiltering && numberOfClaims > 0) {
-      // empty div needed to prevent focus on button becoming misaligned
-      return (
-        <div className="govuk-grid-column-one-half">
-          <button data-module="govuk-button" className={classNames("acc-statistics-section__details", "acc-statistics-section__details--button", { "acc-statistics-section__details--button--unselected": !buttonIsPressed })} aria-pressed={buttonIsPressed} onClick={() => filterFunction()}>
-            <div>
-              <StatisticsBox number={numberOfClaims} label={label} qa={qa} />
-            </div>
-          </button>
-        </div>
-      );
-    }
-
-    return (
-      <div className="govuk-grid-column-one-half">
-        <div className="acc-statistics-section__details">
-          <div>
-            <StatisticsBox number={numberOfClaims} label={label} qa={qa} />
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  private renderProjectList(data: ProjectData[], title: string, qa: string, key: string, section: Section, noProjectsMessage: string) {
-    const statusFiltered = data.filter(x => x.projectSection === section);
-    const stateFiltered = statusFiltered
+  private renderProjectList(data: ProjectData[], qa: string, key: string, noProjectsMessage: string) {
+    const stateFiltered = data
       .filter(x => !this.state.showClaimsToReview || x.project.claimsToReview > 0)
       .filter(x => !this.state.showClaimsWithParticipant || x.project.claimsWithParticipant > 0);
     return (
-      <ACC.ListSection title={title} qa={qa} key={key}>
-        {stateFiltered.map((x, i) => this.renderProject(x.project, x.partner, section, i))}
-        {this.renderNoPojectsMessage(stateFiltered, noProjectsMessage, statusFiltered)}
-      </ACC.ListSection>
+      <ACC.Section qa={qa} key={key}>
+        {stateFiltered.map((x, i) => this.renderProject(x.project, x.partner, x.projectSection, i))}
+        {this.renderNoPojectsMessage(stateFiltered, noProjectsMessage, data)}
+      </ACC.Section>
     );
   }
 
   private renderNoPojectsMessage = (combinedFiltersData: ProjectData[], noProjectsMessage: string, statusFiltered: ProjectData[]) => {
     if (!!combinedFiltersData.length) return null;
-    return <ACC.ListItem><p className="govuk-body govuk-!-margin-0">{noProjectsMessage}</p></ACC.ListItem>;
+    return <SimpleString children={noProjectsMessage} />;
   }
 
   private getProjectSection(project: ProjectDto, partner: PartnerDto | null): Section {
@@ -186,30 +143,6 @@ class ProjectDashboardComponent extends ContainerBaseWithState<{}, Data, {}, Sta
       default:
         return "upcoming";
     }
-  }
-
-  private getIconStatus(project: ProjectDto, partner: PartnerDto | null): Icon {
-    // if fc return warning if overdue or iar required
-    if (partner && ((partner.claimsOverdue! > 0) || partner.status === PartnerClaimStatus.IARRequired)) {
-      return "warning";
-    }
-
-    // mo or pm return warning if any claims overdue
-    if ((project.roles & (ProjectRole.MonitoringOfficer | ProjectRole.ProjectManager)) && project.claimsOverdue > 0) {
-      return "warning";
-    }
-
-    // if fc return edit if claim is not submitted
-    if (partner && (partner.status !== PartnerClaimStatus.ClaimSubmitted && partner.status !== PartnerClaimStatus.NoClaimsDue)) {
-      return "edit";
-    }
-
-    // if mo return edit if claims to review
-    if ((project.roles & ProjectRole.MonitoringOfficer) && project.claimsToReview > 0) {
-      return "edit";
-    }
-
-    return "none";
   }
 
   // tslint:disable-next-line:cognitive-complexity
@@ -304,13 +237,12 @@ class ProjectDashboardComponent extends ContainerBaseWithState<{}, Data, {}, Sta
   }
 
   private renderProject(project: ProjectDto, partner: PartnerDto | null, section: Section, index: number) {
-    const iconStatus = section === "open" ? this.getIconStatus(project, partner) : "none";
     const messages: React.ReactNode[] = this.getMessages(project, partner, section);
 
     return (
-      <ACC.ListItem icon={iconStatus} key={`project_${index}`} qa={`project-${project.projectNumber}`}>
+      <ACC.ListItem key={`project_${index}`} qa={`project-${project.projectNumber}`}>
         <div className="govuk-grid-column-two-thirds" style={{ display: "inline-flex", alignItems: "center" }}>
-          <div className={iconStatus !== "none" ? "govuk-!-margin-left-8" : ""}>
+          <div>
             <h3 className="govuk-heading-s govuk-!-margin-bottom-2">
               {this.renderProjectTitle(project, partner, section !== "upcoming")}
             </h3>
