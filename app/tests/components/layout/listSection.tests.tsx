@@ -14,20 +14,14 @@ describe("ListSection", () => {
 });
 
 describe("ListItem", () => {
-  it("should render with warning styles", () => {
-    const wrapper = mount(<ListItem icon="warning"/>);
-    expect(wrapper.find("div").prop("className")).toContain("acc-message__error");
-  });
-
-  it("should render with edit styles", () => {
-    const wrapper = mount(<ListItem icon="edit"/>);
-    expect(wrapper.find("div").prop("className")).toContain("acc-message__edit");
+  it("should render with action required styles", () => {
+    const wrapper = mount(<ListItem actionRequired={true} />);
+    expect(wrapper.find("div").prop("className")).toContain("acc-message__actionRequired");
   });
 
   it("should render with default styles", () => {
     const wrapper = mount(<ListItem />);
-    expect(wrapper.find("div").prop("className")).not.toContain("acc-message__error");
-    expect(wrapper.find("div").prop("className")).not.toContain("acc-message__edit");
+    expect(wrapper.find("div").prop("className")).not.toContain("acc-message__actionRequired");
   });
 
 });

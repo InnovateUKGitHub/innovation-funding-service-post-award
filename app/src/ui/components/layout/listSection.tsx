@@ -16,10 +16,9 @@ export const ListSection: React.SFC<Props> = (props) => {
   );
 };
 
-export const ListItem: React.SFC<{ icon?: "none" | "warning" | "edit", qa?: string }> = (props) => {
-  const className = classNames("govuk-grid-row", "govuk-!-padding-4", "govuk-!-margin-bottom-2", "acc-message", "acc-message__icon--large", {
-    "acc-message__edit": props.icon === "edit",
-    "acc-message__error": props.icon === "warning"
+export const ListItem: React.SFC<{ actionRequired?: boolean, qa?: string }> = (props) => {
+  const className = classNames("govuk-grid-row", "govuk-!-padding-4", "govuk-!-margin-bottom-2", "acc-message", {
+    "acc-message__actionRequired": props.actionRequired,
   });
 
   return (

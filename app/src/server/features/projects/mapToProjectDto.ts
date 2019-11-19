@@ -27,6 +27,7 @@ export class MapToProjectDtoCommand extends CommandBase<ProjectDto> {
       projectNumber: this.item.Acc_ProjectNumber__c,
       applicationUrl: this.getIFSUrl(this.item, context.config.urls.ifsApplicationUrl),
       grantOfferLetterUrl: this.getIFSUrl(this.item, context.config.urls.ifsGrantLetterUrl),
+      leadPartnerName: this.item.Acc_LeadParticipantName__c,
       claimFrequency,
       claimFrequencyName: ClaimFrequency[claimFrequency],
       grantOfferLetterCosts: this.item.Acc_GOLTotalCostAwarded__c,

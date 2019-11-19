@@ -80,7 +80,6 @@
 }
 
 .acc-message {
-  background-color: #f8f8f8;
   background-position: 8px 50%;
   background-repeat: no-repeat;
   background-size: 16px 16px;
@@ -95,10 +94,10 @@
   border-width: 1px 1px 1px 1px;
 }
 
-.acc-message__edit {
-  background-image: url("/assets/images/icon-edit.png");
+.acc-message__actionRequired {
+  background-color: #f8f8f8
 }
-.acc-message__edit.govuk-grid-row {
+.acc-message__actionRequired.govuk-grid-row {
   border-color: #bfc1c3 #bfc1c3 #bfc1c3 #0b0c0c;
   border-width: 1px 1px 1px 5px;
 }

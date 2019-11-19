@@ -21,6 +21,7 @@ export interface ProjectDto {
     applicationUrl?: string | null;
     grantOfferLetterUrl?: string | null;
     projectNumber: string;
+    leadPartnerName: string;
 
     claimFrequency: ClaimFrequency;
     claimFrequencyName: string;
