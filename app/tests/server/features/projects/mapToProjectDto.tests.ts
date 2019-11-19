@@ -1,11 +1,11 @@
 // tslint:disable:no-identical-functions no-duplicate-string
 import "jest";
 import { TestContext } from "../../testContextProvider";
-import { MapToProjectDtoCommand } from "@server/features/projects/mapToProjectDto";
 import { ClaimFrequency, ProjectDto, ProjectRole, ProjectStatus } from "@framework/types";
+import { mapToProjectDto } from "@server/features/projects";
 
-describe("MapToProjectDtoCommand", () => {
-  it("when valid expect mapping", async () => {
+describe("mapToProjectDto", () => {
+  it("when valid expect mapping",  () => {
     const context = new TestContext();
 
     context.clock.setDate("2009/01/15");
@@ -68,7 +68,7 @@ describe("MapToProjectDtoCommand", () => {
       x.Acc_LeadParticipantName__c = expected.leadPartnerName;
     });
 
-    const result = await context.runCommand(new MapToProjectDtoCommand(salesforce, ProjectRole.Unknown));
+    const result = mapToProjectDto(context, salesforce, ProjectRole.Unknown);
 
     expect(result).toMatchObject(expected);
   });
@@ -83,12 +83,12 @@ describe("MapToProjectDtoCommand", () => {
       x.Acc_ProjectNumber__c = "30000";
     });
 
-    const result = await context.runCommand(new MapToProjectDtoCommand(salesforce, ProjectRole.Unknown));
+    const result = mapToProjectDto(context, salesforce, ProjectRole.Unknown);
 
     expect(result.applicationUrl).toBe("https://ifs.application.url/application/competition/30000/project/1");
   });
 
-  it("when ifs grant letter url configured expect full url", async () => {
+  it("when ifs grant letter url configured expect full url",() => {
     const context = new TestContext();
     context.config.urls.ifsGrantLetterUrl = "https://ifs.application.url/grantletter/competition/<<Acc_ProjectNumber__c>>/project/<<Acc_IFSApplicationId__c>>";
 
@@ -98,39 +98,39 @@ describe("MapToProjectDtoCommand", () => {
       x.Acc_ProjectNumber__c = "30000";
     });
 
-    const result = await context.runCommand(new MapToProjectDtoCommand(salesforce, ProjectRole.Unknown));
+    const result = mapToProjectDto(context, salesforce, ProjectRole.Unknown);
 
     expect(result.grantOfferLetterUrl).toBe("https://ifs.application.url/grantletter/competition/30000/project/1");
   });
 
-  it("ClaimFrequency should map correct - Quarterly", async () => {
+  it("ClaimFrequency should map correct - Quarterly",() => {
     const context = new TestContext();
     const salesforce = context.testData.createProject(x => {
       x.Acc_ClaimFrequency__c = "Quarterly";
     });
-    const result = await context.runCommand(new MapToProjectDtoCommand(salesforce, ProjectRole.Unknown));
+    const result = mapToProjectDto(context, salesforce, ProjectRole.Unknown);
     expect(result.claimFrequency).toBe(ClaimFrequency.Quarterly);
   });
 
-  it("ClaimFrequency should map correct - Monthly", async () => {
+  it("ClaimFrequency should map correct - Monthly",() => {
     const context = new TestContext();
     const salesforce = context.testData.createProject(x => {
       x.Acc_ClaimFrequency__c = "Monthly";
     });
-    const result = await context.runCommand(new MapToProjectDtoCommand(salesforce, ProjectRole.Unknown));
+    const result = mapToProjectDto(context, salesforce, ProjectRole.Unknown);
     expect(result.claimFrequency).toBe(ClaimFrequency.Monthly);
   });
 
-  it("ClaimFrequency should map correct - Unknown", async () => {
+  it("ClaimFrequency should map correct - Unknown",() => {
     const context = new TestContext();
     const salesforce = context.testData.createProject(x => {
       x.Acc_ClaimFrequency__c = "asd";
     });
-    const result = await context.runCommand(new MapToProjectDtoCommand(salesforce, ProjectRole.Unknown));
+    const result = mapToProjectDto(context, salesforce, ProjectRole.Unknown);
     expect(result.claimFrequency).toBe(ClaimFrequency.Unknown);
   });
 
-  it("Period should calculate correct - Quarterly", async () => {
+  it("Period should calculate correct - Quarterly",() => {
     const context = new TestContext();
     const salesforce = context.testData.createProject(x => {
       x.Acc_ClaimFrequency__c = "Quarterly";
@@ -141,13 +141,13 @@ describe("MapToProjectDtoCommand", () => {
     for (let i = 1; i <= 12; i++) {
       const month = i < 10 ? `0${i}` : i;
       context.clock.setDate(`2018/${month}/01`);
-      const result = await context.runCommand(new MapToProjectDtoCommand(salesforce, ProjectRole.Unknown));
+      const result = mapToProjectDto(context, salesforce, ProjectRole.Unknown);
       const expected = Math.ceil(i / 3);
       expect(result.periodId).toBe(expected);
     }
   });
 
-  it("Period should calculate correct - Monthly", async () => {
+  it("Period should calculate correct - Monthly",() => {
     const context = new TestContext();
     const salesforce = context.testData.createProject(x => {
       x.Acc_ClaimFrequency__c = "Monthly";
@@ -158,12 +158,12 @@ describe("MapToProjectDtoCommand", () => {
     for (let i = 1; i <= 12; i++) {
       const month = i < 10 ? `0${i}` : i;
       context.clock.setDate(`2018/${month}/01`);
-      const result = await context.runCommand(new MapToProjectDtoCommand(salesforce, ProjectRole.Unknown));
+      const result = mapToProjectDto(context, salesforce, ProjectRole.Unknown);
       expect(result.periodId).toBe(i);
     }
   });
 
-  it("Period should default when Unknown", async () => {
+  it("Period should default when Unknown",() => {
     const context = new TestContext();
     const salesforce = context.testData.createProject(x => {
       x.Acc_ClaimFrequency__c = "Monthly";
@@ -174,32 +174,32 @@ describe("MapToProjectDtoCommand", () => {
     for (let i = 1; i <= 12; i++) {
       const month = i < 10 ? `0${i}` : i;
       context.clock.setDate(`2018/${month}/01`);
-      const result = await context.runCommand(new MapToProjectDtoCommand(salesforce, ProjectRole.Unknown));
+      const result = mapToProjectDto(context, salesforce, ProjectRole.Unknown);
       expect(result.periodId).toBe(i);
     }
   });
 
-  it("Gol Costs should be returned", async () => {
+  it("Gol Costs should be returned",() => {
     const context = new TestContext();
 
     const salesforce = context.testData.createProject(x => {
       x.Acc_GOLTotalCostAwarded__c = 100000;
     });
 
-    const result = await context.runCommand(new MapToProjectDtoCommand(salesforce, ProjectRole.Unknown));
+    const result = mapToProjectDto(context, salesforce, ProjectRole.Unknown);
 
     expect(result.grantOfferLetterCosts).toBe(100000);
 
   });
 
-  it("Claimed Costs should be returned", async () => {
+  it("Claimed Costs should be returned",() => {
     const context = new TestContext();
 
     const salesforce = context.testData.createProject(x => {
       x.Acc_TotalProjectCosts__c = 500000;
     });
 
-    const result = await context.runCommand(new MapToProjectDtoCommand(salesforce, ProjectRole.Unknown));
+    const result = mapToProjectDto(context, salesforce, ProjectRole.Unknown);
 
     expect(result.costsClaimedToDate).toBe(500000);
 
