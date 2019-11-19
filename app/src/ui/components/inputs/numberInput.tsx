@@ -1,13 +1,11 @@
 import React from "react";
 import classNames from "classnames";
-import { BaseInput } from "./baseInput";
-
-export type numberInputWidths = "full" | "three-quarters" | "two-thirds" | "one-half" | "one-third" | "one-quarter" | 2 | 3 | 4 | 5 | 10 | 20;
+import { BaseInput, FormInputWidths } from "./baseInput";
 
 interface NumberInputProps extends InputProps<number> {
   id?: string;
   className?: string;
-  width?: numberInputWidths;
+  width?: FormInputWidths;
 }
 
 interface NumberInputState extends InputState {

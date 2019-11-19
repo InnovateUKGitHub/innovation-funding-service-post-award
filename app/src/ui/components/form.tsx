@@ -5,12 +5,14 @@ import { EditorStatus, IEditorStore } from "@ui/redux";
 import { ValidationError } from "./validationError";
 import { TextInput } from "./inputs/textInput";
 import classNames from "classnames";
-import { NumberInput, numberInputWidths } from "./inputs/numberInput";
+import { NumberInput } from "./inputs/numberInput";
 import { RadioList } from "./inputs/radioList";
 import { CheckboxList } from "./inputs/checkboxList";
 import { FileUpload, MulipleFileUpload } from "./inputs/fileUpload";
 import { FullDateInput, MonthYearInput } from "./inputs/dateInput";
 import { Button } from "./styledButton";
+import { SearchInput } from "./inputs/searchInput";
+import { FormInputWidths } from "./inputs/baseInput";
 
 interface SharedFormProps<T> {
   onChange?: (data: T) => void;
@@ -187,6 +189,19 @@ const StringField = <T extends {}>(props: ExternalFieldProps<T, string> & Intern
   );
 };
 
+interface SearchFieldProps<T> extends ExternalFieldProps<T, string> {
+  width?: FormInputWidths;
+}
+
+const SearchField = <T extends {}>(props: SearchFieldProps<T> & InternalFieldProps<T>) => {
+  return (
+    <FieldComponent
+      field={((data, disabled) => <SearchInput width={props.width} name={props.name} value={props.value(data, disabled)} onChange={(val) => handleChange(props, val)} placeholder={props.placeholder} disabled={disabled} />)}
+      {...props}
+    />
+  );
+};
+
 interface MultiStringFieldProps<T> extends ExternalFieldProps<T, string> {
   rows?: number;
   qa?: string;
@@ -202,7 +217,7 @@ const MultiStringField = <T extends {}>(props: MultiStringFieldProps<T> & Intern
 };
 
 interface NumericFieldProps<T> extends ExternalFieldProps<T, number> {
-  width?: numberInputWidths;
+  width?: FormInputWidths;
 }
 
 const NumericField = <T extends {}>(props: NumericFieldProps<T> & InternalFieldProps<T>) => {
@@ -371,6 +386,7 @@ export interface FormBuilder<T> {
   Form: { new(): FormComponent<T> };
   Fieldset: { new(): FieldsetComponent<T> };
   String: React.SFC<ExternalFieldProps<T, string>>;
+  Search: React.SFC<SearchFieldProps<T>>;
   MultilineString: React.SFC<MultiStringFieldProps<T>>;
   Numeric: React.SFC<NumericFieldProps<T>>;
   Radio: React.SFC<RadioFieldProps<T>>;
@@ -389,6 +405,7 @@ export const TypedForm = <T extends {}>(): FormBuilder<T> => ({
   Form: FormComponent as { new(): FormComponent<T> },
   Fieldset: FieldsetComponent as { new(): FieldsetComponent<T> },
   String: StringField as React.SFC<ExternalFieldProps<T, string>>,
+  Search: SearchField as React.SFC<SearchFieldProps<T>>,
   MultilineString: MultiStringField as React.SFC<MultiStringFieldProps<T>>,
   Numeric: NumericField as React.SFC<NumericFieldProps<T>>,
   Radio: RadioOptionsField as React.SFC<RadioFieldProps<T>>,
