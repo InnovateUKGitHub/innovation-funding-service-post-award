@@ -13,8 +13,8 @@ import { PCRDtoValidator } from "@ui/validators";
 import { DateTime } from "luxon";
 import * as Dtos from "@framework/dtos";
 import { PCRItemStatus, PCRItemType } from "@framework/constants";
-import { ICallableWorkflow } from "@ui/containers/pcrs/workflow";
-import { AccountNameChangeStep, AccountNameChangeWorkflow } from "@ui/containers/pcrs/nameChange";
+import { WorkFlow } from "@ui/containers/pcrs/workflow";
+import { accountNameChangeStepNames } from "@ui/containers/pcrs/nameChange/accountNameChangeWorkflow";
 
 export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBase<ProjectChangeRequestPrepareItemParams, Dtos.PCRDto, PCRDtoValidator> {
   constructor() {
@@ -31,24 +31,28 @@ export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBa
     }
 
     item.status = body.itemStatus === "true" ? PCRItemStatus.Complete : PCRItemStatus.Incomplete;
-
-    const workflow = this.getWorkflow(params, dto);
-
-    if (item.type === PCRItemType.TimeExtension) {
-      this.updateTimeExtension(item, body);
+    const workflow = WorkFlow.getWorkflow(item, params.step);
+    switch (item.type) {
+      case PCRItemType.TimeExtension:
+        this.updateTimeExtension(item, body);
+        break;
+      case PCRItemType.ScopeChange:
+        this.updateScopeChange(item, body);
+        break;
+      case PCRItemType.ProjectSuspension:
+        this.updateProjectSuspension(item, body);
+        break;
+      case PCRItemType.AccountNameChange:
+        this.updateNameChange(item, body, workflow!.getCurrentStepInfo()!.stepName);
+        break;
+      case PCRItemType.MultiplePartnerFinancialVirement:
+      case PCRItemType.SinglePartnerFinancialVirement:
+      case PCRItemType.PartnerAddition:
+      case PCRItemType.PartnerWithdrawal:
+        // nothing to update as only files
+        break;
     }
 
-    if (item.type === PCRItemType.ScopeChange) {
-      this.updateScopeChange(item, body);
-    }
-
-    if (item.type === PCRItemType.ProjectSuspension) {
-      this.updateProjectSuspension(item, body);
-    }
-
-    if (item.type === PCRItemType.AccountNameChange) {
-      this.updateNameChange(item, body, workflow!);
-    }
     return dto;
   }
 
@@ -78,34 +82,27 @@ export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBa
     item.additionalMonths = body.timeExtension ? Number(body.timeExtension) : null;
   }
 
-  private getWorkflow(params: ProjectChangeRequestPrepareItemParams, dto: Dtos.PCRDto): ICallableWorkflow|null {
-    const item = dto.items.find(x => x.id === params.itemId)!;
-    if (item.type === PCRItemType.AccountNameChange) {
-      return new AccountNameChangeWorkflow(params.step as AccountNameChangeStep["stepNumber"]);
-    }
-    return null;
-  }
-
   protected async run(context: IContext, params: ProjectChangeRequestPrepareItemParams, button: IFormButton, dto: Dtos.PCRDto): Promise<ILinkInfo> {
     await context.runCommand(new UpdatePCRCommand(params.projectId, params.pcrId, dto));
 
-    const workflow = this.getWorkflow(params, dto);
+    const workflow = WorkFlow.getWorkflow(dto.items.find(x => x.id === params.itemId), params.step);
 
     if (!workflow || workflow.isOnSummary()) {
       return ProjectChangeRequestPrepareRoute.getLink(params);
     }
 
+    const step = workflow.getNextStepInfo();
+
     return PCRPrepareItemRoute.getLink({
       projectId: params.projectId,
       pcrId: params.pcrId,
       itemId: params.itemId,
-      step: workflow.nextStep(),
+      step: step && step.stepNumber,
     });
   }
 
-  private updateNameChange(item: Dtos.PCRItemForAccountNameChangeDto, body: IFormBody, workflow: ICallableWorkflow) {
-    const step = workflow.getStep();
-    if (step && step.stepName === "partnerNameStep") {
+  private updateNameChange(item: Dtos.PCRItemForAccountNameChangeDto, body: IFormBody, stepName: accountNameChangeStepNames|null) {
+    if (stepName === "partnerNameStep") {
       item.partnerId = body.partnerId;
       item.accountName = body.accountName;
     }
