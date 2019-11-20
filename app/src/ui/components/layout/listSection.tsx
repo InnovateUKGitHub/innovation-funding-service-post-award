@@ -17,8 +17,8 @@ export const ListSection: React.SFC<Props> = (props) => {
 };
 
 export const ListItem: React.SFC<{ actionRequired?: boolean, qa?: string }> = (props) => {
-  const className = classNames("govuk-grid-row", "govuk-!-padding-4", "govuk-!-margin-bottom-2", "acc-message", {
-    "acc-message__actionRequired": props.actionRequired,
+  const className = classNames("govuk-grid-row", "govuk-!-padding-4", "govuk-!-margin-bottom-2", "acc-list-item", {
+    "acc-list-item__actionRequired": props.actionRequired,
   });
 
   return (

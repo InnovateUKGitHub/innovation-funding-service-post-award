@@ -79,10 +79,27 @@
   border-top: black 3px solid;
 }
 
+.acc-list-item {
+  border-style: solid;
+  margin: 10px 0 30px 0;
+}
+.acc-list-item.govuk-grid-row {
+  border-color: #bfc1c3;
+  border-width: 1px 1px 1px 1px;
+}
+.acc-list-item__actionRequired {
+  background-color: #f8f8f8
+}
+.acc-list-item__actionRequired.govuk-grid-row {
+  border-color: #bfc1c3 #bfc1c3 #bfc1c3 #0b0c0c;
+  border-width: 1px 1px 1px 5px;
+}
+
 .acc-message {
   background-position: 8px 50%;
   background-repeat: no-repeat;
   background-size: 16px 16px;
+  background-color: #f8f8f8;
   border-width: 0 0 0 5px;
   border-style: solid;
   margin: 10px 0 30px 0;
@@ -94,13 +111,6 @@
   border-width: 1px 1px 1px 1px;
 }
 
-.acc-message__actionRequired {
-  background-color: #f8f8f8
-}
-.acc-message__actionRequired.govuk-grid-row {
-  border-color: #bfc1c3 #bfc1c3 #bfc1c3 #0b0c0c;
-  border-width: 1px 1px 1px 5px;
-}
 .acc-message__info {
   background-image: url("/assets/images/icon-info.png");
 }
@@ -113,14 +123,13 @@
 .acc-message__alert {
   background-image: url("/assets/images/icon-alert.png");
 }
-
+.acc-message__success {
+  background-image: url("/assets/images/icon-tick.png");
+}
 
 .acc-message__error.govuk-grid-row {
   border-color: #bfc1c3 #bfc1c3 #bfc1c3 #b10e1e;
   border-width: 1px 1px 1px 5px;
-}
-.acc-message__success {
-  background-image: url("/assets/images/icon-tick.png");
 }
 
 .acc-message .govuk-warning-text {
