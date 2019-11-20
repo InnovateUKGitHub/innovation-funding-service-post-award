@@ -101,14 +101,14 @@ export class UpdatePCRCommand extends CommandBase<boolean> {
     return true;
   }
 
+  // tslint:disable-next-line:cognitive-complexity
   private getItemUpdates(item: ProjectChangeRequestItemEntity, dto: (PCRItemDto)): Partial<ProjectChangeRequestItemEntity> | null {
-
     const init = item.status !== dto.status ? { status: dto.status } : null;
 
     switch (dto.type) {
       case PCRItemType.TimeExtension:
-        if (item.projectDuration !== dto.projectDuration) {
-          return { ...init, projectDuration: dto.projectDuration };
+        if (item.additionalMonths !== dto.additionalMonths) {
+          return { ...init, additionalMonths: dto.additionalMonths, projectDuration: dto.additionalMonths ? dto.additionalMonths + dto.projectDurationSnapshot : null };
         }
         break;
       case PCRItemType.ScopeChange:
