@@ -626,7 +626,7 @@ export class TestData {
       accountName: "",
       recordTypeId: recordType.id,
       projectId: pcr.projectId,
-      projectDuration: null,
+      additionalMonths: null,
       projectDurationSnapshot: null,
       projectSummary: "",
       publicDescription: "",

@@ -75,12 +75,7 @@ export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBa
   }
 
   private updateTimeExtension(item: Dtos.PCRItemForTimeExtensionDto, body: IFormBody) {
-    if (body.timeExtension && item.projectDurationSnapshot) {
-      item.projectDuration = item.projectDurationSnapshot + Number(body.timeExtension);
-    }
-    else {
-      item.projectDuration = null;
-    }
+    item.additionalMonths = body.timeExtension ? Number(body.timeExtension) : null;
   }
 
   private getWorkflow(params: ProjectChangeRequestPrepareItemParams, dto: Dtos.PCRDto): ICallableWorkflow|null {
