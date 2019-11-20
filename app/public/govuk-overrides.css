@@ -139,6 +139,10 @@
   .acc-message.govuk-grid-row {
     background-size: 30px 30px;
   }
+
+  .govuk-grid-column--right-align {
+    text-align:right;
+  }
 }
 
 .govuk-navigation-arrows {
