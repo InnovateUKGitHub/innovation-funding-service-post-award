@@ -56,7 +56,7 @@ export class NumberInput extends BaseInput<NumberInputProps, NumberInputState> {
 
   private getStateFromProps(props: NumberInputProps): NumberInputState {
     let value: string | null = null;
-    if (props.value === null || props.value === undefined) {
+    if (props.value === null || props.value === undefined || isNaN(props.value)) {
       value = "";
     }
     else if (Number.isInteger(props.value)) {
