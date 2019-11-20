@@ -4,12 +4,13 @@ import { PartnerDto, PCRItemForAccountNameChangeDto } from "@framework/dtos";
 import { EditorStatus, StoresConsumer } from "@ui/redux";
 import { StepProps } from "@ui/containers/pcrs/workflow";
 import { PCRAccountNameChangeItemDtoValidator } from "@ui/validators";
+import { accountNameChangeWorkflow } from "./accountNameChangeWorkflow";
 
 interface InnerProps {
   partners: PartnerDto[];
 }
 
-const InnerContainer = (props: StepProps<PCRItemForAccountNameChangeDto, PCRAccountNameChangeItemDtoValidator> & InnerProps) => {
+const InnerContainer = (props: StepProps<typeof accountNameChangeWorkflow> & InnerProps) => {
   const Form = ACC.TypedForm<PCRItemForAccountNameChangeDto>();
   const partnerOptions: ACC.SelectOption[] = props.partners.map(x => (
     {
@@ -52,7 +53,7 @@ const InnerContainer = (props: StepProps<PCRItemForAccountNameChangeDto, PCRAcco
   );
 };
 
-export const NameChangeStep = (props: StepProps<PCRItemForAccountNameChangeDto, PCRAccountNameChangeItemDtoValidator>) => (
+export const NameChangeStep = (props: StepProps<typeof accountNameChangeWorkflow>) => (
   <StoresConsumer>
     {
       stores => {

@@ -13,8 +13,6 @@ import {
   PCRItemType,
   PCRStatus
 } from "@framework/constants";
-import { AccountNameChangeStep, AccountNameChangeWorkflow } from "@ui/containers/pcrs/nameChange";
-import { ICallableWorkflow } from "@ui/containers/pcrs/workflow";
 
 export class ProjectChangeRequestStore extends StoreBase {
   constructor(private projectStore: ProjectsStore, getState: () => RootState, queue: (action: any) => void) {
@@ -69,15 +67,6 @@ export class ProjectChangeRequestStore extends StoreBase {
       else {
         return new Pending<PCRStandardItemDto>(LoadingStatus.Failed, null, new NotFoundError("Item is incorrect type"));
       }
-    });
-  }
-
-  public getPcrItemWorkflow(projectId: string, pcrId: string, itemId: string, step: number | undefined): Pending<ICallableWorkflow|null> {
-    return this.getItemById(projectId, pcrId, itemId).chain(item => {
-      if (item.type === PCRItemType.AccountNameChange) {
-        return Pending.done(new AccountNameChangeWorkflow(step as AccountNameChangeStep["stepNumber"]));
-      }
-      return Pending.done(null);
     });
   }
 
