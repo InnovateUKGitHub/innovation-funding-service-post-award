@@ -126,9 +126,9 @@ class Component extends ContainerBase<ProjectChangeRequestPrepareItemParams, Dat
     const validator = editor.validator.items.results.find(x => x.model.id === pcrItem.id)!;
     const status = editor.status || EditorStatus.Editing;
 
-    const currentStep = workflow.currentStepInfo()!;
+    const currentStep = workflow.getCurrentStepInfo()!;
 
-    const nextStep = workflow.nextStepInfo();
+    const nextStep = workflow.getNextStepInfo();
 
     const nextLink = this.props.routes.pcrPrepareItem.getLink({
       projectId: this.props.projectId,
@@ -139,7 +139,7 @@ class Component extends ContainerBase<ProjectChangeRequestPrepareItemParams, Dat
 
     const nextText = nextStep ? `Skip to '${nextStep.displayName}'` : "Skip to 'Summary'";
 
-    const prevStep = workflow.prevStepInfo();
+    const prevStep = workflow.getPrevStepInfo();
 
     const prevLink = prevStep && this.props.routes.pcrPrepareItem.getLink({
       projectId: this.props.projectId,
@@ -248,7 +248,7 @@ class Component extends ContainerBase<ProjectChangeRequestPrepareItemParams, Dat
     const item = dto.items.find(x => x.id === this.props.itemId)!;
     item.status = PCRItemStatus.Incomplete;
 
-    const nextStep = workflow.nextStepInfo();
+    const nextStep = workflow.getNextStepInfo();
 
     return this.props.onSave(dto, this.props.routes.pcrPrepareItem.getLink({
       projectId: this.props.projectId,

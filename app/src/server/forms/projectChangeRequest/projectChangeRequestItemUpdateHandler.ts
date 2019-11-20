@@ -43,7 +43,7 @@ export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBa
         this.updateProjectSuspension(item, body);
         break;
       case PCRItemType.AccountNameChange:
-        this.updateNameChange(item, body, workflow!.currentStepInfo()!.stepName);
+        this.updateNameChange(item, body, workflow!.getCurrentStepInfo()!.stepName);
         break;
       case PCRItemType.MultiplePartnerFinancialVirement:
       case PCRItemType.SinglePartnerFinancialVirement:
@@ -96,7 +96,7 @@ export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBa
       return ProjectChangeRequestPrepareRoute.getLink(params);
     }
 
-    const step = workflow.nextStepInfo();
+    const step = workflow.getNextStepInfo();
 
     return PCRPrepareItemRoute.getLink({
       projectId: params.projectId,
