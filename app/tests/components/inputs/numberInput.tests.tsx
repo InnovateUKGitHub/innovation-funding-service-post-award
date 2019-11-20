@@ -2,7 +2,7 @@ import "jest";
 import React from "react";
 import Enzyme, { mount, shallow } from "enzyme";
 import Adapter from "enzyme-adapter-react-16";
-import { NumberInput } from "../../../src/ui/components/inputs/numberInput";
+import { NumberInput } from "@ui/components/inputs";
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -20,6 +20,11 @@ describe("NumberInput", () => {
   it("Renders with given value", () => {
     const output = shallow(<NumberInput name="number test" value={78} />);
     expect(output.prop("value")).toBe("78");
+  });
+
+  it("Renders with empty string if invalid value given", () => {
+    const output = shallow(<NumberInput name="number test" value={"invalid string" as any} />);
+    expect(output.prop("value")).toBe("");
   });
 
   it("Renders with basic classNames", () => {
@@ -145,18 +150,18 @@ describe("NumberInput", () => {
     expect(output.state("invalid")).toBe(false);
   });
 
-  it("Props update with non numerical value sets state invalid", () => {
+  it("Props update with non numerical value sets state invalid and empty", () => {
     const output = mount(<NumberInput name="number test" value={3} />);
     expect(output.state("value")).toBe("3");
     output.setProps({ value: "abc3" });
-    expect(output.state("value")).toBe("abc3");
+    expect(output.state("value")).toBe("");
     expect(output.state("invalid")).toBe(true);
   });
 
-  it("Props update with non numerical value when already invalid does nothing", () => {
+  it("Props update with non numerical value when already invalid sets as empty", () => {
     const output = mount(<NumberInput name="number test" value={"abc1" as any} />);
     output.setProps({ value: "abc3" });
-    expect(output.state("value")).toBe("abc1");
+    expect(output.state("value")).toBe("");
     expect(output.state("invalid")).toBe(true);
   });
 
