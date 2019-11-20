@@ -78,7 +78,7 @@ const mapItemForTermination = (pcr: ProjectChangeRequestItemEntity, typeName: st
 
 const mapItemForTimeExtension = (pcr: ProjectChangeRequestItemEntity, typeName: string, type: PCRItemType.TimeExtension): PCRItemForTimeExtensionDto => ({
   ...mapBaseItem(pcr, typeName, type),
-  projectDuration: pcr.projectDuration || null,
+  additionalMonths: pcr.additionalMonths || null,
   projectDurationSnapshot: pcr.projectDurationSnapshot || 0,
   type
 });

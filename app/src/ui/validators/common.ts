@@ -61,7 +61,7 @@ export function alphanumeric(results: Results<{}>, value: string, message?: stri
     return isTrue(results, (!value) || regex.test(value), message || "Only  numbers and letters allowed");
 }
 
-export function number(results: Results<{}>, value: number, message?: string) {
+export function number(results: Results<{}>, value: number | undefined | null, message?: string) {
     return isTrue(results, value === undefined || value === null || isNumber(value), message || "Field must be a number.");
 }
 
