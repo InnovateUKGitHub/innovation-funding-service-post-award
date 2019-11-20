@@ -60,7 +60,7 @@ export interface PCRStandardItemDto extends PCRItemBaseDto {
 
 export interface PCRItemForTimeExtensionDto extends PCRItemBaseDto {
   type: PCRItemType.TimeExtension;
-  projectDuration: number | null;
+  additionalMonths: number | null;
   projectDurationSnapshot: number;
 }
 

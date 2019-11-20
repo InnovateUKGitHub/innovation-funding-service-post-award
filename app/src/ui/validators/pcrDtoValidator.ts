@@ -228,23 +228,23 @@ export class PCRStandardItemDtoValidator extends PCRBaseItemDtoValidator<PCRStan
 }
 
 export class PCRTimeExtensionItemDtoValidator extends PCRBaseItemDtoValidator<PCRItemForTimeExtensionDto> {
-  private validateProjectDuration() {
+  private validateAdditionalMonths() {
     if (!this.canEdit) {
-      return Validation.isUnchanged(this, this.model.projectDuration, this.original && this.original.projectDuration, "Project duration cannot be changed.");
+      return Validation.isUnchanged(this, this.model.additionalMonths, this.original && this.original.additionalMonths, "Project duration cannot be changed.");
     }
 
     const isComplete = this.model.status === PCRItemStatus.Complete;
-    const hasValue = this.model.projectDuration || this.model.projectDuration === 0;
+    const hasValue = this.model.additionalMonths || this.model.additionalMonths === 0;
 
     return Validation.all(this,
-      () => isComplete ? Validation.required(this, this.model.projectDuration , "Please enter the number of months you want to extend your project by") : Validation.valid(this),
-      () => Validation.number(this, this.model.projectDuration! , "Please enter a number of months you want to extend your project by"),
-      () => hasValue ? Validation.isTrue(this, this.model.projectDuration! > (this.model.projectDurationSnapshot || 0), "Please enter a number that increases the project duration") : Validation.valid(this),
-      () => hasValue ? Validation.isTrue(this, Number.isInteger(this.model.projectDuration!), "Please enter a whole number of months") : Validation.valid(this)
+      () => isComplete ? Validation.required(this, this.model.additionalMonths , "Please enter the number of months you want to extend your project by") : Validation.valid(this),
+      () => Validation.number(this, this.model.additionalMonths , "Please enter a number of months you want to extend your project by"),
+      () => hasValue ? Validation.isTrue(this, this.model.additionalMonths! > 0, "Please enter a number that increases the project duration") : Validation.valid(this),
+      () => hasValue ? Validation.isTrue(this, Number.isInteger(this.model.additionalMonths!), "Please enter a whole number of months") : Validation.valid(this)
     );
   }
 
-  projectDuration = this.validateProjectDuration();
+  additionalMonths = this.validateAdditionalMonths();
 }
 
 export class PCRProjectTerminationItemDtoValidator extends PCRBaseItemDtoValidator<PCRItemForProjectTerminationDto> {

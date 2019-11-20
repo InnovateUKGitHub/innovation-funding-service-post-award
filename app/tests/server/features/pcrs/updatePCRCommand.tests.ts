@@ -439,10 +439,10 @@ describe("UpdatePCRCommand", () => {
       const dto = await context.runQuery(new GetPCRByIdQuery(projectChangeRequest.projectId, projectChangeRequest.id));
       const item = dto.items[0] as PCRItemForTimeExtensionDto;
 
-      item.projectDuration = null;
+      item.additionalMonths = null;
       await expect(context.runCommand(new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto))).rejects.toThrow(ValidationError);
 
-      item.projectDuration = 3;
+      item.additionalMonths = 3;
 
       await expect(context.runCommand(new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto))).resolves.toBe(true);
     });
@@ -460,13 +460,13 @@ describe("UpdatePCRCommand", () => {
       const dto = await context.runQuery(new GetPCRByIdQuery(projectChangeRequest.projectId, projectChangeRequest.id));
       const item = dto.items[0] as PCRItemForTimeExtensionDto;
 
-      item.projectDuration = -5;
+      item.additionalMonths = -5;
       await expect(context.runCommand(new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto))).rejects.toThrow(ValidationError);
 
-      item.projectDuration = 1.5;
+      item.additionalMonths = 1.5;
       await expect(context.runCommand(new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto))).rejects.toThrow(ValidationError);
 
-      item.projectDuration = 5;
+      item.additionalMonths = 5;
       await expect(context.runCommand(new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto))).resolves.toBe(true);
     });
 
@@ -483,12 +483,32 @@ describe("UpdatePCRCommand", () => {
       const dto = await context.runQuery(new GetPCRByIdQuery(projectChangeRequest.projectId, projectChangeRequest.id));
       const item = dto.items[0] as PCRItemForTimeExtensionDto;
 
-      item.projectDuration = 5;
+      item.additionalMonths = 5;
       await expect(context.runCommand(new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto))).resolves.toBe(true);
 
       const updated = await context.runQuery(new GetPCRByIdQuery(projectChangeRequest.projectId, projectChangeRequest.id));
       const updatedItem = updated.items[0] as PCRItemForTimeExtensionDto;
-      await expect(updatedItem.projectDuration).toEqual(5);
+      await expect(updatedItem.additionalMonths).toEqual(5);
+    })
+
+    it("correctly updates the project duration", async () => {
+      const context = new TestContext();
+
+      const project = context.testData.createProject();
+      context.testData.createCurrentUserAsProjectManager(project);
+      const projectChangeRequest = context.testData.createPCR(project, { status: PCRStatus.Draft });
+      const recordTypes = context.testData.createPCRRecordTypes();
+      const recordType = recordTypes.find(x => x.type === "Change project duration");
+      context.testData.createPCRItem(projectChangeRequest, recordType);
+
+      const dto = await context.runQuery(new GetPCRByIdQuery(projectChangeRequest.projectId, projectChangeRequest.id));
+      const item = dto.items[0] as PCRItemForTimeExtensionDto;
+
+      item.additionalMonths = 5;
+      await expect(context.runCommand(new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto))).resolves.toBe(true);
+
+      const updatedItem = context.repositories.projectChangeRequests.Items.find(x => x.id === projectChangeRequest.id)!.items.find(x => x.id === item.id)!;
+      await expect(updatedItem.projectDuration).toEqual(item.additionalMonths + item.projectDurationSnapshot);
     })
   });
 
