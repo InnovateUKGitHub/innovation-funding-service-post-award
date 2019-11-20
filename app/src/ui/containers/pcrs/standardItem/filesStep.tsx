@@ -7,7 +7,7 @@ import { standardItemWorkflow } from "./workflow";
 
 interface FileStepsProps {
   documents: DocumentSummaryDto[];
-  onFileChange: (dto: MultipleDocumentUploadDto, saveAndRemain: boolean, saveAndContinue: boolean) => void;
+  onFileChange: (saving: "DontSave"|"SaveAndRemain"|"SaveAndContinue", dto: MultipleDocumentUploadDto) => void;
   onFileDelete: (dto: MultipleDocumentUploadDto, document: DocumentSummaryDto) => void;
 
 }
@@ -40,8 +40,8 @@ class FilesStepComponent extends React.Component<StepProps<typeof standardItemWo
         <UploadForm.Form
           enctype="multipart"
           editor={documentsEditor}
-          onSubmit={() => this.props.onFileChange(documentsEditor.data, false, true)}
-          onChange={(dto) => this.props.onFileChange(dto, false, false)}
+          onSubmit={() => this.props.onFileChange("SaveAndContinue", documentsEditor.data)}
+          onChange={(dto) => this.props.onFileChange("DontSave", dto)}
           qa="projectChangeRequestItemUpload"
         >
           <UploadForm.Fieldset heading="Upload">
@@ -56,7 +56,7 @@ class FilesStepComponent extends React.Component<StepProps<typeof standardItemWo
             />
           </UploadForm.Fieldset>
           <UploadForm.Fieldset>
-            <UploadForm.Button name="uploadFile" styling="Secondary" onClick={() => this.props.onFileChange(documentsEditor.data, true, false)}>Upload documents</UploadForm.Button>
+            <UploadForm.Button name="uploadFile" styling="Secondary" onClick={() => this.props.onFileChange("SaveAndRemain", documentsEditor.data)}>Upload documents</UploadForm.Button>
           </UploadForm.Fieldset>
           <UploadForm.Fieldset>
             <UploadForm.Button name="uploadFileAndContinue" styling="Primary">Upload documents and continue</UploadForm.Button>
@@ -77,12 +77,11 @@ export const FilesStep = (props: StepProps<typeof standardItemWorkflow>) => (
             render={documents => (
               <FilesStepComponent
                 documents={documents}
-                documentsEditor={props.documentsEditor}
-                onFileChange={(dto, saveAndRemain, saveAndContinue) => {
+                onFileChange={(saving, dto) => {
                   stores.messages.clearMessages();
                   const successMessage = dto.files.length === 1 ? `Your document has been uploaded.` : `${dto.files.length} documents have been uploaded.`;
-                  stores.projectChangeRequestDocuments.updatePcrOrPcrItemDocumentsEditor(saveAndContinue || saveAndRemain, props.project.id, props.pcrItem.id, dto, successMessage, () => {
-                    if (saveAndContinue) {
+                  stores.projectChangeRequestDocuments.updatePcrOrPcrItemDocumentsEditor(saving !== "DontSave", props.project.id, props.pcrItem.id, dto, successMessage, () => {
+                    if (saving === "SaveAndContinue") {
                       props.onSave();
                     }
                   });

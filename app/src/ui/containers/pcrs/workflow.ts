@@ -52,9 +52,9 @@ export interface ICallableWorkflow<T> {
   isOnSummary: () => boolean;
   getSummary: () => ((props: SummaryProps<IWorkflow<T, Results<T>, string>>) => React.ReactNode) | undefined;
   findStepNumberByName: (name: string) => number | undefined;
-  currentStepInfo: () => ICallableStep<T> | undefined;
-  nextStepInfo: () => ICallableStep<T> | undefined;
-  prevStepInfo: () => ICallableStep<T> | undefined;
+  getCurrentStepInfo: () => ICallableStep<T> | undefined;
+  getNextStepInfo: () => ICallableStep<T> | undefined;
+  getPrevStepInfo: () => ICallableStep<T> | undefined;
 }
 
 export class WorkFlow<T, TVal extends Results<T>, TStepNames extends string> implements ICallableWorkflow<T> {
@@ -76,17 +76,17 @@ export class WorkFlow<T, TVal extends Results<T>, TStepNames extends string> imp
     return !this.stepNumber;
   }
 
-  public nextStepInfo() {
+  public getNextStepInfo() {
     const nextStepNumber = this.stepNumber && this.stepNumber < this.definition.steps.length ? this.stepNumber + 1 : undefined;
     return nextStepNumber ? this.definition.steps[nextStepNumber - 1] : undefined;
   }
 
-  public prevStepInfo() {
+  public getPrevStepInfo() {
     const prevStepNumber = this.stepNumber && this.stepNumber > 1 ? this.stepNumber - 1 : undefined;
     return prevStepNumber ? this.definition.steps[prevStepNumber - 1] : undefined;
   }
 
-  public currentStepInfo() {
+  public getCurrentStepInfo() {
     if (!this.stepNumber || this.stepNumber > this.definition.steps.length) {
       return undefined;
     }
