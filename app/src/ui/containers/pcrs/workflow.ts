@@ -3,112 +3,110 @@ import { Results } from "@ui/validation";
 import { PCRDto, PCRItemDto, ProjectDto } from "@framework/dtos";
 import { EditorStatus, IEditorStore } from "@ui/redux";
 import { MultipleDocumentUpdloadDtoValidator, PCRBaseItemDtoValidator } from "@ui/validators";
-import { ILinkInfo } from "@framework/types";
+import { ILinkInfo, PCRItemType } from "@framework/types";
+import { accountNameChangeWorkflow } from "./nameChange";
+import { standardItemWorkflow } from "./standardItem/workflow";
 
-export interface StepProps<T, TVal extends Results<T>> {
+type InferStepsNames<T> = T extends IWorkflow<infer TDto, infer TVal, infer TStepname> ? TStepname : never;
+type InferTDto<T> = T extends IWorkflow<infer TDto, infer TVal, infer TStepname> ? TDto : never;
+type InferTVal<T> = T extends IWorkflow<infer TDto, infer TVal, infer TStepname> ? TVal : never;
+
+export interface StepProps<TWorkflow> {
   project: ProjectDto;
   pcr: PCRDto;
-  pcrItem: T;
+  pcrItem: InferTDto<TWorkflow>;
   documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>;
-  validator: TVal;
+  validator: InferTVal<TWorkflow>;
   status: EditorStatus;
-  onChange: (dto: T) => void;
+  onChange: (dto: InferTDto<TWorkflow>) => void;
   onSave: () => void;
 }
 
-export interface ICallableStepProps {
-  project: ProjectDto;
-  pcr: PCRDto;
-  pcrItem: PCRItemDto;
-  documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>;
-  validator: PCRBaseItemDtoValidator<PCRItemDto>;
-  status: EditorStatus;
-  onChange: (dto: PCRItemDto) => void;
-  onSave: () => void;
-}
-
-export interface SummaryProps<T, TVal extends Results<T>> {
+export interface SummaryProps<TWorkflow> {
   projectId: string;
   pcr: PCRDto;
-  pcrItem: T;
-  validator: TVal;
-  mode: "prepare" | "review" | "view";
-  onSave: () => React.ReactNode;
-  getStepLink: (stepName: IStep<T, TVal>["stepName"]) => ILinkInfo;
-}
-
-export interface ICallableSummaryProps {
-  projectId: string;
-  pcr: PCRDto;
-  pcrItem: PCRItemDto;
-  validator: PCRBaseItemDtoValidator<PCRItemDto>;
+  pcrItem: InferTDto<TWorkflow>;
+  validator: InferTVal<TWorkflow>;
   mode: "prepare" | "review" | "view";
   onSave: () => void;
-  getStepLink: (stepName: ICallableStep["stepName"]) => ILinkInfo;
+  getStepLink: (stepName: InferStepsNames<TWorkflow>) => ILinkInfo;
 }
 
-export interface IStep<T, TVal extends Results<T>> {
-  stepName: string;
+export interface IStep<T, TVal extends Results<T>, TStepName extends string> {
+  stepName: TStepName;
+  displayName: string;
   stepNumber: number;
-  stepRender: (props: StepProps<T, TVal>) => React.ReactNode;
+  stepRender: (props: StepProps<IWorkflow<T, TVal, TStepName>>) => React.ReactNode;
 }
 
-export interface ICallableStep {
-  stepName: string;
-  stepNumber: number;
-  stepRender: (props: ICallableStepProps) => React.ReactNode;
+export interface IWorkflow<T, TVal extends Results<T>, TStepName extends string> {
+  steps: IStep<T, TVal, TStepName>[];
+  summaryRender: (props: SummaryProps<IWorkflow<T, TVal, TStepName>>) => React.ReactNode;
 }
 
-interface IWorkflow<T, TVal extends Results<T>> {
-  steps: IStep<T, TVal>[];
-  summaryRender: (props: SummaryProps<T, TVal>) => React.ReactNode;
+export interface ICallableStep<T> extends IStep<T, Results<T>, string> {
+
 }
 
-export interface ICallableWorkflow {
-  summaryRender: (props: ICallableSummaryProps) => React.ReactNode;
-  findStepByName: (stepName: ICallableStep["stepName"]) => ICallableStep;
-  getStep: () => ICallableStep | null;
-  nextStep: () => ICallableStep["stepNumber"] | undefined;
+export interface ICallableWorkflow<T> {
   isOnSummary: () => boolean;
-  stepRender: (props: ICallableStepProps) => React.ReactNode;
+  getSummary: () => ((props: SummaryProps<IWorkflow<T, Results<T>, string>>) => React.ReactNode) | undefined;
+  findStepNumberByName: (name: string) => number | undefined;
+  getCurrentStepInfo: () => ICallableStep<T> | undefined;
+  getNextStepInfo: () => ICallableStep<T> | undefined;
+  getPrevStepInfo: () => ICallableStep<T> | undefined;
 }
 
-export abstract class WorkFlow<T, TVal extends Results<T>> implements ICallableWorkflow {
-  protected constructor(private definition: IWorkflow<T, TVal>, private stepNumber: ICallableStep["stepNumber"] | undefined) {}
+export class WorkFlow<T, TVal extends Results<T>, TStepNames extends string> implements ICallableWorkflow<T> {
+  public constructor(private definition: IWorkflow<T, TVal, TStepNames>, private stepNumber: number | undefined) { }
 
-  public summaryRender = (props: ICallableSummaryProps) => this.definition.summaryRender(props as any);
-
-  public stepRender(props: ICallableStepProps) {
-    if (!this.stepNumber) return null;
-    return this.findStepByNumber(this.stepNumber).stepRender(props);
+  public getSummary() {
+    return this.isOnSummary() ? this.definition.summaryRender : undefined;
   }
 
-  private findStepByNumber(stepNumber: ICallableStep["stepNumber"]): ICallableStep {
-    const step = this.definition.steps.find(x => x.stepNumber === stepNumber);
-    return step as any as ICallableStep;
-  }
-
-  public getStep(): ICallableStep|null {
-    return this.stepNumber ? this.findStepByNumber(this.stepNumber) : null;
-  }
-
-  public findStepByName(stepName: ICallableStep["stepName"]): ICallableStep {
+  public findStepNumberByName(stepName: string) {
     const step = this.definition.steps.find(x => x.stepName === stepName);
     if (!step) {
       throw Error("No such step in workflow");
     }
-    return step as any as ICallableStep;
+    return step.stepNumber;
   }
 
   public isOnSummary() {
     return !this.stepNumber;
   }
 
-  private hasNextStep() {
-    return !!this.stepNumber && this.stepNumber < this.definition.steps.length;
+  public getNextStepInfo() {
+    const nextStepNumber = this.stepNumber && this.stepNumber < this.definition.steps.length ? this.stepNumber + 1 : undefined;
+    return nextStepNumber ? this.definition.steps[nextStepNumber - 1] : undefined;
   }
 
-  public nextStep() {
-    return this.hasNextStep() ? this.stepNumber! + 1 : undefined;
+  public getPrevStepInfo() {
+    const prevStepNumber = this.stepNumber && this.stepNumber > 1 ? this.stepNumber - 1 : undefined;
+    return prevStepNumber ? this.definition.steps[prevStepNumber - 1] : undefined;
+  }
+
+  public getCurrentStepInfo() {
+    if (!this.stepNumber || this.stepNumber > this.definition.steps.length) {
+      return undefined;
+    }
+    return this.definition.steps[this.stepNumber - 1];
+  }
+
+  public static getWorkflow(pcrItem: PCRItemDto | undefined, step: number | undefined) {
+    if (!pcrItem) {
+      return null;
+    }
+    switch (pcrItem.type) {
+      case PCRItemType.AccountNameChange:
+        return new WorkFlow(accountNameChangeWorkflow, step);
+      case PCRItemType.MultiplePartnerFinancialVirement:
+      case PCRItemType.SinglePartnerFinancialVirement:
+      case PCRItemType.PartnerAddition:
+      case PCRItemType.PartnerWithdrawal:
+        return new WorkFlow(standardItemWorkflow, step);
+      default:
+        return null;
+    }
   }
 }

@@ -4,12 +4,13 @@ import * as ACC from "../../../components";
 import { StoresConsumer } from "@ui/redux";
 import { PCRAccountNameChangeItemDtoValidator } from "@ui/validators";
 import { SummaryProps } from "@ui/containers/pcrs/workflow";
+import { accountNameChangeWorkflow } from "./accountNameChangeWorkflow";
 
 interface InnerProps {
   documents: DocumentSummaryDto[];
 }
 
-class Component extends React.Component<SummaryProps<PCRItemForAccountNameChangeDto, PCRAccountNameChangeItemDtoValidator> & InnerProps> {
+class Component extends React.Component<SummaryProps<typeof accountNameChangeWorkflow> & InnerProps> {
   render() {
     const {pcrItem, validator, documents} = this.props;
     return (
@@ -30,7 +31,7 @@ class Component extends React.Component<SummaryProps<PCRItemForAccountNameChange
   }
 }
 
-export const NameChangeSummary = (props: SummaryProps<PCRItemForAccountNameChangeDto, PCRAccountNameChangeItemDtoValidator>) => (
+export const NameChangeSummary = (props: SummaryProps<typeof accountNameChangeWorkflow>) => (
   <StoresConsumer>
     {
       stores => {
