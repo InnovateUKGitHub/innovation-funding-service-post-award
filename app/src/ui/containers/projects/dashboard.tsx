@@ -262,11 +262,11 @@ class ProjectDashboardComponent extends ContainerBaseWithState<{}, Data, {}, Sta
             <h3 className="govuk-heading-s govuk-!-margin-bottom-2">
               {this.renderProjectTitle(project, section !== "upcoming")}
             </h3>
-            {leftHandMessages.map((content, i) => <div key={`leftMessage${i}`} className="govuk-body govuk-!-margin-bottom-0">{content}</div>)}
+            {leftHandMessages.map((content, i) => <div key={`leftMessage${i}`} className="govuk-body-s govuk-!-margin-bottom-0">{content}</div>)}
           </div>
         </div>
-        <div className="govuk-grid-column-one-half govuk-!-margin-top-2" style={{ textAlign: "right" }}>
-          {rightHandMessages.map((content, i) => <div key={`rightMessage${i}`} className="govuk-body govuk-!-margin-bottom-0">{content}</div>)}
+        <div className="govuk-grid-column-one-half govuk-grid-column--right-align govuk-!-margin-top-2">
+          {rightHandMessages.map((content, i) => <div key={`rightMessage${i}`} className="govuk-body-s govuk-!-margin-bottom-0">{content}</div>)}
         </div>
       </ACC.ListItem>
     );
