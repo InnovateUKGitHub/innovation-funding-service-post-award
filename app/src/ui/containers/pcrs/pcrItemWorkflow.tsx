@@ -94,7 +94,7 @@ class Component extends ContainerBase<ProjectChangeRequestPrepareItemParams, Dat
       <React.Fragment>
         {this.props.mode === "prepare" && this.props.step === 1 && this.renderGuidanceSection(pcrItem)}
         {this.props.mode === "prepare" && !workflow.isOnSummary() && this.renderStep(workflow, project, pcr, editor, documentsEditor)}
-        {workflow.isOnSummary() && this.renderSummarySection(workflow, pcr, pcrItem, editor, editableItemTypes)}
+        {workflow.isOnSummary() && this.renderSummarySection(workflow, project, pcr, pcrItem, editor, editableItemTypes)}
       </React.Fragment>
     );
   }
@@ -169,14 +169,15 @@ class Component extends ContainerBase<ProjectChangeRequestPrepareItemParams, Dat
     );
   }
 
-  private renderSummary(workflow: ICallableWorkflow<PCRItemDto>, pcr: PCRDto, editor: IEditorStore<PCRDto, PCRDtoValidator>) {
+  private renderSummary(workflow: ICallableWorkflow<PCRItemDto>, project: ProjectDto, pcr: PCRDto, editor: IEditorStore<PCRDto, PCRDtoValidator>) {
     const pcrItem = editor.data.items.find(x => x.id === this.props.itemId)!;
     const validator = editor.validator.items.results.find(x => x.model.id === pcrItem.id)!;
     const { projectId, mode } = this.props;
-    return workflow.getSummary()!({
+    return workflow.getSummary()!.summaryRender({
       projectId,
       validator,
       pcrItem,
+      project,
       pcr,
       onSave: () => this.onSave(workflow, editor.data),
       getStepLink: (stepName: string) => this.getStepLink(workflow, stepName),
@@ -217,10 +218,10 @@ class Component extends ContainerBase<ProjectChangeRequestPrepareItemParams, Dat
     return <NavigationArrowsForPCRs pcr={pcr} currentItem={pcrItem} isReviewing={this.props.mode === "review"} editableItemTypes={editableItemTypes} routes={this.props.routes} />;
   }
 
-  private renderSummarySection(workflow: ICallableWorkflow<PCRItemDto>, pcr: PCRDto, pcrItem: PCRItemDto, editor: IEditorStore<PCRDto, PCRDtoValidator>, editableItemTypes: PCRItemType[]) {
+  private renderSummarySection(workflow: ICallableWorkflow<PCRItemDto>, project: ProjectDto, pcr: PCRDto, pcrItem: PCRItemDto, editor: IEditorStore<PCRDto, PCRDtoValidator>, editableItemTypes: PCRItemType[]) {
     return (
       <ACC.Section qa="item-save-and-return">
-        {this.renderSummary(workflow, pcr, editor)}
+        {this.renderSummary(workflow, project, pcr, editor)}
         {this.props.mode === "prepare" && this.renderCompleteForm(workflow, editor)}
         {(this.props.mode === "review" || this.props.mode === "view") && this.renderNavigationArrows(pcr, pcrItem, editableItemTypes)}
       </ACC.Section>
