@@ -5,6 +5,7 @@ import { EditorStatus, IEditorStore } from "@ui/redux";
 import { MultipleDocumentUpdloadDtoValidator } from "@ui/validators";
 import { ILinkInfo, PCRItemType } from "@framework/types";
 import { accountNameChangeWorkflow } from "./nameChange";
+import { scopeChangeWorkflow } from "./scopeChange/scopeChangeWorkflow";
 import { standardItemWorkflow } from "./standardItem/workflow";
 import { timeExtensionItemWorkflow } from "@ui/containers/pcrs/timeExtension/timeExtensionWorkflow";
 
@@ -54,7 +55,7 @@ export interface ICallableStep<T> extends IStep<T, Results<T>, string> {
 
 export interface ICallableWorkflow<T> {
   isOnSummary: () => boolean;
-  getSummary: () => {summaryRender: (props: SummaryProps<IWorkflow<T, Results<T>, string>>) => React.ReactNode} | undefined;
+  getSummary: () => { summaryRender: (props: SummaryProps<IWorkflow<T, Results<T>, string>>) => React.ReactNode } | undefined;
   findStepNumberByName: (name: string) => number | undefined;
   getCurrentStepInfo: () => ICallableStep<T> | undefined;
   getNextStepInfo: () => ICallableStep<T> | undefined;
@@ -104,6 +105,8 @@ export class WorkFlow<T, TVal extends Results<T>, TStepNames extends string> imp
     switch (pcrItem.type) {
       case PCRItemType.AccountNameChange:
         return new WorkFlow(accountNameChangeWorkflow, step);
+      case PCRItemType.ScopeChange:
+        return new WorkFlow(scopeChangeWorkflow, step);
       case PCRItemType.TimeExtension:
         return new WorkFlow(timeExtensionItemWorkflow, step);
       case PCRItemType.MultiplePartnerFinancialVirement:
