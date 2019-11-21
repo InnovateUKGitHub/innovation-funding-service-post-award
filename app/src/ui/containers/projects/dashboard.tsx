@@ -89,10 +89,10 @@ class ProjectDashboardComponent extends ContainerBaseWithState<{}, Data, {}, Sta
       <React.Fragment>
         {this.renderProjectList(openProjects, "open-projects", "section-open", "You currently do not have any open projects.")}
         <ACC.Accordion>
-          <ACC.AccordionItem title="Upcoming Projects">
+          <ACC.AccordionItem title="Upcoming Projects" qa="upcoming-projects">
             {this.renderProjectList(upcomingProjects, "upcoming-projects", "section-upcoming", "You do not have any upcoming projects.")}
           </ACC.AccordionItem>
-          <ACC.AccordionItem title="Archived Projects">
+          <ACC.AccordionItem title="Archived Projects" qa="archived-projects">
             {this.renderProjectList(archivedProjects, "archived-projects", "section-archived", "You do not have any archived projects.")}
           </ACC.AccordionItem>
         </ACC.Accordion>
