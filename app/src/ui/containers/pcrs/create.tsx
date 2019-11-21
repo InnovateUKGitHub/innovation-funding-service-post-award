@@ -52,26 +52,26 @@ class PCRCreateComponent extends ContainerBase<CreateProjectChangeRequestParams,
     const selected = options.filter(x => pcrEditor.data.items.some(y => y.type.toString() === x.id));
 
     return (
-      <React.Fragment>
-        <PCRForm.Form editor={pcrEditor} onSubmit={() => this.props.onChange(true, pcrEditor.data)} onChange={dto => this.props.onChange(false, dto)} qa="pcr-create-form">
-          <PCRForm.Fieldset heading="Select request types">
-            <PCRForm.Checkboxes
-              hint="You can select more than one."
-              options={options}
-              name="types"
-              validation={pcrEditor.validator.items}
-              value={x => selected}
-              update={(model, selectedValue) => {
-                model.items = itemTypes
-                  .filter(x => (selectedValue || []).some(y => y.id === x.type.toString()))
-                  .map(x => model.items.find(y => x.type === y.type) || this.props.createNewChangeRequestItem(x));
-              }}
-            />
-          </PCRForm.Fieldset>
+      <PCRForm.Form editor={pcrEditor} onSubmit={() => this.props.onChange(true, pcrEditor.data)} onChange={dto => this.props.onChange(false, dto)} qa="pcr-create-form">
+        <PCRForm.Fieldset heading="Select request types">
+          <PCRForm.Checkboxes
+            hint="You can select more than one."
+            options={options}
+            name="types"
+            validation={pcrEditor.validator.items}
+            value={x => selected}
+            update={(model, selectedValue) => {
+              model.items = itemTypes
+                .filter(x => (selectedValue || []).some(y => y.id === x.type.toString()))
+                .map(x => model.items.find(y => x.type === y.type) || this.props.createNewChangeRequestItem(x));
+            }}
+          />
+        </PCRForm.Fieldset>
+        <PCRForm.Fieldset>
           <PCRForm.Submit>Create request</PCRForm.Submit>
-        </PCRForm.Form>
-        <ACC.Link styling="SecondaryButton" route={this.props.routes.pcrsDashboard.getLink({ projectId: this.props.projectId })}>Cancel</ACC.Link>
-      </React.Fragment>
+          <ACC.Link styling="SecondaryButton" route={this.props.routes.pcrsDashboard.getLink({ projectId: this.props.projectId })}>Cancel</ACC.Link>
+        </PCRForm.Fieldset>
+      </PCRForm.Form>
     );
   }
 }
