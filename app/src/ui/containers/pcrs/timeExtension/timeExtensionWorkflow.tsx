@@ -1,0 +1,22 @@
+import React from "react";
+import { PCRItemForTimeExtensionDto } from "@framework/dtos";
+import { TimeExtensionSummary } from "@ui/containers/pcrs/timeExtension/timeExtensionSummary";
+import { TimeExtensionStep } from "@ui/containers/pcrs/timeExtension/timeExtensionStep";
+import { PCRTimeExtensionItemDtoValidator } from "@ui/validators";
+import { IWorkflow } from "../workflow";
+
+type stepNames = "timeExtension";
+
+export const timeExtensionItemWorkflow: IWorkflow<PCRItemForTimeExtensionDto, PCRTimeExtensionItemDtoValidator, stepNames> = {
+  steps: [
+    {
+      stepName: "timeExtension",
+      displayName: "Time extension",
+      stepNumber: 1,
+      stepRender: TimeExtensionStep
+    }
+  ],
+  summary: {
+    summaryRender: TimeExtensionSummary
+  }
+};

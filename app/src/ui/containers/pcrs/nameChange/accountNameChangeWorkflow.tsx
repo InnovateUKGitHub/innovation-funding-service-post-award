@@ -23,18 +23,21 @@ export const accountNameChangeWorkflow: IWorkflow<PCRItemForAccountNameChangeDto
       stepRender: (props) => <PCRPrepareItemFilesStep {...props}/>
     }
   ],
-  summaryRender: (props) => {
-    const {projectId, validator, pcrItem, pcr, mode, onSave, getStepLink} = props;
-    return (
-      <NameChangeSummary
-        projectId={projectId}
-        validator={validator}
-        pcrItem={pcrItem}
-        pcr={pcr}
-        onSave={onSave}
-        getStepLink={getStepLink}
-        mode={mode}
-      />
-    );
+  summary: {
+    summaryRender: (props) => {
+      const {projectId, validator, pcrItem, project, pcr, mode, onSave, getStepLink} = props;
+      return (
+        <NameChangeSummary
+          projectId={projectId}
+          validator={validator}
+          project={project}
+          pcrItem={pcrItem}
+          pcr={pcr}
+          onSave={onSave}
+          getStepLink={getStepLink}
+          mode={mode}
+        />
+      );
+    }
   }
 };
