@@ -15,6 +15,7 @@ import * as Dtos from "@framework/dtos";
 import { PCRItemStatus, PCRItemType } from "@framework/constants";
 import { WorkFlow } from "@ui/containers/pcrs/workflow";
 import { accountNameChangeStepNames } from "@ui/containers/pcrs/nameChange/accountNameChangeWorkflow";
+import { suspendProjectSteps } from "@ui/containers/pcrs/suspendProject/workflow";
 
 export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBase<ProjectChangeRequestPrepareItemParams, Dtos.PCRDto, PCRDtoValidator> {
   constructor() {
@@ -32,6 +33,7 @@ export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBa
 
     item.status = body.itemStatus === "true" ? PCRItemStatus.Complete : PCRItemStatus.Incomplete;
     const workflow = WorkFlow.getWorkflow(item, params.step);
+    const stepName = workflow && workflow.getCurrentStepName();
     switch (item.type) {
       case PCRItemType.TimeExtension:
         this.updateTimeExtension(item, body);
@@ -40,10 +42,10 @@ export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBa
         this.updateScopeChange(item, body);
         break;
       case PCRItemType.ProjectSuspension:
-        this.updateProjectSuspension(item, body);
+        this.updateProjectSuspension(item, body, stepName as suspendProjectSteps);
         break;
       case PCRItemType.AccountNameChange:
-        this.updateNameChange(item, body, workflow!.getCurrentStepInfo()!.stepName as accountNameChangeStepNames);
+        this.updateNameChange(item, body, stepName as accountNameChangeStepNames);
         break;
       case PCRItemType.MultiplePartnerFinancialVirement:
       case PCRItemType.SinglePartnerFinancialVirement:
@@ -56,20 +58,22 @@ export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBa
     return dto;
   }
 
-  private updateProjectSuspension(item: Dtos.PCRItemForProjectSuspensionDto, body: IFormBody) {
-    if (body.suspensionStartDate_month || body.suspensionStartDate_year) {
-      const suspensionStartDate = DateTime.fromFormat(`${body.suspensionStartDate_month}/${body.suspensionStartDate_year}`, "M/yyyy").startOf("month").startOf("day");
-      item.suspensionStartDate = suspensionStartDate.toJSDate();
-    }
-    else {
-      item.suspensionStartDate = null;
-    }
-    if (body.suspensionEndDate_month || body.suspensionEndDate_year) {
-      const suspensionEndDate = DateTime.fromFormat(`${body.suspensionEndDate_month}/${body.suspensionEndDate_year}`, "M/yyyy").endOf("month").startOf("day");
-      item.suspensionEndDate = suspensionEndDate.toJSDate();
-    }
-    else {
-      item.suspensionEndDate = null;
+  private updateProjectSuspension(item: Dtos.PCRItemForProjectSuspensionDto, body: IFormBody, stepName: suspendProjectSteps) {
+    if (stepName === "details") {
+      if (body.suspensionStartDate_month || body.suspensionStartDate_year) {
+        const suspensionStartDate = DateTime.fromFormat(`${body.suspensionStartDate_month}/${body.suspensionStartDate_year}`, "M/yyyy").startOf("month").startOf("day");
+        item.suspensionStartDate = suspensionStartDate.toJSDate();
+      }
+      else {
+        item.suspensionStartDate = null;
+      }
+      if (body.suspensionEndDate_month || body.suspensionEndDate_year) {
+        const suspensionEndDate = DateTime.fromFormat(`${body.suspensionEndDate_month}/${body.suspensionEndDate_year}`, "M/yyyy").endOf("month").startOf("day");
+        item.suspensionEndDate = suspensionEndDate.toJSDate();
+      }
+      else {
+        item.suspensionEndDate = null;
+      }
     }
   }
 
@@ -101,7 +105,7 @@ export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBa
     });
   }
 
-  private updateNameChange(item: Dtos.PCRItemForAccountNameChangeDto, body: IFormBody, stepName: accountNameChangeStepNames|null) {
+  private updateNameChange(item: Dtos.PCRItemForAccountNameChangeDto, body: IFormBody, stepName: accountNameChangeStepNames | null) {
     if (stepName === "partnerNameStep") {
       item.partnerId = body.partnerId;
       item.accountName = body.accountName;

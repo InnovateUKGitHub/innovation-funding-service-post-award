@@ -1,4 +1,3 @@
-import React from "react";
 import { PCRItemForAccountNameChangeDto } from "@framework/dtos";
 import { NameChangeStep } from "@ui/containers/pcrs/nameChange/nameChangeStep";
 import { PCRAccountNameChangeItemDtoValidator } from "@ui/validators";
@@ -14,30 +13,16 @@ export const accountNameChangeWorkflow: IWorkflow<PCRItemForAccountNameChangeDto
       stepName: "partnerNameStep",
       displayName: "Partner details",
       stepNumber: 1,
-      stepRender: (props) => <NameChangeStep {...props}/>
+      stepRender: NameChangeStep
     },
     {
       stepName: "filesStep",
       displayName: "Upload change of name certificate",
       stepNumber: 2,
-      stepRender: (props) => <PCRPrepareItemFilesStep {...props}/>
+      stepRender: PCRPrepareItemFilesStep
     }
   ],
   summary: {
-    summaryRender: (props) => {
-      const {projectId, validator, pcrItem, project, pcr, mode, onSave, getStepLink} = props;
-      return (
-        <NameChangeSummary
-          projectId={projectId}
-          validator={validator}
-          project={project}
-          pcrItem={pcrItem}
-          pcr={pcr}
-          onSave={onSave}
-          getStepLink={getStepLink}
-          mode={mode}
-        />
-      );
-    }
+    summaryRender: NameChangeSummary
   }
 };
