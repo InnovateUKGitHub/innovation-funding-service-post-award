@@ -102,10 +102,8 @@ class PCRPrepareComponent extends ContainerBase<ProjectChangeRequestPrepareParam
               qa="info-text-area"
             />
           </Form.Fieldset>
-          <Form.Fieldset qa="save-and-submit">
+          <Form.Fieldset qa="save-buttons">
             <Form.Submit>Submit request</Form.Submit>
-          </Form.Fieldset>
-          <Form.Fieldset qa="save-and-return">
             <Form.Button name="return" onClick={() => this.onSave(editor, projectChangeRequest, false)}>Save and return to requests</Form.Button>
           </Form.Fieldset>
         </Form.Form>

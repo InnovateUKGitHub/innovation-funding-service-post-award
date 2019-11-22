@@ -25,10 +25,8 @@ export class MonitoringReportFormComponent extends Component<Props> {
           <SimpleString>For each question score the project against the criteria from 1 to 5, providing a comment explaining your reason. Innovate UK will return the report to you otherwise.</SimpleString>
           {this.renderFormItems(editor)}
           <SimpleString>By submitting this report, you certify that from the project monitoring documents shown to you, this report represents your best opinion of the current progress of this project.</SimpleString>
-          <ReportForm.Fieldset qa="save-and-submit">
+          <ReportForm.Fieldset qa="save-buttons">
             <ReportForm.Button name="save-submitted" styling="Primary" onClick={() => this.props.onSave(editor.data, true)}>Submit report</ReportForm.Button>
-          </ReportForm.Fieldset>
-          <ReportForm.Fieldset qa="save-and-return">
             <ReportForm.Button name="save-draft" onClick={() => this.props.onSave(editor.data, false)}>Save and return to project</ReportForm.Button>
           </ReportForm.Fieldset>
         </ReportForm.Form>
