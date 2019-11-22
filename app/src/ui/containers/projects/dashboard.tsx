@@ -74,6 +74,12 @@ class ProjectDashboardComponent extends ContainerBaseWithState<{}, Data, {}, Sta
     );
   }
 
+  private renderProjectCount(live: ProjectData[], upcoming: ProjectData[], archived: ProjectData[]) {
+    const count = live.length + upcoming.length + archived.length;
+    if (!count) return <ACC.Renderers.SimpleString>0 projects</ACC.Renderers.SimpleString>;
+    return <ACC.Renderers.SimpleString>{`${count} projects (${live.length} live, ${upcoming.length} upcoming, ${archived.length} archived)`}</ACC.Renderers.SimpleString>;
+  }
+
   private renderProjectLists(projects: ProjectDto[], partners: PartnerDto[]) {
     const combinedData = projects
       .map(project => {
@@ -92,33 +98,35 @@ class ProjectDashboardComponent extends ContainerBaseWithState<{}, Data, {}, Sta
 
     return (
       <React.Fragment>
-        {this.renderProjectList(openProjects, "open-projects", "section-open", "You currently do not have any open projects.")}
+        {this.renderProjectCount(openProjects, upcomingProjects, archivedProjects)}
+        {this.renderProjectList(openProjects, "open-projects", "section-open", "You do not have any live projects.", "There are no matching live projects.")}
         <ACC.Accordion>
           <ACC.AccordionItem title="Upcoming Projects" qa="upcoming-projects">
-            {this.renderProjectList(upcomingProjects, "upcoming-projects", "section-upcoming", "You do not have any upcoming projects.")}
+            {this.renderProjectList(upcomingProjects, "upcoming-projects", "section-upcoming", "You do not have any upcoming projects.", "There are no matching upcoming projects.")}
           </ACC.AccordionItem>
           <ACC.AccordionItem title="Archived Projects" qa="archived-projects">
-            {this.renderProjectList(archivedProjects, "archived-projects", "section-archived", "You do not have any archived projects.")}
+            {this.renderProjectList(archivedProjects, "archived-projects", "section-archived", "You do not have any archived projects.", "There are no matching archived projects.")}
           </ACC.AccordionItem>
         </ACC.Accordion>
       </React.Fragment>
     );
   }
 
-  private renderProjectList(data: ProjectData[], qa: string, key: string, noProjectsMessage: string) {
+  private renderProjectList(data: ProjectData[], qa: string, key: string, noProjectsMessage: string, noProjectsFoundMessage: string) {
     const stateFiltered = data
       .filter(x => !this.state.showClaimsToReview || x.project.claimsToReview > 0)
       .filter(x => !this.state.showClaimsWithParticipant || x.project.claimsWithParticipant > 0);
     return (
       <ACC.Section qa={qa} key={key}>
+        {this.renderNoProjectsMessage(stateFiltered, noProjectsMessage, noProjectsFoundMessage)}
         {stateFiltered.map((x, i) => this.renderProject(x.project, x.partner, x.projectSection, i))}
-        {this.renderNoProjectsMessage(stateFiltered, noProjectsMessage)}
       </ACC.Section>
     );
   }
 
-  private renderNoProjectsMessage(combinedFiltersData: ProjectData[], noProjectsMessage: string) {
+  private renderNoProjectsMessage(combinedFiltersData: ProjectData[], noProjectsMessage: string, noProjectsFoundMessage: string) {
     if (!!combinedFiltersData.length) return null;
+    if (this.state.projectSearchString) return <ACC.Renderers.SimpleString>{noProjectsFoundMessage}</ACC.Renderers.SimpleString>;
     return <ACC.Renderers.SimpleString>{noProjectsMessage}</ACC.Renderers.SimpleString>;
   }
 
