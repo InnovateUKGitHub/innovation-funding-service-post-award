@@ -1,4 +1,4 @@
-import React from "react";
+import React, { ReactElement } from "react";
 import { Results } from "@ui/validation";
 import { PCRDto, PCRItemDto, ProjectDto } from "@framework/dtos";
 import { EditorStatus, IEditorStore } from "@ui/redux";
@@ -7,6 +7,7 @@ import { ILinkInfo, PCRItemType } from "@framework/types";
 import { accountNameChangeWorkflow } from "./nameChange";
 import { standardItemWorkflow } from "./standardItem/workflow";
 import { timeExtensionItemWorkflow } from "@ui/containers/pcrs/timeExtension/timeExtensionWorkflow";
+import { suspendProjectWorkflow } from "./suspendProject/workflow";
 
 type InferStepsNames<T> = T extends IWorkflow<infer TDto, infer TVal, infer TStepname> ? TStepname : never;
 type InferTDto<T> = T extends IWorkflow<infer TDto, infer TVal, infer TStepname> ? TDto : never;
@@ -32,6 +33,7 @@ export interface SummaryProps<TWorkflow> {
   mode: "prepare" | "review" | "view";
   onSave: () => void;
   getStepLink: (stepName: InferStepsNames<TWorkflow>) => ILinkInfo;
+  getEditLink: (stepName: InferStepsNames<TWorkflow>) => React.ReactNode;
 }
 
 export interface IStep<T, TVal extends Results<T>, TStepName extends string> {
@@ -57,6 +59,7 @@ export interface ICallableWorkflow<T> {
   getSummary: () => {summaryRender: (props: SummaryProps<IWorkflow<T, Results<T>, string>>) => React.ReactNode} | undefined;
   findStepNumberByName: (name: string) => number | undefined;
   getCurrentStepInfo: () => ICallableStep<T> | undefined;
+  getCurrentStepName: () => string | undefined;
   getNextStepInfo: () => ICallableStep<T> | undefined;
   getPrevStepInfo: () => ICallableStep<T> | undefined;
 }
@@ -97,6 +100,11 @@ export class WorkFlow<T, TVal extends Results<T>, TStepNames extends string> imp
     return this.definition.steps[this.stepNumber - 1];
   }
 
+  public getCurrentStepName() {
+    const currentStep = this.getCurrentStepInfo();
+    return currentStep && currentStep.stepName;
+  }
+
   public static getWorkflow(pcrItem: PCRItemDto | undefined, step: number | undefined) {
     if (!pcrItem) {
       return null;
@@ -106,6 +114,8 @@ export class WorkFlow<T, TVal extends Results<T>, TStepNames extends string> imp
         return new WorkFlow(accountNameChangeWorkflow, step);
       case PCRItemType.TimeExtension:
         return new WorkFlow(timeExtensionItemWorkflow, step);
+      case PCRItemType.ProjectSuspension:
+        return new WorkFlow(suspendProjectWorkflow, step);
       case PCRItemType.MultiplePartnerFinancialVirement:
       case PCRItemType.SinglePartnerFinancialVirement:
       case PCRItemType.PartnerAddition:

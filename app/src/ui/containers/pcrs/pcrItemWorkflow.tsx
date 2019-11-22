@@ -62,6 +62,13 @@ class Component extends ContainerBase<ProjectChangeRequestPrepareItemParams, Dat
     });
   }
 
+  private getEditLink(workflow: ICallableWorkflow<PCRItemDto>, stepName: string) {
+    if (this.props.mode !== "prepare") {
+      return null;
+    }
+    return <ACC.Link route={this.getStepLink(workflow, stepName)}>Edit</ACC.Link>;
+  }
+
   private renderContents(project: ProjectDto, editor: IEditorStore<PCRDto, PCRDtoValidator>, documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>, pcr: PCRDto, pcrItem: PCRItemDto, editableItemTypes: PCRItemType[]) {
     const workflow = WorkFlow.getWorkflow(pcrItem, this.props.step);
     return (
@@ -164,7 +171,7 @@ class Component extends ContainerBase<ProjectChangeRequestPrepareItemParams, Dat
             onSave: () => this.onSave(workflow, editor.data)
           })
         }
-        <ACC.NavigationArrows previousLink={prevText && prevLink ? {label: prevText, route: prevLink} : null} nextLink={{ label: nextText, route: nextLink }} />
+        <ACC.NavigationArrows previousLink={prevText && prevLink ? { label: prevText, route: prevLink } : null} nextLink={{ label: nextText, route: nextLink }} />
       </React.Fragment>
     );
   }
@@ -181,6 +188,7 @@ class Component extends ContainerBase<ProjectChangeRequestPrepareItemParams, Dat
       pcr,
       onSave: () => this.onSave(workflow, editor.data),
       getStepLink: (stepName: string) => this.getStepLink(workflow, stepName),
+      getEditLink: (stepName: string) => this.getEditLink(workflow, stepName),
       mode
     });
   }
