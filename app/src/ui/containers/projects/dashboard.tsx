@@ -65,7 +65,7 @@ class ProjectDashboardComponent extends ContainerBaseWithState<{}, Data, {}, Sta
   private renderContents(partners: PartnerDto[]) {
     return (
       <React.Fragment>
-        {this.renderSearch()}
+        {this.props.isClient && this.renderSearch()}
         <ACC.Loader
           pending={this.props.projectsFilter(this.state.projectSearchString)}
           render={(projects) => this.renderProjectLists(projects, partners)}
