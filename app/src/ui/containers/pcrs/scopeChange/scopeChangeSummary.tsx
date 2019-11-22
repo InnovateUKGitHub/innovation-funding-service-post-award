@@ -4,7 +4,7 @@ import { SummaryProps } from "@ui/containers/pcrs/workflow";
 import { scopeChangeWorkflow } from "./scopeChangeWorkflow";
 
 export const ScopeChangeSummary = (props: SummaryProps<typeof scopeChangeWorkflow>) => {
-  const { pcrItem, validator, mode, getStepLink } = props;
+  const { pcrItem, validator } = props;
   return (
     <ACC.Section qa="scope-change-summary">
       <ACC.SummaryList qa="scope-change-summary-list">
@@ -18,7 +18,7 @@ export const ScopeChangeSummary = (props: SummaryProps<typeof scopeChangeWorkflo
           content={pcrItem.publicDescription}
           qa="newPublicDescription"
           validation={validator.publicDescription}
-          action={mode === "prepare" && <ACC.Link id={validator.publicDescription.key} route={getStepLink("publicDescriptionStep")}>Edit</ACC.Link>}
+          action={props.getEditLink("publicDescriptionStep", validator.publicDescription)}
         />
         <ACC.SummaryListItem
           label="Existing project summary"
@@ -30,7 +30,7 @@ export const ScopeChangeSummary = (props: SummaryProps<typeof scopeChangeWorkflo
           content={pcrItem.projectSummary}
           qa="newProjectSummary"
           validation={validator.projectSummary}
-          action={mode === "prepare" && <ACC.Link id={validator.projectSummary.key} route={getStepLink("projectSummaryStep")}>Edit</ACC.Link>}
+          action={props.getEditLink("projectSummaryStep", validator.projectSummary)}
         />
       </ACC.SummaryList>
     </ACC.Section>
