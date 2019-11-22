@@ -2,10 +2,11 @@ import React from "react";
 import { Results } from "@ui/validation";
 import { PCRDto, PCRItemDto, ProjectDto } from "@framework/dtos";
 import { EditorStatus, IEditorStore } from "@ui/redux";
-import { MultipleDocumentUpdloadDtoValidator, PCRBaseItemDtoValidator } from "@ui/validators";
+import { MultipleDocumentUpdloadDtoValidator } from "@ui/validators";
 import { ILinkInfo, PCRItemType } from "@framework/types";
 import { accountNameChangeWorkflow } from "./nameChange";
 import { standardItemWorkflow } from "./standardItem/workflow";
+import { timeExtensionItemWorkflow } from "@ui/containers/pcrs/timeExtension/timeExtensionWorkflow";
 
 type InferStepsNames<T> = T extends IWorkflow<infer TDto, infer TVal, infer TStepname> ? TStepname : never;
 type InferTDto<T> = T extends IWorkflow<infer TDto, infer TVal, infer TStepname> ? TDto : never;
@@ -26,6 +27,7 @@ export interface SummaryProps<TWorkflow> {
   projectId: string;
   pcr: PCRDto;
   pcrItem: InferTDto<TWorkflow>;
+  project: ProjectDto;
   validator: InferTVal<TWorkflow>;
   mode: "prepare" | "review" | "view";
   onSave: () => void;
@@ -41,7 +43,9 @@ export interface IStep<T, TVal extends Results<T>, TStepName extends string> {
 
 export interface IWorkflow<T, TVal extends Results<T>, TStepName extends string> {
   steps: IStep<T, TVal, TStepName>[];
-  summaryRender: (props: SummaryProps<IWorkflow<T, TVal, TStepName>>) => React.ReactNode;
+  summary: {
+    summaryRender: (props: SummaryProps<IWorkflow<T, TVal, TStepName>>) => React.ReactNode;
+  };
 }
 
 export interface ICallableStep<T> extends IStep<T, Results<T>, string> {
@@ -50,7 +54,7 @@ export interface ICallableStep<T> extends IStep<T, Results<T>, string> {
 
 export interface ICallableWorkflow<T> {
   isOnSummary: () => boolean;
-  getSummary: () => ((props: SummaryProps<IWorkflow<T, Results<T>, string>>) => React.ReactNode) | undefined;
+  getSummary: () => {summaryRender: (props: SummaryProps<IWorkflow<T, Results<T>, string>>) => React.ReactNode} | undefined;
   findStepNumberByName: (name: string) => number | undefined;
   getCurrentStepInfo: () => ICallableStep<T> | undefined;
   getNextStepInfo: () => ICallableStep<T> | undefined;
@@ -61,7 +65,7 @@ export class WorkFlow<T, TVal extends Results<T>, TStepNames extends string> imp
   public constructor(private definition: IWorkflow<T, TVal, TStepNames>, private stepNumber: number | undefined) { }
 
   public getSummary() {
-    return this.isOnSummary() ? this.definition.summaryRender : undefined;
+    return this.isOnSummary() ? this.definition.summary : undefined;
   }
 
   public findStepNumberByName(stepName: string) {
@@ -100,6 +104,8 @@ export class WorkFlow<T, TVal extends Results<T>, TStepNames extends string> imp
     switch (pcrItem.type) {
       case PCRItemType.AccountNameChange:
         return new WorkFlow(accountNameChangeWorkflow, step);
+      case PCRItemType.TimeExtension:
+        return new WorkFlow(timeExtensionItemWorkflow, step);
       case PCRItemType.MultiplePartnerFinancialVirement:
       case PCRItemType.SinglePartnerFinancialVirement:
       case PCRItemType.PartnerAddition:

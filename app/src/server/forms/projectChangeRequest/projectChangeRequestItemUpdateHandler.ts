@@ -43,7 +43,7 @@ export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBa
         this.updateProjectSuspension(item, body);
         break;
       case PCRItemType.AccountNameChange:
-        this.updateNameChange(item, body, workflow!.getCurrentStepInfo()!.stepName);
+        this.updateNameChange(item, body, workflow!.getCurrentStepInfo()!.stepName as accountNameChangeStepNames);
         break;
       case PCRItemType.MultiplePartnerFinancialVirement:
       case PCRItemType.SinglePartnerFinancialVirement:

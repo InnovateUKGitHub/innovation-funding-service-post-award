@@ -15,5 +15,8 @@ export const standardItemWorkflow: IWorkflow<PCRStandardItemDto, PCRStandardItem
       stepRender: FilesStep
     }
   ],
-  summaryRender: Summary
+  summary:
+    {
+      summaryRender: Summary
+    }
 };
