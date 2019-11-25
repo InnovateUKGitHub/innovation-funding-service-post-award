@@ -32,6 +32,7 @@ const InnerContainer = (props: StepProps<typeof accountNameChangeWorkflow> & Inn
         <Form.Fieldset heading="Select partner">
           <Form.Radio
             name="partnerId"
+            hint={props.getRequiredToCompleteMessage()}
             options={partnerOptions}
             inline={false}
             value={() => selectedPartnerOption}
@@ -41,6 +42,7 @@ const InnerContainer = (props: StepProps<typeof accountNameChangeWorkflow> & Inn
         <Form.Fieldset heading="Enter new name">
           <Form.String
             label="Enter new name"
+            hint={props.getRequiredToCompleteMessage()}
             labelHidden={true}
             name="accountName"
             value={x => x.accountName}

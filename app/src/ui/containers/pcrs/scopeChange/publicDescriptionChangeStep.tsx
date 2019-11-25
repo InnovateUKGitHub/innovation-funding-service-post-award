@@ -20,6 +20,7 @@ export const PublicDescriptionChangeStep = (props: StepProps<typeof scopeChangeW
             <ACC.Info summary="Published public description"><ACC.Renderers.SimpleString multiline={true}>{props.pcrItem.publicDescriptionSnapshot || "No public description available."}</ACC.Renderers.SimpleString></ACC.Info>
             <Form.MultilineString
               name="description"
+              hint={props.getRequiredToCompleteMessage()}
               value={m => m.publicDescription}
               update={(m, v) => m.publicDescription = v}
               validation={props.validator.publicDescription}

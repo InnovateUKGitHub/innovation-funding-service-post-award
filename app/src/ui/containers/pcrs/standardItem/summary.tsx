@@ -10,11 +10,10 @@ interface Props {
 
 class SummaryComponent extends React.Component<SummaryProps<typeof standardItemWorkflow> & Props> {
   public render() {
-    const { documents, mode, getStepLink } = this.props;
     return (
       <ACC.Section qa="name-change-summary">
         <ACC.SummaryList qa="name-change-summary-list">
-          <ACC.SummaryListItem label="Documents" content={this.renderDocuments(documents)} qa="supportingDocuments" action={mode === "prepare" && <ACC.Link route={getStepLink("filesStep")}>Edit</ACC.Link>} />
+          <ACC.SummaryListItem label="Documents" content={this.renderDocuments(this.props.documents)} qa="supportingDocuments" action={this.props.getEditLink("filesStep", null)} />
         </ACC.SummaryList>
       </ACC.Section>
     );
