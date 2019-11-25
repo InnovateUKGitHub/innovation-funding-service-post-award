@@ -23,7 +23,7 @@ export const SuspendProjectDetails = (props: StepProps<typeof suspendProjectWork
             value={m => m.suspensionStartDate}
             validation={props.validator.suspensionStartDate}
             update={(m, v) => m.suspensionStartDate = v}
-            hint="This will happen on the first day of the month and is required to complete request."
+            hint={props.getRequiredToCompleteMessage("This will happen on the first day of the month.")}
             startOrEnd="start"
           />
         </Form.Fieldset>

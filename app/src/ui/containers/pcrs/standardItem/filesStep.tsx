@@ -4,6 +4,7 @@ import { MultipleDocumentUpdloadDtoValidator } from "@ui/validators";
 import { IEditorStore, StoresConsumer } from "@ui/redux";
 import * as ACC from "@ui/components";
 import { standardItemWorkflow } from "./workflow";
+import { PCRItemTypeDto } from "@framework/dtos";
 
 interface FileStepsProps {
   documents: DocumentSummaryDto[];
@@ -16,9 +17,21 @@ class FilesStepComponent extends React.Component<StepProps<typeof standardItemWo
   render() {
     return (
       <React.Fragment>
+        {this.renderTemplateLinks(this.props.pcrItemType)}
         {this.renderFiles(this.props.documentsEditor, this.props.documents)}
         {this.renderForm(this.props.documentsEditor)}
       </React.Fragment>
+    );
+  }
+
+  private renderTemplateLinks(itemType: PCRItemTypeDto) {
+    if(!itemType.files || !itemType.files.length) {
+      return null;
+    }
+    return(
+      <ACC.Section title={itemType.files.length === 1 ? "Template" : "Templates"} qa="templates" subtitle="Download templates to comple the information and upload below.">
+        <ACC.LinksList links={itemType.files.map(x => ({text: x.name, url: x.relativeUrl}))}/>
+      </ACC.Section>
     );
   }
 
@@ -57,8 +70,6 @@ class FilesStepComponent extends React.Component<StepProps<typeof standardItemWo
           </UploadForm.Fieldset>
           <UploadForm.Fieldset>
             <UploadForm.Button name="uploadFile" styling="Secondary" onClick={() => this.props.onFileChange("SaveAndRemain", documentsEditor.data)}>Upload documents</UploadForm.Button>
-          </UploadForm.Fieldset>
-          <UploadForm.Fieldset>
             <UploadForm.Button name="uploadFileAndContinue" styling="Primary">Upload documents and continue</UploadForm.Button>
           </UploadForm.Fieldset>
         </UploadForm.Form>
