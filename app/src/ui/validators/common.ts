@@ -99,16 +99,21 @@ export function all(resultSet: Results<{}>, ...results: (() => Result)[]): Resul
     return valid(resultSet, isRequired);
 }
 
-// Validating lists of things, but does fail if list is empty.
-export function requiredChild<T, U extends Results<{}>>(parentResults: Results<{}>, model: T[], validateModel: (model: T) => U, validateAll?: Result, emptyMessage?: string, summaryMessage?: string) {
+// Validating lists of things allowing for overall validation
+export function child<T, U extends Results<{}>>(parentResults: Results<{}>, model: T[], validateModel: (model: T) => U, listValidation: Result, summaryMessage?: string) {
     const childResults = model ? model.map(m => validateModel(m)) : [];
-    return new NestedResult(parentResults, childResults, validateAll, true, emptyMessage || "At least one is required", summaryMessage);
+    return new NestedResult(parentResults, childResults, listValidation, summaryMessage);
+}
+
+// Validating lists of things, but does fail if list is empty.
+export function requiredChild<T, U extends Results<{}>>(parentResults: Results<{}>, model: T[], validateModel: (model: T) => U, emptyMessage?: string, summaryMessage?: string) {
+    const lengthValidation = (!model || model.length) === 0 ? inValid(parentResults, emptyMessage || "At least one is required") : valid(parentResults, true);
+    return child<T, U>(parentResults, model, validateModel,  lengthValidation, summaryMessage);
 }
 
 // Validating lists of things, but don't care if list is empty.
-export function optionalChild<T, U extends Results<{}>>(parentResults: Results<{}>, model: T[], validateModel: (model: T) => U, validateAll?: Result, summaryMessage?: string) {
-    const childResults = model ? model.map(m => validateModel(m)) : [];
-    return new NestedResult(parentResults, childResults, validateAll, false, "", summaryMessage);
+export function optionalChild<T, U extends Results<{}>>(parentResults: Results<{}>, model: T[], validateModel: (model: T) => U, summaryMessage?: string) {
+    return child<T, U>(parentResults, model, validateModel, valid(parentResults, true), summaryMessage);
 }
 
 export function permitedValues<T>(results: Results<{}>, value: T, permitted: T[], message?: string) {

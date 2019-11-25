@@ -5,10 +5,11 @@ import { IFormBody, IFormButton, MultipleFileFormHandlerBase } from "@server/for
 import { PCRPrepareReasoningRoute, ProjectChangeRequestPrepareReasoningParams } from "@ui/containers";
 import { MultipleDocumentUpdloadDtoValidator } from "@ui/validators";
 import { getKey } from "@framework/util";
+import { reasoningWorkflowSteps } from "@ui/containers/pcrs/reasoning/workflowMetadata";
 
 export class ProjectChangeRequestReasoningDocumentUploadHandler extends MultipleFileFormHandlerBase<ProjectChangeRequestPrepareReasoningParams, MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator> {
   constructor() {
-    super(PCRPrepareReasoningRoute, ["uploadFile"]);
+    super(PCRPrepareReasoningRoute, ["uploadFile", "uploadFileAndContinue"]);
   }
 
   protected async getDto(context: IContext, params: ProjectChangeRequestPrepareReasoningParams, button: IFormButton, body: IFormBody, files: IFileWrapper[]): Promise<MultipleDocumentUploadDto> {
@@ -19,19 +20,27 @@ export class ProjectChangeRequestReasoningDocumentUploadHandler extends Multiple
   }
 
   protected async run(context: IContext, params: ProjectChangeRequestPrepareReasoningParams, button: IFormButton, dto: MultipleDocumentUploadDto): Promise<ILinkInfo> {
-    await context.runCommand(new UploadProjectChangeRequestDocumentOrItemDocumentCommand(params.projectId, params.pcrId, dto));
+    if (button.name === "uploadFile" || dto.files.length) {
+      await context.runCommand(new UploadProjectChangeRequestDocumentOrItemDocumentCommand(params.projectId, params.pcrId, dto));
+    }
 
-    return PCRPrepareReasoningRoute.getLink(params);
+    const nextStep = reasoningWorkflowSteps.find(x => x.stepNumber === (params.step ||0) + 1);
+
+    return PCRPrepareReasoningRoute.getLink({
+      projectId: params.projectId,
+      pcrId: params.pcrId,
+      step: button.name === "uploadFile" ? params.step : nextStep && nextStep.stepNumber
+    });
   }
 
   protected getStoreInfo(params: ProjectChangeRequestPrepareReasoningParams): { key: string, store: string } {
     return {
       key: getKey("pcrs", params.projectId, params.pcrId),
-      store:"multipleDocuments"
+      store: "multipleDocuments"
     };
   }
 
-  protected createValidationResult(params: ProjectChangeRequestPrepareReasoningParams, dto: MultipleDocumentUploadDto) {
-    return new MultipleDocumentUpdloadDtoValidator(dto, Configuration, true);
+  protected createValidationResult(params: ProjectChangeRequestPrepareReasoningParams, dto: MultipleDocumentUploadDto, button: IFormButton) {
+    return new MultipleDocumentUpdloadDtoValidator(dto, Configuration, button.name === "uploadFile", true);
   }
 }

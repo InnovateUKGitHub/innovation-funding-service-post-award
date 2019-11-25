@@ -1,37 +1,27 @@
-import React from "react";
+import React, { Component } from "react";
 
 import * as ACC from "@ui/components";
 
-import { ContainerBase } from "../../containerBase";
 import { IEditorStore, StoresConsumer } from "@ui/redux";
 import { MultipleDocumentUpdloadDtoValidator } from "@ui/validators";
 import { Pending } from "@shared/pending";
 import { ReasoningStepProps } from "@ui/containers/pcrs/reasoning/workflowMetadata";
-import { PCRDto } from "@framework/dtos";
 
-interface Data {
+interface InnerProps {
   documents: Pending<DocumentSummaryDto[]>;
-  documentsEditor: Pending<IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>>;
-}
-
-interface Callbacks {
-  onFileChange: (saving: boolean, dto: MultipleDocumentUploadDto) => void;
+  onFileChange: (saving: "DontSave" | "SaveAndRemain" | "SaveAndContinue", dto: MultipleDocumentUploadDto) => void;
   onFileDelete: (dto: MultipleDocumentUploadDto, document: DocumentSummaryDto) => void;
 }
-
-class PrepareReasoningFilesStepComponent extends ContainerBase<ReasoningStepProps, Data, Callbacks> {
+class PrepareReasoningFilesStepComponent extends Component<ReasoningStepProps & InnerProps> {
   render(): React.ReactNode {
-    const combined = Pending.combine({
-      documents: this.props.documents,
-      documentsEditor: this.props.documentsEditor
-    });
+
     return (
       <ACC.Loader
-        pending={combined}
-        render={({ documents, documentsEditor }) => (
+        pending={this.props.documents}
+        render={(documents) => (
           <React.Fragment>
-            {this.renderFiles(documentsEditor, documents)}
-            {this.renderForm(documentsEditor)}
+            {this.renderFiles(this.props.documentsEditor, documents)}
+            {this.renderForm(this.props.documentsEditor)}
           </React.Fragment>
         )}
       />
@@ -40,14 +30,14 @@ class PrepareReasoningFilesStepComponent extends ContainerBase<ReasoningStepProp
 
   private renderForm(documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>): React.ReactNode {
     const UploadForm = ACC.TypedForm<MultipleDocumentUploadDto>();
-    const PCRForm = ACC.TypedForm<PCRDto>();
+
     return (
       <ACC.Section qa="uploadFileSection">
         <UploadForm.Form
           enctype="multipart"
           editor={documentsEditor}
-          onSubmit={() => this.props.onFileChange(true, documentsEditor.data)}
-          onChange={(dto) => this.props.onFileChange(false, dto)}
+          onSubmit={() => this.props.onFileChange("SaveAndContinue", documentsEditor.data)}
+          onChange={(dto) => this.props.onFileChange("DontSave", dto)}
           qa="projectChangeRequestItemUpload"
         >
           <UploadForm.Fieldset heading="Upload">
@@ -61,17 +51,11 @@ class PrepareReasoningFilesStepComponent extends ContainerBase<ReasoningStepProp
               validation={documentsEditor.validator.files}
             />
           </UploadForm.Fieldset>
-          <UploadForm.Button name="uploadFile" styling="Secondary">Upload documents</UploadForm.Button>
+          <UploadForm.Fieldset>
+            <UploadForm.Button name="uploadFile" styling="Secondary" onClick={() => this.props.onFileChange("SaveAndRemain", documentsEditor.data)}>Upload documents</UploadForm.Button>
+            <UploadForm.Button name="uploadFileAndContinue" styling="Primary">Save and continue</UploadForm.Button>
+          </UploadForm.Fieldset>
         </UploadForm.Form>
-
-        <PCRForm.Form
-          editor={this.props.editor}
-          onChange={dto => this.props.onChange(dto)}
-          onSubmit={() => this.props.onSave(this.props.editor.data)}
-        >
-          <PCRForm.Button name="filesStep" styling="Primary" onClick={() => this.props.onSave(this.props.editor.data)}>Save and continue</PCRForm.Button>
-        </PCRForm.Form>
-
       </ACC.Section>
     );
   }
@@ -98,11 +82,14 @@ export const PCRPrepareReasoningFilesStep = (props: ReasoningStepProps) => (
       stores => (
         <PrepareReasoningFilesStepComponent
           documents={stores.projectChangeRequestDocuments.pcrOrPcrItemDocuments(props.projectId, props.pcrId)}
-          documentsEditor={stores.projectChangeRequestDocuments.getPcrOrPcrItemDocumentsEditor(props.projectId, props.pcrId)}
           onFileChange={(saving, dto) => {
             stores.messages.clearMessages();
             const successMessage = dto.files.length === 1 ? `Your document has been uploaded.` : `${dto.files.length} documents have been uploaded.`;
-            stores.projectChangeRequestDocuments.updatePcrOrPcrItemDocumentsEditor(saving, props.projectId, props.pcrId, dto, successMessage);
+            stores.projectChangeRequestDocuments.updatePcrOrPcrItemDocumentsEditor(saving !== "DontSave", props.projectId, props.pcrId, dto, saving === "SaveAndRemain", successMessage, () => {
+              if (saving === "SaveAndContinue") {
+                props.onSave(props.editor.data);
+              }
+            });
           }}
           onFileDelete={(dto, document) => {
             stores.messages.clearMessages();

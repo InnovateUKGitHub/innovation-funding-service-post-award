@@ -3,7 +3,7 @@ import { Results } from "../validation/results";
 import { isNumber } from "@framework/util";
 
 export class ClaimDetailsValidator extends Results<ClaimDetailsDto> {
-    public readonly items = Validation.optionalChild(this, this.model.lineItems, x => new ClaimLineItemDtoValidator(x, this.showValidationErrors), undefined, "There are invalid claim line items.");
+    public readonly items = Validation.optionalChild(this, this.model.lineItems, x => new ClaimLineItemDtoValidator(x, this.showValidationErrors), "There are invalid claim line items.");
 }
 
 export class ClaimLineItemDtoValidator extends Results<ClaimLineItemDto> {
