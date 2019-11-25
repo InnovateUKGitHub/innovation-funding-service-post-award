@@ -163,12 +163,14 @@ export class PCRDtoValidator extends Results<PCRDto> {
   public reasoningComments = this.validateReasoningComments();
   public reasoningStatus = this.validateReasonStatus();
 
-  public items = Validation.requiredChild(
+  public items = Validation.child(
     this,
     this.model.items,
     item => this.getItemValidator(item),
-    Validation.hasNoDuplicates(this, (this.model.items || []).map(x => x.type), "No duplicate items allowed"),
-    "You must select at least one of the types"
+    Validation.all(this,
+      () => Validation.isTrue(this, this.model.items && this.model.items.length > 0, "You must select at least one of the types"),
+      () => Validation.hasNoDuplicates(this, (this.model.items || []).map(x => x.type), "No duplicate items allowed"),
+      )
   );
 }
 

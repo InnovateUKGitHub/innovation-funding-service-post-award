@@ -17,7 +17,7 @@ export class UploadProjectChangeRequestDocumentOrItemDocumentCommand extends Com
   }
 
   protected async Run(context: IContext) {
-    const result = new MultipleDocumentUpdloadDtoValidator(this.documents, context.config, true);
+    const result = new MultipleDocumentUpdloadDtoValidator(this.documents, context.config, true, true);
 
     if (!result.isValid) {
       throw new ValidationError(result);

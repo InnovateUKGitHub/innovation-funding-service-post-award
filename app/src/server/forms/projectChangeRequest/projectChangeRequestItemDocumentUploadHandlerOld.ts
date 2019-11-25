@@ -35,6 +35,6 @@ export class ProjectChangeRequestItemDocumentUploadHandlerOld extends MultipleFi
   }
 
   protected createValidationResult(params: ProjectChangeRequestPrepareItemParams, dto: MultipleDocumentUploadDto) {
-    return new MultipleDocumentUpdloadDtoValidator(dto, Configuration, true);
+    return new MultipleDocumentUpdloadDtoValidator(dto, Configuration, true, true);
   }
 }

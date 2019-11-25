@@ -21,7 +21,7 @@ export class DocumentUploadDtoValidator extends Results<DocumentUploadDto> {
 }
 
 export class MultipleDocumentUpdloadDtoValidator extends Results<MultipleDocumentUploadDto> {
-  constructor(model: MultipleDocumentUploadDto, config: { maxFileSize: number, maxUploadFileCount: number }, showValidationErrors: boolean) {
+  constructor(model: MultipleDocumentUploadDto, config: { maxFileSize: number, maxUploadFileCount: number }, filesRequired: boolean, showValidationErrors: boolean) {
     // file is deliberatly not a private field so it isnt logged....
     // model is empty object for this reason
     super(null as any, showValidationErrors);
@@ -30,9 +30,12 @@ export class MultipleDocumentUpdloadDtoValidator extends Results<MultipleDocumen
     const maxCountMessage = config.maxUploadFileCount === 1 ? "You can only select one file at a time." : `You can only select up to ${config.maxUploadFileCount} files at the same time.`;
 
     // validate the number of files
-    const fileCountValidation = Validation.isTrue(this, filteredFiles.length <= config.maxUploadFileCount, maxCountMessage);
+    const fileCountValidation = Validation.all(this,
+      () => filesRequired ? Validation.isTrue(this, filteredFiles.length > 0, `Select a file to upload.`) : Validation.valid(this),
+      () => Validation.isTrue(this, filteredFiles.length <= config.maxUploadFileCount, maxCountMessage)
+    );
 
-    this.files = Validation.requiredChild(this, model.files, x => new FileDtoValidator(x, config.maxFileSize, this.showValidationErrors), fileCountValidation, `Select a file to upload.`, filesMessage);
+    this.files = Validation.child(this, model.files, x => new FileDtoValidator(x, config.maxFileSize, this.showValidationErrors), fileCountValidation, filesMessage);
   }
 
   public readonly files: NestedResult<FileDtoValidator>;

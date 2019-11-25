@@ -76,7 +76,7 @@ abstract class FormHandlerBase<TParams, TDto, TValidation extends Results<{}>> i
     catch (error) {
       context.logger.error("Error handling form submission", error);
       const { key, store } = this.getStoreInfo(params, dto);
-      throw new FormHandlerError(key, store, dto, this.createValidationResult(params, dto), error);
+      throw new FormHandlerError(key, store, dto, this.createValidationResult(params, dto, button), error);
     }
   }
 
@@ -86,7 +86,7 @@ abstract class FormHandlerBase<TParams, TDto, TValidation extends Results<{}>> i
 
   protected abstract getStoreInfo(params: TParams, dto: TDto): { key: string, store: string };
 
-  protected abstract createValidationResult(params: TParams, dto: TDto): TValidation;
+  protected abstract createValidationResult(params: TParams, dto: TDto, button: IFormButton): TValidation;
 
   protected redirect(link: ILinkInfo, res: express.Response) {
     const router = configureRouter(routeConfig);
