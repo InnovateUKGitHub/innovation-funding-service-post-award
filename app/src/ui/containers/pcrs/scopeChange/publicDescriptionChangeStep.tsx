@@ -9,7 +9,7 @@ export const PublicDescriptionChangeStep = (props: StepProps<typeof scopeChangeW
     const Form = ACC.TypedForm<PCRItemForScopeChangeDto>();
 
     return (
-      <ACC.Section>
+      <ACC.Section qa="newDescriptionSection">
         <Form.Form
           data={props.pcrItem}
           isSaving={props.status === EditorStatus.Saving}
