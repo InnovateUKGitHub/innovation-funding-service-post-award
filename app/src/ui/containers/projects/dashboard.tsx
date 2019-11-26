@@ -103,35 +103,39 @@ class ProjectDashboardComponent extends ContainerBaseWithState<{}, Data, {}, Sta
     return (
       <React.Fragment>
         {this.renderProjectCount(openProjects, upcomingProjects, archivedProjects)}
-        {this.renderProjectList(openProjects, "open-projects", "section-open", "You do not have any live projects.", "There are no matching live projects.")}
+        <ACC.Section qa="open-projects" key="section-open">
+          {this.renderProjectList(openProjects, "You do not have any live projects.", "There are no matching live projects.")}
+        </ACC.Section>
         <ACC.Accordion>
-          <ACC.AccordionItem title="Upcoming Projects" qa="upcoming-projects">
-            {this.renderProjectList(upcomingProjects, "upcoming-projects", "section-upcoming", "You do not have any upcoming projects.", "There are no matching upcoming projects.")}
+          <ACC.AccordionItem title="Upcoming" qa="upcoming-projects">
+            {this.renderProjectList(upcomingProjects, "You do not have any upcoming projects.", "There are no matching upcoming projects.")}
           </ACC.AccordionItem>
-          <ACC.AccordionItem title="Archived Projects" qa="archived-projects">
-            {this.renderProjectList(archivedProjects, "archived-projects", "section-archived", "You do not have any archived projects.", "There are no matching archived projects.")}
+          <ACC.AccordionItem title="Archived" qa="archived-projects">
+            {this.renderProjectList(archivedProjects, "You do not have any archived projects.", "There are no matching archived projects.")}
           </ACC.AccordionItem>
         </ACC.Accordion>
       </React.Fragment>
     );
   }
 
-  private renderProjectList(data: ProjectData[], qa: string, key: string, noProjectsMessage: string, noProjectsFoundMessage: string) {
+  private renderProjectList(data: ProjectData[], noProjectsMessage: string, noProjectsFoundMessage: string) {
     const stateFiltered = data
       .filter(x => !this.state.showClaimsToReview || x.project.claimsToReview > 0)
       .filter(x => !this.state.showClaimsWithParticipant || x.project.claimsWithParticipant > 0);
+
+    if (!stateFiltered.length) {
+      return this.renderNoProjectsMessage(noProjectsMessage, noProjectsFoundMessage);
+    }
+
     return (
-      <ACC.Section qa={qa} key={key}>
-        {this.renderNoProjectsMessage(stateFiltered, noProjectsMessage, noProjectsFoundMessage)}
-        {stateFiltered.map((x, i) => this.renderProject(x.project, x.partner, x.projectSection, i))}
-      </ACC.Section>
+      stateFiltered.map((x, i) => this.renderProject(x.project, x.partner, x.projectSection, i))
     );
   }
 
-  private renderNoProjectsMessage(combinedFiltersData: ProjectData[], noProjectsMessage: string, noProjectsFoundMessage: string) {
-    if (!!combinedFiltersData.length) return null;
-    if (this.state.projectSearchString) return <ACC.Renderers.SimpleString>{noProjectsFoundMessage}</ACC.Renderers.SimpleString>;
-    return <ACC.Renderers.SimpleString>{noProjectsMessage}</ACC.Renderers.SimpleString>;
+  private renderNoProjectsMessage(noProjectsMessage: string, noProjectsFoundMessage: string) {
+    return this.state.projectSearchString
+    ? <ACC.Renderers.SimpleString>{noProjectsFoundMessage}</ACC.Renderers.SimpleString>
+    : <ACC.Renderers.SimpleString>{noProjectsMessage}</ACC.Renderers.SimpleString>;
   }
 
   private getProjectSection(project: ProjectDto, partner: PartnerDto | null): Section {
