@@ -67,7 +67,7 @@ class ProjectDocumentsComponent extends ContainerBaseWithState<ProjectDocumentPa
         project={project}
       >
         <ACC.Renderers.Messages messages={this.props.messages} />
-        <ACC.Section>
+        <ACC.Section title="Upload">
           <UploadForm.Form
             enctype="multipart"
             editor={editor}
@@ -75,12 +75,8 @@ class ProjectDocumentsComponent extends ContainerBaseWithState<ProjectDocumentPa
             onSubmit={() => this.props.onChange(true, editor.data)}
             qa="projectDocumentUpload"
           >
-            <UploadForm.Fieldset heading="Upload">
-              <ACC.Info summary="What should I include?">
-                <p>You can upload and store any documents relevant for this project. Any documents added to the project by Innovate UK will also be visible here.</p>
-                <p>You can upload up to 10 files of any type at one time, as long as their combined size is less than {getFileSize(this.props.config.maxFileSize)}.</p>
-                <p>There is no limit to the number of files you can upload in total.</p>
-              </ACC.Info>
+            <UploadForm.Fieldset>
+              <ACC.DocumentGuidance/>
               <UploadForm.MulipleFileUpload
                 label="Upload documents"
                 name="attachment"
