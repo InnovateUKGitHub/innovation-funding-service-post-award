@@ -81,7 +81,7 @@ class ProjectDashboardComponent extends ContainerBaseWithState<{}, Data, {}, Sta
     if (live.length) results.push(`${live.length} live`);
     if (upcoming.length) results.push(`${upcoming.length} upcoming`);
     if (archived.length) results.push(`${archived.length} archived`);
-    return <ACC.Renderers.SimpleString qa={"project-count"}>{`${count} projects (${results.join(", ")})`}</ACC.Renderers.SimpleString>;
+    return <ACC.Renderers.SimpleString qa={"project-count"}>{`${count} project${count > 1 ? "s" : ""} (${results.join(", ")})`}</ACC.Renderers.SimpleString>;
   }
 
   private renderProjectLists(projects: ProjectDto[], partners: PartnerDto[]) {
