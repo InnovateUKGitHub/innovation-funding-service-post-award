@@ -1,15 +1,11 @@
 import React from "react";
 import * as ACC from "@ui/components";
 
-interface Props {
-    additionalComments?: string;
-}
-
-export const DocumentGuidance = (props: Props) => {
+export const DocumentGuidance = (props: {}) => {
     const classNames = "govuk-list govuk-list--bullet govuk-!-margin-bottom-10";
     return (
-        <ACC.Section>
-            <ACC.Renderers.SimpleString>{props.additionalComments} You can upload up to 10 documents at a time. Each document must:</ACC.Renderers.SimpleString>
+        <React.Fragment>
+            <ACC.Renderers.SimpleString>You can upload up to 10 documents at a time. Each document must:</ACC.Renderers.SimpleString>
             <ul className={classNames}>
                 <li>be less than 10MB in file size</li>
                 <li>have a unique file name that describes its contents</li>
@@ -24,6 +20,6 @@ export const DocumentGuidance = (props: Props) => {
                     <li>image (jpg, jpeg, png)</li>
                 </ul>
             </ACC.Info>
-        </ACC.Section>
+        </React.Fragment>
     );
 };
