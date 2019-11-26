@@ -1,6 +1,6 @@
-import React, { ReactElement } from "react";
-import { Results } from "@ui/validation";
-import { PCRDto, PCRItemDto, ProjectDto } from "@framework/dtos";
+import React from "react";
+import { Result, Results } from "@ui/validation";
+import { PCRDto, PCRItemDto, PCRItemTypeDto, ProjectDto } from "@framework/dtos";
 import { EditorStatus, IEditorStore } from "@ui/redux";
 import { MultipleDocumentUpdloadDtoValidator } from "@ui/validators";
 import { ILinkInfo, PCRItemType } from "@framework/types";
@@ -18,11 +18,13 @@ export interface StepProps<TWorkflow> {
   project: ProjectDto;
   pcr: PCRDto;
   pcrItem: InferTDto<TWorkflow>;
+  pcrItemType: PCRItemTypeDto;
   documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>;
   validator: InferTVal<TWorkflow>;
   status: EditorStatus;
   onChange: (dto: InferTDto<TWorkflow>) => void;
   onSave: () => void;
+  getRequiredToCompleteMessage: (additionalMessage?: string) => React.ReactNode;
 }
 
 export interface SummaryProps<TWorkflow> {
@@ -34,7 +36,7 @@ export interface SummaryProps<TWorkflow> {
   mode: "prepare" | "review" | "view";
   onSave: () => void;
   getStepLink: (stepName: InferStepsNames<TWorkflow>) => ILinkInfo;
-  getEditLink: (stepName: InferStepsNames<TWorkflow>) => React.ReactNode;
+  getEditLink: (stepName: InferStepsNames<TWorkflow>, validation: Result|null) => React.ReactNode;
 }
 
 export interface IStep<T, TVal extends Results<T>, TStepName extends string> {

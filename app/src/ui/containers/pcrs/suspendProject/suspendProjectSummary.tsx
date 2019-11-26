@@ -7,8 +7,8 @@ export const SuspendProjectSummary = (props: SummaryProps<typeof suspendProjectW
   return (
     <ACC.Section title="">
       <ACC.SummaryList qa="projectSuspension">
-        <ACC.SummaryListItem label="First day of pause" content={<ACC.Renderers.ShortDate value={props.pcrItem.suspensionStartDate} />} qa="startDate" action={props.getEditLink("details")} />
-        <ACC.SummaryListItem label="Last day of pause (if known)" content={props.pcrItem.suspensionEndDate ? <ACC.Renderers.ShortDate value={props.pcrItem.suspensionEndDate} /> : "Not set"} qa="endDate" action={props.getEditLink("details")}/>
+        <ACC.SummaryListItem label="First day of pause" validation={props.validator.suspensionStartDate} content={<ACC.Renderers.ShortDate value={props.pcrItem.suspensionStartDate} />} qa="startDate" action={props.getEditLink("details", props.validator.suspensionStartDate)} />
+        <ACC.SummaryListItem label="Last day of pause (if known)" validation={props.validator.suspensionEndDate} content={props.pcrItem.suspensionEndDate ? <ACC.Renderers.ShortDate value={props.pcrItem.suspensionEndDate} /> : "Not set"} qa="endDate" action={props.getEditLink("details", props.validator.suspensionEndDate)}/>
       </ACC.SummaryList>
     </ACC.Section>
   );

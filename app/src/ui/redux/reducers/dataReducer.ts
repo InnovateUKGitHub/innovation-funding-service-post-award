@@ -11,8 +11,7 @@ export interface IDataStore<T> {
   error: IAppError | null;
 }
 
-const dataStoreReducer = <TData extends {}>(storeKey: string) =>
-  (state: { [key: string]: IDataStore<TData> } = {}, action: DataLoadAction | ActionTransitionSuccess) => {
+const dataStoreReducer = <TData extends {}>(storeKey: string) => (state: { [key: string]: IDataStore<TData> } = {}, action: DataLoadAction | ActionTransitionSuccess) => {
   if (action.type === "DATA_LOAD" && action.payload.store === storeKey) {
     const existing = state[action.payload.id];
     const err = action.payload.error;
@@ -26,15 +25,19 @@ const dataStoreReducer = <TData extends {}>(storeKey: string) =>
     return Object.assign({}, state, { [action.payload.id]: pending });
   }
 
-  if (action.type === actionTypes.TRANSITION_SUCCESS && action.payload.previousRoute !== null) {
-    const result = Object.assign({}, state);
-    Object.keys(result).forEach(itemKey => {
-      const pending = result[itemKey];
-      if (pending.status === LoadingStatus.Done || pending.status === LoadingStatus.Failed || pending.status === LoadingStatus.Updated) {
-        result[itemKey] = { status: LoadingStatus.Stale, data: pending.data, error: pending.error };
-      }
-    });
-    return result;
+  if (action.type === actionTypes.TRANSITION_SUCCESS) {
+    const hasPreviousRoute = action.payload.previousRoute !== null;
+    const isReplacing = (action.payload.route && action.payload.route.meta && action.payload.route.meta && action.payload.route.meta.options.replace === true) || false;
+    if (hasPreviousRoute && !isReplacing) {
+      const result = Object.assign({}, state);
+      Object.keys(result).forEach(itemKey => {
+        const pending = result[itemKey];
+        if (pending.status === LoadingStatus.Done || pending.status === LoadingStatus.Failed || pending.status === LoadingStatus.Updated) {
+          result[itemKey] = { status: LoadingStatus.Stale, data: pending.data, error: pending.error };
+        }
+      });
+      return result;
+    }
   }
 
   return state;
@@ -48,7 +51,7 @@ export const dataReducer = combineReducers({
   claimStatusChanges: dataStoreReducer<Dtos.ClaimStatusChangeDto[]>("claimStatusChanges"),
   costsSummary: dataStoreReducer<CostsSummaryForPeriodDto[]>("costsSummary"),
   contacts: dataStoreReducer<IContact[]>("contacts"),
-  costCategories:dataStoreReducer<CostCategoryDto[]>("costCategories"),
+  costCategories: dataStoreReducer<CostCategoryDto[]>("costCategories"),
   documents: dataStoreReducer<DocumentSummaryDto[]>("documents"),
   forecastDetails: dataStoreReducer<ForecastDetailsDTO[]>("forecastDetails"),
   forecastDetail: dataStoreReducer<ForecastDetailsDTO>("forecastDetail"),
@@ -66,5 +69,5 @@ export const dataReducer = combineReducers({
   projects: dataStoreReducer<Dtos.ProjectDto[]>("projects"),
   projectChangeRequestStatusChanges: dataStoreReducer<Dtos.ProjectChangeRequestStatusChangeDto[]>("projectChangeRequestStatusChanges"),
   projectContacts: dataStoreReducer<ProjectContactDto[]>("projectContacts"),
-  user: dataStoreReducer<{[key: string]: Dtos.ProjectRole}>("user")
+  user: dataStoreReducer<{ [key: string]: Dtos.ProjectRole }>("user")
 });
