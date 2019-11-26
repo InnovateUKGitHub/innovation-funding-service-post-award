@@ -173,7 +173,7 @@ describe("editorsReducer", () => {
 
       const action: EditorErrorAction = {
         type: "EDITOR_SUBMIT_ERROR",
-        payload: { id: "2", store: "claim", dto: "test data", error: { code: ErrorCode.REQUEST_ERROR, message: "this is a new error"} }
+        payload: { id: "2", store: "claim", dto: "test data", error: { code: ErrorCode.REQUEST_ERROR, message: "this is a new error" } }
       };
 
       const newState = editorsReducer("claim")(originalState.editors.claim, action);
@@ -186,7 +186,7 @@ describe("editorsReducer", () => {
 
       const action: EditorErrorAction = {
         type: "EDITOR_SUBMIT_ERROR",
-        payload: { id: "2", store: "testStore", dto: "test data", error: { code: ErrorCode.REQUEST_ERROR, message: "this is a new error"} }
+        payload: { id: "2", store: "testStore", dto: "test data", error: { code: ErrorCode.REQUEST_ERROR, message: "this is a new error" } }
       };
 
       const newState = editorsReducer("claim")(originalState.editors.claim, action);
@@ -224,16 +224,36 @@ describe("editorsReducer", () => {
     });
   });
 
-  describe("Transition start", () => {
+  describe("Transition sucess", () => {
     it("should empty all editors when navigating", () => {
       const originalState = setupInitialState();
       const action = {
-        type: actionTypes.TRANSITION_START,
+        type: actionTypes.TRANSITION_SUCCESS,
         payload: { previousRoute: true }
       } as any;
 
       const newState = editorsReducer("claim")(originalState.editors.claim, action);
       expect(newState).toEqual({});
+    });
+
+    test("preserves editor on replace navigation", () => {
+      const originalState = setupInitialState();
+      const action = {
+        type: actionTypes.TRANSITION_SUCCESS,
+        payload: {
+          previousRoute: true,
+          route: {
+            meta: {
+              options: {
+                replace: true
+              }
+            }
+          }
+        }
+      } as any;
+
+      const newState = editorsReducer("claim")(originalState.editors.claim, action);
+      expect(newState).toEqual(originalState.editors.claim);
     });
   });
 });

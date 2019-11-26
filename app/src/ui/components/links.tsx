@@ -8,6 +8,7 @@ interface Props {
   id?: string;
   route: ILinkInfo;
   className?: string;
+  replace?: boolean;
 }
 
 interface StyledLinkProps extends Props {
@@ -19,10 +20,14 @@ export class Link extends React.Component<StyledLinkProps> {
     const { id, route, children } = this.props;
     const styling = this.props.styling || "Link";
     const className = classNames({
-      "govuk-link" : styling === "Link",
-      "govuk-button" : styling === "PrimaryButton" || styling === "SecondaryButton",
-      "govuk-button--secondary" : styling === "SecondaryButton",
+      "govuk-link": styling === "Link",
+      "govuk-button": styling === "PrimaryButton" || styling === "SecondaryButton",
+      "govuk-button--secondary": styling === "SecondaryButton",
     }, this.props.className);
+
+    const options = {
+      replace: this.props.replace === true ? true : undefined
+    };
 
     return (
       <RouterLink
@@ -31,6 +36,7 @@ export class Link extends React.Component<StyledLinkProps> {
         routeParams={route.routeParams}
         className={className}
         successCallback={scrollToTheTopInstantly}
+        routeOptions={options}
       >
         {children}
       </RouterLink>
