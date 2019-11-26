@@ -78,7 +78,7 @@ export class ClaimDetailDocumentsComponent extends ContainerBase<ClaimDetailDocu
       >
         <ACC.Renderers.Messages messages={this.props.messages} />
         {this.renderDocuments(editor, documents)}
-        <ACC.Section>
+        <ACC.Section title="Upload">
           <UploadForm.Form
             enctype="multipart"
             editor={editor}
@@ -86,16 +86,8 @@ export class ClaimDetailDocumentsComponent extends ContainerBase<ClaimDetailDocu
             onChange={(dto) => this.props.onChange(false, dto)}
             qa="claimDetailDocuments"
           >
-            <UploadForm.Fieldset heading="Upload">
-              <ACC.Info summary="What should I include?">
-                <p>You should upload documents that show evidence of the costs you are submitting for this cost category. It is likely that without any documents, your monitoring officer will not accept your claim.</p>
-                <p>There is no restriction on the type of file you can upload.</p>
-                <p>Each document must be:</p>
-                <ul>
-                  <li>less than {getFileSize(this.props.config.maxFileSize)} in file size</li>
-                  <li>given a unique file name that describes its contents</li>
-                </ul>
-              </ACC.Info>
+            <UploadForm.Fieldset>
+              <ACC.DocumentGuidance/>
               <UploadForm.MulipleFileUpload
                 label="Upload documents"
                 labelHidden={true}
