@@ -76,8 +76,9 @@ class ProjectDocumentsComponent extends ContainerBaseWithState<ProjectDocumentPa
             qa="projectDocumentUpload"
           >
             <UploadForm.Fieldset>
-              <ACC.Renderers.SimpleString>You can upload and store any documents relevant for this project. Any documents added to the project by Innovate UK will also be visible here</ACC.Renderers.SimpleString>
-              <ACC.DocumentGuidance/>
+              <ACC.DocumentGuidance
+                additionalComments={"You can upload and store any documents relevant for this project. Any documents added to the project by Innovate UK will also be visible here."}
+              />
               <UploadForm.MulipleFileUpload
                 label="Upload documents"
                 name="attachment"
