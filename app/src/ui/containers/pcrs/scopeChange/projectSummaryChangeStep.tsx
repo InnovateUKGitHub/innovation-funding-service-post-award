@@ -9,7 +9,7 @@ export const ProjectSummaryChangeStep = (props: StepProps<typeof scopeChangeWork
   const Form = ACC.TypedForm<PCRItemForScopeChangeDto>();
 
   return (
-    <ACC.Section>
+    <ACC.Section qa="newSummarySection">
       <Form.Form
         data={props.pcrItem}
         isSaving={props.status === EditorStatus.Saving}
@@ -20,6 +20,7 @@ export const ProjectSummaryChangeStep = (props: StepProps<typeof scopeChangeWork
           <ACC.Info summary="Published project summary"><ACC.Renderers.SimpleString multiline={true}>{props.pcrItem.projectSummarySnapshot || "No project summary available."}</ACC.Renderers.SimpleString></ACC.Info>
           <Form.MultilineString
             name="summary"
+            hint={props.getRequiredToCompleteMessage()}
             value={m => m.projectSummary}
             update={(m, v) => m.projectSummary = v}
             validation={props.validator.projectSummary}
