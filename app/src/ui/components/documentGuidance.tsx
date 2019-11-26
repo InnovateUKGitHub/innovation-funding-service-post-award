@@ -1,7 +1,7 @@
 import React from "react";
 import * as ACC from "@ui/components";
 
-interface Props{
+interface Props {
     additionalComments?: string;
 }
 
