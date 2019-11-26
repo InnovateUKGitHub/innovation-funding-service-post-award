@@ -8,7 +8,7 @@ import { PCRItemTypeDto } from "@framework/dtos";
 
 interface FileStepsProps {
   documents: DocumentSummaryDto[];
-  onFileChange: (saving: "DontSave"|"SaveAndRemain"|"SaveAndContinue", dto: MultipleDocumentUploadDto) => void;
+  onFileChange: (saving: "DontSave" | "SaveAndRemain" | "SaveAndContinue", dto: MultipleDocumentUploadDto) => void;
   onFileDelete: (dto: MultipleDocumentUploadDto, document: DocumentSummaryDto) => void;
 
 }
@@ -25,12 +25,12 @@ class FilesStepComponent extends React.Component<StepProps<typeof standardItemWo
   }
 
   private renderTemplateLinks(itemType: PCRItemTypeDto) {
-    if(!itemType.files || !itemType.files.length) {
+    if (!itemType.files || !itemType.files.length) {
       return null;
     }
-    return(
+    return (
       <ACC.Section title={itemType.files.length === 1 ? "Template" : "Templates"} qa="templates" subtitle="Download templates to comple the information and upload below.">
-        <ACC.LinksList links={itemType.files.map(x => ({text: x.name, url: x.relativeUrl}))}/>
+        <ACC.LinksList links={itemType.files.map(x => ({ text: x.name, url: x.relativeUrl }))} />
       </ACC.Section>
     );
   }
@@ -58,7 +58,7 @@ class FilesStepComponent extends React.Component<StepProps<typeof standardItemWo
           qa="projectChangeRequestItemUpload"
         >
           <UploadForm.Fieldset heading="Upload">
-            <ACC.Renderers.SimpleString>You can upload up to 10 files of any type, as long as their combined file size is less than 10MB.</ACC.Renderers.SimpleString>
+            <ACC.DocumentGuidance />
             <UploadForm.MulipleFileUpload
               label="Upload files"
               name="attachment"

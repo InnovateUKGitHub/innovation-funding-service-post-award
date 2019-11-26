@@ -8,6 +8,7 @@ import * as Forecasts from "./forecasts";
 export * from "./accordion";
 export * from "./accordionItem";
 export * from "./details";
+export * from "./documentGuidance";
 export * from "./documentList";
 export * from "./documentSingle";
 export * from "./errorSummary";
