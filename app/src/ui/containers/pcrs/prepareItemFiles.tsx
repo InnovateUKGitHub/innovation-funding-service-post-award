@@ -53,7 +53,7 @@ class PrepareItemFilesComponent extends ContainerBase<Params, Data, Callbacks> {
         error={documentsEditor.error}
         validator={documentsEditor.validator}
       >
-        <ACC.Renderers.Messages messages={this.props.messages}/>
+        <ACC.Renderers.Messages messages={this.props.messages} />
         {this.renderTemplateLinks(pcrItemType)}
         {this.renderFiles(documentsEditor, documents)}
         {this.renderForm(pcrItem, documentsEditor)}
@@ -87,7 +87,7 @@ class PrepareItemFilesComponent extends ContainerBase<Params, Data, Callbacks> {
           qa="projectChangeRequestItemUpload"
         >
           <UploadForm.Fieldset heading="Upload">
-            <ACC.Renderers.SimpleString>You can upload up to 10 files of any type, as long as their combined file size is less than 10MB.</ACC.Renderers.SimpleString>
+            <ACC.DocumentGuidance />
             <UploadForm.MulipleFileUpload
               label="Upload files"
               name="attachment"
@@ -104,12 +104,12 @@ class PrepareItemFilesComponent extends ContainerBase<Params, Data, Callbacks> {
   }
 
   private renderTemplateLinks(itemType: PCRItemTypeDto) {
-    if(!itemType.files || !itemType.files.length) {
+    if (!itemType.files || !itemType.files.length) {
       return null;
     }
-    return(
+    return (
       <ACC.Section title="Templates" qa="templates">
-        <ACC.LinksList links={itemType.files.map(x => ({text: x.name, url: x.relativeUrl}))}/>
+        <ACC.LinksList links={itemType.files.map(x => ({ text: x.name, url: x.relativeUrl }))} />
       </ACC.Section>
     );
   }
@@ -117,13 +117,13 @@ class PrepareItemFilesComponent extends ContainerBase<Params, Data, Callbacks> {
   private renderFiles(documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>, documents: DocumentSummaryDto[]) {
     if (documents.length) {
       return (
-        <ACC.Section  title="Files uploaded" subtitle="All documents open in a new window.">
+        <ACC.Section title="Files uploaded" subtitle="All documents open in a new window.">
           <ACC.DocumentListWithDelete onRemove={(document) => this.props.onDelete(documentsEditor.data, document)} documents={documents} qa="supporting-documents" />
         </ACC.Section>
       );
     }
     return (
-      <ACC.Section  title="Files uploaded">
+      <ACC.Section title="Files uploaded">
         <ACC.ValidationMessage message="No documents uploaded." messageType="info" />
       </ACC.Section>
     );

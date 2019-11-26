@@ -182,7 +182,7 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
   private renderDocuments(documents: DocumentSummaryDto[]) {
     return (
       <ACC.Section title="Supporting documents" subtitle={documents.length > 0 ? "All documents open in a new window." : ""} qa="supporting-documents-section">
-        <ACC.Renderers.SimpleString>If you are unsure what evidence to provide, speak to your monitoring officer.  They will use these documents when reviewing your claim.</ACC.Renderers.SimpleString>
+        <ACC.Renderers.SimpleString>Upload evidence of the costs for your monitoring officer to review. If you do not upload documents your monitoring officer is unlikely to accept your claim. Contact them for advice on which documents to provide.</ACC.Renderers.SimpleString>
         {documents.length > 0 ? <DocumentList documents={documents} qa="supporting-documents" /> : <ValidationMessage message="No documents uploaded." messageType="info" />}
       </ACC.Section>
     );

@@ -35,7 +35,7 @@ class Component extends React.Component<StepProps<typeof accountNameChangeWorkfl
           qa="projectChangeRequestItemUpload"
         >
           <UploadForm.Fieldset heading="Upload change of name certificate">
-            <ACC.Renderers.SimpleString>You can upload up to 10 files of any type, as long as their combined file size is less than 10MB.</ACC.Renderers.SimpleString>
+            <ACC.DocumentGuidance/>
             <UploadForm.MulipleFileUpload
               label="Upload files"
               name="attachment"
@@ -47,8 +47,6 @@ class Component extends React.Component<StepProps<typeof accountNameChangeWorkfl
           </UploadForm.Fieldset>
           <UploadForm.Fieldset>
             <UploadForm.Button name="uploadFile" styling="Secondary" onClick={() => this.props.onFileChange("SaveAndRemain", documentsEditor.data)}>Upload documents</UploadForm.Button>
-          </UploadForm.Fieldset>
-          <UploadForm.Fieldset>
             <UploadForm.Button name="uploadFileAndContinue" styling="Primary">Upload documents and continue</UploadForm.Button>
           </UploadForm.Fieldset>
         </UploadForm.Form>
