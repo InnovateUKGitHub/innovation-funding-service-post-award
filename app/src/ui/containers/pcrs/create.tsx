@@ -48,9 +48,10 @@ class PCRCreateComponent extends ContainerBase<CreateProjectChangeRequestParams,
 
   private renderForm(pcrEditor: IEditorStore<Dtos.PCRDto, PCRDtoValidator>, itemTypes: Dtos.PCRItemTypeDto[]): React.ReactNode {
     const PCRForm = ACC.TypedForm<Dtos.PCRDto>();
-    const options = itemTypes.map<ACC.SelectOption>(x => ({ id: x.type.toString(), value: x.displayName }));
+    const options = itemTypes
+      .filter(x => x.enabled)
+      .map<ACC.SelectOption>(x => ({ id: x.type.toString(), value: x.displayName }));
     const selected = options.filter(x => pcrEditor.data.items.some(y => y.type.toString() === x.id));
-
     return (
       <PCRForm.Form editor={pcrEditor} onSubmit={() => this.props.onChange(true, pcrEditor.data)} onChange={dto => this.props.onChange(false, dto)} qa="pcr-create-form">
         <PCRForm.Fieldset heading="Select request types">
