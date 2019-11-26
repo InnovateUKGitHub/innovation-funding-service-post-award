@@ -118,7 +118,19 @@ describe("GetAllPCRsQuery", () => {
       PCRItemType.ProjectTermination,
     ];
 
+    const expectedNames = [
+      "Reallocate project costs",
+      "Reallocate several partners' project cost",
+      "Remove a partner",
+      "Add a partner",
+      "Change project scope",
+      "Change project duration",
+      "Change a partner's name",
+      "Put project on hold",
+      "End the project early",
+    ];
+
     expect(result.items.map(x => x.type)).toEqual(expectedTypes);
-    expect(result.items.map(x => x.typeName)).toEqual(recordTypes.map(x => x.type));
+    expect(result.items.map(x => x.typeName)).toEqual(expectedNames);
   });
 });

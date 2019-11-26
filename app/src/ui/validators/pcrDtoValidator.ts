@@ -187,9 +187,8 @@ export class PCRBaseItemDtoValidator<T extends PCRItemDto> extends Results<T> {
 
   private validateTypes() {
     return Validation.all(this,
-      () => Validation.isTrue(this, this.recordTypes
-        .map(x => x.type)
-        .indexOf(this.model.type) >= 0, "Not a valid change request item"),
+      () => Validation.isTrue(this, this.recordTypes.map(x => x.type).indexOf(this.model.type) >= 0, "Not a valid change request item"),
+      () => Validation.isTrue(this, !!this.original || this.recordTypes.find(x => x.type === this.model.type)!.enabled, "Not a valid change request item"),
       // If role is not Project Manager then can not add new type
       () => Validation.isTrue(this, !!(this.role & ProjectRole.ProjectManager) || !!this.original, "Cannot add type")
     );
