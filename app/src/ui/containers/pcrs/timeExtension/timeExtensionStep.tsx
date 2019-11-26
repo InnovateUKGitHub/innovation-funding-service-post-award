@@ -25,7 +25,7 @@ export const TimeExtensionStep = (props: StepProps<typeof timeExtensionItemWorkf
         <Form.Fieldset heading="Proposed project details">
           <Form.Numeric
             name="timeExtension"
-            hint="Enter the number of months you want to extend your project by"
+            hint={props.getRequiredToCompleteMessage("Enter the number of months you want to extend your project by.")}
             width="one-quarter"
             value={m => m.additionalMonths }
             update={(m, val) => m.additionalMonths = val}
