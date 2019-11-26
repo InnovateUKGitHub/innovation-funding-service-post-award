@@ -9,7 +9,7 @@ export const PublicDescriptionChangeStep = (props: StepProps<typeof scopeChangeW
     const Form = ACC.TypedForm<PCRItemForScopeChangeDto>();
 
     return (
-      <ACC.Section>
+      <ACC.Section qa="newDescriptionSection">
         <Form.Form
           data={props.pcrItem}
           isSaving={props.status === EditorStatus.Saving}
@@ -20,6 +20,7 @@ export const PublicDescriptionChangeStep = (props: StepProps<typeof scopeChangeW
             <ACC.Info summary="Published public description"><ACC.Renderers.SimpleString multiline={true}>{props.pcrItem.publicDescriptionSnapshot || "No public description available."}</ACC.Renderers.SimpleString></ACC.Info>
             <Form.MultilineString
               name="description"
+              hint={props.getRequiredToCompleteMessage()}
               value={m => m.publicDescription}
               update={(m, v) => m.publicDescription = v}
               validation={props.validator.publicDescription}

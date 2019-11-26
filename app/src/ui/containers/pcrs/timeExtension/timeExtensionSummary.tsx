@@ -17,6 +17,7 @@ export const TimeExtensionSummary = (props: SummaryProps<typeof timeExtensionIte
       </ACC.Section>
       <ACC.Section title="Proposed project details">
         <ACC.SummaryList qa="proposedProjectDetails">
+          <ACC.SummaryListItem label="Additional months" content={props.pcrItem.additionalMonths} qa="additionalMonths" validation={props.validator.additionalMonths} action={props.getEditLink("timeExtension", props.validator.additionalMonths)} />
           <ACC.SummaryListItem label="Start and end date" content={<ACC.Renderers.ShortDateRangeFromDuration startDate={props.project.startDate} months={newProjectDuration(props.pcrItem)} />} qa="newStartToEndDate" />
           <ACC.SummaryListItem label="Duration" content={<ACC.Renderers.Months months={newProjectDuration(props.pcrItem)} />} qa="newDuration" />
         </ACC.SummaryList>

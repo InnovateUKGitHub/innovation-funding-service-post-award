@@ -76,8 +76,12 @@ class ProjectDashboardComponent extends ContainerBaseWithState<{}, Data, {}, Sta
 
   private renderProjectCount(live: ProjectData[], upcoming: ProjectData[], archived: ProjectData[]) {
     const count = live.length + upcoming.length + archived.length;
-    if (!count) return <ACC.Renderers.SimpleString qa={"zero-project-count"}>0 projects</ACC.Renderers.SimpleString>;
-    return <ACC.Renderers.SimpleString qa={"project-count"}>{`${count} projects (${live.length} live, ${upcoming.length} upcoming, ${archived.length} archived)`}</ACC.Renderers.SimpleString>;
+    if (!count) return <ACC.Renderers.SimpleString>0 projects</ACC.Renderers.SimpleString>;
+    const results = [];
+    if (live.length) results.push(`${live.length} live`);
+    if (upcoming.length) results.push(`${upcoming.length} upcoming`);
+    if (archived.length) results.push(`${archived.length} archived`);
+    return <ACC.Renderers.SimpleString>{`${count} projects (${results.join(", ")})`}</ACC.Renderers.SimpleString>;
   }
 
   private renderProjectLists(projects: ProjectDto[], partners: PartnerDto[]) {
