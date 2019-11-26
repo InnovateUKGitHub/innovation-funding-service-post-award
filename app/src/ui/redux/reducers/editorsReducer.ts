@@ -45,7 +45,7 @@ export const editorsReducer = <TDto extends {}, TValidator extends Results<TDto>
     return result;
   }
 
-  if(action.type === "EDITOR_SUBMIT" && action.payload.store === store) {
+  if (action.type === "EDITOR_SUBMIT" && action.payload.store === store) {
     const result = { ...state };
     const originalEditor = result[action.payload.id];
     const newEditor: IEditorStore<TDto, TValidator> = {
@@ -88,14 +88,18 @@ export const editorsReducer = <TDto extends {}, TValidator extends Results<TDto>
     return result;
   }
 
-  if(action.type === "EDITOR_RESET" && action.payload.store === store) {
+  if (action.type === "EDITOR_RESET" && action.payload.store === store) {
     const result = getNewStateWithoutErrors(state);
     delete result[action.payload.id];
     return result;
   }
 
-  if (action.type === actionTypes.TRANSITION_START && action.payload.previousRoute) {
-    return {};
+  if (action.type === actionTypes.TRANSITION_SUCCESS) {
+    const hasPreviousRoute = action.payload.previousRoute !== null;
+    const isReplacing = (action.payload.route && action.payload.route.meta && action.payload.route.meta && action.payload.route.meta.options.replace === true) || false;
+    if (hasPreviousRoute && !isReplacing) {
+      return {};
+    }
   }
 
   return state;

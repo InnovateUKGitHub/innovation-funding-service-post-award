@@ -69,7 +69,7 @@ class Component extends ContainerBase<ProjectChangeRequestPrepareItemParams, Dat
     if (this.props.mode !== "prepare") {
       return null;
     }
-    return <ACC.Link id={validation ? validation.key : undefined} route={this.getStepLink(workflow, stepName)}>Edit</ACC.Link>;
+    return <ACC.Link id={validation ? validation.key : undefined} replace={true} route={this.getStepLink(workflow, stepName)}>Edit</ACC.Link>;
   }
 
   private renderContents(project: ProjectDto, editor: IEditorStore<PCRDto, PCRDtoValidator>, documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>, pcr: PCRDto, pcrItem: PCRItemDto, pcrItemType: PCRItemTypeDto, editableItemTypes: PCRItemType[]) {
