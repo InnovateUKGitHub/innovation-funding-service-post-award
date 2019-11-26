@@ -29,7 +29,7 @@ class FilesStepComponent extends React.Component<StepProps<typeof standardItemWo
       return null;
     }
     return (
-      <ACC.Section title={itemType.files.length === 1 ? "Template" : "Templates"} qa="templates" subtitle="Download templates to comple the information and upload below.">
+      <ACC.Section title={itemType.files.length === 1 ? "Template" : "Templates"} qa="templates">
         <ACC.LinksList links={itemType.files.map(x => ({ text: x.name, url: x.relativeUrl }))} />
       </ACC.Section>
     );
