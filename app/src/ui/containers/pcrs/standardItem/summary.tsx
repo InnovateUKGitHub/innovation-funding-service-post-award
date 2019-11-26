@@ -11,8 +11,8 @@ interface Props {
 class SummaryComponent extends React.Component<SummaryProps<typeof standardItemWorkflow> & Props> {
   public render() {
     return (
-      <ACC.Section qa="name-change-summary">
-        <ACC.SummaryList qa="name-change-summary-list">
+      <ACC.Section qa="standard-item-summary">
+        <ACC.SummaryList qa="standard-item-summary-list">
           <ACC.SummaryListItem label="Documents" content={this.renderDocuments(this.props.documents)} qa="supportingDocuments" action={this.props.getEditLink("filesStep", null)} />
         </ACC.SummaryList>
       </ACC.Section>
