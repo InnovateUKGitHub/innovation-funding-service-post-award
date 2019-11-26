@@ -11,7 +11,7 @@ import {
   PCRStatus
 } from "@framework/constants";
 
-describe("GetAllPCRsQuery", () => {
+describe("Create PCR Command", () => {
   it("should throw a validation error if no items are added", async () => {
     const context = new TestContext();
     const project = context.testData.createProject();
@@ -44,6 +44,27 @@ describe("GetAllPCRsQuery", () => {
       projectId: project.Id,
       status: PCRStatus.Approved,
       reasoningStatus: PCRItemStatus.ToDo
+    } as any as PCRDto);
+
+    await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
+  });
+  it("returns a validation error if a type is not enabled", async () => {
+    const context = new TestContext();
+    const project = context.testData.createProject();
+    context.testData.createCurrentUserAsProjectManager(project);
+    const partner = context.testData.createPartner(project);
+    const itemType = PCRRecordTypeMetaValues.find(x => x.type === PCRItemType.MultiplePartnerFinancialVirement)!;
+
+    const command = new CreateProjectChangeRequestCommand(project.Id, {
+      projectId: project.Id,
+      status: PCRStatus.Draft,
+      reasoningStatus: PCRItemStatus.ToDo,
+      items: [{
+        type: itemType.type,
+        status: PCRItemStatus.ToDo,
+        accountName: "Pocahontas",
+        partnerId: partner.Id
+      }]
     } as any as PCRDto);
 
     await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
