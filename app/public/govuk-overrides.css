@@ -261,11 +261,6 @@
   padding: 15px 0 15px 0;
 }
 
-.acc-accordion__section-content .govuk-grid-row {
-  margin-right: 0;
-  margin-left: 0;
-}
-
 div.card-link-grid {
   display: flex;
   height: 200px;
