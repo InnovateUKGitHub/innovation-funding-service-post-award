@@ -2,16 +2,28 @@ import { Results } from "./results";
 import { Result } from "./result";
 
 export class NestedResult<T extends Results<{}>> extends Result {
-  constructor(parentResults: Results<{}>, public readonly results: T[], public listValidation: Result, summaryMessage?: string) {
+  constructor(parentResults: Results<{}>, results: T[], listValidation: Result, summaryMessage?: string) {
+
+    const listValidationInvalid = listValidation && !listValidation.isValid;
+    const itemValidationInvalid = results.length && results.some(x => !x.isValid) || false;
+
+    const isValid = !listValidationInvalid && !itemValidationInvalid;
+    const message = (listValidationInvalid ? listValidation.errorMessage : summaryMessage) || "Validation failed";
+
     super(
       parentResults,
       parentResults.showValidationErrors,
-      listValidation && !listValidation.isValid ? false : results && results.length ? results.every(x => x.isValid) : true,
-      listValidation && !listValidation.isValid ? listValidation.errorMessage : summaryMessage || "Validation failed",
-      results.some(x => x.isRequired),
-      listValidation && !listValidation.isValid
+      isValid,
+      message,
+      listValidation.isRequired || results.some(x => x.isRequired)
     );
+
+    this.results = results;
+    this.listValidation = listValidation;
   }
+
+  public readonly results: T[];
+  public readonly listValidation: Result;
 
   public log() {
     if (this.isValid) return null;
