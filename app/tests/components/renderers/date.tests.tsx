@@ -62,6 +62,11 @@ describe("ShortDateTime", () => {
     expect(wrapper.text()).toEqual("7 Jan 1993, 9:02pm");
   });
 
+  it("should render the midday date as 7 Jan 1993 12:00pm", () => {
+    const wrapper = shallow(<ShortDateTime value={new Date("1993/01/07 12:00:00")} />);
+    expect(wrapper.text()).toEqual("7 Jan 1993, 12:00pm");
+  });
+
   it("should return null when a null prop is passed in", () => {
     const wrapper = shallow(<ShortDateTime value={null} />);
     expect(wrapper.html()).toBeNull();
