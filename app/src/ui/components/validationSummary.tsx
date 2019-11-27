@@ -9,19 +9,24 @@ interface Props {
 
 export const ValidationSummary: React.SFC<Props> = ({ validation, compressed }) => {
   const results: Result[] = [];
-  if(validation && validation.errors) {
-      validation.errors.filter(x => !x.isValid && x.showValidationErrors).forEach(x => {
-        // nested results have collection of items that may have errored
-        // if we are not compressed we want to show each of them
-        // need to find all invalid children and flatten them
-        if(x instanceof NestedResult && compressed !== true && x.results.length) {
-            const childErrors = flatten((x as NestedResult<Results<{}>>).results.filter(y => !y.isValid).map(y => y.errors));
-            childErrors.forEach(e => results.push(e));
+  if (validation && validation.errors) {
+    validation.errors.filter(x => !x.isValid && x.showValidationErrors).forEach(x => {
+      // nested results have collection of items that may have errored
+      // if we are not compressed we want to show each of them
+      // need to find all invalid children and flatten them
+      if (x instanceof NestedResult && compressed !== true && x.results.length) {
+        if (!x.listValidation.isValid) {
+          results.push(x.listValidation);
         }
         else {
-            results.push(x);
+          const childErrors = flatten((x as NestedResult<Results<{}>>).results.filter(y => !y.isValid).map(y => y.errors));
+          childErrors.forEach(e => results.push(e));
         }
-      });
+      }
+      else {
+        results.push(x);
+      }
+    });
   }
   if (!results.length) {
     return null;

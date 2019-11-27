@@ -14,16 +14,11 @@ export class Result {
         public readonly isValid: boolean,
         public readonly errorMessage: string | null,
         public readonly isRequired: boolean,
-        supressAddToParent: boolean = false,
     ) {
+        const internalResults = (results as any) as ResultsInternal;
 
-        if (!supressAddToParent) {
-            // Cast so that the internal methods can be private on the public interface.
-            const internalResults = (results as any) as ResultsInternal;
-
-            if (internalResults) {
-                internalResults.add(this);
-            }
+        if (internalResults) {
+            internalResults.add(this);
         }
 
         this.key = "Val" + valSeed;
