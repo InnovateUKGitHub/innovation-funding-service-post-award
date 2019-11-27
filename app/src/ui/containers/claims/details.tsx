@@ -61,28 +61,16 @@ export class ClaimsDetailsComponent extends ContainerBase<Params, Data, {}> {
     const isPmOrMo = (data.project.roles & (ProjectRole.ProjectManager | ProjectRole.MonitoringOfficer)) !== ProjectRole.Unknown;
     const backLink = isPmOrMo ? this.props.routes.allClaimsDashboard.getLink({ projectId: data.project.id }) : this.props.routes.claimsDashboard.getLink({ projectId: data.project.id, partnerId: data.partner.id });
 
-    const tabs: ACC.HashTabItem[] = [
-      { text: "Details", hash: "details", content: this.renderDetailsTab(data), qa: "ClaimDetailTab" },
-      { text: "Log", hash: "log", content: this.renderLogsTab(), qa: "ClaimDetailLogTab" },
-    ];
-
     return (
       <ACC.Page
         backLink={<ACC.BackLink route={backLink}>Back to claims</ACC.BackLink>}
         pageTitle={<ACC.Projects.Title project={data.project} />}
       >
-        <ACC.HashTabs tabList={tabs} />
-      </ACC.Page>
-    );
-  }
-
-  private renderDetailsTab(data: CombinedData) {
-    return (
-      <React.Fragment>
         {this.renderTableSection(data)}
         {this.renderIarSection(data.claim, data.project, data.partner, data.iarDocument)}
         {this.renderForecastSection(data)}
-      </React.Fragment>
+        {this.renderLogs()}
+      </ACC.Page>
     );
   }
 
@@ -157,16 +145,21 @@ export class ClaimsDetailsComponent extends ContainerBase<Params, Data, {}> {
     return <ACC.Claims.ForecastTable data={forecastData} hideValidation={true} />;
   }
 
-  private renderLogsTab() {
+  private renderLogs() {
     return (
-      <ACC.Loader
-        pending={this.props.statusChanges}
-        render={(statusChanges) => (
-          <ACC.Section title="Log">
-            <ACC.Logs qa="claim-status-change-table" data={statusChanges} />
-          </ACC.Section>
-        )}
-      />
+      <ACC.Section>
+        <ACC.Accordion>
+          <ACC.AccordionItem title="Status and comments log" qa="claim-status-change-accordion">
+            {/* Keeping logs inside loader because accordion defaults to closed*/}
+            <ACC.Loader
+              pending={this.props.statusChanges}
+              render={(statusChanges) => (
+                <ACC.Logs qa="claim-status-change-table" data={statusChanges}/>
+              )}
+            />
+          </ACC.AccordionItem>
+        </ACC.Accordion>
+      </ACC.Section>
     );
   }
 }
