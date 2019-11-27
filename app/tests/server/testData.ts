@@ -341,7 +341,8 @@ export class TestData {
       Acc_TotalCostsSubmitted__c: 100,
       Acc_TotalGrantApproved__c: 100,
       LastModifiedDate: "2018-03-04T12:00:00.000+00",
-      Acc_IARRequired__c: false
+      Acc_IARRequired__c: false,
+      Acc_FinalClaim__c: false,
     };
 
     if (update) {
