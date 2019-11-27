@@ -29,5 +29,5 @@ export default (context: IContext) => (claim: ISalesforceClaim, forecast?: ISale
   isApproved: [ClaimStatus.APPROVED, ClaimStatus.PAID].indexOf(claim.Acc_ClaimStatus__c) >= 0,
   allowIarEdit: STATUS_ALLOWING_IAR_EDIT.indexOf(claim.Acc_ClaimStatus__c) >= 0,
   overheadRate: claim.Acc_ProjectParticipant__r.Acc_OverheadRate__c,
-
+  isFinalClaim: claim.Acc_FinalClaim__c,
 });

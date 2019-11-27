@@ -26,6 +26,7 @@ export interface ISalesforceClaim {
   Acc_PaidDate__c: string | null;
   Acc_ReasonForDifference__c: string | null;
   Acc_IARRequired__c: boolean;
+  Acc_FinalClaim__c: boolean;
 }
 
 export interface IClaimRepository {
@@ -57,7 +58,8 @@ export class ClaimRepository extends SalesforceRepositoryBase<ISalesforceClaim> 
     "Acc_ApprovedDate__c",
     "Acc_PaidDate__c",
     "Acc_ReasonForDifference__c",
-    "Acc_IARRequired__c"
+    "Acc_IARRequired__c",
+    "Acc_FinalClaim__c",
   ];
 
   public getAllByProjectId(projectId: string): Promise<ISalesforceClaim[]> {
