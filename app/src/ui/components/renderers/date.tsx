@@ -117,7 +117,7 @@ export const ShortDateRangeFromDuration = (props: { startDate: Date|null, months
 
 const appendMeridian = (date: DateTime|null, format: string) => {
     if(date && date.isValid) {
-        return format + (date.hour > 12 ? "'pm'" : "'am'");
+        return format + (date.hour >= 12 ? "'pm'" : "'am'");
     }
     return format;
 };
