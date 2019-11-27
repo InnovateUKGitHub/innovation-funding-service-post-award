@@ -35,6 +35,7 @@ interface CombinedData {
   claim: ClaimDto;
   claimDetails: CostsSummaryForPeriodDto[];
   editor: IEditorStore<ClaimDto, ClaimDtoValidator>;
+  statusChanges: ClaimStatusChangeDto[];
 }
 
 export class PrepareComponent extends ContainerBase<PrepareClaimParams, Data, Callbacks> {
@@ -47,6 +48,7 @@ export class PrepareComponent extends ContainerBase<PrepareClaimParams, Data, Ca
       claim: this.props.claim,
       claimDetails: this.props.costsSummaryForPeriod,
       editor: this.props.editor,
+      statusChanges: this.props.statusChanges,
     });
 
     return <ACC.PageLoader pending={combined} render={(data) => this.renderContents(data)} />;
@@ -56,11 +58,6 @@ export class PrepareComponent extends ContainerBase<PrepareClaimParams, Data, Ca
     const isPmOrMo = (data.project.roles & (ProjectRole.ProjectManager | ProjectRole.MonitoringOfficer)) !== ProjectRole.Unknown;
     const backLink = isPmOrMo ? this.props.routes.allClaimsDashboard.getLink({ projectId: data.project.id }) : this.props.routes.claimsDashboard.getLink({ projectId: data.project.id, partnerId: data.partner.id });
 
-    const tabs: ACC.HashTabItem[] = [
-      { text: "Details", hash: "details", content: this.renderDetailsTab(data), qa: "ClaimDetailTab" },
-      { text: "Log", hash: "log", content: this.renderLogsTab(), qa: "ClaimDetailLogTab" },
-    ];
-
     return (
       <ACC.Page
         backLink={<ACC.BackLink route={backLink}>Back to claims</ACC.BackLink>}
@@ -68,15 +65,13 @@ export class PrepareComponent extends ContainerBase<PrepareClaimParams, Data, Ca
         validator={data.editor.validator}
         pageTitle={<ACC.Projects.Title project={data.project} />}
       >
-        <ACC.HashTabs tabList={tabs} messages={this.props.messages} />
+        {this.renderDetailsSection(data)}
       </ACC.Page>
     );
   }
 
-  private renderDetailsTab(data: CombinedData) {
+  private renderDetailsSection(data: CombinedData) {
     const Form = ACC.TypedForm<ClaimDto>();
-    const commentsLabel = "Add comments";
-    const commentsHint = "If you want to explain anything to your monitoring officer or to Innovate UK, add it here.";
 
     return (
       <ACC.Section title={<ACC.Claims.ClaimPeriodDate claim={data.claim} />}>
@@ -91,30 +86,23 @@ export class PrepareComponent extends ContainerBase<PrepareClaimParams, Data, Ca
           onChange={(dto) => this.props.onUpdate(false, dto)}
           onSubmit={() => this.props.onUpdate(true, data.editor.data, true)}
         >
-          <Form.Fieldset heading={commentsLabel} qa="additional-info-form" headingQa="additional-info-heading">
-            <Form.MultilineString label="additional-info" labelHidden={true} hint={commentsHint} name="comments" value={m => m.comments} update={(m, v) => m.comments = v} validation={data.editor.validator.comments} qa="info-text-area" />
-          </Form.Fieldset>
+          {this.renderLogsSection(data)}
           <Form.Fieldset qa="save-and-continue">
-            <Form.Submit>Review forecast</Form.Submit>
-          </Form.Fieldset>
-          <Form.Fieldset qa="save-and-return">
-            <Form.Button name="return" onClick={() => this.props.onUpdate(true, data.editor.data, false)}>Save and return to project</Form.Button>
+            <ACC.Link styling="PrimaryButton" route={this.props.routes.claimDocuments.getLink({projectId: this.props.projectId, partnerId: this.props.partnerId, periodId: this.props.periodId })}>Continue to claims documents</ACC.Link>
+            <Form.Button name="return" onClick={() => this.props.onUpdate(true, data.editor.data, false)}>Save and return to claims</Form.Button>
           </Form.Fieldset>
         </Form.Form>
       </ACC.Section>
     );
   }
 
-  private renderLogsTab() {
+  private renderLogsSection(data: CombinedData) {
     return (
-      <ACC.Loader
-        pending={this.props.statusChanges}
-        render={(statusChanges) => (
-          <ACC.Section title="Log">
-            <ACC.Logs qa="claim-status-change-table" data={statusChanges} />
-          </ACC.Section>
-        )}
-      />
+      <ACC.Accordion>
+        <ACC.AccordionItem title="Status and comments log" qa="status-and-comments-log">
+          <ACC.Logs qa="claim-status-change-table" data={data.statusChanges} />
+        </ACC.AccordionItem>
+      </ACC.Accordion>
     );
   }
 
@@ -144,7 +132,7 @@ const PrepareContainer = (props: PrepareClaimParams & BaseProps) => (
           costsSummaryForPeriod={stores.costsSummaries.getForPeriod(props.projectId, props.partnerId, props.periodId)}
           statusChanges={stores.claims.getStatusChanges(props.projectId, props.partnerId, props.periodId)}
           editor={stores.claims.getClaimEditor(props.projectId, props.partnerId, props.periodId)}
-          onUpdate={(saving, dto, progress) => stores.claims.updateClaimEditor(saving, props.projectId, props.partnerId, props.periodId, dto, undefined, () => stores.navigation.navigateTo(getDestination(props, progress, stores.users.getCurrentUserAuthorisation())))}
+          onUpdate={(saving, dto, progress) => stores.claims.updateClaimEditor(saving, props.projectId, props.partnerId, props.periodId, dto, "You have saved your claim.", () => stores.navigation.navigateTo(getDestination(props, progress, stores.users.getCurrentUserAuthorisation())))}
           {...props}
         />
       )
