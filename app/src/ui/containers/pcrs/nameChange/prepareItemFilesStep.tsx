@@ -47,7 +47,7 @@ class Component extends React.Component<StepProps<typeof accountNameChangeWorkfl
           </UploadForm.Fieldset>
           <UploadForm.Fieldset>
             <UploadForm.Button name="uploadFile" styling="Secondary" onClick={() => this.props.onFileChange("SaveAndRemain", documentsEditor.data)}>Upload documents</UploadForm.Button>
-            <UploadForm.Button name="uploadFileAndContinue" styling="Primary">Upload documents and continue</UploadForm.Button>
+            <UploadForm.Button name="uploadFileAndContinue" styling="Primary">Save and continue</UploadForm.Button>
           </UploadForm.Fieldset>
         </UploadForm.Form>
       </ACC.Section>
@@ -82,8 +82,9 @@ export const PCRPrepareItemFilesStep = (props: StepProps<typeof accountNameChang
               documents={documents}
               onFileChange={(saving, dto) => {
                 stores.messages.clearMessages();
-                const successMessage = dto.files.length === 1 ? `Your document has been uploaded.` : `${dto.files.length} documents have been uploaded.`;
-                stores.projectChangeRequestDocuments.updatePcrOrPcrItemDocumentsEditor(saving !== "DontSave", props.project.id, props.pcrItem.id, dto, successMessage, () => {
+                // show message if remaining on page
+                const successMessage = saving === "SaveAndRemain" ? dto.files.length === 1 ? `Your document has been uploaded.` : `${dto.files.length} documents have been uploaded.` : undefined;
+                stores.projectChangeRequestDocuments.updatePcrOrPcrItemDocumentsEditor(saving !== "DontSave", props.project.id, props.pcrItem.id, dto, saving === "SaveAndRemain", successMessage, () => {
                   if (saving === "SaveAndContinue") {
                     props.onSave();
                   }

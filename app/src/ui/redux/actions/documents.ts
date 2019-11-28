@@ -30,7 +30,7 @@ export function updateProjectChangeRequestDocumentOrItemDocumentEditor(projectCh
     const selector = Selectors.getProjectChangeRequestDocumentOrItemDocumentEditor(projectChangeRequestIdOrItemId);
     const current = state.editors[selector.store][selector.key];
     const errors = showErrors || current && current.validator.showValidationErrors || false;
-    const validator = new MultipleDocumentUpdloadDtoValidator(dto, state.config, errors);
+    const validator = new MultipleDocumentUpdloadDtoValidator(dto, state.config, true, errors);
     dispatch(Actions.updateEditorAction(selector.key, selector.store, dto, validator));
 
     return validator;
@@ -57,7 +57,7 @@ export function updateProjectDocumentEditor(projectId: string, dto: MultipleDocu
     const selector = Selectors.getProjectDocumentEditor(projectId);
     const current = state.editors[selector.store][selector.key];
     const errors = showErrors || current && current.validator.showValidationErrors || false;
-    const validator = new MultipleDocumentUpdloadDtoValidator(dto, state.config, errors);
+    const validator = new MultipleDocumentUpdloadDtoValidator(dto, state.config, true, errors);
     dispatch(Actions.updateEditorAction(selector.key, selector.store, dto, validator));
     return validator;
   };
@@ -132,7 +132,7 @@ export function updateClaimDetailDocumentEditor(claimDetailKey: ClaimDetailKey, 
       const current = state.editors[selector.store][selector.key];
       showErrors = current && current.validator.showValidationErrors || false;
     }
-    const validator = new MultipleDocumentUpdloadDtoValidator(dto, state.config, showErrors);
+    const validator = new MultipleDocumentUpdloadDtoValidator(dto, state.config, true, showErrors);
     dispatch(Actions.updateEditorAction(selector.key, selector.store, dto, validator));
     return validator;
   };

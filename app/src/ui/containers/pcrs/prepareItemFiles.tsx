@@ -144,7 +144,7 @@ const PrepareItemFilesContainer = (props: Params & BaseProps) => (
           onChange={(saving, dto) => {
             stores.messages.clearMessages();
             const successMessage = dto.files.length === 1 ? `Your document has been uploaded.` : `${dto.files.length} documents have been uploaded.`;
-            stores.projectChangeRequestDocuments.updatePcrOrPcrItemDocumentsEditor(saving, props.projectId, props.itemId, dto, successMessage);
+            stores.projectChangeRequestDocuments.updatePcrOrPcrItemDocumentsEditor(saving, props.projectId, props.itemId, dto, true, successMessage);
           }}
           onDelete={(dto, document) => {
             stores.messages.clearMessages();
