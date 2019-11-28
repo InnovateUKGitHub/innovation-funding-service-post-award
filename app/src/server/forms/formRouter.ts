@@ -21,19 +21,32 @@ import { ReviewClaimFormHandler } from "./reviewClaimFormHandler";
 import { UpdateForecastFormHandler } from "./updateForecastFormHandler";
 import { IFormHandler } from "./formHandlerBase";
 import { serverRender } from "../serverRender";
+import { ClaimDashboardDocumentDeleteHandler } from "./claimDashboard/claimDashboardDocumentDeleteHandler";
+import { ClaimDashboardDocumentUploadHandler } from "./claimDashboard/claimDashboardDocumentUploadHandler";
+import { ClaimDetailDocumentDeleteHandler } from "./claimDetailDocument/claimDetailDocumentDeleteHandler";
+import { ClaimDetailDocumentUploadHandler } from "./claimDetailDocument/claimDetailDocumentUploadHandler";
 import { ProjectDocumentUploadHandler } from "./projectDocumentFormHandler";
 import { Configuration } from "../features/common";
 import { MonitoringReportCreateFormHandler } from "./monitoringReportCreateFormHandler";
 import { MonitoringReportDeleteFormHandler } from "./monitoringReportDeleteFormHandler";
 import { MonitoringReportPrepareFormHandler } from "./monitoringReportPrepareFormHandler";
+import { AllClaimDashboardDocumentUploadHandler } from "./allClaimsDashboard/allClaimsDashboardDocumentUploadHandler";
+import { AllClaimDashboardDocumentDeleteHandler } from "./allClaimsDashboard/allClaimsDashboardDocumentDeleteHandler";
+
 export const formRouter = express.Router();
 
 const handlers: IFormHandler[] = [
+  new AllClaimDashboardDocumentUploadHandler(),
+  new AllClaimDashboardDocumentDeleteHandler(),
   new ClaimForecastFormHandler(),
   new EditClaimLineItemsFormHandler(),
   new PrepareClaimFormHandler(),
   new ReviewClaimFormHandler(),
   new UpdateForecastFormHandler(),
+  new ClaimDetailDocumentDeleteHandler(),
+  new ClaimDetailDocumentUploadHandler(),
+  new ClaimDashboardDocumentDeleteHandler(),
+  new ClaimDashboardDocumentUploadHandler(),
   new MonitoringReportCreateFormHandler(),
   new MonitoringReportDeleteFormHandler(),
   new MonitoringReportPrepareFormHandler(),
