@@ -21,14 +21,14 @@ export const getProjectChangeRequestDocumentsOrItemDocuments = (projectChangeReq
 export const getProjectDocumentEditor = (projectId: string) => editorStoreHelper<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>(
   "multipleDocuments",
   () => Pending.done({ files: [] }),
-  (dto, store) => Pending.done(new MultipleDocumentUpdloadDtoValidator(dto, store.config, false)),
+  (dto, store) => Pending.done(new MultipleDocumentUpdloadDtoValidator(dto, store.config, true, false)),
   getKey("project", projectId)
 );
 
 export const getClaimDetailDocumentEditor = ({ partnerId, periodId, costCategoryId }: ClaimDetailKey, config: { maxFileSize: number, maxUploadFileCount: number }) => editorStoreHelper<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>(
   "multipleDocuments",
   () => Pending.done({ files: [] }),
-  (dto) => Pending.done(new MultipleDocumentUpdloadDtoValidator(dto, config, false)),
+  (dto) => Pending.done(new MultipleDocumentUpdloadDtoValidator(dto, config, true, false)),
   getKey("claim", "details", partnerId, periodId, costCategoryId)
 );
 

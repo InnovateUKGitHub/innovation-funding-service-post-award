@@ -76,7 +76,7 @@ export const getPcrEditorForCreate = (projectId: string) => editorStoreHelper<PC
 export const getProjectChangeRequestDocumentOrItemDocumentEditor = (projectChangeRequestItemId: string) => editorStoreHelper<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>(
   "multipleDocuments",
   () => Pending.done({ files: [] }),
-  (dto, state) => Pending.done(new MultipleDocumentUpdloadDtoValidator(dto, state.config, false)),
+  (dto, state) => Pending.done(new MultipleDocumentUpdloadDtoValidator(dto, state.config, true, false)),
   getKey("projectChangeRequestItem", projectChangeRequestItemId)
 );
 

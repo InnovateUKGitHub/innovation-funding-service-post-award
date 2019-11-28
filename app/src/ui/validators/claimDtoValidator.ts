@@ -33,7 +33,6 @@ export class ClaimDtoValidator extends Results<ClaimDto>  {
       this,
       this.details,
       (item) => new CostsSummaryForPeriodValidator(item, this.costCategories.find(x => x.id === item.costCategoryId), this.showValidationErrors),
-      undefined,
       "Your costs for this period are more than your remaining grant offer letter costs in at least one cost category. You must remove some costs before you can submit this claim."
     );
 }

@@ -7,7 +7,7 @@ import * as ACC from "../../../components";
 import { Pending } from "@shared/pending";
 import { PCRDto } from "@framework/dtos/pcrDtos";
 import { IEditorStore, StoresConsumer } from "@ui/redux";
-import { PCRDtoValidator } from "@ui/validators";
+import { MultipleDocumentUpdloadDtoValidator, PCRDtoValidator } from "@ui/validators";
 import { PCRReasoningSummary } from "@ui/containers/pcrs/reasoning/summary";
 import { IReasoningWorkflowMetadata, reasoningWorkflowSteps } from "@ui/containers/pcrs/reasoning/workflowMetadata";
 
@@ -21,6 +21,7 @@ interface Data {
   project: Pending<ProjectDto>;
   pcr: Pending<PCRDto>;
   editor: Pending<IEditorStore<PCRDto, PCRDtoValidator>>;
+  documentsEditor: Pending<IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>>;
   mode: "prepare" | "review" | "view";
 }
 
@@ -34,10 +35,11 @@ class PCRReasoningWorkflowComponent extends ContainerBase<ProjectChangeRequestPr
     const combined = Pending.combine({
       project: this.props.project,
       pcr: this.props.pcr,
-      editor: this.props.editor
+      editor: this.props.editor,
+      documentsEditor: this.props.documentsEditor
     });
 
-    return <ACC.PageLoader pending={combined} render={x => this.renderContents(x.project, x.editor, x.pcr)}/>;
+    return <ACC.PageLoader pending={combined} render={x => this.renderContents(x.project, x.pcr, x.editor, x.documentsEditor)}/>;
   }
 
   private findStepByNumber(stepNumber: number) {
@@ -64,18 +66,18 @@ class PCRReasoningWorkflowComponent extends ContainerBase<ProjectChangeRequestPr
     });
   }
 
-  private renderContents(project: ProjectDto, editor: IEditorStore<PCRDto, PCRDtoValidator>, pcr: PCRDto) {
+  private renderContents(project: ProjectDto, pcr: PCRDto, editor: IEditorStore<PCRDto, PCRDtoValidator>, documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>) {
     return (
       <ACC.Page
         backLink={this.getBackLink()}
         pageTitle={<ACC.Projects.Title project={project}/>}
         project={project}
-        validator={[editor.validator]}
-        error={editor.error}
+        validator={[editor.validator, documentsEditor.validator]}
+        error={editor.error || documentsEditor.error}
       >
         <ACC.Renderers.Messages messages={this.props.messages}/>
 
-        {this.props.mode === "prepare" && !!this.props.step && this.renderStep(this.props.step, pcr, editor)}
+        {this.props.mode === "prepare" && !!this.props.step && this.renderStep(this.props.step, pcr, editor, documentsEditor)}
         {!this.props.step && this.renderSummary(pcr, editor)}
 
       </ACC.Page>
@@ -92,7 +94,7 @@ class PCRReasoningWorkflowComponent extends ContainerBase<ProjectChangeRequestPr
     return <ACC.BackLink route={this.props.routes.pcrDetails.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId })}>Back to request</ACC.BackLink>;
   }
 
-  private renderStep(stepNumber: number, pcr: PCRDto, editor: IEditorStore<PCRDto, PCRDtoValidator>) {
+  private renderStep(stepNumber: number, pcr: PCRDto, editor: IEditorStore<PCRDto, PCRDtoValidator>, documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>) {
     const step = this.findStepByNumber(stepNumber);
     return (
       <React.Fragment>
@@ -108,6 +110,7 @@ class PCRReasoningWorkflowComponent extends ContainerBase<ProjectChangeRequestPr
           onChange: (dto: PCRDto) => this.props.onChange(dto),
           onSave: (dto: PCRDto) => this.onSave(dto),
           editor,
+          documentsEditor
         })}
       </React.Fragment>
     );
@@ -167,6 +170,7 @@ const PCRReasoningWorkflowContainer = (props: ProjectChangeRequestPrepareReasoni
         project={stores.projects.getById(props.projectId)}
         pcr={stores.projectChangeRequests.getById(props.projectId, props.pcrId)}
         editor={stores.projectChangeRequests.getPcrUpdateEditor(props.projectId, props.pcrId)}
+        documentsEditor={stores.projectChangeRequestDocuments.getPcrOrPcrItemDocumentsEditor(props.projectId, props.pcrId)}
         onSave={(dto, link) => {
           stores.messages.clearMessages();
           stores.projectChangeRequests.updatePcrEditor(true, props.projectId, dto, undefined, () =>

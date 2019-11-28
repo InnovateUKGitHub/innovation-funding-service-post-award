@@ -6,8 +6,8 @@ import { DataStateKeys, EditorStateKeys } from "../reducers";
 
 export abstract class DocumentsStoreBase extends StoreBase {
 
-  protected validateMultipleDocumentsDto(dto: MultipleDocumentUploadDto, showErrors: boolean) {
-    return new MultipleDocumentUpdloadDtoValidator(dto, this.getState().config, showErrors);
+  protected validateMultipleDocumentsDto(dto: MultipleDocumentUploadDto, showErrors: boolean, filesRequired: boolean = true) {
+    return new MultipleDocumentUpdloadDtoValidator(dto, this.getState().config, filesRequired, showErrors);
   }
 
   protected validateDocumentUploadDto(dto: DocumentUploadDto, showErrors: boolean) {

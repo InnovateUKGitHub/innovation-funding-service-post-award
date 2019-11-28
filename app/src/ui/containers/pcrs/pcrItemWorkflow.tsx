@@ -65,7 +65,7 @@ class Component extends ContainerBase<ProjectChangeRequestPrepareItemParams, Dat
     });
   }
 
-  private getEditLink(workflow: ICallableWorkflow<PCRItemDto>, stepName: string, validation: Result|null) {
+  private getEditLink(workflow: ICallableWorkflow<PCRItemDto>, stepName: string, validation: Result | null) {
     if (this.props.mode !== "prepare") {
       return null;
     }
@@ -137,52 +137,25 @@ class Component extends ContainerBase<ProjectChangeRequestPrepareItemParams, Dat
 
     const currentStep = workflow.getCurrentStepInfo()!;
 
-    const nextStep = workflow.getNextStepInfo();
-
-    const nextLink = this.props.routes.pcrPrepareItem.getLink({
-      projectId: this.props.projectId,
-      pcrId: this.props.pcrId,
-      itemId: this.props.itemId,
-      step: nextStep && nextStep.stepNumber || undefined,
-    });
-
-    const nextText = nextStep ? `Skip to '${nextStep.displayName}'` : "Skip to 'Summary'";
-
-    const prevStep = workflow.getPrevStepInfo();
-
-    const prevLink = prevStep && this.props.routes.pcrPrepareItem.getLink({
-      projectId: this.props.projectId,
-      pcrId: this.props.pcrId,
-      itemId: this.props.itemId,
-      step: prevStep.stepNumber,
-    });
-
-    const prevText = prevStep ? `Skip to '${prevStep.displayName}'` : null;
-
     return (
-      <React.Fragment>
-        {
-          currentStep.stepRender({
-            pcr,
-            pcrItem,
-            pcrItemType,
-            documentsEditor,
-            project,
-            validator,
-            status,
-            onChange: itemDto => this.onChange(editor.data, itemDto),
-            onSave: () => this.onSave(workflow, editor.data),
-            getRequiredToCompleteMessage: (message) => {
-              const standardMessage = "This is required to complete this request.";
-              if(message) {
-                return <span>{message}<br/>{standardMessage}</span>;
-              }
-              return standardMessage;
-            }
-          })
+      currentStep.stepRender({
+        pcr,
+        pcrItem,
+        pcrItemType,
+        documentsEditor,
+        project,
+        validator,
+        status,
+        onChange: itemDto => this.onChange(editor.data, itemDto),
+        onSave: () => this.onSave(workflow, editor.data),
+        getRequiredToCompleteMessage: (message) => {
+          const standardMessage = "This is required to complete this request.";
+          if (message) {
+            return <span>{message}<br />{standardMessage}</span>;
+          }
+          return standardMessage;
         }
-        <ACC.NavigationArrows previousLink={prevText && prevLink ? { label: prevText, route: prevLink } : null} nextLink={{ label: nextText, route: nextLink }} />
-      </React.Fragment>
+      })
     );
   }
 

@@ -9,14 +9,12 @@ let valSeed = 0;
 // A single validation result, typically for a single field
 export class Result {
     constructor(
-        results: Results<{}>|null,
+        results: Results<{}> | null,
         public readonly showValidationErrors: boolean,
         public readonly isValid: boolean,
-        public readonly errorMessage: string|null,
-        public readonly isRequired: boolean
+        public readonly errorMessage: string | null,
+        public readonly isRequired: boolean,
     ) {
-
-        // Cast so that the internal methods can be private on the public interface.
         const internalResults = (results as any) as ResultsInternal;
 
         if (internalResults) {
@@ -31,16 +29,16 @@ export class Result {
 
     public combine(other: Result) {
         return new Result(
-          null,
-          this.showValidationErrors || other.showValidationErrors,
-          this.isValid && other.isValid,
-          this.errorMessage || other.errorMessage || "",
-          this.isRequired || other.isRequired
+            null,
+            this.showValidationErrors || other.showValidationErrors,
+            this.isValid && other.isValid,
+            this.errorMessage || other.errorMessage || "",
+            this.isRequired || other.isRequired
         );
     }
 
     public log() {
-        if(this.isValid) return null;
+        if (this.isValid) return null;
         return this.errorMessage!;
     }
 }
