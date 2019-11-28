@@ -90,7 +90,8 @@ export const FilesStep = (props: StepProps<typeof standardItemWorkflow>) => (
                 documents={documents}
                 onFileChange={(saving, dto) => {
                   stores.messages.clearMessages();
-                  const successMessage = dto.files.length === 1 ? `Your document has been uploaded.` : `${dto.files.length} documents have been uploaded.`;
+                  // show message if remaining on page
+                  const successMessage = saving === "SaveAndRemain" ? dto.files.length === 1 ? `Your document has been uploaded.` : `${dto.files.length} documents have been uploaded.` : undefined;
                   stores.projectChangeRequestDocuments.updatePcrOrPcrItemDocumentsEditor(saving !== "DontSave", props.project.id, props.pcrItem.id, dto, saving === "SaveAndRemain", successMessage, () => {
                     if (saving === "SaveAndContinue") {
                       props.onSave();
