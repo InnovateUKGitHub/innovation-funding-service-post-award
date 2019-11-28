@@ -4,7 +4,6 @@ import { Pending } from "../../../shared/pending";
 import { BaseProps, ContainerBase, defineRoute } from "../containerBase";
 
 import {
-  Authorisation,
   ClaimDto,
   ClaimStatus,
   ClaimStatusChangeDto,
@@ -13,7 +12,7 @@ import {
   ProjectDto,
   ProjectRole,
 } from "@framework/types";
-import { SimpleString } from "../../components/renderers";
+
 import { StoresConsumer } from "@ui/redux";
 
 interface Params {
@@ -28,7 +27,6 @@ interface Data {
   costCategories: Pending<CostCategoryDto[]>;
   claim: Pending<ClaimDto>;
   costsSummaryForPeriod: Pending<CostsSummaryForPeriodDto[]>;
-  iarDocument: Pending<DocumentSummaryDto | null>;
   forecastData: Pending<ACC.Claims.ForecastData> | null;
   statusChanges: Pending<ClaimStatusChangeDto[]>;
 }
@@ -39,7 +37,6 @@ interface CombinedData {
   costCategories: CostCategoryDto[];
   claim: ClaimDto;
   claimDetails: CostsSummaryForPeriodDto[];
-  iarDocument: DocumentSummaryDto | null;
 }
 
 export class ClaimsDetailsComponent extends ContainerBase<Params, Data, {}> {
@@ -51,7 +48,6 @@ export class ClaimsDetailsComponent extends ContainerBase<Params, Data, {}> {
       costCategories: this.props.costCategories,
       claim: this.props.claim,
       claimDetails: this.props.costsSummaryForPeriod,
-      iarDocument: this.props.iarDocument
     });
 
     return <ACC.PageLoader pending={combined} render={(data) => this.renderContents(data)} />;
@@ -80,7 +76,6 @@ export class ClaimsDetailsComponent extends ContainerBase<Params, Data, {}> {
     return (
       <React.Fragment>
         {this.renderTableSection(data)}
-        {this.renderIarSection(data.claim, data.project, data.partner, data.iarDocument)}
         {this.renderForecastSection(data)}
       </React.Fragment>
     );
@@ -119,19 +114,6 @@ export class ClaimsDetailsComponent extends ContainerBase<Params, Data, {}> {
 
   private getClaimPeriodTitle(data: CombinedData) {
     return <ACC.Claims.ClaimPeriodDate claim={data.claim} partner={data.partner} />;
-  }
-
-  private renderIarSection(claim: ClaimDto, project: ProjectDto, partner: PartnerDto, iarDocument?: DocumentSummaryDto | null) {
-    if (!claim.isIarRequired || !claim.isApproved || !iarDocument) return null;
-
-    if (!!(partner.roles & ProjectRole.FinancialContact) || !!(project.roles & ProjectRole.MonitoringOfficer)) {
-      return (
-        <ACC.Section qa="claim-iar" title={"Independent accountant's report"}>
-          <ACC.DocumentSingle document={iarDocument} openNewWindow={true} />
-        </ACC.Section>
-      );
-    }
-    return <SimpleString>{iarDocument.fileName}</SimpleString>;
   }
 
   private renderForecastSection(data: CombinedData) {
@@ -204,7 +186,6 @@ const ClaimsDetailsContainer = (props: Params & BaseProps) => (
             forecastData={forecastData}
             statusChanges={stores.claims.getStatusChanges(props.projectId, props.partnerId, props.periodId)}
             costsSummaryForPeriod={stores.costsSummaries.getForPeriod(props.projectId, props.partnerId, props.periodId)}
-            iarDocument={stores.claimDocuments.getIarDocument(props.projectId, props.partnerId, props.periodId)}
             {...props}
           />
         );

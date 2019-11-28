@@ -22,7 +22,6 @@ interface Data {
   costsSummaryForPeriod: Pending<CostsSummaryForPeriodDto[]>;
   forecastDetails: Pending<ForecastDetailsDTO[]>;
   golCosts: Pending<GOLCostDto[]>;
-  iarDocument: Pending<DocumentSummaryDto | null>;
   statusChanges: Pending<ClaimStatusChangeDto[]>;
   editor: Pending<IEditorStore<ClaimDto, ClaimDtoValidator>>;
 }
@@ -37,7 +36,6 @@ interface CombinedData {
   costCategories: CostCategoryDto[];
   claim: ClaimDto;
   claimDetails: CostsSummaryForPeriodDto[];
-  iarDocument: DocumentSummaryDto | null;
   editor: IEditorStore<ClaimDto, ClaimDtoValidator>;
 }
 
@@ -49,7 +47,6 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, Data, Callbacks> 
       costCategories: this.props.costCategories,
       claim: this.props.claim,
       claimDetails: this.props.costsSummaryForPeriod,
-      iarDocument: this.props.iarDocument,
       editor: this.props.editor,
     });
 
@@ -91,7 +88,6 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, Data, Callbacks> 
           />
         </ACC.Section>
         {this.renderForecastSection()}
-        {this.renderIarSection(data.claim, data.iarDocument)}
         {this.renderForm(data)}
       </React.Fragment>
     );
@@ -125,26 +121,6 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, Data, Callbacks> 
 
   private getClaimLineItemLink(costCategoryId: string) {
     return this.props.routes.reviewClaimLineItems.getLink({ partnerId: this.props.partnerId, projectId: this.props.projectId, periodId: this.props.periodId, costCategoryId });
-  }
-
-  private renderIarSection(claim: ClaimDto, iarDocument?: DocumentSummaryDto | null) {
-    if (!claim.isIarRequired || claim.status !== ClaimStatus.SUBMITTED) {
-      return null;
-    }
-
-    if (!iarDocument) {
-      return (
-        <ACC.Section qa="claim-iar" title={"Independent accountant's report"}>
-          <ACC.Renderers.SimpleString>A report has not been attached. This claim will not be sent to Innovate UK for approval until it is provided.</ACC.Renderers.SimpleString>
-        </ACC.Section>
-      );
-    }
-
-    return (
-      <ACC.Section qa="claim-iar" title={"Independent accountant's report"}>
-        <ACC.DocumentSingle document={iarDocument} openNewWindow={true} />
-      </ACC.Section>
-    );
   }
 
   private renderForm(data: CombinedData) {
@@ -258,7 +234,6 @@ const ReviewContainer = (props: ReviewClaimParams & BaseProps) => (
           claimDetails={stores.claimDetails.getAllByPartner(props.partnerId)}
           forecastDetails={stores.forecastDetails.getAllByPartner(props.partnerId)}
           golCosts={stores.forecastGolCosts.getAllByPartner(props.partnerId)}
-          iarDocument={stores.claimDocuments.getIarDocument(props.projectId, props.partnerId, props.periodId)}
           statusChanges={stores.claims.getStatusChanges(props.projectId, props.partnerId, props.periodId)}
           editor={stores.claims.getClaimEditor(props.projectId, props.partnerId, props.periodId, initEditor)}
           onUpdate={(saving, dto) => {
