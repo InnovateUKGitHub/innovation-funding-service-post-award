@@ -5,6 +5,7 @@ export default (mod?: Partial<ClaimDto>): ClaimDto => {
   const template: ClaimDto = {
     id: "",
     partnerId: "",
+    allowIarEdit: false,
     approvedDate: null,
     comments: null,
     forecastCost: 0,

@@ -5,6 +5,7 @@ import { ClaimDtoValidator } from "@ui/validators";
 import { LoadingStatus } from "@shared/pending";
 import { ClaimDto, ClaimStatus } from "@framework/types";
 import { scrollToTheTopSmoothly } from "@framework/util/windowHelpers";
+import { loadIarDocuments } from "./documents";
 
 export function loadClaim(partnerId: string, periodId: number) {
   return Actions.conditionalLoad(
@@ -85,6 +86,26 @@ export function loadClaimStatusChanges(projectId: string, partnerId: string, per
     Selectors.getClaimStatusChanges(projectId, partnerId, periodId),
     params => ApiClient.claims.getStatusChanges({ projectId, partnerId, periodId, ...params})
   );
+}
+
+export function loadIarDocumentsForCurrentClaim(projectId: string, partnerId: string): Actions.AsyncThunk<void, Actions.DataLoadAction> {
+  return (dispatch, getState) => {
+    const claim = Selectors.getCurrentClaim(getState(), partnerId).data;
+    if (claim) {
+      return loadIarDocuments(projectId, partnerId, claim.periodId)(dispatch, getState, null);
+    }
+    return Promise.resolve();
+  };
+}
+
+export function loadIarDocumentsForLeadPartnerCurrentClaim(projectId: string): Actions.AsyncThunk<void, Actions.DataLoadAction> {
+  return (dispatch, getState) => {
+    const claim = Selectors.getLeadPartnerCurrentClaim(getState(), projectId).data;
+    if (claim) {
+      return loadIarDocuments(projectId, claim.partnerId, claim.periodId)(dispatch, getState, null);
+    }
+    return Promise.resolve();
+  };
 }
 
 export function loadClaimsForProject(projectId: string) {

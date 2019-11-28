@@ -16,6 +16,7 @@ export interface ClaimDto {
   isIarRequired: boolean;
   isApproved: boolean;
   comments: string|null;
+  allowIarEdit: boolean;
   overheadRate: number;
 }
 
