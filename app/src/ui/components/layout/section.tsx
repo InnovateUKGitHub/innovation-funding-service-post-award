@@ -53,11 +53,6 @@ const renderContents = (children: React.ReactNode) => !children ? null : (<div c
 
 export const Section: React.SFC<Props> = (props) => {
   const { title, subtitle, badge, id, children, qa, className } = props;
-  const sectionClassName = classNames(
-    "govuk-grid-row",
-    "acc-section",
-    className
-  );
 
   if (!title && !subtitle && !badge && !children) {
     return null;
@@ -65,15 +60,27 @@ export const Section: React.SFC<Props> = (props) => {
 
   return (
     <SectionContext.Consumer>
-      {header => (
-        <div id={id} className={sectionClassName} data-qa={qa}>
-          {renderTitles(props, !children, header)}
-          {renderBadge(props)}
-          <SectionContext.Provider value={!props.title ? header : getNextHeader(header)}>
-            {renderContents(children)}
-          </SectionContext.Provider>
-        </div>
-        )
+      {
+        header => {
+          const sectionClassName = classNames(
+            "govuk-grid-row",
+            "acc-section",
+            {
+              "govuk-!-margin-bottom-6": header === "h2",
+              "govuk-!-margin-bottom-3": header === "h3",
+            },
+            className
+          );
+          return (
+            <div id={id} className={sectionClassName} data-qa={qa}>
+              {renderTitles(props, !children, header)}
+              {renderBadge(props)}
+              <SectionContext.Provider value={!props.title ? header : getNextHeader(header)}>
+                {renderContents(children)}
+              </SectionContext.Provider>
+            </div>
+          );
+        }
       }
     </SectionContext.Consumer>
   );
