@@ -1,6 +1,5 @@
 export * from "./claimDetailDocumentsStore";
 export * from "./claimDetailsStore";
-export * from "./claimDocumentsStore";
 export * from "./claimsStore";
 export * from "./configStore";
 export * from "./contactsStore";
