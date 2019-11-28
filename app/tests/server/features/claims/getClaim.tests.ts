@@ -105,6 +105,90 @@ describe("GetClaim", () => {
     expect(result.isApproved).toBe(true);
   });
 
+  it("calculates allowIarEdit true if ClaimStatus is Draft", async () => {
+    const context  = new TestContext();
+    const partner  = context.testData.createPartner();
+    const testData = context.testData;
+    const period   = 1;
+
+    testData.createProfileTotalPeriod(partner, period);
+    testData.createClaim(partner, period, x => x.Acc_ClaimStatus__c = ClaimStatus.DRAFT);
+    const query  = new GetClaim(partner.Id, period);
+    const result = await context.runQuery(query);
+
+    expect(result.allowIarEdit).toBe(true);
+  });
+
+  it("calculates allowIarEdit true if ClaimStatus is Submitted", async () => {
+    const context  = new TestContext();
+    const partner  = context.testData.createPartner();
+    const testData = context.testData;
+    const period   = 1;
+
+    testData.createProfileTotalPeriod(partner, period);
+    testData.createClaim(partner, period, x => x.Acc_ClaimStatus__c = ClaimStatus.SUBMITTED);
+    const query  = new GetClaim(partner.Id, period);
+    const result = await context.runQuery(query);
+
+    expect(result.allowIarEdit).toBe(true);
+  });
+
+  it("calculates allowIarEdit true if ClaimStatus is MO Queried", async () => {
+    const context  = new TestContext();
+    const partner  = context.testData.createPartner();
+    const testData = context.testData;
+    const period   = 1;
+
+    testData.createProfileTotalPeriod(partner, period);
+    testData.createClaim(partner, period, x => x.Acc_ClaimStatus__c = ClaimStatus.MO_QUERIED);
+    const query  = new GetClaim(partner.Id, period);
+    const result = await context.runQuery(query);
+
+    expect(result.allowIarEdit).toBe(true);
+  });
+
+  it("calculates allowIarEdit true if ClaimStatus is Awaiting IAR", async () => {
+    const context  = new TestContext();
+    const partner  = context.testData.createPartner();
+    const testData = context.testData;
+    const period   = 1;
+
+    testData.createProfileTotalPeriod(partner, period);
+    testData.createClaim(partner, period, x => x.Acc_ClaimStatus__c = ClaimStatus.AWAITING_IAR);
+    const query  = new GetClaim(partner.Id, period);
+    const result = await context.runQuery(query);
+
+    expect(result.allowIarEdit).toBe(true);
+  });
+
+  it("calculates allowIarEdit true if ClaimStatus is Innovate Queried", async () => {
+    const context  = new TestContext();
+    const partner  = context.testData.createPartner();
+    const testData = context.testData;
+    const period   = 1;
+
+    testData.createProfileTotalPeriod(partner, period);
+    testData.createClaim(partner, period, x => x.Acc_ClaimStatus__c = ClaimStatus.INNOVATE_QUERIED);
+    const query  = new GetClaim(partner.Id, period);
+    const result = await context.runQuery(query);
+
+    expect(result.allowIarEdit).toBe(true);
+  });
+
+  it("calculates allowIarEdit false if ClaimStatus is alternative", async () => {
+    const context  = new TestContext();
+    const partner  = context.testData.createPartner();
+    const testData = context.testData;
+    const period   = 1;
+
+    testData.createProfileTotalPeriod(partner, period);
+    testData.createClaim(partner, period, x => x.Acc_ClaimStatus__c = ClaimStatus.UNKNOWN);
+    const query  = new GetClaim(partner.Id, period);
+    const result = await context.runQuery(query);
+
+    expect(result.allowIarEdit).toBe(false);
+  });
+
   it("maps forecastCost from forecast PeriodInitialForecastCost", async () => {
     const context  = new TestContext();
     const partner  = context.testData.createPartner();
