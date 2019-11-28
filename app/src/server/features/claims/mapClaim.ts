@@ -3,14 +3,6 @@ import { ISalesforceClaim, ISalesforceProfileTotalPeriod } from "@server/reposit
 import { SALESFORCE_DATE_FORMAT } from "@server/features/common";
 import { ClaimDto, ClaimStatus, IContext } from "@framework/types";
 
-const STATUS_ALLOWING_IAR_EDIT = [
-  ClaimStatus.DRAFT,
-  ClaimStatus.SUBMITTED,
-  ClaimStatus.MO_QUERIED,
-  ClaimStatus.AWAITING_IAR,
-  ClaimStatus.INNOVATE_QUERIED,
-];
-
 export default (context: IContext) => (claim: ISalesforceClaim, forecast?: ISalesforceProfileTotalPeriod): ClaimDto => ({
   id: claim.Id,
   partnerId: claim.Acc_ProjectParticipant__r.Id,
@@ -27,7 +19,6 @@ export default (context: IContext) => (claim: ISalesforceClaim, forecast?: ISale
   comments: claim.Acc_ReasonForDifference__c,
   isIarRequired: claim.Acc_IARRequired__c,
   isApproved: [ClaimStatus.APPROVED, ClaimStatus.PAID].indexOf(claim.Acc_ClaimStatus__c) >= 0,
-  allowIarEdit: STATUS_ALLOWING_IAR_EDIT.indexOf(claim.Acc_ClaimStatus__c) >= 0,
   overheadRate: claim.Acc_ProjectParticipant__r.Acc_OverheadRate__c,
 
 });
