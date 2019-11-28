@@ -16,7 +16,7 @@ export class ProjectChangeRequestDocumentsStore extends DocumentsStoreBase {
     return this.getEditor("multipleDocuments", this.getPcrDocumentKey(projectId, projectChangeRequestIdOrItemId), () => Pending.done<MultipleDocumentUploadDto>({ files: [] }), init, (dto) => Pending.done(this.validateMultipleDocumentsDto(dto, false)));
   }
 
-  public updatePcrOrPcrItemDocumentsEditor(saving: boolean, projectId: string, projectChangeRequestIdOrItemId: string, dto: MultipleDocumentUploadDto, filesRequired: boolean, message: string, onComplete?: () => void) {
+  public updatePcrOrPcrItemDocumentsEditor(saving: boolean, projectId: string, projectChangeRequestIdOrItemId: string, dto: MultipleDocumentUploadDto, filesRequired: boolean, message?: string, onComplete?: () => void) {
     const key = this.getPcrDocumentKey(projectId, projectChangeRequestIdOrItemId);
     this.updateEditor(
       saving,
@@ -25,7 +25,7 @@ export class ProjectChangeRequestDocumentsStore extends DocumentsStoreBase {
       dto,
       (show) => this.validateMultipleDocumentsDto(dto, show, filesRequired),
       (p) => dto.files.length ? ApiClient.documents.uploadProjectChangeRequestDocumentOrItemDocument({ projectId, projectChangeRequestIdOrItemId, documents: dto, ...p }) : Promise.resolve(null),
-      () => this.afterUpdate("documents", "multipleDocuments", key, message, onComplete)
+      () => this.afterUpdate("documents", "multipleDocuments", key, dto.files.length ? message : undefined, onComplete)
     );
   }
 

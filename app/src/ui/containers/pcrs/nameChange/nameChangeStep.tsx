@@ -37,6 +37,7 @@ const InnerContainer = (props: StepProps<typeof accountNameChangeWorkflow> & Inn
             inline={false}
             value={() => selectedPartnerOption}
             update={(x, value) => x.partnerId = value && value.id}
+            validation={props.validator.partnerId}
           />
         </Form.Fieldset>
         <Form.Fieldset heading="Enter new name">
@@ -47,6 +48,7 @@ const InnerContainer = (props: StepProps<typeof accountNameChangeWorkflow> & Inn
             name="accountName"
             value={x => x.accountName}
             update={(x, value) => x.accountName = value}
+            validation={props.validator.accountName}
           />
         </Form.Fieldset>
         <Form.Submit>Save and continue</Form.Submit>
