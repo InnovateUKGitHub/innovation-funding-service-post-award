@@ -15,7 +15,6 @@ import { EditorStatus, IEditorStore, IStores, RootState, StoresConsumer } from "
 import { MultipleDocumentUpdloadDtoValidator, PCRDtoValidator } from "@ui/validators";
 import { NavigationArrowsForPCRs } from "@ui/containers/pcrs/navigationArrows";
 import { ICallableWorkflow, WorkFlow } from "@ui/containers/pcrs/workflow";
-import { PCRPrepareItemContainer, PCRViewItemContainer } from "@ui/containers";
 import { Result } from "@ui/validation/result";
 
 export interface ProjectChangeRequestPrepareItemParams {
@@ -84,7 +83,6 @@ class Component extends ContainerBase<ProjectChangeRequestPrepareItemParams, Dat
       >
         <ACC.Renderers.Messages messages={this.props.messages} />
         {workflow && this.renderWorkflow(workflow, project, pcr, pcrItem, pcrItemType, editor, documentsEditor, editableItemTypes)}
-        {!workflow && this.renderSinglePageForm()}
       </ACC.Page>
     );
   }
@@ -107,19 +105,6 @@ class Component extends ContainerBase<ProjectChangeRequestPrepareItemParams, Dat
         {workflow.isOnSummary() && this.renderSummarySection(workflow, project, pcr, pcrItem, editor, editableItemTypes)}
       </React.Fragment>
     );
-  }
-
-  // todo: sort out the prepareItem etc to use specfic props and not go back to the stores
-  private renderSinglePageForm() {
-    if (this.props.mode === "prepare") {
-      return <PCRPrepareItemContainer messages={this.props.messages} route={this.props.route} routes={this.props.routes} config={this.props.config} projectId={this.props.projectId} pcrId={this.props.pcrId} itemId={this.props.itemId} isClient={this.props.isClient} />;
-    }
-    if (this.props.mode === "review") {
-      return <PCRViewItemContainer messages={this.props.messages} route={this.props.route} routes={this.props.routes} config={this.props.config} projectId={this.props.projectId} pcrId={this.props.pcrId} itemId={this.props.itemId} isReviewing={true} isClient={this.props.isClient} />;
-    }
-    if (this.props.mode === "view") {
-      return <PCRViewItemContainer messages={this.props.messages} route={this.props.route} routes={this.props.routes} config={this.props.config} projectId={this.props.projectId} pcrId={this.props.pcrId} itemId={this.props.itemId} isReviewing={false} isClient={this.props.isClient} />;
-    }
   }
 
   private renderGuidanceSection(pcrItem: PCRItemDto) {
