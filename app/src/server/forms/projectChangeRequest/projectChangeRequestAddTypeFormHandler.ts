@@ -12,9 +12,9 @@ import { UpdatePCRCommand } from "@server/features/pcrs/updatePcrCommand";
 import { GetPCRByIdQuery } from "@server/features/pcrs/getPCRByIdQuery";
 import { PCRItemStatus } from "@framework/constants";
 
-export class ProjectChangeRequestAddTypeFormHandler extends StandardFormHandlerBase<ProjectChangeRequestAddTypeParams, PCRDto, PCRDtoValidator> {
+export class ProjectChangeRequestAddTypeFormHandler extends StandardFormHandlerBase<ProjectChangeRequestAddTypeParams, "pcr"> {
   constructor() {
-    super(ProjectChangeRequestAddTypeRoute, ["default"]);
+    super(ProjectChangeRequestAddTypeRoute, ["default"], "pcr");
   }
 
   protected async getDto(context: IContext, params: ProjectChangeRequestAddTypeParams, button: IFormButton, body: IFormBody): Promise<PCRDto> {
@@ -42,8 +42,8 @@ export class ProjectChangeRequestAddTypeFormHandler extends StandardFormHandlerB
     return ProjectChangeRequestPrepareRoute.getLink({projectId: params.projectId, pcrId: params.projectChangeRequestId});
   }
 
-  protected getStoreInfo(params: ProjectChangeRequestAddTypeParams): { key: string; store: string; } {
-    return getPcrEditor(params.projectId, params.projectChangeRequestId);
+  protected getStoreKey(params: ProjectChangeRequestAddTypeParams) {
+    return getPcrEditor(params.projectId, params.projectChangeRequestId).key;
   }
 
   protected createValidationResult(params: ProjectChangeRequestAddTypeParams, dto: PCRDto) {

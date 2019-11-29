@@ -10,10 +10,10 @@ import { MonitoringReportDtoValidator } from "@ui/validators/MonitoringReportDto
 import { getMonitoringReportEditor } from "@ui/redux/selectors";
 import { GetMonitoringReportById, SaveMonitoringReport } from "@server/features/monitoringReports";
 
-export class MonitoringReportPrepareFormHandler extends StandardFormHandlerBase<MonitoringReportPrepareParams, MonitoringReportDto, MonitoringReportDtoValidator> {
+export class MonitoringReportPrepareFormHandler extends StandardFormHandlerBase<MonitoringReportPrepareParams, "monitoringReport"> {
 
   constructor() {
-    super(MonitoringReportPrepareRoute, ["save-draft", "save-submitted"]);
+    super(MonitoringReportPrepareRoute, ["save-draft", "save-submitted"], "monitoringReport");
   }
 
   protected async getDto(context: IContext, params: MonitoringReportPrepareParams, button: IFormButton, body: IFormBody): Promise<MonitoringReportDto> {
@@ -33,8 +33,8 @@ export class MonitoringReportPrepareFormHandler extends StandardFormHandlerBase<
     return new MonitoringReportDtoValidator(dto, false, false, dto.questions, 100);
   }
 
-  protected getStoreInfo(params: MonitoringReportPrepareParams): { key: string; store: string; } {
-    return getMonitoringReportEditor(params.projectId, params.id);
+  protected getStoreKey(params: MonitoringReportPrepareParams) {
+    return getMonitoringReportEditor(params.projectId, params.id).key;
   }
 
   protected async run(context: IContext, params: MonitoringReportPrepareParams, button: IFormButton, dto: MonitoringReportDto): Promise<ILinkInfo> {

@@ -8,9 +8,9 @@ import { GetPCRByIdQuery } from "@server/features/pcrs/getPCRByIdQuery";
 import { UpdatePCRCommand } from "@server/features/pcrs/updatePcrCommand";
 import { PCRStatus } from "@framework/constants";
 
-export class ProjectChangeRequestPrepareFormHandler extends StandardFormHandlerBase<ProjectChangeRequestPrepareParams, PCRDto, PCRDtoValidator> {
+export class ProjectChangeRequestPrepareFormHandler extends StandardFormHandlerBase<ProjectChangeRequestPrepareParams, "pcr"> {
   constructor() {
-    super(ProjectChangeRequestPrepareRoute, ["default", "return"]);
+    super(ProjectChangeRequestPrepareRoute, ["default", "return"], "pcr");
   }
 
   protected async getDto(context: IContext, params: ProjectChangeRequestPrepareParams, button: IFormButton, body: IFormBody): Promise<PCRDto> {
@@ -29,8 +29,8 @@ export class ProjectChangeRequestPrepareFormHandler extends StandardFormHandlerB
     return PCRsDashboardRoute.getLink({ projectId: params.projectId });
   }
 
-  protected getStoreInfo(params: ProjectChangeRequestPrepareParams): { key: string; store: string; } {
-    return getPcrEditor(params.projectId, params.pcrId);
+  protected getStoreKey(params: ProjectChangeRequestPrepareParams) {
+    return getPcrEditor(params.projectId, params.pcrId).key;
   }
 
   protected createValidationResult(params: ProjectChangeRequestPrepareParams, dto: PCRDto) {

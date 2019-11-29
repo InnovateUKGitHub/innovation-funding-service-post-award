@@ -1,14 +1,14 @@
 import { IFormBody, IFormButton, MultipleFileFormHandlerBase } from "./formHandlerBase";
-import { getProjectDocumentEditor } from "../../ui/redux/selectors";
+import { getForecastDetailsEditor, getProjectDocumentEditor } from "../../ui/redux/selectors";
 import { ProjectDocumentPageParams, ProjectDocumentsRoute } from "../../ui/containers";
 import { UploadProjectDocumentCommand } from "../features/documents/uploadProjectDocument";
 import { Configuration } from "@server/features/common";
 import { MultipleDocumentUpdloadDtoValidator } from "@ui/validators";
 import { IContext, ILinkInfo } from "@framework/types";
 
-export class ProjectDocumentUploadHandler extends MultipleFileFormHandlerBase<ProjectDocumentPageParams, MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator> {
+export class ProjectDocumentUploadHandler extends MultipleFileFormHandlerBase<ProjectDocumentPageParams, "multipleDocuments"> {
   constructor() {
-    super(ProjectDocumentsRoute, ["default"]);
+    super(ProjectDocumentsRoute, ["default"], "multipleDocuments");
   }
 
   protected getDto(context: IContext, params: ProjectDocumentPageParams, button: IFormButton, body: IFormBody, files: IFileWrapper[]): Promise<MultipleDocumentUploadDto> {
@@ -23,8 +23,8 @@ export class ProjectDocumentUploadHandler extends MultipleFileFormHandlerBase<Pr
     return ProjectDocumentsRoute.getLink(params);
   }
 
-  protected getStoreInfo(params: ProjectDocumentPageParams, dto: MultipleDocumentUploadDto): { key: string; store: string; } {
-    return getProjectDocumentEditor(params.projectId);
+  protected getStoreKey(params: ProjectDocumentPageParams) {
+    return getProjectDocumentEditor(params.projectId).key;
   }
 
   protected createValidationResult(params: ProjectDocumentPageParams, dto: MultipleDocumentUploadDto): MultipleDocumentUpdloadDtoValidator {

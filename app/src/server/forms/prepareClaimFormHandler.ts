@@ -1,6 +1,5 @@
 import { UpdateClaimCommand } from "../features/claims/updateClaim";
 import { IFormBody, IFormButton, StandardFormHandlerBase } from "./formHandlerBase";
-import { Results } from "../../ui/validation/results";
 import { ClaimDto, ClaimStatus, ProjectRole } from "@framework/types";
 import { GetClaim } from "../features/claims";
 import { AllClaimsDashboardRoute, ClaimForecastRoute, ClaimsDashboardRoute, PrepareClaimParams, PrepareClaimRoute } from "../../ui/containers";
@@ -10,9 +9,9 @@ import { ILinkInfo } from "@framework/types/ILinkInfo";
 import { IContext } from "@framework/types/IContext";
 import { GetAllProjectRolesForUser } from "../features/projects";
 
-export class PrepareClaimFormHandler extends StandardFormHandlerBase<PrepareClaimParams, ClaimDto, ClaimDtoValidator> {
+export class PrepareClaimFormHandler extends StandardFormHandlerBase<PrepareClaimParams, "claim"> {
   constructor() {
-    super(PrepareClaimRoute, ["default", "return"]);
+    super(PrepareClaimRoute, ["default", "return"], "claim");
   }
 
   protected async getDto(context: IContext, params: PrepareClaimParams, button: IFormButton, body: IFormBody): Promise<ClaimDto> {
@@ -38,8 +37,8 @@ export class PrepareClaimFormHandler extends StandardFormHandlerBase<PrepareClai
     return ClaimsDashboardRoute.getLink(params);
   }
 
-  protected getStoreInfo(params: PrepareClaimParams): { key: string; store: string; } {
-    return getClaimEditor(params.partnerId, params.periodId);
+  protected getStoreKey(params: PrepareClaimParams) {
+    return getClaimEditor(params.partnerId, params.periodId).key;
   }
 
   protected createValidationResult(params: PrepareClaimParams, dto: ClaimDto) {

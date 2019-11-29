@@ -12,9 +12,9 @@ import { PCRDtoValidator } from "@ui/validators";
 import { PCRItemStatus, PCRItemType } from "@framework/constants";
 import { reasoningWorkflowSteps } from "@ui/containers/pcrs/reasoning/workflowMetadata";
 
-export class ProjectChangeRequestReasoningUpdateHandler extends StandardFormHandlerBase<ProjectChangeRequestPrepareReasoningParams, PCRDto, PCRDtoValidator> {
+export class ProjectChangeRequestReasoningUpdateHandler extends StandardFormHandlerBase<ProjectChangeRequestPrepareReasoningParams, "pcr"> {
   constructor() {
-    super(PCRPrepareReasoningRoute, ["default", "filesStep", "reasoningStep"]);
+    super(PCRPrepareReasoningRoute, ["default", "filesStep", "reasoningStep"], "pcr");
   }
 
   protected async getDto(context: IContext, params: ProjectChangeRequestPrepareReasoningParams, button: IFormButton, body: IFormBody): Promise<PCRDto> {
@@ -49,8 +49,8 @@ export class ProjectChangeRequestReasoningUpdateHandler extends StandardFormHand
     });
   }
 
-  protected getStoreInfo(params: ProjectChangeRequestPrepareReasoningParams): { key: string, store: string } {
-    return getPcrEditor(params.projectId, params.pcrId);
+  protected getStoreKey(params: ProjectChangeRequestPrepareReasoningParams) {
+    return getPcrEditor(params.projectId, params.pcrId).key;
   }
 
   protected createValidationResult(params: ProjectChangeRequestPrepareReasoningParams, dto: PCRDto) {
