@@ -1,7 +1,5 @@
 import { ProjectChangeRequestItemDocumentDeleteHandler } from "@server/forms/projectChangeRequest/projectChangeRequestItemDocumentDeleteHandler";
 import { ProjectChangeRequestItemDocumentUploadHandler } from "@server/forms/projectChangeRequest/projectChangeRequestItemDocumentUploadHandler";
-import { ProjectChangeRequestItemDocumentDeleteHandlerOld } from "@server/forms/projectChangeRequest/projectChangeRequestItemDocumentDeleteHandlerOld";
-import { ProjectChangeRequestItemDocumentUploadHandlerOld } from "@server/forms/projectChangeRequest/projectChangeRequestItemDocumentUploadHandlerOld";
 import { ProjectChangeRequestItemUpdateHandler } from "@server/forms/projectChangeRequest/projectChangeRequestItemUpdateHandler";
 import { ProjectChangeRequestReasoningDocumentDeleteHandler } from "@server/forms/projectChangeRequest/projectChangeRequestReasoningDocumentDeleteHandler";
 import { ProjectChangeRequestReasoningDocumentUploadHandler } from "@server/forms/projectChangeRequest/projectChangeRequestReasoningDocumentUploadHandler";
@@ -53,9 +51,7 @@ const handlers: IFormHandler[] = [
   new ProjectChangeRequestReasoningDocumentUploadHandler(),
   new ProjectChangeRequestItemUpdateHandler(),
   new ProjectChangeRequestItemDocumentDeleteHandler(),
-  new ProjectChangeRequestItemDocumentDeleteHandlerOld(),
   new ProjectChangeRequestItemDocumentUploadHandler(),
-  new ProjectChangeRequestItemDocumentUploadHandlerOld(),
   new ProjectDocumentUploadHandler(),
 ];
 
