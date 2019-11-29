@@ -22,6 +22,11 @@ export class ClaimDocumentsStore extends DocumentsStoreBase {
       .then(x => x.length ? x[0] : null);
   }
 
+  public getClaimDocuments(projectId: string, partnerId: string, periodId: number) {
+    const key = this.buildKey("claimDocuments", projectId, partnerId, periodId);
+    return this.getData("documents", key, p => ApiClient.documents.getClaimDocuments({projectId, partnerId, periodId, ...p}));
+  }
+
   public getCurrentClaimIarForPartner(projectId: string, partnerId: string) {
     return this.claimsStore.getActiveClaimForPartner(partnerId).chain(claim => {
       if (!claim) {
@@ -48,6 +53,10 @@ export class ClaimDocumentsStore extends DocumentsStoreBase {
 
   public getIAREditor(projectId: string, partnerId: string, periodId: number, init?: (dto: DocumentUploadDto) => void) {
     return this.getEditor("documents", this.getIARKey(projectId, partnerId, periodId), () => Pending.done<DocumentUploadDto>({ file: null, description: DocumentDescription.IAR }), init, (dto) => this.validateDocumentUploadDto(dto, false));
+  }
+
+  public getClaimDocumentsEditor(projectId: string, partnerId: string, periodId: number, init?: (dto: MultipleDocumentUploadDto) => void) {
+    return this.getEditor("multipleDocuments", this.buildKey("claimDocuments", projectId, partnerId, periodId), () => Pending.done<MultipleDocumentUploadDto>({files: []}), init, (dto) => this.validateMultipleDocumentsDto(dto, false));
   }
 
   public getIarEditorForCurrentPartnerClaim(projectId: string, partnerId: string, init?: (dto: DocumentUploadDto) => void) {
@@ -79,8 +88,19 @@ export class ClaimDocumentsStore extends DocumentsStoreBase {
     return this.updateEditor(saving, "documents", key, dto, show => this.validateDocumentUploadDto(dto, show), p => ApiClient.documents.uploadClaimDocument({ claimKey: { projectId, partnerId, periodId }, document: dto, ...p }), () => this.afterUpdate("documents", "multipleDocuments", key, message, onComplete));
   }
 
+  public updateClaimDocumentsEditor(saving: boolean, projectId: string, partnerId: string, periodId: number, dto: MultipleDocumentUploadDto, message?: string, onComplete?: () => void) {
+    const key = this.buildKey("claimDocuments", projectId, partnerId, periodId);
+    return this.updateEditor(saving, "multipleDocuments", key, dto, show => this.validateMultipleDocumentsDto(dto, show), p => ApiClient.documents.uploadClaimDocuments({claimKey: {projectId, partnerId, periodId }, documents: dto, ...p}), () => this.afterUpdate("documents", "multipleDocuments", key, message, onComplete));
+  }
+
   public deleteIARDocument(projectId: string, partnerId: string, periodId: number, dto: DocumentUploadDto, document: DocumentSummaryDto, message?: string, onComplete?: () => void) {
     const key = this.getIARKey(projectId, partnerId, periodId);
     return this.deleteEditor("documents", key, dto, () => this.validateDocumentUploadDto(dto, false), p => ApiClient.documents.deleteClaimDocument({ claimKey: { projectId, partnerId, periodId }, documentId: document.id, ...p }), () => this.afterUpdate("documents", "multipleDocuments", key, message, onComplete));
   }
+
+  public deleteClaimDocument(projectId: string, partnerId: string, periodId: number, dto: MultipleDocumentUploadDto, document: DocumentSummaryDto, message?: string, onComplete?: () => void) {
+    const key = this.buildKey("claimDocuments", projectId, partnerId, periodId);
+    return this.deleteEditor("multipleDocuments", key, dto, () => this.validateMultipleDocumentsDto(dto, false), p => ApiClient.documents.deleteClaimDocument({claimKey: {projectId, partnerId, periodId}, documentId: document.id, ...p}), () => this.afterUpdate("documents", "multipleDocuments", key, message, onComplete));
+  }
+
 }

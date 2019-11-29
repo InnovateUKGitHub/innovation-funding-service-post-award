@@ -1,6 +1,7 @@
 export * from "./allClaimsDashboard";
 export * from "./claimLineItems";
 export * from "./claimDetailDocuments";
+export * from "./claimDocuments";
 export * from "./claimForecast";
 export * from "./dashboard";
 export * from "./details";

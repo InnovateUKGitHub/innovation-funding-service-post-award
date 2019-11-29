@@ -22,6 +22,7 @@ export class Link extends React.Component<StyledLinkProps> {
     const className = classNames({
       "govuk-link": styling === "Link",
       "govuk-button": styling === "PrimaryButton" || styling === "SecondaryButton",
+      "govuk-!-margin-right-1": styling === "PrimaryButton" || styling === "SecondaryButton",
       "govuk-button--secondary": styling === "SecondaryButton",
     }, this.props.className);
 
