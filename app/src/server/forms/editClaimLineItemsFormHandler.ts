@@ -12,10 +12,10 @@ import { SaveClaimDetails } from "@server/features/claimDetails/saveClaimDetails
 import { getClaimDetailsEditor } from "@ui/redux/selectors";
 import { ClaimDetailsValidator } from "@ui/validators/claimDetailsValidator";
 
-export class EditClaimLineItemsFormHandler extends StandardFormHandlerBase<EditClaimDetailsParams, ClaimDetailsDto, ClaimDetailsValidator> {
+export class EditClaimLineItemsFormHandler extends StandardFormHandlerBase<EditClaimDetailsParams, "claimDetail"> {
 
   constructor() {
-    super(EditClaimLineItemsRoute, ["upload", "default"]);
+    super(EditClaimLineItemsRoute, ["upload", "default"], "claimDetail");
   }
 
   protected async getDto(context: IContext, params: EditClaimDetailsParams, button: IFormButton, body: IFormBody) {
@@ -42,8 +42,8 @@ export class EditClaimLineItemsFormHandler extends StandardFormHandlerBase<EditC
     return new ClaimDetailsValidator(dto, false);
   }
 
-  protected getStoreInfo(params: EditClaimDetailsParams): { key: string; store: string; } {
-    return getClaimDetailsEditor(params.partnerId, params.periodId, params.costCategoryId);
+  protected getStoreKey(params: EditClaimDetailsParams) {
+    return getClaimDetailsEditor(params.partnerId, params.periodId, params.costCategoryId).key;
   }
 
   protected async run(context: IContext, params: EditClaimDetailsParams, button: IFormButton, dto: ClaimDetailsDto): Promise<ILinkInfo> {

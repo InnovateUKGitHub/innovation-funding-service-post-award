@@ -7,9 +7,9 @@ import { MultipleDocumentUpdloadDtoValidator } from "@ui/validators";
 import { getKey } from "@framework/util";
 import { reasoningWorkflowSteps } from "@ui/containers/pcrs/reasoning/workflowMetadata";
 
-export class ProjectChangeRequestReasoningDocumentUploadHandler extends MultipleFileFormHandlerBase<ProjectChangeRequestPrepareReasoningParams, MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator> {
+export class ProjectChangeRequestReasoningDocumentUploadHandler extends MultipleFileFormHandlerBase<ProjectChangeRequestPrepareReasoningParams, "multipleDocuments"> {
   constructor() {
-    super(PCRPrepareReasoningRoute, ["uploadFile", "uploadFileAndContinue"]);
+    super(PCRPrepareReasoningRoute, ["uploadFile", "uploadFileAndContinue"], "multipleDocuments");
   }
 
   protected async getDto(context: IContext, params: ProjectChangeRequestPrepareReasoningParams, button: IFormButton, body: IFormBody, files: IFileWrapper[]): Promise<MultipleDocumentUploadDto> {
@@ -33,11 +33,8 @@ export class ProjectChangeRequestReasoningDocumentUploadHandler extends Multiple
     });
   }
 
-  protected getStoreInfo(params: ProjectChangeRequestPrepareReasoningParams): { key: string, store: string } {
-    return {
-      key: getKey("pcrs", params.projectId, params.pcrId),
-      store: "multipleDocuments"
-    };
+  protected getStoreKey(params: ProjectChangeRequestPrepareReasoningParams) {
+    return getKey("pcrs", params.projectId, params.pcrId);
   }
 
   protected createValidationResult(params: ProjectChangeRequestPrepareReasoningParams, dto: MultipleDocumentUploadDto, button: IFormButton) {

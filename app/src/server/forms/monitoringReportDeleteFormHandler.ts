@@ -1,17 +1,15 @@
 import { IFormBody, IFormButton, StandardFormHandlerBase } from "@server/forms/formHandlerBase";
-import { MonitoringReportDeleteParams, MonitoringReportDeleteRoute } from "@ui/containers/monitoringReports/delete";
 import { MonitoringReportDto } from "@framework/dtos";
 import { IContext, ILinkInfo } from "@framework/types";
 import { MonitoringReportDtoValidator } from "@ui/validators";
 import { DeleteMonitoringReportCommand, GetMonitoringReportById} from "@server/features/monitoringReports";
 import { getMonitoringReportEditor } from "@ui/redux/selectors";
-import { MonitoringReportDashboardRoute } from "@ui/containers";
-import { Results } from "@ui/validation";
+import { MonitoringReportDashboardRoute, MonitoringReportDeleteParams, MonitoringReportDeleteRoute } from "@ui/containers";
 
-export class MonitoringReportDeleteFormHandler extends StandardFormHandlerBase<MonitoringReportDeleteParams, MonitoringReportDto, Results<{}>> {
+export class MonitoringReportDeleteFormHandler extends StandardFormHandlerBase<MonitoringReportDeleteParams, "monitoringReport"> {
 
   constructor() {
-    super(MonitoringReportDeleteRoute, ["delete"]);
+    super(MonitoringReportDeleteRoute, ["delete"], "monitoringReport");
   }
 
   protected getDto(context: IContext, params: MonitoringReportDeleteParams, button: IFormButton, body: IFormBody): Promise<MonitoringReportDto> {
@@ -23,8 +21,8 @@ export class MonitoringReportDeleteFormHandler extends StandardFormHandlerBase<M
     return MonitoringReportDashboardRoute.getLink({  projectId: params.projectId });
   }
 
-  protected getStoreInfo(params: MonitoringReportDeleteParams, dto: MonitoringReportDto): { key: string; store: string; } {
-    return getMonitoringReportEditor(params.projectId, params.id);
+  protected getStoreKey(params: MonitoringReportDeleteParams, dto: MonitoringReportDto) {
+    return getMonitoringReportEditor(params.projectId, params.id).key;
   }
 
   protected createValidationResult(params: MonitoringReportDeleteParams, dto: MonitoringReportDto): MonitoringReportDtoValidator {

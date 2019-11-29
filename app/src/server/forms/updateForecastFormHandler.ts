@@ -10,9 +10,9 @@ import { GetCostCategoriesForPartnerQuery } from "../features/claims/getCostCate
 import { Params, UpdateForecastRoute } from "@ui/containers/forecasts/update";
 import { ForecastDetailsRoute } from "@ui/containers/forecasts/details";
 
-export class UpdateForecastFormHandler extends StandardFormHandlerBase<Params, ForecastDetailsDTO[], ForecastDetailsDtosValidator> {
+export class UpdateForecastFormHandler extends StandardFormHandlerBase<Params, "forecastDetails"> {
   constructor() {
-    super(UpdateForecastRoute, ["default"]);
+    super(UpdateForecastRoute, ["default"], "forecastDetails");
   }
   protected async getDto(context: IContext, params: Params, button: IFormButton, body: { [key: string]: string; }): Promise<ForecastDetailsDTO[]> {
     const dto = await context.runQuery(new GetAllForecastsForPartnerQuery(params.partnerId));
@@ -38,8 +38,8 @@ export class UpdateForecastFormHandler extends StandardFormHandlerBase<Params, F
     return ForecastDetailsRoute.getLink(params);
   }
 
-  protected getStoreInfo(params: Params): { key: string; store: string; } {
-    return getForecastDetailsEditor(params.partnerId);
+  protected getStoreKey(params: Params) {
+    return getForecastDetailsEditor(params.partnerId).key;
   }
 
   protected createValidationResult(params: Params, dto: ForecastDetailsDTO[]) {

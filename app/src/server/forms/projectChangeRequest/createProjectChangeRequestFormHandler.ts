@@ -7,9 +7,9 @@ import { CreateProjectChangeRequestCommand } from "@server/features/pcrs/createP
 import { PCRDtoValidator } from "@ui/validators";
 import { PCRItemStatus, PCRStatus } from "@framework/constants";
 
-export class ProjectChangeRequestCreateFormHandler extends StandardFormHandlerBase<CreateProjectChangeRequestParams, PCRDto, PCRDtoValidator> {
+export class ProjectChangeRequestCreateFormHandler extends StandardFormHandlerBase<CreateProjectChangeRequestParams, "pcr"> {
   constructor() {
-    super(PCRCreateRoute, ["default"]);
+    super(PCRCreateRoute, ["default"], "pcr");
   }
 
   protected async getDto(context: IContext, params: CreateProjectChangeRequestParams, button: IFormButton, body: IFormBody): Promise<PCRDto> {
@@ -36,8 +36,8 @@ export class ProjectChangeRequestCreateFormHandler extends StandardFormHandlerBa
     return ProjectChangeRequestPrepareRoute.getLink({projectId: params.projectId, pcrId: id});
   }
 
-  protected getStoreInfo(params: CreateProjectChangeRequestParams): { key: string; store: string; } {
-    return getPcrEditorForCreate(params.projectId);
+  protected getStoreKey(params: CreateProjectChangeRequestParams) {
+    return getPcrEditorForCreate(params.projectId).key;
   }
 
   protected createValidationResult(params: CreateProjectChangeRequestParams, dto: PCRDto) {
