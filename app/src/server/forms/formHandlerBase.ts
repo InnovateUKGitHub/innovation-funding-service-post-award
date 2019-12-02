@@ -1,12 +1,13 @@
 import express, { RequestHandler } from "express";
 import { ISession, ServerFileWrapper } from "../apis/controllerBase";
 import { configureRouter, routeConfig } from "../../ui/routing";
-import { Results } from "../../ui/validation/results";
 import contextProvider from "../features/common/contextProvider";
 import { FormHandlerError } from "../features/common/appError";
 import { ILinkInfo } from "@framework/types/ILinkInfo";
 import { IContext } from "@framework/types/IContext";
 import { upload } from "./memoryStorage";
+import { EditorState, EditorStateKeys } from "@ui/redux";
+import { InferEditorStoreDto, InferEditorStoreValidator } from "@ui/redux/stores/storeBase";
 
 interface RouteInfo<TParams> {
   routeName: string;
@@ -28,8 +29,8 @@ export interface IFormBody {
   [key: string]: string;
 }
 
-abstract class FormHandlerBase<TParams, TDto, TValidation extends Results<{}>> implements IFormHandler {
-  protected constructor(routeInfo: RouteInfo<TParams>, buttons: string[]) {
+abstract class FormHandlerBase<TParams, TStore extends EditorStateKeys> implements IFormHandler {
+  protected constructor(routeInfo: RouteInfo<TParams>, buttons: string[], protected store: TStore) {
     this.routePath = routeInfo.routePath.split("?")[0];
     this.routeName = routeInfo.routeName;
     this.getParams = routeInfo.getParams;
@@ -59,13 +60,13 @@ abstract class FormHandlerBase<TParams, TDto, TValidation extends Results<{}>> i
     const session: ISession = { user: req.session!.user };
     const context = contextProvider.start(session);
 
-    let dto: TDto;
+    let dto: InferEditorStoreDto<EditorState[TStore][string]>;
     try {
-      dto = (await this.createDto(context, params, button, body, req)) || {} as TDto;
+      dto = (await this.createDto(context, params, button, body, req)) || {} as InferEditorStoreDto<EditorState[TStore][string]>;
     }
     catch (error) {
       context.logger.error("Error creating dto in form submission", error);
-      dto = {} as TDto;
+      dto = {} as InferEditorStoreDto<EditorState[TStore][string]>;
     }
 
     try {
@@ -75,18 +76,18 @@ abstract class FormHandlerBase<TParams, TDto, TValidation extends Results<{}>> i
     }
     catch (error) {
       context.logger.error("Error handling form submission", error);
-      const { key, store } = this.getStoreInfo(params, dto);
-      throw new FormHandlerError(key, store, dto, this.createValidationResult(params, dto, button), error);
+      const key = this.getStoreKey(params, dto);
+      throw new FormHandlerError(key, this.store, dto, this.createValidationResult(params, dto, button), error);
     }
   }
 
-  protected abstract createDto(context: IContext, params: TParams, button: IFormButton, body: IFormBody, req: express.Request): Promise<TDto>;
+  protected abstract createDto(context: IContext, params: TParams, button: IFormButton, body: IFormBody, req: express.Request): Promise<InferEditorStoreDto<EditorState[TStore][string]>>;
 
-  protected abstract run(context: IContext, params: TParams, button: IFormButton, dto: TDto): Promise<ILinkInfo>;
+  protected abstract run(context: IContext, params: TParams, button: IFormButton, dto: InferEditorStoreDto<EditorState[TStore][string]>): Promise<ILinkInfo>;
 
-  protected abstract getStoreInfo(params: TParams, dto: TDto): { key: string, store: string };
+  protected abstract getStoreKey(params: TParams, dto: InferEditorStoreDto<EditorState[TStore][string]>): string;
 
-  protected abstract createValidationResult(params: TParams, dto: TDto, button: IFormButton): TValidation;
+  protected abstract createValidationResult(params: TParams, dto: InferEditorStoreDto<EditorState[TStore][string]>, button: IFormButton): InferEditorStoreValidator<EditorState[TStore][string]>;
 
   protected redirect(link: ILinkInfo, res: express.Response) {
     const router = configureRouter(routeConfig);
@@ -98,36 +99,36 @@ abstract class FormHandlerBase<TParams, TDto, TValidation extends Results<{}>> i
   public abstract readonly middleware: RequestHandler[];
 }
 
-export abstract class StandardFormHandlerBase<TParams, TDto, TValidation extends Results<{}>> extends FormHandlerBase<TParams, TDto, TValidation> {
+export abstract class StandardFormHandlerBase<TParams, TStore extends EditorStateKeys> extends FormHandlerBase<TParams, TStore> {
 
   public readonly middleware = [];
 
-  protected async createDto(context: IContext, params: TParams, button: IFormButton, body: IFormBody, req: express.Request): Promise<TDto> {
+  protected async createDto(context: IContext, params: TParams, button: IFormButton, body: IFormBody, req: express.Request): Promise<InferEditorStoreDto<EditorState[TStore][string]>> {
     return this.getDto(context, params, button, body);
   }
 
-  protected abstract getDto(context: IContext, params: TParams, button: IFormButton, body: IFormBody): Promise<TDto>;
+  protected abstract getDto(context: IContext, params: TParams, button: IFormButton, body: IFormBody): Promise<InferEditorStoreDto<EditorState[TStore][string]>>;
 }
 
-export abstract class SingleFileFormHandlerBase<TParams, TDto, TValidation extends Results<{}>> extends FormHandlerBase<TParams, TDto, TValidation> {
+export abstract class SingleFileFormHandlerBase<TParams, TStore extends EditorStateKeys> extends FormHandlerBase<TParams, TStore> {
   public readonly middleware = [upload.single("attachment")];
 
-  protected async createDto(context: IContext, params: TParams, button: IFormButton, body: IFormBody, req: express.Request): Promise<TDto> {
+  protected async createDto(context: IContext, params: TParams, button: IFormButton, body: IFormBody, req: express.Request): Promise<InferEditorStoreDto<EditorState[TStore][string]>> {
     const file: IFileWrapper | null = req.file && new ServerFileWrapper(req.file);
     return this.getDto(context, params, button, body, file);
   }
 
-  protected abstract getDto(context: IContext, params: TParams, button: IFormButton, body: IFormBody, file: IFileWrapper|null): Promise<TDto>;
+  protected abstract getDto(context: IContext, params: TParams, button: IFormButton, body: IFormBody, file: IFileWrapper|null): Promise<InferEditorStoreDto<EditorState[TStore][string]>>;
 }
 
-export abstract class MultipleFileFormHandlerBase<TParams, TDto, TValidation extends Results<{}>> extends FormHandlerBase<TParams, TDto, TValidation> {
+export abstract class MultipleFileFormHandlerBase<TParams, TStore extends EditorStateKeys> extends FormHandlerBase<TParams, TStore> {
   public readonly middleware = [upload.array("attachment")];
 
-  protected async createDto(context: IContext, params: TParams, button: IFormButton, body: IFormBody, req: express.Request): Promise<TDto> {
+  protected async createDto(context: IContext, params: TParams, button: IFormButton, body: IFormBody, req: express.Request): Promise<InferEditorStoreDto<EditorState[TStore][string]>> {
     const files: IFileWrapper[] = Array.isArray(req.files) ? req.files.map(x => new ServerFileWrapper(x)) : [];
     return this.getDto(context, params, button, body, files);
   }
 
-  protected abstract getDto(context: IContext, params: TParams, button: IFormButton, body: IFormBody, files: IFileWrapper[]): Promise<TDto>;
+  protected abstract getDto(context: IContext, params: TParams, button: IFormButton, body: IFormBody, files: IFileWrapper[]): Promise<InferEditorStoreDto<EditorState[TStore][string]>>;
 
 }

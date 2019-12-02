@@ -1,4 +1,4 @@
-import { IContext, ILinkInfo, PCRItemDto, PCRItemType } from "@framework/types";
+import { IContext, ILinkInfo } from "@framework/types";
 import { Configuration } from "@server/features/common";
 import { UploadProjectChangeRequestDocumentOrItemDocumentCommand } from "@server/features/documents/uploadProjectChangeRequestDocumentOrItemDocument";
 import { GetPCRByIdQuery } from "@server/features/pcrs/getPCRByIdQuery";
@@ -11,9 +11,9 @@ import { MultipleDocumentUpdloadDtoValidator } from "@ui/validators";
 import { getKey } from "@framework/util";
 import { WorkFlow } from "@ui/containers/pcrs/workflow";
 
-export class ProjectChangeRequestItemDocumentUploadHandler extends MultipleFileFormHandlerBase<ProjectChangeRequestPrepareItemParams, MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator> {
+export class ProjectChangeRequestItemDocumentUploadHandler extends MultipleFileFormHandlerBase<ProjectChangeRequestPrepareItemParams, "multipleDocuments"> {
   constructor() {
-    super(PCRPrepareItemRoute, ["uploadFile", "uploadFileAndContinue"]);
+    super(PCRPrepareItemRoute, ["uploadFile", "uploadFileAndContinue"], "multipleDocuments");
   }
 
   protected async getDto(context: IContext, params: ProjectChangeRequestPrepareItemParams, button: IFormButton, body: IFormBody, files: IFileWrapper[]): Promise<MultipleDocumentUploadDto> {
@@ -46,11 +46,8 @@ export class ProjectChangeRequestItemDocumentUploadHandler extends MultipleFileF
     return PCRPrepareItemRoute.getLink(params);
   }
 
-  protected getStoreInfo(params: ProjectChangeRequestPrepareItemParams): { key: string, store: string } {
-    return {
-      key: getKey("pcrs", params.projectId, params.itemId),
-      store: "multipleDocuments"
-    };
+  protected getStoreKey(params: ProjectChangeRequestPrepareItemParams) {
+    return getKey("pcrs", params.projectId, params.itemId);
   }
 
   protected createValidationResult(params: ProjectChangeRequestPrepareItemParams, dto: MultipleDocumentUploadDto, button: IFormButton) {

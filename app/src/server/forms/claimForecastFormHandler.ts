@@ -8,9 +8,9 @@ import { GetByIdQuery as GetPartnerByIdQuery } from "../features/partners";
 import { IContext, ILinkInfo, ProjectRole } from "@framework/types";
 import { GetCostCategoriesForPartnerQuery } from "../features/claims/getCostCategoriesForPartnerQuery";
 
-export class ClaimForecastFormHandler extends StandardFormHandlerBase<ClaimForecastParams, ForecastDetailsDTO[], ForecastDetailsDtosValidator> {
+export class ClaimForecastFormHandler extends StandardFormHandlerBase<ClaimForecastParams, "forecastDetails"> {
   constructor() {
-    super(ClaimForecastRoute, ["save", "default"]);
+    super(ClaimForecastRoute, ["save", "default"], "forecastDetails");
   }
 
   protected async getDto(context: IContext, params: ClaimForecastParams, button: IFormButton, body: IFormBody): Promise<ForecastDetailsDTO[]> {
@@ -50,8 +50,8 @@ export class ClaimForecastFormHandler extends StandardFormHandlerBase<ClaimForec
 
   }
 
-  protected getStoreInfo(params: ClaimForecastParams): { key: string; store: string; } {
-    return getForecastDetailsEditor(params.partnerId);
+  protected getStoreKey(params: ClaimForecastParams) {
+    return getForecastDetailsEditor(params.partnerId).key;
   }
 
   protected createValidationResult(params: ClaimForecastParams, dto: ForecastDetailsDTO[]) {

@@ -17,9 +17,9 @@ import { WorkFlow } from "@ui/containers/pcrs/workflow";
 import { accountNameChangeStepNames } from "@ui/containers/pcrs/nameChange/accountNameChangeWorkflow";
 import { suspendProjectSteps } from "@ui/containers/pcrs/suspendProject/workflow";
 
-export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBase<ProjectChangeRequestPrepareItemParams, Dtos.PCRDto, PCRDtoValidator> {
+export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBase<ProjectChangeRequestPrepareItemParams, "pcr"> {
   constructor() {
-    super(PCRPrepareItemRoute, ["default"]);
+    super(PCRPrepareItemRoute, ["default"], "pcr");
   }
 
   protected async getDto(context: IContext, params: ProjectChangeRequestPrepareItemParams, button: IFormButton, body: IFormBody): Promise<Dtos.PCRDto> {
@@ -112,8 +112,8 @@ export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBa
     }
   }
 
-  protected getStoreInfo(params: ProjectChangeRequestPrepareItemParams): { key: string, store: string } {
-    return getPcrEditor(params.projectId, params.pcrId);
+  protected getStoreKey(params: ProjectChangeRequestPrepareItemParams) {
+    return getPcrEditor(params.projectId, params.pcrId).key;
   }
 
   protected createValidationResult(params: ProjectChangeRequestPrepareItemParams, dto: Dtos.PCRDto) {

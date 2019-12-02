@@ -8,9 +8,9 @@ import { Results } from "../../ui/validation/results";
 import { ILinkInfo } from "@framework/types/ILinkInfo";
 import { IContext } from "@framework/types/IContext";
 
-export class ReviewClaimFormHandler extends StandardFormHandlerBase<ReviewClaimParams, ClaimDto, ClaimDtoValidator> {
+export class ReviewClaimFormHandler extends StandardFormHandlerBase<ReviewClaimParams, "claim"> {
     constructor() {
-        super(ReviewClaimRoute, ["default"]);
+        super(ReviewClaimRoute, ["default"], "claim");
     }
 
     protected async getDto(context: IContext, params: ReviewClaimParams, button: IFormButton, body: IFormBody): Promise<ClaimDto> {
@@ -31,8 +31,8 @@ export class ReviewClaimFormHandler extends StandardFormHandlerBase<ReviewClaimP
         return AllClaimsDashboardRoute.getLink(params);
     }
 
-    protected getStoreInfo(params: ReviewClaimParams): { key: string; store: string; } {
-        return getClaimEditor(params.partnerId, params.periodId);
+    protected getStoreKey(params: ReviewClaimParams) {
+        return getClaimEditor(params.partnerId, params.periodId).key;
       }
 
     protected createValidationResult(params: ReviewClaimParams, dto: ClaimDto) {

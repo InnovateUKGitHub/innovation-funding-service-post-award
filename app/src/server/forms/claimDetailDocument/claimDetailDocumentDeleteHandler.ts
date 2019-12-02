@@ -3,33 +3,32 @@ import {
   ClaimDetailDocumentsPageParams,
   ClaimDetailDocumentsRoute
 } from "../../../ui/containers";
-import {
-  getClaimDetailDocumentDeleteEditorStoreInfo
-} from "../../../ui/redux/selectors";
-import { Results } from "../../../ui/validation/results";
 import { ILinkInfo } from "@framework/types/ILinkInfo";
 import { IContext } from "@framework/types/IContext";
 import { DeleteClaimDetailDocumentCommand } from "@server/features/documents/deleteClaimDetailDocument";
+import { MultipleDocumentUpdloadDtoValidator } from "@ui/validators";
+import { Configuration } from "@server/features/common";
+import { getClaimDetailDocumentDeleteEditorStoreInfo } from "@ui/redux/selectors";
 
-interface Document {
+interface Document extends MultipleDocumentUploadDto {
   id: string;
 }
 
-export class ClaimDetailDocumentDeleteHandler extends StandardFormHandlerBase<ClaimDetailDocumentsPageParams, Document, Results<{}>> {
+export class ClaimDetailDocumentDeleteHandler extends StandardFormHandlerBase<ClaimDetailDocumentsPageParams, "multipleDocuments"> {
 
   constructor() {
-    super(ClaimDetailDocumentsRoute, ["delete"]);
+    super(ClaimDetailDocumentsRoute, ["delete"], "multipleDocuments");
   }
 
   protected getDto(context: IContext, params: ClaimDetailDocumentsPageParams, button: IFormButton, body: IFormBody) {
-    return Promise.resolve({ id: button.value });
+    return Promise.resolve({ id: button.value, files: [] });
   }
   protected createValidationResult(params: ClaimDetailDocumentsPageParams, dto: Document) {
-    return new Results(dto, false);
+    return new MultipleDocumentUpdloadDtoValidator(dto, Configuration, false, false);
   }
 
-  protected getStoreInfo(params: ClaimDetailDocumentsPageParams): { key: string; store: string; } {
-    return getClaimDetailDocumentDeleteEditorStoreInfo({ projectId: params.projectId, partnerId: params.partnerId, periodId: params.periodId, costCategoryId: params.costCategoryId }, []);
+  protected getStoreKey(params: ClaimDetailDocumentsPageParams) {
+    return getClaimDetailDocumentDeleteEditorStoreInfo({ projectId: params.projectId, partnerId: params.partnerId, periodId: params.periodId, costCategoryId: params.costCategoryId }, []).key;
   }
 
   protected async run(context: IContext, params: ClaimDetailDocumentsPageParams, button: IFormButton, dto: Document): Promise<ILinkInfo> {
