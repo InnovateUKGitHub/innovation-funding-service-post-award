@@ -7,6 +7,7 @@ export const routeConfig: IRoutes = {
   claimsDashboard: Containers.ClaimsDashboardRoute,
   claimDetails: Containers.ClaimsDetailsRoute,
   claimDetailDocuments: Containers.ClaimDetailDocumentsRoute,
+  claimDocuments: Containers.ClaimDocumentsRoute,
   claimForecast: Containers.ClaimForecastRoute,
   claimLineItems: Containers.ClaimLineItemsRoute,
   error: Containers.ErrorRoute,
@@ -50,6 +51,7 @@ export interface IRoutes {
   claimsDashboard: typeof Containers.ClaimsDashboardRoute;
   claimDetails: typeof Containers.ClaimsDetailsRoute;
   claimDetailDocuments: typeof Containers.ClaimDetailDocumentsRoute;
+  claimDocuments: typeof Containers.ClaimDocumentsRoute;
   claimForecast: typeof Containers.ClaimForecastRoute;
   claimLineItems: typeof Containers.ClaimLineItemsRoute;
   error: typeof Containers.ErrorRoute;
