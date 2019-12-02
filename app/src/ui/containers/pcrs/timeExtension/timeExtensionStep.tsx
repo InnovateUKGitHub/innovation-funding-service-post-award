@@ -31,8 +31,8 @@ export const TimeExtensionStep = (props: StepProps<typeof timeExtensionItemWorkf
             update={(m, val) => m.additionalMonths = val}
             validation={props.validator.additionalMonths}
           />
-          <Form.Custom label="Start and end date" name="proposedDates" value={() => <ACC.Renderers.SimpleString><ACC.Renderers.ShortDateRangeFromDuration startDate={props.project.startDate} months={newProjectDuration} /></ACC.Renderers.SimpleString>} update={() => { return; }} />
-          <Form.Custom label="Duration" name="proposedDuration" value={() => <ACC.Renderers.SimpleString><ACC.Renderers.Months months={newProjectDuration} /></ACC.Renderers.SimpleString>} update={() => { return; }} />
+          {props.isClient && <Form.Custom label="Start and end date" name="proposedDates" value={() => <ACC.Renderers.SimpleString><ACC.Renderers.ShortDateRangeFromDuration startDate={props.project.startDate} months={newProjectDuration} /></ACC.Renderers.SimpleString>} update={() => { return; }} />}
+          {props.isClient && <Form.Custom label="Duration" name="proposedDuration" value={() => <ACC.Renderers.SimpleString><ACC.Renderers.Months months={newProjectDuration} /></ACC.Renderers.SimpleString>} update={() => { return; }} />}
         </Form.Fieldset>
         <Form.Fieldset>
           <Form.Submit>Save and continue</Form.Submit>
