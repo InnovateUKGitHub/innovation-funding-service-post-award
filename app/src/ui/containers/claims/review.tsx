@@ -204,7 +204,7 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, Data, Callbacks> 
           <ACC.Logs qa="claim-status-change-table" data={data.statusChanges} />
         </ACC.AccordionItem>
       </ACC.Accordion>
-    )
+    );
   }
 }
 
