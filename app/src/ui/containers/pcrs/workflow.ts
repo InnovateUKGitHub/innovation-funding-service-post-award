@@ -25,6 +25,7 @@ export interface StepProps<TWorkflow> {
   onChange: (dto: InferTDto<TWorkflow>) => void;
   onSave: () => void;
   getRequiredToCompleteMessage: (additionalMessage?: string) => React.ReactNode;
+  isClient: boolean;
 }
 
 export interface SummaryProps<TWorkflow> {
