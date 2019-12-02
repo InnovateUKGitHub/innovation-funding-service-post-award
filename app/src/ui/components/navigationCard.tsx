@@ -1,11 +1,18 @@
 import React from "react";
 import { ILinkInfo } from "@framework/types";
 import { Link } from "./links";
+import classNames from "classnames";
 
 interface NavigationCardProps {
   label: string;
   route: ILinkInfo;
   qa: string;
+  messages?: NavigationCardMessage[];
+}
+
+export interface NavigationCardMessage {
+  message: string;
+  isAlert: boolean;
 }
 
 export class NavigationCard extends React.Component<NavigationCardProps> {
@@ -14,9 +21,17 @@ export class NavigationCard extends React.Component<NavigationCardProps> {
       <div className="card-link" data-qa={this.props.qa}>
         <Link route={this.props.route}>
           <h2>{this.props.label}</h2>
-          {this.props.children}
+          {this.renderMessages()}
         </Link>
       </div>
+    );
+  }
+
+  private renderMessages() {
+    return (
+      this.props.messages ?
+        <div className={"card-link__messages"}> {this.props.messages.map(x => ( <h3 className={classNames( { "card-link__message": true, "card-link__message--alert": x.isAlert } )}> {x.message} </h3> ) )} </div>
+        : null
     );
   }
 }
