@@ -36,6 +36,7 @@ interface CombinedData {
   costCategories: CostCategoryDto[];
   claim: ClaimDto;
   claimDetails: CostsSummaryForPeriodDto[];
+  statusChanges: ClaimStatusChangeDto[];
   editor: IEditorStore<ClaimDto, ClaimDtoValidator>;
 }
 
@@ -47,6 +48,7 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, Data, Callbacks> 
       costCategories: this.props.costCategories,
       claim: this.props.claim,
       claimDetails: this.props.costsSummaryForPeriod,
+      statusChanges: this.props.statusChanges,
       editor: this.props.editor,
     });
 
@@ -83,7 +85,7 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, Data, Callbacks> 
           />
         </ACC.Section>
         {this.renderForecastSection()}
-        {this.renderLogSection()}
+        {this.renderLogSection(data)}
         {this.renderForm(data)}
       </React.Fragment>
     );
@@ -195,19 +197,14 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, Data, Callbacks> 
     }
   }
 
-  private renderLogSection() {
+  private renderLogSection(data: CombinedData) {
     return (
       <ACC.Accordion>
-        <ACC.Loader
-          pending={this.props.statusChanges}
-          render={(statusChanges) => (
-            <ACC.AccordionItem title="Log">
-              <ACC.Logs qa="claim-status-change-table" data={statusChanges} />
-            </ACC.AccordionItem>
-          )}
-        />
+        <ACC.AccordionItem title="Log">
+          <ACC.Logs qa="claim-status-change-table" data={data.statusChanges} />
+        </ACC.AccordionItem>
       </ACC.Accordion>
-    );
+    )
   }
 }
 
