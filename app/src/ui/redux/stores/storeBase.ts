@@ -7,8 +7,8 @@ import { processDto } from "@shared/processResponse";
 import { AnyAction } from "redux";
 
 type InferDataStore<T> = T extends IDataStore<infer U> ? U : never;
-type InferEditorStoreDto<T> = T extends IEditorStore<infer U, infer V> ? U : never;
-type InferEditorStoreValidator<T> = T extends IEditorStore<infer U, infer V> ? V : never;
+export type InferEditorStoreDto<T> = T extends IEditorStore<infer U, infer V> ? U : never;
+export type InferEditorStoreValidator<T> = T extends IEditorStore<infer U, infer V> ? V : never;
 
 const statesToReload = [
   LoadingStatus.Preload,

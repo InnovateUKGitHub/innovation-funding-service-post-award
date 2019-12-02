@@ -7,9 +7,9 @@ import { MonitoringReportStatus } from "@framework/constants";
 import { MonitoringReportDto } from "@framework/dtos";
 import { IContext, ILinkInfo } from "@framework/types";
 
-export class MonitoringReportCreateFormHandler extends StandardFormHandlerBase<MonitoringReportCreateParams, MonitoringReportDto, MonitoringReportDtoValidator> {
+export class MonitoringReportCreateFormHandler extends StandardFormHandlerBase<MonitoringReportCreateParams, "monitoringReport"> {
   constructor() {
-    super(MonitoringReportCreateRoute, [ "save-draft", "save-submitted"]);
+    super(MonitoringReportCreateRoute, [ "save-draft", "save-submitted"], "monitoringReport");
   }
 
   protected async getDto(context: IContext, params: MonitoringReportCreateParams, button: IFormButton, body: IFormBody): Promise<MonitoringReportDto> {
@@ -39,8 +39,8 @@ export class MonitoringReportCreateFormHandler extends StandardFormHandlerBase<M
     return new MonitoringReportDtoValidator(dto, false, false, dto.questions, 100);
   }
 
-  protected getStoreInfo(params: MonitoringReportCreateParams): { key: string; store: string; } {
-    return getMonitoringReportEditor(params.projectId);
+  protected getStoreKey(params: MonitoringReportCreateParams) {
+    return getMonitoringReportEditor(params.projectId).key;
   }
 
   protected async run(context: IContext, params: MonitoringReportCreateParams, button: IFormButton, dto: MonitoringReportDto): Promise<ILinkInfo> {

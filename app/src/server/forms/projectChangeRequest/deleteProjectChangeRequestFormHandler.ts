@@ -7,9 +7,9 @@ import { PCRDtoValidator } from "@ui/validators";
 import { GetPCRByIdQuery } from "@server/features/pcrs/getPCRByIdQuery";
 import { DeleteProjectChangeRequestCommand } from "@server/features/pcrs/deleteProjectChangeRequestCommand";
 
-export class ProjectChangeRequestDeleteFormHandler extends StandardFormHandlerBase<PCRDeleteParams, PCRDto, PCRDtoValidator> {
+export class ProjectChangeRequestDeleteFormHandler extends StandardFormHandlerBase<PCRDeleteParams, "pcr"> {
   constructor() {
-    super(PCRDeleteRoute, ["delete"]);
+    super(PCRDeleteRoute, ["delete"], "pcr");
   }
 
   protected async getDto(context: IContext, params: PCRDeleteParams, button: IFormButton, body: IFormBody): Promise<PCRDto> {
@@ -21,8 +21,8 @@ export class ProjectChangeRequestDeleteFormHandler extends StandardFormHandlerBa
     return PCRsDashboardRoute.getLink({ projectId: params.projectId });
   }
 
-  protected getStoreInfo(params: PCRDeleteParams): { key: string; store: string; } {
-    return getPcrEditor(params.projectId, params.pcrId);
+  protected getStoreKey(params: PCRDeleteParams) {
+    return getPcrEditor(params.projectId, params.pcrId).key;
   }
 
   protected createValidationResult(params: PCRDeleteParams, dto: PCRDto) {
