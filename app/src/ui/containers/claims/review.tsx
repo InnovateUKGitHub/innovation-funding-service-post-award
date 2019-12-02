@@ -59,11 +59,6 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, Data, Callbacks> 
 
   private renderContents(data: CombinedData) {
 
-    const tabs: ACC.HashTabItem[] = [
-      { text: "Details", hash: "details", content: this.renderDetailsTab(data), qa: "ClaimDetailTab" },
-      { text: "Log", hash: "log", content: this.renderLogsTab(), qa: "ClaimDetailLogTab" },
-    ];
-
     return (
       <ACC.Page
         backLink={<ACC.BackLink route={this.props.routes.allClaimsDashboard.getLink({ projectId: data.project.id })}>Back to claims</ACC.BackLink>}
@@ -71,7 +66,7 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, Data, Callbacks> 
         validator={data.editor.validator}
         pageTitle={<ACC.Projects.Title project={data.project} />}
       >
-        <ACC.HashTabs tabList={tabs} />
+        {this.renderDetailsTab(data)}
       </ACC.Page>
     );
   }
@@ -88,6 +83,7 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, Data, Callbacks> 
           />
         </ACC.Section>
         {this.renderForecastSection()}
+        {this.renderLogSection()}
         {this.renderForm(data)}
       </React.Fragment>
     );
@@ -199,16 +195,18 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, Data, Callbacks> 
     }
   }
 
-  private renderLogsTab() {
+  private renderLogSection() {
     return (
-      <ACC.Loader
-        pending={this.props.statusChanges}
-        render={(statusChanges) => (
-          <ACC.Section title="Log">
-            <ACC.Logs qa="claim-status-change-table" data={statusChanges} />
-          </ACC.Section>
-        )}
-      />
+      <ACC.Accordion>
+        <ACC.Loader
+          pending={this.props.statusChanges}
+          render={(statusChanges) => (
+            <ACC.AccordionItem title="Log">
+              <ACC.Logs qa="claim-status-change-table" data={statusChanges} />
+            </ACC.AccordionItem>
+          )}
+        />
+      </ACC.Accordion>
     );
   }
 }
