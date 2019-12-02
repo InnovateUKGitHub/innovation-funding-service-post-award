@@ -66,12 +66,12 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, Data, Callbacks> 
         validator={data.editor.validator}
         pageTitle={<ACC.Projects.Title project={data.project} />}
       >
-        {this.renderDetailsTab(data)}
+        {this.renderDetails(data)}
       </ACC.Page>
     );
   }
 
-  private renderDetailsTab(data: CombinedData) {
+  private renderDetails(data: CombinedData) {
     return (
       <React.Fragment>
         <ACC.Section title={this.getClaimPeriodTitle(data)}>
