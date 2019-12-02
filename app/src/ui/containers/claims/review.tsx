@@ -36,6 +36,7 @@ interface CombinedData {
   costCategories: CostCategoryDto[];
   claim: ClaimDto;
   claimDetails: CostsSummaryForPeriodDto[];
+  statusChanges: ClaimStatusChangeDto[];
   editor: IEditorStore<ClaimDto, ClaimDtoValidator>;
 }
 
@@ -47,6 +48,7 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, Data, Callbacks> 
       costCategories: this.props.costCategories,
       claim: this.props.claim,
       claimDetails: this.props.costsSummaryForPeriod,
+      statusChanges: this.props.statusChanges,
       editor: this.props.editor,
     });
 
@@ -59,11 +61,6 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, Data, Callbacks> 
 
   private renderContents(data: CombinedData) {
 
-    const tabs: ACC.HashTabItem[] = [
-      { text: "Details", hash: "details", content: this.renderDetailsTab(data), qa: "ClaimDetailTab" },
-      { text: "Log", hash: "log", content: this.renderLogsTab(), qa: "ClaimDetailLogTab" },
-    ];
-
     return (
       <ACC.Page
         backLink={<ACC.BackLink route={this.props.routes.allClaimsDashboard.getLink({ projectId: data.project.id })}>Back to claims</ACC.BackLink>}
@@ -71,12 +68,12 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, Data, Callbacks> 
         validator={data.editor.validator}
         pageTitle={<ACC.Projects.Title project={data.project} />}
       >
-        <ACC.HashTabs tabList={tabs} />
+        {this.renderClaimReview(data)}
       </ACC.Page>
     );
   }
 
-  private renderDetailsTab(data: CombinedData) {
+  private renderClaimReview(data: CombinedData) {
     return (
       <React.Fragment>
         <ACC.Section title={this.getClaimPeriodTitle(data)}>
@@ -88,6 +85,7 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, Data, Callbacks> 
           />
         </ACC.Section>
         {this.renderForecastSection()}
+        {this.renderLogSection(data)}
         {this.renderForm(data)}
       </React.Fragment>
     );
@@ -199,16 +197,13 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, Data, Callbacks> 
     }
   }
 
-  private renderLogsTab() {
+  private renderLogSection(data: CombinedData) {
     return (
-      <ACC.Loader
-        pending={this.props.statusChanges}
-        render={(statusChanges) => (
-          <ACC.Section title="Log">
-            <ACC.Logs qa="claim-status-change-table" data={statusChanges} />
-          </ACC.Section>
-        )}
-      />
+      <ACC.Accordion>
+        <ACC.AccordionItem title="Log">
+          <ACC.Logs qa="claim-status-change-table" data={data.statusChanges} />
+        </ACC.AccordionItem>
+      </ACC.Accordion>
     );
   }
 }
