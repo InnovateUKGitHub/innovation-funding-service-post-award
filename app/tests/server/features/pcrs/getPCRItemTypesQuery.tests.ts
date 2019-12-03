@@ -38,4 +38,28 @@ describe("GetPCRItemTypesQuery", () => {
     expect(result.recordTypeId).toEqual(recordType.id);
     expect(result.displayName).toEqual("Remove a partner");
   });
+
+  test("return single financial virement if feature flag disabled", async () => {
+    const context = new TestContext();
+
+    context.config.features.financialVirements = false;
+
+    const query = new GetPCRItemTypesQuery();
+    const result = await context.runQuery(query);
+
+    expect(result.find(x => x.type === PCRItemType.SinglePartnerFinancialVirement)!.enabled).toBe(true);
+    expect(result.find(x => x.type === PCRItemType.MultiplePartnerFinancialVirement)!.enabled).toBe(false);
+  });
+
+  test("return multiple financial virement if feature flag enabled", async () => {
+    const context = new TestContext();
+
+    context.config.features.financialVirements = true;
+
+    const query = new GetPCRItemTypesQuery();
+    const result = await context.runQuery(query);
+
+    expect(result.find(x => x.type === PCRItemType.SinglePartnerFinancialVirement)!.enabled).toBe(false);
+    expect(result.find(x => x.type === PCRItemType.MultiplePartnerFinancialVirement)!.enabled).toBe(true);
+  });
 });

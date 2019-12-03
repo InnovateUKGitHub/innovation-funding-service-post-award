@@ -50,10 +50,11 @@ describe("Create PCR Command", () => {
   });
   it("returns a validation error if a type is not enabled", async () => {
     const context = new TestContext();
+
     const project = context.testData.createProject();
     context.testData.createCurrentUserAsProjectManager(project);
     const partner = context.testData.createPartner(project);
-    const itemType = PCRRecordTypeMetaValues.find(x => x.type === PCRItemType.MultiplePartnerFinancialVirement)!;
+    const itemType = PCRRecordTypeMetaValues.find(x => x.type === PCRItemType.SinglePartnerFinancialVirement)!;
 
     const command = new CreateProjectChangeRequestCommand(project.Id, {
       projectId: project.Id,

@@ -86,6 +86,7 @@ const defaultFeatureFlag = getFeatureFlagValue(process.env.FEATURE_DEFAULT, fals
 const features: IFeatureFlags = {
     calculateOverheads: getFeatureFlagValue(process.env.FEATURE_CALCULATE_OVERHEADS, false),
     documentFiltering: getFeatureFlagValue(process.env.FEATURE_DOCUMENT_FILTERING, defaultFeatureFlag),
+    financialVirements: getFeatureFlagValue(process.env.FEATURE_FINANCIAL_VIREMENTS, defaultFeatureFlag),
     projectFiltering: getFeatureFlagValue(process.env.FEATURE_PROJECT_FILTERING, defaultFeatureFlag),
     pcrsEnabled: getFeatureFlagValue(process.env.FEATURE_PCRS_ENABLED, defaultFeatureFlag)
 };
