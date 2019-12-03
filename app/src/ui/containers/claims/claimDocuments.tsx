@@ -1,6 +1,6 @@
 import React from "react";
 import * as ACC from "@ui/components";
-import { ProjectDto, ProjectRole } from "@framework/dtos";
+import { ClaimDto, ProjectDto, ProjectRole } from "@framework/dtos";
 import { Pending } from "@shared/pending";
 import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerBase";
 import { IEditorStore, StoresConsumer } from "@ui/redux";
@@ -16,6 +16,7 @@ interface Data {
   project: Pending<ProjectDto>;
   editor: Pending<IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>>;
   documents: Pending<DocumentSummaryDto[]>;
+  claim: Pending<ClaimDto>;
 }
 
 interface Callbacks {
@@ -28,13 +29,14 @@ class ClaimDocumentsComponent extends ContainerBase<ClaimDocumentsParams, Data, 
     const combined = Pending.combine({
       project: this.props.project,
       editor: this.props.editor,
-      documents: this.props.documents
+      documents: this.props.documents,
+      claim: this.props.claim,
     });
 
-    return <ACC.PageLoader pending={combined} render={x => this.renderContents(x.project, x.editor, x.documents)} />;
+    return <ACC.PageLoader pending={combined} render={x => this.renderContents(x.project, x.editor, x.documents, x.claim)} />;
   }
 
-  renderContents(project: ProjectDto, editor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>, documents: DocumentSummaryDto[]) {
+  renderContents(project: ProjectDto, editor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>, documents: DocumentSummaryDto[], claim: ClaimDto) {
     const UploadForm = ACC.TypedForm<MultipleDocumentUploadDto>();
 
     return (
@@ -42,6 +44,7 @@ class ClaimDocumentsComponent extends ContainerBase<ClaimDocumentsParams, Data, 
         pageTitle={<ACC.Projects.Title project={project} />}
         backLink={<ACC.BackLink route={this.props.routes.prepareClaim.getLink({ periodId: this.props.periodId, projectId: this.props.projectId, partnerId: this.props.partnerId })}>Back to costs to be claimed</ACC.BackLink>}
       >
+        {claim.isFinalClaim && <ACC.ValidationMessage messageType="info" message="This is your final claim"/>}
         <ACC.Section>
           <ACC.Renderers.SimpleString>Guidance text</ACC.Renderers.SimpleString>
         </ACC.Section>
@@ -69,8 +72,7 @@ class ClaimDocumentsComponent extends ContainerBase<ClaimDocumentsParams, Data, 
         <ACC.Section title="List of documents">
           {this.renderDocuments(editor, documents)}
         </ACC.Section>
-        {/*ToDo change the link below*/}
-        <ACC.Link styling="PrimaryButton" route={this.props.routes.allClaimsDashboard.getLink({projectId: this.props.projectId})}>Continue to update forecast</ACC.Link>
+        <ACC.Link styling="PrimaryButton" route={this.props.routes.forecastUpdate.getLink({projectId: this.props.projectId, partnerId: this.props.partnerId})}>Continue to update forecast</ACC.Link>
         <ACC.Link styling="SecondaryButton" route={this.props.routes.allClaimsDashboard.getLink({projectId: this.props.projectId})}>Save and return to claims</ACC.Link>
       </ACC.Page>
     );
@@ -101,6 +103,7 @@ const ClaimDocumentsContainer = (props: ClaimDocumentsParams & BaseProps) => (
           project={stores.projects.getById(props.projectId)}
           editor={stores.claimDocuments.getClaimDocumentsEditor(props.projectId, props.partnerId, props.periodId)}
           documents={stores.claimDocuments.getClaimDocuments(props.projectId, props.partnerId, props.periodId)}
+          claim={stores.claims.get(props.partnerId, props.periodId)}
           onChange={(saving, dto) => {
             stores.messages.clearMessages();
             const successMessage = dto.files.length === 1 ? `Your document has been uploaded.` : `${dto.files.length} documents have been uploaded.`;

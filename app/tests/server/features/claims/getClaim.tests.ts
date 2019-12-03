@@ -31,6 +31,7 @@ describe("GetClaim", () => {
     expect(result.overheadRate).toBe(claim.Acc_ProjectParticipant__r.Acc_OverheadRate__c);
     expect(result.periodStartDate).toEqual(context.clock.parse(claim.Acc_ProjectPeriodStartDate__c, SALESFORCE_DATE_FORMAT));
     expect(result.periodEndDate).toEqual(context.clock.parse(claim.Acc_ProjectPeriodEndDate__c, SALESFORCE_DATE_FORMAT));
+    expect(result.isFinalClaim).toBe(claim.Acc_FinalClaim__c);
   });
 
   it("calculates correct lastModifiedDate", async () => {
