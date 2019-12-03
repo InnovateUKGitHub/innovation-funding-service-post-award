@@ -7,6 +7,8 @@ interface FinancialVirementDto {
 
 interface PartnerVirementsDto {
   partnerId: string;
+  partnerName: string;
+  isLead: boolean;
   originalTotal: number;
   currentTotal: number;
   partnerVirements: VirementDto[];
