@@ -1,4 +1,4 @@
-import { QueryBase } from "../common";
+import { IConfig, QueryBase } from "../common";
 import { PCRItemTypeDto } from "@framework/dtos/pcrDtos";
 import { IContext } from "@framework/types";
 import { GetAllRecordTypesQuery } from "../general/getAllRecordTypesQuery";
@@ -9,7 +9,6 @@ interface IMetaValue {
   type: PCRItemType;
   typeName: string;
   displayName?: string;
-  disabled?: boolean;
   files?: string[];
   guidance?: string;
 }
@@ -29,7 +28,7 @@ const nameChangeGuidance = `This will change the partner's name in all projects 
 // @TODO: this might sit better in the pcr repository (or constants?) ... leave for now
 export const PCRRecordTypeMetaValues: IMetaValue[] = [
   { type: PCRItemType.SinglePartnerFinancialVirement, typeName: "Reallocate one partner's project costs", files: ["reallocate-project-costs.xlsx"], displayName: "Reallocate project costs" },
-  { type: PCRItemType.MultiplePartnerFinancialVirement, typeName: "Reallocate several partners' project cost", files: ["reallocate-project-costs.xlsx"], disabled: true },
+  { type: PCRItemType.MultiplePartnerFinancialVirement, typeName: "Reallocate several partners' project cost", files: ["reallocate-project-costs.xlsx"], displayName: "Reallocate project costs" },
   { type: PCRItemType.PartnerWithdrawal, typeName: "Remove a partner" },
   { type: PCRItemType.PartnerAddition, typeName: "Add a partner", files: ["partner_addition.xlsx"] },
   { type: PCRItemType.ScopeChange, typeName: "Change project scope", guidance: scopeChangeGuidance },
@@ -50,10 +49,20 @@ export class GetPCRItemTypesQuery extends QueryBase<PCRItemTypeDto[]> {
       .map<PCRItemTypeDto>(metaInfo => ({
         type: metaInfo.type,
         displayName: metaInfo.displayName || metaInfo.typeName,
-        enabled: !metaInfo.disabled,
+        enabled: this.getEnabledStatus(metaInfo, context.config),
         recordTypeId: this.findRecordType(metaInfo.typeName, recordTypes),
         files: metaInfo.files && metaInfo.files.map(file => ({ name: file, relativeUrl: `/assets/pcr_templates/${file}` })) || []
       }));
+  }
+
+  private getEnabledStatus(metaInfo: IMetaValue, config: IConfig): boolean {
+    if (metaInfo.type === PCRItemType.SinglePartnerFinancialVirement) {
+      return !config.features.financialVirements;
+    }
+    if (metaInfo.type === PCRItemType.MultiplePartnerFinancialVirement) {
+      return config.features.financialVirements;
+    }
+    return true;
   }
 
   private findRecordType(typeName: string, recordTypes: RecordType[]): string {
