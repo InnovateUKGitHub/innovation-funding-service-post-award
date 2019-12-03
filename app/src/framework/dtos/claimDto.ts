@@ -1,23 +1,24 @@
 import { ClaimStatus } from "../constants";
 
 export interface ClaimDto {
+  allowIarEdit: boolean;
+  approvedDate: Date|null;
+  comments: string|null;
   id: string;
-  partnerId: string;
+  isApproved: boolean;
+  isFinalClaim: boolean;
+  isIarRequired: boolean;
+  forecastCost: number;
   lastModifiedDate: Date;
-  status: ClaimStatus;
-  statusLabel: string;
-  periodStartDate: Date;
+  overheadRate: number;
+  paidDate: Date|null;
+  partnerId: string;
   periodEndDate: Date;
   periodId: number;
+  periodStartDate: Date;
+  status: ClaimStatus;
+  statusLabel: string;
   totalCost: number;
-  forecastCost: number;
-  approvedDate: Date|null;
-  paidDate: Date|null;
-  isIarRequired: boolean;
-  isApproved: boolean;
-  comments: string|null;
-  allowIarEdit: boolean;
-  overheadRate: number;
 }
 
 export interface ClaimStatusChangeDto {

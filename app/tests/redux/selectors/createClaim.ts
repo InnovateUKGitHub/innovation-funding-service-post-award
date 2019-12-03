@@ -20,6 +20,7 @@ export default (mod?: Partial<ClaimDto>): ClaimDto => {
     statusLabel: ClaimStatus.DRAFT,
     totalCost: 0,
     overheadRate: 0,
+    isFinalClaim: false,
   };
   return { ...template, ...mod };
 };
