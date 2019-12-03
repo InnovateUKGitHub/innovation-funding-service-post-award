@@ -36,6 +36,9 @@ const clientApi: IApiClient = {
     uploadProjectChangeRequestDocumentOrItemDocument: ({projectId, projectChangeRequestIdOrItemId, documents}) => ajaxPostFiles(`/api/documents/projectChangeRequests/${projectId}/${projectChangeRequestIdOrItemId}`, documents),
     uploadProjectDocument: ({ projectId, documents }) => ajaxPostFiles(`/api/documents/projects/${projectId}`, documents)
   },
+  financialVirements: {
+    get: (params) => ajaxJson(`/api/financial-virements/${params.projectId}/${params.pcrId}/${params.pcrItemId}`),
+  },
   forecastDetails: {
     getAllByPartnerId: (params) => ajaxJson(`/api/forecast-details/?partnerId=${params.partnerId}`),
     get: (params) => ajaxJson(`/api/forecast-details/${params.partnerId}/${params.periodId}/${params.costCategoryId}`),
