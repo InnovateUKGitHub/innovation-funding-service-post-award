@@ -120,7 +120,7 @@ describe("GetAllPCRsQuery", () => {
 
     const expectedNames = [
       "Reallocate project costs",
-      "Reallocate several partners' project cost",
+      "Reallocate project costs",
       "Remove a partner",
       "Add a partner",
       "Change project scope",
