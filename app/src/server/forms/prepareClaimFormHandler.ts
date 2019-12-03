@@ -4,10 +4,10 @@ import { ClaimDto, ClaimStatus, ProjectRole } from "@framework/types";
 import { GetClaim } from "../features/claims";
 import { AllClaimsDashboardRoute, ClaimForecastRoute, ClaimsDashboardRoute, PrepareClaimParams, PrepareClaimRoute } from "../../ui/containers";
 import { ClaimDtoValidator } from "../../ui/validators/claimDtoValidator";
-import { getClaimEditor } from "../../ui/redux/selectors";
 import { ILinkInfo } from "@framework/types/ILinkInfo";
 import { IContext } from "@framework/types/IContext";
 import { GetAllProjectRolesForUser } from "../features/projects";
+import { getClaimKey } from "@ui/redux/stores/storeKeys";
 
 export class PrepareClaimFormHandler extends StandardFormHandlerBase<PrepareClaimParams, "claim"> {
   constructor() {
@@ -38,7 +38,7 @@ export class PrepareClaimFormHandler extends StandardFormHandlerBase<PrepareClai
   }
 
   protected getStoreKey(params: PrepareClaimParams) {
-    return getClaimEditor(params.partnerId, params.periodId).key;
+    return getClaimKey(params.partnerId, params.periodId);
   }
 
   protected createValidationResult(params: PrepareClaimParams, dto: ClaimDto) {
