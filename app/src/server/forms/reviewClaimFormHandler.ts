@@ -2,11 +2,10 @@ import { IFormBody, IFormButton, StandardFormHandlerBase } from "./formHandlerBa
 import { AllClaimsDashboardRoute, ReviewClaimParams, ReviewClaimRoute, } from "../../ui/containers";
 import { ClaimDto, ClaimStatus } from "@framework/types";
 import { GetClaim, UpdateClaimCommand } from "../features/claims";
-import { getClaimEditor } from "../../ui/redux/selectors";
 import { ClaimDtoValidator } from "../../ui/validators";
-import { Results } from "../../ui/validation/results";
 import { ILinkInfo } from "@framework/types/ILinkInfo";
 import { IContext } from "@framework/types/IContext";
+import { getClaimKey } from "@ui/redux/stores/storeKeys";
 
 export class ReviewClaimFormHandler extends StandardFormHandlerBase<ReviewClaimParams, "claim"> {
     constructor() {
@@ -32,8 +31,8 @@ export class ReviewClaimFormHandler extends StandardFormHandlerBase<ReviewClaimP
     }
 
     protected getStoreKey(params: ReviewClaimParams) {
-        return getClaimEditor(params.partnerId, params.periodId).key;
-      }
+        return getClaimKey(params.partnerId, params.periodId);
+    }
 
     protected createValidationResult(params: ReviewClaimParams, dto: ClaimDto) {
         return new ClaimDtoValidator(dto, ClaimStatus.UNKNOWN, [], [], false);
