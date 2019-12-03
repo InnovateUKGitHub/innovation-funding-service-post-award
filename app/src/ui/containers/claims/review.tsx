@@ -200,7 +200,7 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, Data, Callbacks> 
   private renderLogSection(data: CombinedData) {
     return (
       <ACC.Accordion>
-        <ACC.AccordionItem title="Log">
+        <ACC.AccordionItem title="Log" qa="log-accordion">
           <ACC.Logs qa="claim-status-change-table" data={data.statusChanges} />
         </ACC.AccordionItem>
       </ACC.Accordion>
