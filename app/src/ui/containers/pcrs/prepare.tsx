@@ -6,6 +6,7 @@ import { Pending } from "@shared/pending";
 import { PCRDto, ProjectChangeRequestStatusChangeDto } from "@framework/dtos/pcrDtos";
 import { IEditorStore, StoresConsumer } from "@ui/redux";
 import { PCRDtoValidator } from "@ui/validators/pcrDtoValidator";
+import { WorkFlow } from "./workflow";
 
 export interface ProjectChangeRequestPrepareParams {
   projectId: string;
@@ -146,6 +147,7 @@ class PCRPrepareComponent extends ContainerBase<ProjectChangeRequestPrepareParam
 
   private getItemTasks(item: PCRItemDto, editor: IEditorStore<PCRDto, PCRDtoValidator>, index: number) {
     const validationErrors = editor.validator.items.results[index].errors;
+    const workflow = WorkFlow.getWorkflow(item, 1);
     return (
       <ACC.Task
         name={item.typeName}
@@ -154,7 +156,7 @@ class PCRPrepareComponent extends ContainerBase<ProjectChangeRequestPrepareParam
           projectId: this.props.projectId,
           pcrId: this.props.pcrId,
           itemId: item.id,
-          step: item.status === PCRItemStatus.ToDo ? 1 : undefined
+          step: item.status === PCRItemStatus.ToDo && workflow && workflow.getCurrentStepInfo() ? 1 : undefined
         })}
         validation={validationErrors}
       />

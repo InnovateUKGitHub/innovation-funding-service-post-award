@@ -53,6 +53,7 @@ export const dataReducer = combineReducers({
   contacts: dataStoreReducer<IContact[]>("contacts"),
   costCategories: dataStoreReducer<CostCategoryDto[]>("costCategories"),
   documents: dataStoreReducer<DocumentSummaryDto[]>("documents"),
+  financialVirement: dataStoreReducer<FinancialVirementDto>("financialVirement"),
   forecastDetails: dataStoreReducer<ForecastDetailsDTO[]>("forecastDetails"),
   forecastDetail: dataStoreReducer<ForecastDetailsDTO>("forecastDetail"),
   forecastGolCosts: dataStoreReducer<GOLCostDto[]>("forecastGolCosts"),
