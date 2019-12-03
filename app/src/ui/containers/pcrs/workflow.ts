@@ -9,6 +9,7 @@ import { scopeChangeWorkflow } from "./scopeChange/scopeChangeWorkflow";
 import { standardItemWorkflow } from "./standardItem/workflow";
 import { timeExtensionItemWorkflow } from "@ui/containers/pcrs/timeExtension/timeExtensionWorkflow";
 import { suspendProjectWorkflow } from "./suspendProject/workflow";
+import { financialVirementWorkflow } from "./financialVirements/workflow";
 
 type InferStepsNames<T> = T extends IWorkflow<infer TDto, infer TVal, infer TStepname> ? TStepname : never;
 type InferTDto<T> = T extends IWorkflow<infer TDto, infer TVal, infer TStepname> ? TDto : never;
@@ -123,6 +124,7 @@ export class WorkFlow<T, TVal extends Results<T>, TStepNames extends string> imp
       case PCRItemType.ProjectSuspension:
         return new WorkFlow(suspendProjectWorkflow, step);
       case PCRItemType.MultiplePartnerFinancialVirement:
+        return new WorkFlow(financialVirementWorkflow, step);
       case PCRItemType.SinglePartnerFinancialVirement:
       case PCRItemType.PartnerAddition:
       case PCRItemType.PartnerWithdrawal:
