@@ -34,11 +34,13 @@ export const ClaimDetailsLink: React.SFC<PropsWithRoutes> = (props) => {
 export const getClaimDetailsLinkType = (props: {claim: ClaimDto; project: ProjectDto; partner: PartnerDto;}): "edit" | "review" | "view" | "nothing" => {
 
   if (props.project.status === ProjectStatus.OnHold) return "view";
-
   switch (props.claim.status) {
     case ClaimStatus.DRAFT:
       if (props.partner.roles & ProjectRole.FinancialContact) {
         return "edit";
+      }
+      else if (props.project.roles & ProjectRole.MonitoringOfficer) {
+        return "view";
       }
       else {
         return "nothing";
