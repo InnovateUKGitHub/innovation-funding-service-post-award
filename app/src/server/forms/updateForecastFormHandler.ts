@@ -9,6 +9,7 @@ import { GetCostCategoriesForPartnerQuery } from "../features/claims/getCostCate
 import { Params, UpdateForecastRoute } from "@ui/containers/forecasts/update";
 import { ForecastDetailsRoute } from "@ui/containers/forecasts/details";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
+import { PartnerStatus } from "@framework/dtos";
 
 export class UpdateForecastFormHandler extends StandardFormHandlerBase<Params, "forecastDetails"> {
   constructor() {
@@ -43,6 +44,6 @@ export class UpdateForecastFormHandler extends StandardFormHandlerBase<Params, "
   }
 
   protected createValidationResult(params: Params, dto: ForecastDetailsDTO[]) {
-    return new ForecastDetailsDtosValidator(dto, [], [], [], false);
+    return new ForecastDetailsDtosValidator(dto, [], [], [], undefined, false);
   }
 }

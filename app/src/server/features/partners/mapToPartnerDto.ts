@@ -1,7 +1,7 @@
 import { DateTime } from "luxon";
 import { SyncCommandBase } from "../common/commandBase";
 import { ISalesforcePartner, SalesforceProjectRole } from "../../repositories/partnersRepository";
-import { PartnerClaimStatus, PartnerDto, ProjectRole } from "@framework/types";
+import { PartnerClaimStatus, PartnerDto, PartnerStatus, ProjectRole } from "@framework/types";
 
 export class MapToPartnerDtoCommand extends SyncCommandBase<PartnerDto> {
     constructor(
@@ -42,6 +42,7 @@ export class MapToPartnerDtoCommand extends SyncCommandBase<PartnerDto> {
             status: this.getClaimStatus(this.item.Acc_TrackingClaims__c),
             statusName: this.item.Acc_TrackingClaims__c || "",
             overheadRate: this.valueIfPermission(this.item.Acc_OverheadRate__c) || null,
+            partnerStatus: this.getPartnerStatus(this.item.Acc_ParticipantStatus__c),
             totalCostsAwarded: this.item.Acc_TotalCostsAwarded__c,
             auditReportFrequencyName: this.item.AuditReportFrequencyName,
             totalPrepayment: this.item.Acc_TotalPrepayment__c,
@@ -66,6 +67,21 @@ export class MapToPartnerDtoCommand extends SyncCommandBase<PartnerDto> {
                 return PartnerClaimStatus.IARRequired;
             default:
                 return PartnerClaimStatus.Unknown;
+        }
+    }
+
+    getPartnerStatus(salesforceStatus: string): PartnerStatus {
+        switch (salesforceStatus) {
+            case "Active":
+                return PartnerStatus.Active;
+            case "On Hold":
+                return PartnerStatus.OnHold;
+            case "Involuntary Withdrawal":
+                return PartnerStatus.InvoluntaryWithdrawal;
+            case "Voluntary Withdrawal":
+                return PartnerStatus.VoluntaryWithdrawal;
+            default:
+                return PartnerStatus.Unknown;
         }
     }
 

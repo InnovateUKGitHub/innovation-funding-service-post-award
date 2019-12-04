@@ -72,16 +72,15 @@ class ClaimForecastComponent extends ContainerBase<ClaimForecastParams, Data, Ca
           <Form.Form
             editor={editor}
             onChange={data => this.props.onUpdate(false, data, false)}
-            onSubmit={() => this.props.onUpdate(true, editor.data, true)}
             qa="claim-forecast-form"
           >
             <ACC.Claims.ForecastTable data={combined} editor={editor} isSubmitting={true} />
             <Form.Fieldset>
               <ACC.Claims.ClaimLastModified partner={combined.partner} />
-              <Form.Submit>Submit forecast and claim</Form.Submit>
             </Form.Fieldset>
             <Form.Fieldset qa="save-button">
               <Form.Button name="save" onClick={() => this.props.onUpdate(true, editor.data, false)}>Save and return to claim</Form.Button>
+              <ACC.Link styling="PrimaryButton" route={this.props.routes.error.getLink({errorType: "notFound"})}>Continue to summary</ACC.Link>
             </Form.Fieldset>
           </Form.Form>
         </ACC.Section>

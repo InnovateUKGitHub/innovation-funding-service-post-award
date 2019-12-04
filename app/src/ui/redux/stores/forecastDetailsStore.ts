@@ -8,12 +8,14 @@ import { ForecastGolCostsStore } from "./forecastGolCostsStore";
 import { RootState } from "@ui/redux";
 import { messageSuccess, RootActionsOrThunk } from "@ui/redux/actions";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
+import { PartnersStore } from "@ui/redux/stores/partnersStore";
 
 export class ForecastDetailsStore extends StoreBase {
   constructor(
     private claimsStore: ClaimsStore,
     private claimDetailsStore: ClaimsDetailsStore,
     private golCostsStore: ForecastGolCostsStore,
+    private partnersStore: PartnersStore,
     getState: () => RootState, queue: (action: RootActionsOrThunk) => void
   ) {
     super(getState, queue);
@@ -32,8 +34,9 @@ export class ForecastDetailsStore extends StoreBase {
       claims: this.claimsStore.getAllClaimsForPartner(partnerId),
       claimDetails: this.claimDetailsStore.getAllByPartner(partnerId),
       golCosts: this.golCostsStore.getAllByPartner(partnerId),
+      partner: this.partnersStore.getById(partnerId)
     });
-    return combined.then(x => new ForecastDetailsDtosValidator(dto, x.claims, x.claimDetails, x.golCosts, showValidationErrors));
+    return combined.then(x => new ForecastDetailsDtosValidator(dto, x.claims, x.claimDetails, x.golCosts, x.partner, showValidationErrors));
   }
 
   public getForecastEditor(partnerId: string, init?: (data: ForecastDetailsDTO[]) => void) {
