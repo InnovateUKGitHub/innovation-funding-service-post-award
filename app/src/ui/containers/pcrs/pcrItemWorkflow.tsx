@@ -158,7 +158,12 @@ class Component extends ContainerBase<ProjectChangeRequestPrepareItemParams, Dat
       onSave: () => this.onSave(workflow, editor.data),
       getStepLink: (stepName) => this.getStepLink(workflow, stepName),
       getEditLink: (stepName, validation) => this.getEditLink(workflow, stepName, validation),
-      mode
+      mode,
+      config: this.props.config,
+      isClient: this.props.isClient,
+      messages: this.props.messages,
+      route: this.props.route,
+      routes: this.props.routes
     });
   }
 

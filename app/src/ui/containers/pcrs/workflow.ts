@@ -10,6 +10,7 @@ import { standardItemWorkflow } from "./standardItem/workflow";
 import { timeExtensionItemWorkflow } from "@ui/containers/pcrs/timeExtension/timeExtensionWorkflow";
 import { suspendProjectWorkflow } from "./suspendProject/workflow";
 import { financialVirementWorkflow } from "./financialVirements/workflow";
+import { BaseProps } from "../containerBase";
 
 type InferStepsNames<T> = T extends IWorkflow<infer TDto, infer TVal, infer TStepname> ? TStepname : never;
 type InferTDto<T> = T extends IWorkflow<infer TDto, infer TVal, infer TStepname> ? TDto : never;
@@ -29,7 +30,7 @@ export interface StepProps<TWorkflow> {
   isClient: boolean;
 }
 
-export interface SummaryProps<TWorkflow> {
+export interface SummaryProps<TWorkflow> extends BaseProps {
   projectId: string;
   pcr: PCRDto;
   pcrItem: InferTDto<TWorkflow>;

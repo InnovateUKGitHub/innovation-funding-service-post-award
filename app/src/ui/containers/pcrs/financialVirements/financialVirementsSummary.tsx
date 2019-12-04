@@ -18,15 +18,23 @@ class Component extends React.Component<Props> {
     const Table = ACC.TypedTable<PartnerVirementsDto>();
     return (
       <Table.Table qa="partners" data={data.partners}>
-        <Table.Custom qa="partner" header="Partner" value={x => x.isLead ? `${x.partnerName} (Lead)` : x.partnerName} footer="Totals" />
+        <Table.Custom qa="partner" header="Partner" value={x => this.getPartnerLink(x)} footer="Totals" />
         <Table.Currency qa="original" header="Original" value={x => x.originalTotal} footer={<ACC.Renderers.Currency value={data.originalTotal} />} />
         <Table.Currency qa="new" header="New" value={x => x.currentTotal} footer={<ACC.Renderers.Currency value={data.currentTotal} />} />
       </Table.Table>
     );
   }
 
-  private renderTotals(data: FinancialVirementDto): JSX.Element {
-    throw new Error("Method not implemented.");
+  private getPartnerLink(partnerVirement: PartnerVirementsDto) {
+    const route = this.props.routes.pcrFinancialVirementDetails.getLink({
+      projectId: this.props.projectId,
+      partnerId: partnerVirement.partnerId,
+      pcrId: this.props.pcr.id,
+      itemId: this.props.pcrItem.id,
+      mode: this.props.mode
+    });
+    const name =  partnerVirement.isLead ? `${partnerVirement.partnerName} (Lead)` : partnerVirement.partnerName;
+    return <ACC.Link replace={true} route={route}>{name}</ACC.Link>;
   }
 }
 

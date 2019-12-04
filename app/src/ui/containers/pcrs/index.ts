@@ -7,3 +7,4 @@ export * from "./prepare";
 export * from "./pcrItemWorkflow";
 export * from "./reasoning";
 export * from "./review";
+export * from "./financialVirements/detailsPage";
