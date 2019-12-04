@@ -2,7 +2,7 @@
 import { TestContext } from "../../testContextProvider";
 import { GetByIdQuery } from "@server/features/partners/getByIdQuery";
 import { SalesforceProjectRole } from "@server/repositories";
-import { PartnerClaimStatus, PartnerDto, ProjectRole } from "@framework/types";
+import { PartnerClaimStatus, PartnerDto, PartnerStatus, ProjectRole } from "@framework/types";
 
 describe("getAllForProjectQuery", () => {
   it("when partner exists is mapped to DTO", async () => {
@@ -24,6 +24,7 @@ describe("getAllForProjectQuery", () => {
       x.Acc_ClaimsUnderQuery__c = 20;
       x.Acc_ClaimsOverdue__c = 30;
       x.Acc_TrackingClaims__c = "Claim Due";
+      x.Acc_ParticipantStatus__c = "On Hold";
       x.Acc_OverheadRate__c = 75;
       x.Acc_TotalCostsSubmitted__c = 100;
       x.AuditReportFrequencyName = "Never, for this project";
@@ -64,6 +65,7 @@ describe("getAllForProjectQuery", () => {
       statusName: "Claim Due",
       overheadRate: 75,
       auditReportFrequencyName: "Never, for this project",
+      partnerStatus: PartnerStatus.OnHold,
       totalCostsAwarded: 100000,
       totalPrepayment: 500,
       totalFundingDueToReceive: 62500,

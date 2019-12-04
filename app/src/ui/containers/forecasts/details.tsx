@@ -1,7 +1,7 @@
 import React from "react";
 import * as ACC from "@ui/components";
 import { BaseProps, ContainerBase, defineRoute } from "../containerBase";
-import { PartnerDto, ProjectDto, ProjectRole, ProjectStatus } from "@framework/dtos";
+import { PartnerDto, PartnerStatus, ProjectDto, ProjectRole, ProjectStatus } from "@framework/dtos";
 import { Pending } from "@shared/pending";
 import { StoresConsumer } from "@ui/redux";
 
@@ -56,6 +56,7 @@ class ViewForecastComponent extends ContainerBase<Params, Data, {}> {
 
     if (project.status === ProjectStatus.OnHold) return null;
     if (!(partner.roles & ProjectRole.FinancialContact)) return null;
+    if (partner.partnerStatus === PartnerStatus.VoluntaryWithdrawal || partner.partnerStatus === PartnerStatus.InvoluntaryWithdrawal) return null;
     return <ACC.Link styling="PrimaryButton" route={this.props.routes.forecastUpdate.getLink({ projectId: project.id, partnerId: partner.id })}>Update forecast</ACC.Link>;
   }
 }
