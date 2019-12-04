@@ -8,7 +8,7 @@ import { IContext } from "@framework/types/IContext";
 import { DeleteClaimDetailDocumentCommand } from "@server/features/documents/deleteClaimDetailDocument";
 import { MultipleDocumentUpdloadDtoValidator } from "@ui/validators";
 import { Configuration } from "@server/features/common";
-import { getClaimDetailDocumentDeleteEditorStoreInfo } from "@ui/redux/selectors";
+import { getClaimDetailDocumentsKey } from "@ui/redux/stores/storeKeys";
 
 interface Document extends MultipleDocumentUploadDto {
   id: string;
@@ -28,7 +28,7 @@ export class ClaimDetailDocumentDeleteHandler extends StandardFormHandlerBase<Cl
   }
 
   protected getStoreKey(params: ClaimDetailDocumentsPageParams) {
-    return getClaimDetailDocumentDeleteEditorStoreInfo({ projectId: params.projectId, partnerId: params.partnerId, periodId: params.periodId, costCategoryId: params.costCategoryId }, []).key;
+    return getClaimDetailDocumentsKey(params.partnerId, params.periodId, params.costCategoryId);
   }
 
   protected async run(context: IContext, params: ClaimDetailDocumentsPageParams, button: IFormButton, dto: Document): Promise<ILinkInfo> {

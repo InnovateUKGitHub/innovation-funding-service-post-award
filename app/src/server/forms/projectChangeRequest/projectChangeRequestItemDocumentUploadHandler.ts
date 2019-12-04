@@ -8,8 +8,8 @@ import {
   ProjectChangeRequestPrepareItemParams
 } from "@ui/containers";
 import { MultipleDocumentUpdloadDtoValidator } from "@ui/validators";
-import { getKey } from "@framework/util";
 import { WorkFlow } from "@ui/containers/pcrs/workflow";
+import { getKey } from "@ui/redux/stores/storeKeys";
 
 export class ProjectChangeRequestItemDocumentUploadHandler extends MultipleFileFormHandlerBase<ProjectChangeRequestPrepareItemParams, "multipleDocuments"> {
   constructor() {

@@ -1,5 +1,5 @@
 import { IFormBody, IFormButton, MultipleFileFormHandlerBase } from "./formHandlerBase";
-import { getForecastDetailsEditor, getProjectDocumentEditor } from "../../ui/redux/selectors";
+import { getProjectDocumentEditor } from "../../ui/redux/selectors";
 import { ProjectDocumentPageParams, ProjectDocumentsRoute } from "../../ui/containers";
 import { UploadProjectDocumentCommand } from "../features/documents/uploadProjectDocument";
 import { Configuration } from "@server/features/common";
