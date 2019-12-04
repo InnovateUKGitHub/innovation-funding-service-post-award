@@ -11,11 +11,12 @@ interface PartnerVirementsDto {
   isLead: boolean;
   originalTotal: number;
   currentTotal: number;
-  partnerVirements: VirementDto[];
+  virements: VirementDto[];
 }
 
 interface VirementDto {
   costCategoryId: string;
+  costCategoryName: string;
   originalAmount: number;
   currentAmount: number;
 }

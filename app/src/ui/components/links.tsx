@@ -12,7 +12,7 @@ interface Props {
 }
 
 interface StyledLinkProps extends Props {
-  styling?: "Link" | "PrimaryButton" | "SecondaryButton";
+  styling?: "Link" | "PrimaryButton" | "SecondaryButton" | "BackLink";
 }
 
 export class Link extends React.Component<StyledLinkProps> {
@@ -24,6 +24,7 @@ export class Link extends React.Component<StyledLinkProps> {
       "govuk-button": styling === "PrimaryButton" || styling === "SecondaryButton",
       "govuk-!-margin-right-1": styling === "PrimaryButton" || styling === "SecondaryButton",
       "govuk-button--secondary": styling === "SecondaryButton",
+      "govuk-back-link": styling === "BackLink"
     }, this.props.className);
 
     const options = {
@@ -45,13 +46,6 @@ export class Link extends React.Component<StyledLinkProps> {
   }
 }
 
-// @TODO go back to same place in page (no scroll to top)
 export const BackLink: React.SFC<Props> = (props) => (
-  <RouterLink
-    routeName={props.route.routeName}
-    routeParams={props.route.routeParams}
-    className={classNames("govuk-back-link", props.className)}
-  >
-    {props.children}
-  </RouterLink>
+  <Link styling="BackLink" {...props}>{props.children}</Link>
 );
