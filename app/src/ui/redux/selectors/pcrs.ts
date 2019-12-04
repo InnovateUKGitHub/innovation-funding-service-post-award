@@ -1,5 +1,4 @@
 import { dataStoreHelper, editorStoreHelper } from "./common";
-import { getKey } from "@framework/util/key";
 import { RootState } from "../reducers";
 import { PCRDto, PCRItemForTimeExtensionDto, PCRStandardItemDto } from "@framework/dtos/pcrDtos";
 import { MultipleDocumentUpdloadDtoValidator } from "@ui/validators";
@@ -11,6 +10,7 @@ import {
   PCRItemType,
   PCRStatus
 } from "@framework/constants";
+import { getKey } from "@ui/redux/stores/storeKeys";
 
 export const getAllPcrTypes = () => dataStoreHelper("pcrTypes", "all");
 export const getAllPcrs = (projectId: string) => dataStoreHelper("pcrs", projectId);

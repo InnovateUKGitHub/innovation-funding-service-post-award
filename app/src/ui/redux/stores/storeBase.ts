@@ -2,9 +2,10 @@ import { LoadingStatus, Pending } from "@shared/pending";
 import { DataState, DataStateKeys, EditorState, EditorStateKeys, EditorStatus, IDataStore, IEditorStore, RootState } from "../reducers";
 import { IClientUser, ILinkInfo } from "@framework/types";
 import { DataLoadAction, dataLoadAction, EditorErrorAction, EditorSubmitAction, EditorSuccessAction, handleEditorError, handleEditorSubmit, handleEditorSuccess, navigateTo, resetEditor, RootActions, RootActionsOrThunk, UpdateEditorAction, updateEditorAction } from "../actions";
-import { getKey, scrollToTheTopSmoothly } from "@framework/util";
+import { scrollToTheTopSmoothly } from "@framework/util";
 import { processDto } from "@shared/processResponse";
 import { AnyAction } from "redux";
+import { getKey } from "@ui/redux/stores/storeKeys";
 
 type InferDataStore<T> = T extends IDataStore<infer U> ? U : never;
 export type InferEditorStoreDto<T> = T extends IEditorStore<infer U, infer V> ? U : never;
@@ -99,6 +100,7 @@ export class StoreBase {
 
   }
 
+  /* @deprecated TODO remove */
   protected buildKey(...vals: (string|number|boolean|"all")[]) {
     return getKey(...vals);
   }

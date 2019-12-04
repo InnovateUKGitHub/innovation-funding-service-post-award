@@ -25,17 +25,3 @@ export const dataStoreHelper = <T extends DataStateKeys, K extends string, TDto 
     return new Pending(data && data.status || LoadingStatus.Preload, data && data.data, data && data.error);
   }
 });
-
-export const dataStoreHelperMap = <TOriginalDto, TResult>(dataSelector: IDataSelector<TOriginalDto>, map: (item: TOriginalDto) => TResult): IDataSelector<TResult> => ({
-  store: dataSelector.store,
-  key: dataSelector.key,
-  get: state => {
-    const innerResult = dataSelector.get(state);
-    return {
-      error: innerResult.error,
-      status: innerResult.status,
-      data: innerResult.data && map(innerResult.data)
-    };
-  },
-  getPending: state => dataSelector.getPending(state).then(x => map(x))
-});
