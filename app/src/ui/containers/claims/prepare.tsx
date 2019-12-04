@@ -35,7 +35,6 @@ interface CombinedData {
   claim: ClaimDto;
   claimDetails: CostsSummaryForPeriodDto[];
   editor: IEditorStore<ClaimDto, ClaimDtoValidator>;
-  statusChanges: ClaimStatusChangeDto[];
 }
 
 export class PrepareComponent extends ContainerBase<PrepareClaimParams, Data, Callbacks> {
@@ -48,7 +47,6 @@ export class PrepareComponent extends ContainerBase<PrepareClaimParams, Data, Ca
       claim: this.props.claim,
       claimDetails: this.props.costsSummaryForPeriod,
       editor: this.props.editor,
-      statusChanges: this.props.statusChanges,
     });
 
     return <ACC.PageLoader pending={combined} render={(data) => this.renderContents(data)} />;
@@ -87,7 +85,7 @@ export class PrepareComponent extends ContainerBase<PrepareClaimParams, Data, Ca
           onChange={(dto) => this.props.onUpdate(false, dto)}
           onSubmit={() => this.props.onUpdate(true, data.editor.data, true)}
         >
-          {this.renderLogsSection(data)}
+          {this.renderLogsSection()}
           <Form.Fieldset qa="save-and-continue">
             <ACC.Link styling="PrimaryButton" route={this.props.routes.claimDocuments.getLink({projectId: this.props.projectId, partnerId: this.props.partnerId, periodId: this.props.periodId })}>Continue to claims documents</ACC.Link>
             <Form.Button name="return" onClick={() => this.props.onUpdate(true, data.editor.data, false)}>Save and return to claims</Form.Button>
@@ -97,11 +95,17 @@ export class PrepareComponent extends ContainerBase<PrepareClaimParams, Data, Ca
     );
   }
 
-  private renderLogsSection(data: CombinedData) {
+  private renderLogsSection() {
     return (
       <ACC.Accordion>
         <ACC.AccordionItem title="Status and comments log" qa="status-and-comments-log">
-          <ACC.Logs qa="claim-status-change-table" data={data.statusChanges} />
+          {/* Keeping logs inside loader because accordion defaults to closed*/}
+          <ACC.Loader
+            pending={this.props.statusChanges}
+            render={(statusChanges) => (
+              <ACC.Logs qa="claim-status-change-table" data={statusChanges} />
+            )}
+          />
         </ACC.AccordionItem>
       </ACC.Accordion>
     );
