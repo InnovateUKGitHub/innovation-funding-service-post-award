@@ -9,8 +9,8 @@ import {
 import { IContext, ILinkInfo } from "@framework/types";
 import { range } from "@shared/range";
 import { SaveClaimDetails } from "@server/features/claimDetails/saveClaimDetailsCommand";
-import { getClaimDetailsEditor } from "@ui/redux/selectors";
 import { ClaimDetailsValidator } from "@ui/validators/claimDetailsValidator";
+import { getClaimDetailKey } from "@ui/redux/stores/storeKeys";
 
 export class EditClaimLineItemsFormHandler extends StandardFormHandlerBase<EditClaimDetailsParams, "claimDetail"> {
 
@@ -43,7 +43,7 @@ export class EditClaimLineItemsFormHandler extends StandardFormHandlerBase<EditC
   }
 
   protected getStoreKey(params: EditClaimDetailsParams) {
-    return getClaimDetailsEditor(params.partnerId, params.periodId, params.costCategoryId).key;
+    return getClaimDetailKey(params.partnerId, params.periodId, params.costCategoryId);
   }
 
   protected async run(context: IContext, params: EditClaimDetailsParams, button: IFormButton, dto: ClaimDetailsDto): Promise<ILinkInfo> {
