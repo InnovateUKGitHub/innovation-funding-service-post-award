@@ -7,6 +7,7 @@ import { RootState } from "../reducers";
 import { CostSummeriesStore } from "./costsSummariesStore";
 import { CostCategoriesStore } from "./costCategoriesStore";
 import { Pending } from "@shared/pending";
+import { getClaimKey, getPartnerKey, getProjectKey } from "@ui/redux/stores/storeKeys";
 
 export class ClaimsStore extends StoreBase {
   constructor(private costsSummariesStore: CostSummeriesStore, private costCategoriesStore: CostCategoriesStore, getState: () => RootState, queue: (action: RootActionsOrThunk) => void) {
@@ -14,15 +15,16 @@ export class ClaimsStore extends StoreBase {
   }
 
   private getKey(partnerId: string, periodId: number) {
-    return this.buildKey(partnerId, periodId);
+    return getClaimKey(partnerId, periodId);
   }
 
   public get(partnerId: string, periodId: number) {
     return this.getData("claim", this.getKey(partnerId, periodId), p => ApiClient.claims.get({ partnerId, periodId, ...p }));
   }
 
-  public getAllClaimsForProject(projectId: string) {
-    return this.getData("claims", projectId, p => ApiClient.claims.getAllByProjectId({ projectId, ...p }));
+  public getAllClaimsForProject(projectId: string): Pending<ClaimDto[]> {
+    return this.getData("claims", getProjectKey(projectId), p => ApiClient.claims.getAllByProjectId({ projectId, ...p }))
+      .then(data => data, () => []);
   }
 
   public getInactiveClaimsForProject(projectId: string) {
@@ -34,7 +36,8 @@ export class ClaimsStore extends StoreBase {
   }
 
   public getAllClaimsForPartner(partnerId: string) {
-    return this.getData("claims", partnerId, p => ApiClient.claims.getAllByPartnerId({ partnerId, ...p }));
+    return this.getData("claims", getPartnerKey(partnerId), p => ApiClient.claims.getAllByPartnerId({ partnerId, ...p }))
+      .then(data => data, () => []);
   }
 
   public getActiveClaimForPartner(partnerId: string) {
@@ -87,7 +90,7 @@ export class ClaimsStore extends StoreBase {
   }
 
   public getStatusChanges(projectId: string, partnerId: string, periodId: number) {
-    return this.getData("claimStatusChanges", this.buildKey(projectId, partnerId, periodId), p => ApiClient.claims.getStatusChanges({ projectId, partnerId, periodId, ...p }));
+    return this.getData("claimStatusChanges", this.getKey(partnerId, periodId), p => ApiClient.claims.getStatusChanges({ projectId, partnerId, periodId, ...p }));
   }
 
 }

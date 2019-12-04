@@ -3,9 +3,9 @@ import { actionTypes } from "redux-router5";
 import { editorsReducer, EditorStatus, IEditorStore } from "@ui/redux/reducers";
 import { ClaimDtoValidator } from "@ui/validators";
 import { ClaimDto, IAppError, ErrorCode } from "@framework/types";
-import createCostCategory from "../selectors/createCostCategory";
-import getRootState from "../selectors/getRootState";
-import createClaim from "../selectors/createClaim";
+import createCostCategory from "../stores/createCostCategory";
+import getRootState from "../stores/getRootState";
+import createClaim from "../stores/createClaim";
 import { EditorResetAction, UpdateEditorAction, EditorSubmitAction, EditorSuccessAction, EditorErrorAction } from "@ui/redux/actions/common/editorActions";
 import { Results } from "@ui/validation";
 

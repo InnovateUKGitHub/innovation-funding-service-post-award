@@ -1,40 +1,14 @@
 import { dataStoreHelper, editorStoreHelper } from "./common";
 import { RootState } from "../reducers";
-import { ClaimDtoValidator } from "../../validators/claimDtoValidator";
-import { getCostCategories } from "./costCategories";
-import { LoadingStatus, Pending } from "../../../shared/pending";
-import { ClaimDto, ClaimStatus } from "@framework/types";
+import { Pending } from "../../../shared/pending";
+import { ClaimDto } from "@framework/types";
 import { getKey } from "@framework/util/key";
 import { ClaimDetailsValidator } from "@ui/validators";
 import { range } from "@shared/range";
-import { getLeadPartner } from "@ui/redux/selectors/partners";
 
 export const claimsStore = "claims";
 export const findClaimsByPartner = (partnerId: string) => dataStoreHelper(claimsStore, `partnerId=${partnerId}`);
 export const findClaimsByProject = (projectId: string) => dataStoreHelper(claimsStore, `projectId=${projectId}`);
-
-const claimStore = "claim";
-export const getClaim = (partnerId: string, periodId: number) => dataStoreHelper(claimStore, getKey(partnerId, periodId));
-
-export const getClaimEditor = (partnerId: string, periodId: number) => editorStoreHelper<ClaimDto, ClaimDtoValidator>(
-  claimStore,
-  (store) => createClaimEditorDto(partnerId, periodId, store),
-  (claim, store) => createClaimValidator(partnerId, periodId, claim, store),
-  `${partnerId}_${periodId}`
-);
-
-const createClaimEditorDto = (partnerId: string, periodId: number, store: RootState) => getClaim(partnerId, periodId).getPending(store);
-
-const createClaimValidator = (partnerId: string, periodId: number, claim: ClaimDto, store: RootState) => {
-  const originalStatus = getClaim(partnerId, periodId).getPending(store).then(x => x.status);
-  const details = getCostsSummaryForPeriod(partnerId, periodId).getPending(store);
-  const costCategories = getCostCategories().getPending(store);
-  return Pending.combine({
-    originalStatus,
-    details,
-    costCategories
-  }).then(x => new ClaimDtoValidator(claim, x.originalStatus, x.details, x.costCategories, false));
-};
 
 export const claimDetailStore = "claimDetail";
 
@@ -70,21 +44,9 @@ export const findClaimDetailsByPartner = (partnerId: string) => dataStoreHelper(
 export const costsSummaryForPeriodStore = "costsSummary";
 export const getCostsSummaryForPeriod = (partnerId: string, periodId: number) => dataStoreHelper(costsSummaryForPeriodStore, `partnerId=${partnerId}&periodId=${periodId}`);
 
-export const claimStatusChangesStore = "claimStatusChanges";
-export const getClaimStatusChanges = (projectId: string, partnerId: string, periodId: number) =>  dataStoreHelper(claimStatusChangesStore, getKey(projectId, partnerId, periodId));
-
 export const getCurrentClaim = (state: RootState, partnerId: string): Pending<ClaimDto | null> => {
   const pending = findClaimsByPartner(partnerId).getPending(state);
   return pending.then(claims => claims.find(x => !x.isApproved) || null);
-};
-
-export const getLeadPartnerCurrentClaim = (state: RootState, projectId: string) => {
-  return getLeadPartner(state, projectId).chain(partner => {
-    if (!partner) {
-      return new Pending(LoadingStatus.Done, null);
-    }
-    return getProjectCurrentClaims(state, projectId).then(claims => claims.find(x => x.partnerId === partner.id));
-  });
 };
 
 export const getProjectCurrentClaims = (state: RootState, projectId: string): Pending<ClaimDto[]> => {
