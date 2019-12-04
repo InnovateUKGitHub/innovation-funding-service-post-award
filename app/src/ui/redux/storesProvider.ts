@@ -7,7 +7,7 @@ export const createStores = (getState: () => RootState, dispatch: (action: RootA
   const costCategories = new Stores.CostCategoriesStore(getState, dispatch);
   const projects = new Stores.ProjectsStore(getState, dispatch);
   const partners = new Stores.PartnersStore(getState, dispatch);
-  const costsSummaries = new Stores.CostSummeriesStore(getState, dispatch);
+  const costsSummaries = new Stores.CostSummariesStore(getState, dispatch);
 
   const claims = new Stores.ClaimsStore(costsSummaries, costCategories, getState, dispatch);
   const claimDetails = new Stores.ClaimsDetailsStore(getState, dispatch);

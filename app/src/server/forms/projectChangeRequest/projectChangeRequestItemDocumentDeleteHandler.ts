@@ -6,8 +6,8 @@ import {
   PCRPrepareItemRoute,
   ProjectChangeRequestPrepareItemParams
 } from "@ui/containers";
-import { getKey } from "@framework/util";
 import { MultipleDocumentUpdloadDtoValidator } from "@ui/validators";
+import { getKey } from "@ui/redux/stores/storeKeys";
 
 interface Document extends MultipleDocumentUploadDto {
   id: string;
