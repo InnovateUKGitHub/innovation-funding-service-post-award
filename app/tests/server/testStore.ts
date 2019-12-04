@@ -1,13 +1,16 @@
-import getRootState from "../redux/selectors/getRootState";
-import { AnyAction, createStore } from "redux";
-import { createStores, IStores, rootReducer, RootState } from "@ui/redux";
+import getRootState from "../redux/stores/getRootState";
+import { applyMiddleware, createStore } from "redux";
+import { rootReducer, RootState } from "@ui/redux";
 import { LoadingStatus } from "@shared/pending";
 import { dataLoadAction, RootActionsOrThunk } from "@ui/redux/actions";
-import { partnersStore, partnerStore, projectsStore, projectStore } from "@ui/redux/selectors";
+import { partnersStore, projectsStore, projectStore } from "@ui/redux/selectors";
 import * as Repositories from "@server/repositories";
 import { TestContext } from "./testContextProvider";
 import { GetAllQuery as GetAllProjects, GetByIdQuery as GetProjectById } from "@server/features/projects";
 import { GetAllQuery as GetAllPartners, GetByIdQuery as GetPartnerById } from "@server/features/partners";
+import { GetAllClaimsForProjectQuery, GetAllForPartnerQuery as GetAllClaimsForPartner } from "@server/features/claims";
+import thunk from "redux-thunk";
+import { getPartnerKey, getProjectKey } from "@ui/redux/stores/storeKeys";
 
 export class TestStore {
 
@@ -16,7 +19,8 @@ export class TestStore {
 
   constructor(private context: TestContext) {
     const initialState = getRootState();
-    const store = createStore(rootReducer, initialState);
+    const middleware = applyMiddleware(thunk);
+    const store = createStore(rootReducer, initialState, middleware);
     this.dispatch = store.dispatch as any;
     this.getState = store.getState;
   }
@@ -37,5 +41,14 @@ export class TestStore {
     this.dispatch(dataLoadAction(partnerDto.id, partnersStore, LoadingStatus.Done, partnerDto));
     this.dispatch(dataLoadAction("all", partnersStore, LoadingStatus.Done, partnerDtos));
     return partner;
+  }
+
+  public async createClaim(partner: Repositories.ISalesforcePartner, periodId?: number, update?: (item: Repositories.ISalesforceClaim) => void) {
+    const claim = this.context.testData.createClaim(partner, periodId, update);
+    const partnerClaims = await this.context.runQuery(new GetAllClaimsForPartner(partner.Id));
+    const projectClaims = await this.context.runQuery(new GetAllClaimsForProjectQuery(partner.Acc_ProjectId__r.Id));
+    this.dispatch(dataLoadAction(getPartnerKey(partner.Id), "claims", LoadingStatus.Done, partnerClaims));
+    this.dispatch(dataLoadAction(getProjectKey(partner.Acc_ProjectId__r.Id), "claims", LoadingStatus.Done, projectClaims));
+    return claim;
   }
 }
