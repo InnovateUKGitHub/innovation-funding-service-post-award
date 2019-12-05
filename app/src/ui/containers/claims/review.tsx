@@ -195,7 +195,7 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, Data, Callbacks> 
 
   private renderLogsItem() {
     return (
-      <ACC.AccordionItem title="Log" qa="log-accordion">
+      <ACC.AccordionItem title="Status and comments log" qa="log-accordion">
         {/* Keeping logs inside loader because accordion defaults to closed*/}
         <ACC.Loader
           pending={this.props.statusChanges}
