@@ -61,9 +61,9 @@ export class Pending<T> {
    * create a new pending based of this pendings data
    * @param next - delegate to create new pending
    */
-  chain<T2>(next: (data: T) => Pending<T2>): Pending<T2> {
+  chain<T2>(next: (data: T, state: LoadingStatus) => Pending<T2>): Pending<T2> {
     if (Pending.canResolve([this])) {
-      return next(this.data!);
+      return next(this.data! ,this.state);
     }
     return new Pending<T2>(this.state, null, this.error);
   }

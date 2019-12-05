@@ -12,8 +12,9 @@ export class GetAllForecastsGOLCostsQuery extends QueryBase<GOLCostDto[]> {
     const costCategoriesOrder = costCategories.map(y => y.id);
 
     const results = await context.repositories.profileTotalCostCategory.getAllByPartnerId(this.partnerId);
-    const mapped = results.map(x => ({
+    const mapped = results.map<GOLCostDto>(x => ({
       costCategoryId: x.Acc_CostCategory__c,
+      costCategoryName: costCategories.filter(costCategory => costCategory.id === x.Acc_CostCategory__c).map(costCategory => costCategory.name)[0],
       value: x.Acc_CostCategoryGOLCost__c,
     }));
 
