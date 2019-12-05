@@ -8,7 +8,7 @@ import { GetByIdQuery as GetPartnerByIdQuery } from "../features/partners";
 import { GetCostCategoriesForPartnerQuery } from "../features/claims/getCostCategoriesForPartnerQuery";
 import { Params, UpdateForecastRoute } from "@ui/containers/forecasts/update";
 import { ForecastDetailsRoute } from "@ui/containers/forecasts/details";
-import { getForecastDetailsForPartnerKey } from "@ui/redux/stores/storeKeys";
+import { storeKeys } from "@ui/redux/stores/storeKeys";
 
 export class UpdateForecastFormHandler extends StandardFormHandlerBase<Params, "forecastDetails"> {
   constructor() {
@@ -39,7 +39,7 @@ export class UpdateForecastFormHandler extends StandardFormHandlerBase<Params, "
   }
 
   protected getStoreKey(params: Params) {
-    return getForecastDetailsForPartnerKey(params.partnerId);
+    return storeKeys.getForecastDetailsForPartnerKey(params.partnerId);
   }
 
   protected createValidationResult(params: Params, dto: ForecastDetailsDTO[]) {

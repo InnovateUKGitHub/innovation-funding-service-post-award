@@ -1,12 +1,12 @@
 import { ApiClient } from "@ui/apiClient";
 import { Pending } from "@shared/pending";
 import { DocumentsStoreBase } from "./documentsStoreBase";
-import { getClaimDetailDocumentsKey } from "@ui/redux/stores/storeKeys";
+import { storeKeys } from "@ui/redux/stores/storeKeys";
 
 export class ClaimDetailDocumentsStore extends DocumentsStoreBase {
 
   private getKey(partnerId: string, periodId: number, costCategoryId: string) {
-    return getClaimDetailDocumentsKey(partnerId, periodId, costCategoryId);
+    return storeKeys.getClaimDetailDocumentsKey(partnerId, periodId, costCategoryId);
   }
 
   public getClaimDetailDocuments(projectId: string, partnerId: string, periodId: number, costCategoryId: string) {

@@ -7,11 +7,7 @@ import { RootState } from "../reducers";
 import { CostSummariesStore } from "./costsSummariesStore";
 import { CostCategoriesStore } from "./costCategoriesStore";
 import { Pending } from "@shared/pending";
-import {
-  getClaimKey,
-  getClaimsForPartnerKey,
-  getClaimsForProjectKey,
-} from "@ui/redux/stores/storeKeys";
+import { storeKeys } from "@ui/redux/stores/storeKeys";
 
 export class ClaimsStore extends StoreBase {
   constructor(private costsSummariesStore: CostSummariesStore, private costCategoriesStore: CostCategoriesStore, getState: () => RootState, queue: (action: RootActionsOrThunk) => void) {
@@ -19,7 +15,7 @@ export class ClaimsStore extends StoreBase {
   }
 
   private getKey(partnerId: string, periodId: number) {
-    return getClaimKey(partnerId, periodId);
+    return storeKeys.getClaimKey(partnerId, periodId);
   }
 
   public get(partnerId: string, periodId: number) {
@@ -27,7 +23,7 @@ export class ClaimsStore extends StoreBase {
   }
 
   public getAllClaimsForProject(projectId: string): Pending<ClaimDto[]> {
-    return this.getData("claims", getClaimsForProjectKey(projectId), p => ApiClient.claims.getAllByProjectId({ projectId, ...p }))
+    return this.getData("claims", storeKeys.getClaimsForProjectKey(projectId), p => ApiClient.claims.getAllByProjectId({ projectId, ...p }))
       .then(data => data, () => []);
   }
 
@@ -40,7 +36,7 @@ export class ClaimsStore extends StoreBase {
   }
 
   public getAllClaimsForPartner(partnerId: string) {
-    return this.getData("claims", getClaimsForPartnerKey(partnerId), p => ApiClient.claims.getAllByPartnerId({ partnerId, ...p }))
+    return this.getData("claims", storeKeys.getClaimsForPartnerKey(partnerId), p => ApiClient.claims.getAllByPartnerId({ partnerId, ...p }))
       .then(data => data, () => []);
   }
 

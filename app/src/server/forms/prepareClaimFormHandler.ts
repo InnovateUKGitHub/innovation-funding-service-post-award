@@ -7,7 +7,7 @@ import { ClaimDtoValidator } from "../../ui/validators/claimDtoValidator";
 import { ILinkInfo } from "@framework/types/ILinkInfo";
 import { IContext } from "@framework/types/IContext";
 import { GetAllProjectRolesForUser } from "../features/projects";
-import { getClaimKey } from "@ui/redux/stores/storeKeys";
+import { storeKeys } from "@ui/redux/stores/storeKeys";
 
 export class PrepareClaimFormHandler extends StandardFormHandlerBase<PrepareClaimParams, "claim"> {
   constructor() {
@@ -38,7 +38,7 @@ export class PrepareClaimFormHandler extends StandardFormHandlerBase<PrepareClai
   }
 
   protected getStoreKey(params: PrepareClaimParams) {
-    return getClaimKey(params.partnerId, params.periodId);
+    return storeKeys.getClaimKey(params.partnerId, params.periodId);
   }
 
   protected createValidationResult(params: PrepareClaimParams, dto: ClaimDto) {

@@ -6,7 +6,7 @@ import { GetAllProjectRolesForUser, GetByIdQuery } from "../features/projects";
 import { GetByIdQuery as GetPartnerByIdQuery } from "../features/partners";
 import { IContext, ILinkInfo, ProjectRole } from "@framework/types";
 import { GetCostCategoriesForPartnerQuery } from "../features/claims/getCostCategoriesForPartnerQuery";
-import { getForecastDetailsForPartnerKey } from "@ui/redux/stores/storeKeys";
+import { storeKeys } from "@ui/redux/stores/storeKeys";
 
 export class ClaimForecastFormHandler extends StandardFormHandlerBase<ClaimForecastParams, "forecastDetails"> {
   constructor() {
@@ -51,7 +51,7 @@ export class ClaimForecastFormHandler extends StandardFormHandlerBase<ClaimForec
   }
 
   protected getStoreKey(params: ClaimForecastParams) {
-    return getForecastDetailsForPartnerKey(params.partnerId);
+    return storeKeys.getForecastDetailsForPartnerKey(params.partnerId);
   }
 
   protected createValidationResult(params: ClaimForecastParams, dto: ForecastDetailsDTO[]) {
