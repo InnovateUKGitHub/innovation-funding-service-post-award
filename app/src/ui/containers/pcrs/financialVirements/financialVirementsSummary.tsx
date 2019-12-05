@@ -20,7 +20,7 @@ class Component extends React.Component<Props> {
       <Table.Table qa="partners" data={data.partners}>
         <Table.Custom qa="partner" header="Partner" value={x => this.getPartnerLink(x)} footer="Totals" />
         <Table.Currency qa="original" header="Original" value={x => x.originalTotal} footer={<ACC.Renderers.Currency value={data.originalTotal} />} />
-        <Table.Currency qa="new" header="New" value={x => x.currentTotal} footer={<ACC.Renderers.Currency value={data.currentTotal} />} />
+        <Table.Currency qa="new" header="New" value={x => x.newTotal} footer={<ACC.Renderers.Currency value={data.newTotal} />} />
       </Table.Table>
     );
   }
