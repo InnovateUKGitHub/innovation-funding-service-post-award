@@ -55,7 +55,7 @@ class ClaimDocumentsComponent extends ContainerBase<ClaimDocumentsPageParams, Da
           <UploadForm.Form
             enctype="multipart"
             editor={editor}
-            qa="claimDocuments"
+            qa="claimDocumentsForm"
             onChange={(dto) => this.props.onChange(false, dto)}
           >
             <UploadForm.Fieldset>
@@ -75,8 +75,10 @@ class ClaimDocumentsComponent extends ContainerBase<ClaimDocumentsPageParams, Da
         <ACC.Section title="List of documents">
           {this.renderDocuments(editor, documents)}
         </ACC.Section>
-        <ACC.Link styling="PrimaryButton" route={this.props.routes.forecastUpdate.getLink({projectId: this.props.projectId, partnerId: this.props.partnerId})}>Continue to update forecast</ACC.Link>
-        <ACC.Link styling="SecondaryButton" route={this.props.routes.allClaimsDashboard.getLink({projectId: this.props.projectId})}>Save and return to claims</ACC.Link>
+        <ACC.Section qa="buttons">
+          <ACC.Link styling="PrimaryButton" id="continue-claim" route={this.props.routes.forecastUpdate.getLink({projectId: this.props.projectId, partnerId: this.props.partnerId})}>Continue to update forecast</ACC.Link>
+          <ACC.Link styling="SecondaryButton" id="save-claim" route={this.props.routes.allClaimsDashboard.getLink({projectId: this.props.projectId})}>Save and return to claims</ACC.Link>
+        </ACC.Section>
       </ACC.Page>
     );
   }
