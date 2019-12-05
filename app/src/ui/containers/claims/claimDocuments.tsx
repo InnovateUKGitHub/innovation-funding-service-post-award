@@ -6,7 +6,7 @@ import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerB
 import { IEditorStore, StoresConsumer } from "@ui/redux";
 import { MultipleDocumentUpdloadDtoValidator } from "@ui/validators";
 
-interface ClaimDocumentsParams {
+export interface ClaimDocumentsPageParams {
   projectId: string;
   periodId: number;
   partnerId: string;
@@ -24,7 +24,7 @@ interface Callbacks {
   onDelete: (dto: MultipleDocumentUploadDto, document: DocumentSummaryDto) => void;
 }
 
-class ClaimDocumentsComponent extends ContainerBase<ClaimDocumentsParams, Data, Callbacks> {
+class ClaimDocumentsComponent extends ContainerBase<ClaimDocumentsPageParams, Data, Callbacks> {
   render() {
     const combined = Pending.combine({
       project: this.props.project,
@@ -96,7 +96,7 @@ class ClaimDocumentsComponent extends ContainerBase<ClaimDocumentsParams, Data, 
   }
 }
 
-const ClaimDocumentsContainer = (props: ClaimDocumentsParams & BaseProps) => (
+const ClaimDocumentsContainer = (props: ClaimDocumentsPageParams & BaseProps) => (
   <StoresConsumer>
     {
       stores => (
