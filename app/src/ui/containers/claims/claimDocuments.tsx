@@ -42,6 +42,8 @@ class ClaimDocumentsComponent extends ContainerBase<ClaimDocumentsPageParams, Da
     return (
       <ACC.Page
         pageTitle={<ACC.Projects.Title project={project} />}
+        error={(editor.error)}
+        validator={editor.validator}
         backLink={<ACC.BackLink route={this.props.routes.prepareClaim.getLink({ periodId: this.props.periodId, projectId: this.props.projectId, partnerId: this.props.partnerId })}>Back to costs to be claimed</ACC.BackLink>}
       >
         <ACC.Renderers.Messages messages={this.props.messages} />
