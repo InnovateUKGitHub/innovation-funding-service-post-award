@@ -268,6 +268,7 @@ div.card-link-grid {
 }
 
 div.card-link {
+  position: relative;
   display: flex;
   background: #f8f8f8;
   height:100%;
@@ -291,6 +292,26 @@ div.card-link > a:hover {
 
 div.card-link > a:focus {
   outline: 0px;
+}
+
+.card-link__message--alert {
+  color: #ff0000;
+}
+
+a:hover > .card-link__messages > .card-link__message--alert {
+  color: #ffffff;
+}
+
+.card-link__messages {
+  position: absolute;
+  bottom: 0px;
+  right: 20px;
+}
+
+@media (max-width: 40.0625em) {
+  .card-link__messages {
+    right: auto!important;
+  }
 }
 
 button.govuk-link {

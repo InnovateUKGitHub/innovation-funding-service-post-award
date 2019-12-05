@@ -3,13 +3,11 @@ import React from "react";
 import { BaseProps, ContainerBase, defineRoute } from "../containerBase";
 import * as Dtos from "@framework/dtos";
 import { Pending } from "@shared/pending";
-import { IClientUser, PartnerDto, ProjectDto, ProjectRole } from "@framework/types";
+import { IClientUser, PartnerClaimStatus, PartnerDto, ProjectDto, ProjectRole } from "@framework/types";
 import * as ACC from "@ui/components";
 import { IClientConfig } from "@ui/redux/reducers/configReducer";
-import { NavigationCard } from "@ui/components";
 import { StoresConsumer } from "@ui/redux";
 import { IRoutes } from "@ui/routing";
-
 interface Data {
   projectDetails: Pending<Dtos.ProjectDto>;
   partners: Pending<Dtos.PartnerDto[]>;
@@ -34,8 +32,6 @@ class ProjectOverviewComponent extends ContainerBase<Params, Data, {}> {
   }
 
   renderContents(project: Dtos.ProjectDto, partners: Dtos.PartnerDto[], contacts: ProjectContactDto[]) {
-
-    const projectId = project.id;
     // find first partner with role
     const partner = partners.filter(x => x.roles !== ProjectRole.Unknown)[0];
 
@@ -52,7 +48,7 @@ class ProjectOverviewComponent extends ContainerBase<Params, Data, {}> {
         >
           {this.renderProjectOveriewDetails(project, partner)}
         </ACC.Section>
-        {this.renderLinks(projectId, partner && partner.id || partners[0].id, project.roles, this.props.routes)}
+        {this.renderLinks(project, partner || partners[0], this.props.routes)}
       </ACC.Page>
     );
   }
@@ -106,10 +102,14 @@ class ProjectOverviewComponent extends ContainerBase<Params, Data, {}> {
     );
   }
 
-  private renderLinks(projectId: string, partnerId: string, projectRole: ProjectRole, routes: IRoutes) {
+  private renderLinks(project: ProjectDto, partner: PartnerDto, routes: IRoutes) {
+    const projectId = project.id;
+    const projectRole = project.roles;
+    const partnerId = partner.id;
+
     let links = [
-      { text: "Claims", link: routes.allClaimsDashboard.getLink({ projectId }) },
-      { text: "Claims", link: routes.claimsDashboard.getLink({ projectId, partnerId }) },
+      { text: "Claims", link: routes.allClaimsDashboard.getLink({ projectId }), messages: () => this.getClaimMessages(project, partner) },
+      { text: "Claims", link: routes.claimsDashboard.getLink({ projectId, partnerId }), messages: () => this.getClaimMessages(project, partner) },
       { text: "Monitoring reports", link: routes.monitoringReportDashboard.getLink({ projectId }) },
       { text: "Forecasts", link: routes.forecastDashboard.getLink({ projectId }) },
       { text: "Forecast", link: routes.forecastDetails.getLink({ projectId, partnerId }) },
@@ -118,7 +118,10 @@ class ProjectOverviewComponent extends ContainerBase<Params, Data, {}> {
       { text: "Documents", link: routes.projectDocuments.getLink({ projectId }) },
       { text: "Project details", link: routes.projectDetails.getLink({ id: projectId }) },
       { text: "Finance summary", link: routes.financeSummary.getLink({ projectId, partnerId }) },
-    ].filter(x => x.link.accessControl(this.props.user, this.props.config));
+    ];
+
+    // filter out like the current user dosnt have access too
+    links = links.filter(x => x.link.accessControl(this.props.user, this.props.config));
 
     // special case if not fc shouldnt have link to ViewForecastRoute from this page... the view forecast route has permission from the project forecasts route
     if (projectRole & (ProjectRole.MonitoringOfficer | ProjectRole.ProjectManager)) {
@@ -127,10 +130,53 @@ class ProjectOverviewComponent extends ContainerBase<Params, Data, {}> {
 
     return (
       <ACC.NavigationCardsGrid>
-        {links.map((x, i) => <NavigationCard label={x.text} route={x.link} key={i} qa={`overview-link-${x.link.routeName}`} />)}
+        {links.map((x, i) =>
+          <ACC.NavigationCard
+            label={x.text}
+            route={x.link}
+            key={i}
+            qa={`overview-link-${x.link.routeName}`}
+            messages={x.messages && x.messages()}
+          />)}
       </ACC.NavigationCardsGrid>
     );
   }
+
+  private getClaimMessages(project: ProjectDto, partner: PartnerDto) {
+    const result: ACC.NavigationCardMessage[] = [];
+
+    if (project.roles & ProjectRole.FinancialContact) {
+      switch (partner.status) {
+        case PartnerClaimStatus.NoClaimsDue:
+          result.push({ message: "No claim due", isAlert: false });
+          break;
+        case PartnerClaimStatus.ClaimDue:
+          result.push({ message: "Claim due", isAlert: true });
+          break;
+        case PartnerClaimStatus.ClaimsOverdue:
+          result.push({ message: "Claim overdue", isAlert: true });
+          break;
+        case PartnerClaimStatus.ClaimQueried:
+          result.push({ message: "Claim queried", isAlert: true });
+          break;
+        case PartnerClaimStatus.ClaimSubmitted:
+          result.push({ message: "Claim submitted", isAlert: false });
+          break;
+        case PartnerClaimStatus.IARRequired:
+          result.push({ message: "IAR required", isAlert: true });
+      }
+    }
+
+    if (project.roles & ProjectRole.MonitoringOfficer) {
+      result.push({
+        message: "Claims to review: " + project.claimsToReview,
+        isAlert: false
+      });
+    }
+
+    return result;
+  }
+
 }
 
 const ProjectOverviewContainer = (props: Params & BaseProps) => {
