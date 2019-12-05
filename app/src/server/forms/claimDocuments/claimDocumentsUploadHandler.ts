@@ -4,7 +4,7 @@ import { IContext } from "@framework/types/IContext";
 import { ILinkInfo } from "@framework/types/ILinkInfo";
 import { Configuration } from "@server/features/common";
 import { UploadClaimDocumentsCommand } from "@server/features/documents/uploadClaimDocuments";
-import { getClaimDocumentsKey } from "@ui/redux/stores/storeKeys";
+import { storeKeys } from "@ui/redux/stores/storeKeys";
 import { MultipleDocumentUpdloadDtoValidator } from "@ui/validators";
 
 export class ClaimDocumentsUploadHandler extends MultipleFileFormHandlerBase<ClaimDocumentsPageParams, "multipleDocuments"> {
@@ -28,7 +28,7 @@ export class ClaimDocumentsUploadHandler extends MultipleFileFormHandlerBase<Cla
   }
 
   protected getStoreKey(params: ClaimDocumentsPageParams) {
-    return getClaimDocumentsKey(params.partnerId, params.periodId);
+    return storeKeys.getClaimDocumentsKey(params.partnerId, params.periodId);
   }
 
   protected createValidationResult(params: ClaimDocumentsPageParams, dto: MultipleDocumentUploadDto) {

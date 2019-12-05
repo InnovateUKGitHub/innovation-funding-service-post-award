@@ -1,15 +1,15 @@
 import { StoreBase } from "./storeBase";
 import { ApiClient } from "@ui/apiClient";
 import { ClaimDetailsValidator } from "@ui/validators";
-import { getClaimDetailKey, getClaimDetailsForPartnerKey } from "@ui/redux/stores/storeKeys";
+import { storeKeys } from "@ui/redux/stores/storeKeys";
 
 export class ClaimsDetailsStore extends StoreBase {
   private getKey(partnerId: string, periodId: number, costCategoryId: string) {
-    return getClaimDetailKey(partnerId, periodId, costCategoryId);
+    return storeKeys.getClaimDetailKey(partnerId, periodId, costCategoryId);
   }
 
   public getAllByPartner(partnerId: string) {
-    return this.getData("claimDetails", getClaimDetailsForPartnerKey(partnerId), p => ApiClient.claimDetails.getAllByPartner({partnerId, ...p}));
+    return this.getData("claimDetails", storeKeys.getClaimDetailsForPartnerKey(partnerId), p => ApiClient.claimDetails.getAllByPartner({partnerId, ...p}));
   }
 
   public get(projectId: string, partnerId: string, periodId: number, costCategoryId: string) {

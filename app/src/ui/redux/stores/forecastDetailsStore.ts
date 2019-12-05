@@ -7,10 +7,7 @@ import { ClaimsDetailsStore } from "./claimDetailsStore";
 import { ForecastGolCostsStore } from "./forecastGolCostsStore";
 import { RootState } from "@ui/redux";
 import { messageSuccess, RootActionsOrThunk } from "@ui/redux/actions";
-import {
-  getForecastDetailKey,
-  getForecastDetailsForPartnerKey,
-} from "@ui/redux/stores/storeKeys";
+import { storeKeys } from "@ui/redux/stores/storeKeys";
 
 export class ForecastDetailsStore extends StoreBase {
   constructor(
@@ -23,11 +20,11 @@ export class ForecastDetailsStore extends StoreBase {
   }
 
   public get(partnerId: string, periodId: number, costCategoryId: string) {
-    return this.getData("forecastDetail", getForecastDetailKey(partnerId, periodId, costCategoryId), p => ApiClient.forecastDetails.get({partnerId, periodId, costCategoryId, ...p}));
+    return this.getData("forecastDetail", storeKeys.getForecastDetailKey(partnerId, periodId, costCategoryId), p => ApiClient.forecastDetails.get({partnerId, periodId, costCategoryId, ...p}));
   }
 
   public getAllByPartner(partnerId: string) {
-    return this.getData("forecastDetails", getForecastDetailsForPartnerKey(partnerId), p => ApiClient.forecastDetails.getAllByPartnerId({ partnerId, ...p }));
+    return this.getData("forecastDetails", storeKeys.getForecastDetailsForPartnerKey(partnerId), p => ApiClient.forecastDetails.getAllByPartnerId({ partnerId, ...p }));
   }
 
   private getValidator(partnerId: string, dto: ForecastDetailsDTO[], showValidationErrors: boolean) {
@@ -42,7 +39,7 @@ export class ForecastDetailsStore extends StoreBase {
   public getForecastEditor(partnerId: string, init?: (data: ForecastDetailsDTO[]) => void) {
     return this.getEditor(
       "forecastDetails",
-      getForecastDetailsForPartnerKey(partnerId),
+      storeKeys.getForecastDetailsForPartnerKey(partnerId),
       () => this.getAllByPartner(partnerId),
       init,
       (dto) => this.getValidator(partnerId, dto, false)
@@ -53,7 +50,7 @@ export class ForecastDetailsStore extends StoreBase {
     super.updateEditor(
       saving,
       "forecastDetails",
-      getForecastDetailsForPartnerKey(partnerId),
+      storeKeys.getForecastDetailsForPartnerKey(partnerId),
       dto,
       (show) => this.getValidator(partnerId, dto, show),
       (p) => ApiClient.forecastDetails.update({ projectId, partnerId, submit: submitClaim, forecasts: dto, ...p }),
