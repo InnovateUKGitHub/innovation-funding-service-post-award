@@ -1,7 +1,7 @@
 interface FinancialVirementDto {
   pcrItemId: string;
   originalTotal: number;
-  currentTotal: number;
+  newTotal: number;
   partners: PartnerVirementsDto[]
 }
 
@@ -10,7 +10,7 @@ interface PartnerVirementsDto {
   partnerName: string;
   isLead: boolean;
   originalTotal: number;
-  currentTotal: number;
+  newTotal: number;
   virements: VirementDto[];
 }
 
@@ -18,5 +18,5 @@ interface VirementDto {
   costCategoryId: string;
   costCategoryName: string;
   originalAmount: number;
-  currentAmount: number;
+  newAmount: number;
 }
