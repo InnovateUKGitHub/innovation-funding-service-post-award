@@ -10,7 +10,7 @@ import { GetAllQuery as GetAllProjects, GetByIdQuery as GetProjectById } from "@
 import { GetAllQuery as GetAllPartners, GetByIdQuery as GetPartnerById } from "@server/features/partners";
 import { GetAllClaimsForProjectQuery, GetAllForPartnerQuery as GetAllClaimsForPartner } from "@server/features/claims";
 import thunk from "redux-thunk";
-import { getPartnerKey, getProjectKey } from "@ui/redux/stores/storeKeys";
+import { storeKeys } from "@ui/redux/stores/storeKeys";
 
 export class TestStore {
 
@@ -47,8 +47,8 @@ export class TestStore {
     const claim = this.context.testData.createClaim(partner, periodId, update);
     const partnerClaims = await this.context.runQuery(new GetAllClaimsForPartner(partner.Id));
     const projectClaims = await this.context.runQuery(new GetAllClaimsForProjectQuery(partner.Acc_ProjectId__r.Id));
-    this.dispatch(dataLoadAction(getPartnerKey(partner.Id), "claims", LoadingStatus.Done, partnerClaims));
-    this.dispatch(dataLoadAction(getProjectKey(partner.Acc_ProjectId__r.Id), "claims", LoadingStatus.Done, projectClaims));
+    this.dispatch(dataLoadAction(storeKeys.getPartnerKey(partner.Id), "claims", LoadingStatus.Done, partnerClaims));
+    this.dispatch(dataLoadAction(storeKeys.getProjectKey(partner.Acc_ProjectId__r.Id), "claims", LoadingStatus.Done, projectClaims));
     return claim;
   }
 }

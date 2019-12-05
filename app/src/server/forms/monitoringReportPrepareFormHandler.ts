@@ -7,8 +7,8 @@ import {
   MonitoringReportPrepareRoute
 } from "@ui/containers";
 import { MonitoringReportDtoValidator } from "@ui/validators/MonitoringReportDtoValidator";
-import { getMonitoringReportEditor } from "@ui/redux/selectors";
 import { GetMonitoringReportById, SaveMonitoringReport } from "@server/features/monitoringReports";
+import { storeKeys } from "@ui/redux/stores/storeKeys";
 
 export class MonitoringReportPrepareFormHandler extends StandardFormHandlerBase<MonitoringReportPrepareParams, "monitoringReport"> {
 
@@ -34,7 +34,7 @@ export class MonitoringReportPrepareFormHandler extends StandardFormHandlerBase<
   }
 
   protected getStoreKey(params: MonitoringReportPrepareParams) {
-    return getMonitoringReportEditor(params.projectId, params.id).key;
+    return storeKeys.getMonitoringReportKey(params.projectId, params.id);
   }
 
   protected async run(context: IContext, params: MonitoringReportPrepareParams, button: IFormButton, dto: MonitoringReportDto): Promise<ILinkInfo> {

@@ -3,8 +3,8 @@ import { MonitoringReportDto } from "@framework/dtos";
 import { IContext, ILinkInfo } from "@framework/types";
 import { MonitoringReportDtoValidator } from "@ui/validators";
 import { DeleteMonitoringReportCommand, GetMonitoringReportById} from "@server/features/monitoringReports";
-import { getMonitoringReportEditor } from "@ui/redux/selectors";
 import { MonitoringReportDashboardRoute, MonitoringReportDeleteParams, MonitoringReportDeleteRoute } from "@ui/containers";
+import { storeKeys } from "@ui/redux/stores/storeKeys";
 
 export class MonitoringReportDeleteFormHandler extends StandardFormHandlerBase<MonitoringReportDeleteParams, "monitoringReport"> {
 
@@ -22,7 +22,7 @@ export class MonitoringReportDeleteFormHandler extends StandardFormHandlerBase<M
   }
 
   protected getStoreKey(params: MonitoringReportDeleteParams, dto: MonitoringReportDto) {
-    return getMonitoringReportEditor(params.projectId, params.id).key;
+    return storeKeys.getMonitoringReportKey(params.projectId, params.id);
   }
 
   protected createValidationResult(params: MonitoringReportDeleteParams, dto: MonitoringReportDto): MonitoringReportDtoValidator {
