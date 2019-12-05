@@ -36,7 +36,6 @@ interface CombinedData {
   costCategories: CostCategoryDto[];
   claim: ClaimDto;
   claimDetails: CostsSummaryForPeriodDto[];
-  statusChanges: ClaimStatusChangeDto[];
   editor: IEditorStore<ClaimDto, ClaimDtoValidator>;
 }
 
@@ -48,7 +47,6 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, Data, Callbacks> 
       costCategories: this.props.costCategories,
       claim: this.props.claim,
       claimDetails: this.props.costsSummaryForPeriod,
-      statusChanges: this.props.statusChanges,
       editor: this.props.editor,
     });
 
@@ -68,14 +66,20 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, Data, Callbacks> 
         validator={data.editor.validator}
         pageTitle={<ACC.Projects.Title project={data.project} />}
       >
-        {this.renderClaimReview(data)}
+        {this.renderClaimReviewSection(data)}
+        <ACC.Section>
+          <ACC.Accordion>
+            {this.renderForecastItem()}
+            {this.renderLogsItem()}
+          </ACC.Accordion>
+        </ACC.Section>
+        {this.renderForm(data)}
       </ACC.Page>
     );
   }
 
-  private renderClaimReview(data: CombinedData) {
+  private renderClaimReviewSection(data: CombinedData) {
     return (
-      <React.Fragment>
         <ACC.Section title={this.getClaimPeriodTitle(data)}>
           <ACC.Claims.ClaimReviewTable
             {...data}
@@ -84,14 +88,10 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, Data, Callbacks> 
             getLink={costCategoryId => this.getClaimLineItemLink(costCategoryId)}
           />
         </ACC.Section>
-        {this.renderForecastSection()}
-        {this.renderLogSection(data)}
-        {this.renderForm(data)}
-      </React.Fragment>
     );
   }
 
-  private renderForecastSection() {
+  private renderForecastItem() {
     const pendingForcastData: Pending<ACC.Claims.ForecastData> = Pending.combine({
       project: this.props.project,
       partner: this.props.partner,
@@ -104,16 +104,12 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, Data, Callbacks> 
     });
 
     return (
-      <ACC.Section>
-        <ACC.Accordion>
-          <ACC.AccordionItem title="Forecast" qa="forecast-accordion">
-            <ACC.Loader
-              pending={pendingForcastData}
-              render={(forecastData) => (<ACC.Claims.ForecastTable data={forecastData} hideValidation={true} />)}
-            />
-          </ACC.AccordionItem>
-        </ACC.Accordion>
-      </ACC.Section>
+      <ACC.AccordionItem title="Forecast" qa="forecast-accordion">
+        <ACC.Loader
+          pending={pendingForcastData}
+          render={(forecastData) => (<ACC.Claims.ForecastTable data={forecastData} hideValidation={true} />)}
+        />
+      </ACC.AccordionItem>
     );
   }
 
@@ -197,13 +193,17 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, Data, Callbacks> 
     }
   }
 
-  private renderLogSection(data: CombinedData) {
+  private renderLogsItem() {
     return (
-      <ACC.Accordion>
-        <ACC.AccordionItem title="Log" qa="log-accordion">
-          <ACC.Logs qa="claim-status-change-table" data={data.statusChanges} />
-        </ACC.AccordionItem>
-      </ACC.Accordion>
+      <ACC.AccordionItem title="Log" qa="log-accordion">
+        {/* Keeping logs inside loader because accordion defaults to closed*/}
+        <ACC.Loader
+          pending={this.props.statusChanges}
+          render={(statusChanges) => (
+            <ACC.Logs qa="claim-status-change-table" data={statusChanges} />
+          )}
+        />
+      </ACC.AccordionItem>
     );
   }
 }

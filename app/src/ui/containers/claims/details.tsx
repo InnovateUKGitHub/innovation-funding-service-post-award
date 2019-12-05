@@ -62,8 +62,7 @@ export class ClaimsDetailsComponent extends ContainerBase<Params, Data, {}> {
         pageTitle={<ACC.Projects.Title project={data.project} />}
       >
         {this.renderTableSection(data)}
-        {this.renderForecastSection(data)}
-        {this.renderLogs()}
+        {this.renderAccordionSection(data)}
       </ACC.Page>
     );
   }
@@ -72,6 +71,20 @@ export class ClaimsDetailsComponent extends ContainerBase<Params, Data, {}> {
     return (
       <ACC.Section title={this.getClaimPeriodTitle(data)}>
         {this.renderTable(data)}
+      </ACC.Section>
+    );
+  }
+
+  private renderAccordionSection(data: CombinedData) {
+    const isArchived = data.claim.status === ClaimStatus.PAID || data.claim.status === ClaimStatus.APPROVED;
+    const isMO = data.project.roles & ProjectRole.MonitoringOfficer;
+    const showForecast = this.props.forecastData && !(isArchived && isMO);
+    return (
+      <ACC.Section>
+        <ACC.Accordion>
+          {showForecast && this.renderForecastItem(this.props.forecastData!)}
+          {this.renderLogsItem()}
+        </ACC.Accordion>
       </ACC.Section>
     );
   }
@@ -103,44 +116,30 @@ export class ClaimsDetailsComponent extends ContainerBase<Params, Data, {}> {
     return <ACC.Claims.ClaimPeriodDate claim={data.claim} partner={data.partner} />;
   }
 
-  private renderForecastSection(data: CombinedData) {
-    const isArchived = data.claim.status === ClaimStatus.PAID || data.claim.status === ClaimStatus.APPROVED;
-    const isMO = data.project.roles & ProjectRole.MonitoringOfficer;
-
-    if (!this.props.forecastData || (isArchived && isMO)) {
-      return null;
-    }
-
+  private renderForecastItem(pendingForecastData: Pending<ACC.Claims.ForecastData>) {
     return (
-      <ACC.Section>
-        <ACC.Accordion>
-          <ACC.AccordionItem title="Forecast" qa="forecast-accordion">
-            <ACC.Loader pending={this.props.forecastData} render={(x) => this.renderForecastTable(x)} />
-          </ACC.AccordionItem>
-        </ACC.Accordion>
-      </ACC.Section>
+      <ACC.AccordionItem title="Forecast" qa="forecast-accordion">
+        <ACC.Loader
+          pending={pendingForecastData}
+          render={(forecastData) => (
+            <ACC.Claims.ForecastTable data={forecastData} hideValidation={true}/>
+          )}
+        />
+      </ACC.AccordionItem>
     );
   }
 
-  private renderForecastTable(forecastData: ACC.Claims.ForecastData) {
-    return <ACC.Claims.ForecastTable data={forecastData} hideValidation={true} />;
-  }
-
-  private renderLogs() {
+  private renderLogsItem() {
     return (
-      <ACC.Section>
-        <ACC.Accordion>
-          <ACC.AccordionItem title="Status and comments log" qa="claim-status-change-accordion">
-            {/* Keeping logs inside loader because accordion defaults to closed*/}
-            <ACC.Loader
-              pending={this.props.statusChanges}
-              render={(statusChanges) => (
-                <ACC.Logs qa="claim-status-change-table" data={statusChanges}/>
-              )}
-            />
-          </ACC.AccordionItem>
-        </ACC.Accordion>
-      </ACC.Section>
+      <ACC.AccordionItem title="Status and comments log" qa="claim-status-change-accordion">
+        {/* Keeping logs inside loader because accordion defaults to closed*/}
+        <ACC.Loader
+          pending={this.props.statusChanges}
+          render={(statusChanges) => (
+            <ACC.Logs qa="claim-status-change-table" data={statusChanges} />
+          )}
+        />
+      </ACC.AccordionItem>
     );
   }
 }
