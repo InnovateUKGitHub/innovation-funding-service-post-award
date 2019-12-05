@@ -26,6 +26,8 @@ import { Configuration } from "../features/common";
 import { MonitoringReportCreateFormHandler } from "./monitoringReportCreateFormHandler";
 import { MonitoringReportDeleteFormHandler } from "./monitoringReportDeleteFormHandler";
 import { MonitoringReportPrepareFormHandler } from "./monitoringReportPrepareFormHandler";
+import { ClaimDocumentsDeleteHandler } from "@server/forms/claimDocuments/claimDocumentsDeleteHandler";
+import { ClaimDocumentsUploadHandler } from "@server/forms/claimDocuments/claimDocumentsUploadHandler";
 
 export const formRouter = express.Router();
 
@@ -37,6 +39,8 @@ const handlers: IFormHandler[] = [
   new UpdateForecastFormHandler(),
   new ClaimDetailDocumentDeleteHandler(),
   new ClaimDetailDocumentUploadHandler(),
+  new ClaimDocumentsDeleteHandler(),
+  new ClaimDocumentsUploadHandler(),
   new MonitoringReportCreateFormHandler(),
   new MonitoringReportDeleteFormHandler(),
   new MonitoringReportPrepareFormHandler(),
