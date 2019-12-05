@@ -3,7 +3,6 @@ import { applyMiddleware, createStore } from "redux";
 import { rootReducer, RootState } from "@ui/redux";
 import { LoadingStatus } from "@shared/pending";
 import { dataLoadAction, RootActionsOrThunk } from "@ui/redux/actions";
-import { partnersStore, projectsStore, projectStore } from "@ui/redux/selectors";
 import * as Repositories from "@server/repositories";
 import { TestContext } from "./testContextProvider";
 import { GetAllQuery as GetAllProjects, GetByIdQuery as GetProjectById } from "@server/features/projects";
@@ -29,8 +28,8 @@ export class TestStore {
     const project = this.context.testData.createProject(update);
     const projectDto = await this.context.runQuery(new GetProjectById(project.Id));
     const projectDtos = await this.context.runQuery(new GetAllProjects());
-    this.dispatch(dataLoadAction(projectDto.id, projectStore, LoadingStatus.Done, projectDto));
-    this.dispatch(dataLoadAction("all", projectsStore, LoadingStatus.Done, projectDtos));
+    this.dispatch(dataLoadAction(storeKeys.getProjectKey(projectDto.id), "project", LoadingStatus.Done, projectDto));
+    this.dispatch(dataLoadAction(storeKeys.getProjectKey(), "projects", LoadingStatus.Done, projectDtos));
     return project;
   }
 
@@ -38,8 +37,8 @@ export class TestStore {
     const partner = this.context.testData.createPartner(project, update);
     const partnerDto = await this.context.runQuery(new GetPartnerById(partner.Id));
     const partnerDtos = await this.context.runQuery(new GetAllPartners());
-    this.dispatch(dataLoadAction(partnerDto.id, partnersStore, LoadingStatus.Done, partnerDto));
-    this.dispatch(dataLoadAction("all", partnersStore, LoadingStatus.Done, partnerDtos));
+    this.dispatch(dataLoadAction(storeKeys.getPartnerKey(partner.Id), "partner", LoadingStatus.Done, partnerDto));
+    this.dispatch(dataLoadAction(storeKeys.getPartnerKey(), "partners", LoadingStatus.Done, partnerDtos));
     return partner;
   }
 

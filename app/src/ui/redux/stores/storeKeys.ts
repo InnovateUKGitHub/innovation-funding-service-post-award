@@ -1,8 +1,10 @@
 // TODO make "getKey" private
 export const getKey = (...args: (string | number | boolean | "all")[]) => args.join("_");
 
-const getProjectKey = (projectId: string) => getKey("project", projectId);
-const getPartnerKey = (partnerId: string) => getKey("partner", partnerId);
+const getProjectKey = (projectId?: string) => getKey("project", projectId || "all");
+const getProjectDocumentsKey = (projectId: string) => getKey("project", projectId);
+const getPartnerKey = (partnerId?: string) => getKey("partner", partnerId || "all");
+const getPartnersForProjectKey = (projectId: string) => getKey("project", projectId);
 const getClaimsForPartnerKey = (partnerId: string) => getKey("partner", partnerId);
 const getClaimsForProjectKey = (projectId: string) => getKey("project", projectId);
 const getClaimKey = (partnerId: string, periodId: number) => getKey("partner", partnerId, "period", periodId);
@@ -16,7 +18,9 @@ const getMonitoringReportKey = (projectId: string, id?: string) => getKey("proje
 
 export const storeKeys = {
   getProjectKey,
+  getProjectDocumentsKey,
   getPartnerKey,
+  getPartnersForProjectKey,
   getClaimsForPartnerKey,
   getClaimsForProjectKey,
   getClaimKey,
