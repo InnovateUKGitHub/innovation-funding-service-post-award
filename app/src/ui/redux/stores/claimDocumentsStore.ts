@@ -5,7 +5,7 @@ import { PartnersStore } from "./partnersStore";
 import { ClaimsStore } from "./claimsStore";
 import { RootState } from "../reducers";
 import { DocumentsStoreBase } from "./documentsStoreBase";
-import { getClaimDocumentsKey } from "@ui/redux/stores/storeKeys";
+import { storeKeys } from "@ui/redux/stores/storeKeys";
 
 export class ClaimDocumentsStore extends DocumentsStoreBase {
 
@@ -14,7 +14,7 @@ export class ClaimDocumentsStore extends DocumentsStoreBase {
   }
 
   private getKey(partnerId: string, periodId: number) {
-    return getClaimDocumentsKey(partnerId, periodId);
+    return storeKeys.getClaimDocumentsKey(partnerId, periodId);
   }
 
   public getClaimDocuments(projectId: string, partnerId: string, periodId: number) {

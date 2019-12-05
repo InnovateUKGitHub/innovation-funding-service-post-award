@@ -1,11 +1,11 @@
 import { IFormBody, IFormButton, StandardFormHandlerBase } from "@server/forms/formHandlerBase";
 import { CreateMonitoringReportCommand, GetMonitoringReportActiveQuestions } from "@server/features/monitoringReports";
 import { MonitoringReportCreateParams, MonitoringReportCreateRoute, MonitoringReportDashboardRoute } from "@ui/containers/monitoringReports";
-import { getMonitoringReportEditor } from "@ui/redux/selectors";
 import { MonitoringReportDtoValidator } from "@ui/validators/MonitoringReportDtoValidator";
 import { MonitoringReportStatus } from "@framework/constants";
 import { MonitoringReportDto } from "@framework/dtos";
 import { IContext, ILinkInfo } from "@framework/types";
+import { storeKeys } from "@ui/redux/stores/storeKeys";
 
 export class MonitoringReportCreateFormHandler extends StandardFormHandlerBase<MonitoringReportCreateParams, "monitoringReport"> {
   constructor() {
@@ -40,7 +40,7 @@ export class MonitoringReportCreateFormHandler extends StandardFormHandlerBase<M
   }
 
   protected getStoreKey(params: MonitoringReportCreateParams) {
-    return getMonitoringReportEditor(params.projectId).key;
+    return storeKeys.getMonitoringReportKey(params.projectId);
   }
 
   protected async run(context: IContext, params: MonitoringReportCreateParams, button: IFormButton, dto: MonitoringReportDto): Promise<ILinkInfo> {

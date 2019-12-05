@@ -5,7 +5,7 @@ import { GetClaim, UpdateClaimCommand } from "../features/claims";
 import { ClaimDtoValidator } from "../../ui/validators";
 import { ILinkInfo } from "@framework/types/ILinkInfo";
 import { IContext } from "@framework/types/IContext";
-import { getClaimKey } from "@ui/redux/stores/storeKeys";
+import { storeKeys } from "@ui/redux/stores/storeKeys";
 
 export class ReviewClaimFormHandler extends StandardFormHandlerBase<ReviewClaimParams, "claim"> {
     constructor() {
@@ -31,7 +31,7 @@ export class ReviewClaimFormHandler extends StandardFormHandlerBase<ReviewClaimP
     }
 
     protected getStoreKey(params: ReviewClaimParams) {
-        return getClaimKey(params.partnerId, params.periodId);
+        return storeKeys.getClaimKey(params.partnerId, params.periodId);
     }
 
     protected createValidationResult(params: ReviewClaimParams, dto: ClaimDto) {
