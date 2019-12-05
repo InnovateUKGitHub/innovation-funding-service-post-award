@@ -38,7 +38,12 @@ export class GetFinancialVirementsQuery extends QueryBase<FinancialVirementDto> 
         isLead: x.partner.isLead,
         currentTotal: x.total,
         originalTotal: x.total,
-        partnerVirements: x.golCosts.map<VirementDto>(y => ({ costCategoryId: y.costCategoryId, currentAmount: y.value, originalAmount: y.value }))
+        virements: x.golCosts.map<VirementDto>(y => ({
+          costCategoryId: y.costCategoryId,
+          costCategoryName: y.costCategoryName,
+          currentAmount: y.value,
+          originalAmount: y.value
+        }))
       }))
     };
   }
