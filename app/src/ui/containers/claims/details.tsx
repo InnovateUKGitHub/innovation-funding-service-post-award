@@ -61,6 +61,7 @@ export class ClaimsDetailsComponent extends ContainerBase<Params, Data, {}> {
         backLink={<ACC.BackLink route={backLink}>Back to claims</ACC.BackLink>}
         pageTitle={<ACC.Projects.Title project={data.project} />}
       >
+        {data.claim.isFinalClaim && <ACC.ValidationMessage messageType="info" message="This is the final claim."/>}
         {this.renderTableSection(data)}
         {this.renderAccordionSection(data)}
       </ACC.Page>

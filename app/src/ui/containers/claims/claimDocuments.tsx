@@ -47,7 +47,7 @@ class ClaimDocumentsComponent extends ContainerBase<ClaimDocumentsPageParams, Da
         backLink={<ACC.BackLink route={this.props.routes.prepareClaim.getLink({ periodId: this.props.periodId, projectId: this.props.projectId, partnerId: this.props.partnerId })}>Back to costs to be claimed</ACC.BackLink>}
       >
         <ACC.Renderers.Messages messages={this.props.messages} />
-        {claim.isFinalClaim && <ACC.ValidationMessage messageType="info" message="This is your final claim"/>}
+        {claim.isFinalClaim && <ACC.ValidationMessage messageType="info" message="This is the final claim."/>}
         <ACC.Section>
           <ACC.Renderers.SimpleString>Guidance text</ACC.Renderers.SimpleString>
         </ACC.Section>
