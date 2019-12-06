@@ -57,6 +57,8 @@ export interface IConfig {
 
     readonly standardOverheadRate: number;
 
+    readonly googleTagManagerCode: string;
+
 }
 
 const build = process.env.BUILD || `${Date.now()}`;
@@ -123,6 +125,8 @@ const standardOverheadRate = parseFloat(process.env.STANDARD_OVERHEAD_RATE!) || 
 const maxFileSize = parseInt(process.env.MAX_FILE_SIZE_IN_BYTES!, 10) || 10485760; // 10MB
 const maxUploadFileCount = parseInt(process.env.MAX_UPLOAD_FILE_COUNT!, 10) || 10;
 
+const googleTagManagerCode = process.env.GOOGLE_TAG_MANAGER_CODE!;
+
 export const Configuration: IConfig = {
     build,
     cookieKey,
@@ -138,4 +142,5 @@ export const Configuration: IConfig = {
     standardOverheadRate,
     sso,
     urls,
+    googleTagManagerCode
 };

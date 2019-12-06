@@ -28,10 +28,12 @@ export function renderHtml(html: string, htmlTitle: string, preloadedState: any 
           <link href="/govuk-overrides.css?build=${Configuration.build}" rel="stylesheet" />
 
           <meta property="og:image" content="/assets/images/govuk-opengraph-image.png">
+
       </head>
       <body class="govuk-template__body">
           <a href="#main-content" class="govuk-skip-link">Skip to main content</a>
           <div id="root">${html}</div>
+          ${renderJSGoogleTagManager(Configuration.googleTagManagerCode)}
           <script>
             // if js enabled then hide page for moment to allow any difference from server v client rendering to be sorted
             document.body.style.visibility = "hidden";
@@ -44,7 +46,38 @@ export function renderHtml(html: string, htmlTitle: string, preloadedState: any 
           <script src="/govuk-frontend-3.0.0.min.js"></script>
           <script src="/build/vendor.js?build=${Configuration.build}"></script>
           <script src="/build/bundle.js?build=${Configuration.build}"></script>
+          ${renderNonJSGoogleTagManager(Configuration.googleTagManagerCode)}
       </body>
   </html>
 `;
 }
+
+const renderJSGoogleTagManager = (tagManagerCode: string) => {
+  if (!tagManagerCode) {
+    return "";
+  }
+  return `
+      <!-- Google Tag Manager -->
+      <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push(
+
+      {'gtm.start': new Date().getTime(),event:'gtm.js'}
+
+      );var f=d.getElementsByTagName(s)[0],
+      j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+      'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+      })(window,document,'script','dataLayer','${tagManagerCode}');</script>
+      <!-- End Google Tag Manager -->
+    `;
+};
+
+const renderNonJSGoogleTagManager = (tagManagerCode: string) => {
+  if (!tagManagerCode) {
+    return "";
+  }
+  return `
+  <!-- Google Tag Manager (noscript) -->
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=${tagManagerCode}"
+  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  <!-- End Google Tag Manager (noscript) -->
+  `;
+};
