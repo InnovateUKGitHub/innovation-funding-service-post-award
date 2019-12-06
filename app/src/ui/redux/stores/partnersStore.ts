@@ -1,6 +1,7 @@
 import { StoreBase } from "./storeBase";
 import { RootState } from "../reducers";
 import { ApiClient } from "@ui/apiClient";
+import { storeKeys } from "@ui/redux/stores/storeKeys";
 
 export class PartnersStore extends StoreBase {
   constructor(getState: () => RootState, dispatch: (action: any) => void) {
@@ -8,15 +9,15 @@ export class PartnersStore extends StoreBase {
   }
 
   public getAll() {
-    return this.getData("partners", "all", p => ApiClient.partners.getAll({ ...p }));
+    return this.getData("partners", storeKeys.getPartnerKey(), p => ApiClient.partners.getAll({ ...p }));
   }
 
   public getPartnersForProject(projectId: string) {
-    return this.getData("partners", projectId, p => ApiClient.partners.getAllByProjectId({ projectId, ...p }));
+    return this.getData("partners", storeKeys.getPartnersForProjectKey(projectId), p => ApiClient.partners.getAllByProjectId({ projectId, ...p }));
   }
 
   public getById(partnerId: string) {
-    return this.getData("partner", partnerId, p => ApiClient.partners.get({ partnerId, ...p }));
+    return this.getData("partner", storeKeys.getPartnerKey(partnerId), p => ApiClient.partners.get({ partnerId, ...p }));
   }
 
   public getLeadPartner(projectId: string) {

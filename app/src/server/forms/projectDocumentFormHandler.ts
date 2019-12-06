@@ -1,10 +1,10 @@
 import { IFormBody, IFormButton, MultipleFileFormHandlerBase } from "./formHandlerBase";
-import { getProjectDocumentEditor } from "../../ui/redux/selectors";
 import { ProjectDocumentPageParams, ProjectDocumentsRoute } from "../../ui/containers";
 import { UploadProjectDocumentCommand } from "../features/documents/uploadProjectDocument";
 import { Configuration } from "@server/features/common";
 import { MultipleDocumentUpdloadDtoValidator } from "@ui/validators";
 import { IContext, ILinkInfo } from "@framework/types";
+import { storeKeys } from "@ui/redux/stores/storeKeys";
 
 export class ProjectDocumentUploadHandler extends MultipleFileFormHandlerBase<ProjectDocumentPageParams, "multipleDocuments"> {
   constructor() {
@@ -24,7 +24,7 @@ export class ProjectDocumentUploadHandler extends MultipleFileFormHandlerBase<Pr
   }
 
   protected getStoreKey(params: ProjectDocumentPageParams) {
-    return getProjectDocumentEditor(params.projectId).key;
+    return storeKeys.getProjectDocumentsKey(params.projectId);
   }
 
   protected createValidationResult(params: ProjectDocumentPageParams, dto: MultipleDocumentUploadDto): MultipleDocumentUpdloadDtoValidator {
