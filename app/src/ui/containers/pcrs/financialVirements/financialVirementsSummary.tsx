@@ -26,14 +26,19 @@ class Component extends React.Component<Props> {
   }
 
   private getPartnerLink(partnerVirement: PartnerVirementsDto) {
-    const route = this.props.routes.pcrFinancialVirementDetails.getLink({
+    const params = {
       projectId: this.props.projectId,
       partnerId: partnerVirement.partnerId,
       pcrId: this.props.pcr.id,
       itemId: this.props.pcrItem.id,
-      mode: this.props.mode
-    });
-    const name =  partnerVirement.isLead ? `${partnerVirement.partnerName} (Lead)` : partnerVirement.partnerName;
+    };
+
+    const route = this.props.mode === "prepare" ?
+      this.props.routes.pcrFinancialVirementEdit.getLink({...params}) :
+      this.props.routes.pcrFinancialVirementDetails.getLink({...params, mode: this.props.mode})
+      ;
+
+    const name = partnerVirement.isLead ? `${partnerVirement.partnerName} (Lead)` : partnerVirement.partnerName;
     return <ACC.Link replace={true} route={route}>{name}</ACC.Link>;
   }
 }
