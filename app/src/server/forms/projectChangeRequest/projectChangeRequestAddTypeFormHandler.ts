@@ -6,11 +6,11 @@ import {
 } from "@ui/containers";
 import { PCRDto, PCRStandardItemDto, ProjectRole } from "@framework/dtos";
 import { IContext, ILinkInfo } from "@framework/types";
-import { getPcrEditor } from "@ui/redux/selectors";
 import { PCRDtoValidator } from "@ui/validators";
 import { UpdatePCRCommand } from "@server/features/pcrs/updatePcrCommand";
 import { GetPCRByIdQuery } from "@server/features/pcrs/getPCRByIdQuery";
 import { PCRItemStatus } from "@framework/constants";
+import { storeKeys } from "@ui/redux/stores/storeKeys";
 
 export class ProjectChangeRequestAddTypeFormHandler extends StandardFormHandlerBase<ProjectChangeRequestAddTypeParams, "pcr"> {
   constructor() {
@@ -43,7 +43,7 @@ export class ProjectChangeRequestAddTypeFormHandler extends StandardFormHandlerB
   }
 
   protected getStoreKey(params: ProjectChangeRequestAddTypeParams) {
-    return getPcrEditor(params.projectId, params.projectChangeRequestId).key;
+    return storeKeys.getPcrKey(params.projectId, params.projectChangeRequestId);
   }
 
   protected createValidationResult(params: ProjectChangeRequestAddTypeParams, dto: PCRDto) {

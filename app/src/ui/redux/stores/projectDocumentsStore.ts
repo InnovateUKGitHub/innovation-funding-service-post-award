@@ -1,10 +1,11 @@
 import { ApiClient } from "@ui/apiClient";
 import { Pending } from "@shared/pending";
 import { DocumentsStoreBase } from "./documentsStoreBase";
+import { storeKeys } from "@ui/redux/stores/storeKeys";
 
 export class ProjectDocumentsStore extends DocumentsStoreBase {
   private getProjectDocumentsKey(projectId: string) {
-    return this.buildKey("projects", projectId);
+    return storeKeys.getProjectKey(projectId);
   }
   public getProjectDocuments(projectId: string) {
     return this.getData("documents", this.getProjectDocumentsKey(projectId), p => ApiClient.documents.getProjectDocuments({ projectId, ...p }));

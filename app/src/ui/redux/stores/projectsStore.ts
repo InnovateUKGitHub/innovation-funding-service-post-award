@@ -12,7 +12,7 @@ export class ProjectsStore extends StoreBase {
   }
 
   public getProjects() {
-    return this.getData("projects", storeKeys.getProjectKey(), p => ApiClient.projects.getAll(p));
+    return this.getData("projects", storeKeys.getProjectsKey(), p => ApiClient.projects.getAll(p));
   }
 
   public getProjectsFilter(searchString: string): Pending<ProjectDto[]> {

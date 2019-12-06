@@ -24,7 +24,7 @@ export class ForecastDetailsStore extends StoreBase {
   }
 
   public getAllByPartner(partnerId: string) {
-    return this.getData("forecastDetails", storeKeys.getForecastDetailsForPartnerKey(partnerId), p => ApiClient.forecastDetails.getAllByPartnerId({ partnerId, ...p }));
+    return this.getData("forecastDetails", storeKeys.getPartnerKey(partnerId), p => ApiClient.forecastDetails.getAllByPartnerId({ partnerId, ...p }));
   }
 
   private getValidator(partnerId: string, dto: ForecastDetailsDTO[], showValidationErrors: boolean) {
@@ -39,7 +39,7 @@ export class ForecastDetailsStore extends StoreBase {
   public getForecastEditor(partnerId: string, init?: (data: ForecastDetailsDTO[]) => void) {
     return this.getEditor(
       "forecastDetails",
-      storeKeys.getForecastDetailsForPartnerKey(partnerId),
+      storeKeys.getPartnerKey(partnerId),
       () => this.getAllByPartner(partnerId),
       init,
       (dto) => this.getValidator(partnerId, dto, false)
@@ -50,7 +50,7 @@ export class ForecastDetailsStore extends StoreBase {
     super.updateEditor(
       saving,
       "forecastDetails",
-      storeKeys.getForecastDetailsForPartnerKey(partnerId),
+      storeKeys.getPartnerKey(partnerId),
       dto,
       (show) => this.getValidator(partnerId, dto, show),
       (p) => ApiClient.forecastDetails.update({ projectId, partnerId, submit: submitClaim, forecasts: dto, ...p }),

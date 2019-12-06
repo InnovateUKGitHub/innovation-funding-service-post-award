@@ -39,7 +39,7 @@ export class UpdateForecastFormHandler extends StandardFormHandlerBase<Params, "
   }
 
   protected getStoreKey(params: Params) {
-    return storeKeys.getForecastDetailsForPartnerKey(params.partnerId);
+    return storeKeys.getPartnerKey(params.partnerId);
   }
 
   protected createValidationResult(params: Params, dto: ForecastDetailsDTO[]) {
