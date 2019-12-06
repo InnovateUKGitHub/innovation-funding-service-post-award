@@ -49,7 +49,7 @@ class ClaimDocumentsComponent extends ContainerBase<ClaimDocumentsPageParams, Da
         <ACC.Renderers.Messages messages={this.props.messages} />
         {claim.isFinalClaim && <ACC.ValidationMessage messageType="info" message="This is your final claim"/>}
         <ACC.Section>
-          <ACC.Renderers.SimpleString>Guidance text</ACC.Renderers.SimpleString>
+          {this.renderGuidanceText(claim)}
         </ACC.Section>
         <ACC.Section title="Upload">
           <UploadForm.Form
@@ -81,6 +81,29 @@ class ClaimDocumentsComponent extends ContainerBase<ClaimDocumentsPageParams, Da
         </ACC.Section>
       </ACC.Page>
     );
+  }
+
+  private renderGuidanceText(claim: ClaimDto) {
+    if (claim.isIarRequired && claim.isFinalClaim) {
+      return (
+        <ACC.Renderers.SimpleString qa="iarAndFinalClaimText">
+          We need to ask you a few questions about the project before we can make your last payment.
+          <br/>
+          You also need to upload an independent accountant's report (IAR).
+          <ol>
+            <li>Complete our survey.</li>
+            <li>Download a copy from the survey website.</li>
+            <li>Upload it here.</li>
+          </ol>
+        </ACC.Renderers.SimpleString>
+      );
+    }
+
+    if (claim.isIarRequired) {
+      return <ACC.Renderers.SimpleString qa="iarText">You must attach an independent accountant's report (IAR) to this claim.</ACC.Renderers.SimpleString>;
+    }
+
+    return null;
   }
 
   private renderDocuments(editor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>, documents: DocumentSummaryDto[]) {
