@@ -1,4 +1,4 @@
-import SalesforceRepositoryBase from "./salesforceRepositoryBase";
+import SalesforceRepositoryBase, { Updatable } from "./salesforceRepositoryBase";
 
 export interface ISalesforceFinancialVirement {
   Id: string;
@@ -18,6 +18,8 @@ export interface ISalesforceFinancialVirement {
 
 export interface IFinancialVirementRepository {
   getAllForPcr(pcrItemId: string): Promise<ISalesforceFinancialVirement[]>;
+  insertVirements(items: Partial<ISalesforceFinancialVirement>[]): Promise<string[]>;
+  updateVirements(items: Updatable<ISalesforceFinancialVirement>[]): Promise<boolean>;
 }
 
 export class FinancialVirementRepository extends SalesforceRepositoryBase<ISalesforceFinancialVirement> implements IFinancialVirementRepository {
@@ -38,5 +40,13 @@ export class FinancialVirementRepository extends SalesforceRepositoryBase<ISales
 
   getAllForPcr(pcrItemId: string): Promise<ISalesforceFinancialVirement[]> {
     return super.where({ Acc_ProjectChangeRequest__c: pcrItemId });
+  }
+
+  updateVirements(items: Updatable<ISalesforceFinancialVirement>[]) {
+    return super.updateAll(items);
+  }
+
+  insertVirements(items: Partial<ISalesforceFinancialVirement>[]) {
+    return super.insertAll(items);
   }
 }

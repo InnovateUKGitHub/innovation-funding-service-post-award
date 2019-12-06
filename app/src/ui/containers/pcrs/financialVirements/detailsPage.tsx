@@ -10,7 +10,7 @@ interface Params {
   partnerId: string;
   pcrId: string;
   itemId: string;
-  mode: "prepare" | "review" | "view";
+  mode: "review" | "view";
 }
 
 interface Props {
@@ -71,7 +71,7 @@ const Container = (props: Params & BaseProps) => (
 
 export const FinancialVirementDetailsRoute = defineRoute({
   routeName: "financial-virement-details",
-  routePath: "/projects/:projectId/pcrs/:pcrId/:mode<prepare|details|review>/item/:itemId/financial/:partnerId",
+  routePath: "/projects/:projectId/pcrs/:pcrId/:mode<details|review>/item/:itemId/financial/:partnerId",
   container: Container,
   getParams: (route) => ({
     projectId: route.params.projectId,
