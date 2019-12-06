@@ -6,7 +6,7 @@ export class ForecastGolCostsStore extends StoreBase {
   public getAllByPartner(partnerId: string) {
     return this.getData(
       "forecastGolCosts",
-      storeKeys.getForecastDetailsForPartnerKey(partnerId),
+      storeKeys.getPartnerKey(partnerId),
         p => ApiClient.forecastGolCosts.getAllByPartnerId({partnerId, ...p}));
   }
 }

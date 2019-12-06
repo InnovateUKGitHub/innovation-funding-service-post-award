@@ -14,7 +14,7 @@ export class ClaimDocumentsStore extends DocumentsStoreBase {
   }
 
   private getKey(partnerId: string, periodId: number) {
-    return storeKeys.getClaimDocumentsKey(partnerId, periodId);
+    return storeKeys.getClaimKey(partnerId, periodId);
   }
 
   public getClaimDocuments(projectId: string, partnerId: string, periodId: number) {

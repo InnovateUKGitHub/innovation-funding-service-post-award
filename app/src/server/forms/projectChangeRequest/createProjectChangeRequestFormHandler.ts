@@ -2,10 +2,10 @@ import { IFormBody, IFormButton, StandardFormHandlerBase } from "@server/forms/f
 import { CreateProjectChangeRequestParams, PCRCreateRoute, ProjectChangeRequestPrepareRoute, } from "@ui/containers";
 import { PCRDto, PCRItemDto, PCRStandardItemDto, ProjectRole } from "@framework/dtos";
 import { IContext, ILinkInfo } from "@framework/types";
-import { getPcrEditorForCreate } from "@ui/redux/selectors";
 import { CreateProjectChangeRequestCommand } from "@server/features/pcrs/createProjectChangeRequestCommand";
 import { PCRDtoValidator } from "@ui/validators";
 import { PCRItemStatus, PCRStatus } from "@framework/constants";
+import { storeKeys } from "@ui/redux/stores/storeKeys";
 
 export class ProjectChangeRequestCreateFormHandler extends StandardFormHandlerBase<CreateProjectChangeRequestParams, "pcr"> {
   constructor() {
@@ -37,7 +37,7 @@ export class ProjectChangeRequestCreateFormHandler extends StandardFormHandlerBa
   }
 
   protected getStoreKey(params: CreateProjectChangeRequestParams) {
-    return getPcrEditorForCreate(params.projectId).key;
+    return storeKeys.getPcrKey(params.projectId);
   }
 
   protected createValidationResult(params: CreateProjectChangeRequestParams, dto: PCRDto) {

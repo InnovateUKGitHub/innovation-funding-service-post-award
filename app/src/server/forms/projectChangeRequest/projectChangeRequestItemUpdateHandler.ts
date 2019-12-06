@@ -8,7 +8,6 @@ import {
   ProjectChangeRequestPrepareItemParams,
   ProjectChangeRequestPrepareRoute
 } from "@ui/containers";
-import { getPcrEditor } from "@ui/redux/selectors";
 import { PCRDtoValidator } from "@ui/validators";
 import { DateTime } from "luxon";
 import * as Dtos from "@framework/dtos";
@@ -16,6 +15,7 @@ import { PCRItemStatus, PCRItemType } from "@framework/constants";
 import { WorkFlow } from "@ui/containers/pcrs/workflow";
 import { accountNameChangeStepNames } from "@ui/containers/pcrs/nameChange/accountNameChangeWorkflow";
 import { suspendProjectSteps } from "@ui/containers/pcrs/suspendProject/workflow";
+import { storeKeys } from "@ui/redux/stores/storeKeys";
 
 export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBase<ProjectChangeRequestPrepareItemParams, "pcr"> {
   constructor() {
@@ -113,7 +113,7 @@ export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBa
   }
 
   protected getStoreKey(params: ProjectChangeRequestPrepareItemParams) {
-    return getPcrEditor(params.projectId, params.pcrId).key;
+    return storeKeys.getPcrKey(params.projectId, params.pcrId);
   }
 
   protected createValidationResult(params: ProjectChangeRequestPrepareItemParams, dto: Dtos.PCRDto) {
