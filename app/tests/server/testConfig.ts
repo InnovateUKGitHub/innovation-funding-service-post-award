@@ -58,4 +58,6 @@ export class TestConfig implements IConfig {
   public cookieKey = "thekey";
 
   public standardOverheadRate = 20;
+
+  public googleTagManagerCode = "";
 }
