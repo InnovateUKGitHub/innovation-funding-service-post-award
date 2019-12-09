@@ -10,6 +10,14 @@ export enum PartnerClaimStatus {
   IARRequired = 6
 }
 
+export enum PartnerStatus {
+  Unknown = 0,
+  Active = 1,
+  OnHold = 2,
+  InvoluntaryWithdrawal = 3,
+  VoluntaryWithdrawal = 4,
+}
+
 export interface PartnerDto {
   id: string;
   type: string;
@@ -38,6 +46,7 @@ export interface PartnerDto {
   totalCostsAwarded: number | null;
   auditReportFrequencyName: string;
   totalPrepayment: number | null;
+  partnerStatus: PartnerStatus;
   percentageParticipantCostsSubmitted: number | null;
   totalFundingDueToReceive: number | null;
 

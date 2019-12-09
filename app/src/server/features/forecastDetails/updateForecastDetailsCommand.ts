@@ -5,8 +5,9 @@ import { GetAllForecastsGOLCostsQuery, GetAllForPartnerQuery, GetCostCategoriesQ
 import { GetAllClaimDetailsByPartner } from "@server/features/claimDetails";
 import { GetByIdQuery as GetProjectById } from "@server/features/projects";
 import { ForecastDetailsDtosValidator } from "@ui/validators/forecastDetailsDtosValidator";
-import { Authorisation, ClaimDto, ClaimStatus, IContext, ProjectRole } from "@framework/types";
+import { Authorisation, ClaimDto, ClaimStatus, IContext, PartnerDto, ProjectRole } from "@framework/types";
 import { GetAllForecastsForPartnerQuery } from "./getAllForecastsForPartnerQuery";
+import { GetByIdQuery } from "@server/features/partners";
 
 export class UpdateForecastDetailsCommand extends CommandBase<boolean> {
   constructor(
@@ -30,8 +31,9 @@ export class UpdateForecastDetailsCommand extends CommandBase<boolean> {
     const claims = await context.runQuery(new GetAllForPartnerQuery(this.partnerId));
     const claimDetails = await context.runQuery(new GetAllClaimDetailsByPartner(this.partnerId));
     const golCosts = await context.runQuery(new GetAllForecastsGOLCostsQuery(this.partnerId));
+    const partner = await context.runQuery(new GetByIdQuery(this.partnerId));
 
-    await this.testValidation(claims, claimDetails, golCosts);
+    await this.testValidation(claims, claimDetails, golCosts, partner);
     await this.testPastForecastPeriodsHaveNotBeenUpdated(project.periodId, preparedForecasts, existing);
     await this.updateProfileDetails(context, preparedForecasts, existing);
 
@@ -80,9 +82,9 @@ export class UpdateForecastDetailsCommand extends CommandBase<boolean> {
     return related.value * overheadRate / 100;
   }
 
-  private async testValidation(claims: ClaimDto[], claimDetails: ClaimDetailsSummaryDto[], golCosts: GOLCostDto[]) {
+  private async testValidation(claims: ClaimDto[], claimDetails: ClaimDetailsSummaryDto[], golCosts: GOLCostDto[], partner: PartnerDto) {
     const showErrors = true;
-    const validation = new ForecastDetailsDtosValidator(this.forecasts, claims, claimDetails, golCosts, showErrors);
+    const validation = new ForecastDetailsDtosValidator(this.forecasts, claims, claimDetails, golCosts, partner, showErrors);
 
     if (!validation.isValid) {
       throw new ValidationError(validation);

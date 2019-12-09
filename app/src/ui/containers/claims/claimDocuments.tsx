@@ -76,7 +76,7 @@ class ClaimDocumentsComponent extends ContainerBase<ClaimDocumentsPageParams, Da
           {this.renderDocuments(editor, documents)}
         </ACC.Section>
         <ACC.Section qa="buttons">
-          <ACC.Link styling="PrimaryButton" id="continue-claim" route={this.props.routes.forecastUpdate.getLink({projectId: this.props.projectId, partnerId: this.props.partnerId})}>Continue to update forecast</ACC.Link>
+          <ACC.Link styling="PrimaryButton" id="continue-claim" route={this.props.routes.claimForecast.getLink({projectId: this.props.projectId, partnerId: this.props.partnerId, periodId: this.props.periodId})}>Continue to update forecast</ACC.Link>
           <ACC.Link styling="SecondaryButton" id="save-claim" route={this.props.routes.allClaimsDashboard.getLink({projectId: this.props.projectId})}>Save and return to claims</ACC.Link>
         </ACC.Section>
       </ACC.Page>

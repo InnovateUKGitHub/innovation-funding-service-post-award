@@ -1,7 +1,7 @@
 import * as Validation from "./common";
 import { Results } from "../validation/results";
 import { Result } from "../validation/result";
-import { ClaimDto } from "@framework/types";
+import { ClaimDto, PartnerDto, PartnerStatus } from "@framework/types";
 
 export class ForecastDetailsDtosValidator extends Results<ForecastDetailsDTO[]>  {
   public readonly items = Validation.optionalChild(this, this.model, x => new ForecastDetailsDtoValidator(x));
@@ -12,7 +12,8 @@ export class ForecastDetailsDtosValidator extends Results<ForecastDetailsDTO[]> 
     private readonly claims: ClaimDto[],
     private readonly claimDetails: ClaimDetailsSummaryDto[],
     private readonly golCosts: GOLCostDto[],
-    private readonly showErrors: boolean
+    private readonly partnerStatus: PartnerDto | undefined,
+    private readonly showErrors: boolean,
   ) {
     super(forecasts, showErrors);
 
@@ -21,9 +22,14 @@ export class ForecastDetailsDtosValidator extends Results<ForecastDetailsDTO[]> 
     const totalGolCosts = golCosts.reduce((total, current) => total += current.value, 0);
     const totalClaimCosts = claimDetails.filter(x => x.periodId <= periodId).reduce((total, current) => total += current.value, 0);
     const totalForecastCosts = forecasts.filter(x => x.periodId > periodId).reduce((total, current) => total += current.value, 0);
+    const currentClaim = claims.find(x => x.periodId === periodId) || null;
 
     if (this.items.isValid) {
-      this.totalCosts = Validation.isTrue(this, totalForecastCosts + totalClaimCosts <= totalGolCosts, "Your overall total cannot be higher than your total eligible costs.");
+      this.totalCosts = Validation.all(this,
+        () => Validation.isTrue(this, totalForecastCosts + totalClaimCosts <= totalGolCosts, "Your overall total cannot be higher than your total eligible costs."),
+        () => Validation.isFalse(this, currentClaim && currentClaim.isFinalClaim, "You cannot change your forecast after you have withdrawn from the project."),
+        () => Validation.isTrue(this, !partnerStatus || (partnerStatus.partnerStatus !== PartnerStatus.InvoluntaryWithdrawal && partnerStatus.partnerStatus !== PartnerStatus.VoluntaryWithdrawal), "You cannot change your forecast after you have withdrawn from the project.")
+      );
     } else {
       this.totalCosts = Validation.valid(this);
     }

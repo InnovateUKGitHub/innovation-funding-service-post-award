@@ -1,10 +1,16 @@
 import { IFormBody, IFormButton, StandardFormHandlerBase } from "./formHandlerBase";
-import { AllClaimsDashboardRoute, ClaimForecastParams, ClaimForecastRoute, ClaimsDashboardRoute, PrepareClaimRoute } from "../../ui/containers";
+import {
+  AllClaimsDashboardRoute,
+  ClaimForecastParams,
+  ClaimForecastRoute,
+  ClaimsDashboardRoute,
+  PrepareClaimRoute
+} from "../../ui/containers";
 import { ForecastDetailsDtosValidator } from "../../ui/validators";
 import { GetAllForecastsForPartnerQuery, UpdateForecastDetailsCommand } from "../features/forecastDetails";
 import { GetAllProjectRolesForUser, GetByIdQuery } from "../features/projects";
 import { GetByIdQuery as GetPartnerByIdQuery } from "../features/partners";
-import { IContext, ILinkInfo, ProjectRole } from "@framework/types";
+import { IContext, ILinkInfo, PartnerStatus, ProjectRole } from "@framework/types";
 import { GetCostCategoriesForPartnerQuery } from "../features/claims/getCostCategoriesForPartnerQuery";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
 
@@ -55,7 +61,7 @@ export class ClaimForecastFormHandler extends StandardFormHandlerBase<ClaimForec
   }
 
   protected createValidationResult(params: ClaimForecastParams, dto: ForecastDetailsDTO[]) {
-    return new ForecastDetailsDtosValidator(dto, [], [], [], false);
+    return new ForecastDetailsDtosValidator(dto, [], [], [], undefined, false);
   }
 
 }
