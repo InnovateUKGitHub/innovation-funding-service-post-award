@@ -9,7 +9,7 @@ export class ClaimsDetailsStore extends StoreBase {
   }
 
   public getAllByPartner(partnerId: string) {
-    return this.getData("claimDetails", storeKeys.getClaimDetailsForPartnerKey(partnerId), p => ApiClient.claimDetails.getAllByPartner({partnerId, ...p}));
+    return this.getData("claimDetails", storeKeys.getPartnerKey(partnerId), p => ApiClient.claimDetails.getAllByPartner({partnerId, ...p}));
   }
 
   public get(projectId: string, partnerId: string, periodId: number, costCategoryId: string) {

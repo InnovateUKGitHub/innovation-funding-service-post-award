@@ -29,7 +29,7 @@ export class TestStore {
     const projectDto = await this.context.runQuery(new GetProjectById(project.Id));
     const projectDtos = await this.context.runQuery(new GetAllProjects());
     this.dispatch(dataLoadAction(storeKeys.getProjectKey(projectDto.id), "project", LoadingStatus.Done, projectDto));
-    this.dispatch(dataLoadAction(storeKeys.getProjectKey(), "projects", LoadingStatus.Done, projectDtos));
+    this.dispatch(dataLoadAction(storeKeys.getProjectsKey(), "projects", LoadingStatus.Done, projectDtos));
     return project;
   }
 
@@ -38,7 +38,7 @@ export class TestStore {
     const partnerDto = await this.context.runQuery(new GetPartnerById(partner.Id));
     const partnerDtos = await this.context.runQuery(new GetAllPartners());
     this.dispatch(dataLoadAction(storeKeys.getPartnerKey(partner.Id), "partner", LoadingStatus.Done, partnerDto));
-    this.dispatch(dataLoadAction(storeKeys.getPartnerKey(), "partners", LoadingStatus.Done, partnerDtos));
+    this.dispatch(dataLoadAction(storeKeys.getPartnersKey(), "partners", LoadingStatus.Done, partnerDtos));
     return partner;
   }
 

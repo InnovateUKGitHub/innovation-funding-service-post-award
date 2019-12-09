@@ -28,7 +28,7 @@ export class ClaimDetailDocumentDeleteHandler extends StandardFormHandlerBase<Cl
   }
 
   protected getStoreKey(params: ClaimDetailDocumentsPageParams) {
-    return storeKeys.getClaimDetailDocumentsKey(params.partnerId, params.periodId, params.costCategoryId);
+    return storeKeys.getClaimDetailKey(params.partnerId, params.periodId, params.costCategoryId);
   }
 
   protected async run(context: IContext, params: ClaimDetailDocumentsPageParams, button: IFormButton, dto: Document): Promise<ILinkInfo> {

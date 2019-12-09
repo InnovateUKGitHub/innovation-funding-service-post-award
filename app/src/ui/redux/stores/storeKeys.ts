@@ -1,34 +1,27 @@
-// TODO make "getKey" private
-export const getKey = (...args: (string | number | boolean | "all")[]) => args.join("_");
+const getKey = (...args: (string | number | boolean | "all")[]) => args.join("_");
 
-const getProjectKey = (projectId?: string) => getKey("project", projectId || "all");
-const getProjectDocumentsKey = (projectId: string) => getKey("project", projectId);
-const getPartnerKey = (partnerId?: string) => getKey("partner", partnerId || "all");
-const getPartnersForProjectKey = (projectId: string) => getKey("project", projectId);
-const getClaimsForPartnerKey = (partnerId: string) => getKey("partner", partnerId);
-const getClaimsForProjectKey = (projectId: string) => getKey("project", projectId);
-const getClaimKey = (partnerId: string, periodId: number) => getKey("partner", partnerId, "period", periodId);
-const getClaimDocumentsKey = (partnerId: string, periodId: number) => getKey("claimDocuments", "partner", partnerId, "period", periodId);
-const getClaimDetailKey = (partnerId: string, periodId: number, costCategoryId: string) => getKey("partner", partnerId, "period", periodId, "costCategory", costCategoryId);
-const getClaimDetailsForPartnerKey = (partnerId: string) => getKey("partner", partnerId);
-const getClaimDetailDocumentsKey = (partnerId: string, periodId: number, costCategoryId: string) => getKey("claimDetailDocuments", "partner", partnerId, "period", periodId, "costCategory", costCategoryId);
-const getForecastDetailKey = (partnerId: string, periodId: number, costCategoryId: string) => getKey("partner", partnerId, "period", periodId, "costCategory", costCategoryId);
-const getForecastDetailsForPartnerKey = (partnerId: string) => getKey("partner", partnerId);
-const getMonitoringReportKey = (projectId: string, id?: string) => getKey("project", projectId, "report", id || "new");
+const getProjectKey = (projectId: string) => getKey("projectKey", "project", projectId);
+const getProjectsKey = () => getKey("projectsKey", "project", "all");
+const getPartnerKey = (partnerId: string) => getKey("partnerKey", "partner", partnerId);
+const getPartnersKey = () => getKey("partnersKey", "partner", "all");
+const getClaimKey = (partnerId: string, periodId: number) => getKey("claimKey", "partner", partnerId, "period", periodId);
+const getClaimDetailKey = (partnerId: string, periodId: number, costCategoryId: string) => getKey("claimDetailsKey", "partner", partnerId, "period", periodId, "costCategory", costCategoryId);
+const getForecastDetailKey = (partnerId: string, periodId: number, costCategoryId: string) => getKey("forecastDetailKey", "partner", partnerId, "period", periodId, "costCategory", costCategoryId);
+const getMonitoringReportKey = (projectId: string, id?: string) => getKey("monitoringReportKey", "project", projectId, "report", id || "new");
+const getPcrKey = (projectId: string, id?: string) => getKey("pcrKey", "project", projectId, "request", id || "new");
+const getFinancialVirementKey = (projectId: string, pcrId: string, itemId: string) => getKey("financialVirementKey", "project", projectId, "request", pcrId, "itemId", itemId);
+const getPcrTypesKey = () => getKey("pcrTypesKey", "all");
 
 export const storeKeys = {
   getProjectKey,
-  getProjectDocumentsKey,
+  getProjectsKey,
   getPartnerKey,
-  getPartnersForProjectKey,
-  getClaimsForPartnerKey,
-  getClaimsForProjectKey,
+  getPartnersKey,
   getClaimKey,
-  getClaimDocumentsKey,
   getClaimDetailKey,
-  getClaimDetailsForPartnerKey,
-  getClaimDetailDocumentsKey,
   getForecastDetailKey,
-  getForecastDetailsForPartnerKey,
-  getMonitoringReportKey
+  getMonitoringReportKey,
+  getPcrKey,
+  getFinancialVirementKey,
+  getPcrTypesKey,
 };

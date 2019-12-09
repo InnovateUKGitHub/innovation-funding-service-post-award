@@ -7,7 +7,7 @@ import {
   ProjectChangeRequestPrepareItemParams
 } from "@ui/containers";
 import { MultipleDocumentUpdloadDtoValidator } from "@ui/validators";
-import { getKey } from "@ui/redux/stores/storeKeys";
+import { storeKeys } from "@ui/redux/stores/storeKeys";
 
 interface Document extends MultipleDocumentUploadDto {
   id: string;
@@ -27,7 +27,7 @@ export class ProjectChangeRequestItemDocumentDeleteHandler extends StandardFormH
   }
 
   protected getStoreKey(params: ProjectChangeRequestPrepareItemParams) {
-    return getKey("pcrs", params.projectId, params.itemId);
+    return storeKeys.getPcrKey(params.projectId, params.itemId);
   }
 
   protected async run(context: IContext, params: ProjectChangeRequestPrepareItemParams, button: IFormButton, dto: Document): Promise<ILinkInfo> {

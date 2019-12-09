@@ -7,10 +7,10 @@ import {
   ProjectChangeRequestPrepareReasoningParams,
   ProjectChangeRequestPrepareRoute
 } from "@ui/containers";
-import { getPcrEditor } from "@ui/redux/selectors";
 import { PCRDtoValidator } from "@ui/validators";
 import { PCRItemStatus, PCRItemType } from "@framework/constants";
 import { reasoningWorkflowSteps } from "@ui/containers/pcrs/reasoning/workflowMetadata";
+import { storeKeys } from "@ui/redux/stores/storeKeys";
 
 export class ProjectChangeRequestReasoningUpdateHandler extends StandardFormHandlerBase<ProjectChangeRequestPrepareReasoningParams, "pcr"> {
   constructor() {
@@ -50,7 +50,7 @@ export class ProjectChangeRequestReasoningUpdateHandler extends StandardFormHand
   }
 
   protected getStoreKey(params: ProjectChangeRequestPrepareReasoningParams) {
-    return getPcrEditor(params.projectId, params.pcrId).key;
+    return storeKeys.getPcrKey(params.projectId, params.pcrId);
   }
 
   protected createValidationResult(params: ProjectChangeRequestPrepareReasoningParams, dto: PCRDto) {

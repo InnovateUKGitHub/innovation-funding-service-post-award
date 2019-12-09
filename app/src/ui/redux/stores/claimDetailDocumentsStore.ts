@@ -6,7 +6,7 @@ import { storeKeys } from "@ui/redux/stores/storeKeys";
 export class ClaimDetailDocumentsStore extends DocumentsStoreBase {
 
   private getKey(partnerId: string, periodId: number, costCategoryId: string) {
-    return storeKeys.getClaimDetailDocumentsKey(partnerId, periodId, costCategoryId);
+    return storeKeys.getClaimDetailKey(partnerId, periodId, costCategoryId);
   }
 
   public getClaimDetailDocuments(projectId: string, partnerId: string, periodId: number, costCategoryId: string) {

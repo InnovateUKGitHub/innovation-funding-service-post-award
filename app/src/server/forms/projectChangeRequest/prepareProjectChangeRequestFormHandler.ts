@@ -2,11 +2,11 @@ import { IFormBody, IFormButton, StandardFormHandlerBase } from "@server/forms/f
 import { PCRsDashboardRoute, ProjectChangeRequestPrepareParams, ProjectChangeRequestPrepareRoute } from "@ui/containers";
 import { PCRDto, ProjectRole } from "@framework/dtos";
 import { IContext, ILinkInfo } from "@framework/types";
-import { getPcrEditor } from "@ui/redux/selectors";
 import { PCRDtoValidator } from "@ui/validators";
 import { GetPCRByIdQuery } from "@server/features/pcrs/getPCRByIdQuery";
 import { UpdatePCRCommand } from "@server/features/pcrs/updatePcrCommand";
 import { PCRStatus } from "@framework/constants";
+import { storeKeys } from "@ui/redux/stores/storeKeys";
 
 export class ProjectChangeRequestPrepareFormHandler extends StandardFormHandlerBase<ProjectChangeRequestPrepareParams, "pcr"> {
   constructor() {
@@ -30,7 +30,7 @@ export class ProjectChangeRequestPrepareFormHandler extends StandardFormHandlerB
   }
 
   protected getStoreKey(params: ProjectChangeRequestPrepareParams) {
-    return getPcrEditor(params.projectId, params.pcrId).key;
+    return storeKeys.getPcrKey(params.projectId, params.pcrId);
   }
 
   protected createValidationResult(params: ProjectChangeRequestPrepareParams, dto: PCRDto) {

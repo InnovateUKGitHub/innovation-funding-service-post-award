@@ -5,7 +5,7 @@ import { IFormBody, IFormButton, MultipleFileFormHandlerBase } from "@server/for
 import { PCRPrepareReasoningRoute, ProjectChangeRequestPrepareReasoningParams } from "@ui/containers";
 import { MultipleDocumentUpdloadDtoValidator } from "@ui/validators";
 import { reasoningWorkflowSteps } from "@ui/containers/pcrs/reasoning/workflowMetadata";
-import { getKey } from "@ui/redux/stores/storeKeys";
+import { storeKeys } from "@ui/redux/stores/storeKeys";
 
 export class ProjectChangeRequestReasoningDocumentUploadHandler extends MultipleFileFormHandlerBase<ProjectChangeRequestPrepareReasoningParams, "multipleDocuments"> {
   constructor() {
@@ -34,7 +34,7 @@ export class ProjectChangeRequestReasoningDocumentUploadHandler extends Multiple
   }
 
   protected getStoreKey(params: ProjectChangeRequestPrepareReasoningParams) {
-    return getKey("pcrs", params.projectId, params.pcrId);
+    return storeKeys.getPcrKey(params.projectId, params.pcrId);
   }
 
   protected createValidationResult(params: ProjectChangeRequestPrepareReasoningParams, dto: MultipleDocumentUploadDto, button: IFormButton) {

@@ -28,7 +28,7 @@ export class ClaimDocumentsUploadHandler extends MultipleFileFormHandlerBase<Cla
   }
 
   protected getStoreKey(params: ClaimDocumentsPageParams) {
-    return storeKeys.getClaimDocumentsKey(params.partnerId, params.periodId);
+    return storeKeys.getClaimKey(params.partnerId, params.periodId);
   }
 
   protected createValidationResult(params: ClaimDocumentsPageParams, dto: MultipleDocumentUploadDto) {
