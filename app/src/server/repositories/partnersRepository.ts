@@ -31,6 +31,7 @@ export interface ISalesforcePartner {
   Acc_ClaimsUnderQuery__c: number;
   Acc_TrackingClaims__c: string;
   Acc_OverheadRate__c: number;
+  Acc_ParticipantStatus__c: string;
   Acc_TotalCostsSubmitted__c: number;
   Acc_TotalCostsAwarded__c: number;
   Acc_AuditReportFrequency__c: string;
@@ -72,6 +73,7 @@ export class PartnerRepository extends SalesforceRepositoryBase<ISalesforcePartn
     "Acc_ClaimsUnderQuery__c",
     "Acc_TrackingClaims__c",
     "Acc_OverheadRate__c",
+    "Acc_ParticipantStatus__c",
     "Acc_TotalCostsSubmitted__c",
     "Acc_TotalCostsAwarded__c",
     "Acc_AuditReportFrequency__c",

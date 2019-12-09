@@ -113,6 +113,7 @@ export class TestData {
       Acc_ProjectRole__c: "Unknown",
       ProjectRoleName: "Unknown",
       Acc_TotalCostsSubmitted__c: 0,
+      Acc_ParticipantStatus__c: "On Hold",
       Acc_TotalFutureForecastsForParticipant__c: 0,
       Acc_TrackingClaims__c: "",
       Acc_AuditReportFrequency__c: "Never, for this project",
