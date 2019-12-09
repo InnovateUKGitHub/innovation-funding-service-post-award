@@ -88,6 +88,39 @@ describe("UpdateClaimCommand", () => {
     expect(claim.Acc_ClaimStatus__c).toBe(ClaimStatus.SUBMITTED);
   });
 
+  it("throws a validation error if an iar is required when the claim is submitted", async () => {
+    const context = new TestContext();
+    const claim = context.testData.createClaim(null!, null!, x => {
+      x.Acc_ClaimStatus__c = ClaimStatus.DRAFT;
+      x.Acc_IARRequired__c = true;
+    });
+    const dto = mapClaim(context)(claim);
+    const project = context.testData.createProject();
+
+    dto.status = ClaimStatus.SUBMITTED;
+
+    const command = new UpdateClaimCommand(project.Id, dto);
+    expect(context.runCommand(command)).rejects.toThrow(ValidationError);
+  });
+
+  it("updates the status to submitted if an iar is required and there are claim documents uploaded", async () => {
+    const context = new TestContext();
+    const claim = context.testData.createClaim(null!, null!, x => {
+      x.Acc_ClaimStatus__c = ClaimStatus.DRAFT;
+      x.Acc_IARRequired__c = true;
+    });
+    context.testData.createDocument(claim.Id, "cats_are_the_best.txt");
+    const dto = mapClaim(context)(claim);
+    const project = context.testData.createProject();
+
+    dto.status = ClaimStatus.SUBMITTED;
+
+    const command = new UpdateClaimCommand(project.Id, dto);
+    await context.runCommand(command);
+
+    expect(claim.Acc_ClaimStatus__c).toBe(ClaimStatus.SUBMITTED);
+  });
+
   it("when status updated to approved expect item updated", async () => {
     const context = new TestContext();
     const claim = context.testData.createClaim(null!, null!, x => x.Acc_ClaimStatus__c = ClaimStatus.DRAFT);

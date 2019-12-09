@@ -155,7 +155,7 @@ describe("editorsReducer", () => {
 
     it("should preserve the editor validation", () => {
       const claimDto = createClaim();
-      const validator = new ClaimDtoValidator(claimDto, claimDto.status, [], [createCostCategory()], true);
+      const validator = new ClaimDtoValidator(claimDto, claimDto.status, [], [createCostCategory()], [], true);
       const originalState = setupInitialState(x => x.validator = validator);
 
       const action: EditorErrorAction = {
