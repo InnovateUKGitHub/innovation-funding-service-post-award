@@ -5,7 +5,6 @@ import { DataLoadAction, dataLoadAction, EditorErrorAction, EditorSubmitAction, 
 import { scrollToTheTopSmoothly } from "@framework/util";
 import { processDto } from "@shared/processResponse";
 import { AnyAction } from "redux";
-import { getKey } from "@ui/redux/stores/storeKeys";
 
 type InferDataStore<T> = T extends IDataStore<infer U> ? U : never;
 export type InferEditorStoreDto<T> = T extends IEditorStore<infer U, infer V> ? U : never;
@@ -98,11 +97,6 @@ const conditionalDelete = <T extends EditorStateKeys, K extends string, TDto ext
 export class StoreBase {
   constructor(protected getState: () => RootState, protected queue: (action: RootActionsOrThunk) => void) {
 
-  }
-
-  /* @deprecated TODO remove */
-  protected buildKey(...vals: (string|number|boolean|"all")[]) {
-    return getKey(...vals);
   }
 
   protected markStale<T extends DataStateKeys, K extends string, TDto extends InferDataStore<DataState[T][K]>>(store: T, key: K, dto: TDto | undefined) {

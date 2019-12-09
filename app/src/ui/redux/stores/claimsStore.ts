@@ -23,7 +23,7 @@ export class ClaimsStore extends StoreBase {
   }
 
   public getAllClaimsForProject(projectId: string): Pending<ClaimDto[]> {
-    return this.getData("claims", storeKeys.getClaimsForProjectKey(projectId), p => ApiClient.claims.getAllByProjectId({ projectId, ...p }))
+    return this.getData("claims", storeKeys.getProjectKey(projectId), p => ApiClient.claims.getAllByProjectId({ projectId, ...p }))
       .then(data => data, () => []);
   }
 
@@ -36,7 +36,7 @@ export class ClaimsStore extends StoreBase {
   }
 
   public getAllClaimsForPartner(partnerId: string) {
-    return this.getData("claims", storeKeys.getClaimsForPartnerKey(partnerId), p => ApiClient.claims.getAllByPartnerId({ partnerId, ...p }))
+    return this.getData("claims", storeKeys.getPartnerKey(partnerId), p => ApiClient.claims.getAllByPartnerId({ partnerId, ...p }))
       .then(data => data, () => []);
   }
 

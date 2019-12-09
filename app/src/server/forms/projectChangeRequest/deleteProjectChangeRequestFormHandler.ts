@@ -2,10 +2,10 @@ import { IFormBody, IFormButton, StandardFormHandlerBase } from "@server/forms/f
 import { PCRDeleteParams, PCRDeleteRoute, PCRsDashboardRoute, } from "@ui/containers";
 import { PCRDto, ProjectRole } from "@framework/dtos";
 import { IContext, ILinkInfo } from "@framework/types";
-import { getPcrEditor } from "@ui/redux/selectors";
 import { PCRDtoValidator } from "@ui/validators";
 import { GetPCRByIdQuery } from "@server/features/pcrs/getPCRByIdQuery";
 import { DeleteProjectChangeRequestCommand } from "@server/features/pcrs/deleteProjectChangeRequestCommand";
+import { storeKeys } from "@ui/redux/stores/storeKeys";
 
 export class ProjectChangeRequestDeleteFormHandler extends StandardFormHandlerBase<PCRDeleteParams, "pcr"> {
   constructor() {
@@ -22,7 +22,7 @@ export class ProjectChangeRequestDeleteFormHandler extends StandardFormHandlerBa
   }
 
   protected getStoreKey(params: PCRDeleteParams) {
-    return getPcrEditor(params.projectId, params.pcrId).key;
+    return storeKeys.getPcrKey(params.projectId, params.pcrId);
   }
 
   protected createValidationResult(params: PCRDeleteParams, dto: PCRDto) {

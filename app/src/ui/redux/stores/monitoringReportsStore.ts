@@ -8,24 +8,21 @@ import { MonitoringReportDto, MonitoringReportSummaryDto } from "@framework/dtos
 import { MonitoringReportStatus } from "@framework/types";
 import { dataLoadAction, handleEditorError, handleEditorSubmit, handleEditorSuccess, messageSuccess } from "../actions";
 import { MonitoringReportDtoValidator } from "@ui/validators";
+import { storeKeys } from "@ui/redux/stores/storeKeys";
 
 export class MonitoringReportsStore extends StoreBase {
   constructor(private projectStore: ProjectsStore, protected getState: () => RootState, protected queue: (action: any) => void) {
     super(getState, queue);
   }
 
-  private getKeyForProject(projectId: string) {
-    return super.buildKey(projectId);
-  }
-
-  private getKeyForReport(projectId: string, reportId: string|undefined) {
-    return super.buildKey(projectId, reportId || "new");
+  private getKey(projectId: string, reportId: string|undefined) {
+    return storeKeys.getMonitoringReportKey(projectId, reportId);
   }
 
   getStatusChanges(projectId: string, reportId: string) {
     return this.getData(
       "monitoringReportStatusChanges",
-      this.getKeyForReport(projectId, reportId),
+      this.getKey(projectId, reportId),
       (p) => ApiClient.monitoringReports.getStatusChanges({ projectId, reportId, ...p })
     );
   }
@@ -33,7 +30,7 @@ export class MonitoringReportsStore extends StoreBase {
   getAllForProject(projectId: string): Pending<MonitoringReportSummaryDto[]> {
     return this.getData(
       "monitoringReports",
-      this.getKeyForProject(projectId),
+      storeKeys.getProjectKey(projectId),
       p => ApiClient.monitoringReports.getAllForProject({ projectId, ...p })
     );
   }
@@ -41,7 +38,7 @@ export class MonitoringReportsStore extends StoreBase {
   getById(projectId: string, reportId: string) {
     return this.getData(
       "monitoringReport",
-      this.getKeyForReport(projectId, reportId),
+      this.getKey(projectId, reportId),
       (p) => ApiClient.monitoringReports.get({ projectId, reportId, ...p })
     );
   }
@@ -57,7 +54,7 @@ export class MonitoringReportsStore extends StoreBase {
   getCreateMonitoringReportEditor(projectId: string, init?: (dto: MonitoringReportDto) => void) {
     return this.getEditor(
       "monitoringReport",
-      this.getKeyForReport(projectId, undefined),
+      this.getKey(projectId, undefined),
       () => this.getMonitoringReportQuestions().then<MonitoringReportDto>(questions => ({
         headerId: "",
         startDate: new Date(),
@@ -78,7 +75,7 @@ export class MonitoringReportsStore extends StoreBase {
   getUpdateMonitoringReportEditor(projectId: string, reportId: string, init?: (dto: MonitoringReportDto) => void) {
     return this.getEditor(
       "monitoringReport",
-      this.getKeyForReport(projectId, reportId),
+      this.getKey(projectId, reportId),
       () => this.getById(projectId, reportId),
       init,
       (dto) => this.getValidator(projectId, dto, false, false)
@@ -87,7 +84,7 @@ export class MonitoringReportsStore extends StoreBase {
 
   updateMonitoringReportEditor(saving: boolean, projectId: string, dto: MonitoringReportDto, submit?: boolean, onComplete?: () => void) {
     // if submit isnt supplied need to get it from the last validator to keep it insync
-    const key = this.getKeyForReport(projectId, dto.headerId);
+    const key = this.getKey(projectId, dto.headerId);
     const isSubmitting = (submit === undefined && this.getState().editors.monitoringReport[key] ? this.getState().editors.monitoringReport[key].validator.submit : submit) || false;
 
     this.updateEditor(
@@ -121,7 +118,7 @@ export class MonitoringReportsStore extends StoreBase {
   deleteReport(projectId: string, reportId: string, dto: MonitoringReportDto, message: string, onComplete: () => void) {
     this.deleteEditor(
       "monitoringReport",
-      this.getKeyForReport(projectId, reportId),
+      this.getKey(projectId, reportId),
       dto,
       () => this.getValidator(projectId, dto, false, false),
       p => ApiClient.monitoringReports.deleteMonitoringReport({ reportId, projectId, ...p}),

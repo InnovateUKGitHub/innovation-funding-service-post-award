@@ -13,6 +13,7 @@ import {
   PCRItemType,
   PCRStatus
 } from "@framework/constants";
+import { storeKeys } from "@ui/redux/stores/storeKeys";
 
 export class ProjectChangeRequestStore extends StoreBase {
   constructor(private projectStore: ProjectsStore, getState: () => RootState, queue: (action: any) => void) {
@@ -20,7 +21,7 @@ export class ProjectChangeRequestStore extends StoreBase {
   }
 
   private getKeyForRequest(projectId: string, pcrId?: string) {
-    return this.buildKey(projectId, pcrId || "new");
+    return storeKeys.getPcrKey(projectId, pcrId);
   }
 
   public getById(projectId: string, pcrId: string) {
@@ -82,11 +83,11 @@ export class ProjectChangeRequestStore extends StoreBase {
   }
 
   public getAllForProject(projectId: string) {
-    return this.getData("pcrs", projectId, p => ApiClient.pcrs.getAll({ projectId, ...p }));
+    return this.getData("pcrs", storeKeys.getProjectKey(projectId), p => ApiClient.pcrs.getAll({ projectId, ...p }));
   }
 
   public getAllPcrTypes() {
-    return this.getData("pcrTypes", "all", p => ApiClient.pcrs.getTypes({ ...p }));
+    return this.getData("pcrTypes", storeKeys.getPcrTypesKey(), p => ApiClient.pcrs.getTypes({ ...p }));
   }
 
   public getPcrTypeForItem(projectId: string, pcrId: string, itemId: string) {

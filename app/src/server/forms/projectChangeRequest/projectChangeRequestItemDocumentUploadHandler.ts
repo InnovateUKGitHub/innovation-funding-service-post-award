@@ -9,7 +9,7 @@ import {
 } from "@ui/containers";
 import { MultipleDocumentUpdloadDtoValidator } from "@ui/validators";
 import { WorkFlow } from "@ui/containers/pcrs/workflow";
-import { getKey } from "@ui/redux/stores/storeKeys";
+import { storeKeys } from "@ui/redux/stores/storeKeys";
 
 export class ProjectChangeRequestItemDocumentUploadHandler extends MultipleFileFormHandlerBase<ProjectChangeRequestPrepareItemParams, "multipleDocuments"> {
   constructor() {
@@ -47,7 +47,7 @@ export class ProjectChangeRequestItemDocumentUploadHandler extends MultipleFileF
   }
 
   protected getStoreKey(params: ProjectChangeRequestPrepareItemParams) {
-    return getKey("pcrs", params.projectId, params.itemId);
+    return storeKeys.getPcrKey(params.projectId, params.itemId);
   }
 
   protected createValidationResult(params: ProjectChangeRequestPrepareItemParams, dto: MultipleDocumentUploadDto, button: IFormButton) {

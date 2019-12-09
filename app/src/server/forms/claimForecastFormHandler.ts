@@ -51,7 +51,7 @@ export class ClaimForecastFormHandler extends StandardFormHandlerBase<ClaimForec
   }
 
   protected getStoreKey(params: ClaimForecastParams) {
-    return storeKeys.getForecastDetailsForPartnerKey(params.partnerId);
+    return storeKeys.getPartnerKey(params.partnerId);
   }
 
   protected createValidationResult(params: ClaimForecastParams, dto: ForecastDetailsDTO[]) {

@@ -2,10 +2,11 @@ import { StoreBase } from "./storeBase";
 import { ApiClient } from "@ui/apiClient";
 import { LoadingStatus, Pending } from "@shared/pending";
 import { NotFoundError } from "@server/features/common";
+import { storeKeys } from "@ui/redux/stores/storeKeys";
 
 export class FinancialVirementsStore extends StoreBase {
   public get(projectId: string, pcrId: string, pcrItemId: string) {
-    return this.getData("financialVirement", this.buildKey(projectId, pcrId, pcrItemId), p => ApiClient.financialVirements.get({ projectId, pcrItemId, pcrId, ...p }));
+    return this.getData("financialVirement", storeKeys.getFinancialVirementKey(projectId, pcrId, pcrItemId), p => ApiClient.financialVirements.get({ projectId, pcrItemId, pcrId, ...p }));
   }
 
   public getPartnerVirements(projectId: string, partnerId: string, pcrId: string, pcrItemId: string) {
