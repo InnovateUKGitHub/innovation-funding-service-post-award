@@ -4,19 +4,19 @@ import {
   ClaimForecastParams,
   ClaimForecastRoute,
   ClaimsDashboardRoute,
-  PrepareClaimRoute
+  ClaimSummaryRoute,
 } from "../../ui/containers";
 import { ForecastDetailsDtosValidator } from "../../ui/validators";
 import { GetAllForecastsForPartnerQuery, UpdateForecastDetailsCommand } from "../features/forecastDetails";
 import { GetAllProjectRolesForUser, GetByIdQuery } from "../features/projects";
 import { GetByIdQuery as GetPartnerByIdQuery } from "../features/partners";
-import { IContext, ILinkInfo, PartnerStatus, ProjectRole } from "@framework/types";
+import { IContext, ILinkInfo, ProjectRole } from "@framework/types";
 import { GetCostCategoriesForPartnerQuery } from "../features/claims/getCostCategoriesForPartnerQuery";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
 
 export class ClaimForecastFormHandler extends StandardFormHandlerBase<ClaimForecastParams, "forecastDetails"> {
   constructor() {
-    super(ClaimForecastRoute, ["save", "default"], "forecastDetails");
+    super(ClaimForecastRoute, ["default", "save"], "forecastDetails");
   }
 
   protected async getDto(context: IContext, params: ClaimForecastParams, button: IFormButton, body: IFormBody): Promise<ForecastDetailsDTO[]> {
@@ -39,11 +39,10 @@ export class ClaimForecastFormHandler extends StandardFormHandlerBase<ClaimForec
   }
 
   protected async run(context: IContext, params: ClaimForecastParams, button: IFormButton, dto: ForecastDetailsDTO[]): Promise<ILinkInfo> {
-    const submit = button.name === "default";
-    await context.runCommand(new UpdateForecastDetailsCommand(params.projectId, params.partnerId, dto, submit));
+    await context.runCommand(new UpdateForecastDetailsCommand(params.projectId, params.partnerId, dto, false));
 
-    if (button.name === "save") {
-      return PrepareClaimRoute.getLink(params);
+    if (button.name === "default") {
+      return ClaimSummaryRoute.getLink(params);
     }
 
     // if pm as well as fc then go to all claims route

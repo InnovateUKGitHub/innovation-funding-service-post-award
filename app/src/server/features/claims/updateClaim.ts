@@ -3,6 +3,7 @@ import { ClaimDtoValidator } from "@ui/validators/claimDtoValidator";
 import { Authorisation, ClaimDto, ClaimStatus, IContext, ProjectRole } from "@framework/types";
 import { GetCostsSummaryForPeriodQuery } from "../claimDetails";
 import { GetCostCategoriesQuery } from "@server/features/claims/getCostCategoriesQuery";
+import { GetClaimDocumentsQuery } from "@server/features/documents/getClaimDocumentsSummary";
 
 export class UpdateClaimCommand extends CommandBase<boolean> {
   constructor(private readonly projectId: string, private readonly claimDto: ClaimDto) {
@@ -18,7 +19,10 @@ export class UpdateClaimCommand extends CommandBase<boolean> {
     const existingStatus = await context.repositories.claims.get(this.claimDto.partnerId, this.claimDto.periodId).then(x => x.Acc_ClaimStatus__c);
     const costCategories = await context.runQuery(new GetCostCategoriesQuery());
     const details = await context.runQuery(new GetCostsSummaryForPeriodQuery(this.projectId, this.claimDto.partnerId, this.claimDto.periodId));
-    const result = new ClaimDtoValidator(this.claimDto, existingStatus, details, costCategories, true);
+    const documents = await context.runQuery(
+      new GetClaimDocumentsQuery({ projectId: this.projectId, partnerId: this.claimDto.partnerId, periodId: this.claimDto.periodId})
+    );
+    const result = new ClaimDtoValidator(this.claimDto, existingStatus, details, costCategories, documents, true);
 
     if (!result.isValid) {
       throw new ValidationError(result);
