@@ -304,8 +304,8 @@ div.card-link > a:focus {
   font-weight: normal;
 }
 
-.card-link a:hover > .card-link__messages > .card-link__message--alert,
-.card-link a:hover > .card-link__messages > .card-link__message {
+.card-link a:hover > .card-link__messages > .card-link__message,
+.card-link a:hover > .card-link__messages > .card-link__message--alert {
   color: #ffffff;
 }
 
