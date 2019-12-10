@@ -294,24 +294,32 @@ div.card-link > a:focus {
   outline: 0px;
 }
 
+.card-link__link {
+  text-decoration: none;
+}
+
+.card-link__title {
+  text-decoration: underline;
+} 
+
+.card-link__message {
+  color: #000000;
+  font-weight: normal;
+}
+
 .card-link__message--alert {
   color: #ff0000;
+  font-weight: normal;
 }
 
-a:hover > .card-link__messages > .card-link__message--alert {
+.card-link a:focus > .card-link__messages > .card-link__message,
+.card-link a:focus > .card-link__messages > .card-link__message--alert {
+  color: #000000;
+}
+
+.card-link a:hover > .card-link__messages > .card-link__message,
+.card-link a:hover > .card-link__messages > .card-link__message--alert {
   color: #ffffff;
-}
-
-.card-link__messages {
-  position: absolute;
-  bottom: 0px;
-  right: 20px;
-}
-
-@media (max-width: 40.0625em) {
-  .card-link__messages {
-    right: auto!important;
-  }
 }
 
 button.govuk-link {
