@@ -44,7 +44,7 @@ class PrepareMonitoringReportComponent extends ContainerBase<MonitoringReportPre
           editor={editor}
           onChange={(dto) => this.props.onChange(false, dto)}
           onSave={(dto, submit) => this.props.onChange(true, dto, submit)}
-          showLog={() => this.renderLog()}
+          renderLog={() => this.renderLog()}
         />
       </ACC.Page>
     );
