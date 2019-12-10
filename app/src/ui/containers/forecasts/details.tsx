@@ -1,7 +1,7 @@
 import React from "react";
 import * as ACC from "@ui/components";
 import { BaseProps, ContainerBase, defineRoute } from "../containerBase";
-import { PartnerDto, PartnerStatus, ProjectDto, ProjectRole, ProjectStatus } from "@framework/dtos";
+import { ClaimDto, PartnerDto, PartnerStatus, ProjectDto, ProjectRole, ProjectStatus } from "@framework/dtos";
 import { Pending } from "@shared/pending";
 import { StoresConsumer } from "@ui/redux";
 
@@ -40,7 +40,7 @@ class ViewForecastComponent extends ContainerBase<Params, Data, {}> {
         </ACC.Section>
         <ACC.Section qa="viewForecastUpdate">
           <ACC.Claims.ClaimLastModified partner={data.partner} />
-          {this.renderUpdateSection(data.project, data.partner)}
+          {this.renderUpdateSection(data.project, data.partner, data.claim)}
         </ACC.Section>
       </ACC.Page>
     );
@@ -52,11 +52,12 @@ class ViewForecastComponent extends ContainerBase<Params, Data, {}> {
     return <ACC.Renderers.SimpleString qa="overhead-costs">Overhead costs: <ACC.Renderers.Percentage value={overheadRate} /></ACC.Renderers.SimpleString>;
   }
 
-  private renderUpdateSection(project: ProjectDto, partner: PartnerDto) {
+  private renderUpdateSection(project: ProjectDto, partner: PartnerDto, claim: ClaimDto | null) {
 
     if (project.status === ProjectStatus.OnHold) return null;
     if (!(partner.roles & ProjectRole.FinancialContact)) return null;
     if (partner.partnerStatus === PartnerStatus.VoluntaryWithdrawal || partner.partnerStatus === PartnerStatus.InvoluntaryWithdrawal) return null;
+    if (claim && claim.isFinalClaim) return null;
     return <ACC.Link styling="PrimaryButton" route={this.props.routes.forecastUpdate.getLink({ projectId: project.id, partnerId: partner.id })}>Update forecast</ACC.Link>;
   }
 }
