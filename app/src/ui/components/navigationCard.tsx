@@ -13,7 +13,7 @@ interface NavigationCardProps {
 
 export interface NavigationCardMessage {
   message: string;
-  isAlert: boolean;
+  isAlert?: boolean;
 }
 
 export class NavigationCard extends React.Component<NavigationCardProps> {
