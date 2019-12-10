@@ -20,8 +20,8 @@ export class NavigationCard extends React.Component<NavigationCardProps> {
   render() {
     return (
       <div className="card-link" data-qa={this.props.qa}>
-        <Link className="card-link__a--no-underline" route={this.props.route}>
-          <h2 className="card-link__h2--underline">{this.props.label}</h2>
+        <Link className="card-link__link" route={this.props.route}>
+          <h2 className="card-link__title">{this.props.label}</h2>
           {this.renderMessages()}
         </Link>
       </div>
