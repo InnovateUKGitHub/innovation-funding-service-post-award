@@ -148,29 +148,28 @@ class ProjectOverviewComponent extends ContainerBase<Params, Data, {}> {
     if (project.roles & ProjectRole.FinancialContact) {
       switch (partner.status) {
         case PartnerClaimStatus.NoClaimsDue:
-          result.push({ message: "No claim due", isAlert: false });
+          result.push({ message: "No claim due" });
           break;
         case PartnerClaimStatus.ClaimDue:
-          result.push({ message: "Claim due", isAlert: true });
+          result.push({ message: "Claim due" });
           break;
         case PartnerClaimStatus.ClaimsOverdue:
-          result.push({ message: "Claim overdue", isAlert: true });
+          result.push({ message: "Claim overdue" });
           break;
         case PartnerClaimStatus.ClaimQueried:
-          result.push({ message: "Claim queried", isAlert: true });
+          result.push({ message: "Claim queried" });
           break;
         case PartnerClaimStatus.ClaimSubmitted:
-          result.push({ message: "Claim submitted", isAlert: false });
+          result.push({ message: "Claim submitted" });
           break;
         case PartnerClaimStatus.IARRequired:
-          result.push({ message: "IAR required", isAlert: true });
+          result.push({ message: "IAR required" });
       }
     }
 
     if (project.roles & ProjectRole.MonitoringOfficer) {
       result.push({
-        message: "Claims to review: " + project.claimsToReview,
-        isAlert: false
+        message: "Claims to review: " + project.claimsToReview
       });
     }
 
