@@ -7,10 +7,11 @@ import { RootState } from "../reducers";
 import { CostSummariesStore } from "./costsSummariesStore";
 import { CostCategoriesStore } from "./costCategoriesStore";
 import { Pending } from "@shared/pending";
+import { ClaimDocumentsStore } from "@ui/redux/stores/claimDocumentsStore";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
 
 export class ClaimsStore extends StoreBase {
-  constructor(private costsSummariesStore: CostSummariesStore, private costCategoriesStore: CostCategoriesStore, getState: () => RootState, queue: (action: RootActionsOrThunk) => void) {
+  constructor(private costsSummariesStore: CostSummariesStore, private costCategoriesStore: CostCategoriesStore, private claimDocumentsStore: ClaimDocumentsStore, getState: () => RootState, queue: (action: RootActionsOrThunk) => void) {
     super(getState, queue);
   }
 
@@ -80,13 +81,14 @@ export class ClaimsStore extends StoreBase {
   private validate(projectId: string, partnerId: string, periodId: number, claim: ClaimDto, showErrors: boolean) {
     const originalStatus = this.get(partnerId, periodId).then(x => x.status);
     const details = this.costsSummariesStore.getForPeriod(projectId, partnerId, periodId);
+    const documents = this.claimDocumentsStore.getClaimDocuments(projectId, partnerId, periodId).data || [];
     const costCategories = this.costCategoriesStore.getAll();
 
     return Pending.combine({
       originalStatus,
       details,
       costCategories
-    }).then(x => new ClaimDtoValidator(claim, x.originalStatus, x.details, x.costCategories, showErrors));
+    }).then(x => new ClaimDtoValidator(claim, x.originalStatus, x.details, x.costCategories, documents, showErrors));
   }
 
   public getStatusChanges(projectId: string, partnerId: string, periodId: number) {

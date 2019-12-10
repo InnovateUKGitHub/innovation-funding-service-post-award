@@ -2,10 +2,10 @@ import React from "react";
 import * as ACC from "@ui/components";
 import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerBase";
 import { isNumber } from "@framework/util";
-import { ClaimDto, PartnerDto, ProjectDto, ProjectRole } from "@framework/types";
+import { ClaimDto, ILinkInfo, PartnerDto, ProjectDto, ProjectRole } from "@framework/types";
 import { Pending } from "@shared/pending";
 import { ForecastDetailsDtosValidator } from "@ui/validators";
-import { IEditorStore, IStores, StoresConsumer } from "@ui/redux";
+import { IEditorStore, StoresConsumer } from "@ui/redux";
 
 export interface ClaimForecastParams {
   projectId: string;
@@ -26,13 +26,13 @@ interface Data {
 }
 
 interface Callbacks {
-  onUpdate: (saving: boolean, dto: ForecastDetailsDTO[], updateClaim: boolean) => void;
+  onUpdate: (saving: boolean, dto: ForecastDetailsDTO[], link?: ILinkInfo) => void;
 }
 
 class ClaimForecastComponent extends ContainerBase<ClaimForecastParams, Data, Callbacks> {
   render() {
 
-    const combinedForcastData = Pending.combine({
+    const combinedForecastData = Pending.combine({
       project: this.props.project,
       partner: this.props.partner,
       claim: this.props.claim,
@@ -43,7 +43,7 @@ class ClaimForecastComponent extends ContainerBase<ClaimForecastParams, Data, Ca
       costCategories: this.props.costCategories,
     });
 
-    const combined = Pending.combine({ data: combinedForcastData, editor: this.props.editor });
+    const combined = Pending.combine({ data: combinedForecastData, editor: this.props.editor });
     return <ACC.PageLoader pending={combined} render={x => this.renderContents(x.data, x.editor)} />;
   }
 
@@ -58,7 +58,7 @@ class ClaimForecastComponent extends ContainerBase<ClaimForecastParams, Data, Ca
 
     return (
       <ACC.Page
-        backLink={<ACC.BackLink route={this.props.routes.prepareClaim.getLink({ periodId: this.props.periodId, projectId: this.props.projectId, partnerId: this.props.partnerId })}>Back to claim</ACC.BackLink>}
+        backLink={<ACC.BackLink route={this.props.routes.claimDocuments.getLink({ projectId: this.props.projectId, partnerId: this.props.partnerId, periodId: this.props.periodId })}>Back to claim documents</ACC.BackLink>}
         error={editor.error}
         validator={editor.validator}
         pageTitle={<ACC.Projects.Title project={combined.project} />}
@@ -71,38 +71,31 @@ class ClaimForecastComponent extends ContainerBase<ClaimForecastParams, Data, Ca
           {this.renderOverheadsRate(combined.partner.overheadRate)}
           <Form.Form
             editor={editor}
-            onChange={data => this.props.onUpdate(false, data, false)}
+            onChange={data => this.props.onUpdate(false, data)}
+            onSubmit={() => this.props.onUpdate(true, editor.data, this.props.routes.claimSummary.getLink({ projectId: this.props.projectId, partnerId: this.props.partnerId, periodId: this.props.periodId }))}
             qa="claim-forecast-form"
           >
             <ACC.Claims.ForecastTable data={combined} editor={editor} isSubmitting={true} />
-            <Form.Fieldset>
+            <Form.Fieldset qa="last-saved">
               <ACC.Claims.ClaimLastModified partner={combined.partner} />
             </Form.Fieldset>
-            <Form.Fieldset qa="save-button">
-              <Form.Button name="save" onClick={() => this.props.onUpdate(true, editor.data, false)}>Save and return to claim</Form.Button>
-              <ACC.Link styling="PrimaryButton" route={this.props.routes.error.getLink({errorType: "notFound"})}>Continue to summary</ACC.Link>
+            <Form.Fieldset qa="save-and-continue">
+              <Form.Submit>Continue to summary</Form.Submit>
+              <Form.Button name="save" onClick={() => this.props.onUpdate(true, editor.data, this.getBackLink(combined.project))}>Save and return to claims</Form.Button>
             </Form.Fieldset>
           </Form.Form>
         </ACC.Section>
       </ACC.Page>
     );
   }
+
+  private getBackLink(project: ProjectDto) {
+    const isPmOrMo = (project.roles & (ProjectRole.ProjectManager | ProjectRole.MonitoringOfficer)) !== ProjectRole.Unknown;
+    return isPmOrMo
+      ? this.props.routes.allClaimsDashboard.getLink({ projectId: project.id })
+      : this.props.routes.claimsDashboard.getLink({ projectId: project.id, partnerId: this.props.partnerId });
+  }
 }
-
-const afterUpdate = (submitClaim: boolean, props: ClaimForecastParams & BaseProps, stores: IStores) => {
-
-  const { routes, projectId, partnerId, periodId } = props;
-
-  if (!submitClaim) {
-    stores.navigation.navigateTo(routes.prepareClaim.getLink({ projectId, partnerId, periodId }));
-  }
-  else if (stores.users.getCurrentUserAuthorisation().forProject(projectId).hasRole(ProjectRole.ProjectManager)) {
-    stores.navigation.navigateTo(routes.allClaimsDashboard.getLink({ projectId }));
-  }
-  else {
-    stores.navigation.navigateTo(routes.claimsDashboard.getLink({ projectId, partnerId }));
-  }
-};
 
 const ClaimForcastContainer = (props: ClaimForecastParams & BaseProps) => (
   <StoresConsumer>
@@ -118,9 +111,10 @@ const ClaimForcastContainer = (props: ClaimForecastParams & BaseProps) => (
           golCosts={stores.forecastGolCosts.getAllByPartner(props.partnerId)}
           costCategories={stores.costCategories.getAll()}
           editor={stores.forecastDetails.getForecastEditor(props.partnerId)}
-          onUpdate={(saving, dto, submitClaim) => {
-            const message = submitClaim ? "You have submitted your claim for this period." : undefined;
-            stores.forecastDetails.updateForcastEditor(saving, props.projectId, props.partnerId, dto, submitClaim, message, () => afterUpdate(submitClaim, props, stores));
+          onUpdate={(saving, dto, link) => {
+            stores.forecastDetails.updateForcastEditor(saving, props.projectId, props.partnerId, dto, false,  "You have saved your claim.", () => {
+              if (link) stores.navigation.navigateTo(link);
+            });
           }}
           {...props}
         />
