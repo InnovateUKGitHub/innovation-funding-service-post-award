@@ -3,7 +3,7 @@ import { Authorisation, IContext, ProjectRole } from "@framework/types";
 import { GetAllForProjectQuery } from "../partners/getAllForProjectQuery";
 import { GetAllForecastsGOLCostsQuery } from "../claims";
 
-export class GetFinancialVirementsQuery extends QueryBase<FinancialVirementDto> {
+export class GetFinancialVirementQuery extends QueryBase<FinancialVirementDto> {
   constructor(private projectId: string, private pcrId: string, private pcrItemId: string) {
     super();
   }
