@@ -9,14 +9,15 @@ export const createStores = (getState: () => RootState, dispatch: (action: RootA
   const partners = new Stores.PartnersStore(getState, dispatch);
   const costsSummaries = new Stores.CostSummariesStore(getState, dispatch);
 
-  const claims = new Stores.ClaimsStore(costsSummaries, costCategories, getState, dispatch);
+  const claimDocuments = new Stores.ClaimDocumentsStore(partners, getState, dispatch);
+  const claims = new Stores.ClaimsStore(costsSummaries, costCategories, claimDocuments, getState, dispatch);
   const claimDetails = new Stores.ClaimsDetailsStore(getState, dispatch);
   const forecastGolCosts = new Stores.ForecastGolCostsStore(getState, dispatch);
 
   return {
     claimDetailDocuments: new Stores.ClaimDetailDocumentsStore(getState, dispatch),
     claimDetails,
-    claimDocuments: new Stores.ClaimDocumentsStore(partners, claims, getState, dispatch),
+    claimDocuments,
     claims,
     config: new Stores.ConfigStore(getState, dispatch),
     contacts: new Stores.ContactsStore(getState, dispatch),

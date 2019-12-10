@@ -28,12 +28,14 @@ import { MonitoringReportDeleteFormHandler } from "./monitoringReportDeleteFormH
 import { MonitoringReportPrepareFormHandler } from "./monitoringReportPrepareFormHandler";
 import { ClaimDocumentsDeleteHandler } from "@server/forms/claimDocuments/claimDocumentsDeleteHandler";
 import { ClaimDocumentsUploadHandler } from "@server/forms/claimDocuments/claimDocumentsUploadHandler";
+import { ClaimSummaryFormHandler } from "@server/forms/claimSummaryFormHandler";
 
 export const formRouter = express.Router();
 
 const handlers: IFormHandler[] = [
   new ClaimForecastFormHandler(),
   new EditClaimLineItemsFormHandler(),
+  new ClaimSummaryFormHandler(),
   new PrepareClaimFormHandler(),
   new ReviewClaimFormHandler(),
   new UpdateForecastFormHandler(),

@@ -11,6 +11,7 @@ export class ClaimDtoValidator extends Results<ClaimDto>  {
       private readonly originalStatus: ClaimStatus,
       private readonly details: CostsSummaryForPeriodDto[],
       private readonly costCategories: CostCategoryDto[],
+      private readonly documents: DocumentSummaryDto[],
       readonly showErrors: boolean
     ) {
         super(dto, showErrors);
@@ -28,6 +29,12 @@ export class ClaimDtoValidator extends Results<ClaimDto>  {
     );
 
     public status: Result;
+
+    private validateIar() {
+        const isIarRequired = this.model.isIarRequired && this.originalStatus === ClaimStatus.DRAFT && this.model.status === ClaimStatus.SUBMITTED;
+        return Validation.isTrue(this, !isIarRequired || this.documents.length > 0, "You must attach an IAR");
+    }
+    public iar = this.validateIar();
 
     public claimDetails = Validation.optionalChild(
       this,

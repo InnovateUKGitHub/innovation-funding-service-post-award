@@ -44,7 +44,7 @@ class ClaimDocumentsComponent extends ContainerBase<ClaimDocumentsPageParams, Da
         pageTitle={<ACC.Projects.Title project={project} />}
         error={(editor.error)}
         validator={editor.validator}
-        backLink={<ACC.BackLink route={this.props.routes.prepareClaim.getLink({ periodId: this.props.periodId, projectId: this.props.projectId, partnerId: this.props.partnerId })}>Back to costs to be claimed</ACC.BackLink>}
+        backLink={<ACC.BackLink route={this.props.routes.prepareClaim.getLink({projectId: this.props.projectId, partnerId: this.props.partnerId, periodId:this.props.periodId})}>Back to costs to be claimed</ACC.BackLink>}
       >
         <ACC.Renderers.Messages messages={this.props.messages} />
         {claim.isFinalClaim && <ACC.ValidationMessage messageType="info" message="This is the final claim."/>}
@@ -77,10 +77,17 @@ class ClaimDocumentsComponent extends ContainerBase<ClaimDocumentsPageParams, Da
         </ACC.Section>
         <ACC.Section qa="buttons">
           <ACC.Link styling="PrimaryButton" id="continue-claim" route={this.props.routes.claimForecast.getLink({projectId: this.props.projectId, partnerId: this.props.partnerId, periodId: this.props.periodId})}>Continue to update forecast</ACC.Link>
-          <ACC.Link styling="SecondaryButton" id="save-claim" route={this.props.routes.allClaimsDashboard.getLink({projectId: this.props.projectId})}>Save and return to claims</ACC.Link>
+          <ACC.Link styling="SecondaryButton" id="save-claim" route={this.getDashboardLink(project)}>Save and return to claims</ACC.Link>
         </ACC.Section>
       </ACC.Page>
     );
+  }
+
+  private getDashboardLink(project: ProjectDto) {
+    const isPmOrMo = (project.roles & (ProjectRole.ProjectManager | ProjectRole.MonitoringOfficer)) !== ProjectRole.Unknown;
+    return isPmOrMo
+      ? this.props.routes.allClaimsDashboard.getLink({ projectId: project.id })
+      : this.props.routes.claimsDashboard.getLink({ projectId: project.id, partnerId: this.props.partnerId });
   }
 
   private renderGuidanceText(claim: ClaimDto) {

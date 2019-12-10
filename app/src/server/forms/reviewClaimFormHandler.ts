@@ -35,6 +35,6 @@ export class ReviewClaimFormHandler extends StandardFormHandlerBase<ReviewClaimP
     }
 
     protected createValidationResult(params: ReviewClaimParams, dto: ClaimDto) {
-        return new ClaimDtoValidator(dto, ClaimStatus.UNKNOWN, [], [], false);
+        return new ClaimDtoValidator(dto, ClaimStatus.UNKNOWN, [], [], [], false);
     }
 }

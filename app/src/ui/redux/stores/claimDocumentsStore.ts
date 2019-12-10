@@ -2,14 +2,13 @@ import { ApiClient } from "@ui/apiClient";
 import { Pending } from "@shared/pending";
 import { RootActionsOrThunk } from "../actions";
 import { PartnersStore } from "./partnersStore";
-import { ClaimsStore } from "./claimsStore";
 import { RootState } from "../reducers";
 import { DocumentsStoreBase } from "./documentsStoreBase";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
 
 export class ClaimDocumentsStore extends DocumentsStoreBase {
 
-  constructor(private partnerStore: PartnersStore, private claimsStore: ClaimsStore, getState: () => RootState, queue: (action: RootActionsOrThunk) => void) {
+  constructor(private partnerStore: PartnersStore, getState: () => RootState, queue: (action: RootActionsOrThunk) => void) {
     super(getState, queue);
   }
 
