@@ -294,6 +294,14 @@ div.card-link > a:focus {
   outline: 0px;
 }
 
+.card-link__link {
+  text-decoration: none;
+}
+
+.card-link__title {
+  text-decoration: underline;
+} 
+
 .card-link__message {
   color: #000000;
   font-weight: normal;
@@ -313,14 +321,6 @@ div.card-link > a:focus {
 .card-link a:hover > .card-link__messages > .card-link__message--alert {
   color: #ffffff;
 }
-
-.card-link__a--no-underline {
-  text-decoration: none;
-}
-
-.card-link__h2--underline {
-  text-decoration: underline;
-} 
 
 button.govuk-link {
   color:#1d70b8;
