@@ -12,7 +12,7 @@ export class ForecastDetailsDtosValidator extends Results<ForecastDetailsDTO[]> 
     private readonly claims: ClaimDto[],
     private readonly claimDetails: ClaimDetailsSummaryDto[],
     private readonly golCosts: GOLCostDto[],
-    private readonly partnerStatus: PartnerDto | undefined,
+    private readonly partner: PartnerDto | undefined,
     private readonly showErrors: boolean,
   ) {
     super(forecasts, showErrors);
@@ -28,7 +28,7 @@ export class ForecastDetailsDtosValidator extends Results<ForecastDetailsDTO[]> 
       this.totalCosts = Validation.all(this,
         () => Validation.isTrue(this, totalForecastCosts + totalClaimCosts <= totalGolCosts, "Your overall total cannot be higher than your total eligible costs."),
         () => Validation.isFalse(this, currentClaim && currentClaim.isFinalClaim, "You cannot change your forecast after you have withdrawn from the project."),
-        () => Validation.isTrue(this, !partnerStatus || (partnerStatus.partnerStatus !== PartnerStatus.InvoluntaryWithdrawal && partnerStatus.partnerStatus !== PartnerStatus.VoluntaryWithdrawal), "You cannot change your forecast after you have withdrawn from the project.")
+        () => Validation.isTrue(this, !partner || (partner.partnerStatus !== PartnerStatus.InvoluntaryWithdrawal && partner.partnerStatus !== PartnerStatus.VoluntaryWithdrawal), "You cannot change your forecast after you have withdrawn from the project.")
       );
     } else {
       this.totalCosts = Validation.valid(this);
