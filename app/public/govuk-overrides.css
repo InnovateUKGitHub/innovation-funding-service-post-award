@@ -295,7 +295,7 @@ div.card-link > a:focus {
 }
 
 .card-link__message {
-  color: #0b0c0c;
+  color: #000000;
   font-weight: normal;
 }
 
@@ -304,21 +304,23 @@ div.card-link > a:focus {
   font-weight: normal;
 }
 
-a:hover > .card-link__messages > .card-link__message--alert {
+.card-link a:hover > .card-link__messages > .card-link__message--alert,
+.card-link a:hover > .card-link__messages > .card-link__message {
   color: #ffffff;
 }
 
-a:hover > .card-link__messages > .card-link__message {
-  color: #ffffff;
+.card-link a:focus > .card-link__messages > .card-link__message,
+.card-link a:focus > .card-link__messages > .card-link__message--alert {
+  color: #000000;
 }
 
-.govuk-link--no-underline {
+.card-link a {
   text-decoration: none;
 }
 
-.govuk-link--underline {
+.card-link a h2 {
   text-decoration: underline;
-}
+} 
 
 button.govuk-link {
   color:#1d70b8;
