@@ -1,9 +1,12 @@
 import { ApiParams, ControllerBase } from "./controllerBase";
-import { GetFinancialVirementsQuery } from "@server/features/financialVirements/getFinancialVirementsQuery";
+import { GetFinancialVirementQuery } from "@server/features/financialVirements/getFinancialVirementQuery";
 import contextProvider from "@server/features/common/contextProvider";
+import { processDto } from "@shared/processResponse";
+import { UpdateFinancialVirementCommand } from "@server/features/financialVirements/updateFinancialVirementCommand";
 
 export interface IFinancialVirement {
   get: (params: ApiParams<{ projectId: string, pcrId: string, pcrItemId: string }>) => Promise<FinancialVirementDto>;
+  update: (params: ApiParams<{ projectId: string, pcrId: string, pcrItemId: string, financialVirment: FinancialVirementDto }>) => Promise<FinancialVirementDto>;
 }
 
 class Controller extends ControllerBase<FinancialVirementDto> implements IFinancialVirement {
@@ -11,11 +14,22 @@ class Controller extends ControllerBase<FinancialVirementDto> implements IFinanc
     super("financial-virements");
 
     this.getItem("/:projectId/:pcrId/:pcrItemId", (p) => ({ projectId: p.projectId, pcrId: p.pcrId, pcrItemId: p.pcrItemId }), p => this.get(p));
+    this.putItem("/:projectId/:pcrId/:pcrItemId", (p, q, b) => ({ projectId: p.projectId, pcrId: p.pcrId, pcrItemId: p.pcrItemId, financialVirment: processDto(b) }), p => this.update(p));
   }
 
   async get(params: ApiParams<{ projectId: string, pcrId: string, pcrItemId: string }>) {
-    const query = new GetFinancialVirementsQuery(params.projectId, params.pcrId, params.pcrItemId);
+    const query = new GetFinancialVirementQuery(params.projectId, params.pcrId, params.pcrItemId);
     return contextProvider.start(params).runQuery(query);
+  }
+
+  async update(params: ApiParams<{ projectId: string; pcrId: string; pcrItemId: string; financialVirment: FinancialVirementDto }>): Promise<FinancialVirementDto> {
+    const context = contextProvider.start(params);
+
+    const command = new UpdateFinancialVirementCommand(params.projectId, params.pcrId, params.pcrItemId, params.financialVirment);
+    await context.runCommand(command);
+
+    const query = new GetFinancialVirementQuery(params.projectId, params.pcrId, params.pcrItemId);
+    return await context.runQuery(query);
   }
 }
 
