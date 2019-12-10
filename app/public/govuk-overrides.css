@@ -294,24 +294,30 @@ div.card-link > a:focus {
   outline: 0px;
 }
 
+.card-link__message {
+  color: #0b0c0c;
+  font-weight: normal;
+}
+
 .card-link__message--alert {
   color: #ff0000;
+  font-weight: normal;
 }
 
 a:hover > .card-link__messages > .card-link__message--alert {
   color: #ffffff;
 }
 
-.card-link__messages {
-  position: absolute;
-  bottom: 0px;
-  right: 20px;
+a:hover > .card-link__messages > .card-link__message {
+  color: #ffffff;
 }
 
-@media (max-width: 40.0625em) {
-  .card-link__messages {
-    right: auto!important;
-  }
+.govuk-link--no-underline {
+  text-decoration: none;
+}
+
+.govuk-link--underline {
+  text-decoration: underline;
 }
 
 button.govuk-link {
