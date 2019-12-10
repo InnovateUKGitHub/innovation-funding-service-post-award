@@ -314,11 +314,11 @@ div.card-link > a:focus {
   color: #ffffff;
 }
 
-.card-link-a__no-underline {
+.card-link__a--no-underline {
   text-decoration: none;
 }
 
-.card-link-h2__underline {
+.card-link__h2--underline {
   text-decoration: underline;
 } 
 
