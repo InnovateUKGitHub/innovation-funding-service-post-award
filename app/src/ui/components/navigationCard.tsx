@@ -20,8 +20,8 @@ export class NavigationCard extends React.Component<NavigationCardProps> {
   render() {
     return (
       <div className="card-link" data-qa={this.props.qa}>
-        <Link route={this.props.route}>
-          <h2>{this.props.label}</h2>
+        <Link className="card-link-a__no-underline" route={this.props.route}>
+          <h2 className="card-link-h2__underline">{this.props.label}</h2>
           {this.renderMessages()}
         </Link>
       </div>
@@ -31,7 +31,7 @@ export class NavigationCard extends React.Component<NavigationCardProps> {
   private renderMessages() {
     return (
       this.props.messages ?
-        <div className={"card-link__messages"}> {this.props.messages.map(x => ( <SimpleString className={classNames( { "card-link__message": true, "card-link__message--alert": x.isAlert } )}> {x.message} </SimpleString> ) )} </div>
+        <div className="card-link__messages"> {this.props.messages.map(x => ( <SimpleString className={classNames( "card-link__message", { "card-link__message--alert": x.isAlert } )}> {x.message} </SimpleString> ) )} </div>
         : null
     );
   }
