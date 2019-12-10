@@ -38,7 +38,7 @@ class Component extends ContainerBase<Params, Props, {}> {
         <VirementTable.Table qa="partnerVirements" data={financialVirements.virements}>
           <VirementTable.String header="Cost category" qa="costCategory" value={x =>  x.costCategoryName} footer="Total" />
           <VirementTable.Currency header="Original" qa="original" value={x => x.originalAmount} footer={<ACC.Renderers.Currency value={financialVirements.originalTotal}/> }/>
-          <VirementTable.Currency header="Currrent" qa="current" value={x => x.currentAmount} footer={<ACC.Renderers.Currency value={financialVirements.currentTotal}/> }/>
+          <VirementTable.Currency header="New" qa="new" value={x => x.newAmount} footer={<ACC.Renderers.Currency value={financialVirements.newTotal}/> }/>
         </VirementTable.Table>
       </ACC.Page>
     );

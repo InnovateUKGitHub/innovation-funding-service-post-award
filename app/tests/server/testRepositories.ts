@@ -506,6 +506,13 @@ class ProjectChangeRequestStatusChangeTestRepository extends TestRepository<Repo
   }
 }
 
+class FinancialVirementsTestRepository extends TestRepository<Repositories.ISalesforceFinancialVirement> implements Repositories.IFinancialVirementRepository {
+  getAllForPcr(pcrItemId: string): Promise<Repositories.ISalesforceFinancialVirement[]> {
+    return super.getWhere(x => x.Acc_PcrRecordId__c === pcrItemId);
+  }
+
+}
+
 export interface ITestRepositories extends IRepositories {
   claims: ClaimsTestRepository;
   claimDetails: ClaimDetailsTestRepository;
@@ -544,6 +551,7 @@ export const createTestRepositories = (): ITestRepositories => {
     claimLineItems: new ClaimLineItemsTestRepository(),
     costCategories: new CostCategoriesTestRepository(),
     documents: new DocumentsTestRepository(),
+    financialVirements: null as any,
     monitoringReportResponse: new MonitoringReportResponseTestRepository(),
     monitoringReportHeader: new MonitoringReportHeaderTestRepository(),
     monitoringReportQuestions: new MonitoringReportQuestionsRepository(),
