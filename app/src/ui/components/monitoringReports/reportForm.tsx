@@ -10,7 +10,6 @@ interface Props {
   editor: IEditorStore<Dtos.MonitoringReportDto, MonitoringReportDtoValidator>;
   onChange: (dto: Dtos.MonitoringReportDto) => void;
   onSave: (dto: Dtos.MonitoringReportDto, submit: boolean) => void;
-  renderLog?: () => React.ReactNode;
 }
 
 export class MonitoringReportFormComponent extends Component<Props> {
@@ -25,7 +24,6 @@ export class MonitoringReportFormComponent extends Component<Props> {
           <ReportForm.Numeric label="Period" labelBold={true} width={3} name="period" value={x => x.periodId} update={(x, v) => x.periodId = v!} validation={editor.validator.periodId} />
           <SimpleString>For each question score the project against the criteria from 1 to 5, providing a comment explaining your reason. Innovate UK will return the report to you otherwise.</SimpleString>
           {this.renderFormItems(editor)}
-          {this.props.renderLog ? this.props.renderLog() : null}
           <SimpleString>By submitting this report, you certify that from the project monitoring documents shown to you, this report represents your best opinion of the current progress of this project.</SimpleString>
           <ReportForm.Fieldset qa="save-buttons">
             <ReportForm.Button name="save-submitted" styling="Primary" onClick={() => this.props.onSave(editor.data, true)}>Submit report</ReportForm.Button>
