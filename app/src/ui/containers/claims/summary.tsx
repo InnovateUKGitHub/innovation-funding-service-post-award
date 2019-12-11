@@ -143,10 +143,9 @@ class ClaimSummaryComponent extends ContainerBase<ClaimSummaryParams, Data, Call
     );
   }
 
-  private renderDocuments(documents: DocumentSummaryDto[], isIarRequired: boolean) {
+  private renderDocuments(documents: DocumentSummaryDto[]) {
     return (
       <React.Fragment>
-        {isIarRequired ? <ACC.ValidationMessage message="You need to upload an IAR document." messageType="alert" /> : null}
         {documents.length ?
           <ACC.Section subtitle="All documents open in a new window" >
             <ACC.DocumentList documents={documents} qa="claim-documents-summary-list" />
@@ -160,7 +159,7 @@ class ClaimSummaryComponent extends ContainerBase<ClaimSummaryParams, Data, Call
   private renderDocumentsSummary(data: CombinedData) {
     return (
       <ACC.Section title={"Claim documents"} qa="claim-documents-summary">
-        {this.renderDocuments(data.documents, data.claim.isIarRequired)}
+        {this.renderDocuments(data.documents)}
         <ACC.Renderers.SimpleString>
           <ACC.Link route={this.props.routes.claimDocuments.getLink({ projectId: data.project.id, partnerId: data.partner.id, periodId: this.props.periodId })}>Edit claim documents</ACC.Link>
         </ACC.Renderers.SimpleString>
