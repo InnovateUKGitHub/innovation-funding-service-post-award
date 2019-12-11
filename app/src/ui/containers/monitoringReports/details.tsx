@@ -32,38 +32,48 @@ class DetailsComponent extends ContainerBase<Params, Data, Callbacks> {
   }
 
   private renderContents(project: Dtos.ProjectDto, report: Dtos.MonitoringReportDto) {
-    const title = <ACC.PeriodTitle periodId={report.periodId} periodStartDate={report.startDate} periodEndDate={report.endDate} />;
+
+    const tabs = [{
+      text: "Questions",
+      hash: "details",
+      default: true,
+      content: this.renderResponses(report),
+      qa: "MRDetailTab"
+    }, {
+      text: "Log",
+      hash: "log",
+      content: this.renderLogTab(),
+      qa: "MRDetailsLogTab"
+    }];
 
     return (
       <ACC.Page
         backLink={<ACC.BackLink route={this.props.routes.monitoringReportDashboard.getLink({ projectId: this.props.projectId })}>Back to monitoring reports</ACC.BackLink>}
         pageTitle={<ACC.Projects.Title project={project} />}
       >
-        <ACC.Section title={title} qa="monitoringReportViewSection">
-          {report.questions
-            .map((q, i) => this.renderResponse(q, i))
-            .reduce((a, b) => a.concat(b), [])
-            .filter(x => !!x)}
-        </ACC.Section>
-
-        {this.renderLog()}
+        <ACC.HashTabs tabList={tabs} />
       </ACC.Page>
     );
   }
 
-  private renderLog() {
+  private renderLogTab() {
     return (
-      <ACC.Accordion>
-        <ACC.AccordionItem title="Status and comments log" qa="status-and-comments-log">
-          {/* Keeping logs inside loader because accordion defaults to closed*/}
-          <ACC.Loader
-            pending={this.props.statusChanges}
-            render={(statusChanges) => (
-              <ACC.Logs data={statusChanges} qa="monitoring-report-status-change-table" />
-            )}
-          />
-        </ACC.AccordionItem>
-      </ACC.Accordion>);
+      <ACC.Loader
+        pending={this.props.statusChanges}
+        render={(statusChanges) => <ACC.Section title="Log"><ACC.Logs data={statusChanges} qa="monitoring-report-status-change-table" /></ACC.Section>}
+      />);
+  }
+
+  private renderResponses(report: Dtos.MonitoringReportDto) {
+    const title = <ACC.PeriodTitle periodId={report.periodId} periodStartDate={report.startDate} periodEndDate={report.endDate} />;
+    return (
+      <ACC.Section title={title} qa="monitoringReportViewSection">
+        {report.questions
+          .map((q, i) => this.renderResponse(q, i))
+          .reduce((a, b) => a.concat(b), [])
+          .filter(x => !!x)}
+      </ACC.Section>
+    );
   }
 
   private renderResponse(question: MonitoringReportQuestionDto, index: number) {

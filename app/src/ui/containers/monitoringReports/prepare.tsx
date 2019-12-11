@@ -32,6 +32,18 @@ class PrepareMonitoringReportComponent extends ContainerBase<MonitoringReportPre
   }
 
   private renderContents(project: Dtos.ProjectDto, editor: IEditorStore<Dtos.MonitoringReportDto, MonitoringReportDtoValidator>) {
+    const tabs = [{
+      text: "Questions",
+      hash: "details",
+      default: true,
+      content: this.renderFormTab(project, editor),
+      qa: "MRPrepareTab"
+    }, {
+      text: "Log",
+      hash: "log",
+      content: this.renderLogTab(),
+      qa: "MRPrepareLogTab"
+    }];
 
     return (
       <ACC.Page
@@ -40,29 +52,27 @@ class PrepareMonitoringReportComponent extends ContainerBase<MonitoringReportPre
         validator={editor.validator}
         error={editor.error}
       >
-        <ACC.MonitoringReportFormComponent
-          editor={editor}
-          onChange={(dto) => this.props.onChange(false, dto)}
-          onSave={(dto, submit) => this.props.onChange(true, dto, submit)}
-          renderLog={() => this.renderLog()}
-        />
+        <ACC.HashTabs tabList={tabs} />
       </ACC.Page>
     );
   }
 
-  private renderLog() {
+  private renderFormTab(project: Dtos.ProjectDto, editor: IEditorStore<Dtos.MonitoringReportDto, MonitoringReportDtoValidator>) {
     return (
-      <ACC.Accordion>
-        <ACC.AccordionItem title="Status and comments log" qa="status-and-comments-log">
-          {/* Keeping logs inside loader because accordion defaults to closed*/}
-          <ACC.Loader
-            pending={this.props.statusChanges}
-            render={(statusChanges) => (
-              <ACC.Logs data={statusChanges} qa="monitoring-report-status-change-table" />
-            )}
-          />
-        </ACC.AccordionItem>
-      </ACC.Accordion>);
+      <ACC.MonitoringReportFormComponent
+        editor={editor}
+        onChange={(dto) => this.props.onChange(false, dto)}
+        onSave={(dto, submit) => this.props.onChange(true, dto, submit)}
+      />
+    );
+  }
+
+  private renderLogTab() {
+    return (
+      <ACC.Loader
+        pending={this.props.statusChanges}
+        render={(statusChanges) => <ACC.Section title="Log"><ACC.Logs data={statusChanges} qa="monitoring-report-status-change-table"/></ACC.Section>}
+      />);
   }
 }
 
