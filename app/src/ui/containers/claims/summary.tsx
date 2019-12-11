@@ -57,7 +57,7 @@ class ClaimSummaryComponent extends ContainerBase<ClaimSummaryParams, Data, Call
 
     return (
       <ACC.Page
-        backLink={<ACC.BackLink route={this.props.routes.claimForecast.getLink({ projectId: data.project.id, partnerId: data.partner.id, periodId: this.props.periodId })}>Back to update forecast</ACC.BackLink>}
+        backLink={this.renderBackLink(data)}
         error={data.editor.error}
         validator={data.editor.validator}
         pageTitle={<ACC.Projects.Title project={data.project} />}
@@ -65,11 +65,18 @@ class ClaimSummaryComponent extends ContainerBase<ClaimSummaryParams, Data, Call
         <ACC.Section title={<ACC.Claims.ClaimPeriodDate claim={data.claim} />}>
           {this.renderCostsPaidSummary(data)}
           {this.renderDocumentsSummary(data)}
-          {this.renderForecastSummary(data)}
+          {!data.claim.isFinalClaim && this.renderForecastSummary(data)}
           {this.renderClaimForm(data)}
         </ACC.Section>
       </ACC.Page>
     );
+  }
+
+  private renderBackLink(data: CombinedData) {
+    if(data.claim.isFinalClaim) {
+      return <ACC.BackLink route={this.props.routes.claimDocuments.getLink({ projectId: data.project.id, partnerId: data.partner.id, periodId: this.props.periodId })}>Back to claim documents</ACC.BackLink>;
+    }
+    return <ACC.BackLink route={this.props.routes.claimForecast.getLink({ projectId: data.project.id, partnerId: data.partner.id, periodId: this.props.periodId })}>Back to update forecast</ACC.BackLink>;
   }
 
   private renderClaimForm(data: CombinedData) {
