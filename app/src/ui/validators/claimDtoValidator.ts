@@ -32,7 +32,7 @@ export class ClaimDtoValidator extends Results<ClaimDto>  {
 
     private validateIar() {
         const isIarRequired = this.model.isIarRequired && this.originalStatus === ClaimStatus.DRAFT && this.model.status === ClaimStatus.SUBMITTED;
-        return Validation.isTrue(this, !isIarRequired || this.documents.length > 0, "You must attach an IAR");
+        return Validation.isTrue(this, !isIarRequired || this.documents.length > 0, "You must upload an independent accountant's report.");
     }
     public iar = this.validateIar();
 
