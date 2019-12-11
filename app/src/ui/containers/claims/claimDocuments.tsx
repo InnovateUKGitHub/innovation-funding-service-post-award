@@ -76,11 +76,18 @@ class ClaimDocumentsComponent extends ContainerBase<ClaimDocumentsPageParams, Da
           {this.renderDocuments(editor, documents)}
         </ACC.Section>
         <ACC.Section qa="buttons">
-          <ACC.Link styling="PrimaryButton" id="continue-claim" route={this.props.routes.claimForecast.getLink({projectId: this.props.projectId, partnerId: this.props.partnerId, periodId: this.props.periodId})}>Continue to update forecast</ACC.Link>
+          {this.renderNextStepLink(claim)}
           <ACC.Link styling="SecondaryButton" id="save-claim" route={this.getDashboardLink(project)}>Save and return to claims</ACC.Link>
         </ACC.Section>
       </ACC.Page>
     );
+  }
+
+  private renderNextStepLink(claim: ClaimDto) {
+    if (claim.isFinalClaim) {
+      return <ACC.Link styling="PrimaryButton" id="continue-claim" route={this.props.routes.claimSummary.getLink({ projectId: this.props.projectId, partnerId: this.props.partnerId, periodId: this.props.periodId })}>Continue to summary</ACC.Link>;
+    }
+    return <ACC.Link styling="PrimaryButton" id="continue-claim" route={this.props.routes.claimForecast.getLink({projectId: this.props.projectId, partnerId: this.props.partnerId, periodId: this.props.periodId})}>Continue to update forecast</ACC.Link>;
   }
 
   private getDashboardLink(project: ProjectDto) {
