@@ -14,6 +14,7 @@ interface ItemProps {
   validation?: Result;
   qa: string;
 }
+
 export const SummaryList: React.FunctionComponent<ListProps> = (props) => {
   const classNames = cn({
     "govuk-summary-list": true,
