@@ -13,13 +13,7 @@ interface IMetaValue {
   guidance?: string;
 }
 
-<<<<<<< HEAD
-const guidanceMessages = {
-  scopeChangeGuidance: `
-Your public description is published in line with government practice on openness and transparency of public-funded activities. It should describe your project in a way that will be easy for a non-specialist to understand. Do not include any information that is confidential, for example, intellectual property or patent details.
-=======
 const scopeChangeGuidance = `Your public description is published in line with government practice on openness and transparency of public-funded activities. It should describe your project in a way that will be easy for a non-specialist to understand. Do not include any information that is confidential, for example, intellectual property or patent details.
->>>>>>> 0013c427c... Reverted changes to guidance message storing. Using SimpleString to render contents in summary list items
 
 Your project summary should provide a clear overview of the whole project, including:
 
