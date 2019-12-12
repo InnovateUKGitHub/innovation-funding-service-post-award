@@ -32,45 +32,37 @@ class PCRDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
   }
 
   private renderContents(project: ProjectDto, projectChangeRequest: PCRDto, editableItemTypes: PCRItemType[]) {
-    const tabs = [{
-      text: "Details",
-      hash: "details",
-      default: true,
-      content: this.renderDetailsTab(project, projectChangeRequest, editableItemTypes),
-      qa: "ProjectChangeRequestDetailsTab"
-    }, {
-      text: "Log",
-      hash: "log",
-      content: this.renderLogTab(),
-      qa: "ProjectChangeRequestLogTab"
-    }];
-
     return (
       <ACC.Page
         backLink={<ACC.BackLink route={this.props.routes.pcrsDashboard.getLink({ projectId: this.props.projectId })}>Back to project change requests</ACC.BackLink>}
         pageTitle={<ACC.Projects.Title project={project} />}
         project={project}
       >
-        <ACC.HashTabs tabList={tabs} />
+        {this.renderSummary(projectChangeRequest)}
+        {this.renderTasks(projectChangeRequest, editableItemTypes)}
+        {this.renderCommentsFromPM(project, projectChangeRequest)}
+        {this.renderLog()}
       </ACC.Page>
     );
   }
 
-  private renderDetailsTab(project: ProjectDto, projectChangeRequest: PCRDto, editableItemTypes: PCRItemType[]) {
+  private renderSummary(projectChangeRequest: PCRDto) {
     return (
-      <React.Fragment>
-        <ACC.Section title="Details">
-          <ACC.SummaryList qa="pcr_details">
-            <ACC.SummaryListItem label="Request number" content={projectChangeRequest.requestNumber} qa="numberRow" />
-            <ACC.SummaryListItem label="Types" content={<ACC.Renderers.LineBreakList items={projectChangeRequest.items.map(x => x.shortName)} />} qa="typesRow" />
-          </ACC.SummaryList>
-          <ACC.TaskList qa="taskList">
-            {this.renderTaskListActions(projectChangeRequest, editableItemTypes)}
-            {this.renderTaskListReasoning(projectChangeRequest, editableItemTypes)}
-          </ACC.TaskList>
-          {this.renderCommentsFromPM(project, projectChangeRequest)}
-        </ACC.Section>
-      </React.Fragment>
+      <ACC.Section title="Details">
+        <ACC.SummaryList qa="pcr_details">
+          <ACC.SummaryListItem label="Request number" content={projectChangeRequest.requestNumber} qa="numberRow" />
+          <ACC.SummaryListItem label="Types" content={<ACC.Renderers.LineBreakList items={projectChangeRequest.items.map(x => x.shortName)} />} qa="typesRow" />
+        </ACC.SummaryList>
+      </ACC.Section>
+    );
+  }
+
+  private renderTasks(projectChangeRequest: PCRDto, editableItemTypes: PCRItemType[]) {
+    return (
+      <ACC.TaskList qa="taskList">
+        {this.renderTaskListActions(projectChangeRequest, editableItemTypes)}
+        {this.renderTaskListReasoning(projectChangeRequest, editableItemTypes)}
+      </ACC.TaskList>
     );
   }
 
@@ -135,13 +127,19 @@ class PCRDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
     }
   }
 
-  private renderLogTab() {
+  private renderLog() {
     return (
-      <ACC.Loader
-        pending={this.props.statusChanges}
-        render={(statusChanges) => <ACC.Section title="Log"><ACC.Logs data={statusChanges} qa="projectChangeRequestStatusChangeTable" /></ACC.Section>}
-      />
-    );
+      <ACC.Accordion>
+        <ACC.AccordionItem title="Status and comments log" qa="status-and-comments-log">
+          {/* Keeping logs inside loader because accordion defaults to closed*/}
+          <ACC.Loader
+            pending={this.props.statusChanges}
+            render={(statusChanges) => (
+              <ACC.Logs data={statusChanges} qa="projectChangeRequestStatusChangeTable" />
+            )}
+          />
+        </ACC.AccordionItem>
+      </ACC.Accordion>);
   }
 }
 

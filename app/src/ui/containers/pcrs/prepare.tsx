@@ -48,19 +48,6 @@ class PCRPrepareComponent extends ContainerBase<ProjectChangeRequestPrepareParam
   }
 
   private renderContents(project: ProjectDto, projectChangeRequest: PCRDto, editor: IEditorStore<PCRDto, PCRDtoValidator>, editableItemTypes: PCRItemType[]) {
-    const tabs = [{
-      text: "Details",
-      hash: "details",
-      default: true,
-      content: this.renderDetailsTab(projectChangeRequest, editor, editableItemTypes),
-      qa: "ProjectChangeRequestDetailsTab"
-    }, {
-      text: "Log",
-      hash: "log",
-      content: this.renderLogTab(),
-      qa: "ProjectChangeRequestLogTab"
-    }];
-
     return (
       <ACC.Page
         backLink={<ACC.BackLink route={this.props.routes.pcrsDashboard.getLink({ projectId: this.props.projectId })}>Back to project change requests</ACC.BackLink>}
@@ -69,46 +56,58 @@ class PCRPrepareComponent extends ContainerBase<ProjectChangeRequestPrepareParam
         validator={editor.validator}
         error={editor.error}
       >
-        <ACC.HashTabs tabList={tabs} />
-      </ACC.Page>
+        {this.renderSummary(projectChangeRequest)}
+        {this.renderTasks(projectChangeRequest, editor, editableItemTypes)}
+        {this.renderForm(projectChangeRequest, editor)}
+      </ACC.Page >
     );
   }
 
-  private renderDetailsTab(projectChangeRequest: PCRDto, editor: IEditorStore<PCRDto, PCRDtoValidator>, editableItemTypes: PCRItemType[]) {
-    const Form = ACC.TypedForm<PCRDto>();
+  private renderSummary(projectChangeRequest: PCRDto) {
     return (
-      <React.Fragment>
-        <ACC.Section title="Details">
-          <ACC.SummaryList qa="pcr-prepare">
-            <ACC.SummaryListItem label="Request number" content={projectChangeRequest.requestNumber} qa="numberRow" />
-            <ACC.SummaryListItem label="Types" content={<ACC.Renderers.LineBreakList items={projectChangeRequest.items.map(x => x.shortName)} />} action={<ACC.Link route={this.props.routes.ProjectChangeRequestAddType.getLink({ projectId: this.props.projectId, projectChangeRequestId: this.props.pcrId })}>Add types</ACC.Link>} qa="typesRow" />
-          </ACC.SummaryList>
-        </ACC.Section>
-        <ACC.TaskList qa="taskList">
-          {this.renderTaskListActions(projectChangeRequest, editor, editableItemTypes)}
-          {this.renderTaskListReasoning(projectChangeRequest, editor, editableItemTypes)}
-        </ACC.TaskList>
-        <Form.Form
-          editor={editor}
-          onChange={dto => this.props.onChange(false, dto)}
-          onSubmit={() => this.onSave(editor, projectChangeRequest, true)}
-        >
-          <Form.Fieldset heading="Add comments">
-            <Form.MultilineString
-              name="comments"
-              hint="If you want to explain anything to your monitoring officer or to Innovate UK, add it here."
-              value={x => x.comments}
-              update={(m, v) => m.comments = v || ""}
-              validation={editor.validator.comments}
-              qa="info-text-area"
-            />
-          </Form.Fieldset>
-          <Form.Fieldset qa="save-buttons">
-            <Form.Submit>Submit request</Form.Submit>
-            <Form.Button name="return" onClick={() => this.onSave(editor, projectChangeRequest, false)}>Save and return to requests</Form.Button>
-          </Form.Fieldset>
-        </Form.Form>
-      </React.Fragment>
+      <ACC.Section title="Details">
+        <ACC.SummaryList qa="pcr-prepare">
+          <ACC.SummaryListItem label="Request number" content={projectChangeRequest.requestNumber} qa="numberRow" />
+          <ACC.SummaryListItem label="Types" content={<ACC.Renderers.LineBreakList items={projectChangeRequest.items.map(x => x.shortName)} />} action={<ACC.Link route={this.props.routes.ProjectChangeRequestAddType.getLink({ projectId: this.props.projectId, projectChangeRequestId: this.props.pcrId })}>Add types</ACC.Link>} qa="typesRow" />
+        </ACC.SummaryList>
+      </ACC.Section>
+    );
+  }
+
+  private renderTasks(projectChangeRequest: PCRDto, editor: IEditorStore<PCRDto, PCRDtoValidator>, editableItemTypes: PCRItemType[]) {
+    return (
+      <ACC.TaskList qa="taskList">
+        {this.renderTaskListActions(projectChangeRequest, editor, editableItemTypes)}
+        {this.renderTaskListReasoning(projectChangeRequest, editor, editableItemTypes)}
+      </ACC.TaskList>
+    );
+  }
+
+  private renderForm(projectChangeRequest: PCRDto, editor: IEditorStore<PCRDto, PCRDtoValidator>) {
+    const Form = ACC.TypedForm<PCRDto>();
+
+    return (
+      <Form.Form
+        editor={editor}
+        onChange={dto => this.props.onChange(false, dto)}
+        onSubmit={() => this.onSave(editor, projectChangeRequest, true)}
+      >
+        <Form.Fieldset heading="Add comments">
+          <Form.MultilineString
+            name="comments"
+            hint="If you want to explain anything to your monitoring officer or to Innovate UK, add it here."
+            value={x => x.comments}
+            update={(m, v) => m.comments = v || ""}
+            validation={editor.validator.comments}
+            qa="info-text-area"
+          />
+        </Form.Fieldset>
+        {this.renderLog()}
+        <Form.Fieldset qa="save-buttons">
+          <Form.Submit>Submit request</Form.Submit>
+          <Form.Button name="return" onClick={() => this.onSave(editor, projectChangeRequest, false)}>Save and return to requests</Form.Button>
+        </Form.Fieldset>
+      </Form.Form>
     );
   }
 
@@ -175,12 +174,19 @@ class PCRPrepareComponent extends ContainerBase<ProjectChangeRequestPrepareParam
     }
   }
 
-  private renderLogTab() {
+  private renderLog() {
     return (
-      <ACC.Loader
-        pending={this.props.statusChanges}
-        render={(statusChanges) => <ACC.Section title="Log"><ACC.Logs data={statusChanges} qa="projectChangeRequestStatusChangeTable" /></ACC.Section>}
-      />
+      <ACC.Accordion>
+        <ACC.AccordionItem title="Status and comments log" qa="status-and-comments-log">
+          {/* Keeping logs inside loader because accordion defaults to closed*/}
+          <ACC.Loader
+            pending={this.props.statusChanges}
+            render={(statusChanges) => (
+              <ACC.Logs data={statusChanges} qa="projectChangeRequestStatusChangeTable" />
+            )}
+          />
+        </ACC.AccordionItem>
+      </ACC.Accordion>
     );
   }
 }
