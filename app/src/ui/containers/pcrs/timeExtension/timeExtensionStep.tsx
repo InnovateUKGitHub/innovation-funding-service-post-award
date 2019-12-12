@@ -26,7 +26,7 @@ export const TimeExtensionStep = (props: StepProps<typeof timeExtensionItemWorkf
           <Form.Numeric
             name="timeExtension"
             hint={props.getRequiredToCompleteMessage("Enter the number of months you want to extend your project by.")}
-            width="one-quarter"
+            width={3}
             value={m => m.additionalMonths }
             update={(m, val) => m.additionalMonths = val}
             validation={props.validator.additionalMonths}
