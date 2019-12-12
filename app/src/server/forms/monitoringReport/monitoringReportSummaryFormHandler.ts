@@ -4,29 +4,21 @@ import { MonitoringReportDto } from "@framework/dtos/monitoringReportDto";
 import {
   MonitoringReportDashboardRoute,
   MonitoringReportPrepareParams,
-  MonitoringReportPrepareRoute
+  MonitoringReportSummaryRoute
 } from "@ui/containers";
 import { MonitoringReportDtoValidator } from "@ui/validators/MonitoringReportDtoValidator";
 import { GetMonitoringReportById, SaveMonitoringReport } from "@server/features/monitoringReports";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
 
-export class MonitoringReportPrepareFormHandler extends StandardFormHandlerBase<MonitoringReportPrepareParams, "monitoringReport"> {
+export class MonitoringReportSummaryFormHandler extends StandardFormHandlerBase<MonitoringReportPrepareParams, "monitoringReport"> {
 
   constructor() {
-    super(MonitoringReportPrepareRoute, ["save-draft", "save-submitted"], "monitoringReport");
+    super(MonitoringReportSummaryRoute, ["save-draft", "save-submitted"], "monitoringReport");
   }
 
   protected async getDto(context: IContext, params: MonitoringReportPrepareParams, button: IFormButton, body: IFormBody): Promise<MonitoringReportDto> {
     const query = new GetMonitoringReportById(params.projectId, params.id);
-    const dto = await context.runQuery(query);
-    dto.periodId = parseInt(body.period, 10);
-    dto.questions.forEach(q => {
-      if (q.isScored) {
-        q.optionId = body[`question_${q.displayOrder}_options`];
-      }
-      q.comments = body[`question_${q.displayOrder}_comments`];
-    });
-    return dto;
+    return context.runQuery(query);
   }
 
   protected createValidationResult(params: MonitoringReportPrepareParams, dto: MonitoringReportDto) {
@@ -40,7 +32,6 @@ export class MonitoringReportPrepareFormHandler extends StandardFormHandlerBase<
   protected async run(context: IContext, params: MonitoringReportPrepareParams, button: IFormButton, dto: MonitoringReportDto): Promise<ILinkInfo> {
     const command = new SaveMonitoringReport(dto, button.name === "save-submitted");
     await context.runCommand(command);
-
     return MonitoringReportDashboardRoute.getLink({ projectId: params.projectId });
   }
 }
