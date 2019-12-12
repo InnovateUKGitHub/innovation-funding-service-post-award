@@ -18,7 +18,7 @@ export const routeConfig: IRoutes = {
   monitoringReportDashboard: Containers.MonitoringReportDashboardRoute,
   monitoringReportDelete: Containers.MonitoringReportDeleteRoute,
   monitoringReportPrepare: Containers.MonitoringReportPrepareRoute,
-  monitoringReportView: Containers.MonitoringReportViewRoute,
+  monitoringReportSummary: Containers.MonitoringReportSummaryRoute,
   prepareClaim: Containers.PrepareClaimRoute,
   prepareClaimLineItems: Containers.EditClaimLineItemsRoute,
   projectChangeRequests: Containers.ProjectChangeRequestsRoute,
@@ -65,7 +65,7 @@ export interface IRoutes {
   monitoringReportDashboard: typeof Containers.MonitoringReportDashboardRoute;
   monitoringReportDelete: typeof Containers.MonitoringReportDeleteRoute;
   monitoringReportPrepare: typeof Containers.MonitoringReportPrepareRoute;
-  monitoringReportView: typeof Containers.MonitoringReportViewRoute;
+  monitoringReportSummary: typeof Containers.MonitoringReportSummaryRoute;
   prepareClaim: typeof Containers.PrepareClaimRoute;
   prepareClaimLineItems: typeof Containers.EditClaimLineItemsRoute;
   projectChangeRequests: typeof Containers.ProjectChangeRequestsRoute;
