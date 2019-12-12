@@ -95,7 +95,7 @@ class DashboardComponent extends ContainerBase<Params, Data, Callbacks> {
       links.push({ route: this.props.routes.monitoringReportPrepare.getLink({ projectId: report.projectId, id: report.headerId }), text: "Edit report", qa: "editLink" });
     }
     else {
-      links.push({ route: this.props.routes.monitoringReportView.getLink({ projectId: report.projectId, id: report.headerId }), text: "View report", qa: "viewLink" });
+      links.push({ route: this.props.routes.monitoringReportSummary.getLink({ projectId: report.projectId, id: report.headerId, mode: "view" }), text: "View report", qa: "viewLink" });
     }
 
     if (report.status === MonitoringReportStatus.Draft) {
