@@ -1,6 +1,11 @@
 import { IFormBody, IFormButton, StandardFormHandlerBase } from "@server/forms/formHandlerBase";
 import { CreateMonitoringReportCommand, GetMonitoringReportActiveQuestions } from "@server/features/monitoringReports";
-import { MonitoringReportCreateParams, MonitoringReportCreateRoute, MonitoringReportDashboardRoute } from "@ui/containers/monitoringReports";
+import {
+  MonitoringReportCreateParams,
+  MonitoringReportCreateRoute,
+  MonitoringReportDashboardRoute,
+  MonitoringReportSummaryRoute
+} from "@ui/containers/monitoringReports";
 import { MonitoringReportDtoValidator } from "@ui/validators/MonitoringReportDtoValidator";
 import { MonitoringReportStatus } from "@framework/constants";
 import { MonitoringReportDto } from "@framework/dtos";
@@ -9,7 +14,7 @@ import { storeKeys } from "@ui/redux/stores/storeKeys";
 
 export class MonitoringReportCreateFormHandler extends StandardFormHandlerBase<MonitoringReportCreateParams, "monitoringReport"> {
   constructor() {
-    super(MonitoringReportCreateRoute, [ "save-draft", "save-submitted"], "monitoringReport");
+    super(MonitoringReportCreateRoute, [ "save-continue", "save-return"], "monitoringReport");
   }
 
   protected async getDto(context: IContext, params: MonitoringReportCreateParams, button: IFormButton, body: IFormBody): Promise<MonitoringReportDto> {
@@ -44,9 +49,13 @@ export class MonitoringReportCreateFormHandler extends StandardFormHandlerBase<M
   }
 
   protected async run(context: IContext, params: MonitoringReportCreateParams, button: IFormButton, dto: MonitoringReportDto): Promise<ILinkInfo> {
-    const command = new CreateMonitoringReportCommand(dto, button.name === "save-submitted");
-    await context.runCommand(command);
+    const command = new CreateMonitoringReportCommand(dto, false);
+    const id = await context.runCommand(command);
 
-    return MonitoringReportDashboardRoute.getLink({ projectId: params.projectId });
+    if (button.name === "save-return") {
+      return MonitoringReportDashboardRoute.getLink({ projectId: params.projectId });
+    }
+    return MonitoringReportSummaryRoute.getLink({ projectId: params.projectId, id, mode: "prepare" });
+
   }
 }

@@ -2,7 +2,7 @@ import * as Validation from "./common";
 import { Results } from "../validation/results";
 import { MonitoringReportDto, MonitoringReportQuestionDto } from "@framework/dtos";
 
-class QuestionValidator extends Results<MonitoringReportQuestionDto> {
+export class QuestionValidator extends Results<MonitoringReportQuestionDto> {
   constructor(
     readonly question: MonitoringReportQuestionDto,
     readonly answer: MonitoringReportQuestionDto,

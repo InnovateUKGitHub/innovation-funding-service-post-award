@@ -23,9 +23,10 @@ import { ClaimDetailDocumentDeleteHandler } from "./claimDetailDocument/claimDet
 import { ClaimDetailDocumentUploadHandler } from "./claimDetailDocument/claimDetailDocumentUploadHandler";
 import { ProjectDocumentUploadHandler } from "./projectDocumentFormHandler";
 import { Configuration } from "../features/common";
-import { MonitoringReportCreateFormHandler } from "./monitoringReportCreateFormHandler";
-import { MonitoringReportDeleteFormHandler } from "./monitoringReportDeleteFormHandler";
-import { MonitoringReportPrepareFormHandler } from "./monitoringReportPrepareFormHandler";
+import { MonitoringReportCreateFormHandler } from "./monitoringReport/monitoringReportCreateFormHandler";
+import { MonitoringReportDeleteFormHandler } from "./monitoringReport/monitoringReportDeleteFormHandler";
+import { MonitoringReportPrepareFormHandler } from "./monitoringReport/monitoringReportPrepareFormHandler";
+import { MonitoringReportSummaryFormHandler } from "./monitoringReport/monitoringReportSummaryFormHandler";
 import { ClaimDocumentsDeleteHandler } from "@server/forms/claimDocuments/claimDocumentsDeleteHandler";
 import { ClaimDocumentsUploadHandler } from "@server/forms/claimDocuments/claimDocumentsUploadHandler";
 import { ClaimSummaryFormHandler } from "@server/forms/claimSummaryFormHandler";
@@ -46,6 +47,7 @@ const handlers: IFormHandler[] = [
   new MonitoringReportCreateFormHandler(),
   new MonitoringReportDeleteFormHandler(),
   new MonitoringReportPrepareFormHandler(),
+  new MonitoringReportSummaryFormHandler(),
   new ProjectChangeRequestAddTypeFormHandler(),
   new ProjectChangeRequestCreateFormHandler(),
   new ProjectChangeRequestDeleteFormHandler(),
