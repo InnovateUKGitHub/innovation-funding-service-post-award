@@ -39,19 +39,6 @@ class PCRReviewComponent extends ContainerBase<PCRReviewParams, Data, Callbacks>
   }
 
   private renderContents(project: ProjectDto, projectChangeRequest: PCRDto, editor: IEditorStore<PCRDto, PCRDtoValidator>, editableItemTypes: PCRItemType[]) {
-    const tabs = [{
-      text: "Details",
-      hash: "details",
-      default: true,
-      content: this.renderDetailsTab(projectChangeRequest, editor, editableItemTypes),
-      qa: "ProjectChangeRequestDetailsTab"
-    }, {
-      text: "Log",
-      hash: "log",
-      content: this.renderLogTab(),
-      qa: "ProjectChangeRequestLogTab"
-    }];
-
     return (
       <ACC.Page
         backLink={<ACC.BackLink route={this.props.routes.pcrsDashboard.getLink({ projectId: this.props.projectId })}>Back to project change requests</ACC.BackLink>}
@@ -60,12 +47,34 @@ class PCRReviewComponent extends ContainerBase<PCRReviewParams, Data, Callbacks>
         validator={editor.validator}
         error={editor.error}
       >
-        <ACC.HashTabs tabList={tabs} />
+        {this.renderSummary(projectChangeRequest)}
+        {this.renderTasks(projectChangeRequest, editor, editableItemTypes)}
+        {this.renderForm(editor)}
       </ACC.Page>
     );
   }
 
-  private renderDetailsTab(projectChangeRequest: PCRDto, editor: IEditorStore<PCRDto, PCRDtoValidator>, editableItemTypes: PCRItemType[]) {
+  private renderSummary(projectChangeRequest: PCRDto) {
+    return (
+      <ACC.Section title="Details">
+        <ACC.SummaryList qa="pcrDetails">
+          <ACC.SummaryListItem label="Request number" content={projectChangeRequest.requestNumber} qa="numberRow" />
+          <ACC.SummaryListItem label="Types" content={<ACC.Renderers.LineBreakList items={projectChangeRequest.items.map(x => x.shortName)} />} qa="typesRow" />
+        </ACC.SummaryList>
+      </ACC.Section>
+    );
+  }
+
+  private renderTasks(projectChangeRequest: PCRDto, editor: IEditorStore<PCRDto, PCRDtoValidator>, editableItemTypes: PCRItemType[]) {
+    return (
+      <ACC.TaskList qa="taskList">
+        {this.renderTaskListActions(projectChangeRequest, editor, editableItemTypes)}
+        {this.renderTaskListReasoning(projectChangeRequest, editableItemTypes)}
+      </ACC.TaskList>
+    );
+  }
+
+  private renderForm(editor: IEditorStore<PCRDto, PCRDtoValidator>) {
     const Form = ACC.TypedForm<PCRDto>();
 
     const options: ACC.SelectOption[] = [
@@ -74,49 +83,39 @@ class PCRReviewComponent extends ContainerBase<PCRReviewParams, Data, Callbacks>
     ];
 
     const selected = options.find(x => x.id === editor.data.status.toString());
+
     return (
-      <React.Fragment>
-        <ACC.Section title="Details">
-          <ACC.SummaryList qa="pcrDetails">
-            <ACC.SummaryListItem label="Request number" content={projectChangeRequest.requestNumber} qa="numberRow" />
-            <ACC.SummaryListItem label="Types" content={<ACC.Renderers.LineBreakList items={projectChangeRequest.items.map(x => x.shortName)} />} qa="typesRow" />
-          </ACC.SummaryList>
-        </ACC.Section>
-        <ACC.TaskList qa="taskList">
-          {this.renderTaskListActions(projectChangeRequest, editor, editableItemTypes)}
-          {this.renderTaskListReasoning(projectChangeRequest, editableItemTypes)}
-        </ACC.TaskList>
-        <Form.Form
-          editor={editor}
-          onChange={dto => this.props.onChange(false, dto)}
-          onSubmit={() => this.props.onChange(true, editor.data)}
-          qa="pcr-review-form"
-        >
-          <Form.Fieldset heading="How do you want to proceed?">
-            <Form.Radio
-              name="status"
-              inline={false}
-              options={options}
-              value={x => selected}
-              update={(m, v) => m.status = parseInt(v && v.id || "", 10) || PCRStatus.Unknown}
-              validation={editor.validator.status}
-            />
-          </Form.Fieldset>
-          <Form.Fieldset heading="Add your comments" isSubQuestion={true}>
-            <Form.MultilineString
-              name="comments"
-              label=""
-              hint="If you query the request, you must explain what the partner needs to amend. If you are sending it to Innovate UK, you must say whether you approve of the request, giving a reason why."
-              value={m => m.comments}
-              update={(m, v) => m.comments = (v || "")}
-              validation={editor.validator.comments}
-            />
-          </Form.Fieldset>
-          <Form.Fieldset qa="save-and-submit">
-            <Form.Submit>Submit</Form.Submit>
-          </Form.Fieldset>
-        </Form.Form>
-      </React.Fragment>
+      <Form.Form
+        editor={editor}
+        onChange={dto => this.props.onChange(false, dto)}
+        onSubmit={() => this.props.onChange(true, editor.data)}
+        qa="pcr-review-form"
+      >
+        <Form.Fieldset heading="How do you want to proceed?">
+          <Form.Radio
+            name="status"
+            inline={false}
+            options={options}
+            value={x => selected}
+            update={(m, v) => m.status = parseInt(v && v.id || "", 10) || PCRStatus.Unknown}
+            validation={editor.validator.status}
+          />
+        </Form.Fieldset>
+        <Form.Fieldset heading="Add your comments" isSubQuestion={true}>
+          <Form.MultilineString
+            name="comments"
+            label=""
+            hint="If you query the request, you must explain what the partner needs to amend. If you are sending it to Innovate UK, you must say whether you approve of the request, giving a reason why."
+            value={m => m.comments}
+            update={(m, v) => m.comments = (v || "")}
+            validation={editor.validator.comments}
+          />
+        </Form.Fieldset>
+        {this.renderLog()}
+        <Form.Fieldset qa="save-and-submit">
+          <Form.Submit>Submit</Form.Submit>
+        </Form.Fieldset>
+      </Form.Form>
     );
   }
 
@@ -170,12 +169,19 @@ class PCRReviewComponent extends ContainerBase<PCRReviewParams, Data, Callbacks>
     }
   }
 
-  private renderLogTab() {
+  private renderLog() {
     return (
-      <ACC.Loader
-        pending={this.props.statusChanges}
-        render={(statusChanges) => <ACC.Section title="Log"><ACC.Logs data={statusChanges} qa="projectChangeRequestStatusChangeTable" /></ACC.Section>}
-      />
+      <ACC.Accordion>
+        <ACC.AccordionItem title="Status and comments log" qa="status-and-comments-log">
+          {/* Keeping logs inside loader because accordion defaults to closed*/}
+          <ACC.Loader
+            pending={this.props.statusChanges}
+            render={(statusChanges) => (
+              <ACC.Logs data={statusChanges} qa="projectChangeRequestStatusChangeTable" />
+            )}
+          />
+        </ACC.AccordionItem>
+      </ACC.Accordion>
     );
   }
 }
