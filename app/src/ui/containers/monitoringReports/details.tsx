@@ -124,7 +124,7 @@ const DetailsContainer = (props: Params & BaseProps) => (
   </StoresConsumer>
 );
 
-export const MonitoringReportViewRoute = defineRoute({
+const MonitoringReportViewRoute = defineRoute({
   routeName: "monitoringReportView",
   routePath: "/projects/:projectId/monitoring-reports/:id/details",
   getParams: (r) => ({ projectId: r.params.projectId, id: r.params.id }),
