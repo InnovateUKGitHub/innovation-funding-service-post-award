@@ -31,18 +31,21 @@ class PrepareMonitoringReportComponent extends ContainerBase<MonitoringReportPre
   }
 
   private renderContents(project: Dtos.ProjectDto, editor: IEditorStore<Dtos.MonitoringReportDto, MonitoringReportDtoValidator>) {
+    const title = <ACC.PeriodTitle periodId={editor.data.periodId} periodStartDate={editor.data.startDate} periodEndDate={editor.data.endDate} />;
     return (
       <ACC.Page
-        backLink={<ACC.BackLink route={this.props.routes.monitoringReportDashboard.getLink({ projectId: this.props.projectId })}>Back to monitoring reports</ACC.BackLink>}
+        backLink={<ACC.BackLink route={this.props.routes.monitoringReportPreparePeriod.getLink({ projectId: this.props.projectId, id: this.props.id })}>Back to monitoring report period</ACC.BackLink>}
         pageTitle={<ACC.Projects.Title project={project} />}
         validator={editor.validator}
         error={editor.error}
       >
-        <ACC.MonitoringReportFormComponent
-          editor={editor}
-          onChange={(dto) => this.props.onChange(false, dto)}
-          onSave={(dto, submit, progress) => this.props.onChange(true, dto, submit, progress)}
-        />
+        <ACC.Section title={title}>
+          <ACC.MonitoringReportFormComponent
+            editor={editor}
+            onChange={(dto) => this.props.onChange(false, dto)}
+            onSave={(dto, submit, progress) => this.props.onChange(true, dto, submit, progress)}
+          />
+        </ACC.Section>
       </ACC.Page>
     );
   }

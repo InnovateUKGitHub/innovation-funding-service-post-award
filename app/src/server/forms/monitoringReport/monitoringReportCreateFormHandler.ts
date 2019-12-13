@@ -4,7 +4,7 @@ import {
   MonitoringReportCreateParams,
   MonitoringReportCreateRoute,
   MonitoringReportDashboardRoute,
-  MonitoringReportSummaryRoute
+  MonitoringReportPrepareRoute,
 } from "@ui/containers/monitoringReports";
 import { MonitoringReportDtoValidator } from "@ui/validators/MonitoringReportDtoValidator";
 import { MonitoringReportStatus } from "@framework/constants";
@@ -19,13 +19,6 @@ export class MonitoringReportCreateFormHandler extends StandardFormHandlerBase<M
 
   protected async getDto(context: IContext, params: MonitoringReportCreateParams, button: IFormButton, body: IFormBody): Promise<MonitoringReportDto> {
     const questions = await context.runQuery(new GetMonitoringReportActiveQuestions());
-
-    questions.forEach(q => {
-      if(q.isScored) {
-        q.optionId = body[`question_${q.displayOrder}_options`];
-      }
-      q.comments = body[`question_${q.displayOrder}_comments`];
-    });
 
     return {
       headerId: "",
@@ -55,7 +48,7 @@ export class MonitoringReportCreateFormHandler extends StandardFormHandlerBase<M
     if (button.name === "save-return") {
       return MonitoringReportDashboardRoute.getLink({ projectId: params.projectId });
     }
-    return MonitoringReportSummaryRoute.getLink({ projectId: params.projectId, id, mode: "prepare" });
+    return MonitoringReportPrepareRoute.getLink({ projectId: params.projectId, id });
 
   }
 }
