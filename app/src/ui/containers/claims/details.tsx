@@ -64,6 +64,7 @@ export class ClaimsDetailsComponent extends ContainerBase<Params, Data, {}> {
         {data.claim.isFinalClaim && <ACC.ValidationMessage messageType="info" message="This is the final claim."/>}
         {this.renderTableSection(data)}
         {this.renderAccordionSection(data)}
+        {this.renderCommentsFromFC(data.project, data.claim)}
       </ACC.Page>
     );
   }
@@ -88,6 +89,20 @@ export class ClaimsDetailsComponent extends ContainerBase<Params, Data, {}> {
         </ACC.Accordion>
       </ACC.Section>
     );
+  }
+
+  private renderCommentsFromFC(project: ProjectDto, claim: ClaimDto) {
+    if (project.roles & ProjectRole.MonitoringOfficer && (claim.status === ClaimStatus.DRAFT || claim.status === ClaimStatus.MO_QUERIED) && claim.comments) {
+      return (
+        <ACC.Section title="Comments" qa="additionalComments">
+          <ACC.Renderers.SimpleString multiline={true}>
+            {claim.comments}
+          </ACC.Renderers.SimpleString>
+        </ACC.Section>
+      );
+    }
+
+    return null;
   }
 
   private renderTable(data: CombinedData) {
