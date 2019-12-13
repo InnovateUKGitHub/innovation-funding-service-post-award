@@ -47,11 +47,11 @@ class DetailsComponent extends ContainerBase<Params, Data, Callbacks> {
         validator={editor.validator}
       >
         <ACC.Section title={title} qa="monitoringReportViewSection">
+          {this.renderPeriod(editor)}
           {report.questions.map((q, i) => this.renderResponse(editor, q, i))}
+          {this.renderLog()}
+          { this.props.mode === "prepare" && this.renderForm(editor)}
         </ACC.Section>
-
-        {this.renderLog()}
-        { this.props.mode === "prepare" && this.renderForm(editor)}
       </ACC.Page>
     );
   }
@@ -133,6 +133,24 @@ class DetailsComponent extends ContainerBase<Params, Data, Callbacks> {
         /*Put the action on the second item if not showing the first*/
         action={!question.isScored && this.getAction(validation, question)}
       />
+    );
+  }
+
+  private renderPeriod(editor: IEditorStore<Dtos.MonitoringReportDto, MonitoringReportDtoValidator>) {
+    const validation = editor && editor.validator.periodId;
+    return (
+      <Section>
+        <SummaryList qa={`summary-period`}>
+          <SummaryListItem
+            validation={validation}
+            label="Period"
+            content={editor.data.periodId}
+            qa={`period`}
+            /*Put the action on the second item if not showing the first*/
+            action={this.props.mode === "prepare" && <Link id={validation.key} replace={true} route={this.props.routes.monitoringReportPreparePeriod.getLink({projectId: this.props.projectId, id: this.props.id})}>Edit</Link>}
+          />
+        </SummaryList>
+      </Section>
     );
   }
 

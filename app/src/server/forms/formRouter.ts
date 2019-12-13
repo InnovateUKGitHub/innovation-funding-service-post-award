@@ -30,6 +30,7 @@ import { MonitoringReportSummaryFormHandler } from "./monitoringReport/monitorin
 import { ClaimDocumentsDeleteHandler } from "@server/forms/claimDocuments/claimDocumentsDeleteHandler";
 import { ClaimDocumentsUploadHandler } from "@server/forms/claimDocuments/claimDocumentsUploadHandler";
 import { ClaimSummaryFormHandler } from "@server/forms/claimSummaryFormHandler";
+import { MonitoringReportPreparePeriodFormHandler } from "@server/forms/monitoringReport/monitoringReportPreparePeriodFormHandler";
 
 export const formRouter = express.Router();
 
@@ -47,6 +48,7 @@ const handlers: IFormHandler[] = [
   new MonitoringReportCreateFormHandler(),
   new MonitoringReportDeleteFormHandler(),
   new MonitoringReportPrepareFormHandler(),
+  new MonitoringReportPreparePeriodFormHandler(),
   new MonitoringReportSummaryFormHandler(),
   new ProjectChangeRequestAddTypeFormHandler(),
   new ProjectChangeRequestCreateFormHandler(),
@@ -70,8 +72,13 @@ if (!Configuration.sso.enabled) {
 
 handlers.push(new BadRequestHandler());
 
+const getRoute = (handler: IFormHandler) => {
+  // map router 5 to express syntax - remove < & >
+  return handler.routePath.replace(/(<|>)/g, "");
+};
+
 handlers.forEach(x => {
-  formRouter.post(x.routePath, ...x.middleware, async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+  formRouter.post(getRoute(x), ...x.middleware, async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     try {
       await x.handle(req, res, next);
     } catch (e) {

@@ -20,8 +20,7 @@ export class MonitoringReportFormComponent extends Component<Props> {
 
     return (
       <Section>
-        <ReportForm.Form editor={editor} onChange={(dto) => this.props.onChange(dto)} qa="monitoringReportCreateForm" >
-          <ReportForm.Numeric label="Period" labelBold={true} width={3} name="period" value={x => x.periodId} update={(x, v) => x.periodId = v!} validation={editor.validator.periodId} />
+        <ReportForm.Form editor={editor} onChange={(dto) => this.props.onChange(dto)} qa="monitoringReportQuestionForm" >
           <SimpleString>For each question score the project against the criteria from 1 to 5, providing a comment explaining your reason. Innovate UK will return the report to you otherwise.</SimpleString>
           {this.renderFormItems(editor)}
           <ReportForm.Fieldset qa="save-buttons">
@@ -73,6 +72,26 @@ export class MonitoringReportFormComponent extends Component<Props> {
   }
 }
 
+export class MonitoringReportPeriodFormComponent extends Component<Props> {
+
+  public render() {
+    const {editor} = this.props;
+    const ReportForm = TypedForm<Dtos.MonitoringReportDto>();
+
+    return (
+      <Section>
+        <ReportForm.Form editor={editor} onChange={(dto) => this.props.onChange(dto)} qa="monitoringReportCreateForm" >
+          <ReportForm.Numeric label="Period" labelBold={true} width={3} name="period" value={x => x.periodId} update={(x, v) => x.periodId = v!} validation={editor.validator.periodId} />
+          <ReportForm.Fieldset qa="save-buttons">
+            <ReportForm.Button name="save-continue" styling="Primary" onClick={() => this.props.onSave(editor.data, false, true)}>Continue to questions</ReportForm.Button>
+            <ReportForm.Button name="save-return" onClick={() => this.props.onSave(editor.data, false, false)}>Save and return to project</ReportForm.Button>
+          </ReportForm.Fieldset>
+        </ReportForm.Form>
+      </Section>
+    );
+  }
+}
+
 interface SummaryProps {
   editor: IEditorStore<Dtos.MonitoringReportDto, MonitoringReportDtoValidator>;
   onChange: (dto: Dtos.MonitoringReportDto) => void;
@@ -87,7 +106,11 @@ export class MonitoringReportSummaryFormComponent extends Component<SummaryProps
 
     return (
       <Section>
-        <ReportForm.Form editor={editor} onChange={(dto) => this.props.onChange(dto)} qa="monitoringReportCreateForm" >
+        <ReportForm.Form
+          editor={editor}
+          onChange={(dto) => this.props.onChange(dto)}
+          qa="monitoringReportCreateForm"
+        >
           <SimpleString>By submitting this report, you certify that from the project monitoring documents shown to you, this report represents your best opinion of the current progress of this project.</SimpleString>
           <ReportForm.Fieldset qa="save-buttons">
             <ReportForm.Button name="save-submitted" styling="Primary" onClick={() => this.props.onSave(editor.data, true)}>Submit report</ReportForm.Button>
