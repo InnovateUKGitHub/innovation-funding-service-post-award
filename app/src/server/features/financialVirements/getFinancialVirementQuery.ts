@@ -2,6 +2,7 @@ import { QueryBase } from "@server/features/common";
 import { Authorisation, IContext, ProjectRole } from "@framework/types";
 import { GetAllForProjectQuery } from "../partners/getAllForProjectQuery";
 import { GetAllForecastsGOLCostsQuery } from "../claims";
+import { ISalesforceFinancialVirement } from "@server/repositories";
 
 export class GetFinancialVirementQuery extends QueryBase<FinancialVirementDto> {
   constructor(private projectId: string, private pcrId: string, private pcrItemId: string) {
@@ -72,6 +73,41 @@ export class GetFinancialVirementQuery extends QueryBase<FinancialVirementDto> {
           originalAmount: y.originalAmount
         }))
       }))
+    };
+  }
+}
+
+export class GetFinancialVirementV2Query extends QueryBase<FinancialVirementV2Dto> {
+  constructor(private projectId: string, private pcrId: string, private pcrItemId: string) {
+    super();
+  }
+
+  protected async accessControl(auth: Authorisation, context: IContext) {
+    return auth.forProject(this.projectId).hasAnyRoles(ProjectRole.MonitoringOfficer, ProjectRole.ProjectManager);
+  }
+
+  protected async Run(context: IContext): Promise<FinancialVirementV2Dto> {
+    const data = await context.repositories.financialVirements.getAllForPcr(this.pcrItemId);
+    return {
+      pcrItemId: this.pcrItemId,
+      difference: data.reduce((total, item) => total + item.Acc_NewCosts__c - item.Acc_CurrentCosts__c, 0),
+      additions: data
+        .filter(x => x.Acc_NewCosts__c > x.Acc_CurrentCosts__c)
+        .map(this.mapToVirementDto),
+      subtractions: data
+        .filter(x => x.Acc_NewCosts__c < x.Acc_CurrentCosts__c)
+        .map(this.mapToVirementDto),
+    };
+  }
+
+  private mapToVirementDto(record: ISalesforceFinancialVirement): VirementV2Dto {
+    const difference = record.Acc_NewCosts__c - record.Acc_CurrentCosts__c;
+    return {
+      costCategoryId: record.Acc_Profile__r.Acc_CostCategory__c,
+      newAmount: record.Acc_NewCosts__c,
+      originalAmount: record.Acc_CurrentCosts__c,
+      difference: difference > 0 ? difference : difference * -1,
+      partnerId: record.Acc_Profile__r.Acc_ProjectParticipant__c
     };
   }
 }

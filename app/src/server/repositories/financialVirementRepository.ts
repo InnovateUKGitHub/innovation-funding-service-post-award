@@ -20,6 +20,7 @@ export interface IFinancialVirementRepository {
   getAllForPcr(pcrItemId: string): Promise<ISalesforceFinancialVirement[]>;
   insertVirements(items: Partial<ISalesforceFinancialVirement>[]): Promise<string[]>;
   updateVirements(items: Updatable<ISalesforceFinancialVirement>[]): Promise<boolean>;
+  deleteVirements(ids: string[]): Promise<void>;
 }
 
 export class FinancialVirementRepository extends SalesforceRepositoryBase<ISalesforceFinancialVirement> implements IFinancialVirementRepository {
@@ -38,15 +39,19 @@ export class FinancialVirementRepository extends SalesforceRepositoryBase<ISales
     "Acc_CurrentAwardRate__c",
   ];
 
-  getAllForPcr(pcrItemId: string): Promise<ISalesforceFinancialVirement[]> {
+  public getAllForPcr(pcrItemId: string): Promise<ISalesforceFinancialVirement[]> {
     return super.where({ Acc_ProjectChangeRequest__c: pcrItemId });
   }
 
-  updateVirements(items: Updatable<ISalesforceFinancialVirement>[]) {
+  public updateVirements(items: Updatable<ISalesforceFinancialVirement>[]) {
     return super.updateAll(items);
   }
 
-  insertVirements(items: Partial<ISalesforceFinancialVirement>[]) {
+  public insertVirements(items: Partial<ISalesforceFinancialVirement>[]) {
     return super.insertAll(items);
+  }
+
+  public deleteVirements(ids: string[]) {
+    return super.deleteAll(ids);
   }
 }
