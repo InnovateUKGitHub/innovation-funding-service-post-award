@@ -3,10 +3,10 @@ import { BaseProps, ContainerBase, defineRoute } from "../containerBase";
 import * as ACC from "../../components";
 import * as Dtos from "@framework/types";
 import { Pending } from "../../../shared/pending";
-import { MonitoringReportQuestionDto, ProjectRole } from "@framework/types";
+import { MonitoringReportOptionDto, MonitoringReportQuestionDto, ProjectRole } from "@framework/types";
 import { IEditorStore, StoresConsumer } from "@ui/redux";
 import { Link, Section, SummaryList, SummaryListItem } from "../../components";
-import { MonitoringReportDtoValidator } from "@ui/validators";
+import { MonitoringReportDtoValidator, QuestionValidator } from "@ui/validators";
 
 interface Params {
   projectId: string;
@@ -41,16 +41,26 @@ class DetailsComponent extends ContainerBase<Params, Data, Callbacks> {
 
     return (
       <ACC.Page
-        backLink={<ACC.BackLink route={this.props.routes.monitoringReportDashboard.getLink({ projectId: this.props.projectId })}>Back to monitoring reports</ACC.BackLink>}
-        pageTitle={<ACC.Projects.Title project={project} />}
+        backLink={this.getBackLink()}
+        pageTitle={<ACC.Projects.Title project={project}/>}
+        error={editor.error}
+        validator={editor.validator}
       >
         <ACC.Section title={title} qa="monitoringReportViewSection">
-          {report.questions.map((q, i) => this.renderResponse(q, i))}
+          {report.questions.map((q, i) => this.renderResponse(editor, q, i))}
         </ACC.Section>
 
         {this.renderLog()}
+        { this.props.mode === "prepare" && this.renderForm(editor)}
       </ACC.Page>
     );
+  }
+
+  private getBackLink() {
+    if (this.props.mode === "view") {
+      return <ACC.BackLink route={this.props.routes.monitoringReportDashboard.getLink({ projectId: this.props.projectId })}>Back to monitoring reports</ACC.BackLink>;
+    }
+    return <ACC.BackLink route={this.props.routes.monitoringReportPrepare.getLink({ projectId: this.props.projectId, id: this.props.id })}>Back to edit monitoring report</ACC.BackLink>;
   }
 
   private renderLog() {
@@ -71,15 +81,69 @@ class DetailsComponent extends ContainerBase<Params, Data, Callbacks> {
     );
   }
 
-  private renderResponse(question: MonitoringReportQuestionDto, index: number) {
+  private renderForm(editor: IEditorStore<Dtos.MonitoringReportDto, MonitoringReportDtoValidator>) {
+    return (
+      <ACC.MonitoringReportSummaryFormComponent
+        editor={editor}
+        onChange={(dto) => this.props.onChange(false, dto)}
+        onSave={(dto, submit) => this.props.onChange(true, dto, submit)}
+      />
+    );
+  }
+
+  private getAction(validation: QuestionValidator, question: MonitoringReportQuestionDto) {
+    if (this.props.mode !== "prepare") {
+      return null;
+    }
+    return (
+      <span id={validation.score.key}>
+        <Link
+          id={validation.comments.key}
+          replace={true}
+          route={this.props.routes.monitoringReportPrepare.getLink({projectId: this.props.projectId, id: this.props.id})}
+        >
+          Edit
+        </Link>
+      </span>
+    );
+  }
+
+  private renderScore(response: MonitoringReportOptionDto | undefined, validation: QuestionValidator, question: MonitoringReportQuestionDto, index: number) {
+    if(!question.isScored) {
+      return null;
+    }
+    return (
+      <SummaryListItem
+        validation={validation.score}
+        label="Score"
+        content={(response && `${response.questionScore} - ${response.questionText}`)}
+        qa={`question-${index}-score`}
+        action={this.getAction(validation, question)}
+      />
+    );
+  }
+
+  private renderComments(validation: QuestionValidator, question: MonitoringReportQuestionDto, index: number) {
+    return (
+      <SummaryListItem
+        validation={validation.comments}
+        label="Comments"
+        content={question.comments || ""}
+        qa={`question-${index}-comments`}
+        /*Put the action on the second item if not showing the first*/
+        action={!question.isScored && this.getAction(validation, question)}
+      />
+    );
+  }
+
+  private renderResponse(editor: IEditorStore<Dtos.MonitoringReportDto, MonitoringReportDtoValidator>, question: MonitoringReportQuestionDto, index: number) {
     const response = question.options.find(x => x.id === question.optionId);
-    const action = this.props.mode === "prepare" && <Link route={this.props.routes.error.getLink({errorType: "notFound"})}>Edit</Link>;
+    const validation = editor && editor.validator.responses.results.find(x => x.model.displayOrder === question.displayOrder)!;
     return (
       <Section title={question.title}>
         <SummaryList qa={`summary-question-${index}`}>
-          { question.isScored && <SummaryListItem label="Score" content={(response && `${response.questionScore} - ${response.questionText}`)} qa={`question-${index}-score`} action={action}/> }
-          {/*Put the action on the second item if not showing the first*/}
-          { <SummaryListItem label="Comments" content={question.comments || ""} qa={`question-${index}-comments`} action={!question.isScored && action}/> }
+          {this.renderScore(response, validation, question, index)}
+          {this.renderComments(validation, question, index)}
         </SummaryList>
       </Section>
     );

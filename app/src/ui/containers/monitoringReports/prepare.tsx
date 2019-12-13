@@ -14,11 +14,10 @@ export interface MonitoringReportPrepareParams {
 interface Data {
   project: Pending<Dtos.ProjectDto>;
   editor: Pending<IEditorStore<Dtos.MonitoringReportDto, MonitoringReportDtoValidator>>;
-  statusChanges: Pending<Dtos.MonitoringReportStatusChangeDto[]>;
 }
 
 interface Callbacks {
-  onChange: (save: boolean, dto: Dtos.MonitoringReportDto, submit?: boolean) => void;
+  onChange: (save: boolean, dto: Dtos.MonitoringReportDto, submit?: boolean, progress?: boolean) => void;
 }
 
 class PrepareMonitoringReportComponent extends ContainerBase<MonitoringReportPrepareParams, Data, Callbacks> {
@@ -32,19 +31,6 @@ class PrepareMonitoringReportComponent extends ContainerBase<MonitoringReportPre
   }
 
   private renderContents(project: Dtos.ProjectDto, editor: IEditorStore<Dtos.MonitoringReportDto, MonitoringReportDtoValidator>) {
-    const tabs = [{
-      text: "Questions",
-      hash: "details",
-      default: true,
-      content: this.renderFormTab(project, editor),
-      qa: "MRPrepareTab"
-    }, {
-      text: "Log",
-      hash: "log",
-      content: this.renderLogTab(),
-      qa: "MRPrepareLogTab"
-    }];
-
     return (
       <ACC.Page
         backLink={<ACC.BackLink route={this.props.routes.monitoringReportDashboard.getLink({ projectId: this.props.projectId })}>Back to monitoring reports</ACC.BackLink>}
@@ -52,27 +38,13 @@ class PrepareMonitoringReportComponent extends ContainerBase<MonitoringReportPre
         validator={editor.validator}
         error={editor.error}
       >
-        <ACC.HashTabs tabList={tabs} />
+        <ACC.MonitoringReportFormComponent
+          editor={editor}
+          onChange={(dto) => this.props.onChange(false, dto)}
+          onSave={(dto, submit, progress) => this.props.onChange(true, dto, submit, progress)}
+        />
       </ACC.Page>
     );
-  }
-
-  private renderFormTab(project: Dtos.ProjectDto, editor: IEditorStore<Dtos.MonitoringReportDto, MonitoringReportDtoValidator>) {
-    return (
-      <ACC.MonitoringReportFormComponent
-        editor={editor}
-        onChange={(dto) => this.props.onChange(false, dto)}
-        onSave={(dto, submit) => this.props.onChange(true, dto, submit)}
-      />
-    );
-  }
-
-  private renderLogTab() {
-    return (
-      <ACC.Loader
-        pending={this.props.statusChanges}
-        render={(statusChanges) => <ACC.Section title="Log"><ACC.Logs data={statusChanges} qa="monitoring-report-status-change-table"/></ACC.Section>}
-      />);
   }
 }
 
@@ -82,11 +54,14 @@ const PrepareMonitoringReportContainer = (props: MonitoringReportPrepareParams &
       stores => (
         <PrepareMonitoringReportComponent
           project={stores.projects.getById(props.projectId)}
-          statusChanges={stores.monitoringReports.getStatusChanges(props.projectId, props.id)}
           editor={stores.monitoringReports.getUpdateMonitoringReportEditor(props.projectId, props.id)}
-          onChange={(save, dto, submit) => {
+          onChange={(save, dto, submit, progress) => {
             stores.monitoringReports.updateMonitoringReportEditor(save, props.projectId, dto, submit, () => {
-              stores.navigation.navigateTo(props.routes.monitoringReportDashboard.getLink({ projectId: dto.projectId }));
+              if(progress) {
+                stores.navigation.navigateTo(props.routes.monitoringReportSummary.getLink({ projectId: props.projectId, id: props.id, mode: "prepare" }));
+              } else {
+                stores.navigation.navigateTo(props.routes.monitoringReportDashboard.getLink({ projectId: dto.projectId }));
+              }
             });
           }}
           {...props}

@@ -82,7 +82,7 @@ export class MonitoringReportsStore extends StoreBase {
     );
   }
 
-  updateMonitoringReportEditor(saving: boolean, projectId: string, dto: MonitoringReportDto, submit?: boolean, onComplete?: () => void) {
+  updateMonitoringReportEditor(saving: boolean, projectId: string, dto: MonitoringReportDto, submit?: boolean, onComplete?: (id: string) => void) {
     // if submit isnt supplied need to get it from the last validator to keep it insync
     const key = this.getKey(projectId, dto.headerId);
     const isSubmitting = (submit === undefined && this.getState().editors.monitoringReport[key] ? this.getState().editors.monitoringReport[key].validator.submit : submit) || false;
@@ -109,7 +109,7 @@ export class MonitoringReportsStore extends StoreBase {
         scrollToTheTopSmoothly();
 
         if (onComplete) {
-          onComplete();
+          onComplete(result.headerId);
         }
       }
     );

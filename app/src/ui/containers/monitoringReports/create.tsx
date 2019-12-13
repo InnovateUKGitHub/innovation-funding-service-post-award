@@ -16,7 +16,7 @@ interface Data {
 }
 
 interface Callbacks {
-  onChange: (save: boolean, dto: Dtos.MonitoringReportDto, submit?: boolean) => void;
+  onChange: (save: boolean, dto: Dtos.MonitoringReportDto, submit?: boolean, progress?: boolean) => void;
 }
 
 class CreateMonitoringReportComponent extends ContainerBase<MonitoringReportCreateParams, Data, Callbacks> {
@@ -41,7 +41,7 @@ class CreateMonitoringReportComponent extends ContainerBase<MonitoringReportCrea
         <ACC.MonitoringReportFormComponent
           editor={editor}
           onChange={(dto) => this.props.onChange(false, dto)}
-          onSave={(dto, submit) => this.props.onChange(true, dto, submit)}
+          onSave={(dto, submit, progress) => this.props.onChange(true, dto, submit, progress)}
         />
       </ACC.Page>
     );
@@ -55,9 +55,13 @@ const MonitoringReportCreateContainer = (props: MonitoringReportCreateParams&Bas
         <CreateMonitoringReportComponent
           project={stores.projects.getById(props.projectId)}
           editor={stores.monitoringReports.getCreateMonitoringReportEditor(props.projectId)}
-          onChange={(save, dto, submit) => {
-            stores.monitoringReports.updateMonitoringReportEditor(save, props.projectId, dto, submit, () => {
-              stores.navigation.navigateTo(props.routes.monitoringReportDashboard.getLink({ projectId: dto.projectId }));
+          onChange={(save, dto, submit, progress) => {
+            stores.monitoringReports.updateMonitoringReportEditor(save, props.projectId, dto, submit, (id) => {
+              if(progress) {
+                stores.navigation.navigateTo(props.routes.monitoringReportSummary.getLink({ projectId: props.projectId, id, mode: "prepare" }));
+              } else {
+                stores.navigation.navigateTo(props.routes.monitoringReportDashboard.getLink({ projectId: dto.projectId }));
+              }
             });
           }}
           {...props}
