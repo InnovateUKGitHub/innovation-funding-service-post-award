@@ -525,6 +525,11 @@ class FinancialVirementsTestRepository extends TestRepository<Repositories.ISale
     return Promise.resolve(true);
   }
 
+  deleteVirements(ids: string[]): Promise<void> {
+    this.Items = this.Items.filter(x => !ids.some(y => x.Id === y));
+    return Promise.resolve();
+  }
+
 }
 
 export interface ITestRepositories extends IRepositories {
