@@ -9,6 +9,7 @@ import {
 import { MonitoringReportDtoValidator } from "@ui/validators/MonitoringReportDtoValidator";
 import { GetMonitoringReportById, SaveMonitoringReport } from "@server/features/monitoringReports";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
+import { numberComparator } from "@framework/util";
 
 export class MonitoringReportPrepareFormHandler extends StandardFormHandlerBase<MonitoringReportPrepareParams, "monitoringReport"> {
 
@@ -19,12 +20,11 @@ export class MonitoringReportPrepareFormHandler extends StandardFormHandlerBase<
   protected async getDto(context: IContext, params: MonitoringReportPrepareParams, button: IFormButton, body: IFormBody): Promise<MonitoringReportDto> {
     const query = new GetMonitoringReportById(params.projectId, params.id);
     const dto = await context.runQuery(query);
-    dto.questions.forEach(q => {
-      if (q.isScored) {
-        q.optionId = body[`question_${q.displayOrder}_options`];
-      }
-      q.comments = body[`question_${q.displayOrder}_comments`];
-    });
+    const q = dto.questions.find(x => x.displayOrder === params.questionNumber)!;
+    if (q.isScored) {
+      q.optionId = body[`question_${q.displayOrder}_options`];
+    }
+    q.comments = body[`question_${q.displayOrder}_comments`];
     return dto;
   }
 
@@ -36,12 +36,27 @@ export class MonitoringReportPrepareFormHandler extends StandardFormHandlerBase<
     return storeKeys.getMonitoringReportKey(params.projectId, params.id);
   }
 
+  private getLink(progress: boolean, dto: MonitoringReportDto, params: MonitoringReportPrepareParams) {
+    if (!progress) {
+      return MonitoringReportDashboardRoute.getLink({ projectId: params.projectId });
+    }
+    const questions = dto.questions.map(x => x.displayOrder).sort(numberComparator);
+    const lastQuestion = questions[questions.length - 1];
+    if (params.questionNumber === lastQuestion) {
+      return MonitoringReportSummaryRoute.getLink({ projectId: params.projectId, id: params.id, mode: "prepare" });
+    }
+
+    const currentQuestionIndex = questions.indexOf(params.questionNumber);
+    const nextQuestion = questions[currentQuestionIndex + 1];
+    return MonitoringReportPrepareRoute.getLink({ projectId: params.projectId, id: params.id, questionNumber: nextQuestion });
+  }
+
   protected async run(context: IContext, params: MonitoringReportPrepareParams, button: IFormButton, dto: MonitoringReportDto): Promise<ILinkInfo> {
     const command = new SaveMonitoringReport(dto, false);
     await context.runCommand(command);
     if (button.name === "save-return") {
       return MonitoringReportDashboardRoute.getLink({ projectId: params.projectId });
     }
-    return MonitoringReportSummaryRoute.getLink({ projectId: params.projectId, id: params.id, mode: "prepare" });
+    return this.getLink(button.name === "save-continue", dto, params);
   }
 }
