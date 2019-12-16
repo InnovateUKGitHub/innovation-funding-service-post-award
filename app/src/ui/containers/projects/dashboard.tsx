@@ -76,7 +76,8 @@ class ProjectDashboardComponent extends ContainerBaseWithState<{}, Data, {}, Sta
 
   private renderProjectCount(live: ProjectData[], upcoming: ProjectData[], archived: ProjectData[]) {
     const count = live.length + upcoming.length + archived.length;
-    if (!count) return <ACC.Renderers.SimpleString qa={"project-count"}>0 projects</ACC.Renderers.SimpleString>;
+    if (!count) return null;
+
     const results = [];
     if (live.length) results.push(`${live.length} live`);
     if (upcoming.length) results.push(`${upcoming.length} upcoming`);
