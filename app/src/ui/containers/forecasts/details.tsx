@@ -58,7 +58,7 @@ class ViewForecastComponent extends ContainerBase<Params, Data, {}> {
     if (!(partner.roles & ProjectRole.FinancialContact)) return null;
     if (partner.partnerStatus === PartnerStatus.VoluntaryWithdrawal || partner.partnerStatus === PartnerStatus.InvoluntaryWithdrawal) return null;
     if (claim && claim.isFinalClaim) return null;
-    return <ACC.Link styling="PrimaryButton" route={this.props.routes.forecastUpdate.getLink({ projectId: project.id, partnerId: partner.id })}>Update forecast</ACC.Link>;
+    return <ACC.Link id="update-forecast" styling="PrimaryButton" route={this.props.routes.forecastUpdate.getLink({ projectId: project.id, partnerId: partner.id })}>Update forecast</ACC.Link>;
   }
 }
 
