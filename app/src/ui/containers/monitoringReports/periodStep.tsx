@@ -5,6 +5,8 @@ import { Pending } from "@shared/pending";
 import { MonitoringReportDtoValidator } from "@ui/validators";
 import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerBase";
 import { IEditorStore, StoresConsumer } from "@ui/redux";
+import { numberComparator } from "@framework/util";
+import { ILinkInfo } from "@framework/types";
 
 export interface MonitoringReportPreparePeriodParams {
   projectId: string;
@@ -17,7 +19,7 @@ interface Data {
 }
 
 interface Callbacks {
-  onChange: (save: boolean, dto: Dtos.MonitoringReportDto, submit?: boolean, progress?: boolean) => void;
+  onChange: (save: boolean, dto: Dtos.MonitoringReportDto, submit?: boolean, link?: ILinkInfo) => void;
 }
 
 class Component extends ContainerBase<MonitoringReportPreparePeriodParams, Data, Callbacks> {
@@ -41,10 +43,18 @@ class Component extends ContainerBase<MonitoringReportPreparePeriodParams, Data,
         <ACC.MonitoringReportPeriodFormComponent
           editor={editor}
           onChange={(dto) => this.props.onChange(false, dto)}
-          onSave={(dto, submit, progress) => this.props.onChange(true, dto, submit, progress)}
+          onSave={(dto, submit, progress) => this.props.onChange(true, dto, submit, this.getLink(progress, editor))}
         />
       </ACC.Page>
     );
+  }
+  private getLink(progress: boolean, editor: IEditorStore<Dtos.MonitoringReportDto, MonitoringReportDtoValidator>) {
+    if (!progress) {
+      return this.props.routes.monitoringReportDashboard.getLink({ projectId: this.props.projectId });
+    }
+    const questions = editor.data.questions.map(x => x.displayOrder).sort(numberComparator);
+    const firstQuestion = questions[0];
+    return this.props.routes.monitoringReportPrepare.getLink({ projectId: this.props.projectId, id: this.props.id, questionNumber: firstQuestion });
   }
 }
 
@@ -55,12 +65,10 @@ const Container = (props: MonitoringReportPreparePeriodParams & BaseProps) => (
         <Component
           project={stores.projects.getById(props.projectId)}
           editor={stores.monitoringReports.getUpdateMonitoringReportEditor(props.projectId, props.id)}
-          onChange={(save, dto, submit, progress) => {
+          onChange={(save, dto, submit, link) => {
             stores.monitoringReports.updateMonitoringReportEditor(save, props.projectId, dto, submit, () => {
-              if(progress) {
-                stores.navigation.navigateTo(props.routes.monitoringReportPrepare.getLink({ projectId: props.projectId, id: props.id }));
-              } else {
-                stores.navigation.navigateTo(props.routes.monitoringReportDashboard.getLink({ projectId: dto.projectId }));
+              if(link) {
+                stores.navigation.navigateTo(link);
               }
             });
           }}

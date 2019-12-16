@@ -7,8 +7,9 @@ import { MonitoringReportOptionDto, MonitoringReportQuestionDto, ProjectRole } f
 import { IEditorStore, StoresConsumer } from "@ui/redux";
 import { Link, Section, SummaryList, SummaryListItem } from "../../components";
 import { MonitoringReportDtoValidator, QuestionValidator } from "@ui/validators";
+import { numberComparator } from "@framework/util";
 
-interface Params {
+export interface MonitoringReportPrepareSummaryParams {
   projectId: string;
   id: string;
   mode: "prepare" | "view";
@@ -25,7 +26,7 @@ interface Callbacks {
   onChange: (save: boolean, dto: Dtos.MonitoringReportDto, submit?: boolean) => void;
 }
 
-class DetailsComponent extends ContainerBase<Params, Data, Callbacks> {
+class DetailsComponent extends ContainerBase<MonitoringReportPrepareSummaryParams, Data, Callbacks> {
   render() {
     const combined = Pending.combine({
       report: this.props.report,
@@ -41,7 +42,7 @@ class DetailsComponent extends ContainerBase<Params, Data, Callbacks> {
 
     return (
       <ACC.Page
-        backLink={this.getBackLink()}
+        backLink={this.getBackLink(report)}
         pageTitle={<ACC.Projects.Title project={project}/>}
         error={editor.error}
         validator={editor.validator}
@@ -56,11 +57,13 @@ class DetailsComponent extends ContainerBase<Params, Data, Callbacks> {
     );
   }
 
-  private getBackLink() {
+  private getBackLink(report: Dtos.MonitoringReportDto) {
     if (this.props.mode === "view") {
       return <ACC.BackLink route={this.props.routes.monitoringReportDashboard.getLink({ projectId: this.props.projectId })}>Back to monitoring reports</ACC.BackLink>;
     }
-    return <ACC.BackLink route={this.props.routes.monitoringReportPrepare.getLink({ projectId: this.props.projectId, id: this.props.id })}>Back to edit monitoring report</ACC.BackLink>;
+    const questions = report.questions.map(x => x.displayOrder).sort(numberComparator);
+    const lastQuestion = questions[questions.length - 1];
+    return <ACC.BackLink route={this.props.routes.monitoringReportPrepare.getLink({ projectId: this.props.projectId, id: this.props.id, questionNumber: lastQuestion })}>Back to edit monitoring report</ACC.BackLink>;
   }
 
   private renderLog() {
@@ -100,7 +103,7 @@ class DetailsComponent extends ContainerBase<Params, Data, Callbacks> {
         <Link
           id={validation.comments.key}
           replace={true}
-          route={this.props.routes.monitoringReportPrepare.getLink({projectId: this.props.projectId, id: this.props.id})}
+          route={this.props.routes.monitoringReportPrepare.getLink({projectId: this.props.projectId, id: this.props.id, questionNumber: question.displayOrder})}
         >
           Edit
         </Link>
@@ -168,7 +171,7 @@ class DetailsComponent extends ContainerBase<Params, Data, Callbacks> {
   }
 }
 
-const Container = (props: Params & BaseProps) => (
+const Container = (props: MonitoringReportPrepareSummaryParams & BaseProps) => (
   <StoresConsumer>
     {
       stores => (
