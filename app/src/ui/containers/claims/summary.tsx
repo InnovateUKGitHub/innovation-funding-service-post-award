@@ -63,6 +63,7 @@ class ClaimSummaryComponent extends ContainerBase<ClaimSummaryParams, Data, Call
         pageTitle={<ACC.Projects.Title project={data.project} />}
       >
         <ACC.Section title={<ACC.Claims.ClaimPeriodDate claim={data.claim} />}>
+          {data.claim.isFinalClaim && <ACC.ValidationMessage messageType="info" message="This is the final claim." />}
           {this.renderCostsPaidSummary(data)}
           {this.renderDocumentsSummary(data)}
           {!data.claim.isFinalClaim && this.renderForecastSummary(data)}
@@ -73,7 +74,7 @@ class ClaimSummaryComponent extends ContainerBase<ClaimSummaryParams, Data, Call
   }
 
   private renderBackLink(data: CombinedData) {
-    if(data.claim.isFinalClaim) {
+    if (data.claim.isFinalClaim) {
       return <ACC.BackLink route={this.props.routes.claimDocuments.getLink({ projectId: data.project.id, partnerId: data.partner.id, periodId: this.props.periodId })}>Back to claim documents</ACC.BackLink>;
     }
     return <ACC.BackLink route={this.props.routes.claimForecast.getLink({ projectId: data.project.id, partnerId: data.partner.id, periodId: this.props.periodId })}>Back to update forecast</ACC.BackLink>;
@@ -106,7 +107,7 @@ class ClaimSummaryComponent extends ContainerBase<ClaimSummaryParams, Data, Call
     );
   }
 
-  private onSave(original: ClaimDto, editor: IEditorStore<ClaimDto, ClaimDtoValidator>, submit: boolean,  project: ProjectDto) {
+  private onSave(original: ClaimDto, editor: IEditorStore<ClaimDto, ClaimDtoValidator>, submit: boolean, project: ProjectDto) {
     const dto = editor.data;
     if (submit && original.status === ClaimStatus.DRAFT) {
       dto.status = ClaimStatus.SUBMITTED;
