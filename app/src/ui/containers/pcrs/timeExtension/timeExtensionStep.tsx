@@ -1,11 +1,11 @@
 import React from "react";
 import * as ACC from "@ui/components";
 import { PCRItemForTimeExtensionDto } from "@framework/dtos";
-import { StepProps } from "@ui/containers/pcrs/workflow";
 import { EditorStatus } from "@ui/redux";
-import { timeExtensionItemWorkflow } from "./timeExtensionWorkflow";
+import { PcrStepProps } from "@ui/containers/pcrs/pcrWorkflow";
+import { PCRTimeExtensionItemDtoValidator } from "@ui/validators";
 
-export const TimeExtensionStep = (props: StepProps<typeof timeExtensionItemWorkflow>) => {
+export const TimeExtensionStep = (props: PcrStepProps<PCRItemForTimeExtensionDto, PCRTimeExtensionItemDtoValidator>) => {
   const Form = ACC.TypedForm<PCRItemForTimeExtensionDto>();
   const newProjectDuration = props.pcrItem.additionalMonths || props.pcrItem.additionalMonths === 0 ? props.pcrItem.additionalMonths + props.pcrItem.projectDurationSnapshot : null;
 

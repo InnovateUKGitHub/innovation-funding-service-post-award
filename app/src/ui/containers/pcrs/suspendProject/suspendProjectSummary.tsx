@@ -1,9 +1,11 @@
 import React from "react";
 import * as ACC from "@ui/components";
-import { SummaryProps } from "../workflow";
-import { suspendProjectWorkflow } from "./workflow";
+import { suspendProjectSteps } from "./workflow";
+import { PcrSummaryProps } from "@ui/containers/pcrs/pcrWorkflow";
+import { PCRItemForProjectSuspensionDto } from "@framework/dtos";
+import { PCRProjectSuspensionItemDtoValidator } from "@ui/validators";
 
-export const SuspendProjectSummary = (props: SummaryProps<typeof suspendProjectWorkflow>) => {
+export const SuspendProjectSummary = (props: PcrSummaryProps<PCRItemForProjectSuspensionDto, PCRProjectSuspensionItemDtoValidator, suspendProjectSteps>) => {
   return (
     <ACC.Section title="">
       <ACC.SummaryList qa="projectSuspension">

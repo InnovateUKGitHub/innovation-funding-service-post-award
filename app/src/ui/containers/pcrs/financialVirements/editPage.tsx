@@ -6,7 +6,6 @@ import * as ACC from "@ui/components";
 import { ProjectDto } from "@framework/dtos";
 import { FinancialVirementDtoValidator } from "@ui/validators";
 import { PCRPrepareItemRoute } from "../pcrItemWorkflow";
-import { flatten } from "@framework/util/arrayHelpers";
 
 interface Params {
   projectId: string;

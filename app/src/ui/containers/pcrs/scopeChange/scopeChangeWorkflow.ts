@@ -3,11 +3,11 @@ import { PublicDescriptionChangeStep } from "./publicDescriptionChangeStep";
 import { ProjectSummaryChangeStep } from "./projectSummaryChangeStep";
 import { PCRScopeChangeItemDtoValidator } from "@ui/validators";
 import { ScopeChangeSummary } from "./scopeChangeSummary";
-import { IWorkflow } from "@ui/containers/pcrs/workflow";
+import { IPCRWorkflow } from "@ui/containers/pcrs/pcrWorkflow";
 
 export type scopeChangeStepNames = "publicDescriptionStep" | "projectSummaryStep";
 
-export const scopeChangeWorkflow: IWorkflow<PCRItemForScopeChangeDto, PCRScopeChangeItemDtoValidator, scopeChangeStepNames> = {
+export const scopeChangeWorkflow: IPCRWorkflow<PCRItemForScopeChangeDto, PCRScopeChangeItemDtoValidator> = {
   steps: [
     {
       stepName: "publicDescriptionStep",

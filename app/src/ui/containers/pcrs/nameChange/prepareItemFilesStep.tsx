@@ -1,10 +1,10 @@
 import React from "react";
 import * as ACC from "@ui/components";
 import { IEditorStore, StoresConsumer } from "@ui/redux";
-import { MultipleDocumentUpdloadDtoValidator } from "@ui/validators";
-import { StepProps } from "@ui/containers/pcrs/workflow";
-import { PCRItemForAccountNameChangeDto } from "@framework/dtos";
+import { MultipleDocumentUpdloadDtoValidator, PCRAccountNameChangeItemDtoValidator } from "@ui/validators";
 import { accountNameChangeWorkflow } from "./accountNameChangeWorkflow";
+import { PcrStepProps } from "@ui/containers/pcrs/pcrWorkflow";
+import { PCRItemForAccountNameChangeDto } from "@framework/dtos";
 
 interface InnerProps {
   documents: DocumentSummaryDto[];
@@ -12,7 +12,7 @@ interface InnerProps {
   onFileDelete: (dto: MultipleDocumentUploadDto, document: DocumentSummaryDto) => void;
 }
 
-class Component extends React.Component<StepProps<typeof accountNameChangeWorkflow> & InnerProps> {
+class Component extends React.Component<PcrStepProps<PCRItemForAccountNameChangeDto, PCRAccountNameChangeItemDtoValidator> & InnerProps> {
   render(): React.ReactNode {
     const { documents, documentsEditor } = this.props;
     return (
@@ -70,7 +70,7 @@ class Component extends React.Component<StepProps<typeof accountNameChangeWorkfl
   }
 }
 
-export const PCRPrepareItemFilesStep = (props: StepProps<typeof accountNameChangeWorkflow>) => (
+export const PCRPrepareItemFilesStep = (props: PcrStepProps<PCRItemForAccountNameChangeDto, PCRAccountNameChangeItemDtoValidator>) => (
   <StoresConsumer>
     {
       stores => {
