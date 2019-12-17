@@ -62,7 +62,7 @@ class ClaimSummaryComponent extends ContainerBase<ClaimSummaryParams, Data, Call
         validator={data.editor.validator}
         pageTitle={<ACC.Projects.Title project={data.project} />}
       >
-        <ACC.Section title={<ACC.Claims.ClaimPeriodDate claim={data.claim} />}>
+        <ACC.Section qa="claimSummaryForm" title={<ACC.Claims.ClaimPeriodDate claim={data.claim} />}>
           {data.claim.isFinalClaim && <ACC.ValidationMessage messageType="info" message="This is the final claim." />}
           {this.renderCostsPaidSummary(data)}
           {this.renderDocumentsSummary(data)}
@@ -144,7 +144,7 @@ class ClaimSummaryComponent extends ContainerBase<ClaimSummaryParams, Data, Call
           />
         </ACC.SummaryList>
         <ACC.Renderers.SimpleString>
-          <ACC.Link route={this.props.routes.prepareClaim.getLink({ projectId: data.project.id, partnerId: data.partner.id, periodId: this.props.periodId })}>Edit costs to be claimed</ACC.Link>
+          <ACC.Link id="editCostsToBeClaimedLink" route={this.props.routes.prepareClaim.getLink({ projectId: data.project.id, partnerId: data.partner.id, periodId: this.props.periodId })}>Edit costs to be claimed</ACC.Link>
         </ACC.Renderers.SimpleString>
 
       </ACC.Section>
@@ -156,7 +156,7 @@ class ClaimSummaryComponent extends ContainerBase<ClaimSummaryParams, Data, Call
       <React.Fragment>
         {documents.length ?
           <ACC.Section subtitle="All documents open in a new window" >
-            <ACC.DocumentList documents={documents} qa="claim-documents-summary-list" />
+            <ACC.DocumentList documents={documents} qa="claim-documents-list" />
           </ACC.Section>
           : <ACC.ValidationMessage message="No documents uploaded." messageType="info" />
         }
@@ -169,7 +169,7 @@ class ClaimSummaryComponent extends ContainerBase<ClaimSummaryParams, Data, Call
       <ACC.Section title={"Claim documents"} qa="claim-documents-summary">
         {this.renderDocuments(data.documents)}
         <ACC.Renderers.SimpleString>
-          <ACC.Link route={this.props.routes.claimDocuments.getLink({ projectId: data.project.id, partnerId: data.partner.id, periodId: this.props.periodId })}>Edit claim documents</ACC.Link>
+          <ACC.Link id="claimDocumentsLink" route={this.props.routes.claimDocuments.getLink({ projectId: data.project.id, partnerId: data.partner.id, periodId: this.props.periodId })}>Edit claim documents</ACC.Link>
         </ACC.Renderers.SimpleString>
       </ACC.Section>
     );
@@ -205,7 +205,7 @@ class ClaimSummaryComponent extends ContainerBase<ClaimSummaryParams, Data, Call
           />
         </ACC.SummaryList>
         <ACC.Renderers.SimpleString>
-          <ACC.Link route={this.props.routes.claimForecast.getLink({ projectId: data.project.id, partnerId: data.partner.id, periodId: this.props.periodId })}>Edit forecast</ACC.Link>
+          <ACC.Link id="editForecastLink" route={this.props.routes.claimForecast.getLink({ projectId: data.project.id, partnerId: data.partner.id, periodId: this.props.periodId })}>Edit forecast</ACC.Link>
         </ACC.Renderers.SimpleString>
       </ACC.Section>
     );
