@@ -20,3 +20,18 @@ interface VirementDto {
   originalAmount: number;
   newAmount: number;
 }
+
+interface FinancialVirementV2Dto {
+  pcrItemId: string;
+  difference: number;
+  additions: VirementV2Dto[];
+  subtractions: VirementV2Dto[];
+}
+
+interface VirementV2Dto {
+  partnerId: string;
+  costCategoryId: string;
+  originalAmount: number;
+  newAmount: number;
+  difference: number;
+}

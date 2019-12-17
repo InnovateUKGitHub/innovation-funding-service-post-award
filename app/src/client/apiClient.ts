@@ -38,7 +38,9 @@ const clientApi: IApiClient = {
   },
   financialVirements: {
     get: (params) => ajaxJson(`/api/financial-virements/${params.projectId}/${params.pcrId}/${params.pcrItemId}`),
+    getV2: (params) => ajaxJson(`/V2/api/financial-virements/${params.projectId}/${params.pcrId}/${params.pcrItemId}`),
     update: (params) => ajaxPut(`/api/financial-virements/${params.projectId}/${params.pcrId}/${params.pcrItemId}`, params.financialVirment),
+    updateV2: (params) => ajaxPut(`/V2/api/financial-virements/${params.projectId}/${params.pcrId}/${params.pcrItemId}`, params.financialVirment),
   },
   forecastDetails: {
     getAllByPartnerId: (params) => ajaxJson(`/api/forecast-details/?partnerId=${params.partnerId}`),
