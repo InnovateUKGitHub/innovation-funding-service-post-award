@@ -228,12 +228,11 @@ class ProjectDashboardComponent extends ContainerBaseWithState<{}, Data, {}, Sta
   private getLeftHandMessages(project: ProjectDto, section: Section): React.ReactNode[] {
     const messages: React.ReactNode[] = [];
 
+    messages.push(project.leadPartnerName);
+
     if (section === "upcoming") messages.push(<ACC.Renderers.ShortDateRange start={project.startDate} end={project.endDate} />);
 
-    if (section === "archived") messages.push(project.leadPartnerName);
-
     if (section === "open" || section === "awaiting") {
-      messages.push(project.leadPartnerName);
       messages.push(
         <React.Fragment>
           {`Period ${project.periodId} of ${project.totalPeriods}`}
