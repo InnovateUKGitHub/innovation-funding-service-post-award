@@ -1,11 +1,12 @@
 import React from "react";
 import { StoresConsumer } from "@ui/redux";
-import { financialVirementWorkflow } from "./workflow";
-import { SummaryProps } from "../workflow";
 import { Pending } from "@shared/pending";
 import * as ACC from "@ui/components";
+import { PcrSummaryProps } from "@ui/containers/pcrs/pcrWorkflow";
+import { PCRStandardItemDtoValidator } from "@ui/validators";
+import { PCRStandardItemDto } from "@framework/dtos";
 
-interface Props extends SummaryProps<typeof financialVirementWorkflow> {
+interface Props extends PcrSummaryProps<PCRStandardItemDto, PCRStandardItemDtoValidator, ""> {
   virements: Pending<FinancialVirementDto>;
 }
 
@@ -43,7 +44,7 @@ class Component extends React.Component<Props> {
   }
 }
 
-export const FinancialVirementSummary = (props: SummaryProps<typeof financialVirementWorkflow>) => (
+export const FinancialVirementSummary = (props: PcrSummaryProps<PCRStandardItemDto, PCRStandardItemDtoValidator, "">) => (
   <StoresConsumer>
     {
       stores => (
