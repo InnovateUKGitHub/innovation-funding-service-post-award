@@ -15,10 +15,10 @@ interface RadioListProps extends InputProps<{ id: string, value: string }> {
 
 export class RadioList extends BaseInput<RadioListProps, {}> {
   render() {
-    const className = classNames("govuk-radios", {"govuk-radios--inline": this.props.inline});
+    const className = classNames("govuk-radios", { "govuk-radios--inline": this.props.inline });
     return (
       <div className={className}>
-        {this.props.options.map((x,i) => this.renderOption(this.props.name, x, i))}
+        {this.props.options.map((x, i) => this.renderOption(this.props.name, x, i))}
       </div>
     );
   }
