@@ -2,10 +2,10 @@ import React from "react";
 import * as ACC from "@ui/components";
 import { PCRItemForScopeChangeDto } from "@framework/dtos";
 import { EditorStatus } from "@ui/redux";
-import { StepProps } from "../workflow";
-import { scopeChangeWorkflow } from "./scopeChangeWorkflow";
+import { PcrStepProps } from "@ui/containers/pcrs/pcrWorkflow";
+import { PCRScopeChangeItemDtoValidator } from "@ui/validators";
 
-export const PublicDescriptionChangeStep = (props: StepProps<typeof scopeChangeWorkflow>) => {
+export const PublicDescriptionChangeStep = (props: PcrStepProps<PCRItemForScopeChangeDto, PCRScopeChangeItemDtoValidator>) => {
     const Form = ACC.TypedForm<PCRItemForScopeChangeDto>();
 
     return (

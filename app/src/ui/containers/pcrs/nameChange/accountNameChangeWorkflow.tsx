@@ -3,11 +3,11 @@ import { NameChangeStep } from "@ui/containers/pcrs/nameChange/nameChangeStep";
 import { PCRAccountNameChangeItemDtoValidator } from "@ui/validators";
 import { PCRPrepareItemFilesStep } from "@ui/containers/pcrs/nameChange/prepareItemFilesStep";
 import { NameChangeSummary } from "@ui/containers/pcrs/nameChange/summary";
-import { IWorkflow } from "@ui/containers/pcrs/workflow";
+import { IPCRWorkflow } from "@ui/containers/pcrs/pcrWorkflow";
 
 export type accountNameChangeStepNames = "partnerNameStep" | "filesStep";
 
-export const accountNameChangeWorkflow: IWorkflow<PCRItemForAccountNameChangeDto, PCRAccountNameChangeItemDtoValidator, accountNameChangeStepNames> = {
+export const accountNameChangeWorkflow: IPCRWorkflow<PCRItemForAccountNameChangeDto, PCRAccountNameChangeItemDtoValidator> = {
   steps: [
     {
       stepName: "partnerNameStep",

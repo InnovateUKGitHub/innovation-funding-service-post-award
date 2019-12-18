@@ -12,10 +12,10 @@ import { PCRDtoValidator } from "@ui/validators";
 import { DateTime } from "luxon";
 import * as Dtos from "@framework/dtos";
 import { PCRItemStatus, PCRItemType } from "@framework/constants";
-import { WorkFlow } from "@ui/containers/pcrs/workflow";
 import { accountNameChangeStepNames } from "@ui/containers/pcrs/nameChange/accountNameChangeWorkflow";
 import { suspendProjectSteps } from "@ui/containers/pcrs/suspendProject/workflow";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
+import { PcrWorkflow } from "@ui/containers/pcrs/pcrWorkflow";
 
 export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBase<ProjectChangeRequestPrepareItemParams, "pcr"> {
   constructor() {
@@ -32,7 +32,7 @@ export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBa
     }
 
     item.status = body.itemStatus === "true" ? PCRItemStatus.Complete : PCRItemStatus.Incomplete;
-    const workflow = WorkFlow.getWorkflow(item, params.step);
+    const workflow = PcrWorkflow.getWorkflow(item, params.step);
     const stepName = workflow && workflow.getCurrentStepName();
     switch (item.type) {
       case PCRItemType.TimeExtension:
@@ -89,7 +89,7 @@ export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBa
   protected async run(context: IContext, params: ProjectChangeRequestPrepareItemParams, button: IFormButton, dto: Dtos.PCRDto): Promise<ILinkInfo> {
     await context.runCommand(new UpdatePCRCommand(params.projectId, params.pcrId, dto));
 
-    const workflow = WorkFlow.getWorkflow(dto.items.find(x => x.id === params.itemId), params.step);
+    const workflow = PcrWorkflow.getWorkflow(dto.items.find(x => x.id === params.itemId), params.step);
 
     if (!workflow || workflow.isOnSummary()) {
       return ProjectChangeRequestPrepareRoute.getLink(params);

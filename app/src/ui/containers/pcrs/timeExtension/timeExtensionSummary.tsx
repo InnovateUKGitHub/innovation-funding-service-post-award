@@ -1,10 +1,12 @@
 import React from "react";
 import * as Dtos from "@framework/dtos";
 import * as ACC from "@ui/components";
-import { SummaryProps } from "../workflow";
-import { timeExtensionItemWorkflow } from "./timeExtensionWorkflow";
+import { timeExtensionStepNames } from "./timeExtensionWorkflow";
+import { PcrSummaryProps } from "@ui/containers/pcrs/pcrWorkflow";
+import { PCRItemForTimeExtensionDto } from "@framework/dtos";
+import { PCRTimeExtensionItemDtoValidator } from "@ui/validators";
 
-export const TimeExtensionSummary = (props: SummaryProps<typeof timeExtensionItemWorkflow>) => {
+export const TimeExtensionSummary = (props: PcrSummaryProps<PCRItemForTimeExtensionDto, PCRTimeExtensionItemDtoValidator, timeExtensionStepNames>) => {
   const newProjectDuration = (x: Dtos.PCRItemForTimeExtensionDto) => !!x.additionalMonths || x.additionalMonths === 0 ? x.additionalMonths + x.projectDurationSnapshot : null;
 
   return (

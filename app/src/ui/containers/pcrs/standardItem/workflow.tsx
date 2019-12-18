@@ -1,12 +1,12 @@
 import { PCRStandardItemDto } from "@framework/dtos";
 import { PCRStandardItemDtoValidator } from "@ui/validators";
-import { IWorkflow } from "../workflow";
 import { FilesStep } from "./filesStep";
 import { Summary } from "./summary";
+import { IPCRWorkflow } from "@ui/containers/pcrs/pcrWorkflow";
 
-type stepNames = "filesStep";
+export type standardItemStepNames = "filesStep";
 
-export const standardItemWorkflow: IWorkflow<PCRStandardItemDto, PCRStandardItemDtoValidator, stepNames> = {
+export const standardItemWorkflow: IPCRWorkflow<PCRStandardItemDto, PCRStandardItemDtoValidator> = {
   steps: [
     {
       stepName: "filesStep",
