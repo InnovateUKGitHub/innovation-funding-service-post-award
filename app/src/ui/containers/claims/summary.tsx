@@ -4,7 +4,15 @@ import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerB
 import { IEditorStore } from "@ui/redux/reducers/editorsReducer";
 import { ClaimDtoValidator } from "@ui/validators/claimDtoValidator";
 import { Pending } from "@shared/pending";
-import { ClaimDto, ClaimStatus, ClaimStatusChangeDto, ILinkInfo, PartnerDto, ProjectDto, ProjectRole } from "@framework/types";
+import {
+  ClaimDto,
+  ClaimStatus,
+  ClaimStatusChangeDto,
+  ILinkInfo,
+  PartnerDto,
+  ProjectDto,
+  ProjectRole
+} from "@framework/types";
 import { StoresConsumer } from "@ui/redux";
 
 export interface ClaimSummaryParams {
@@ -109,8 +117,11 @@ class ClaimSummaryComponent extends ContainerBase<ClaimSummaryParams, Data, Call
 
   private onSave(original: ClaimDto, editor: IEditorStore<ClaimDto, ClaimDtoValidator>, submit: boolean, project: ProjectDto) {
     const dto = editor.data;
-    if (submit && original.status === ClaimStatus.DRAFT) {
+
+    if (submit && (original.status === ClaimStatus.DRAFT || original.status === ClaimStatus.MO_QUERIED)) {
       dto.status = ClaimStatus.SUBMITTED;
+    } else if (submit && original.status === ClaimStatus.INNOVATE_QUERIED) {
+      dto.status = ClaimStatus.AWAITING_IUK_APPROVAL;
     } else {
       // not submitting so set status to the original status
       dto.status = original.status;
