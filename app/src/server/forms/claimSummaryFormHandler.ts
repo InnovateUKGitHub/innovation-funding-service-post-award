@@ -4,7 +4,8 @@ import { ClaimDto, ClaimStatus, ProjectRole } from "@framework/types";
 import { GetClaim } from "../features/claims";
 import {
   AllClaimsDashboardRoute,
-  ClaimsDashboardRoute, ClaimSummaryRoute,
+  ClaimsDashboardRoute,
+  ClaimSummaryRoute,
   PrepareClaimParams,
 } from "../../ui/containers";
 import { ClaimDtoValidator } from "../../ui/validators/claimDtoValidator";
@@ -20,10 +21,15 @@ export class ClaimSummaryFormHandler extends StandardFormHandlerBase<PrepareClai
 
   protected async getDto(context: IContext, params: PrepareClaimParams, button: IFormButton, body: IFormBody): Promise<ClaimDto> {
     const claim = await context.runQuery(new GetClaim(params.partnerId, params.periodId));
+
     claim.comments = body.comments;
-    if (button.name === "default") {
+
+    if (button.name === "default" && (claim.status === ClaimStatus.DRAFT || claim.status === ClaimStatus.MO_QUERIED)) {
       claim.status = ClaimStatus.SUBMITTED;
+    } else if (button.name === "default" && claim.status === ClaimStatus.INNOVATE_QUERIED) {
+      claim.status = ClaimStatus.AWAITING_IUK_APPROVAL;
     }
+
     return claim;
   }
 

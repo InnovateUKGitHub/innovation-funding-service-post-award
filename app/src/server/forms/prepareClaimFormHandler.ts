@@ -20,11 +20,8 @@ export class PrepareClaimFormHandler extends StandardFormHandlerBase<PrepareClai
     super(PrepareClaimRoute, ["default", "save"], "claim");
   }
 
-  protected async getDto(context: IContext, params: PrepareClaimParams, button: IFormButton, body: IFormBody): Promise<ClaimDto> {
-    const claim = await context.runQuery(new GetClaim(params.partnerId, params.periodId));
-    claim.comments = body.comments;
-    claim.status = ClaimStatus.DRAFT;
-    return claim;
+  protected getDto(context: IContext, params: PrepareClaimParams, button: IFormButton, body: IFormBody): Promise<ClaimDto> {
+    return context.runQuery(new GetClaim(params.partnerId, params.periodId));
   }
 
   protected async run(context: IContext, params: PrepareClaimParams, button: IFormButton, dto: ClaimDto): Promise<ILinkInfo> {
