@@ -8,8 +8,8 @@ import {
   ProjectChangeRequestPrepareItemParams
 } from "@ui/containers";
 import { MultipleDocumentUpdloadDtoValidator } from "@ui/validators";
-import { WorkFlow } from "@ui/containers/pcrs/workflow";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
+import { PcrWorkflow } from "@ui/containers/pcrs/pcrWorkflow";
 
 export class ProjectChangeRequestItemDocumentUploadHandler extends MultipleFileFormHandlerBase<ProjectChangeRequestPrepareItemParams, "multipleDocuments"> {
   constructor() {
@@ -31,7 +31,7 @@ export class ProjectChangeRequestItemDocumentUploadHandler extends MultipleFileF
 
     if (button.name === "uploadFileAndContinue") {
       const itemDto = await context.runQuery(new GetPCRByIdQuery(params.projectId, params.pcrId)).then(pcr => pcr.items.find(item => item.id === params.itemId)!);
-      const workflow = WorkFlow.getWorkflow(itemDto, params.step);
+      const workflow = PcrWorkflow.getWorkflow(itemDto, params.step);
       if (workflow) {
         const nextStep = workflow.getNextStepInfo();
         return PCRPrepareItemRoute.getLink({

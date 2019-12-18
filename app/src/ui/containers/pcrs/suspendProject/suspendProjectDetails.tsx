@@ -1,11 +1,11 @@
 import React from "react";
 import * as ACC from "@ui/components";
-import { StepProps } from "../workflow";
-import { suspendProjectWorkflow } from "./workflow";
 import { PCRItemForProjectSuspensionDto } from "@framework/dtos";
 import { EditorStatus } from "@ui/redux";
+import { PcrStepProps } from "@ui/containers/pcrs/pcrWorkflow";
+import { PCRProjectSuspensionItemDtoValidator } from "@ui/validators";
 
-export const SuspendProjectDetails = (props: StepProps<typeof suspendProjectWorkflow>) => {
+export const SuspendProjectDetails = (props: PcrStepProps<PCRItemForProjectSuspensionDto, PCRProjectSuspensionItemDtoValidator>) => {
   const Form = ACC.TypedForm<PCRItemForProjectSuspensionDto>();
 
   return (

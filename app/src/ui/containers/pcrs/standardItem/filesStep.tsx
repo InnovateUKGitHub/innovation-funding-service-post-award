@@ -1,10 +1,9 @@
 import React from "react";
-import { StepProps } from "../workflow";
-import { MultipleDocumentUpdloadDtoValidator } from "@ui/validators";
+import { MultipleDocumentUpdloadDtoValidator, PCRStandardItemDtoValidator } from "@ui/validators";
 import { IEditorStore, StoresConsumer } from "@ui/redux";
 import * as ACC from "@ui/components";
-import { standardItemWorkflow } from "./workflow";
-import { PCRItemTypeDto } from "@framework/dtos";
+import { PCRItemTypeDto, PCRStandardItemDto } from "@framework/dtos";
+import { PcrStepProps } from "@ui/containers/pcrs/pcrWorkflow";
 
 interface FileStepsProps {
   documents: DocumentSummaryDto[];
@@ -13,7 +12,7 @@ interface FileStepsProps {
 
 }
 
-class FilesStepComponent extends React.Component<StepProps<typeof standardItemWorkflow> & FileStepsProps> {
+class FilesStepComponent extends React.Component<PcrStepProps<PCRStandardItemDto, PCRStandardItemDtoValidator> & FileStepsProps> {
   render() {
     return (
       <React.Fragment>
@@ -78,7 +77,7 @@ class FilesStepComponent extends React.Component<StepProps<typeof standardItemWo
   }
 }
 
-export const FilesStep = (props: StepProps<typeof standardItemWorkflow>) => (
+export const FilesStep = (props: PcrStepProps<PCRStandardItemDto, PCRStandardItemDtoValidator>) => (
   <StoresConsumer>
     {
       stores => {

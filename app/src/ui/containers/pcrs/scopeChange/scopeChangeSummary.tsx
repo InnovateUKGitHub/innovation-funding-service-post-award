@@ -1,10 +1,12 @@
 import React from "react";
 import * as ACC from "../../../components";
-import { SummaryProps } from "@ui/containers/pcrs/workflow";
-import { scopeChangeWorkflow } from "./scopeChangeWorkflow";
 import { SimpleString } from "@ui/components/renderers";
+import { PcrSummaryProps } from "@ui/containers/pcrs/pcrWorkflow";
+import { PCRItemForScopeChangeDto } from "@framework/dtos";
+import { PCRScopeChangeItemDtoValidator } from "@ui/validators";
+import { scopeChangeStepNames } from "@ui/containers/pcrs/scopeChange/scopeChangeWorkflow";
 
-export const ScopeChangeSummary = (props: SummaryProps<typeof scopeChangeWorkflow>) => {
+export const ScopeChangeSummary = (props: PcrSummaryProps<PCRItemForScopeChangeDto, PCRScopeChangeItemDtoValidator, scopeChangeStepNames>) => {
   const { pcrItem, validator } = props;
   return (
     <ACC.Section qa="scope-change-summary">
