@@ -13,6 +13,7 @@ import { FullDateInput, MonthYearInput } from "./inputs/dateInput";
 import { Button } from "./styledButton";
 import { SearchInput } from "./inputs/searchInput";
 import { FormInputWidths } from "./inputs/baseInput";
+import { DropdownList } from "./inputs";
 
 interface SharedFormProps<T> {
   onChange?: (data: T) => void;
@@ -264,6 +265,21 @@ const CheckboxOptionsField = <T extends {}>(props: CheckboxFieldProps<T> & Inter
   );
 };
 
+interface DropdownFieldProps<T extends {}> extends ExternalFieldProps<T, SelectOption> {
+  options: SelectOption[];
+  hasEmptyOption?: boolean;
+}
+
+const DropdownListField = <T extends {}>(props: DropdownFieldProps<T> & InternalFieldProps<T>) => {
+  const TypedFieldComponent = FieldComponent as { new(): FieldComponent<T, SelectOption> };
+  return (
+    <TypedFieldComponent
+      field={(data, disabled) => <DropdownList options={props.options} name={props.name} hasEmptyOption={props.hasEmptyOption} value={props.value(data, disabled)} onChange={(val) => handleChange(props, val)} disabled={disabled} />}
+      {...props}
+    />
+  );
+};
+
 const HiddenField = <T extends {}>(props: HiddenFieldProps<T> & InternalFieldProps<T>) => {
   return (
     <input type="hidden" name={props.name} value={props.value((props as any as InternalFieldProps<T>).formData) || ""} />
@@ -390,6 +406,7 @@ export interface FormBuilder<T> {
   MultilineString: React.SFC<MultiStringFieldProps<T>>;
   Numeric: React.SFC<NumericFieldProps<T>>;
   Radio: React.SFC<RadioFieldProps<T>>;
+  DropdownList: React.SFC<DropdownFieldProps<T>>;
   Checkboxes: React.SFC<CheckboxFieldProps<T>>;
   Hidden: React.SFC<HiddenFieldProps<T>>;
   Submit: React.SFC<SubmitProps>;
@@ -409,6 +426,7 @@ export const TypedForm = <T extends {}>(): FormBuilder<T> => ({
   MultilineString: MultiStringField as React.SFC<MultiStringFieldProps<T>>,
   Numeric: NumericField as React.SFC<NumericFieldProps<T>>,
   Radio: RadioOptionsField as React.SFC<RadioFieldProps<T>>,
+  DropdownList: DropdownListField as React.SFC<DropdownFieldProps<T>>,
   Checkboxes: CheckboxOptionsField as React.SFC<CheckboxFieldProps<T>>,
   Hidden: HiddenField as React.SFC<HiddenFieldProps<T>>,
   Submit: SubmitComponent as React.SFC<SubmitProps>,
