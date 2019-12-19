@@ -55,7 +55,7 @@ class ProjectDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
 
                 <ACC.Section
                     title={`Project period ${project.periodId} of ${project.totalPeriods}`}
-                    subtitle={<ACC.Renderers.ShortDateRange start={project.startDate} end={project.endDate} />}
+                    subtitle={<ACC.Renderers.ShortDateRange start={project.periodStartDate} end={project.periodEndDate} />}
                 />
 
                 <ACC.Section title="Project members">
