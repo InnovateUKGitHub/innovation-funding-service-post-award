@@ -120,8 +120,7 @@ class ClaimSummaryComponent extends ContainerBase<ClaimSummaryParams, Data, Call
 
   private renderCostsPaidSummary(data: CombinedData) {
     const totalCostsClaimed = data.claimDetails.map((x) => x.costsClaimedThisPeriod).reduce((res, x) => res + x);
-    const fundingLevel = data.partner.awardRate;
-    const totalCostsPaid = (totalCostsClaimed * fundingLevel!) / 100;
+    const totalCostsPaid = totalCostsClaimed * (data.partner.awardRate! / 100);
 
     return (
       <ACC.Section title={"Costs to be claimed"} qa="costs-to-be-claimed-summary">
@@ -133,7 +132,7 @@ class ClaimSummaryComponent extends ContainerBase<ClaimSummaryParams, Data, Call
           />
           <ACC.SummaryListItem
             label="Funding level"
-            content={<ACC.Renderers.Percentage value={fundingLevel} />}
+            content={<ACC.Renderers.Percentage value={data.partner.awardRate} />}
             qa="fundingLevel"
           />
           <ACC.SummaryListItem
