@@ -42,6 +42,7 @@ class ProjectOverviewComponent extends ContainerBase<Params, Data, {}> {
         project={project}
       >
         <ACC.Section
+          qa="period-information"
           className="govuk-!-padding-bottom-6"
           title={`Project period ${project.periodId} of ${project.totalPeriods}`}
           subtitle={<ACC.Renderers.ShortDateRange start={project.periodStartDate} end={project.periodEndDate} />}
