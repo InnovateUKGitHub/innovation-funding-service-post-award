@@ -11,7 +11,6 @@ import { MonitoringReportStatus } from "@framework/constants";
 import { MonitoringReportDto } from "@framework/dtos";
 import { IContext, ILinkInfo } from "@framework/types";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
-import { numberComparator } from "@framework/util";
 
 export class MonitoringReportCreateFormHandler extends StandardFormHandlerBase<MonitoringReportCreateParams, "monitoringReport"> {
   constructor() {
@@ -49,10 +48,7 @@ export class MonitoringReportCreateFormHandler extends StandardFormHandlerBase<M
     if (button.name === "save-return") {
       return MonitoringReportDashboardRoute.getLink({ projectId: params.projectId });
     }
-
-    const questions = dto.questions.map(x => x.displayOrder).sort(numberComparator);
-    const firstQuestion = questions[0];
-    return MonitoringReportPrepareRoute.getLink({ projectId: params.projectId, id, questionNumber: firstQuestion });
+    return MonitoringReportPrepareRoute.getLink({ projectId: params.projectId, id, step: 1 });
 
   }
 }

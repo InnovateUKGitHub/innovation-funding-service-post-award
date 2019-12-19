@@ -5,7 +5,6 @@ import { Pending } from "@shared/pending";
 import { MonitoringReportDtoValidator } from "@ui/validators";
 import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerBase";
 import { IEditorStore, StoresConsumer } from "@ui/redux";
-import { numberComparator } from "@framework/util";
 import { ILinkInfo } from "@framework/types";
 
 export interface MonitoringReportPreparePeriodParams {
@@ -43,18 +42,16 @@ class Component extends ContainerBase<MonitoringReportPreparePeriodParams, Data,
         <ACC.MonitoringReportPeriodFormComponent
           editor={editor}
           onChange={(dto) => this.props.onChange(false, dto)}
-          onSave={(dto, submit, progress) => this.props.onChange(true, dto, submit, this.getLink(progress, editor))}
+          onSave={(dto, submit, progress) => this.props.onChange(true, dto, submit, this.getLink(progress))}
         />
       </ACC.Page>
     );
   }
-  private getLink(progress: boolean, editor: IEditorStore<Dtos.MonitoringReportDto, MonitoringReportDtoValidator>) {
+  private getLink(progress: boolean) {
     if (!progress) {
       return this.props.routes.monitoringReportDashboard.getLink({ projectId: this.props.projectId });
     }
-    const questions = editor.data.questions.map(x => x.displayOrder).sort(numberComparator);
-    const firstQuestion = questions[0];
-    return this.props.routes.monitoringReportPrepare.getLink({ projectId: this.props.projectId, id: this.props.id, questionNumber: firstQuestion });
+    return this.props.routes.monitoringReportPrepare.getLink({ projectId: this.props.projectId, id: this.props.id, step: 1 });
   }
 }
 
