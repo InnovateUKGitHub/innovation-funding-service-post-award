@@ -1,4 +1,6 @@
 import React from "react";
+import { numberComparator } from "@framework/util";
+import { NotFoundError } from "@server/features/common";
 
 export interface IStepProps {}
 export interface ISummaryProps {}
@@ -30,15 +32,24 @@ export interface ICallableWorkflow<TStepProps extends IStepProps, TSummaryProps 
 }
 
 export abstract class WorkflowBase<TStepNames extends string, TStepProps extends IStepProps, TSummaryProps extends ISummaryProps> implements ICallableWorkflow<TStepProps, TSummaryProps> {
-  protected constructor(private definition: IWorkflow<TStepNames, TStepProps, TSummaryProps>, private stepNumber: number | undefined) {
+  private readonly steps: IStep<TStepNames, TStepProps>[];
+  private readonly summary: { summaryRender: (props: TSummaryProps) => React.ReactNode; };
+
+  protected constructor(definition: IWorkflow<TStepNames, TStepProps, TSummaryProps>, private stepNumber: number | undefined) {
+    if (stepNumber && !definition.steps.find(x => x.stepNumber === stepNumber)) {
+      throw new NotFoundError();
+    }
+    this.steps = definition.steps;
+    this.steps.sort((a, b) => numberComparator(a.stepNumber, b.stepNumber));
+    this.summary = definition.summary;
   }
 
   public getSummary() {
-    return this.isOnSummary() ? this.definition.summary : undefined;
+    return this.isOnSummary() ? this.summary : undefined;
   }
 
   public findStepNumberByName(stepName: string) {
-    const step = this.definition.steps.find(x => x.stepName === stepName);
+    const step = this.steps.find(x => x.stepName === stepName);
     if (!step) {
       throw Error("No such step in workflow");
     }
@@ -49,21 +60,30 @@ export abstract class WorkflowBase<TStepNames extends string, TStepProps extends
     return !this.stepNumber;
   }
 
+  private getCurrentStepIndex() {
+    return this.steps.findIndex(x => x.stepNumber === this.stepNumber);
+  }
+
   public getNextStepInfo() {
-    const nextStepNumber = this.stepNumber && this.stepNumber < this.definition.steps.length ? this.stepNumber + 1 : undefined;
-    return nextStepNumber ? this.definition.steps[nextStepNumber - 1] : undefined;
+    const currentIndex = this.getCurrentStepIndex();
+    if (currentIndex < 0) return undefined;
+    return this.steps[currentIndex + 1];
   }
 
   public getPrevStepInfo() {
-    const prevStepNumber = this.stepNumber && this.stepNumber > 1 ? this.stepNumber - 1 : undefined;
-    return prevStepNumber ? this.definition.steps[prevStepNumber - 1] : undefined;
+    // If on the summary return the last step
+    if (this.isOnSummary()) {
+      return this.steps[this.steps.length - 1];
+    }
+    const currentIndex = this.getCurrentStepIndex();
+    if (currentIndex < 0) return undefined;
+    return this.steps[currentIndex - 1];
   }
 
   public getCurrentStepInfo() {
-    if (!this.stepNumber || this.stepNumber > this.definition.steps.length) {
-      return undefined;
-    }
-    return this.definition.steps[this.stepNumber - 1];
+    const currentIndex = this.getCurrentStepIndex();
+    if (currentIndex < 0) return undefined;
+    return this.steps[currentIndex];
   }
 
   public getCurrentStepName() {

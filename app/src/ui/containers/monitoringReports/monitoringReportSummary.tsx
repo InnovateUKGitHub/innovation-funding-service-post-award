@@ -7,7 +7,7 @@ import { MonitoringReportOptionDto, MonitoringReportQuestionDto, ProjectRole } f
 import { IEditorStore, StoresConsumer } from "@ui/redux";
 import { Link, Section, SummaryList, SummaryListItem } from "../../components";
 import { MonitoringReportDtoValidator, QuestionValidator } from "@ui/validators";
-import { numberComparator } from "@framework/util";
+import { MonitoringReportWorkflow } from "@ui/containers/monitoringReports/workflow";
 
 export interface MonitoringReportPrepareSummaryParams {
   projectId: string;
@@ -39,17 +39,17 @@ class DetailsComponent extends ContainerBase<MonitoringReportPrepareSummaryParam
 
   private renderContents(project: Dtos.ProjectDto, report: Dtos.MonitoringReportDto, editor: IEditorStore<Dtos.MonitoringReportDto, MonitoringReportDtoValidator>) {
     const title = <ACC.PeriodTitle periodId={report.periodId} periodStartDate={report.startDate} periodEndDate={report.endDate} />;
-
+    const workflow = MonitoringReportWorkflow.getWorkflow(editor.data, undefined);
     return (
       <ACC.Page
-        backLink={this.getBackLink(report)}
+        backLink={this.getBackLink(workflow)}
         pageTitle={<ACC.Projects.Title project={project}/>}
         error={editor.error}
         validator={editor.validator}
       >
         <ACC.Section title={title} qa="monitoringReportViewSection">
           {this.renderPeriod(editor)}
-          {report.questions.map((q, i) => this.renderResponse(editor, q, i))}
+          {report.questions.map(q => this.renderResponse(workflow, editor, q))}
           {this.renderLog()}
           { this.props.mode === "prepare" && this.renderForm(editor)}
         </ACC.Section>
@@ -57,13 +57,11 @@ class DetailsComponent extends ContainerBase<MonitoringReportPrepareSummaryParam
     );
   }
 
-  private getBackLink(report: Dtos.MonitoringReportDto) {
+  private getBackLink(workflow: MonitoringReportWorkflow) {
     if (this.props.mode === "view") {
       return <ACC.BackLink route={this.props.routes.monitoringReportDashboard.getLink({ projectId: this.props.projectId })}>Back to monitoring reports</ACC.BackLink>;
     }
-    const questions = report.questions.map(x => x.displayOrder).sort(numberComparator);
-    const lastQuestion = questions[questions.length - 1];
-    return <ACC.BackLink route={this.props.routes.monitoringReportPrepare.getLink({ projectId: this.props.projectId, id: this.props.id, questionNumber: lastQuestion })}>Back to edit monitoring report</ACC.BackLink>;
+    return <ACC.BackLink route={this.props.routes.monitoringReportPrepare.getLink({ projectId: this.props.projectId, id: this.props.id, step: workflow.getPrevStepInfo()!.stepNumber })}>Back to edit monitoring report</ACC.BackLink>;
   }
 
   private renderLog() {
@@ -94,7 +92,7 @@ class DetailsComponent extends ContainerBase<MonitoringReportPrepareSummaryParam
     );
   }
 
-  private getAction(validation: QuestionValidator, question: MonitoringReportQuestionDto) {
+  private getAction(workflow: MonitoringReportWorkflow, validation: QuestionValidator, question: MonitoringReportQuestionDto) {
     if (this.props.mode !== "prepare") {
       return null;
     }
@@ -103,7 +101,7 @@ class DetailsComponent extends ContainerBase<MonitoringReportPrepareSummaryParam
         <Link
           id={validation.comments.key}
           replace={true}
-          route={this.props.routes.monitoringReportPrepare.getLink({projectId: this.props.projectId, id: this.props.id, questionNumber: question.displayOrder})}
+          route={this.props.routes.monitoringReportPrepare.getLink({projectId: this.props.projectId, id: this.props.id, step: workflow.findStepNumberByName(`question-${question.displayOrder}`)})}
         >
           Edit
         </Link>
@@ -111,7 +109,7 @@ class DetailsComponent extends ContainerBase<MonitoringReportPrepareSummaryParam
     );
   }
 
-  private renderScore(response: MonitoringReportOptionDto | undefined, validation: QuestionValidator, question: MonitoringReportQuestionDto, index: number) {
+  private renderScore(workflow: MonitoringReportWorkflow, response: MonitoringReportOptionDto | undefined, validation: QuestionValidator, question: MonitoringReportQuestionDto) {
     if(!question.isScored) {
       return null;
     }
@@ -120,21 +118,21 @@ class DetailsComponent extends ContainerBase<MonitoringReportPrepareSummaryParam
         validation={validation.score}
         label="Score"
         content={(response && `${response.questionScore} - ${response.questionText}`)}
-        qa={`question-${index}-score`}
-        action={this.getAction(validation, question)}
+        qa={`question-${question.displayOrder}-score`}
+        action={this.getAction(workflow, validation, question)}
       />
     );
   }
 
-  private renderComments(validation: QuestionValidator, question: MonitoringReportQuestionDto, index: number) {
+  private renderComments(workflow: MonitoringReportWorkflow, validation: QuestionValidator, question: MonitoringReportQuestionDto) {
     return (
       <SummaryListItem
         validation={validation.comments}
         label="Comments"
         content={question.comments || ""}
-        qa={`question-${index}-comments`}
+        qa={`question-${question.displayOrder}-comments`}
         /*Put the action on the second item if not showing the first*/
-        action={!question.isScored && this.getAction(validation, question)}
+        action={!question.isScored && this.getAction(workflow, validation, question)}
       />
     );
   }
@@ -157,14 +155,14 @@ class DetailsComponent extends ContainerBase<MonitoringReportPrepareSummaryParam
     );
   }
 
-  private renderResponse(editor: IEditorStore<Dtos.MonitoringReportDto, MonitoringReportDtoValidator>, question: MonitoringReportQuestionDto, index: number) {
+  private renderResponse(workflow: MonitoringReportWorkflow, editor: IEditorStore<Dtos.MonitoringReportDto, MonitoringReportDtoValidator>, question: MonitoringReportQuestionDto) {
     const response = question.options.find(x => x.id === question.optionId);
     const validation = editor && editor.validator.responses.results.find(x => x.model.displayOrder === question.displayOrder)!;
     return (
       <Section title={question.title}>
-        <SummaryList qa={`summary-question-${index}`}>
-          {this.renderScore(response, validation, question, index)}
-          {this.renderComments(validation, question, index)}
+        <SummaryList qa={`summary-question-${question.displayOrder}`}>
+          {this.renderScore(workflow, response, validation, question)}
+          {this.renderComments(workflow, validation, question)}
         </SummaryList>
       </Section>
     );
