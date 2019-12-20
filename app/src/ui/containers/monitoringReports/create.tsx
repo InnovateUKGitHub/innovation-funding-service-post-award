@@ -53,7 +53,7 @@ class Component extends ContainerBase<MonitoringReportCreateParams, Data, Callba
       if (!progress) {
         return this.props.routes.monitoringReportDashboard.getLink({ projectId: this.props.projectId });
       }
-      return this.props.routes.monitoringReportPrepare.getLink({ projectId: this.props.projectId, id, step: 1 });
+      return this.props.routes.monitoringReportWorkflow.getLink({ projectId: this.props.projectId, id, mode: "prepare", step: 1 });
     };
   }
 }
@@ -66,9 +66,9 @@ const Container = (props: MonitoringReportCreateParams&BaseProps) => (
           project={stores.projects.getById(props.projectId)}
           editor={stores.monitoringReports.getCreateMonitoringReportEditor(props.projectId)}
           onChange={(save, dto, submit, getLink) => {
-            stores.monitoringReports.updateMonitoringReportEditor(save, props.projectId, dto, submit, (id) => {
+            stores.monitoringReports.updateMonitoringReportEditor(save, props.projectId, dto, submit, (newDto) => {
               if(getLink) {
-                return stores.navigation.navigateTo(getLink(id));
+                return stores.navigation.navigateTo(getLink(newDto.headerId));
               }
             });
           }}

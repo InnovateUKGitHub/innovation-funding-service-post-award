@@ -2,22 +2,21 @@ import { IFormBody, IFormButton, StandardFormHandlerBase } from "@server/forms/f
 import { IContext, ILinkInfo } from "@framework/types";
 import { MonitoringReportDto } from "@framework/dtos/monitoringReportDto";
 import {
-  MonitoringReportDashboardRoute,
-  MonitoringReportPrepareParams,
-  MonitoringReportPrepareRoute, MonitoringReportSummaryRoute
+  MonitoringReportDashboardRoute, MonitoringReportWorkflowParams,
+  MonitoringReportWorkflowRoute,
 } from "@ui/containers";
 import { MonitoringReportDtoValidator } from "@ui/validators/MonitoringReportDtoValidator";
 import { GetMonitoringReportById, SaveMonitoringReport } from "@server/features/monitoringReports";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
-import { MonitoringReportWorkflow } from "@ui/containers/monitoringReports/workflow";
+import { MonitoringReportWorkflowDef } from "@ui/containers/monitoringReports/monitoringReportWorkflowDef";
 
-export class MonitoringReportPrepareFormHandler extends StandardFormHandlerBase<MonitoringReportPrepareParams, "monitoringReport"> {
+export class MonitoringReportPrepareFormHandler extends StandardFormHandlerBase<MonitoringReportWorkflowParams, "monitoringReport"> {
 
   constructor() {
-    super(MonitoringReportPrepareRoute, ["save-continue", "save-return"], "monitoringReport");
+    super(MonitoringReportWorkflowRoute, ["save-continue", "save-return"], "monitoringReport");
   }
 
-  protected async getDto(context: IContext, params: MonitoringReportPrepareParams, button: IFormButton, body: IFormBody): Promise<MonitoringReportDto> {
+  protected async getDto(context: IContext, params: MonitoringReportWorkflowParams, button: IFormButton, body: IFormBody): Promise<MonitoringReportDto> {
     const query = new GetMonitoringReportById(params.projectId, params.id);
     const dto = await context.runQuery(query);
     const questionDisplayOrder = Number(body.questionDisplayOrder);
@@ -29,26 +28,23 @@ export class MonitoringReportPrepareFormHandler extends StandardFormHandlerBase<
     return dto;
   }
 
-  protected createValidationResult(params: MonitoringReportPrepareParams, dto: MonitoringReportDto) {
+  protected createValidationResult(params: MonitoringReportWorkflowParams, dto: MonitoringReportDto) {
     return new MonitoringReportDtoValidator(dto, false, false, dto.questions, 100);
   }
 
-  protected getStoreKey(params: MonitoringReportPrepareParams) {
+  protected getStoreKey(params: MonitoringReportWorkflowParams) {
     return storeKeys.getMonitoringReportKey(params.projectId, params.id);
   }
 
-  private getLink(progress: boolean, dto: MonitoringReportDto, params: MonitoringReportPrepareParams) {
+  private getLink(progress: boolean, dto: MonitoringReportDto, params: MonitoringReportWorkflowParams) {
     if (!progress) {
       return MonitoringReportDashboardRoute.getLink({ projectId: params.projectId });
     }
-    const nextStep = MonitoringReportWorkflow.getWorkflow(dto, params.step).getNextStepInfo();
-    if (!nextStep) {
-      return MonitoringReportSummaryRoute.getLink({ projectId: params.projectId, id: params.id, mode: "prepare" });
-    }
-    return MonitoringReportPrepareRoute.getLink({ projectId: params.projectId, id: params.id, step: nextStep.stepNumber });
+    const nextStep = MonitoringReportWorkflowDef.getWorkflow(dto, params.step).getNextStepInfo();
+    return MonitoringReportWorkflowRoute.getLink({ projectId: params.projectId, id: params.id, mode: "prepare", step: nextStep && nextStep.stepNumber });
   }
 
-  protected async run(context: IContext, params: MonitoringReportPrepareParams, button: IFormButton, dto: MonitoringReportDto): Promise<ILinkInfo> {
+  protected async run(context: IContext, params: MonitoringReportWorkflowParams, button: IFormButton, dto: MonitoringReportDto): Promise<ILinkInfo> {
     const command = new SaveMonitoringReport(dto, false);
     await context.runCommand(command);
     if (button.name === "save-return") {

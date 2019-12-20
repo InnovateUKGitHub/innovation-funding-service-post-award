@@ -2,7 +2,6 @@ import React from "react";
 import * as ACC from "@ui/components";
 import { IEditorStore, StoresConsumer } from "@ui/redux";
 import { MultipleDocumentUpdloadDtoValidator, PCRAccountNameChangeItemDtoValidator } from "@ui/validators";
-import { accountNameChangeWorkflow } from "./accountNameChangeWorkflow";
 import { PcrStepProps } from "@ui/containers/pcrs/pcrWorkflow";
 import { PCRItemForAccountNameChangeDto } from "@framework/dtos";
 

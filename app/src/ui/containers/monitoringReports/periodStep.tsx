@@ -51,7 +51,7 @@ class Component extends ContainerBase<MonitoringReportPreparePeriodParams, Data,
     if (!progress) {
       return this.props.routes.monitoringReportDashboard.getLink({ projectId: this.props.projectId });
     }
-    return this.props.routes.monitoringReportPrepare.getLink({ projectId: this.props.projectId, id: this.props.id, step: 1 });
+    return this.props.routes.monitoringReportWorkflow.getLink({ projectId: this.props.projectId, id: this.props.id, mode: "prepare", step: 1 });
   }
 }
 

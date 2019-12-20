@@ -92,10 +92,10 @@ class DashboardComponent extends ContainerBase<Params, Data, Callbacks> {
     const links: { route: ILinkInfo, text: string, qa: string; }[] = [];
 
     if (this.editStatuses.indexOf(report.status) > -1) {
-      links.push({ route: this.props.routes.monitoringReportSummary.getLink({ projectId: report.projectId, id: report.headerId, mode: "prepare" }), text: "Edit report", qa: "editLink" });
+      links.push({ route: this.props.routes.monitoringReportWorkflow.getLink({ projectId: report.projectId, id: report.headerId, mode: "prepare", step: undefined }), text: "Edit report", qa: "editLink" });
     }
     else {
-      links.push({ route: this.props.routes.monitoringReportSummary.getLink({ projectId: report.projectId, id: report.headerId, mode: "view" }), text: "View report", qa: "viewLink" });
+      links.push({ route: this.props.routes.monitoringReportWorkflow.getLink({ projectId: report.projectId, id: report.headerId, mode: "view", step: undefined }), text: "View report", qa: "viewLink" });
     }
 
     if (report.status === MonitoringReportStatus.Draft) {
