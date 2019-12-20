@@ -47,7 +47,7 @@ export class MapToPartnerDtoCommand extends SyncCommandBase<PartnerDto> {
             auditReportFrequencyName: this.item.AuditReportFrequencyName,
             totalPrepayment: this.item.Acc_TotalPrepayment__c,
             percentageParticipantCostsSubmitted: this.valueIfPermission(this.calcPercentageClaimed(this.item.Acc_TotalParticipantCosts__c, this.item.Acc_TotalCostsSubmitted__c)),
-            totalFundingDueToReceive: this.valueIfPermission(this.item.Acc_TotalParticipantCosts__c * this.item.Acc_Award_Rate__c / 100)
+            totalFundingDueToReceive: this.valueIfPermission(this.item.Acc_TotalParticipantCosts__c * (this.item.Acc_Award_Rate__c / 100))
         };
     }
 

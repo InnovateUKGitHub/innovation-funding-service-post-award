@@ -235,7 +235,7 @@ export class ForecastTable extends React.Component<Props> {
 
         const categoryToUpdate = overheadsCategory && data.find(x => x.costCategoryId === overheadsCategory.id && x.periodId === item.periodId);
         if (categoryToUpdate) {
-          categoryToUpdate.value = item.value * overheadRate / 100;
+          categoryToUpdate.value = item.value * (overheadRate / 100);
         }
       }
     }
