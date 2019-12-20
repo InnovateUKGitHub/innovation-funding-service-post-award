@@ -4,7 +4,7 @@ import {
   MonitoringReportCreateParams,
   MonitoringReportCreateRoute,
   MonitoringReportDashboardRoute,
-  MonitoringReportPrepareRoute,
+  MonitoringReportWorkflowRoute,
 } from "@ui/containers/monitoringReports";
 import { MonitoringReportDtoValidator } from "@ui/validators/MonitoringReportDtoValidator";
 import { MonitoringReportStatus } from "@framework/constants";
@@ -48,7 +48,7 @@ export class MonitoringReportCreateFormHandler extends StandardFormHandlerBase<M
     if (button.name === "save-return") {
       return MonitoringReportDashboardRoute.getLink({ projectId: params.projectId });
     }
-    return MonitoringReportPrepareRoute.getLink({ projectId: params.projectId, id, step: 1 });
+    return MonitoringReportWorkflowRoute.getLink({ projectId: params.projectId, id, mode: "prepare", step: 1 });
 
   }
 }

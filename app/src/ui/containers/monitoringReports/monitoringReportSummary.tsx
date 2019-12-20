@@ -1,72 +1,33 @@
 import React from "react";
-import { BaseProps, ContainerBase, defineRoute } from "../containerBase";
 import * as ACC from "../../components";
 import * as Dtos from "@framework/types";
-import { Pending } from "../../../shared/pending";
-import { MonitoringReportOptionDto, MonitoringReportQuestionDto, ProjectRole } from "@framework/types";
 import { IEditorStore, StoresConsumer } from "@ui/redux";
-import { Link, Section, SummaryList, SummaryListItem } from "../../components";
 import { MonitoringReportDtoValidator, QuestionValidator } from "@ui/validators";
-import { MonitoringReportWorkflow } from "@ui/containers/monitoringReports/workflow";
+import { Pending } from "@shared/pending";
+import { MonitoringReportReportSummaryProps } from "@ui/containers/monitoringReports/monitoringReportWorkflowDef";
 
-export interface MonitoringReportPrepareSummaryParams {
-  projectId: string;
-  id: string;
-  mode: "prepare" | "view";
-}
-
-interface Data {
-  project: Pending<Dtos.ProjectDto>;
-  report: Pending<Dtos.MonitoringReportDto>;
-  editor: Pending<IEditorStore<Dtos.MonitoringReportDto, MonitoringReportDtoValidator>>;
+interface InnerProps {
   statusChanges: Pending<Dtos.MonitoringReportStatusChangeDto[]>;
 }
 
-interface Callbacks {
-  onChange: (save: boolean, dto: Dtos.MonitoringReportDto, submit?: boolean) => void;
-}
+class Component extends React.Component<MonitoringReportReportSummaryProps & InnerProps> {
 
-class DetailsComponent extends ContainerBase<MonitoringReportPrepareSummaryParams, Data, Callbacks> {
-  render() {
-    const combined = Pending.combine({
-      report: this.props.report,
-      project: this.props.project,
-      editor: this.props.editor,
-    });
-
-    return <ACC.PageLoader pending={combined} render={(data) => this.renderContents(data.project, data.report, data.editor)} />;
-  }
-
-  private renderContents(project: Dtos.ProjectDto, report: Dtos.MonitoringReportDto, editor: IEditorStore<Dtos.MonitoringReportDto, MonitoringReportDtoValidator>) {
-    const title = <ACC.PeriodTitle periodId={report.periodId} periodStartDate={report.startDate} periodEndDate={report.endDate} />;
-    const workflow = MonitoringReportWorkflow.getWorkflow(editor.data, undefined);
+  public render() {
+    const {mode, editor} = this.props;
+    const title = <ACC.PeriodTitle periodId={editor.data.periodId} periodStartDate={editor.data.startDate} periodEndDate={editor.data.endDate} />;
     return (
-      <ACC.Page
-        backLink={this.getBackLink(workflow)}
-        pageTitle={<ACC.Projects.Title project={project}/>}
-        error={editor.error}
-        validator={editor.validator}
-      >
-        <ACC.Section title={title} qa="monitoringReportViewSection">
-          {this.renderPeriod(editor)}
-          {report.questions.map(q => this.renderResponse(workflow, editor, q))}
-          {this.renderLog()}
-          { this.props.mode === "prepare" && this.renderForm(editor)}
-        </ACC.Section>
-      </ACC.Page>
+      <ACC.Section title={title} qa="monitoringReportViewSection">
+        {this.renderPeriod(editor)}
+        {editor.data.questions.map(q => this.renderResponse(editor, q))}
+        {this.renderLog()}
+        { mode === "prepare" && this.renderForm(editor)}
+      </ACC.Section>
     );
-  }
-
-  private getBackLink(workflow: MonitoringReportWorkflow) {
-    if (this.props.mode === "view") {
-      return <ACC.BackLink route={this.props.routes.monitoringReportDashboard.getLink({ projectId: this.props.projectId })}>Back to monitoring reports</ACC.BackLink>;
-    }
-    return <ACC.BackLink route={this.props.routes.monitoringReportPrepare.getLink({ projectId: this.props.projectId, id: this.props.id, step: workflow.getPrevStepInfo()!.stepNumber })}>Back to edit monitoring report</ACC.BackLink>;
   }
 
   private renderLog() {
     return (
-      <Section>
+      <ACC.Section>
         <ACC.Accordion>
           <ACC.AccordionItem title="Status and comments log" qa="status-and-comments-log">
             {/* Keeping logs inside loader because accordion defaults to closed*/}
@@ -78,61 +39,70 @@ class DetailsComponent extends ContainerBase<MonitoringReportPrepareSummaryParam
             />
           </ACC.AccordionItem>
         </ACC.Accordion>
-      </Section>
+      </ACC.Section>
     );
   }
 
   private renderForm(editor: IEditorStore<Dtos.MonitoringReportDto, MonitoringReportDtoValidator>) {
+    const ReportForm = ACC.TypedForm<Dtos.MonitoringReportDto>();
     return (
-      <ACC.MonitoringReportSummaryFormComponent
-        editor={editor}
-        onChange={(dto) => this.props.onChange(false, dto)}
-        onSave={(dto, submit) => this.props.onChange(true, dto, submit)}
-      />
+      <ACC.Section>
+        <ReportForm.Form
+          editor={editor}
+          onChange={(dto) => this.props.onChange(dto)}
+          qa="monitoringReportCreateForm"
+        >
+          <ACC.Renderers.SimpleString>By submitting this report, you certify that from the project monitoring documents shown to you, this report represents your best opinion of the current progress of this project.</ACC.Renderers.SimpleString>
+          <ReportForm.Fieldset qa="save-buttons">
+            <ReportForm.Button name="save-submitted" styling="Primary" onClick={() => this.props.onSave(editor.data, true)}>Submit report</ReportForm.Button>
+            <ReportForm.Button name="save-draft" onClick={() => this.props.onSave(editor.data, false)}>Save and return to project</ReportForm.Button>
+          </ReportForm.Fieldset>
+        </ReportForm.Form>
+      </ACC.Section>
     );
   }
 
-  private getAction(workflow: MonitoringReportWorkflow, validation: QuestionValidator, question: MonitoringReportQuestionDto) {
+  private getAction(validation: QuestionValidator, question: Dtos.MonitoringReportQuestionDto) {
     if (this.props.mode !== "prepare") {
       return null;
     }
     return (
       <span id={validation.score.key}>
-        <Link
+        <ACC.Link
           id={validation.comments.key}
           replace={true}
-          route={this.props.routes.monitoringReportPrepare.getLink({projectId: this.props.projectId, id: this.props.id, step: workflow.findStepNumberByName(`question-${question.displayOrder}`)})}
+          route={this.props.getEditLink(`question-${question.displayOrder}`)}
         >
           Edit
-        </Link>
+        </ACC.Link>
       </span>
     );
   }
 
-  private renderScore(workflow: MonitoringReportWorkflow, response: MonitoringReportOptionDto | undefined, validation: QuestionValidator, question: MonitoringReportQuestionDto) {
+  private renderScore(response: Dtos.MonitoringReportOptionDto | undefined, validation: QuestionValidator, question: Dtos.MonitoringReportQuestionDto) {
     if(!question.isScored) {
       return null;
     }
     return (
-      <SummaryListItem
+      <ACC.SummaryListItem
         validation={validation.score}
         label="Score"
         content={(response && `${response.questionScore} - ${response.questionText}`)}
         qa={`question-${question.displayOrder}-score`}
-        action={this.getAction(workflow, validation, question)}
+        action={this.getAction(validation, question)}
       />
     );
   }
 
-  private renderComments(workflow: MonitoringReportWorkflow, validation: QuestionValidator, question: MonitoringReportQuestionDto) {
+  private renderComments(validation: QuestionValidator, question: Dtos.MonitoringReportQuestionDto) {
     return (
-      <SummaryListItem
+      <ACC.SummaryListItem
         validation={validation.comments}
         label="Comments"
         content={question.comments || ""}
         qa={`question-${question.displayOrder}-comments`}
         /*Put the action on the second item if not showing the first*/
-        action={!question.isScored && this.getAction(workflow, validation, question)}
+        action={!question.isScored && this.getAction(validation, question)}
       />
     );
   }
@@ -140,64 +110,44 @@ class DetailsComponent extends ContainerBase<MonitoringReportPrepareSummaryParam
   private renderPeriod(editor: IEditorStore<Dtos.MonitoringReportDto, MonitoringReportDtoValidator>) {
     const validation = editor && editor.validator.periodId;
     return (
-      <Section>
-        <SummaryList qa={`summary-period`}>
-          <SummaryListItem
+      <ACC.Section>
+        <ACC.SummaryList qa={`summary-period`}>
+          <ACC.SummaryListItem
             validation={validation}
             label="Period"
             content={editor.data.periodId}
             qa={`period`}
             /*Put the action on the second item if not showing the first*/
-            action={this.props.mode === "prepare" && <Link id={validation.key} replace={true} route={this.props.routes.monitoringReportPreparePeriod.getLink({projectId: this.props.projectId, id: this.props.id})}>Edit</Link>}
+            action={this.props.mode === "prepare" && <ACC.Link id={validation.key} replace={true} route={this.props.routes.monitoringReportPreparePeriod.getLink({projectId: this.props.projectId, id: this.props.id})}>Edit</ACC.Link>}
           />
-        </SummaryList>
-      </Section>
+        </ACC.SummaryList>
+      </ACC.Section>
     );
   }
 
-  private renderResponse(workflow: MonitoringReportWorkflow, editor: IEditorStore<Dtos.MonitoringReportDto, MonitoringReportDtoValidator>, question: MonitoringReportQuestionDto) {
+  private renderResponse(editor: IEditorStore<Dtos.MonitoringReportDto, MonitoringReportDtoValidator>, question: Dtos.MonitoringReportQuestionDto) {
     const response = question.options.find(x => x.id === question.optionId);
     const validation = editor && editor.validator.responses.results.find(x => x.model.displayOrder === question.displayOrder)!;
     return (
-      <Section title={question.title}>
-        <SummaryList qa={`summary-question-${question.displayOrder}`}>
-          {this.renderScore(workflow, response, validation, question)}
-          {this.renderComments(workflow, validation, question)}
-        </SummaryList>
-      </Section>
+      <ACC.Section title={question.title}>
+        <ACC.SummaryList qa={`summary-question-${question.displayOrder}`}>
+          {this.renderScore(response, validation, question)}
+          {this.renderComments(validation, question)}
+        </ACC.SummaryList>
+      </ACC.Section>
     );
   }
 }
 
-const Container = (props: MonitoringReportPrepareSummaryParams & BaseProps) => (
+export const MonitoringReportSummary = (props: MonitoringReportReportSummaryProps) => (
   <StoresConsumer>
     {
       stores => (
-        <DetailsComponent
-          project={stores.projects.getById(props.projectId)}
-          report={stores.monitoringReports.getById(props.projectId, props.id)}
+        <Component
           statusChanges={stores.monitoringReports.getStatusChanges(props.projectId, props.id)}
-          editor={stores.monitoringReports.getUpdateMonitoringReportEditor(props.projectId, props.id)}
-          onChange={(save, dto, submit) => {
-            stores.monitoringReports.updateMonitoringReportEditor(save, props.projectId, dto, submit, () => {
-              stores.navigation.navigateTo(props.routes.monitoringReportDashboard.getLink({ projectId: dto.projectId }));
-            });
-          }}
           {...props}
         />
       )
     }
   </StoresConsumer>
 );
-
-export const MonitoringReportSummaryRoute = defineRoute({
-  routeName: "monitoringReportSummary",
-  routePath: "/projects/:projectId/monitoring-reports/:id/:mode<(view|prepare){1}>/summary",
-  getParams: (r) => ({ projectId: r.params.projectId, id: r.params.id, mode: r.params.mode }),
-  container: Container,
-  accessControl: (auth, params) => auth.forProject(params.projectId).hasRole(ProjectRole.MonitoringOfficer),
-  getTitle: (store, params) => ({
-    htmlTitle: params.mode === "view" ? "View monitoring report" : "Edit monitoring report",
-    displayTitle: "Monitoring report"
-  })
-});

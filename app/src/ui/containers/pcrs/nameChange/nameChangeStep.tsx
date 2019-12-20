@@ -2,7 +2,6 @@ import React from "react";
 import * as ACC from "@ui/components";
 import { PartnerDto, PCRItemForAccountNameChangeDto } from "@framework/dtos";
 import { EditorStatus, StoresConsumer } from "@ui/redux";
-import { accountNameChangeWorkflow } from "./accountNameChangeWorkflow";
 import { PcrStepProps } from "@ui/containers/pcrs/pcrWorkflow";
 import { PCRAccountNameChangeItemDtoValidator } from "@ui/validators";
 
