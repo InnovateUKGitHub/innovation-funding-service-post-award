@@ -32,6 +32,7 @@ class ViewForecastComponent extends ContainerBase<Params, Data, {}> {
         backLink={<ACC.BackLink route={backLink}>{backText}</ACC.BackLink>}
         project={data.project}
       >
+        {this.renderFinalClaimMessage(data)}
         <ACC.Section title={partnerName} qa="partner-name" className="govuk-!-padding-bottom-3">
           <ACC.Renderers.Messages messages={this.props.messages} />
           <ACC.Forecasts.Warning {...data}/>
@@ -44,6 +45,20 @@ class ViewForecastComponent extends ContainerBase<Params, Data, {}> {
         </ACC.Section>
       </ACC.Page>
     );
+  }
+
+  private renderFinalClaimMessage(data: ACC.Claims.ForecastData) {
+    const isWithdrawn = data.partner.partnerStatus === PartnerStatus.VoluntaryWithdrawal || data.partner.partnerStatus === PartnerStatus.InvoluntaryWithdrawal;
+    if (!data.claim || data.claim && !data.claim.isFinalClaim || !isWithdrawn) return null;
+
+    const isMoPm = !!(data.project.roles & (ProjectRole.ProjectManager | ProjectRole.MonitoringOfficer));
+
+    if (isMoPm) {
+      return <ACC.ValidationMessage qa="final-claim-message-MO/PM" messageType="info" message={`${data.partner.name} is due to submit their final claim so cannot change their forecast.`}/>;
+    }
+
+    return <ACC.ValidationMessage qa="final-claim-message-FC" messageType="info" message="You cannot change your forecast as you are due to submit your final claim."/>;
+
   }
 
   private renderOverheadsRate(overheadRate: number | null) {
