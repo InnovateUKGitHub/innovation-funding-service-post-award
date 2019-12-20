@@ -27,7 +27,7 @@ export class ForecastDetailsDtosValidator extends Results<ForecastDetailsDTO[]> 
     if (this.items.isValid) {
       this.totalCosts = Validation.all(this,
         () => Validation.isTrue(this, totalForecastCosts + totalClaimCosts <= totalGolCosts, "Your overall total cannot be higher than your total eligible costs."),
-        () => Validation.isFalse(this, currentClaim && currentClaim.isFinalClaim, "You cannot change your forecast after you have withdrawn from the project."),
+        () => Validation.isFalse(this, currentClaim && currentClaim.isFinalClaim, "You cannot change your forecast as you are due to submit your final claim."),
         () => Validation.isTrue(this, !partner || (partner.partnerStatus !== PartnerStatus.InvoluntaryWithdrawal && partner.partnerStatus !== PartnerStatus.VoluntaryWithdrawal), "You cannot change your forecast after you have withdrawn from the project.")
       );
     } else {
