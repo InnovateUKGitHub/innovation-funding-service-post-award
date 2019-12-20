@@ -4,8 +4,7 @@ import { MonitoringReportDto } from "@framework/dtos/monitoringReportDto";
 import {
   MonitoringReportDashboardRoute,
   MonitoringReportPreparePeriodParams,
-  MonitoringReportPreparePeriodRoute,
-  MonitoringReportPrepareRoute,
+  MonitoringReportPreparePeriodRoute, MonitoringReportWorkflowRoute,
 } from "@ui/containers";
 import { MonitoringReportDtoValidator } from "@ui/validators/MonitoringReportDtoValidator";
 import { GetMonitoringReportById, SaveMonitoringReport } from "@server/features/monitoringReports";
@@ -38,6 +37,6 @@ export class MonitoringReportPreparePeriodFormHandler extends StandardFormHandle
     if (button.name === "save-return") {
       return MonitoringReportDashboardRoute.getLink({ projectId: params.projectId });
     }
-    return MonitoringReportPrepareRoute.getLink({ projectId: params.projectId, id: params.id, step: 1 });
+    return MonitoringReportWorkflowRoute.getLink({ projectId: params.projectId, id: params.id, mode: "prepare", step: 1 });
   }
 }

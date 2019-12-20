@@ -1,6 +1,6 @@
 export * from "./create";
 export * from "./dashboard";
-export * from "./prepare";
+export * from "./monitoringReportWorkflow";
 export * from "./delete";
 export * from "./monitoringReportSummary";
 export * from "./periodStep";
