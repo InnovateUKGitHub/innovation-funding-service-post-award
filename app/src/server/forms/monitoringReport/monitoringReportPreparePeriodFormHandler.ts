@@ -10,7 +10,6 @@ import {
 import { MonitoringReportDtoValidator } from "@ui/validators/MonitoringReportDtoValidator";
 import { GetMonitoringReportById, SaveMonitoringReport } from "@server/features/monitoringReports";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
-import { numberComparator } from "@framework/util";
 
 export class MonitoringReportPreparePeriodFormHandler extends StandardFormHandlerBase<MonitoringReportPreparePeriodParams, "monitoringReport"> {
 
@@ -39,8 +38,6 @@ export class MonitoringReportPreparePeriodFormHandler extends StandardFormHandle
     if (button.name === "save-return") {
       return MonitoringReportDashboardRoute.getLink({ projectId: params.projectId });
     }
-    const questions = dto.questions.map(x => x.displayOrder).sort(numberComparator);
-    const firstQuestion = questions[0];
-    return MonitoringReportPrepareRoute.getLink({ projectId: params.projectId, id: params.id, questionNumber: firstQuestion });
+    return MonitoringReportPrepareRoute.getLink({ projectId: params.projectId, id: params.id, step: 1 });
   }
 }
