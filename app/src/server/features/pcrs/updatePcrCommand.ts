@@ -1,16 +1,14 @@
 import { BadRequestError, CommandBase, ValidationError } from "../common";
-import { PCRDto, PCRItemDto, ProjectRole } from "@framework/dtos";
+import { PCRDto, PCRItemDto, ProjectDto, ProjectRole } from "@framework/dtos";
 import { PCRDtoValidator } from "@ui/validators/pcrDtoValidator";
 import { Authorisation, IContext } from "@framework/types";
-import { GetAllProjectRolesForUser } from "../projects";
+import { GetAllProjectRolesForUser, GetByIdQuery } from "../projects";
 import { mapToPcrDto } from "./mapToPCRDto";
 import { GetPCRItemTypesQuery } from "./getItemTypesQuery";
-import {
-  ProjectChangeRequestItemEntity,
-  ProjectChangeRequestItemForCreateEntity
-} from "@framework/entities";
+import { ProjectChangeRequestItemEntity, ProjectChangeRequestItemForCreateEntity } from "@framework/entities";
 import { GetAllForProjectQuery } from "@server/features/partners";
 import { PCRItemType, PCRStatus } from "@framework/constants";
+import { periodInProject } from "@framework/util";
 
 export class UpdatePCRCommand extends CommandBase<boolean> {
   constructor(private projectId: string, private projectChangeRequestId: string, private pcr: PCRDto) {
@@ -45,10 +43,11 @@ export class UpdatePCRCommand extends CommandBase<boolean> {
 
     const entityToUpdate = await context.repositories.projectChangeRequests.getById(this.pcr.projectId, this.pcr.id);
     const partners = await context.runQuery(new GetAllForProjectQuery(this.projectId));
+    const project = await context.runQuery(new GetByIdQuery(this.projectId));
 
     const originalDto = mapToPcrDto(entityToUpdate, itemTypes);
 
-    const validationResult = new PCRDtoValidator(this.pcr, projectRoles, itemTypes, true, originalDto, partners);
+    const validationResult = new PCRDtoValidator(this.pcr, projectRoles, itemTypes, true, project, originalDto, partners);
 
     if (!validationResult.isValid) {
       throw new ValidationError(validationResult);
@@ -74,7 +73,7 @@ export class UpdatePCRCommand extends CommandBase<boolean> {
       .filter(x => !!x.originalItem)
       // get any updates
       .map(x => {
-        const updates = this.getItemUpdates(x.originalItem!, x.item);
+        const updates = this.getItemUpdates(x.originalItem!, x.item, project);
         return updates ? { ...x.originalItem!, ...updates } : null;
       })
       // filter those that need updating
@@ -85,7 +84,6 @@ export class UpdatePCRCommand extends CommandBase<boolean> {
     if (itemsToUpdate.length) {
       await context.repositories.projectChangeRequests.updateItems(entityToUpdate, itemsToUpdate);
     }
-
     const itemsToInsert: ProjectChangeRequestItemForCreateEntity[] = paired
       .filter(x => !x.originalItem)
       .map(x => ({
@@ -102,7 +100,7 @@ export class UpdatePCRCommand extends CommandBase<boolean> {
   }
 
   // tslint:disable-next-line:cognitive-complexity
-  private getItemUpdates(item: ProjectChangeRequestItemEntity, dto: (PCRItemDto)): Partial<ProjectChangeRequestItemEntity> | null {
+  private getItemUpdates(item: ProjectChangeRequestItemEntity, dto: PCRItemDto, project: ProjectDto): Partial<ProjectChangeRequestItemEntity> | null {
     const init = item.status !== dto.status ? { status: dto.status } : null;
 
     switch (dto.type) {
@@ -124,6 +122,11 @@ export class UpdatePCRCommand extends CommandBase<boolean> {
       case PCRItemType.AccountNameChange:
         if (item.accountName !== dto.accountName || item.partnerId !== dto.partnerId) {
           return { ...init, accountName: dto.accountName, partnerId: dto.partnerId };
+        }
+        break;
+      case PCRItemType.PartnerWithdrawal:
+        if (item.withdrawalDate !== dto.withdrawalDate || item.partnerId !== dto.partnerId) {
+          return { ...init, withdrawalDate: dto.withdrawalDate, partnerId: dto.partnerId, removalPeriod: periodInProject(dto.withdrawalDate, project) };
         }
         break;
     }

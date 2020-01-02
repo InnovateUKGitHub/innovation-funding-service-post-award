@@ -12,6 +12,7 @@ import { suspendProjectWorkflow } from "./suspendProject/workflow";
 import { financialVirementWorkflow } from "./financialVirements/workflow";
 import { BaseProps } from "../containerBase";
 import { IStepProps, ISummaryProps, IWorkflow, WorkflowBase } from "@framework/types/workflowBase";
+import { removePartnerWorkflow } from "@ui/containers/pcrs/removePartner";
 
 export interface PcrStepProps<TDto, TVal> extends IStepProps {
   project: ProjectDto;
@@ -58,9 +59,10 @@ export class PcrWorkflow<T, TVal extends Results<T>> extends WorkflowBase<string
         return new PcrWorkflow(suspendProjectWorkflow, step);
       case PCRItemType.MultiplePartnerFinancialVirement:
         return new PcrWorkflow(financialVirementWorkflow, step);
+      case PCRItemType.PartnerWithdrawal:
+        return new PcrWorkflow(removePartnerWorkflow, step);
       case PCRItemType.SinglePartnerFinancialVirement:
       case PCRItemType.PartnerAddition:
-      case PCRItemType.PartnerWithdrawal:
         return new PcrWorkflow(standardItemWorkflow, step);
       default:
         return null;
