@@ -5,6 +5,7 @@ import {
 import {
   PCRDto,
   PCRItemForAccountNameChangeDto,
+  PCRItemForPartnerWithdrawalDto,
   PCRItemForProjectSuspensionDto,
   PCRItemForProjectTerminationDto,
   PCRItemForScopeChangeDto,
@@ -47,9 +48,10 @@ const mapItem = (pcr: ProjectChangeRequestItemEntity, itemType: PCRItemTypeDto) 
       return mapItemForTermination(pcr, itemType.displayName, itemType.type);
     case PCRItemType.AccountNameChange:
       return mapItemForAccountNameChange(pcr, itemType.displayName, itemType.type);
+    case PCRItemType.PartnerWithdrawal:
+      return mapItemForPartnerWithdrawal(pcr, itemType.displayName, itemType.type);
     case PCRItemType.MultiplePartnerFinancialVirement:
     case PCRItemType.PartnerAddition:
-    case PCRItemType.PartnerWithdrawal:
     case PCRItemType.SinglePartnerFinancialVirement:
       return mapStandardItem(pcr, itemType.displayName, itemType.type);
     default:
@@ -102,6 +104,14 @@ const mapItemForProjectSuspension = (pcr: ProjectChangeRequestItemEntity, typeNa
 const mapItemForAccountNameChange = (pcr: ProjectChangeRequestItemEntity, typeName: string, type: PCRItemType.AccountNameChange): PCRItemForAccountNameChangeDto => ({
   ...mapBaseItem(pcr, typeName, type),
   accountName: pcr.accountName || null,
+  partnerId: pcr.partnerId || null,
+  partnerNameSnapshot: pcr.partnerNameSnapshot || null,
+  type
+});
+
+const mapItemForPartnerWithdrawal = (pcr: ProjectChangeRequestItemEntity, typeName: string, type: PCRItemType.PartnerWithdrawal): PCRItemForPartnerWithdrawalDto => ({
+  ...mapBaseItem(pcr, typeName, type),
+  withdrawalDate: pcr.withdrawalDate || null,
   partnerId: pcr.partnerId || null,
   partnerNameSnapshot: pcr.partnerNameSnapshot || null,
   type

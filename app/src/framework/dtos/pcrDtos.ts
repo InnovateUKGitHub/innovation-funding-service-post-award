@@ -45,11 +45,11 @@ export type PCRItemDto =
   PCRItemForScopeChangeDto |
   PCRItemForProjectSuspensionDto |
   PCRItemForAccountNameChangeDto |
-  PCRItemForProjectTerminationDto;
+  PCRItemForProjectTerminationDto |
+  PCRItemForPartnerWithdrawalDto;
 
 export type ProjectChangeRequestStandardItemTypes = (
   PCRItemType.PartnerAddition|
-  PCRItemType.PartnerWithdrawal|
   PCRItemType.MultiplePartnerFinancialVirement|
   PCRItemType.SinglePartnerFinancialVirement
   );
@@ -83,6 +83,13 @@ export interface PCRItemForAccountNameChangeDto extends PCRItemBaseDto {
   accountName: string | null;
   partnerId: string | null;
   partnerNameSnapshot: string | null;
+}
+
+export interface PCRItemForPartnerWithdrawalDto extends PCRItemBaseDto {
+  type: PCRItemType.PartnerWithdrawal;
+  partnerNameSnapshot: string | null;
+  withdrawalDate: Date | null;
+  partnerId: string | null;
 }
 
 export interface PCRItemForProjectTerminationDto extends PCRItemBaseDto {

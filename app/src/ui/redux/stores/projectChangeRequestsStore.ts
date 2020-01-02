@@ -170,11 +170,18 @@ export class ProjectChangeRequestStore extends StoreBase {
     switch (itemType.type) {
       case PCRItemType.MultiplePartnerFinancialVirement:
       case PCRItemType.PartnerAddition:
-      case PCRItemType.PartnerWithdrawal:
       case PCRItemType.SinglePartnerFinancialVirement:
         return {
           ...baseFields,
           type: itemType.type
+        };
+      case PCRItemType.PartnerWithdrawal:
+        return {
+          ...baseFields,
+          type: itemType.type,
+          partnerId: null,
+          withdrawalDate: null,
+          partnerNameSnapshot: null,
         };
       case PCRItemType.AccountNameChange:
         return {
@@ -223,7 +230,8 @@ export class ProjectChangeRequestStore extends StoreBase {
       projectRoles: this.projectStore.getById(projectId).then(x => x.roles),
       original: dto.id ? this.getById(projectId, dto.id) : Pending.done(undefined),
       itemTypes: this.getAllPcrTypes(),
-    }).then(x => new PCRDtoValidator(dto, x.projectRoles, x.itemTypes, showErrors, x.original));
+      project: this.projectStore.getById(projectId)
+    }).then(x => new PCRDtoValidator(dto, x.projectRoles, x.itemTypes, showErrors, x.project, x.original));
   }
 
   public deletePcr(projectId: string, pcrId: string, dto: PCRDto, message?: string, onComplete?: () => void): void {

@@ -1,4 +1,4 @@
-import { IContext, ILinkInfo, ProjectRole } from "@framework/types";
+import { IContext, ILinkInfo, ProjectDto, ProjectRole } from "@framework/types";
 import { BadRequestError } from "@server/features/common";
 import { GetPCRByIdQuery } from "@server/features/pcrs/getPCRByIdQuery";
 import { UpdatePCRCommand } from "@server/features/pcrs/updatePcrCommand";
@@ -16,6 +16,8 @@ import { accountNameChangeStepNames } from "@ui/containers/pcrs/nameChange/accou
 import { suspendProjectSteps } from "@ui/containers/pcrs/suspendProject/workflow";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
 import { PcrWorkflow } from "@ui/containers/pcrs/pcrWorkflow";
+import { removePartnerStepNames } from "@ui/containers/pcrs/removePartner";
+import { mapToProjectDto } from "@server/features/projects";
 
 export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBase<ProjectChangeRequestPrepareItemParams, "pcr"> {
   constructor() {
@@ -47,10 +49,12 @@ export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBa
       case PCRItemType.AccountNameChange:
         this.updateNameChange(item, body, stepName as accountNameChangeStepNames);
         break;
+      case PCRItemType.PartnerWithdrawal:
+        this.updatePartnerWithdrawal(item, body, stepName as removePartnerStepNames);
+        break;
       case PCRItemType.MultiplePartnerFinancialVirement:
       case PCRItemType.SinglePartnerFinancialVirement:
       case PCRItemType.PartnerAddition:
-      case PCRItemType.PartnerWithdrawal:
         // nothing to update as only files
         break;
     }
@@ -112,11 +116,22 @@ export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBa
     }
   }
 
+  private updatePartnerWithdrawal(item: Dtos.PCRItemForPartnerWithdrawalDto, body: IFormBody, stepName: removePartnerStepNames | null) {
+    if (stepName === "withdrawalDateStep") {
+      if (body.withdrawalDate_day || body.withdrawalDate_month || body.withdrawalDate_year) {
+        const withdrawalDate = DateTime.fromFormat(`${body.withdrawalDate_day}/${body.withdrawalDate_month}/${body.withdrawalDate_year}`, "d/M/yyyy");
+        item.withdrawalDate = withdrawalDate.toJSDate();
+      }
+
+      item.partnerId = body.partnerId;
+    }
+  }
+
   protected getStoreKey(params: ProjectChangeRequestPrepareItemParams) {
     return storeKeys.getPcrKey(params.projectId, params.pcrId);
   }
 
   protected createValidationResult(params: ProjectChangeRequestPrepareItemParams, dto: Dtos.PCRDto) {
-    return new PCRDtoValidator(dto, ProjectRole.Unknown, [], false, dto);
+    return new PCRDtoValidator(dto, ProjectRole.Unknown, [], false, {} as ProjectDto, dto);
   }
 }
