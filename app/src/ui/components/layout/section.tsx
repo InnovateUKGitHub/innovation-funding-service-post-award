@@ -29,6 +29,7 @@ const renderTitles = ({ title, subtitle, badge }: Props, isEmpty: boolean, heade
 
   const Header = header;
   const headerClasses = classNames({
+    "acc-section-title": true,
     "govuk-heading-xl" : header === "h1",
     "govuk-heading-l" : header === "h2",
     "govuk-heading-m" : header === "h3",
@@ -42,7 +43,7 @@ const renderTitles = ({ title, subtitle, badge }: Props, isEmpty: boolean, heade
   return (
     <div className={classes}>
       {!!title ? <Header className={headerClasses}>{title}</Header> : null}
-      {!!subtitle ? <SimpleString>{subtitle}</SimpleString> : null}
+      {!!subtitle ? <SimpleString className="acc-section-subtitle">{subtitle}</SimpleString> : null}
     </div>
   );
 };
