@@ -76,6 +76,7 @@ export class ClaimDetailDocumentsComponent extends ContainerBase<ClaimDetailDocu
         validator={editor.validator}
         pageTitle={<ACC.Projects.Title project={project} />}
       >
+        <ACC.Renderers.SimpleString qa="guidanceText">Evidence for each expenditure might include, but is not limited to, invoices, timesheets, receipts and spreadsheets for capital usage.</ACC.Renderers.SimpleString>
         <ACC.Renderers.Messages messages={this.props.messages} />
         {this.renderDocuments(editor, documents)}
         <ACC.Section title="Upload">
