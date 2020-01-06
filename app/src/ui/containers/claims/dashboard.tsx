@@ -42,6 +42,7 @@ class Component extends ContainerBase<ClaimDashboardPageParams, Data, {}> {
         backLink={<Acc.Projects.ProjectBackLink project={project} routes={this.props.routes} />}
         project={project}
       >
+        {this.renderGuidanceMessage()}
         <Acc.Renderers.Messages messages={this.props.messages} />
         <Acc.Section qa="current-claims-section" title={"Open"} badge={claimsWindow}>
           {this.renderCurrentClaims(currentClaim ? [currentClaim] : [], "current-claims-table", project, partner, previousClaims)}
@@ -53,6 +54,15 @@ class Component extends ContainerBase<ClaimDashboardPageParams, Data, {}> {
     );
   }
 
+  private renderGuidanceMessage() {
+    return (
+      <Acc.ValidationMessage
+        qa="guidance-message"
+        messageType="info"
+        message={<Acc.Renderers.SimpleString>All partners in this project must upload evidence for each expenditure with every claim made. These might include invoices, timesheets, receipts or spreadsheets for capital usage. This is part of Innovate UK's obligations under the <a href="https://www.gov.uk/government/publications/managing-public-money?_ga=2.105018247.521318796.1576575366-1871284022.1544109966">Managing Public Money government handbook</a> in relation to assurance, financial management and control.</Acc.Renderers.SimpleString>}
+      />
+    );
+  }
   private renderNextPeriodStartDate(endDate: Date) {
     const date = DateTime.fromJSDate(endDate).plus({ days: 1 }).toJSDate();
     return (
