@@ -71,6 +71,7 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
         validator={editor.validator}
         pageTitle={<ACC.Projects.Title project={project} />}
       >
+        {this.renderGuidanceMessage()}
         <ACC.Section>
           <ACC.TextHint text={costCategory.hintText} />
           {costCategory.isCalculated ? this.renderCalculated(costCategory, claimDetails, forecastDetail, documents, editor) : this.renderTable(editor, forecastDetail, documents)}
@@ -117,7 +118,7 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
         <LineItemForm.Fieldset heading={"Additional information"} qa="additional-info-form" headingQa="additional-info-heading">
           <LineItemForm.MultilineString
             label="additional-info"
-            hint={"Explain any difference between the forecast costs and the total costs."}
+            hint="Explain any difference between the forecast costs and the total costs, and what actions are you taking because of this. For example updating the project plan or financial forecast."
             labelHidden={true}
             name="comments"
             value={() => editor.data.comments}
@@ -176,6 +177,14 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
         </LineItemForm.Fieldset>
         <LineItemForm.Submit>Save and return to claim</LineItemForm.Submit>
       </LineItemForm.Form>
+    );
+  }
+
+  private renderGuidanceMessage() {
+    return (
+      <ACC.Renderers.SimpleString qa="guidance-message">
+        You must break down your total costs and upload evidence for each expenditure you are claiming for. Contact your monitoring officer for more information about the level of detail you are required to provide.
+      </ACC.Renderers.SimpleString>
     );
   }
 
