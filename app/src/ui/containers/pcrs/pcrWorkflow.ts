@@ -39,9 +39,9 @@ export interface PcrSummaryProps<TDto, TVal, TStepNames> extends ISummaryProps, 
   getEditLink: (stepName: TStepNames, validation: Result|null) => React.ReactNode;
 }
 
-export type IPCRWorkflow<T, TVal> = IWorkflow<string, PcrStepProps<T, TVal>, PcrSummaryProps<T, TVal, string>>;
+export type IPCRWorkflow<T, TVal extends Results<{}>> = IWorkflow<string, PcrStepProps<T, TVal>, PcrSummaryProps<T, TVal, string>, TVal>;
 
-export class PcrWorkflow<T, TVal extends Results<T>> extends WorkflowBase<string, PcrStepProps<T, TVal>, PcrSummaryProps<T, TVal, string>> {
+export class PcrWorkflow<T, TVal extends Results<T>> extends WorkflowBase<string, PcrStepProps<T, TVal>, PcrSummaryProps<T, TVal, string>, TVal> {
   public constructor(definition: IPCRWorkflow<T, TVal>, stepNumber: number | undefined) {
     super(definition, stepNumber);
   }

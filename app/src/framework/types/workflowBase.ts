@@ -1,41 +1,46 @@
 import React from "react";
 import { numberComparator } from "@framework/util";
 import { NotFoundError } from "@server/features/common";
+import { Results } from "@ui/validation";
 
 export interface IStepProps {}
 export interface ISummaryProps {}
 
-export interface IStep<TStepName extends string, TStepProps extends IStepProps> {
+export interface IStep<TStepName extends string, TStepProps extends IStepProps, TVal extends Results<{}>> {
   stepName: TStepName;
   displayName: string;
   stepNumber: number;
+  // TODO make validation non optional
+  validation?: (val: TVal) => Results<any>;
   stepRender: (props: TStepProps) => React.ReactNode;
 }
 
-export interface IWorkflow<TStepName extends string, TStepProps extends IStepProps, TSummaryProps extends ISummaryProps> {
-  steps: IStep<TStepName, TStepProps>[];
-  summary: {
-    summaryRender: (props: TSummaryProps) => React.ReactNode;
-  };
+interface ISummary<TSummaryProps, TVal extends Results<{}>> {
+  validation?: (val: TVal) => Results<any>;
+  summaryRender: (props: TSummaryProps) => React.ReactNode;
+}
+export interface IWorkflow<TStepName extends string, TStepProps extends IStepProps, TSummaryProps extends ISummaryProps, TVal extends Results<{}>> {
+  steps: IStep<TStepName, TStepProps, TVal>[];
+  summary: ISummary<TSummaryProps, TVal>;
 }
 
-export interface ICallableStep<TStepProps extends IStepProps> extends IStep<string, TStepProps> {}
+export interface ICallableStep<TStepProps extends IStepProps, TVal extends Results<{}>> extends IStep<string, TStepProps, TVal> {}
 
-export interface ICallableWorkflow<TStepProps extends IStepProps, TSummaryProps extends ISummaryProps> {
+export interface ICallableWorkflow<TStepProps extends IStepProps, TSummaryProps extends ISummaryProps, TVal extends Results<{}>> {
   isOnSummary: () => boolean;
   getSummary: () => { summaryRender: (props: TSummaryProps) => React.ReactNode } | undefined;
   findStepNumberByName: (name: string) => number | undefined;
-  getCurrentStepInfo: () => ICallableStep<TStepProps> | undefined;
+  getCurrentStepInfo: () => ICallableStep<TStepProps, TVal> | undefined;
   getCurrentStepName: () => string | undefined;
-  getNextStepInfo: () => ICallableStep<TStepProps> | undefined;
-  getPrevStepInfo: () => ICallableStep<TStepProps> | undefined;
+  getNextStepInfo: () => ICallableStep<TStepProps, TVal> | undefined;
+  getPrevStepInfo: () => ICallableStep<TStepProps, TVal> | undefined;
 }
 
-export abstract class WorkflowBase<TStepNames extends string, TStepProps extends IStepProps, TSummaryProps extends ISummaryProps> implements ICallableWorkflow<TStepProps, TSummaryProps> {
-  private readonly steps: IStep<TStepNames, TStepProps>[];
-  private readonly summary: { summaryRender: (props: TSummaryProps) => React.ReactNode; };
+export abstract class WorkflowBase<TStepNames extends string, TStepProps extends IStepProps, TSummaryProps extends ISummaryProps, TVal extends Results<{}>> implements ICallableWorkflow<TStepProps, TSummaryProps, TVal> {
+  private readonly steps: IStep<TStepNames, TStepProps, TVal>[];
+  private readonly summary: ISummary<TSummaryProps, TVal>;
 
-  protected constructor(definition: IWorkflow<TStepNames, TStepProps, TSummaryProps>, private stepNumber: number | undefined) {
+  protected constructor(definition: IWorkflow<TStepNames, TStepProps, TSummaryProps, TVal>, private stepNumber: number | undefined) {
     if (stepNumber && !definition.steps.find(x => x.stepNumber === stepNumber)) {
       throw new NotFoundError();
     }

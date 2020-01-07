@@ -27,7 +27,7 @@ export interface MonitoringReportReportSummaryProps extends ISummaryProps {
   getEditLink: (stepName: string) => ILinkInfo;
 }
 
-export type IMonitoringReportWorkflow = IWorkflow<string, MonitoringReportReportStepProps, MonitoringReportReportSummaryProps>;
+export type IMonitoringReportWorkflow = IWorkflow<string, MonitoringReportReportStepProps, MonitoringReportReportSummaryProps, MonitoringReportDtoValidator>;
 
 const getQuestionSteps = (dto: Dtos.MonitoringReportDto, startingStepNumber: number) => {
   return dto.questions
@@ -36,6 +36,7 @@ const getQuestionSteps = (dto: Dtos.MonitoringReportDto, startingStepNumber: num
     stepName: `question-${x.displayOrder}`,
     displayName: x.title,
     stepNumber: i + startingStepNumber,
+    validation: (val: MonitoringReportDtoValidator) => val.responses.results.find(response => response.question.displayOrder === x.displayOrder)!,
     stepRender: (props: MonitoringReportReportStepProps) =>
       <MonitoringReportQuestionStep questionNumber={x.displayOrder} {...props}/>
   }));
@@ -47,12 +48,13 @@ const monitoringReportWorkflowDef = (dto: Dtos.MonitoringReportDto): IMonitoring
   return {
     steps: getQuestionSteps(dto, 1),
     summary: {
+      validation: (val: MonitoringReportDtoValidator) => val,
       summaryRender: MonitoringReportSummary
     }
   };
 };
 
-export class MonitoringReportWorkflowDef extends WorkflowBase<string, MonitoringReportReportStepProps, MonitoringReportReportSummaryProps> {
+export class MonitoringReportWorkflowDef extends WorkflowBase<string, MonitoringReportReportStepProps, MonitoringReportReportSummaryProps, MonitoringReportDtoValidator> {
   public constructor(definition: IMonitoringReportWorkflow, stepNumber: number | undefined) {
     super(definition, stepNumber);
   }

@@ -40,6 +40,7 @@ export class MonitoringReportPrepareFormHandler extends StandardFormHandlerBase<
     if (!progress) {
       return MonitoringReportDashboardRoute.getLink({ projectId: params.projectId });
     }
+
     const nextStep = MonitoringReportWorkflowDef.getWorkflow(dto, params.step).getNextStepInfo();
     return MonitoringReportWorkflowRoute.getLink({ projectId: params.projectId, id: params.id, mode: "prepare", step: nextStep && nextStep.stepNumber });
   }
