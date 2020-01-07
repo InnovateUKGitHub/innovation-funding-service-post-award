@@ -14,16 +14,19 @@ export const removePartnerWorkflow: IPCRWorkflow<PCRItemForPartnerWithdrawalDto,
       stepName: "withdrawalDateStep",
       displayName: "Partner withdrawal",
       stepNumber: 1,
+      validation: val => val.pcr,
       stepRender: RemovePartnerStep
     },
     {
       stepName: "filesStep",
       displayName: "Upload withdrawal of partner certificate",
       stepNumber: 2,
+      validation: val => val.files,
       stepRender: PCRPrepareItemFilesForPartnerWithdrawalStep
     }
   ],
   summary: {
+    validation: val => val,
     summaryRender: RemovePartnerSummary
   }
 };

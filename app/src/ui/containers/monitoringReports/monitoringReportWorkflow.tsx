@@ -40,7 +40,7 @@ class Component extends ContainerBase<MonitoringReportWorkflowParams, Data, Call
       <ACC.Page
         backLink={this.getBackLink(workflow)}
         pageTitle={<ACC.Projects.Title project={project} />}
-        validator={this.getValidationFromWorkflow(workflow, editor)}
+        validator={workflow.getValidation(editor.validator)}
         error={editor.error}
       >
         { this.renderWorkflow(workflow, editor) }
@@ -82,15 +82,6 @@ class Component extends ContainerBase<MonitoringReportWorkflowParams, Data, Call
       onChange: (dto) => this.props.onChange(false, dto),
       onSave: (dto, progress) => this.props.onChange(true, dto, false, this.getForwardLink(workflow, progress))
     });
-  }
-
-  private getValidationFromWorkflow(workflow: MonitoringReportWorkflowDef, editor: IEditorStore<Dtos.MonitoringReportDto, MonitoringReportDtoValidator>) {
-    if (workflow.isOnSummary()) {
-      const summary = workflow.getSummary();
-      return summary && summary.validation && summary.validation(editor.validator);
-    }
-    const step = workflow.getCurrentStepInfo();
-    return step && step.validation && step.validation(editor.validator);
   }
 
   private getForwardLink(workflow: MonitoringReportWorkflowDef, progress: boolean) {

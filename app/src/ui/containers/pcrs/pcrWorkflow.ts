@@ -13,6 +13,7 @@ import { financialVirementWorkflow } from "./financialVirements/workflow";
 import { BaseProps } from "../containerBase";
 import { IStepProps, ISummaryProps, IWorkflow, WorkflowBase } from "@framework/types/workflowBase";
 import { removePartnerWorkflow } from "@ui/containers/pcrs/removePartner";
+import { PCRWorkflowValidator } from "@ui/validators/pcrWorkflowValidator";
 
 export interface PcrStepProps<TDto, TVal> extends IStepProps {
   project: ProjectDto;
@@ -40,9 +41,9 @@ export interface PcrSummaryProps<TDto, TVal, TStepNames> extends ISummaryProps, 
   getEditLink: (stepName: TStepNames, validation: Result | null) => React.ReactNode;
 }
 
-export type IPCRWorkflow<T, TVal extends Results<{}>> = IWorkflow<string, PcrStepProps<T, TVal>, PcrSummaryProps<T, TVal, string>, TVal>;
+export type IPCRWorkflow<T, TVal extends Results<{}>> = IWorkflow<string, PcrStepProps<T, TVal>, PcrSummaryProps<T, TVal, string>, PCRWorkflowValidator>;
 
-export class PcrWorkflow<T, TVal extends Results<T>> extends WorkflowBase<string, PcrStepProps<T, TVal>, PcrSummaryProps<T, TVal, string>, TVal> {
+export class PcrWorkflow<T, TVal extends Results<T>> extends WorkflowBase<string, PcrStepProps<T, TVal>, PcrSummaryProps<T, TVal, string>, PCRWorkflowValidator> {
   public constructor(definition: IPCRWorkflow<T, TVal>, stepNumber: number | undefined) {
     super(definition, stepNumber);
   }
