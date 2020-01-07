@@ -12,11 +12,13 @@ export const standardItemWorkflow: IPCRWorkflow<PCRStandardItemDto, PCRStandardI
       stepName: "filesStep",
       displayName: "Upload files",
       stepNumber: 1,
+      validation: val => val.files,
       stepRender: FilesStep
     }
   ],
   summary:
     {
+      validation: val => val,
       summaryRender: Summary
     }
 };

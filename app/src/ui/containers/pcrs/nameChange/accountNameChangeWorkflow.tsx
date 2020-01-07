@@ -13,16 +13,19 @@ export const accountNameChangeWorkflow: IPCRWorkflow<PCRItemForAccountNameChange
       stepName: "partnerNameStep",
       displayName: "Partner details",
       stepNumber: 1,
+      validation: val => val.pcr,
       stepRender: NameChangeStep
     },
     {
       stepName: "filesStep",
       displayName: "Upload change of name certificate",
       stepNumber: 2,
+      validation: val => val.files,
       stepRender: PCRPrepareItemFilesStep
     }
   ],
   summary: {
+    validation: val => val,
     summaryRender: NameChangeSummary
   }
 };

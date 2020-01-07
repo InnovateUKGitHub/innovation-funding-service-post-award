@@ -1,6 +1,5 @@
 import React from "react";
 import { numberComparator } from "@framework/util";
-import { NotFoundError } from "@server/features/common";
 import { Results } from "@ui/validation";
 
 export interface IStepProps {}
@@ -10,13 +9,12 @@ export interface IStep<TStepName extends string, TStepProps extends IStepProps, 
   stepName: TStepName;
   displayName: string;
   stepNumber: number;
-  // TODO make validation non optional
-  validation?: (val: TVal) => Results<any>;
+  validation: (val: TVal) => Results<any>;
   stepRender: (props: TStepProps) => React.ReactNode;
 }
 
 interface ISummary<TSummaryProps, TVal extends Results<{}>> {
-  validation?: (val: TVal) => Results<any>;
+  validation: (val: TVal) => Results<any>;
   summaryRender: (props: TSummaryProps) => React.ReactNode;
 }
 export interface IWorkflow<TStepName extends string, TStepProps extends IStepProps, TSummaryProps extends ISummaryProps, TVal extends Results<{}>> {
@@ -34,6 +32,7 @@ export interface ICallableWorkflow<TStepProps extends IStepProps, TSummaryProps 
   getCurrentStepName: () => string | undefined;
   getNextStepInfo: () => ICallableStep<TStepProps, TVal> | undefined;
   getPrevStepInfo: () => ICallableStep<TStepProps, TVal> | undefined;
+  getValidation: (validators: TVal) => Results<{}> | undefined;
 }
 
 export abstract class WorkflowBase<TStepNames extends string, TStepProps extends IStepProps, TSummaryProps extends ISummaryProps, TVal extends Results<{}>> implements ICallableWorkflow<TStepProps, TSummaryProps, TVal> {
@@ -91,5 +90,14 @@ export abstract class WorkflowBase<TStepNames extends string, TStepProps extends
   public getCurrentStepName() {
     const currentStep = this.getCurrentStepInfo();
     return currentStep && currentStep.stepName;
+  }
+
+  public getValidation(validators: TVal) {
+    if (this.isOnSummary()) {
+      const summary = this.getSummary();
+      return summary && summary.validation && summary.validation(validators);
+    }
+    const step = this.getCurrentStepInfo();
+    return step && step.validation && step.validation(validators);
   }
 }
