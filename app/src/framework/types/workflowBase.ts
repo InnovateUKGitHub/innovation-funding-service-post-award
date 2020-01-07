@@ -41,9 +41,6 @@ export abstract class WorkflowBase<TStepNames extends string, TStepProps extends
   private readonly summary: ISummary<TSummaryProps, TVal>;
 
   protected constructor(definition: IWorkflow<TStepNames, TStepProps, TSummaryProps, TVal>, private stepNumber: number | undefined) {
-    if (stepNumber && !definition.steps.find(x => x.stepNumber === stepNumber)) {
-      throw new NotFoundError();
-    }
     this.steps = definition.steps;
     this.steps.sort((a, b) => numberComparator(a.stepNumber, b.stepNumber));
     this.summary = definition.summary;
