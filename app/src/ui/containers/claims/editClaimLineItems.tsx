@@ -167,7 +167,7 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
         <LineItemForm.Fieldset heading={"Additional information"} qa="additional-info-form" headingQa="additional-info-heading">
           <LineItemForm.MultilineString
             label="additional-info"
-            hint={"Explain any difference between the forecast costs and the total costs."}
+            hint="Explain any difference between the forecast costs and the total costs, and what actions are you taking because of this. For example updating the project plan or financial forecast."
             labelHidden={true}
             name="comments"
             value={() => editor.data.comments}
