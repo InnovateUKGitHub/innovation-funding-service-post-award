@@ -48,17 +48,24 @@ class ViewForecastComponent extends ContainerBase<Params, Data, {}> {
   }
 
   private renderFinalClaimMessage(data: ACC.Claims.ForecastData) {
-    const isWithdrawn = data.partner.partnerStatus === PartnerStatus.VoluntaryWithdrawal || data.partner.partnerStatus === PartnerStatus.InvoluntaryWithdrawal;
-    if (!data.claim || data.claim && !data.claim.isFinalClaim || !isWithdrawn) return null;
+    const finalClaim = data.claims.find(x => x.isFinalClaim);
+    // Checks that the data exists
+    if (!data.claim || !finalClaim ) return null;
+
+    // Check to see if final claim has been reached
+    if (data.claim.periodId < finalClaim.periodId) return null;
 
     const isMoPm = !!(data.project.roles & (ProjectRole.ProjectManager | ProjectRole.MonitoringOfficer));
 
     if (isMoPm) {
-      return <ACC.ValidationMessage qa="final-claim-message-MO/PM" messageType="info" message={`${data.partner.name} is due to submit their final claim so cannot change their forecast.`}/>;
+      return finalClaim.isApproved
+        ? <ACC.ValidationMessage qa="final-claim-message-MO/PM" messageType="info" message={`${data.partner.name} has submitted their final claim so cannot change their forecast.`}/>
+        : <ACC.ValidationMessage qa="final-claim-message-MO/PM" messageType="info" message={`${data.partner.name} is due to submit their final claim so cannot change their forecast.`}/>;
     }
 
-    return <ACC.ValidationMessage qa="final-claim-message-FC" messageType="info" message="You cannot change your forecast as you are due to submit your final claim."/>;
-
+    return finalClaim.isApproved
+      ? <ACC.ValidationMessage qa="final-claim-message-FC" messageType="info" message="You cannot change your forecast as you have submitted your final claim."/>
+      : <ACC.ValidationMessage qa="final-claim-message-FC" messageType="info" message="You cannot change your forecast as you are due to submit your final claim."/>;
   }
 
   private renderOverheadsRate(overheadRate: number | null) {
