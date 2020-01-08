@@ -44,9 +44,9 @@ export class MonitoringReportQuestionStep extends React.Component<Props> {
       : [];
     return (
       <ReportForm.Fieldset heading={q.title} >
+        <ACC.Renderers.SimpleString className="govuk-hint">{q.description}</ACC.Renderers.SimpleString>
         <ReportForm.Hidden name={`questionDisplayOrder`} value={x => questionNumber} />
-        {
-          radioOptions.length ? (
+        { !!radioOptions.length && (
             <ReportForm.Radio
               name={`question_${q.displayOrder}_options`}
               label={``}
@@ -56,10 +56,7 @@ export class MonitoringReportQuestionStep extends React.Component<Props> {
               update={(x, value) => x.questions[i].optionId = value && value.id}
               validation={validator.responses.results[i].score}
             />
-          ) : (
-            <ACC.Renderers.SimpleString className="govuk-hint">{q.description}</ACC.Renderers.SimpleString>
-          )
-        }
+          ) }
         <ReportForm.MultilineString
           name={`question_${q.displayOrder}_comments`}
           label="Comment"
