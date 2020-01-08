@@ -1,6 +1,6 @@
 import { IFormBody, IFormButton, StandardFormHandlerBase } from "@server/forms/formHandlerBase";
 import { CreateProjectChangeRequestParams, PCRCreateRoute, ProjectChangeRequestPrepareRoute, } from "@ui/containers";
-import { PCRDto, PCRItemDto, PCRStandardItemDto, ProjectRole } from "@framework/dtos";
+import { PCRDto, PCRItemDto, PCRStandardItemDto, ProjectDto, ProjectRole } from "@framework/dtos";
 import { IContext, ILinkInfo } from "@framework/types";
 import { CreateProjectChangeRequestCommand } from "@server/features/pcrs/createProjectChangeRequestCommand";
 import { PCRDtoValidator } from "@ui/validators";
@@ -41,6 +41,6 @@ export class ProjectChangeRequestCreateFormHandler extends StandardFormHandlerBa
   }
 
   protected createValidationResult(params: CreateProjectChangeRequestParams, dto: PCRDto) {
-    return new PCRDtoValidator(dto, ProjectRole.Unknown, [], false, dto);
+    return new PCRDtoValidator(dto, ProjectRole.Unknown, [], false, {} as ProjectDto, dto);
   }
 }

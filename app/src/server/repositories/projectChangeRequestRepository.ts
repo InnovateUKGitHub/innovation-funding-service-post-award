@@ -47,6 +47,8 @@ export interface ISalesforcePCR {
   // will probably change to Acc_AdditionalNumberoFMonths__c in the future!!
   Acc_AdditionalNumberofMonths__c: number|null;
   Acc_NewProjectDuration__c: number|null;
+  Acc_RemovalDate__c: string|null;
+  Acc_RemovalPeriod__c: number|null;
   Acc_ExistingProjectDuration__c: number|null;
   Acc_SuspensionStarts__c: string|null;
   Acc_SuspensionEnds__c: string|null;
@@ -83,6 +85,8 @@ export class ProjectChangeRequestRepository extends SalesforceRepositoryBase<ISa
     "Acc_AdditionalNumberofMonths__c",
     "Acc_NewProjectDuration__c",
     "Acc_ExistingProjectDuration__c",
+    "Acc_RemovalDate__c",
+    "Acc_RemovalPeriod__c",
     "toLabel(Acc_MarkedAsComplete__c) MarkedAsCompleteName",
     "Acc_Comments__c",
     "Acc_SuspensionStarts__c",
@@ -143,6 +147,8 @@ export class ProjectChangeRequestRepository extends SalesforceRepositoryBase<ISa
       Acc_SuspensionStarts__c: this.toOptionalSFDate(x.suspensionStartDate),
       Acc_SuspensionEnds__c: this.toOptionalSFDate(x.suspensionEndDate),
       Acc_NewOrganisationName__c: x.accountName,
+      Acc_RemovalDate__c: this.toOptionalSFDate(x.withdrawalDate),
+      Acc_RemovalPeriod__c: x.removalPeriod,
       Acc_Project_Participant__c: x.partnerId
     })));
   }
