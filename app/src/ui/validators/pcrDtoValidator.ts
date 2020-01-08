@@ -6,23 +6,21 @@ import {
   PCRDto,
   PCRItemDto,
   PCRItemForAccountNameChangeDto,
+  PCRItemForPartnerWithdrawalDto,
   PCRItemForProjectSuspensionDto,
   PCRItemForProjectTerminationDto,
   PCRItemForScopeChangeDto,
   PCRItemForTimeExtensionDto,
   PCRItemTypeDto,
-  PCRStandardItemDto,
+  PCRStandardItemDto, ProjectDto,
   ProjectRole
 } from "@framework/dtos";
-import {
-  PCRItemStatus,
-  PCRItemType,
-  PCRStatus
-} from "@framework/constants";
+import { PCRItemStatus, PCRItemType, PCRStatus } from "@framework/constants";
+import { isNumber, periodInProject } from "@framework/util";
 
 export class PCRDtoValidator extends Results<PCRDto> {
 
-  constructor(model: PCRDto, private role: ProjectRole, private readonly recordTypes: PCRItemTypeDto[], showValidationErrors: boolean, private original?: PCRDto, private partners?: PartnerDto[]) {
+  constructor(model: PCRDto, private role: ProjectRole, private readonly recordTypes: PCRItemTypeDto[], showValidationErrors: boolean, private readonly project: ProjectDto, private original?: PCRDto, private partners?: PartnerDto[]) {
     super(model, showValidationErrors);
   }
 
@@ -148,9 +146,10 @@ export class PCRDtoValidator extends Results<PCRDto> {
         return new PCRProjectTerminationItemDtoValidator(item, canEdit, this.role, this.model.status, this.recordTypes, this.showValidationErrors, originalItem as PCRItemForProjectTerminationDto);
       case PCRItemType.AccountNameChange:
         return new PCRAccountNameChangeItemDtoValidator(item, canEdit, this.role, this.model.status, this.recordTypes, this.showValidationErrors, this.partners, originalItem as PCRItemForAccountNameChangeDto);
+      case PCRItemType.PartnerWithdrawal:
+        return new PCRPartnerWithdrawalItemDtoValidator(item, canEdit, this.role, this.model.status, this.recordTypes, this.showValidationErrors, this.project, this.partners, originalItem as PCRItemForPartnerWithdrawalDto);
       case PCRItemType.MultiplePartnerFinancialVirement:
       case PCRItemType.PartnerAddition:
-      case PCRItemType.PartnerWithdrawal:
       case PCRItemType.SinglePartnerFinancialVirement:
         return new PCRStandardItemDtoValidator(item, canEdit, this.role, this.model.status, this.recordTypes, this.showValidationErrors, originalItem as PCRStandardItemDto);
       default:
@@ -339,5 +338,49 @@ export class PCRAccountNameChangeItemDtoValidator extends PCRBaseItemDtoValidato
   }
 
   accountName = this.validateAccountName();
+  partnerId = this.validatePartnerId();
+}
+
+export class PCRPartnerWithdrawalItemDtoValidator extends PCRBaseItemDtoValidator<PCRItemForPartnerWithdrawalDto> {
+  constructor(
+    model: PCRItemForPartnerWithdrawalDto,
+    protected readonly canEdit: boolean,
+    protected readonly role: ProjectRole,
+    protected readonly pcrStatus: PCRStatus,
+    protected readonly recordTypes: PCRItemTypeDto[],
+    showValidationErrors: boolean,
+    protected readonly project: ProjectDto,
+    protected readonly partners?: PartnerDto[],
+    protected readonly original?: PCRItemForPartnerWithdrawalDto
+  ) {
+    super(model, canEdit, role, pcrStatus, recordTypes, showValidationErrors, original);
+  }
+
+  private validateWithdrawalDate() {
+    if (!this.canEdit) {
+      return Validation.isUnchanged(this, this.model.withdrawalDate, this.original && this.original.withdrawalDate, "Withdrawal date cannot be changed.");
+    }
+    const isComplete = this.model.status === PCRItemStatus.Complete;
+    const removalPeriod = periodInProject(this.model.withdrawalDate, this.project);
+    return Validation.all(this,
+      () => isComplete ? Validation.required(this, this.model.withdrawalDate, "Enter a new withdrawal date") : Validation.valid(this),
+      () => Validation.isDate(this, this.model.withdrawalDate, "Please enter a valid withdrawal date"),
+      () => isNumber(removalPeriod) ? Validation.isTrue(this, removalPeriod > 0, "Withdrawal date must be after the project started") : Validation.valid(this)
+    );
+  }
+
+  // tslint:disable-next-line:no-identical-functions
+  private validatePartnerId() {
+    if (!this.canEdit) {
+      return Validation.isUnchanged(this, this.model.partnerId, this.original && this.original.partnerId, "Partner cannot be changed.");
+    }
+    const isComplete = this.model.status === PCRItemStatus.Complete;
+    return Validation.all(this,
+      () => isComplete ? Validation.required(this, this.model.partnerId, "Select partner to change") : Validation.valid(this),
+      () => this.partners && this.model.partnerId ? Validation.permitedValues(this, this.model.partnerId, this.partners.map(x => x.id), "Invalid partner for project") : Validation.valid(this)
+    );
+  }
+
+  withdrawalDate = this.validateWithdrawalDate();
   partnerId = this.validatePartnerId();
 }
