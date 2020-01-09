@@ -59,7 +59,7 @@ class Component extends ContainerBase<ClaimDashboardPageParams, Data, {}> {
       <Acc.ValidationMessage
         qa="guidance-message"
         messageType="info"
-        message={<Acc.Renderers.SimpleString>All partners in this project must upload evidence for each expenditure with every claim made. These might include invoices, timesheets, receipts or spreadsheets for capital usage. This is part of Innovate UK's obligations under the <a href="https://www.gov.uk/government/publications/managing-public-money?_ga=2.105018247.521318796.1576575366-1871284022.1544109966">Managing Public Money government handbook</a> in relation to assurance, financial management and control.</Acc.Renderers.SimpleString>}
+        message={<span>All partners in this project must upload evidence for each expenditure with every claim made. These might include invoices, timesheets, receipts or spreadsheets for capital usage. This is part of Innovate UK's obligations under the <a href="https://www.gov.uk/government/publications/managing-public-money?_ga=2.105018247.521318796.1576575366-1871284022.1544109966">Managing Public Money government handbook</a> in relation to assurance, financial management and control.</span>}
       />
     );
   }
