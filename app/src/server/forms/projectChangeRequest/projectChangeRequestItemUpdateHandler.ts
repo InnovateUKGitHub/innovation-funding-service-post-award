@@ -1,5 +1,5 @@
 import { IContext, ILinkInfo, ProjectDto, ProjectRole } from "@framework/types";
-import { BadRequestError } from "@server/features/common";
+import { BadRequestError, Configuration } from "@server/features/common";
 import { GetPCRByIdQuery } from "@server/features/pcrs/getPCRByIdQuery";
 import { UpdatePCRCommand } from "@server/features/pcrs/updatePcrCommand";
 import { IFormBody, IFormButton, StandardFormHandlerBase } from "@server/forms/formHandlerBase";
@@ -34,7 +34,7 @@ export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBa
     }
 
     item.status = body.itemStatus === "true" ? PCRItemStatus.Complete : PCRItemStatus.Incomplete;
-    const workflow = PcrWorkflow.getWorkflow(item, params.step);
+    const workflow = PcrWorkflow.getWorkflow(item, params.step, Configuration.features);
     const stepName = workflow && workflow.getCurrentStepName();
     switch (item.type) {
       case PCRItemType.TimeExtension:
@@ -50,7 +50,9 @@ export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBa
         this.updateNameChange(item, body, stepName as accountNameChangeStepNames);
         break;
       case PCRItemType.PartnerWithdrawal:
-        this.updatePartnerWithdrawal(item, body, stepName as removePartnerStepNames);
+        if(Configuration.features.pcrRemovePartner) {
+          this.updatePartnerWithdrawal(item, body, stepName as removePartnerStepNames);
+        }
         break;
       case PCRItemType.MultiplePartnerFinancialVirement:
       case PCRItemType.SinglePartnerFinancialVirement:
@@ -93,7 +95,7 @@ export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBa
   protected async run(context: IContext, params: ProjectChangeRequestPrepareItemParams, button: IFormButton, dto: Dtos.PCRDto): Promise<ILinkInfo> {
     await context.runCommand(new UpdatePCRCommand(params.projectId, params.pcrId, dto));
 
-    const workflow = PcrWorkflow.getWorkflow(dto.items.find(x => x.id === params.itemId), params.step);
+    const workflow = PcrWorkflow.getWorkflow(dto.items.find(x => x.id === params.itemId), params.step, Configuration.features);
 
     if (!workflow || workflow.isOnSummary()) {
       return ProjectChangeRequestPrepareRoute.getLink(params);
