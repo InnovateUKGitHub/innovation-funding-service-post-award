@@ -4,7 +4,7 @@ import {
   ProjectChangeRequestAddTypeRoute,
   ProjectChangeRequestPrepareRoute,
 } from "@ui/containers";
-import { PCRDto, PCRStandardItemDto, ProjectRole } from "@framework/dtos";
+import { PCRDto, PCRStandardItemDto, ProjectDto, ProjectRole } from "@framework/dtos";
 import { IContext, ILinkInfo } from "@framework/types";
 import { PCRDtoValidator } from "@ui/validators";
 import { UpdatePCRCommand } from "@server/features/pcrs/updatePcrCommand";
@@ -47,6 +47,6 @@ export class ProjectChangeRequestAddTypeFormHandler extends StandardFormHandlerB
   }
 
   protected createValidationResult(params: ProjectChangeRequestAddTypeParams, dto: PCRDto) {
-    return new PCRDtoValidator(dto, ProjectRole.Unknown, [], false, dto);
+    return new PCRDtoValidator(dto, ProjectRole.Unknown, [], false, {} as ProjectDto, dto);
   }
 }

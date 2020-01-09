@@ -1,4 +1,4 @@
-import { IContext, ILinkInfo, PCRDto, PCRItemTypeDto, ProjectRole } from "@framework/types";
+import { IContext, ILinkInfo, PCRDto, PCRItemTypeDto, ProjectDto, ProjectRole } from "@framework/types";
 import { GetPCRByIdQuery } from "@server/features/pcrs/getPCRByIdQuery";
 import { UpdatePCRCommand } from "@server/features/pcrs/updatePcrCommand";
 import { IFormBody, IFormButton, StandardFormHandlerBase } from "@server/forms/formHandlerBase";
@@ -61,6 +61,6 @@ export class ProjectChangeRequestReasoningUpdateHandler extends StandardFormHand
       enabled: false,
       files:[]
     }];
-    return new PCRDtoValidator(dto, ProjectRole.Unknown, projectChangeRequestItemTypes, false, dto);
+    return new PCRDtoValidator(dto, ProjectRole.Unknown, projectChangeRequestItemTypes, false, {} as ProjectDto, dto);
   }
 }
