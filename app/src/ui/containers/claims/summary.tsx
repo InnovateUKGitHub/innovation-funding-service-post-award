@@ -262,6 +262,6 @@ export const ClaimSummaryRoute = defineRoute({
   accessControl: (auth, { projectId, partnerId }) => auth.forPartner(projectId, partnerId).hasRole(ProjectRole.FinancialContact),
   getTitle: () => ({
     htmlTitle: "Claim summary",
-    displayTitle: "Claim Summary"
+    displayTitle: "Claim summary"
   })
 });
