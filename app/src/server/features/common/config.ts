@@ -90,7 +90,8 @@ const features: IFeatureFlags = {
     documentFiltering: getFeatureFlagValue(process.env.FEATURE_DOCUMENT_FILTERING, defaultFeatureFlag),
     financialVirements: getFeatureFlagValue(process.env.FEATURE_FINANCIAL_VIREMENTS, defaultFeatureFlag),
     projectFiltering: getFeatureFlagValue(process.env.FEATURE_PROJECT_FILTERING, defaultFeatureFlag),
-    pcrsEnabled: getFeatureFlagValue(process.env.FEATURE_PCRS_ENABLED, defaultFeatureFlag)
+    pcrsEnabled: getFeatureFlagValue(process.env.FEATURE_PCRS_ENABLED, defaultFeatureFlag),
+    pcrRemovePartner: getFeatureFlagValue(process.env.FEATURE_PCR_REMOVE_PARTNER, defaultFeatureFlag),
 };
 
 const logLevel = parseLogLevel(process.env.LOG_LEVEL! || process.env.LOGLEVEL!);
