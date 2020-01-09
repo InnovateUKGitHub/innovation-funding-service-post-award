@@ -146,7 +146,7 @@ class PCRPrepareComponent extends ContainerBase<ProjectChangeRequestPrepareParam
 
   private getItemTasks(item: PCRItemDto, editor: IEditorStore<PCRDto, PCRDtoValidator>, index: number) {
     const validationErrors = editor.validator.items.results[index].errors;
-    const workflow = PcrWorkflow.getWorkflow(item, 1);
+    const workflow = PcrWorkflow.getWorkflow(item, 1, this.props.config.features);
     return (
       <ACC.Task
         name={item.typeName}

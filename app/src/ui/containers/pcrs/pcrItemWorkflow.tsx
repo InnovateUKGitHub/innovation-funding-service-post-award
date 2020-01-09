@@ -74,7 +74,7 @@ class Component extends ContainerBase<ProjectChangeRequestPrepareItemParams, Dat
 
   private renderContents(project: ProjectDto, editor: IEditorStore<PCRDto, PCRDtoValidator>, documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>, pcr: PCRDto, pcrItem: PCRItemDto, pcrItemType: PCRItemTypeDto, editableItemTypes: PCRItemType[]) {
     // TODO fix this
-    const workflow = PcrWorkflow.getWorkflow(pcrItem, this.props.step);
+    const workflow = PcrWorkflow.getWorkflow(pcrItem, this.props.step, this.props.config.features);
     return (
       <ACC.Page
         backLink={this.getBackLink()}

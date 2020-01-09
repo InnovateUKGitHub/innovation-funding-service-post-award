@@ -37,7 +37,7 @@ export interface PcrSummaryProps<TDto, TVal, TStepNames> extends ISummaryProps, 
   mode: "prepare" | "review" | "view";
   onSave: () => void;
   getStepLink: (stepName: TStepNames) => ILinkInfo;
-  getEditLink: (stepName: TStepNames, validation: Result|null) => React.ReactNode;
+  getEditLink: (stepName: TStepNames, validation: Result | null) => React.ReactNode;
 }
 
 export type IPCRWorkflow<T, TVal extends Results<{}>> = IWorkflow<string, PcrStepProps<T, TVal>, PcrSummaryProps<T, TVal, string>, TVal>;
@@ -47,7 +47,7 @@ export class PcrWorkflow<T, TVal extends Results<T>> extends WorkflowBase<string
     super(definition, stepNumber);
   }
 
-  private static getWorkflowType(pcrItem: PCRItemDto, step: number | undefined) {
+  private static getWorkflowType(pcrItem: PCRItemDto, step: number | undefined, features: IFeatureFlags) {
     switch (pcrItem.type) {
       case PCRItemType.AccountNameChange:
         return new PcrWorkflow(accountNameChangeWorkflow, step);
@@ -60,7 +60,12 @@ export class PcrWorkflow<T, TVal extends Results<T>> extends WorkflowBase<string
       case PCRItemType.MultiplePartnerFinancialVirement:
         return new PcrWorkflow(financialVirementWorkflow, step);
       case PCRItemType.PartnerWithdrawal:
-        return new PcrWorkflow(removePartnerWorkflow, step);
+        if (features.pcrRemovePartner) {
+          return new PcrWorkflow(removePartnerWorkflow, step);
+        }
+        else {
+          return new PcrWorkflow(standardItemWorkflow, step);
+        }
       case PCRItemType.SinglePartnerFinancialVirement:
       case PCRItemType.PartnerAddition:
         return new PcrWorkflow(standardItemWorkflow, step);
@@ -69,10 +74,10 @@ export class PcrWorkflow<T, TVal extends Results<T>> extends WorkflowBase<string
     }
   }
 
-  public static getWorkflow(pcrItem: PCRItemDto | undefined, step: number | undefined): PcrWorkflow<PCRItemDto, Results<PCRItemDto>> | null {
+  public static getWorkflow(pcrItem: PCRItemDto | undefined, step: number | undefined, features: IFeatureFlags): PcrWorkflow<PCRItemDto, Results<PCRItemDto>> | null {
     if (!pcrItem) {
       return null;
     }
-    return this.getWorkflowType(pcrItem, step) as PcrWorkflow<PCRItemDto, Results<PCRItemDto>>;
+    return this.getWorkflowType(pcrItem, step, features) as PcrWorkflow<PCRItemDto, Results<PCRItemDto>>;
   }
 }

@@ -31,7 +31,7 @@ export class ProjectChangeRequestItemDocumentUploadHandler extends MultipleFileF
 
     if (button.name === "uploadFileAndContinue") {
       const itemDto = await context.runQuery(new GetPCRByIdQuery(params.projectId, params.pcrId)).then(pcr => pcr.items.find(item => item.id === params.itemId)!);
-      const workflow = PcrWorkflow.getWorkflow(itemDto, params.step);
+      const workflow = PcrWorkflow.getWorkflow(itemDto, params.step, Configuration.features);
       if (workflow) {
         const nextStep = workflow.getNextStepInfo();
         return PCRPrepareItemRoute.getLink({
