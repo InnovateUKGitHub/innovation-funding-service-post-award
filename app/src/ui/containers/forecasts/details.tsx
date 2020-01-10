@@ -3,6 +3,7 @@ import * as ACC from "@ui/components";
 import { BaseProps, ContainerBase, defineRoute } from "../containerBase";
 import { ClaimDto, PartnerDto, PartnerStatus, ProjectDto, ProjectRole, ProjectStatus } from "@framework/dtos";
 import { Pending } from "@shared/pending";
+import { PrepareClaimRoute } from "@ui/containers";
 import { StoresConsumer } from "@ui/redux";
 
 interface Params {
@@ -63,9 +64,14 @@ class ViewForecastComponent extends ContainerBase<Params, Data, {}> {
         : <ACC.ValidationMessage qa="final-claim-message-MO/PM" messageType="info" message={`${data.partner.name} is due to submit their final claim so cannot change their forecast.`}/>;
     }
 
-    return finalClaim.isApproved
-      ? <ACC.ValidationMessage qa="final-claim-message-FC" messageType="info" message="You cannot change your forecast as you have submitted your final claim."/>
-      : <ACC.ValidationMessage qa="final-claim-message-FC" messageType="info" message="You cannot change your forecast as you are due to submit your final claim."/>;
+    const claimPageLink = PrepareClaimRoute.getLink({projectId: data.project.id, partnerId: data.partner.id, periodId: data.project.periodId});
+
+    const isClaimApprovedOrPaid = finalClaim.isApproved || finalClaim.paidDate;
+    const isPartnerWithdrawn = data.partner.partnerStatus === PartnerStatus.VoluntaryWithdrawal || data.partner.partnerStatus === PartnerStatus.InvoluntaryWithdrawal;
+
+    return (isClaimApprovedOrPaid) || (isPartnerWithdrawn)
+      ? <ACC.ValidationMessage qa="final-claim-message-FC" messageType="info" message="You cannot change your forecast. Your project has ended."/>
+      : <ACC.ValidationMessage qa="final-claim-message-FC" messageType="info" message={<span>You cannot change your forecast. You must <ACC.Link route={claimPageLink} styling="Link">submit your final claim</ACC.Link>.</span>}/>;
   }
 
   private renderOverheadsRate(overheadRate: number | null) {
