@@ -63,8 +63,16 @@ class Component extends ContainerBase<ClaimDashboardPageParams, Data, {}> {
       />
     );
   }
-  private renderNextPeriodStartDate(endDate: Date) {
+  private renderNoCurrentClaimsMessage(endDate: Date, previousClaims: ClaimDto[]) {
     const date = DateTime.fromJSDate(endDate).plus({ days: 1 }).toJSDate();
+    // If the final claim has been approved
+    if (previousClaims && previousClaims.find(x => x.isFinalClaim)) {
+      return (
+        <Acc.Renderers.SimpleString qa="notificationMessage">
+          There are no claims. Innovate UK has approved your final claim.
+        </Acc.Renderers.SimpleString>
+      );
+    }
     return (
       <Acc.Renderers.SimpleString>
         You have no open claims. The next claim period begins <Acc.Renderers.FullDate value={date} />.
@@ -72,21 +80,16 @@ class Component extends ContainerBase<ClaimDashboardPageParams, Data, {}> {
     );
   }
 
-  private renderCurrentClaims(data: ClaimDto[], tableQa: string, project: ProjectDto, partner: PartnerDto, previousClaims?: ClaimDto[]) {
-    if (data.length) {
-      return this.renderClaimsTable(data, tableQa, project, partner, "Open");
+  private renderCurrentClaims(currentClaims: ClaimDto[], tableQa: string, project: ProjectDto, partner: PartnerDto, previousClaims: ClaimDto[]) {
+    if (currentClaims.length) {
+      return this.renderClaimsTable(currentClaims, tableQa, project, partner, "Open");
     }
 
     if (!!project.periodEndDate) {
-      return this.renderNextPeriodStartDate(project.periodEndDate);
-    }
-
-    if (!!previousClaims) {
-      return this.renderNextPeriodStartDate(previousClaims[0].periodEndDate);
+      return this.renderNoCurrentClaimsMessage(project.periodEndDate, previousClaims);
     }
 
     return null;
-
   }
 
   private renderPreviousClaims(data: ClaimDto[], tableQa: string, project: ProjectDto, partner: PartnerDto) {
