@@ -3,7 +3,9 @@ import "jest";
 import { TestContext } from "../../testContextProvider";
 import { ClaimFrequency, ProjectDto, ProjectRole, ProjectStatus } from "@framework/types";
 import { mapToProjectDto } from "@server/features/projects";
+import { DateTime } from "luxon";
 
+// tslint:disable:no-big-function
 describe("mapToProjectDto", () => {
   it("when valid expect mapping",  () => {
     const context = new TestContext();
@@ -18,6 +20,7 @@ describe("mapToProjectDto", () => {
       title: "Expected title",
       startDate: startDate.set({ hour: 0, minute: 0, second: 0, millisecond: 0 }).toJSDate(),
       endDate: endDate.set({ hour: 0, minute: 0, second: 0, millisecond: 0 }).toJSDate(),
+      hasEnded: true,
       summary: "Expected summary",
       description: "Expected description",
       projectNumber: "Expected project number",
@@ -101,6 +104,16 @@ describe("mapToProjectDto", () => {
     const result = mapToProjectDto(context, salesforce, ProjectRole.Unknown);
 
     expect(result.grantOfferLetterUrl).toBe("https://ifs.application.url/grantletter/competition/30000/project/1");
+  });
+
+  it("should return hasEnded correctly",() => {
+    const context = new TestContext();
+    const salesforceNow = context.testData.createProject(x => {x.Acc_EndDate__c = DateTime.fromJSDate(new Date()).toFormat("yyyy-MM-dd");});
+    const salesforceTomorrow = context.testData.createProject(x => {x.Acc_EndDate__c = DateTime.fromJSDate(new Date()).plus({days: 1}).toFormat("yyyy-MM-dd");});
+    const salesforceYesterday = context.testData.createProject(x => {x.Acc_EndDate__c = DateTime.fromJSDate(new Date()).minus({days: 1}).toFormat("yyyy-MM-dd");});
+    expect(mapToProjectDto(context, salesforceNow, ProjectRole.Unknown).hasEnded).toBe(false);
+    expect(mapToProjectDto(context, salesforceTomorrow, ProjectRole.Unknown).hasEnded).toBe(false);
+    expect(mapToProjectDto(context, salesforceYesterday, ProjectRole.Unknown).hasEnded).toBe(true);
   });
 
   it("ClaimFrequency should map correct - Quarterly",() => {

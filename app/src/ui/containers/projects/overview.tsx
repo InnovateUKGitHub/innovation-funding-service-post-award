@@ -3,11 +3,12 @@ import React from "react";
 import { BaseProps, ContainerBase, defineRoute } from "../containerBase";
 import * as Dtos from "@framework/dtos";
 import { Pending } from "@shared/pending";
-import { IClientUser, PartnerClaimStatus, PartnerDto, ProjectDto, ProjectRole } from "@framework/types";
+import { IClientUser, PartnerClaimStatus, PartnerDto, ProjectDto, ProjectRole, ProjectStatus } from "@framework/types";
 import * as ACC from "@ui/components";
 import { IClientConfig } from "@ui/redux/reducers/configReducer";
 import { StoresConsumer } from "@ui/redux";
 import { IRoutes } from "@ui/routing";
+
 interface Data {
   projectDetails: Pending<Dtos.ProjectDto>;
   partners: Pending<Dtos.PartnerDto[]>;
@@ -31,9 +32,23 @@ class ProjectOverviewComponent extends ContainerBase<Params, Data, {}> {
     return <ACC.PageLoader pending={combined} render={x => this.renderContents(x.project, x.partners, x.contacts)} />;
   }
 
+  private isPartnerWithdrawn(project: Dtos.ProjectDto, partners: Dtos.PartnerDto[]) {
+    if (project.roles & ProjectRole.ProjectManager) {
+      const leadPartner = partners.find(x => x.isLead);
+      return leadPartner && leadPartner.isWithdrawn;
+    }
+    return partners.some(p => !!(p.roles & ProjectRole.FinancialContact) && p.isWithdrawn);
+  }
+
   renderContents(project: Dtos.ProjectDto, partners: Dtos.PartnerDto[], contacts: ProjectContactDto[]) {
     // find first partner with role
     const partner = partners.filter(x => x.roles !== ProjectRole.Unknown)[0];
+
+    const showSubtitle = project.status !== ProjectStatus.Closed && project.status !== ProjectStatus.Terminated;
+    const title = project.hasEnded || this.isPartnerWithdrawn(project, partners) ? "Project ended" : `Project period ${project.periodId} of ${project.totalPeriods}`;
+    const subtitle = (project.hasEnded || this.isPartnerWithdrawn(project, partners)
+      ? "Final claim period"
+      : <ACC.Renderers.ShortDateRange start={project.periodStartDate} end={project.periodEndDate} />);
 
     return (
       <ACC.Page
@@ -44,8 +59,8 @@ class ProjectOverviewComponent extends ContainerBase<Params, Data, {}> {
         <ACC.Section
           qa="period-information"
           className="govuk-!-padding-bottom-6"
-          title={`Project period ${project.periodId} of ${project.totalPeriods}`}
-          subtitle={<ACC.Renderers.ShortDateRange start={project.periodStartDate} end={project.periodEndDate} />}
+          title={title}
+          subtitle={showSubtitle && subtitle}
         >
           {this.renderProjectOveriewDetails(project, partner)}
         </ACC.Section>
@@ -147,7 +162,7 @@ class ProjectOverviewComponent extends ContainerBase<Params, Data, {}> {
     const result: ACC.NavigationCardMessage[] = [];
 
     if (project.roles & ProjectRole.FinancialContact) {
-      switch (partner.status) {
+      switch (partner.claimStatus) {
         case PartnerClaimStatus.NoClaimsDue:
           result.push({ message: "No claim due" });
           break;
