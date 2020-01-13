@@ -17,6 +17,7 @@ import { NavigationArrowsForPCRs } from "@ui/containers/pcrs/navigationArrows";
 import { Result } from "@ui/validation/result";
 import { PcrWorkflow } from "@ui/containers/pcrs/pcrWorkflow";
 import { Results } from "@ui/validation";
+import { PCRWorkflowValidator } from "@ui/validators/pcrWorkflowValidator";
 
 export interface ProjectChangeRequestPrepareItemParams {
   projectId: string;
@@ -73,14 +74,14 @@ class Component extends ContainerBase<ProjectChangeRequestPrepareItemParams, Dat
   }
 
   private renderContents(project: ProjectDto, editor: IEditorStore<PCRDto, PCRDtoValidator>, documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>, pcr: PCRDto, pcrItem: PCRItemDto, pcrItemType: PCRItemTypeDto, editableItemTypes: PCRItemType[]) {
-    // TODO fix this
     const workflow = PcrWorkflow.getWorkflow(pcrItem, this.props.step, this.props.config.features);
+    const validation = workflow ? workflow.getValidation(new PCRWorkflowValidator(editor.validator, documentsEditor.validator)) : [editor.validator, documentsEditor.validator];
     return (
       <ACC.Page
         backLink={this.getBackLink()}
         pageTitle={<ACC.Projects.Title project={project} />}
         project={project}
-        validator={[editor.validator, documentsEditor.validator]}
+        validator={validation}
         error={editor.error || documentsEditor.error}
       >
         <ACC.Renderers.Messages messages={this.props.messages} />
