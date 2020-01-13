@@ -10,12 +10,14 @@ export const suspendProjectWorkflow: IPCRWorkflow<PCRItemForProjectSuspensionDto
   steps:[
     {
       stepName: "details",
-      displayName: "Suspention details",
+      displayName: "Suspension details",
       stepNumber: 1,
+      validation: val => val.pcr,
       stepRender: SuspendProjectDetails
     }
   ],
   summary:{
+    validation: val => val,
     summaryRender: SuspendProjectSummary
   }
 };

@@ -6,6 +6,7 @@ import { IPCRWorkflow } from "@ui/containers/pcrs/pcrWorkflow";
 export const financialVirementWorkflow: IPCRWorkflow<PCRStandardItemDto, PCRStandardItemDtoValidator> = {
   steps: [],
   summary: {
+    validation: val => val,
     summaryRender: FinancialVirementSummary
   }
 };

@@ -1,6 +1,6 @@
 import React from "react";
 import { IAppError, ProjectDto, ProjectStatus } from "@framework/types";
-import { CombinedValidator, Results } from "@ui/validation";
+import { CombinedResultsValidator, Results } from "@ui/validation";
 import { AriaLive } from "../renderers/ariaLive";
 import { ErrorSummary } from "../errorSummary";
 import { Section } from "./section";
@@ -17,7 +17,7 @@ interface Props {
 
 export const Page: React.FunctionComponent<Props> = (props) => {
   const { pageTitle, backLink, error, children, project } = props;
-  const validation = props.validator !== undefined && Array.isArray(props.validator) ? new CombinedValidator(...props.validator) : props.validator;
+  const validation = props.validator !== undefined && Array.isArray(props.validator) ? new CombinedResultsValidator(...props.validator) : props.validator;
   return (
     <div>
       {backLink && (<div className="govuk-grid-row"><div className="govuk-grid-column-full">{backLink}</div></div>)}

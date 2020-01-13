@@ -48,7 +48,7 @@ const monitoringReportWorkflowDef = (dto: Dtos.MonitoringReportDto): IMonitoring
   return {
     steps: getQuestionSteps(dto, 1),
     summary: {
-      validation: (val: MonitoringReportDtoValidator) => val,
+      validation: val => val,
       summaryRender: MonitoringReportSummary
     }
   };
