@@ -12,6 +12,14 @@ export interface IProfileTotalCostCategoryRepository {
   getAllByPartnerId(partnerId: string): Promise<ISalesforceProfileTotalCostCategory[]>;
 }
 
+/**
+ * Forecast Total for partner per cost category
+ * 
+ * ie amount a partner expects to spend in that cost category for the hole project calculated from the detail for that period
+ * Effectively holds the grant letter offer for each cost category
+ * 
+ * Stored in "Acc_Profile__c" table with record type of "Total Cost Category"
+ */
 export class ProfileTotalCostCategoryRepository extends SalesforceRepositoryBase<ISalesforceProfileTotalCostCategory> implements IProfileTotalCostCategoryRepository {
 
   private readonly recordType: string = "Total Cost Category";
@@ -21,7 +29,6 @@ export class ProfileTotalCostCategoryRepository extends SalesforceRepositoryBase
   protected readonly salesforceFieldNames = [
     "Id",
     "Acc_CostCategory__c",
-    // "Acc_CostCategoryTotal__c",
     "Acc_CostCategoryGOLCost__c",
     "Acc_ProjectParticipant__c",
   ];

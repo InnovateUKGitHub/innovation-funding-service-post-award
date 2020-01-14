@@ -15,6 +15,13 @@ export interface IMonitoringReportQuestionsRepository {
   getAll(): Promise<ISalesforceMonitoringReportQuestions[]>;
 }
 
+/**
+ * The questions for a monitoring report
+ * 
+ * Stored in Acc_MonitoringQuestion__c table
+ * 
+ * Questions can be enabled or disabled for new reports
+ */
 export class MonitoringReportQuestionsRepository
   extends SalesforceRepositoryBase<ISalesforceMonitoringReportQuestions>
   implements IMonitoringReportQuestionsRepository {

@@ -8,6 +8,9 @@ export type Updatable<T> = Partial<T> & {
   Id: string
 };
 
+/**
+ * Base class for all salesforce repositories
+ */
 export abstract class RepositoryBase {
   public constructor(
     protected readonly getSalesforceConnection: () => Promise<Connection>,
@@ -35,7 +38,7 @@ export abstract class RepositoryBase {
           rej(this.constructError(err));
         }
         else {
-          // there is an error in the typeings of result so need to cast here
+          // there is an error in the typings of result so need to cast here
           res(records as any as T[]);
         }
       });
@@ -43,6 +46,9 @@ export abstract class RepositoryBase {
   }
 }
 
+/**
+ * Generic Base class with mapping and helpers to retrieve salesforce objects
+ */
 export abstract class SalesforceRepositoryBaseWithMapping<TSalesforce, TEntity> extends RepositoryBase {
   public constructor(
     getSalesforceConnection: () => Promise<Connection>,
@@ -237,6 +243,11 @@ class DefaultMapper<T> implements ISalesforceMapper<T, T> {
   map(item: T) { return item; }
 }
 
+/**
+ * Generic Base class without mapping
+ * 
+ * Has helpers to retrieve salesforce objects
+ */
 export default abstract class SalesforceRepositoryBase<T> extends SalesforceRepositoryBaseWithMapping<T, T> {
   protected mapper = new DefaultMapper<T>();
 }

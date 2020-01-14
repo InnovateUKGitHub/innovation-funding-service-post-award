@@ -1,5 +1,4 @@
 import SalesforceRepositoryBase, { Updatable } from "./salesforceRepositoryBase";
-import { IRecordTypeRepository } from ".";
 import { Connection } from "jsforce";
 import { ILogger } from "@server/features/common";
 
@@ -25,6 +24,12 @@ export interface IClaimDetailsRepository {
   insert(insert: Partial<ISalesforceClaimDetails>): Promise<string>;
 }
 
+/**
+ * Claim details are from the Acc_Claims__c table at the "Claims Detail" level.
+ * 
+ * Claim amounts stored per cost category per claim and are summed from the Claim Line items
+ * A text field for comments
+ */
 export class ClaimDetailsRepository extends SalesforceRepositoryBase<ISalesforceClaimDetails> implements IClaimDetailsRepository {
 
   constructor(private getRecordTypeId: (objectName: string, recordType: string) => Promise<string>, getSalesforceConnection: () => Promise<Connection>, logger: ILogger) {
@@ -81,7 +86,7 @@ export class ClaimDetailsRepository extends SalesforceRepositoryBase<ISalesforce
 
   async insert(item: Partial<ISalesforceClaimDetails>) {
     const RecordTypeId = await this.getRecordTypeId(this.salesforceObjectName, this.recordType);
-    const salesforcUpdate: Partial<{
+    const salesforceUpdate: Partial<{
       Acc_ProjectParticipant__c: string;
       Acc_CostCategory__c: string;
       Acc_PeriodCostCategoryTotal__c: number;
@@ -97,7 +102,7 @@ export class ClaimDetailsRepository extends SalesforceRepositoryBase<ISalesforce
       RecordTypeId
     };
 
-    return super.insertItem(salesforcUpdate);
+    return super.insertItem(salesforceUpdate);
   }
 
 }

@@ -36,6 +36,13 @@ export interface IClaimRepository {
   update(updatedClaim: Partial<ISalesforceClaim> & { Id: string }): Promise<boolean>;
 }
 
+/**
+ * Claims are from the Acc_Claims__c table at the "Total Project Period" level.
+ *
+ * Claims store the total cost for a given period claim and are calculated by summing the Claim details (ie cost categories) for the period
+ * 
+ * Claims also store the status of the claim ie Approval Paid etc.
+ */
 export class ClaimRepository extends SalesforceRepositoryBase<ISalesforceClaim> implements IClaimRepository {
 
   private readonly recordType = "Total Project Period";
