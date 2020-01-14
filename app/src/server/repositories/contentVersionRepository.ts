@@ -15,6 +15,7 @@ interface ISalesforceContentVersion {
   VersionData: string;
   Description?: string;
   CreatedDate: string;
+  Acc_LastModifiedByAlias__c: string;
   Owner: {
     Username: string
   };
@@ -40,6 +41,7 @@ export class ContentVersionRepository extends SalesforceRepositoryBase<ISalesfor
     "FileType",
     "Description",
     "CreatedDate",
+    "Acc_LastModifiedByAlias__c",
     "Owner.Username"
   ];
 

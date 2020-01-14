@@ -9,7 +9,7 @@ describe("GetClaimDocumentQuery", () => {
     const partner = context.testData.createPartner(project);
     const claim = context.testData.createClaim(partner, 1);
 
-    const document = context.testData.createDocument(claim.Id, "cat", "jpg", "file content");
+    const document = context.testData.createDocument(claim.Id, "cat", "jpg", "","file content");
 
     const query = new GetClaimDocumentQuery({projectId: project.Id, partnerId: partner.Id, periodId: claim.Acc_ProjectPeriodNumber__c}, document.Id);
     const result = await context.runQuery(query).then(x => x!);

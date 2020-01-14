@@ -16,14 +16,13 @@ describe("GetProjectChangeRequestDocumentOrItemDocumentQuery", () => {
     };
     const pcrItem = context.testData.createPCRItem(pcr, pcrRecordType);
 
-    const document = context.testData.createDocument(pcrItem.id, "PCR Document", "txt", "Why I want more money");
+    const document = context.testData.createDocument(pcrItem.id, "PCR Document", "txt", "Jackie", "Why I want more money");
 
     const query = new GetProjectChangeRequestDocumentOrItemDocumentQuery(project.Id, pcrItem.id, document.Id);
     const result = await context.runQuery(query).then(x => x!);
 
     expect(result).not.toBeNull();
     expect(result.fileName).toBe("PCR Document.txt");
-    expect(result.fileType).toBe("txt");
     expect(result.contentLength).toBe("Why I want more money".length);
     expect(result.stream).not.toBeNull();
   });
@@ -33,7 +32,7 @@ describe("GetProjectChangeRequestDocumentOrItemDocumentQuery", () => {
     const project = context.testData.createProject();
     const pcr = context.testData.createPCR(project);
 
-    const document = context.testData.createDocument(pcr.id, "PCR Document", "txt", "Why I want more money");
+    const document = context.testData.createDocument(pcr.id, "PCR Document", "txt", "Paul","Why I want more money");
 
     const query = new GetProjectChangeRequestDocumentOrItemDocumentQuery(project.Id, pcr.id, document.Id);
     const result = await context.runQuery(query).then(x => x!);
