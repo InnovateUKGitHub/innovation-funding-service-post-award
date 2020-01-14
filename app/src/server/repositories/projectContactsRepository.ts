@@ -23,7 +23,7 @@ export interface IProjectContactsRepository {
 
 /**
  * Project Contacts are the roles users are assigned to on the project
- * 
+ *
  * Stored in Acc_ProjectContactLink__c and the role is a pick list Acc_Role__c
  */
 export class ProjectContactsRepository extends SalesforceRepositoryBase<ISalesforceProjectContact> implements IProjectContactsRepository {

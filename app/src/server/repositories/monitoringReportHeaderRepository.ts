@@ -25,9 +25,9 @@ export interface IMonitoringReportHeaderRepository {
 
 /**
  * MonitoringReportHeader is the parent record of a monitoring report
- * 
+ *
  * It is stored in "Acc_MonitoringAnswer__c" table with record type of "Monitoring Header"
- * 
+ *
  * It also stores the status of the monitoring report.
  */
 export class MonitoringReportHeaderRepository extends SalesforceRepositoryBase<ISalesforceMonitoringReportHeader> implements IMonitoringReportHeaderRepository {
