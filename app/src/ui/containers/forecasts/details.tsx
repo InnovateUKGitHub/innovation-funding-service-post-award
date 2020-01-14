@@ -51,27 +51,27 @@ class ViewForecastComponent extends ContainerBase<Params, Data, {}> {
   private renderFinalClaimMessage(data: ACC.Claims.ForecastData) {
     const finalClaim = data.claims.find(x => x.isFinalClaim);
     // Checks that the data exists
-    if (!data.claim || !finalClaim ) return null;
-
-    // Check to see if final claim has been reached
-    if (data.claim.periodId < finalClaim.periodId) return null;
-
-    const isMoPm = !!(data.project.roles & (ProjectRole.ProjectManager | ProjectRole.MonitoringOfficer));
-
-    if (isMoPm) {
-      return finalClaim.isApproved
-        ? <ACC.ValidationMessage qa="final-claim-message-MO/PM" messageType="info" message={`${data.partner.name} has submitted their final claim so cannot change their forecast.`}/>
-        : <ACC.ValidationMessage qa="final-claim-message-MO/PM" messageType="info" message={`${data.partner.name} is due to submit their final claim so cannot change their forecast.`}/>;
-    }
 
     const claimPageLink = PrepareClaimRoute.getLink({projectId: data.project.id, partnerId: data.partner.id, periodId: data.project.periodId});
-
-    const isClaimApprovedOrPaid = finalClaim.isApproved || finalClaim.paidDate;
+    const isClaimApprovedOrPaid = finalClaim && finalClaim.isApproved || finalClaim && finalClaim.paidDate;
     const isPartnerWithdrawn = data.partner.partnerStatus === PartnerStatus.VoluntaryWithdrawal || data.partner.partnerStatus === PartnerStatus.InvoluntaryWithdrawal;
 
-    return (isClaimApprovedOrPaid) || (isPartnerWithdrawn)
-      ? <ACC.ValidationMessage qa="final-claim-message-FC" messageType="info" message="You cannot change your forecast. Your project has ended."/>
-      : <ACC.ValidationMessage qa="final-claim-message-FC" messageType="info" message={<span>You cannot change your forecast. You must <ACC.Link route={claimPageLink} styling="Link">submit your final claim</ACC.Link>.</span>}/>;
+    const isFc = !!(data.project.roles & (ProjectRole.FinancialContact));
+
+    if (isFc) {
+      return (isClaimApprovedOrPaid || isPartnerWithdrawn)
+        ? <ACC.ValidationMessage qa="final-claim-message-FC" messageType="info" message="You cannot change your forecast. Your project has ended."/>
+        : <ACC.ValidationMessage qa="final-claim-message-FC" messageType="info" message={<span>You cannot change your forecast. You must <ACC.Link route={claimPageLink} styling="Link">submit your final claim</ACC.Link>.</span>}/>;
+    }
+
+    if (!finalClaim ) return null;
+
+    // Check to see if final claim has been reached
+    if (data.claim && data.claim.periodId < finalClaim.periodId) return null;
+
+    return finalClaim.isApproved
+      ? <ACC.ValidationMessage qa="final-claim-message-MO/PM" messageType="info" message={`${data.partner.name} has submitted their final claim so cannot change their forecast.`}/>
+      : <ACC.ValidationMessage qa="final-claim-message-MO/PM" messageType="info" message={`${data.partner.name} is due to submit their final claim so cannot change their forecast.`}/>;
   }
 
   private renderOverheadsRate(overheadRate: number | null) {
