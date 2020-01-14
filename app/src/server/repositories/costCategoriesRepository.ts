@@ -16,6 +16,13 @@ export interface ICostCategoryRepository {
   getAll(): Promise<CostCategory[]>;
 }
 
+/**
+ * Cost categories are categories that cost (claims or forecasts) are assigned to
+ * 
+ * Cost categories are applied to a partner based on the Acc_OrganisationType__c of the partner and the Acc_CompetitionType__c of the project
+ * 
+ * There is currently no way of enabling or disabling cost categories which presumably will required at some point?
+ */
 export class CostCategoryRepository extends SalesforceRepositoryBaseWithMapping<ISalesforceCostCategory, CostCategory> implements ICostCategoryRepository {
 
   protected readonly salesforceObjectName = "Acc_CostCategory__c";

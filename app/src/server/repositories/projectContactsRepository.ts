@@ -21,6 +21,11 @@ export interface IProjectContactsRepository {
   getAllForUser(login: string): Promise<ISalesforceProjectContact[]>;
 }
 
+/**
+ * Project Contacts are the roles users are assigned to on the project
+ * 
+ * Stored in Acc_ProjectContactLink__c and the role is a pick list Acc_Role__c
+ */
 export class ProjectContactsRepository extends SalesforceRepositoryBase<ISalesforceProjectContact> implements IProjectContactsRepository {
   protected readonly salesforceObjectName = "Acc_ProjectContactLink__c";
 
