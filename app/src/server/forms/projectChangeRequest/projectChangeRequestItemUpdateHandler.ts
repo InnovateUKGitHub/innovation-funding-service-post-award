@@ -18,6 +18,7 @@ import { storeKeys } from "@ui/redux/stores/storeKeys";
 import { PcrWorkflow } from "@ui/containers/pcrs/pcrWorkflow";
 import { removePartnerStepNames } from "@ui/containers/pcrs/removePartner";
 import { mapToProjectDto } from "@server/features/projects";
+import { scopeChangeStepNames } from "@ui/containers/pcrs/scopeChange/scopeChangeWorkflow";
 
 export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBase<ProjectChangeRequestPrepareItemParams, "pcr"> {
   constructor() {
@@ -41,7 +42,7 @@ export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBa
         this.updateTimeExtension(item, body);
         break;
       case PCRItemType.ScopeChange:
-        this.updateScopeChange(item, body);
+        this.updateScopeChange(item, body, stepName as scopeChangeStepNames);
         break;
       case PCRItemType.ProjectSuspension:
         this.updateProjectSuspension(item, body, stepName as suspendProjectSteps);
@@ -83,9 +84,14 @@ export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBa
     }
   }
 
-  private updateScopeChange(item: Dtos.PCRItemForScopeChangeDto, body: IFormBody) {
-    item.publicDescription = body.description || "";
-    item.projectSummary = body.summary || "";
+  private updateScopeChange(item: Dtos.PCRItemForScopeChangeDto, body: IFormBody, stepName: scopeChangeStepNames) {
+    if (stepName === "publicDescriptionStep") {
+      item.publicDescription = body.description;
+    }
+
+    if (stepName === "projectSummaryStep") {
+      item.projectSummary = body.summary;
+    }
   }
 
   private updateTimeExtension(item: Dtos.PCRItemForTimeExtensionDto, body: IFormBody) {
