@@ -8,7 +8,7 @@ describe("GetClaimDetailDocumentsQuery", () => {
     const project = context.testData.createProject();
     const partner = context.testData.createPartner(project);
     const claimDetail = context.testData.createClaimDetail(project, undefined, partner);
-    const document = context.testData.createDocument(claimDetail.Id, "cat", "jpg");
+    const document = context.testData.createDocument(claimDetail.Id, "cat", "jpg", "The Big Show");
 
     const query = new GetClaimDetailDocumentsQuery(project.Id, claimDetail.Acc_ProjectParticipant__r.Id, claimDetail.Acc_ProjectPeriodNumber__c, claimDetail.Acc_CostCategory__c);
     const result = await context.runQuery(query);
@@ -17,6 +17,7 @@ describe("GetClaimDetailDocumentsQuery", () => {
     expect(item.fileName).toBe("cat.jpg");
     expect(item.link).toBe(`/api/documents/claim-details/${project.Id}/${partner.Id}/${claimDetail.Acc_ProjectPeriodNumber__c}/${claimDetail.Acc_CostCategory__c}/${document.Id}/content`);
     expect(item.id).toBe(document.ContentDocumentId);
+    expect(item.uploadedBy).toBe("The Big Show");
   });
 
   it("returns empty array if no claim detail", async () => {

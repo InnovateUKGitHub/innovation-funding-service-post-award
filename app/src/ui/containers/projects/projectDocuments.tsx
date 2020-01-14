@@ -152,6 +152,7 @@ class ProjectDocumentsComponent extends ContainerBaseWithState<ProjectDocumentPa
         <ProjectDocumentsTable.Custom header="File name" qa="fileName" value={x => this.renderDocumentName(x)} />
         <ProjectDocumentsTable.ShortDate header="Date uploaded" qa="dateUploaded" value={x => x.dateCreated} />
         <ProjectDocumentsTable.Custom header="File size" qa="fileSize" classSuffix="numeric" value={x => getFileSize(x.fileSize)} />
+        <ProjectDocumentsTable.String header="Uploaded by" qa="uploadedBy" value={x => x.uploadedBy}/>
       </ProjectDocumentsTable.Table>
     );
   }

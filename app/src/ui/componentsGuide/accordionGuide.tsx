@@ -4,9 +4,9 @@ import {DocumentList, ProjectContact} from "../components";
 import {AccordionItem} from "../components/accordionItem";
 
 const documents = [
-  { link: "https://www.google.com/", fileName: "LABOUR_COSTS_Q3_2017-11-05.pdf", id: "1", fileSize: 3, dateCreated: new Date(), owner: "owner1@ownder.com" },
-  { link: "https://www.amazon.co.uk/", fileName: "PAYMENT_RECEIPT_PROJECT_MANAGER_Q3_2017-11-05.pdf", id: "2",fileSize: 3, dateCreated: new Date(), owner: "owner2@ownder.com" },
-  { link: "https://www.bbc.co.uk/", fileName: "PAYMENT_RECEIPT_ELECTRICIAN_Q3_2017-11-05.pdf", id: "3", fileSize: 3, dateCreated: new Date(), owner: "owner3@ownder.com" },
+  { link: "https://www.google.com/", fileName: "LABOUR_COSTS_Q3_2017-11-05.pdf", id: "1", fileSize: 3, dateCreated: new Date(), owner: "owner1@ownder.com", uploadedBy: "Snap" },
+  { link: "https://www.amazon.co.uk/", fileName: "PAYMENT_RECEIPT_PROJECT_MANAGER_Q3_2017-11-05.pdf", id: "2",fileSize: 3, dateCreated: new Date(), owner: "owner2@ownder.com", uploadedBy: "Crackle" },
+  { link: "https://www.bbc.co.uk/", fileName: "PAYMENT_RECEIPT_ELECTRICIAN_Q3_2017-11-05.pdf", id: "3", fileSize: 3, dateCreated: new Date(), owner: "owner3@ownder.com", uploadedBy: "Pop" },
 ];
 
 export const accordionGuide: IGuide = {
