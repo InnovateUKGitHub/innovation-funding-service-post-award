@@ -15,13 +15,14 @@ export interface IClaimStatusChangeRepository {
   create(item: Partial<ISalesforceClaimStatusChange>): Promise<string>;
 }
 
-/** 
+/**
  * ClaimStatusChanges are stored in the Acc_StatusChange__c
- * 
+ *
  * Hold all status changes for Claims level records ("Acc_Claims__c" of type "Total Project Period")
- * 
+ *
  * Acc_ParticipantVisibility__c is a flag determining whether to show message to pm or fc.
- * */
+ *
+ */
 export class ClaimStatusChangeRepository
   extends SalesforceRepositoryBase<ISalesforceClaimStatusChange>
   implements IClaimStatusChangeRepository {

@@ -14,7 +14,7 @@ export interface IClaimTotalCostCategoryRepository {
  * ClaimTotalCostCategory are from the Acc_Claims__c table at the "Total Cost Category" level.
  *
  * The total claimed for a given cost category across the project summed from the claim details for the cost category and project
- * 
+ *
  * This is the total **claimed** not the total **approved**
  */
 export class ClaimTotalCostCategoryRepository extends SalesforceRepositoryBase<ISalesforceClaimTotalCostCategory> implements IClaimTotalCostCategoryRepository {

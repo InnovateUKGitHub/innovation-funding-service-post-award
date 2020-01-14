@@ -18,11 +18,11 @@ export interface IProjectChangeRequestStatusChangeRepository {
   getStatusChanges(projectId: string, projectChangeRequestId: string): Promise<ISalesforceProjectChangeRequestStatusChange[]>;
 }
 
-/** 
+/**
  * ProjectChangeRequestStatusChanges are stored in the Acc_StatusChange__c
- * 
+ *
  * Holds all status changes for Project Change Request records ("Acc_ProjectChangeRequest__c" of type "Request Header)
- * 
+ *
  */
 export class ProjectChangeRequestStatusChangeRepository extends SalesforceRepositoryBase<ISalesforceProjectChangeRequestStatusChange> implements IProjectChangeRequestStatusChangeRepository {
   protected readonly salesforceObjectName = "Acc_StatusChange__c";

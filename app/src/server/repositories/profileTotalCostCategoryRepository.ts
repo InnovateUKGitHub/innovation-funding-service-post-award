@@ -14,10 +14,10 @@ export interface IProfileTotalCostCategoryRepository {
 
 /**
  * Forecast Total for partner per cost category
- * 
+ *
  * ie amount a partner expects to spend in that cost category for the hole project calculated from the detail for that period
  * Effectively holds the grant letter offer for each cost category
- * 
+ *
  * Stored in "Acc_Profile__c" table with record type of "Total Cost Category"
  */
 export class ProfileTotalCostCategoryRepository extends SalesforceRepositoryBase<ISalesforceProfileTotalCostCategory> implements IProfileTotalCostCategoryRepository {

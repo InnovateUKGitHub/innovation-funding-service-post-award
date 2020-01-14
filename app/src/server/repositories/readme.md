@@ -4,7 +4,7 @@ The repository layer retrieves from and updates data in the data stores,currentl
 	
 ### All ###
 
-Define the interface of the repository, eg `IProjectRepository`, to allow easy mocking in the using tests.
+Define the interface of the repository, eg `IProjectRepository`, to allow easy mocking in the unit tests.
 
 ### Salesforce ###
 

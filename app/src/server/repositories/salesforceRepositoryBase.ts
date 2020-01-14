@@ -245,7 +245,7 @@ class DefaultMapper<T> implements ISalesforceMapper<T, T> {
 
 /**
  * Generic Base class without mapping
- * 
+ *
  * Has helpers to retrieve salesforce objects
  */
 export default abstract class SalesforceRepositoryBase<T> extends SalesforceRepositoryBaseWithMapping<T, T> {

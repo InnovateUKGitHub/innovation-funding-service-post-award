@@ -26,7 +26,7 @@ export interface IClaimDetailsRepository {
 
 /**
  * Claim details are from the Acc_Claims__c table at the "Claims Detail" level.
- * 
+ *
  * Claim amounts stored per cost category per claim and are summed from the Claim Line items
  * A text field for comments
  */

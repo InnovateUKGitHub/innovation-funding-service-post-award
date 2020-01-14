@@ -19,9 +19,9 @@ export interface IMonitoringReportResponseRepository {
 
 /**
  * Answers for the monitoring report
- * 
+ *
  * Stored in "Acc_MonitoringAnswer__c" table with record type "Monitoring Answer"
- * 
+ *
  * Links to the Header record and the question
  */
 export class MonitoringReportResponseRepository extends SalesforceRepositoryBase<ISalesforceMonitoringReportResponse> implements IMonitoringReportResponseRepository {

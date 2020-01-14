@@ -60,12 +60,12 @@ export interface ISalesforcePCR {
 
 /**
  * ProjectChangeRequests are stored in Acc_ProjectChangeRequest__c table
- * 
+ *
  * The header record is stored with "Request Header" record type
  * Each item type are stored in the same table with different record types
- * 
+ *
  * The mapper used will convert the list of all pcrs into a parent child relationship to support pcr item types
- * 
+ *
  */
 export class ProjectChangeRequestRepository extends SalesforceRepositoryBase<ISalesforcePCR> implements IProjectChangeRequestRepository {
   constructor(private getRecordTypeId: (objectName: string, recordType: string) => Promise<string>, getSalesforceConnection: () => Promise<Connection>, logger: ILogger) {

@@ -31,9 +31,9 @@ export interface IProfileDetailsRepository {
 
 /**
  * Forecast Details for partner per cost category per period
- * 
+ *
  * ie amount a partner expects to spend in that period for each cost category
- * 
+ *
  * Stored in "Acc_Profile__c" table with record type of "Profile Detail"
  */
 export class ProfileDetailsRepository extends SalesforceRepositoryBase<ISalesforceProfileDetails> implements IProfileDetailsRepository {
