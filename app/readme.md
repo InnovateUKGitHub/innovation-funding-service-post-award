@@ -4,10 +4,9 @@ Starting at the back
 
 ### Repositories
 
-`./server/repositories/`
+[./src/server/repositories](./src/server/repositories)
 
 These make the relevant api calls to data stores
-- Salesforce - inherit from `SalesforceRepositoryBase<T>` where T is the `ISalesforceXXX` definition of the fields
 
 ### DTOs
 
