@@ -36,7 +36,9 @@ describe("GetProjectDocumentsQuery", () => {
     const expectedFileName = "report1";
     const expectedExtention = "pdf";
     const expectedDescription = "Expected Description";
-    const document = context.testData.createDocument(project.Id, expectedFileName, expectedExtention);
+    const expectedUploadedBy = "Chaka Khan";
+
+    const document = context.testData.createDocument(project.Id, expectedFileName, expectedExtention, expectedUploadedBy);
     document.Description = expectedDescription;
 
     const query = new GetProjectDocumentsQuery(project.Id);
@@ -45,6 +47,7 @@ describe("GetProjectDocumentsQuery", () => {
     expect(result.id).toBe(document.Id);
     expect(result.fileName).toBe(`${expectedFileName}.${expectedExtention}`);
     expect(result.fileSize).toBe(document.ContentSize);
+    expect(result.uploadedBy).toBe(document.Acc_LastModifiedByAlias__c);
     expect(result.description).toBe(document.Description);
   });
 
@@ -53,7 +56,7 @@ describe("GetProjectDocumentsQuery", () => {
     const project = context.testData.createProject();
 
     const documents = context.testData.range(3, i => {
-      return context.testData.createDocument(project.Id, undefined, undefined, undefined, undefined, x => {
+      return context.testData.createDocument(project.Id, undefined, undefined, undefined,undefined, undefined, x => {
         x.CreatedDate = DateTime.local().minus({ days: 1 }).plus({ hours: i }).toISO();
       });
     });
