@@ -61,11 +61,12 @@ describe("getAllForProjectQuery", () => {
       forecastLastModifiedDate: null,
       claimsWithParticipant: 20,
       claimsOverdue: 30,
-      status: PartnerClaimStatus.ClaimDue,
+      claimStatus: PartnerClaimStatus.ClaimDue,
       statusName: "Claim Due",
       overheadRate: 75,
       auditReportFrequencyName: "Never, for this project",
       partnerStatus: PartnerStatus.OnHold,
+      isWithdrawn: false,
       totalCostsAwarded: 100000,
       totalPrepayment: 500,
       totalFundingDueToReceive: 62500,
@@ -73,6 +74,17 @@ describe("getAllForProjectQuery", () => {
     };
 
     expect(result).toEqual(expected);
+  });
+
+  it("sets isWithdrawn correctly", async () => {
+    const context = new TestContext();
+    const project = context.testData.createProject();
+    const partnerInvoluntaryWithdrawal = context.testData.createPartner(project, x => {x.Acc_ParticipantStatus__c = "Involuntary Withdrawal";});
+    const partnerVoluntaryWithdrawal = context.testData.createPartner(project, x => {x.Acc_ParticipantStatus__c = "Voluntary Withdrawal";});
+    const partnerActive = context.testData.createPartner(project, x => {x.Acc_ParticipantStatus__c = "Active";});
+    expect((await context.runQuery(new GetByIdQuery(partnerInvoluntaryWithdrawal.Id))).isWithdrawn).toBe(true);
+    expect((await context.runQuery(new GetByIdQuery(partnerVoluntaryWithdrawal.Id))).isWithdrawn).toBe(true);
+    expect((await context.runQuery(new GetByIdQuery(partnerActive.Id))).isWithdrawn).toBe(false);
   });
 
   it("calculated cost claimed percentage", async () => {

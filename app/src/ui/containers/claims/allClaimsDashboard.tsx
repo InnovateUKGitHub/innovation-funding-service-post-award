@@ -1,4 +1,4 @@
-import { ClaimDto, PartnerDto, ProjectDto, ProjectRole } from "@framework/dtos";
+import { ClaimDto, PartnerDto, ProjectDto, ProjectRole, ProjectStatus } from "@framework/dtos";
 import React from "react";
 import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerBase";
 import * as Acc from "@ui/components";
@@ -80,9 +80,17 @@ class Component extends ContainerBase<AllClaimsDashboardParams, Data, {}> {
   private renderCurrentClaimsPerPeriod(claims: ClaimDto[], project: ProjectDto, partners: PartnerDto[]) {
     const groupedClaims = this.groupClaimsByPeriod(claims);
     if (groupedClaims.length === 0) {
+
+      if (project.status === ProjectStatus.Terminated || project.status === ProjectStatus.Closed) {
+        return (
+          <Acc.Renderers.SimpleString qa="notificationMessage">
+          There are no claims. Innovate UK has approved the final claims.
+          </Acc.Renderers.SimpleString>
+        );
+      }
+
       if (!project.periodEndDate) return null;
       const date = DateTime.fromJSDate(project.periodEndDate).plus({ days: 1 }).toJSDate();
-
       return (
         <Acc.Renderers.SimpleString qa="notificationMessage">
           There are no open claims. The next claim period begins <Acc.Renderers.FullDate value={date} />.

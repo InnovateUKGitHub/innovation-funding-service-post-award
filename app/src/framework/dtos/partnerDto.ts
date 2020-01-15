@@ -22,11 +22,11 @@ export interface PartnerDto {
   id: string;
   type: string;
   isLead: boolean;
+  isWithdrawn: boolean;
   projectRoleName: string;
   projectId: string;
   accountId: string;
   name: string;
-
   organisationType: string;
   competitionType: string;
   totalParticipantGrant: number | null;
@@ -41,7 +41,7 @@ export interface PartnerDto {
   forecastLastModifiedDate: Date | null;
   claimsOverdue: number | null;
   claimsWithParticipant: number | null;
-  status: PartnerClaimStatus;
+  claimStatus: PartnerClaimStatus;
   statusName: string;
   totalCostsAwarded: number | null;
   auditReportFrequencyName: string;

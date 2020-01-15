@@ -1,12 +1,14 @@
 // tslint:disable:no-bitwise
 import { GetPeriodInfoQuery } from "./";
 import { ISalesforceProject } from "../../repositories/projectsRepository";
-import { ClaimFrequency, IContext, ProjectRole, ProjectStatus } from "@framework/types";
+import { ClaimFrequency, IContext, ProjectDto, ProjectRole, ProjectStatus } from "@framework/types";
+import { dayComparator } from "@framework/util";
 
-export const mapToProjectDto = (context: IContext, item: ISalesforceProject, roles: ProjectRole) => {
+export const mapToProjectDto = (context: IContext, item: ISalesforceProject, roles: ProjectRole): ProjectDto => {
   const claimFrequency = mapFrequencyToEnum(item.Acc_ClaimFrequency__c);
-  const startDate = context.clock.parse(item.Acc_StartDate__c, "yyyy-MM-dd")!;
-  const endDate = context.clock.parse(item.Acc_EndDate__c, "yyyy-MM-dd")!;
+  // TODO change this to parseRequiredSalesforceDate and update tests to pass
+  const startDate = context.clock.parseOptionalSalesforceDate(item.Acc_StartDate__c)!;
+  const endDate = context.clock.parseOptionalSalesforceDate(item.Acc_EndDate__c)!;
   const periodInfo = context.runSyncQuery(new GetPeriodInfoQuery(startDate, endDate, claimFrequency));
 
   return {
@@ -18,6 +20,7 @@ export const mapToProjectDto = (context: IContext, item: ISalesforceProject, rol
     applicationUrl: getIFSUrl(item, context.config.urls.ifsApplicationUrl),
     grantOfferLetterUrl: getIFSUrl(item, context.config.urls.ifsGrantLetterUrl),
     leadPartnerName: item.Acc_LeadParticipantName__c,
+    hasEnded: dayComparator(endDate, new Date()) < 0,
     claimFrequency,
     claimFrequencyName: ClaimFrequency[claimFrequency],
     grantOfferLetterCosts: item.Acc_GOLTotalCostAwarded__c,

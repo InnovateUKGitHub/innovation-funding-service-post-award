@@ -1,6 +1,12 @@
 import React from "react";
 import * as ACC from "../../components";
-import { PartnerClaimStatus, PartnerDto, ProjectDto, ProjectRole, ProjectStatus } from "@framework/types";
+import {
+  PartnerClaimStatus,
+  PartnerDto,
+  ProjectDto,
+  ProjectRole,
+  ProjectStatus
+} from "@framework/types";
 import { IClientConfig } from "@ui/redux/reducers/configReducer";
 import { StoresConsumer } from "@ui/redux";
 import { Pending } from "@shared/pending";
@@ -88,7 +94,10 @@ class ProjectDashboardComponent extends ContainerBaseWithState<{}, Data, {}, Sta
   private renderProjectLists(projects: ProjectDto[], partners: PartnerDto[]) {
     const combinedData = projects
       .map(project => {
-        const partner = partners.find(y => (y.projectId === project.id) && !!(y.roles & ProjectRole.FinancialContact)) || null;
+        const partner = (project.roles & ProjectRole.ProjectManager)
+          ? partners.find(y => y.projectId === project.id && y.isLead)!
+          : partners.find(y => (y.projectId === project.id) && !!(y.roles & ProjectRole.FinancialContact)) || null;
+
         const projectSection = this.getProjectSection(project, partner);
         return {
           project,
@@ -151,7 +160,7 @@ class ProjectDashboardComponent extends ContainerBaseWithState<{}, Data, {}, Sta
           return project.numberOfOpenClaims > 0 ? "open" : "awaiting";
         }
         if (project.roles & (ProjectRole.FinancialContact) && partner) {
-          return partner.status === PartnerClaimStatus.NoClaimsDue ? "awaiting" : "open";
+          return partner.claimStatus === PartnerClaimStatus.NoClaimsDue ? "awaiting" : "open";
         }
         return "upcoming";
       case ProjectStatus.Closed:
@@ -168,7 +177,7 @@ class ProjectDashboardComponent extends ContainerBaseWithState<{}, Data, {}, Sta
     }
 
     // if fc return warning if overdue or iar required
-    if (partner && ((partner.claimsOverdue! > 0) || partner.status === PartnerClaimStatus.IARRequired)) {
+    if (partner && ((partner.claimsOverdue! > 0) || partner.claimStatus === PartnerClaimStatus.IARRequired)) {
       return true;
     }
 
@@ -178,7 +187,7 @@ class ProjectDashboardComponent extends ContainerBaseWithState<{}, Data, {}, Sta
     }
 
     // if fc return edit if claim is not submitted
-    if (partner && (partner.status !== PartnerClaimStatus.ClaimSubmitted && partner.status !== PartnerClaimStatus.NoClaimsDue)) {
+    if (partner && (partner.claimStatus !== PartnerClaimStatus.ClaimSubmitted && partner.claimStatus !== PartnerClaimStatus.NoClaimsDue)) {
       return true;
     }
 
@@ -208,7 +217,7 @@ class ProjectDashboardComponent extends ContainerBaseWithState<{}, Data, {}, Sta
       }
 
       if (isFc) {
-        switch (partner && partner.status) {
+        switch (partner && partner.claimStatus) {
           case PartnerClaimStatus.ClaimDue:
             messages.push(`You need to submit your claim.`);
             break;
@@ -225,7 +234,7 @@ class ProjectDashboardComponent extends ContainerBaseWithState<{}, Data, {}, Sta
     return messages;
   }
 
-  private getLeftHandMessages(project: ProjectDto, section: Section): React.ReactNode[] {
+  private getLeftHandMessages(project: ProjectDto, partner: PartnerDto | null, section: Section): React.ReactNode[] {
     const messages: React.ReactNode[] = [];
 
     messages.push(project.leadPartnerName);
@@ -233,12 +242,14 @@ class ProjectDashboardComponent extends ContainerBaseWithState<{}, Data, {}, Sta
     if (section === "upcoming") messages.push(<ACC.Renderers.ShortDateRange start={project.startDate} end={project.endDate} />);
 
     if (section === "open" || section === "awaiting") {
-      messages.push(
+
+      const endedMessage = "Project ended (final claim period)";
+      const openMessage = (
         <React.Fragment>
-          {`Period ${project.periodId} of ${project.totalPeriods}`}
-          &nbsp;(<ACC.Renderers.ShortDateRange start={project.periodStartDate} end={project.periodEndDate} />)
+          Period {project.periodId} of {project.totalPeriods}&nbsp;(<ACC.Renderers.ShortDateRange start={project.periodStartDate} end={project.periodEndDate}/>)
         </React.Fragment>
       );
+      messages.push(project.hasEnded || (partner && partner.isWithdrawn) ? endedMessage : openMessage);
     }
 
     return messages;
@@ -269,7 +280,7 @@ class ProjectDashboardComponent extends ContainerBaseWithState<{}, Data, {}, Sta
   private renderProject(project: ProjectDto, partner: PartnerDto | null, section: Section, index: number) {
     const actionRequired = this.isActionRequired(project, partner, section);
     const rightHandMessages: React.ReactNode[] = this.getRightHandMessages(project, partner, section);
-    const leftHandMessages: React.ReactNode[] = this.getLeftHandMessages(project, section);
+    const leftHandMessages: React.ReactNode[] = this.getLeftHandMessages(project, partner, section);
 
     return (
       <ACC.ListItem actionRequired={actionRequired} key={`project_${index}`} qa={`project-${project.projectNumber}`}>
