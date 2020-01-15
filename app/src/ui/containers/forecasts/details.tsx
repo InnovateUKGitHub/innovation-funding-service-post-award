@@ -54,12 +54,11 @@ class ViewForecastComponent extends ContainerBase<Params, Data, {}> {
 
     const claimPageLink = PrepareClaimRoute.getLink({projectId: data.project.id, partnerId: data.partner.id, periodId: data.project.periodId});
     const isClaimApprovedOrPaid = finalClaim && finalClaim.isApproved || finalClaim && finalClaim.paidDate;
-    const isPartnerWithdrawn = data.partner.partnerStatus === PartnerStatus.VoluntaryWithdrawal || data.partner.partnerStatus === PartnerStatus.InvoluntaryWithdrawal;
 
     const isFc = !!(data.project.roles & (ProjectRole.FinancialContact));
 
     if (isFc) {
-      return (isClaimApprovedOrPaid || isPartnerWithdrawn)
+      return (isClaimApprovedOrPaid || data.partner.isWithdrawn)
         ? <ACC.ValidationMessage qa="final-claim-message-FC" messageType="info" message="You cannot change your forecast. Your project has ended."/>
         : <ACC.ValidationMessage qa="final-claim-message-FC" messageType="info" message={<span>You cannot change your forecast. You must <ACC.Link route={claimPageLink} styling="Link">submit your final claim</ACC.Link>.</span>}/>;
     }
@@ -84,7 +83,7 @@ class ViewForecastComponent extends ContainerBase<Params, Data, {}> {
 
     if (project.status === ProjectStatus.OnHold) return null;
     if (!(partner.roles & ProjectRole.FinancialContact)) return null;
-    if (partner.partnerStatus === PartnerStatus.VoluntaryWithdrawal || partner.partnerStatus === PartnerStatus.InvoluntaryWithdrawal) return null;
+    if (partner.isWithdrawn) return null;
     if (claim && claim.isFinalClaim) return null;
     return <ACC.Link id="update-forecast" styling="PrimaryButton" route={this.props.routes.forecastUpdate.getLink({ projectId: project.id, partnerId: partner.id })}>Update forecast</ACC.Link>;
   }
