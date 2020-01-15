@@ -7,5 +7,6 @@ export const mapToDocumentSummaryDto = (doc: ISalesforceDocument, link: string):
   id: doc.ContentDocumentId,
   description: doc.Description,
   fileSize: doc.ContentSize,
-  dateCreated: DateTime.fromISO(doc.CreatedDate).toJSDate()
+  dateCreated: DateTime.fromISO(doc.CreatedDate).toJSDate(),
+  uploadedBy: doc.Acc_LastModifiedByAlias__c
 });

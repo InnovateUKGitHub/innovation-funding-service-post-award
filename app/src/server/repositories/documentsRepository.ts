@@ -19,6 +19,7 @@ export interface ISalesforceDocument {
   VersionData: string;
   Description?: string;
   CreatedDate: string;
+  Acc_LastModifiedByAlias__c: string;
   Owner: {
     Username: string
   };

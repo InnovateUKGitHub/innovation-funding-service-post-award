@@ -469,6 +469,7 @@ export class TestData {
     entityId: string,
     title: string = "cat",
     fileType: string | null = "jpg",
+    uploadedBy: string = "Catwoman",
     content: string = "",
     description?: string,
     update?: (item: Repositories.ISalesforceDocument) => void
@@ -486,6 +487,7 @@ export class TestData {
       ContentLocation: "S",
       VersionData: content,
       Description: description,
+      Acc_LastModifiedByAlias__c: uploadedBy,
       CreatedDate: new Date().toISOString(),
       Owner: {
         Username: "aUserId"

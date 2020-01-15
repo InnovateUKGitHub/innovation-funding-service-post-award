@@ -203,7 +203,7 @@ describe("UploadClaimDocumentCommand", () => {
           item.Id = claimId;
           item.Acc_IARRequired__c = true;
         });
-        const originalDocumentId = context.testData.createDocument("12345", "cat", "jpg", "", DocumentDescription.IAR).ContentDocumentId;
+        const originalDocumentId = context.testData.createDocument("12345", "cat", "jpg", "","", DocumentDescription.IAR).ContentDocumentId;
 
         const claimKey = {
           projectId: project.Id,

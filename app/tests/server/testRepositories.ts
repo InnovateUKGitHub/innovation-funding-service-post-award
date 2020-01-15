@@ -134,6 +134,7 @@ class DocumentsTestRepository extends TestRepository<[string, Repositories.ISale
       VersionData: file.content,
       Description: description,
       CreatedDate: new Date().toISOString(),
+      Acc_LastModifiedByAlias__c: "User",
       Owner: {
         Username: "aUserName"
       }

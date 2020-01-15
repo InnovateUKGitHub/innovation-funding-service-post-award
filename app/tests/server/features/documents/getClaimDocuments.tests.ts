@@ -31,7 +31,7 @@ describe("GetClaimDocumentQuery", () => {
     const context = new TestContext();
 
     context.testData.createDocument("12345", "cat1", "jpg");
-    context.testData.createDocument("12345", "cat2", "jpg", "hello world", DocumentDescription.IAR);
+    context.testData.createDocument("12345", "cat2", "jpg", "Tim Berners-Lee", "hello world", DocumentDescription.IAR);
 
     const partner = context.testData.createPartner();
     const project = context.testData.createProject();
