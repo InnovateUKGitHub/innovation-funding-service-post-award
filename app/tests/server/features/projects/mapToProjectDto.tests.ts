@@ -34,6 +34,8 @@ describe("mapToProjectDto", () => {
       claimedPercentage: 50,
       periodStartDate: context.clock.parse("2009-01-01", "yyyy-MM-dd"),
       periodEndDate: context.clock.parse("2009-03-31", "yyyy-MM-dd"),
+      pcrsQueried: 2,
+      pcrsToReview: 3,
       roles: ProjectRole.Unknown,
       roleTitles: [],
       claimWindowStart: context.clock.parse("2009-01-01 00:00:00", "yyyy-MM-dd hh:mm:ss"),
@@ -61,6 +63,8 @@ describe("mapToProjectDto", () => {
       x.Acc_GOLTotalCostAwarded__c = expected.grantOfferLetterCosts;
       x.Acc_TotalProjectCosts__c = expected.costsClaimedToDate;
       x.Acc_ProjectStatus__c = expected.statusName;
+      x.Acc_PCRsUnderQuery__c = 2;
+      x.Acc_PCRsForReview__c = 3;
       x.ProjectStatusName = expected.statusName;
       x.Acc_ClaimsOverdue__c = expected.claimsOverdue;
       x.Acc_ClaimsUnderQuery__c = expected.claimsWithParticipant;

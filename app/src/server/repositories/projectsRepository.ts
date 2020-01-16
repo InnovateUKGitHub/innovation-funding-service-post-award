@@ -15,6 +15,8 @@ export interface ISalesforceProject {
   Acc_StartDate__c: string;
   Acc_TotalProjectCosts__c: number;
   Acc_ProjectStatus__c: string;
+  Acc_PCRsForReview__c: number;
+  Acc_PCRsUnderQuery__c: number;
   ProjectStatusName: string;
   Acc_ClaimsForReview__c: number;
   Acc_ClaimsOverdue__c: number;
@@ -52,6 +54,8 @@ export class ProjectRepository extends SalesforceRepositoryBase<ISalesforceProje
     "Acc_TotalProjectCosts__c",
     "Acc_ProjectStatus__c",
     "toLabel(Acc_ProjectStatus__c) ProjectStatusName",
+    "Acc_PCRsForReview__c",
+    "Acc_PCRsUnderQuery__c",
     "Acc_ClaimsForReview__c",
     "Acc_ClaimsOverdue__c",
     "Acc_ClaimsUnderQuery__c",

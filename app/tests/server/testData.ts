@@ -59,6 +59,8 @@ export class TestData {
       Acc_ProjectSource__c: "",
       Acc_ProjectStatus__c: "",
       ProjectStatusName: "",
+      Acc_PCRsForReview__c: 0,
+      Acc_PCRsUnderQuery__c: 0,
       Acc_ProjectSummary__c: "",
       Acc_PublicDescription__c: "",
       Acc_TotalProjectCosts__c: 0,

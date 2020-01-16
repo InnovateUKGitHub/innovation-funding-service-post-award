@@ -32,6 +32,8 @@ export const mapToProjectDto = (context: IContext, item: ISalesforceProject, rol
     periodId: periodInfo.current,
     periodStartDate: periodInfo.startDate,
     periodEndDate: periodInfo.endDate,
+    pcrsToReview: item.Acc_PCRsForReview__c || 0,
+    pcrsQueried: item.Acc_PCRsUnderQuery__c || 0,
     // TODO use either totalPeriods OR numberOfPeriods
     totalPeriods: periodInfo.total,
     claimWindowStart: periodInfo.currentClaimWindowStart,
