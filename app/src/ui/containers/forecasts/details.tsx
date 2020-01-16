@@ -1,7 +1,7 @@
 import React from "react";
 import * as ACC from "@ui/components";
 import { BaseProps, ContainerBase, defineRoute } from "../containerBase";
-import { ClaimDto, PartnerDto, PartnerStatus, ProjectDto, ProjectRole, ProjectStatus } from "@framework/dtos";
+import { ClaimDto, PartnerDto, ProjectDto, ProjectRole, ProjectStatus } from "@framework/dtos";
 import { Pending } from "@shared/pending";
 import { PrepareClaimRoute } from "@ui/containers";
 import { StoresConsumer } from "@ui/redux";
@@ -55,7 +55,7 @@ class ViewForecastComponent extends ContainerBase<Params, Data, {}> {
     const claimPageLink = PrepareClaimRoute.getLink({projectId: data.project.id, partnerId: data.partner.id, periodId: data.project.periodId});
     const isClaimApprovedOrPaid = finalClaim && finalClaim.isApproved || finalClaim && finalClaim.paidDate;
 
-    const isFc = !!(data.project.roles & (ProjectRole.FinancialContact));
+    const isFc = data.partner.roles & (ProjectRole.FinancialContact);
 
     if (isFc) {
       return (isClaimApprovedOrPaid || data.partner.isWithdrawn)
@@ -63,14 +63,18 @@ class ViewForecastComponent extends ContainerBase<Params, Data, {}> {
         : <ACC.ValidationMessage qa="final-claim-message-FC" messageType="info" message={<span>You cannot change your forecast. You must <ACC.Link route={claimPageLink} styling="Link">submit your final claim</ACC.Link>.</span>}/>;
     }
 
+    const isPm = data.project.roles & (ProjectRole.ProjectManager);
+
+    if (isPm) return null;
+
     if (!finalClaim ) return null;
 
     // Check to see if final claim has been reached
     if (data.claim && data.claim.periodId < finalClaim.periodId) return null;
 
     return finalClaim.isApproved
-      ? <ACC.ValidationMessage qa="final-claim-message-MO/PM" messageType="info" message={`${data.partner.name} has submitted their final claim so cannot change their forecast.`}/>
-      : <ACC.ValidationMessage qa="final-claim-message-MO/PM" messageType="info" message={`${data.partner.name} is due to submit their final claim so cannot change their forecast.`}/>;
+      ? <ACC.ValidationMessage qa="final-claim-message-MO" messageType="info" message={`${data.partner.name} has submitted their final claim so cannot change their forecast.`}/>
+      : <ACC.ValidationMessage qa="final-claim-message-MO" messageType="info" message={`${data.partner.name} is due to submit their final claim so cannot change their forecast.`}/>;
   }
 
   private renderOverheadsRate(overheadRate: number | null) {
