@@ -199,6 +199,22 @@ class ProjectDashboardComponent extends ContainerBaseWithState<{}, Data, {}, Sta
     return false;
   }
 
+  private getRightHandMessagesForFC(partner: PartnerDto | null) {
+    const messages: React.ReactNode[] = [];
+    switch (partner && partner.claimStatus) {
+      case PartnerClaimStatus.ClaimDue:
+        messages.push(`You need to submit your claim.`);
+        break;
+      case PartnerClaimStatus.ClaimQueried:
+        messages.push(`Your claim has been queried. Please respond.`);
+        break;
+      case PartnerClaimStatus.IARRequired:
+        messages.push(`You need to submit your IAR.`);
+        break;
+    }
+    return messages;
+  }
+
   private getRightHandMessages(project: ProjectDto, partner: PartnerDto | null, section: Section): React.ReactNode[] {
     const messages: React.ReactNode[] = [];
 
@@ -207,6 +223,7 @@ class ProjectDashboardComponent extends ContainerBaseWithState<{}, Data, {}, Sta
     if (section === "open" || section === "awaiting") {
       const isMo = !!(project.roles & ProjectRole.MonitoringOfficer);
       const isFc = !!(project.roles & ProjectRole.FinancialContact);
+      const isPm = !!(project.roles & ProjectRole.ProjectManager);
 
       if(project.status === ProjectStatus.OnHold) {
         messages.push("On hold");
@@ -214,20 +231,15 @@ class ProjectDashboardComponent extends ContainerBaseWithState<{}, Data, {}, Sta
 
       if (isMo) {
         messages.push(`Claims to review: ${project.claimsToReview}`);
+        messages.push(`Project change requests to review: ${project.pcrsToReview}`);
       }
 
       if (isFc) {
-        switch (partner && partner.claimStatus) {
-          case PartnerClaimStatus.ClaimDue:
-            messages.push(`You need to submit your claim.`);
-            break;
-          case PartnerClaimStatus.ClaimQueried:
-            messages.push(`Your claim has been queried. Please respond.`);
-            break;
-          case PartnerClaimStatus.IARRequired:
-            messages.push(`You need to submit your IAR.`);
-            break;
-        }
+        messages.push(...this.getRightHandMessagesForFC(partner));
+      }
+
+      if (isPm) {
+        if (project.pcrsQueried > 0) messages.push("Project change request queried");
       }
     }
 
