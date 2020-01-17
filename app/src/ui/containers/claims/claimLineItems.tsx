@@ -152,7 +152,7 @@ export class ClaimLineItemsComponent extends ContainerBase<Params, Data, {}> {
   }
 }
 
-const ClaimLineItemsTable: React.SFC<{ lineItems: ClaimLineItemDto[], forecastDetail: ForecastDetailsDTO }> = ({ lineItems, forecastDetail }) => {
+const ClaimLineItemsTable: React.FunctionComponent<{ lineItems: ClaimLineItemDto[], forecastDetail: ForecastDetailsDTO }> = ({ lineItems, forecastDetail }) => {
   const LineItemTable = ACC.TypedTable<ClaimLineItemDto>();
   const renderFooterRow = (row: { key: string, title: string, value: React.ReactNode, qa: string, isBold?: boolean }) => (
     <tr key={row.key} className="govuk-table__row" data-qa={row.qa}>

@@ -401,39 +401,39 @@ const CustomComponent = <T extends {}>(props: ExternalFieldProps<T, React.ReactN
 export interface FormBuilder<T> {
   Form: { new(): FormComponent<T> };
   Fieldset: { new(): FieldsetComponent<T> };
-  String: React.SFC<ExternalFieldProps<T, string>>;
-  Search: React.SFC<SearchFieldProps<T>>;
-  MultilineString: React.SFC<MultiStringFieldProps<T>>;
-  Numeric: React.SFC<NumericFieldProps<T>>;
-  Radio: React.SFC<RadioFieldProps<T>>;
-  DropdownList: React.SFC<DropdownFieldProps<T>>;
-  Checkboxes: React.SFC<CheckboxFieldProps<T>>;
-  Hidden: React.SFC<HiddenFieldProps<T>>;
-  Submit: React.SFC<SubmitProps>;
-  Button: React.SFC<ButtonProps>;
-  FileUpload: React.SFC<ExternalFieldProps<T, IFileWrapper>>;
-  MulipleFileUpload: React.SFC<ExternalFieldProps<T, IFileWrapper[]>>;
-  Date: React.SFC<ExternalFieldProps<T, Date>>;
+  String: React.FunctionComponent<ExternalFieldProps<T, string>>;
+  Search: React.FunctionComponent<SearchFieldProps<T>>;
+  MultilineString: React.FunctionComponent<MultiStringFieldProps<T>>;
+  Numeric: React.FunctionComponent<NumericFieldProps<T>>;
+  Radio: React.FunctionComponent<RadioFieldProps<T>>;
+  DropdownList: React.FunctionComponent<DropdownFieldProps<T>>;
+  Checkboxes: React.FunctionComponent<CheckboxFieldProps<T>>;
+  Hidden: React.FunctionComponent<HiddenFieldProps<T>>;
+  Submit: React.FunctionComponent<SubmitProps>;
+  Button: React.FunctionComponent<ButtonProps>;
+  FileUpload: React.FunctionComponent<ExternalFieldProps<T, IFileWrapper>>;
+  MulipleFileUpload: React.FunctionComponent<ExternalFieldProps<T, IFileWrapper[]>>;
+  Date: React.FunctionComponent<ExternalFieldProps<T, Date>>;
   MonthYear: React.FunctionComponent<MonthYearProps<T, Date>>;
-  Custom: React.SFC<ExternalFieldProps<T, React.ReactNode>>;
+  Custom: React.FunctionComponent<ExternalFieldProps<T, React.ReactNode>>;
 }
 
 export const TypedForm = <T extends {}>(): FormBuilder<T> => ({
   Form: FormComponent as { new(): FormComponent<T> },
   Fieldset: FieldsetComponent as { new(): FieldsetComponent<T> },
-  String: StringField as React.SFC<ExternalFieldProps<T, string>>,
-  Search: SearchField as React.SFC<SearchFieldProps<T>>,
-  MultilineString: MultiStringField as React.SFC<MultiStringFieldProps<T>>,
-  Numeric: NumericField as React.SFC<NumericFieldProps<T>>,
-  Radio: RadioOptionsField as React.SFC<RadioFieldProps<T>>,
-  DropdownList: DropdownListField as React.SFC<DropdownFieldProps<T>>,
-  Checkboxes: CheckboxOptionsField as React.SFC<CheckboxFieldProps<T>>,
-  Hidden: HiddenField as React.SFC<HiddenFieldProps<T>>,
-  Submit: SubmitComponent as React.SFC<SubmitProps>,
-  Button: ButtonComponent as React.SFC<ButtonProps>,
-  FileUpload: FileUploadComponent as React.SFC<ExternalFieldProps<T, IFileWrapper>>,
-  MulipleFileUpload: MulipleFileUploadComponent as React.SFC<ExternalFieldProps<T, IFileWrapper[]>>,
-  Date: FullDateComponent as React.SFC<ExternalFieldProps<T, Date>>,
-  MonthYear: MonthYearComponent as React.SFC<MonthYearProps<T, Date>>,
-  Custom: CustomComponent as React.SFC<ExternalFieldProps<T, React.ReactNode>>
+  String: StringField as React.FunctionComponent<ExternalFieldProps<T, string>>,
+  Search: SearchField as React.FunctionComponent<SearchFieldProps<T>>,
+  MultilineString: MultiStringField as React.FunctionComponent<MultiStringFieldProps<T>>,
+  Numeric: NumericField as React.FunctionComponent<NumericFieldProps<T>>,
+  Radio: RadioOptionsField as React.FunctionComponent<RadioFieldProps<T>>,
+  DropdownList: DropdownListField as React.FunctionComponent<DropdownFieldProps<T>>,
+  Checkboxes: CheckboxOptionsField as React.FunctionComponent<CheckboxFieldProps<T>>,
+  Hidden: HiddenField as React.FunctionComponent<HiddenFieldProps<T>>,
+  Submit: SubmitComponent as React.FunctionComponent<SubmitProps>,
+  Button: ButtonComponent as React.FunctionComponent<ButtonProps>,
+  FileUpload: FileUploadComponent as React.FunctionComponent<ExternalFieldProps<T, IFileWrapper>>,
+  MulipleFileUpload: MulipleFileUploadComponent as React.FunctionComponent<ExternalFieldProps<T, IFileWrapper[]>>,
+  Date: FullDateComponent as React.FunctionComponent<ExternalFieldProps<T, Date>>,
+  MonthYear: MonthYearComponent as React.FunctionComponent<MonthYearProps<T, Date>>,
+  Custom: CustomComponent as React.FunctionComponent<ExternalFieldProps<T, React.ReactNode>>
 });

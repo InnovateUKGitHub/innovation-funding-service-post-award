@@ -1,9 +1,20 @@
 import React from "react";
 import { Link } from "react-router5";
 
-export const Breadcrumbs = (props: any) => {
-  const renderLink = (linkProps: any, i: number) => {
-    const { text, routeName, routeParams } = linkProps;
+interface Props {
+  links: LinkProps[];
+}
+
+interface LinkProps {
+  text: string;
+  routeName: string;
+  routeParams: any;
+}
+
+export const Breadcrumbs: React.FunctionComponent<Props> = (props) => {
+
+  const renderLink = (link: LinkProps, i: number) => {
+    const { text, routeName, routeParams } = link;
 
     return (
       <li key={`breadcrumb${i}`} className="govuk-breadcrumbs__list-item">
@@ -18,12 +29,10 @@ export const Breadcrumbs = (props: any) => {
     </li>
   );
 
-  const links: any[] = props.links || [];
-
   return (
     <div className="govuk-breadcrumbs">
       <ol className="govuk-breadcrumbs__list">
-        { links.map((x, i) => renderLink(x, i)) }
+        { props.links.map((x, i) => renderLink(x, i)) }
         { renderLastLink() }
       </ol>
     </div>

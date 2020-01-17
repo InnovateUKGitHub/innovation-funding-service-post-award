@@ -7,7 +7,7 @@ interface Props {
   periodEndDate: Date | null;
 }
 
-export const PeriodTitle: React.SFC<Props> = (props) => {
+export const PeriodTitle: React.FunctionComponent<Props> = (props) => {
   return (
     <React.Fragment>
       Period {props.periodId}: <ShortDateRange start={props.periodStartDate} end={props.periodEndDate} />

@@ -6,7 +6,7 @@ interface Props {
   fractionDigits?: number;
 }
 
-export const Percentage: React.SFC<Props> = ({ value, fractionDigits = 1 }) => {
+export const Percentage: React.FunctionComponent<Props> = ({ value, fractionDigits = 1 }) => {
   if (!isNumber(value)) {
     return null;
   }

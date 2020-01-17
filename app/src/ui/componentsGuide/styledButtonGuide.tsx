@@ -28,6 +28,5 @@ export const buttonGuide: IGuide = {
       example: `<Button styling="Link">A link button</Button>`,
       render: () => <Button styling="Link">A link button</Button>
     }
-
   ]
 };
