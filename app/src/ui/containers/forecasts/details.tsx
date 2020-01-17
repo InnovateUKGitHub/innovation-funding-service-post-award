@@ -42,7 +42,7 @@ class ViewForecastComponent extends ContainerBase<Params, Data, {}> {
         </ACC.Section>
         <ACC.Section qa="viewForecastUpdate">
           <ACC.Claims.ClaimLastModified partner={data.partner} />
-          {this.renderUpdateSection(data.project, data.partner, data.claim)}
+          {this.renderUpdateSection(data.project, data.partner, data.claims)}
         </ACC.Section>
       </ACC.Page>
     );
@@ -50,10 +50,12 @@ class ViewForecastComponent extends ContainerBase<Params, Data, {}> {
 
   private renderFinalClaimMessage(data: ACC.Claims.ForecastData) {
     const finalClaim = data.claims.find(x => x.isFinalClaim);
-    // Checks that the data exists
+    // Checks that the data exists in either past or present
+
+    if (!finalClaim) return null;
 
     const claimPageLink = PrepareClaimRoute.getLink({projectId: data.project.id, partnerId: data.partner.id, periodId: data.project.periodId});
-    const isClaimApprovedOrPaid = finalClaim && finalClaim.isApproved || finalClaim && finalClaim.paidDate;
+    const isClaimApprovedOrPaid = finalClaim.isApproved || finalClaim.paidDate;
 
     const isFc = data.partner.roles & (ProjectRole.FinancialContact);
 
@@ -67,11 +69,6 @@ class ViewForecastComponent extends ContainerBase<Params, Data, {}> {
 
     if (isPm) return null;
 
-    if (!finalClaim ) return null;
-
-    // Check to see if final claim has been reached
-    if (data.claim && data.claim.periodId < finalClaim.periodId) return null;
-
     return finalClaim.isApproved
       ? <ACC.ValidationMessage qa="final-claim-message-MO" messageType="info" message={`${data.partner.name} has submitted their final claim so cannot change their forecast.`}/>
       : <ACC.ValidationMessage qa="final-claim-message-MO" messageType="info" message={`${data.partner.name} is due to submit their final claim so cannot change their forecast.`}/>;
@@ -83,12 +80,14 @@ class ViewForecastComponent extends ContainerBase<Params, Data, {}> {
     return <ACC.Renderers.SimpleString qa="overhead-costs">Overhead costs: <ACC.Renderers.Percentage value={overheadRate} /></ACC.Renderers.SimpleString>;
   }
 
-  private renderUpdateSection(project: ProjectDto, partner: PartnerDto, claim: ClaimDto | null) {
+  private renderUpdateSection(project: ProjectDto, partner: PartnerDto, claims: ClaimDto[]) {
+    const finalClaim = claims.find(x => x.isFinalClaim);
 
     if (project.status === ProjectStatus.OnHold) return null;
     if (!(partner.roles & ProjectRole.FinancialContact)) return null;
     if (partner.isWithdrawn) return null;
-    if (claim && claim.isFinalClaim) return null;
+    if (finalClaim) return null;
+
     return <ACC.Link id="update-forecast" styling="PrimaryButton" route={this.props.routes.forecastUpdate.getLink({ projectId: project.id, partnerId: partner.id })}>Update forecast</ACC.Link>;
   }
 }
