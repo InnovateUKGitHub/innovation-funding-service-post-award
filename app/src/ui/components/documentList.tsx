@@ -14,7 +14,7 @@ const mapDocumentToLink = (document: DocumentSummaryDto, i: number) => ({
   qa: `document-${i}`,
 });
 
-export const DocumentList: React.SFC<Props> = ({ documents = [], qa}: Props) => {
+export const DocumentList: React.FunctionComponent<Props> = ({ documents = [], qa}: Props) => {
   // @TODO: should server not do this?
   documents.sort((a,b) => stringComparator(a.fileName, b.fileName));
   return (
@@ -28,7 +28,7 @@ interface PropsWithRemove extends Props {
   onRemove: (d: DocumentSummaryDto) => void;
 }
 
-export const DocumentListWithDelete: React.SFC<PropsWithRemove> = ({ documents = [], qa, onRemove }: PropsWithRemove) => {
+export const DocumentListWithDelete: React.FunctionComponent<PropsWithRemove> = ({ documents = [], qa, onRemove }: PropsWithRemove) => {
   // @TODO: should server not do this?
   documents.sort((a,b) => stringComparator(a.fileName, b.fileName));
 

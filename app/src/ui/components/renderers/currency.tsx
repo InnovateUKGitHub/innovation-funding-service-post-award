@@ -6,7 +6,7 @@ interface Props {
   fractionDigits?: number;
 }
 
-export const Currency: React.SFC<Props> = ({ value, fractionDigits = 2 }) => {
+export const Currency: React.FunctionComponent<Props> = ({ value, fractionDigits = 2 }) => {
   const options = {
     style: "currency",
     currency: "GBP",
