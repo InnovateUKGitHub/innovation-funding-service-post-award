@@ -129,17 +129,17 @@ class ProjectOverviewComponent extends ContainerBase<Params, Data, {}> {
       { text: "Monitoring reports", link: routes.monitoringReportDashboard.getLink({ projectId }) },
       { text: "Forecasts", link: routes.forecastDashboard.getLink({ projectId }) },
       { text: "Forecast", link: routes.forecastDetails.getLink({ projectId, partnerId }) },
-      { text: "Project change requests", link: routes.projectChangeRequests.getLink({ projectId }) },
-      { text: "Project change requests", link: routes.pcrsDashboard.getLink({ projectId }) },
+      { text: "Project change requests", link: routes.projectChangeRequests.getLink({ projectId }), messages: () => this.getPcrMessages(project) },
+      { text: "Project change requests", link: routes.pcrsDashboard.getLink({ projectId }), messages: () => this.getPcrMessages(project) },
       { text: "Documents", link: routes.projectDocuments.getLink({ projectId }) },
       { text: "Project details", link: routes.projectDetails.getLink({ id: projectId }) },
       { text: "Finance summary", link: routes.financeSummary.getLink({ projectId, partnerId }) },
     ];
 
-    // filter out like the current user dosnt have access too
+    // filter out links the current user doesn't have access to
     links = links.filter(x => x.link.accessControl(this.props.user, this.props.config));
 
-    // special case if not fc shouldnt have link to ViewForecastRoute from this page... the view forecast route has permission from the project forecasts route
+    // special case if not fc shouldn't have link to ViewForecastRoute from this page... the view forecast route has permission from the project forecasts route
     if (projectRole & (ProjectRole.MonitoringOfficer | ProjectRole.ProjectManager)) {
       links = links.filter(x => x.link.routeName !== routes.forecastDetails.routeName);
     }
@@ -156,6 +156,17 @@ class ProjectOverviewComponent extends ContainerBase<Params, Data, {}> {
           />)}
       </ACC.NavigationCardsGrid>
     );
+  }
+
+  private getPcrMessages(project: ProjectDto) {
+    const result: ACC.NavigationCardMessage[] = [];
+    if (project.roles & ProjectRole.ProjectManager) {
+      if (project.pcrsQueried > 0) result.push({ message: "Request queried" });
+    }
+    if (project.roles & ProjectRole.MonitoringOfficer) {
+      result.push({ message: `Requests to review: ${project.pcrsToReview}` });
+    }
+    return result;
   }
 
   private getClaimMessages(project: ProjectDto, partner: PartnerDto) {

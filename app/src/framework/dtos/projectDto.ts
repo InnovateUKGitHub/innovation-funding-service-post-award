@@ -33,6 +33,9 @@ export interface ProjectDto {
     periodStartDate: Date | null;
     periodEndDate: Date | null;
 
+    pcrsQueried: number;
+    pcrsToReview: number;
+
     claimWindowStart: Date|null;
     claimWindowEnd: Date|null;
 
