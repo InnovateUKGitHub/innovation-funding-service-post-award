@@ -52,6 +52,7 @@ export interface ProjectChangeRequestItemEntity extends ProjectChangeRequestItem
 export interface ProjectChangeRequestStatusChangeEntity {
   id: string;
   pcrId: string;
+  createdBy: string;
   createdDate: Date;
   previousStatus: PCRStatus;
   newStatus: PCRStatus;

@@ -304,6 +304,7 @@ export class TestData {
       Acc_MonitoringReport__c: header.Id,
       Acc_PreviousMonitoringReportStatus__c: "Draft",
       Acc_NewMonitoringReportStatus__c: "Submitted to Monitoring Officer",
+      Acc_CreatedByAlias__c: "The Beast from The Chase",
       CreatedDate: DateTime.local().toISO()
     };
 
@@ -429,6 +430,7 @@ export class TestData {
       Acc_NewClaimStatus__c: "Submitted",
       Acc_ExternalComment__c: "Comments",
       Acc_ParticipantVisibility__c: true,
+      Acc_CreatedByAlias__c: "Generic username",
       CreatedDate: new Date().toISOString()
     };
 
@@ -666,6 +668,7 @@ export class TestData {
       pcrId: projectChangeRequest.id,
       previousStatus: PCRStatus.Draft,
       newStatus: PCRStatus.SubmittedToMonitoringOfficer,
+      createdBy: "Person A",
       createdDate: new Date(),
       externalComments: "This is a comment",
       participantVisibility

@@ -113,5 +113,6 @@ export interface ProjectChangeRequestStatusChangeDto {
   previousStatusLabel: string;
   createdDate: Date;
   participantVisibility: boolean;
+  createdBy: string;
   comments: string | null;
 }

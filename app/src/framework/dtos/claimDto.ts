@@ -31,4 +31,5 @@ export interface ClaimStatusChangeDto {
   newStatusLabel: string;
   createdDate: Date;
   comments: string | null;
+  createdBy: string;
 }
