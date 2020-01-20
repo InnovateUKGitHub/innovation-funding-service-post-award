@@ -43,6 +43,7 @@ describe("GetClaimStatusChanges", () => {
       newStatusLabel: claimStatuses.find(x => x.value === existing.Acc_NewClaimStatus__c)!.label,
       previousStatus: existing.Acc_PreviousClaimStatus__c as ClaimStatus,
       previousStatusLabel: claimStatuses.find(x => x.value === existing.Acc_PreviousClaimStatus__c)!.label,
+      createdBy: existing.Acc_CreatedByAlias__c,
     };
     expect(result).toEqual([expected]);
   });

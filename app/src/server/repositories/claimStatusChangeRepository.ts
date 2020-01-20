@@ -8,6 +8,7 @@ export interface ISalesforceClaimStatusChange {
   Acc_ExternalComment__c: string | null;
   Acc_ParticipantVisibility__c: boolean;
   CreatedDate: string;
+  Acc_CreatedByAlias__c: string;
 }
 
 export interface IClaimStatusChangeRepository {
@@ -35,6 +36,7 @@ export class ClaimStatusChangeRepository
     "Acc_NewClaimStatus__c",
     "Acc_ExternalComment__c",
     "Acc_ParticipantVisibility__c",
+    "Acc_CreatedByAlias__c",
     "CreatedDate",
   ];
 

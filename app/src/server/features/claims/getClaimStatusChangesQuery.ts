@@ -47,6 +47,7 @@ export class GetClaimStatusChangesQuery extends QueryBase<ClaimStatusChangeDto[]
       newStatus,
       newStatusLabel: (newClaimStatusOption && newClaimStatusOption.label) || item.Acc_NewClaimStatus__c,
       createdDate: context.clock.parseRequiredSalesforceDateTime(item.CreatedDate),
+      createdBy: item.Acc_CreatedByAlias__c
     };
   }
 }
