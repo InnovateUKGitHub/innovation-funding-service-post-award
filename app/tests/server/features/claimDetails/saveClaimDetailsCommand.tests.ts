@@ -386,166 +386,22 @@ describe("SaveClaimDetails", () => {
       await expect(context.runCommand(command)).rejects.toThrow(BadRequestError);
     });
 
-  });
-
-  describe("Overheads calulation", () => {
-
-    const createRelatedCostCategories = (context: TestContext) => {
-      return {
-        labour: context.testData.createCostCategory({ hasRelated: true }),
-        overheads: context.testData.createCostCategory({ isCalculated: true }),
-      };
-    };
-
-    test("If updating Labour will add overheads line item", async () => {
+    test("overheads are not saved", async () => {
       const context = new TestContext();
 
-      const { labour, overheads } = createRelatedCostCategories(context);
-
-      const periodId = 2;
-      const project = context.testData.createProject();
-      const partner = context.testData.createPartner(project, x => x.Acc_OverheadRate__c = 20);
-
-      const labourClaimDetail = context.testData.createClaimDetail(project, labour, partner, periodId);
-
-      expect(context.repositories.claimLineItems.Items.length).toBe(0);
-
-      const dto = createDto(context, labourClaimDetail);
-      dto.lineItems = [
-        createNewLineItemDto(dto, 100),
-        createNewLineItemDto(dto, 100),
-      ];
-
-      const command = new SaveClaimDetails(partner.Acc_ProjectId__r.Id, partner.Id, periodId, labour.id, dto);
-      await context.runCommand(command);
-
-      expect(context.repositories.claimLineItems.Items.length).toBe(3);
-      expect(context.repositories.claimLineItems.Items.map(x => x.Acc_CostCategory__c)).toEqual([labour.id, labour.id, overheads.id]);
-
-      const overheadsLineItem = context.repositories.claimLineItems.Items.find(x => x.Acc_CostCategory__c === overheads.id)!;
-
-      expect(overheadsLineItem.Acc_LineItemCost__c).toBe(40);
-
-    });
-
-    test("If updating Labour will udpate exiting overheads line item", async () => {
-      const context = new TestContext();
-
-      const { labour, overheads } = createRelatedCostCategories(context);
-
-      const periodId = 2;
-      const project = context.testData.createProject();
-      const partner = context.testData.createPartner(project, x => x.Acc_OverheadRate__c = 30);
-
-      const labourClaimDetail = context.testData.createClaimDetail(project, labour, partner, periodId);
-
-      context.testData.createClaimLineItem(overheads, partner, periodId, x => {
-        x.Acc_LineItemCost__c = 100;
-      });
-
-      expect(context.repositories.claimLineItems.Items.length).toBe(1);
-
-      const dto = createDto(context, labourClaimDetail);
-      dto.lineItems = [
-        createNewLineItemDto(dto, 200),
-        createNewLineItemDto(dto, 200),
-      ];
-
-      const command = new SaveClaimDetails(partner.Acc_ProjectId__r.Id, partner.Id, periodId, labour.id, dto);
-      await context.runCommand(command);
-
-      expect(context.repositories.claimLineItems.Items.length).toBe(3);
-      expect(context.repositories.claimLineItems.Items.map(x => x.Acc_CostCategory__c)).toEqual([overheads.id, labour.id, labour.id]);
-
-      const overheadsLineItem = context.repositories.claimLineItems.Items.find(x => x.Acc_CostCategory__c === overheads.id)!;
-
-      expect(overheadsLineItem.Acc_LineItemCost__c).toBe(120);
-    });
-
-    test("If multiple overhead categories will use one related to partner comp type and org type", async () => {
-      const context = new TestContext();
-
-      // make first 2 one comp / org and second 2 a different comp / org
-      const costCategories = [
-        context.testData.createCostCategory({ hasRelated: true, competitionType: "COMP_1", organisationType: "ORG_1" }),
-        context.testData.createCostCategory({ isCalculated: true, competitionType: "COMP_1", organisationType: "ORG_1" }),
-        context.testData.createCostCategory({ hasRelated: true, competitionType: "COMP_2", organisationType: "ORG_2" }),
-        context.testData.createCostCategory({ isCalculated: true, competitionType: "COMP_2", organisationType: "ORG_2" }),
-      ];
-
-      const labourToUse = costCategories[2];
-      const overheadsToExpect = costCategories[3];
-
-      const periodId = 2;
-      const project = context.testData.createProject(x => x.Acc_CompetitionType__c = labourToUse.competitionType);
-      const partner = context.testData.createPartner(project, x => x.Acc_OrganisationType__c = labourToUse.organisationType);
-
-      const labourClaimDetail = context.testData.createClaimDetail(project, labourToUse, partner, periodId);
-
-      expect(context.repositories.claimLineItems.Items.length).toBe(0);
-
-      const dto = createDto(context, labourClaimDetail);
-
-      const command = new SaveClaimDetails(partner.Acc_ProjectId__r.Id, partner.Id, periodId, labourToUse.id, dto);
-      await context.runCommand(command);
-
-      expect(context.repositories.claimLineItems.Items.length).toBe(1);
-      const overheadsLineItem = context.repositories.claimLineItems.Items[0];
-
-      expect(overheadsLineItem.Acc_CostCategory__c).toBe(overheadsToExpect.id);
-      expect(overheadsLineItem.Acc_LineItemCost__c).toBe(0);
-    });
-
-    test("overheads calulation handle empty values", async () => {
-      const context = new TestContext();
-
-      const { labour, overheads } = createRelatedCostCategories(context);
+      const overheads = context.testData.createCostCategory({ isCalculated: true });
 
       const periodId = 1;
       const project = context.testData.createProject();
-      const partner = context.testData.createPartner(project, x => x.Acc_OverheadRate__c = 20);
+      const partner = context.testData.createPartner(project);
 
-      const dto = createNewDto(partner, periodId, labour);
-
-      const lineItem = createNewLineItemDto(dto, 200);
-
-      const emptyLineItem = createNewLineItemDto(dto);
-      emptyLineItem.value = undefined as any;
-      emptyLineItem.description = undefined as any;
-
-      dto.lineItems = [lineItem, emptyLineItem];
-
-      const command = new SaveClaimDetails(partner.Acc_ProjectId__r.Id, partner.Id, periodId, labour.id, dto);
-      await context.runCommand(command);
-
-      expect(context.repositories.claimLineItems.Items.length).toBe(2);
-      expect(context.repositories.claimLineItems.Items[0].Acc_CostCategory__c).toBe(labour.id);
-      expect(context.repositories.claimLineItems.Items[1].Acc_CostCategory__c).toBe(overheads.id);
-      expect(context.repositories.claimLineItems.Items[1].Acc_LineItemCost__c).toBe(200 * 0.2);
-
-    });
-
-    test("overheads not calcuated if calculateOverheads is false", async () => {
-      const context = new TestContext();
-      context.config.features.calculateOverheads = false;
-
-      const { labour } = createRelatedCostCategories(context);
-
-      const periodId = 1;
-      const project = context.testData.createProject();
-      const partner = context.testData.createPartner(project, x => x.Acc_OverheadRate__c = 20);
-
-      const dto = createNewDto(partner, periodId, labour);
+      const dto = createNewDto(partner, periodId, overheads);
       dto.lineItems = [
         createNewLineItemDto(dto, 200, "Line 1"),
       ];
 
-      const command = new SaveClaimDetails(partner.Acc_ProjectId__r.Id, partner.Id, periodId, labour.id, dto);
-      await context.runCommand(command);
-
-      expect(context.repositories.claimLineItems.Items.length).toBe(1);
-      expect(context.repositories.claimLineItems.Items[0].Acc_CostCategory__c).toBe(labour.id);
-
+      const command = new SaveClaimDetails(partner.Acc_ProjectId__r.Id, partner.Id, periodId, overheads.id, dto);
+      await expect(context.runCommand(command)).rejects.toThrow(BadRequestError);
     });
   });
 
