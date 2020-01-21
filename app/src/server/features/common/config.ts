@@ -7,6 +7,7 @@ export interface IConfig {
     readonly build: string;
 
     readonly timeouts: {
+        readonly claimStatuses: number;
         readonly costCategories: number;
         readonly projectRoles: number;
         readonly recordTypes: number;
@@ -64,6 +65,7 @@ export interface IConfig {
 const build = process.env.BUILD || `${Date.now()}`;
 
 const timeouts = {
+    claimStatuses: parseFloat(process.env.CLAIM_STATUSES_TIMEOUT_MINUTES!) || defaultCacheTimeout,
     costCategories: parseFloat(process.env.COST_CAT_TIMEOUT_MINUTES!) || defaultCacheTimeout,
     projectRoles: parseFloat(process.env.PROJ_ROLES_TIMEOUT_MINUTES!) || defaultCacheTimeout,
     recordTypes: parseFloat(process.env.RECORD_TYPES_TIMEOUT_MINUTES!) || defaultCacheTimeout,
