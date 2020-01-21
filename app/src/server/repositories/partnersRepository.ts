@@ -46,6 +46,15 @@ export interface IPartnerRepository {
   getAll(): Promise<ISalesforcePartner[]>;
 }
 
+/**
+ * Partners stored in the "Acc_ProjectParticipant__c" table
+ *
+ * There is 1 lead partner (Acc_ProjectRole__c = "Lead") per project
+ *
+ * The status of the partner is stored (Withdrawn etc)
+ * Total grant and approved costs etc are rolled up to this level
+ * A Sum of the number of outstanding claims etc are also de-normalised at this level
+ */
 export class PartnerRepository extends SalesforceRepositoryBase<ISalesforcePartner> implements IPartnerRepository {
 
   protected readonly salesforceObjectName = "Acc_ProjectParticipant__c";
