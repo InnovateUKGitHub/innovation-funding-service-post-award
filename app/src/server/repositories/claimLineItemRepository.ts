@@ -20,6 +20,13 @@ export interface IClaimLineItemRepository {
   insert(insert: Partial<ISalesforceClaimLineItem>[]): Promise<string[]>;
 }
 
+/**
+ * Claim line items are from the Acc_Claims__c table at the "Claims Line Item" level.
+ *
+ * Claim information that makes up a claim detail stored against a cost category and claim
+ *
+ * A number of claim line item records are summed to make a claim detail
+ */
 export class ClaimLineItemRepository extends SalesforceRepositoryBase<ISalesforceClaimLineItem> implements IClaimLineItemRepository {
 
   constructor(private getRecordTypeId: (objectName: string, recordType: string) => Promise<string>, getSalesforceConnection: () => Promise<Connection>, logger: ILogger) {

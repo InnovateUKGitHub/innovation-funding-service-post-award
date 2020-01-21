@@ -22,6 +22,13 @@ export interface IProfileTotalPeriodRepository {
   get(partnerId: string, periodId: number): Promise<ISalesforceProfileTotalPeriod>;
 }
 
+/**
+ * Forecast Total for partner per period
+ *
+ * ie amount a partner expects to spend in that period calculated from the detail for that period
+ *
+ * Stored in "Acc_Profile__c" table with record type of "Total Project Period"
+ */
 export class ProfileTotalPeriodRepository extends SalesforceRepositoryBase<ISalesforceProfileTotalPeriod> implements IProfileTotalPeriodRepository {
 
   private readonly recordType: string = "Total Project Period";
