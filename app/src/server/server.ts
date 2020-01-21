@@ -13,6 +13,7 @@ import { GetPermissionGroupQuery } from "./features/general/getPermissionGroupsQ
 import { IContext, PermissionGroupIdenfifier } from "@framework/types";
 import { GetAllRecordTypesQuery } from "./features/general/getAllRecordTypesQuery";
 import { GetCostCategoriesQuery } from "./features/claims";
+import { GetClaimStatusesQuery } from "@server/features/claims/getClaimStatusesQuery";
 
 export class Server {
   private app: express.Express;
@@ -78,6 +79,7 @@ export class Server {
       this.primeCache(context, "Permission group cache", () => context.runQuery(new GetPermissionGroupQuery(PermissionGroupIdenfifier.ClaimsTeam)));
       this.primeCache(context, "Record type cache", () => context.runQuery(new GetAllRecordTypesQuery()));
       this.primeCache(context, "Cost Categories cache", () => context.runQuery(new GetCostCategoriesQuery()));
+      this.primeCache(context, "Claim Statuses cache", () => context.runQuery(new GetClaimStatusesQuery()));
     }
   }
 

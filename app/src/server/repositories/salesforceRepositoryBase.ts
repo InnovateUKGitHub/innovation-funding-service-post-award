@@ -1,7 +1,7 @@
-import { Connection, Query, RecordResult } from "jsforce";
+import { Connection, DescribeSObjectResult, Field, PicklistEntry, Query, RecordResult } from "jsforce";
 import { Stream } from "stream";
 import * as Errors from "@server/repositories/errors";
-import { ILogger } from "@server/features/common";
+import { BadRequestError, ILogger } from "@server/features/common";
 import { ISalesforceMapper } from "./mappers/saleforceMapperBase";
 
 export type Updatable<T> = Partial<T> & {
@@ -95,6 +95,30 @@ export abstract class SalesforceRepositoryBaseWithMapping<TSalesforce, TEntity> 
       .record(id)
       .blob(fieldName)
       ;
+  }
+
+  private async getMetadata(): Promise<DescribeSObjectResult> {
+    const conn = await this.getSalesforceConnection();
+    return conn.sobject(this.salesforceObjectName)
+      .describe()
+      .catch(e => { throw this.constructError(e); });
+  }
+
+  private async getFieldMetadata(field: string): Promise<Field> {
+    const metadata = await this.getMetadata();
+    const fieldDescription = metadata.fields.find(x => x.name === field);
+    if (!fieldDescription) {
+      throw new BadRequestError(`Bad field description: ${field}`);
+    }
+    return fieldDescription;
+  }
+
+  protected async getPicklist(field: string): Promise<PicklistEntry[]> {
+    const fieldMetadata = await this.getFieldMetadata(field);
+    if (!fieldMetadata.picklistValues) {
+      throw new BadRequestError(`Field is not a pick-list: ${field}`);
+    }
+    return fieldMetadata.picklistValues;
   }
 
   protected async where(filter: Partial<TSalesforce> | string): Promise<TEntity[]> {
