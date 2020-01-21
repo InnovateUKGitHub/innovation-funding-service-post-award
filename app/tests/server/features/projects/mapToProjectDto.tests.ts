@@ -20,7 +20,7 @@ describe("mapToProjectDto", () => {
       title: "Expected title",
       startDate: startDate.set({ hour: 0, minute: 0, second: 0, millisecond: 0 }).toJSDate(),
       endDate: endDate.set({ hour: 0, minute: 0, second: 0, millisecond: 0 }).toJSDate(),
-      hasEnded: true,
+      isPastEndDate: true,
       summary: "Expected summary",
       description: "Expected description",
       projectNumber: "Expected project number",
@@ -115,9 +115,9 @@ describe("mapToProjectDto", () => {
     const salesforceNow = context.testData.createProject(x => {x.Acc_EndDate__c = DateTime.fromJSDate(new Date()).toFormat("yyyy-MM-dd");});
     const salesforceTomorrow = context.testData.createProject(x => {x.Acc_EndDate__c = DateTime.fromJSDate(new Date()).plus({days: 1}).toFormat("yyyy-MM-dd");});
     const salesforceYesterday = context.testData.createProject(x => {x.Acc_EndDate__c = DateTime.fromJSDate(new Date()).minus({days: 1}).toFormat("yyyy-MM-dd");});
-    expect(mapToProjectDto(context, salesforceNow, ProjectRole.Unknown).hasEnded).toBe(false);
-    expect(mapToProjectDto(context, salesforceTomorrow, ProjectRole.Unknown).hasEnded).toBe(false);
-    expect(mapToProjectDto(context, salesforceYesterday, ProjectRole.Unknown).hasEnded).toBe(true);
+    expect(mapToProjectDto(context, salesforceNow, ProjectRole.Unknown).isPastEndDate).toBe(false);
+    expect(mapToProjectDto(context, salesforceTomorrow, ProjectRole.Unknown).isPastEndDate).toBe(false);
+    expect(mapToProjectDto(context, salesforceYesterday, ProjectRole.Unknown).isPastEndDate).toBe(true);
   });
 
   it("ClaimFrequency should map correct - Quarterly",() => {

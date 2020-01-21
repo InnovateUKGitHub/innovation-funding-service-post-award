@@ -20,7 +20,7 @@ export const mapToProjectDto = (context: IContext, item: ISalesforceProject, rol
     applicationUrl: getIFSUrl(item, context.config.urls.ifsApplicationUrl),
     grantOfferLetterUrl: getIFSUrl(item, context.config.urls.ifsGrantLetterUrl),
     leadPartnerName: item.Acc_LeadParticipantName__c,
-    hasEnded: dayComparator(endDate, new Date()) < 0,
+    isPastEndDate: dayComparator(endDate, new Date()) < 0,
     claimFrequency,
     claimFrequencyName: ClaimFrequency[claimFrequency],
     grantOfferLetterCosts: item.Acc_GOLTotalCostAwarded__c,
