@@ -5,9 +5,11 @@ import * as Salesforce from "../../repositories/salesforceConnection";
 import * as Common from "@server/features/common";
 import * as Framework from "@framework/types";
 import * as Entities from "@framework/entities";
+import { ClaimStatusOptions } from "@framework/types";
 
 // obvs needs to be singleton
 const cachesImplementation: Framework.ICaches = {
+  claimStatuses: new Common.Cache<ClaimStatusOptions>(Common.Configuration.timeouts.claimStatuses),
   costCategories: new Common.Cache<CostCategoryDto[]>(Common.Configuration.timeouts.costCategories),
   projectRoles: new Common.Cache<{ [key: string]: IRoleInfo }>(Common.Configuration.timeouts.projectRoles),
   recordTypes: new Common.Cache<Entities.RecordType[]>(Common.Configuration.timeouts.recordTypes),

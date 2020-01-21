@@ -1,4 +1,5 @@
 import { ClaimStatus } from "../constants";
+import { Option } from "@framework/dtos/option";
 
 export interface ClaimDto {
   allowIarEdit: boolean;
@@ -21,11 +22,15 @@ export interface ClaimDto {
   totalCost: number;
 }
 
+export type ClaimStatusOptions = Map<ClaimStatus, Option>;
+
 export interface ClaimStatusChangeDto {
   id: string;
   claimId: string;
-  previousStatus: string;
-  newStatus: string;
+  previousStatus: ClaimStatus;
+  previousStatusLabel: string;
+  newStatus: ClaimStatus;
+  newStatusLabel: string;
   createdDate: Date;
   comments: string | null;
 }

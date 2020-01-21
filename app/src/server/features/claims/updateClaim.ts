@@ -4,6 +4,7 @@ import { Authorisation, ClaimDto, ClaimStatus, IContext, ProjectRole } from "@fr
 import { GetCostsSummaryForPeriodQuery } from "../claimDetails";
 import { GetCostCategoriesQuery } from "@server/features/claims/getCostCategoriesQuery";
 import { GetClaimDocumentsQuery } from "@server/features/documents/getClaimDocumentsSummary";
+import { mapToClaimStatus } from "@server/features/claims/mapClaim";
 
 export class UpdateClaimCommand extends CommandBase<boolean> {
   constructor(private readonly projectId: string, private readonly claimDto: ClaimDto) {
@@ -22,7 +23,7 @@ export class UpdateClaimCommand extends CommandBase<boolean> {
     const documents = await context.runQuery(
       new GetClaimDocumentsQuery({ projectId: this.projectId, partnerId: this.claimDto.partnerId, periodId: this.claimDto.periodId})
     );
-    const result = new ClaimDtoValidator(this.claimDto, existingStatus, details, costCategories, documents, true);
+    const result = new ClaimDtoValidator(this.claimDto, mapToClaimStatus(existingStatus), details, costCategories, documents, true);
 
     if (!result.isValid) {
       throw new ValidationError(result);
