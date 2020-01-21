@@ -1,6 +1,6 @@
 import SalesforceRepositoryBase, { Updatable } from "./salesforceRepositoryBase";
 import { ClaimStatus } from "@framework/types";
-import { BadRequestError } from "../features/common/appError";
+import { NotFoundError } from "../features/common/appError";
 
 export interface ISalesforceClaim {
   Id: string;
@@ -62,36 +62,43 @@ export class ClaimRepository extends SalesforceRepositoryBase<ISalesforceClaim> 
     "Acc_FinalClaim__c",
   ];
 
-  public getAllByProjectId(projectId: string): Promise<ISalesforceClaim[]> {
-    const filter = `
-      Acc_ProjectParticipant__r.Acc_ProjectId__c = '${projectId}'
-      AND RecordType.Name = '${this.recordType}'
+  private getStandardFilter() {
+    return `
+      RecordType.Name = '${this.recordType}'
       AND Acc_ClaimStatus__c != 'New'
+      AND Acc_ClaimStatus__c != 'Not used'
     `;
+  }
+
+  public getAllByProjectId(projectId: string): Promise<ISalesforceClaim[]> {
+    const filter = this.getStandardFilter() + `
+      AND Acc_ProjectParticipant__r.Acc_ProjectId__c = '${projectId}'
+    `;
+
     return super.where(filter);
   }
 
   public getAllByPartnerId(partnerId: string): Promise<ISalesforceClaim[]> {
-    const filter = `
-      Acc_ProjectParticipant__c = '${partnerId}'
-      AND RecordType.Name = '${this.recordType}'
-      AND Acc_ClaimStatus__c != 'New'
+    const filter = this.getStandardFilter() + `
+      AND Acc_ProjectParticipant__c = '${partnerId}'
     `;
+
     return super.where(filter);
   }
 
   public async get(partnerId: string, periodId: number) {
-    const filter = `
-      Acc_ProjectParticipant__c = '${partnerId}'
+    const filter = this.getStandardFilter() + `
+      AND Acc_ProjectParticipant__c = '${partnerId}'
       AND Acc_ProjectPeriodNumber__c = ${periodId}
-      AND RecordType.Name = '${this.recordType}'
-      AND Acc_ClaimStatus__c != 'New'
     `;
-    const claim = await super.where(filter);
-    if (claim.length === 0) {
-      throw new BadRequestError("Claim does not exist");
+
+    const claim = await super.filterOne(filter);
+
+    if (!claim) {
+      throw new NotFoundError("Claim does not exist");
     }
-    return claim[0];
+
+    return claim;
   }
 
   public update(updatedClaim: Updatable<ISalesforceClaim>) {
