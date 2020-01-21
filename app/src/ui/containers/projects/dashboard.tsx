@@ -261,7 +261,7 @@ class ProjectDashboardComponent extends ContainerBaseWithState<{}, Data, {}, Sta
           Period {project.periodId} of {project.totalPeriods}&nbsp;(<ACC.Renderers.ShortDateRange start={project.periodStartDate} end={project.periodEndDate}/>)
         </React.Fragment>
       );
-      messages.push(project.hasEnded || (partner && partner.isWithdrawn) ? endedMessage : openMessage);
+      messages.push(project.isPastEndDate || (partner && partner.isWithdrawn) ? endedMessage : openMessage);
     }
 
     return messages;
