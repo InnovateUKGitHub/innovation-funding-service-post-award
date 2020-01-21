@@ -15,7 +15,7 @@ const cachesImplementation: Framework.ICaches = {
 };
 
 const constructErrorResponse = <E extends Error>(error: E): AppError => {
-  if (error instanceof ValidationError || error instanceof ForbiddenError || error instanceof BadRequestError) {
+  if (error instanceof ValidationError || error instanceof ForbiddenError || error instanceof BadRequestError || error instanceof NotFoundError) {
     return error;
   }
 
