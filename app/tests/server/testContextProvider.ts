@@ -3,7 +3,7 @@ import { QueryBase } from "@server/features/common/queryBase";
 import { SyncQueryBase } from "@server/features/common/queryBase";
 import { CommandBase, SyncCommandBase } from "@server/features/common/commandBase";
 import { Cache } from "@server/features/common/cache";
-import { Authorisation, IAsyncRunnable, ICaches, IContext, ISyncRunnable } from "@framework/types";
+import { Authorisation, ClaimStatusOptions, IAsyncRunnable, ICaches, IContext, ISyncRunnable } from "@framework/types";
 import { IRoleInfo } from "@server/features/projects/getAllProjectRolesForUser";
 import { TestData } from "./testData";
 import { TestClock } from "./testClock";
@@ -37,6 +37,7 @@ export class TestContext implements IContext {
     public config = new TestConfig();
 
     public caches: ICaches = {
+        claimStatuses: new Cache<ClaimStatusOptions>(1),
         costCategories: new Cache<CostCategoryDto[]>(1),
         permissionGroups: new Cache<Entities.PermissionGroup[]>(1),
         projectRoles: new Cache<{ [key: string]: IRoleInfo }>(1),

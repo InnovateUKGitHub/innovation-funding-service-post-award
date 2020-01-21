@@ -1,6 +1,6 @@
 import SalesforceRepositoryBase, { Updatable } from "./salesforceRepositoryBase";
-import { ClaimStatus } from "@framework/types";
 import { NotFoundError } from "../features/common/appError";
+import { PicklistEntry } from "jsforce";
 
 export interface ISalesforceClaim {
   Id: string;
@@ -13,7 +13,7 @@ export interface ISalesforceClaim {
     }
   };
   LastModifiedDate: string;
-  Acc_ClaimStatus__c: ClaimStatus;
+  Acc_ClaimStatus__c: string;
   ClaimStatusLabel: string;
   Acc_ProjectPeriodStartDate__c: string;
   Acc_ProjectPeriodEndDate__c: string;
@@ -33,6 +33,7 @@ export interface IClaimRepository {
   getAllByProjectId(projectId: string): Promise<ISalesforceClaim[]>;
   getAllByPartnerId(partnerId: string): Promise<ISalesforceClaim[]>;
   get(partnerId: string, periodId: number): Promise<ISalesforceClaim>;
+  getClaimStatuses(): Promise<PicklistEntry[]>;
   update(updatedClaim: Partial<ISalesforceClaim> & { Id: string }): Promise<boolean>;
 }
 
@@ -110,5 +111,9 @@ export class ClaimRepository extends SalesforceRepositoryBase<ISalesforceClaim> 
 
   public update(updatedClaim: Updatable<ISalesforceClaim>) {
     return super.updateItem(updatedClaim);
+  }
+
+  public async getClaimStatuses() {
+    return super.getPicklist("Acc_ClaimStatus__c");
   }
 }

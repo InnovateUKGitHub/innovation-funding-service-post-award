@@ -2,10 +2,11 @@ import { Stream } from "stream";
 import { TestRepository } from "./testRepository";
 import * as Repositories from "@server/repositories";
 import { Updatable } from "@server/repositories/salesforceRepositoryBase";
-import { IRepositories, PCRStatus } from "@framework/types";
+import { ClaimStatus, IRepositories, PCRStatus } from "@framework/types";
 import { TestFileWrapper } from "./testData";
 import { PermissionGroupIdenfifier } from "@framework/types/permisionGroupIndentifier";
 import * as Entities from "@framework/entities";
+import { PicklistEntry } from "jsforce";
 
 class ProjectsTestRepository extends TestRepository<Repositories.ISalesforceProject> implements Repositories.IProjectRepository {
   getById(id: string) {
@@ -81,6 +82,20 @@ class ClaimsTestRepository extends TestRepository<Repositories.ISalesforceClaim>
       return Promise.resolve(true);
     }
     return Promise.resolve(false);
+  }
+
+  getClaimStatuses() {
+    return Promise.resolve([
+      { value: ClaimStatus.APPROVED, label: "Approved", active: true, defaultValue: false },
+      { value: ClaimStatus.UNKNOWN, label: "Unknown", active: true, defaultValue: false },
+      { value: ClaimStatus.PAID, label: "Paid", active: true, defaultValue: false },
+      { value: ClaimStatus.INNOVATE_QUERIED, label: "Innovate Queried", active: true, defaultValue: false },
+      { value: ClaimStatus.MO_QUERIED, label: "MO Queried", active: true, defaultValue: false },
+      { value: ClaimStatus.AWAITING_IUK_APPROVAL, label: "Awaiting IUK Approval", active: true, defaultValue: false },
+      { value: ClaimStatus.AWAITING_IAR, label: "Awaiting IAR", active: true, defaultValue: false },
+      { value: ClaimStatus.DRAFT, label: "Draft", active: true, defaultValue: false },
+      { value: ClaimStatus.SUBMITTED, label: "Submitted", active: true, defaultValue: false },
+    ]);
   }
 }
 
