@@ -1,9 +1,9 @@
 import { QueryBase } from "@server/features/common";
 import { GetAllProjectRolesForUser } from "@server/features/projects";
 import { ISalesforceClaimStatusChange } from "@server/repositories";
-import { ClaimStatusChangeDto, ClaimStatusOptions, ProjectRole } from "@framework/dtos";
+import { ClaimStatusChangeDto, ProjectRole } from "@framework/dtos";
 import { dateComparator, stringComparator } from "@framework/util/comparator";
-import { Authorisation, ClaimStatus, IContext } from "@framework/types";
+import { Authorisation, ClaimStatus, IContext, Option } from "@framework/types";
 import { GetClaimStatusesQuery } from "@server/features/claims/getClaimStatusesQuery";
 import { mapToClaimStatus } from "@server/features/claims/mapClaim";
 
@@ -33,19 +33,19 @@ export class GetClaimStatusChangesQuery extends QueryBase<ClaimStatusChangeDto[]
     return mapped.sort((a, b) => dateComparator(a.createdDate, b.createdDate) * -1 || stringComparator(a.id, b.id) * -1);
   }
 
-  map(context: IContext, item: ISalesforceClaimStatusChange, claimStatuses: ClaimStatusOptions, canSeeHidden: boolean, canSeePublic: boolean): ClaimStatusChangeDto {
-    const prevClaimStatus = mapToClaimStatus(item.Acc_PreviousClaimStatus__c);
-    const newClaimStatus = mapToClaimStatus(item.Acc_NewClaimStatus__c);
-    const prevClaimStatusOption = claimStatuses.get(prevClaimStatus);
-    const newClaimStatusOption = claimStatuses.get(newClaimStatus);
+  map(context: IContext, item: ISalesforceClaimStatusChange, claimStatuses: Map<ClaimStatus, Option<ClaimStatus>>, canSeeHidden: boolean, canSeePublic: boolean): ClaimStatusChangeDto {
+    const previousStatus = mapToClaimStatus(item.Acc_PreviousClaimStatus__c);
+    const newStatus = mapToClaimStatus(item.Acc_NewClaimStatus__c);
+    const prevClaimStatusOption = claimStatuses.get(previousStatus);
+    const newClaimStatusOption = claimStatuses.get(newStatus);
     return {
       claimId: item.Acc_Claim__c,
       id: item.Id,
       comments: canSeeHidden || (item.Acc_ParticipantVisibility__c && canSeePublic)  ? item.Acc_ExternalComment__c : "",
-      previousStatus: prevClaimStatus,
-      previousStatusLabel: (prevClaimStatusOption && prevClaimStatusOption.label) || "",
-      newStatus: newClaimStatus,
-      newStatusLabel: (newClaimStatusOption && newClaimStatusOption.label) || "",
+      previousStatus,
+      previousStatusLabel: (prevClaimStatusOption && prevClaimStatusOption.label) || item.Acc_PreviousClaimStatus__c,
+      newStatus,
+      newStatusLabel: (newClaimStatusOption && newClaimStatusOption.label) || item.Acc_NewClaimStatus__c,
       createdDate: context.clock.parseRequiredSalesforceDateTime(item.CreatedDate),
     };
   }

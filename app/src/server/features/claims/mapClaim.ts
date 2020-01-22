@@ -20,7 +20,7 @@ export default (context: IContext) => (claim: ISalesforceClaim, forecast?: ISale
     status: claimStatus,
     statusLabel: claim.ClaimStatusLabel,
     periodStartDate: context.clock.parse(claim.Acc_ProjectPeriodStartDate__c, SALESFORCE_DATE_FORMAT)!,
-    periodEndDate: context.clock.parse(claim.Acc_ProjectPeriodEndDate__c,SALESFORCE_DATE_FORMAT)!,
+    periodEndDate: context.clock.parse(claim.Acc_ProjectPeriodEndDate__c, SALESFORCE_DATE_FORMAT)!,
     periodId: claim.Acc_ProjectPeriodNumber__c,
     totalCost: claim.Acc_ProjectPeriodCost__c,
     forecastCost: forecast && forecast.Acc_PeriodInitialForecastCost__c || 0,
@@ -37,7 +37,7 @@ export default (context: IContext) => (claim: ISalesforceClaim, forecast?: ISale
 
 export const mapToClaimStatus = (status: string): ClaimStatus => {
   for (const claimStatus in ClaimStatus) {
-    if (status === ClaimStatus[claimStatus]) return status as ClaimStatus;
+    if (status === ClaimStatus[claimStatus as keyof typeof ClaimStatus]) return status;
   }
   return ClaimStatus.UNKNOWN;
 };

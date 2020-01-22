@@ -22,8 +22,6 @@ export interface ClaimDto {
   totalCost: number;
 }
 
-export type ClaimStatusOptions = Map<ClaimStatus, Option>;
-
 export interface ClaimStatusChangeDto {
   id: string;
   claimId: string;

@@ -1,9 +1,10 @@
 import React from "react";
 import { SimpleString } from "./renderers/simpleString";
 import { ShortDateTime } from "./renderers/date";
+import { ClaimStatus, MonitoringReportStatus } from "@framework/types";
 
 export interface LogItem {
-  newStatus: string;
+  newStatus: MonitoringReportStatus|ClaimStatus|string;
   newStatusLabel?: string;
   createdDate: Date;
   comments?: string | null;

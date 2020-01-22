@@ -20,7 +20,7 @@ export class GetMonitoringReportsForProject extends QueryBase<MonitoringReportSu
     return headers.map<MonitoringReportSummaryDto>(x => ({
       headerId: x.Id,
       projectId: x.Acc_Project__c,
-      status: mapMonitoringReportStatus(x),
+      status: mapMonitoringReportStatus(x.Acc_MonitoringReportStatus__c),
       statusName: x.MonitoringReportStatusName,
       startDate: context.clock.parseOptionalSalesforceDate(x.Acc_PeriodStartDate__c),
       endDate: context.clock.parseOptionalSalesforceDate(x.Acc_PeriodEndDate__c),
