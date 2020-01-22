@@ -18,7 +18,7 @@ describe("GetClaimStatusChanges", () => {
     expect(result).toEqual([]);
   });
 
-  it("returns item values corectly", async () => {
+  it("returns item values correctly", async () => {
     const context = new TestContext();
 
     const project = context.testData.createProject();

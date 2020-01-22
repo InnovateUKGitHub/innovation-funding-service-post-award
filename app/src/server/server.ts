@@ -14,6 +14,7 @@ import { IContext, PermissionGroupIdenfifier } from "@framework/types";
 import { GetAllRecordTypesQuery } from "./features/general/getAllRecordTypesQuery";
 import { GetCostCategoriesQuery } from "./features/claims";
 import { GetClaimStatusesQuery } from "@server/features/claims/getClaimStatusesQuery";
+import { GetMonitoringReportStatusesQuery } from "./features/monitoringReports/getMonitoringReportStatusesQuery";
 
 export class Server {
   private app: express.Express;
@@ -80,6 +81,7 @@ export class Server {
       this.primeCache(context, "Record type cache", () => context.runQuery(new GetAllRecordTypesQuery()));
       this.primeCache(context, "Cost Categories cache", () => context.runQuery(new GetCostCategoriesQuery()));
       this.primeCache(context, "Claim Statuses cache", () => context.runQuery(new GetClaimStatusesQuery()));
+      this.primeCache(context, "Monitoring Report Status cache", () => context.runQuery(new GetMonitoringReportStatusesQuery()));
     }
   }
 

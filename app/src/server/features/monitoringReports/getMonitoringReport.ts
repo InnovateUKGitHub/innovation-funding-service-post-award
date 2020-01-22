@@ -7,7 +7,7 @@ import { GetMonitoringReportAnsweredQuestions } from "./getMonitoringReportAnswe
 import { mapMonitoringReportStatus } from "./mapMonitoringReportStatus";
 
 export class GetMonitoringReportById extends QueryBase<MonitoringReportDto> {
-  private readonly updatablaStatuses: ISalesforceMonitoringReportStatus[] = ["New", "Draft", "IUK Queried"];
+  private readonly updatableStatuses: ISalesforceMonitoringReportStatus[] = ["New", "Draft", "IUK Queried"];
 
   constructor(private projectId: string, private readonly id: string) {
     super();
@@ -31,7 +31,7 @@ export class GetMonitoringReportById extends QueryBase<MonitoringReportDto> {
 
     return {
       headerId: header.Id,
-      status: mapMonitoringReportStatus(header),
+      status: mapMonitoringReportStatus(header.Acc_MonitoringReportStatus__c),
       statusName: header.MonitoringReportStatusName,
       projectId: header.Acc_Project__c,
       startDate: context.clock.parseOptionalSalesforceDate(header.Acc_PeriodStartDate__c),
@@ -43,7 +43,7 @@ export class GetMonitoringReportById extends QueryBase<MonitoringReportDto> {
   }
 
   private async getQuestions(context: IContext, header: ISalesforceMonitoringReportHeader, results: ISalesforceMonitoringReportResponse[]): Promise<MonitoringReportQuestionDto[]> {
-    if (this.updatablaStatuses.indexOf(header.Acc_MonitoringReportStatus__c) >= 0) {
+    if (this.updatableStatuses.indexOf(header.Acc_MonitoringReportStatus__c) >= 0) {
       return context.runQuery(new GetMonitoringReportActiveQuestions());
     }
     const answeredQuestions = results.map(r => r.Acc_Question__c);

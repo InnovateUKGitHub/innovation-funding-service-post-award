@@ -6,9 +6,9 @@ export class TestConfig implements IConfig {
   public build = `test${Date.now()}`;
 
   public timeouts = {
-    claimStatuses: 720,
     costCategories: 720,
     projectRoles: 720,
+    optionsLookup: 720,
     recordTypes: 720,
     cookie: 1,
     token: 1
