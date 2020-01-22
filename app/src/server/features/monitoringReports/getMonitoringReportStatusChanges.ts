@@ -1,7 +1,10 @@
 import { QueryBase } from "@server/features/common";
 import { mapMonitoringReportStatus } from "@server/features/monitoringReports/mapMonitoringReportStatus";
-import { Authorisation, IContext, MonitoringReportStatusChangeDto, ProjectRole } from "@framework/types";
+import { Authorisation, IContext, MonitoringReportStatus, MonitoringReportStatusChangeDto, ProjectRole } from "@framework/types";
 import { dateComparator } from "@framework/util";
+import { GetMonitoringReportStatusesQuery } from "./getMonitoringReportStatusesQuery";
+import { ISalesforceMonitoringReportStatusChange } from "@server/repositories/monitoringReportStatusChangeRepository";
+import { Option} from "@framework/types";
 
 export class GetMonitoringReportStatusChanges extends QueryBase<MonitoringReportStatusChangeDto[]> {
   constructor(
@@ -18,15 +21,27 @@ export class GetMonitoringReportStatusChanges extends QueryBase<MonitoringReport
 
   protected async Run(context: IContext): Promise<MonitoringReportStatusChangeDto[]> {
     const statusChanges = await context.repositories.monitoringReportStatusChange.getStatusChanges(this.reportId);
+    const statusLookup = await context.runQuery(new GetMonitoringReportStatusesQuery());
+
     return statusChanges
-      .map<MonitoringReportStatusChangeDto>(x => ({
-          id: x.Id,
-          monitoringReport: x.Acc_MonitoringReport__c,
-          newStatus: x.Acc_NewMonitoringReportStatus__c,
-          previousStatus: x.Acc_PreviousMonitoringReportStatus__c,
-          createdDate: context.clock.parseRequiredSalesforceDateTime(x.CreatedDate)
-        })
-      )
-      .sort((a, b) => dateComparator(b.createdDate, a.createdDate) || mapMonitoringReportStatus(b) - mapMonitoringReportStatus(a));
+      .map(x => this.mapItem(context, x, statusLookup))
+      .sort((a, b) => dateComparator(b.createdDate, a.createdDate) || b.newStatus - a.newStatus)
+      ;
+  }
+
+  private mapItem(context: IContext, statusChange: ISalesforceMonitoringReportStatusChange, statusLookup: Map<MonitoringReportStatus, Option>): MonitoringReportStatusChangeDto {
+    const newStatus = mapMonitoringReportStatus(statusChange.Acc_NewMonitoringReportStatus__c);
+    const previousStatus = mapMonitoringReportStatus(statusChange.Acc_PreviousMonitoringReportStatus__c);
+    const newStatusLookup = statusLookup.get(newStatus);
+    const previousStatusLookup = statusLookup.get(previousStatus);
+    return {
+      id: statusChange.Id,
+      monitoringReport: statusChange.Acc_MonitoringReport__c,
+      newStatus,
+      newStatusLabel: newStatusLookup && newStatusLookup.label || statusChange.Acc_NewMonitoringReportStatus__c,
+      previousStatus,
+      previousStatusLabel: previousStatusLookup && previousStatusLookup.label || statusChange.Acc_PreviousMonitoringReportStatus__c,
+      createdDate: context.clock.parseRequiredSalesforceDateTime(statusChange.CreatedDate)
+    };
   }
 }

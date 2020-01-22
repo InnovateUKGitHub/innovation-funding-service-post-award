@@ -1,6 +1,6 @@
 import SalesforceRepositoryBase, { Updatable } from "./salesforceRepositoryBase";
 import { ILogger } from "../features/common";
-import { Connection } from "jsforce";
+import { Connection, PicklistEntry } from "jsforce";
 
 export type ISalesforceMonitoringReportStatus = "New" | "Draft" | "Awaiting IUK Approval" | "Approved" | "IUK Queried";
 export interface ISalesforceMonitoringReportHeader {
@@ -21,6 +21,7 @@ export interface IMonitoringReportHeaderRepository {
   create(updateDto: Partial<ISalesforceMonitoringReportHeader>): Promise<string>;
   getAllForProject(projectId: string): Promise<ISalesforceMonitoringReportHeader[]>;
   delete(reportId: string): Promise<void>;
+  getMonitoringReportStatuses(): Promise<PicklistEntry[]>;
 }
 
 /**
@@ -74,5 +75,9 @@ export class MonitoringReportHeaderRepository extends SalesforceRepositoryBase<I
 
   async delete(reportId: string): Promise<void> {
     return super.deleteItem(reportId);
+  }
+
+  async getMonitoringReportStatuses() {
+    return super.getPicklist("Acc_MonitoringReportStatus__c");
   }
 }
