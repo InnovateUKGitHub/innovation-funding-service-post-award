@@ -2,11 +2,12 @@ import { Stream } from "stream";
 import { TestRepository } from "./testRepository";
 import * as Repositories from "@server/repositories";
 import { Updatable } from "@server/repositories/salesforceRepositoryBase";
-import { ClaimStatus, IRepositories, PCRStatus } from "@framework/types";
+import { ClaimStatus, IRepositories, MonitoringReportStatus, PCRStatus } from "@framework/types";
 import { TestFileWrapper } from "./testData";
 import { PermissionGroupIdenfifier } from "@framework/types/permisionGroupIndentifier";
 import * as Entities from "@framework/entities";
 import { PicklistEntry } from "jsforce";
+import { getAllEnumValues } from "@shared/enumHelper";
 
 class ProjectsTestRepository extends TestRepository<Repositories.ISalesforceProject> implements Repositories.IProjectRepository {
   getById(id: string) {
@@ -262,6 +263,22 @@ class MonitoringReportHeaderTestRepository extends TestRepository<Repositories.I
   delete(reportId: string): Promise<void> {
     return super.deleteItem(this.Items.find(x => x.Id === reportId));
   }
+
+  getMonitoringReportStatuses(): Promise<PicklistEntry[]> {
+    return Promise.resolve(
+      getAllEnumValues<MonitoringReportStatus>(MonitoringReportStatus)
+        // convert to string representation of enum value
+        .map(x => MonitoringReportStatus[x])
+        .map(statusLabel => ({
+          value: statusLabel,
+          label: statusLabel,
+          active: true,
+          defaultValue: false
+        })
+        )
+    );
+  }
+
 }
 
 class MonitoringReportResponseTestRepository extends TestRepository<Repositories.ISalesforceMonitoringReportResponse> implements Repositories.IMonitoringReportResponseRepository {

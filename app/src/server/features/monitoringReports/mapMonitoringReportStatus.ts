@@ -1,9 +1,6 @@
-import { ISalesforceMonitoringReportHeader } from "@server/repositories";
 import { MonitoringReportStatus } from "@framework/constants";
-import { MonitoringReportStatusChangeDto } from "@framework/types";
 
-export function mapMonitoringReportStatus(report: ISalesforceMonitoringReportHeader | MonitoringReportStatusChangeDto) {
-  const status = isMonitoringReportHeader(report) ? report.Acc_MonitoringReportStatus__c : report.newStatus;
+export function mapMonitoringReportStatus(status: string) {
   switch (status) {
     case "Draft":
       return MonitoringReportStatus.Draft;
@@ -19,7 +16,3 @@ export function mapMonitoringReportStatus(report: ISalesforceMonitoringReportHea
       return MonitoringReportStatus.Unknown;
   }
 }
-
-const isMonitoringReportHeader = (report: ISalesforceMonitoringReportHeader | MonitoringReportStatusChangeDto): report is ISalesforceMonitoringReportHeader => {
-  return (report as ISalesforceMonitoringReportHeader).Acc_MonitoringReportStatus__c !== undefined;
-};
