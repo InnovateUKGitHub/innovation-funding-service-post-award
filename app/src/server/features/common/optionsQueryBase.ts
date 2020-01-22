@@ -3,21 +3,21 @@ import { IContext } from "@framework/types";
 import { Option } from "@framework/dtos/option";
 import { PicklistEntry } from "jsforce";
 
-export abstract class OptionsQueryBase<T extends (string | number)> extends QueryBase<Map<T, Option>> {
+export abstract class OptionsQueryBase<T extends (string | number)> extends QueryBase<Map<T, Option<T>>> {
   constructor(private key: string) {
     super();
   }
 
-  protected async Run(context: IContext): Promise<Map<T, Option>> {
+  protected async Run(context: IContext): Promise<Map<T, Option<T>>> {
     return context.caches.optionsLookup.fetchAsync(this.key, () => this.executeQuery(context));
   }
 
   private async executeQuery(context: IContext) {
     const statuses = await this.getPickListValues(context);
-    return statuses.reduce<Map<T, Option>>((acc, curr) => {
+    return statuses.reduce<Map<T, Option<T>>>((acc, curr) => {
       const enumValue = this.mapToEnumValue(curr.value);
       return acc.set(enumValue, {
-        value: curr.value,
+        value: enumValue,
         label: curr.label || curr.value,
         defaultValue: curr.defaultValue,
         active: curr.active,

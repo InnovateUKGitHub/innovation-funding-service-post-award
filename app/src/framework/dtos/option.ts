@@ -1,6 +1,6 @@
-export interface Option {
+export interface Option<T> {
   active: boolean;
   defaultValue: boolean;
   label: string;
-  value: string;
+  value: T;
 }

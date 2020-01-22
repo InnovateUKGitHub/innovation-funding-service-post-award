@@ -9,7 +9,7 @@ import * as Entities from "@framework/entities";
 // obvs needs to be singleton
 const cachesImplementation: Framework.ICaches = {
   costCategories: new Common.Cache<CostCategoryDto[]>(Common.Configuration.timeouts.costCategories),
-  optionsLookup: new Common.Cache<Map<any, Framework.Option>>(Common.Configuration.timeouts.optionsLookup),
+  optionsLookup: new Common.Cache<Map<any, Framework.Option<any>>>(Common.Configuration.timeouts.optionsLookup),
   projectRoles: new Common.Cache<{ [key: string]: IRoleInfo }>(Common.Configuration.timeouts.projectRoles),
   permissionGroups: new Common.Cache<Entities.PermissionGroup[]>(0 /* permanant cache */),
   recordTypes: new Common.Cache<Entities.RecordType[]>(Common.Configuration.timeouts.recordTypes),

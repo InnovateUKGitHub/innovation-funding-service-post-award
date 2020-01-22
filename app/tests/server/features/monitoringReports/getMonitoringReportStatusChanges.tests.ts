@@ -48,8 +48,8 @@ describe("GetMonitoringReportStatusChanges", () => {
     statusChange.Acc_NewMonitoringReportStatus__c = "Approved";
 
     context.caches.optionsLookup.monitoringReports
-      .addItem(MonitoringReportStatus.Draft, "Draft", "Custom Draft")
-      .addItem(MonitoringReportStatus.Approved, "Approved", "Custom Approved")
+      .addItem(MonitoringReportStatus.Draft, "Custom Draft")
+      .addItem(MonitoringReportStatus.Approved, "Custom Approved")
       ;
 
     const query = new GetMonitoringReportStatusChanges(project.Id, report.Id);

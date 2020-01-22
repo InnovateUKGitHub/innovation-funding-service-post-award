@@ -12,7 +12,7 @@ export class TestCaches implements ICaches {
   readonly recordTypes = new Cache<RecordType[]>(1);
 }
 
-class TestOptionsCache extends Cache<Map<any, Option>> {
+class TestOptionsCache extends Cache<Map<any, Option<any>>> {
 
   constructor() {
     super(1);
@@ -24,16 +24,16 @@ class TestOptionsCache extends Cache<Map<any, Option>> {
 }
 
 class OptionsCacheMap<T> {
-  constructor(private map: Map<T, Option>) {
+  constructor(private map: Map<T, Option<T>>) {
 
   }
 
-  addItem(enumValue: T, value: string, label: string) {
+  addItem(enumValue: T, label: string) {
     this.map.set(enumValue, {
       active: true,
       defaultValue: false,
       label,
-      value
+      value: enumValue
     });
 
     return this;
