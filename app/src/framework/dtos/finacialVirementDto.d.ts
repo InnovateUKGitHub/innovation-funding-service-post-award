@@ -2,13 +2,14 @@ interface FinancialVirementDto {
   pcrItemId: string;
   originalTotal: number;
   newTotal: number;
-  partners: PartnerVirementsDto[]
+  partners: PartnerVirementsDto[];
 }
 
 interface PartnerVirementsDto {
   partnerId: string;
   partnerName: string;
   isLead: boolean;
+  isWithdrawn: boolean;
   originalTotal: number;
   newTotal: number;
   virements: VirementDto[];
