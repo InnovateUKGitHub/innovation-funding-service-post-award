@@ -46,6 +46,6 @@ export class Link extends React.Component<StyledLinkProps> {
   }
 }
 
-export const BackLink: React.SFC<Props> = (props) => (
+export const BackLink: React.FunctionComponent<Props> = (props) => (
   <Link styling="BackLink" {...props}>{props.children}</Link>
 );

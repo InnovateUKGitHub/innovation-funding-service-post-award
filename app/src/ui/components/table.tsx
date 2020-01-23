@@ -237,15 +237,15 @@ const LinkColumn = <T extends {}>(props: LinkColumnProps<T>) => {
 };
 
 export const TypedTable = <T extends {}>() => ({
-  Table: TableComponent as React.SFC<TableProps<T>>,
-  Custom: CustomColumn as React.SFC<ExternalColumnProps<T, React.ReactNode> & { classSuffix?: "numeric" }>,
-  String: StringColumn as React.SFC<ExternalColumnProps<T, string | null>>,
-  Number: NumberColumn as React.SFC<ExternalColumnProps<T, number | null>>,
-  Currency: CurrencyColumn as React.SFC<ExternalColumnProps<T, number | null> & {fractionDigits?: number}>,
-  Percentage: PercentageColumn as React.SFC<ExternalColumnProps<T, number | null> & {fractionDigits?: number}>,
-  FullDate: FullDateColumn as React.SFC<ExternalColumnProps<T, Date | null>>,
-  ShortDate: ShortDateColumn as React.SFC<ExternalColumnProps<T, Date | null>>,
-  ShortDateTime: ShortDateTimeColumn as React.SFC<ExternalColumnProps<T, Date | null>>,
-  Email: EmailColumn as React.SFC<ExternalColumnProps<T, string | null>>,
-  Link: LinkColumn as React.SFC<LinkColumnProps<T>>
+  Table: TableComponent as React.FunctionComponent<TableProps<T>>,
+  Custom: CustomColumn as React.FunctionComponent<ExternalColumnProps<T, React.ReactNode> & { classSuffix?: "numeric" }>,
+  String: StringColumn as React.FunctionComponent<ExternalColumnProps<T, string | null>>,
+  Number: NumberColumn as React.FunctionComponent<ExternalColumnProps<T, number | null>>,
+  Currency: CurrencyColumn as React.FunctionComponent<ExternalColumnProps<T, number | null> & {fractionDigits?: number}>,
+  Percentage: PercentageColumn as React.FunctionComponent<ExternalColumnProps<T, number | null> & {fractionDigits?: number}>,
+  FullDate: FullDateColumn as React.FunctionComponent<ExternalColumnProps<T, Date | null>>,
+  ShortDate: ShortDateColumn as React.FunctionComponent<ExternalColumnProps<T, Date | null>>,
+  ShortDateTime: ShortDateTimeColumn as React.FunctionComponent<ExternalColumnProps<T, Date | null>>,
+  Email: EmailColumn as React.FunctionComponent<ExternalColumnProps<T, string | null>>,
+  Link: LinkColumn as React.FunctionComponent<LinkColumnProps<T>>
 });

@@ -22,7 +22,7 @@ const getMessageContent = (error: IAppError) => {
   );
 };
 
-export const ErrorSummary: React.SFC<Props> = ({ error }) => {
+export const ErrorSummary: React.FunctionComponent<Props> = ({ error }) => {
   if (!error) {
     return null;
   }

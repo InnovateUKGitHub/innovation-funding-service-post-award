@@ -1,6 +1,6 @@
 import React from "react";
 
-export const InsetText: React.SFC<{ text: string|null}> = ({ text }) => {
+export const InsetText: React.FunctionComponent<{ text: string|null}> = ({ text }) => {
     if(!text) {
         return null;
     }

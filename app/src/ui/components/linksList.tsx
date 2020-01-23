@@ -12,7 +12,7 @@ interface Props {
   renderAfterLink?: (x: number) => React.ReactNode;
 }
 
-export const LinksList: React.SFC<Props> = (props) => {
+export const LinksList: React.FunctionComponent<Props> = (props) => {
     const { links = [], openNewWindow = false, renderAfterLink} = props;
     return (
         <React.Fragment>
