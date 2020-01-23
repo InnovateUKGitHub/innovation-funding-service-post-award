@@ -1,4 +1,6 @@
-import SalesforceRepositoryBase from "@server/repositories/salesforceRepositoryBase";
+import SalesforceRepositoryBase, { SalesforceRepositoryBaseWithMapping } from "@server/repositories/salesforceRepositoryBase";
+import { ProjectChangeRequestStatusChangeEntity } from "@framework/entities";
+import { PCRStatusChangeMapper } from "./mappers/pcrStatusChangeMapper";
 
 export interface ICreateProjectChangeRequestStatusChange {
   Acc_ProjectChangeRequest__c: string;
@@ -15,7 +17,7 @@ export interface ISalesforceProjectChangeRequestStatusChange extends ICreateProj
 
 export interface IProjectChangeRequestStatusChangeRepository {
   createStatusChange(statusChange: ICreateProjectChangeRequestStatusChange): Promise<string>;
-  getStatusChanges(projectId: string, projectChangeRequestId: string): Promise<ISalesforceProjectChangeRequestStatusChange[]>;
+  getStatusChanges(projectId: string, projectChangeRequestId: string): Promise<ProjectChangeRequestStatusChangeEntity[]>;
 }
 
 /**
@@ -24,7 +26,7 @@ export interface IProjectChangeRequestStatusChangeRepository {
  * Holds all status changes for Project Change Request records ("Acc_ProjectChangeRequest__c" of type "Request Header)
  *
  */
-export class ProjectChangeRequestStatusChangeRepository extends SalesforceRepositoryBase<ISalesforceProjectChangeRequestStatusChange> implements IProjectChangeRequestStatusChangeRepository {
+export class ProjectChangeRequestStatusChangeRepository extends SalesforceRepositoryBaseWithMapping<ISalesforceProjectChangeRequestStatusChange, ProjectChangeRequestStatusChangeEntity> implements IProjectChangeRequestStatusChangeRepository {
   protected readonly salesforceObjectName = "Acc_StatusChange__c";
   protected readonly salesforceFieldNames = [
     "Id",
@@ -36,6 +38,8 @@ export class ProjectChangeRequestStatusChangeRepository extends SalesforceReposi
     "Acc_ParticipantVisibility__c"
   ];
 
+  protected mapper = new PCRStatusChangeMapper();
+
   public createStatusChange(statusChange: ICreateProjectChangeRequestStatusChange) {
     return super.insertItem({
       Acc_ProjectChangeRequest__c: statusChange.Acc_ProjectChangeRequest__c,
@@ -44,7 +48,7 @@ export class ProjectChangeRequestStatusChangeRepository extends SalesforceReposi
     });
   }
 
-  public getStatusChanges(projectId: string, projectChangeRequestId: string): Promise<ISalesforceProjectChangeRequestStatusChange[]> {
+  public getStatusChanges(projectId: string, projectChangeRequestId: string): Promise<ProjectChangeRequestStatusChangeEntity[]> {
     return super.where(`Acc_ProjectChangeRequest__c = '${projectChangeRequestId}' AND Acc_ProjectChangeRequest__r.Acc_Project__c = '${projectId}'`);
   }
 }
