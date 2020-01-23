@@ -8,11 +8,11 @@ import * as ACC from "@ui/components";
 import { IClientConfig } from "@ui/redux/reducers/configReducer";
 import { StoresConsumer } from "@ui/redux";
 import { IRoutes } from "@ui/routing";
+import { PartnerName } from "@ui/components";
 
 interface Data {
   projectDetails: Pending<Dtos.ProjectDto>;
   partners: Pending<Dtos.PartnerDto[]>;
-  contacts: Pending<ProjectContactDto[]>;
   user: IClientUser;
   config: IClientConfig;
 }
@@ -26,10 +26,9 @@ class ProjectOverviewComponent extends ContainerBase<Params, Data, {}> {
     const combined = Pending.combine({
       project: this.props.projectDetails,
       partners: this.props.partners,
-      contacts: this.props.contacts,
     });
 
-    return <ACC.PageLoader pending={combined} render={x => this.renderContents(x.project, x.partners, x.contacts)} />;
+    return <ACC.PageLoader pending={combined} render={x => this.renderContents(x.project, x.partners)} />;
   }
 
   private isPartnerWithdrawn(project: Dtos.ProjectDto, partners: Dtos.PartnerDto[]) {
@@ -40,7 +39,7 @@ class ProjectOverviewComponent extends ContainerBase<Params, Data, {}> {
     return partners.some(p => !!(p.roles & ProjectRole.FinancialContact) && p.isWithdrawn);
   }
 
-  renderContents(project: Dtos.ProjectDto, partners: Dtos.PartnerDto[], contacts: ProjectContactDto[]) {
+  renderContents(project: Dtos.ProjectDto, partners: Dtos.PartnerDto[]) {
     // find first partner with role
     const partner = partners.filter(x => x.roles !== ProjectRole.Unknown)[0];
 
@@ -90,7 +89,7 @@ class ProjectOverviewComponent extends ContainerBase<Params, Data, {}> {
     const PartnerSummaryDetails = ACC.TypedDetails<PartnerDto>();
 
     return (
-      <ACC.SectionPanel qa="claims-totals" title={`${partner.name} costs to date`}>
+      <ACC.SectionPanel qa="claims-totals" title={<React.Fragment><PartnerName partner={partner}/> costs to date</React.Fragment>}>
         <ACC.DualDetails displayDensity="Compact">
           <PartnerSummaryDetails.Details qa="claims-totals-col-0" data={partner}>
             <PartnerSummaryDetails.Currency label="Total eligible costs" qa="gol-costs" value={x => x.totalParticipantGrant} />
@@ -113,7 +112,7 @@ class ProjectOverviewComponent extends ContainerBase<Params, Data, {}> {
             <ProjectSummaryDetails.Currency label="Eligible costs claimed to date" qa="claimed-costs" value={x => x.costsClaimedToDate || 0} />
             <ProjectSummaryDetails.Percentage label="Percentage of eligible costs claimed to date" qa="claimed-percentage" value={x => x.claimedPercentage} />
           </ProjectSummaryDetails.Details>
-          <PartnerSummaryDetails.Details data={partner} title={`${partner.name} costs to date`} qa="lead-partner-summary">
+          <PartnerSummaryDetails.Details data={partner} title={<React.Fragment><ACC.PartnerName partner={partner}/> costs to date</React.Fragment>} qa="lead-partner-summary">
             <PartnerSummaryDetails.Currency label="Total eligible costs" qa="gol-costs" value={x => x.totalParticipantGrant} />
             <PartnerSummaryDetails.Currency label="Eligible costs claimed to date" qa="claimed-costs" value={x => x.totalParticipantCostsClaimed || 0} />
             <PartnerSummaryDetails.Percentage label="Percentage of eligible costs claimed to date" qa="claimed-percentage" value={x => x.percentageParticipantCostsClaimed} />
@@ -218,7 +217,6 @@ const ProjectOverviewContainer = (props: Params & BaseProps) => {
           <ProjectOverviewComponent
             projectDetails={stores.projects.getById(props.projectId)}
             partners={stores.partners.getPartnersForProject(props.projectId)}
-            contacts={stores.contacts.getAllByProjectId(props.projectId)}
             user={stores.users.getCurrentUser()}
             {...props}
           />

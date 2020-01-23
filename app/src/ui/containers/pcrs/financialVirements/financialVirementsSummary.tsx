@@ -39,8 +39,11 @@ class Component extends React.Component<Props> {
       this.props.routes.pcrFinancialVirementDetails.getLink({...params, mode: this.props.mode})
       ;
 
-    const name = partnerVirement.isLead ? `${partnerVirement.partnerName} (Lead)` : partnerVirement.partnerName;
-    return <ACC.Link replace={true} route={route}>{name}</ACC.Link>;
+    return (
+      <ACC.Link replace={true} route={route}>
+        <ACC.PartnerName partner={{ name: partnerVirement.partnerName, isLead: partnerVirement.isLead, isWithdrawn: partnerVirement.isWithdrawn }} showIsLead={true}/>
+      </ACC.Link>
+    );
   }
 }
 

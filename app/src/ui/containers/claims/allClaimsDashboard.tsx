@@ -114,8 +114,7 @@ class Component extends ContainerBase<AllClaimsDashboardParams, Data, {}> {
     const ClaimTable = Acc.TypedTable<ClaimDto>();
     const renderPartnerName = (x: ClaimDto) => {
       const p = partners.filter(y => y.id === x.partnerId)[0];
-      if (p && p.isLead) return `${p.name} (Lead)`;
-      if (p) return p.name;
+      if (p) return <Acc.PartnerName partner={p} showIsLead={true}/>;
       return null;
     };
 
@@ -130,7 +129,7 @@ class Component extends ContainerBase<AllClaimsDashboardParams, Data, {}> {
           caption="Open"
           qa="current-claims-table"
         >
-          <ClaimTable.String header="Partner" qa="partner" value={renderPartnerName} />
+          <ClaimTable.Custom header="Partner" qa="partner" value={renderPartnerName} />
           <ClaimTable.Currency header="Forecast costs for period" qa="forecast-cost" value={(x) => x.forecastCost} />
           <ClaimTable.Currency header="Actual costs for period" qa="actual-cost" value={(x) => x.totalCost} />
           <ClaimTable.Currency header="Difference" qa="diff" value={(x) => x.forecastCost - x.totalCost} />
@@ -156,7 +155,7 @@ class Component extends ContainerBase<AllClaimsDashboardParams, Data, {}> {
     return (
       <Acc.Accordion qa="previous-claims">
         {grouped.map((x, i) => (
-          <Acc.AccordionItem title={`${x.partner.name} ${x.partner.isLead ? "(Lead)" : ""}`} key={i} qa={`accordion-item-${i}`}>
+          <Acc.AccordionItem title={<Acc.PartnerName partner={x.partner} showIsLead={true}/>} key={i} qa={`accordion-item-${i}`}>
             {this.previousClaimsSection(project, x.partner, x.claims)}
           </Acc.AccordionItem>
         ))}
@@ -173,7 +172,7 @@ class Component extends ContainerBase<AllClaimsDashboardParams, Data, {}> {
     const ClaimTable = Acc.TypedTable<ClaimDto>();
     return (
       <div>
-        <ClaimTable.Table data={previousClaims} caption={partner.name} qa={`previousClaims-${partner.accountId}`}>
+        <ClaimTable.Table data={previousClaims} caption={<Acc.PartnerName partner={partner}/>} qa={`previousClaims-${partner.accountId}`}>
           <ClaimTable.Custom header="" qa="period" value={(x) => this.renderClosedPeriodColumn(x)} />
           <ClaimTable.Currency header="Forecast costs for period" qa="forecast-cost" value={(x) => x.forecastCost} />
           <ClaimTable.Currency header="Actual costs for period" qa="actual-cost" value={(x) => x.totalCost} />

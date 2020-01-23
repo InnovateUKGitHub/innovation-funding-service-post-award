@@ -14,7 +14,7 @@ const InnerContainer = (props: PcrStepProps<PCRItemForAccountNameChangeDto, PCRA
   const partnerOptions: ACC.SelectOption[] = props.partners.map(x => (
     {
       id: x.id,
-      value: x.name
+      value: <ACC.PartnerName partner={x}/>
     }
   ));
   const selectedPartnerOption = partnerOptions.find(x => x.id === props.pcrItem.partnerId);
