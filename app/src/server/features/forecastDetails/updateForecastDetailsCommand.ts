@@ -27,7 +27,7 @@ export class UpdateForecastDetailsCommand extends CommandBase<boolean> {
     const project = await context.runQuery(new GetProjectById(this.projectId));
     const existing = await context.runQuery(new GetAllForecastsForPartnerQuery(this.partnerId));
 
-    const preparedForecasts = await this.getPrepareForecastValues(context, project.periodId, existing);
+    const preparedForecasts = await this.ignoreCalculatedCostCategories(context, this.forecasts);
     const claims = await context.runQuery(new GetAllForPartnerQuery(this.partnerId));
     const claimDetails = await context.runQuery(new GetAllClaimDetailsByPartner(this.partnerId));
     const golCosts = await context.runQuery(new GetAllForecastsGOLCostsQuery(this.partnerId));
@@ -44,42 +44,12 @@ export class UpdateForecastDetailsCommand extends CommandBase<boolean> {
     return true;
   }
 
-  private async getPrepareForecastValues(context: IContext, currentPeriodId: number, existing: ForecastDetailsDTO[]) {
+  private async ignoreCalculatedCostCategories(context: IContext, dtos: ForecastDetailsDTO[]) {
     // check to see if there are any calculated cost categories
-    const allCostCategories = await context.runQuery(new GetCostCategoriesQuery());
-    const calculatedCostCategoryIds = allCostCategories.filter(x => x.isCalculated).map(x => x.id);
-    const relatedCostCategoryIds = allCostCategories.filter(x => x.hasRelated).map(x => x.id);
+    const calculatedCostCategoryIds = await context.runQuery(new GetCostCategoriesQuery())
+      .then(costCategories =>  costCategories.filter(x => x.isCalculated).map(x => x.id));
 
-    if (this.forecasts.every(forecast => calculatedCostCategoryIds.indexOf(forecast.costCategoryId) === -1)) {
-      return Promise.resolve(this.forecasts);
-    }
-
-    const overheadRate = await context.repositories.partners.getById(this.partnerId).then(x => x.Acc_OverheadRate__c);
-
-    return this.forecasts.map(forecast => {
-      return Object.assign({}, forecast, {value : this.getForecastValue(context, forecast, currentPeriodId, overheadRate, calculatedCostCategoryIds, relatedCostCategoryIds, this.forecasts, existing)});
-    });
-  }
-
-  private getForecastValue(context: IContext, forecast: ForecastDetailsDTO, currentPeriodId: number, overheadRate: number, calculatedCostCategoryIds: string[], relatedCostCategoryIds: string[], sent: ForecastDetailsDTO[], existing: ForecastDetailsDTO[]) {
-    // if its for past period dont change
-    if (forecast.periodId <= currentPeriodId) {
-      return forecast.value;
-    }
-
-    // if its not calculated dont change
-    if (!context.config.features.calculateOverheads || calculatedCostCategoryIds.indexOf(forecast.costCategoryId) === -1) {
-      return forecast.value;
-    }
-
-    // calculated - find the related update or if not sent then the existing related value
-    const related = [...sent, ...existing].find(x => relatedCostCategoryIds.indexOf(x.costCategoryId) !== -1 && forecast.periodId === x.periodId);
-
-    if (!related) {
-      throw new BadRequestError("Unable to calculate overheads");
-    }
-
-    return related.value * overheadRate / 100;
+    return dtos.filter(forecast => calculatedCostCategoryIds.indexOf(forecast.costCategoryId) === -1);
   }
 
   private async testValidation(claims: ClaimDto[], claimDetails: ClaimDetailsSummaryDto[], golCosts: GOLCostDto[], partner: PartnerDto) {
