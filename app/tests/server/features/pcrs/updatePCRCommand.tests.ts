@@ -264,11 +264,11 @@ describe("UpdatePCRCommand", () => {
       expect(context.repositories.projectChangeRequestStatusChange.Items.length).toBe(1);
 
       const statusChange = context.repositories.projectChangeRequestStatusChange.Items[0];
-      expect(statusChange.Acc_ExternalComment__c).toBe("Expected Comments");
-      expect(statusChange.Acc_ProjectChangeRequest__c).toBe(pcr.id);
-      expect(statusChange.Acc_PreviousProjectChangeRequestStatus__c).toBe(PCRStatus[PCRStatus.Draft]);
-      expect(statusChange.Acc_NewProjectChangeRequestStatus__c).toBe(PCRStatus[PCRStatus.SubmittedToMonitoringOfficer]);
-      expect(statusChange.Acc_ParticipantVisibility__c).toBe(true);
+      expect(statusChange.externalComments).toBe("Expected Comments");
+      expect(statusChange.pcrId).toBe(pcr.id);
+      expect(statusChange.previousStatus).toBe(PCRStatus.Draft);
+      expect(statusChange.newStatus).toBe(PCRStatus.SubmittedToMonitoringOfficer);
+      expect(statusChange.participantVisibility).toBe(true);
 
       expect(pcr.comments).toBe("");
     });
@@ -294,7 +294,7 @@ describe("UpdatePCRCommand", () => {
       expect(context.repositories.projectChangeRequestStatusChange.Items.length).toBe(1);
 
       const statusChange = context.repositories.projectChangeRequestStatusChange.Items[0];
-      expect(statusChange.Acc_ParticipantVisibility__c).toBe(false);
+      expect(statusChange.participantVisibility).toBe(false);
     });
   });
 

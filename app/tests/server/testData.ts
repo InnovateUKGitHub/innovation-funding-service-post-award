@@ -7,6 +7,7 @@ import { ClaimStatus, IClientUser } from "@framework/types";
 import { ITestRepositories } from "./testRepositories";
 import { PCRRecordTypeMetaValues } from "@server/features/pcrs/getItemTypesQuery";
 import { PCRItemStatus, PCRStatus } from "@framework/constants";
+import { ProjectChangeRequestStatusChangeEntity } from "@framework/entities";
 
 export class TestData {
   constructor(private repositories: ITestRepositories, private getCurrentUser: () => IClientUser) {
@@ -656,17 +657,17 @@ export class TestData {
     return newItem;
   }
 
-  public createProjectChangeRequestStatusChange(projectChangeRequest: Entites.ProjectChangeRequestEntity, participantVisibility: boolean): Repositories.ISalesforceProjectChangeRequestStatusChange {
+  public createProjectChangeRequestStatusChange(projectChangeRequest: Entites.ProjectChangeRequestEntity, participantVisibility: boolean): ProjectChangeRequestStatusChangeEntity {
     const seed = this.repositories.projectChangeRequestStatusChange.Items.length + 1;
 
-    const response: Repositories.ISalesforceProjectChangeRequestStatusChange = {
-      Id: `StatusChange: ${seed}`,
-      Acc_ProjectChangeRequest__c: projectChangeRequest.id,
-      Acc_PreviousProjectChangeRequestStatus__c: "Draft",
-      Acc_NewProjectChangeRequestStatus__c: "Submitted to Monitoring Officer",
-      CreatedDate: DateTime.local().toISO(),
-      Acc_ExternalComment__c: "This is a comment",
-      Acc_ParticipantVisibility__c: participantVisibility
+    const response: ProjectChangeRequestStatusChangeEntity = {
+      id: `StatusChange: ${seed}`,
+      pcrId: projectChangeRequest.id,
+      previousStatus: PCRStatus.Draft,
+      newStatus: PCRStatus.SubmittedToMonitoringOfficer,
+      createdDate: new Date(),
+      externalComments: "This is a comment",
+      participantVisibility
     };
 
     this.repositories.projectChangeRequestStatusChange.Items.push(response);
