@@ -7,7 +7,7 @@ interface Props {
   partner?: PartnerDto | null;
 }
 
-export const ClaimPeriodDate: React.SFC<Props> = (props) => {
+export const ClaimPeriodDate: React.FunctionComponent<Props> = (props) => {
   if (!props.claim) return null;
 
   if (!props.partner) {

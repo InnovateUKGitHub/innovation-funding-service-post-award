@@ -6,6 +6,6 @@ interface Props {
   project: ProjectDto;
 }
 
-export const Title: React.SFC<Props> = ({project}) => (
+export const Title: React.FunctionComponent<Props> = ({project}) => (
   <PageTitle caption={`${project.projectNumber || ""} : ${project.title || ""}`} />
 );

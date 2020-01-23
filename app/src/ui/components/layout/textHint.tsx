@@ -1,7 +1,7 @@
 import React from "react";
 import * as colour from "../../styles/colours";
 
-export const TextHint: React.SFC<{ text: string|null}> = ({ text }) => {
+export const TextHint: React.FunctionComponent<{ text: string|null}> = ({ text }) => {
   if(!text) {
     return null;
   }
