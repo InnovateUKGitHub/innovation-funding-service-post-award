@@ -13,6 +13,12 @@ export interface IMonitoringReportStatusChangeRepository {
   createStatusChange(statusChange: Partial<ISalesforceMonitoringReportStatusChange>): Promise<string>;
 }
 
+/**
+ * MonitoringReportStatusChanges are stored in the Acc_StatusChange__c
+ *
+ * Holds all status changes for Monitoring Report Header records ("Acc_MonitoringAnswer__c" of type "Monitoring Header")
+ *
+ */
 export class MonitoringReportStatusChangeRepository extends SalesforceRepositoryBase<ISalesforceMonitoringReportStatusChange> implements IMonitoringReportStatusChangeRepository {
   protected readonly salesforceObjectName = "Acc_StatusChange__c";
   protected readonly salesforceFieldNames = [

@@ -6,7 +6,7 @@ interface Props {
   periodEnd: Date;
 }
 
-export const ClaimWindow: React.SFC<Props> = (props) => {
+export const ClaimWindow: React.FunctionComponent<Props> = (props) => {
   const localOpts = { locale: "en-GB", zone: "Europe/London" };
   const today = DateTime.local().setLocale(localOpts.locale).setZone(localOpts.zone).set({ hour: 0, minute: 0, second: 0 });
   const windowStart = DateTime.fromJSDate(props.periodEnd, localOpts).plus({ days: 1 }).set({ hour: 0, minute: 0, second: 0 });

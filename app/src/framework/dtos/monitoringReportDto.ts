@@ -35,7 +35,9 @@ export interface MonitoringReportOptionDto {
 export interface MonitoringReportStatusChangeDto {
   id: string;
   monitoringReport: string;
-  previousStatus: string;
-  newStatus: string;
+  previousStatus: MonitoringReportStatus;
+  previousStatusLabel: string;
+  newStatus: MonitoringReportStatus;
+  newStatusLabel: string;
   createdDate: Date;
 }

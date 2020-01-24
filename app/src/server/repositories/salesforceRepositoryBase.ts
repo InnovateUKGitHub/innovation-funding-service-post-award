@@ -1,13 +1,16 @@
-import { Connection, Query, RecordResult } from "jsforce";
+import { Connection, DescribeSObjectResult, Field, PicklistEntry, Query, RecordResult } from "jsforce";
 import { Stream } from "stream";
 import * as Errors from "@server/repositories/errors";
-import { ILogger } from "@server/features/common";
+import { BadRequestError, ILogger } from "@server/features/common";
 import { ISalesforceMapper } from "./mappers/saleforceMapperBase";
 
 export type Updatable<T> = Partial<T> & {
   Id: string
 };
 
+/**
+ * Base class for all salesforce repositories
+ */
 export abstract class RepositoryBase {
   public constructor(
     protected readonly getSalesforceConnection: () => Promise<Connection>,
@@ -35,7 +38,7 @@ export abstract class RepositoryBase {
           rej(this.constructError(err));
         }
         else {
-          // there is an error in the typeings of result so need to cast here
+          // there is an error in the typings of result so need to cast here
           res(records as any as T[]);
         }
       });
@@ -43,6 +46,9 @@ export abstract class RepositoryBase {
   }
 }
 
+/**
+ * Generic Base class with mapping and helpers to retrieve salesforce objects
+ */
 export abstract class SalesforceRepositoryBaseWithMapping<TSalesforce, TEntity> extends RepositoryBase {
   public constructor(
     getSalesforceConnection: () => Promise<Connection>,
@@ -89,6 +95,30 @@ export abstract class SalesforceRepositoryBaseWithMapping<TSalesforce, TEntity> 
       .record(id)
       .blob(fieldName)
       ;
+  }
+
+  private async getMetadata(): Promise<DescribeSObjectResult> {
+    const conn = await this.getSalesforceConnection();
+    return conn.sobject(this.salesforceObjectName)
+      .describe()
+      .catch(e => { throw this.constructError(e); });
+  }
+
+  private async getFieldMetadata(field: string): Promise<Field> {
+    const metadata = await this.getMetadata();
+    const fieldDescription = metadata.fields.find(x => x.name === field);
+    if (!fieldDescription) {
+      throw new BadRequestError(`Bad field description: ${field}`);
+    }
+    return fieldDescription;
+  }
+
+  protected async getPicklist(field: string): Promise<PicklistEntry[]> {
+    const fieldMetadata = await this.getFieldMetadata(field);
+    if (!fieldMetadata.picklistValues) {
+      throw new BadRequestError(`Field is not a pick-list: ${field}`);
+    }
+    return fieldMetadata.picklistValues;
   }
 
   protected async where(filter: Partial<TSalesforce> | string): Promise<TEntity[]> {
@@ -237,6 +267,11 @@ class DefaultMapper<T> implements ISalesforceMapper<T, T> {
   map(item: T) { return item; }
 }
 
+/**
+ * Generic Base class without mapping
+ *
+ * Has helpers to retrieve salesforce objects
+ */
 export default abstract class SalesforceRepositoryBase<T> extends SalesforceRepositoryBaseWithMapping<T, T> {
   protected mapper = new DefaultMapper<T>();
 }

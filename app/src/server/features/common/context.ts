@@ -9,13 +9,14 @@ import * as Entities from "@framework/entities";
 // obvs needs to be singleton
 const cachesImplementation: Framework.ICaches = {
   costCategories: new Common.Cache<CostCategoryDto[]>(Common.Configuration.timeouts.costCategories),
+  optionsLookup: new Common.Cache<Map<any, Framework.Option<any>>>(Common.Configuration.timeouts.optionsLookup),
   projectRoles: new Common.Cache<{ [key: string]: IRoleInfo }>(Common.Configuration.timeouts.projectRoles),
+  permissionGroups: new Common.Cache<Entities.PermissionGroup[]>(0 /* permanant cache */),
   recordTypes: new Common.Cache<Entities.RecordType[]>(Common.Configuration.timeouts.recordTypes),
-  permissionGroups: new Common.Cache<Entities.PermissionGroup[]>(0 /* permanant cache */)
 };
 
 const constructErrorResponse = <E extends Error>(error: E): AppError => {
-  if (error instanceof ValidationError || error instanceof ForbiddenError || error instanceof BadRequestError) {
+  if (error instanceof ValidationError || error instanceof ForbiddenError || error instanceof BadRequestError || error instanceof NotFoundError) {
     return error;
   }
 

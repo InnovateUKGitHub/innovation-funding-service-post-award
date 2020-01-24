@@ -8,6 +8,7 @@ export class TestConfig implements IConfig {
   public timeouts = {
     costCategories: 720,
     projectRoles: 720,
+    optionsLookup: 720,
     recordTypes: 720,
     cookie: 1,
     token: 1
@@ -19,10 +20,7 @@ export class TestConfig implements IConfig {
   };
 
   public features = {
-    calculateOverheads: true,
-    documentFiltering: true,
     financialVirements: true,
-    projectFiltering: true,
     pcrsEnabled: true,
     pcrRemovePartner: true
   };

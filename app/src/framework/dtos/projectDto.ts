@@ -27,7 +27,7 @@ export interface ProjectDto {
     claimFrequencyName: string;
     competitionType: string;
 
-    hasEnded: boolean;
+    isPastEndDate: boolean;
     periodId: number;
     totalPeriods: number | null;
     periodStartDate: Date | null;

@@ -44,11 +44,16 @@ class ProjectOverviewComponent extends ContainerBase<Params, Data, {}> {
     // find first partner with role
     const partner = partners.filter(x => x.roles !== ProjectRole.Unknown)[0];
 
-    const showSubtitle = project.status !== ProjectStatus.Closed && project.status !== ProjectStatus.Terminated;
-    const title = project.hasEnded || this.isPartnerWithdrawn(project, partners) ? "Project ended" : `Project period ${project.periodId} of ${project.totalPeriods}`;
-    const subtitle = (project.hasEnded || this.isPartnerWithdrawn(project, partners)
-      ? "Final claim period"
-      : <ACC.Renderers.ShortDateRange start={project.periodStartDate} end={project.periodEndDate} />);
+    const isProjectClosed = project.status === ProjectStatus.Closed || project.status === ProjectStatus.Terminated;
+
+    const title = isProjectClosed || project.isPastEndDate || this.isPartnerWithdrawn(project, partners)
+      ? "Project ended"
+      : `Project period ${project.periodId} of ${project.totalPeriods}`;
+
+    const subtitle = isProjectClosed ? null :
+      project.isPastEndDate || this.isPartnerWithdrawn(project, partners)
+        ? "Final claim period"
+        : <ACC.Renderers.ShortDateRange start={project.periodStartDate} end={project.periodEndDate} />;
 
     return (
       <ACC.Page
@@ -60,16 +65,16 @@ class ProjectOverviewComponent extends ContainerBase<Params, Data, {}> {
           qa="period-information"
           className="govuk-!-padding-bottom-6"
           title={title}
-          subtitle={showSubtitle && subtitle}
+          subtitle={subtitle}
         >
-          {this.renderProjectOveriewDetails(project, partner)}
+          {this.renderProjectOverviewDetails(project, partner)}
         </ACC.Section>
         {this.renderLinks(project, partner || partners[0], this.props.routes)}
       </ACC.Page>
     );
   }
 
-  private renderProjectOveriewDetails(project: ProjectDto, partner: PartnerDto) {
+  private renderProjectOverviewDetails(project: ProjectDto, partner: PartnerDto) {
     if ((project.roles & ProjectRole.ProjectManager) && partner) {
       return this.renderPMOverviewDetails(project, partner);
     }

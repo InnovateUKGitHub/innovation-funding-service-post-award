@@ -46,16 +46,20 @@ class ProjectDashboardComponent extends ContainerBaseWithState<{}, Data, {}, Sta
   }
 
   render() {
-    return <ACC.PageLoader pending={this.props.partners} render={x => this.renderContent(x)} />;
+    return <ACC.PageLoader pending={this.props.partners} render={x => this.renderContents(x)} />;
   }
 
-  private renderContent(partners: PartnerDto[]) {
+  private renderContents(partners: PartnerDto[]) {
     return (
       <ACC.Page
         backLink={this.getBackLink()}
         pageTitle={<ACC.PageTitle />}
       >
-        {this.renderContents(partners)}
+        {this.props.isClient && this.renderSearch()}
+        <ACC.Loader
+          pending={this.props.projectsFilter(this.state.projectSearchString)}
+          render={(projects) => this.renderProjectLists(projects, partners)}
+        />
       </ACC.Page>
     );
   }
@@ -66,18 +70,6 @@ class ProjectDashboardComponent extends ContainerBaseWithState<{}, Data, {}, Sta
       return <a className="govuk-back-link" href={`${config.ifsRoot}/dashboard-selection`}>Back to dashboard</a>;
     }
     return <ACC.BackLink route={this.props.routes.home.getLink({})}>Back to home page</ACC.BackLink>;
-  }
-
-  private renderContents(partners: PartnerDto[]) {
-    return (
-      <React.Fragment>
-        {this.props.isClient && this.renderSearch()}
-        <ACC.Loader
-          pending={this.props.projectsFilter(this.state.projectSearchString)}
-          render={(projects) => this.renderProjectLists(projects, partners)}
-        />
-      </React.Fragment>
-    );
   }
 
   private renderProjectCount(live: ProjectData[], upcoming: ProjectData[], archived: ProjectData[]) {
@@ -261,7 +253,7 @@ class ProjectDashboardComponent extends ContainerBaseWithState<{}, Data, {}, Sta
           Period {project.periodId} of {project.totalPeriods}&nbsp;(<ACC.Renderers.ShortDateRange start={project.periodStartDate} end={project.periodEndDate}/>)
         </React.Fragment>
       );
-      messages.push(project.hasEnded || (partner && partner.isWithdrawn) ? endedMessage : openMessage);
+      messages.push(project.isPastEndDate || (partner && partner.isWithdrawn) ? endedMessage : openMessage);
     }
 
     return messages;

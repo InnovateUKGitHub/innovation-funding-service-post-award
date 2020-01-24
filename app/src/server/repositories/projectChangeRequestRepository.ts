@@ -44,7 +44,7 @@ export interface ISalesforcePCR {
   MarkedAsCompleteName: string;
   Acc_Comments__c: string;
   // careful there is a typo in the salesforce setup
-  // will probably change to Acc_AdditionalNumberoFMonths__c in the future!!
+  // will probably change to Acc_AdditionalNumberOfMonths__c in the future!!
   Acc_AdditionalNumberofMonths__c: number|null;
   Acc_NewProjectDuration__c: number|null;
   Acc_RemovalDate__c: string|null;
@@ -58,6 +58,15 @@ export interface ISalesforcePCR {
   Acc_Nickname__c: string|null;
 }
 
+/**
+ * ProjectChangeRequests are stored in Acc_ProjectChangeRequest__c table
+ *
+ * The header record is stored with "Request Header" record type
+ * Each item type are stored in the same table with different record types
+ *
+ * The mapper used will convert the list of all pcrs into a parent child relationship to support pcr item types
+ *
+ */
 export class ProjectChangeRequestRepository extends SalesforceRepositoryBase<ISalesforcePCR> implements IProjectChangeRequestRepository {
   constructor(private getRecordTypeId: (objectName: string, recordType: string) => Promise<string>, getSalesforceConnection: () => Promise<Connection>, logger: ILogger) {
     super(getSalesforceConnection, logger);

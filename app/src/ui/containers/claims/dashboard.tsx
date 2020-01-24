@@ -68,7 +68,7 @@ class Component extends ContainerBase<ClaimDashboardPageParams, Data, {}> {
     // If the final claim has been approved
     if (previousClaims && previousClaims.find(x => x.isFinalClaim)) {
       return (
-        <Acc.Renderers.SimpleString qa="notificationMessage">
+        <Acc.Renderers.SimpleString qa="yourFinalClaimApprovedNotificationMessage">
           There are no claims. Innovate UK has approved your final claim.
         </Acc.Renderers.SimpleString>
       );
