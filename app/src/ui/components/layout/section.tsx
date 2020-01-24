@@ -52,7 +52,7 @@ const renderBadge = ({ badge }: Props) => !badge ? null : (<div className={class
 
 const renderContents = (children: React.ReactNode) => !children ? null : (<div className="govuk-grid-column-full">{children}</div>);
 
-export const Section: React.SFC<Props> = (props) => {
+export const Section: React.FunctionComponent<Props> = (props) => {
   const { title, subtitle, badge, id, children, qa, className } = props;
 
   if (!title && !subtitle && !badge && !children) {

@@ -6,7 +6,7 @@ interface Props {
   messages: string[];
 }
 
-export const Messages: React.SFC<Props> = (props) => (
+export const Messages: React.FunctionComponent<Props> = (props) => (
   <AriaLive>
     {props.messages.map((x, i) => <ValidationMessage message={x} messageType="success" key={i} />)}
   </AriaLive>

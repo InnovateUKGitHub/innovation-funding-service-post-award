@@ -6,7 +6,7 @@ interface Props {
     qa?: string;
 }
 
-export const SectionPanel: React.SFC<Props> = (props) => {
+export const SectionPanel: React.FunctionComponent<Props> = (props) => {
     const { qa, title, children } = props;
     const style = {
         border: `1px solid ${colour.GOVUK_BORDER_COLOUR}`

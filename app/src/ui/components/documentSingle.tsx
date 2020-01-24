@@ -8,7 +8,7 @@ interface Props {
     renderRemove?: () => React.ReactNode;
 }
 
-const Message: React.SFC<{message?: string}> = ({message}: {message?: string}) => {
+const Message: React.FunctionComponent<{message?: string}> = ({message}: {message?: string}) => {
     if (!message) {
         return null;
     }
@@ -19,7 +19,7 @@ const Message: React.SFC<{message?: string}> = ({message}: {message?: string}) =
     );
 };
 
-export const DocumentSingle: React.SFC<Props> = ({ message, document, openNewWindow, qa, renderRemove }: Props) => {
+export const DocumentSingle: React.FunctionComponent<Props> = ({ message, document, openNewWindow, qa, renderRemove }: Props) => {
 
     const textStyle = {
         paddingRight: "20px"
