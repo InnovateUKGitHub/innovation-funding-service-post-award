@@ -64,7 +64,7 @@ const DetailsComponent = <T extends {}>(props: DetailsProps & { data: T } & { ch
     );
 };
 
-export const DualDetails: React.SFC<DetailsProps> = ({ children, ...rest }) => {
+export const DualDetails: React.FunctionComponent<DetailsProps> = ({ children, ...rest }) => {
     const columns = React.Children.toArray(children).map((field) => {
         return React.cloneElement(field as React.ReactElement<any>, rest);
     });
@@ -155,14 +155,14 @@ const HeadingField = (props: ExternalHeadingProps<React.ReactNode>) => {
 };
 
 export const TypedDetails = <T extends {}>() => ({
-    Details: DetailsComponent as React.SFC<DetailsProps & { data: T }>,
-    String: StringField as React.SFC<ExternalFieldProps<T, string>>,
-    MultilineString: MultilineStringField as React.SFC<ExternalFieldProps<T, string>>,
-    Date: DateField as React.SFC<ExternalFieldProps<T, Date>>,
-    DateTime: DateTimeField as React.SFC<ExternalFieldProps<T, Date>>,
-    Number: NumberField as React.SFC<ExternalFieldProps<T, number>>,
-    Currency: CurrencyField as React.SFC<ExternalFieldProps<T, number> & { fractionDigits?: number }>,
-    Percentage: PercentageField as React.SFC<ExternalFieldProps<T, number> & { fractionDigits?: number }>,
-    Custom: CustomField as React.SFC<ExternalFieldProps<T, React.ReactNode>>,
-    Heading: HeadingField as React.SFC<ExternalHeadingProps<React.ReactNode>>,
+    Details: DetailsComponent as React.FunctionComponent<DetailsProps & { data: T }>,
+    String: StringField as React.FunctionComponent<ExternalFieldProps<T, string>>,
+    MultilineString: MultilineStringField as React.FunctionComponent<ExternalFieldProps<T, string>>,
+    Date: DateField as React.FunctionComponent<ExternalFieldProps<T, Date>>,
+    DateTime: DateTimeField as React.FunctionComponent<ExternalFieldProps<T, Date>>,
+    Number: NumberField as React.FunctionComponent<ExternalFieldProps<T, number>>,
+    Currency: CurrencyField as React.FunctionComponent<ExternalFieldProps<T, number> & { fractionDigits?: number }>,
+    Percentage: PercentageField as React.FunctionComponent<ExternalFieldProps<T, number> & { fractionDigits?: number }>,
+    Custom: CustomField as React.FunctionComponent<ExternalFieldProps<T, React.ReactNode>>,
+    Heading: HeadingField as React.FunctionComponent<ExternalHeadingProps<React.ReactNode>>,
 });

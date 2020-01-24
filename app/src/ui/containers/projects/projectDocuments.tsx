@@ -132,7 +132,7 @@ class ProjectDocumentsComponent extends ContainerBaseWithState<ProjectDocumentPa
   }
 
   private renderDocumentsFilter() {
-    if (!this.props.isClient || !this.props.config.features.documentFiltering) {
+    if (!this.props.isClient) {
       return null;
     }
     const FilterForm = ACC.TypedForm<{ filterBoxText: string | null }>();

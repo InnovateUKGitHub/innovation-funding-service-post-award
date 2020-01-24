@@ -438,7 +438,7 @@ describe("UpdateForecastDetailsCommand", () => {
 
   });
 
-  it("when total forcast exceeds goal costs expect exception", async () => {
+  it("when total forecast exceeds goal costs expect exception", async () => {
 
     const context = new TestContext();
 
@@ -507,131 +507,29 @@ describe("UpdateForecastDetailsCommand", () => {
 
   });
 
-  it("when labour updated overheads should be updated to value calulated from labour value", async () => {
+  it("overheads should be ignored", async () => {
     const context = new TestContext();
 
-    const labour = context.testData.createCostCategory({ hasRelated: true });
     const overheads = context.testData.createCostCategory({ isCalculated: true });
+
+    const originalAmount = 1000;
 
     const project = context.testData.createProject();
     const partner = context.testData.createPartner(project);
     partner.Acc_OverheadRate__c = 10;
 
-    context.testData.createProfileTotalCostCategory(labour, partner, 1000);
     context.testData.createProfileTotalCostCategory(overheads, partner, 100);
 
-    const labourProfile = context.testData.createProfileDetail(labour, partner, 1, x => x.Acc_LatestForecastCost__c = 100);
-    const overheadProfile = context.testData.createProfileDetail(overheads, partner, 1, x => x.Acc_LatestForecastCost__c = 10);
+    const overheadProfile = context.testData.createProfileDetail(overheads, partner, 1, x => x.Acc_LatestForecastCost__c = originalAmount);
 
     const dto: ForecastDetailsDTO[] = [
-      mapProfileValue(labourProfile, 1000),
-      mapProfileValue(overheadProfile, 10)
+      mapProfileValue(overheadProfile, originalAmount / 10)
     ];
 
     const command = new UpdateForecastDetailsCommand(project.Id, partner.Id, dto, false);
 
     await context.runCommand(command);
 
-    expect(labourProfile.Acc_LatestForecastCost__c).toBe(1000);
-    expect(overheadProfile.Acc_LatestForecastCost__c).toBe(100);
+    expect(overheadProfile.Acc_LatestForecastCost__c).toBe(originalAmount);
   });
-
-  it("when multiple labour updated overheads should be updated to calulated value for correct period", async () => {
-    const context = new TestContext();
-
-    const labour = context.testData.createCostCategory({ hasRelated: true });
-    const overheads = context.testData.createCostCategory({ isCalculated: true });
-
-    const project = context.testData.createProject();
-    const partner = context.testData.createPartner(project);
-    partner.Acc_OverheadRate__c = 10;
-
-    context.testData.createProfileTotalCostCategory(labour, partner, 3000);
-    context.testData.createProfileTotalCostCategory(overheads, partner, 300);
-
-    const labourProfile1 = context.testData.createProfileDetail(labour, partner, 1, x => x.Acc_LatestForecastCost__c = 100);
-    const overheadProfile1 = context.testData.createProfileDetail(overheads, partner, 1, x => x.Acc_LatestForecastCost__c = 10);
-    const labourProfile2 = context.testData.createProfileDetail(labour, partner, 2, x => x.Acc_LatestForecastCost__c = 100);
-    const overheadProfile2 = context.testData.createProfileDetail(overheads, partner, 2, x => x.Acc_LatestForecastCost__c = 10);
-
-    const dto: ForecastDetailsDTO[] = [
-      mapProfileValue(labourProfile1, 1000),
-      mapProfileValue(overheadProfile1),
-      mapProfileValue(labourProfile2, 2000),
-      mapProfileValue(overheadProfile2),
-    ];
-
-    const command = new UpdateForecastDetailsCommand(project.Id, partner.Id, dto, false);
-
-    await context.runCommand(command);
-
-    expect(labourProfile1.Acc_LatestForecastCost__c).toBe(1000);
-    expect(overheadProfile1.Acc_LatestForecastCost__c).toBe(100);
-    expect(labourProfile2.Acc_LatestForecastCost__c).toBe(2000);
-    expect(overheadProfile2.Acc_LatestForecastCost__c).toBe(200);
-  });
-
-  it("when labour not supplied overheads should be updated to calculation from exising labour value", async () => {
-    const context = new TestContext();
-
-    const labour = context.testData.createCostCategory({ hasRelated: true });
-    const overheads = context.testData.createCostCategory({ isCalculated: true });
-
-    const project = context.testData.createProject();
-    const partner = context.testData.createPartner(project);
-    partner.Acc_OverheadRate__c = 10;
-
-    context.testData.createProfileTotalCostCategory(labour, partner, 1000);
-    context.testData.createProfileTotalCostCategory(overheads, partner, 100);
-
-    const labourProfile1 = context.testData.createProfileDetail(labour, partner, 1, x => x.Acc_LatestForecastCost__c = 100);
-    const overheadProfile1 = context.testData.createProfileDetail(overheads, partner, 1, x => x.Acc_LatestForecastCost__c = 1);
-    const labourProfile2 = context.testData.createProfileDetail(labour, partner, 2, x => x.Acc_LatestForecastCost__c = 200);
-    const overheadProfile2 = context.testData.createProfileDetail(overheads, partner, 2, x => x.Acc_LatestForecastCost__c = 1);
-
-    const dto: ForecastDetailsDTO[] = [
-      mapProfileValue(overheadProfile1, 1),
-      mapProfileValue(overheadProfile2, 1),
-    ];
-
-    const command = new UpdateForecastDetailsCommand(project.Id, partner.Id, dto, false);
-
-    await context.runCommand(command);
-
-    expect(labourProfile1.Acc_LatestForecastCost__c).toBe(100);
-    expect(overheadProfile1.Acc_LatestForecastCost__c).toBe(10);
-    expect(labourProfile2.Acc_LatestForecastCost__c).toBe(200);
-    expect(overheadProfile2.Acc_LatestForecastCost__c).toBe(20);
-  });
-
-  it("when overheads calculated in salesforece should not calculate overheads", async () => {
-    const context = new TestContext();
-    context.config.features.calculateOverheads = false;
-
-    const labour = context.testData.createCostCategory({ hasRelated: true });
-    const overheads = context.testData.createCostCategory({ isCalculated: true });
-
-    const project = context.testData.createProject();
-    const partner = context.testData.createPartner(project);
-    partner.Acc_OverheadRate__c = 10;
-
-    context.testData.createProfileTotalCostCategory(labour, partner, 1000);
-    context.testData.createProfileTotalCostCategory(overheads, partner, 100);
-
-    const labourProfile = context.testData.createProfileDetail(labour, partner, 1, x => x.Acc_LatestForecastCost__c = 100);
-    const overheadProfile = context.testData.createProfileDetail(overheads, partner, 1, x => x.Acc_LatestForecastCost__c = 10);
-
-    const dto: ForecastDetailsDTO[] = [
-      mapProfileValue(labourProfile, 1000),
-      mapProfileValue(overheadProfile, 10)
-    ];
-
-    const command = new UpdateForecastDetailsCommand(project.Id, partner.Id, dto, false);
-
-    await context.runCommand(command);
-
-    expect(labourProfile.Acc_LatestForecastCost__c).toBe(1000);
-    expect(overheadProfile.Acc_LatestForecastCost__c).toBe(10);
-  });
-
 });

@@ -3,9 +3,8 @@ import { Authorisation, IContext, ProjectRole } from "@framework/types";
 import { ClaimDetailsValidator } from "@ui/validators";
 import { isNumber } from "@framework/util";
 import { Updatable } from "@server/repositories/salesforceRepositoryBase";
-import { ISalesforceClaimDetails, ISalesforceClaimLineItem } from "@server/repositories";
+import { ISalesforceClaimLineItem } from "@server/repositories";
 import { GetCostCategoriesQuery } from "../claims";
-import { number } from "@ui/validators/common";
 
 export class SaveClaimDetails extends CommandBase<boolean> {
   constructor(
@@ -25,6 +24,14 @@ export class SaveClaimDetails extends CommandBase<boolean> {
   protected async Run(context: IContext) {
     this.validateRequest();
 
+    const costCategory = await context.runQuery(new GetCostCategoriesQuery()).then(x => x.find(y => y.id === this.costCategoryId));
+    if (!costCategory) {
+      throw new BadRequestError("Invalid cost category specified");
+    }
+    else if (costCategory.isCalculated) {
+      throw new BadRequestError("Invalid calculated cost category specified");
+    }
+
     const validationResult = new ClaimDetailsValidator(this.claimDetails, true);
     if (!validationResult.isValid) {
       throw new ValidationError(validationResult);
@@ -32,9 +39,6 @@ export class SaveClaimDetails extends CommandBase<boolean> {
 
     await this.saveClaimDetail(context, this.claimDetails);
     await this.saveLineItems(context, this.claimDetails.lineItems);
-    if (context.config.features.calculateOverheads) {
-      await this.saveAssociated(context, this.claimDetails.lineItems);
-    }
 
     return true;
   }
@@ -50,7 +54,7 @@ export class SaveClaimDetails extends CommandBase<boolean> {
   }
 
   private async saveLineItems(context: IContext, lineItems: ClaimLineItemDto[]) {
-    const existingLineItmes = await context.repositories.claimLineItems.getAllForCategory(this.partnerId, this.costCategoryId, this.periodId);
+    const existingLineItems = await context.repositories.claimLineItems.getAllForCategory(this.partnerId, this.costCategoryId, this.periodId);
 
     const filtered = lineItems.filter(x => !!x.description || isNumber(x.value));
 
@@ -71,56 +75,11 @@ export class SaveClaimDetails extends CommandBase<boolean> {
       Acc_CostCategory__c: x.costCategoryId
     }));
 
-    const deleteItems = existingLineItmes.filter(x => !updateDtos.some(y => x.Id === y.id)).map(x => x.Id);
+    const deleteItems = existingLineItems.filter(x => !updateDtos.some(y => x.Id === y.id)).map(x => x.Id);
 
     await context.repositories.claimLineItems.delete(deleteItems);
     await context.repositories.claimLineItems.update(updateItems);
     await context.repositories.claimLineItems.insert(insertItems);
-  }
-
-  private async saveAssociated(context: IContext, lineItems: ClaimLineItemDto[]) {
-    const costCategories = await context.runQuery(new GetCostCategoriesQuery());
-    const hasRelated = costCategories.find(x => x.id === this.costCategoryId)!.hasRelated;
-    if (!hasRelated) {
-      return;
-    }
-
-    const partner = await context.repositories.partners.getById(this.partnerId);
-
-    const labourTotal = lineItems.filter(x => !!x.value).reduce((a, b) => a + b.value, 0);
-    const relatedCost = parseFloat((labourTotal * partner.Acc_OverheadRate__c / 100).toFixed(2));
-
-    const relatedCostCategory = costCategories.find(x => x.organisationType === partner.Acc_OrganisationType__c && x.competitionType === partner.Acc_ProjectId__r.Acc_CompetitionType__c && x.isCalculated);
-
-    if (!relatedCostCategory) {
-      return;
-    }
-
-    const existing = (await context.repositories.claimLineItems.getAllForCategory(this.partnerId, relatedCostCategory.id, this.periodId));
-
-    const description = `${relatedCostCategory.name} line item`;
-
-    if (existing.length > 0) {
-      await context.repositories.claimLineItems.update([{
-        Id: existing[0].Id,
-        Acc_LineItemDescription__c: description,
-        Acc_LineItemCost__c: relatedCost
-      }]);
-    }
-    else {
-      await context.repositories.claimLineItems.insert([{
-        Acc_LineItemDescription__c: description,
-        Acc_LineItemCost__c: relatedCost,
-        Acc_ProjectParticipant__c: this.partnerId,
-        Acc_ProjectPeriodNumber__c: this.periodId,
-        Acc_CostCategory__c: relatedCostCategory.id
-      }]);
-    }
-
-    if (existing.length > 1) {
-      const idsToDelete = existing.filter((x, i) => i > 0).map(x => x.Id);
-      await context.repositories.claimLineItems.delete(idsToDelete);
-    }
   }
 
   private async saveClaimDetail(context: IContext, claimDetail: ClaimDetailsDto) {
@@ -128,7 +87,7 @@ export class SaveClaimDetails extends CommandBase<boolean> {
     const existing = await context.repositories.claimDetails.get(key);
 
     if (!existing) {
-      context.logger.info("Createing new claim detail", key);
+      context.logger.info("Creating new claim detail", key);
       await context.repositories.claimDetails.insert({
         Acc_ReasonForDifference__c: claimDetail.comments,
         Acc_ProjectParticipant__r: {
@@ -141,7 +100,7 @@ export class SaveClaimDetails extends CommandBase<boolean> {
       });
     }
     else if (existing.Acc_ReasonForDifference__c !== claimDetail.comments) {
-      context.logger.info("Updateing existing claim detail", key, existing.Id);
+      context.logger.info("Updating existing claim detail", key, existing.Id);
       await context.repositories.claimDetails.update({
         Id: existing.Id,
         Acc_ReasonForDifference__c: claimDetail.comments,

@@ -7,7 +7,7 @@ interface Props {
   partner: PartnerDto | null;
 }
 
-export const ClaimLastModified: React.SFC<Props> = (props) => !props.partner ? null : (
+export const ClaimLastModified: React.FunctionComponent<Props> = (props) => !props.partner ? null : (
   <SimpleString qa="last-updated">Changes last saved:&nbsp;
     <FullDateTime value={props.partner.forecastLastModifiedDate} />
   </SimpleString>

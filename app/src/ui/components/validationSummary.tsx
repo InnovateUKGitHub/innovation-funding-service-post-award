@@ -7,7 +7,7 @@ interface Props {
   compressed?: boolean;
 }
 
-export const ValidationSummary: React.SFC<Props> = ({ validation, compressed }) => {
+export const ValidationSummary: React.FunctionComponent<Props> = ({ validation, compressed }) => {
   const results: Result[] = [];
   if (validation && validation.errors) {
     validation.errors.filter(x => !x.isValid && x.showValidationErrors).forEach(x => {

@@ -1,5 +1,6 @@
 import React from "react";
 import { SummaryList, SummaryListItem } from "@ui/components/summaryList";
+import { LineBreakList } from "@ui/components/renderers";
 
 export const summaryListGuide: IGuide = {
   name: "Summary list",
@@ -44,6 +45,20 @@ export const summaryListGuide: IGuide = {
       )
     },
     {
+      name: "Single, with multiple lines of information",
+      comments: "Renders list item with multiple lines of information",
+      example: `
+        <SummaryList qa="list-example">
+          <SummaryListItem label="Contact details" content={<LineBreakList items={["Item 1", "Item 2", "Item 3"]}/>} qa="contact"/>
+        </SummaryList>
+      `,
+      render: () => (
+        <SummaryList qa="list-example">
+          <SummaryListItem label="Contact details" content={<LineBreakList items={["Item 1", "Item 2", "Item 3"]}/>} qa="contact"/>
+        </SummaryList>
+      )
+    },
+    {
       name: "Multiple, with actions",
       comments: "Renders multiple sets of information in a summary list",
       example: `
@@ -59,6 +74,6 @@ export const summaryListGuide: IGuide = {
           <SummaryListItem label="Contact information" content="72 Guild Street" qa="contact" action={<a href="#ChangeContact">Change contact information</a>} />
         </SummaryList>
       )
-    }
+    },
   ]
 };

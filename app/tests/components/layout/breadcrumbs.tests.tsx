@@ -17,8 +17,8 @@ describe("Breadcrumbs", () => {
     it("should render 3 breadcrumb navigation links and current pages", () => {
         const testID = 5;
         const links = [
-            { routeName: "home", text: "Home" },
-            { routeName: "contacts", text: "Contacts" },
+            { routeName: "home", text: "Home", routeParams: {} },
+            { routeName: "contacts", text: "Contacts", routeParams: {} },
             { routeName: "contact_details", text: `Contact ${testID}`, routeParams: { id: testID } }
         ];
         const wrapper = mount(
@@ -43,7 +43,7 @@ describe("Breadcrumbs", () => {
     it("should only render current page breadcrumb navigation", () => {
         const wrapper = mount(
             <RouterProvider router={router}>
-                <Breadcrumbs>Test</Breadcrumbs>
+                <Breadcrumbs links={[]}>Test</Breadcrumbs>
             </RouterProvider>
         );
         expect(wrapper

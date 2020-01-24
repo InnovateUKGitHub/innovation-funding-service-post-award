@@ -23,7 +23,7 @@ const links: Link[] = [
   createLink("Latest funding opportunities", "https://apply-for-innovation-funding.service.gov.uk/competition/search")
 ];
 
-export const Footer: React.SFC<{}> = () => {
+export const Footer: React.FunctionComponent<{}> = () => {
   const renderLinks = (l: Link, i: number) => (
     <li key={i} className="govuk-footer__inline-list-item">
       <a className="govuk-footer__link" target="_blank" data-qa={l.text.split(" ").join("-").toLocaleLowerCase()} href={l.link}>{l.text}</a>

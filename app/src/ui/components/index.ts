@@ -24,7 +24,6 @@ export * from "./monitoringReports";
 export * from "./partnersAndFinanceContacts";
 export * from "./periodTitle";
 export * from "./projectContact";
-export * from "./statisticsBox";
 export * from "./styledButton";
 export * from "./summaryList";
 export * from "./table";
