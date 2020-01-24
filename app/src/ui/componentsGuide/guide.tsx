@@ -24,7 +24,6 @@ import { pageTitleGuide } from "./pageTitleGuide";
 import { renderersGuide } from "./renderersGuide";
 import { sectionGuide } from "./sectionGuide";
 import { sectionPanelGuide } from "./sectionPanelGuide";
-import { statisticsBoxGuide } from "./statisticsBoxGuide";
 import { summaryListGuide } from "./summaryListGuide";
 import { tableGuide } from "./tableGuide";
 import { tabsGuide } from "./tabsGuide";
@@ -33,11 +32,16 @@ import { textHint } from "./textHintGuide";
 import { validationErrorGuide } from "./validationErrorGuide";
 import { validationMessageGuide } from "./validationMessageGuide";
 import { validationSummaryGuide } from "./validationSummaryGuide";
+import { currencyGuide } from "@ui/componentsGuide/currencyGuide";
+import { percentageGuide } from "@ui/componentsGuide/percentageGuide";
+import { breadcrumbsGuide } from "@ui/componentsGuide/breadcrumbsGuide";
 
 const guides: IGuide[] = [
     accordionGuide,
     buttonGuide,
+    breadcrumbsGuide,
     claimWindowGuide,
+    currencyGuide,
     datesGuide,
     detailsGuide,
     documentListGuide,
@@ -53,10 +57,10 @@ const guides: IGuide[] = [
     numericInputGuide,
     projectContactGuide,
     pageTitleGuide,
+    percentageGuide,
     renderersGuide,
     sectionGuide,
     sectionPanelGuide,
-    statisticsBoxGuide,
     summaryListGuide,
     tabsGuide,
     hashTabsGuide,

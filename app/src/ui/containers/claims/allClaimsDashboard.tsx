@@ -83,7 +83,7 @@ class Component extends ContainerBase<AllClaimsDashboardParams, Data, {}> {
 
       if (project.status === ProjectStatus.Terminated || project.status === ProjectStatus.Closed) {
         return (
-          <Acc.Renderers.SimpleString qa="notificationMessage">
+          <Acc.Renderers.SimpleString qa="theFinalClaimApprovedNotificationMessage">
           There are no claims. Innovate UK has approved the final claims.
           </Acc.Renderers.SimpleString>
         );

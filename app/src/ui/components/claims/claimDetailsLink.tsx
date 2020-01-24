@@ -13,7 +13,7 @@ interface PropsWithRoutes extends Props {
   routes: IRoutes;
 }
 
-export const ClaimDetailsLink: React.SFC<PropsWithRoutes> = (props) => {
+export const ClaimDetailsLink: React.FunctionComponent<PropsWithRoutes> = (props) => {
   const linkProps = { projectId: props.project.id, partnerId: props.partner.id, periodId: props.claim.periodId };
 
   switch (getClaimDetailsLinkType(props)) {

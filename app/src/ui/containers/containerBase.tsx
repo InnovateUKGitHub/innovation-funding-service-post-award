@@ -36,13 +36,13 @@ export abstract class ContainerBase<TParams = {}, TData = {}, TCallbacks = {}> e
 interface IRouteOptions<TParams> {
     routeName: string;
     routePath: string;
+    container: React.FunctionComponent<TParams & BaseProps>;
     getParams: (route: RouteState) => TParams;
     accessControl?: (auth: Authorisation, params: TParams, config: IClientConfig) => boolean;
     getTitle: (store: RootState, params: TParams, stores: IStores) => {
         htmlTitle: string;
         displayTitle: string;
     };
-    container: React.FunctionComponent<TParams & BaseProps>;
 }
 
 interface IRouteDefinition<TParams> extends IRouteOptions<TParams> {

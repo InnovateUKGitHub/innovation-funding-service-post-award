@@ -8,7 +8,7 @@ interface Props {
     qa: string;
 }
 
-export const ProjectContact: React.SFC<Props> = (props) => {
+export const ProjectContact: React.FunctionComponent<Props> = (props) => {
 
     const contact = props.contact;
 

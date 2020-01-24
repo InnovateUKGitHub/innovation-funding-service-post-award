@@ -1,6 +1,6 @@
 import SalesforceRepositoryBase, { Updatable } from "./salesforceRepositoryBase";
 import { ILogger } from "../features/common";
-import { Connection } from "jsforce";
+import { Connection, PicklistEntry } from "jsforce";
 
 export type ISalesforceMonitoringReportStatus = "New" | "Draft" | "Awaiting IUK Approval" | "Approved" | "IUK Queried";
 export interface ISalesforceMonitoringReportHeader {
@@ -21,8 +21,16 @@ export interface IMonitoringReportHeaderRepository {
   create(updateDto: Partial<ISalesforceMonitoringReportHeader>): Promise<string>;
   getAllForProject(projectId: string): Promise<ISalesforceMonitoringReportHeader[]>;
   delete(reportId: string): Promise<void>;
+  getMonitoringReportStatuses(): Promise<PicklistEntry[]>;
 }
 
+/**
+ * MonitoringReportHeader is the parent record of a monitoring report
+ *
+ * It is stored in "Acc_MonitoringAnswer__c" table with record type of "Monitoring Header"
+ *
+ * It also stores the status of the monitoring report.
+ */
 export class MonitoringReportHeaderRepository extends SalesforceRepositoryBase<ISalesforceMonitoringReportHeader> implements IMonitoringReportHeaderRepository {
 
   constructor(private getRecordTypeId: (objectName: string, recordType: string) => Promise<string>, getSalesforceConnection: () => Promise<Connection>, logger: ILogger) {
@@ -67,5 +75,9 @@ export class MonitoringReportHeaderRepository extends SalesforceRepositoryBase<I
 
   async delete(reportId: string): Promise<void> {
     return super.deleteItem(reportId);
+  }
+
+  async getMonitoringReportStatuses() {
+    return super.getPicklist("Acc_MonitoringReportStatus__c");
   }
 }

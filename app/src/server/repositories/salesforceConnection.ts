@@ -25,7 +25,7 @@ interface ITokenInfo {
 
 const tokenCache = new Cache<ITokenInfo>(Configuration.timeouts.token);
 
-export const salesforceConnection = (connectionDetails: ISalesforceConnectionDetails) => {
+export const salesforceConnectionWithUsernameAndPassword = (connectionDetails: ISalesforceConnectionDetails) => {
   const connection = new jsforce.Connection({
     loginUrl: "https://test.salesforce.com",
     logLevel: Configuration.logLevel === LogLevel.VERBOSE ? "DEBUG" : undefined

@@ -4,10 +4,9 @@ Starting at the back
 
 ### Repositories
 
-`./server/repositories/`
+[./src/server/repositories](./src/server/repositories)
 
 These make the relevant api calls to data stores
-- Salesforce - inherit from `SalesforceRepositoryBase<T>` where T is the `ISalesforceXXX` definition of the fields
 
 ### DTOs
 
@@ -88,7 +87,9 @@ Routes are objects that inherit from `AsyncRoute<T>` and provide the following p
 
 ### Containers
 
-Containers are the page level react components and use Redux connect via a wrapper `ReduxContainer.for<TData, TDispach>(Container).withData().withCallBacks().connect()`. This strongly types the mapStateToProps and mapDispatchToProps from standard Redux.
+[./src/ui/containers](./src/ui/containers)
+
+Containers are the page level react components.
 
 ### Components
 

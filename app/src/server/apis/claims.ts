@@ -5,8 +5,6 @@ import { UpdateClaimCommand } from "../features/claims/updateClaim";
 import { processDto } from "../../shared/processResponse";
 import { BadRequestError } from "../features/common/appError";
 import { ClaimDto, ClaimStatusChangeDto } from "@framework/types";
-import { dateComparator } from "@framework/util/comparator";
-import { DateTime } from "luxon";
 import { GetClaimStatusChangesQuery } from "@server/features/claims/getClaimStatusChangesQuery";
 
 export interface IClaimsApi {

@@ -17,6 +17,13 @@ export interface IMonitoringReportResponseRepository {
   insert(insert: Partial<ISalesforceMonitoringReportResponse>[]): Promise<string[]>;
 }
 
+/**
+ * Answers for the monitoring report
+ *
+ * Stored in "Acc_MonitoringAnswer__c" table with record type "Monitoring Answer"
+ *
+ * Links to the Header record and the question
+ */
 export class MonitoringReportResponseRepository extends SalesforceRepositoryBase<ISalesforceMonitoringReportResponse> implements IMonitoringReportResponseRepository {
 
   constructor(private getRecordTypeId: (objectName: string, recordType: string) => Promise<string>, getSalesforceConnection: () => Promise<Connection>, logger: ILogger) {

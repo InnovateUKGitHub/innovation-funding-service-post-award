@@ -7,6 +7,7 @@ import { ISessionUser } from "./IUser";
 import { Authorisation } from "./authorisation";
 import { PermissionGroup } from "@framework/entities/permissionGroup";
 import { RecordType } from "@framework/entities/recordType";
+import { Option } from "@framework/types";
 
 export interface IRepositories {
   readonly claims: Repositories.IClaimRepository;
@@ -54,6 +55,7 @@ export interface ITimer {
 
 export interface ICaches {
   readonly costCategories: Cache<CostCategoryDto[]>;
+  readonly optionsLookup: Cache<Map<any, Option<any>>>;
   readonly permissionGroups: Cache<PermissionGroup[]>;
   readonly projectRoles: Cache<{ [key: string]: IRoleInfo }>;
   readonly recordTypes: Cache<RecordType[]>;

@@ -2,17 +2,15 @@ import { createTestRepositories, ITestRepositories } from "./testRepositories";
 import { QueryBase } from "@server/features/common/queryBase";
 import { SyncQueryBase } from "@server/features/common/queryBase";
 import { CommandBase, SyncCommandBase } from "@server/features/common/commandBase";
-import { Cache } from "@server/features/common/cache";
-import { Authorisation, IAsyncRunnable, ICaches, IContext, ISyncRunnable } from "@framework/types";
-import { IRoleInfo } from "@server/features/projects/getAllProjectRolesForUser";
+import { Authorisation, IAsyncRunnable, IContext, ISyncRunnable } from "@framework/types";
 import { TestData } from "./testData";
 import { TestClock } from "./testClock";
 import { TestLogger } from "./testLogger";
 import { TestUser } from "./testUser";
 import { TestConfig } from "./testConfig";
-import * as Entities from "@framework/entities";
 import { ValidationError } from "@server/features/common";
 import { TestStore } from "./testStore";
+import { TestCaches } from "./testCaches";
 
 export class TestContext implements IContext {
     constructor() {
@@ -36,12 +34,7 @@ export class TestContext implements IContext {
 
     public config = new TestConfig();
 
-    public caches: ICaches = {
-        costCategories: new Cache<CostCategoryDto[]>(1),
-        permissionGroups: new Cache<Entities.PermissionGroup[]>(1),
-        projectRoles: new Cache<{ [key: string]: IRoleInfo }>(1),
-        recordTypes: new Cache<Entities.RecordType[]>(1),
-    };
+    public caches = new TestCaches();
 
     public runQuery<TResult>(query: QueryBase<TResult>): Promise<TResult> {
         return ((query as any) as IAsyncRunnable<TResult>)
@@ -68,7 +61,7 @@ export class TestContext implements IContext {
         return ((command as any) as ISyncRunnable<TResult>).Run(this);
     }
 
-    // handle access control seperate to running the commands to keep tests focused on single areas
+    // handle access control separate to running the commands to keep tests focused on single areas
     public runAccessControl(auth: Authorisation, runnable: QueryBase<any> | CommandBase<any>): Promise<boolean> {
         return (runnable as any as IAsyncRunnable<any>).accessControl(auth, this);
     }

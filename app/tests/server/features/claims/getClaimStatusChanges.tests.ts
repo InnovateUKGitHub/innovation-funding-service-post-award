@@ -1,8 +1,7 @@
 import { TestContext } from "../../testContextProvider";
 import { GetClaimStatusChangesQuery } from "@server/features/claims/getClaimStatusChangesQuery";
-import { ClaimStatusChangeDto } from "@framework/types";
+import { ClaimStatus, ClaimStatusChangeDto } from "@framework/types";
 import { DateTime } from "luxon";
-import { stringComparator } from "@framework/util/comparator";
 
 // tslint:disable: no-big-function
 describe("GetClaimStatusChanges", () => {
@@ -19,7 +18,7 @@ describe("GetClaimStatusChanges", () => {
     expect(result).toEqual([]);
   });
 
-  it("returns item values corectly", async () => {
+  it("returns item values correctly", async () => {
     const context = new TestContext();
 
     const project = context.testData.createProject();
@@ -31,6 +30,7 @@ describe("GetClaimStatusChanges", () => {
     const existing = context.testData.createClaimStatusChange(claim);
 
     const query = new GetClaimStatusChangesQuery(partner.Acc_ProjectId__r.Id, partner.Id, claim.Acc_ProjectPeriodNumber__c);
+    const claimStatuses = await context.repositories.claims.getClaimStatuses();
 
     const result = await context.runQuery(query);
 
@@ -39,8 +39,10 @@ describe("GetClaimStatusChanges", () => {
       claimId: existing.Acc_Claim__c,
       comments: existing.Acc_ExternalComment__c,
       createdDate: new Date(existing.CreatedDate),
-      newStatus: existing.Acc_NewClaimStatus__c,
-      previousStatus: existing.Acc_PreviousClaimStatus__c
+      newStatus: existing.Acc_NewClaimStatus__c as ClaimStatus,
+      newStatusLabel: claimStatuses.find(x => x.value === existing.Acc_NewClaimStatus__c)!.label,
+      previousStatus: existing.Acc_PreviousClaimStatus__c as ClaimStatus,
+      previousStatusLabel: claimStatuses.find(x => x.value === existing.Acc_PreviousClaimStatus__c)!.label,
     };
     expect(result).toEqual([expected]);
   });

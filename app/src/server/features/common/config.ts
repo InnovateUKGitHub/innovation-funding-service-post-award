@@ -8,6 +8,7 @@ export interface IConfig {
 
     readonly timeouts: {
         readonly costCategories: number;
+        readonly optionsLookup: number;
         readonly projectRoles: number;
         readonly recordTypes: number;
         readonly token: number;
@@ -67,6 +68,7 @@ const timeouts = {
     costCategories: parseFloat(process.env.COST_CAT_TIMEOUT_MINUTES!) || defaultCacheTimeout,
     projectRoles: parseFloat(process.env.PROJ_ROLES_TIMEOUT_MINUTES!) || defaultCacheTimeout,
     recordTypes: parseFloat(process.env.RECORD_TYPES_TIMEOUT_MINUTES!) || defaultCacheTimeout,
+    optionsLookup: parseFloat(process.env.OPTIONS_LOOKUP_TIMEOUT_MINUTES!) || defaultCacheTimeout,
     token: parseFloat(process.env.TOKEN_TIMEOUT_MINUTES!) || 10,
     cookie: parseFloat(process.env.COOKIE_TIMEOUT_MINUTES!) || 10,
 };
@@ -86,10 +88,7 @@ const getFeatureFlagValue = (value: string | null | undefined, defaultValue: boo
 const defaultFeatureFlag = getFeatureFlagValue(process.env.FEATURE_DEFAULT, false);
 
 const features: IFeatureFlags = {
-    calculateOverheads: getFeatureFlagValue(process.env.FEATURE_CALCULATE_OVERHEADS, false),
-    documentFiltering: getFeatureFlagValue(process.env.FEATURE_DOCUMENT_FILTERING, defaultFeatureFlag),
     financialVirements: getFeatureFlagValue(process.env.FEATURE_FINANCIAL_VIREMENTS, defaultFeatureFlag),
-    projectFiltering: getFeatureFlagValue(process.env.FEATURE_PROJECT_FILTERING, defaultFeatureFlag),
     pcrsEnabled: getFeatureFlagValue(process.env.FEATURE_PCRS_ENABLED, defaultFeatureFlag),
     pcrRemovePartner: getFeatureFlagValue(process.env.FEATURE_PCR_REMOVE_PARTNER, defaultFeatureFlag),
 };
