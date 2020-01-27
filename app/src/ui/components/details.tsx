@@ -8,7 +8,7 @@ interface DetailsProps {
     displayDensity?: "Compact" | "Comfortable";
     labelWidth?: "Wide" | "Narrow";
     qa?: string;
-    title?: string;
+    title?: React.ReactNode;
 }
 
 interface InternalFieldProps<T> {

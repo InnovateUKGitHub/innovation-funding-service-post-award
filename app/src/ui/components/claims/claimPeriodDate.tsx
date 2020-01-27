@@ -1,6 +1,7 @@
 import React from "react";
 import {ClaimDto, PartnerDto} from "@framework/types";
 import { ShortDateRange } from "../renderers/date";
+import { PartnerName } from "@ui/components";
 
 interface Props {
   claim: ClaimDto | null;
@@ -20,7 +21,7 @@ export const ClaimPeriodDate: React.FunctionComponent<Props> = (props) => {
 
   return (
     <React.Fragment>
-      {props.partner.name} claim for period {props.claim.periodId}: <ShortDateRange start={props.claim.periodStartDate} end={props.claim.periodEndDate} />
+      <PartnerName partner={props.partner}/> claim for period {props.claim.periodId}: <ShortDateRange start={props.claim.periodStartDate} end={props.claim.periodEndDate} />
     </React.Fragment>
   );
 };

@@ -4,7 +4,7 @@ import { Option } from "@framework/dtos/option";
 import { PicklistEntry } from "jsforce";
 
 export abstract class OptionsQueryBase<T extends (string | number)> extends QueryBase<Map<T, Option<T>>> {
-  constructor(private key: string) {
+  protected constructor(private key: string) {
     super();
   }
 

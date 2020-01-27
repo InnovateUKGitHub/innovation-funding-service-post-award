@@ -35,14 +35,14 @@ interface ISimpleEditorDto {
     description: string | null;
     value: number | null;
     date: Date | null;
-    option: { value: string, id: string } | null;
-    mulipleOptions: { value: string, id: string }[] | null;
+    option: { value: React.ReactNode, id: string } | null;
+    mulipleOptions: { value: React.ReactNode, id: string }[] | null;
     file: IFileWrapper | null;
 }
 
 class SimpleForm extends React.Component<{}, { original: ISimpleEditorDto, editor: ISimpleEditorDto }> {
-    private options: { value: string; id: string; }[];
-    private multiOptions: { value: string; id: string; }[];
+    private options: { value: React.ReactNode; id: string; }[];
+    private multiOptions: { value: React.ReactNode; id: string; }[];
 
     constructor(props: {}) {
         super(props);

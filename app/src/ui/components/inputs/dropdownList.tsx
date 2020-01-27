@@ -2,8 +2,8 @@ import React from "react";
 
 import { BaseInput } from "./baseInput";
 
-interface DropdownListProps extends InputProps<{ id: string, value: string }> {
-  options: { id: string, value: string }[];
+interface DropdownListProps extends InputProps<{ id: string, value: React.ReactNode }> {
+  options: { id: string, value: React.ReactNode }[];
   hasEmptyOption?: boolean;
 }
 

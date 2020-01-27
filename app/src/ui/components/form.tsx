@@ -233,7 +233,7 @@ const NumericField = <T extends {}>(props: NumericFieldProps<T> & InternalFieldP
 
 export interface SelectOption {
   id: string;
-  value: string;
+  value: React.ReactNode;
 }
 
 interface RadioFieldProps<T extends {}> extends ExternalFieldProps<T, SelectOption> {
