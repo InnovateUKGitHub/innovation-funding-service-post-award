@@ -4,12 +4,12 @@ import classNames from "classnames";
 
 interface CheckboxOptionProps {
   id: string;
-  value: string;
+  value: React.ReactNode;
   disabled?: boolean;
   qa?: string;
 }
 
-interface CheckboxListProps extends InputProps<{ id: string, value: string }[]> {
+interface CheckboxListProps extends InputProps<{ id: string, value: React.ReactNode }[]> {
   options: CheckboxOptionProps[];
 }
 
@@ -44,7 +44,7 @@ export class CheckboxList extends BaseInput<CheckboxListProps, {}> {
     );
   }
 
-  private onChange(item: { id: string; value: string; }, checked: boolean) {
+  private onChange(item: { id: string; value: React.ReactNode; }, checked: boolean) {
     const original = this.props.value || [];
     if (this.props.onChange) {
       const values = this.props.options.filter(x => x.id === item.id ? checked : !!original.find(y => y.id === x.id));

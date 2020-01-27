@@ -5,6 +5,7 @@ import { EditorStatus, StoresConsumer } from "@ui/redux";
 import { PcrStepProps } from "@ui/containers/pcrs/pcrWorkflow";
 import { PCRPartnerWithdrawalItemDtoValidator } from "@ui/validators";
 import { periodInProject } from "@framework/util";
+import { PartnerName } from "@ui/components";
 
 interface InnerProps {
   partners: PartnerDto[];
@@ -15,7 +16,7 @@ const InnerContainer = (props: PcrStepProps<PCRItemForPartnerWithdrawalDto, PCRP
   const partnerOptions: ACC.SelectOption[] = props.partners.filter(x => !x.isWithdrawn).map(x => (
     {
       id: x.id,
-      value: x.name
+      value: <PartnerName partner={x}/>
     }
   ));
   const selectedPartnerOption = partnerOptions.find(x => x.id === props.pcrItem.partnerId);
