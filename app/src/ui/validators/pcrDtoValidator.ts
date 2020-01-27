@@ -333,7 +333,7 @@ export class PCRAccountNameChangeItemDtoValidator extends PCRBaseItemDtoValidato
     const isComplete = this.model.status === PCRItemStatus.Complete;
     return Validation.all(this,
       () => isComplete ? Validation.required(this, this.model.partnerId, "Select partner to change") : Validation.valid(this),
-      () => this.partners && this.model.partnerId ? Validation.permitedValues(this, this.model.partnerId, this.partners.map(x => x.id), "Invalid partner for project") : Validation.valid(this)
+      () => this.partners && this.model.partnerId ? Validation.permitedValues(this, this.model.partnerId, this.partners.filter(x => !x.isWithdrawn).map(x => x.id), "Invalid partner for project") : Validation.valid(this)
     );
   }
 
@@ -377,7 +377,7 @@ export class PCRPartnerWithdrawalItemDtoValidator extends PCRBaseItemDtoValidato
     const isComplete = this.model.status === PCRItemStatus.Complete;
     return Validation.all(this,
       () => isComplete ? Validation.required(this, this.model.partnerId, "Select partner to change") : Validation.valid(this),
-      () => this.partners && this.model.partnerId ? Validation.permitedValues(this, this.model.partnerId, this.partners.map(x => x.id), "Invalid partner for project") : Validation.valid(this)
+      () => this.partners && this.model.partnerId ? Validation.permitedValues(this, this.model.partnerId, this.partners.filter(x => !x.isWithdrawn).map(x => x.id), "Invalid partner for project") : Validation.valid(this)
     );
   }
 
