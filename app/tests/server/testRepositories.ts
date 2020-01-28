@@ -8,6 +8,8 @@ import { PermissionGroupIdenfifier } from "@framework/types/permisionGroupIndent
 import * as Entities from "@framework/entities";
 import { PicklistEntry } from "jsforce";
 import { getAllEnumValues } from "@shared/enumHelper";
+import { PCRStatusesPicklist } from "../server/features/pcrs/pcrStatusesPicklist";
+import { ProjectChangeRequestStatusChangeEntity } from "@framework/entities";
 
 class ProjectsTestRepository extends TestRepository<Repositories.ISalesforceProject> implements Repositories.IProjectRepository {
   getById(id: string) {
@@ -513,29 +515,35 @@ class PCRTestRepository extends TestRepository<Entities.ProjectChangeRequestEnti
   delete(item: Entities.ProjectChangeRequestEntity) {
     return super.deleteItem(item);
   }
+
+  getPcrChangeStatuses(): Promise<PicklistEntry[]> {
+    const picklistEntry: PicklistEntry[] = new Array();
+    PCRStatusesPicklist.forEach(x=> picklistEntry.push(x));
+    return Promise.resolve(picklistEntry);
+  }
 }
 
-class ProjectChangeRequestStatusChangeTestRepository extends TestRepository<Repositories.ISalesforceProjectChangeRequestStatusChange> implements Repositories.IProjectChangeRequestStatusChangeRepository {
+class ProjectChangeRequestStatusChangeTestRepository extends TestRepository<ProjectChangeRequestStatusChangeEntity> implements Repositories.IProjectChangeRequestStatusChangeRepository {
   constructor(private pcrRepository: PCRTestRepository) {
     super();
   }
 
   createStatusChange(statusChange: Repositories.ICreateProjectChangeRequestStatusChange) {
-    const originalStatus = this.pcrRepository.PreviousStatus[statusChange.Acc_ProjectChangeRequest__c];
+    const previousStatus = this.pcrRepository.PreviousStatus[statusChange.Acc_ProjectChangeRequest__c];
     const newStatus = this.pcrRepository.Items.find(x => x.id === statusChange.Acc_ProjectChangeRequest__c)!.status;
     return super.insertOne({
-      Id: (this.Items.length + 1).toString(),
-      Acc_ProjectChangeRequest__c: statusChange.Acc_ProjectChangeRequest__c,
-      Acc_PreviousProjectChangeRequestStatus__c: PCRStatus[originalStatus],
-      Acc_NewProjectChangeRequestStatus__c: PCRStatus[newStatus],
-      CreatedDate: new Date().toISOString(),
-      Acc_ParticipantVisibility__c: statusChange.Acc_ParticipantVisibility__c,
-      Acc_ExternalComment__c: statusChange.Acc_ExternalComment__c
+      id: (this.Items.length + 1).toString(),
+      pcrId: statusChange.Acc_ProjectChangeRequest__c,
+      createdDate: new Date(),
+      previousStatus,
+      newStatus,
+      externalComments: statusChange.Acc_ExternalComment__c,
+      participantVisibility: statusChange.Acc_ParticipantVisibility__c
     });
   }
 
-  getStatusChanges(projectId: string, projectChangeRequestId: string): Promise<Repositories.ISalesforceProjectChangeRequestStatusChange[]> {
-    return super.getWhere(x => x.Acc_ProjectChangeRequest__c === projectChangeRequestId);
+  getStatusChanges(projectId: string, projectChangeRequestId: string): Promise<ProjectChangeRequestStatusChangeEntity[]> {
+    return super.getWhere(x => x.pcrId === projectChangeRequestId);
   }
 }
 

@@ -107,8 +107,10 @@ export interface PCRItemTypeDto {
 export interface ProjectChangeRequestStatusChangeDto {
   id: string;
   projectChangeRequest: string;
-  previousStatus: string;
-  newStatus: string;
+  newStatus: PCRStatus;
+  newStatusLabel: string;
+  previousStatus: PCRStatus;
+  previousStatusLabel: string;
   createdDate: Date;
   participantVisibility: boolean;
   comments: string | null;

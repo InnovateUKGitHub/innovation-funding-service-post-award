@@ -15,6 +15,7 @@ import { GetAllRecordTypesQuery } from "./features/general/getAllRecordTypesQuer
 import { GetCostCategoriesQuery } from "./features/claims";
 import { GetClaimStatusesQuery } from "@server/features/claims/getClaimStatusesQuery";
 import { GetMonitoringReportStatusesQuery } from "./features/monitoringReports/getMonitoringReportStatusesQuery";
+import { GetPcrStatusesQuery } from "./features/pcrs/getPcrStatusesQuery";
 
 export class Server {
   private app: express.Express;
@@ -82,6 +83,7 @@ export class Server {
       this.primeCache(context, "Cost Categories cache", () => context.runQuery(new GetCostCategoriesQuery()));
       this.primeCache(context, "Claim Statuses cache", () => context.runQuery(new GetClaimStatusesQuery()));
       this.primeCache(context, "Monitoring Report Status cache", () => context.runQuery(new GetMonitoringReportStatusesQuery()));
+      this.primeCache(context, "Project Change Request Status cache", () => context.runQuery(new GetPcrStatusesQuery()));
     }
   }
 
