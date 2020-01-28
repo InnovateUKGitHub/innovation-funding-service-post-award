@@ -1,5 +1,5 @@
 import { QueryBase } from "./queryBase";
-import { IContext } from "@framework/types";
+import { IContext, PCRStatus } from "@framework/types";
 import { Option } from "@framework/dtos/option";
 import { PicklistEntry } from "jsforce";
 
@@ -16,6 +16,9 @@ export abstract class OptionsQueryBase<T extends (string | number)> extends Quer
     const statuses = await this.getPickListValues(context);
     return statuses.reduce<Map<T, Option<T>>>((acc, curr) => {
       const enumValue = this.mapToEnumValue(curr.value);
+      if(!enumValue) {
+        return acc;
+      }
       return acc.set(enumValue, {
         value: enumValue,
         label: curr.label || curr.value,

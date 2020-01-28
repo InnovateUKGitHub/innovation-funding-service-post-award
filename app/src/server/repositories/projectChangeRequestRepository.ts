@@ -1,4 +1,4 @@
-import { Connection } from "jsforce";
+import { Connection, PicklistEntry } from "jsforce";
 import { DateTime } from "luxon";
 import {
   ProjectChangeRequestEntity,
@@ -21,6 +21,7 @@ export interface IProjectChangeRequestRepository {
   insertItems(headerId: string, items: ProjectChangeRequestItemForCreateEntity[]): Promise<void>;
   isExisting(projectId: string, projectChangeRequestId: string): Promise<boolean>;
   delete(pcr: ProjectChangeRequestEntity): Promise<void>;
+  getPcrChangeStatuses(): Promise<PicklistEntry[]>;
 }
 
 export interface ISalesforcePCR {
@@ -187,6 +188,10 @@ export class ProjectChangeRequestRepository extends SalesforceRepositoryBase<ISa
 
   async delete(item: ProjectChangeRequestEntity) {
     return super.deleteAll([item.id, ... item.items.map(x => x.id)]);
+  }
+
+  getPcrChangeStatuses(): Promise<PicklistEntry[]> {
+    return super.getPicklist("Acc_Status__c");
   }
 
   private mapStatus(status: PCRStatus): string {

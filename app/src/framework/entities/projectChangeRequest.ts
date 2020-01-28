@@ -48,3 +48,13 @@ export interface ProjectChangeRequestItemEntity extends ProjectChangeRequestItem
   partnerNameSnapshot?: string | null;
   projectDurationSnapshot?: number | null;
 }
+
+export interface ProjectChangeRequestStatusChangeEntity {
+  id: string;
+  pcrId: string;
+  createdDate: Date;
+  previousStatus: PCRStatus;
+  newStatus: PCRStatus;
+  externalComments: string;
+  participantVisibility: boolean;
+}
