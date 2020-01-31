@@ -5,6 +5,7 @@ import { SimpleString } from "../components/renderers";
 import { Authorisation } from "@framework/types";
 import { IClientConfig } from "@ui/redux/reducers/configReducer";
 import { StoresConsumer } from "@ui/redux";
+import { ContentConsumer } from "@ui/redux/contentProvider";
 
 interface Data {
   userEmail: string;
@@ -41,6 +42,16 @@ class Component extends ContainerBaseWithState<{}, Data, {}, State> {
             <h2><Link route={this.props.routes.projectDashboard.getLink({})}>Projects</Link></h2>
             <SimpleString>Projects dashboard</SimpleString>
           </div>
+          <ContentConsumer>
+            {
+              content => (
+                <div className="govuk-grid-column-one-third">
+                  <h2>{content.exampleContentTitle()}</h2>
+                  <SimpleString>{content.exampleContent()}</SimpleString>
+                </div>
+              )
+            }
+          </ContentConsumer>
         </div>
       </div>
     );
@@ -50,7 +61,7 @@ class Component extends ContainerBaseWithState<{}, Data, {}, State> {
 const HomeContainer = (props: BaseProps) => (
   <StoresConsumer>
     {
-      stores => <Component userEmail={stores.users.getCurrentUser().email} {...props}/>
+      stores => <Component userEmail={stores.users.getCurrentUser().email} {...props} />
     }
   </StoresConsumer>
 );

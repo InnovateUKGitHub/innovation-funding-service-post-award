@@ -111,7 +111,8 @@
     "@shared": "dist/src/shared",
     "@framework": "dist/src/framework",
     "@ui": "dist/src/ui",
-    "@util": "dist/src/util"
+    "@util": "dist/src/util",
+    "@content" : "dist/content"
   },
   "jest": {
     "testURL": "http://localhost",
@@ -149,7 +150,8 @@
       "@shared/(.*)": "<rootDir>/src/shared/$1",
       "@framework/(.*)": "<rootDir>/src/framework/$1",
       "@ui/(.*)": "<rootDir>/src/ui/$1",
-      "@util/(.*)": "<rootDir>/src/util/$1"
+      "@util/(.*)": "<rootDir>/src/util/$1",
+      "@content/(.*)": "<rootDir>/content/$1"
     },
     "coveragePathIgnorePatterns": [
       "/node_modules/"
