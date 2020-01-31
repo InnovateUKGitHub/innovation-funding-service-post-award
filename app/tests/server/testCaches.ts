@@ -10,6 +10,7 @@ export class TestCaches implements ICaches {
   readonly permissionGroups = new Cache<PermissionGroup[]>(1);
   readonly projectRoles = new Cache<{ [key: string]: IRoleInfo }>(1);
   readonly recordTypes = new Cache<RecordType[]>(1);
+  contentStoreLastUpdated: Date|null = null;
 }
 
 class TestOptionsCache extends Cache<Map<any, Option<any>>> {
