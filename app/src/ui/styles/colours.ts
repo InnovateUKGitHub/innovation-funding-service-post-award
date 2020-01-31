@@ -20,3 +20,5 @@ export const GOVUK_LINK_COLOUR = "#1d70b8";
 
 // EXTENDED COLOURS
 export const GOVUK_COLOUR_GREEN = "#00703c";
+// EXTENDED COLOURS
+export const GOVUK_COLOUR_WHITE = "#ffffff";

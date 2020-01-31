@@ -26,6 +26,7 @@ export function renderHtml(html: string, htmlTitle: string, preloadedState: any 
           <link href="/govuk-frontend-ie8-3.0.0.min.css" rel="stylesheet" />
           <![endif]-->
           <link href="/govuk-overrides.css?build=${Configuration.build}" rel="stylesheet" />
+          <link href="/govuk-overrides-modal.css?build=${Configuration.build}" rel="stylesheet" />
 
           <meta property="og:image" content="/assets/images/govuk-opengraph-image.png">
 
