@@ -8,6 +8,7 @@ import { Authorisation } from "./authorisation";
 import { PermissionGroup } from "@framework/entities/permissionGroup";
 import { RecordType } from "@framework/entities/recordType";
 import { Option } from "@framework/types";
+import { IDefaultContentStore } from "@server/fileStores/defaultContentStore";
 
 export interface IRepositories {
   readonly claims: Repositories.IClaimRepository;
@@ -34,8 +35,17 @@ export interface IRepositories {
   readonly recordTypes: Repositories.IRecordTypeRepository;
 }
 
+export interface IResources {
+  readonly defaultContent: IDefaultContentStore;
+}
+
+export interface IInternationalisation {
+  addResourceBundle(content: any): void;
+}
+
 export interface IContext {
   repositories: IRepositories;
+  resources: IResources;
   caches: ICaches;
   config: IConfig;
   runQuery<TResult>(cmd: QueryBase<TResult>): Promise<TResult>;
@@ -47,6 +57,7 @@ export interface IContext {
   user: ISessionUser;
   startTimer: (message: string) => ITimer;
   asSystemUser: () => IContext;
+  internationalisation: IInternationalisation;
 }
 
 export interface ITimer {
@@ -59,6 +70,7 @@ export interface ICaches {
   readonly permissionGroups: Cache<PermissionGroup[]>;
   readonly projectRoles: Cache<{ [key: string]: IRoleInfo }>;
   readonly recordTypes: Cache<RecordType[]>;
+  contentStoreLastUpdated: Date|null;
 }
 
 export interface IAsyncRunnable<T> {

@@ -5,7 +5,7 @@
   "scripts": {
     "clean": "rimraf ./dist",
     "start:server": "node ./dist/src/server/index.js",
-    "start:dev": "nodemon ./dist/src/server/index.js --watch ./dist/src/ --watch ./.env --watch ./public/build/",
+    "start:dev": "nodemon ./dist/src/server/index.js --watch ./dist/src/ --watch ./.env --watch ./public/build/ --watch ./content/",
     "build:server": "rimraf dist/ && tsc",
     "watch:server": "npm run clean && tsc --watch",
     "build:client": "webpack --config webpack.client.prod.js",
@@ -33,6 +33,7 @@
     "cors": "^2.8.4",
     "dotenv": "^6.1.0",
     "express": "^4.16.3",
+    "i18next": "^19.1.0",
     "isomorphic-fetch": "^2.2.1",
     "isomorphic-form-data": "^2.0.0",
     "jsforce": "^1.9.3",
