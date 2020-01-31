@@ -2,7 +2,7 @@ import { createTestRepositories, ITestRepositories } from "./testRepositories";
 import { QueryBase } from "@server/features/common/queryBase";
 import { SyncQueryBase } from "@server/features/common/queryBase";
 import { CommandBase, SyncCommandBase } from "@server/features/common/commandBase";
-import { Authorisation, IAsyncRunnable, IContext, ISyncRunnable } from "@framework/types";
+import { Authorisation, IAsyncRunnable, IContext, IInternationalisation, ISyncRunnable } from "@framework/types";
 import { TestData } from "./testData";
 import { TestClock } from "./testClock";
 import { TestLogger } from "./testLogger";
@@ -11,6 +11,8 @@ import { TestConfig } from "./testConfig";
 import { ValidationError } from "@server/features/common";
 import { TestStore } from "./testStore";
 import { TestCaches } from "./testCaches";
+import { TestResources } from "./testResources";
+import { TestInternationalisation } from "./testInternationalisation";
 
 export class TestContext implements IContext {
     constructor() {
@@ -25,6 +27,10 @@ export class TestContext implements IContext {
     public user = new TestUser();
     public testData: TestData;
     public testStore: TestStore;
+
+    public internationalisation = new TestInternationalisation();
+
+    public resources = new TestResources();
 
     public startTimer = (message: string) => {
         return {
