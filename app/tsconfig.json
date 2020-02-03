@@ -19,7 +19,8 @@
       "@shared/*": ["src/shared/*"],
       "@framework/*": ["src/framework/*"],
       "@ui/*": ["src/ui/*"],
-      "@util/*": ["src/framework/util/*"]
+      "@util/*": ["src/framework/util/*"],
+      "@content/*": ["src/content/*"]
     },
 
     // "composite": true,                     /* Enable project compilation */
