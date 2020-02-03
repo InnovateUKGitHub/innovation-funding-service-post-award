@@ -6,6 +6,7 @@ import { Authorisation } from "@framework/types";
 import { IClientConfig } from "@ui/redux/reducers/configReducer";
 import { StoresConsumer } from "@ui/redux";
 import { ContentConsumer } from "@ui/redux/contentProvider";
+import * as ACC from "@ui/components";
 
 interface Data {
   userEmail: string;
@@ -46,8 +47,8 @@ class Component extends ContainerBaseWithState<{}, Data, {}, State> {
             {
               content => (
                 <div className="govuk-grid-column-one-third">
-                  <h2>{content.exampleContentTitle()}</h2>
-                  <SimpleString>{content.exampleContent()}</SimpleString>
+                  <h2><ACC.Content value={x => x.exampleContentTitle() }/></h2>
+                  <SimpleString><ACC.Content value={x => x.exampleContent() }/></SimpleString>
                 </div>
               )
             }
