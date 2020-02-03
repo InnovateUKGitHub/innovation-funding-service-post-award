@@ -49,6 +49,7 @@ const renderGuide = (html: string) => {
             <link href="/govuk-frontend-3.0.0.min.css" rel="stylesheet" />
             <!--<![endif]-->
             <link href="/govuk-overrides.css" rel="stylesheet" />
+            <link href="/govuk-overrides-modal.css" rel="stylesheet" />
 
             <!--[if IE 8]>
             <link href="/govuk-frontend-ie8-3.0.0.min.css" rel="stylesheet" />

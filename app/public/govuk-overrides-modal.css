@@ -1,0 +1,149 @@
+/************************************** Modal ***********************************/
+.govuk-modal-dialogue,
+.govuk-modal-dialogue__backdrop {
+  position: fixed;
+  z-index: 0;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/*Hide dialogue when closed*/
+.govuk-modal-dialogue {
+  display: none;
+}
+
+/*Show dialogue when opened*/
+.govuk-modal-dialogue:target {
+  display: table;
+  display: flex;
+  flex-direction: column;
+}
+
+/*Wrapper to handle overflow scrolling*/
+.govuk-modal-dialogue__wrapper {
+  box-sizing: border-box;
+  display: table-cell;
+  display: flex;
+  height: inherit;
+  overflow-y: auto;
+  vertical-align: middle;
+  align-items: center;
+}
+
+@media (min-width: 40.0625em) {
+  .govuk-modal-dialogue__wrapper {
+    padding-bottom: 40px;
+    padding-top: 40px;
+  }
+}
+
+/*HTML5 dialogue component*/
+.govuk-modal-dialogue__box {
+  box-sizing: border-box;
+  display: block;
+  position: relative;
+  z-index: 1;
+  width: 90%;
+  margin-right: auto;
+  margin-left: auto;
+  padding: 0;
+  border: 3px solid #0b0c0c;
+  background: #ffffff;
+}
+
+/*Add focus outline to dialogue*/
+.govuk-modal-dialogue__box:focus {
+  outline: 3px solid #ffdd00;
+}
+
+/*Hide browser backdrop*/
+.govuk-modal-dialogue__box::backdrop {
+  display: none;
+}
+
+
+/*Header with close button*/
+.govuk-modal-dialogue__header {
+  margin-bottom: 15px;
+  padding-bottom: 3px;
+  color: #ffffff;
+  background-color: #0b0c0c;
+  text-align: right;
+}
+
+@media (min-width: 40.0625em) {
+  .govuk-modal-dialogue__header {
+    margin-bottom: 25px;
+  }
+}
+
+.govuk-modal-dialogue__header:after {
+  content: "";
+  display: block;
+  clear: both;
+}
+
+/*Inner content*/
+.govuk-modal-dialogue__content {
+  padding: 20px;
+}
+.govuk-modal-dialogue__content .govuk-button {
+  margin-bottom: 0px;
+}
+@media (min-width: 40.0625em) {
+  .govuk-modal-dialogue__content {
+    padding: 30px;
+    padding-top: 0;
+  }
+}
+
+/*Custom backdrop*/
+.govuk-modal-dialogue__backdrop {
+  opacity: .8;
+  background: #0b0c0c;
+  pointer-events: none;
+  touch-action: none;
+}
+
+/*Crown icon*/
+.govuk-modal-dialogue__crown {
+  display: block;
+  margin: 6px 0 0 6px;
+  float: left;
+}
+@media (min-width: 40.0625em) {
+  .govuk-modal-dialogue__crown {
+    margin-left: 25px;
+  }
+}
+
+/*Close button*/
+.govuk-modal-dialogue__close {
+  font-size: 36px;
+  line-height: 1;
+  display: block;
+  width: auto;
+  min-width: 44px;
+  margin: 0;
+  padding: 2px 5px;
+  float: right;
+  color: #ffffff;
+  background-color: #0b0c0c;
+  box-shadow: none !important;
+  font-size: 2.25rem;
+}
+
+.govuk-modal-dialogue__close:hover {
+  color: #0b0c0c;
+  background-color: #ffdd00;
+}
+
+.govuk-modal-dialogue__close:active {
+  top: 0;
+}
+
+.govuk-modal-dialogue__box {
+  width: 640px;
+}
