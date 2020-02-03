@@ -22,7 +22,8 @@ export class TestConfig implements IConfig {
   public features = {
     financialVirements: true,
     pcrsEnabled: true,
-    pcrRemovePartner: true
+    pcrRemovePartner: true,
+    contentHint: true
   };
 
   public logLevel = LogLevel.DEBUG;
