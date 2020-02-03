@@ -67,33 +67,3 @@ Query files (as well as any other DTO logic) should live in the CQRS layer.
                     return results.map(mapFooBar(context));
                 }
             }
-
-## Using DTOs in the API layer
-
-The API layer makes use of queries that return our DTOs by implementing the Model-View-Controller pattern. To create a new Controller for a new data object, design a class that extends any [ControllerBase<T>](/app/src/server/apis/controllerBase.ts) class, and define the implemented methods making use of the queries designed for the specific data object. Once the controller has been defined, it needs to be added in the [`index.ts`](/app/src/server/apis/index.ts) file to the serverApis object. This can then be used to create a store for all the DTOs of the new data object, which can be accessed by the application layer via React containers and components.
-
-### Example
-
-`/server/api/fooBars.ts`
-            import contextProvider from "@server/features/common/contextProvider";
-            import { ApiParams, ControllerBaseWithSummary } from "./controllerBase";
-            import { GetAllFooBarsQuery } from "@server/features/pcrs/getAllFooBarsQuery";
-
-            export interface IFooBarsApi {
-                getAll: (params: ApiParams<{ id: string }>) => Promise<FooBarDto[]>;
-            }
-
-            class Controller extends ControllerBase<FooBarDto> implements IFooBarsApi {
-                constructor() {
-                    super("fooBars");
-
-                    super.getItems("/", (p, q) => ({ id: q.id }), (p) => this.getAll(p));
-                }
-
-                getAll(params: ApiParams<{ id: string }>): Promise<FooBarDto[]> {
-                    const query = new GetAllFooBarsQuery(params.id);
-                    return contextProvider.start(params).runQuery(query);
-                }
-            }
-
-            export const controller = new Controller();
