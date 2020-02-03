@@ -7,7 +7,7 @@ export interface IDefaultContentStore {
 export class DefaultContentStore implements IDefaultContentStore {
   getContent() {
     return new Promise<string>((resolve, reject) => {
-      fs.readFile("./content/defaultContent.en.json", { encoding: "utf-8", }, (err, data) => {
+      fs.readFile("./src/content/defaultContent.en.json", { encoding: "utf-8", }, (err, data) => {
         if (err) {
           reject(err);
         }
