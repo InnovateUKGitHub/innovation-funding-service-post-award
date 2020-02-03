@@ -7,6 +7,7 @@ import * as Forecasts from "./forecasts";
 
 export * from "./accordion";
 export * from "./accordionItem";
+export * from "./content";
 export * from "./details";
 export * from "./documentGuidance";
 export * from "./documentList";
