@@ -20,10 +20,12 @@ export * from "./loading";
 export * from "./logs";
 export * from "./navigationArrows";
 export * from "./navigationCard";
+export * from "./modal";
 export * from "./monitoringReports";
 export * from "./partnersAndFinanceContacts";
 export * from "./periodTitle";
 export * from "./projectContact";
+export * from "./partners";
 export * from "./styledButton";
 export * from "./summaryList";
 export * from "./table";
@@ -39,4 +41,4 @@ export {
   MonitoringReports,
   Projects,
   Renderers,
- };
+};

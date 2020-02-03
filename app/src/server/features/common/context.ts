@@ -5,6 +5,9 @@ import * as Salesforce from "../../repositories/salesforceConnection";
 import * as Common from "@server/features/common";
 import * as Framework from "@framework/types";
 import * as Entities from "@framework/entities";
+import { DefaultContentStore } from "@server/fileStores/defaultContentStore";
+import { IInternationalisation } from "@framework/types";
+import i18next from "i18next";
 
 // obvs needs to be singleton
 const cachesImplementation: Framework.ICaches = {
@@ -13,6 +16,7 @@ const cachesImplementation: Framework.ICaches = {
   projectRoles: new Common.Cache<{ [key: string]: IRoleInfo }>(Common.Configuration.timeouts.projectRoles),
   permissionGroups: new Common.Cache<Entities.PermissionGroup[]>(0 /* permanant cache */),
   recordTypes: new Common.Cache<Entities.RecordType[]>(Common.Configuration.timeouts.recordTypes),
+  contentStoreLastUpdated: null
 };
 
 const constructErrorResponse = <E extends Error>(error: E): AppError => {
@@ -78,6 +82,9 @@ export class Context implements Framework.IContext {
       recordTypes: new Repositories.RecordTypeRepository(connectionCallback, this.logger)
     };
 
+    this.resources = {
+      defaultContent: new DefaultContentStore()
+    };
   }
 
   public readonly repositories: Framework.IRepositories;
@@ -85,6 +92,11 @@ export class Context implements Framework.IContext {
   public readonly config: Common.IConfig;
   public readonly clock: Common.IClock = new Common.Clock();
   public readonly caches: Framework.ICaches;
+  public readonly resources: Framework.IResources;
+
+  public readonly internationalisation: IInternationalisation = {
+    addResourceBundle: (content) => i18next.addResourceBundle("en", "default", content, true, true)
+  };
 
   private readonly salesforceConnectionDetails: Salesforce.ISalesforceConnectionDetails;
 

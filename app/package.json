@@ -33,6 +33,7 @@
     "cors": "^2.8.4",
     "dotenv": "^6.1.0",
     "express": "^4.16.3",
+    "i18next": "^19.1.0",
     "isomorphic-fetch": "^2.2.1",
     "isomorphic-form-data": "^2.0.0",
     "jsforce": "^1.9.3",
@@ -110,7 +111,8 @@
     "@shared": "dist/src/shared",
     "@framework": "dist/src/framework",
     "@ui": "dist/src/ui",
-    "@util": "dist/src/util"
+    "@util": "dist/src/util",
+    "@content" : "dist/src/content"
   },
   "jest": {
     "testURL": "http://localhost",
@@ -148,7 +150,8 @@
       "@shared/(.*)": "<rootDir>/src/shared/$1",
       "@framework/(.*)": "<rootDir>/src/framework/$1",
       "@ui/(.*)": "<rootDir>/src/ui/$1",
-      "@util/(.*)": "<rootDir>/src/util/$1"
+      "@util/(.*)": "<rootDir>/src/util/$1",
+      "@content/(.*)": "<rootDir>/src/content/$1"
     },
     "coveragePathIgnorePatterns": [
       "/node_modules/"

@@ -241,6 +241,9 @@ class ProjectDashboardComponent extends ContainerBaseWithState<{}, Data, {}, Sta
   private getLeftHandMessages(project: ProjectDto, partner: PartnerDto | null, section: Section): React.ReactNode[] {
     const messages: React.ReactNode[] = [];
 
+    // The lead partner will never have status === withdrawn,
+    // so it doesn't matter that "withdrawn" is not getting appended to leadPartnerName
+    // Caveat: they will be withdrawn for a few minutes while another lead partner is set, but we're not worrying about this
     messages.push(project.leadPartnerName);
 
     if (section === "upcoming") messages.push(<ACC.Renderers.ShortDateRange start={project.startDate} end={project.endDate} />);

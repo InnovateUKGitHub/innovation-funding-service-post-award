@@ -35,6 +35,7 @@ import { validationSummaryGuide } from "./validationSummaryGuide";
 import { currencyGuide } from "@ui/componentsGuide/currencyGuide";
 import { percentageGuide } from "@ui/componentsGuide/percentageGuide";
 import { breadcrumbsGuide } from "@ui/componentsGuide/breadcrumbsGuide";
+import { modalGuide } from "@ui/componentsGuide/modalGuide";
 
 const guides: IGuide[] = [
     accordionGuide,
@@ -52,6 +53,7 @@ const guides: IGuide[] = [
     insetText,
     linksListGuide,
     logsGuide,
+    modalGuide,
     navigationArrowsGuide,
     navigationCardGuide,
     numericInputGuide,
