@@ -20,7 +20,7 @@
       "@framework/*": ["src/framework/*"],
       "@ui/*": ["src/ui/*"],
       "@util/*": ["src/framework/util/*"],
-      "@content/*": ["content/*"]
+      "@content/*": ["src/content/*"]
     },
 
     // "composite": true,                     /* Enable project compilation */

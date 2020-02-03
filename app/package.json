@@ -5,7 +5,7 @@
   "scripts": {
     "clean": "rimraf ./dist",
     "start:server": "node ./dist/src/server/index.js",
-    "start:dev": "nodemon ./dist/src/server/index.js --watch ./dist/src/ --watch ./.env --watch ./public/build/ --watch ./content/",
+    "start:dev": "nodemon ./dist/src/server/index.js --watch ./dist/src/ --watch ./.env --watch ./public/build/",
     "build:server": "rimraf dist/ && tsc",
     "watch:server": "npm run clean && tsc --watch",
     "build:client": "webpack --config webpack.client.prod.js",
@@ -112,7 +112,7 @@
     "@framework": "dist/src/framework",
     "@ui": "dist/src/ui",
     "@util": "dist/src/util",
-    "@content" : "dist/content"
+    "@content" : "dist/src/content"
   },
   "jest": {
     "testURL": "http://localhost",
@@ -151,7 +151,7 @@
       "@framework/(.*)": "<rootDir>/src/framework/$1",
       "@ui/(.*)": "<rootDir>/src/ui/$1",
       "@util/(.*)": "<rootDir>/src/util/$1",
-      "@content/(.*)": "<rootDir>/content/$1"
+      "@content/(.*)": "<rootDir>/src/content/$1"
     },
     "coveragePathIgnorePatterns": [
       "/node_modules/"
