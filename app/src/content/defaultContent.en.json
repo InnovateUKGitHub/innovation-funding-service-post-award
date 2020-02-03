@@ -22,6 +22,17 @@
       "project-messages": {
         "claimQueriedMessage": "Your claim has been queried. Please respond."
       }
+    },
+    "project-overview": {
+      "title": "Project overview",
+      "monitoringReportLink": "Monitoring reports",
+      "claimsLink": "Claims",
+      "forecastLink": "Forecast",
+      "forecastsLink": "Forecasts",
+      "projectChangeRequestsLink": "Project change requests",
+      "documentsLink": "Documents",
+      "detailsLink": "Project details",
+      "summaryLink": "Finance summary"
     }
   },
   "project-messages": {
@@ -38,5 +49,20 @@
     "currentPeriodInfo": "Project period {{currentPeriod}} of {{totalPeriods}}",
     "pcrQueried": "Project change request queried",
     "pcrToReview": "Project change requests to review: {{numberOfPcrs}}"
-   }
+   },
+   "project-labels": {
+    "projectCostsLabel": "Project costs to date",
+    "partnerCostsLabel": "{{partnerName}} costs to date",
+    "totalEligibleCostsLabel": "Total eligible costs",
+    "totalEligibleCostsClaimedLabel": "Eligible costs claimed to date",
+    "percentageEligibleCostsClaimedLabel": "Percentage of eligible costs claimed to date",
+    "projectInformation": "Project information",
+    "startDate": "Project start date",
+    "endDate": "Project end date",
+    "duration": "Duration",
+    "numberOfPeriods": "Number of periods",
+    "scope": "Project scope statement",
+    "projectMembers": "Project members",
+    "financeContacts": "Finance contacts"
+  }
 }
