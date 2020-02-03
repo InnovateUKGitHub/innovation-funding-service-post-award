@@ -62,7 +62,7 @@ export async function serverRender(req: Request, res: Response, error?: IAppErro
       renderApp(router, store, stores, routes, content);
     });
 
-    onComplete(store, stores, matched, params, error);
+    onComplete(store, stores, content, matched, params, error);
 
     res.send(renderApp(router, store, stores, routes, content));
   }
@@ -90,9 +90,11 @@ export async function serverRender(req: Request, res: Response, error?: IAppErro
 
     const matched = matchRoute(routeState);
 
-    store.dispatch(Actions.setPageTitle(matched.getTitle(store.getState(), routeState.params, stores)));
+    const content = new Content();
 
-    res.status(getErrorStatus(e)).send(renderApp(router, store, stores, routes, new Content()));
+    store.dispatch(Actions.setPageTitle(matched.getTitle(store.getState(), routeState.params, stores, content)));
+
+    res.status(getErrorStatus(e)).send(renderApp(router, store, stores, routes, content));
   }
 }
 
@@ -120,7 +122,7 @@ function loadAllData(store: Store, render: () => void): Promise<void> {
   });
 }
 
-const onComplete = (store: Store, stores: IStores, matched: MatchedRoute, params: {}, error: FormHandlerError | undefined) => {
+const onComplete = (store: Store, stores: IStores, content: Content, matched: MatchedRoute, params: {}, error: FormHandlerError | undefined) => {
   // validation errror occoured so add it into store as validation error
   if (error && error.code === ErrorCode.VALIDATION_ERROR) {
     store.dispatch(Actions.updateEditorAction(error.key, error.store, error.dto, error.error.results!));
@@ -138,7 +140,7 @@ const onComplete = (store: Store, stores: IStores, matched: MatchedRoute, params
       scrollToTop: false
     }));
   }
-  store.dispatch(Actions.setPageTitle(matched.getTitle(store.getState(), params, stores)));
+  store.dispatch(Actions.setPageTitle(matched.getTitle(store.getState(), params, stores, content)));
 };
 
 // wrap callback in Promise so we use await for consistency

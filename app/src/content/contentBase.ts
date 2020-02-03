@@ -13,7 +13,7 @@ export abstract class ContentBase {
   constructor(private parent: ContentBase | null, private name: string | null) {
   }
 
-  private getNameParts(): string[] {
+  protected getNameParts(): string[] {
     const result = this.parent ? this.parent.getNameParts() : [];
     if (this.name) {
       result.push(this.name);

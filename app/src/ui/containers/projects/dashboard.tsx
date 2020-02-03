@@ -11,6 +11,8 @@ import { IClientConfig } from "@ui/redux/reducers/configReducer";
 import { StoresConsumer } from "@ui/redux";
 import { Pending } from "@shared/pending";
 import { BaseProps, ContainerBaseWithState, ContainerProps, defineRoute } from "../containerBase";
+import { Content } from "@content/content";
+import { ContentResult } from "@content/contentBase";
 
 interface Data {
   projectsFilter: (searchString: string) => Pending<ProjectDto[]>;
@@ -106,27 +108,27 @@ class ProjectDashboardComponent extends ContainerBaseWithState<{}, Data, {}, Sta
       <React.Fragment>
         {this.renderProjectCount(openProjects, upcomingProjects, archivedProjects)}
         <ACC.Section qa="open-projects" key="section-open">
-          {this.renderProjectList(openProjects, "You do not have any live projects.", "There are no matching live projects.")}
+          {this.renderProjectList(openProjects, x => x.projectsDashboard.live)}
         </ACC.Section>
         <ACC.Accordion>
           <ACC.AccordionItem title="Upcoming" qa="upcoming-projects">
-            {this.renderProjectList(upcomingProjects, "You do not have any upcoming projects.", "There are no matching upcoming projects.")}
+            {this.renderProjectList(upcomingProjects, x => x.projectsDashboard.upcoming)}
           </ACC.AccordionItem>
           <ACC.AccordionItem title="Archived" qa="archived-projects">
-            {this.renderProjectList(archivedProjects, "You do not have any archived projects.", "There are no matching archived projects.")}
+            {this.renderProjectList(archivedProjects, x => x.projectsDashboard.archived)}
           </ACC.AccordionItem>
         </ACC.Accordion>
       </React.Fragment>
     );
   }
 
-  private renderProjectList(data: ProjectData[], noProjectsMessage: string, noProjectsFoundMessage: string) {
+  private renderProjectList(data: ProjectData[], messages: (x: Content) => { noProjects: () => ContentResult, noMatchingProjects: () => ContentResult }) {
     const stateFiltered = data
       .filter(x => !this.state.showClaimsToReview || x.project.claimsToReview > 0)
       .filter(x => !this.state.showClaimsWithParticipant || x.project.claimsWithParticipant > 0);
 
     if (!stateFiltered.length) {
-      return this.renderNoProjectsMessage(noProjectsMessage, noProjectsFoundMessage);
+      return this.renderNoProjectsMessage(messages);
     }
 
     return (
@@ -134,10 +136,11 @@ class ProjectDashboardComponent extends ContainerBaseWithState<{}, Data, {}, Sta
     );
   }
 
-  private renderNoProjectsMessage(noProjectsMessage: string, noProjectsFoundMessage: string) {
+  private renderNoProjectsMessage(messages: (x: Content) => { noProjects: () => ContentResult, noMatchingProjects: () => ContentResult }) {
     return this.state.projectSearchString
-    ? <ACC.Renderers.SimpleString>{noProjectsFoundMessage}</ACC.Renderers.SimpleString>
-    : <ACC.Renderers.SimpleString>{noProjectsMessage}</ACC.Renderers.SimpleString>;
+      ? <ACC.Renderers.SimpleString><ACC.Content value={x => messages(x).noMatchingProjects()} /></ACC.Renderers.SimpleString>
+      : <ACC.Renderers.SimpleString><ACC.Content value={x => messages(x).noProjects()} /></ACC.Renderers.SimpleString>
+      ;
   }
 
   private getProjectSection(project: ProjectDto, partner: PartnerDto | null): Section {
@@ -164,7 +167,7 @@ class ProjectDashboardComponent extends ContainerBaseWithState<{}, Data, {}, Sta
   }
 
   private isActionRequired(project: ProjectDto, partner: PartnerDto | null, section: Section): boolean {
-    if(section === "archived" || section === "upcoming") {
+    if (section === "archived" || section === "upcoming") {
       return false;
     }
 
@@ -195,13 +198,13 @@ class ProjectDashboardComponent extends ContainerBaseWithState<{}, Data, {}, Sta
     const messages: React.ReactNode[] = [];
     switch (partner && partner.claimStatus) {
       case PartnerClaimStatus.ClaimDue:
-        messages.push(`You need to submit your claim.`);
+        messages.push(<ACC.Content value={x => x.projectsDashboard.messages.claimToSubmit()} />);
         break;
       case PartnerClaimStatus.ClaimQueried:
-        messages.push(`Your claim has been queried. Please respond.`);
+        messages.push(<ACC.Content value={x => x.projectsDashboard.messages.claimQueried()} />);
         break;
       case PartnerClaimStatus.IARRequired:
-        messages.push(`You need to submit your IAR.`);
+        messages.push(<ACC.Content value={x => x.projectsDashboard.messages.claimRequiresIAR()} />);
         break;
     }
     return messages;
@@ -217,13 +220,13 @@ class ProjectDashboardComponent extends ContainerBaseWithState<{}, Data, {}, Sta
       const isFc = !!(project.roles & ProjectRole.FinancialContact);
       const isPm = !!(project.roles & ProjectRole.ProjectManager);
 
-      if(project.status === ProjectStatus.OnHold) {
-        messages.push("On hold");
+      if (project.status === ProjectStatus.OnHold) {
+        messages.push(project.statusName);
       }
 
       if (isMo) {
-        messages.push(`Claims to review: ${project.claimsToReview}`);
-        messages.push(`Project change requests to review: ${project.pcrsToReview}`);
+        messages.push(<ACC.Content value={x => x.projectsDashboard.messages.claimsToReview(project.claimsToReview)} />);
+        messages.push(<ACC.Content value={x => x.projectsDashboard.messages.pcrsToReview(project.pcrsToReview)} />);
       }
 
       if (isFc) {
@@ -231,7 +234,7 @@ class ProjectDashboardComponent extends ContainerBaseWithState<{}, Data, {}, Sta
       }
 
       if (isPm) {
-        if (project.pcrsQueried > 0) messages.push("Project change request queried");
+        if (project.pcrsQueried > 0) messages.push(<ACC.Content value={x => x.projectsDashboard.messages.pcrQueried()} />);
       }
     }
 
@@ -250,10 +253,10 @@ class ProjectDashboardComponent extends ContainerBaseWithState<{}, Data, {}, Sta
 
     if (section === "open" || section === "awaiting") {
 
-      const endedMessage = "Project ended (final claim period)";
+      const endedMessage = <ACC.Content value={x => x.projectsDashboard.messages.projectEnded()} />;
       const openMessage = (
         <React.Fragment>
-          Period {project.periodId} of {project.totalPeriods}&nbsp;(<ACC.Renderers.ShortDateRange start={project.periodStartDate} end={project.periodEndDate}/>)
+          Period {project.periodId} of {project.totalPeriods}&nbsp;(<ACC.Renderers.ShortDateRange start={project.periodStartDate} end={project.periodEndDate} />)
         </React.Fragment>
       );
       messages.push(project.isPastEndDate || (partner && partner.isWithdrawn) ? endedMessage : openMessage);
@@ -267,8 +270,8 @@ class ProjectDashboardComponent extends ContainerBaseWithState<{}, Data, {}, Sta
     const Form = ACC.TypedForm<{ projectSearchString: string }>();
     return (
       <Form.Form data={formData} qa={"projectSearch"} onSubmit={() => { return; }} onChange={v => this.setState({ projectSearchString: v.projectSearchString })}>
-        <Form.Fieldset heading="Search">
-          <Form.Search width="one-half" hint="Project number, project or lead partner" label="search" labelHidden={true} name="search" value={x => x.projectSearchString} update={(x, v) => x.projectSearchString = v || ""} />
+        <Form.Fieldset heading={<ACC.Content value={x => x.projectsDashboard.searchTitle()} />}>
+          <Form.Search width="one-half" hint={<ACC.Content value={x => x.projectsDashboard.searchHint()} />} label={<ACC.Content value={x => x.projectsDashboard.searchLabel()} />} labelHidden={true} name="search" value={x => x.projectSearchString} update={(x, v) => x.projectSearchString = v || ""} />
         </Form.Fieldset>
       </Form.Form>
     );
@@ -326,8 +329,5 @@ export const ProjectDashboardRoute = defineRoute({
   routePath: "/projects/dashboard",
   container: ProjectDashboardContainer,
   getParams: () => ({}),
-  getTitle: () => ({
-    htmlTitle: "Projects",
-    displayTitle: "Projects"
-  }),
+  getTitle: (state, params, stores, content) => content.projectsDashboard.title()
 });
