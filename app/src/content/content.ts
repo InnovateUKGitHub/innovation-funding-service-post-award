@@ -1,6 +1,11 @@
-import i18next from "i18next";
+import { ContentBase, ContentResult } from "./contentBase";
 
-export class Content {
-  public exampleContentTitle = () => i18next.t("example.contentTitle");
-  public exampleContent = () => i18next.t("example.content");
+export type ContentSelector = (content: Content) => ContentResult;
+
+export class Content extends ContentBase {
+  constructor() {
+    super(null, null);
+  }
+  public exampleContentTitle = () => this.getContent("example.contentTitle");
+  public exampleContent = () => this.getContent("example.content");
 }
