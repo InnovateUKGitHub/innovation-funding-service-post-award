@@ -3,7 +3,7 @@ import cn from "classnames";
 import { AccordionContext } from "./accordion";
 
 interface Props {
-  title: string;
+  title: React.ReactNode;
   qa?: string;
 }
 

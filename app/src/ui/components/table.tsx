@@ -55,7 +55,7 @@ interface TableProps<T> {
   headers?: JSX.Element[];
   data: T[];
   validationResult?: Results<{}>[];
-  caption?: string;
+  caption?: React.ReactNode;
   bodyRowClass?: (row: T, index: number) => string;
   bodyRowFlag?: (row: T, index: number) => "warning" | "info" | "error" | "edit" | null;
   headerRowClass?: string;

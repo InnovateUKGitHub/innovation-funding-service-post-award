@@ -5,6 +5,7 @@ import { ClaimDto, PartnerDto, ProjectDto, ProjectRole, ProjectStatus } from "@f
 import { Pending } from "@shared/pending";
 import { PrepareClaimRoute } from "@ui/containers";
 import { StoresConsumer } from "@ui/redux";
+import { PartnerName } from "@ui/components";
 
 interface Params {
   projectId: string;
@@ -23,7 +24,7 @@ class ViewForecastComponent extends ContainerBase<Params, Data, {}> {
   public renderContents(data: ACC.Claims.ForecastData) {
     // MO, PM & FC/PM should see partner name
     const isMoPm = !!(data.project.roles & (ProjectRole.ProjectManager | ProjectRole.MonitoringOfficer));
-    const partnerName = isMoPm ? data.partner.name : null;
+    const partnerName = isMoPm ? <PartnerName partner={data.partner}/> : null;
     const backLink = isMoPm ? this.props.routes.forecastDashboard.getLink({ projectId: data.project.id }) : this.props.routes.projectOverview.getLink({ projectId: data.project.id });
     const backText = isMoPm ? "Back to forecasts" : "Back to project";
 
@@ -70,8 +71,8 @@ class ViewForecastComponent extends ContainerBase<Params, Data, {}> {
     if (isPm) return null;
 
     return finalClaim.isApproved
-      ? <ACC.ValidationMessage qa="final-claim-message-MO" messageType="info" message={`${data.partner.name} has submitted their final claim so cannot change their forecast.`}/>
-      : <ACC.ValidationMessage qa="final-claim-message-MO" messageType="info" message={`${data.partner.name} is due to submit their final claim so cannot change their forecast.`}/>;
+      ? <ACC.ValidationMessage qa="final-claim-message-MO" messageType="info" message={<React.Fragment><PartnerName partner={data.partner}/> has submitted their final claim so cannot change their forecast.</React.Fragment>}/>
+      : <ACC.ValidationMessage qa="final-claim-message-MO" messageType="info" message={<React.Fragment><PartnerName partner={data.partner}/>} is due to submit their final claim so cannot change their forecast.</React.Fragment>}/>;
   }
 
   private renderOverheadsRate(overheadRate: number | null) {

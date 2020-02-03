@@ -11,10 +11,10 @@ interface InnerProps {
 
 const InnerContainer = (props: PcrStepProps<PCRItemForAccountNameChangeDto, PCRAccountNameChangeItemDtoValidator> & InnerProps) => {
   const Form = ACC.TypedForm<PCRItemForAccountNameChangeDto>();
-  const partnerOptions: ACC.SelectOption[] = props.partners.map(x => (
+  const partnerOptions: ACC.SelectOption[] = props.partners.filter(x => !x.isWithdrawn).map(x => (
     {
       id: x.id,
-      value: x.name
+      value: <ACC.PartnerName partner={x}/>
     }
   ));
   const selectedPartnerOption = partnerOptions.find(x => x.id === props.pcrItem.partnerId);

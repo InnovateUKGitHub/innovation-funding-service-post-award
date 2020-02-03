@@ -1,11 +1,9 @@
 import React from "react";
 import { SimpleString } from "./renderers/simpleString";
 import { ShortDateTime } from "./renderers/date";
-import { ClaimStatus, MonitoringReportStatus } from "@framework/types";
 
 export interface LogItem {
-  newStatus: MonitoringReportStatus|ClaimStatus|string;
-  newStatusLabel?: string;
+  newStatusLabel: string;
   createdDate: Date;
   comments?: string | null;
 }
@@ -48,8 +46,7 @@ export class Logs extends React.Component<Props> {
       <React.Fragment key={index}>
         <tr className="govuk-table__row" key={`${index}_a`}>
           <td className="govuk-table__cell" key="0"><ShortDateTime value={item.createdDate} /></td>
-          {/* TODO use label exclusively */}
-          <td className="govuk-table__cell" key="1">{item.newStatusLabel || item.newStatus}</td>
+          <td className="govuk-table__cell" key="1">{ item.newStatusLabel } </td>
         </tr>
         {this.renderCommentsRow(item, index)}
       </React.Fragment>

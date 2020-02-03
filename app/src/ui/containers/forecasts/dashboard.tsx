@@ -33,7 +33,7 @@ class ProjectForecastComponent extends ContainerBase<Params, Data, Callbacks> {
       >
         <ACC.Section qa="project-forecasts">
           <Table.Table data={partners} qa="partner-table">
-            <Table.String header="Partner" value={x => x.name + (x.isLead ? " (Lead)" : "")} qa="partner" />
+            <Table.Custom header="Partner" value={x => <ACC.PartnerName partner={x} showIsLead={true}/>} qa="partner" />
             <Table.Currency header="Total eligible costs" value={x => x.totalParticipantGrant} qa="grant-offered" />
             <Table.Currency header="Forecasts and costs" value={x => (x.totalFutureForecastsForParticipants || 0) + (x.totalCostsSubmitted || 0)} qa="forecasts-and-costs" />
             <Table.Currency header="Underspend" value={x => x.totalParticipantGrant! - (x.totalFutureForecastsForParticipants || 0) - (x.totalCostsSubmitted || 0)} qa="underspend" />

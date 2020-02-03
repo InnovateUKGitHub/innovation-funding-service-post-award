@@ -264,11 +264,11 @@ describe("UpdatePCRCommand", () => {
       expect(context.repositories.projectChangeRequestStatusChange.Items.length).toBe(1);
 
       const statusChange = context.repositories.projectChangeRequestStatusChange.Items[0];
-      expect(statusChange.Acc_ExternalComment__c).toBe("Expected Comments");
-      expect(statusChange.Acc_ProjectChangeRequest__c).toBe(pcr.id);
-      expect(statusChange.Acc_PreviousProjectChangeRequestStatus__c).toBe(PCRStatus[PCRStatus.Draft]);
-      expect(statusChange.Acc_NewProjectChangeRequestStatus__c).toBe(PCRStatus[PCRStatus.SubmittedToMonitoringOfficer]);
-      expect(statusChange.Acc_ParticipantVisibility__c).toBe(true);
+      expect(statusChange.externalComments).toBe("Expected Comments");
+      expect(statusChange.pcrId).toBe(pcr.id);
+      expect(statusChange.previousStatus).toBe(PCRStatus.Draft);
+      expect(statusChange.newStatus).toBe(PCRStatus.SubmittedToMonitoringOfficer);
+      expect(statusChange.participantVisibility).toBe(true);
 
       expect(pcr.comments).toBe("");
     });
@@ -294,7 +294,7 @@ describe("UpdatePCRCommand", () => {
       expect(context.repositories.projectChangeRequestStatusChange.Items.length).toBe(1);
 
       const statusChange = context.repositories.projectChangeRequestStatusChange.Items[0];
-      expect(statusChange.Acc_ParticipantVisibility__c).toBe(false);
+      expect(statusChange.participantVisibility).toBe(false);
     });
   });
 
@@ -699,7 +699,34 @@ describe("UpdatePCRCommand", () => {
       const updatedItem = updated.items[0] as PCRItemForAccountNameChangeDto;
       await expect(updatedItem.accountName).toEqual("New Name Goes Here");
       await expect(updatedItem.partnerId).toEqual(partner.Id);
-    })
+    });
+
+    test("cannot rename withdrawn partner", async () => {
+      const context = new TestContext();
+
+      const project = context.testData.createProject();
+      const partner = context.testData.createPartner(project);
+      const projectChangeRequest = context.testData.createPCR(project, { status: PCRStatus.Draft });
+
+      context.testData.createCurrentUserAsProjectManager(project);
+
+      const accountNameChangeType = PCRRecordTypeMetaValues.find(x => x.type === PCRItemType.AccountNameChange)!;
+      const recordType = context.testData.createPCRRecordTypes().find(x => x.type === accountNameChangeType.typeName);
+      context.testData.createPCRItem(projectChangeRequest, recordType, {status: PCRItemStatus.ToDo});
+
+      const dto = await context.runQuery(new GetPCRByIdQuery(projectChangeRequest.projectId, projectChangeRequest.id));
+      const item = dto.items[0] as PCRItemForAccountNameChangeDto;
+      item.partnerId = partner.Id;
+      item.accountName = "New account name";
+
+      await expect(context.runCommand(new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto))).resolves.toBe(true);
+
+      partner.Acc_ParticipantStatus__c = "Involuntary Withdrawal";
+
+      await expect(context.runCommand(new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto))).rejects.toThrow(ValidationError);
+
+    });
+
   });
 
   describe("Partner withdrawal", () => {
@@ -843,7 +870,34 @@ describe("UpdatePCRCommand", () => {
       const updateItem = update.items[0] as PCRItemForPartnerWithdrawalDto;
       await expect(updateItem.withdrawalDate).toEqual(date);
       await expect(updateItem.partnerId).toBe(partner.Id);
-    })
+    });
+
+    test("cannot withdraw withdrawn partner", async () => {
+      const context = new TestContext();
+
+      const project = context.testData.createProject();
+      const partner = context.testData.createPartner(project);
+      const projectChangeRequest = context.testData.createPCR(project, { status: PCRStatus.Draft });
+
+      context.testData.createCurrentUserAsProjectManager(project);
+
+      const partnerWithdrawalType = PCRRecordTypeMetaValues.find(x => x.type === PCRItemType.PartnerWithdrawal)!;
+      const recordType = context.testData.createPCRRecordTypes().find(x => x.type === partnerWithdrawalType.typeName);
+      context.testData.createPCRItem(projectChangeRequest, recordType, {status: PCRItemStatus.ToDo});
+
+      const dto = await context.runQuery(new GetPCRByIdQuery(projectChangeRequest.projectId, projectChangeRequest.id));
+      const item = dto.items[0] as PCRItemForPartnerWithdrawalDto;
+      item.withdrawalDate = new Date();
+      item.partnerId = partner.Id;
+      item.status = PCRItemStatus.Complete;
+
+      await expect(context.runCommand(new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto))).resolves.toBe(true);
+
+      partner.Acc_ParticipantStatus__c = "Involuntary Withdrawal";
+
+      await expect(context.runCommand(new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto))).rejects.toThrow(ValidationError);
+
+    });
   });
 
   test("updates pcr fields if pm", async () => {

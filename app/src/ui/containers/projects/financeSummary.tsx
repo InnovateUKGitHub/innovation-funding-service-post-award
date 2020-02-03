@@ -59,14 +59,14 @@ class FinanceSummaryComponent extends ContainerBase<Params, Data, Callbacks> {
       <React.Fragment>
         <ACC.Section title="Project costs to date">
           <FinanceSummaryTable.Table data={partnersToShow} qa="ProjectCostsToDate" footers={this.renderTotalValueFooters(project, partners)}>
-            <FinanceSummaryTable.String header={null} qa="Partner" value={x => x.isLead ? `${x.name} (Lead)` : x.name} />
+            <FinanceSummaryTable.Custom header={null} qa="Partner" value={x => <ACC.PartnerName partner={x} showIsLead={true}/>} />
             <FinanceSummaryTable.Currency header="Total eligible costs" qa="TotalEligibleCosts" value={x => x.totalParticipantGrant} />
             <FinanceSummaryTable.Currency header="Costs claimed to date" qa="CostsClaimedToDate" value={x => x.totalCostsSubmitted} />
             <FinanceSummaryTable.Percentage header="Percentage of costs claimed to date" qa="PercentageOfCostsClaimedToDate" value={x => x.percentageParticipantCostsSubmitted} />
           </FinanceSummaryTable.Table>
           <ACC.Section title="Partner finance details">
             <FinanceSummaryTable.Table data={partnersToShow} qa="PartnerFinanceDetails">
-              <FinanceSummaryTable.String header={null} qa="Partner" value={x => x.isLead ? `${x.name} (Lead)` : x.name} />
+              <FinanceSummaryTable.Custom header={null} qa="Partner" value={x => <ACC.PartnerName partner={x} showIsLead={true}/>} />
               <FinanceSummaryTable.Currency header="Total eligible costs" qa="TotalEligibleCosts" value={x => x.totalParticipantGrant} />
               <FinanceSummaryTable.Percentage header="Funding level" qa="FundingLevel" value={x => x.awardRate} />
               <FinanceSummaryTable.Currency header="Total grant" qa="TotalGrant" value={x => x.totalFundingDueToReceive} />
@@ -75,7 +75,7 @@ class FinanceSummaryComponent extends ContainerBase<Params, Data, Callbacks> {
             </FinanceSummaryTable.Table>
             <ACC.Section title="When an independent accountant's report is needed">
               <FinanceSummaryTable.Table data={partnersToShow} qa="WhenAnIarIsNeeded" >
-                <FinanceSummaryTable.String header={null} value={x => x.isLead ? `${x.name} (Lead)` : x.name} qa="Partner" />
+                <FinanceSummaryTable.Custom header={null} value={x => <ACC.PartnerName partner={x} showIsLead={true}/>} qa="Partner" />
                 <FinanceSummaryTable.String header={null} value={x => x.auditReportFrequencyName} qa="Frequency" />
               </FinanceSummaryTable.Table>
             </ACC.Section>

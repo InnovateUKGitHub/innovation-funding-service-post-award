@@ -4,11 +4,11 @@ import classNames from "classnames";
 
 interface RadioOptionProps {
   id: string;
-  value: string;
+  value: React.ReactNode;
   qa?: string;
 }
 
-interface RadioListProps extends InputProps<{ id: string, value: string }> {
+interface RadioListProps extends InputProps<{ id: string, value: React.ReactNode }> {
   options: RadioOptionProps[];
   inline: boolean;
 }
@@ -44,7 +44,7 @@ export class RadioList extends BaseInput<RadioListProps, {}> {
     );
   }
 
-  private onChange(item: { id: string; value: string; }) {
+  private onChange(item: { id: string; value: React.ReactNode; }) {
     if (this.props.onChange) {
       this.props.onChange(item);
     }

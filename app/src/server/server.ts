@@ -15,6 +15,9 @@ import { GetAllRecordTypesQuery } from "./features/general/getAllRecordTypesQuer
 import { GetCostCategoriesQuery } from "./features/claims";
 import { GetClaimStatusesQuery } from "@server/features/claims/getClaimStatusesQuery";
 import { GetMonitoringReportStatusesQuery } from "./features/monitoringReports/getMonitoringReportStatusesQuery";
+import { GetPcrStatusesQuery } from "./features/pcrs/getPcrStatusesQuery";
+import { initInternationalisation, internationalisationRouter } from "./internationalisation";
+import { InitialiseContentCommand } from "./features/general/initialiseContentCommand";
 
 export class Server {
   private app: express.Express;
@@ -29,7 +32,14 @@ export class Server {
     this.routing();
   }
 
-  public start(secure: boolean) {
+  public async start(secure: boolean) {
+    await initInternationalisation()
+      .then(_ => this.setInitialContent())
+      .catch(e => {
+        console.log("Failed to initialize internationalization", e);
+        throw e;
+      });
+
     if (secure) {
       this.startHTTPS();
     } else {
@@ -38,14 +48,15 @@ export class Server {
 
     this.log.info(`Listening at ${process.env.SERVER_URL}`);
     this.log.info("Configuration", Configuration);
+
     setTimeout(() => this.primeCaches());
   }
 
-  public startHTTPS() {
-    const privateKey  = fs.readFileSync("security/AccLocalDevKey.key", "utf8");
+  private startHTTPS() {
+    const privateKey = fs.readFileSync("security/AccLocalDevKey.key", "utf8");
     const certificate = fs.readFileSync("security/AccLocalDevCert.crt", "utf8");
 
-    const credentials = {key: privateKey, cert: certificate};
+    const credentials = { key: privateKey, cert: certificate };
     const httpsServer = https.createServer(credentials, this.app);
 
     httpsServer.listen(this.port);
@@ -69,6 +80,7 @@ export class Server {
     this.app.use(setOwaspHeaders, allowCache, express.static("public"));
     this.app.use(noCache, healthRouter);
     this.app.use(authRouter);
+    this.app.use(internationalisationRouter);
     this.app.use(setOwaspHeaders, noCache, router);
   }
 
@@ -82,6 +94,7 @@ export class Server {
       this.primeCache(context, "Cost Categories cache", () => context.runQuery(new GetCostCategoriesQuery()));
       this.primeCache(context, "Claim Statuses cache", () => context.runQuery(new GetClaimStatusesQuery()));
       this.primeCache(context, "Monitoring Report Status cache", () => context.runQuery(new GetMonitoringReportStatusesQuery()));
+      this.primeCache(context, "Project Change Request Status cache", () => context.runQuery(new GetPcrStatusesQuery()));
     }
   }
 
@@ -90,5 +103,16 @@ export class Server {
     perform()
       .then(x => context.logger.info("Successfully primed cache", message))
       .catch(e => context.logger.error("Unable to primed cache", message, e));
+  }
+
+  private setInitialContent() {
+    const context = contextProvider.start({ user: { email: Configuration.salesforce.serivceUsername } });
+    return context.runCommand(new InitialiseContentCommand())
+      .then(updated => {
+        if (updated) {
+          context.logger.info("Successfully initialised content");
+        }
+      })
+      .catch(e => context.logger.error("Unable to initialised content", e));
   }
 }

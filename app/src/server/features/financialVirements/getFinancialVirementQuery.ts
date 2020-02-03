@@ -64,6 +64,7 @@ export class GetFinancialVirementQuery extends QueryBase<FinancialVirementDto> {
         partnerId: x.partner.id,
         partnerName: x.partner.name,
         isLead: x.partner.isLead,
+        isWithdrawn: x.partner.isWithdrawn,
         originalTotal: x.originalTotal,
         newTotal: x.newTotal,
         virements: x.costCategories.map<VirementDto>(y => ({
