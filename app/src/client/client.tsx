@@ -3,6 +3,7 @@ import { Provider } from "react-redux";
 import { AnyAction, createStore } from "redux";
 import { RouterProvider } from "react-router5";
 import { hydrate } from "react-dom";
+import i18next from "i18next";
 
 import { Polyfill } from "./polyfill";
 
@@ -11,6 +12,8 @@ import { createStores, rootReducer, setupMiddleware, StoresProvider } from "@ui/
 import { App } from "../ui/containers/app";
 import { processDto } from "../shared/processResponse";
 import * as Actions from "@ui/redux/actions";
+import { ContentProvider } from "@ui/redux/contentProvider";
+import { Content } from "@content/content";
 
 // get servers store to initalise client store
 const serverState = processDto((window as any).__PRELOADED_STATE__);
@@ -35,14 +38,40 @@ const getStores = () => {
 // make sure middleware and reducers have run
 store.dispatch(Actions.initaliseAction());
 
-Polyfill().then(() => router.start(() => hydrate((
-  // @todo remove once react/redux connect can be removed
-  <Provider store={store}>
-    <RouterProvider router={router}>
-      <StoresProvider value={getStores()}>
-        <App store={store} routes={routes}/>
-      </StoresProvider>
-    </RouterProvider>
-  </Provider>),
-  document.getElementById("root")
-)));
+Polyfill()
+  .then(() => i18next.init({
+    lng: "en",
+    fallbackLng: "en",
+    defaultNS: "default",
+    debug: true
+  }))
+  // temporarily add it globally to help debugging...
+  .then(() => (window as any).i18n = i18next)
+  .then(() => {
+    // get the english by default, if supporting another language and the browser specifies it then would need to get that too
+    return fetch("/globalization/en")
+      .then(content => {
+        if (content.ok) {
+          return content.json();
+        }
+        else {
+          throw new Error(`Unable to load content : ${content.status} : ${content.statusText}`);
+        }
+      })
+      .then(content => {
+        i18next.addResourceBundle("en", "default", content, true, true);
+      });
+  })
+  .then(() => router.start(() => hydrate((
+    // @todo remove once react/redux connect can be removed
+    <Provider store={store}>
+      <RouterProvider router={router}>
+        <StoresProvider value={getStores()}>
+          <ContentProvider value={new Content()}>
+            <App store={store} routes={routes} />
+          </ContentProvider>
+        </StoresProvider>
+      </RouterProvider>
+    </Provider>),
+    document.getElementById("root")
+  )));

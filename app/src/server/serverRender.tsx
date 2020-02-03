@@ -18,6 +18,8 @@ import { Logger } from "./features/common/logger";
 import { ErrorCode, IAppError, IClientUser, IContext } from "@framework/types";
 import { IClientConfig } from "@ui/redux/reducers/configReducer";
 import { getErrorStatus } from "./errorHandlers";
+import { ContentProvider } from "@ui/redux/contentProvider";
+import { Content } from "@content/content";
 
 export async function serverRender(req: Request, res: Response, error?: IAppError): Promise<void> {
   try {
@@ -25,6 +27,7 @@ export async function serverRender(req: Request, res: Response, error?: IAppErro
       throw error;
     }
 
+    const content = new Content();
     const routes = routeConfig;
     const router = configureRouter(routes);
     const route = await startRouter(req, router);
@@ -56,12 +59,12 @@ export async function serverRender(req: Request, res: Response, error?: IAppErro
 
     await loadAllData(store, () => {
       // render the app to cause any other actions to go round the loop
-      renderApp(router, store, stores, routes);
+      renderApp(router, store, stores, routes, content);
     });
 
     onComplete(store, stores, matched, params, error);
 
-    res.send(renderApp(router, store, stores, routes));
+    res.send(renderApp(router, store, stores, routes, content));
   }
   catch (e) {
 
@@ -89,7 +92,7 @@ export async function serverRender(req: Request, res: Response, error?: IAppErro
 
     store.dispatch(Actions.setPageTitle(matched.getTitle(store.getState(), routeState.params, stores)));
 
-    res.status(getErrorStatus(e)).send(renderApp(router, store, stores, routes));
+    res.status(getErrorStatus(e)).send(renderApp(router, store, stores, routes, new Content()));
   }
 }
 
@@ -151,13 +154,15 @@ function startRouter(req: Request, router: Router): Promise<State> {
   });
 }
 
-function renderApp(router: Router, store: Store<RootState>, stores: IStores, routes: IRoutes): string {
+function renderApp(router: Router, store: Store<RootState>, stores: IStores, routes: IRoutes, content: Content): string {
 
   const html = renderToString(
     <Provider store={store}>
       <RouterProvider router={router}>
         <StoresProvider value={stores}>
-          <App store={store} routes={routes}/>
+          <ContentProvider value={content}>
+            <App store={store} routes={routes}/>
+          </ContentProvider>
         </StoresProvider>
       </RouterProvider>
     </Provider>
