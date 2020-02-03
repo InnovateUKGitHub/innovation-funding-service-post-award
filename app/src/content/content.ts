@@ -1,4 +1,6 @@
 import { ContentBase, ContentResult } from "./contentBase";
+import { HomePageContent } from "./pages/homePageContent";
+import { ProjectDashboardContent } from "./pages/projectDashboardContent";
 
 export type ContentSelector = (content: Content) => ContentResult;
 
@@ -6,6 +8,8 @@ export class Content extends ContentBase {
   constructor() {
     super(null, null);
   }
-  public exampleContentTitle = () => this.getContent("example.contentTitle");
-  public exampleContent = () => this.getContent("example.content");
+
+  readonly home = new HomePageContent(this);
+  public projectsDashboard = new ProjectDashboardContent(this);
+
 }

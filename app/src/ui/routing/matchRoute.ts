@@ -6,6 +6,7 @@ import { IStores, RootState } from "@ui/redux";
 import { PageTitleState } from "@ui/redux/reducers/pageTitleReducer";
 import { Authorisation } from "@framework/types";
 import { IClientConfig } from "@ui/redux/reducers/configReducer";
+import { Content } from "@content/content";
 
 export interface MatchedRoute {
   name: string;
@@ -13,7 +14,7 @@ export interface MatchedRoute {
   accessControl?: (auth: Authorisation, params: {}, config: IClientConfig) => boolean;
   getParams: (route: State) => {};
   container: React.FunctionComponent<any>;
-  getTitle: (store: RootState, params: {}, stores: IStores) => PageTitleState;
+  getTitle: (store: RootState, params: {}, stores: IStores, content: Content) => PageTitleState;
 }
 
 export function matchRoute(route: State | null | undefined): MatchedRoute {
@@ -24,6 +25,6 @@ export function matchRoute(route: State | null | undefined): MatchedRoute {
     getParams: found.getParams,
     accessControl: found.accessControl as (auth: Authorisation, params: {}, config: IClientConfig) => boolean,
     container: found.container,
-    getTitle: found.getTitle as (store: RootState, params: {}) => PageTitleState
+    getTitle: found.getTitle as (store: RootState, params: {}, stores: IStores, content: Content) => PageTitleState
   };
 }
