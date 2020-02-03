@@ -91,6 +91,7 @@ const features: IFeatureFlags = {
     financialVirements: getFeatureFlagValue(process.env.FEATURE_FINANCIAL_VIREMENTS, defaultFeatureFlag),
     pcrsEnabled: getFeatureFlagValue(process.env.FEATURE_PCRS_ENABLED, defaultFeatureFlag),
     pcrRemovePartner: getFeatureFlagValue(process.env.FEATURE_PCR_REMOVE_PARTNER, defaultFeatureFlag),
+    contentHint: getFeatureFlagValue(process.env.FEATURE_CONTENT_HINT, false),
 };
 
 const logLevel = parseLogLevel(process.env.LOG_LEVEL! || process.env.LOGLEVEL!);
