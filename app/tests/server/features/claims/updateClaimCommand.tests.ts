@@ -318,7 +318,7 @@ describe("UpdateClaimCommand", () => {
 
   });
 
-  it("when status has changed to AWAITING_IUK_APPROVAL expect comment to not be external", async () => {
+  test("when status has changed to AWAITING_IUK_APPROVAL expect comment to not be external", async () => {
     const context = new TestContext();
     const project = context.testData.createProject();
     const partner = context.testData.createPartner();
@@ -336,6 +336,26 @@ describe("UpdateClaimCommand", () => {
 
     expect(context.repositories.claimStatusChanges.Items.length).toBe(1);
     expect(context.repositories.claimStatusChanges.Items[0].Acc_ParticipantVisibility__c).toBe(false);
+  });
+
+  test("when status has changed from INNOVATE_QUERIED to AWAITING_IUK_APPROVAL expect comment to be external", async () => {
+    const context = new TestContext();
+    const project = context.testData.createProject();
+    const partner = context.testData.createPartner();
+    const claim = context.testData.createClaim(partner, 2);
+
+    claim.Acc_ClaimStatus__c = ClaimStatus.INNOVATE_QUERIED;
+
+    const dto = mapClaim(context)(claim);
+
+    dto.status = ClaimStatus.AWAITING_IUK_APPROVAL;
+
+    const command = new UpdateClaimCommand(project.Id, dto);
+
+    await context.runCommand(command);
+
+    expect(context.repositories.claimStatusChanges.Items.length).toBe(1);
+    expect(context.repositories.claimStatusChanges.Items[0].Acc_ParticipantVisibility__c).toBe(true);
   });
 
   it("when status has changed to MO_QUERIED expect comment to be external", async () => {
