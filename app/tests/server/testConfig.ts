@@ -11,7 +11,8 @@ export class TestConfig implements IConfig {
     optionsLookup: 720,
     recordTypes: 720,
     cookie: 1,
-    token: 1
+    token: 1,
+    contentRefreshInMinutes: 0
   };
 
   public certificates = {
@@ -23,7 +24,8 @@ export class TestConfig implements IConfig {
     financialVirements: true,
     pcrsEnabled: true,
     pcrRemovePartner: true,
-    contentHint: true
+    contentHint: true,
+    customContent: false,
   };
 
   public logLevel = LogLevel.DEBUG;
@@ -60,4 +62,11 @@ export class TestConfig implements IConfig {
   public standardOverheadRate = 20;
 
   public googleTagManagerCode = "";
+
+  public s3Account = {
+    accessKeyId: "",
+    secretAccessKey:  "",
+    contentBucket: "",
+    customContentPath: "",
+  };
 }

@@ -1,3 +1,4 @@
+import i18next from "i18next";
 import { GetAllProjectRolesForUser, IRoleInfo } from "../projects/getAllProjectRolesForUser";
 import * as Repositories from "../../repositories";
 import { AppError, BadRequestError, ForbiddenError, NotFoundError, ValidationError } from "./appError";
@@ -7,7 +8,7 @@ import * as Framework from "@framework/types";
 import * as Entities from "@framework/entities";
 import { DefaultContentStore } from "@server/fileStores/defaultContentStore";
 import { IInternationalisation } from "@framework/types";
-import i18next from "i18next";
+import { CustomContentStore } from "@server/fileStores/customContentStore";
 
 // obvs needs to be singleton
 const cachesImplementation: Framework.ICaches = {
@@ -83,7 +84,8 @@ export class Context implements Framework.IContext {
     };
 
     this.resources = {
-      defaultContent: new DefaultContentStore()
+      defaultContent: new DefaultContentStore(),
+      customContent: new CustomContentStore()
     };
   }
 

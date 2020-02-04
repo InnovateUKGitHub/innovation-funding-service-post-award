@@ -9,6 +9,7 @@ import { PermissionGroup } from "@framework/entities/permissionGroup";
 import { RecordType } from "@framework/entities/recordType";
 import { Option } from "@framework/types";
 import { IDefaultContentStore } from "@server/fileStores/defaultContentStore";
+import { ICustomContentStore } from "@server/fileStores/customContentStore";
 
 export interface IRepositories {
   readonly claims: Repositories.IClaimRepository;
@@ -37,6 +38,7 @@ export interface IRepositories {
 
 export interface IResources {
   readonly defaultContent: IDefaultContentStore;
+  readonly customContent: ICustomContentStore;
 }
 
 export interface IInternationalisation {
