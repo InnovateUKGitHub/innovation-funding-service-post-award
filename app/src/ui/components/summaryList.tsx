@@ -11,6 +11,7 @@ interface ItemProps {
   label: React.ReactNode;
   content: React.ReactNode;
   action?: React.ReactNode;
+  hideAction?: boolean;
   validation?: Result;
   qa: string;
 }
@@ -37,9 +38,10 @@ export const SummaryListItem: React.FunctionComponent<ItemProps> = (props) => {
     <div className={classNames} data-qa={props.qa}>
       <dt className="govuk-summary-list__key">{props.label}</dt>
       <dd className="govuk-summary-list__value">{props.content}</dd>
+      {!props.hideAction &&
       <dd className="govuk-summary-list__actions">
         {props.action}
-      </dd>
+      </dd>}
     </div>
   );
 };
