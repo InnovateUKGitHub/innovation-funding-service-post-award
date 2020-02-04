@@ -13,6 +13,7 @@ export interface IConfig {
         readonly recordTypes: number;
         readonly token: number;
         readonly cookie: number;
+        readonly contentRefreshInMinutes: number;
     };
 
     readonly certificates: {
@@ -60,6 +61,13 @@ export interface IConfig {
 
     readonly googleTagManagerCode: string;
 
+    readonly s3Account: {
+        accessKeyId: string,
+        secretAccessKey: string,
+        contentBucket: string,
+        customContentPath: string,
+    };
+
 }
 
 const build = process.env.BUILD || `${Date.now()}`;
@@ -71,6 +79,7 @@ const timeouts = {
     optionsLookup: parseFloat(process.env.OPTIONS_LOOKUP_TIMEOUT_MINUTES!) || defaultCacheTimeout,
     token: parseFloat(process.env.TOKEN_TIMEOUT_MINUTES!) || 10,
     cookie: parseFloat(process.env.COOKIE_TIMEOUT_MINUTES!) || 10,
+    contentRefreshInMinutes: parseFloat(process.env.CONTENT_REFRESH_TIMEOUT!) || 0
 };
 
 const certificates = {
@@ -92,6 +101,7 @@ const features: IFeatureFlags = {
     pcrsEnabled: getFeatureFlagValue(process.env.FEATURE_PCRS_ENABLED, defaultFeatureFlag),
     pcrRemovePartner: getFeatureFlagValue(process.env.FEATURE_PCR_REMOVE_PARTNER, defaultFeatureFlag),
     contentHint: getFeatureFlagValue(process.env.FEATURE_CONTENT_HINT, false),
+    customContent: getFeatureFlagValue(process.env.FEATURE_CUSTOM_CONTENT, false),
 };
 
 const logLevel = parseLogLevel(process.env.LOG_LEVEL! || process.env.LOGLEVEL!);
@@ -128,6 +138,13 @@ const maxUploadFileCount = parseInt(process.env.MAX_UPLOAD_FILE_COUNT!, 10) || 1
 
 const googleTagManagerCode = process.env.GOOGLE_TAG_MANAGER_CODE!;
 
+const s3Account = {
+    accessKeyId: process.env.S3_Access_Key!,
+    secretAccessKey: process.env.S3_Secret!,
+    contentBucket: process.env.S3_Content_Bucket!,
+    customContentPath: process.env.S3_Content_File!,
+};
+
 export const Configuration: IConfig = {
     build,
     cookieKey,
@@ -143,5 +160,6 @@ export const Configuration: IConfig = {
     standardOverheadRate,
     sso,
     urls,
-    googleTagManagerCode
+    googleTagManagerCode,
+    s3Account
 };

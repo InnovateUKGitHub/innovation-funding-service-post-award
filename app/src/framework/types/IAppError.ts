@@ -7,7 +7,8 @@ export enum ErrorCode {
   REQUEST_ERROR = 4,
   BAD_REQUEST_ERROR = 5,
   FORBIDDEN_ERROR = 6,
-  UNAUTHENTICATED_ERROR = 7
+  UNAUTHENTICATED_ERROR = 7,
+  CONFIGURATION_ERROR = 8
 }
 
 export interface IAppError {

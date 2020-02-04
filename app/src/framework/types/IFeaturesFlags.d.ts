@@ -3,4 +3,5 @@ interface IFeatureFlags {
   readonly pcrRemovePartner: boolean;
   readonly pcrsEnabled: boolean;
   readonly contentHint: boolean;
+  readonly customContent: boolean;
 }
