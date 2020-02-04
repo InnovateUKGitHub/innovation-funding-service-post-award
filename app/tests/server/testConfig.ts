@@ -12,7 +12,7 @@ export class TestConfig implements IConfig {
     recordTypes: 720,
     cookie: 1,
     token: 1,
-    contentRefreshInMinutes: 0
+    contentRefreshSeconds: 0
   };
 
   public certificates = {
@@ -25,7 +25,7 @@ export class TestConfig implements IConfig {
     pcrsEnabled: true,
     pcrRemovePartner: true,
     contentHint: true,
-    customContent: false,
+    customContent: true,
   };
 
   public logLevel = LogLevel.DEBUG;

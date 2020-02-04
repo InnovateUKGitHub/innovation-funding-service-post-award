@@ -1,10 +1,10 @@
+import { Authorisation } from "./authorisation";
 import * as Repositories from "@server/repositories";
-import { Cache, IClock, IConfig, ILogger } from "@server/features/common";
 import { IRoleInfo } from "@server/features/projects/getAllProjectRolesForUser";
 import { QueryBase, SyncQueryBase } from "@server/features/common/queryBase";
-import { CommandBase, SyncCommandBase } from "@server/features/common/commandBase";
+import { CommandBase, NonAuthorisedCommandBase, SyncCommandBase } from "@server/features/common/commandBase";
 import { ISessionUser } from "./IUser";
-import { Authorisation } from "./authorisation";
+import { Cache, IClock, IConfig, ILogger } from "@server/features/common";
 import { PermissionGroup } from "@framework/entities/permissionGroup";
 import { RecordType } from "@framework/entities/recordType";
 import { Option } from "@framework/types";
@@ -52,7 +52,7 @@ export interface IContext {
   config: IConfig;
   runQuery<TResult>(cmd: QueryBase<TResult>): Promise<TResult>;
   runSyncQuery<TResult>(cmd: SyncQueryBase<TResult>): TResult;
-  runCommand<TResult>(cmd: CommandBase<TResult>): Promise<TResult>;
+  runCommand<TResult>(cmd: CommandBase<TResult>|NonAuthorisedCommandBase<TResult>): Promise<TResult>;
   runSyncCommand<TResult>(cmd: SyncCommandBase<TResult>): TResult;
   clock: IClock;
   logger: ILogger;
@@ -78,7 +78,7 @@ export interface ICaches {
 export interface IAsyncRunnable<T> {
   Run: (context: IContext) => Promise<T>;
   LogMessage: () => any[];
-  accessControl: (auth: Authorisation, context: IContext) => Promise<boolean>;
+  accessControl?: (auth: Authorisation, context: IContext) => Promise<boolean>;
 }
 
 export interface ISyncRunnable<T> {
