@@ -493,3 +493,17 @@ button.govuk-link:focus {
 p.govuk-body--multiline {
   white-space: pre-line;
 }
+
+/* Content */
+.content-prompt__icon {
+  width: 20px;
+  height: 20px;
+  background-size: 20px 20px;
+  background-image: url("/assets/images/icon-info.png");
+  display: inline-block;
+  background-position: 0 0;
+  background-repeat: no-repeat;
+}
+.content-prompt__icon:hover {
+  cursor: pointer;
+}

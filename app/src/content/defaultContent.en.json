@@ -2,5 +2,41 @@
   "example": {
     "contentTitle": "Content solution",
     "content": "Some example content"
-  }
+  },
+  "pages": {
+    "home": {
+      "title": "Home"
+    },
+    "projects-dashboard": {
+      "title": "Projects",
+      "searchTitle": "Search",
+      "searchHint": "Project number, project or lead partner",
+      "noLiveProjectsMessage": "You do not have any live projects.",
+      "noLiveMatchingMessage": "There are no matching live projects.",
+      "upcomingTitle": "Upcoming",
+      "noUpcomingProjectsMessage": "You do not have any upcoming projects.",
+      "noUpcomingMatchingMessage": "There are no matching upcoming projects.",
+      "archivedTitle": "Archived",
+      "noArchivedProjectsMessage": "You do not have any archived projects.",
+      "noArchivedMatchingMessage": "There are no matching archived projects.",
+      "project-messages": {
+        "claimQueriedMessage": "Your claim has been queried. Please respond."
+      }
+    }
+  },
+  "project-messages": {
+    "noClaimDueMessage": "No claim due",
+    "claimDueMessage": "Claim due",
+    "claimOverdueMessage": "Claim overdue",
+    "claimQueriedMessage": "Claim queried",
+    "claimSubmittedMessage": "Claim submitted",
+    "iarRequiredMessage": "IAR required",
+    "claimsToReviewMessage": "Claims to review: {{numberOfClaims}}",
+    "claimToSubmitMessage": "You have to a claim to submit.",
+    "claimRequiresRequiresIARMessage": "You need to submit your IAR.",
+    "projectEndedMessage": "Project ended (final claim period)",
+    "currentPeriodInfo": "Project period {{currentPeriod}} of {{totalPeriods}}",
+    "pcrQueried": "Project change request queried",
+    "pcrToReview": "Project change requests to review: {{numberOfPcrs}}"
+   }
 }

@@ -6,6 +6,7 @@ import { Authorisation, IClientUser, ILinkInfo } from "@framework/types";
 import { IClientConfig } from "@ui/redux/reducers/configReducer";
 import { IStores } from "@ui/redux";
 import { IRoutes, routeConfig } from "@ui/routing/routeConfig";
+import { Content } from "@content/content";
 
 export interface BaseProps {
     messages: string[];
@@ -39,7 +40,7 @@ interface IRouteOptions<TParams> {
     container: React.FunctionComponent<TParams & BaseProps>;
     getParams: (route: RouteState) => TParams;
     accessControl?: (auth: Authorisation, params: TParams, config: IClientConfig) => boolean;
-    getTitle: (store: RootState, params: TParams, stores: IStores) => {
+    getTitle: (store: RootState, params: TParams, stores: IStores, content: Content) => {
         htmlTitle: string;
         displayTitle: string;
     };
