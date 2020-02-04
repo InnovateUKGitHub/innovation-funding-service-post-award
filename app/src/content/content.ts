@@ -1,6 +1,15 @@
-import i18next from "i18next";
+import { ContentBase, ContentResult } from "./contentBase";
+import { HomePageContent } from "./pages/homePageContent";
+import { ProjectDashboardContent } from "./pages/projectDashboardContent";
 
-export class Content {
-  public exampleContentTitle = () => i18next.t("example.contentTitle");
-  public exampleContent = () => i18next.t("example.content");
+export type ContentSelector = (content: Content) => ContentResult;
+
+export class Content extends ContentBase {
+  constructor() {
+    super(null, null);
+  }
+
+  readonly home = new HomePageContent(this);
+  public projectsDashboard = new ProjectDashboardContent(this);
+
 }

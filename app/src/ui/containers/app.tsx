@@ -9,6 +9,8 @@ import { Authorisation, IClientUser } from "@framework/types";
 import { BaseProps } from "./containerBase";
 import { Store } from "redux";
 import { State as RouteState } from "router5";
+import { Content } from "@content/content";
+import { ContentConsumer } from "@ui/redux/contentProvider";
 
 interface IAppProps {
   // @todo see if we can remove and replace with a callback to set page title
@@ -20,6 +22,7 @@ interface IAppProps {
   stores: IStores;
   route: RouteState;
   routes: IRoutes;
+  content: Content;
 }
 
 class AppComponent extends React.Component<IAppProps, {}> {
@@ -38,7 +41,7 @@ class AppComponent extends React.Component<IAppProps, {}> {
   private updateTitle() {
     const route = matchRoute(this.props.route);
     const params = route.getParams(this.props.route);
-    this.props.dispatch(udpatePageTitle(route, params, this.props.stores));
+    this.props.dispatch(udpatePageTitle(route, params, this.props.stores, this.props.content));
   }
 
   public render() {
@@ -66,7 +69,7 @@ class AppComponent extends React.Component<IAppProps, {}> {
   }
 }
 
-export class App extends React.Component<{ store: Store, routes: IRoutes }, { marker: {}}> {
+export class App extends React.Component<{ store: Store, routes: IRoutes }, { marker: {} }> {
   constructor(props: any) {
     super(props);
     // whenever the store changes force a rerender this will flow down to container level
@@ -78,16 +81,23 @@ export class App extends React.Component<{ store: Store, routes: IRoutes }, { ma
     return (
       <StoresConsumer>
         {stores => (
-          <AppComponent
-            stores={stores}
-            loadStatus={stores.navigation.getLoadStatus()}
-            config={stores.config.getConfig()}
-            isClient={stores.config.isClient()}
-            messages={stores.messages.messages()}
-            dispatch={this.props.store.dispatch}
-            route={stores.navigation.getRoute()}
-            routes={this.props.routes}
-          />
+          <ContentConsumer>
+            {
+              content => (
+                <AppComponent
+                  content={content}
+                  stores={stores}
+                  loadStatus={stores.navigation.getLoadStatus()}
+                  config={stores.config.getConfig()}
+                  isClient={stores.config.isClient()}
+                  messages={stores.messages.messages()}
+                  dispatch={this.props.store.dispatch}
+                  route={stores.navigation.getRoute()}
+                  routes={this.props.routes}
+                />
+              )
+            }
+          </ContentConsumer>
         )}
       </StoresConsumer>
     );
