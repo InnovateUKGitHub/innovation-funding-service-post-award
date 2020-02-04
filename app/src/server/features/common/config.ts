@@ -13,7 +13,7 @@ export interface IConfig {
         readonly recordTypes: number;
         readonly token: number;
         readonly cookie: number;
-        readonly contentRefreshInMinutes: number;
+        readonly contentRefreshSeconds: number;
     };
 
     readonly certificates: {
@@ -79,7 +79,7 @@ const timeouts = {
     optionsLookup: parseFloat(process.env.OPTIONS_LOOKUP_TIMEOUT_MINUTES!) || defaultCacheTimeout,
     token: parseFloat(process.env.TOKEN_TIMEOUT_MINUTES!) || 10,
     cookie: parseFloat(process.env.COOKIE_TIMEOUT_MINUTES!) || 10,
-    contentRefreshInMinutes: parseFloat(process.env.CONTENT_REFRESH_TIMEOUT!) || 0
+    contentRefreshSeconds: parseFloat(process.env.CONTENT_REFRESH_TIMEOUT_SECONDS!) || 0
 };
 
 const certificates = {

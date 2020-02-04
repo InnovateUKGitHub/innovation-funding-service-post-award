@@ -125,8 +125,10 @@ export class Context implements Framework.IContext {
   private async runAsync<TResult>(runnable: Framework.IAsyncRunnable<TResult>): Promise<TResult> {
     const timer = this.startTimer(runnable.constructor.name);
     try {
-      const authorisation = await this.getAuthorisation();
-      if (!(await runnable.accessControl(authorisation, this))) throw new ForbiddenError();
+      if (runnable.accessControl) {
+        const authorisation = await this.getAuthorisation();
+        if (!(await runnable.accessControl(authorisation, this))) throw new ForbiddenError();
+      }
       // await the run because of the finally
       return await runnable.Run(this);
     }
@@ -168,7 +170,7 @@ export class Context implements Framework.IContext {
     return this.runSync(runnable);
   }
 
-  public runCommand<TResult>(command: Common.CommandBase<TResult>): Promise<TResult> {
+  public runCommand<TResult>(command: Common.CommandBase<TResult> | Common.NonAuthorisedCommandBase<TResult>): Promise<TResult> {
     const runnable = (command as any) as Framework.IAsyncRunnable<TResult>;
     this.logger.info("Running async command", runnable.LogMessage());
     return this.runAsync(runnable);

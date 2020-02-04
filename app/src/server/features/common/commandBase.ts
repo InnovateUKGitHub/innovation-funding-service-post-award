@@ -1,5 +1,13 @@
 import { Authorisation, IContext } from "@framework/types";
 
+export abstract class NonAuthorisedCommandBase<T> {
+  protected abstract Run(context: IContext): Promise<T>;
+
+  protected LogMessage(): any {
+    return [this.constructor.name, this];
+  }
+}
+
 export abstract class CommandBase<T> {
   protected abstract Run(context: IContext): Promise<T>;
 
