@@ -39,7 +39,7 @@ export class UpdateClaimCommand extends CommandBase<boolean> {
       await context.repositories.claimStatusChanges.create({
         Acc_Claim__c:this.claimDto.id,
         Acc_ExternalComment__c: this.claimDto.comments,
-        Acc_ParticipantVisibility__c: this.getChangeStatusVisibility(this.claimDto)
+        Acc_ParticipantVisibility__c: this.getChangeStatusVisibility(mapToClaimStatus(existingStatus), this.claimDto)
       });
     }
     else {
@@ -57,10 +57,11 @@ export class UpdateClaimCommand extends CommandBase<boolean> {
     ClaimStatus.DRAFT,
     ClaimStatus.MO_QUERIED,
     ClaimStatus.SUBMITTED,
-    ClaimStatus.AWAITING_IAR
-
+    ClaimStatus.AWAITING_IAR,
   ];
-  private getChangeStatusVisibility(claimDto: ClaimDto): boolean {
-    return this.participantVisibleStatus.indexOf(claimDto.status) !== -1;
+
+  private getChangeStatusVisibility(existingStatus: ClaimStatus, claimDto: ClaimDto): boolean {
+    return this.participantVisibleStatus.indexOf(claimDto.status) !== -1
+      || existingStatus === ClaimStatus.INNOVATE_QUERIED && claimDto.status === ClaimStatus.AWAITING_IUK_APPROVAL;
   }
 }
