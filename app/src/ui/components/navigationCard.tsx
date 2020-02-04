@@ -5,14 +5,14 @@ import classNames from "classnames";
 import { SimpleString } from "./renderers";
 
 interface NavigationCardProps {
-  label: string;
+  label: React.ReactNode;
   route: ILinkInfo;
   qa: string;
   messages?: NavigationCardMessage[];
 }
 
 export interface NavigationCardMessage {
-  message: string;
+  message: React.ReactNode;
   isAlert?: boolean;
 }
 
@@ -31,7 +31,7 @@ export class NavigationCard extends React.Component<NavigationCardProps> {
   private renderMessages() {
     return (
       this.props.messages ?
-        <div className="card-link__messages"> {this.props.messages.map(x => ( <SimpleString className={classNames( "card-link__message", { "card-link__message--alert": x.isAlert } )}> {x.message} </SimpleString> ) )} </div>
+        <div className="card-link__messages"> {this.props.messages.map((x,i) => ( <SimpleString key={i} className={classNames( "card-link__message", { "card-link__message--alert": x.isAlert } )}> {x.message} </SimpleString> ) )} </div>
         : null
     );
   }
@@ -48,15 +48,15 @@ export class NavigationCardsGrid extends React.Component<NavigationCardsGridProp
     let current = 0;
     const results = [];
     while (current < children.length) {
-      results.push(this.renderRow(children.slice(current, current + 3)));
+      results.push(this.renderRow(children.slice(current, current + 3), Math.floor(current / 3)));
       current = current + 3;
     }
     return results;
   }
 
-  private renderRow(items: React.ReactElement<NavigationCardProps>[]) {
+  private renderRow(items: React.ReactElement<NavigationCardProps>[], rowIndex: number) {
     return (
-      <div className="govuk-grid-row card-link-grid">
+      <div className="govuk-grid-row card-link-grid" key={rowIndex}>
         {items.map((x, i) => <div key={i} className="govuk-grid-column-one-third">{x}</div>)}
       </div>
     );
