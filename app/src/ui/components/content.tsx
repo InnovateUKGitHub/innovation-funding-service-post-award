@@ -41,8 +41,8 @@ class ContentComponent extends Component<InnerProps> {
         <Modal id={modalId}>
           <Section title="Content hint">
             <SummaryList qa="content_info">
-              <SummaryListItem label="Current value" content={displayValue} qa="current_value" />
-              <SummaryListItem label="Content key" content={this.props.result.key} qa="current_value" />
+              <SummaryListItem hideAction={true} label="Current value" content={displayValue} qa="current_value" />
+              <SummaryListItem hideAction={true} label="Content key" content={this.props.result.key} qa="current_value" />
             </SummaryList>
             <ModalLink styling="PrimaryButton" modalId={modalId} open={false}>Close</ModalLink>
           </Section>
