@@ -9,6 +9,7 @@ import { IClientConfig } from "@ui/redux/reducers/configReducer";
 import { StoresConsumer } from "@ui/redux";
 import { IRoutes } from "@ui/routing";
 import { PartnerName } from "@ui/components";
+import { Content } from "@content/content";
 
 interface Data {
   projectDetails: Pending<Dtos.ProjectDto>;
@@ -89,12 +90,12 @@ class ProjectOverviewComponent extends ContainerBase<Params, Data, {}> {
     const PartnerSummaryDetails = ACC.TypedDetails<PartnerDto>();
 
     return (
-      <ACC.SectionPanel qa="claims-totals" title={<React.Fragment><PartnerName partner={partner}/> costs to date</React.Fragment>}>
+      <ACC.SectionPanel qa="claims-totals" title={<React.Fragment><PartnerName partner={partner} /> costs to date</React.Fragment>}>
         <ACC.DualDetails displayDensity="Compact">
           <PartnerSummaryDetails.Details qa="claims-totals-col-0" data={partner}>
-            <PartnerSummaryDetails.Currency label="Total eligible costs" qa="gol-costs" value={x => x.totalParticipantGrant} />
-            <PartnerSummaryDetails.Currency label="Eligible costs claimed to date" qa="claimed-costs" value={x => x.totalParticipantCostsClaimed || 0} />
-            <PartnerSummaryDetails.Percentage label="Percentage of eligible costs claimed to date" qa="percentage-costs" value={x => x.percentageParticipantCostsClaimed} />
+            <PartnerSummaryDetails.Currency label={<ACC.Content value={x => x.projectOverview.labels.totalEligibleCosts()}/>} qa="gol-costs" value={x => x.totalParticipantGrant} />
+            <PartnerSummaryDetails.Currency label={<ACC.Content value={x => x.projectOverview.labels.totalEligibleCostsClaimed()}/>} qa="claimed-costs" value={x => x.totalParticipantCostsClaimed || 0} />
+            <PartnerSummaryDetails.Percentage label={<ACC.Content value={x => x.projectOverview.labels.percentageEligibleCostsClaimed()}/>} qa="percentage-costs" value={x => x.percentageParticipantCostsClaimed} />
           </PartnerSummaryDetails.Details>
         </ACC.DualDetails>
       </ACC.SectionPanel>
@@ -107,15 +108,15 @@ class ProjectOverviewComponent extends ContainerBase<Params, Data, {}> {
     return (
       <ACC.SectionPanel qa="claims-summary">
         <ACC.DualDetails>
-          <ProjectSummaryDetails.Details title="Project costs to date" data={project} qa="project-summary">
-            <ProjectSummaryDetails.Currency label="Total eligible costs" qa="gol-costs" value={x => x.grantOfferLetterCosts} />
-            <ProjectSummaryDetails.Currency label="Eligible costs claimed to date" qa="claimed-costs" value={x => x.costsClaimedToDate || 0} />
-            <ProjectSummaryDetails.Percentage label="Percentage of eligible costs claimed to date" qa="claimed-percentage" value={x => x.claimedPercentage} />
+          <ProjectSummaryDetails.Details title={<ACC.Content value={x => x.projectOverview.labels.projectCosts()}/>} data={project} qa="project-summary">
+            <ProjectSummaryDetails.Currency label={<ACC.Content value={x => x.projectOverview.labels.totalEligibleCosts()}/>} qa="gol-costs" value={x => x.grantOfferLetterCosts} />
+            <ProjectSummaryDetails.Currency label={<ACC.Content value={x => x.projectOverview.labels.totalEligibleCostsClaimed()}/>} qa="claimed-costs" value={x => x.costsClaimedToDate || 0} />
+            <ProjectSummaryDetails.Percentage label={<ACC.Content value={x => x.projectOverview.labels.percentageEligibleCostsClaimed()}/>} qa="claimed-percentage" value={x => x.claimedPercentage} />
           </ProjectSummaryDetails.Details>
-          <PartnerSummaryDetails.Details data={partner} title={<React.Fragment><ACC.PartnerName partner={partner}/> costs to date</React.Fragment>} qa="lead-partner-summary">
-            <PartnerSummaryDetails.Currency label="Total eligible costs" qa="gol-costs" value={x => x.totalParticipantGrant} />
-            <PartnerSummaryDetails.Currency label="Eligible costs claimed to date" qa="claimed-costs" value={x => x.totalParticipantCostsClaimed || 0} />
-            <PartnerSummaryDetails.Percentage label="Percentage of eligible costs claimed to date" qa="claimed-percentage" value={x => x.percentageParticipantCostsClaimed} />
+          <PartnerSummaryDetails.Details data={partner} title={<React.Fragment><ACC.PartnerName partner={partner} /> costs to date</React.Fragment>} qa="lead-partner-summary">
+            <PartnerSummaryDetails.Currency label={<ACC.Content value={x => x.projectOverview.labels.totalEligibleCosts()}/>} qa="gol-costs" value={x => x.totalParticipantGrant} />
+            <PartnerSummaryDetails.Currency label={<ACC.Content value={x => x.projectOverview.labels.totalEligibleCostsClaimed()}/>} qa="claimed-costs" value={x => x.totalParticipantCostsClaimed || 0} />
+            <PartnerSummaryDetails.Percentage label={<ACC.Content value={x => x.projectOverview.labels.percentageEligibleCostsClaimed()}/>} qa="claimed-percentage" value={x => x.percentageParticipantCostsClaimed} />
           </PartnerSummaryDetails.Details>
         </ACC.DualDetails>
       </ACC.SectionPanel>
@@ -128,16 +129,16 @@ class ProjectOverviewComponent extends ContainerBase<Params, Data, {}> {
     const partnerId = partner.id;
 
     let links = [
-      { text: "Claims", link: routes.allClaimsDashboard.getLink({ projectId }), messages: () => this.getClaimMessages(project, partner) },
-      { text: "Claims", link: routes.claimsDashboard.getLink({ projectId, partnerId }), messages: () => this.getClaimMessages(project, partner) },
-      { text: "Monitoring reports", link: routes.monitoringReportDashboard.getLink({ projectId }) },
-      { text: "Forecasts", link: routes.forecastDashboard.getLink({ projectId }) },
-      { text: "Forecast", link: routes.forecastDetails.getLink({ projectId, partnerId }) },
-      { text: "Project change requests", link: routes.projectChangeRequests.getLink({ projectId }), messages: () => this.getPcrMessages(project) },
-      { text: "Project change requests", link: routes.pcrsDashboard.getLink({ projectId }), messages: () => this.getPcrMessages(project) },
-      { text: "Documents", link: routes.projectDocuments.getLink({ projectId }) },
-      { text: "Project details", link: routes.projectDetails.getLink({ id: projectId }) },
-      { text: "Finance summary", link: routes.financeSummary.getLink({ projectId, partnerId }) },
+      { textContent: (x: Content) => x.projectOverview.links.claims(), link: routes.allClaimsDashboard.getLink({ projectId }), messages: () => this.getClaimMessages(project, partner) },
+      { textContent: (x: Content) => x.projectOverview.links.claims(), link: routes.claimsDashboard.getLink({ projectId, partnerId }), messages: () => this.getClaimMessages(project, partner) },
+      { textContent: (x: Content) => x.projectOverview.links.monitoringReport(), link: routes.monitoringReportDashboard.getLink({ projectId }) },
+      { textContent: (x: Content) => x.projectOverview.links.forecast(), link: routes.forecastDashboard.getLink({ projectId }) },
+      { textContent: (x: Content) => x.projectOverview.links.forecasts(), link: routes.forecastDetails.getLink({ projectId, partnerId }) },
+      { textContent: (x: Content) => x.projectOverview.links.projectChangeRequests(), link: routes.projectChangeRequests.getLink({ projectId }) },
+      { textContent: (x: Content) => x.projectOverview.links.projectChangeRequests(), link: routes.pcrsDashboard.getLink({ projectId }) },
+      { textContent: (x: Content) => x.projectOverview.links.documents(), link: routes.projectDocuments.getLink({ projectId }) },
+      { textContent: (x: Content) => x.projectOverview.links.details(), link: routes.projectDetails.getLink({ id: projectId }) },
+      { textContent: (x: Content) => x.projectOverview.links.summary(), link: routes.financeSummary.getLink({ projectId, partnerId }) },
     ];
 
     // filter out links the current user doesn't have access to
@@ -152,7 +153,7 @@ class ProjectOverviewComponent extends ContainerBase<Params, Data, {}> {
       <ACC.NavigationCardsGrid>
         {links.map((x, i) =>
           <ACC.NavigationCard
-            label={x.text}
+            label={<ACC.Content value={x.textContent}/>}
             route={x.link}
             key={i}
             qa={`overview-link-${x.link.routeName}`}
@@ -165,10 +166,12 @@ class ProjectOverviewComponent extends ContainerBase<Params, Data, {}> {
   private getPcrMessages(project: ProjectDto) {
     const result: ACC.NavigationCardMessage[] = [];
     if (project.roles & ProjectRole.ProjectManager) {
-      if (project.pcrsQueried > 0) result.push({ message: "Request queried" });
+      if (project.pcrsQueried > 0) {
+        result.push({ message: <ACC.Content value={x => x.projectOverview.messages.pcrQueried()} /> });
+      }
     }
     if (project.roles & ProjectRole.MonitoringOfficer) {
-      result.push({ message: `Requests to review: ${project.pcrsToReview}` });
+      result.push({ message: <ACC.Content value={x => x.projectOverview.messages.pcrsToReview(project.pcrsToReview)} /> });
     }
     return result;
   }
@@ -179,29 +182,27 @@ class ProjectOverviewComponent extends ContainerBase<Params, Data, {}> {
     if (project.roles & ProjectRole.FinancialContact) {
       switch (partner.claimStatus) {
         case PartnerClaimStatus.NoClaimsDue:
-          result.push({ message: "No claim due" });
+          result.push({ message: <ACC.Content value={x => x.projectOverview.messages.noClaimDue()} /> });
           break;
         case PartnerClaimStatus.ClaimDue:
-          result.push({ message: "Claim due" });
+          result.push({ message: <ACC.Content value={x => x.projectOverview.messages.claimDue()} /> });
           break;
         case PartnerClaimStatus.ClaimsOverdue:
-          result.push({ message: "Claim overdue" });
+          result.push({ message: <ACC.Content value={x => x.projectOverview.messages.claimOverdue()} /> });
           break;
         case PartnerClaimStatus.ClaimQueried:
-          result.push({ message: "Claim queried" });
+          result.push({ message: <ACC.Content value={x => x.projectOverview.messages.claimQueried()} /> });
           break;
         case PartnerClaimStatus.ClaimSubmitted:
-          result.push({ message: "Claim submitted" });
+          result.push({ message: <ACC.Content value={x => x.projectOverview.messages.claimSubmitted()} /> });
           break;
         case PartnerClaimStatus.IARRequired:
-          result.push({ message: "IAR required" });
+          result.push({ message: <ACC.Content value={x => x.projectOverview.messages.iarRequired()} /> });
       }
     }
 
     if (project.roles & ProjectRole.MonitoringOfficer) {
-      result.push({
-        message: "Claims to review: " + project.claimsToReview
-      });
+      result.push({ message: <ACC.Content value={x => x.projectOverview.messages.claimsToReview(project.claimsToReview)} /> });
     }
 
     return result;
@@ -231,8 +232,5 @@ export const ProjectOverviewRoute = defineRoute({
   getParams: (r) => ({ projectId: r.params.projectId }),
   container: ProjectOverviewContainer,
   accessControl: (auth, params) => auth.forProject(params.projectId).hasAnyRoles(ProjectRole.FinancialContact, ProjectRole.ProjectManager, ProjectRole.MonitoringOfficer),
-  getTitle: () => ({
-    htmlTitle: "Project overview",
-    displayTitle: "Project overview"
-  }),
+  getTitle: (state, params, stores, content) => content.projectOverview.title(),
 });
