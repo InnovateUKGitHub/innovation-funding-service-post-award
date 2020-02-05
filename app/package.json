@@ -26,6 +26,7 @@
   "license": "ISC",
   "dependencies": {
     "@babel/polyfill": "^7.2.5",
+    "aws-sdk": "^2.610.0",
     "body-parser": "^1.0.0",
     "classnames": "^2.2.6",
     "commander": "^2.20.0",
@@ -112,7 +113,7 @@
     "@framework": "dist/src/framework",
     "@ui": "dist/src/ui",
     "@util": "dist/src/util",
-    "@content" : "dist/src/content"
+    "@content": "dist/src/content"
   },
   "jest": {
     "testURL": "http://localhost",

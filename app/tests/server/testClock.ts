@@ -23,7 +23,7 @@ export class TestClock implements IClock {
         return this._now = this.parse(value, format);
     }
 
-    today(): Date {
+    now(): Date {
         return this._now || new Date();
     }
 
@@ -36,7 +36,7 @@ export class TestClock implements IClock {
     }
 
     asLuxon(): DateTime {
-        return DateTime.fromJSDate(this.today());
+        return DateTime.fromJSDate(this.now());
     }
 
     parseOptionalSalesforceDate(value: string): Date | null {
