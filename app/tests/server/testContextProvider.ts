@@ -1,8 +1,8 @@
 import { createTestRepositories, ITestRepositories } from "./testRepositories";
 import { QueryBase } from "@server/features/common/queryBase";
 import { SyncQueryBase } from "@server/features/common/queryBase";
-import { CommandBase, SyncCommandBase } from "@server/features/common/commandBase";
-import { Authorisation, IAsyncRunnable, IContext, IInternationalisation, ISyncRunnable } from "@framework/types";
+import { CommandBase, NonAuthorisedCommandBase, SyncCommandBase } from "@server/features/common/commandBase";
+import { Authorisation, IAsyncRunnable, IContext, ISyncRunnable } from "@framework/types";
 import { TestData } from "./testData";
 import { TestClock } from "./testClock";
 import { TestLogger } from "./testLogger";
@@ -48,7 +48,7 @@ export class TestContext implements IContext {
             ;
     }
 
-    public runCommand<TResult>(command: CommandBase<TResult>): Promise<TResult> {
+    public runCommand<TResult>(command: CommandBase<TResult> | NonAuthorisedCommandBase<TResult>): Promise<TResult> {
         return ((command as any) as IAsyncRunnable<TResult>)
             .Run(this)
             .catch(e => {
@@ -69,7 +69,7 @@ export class TestContext implements IContext {
 
     // handle access control separate to running the commands to keep tests focused on single areas
     public runAccessControl(auth: Authorisation, runnable: QueryBase<any> | CommandBase<any>): Promise<boolean> {
-        return (runnable as any as IAsyncRunnable<any>).accessControl(auth, this);
+        return (runnable as any as IAsyncRunnable<any>).accessControl!(auth, this);
     }
 
     public asSystemUser() {

@@ -34,7 +34,7 @@ export class Server {
 
   public async start(secure: boolean) {
     await initInternationalisation()
-      .then(_ => this.setInitialContent())
+      .then(_ => this.initaliseCustomContent(false))
       .catch(e => {
         console.log("Failed to initialize internationalization", e);
         throw e;
@@ -50,6 +50,11 @@ export class Server {
     this.log.info("Configuration", Configuration);
 
     setTimeout(() => this.primeCaches());
+    setTimeout(() => this.initaliseCustomContent(true));
+
+    if(Configuration.timeouts.contentRefreshSeconds) {
+      setInterval(() => this.initaliseCustomContent(true), Configuration.timeouts.contentRefreshSeconds * 1000);
+    }
   }
 
   private startHTTPS() {
@@ -105,9 +110,9 @@ export class Server {
       .catch(e => context.logger.error("Unable to primed cache", message, e));
   }
 
-  private setInitialContent() {
+  private initaliseCustomContent(loadCustom: boolean) {
     const context = contextProvider.start({ user: { email: Configuration.salesforce.serivceUsername } });
-    return context.runCommand(new InitialiseContentCommand())
+    return context.runCommand(new InitialiseContentCommand(loadCustom))
       .then(updated => {
         if (updated) {
           context.logger.info("Successfully initialised content");

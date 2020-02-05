@@ -3,7 +3,7 @@ import { DateTime } from "luxon";
 export const SALESFORCE_DATE_FORMAT = "yyyy-MM-dd";
 
 export interface IClock {
-  today(): Date;
+  now(): Date;
   parse(value: string | null | undefined, format: string): Date | null;
   dateTime(value: Date): DateTime;
   dateTime(value: string, format: string): DateTime;
@@ -14,7 +14,7 @@ export interface IClock {
 }
 
 export class Clock implements IClock {
-  today() {
+  now() {
     return new Date();
   }
 

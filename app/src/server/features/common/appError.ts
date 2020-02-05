@@ -59,3 +59,9 @@ export class UnauthenticatedError extends AppError {
     super(ErrorCode.UNAUTHENTICATED_ERROR, "User not authenticated");
   }
 }
+
+export class ConfigurationError extends AppError {
+  constructor(message: string) {
+    super(ErrorCode.CONFIGURATION_ERROR, message);
+  }
+}

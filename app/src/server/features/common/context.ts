@@ -1,3 +1,4 @@
+import i18next from "i18next";
 import { GetAllProjectRolesForUser, IRoleInfo } from "../projects/getAllProjectRolesForUser";
 import * as Repositories from "../../repositories";
 import { AppError, BadRequestError, ForbiddenError, NotFoundError, ValidationError } from "./appError";
@@ -7,7 +8,7 @@ import * as Framework from "@framework/types";
 import * as Entities from "@framework/entities";
 import { DefaultContentStore } from "@server/fileStores/defaultContentStore";
 import { IInternationalisation } from "@framework/types";
-import i18next from "i18next";
+import { CustomContentStore } from "@server/fileStores/customContentStore";
 
 // obvs needs to be singleton
 const cachesImplementation: Framework.ICaches = {
@@ -83,7 +84,8 @@ export class Context implements Framework.IContext {
     };
 
     this.resources = {
-      defaultContent: new DefaultContentStore()
+      defaultContent: new DefaultContentStore(),
+      customContent: new CustomContentStore()
     };
   }
 
@@ -123,8 +125,10 @@ export class Context implements Framework.IContext {
   private async runAsync<TResult>(runnable: Framework.IAsyncRunnable<TResult>): Promise<TResult> {
     const timer = this.startTimer(runnable.constructor.name);
     try {
-      const authorisation = await this.getAuthorisation();
-      if (!(await runnable.accessControl(authorisation, this))) throw new ForbiddenError();
+      if (runnable.accessControl) {
+        const authorisation = await this.getAuthorisation();
+        if (!(await runnable.accessControl(authorisation, this))) throw new ForbiddenError();
+      }
       // await the run because of the finally
       return await runnable.Run(this);
     }
@@ -166,7 +170,7 @@ export class Context implements Framework.IContext {
     return this.runSync(runnable);
   }
 
-  public runCommand<TResult>(command: Common.CommandBase<TResult>): Promise<TResult> {
+  public runCommand<TResult>(command: Common.CommandBase<TResult> | Common.NonAuthorisedCommandBase<TResult>): Promise<TResult> {
     const runnable = (command as any) as Framework.IAsyncRunnable<TResult>;
     this.logger.info("Running async command", runnable.LogMessage());
     return this.runAsync(runnable);
