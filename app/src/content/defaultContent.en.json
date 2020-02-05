@@ -43,7 +43,7 @@
     "claimSubmittedMessage": "Claim submitted",
     "iarRequiredMessage": "IAR required",
     "claimsToReviewMessage": "Claims to review: {{numberOfClaims}}",
-    "claimToSubmitMessage": "You have to a claim to submit.",
+    "claimToSubmitMessage": "You need to submit your claim.",
     "claimRequiresRequiresIARMessage": "You need to submit your IAR.",
     "projectEndedMessage": "Project ended (final claim period)",
     "currentPeriodInfo": "Project period {{currentPeriod}} of {{totalPeriods}}",
