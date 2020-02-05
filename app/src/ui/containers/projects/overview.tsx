@@ -40,19 +40,19 @@ class ProjectOverviewComponent extends ContainerBase<Params, Data, {}> {
     return partners.some(p => !!(p.roles & ProjectRole.FinancialContact) && p.isWithdrawn);
   }
 
-  renderContents(project: Dtos.ProjectDto, partners: Dtos.PartnerDto[]) {
+  private renderContents(project: Dtos.ProjectDto, partners: Dtos.PartnerDto[]) {
     // find first partner with role
     const partner = partners.filter(x => x.roles !== ProjectRole.Unknown)[0];
 
     const isProjectClosed = project.status === ProjectStatus.Closed || project.status === ProjectStatus.Terminated;
 
     const title = isProjectClosed || project.isPastEndDate || this.isPartnerWithdrawn(project, partners)
-      ? "Project ended"
-      : `Project period ${project.periodId} of ${project.totalPeriods}`;
+      ? <ACC.Content value={x => x.projectOverview.messages.projectEnded()}/>
+      : <ACC.Content value={x => x.projectOverview.messages.currentPeriodInfo(project.periodId, project.totalPeriods!)}/>;
 
     const subtitle = isProjectClosed ? null :
       project.isPastEndDate || this.isPartnerWithdrawn(project, partners)
-        ? "Final claim period"
+        ? <ACC.Content value={x => x.projectOverview.messages.finalClaimPeriod()}/>
         : <ACC.Renderers.ShortDateRange start={project.periodStartDate} end={project.periodEndDate} />;
 
     return (
