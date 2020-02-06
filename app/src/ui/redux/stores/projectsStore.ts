@@ -15,7 +15,7 @@ export class ProjectsStore extends StoreBase {
     return this.getData("projects", storeKeys.getProjectsKey(), p => ApiClient.projects.getAll(p));
   }
 
-  public getProjectsFilter(searchString: string): Pending<ProjectDto[]> {
+  public getProjectsFilter(searchString?: string|null): Pending<ProjectDto[]> {
     return this.getProjects().then(projects => {
         if (!searchString) return projects;
         return projects.filter(project =>

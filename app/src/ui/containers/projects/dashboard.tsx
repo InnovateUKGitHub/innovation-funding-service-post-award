@@ -7,17 +7,24 @@ import {
   ProjectRole,
   ProjectStatus
 } from "@framework/types";
-import { IClientConfig } from "@ui/redux/reducers/configReducer";
 import { StoresConsumer } from "@ui/redux";
 import { Pending } from "@shared/pending";
 import { BaseProps, ContainerBaseWithState, ContainerProps, defineRoute } from "../containerBase";
 import { Content } from "@content/content";
 import { ContentResult } from "@content/contentBase";
 
+interface Params {
+  search?: string | null;
+}
+
 interface Data {
-  projectsFilter: (searchString: string) => Pending<ProjectDto[]>;
+  totalNumberOfProjects: Pending<number>;
+  projects: Pending<ProjectDto[]>;
   partners: Pending<PartnerDto[]>;
-  config: IClientConfig;
+}
+
+interface Callbacks {
+  onSearch: (search: string | null | undefined) => void;
 }
 
 interface State {
@@ -35,9 +42,9 @@ interface ProjectData {
 
 type Section = "archived" | "open" | "awaiting" | "upcoming";
 
-class ProjectDashboardComponent extends ContainerBaseWithState<{}, Data, {}, State> {
+class ProjectDashboardComponent extends ContainerBaseWithState<Params, Data, Callbacks, {}> {
 
-  constructor(props: ContainerProps<{}, Data, {}>) {
+  constructor(props: ContainerProps<Params, Data, Callbacks>) {
     super(props);
     this.state = {
       showRequestsToReview: false,
@@ -48,20 +55,23 @@ class ProjectDashboardComponent extends ContainerBaseWithState<{}, Data, {}, Sta
   }
 
   render() {
-    return <ACC.PageLoader pending={this.props.partners} render={x => this.renderContents(x)} />;
+    const combined = Pending.combine({
+      totalNumberOfProjects: this.props.totalNumberOfProjects,
+      projects: this.props.projects,
+      partners: this.props.partners
+    });
+
+    return <ACC.PageLoader pending={combined} render={x => this.renderContents(x.totalNumberOfProjects, x.projects, x.partners)} />;
   }
 
-  private renderContents(partners: PartnerDto[]) {
+  private renderContents(totalNumberOfProjects: number, projects: ProjectDto[], partners: PartnerDto[]) {
     return (
       <ACC.Page
         backLink={this.getBackLink()}
         pageTitle={<ACC.PageTitle />}
       >
-        {this.props.isClient && this.renderSearch()}
-        <ACC.Loader
-          pending={this.props.projectsFilter(this.state.projectSearchString)}
-          render={(projects) => this.renderProjectLists(projects, partners)}
-        />
+        {totalNumberOfProjects >= this.props.config.features.numberOfProjectsToSearch && this.renderSearch()}
+        {this.renderProjectLists(projects, partners)}
       </ACC.Page>
     );
   }
@@ -122,25 +132,19 @@ class ProjectDashboardComponent extends ContainerBaseWithState<{}, Data, {}, Sta
     );
   }
 
-  private renderProjectList(data: ProjectData[], messages: (x: Content) => { noProjects: () => ContentResult, noMatchingProjects: () => ContentResult }) {
-    const stateFiltered = data
-      .filter(x => !this.state.showClaimsToReview || x.project.claimsToReview > 0)
-      .filter(x => !this.state.showClaimsWithParticipant || x.project.claimsWithParticipant > 0);
+  private renderProjectList(projects: ProjectData[], messages: (x: Content) => { noProjects: () => ContentResult, noMatchingProjects: () => ContentResult }) {
 
-    if (!stateFiltered.length) {
-      return this.renderNoProjectsMessage(messages);
+    if (!projects.length && this.props.search) {
+      return <ACC.Renderers.SimpleString><ACC.Content value={x => messages(x).noMatchingProjects()} /></ACC.Renderers.SimpleString>;
+    }
+
+    if (!projects.length) {
+      return <ACC.Renderers.SimpleString><ACC.Content value={x => messages(x).noProjects()} /></ACC.Renderers.SimpleString>;
     }
 
     return (
-      stateFiltered.map((x, i) => this.renderProject(x.project, x.partner, x.projectSection, i))
+      projects.map((x, i) => this.renderProject(x.project, x.partner, x.projectSection, i))
     );
-  }
-
-  private renderNoProjectsMessage(messages: (x: Content) => { noProjects: () => ContentResult, noMatchingProjects: () => ContentResult }) {
-    return this.state.projectSearchString
-      ? <ACC.Renderers.SimpleString><ACC.Content value={x => messages(x).noMatchingProjects()} /></ACC.Renderers.SimpleString>
-      : <ACC.Renderers.SimpleString><ACC.Content value={x => messages(x).noProjects()} /></ACC.Renderers.SimpleString>
-      ;
   }
 
   private getProjectSection(project: ProjectDto, partner: PartnerDto | null): Section {
@@ -266,10 +270,10 @@ class ProjectDashboardComponent extends ContainerBaseWithState<{}, Data, {}, Sta
   }
 
   private renderSearch() {
-    const formData = ({ projectSearchString: this.state.projectSearchString });
-    const Form = ACC.TypedForm<{ projectSearchString: string }>();
+    const formData = ({ projectSearchString: this.props.search });
+    const Form = ACC.TypedForm<typeof formData>();
     return (
-      <Form.Form data={formData} qa={"projectSearch"} onSubmit={() => { return; }} onChange={v => this.setState({ projectSearchString: v.projectSearchString })}>
+      <Form.Form data={formData} qa={"projectSearch"} isGet={true} onSubmit={() => { return; }} onChange={v => this.props.onSearch(v.projectSearchString)}>
         <Form.Fieldset heading={<ACC.Content value={x => x.projectsDashboard.searchTitle()} />}>
           <Form.Search width="one-half" hint={<ACC.Content value={x => x.projectsDashboard.searchHint()} />} label={<ACC.Content value={x => x.projectsDashboard.searchLabel()} />} labelHidden={true} name="search" value={x => x.projectSearchString} update={(x, v) => x.projectSearchString = v || ""} />
         </Form.Fieldset>
@@ -310,13 +314,15 @@ class ProjectDashboardComponent extends ContainerBaseWithState<{}, Data, {}, Sta
   }
 }
 
-const ProjectDashboardContainer = (props: BaseProps) => (
+const ProjectDashboardContainer = (props: Params & BaseProps) => (
   <StoresConsumer>
     {
       stores => (
         <ProjectDashboardComponent
-          projectsFilter={(searchString) => stores.projects.getProjectsFilter(searchString)}
+          projects={stores.projects.getProjectsFilter(props.search)}
+          totalNumberOfProjects={stores.projects.getProjects().then(x => x.length)}
           partners={stores.partners.getAll()}
+          onSearch={(search) => stores.navigation.navigateTo(ProjectDashboardRoute.getLink({ search }), true)}
           {...props}
         />
       )
@@ -326,8 +332,8 @@ const ProjectDashboardContainer = (props: BaseProps) => (
 
 export const ProjectDashboardRoute = defineRoute({
   routeName: "projectDashboard",
-  routePath: "/projects/dashboard",
+  routePath: "/projects/dashboard?:search",
   container: ProjectDashboardContainer,
-  getParams: () => ({}),
+  getParams: (r) => ({ search: r.params.search }),
   getTitle: (state, params, stores, content) => content.projectsDashboard.title()
 });

@@ -102,6 +102,7 @@ const features: IFeatureFlags = {
     pcrRemovePartner: getFeatureFlagValue(process.env.FEATURE_PCR_REMOVE_PARTNER, defaultFeatureFlag),
     contentHint: getFeatureFlagValue(process.env.FEATURE_CONTENT_HINT, false),
     customContent: getFeatureFlagValue(process.env.FEATURE_CUSTOM_CONTENT, false),
+    numberOfProjectsToSearch: parseInt(process.env.FEATURE_SEARCH_NUMBER_PROJECTS!, 10) || 3,
 };
 
 const logLevel = parseLogLevel(process.env.LOG_LEVEL! || process.env.LOGLEVEL!);

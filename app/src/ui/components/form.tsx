@@ -20,6 +20,7 @@ interface SharedFormProps<T> {
   onSubmit?: () => void;
   qa?: string;
   enctype?: "urlencoded" | "multipart";
+  isGet?: boolean;
 }
 
 interface EditorForm<T> extends SharedFormProps<T> {
@@ -54,7 +55,7 @@ class FormComponent<T> extends React.Component<FormProps<T>, []> {
 
     const childrenWithData = React.Children.map(this.props.children, (child, index) => child && React.cloneElement(child as any, childProps(index)));
     return (
-      <form encType={this.mapEncType()} method="post" action="" onSubmit={(e) => this.onSubmit(e)} data-qa={this.props.qa}>
+      <form encType={this.mapEncType()} method={this.props.isGet ? "get" : "post"} action="" onSubmit={(e) => this.onSubmit(e)} data-qa={this.props.qa}>
         {childrenWithData}
       </form>
     );
