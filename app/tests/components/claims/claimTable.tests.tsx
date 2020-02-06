@@ -58,7 +58,6 @@ describe("Claim Table", () => {
     costsClaimedToDate: claimedToDate[i],
     remainingOfferCosts: elegibleCosts[i] - claimedToDate[i]
   }));
-  const getLink = () => null as any;
 
   it("Displays costs cost catogories", () => {
 
@@ -123,19 +122,5 @@ describe("Claim Table", () => {
 
     const claimed = getColumnValues(wrapper, "cost-cat", "col-remainingCosts").map(x => x.text());
     expect(claimed).toEqual(expected);
-  });
-
-  it("Displays Funding Level", () => {
-
-    const wrapper = Enzyme.mount(<ClaimTable project={project} partner={partner} claim={claim} costCategories={costCategories} claimDetails={claimDetails} getLink={getLink} standardOverheadRate={20} />);
-    const total = getFooterValue(wrapper, "cost-cat", 0, 1); // its the footer - 1st row, 2nd col,
-    expect(total.text()).toBe("90%");
-  });
-
-  it("Displays Costs to be paid", () => {
-
-    const wrapper = Enzyme.mount(<ClaimTable project={project} partner={partner} claim={claim} costCategories={costCategories} claimDetails={claimDetails} getLink={getLink} standardOverheadRate={20} />);
-    const total = getFooterValue(wrapper, "cost-cat", 1, 1); // its the footer - 2nd row, 2nd col
-    expect(total.text()).toBe("£8,261.15");
   });
 });
