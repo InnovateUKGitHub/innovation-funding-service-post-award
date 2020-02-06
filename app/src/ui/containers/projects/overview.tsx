@@ -40,19 +40,19 @@ class ProjectOverviewComponent extends ContainerBase<Params, Data, {}> {
     return partners.some(p => !!(p.roles & ProjectRole.FinancialContact) && p.isWithdrawn);
   }
 
-  renderContents(project: Dtos.ProjectDto, partners: Dtos.PartnerDto[]) {
+  private renderContents(project: Dtos.ProjectDto, partners: Dtos.PartnerDto[]) {
     // find first partner with role
     const partner = partners.filter(x => x.roles !== ProjectRole.Unknown)[0];
 
     const isProjectClosed = project.status === ProjectStatus.Closed || project.status === ProjectStatus.Terminated;
 
     const title = isProjectClosed || project.isPastEndDate || this.isPartnerWithdrawn(project, partners)
-      ? "Project ended"
-      : `Project period ${project.periodId} of ${project.totalPeriods}`;
+      ? <ACC.Content value={x => x.projectOverview.messages.projectEnded()}/>
+      : <ACC.Content value={x => x.projectOverview.messages.currentPeriodInfo(project.periodId, project.totalPeriods!)}/>;
 
     const subtitle = isProjectClosed ? null :
       project.isPastEndDate || this.isPartnerWithdrawn(project, partners)
-        ? "Final claim period"
+        ? <ACC.Content value={x => x.projectOverview.messages.finalClaimPeriod()}/>
         : <ACC.Renderers.ShortDateRange start={project.periodStartDate} end={project.periodEndDate} />;
 
     return (
@@ -134,8 +134,8 @@ class ProjectOverviewComponent extends ContainerBase<Params, Data, {}> {
       { textContent: (x: Content) => x.projectOverview.links.monitoringReport(), link: routes.monitoringReportDashboard.getLink({ projectId }) },
       { textContent: (x: Content) => x.projectOverview.links.forecast(), link: routes.forecastDashboard.getLink({ projectId }) },
       { textContent: (x: Content) => x.projectOverview.links.forecasts(), link: routes.forecastDetails.getLink({ projectId, partnerId }) },
-      { textContent: (x: Content) => x.projectOverview.links.projectChangeRequests(), link: routes.projectChangeRequests.getLink({ projectId }) },
-      { textContent: (x: Content) => x.projectOverview.links.projectChangeRequests(), link: routes.pcrsDashboard.getLink({ projectId }) },
+      { textContent: (x: Content) => x.projectOverview.links.projectChangeRequests(), link: routes.projectChangeRequests.getLink({ projectId }), messages: () => this.getPcrMessages(project) },
+      { textContent: (x: Content) => x.projectOverview.links.projectChangeRequests(), link: routes.pcrsDashboard.getLink({ projectId }), messages: () => this.getPcrMessages(project) },
       { textContent: (x: Content) => x.projectOverview.links.documents(), link: routes.projectDocuments.getLink({ projectId }) },
       { textContent: (x: Content) => x.projectOverview.links.details(), link: routes.projectDetails.getLink({ id: projectId }) },
       { textContent: (x: Content) => x.projectOverview.links.summary(), link: routes.financeSummary.getLink({ projectId, partnerId }) },

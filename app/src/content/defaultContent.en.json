@@ -20,7 +20,8 @@
       "noArchivedProjectsMessage": "You do not have any archived projects.",
       "noArchivedMatchingMessage": "There are no matching archived projects.",
       "project-messages": {
-        "claimQueriedMessage": "Your claim has been queried. Please respond."
+        "claimQueriedMessage": "Your claim has been queried. Please respond.",
+        "projectEndedMessage": "Project ended (final claim period)"
       }
     },
     "project-overview": {
@@ -45,10 +46,12 @@
     "claimsToReviewMessage": "Claims to review: {{numberOfClaims}}",
     "claimToSubmitMessage": "You need to submit your claim.",
     "claimRequiresRequiresIARMessage": "You need to submit your IAR.",
-    "projectEndedMessage": "Project ended (final claim period)",
+    "projectEndedMessage": "Project ended",
+    "finalClaimPeriodMessage" : "Final claim period",
     "currentPeriodInfo": "Project period {{currentPeriod}} of {{totalPeriods}}",
     "pcrQueried": "Project change request queried",
-    "pcrToReview": "Project change requests to review: {{numberOfPcrs}}"
+    "pcrToReview": "Project change requests to review: {{numberOfPcrs}}",
+    "projectOnHold" : "On hold"
    },
    "project-labels": {
     "projectCostsLabel": "Project costs to date",
