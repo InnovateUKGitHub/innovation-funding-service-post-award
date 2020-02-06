@@ -66,7 +66,7 @@ function convertToParameters(params: any) {
 
     Object.keys(params || {}).forEach(key => {
         if (params[key] !== undefined) {
-          result[key] = convertToParameter(params[key]);
+            result[key] = convertToParameter(params[key]);
         }
     });
 
