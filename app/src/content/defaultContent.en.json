@@ -50,7 +50,8 @@
     "finalClaimPeriodMessage" : "Final claim period",
     "currentPeriodInfo": "Project period {{currentPeriod}} of {{totalPeriods}}",
     "pcrQueried": "Project change request queried",
-    "pcrToReview": "Project change requests to review: {{numberOfPcrs}}"
+    "pcrToReview": "Project change requests to review: {{numberOfPcrs}}",
+    "projectOnHold" : "On hold"
    },
    "project-labels": {
     "projectCostsLabel": "Project costs to date",
