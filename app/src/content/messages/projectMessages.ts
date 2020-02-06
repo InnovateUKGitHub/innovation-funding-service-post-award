@@ -15,7 +15,9 @@ export class ProjectMessages extends ContentBase {
   public iarRequired = () => this.getContent("iarRequiredMessage");
   public noClaimDue = () => this.getContent("noClaimDueMessage");
   public projectEnded = () => this.getContent("projectEndedMessage");
+  public finalClaimPeriod = () => this.getContent("finalClaimPeriodMessage");
   public currentPeriodInfo = (currentPeriod: number, totalPeriods: number) => this.getContent("currentPeriodInfo", { currentPeriod, totalPeriods });
   public pcrQueried = () => this.getContent("pcrQueried");
   public pcrsToReview = (numberOfPcrs: number) => this.getContent("pcrToReview", { numberOfPcrs });
+  public projectOnHold = () => this.getContent("projectOnHold");
 }

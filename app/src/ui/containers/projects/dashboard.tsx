@@ -221,7 +221,7 @@ class ProjectDashboardComponent extends ContainerBaseWithState<{}, Data, {}, Sta
       const isPm = !!(project.roles & ProjectRole.ProjectManager);
 
       if (project.status === ProjectStatus.OnHold) {
-        messages.push(project.statusName);
+        messages.push(<ACC.Content value={x => x.projectsDashboard.messages.projectOnHold()} />);
       }
 
       if (isMo) {
