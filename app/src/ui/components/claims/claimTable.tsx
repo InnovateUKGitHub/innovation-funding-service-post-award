@@ -52,7 +52,7 @@ export const ClaimTable: React.FunctionComponent<Props> = (props) => {
   const CostCategoriesTable = TypedTable<typeof combinedData[0]>();
 
   return (
-    <CostCategoriesTable.Table qa="cost-cat" data={combinedData} footers={renderFooters(props.project, props.partner, props.claimDetails)} validationResult={props.validation}>
+    <CostCategoriesTable.Table qa="cost-cat" data={combinedData} validationResult={props.validation}>
       <CostCategoriesTable.Custom
         header="Category"
         qa="category"
@@ -77,25 +77,4 @@ const renderCostCategory = (claim: ClaimDto, category: CostCategoryDto, isTotal:
   const id = validation && validation.errors[0] && validation.errors[0].key;
 
   return <Link id={id} route={route}>{category.name}</Link>;
-};
-
-const renderFooters = (project: ProjectDto, partner: PartnerDto, claimsCosts: CostsSummaryForPeriodDto[]) => {
-  return [
-    (
-      <tr key="1" className="govuk-table__row">
-        <td className="govuk-table__cell govuk-table__cell--numeric govuk-!-font-weight-bold" colSpan={3}>Funding level</td>
-        <td className="govuk-table__cell govuk-table__cell--numeric"><Renderers.Percentage fractionDigits={0} value={partner.awardRate} /></td>
-        <td className="govuk-table__cell"><AccessibilityText>No data</AccessibilityText></td>
-      </tr>
-    ),
-    (
-      <tr key="2" className="govuk-table__row">
-        <td className="govuk-table__cell govuk-table__cell--numeric govuk-!-font-weight-bold" colSpan={3}>Costs to be paid this period</td>
-        <td className="govuk-table__cell govuk-table__cell--numeric">
-          <Currency value={claimsCosts.reduce((total, item) => total + item.costsClaimedThisPeriod, 0) * (partner.awardRate! / 100)} />
-        </td>
-        <td className="govuk-table__cell"><AccessibilityText>No data</AccessibilityText></td>
-      </tr>
-    )
-  ];
 };
