@@ -42,6 +42,17 @@ describe("UploadProjectChangeRequestDocumentOrItemDocumentCommand", () => {
     expect(document.PathOnClient).toEqual("testFile.txt");
   });
 
+  it("should throw a validation error if the file type is not allowed", async () => {
+    const context = new TestContext();
+    const project = context.testData.createProject();
+    const projectChangeRequest = context.testData.createPCR(project);
+
+    const file = context.testData.createFile("This is some content", "testFile.zip");
+
+    const command = new UploadProjectChangeRequestDocumentOrItemDocumentCommand(project.Id, projectChangeRequest.id, {files: [file]});
+    await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
+  });
+
   it("should upload multiple item documents", async () => {
     const context = new TestContext();
     const project = context.testData.createProject();

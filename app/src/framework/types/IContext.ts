@@ -78,6 +78,7 @@ export interface ICaches {
 export interface IAsyncRunnable<T> {
   Run: (context: IContext) => Promise<T>;
   LogMessage: () => any[];
+  handleRepositoryError?: (context: IContext, error: any) => void;
   accessControl?: (auth: Authorisation, context: IContext) => Promise<boolean>;
 }
 

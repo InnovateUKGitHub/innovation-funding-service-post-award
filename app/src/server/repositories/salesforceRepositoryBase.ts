@@ -27,6 +27,9 @@ export abstract class RepositoryBase {
     if (e.errorCode === "INVALID_QUERY_FILTER_OPERATOR") {
       throw new Errors.SalesforceInvalidFilterError(`Salesforce filter error`);
     }
+    if (e.errorCode === "FILE_EXTENSION_NOT_ALLOWED") {
+      throw new Errors.FileTypeNotAllowedError(e.message);
+    }
 
     return e instanceof Error ? e : new Error(`${e.errorCode}: ${e.message}`);
   }
