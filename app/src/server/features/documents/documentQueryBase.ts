@@ -2,7 +2,7 @@ import { IContext } from "@framework/types";
 import { QueryBase } from "../common";
 
 export abstract class DocumentQueryBase extends QueryBase<DocumentDto | null> {
-  constructor(protected readonly documentId: string) {
+  protected constructor(protected readonly documentId: string) {
     super();
   }
 

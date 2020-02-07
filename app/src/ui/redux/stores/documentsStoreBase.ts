@@ -7,11 +7,11 @@ import { DataStateKeys, EditorStateKeys } from "../reducers";
 export abstract class DocumentsStoreBase extends StoreBase {
 
   protected validateMultipleDocumentsDto(dto: MultipleDocumentUploadDto, showErrors: boolean, filesRequired: boolean = true) {
-    return new MultipleDocumentUpdloadDtoValidator(dto, this.getState().config, filesRequired, showErrors);
+    return new MultipleDocumentUpdloadDtoValidator(dto, this.getState().config, filesRequired, showErrors, null);
   }
 
   protected validateDocumentUploadDto(dto: DocumentUploadDto, showErrors: boolean) {
-    return new DocumentUploadDtoValidator(dto, this.getState().config.maxFileSize, showErrors);
+    return new DocumentUploadDtoValidator(dto, this.getState().config.maxFileSize, showErrors, null);
   }
 
   protected afterUpdate(dataStore: DataStateKeys, editorStore: EditorStateKeys, key: string, message: string | undefined, onComplete: (() => void) | undefined) {

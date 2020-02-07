@@ -5,6 +5,12 @@ export class SalesforceUnavilableError extends Error {
     }
 }
 
+export class FileTypeNotAllowedError extends Error {
+  constructor(message: string) {
+    super(message);
+  }
+}
+
 export class SalesforceInvalidFilterError extends Error {
   constructor(message: string) {
     super(message);

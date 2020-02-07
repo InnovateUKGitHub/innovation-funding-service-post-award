@@ -49,12 +49,14 @@ export class TestContext implements IContext {
     }
 
     public runCommand<TResult>(command: CommandBase<TResult> | NonAuthorisedCommandBase<TResult>): Promise<TResult> {
-        return ((command as any) as IAsyncRunnable<TResult>)
+        const runnable = (command as any) as IAsyncRunnable<TResult>;
+        return runnable
             .Run(this)
             .catch(e => {
                 if (e instanceof ValidationError) {
                     this.logger.debug("Validation ERROR", [e.results]);
                 }
+                if (runnable.handleRepositoryError) runnable.handleRepositoryError(this, e);
                 throw e;
             });
     }

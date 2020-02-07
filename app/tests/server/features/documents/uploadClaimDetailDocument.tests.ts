@@ -2,7 +2,6 @@ import { TestContext } from "../../testContextProvider";
 import { UploadClaimDetailDocumentCommand } from "@server/features/documents/uploadClaimDetailDocument";
 import { BadRequestError, ValidationError } from "@server/features/common/appError";
 import { Authorisation, ProjectRole } from "@framework/types";
-import { ISalesforceClaim, ISalesforceClaimDetails, ISalesforceProject } from "@server/repositories";
 
 describe("UploadClaimDetailDocumentCommand", () => {
   it("should upload a claim detail document", async () => {
@@ -74,10 +73,14 @@ describe("UploadClaimDetailDocumentCommand", () => {
     };
 
     const file = context.testData.createFile();
-    file.fileName = "";
 
-    const command = new UploadClaimDetailDocumentCommand(claimDetailKey, {files: [file]});
-    await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
+    file.fileName = "";
+    const commandNoFilename = new UploadClaimDetailDocumentCommand(claimDetailKey, {files: [file]});
+    await expect(context.runCommand(commandNoFilename)).rejects.toThrow(ValidationError);
+
+    file.fileName = "NotValid.zip";
+    const commandInvalidFiletype = new UploadClaimDetailDocumentCommand(claimDetailKey, {files: [file]});
+    await expect(context.runCommand(commandInvalidFiletype)).rejects.toThrow(ValidationError);
   });
 
   test("invalid claimDetailKey should throw exception", async () => {

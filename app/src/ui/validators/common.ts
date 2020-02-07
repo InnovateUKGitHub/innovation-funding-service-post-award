@@ -87,8 +87,8 @@ export function all(resultSet: Results<{}>, ...results: (() => Result)[]): Resul
   // tslint:disable-next-line
   for (let i = 0; i < results.length; i++) {
     const result = results[i]();
-    // this logic presumes that the is required is set as the first validation. If it sthe last one it wont be shown untill prev are valid
-    // however it wouldnt make much sense for the required validation to not be the first one
+    // this logic presumes that the "isRequired" is set as the first validation. If it is the last one it won't be shown until prev are valid
+    // however it wouldn't make much sense for the required validation to not be the first one
     if (result.isRequired) {
       isRequired = true;
     }

@@ -23,7 +23,7 @@ export class ProjectChangeRequestItemDocumentDeleteHandler extends StandardFormH
   }
 
   protected createValidationResult(params: ProjectChangeRequestPrepareItemParams, dto: Document) {
-    return new MultipleDocumentUpdloadDtoValidator(dto, Configuration, false, false);
+    return new MultipleDocumentUpdloadDtoValidator(dto, Configuration, false, false, null);
   }
 
   protected getStoreKey(params: ProjectChangeRequestPrepareItemParams) {
