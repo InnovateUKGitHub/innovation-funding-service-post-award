@@ -33,7 +33,11 @@
       "projectChangeRequestsLink": "Project change requests",
       "documentsLink": "Documents",
       "detailsLink": "Project details",
-      "summaryLink": "Finance summary"
+      "summaryLink": "Finance summary",
+      "project-messages":{
+        "pcrQueried": "Request queried",
+        "pcrToReview": "Requests to review: {{numberOfPcrs}}"
+      }
     }
   },
   "project-messages": {
