@@ -10,11 +10,14 @@ import * as colour from "../styles/colours";
 import { Results } from "../validation/results";
 import { ILinkInfo } from "@framework/types/ILinkInfo";
 import { AccessibilityText } from "./renderers/accessibilityText";
+import { ContentSelector } from "@content/content";
+import { Content } from "./content";
 
 type dividerTypes = "normal" | "bold";
 type columnMode = "cell" | "header" | "footer" | "col";
 interface InternalColumnProps<T> {
-  header: React.ReactNode;
+  header?: React.ReactNode;
+  headerContent?: ContentSelector;
   dataItem?: T;
   footer?: React.ReactNode;
   classSuffix?: "numeric";
@@ -33,7 +36,8 @@ interface InternalColumnProps<T> {
 }
 
 interface ExternalColumnProps<T, TResult> {
-  header: React.ReactNode;
+  header?: React.ReactNode;
+  headerContent?: ContentSelector;
   value: (item: T, index: { column: number, row: number }) => TResult;
   cellClassName?: (data: T, index: { column: number, row: number }) => string | null | undefined;
   colClassName?: (col: number) => string;
@@ -86,7 +90,8 @@ export class TableColumn<T> extends React.Component<InternalColumnProps<T>> {
   }
 
   renderHeaderElement() {
-    return this.props.hideHeader ? <AccessibilityText>{this.props.header}</AccessibilityText> : this.props.header;
+    const header = this.props.headerContent ? <Content value={x => this.props.headerContent!(x)}/> : this.props.header;
+    return this.props.hideHeader ? <AccessibilityText>{header}</AccessibilityText> : header;
   }
 
   renderFooter(column: number) {
