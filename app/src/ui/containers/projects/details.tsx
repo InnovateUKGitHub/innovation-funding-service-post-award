@@ -99,6 +99,6 @@ export const ProjectDetailsRoute = defineRoute({
     routePath: "/projects/:id/details",
     container: ProjectDetailsContainer,
     getParams: (r) => ({ id: r.params.id }),
-    getTitle: (state, params, stores, content) => content.projectDetails.title(),
+    getTitle: ({ content }) => content.projectDetails.title(),
     accessControl: (auth, { id }) => auth.forProject(id).hasAnyRoles(ProjectRole.FinancialContact, ProjectRole.ProjectManager, ProjectRole.MonitoringOfficer)
 });

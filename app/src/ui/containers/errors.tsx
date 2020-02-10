@@ -11,22 +11,22 @@ const ErrorContainer = (props: Params & BaseProps) => (
   props.errorType === "notFound" ? <NotFoundErrorPage /> : <StandardErrorPage />
 );
 
-export const ErrorRoute = defineRoute<Params>({
+export const ErrorRoute = defineRoute<{}>({
   routeName: "error",
   routePath: "/error",
-  container: ErrorContainer,
-  getParams: () => ({ errorType: "standard" }),
+  container: (params) => <ErrorContainer errorType="standard" {...params}/>,
+  getParams: () => ({}),
   getTitle: () => ({
     htmlTitle: "Error",
     displayTitle: "Something has gone wrong at our end"
   })
 });
 
-export const ErrorNotFoundRoute = defineRoute<Params>({
+export const ErrorNotFoundRoute = defineRoute<{}>({
   routeName: "errorNotFound",
   routePath: "/error-not-found",
-  getParams: () => ({errorType: "notFound"}),
-  container: ErrorContainer,
+  container: (params) => <ErrorContainer errorType="notFound" {...params}/>,
+  getParams: () => ({}),
   getTitle: () => ({
     htmlTitle: "Page not found",
     displayTitle: "Page not found"

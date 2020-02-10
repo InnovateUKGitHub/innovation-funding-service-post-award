@@ -335,5 +335,5 @@ export const ProjectDashboardRoute = defineRoute({
   routePath: "/projects/dashboard?:search",
   container: ProjectDashboardContainer,
   getParams: (r) => ({ search: r.params.search }),
-  getTitle: (state, params, stores, content) => content.projectsDashboard.title()
+  getTitle: ({ content }) => content.projectsDashboard.title()
 });

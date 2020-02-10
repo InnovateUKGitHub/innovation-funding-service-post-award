@@ -92,7 +92,7 @@ export async function serverRender(req: Request, res: Response, error?: IAppErro
 
     const content = new Content();
 
-    store.dispatch(Actions.setPageTitle(matched.getTitle(store.getState(), routeState.params, stores, content)));
+    store.dispatch(Actions.setPageTitle(matched.getTitle({ params: routeState.params, stores, content })));
 
     res.status(getErrorStatus(e)).send(renderApp(router, store, stores, routes, content));
   }
@@ -140,7 +140,7 @@ const onComplete = (store: Store, stores: IStores, content: Content, matched: Ma
       scrollToTop: false
     }));
   }
-  store.dispatch(Actions.setPageTitle(matched.getTitle(store.getState(), params, stores, content)));
+  store.dispatch(Actions.setPageTitle(matched.getTitle({ params, stores, content })));
 };
 
 // wrap callback in Promise so we use await for consistency
@@ -163,7 +163,7 @@ function renderApp(router: Router, store: Store<RootState>, stores: IStores, rou
       <RouterProvider router={router}>
         <StoresProvider value={stores}>
           <ContentProvider value={content}>
-            <App store={store} routes={routes}/>
+            <App store={store} routes={routes} />
           </ContentProvider>
         </StoresProvider>
       </RouterProvider>
