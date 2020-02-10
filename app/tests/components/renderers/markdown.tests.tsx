@@ -14,7 +14,7 @@ describe("Markdown", () => {
 
     const elem = result.getDOMNode();
     expect(elem.tagName).toBe("SPAN");
-    expect(elem).toHaveProperty("className", "govuk-body");
+    expect(elem).toHaveProperty("className", "govuk-body markdown");
   });
 
   it("should return null if no content", () => {

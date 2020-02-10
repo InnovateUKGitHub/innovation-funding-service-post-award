@@ -67,7 +67,7 @@ class ProjectDocumentsComponent extends ContainerBaseWithState<ProjectDocumentPa
         project={project}
       >
         <ACC.Renderers.Messages messages={this.props.messages} />
-        <ACC.Section title="Upload">
+        <ACC.Section titleContent={x => x.projectDocuments.uploadTitle()}>
           <UploadForm.Form
             enctype="multipart"
             editor={editor}
@@ -76,12 +76,10 @@ class ProjectDocumentsComponent extends ContainerBaseWithState<ProjectDocumentPa
             qa="projectDocumentUpload"
           >
             <UploadForm.Fieldset>
-              <ACC.Renderers.SimpleString>
-                You can upload and store any documents relevant for this project. Any documents added to the project by Innovate UK will also be visible here.
-              </ACC.Renderers.SimpleString>
-              <ACC.DocumentGuidance />
+              <ACC.Content value={x => x.projectDocuments.uploadInstruction()}/>
+              <ACC.DocumentGuidanceWithContent documentMessages={x => x.projectDocuments.documentMessages} />
               <UploadForm.MulipleFileUpload
-                label="Upload documents"
+                labelContent={x => x.projectDocuments.documentLabels.uploadInputLabel()}
                 name="attachment"
                 labelHidden={true}
                 value={data => data.files}
@@ -89,7 +87,7 @@ class ProjectDocumentsComponent extends ContainerBaseWithState<ProjectDocumentPa
                 validation={editor.validator.files}
               />
             </UploadForm.Fieldset>
-            <UploadForm.Submit styling="Secondary">Upload</UploadForm.Submit>
+            <UploadForm.Submit styling="Secondary"><ACC.Content value={x => x.projectDocuments.documentLabels.uploadButtonLabel()}/></UploadForm.Submit>
           </UploadForm.Form>
         </ACC.Section>
         {this.renderDocumentsSection(documents)}
@@ -111,14 +109,16 @@ class ProjectDocumentsComponent extends ContainerBaseWithState<ProjectDocumentPa
       : documents;
 
     if (documents.length === 0) {
-      return <ACC.ValidationMessage qa={"noDocuments"} message="No documents uploaded." messageType="info" />;
+      return <ACC.ValidationMessage qa={"noDocuments"} message={<ACC.Content value={x => x.projectDocuments.noDocumentsMessage()}/>} messageType="info" />;
     }
 
     if (documentsToDisplay.length === 0) {
       return (
         <React.Fragment>
           {this.renderDocumentsFilter()}
-          <ACC.Renderers.SimpleString qa={"noDocuments"}>No documents match.</ACC.Renderers.SimpleString>
+          <ACC.Renderers.SimpleString qa={"noDocuments"}>
+            <ACC.Content value={x => x.projectDocuments.noMatchingDocumentsMessage()}/>
+          </ACC.Renderers.SimpleString>
         </React.Fragment>
       );
     }
@@ -138,8 +138,7 @@ class ProjectDocumentsComponent extends ContainerBaseWithState<ProjectDocumentPa
     const FilterForm = ACC.TypedForm<{ filterBoxText: string | null }>();
 
     return (
-      // tslint:disable-next-line:no-empty
-      <FilterForm.Form data={this.state} onSubmit={() => { }} onChange={x => this.setState(x)} qa="document-search-form">
+      <FilterForm.Form data={this.state} onSubmit={() => { return; }} onChange={x => this.setState(x)} qa="document-search-form">
         <FilterForm.Search name="document-filter" labelHidden={true} value={x => x.filterBoxText} update={(x, v) => x.filterBoxText = v} placeholder="Search documents" />
       </FilterForm.Form>
     );
@@ -149,10 +148,10 @@ class ProjectDocumentsComponent extends ContainerBaseWithState<ProjectDocumentPa
     const ProjectDocumentsTable = ACC.TypedTable<DocumentSummaryDto>();
     return (
       <ProjectDocumentsTable.Table data={documentsToDisplay} qa="project-documents">
-        <ProjectDocumentsTable.Custom header="File name" qa="fileName" value={x => this.renderDocumentName(x)} />
-        <ProjectDocumentsTable.ShortDate header="Date uploaded" qa="dateUploaded" value={x => x.dateCreated} />
-        <ProjectDocumentsTable.Custom header="File size" qa="fileSize" classSuffix="numeric" value={x => getFileSize(x.fileSize)} />
-        <ProjectDocumentsTable.String header="Uploaded by" qa="uploadedBy" value={x => x.uploadedBy}/>
+        <ProjectDocumentsTable.Custom headerContent={x => x.projectDocuments.documentLabels.fileNameLabel()} qa="fileName" value={x => this.renderDocumentName(x)} />
+        <ProjectDocumentsTable.ShortDate headerContent={x => x.projectDocuments.documentLabels.dateUploadedLabel()} qa="dateUploaded" value={x => x.dateCreated} />
+        <ProjectDocumentsTable.Custom headerContent={x => x.projectDocuments.documentLabels.fileSizeLabel()} qa="fileSize" classSuffix="numeric" value={x => getFileSize(x.fileSize)} />
+        <ProjectDocumentsTable.String headerContent={x => x.projectDocuments.documentLabels.uploadedByLabel()} qa="uploadedBy" value={x => x.uploadedBy}/>
       </ProjectDocumentsTable.Table>
     );
   }
@@ -183,9 +182,6 @@ export const ProjectDocumentsRoute = defineRoute({
   routePath: "/projects/:projectId/documents",
   container: ProjectDocumentsContainer,
   getParams: (route) => ({ projectId: route.params.projectId }),
-  getTitle: () => ({
-    htmlTitle: "Project documents - View project",
-    displayTitle: "Project documents"
-  }),
+  getTitle: (state, params, stores, content) => content.projectDocuments.title(),
   accessControl: (auth, { projectId }) => auth.forProject(projectId).hasRole(ProjectRole.MonitoringOfficer)
 });
