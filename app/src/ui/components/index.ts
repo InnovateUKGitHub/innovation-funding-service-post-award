@@ -34,6 +34,7 @@ export * from "./taskList";
 export * from "./validationError";
 export * from "./validationMessage";
 export * from "./validationSummary";
+export * from "./partnersInformation";
 
 export {
   Claims,
