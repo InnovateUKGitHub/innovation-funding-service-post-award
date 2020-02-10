@@ -2,10 +2,13 @@ import React from "react";
 import { TypedTable } from "./table";
 import { PartnerDto } from "@framework/types";
 import { PartnerName } from "@ui/components/partners";
+import { Content } from "@content/content";
+import { ProjectContactLabels } from "@content/labels/projectContactLabels";
 
 interface Props {
   partners: PartnerDto[];
   contacts: ProjectContactDto[];
+  projectContactLabels: (content: Content) => ProjectContactLabels;
 }
 
 export const PartnersAndFinanceContacts: React.FunctionComponent<Props> = (props) => {
@@ -17,10 +20,10 @@ export const PartnersAndFinanceContacts: React.FunctionComponent<Props> = (props
 
   return (
     <PartnersTable.Table qa="partner-details" data={partnersAndContactsData}>
-      <PartnersTable.String header="Name" value={x => x.financeContact && x.financeContact.name || ""} qa="fc-name" />
-      <PartnersTable.Custom header="Partner" value={x => <PartnerName partner={x.partner} showIsLead={true}/>} qa="partner-name"/>
-      <PartnersTable.String header="Partner type" value={x => x.partner.type} qa="partner-type"/>
-      <PartnersTable.Email header="Email" value={x => x.financeContact && x.financeContact.email || ""} qa="fc-email" />
+      <PartnersTable.String headerContent={x => props.projectContactLabels(x).contactName()} value={x => x.financeContact && x.financeContact.name || ""} qa="fc-name" />
+      <PartnersTable.Custom headerContent={x => props.projectContactLabels(x).partnerName()} value={x => <PartnerName partner={x.partner} showIsLead={true}/>} qa="partner-name"/>
+      <PartnersTable.String headerContent={x => props.projectContactLabels(x).partnerType()} value={x => x.partner.type} qa="partner-type"/>
+      <PartnersTable.Email headerContent={x => props.projectContactLabels(x).contactEmail()} value={x => x.financeContact && x.financeContact.email || ""} qa="fc-email" />
     </PartnersTable.Table>
   );
 };

@@ -6,6 +6,10 @@ import Adapter from "enzyme-adapter-react-16";
 import { PartnersAndFinanceContacts } from "@ui/components/partnersAndFinanceContacts";
 import { getColumnValues } from "./helpers/tableHelpers";
 import { PartnerDto } from "@framework/types";
+import { ProjectContactLabels } from "@content/labels/projectContactLabels";
+import { ContentResult } from "@content/contentBase";
+import { ContentProvider } from "@ui/redux/contentProvider";
+import { StoresProvider } from "@ui/redux";
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -75,9 +79,30 @@ const testContactData: ProjectContactDto[] = [
   }
 ];
 
+const createContentResult: (content: string) => () => ContentResult = (content) => () => ({ content, key: content, markdown: false });
+
+const labels = () => ({
+  contactEmail: createContentResult("Email"),
+  contactName: createContentResult("Name"),
+  partnerName: createContentResult("Partner"),
+  partnerType: createContentResult("Partner type"),
+}) as ProjectContactLabels;
+
+const testStores = {
+  config : {
+    getConfig: () => ({
+      features: ({
+
+      })
+    })
+  }
+};
+
+const TestProviders: React.FunctionComponent = (props) => <StoresProvider value={testStores as any}><ContentProvider value={{} as any}>{props.children}</ContentProvider></StoresProvider>;
+
 describe("Partners Table", () => {
   const testForCorrectTableEntries = (expectedA: string, expectedB: string, expectedC: string, columnQA: string) => {
-    const wrapper = mount(<PartnersAndFinanceContacts partners={testPartnerData} contacts={testContactData} />);
+    const wrapper = mount(<TestProviders><PartnersAndFinanceContacts partners={testPartnerData} contacts={testContactData} projectContactLabels={labels} /></TestProviders>);
     const columnValues = getColumnValues(wrapper, "partner-details", columnQA).map(x => x.text());
     expect(columnValues[0]).toBe(expectedA);
     expect(columnValues[1]).toBe(expectedB);
