@@ -82,7 +82,7 @@
     "partnerType": "Partner type",
     "contactEmail": "Email"
   },
-  "project-partner-information" : {
+  "project-partner-information-labels" : {
     "partnerName": "Partner",
     "partnerType": "Partner type",
     "partnerPostcode": "Postcode"
