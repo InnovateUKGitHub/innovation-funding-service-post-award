@@ -7,5 +7,5 @@ interface Props {
 
 export const Markdown = (props: Props) => {
   if(!props.value) return null;
-  return <span className={"govuk-body"} dangerouslySetInnerHTML={{ __html: marked(props.value) }} />;
+  return <span className={"govuk-body markdown"} dangerouslySetInnerHTML={{ __html: marked(props.value) }} />;
 };

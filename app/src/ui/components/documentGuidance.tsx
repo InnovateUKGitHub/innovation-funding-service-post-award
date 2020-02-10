@@ -1,5 +1,7 @@
 import React from "react";
 import * as ACC from "@ui/components";
+import { Content } from "@content/content";
+import { DocumentMessages } from "@content/messages/documentMessages";
 
 export const DocumentGuidance = (props: {}) => {
   const classNames = "govuk-list govuk-list--bullet govuk-!-margin-bottom-10";
@@ -20,6 +22,17 @@ export const DocumentGuidance = (props: {}) => {
           <li>spreadsheet (xls, xlsx, ods)</li>
           <li>image (jpg, jpeg, png)</li>
         </ul>
+      </ACC.Info>
+    </React.Fragment>
+  );
+};
+
+export const DocumentGuidanceWithContent = (props: { documentMessages: (x: Content) => DocumentMessages }) => {
+  return (
+    <React.Fragment>
+      <ACC.Content value={x => props.documentMessages(x).header()}/>
+      <ACC.Info summary={<ACC.Content value={x => props.documentMessages(x).infoTitle()}/>}>
+        <ACC.Content value={x => props.documentMessages(x).infoContent()}/>
       </ACC.Info>
     </React.Fragment>
   );
