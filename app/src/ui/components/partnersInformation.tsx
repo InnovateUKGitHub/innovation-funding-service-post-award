@@ -3,7 +3,6 @@ import { TypedTable } from "./table";
 import { PartnerDto } from "@framework/types";
 import { PartnerName } from "@ui/components/partners";
 import { Content } from "@content/content";
-import { ProjectContactLabels } from "@content/labels/projectContactLabels";
 import { ProjectPartnerInformationLabel } from "@content/labels/projectPartnerInformationLabel";
 
 interface Props {
