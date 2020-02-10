@@ -72,7 +72,7 @@ class ProjectDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
                 </ACC.Section>
 
                 <ACC.Section titleContent={x => x.projectDetails.projectLabels.partners()}>
-                    <ACC.PartnersContactInformation partners={partners} partnerInformationLabels={x => x.projectDetails.partnerInformationLabels} />
+                    <ACC.PartnersContactInformation partners={partners} projectContactLabels={x => x.projectDetails.contactLabels} />
                 </ACC.Section>
             </ACC.Page>
         );

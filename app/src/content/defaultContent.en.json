@@ -80,11 +80,7 @@
     "contactName" : "Name",
     "partnerName": "Partner",
     "partnerType": "Partner type",
+    "partnerPostcode": "Postcode",
     "contactEmail": "Email"
-  },
-  "project-partner-information-labels" : {
-    "partnerName": "Partner",
-    "partnerType": "Partner type",
-    "partnerPostcode": "Postcode"
   }
 }
