@@ -4,4 +4,5 @@ interface IFeatureFlags {
   readonly pcrsEnabled: boolean;
   readonly contentHint: boolean;
   readonly customContent: boolean;
+  readonly numberOfProjectsToSearch: number;
 }

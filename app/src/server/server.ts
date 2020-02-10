@@ -52,7 +52,7 @@ export class Server {
     setTimeout(() => this.primeCaches());
     setTimeout(() => this.initaliseCustomContent(true));
 
-    if(Configuration.timeouts.contentRefreshSeconds) {
+    if (Configuration.timeouts.contentRefreshSeconds) {
       setInterval(() => this.initaliseCustomContent(true), Configuration.timeouts.contentRefreshSeconds * 1000);
     }
   }
@@ -72,6 +72,7 @@ export class Server {
       cors(),
       bodyParser.urlencoded({ extended: false }),
       bodyParser.json(),
+      this.handleGetWithPlus,
       this.requestLogger
     ]);
   }
@@ -79,6 +80,18 @@ export class Server {
   private requestLogger = (req: express.Request, res: express.Response, next: express.NextFunction) => {
     this.log.debug("request", req.url, req.method);
     next();
+  }
+
+  private handleGetWithPlus = (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    /// pluses don't get handled by router 5 when round tripped
+    /// with js disabled form submits values with + rather then %20
+    /// when js is enabled router 5 handles it
+    if (req.method === "GET" && req.url.match(/\+/)) {
+      res.redirect(req.url.replace(/\+/g, "%20"));
+    }
+    else {
+      next();
+    }
   }
 
   private routing() {
