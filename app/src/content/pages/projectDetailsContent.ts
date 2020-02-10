@@ -3,6 +3,7 @@ import { Content } from "../content";
 import { ProjectMessages } from "@content/messages/projectMessages";
 import { ProjectLabels } from "@content/labels/projectLabels";
 import { ProjectContactLabels } from "@content/labels/projectContactLabels";
+import { ProjectPartnerInformationLabel } from "@content/labels/projectPartnerInformationLabel";
 
 export class ProjectDetailsContent extends ContentPageBase {
   constructor(content: Content) {
@@ -12,4 +13,5 @@ export class ProjectDetailsContent extends ContentPageBase {
   public projectMessages = new ProjectMessages(this);
   public projectLabels = new ProjectLabels(this);
   public contactLabels = new ProjectContactLabels(this);
+  public partnerInformationLabels = new ProjectPartnerInformationLabel(this);
 }

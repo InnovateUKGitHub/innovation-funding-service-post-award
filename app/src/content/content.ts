@@ -15,5 +15,4 @@ export class Content extends ContentBase {
   public projectsDashboard = new ProjectDashboardContent(this);
   public projectOverview = new ProjectOverviewContent(this);
   public projectDetails = new ProjectDetailsContent(this);
-
 }
