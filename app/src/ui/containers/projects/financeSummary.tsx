@@ -38,7 +38,7 @@ class FinanceSummaryComponent extends ContainerBase<Params, Data, Callbacks> {
         project={project}
       >
         <ACC.Section
-          title={`Project period ${project.periodId} of ${project.totalPeriods}`}
+          title={<ACC.Content value={x => x.financeSummary.projectMessages.currentPeriodInfo(project.periodId, project.totalPeriods!)} />}
           subtitle={<ACC.Renderers.ShortDateRange start={project.periodStartDate} end={project.periodEndDate} />}
           qa="financeSummarySection"
         >
@@ -52,31 +52,31 @@ class FinanceSummaryComponent extends ContainerBase<Params, Data, Callbacks> {
     const FinanceSummaryTable = TypedTable<PartnerDto>();
     const partnersToShow =
       (project.roles & ProjectRole.ProjectManager || project.roles & ProjectRole.MonitoringOfficer)
-      ? partners
-      : partners.filter(x => x.id === this.props.partnerId);
+        ? partners
+        : partners.filter(x => x.id === this.props.partnerId);
 
     return (
       <React.Fragment>
         <ACC.Section title="Project costs to date">
           <FinanceSummaryTable.Table data={partnersToShow} qa="ProjectCostsToDate" footers={this.renderTotalValueFooters(project, partners)}>
-            <FinanceSummaryTable.Custom header={null} qa="Partner" value={x => <ACC.PartnerName partner={x} showIsLead={true}/>} />
-            <FinanceSummaryTable.Currency header="Total eligible costs" qa="TotalEligibleCosts" value={x => x.totalParticipantGrant} />
-            <FinanceSummaryTable.Currency header="Costs claimed to date" qa="CostsClaimedToDate" value={x => x.totalCostsSubmitted} />
-            <FinanceSummaryTable.Percentage header="Percentage of costs claimed to date" qa="PercentageOfCostsClaimedToDate" value={x => x.percentageParticipantCostsSubmitted} />
+            <FinanceSummaryTable.Custom headerContent={x => x.financeSummary.projectLabels.partner()} hideHeader={true} qa="Partner" value={x => <ACC.PartnerName partner={x} showIsLead={true} />} />
+            <FinanceSummaryTable.Currency headerContent={x => x.financeSummary.projectLabels.totalEligibleCosts()} qa="TotalEligibleCosts" value={x => x.totalParticipantGrant} />
+            <FinanceSummaryTable.Currency headerContent={x => x.financeSummary.projectLabels.totalEligibleCostsClaimed()} qa="CostsClaimedToDate" value={x => x.totalCostsSubmitted} />
+            <FinanceSummaryTable.Percentage headerContent={x => x.financeSummary.projectLabels.percentageEligibleCostsClaimed()} qa="PercentageOfCostsClaimedToDate" value={x => x.percentageParticipantCostsSubmitted} />
           </FinanceSummaryTable.Table>
           <ACC.Section title="Partner finance details">
             <FinanceSummaryTable.Table data={partnersToShow} qa="PartnerFinanceDetails">
-              <FinanceSummaryTable.Custom header={null} qa="Partner" value={x => <ACC.PartnerName partner={x} showIsLead={true}/>} />
-              <FinanceSummaryTable.Currency header="Total eligible costs" qa="TotalEligibleCosts" value={x => x.totalParticipantGrant} />
-              <FinanceSummaryTable.Percentage header="Funding level" qa="FundingLevel" value={x => x.awardRate} />
-              <FinanceSummaryTable.Currency header="Total grant" qa="TotalGrant" value={x => x.totalFundingDueToReceive} />
-              <FinanceSummaryTable.Currency header="Total grant paid in advance" qa="TotalGrantPaidInAdvance" value={x => x.totalPrepayment} />
-              <FinanceSummaryTable.Percentage header="Claim cap" qa="ClaimCap" value={x => x.capLimit} />
+              <FinanceSummaryTable.Custom headerContent={x => x.financeSummary.projectLabels.partner()} hideHeader={true} qa="Partner" value={x => <ACC.PartnerName partner={x} showIsLead={true} />} />
+              <FinanceSummaryTable.Currency headerContent={x => x.financeSummary.projectLabels.totalEligibleCosts()} qa="TotalEligibleCosts" value={x => x.totalParticipantGrant} />
+              <FinanceSummaryTable.Percentage headerContent={x => x.financeSummary.projectLabels.awardRate()} qa="FundingLevel" value={x => x.awardRate} />
+              <FinanceSummaryTable.Currency headerContent={x => x.financeSummary.projectLabels.totalGrant()} qa="TotalGrant" value={x => x.totalFundingDueToReceive} />
+              <FinanceSummaryTable.Currency headerContent={x => x.financeSummary.projectLabels.totalPrepayment()} qa="TotalGrantPaidInAdvance" value={x => x.totalPrepayment} />
+              <FinanceSummaryTable.Percentage headerContent={x => x.financeSummary.projectLabels.capLimit()} qa="ClaimCap" value={x => x.capLimit} />
             </FinanceSummaryTable.Table>
             <ACC.Section title="When an independent accountant's report is needed">
               <FinanceSummaryTable.Table data={partnersToShow} qa="WhenAnIarIsNeeded" >
-                <FinanceSummaryTable.Custom header={null} value={x => <ACC.PartnerName partner={x} showIsLead={true}/>} qa="Partner" />
-                <FinanceSummaryTable.String header={null} value={x => x.auditReportFrequencyName} qa="Frequency" />
+                <FinanceSummaryTable.Custom headerContent={x => x.financeSummary.projectLabels.partner()} hideHeader={true} value={x => <ACC.PartnerName partner={x} showIsLead={true} />} qa="Partner" />
+                <FinanceSummaryTable.String headerContent={x => x.financeSummary.projectLabels.auditReportFrequency()} hideHeader={true} value={x => x.auditReportFrequencyName} qa="Frequency" />
               </FinanceSummaryTable.Table>
             </ACC.Section>
           </ACC.Section>
@@ -96,18 +96,25 @@ class FinanceSummaryComponent extends ContainerBase<Params, Data, Callbacks> {
       }, 0);
 
       const percentageParticipantCostsSubmittedTotal = (totalParticipantGrantTotal) ? 100 * (totalCostsSubmittedTotal || 0) / totalParticipantGrantTotal : null;
-      return ([
-        <td key="th" className="govuk-table__cell govuk-!-font-weight-bold acc-table__cell-top-border">Total</td>,
-        this.renderTableFooter(<ACC.Renderers.Currency value={totalParticipantGrantTotal} />, 1),
-        this.renderTableFooter(<ACC.Renderers.Currency value={totalCostsSubmittedTotal} />, 2),
-        this.renderTableFooter(<ACC.Renderers.Percentage value={percentageParticipantCostsSubmittedTotal} />, 3)
-      ]);
-    } else return [];
+      return [(
+        <tr key={1}>
+          <th key="th" className="govuk-table__cell acc-table__cell-top-border">
+            <ACC.Content value={x => x.financeSummary.totalsFooterLabel()} />
+          </th>
+          {this.renderTableFooter(<ACC.Renderers.Currency value={totalParticipantGrantTotal} />, 1)}
+          {this.renderTableFooter(<ACC.Renderers.Currency value={totalCostsSubmittedTotal} />, 2)}
+          {this.renderTableFooter(<ACC.Renderers.Percentage value={percentageParticipantCostsSubmittedTotal} />, 3)}
+        </tr>
+      )];
+    }
+    else {
+      return [];
+    }
   }
 
   private renderTableFooter(child: React.ReactElement<any>, key: number) {
     return (
-      <td key={key} className="govuk-table__cell govuk-table__cell--numeric acc-table__cell-top-border govuk-!-font-weight-regular">
+      <td key={key} className="govuk-table__cell govuk-table__cell--numeric acc-table__cell-top-border">
         {child}
       </td>
     );
@@ -135,8 +142,5 @@ export const FinanceSummaryRoute = defineRoute({
     partnerId: route.params.partnerId
   }),
   accessControl: (auth, params) => auth.forProject(params.projectId).hasAnyRoles(ProjectRole.ProjectManager, ProjectRole.MonitoringOfficer, ProjectRole.FinancialContact),
-  getTitle: () => ({
-    htmlTitle: "Finance summary",
-    displayTitle: "Finance summary"
-  })
+  getTitle: (state, parmas, stores, content) => content.financeSummary.title()
 });
