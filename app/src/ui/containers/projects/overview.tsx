@@ -232,5 +232,5 @@ export const ProjectOverviewRoute = defineRoute({
   getParams: (r) => ({ projectId: r.params.projectId }),
   container: ProjectOverviewContainer,
   accessControl: (auth, params) => auth.forProject(params.projectId).hasAnyRoles(ProjectRole.FinancialContact, ProjectRole.ProjectManager, ProjectRole.MonitoringOfficer),
-  getTitle: (state, params, stores, content) => content.projectOverview.title(),
+  getTitle: ({ content }) => content.projectOverview.title(),
 });

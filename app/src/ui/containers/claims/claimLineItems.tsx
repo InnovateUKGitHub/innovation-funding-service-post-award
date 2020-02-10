@@ -223,7 +223,7 @@ export const ClaimLineItemsRoute = defineRoute({
   routePath: "/projects/:projectId/claims/:partnerId/details/:periodId/costs/:costCategoryId",
   container: ClaimLineItemsContainer,
   getParams: (route) => getParams(route),
-  getTitle: (store, params, stores) => {
+  getTitle: ({ params, stores }) => {
     const costCatName = stores.costCategories.get(params.costCategoryId).then(x => x.name).data;
     return {
       htmlTitle: costCatName ? `View costs for ${costCatName}` : "View costs",
@@ -240,7 +240,7 @@ export const ReviewClaimLineItemsRoute = defineRoute({
   accessControl: (auth, { projectId, partnerId }) =>
     auth.forPartner(projectId, partnerId).hasAnyRoles(ProjectRole.FinancialContact, ProjectRole.ProjectManager) ||
     auth.forProject(projectId).hasRole(ProjectRole.MonitoringOfficer),
-  getTitle: (store, params, stores) => {
+  getTitle: ({ params, stores }) => {
     const costCatName = stores.costCategories.get(params.costCategoryId).then(x => x.name).data;
     return {
       htmlTitle: costCatName ? `Review costs for ${costCatName}` : "Review costs",

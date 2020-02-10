@@ -11,7 +11,7 @@ import {
 import * as ACC from "../../components";
 import { Pending } from "@shared/pending";
 import { PCRDto, PCRItemTypeDto } from "@framework/dtos/pcrDtos";
-import { EditorStatus, IEditorStore, IStores, RootState, StoresConsumer } from "@ui/redux";
+import { EditorStatus, IEditorStore, IStores, StoresConsumer } from "@ui/redux";
 import { MultipleDocumentUpdloadDtoValidator, PCRDtoValidator } from "@ui/validators";
 import { NavigationArrowsForPCRs } from "@ui/containers/pcrs/navigationArrows";
 import { Result } from "@ui/validation/result";
@@ -271,7 +271,7 @@ const PCRItemContainer = (props: ProjectChangeRequestPrepareItemParams & BasePro
   </StoresConsumer>
 );
 
-const getTitle = (defaultTitle: string) => (store: RootState, params: ProjectChangeRequestPrepareItemParams, stores: IStores) => {
+const getTitle = (defaultTitle: string, params: ProjectChangeRequestPrepareItemParams, stores: IStores) => {
   const typeName = stores.projectChangeRequests.getItemById(params.projectId, params.pcrId, params.itemId).then(x => x.typeName).data;
   return {
     htmlTitle: typeName ? `${typeName}` : defaultTitle,
@@ -288,7 +288,7 @@ export const PCRViewItemRoute = defineRoute<ProjectChangeRequestPrepareItemParam
     pcrId: route.params.pcrId
   }),
   container: (props) => <PCRItemContainer mode="view" {...props} />,
-  getTitle: getTitle("View project change request item"),
+  getTitle: ({params, stores}) => getTitle("View project change request item", params, stores),
   accessControl: (auth, { projectId }, config) => config.features.pcrsEnabled && auth.forProject(projectId).hasAnyRoles(ProjectRole.ProjectManager, ProjectRole.MonitoringOfficer)
 });
 
@@ -301,7 +301,7 @@ export const PCRReviewItemRoute = defineRoute<ProjectChangeRequestPrepareItemPar
     itemId: route.params.itemId,
     pcrId: route.params.pcrId
   }),
-  getTitle: getTitle("Review project change request item"),
+  getTitle: ({params, stores}) => getTitle("Review project change request item", params, stores),
   accessControl: (auth, { projectId }, config) => config.features.pcrsEnabled && auth.forProject(projectId).hasAnyRoles(ProjectRole.MonitoringOfficer)
 });
 
@@ -315,6 +315,6 @@ export const PCRPrepareItemRoute = defineRoute<ProjectChangeRequestPrepareItemPa
     itemId: route.params.itemId,
     step: parseInt(route.params.step, 10)
   }),
-  getTitle: getTitle("Prepare project change request item"),
+  getTitle: ({params, stores}) => getTitle("Prepare project change request item", params, stores),
   accessControl: (auth, { projectId }, config) => config.features.pcrsEnabled && auth.forProject(projectId).hasRole(ProjectRole.ProjectManager)
 });

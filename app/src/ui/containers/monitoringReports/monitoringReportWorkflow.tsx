@@ -43,7 +43,7 @@ class Component extends ContainerBase<MonitoringReportWorkflowParams, Data, Call
         validator={workflow.getValidation(editor.validator)}
         error={editor.error}
       >
-        { this.renderWorkflow(workflow, editor) }
+        {this.renderWorkflow(workflow, editor)}
       </ACC.Page>
     );
   }
@@ -113,7 +113,7 @@ const Container = (props: MonitoringReportWorkflowParams & BaseProps) => (
           editor={stores.monitoringReports.getUpdateMonitoringReportEditor(props.projectId, props.id)}
           onChange={(save, dto, submit, link) => {
             stores.monitoringReports.updateMonitoringReportEditor(save, props.projectId, dto, submit, () => {
-              if(link) stores.navigation.navigateTo(link);
+              if (link) stores.navigation.navigateTo(link);
             });
           }}
           {...props}
@@ -129,7 +129,7 @@ export const MonitoringReportWorkflowRoute = defineRoute({
   container: Container,
   getParams: (r) => ({ projectId: r.params.projectId, id: r.params.id, mode: r.params.mode, step: parseInt(r.params.step, 10) }),
   accessControl: (auth, { projectId }) => auth.forProject(projectId).hasRole(Dtos.ProjectRole.MonitoringOfficer),
-  getTitle: (store, params) => ({
+  getTitle: ({ params }) => ({
     htmlTitle: params.mode === "view" ? "View monitoring report" : "Edit monitoring report",
     displayTitle: "Monitoring report"
   }),
