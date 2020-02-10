@@ -11,16 +11,14 @@ interface Props {
 }
 
 export const PartnersContactInformation: React.FunctionComponent<Props> = (props) => {
-    const partnersContactData = props.partners.map(partner => ({
-        partner
-    }));
-    const PartnersTable = TypedTable<typeof partnersContactData[0]>();
+
+    const PartnersTable = TypedTable<typeof props.partners[0]>();
 
     return (
-        <PartnersTable.Table qa="partner-details" data={partnersContactData}>
-            <PartnersTable.Custom headerContent={x => props.partnerInformationLabels(x).partnerName()} value={x => <PartnerName partner={x.partner} showIsLead={true} />} qa="partner-name" />
-            <PartnersTable.String headerContent={x => props.partnerInformationLabels(x).partnerType()} value={x => x.partner && x.partner.type} qa="partner-type" />
-            <PartnersTable.String headerContent={x => props.partnerInformationLabels(x).partnerPostcode()} value={x => x.partner && x.partner.postcode} qa="partner-postcode" />
+        <PartnersTable.Table qa="partner-details" data={props.partners}>
+            <PartnersTable.Custom headerContent={x => props.partnerInformationLabels(x).partnerName()} value={x => <PartnerName partner={x} showIsLead={true} />} qa="partner-name" />
+            <PartnersTable.String headerContent={x => props.partnerInformationLabels(x).partnerType()} value={x => x.type} qa="partner-type" />
+            <PartnersTable.String headerContent={x => props.partnerInformationLabels(x).partnerPostcode()} value={x => x.postcode} qa="partner-postcode" />
         </PartnersTable.Table>
     );
 };

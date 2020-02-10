@@ -122,7 +122,8 @@ export class TestData {
       Acc_AuditReportFrequency__c: "Never, for this project",
       AuditReportFrequencyName: "Never, for this project",
       Acc_TotalCostsAwarded__c: 100000,
-      Acc_TotalPrepayment__c: 500
+      Acc_TotalPrepayment__c: 500,
+      Acc_Postcode__c: "BS1 1AA",
     };
 
     if (!!update) update(newItem);
