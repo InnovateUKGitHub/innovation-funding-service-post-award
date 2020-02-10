@@ -18,4 +18,5 @@ export class ProjectLabels extends ContentBase {
   public duration = () => this.getContent("duration");
   public numberOfPeriods = () => this.getContent("numberOfPeriods");
   public scope = () => this.getContent("scope");
+  public partners = () => this.getContent("partners");
 }

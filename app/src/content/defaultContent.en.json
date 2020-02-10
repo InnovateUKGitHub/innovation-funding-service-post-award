@@ -73,12 +73,18 @@
     "numberOfPeriods": "Number of periods",
     "scope": "Project scope statement",
     "projectMembers": "Project members",
-    "financeContacts": "Finance contacts"
+    "financeContacts": "Finance contacts",
+    "partners": "Partner information"
   },
   "project-contact-labels" : {
     "contactName" : "Name",
     "partnerName": "Partner",
     "partnerType": "Partner type",
     "contactEmail": "Email"
+  },
+  "project-partner-information" : {
+    "partnerName": "Partner",
+    "partnerType": "Partner type",
+    "partnerPostcode": "Postcode"
   }
 }

@@ -21,6 +21,7 @@ export enum PartnerStatus {
 export interface PartnerDto {
   id: string;
   type: string;
+  postcode: string;
   isLead: boolean;
   isWithdrawn: boolean;
   projectRoleName: string;

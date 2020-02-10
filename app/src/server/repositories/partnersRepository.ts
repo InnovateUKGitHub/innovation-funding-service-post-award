@@ -37,6 +37,7 @@ export interface ISalesforcePartner {
   Acc_AuditReportFrequency__c: string;
   AuditReportFrequencyName: string;
   Acc_TotalPrepayment__c: number;
+  Acc_Postcode__c: string;
 }
 
 export interface IPartnerRepository {
@@ -70,6 +71,7 @@ export class PartnerRepository extends SalesforceRepositoryBase<ISalesforcePartn
     "Acc_TotalApprovedCosts__c",
     "Acc_Cap_Limit__c",
     "Acc_Award_Rate__c",
+    "Acc_Postcode__c",
     "Acc_ProjectRole__c",
     "toLabel(Acc_ProjectRole__c) ProjectRoleName",
     "Acc_ProjectId__r.Id",

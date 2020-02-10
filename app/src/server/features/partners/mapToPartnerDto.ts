@@ -22,6 +22,7 @@ export class MapToPartnerDtoCommand extends SyncCommandBase<PartnerDto> {
             name: this.item.Acc_AccountId__r.Name,
             accountId: this.item.Acc_AccountId__r.Id,
             type: this.item.Acc_ParticipantType__c,
+            postcode: this.item.Acc_Postcode__c,
             organisationType: this.item.Acc_OrganisationType__c,
             competitionType: this.item.Acc_ProjectId__r.Acc_CompetitionType__c,
             isLead: this.item.Acc_ProjectRole__c === SalesforceProjectRole.ProjectLead,
