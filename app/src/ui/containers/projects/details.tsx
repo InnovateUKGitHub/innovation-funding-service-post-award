@@ -40,12 +40,6 @@ class ProjectDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
         const projectManager = contacts.find(x => x.role === "Project Manager");
         const projectManagerPartner = projectManager ? partners.find(x => x.accountId === projectManager.accountId) : null;
 
-        // project links are not currenly required but will be added back
-        // const links = [
-        //     { text: "View original application", url: project.applicationUrl, qa: "application-link" },
-        //     { text: "View original grant offer letter", url: project.grantOfferLetterUrl, qa: "grant-letter-link" }
-        // ];
-
         return (
             <ACC.Page
                 backLink={<ACC.Projects.ProjectBackLink project={project} routes={this.props.routes} />}
@@ -55,34 +49,27 @@ class ProjectDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
 
                 <ACC.Section
                     qa="period-information"
-                    title={`Project period ${project.periodId} of ${project.totalPeriods}`}
+                    titleContent={x => x.projectDetails.projectMessages.currentPeriodInfo(project.periodId, project.totalPeriods!)}
                     subtitle={<ACC.Renderers.ShortDateRange start={project.periodStartDate} end={project.periodEndDate} />}
                 />
 
-                <ACC.Section title="Project members">
+                <ACC.Section titleContent={x => x.projectDetails.projectLabels.projectMembers()}>
                     <ACC.ProjectContact contact={monitoringOfficer} qa="monitoring-officer" />
                     <ACC.ProjectContact contact={projectManager} partner={projectManagerPartner} qa="project-manager" />
-                    <ACC.Section title="Finance contacts">
-                        <ACC.PartnersAndFinanceContacts contacts={contacts} partners={partners} />
+                    <ACC.Section titleContent={x => x.projectDetails.projectLabels.financeContacts()}>
+                        <ACC.PartnersAndFinanceContacts contacts={contacts} partners={partners} projectContactLabels={x => x.projectDetails.contactLabels}/>
                     </ACC.Section>
                 </ACC.Section>
 
                 <ACC.Section title="Project information" qa="project-details">
                     <ACC.SummaryList qa="project-information">
-                        <ACC.SummaryListItem label="Project start date" qa="start-date" content={<ACC.Renderers.FullDate value={project.startDate} />} />
-                        <ACC.SummaryListItem label="Project end date" qa="end-date" content={<ACC.Renderers.FullDate value={project.endDate} />} />
-                        <ACC.SummaryListItem label="Duration" qa="duration" content={`${project.durationInMonths} ${project.durationInMonths === 1 ? "month" : "months"}`} />
-                        <ACC.SummaryListItem label="Number of periods" qa="periods" content={project.numberOfPeriods} />
-                        <ACC.SummaryListItem label="Project scope statement" qa="scope" content={<ACC.Renderers.SimpleString multiline={true}>{project.summary}</ACC.Renderers.SimpleString>} />
+                        <ACC.SummaryListItem labelContent={x => x.projectDetails.projectLabels.startDate()} qa="start-date" content={<ACC.Renderers.FullDate value={project.startDate} />} />
+                        <ACC.SummaryListItem labelContent={x => x.projectDetails.projectLabels.endDate()} qa="end-date" content={<ACC.Renderers.FullDate value={project.endDate} />} />
+                        <ACC.SummaryListItem labelContent={x => x.projectDetails.projectLabels.duration()} qa="duration" content={`${project.durationInMonths} ${project.durationInMonths === 1 ? "month" : "months"}`} />
+                        <ACC.SummaryListItem labelContent={x => x.projectDetails.projectLabels.numberOfPeriods()} qa="periods" content={project.numberOfPeriods} />
+                        <ACC.SummaryListItem labelContent={x => x.projectDetails.projectLabels.scope()} qa="scope" content={<ACC.Renderers.SimpleString multiline={true}>{project.summary}</ACC.Renderers.SimpleString>} />
                     </ACC.SummaryList>
                 </ACC.Section>
-
-                {/*
-                // project links are not currently required but will be added back
-                <ACC.Section title="Application information" qa="application-details">
-                    <ACC.LinksList links={links} />
-                </ACC.Section>
-                */}
             </ACC.Page>
         );
     }
@@ -108,9 +95,6 @@ export const ProjectDetailsRoute = defineRoute({
     routePath: "/projects/:id/details",
     container: ProjectDetailsContainer,
     getParams: (r) => ({ id: r.params.id }),
-    getTitle: () => ({
-        htmlTitle: "Project details",
-        displayTitle: "Project details"
-    }),
+    getTitle: (state, params, stores, content) => content.projectDetails.title(),
     accessControl: (auth, { id }) => auth.forProject(id).hasAnyRoles(ProjectRole.FinancialContact, ProjectRole.ProjectManager, ProjectRole.MonitoringOfficer)
 });

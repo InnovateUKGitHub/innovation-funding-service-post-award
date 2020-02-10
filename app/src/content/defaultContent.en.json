@@ -38,6 +38,9 @@
         "pcrQueried": "Request queried",
         "pcrToReview": "Requests to review: {{numberOfPcrs}}"
       }
+    },
+    "project-details": {
+      "title": "Project details"
     }
   },
   "project-messages": {
@@ -71,5 +74,11 @@
     "scope": "Project scope statement",
     "projectMembers": "Project members",
     "financeContacts": "Finance contacts"
+  },
+  "project-contact-labels" : {
+    "contactName" : "Name",
+    "partnerName": "Partner",
+    "partnerType": "Partner type",
+    "contactEmail": "Email"
   }
 }
