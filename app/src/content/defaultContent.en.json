@@ -41,6 +41,14 @@
     },
     "project-details": {
       "title": "Project details"
+    },
+    "finance-summary": {
+      "title": "Finance summary",
+      "totalsFooter" : "Totals",
+      "project-labels": {
+        "totalEligibleCostsClaimedLabel": "Costs claimed to date",
+        "percentageEligibleCostsClaimedLabel": "Percentage of costs claimed to date"
+      }
     }
   },
   "project-messages": {
@@ -73,7 +81,13 @@
     "numberOfPeriods": "Number of periods",
     "scope": "Project scope statement",
     "projectMembers": "Project members",
-    "financeContacts": "Finance contacts"
+    "financeContacts": "Finance contacts",
+    "partner": "Partner",
+    "awardRate": "Funding level",
+    "totalGrant": "Total grant",
+    "totalPrepayment": "Total grant paid in advance",
+    "capLimit": "Claim cap",
+    "auditReportFrequency" :"Audit frequency"
   },
   "project-contact-labels" : {
     "contactName" : "Name",
