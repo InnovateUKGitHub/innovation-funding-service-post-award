@@ -26,6 +26,7 @@ export class TestConfig implements IConfig {
     pcrRemovePartner: true,
     contentHint: true,
     customContent: true,
+    numberOfProjectsToSearch: 3
   };
 
   public logLevel = LogLevel.DEBUG;
