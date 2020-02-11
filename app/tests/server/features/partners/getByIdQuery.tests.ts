@@ -44,6 +44,7 @@ describe("getAllForProjectQuery", () => {
       name: "Expected name",
       accountId: "AccountId1",
       type: "Accedemic",
+      postcode: "BS1 1AA",
       isLead: true,
       projectRoleName: "Lead",
       projectId: "Project1",

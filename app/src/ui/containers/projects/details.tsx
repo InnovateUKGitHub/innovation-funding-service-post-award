@@ -57,7 +57,7 @@ class ProjectDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
                     <ACC.ProjectContact contact={monitoringOfficer} qa="monitoring-officer" />
                     <ACC.ProjectContact contact={projectManager} partner={projectManagerPartner} qa="project-manager" />
                     <ACC.Section titleContent={x => x.projectDetails.projectLabels.financeContacts()}>
-                        <ACC.PartnersAndFinanceContacts contacts={contacts} partners={partners} projectContactLabels={x => x.projectDetails.contactLabels}/>
+                        <ACC.PartnersAndFinanceContacts contacts={contacts} partners={partners} projectContactLabels={x => x.projectDetails.contactLabels} />
                     </ACC.Section>
                 </ACC.Section>
 
@@ -69,6 +69,10 @@ class ProjectDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
                         <ACC.SummaryListItem labelContent={x => x.projectDetails.projectLabels.numberOfPeriods()} qa="periods" content={project.numberOfPeriods} />
                         <ACC.SummaryListItem labelContent={x => x.projectDetails.projectLabels.scope()} qa="scope" content={<ACC.Renderers.SimpleString multiline={true}>{project.summary}</ACC.Renderers.SimpleString>} />
                     </ACC.SummaryList>
+                </ACC.Section>
+
+                <ACC.Section titleContent={x => x.projectDetails.projectLabels.partners()}>
+                    <ACC.PartnersContactInformation partners={partners} projectContactLabels={x => x.projectDetails.contactLabels} />
                 </ACC.Section>
             </ACC.Page>
         );

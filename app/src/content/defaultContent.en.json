@@ -89,6 +89,7 @@
     "scope": "Project scope statement",
     "projectMembers": "Project members",
     "financeContacts": "Finance contacts",
+    "partners": "Partner information",
     "partner": "Partner",
     "awardRate": "Funding level",
     "totalGrant": "Total grant",
@@ -100,6 +101,7 @@
     "contactName" : "Name",
     "partnerName": "Partner",
     "partnerType": "Partner type",
+    "partnerPostcode": "Postcode",
     "contactEmail": "Email"
   },
   "document-labels" : {
