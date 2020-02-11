@@ -96,7 +96,7 @@ export const editorsReducer = <TDto extends {}, TValidator extends Results<TDto>
 
   if (action.type === actionTypes.TRANSITION_SUCCESS) {
     const hasPreviousRoute = action.payload.previousRoute !== null;
-    const isReplacing = (action.payload.route && action.payload.route.meta && action.payload.route.meta && action.payload.route.meta.options.replace === true) || false;
+    const isReplacing = (action.payload.route && action.payload.route.meta && action.payload.route.meta && action.payload.route.meta.options && action.payload.route.meta.options.replace === true) || false;
     if (hasPreviousRoute && !isReplacing) {
       return {};
     }
