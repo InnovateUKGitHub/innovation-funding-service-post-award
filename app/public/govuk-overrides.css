@@ -506,3 +506,20 @@ p.govuk-body--multiline {
 .content-prompt__icon:hover {
   cursor: pointer;
 }
+
+/* Markdown */
+.markdown p {
+  margin-top: 0px;
+  margin-bottom: 20px;
+}
+
+.markdown ul {
+  padding-left: 20px;
+  margin-top: 0px;
+  margin-bottom: 20px;
+}
+
+.markdown li {
+  margin-top: 0px;
+  margin-bottom: 5px;
+}
