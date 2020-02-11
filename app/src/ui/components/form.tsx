@@ -14,6 +14,8 @@ import { Button } from "./styledButton";
 import { SearchInput } from "./inputs/searchInput";
 import { FormInputWidths } from "./inputs/baseInput";
 import { DropdownList } from "./inputs";
+import { ContentSelector } from "@content/content";
+import { Content } from "./content";
 
 interface SharedFormProps<T> {
   onChange?: (data: T) => void;
@@ -128,6 +130,7 @@ interface HiddenFieldProps<TDto> {
 
 interface ExternalFieldProps<TDto, TValue> {
   label?: React.ReactNode;
+  labelContent?: ContentSelector;
   labelBold?: boolean;
   labelHidden?: boolean;
   hint?: React.ReactNode;
@@ -143,12 +146,12 @@ const createFieldHintId = <TDto, TValue>(props: ExternalFieldProps<TDto, TValue>
 
 class FieldComponent<T, TValue> extends React.Component<InternalFieldProps<T> & ExternalFieldProps<T, TValue>, {}> {
   render() {
-    const { hint, name, label, labelHidden, labelBold, field, formData, validation } = this.props;
+    const { hint, name, label, labelContent, labelHidden, labelBold, field, formData, validation } = this.props;
     const hasError = validation && validation.showValidationErrors && !validation.isValid;
 
     return (
       <div data-qa={`field-${name}`} className={classNames("govuk-form-group", { "govuk-form-group--error": hasError })}>
-        {!!label ? <label className={classNames("govuk-label", { "govuk-visually-hidden": labelHidden, "govuk-label--m": labelBold })} htmlFor={name}>{label}</label> : null}
+        {!!label || !!labelContent ? <label className={classNames("govuk-label", { "govuk-visually-hidden": labelHidden, "govuk-label--m": labelBold })} htmlFor={name}>{labelContent ? <Content value={labelContent} /> : label}</label> : null}
         {hint ? <span id={createFieldHintId(this.props)} className="govuk-hint">{hint}</span> : null}
         <ValidationError error={validation} />
         {field(formData, this.props.disabled, hasError)}

@@ -1,7 +1,7 @@
 import React from "react";
 
 interface InfoProps {
-  summary: string;
+  summary: React.ReactNode;
   qa?: string;
 }
 
