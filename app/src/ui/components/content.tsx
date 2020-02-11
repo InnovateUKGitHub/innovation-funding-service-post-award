@@ -12,6 +12,7 @@ import { ContentResult } from "@content/contentBase";
 interface Props {
   value: ContentSelector;
 }
+
 interface InnerProps {
   result: ContentResult;
   config: IFeatureFlags;
@@ -35,14 +36,21 @@ class ContentComponent extends Component<InnerProps> {
     return (
       <React.Fragment>
         &nbsp;
-        <a aria-label="Open content modal dialogue" role="button" href={`#${modalId}`}>
-          <i className="content-prompt__icon"/>
-        </a>
+        <i
+          aria-label="Open content modal dialogue"
+          role="button"
+          className="content-prompt__icon"
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            window.location.hash = `#${modalId}`;
+          }}
+        />
         <Modal id={modalId}>
           <Section title="Content hint">
             <SummaryList qa="content_info">
-              <SummaryListItem hideAction={true} label="Current value" content={displayValue} qa="current_value" />
-              <SummaryListItem hideAction={true} label="Content key" content={this.props.result.key} qa="current_value" />
+              <SummaryListItem hideAction={true} label="Current value" content={displayValue} qa="current_value"/>
+              <SummaryListItem hideAction={true} label="Content key" content={this.props.result.key} qa="current_value"/>
             </SummaryList>
             <ModalLink styling="PrimaryButton" modalId={modalId} open={false}>Close</ModalLink>
           </Section>
