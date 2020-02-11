@@ -7,6 +7,15 @@
     "home": {
       "title": "Home"
     },
+    "error-not-found": {
+      "title": "Page not found"
+    },
+    "error-unexpected": {
+      "title": {
+        "html": "Error",
+        "display": "Something has gone wrong at our end"
+      }
+    },
     "projects-dashboard": {
       "title": "Projects",
       "searchTitle": "Search",
