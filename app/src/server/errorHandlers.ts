@@ -1,4 +1,3 @@
-import { Response } from "express";
 import { ErrorCode, IAppError } from "@framework/types";
 import { Logger } from "./features/common/logger";
 import { ValidationError } from "./features/common";
