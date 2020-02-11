@@ -37,6 +37,7 @@ export interface ISalesforcePartner {
   Acc_AuditReportFrequency__c: string;
   AuditReportFrequencyName: string;
   Acc_TotalPrepayment__c: number;
+  Acc_Postcode__c: string;
 }
 
 export interface IPartnerRepository {
@@ -88,6 +89,7 @@ export class PartnerRepository extends SalesforceRepositoryBase<ISalesforcePartn
     "Acc_AuditReportFrequency__c",
     "toLabel(Acc_AuditReportFrequency__c) AuditReportFrequencyName",
     "Acc_TotalPrepayment__c",
+    "Acc_Postcode__c",
   ];
 
   getAllByProjectId(projectId: string): Promise<ISalesforcePartner[]> {
