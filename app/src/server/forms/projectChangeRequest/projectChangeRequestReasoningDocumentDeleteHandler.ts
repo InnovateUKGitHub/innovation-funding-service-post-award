@@ -20,7 +20,7 @@ export class ProjectChangeRequestReasoningDocumentDeleteHandler extends Standard
   }
 
   protected createValidationResult(params: ProjectChangeRequestPrepareReasoningParams, dto: Document) {
-    return new MultipleDocumentUpdloadDtoValidator(dto, Configuration, false, false);
+    return new MultipleDocumentUpdloadDtoValidator(dto, Configuration, false, false, null);
   }
 
   protected getStoreKey(params: ProjectChangeRequestPrepareReasoningParams) {

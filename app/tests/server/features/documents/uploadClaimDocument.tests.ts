@@ -93,6 +93,23 @@ describe("UploadClaimDocumentCommand", () => {
       expect(document.Description).toEqual("test description");
     });
 
+    it("should throw a validation error if the file type is not allowed", async () => {
+      const context = new TestContext();
+      const partner = context.testData.createPartner();
+      const project = context.testData.createProject();
+      const claim = context.testData.createClaim(partner, 1);
+      const claimKey = {
+        projectId: project.Id,
+        partnerId: claim.Acc_ProjectParticipant__r.Id,
+        periodId: claim.Acc_ProjectPeriodNumber__c
+      };
+
+      const validExtension = { file: context.testData.createFile("test", "file.csv")};
+      const nonValidExtension = { file: context.testData.createFile("test", "file.zip")};
+      await expect(context.runCommand(new UploadClaimDocumentCommand(claimKey, validExtension))).resolves.toBe("1");
+      await expect(context.runCommand(new UploadClaimDocumentCommand(claimKey, nonValidExtension))).rejects.toThrow(ValidationError);
+    });
+
     describe("When the claim status is AWAITING_IAR", () => {
       it("should update the claim status to AWAITING_IUK_APPROVAL", async () => {
         const context = new TestContext();

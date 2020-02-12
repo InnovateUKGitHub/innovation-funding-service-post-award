@@ -1,11 +1,15 @@
 import { Authorisation, IContext, ProjectRole } from "@framework/types";
-import { CommandBase, ValidationError } from "@server/features/common";
-import { DocumentUploadDtoValidator, MultipleDocumentUpdloadDtoValidator } from "@ui/validators/documentUploadValidator";
+import { CommandMultipleDocumentBase, ValidationError } from "@server/features/common";
+import { MultipleDocumentUpdloadDtoValidator } from "@ui/validators/documentUploadValidator";
 
-export class UploadProjectDocumentCommand extends CommandBase<string[]> {
+export class UploadProjectDocumentCommand extends CommandMultipleDocumentBase<string[]> {
+
+  protected filesRequired = true;
+  protected showValidationErrors = true;
+
   constructor(
     private readonly projectId: string,
-    private readonly documents: MultipleDocumentUploadDto
+    protected readonly documents: MultipleDocumentUploadDto
   ) {
     super();
   }
@@ -19,7 +23,7 @@ export class UploadProjectDocumentCommand extends CommandBase<string[]> {
   }
 
   protected async Run(context: IContext) {
-    const result = new MultipleDocumentUpdloadDtoValidator(this.documents, context.config, true, true);
+    const result = new MultipleDocumentUpdloadDtoValidator(this.documents, context.config, this.filesRequired, this.showValidationErrors, null);
 
     if (!result.isValid) {
       throw new ValidationError(result);

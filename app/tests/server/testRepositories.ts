@@ -10,6 +10,7 @@ import { PicklistEntry } from "jsforce";
 import { getAllEnumValues } from "@shared/enumHelper";
 import { PCRStatusesPicklist } from "../server/features/pcrs/pcrStatusesPicklist";
 import { ProjectChangeRequestStatusChangeEntity } from "@framework/entities";
+import { FileTypeNotAllowedError } from "@server/repositories";
 
 class ProjectsTestRepository extends TestRepository<Repositories.ISalesforceProject> implements Repositories.IProjectRepository {
   getById(id: string) {
@@ -135,6 +136,9 @@ class DocumentsTestRepository extends TestRepository<[string, Repositories.ISale
   async insertDocument(file: TestFileWrapper, recordId: string, description: string): Promise<string> {
     const nameParts = file.fileName.split(".");
     const extension = nameParts.length > 1 ? nameParts[nameParts.length - 1] : null;
+    if (extension === "zip") {
+      throw new FileTypeNotAllowedError("File type not allowed");
+    }
     const title = nameParts[0];
 
     const newDocumentId = (this.Items.length + 1).toString();

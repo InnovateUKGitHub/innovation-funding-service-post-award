@@ -1,11 +1,17 @@
-import { BadRequestError, CommandBase, ValidationError } from "@server/features/common";
-import { DocumentUploadDtoValidator, MultipleDocumentUpdloadDtoValidator } from "@ui/validators/documentUploadValidator";
+import { BadRequestError, CommandMultipleDocumentBase, ValidationError } from "@server/features/common";
+import {
+  MultipleDocumentUpdloadDtoValidator
+} from "@ui/validators/documentUploadValidator";
 import { Authorisation, IContext, ProjectRole } from "@framework/types";
 
-export class UploadClaimDetailDocumentCommand extends CommandBase<string[]> {
+export class UploadClaimDetailDocumentCommand extends CommandMultipleDocumentBase<string[]> {
+
+  protected filesRequired = true;
+  protected showValidationErrors = true;
+
   constructor(
     private readonly claimDetailKey: ClaimDetailKey,
-    private readonly documents: MultipleDocumentUploadDto
+    protected readonly documents: MultipleDocumentUploadDto
     ) {
     super();
   }
@@ -25,7 +31,7 @@ export class UploadClaimDetailDocumentCommand extends CommandBase<string[]> {
       throw new BadRequestError("No Claim Detail");
     }
 
-    const result = new MultipleDocumentUpdloadDtoValidator(this.documents, context.config, true, true);
+    const result = new MultipleDocumentUpdloadDtoValidator(this.documents, context.config, this.filesRequired, this.showValidationErrors, null);
     if (!result.isValid) {
       throw new ValidationError(result);
     }
