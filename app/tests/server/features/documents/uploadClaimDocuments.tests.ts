@@ -17,7 +17,7 @@ describe("UploadClaimDocumentsCommand", () => {
       periodId: claim.Acc_ProjectPeriodNumber__c
     };
 
-    const expectedContent = "Some content";
+    const expectedContent = "Some content 2";
     const expectedFileName = "fileName.txt";
 
     const file = context.testData.createFile(expectedContent, expectedFileName);
@@ -52,6 +52,26 @@ describe("UploadClaimDocumentsCommand", () => {
     const documents = await context.repositories.documents.Items.map(x => x[1]);
     expect(documents.map(x => x.VersionData)).toEqual(files.map(x => x.content));
     expect(documents.map(x => x.PathOnClient)).toEqual(files.map(x => x.fileName));
+  });
+
+  it("should throw a validation error if the file type is not allowed", async () => {
+    const context = new TestContext();
+    const partner = context.testData.createPartner();
+    const project = context.testData.createProject();
+    const claim = context.testData.createClaim(partner, 1);
+
+    const claimKey = {
+      projectId: project.Id,
+      partnerId: claim.Acc_ProjectParticipant__r.Id,
+      periodId: claim.Acc_ProjectPeriodNumber__c
+    };
+
+    const expectedContent = "Some content";
+    const expectedFileName = "fileName.zip";
+
+    const file = context.testData.createFile(expectedContent, expectedFileName);
+    const command = new UploadClaimDocumentsCommand(claimKey,{ files: [file] });
+    await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
   });
 
   it("should throw an exception if file upload validation fails", async () => {

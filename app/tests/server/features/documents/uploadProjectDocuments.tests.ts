@@ -11,7 +11,7 @@ describe("UploadProjectDocumentCommand", () => {
     const context = new TestContext();
     const project = context.testData.createProject();
 
-    const content = "Some content";
+    const content = "Some content 1";
     const fileName = "test.csv";
 
     const file = context.testData.createFile(content, fileName);
@@ -22,6 +22,19 @@ describe("UploadProjectDocumentCommand", () => {
 
     expect(document.VersionData).toEqual(content);
     expect(document.PathOnClient).toEqual(fileName);
+  });
+
+  it("should throw a validation error if the file type is not allowed", async () => {
+    const context = new TestContext();
+    const project = context.testData.createProject();
+
+    const content = "Some content";
+    const fileName = "test.zip";
+
+    const file = context.testData.createFile(content, fileName);
+
+    const command = new UploadProjectDocumentCommand(project.Id, { files: [file] });
+    await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
   });
 
   it("should upload a project document description", async () => {

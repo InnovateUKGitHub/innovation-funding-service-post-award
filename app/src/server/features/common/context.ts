@@ -33,6 +33,10 @@ const constructErrorResponse = <E extends Error>(error: E): AppError => {
     return new NotFoundError(undefined, error);
   }
 
+  if (error instanceof Repositories.FileTypeNotAllowedError) {
+    return new AppError(Framework.ErrorCode.BAD_REQUEST_ERROR, error.message, error);
+  }
+
   return new AppError(Framework.ErrorCode.UNKNOWN_ERROR, error.message, error);
 };
 
@@ -137,6 +141,7 @@ export class Context implements Framework.IContext {
       if (e instanceof ValidationError) {
         this.logger.debug("Validation Error", e.results && e.results.log());
       }
+      if (runnable.handleRepositoryError) runnable.handleRepositoryError(this, e);
       throw constructErrorResponse(e);
     }
     finally {

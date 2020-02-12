@@ -1,4 +1,4 @@
-import { BadRequestError, CommandBase, ValidationError } from "@server/features/common";
+import { BadRequestError, CommandDocumentBase, ValidationError } from "@server/features/common";
 import { DeleteClaimDocumentCommand } from "@server/features/documents/deleteClaimDocument";
 import { DocumentUploadDtoValidator } from "@ui/validators/documentUploadValidator";
 import { Authorisation, ClaimDto, ClaimStatus, DocumentDescription, IContext, ProjectRole } from "@framework/types";
@@ -6,8 +6,11 @@ import mapClaim from "@server/features/claims/mapClaim";
 import { GetClaimDocumentsQuery } from "@server/features/documents/getClaimDocumentsSummary";
 import { UpdateClaimCommand } from "../claims";
 
-export class UploadClaimDocumentCommand extends CommandBase<string> {
-  constructor(private readonly claimKey: ClaimKey, private readonly document: DocumentUploadDto) {
+export class UploadClaimDocumentCommand extends CommandDocumentBase<string> {
+
+  protected showValidationErrors = true;
+
+  constructor(private readonly claimKey: ClaimKey, protected readonly document: DocumentUploadDto) {
     super();
   }
 
@@ -42,7 +45,7 @@ export class UploadClaimDocumentCommand extends CommandBase<string> {
   }
 
   protected async Run(context: IContext) {
-    const result = new DocumentUploadDtoValidator(this.document, context.config.maxFileSize, true);
+    const result = new DocumentUploadDtoValidator(this.document, context.config.maxFileSize, this.showValidationErrors, null);
 
     if (!result.isValid) {
       throw new ValidationError(result);
