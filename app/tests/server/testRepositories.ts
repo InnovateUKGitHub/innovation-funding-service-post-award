@@ -395,6 +395,7 @@ class MonitoringReportStatusChangeTestRepository extends TestRepository<Reposito
       Acc_MonitoringReport__c: statusChange.Acc_MonitoringReport__c!,
       Acc_PreviousMonitoringReportStatus__c: statusChange.Acc_PreviousMonitoringReportStatus__c!,
       Acc_NewMonitoringReportStatus__c: statusChange.Acc_NewMonitoringReportStatus__c!,
+      Acc_CreatedByAlias__c: statusChange.Acc_CreatedByAlias__c!,
       CreatedDate: statusChange.CreatedDate!
     });
   }
@@ -534,6 +535,7 @@ class ProjectChangeRequestStatusChangeTestRepository extends TestRepository<Proj
     return super.insertOne({
       id: (this.Items.length + 1).toString(),
       pcrId: statusChange.Acc_ProjectChangeRequest__c,
+      createdBy: "Sentient being Alpha B-25",
       createdDate: new Date(),
       previousStatus,
       newStatus,

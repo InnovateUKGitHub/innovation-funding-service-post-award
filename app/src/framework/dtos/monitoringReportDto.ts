@@ -39,5 +39,6 @@ export interface MonitoringReportStatusChangeDto {
   previousStatusLabel: string;
   newStatus: MonitoringReportStatus;
   newStatusLabel: string;
+  createdBy: string;
   createdDate: Date;
 }

@@ -11,6 +11,7 @@ export interface ICreateProjectChangeRequestStatusChange {
 export interface ISalesforceProjectChangeRequestStatusChange extends ICreateProjectChangeRequestStatusChange {
   Id: string;
   CreatedDate: string;
+  Acc_CreatedByAlias__c: string;
   Acc_NewProjectChangeRequestStatus__c: string;
   Acc_PreviousProjectChangeRequestStatus__c: string;
 }
@@ -35,6 +36,7 @@ export class ProjectChangeRequestStatusChangeRepository extends SalesforceReposi
     "Acc_NewProjectChangeRequestStatus__c",
     "CreatedDate",
     "Acc_ExternalComment__c",
+    "Acc_CreatedByAlias__c",
     "Acc_ParticipantVisibility__c"
   ];
 

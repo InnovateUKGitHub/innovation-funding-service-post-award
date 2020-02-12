@@ -9,6 +9,7 @@ export class PCRStatusChangeMapper extends SalesforceBaseMapper<ISalesforceProje
     return {
       id: item.Id,
       pcrId: item.Acc_ProjectChangeRequest__c,
+      createdBy: item.Acc_CreatedByAlias__c,
       createdDate: this.clock.parseRequiredSalesforceDateTime(item.CreatedDate),
       previousStatus: this.mapStatus(item.Acc_PreviousProjectChangeRequestStatus__c),
       newStatus: this.mapStatus(item.Acc_NewProjectChangeRequestStatus__c),
