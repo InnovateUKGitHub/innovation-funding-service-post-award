@@ -41,6 +41,7 @@ export class GetMonitoringReportStatusChanges extends QueryBase<MonitoringReport
       newStatusLabel: newStatusLookup && newStatusLookup.label || statusChange.Acc_NewMonitoringReportStatus__c,
       previousStatus,
       previousStatusLabel: previousStatusLookup && previousStatusLookup.label || statusChange.Acc_PreviousMonitoringReportStatus__c,
+      createdBy: statusChange.Acc_CreatedByAlias__c,
       createdDate: context.clock.parseRequiredSalesforceDateTime(statusChange.CreatedDate)
     };
   }

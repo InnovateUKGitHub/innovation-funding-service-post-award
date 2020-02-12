@@ -5,6 +5,7 @@ import { ShortDateTime } from "./renderers/date";
 export interface LogItem {
   newStatusLabel: string;
   createdDate: Date;
+  createdBy: string;
   comments?: string | null;
 }
 
@@ -31,6 +32,7 @@ export class Logs extends React.Component<Props> {
             <tr className="govuk-table__row">
               <th className="govuk-table__header" scope="col" key="0">Date and time</th>
               <th className="govuk-table__header" scope="col" key="1">Status update</th>
+              <th className="govuk-table__header" scope="col" key="2">Created by</th>
             </tr>
           </thead>
           <tbody className="govuk-table__body">
@@ -46,7 +48,8 @@ export class Logs extends React.Component<Props> {
       <React.Fragment key={index}>
         <tr className="govuk-table__row" key={`${index}_a`}>
           <td className="govuk-table__cell" key="0"><ShortDateTime value={item.createdDate} /></td>
-          <td className="govuk-table__cell" key="1">{ item.newStatusLabel } </td>
+          <td className="govuk-table__cell" key="1">{item.newStatusLabel} </td>
+          <td className="govuk-table__cell" key="2">{item.createdBy}</td>
         </tr>
         {this.renderCommentsRow(item, index)}
       </React.Fragment>
