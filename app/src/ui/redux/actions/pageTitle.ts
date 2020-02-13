@@ -9,9 +9,9 @@ export const setPageTitle = (title: { displayTitle: string, htmlTitle: string })
 export const udpatePageTitle = (route: MatchedRoute, params: {}, stores: IStores, content: Content): AsyncThunk<void, SetPageTitleAction> => {
   return (dispatch, getState) => {
     const state = getState();
-    const title = route.getTitle(state, params, stores, content);
+    const title = route.getTitle({ params, stores, content });
 
-    if(!state.title || title.displayTitle !== state.title.displayTitle || title.htmlTitle !== state.title.htmlTitle) {
+    if (!state.title || title.displayTitle !== state.title.displayTitle || title.htmlTitle !== state.title.htmlTitle) {
       dispatch(setPageTitle(title));
     }
 

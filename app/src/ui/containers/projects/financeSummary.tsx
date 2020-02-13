@@ -142,5 +142,5 @@ export const FinanceSummaryRoute = defineRoute({
     partnerId: route.params.partnerId
   }),
   accessControl: (auth, params) => auth.forProject(params.projectId).hasAnyRoles(ProjectRole.ProjectManager, ProjectRole.MonitoringOfficer, ProjectRole.FinancialContact),
-  getTitle: (state, parmas, stores, content) => content.financeSummary.title()
+  getTitle: ({ content }) => content.financeSummary.title()
 });

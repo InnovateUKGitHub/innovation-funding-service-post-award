@@ -59,7 +59,7 @@ class AppComponent extends React.Component<IAppProps, {}> {
     return (
       <div>
         <Header ifsRoot={this.props.config.ifsRoot} />
-        <div className="govuk-width-container" data-page-qa={route.name}>
+        <div className="govuk-width-container" data-page-qa={route.routeName}>
           <PhaseBanner />
           {pageContent}
         </div>

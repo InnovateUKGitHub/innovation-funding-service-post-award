@@ -76,7 +76,7 @@ class ProjectDocumentsComponent extends ContainerBaseWithState<ProjectDocumentPa
             qa="projectDocumentUpload"
           >
             <UploadForm.Fieldset>
-              <ACC.Content value={x => x.projectDocuments.uploadInstruction()}/>
+              <ACC.Content value={x => x.projectDocuments.uploadInstruction()} />
               <ACC.DocumentGuidanceWithContent documentMessages={x => x.projectDocuments.documentMessages} />
               <UploadForm.MulipleFileUpload
                 labelContent={x => x.projectDocuments.documentLabels.uploadInputLabel()}
@@ -87,7 +87,7 @@ class ProjectDocumentsComponent extends ContainerBaseWithState<ProjectDocumentPa
                 validation={editor.validator.files}
               />
             </UploadForm.Fieldset>
-            <UploadForm.Submit styling="Secondary"><ACC.Content value={x => x.projectDocuments.documentLabels.uploadButtonLabel()}/></UploadForm.Submit>
+            <UploadForm.Submit styling="Secondary"><ACC.Content value={x => x.projectDocuments.documentLabels.uploadButtonLabel()} /></UploadForm.Submit>
           </UploadForm.Form>
         </ACC.Section>
         {this.renderDocumentsSection(documents)}
@@ -109,7 +109,7 @@ class ProjectDocumentsComponent extends ContainerBaseWithState<ProjectDocumentPa
       : documents;
 
     if (documents.length === 0) {
-      return <ACC.ValidationMessage qa={"noDocuments"} message={<ACC.Content value={x => x.projectDocuments.noDocumentsMessage()}/>} messageType="info" />;
+      return <ACC.ValidationMessage qa={"noDocuments"} message={<ACC.Content value={x => x.projectDocuments.noDocumentsMessage()} />} messageType="info" />;
     }
 
     if (documentsToDisplay.length === 0) {
@@ -117,7 +117,7 @@ class ProjectDocumentsComponent extends ContainerBaseWithState<ProjectDocumentPa
         <React.Fragment>
           {this.renderDocumentsFilter()}
           <ACC.Renderers.SimpleString qa={"noDocuments"}>
-            <ACC.Content value={x => x.projectDocuments.noMatchingDocumentsMessage()}/>
+            <ACC.Content value={x => x.projectDocuments.noMatchingDocumentsMessage()} />
           </ACC.Renderers.SimpleString>
         </React.Fragment>
       );
@@ -151,7 +151,7 @@ class ProjectDocumentsComponent extends ContainerBaseWithState<ProjectDocumentPa
         <ProjectDocumentsTable.Custom headerContent={x => x.projectDocuments.documentLabels.fileNameLabel()} qa="fileName" value={x => this.renderDocumentName(x)} />
         <ProjectDocumentsTable.ShortDate headerContent={x => x.projectDocuments.documentLabels.dateUploadedLabel()} qa="dateUploaded" value={x => x.dateCreated} />
         <ProjectDocumentsTable.Custom headerContent={x => x.projectDocuments.documentLabels.fileSizeLabel()} qa="fileSize" classSuffix="numeric" value={x => getFileSize(x.fileSize)} />
-        <ProjectDocumentsTable.String headerContent={x => x.projectDocuments.documentLabels.uploadedByLabel()} qa="uploadedBy" value={x => x.uploadedBy}/>
+        <ProjectDocumentsTable.String headerContent={x => x.projectDocuments.documentLabels.uploadedByLabel()} qa="uploadedBy" value={x => x.uploadedBy} />
       </ProjectDocumentsTable.Table>
     );
   }
@@ -182,6 +182,6 @@ export const ProjectDocumentsRoute = defineRoute({
   routePath: "/projects/:projectId/documents",
   container: ProjectDocumentsContainer,
   getParams: (route) => ({ projectId: route.params.projectId }),
-  getTitle: (state, params, stores, content) => content.projectDocuments.title(),
+  getTitle: ({ content }) => content.projectDocuments.title(),
   accessControl: (auth, { projectId }) => auth.forProject(projectId).hasRole(ProjectRole.MonitoringOfficer)
 });
