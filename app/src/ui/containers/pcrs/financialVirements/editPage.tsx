@@ -46,8 +46,8 @@ class Component extends ContainerBase<Params, Props, {}> {
           <VirementForm.Fieldset>
             <VirementTable.Table qa="partnerVirements" data={partnerVirements.virements}>
               <VirementTable.String header="Cost category" qa="costCategory" value={x => x.costCategoryName} footer="Total" />
-              <VirementTable.Currency header="Original" qa="original" value={x => x.originalAmount} footer={<ACC.Renderers.Currency value={partnerVirements.originalTotal} />} />
-              <VirementTable.Custom header="New" qa="new" value={x => this.renderInput(x, editor.status === EditorStatus.Saving)} footer={<ACC.Renderers.Currency value={partnerVirements.newTotal} />} classSuffix={"numeric"} />
+              <VirementTable.Currency header="Original" qa="original" value={x => x.totalEligibleCosts} footer={<ACC.Renderers.Currency value={partnerVirements.totalEligibleCosts} />} />
+              <VirementTable.Custom header="New" qa="new" value={x => this.renderInput(x, editor.status === EditorStatus.Saving)} footer={<ACC.Renderers.Currency value={partnerVirements.newEligibleCosts} />} classSuffix={"numeric"} />
             </VirementTable.Table>
           </VirementForm.Fieldset>
           <VirementForm.Fieldset>
@@ -59,7 +59,7 @@ class Component extends ContainerBase<Params, Props, {}> {
   }
 
   private renderInput(virement: VirementDto, disabled: boolean) {
-    return <ACC.Inputs.NumberInput name={virement.costCategoryId} value={virement.newAmount} onChange={(val) => this.updateValue(virement.costCategoryId, val)} width={4} ariaLabel={virement.costCategoryName} disabled={disabled} />;
+    return <ACC.Inputs.NumberInput name={virement.costCategoryId} value={virement.newEligibleCosts} onChange={(val) => this.updateValue(virement.costCategoryId, val)} width={4} ariaLabel={virement.costCategoryName} disabled={disabled} />;
   }
 
   private updateValue(costCategoryId: string, value: number | null) {
@@ -70,11 +70,11 @@ class Component extends ContainerBase<Params, Props, {}> {
     const partnerVirement = partner.virements
       .find(x => x.costCategoryId === costCategoryId)!;
 
-    partnerVirement.newAmount = value!;
+    partnerVirement.newEligibleCosts = value!;
 
-    partner.newTotal = partner.virements.filter(x => !!x.newAmount).reduce((total, x) => total + x.newAmount, 0);
+    partner.newEligibleCosts = partner.virements.filter(x => !!x.newEligibleCosts).reduce((total, x) => total + x.newEligibleCosts, 0);
 
-    dto.newTotal = dto.partners.filter(x => !!x.newTotal).reduce((total, x) => total + x.newTotal, 0);
+    dto.newEligibleCosts = dto.partners.filter(x => !!x.newEligibleCosts).reduce((total, x) => total + x.newEligibleCosts, 0);
 
     this.props.onChange(false, dto);
   }

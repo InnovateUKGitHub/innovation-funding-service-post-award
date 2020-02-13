@@ -1,8 +1,7 @@
 import { QueryBase } from "@server/features/common";
 import { Authorisation, IContext, ProjectRole } from "@framework/types";
-import { GetAllForProjectQuery } from "../partners/getAllForProjectQuery";
-import { GetAllForecastsGOLCostsQuery } from "../claims";
-import { ISalesforceFinancialVirement } from "@server/repositories";
+import { CostCategoryFinancialVirement, PartnerFinancialVirement } from "@framework/entities";
+import { GetCostCategoriesQuery } from "../claims/getCostCategoriesQuery";
 
 export class GetFinancialVirementQuery extends QueryBase<FinancialVirementDto> {
   constructor(private projectId: string, private pcrId: string, private pcrItemId: string) {
@@ -13,102 +12,50 @@ export class GetFinancialVirementQuery extends QueryBase<FinancialVirementDto> {
     return auth.forProject(this.projectId).hasAnyRoles(ProjectRole.MonitoringOfficer, ProjectRole.ProjectManager);
   }
 
+  private sumPartnerCost(value: (item: CostCategoryFinancialVirement) => number, partner: PartnerFinancialVirement) {
+    return partner.virements.reduce((total, item) => total + value(item), 0);
+  }
+
+  private sumTotalCost(value: (item: CostCategoryFinancialVirement) => number, partners: PartnerFinancialVirement[]) {
+    return partners.reduce((total, item) => total + this.sumPartnerCost(value, item), 0);
+  }
+
   protected async Run(context: IContext): Promise<FinancialVirementDto> {
 
-    const data = await context.repositories.financialVirements.getAllForPcr(this.pcrItemId);
+    const costCategories = await context.runQuery(new GetCostCategoriesQuery());
 
-    // todo: this will end up in the create pcr item code...
-    // not production ready as calling query in a loop!
-
-    const partners = await context.runQuery(new GetAllForProjectQuery(this.projectId));
-
-    const partnerAndGolCostsPromises = partners.map(partner =>
-      context.runQuery(new GetAllForecastsGOLCostsQuery(partner.id))
-        .then(golCosts => ({ partner, golCosts, total: golCosts.reduce((total, g) => total + g.value, 0) }))
-    );
-
-    const partnerAndGolCosts = await Promise.all(partnerAndGolCostsPromises);
-
-    const combined = partnerAndGolCosts.map(x => {
-      const costCategories = x.golCosts.map(golCost => {
-
-        const saved = data.find(savedItem =>
-          savedItem.Acc_Profile__r.Acc_CostCategory__c === golCost.costCategoryId &&
-          savedItem.Acc_Profile__r.Acc_ProjectParticipant__c === x.partner.id
-        );
-
-        return {
-          costcategoryId: golCost.costCategoryId,
-          costCategoryName: golCost.costCategoryName,
-          originalAmount: saved ? saved.Acc_CurrentCosts__c : golCost.value,
-          newAmount: saved ? saved.Acc_NewCosts__c : golCost.value,
-        };
-      });
-
-      return {
-        partner: x.partner,
-        costCategories,
-        originalTotal: costCategories.reduce((total, c) => total + c.originalAmount, 0),
-        newTotal: costCategories.reduce((total, c) => total + c.newAmount, 0)
-      };
-    });
-
-    const originalTotal = combined.reduce((total, c) => total + c.originalTotal, 0);
-    const newTotal = combined.reduce((total, c) => total + c.newTotal, 0);
-
-    return {
-      pcrItemId: this.pcrItemId,
-      originalTotal,
-      newTotal,
-      partners: combined.map<PartnerVirementsDto>(x => ({
-        partnerId: x.partner.id,
-        partnerName: x.partner.name,
-        isLead: x.partner.isLead,
-        isWithdrawn: x.partner.isWithdrawn,
-        originalTotal: x.originalTotal,
-        newTotal: x.newTotal,
-        virements: x.costCategories.map<VirementDto>(y => ({
-          costCategoryId: y.costcategoryId,
-          costCategoryName: y.costCategoryName,
-          newAmount: y.newAmount,
-          originalAmount: y.originalAmount
-        }))
-      }))
-    };
-  }
-}
-
-export class GetFinancialVirementV2Query extends QueryBase<FinancialVirementV2Dto> {
-  constructor(private projectId: string, private pcrId: string, private pcrItemId: string) {
-    super();
-  }
-
-  protected async accessControl(auth: Authorisation, context: IContext) {
-    return auth.forProject(this.projectId).hasAnyRoles(ProjectRole.MonitoringOfficer, ProjectRole.ProjectManager);
-  }
-
-  protected async Run(context: IContext): Promise<FinancialVirementV2Dto> {
     const data = await context.repositories.financialVirements.getAllForPcr(this.pcrItemId);
     return {
       pcrItemId: this.pcrItemId,
-      difference: data.reduce((total, item) => total + item.Acc_NewCosts__c - item.Acc_CurrentCosts__c, 0),
-      additions: data
-        .filter(x => x.Acc_NewCosts__c > x.Acc_CurrentCosts__c)
-        .map(this.mapToVirementDto),
-      subtractions: data
-        .filter(x => x.Acc_NewCosts__c < x.Acc_CurrentCosts__c)
-        .map(this.mapToVirementDto),
-    };
-  }
-
-  private mapToVirementDto(record: ISalesforceFinancialVirement): VirementV2Dto {
-    const difference = record.Acc_NewCosts__c - record.Acc_CurrentCosts__c;
-    return {
-      costCategoryId: record.Acc_Profile__r.Acc_CostCategory__c,
-      newAmount: record.Acc_NewCosts__c,
-      originalAmount: record.Acc_CurrentCosts__c,
-      difference: difference > 0 ? difference : difference * -1,
-      partnerId: record.Acc_Profile__r.Acc_ProjectParticipant__c
+      totalEligibleCosts: this.sumTotalCost(v => v.originalEligibleCosts, data),
+      totalCostsClaimed: this.sumTotalCost(v => v.originalCostsClaimedToDate, data),
+      totalCostsNotYetClaimed: this.sumTotalCost(v => v.originalEligibleCosts - v.originalCostsClaimedToDate, data),
+      totalRemaining: 0,
+      newEligibleCosts: this.sumTotalCost(v => v.newCosts, data),
+      newCostsNotYetClaimed: this.sumTotalCost(v => v.newCosts - v.originalCostsClaimedToDate, data),
+      newRemaining: 0,
+      partners: data
+        .map(partner => ({
+          partnerId: partner.partnerId,
+          totalEligibleCosts: this.sumPartnerCost(v => v.originalEligibleCosts, partner),
+          totalCostsClaimed: this.sumPartnerCost(v => v.originalCostsClaimedToDate, partner),
+          totalCostsNotYetClaimed: this.sumPartnerCost(v => v.originalEligibleCosts - v.originalCostsClaimedToDate, partner),
+          totalRemaining: 0,
+          newEligibleCosts: this.sumPartnerCost(v => v.newCosts, partner),
+          newCostsNotYetClaimed: this.sumPartnerCost(v => v.newCosts - v.originalCostsClaimedToDate, partner),
+          newRemaining: 0,
+          virements: partner.virements.map(virement => ({
+            costCategoryId: virement.costCategoryId,
+            costCategoryName: costCategories.filter(x => x.id === virement.costCategoryId).map(x => x.name)[0],
+            totalEligibleCosts: virement.originalEligibleCosts,
+            totalCostsClaimed: virement.originalCostsClaimedToDate,
+            totalCostsNotYetClaimed: virement.originalEligibleCosts - virement.originalCostsClaimedToDate,
+            totalRemaining: 0,
+            newEligibleCosts: virement.newCosts,
+            newCostsNotYetClaimed: virement.originalEligibleCosts - virement.newCosts,
+            newRemaining: 0,
+          }))
+        })),
     };
   }
 }
