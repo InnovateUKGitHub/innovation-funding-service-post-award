@@ -523,7 +523,7 @@ class PCRTestRepository extends TestRepository<Entities.ProjectChangeRequestEnti
 
   getPcrChangeStatuses(): Promise<PicklistEntry[]> {
     const picklistEntry: PicklistEntry[] = new Array();
-    PCRStatusesPicklist.forEach(x=> picklistEntry.push(x));
+    PCRStatusesPicklist.forEach(x => picklistEntry.push(x));
     return Promise.resolve(picklistEntry);
   }
 }
@@ -553,30 +553,14 @@ class ProjectChangeRequestStatusChangeTestRepository extends TestRepository<Proj
   }
 }
 
-class FinancialVirementsTestRepository extends TestRepository<Repositories.ISalesforceFinancialVirement> implements Repositories.IFinancialVirementRepository {
-  getAllForPcr(pcrItemId: string): Promise<Repositories.ISalesforceFinancialVirement[]> {
-    return super.getWhere(x => x.Acc_ProjectChangeRequest__c === pcrItemId);
-  }
-
-  insertVirements(items: Partial<Repositories.ISalesforceFinancialVirement>[]): Promise<string[]> {
-    const newIds: string[] = [];
-    items.forEach((item) => {
-      const Id = `Virement-${this.Items.length}`;
-      newIds.push(Id);
-      this.Items.push({ ...item, Id } as Repositories.ISalesforceFinancialVirement);
-    });
-    return Promise.resolve(newIds);
+class FinancialVirementsTestRepository extends TestRepository<Entities.PartnerFinancialVirement> implements Repositories.IFinancialVirementRepository {
+  getAllForPcr(pcrItemId: string): Promise<Entities.PartnerFinancialVirement[]> {
+    return super.getWhere(x => x.pcrItemId === pcrItemId);
   }
 
   updateVirements(items: Updatable<Repositories.ISalesforceFinancialVirement>[]): Promise<boolean> {
     return Promise.resolve(true);
   }
-
-  deleteVirements(ids: string[]): Promise<void> {
-    this.Items = this.Items.filter(x => !ids.some(y => x.Id === y));
-    return Promise.resolve();
-  }
-
 }
 
 export interface ITestRepositories extends IRepositories {
