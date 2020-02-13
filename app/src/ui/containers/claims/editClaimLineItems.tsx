@@ -337,7 +337,7 @@ export const EditClaimLineItemsRoute = defineRoute({
     periodId: parseInt(route.params.periodId, 10)
   }),
   accessControl: (auth, params) => auth.forPartner(params.projectId, params.partnerId).hasRole(ProjectRole.FinancialContact),
-  getTitle: (store, params, stores) => {
+  getTitle: ({ params, stores }) => {
     const costCatName =  stores.costCategories.get(params.costCategoryId).then(x => x.name).data;
     return {
       htmlTitle: costCatName ? `Add costs for ${costCatName}` : "Add costs",

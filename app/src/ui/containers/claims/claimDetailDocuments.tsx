@@ -142,7 +142,7 @@ export const ClaimDetailDocumentsRoute = defineRoute({
     periodId: parseInt(route.params.periodId, 10)
   }),
   accessControl: (auth, { projectId, partnerId }) => auth.forPartner(projectId, partnerId).hasRole(ProjectRole.FinancialContact),
-  getTitle: (store, params, stores) => {
+  getTitle: ({ params, stores }) => {
     const costCatName = stores.costCategories.get(params.costCategoryId).then(x => x.name).data;
     return {
       htmlTitle: costCatName ? `Add documents for ${costCatName}` : "Add documents",
