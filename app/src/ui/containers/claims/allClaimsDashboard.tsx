@@ -41,10 +41,10 @@ class Component extends ContainerBase<AllClaimsDashboardParams, Data, {}> {
       >
         {this.renderGuidanceMessage(projectDetails)}
         <Acc.Renderers.Messages messages={this.props.messages} />
-        <Acc.Section qa="current-claims-section" title="Open">
+        <Acc.Section qa="current-claims-section" titleContent={x => x.allClaimsDashboard.openSection.title()}>
           {this.renderCurrentClaimsPerPeriod(currentClaims, projectDetails, partners)}
         </Acc.Section>
-        <Acc.Section qa="closed-claims-section" title="Closed">
+        <Acc.Section qa="closed-claims-section" titleContent={x => x.allClaimsDashboard.closedSection.title()}>
           {this.renderPreviousClaimsSections(projectDetails, partners, previousClaims)}
         </Acc.Section>
       </Acc.Page>
@@ -59,7 +59,7 @@ class Component extends ContainerBase<AllClaimsDashboardParams, Data, {}> {
       <Acc.ValidationMessage
         qa="guidance-message"
         messageType="info"
-        message={<span>All partners in this project must upload evidence for each expenditure with every claim made. These might include invoices, timesheets, receipts or spreadsheets for capital usage. This is part of Innovate UK's obligations under the <a href="https://www.gov.uk/government/publications/managing-public-money?_ga=2.105018247.521318796.1576575366-1871284022.1544109966">Managing Public Money government handbook</a> in relation to assurance, financial management and control.</span>}
+        messageContent={x => x.allClaimsDashboard.guidanceMessage() }
       />
     );
   }
@@ -84,7 +84,7 @@ class Component extends ContainerBase<AllClaimsDashboardParams, Data, {}> {
       if (project.status === ProjectStatus.Terminated || project.status === ProjectStatus.Closed) {
         return (
           <Acc.Renderers.SimpleString qa="theFinalClaimApprovedNotificationMessage">
-          There are no claims. Innovate UK has approved the final claims.
+            <Acc.Content value={ x => x.allClaimsDashboard.openSection.noClaimsMessage()}/>
           </Acc.Renderers.SimpleString>
         );
       }
@@ -93,7 +93,7 @@ class Component extends ContainerBase<AllClaimsDashboardParams, Data, {}> {
       const date = DateTime.fromJSDate(project.periodEndDate).plus({ days: 1 }).toJSDate();
       return (
         <Acc.Renderers.SimpleString qa="notificationMessage">
-          There are no open claims. The next claim period begins <Acc.Renderers.FullDate value={date} />.
+          <Acc.Content value={ x => x.allClaimsDashboard.openSection.noOpenClaimsMessage(date)}/>
         </Acc.Renderers.SimpleString>
       );
     }
@@ -129,12 +129,12 @@ class Component extends ContainerBase<AllClaimsDashboardParams, Data, {}> {
           caption="Open"
           qa="current-claims-table"
         >
-          <ClaimTable.Custom header="Partner" qa="partner" value={renderPartnerName} />
-          <ClaimTable.Currency header="Forecast costs for period" qa="forecast-cost" value={(x) => x.forecastCost} />
-          <ClaimTable.Currency header="Actual costs for period" qa="actual-cost" value={(x) => x.totalCost} />
-          <ClaimTable.Currency header="Difference" qa="diff" value={(x) => x.forecastCost - x.totalCost} />
-          <ClaimTable.String header="Status" qa="status" value={(x) => x.statusLabel} />
-          <ClaimTable.ShortDate header="Date of last update" qa="last-update" value={x => x.paidDate || x.approvedDate || x.lastModifiedDate} />
+          <ClaimTable.Custom headerContent={x => x.allClaimsDashboard.labels.partner()} qa="partner" value={renderPartnerName} />
+          <ClaimTable.Currency headerContent={x => x.allClaimsDashboard.labels.forecastCosts()} qa="forecast-cost" value={(x) => x.forecastCost} />
+          <ClaimTable.Currency headerContent={x => x.allClaimsDashboard.labels.actualCosts()} qa="actual-cost" value={(x) => x.totalCost} />
+          <ClaimTable.Currency headerContent={x => x.allClaimsDashboard.labels.difference()} qa="diff" value={(x) => x.forecastCost - x.totalCost} />
+          <ClaimTable.String headerContent={x => x.allClaimsDashboard.labels.status()} qa="status" value={(x) => x.statusLabel} />
+          <ClaimTable.ShortDate headerContent={x => x.allClaimsDashboard.labels.lastUpdated()} qa="last-update" value={x => x.paidDate || x.approvedDate || x.lastModifiedDate} />
           <ClaimTable.Custom header="Action" hideHeader={true} qa="link" value={(x) => <Acc.Claims.ClaimDetailsLink claim={x} project={project} partner={partners.find(p => p.id === x.partnerId)!} routes={this.props.routes} />} />
         </ClaimTable.Table>
       </Acc.Section>
@@ -166,19 +166,19 @@ class Component extends ContainerBase<AllClaimsDashboardParams, Data, {}> {
   private previousClaimsSection(project: ProjectDto, partner: PartnerDto, previousClaims: ClaimDto[]) {
     if (previousClaims.length === 0) {
       return (
-        <Acc.Renderers.SimpleString qa={`noClosedClaims-${partner.accountId}`}>There are no closed claims for this partner.</Acc.Renderers.SimpleString>
+        <Acc.Renderers.SimpleString qa={`noClosedClaims-${partner.accountId}`}><Acc.Content value={x => x.allClaimsDashboard.closedSection.noClosedClaims()}/></Acc.Renderers.SimpleString>
       );
     }
     const ClaimTable = Acc.TypedTable<ClaimDto>();
     return (
       <div>
         <ClaimTable.Table data={previousClaims} caption={<Acc.PartnerName partner={partner}/>} qa={`previousClaims-${partner.accountId}`}>
-          <ClaimTable.Custom header="" qa="period" value={(x) => this.renderClosedPeriodColumn(x)} />
-          <ClaimTable.Currency header="Forecast costs for period" qa="forecast-cost" value={(x) => x.forecastCost} />
-          <ClaimTable.Currency header="Actual costs for period" qa="actual-cost" value={(x) => x.totalCost} />
-          <ClaimTable.Currency header="Difference" qa="diff" value={(x) => x.forecastCost - x.totalCost} />
-          <ClaimTable.String header="Status" qa="status" value={(x) => x.statusLabel} />
-          <ClaimTable.ShortDate header="Date of last update" qa="last-update" value={x => x.paidDate || x.approvedDate || x.lastModifiedDate} />
+          <ClaimTable.Custom qa="period" value={(x) => this.renderClosedPeriodColumn(x)} />
+          <ClaimTable.Currency headerContent={x => x.allClaimsDashboard.labels.forecastCosts()} qa="forecast-cost" value={(x) => x.forecastCost} />
+          <ClaimTable.Currency headerContent={x => x.allClaimsDashboard.labels.actualCosts()} qa="actual-cost" value={(x) => x.totalCost} />
+          <ClaimTable.Currency headerContent={x => x.allClaimsDashboard.labels.difference()} qa="diff" value={(x) => x.forecastCost - x.totalCost} />
+          <ClaimTable.String headerContent={x => x.allClaimsDashboard.labels.status()} qa="status" value={(x) => x.statusLabel} />
+          <ClaimTable.ShortDate headerContent={x => x.allClaimsDashboard.labels.lastUpdated()} qa="last-update" value={x => x.paidDate || x.approvedDate || x.lastModifiedDate} />
           <ClaimTable.Custom header="Action" hideHeader={true} qa="link" value={(x) => <Acc.Claims.ClaimDetailsLink claim={x} project={project} partner={partner} routes={this.props.routes} />} />
         </ClaimTable.Table>
       </div>
@@ -217,11 +217,6 @@ export const AllClaimsDashboardRoute = defineRoute({
   getParams: (route) => ({
     projectId: route.params.projectId,
   }),
-  getTitle: (store) => {
-    return {
-      displayTitle: "Claims",
-      htmlTitle: "Claims - View project"
-    };
-  },
+  getTitle: ({ content }) => content.allClaimsDashboard.title(),
   accessControl: (auth, { projectId }) => auth.forProject(projectId).hasAnyRoles(ProjectRole.MonitoringOfficer, ProjectRole.ProjectManager),
 });
