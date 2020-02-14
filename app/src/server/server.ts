@@ -50,10 +50,14 @@ export class Server {
     this.log.info("Configuration", Configuration);
 
     setTimeout(() => this.primeCaches());
-    setTimeout(() => this.initaliseCustomContent(true));
 
-    if (Configuration.timeouts.contentRefreshSeconds) {
-      setInterval(() => this.initaliseCustomContent(true), Configuration.timeouts.contentRefreshSeconds * 1000);
+    if (Configuration.features.customContent) {
+
+      setTimeout(() => this.initaliseCustomContent(true));
+
+      if (Configuration.timeouts.contentRefreshSeconds) {
+        setInterval(() => this.initaliseCustomContent(true), Configuration.timeouts.contentRefreshSeconds * 1000);
+      }
     }
   }
 
