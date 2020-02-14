@@ -11,5 +11,5 @@ export interface CostCategoryFinancialVirement {
   costCategoryId: string;
   originalEligibleCosts: number;
   originalCostsClaimedToDate: number;
-  newCosts: number;
+  newEligibleCosts: number;
 }

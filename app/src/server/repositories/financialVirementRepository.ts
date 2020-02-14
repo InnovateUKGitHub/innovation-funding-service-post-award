@@ -1,6 +1,8 @@
 import SalesforceRepositoryBase, { Updatable } from "./salesforceRepositoryBase";
 import { PartnerFinancialVirement } from "@framework/entities";
 import { SalesforceFinancialVirementMapper } from "./mappers/financialVirementMapper";
+import { Connection } from "jsforce";
+import { ILogger } from "@server/features/common/logger";
 
 export interface ISalesforceFinancialVirement {
   Id: string;
@@ -14,6 +16,7 @@ export interface ISalesforceFinancialVirement {
   Acc_ClaimedCostsToDate__c: number;
   Acc_CurrentCosts__c: number;
   Acc_NewCosts__c: number;
+  RecordTypeId: string;
 }
 
 export interface IFinancialVirementRepository {
@@ -22,6 +25,9 @@ export interface IFinancialVirementRepository {
 }
 
 export class FinancialVirementRepository extends SalesforceRepositoryBase<ISalesforceFinancialVirement> implements IFinancialVirementRepository {
+  constructor(private getRecordTypeId: (objectName: string, recordType: string) => Promise<string>, getSalesforceConnection: () => Promise<Connection>, logger: ILogger) {
+    super(getSalesforceConnection, logger);
+  }
 
   protected readonly salesforceObjectName = "Acc_Virements__c";
   protected salesforceFieldNames = [
@@ -34,11 +40,14 @@ export class FinancialVirementRepository extends SalesforceRepositoryBase<ISales
     "Acc_ClaimedCostsToDate__c",
     "Acc_CurrentCosts__c",
     "Acc_NewCosts__c",
+    "RecordTypeId",
   ];
 
   public async getAllForPcr(pcrItemId: string): Promise<PartnerFinancialVirement[]> {
+    const partnerVirementRecordType = await this.getRecordTypeId(this.salesforceObjectName, "Virements for Participant");
+    const costCategoryVirementRecordType = await this.getRecordTypeId(this.salesforceObjectName, "Virements for Costs");
     const data = await super.where(`Acc_ProjectChangeRequest__c = '${pcrItemId}' or Acc_ParticipantVirement__r.Acc_ProjectChangeRequest__c = '${pcrItemId}'`);
-    return new SalesforceFinancialVirementMapper().map(data);
+    return new SalesforceFinancialVirementMapper(partnerVirementRecordType, costCategoryVirementRecordType).map(data);
   }
 
   public updateVirements(items: Updatable<ISalesforceFinancialVirement>[]) {

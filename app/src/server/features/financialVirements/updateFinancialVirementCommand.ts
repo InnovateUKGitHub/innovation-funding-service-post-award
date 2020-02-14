@@ -41,7 +41,7 @@ export class UpdateFinancialVirementCommand extends CommandBase<boolean> {
     return true;
   }
 
-  private getUpdate(original: CostCategoryFinancialVirement, dto: VirementDto): Updatable<ISalesforceFinancialVirement> | null {
+  private getUpdate(original: CostCategoryFinancialVirement, dto: CostCategoryVirementDto): Updatable<ISalesforceFinancialVirement> | null {
     let isUpdated = false;
 
     const update: Updatable<ISalesforceFinancialVirement> = {
@@ -49,7 +49,7 @@ export class UpdateFinancialVirementCommand extends CommandBase<boolean> {
       Acc_Profile__c: original.profileId
     };
 
-    if (original.newCosts !== dto.newEligibleCosts) {
+    if (original.newEligibleCosts !== dto.newEligibleCosts) {
       isUpdated = true;
       update.Acc_NewCosts__c = dto.newEligibleCosts;
     }

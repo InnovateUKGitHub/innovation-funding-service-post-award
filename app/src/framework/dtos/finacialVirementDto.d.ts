@@ -1,10 +1,10 @@
 interface FinancialVirementDto {
   pcrItemId: string;
 
-  totalEligibleCosts: number;
-  totalCostsClaimed: number;
-  totalCostsNotYetClaimed: number;
-  totalRemaining: number;
+  originalEligibleCosts: number;
+  originalCostsClaimed: number;
+  originalCostsNotYetClaimed: number;
+  originalRemaining: number;
 
   newEligibleCosts: number;
   newCostsNotYetClaimed: number;
@@ -16,25 +16,25 @@ interface FinancialVirementDto {
 interface PartnerVirementsDto {
   partnerId: string;
 
-  totalEligibleCosts: number;
-  totalCostsClaimed: number;
-  totalCostsNotYetClaimed: number;
-  totalRemaining: number;
+  originalEligibleCosts: number;
+  originalCostsClaimed: number;
+  originalCostsNotYetClaimed: number;
+  originalRemaining: number;
 
   newEligibleCosts: number;
   newCostsNotYetClaimed: number;
   newRemaining: number;
 
-  virements: VirementDto[];
+  virements: CostCategoryVirementDto[];
 }
 
-interface VirementDto {
+interface CostCategoryVirementDto {
   costCategoryId: string;
   costCategoryName: string;
-  totalEligibleCosts: number;
-  totalCostsClaimed: number;
-  totalCostsNotYetClaimed: number;
-  totalRemaining: number;
+  originalEligibleCosts: number;
+  originalCostsClaimed: number;
+  originalCostsNotYetClaimed: number;
+  originalRemaining: number;
   newEligibleCosts: number;
   newCostsNotYetClaimed: number;
   newRemaining: number;
