@@ -3,32 +3,39 @@ import { ISalesforceFinancialVirement } from "../financialVirementRepository";
 import { CostCategoryFinancialVirement, PartnerFinancialVirement } from "@framework/entities";
 
 export class SalesforceFinancialVirementMapper extends SalesforceBaseMapper<ISalesforceFinancialVirement[], PartnerFinancialVirement[]> {
+  constructor(private partnerLevelRecordType: string, private costCategoryLevelRecordType: string) {
+    super();
+  }
+
   public map(items: ISalesforceFinancialVirement[]): PartnerFinancialVirement[] {
-    return items
-      .filter(item => !!item.Acc_ProjectParticipant__c)
-      .map(item => this.mapPartner(item, items))
+    const partnerItems = items.filter(x => x.RecordTypeId === this.partnerLevelRecordType);
+    const costCategoryItems = items.filter(x =>  x.RecordTypeId === this.costCategoryLevelRecordType);
+
+    return partnerItems
+      .filter(item => item.RecordTypeId === this.partnerLevelRecordType)
+      .map(item => this.mapPartner(item, costCategoryItems))
       ;
   }
 
-  private mapPartner(partner: ISalesforceFinancialVirement, allItems: ISalesforceFinancialVirement[]): PartnerFinancialVirement {
+  private mapPartner(partnerItem: ISalesforceFinancialVirement, costCategoryItems: ISalesforceFinancialVirement[]): PartnerFinancialVirement {
     return {
-      id: partner.Id,
-      pcrItemId: partner.Acc_ProjectChangeRequest__c,
-      partnerId: partner.Acc_ProjectParticipant__c,
-      virements: allItems
-        .filter(item => item !== partner && !!item.Acc_Profile__r && item.Acc_Profile__r.Acc_ProjectParticipant__c === partner.Acc_ProjectParticipant__c)
+      id: partnerItem.Id,
+      pcrItemId: partnerItem.Acc_ProjectChangeRequest__c,
+      partnerId: partnerItem.Acc_ProjectParticipant__c,
+      virements: costCategoryItems
+        .filter(item => item.Acc_Profile__r && item.Acc_Profile__r.Acc_ProjectParticipant__c === partnerItem.Acc_ProjectParticipant__c)
         .map(item => this.mapVirement(item))
     };
   }
 
-  private mapVirement(virement: ISalesforceFinancialVirement): CostCategoryFinancialVirement {
+  private mapVirement(costCategoryItem: ISalesforceFinancialVirement): CostCategoryFinancialVirement {
     return {
-      id: virement.Id,
-      profileId: virement.Acc_Profile__c,
-      costCategoryId: virement.Acc_Profile__r.Acc_CostCategory__c,
-      originalEligibleCosts: virement.Acc_CurrentCosts__c,
-      originalCostsClaimedToDate: virement.Acc_ClaimedCostsToDate__c,
-      newCosts: virement.Acc_NewCosts__c
+      id: costCategoryItem.Id,
+      profileId: costCategoryItem.Acc_Profile__c,
+      costCategoryId: costCategoryItem.Acc_Profile__r.Acc_CostCategory__c,
+      originalEligibleCosts: costCategoryItem.Acc_CurrentCosts__c,
+      originalCostsClaimedToDate: costCategoryItem.Acc_ClaimedCostsToDate__c,
+      newEligibleCosts: costCategoryItem.Acc_NewCosts__c
     };
   }
 }

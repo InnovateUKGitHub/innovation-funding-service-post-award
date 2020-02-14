@@ -31,7 +31,7 @@ class Component extends ContainerBase<Params, Props, {}> {
   }
 
   private renderPage(project: ProjectDto, editor: IEditorStore<FinancialVirementDto, FinancialVirementDtoValidator>) {
-    const VirementTable = ACC.TypedTable<VirementDto>();
+    const VirementTable = ACC.TypedTable<CostCategoryVirementDto>();
     const VirementForm = ACC.TypedForm<FinancialVirementDto>();
     const partnerVirements = editor.data.partners.find(x => x.partnerId === this.props.partnerId)!;
 
@@ -46,7 +46,7 @@ class Component extends ContainerBase<Params, Props, {}> {
           <VirementForm.Fieldset>
             <VirementTable.Table qa="partnerVirements" data={partnerVirements.virements}>
               <VirementTable.String header="Cost category" qa="costCategory" value={x => x.costCategoryName} footer="Total" />
-              <VirementTable.Currency header="Original" qa="original" value={x => x.totalEligibleCosts} footer={<ACC.Renderers.Currency value={partnerVirements.totalEligibleCosts} />} />
+              <VirementTable.Currency header="Original" qa="original" value={x => x.originalEligibleCosts} footer={<ACC.Renderers.Currency value={partnerVirements.originalEligibleCosts} />} />
               <VirementTable.Custom header="New" qa="new" value={x => this.renderInput(x, editor.status === EditorStatus.Saving)} footer={<ACC.Renderers.Currency value={partnerVirements.newEligibleCosts} />} classSuffix={"numeric"} />
             </VirementTable.Table>
           </VirementForm.Fieldset>
@@ -58,7 +58,7 @@ class Component extends ContainerBase<Params, Props, {}> {
     );
   }
 
-  private renderInput(virement: VirementDto, disabled: boolean) {
+  private renderInput(virement: CostCategoryVirementDto, disabled: boolean) {
     return <ACC.Inputs.NumberInput name={virement.costCategoryId} value={virement.newEligibleCosts} onChange={(val) => this.updateValue(virement.costCategoryId, val)} width={4} ariaLabel={virement.costCategoryName} disabled={disabled} />;
   }
 

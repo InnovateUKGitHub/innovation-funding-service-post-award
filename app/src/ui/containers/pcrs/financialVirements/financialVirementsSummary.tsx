@@ -32,9 +32,9 @@ class Component extends React.Component<Props> {
     return (
       <Table.Table qa="partners" data={paired}>
         <Table.Custom qa="partner" header="Partner" value={x => this.getPartnerLink(x.partnerVirement, x.partner)} footer="Totals" isDivider="normal"/>
-        <Table.Currency qa="totalCosts" header="Total eligible costs" value={x => x.partnerVirement.totalEligibleCosts} footer={<ACC.Renderers.Currency value={virement.totalEligibleCosts} />} />
-        <Table.Currency qa="totalNotClaimed" header="Eligible costs not yet claimed" value={x => x.partnerVirement.totalCostsNotYetClaimed} footer={<ACC.Renderers.Currency value={virement.totalCostsNotYetClaimed} />} />
-        <Table.Currency qa="remainingGrant" header="Remaining grant" value={x => x.partnerVirement.totalRemaining} footer={<ACC.Renderers.Currency value={virement.totalRemaining} />}  isDivider="normal"/>
+        <Table.Currency qa="totalCosts" header="Total eligible costs" value={x => x.partnerVirement.originalEligibleCosts} footer={<ACC.Renderers.Currency value={virement.originalEligibleCosts} />} />
+        <Table.Currency qa="totalNotClaimed" header="Eligible costs not yet claimed" value={x => x.partnerVirement.originalCostsNotYetClaimed} footer={<ACC.Renderers.Currency value={virement.originalCostsNotYetClaimed} />} />
+        <Table.Currency qa="remainingGrant" header="Remaining grant" value={x => x.partnerVirement.originalRemaining} footer={<ACC.Renderers.Currency value={virement.originalRemaining} />}  isDivider="normal"/>
         <Table.Currency qa="newEligibleCosts" header="New total eligible costs" value={x => x.partnerVirement.newEligibleCosts} footer={<ACC.Renderers.Currency value={virement.newEligibleCosts} />} />
         <Table.Currency qa="newNotClaimed" header="New eligible costs not yet claimed" value={x => x.partnerVirement.newCostsNotYetClaimed} footer={<ACC.Renderers.Currency value={virement.newCostsNotYetClaimed} />} />
         <Table.Currency qa="newRemainingGrant" header="New remaining grant" value={x => x.partnerVirement.newRemaining} footer={<ACC.Renderers.Currency value={virement.newRemaining} />} />

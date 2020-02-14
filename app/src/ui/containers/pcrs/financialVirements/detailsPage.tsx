@@ -29,7 +29,7 @@ class Component extends ContainerBase<Params, Props, {}> {
   }
 
   private renderPage(project: ProjectDto, financialVirements: PartnerVirementsDto) {
-    const VirementTable = ACC.TypedTable<VirementDto>();
+    const VirementTable = ACC.TypedTable<CostCategoryVirementDto>();
     return (
       <ACC.Page
         backLink={this.getBackLink()}
@@ -37,7 +37,7 @@ class Component extends ContainerBase<Params, Props, {}> {
       >
         <VirementTable.Table qa="partnerVirements" data={financialVirements.virements}>
           <VirementTable.String header="Cost category" qa="costCategory" value={x =>  x.costCategoryName} footer="Total" />
-          <VirementTable.Currency header="Original" qa="original" value={x => x.totalEligibleCosts} footer={<ACC.Renderers.Currency value={financialVirements.totalEligibleCosts}/> }/>
+          <VirementTable.Currency header="Original" qa="original" value={x => x.originalEligibleCosts} footer={<ACC.Renderers.Currency value={financialVirements.originalEligibleCosts}/> }/>
           <VirementTable.Currency header="New" qa="new" value={x => x.newEligibleCosts} footer={<ACC.Renderers.Currency value={financialVirements.newEligibleCosts}/> }/>
         </VirementTable.Table>
       </ACC.Page>
