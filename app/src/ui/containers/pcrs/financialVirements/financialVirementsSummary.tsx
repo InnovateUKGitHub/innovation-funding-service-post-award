@@ -4,29 +4,45 @@ import { Pending } from "@shared/pending";
 import * as ACC from "@ui/components";
 import { PcrSummaryProps } from "@ui/containers/pcrs/pcrWorkflow";
 import { PCRStandardItemDtoValidator } from "@ui/validators";
-import { PCRStandardItemDto } from "@framework/dtos";
+import { PartnerDto, PCRStandardItemDto } from "@framework/dtos";
 
 interface Props extends PcrSummaryProps<PCRStandardItemDto, PCRStandardItemDtoValidator, ""> {
-  virements: Pending<FinancialVirementDto>;
+  virement: Pending<FinancialVirementDto>;
+  partners: Pending<PartnerDto[]>;
 }
 
 class Component extends React.Component<Props> {
   render() {
-    return <ACC.Loader pending={this.props.virements} render={data => this.renderPartners(data)} />;
+
+    const combined = Pending.combine({
+      virement: this.props.virement,
+      partners: this.props.partners
+    });
+
+    return <ACC.Loader pending={combined} render={data => this.renderPartners(data.virement, data.partners)} />;
   }
 
-  private renderPartners(data: FinancialVirementDto): React.ReactNode {
-    const Table = ACC.TypedTable<PartnerVirementsDto>();
+  private renderPartners(virement: FinancialVirementDto, partners: PartnerDto[]): React.ReactNode {
+    const paired = partners.map(partner => ({
+      partner,
+      partnerVirement: virement.partners.find(x => x.partnerId === partner.id)!
+    }));
+
+    const Table = ACC.TypedTable<typeof paired[0]>();
     return (
-      <Table.Table qa="partners" data={data.partners}>
-        <Table.Custom qa="partner" header="Partner" value={x => this.getPartnerLink(x)} footer="Totals" />
-        <Table.Currency qa="original" header="Original" value={x => x.originalTotal} footer={<ACC.Renderers.Currency value={data.originalTotal} />} />
-        <Table.Currency qa="new" header="New" value={x => x.newTotal} footer={<ACC.Renderers.Currency value={data.newTotal} />} />
+      <Table.Table qa="partners" data={paired}>
+        <Table.Custom qa="partner" header="Partner" value={x => this.getPartnerLink(x.partnerVirement, x.partner)} footer="Totals" isDivider="normal"/>
+        <Table.Currency qa="totalCosts" header="Total eligible costs" value={x => x.partnerVirement.originalEligibleCosts} footer={<ACC.Renderers.Currency value={virement.originalEligibleCosts} />} />
+        <Table.Currency qa="totalNotClaimed" header="Eligible costs not yet claimed" value={x => x.partnerVirement.originalCostsNotYetClaimed} footer={<ACC.Renderers.Currency value={virement.originalCostsNotYetClaimed} />} />
+        <Table.Currency qa="remainingGrant" header="Remaining grant" value={x => x.partnerVirement.originalRemaining} footer={<ACC.Renderers.Currency value={virement.originalRemaining} />}  isDivider="normal"/>
+        <Table.Currency qa="newEligibleCosts" header="New total eligible costs" value={x => x.partnerVirement.newEligibleCosts} footer={<ACC.Renderers.Currency value={virement.newEligibleCosts} />} />
+        <Table.Currency qa="newNotClaimed" header="New eligible costs not yet claimed" value={x => x.partnerVirement.newCostsNotYetClaimed} footer={<ACC.Renderers.Currency value={virement.newCostsNotYetClaimed} />} />
+        <Table.Currency qa="newRemainingGrant" header="New remaining grant" value={x => x.partnerVirement.newRemaining} footer={<ACC.Renderers.Currency value={virement.newRemaining} />} />
       </Table.Table>
     );
   }
 
-  private getPartnerLink(partnerVirement: PartnerVirementsDto) {
+  private getPartnerLink(partnerVirement: PartnerVirementsDto, partner: PartnerDto) {
     const params = {
       projectId: this.props.projectId,
       partnerId: partnerVirement.partnerId,
@@ -35,13 +51,13 @@ class Component extends React.Component<Props> {
     };
 
     const route = this.props.mode === "prepare" ?
-      this.props.routes.pcrFinancialVirementEdit.getLink({...params}) :
-      this.props.routes.pcrFinancialVirementDetails.getLink({...params, mode: this.props.mode})
+      this.props.routes.pcrFinancialVirementEdit.getLink({ ...params }) :
+      this.props.routes.pcrFinancialVirementDetails.getLink({ ...params, mode: this.props.mode })
       ;
 
     return (
       <ACC.Link replace={true} route={route}>
-        <ACC.PartnerName partner={{ name: partnerVirement.partnerName, isLead: partnerVirement.isLead, isWithdrawn: partnerVirement.isWithdrawn }} showIsLead={true}/>
+        <ACC.PartnerName partner={partner} showIsLead={true} />
       </ACC.Link>
     );
   }
@@ -51,7 +67,11 @@ export const FinancialVirementSummary = (props: PcrSummaryProps<PCRStandardItemD
   <StoresConsumer>
     {
       stores => (
-        <Component virements={stores.financialVirements.get(props.projectId, props.pcr.id, props.pcrItem.id)} {...props} />
+        <Component
+          virement={stores.financialVirements.get(props.projectId, props.pcr.id, props.pcrItem.id)}
+          partners={stores.partners.getPartnersForProject(props.projectId)}
+          {...props}
+        />
       )
     }
   </StoresConsumer>

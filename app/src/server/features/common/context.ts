@@ -70,7 +70,7 @@ export class Context implements Framework.IContext {
       claimLineItems: new Repositories.ClaimLineItemRepository(recordTypeCallback, connectionCallback, this.logger),
       costCategories: new Repositories.CostCategoryRepository(connectionCallback, this.logger),
       documents: new Repositories.DocumentsRepository(connectionCallback, this.logger),
-      financialVirements: new Repositories.FinancialVirementRepository(connectionCallback, this.logger),
+      financialVirements: new Repositories.FinancialVirementRepository(recordTypeCallback, connectionCallback, this.logger),
       monitoringReportResponse: new Repositories.MonitoringReportResponseRepository(recordTypeCallback, connectionCallback, this.logger),
       monitoringReportHeader: new Repositories.MonitoringReportHeaderRepository(recordTypeCallback, connectionCallback, this.logger),
       monitoringReportQuestions: new Repositories.MonitoringReportQuestionsRepository(connectionCallback, this.logger),
