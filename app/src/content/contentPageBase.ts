@@ -4,7 +4,7 @@ import { Content } from "./content";
 
 export abstract class ContentPageBase extends ContentBase {
 
-  constructor(parent: Content, pageName: string) {
+  protected constructor(parent: Content, pageName: string) {
     super(parent, `pages.${pageName}`);
   }
 

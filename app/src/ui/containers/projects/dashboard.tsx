@@ -27,13 +27,6 @@ interface Callbacks {
   onSearch: (search: string | null | undefined) => void;
 }
 
-interface State {
-  showRequestsToReview: boolean;
-  showClaimsToReview: boolean;
-  showClaimsWithParticipant: boolean;
-  projectSearchString: string;
-}
-
 interface ProjectData {
   project: ProjectDto;
   partner: PartnerDto | null;

@@ -1,11 +1,14 @@
 import React from "react";
 import classnames from "classnames";
 import * as colours from "../styles/colours";
+import { ContentSelector } from "@content/content";
+import { Content } from "@ui/components/content";
 
 type MessageType = "info" | "error" | "success" | "warning" | "alert";
 
 interface Props {
-    message: React.ReactNode;
+    message?: React.ReactNode;
+    messageContent?: ContentSelector;
     messageType: MessageType;
     qa?: string;
 }
@@ -49,8 +52,8 @@ const getMessageStyle = (messageType: MessageType): MessageStyle => {
   }
 };
 
-export const ValidationMessage: React.FunctionComponent<Props> = ({ message, messageType, qa = "validation-message" }) => {
-    if (!message) return null;
+export const ValidationMessage: React.FunctionComponent<Props> = ({ message, messageContent, messageType, qa = "validation-message" }) => {
+    if (!message && !messageContent) return null;
 
     const {colour, validationColour, validationClass, validationText} = getMessageStyle(messageType);
     const msgClasses = classnames("govuk-warning-text-background", "govuk-warning-text", "acc-message", validationClass);
@@ -62,7 +65,7 @@ export const ValidationMessage: React.FunctionComponent<Props> = ({ message, mes
     return (
       <div className={msgClasses} style={style} data-qa={qa} data-qa-type={messageType}>
         <span className="govuk-warning-text__assistive">{validationText}</span>
-        <span>{message}</span>
+        <span>{messageContent ? <Content value={messageContent}/> : message}</span>
       </div>
     );
 };

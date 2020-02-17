@@ -1,4 +1,3 @@
-import { IEditorStore } from "../../redux/reducers";
 import React from "react";
 import * as Acc from "../../components";
 import { BaseProps, ContainerBase, defineRoute } from "../containerBase";

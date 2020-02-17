@@ -523,3 +523,7 @@ p.govuk-body--multiline {
   margin-top: 0px;
   margin-bottom: 5px;
 }
+
+.markdown p:last-child {
+  margin-bottom: 0!important;
+}
