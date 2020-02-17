@@ -28,16 +28,41 @@ class Component extends React.Component<Props> {
       partnerVirement: virement.partners.find(x => x.partnerId === partner.id)!
     }));
 
-    const Table = ACC.TypedTable<typeof paired[0]>();
+    if (this.props.mode === "prepare") {
+      return this.renderPrepareTable(paired, virement);
+    }
+
+    return this.renderReviewTable(paired, virement);
+  }
+
+  private renderPrepareTable(data: { partner: PartnerDto, partnerVirement: PartnerVirementsDto }[], dto: FinancialVirementDto) {
+    const Table = ACC.TypedTable<typeof data[0]>();
     return (
-      <Table.Table qa="partners" data={paired}>
-        <Table.Custom qa="partner" header="Partner" value={x => this.getPartnerLink(x.partnerVirement, x.partner)} footer="Totals" isDivider="normal"/>
-        <Table.Currency qa="totalCosts" header="Total eligible costs" value={x => x.partnerVirement.originalEligibleCosts} footer={<ACC.Renderers.Currency value={virement.originalEligibleCosts} />} />
-        <Table.Currency qa="totalNotClaimed" header="Eligible costs not yet claimed" value={x => x.partnerVirement.originalCostsNotYetClaimed} footer={<ACC.Renderers.Currency value={virement.originalCostsNotYetClaimed} />} />
-        <Table.Currency qa="remainingGrant" header="Remaining grant" value={x => x.partnerVirement.originalRemaining} footer={<ACC.Renderers.Currency value={virement.originalRemaining} />}  isDivider="normal"/>
-        <Table.Currency qa="newEligibleCosts" header="New total eligible costs" value={x => x.partnerVirement.newEligibleCosts} footer={<ACC.Renderers.Currency value={virement.newEligibleCosts} />} />
-        <Table.Currency qa="newNotClaimed" header="New eligible costs not yet claimed" value={x => x.partnerVirement.newCostsNotYetClaimed} footer={<ACC.Renderers.Currency value={virement.newCostsNotYetClaimed} />} />
-        <Table.Currency qa="newRemainingGrant" header="New remaining grant" value={x => x.partnerVirement.newRemaining} footer={<ACC.Renderers.Currency value={virement.newRemaining} />} />
+      <Table.Table qa="partners" data={data}>
+        <Table.Custom qa="partner" header="Partner" value={x => this.getPartnerLink(x.partnerVirement, x.partner)} footer="Totals" isDivider="normal" />
+        <Table.Currency qa="totalCosts" header="Total eligible costs" value={x => x.partnerVirement.originalEligibleCosts} footer={<ACC.Renderers.Currency value={dto.originalEligibleCosts} />} />
+        <Table.Currency qa="totalNotClaimed" header="Eligible costs not yet claimed" value={x => x.partnerVirement.originalCostsNotYetClaimed} footer={<ACC.Renderers.Currency value={dto.originalCostsNotYetClaimed} />} />
+        <Table.Currency qa="remainingGrant" header="Remaining grant" value={x => x.partnerVirement.originalRemaining} footer={<ACC.Renderers.Currency value={dto.originalRemaining} />} isDivider="normal" />
+        <Table.Currency qa="newEligibleCosts" header="New total eligible costs" value={x => x.partnerVirement.newEligibleCosts} footer={<ACC.Renderers.Currency value={dto.newEligibleCosts} />} />
+        <Table.Currency qa="newNotClaimed" header="New eligible costs not yet claimed" value={x => x.partnerVirement.newCostsNotYetClaimed} footer={<ACC.Renderers.Currency value={dto.newCostsNotYetClaimed} />} />
+        <Table.Currency qa="newRemainingGrant" header="New remaining grant" value={x => x.partnerVirement.newRemaining} footer={<ACC.Renderers.Currency value={dto.newRemaining} />} />
+      </Table.Table>
+    );
+  }
+
+  private renderReviewTable(data: { partner: PartnerDto, partnerVirement: PartnerVirementsDto }[], dto: FinancialVirementDto) {
+    const Table = ACC.TypedTable<typeof data[0]>();
+    return (
+      <Table.Table qa="partners" data={data}>
+        <Table.Custom qa="partner" header="Partner" value={x => this.getPartnerLink(x.partnerVirement, x.partner)} footer="Totals" isDivider="normal" />
+        <Table.Currency qa="originalEligibleCosts" header="Total eligible costs" value={x => x.partnerVirement.originalEligibleCosts} footer={<ACC.Renderers.Currency value={dto.originalEligibleCosts} />} />
+        <Table.Currency qa="newEligibleCosts" header="New total eligible costs" value={x => x.partnerVirement.newEligibleCosts} footer={<ACC.Renderers.Currency value={dto.newEligibleCosts} />} />
+        <Table.Currency qa="differenceEligibleCosts" header="Difference" value={x => x.partnerVirement.differenceEligibleCosts} footer={<ACC.Renderers.Currency value={dto.differenceEligibleCosts} />} isDivider="normal" />
+        <Table.Percentage qa="originalFundingLevel" header="Funding level" value={x => x.partnerVirement.originalFundingLevel} footer={<ACC.Renderers.Percentage value={dto.originalFundingLevel} />} />
+        <Table.Percentage qa="newFundingLevel" header="New funding level" value={x => x.partnerVirement.newFundingLevel} footer={<ACC.Renderers.Percentage value={dto.newFundingLevel} />} isDivider="normal" />
+        <Table.Currency qa="remainingGrant" header="Remaining grant" value={x => x.partnerVirement.originalRemaining} footer={<ACC.Renderers.Currency value={dto.originalRemaining} />} />
+        <Table.Currency qa="newRemainingGrant" header="New remaining grant" value={x => x.partnerVirement.newRemaining} footer={<ACC.Renderers.Currency value={dto.newRemaining} />} />
+        <Table.Currency qa="differenceRemaining" header="Difference" value={x => x.partnerVirement.differenceRemaining} footer={<ACC.Renderers.Currency value={dto.differenceRemaining} />} />
       </Table.Table>
     );
   }

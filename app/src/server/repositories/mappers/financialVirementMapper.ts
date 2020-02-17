@@ -12,7 +12,6 @@ export class SalesforceFinancialVirementMapper extends SalesforceBaseMapper<ISal
     const costCategoryItems = items.filter(x =>  x.RecordTypeId === this.costCategoryLevelRecordType);
 
     return partnerItems
-      .filter(item => item.RecordTypeId === this.partnerLevelRecordType)
       .map(item => this.mapPartner(item, costCategoryItems))
       ;
   }
