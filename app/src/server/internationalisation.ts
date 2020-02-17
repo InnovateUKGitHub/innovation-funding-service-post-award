@@ -6,7 +6,7 @@ export const initInternationalisation = async () => {
   await i18next.init({
     lng: "en",
     fallbackLng: "en",
-    defaultNS: "default"
+    defaultNS: "default",
   });
 };
 

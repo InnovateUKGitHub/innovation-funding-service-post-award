@@ -1,19 +1,10 @@
 import * as React from "react";
 import { DateTime } from "luxon";
+import { convertDateAndTime, DateFormat, formatDate } from "@framework/util";
 
-const convertDateAndTime = (jsDate: Date | null): DateTime | null => {
-    return jsDate && DateTime.fromJSDate(jsDate).setZone("Europe/London");
-};
-
-const convertDateOnly = (jsDate: Date | null): DateTime | null => {
-    return jsDate && DateTime.fromJSDate(jsDate).setZone("Europe/London");
-};
-
-const render = (value: DateTime | null, format: string) => {
-    if (value && value.isValid) {
-        return <span>{value.toFormat(format)}</span>;
-    }
-    return null;
+const render = (value: Date | null, format: DateFormat) => {
+    const date = formatDate(value, format);
+    return date ? <span>{date}</span> : null;
 };
 
 const renderDateRange = ( start: DateTime | null, end: DateTime | null, format: string, isCondensed: boolean = false )=> {
@@ -43,45 +34,43 @@ const renderDateRange = ( start: DateTime | null, end: DateTime | null, format: 
 };
 
 export const CondensedDateRange: React.FunctionComponent<{ start: Date | null, end: Date | null }> = props => {
-    return renderDateRange(convertDateOnly(props.start), convertDateOnly(props.end), "MMM", true);
+    return renderDateRange(convertDateAndTime(props.start), convertDateAndTime(props.end), "MMM", true);
 };
 
 export const LongDateRange: React.FunctionComponent<{ start: Date | null, end: Date | null }> = props => {
-    return renderDateRange(convertDateOnly(props.start), convertDateOnly(props.end), "d MMMM");
+    return renderDateRange(convertDateAndTime(props.start), convertDateAndTime(props.end), "d MMMM");
 };
 
 export const ShortDateRange: React.FunctionComponent<{ start: Date | null, end: Date | null }> = props => {
-    return renderDateRange(convertDateOnly(props.start), convertDateOnly(props.end), "d MMM");
+    return renderDateRange(convertDateAndTime(props.start), convertDateAndTime(props.end), "d MMM");
 };
 
-export const ShortMonth: React.FunctionComponent<{ value: Date | null }> = (props) => {
-    return render(convertDateOnly(props.value), "MMM");
+export const ShortMonth: React.FunctionComponent<{ value: Date | null }> = ({ value }) => {
+    return render(value, DateFormat.SHORT_MONTH);
 };
 
-export const DayAndLongMonth: React.FunctionComponent<{ value: Date | null }> = (props) => {
-    return render(convertDateOnly(props.value), "d MMMM");
+export const DayAndLongMonth: React.FunctionComponent<{ value: Date | null }> = ({value}) => {
+    return render(value, DateFormat.DAY_AND_LONG_MONTH);
 };
 
-export const LongYear: React.FunctionComponent<{ value: Date | null }> = (props) => {
-    return render(convertDateOnly(props.value), "yyyy");
+export const LongYear: React.FunctionComponent<{ value: Date | null }> = ({value}) => {
+    return render(value, DateFormat.LONG_YEAR);
 };
 
-export const FullDate: React.FunctionComponent<{ value: Date | null }> = (props) => {
-    return render(convertDateOnly(props.value), "d MMMM yyyy");
+export const FullDate: React.FunctionComponent<{ value: Date | null }> = ({value}) => {
+    return render(value, DateFormat.FULL_DATE);
 };
 
-export const FullDateTime: React.FunctionComponent<{ value: Date | null }> = (props) => {
-    const date = convertDateAndTime(props.value);
-    return render(date, appendMeridian(date, "d MMMM yyyy, h:mm"));
+export const FullDateTime: React.FunctionComponent<{ value: Date | null }> = ({value}) => {
+    return render(value, DateFormat.FULL_DATE_TIME);
 };
 
-export const ShortDate: React.FunctionComponent<{ value: Date | null }> = (props) => {
-    return render(convertDateOnly(props.value), "d MMM yyyy");
+export const ShortDate: React.FunctionComponent<{ value: Date | null }> = ({value}) => {
+    return render(value, DateFormat.SHORT_DATE);
 };
 
-export const ShortDateTime: React.FunctionComponent<{ value: Date | null }> = (props) => {
-    const date = convertDateAndTime(props.value);
-    return render(date, appendMeridian(date, "d MMM yyyy, h:mm"));
+export const ShortDateTime: React.FunctionComponent<{ value: Date | null }> = ({value}) => {
+    return render(value, DateFormat.SHORT_DATE_TIME);
 };
 
 export const Duration: React.FunctionComponent<{ startDate: Date | null, endDate: Date | null }> = (props) => {
@@ -113,11 +102,4 @@ export const ShortDateRangeFromDuration = (props: { startDate: Date|null, months
     const isValidDuration = (props.months) && Number.isInteger(props.months);
     const endDate = startDateLuxon && isValidDuration ? startDateLuxon.plus({months: props.months! - 1}).endOf("month").toJSDate() : null;
     return <ShortDateRange start={props.startDate} end={endDate}/>;
-};
-
-const appendMeridian = (date: DateTime|null, format: string) => {
-    if(date && date.isValid) {
-        return format + (date.hour >= 12 ? "'pm'" : "'am'");
-    }
-    return format;
 };
