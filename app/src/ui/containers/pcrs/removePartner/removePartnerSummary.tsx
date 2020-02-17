@@ -19,7 +19,7 @@ class Component extends React.Component<PcrSummaryProps<PCRItemForPartnerWithdra
         <ACC.SummaryList qa="remove-partner-summary-list">
           <ACC.SummaryListItem label="Partner being removed" content={pcrItem.partnerNameSnapshot} validation={validator.partnerId} qa="partnerToRemove" action={this.props.getEditLink("withdrawalDateStep", validator.partnerId)} />
           <ACC.SummaryListItem label="Removal date" content={<ACC.Renderers.ShortDate value={pcrItem.withdrawalDate} />} validation={validator.withdrawalDate} qa="withdrawalDate" action={this.props.getEditLink("withdrawalDateStep", validator.withdrawalDate)} />
-          <ACC.SummaryListItem label="Period" content={periodInProject(pcrItem.withdrawalDate, project)} qa="withdrawalPeriod" action={this.props.getEditLink("withdrawalDateStep", null)} />
+          <ACC.SummaryListItem label="Period" content={periodInProject(pcrItem.withdrawalDate, project)} qa="withdrawalPeriod" />
           <ACC.SummaryListItem label="Documents" content={this.renderDocuments(documents)} qa="supportingDocuments" action={this.props.getEditLink("filesStep", null)} />
         </ACC.SummaryList>
       </ACC.Section>
