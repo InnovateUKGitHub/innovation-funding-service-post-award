@@ -31,9 +31,13 @@ export class GetFinancialVirementQuery extends QueryBase<FinancialVirementDto> {
       originalCostsClaimed: this.sumTotalCost(v => v.originalCostsClaimedToDate, data),
       originalCostsNotYetClaimed: this.sumTotalCost(v => v.originalEligibleCosts - v.originalCostsClaimedToDate, data),
       originalRemaining: 0,
+      originalFundingLevel:0,
       newEligibleCosts: this.sumTotalCost(v => v.newEligibleCosts, data),
       newCostsNotYetClaimed: this.sumTotalCost(v => v.newEligibleCosts - v.originalCostsClaimedToDate, data),
       newRemaining: 0,
+      newFundingLevel:0,
+      differenceEligibleCosts: this.sumTotalCost(v => v.originalEligibleCosts - v.newEligibleCosts, data),
+      differenceRemaining: 0,
       partners: data
         .map(partner => ({
           partnerId: partner.partnerId,
@@ -41,9 +45,13 @@ export class GetFinancialVirementQuery extends QueryBase<FinancialVirementDto> {
           originalCostsClaimed: this.sumPartnerCost(v => v.originalCostsClaimedToDate, partner),
           originalCostsNotYetClaimed: this.sumPartnerCost(v => v.originalEligibleCosts - v.originalCostsClaimedToDate, partner),
           originalRemaining: 0,
+          originalFundingLevel: 0,
           newEligibleCosts: this.sumPartnerCost(v => v.newEligibleCosts, partner),
           newCostsNotYetClaimed: this.sumPartnerCost(v => v.newEligibleCosts - v.originalCostsClaimedToDate, partner),
           newRemaining: 0,
+          newFundingLevel: 0,
+          differenceEligibleCosts: this.sumPartnerCost(v => v.originalEligibleCosts - v.newEligibleCosts, partner),
+          differenceRemaining:0,
           virements: partner.virements.map(virement => ({
             costCategoryId: virement.costCategoryId,
             costCategoryName: costCategories.filter(x => x.id === virement.costCategoryId).map(x => x.name)[0],
