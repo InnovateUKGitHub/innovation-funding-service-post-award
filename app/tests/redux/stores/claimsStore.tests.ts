@@ -13,8 +13,8 @@ describe("claims by project", () => {
       const partner = await testStore.createPartner(project);
       const claim = await testStore.createClaim(partner);
       const costSummariesStore = new CostSummariesStore(context.testStore.getState, context.testStore.dispatch);
-      const costCategoriesStore = new CostCategoriesStore(context.testStore.getState, context.testStore.dispatch);
       const partnerStore = new PartnersStore(context.testStore.getState, context.testStore.dispatch);
+      const costCategoriesStore = new CostCategoriesStore(partnerStore, context.testStore.getState, context.testStore.dispatch);
       const claimDocumemtsStore = new ClaimDocumentsStore(partnerStore, context.testStore.getState, context.testStore.dispatch);
       const claimsStore = new ClaimsStore(costSummariesStore, costCategoriesStore, claimDocumemtsStore, context.testStore.getState, context.testStore.dispatch);
       const foundClaims = claimsStore.getAllClaimsForProject(project.Id).data!;
@@ -28,8 +28,8 @@ describe("claims by project", () => {
       const partner = await testStore.createPartner(project);
       await testStore.createClaim(partner);
       const costSummariesStore = new CostSummariesStore(context.testStore.getState, context.testStore.dispatch);
-      const costCategoriesStore = new CostCategoriesStore(context.testStore.getState, context.testStore.dispatch);
       const partnerStore = new PartnersStore(context.testStore.getState, context.testStore.dispatch);
+      const costCategoriesStore = new CostCategoriesStore(partnerStore, context.testStore.getState, context.testStore.dispatch);
       const claimDocumemtsStore = new ClaimDocumentsStore(partnerStore, context.testStore.getState, context.testStore.dispatch);
       const claimsStore = new ClaimsStore(costSummariesStore, costCategoriesStore, claimDocumemtsStore, context.testStore.getState, context.testStore.dispatch);
       const foundClaims = claimsStore.getAllClaimsForProject("not real").data!;
@@ -47,8 +47,8 @@ describe("claims by project", () => {
       await testStore.createClaim(partner, undefined, x => x.Acc_ClaimStatus__c = ClaimStatus.APPROVED);
       const draftClaim = await testStore.createClaim(partner, undefined, x => x.Acc_ClaimStatus__c = ClaimStatus.DRAFT);
       const costSummariesStore = new CostSummariesStore(context.testStore.getState, context.testStore.dispatch);
-      const costCategoriesStore = new CostCategoriesStore(context.testStore.getState, context.testStore.dispatch);
       const partnerStore = new PartnersStore(context.testStore.getState, context.testStore.dispatch);
+      const costCategoriesStore = new CostCategoriesStore(partnerStore, context.testStore.getState, context.testStore.dispatch);
       const claimDocumemtsStore = new ClaimDocumentsStore(partnerStore, context.testStore.getState, context.testStore.dispatch);
       const claimsStore = new ClaimsStore(costSummariesStore, costCategoriesStore, claimDocumemtsStore, context.testStore.getState, context.testStore.dispatch);
       const foundClaims = claimsStore.getActiveClaimsForProject(project.Id).data!;
@@ -63,8 +63,8 @@ describe("claims by project", () => {
       const partner = await testStore.createPartner(project);
       await testStore.createClaim(partner, undefined, x => x.Acc_ClaimStatus__c = ClaimStatus.APPROVED);
       const costSummariesStore = new CostSummariesStore(context.testStore.getState, context.testStore.dispatch);
-      const costCategoriesStore = new CostCategoriesStore(context.testStore.getState, context.testStore.dispatch);
       const partnerStore = new PartnersStore(context.testStore.getState, context.testStore.dispatch);
+      const costCategoriesStore = new CostCategoriesStore(partnerStore, context.testStore.getState, context.testStore.dispatch);
       const claimDocumemtsStore = new ClaimDocumentsStore(partnerStore, context.testStore.getState, context.testStore.dispatch);
       const claimsStore = new ClaimsStore(costSummariesStore, costCategoriesStore, claimDocumemtsStore, context.testStore.getState, context.testStore.dispatch);
       const foundClaims = claimsStore.getActiveClaimsForProject(project.Id).data!;
@@ -81,8 +81,8 @@ describe("claims by project", () => {
       const approvedClaim = await testStore.createClaim(partner, undefined, x => x.Acc_ClaimStatus__c = ClaimStatus.APPROVED);
       await testStore.createClaim(partner, undefined, x => x.Acc_ClaimStatus__c = ClaimStatus.DRAFT);
       const costSummariesStore = new CostSummariesStore(context.testStore.getState, context.testStore.dispatch);
-      const costCategoriesStore = new CostCategoriesStore(context.testStore.getState, context.testStore.dispatch);
       const partnerStore = new PartnersStore(context.testStore.getState, context.testStore.dispatch);
+      const costCategoriesStore = new CostCategoriesStore(partnerStore, context.testStore.getState, context.testStore.dispatch);
       const claimDocumemtsStore = new ClaimDocumentsStore(partnerStore, context.testStore.getState, context.testStore.dispatch);
       const claimsStore = new ClaimsStore(costSummariesStore, costCategoriesStore, claimDocumemtsStore, context.testStore.getState, context.testStore.dispatch);
       const foundClaims = claimsStore.getInactiveClaimsForProject(project.Id).data!;
@@ -97,8 +97,8 @@ describe("claims by project", () => {
       await testStore.createClaim(partner, undefined, x => x.Acc_ClaimStatus__c = ClaimStatus.DRAFT);
       await testStore.createClaim(partner, undefined, x => x.Acc_ClaimStatus__c = ClaimStatus.DRAFT);
       const costSummariesStore = new CostSummariesStore(context.testStore.getState, context.testStore.dispatch);
-      const costCategoriesStore = new CostCategoriesStore(context.testStore.getState, context.testStore.dispatch);
       const partnerStore = new PartnersStore(context.testStore.getState, context.testStore.dispatch);
+      const costCategoriesStore = new CostCategoriesStore(partnerStore, context.testStore.getState, context.testStore.dispatch);
       const claimDocumemtsStore = new ClaimDocumentsStore(partnerStore, context.testStore.getState, context.testStore.dispatch);
       const claimsStore = new ClaimsStore(costSummariesStore, costCategoriesStore, claimDocumemtsStore, context.testStore.getState, context.testStore.dispatch);
       const foundClaims = claimsStore.getInactiveClaimsForProject(project.Id).data!;
@@ -116,8 +116,8 @@ describe("claims by partner", () => {
       const partner = await testStore.createPartner(project);
       const claim = await testStore.createClaim(partner);
       const costSummariesStore = new CostSummariesStore(context.testStore.getState, context.testStore.dispatch);
-      const costCategoriesStore = new CostCategoriesStore(context.testStore.getState, context.testStore.dispatch);
       const partnerStore = new PartnersStore(context.testStore.getState, context.testStore.dispatch);
+      const costCategoriesStore = new CostCategoriesStore(partnerStore, context.testStore.getState, context.testStore.dispatch);
       const claimDocumemtsStore = new ClaimDocumentsStore(partnerStore, context.testStore.getState, context.testStore.dispatch);
       const claimsStore = new ClaimsStore(costSummariesStore, costCategoriesStore, claimDocumemtsStore, context.testStore.getState, context.testStore.dispatch);
       const foundClaims = claimsStore.getAllClaimsForPartner(partner.Id).data!;
@@ -131,8 +131,8 @@ describe("claims by partner", () => {
       const partner = await testStore.createPartner(project);
       await testStore.createClaim(partner);
       const costSummariesStore = new CostSummariesStore(context.testStore.getState, context.testStore.dispatch);
-      const costCategoriesStore = new CostCategoriesStore(context.testStore.getState, context.testStore.dispatch);
       const partnerStore = new PartnersStore(context.testStore.getState, context.testStore.dispatch);
+      const costCategoriesStore = new CostCategoriesStore(partnerStore, context.testStore.getState, context.testStore.dispatch);
       const claimDocumemtsStore = new ClaimDocumentsStore(partnerStore, context.testStore.getState, context.testStore.dispatch);
       const claimsStore = new ClaimsStore(costSummariesStore, costCategoriesStore, claimDocumemtsStore, context.testStore.getState, context.testStore.dispatch);
       const foundClaims = claimsStore.getAllClaimsForPartner("not real").data!;
@@ -150,8 +150,8 @@ describe("claims by partner", () => {
       await testStore.createClaim(partner, undefined, x => x.Acc_ClaimStatus__c = ClaimStatus.APPROVED);
       const draftClaim = await testStore.createClaim(partner, undefined, x => x.Acc_ClaimStatus__c = ClaimStatus.DRAFT);
       const costSummariesStore = new CostSummariesStore(context.testStore.getState, context.testStore.dispatch);
-      const costCategoriesStore = new CostCategoriesStore(context.testStore.getState, context.testStore.dispatch);
       const partnerStore = new PartnersStore(context.testStore.getState, context.testStore.dispatch);
+      const costCategoriesStore = new CostCategoriesStore(partnerStore, context.testStore.getState, context.testStore.dispatch);
       const claimDocumemtsStore = new ClaimDocumentsStore(partnerStore, context.testStore.getState, context.testStore.dispatch);
       const claimsStore = new ClaimsStore(costSummariesStore, costCategoriesStore, claimDocumemtsStore, context.testStore.getState, context.testStore.dispatch);
       const foundClaim = claimsStore.getActiveClaimForPartner(partner.Id).data!;
@@ -165,8 +165,8 @@ describe("claims by partner", () => {
       const partner = await testStore.createPartner(project);
       await testStore.createClaim(partner, undefined, x => x.Acc_ClaimStatus__c = ClaimStatus.APPROVED);
       const costSummariesStore = new CostSummariesStore(context.testStore.getState, context.testStore.dispatch);
-      const costCategoriesStore = new CostCategoriesStore(context.testStore.getState, context.testStore.dispatch);
       const partnerStore = new PartnersStore(context.testStore.getState, context.testStore.dispatch);
+      const costCategoriesStore = new CostCategoriesStore(partnerStore, context.testStore.getState, context.testStore.dispatch);
       const claimDocumemtsStore = new ClaimDocumentsStore(partnerStore, context.testStore.getState, context.testStore.dispatch);
       const claimsStore = new ClaimsStore(costSummariesStore, costCategoriesStore, claimDocumemtsStore, context.testStore.getState, context.testStore.dispatch);
       const foundClaim = claimsStore.getActiveClaimForPartner(partner.Id).data!;
@@ -183,8 +183,8 @@ describe("claims by partner", () => {
       const approvedClaim = await testStore.createClaim(partner, undefined, x => x.Acc_ClaimStatus__c = ClaimStatus.APPROVED);
       await testStore.createClaim(partner, undefined, x => x.Acc_ClaimStatus__c = ClaimStatus.DRAFT);
       const costSummariesStore = new CostSummariesStore(context.testStore.getState, context.testStore.dispatch);
-      const costCategoriesStore = new CostCategoriesStore(context.testStore.getState, context.testStore.dispatch);
       const partnerStore = new PartnersStore(context.testStore.getState, context.testStore.dispatch);
+      const costCategoriesStore = new CostCategoriesStore(partnerStore, context.testStore.getState, context.testStore.dispatch);
       const claimDocumemtsStore = new ClaimDocumentsStore(partnerStore, context.testStore.getState, context.testStore.dispatch);
       const claimsStore = new ClaimsStore(costSummariesStore, costCategoriesStore, claimDocumemtsStore, context.testStore.getState, context.testStore.dispatch);
       const foundClaims = claimsStore.getInactiveClaimsForPartner(partner.Id).data!;
@@ -199,8 +199,8 @@ describe("claims by partner", () => {
       await testStore.createClaim(partner, undefined, x => x.Acc_ClaimStatus__c = ClaimStatus.DRAFT);
       await testStore.createClaim(partner, undefined, x => x.Acc_ClaimStatus__c = ClaimStatus.DRAFT);
       const costSummariesStore = new CostSummariesStore(context.testStore.getState, context.testStore.dispatch);
-      const costCategoriesStore = new CostCategoriesStore(context.testStore.getState, context.testStore.dispatch);
       const partnerStore = new PartnersStore(context.testStore.getState, context.testStore.dispatch);
+      const costCategoriesStore = new CostCategoriesStore(partnerStore, context.testStore.getState, context.testStore.dispatch);
       const claimDocumemtsStore = new ClaimDocumentsStore(partnerStore, context.testStore.getState, context.testStore.dispatch);
       const claimsStore = new ClaimsStore(costSummariesStore, costCategoriesStore, claimDocumemtsStore, context.testStore.getState, context.testStore.dispatch);
       const foundClaims = claimsStore.getInactiveClaimsForPartner(partner.Id).data!;

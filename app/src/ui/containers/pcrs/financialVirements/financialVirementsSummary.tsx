@@ -81,7 +81,7 @@ class Component extends React.Component<Props> {
       ;
 
     return (
-      <ACC.Link replace={true} route={route}>
+      <ACC.Link preserveData={true} route={route}>
         <ACC.PartnerName partner={partner} showIsLead={true} />
       </ACC.Link>
     );

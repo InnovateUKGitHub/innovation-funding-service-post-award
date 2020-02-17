@@ -4,6 +4,7 @@ import { DataLoadAction } from "../actions/common";
 import { LoadingStatus } from "../../../shared/pending";
 import * as Dtos from "@framework/dtos";
 import { IAppError } from "@framework/types";
+import { State } from "router5";
 
 export interface IDataStore<T> {
   status: LoadingStatus;
@@ -26,9 +27,9 @@ const dataStoreReducer = <TData extends {}>(storeKey: string) => (state: { [key:
   }
 
   if (action.type === actionTypes.TRANSITION_SUCCESS) {
-    const hasPreviousRoute = action.payload.previousRoute !== null;
-    const isReplacing = (action.payload.route && action.payload.route.meta && action.payload.route.meta && action.payload.route.meta.options && action.payload.route.meta.options.replace === true) || false;
-    if (hasPreviousRoute && !isReplacing) {
+
+    const options = getRouteTransitionOptions(action.payload);
+    if (options.hasPreviousRoute && !options.isReplacing && !options.preserveData) {
       const result = Object.assign({}, state);
       Object.keys(result).forEach(itemKey => {
         const pending = result[itemKey];
@@ -42,6 +43,17 @@ const dataStoreReducer = <TData extends {}>(storeKey: string) => (state: { [key:
 
   return state;
 };
+
+function getRouteTransitionOptions(payload: { route: State, previousRoute: State }) {
+  const hasPreviousRoute = payload.previousRoute !== null;
+  const options = payload && payload.route && payload.route.meta && payload.route.meta.options || {};
+
+  return {
+    isReplacing: options.replace || false,
+    preserveData: options.preserveData || false,
+    hasPreviousRoute
+  };
+}
 
 export const dataReducer = combineReducers({
   claims: dataStoreReducer<Dtos.ClaimDto[]>("claims"),
