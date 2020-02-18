@@ -14,6 +14,7 @@ interface LinkProps extends StyledLinkProps {
   route: ILinkInfo;
   className?: string;
   replace?: boolean;
+  preserveData?: boolean;
 }
 
 const getClassNames = (styling: TStyling, className?: string) => {
@@ -33,7 +34,8 @@ export class Link extends React.Component<LinkProps> {
     const className = getClassNames(styling, this.props.className);
 
     const options = {
-      replace: this.props.replace === true ? true : undefined
+      replace: this.props.replace || false,
+      preserveData: this.props.preserveData || false
     };
 
     return (
