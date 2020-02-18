@@ -102,6 +102,14 @@
       "back-link": "Back to claims",
       "button-save-and-return": "Save and return to claims",
       "button-save-and-continue": "Continue to claims documents"
+    },
+    "financial-virement-details":{
+      "title": "Reallocate costs"
+    },
+    "financial-virement-edit":{
+      "title": "Reallocate costs",
+      "summary-title": "Summary of project costs",
+      "save-button": "Save and return to reallocate project costs"
     }
   },
   "claims-messages": {
@@ -187,5 +195,26 @@
     "no-documents-uploaded": "No documents uploaded.",
     "document-uploaded-success": "Your document has been uploaded.",
     "documents-uploaded-success": "{{documentsNumber}} documents have been uploaded."
+  },
+  "financial-virement-labels":{
+    "partner-name":"Partner",
+    "cost-category-name": "Cost category",
+    "original-funding-level":"Funding level",
+    "new-funding-level":"New funding level",
+    "partner-original-eligible-costs": "Total eligible costs",
+    "partner-original-remaining-costs": "Remaining costs",
+    "partner-original-remaining-grant": "Remaining grant",
+    "partner-new-eligible-costs": "New total eligible costs",
+    "partner-new-remaining-costs": "New remaining costs",
+    "partner-new-remaining-grant": "New remaining grant",
+    "partner-difference-costs": "Difference",
+    "partner-original-grant": "Total grant",
+    "partner-new-grant": "New total grant",
+    "partner-difference-grant": "Difference",
+    "cost-category-original-eligible-costs": "Total eligible costs",
+    "cost-category-costs-claimed": "Costs claimed",
+    "cost-category-new-eligible-costs": "New total eligible costs",
+    "cost-category-difference-costs": "Costs reallocated",
+    "totals": "Total"
   }
 }
