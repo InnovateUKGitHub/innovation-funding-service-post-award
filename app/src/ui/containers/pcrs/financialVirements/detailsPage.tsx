@@ -3,7 +3,8 @@ import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerB
 import { StoresConsumer } from "@ui/redux";
 import { Pending } from "@shared/pending";
 import * as ACC from "@ui/components";
-import { ProjectDto } from "@framework/dtos";
+import { PartnerDto, PCRDto, ProjectDto, ProjectRole } from "@framework/dtos";
+import { createDto } from "@framework/util/dtoHelpers";
 
 interface Params {
   projectId: string;
@@ -15,6 +16,9 @@ interface Params {
 
 interface Props {
   project: Pending<ProjectDto>;
+  partner: Pending<PartnerDto>;
+  pcr: Pending<PCRDto>;
+  costCategories: Pending<CostCategoryDto[]>;
   financialVirements: Pending<PartnerVirementsDto>;
 }
 
@@ -22,25 +26,48 @@ class Component extends ContainerBase<Params, Props, {}> {
   render() {
     const combined = Pending.combine({
       project: this.props.project,
+      partner: this.props.partner,
+      pcr: this.props.pcr,
+      costCategories: this.props.costCategories,
       financialVirements: this.props.financialVirements
     });
 
-    return <ACC.PageLoader pending={combined} render={data => this.renderPage(data.project, data.financialVirements)} />;
+    return <ACC.PageLoader pending={combined} render={data => this.renderPage(data.project, data.partner, data.costCategories, data.financialVirements, data.pcr)} />;
   }
 
-  private renderPage(project: ProjectDto, financialVirements: PartnerVirementsDto) {
-    const VirementTable = ACC.TypedTable<CostCategoryVirementDto>();
+  private renderPage(project: ProjectDto, partner: PartnerDto, costCategories: CostCategoryDto[], financialVirements: PartnerVirementsDto, pcr: PCRDto) {
+    const data = costCategories
+      .map(costCategory => ({
+        costCategory,
+        virement: financialVirements.virements.find(x => x.costCategoryId === costCategory.id) || createDto<CostCategoryVirementDto>({})
+      }))
+      ;
+
+    const VirementTable = ACC.TypedTable<typeof data[0]>();
     return (
       <ACC.Page
         backLink={this.getBackLink()}
         pageTitle={<ACC.Projects.Title project={project} />}
       >
-        <VirementTable.Table qa="partnerVirements" data={financialVirements.virements}>
-          <VirementTable.String header="Cost category" qa="costCategory" value={x =>  x.costCategoryName} footer="Total" />
-          <VirementTable.Currency header="Original" qa="original" value={x => x.originalEligibleCosts} footer={<ACC.Renderers.Currency value={financialVirements.originalEligibleCosts}/> }/>
-          <VirementTable.Currency header="New" qa="new" value={x => x.newEligibleCosts} footer={<ACC.Renderers.Currency value={financialVirements.newEligibleCosts}/> }/>
+        {this.renderReasoning(project, pcr)}
+        <VirementTable.Table qa="partnerVirements" data={data}>
+          <VirementTable.String header="Cost category" qa="costCategory" value={x =>  x.costCategory.name} footer="Total" />
+          <VirementTable.Currency header="Current eligible costs" qa="originalEligibleCosts" value={x => x.virement.originalEligibleCosts} footer={<ACC.Renderers.Currency value={financialVirements.originalEligibleCosts}/> }/>
+          <VirementTable.Currency header="New eligible costs" qa="newEligibleCosts" value={x => x.virement.newEligibleCosts} footer={<ACC.Renderers.Currency value={financialVirements.newEligibleCosts}/> }/>
+          <VirementTable.Currency header="Difference" qa="difference" value={x => x.virement.newEligibleCosts - x.virement.originalEligibleCosts} footer={<ACC.Renderers.Currency value={financialVirements.newEligibleCosts - financialVirements.originalEligibleCosts}/> }/>
         </VirementTable.Table>
       </ACC.Page>
+    );
+  }
+
+  private renderReasoning(project: ProjectDto, pcr: PCRDto) {
+    if (!(project.roles & ProjectRole.MonitoringOfficer) || !pcr.reasoningComments) {
+      return null;
+    }
+    return (
+      <ACC.Info summary="Reasoning for the request">
+        <ACC.Renderers.SimpleString multiline={true}>{pcr.reasoningComments}</ACC.Renderers.SimpleString>
+      </ACC.Info>
     );
   }
 
@@ -51,7 +78,7 @@ class Component extends ContainerBase<Params, Props, {}> {
       itemId: this.props.itemId
     };
 
-    return <ACC.BackLink route={this.props.routes.pcrPrepareItem.getLink(params)} replace={true}>Back to summary</ACC.BackLink>;
+    return <ACC.BackLink route={this.props.routes.pcrPrepareItem.getLink(params)} preserveData={true}>Back to summary</ACC.BackLink>;
   }
 }
 
@@ -61,6 +88,9 @@ const Container = (props: Params & BaseProps) => (
       stores => (
         <Component
           project={stores.projects.getById(props.projectId)}
+          partner={stores.partners.getById(props.partnerId)}
+          pcr={stores.projectChangeRequests.getById(props.projectId, props.pcrId)}
+          costCategories={stores.costCategories.getAllForPartner(props.partnerId)}
           financialVirements={stores.financialVirements.getPartnerVirements(props.projectId, props.partnerId, props.pcrId, props.itemId)}
           {...props}
         />

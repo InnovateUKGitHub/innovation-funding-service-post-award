@@ -3,7 +3,7 @@ import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerB
 import { EditorStatus, IEditorStore, StoresConsumer } from "@ui/redux";
 import { Pending } from "@shared/pending";
 import * as ACC from "@ui/components";
-import { PartnerDto, ProjectDto } from "@framework/dtos";
+import { PartnerDto, PCRDto, ProjectDto, ProjectRole } from "@framework/dtos";
 import { FinancialVirementDtoValidator } from "@ui/validators";
 import { PCRPrepareItemRoute } from "../pcrItemWorkflow";
 import { createDto } from "@framework/util/dtoHelpers";
@@ -39,7 +39,6 @@ class Component extends ContainerBase<Params, Props, {}> {
     const partnerVirements = editor.data.partners.find(x => x.partnerId === this.props.partnerId)!;
 
     const costCategoriesWithVirement = costCategories
-      .filter(x => x.competitionType === partner.competitionType && x.organisationType === partner.organisationType)
       .map(x => ({
         costCategory: x,
         virement: partnerVirements.virements.find(y => y.costCategoryId === x.id) || createDto<CostCategoryVirementDto>({
@@ -102,8 +101,8 @@ class Component extends ContainerBase<Params, Props, {}> {
     partnerVirement.newEligibleCosts = value!;
 
     if (costCategory.hasRelated && partner.overheadRate) {
-      const calculatedCostCategories = this.props.costCategories.then(x => x.filter(y => y.isCalculated).map(y => y.id)).data || [];
-      const related = partnerLevel.virements.find(v => calculatedCostCategories.indexOf(v.costCategoryId) !== -1);
+      const calculatedCostCategoryIds = this.props.costCategories.then(x => x.filter(y => y.isCalculated).map(y => y.id)).data || [];
+      const related = partnerLevel.virements.find(v => calculatedCostCategoryIds.indexOf(v.costCategoryId) !== -1);
       if (related) {
         related.newEligibleCosts = partnerVirement.newEligibleCosts * (partner.overheadRate / 100);
       }
@@ -123,7 +122,7 @@ class Component extends ContainerBase<Params, Props, {}> {
       itemId: this.props.itemId
     };
 
-    return <ACC.BackLink route={this.props.routes.pcrPrepareItem.getLink(params)} replace={true}>Back to summary</ACC.BackLink>;
+    return <ACC.BackLink route={this.props.routes.pcrPrepareItem.getLink(params)} preserveData={true}>Back to summary</ACC.BackLink>;
   }
 }
 
@@ -134,7 +133,7 @@ const Container = (props: Params & BaseProps) => (
         <Component
           project={stores.projects.getById(props.projectId)}
           partner={stores.partners.getById(props.partnerId)}
-          costCategories={stores.costCategories.getAll()}
+          costCategories={stores.costCategories.getAllForPartner(props.partnerId)}
           editor={stores.financialVirements.getFiniancialVirementEditor(props.projectId, props.pcrId, props.itemId)}
           onChange={(saving, dto) => stores.financialVirements.updateFiniancialVirementEditor(saving, props.projectId, props.pcrId, props.itemId, dto, () => stores.navigation.navigateTo(PCRPrepareItemRoute.getLink({ projectId: props.projectId, pcrId: props.pcrId, itemId: props.itemId }), true))}
           {...props}

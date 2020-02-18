@@ -4,6 +4,7 @@ import { LoadingStatus } from "../../../src/shared/pending";
 
 const navigate = (): any => ({ type: actionTypes.TRANSITION_SUCCESS, payload: { previousRoute: "" } });
 const replaceNavigation = (): any => ({ type: actionTypes.TRANSITION_SUCCESS, payload: { previousRoute: "", route: { meta: { options: { replace: true } } } } });
+const preserveDataNavigation = (): any => ({ type: actionTypes.TRANSITION_SUCCESS, payload: { previousRoute: "", route: { meta: { options: { preserveData: true } } } } });
 
 const claimDataAction = (id: any, data: any, status: number = 1, error: any = {}): any => ({
   type: "DATA_LOAD",
@@ -85,6 +86,17 @@ describe("DataReducer", () => {
     expect(state2.claim[id].status).toBe(LoadingStatus.Done);
 
     const result = dataReducer(state2, replaceNavigation());
+    expect(result.claim[id].status).toBe(LoadingStatus.Done);
+  });
+
+  test("preserves loaded data on preserve data navigation", () => {
+    const id = 5;
+    const data = { test: 456 };
+    const action = claimDataAction(id, data, LoadingStatus.Done);
+    const state2 = dataReducer(state, action);
+    expect(state2.claim[id].status).toBe(LoadingStatus.Done);
+
+    const result = dataReducer(state2, preserveDataNavigation());
     expect(result.claim[id].status).toBe(LoadingStatus.Done);
   });
 
