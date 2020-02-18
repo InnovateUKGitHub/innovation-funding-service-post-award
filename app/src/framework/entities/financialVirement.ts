@@ -2,6 +2,8 @@ export interface PartnerFinancialVirement {
   id: string;
   pcrItemId: string;
   partnerId: string;
+  originalFundingLevel: number;
+  newFundingLevel: number;
   virements: CostCategoryFinancialVirement[];
 }
 
