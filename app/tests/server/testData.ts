@@ -49,7 +49,7 @@ export class TestData {
       Acc_CompetitionType__c: "SBRI",
       Acc_StartDate__c: "",
       Acc_EndDate__c: "",
-      Acc_ClaimFrequency__c: "",
+      Acc_ClaimFrequency__c: "Quarterly",
       Acc_ClaimsForReview__c: 0,
       Acc_ClaimsOverdue__c: 0,
       Acc_ClaimsUnderQuery__c: 0,

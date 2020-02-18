@@ -44,7 +44,7 @@ describe("GetCurrentPeriodQuery", () => {
     }
     else {
       expect(result.startDate).toEqual(projectStart.plus({ months: current - 1 }).toJSDate());
-      expect(result.endDate).toEqual(projectStart.plus({ months: current, days: -1 }).toJSDate());
+      expect(result.endDate).toEqual(projectStart.plus({ months: current}).minus({day: 1}).toJSDate());
     }
   });
 
@@ -86,7 +86,7 @@ describe("GetCurrentPeriodQuery", () => {
     }
     else {
       expect(result.startDate).toEqual(projectStart.plus({ months: (current - 1) * 3 }).toJSDate());
-      expect(result.endDate).toEqual(projectStart.plus({ months: (current * 3), days: -1 }).toJSDate());
+      expect(result.endDate).toEqual(projectStart.plus({ months: (current * 3)}).minus({day: 1}).toJSDate());
     }
   });
 
