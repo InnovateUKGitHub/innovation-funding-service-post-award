@@ -7,27 +7,27 @@ export class ProjectDashboardContent extends ContentPageBase {
     super(content, "projects-dashboard");
   }
 
-  public searchTitle = () => this.getContent("searchTitle");
-  public searchHint = () => this.getContent("searchHint");
-  public searchLabel = () => this.getContent("searchLabel");
+  public readonly searchTitle = () => this.getContent("searchTitle");
+  public readonly searchHint = () => this.getContent("searchHint");
+  public readonly searchLabel = () => this.getContent("searchLabel");
 
-  public live = {
+  public readonly live = {
     noProjects: () => this.getContent("noLiveProjectsMessage"),
     noMatchingProjects: () => this.getContent("noLiveMatchingMessage"),
   };
 
-  public upcoming = {
+  public readonly upcoming = {
     title: () => this.getContent("upcomingTitle"),
     noProjects: () => this.getContent("noUpcomingProjectsMessage"),
     noMatchingProjects: () => this.getContent("noUpcomingMatchingMessage"),
   };
 
-  public archived = {
+  public readonly archived = {
     title: () => this.getContent("archivedTitle"),
     noProjects: () => this.getContent("noArchivedProjectsMessage"),
     noMatchingProjects: () => this.getContent("noArchivedMatchingMessage"),
   };
 
-  public messages = new ProjectMessages(this);
+  public readonly messages = new ProjectMessages(this);
 
 }

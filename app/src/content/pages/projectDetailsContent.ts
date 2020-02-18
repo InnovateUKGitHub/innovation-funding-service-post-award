@@ -9,7 +9,7 @@ export class ProjectDetailsContent extends ContentPageBase {
     super(content, "project-details");
   }
 
-  public projectMessages = new ProjectMessages(this);
-  public projectLabels = new ProjectLabels(this);
-  public contactLabels = new ProjectContactLabels(this);
+  public readonly projectMessages = new ProjectMessages(this);
+  public readonly projectLabels = new ProjectLabels(this);
+  public readonly contactLabels = new ProjectContactLabels(this);
 }
