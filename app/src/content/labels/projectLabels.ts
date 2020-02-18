@@ -5,25 +5,25 @@ export class ProjectLabels extends ContentBase {
     super(parent, "project-labels");
   }
 
-  public projectCosts = () => this.getContent("projectCostsLabel");
-  public partnerCosts = (partnerName: string) => this.getContent("partnerCostsLabel", { partnerName });
-  public partner = () => this.getContent("partner");
-  public totalEligibleCosts = () => this.getContent("totalEligibleCostsLabel");
-  public totalEligibleCostsClaimed = () => this.getContent("totalEligibleCostsClaimedLabel");
-  public percentageEligibleCostsClaimed = () => this.getContent("percentageEligibleCostsClaimedLabel");
-  public projectMembers = () => this.getContent("projectMembers");
-  public financeContacts = () => this.getContent("financeContacts");
-  public projectInformation = () => this.getContent("projectInformation");
-  public startDate = () => this.getContent("startDate");
-  public endDate = () => this.getContent("endDate");
-  public duration = () => this.getContent("duration");
-  public numberOfPeriods = () => this.getContent("numberOfPeriods");
-  public scope = () => this.getContent("scope");
-  public partners = () => this.getContent("partners");
-  public awardRate = () => this.getContent("awardRate");
-  public totalGrant = () => this.getContent("totalGrant");
-  public totalPrepayment = () => this.getContent("totalPrepayment");
-  public capLimit = () => this.getContent("capLimit");
-  public auditReportFrequency = () => this.getContent("auditReportFrequency");
+  public readonly projectCosts = () => this.getContent("projectCostsLabel");
+  public readonly partnerCosts = (partnerName: string) => this.getContent("partnerCostsLabel", { partnerName });
+  public readonly partner = () => this.getContent("partner");
+  public readonly totalEligibleCosts = () => this.getContent("totalEligibleCostsLabel");
+  public readonly totalEligibleCostsClaimed = () => this.getContent("totalEligibleCostsClaimedLabel");
+  public readonly percentageEligibleCostsClaimed = () => this.getContent("percentageEligibleCostsClaimedLabel");
+  public readonly projectMembers = () => this.getContent("projectMembers");
+  public readonly financeContacts = () => this.getContent("financeContacts");
+  public readonly projectInformation = () => this.getContent("projectInformation");
+  public readonly startDate = () => this.getContent("startDate");
+  public readonly endDate = () => this.getContent("endDate");
+  public readonly duration = () => this.getContent("duration");
+  public readonly numberOfPeriods = () => this.getContent("numberOfPeriods");
+  public readonly scope = () => this.getContent("scope");
+  public readonly partners = () => this.getContent("partners");
+  public readonly awardRate = () => this.getContent("awardRate");
+  public readonly totalGrant = () => this.getContent("totalGrant");
+  public readonly totalPrepayment = () => this.getContent("totalPrepayment");
+  public readonly capLimit = () => this.getContent("capLimit");
+  public readonly auditReportFrequency = () => this.getContent("auditReportFrequency");
 
 }

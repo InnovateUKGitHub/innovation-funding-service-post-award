@@ -5,19 +5,19 @@ export class ProjectMessages extends ContentBase {
     super(parent, "project-messages");
   }
 
-  public claimDue = () => this.getContent("claimDueMessage");
-  public claimOverdue = () => this.getContent("claimOverdueMessage");
-  public claimQueried = () => this.getContent("claimQueriedMessage");
-  public claimRequiresIAR = () => this.getContent("claimRequiresIARMessage");
-  public claimSubmitted = () => this.getContent("claimSubmittedMessage");
-  public claimsToReview = (numberOfClaims: number) => this.getContent("claimsToReviewMessage", { numberOfClaims });
-  public claimToSubmit = () => this.getContent("claimToSubmitMessage");
-  public iarRequired = () => this.getContent("iarRequiredMessage");
-  public noClaimDue = () => this.getContent("noClaimDueMessage");
-  public projectEnded = () => this.getContent("projectEndedMessage");
-  public finalClaimPeriod = () => this.getContent("finalClaimPeriodMessage");
-  public currentPeriodInfo = (currentPeriod: number, totalPeriods: number) => this.getContent("currentPeriodInfo", { currentPeriod, totalPeriods });
-  public pcrQueried = () => this.getContent("pcrQueried");
-  public pcrsToReview = (numberOfPcrs: number) => this.getContent("pcrToReview", { numberOfPcrs });
-  public projectOnHold = () => this.getContent("projectOnHold");
+  public readonly claimDue = () => this.getContent("claimDueMessage");
+  public readonly claimOverdue = () => this.getContent("claimOverdueMessage");
+  public readonly claimQueried = () => this.getContent("claimQueriedMessage");
+  public readonly claimRequiresIAR = () => this.getContent("claimRequiresIARMessage");
+  public readonly claimSubmitted = () => this.getContent("claimSubmittedMessage");
+  public readonly claimsToReview = (numberOfClaims: number) => this.getContent("claimsToReviewMessage", { numberOfClaims });
+  public readonly claimToSubmit = () => this.getContent("claimToSubmitMessage");
+  public readonly iarRequired = () => this.getContent("iarRequiredMessage");
+  public readonly noClaimDue = () => this.getContent("noClaimDueMessage");
+  public readonly projectEnded = () => this.getContent("projectEndedMessage");
+  public readonly finalClaimPeriod = () => this.getContent("finalClaimPeriodMessage");
+  public readonly currentPeriodInfo = (currentPeriod: number, totalPeriods: number) => this.getContent("currentPeriodInfo", { currentPeriod, totalPeriods });
+  public readonly pcrQueried = () => this.getContent("pcrQueried");
+  public readonly pcrsToReview = (numberOfPcrs: number) => this.getContent("pcrToReview", { numberOfPcrs });
+  public readonly projectOnHold = () => this.getContent("projectOnHold");
 }

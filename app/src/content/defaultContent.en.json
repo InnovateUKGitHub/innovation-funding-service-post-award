@@ -67,23 +67,31 @@
       }
     },
     "all-claims-dashboard": {
-      "title": "Claims",
-      "guidance-message": "All partners in this project must upload evidence for each expenditure with every claim made. These might include invoices, timesheets, receipts or spreadsheets for capital usage. This is part of Innovate UK's obligations under the [Managing Public Money government handbook](https://www.gov.uk/government/publications/managing-public-money?_ga=2.105018247.521318796.1576575366-1871284022.1544109966) in relation to assurance, financial management and control.",
-      "open-section" : {
-        "title": "Open"
+      "title": "Claims"
+    },
+    "claims-dashboard": {
+      "title": {
+        "html": "Claims - View project",
+        "display": "Claims"
       },
-      "closed-section" : {
-        "title": "Closed"
+      "claims-messages": {
+        "no-remaining-claims": "There are no claims. Innovate UK has approved your final claim.",
+        "no-open-claims": "You have no open claims. The next claim period begins {{nextClaimStartDate}}.",
+        "no-closed-claims": "You have not made any claims."
       }
     }
   },
   "claims-messages": {
+    "guidance-message": "All partners in this project must upload evidence for each expenditure with every claim made. These might include invoices, timesheets, receipts or spreadsheets for capital usage. This is part of Innovate UK's obligations under the [Managing Public Money government handbook](https://www.gov.uk/government/publications/managing-public-money?_ga=2.105018247.521318796.1576575366-1871284022.1544109966) in relation to assurance, financial management and control.",
     "no-open-claims": "There are no open claims. The next claim period begins {{nextClaimStartDate}}.",
     "no-closed-claims": "There are no closed claims for this partner.",
-    "no-claims": "There are no claims. Innovate UK has approved the final claims."
+    "no-remaining-claims": "There are no claims. Innovate UK has approved the final claims."
   },
   "claims-labels": {
+    "open-section-title": "Open",
+    "closed-section-title": "Closed",
     "partner": "Partner",
+    "period": "Period",
     "forecast-costs": "Forecast costs for period",
     "actual-costs": "Actual costs for period",
     "difference": "Difference",

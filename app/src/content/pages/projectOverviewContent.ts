@@ -8,7 +8,7 @@ export class ProjectOverviewContent extends ContentPageBase {
     super(content, "project-overview");
   }
 
-  public links = {
+  public readonly links = {
     claims: () => this.getContent("claimsLink"),
     monitoringReport: () => this.getContent("monitoringReportLink"),
     forecast: () => this.getContent("forecastLink"),
@@ -19,7 +19,7 @@ export class ProjectOverviewContent extends ContentPageBase {
     summary: () => this.getContent("summaryLink"),
   };
 
-  public messages = new ProjectMessages(this);
-  public labels = new ProjectLabels(this);
+  public readonly messages = new ProjectMessages(this);
+  public readonly labels = new ProjectLabels(this);
 
 }

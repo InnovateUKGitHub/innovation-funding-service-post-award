@@ -8,10 +8,10 @@ export class ProjectDocumentsContent extends ContentPageBase {
     super(content, "project-documents");
   }
 
-  public uploadTitle = () => this.getContent("uploadTitle");
-  public uploadInstruction = () => this.getContent("uploadInstruction", { markdown: true });
-  public noDocumentsMessage = () => this.getContent("noDocumentsMessage");
-  public noMatchingDocumentsMessage = () => this.getContent("noMatchingDocumentsMessage");
-  public documentLabels = new DocumentLabels(this);
-  public documentMessages = new DocumentMessages(this);
+  public readonly uploadTitle = () => this.getContent("uploadTitle");
+  public readonly uploadInstruction = () => this.getContent("uploadInstruction", { markdown: true });
+  public readonly noDocumentsMessage = () => this.getContent("noDocumentsMessage");
+  public readonly noMatchingDocumentsMessage = () => this.getContent("noMatchingDocumentsMessage");
+  public readonly documentLabels = new DocumentLabels(this);
+  public readonly documentMessages = new DocumentMessages(this);
 }
