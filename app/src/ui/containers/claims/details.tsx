@@ -58,10 +58,10 @@ export class ClaimsDetailsComponent extends ContainerBase<Params, Data, {}> {
 
     return (
       <ACC.Page
-        backLink={<ACC.BackLink route={backLink}>Back to claims</ACC.BackLink>}
+        backLink={<ACC.BackLink route={backLink}><ACC.Content value={x => x.claimDetails.backLink()} /></ACC.BackLink>}
         pageTitle={<ACC.Projects.Title project={data.project} />}
       >
-        {data.claim.isFinalClaim && <ACC.ValidationMessage messageType="info" message="This is the final claim."/>}
+        {data.claim.isFinalClaim && <ACC.ValidationMessage messageType="info" messageContent={x => x.claimDetails.messages.finalClaim()}/>}
         {this.renderTableSection(data)}
         {this.renderAccordionSection(data)}
         {this.renderCommentsFromFC(data.project, data.claim)}
@@ -94,7 +94,7 @@ export class ClaimsDetailsComponent extends ContainerBase<Params, Data, {}> {
   private renderCommentsFromFC(project: ProjectDto, claim: ClaimDto) {
     if (project.roles & ProjectRole.MonitoringOfficer && (claim.status === ClaimStatus.DRAFT || claim.status === ClaimStatus.MO_QUERIED) && claim.comments) {
       return (
-        <ACC.Section title="Comments" qa="additionalComments">
+        <ACC.Section titleContent={x => x.claimDetails.commentsSectionTitle()} qa="additionalComments">
           <ACC.Renderers.SimpleString multiline={true}>
             {claim.comments}
           </ACC.Renderers.SimpleString>
@@ -134,7 +134,7 @@ export class ClaimsDetailsComponent extends ContainerBase<Params, Data, {}> {
 
   private renderForecastItem(pendingForecastData: Pending<ACC.Claims.ForecastData>) {
     return (
-      <ACC.AccordionItem title="Forecast" qa="forecast-accordion">
+      <ACC.AccordionItem titleContent={x => x.claimDetails.labels.forecastAccordionTitle()} qa="forecast-accordion">
         <ACC.Loader
           pending={pendingForecastData}
           render={(forecastData) => (
@@ -147,7 +147,7 @@ export class ClaimsDetailsComponent extends ContainerBase<Params, Data, {}> {
 
   private renderLogsItem() {
     return (
-      <ACC.AccordionItem title="Status and comments log" qa="claim-status-change-accordion">
+      <ACC.AccordionItem titleContent={x => x.claimDetails.labels.claimLogAccordionTitle()} qa="claim-status-change-accordion">
         {/* Keeping logs inside loader because accordion defaults to closed*/}
         <ACC.Loader
           pending={this.props.statusChanges}
@@ -207,8 +207,5 @@ export const ClaimsDetailsRoute = defineRoute({
   container: ClaimsDetailsContainer,
   getParams: (route) => ({ projectId: route.params.projectId, partnerId: route.params.partnerId, periodId: parseInt(route.params.periodId, 10) }),
   accessControl: (auth, params) => auth.forProject(params.projectId).hasAnyRoles(ProjectRole.MonitoringOfficer, ProjectRole.ProjectManager) || auth.forPartner(params.projectId, params.partnerId).hasRole(ProjectRole.FinancialContact),
-  getTitle: () => ({
-    displayTitle: "Claim",
-    htmlTitle: "View claim"
-  }),
+  getTitle: ({ content }) => content.claimDetails.title(),
 });

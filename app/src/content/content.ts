@@ -9,6 +9,7 @@ import { NotFoundContent, UnexpectedErrorContent } from "./pages/errorsContent";
 import { AllClaimsDashboardContent } from "@content/pages/claims/allClaimsDashboardContent";
 import { ClaimsDashboardContent } from "@content/pages/claims/claimsDashboardContent";
 import { ClaimDocumentsContent } from "@content/pages/claims/claimDocumentsContent";
+import { ClaimDetailsContent } from "@content/pages/claims/claimDetailsContent";
 
 export type ContentSelector = (content: Content) => ContentResult;
 
@@ -29,6 +30,7 @@ export class Content extends ContentBase {
   public readonly allClaimsDashboard = new AllClaimsDashboardContent(this);
   public readonly claimsDashboard = new ClaimsDashboardContent(this);
   public readonly claimDocuments = new ClaimDocumentsContent(this);
+  public readonly claimDetails = new ClaimDetailsContent(this);
 
   public readonly errors = {
     notfound: new NotFoundContent(this),
