@@ -43,10 +43,10 @@ class Component extends ContainerBase<ClaimDashboardPageParams, Data, {}> {
       >
         {this.renderGuidanceMessage()}
         <Acc.Renderers.Messages messages={this.props.messages} />
-        <Acc.Section qa="current-claims-section" title={"Open"} badge={claimsWindow}>
+        <Acc.Section qa="current-claims-section" titleContent={x => x.claimsDashboard.labels.openSectionTitle()} badge={claimsWindow}>
           {this.renderCurrentClaims(currentClaim ? [currentClaim] : [], "current-claims-table", project, partner, previousClaims)}
         </Acc.Section>
-        <Acc.Section qa="previous-claims-section" title="Closed">
+        <Acc.Section qa="previous-claims-section" titleContent={x => x.claimsDashboard.labels.closedSectionTitle()}>
           {this.renderPreviousClaims(previousClaims, "previous-claims-table", project, partner)}
         </Acc.Section>
       </Acc.Page>
@@ -58,7 +58,7 @@ class Component extends ContainerBase<ClaimDashboardPageParams, Data, {}> {
       <Acc.ValidationMessage
         qa="guidance-message"
         messageType="info"
-        message={<span>All partners in this project must upload evidence for each expenditure with every claim made. These might include invoices, timesheets, receipts or spreadsheets for capital usage. This is part of Innovate UK's obligations under the <a href="https://www.gov.uk/government/publications/managing-public-money?_ga=2.105018247.521318796.1576575366-1871284022.1544109966">Managing Public Money government handbook</a> in relation to assurance, financial management and control.</span>}
+        messageContent={x => x.claimsDashboard.messages.guidanceMessage()}
       />
     );
   }
@@ -68,13 +68,13 @@ class Component extends ContainerBase<ClaimDashboardPageParams, Data, {}> {
     if (previousClaims && previousClaims.find(x => x.isFinalClaim)) {
       return (
         <Acc.Renderers.SimpleString qa="yourFinalClaimApprovedNotificationMessage">
-          There are no claims. Innovate UK has approved your final claim.
+          <Acc.Content value={x => x.claimsDashboard.messages.noRemainingClaims()}/>
         </Acc.Renderers.SimpleString>
       );
     }
     return (
       <Acc.Renderers.SimpleString>
-        You have no open claims. The next claim period begins <Acc.Renderers.FullDate value={date} />.
+        <Acc.Content value={x => x.claimsDashboard.messages.noOpenClaimsMessage(date)}/>
       </Acc.Renderers.SimpleString>
     );
   }
@@ -96,7 +96,7 @@ class Component extends ContainerBase<ClaimDashboardPageParams, Data, {}> {
       return this.renderClaimsTable(data, tableQa, project, partner, "Closed");
     }
 
-    return <Acc.Renderers.SimpleString>You have not made any claims.</Acc.Renderers.SimpleString>;
+    return <Acc.Renderers.SimpleString><Acc.Content value={x => x.claimsDashboard.messages.noClosedClaims()}/></Acc.Renderers.SimpleString>;
   }
 
   private renderClaimsTable(data: ClaimDto[], tableQa: string, project: ProjectDto, partner: PartnerDto, tableCaption?: string) {
@@ -110,14 +110,14 @@ class Component extends ContainerBase<ClaimDashboardPageParams, Data, {}> {
         caption={tableCaption}
       >
         <ClaimTable.Custom
-          header="Period"
+          headerContent={x => x.claimsDashboard.labels.period()}
           qa="period"
           value={x => <Acc.Claims.ClaimPeriodDate claim={x} />}
         />
-        <ClaimTable.Currency header="Forecast costs for period" qa="forecast-cost" value={(x) => x.forecastCost} />
-        <ClaimTable.Currency header="Actual costs for period" qa="actual-cost" value={(x) => x.totalCost} />
-        <ClaimTable.Currency header="Difference" qa="diff" value={(x) => x.forecastCost - x.totalCost} />
-        <ClaimTable.Custom header="Status" qa="status" value={(x) => x.statusLabel} />
+        <ClaimTable.Currency headerContent={x => x.claimsDashboard.labels.forecastCosts()} header="Forecast costs for period" qa="forecast-cost" value={(x) => x.forecastCost} />
+        <ClaimTable.Currency headerContent={x => x.claimsDashboard.labels.actualCosts()} header="Actual costs for period" qa="actual-cost" value={(x) => x.totalCost} />
+        <ClaimTable.Currency headerContent={x => x.claimsDashboard.labels.difference()} header="Difference" qa="diff" value={(x) => x.forecastCost - x.totalCost} />
+        <ClaimTable.Custom headerContent={x => x.claimsDashboard.labels.status()} header="Status" qa="status" value={(x) => x.statusLabel} />
         <ClaimTable.ShortDate
           header="Date of last update"
           qa="date"
@@ -157,8 +157,5 @@ export const ClaimsDashboardRoute = defineRoute({
 
     return isFC && !isMoOrPm;
   },
-  getTitle: () => ({
-    displayTitle: "Claims",
-    htmlTitle: "Claims - View project"
-  })
+  getTitle: ({ content }) => content.claimsDashboard.title()
 });

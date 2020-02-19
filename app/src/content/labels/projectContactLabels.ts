@@ -5,9 +5,9 @@ export class ProjectContactLabels extends ContentBase {
     super(parent, "project-contact-labels");
   }
 
-  public contactName = () => this.getContent("contactName");
-  public partnerName = () => this.getContent("partnerName");
-  public partnerType = () => this.getContent("partnerType");
-  public contactEmail = () => this.getContent("contactEmail");
-  public partnerPostcode = () => this.getContent("partnerPostcode");
+  public readonly contactName = () => this.getContent("contactName");
+  public readonly partnerName = () => this.getContent("partnerName");
+  public readonly partnerType = () => this.getContent("partnerType");
+  public readonly contactEmail = () => this.getContent("contactEmail");
+  public readonly partnerPostcode = () => this.getContent("partnerPostcode");
 }

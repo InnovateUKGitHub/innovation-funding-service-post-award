@@ -5,10 +5,10 @@ export class DocumentLabels extends ContentBase {
     super(parent, "document-labels");
   }
 
-  public uploadInputLabel = () => this.getContent("uploadInputLabel");
-  public uploadButtonLabel = () => this.getContent("uploadButtonLabel");
-  public fileNameLabel = () => this.getContent("fileNameLabel");
-  public dateUploadedLabel = () => this.getContent("dateUploadedLabel");
-  public fileSizeLabel = () => this.getContent("fileSizeLabel");
-  public uploadedByLabel = () => this.getContent("uploadedByLabel");
+  public readonly uploadInputLabel = () => this.getContent("uploadInputLabel");
+  public readonly uploadButtonLabel = () => this.getContent("uploadButtonLabel");
+  public readonly fileNameLabel = () => this.getContent("fileNameLabel");
+  public readonly dateUploadedLabel = () => this.getContent("dateUploadedLabel");
+  public readonly fileSizeLabel = () => this.getContent("fileSizeLabel");
+  public readonly uploadedByLabel = () => this.getContent("uploadedByLabel");
 }

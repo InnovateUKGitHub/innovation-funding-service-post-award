@@ -8,8 +8,8 @@ export class FinanceSummaryContent extends ContentPageBase {
     super(content, "finance-summary");
   }
 
-  public projectMessages = new ProjectMessages(this);
-  public projectLabels = new ProjectLabels(this);
+  public readonly projectMessages = new ProjectMessages(this);
+  public readonly projectLabels = new ProjectLabels(this);
 
-  public totalsFooterLabel = () => this.getContent("totalsFooter");
+  public readonly totalsFooterLabel = () => this.getContent("totalsFooter");
 }
