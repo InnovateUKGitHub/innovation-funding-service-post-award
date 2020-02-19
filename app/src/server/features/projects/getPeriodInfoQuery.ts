@@ -1,4 +1,4 @@
-// tslint:disable:complexity
+// tslint:disable:cognitive-complexity
 import { DateTime } from "luxon";
 import { SyncQueryBase } from "../common";
 import { ClaimFrequency, IContext } from "@framework/types";
