@@ -1,11 +1,11 @@
 import { ContentPageBase } from "../../contentPageBase";
 import { Content } from "../../content";
-import { ClaimsLabels } from "@content/labels/claimsLabels";
 import { ClaimMessages } from "@content/messages/claimMessages";
+import { ClaimsLabels } from "@content/labels/claimsLabels";
 
-export class AllClaimsDashboardContent extends ContentPageBase {
+export class ClaimsDashboardContent extends ContentPageBase {
   constructor(private content: Content) {
-    super(content, "all-claims-dashboard");
+    super(content, "claims-dashboard");
   }
   public readonly messages = new ClaimMessages(this);
   public readonly labels = new ClaimsLabels(this);

@@ -41,10 +41,10 @@ class Component extends ContainerBase<AllClaimsDashboardParams, Data, {}> {
       >
         {this.renderGuidanceMessage(projectDetails)}
         <Acc.Renderers.Messages messages={this.props.messages} />
-        <Acc.Section qa="current-claims-section" titleContent={x => x.allClaimsDashboard.openSection.title()}>
+        <Acc.Section qa="current-claims-section" titleContent={x => x.allClaimsDashboard.labels.openSectionTitle()}>
           {this.renderCurrentClaimsPerPeriod(currentClaims, projectDetails, partners)}
         </Acc.Section>
-        <Acc.Section qa="closed-claims-section" titleContent={x => x.allClaimsDashboard.closedSection.title()}>
+        <Acc.Section qa="closed-claims-section" titleContent={x => x.allClaimsDashboard.labels.closedSectionTitle()}>
           {this.renderPreviousClaimsSections(projectDetails, partners, previousClaims)}
         </Acc.Section>
       </Acc.Page>
@@ -59,7 +59,7 @@ class Component extends ContainerBase<AllClaimsDashboardParams, Data, {}> {
       <Acc.ValidationMessage
         qa="guidance-message"
         messageType="info"
-        messageContent={x => x.allClaimsDashboard.guidanceMessage() }
+        messageContent={x => x.allClaimsDashboard.messages.guidanceMessage()}
       />
     );
   }
@@ -84,7 +84,7 @@ class Component extends ContainerBase<AllClaimsDashboardParams, Data, {}> {
       if (project.status === ProjectStatus.Terminated || project.status === ProjectStatus.Closed) {
         return (
           <Acc.Renderers.SimpleString qa="theFinalClaimApprovedNotificationMessage">
-            <Acc.Content value={ x => x.allClaimsDashboard.openSection.noClaimsMessage()}/>
+            <Acc.Content value={ x => x.allClaimsDashboard.messages.noRemainingClaims()}/>
           </Acc.Renderers.SimpleString>
         );
       }
@@ -93,7 +93,7 @@ class Component extends ContainerBase<AllClaimsDashboardParams, Data, {}> {
       const date = DateTime.fromJSDate(project.periodEndDate).plus({ days: 1 }).toJSDate();
       return (
         <Acc.Renderers.SimpleString qa="notificationMessage">
-          <Acc.Content value={ x => x.allClaimsDashboard.openSection.noOpenClaimsMessage(date)}/>
+          <Acc.Content value={ x => x.allClaimsDashboard.messages.noOpenClaimsMessage(date)}/>
         </Acc.Renderers.SimpleString>
       );
     }
@@ -166,7 +166,7 @@ class Component extends ContainerBase<AllClaimsDashboardParams, Data, {}> {
   private previousClaimsSection(project: ProjectDto, partner: PartnerDto, previousClaims: ClaimDto[]) {
     if (previousClaims.length === 0) {
       return (
-        <Acc.Renderers.SimpleString qa={`noClosedClaims-${partner.accountId}`}><Acc.Content value={x => x.allClaimsDashboard.closedSection.noClosedClaims()}/></Acc.Renderers.SimpleString>
+        <Acc.Renderers.SimpleString qa={`noClosedClaims-${partner.accountId}`}><Acc.Content value={x => x.allClaimsDashboard.messages.noClosedClaims()}/></Acc.Renderers.SimpleString>
       );
     }
     const ClaimTable = Acc.TypedTable<ClaimDto>();

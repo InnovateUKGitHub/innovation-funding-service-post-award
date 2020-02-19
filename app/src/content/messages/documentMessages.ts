@@ -5,7 +5,7 @@ export class DocumentMessages extends ContentBase {
     super(parent, "document-messages");
   }
 
-  public header = () => this.getContent("header", { markdown: true });
-  public infoTitle = () => this.getContent("infoTitle");
-  public infoContent = () => this.getContent("infoContent", { markdown: true });
+  public readonly header = () => this.getContent("header", { markdown: true });
+  public readonly infoTitle = () => this.getContent("infoTitle");
+  public readonly infoContent = () => this.getContent("infoContent", { markdown: true });
 }
