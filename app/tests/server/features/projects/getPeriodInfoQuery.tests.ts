@@ -182,4 +182,25 @@ describe("GetCurrentPeriodQuery", () => {
       expect(result.currentClaimWindowEnd).toBeNull();
     }
   });
+
+  test("if project does not have claim frequency returns zero period", async () => {
+    const context = new TestContext();
+
+    const projectStart = context.clock.asLuxon().set({ day: 1, minute: 1, second: 1, millisecond: 1 });
+    const projectEnd = projectStart.plus({ month: 1 });
+    const frequency = ClaimFrequency.Unknown;
+
+    const query = new GetPeriodInfoQuery(projectStart.toJSDate(), projectEnd.toJSDate(), frequency);
+    const result = await context.runSyncQuery(query);
+
+    expect(result).toEqual({
+      current: 0,
+      total: null,
+      startDate: null,
+      endDate: null,
+      currentClaimWindowStart: null,
+      currentClaimWindowEnd: null
+    });
+
+  });
 });

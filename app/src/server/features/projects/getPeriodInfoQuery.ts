@@ -1,3 +1,4 @@
+// tslint:disable:complexity
 import { DateTime } from "luxon";
 import { SyncQueryBase } from "../common";
 import { ClaimFrequency, IContext } from "@framework/types";
@@ -21,6 +22,18 @@ export class GetPeriodInfoQuery extends SyncQueryBase<PeriodInfo> {
   }
 
   protected Run(context: IContext): PeriodInfo {
+    const factor = this.claimFrequency as number;
+    if(!factor) {
+      return {
+        current: 0,
+        startDate: null,
+        endDate: null,
+        currentClaimWindowEnd: null,
+        currentClaimWindowStart: null,
+        total: null
+      };
+    }
+
     const start = context.clock.dateTime(this.startDate).set({ hour: 0, minute: 0, second: 0, millisecond: 0 });
     const end = context.clock.dateTime(this.endDate).set({ hour: 0, minute: 0, second: 0, millisecond: 0 });
     const today = context.clock.dateTime(context.clock.now()).set({ hour: 0, minute: 0, second: 0, millisecond: 0 });
@@ -31,7 +44,6 @@ export class GetPeriodInfoQuery extends SyncQueryBase<PeriodInfo> {
 
     // if valid end date isnt supplied use null so we can return a total value of null
     const totalMonthsInProject = end.isValid ? end.diff(start, "months").months : null;
-    const factor = this.claimFrequency as number;
 
     const currentPeriod = monthsIntoProject >= 0 ? Math.floor(monthsIntoProject / factor) + 1 : 0;
     const totalPeriods = totalMonthsInProject !== null && totalMonthsInProject >= 0 ? Math.ceil(totalMonthsInProject / factor) : null;
