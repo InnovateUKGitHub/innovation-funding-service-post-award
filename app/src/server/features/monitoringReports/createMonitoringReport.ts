@@ -30,7 +30,7 @@ export class CreateMonitoringReportCommand extends CommandBase<string> {
     const periodLength = project.claimFrequency === ClaimFrequency.Quarterly ? 3 : 1;
 
     const startDate = DateTime.fromJSDate(project.startDate).setZone("Europe/London").plus({months : (periodId - 1) * periodLength });
-    const endDate = DateTime.fromJSDate(project.startDate).setZone("Europe/London").plus({months : (periodId) * periodLength, days: -1 });
+    const endDate = DateTime.fromJSDate(project.startDate).setZone("Europe/London").plus({months : (periodId) * periodLength}).minus({days:1});
 
     const createRequest: Partial<ISalesforceMonitoringReportHeader> = {
       Acc_Project__c: this.monitoringReportDto.projectId,
