@@ -10,6 +10,8 @@ export const router = express.Router();
 
 const endpoint = "/api/health";
 
+type HealthCheckResult = "Success" | "Failed" | "Not Applicable";
+
 const checkSalesforce = (logger: ILogger) => {
   const getSalesforceConnection = () => salesforceConnectionWithToken({
     clientId: Configuration.salesforce.clientId,
@@ -19,29 +21,29 @@ const checkSalesforce = (logger: ILogger) => {
 
   return new CostCategoryRepository(getSalesforceConnection, logger)
     .getAll()
-    .then(() => true)
-    .catch(e => {
+    .then<HealthCheckResult>(() => "Success")
+    .catch<HealthCheckResult>(e => {
       logger.error("SALESFORCE HEALTH CHECK", new AppError(ErrorCode.UNKNOWN_ERROR, e.message, e));
-      return false;
+      return "Failed";
     });
 };
 
 const checkGoogleAnalytics = (logger: ILogger) => {
   if (!Configuration.googleTagManagerCode) {
-    return Promise.resolve(null);
+    return Promise.resolve<HealthCheckResult>("Not Applicable");
   }
 
   const url = `https://www.googletagmanager.com/ns.html?id=${Configuration.googleTagManagerCode}`;
   return fetch(url)
-    .then((e) => {
+    .then<HealthCheckResult>((e) => {
       if (e.ok) {
-        return true;
+        return "Success";
       }
       throw new Error(`Failed get request to ${url}`);
     })
-    .catch(e => {
+    .catch<HealthCheckResult>(e => {
       logger.error("GOOGLE ANALYTICS HEALTH CHECK", new AppError(ErrorCode.UNKNOWN_ERROR, e.message, e));
-      return false;
+      return "Failed";
     });
 };
 
@@ -49,11 +51,12 @@ export const health = async (logger: ILogger) => {
   const salesforce = checkSalesforce(logger);
   const googleAnalytics = checkGoogleAnalytics(logger);
 
-  const results = await Promise.all([salesforce, googleAnalytics]);
+  const results = await Promise.all<HealthCheckResult>([salesforce, googleAnalytics]);
 
   // awaits in response are required to get result but will have already run in promise all
+  // status calculated from if all results are true or null (ie not applied)
   return {
-    status: results.some(x => x === false) ? 500 : 200,
+    status: results.some(x => x === "Failed") ? 500 : 200,
     response: {
       salesforce: await salesforce,
       googleAnalytics: await googleAnalytics
