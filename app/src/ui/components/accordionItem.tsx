@@ -1,9 +1,12 @@
 import * as React from "react";
 import cn from "classnames";
 import { AccordionContext } from "./accordion";
+import { Content } from "@ui/components/content";
+import { ContentSelector } from "@content/content";
 
 interface Props {
-  title: React.ReactNode;
+  title?: React.ReactNode;
+  titleContent?: ContentSelector;
   qa?: string;
 }
 
@@ -58,12 +61,14 @@ export class AccordionItem extends React.Component<Props, State> {
   }
 
   renderTitle() {
+    const title = this.props.titleContent ? <Content value={this.props.titleContent}/> : this.props.title;
+    if (!title) return null;
     if (!this.context.jsEnabled) {
-      return <span className="govuk-accordion__section-button">{this.props.title}</span>;
+      return <span className="govuk-accordion__section-button">{title}</span>;
     }
     return (
       <React.Fragment>
-        <button data-module="govuk-button" type="button" className="govuk-accordion__section-button" aria-expanded={this.state.accordionOpen} data-qa={`${this.props.qa}-button`}>{this.props.title}</button>
+        <button data-module="govuk-button" type="button" className="govuk-accordion__section-button" aria-expanded={this.state.accordionOpen} data-qa={`${this.props.qa}-button`}>{title}</button>
         <span className="govuk-accordion__icon" aria-hidden={!this.state.accordionOpen}/>
       </React.Fragment>
     );
