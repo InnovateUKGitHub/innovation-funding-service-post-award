@@ -32,6 +32,10 @@ export default (context: IContext) => (claim: ISalesforceClaim, forecast?: ISale
     allowIarEdit: STATUS_ALLOWING_IAR_EDIT.indexOf(claimStatus) >= 0,
     overheadRate: claim.Acc_ProjectParticipant__r.Acc_OverheadRate__c,
     isFinalClaim: claim.Acc_FinalClaim__c,
+    totalCostsSubmitted: claim.Acc_TotalCostsSubmitted__c,
+    totalCostsApproved: claim.Acc_TotalCostsApproved__c,
+    totalDeferredAmount: claim.Acc_TotalDeferredAmount__c,
+    periodCostsToBePaid: claim.Acc_PeriodCoststobePaid__c
   };
 };
 

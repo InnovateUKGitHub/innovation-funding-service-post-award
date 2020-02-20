@@ -20,6 +20,10 @@ export interface ClaimDto {
   status: ClaimStatus;
   statusLabel: string;
   totalCost: number;
+  totalCostsSubmitted: number;
+  totalCostsApproved: number;
+  totalDeferredAmount: number;
+  periodCostsToBePaid: number;
 }
 
 export interface ClaimStatusChangeDto {

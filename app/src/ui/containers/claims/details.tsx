@@ -61,7 +61,9 @@ export class ClaimsDetailsComponent extends ContainerBase<Params, Data, {}> {
         backLink={<ACC.BackLink route={backLink}>Back to claims</ACC.BackLink>}
         pageTitle={<ACC.Projects.Title project={data.project} />}
       >
-        {data.claim.isFinalClaim && <ACC.ValidationMessage messageType="info" message="This is the final claim."/>}
+        {data.claim.isFinalClaim && <ACC.ValidationMessage messageType="info" message="This is the final claim." />}
+        {this.renderPageSubtitle(data)}
+        {this.renderCostsAndGrantSummarySection(data)}
         {this.renderTableSection(data)}
         {this.renderAccordionSection(data)}
         {this.renderCommentsFromFC(data.project, data.claim)}
@@ -69,9 +71,44 @@ export class ClaimsDetailsComponent extends ContainerBase<Params, Data, {}> {
     );
   }
 
+  private renderCostsAndGrantSummary(data: CombinedData) {
+    if ((data.project.roles & ProjectRole.FinancialContact) && data.claim) {
+      const ClaimSummaryDetails = ACC.TypedDetails<ClaimDto>();
+
+      return (
+        <ACC.SectionPanel qa="claims-summary">
+          <ACC.DualDetails>
+            <ClaimSummaryDetails.Details title={<ACC.Content value={x => x.claimsDashboard.labels.costsAndGrantSummaryTitle()} />} data={data.claim} qa="claim-costs-summary">
+              <ClaimSummaryDetails.Currency label={<ACC.Content value={x => x.claimsDashboard.labels.costsClaimedSummary()} />} qa="costs-claimed" value={x => x.totalCostsSubmitted} />
+              <ClaimSummaryDetails.Currency label={<ACC.Content value={x => x.claimsDashboard.labels.costsApprovedSummary()} />} qa="costs-approved" value={x => x.totalCostsApproved} />
+              <ClaimSummaryDetails.Currency label={<ACC.Content value={x => x.claimsDashboard.labels.costsDeferredSummary()} />} qa="costs-deferred" value={x => x.totalDeferredAmount} />
+            </ClaimSummaryDetails.Details>
+            <ClaimSummaryDetails.Details data={data.claim} qa="claim-grant-summary">
+              <ClaimSummaryDetails.Currency label={<ACC.Content value={x => x.claimsDashboard.labels.totalGrantPaidSummary()} />} qa="total-grant-paid" value={x => x.periodCostsToBePaid} />
+            </ClaimSummaryDetails.Details>
+          </ACC.DualDetails>
+        </ACC.SectionPanel>
+      );
+    }
+
+    return null;
+  }
+
+  private renderPageSubtitle(data: CombinedData) {
+    return <ACC.Section title={this.getClaimPeriodTitle(data)} />;
+  }
+
+  private renderCostsAndGrantSummarySection(data: CombinedData) {
+    return (
+      <ACC.Section>
+        {this.renderCostsAndGrantSummary(data)}
+      </ACC.Section>
+    );
+  }
+
   private renderTableSection(data: CombinedData) {
     return (
-      <ACC.Section title={this.getClaimPeriodTitle(data)}>
+      <ACC.Section>
         {this.renderTable(data)}
       </ACC.Section>
     );
@@ -138,7 +175,7 @@ export class ClaimsDetailsComponent extends ContainerBase<Params, Data, {}> {
         <ACC.Loader
           pending={pendingForecastData}
           render={(forecastData) => (
-            <ACC.Claims.ForecastTable data={forecastData} hideValidation={true}/>
+            <ACC.Claims.ForecastTable data={forecastData} hideValidation={true} />
           )}
         />
       </ACC.AccordionItem>

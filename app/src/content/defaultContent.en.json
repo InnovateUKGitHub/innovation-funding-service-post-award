@@ -96,7 +96,12 @@
     "actual-costs": "Actual costs for period",
     "difference": "Difference",
     "status": "Status",
-    "last-updated-date": "Date of last update"
+    "last-updated-date": "Date of last update",
+    "costs-and-grant-summary-title": "Summary",
+    "costs-claimed-summary": "Costs claimed",
+    "costs-approved-summary": "Costs approved",
+    "costs-deferred-summary": "Costs deferred",
+    "total-grant-paid-summary": "Total grant paid"
   },
   "project-messages": {
     "noClaimDueMessage": "No claim due",

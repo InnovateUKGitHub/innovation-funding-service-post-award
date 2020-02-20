@@ -21,6 +21,8 @@ export interface ISalesforceClaim {
   Acc_ProjectPeriodCost__c: number;
   Acc_TotalCostsApproved__c: number;
   Acc_TotalCostsSubmitted__c: number;
+  Acc_TotalDeferredAmount__c: number;
+  Acc_PeriodCoststobePaid__c: number;
   Acc_TotalGrantApproved__c: number;
   Acc_ApprovedDate__c: string | null;
   Acc_PaidDate__c: string | null;
@@ -68,6 +70,11 @@ export class ClaimRepository extends SalesforceRepositoryBase<ISalesforceClaim> 
     "Acc_ReasonForDifference__c",
     "Acc_IARRequired__c",
     "Acc_FinalClaim__c",
+    "Acc_TotalCostsSubmitted__c",
+    "Acc_TotalCostsApproved__c",
+    "Acc_TotalDeferredAmount__c",
+    "Acc_PeriodCoststobePaid__c",
+
   ];
 
   private getStandardFilter() {
