@@ -36,7 +36,7 @@ const InnerContainer = (props: PcrStepProps<PCRItemForPartnerWithdrawalDto, PCRP
         onSubmit={() => props.onSave()}
         onChange={dto => props.onChange(dto)}
       >
-        <Form.Fieldset heading="Select partner">
+        <Form.Fieldset heading="Select partner to remove">
           <Form.Radio
             name="partnerId"
             hint={props.getRequiredToCompleteMessage()}
