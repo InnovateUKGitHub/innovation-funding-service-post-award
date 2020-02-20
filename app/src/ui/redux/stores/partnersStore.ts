@@ -2,6 +2,10 @@ import { StoreBase } from "./storeBase";
 import { RootState } from "../reducers";
 import { ApiClient } from "@ui/apiClient";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
+import { PartnerDto } from "@framework/dtos";
+import { dataLoadAction } from "../actions";
+import { LoadingStatus } from "@shared/pending";
+import { PartnerDtoValidator } from "@ui/validators/partnerValidator";
 
 export class PartnersStore extends StoreBase {
   constructor(getState: () => RootState, dispatch: (action: any) => void) {
@@ -24,4 +28,25 @@ export class PartnersStore extends StoreBase {
     return this.getPartnersForProject(projectId).then(x => x.find(y => y.isLead)!);
   }
 
+  public getPartnerEditor(projectId: string, partnerId: string, init?: (dto: PartnerDto) => void) {
+    return this.getEditor(
+      "partner",
+      storeKeys.getPartnerKey(partnerId),
+      () => this.getById(partnerId),
+      init,
+      (dto) => new PartnerDtoValidator(dto, false)
+    );
+  }
+
+  public updatePartner(submit: boolean, partnerId: string, partnerDto: PartnerDto) {
+    return this.updateEditor(
+      submit,
+      "partner",
+      storeKeys.getPartnerKey(partnerId),
+      partnerDto,
+      () => new PartnerDtoValidator(partnerDto, true),
+      p => ApiClient.partners.updatePartner({ partnerId, partnerDto, ...p }),
+      (result) => (this.queue(dataLoadAction(storeKeys.getPartnerKey(partnerId), "partner", LoadingStatus.Updated, result)))
+    );
+  }
 }
