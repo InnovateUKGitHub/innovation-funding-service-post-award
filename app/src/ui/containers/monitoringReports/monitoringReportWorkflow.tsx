@@ -85,11 +85,14 @@ class Component extends ContainerBase<MonitoringReportWorkflowParams, Data, Call
   }
 
   private getForwardLink(workflow: MonitoringReportWorkflowDef, progress: boolean) {
-    if (!progress) {
+    if (progress) {
+      const nextStep = workflow.getNextStepInfo();
+      return this.props.routes.monitoringReportWorkflow.getLink({ projectId: this.props.projectId, id: this.props.id, mode: this.props.mode, step: nextStep && nextStep.stepNumber });
+    }
+    if (workflow.isOnSummary()) {
       return this.props.routes.monitoringReportDashboard.getLink({ projectId: this.props.projectId });
     }
-    const nextStep = workflow.getNextStepInfo();
-    return this.props.routes.monitoringReportWorkflow.getLink({ projectId: this.props.projectId, id: this.props.id, mode: this.props.mode, step: nextStep && nextStep.stepNumber });
+    return this.props.routes.monitoringReportWorkflow.getLink({ projectId: this.props.projectId, id: this.props.id, mode: this.props.mode, step: undefined });
   }
 
   private getBackLink(workflow: MonitoringReportWorkflowDef) {
@@ -98,9 +101,9 @@ class Component extends ContainerBase<MonitoringReportWorkflowParams, Data, Call
     }
     const prevStep = workflow.getPrevStepInfo();
     if (!prevStep) {
-      return <ACC.BackLink route={this.props.routes.monitoringReportPreparePeriod.getLink({ projectId: this.props.projectId, id: this.props.id })}>Back to monitoring report period</ACC.BackLink>;
+      return <ACC.BackLink route={this.props.routes.monitoringReportPreparePeriod.getLink({ projectId: this.props.projectId, id: this.props.id })}>Back to period</ACC.BackLink>;
     }
-    return <ACC.BackLink route={this.props.routes.monitoringReportWorkflow.getLink({ projectId: this.props.projectId, id: this.props.id, mode: this.props.mode, step: prevStep.stepNumber })}>Back to previous question</ACC.BackLink>;
+    return <ACC.BackLink route={this.props.routes.monitoringReportWorkflow.getLink({ projectId: this.props.projectId, id: this.props.id, mode: this.props.mode, step: prevStep.stepNumber })}>Back to {prevStep.displayName.toLocaleLowerCase()}</ACC.BackLink>;
   }
 }
 

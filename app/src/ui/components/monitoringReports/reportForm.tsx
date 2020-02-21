@@ -4,6 +4,7 @@ import { MonitoringReportDtoValidator } from "@ui/validators";
 import React, { Component } from "react";
 import { TypedForm } from "../form";
 import { Section } from "../layout/section";
+import { SimpleString } from "@ui/components/renderers";
 
 interface PeriodProps {
   editor: IEditorStore<Dtos.MonitoringReportDto, MonitoringReportDtoValidator>;
@@ -18,15 +19,21 @@ export class MonitoringReportPeriodFormComponent extends Component<PeriodProps> 
     const ReportForm = TypedForm<Dtos.MonitoringReportDto>();
 
     return (
-      <Section>
-        <ReportForm.Form editor={editor} onChange={(dto) => this.props.onChange(dto)} qa="monitoringReportCreateForm" >
-          <ReportForm.Numeric label="Period" labelBold={true} width={3} name="period" value={x => x.periodId} update={(x, v) => x.periodId = v!} validation={editor.validator.periodId} />
-          <ReportForm.Fieldset qa="save-buttons">
-            <ReportForm.Button name="save-continue" styling="Primary" onClick={() => this.props.onSave(editor.data, false, true)}>Continue to questions</ReportForm.Button>
-            <ReportForm.Button name="save-return" onClick={() => this.props.onSave(editor.data, false, false)}>Save and return to project</ReportForm.Button>
-          </ReportForm.Fieldset>
-        </ReportForm.Form>
-      </Section>
+      <React.Fragment>
+        <Section>
+          <SimpleString>Each report refers to a period of the project. You may have more than one report per period.</SimpleString>
+          <SimpleString>For each question score the project against the criteria from 1 to 5, providing a comment explaining your reason. The report will be returned to you otherwise.</SimpleString>
+        </Section>
+        <Section>
+          <ReportForm.Form editor={editor} onChange={(dto) => this.props.onChange(dto)} qa="monitoringReportCreateForm" >
+            <ReportForm.Numeric label="Period" labelBold={true} width={3} name="period" value={x => x.periodId} update={(x, v) => x.periodId = v!} validation={editor.validator.periodId} />
+            <ReportForm.Fieldset qa="save-buttons">
+              <ReportForm.Button name="save-continue" styling="Primary" onClick={() => this.props.onSave(editor.data, false, true)}>Continue</ReportForm.Button>
+              <ReportForm.Button name="save-return" onClick={() => this.props.onSave(editor.data, false, false)}>Save and return to monitoring reports</ReportForm.Button>
+            </ReportForm.Fieldset>
+          </ReportForm.Form>
+        </Section>
+      </React.Fragment>
     );
   }
 }
