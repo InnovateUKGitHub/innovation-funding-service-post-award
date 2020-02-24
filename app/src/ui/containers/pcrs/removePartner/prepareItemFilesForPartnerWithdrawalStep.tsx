@@ -14,10 +14,16 @@ interface InnerProps {
 class Component extends React.Component<PcrStepProps<PCRItemForPartnerWithdrawalDto, PCRPartnerWithdrawalItemDtoValidator> & InnerProps> {
   render(): React.ReactNode {
     const { documents, documentsEditor } = this.props;
+    const form = ACC.TypedForm<PCRItemForPartnerWithdrawalDto>();
     return (
       <React.Fragment>
-        {this.renderFiles(documentsEditor, documents)}
         {this.renderForm(documentsEditor)}
+        {this.renderFiles(documentsEditor, documents)}
+        <form.Form data={this.props.pcrItem} onSubmit={() => this.props.onSave()}>
+          <form.Fieldset>
+            <form.Button name="default" styling="Primary">Save and continue</form.Button>
+          </form.Fieldset>
+        </form.Form>
       </React.Fragment>
     );
   }
@@ -46,7 +52,6 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerWithdrawal
           </UploadForm.Fieldset>
           <UploadForm.Fieldset>
             <UploadForm.Button name="uploadFile" styling="Secondary" onClick={() => this.props.onFileChange("SaveAndRemain", documentsEditor.data)}>Upload documents</UploadForm.Button>
-            <UploadForm.Button name="uploadFileAndContinue" styling="Primary">Save and continue</UploadForm.Button>
           </UploadForm.Fieldset>
         </UploadForm.Form>
       </ACC.Section>
