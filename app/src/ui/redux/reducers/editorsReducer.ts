@@ -3,7 +3,7 @@ import { actionTypes } from "redux-router5";
 import * as Validators from "@ui/validators";
 import { RootActions } from "@ui/redux/actions";
 import { Results } from "@ui/validation/results";
-import { ClaimDto, IAppError, MonitoringReportDto } from "@framework/types";
+import { ClaimDto, IAppError, MonitoringReportDto, PartnerDto } from "@framework/types";
 import { PCRDto } from "@framework/dtos/pcrDtos";
 
 export enum EditorStatus {
@@ -115,4 +115,5 @@ export const editorReducer = combineReducers({
   documentSummary: editorsReducer<DocumentSummaryDto[], Results<DocumentSummaryDto[]>>("documentSummary"),
   monitoringReport: editorsReducer<MonitoringReportDto, Validators.MonitoringReportDtoValidator>("monitoringReport"),
   pcr: editorsReducer<PCRDto, Results<PCRDto>>("pcr"),
+  partner: editorsReducer<PartnerDto, Results<PartnerDto>>("partner"),
 });
