@@ -88,6 +88,20 @@
       "button-save-and-return": "Save and return to claims",
       "button-save-and-continue-to-summary": "Continue to summary",
       "button-save-and-continue-to-forecast": "Continue to update forecast"
+    },
+    "claim-details": {
+      "title": {
+        "html": "View claim",
+        "display": "Claim"
+      },
+      "back-link": "Back to claims",
+      "section-title-comments": "Comments"
+    },
+    "claim-prepare": {
+      "title": "Costs to be claimed",
+      "back-link": "Back to claims",
+      "button-save-and-return": "Save and return to claims",
+      "button-save-and-continue": "Continue to claims documents"
     }
   },
   "claims-messages": {
@@ -102,6 +116,8 @@
   "claims-labels": {
     "open-section-title": "Open",
     "closed-section-title": "Closed",
+    "accordion-title-forecast": "Forecast",
+    "accordion-title-claim-log": "Status and comments log",
     "partner": "Partner",
     "period": "Period",
     "forecast-costs": "Forecast costs for period",
