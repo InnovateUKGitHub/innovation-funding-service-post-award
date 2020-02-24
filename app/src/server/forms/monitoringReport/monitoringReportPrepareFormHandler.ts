@@ -49,7 +49,11 @@ export class MonitoringReportPrepareFormHandler extends StandardFormHandlerBase<
     const command = new SaveMonitoringReport(dto, false);
     await context.runCommand(command);
     if (button.name === "save-return") {
-      return MonitoringReportDashboardRoute.getLink({ projectId: params.projectId });
+      const workflow = MonitoringReportWorkflowDef.getWorkflow(dto, params.step);
+      if (workflow.isOnSummary()) {
+        return MonitoringReportDashboardRoute.getLink({ projectId: params.projectId });
+      }
+      return MonitoringReportWorkflowRoute.getLink({ projectId: params.projectId, id: params.id, mode: "prepare", step: undefined });
     }
     return this.getLink(button.name === "save-continue", dto, params);
   }

@@ -34,7 +34,7 @@ class Component extends ContainerBase<MonitoringReportPreparePeriodParams, Data,
   private renderContents(project: Dtos.ProjectDto, editor: IEditorStore<Dtos.MonitoringReportDto, MonitoringReportDtoValidator>) {
     return (
       <ACC.Page
-        backLink={<ACC.BackLink route={this.props.routes.monitoringReportDashboard.getLink({ projectId: this.props.projectId })}>Back to monitoring reports</ACC.BackLink>}
+        backLink={<ACC.BackLink route={this.props.routes.monitoringReportWorkflow.getLink({ projectId: this.props.projectId, id: this.props.id, mode: "prepare", step: undefined })}>Back to summary</ACC.BackLink>}
         pageTitle={<ACC.Projects.Title project={project} />}
         validator={editor.validator}
         error={editor.error}
