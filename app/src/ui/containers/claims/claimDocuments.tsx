@@ -3,7 +3,7 @@ import * as ACC from "@ui/components";
 import { ClaimDto, ProjectDto, ProjectRole } from "@framework/dtos";
 import { Pending } from "@shared/pending";
 import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerBase";
-import { IEditorStore, StoresConsumer } from "@ui/redux";
+import { ContentConsumer, IEditorStore, StoresConsumer } from "@ui/redux";
 import { MultipleDocumentUpdloadDtoValidator } from "@ui/validators";
 
 export interface ClaimDocumentsPageParams {
@@ -44,14 +44,18 @@ class ClaimDocumentsComponent extends ContainerBase<ClaimDocumentsPageParams, Da
         pageTitle={<ACC.Projects.Title project={project} />}
         error={(editor.error)}
         validator={editor.validator}
-        backLink={<ACC.BackLink route={this.props.routes.prepareClaim.getLink({projectId: this.props.projectId, partnerId: this.props.partnerId, periodId:this.props.periodId})}>Back to costs to be claimed</ACC.BackLink>}
+        backLink={
+          <ACC.BackLink route={this.props.routes.prepareClaim.getLink({projectId: this.props.projectId, partnerId: this.props.partnerId, periodId:this.props.periodId})}>
+            <ACC.Content value={x => x.claimDocuments.backLink()} />
+          </ACC.BackLink>
+        }
       >
         <ACC.Renderers.Messages messages={this.props.messages} />
-        {claim.isFinalClaim && <ACC.ValidationMessage messageType="info" message="This is the final claim."/>}
+        {claim.isFinalClaim && <ACC.ValidationMessage messageType="info" messageContent={x => x.claimDocuments.messages.finalClaim()}/>}
         <ACC.Section>
           {this.renderGuidanceText(claim)}
         </ACC.Section>
-        <ACC.Section title="Upload">
+        <ACC.Section titleContent={x => x.claimDocuments.uploadSectionTitle()}>
           <UploadForm.Form
             enctype="multipart"
             editor={editor}
@@ -69,15 +73,16 @@ class ClaimDocumentsComponent extends ContainerBase<ClaimDocumentsPageParams, Da
                 update={(dto, files) => dto.files = files || []}
               />
             </UploadForm.Fieldset>
+            {/*TODO @documents-content make button label consistent*/}
             <UploadForm.Button styling="Secondary" name="upload" onClick={() => this.props.onChange(true, editor.data)}>Upload documents</UploadForm.Button>
           </UploadForm.Form>
         </ACC.Section>
-        <ACC.Section title="List of documents">
+        <ACC.Section titleContent={x => x.claimDocuments.documentsListSectionTitle()}>
           {this.renderDocuments(editor, documents)}
         </ACC.Section>
         <ACC.Section qa="buttons">
           {this.renderNextStepLink(claim)}
-          <ACC.Link styling="SecondaryButton" id="save-claim" route={this.getDashboardLink(project)}>Save and return to claims</ACC.Link>
+          <ACC.Link styling="SecondaryButton" id="save-claim" route={this.getDashboardLink(project)}><ACC.Content value={x => x.claimDocuments.saveAndReturnButton()} /></ACC.Link>
         </ACC.Section>
       </ACC.Page>
     );
@@ -85,9 +90,17 @@ class ClaimDocumentsComponent extends ContainerBase<ClaimDocumentsPageParams, Da
 
   private renderNextStepLink(claim: ClaimDto) {
     if (claim.isFinalClaim) {
-      return <ACC.Link styling="PrimaryButton" id="continue-claim" route={this.props.routes.claimSummary.getLink({ projectId: this.props.projectId, partnerId: this.props.partnerId, periodId: this.props.periodId })}>Continue to summary</ACC.Link>;
+      return (
+        <ACC.Link styling="PrimaryButton" id="continue-claim" route={this.props.routes.claimSummary.getLink({ projectId: this.props.projectId, partnerId: this.props.partnerId, periodId: this.props.periodId })}>
+          <ACC.Content value={x => x.claimDocuments.saveAndContinueToSummaryButton()}/>
+        </ACC.Link>
+      );
     }
-    return <ACC.Link styling="PrimaryButton" id="continue-claim" route={this.props.routes.claimForecast.getLink({projectId: this.props.projectId, partnerId: this.props.partnerId, periodId: this.props.periodId})}>Continue to update forecast</ACC.Link>;
+    return (
+      <ACC.Link styling="PrimaryButton" id="continue-claim" route={this.props.routes.claimForecast.getLink({projectId: this.props.projectId, partnerId: this.props.partnerId, periodId: this.props.periodId})}>
+        <ACC.Content value={x => x.claimDocuments.saveAndContinueToForecastButton()}/>
+      </ACC.Link>
+    );
   }
 
   private getDashboardLink(project: ProjectDto) {
@@ -100,21 +113,12 @@ class ClaimDocumentsComponent extends ContainerBase<ClaimDocumentsPageParams, Da
   private renderGuidanceText(claim: ClaimDto) {
     if (claim.isIarRequired && claim.isFinalClaim) {
       return (
-        <ACC.Renderers.SimpleString qa="iarAndFinalClaimText">
-          We need to ask you a few questions about the project before we can make your last payment.
-          <br/>
-          You also need to upload an independent accountant's report (IAR).
-          <ol>
-            <li>Complete our survey.</li>
-            <li>Download a copy from the survey website.</li>
-            <li>Upload it here.</li>
-          </ol>
-        </ACC.Renderers.SimpleString>
+        <span data-qa="iarText"><ACC.Content value={x => x.claimDocuments.messages.finalClaimGuidance()}/></span>
       );
     }
 
     if (claim.isIarRequired) {
-      return <ACC.Renderers.SimpleString qa="iarText">You must attach an independent accountant's report (IAR) to this claim.</ACC.Renderers.SimpleString>;
+      return <ACC.Renderers.SimpleString qa="iarText"><ACC.Content value={x => x.claimDocuments.messages.iarRequired()} /></ACC.Renderers.SimpleString>;
     }
 
     return null;
@@ -124,7 +128,7 @@ class ClaimDocumentsComponent extends ContainerBase<ClaimDocumentsPageParams, Da
     if (!documents.length) {
       return (
         <ACC.Section>
-          <ACC.ValidationMessage message="No documents uploaded." messageType="info" />
+          <ACC.ValidationMessage messageContent={x => x.claimDocuments.documentMessages.noDocumentsUploaded()} messageType="info" />
         </ACC.Section>
       );
     }
@@ -141,22 +145,28 @@ const ClaimDocumentsContainer = (props: ClaimDocumentsPageParams & BaseProps) =>
   <StoresConsumer>
     {
       stores => (
-        <ClaimDocumentsComponent
-          project={stores.projects.getById(props.projectId)}
-          editor={stores.claimDocuments.getClaimDocumentsEditor(props.projectId, props.partnerId, props.periodId)}
-          documents={stores.claimDocuments.getClaimDocuments(props.projectId, props.partnerId, props.periodId)}
-          claim={stores.claims.get(props.partnerId, props.periodId)}
-          onChange={(saving, dto) => {
-            stores.messages.clearMessages();
-            const successMessage = dto.files.length === 1 ? `Your document has been uploaded.` : `${dto.files.length} documents have been uploaded.`;
-            stores.claimDocuments.updateClaimDocumentsEditor(saving, props.projectId, props.partnerId, props.periodId, dto, successMessage);
-          }}
-          onDelete={(dto, document) => {
-            stores.messages.clearMessages();
-            stores.claimDocuments.deleteClaimDocument(props.projectId, props.partnerId, props.periodId, dto, document);
-          }}
-          {...props}
-        />
+        <ContentConsumer>{
+          content => (
+            <ClaimDocumentsComponent
+              project={stores.projects.getById(props.projectId)}
+              editor={stores.claimDocuments.getClaimDocumentsEditor(props.projectId, props.partnerId, props.periodId)}
+              documents={stores.claimDocuments.getClaimDocuments(props.projectId, props.partnerId, props.periodId)}
+              claim={stores.claims.get(props.partnerId, props.periodId)}
+              onChange={(saving, dto) => {
+                stores.messages.clearMessages();
+                const successMessage = dto.files.length === 1
+                  ? content.claimDocuments.documentMessages.documentUploadedSuccess().content
+                  : content.claimDocuments.documentMessages.documentsUploadedSuccess(dto.files.length).content;
+                stores.claimDocuments.updateClaimDocumentsEditor(saving, props.projectId, props.partnerId, props.periodId, dto, successMessage);
+              }}
+              onDelete={(dto, document) => {
+                stores.messages.clearMessages();
+                stores.claimDocuments.deleteClaimDocument(props.projectId, props.partnerId, props.periodId, dto, document);
+              }}
+              {...props}
+            />
+          )
+        }</ContentConsumer>
       )
     }
   </StoresConsumer>
@@ -172,8 +182,5 @@ export const ClaimDocumentsRoute = defineRoute({
     periodId: parseInt(route.params.periodId, 10)
   }),
   accessControl: (auth, { projectId, partnerId }) => auth.forPartner(projectId, partnerId).hasRole(ProjectRole.FinancialContact),
-  getTitle: () => ({
-    htmlTitle: "Claim documents",
-    displayTitle: "Claim documents"
-  })
+  getTitle: ({content}) => content.claimDocuments.title(),
 });

@@ -60,7 +60,7 @@
     },
     "finance-summary": {
       "title": "Finance summary",
-      "totalsFooter" : "Totals",
+      "totalsFooter": "Totals",
       "project-labels": {
         "totalEligibleCostsClaimedLabel": "Costs claimed to date",
         "percentageEligibleCostsClaimedLabel": "Percentage of costs claimed to date"
@@ -79,17 +79,57 @@
         "no-open-claims": "You have no open claims. The next claim period begins {{nextClaimStartDate}}.",
         "no-closed-claims": "You have not made any claims."
       }
+    },
+    "claim-documents": {
+      "title": "Claim documents",
+      "section-title-upload": "Upload",
+      "section-title-document-list": "List of documents",
+      "back-link": "Back to costs to be claimed",
+      "button-save-and-return": "Save and return to claims",
+      "button-save-and-continue-to-summary": "Continue to summary",
+      "button-save-and-continue-to-forecast": "Continue to update forecast"
+    },
+    "claim-details": {
+      "title": {
+        "html": "View claim",
+        "display": "Claim"
+      },
+      "back-link": "Back to claims",
+      "section-title-comments": "Comments",
+      "costs-claimed-summary": "Costs claimed",
+      "costs-approved-summary": "Costs approved",
+      "costs-deferred-summary": "Costs deferred",
+      "total-grant-paid-summary": "Total grant paid"
+    },
+    "claim-prepare": {
+      "title": "Costs to be claimed",
+      "back-link": "Back to claims",
+      "button-save-and-return": "Save and return to claims",
+      "button-save-and-continue": "Continue to claims documents"
+    },
+    "financial-virement-details":{
+      "title": "Reallocate costs"
+    },
+    "financial-virement-edit":{
+      "title": "Reallocate costs",
+      "summary-title": "Summary of project costs",
+      "save-button": "Save and return to reallocate project costs"
     }
   },
   "claims-messages": {
     "guidance-message": "All partners in this project must upload evidence for each expenditure with every claim made. These might include invoices, timesheets, receipts or spreadsheets for capital usage. This is part of Innovate UK's obligations under the [Managing Public Money government handbook](https://www.gov.uk/government/publications/managing-public-money?_ga=2.105018247.521318796.1576575366-1871284022.1544109966) in relation to assurance, financial management and control.",
     "no-open-claims": "There are no open claims. The next claim period begins {{nextClaimStartDate}}.",
     "no-closed-claims": "There are no closed claims for this partner.",
-    "no-remaining-claims": "There are no claims. Innovate UK has approved the final claims."
+    "no-remaining-claims": "There are no claims. Innovate UK has approved the final claims.",
+    "final-claim": "This is the final claim.",
+    "iar-required": "You must attach an independent accountant's report (IAR) to this claim.",
+    "final-claim-guidance": "We need to ask you a few questions about the project before we can make your last payment.\n\nYou also need to upload an independent accountant's report (IAR).\n\n1.  Complete our survey.\n2.  Download a copy from the survey website.\n3.  Upload it here."
   },
   "claims-labels": {
     "open-section-title": "Open",
     "closed-section-title": "Closed",
+    "accordion-title-forecast": "Forecast",
+    "accordion-title-claim-log": "Status and comments log",
     "partner": "Partner",
     "period": "Period",
     "forecast-costs": "Forecast costs for period",
@@ -97,11 +137,7 @@
     "difference": "Difference",
     "status": "Status",
     "last-updated-date": "Date of last update",
-    "costs-and-grant-summary-title": "Summary",
-    "costs-claimed-summary": "Costs claimed",
-    "costs-approved-summary": "Costs approved",
-    "costs-deferred-summary": "Costs deferred",
-    "total-grant-paid-summary": "Total grant paid"
+    "costs-and-grant-summary-title": "Summary"
   },
   "project-messages": {
     "noClaimDueMessage": "No claim due",
@@ -160,6 +196,30 @@
   "document-messages": {
     "header": "You can upload up to 10 documents at a time. Each document must:\n\n* be less than 10MB in file size\n* have a unique file name that describes its contents\n\nThere is no limit to the number of files you can upload in total.",
     "infoTitle":"What file types can I upload?",
-    "infoContent": "You can upload these file types:\n\n* PDF (pdf, xps)\n* text (doc, docx, rdf, txt, csv, odt)\n* presentation (ppt, pptx, odp)\n* spreadsheet (xls, xlsx, ods)\n* image (jpg, jpeg, png)"
+    "infoContent": "You can upload these file types:\n\n* PDF (pdf, xps)\n* text (doc, docx, rdf, txt, csv, odt)\n* presentation (ppt, pptx, odp)\n* spreadsheet (xls, xlsx, ods)\n* image (jpg, jpeg, png)",
+    "no-documents-uploaded": "No documents uploaded.",
+    "document-uploaded-success": "Your document has been uploaded.",
+    "documents-uploaded-success": "{{documentsNumber}} documents have been uploaded."
+  },
+  "financial-virement-labels":{
+    "partner-name":"Partner",
+    "cost-category-name": "Cost category",
+    "original-funding-level":"Funding level",
+    "new-funding-level":"New funding level",
+    "partner-original-eligible-costs": "Total eligible costs",
+    "partner-original-remaining-costs": "Remaining costs",
+    "partner-original-remaining-grant": "Remaining grant",
+    "partner-new-eligible-costs": "New total eligible costs",
+    "partner-new-remaining-costs": "New remaining costs",
+    "partner-new-remaining-grant": "New remaining grant",
+    "partner-difference-costs": "Difference",
+    "partner-original-grant": "Total grant",
+    "partner-new-grant": "New total grant",
+    "partner-difference-grant": "Difference",
+    "cost-category-original-eligible-costs": "Total eligible costs",
+    "cost-category-costs-claimed": "Costs claimed",
+    "cost-category-new-eligible-costs": "New total eligible costs",
+    "cost-category-difference-costs": "Costs reallocated",
+    "totals": "Total"
   }
 }

@@ -3,7 +3,7 @@ import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerB
 import { EditorStatus, IEditorStore, StoresConsumer } from "@ui/redux";
 import { Pending } from "@shared/pending";
 import * as ACC from "@ui/components";
-import { PartnerDto, PCRDto, ProjectDto, ProjectRole } from "@framework/dtos";
+import { PartnerDto, ProjectDto } from "@framework/dtos";
 import { FinancialVirementDtoValidator } from "@ui/validators";
 import { PCRPrepareItemRoute } from "../pcrItemWorkflow";
 import { createDto } from "@framework/util/dtoHelpers";
@@ -44,19 +44,13 @@ class Component extends ContainerBase<Params, Props, {}> {
         virement: partnerVirements.virements.find(y => y.costCategoryId === x.id) || createDto<CostCategoryVirementDto>({
           costCategoryId: x.id,
           costCategoryName: x.name,
-          newCostsNotYetClaimed: 0,
-          newEligibleCosts: 0,
-          newRemaining: 0,
-          originalCostsClaimed: 0,
-          originalCostsNotYetClaimed: 0,
-          originalEligibleCosts: 0,
-          originalRemaining: 0
         })
       }))
       ;
 
     const VirementForm = ACC.TypedForm<FinancialVirementDto>();
     const VirementTable = ACC.TypedTable<typeof costCategoriesWithVirement[0]>();
+    const SummaryTable = ACC.TypedTable<PartnerVirementsDto>();
 
     return (
       <ACC.Page
@@ -65,20 +59,32 @@ class Component extends ContainerBase<Params, Props, {}> {
         error={editor.error}
         validator={editor.validator}
       >
-        <VirementForm.Form editor={editor} onChange={(dto) => this.props.onChange(false, dto)} onSubmit={() => this.props.onChange(true, editor.data)}>
-          <VirementForm.Fieldset>
-            <VirementTable.Table qa="partnerVirements" data={costCategoriesWithVirement}>
-              <VirementTable.String header="Cost category" qa="costCategory" value={x => x.costCategory.name} footer="Total" />
-              <VirementTable.Currency header="Current eligible costs" qa="originalEligibleCosts" value={x => x.virement.originalEligibleCosts} footer={<ACC.Renderers.Currency value={partnerVirements.originalEligibleCosts} />} />
-              <VirementTable.Currency header="Eligible costs claimed" qa="originalCostsClaimed" value={x => x.virement.originalCostsClaimed} footer={<ACC.Renderers.Currency value={partnerVirements.originalCostsClaimed} />} />
-              <VirementTable.Custom header="New eligible costs" qa="new" value={x => this.renderInput(partner, x.costCategory, x.virement, editor.status === EditorStatus.Saving)} footer={<ACC.Renderers.Currency value={partnerVirements.newEligibleCosts} />} classSuffix={"numeric"} />
-              <VirementTable.Currency header="Costs reallocated" qa="difference" value={x => x.virement.newEligibleCosts - x.virement.originalEligibleCosts} footer={<ACC.Renderers.Currency value={partnerVirements.newEligibleCosts - partnerVirements.originalEligibleCosts} />} />
-            </VirementTable.Table>
-          </VirementForm.Fieldset>
-          <VirementForm.Fieldset>
-            <VirementForm.Submit>Save and return</VirementForm.Submit>
-          </VirementForm.Fieldset>
-        </VirementForm.Form>
+        <ACC.Section title={partner.name}>
+          <VirementForm.Form editor={editor} onChange={(dto) => this.props.onChange(false, dto)} onSubmit={() => this.props.onChange(true, editor.data)}>
+            <VirementForm.Fieldset>
+              <VirementTable.Table qa="partnerVirements" data={costCategoriesWithVirement}>
+                <VirementTable.String qa="costCategory" headerContent={x => x.financialVirementEdit.labels.costCategoryName()} value={x => x.costCategory.name} footer={<ACC.Content value={x => x.financialVirementEdit.labels.totals()}/>} />
+                <VirementTable.Currency qa="originalEligibleCosts" headerContent={x => x.financialVirementEdit.labels.costCategoryOriginalEligibleCosts()} value={x => x.virement.originalEligibleCosts} footer={<ACC.Renderers.Currency value={partnerVirements.originalEligibleCosts} />} />
+                <VirementTable.Currency qa="originalCostsClaimed" headerContent={x => x.financialVirementEdit.labels.costCategoryCostsClaimed()} value={x => x.virement.costsClaimedToDate} footer={<ACC.Renderers.Currency value={partnerVirements.costsClaimedToDate} />} />
+                <VirementTable.Custom qa="newEligibleCosts" headerContent={x => x.financialVirementEdit.labels.costCategoryNewEligibleCosts()} value={x => this.renderInput(partner, x.costCategory, x.virement, editor.status === EditorStatus.Saving)} footer={<ACC.Renderers.Currency value={partnerVirements.newEligibleCosts} />} classSuffix={"numeric"} />
+                <VirementTable.Currency qa="difference" headerContent={x => x.financialVirementEdit.labels.costCategoryDifferenceCosts()} value={x => x.virement.newEligibleCosts - x.virement.originalEligibleCosts} />
+              </VirementTable.Table>
+            </VirementForm.Fieldset>
+            <VirementForm.Fieldset headingContent={x => x.financialVirementEdit.summaryTitle()}>
+              <SummaryTable.Table qa="summary-table" data={[partnerVirements]}>
+                <SummaryTable.Currency qa="originalEligibleCosts" headerContent={x => x.financialVirementEdit.labels.partnerOriginalEligibleCosts()} value={x => x.originalEligibleCosts} />
+                <SummaryTable.Currency qa="newEligibleCosts" headerContent={x => x.financialVirementEdit.labels.partnerNewEligibleCosts()} value={x => x.newEligibleCosts} />
+                <SummaryTable.Currency qa="differenceEligibleCosts" headerContent={x => x.financialVirementEdit.labels.partnerDifferenceCosts()} value={x => x.newEligibleCosts - x.originalEligibleCosts} />
+                <SummaryTable.Currency qa="originalGrant" headerContent={x => x.financialVirementEdit.labels.partnerOriginalGrant()} value={x => x.originalGrant} />
+                <SummaryTable.Currency qa="newGrant" headerContent={x => x.financialVirementEdit.labels.partnerNewGrant()} value={x => x.newGrant} />
+                <SummaryTable.Currency qa="differenceGrant" headerContent={x => x.financialVirementEdit.labels.partnerDifferenceGrant()} value={x => x.newGrant - x.originalGrant} />
+              </SummaryTable.Table>
+            </VirementForm.Fieldset>
+            <VirementForm.Fieldset>
+              <VirementForm.Submit><ACC.Content value={x => x.financialVirementEdit.saveButton()} /></VirementForm.Submit>
+            </VirementForm.Fieldset>
+          </VirementForm.Form>
+        </ACC.Section>
       </ACC.Page>
     );
   }
@@ -153,8 +159,5 @@ export const FinancialVirementEditRoute = defineRoute({
     itemId: route.params.itemId,
     partnerId: route.params.partnerId,
   }),
-  getTitle: () => ({
-    htmlTitle: "Financial Virement Edit Partner Details",
-    displayTitle: "Financial Virement Edit Partner Details"
-  }),
+  getTitle: ({ content }) => content.financialVirementEdit.title()
 });

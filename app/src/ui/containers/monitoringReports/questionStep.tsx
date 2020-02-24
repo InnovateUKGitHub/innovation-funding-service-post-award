@@ -25,7 +25,7 @@ export class MonitoringReportQuestionStep extends React.Component<Props> {
             {this.renderFormItem(editor, questionNumber)}
             <ReportForm.Fieldset qa="save-buttons">
               <ReportForm.Button name="save-continue" styling="Primary" onClick={() => onSave(editor.data, true)}>Continue</ReportForm.Button>
-              <ReportForm.Button name="save-return" onClick={() => onSave(editor.data, false)}>Save and return to project</ReportForm.Button>
+              <ReportForm.Button name="save-return" onClick={() => onSave(editor.data, false)}>Save and return to summary</ReportForm.Button>
             </ReportForm.Fieldset>
           </ReportForm.Form>
         </ACC.Section>

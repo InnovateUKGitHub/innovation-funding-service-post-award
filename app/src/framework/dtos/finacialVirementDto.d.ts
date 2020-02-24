@@ -1,39 +1,37 @@
 interface FinancialVirementDto {
   pcrItemId: string;
+  costsClaimedToDate: number;
 
   originalEligibleCosts: number;
-  originalCostsClaimed: number;
-  originalCostsNotYetClaimed: number;
-  originalRemaining: number;
+  originalRemainingCosts: number;
   originalFundingLevel: number;
+  originalGrant: number;
+  originalRemainingGrant: number;
 
   newEligibleCosts: number;
-  newCostsNotYetClaimed: number;
-  newRemaining: number;
+  newRemainingCosts: number;
   newFundingLevel: number;
-
-  differenceEligibleCosts: number;
-  differenceRemaining: number;
+  newGrant: number;
+  newRemainingGrant: number;
 
   partners: PartnerVirementsDto[];
 }
 
 interface PartnerVirementsDto {
   partnerId: string;
+  costsClaimedToDate: number;
 
   originalEligibleCosts: number;
-  originalCostsClaimed: number;
-  originalCostsNotYetClaimed: number;
-  originalRemaining: number;
+  originalRemainingCosts: number;
   originalFundingLevel: number;
+  originalGrant: number;
+  originalRemainingGrant: number;
 
   newEligibleCosts: number;
-  newCostsNotYetClaimed: number;
-  newRemaining: number;
+  newRemainingCosts: number;
   newFundingLevel: number;
-
-  differenceEligibleCosts: number;
-  differenceRemaining: number;
+  newGrant: number;
+  newRemainingGrant: number;
 
   virements: CostCategoryVirementDto[];
 }
@@ -41,11 +39,9 @@ interface PartnerVirementsDto {
 interface CostCategoryVirementDto {
   costCategoryId: string;
   costCategoryName: string;
+  costsClaimedToDate: number;
   originalEligibleCosts: number;
-  originalCostsClaimed: number;
-  originalCostsNotYetClaimed: number;
-  originalRemaining: number;
+  originalRemainingCosts: number;
   newEligibleCosts: number;
-  newCostsNotYetClaimed: number;
-  newRemaining: number;
+  newRemainingCosts: number;
 }
