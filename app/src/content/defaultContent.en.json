@@ -96,6 +96,12 @@
       },
       "back-link": "Back to claims",
       "section-title-comments": "Comments"
+    },
+    "claim-prepare": {
+      "title": "Costs to be claimed",
+      "back-link": "Back to claims",
+      "button-save-and-return": "Save and return to claims",
+      "button-save-and-continue": "Continue to claims documents"
     }
   },
   "claims-messages": {
