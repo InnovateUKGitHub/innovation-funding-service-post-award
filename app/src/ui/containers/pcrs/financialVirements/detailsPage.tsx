@@ -51,10 +51,10 @@ class Component extends ContainerBase<Params, Props, {}> {
       >
         {this.renderReasoning(project, pcr)}
         <VirementTable.Table qa="partnerVirements" data={data}>
-          <VirementTable.String header="Cost category" qa="costCategory" value={x =>  x.costCategory.name} footer="Total" />
-          <VirementTable.Currency header="Current eligible costs" qa="originalEligibleCosts" value={x => x.virement.originalEligibleCosts} footer={<ACC.Renderers.Currency value={financialVirements.originalEligibleCosts}/> }/>
-          <VirementTable.Currency header="New eligible costs" qa="newEligibleCosts" value={x => x.virement.newEligibleCosts} footer={<ACC.Renderers.Currency value={financialVirements.newEligibleCosts}/> }/>
-          <VirementTable.Currency header="Difference" qa="difference" value={x => x.virement.newEligibleCosts - x.virement.originalEligibleCosts} footer={<ACC.Renderers.Currency value={financialVirements.newEligibleCosts - financialVirements.originalEligibleCosts}/> }/>
+          <VirementTable.String qa="costCategory" headerContent={x => x.financialVirementDetails.labels.costCategoryName()} value={x =>  x.costCategory.name} footer={<ACC.Content value={x => x.financialVirementDetails.labels.totals()}/>} />
+          <VirementTable.Currency qa="originalEligibleCosts" headerContent={x => x.financialVirementDetails.labels.costCategoryOriginalEligibleCosts()} value={x => x.virement.originalEligibleCosts} footer={<ACC.Renderers.Currency value={financialVirements.originalEligibleCosts}/> }/>
+          <VirementTable.Currency qa="newEligibleCosts" headerContent={x => x.financialVirementDetails.labels.costCategoryNewEligibleCosts()} value={x => x.virement.newEligibleCosts} footer={<ACC.Renderers.Currency value={financialVirements.newEligibleCosts}/> }/>
+          <VirementTable.Currency qa="difference" headerContent={x => x.financialVirementDetails.labels.costCategoryDifferenceCosts()} value={x => x.virement.newEligibleCosts - x.virement.originalEligibleCosts} footer={<ACC.Renderers.Currency value={financialVirements.newEligibleCosts - financialVirements.originalEligibleCosts}/> }/>
         </VirementTable.Table>
       </ACC.Page>
     );
@@ -110,8 +110,5 @@ export const FinancialVirementDetailsRoute = defineRoute({
     partnerId: route.params.partnerId,
     mode: route.params.mode
   }),
-  getTitle: () => ({
-    htmlTitle: "Financial Virement Partner Details",
-    displayTitle: "Financial Virement Partner Details"
-  }),
+  getTitle: ({content}) => content.financialVirementDetails.title()
 });
