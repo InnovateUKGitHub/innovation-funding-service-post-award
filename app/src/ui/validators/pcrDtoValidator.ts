@@ -363,8 +363,8 @@ export class PCRPartnerWithdrawalItemDtoValidator extends PCRBaseItemDtoValidato
     const isComplete = this.model.status === PCRItemStatus.Complete;
     const removalPeriod = periodInProject(this.model.withdrawalDate, this.project);
     return Validation.all(this,
-      () => isComplete ? Validation.required(this, this.model.withdrawalDate, "Enter a new withdrawal date") : Validation.valid(this),
-      () => Validation.isDate(this, this.model.withdrawalDate, "Please enter a valid withdrawal date"),
+      () => isComplete ? Validation.required(this, this.model.withdrawalDate, "Enter a removal date") : Validation.valid(this),
+      () => Validation.isDate(this, this.model.withdrawalDate, "Enter a real removal date"),
       () => isNumber(removalPeriod) ? Validation.isTrue(this, removalPeriod > 0, "Withdrawal date must be after the project started") : Validation.valid(this)
     );
   }
@@ -376,7 +376,7 @@ export class PCRPartnerWithdrawalItemDtoValidator extends PCRBaseItemDtoValidato
     }
     const isComplete = this.model.status === PCRItemStatus.Complete;
     return Validation.all(this,
-      () => isComplete ? Validation.required(this, this.model.partnerId, "Select partner to change") : Validation.valid(this),
+      () => isComplete ? Validation.required(this, this.model.partnerId, "Select a partner to remove from the project") : Validation.valid(this),
       () => this.partners && this.model.partnerId ? Validation.permitedValues(this, this.model.partnerId, this.partners.filter(x => !x.isWithdrawn).map(x => x.id), "Invalid partner for project") : Validation.valid(this)
     );
   }
