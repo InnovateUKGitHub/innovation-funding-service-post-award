@@ -82,13 +82,13 @@ export class ClaimsDetailsComponent extends ContainerBase<Params, Data, {}> {
       <ACC.Section>
         <ACC.SectionPanel qa="claims-summary">
           <ACC.DualDetails>
-            <ClaimSummaryDetails.Details title={<ACC.Content value={x => x.claimsDashboard.labels.costsAndGrantSummaryTitle()} />} data={data.claim} qa="claim-costs-summary">
-              <ClaimSummaryDetails.Currency label={<ACC.Content value={x => x.claimDetails.costsClaimedSummary()} />} qa="costs-claimed" value={x => x.totalCostsSubmitted} />
-              <ClaimSummaryDetails.Currency label={<ACC.Content value={x => x.claimDetails.costsApprovedSummary()} />} qa="costs-approved" value={x => x.totalCostsApproved} />
-              <ClaimSummaryDetails.Currency label={<ACC.Content value={x => x.claimDetails.costsDeferredSummary()} />} qa="costs-deferred" value={x => x.totalDeferredAmount} />
+            <ClaimSummaryDetails.Details title={<ACC.Content value={x => x.claimDetails.costsAndGrantSummaryTitle()} />} data={data.claim} qa="claim-costs-summary">
+              <ClaimSummaryDetails.Currency label={<ACC.Content value={x => x.claimDetails.labels.costsClaimed()} />} qa="costs-claimed" value={x => x.totalCostsSubmitted} />
+              <ClaimSummaryDetails.Currency label={<ACC.Content value={x => x.claimDetails.labels.costsApproved()} />} qa="costs-approved" value={x => x.totalCostsApproved} />
+              <ClaimSummaryDetails.Currency label={<ACC.Content value={x => x.claimDetails.labels.costsDeferred()} />} qa="costs-deferred" value={x => x.totalDeferredAmount} />
             </ClaimSummaryDetails.Details>
             <ClaimSummaryDetails.Details data={data.claim} qa="claim-grant-summary">
-              <ClaimSummaryDetails.Currency label={<ACC.Content value={x => x.claimDetails.totalGrantPaidSummary()} />} qa="total-grant-paid" value={x => x.periodCostsToBePaid} />
+              <ClaimSummaryDetails.Currency label={<ACC.Content value={x => x.claimDetails.labels.totalGrantPaid()} />} qa="total-grant-paid" value={x => x.periodCostsToBePaid} />
             </ClaimSummaryDetails.Details>
           </ACC.DualDetails>
         </ACC.SectionPanel>
