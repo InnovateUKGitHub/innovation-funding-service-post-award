@@ -12,12 +12,8 @@ export class GetFinancialVirementQuery extends QueryBase<FinancialVirementDto> {
     return auth.forProject(this.projectId).hasAnyRoles(ProjectRole.MonitoringOfficer, ProjectRole.ProjectManager);
   }
 
-  private sumPartnerCost(value: (item: CostCategoryFinancialVirement) => number, partner: PartnerFinancialVirement) {
-    return partner.virements.reduce((total, item) => total + value(item), 0);
-  }
-
-  private sumTotalCost(value: (item: CostCategoryFinancialVirement) => number, partners: PartnerFinancialVirement[]) {
-    return partners.reduce((total, item) => total + this.sumPartnerCost(value, item), 0);
+  private sum<T>(items: T[], value: (item: T) => number) {
+    return items.reduce((total, item) => total + value(item), 0);
   }
 
   protected async Run(context: IContext): Promise<FinancialVirementDto> {
@@ -25,45 +21,85 @@ export class GetFinancialVirementQuery extends QueryBase<FinancialVirementDto> {
     const costCategories = await context.runQuery(new GetCostCategoriesQuery());
 
     const data = await context.repositories.financialVirements.getAllForPcr(this.pcrItemId);
+
+    const partners = data.map(x => this.mapPartner(x, costCategories));
+
+    const costsClaimedToDate = this.sum(partners, v => v.costsClaimedToDate);
+    const originalEligibleCosts = this.sum(partners, v => v.originalEligibleCosts);
+    const originalRemainingCosts = this.sum(partners, v => v.originalRemainingCosts);
+    const originalGrant = this.sum(partners, v => v.originalGrant);
+    const originalRemainingGrant = this.sum(partners, v => v.originalRemainingGrant);
+    const newEligibleCosts = this.sum(partners, v => v.newEligibleCosts);
+    const newRemainingCosts = this.sum(partners, v => v.newRemainingCosts);
+    const newGrant = this.sum(partners, v => v.newGrant);
+    const newRemainingGrant = this.sum(partners, v => v.newRemainingGrant);
+
+    const originalFundingLevel = originalEligibleCosts ? 100 * originalGrant / originalEligibleCosts : 0;
+    const newFundingLevel = newEligibleCosts ? 100 * newGrant / newEligibleCosts : 0;
+
     return {
       pcrItemId: this.pcrItemId,
-      originalEligibleCosts: this.sumTotalCost(v => v.originalEligibleCosts, data),
-      originalCostsClaimed: this.sumTotalCost(v => v.originalCostsClaimedToDate, data),
-      originalCostsNotYetClaimed: this.sumTotalCost(v => v.originalEligibleCosts - v.originalCostsClaimedToDate, data),
-      originalRemaining: 0,
-      originalFundingLevel:0,
-      newEligibleCosts: this.sumTotalCost(v => v.newEligibleCosts, data),
-      newCostsNotYetClaimed: this.sumTotalCost(v => v.newEligibleCosts - v.originalCostsClaimedToDate, data),
-      newRemaining: 0,
-      newFundingLevel:0,
-      differenceEligibleCosts: this.sumTotalCost(v => v.originalEligibleCosts - v.newEligibleCosts, data),
-      differenceRemaining: 0,
-      partners: data
-        .map(partner => ({
-          partnerId: partner.partnerId,
-          originalEligibleCosts: this.sumPartnerCost(v => v.originalEligibleCosts, partner),
-          originalCostsClaimed: this.sumPartnerCost(v => v.originalCostsClaimedToDate, partner),
-          originalCostsNotYetClaimed: this.sumPartnerCost(v => v.originalEligibleCosts - v.originalCostsClaimedToDate, partner),
-          originalRemaining: 0,
-          originalFundingLevel: 0,
-          newEligibleCosts: this.sumPartnerCost(v => v.newEligibleCosts, partner),
-          newCostsNotYetClaimed: this.sumPartnerCost(v => v.newEligibleCosts - v.originalCostsClaimedToDate, partner),
-          newRemaining: 0,
-          newFundingLevel: 0,
-          differenceEligibleCosts: this.sumPartnerCost(v => v.originalEligibleCosts - v.newEligibleCosts, partner),
-          differenceRemaining:0,
-          virements: partner.virements.map(virement => ({
-            costCategoryId: virement.costCategoryId,
-            costCategoryName: costCategories.filter(x => x.id === virement.costCategoryId).map(x => x.name)[0],
-            originalEligibleCosts: virement.originalEligibleCosts,
-            originalCostsClaimed: virement.originalCostsClaimedToDate,
-            originalCostsNotYetClaimed: virement.originalEligibleCosts - virement.originalCostsClaimedToDate,
-            originalRemaining: 0,
-            newEligibleCosts: virement.newEligibleCosts,
-            newCostsNotYetClaimed: virement.originalEligibleCosts - virement.newEligibleCosts,
-            newRemaining: 0,
-          }))
-        })),
+      costsClaimedToDate,
+      originalEligibleCosts,
+      originalRemainingCosts,
+      originalGrant,
+      originalRemainingGrant,
+      originalFundingLevel,
+      newEligibleCosts,
+      newRemainingCosts,
+      newGrant,
+      newRemainingGrant,
+      newFundingLevel,
+      partners,
     };
   }
+
+  private mapPartner(partner: PartnerFinancialVirement, costCategories: CostCategoryDto[]): PartnerVirementsDto {
+    const originalFundingPercentage = partner.originalFundingLevel / 100;
+    const newFundingPercentage = partner.newFundingLevel / 100;
+
+    const virements = partner.virements.map(x => this.mapCostCategory(x, costCategories));
+
+    const costsClaimedToDate = this.sum(virements, v => v.costsClaimedToDate);
+
+    const originalEligibleCosts = this.sum(virements, v => v.originalEligibleCosts);
+    const originalRemainingCosts = originalEligibleCosts - costsClaimedToDate;
+
+    const newEligibleCosts = this.sum(virements, v => v.newEligibleCosts);
+    const newRemainingCosts = newEligibleCosts - costsClaimedToDate;
+
+    const originalGrant = originalEligibleCosts * originalFundingPercentage;
+    const originalRemainingGrant = originalRemainingCosts * originalFundingPercentage;
+    const newGrant = newEligibleCosts * newFundingPercentage;
+    const newRemainingGrant = newRemainingCosts * newFundingPercentage;
+
+    return {
+      partnerId: partner.partnerId,
+      costsClaimedToDate: this.sum(virements, v => v.costsClaimedToDate),
+      originalEligibleCosts,
+      originalRemainingCosts,
+      originalFundingLevel: partner.originalFundingLevel,
+      newEligibleCosts,
+      newRemainingCosts,
+      newFundingLevel: partner.newFundingLevel,
+      originalGrant,
+      originalRemainingGrant,
+      newGrant,
+      newRemainingGrant,
+      virements,
+    };
+  }
+
+  private mapCostCategory(virement: CostCategoryFinancialVirement, costCategories: CostCategoryDto[]): CostCategoryVirementDto {
+    return {
+      costCategoryId: virement.costCategoryId,
+      costCategoryName: costCategories.filter(x => x.id === virement.costCategoryId).map(x => x.name)[0],
+      costsClaimedToDate: virement.originalCostsClaimedToDate,
+      originalEligibleCosts: virement.originalEligibleCosts,
+      originalRemainingCosts: virement.originalEligibleCosts - virement.originalCostsClaimedToDate,
+      newEligibleCosts: virement.newEligibleCosts,
+      newRemainingCosts: virement.newEligibleCosts - virement.originalCostsClaimedToDate,
+    };
+  }
+
 }

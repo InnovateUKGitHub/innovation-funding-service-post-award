@@ -21,6 +21,8 @@ export class SalesforceFinancialVirementMapper extends SalesforceBaseMapper<ISal
       id: partnerItem.Id,
       pcrItemId: partnerItem.Acc_ProjectChangeRequest__c,
       partnerId: partnerItem.Acc_ProjectParticipant__c,
+      newFundingLevel: 0, // todo: from salesforce
+      originalFundingLevel: 0, // todo: from salesforce
       virements: costCategoryItems
         .filter(item => item.Acc_Profile__r && item.Acc_Profile__r.Acc_ProjectParticipant__c === partnerItem.Acc_ProjectParticipant__c)
         .map(item => this.mapVirement(item))

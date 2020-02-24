@@ -81,6 +81,7 @@ class FormComponent<T> extends React.Component<FormProps<T>, []> {
 
 interface FieldsetProps<T> {
   heading?: React.ReactNode;
+  headingContent?: ContentSelector;
   qa?: string;
   headingQa?: string;
   isSubQuestion?: boolean;
@@ -107,11 +108,11 @@ class FieldsetComponent<T> extends React.Component<FieldsetProps<T>, []> {
     });
 
     const Header = this.props.isSubQuestion ? "h3" : "h2";
-
+    const headerContent = this.props.headingContent ? <Content value={this.props.headingContent}/> : this.props.heading;
     return (
       <fieldset className="govuk-fieldset" data-qa={this.props.qa}>
         <legend className={legendClassName}>
-          {this.props.heading ? <Header className="govuk-fieldset__heading" data-qa={this.props.headingQa}>{this.props.heading}</Header> : null}
+          {headerContent ? <Header className="govuk-fieldset__heading" data-qa={this.props.headingQa}>{headerContent}</Header> : null}
         </legend>
         {childrenWithData}
       </fieldset>
