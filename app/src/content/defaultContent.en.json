@@ -103,6 +103,20 @@
       "button-save-and-return": "Save and return to claims",
       "button-save-and-continue": "Continue to claims documents"
     },
+    "claim-review": {
+      "title": {
+        "html": "Review claim",
+        "display": "Claim"
+      },
+      "back-link": "Back to claims",
+      "option-query-claim": "Query claim",
+      "option-submit-claim": "Submit for approval",
+      "section-title-how-to-proceed": "How do you want to proceed with this claim?",
+      "section-title-additional-info": "Additional information",
+      "additional-info-hint": "If you query the claim, you must explain what the partner needs to amend. If you approve the claim, you may add a comment to Innovate UK in support of the claim.",
+      "button-submit": "Submit",
+      "button-send-query": "Send query"
+    },
     "financial-virement-details":{
       "title": "Reallocate costs"
     },
@@ -119,7 +133,9 @@
     "no-remaining-claims": "There are no claims. Innovate UK has approved the final claims.",
     "final-claim": "This is the final claim.",
     "iar-required": "You must attach an independent accountant's report (IAR) to this claim.",
-    "final-claim-guidance": "We need to ask you a few questions about the project before we can make your last payment.\n\nYou also need to upload an independent accountant's report (IAR).\n\n1.  Complete our survey.\n2.  Download a copy from the survey website.\n3.  Upload it here."
+    "final-claim-guidance": "We need to ask you a few questions about the project before we can make your last payment.\n\nYou also need to upload an independent accountant's report (IAR).\n\n1.  Complete our survey.\n2.  Download a copy from the survey website.\n3.  Upload it here.",
+    "claim-queried": "You have queried this claim.",
+    "claim-approved": "You have approved this claim."
   },
   "claims-labels": {
     "open-section-title": "Open",
