@@ -16,4 +16,8 @@ export class ClaimsLabels extends ContentBase {
   public readonly closedSectionTitle = () => this.getContent("closed-section-title");
   public readonly forecastAccordionTitle = () => this.getContent("accordion-title-forecast");
   public readonly claimLogAccordionTitle = () => this.getContent("accordion-title-claim-log");
+  public readonly costsClaimed = () => this.getContent("costs-claimed");
+  public readonly costsApproved = () => this.getContent("costs-approved");
+  public readonly costsDeferred = () => this.getContent("costs-deferred");
+  public readonly totalGrantPaid = () => this.getContent("total-grant-paid");
 }

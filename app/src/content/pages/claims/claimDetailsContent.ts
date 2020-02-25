@@ -11,4 +11,5 @@ export class ClaimDetailsContent extends ContentPageBase {
   public readonly labels = new ClaimsLabels(this);
   public readonly backLink = () => this.getContent("back-link");
   public readonly commentsSectionTitle = () => this.getContent("section-title-comments");
+  public readonly costsAndGrantSummaryTitle = () => this.getContent("costs-and-grant-summary-title");
 }

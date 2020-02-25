@@ -21,6 +21,11 @@ export default (mod?: Partial<ClaimDto>): ClaimDto => {
     totalCost: 0,
     overheadRate: 0,
     isFinalClaim: false,
+    totalCostsSubmitted: 100,
+    totalCostsApproved: 100,
+    totalDeferredAmount: 100,
+    periodCostsToBePaid: 100
+
   };
   return { ...template, ...mod };
 };
