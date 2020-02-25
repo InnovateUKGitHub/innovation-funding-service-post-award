@@ -95,7 +95,7 @@
         "display": "Claim"
       },
       "back-link": "Back to claims",
-      "section-title-comments": "Comments"
+      "costs-and-grant-summary-title": "Summary"
     },
     "claim-prepare": {
       "title": "Costs to be claimed",
@@ -132,7 +132,12 @@
     "actual-costs": "Actual costs for period",
     "difference": "Difference",
     "status": "Status",
-    "last-updated-date": "Date of last update"
+    "last-updated-date": "Date of last update",
+    "section-title-comments": "Comments",
+    "costs-claimed": "Costs claimed",
+    "costs-approved": "Costs approved",
+    "costs-deferred": "Costs deferred",
+    "total-grant-paid": "Total grant paid"
   },
   "project-messages": {
     "noClaimDueMessage": "No claim due",
