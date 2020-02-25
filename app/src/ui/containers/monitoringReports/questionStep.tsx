@@ -14,12 +14,11 @@ interface Props {
 export class MonitoringReportQuestionStep extends React.Component<Props> {
   public render() {
     const {editor, questionNumber, onChange, onSave} = this.props;
-    const questionIndex = editor.data.questions.findIndex(x => x.displayOrder === questionNumber);
     const ReportForm = ACC.TypedForm<Dtos.MonitoringReportDto>();
     const title = <ACC.PeriodTitle periodId={editor.data.periodId} periodStartDate={editor.data.startDate} periodEndDate={editor.data.endDate} />;
 
     return (
-      <ACC.Section title={title} subtitle={`Question ${questionIndex + 1} of ${editor.data.questions.length}`}>
+      <ACC.Section title={title}>
         <ACC.Section>
           <ReportForm.Form editor={editor} onChange={(dto) => onChange(dto)} qa="monitoringReportQuestionForm" >
             {this.renderFormItem(editor, questionNumber)}
