@@ -5,10 +5,17 @@ import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerB
 import { Pending } from "@shared/pending";
 import { ILinkInfo, ProjectRole } from "@framework/types";
 import * as ACC from "@ui/components";
-import { StoresConsumer } from "@ui/redux";
+import { ContentConsumer, StoresConsumer } from "@ui/redux";
+import { MonitoringReportsDashboardContent } from "@content/pages/monitoringReports/monitoringReportsDashboardContent";
+import { ContentSelector } from "@content/content";
+import { Content } from "@content/content";
 
 interface Params {
   projectId: string;
+}
+
+interface Props {
+  content: MonitoringReportsDashboardContent;
 }
 
 interface Data {
@@ -21,7 +28,7 @@ interface Callbacks {
 
 }
 
-class DashboardComponent extends ContainerBase<Params, Data, Callbacks> {
+class DashboardComponent extends ContainerBase<Params&Props, Data, Callbacks> {
   private editStatuses = [MonitoringReportStatus.New, MonitoringReportStatus.Draft, MonitoringReportStatus.Queried];
   private currentStatuses = [MonitoringReportStatus.New, MonitoringReportStatus.Draft, MonitoringReportStatus.Queried, MonitoringReportStatus.AwaitingApproval];
 
@@ -57,15 +64,21 @@ class DashboardComponent extends ContainerBase<Params, Data, Callbacks> {
         project={project}
       >
         <ACC.Renderers.Messages messages={this.props.messages} />
-        <ACC.Renderers.SimpleString>You should submit reports for this project according to the schedule agreed with Innovate UK.</ACC.Renderers.SimpleString>
-        <ACC.Link route={this.props.routes.monitoringReportCreate.getLink({ projectId: this.props.projectId })} className="govuk-button">Start a new report</ACC.Link>
-        <ACC.Section title={"Open"}>
+        <ACC.ValidationMessage
+          qa="guidance-message"
+          messageType="info"
+          messageContent={x => x.monitoringReportsDashboard.messages.reportsSubmissionGuidance()}
+        />
+
+        <ACC.Link route={this.props.routes.monitoringReportCreate.getLink({ projectId: this.props.projectId })} className="govuk-button"><ACC.Content value={(x) => x.monitoringReportsDashboard.buttonNewMonitoringReport()}/></ACC.Link>
+        <ACC.Section title={ < ACC.Content value={x => x.monitoringReportsDashboard.sectionTitleOpen()} /> } >
           {reportSections.open.length ? this.renderTable(project, reportSections.open, "current") : null}
-          {!reportSections.open.length ? <ACC.Renderers.SimpleString>There are no open reports.</ACC.Renderers.SimpleString> : null}
+
+          {!reportSections.open.length ? <ACC.Renderers.SimpleString><ACC.Content value={(x) => x.monitoringReportsDashboard.messages.noOpenReportsMessage()}/></ACC.Renderers.SimpleString> : null}
         </ACC.Section>
-        <ACC.Section title={"Archived"}>
+        <ACC.Section title={ < ACC.Content value={x => x.monitoringReportsDashboard.sectionTitleArchived()} /> } >
           {reportSections.archived.length ? this.renderTable(project, reportSections.archived, "previous") : null}
-          {!reportSections.archived.length ? <ACC.Renderers.SimpleString>There are no archived reports.</ACC.Renderers.SimpleString> : null}
+          {!reportSections.archived.length ? <ACC.Renderers.SimpleString><ACC.Content value={(x) => x.monitoringReportsDashboard.messages.noArchivedReportsMessage()}/></ACC.Renderers.SimpleString> : null}
         </ACC.Section>
       </ACC.Page>
     );
@@ -89,33 +102,37 @@ class DashboardComponent extends ContainerBase<Params, Data, Callbacks> {
   }
 
   private renderLinks(report: Dtos.MonitoringReportSummaryDto) {
-    const links: { route: ILinkInfo, text: string, qa: string; }[] = [];
+    const links: { route: ILinkInfo, titleContent: ContentSelector, qa: string; }[] = [];
 
     if (this.editStatuses.indexOf(report.status) > -1) {
-      links.push({ route: this.props.routes.monitoringReportWorkflow.getLink({ projectId: report.projectId, id: report.headerId, mode: "prepare", step: undefined }), text: "Edit report", qa: "editLink" });
+      links.push({ route: this.props.routes.monitoringReportWorkflow.getLink({ projectId: report.projectId, id: report.headerId, mode: "prepare", step: undefined }), titleContent: (content) => content.monitoringReportsDashboard.linkEditMonitoringReport(), qa: "editLink" });
     }
     else {
-      links.push({ route: this.props.routes.monitoringReportWorkflow.getLink({ projectId: report.projectId, id: report.headerId, mode: "view", step: undefined }), text: "View report", qa: "viewLink" });
+      links.push({ route: this.props.routes.monitoringReportWorkflow.getLink({ projectId: report.projectId, id: report.headerId, mode: "view", step: undefined }), titleContent: (content) => content.monitoringReportsDashboard.linkViewMonitoringReport(), qa: "viewLink" });
     }
 
     if (report.status === MonitoringReportStatus.Draft) {
-      links.push({ route: this.props.routes.monitoringReportDelete.getLink({ projectId: report.projectId, id: report.headerId }), text: "Delete report", qa: "deleteLink" });
+      links.push({ route: this.props.routes.monitoringReportDelete.getLink({ projectId: report.projectId, id: report.headerId }), titleContent: (content) => content.monitoringReportsDashboard.linkDeleteMonitoringReport(), qa: "deleteLink" });
     }
 
-    return links.map((x, i) => <div key={i} data-qa={x.qa}><ACC.Link route={x.route}>{x.text}</ACC.Link></div>);
+    return links.map((x, i) => <div key={i} data-qa={x.qa}><ACC.Link route={x.route}><ACC.Content value={x.titleContent}/></ACC.Link></div>);
   }
 }
 
 const DashboardContainer = (props: Params & BaseProps) => (
   <StoresConsumer>
     {stores => (
-      <DashboardComponent
-        project={stores.projects.getById(props.projectId)}
-        partners={stores.partners.getPartnersForProject(props.projectId)}
-        reports={stores.monitoringReports.getAllForProject(props.projectId)}
-        {...props}
-      />
-
+      <ContentConsumer>{
+        content => (
+        <DashboardComponent
+          project={stores.projects.getById(props.projectId)}
+          partners={stores.partners.getPartnersForProject(props.projectId)}
+          reports={stores.monitoringReports.getAllForProject(props.projectId)}
+          content={content.monitoringReportsDashboard}
+          {...props}
+        />
+        )}
+      </ContentConsumer>
     )}
   </StoresConsumer>
 );
@@ -126,10 +143,5 @@ export const MonitoringReportDashboardRoute = defineRoute({
   getParams: (r) => ({ projectId: r.params.projectId, periodId: parseInt(r.params.periodId, 10) }),
   container: DashboardContainer,
   accessControl: (auth, params) => auth.forProject(params.projectId).hasRole(ProjectRole.MonitoringOfficer),
-  getTitle: () => {
-    return {
-      htmlTitle: "Monitoring reports - View project",
-      displayTitle: "Monitoring reports"
-    };
-  }
+  getTitle: ({content}) => content.monitoringReportsDashboard.title(),
 });

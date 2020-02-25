@@ -4,7 +4,7 @@ import * as Dtos from "@framework/dtos";
 import { Pending } from "@shared/pending";
 import { MonitoringReportDtoValidator } from "@ui/validators";
 import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerBase";
-import { IEditorStore, StoresConsumer } from "@ui/redux";
+import { ContentConsumer, IEditorStore, StoresConsumer } from "@ui/redux";
 import { ILinkInfo } from "@framework/types";
 
 export interface MonitoringReportPreparePeriodParams {
@@ -34,7 +34,7 @@ class Component extends ContainerBase<MonitoringReportPreparePeriodParams, Data,
   private renderContents(project: Dtos.ProjectDto, editor: IEditorStore<Dtos.MonitoringReportDto, MonitoringReportDtoValidator>) {
     return (
       <ACC.Page
-        backLink={<ACC.BackLink route={this.props.routes.monitoringReportWorkflow.getLink({ projectId: this.props.projectId, id: this.props.id, mode: "prepare", step: undefined })}>Back to summary</ACC.BackLink>}
+        backLink={<ACC.BackLink route={this.props.routes.monitoringReportWorkflow.getLink({ projectId: this.props.projectId, id: this.props.id, mode: "prepare", step: undefined })}><ACC.Content value={(x) => x.monitoringReportsPeriodStep.backLink()} /></ACC.BackLink>}
         pageTitle={<ACC.Projects.Title project={project} />}
         validator={editor.validator}
         error={editor.error}
@@ -59,18 +59,24 @@ const Container = (props: MonitoringReportPreparePeriodParams & BaseProps) => (
   <StoresConsumer>
     {
       stores => (
-        <Component
-          project={stores.projects.getById(props.projectId)}
-          editor={stores.monitoringReports.getUpdateMonitoringReportEditor(props.projectId, props.id)}
-          onChange={(save, dto, submit, link) => {
-            stores.monitoringReports.updateMonitoringReportEditor(save, props.projectId, dto, submit, () => {
-              if(link) {
-                stores.navigation.navigateTo(link);
-              }
-            });
-          }}
-          {...props}
-        />
+        <ContentConsumer>
+          {
+            content => (
+              <Component
+                project={stores.projects.getById(props.projectId)}
+                editor={stores.monitoringReports.getUpdateMonitoringReportEditor(props.projectId, props.id)}
+                onChange={(save, dto, submit, link) => {
+                  stores.monitoringReports.updateMonitoringReportEditor(save, props.projectId, dto, submit, () => {
+                    if(link) {
+                      stores.navigation.navigateTo(link);
+                    }
+                  });
+                }}
+                {...props}
+              />
+            )
+          }
+        </ContentConsumer>
       )
     }
   </StoresConsumer>
@@ -82,5 +88,5 @@ export const MonitoringReportPreparePeriodRoute = defineRoute({
   container: Container,
   getParams: (r) => ({ projectId: r.params.projectId, id: r.params.id }),
   accessControl: (auth, { projectId }) => auth.forProject(projectId).hasRole(Dtos.ProjectRole.MonitoringOfficer),
-  getTitle: () => ({ htmlTitle: "Edit monitoring report", displayTitle: "Monitoring report" }),
+  getTitle: ({content}) => content.monitoringReportsPeriodStep.title(),
 });

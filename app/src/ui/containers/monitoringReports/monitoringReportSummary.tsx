@@ -52,10 +52,10 @@ class Component extends React.Component<MonitoringReportReportSummaryProps & Inn
           onChange={(dto) => this.props.onChange(dto)}
           qa="monitoringReportCreateForm"
         >
-          <ACC.Renderers.SimpleString>By submitting this report, you certify that from the project monitoring documents shown to you, this report represents your best opinion of the current progress of this project.</ACC.Renderers.SimpleString>
+          <ACC.Renderers.SimpleString><ACC.Content value={(x) => x.monitoringReportsSummary.messages.submittingMonitoringReportMessage()} /></ACC.Renderers.SimpleString>
           <ReportForm.Fieldset qa="save-buttons">
-            <ReportForm.Button name="save-submitted" styling="Primary" onClick={() => this.props.onSave(editor.data, true)}>Submit report</ReportForm.Button>
-            <ReportForm.Button name="save-draft" onClick={() => this.props.onSave(editor.data, false)}>Save and return to monitoring reports</ReportForm.Button>
+            <ReportForm.Button name="save-submitted" styling="Primary" onClick={() => this.props.onSave(editor.data, true)}><ACC.Content value={(x) => x.monitoringReportsSummary.submitButton()} /></ReportForm.Button>
+            <ReportForm.Button name="save-draft" onClick={() => this.props.onSave(editor.data, false)}><ACC.Content value={(x) => x.monitoringReportsSummary.saveAndReturnButton()} /></ReportForm.Button>
           </ReportForm.Fieldset>
         </ReportForm.Form>
       </ACC.Section>
@@ -73,7 +73,7 @@ class Component extends React.Component<MonitoringReportReportSummaryProps & Inn
           replace={true}
           route={this.props.getEditLink(`question-${question.displayOrder}`)}
         >
-          Edit
+          <ACC.Content value={(x) => x.monitoringReportsSummary.editItemButton()} />
         </ACC.Link>
       </span>
     );
@@ -118,7 +118,7 @@ class Component extends React.Component<MonitoringReportReportSummaryProps & Inn
             content={editor.data.periodId}
             qa={`period`}
             /*Put the action on the second item if not showing the first*/
-            action={this.props.mode === "prepare" && <ACC.Link id={validation.key} replace={true} route={this.props.routes.monitoringReportPreparePeriod.getLink({projectId: this.props.projectId, id: this.props.id})}>Edit</ACC.Link>}
+            action={this.props.mode === "prepare" && <ACC.Link id={validation.key} replace={true} route={this.props.routes.monitoringReportPreparePeriod.getLink({projectId: this.props.projectId, id: this.props.id})}><ACC.Content value={(x) => x.monitoringReportsSummary.editItemButton()} /></ACC.Link>}
           />
         </ACC.SummaryList>
       </ACC.Section>
