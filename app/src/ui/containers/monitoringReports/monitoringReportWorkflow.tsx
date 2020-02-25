@@ -4,7 +4,7 @@ import * as Dtos from "@framework/dtos";
 import { Pending } from "@shared/pending";
 import { MonitoringReportDtoValidator } from "@ui/validators";
 import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerBase";
-import { IEditorStore, StoresConsumer } from "@ui/redux";
+import { ContentConsumer, IEditorStore, StoresConsumer } from "@ui/redux";
 import { ILinkInfo } from "@framework/types";
 import { MonitoringReportWorkflowDef } from "@ui/containers/monitoringReports/monitoringReportWorkflowDef";
 
@@ -97,13 +97,13 @@ class Component extends ContainerBase<MonitoringReportWorkflowParams, Data, Call
 
   private getBackLink(workflow: MonitoringReportWorkflowDef) {
     if (this.props.mode === "view") {
-      return <ACC.BackLink route={this.props.routes.monitoringReportDashboard.getLink({ projectId: this.props.projectId })}>Back to monitoring reports</ACC.BackLink>;
+      return <ACC.BackLink route={this.props.routes.monitoringReportDashboard.getLink({ projectId: this.props.projectId })}><ACC.Content value={(x) => x.monitoringReportsWorkflow.backLink()} /></ACC.BackLink>;
     }
     const prevStep = workflow.getPrevStepInfo();
     if (!prevStep) {
-      return <ACC.BackLink route={this.props.routes.monitoringReportPreparePeriod.getLink({ projectId: this.props.projectId, id: this.props.id })}>Back to period</ACC.BackLink>;
+      return <ACC.BackLink route={this.props.routes.monitoringReportPreparePeriod.getLink({ projectId: this.props.projectId, id: this.props.id })}><ACC.Content value={(x) => x.monitoringReportsWorkflow.backLink()} /></ACC.BackLink>;
     }
-    return <ACC.BackLink route={this.props.routes.monitoringReportWorkflow.getLink({ projectId: this.props.projectId, id: this.props.id, mode: this.props.mode, step: prevStep.stepNumber })}>Back to {prevStep.displayName.toLocaleLowerCase()}</ACC.BackLink>;
+    return <ACC.BackLink route={this.props.routes.monitoringReportWorkflow.getLink({ projectId: this.props.projectId, id: this.props.id, mode: this.props.mode, step: prevStep.stepNumber })}><ACC.Content value={(x) => x.monitoringReportsWorkflow.backToStepLink(prevStep.displayName.toLocaleLowerCase())} /></ACC.BackLink>;
   }
 }
 
@@ -111,16 +111,22 @@ const Container = (props: MonitoringReportWorkflowParams & BaseProps) => (
   <StoresConsumer>
     {
       stores => (
-        <Component
-          project={stores.projects.getById(props.projectId)}
-          editor={stores.monitoringReports.getUpdateMonitoringReportEditor(props.projectId, props.id)}
-          onChange={(save, dto, submit, link) => {
-            stores.monitoringReports.updateMonitoringReportEditor(save, props.projectId, dto, submit, () => {
-              if (link) stores.navigation.navigateTo(link);
-            });
-          }}
-          {...props}
-        />
+        <ContentConsumer>
+          {
+            content => (
+              <Component
+                project={stores.projects.getById(props.projectId)}
+                editor={stores.monitoringReports.getUpdateMonitoringReportEditor(props.projectId, props.id)}
+                onChange={(save, dto, submit, link) => {
+                  stores.monitoringReports.updateMonitoringReportEditor(save, props.projectId, dto, submit, () => {
+                    if (link) stores.navigation.navigateTo(link);
+                  });
+                }}
+                {...props}
+              />
+            )
+          }
+        </ContentConsumer>
       )
     }
   </StoresConsumer>
@@ -132,8 +138,5 @@ export const MonitoringReportWorkflowRoute = defineRoute({
   container: Container,
   getParams: (r) => ({ projectId: r.params.projectId, id: r.params.id, mode: r.params.mode, step: parseInt(r.params.step, 10) }),
   accessControl: (auth, { projectId }) => auth.forProject(projectId).hasRole(Dtos.ProjectRole.MonitoringOfficer),
-  getTitle: ({ params }) => ({
-    htmlTitle: params.mode === "view" ? "View monitoring report" : "Edit monitoring report",
-    displayTitle: "Monitoring report"
-  }),
+  getTitle: ({ params, content }) => (params.mode === "view" ? content.monitoringReportsWorkflow.viewMode.title() : content.monitoringReportsWorkflow.editMode.title()),
 });
