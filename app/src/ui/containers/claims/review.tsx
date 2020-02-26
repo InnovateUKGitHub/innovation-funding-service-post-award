@@ -1,6 +1,6 @@
 import React from "react";
 import * as ACC from "@ui/components";
-import { IEditorStore, StoresConsumer } from "@ui/redux";
+import { ContentConsumer, IEditorStore, StoresConsumer } from "@ui/redux";
 import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerBase";
 import { ClaimDtoValidator } from "@ui/validators/claimDtoValidator";
 import { Pending } from "@shared/pending";
@@ -61,12 +61,12 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, Data, Callbacks> 
 
     return (
       <ACC.Page
-        backLink={<ACC.BackLink route={this.props.routes.allClaimsDashboard.getLink({ projectId: data.project.id })}>Back to claims</ACC.BackLink>}
+        backLink={<ACC.BackLink route={this.props.routes.allClaimsDashboard.getLink({ projectId: data.project.id })}><ACC.Content value={x => x.claimReview.backLink()}/></ACC.BackLink>}
         error={data.editor.error}
         validator={data.editor.validator}
         pageTitle={<ACC.Projects.Title project={data.project} />}
       >
-        {data.claim.isFinalClaim && <ACC.ValidationMessage messageType="info" message="This is the final claim."/>}
+        {data.claim.isFinalClaim && <ACC.ValidationMessage messageType="info" messageContent={x => x.claimReview.messages.finalClaim()}/>}
         {this.renderClaimReviewSection(data)}
         <ACC.Section>
           <ACC.Accordion>
@@ -93,7 +93,7 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, Data, Callbacks> 
   }
 
   private renderForecastItem() {
-    const pendingForcastData: Pending<ACC.Claims.ForecastData> = Pending.combine({
+    const pendingForecastData: Pending<ACC.Claims.ForecastData> = Pending.combine({
       project: this.props.project,
       partner: this.props.partner,
       claim: this.props.claim,
@@ -105,9 +105,9 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, Data, Callbacks> 
     });
 
     return (
-      <ACC.AccordionItem title="Forecast" qa="forecast-accordion">
+      <ACC.AccordionItem titleContent={x => x.claimReview.labels.forecastAccordionTitle()} qa="forecast-accordion">
         <ACC.Loader
-          pending={pendingForcastData}
+          pending={pendingForecastData}
           render={(forecastData) => (<ACC.Claims.ForecastTable data={forecastData} hideValidation={true} />)}
         />
       </ACC.AccordionItem>
@@ -121,8 +121,8 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, Data, Callbacks> 
   private renderForm(data: CombinedData) {
     const Form = ACC.TypedForm<ClaimDto>();
     const options: ACC.SelectOption[] = [
-      { id: ClaimStatus.MO_QUERIED, value: "Query claim" },
-      { id: ClaimStatus.AWAITING_IUK_APPROVAL, value: "Submit for approval" },
+      { id: ClaimStatus.MO_QUERIED, value: <ACC.Content value={x => x.claimReview.queryClaimOption()} /> },
+      { id: ClaimStatus.AWAITING_IUK_APPROVAL, value: <ACC.Content value={x => x.claimReview.approveClaimOption()} /> },
     ];
     const submitButtonLabel = this.getSubmitButtonLabel(data);
 
@@ -133,7 +133,7 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, Data, Callbacks> 
         onChange={(dto) => this.props.onUpdate(false, dto)}
         qa="review-form"
       >
-        <Form.Fieldset heading="How do you want to proceed with this claim?">
+        <Form.Fieldset headingContent={x => x.claimReview.howToProceedSectionTitle()}>
           <Form.Radio
             name="status"
             options={options}
@@ -150,18 +150,18 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, Data, Callbacks> 
   }
 
   private renderCommentsSection(Form: ACC.FormBuilder<ClaimDto>, editor: IEditorStore<ClaimDto, ClaimDtoValidator>) {
-    // on client if the status hasnt yet been set by the readio buttons then dont show
+    // on client if the status hasn't yet been set by the radio buttons then don't show
     // if server rendering we need to always show
     if (!editor.data.status && this.props.isClient) {
       return null;
     }
 
     return (
-      <Form.Fieldset heading={"Additional information"} qa="additional-info-form" headingQa="additional-info-heading">
+      <Form.Fieldset headingContent={x => x.claimReview.additionalInfoSectionTitle()} qa="additional-info-form" headingQa="additional-info-heading">
         <Form.MultilineString
           label="additional-info"
           labelHidden={true}
-          hint={"If you query the claim, you must explain what the partner needs to amend. If you approve the claim, you may add a comment to Innovate UK in support of the claim."}
+          hintContent={x => x.claimReview.additionalInfoHint()}
           name="comments"
           value={m => m.comments}
           update={(m, v) => m.comments = v}
@@ -174,18 +174,16 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, Data, Callbacks> 
   }
 
   private getSubmitButtonLabel(data: CombinedData) {
-    let label: string | null = "Submit";
-
-    if (this.props.isClient) {
-      if (data.editor.data.status === ClaimStatus.MO_QUERIED) {
-        label = "Send query";
-      }
-      else if (data.editor.data.status !== ClaimStatus.AWAITING_IUK_APPROVAL) {
-        label = null;
-      }
+    // If rendering from the server then always use "Submit"
+    if (!this.props.isClient || data.editor.data.status === ClaimStatus.AWAITING_IUK_APPROVAL) {
+      return <ACC.Content value={x => x.claimReview.submitButton()} />;
     }
 
-    return label;
+    if (data.editor.data.status === ClaimStatus.MO_QUERIED) {
+      return <ACC.Content value={x => x.claimReview.sendQueryButton()} />;
+    }
+
+    return null;
   }
 
   private updateStatus(dto: ClaimDto, option: ACC.SelectOption | null | undefined) {
@@ -196,7 +194,7 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, Data, Callbacks> 
 
   private renderLogsItem() {
     return (
-      <ACC.AccordionItem title="Status and comments log" qa="log-accordion">
+      <ACC.AccordionItem titleContent={x => x.claimReview.labels.claimLogAccordionTitle()} qa="log-accordion">
         {/* Keeping logs inside loader because accordion defaults to closed*/}
         <ACC.Loader
           pending={this.props.statusChanges}
@@ -220,24 +218,30 @@ const ReviewContainer = (props: ReviewClaimParams & BaseProps) => (
   <StoresConsumer>
     {
       stores => (
-        <ReviewComponent
-          project={stores.projects.getById(props.projectId)}
-          partner={stores.partners.getById(props.partnerId)}
-          costCategories={stores.costCategories.getAll()}
-          claim={stores.claims.get(props.partnerId, props.periodId)}
-          claims={stores.claims.getAllClaimsForPartner(props.partnerId)}
-          costsSummaryForPeriod={stores.costsSummaries.getForPeriod(props.projectId, props.partnerId, props.periodId)}
-          claimDetails={stores.claimDetails.getAllByPartner(props.partnerId)}
-          forecastDetails={stores.forecastDetails.getAllByPartner(props.partnerId)}
-          golCosts={stores.forecastGolCosts.getAllByPartner(props.partnerId)}
-          statusChanges={stores.claims.getStatusChanges(props.projectId, props.partnerId, props.periodId)}
-          editor={stores.claims.getClaimEditor(props.projectId, props.partnerId, props.periodId, initEditor)}
-          onUpdate={(saving, dto) => {
-            const message = dto.status === ClaimStatus.MO_QUERIED ? "You have queried this claim." : "You have approved this claim.";
-            stores.claims.updateClaimEditor(saving, props.projectId, props.partnerId, props.periodId, dto, message, () => stores.navigation.navigateTo(props.routes.allClaimsDashboard.getLink({ projectId: props.projectId })));
-          }}
-          {...props}
-        />
+        <ContentConsumer>
+          {
+            content => (
+              <ReviewComponent
+                project={stores.projects.getById(props.projectId)}
+                partner={stores.partners.getById(props.partnerId)}
+                costCategories={stores.costCategories.getAll()}
+                claim={stores.claims.get(props.partnerId, props.periodId)}
+                claims={stores.claims.getAllClaimsForPartner(props.partnerId)}
+                costsSummaryForPeriod={stores.costsSummaries.getForPeriod(props.projectId, props.partnerId, props.periodId)}
+                claimDetails={stores.claimDetails.getAllByPartner(props.partnerId)}
+                forecastDetails={stores.forecastDetails.getAllByPartner(props.partnerId)}
+                golCosts={stores.forecastGolCosts.getAllByPartner(props.partnerId)}
+                statusChanges={stores.claims.getStatusChanges(props.projectId, props.partnerId, props.periodId)}
+                editor={stores.claims.getClaimEditor(props.projectId, props.partnerId, props.periodId, initEditor)}
+                onUpdate={(saving, dto) => {
+                  const message = dto.status === ClaimStatus.MO_QUERIED ? content.claimReview.messages.claimQueried() : content.claimReview.messages.claimApproved();
+                  stores.claims.updateClaimEditor(saving, props.projectId, props.partnerId, props.periodId, dto, message.content, () => stores.navigation.navigateTo(props.routes.allClaimsDashboard.getLink({ projectId: props.projectId })));
+                }}
+                {...props}
+              />
+            )
+          }
+        </ContentConsumer>
       )
     }
   </StoresConsumer>
@@ -249,8 +253,5 @@ export const ReviewClaimRoute = defineRoute({
   container: ReviewContainer,
   getParams: (route) => ({ projectId: route.params.projectId, partnerId: route.params.partnerId, periodId: parseInt(route.params.periodId, 10) }),
   accessControl: (auth, { projectId }) => auth.forProject(projectId).hasRole(ProjectRole.MonitoringOfficer),
-  getTitle: () => ({
-    htmlTitle: "Review claim",
-    displayTitle: "Claim"
-  }),
+  getTitle: ({content}) => content.claimReview.title(),
 });
