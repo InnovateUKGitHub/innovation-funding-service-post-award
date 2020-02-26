@@ -12,5 +12,7 @@ export class ClaimMessages extends ContentBase {
   public readonly noClosedClaims = () => this.getContent("no-closed-claims");
   public readonly finalClaim = () => this.getContent("final-claim");
   public readonly iarRequired = () => this.getContent("iar-required");
+  public readonly claimQueried = () => this.getContent("claim-queried");
+  public readonly claimApproved = () => this.getContent("claim-approved");
   public readonly finalClaimGuidance = () => this.getContent("final-claim-guidance", {markdown: true});
 }

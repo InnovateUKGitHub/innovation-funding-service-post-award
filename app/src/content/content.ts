@@ -14,6 +14,7 @@ import { ClaimPrepareContent } from "@content/pages/claims/claimPrepareContent";
 import { FinancialVirementSummaryContent } from "./pages/financialVirementSummaryContent";
 import { FinancialVirementEditContent } from "./pages/financialVirementEditContent";
 import { FinancialVirementDetailsContent } from "./pages/financialVirementDetailsContent";
+import { ClaimReviewContent } from "@content/pages/claims/claimReviewContent";
 
 export type ContentSelector = (content: Content) => ContentResult;
 
@@ -36,6 +37,7 @@ export class Content extends ContentBase {
   public readonly claimDocuments = new ClaimDocumentsContent(this);
   public readonly claimDetails = new ClaimDetailsContent(this);
   public readonly claimPrepare = new ClaimPrepareContent(this);
+  public readonly claimReview = new ClaimReviewContent(this);
 
   public readonly financialVirementSummary = new FinancialVirementSummaryContent(this);
   public readonly financialVirementEdit = new FinancialVirementEditContent(this);
