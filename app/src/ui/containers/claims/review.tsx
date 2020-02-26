@@ -162,7 +162,8 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, Data, Callbacks> 
     const UploadForm = ACC.TypedForm<MultipleDocumentUploadDto>()
 
     return (
-      <ACC.Section title={"Upload claims validation"}>
+      <ACC.Accordion>
+        <ACC.AccordionItem title="Upload claims validation">
         <ACC.Renderers.Messages messages={this.props.messages} />
         <UploadForm.Form
             enctype="multipart"
@@ -186,7 +187,8 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, Data, Callbacks> 
             <UploadForm.Submit styling="Secondary"><ACC.Content value={x => x.projectDocuments.documentLabels.uploadButtonLabel()} /></UploadForm.Submit>
           </UploadForm.Form>
           {this.renderDocuments(data.documents)}
-      </ACC.Section>
+        </ACC.AccordionItem>
+      </ACC.Accordion>
     );
   }
   renderDocuments(documents: DocumentSummaryDto[]): React.ReactNode {
