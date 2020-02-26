@@ -58,7 +58,7 @@ interface TableProps<T> {
   footers?: JSX.Element[];
   headers?: JSX.Element[];
   data: T[];
-  validationResult?: Results<{}>[];
+  validationResult?: (Results<{}> | null)[];
   caption?: React.ReactNode;
   bodyRowClass?: (row: T, index: number) => string;
   bodyRowFlag?: (row: T, index: number) => "warning" | "info" | "error" | "edit" | null;
@@ -90,7 +90,7 @@ export class TableColumn<T> extends React.Component<InternalColumnProps<T>> {
   }
 
   renderHeaderElement() {
-    const header = this.props.headerContent ? <Content value={x => this.props.headerContent!(x)}/> : this.props.header;
+    const header = this.props.headerContent ? <Content value={x => this.props.headerContent!(x)} /> : this.props.header;
     return this.props.hideHeader ? <AccessibilityText>{header}</AccessibilityText> : header;
   }
 
@@ -104,9 +104,9 @@ export class TableColumn<T> extends React.Component<InternalColumnProps<T>> {
       "govuk-table__cell",
       this.props.cellClassName && this.props.cellClassName(data, { column, row }),
       this.props.colClassName && this.props.colClassName(column),
-      {["govuk-table__cell--" + this.props.classSuffix]: !!this.props.classSuffix}
+      { ["govuk-table__cell--" + this.props.classSuffix]: !!this.props.classSuffix }
     );
-    return <td style={{paddingRight: this.props.paddingRight}} className={className} key={column}>{this.props.renderCell(data, { column, row })}</td>;
+    return <td style={{ paddingRight: this.props.paddingRight }} className={className} key={column}>{this.props.renderCell(data, { column, row })}</td>;
   }
 
   renderCol(column: number) {
@@ -115,8 +115,8 @@ export class TableColumn<T> extends React.Component<InternalColumnProps<T>> {
       style.width = this.props.width + "%";
     }
 
-    if(this.props.isDivider) {
-      if(this.props.isDivider === "normal") {
+    if (this.props.isDivider) {
+      if (this.props.isDivider === "normal") {
         style.borderRight = "1px solid " + colour.GOVUK_BORDER_COLOUR;
       } else {
         style.borderRight = "3px solid " + colour.GOVUK_COLOUR_BLACK;
@@ -144,27 +144,27 @@ const TableComponent = <T extends {}>(props: TableProps<T> & { data: T[]; valida
 
   const rowFlags = props.data.map((dataItem, rowIndex) => {
     const validation = props.validationResult && props.validationResult[rowIndex];
-    if(validation && validation.showValidationErrors && !validation.isValid) {
+    if (validation && validation.showValidationErrors && !validation.isValid) {
       return "error";
     }
-    if(props.bodyRowFlag) {
+    if (props.bodyRowFlag) {
       return props.bodyRowFlag(dataItem, rowIndex);
     }
     return null;
   });
 
   const rowClasses = rowFlags.map(x => {
-    switch(x) {
+    switch (x) {
       case "warning": return "table__row--warning";
-      case "error":   return "table__row--error";
-      case "info":    return "table__row--info";
-      case "edit":    return "table__row--info";
-      default:        return "";
+      case "error": return "table__row--error";
+      case "info": return "table__row--info";
+      case "edit": return "table__row--info";
+      default: return "";
     }
   });
 
   return (
-    <div data-qa={props.qa} style={{overflowX:"auto"}}>
+    <div data-qa={props.qa} style={{ overflowX: "auto" }}>
       <table className={classNames("govuk-table", props.className)}>
         {!!props.caption ? <caption className="govuk-visually-hidden">{props.caption}</caption> : null}
         <colgroup>
@@ -222,12 +222,12 @@ const EmailColumn = <T extends {}>(props: ExternalColumnProps<T, string | null>)
   return <TypedColumn renderCell={(data, index) => <Email value={props.value(data, index)} />} {...props} />;
 };
 
-const CurrencyColumn = <T extends {}>(props: ExternalColumnProps<T, number | null> & {fractionDigits?: number}) => {
+const CurrencyColumn = <T extends {}>(props: ExternalColumnProps<T, number | null> & { fractionDigits?: number }) => {
   const TypedColumn = TableColumn as { new(): TableColumn<T> };
   return <TypedColumn classSuffix="numeric" renderCell={(data, index) => <Currency value={props.value(data, index)} fractionDigits={props.fractionDigits} />} {...props} />;
 };
 
-const PercentageColumn = <T extends {}>(props: ExternalColumnProps<T, number | null> & {fractionDigits?: number}) => {
+const PercentageColumn = <T extends {}>(props: ExternalColumnProps<T, number | null> & { fractionDigits?: number }) => {
   const TypedColumn = TableColumn as { new(): TableColumn<T> };
   return <TypedColumn classSuffix="numeric" renderCell={(data, index) => <Percentage value={props.value(data, index)} fractionDigits={props.fractionDigits} />} {...props} />;
 };
@@ -246,8 +246,8 @@ export const TypedTable = <T extends {}>() => ({
   Custom: CustomColumn as React.FunctionComponent<ExternalColumnProps<T, React.ReactNode> & { classSuffix?: "numeric" }>,
   String: StringColumn as React.FunctionComponent<ExternalColumnProps<T, string | null>>,
   Number: NumberColumn as React.FunctionComponent<ExternalColumnProps<T, number | null>>,
-  Currency: CurrencyColumn as React.FunctionComponent<ExternalColumnProps<T, number | null> & {fractionDigits?: number}>,
-  Percentage: PercentageColumn as React.FunctionComponent<ExternalColumnProps<T, number | null> & {fractionDigits?: number}>,
+  Currency: CurrencyColumn as React.FunctionComponent<ExternalColumnProps<T, number | null> & { fractionDigits?: number }>,
+  Percentage: PercentageColumn as React.FunctionComponent<ExternalColumnProps<T, number | null> & { fractionDigits?: number }>,
   FullDate: FullDateColumn as React.FunctionComponent<ExternalColumnProps<T, Date | null>>,
   ShortDate: ShortDateColumn as React.FunctionComponent<ExternalColumnProps<T, Date | null>>,
   ShortDateTime: ShortDateTimeColumn as React.FunctionComponent<ExternalColumnProps<T, Date | null>>,

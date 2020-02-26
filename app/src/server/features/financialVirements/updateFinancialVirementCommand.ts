@@ -1,10 +1,11 @@
 // tslint:disable:complexity
-import { CommandBase } from "@server/features/common";
+import { CommandBase, ValidationError } from "@server/features/common";
 import { Authorisation, IContext, ProjectRole } from "@framework/types";
 import { flatten } from "@framework/util/arrayHelpers";
 import { ISalesforceFinancialVirement } from "@server/repositories";
 import { Updatable } from "@server/repositories/salesforceRepositoryBase";
 import { CostCategoryFinancialVirement } from "@framework/entities";
+import { FinancialVirementDtoValidator } from "@ui/validators/financialVirementDtoValidator";
 
 export class UpdateFinancialVirementCommand extends CommandBase<boolean> {
   constructor(private readonly projectId: string, private readonly pcrId: string, private readonly pcrItemId: string, private readonly data: FinancialVirementDto) {
@@ -18,6 +19,11 @@ export class UpdateFinancialVirementCommand extends CommandBase<boolean> {
   protected async Run(context: IContext): Promise<boolean> {
 
     const existingVirements = await context.repositories.financialVirements.getAllForPcr(this.pcrItemId);
+
+    const validator = new FinancialVirementDtoValidator(this.data, true);
+    if(!validator.isValid) {
+      throw new ValidationError(validator);
+    }
 
     const updates: Updatable<ISalesforceFinancialVirement>[] = [];
     const flattenedData = flatten(this.data.partners.map(partner => partner.virements.map(virement => ({ partnerId: partner.partnerId, costCategoryId: virement.costCategoryId, virement }))));
