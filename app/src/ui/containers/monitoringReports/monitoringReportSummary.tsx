@@ -55,7 +55,7 @@ class Component extends React.Component<MonitoringReportReportSummaryProps & Inn
           <ACC.Renderers.SimpleString>By submitting this report, you certify that from the project monitoring documents shown to you, this report represents your best opinion of the current progress of this project.</ACC.Renderers.SimpleString>
           <ReportForm.Fieldset qa="save-buttons">
             <ReportForm.Button name="save-submitted" styling="Primary" onClick={() => this.props.onSave(editor.data, true)}>Submit report</ReportForm.Button>
-            <ReportForm.Button name="save-draft" onClick={() => this.props.onSave(editor.data, false)}>Save and return to project</ReportForm.Button>
+            <ReportForm.Button name="save-draft" onClick={() => this.props.onSave(editor.data, false)}>Save and return to monitoring reports</ReportForm.Button>
           </ReportForm.Fieldset>
         </ReportForm.Form>
       </ACC.Section>
