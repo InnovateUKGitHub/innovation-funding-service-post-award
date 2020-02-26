@@ -77,8 +77,8 @@ export function email(results: Results<{}>, value: string, message?: string) {
 
 export function isCurrency(results: Results<{}>, value: number | null, message?: string) {
   const regex = /^-?[0-9]+(\.[0-9]{1,2})?$/i;
-  if (value === null || value === undefined) { return valid(results); }
-  return isTrue(results, (!value) || regex.test(value.toString()), message || "Invalid amount");
+  if (value === null || value === undefined || value === 0) { return valid(results); }
+  return isTrue(results, !isNaN(value) && regex.test(value.toString()), message || "Invalid amount");
 }
 
 // Accepts an array of delegates. Runs until it finds a failure. EG, Not empty, length < 100, no spaces. Will fail fast.
