@@ -40,6 +40,11 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerWithdrawal
           qa="projectChangeRequestItemUpload"
         >
           <UploadForm.Fieldset heading="Upload withdrawal of partner certificate">
+            <ACC.Renderers.SimpleString>You must upload these documents:</ACC.Renderers.SimpleString>
+            <ACC.UnorderedList>
+              <li>a confirmation letter on headed paper from the partner who is leaving, signed by someone with financial authority</li>
+              <li>a brief list of the outstanding deliverables, and who each will be assigned to once the partner leaves</li>
+            </ACC.UnorderedList>
             <ACC.DocumentGuidance/>
             <UploadForm.MulipleFileUpload
               label="Upload files"

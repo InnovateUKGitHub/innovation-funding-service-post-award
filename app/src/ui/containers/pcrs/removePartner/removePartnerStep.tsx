@@ -4,7 +4,6 @@ import { PartnerDto, PCRItemForPartnerWithdrawalDto } from "@framework/dtos";
 import { EditorStatus, StoresConsumer } from "@ui/redux";
 import { PcrStepProps } from "@ui/containers/pcrs/pcrWorkflow";
 import { PCRPartnerWithdrawalItemDtoValidator } from "@ui/validators";
-import { periodInProject } from "@framework/util";
 import { PartnerName } from "@ui/components";
 
 interface InnerProps {
@@ -20,12 +19,6 @@ const InnerContainer = (props: PcrStepProps<PCRItemForPartnerWithdrawalDto, PCRP
     }
   ));
   const selectedPartnerOption = partnerOptions.find(x => x.id === props.pcrItem.partnerId);
-
-  const renderRemovalPeriodText = (removalPeriod: number | null) => {
-    if (!removalPeriod) return null;
-
-    return <ACC.Renderers.SimpleString>{`This will happen in period ${removalPeriod}`}</ACC.Renderers.SimpleString>;
-  };
 
   return (
     <ACC.Section>
@@ -58,7 +51,6 @@ const InnerContainer = (props: PcrStepProps<PCRItemForPartnerWithdrawalDto, PCRP
             validation={props.validator.withdrawalDate}
           />
         </Form.Fieldset>
-        {props.isClient && renderRemovalPeriodText(periodInProject(props.pcrItem.withdrawalDate, props.project))}
         <Form.Submit>Save and continue</Form.Submit>
       </Form.Form>
     </ACC.Section>
