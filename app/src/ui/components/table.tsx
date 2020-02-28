@@ -58,7 +58,7 @@ interface TableProps<T> {
   footers?: JSX.Element[];
   headers?: JSX.Element[];
   data: T[];
-  validationResult?: (Results<{}> | null)[];
+  validationResult?: (Results<{}> | null | undefined)[];
   caption?: React.ReactNode;
   bodyRowClass?: (row: T, index: number) => string;
   bodyRowFlag?: (row: T, index: number) => "warning" | "info" | "error" | "edit" | null;
