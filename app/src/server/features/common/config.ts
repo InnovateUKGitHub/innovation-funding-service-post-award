@@ -49,6 +49,12 @@ export interface IConfig {
         readonly signoutUrl: string;
     };
 
+    readonly sil: {
+      companiesHouseSearchUrl: string,
+      username: string,
+      password: string,
+    };
+
     readonly urls: {
         readonly ifsRoot: string;
         readonly ifsApplicationUrl: string;
@@ -146,6 +152,12 @@ const s3Account = {
     customContentPath: process.env.S3_Content_File!,
 };
 
+const sil = {
+    companiesHouseSearchUrl: process.env.SIL_COMPANIES_HOUSE_SEARCH_URL!,
+    username: process.env.SIL_USERNAME!,
+    password: process.env.SIL_PASSWORD!,
+};
+
 export const Configuration: IConfig = {
     build,
     cookieKey,
@@ -159,8 +171,9 @@ export const Configuration: IConfig = {
     salesforce,
     serverUrl,
     standardOverheadRate,
+    sil,
     sso,
     urls,
     googleTagManagerCode,
-    s3Account
+    s3Account,
 };
