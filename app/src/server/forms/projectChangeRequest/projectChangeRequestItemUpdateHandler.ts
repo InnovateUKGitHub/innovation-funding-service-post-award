@@ -50,9 +50,7 @@ export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBa
         this.updateNameChange(item, body, stepName as accountNameChangeStepNames);
         break;
       case PCRItemType.PartnerWithdrawal:
-        if(Configuration.features.pcrRemovePartner) {
-          this.updatePartnerWithdrawal(item, body, stepName as removePartnerStepNames);
-        }
+        this.updatePartnerWithdrawal(item, body, stepName as removePartnerStepNames);
         break;
       case PCRItemType.MultiplePartnerFinancialVirement:
       case PCRItemType.SinglePartnerFinancialVirement:

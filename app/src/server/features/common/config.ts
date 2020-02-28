@@ -99,7 +99,6 @@ const defaultFeatureFlag = getFeatureFlagValue(process.env.FEATURE_DEFAULT, fals
 const features: IFeatureFlags = {
     financialVirements: getFeatureFlagValue(process.env.FEATURE_FINANCIAL_VIREMENTS, defaultFeatureFlag),
     pcrsEnabled: getFeatureFlagValue(process.env.FEATURE_PCRS_ENABLED, defaultFeatureFlag),
-    pcrRemovePartner: getFeatureFlagValue(process.env.FEATURE_PCR_REMOVE_PARTNER, defaultFeatureFlag),
     contentHint: getFeatureFlagValue(process.env.FEATURE_CONTENT_HINT, false),
     customContent: getFeatureFlagValue(process.env.FEATURE_CUSTOM_CONTENT, false),
     numberOfProjectsToSearch: parseInt(process.env.FEATURE_SEARCH_NUMBER_PROJECTS!, 10) || 3,
