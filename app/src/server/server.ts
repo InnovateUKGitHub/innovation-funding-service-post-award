@@ -73,7 +73,9 @@ export class Server {
 
   private middleware() {
     this.app.use([
-      cors(),
+      cors({
+        origin: true
+      }),
       bodyParser.urlencoded({ extended: false }),
       bodyParser.json(),
       this.handleGetWithPlus,
