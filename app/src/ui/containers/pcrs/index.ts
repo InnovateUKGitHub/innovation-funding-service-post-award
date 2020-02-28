@@ -9,3 +9,4 @@ export * from "./reasoning";
 export * from "./review";
 export * from "./financialVirements/detailsPage";
 export * from "./financialVirements/editPage";
+export * from "./financialVirements/editPartnerLevel";
