@@ -52,6 +52,12 @@ export class TestConfig implements IConfig {
     signoutUrl: "https://shibboleth.com/Logout",
   };
 
+  public sil = {
+    companiesHouseSearchUrl: "",
+    username: "",
+    password: ""
+  };
+
   public urls = {
     ifsRoot: "",
     ifsApplicationUrl: "",
