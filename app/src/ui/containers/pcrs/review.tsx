@@ -49,6 +49,7 @@ class PCRReviewComponent extends ContainerBase<PCRReviewParams, Data, Callbacks>
       >
         {this.renderSummary(projectChangeRequest)}
         {this.renderTasks(projectChangeRequest, editor, editableItemTypes)}
+        {this.renderLog()}
         {this.renderForm(editor)}
       </ACC.Page>
     );
@@ -111,7 +112,6 @@ class PCRReviewComponent extends ContainerBase<PCRReviewParams, Data, Callbacks>
             validation={editor.validator.comments}
           />
         </Form.Fieldset>
-        {this.renderLog()}
         <Form.Fieldset qa="save-and-submit">
           <Form.Submit>Submit</Form.Submit>
         </Form.Fieldset>
@@ -171,17 +171,19 @@ class PCRReviewComponent extends ContainerBase<PCRReviewParams, Data, Callbacks>
 
   private renderLog() {
     return (
-      <ACC.Accordion>
-        <ACC.AccordionItem title="Status and comments log" qa="status-and-comments-log">
-          {/* Keeping logs inside loader because accordion defaults to closed*/}
-          <ACC.Loader
-            pending={this.props.statusChanges}
-            render={(statusChanges) => (
-              <ACC.Logs data={statusChanges} qa="projectChangeRequestStatusChangeTable" />
-            )}
-          />
-        </ACC.AccordionItem>
-      </ACC.Accordion>
+      <ACC.Section>
+        <ACC.Accordion>
+          <ACC.AccordionItem title="Status and comments log" qa="status-and-comments-log">
+            {/* Keeping logs inside loader because accordion defaults to closed*/}
+            <ACC.Loader
+              pending={this.props.statusChanges}
+              render={(statusChanges) => (
+                <ACC.Logs data={statusChanges} qa="projectChangeRequestStatusChangeTable" />
+              )}
+            />
+          </ACC.AccordionItem>
+        </ACC.Accordion>
+      </ACC.Section>
     );
   }
 }
