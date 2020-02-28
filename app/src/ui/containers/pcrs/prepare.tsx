@@ -58,6 +58,7 @@ class PCRPrepareComponent extends ContainerBase<ProjectChangeRequestPrepareParam
       >
         {this.renderSummary(projectChangeRequest)}
         {this.renderTasks(projectChangeRequest, editor, editableItemTypes)}
+        {this.renderLog()}
         {this.renderForm(projectChangeRequest, editor)}
       </ACC.Page >
     );
@@ -102,8 +103,8 @@ class PCRPrepareComponent extends ContainerBase<ProjectChangeRequestPrepareParam
             qa="info-text-area"
           />
         </Form.Fieldset>
-        {this.renderLog()}
         <Form.Fieldset qa="save-buttons">
+          <ACC.Renderers.SimpleString>By submitting this request, you confirm that all project partners have approved these changes.</ACC.Renderers.SimpleString>
           <Form.Submit>Submit request</Form.Submit>
           <Form.Button name="return" onClick={() => this.onSave(editor, projectChangeRequest, false)}>Save and return to requests</Form.Button>
         </Form.Fieldset>
@@ -176,17 +177,19 @@ class PCRPrepareComponent extends ContainerBase<ProjectChangeRequestPrepareParam
 
   private renderLog() {
     return (
-      <ACC.Accordion>
-        <ACC.AccordionItem title="Status and comments log" qa="status-and-comments-log">
-          {/* Keeping logs inside loader because accordion defaults to closed*/}
-          <ACC.Loader
-            pending={this.props.statusChanges}
-            render={(statusChanges) => (
-              <ACC.Logs data={statusChanges} qa="projectChangeRequestStatusChangeTable" />
-            )}
-          />
-        </ACC.AccordionItem>
-      </ACC.Accordion>
+      <ACC.Section>
+        <ACC.Accordion>
+          <ACC.AccordionItem title="Status and comments log" qa="status-and-comments-log">
+            {/* Keeping logs inside loader because accordion defaults to closed*/}
+            <ACC.Loader
+              pending={this.props.statusChanges}
+              render={(statusChanges) => (
+                <ACC.Logs data={statusChanges} qa="projectChangeRequestStatusChangeTable" />
+              )}
+            />
+          </ACC.AccordionItem>
+        </ACC.Accordion>
+      </ACC.Section>
     );
   }
 }
