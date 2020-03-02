@@ -61,12 +61,7 @@ export class PcrWorkflow<T, TVal extends Results<T>> extends WorkflowBase<string
       case PCRItemType.MultiplePartnerFinancialVirement:
         return new PcrWorkflow(financialVirementWorkflow, step);
       case PCRItemType.PartnerWithdrawal:
-        if (features.pcrRemovePartner) {
-          return new PcrWorkflow(removePartnerWorkflow, step);
-        }
-        else {
-          return new PcrWorkflow(standardItemWorkflow, step);
-        }
+        return new PcrWorkflow(removePartnerWorkflow, step);
       case PCRItemType.SinglePartnerFinancialVirement:
       case PCRItemType.PartnerAddition:
         return new PcrWorkflow(standardItemWorkflow, step);
