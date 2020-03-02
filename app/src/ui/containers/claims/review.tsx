@@ -7,6 +7,7 @@ import { Pending } from "@shared/pending";
 import { ClaimDto, ClaimStatus, ClaimStatusChangeDto, PartnerDto, ProjectDto, ProjectRole } from "@framework/types";
 import { MultipleDocumentUpdloadDtoValidator } from "@ui/validators";
 import { getFileSize } from "@framework/util";
+import { mapToDocumentSummaryDto } from "@server/features/documents/mapToDocumentSummaryDto";
 
 export interface ReviewClaimParams {
   projectId: string;
@@ -83,7 +84,7 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, Data, Callbacks> 
             {this.renderLogsItem()}
           </ACC.Accordion>
         </ACC.Section>
-        {this.renderClaimValidationSection(data)}
+        {this.renderUploadClaimValidationFormSection(data)}
         {this.renderForm(data)}
       </ACC.Page>
     );
@@ -158,18 +159,18 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, Data, Callbacks> 
       </Form.Form>
     );
   }
-  renderClaimValidationSection(data: CombinedData): React.ReactNode {
+  renderUploadClaimValidationFormSection(data: CombinedData): React.ReactNode {
     const UploadForm = ACC.TypedForm<MultipleDocumentUploadDto>()
 
     return (
       <ACC.Accordion>
-        <ACC.AccordionItem title="Upload claims validation">
+        <ACC.AccordionItem title="Upload claims validation form" qa="upload-claims-validation-form-accordion">
         <ACC.Renderers.Messages messages={this.props.messages} />
         <UploadForm.Form
             enctype="multipart"
             editor={data.documentsEditor}
-            onChange={dto => this.props.onUpload(false, dto)}
-            onSubmit={() => this.props.onUpload(true, data.documentsEditor.data)}
+            onChange={dto => this.props.onUpload(false, {...dto, description: "Claim Validation Form" })}
+            onSubmit={() => this.props.onUpload(true, {...data.documentsEditor.data, description: "Claim Validation Form"})}
             qa="projectDocumentUpload"
           >
             <UploadForm.Fieldset>
@@ -192,9 +193,9 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, Data, Callbacks> 
     );
   }
   renderDocuments(documents: DocumentSummaryDto[]): React.ReactNode {
-    if (documents.length === 0) {
-      return <ACC.ValidationMessage qa={"noDocuments"} message={<ACC.Content value={x => x.projectDocuments.noDocumentsMessage()} />} messageType="info" />;
-    }
+
+
+    console.log(documents);
 
     const ProjectDocumentsTable = ACC.TypedTable<DocumentSummaryDto>();
     return (
