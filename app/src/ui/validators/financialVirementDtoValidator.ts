@@ -2,12 +2,17 @@ import { Results } from "@ui/validation/results";
 import * as Validation from "./common";
 
 export class FinancialVirementDtoValidator extends Results<FinancialVirementDto> {
+
+  constructor(model: FinancialVirementDto, showValidationErrors: boolean, private readonly submit: boolean) {
+    super(model, showValidationErrors);
+  }
+
   public readonly partners = Validation.optionalChild(this, this.model.partners, x => new PartnerVirementsDtoValidator(x, this.showValidationErrors));
 
   public readonly newRemainingGrant = Validation.all(this,
     () => Validation.required(this, this.model.newRemainingGrant),
     () => Validation.isCurrency(this, this.model.newRemainingGrant),
-    () => Validation.isTrue(this, this.model.newRemainingGrant <= this.model.originalRemainingGrant, "The total grant cannot exceed the remaining grant")
+    () => Validation.isTrue(this, !this.submit || (this.model.newRemainingGrant <= this.model.originalRemainingGrant), "The total grant cannot exceed the remaining grant")
   );
 }
 

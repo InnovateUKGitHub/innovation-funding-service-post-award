@@ -8,7 +8,7 @@ import { CostCategoryFinancialVirement, PartnerFinancialVirement } from "@framew
 import { FinancialVirementDtoValidator } from "@ui/validators/financialVirementDtoValidator";
 
 export class UpdateFinancialVirementCommand extends CommandBase<boolean> {
-  constructor(private readonly projectId: string, private readonly pcrId: string, private readonly pcrItemId: string, private readonly data: FinancialVirementDto) {
+  constructor(private readonly projectId: string, private readonly pcrId: string, private readonly pcrItemId: string, private readonly data: FinancialVirementDto, private readonly submit: boolean) {
     super();
   }
 
@@ -20,7 +20,7 @@ export class UpdateFinancialVirementCommand extends CommandBase<boolean> {
 
     const existingVirements = await context.repositories.financialVirements.getAllForPcr(this.pcrItemId);
 
-    const validator = new FinancialVirementDtoValidator(this.data, true);
+    const validator = new FinancialVirementDtoValidator(this.data, true, this.submit);
     if (!validator.isValid) {
       throw new ValidationError(validator);
     }

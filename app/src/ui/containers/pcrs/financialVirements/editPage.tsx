@@ -5,12 +5,10 @@ import { Pending } from "@shared/pending";
 import * as ACC from "@ui/components";
 import { PartnerDto, ProjectDto } from "@framework/dtos";
 import { CostCategoryVirementDtoValidator, FinancialVirementDtoValidator } from "@ui/validators";
-import { PCRPrepareItemRoute } from "../pcrItemWorkflow";
 import { createDto } from "@framework/util/dtoHelpers";
-import { Results } from "@ui/validation";
-import { filterEmpty } from "@framework/util/arrayHelpers";
+import { roundCurrency } from "@framework/util";
 
-interface Params {
+export interface VirementCostsParams {
   projectId: string;
   partnerId: string;
   pcrId: string;
@@ -25,7 +23,7 @@ interface Props {
   onChange: (saving: boolean, dto: FinancialVirementDto) => void;
 }
 
-class Component extends ContainerBase<Params, Props, {}> {
+class Component extends ContainerBase<VirementCostsParams, Props, {}> {
   render() {
     const combined = Pending.combine({
       project: this.props.project,
@@ -64,7 +62,7 @@ class Component extends ContainerBase<Params, Props, {}> {
         backLink={this.getBackLink()}
         pageTitle={<ACC.Projects.Title project={project} />}
         error={editor.error}
-        validator={filterEmpty(validation)}
+        validator={editor.validator}
       >
         <ACC.Section title={partner.name}>
           <VirementForm.Form editor={editor} onChange={(dto) => this.props.onChange(false, dto)} onSubmit={() => this.props.onChange(true, editor.data)}>
@@ -101,7 +99,16 @@ class Component extends ContainerBase<Params, Props, {}> {
       <React.Fragment>
         <ACC.ValidationError overrideMessage={`Invalid cost for ${costCategory.name}`} error={validation && validation.newEligibleCosts} />
         {costCategory.isCalculated ? <ACC.Renderers.Currency value={virement.newEligibleCosts} /> : null}
-        {!costCategory.isCalculated ? <ACC.Inputs.NumberInput name={virement.costCategoryId} value={virement.newEligibleCosts} onChange={(val) => this.updateValue(partner, costCategory, val)} width={4} ariaLabel={virement.costCategoryName} disabled={disabled} /> : null}
+        {!costCategory.isCalculated ?
+          <ACC.Inputs.NumberInput
+            name={virement.costCategoryId}
+            value={virement.newEligibleCosts}
+            onChange={(val) => this.updateValue(partner, costCategory, val)}
+            width={4}
+            ariaLabel={virement.costCategoryName}
+            disabled={disabled}
+          />
+          : null}
       </React.Fragment>
     );
   }
@@ -120,7 +127,7 @@ class Component extends ContainerBase<Params, Props, {}> {
       const calculatedCostCategoryIds = this.props.costCategories.then(x => x.filter(y => y.isCalculated).map(y => y.id)).data || [];
       const related = partnerLevel.virements.find(v => calculatedCostCategoryIds.indexOf(v.costCategoryId) !== -1);
       if (related) {
-        related.newEligibleCosts = (partnerVirement.newEligibleCosts || 0) * (partner.overheadRate / 100);
+        related.newEligibleCosts = roundCurrency((partnerVirement.newEligibleCosts || 0) * (partner.overheadRate / 100));
       }
     }
 
@@ -142,7 +149,7 @@ class Component extends ContainerBase<Params, Props, {}> {
   }
 }
 
-const Container = (props: Params & BaseProps) => (
+const Container = (props: VirementCostsParams & BaseProps) => (
   <StoresConsumer>
     {
       stores => (
@@ -151,7 +158,8 @@ const Container = (props: Params & BaseProps) => (
           partner={stores.partners.getById(props.partnerId)}
           costCategories={stores.costCategories.getAllForPartner(props.partnerId)}
           editor={stores.financialVirements.getFiniancialVirementEditor(props.projectId, props.pcrId, props.itemId)}
-          onChange={(saving, dto) => stores.financialVirements.updateFiniancialVirementEditor(saving, props.projectId, props.pcrId, props.itemId, dto, () => stores.navigation.navigateTo(props.routes.pcrPrepareItem.getLink({ projectId: props.projectId, pcrId: props.pcrId, itemId: props.itemId }), true))}
+          onChange={(saving, dto) => stores.financialVirements.updateFiniancialVirementEditor(saving, props.projectId, props.pcrId, props.itemId, dto,false, () =>
+            stores.navigation.navigateTo(props.routes.pcrPrepareItem.getLink({ projectId: props.projectId, pcrId: props.pcrId, itemId: props.itemId }), true))}
           {...props}
         />
       )
