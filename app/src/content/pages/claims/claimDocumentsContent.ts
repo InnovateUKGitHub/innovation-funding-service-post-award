@@ -12,8 +12,6 @@ export class ClaimDocumentsContent extends ContentPageBase {
   public readonly saveAndReturnButton = () => this.getContent("button-save-and-return");
   public readonly saveAndContinueToSummaryButton = () => this.getContent("button-save-and-continue-to-summary");
   public readonly saveAndContinueToForecastButton = () => this.getContent("button-save-and-continue-to-forecast");
-  public readonly uploadButton = () => this.getContent("button-upload");
-  public readonly uploadInput = () => this.getContent("input-button");
   public readonly uploadSectionTitle = () => this.getContent("section-title-upload");
   public readonly documentsListSectionTitle = () => this.getContent("section-title-document-list");
 

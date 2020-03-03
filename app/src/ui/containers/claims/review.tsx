@@ -177,7 +177,7 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, Data, Callbacks> 
             <ACC.Content value={x => x.claimReview.uploadClaimValidationFormInstructions()} />
             <ACC.DocumentGuidanceWithContent documentMessages={x => x.claimDocuments.documentMessages} />
             <UploadForm.MulipleFileUpload
-              labelContent={x => x.claimDocuments.uploadInput()}
+              labelContent={x => x.claimReview.uploadInput()}
               name="attachment"
               labelHidden={true}
               value={x => x.files}
@@ -185,7 +185,7 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, Data, Callbacks> 
               validation={data.documentsEditor.validator.files}
             />
           </UploadForm.Fieldset>
-          <UploadForm.Submit styling="Secondary"><ACC.Content value={x => x.claimDocuments.uploadButton()} /></UploadForm.Submit>
+          <UploadForm.Submit styling="Secondary"><ACC.Content value={x => x.claimReview.uploadButton()} /></UploadForm.Submit>
         </UploadForm.Form>
         {this.renderDocumentList(data.documentsEditor, data.documents)}
       </ACC.AccordionItem>

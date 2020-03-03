@@ -87,9 +87,7 @@
       "back-link": "Back to costs to be claimed",
       "button-save-and-return": "Save and return to claims",
       "button-save-and-continue-to-summary": "Continue to summary",
-      "button-save-and-continue-to-forecast": "Continue to update forecast",
-      "button-upload": "Upload documents",
-      "input-upload": "Upload files"
+      "button-save-and-continue-to-forecast": "Continue to update forecast"
     },
     "claim-details": {
       "title": {
@@ -118,6 +116,8 @@
       "additional-info-hint": "If you query the claim, you must explain what the partner needs to amend. If you approve the claim, you may add a comment to Innovate UK in support of the claim.",
       "button-submit": "Submit",
       "button-send-query": "Send query",
+      "button-upload": "Upload documents",
+      "input-upload": "Upload files",
       "accordion-title-upload-claim-validation-form": "Claim validation form",
       "claims-messages": {
         "uploaded-claim-document": "Your document has been uploaded.",
