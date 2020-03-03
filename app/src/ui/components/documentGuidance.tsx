@@ -4,14 +4,13 @@ import { Content } from "@content/content";
 import { DocumentMessages } from "@content/messages/documentMessages";
 
 export const DocumentGuidance = (props: {}) => {
-  const classNames = "govuk-list govuk-list--bullet govuk-!-margin-bottom-10";
   return (
     <React.Fragment>
       <ACC.Renderers.SimpleString>You can upload up to 10 documents at a time. Each document must:</ACC.Renderers.SimpleString>
-      <ul className={classNames}>
+      <ACC.UnorderedList>
         <li>be less than 10MB in file size</li>
         <li>have a unique file name that describes its contents</li>
-      </ul>
+      </ACC.UnorderedList>
       <ACC.Renderers.SimpleString>There is no limit to the number of files you can upload in total.</ACC.Renderers.SimpleString>
       <ACC.Info summary="What file types can I upload?">
         <p>You can upload these file types:</p>

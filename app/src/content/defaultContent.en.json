@@ -89,10 +89,7 @@
       "button-save-and-continue-to-summary": "Continue to summary",
       "button-save-and-continue-to-forecast": "Continue to update forecast",
       "button-upload": "Upload documents",
-      "input-upload": "Upload files",
-      "accordion-title-upload-claim-validation-form": "Claim validation form",
-      "upload-instruction-claim-validation-form": "You can upload and store any documents relevant for this project. Any documents added to the project by Innovate UK will also be visible here."
-
+      "input-upload": "Upload files"
     },
     "claim-details": {
       "title": {
@@ -100,13 +97,34 @@
         "display": "Claim"
       },
       "back-link": "Back to claims",
-      "section-title-comments": "Comments"
+      "costs-and-grant-summary-title": "Summary"
     },
     "claim-prepare": {
       "title": "Costs to be claimed",
       "back-link": "Back to claims",
       "button-save-and-return": "Save and return to claims",
       "button-save-and-continue": "Continue to claims documents"
+    },
+    "claim-review": {
+      "title": {
+        "html": "Review claim",
+        "display": "Claim"
+      },
+      "back-link": "Back to claims",
+      "option-query-claim": "Query claim",
+      "option-submit-claim": "Submit for approval",
+      "section-title-how-to-proceed": "How do you want to proceed with this claim?",
+      "section-title-additional-info": "Additional information",
+      "additional-info-hint": "If you query the claim, you must explain what the partner needs to amend. If you approve the claim, you may add a comment to Innovate UK in support of the claim.",
+      "button-submit": "Submit",
+      "button-send-query": "Send query",
+      "accordion-title-upload-claim-validation-form": "Claim validation form",
+      "claims-messages": {
+        "uploaded-claim-document": "Your document has been uploaded.",
+        "uploaded-claim-documents": "{{filesLength}} documents have been uploaded.",
+        "upload-instruction-claim-validation-form": "You can upload and store any documents relevant for this project. Any documents added to the project by Innovate UK will also be visible here."
+
+      }
     },
     "financial-virement-details":{
       "title": "Reallocate costs"
@@ -124,7 +142,9 @@
     "no-remaining-claims": "There are no claims. Innovate UK has approved the final claims.",
     "final-claim": "This is the final claim.",
     "iar-required": "You must attach an independent accountant's report (IAR) to this claim.",
-    "final-claim-guidance": "We need to ask you a few questions about the project before we can make your last payment.\n\nYou also need to upload an independent accountant's report (IAR).\n\n1.  Complete our survey.\n2.  Download a copy from the survey website.\n3.  Upload it here."
+    "final-claim-guidance": "We need to ask you a few questions about the project before we can make your last payment.\n\nYou also need to upload an independent accountant's report (IAR).\n\n1.  Complete our survey.\n2.  Download a copy from the survey website.\n3.  Upload it here.",
+    "claim-queried": "You have queried this claim.",
+    "claim-approved": "You have approved this claim."
   },
   "claims-labels": {
     "open-section-title": "Open",
@@ -137,7 +157,12 @@
     "actual-costs": "Actual costs for period",
     "difference": "Difference",
     "status": "Status",
-    "last-updated-date": "Date of last update"
+    "last-updated-date": "Date of last update",
+    "section-title-comments": "Comments",
+    "costs-claimed": "Costs claimed",
+    "costs-approved": "Costs approved",
+    "costs-deferred": "Costs deferred",
+    "total-grant-paid": "Total grant paid"
   },
   "project-messages": {
     "noClaimDueMessage": "No claim due",

@@ -135,6 +135,7 @@ interface ExternalFieldProps<TDto, TValue> {
   labelBold?: boolean;
   labelHidden?: boolean;
   hint?: React.ReactNode;
+  hintContent?: ContentSelector;
   name: string;
   value: (data: TDto, disabled: boolean) => TValue | null | undefined;
   update: (data: TDto, value: TValue | null) => void;
@@ -147,13 +148,14 @@ const createFieldHintId = <TDto, TValue>(props: ExternalFieldProps<TDto, TValue>
 
 class FieldComponent<T, TValue> extends React.Component<InternalFieldProps<T> & ExternalFieldProps<T, TValue>, {}> {
   render() {
-    const { hint, name, label, labelContent, labelHidden, labelBold, field, formData, validation } = this.props;
+    const { hint, hintContent, name, label, labelContent, labelHidden, labelBold, field, formData, validation } = this.props;
     const hasError = validation && validation.showValidationErrors && !validation.isValid;
 
+    const hintValue = hintContent ? <Content value={hintContent}/> : hint;
     return (
       <div data-qa={`field-${name}`} className={classNames("govuk-form-group", { "govuk-form-group--error": hasError })}>
         {!!label || !!labelContent ? <label className={classNames("govuk-label", { "govuk-visually-hidden": labelHidden, "govuk-label--m": labelBold })} htmlFor={name}>{labelContent ? <Content value={labelContent} /> : label}</label> : null}
-        {hint ? <span id={createFieldHintId(this.props)} className="govuk-hint">{hint}</span> : null}
+        {hintValue ? <span id={createFieldHintId(this.props)} className="govuk-hint">{hintValue}</span> : null}
         <ValidationError error={validation} />
         {field(formData, this.props.disabled, hasError)}
       </div>
