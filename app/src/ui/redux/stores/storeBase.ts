@@ -29,7 +29,7 @@ const conditionalLoad = <T extends DataStateKeys, K extends string, TDto extends
   };
 };
 
-const conditionalSave = <T extends EditorStateKeys, K extends string, TDto extends InferEditorStoreDto<EditorState[T][K]>, TVal extends InferEditorStoreValidator<EditorState[T][K]>, TResult>(saving: boolean, store: T, key: K, dto: TDto, getValidator: (show: boolean) => Pending<TVal> | TVal, saveCall: (params: { user: IClientUser }) => Promise<TResult>, onComplete: (result: TResult) => void) => {
+const conditionalSave = <T extends EditorStateKeys, K extends string, TDto extends InferEditorStoreDto<EditorState[T][K]>, TVal extends InferEditorStoreValidator<EditorState[T][K]>, TResult>(saving: boolean, store: T, key: K, dto: TDto, getValidator: (show: boolean) => Pending<TVal> | TVal, saveCall: (params: { user: IClientUser }) => Promise<TResult>, onComplete?: (result: TResult) => void, onError?: (e: any) => void) => {
   // dispatch a thunk to get latest store...
   return (dispatch: (action: UpdateEditorAction | EditorSubmitAction | EditorSuccessAction | EditorErrorAction) => void, getState: () => RootState) => {
     const current = getState().editors[store][key];
@@ -53,10 +53,15 @@ const conditionalSave = <T extends EditorStateKeys, K extends string, TDto exten
       saveCall({ user: getState().user })
         .then((x) => {
           dispatch(handleEditorSuccess(key, store));
-          onComplete(x);
+          if (onComplete) {
+            onComplete(x);
+          }
         })
         .catch(e => {
           dispatch(handleEditorError({ id: key, store, dto, validation: validator, error: e }));
+          if (onError) {
+            onError(e);
+          }
         });
     }
   };
@@ -147,8 +152,8 @@ export class StoreBase {
     }));
   }
 
-  protected updateEditor<T extends EditorStateKeys, K extends string, TDto extends InferEditorStoreDto<EditorState[T][K]>, TVal extends InferEditorStoreValidator<EditorState[T][K]>, TResult>(submit: boolean, store: T, key: K, dto: TDto, getValidator: (showErrors: boolean) => Pending<TVal> | TVal, saveCall: (p: { user: IClientUser }) => Promise<TResult>, onComplete: (result: TResult) => void) {
-    this.queue(conditionalSave(submit, store, key, dto, getValidator, saveCall, onComplete));
+  protected updateEditor<T extends EditorStateKeys, K extends string, TDto extends InferEditorStoreDto<EditorState[T][K]>, TVal extends InferEditorStoreValidator<EditorState[T][K]>, TResult>(submit: boolean, store: T, key: K, dto: TDto, getValidator: (showErrors: boolean) => Pending<TVal> | TVal, saveCall: (p: { user: IClientUser }) => Promise<TResult>, onComplete?: (result: TResult) => void, onError?: (e: any) => void) {
+    this.queue(conditionalSave(submit, store, key, dto, getValidator, saveCall, onComplete, onError));
   }
 
   protected deleteEditor<T extends EditorStateKeys, K extends string, TDto extends InferEditorStoreDto<EditorState[T][K]>, TVal extends InferEditorStoreValidator<EditorState[T][K]>, TResult>(store: T, key: K, dto: TDto, getValidator: () => Pending<TVal> | TVal, deleteCall: (p: { user: IClientUser }) => Promise<TResult>, onComplete: (result: TResult) => void, destination?: ILinkInfo) {

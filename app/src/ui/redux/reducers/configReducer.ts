@@ -7,6 +7,7 @@ export interface IClientConfig {
   ssoEnabled: boolean;
   maxFileSize: number;
   maxUploadFileCount: number;
+  permittedFileTypes: string[];
 }
 
 export const configReducer = (state: IClientConfig  = {} as IClientConfig , action: RootActions) => {
