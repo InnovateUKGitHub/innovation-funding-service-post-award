@@ -16,8 +16,6 @@ export class ClaimDocumentsContent extends ContentPageBase {
   public readonly uploadInput = () => this.getContent("input-button");
   public readonly uploadSectionTitle = () => this.getContent("section-title-upload");
   public readonly documentsListSectionTitle = () => this.getContent("section-title-document-list");
-  public readonly uploadClaimValidationFormInstructions = () => this.getContent("upload-instruction-claim-validation-form", { markdown: true });
-  public readonly uploadClaimValidationFormAccordionTitle = () => this.getContent("accordion-title-upload-claim-validation-form");
 
   public readonly messages = new ClaimMessages(this);
   public readonly documentMessages = new DocumentMessages(this);

@@ -19,9 +19,25 @@ export class NumberInput extends BaseInput<NumberInputProps, NumberInputState> {
     this.state = this.getStateFromProps(props);
   }
 
+  private hasChanged(nextProps: NumberInputProps) {
+    // if value is NaN in incoming props and we have a string that is a number in the state value it is a change
+    if (isNaN(nextProps.value!)) {
+      return isFinite(this.state.value as any);
+    }
+
+    // if value is null or undefined in incoming props and the value in the state is not empty string it is a change
+    if (nextProps.value === null || nextProps.value === undefined) {
+      return this.state.value !== "";
+    }
+
+    // if value in incoming props is not equal to the string converted to number it is a change
+    return parseFloat(this.state.value) !== nextProps.value;
+  }
+
   public componentWillReceiveProps(nextProps: NumberInputProps) {
     // if both new and current is nan then don't change
-    if (nextProps.value !== this.props.value && !(isNaN(nextProps.value!) && !isFinite(this.state.value as any))) {
+    // also if current string in state once passed is equivalent don't change
+    if (this.hasChanged(nextProps)) {
       this.setState(this.getStateFromProps(nextProps));
       this.cancelTimeout();
     }
@@ -87,6 +103,7 @@ export class NumberInput extends BaseInput<NumberInputProps, NumberInputState> {
   private changeNow(value: string) {
     this.cancelTimeout();
 
+    // empty string maps to null then use isFinite to handle parse float converting "1. 2" to "1" etc
     const newValue = value === "" ? null : (isFinite(value as any) ? parseFloat(value) : NaN);
 
     if (this.props.onChange) {

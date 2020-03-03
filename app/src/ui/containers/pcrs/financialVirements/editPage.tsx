@@ -4,9 +4,11 @@ import { EditorStatus, IEditorStore, StoresConsumer } from "@ui/redux";
 import { Pending } from "@shared/pending";
 import * as ACC from "@ui/components";
 import { PartnerDto, ProjectDto } from "@framework/dtos";
-import { FinancialVirementDtoValidator } from "@ui/validators";
+import { CostCategoryVirementDtoValidator, FinancialVirementDtoValidator } from "@ui/validators";
 import { PCRPrepareItemRoute } from "../pcrItemWorkflow";
 import { createDto } from "@framework/util/dtoHelpers";
+import { Results } from "@ui/validation";
+import { filterEmpty } from "@framework/util/arrayHelpers";
 
 interface Params {
   projectId: string;
@@ -37,6 +39,7 @@ class Component extends ContainerBase<Params, Props, {}> {
 
   private renderPage(project: ProjectDto, partner: PartnerDto, costCategories: CostCategoryDto[], editor: IEditorStore<FinancialVirementDto, FinancialVirementDtoValidator>) {
     const partnerVirements = editor.data.partners.find(x => x.partnerId === this.props.partnerId)!;
+    const partnerValidation = editor.validator.partners.results.find(x => x.model.partnerId === this.props.partnerId);
 
     const costCategoriesWithVirement = costCategories
       .map(x => ({
@@ -48,6 +51,10 @@ class Component extends ContainerBase<Params, Props, {}> {
       }))
       ;
 
+    const validation = costCategories
+      .map(x => (partnerValidation && partnerValidation.virements.results.find(y => y.model.costCategoryId === x.id)) || null)
+      ;
+
     const VirementForm = ACC.TypedForm<FinancialVirementDto>();
     const VirementTable = ACC.TypedTable<typeof costCategoriesWithVirement[0]>();
     const SummaryTable = ACC.TypedTable<PartnerVirementsDto>();
@@ -57,16 +64,16 @@ class Component extends ContainerBase<Params, Props, {}> {
         backLink={this.getBackLink()}
         pageTitle={<ACC.Projects.Title project={project} />}
         error={editor.error}
-        validator={editor.validator}
+        validator={filterEmpty(validation)}
       >
         <ACC.Section title={partner.name}>
           <VirementForm.Form editor={editor} onChange={(dto) => this.props.onChange(false, dto)} onSubmit={() => this.props.onChange(true, editor.data)}>
             <VirementForm.Fieldset>
-              <VirementTable.Table qa="partnerVirements" data={costCategoriesWithVirement}>
-                <VirementTable.String qa="costCategory" headerContent={x => x.financialVirementEdit.labels.costCategoryName()} value={x => x.costCategory.name} footer={<ACC.Content value={x => x.financialVirementEdit.labels.totals()}/>} />
+              <VirementTable.Table qa="partnerVirements" data={costCategoriesWithVirement} validationResult={validation}>
+                <VirementTable.String qa="costCategory" headerContent={x => x.financialVirementEdit.labels.costCategoryName()} value={x => x.costCategory.name} footer={<ACC.Content value={x => x.financialVirementEdit.labels.totals()} />} />
                 <VirementTable.Currency qa="originalEligibleCosts" headerContent={x => x.financialVirementEdit.labels.costCategoryOriginalEligibleCosts()} value={x => x.virement.originalEligibleCosts} footer={<ACC.Renderers.Currency value={partnerVirements.originalEligibleCosts} />} />
                 <VirementTable.Currency qa="originalCostsClaimed" headerContent={x => x.financialVirementEdit.labels.costCategoryCostsClaimed()} value={x => x.virement.costsClaimedToDate} footer={<ACC.Renderers.Currency value={partnerVirements.costsClaimedToDate} />} />
-                <VirementTable.Custom qa="newEligibleCosts" headerContent={x => x.financialVirementEdit.labels.costCategoryNewEligibleCosts()} value={x => this.renderInput(partner, x.costCategory, x.virement, editor.status === EditorStatus.Saving)} footer={<ACC.Renderers.Currency value={partnerVirements.newEligibleCosts} />} classSuffix={"numeric"} />
+                <VirementTable.Custom qa="newEligibleCosts" headerContent={x => x.financialVirementEdit.labels.costCategoryNewEligibleCosts()} value={(x, i) => this.renderInput(partner, x.costCategory, x.virement, editor.status === EditorStatus.Saving, validation[i.row])} footer={<ACC.Renderers.Currency value={partnerVirements.newEligibleCosts} />} classSuffix={"numeric"} />
                 <VirementTable.Currency qa="difference" headerContent={x => x.financialVirementEdit.labels.costCategoryDifferenceCosts()} value={x => x.virement.newEligibleCosts - x.virement.originalEligibleCosts} />
               </VirementTable.Table>
             </VirementForm.Fieldset>
@@ -89,11 +96,14 @@ class Component extends ContainerBase<Params, Props, {}> {
     );
   }
 
-  private renderInput(partner: PartnerDto, costCategory: CostCategoryDto, virement: CostCategoryVirementDto, disabled: boolean) {
-    if (costCategory.isCalculated) {
-      return <ACC.Renderers.Currency value={virement.newEligibleCosts} />;
-    }
-    return <ACC.Inputs.NumberInput name={virement.costCategoryId} value={virement.newEligibleCosts} onChange={(val) => this.updateValue(partner, costCategory, val)} width={4} ariaLabel={virement.costCategoryName} disabled={disabled} />;
+  private renderInput(partner: PartnerDto, costCategory: CostCategoryDto, virement: CostCategoryVirementDto, disabled: boolean, validation: CostCategoryVirementDtoValidator | null) {
+    return (
+      <React.Fragment>
+        <ACC.ValidationError overrideMessage={`Invalid cost for ${costCategory.name}`} error={validation && validation.newEligibleCosts} />
+        {costCategory.isCalculated ? <ACC.Renderers.Currency value={virement.newEligibleCosts} /> : null}
+        {!costCategory.isCalculated ? <ACC.Inputs.NumberInput name={virement.costCategoryId} value={virement.newEligibleCosts} onChange={(val) => this.updateValue(partner, costCategory, val)} width={4} ariaLabel={virement.costCategoryName} disabled={disabled} /> : null}
+      </React.Fragment>
+    );
   }
 
   private updateValue(partner: PartnerDto, costCategory: CostCategoryDto, value: number | null) {
@@ -110,7 +120,7 @@ class Component extends ContainerBase<Params, Props, {}> {
       const calculatedCostCategoryIds = this.props.costCategories.then(x => x.filter(y => y.isCalculated).map(y => y.id)).data || [];
       const related = partnerLevel.virements.find(v => calculatedCostCategoryIds.indexOf(v.costCategoryId) !== -1);
       if (related) {
-        related.newEligibleCosts = partnerVirement.newEligibleCosts * (partner.overheadRate / 100);
+        related.newEligibleCosts = (partnerVirement.newEligibleCosts || 0) * (partner.overheadRate / 100);
       }
     }
 
@@ -141,7 +151,7 @@ const Container = (props: Params & BaseProps) => (
           partner={stores.partners.getById(props.partnerId)}
           costCategories={stores.costCategories.getAllForPartner(props.partnerId)}
           editor={stores.financialVirements.getFiniancialVirementEditor(props.projectId, props.pcrId, props.itemId)}
-          onChange={(saving, dto) => stores.financialVirements.updateFiniancialVirementEditor(saving, props.projectId, props.pcrId, props.itemId, dto, () => stores.navigation.navigateTo(PCRPrepareItemRoute.getLink({ projectId: props.projectId, pcrId: props.pcrId, itemId: props.itemId }), true))}
+          onChange={(saving, dto) => stores.financialVirements.updateFiniancialVirementEditor(saving, props.projectId, props.pcrId, props.itemId, dto, () => stores.navigation.navigateTo(props.routes.pcrPrepareItem.getLink({ projectId: props.projectId, pcrId: props.pcrId, itemId: props.itemId }), true))}
           {...props}
         />
       )

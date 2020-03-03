@@ -26,12 +26,6 @@ Your project summary should provide a clear overview of the whole project, inclu
 const nameChangeGuidance = `This will change the partner's name in all projects they are claiming funding for. You must upload a change of name certificate from Companies House as evidence of the change.
 `;
 
-const partnerWithdrawalGuidance = `You must upload these documents:
-
-*  a confirmation letter on headed paper from the partner who is leaving, signed by someone with financial authority
-*  a brief list of the outstanding deliverables, and who each will be assigned to once the partner leaves
-`;
-
 const partnerAdditionGuidance = `If the new partner is a business you need to send them an industrial partner finance form to apply to take part. Tell them to complete it and email it to your monitoring officer. Innovate UK will decide whether to approve their application.
 
 If the new partner is an academic, you need to tell them to complete a Je-S form and email it to your monitoring officer.
@@ -67,7 +61,7 @@ You should not increase the overhead percentage rate.
 export const PCRRecordTypeMetaValues: IMetaValue[] = [
   { type: PCRItemType.SinglePartnerFinancialVirement, typeName: "Reallocate one partner's project costs", files: ["reallocate-project-costs.xlsx"], displayName: "Reallocate project costs", guidance: singlePartnerFinancialVirementGuidance },
   { type: PCRItemType.MultiplePartnerFinancialVirement, typeName: "Reallocate several partners' project cost", files: ["reallocate-project-costs.xlsx"], displayName: "Reallocate project costs", guidance: multiplePartnerFinancialVirementGuidance },
-  { type: PCRItemType.PartnerWithdrawal, typeName: "Remove a partner", guidance: partnerWithdrawalGuidance },
+  { type: PCRItemType.PartnerWithdrawal, typeName: "Remove a partner" },
   { type: PCRItemType.PartnerAddition, typeName: "Add a partner", files: ["partner_addition.xlsx"], guidance: partnerAdditionGuidance },
   { type: PCRItemType.ScopeChange, typeName: "Change project scope", guidance: scopeChangeGuidance },
   { type: PCRItemType.TimeExtension, typeName: "Change project duration" },

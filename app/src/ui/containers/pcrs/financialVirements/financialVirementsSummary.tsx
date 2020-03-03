@@ -29,7 +29,15 @@ class Component extends React.Component<Props> {
     }));
 
     if (this.props.mode === "prepare") {
-      return this.renderPrepareTable(paired, virement);
+      return (
+        <React.Fragment>
+          {this.renderPrepareTable(paired, virement)}
+          <ACC.Section>
+            <ACC.Renderers.SimpleString>If the new remaining project grant is higher as a result of the reallocation of costs, you can change the funding level of partners to lower the new project grant.</ACC.Renderers.SimpleString>
+            <ACC.Link route={this.props.routes.pcrFinancialVirementEditPartnerLevel.getLink({ itemId: this.props.pcrItem.id, pcrId: this.props.pcr.id, projectId: this.props.projectId })}>Change remaining grant</ACC.Link>
+          </ACC.Section>
+        </React.Fragment>
+      );
     }
 
     return this.renderReviewTable(paired, virement);
@@ -39,7 +47,7 @@ class Component extends React.Component<Props> {
     const Table = ACC.TypedTable<typeof data[0]>();
     return (
       <Table.Table qa="partners" data={data}>
-        <Table.Custom qa="partner" headerContent={x => x.financialVirementSummary.labels.partnerName()} value={x => this.getPartnerLink(x.partnerVirement, x.partner)}  footer={<ACC.Content value={x => x.financialVirementDetails.labels.totals()}/>} isDivider="normal" />
+        <Table.Custom qa="partner" headerContent={x => x.financialVirementSummary.labels.partnerName()} value={x => this.getPartnerLink(x.partnerVirement, x.partner)} footer={<ACC.Content value={x => x.financialVirementDetails.labels.totals()} />} isDivider="normal" />
         <Table.Currency qa="originalEligibleCosts" headerContent={x => x.financialVirementSummary.labels.partnerOriginalEligibleCosts()} value={x => x.partnerVirement.originalEligibleCosts} footer={<ACC.Renderers.Currency value={dto.originalEligibleCosts} />} />
         <Table.Currency qa="originalRemaining" headerContent={x => x.financialVirementSummary.labels.partnerOriginalRemainingCosts()} value={x => x.partnerVirement.originalRemainingCosts} footer={<ACC.Renderers.Currency value={dto.originalRemainingCosts} />} />
         <Table.Currency qa="originalRemainingGrant" headerContent={x => x.financialVirementSummary.labels.partnerOriginalRemainingGrant()} value={x => x.partnerVirement.originalRemainingGrant} footer={<ACC.Renderers.Currency value={dto.originalRemainingGrant} />} isDivider="normal" />
@@ -54,7 +62,7 @@ class Component extends React.Component<Props> {
     const Table = ACC.TypedTable<typeof data[0]>();
     return (
       <Table.Table qa="partners" data={data}>
-        <Table.Custom qa="partner" headerContent={x => x.financialVirementSummary.labels.partnerName()} value={x => this.getPartnerLink(x.partnerVirement, x.partner)}  footer={<ACC.Content value={x => x.financialVirementDetails.labels.totals()}/>} isDivider="normal" />
+        <Table.Custom qa="partner" headerContent={x => x.financialVirementSummary.labels.partnerName()} value={x => this.getPartnerLink(x.partnerVirement, x.partner)} footer={<ACC.Content value={x => x.financialVirementDetails.labels.totals()} />} isDivider="normal" />
         <Table.Currency qa="originalEligibleCosts" headerContent={x => x.financialVirementSummary.labels.partnerOriginalEligibleCosts()} value={x => x.partnerVirement.originalEligibleCosts} footer={<ACC.Renderers.Currency value={dto.originalEligibleCosts} />} />
         <Table.Currency qa="newEligibleCosts" headerContent={x => x.financialVirementSummary.labels.partnerNewEligibleCosts()} value={x => x.partnerVirement.newEligibleCosts} footer={<ACC.Renderers.Currency value={dto.newEligibleCosts} />} />
         <Table.Currency qa="differenceEligibleCosts" headerContent={x => x.financialVirementSummary.labels.partnerDifferenceCosts()} value={x => x.partnerVirement.newEligibleCosts - x.partnerVirement.originalEligibleCosts} footer={<ACC.Renderers.Currency value={dto.newEligibleCosts - dto.originalEligibleCosts} />} isDivider="normal" />
@@ -76,7 +84,7 @@ class Component extends React.Component<Props> {
     };
 
     const route = this.props.mode === "prepare" ?
-      this.props.routes.pcrFinancialVirementEdit.getLink({ ...params }) :
+      this.props.routes.pcrFinancialVirementEditCostCategoryLevel.getLink({ ...params }) :
       this.props.routes.pcrFinancialVirementDetails.getLink({ ...params, mode: this.props.mode })
       ;
 

@@ -7,7 +7,7 @@ import { ClaimStatus, IClientUser } from "@framework/types";
 import { ITestRepositories } from "./testRepositories";
 import { PCRRecordTypeMetaValues } from "@server/features/pcrs/getItemTypesQuery";
 import { PCRItemStatus, PCRStatus } from "@framework/constants";
-import { ProjectChangeRequestStatusChangeEntity } from "@framework/entities";
+import { PartnerFinancialVirement, ProjectChangeRequestStatusChangeEntity } from "@framework/entities";
 
 export class TestData {
   constructor(private repositories: ITestRepositories, private getCurrentUser: () => IClientUser) {
@@ -349,6 +349,8 @@ export class TestData {
       LastModifiedDate: "2018-03-04T12:00:00.000+00",
       Acc_IARRequired__c: false,
       Acc_FinalClaim__c: false,
+      Acc_PeriodCoststobePaid__c: 100,
+      Acc_TotalDeferredAmount__c: 100,
     };
 
     if (update) {
@@ -621,10 +623,12 @@ export class TestData {
     return newItem;
   }
 
-  public createPCRItem(pcr: Entites.ProjectChangeRequestEntity, recordType?: Entites.RecordType, update?: Partial<Entites.ProjectChangeRequestItemEntity>) {
+  public createPCRItem(pcr?: Entites.ProjectChangeRequestEntity, recordType?: Entites.RecordType, update?: Partial<Entites.ProjectChangeRequestItemEntity>) {
     const seed = this.repositories.projectChangeRequests.Items.reduce((c, x) => c + x.items.length, 0) + 1;
     pcr = pcr || this.createPCR();
-    recordType = recordType || this.createPCRRecordTypes().find(x => pcr.items.every(y => x.id !== y.recordTypeId));
+
+    // find a record type that hasnt yet been used
+    recordType = recordType || this.createPCRRecordTypes().find(x => pcr!.items.every(y => x.id !== y.recordTypeId));
 
     if(!recordType) {
       throw new Error("Unable to create pcr item as pcr already has all the record types");
@@ -678,6 +682,23 @@ export class TestData {
 
     return response;
   }
+
+  public createFinancialVirement(pcrItem: Entites.ProjectChangeRequestItemEntity, partner: Repositories.ISalesforcePartner, update?: Partial<PartnerFinancialVirement>): PartnerFinancialVirement {
+    const seed = this.repositories.financialVirements.Items.length + 1;
+    const response = {
+      id: `FinancialVirement: ${seed}`,
+      pcrItemId: pcrItem.id,
+      partnerId: partner.Id,
+      originalFundingLevel: 100,
+      newFundingLevel: 100,
+      virements:[],
+      ...update
+    };
+
+    this.repositories.financialVirements.Items.push(response);
+
+    return response;
+}
 
 }
 

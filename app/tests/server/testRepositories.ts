@@ -559,7 +559,21 @@ class FinancialVirementsTestRepository extends TestRepository<Entities.PartnerFi
   }
 
   updateVirements(items: Updatable<Repositories.ISalesforceFinancialVirement>[]): Promise<boolean> {
+    items.forEach(x => this.updateVirement(x));
     return Promise.resolve(true);
+  }
+
+  private updateVirement(item: Updatable<Repositories.ISalesforceFinancialVirement>) {
+    this.Items.forEach(partnerVirement => {
+      if(partnerVirement.id === item.Id) {
+        // nothing to update yet
+      }
+      partnerVirement.virements.forEach(costCategoryVirement => {
+        if(costCategoryVirement.id === item.Id) {
+          costCategoryVirement.newEligibleCosts = item.Acc_NewCosts__c || costCategoryVirement.newEligibleCosts;
+        }
+      });
+    });
   }
 }
 
@@ -570,6 +584,7 @@ export interface ITestRepositories extends IRepositories {
   claimStatusChanges: ClaimStatusChangeTestRepository;
   costCategories: CostCategoriesTestRepository;
   documents: DocumentsTestRepository;
+  financialVirements: FinancialVirementsTestRepository;
   monitoringReportHeader: MonitoringReportHeaderTestRepository;
   monitoringReportResponse: MonitoringReportResponseTestRepository;
   monitoringReportQuestions: MonitoringReportQuestionsRepository;
