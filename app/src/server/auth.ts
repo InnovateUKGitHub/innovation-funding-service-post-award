@@ -69,13 +69,14 @@ router.get("/logout", noCache, (req, res) => {
 });
 
 router.post("/auth/success", (req, res, next) => passport.authenticate("shibboleth", (err, user) => {
-  if(err) {
+  if (err) {
     new Logger().error("Authentication Error", err);
     return res.sendStatus(500);
   }
   // copy user info from shibboleth that has been serilised to the user object and store it in the session object
   req.session = req.session || {};
   req.session.user = { email: user[urnEmail] };
+  req.session.last_reset = getCookieTimestamp();
 
   // redirect to orignal locaion if it starts with a / otherwise use server root
   const redirect = req.session && req.session.redirect;
@@ -89,6 +90,7 @@ router.use((req, res, next) => {
     res.redirect("/projects/dashboard");
   }
   else if (req.session && req.session.user && req.session.user.email) {
+    req.session.last_reset = getCookieTimestamp();
     next();
   }
   // if user not logged in but we arent using sso then set default user
@@ -110,3 +112,8 @@ router.use((req, res, next) => {
     res.sendStatus(401);
   }
 });
+
+const getCookieTimestamp = () => {
+  // reset cookie once every minute to make rolling session
+  return Date.now() - (Date.now() % 60000);
+};
