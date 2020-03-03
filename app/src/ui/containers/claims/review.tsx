@@ -4,10 +4,9 @@ import { IEditorStore, StoresConsumer } from "@ui/redux";
 import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerBase";
 import { ClaimDtoValidator } from "@ui/validators/claimDtoValidator";
 import { Pending } from "@shared/pending";
-import { ClaimDto, ClaimStatus, ClaimStatusChangeDto, PartnerDto, ProjectDto, ProjectRole } from "@framework/types";
+import { ClaimDto, ClaimStatus, ClaimStatusChangeDto, DocumentDescription, PartnerDto, ProjectDto, ProjectRole } from "@framework/types";
 import { MultipleDocumentUpdloadDtoValidator } from "@ui/validators";
-import { getFileSize } from "@framework/util";
-import { mapToDocumentSummaryDto } from "@server/features/documents/mapToDocumentSummaryDto";
+import { DocumentListWithDelete } from "@ui/components";
 
 export interface ReviewClaimParams {
   projectId: string;
@@ -34,6 +33,7 @@ interface Data {
 interface Callbacks {
   onUpdate: (saving: boolean, dto: ClaimDto) => void;
   onUpload: (saving: boolean, dto: MultipleDocumentUploadDto) => void;
+  onDelete: (dto: MultipleDocumentUploadDto, document: DocumentSummaryDto) => void;
 }
 
 interface CombinedData {
@@ -73,7 +73,7 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, Data, Callbacks> 
       <ACC.Page
         backLink={<ACC.BackLink route={this.props.routes.allClaimsDashboard.getLink({ projectId: data.project.id })}>Back to claims</ACC.BackLink>}
         error={data.editor.error}
-        validator={data.editor.validator}
+        validator={[data.editor.validator, data.documentsEditor.validator]}
         pageTitle={<ACC.Projects.Title project={data.project} />}
       >
         {data.claim.isFinalClaim && <ACC.ValidationMessage messageType="info" message="This is the final claim."/>}
@@ -82,9 +82,9 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, Data, Callbacks> 
           <ACC.Accordion>
             {this.renderForecastItem()}
             {this.renderLogsItem()}
+            {this.renderUploadClaimValidationForm(data)}
           </ACC.Accordion>
         </ACC.Section>
-        {this.renderUploadClaimValidationFormSection(data)}
         {this.renderForm(data)}
       </ACC.Page>
     );
@@ -159,60 +159,46 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, Data, Callbacks> 
       </Form.Form>
     );
   }
-  renderUploadClaimValidationFormSection(data: CombinedData): React.ReactNode {
-    const UploadForm = ACC.TypedForm<MultipleDocumentUploadDto>()
+
+  renderUploadClaimValidationForm(data: CombinedData): React.ReactNode {
+    const UploadForm = ACC.TypedForm<MultipleDocumentUploadDto>();
 
     return (
-      <ACC.Accordion>
-        <ACC.AccordionItem title="Upload claims validation form" qa="upload-claims-validation-form-accordion">
+      <ACC.AccordionItem title={<ACC.Content value={x => x.claimDocuments.uploadClaimValidationFormAccordionTitle()} />} qa="upload-claims-validation-form-accordion">
         <ACC.Renderers.Messages messages={this.props.messages} />
         <UploadForm.Form
             enctype="multipart"
             editor={data.documentsEditor}
-            onChange={dto => this.props.onUpload(false, {...dto, description: "Claim Validation Form" })}
-            onSubmit={() => this.props.onUpload(true, {...data.documentsEditor.data, description: "Claim Validation Form"})}
+            onChange={dto => this.props.onUpload(false, {...dto, description: DocumentDescription.ClaimValidationForm})}
+            onSubmit={() => this.props.onUpload(true, {...data.documentsEditor.data, description: DocumentDescription.ClaimValidationForm})}
             qa="projectDocumentUpload"
-          >
-            <UploadForm.Fieldset>
-              <ACC.Content value={x => x.projectDocuments.uploadInstruction()} />
-              <ACC.DocumentGuidanceWithContent documentMessages={x => x.projectDocuments.documentMessages} />
-              <UploadForm.MulipleFileUpload
-                labelContent={x => x.projectDocuments.documentLabels.uploadInputLabel()}
-                name="attachment"
-                labelHidden={true}
-                value={data => data.files}
-                update={(dto, files) => dto.files = files || []}
-                validation={data.documentsEditor.validator.files}
-              />
-            </UploadForm.Fieldset>
-            <UploadForm.Submit styling="Secondary"><ACC.Content value={x => x.projectDocuments.documentLabels.uploadButtonLabel()} /></UploadForm.Submit>
-          </UploadForm.Form>
-          {this.renderDocuments(data.documents)}
-        </ACC.AccordionItem>
-      </ACC.Accordion>
-    );
-  }
-  renderDocuments(documents: DocumentSummaryDto[]): React.ReactNode {
-
-
-    console.log(documents);
-
-    const ProjectDocumentsTable = ACC.TypedTable<DocumentSummaryDto>();
-    return (
-      <ProjectDocumentsTable.Table data={documents} qa="project-documents">
-        <ProjectDocumentsTable.Custom headerContent={x => x.projectDocuments.documentLabels.fileNameLabel()} qa="fileName" value={x => this.renderDocumentName(x)} />
-        <ProjectDocumentsTable.ShortDate headerContent={x => x.projectDocuments.documentLabels.dateUploadedLabel()} qa="dateUploaded" value={x => x.dateCreated} />
-        <ProjectDocumentsTable.Custom headerContent={x => x.projectDocuments.documentLabels.fileSizeLabel()} qa="fileSize" classSuffix="numeric" value={x => getFileSize(x.fileSize)} />
-        <ProjectDocumentsTable.String headerContent={x => x.projectDocuments.documentLabels.uploadedByLabel()} qa="uploadedBy" value={x => x.uploadedBy} />
-      </ProjectDocumentsTable.Table>
+        >
+          <UploadForm.Fieldset>
+            <ACC.Content value={x => x.claimDocuments.uploadClaimValidationFormInstructions()} />
+            <ACC.DocumentGuidanceWithContent documentMessages={x => x.claimDocuments.documentMessages} />
+            <UploadForm.MulipleFileUpload
+              labelContent={x => x.claimDocuments.uploadInput()}
+              name="attachment"
+              labelHidden={true}
+              value={x => x.files}
+              update={(dto, files) => dto.files = files || []}
+              validation={data.documentsEditor.validator.files}
+            />
+          </UploadForm.Fieldset>
+          <UploadForm.Submit styling="Secondary"><ACC.Content value={x => x.claimDocuments.uploadButton()} /></UploadForm.Submit>
+        </UploadForm.Form>
+        {this.renderDocumentList(data.documentsEditor, data.documents)}
+      </ACC.AccordionItem>
     );
   }
 
-  private renderDocumentName(document: DocumentSummaryDto) {
-    return <a target={"_blank"} href={document.link} className="govuk-link">{document.fileName}</a>;
+   private renderDocumentList(editor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>, documents: DocumentSummaryDto[]) {
+    const renderDocuments = documents.filter(x => x.description === DocumentDescription.ClaimValidationForm);
+
+    return renderDocuments.length > 0
+      ? <DocumentListWithDelete documents={renderDocuments} onRemove={(document) => this.props.onDelete(editor.data, document)} qa="supporting-documents"/>
+      : <ACC.ValidationMessage message="No documents uploaded." messageType="info" />;
   }
-
-
 
   private renderCommentsSection(Form: ACC.FormBuilder<ClaimDto>, editor: IEditorStore<ClaimDto, ClaimDtoValidator>) {
     // on client if the status hasnt yet been set by the readio buttons then dont show
@@ -307,6 +293,10 @@ const ReviewContainer = (props: ReviewClaimParams & BaseProps) => (
             stores.messages.clearMessages();
             const successMessage = dto.files.length === 1 ? `Your document has been uploaded.` : `${dto.files.length} documents have been uploaded.`;
             stores.claimDocuments.updateClaimDocumentsEditor(saving, props.projectId, props.partnerId, props.periodId, dto, successMessage);
+          }}
+          onDelete={(dto, document) => {
+            stores.messages.clearMessages();
+            stores.claimDocuments.deleteClaimDocument(props.projectId, props.partnerId, props.periodId, dto, document);
           }}
           {...props}
         />

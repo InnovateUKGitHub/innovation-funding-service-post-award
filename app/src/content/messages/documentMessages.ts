@@ -11,4 +11,5 @@ export class DocumentMessages extends ContentBase {
   public readonly noDocumentsUploaded = () => this.getContent("no-documents-uploaded");
   public readonly documentUploadedSuccess = () => this.getContent("document-uploaded-success");
   public readonly documentsUploadedSuccess = (documentsNumber: number) => this.getContent("documents-uploaded-success", {documentsNumber});
+  public readonly uploadCaimValidationFormGuidance = () => this.getContent("guidance-upload-claim-validation-form");
 }

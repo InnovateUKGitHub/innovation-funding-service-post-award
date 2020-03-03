@@ -12,8 +12,12 @@ export class ClaimDocumentsContent extends ContentPageBase {
   public readonly saveAndReturnButton = () => this.getContent("button-save-and-return");
   public readonly saveAndContinueToSummaryButton = () => this.getContent("button-save-and-continue-to-summary");
   public readonly saveAndContinueToForecastButton = () => this.getContent("button-save-and-continue-to-forecast");
+  public readonly uploadButton = () => this.getContent("button-upload");
+  public readonly uploadInput = () => this.getContent("input-button");
   public readonly uploadSectionTitle = () => this.getContent("section-title-upload");
   public readonly documentsListSectionTitle = () => this.getContent("section-title-document-list");
+  public readonly uploadClaimValidationFormInstructions = () => this.getContent("upload-instruction-claim-validation-form", { markdown: true });
+  public readonly uploadClaimValidationFormAccordionTitle = () => this.getContent("accordion-title-upload-claim-validation-form");
 
   public readonly messages = new ClaimMessages(this);
   public readonly documentMessages = new DocumentMessages(this);
