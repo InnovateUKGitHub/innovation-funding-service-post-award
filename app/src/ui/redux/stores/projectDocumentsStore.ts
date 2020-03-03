@@ -13,7 +13,15 @@ export class ProjectDocumentsStore extends DocumentsStoreBase {
   public getProjectDocumentEditor(projectId: string, init?: (dto: MultipleDocumentUploadDto) => void) {
     return this.getEditor("multipleDocuments", this.getProjectDocumentsKey(projectId), () => Pending.done<MultipleDocumentUploadDto>({ files: [] }), init, (dto) => this.validateMultipleDocumentsDto(dto, false));
   }
+
   public updateProjectDocumentsEditor(saving: boolean, projectId: string, dto: MultipleDocumentUploadDto, message: string, onComplete?: () => void) {
-    this.updateEditor(saving, "multipleDocuments", this.getProjectDocumentsKey(projectId), dto, (show) => this.validateMultipleDocumentsDto(dto, show), (p) => ApiClient.documents.uploadProjectDocument({ projectId, documents: dto, ...p }), () => this.afterUpdate("documents", "multipleDocuments", this.getProjectDocumentsKey(projectId), message, onComplete));
+    this.updateMultiple(
+      saving,
+      this.getProjectDocumentsKey(projectId),
+      dto,
+      (p) => ApiClient.documents.uploadProjectDocument({ projectId, ...p }),
+      message,
+      onComplete
+    );
   }
 }

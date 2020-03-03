@@ -27,6 +27,7 @@ export interface IConfig {
 
     readonly maxFileSize: number;
     readonly maxUploadFileCount: number;
+    readonly permittedFileTypes: string[];
 
     readonly prettyLogs: boolean;
 
@@ -136,6 +137,14 @@ const standardOverheadRate = parseFloat(process.env.STANDARD_OVERHEAD_RATE!) || 
 const maxFileSize = parseInt(process.env.MAX_FILE_SIZE_IN_BYTES!, 10) || 10485760; // 10MB
 const maxUploadFileCount = parseInt(process.env.MAX_UPLOAD_FILE_COUNT!, 10) || 10;
 
+let permittedFileTypes = process.env.PERMITTED_FILE_TYPES && process.env.PERMITTED_FILE_TYPES
+    .split(",")
+    .map(x => x.trim())
+    .filter(x => !!x);
+
+if (!permittedFileTypes || !permittedFileTypes.length) {
+    permittedFileTypes = ["pdf", "xps", "doc", "docx", "rdf", "txt", "csv", "odt", "ppt", "pptx", "odp", "xls", "xlsx", "ods", "jpg", "jpeg", "png"];
+}
 const googleTagManagerCode = process.env.GOOGLE_TAG_MANAGER_CODE!;
 
 const s3Account = {
@@ -154,6 +163,7 @@ export const Configuration: IConfig = {
     logLevel,
     maxFileSize,
     maxUploadFileCount,
+    permittedFileTypes,
     prettyLogs,
     salesforce,
     serverUrl,

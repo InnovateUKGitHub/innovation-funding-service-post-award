@@ -182,6 +182,7 @@ function getClientConfig(context: IContext): IClientConfig {
     standardOverheadRate: context.config.standardOverheadRate,
     ssoEnabled: context.config.sso.enabled,
     maxFileSize: context.config.maxFileSize,
-    maxUploadFileCount: context.config.maxUploadFileCount
+    maxUploadFileCount: context.config.maxUploadFileCount,
+    permittedFileTypes: context.config.permittedFileTypes,
   };
 }

@@ -19,11 +19,18 @@ export class ClaimDetailDocumentsStore extends DocumentsStoreBase {
 
   public updateClaimDetailDocumentsEditor(saving: boolean, projectId: string, partnerId: string, periodId: number, costCategoryId: string, dto: MultipleDocumentUploadDto, message: string, onComplete?: () => void) {
     const key = this.getKey(partnerId, periodId, costCategoryId);
-    this.updateEditor(saving, "multipleDocuments", key, dto, (show) => this.validateMultipleDocumentsDto(dto, show), (p) => ApiClient.documents.uploadClaimDetailDocuments({ claimDetailKey: { projectId, partnerId, periodId, costCategoryId }, documents: dto, ...p }), () => this.afterUpdate("documents", "multipleDocuments", key, message, onComplete));
+    this.updateMultiple(
+      saving,
+      key,
+      dto,
+      (p) => ApiClient.documents.uploadClaimDetailDocuments({ claimDetailKey: { projectId, partnerId, periodId, costCategoryId }, ...p }),
+      message,
+      onComplete
+    );
   }
 
   public deleteClaimDetailDocumentsEditor(projectId: string, partnerId: string, periodId: number, costCategoryId: string, dto: MultipleDocumentUploadDto, document: DocumentSummaryDto, message?: string, onComplete?: () => void) {
     const key = this.getKey(partnerId, periodId, costCategoryId);
-    this.deleteEditor("multipleDocuments", key, dto, () => this.validateMultipleDocumentsDto(dto, false), (p) => ApiClient.documents.deleteClaimDetailDocument({ claimDetailKey: { projectId, partnerId, periodId, costCategoryId }, documentId: document.id, ...p }), () => this.afterUpdate("documents", "multipleDocuments", key, message, onComplete));
+    this.deleteEditor("multipleDocuments", key, dto, () => this.validateMultipleDocumentsDto(dto, false), (p) => ApiClient.documents.deleteClaimDetailDocument({ claimDetailKey: { projectId, partnerId, periodId, costCategoryId }, documentId: document.id, ...p }), () => this.afterUpdate(key, message, onComplete));
   }
 }
