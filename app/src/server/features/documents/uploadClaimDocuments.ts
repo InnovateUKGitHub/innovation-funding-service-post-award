@@ -15,7 +15,7 @@ export class UploadClaimDocumentsCommand extends CommandMultipleDocumentBase<str
   }
 
   protected async accessControl(auth: Authorisation) {
-    return auth.forPartner(this.claimKey.projectId, this.claimKey.partnerId).hasRole(ProjectRole.FinancialContact);
+    return auth.forPartner(this.claimKey.projectId, this.claimKey.partnerId).hasAnyRoles(ProjectRole.FinancialContact, ProjectRole.MonitoringOfficer);
   }
 
   protected async Run(context: IContext) {
@@ -33,7 +33,7 @@ export class UploadClaimDocumentsCommand extends CommandMultipleDocumentBase<str
 
     return Promise.all(
       this.documents.files.filter(x => x.fileName && x.size)
-        .map(async (document) => await context.repositories.documents.insertDocument(document, claim.Id))
+        .map(async (document) => await context.repositories.documents.insertDocument(document, claim.Id, this.documents.description))
     );
   }
 }
