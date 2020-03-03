@@ -164,7 +164,7 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, Data, Callbacks> 
     const UploadForm = ACC.TypedForm<MultipleDocumentUploadDto>();
 
     return (
-      <ACC.AccordionItem title={<ACC.Content value={x => x.claimReview.uploadClaimValidationFormAccordionTitle()} />} qa="upload-claims-validation-form-accordion">
+      <ACC.AccordionItem titleContent={x => x.claimReview.uploadClaimValidationFormAccordionTitle()} qa="upload-claims-validation-form-accordion">
         <ACC.Renderers.Messages messages={this.props.messages} />
         <UploadForm.Form
             enctype="multipart"
@@ -174,10 +174,10 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, Data, Callbacks> 
             qa="projectDocumentUpload"
         >
           <UploadForm.Fieldset>
-            <ACC.Content value={x => x.claimReview.uploadClaimValidationFormInstructions()} />
-            <ACC.DocumentGuidanceWithContent documentMessages={x => x.claimDocuments.documentMessages} />
+            <ACC.Content value={x => x.claimReview.messages.uploadClaimValidationFormInstructions()} />
+            <ACC.DocumentGuidanceWithContent documentMessages={x => x.claimReview.documentMessages} />
             <UploadForm.MulipleFileUpload
-              labelContent={x => x.claimReview.uploadInput()}
+              labelContent={x => x.claimReview.uploadInputLabel()}
               name="attachment"
               labelHidden={true}
               value={x => x.files}
@@ -292,7 +292,7 @@ const ReviewContainer = (props: ReviewClaimParams & BaseProps) => (
                 }}
                 onUpload={(saving, dto) => {
                   stores.messages.clearMessages();
-                  const successMessage = dto.files.length === 1 ? content.claimReview.messages.documentUploaded() : content.claimReview.messages.documentsUploaded(dto.files.length);
+                  const successMessage = dto.files.length === 1 ? content.claimDocuments.documentMessages.documentUploaded() : content.claimDocuments.documentMessages.documentsUploaded(dto.files.length);
                   stores.claimDocuments.updateClaimDocumentsEditor(saving, props.projectId, props.partnerId, props.periodId, dto, successMessage.content);
                 }}
                 onDelete={(dto, document) => {
