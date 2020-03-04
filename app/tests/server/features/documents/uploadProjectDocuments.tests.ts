@@ -159,6 +159,26 @@ describe("UploadProjectDocumentCommand", () => {
     await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
   });
 
+  it("should use permitted extensions", async () => {
+    const context = new TestContext();
+
+    const project = context.testData.createProject();
+
+    const file = context.testData.createFile();
+    file.fileName = "text.txt";
+
+    const command = new UploadProjectDocumentCommand(project.Id, { files: [file] });
+
+    context.config.permittedFileTypes = ["nottxt"];
+
+    await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
+
+    context.config.permittedFileTypes = ["txt"];
+
+    await expect(context.runCommand(command)).resolves.not.toBeNull();
+
+  });
+
   test("accessControl - Project Monitoring officer passes", async () => {
     const context = new TestContext();
     const project = context.testData.createProject();

@@ -64,7 +64,7 @@ describe("UploadProjectChangeRequestDocumentOrItemDocumentCommand", () => {
     };
     const projectChangeRequestItem = context.testData.createPCRItem(projectChangeRequest, recordType);
 
-    const files = context.testData.range(5, (i) => context.testData.createFile(`File content ${i}`, `File name ${i}`));
+    const files = context.testData.range(5, (i) => context.testData.createFile(`File content ${i}`, `File name ${i}.txt`));
 
     const command = new UploadProjectChangeRequestDocumentOrItemDocumentCommand(project.Id, projectChangeRequestItem.id, {files});
     const documentIds = await context.runCommand(command);

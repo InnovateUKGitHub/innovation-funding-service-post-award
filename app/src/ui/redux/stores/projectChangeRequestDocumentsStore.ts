@@ -19,14 +19,13 @@ export class ProjectChangeRequestDocumentsStore extends DocumentsStoreBase {
 
   public updatePcrOrPcrItemDocumentsEditor(saving: boolean, projectId: string, projectChangeRequestIdOrItemId: string, dto: MultipleDocumentUploadDto, filesRequired: boolean, message?: string, onComplete?: () => void) {
     const key = this.getKey(projectId, projectChangeRequestIdOrItemId);
-    this.updateEditor(
+    this.updateMultiple(
       saving,
-      "multipleDocuments",
       key,
       dto,
-      (show) => this.validateMultipleDocumentsDto(dto, show, filesRequired),
-      (p) => dto.files.length ? ApiClient.documents.uploadProjectChangeRequestDocumentOrItemDocument({ projectId, projectChangeRequestIdOrItemId, documents: dto, ...p }) : Promise.resolve(null),
-      () => this.afterUpdate("documents", "multipleDocuments", key, dto.files.length ? message : undefined, onComplete)
+      (p) => ApiClient.documents.uploadProjectChangeRequestDocumentOrItemDocument({ projectId, projectChangeRequestIdOrItemId, ...p }),
+      message,
+      onComplete
     );
   }
 
@@ -38,7 +37,7 @@ export class ProjectChangeRequestDocumentsStore extends DocumentsStoreBase {
       dto,
       () => this.validateMultipleDocumentsDto(dto, false),
       (p) => ApiClient.documents.deleteProjectChangeRequestDocumentOrItemDocument({ projectId, projectChangeRequestIdOrItemId, documentId: document.id, ...p }),
-      () => this.afterUpdate("documents", "multipleDocuments", key, message, onComplete)
+      () => this.afterUpdate(key, message, onComplete)
     );
   }
 }

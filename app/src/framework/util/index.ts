@@ -3,4 +3,4 @@ export * from "./dtoHelpers";
 export * from "./dateHelpers";
 export * from "./numberHelper";
 export * from "./windowHelpers";
-export * from "./filesize";
+export * from "./files";
