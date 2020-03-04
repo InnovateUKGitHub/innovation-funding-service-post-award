@@ -19,7 +19,7 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerWithdrawal
       <React.Fragment>
         {this.renderForm(documentsEditor)}
         {this.renderFiles(documentsEditor, documents)}
-        <form.Form data={this.props.pcrItem} onSubmit={() => this.props.onSave()}>
+        <form.Form qa="saveAndContinue" data={this.props.pcrItem} onSubmit={() => this.props.onSave()}>
           <form.Fieldset>
             <form.Button name="default" styling="Primary">Save and continue</form.Button>
           </form.Fieldset>
