@@ -19,7 +19,7 @@ describe("UpdateFinancialVirementCommand", () => {
     expect(dto).not.toBeNull();
     expect(dto.partners.length).toBe(1);
 
-    const result = await testContext.runCommand(new UpdateFinancialVirementCommand(partner.Acc_ProjectId__r.Id, pcrItem.pcrId, pcrItem.id, dto));
+    const result = await testContext.runCommand(new UpdateFinancialVirementCommand(partner.Acc_ProjectId__r.Id, pcrItem.pcrId, pcrItem.id, dto, true));
 
     expect(result).toBe(true);
   });
@@ -50,7 +50,7 @@ describe("UpdateFinancialVirementCommand", () => {
 
     expect(dto).not.toBeNull();
 
-    const result = await testContext.runCommand(new UpdateFinancialVirementCommand(partner.Acc_ProjectId__r.Id, pcrItem.pcrId, pcrItem.id, dto));
+    const result = await testContext.runCommand(new UpdateFinancialVirementCommand(partner.Acc_ProjectId__r.Id, pcrItem.pcrId, pcrItem.id, dto, true));
 
     expect(result).toBe(true);
 
@@ -82,7 +82,7 @@ describe("UpdateFinancialVirementCommand", () => {
     dto.partners[0].virements[0].newEligibleCosts = 100;
     dto.partners[0].virements[0].costsClaimedToDate = 101;
 
-    await expect(testContext.runCommand(new UpdateFinancialVirementCommand(partner.Acc_ProjectId__r.Id, pcrItem.pcrId, pcrItem.id, dto))).rejects.toThrow(ValidationError);
+    await expect(testContext.runCommand(new UpdateFinancialVirementCommand(partner.Acc_ProjectId__r.Id, pcrItem.pcrId, pcrItem.id, dto, true))).rejects.toThrow(ValidationError);
   });
 
 });

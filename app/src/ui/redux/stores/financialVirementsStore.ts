@@ -27,18 +27,18 @@ export class FinancialVirementsStore extends StoreBase {
       this.getKey(projectId, pcrId, pcrItemId),
       () => this.get(projectId, pcrId, pcrItemId),
       undefined,
-      (data) => new FinancialVirementDtoValidator(data, false)
+      (data) => new FinancialVirementDtoValidator(data, false, false)
     );
   }
 
-  public updateFiniancialVirementEditor(saving: boolean, projectId: string, pcrId: string, pcrItemId: string, dto: FinancialVirementDto, onComplete: () => void) {
+  public updateFiniancialVirementEditor(saving: boolean, projectId: string, pcrId: string, pcrItemId: string, dto: FinancialVirementDto, submit: boolean, onComplete: () => void) {
     return super.updateEditor(
       saving,
       "financialVirement",
       this.getKey(projectId,pcrId, pcrItemId),
       dto,
-      (showErrors) => new FinancialVirementDtoValidator(dto, showErrors),
-      (p) => ApiClient.financialVirements.update({projectId, pcrId, pcrItemId, financialVirment: dto, ...p}),
+      (showErrors) => new FinancialVirementDtoValidator(dto, showErrors, submit),
+      (p) => ApiClient.financialVirements.update({projectId, pcrId, pcrItemId, financialVirment: dto, submit, ...p}),
       (result) => {
         this.markStale("financialVirement", this.getKey(projectId, pcrId, pcrItemId), result);
         onComplete();

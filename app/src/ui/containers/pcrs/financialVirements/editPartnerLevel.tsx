@@ -119,7 +119,8 @@ const Container = (props: Params & BaseProps) => (
           project={stores.projects.getById(props.projectId)}
           partners={stores.partners.getPartnersForProject(props.projectId)}
           editor={stores.financialVirements.getFiniancialVirementEditor(props.projectId, props.pcrId, props.itemId)}
-          onChange={(saving, dto) => stores.financialVirements.updateFiniancialVirementEditor(saving, props.projectId, props.pcrId, props.itemId, dto, () => stores.navigation.navigateTo(props.routes.pcrPrepareItem.getLink({ projectId: props.projectId, pcrId: props.pcrId, itemId: props.itemId }), true))}
+          onChange={(saving, dto) => stores.financialVirements.updateFiniancialVirementEditor(saving, props.projectId, props.pcrId, props.itemId, dto, false, () =>
+            stores.navigation.navigateTo(props.routes.pcrPrepareItem.getLink({ projectId: props.projectId, pcrId: props.pcrId, itemId: props.itemId }), true))}
           {...props}
         />
       )
