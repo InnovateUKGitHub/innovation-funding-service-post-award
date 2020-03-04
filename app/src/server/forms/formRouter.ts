@@ -32,6 +32,7 @@ import { ClaimDocumentsUploadHandler } from "@server/forms/claimDocuments/claimD
 import { ClaimSummaryFormHandler } from "@server/forms/claimSummaryFormHandler";
 import { MonitoringReportPreparePeriodFormHandler } from "@server/forms/monitoringReport/monitoringReportPreparePeriodFormHandler";
 import { VirementCostsUpdateHandler } from "@server/forms/projectChangeRequest/virements/virementCostsUpdateHandler";
+import { VirementPartnerCostsUpdateHandler } from "./projectChangeRequest/virements/virementPartnerCostsUpdateHandler";
 
 export const formRouter = express.Router();
 
@@ -64,6 +65,7 @@ const handlers: IFormHandler[] = [
   new ProjectChangeRequestItemDocumentDeleteHandler(),
   new ProjectChangeRequestItemDocumentUploadHandler(),
   new VirementCostsUpdateHandler(),
+  new VirementPartnerCostsUpdateHandler(),
   new ProjectDocumentUploadHandler(),
 ];
 

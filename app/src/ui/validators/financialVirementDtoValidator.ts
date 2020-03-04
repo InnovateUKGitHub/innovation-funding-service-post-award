@@ -12,7 +12,7 @@ export class FinancialVirementDtoValidator extends Results<FinancialVirementDto>
   public readonly newRemainingGrant = Validation.all(this,
     () => Validation.required(this, this.model.newRemainingGrant),
     () => Validation.isCurrency(this, this.model.newRemainingGrant),
-    () => Validation.isTrue(this, !this.submit || (this.model.newRemainingGrant <= this.model.originalRemainingGrant), "The total grant cannot exceed the remaining grant")
+    () => this.submit ? Validation.isTrue(this, (this.model.newRemainingGrant <= this.model.originalRemainingGrant), "The total grant cannot exceed the remaining grant") : Validation.valid(this),
   );
 }
 
