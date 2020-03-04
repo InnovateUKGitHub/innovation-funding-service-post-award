@@ -118,10 +118,7 @@
       "button-send-query": "Send query",
       "button-upload": "Upload documents",
       "label-input-upload": "Upload files",
-      "accordion-title-upload-claim-validation-form": "Claim validation form",
-      "claims-messages": {
-
-      }
+      "accordion-title-upload-claim-validation-form": "Claim validation form"
     },
     "financial-virement-details":{
       "title": "Reallocate costs"
@@ -220,8 +217,8 @@
     "header": "You can upload up to 10 documents at a time. Each document must:\n\n* be less than 10MB in file size\n* have a unique file name that describes its contents\n\nThere is no limit to the number of files you can upload in total.",
     "infoTitle":"What file types can I upload?",
     "infoContent": "You can upload these file types:\n\n* PDF (pdf, xps)\n* text (doc, docx, rdf, txt, csv, odt)\n* presentation (ppt, pptx, odp)\n* spreadsheet (xls, xlsx, ods)\n* image (jpg, jpeg, png)",
-    "uploaded-claim-document": "Your document has been uploaded.",
-    "uploaded-claim-documents": "{{filesLength}} documents have been uploaded.",
+    "uploaded-document": "Your document has been uploaded.",
+    "uploaded-documents": "{{filesLength}} documents have been uploaded.",
     "no-documents-uploaded": "No documents uploaded.",
     "document-uploaded-success": "Your document has been uploaded.",
     "documents-uploaded-success": "{{documentsNumber}} documents have been uploaded."
