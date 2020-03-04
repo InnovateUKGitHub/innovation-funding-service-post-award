@@ -123,7 +123,20 @@ describe("UploadClaimDocumentsCommand", () => {
       const auth = new Authorisation({
         [project.Id]: {
           projectRoles: ProjectRole.FinancialContact,
-          partnerRoles: {[claim.Acc_ProjectParticipant__r.Id]: ProjectRole.FinancialContact | ProjectRole.ProjectManager}
+          partnerRoles: {[claim.Acc_ProjectParticipant__r.Id]: ProjectRole.FinancialContact | ProjectRole.ProjectManager | ProjectRole.MonitoringOfficer}
+        }
+      });
+
+      expect(await context.runAccessControl(auth, command)).toBe(true);
+    });
+
+    test("accessControl - MO can upload documents for claim review", async () => {
+      const {command, project, claim, context} = setupAccessControlContext();
+
+      const auth = new Authorisation({
+        [project.Id]: {
+          projectRoles: ProjectRole.MonitoringOfficer,
+          partnerRoles: {[claim.Acc_ProjectParticipant__r.Id]: ProjectRole.FinancialContact | ProjectRole.ProjectManager | ProjectRole.MonitoringOfficer}
         }
       });
 
@@ -136,7 +149,7 @@ describe("UploadClaimDocumentsCommand", () => {
       const auth = new Authorisation({
         [project.Id]: {
           projectRoles: ProjectRole.ProjectManager | ProjectRole.MonitoringOfficer | ProjectRole.FinancialContact,
-          partnerRoles: {[claim.Acc_ProjectParticipant__r.Id]: ProjectRole.ProjectManager | ProjectRole.Unknown | ProjectRole.MonitoringOfficer}
+          partnerRoles: {[claim.Acc_ProjectParticipant__r.Id]: ProjectRole.ProjectManager | ProjectRole.Unknown}
         }
       });
 
