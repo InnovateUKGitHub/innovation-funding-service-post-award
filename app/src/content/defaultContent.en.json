@@ -115,7 +115,10 @@
       "section-title-additional-info": "Additional information",
       "additional-info-hint": "If you query the claim, you must explain what the partner needs to amend. If you approve the claim, you may add a comment to Innovate UK in support of the claim.",
       "button-submit": "Submit",
-      "button-send-query": "Send query"
+      "button-send-query": "Send query",
+      "button-upload": "Upload documents",
+      "label-input-upload": "Upload files",
+      "accordion-title-upload-claim-validation-form": "Claim validation form"
     },
     "financial-virement-details":{
       "title": "Reallocate costs"
@@ -135,7 +138,8 @@
     "iar-required": "You must attach an independent accountant's report (IAR) to this claim.",
     "final-claim-guidance": "We need to ask you a few questions about the project before we can make your last payment.\n\nYou also need to upload an independent accountant's report (IAR).\n\n1.  Complete our survey.\n2.  Download a copy from the survey website.\n3.  Upload it here.",
     "claim-queried": "You have queried this claim.",
-    "claim-approved": "You have approved this claim."
+    "claim-approved": "You have approved this claim.",
+    "upload-instruction-claim-validation-form": "You can upload and store any documents relevant for this project. Any documents added to the project by Innovate UK will also be visible here."
   },
   "claims-labels": {
     "open-section-title": "Open",
@@ -213,6 +217,8 @@
     "header": "You can upload up to 10 documents at a time. Each document must:\n\n* be less than 10MB in file size\n* have a unique file name that describes its contents\n\nThere is no limit to the number of files you can upload in total.",
     "infoTitle":"What file types can I upload?",
     "infoContent": "You can upload these file types:\n\n* PDF (pdf, xps)\n* text (doc, docx, rdf, txt, csv, odt)\n* presentation (ppt, pptx, odp)\n* spreadsheet (xls, xlsx, ods)\n* image (jpg, jpeg, png)",
+    "uploaded-document": "Your document has been uploaded.",
+    "uploaded-documents": "{{filesLength}} documents have been uploaded.",
     "no-documents-uploaded": "No documents uploaded.",
     "document-uploaded-success": "Your document has been uploaded.",
     "documents-uploaded-success": "{{documentsNumber}} documents have been uploaded."

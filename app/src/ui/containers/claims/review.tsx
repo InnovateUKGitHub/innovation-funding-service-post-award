@@ -4,7 +4,9 @@ import { ContentConsumer, IEditorStore, StoresConsumer } from "@ui/redux";
 import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerBase";
 import { ClaimDtoValidator } from "@ui/validators/claimDtoValidator";
 import { Pending } from "@shared/pending";
-import { ClaimDto, ClaimStatus, ClaimStatusChangeDto, PartnerDto, ProjectDto, ProjectRole } from "@framework/types";
+import { ClaimDto, ClaimStatus, ClaimStatusChangeDto, DocumentDescription, PartnerDto, ProjectDto, ProjectRole } from "@framework/types";
+import { MultipleDocumentUpdloadDtoValidator } from "@ui/validators";
+import { DocumentListWithDelete } from "@ui/components";
 
 export interface ReviewClaimParams {
   projectId: string;
@@ -24,10 +26,14 @@ interface Data {
   golCosts: Pending<GOLCostDto[]>;
   statusChanges: Pending<ClaimStatusChangeDto[]>;
   editor: Pending<IEditorStore<ClaimDto, ClaimDtoValidator>>;
+  documents: Pending<DocumentSummaryDto[]>;
+  documentsEditor: Pending<IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>>;
 }
 
 interface Callbacks {
   onUpdate: (saving: boolean, dto: ClaimDto) => void;
+  onUpload: (saving: boolean, dto: MultipleDocumentUploadDto) => void;
+  onDelete: (dto: MultipleDocumentUploadDto, document: DocumentSummaryDto) => void;
 }
 
 interface CombinedData {
@@ -37,6 +43,8 @@ interface CombinedData {
   claim: ClaimDto;
   claimDetails: CostsSummaryForPeriodDto[];
   editor: IEditorStore<ClaimDto, ClaimDtoValidator>;
+  documents: DocumentSummaryDto[];
+  documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>;
 }
 
 class ReviewComponent extends ContainerBase<ReviewClaimParams, Data, Callbacks> {
@@ -48,6 +56,8 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, Data, Callbacks> 
       claim: this.props.claim,
       claimDetails: this.props.costsSummaryForPeriod,
       editor: this.props.editor,
+      documents: this.props.documents,
+      documentsEditor: this.props.documentsEditor
     });
 
     return <ACC.PageLoader pending={combined} render={(data) => this.renderContents(data)} />;
@@ -63,7 +73,7 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, Data, Callbacks> 
       <ACC.Page
         backLink={<ACC.BackLink route={this.props.routes.allClaimsDashboard.getLink({ projectId: data.project.id })}><ACC.Content value={x => x.claimReview.backLink()}/></ACC.BackLink>}
         error={data.editor.error}
-        validator={data.editor.validator}
+        validator={[data.editor.validator, data.documentsEditor.validator]}
         pageTitle={<ACC.Projects.Title project={data.project} />}
       >
         {data.claim.isFinalClaim && <ACC.ValidationMessage messageType="info" messageContent={x => x.claimReview.messages.finalClaim()}/>}
@@ -72,6 +82,7 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, Data, Callbacks> 
           <ACC.Accordion>
             {this.renderForecastItem()}
             {this.renderLogsItem()}
+            {this.renderUploadClaimValidationForm(data)}
           </ACC.Accordion>
         </ACC.Section>
         {this.renderForm(data)}
@@ -147,6 +158,46 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, Data, Callbacks> 
         </Form.Fieldset>
       </Form.Form>
     );
+  }
+
+  renderUploadClaimValidationForm(data: CombinedData): React.ReactNode {
+    const UploadForm = ACC.TypedForm<MultipleDocumentUploadDto>();
+
+    return (
+      <ACC.AccordionItem titleContent={x => x.claimReview.uploadClaimValidationFormAccordionTitle()} qa="upload-claims-validation-form-accordion">
+        <ACC.Renderers.Messages messages={this.props.messages} />
+        <UploadForm.Form
+            enctype="multipart"
+            editor={data.documentsEditor}
+            onChange={dto => this.props.onUpload(false, {...dto, description: DocumentDescription.ClaimValidationForm})}
+            onSubmit={() => this.props.onUpload(true, {...data.documentsEditor.data, description: DocumentDescription.ClaimValidationForm})}
+            qa="projectDocumentUpload"
+        >
+          <UploadForm.Fieldset>
+            <ACC.Content value={x => x.claimReview.messages.uploadClaimValidationFormInstructions()} />
+            <ACC.DocumentGuidanceWithContent documentMessages={x => x.claimReview.documentMessages} />
+            <UploadForm.MulipleFileUpload
+              labelContent={x => x.claimReview.uploadInputLabel()}
+              name="attachment"
+              labelHidden={true}
+              value={x => x.files}
+              update={(dto, files) => dto.files = files || []}
+              validation={data.documentsEditor.validator.files}
+            />
+          </UploadForm.Fieldset>
+          <UploadForm.Submit styling="Secondary"><ACC.Content value={x => x.claimReview.uploadButton()} /></UploadForm.Submit>
+        </UploadForm.Form>
+        {this.renderDocumentList(data.documentsEditor, data.documents)}
+      </ACC.AccordionItem>
+    );
+  }
+
+  private renderDocumentList(editor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>, documents: DocumentSummaryDto[]) {
+    const renderDocuments = documents.filter(x => x.description === DocumentDescription.ClaimValidationForm);
+
+    return renderDocuments.length > 0
+      ? <DocumentListWithDelete documents={renderDocuments} onRemove={(document) => this.props.onDelete(editor.data, document)} qa="supporting-documents"/>
+      : <ACC.ValidationMessage message="No documents uploaded." messageType="info" />;
   }
 
   private renderCommentsSection(Form: ACC.FormBuilder<ClaimDto>, editor: IEditorStore<ClaimDto, ClaimDtoValidator>) {
@@ -233,9 +284,20 @@ const ReviewContainer = (props: ReviewClaimParams & BaseProps) => (
                 golCosts={stores.forecastGolCosts.getAllByPartner(props.partnerId)}
                 statusChanges={stores.claims.getStatusChanges(props.projectId, props.partnerId, props.periodId)}
                 editor={stores.claims.getClaimEditor(props.projectId, props.partnerId, props.periodId, initEditor)}
+                documents={stores.claimDocuments.getClaimDocuments(props.projectId, props.partnerId, props.periodId)}
+                documentsEditor={stores.claimDocuments.getClaimDocumentsEditor(props.projectId, props.partnerId, props.periodId)}
                 onUpdate={(saving, dto) => {
                   const message = dto.status === ClaimStatus.MO_QUERIED ? content.claimReview.messages.claimQueried() : content.claimReview.messages.claimApproved();
                   stores.claims.updateClaimEditor(saving, props.projectId, props.partnerId, props.periodId, dto, message.content, () => stores.navigation.navigateTo(props.routes.allClaimsDashboard.getLink({ projectId: props.projectId })));
+                }}
+                onUpload={(saving, dto) => {
+                  stores.messages.clearMessages();
+                  const successMessage = dto.files.length === 1 ? content.claimDocuments.documentMessages.documentUploaded() : content.claimDocuments.documentMessages.documentsUploaded(dto.files.length);
+                  stores.claimDocuments.updateClaimDocumentsEditor(saving, props.projectId, props.partnerId, props.periodId, dto, successMessage.content);
+                }}
+                onDelete={(dto, document) => {
+                  stores.messages.clearMessages();
+                  stores.claimDocuments.deleteClaimDocument(props.projectId, props.partnerId, props.periodId, dto, document);
                 }}
                 {...props}
               />
