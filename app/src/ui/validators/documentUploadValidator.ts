@@ -1,13 +1,9 @@
 import * as Validation from "./common";
 import { Result } from "../validation/result";
 import { Results } from "../validation/results";
-import { getFileSize } from "@framework/util";
+import { getFileExtension, getFileSize } from "@framework/util";
 import { FileTypeNotAllowedError } from "@server/repositories";
 import { NestedResult } from "@ui/validation";
-
-const getFileExtension = (file: IFileWrapper | null | undefined) => {
-  return file && file.fileName.indexOf(".") >= 0 ? file.fileName.split(".").pop() : "";
-};
 
 export class DocumentUploadDtoValidator extends Results<DocumentUploadDto> {
   constructor(model: DocumentUploadDto, config: { maxFileSize: number, permittedFileTypes: string[] }, showValidationErrors: boolean, private error: FileTypeNotAllowedError | null) {
