@@ -17,7 +17,6 @@ interface RouteInfo<TParams> {
 
 export interface IFormHandler {
   readonly routePath: string;
-  readonly middleware: RequestHandler[];
   handle(req: express.Request, res: express.Response, next: express.NextFunction): Promise<void>;
 }
 
@@ -95,13 +94,9 @@ abstract class FormHandlerBase<TParams, TStore extends EditorStateKeys> implemen
     res.redirect(url);
     return;
   }
-
-  public abstract readonly middleware: RequestHandler[];
 }
 
 export abstract class StandardFormHandlerBase<TParams, TStore extends EditorStateKeys> extends FormHandlerBase<TParams, TStore> {
-
-  public readonly middleware = [];
 
   protected async createDto(context: IContext, params: TParams, button: IFormButton, body: IFormBody, req: express.Request): Promise<InferEditorStoreDto<EditorState[TStore][string]>> {
     return this.getDto(context, params, button, body);
@@ -111,19 +106,16 @@ export abstract class StandardFormHandlerBase<TParams, TStore extends EditorStat
 }
 
 export abstract class SingleFileFormHandlerBase<TParams, TStore extends EditorStateKeys> extends FormHandlerBase<TParams, TStore> {
-  public readonly middleware = [upload.single("attachment")];
 
   protected async createDto(context: IContext, params: TParams, button: IFormButton, body: IFormBody, req: express.Request): Promise<InferEditorStoreDto<EditorState[TStore][string]>> {
     const file: IFileWrapper | null = req.file && new ServerFileWrapper(req.file);
     return this.getDto(context, params, button, body, file);
   }
 
-  protected abstract getDto(context: IContext, params: TParams, button: IFormButton, body: IFormBody, file: IFileWrapper|null): Promise<InferEditorStoreDto<EditorState[TStore][string]>>;
+  protected abstract getDto(context: IContext, params: TParams, button: IFormButton, body: IFormBody, file: IFileWrapper | null): Promise<InferEditorStoreDto<EditorState[TStore][string]>>;
 }
 
 export abstract class MultipleFileFormHandlerBase<TParams, TStore extends EditorStateKeys> extends FormHandlerBase<TParams, TStore> {
-  public readonly middleware = [upload.array("attachment")];
-
   protected async createDto(context: IContext, params: TParams, button: IFormButton, body: IFormBody, req: express.Request): Promise<InferEditorStoreDto<EditorState[TStore][string]>> {
     const files: IFileWrapper[] = Array.isArray(req.files) ? req.files.map(x => new ServerFileWrapper(x)) : [];
     return this.getDto(context, params, button, body, files);
