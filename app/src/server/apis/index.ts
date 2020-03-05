@@ -1,6 +1,7 @@
 import express from "express";
 import * as claims from "./claims";
 import * as claimDetails from "./claimDetails";
+import * as companiesHouse from "./companies";
 import * as costsSummary from "./costsSummary";
 import * as costCategories from "./costCategories";
 import * as documents from "./documents";
@@ -21,6 +22,7 @@ import { getErrorResponse, getErrorStatus } from "@server/errorHandlers";
 export interface IApiClient {
   claimDetails: claimDetails.IClaimDetailsApi;
   costsSummary: costsSummary.ICostsSummaryApi;
+  companies: companiesHouse.ICompaniesApi;
   claims: claims.IClaimsApi;
   costCategories: costCategories.ICostCategoriesApi;
   documents: documents.IDocumentsApi;
@@ -38,6 +40,7 @@ export interface IApiClient {
 export const serverApis: IApiClient & { [key: string]: ControllerBase<{}> } = {
   claims: claims.controller,
   claimDetails: claimDetails.controller,
+  companies: companiesHouse.controller,
   costsSummary: costsSummary.controller,
   costCategories: costCategories.controller,
   documents: documents.controller,

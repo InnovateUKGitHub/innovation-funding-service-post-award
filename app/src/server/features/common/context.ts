@@ -6,9 +6,10 @@ import * as Salesforce from "../../repositories/salesforceConnection";
 import * as Common from "@server/features/common";
 import * as Framework from "@framework/types";
 import * as Entities from "@framework/entities";
-import { DefaultContentStore } from "@server/fileStores/defaultContentStore";
+import { DefaultContentStore } from "@server/resources/defaultContentStore";
 import { IInternationalisation } from "@framework/types";
-import { CustomContentStore } from "@server/fileStores/customContentStore";
+import { CustomContentStore } from "@server/resources/customContentStore";
+import { CompaniesHouse } from "@server/resources/companiesHouse";
 
 // obvs needs to be singleton
 const cachesImplementation: Framework.ICaches = {
@@ -88,6 +89,7 @@ export class Context implements Framework.IContext {
     };
 
     this.resources = {
+      companiesHouse: new CompaniesHouse(),
       defaultContent: new DefaultContentStore(),
       customContent: new CustomContentStore()
     };
