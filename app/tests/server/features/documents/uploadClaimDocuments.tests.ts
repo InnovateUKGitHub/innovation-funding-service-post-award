@@ -148,7 +148,7 @@ describe("UploadClaimDocumentsCommand", () => {
 
       const auth = new Authorisation({
         [project.Id]: {
-          projectRoles: ProjectRole.ProjectManager | ProjectRole.MonitoringOfficer | ProjectRole.FinancialContact,
+          projectRoles: ProjectRole.ProjectManager,
           partnerRoles: {[claim.Acc_ProjectParticipant__r.Id]: ProjectRole.ProjectManager | ProjectRole.Unknown}
         }
       });
