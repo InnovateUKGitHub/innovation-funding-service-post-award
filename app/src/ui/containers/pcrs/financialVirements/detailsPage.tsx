@@ -78,7 +78,7 @@ class Component extends ContainerBase<Params, Props, {}> {
       itemId: this.props.itemId
     };
 
-    return <ACC.BackLink route={this.props.routes.pcrPrepareItem.getLink(params)} preserveData={true}>Back to summary</ACC.BackLink>;
+    return <ACC.BackLink route={this.props.routes.pcrViewItem.getLink(params)} preserveData={true}>Back to summary</ACC.BackLink>;
   }
 }
 
