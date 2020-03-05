@@ -21,13 +21,14 @@ export class ClaimDocumentsStore extends DocumentsStoreBase {
   }
 
   public getClaimDocumentsEditor(projectId: string, partnerId: string, periodId: number, init?: (dto: MultipleDocumentUploadDto) => void) {
-    return this.getEditor("multipleDocuments", this.getKey(partnerId, periodId), () => Pending.done<MultipleDocumentUploadDto>({ files: [] }), init, (dto) => this.validateMultipleDocumentsDto(dto, false));
+    return this.getEditor("multipleDocuments", this.getKey(partnerId, periodId), () => Pending.done<MultipleDocumentUploadDto>({ files: [] }), init, (dto) => this.validateMultipleDocumentsDto(dto, false, true));
   }
 
   public updateClaimDocumentsEditor(saving: boolean, projectId: string, partnerId: string, periodId: number, dto: MultipleDocumentUploadDto, message?: string, onComplete?: () => void) {
     const key = this.getKey(partnerId, periodId);
     return this.updateMultiple(
       saving,
+      true,
       key,
       dto,
       p => ApiClient.documents.uploadClaimDocuments({ claimKey: { projectId, partnerId, periodId }, ...p }),
@@ -38,7 +39,7 @@ export class ClaimDocumentsStore extends DocumentsStoreBase {
 
   public deleteClaimDocument(projectId: string, partnerId: string, periodId: number, dto: MultipleDocumentUploadDto, document: DocumentSummaryDto, message?: string, onComplete?: () => void) {
     const key = this.getKey(partnerId, periodId);
-    return this.deleteEditor("multipleDocuments", key, dto, () => this.validateMultipleDocumentsDto(dto, false), p => ApiClient.documents.deleteClaimDocument({ claimKey: { projectId, partnerId, periodId }, documentId: document.id, ...p }), () => this.afterUpdate(key, message, onComplete));
+    return this.deleteEditor("multipleDocuments", key, dto, () => this.validateMultipleDocumentsDto(dto, false, true), p => ApiClient.documents.deleteClaimDocument({ claimKey: { projectId, partnerId, periodId }, documentId: document.id, ...p }), () => this.afterUpdate(key, message, onComplete));
   }
 
 }
