@@ -76,6 +76,7 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, Data, Callbacks> 
         validator={[data.editor.validator, data.documentsEditor.validator]}
         pageTitle={<ACC.Projects.Title project={data.project} />}
       >
+        <ACC.Renderers.Messages messages={this.props.messages} />
         {data.claim.isFinalClaim && <ACC.ValidationMessage messageType="info" messageContent={x => x.claimReview.messages.finalClaim()}/>}
         {this.renderClaimReviewSection(data)}
         <ACC.Section>
@@ -165,7 +166,6 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, Data, Callbacks> 
 
     return (
       <ACC.AccordionItem titleContent={x => x.claimReview.uploadClaimValidationFormAccordionTitle()} qa="upload-claims-validation-form-accordion">
-        <ACC.Renderers.Messages messages={this.props.messages} />
         <UploadForm.Form
             enctype="multipart"
             editor={data.documentsEditor}
@@ -287,6 +287,7 @@ const ReviewContainer = (props: ReviewClaimParams & BaseProps) => (
                 documents={stores.claimDocuments.getClaimDocuments(props.projectId, props.partnerId, props.periodId)}
                 documentsEditor={stores.claimDocuments.getClaimDocumentsEditor(props.projectId, props.partnerId, props.periodId)}
                 onUpdate={(saving, dto) => {
+                  stores.messages.clearMessages();
                   const message = dto.status === ClaimStatus.MO_QUERIED ? content.claimReview.messages.claimQueried() : content.claimReview.messages.claimApproved();
                   stores.claims.updateClaimEditor(saving, props.projectId, props.partnerId, props.periodId, dto, message.content, () => stores.navigation.navigateTo(props.routes.allClaimsDashboard.getLink({ projectId: props.projectId })));
                 }}
