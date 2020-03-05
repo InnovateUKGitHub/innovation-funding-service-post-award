@@ -15,7 +15,7 @@ export class UploadClaimDocumentsCommand extends CommandMultipleDocumentBase<str
   }
 
   protected async accessControl(auth: Authorisation) {
-    return auth.forPartner(this.claimKey.projectId, this.claimKey.partnerId).hasAnyRoles(ProjectRole.FinancialContact, ProjectRole.MonitoringOfficer);
+    return auth.forProject(this.claimKey.projectId).hasRole(ProjectRole.MonitoringOfficer) || auth.forPartner(this.claimKey.projectId, this.claimKey.partnerId).hasRole(ProjectRole.FinancialContact);
   }
 
   protected async Run(context: IContext) {
