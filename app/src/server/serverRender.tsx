@@ -48,7 +48,7 @@ export async function serverRender(req: Request, res: Response, error?: IAppErro
 
     const context = contextProvider.start({ user: req.session!.user });
     const auth = await context.runQuery(new GetAllProjectRolesForUser());
-    const user: IClientUser = { ...req.session!.user, roleInfo: auth.permissions };
+    const user: IClientUser = { roleInfo: auth.permissions, email: req.session!.user.email, csrf: req.csrfToken() };
     const clientConfig = getClientConfig(context);
 
     const initialState = setupInitialState(route, user, clientConfig);

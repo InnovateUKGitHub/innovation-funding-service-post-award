@@ -43,7 +43,9 @@ const preloadedState: IClientUser = {
       projectRoles: ProjectRole.MonitoringOfficer,
       partnerRoles: {}
     }
-  }
+  },
+  csrf: "CSFR"
+
 };
 
 describe("NavigationArrows", () => {

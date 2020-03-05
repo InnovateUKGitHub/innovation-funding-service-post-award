@@ -1,7 +1,7 @@
 import { TextAreaInput } from "./inputs/textAreaInput";
 import React, { CSSProperties } from "react";
 import { Result } from "@ui/validation";
-import { EditorStatus, IEditorStore } from "@ui/redux";
+import { EditorStatus, IEditorStore, StoresConsumer } from "@ui/redux";
 import { ValidationError } from "./validationError";
 import { TextInput } from "./inputs/textInput";
 import classNames from "classnames";
@@ -57,9 +57,16 @@ class FormComponent<T> extends React.Component<FormProps<T>, []> {
 
     const childrenWithData = React.Children.map(this.props.children, (child, index) => child && React.cloneElement(child as any, childProps(index)));
     return (
-      <form encType={this.mapEncType()} method={this.props.isGet ? "get" : "post"} action="" onSubmit={(e) => this.onSubmit(e)} data-qa={this.props.qa}>
-        {childrenWithData}
-      </form>
+      <StoresConsumer>
+        {
+          stores => (
+            <form encType={this.mapEncType()} method={this.props.isGet ? "get" : "post"} action="" onSubmit={(e) => this.onSubmit(e)} data-qa={this.props.qa}>
+              <input type="hidden" name="_csrf" value={stores.users.getCurrentUser().csrf}/>
+              {childrenWithData}
+            </form>
+          )
+        }
+      </StoresConsumer>
     );
   }
 
@@ -108,7 +115,7 @@ class FieldsetComponent<T> extends React.Component<FieldsetProps<T>, []> {
     });
 
     const Header = this.props.isSubQuestion ? "h3" : "h2";
-    const headerContent = this.props.headingContent ? <Content value={this.props.headingContent}/> : this.props.heading;
+    const headerContent = this.props.headingContent ? <Content value={this.props.headingContent} /> : this.props.heading;
     return (
       <fieldset className="govuk-fieldset" data-qa={this.props.qa}>
         <legend className={legendClassName}>
@@ -151,7 +158,7 @@ class FieldComponent<T, TValue> extends React.Component<InternalFieldProps<T> & 
     const { hint, hintContent, name, label, labelContent, labelHidden, labelBold, field, formData, validation } = this.props;
     const hasError = validation && validation.showValidationErrors && !validation.isValid;
 
-    const hintValue = hintContent ? <Content value={hintContent}/> : hint;
+    const hintValue = hintContent ? <Content value={hintContent} /> : hint;
     return (
       <div data-qa={`field-${name}`} className={classNames("govuk-form-group", { "govuk-form-group--error": hasError })}>
         {!!label || !!labelContent ? <label className={classNames("govuk-label", { "govuk-visually-hidden": labelHidden, "govuk-label--m": labelBold })} htmlFor={name}>{labelContent ? <Content value={labelContent} /> : label}</label> : null}
