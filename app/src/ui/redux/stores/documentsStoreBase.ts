@@ -7,7 +7,7 @@ import { IClientUser } from "@framework/types";
 
 export abstract class DocumentsStoreBase extends StoreBase {
 
-  protected validateMultipleDocumentsDto(dto: MultipleDocumentUploadDto, showErrors: boolean, filesRequired: boolean = true) {
+  protected validateMultipleDocumentsDto(dto: MultipleDocumentUploadDto, showErrors: boolean, filesRequired: boolean) {
     return new MultipleDocumentUpdloadDtoValidator(dto, this.getState().config, filesRequired, showErrors, null);
   }
 
@@ -31,13 +31,13 @@ export abstract class DocumentsStoreBase extends StoreBase {
     setTimeout(() => this.markStale("documents", key, undefined));
   }
 
-  protected updateMultiple(saving: boolean, key: string, dto: MultipleDocumentUploadDto, callUpdateApi: (p: { user: IClientUser, documents: MultipleDocumentUploadDto }) => Promise<{ documentIds: string[] }>, message: string | undefined, onComplete: (() => void) | undefined) {
+  protected updateMultiple(saving: boolean, filesRequired: boolean, key: string, dto: MultipleDocumentUploadDto, callUpdateApi: (p: { user: IClientUser, documents: MultipleDocumentUploadDto }) => Promise<{ documentIds: string[] }>, message: string | undefined, onComplete: (() => void) | undefined) {
     this.updateEditor(
       saving,
       "multipleDocuments",
       key,
       dto,
-      (show) => this.validateMultipleDocumentsDto(dto, show),
+      (show) => this.validateMultipleDocumentsDto(dto, show, filesRequired),
       p => dto.files.length ? callUpdateApi({ documents: dto, ...p }) : Promise.resolve(null),
       () => this.afterUpdate(key, dto.files.length ? message : undefined, onComplete),
       () => this.afterError(key)
