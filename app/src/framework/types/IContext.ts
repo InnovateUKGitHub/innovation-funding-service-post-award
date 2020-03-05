@@ -8,8 +8,9 @@ import { Cache, IClock, IConfig, ILogger } from "@server/features/common";
 import { PermissionGroup } from "@framework/entities/permissionGroup";
 import { RecordType } from "@framework/entities/recordType";
 import { Option } from "@framework/types";
-import { IDefaultContentStore } from "@server/fileStores/defaultContentStore";
-import { ICustomContentStore } from "@server/fileStores/customContentStore";
+import { IDefaultContentStore } from "@server/resources/defaultContentStore";
+import { ICustomContentStore } from "@server/resources/customContentStore";
+import { CompaniesHouse, ICompaniesHouse } from "@server/resources/companiesHouse";
 
 export interface IRepositories {
   readonly claims: Repositories.IClaimRepository;
@@ -39,6 +40,7 @@ export interface IRepositories {
 export interface IResources {
   readonly defaultContent: IDefaultContentStore;
   readonly customContent: ICustomContentStore;
+  readonly companiesHouse: ICompaniesHouse;
 }
 
 export interface IInternationalisation {
