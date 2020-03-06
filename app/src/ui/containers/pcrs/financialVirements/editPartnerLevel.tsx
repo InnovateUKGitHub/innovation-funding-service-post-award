@@ -6,7 +6,7 @@ import { EditorStatus, IEditorStore, StoresConsumer } from "@ui/redux";
 import { FinancialVirementDtoValidator, PartnerVirementsDtoValidator } from "@ui/validators";
 import { PartnerDto, ProjectDto } from "@framework/dtos";
 
-interface Params {
+export interface FinancialVirementParams {
   projectId: string;
   pcrId: string;
   itemId: string;
@@ -19,7 +19,7 @@ interface Props {
   onChange: (saving: boolean, dto: FinancialVirementDto) => void;
 }
 
-class Component extends ContainerBase<Params, Props, {}> {
+class Component extends ContainerBase<FinancialVirementParams, Props, {}> {
   render() {
     const combined = Pending.combine({
       project: this.props.project,
@@ -111,7 +111,7 @@ class Component extends ContainerBase<Params, Props, {}> {
   }
 }
 
-const Container = (props: Params & BaseProps) => (
+const Container = (props: FinancialVirementParams & BaseProps) => (
   <StoresConsumer>
     {
       stores => (
@@ -119,7 +119,7 @@ const Container = (props: Params & BaseProps) => (
           project={stores.projects.getById(props.projectId)}
           partners={stores.partners.getPartnersForProject(props.projectId)}
           editor={stores.financialVirements.getFiniancialVirementEditor(props.projectId, props.pcrId, props.itemId)}
-          onChange={(saving, dto) => stores.financialVirements.updateFiniancialVirementEditor(saving, props.projectId, props.pcrId, props.itemId, dto, false, () =>
+          onChange={(saving, dto) => stores.financialVirements.updateFiniancialVirementEditor(saving, props.projectId, props.pcrId, props.itemId, dto, true, () =>
             stores.navigation.navigateTo(props.routes.pcrPrepareItem.getLink({ projectId: props.projectId, pcrId: props.pcrId, itemId: props.itemId }), true))}
           {...props}
         />
