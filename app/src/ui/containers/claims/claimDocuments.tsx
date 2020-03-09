@@ -138,7 +138,7 @@ class ClaimDocumentsComponent extends ContainerBase<ClaimDocumentsPageParams, Da
     const renderClaimDocuments = documents.filter(x => x.description !== DocumentDescription.ClaimValidationForm);
 
     return (
-      <ACC.Section>
+      <ACC.Section subtitle="All documents open in a new window">
         {renderClaimDocuments.length ? <ACC.DocumentListWithDelete onRemove={(document) => this.props.onDelete(editor.data, document)} documents={renderClaimDocuments} qa="claim-documents"/> : null}
         {renderClaimValidationFormDocuments.length ? <ACC.DocumentList documents={renderClaimValidationFormDocuments} qa="claim-validation-form-documents"/> : null}
       </ACC.Section>
