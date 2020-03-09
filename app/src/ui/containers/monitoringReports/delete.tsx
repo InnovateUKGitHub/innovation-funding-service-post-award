@@ -3,7 +3,7 @@ import * as ACC from "@ui/components";
 import * as Dtos from "@framework/dtos";
 import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerBase";
 import { MonitoringReportDtoValidator } from "@ui/validators/MonitoringReportDtoValidator";
-import { IEditorStore } from "@ui/redux";
+import { ContentConsumer, IEditorStore } from "@ui/redux";
 import { Pending } from "@shared/pending";
 import { StoresConsumer } from "@ui/redux";
 
@@ -36,11 +36,11 @@ class DeleteVerificationComponent extends ContainerBase<MonitoringReportDeletePa
     return (
       <ACC.Page
         pageTitle={<ACC.Projects.Title project={project} />}
-        backLink={<ACC.BackLink route={this.props.routes.monitoringReportDashboard.getLink({ projectId: this.props.projectId })}>Back to monitoring reports</ACC.BackLink>}
+        backLink={<ACC.BackLink route={this.props.routes.monitoringReportDashboard.getLink({ projectId: this.props.projectId })}><ACC.Content value={(x) => x.monitoringReportsDelete.backLink()} /></ACC.BackLink>}
         error={editor.error}
       >
         <ACC.Section>
-          <ACC.Renderers.SimpleString>All the information in the report will be permanently removed.</ACC.Renderers.SimpleString>
+          <ACC.Renderers.SimpleString><ACC.Content value={(x) => x.monitoringReportsDelete.messages.deletingMonitoringReportMessage()} /></ACC.Renderers.SimpleString>
           <DeleteForm.Form editor={editor} qa="monitoringReportDelete">
             <DeleteForm.Fieldset>
               <DeleteForm.Button
@@ -50,7 +50,7 @@ class DeleteVerificationComponent extends ContainerBase<MonitoringReportDeletePa
                 onClick={() => this.props.delete(editor.data)}
                 value={editor.data.headerId}
               >
-                Delete report
+                <ACC.Content value={(x) => x.monitoringReportsDelete.deleteReportButton()} />
               </DeleteForm.Button>
             </DeleteForm.Fieldset>
           </DeleteForm.Form>
@@ -64,12 +64,18 @@ const DeleteVerificationContainer = (props: MonitoringReportDeleteParams&BasePro
   <StoresConsumer>
     {
       stores => (
-        <DeleteVerificationComponent
-          project={stores.projects.getById(props.projectId)}
-          editor={stores.monitoringReports.getUpdateMonitoringReportEditor(props.projectId, props.id)}
-          delete={(dto) => stores.monitoringReports.deleteReport(props.projectId, props.id, dto, "You have deleted the monitoring report.", () => stores.navigation.navigateTo(props.routes.monitoringReportDashboard.getLink({ projectId: dto.projectId })))}
-          {...props}
-        />
+        <ContentConsumer>
+          {
+            content => (
+              <DeleteVerificationComponent
+                project={stores.projects.getById(props.projectId)}
+                editor={stores.monitoringReports.getUpdateMonitoringReportEditor(props.projectId, props.id)}
+                delete={(dto) => stores.monitoringReports.deleteReport(props.projectId, props.id, dto, content.monitoringReportsDelete.messages.onDeleteMonitoringReportMessage().content, () => stores.navigation.navigateTo(props.routes.monitoringReportDashboard.getLink({ projectId: dto.projectId })))}
+                {...props}
+              />
+            )
+          }
+        </ContentConsumer>
       )
     }
   </StoresConsumer>
@@ -83,9 +89,6 @@ export const MonitoringReportDeleteRoute = defineRoute({
     projectId: route.params.projectId,
     id: route.params.id
   }),
-  getTitle: () => ({
-    htmlTitle: "Delete monitoring report",
-    displayTitle: "Monitoring report"
-  }),
+  getTitle: ({content}) => content.monitoringReportsDelete.title(),
   accessControl: (auth, { projectId }) => auth.forProject(projectId).hasRole(Dtos.ProjectRole.MonitoringOfficer),
 });

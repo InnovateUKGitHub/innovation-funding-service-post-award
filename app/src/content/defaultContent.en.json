@@ -127,6 +127,77 @@
       "title": "Reallocate costs",
       "summary-title": "Summary of project costs",
       "save-button": "Save and return to reallocate project costs"
+    },
+    "monitoring-reports-dashboard":{
+      "title": {
+        "html": "Monitoring reports - View project",
+        "display": "Monitoring reports"
+      },
+      "button-new-monitoring-report" : "Start a new report",
+      "section-title-open": "Open",
+      "section-title-archived": "Archived",
+      "link-view-monitoring-report": "View report",
+      "link-edit-monitoring-report": "Edit report",
+      "link-delete-monitoring-report": "Delete report"
+    },
+    "monitoring-reports-create":{
+      "title": {
+        "html": "Create monitoring report",
+        "display": "Monitoring report"
+      },
+      "back-link": "Back to monitoring reports"
+    },
+    "monitoring-reports-delete":{
+      "title": {
+        "html": "Delete monitoring report",
+        "display": "Monitoring report"
+      },
+      "back-link": "Back to monitoring reports",
+      "button-delete-report": "Delete report"
+    },
+    "monitoring-reports-summary":{
+      "button-submit": "Submit report",
+      "button-save-and-return": "Save and return to project",
+      "button-edit-item" : "Edit"
+    },
+    "monitoring-reports-workflow":{
+      "editMode": {
+        "title": {
+          "html": "Edit monitoring report",
+          "display": "Monitoring report"
+        }
+      },
+      "viewMode": {
+        "title": {
+          "html": "View monitoring report",
+          "display": "Monitoring report"
+        }
+      },
+      "back-link": "Back to period",
+      "link-back-to-step": "Back to {{step}}"
+    },
+    "monitoring-reports-workflow-edit":{
+      "title": {
+        "html": "Edit monitoring report",
+        "display": "Monitoring report"
+      }
+    },
+    "monitoring-reports-workflow-view":{
+      "title": {
+        "html": "View monitoring report",
+        "display": "Monitoring report"
+      }
+    },
+    "monitoring-reports-period-step":{
+      "title": {
+        "html": "Edit monitoring report",
+        "display": "Monitoring report"
+      },
+      "back-link": "Back to summary"
+    },
+    "monitoring-reports-question-step":{
+      "button-continue": "Continue",
+      "button-save-and-return": "Save and return to summary"
     }
   },
   "claims-messages": {
@@ -175,8 +246,16 @@
     "pcrQueried": "Project change request queried",
     "pcrToReview": "Project change requests to review: {{numberOfPcrs}}",
     "projectOnHold" : "On hold"
-   },
-   "project-labels": {
+  },
+  "monitoring-reports-messages": {
+    "reportsSubmissionGuidance": "You should submit reports for this project according to the schedule agreed with Innovate UK.",
+    "noOpenReportsMessage": "There are no open reports.",
+    "noArchivedReportsMessage": "There are no archived reports.",
+    "onDeleteMonitoringReportMessage": "You have deleted the monitoring report.",
+    "deletingMonitoringReportMessage": "All the information in the report will be permanently removed.",
+    "submittingMonitoringReportMessage": "By submitting this report, you certify that from the project monitoring documents shown to you, this report represents your best opinion of the current progress of this project."
+  },
+  "project-labels": {
     "projectCostsLabel": "Project costs to date",
     "partnerCostsLabel": "{{partnerName}} costs to date",
     "totalEligibleCostsLabel": "Total eligible costs",
@@ -243,5 +322,7 @@
     "cost-category-new-eligible-costs": "New total eligible costs",
     "cost-category-difference-costs": "Costs reallocated",
     "totals": "Total"
+  },
+  "monitoring-reports-labels": {
   }
 }
