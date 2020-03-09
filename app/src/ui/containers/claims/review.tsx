@@ -201,12 +201,12 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, Data, Callbacks> 
     }
 
     const renderClaimValidationFormDocuments = documents.filter(x => x.description === DocumentDescription.ClaimValidationForm);
-    const renderClaimDocuments = documents.filter(x => x.description !== DocumentDescription.ClaimValidationForm);
+    const renderClaimSupportingDocuments = documents.filter(x => x.description !== DocumentDescription.ClaimValidationForm);
 
     return (
       <React.Fragment>
         {renderClaimValidationFormDocuments.length ? <ACC.DocumentListWithDelete documents={renderClaimValidationFormDocuments} onRemove={(document) => this.props.onDelete(editor.data, document)} qa="claim-validation-form-documents"/> : null}
-        {renderClaimDocuments.length ? <ACC.DocumentList documents={renderClaimDocuments} qa="supporting-claim-documents" /> : null}
+        {renderClaimSupportingDocuments.length ? <ACC.DocumentList documents={renderClaimSupportingDocuments} qa="claim-supporting-documents" /> : null}
       </React.Fragment>
     );
   }
