@@ -6,7 +6,6 @@ import { ClaimDtoValidator } from "@ui/validators/claimDtoValidator";
 import { Pending } from "@shared/pending";
 import { ClaimDto, ClaimStatus, ClaimStatusChangeDto, DocumentDescription, PartnerDto, ProjectDto, ProjectRole } from "@framework/types";
 import { MultipleDocumentUpdloadDtoValidator } from "@ui/validators";
-import { DocumentListWithDelete } from "@ui/components";
 
 export interface ReviewClaimParams {
   projectId: string;
@@ -193,11 +192,23 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, Data, Callbacks> 
   }
 
   private renderDocumentList(editor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>, documents: DocumentSummaryDto[]) {
-    const renderDocuments = documents.filter(x => x.description === DocumentDescription.ClaimValidationForm);
+    if (!documents.length) {
+      return (
+        <React.Fragment>
+          <ACC.ValidationMessage messageContent={x => x.claimDocuments.documentMessages.noDocumentsUploaded()} messageType="info" />
+        </React.Fragment>
+      );
+    }
 
-    return renderDocuments.length > 0
-      ? <DocumentListWithDelete documents={renderDocuments} onRemove={(document) => this.props.onDelete(editor.data, document)} qa="supporting-documents"/>
-      : <ACC.ValidationMessage message="No documents uploaded." messageType="info" />;
+    const renderClaimValidationFormDocuments = documents.filter(x => x.description === DocumentDescription.ClaimValidationForm);
+    const renderClaimDocuments = documents.filter(x => x.description !== DocumentDescription.ClaimValidationForm);
+
+    return (
+      <React.Fragment>
+        {renderClaimValidationFormDocuments.length ? <ACC.DocumentListWithDelete documents={renderClaimValidationFormDocuments} onRemove={(document) => this.props.onDelete(editor.data, document)} qa="claim-validation-form-documents"/> : null}
+        {renderClaimDocuments.length ? <ACC.DocumentList documents={renderClaimDocuments} qa="supporting-claim-documents" /> : null}
+      </React.Fragment>
+    );
   }
 
   private renderCommentsSection(Form: ACC.FormBuilder<ClaimDto>, editor: IEditorStore<ClaimDto, ClaimDtoValidator>) {
