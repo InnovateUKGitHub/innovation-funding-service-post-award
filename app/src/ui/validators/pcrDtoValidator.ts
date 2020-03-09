@@ -6,13 +6,15 @@ import {
   PCRDto,
   PCRItemDto,
   PCRItemForAccountNameChangeDto,
+  PCRItemForPartnerAdditionDto,
   PCRItemForPartnerWithdrawalDto,
   PCRItemForProjectSuspensionDto,
   PCRItemForProjectTerminationDto,
   PCRItemForScopeChangeDto,
   PCRItemForTimeExtensionDto,
   PCRItemTypeDto,
-  PCRStandardItemDto, ProjectDto,
+  PCRStandardItemDto,
+  ProjectDto,
   ProjectRole
 } from "@framework/dtos";
 import { PCRItemStatus, PCRItemType, PCRStatus } from "@framework/constants";
@@ -20,7 +22,16 @@ import { isNumber, periodInProject } from "@framework/util";
 
 export class PCRDtoValidator extends Results<PCRDto> {
 
-  constructor(model: PCRDto, private role: ProjectRole, private readonly recordTypes: PCRItemTypeDto[], showValidationErrors: boolean, private readonly project: ProjectDto, private original?: PCRDto, private partners?: PartnerDto[]) {
+  constructor(
+    model: PCRDto,
+    private role: ProjectRole,
+    private readonly recordTypes: PCRItemTypeDto[],
+    showValidationErrors: boolean,
+    private readonly project: ProjectDto,
+    private featureFlags: IFeatureFlags,
+    private original?: PCRDto,
+    private partners?: PartnerDto[]
+  ) {
     super(model, showValidationErrors);
   }
 
@@ -148,10 +159,14 @@ export class PCRDtoValidator extends Results<PCRDto> {
         return new PCRAccountNameChangeItemDtoValidator(item, canEdit, this.role, this.model.status, this.recordTypes, this.showValidationErrors, this.partners, originalItem as PCRItemForAccountNameChangeDto);
       case PCRItemType.PartnerWithdrawal:
         return new PCRPartnerWithdrawalItemDtoValidator(item, canEdit, this.role, this.model.status, this.recordTypes, this.showValidationErrors, this.project, this.partners, originalItem as PCRItemForPartnerWithdrawalDto);
+      case PCRItemType.PartnerAddition: {
+        if (this.featureFlags.addPartnerWorkflow) {
+          return new PCRPartnerAdditionItemDtoValidator(item, canEdit, this.role, this.model.status, this.recordTypes, this.showValidationErrors, originalItem as PCRItemForPartnerAdditionDto);
+        }
+      }
       case PCRItemType.MultiplePartnerFinancialVirement:
-      case PCRItemType.PartnerAddition:
       case PCRItemType.SinglePartnerFinancialVirement:
-        return new PCRStandardItemDtoValidator(item, canEdit, this.role, this.model.status, this.recordTypes, this.showValidationErrors, originalItem as PCRStandardItemDto);
+        return new PCRStandardItemDtoValidator(item as PCRStandardItemDto, canEdit, this.role, this.model.status, this.recordTypes, this.showValidationErrors, originalItem as PCRStandardItemDto);
       default:
         throw new Error("PCR Type not implemented");
     }
@@ -301,6 +316,23 @@ export class PCRScopeChangeItemDtoValidator extends PCRBaseItemDtoValidator<PCRI
 
   projectSummary = this.validateProjectSummary();
   publicDescription = this.validatePublicDescription();
+}
+
+export class PCRPartnerAdditionItemDtoValidator extends PCRBaseItemDtoValidator<PCRItemForPartnerAdditionDto> {
+  private validateProjectRoleRequired() {
+    if (!this.model.id) {
+      return Validation.valid(this);
+    }
+    return Validation.required(this, this.model.projectRole, "Select a project role");
+  }
+  private validatePartnerTypeRequired() {
+    if (!this.model.id) {
+      return Validation.valid(this);
+    }
+    return Validation.required(this, this.model.partnerType, "Select a partner type");
+  }
+  projectRole = Validation.all(this, () => this.validateProjectRoleRequired());
+  partnerType = Validation.all(this, () => this.validatePartnerTypeRequired());
 }
 
 export class PCRAccountNameChangeItemDtoValidator extends PCRBaseItemDtoValidator<PCRItemForAccountNameChangeDto> {

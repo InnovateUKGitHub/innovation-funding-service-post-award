@@ -1,4 +1,4 @@
-import { BadRequestError, CommandBase, ValidationError } from "@server/features/common";
+import { BadRequestError, CommandBase, Configuration, ValidationError } from "@server/features/common";
 import { PCRDto, PCRItemDto, PCRItemTypeDto, ProjectDto, ProjectRole } from "@framework/dtos";
 import { Authorisation, IContext } from "@framework/types";
 import { GetPCRItemTypesQuery } from "@server/features/pcrs/getItemTypesQuery";
@@ -51,7 +51,7 @@ export class CreateProjectChangeRequestCommand extends CommandBase<string> {
     const itemTypes = await context.runQuery(new GetPCRItemTypesQuery());
     const projectRoles = await context.runQuery(new GetAllProjectRolesForUser()).then(x => x.forProject(this.projectId).getRoles());
     const proejct = await context.runQuery(new GetByIdQuery(this.projectId));
-    const validationResult = new PCRDtoValidator(this.projectChangeRequestDto, projectRoles, itemTypes,true, proejct);
+    const validationResult = new PCRDtoValidator(this.projectChangeRequestDto, projectRoles, itemTypes,true, proejct, context.config.features);
 
     if (!validationResult.isValid) {
       throw new ValidationError(validationResult);
@@ -79,6 +79,8 @@ export class CreateProjectChangeRequestCommand extends CommandBase<string> {
           return { ...init, accountName: itemDto.accountName, partnerId: itemDto.partnerId };
       case PCRItemType.PartnerWithdrawal:
         return { ...init, removalPeriod: periodInProject(itemDto.withdrawalDate, project), partnerId: itemDto.partnerId, withdrawalDate: itemDto.withdrawalDate };
+      case PCRItemType.PartnerAddition:
+        return { ...init, projectRole: itemDto.projectRole, partnerType: itemDto.partnerType };
       default:
         return init;
     }
