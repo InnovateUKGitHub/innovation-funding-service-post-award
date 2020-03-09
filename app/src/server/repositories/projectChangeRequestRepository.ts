@@ -57,6 +57,10 @@ export interface ISalesforcePCR {
   Acc_ProjectSummarySnapshot__c: string|null;
   Acc_ExistingPartnerName__c: string|null;
   Acc_Nickname__c: string|null;
+
+  // Add partner
+  Acc_ProjectRole__c: string|null;
+  Acc_ParticipantType__c: string|null;
 }
 
 /**
@@ -105,6 +109,8 @@ export class ProjectChangeRequestRepository extends SalesforceRepositoryBase<ISa
     "Acc_ProjectSummarySnapshot__c",
     "Acc_ExistingPartnerName__c",
     "Acc_Nickname__c",
+    "Acc_ProjectRole__c",
+    "Acc_ParticipantType__c",
   ];
 
   async getAllByProjectId(projectId: string): Promise<ProjectChangeRequestEntity[]> {
@@ -159,7 +165,9 @@ export class ProjectChangeRequestRepository extends SalesforceRepositoryBase<ISa
       Acc_NewOrganisationName__c: x.accountName,
       Acc_RemovalDate__c: this.toOptionalSFDate(x.withdrawalDate),
       Acc_RemovalPeriod__c: x.removalPeriod,
-      Acc_Project_Participant__c: x.partnerId
+      Acc_Project_Participant__c: x.partnerId,
+      Acc_ProjectRole__c: x.projectRole,
+      Acc_ParticipantType__c: x.partnerType,
     })));
   }
 

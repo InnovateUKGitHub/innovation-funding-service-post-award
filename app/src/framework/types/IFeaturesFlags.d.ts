@@ -1,4 +1,5 @@
 interface IFeatureFlags {
+  readonly addPartnerWorkflow: boolean;
   readonly financialVirements: boolean;
   readonly pcrsEnabled: boolean;
   readonly contentHint: boolean;

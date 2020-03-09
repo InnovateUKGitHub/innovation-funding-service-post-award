@@ -12,6 +12,7 @@ export const createStores = (getState: () => RootState, dispatch: (action: RootA
   const claimDocuments = new Stores.ClaimDocumentsStore(partners, getState, dispatch);
   const claims = new Stores.ClaimsStore(costsSummaries, costCategories, claimDocuments, getState, dispatch);
   const claimDetails = new Stores.ClaimsDetailsStore(getState, dispatch);
+  const config = new Stores.ConfigStore(getState, dispatch);
   const forecastGolCosts = new Stores.ForecastGolCostsStore(getState, dispatch);
 
   return {
@@ -30,7 +31,7 @@ export const createStores = (getState: () => RootState, dispatch: (action: RootA
     monitoringReports: new Stores.MonitoringReportsStore(projects, getState, dispatch),
     navigation: new Stores.NavigationStore(getState, dispatch),
     projectChangeRequestDocuments: new Stores.ProjectChangeRequestDocumentsStore(getState, dispatch),
-    projectChangeRequests: new Stores.ProjectChangeRequestStore(projects, getState, dispatch),
+    projectChangeRequests: new Stores.ProjectChangeRequestStore(projects, config, getState, dispatch),
     projectDocuments: new Stores.ProjectDocumentsStore(getState, dispatch),
     projects,
     partners,

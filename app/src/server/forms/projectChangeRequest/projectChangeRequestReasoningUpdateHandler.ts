@@ -11,6 +11,7 @@ import { PCRDtoValidator } from "@ui/validators";
 import { PCRItemStatus, PCRItemType } from "@framework/constants";
 import { reasoningWorkflowSteps } from "@ui/containers/pcrs/reasoning/workflowMetadata";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
+import { Configuration } from "@server/features/common";
 
 export class ProjectChangeRequestReasoningUpdateHandler extends StandardFormHandlerBase<ProjectChangeRequestPrepareReasoningParams, "pcr"> {
   constructor() {
@@ -61,6 +62,6 @@ export class ProjectChangeRequestReasoningUpdateHandler extends StandardFormHand
       enabled: false,
       files:[]
     }];
-    return new PCRDtoValidator(dto, ProjectRole.Unknown, projectChangeRequestItemTypes, false, {} as ProjectDto, dto);
+    return new PCRDtoValidator(dto, ProjectRole.Unknown, projectChangeRequestItemTypes, false, {} as ProjectDto, Configuration.features, dto);
   }
 }
