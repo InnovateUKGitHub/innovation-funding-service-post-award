@@ -15,6 +15,13 @@ import { FinancialVirementSummaryContent } from "./pages/financialVirementSummar
 import { FinancialVirementEditContent } from "./pages/financialVirementEditContent";
 import { FinancialVirementDetailsContent } from "./pages/financialVirementDetailsContent";
 import { ClaimReviewContent } from "@content/pages/claims/claimReviewContent";
+import { MonitoringReportsDashboardContent } from "./pages/monitoringReports/monitoringReportsDashboardContent";
+import { MonitoringReportsCreateContent } from "./pages/monitoringReports/monitoringReportsCreateContent";
+import { MonitoringReportsDeleteContent } from "./pages/monitoringReports/monitoringReportsDeleteContent";
+import { MonitoringReportsSummaryContent } from "./pages/monitoringReports/monitoringReportsSummaryContent";
+import { MonitoringReportsWorkflowContent } from "./pages/monitoringReports/monitoringReportsWorkflowContent";
+import { MonitoringReportsPeriodStepContent } from "./pages/monitoringReports/monitoringReportsPeriodStepContent";
+import { MonitoringReportsQuestionStepContent } from "./pages/monitoringReports/monitoringReportsQuestionStep";
 
 export type ContentSelector = (content: Content) => ContentResult;
 
@@ -42,6 +49,14 @@ export class Content extends ContentBase {
   public readonly financialVirementSummary = new FinancialVirementSummaryContent(this);
   public readonly financialVirementEdit = new FinancialVirementEditContent(this);
   public readonly financialVirementDetails = new FinancialVirementDetailsContent(this);
+
+  public readonly monitoringReportsDashboard = new MonitoringReportsDashboardContent(this);
+  public readonly monitoringReportsCreate = new MonitoringReportsCreateContent(this);
+  public readonly monitoringReportsDelete = new MonitoringReportsDeleteContent(this);
+  public readonly monitoringReportsSummary = new MonitoringReportsSummaryContent(this);
+  public readonly monitoringReportsWorkflow = new MonitoringReportsWorkflowContent(this);
+  public readonly monitoringReportsPeriodStep = new MonitoringReportsPeriodStepContent(this);
+  public readonly monitoringReportsQuestionStep = new MonitoringReportsQuestionStepContent(this);
 
   public readonly errors = {
     notfound: new NotFoundContent(this),
