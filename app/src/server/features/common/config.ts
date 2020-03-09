@@ -110,6 +110,7 @@ const features: IFeatureFlags = {
     contentHint: getFeatureFlagValue(process.env.FEATURE_CONTENT_HINT, false),
     customContent: getFeatureFlagValue(process.env.FEATURE_CUSTOM_CONTENT, false),
     numberOfProjectsToSearch: parseInt(process.env.FEATURE_SEARCH_NUMBER_PROJECTS!, 10) || 3,
+    editPartnerPostcode: getFeatureFlagValue(process.env.FEATURE_EDIT_PARTNER_POSTCODE, defaultFeatureFlag),
 };
 
 const logLevel = parseLogLevel(process.env.LOG_LEVEL! || process.env.LOGLEVEL!);

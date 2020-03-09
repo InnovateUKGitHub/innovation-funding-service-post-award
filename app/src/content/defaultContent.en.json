@@ -198,6 +198,19 @@
     "monitoring-reports-question-step":{
       "button-continue": "Continue",
       "button-save-and-return": "Save and return to summary"
+    },
+    "partner-details":{
+      "title": {
+        "html": "View partner details",
+        "display": "Partner details"
+      }
+    },
+    "partner-details-edit":{
+      "title": {
+        "html": "Edit partner details",
+        "display": "Partner details"
+      },
+      "save-and-return-partner-details-button": "Save and return to partner details"
     }
   },
   "claims-messages": {

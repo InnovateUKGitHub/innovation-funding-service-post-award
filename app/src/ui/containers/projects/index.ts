@@ -4,3 +4,5 @@ export * from "./financeSummary";
 export * from "./projectChangeRequests";
 export * from "./projectDocuments";
 export * from "./overview";
+export * from "./partnerDetails";
+export * from "./partnerDetailsEdit";
