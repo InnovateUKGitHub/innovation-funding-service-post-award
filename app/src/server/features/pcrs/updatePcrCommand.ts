@@ -47,7 +47,7 @@ export class UpdatePCRCommand extends CommandBase<boolean> {
 
     const originalDto = mapToPcrDto(entityToUpdate, itemTypes);
 
-    const validationResult = new PCRDtoValidator(this.pcr, projectRoles, itemTypes, true, project, originalDto, partners);
+    const validationResult = new PCRDtoValidator(this.pcr, projectRoles, itemTypes, true, project, context.config.features, originalDto, partners);
 
     if (!validationResult.isValid) {
       throw new ValidationError(validationResult);
@@ -127,6 +127,11 @@ export class UpdatePCRCommand extends CommandBase<boolean> {
       case PCRItemType.PartnerWithdrawal:
         if (item.withdrawalDate !== dto.withdrawalDate || item.partnerId !== dto.partnerId) {
           return { ...init, withdrawalDate: dto.withdrawalDate, partnerId: dto.partnerId, removalPeriod: periodInProject(dto.withdrawalDate, project) };
+        }
+        break;
+      case PCRItemType.PartnerAddition:
+        if (item.projectRole !== dto.projectRole || item.partnerType !== dto.partnerType) {
+          return { ...init, projectRole: dto.projectRole, partnerType: dto.partnerType };
         }
         break;
     }

@@ -14,9 +14,10 @@ import {
   PCRStatus
 } from "@framework/constants";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
+import { ConfigStore } from "@ui/redux/stores/configStore";
 
 export class ProjectChangeRequestStore extends StoreBase {
-  constructor(private projectStore: ProjectsStore, getState: () => RootState, queue: (action: any) => void) {
+  constructor(private projectStore: ProjectsStore, private readonly configStore: ConfigStore, getState: () => RootState, queue: (action: any) => void) {
     super(getState, queue);
   }
 
@@ -169,11 +170,17 @@ export class ProjectChangeRequestStore extends StoreBase {
 
     switch (itemType.type) {
       case PCRItemType.MultiplePartnerFinancialVirement:
-      case PCRItemType.PartnerAddition:
       case PCRItemType.SinglePartnerFinancialVirement:
         return {
           ...baseFields,
           type: itemType.type
+        };
+      case PCRItemType.PartnerAddition:
+        return {
+          ...baseFields,
+          type: itemType.type,
+          projectRole: null,
+          partnerType: null
         };
       case PCRItemType.PartnerWithdrawal:
         return {
@@ -231,7 +238,7 @@ export class ProjectChangeRequestStore extends StoreBase {
       original: dto.id ? this.getById(projectId, dto.id) : Pending.done(undefined),
       itemTypes: this.getAllPcrTypes(),
       project: this.projectStore.getById(projectId)
-    }).then(x => new PCRDtoValidator(dto, x.projectRoles, x.itemTypes, showErrors, x.project, x.original));
+    }).then(x => new PCRDtoValidator(dto, x.projectRoles, x.itemTypes, showErrors, x.project, this.configStore.getConfig().features, x.original));
   }
 
   public deletePcr(projectId: string, pcrId: string, dto: PCRDto, message?: string, onComplete?: () => void): void {

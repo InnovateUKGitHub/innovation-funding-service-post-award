@@ -6,6 +6,7 @@ import { CreateProjectChangeRequestCommand } from "@server/features/pcrs/createP
 import { PCRDtoValidator } from "@ui/validators";
 import { PCRItemStatus, PCRStatus } from "@framework/constants";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
+import { Configuration } from "@server/features/common";
 
 export class ProjectChangeRequestCreateFormHandler extends StandardFormHandlerBase<CreateProjectChangeRequestParams, "pcr"> {
   constructor() {
@@ -41,6 +42,6 @@ export class ProjectChangeRequestCreateFormHandler extends StandardFormHandlerBa
   }
 
   protected createValidationResult(params: CreateProjectChangeRequestParams, dto: PCRDto) {
-    return new PCRDtoValidator(dto, ProjectRole.Unknown, [], false, {} as ProjectDto, dto);
+    return new PCRDtoValidator(dto, ProjectRole.Unknown, [], false, {} as ProjectDto, Configuration.features, dto);
   }
 }

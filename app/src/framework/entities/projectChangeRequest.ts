@@ -36,6 +36,8 @@ export interface ProjectChangeRequestItemForCreateEntity {
   partnerId?: string | null;
   withdrawalDate?: Date | null;
   removalPeriod?: number | null;
+  projectRole?: string | null;
+  partnerType?: string | null;
 }
 
 export interface ProjectChangeRequestItemEntity extends ProjectChangeRequestItemForCreateEntity {
