@@ -38,7 +38,7 @@ export class PartnersStore extends StoreBase {
     );
   }
 
-  public updatePartner(submit: boolean, partnerId: string, partnerDto: PartnerDto) {
+  public updatePartner(submit: boolean, partnerId: string, partnerDto: PartnerDto, onComplete?: (result: PartnerDto) => void): void {
     return this.updateEditor(
       submit,
       "partner",
@@ -46,7 +46,12 @@ export class PartnersStore extends StoreBase {
       partnerDto,
       () => new PartnerDtoValidator(partnerDto, true),
       p => ApiClient.partners.updatePartner({ partnerId, partnerDto, ...p }),
-      (result) => (this.queue(dataLoadAction(storeKeys.getPartnerKey(partnerId), "partner", LoadingStatus.Updated, result)))
+      (result) => {
+        this.queue(dataLoadAction(storeKeys.getPartnerKey(partnerId), "partner", LoadingStatus.Updated, result));
+        if(onComplete) {
+          onComplete(result);
+        }
+      }
     );
   }
 }

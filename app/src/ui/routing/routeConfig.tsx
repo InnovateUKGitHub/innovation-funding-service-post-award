@@ -20,6 +20,8 @@ export const routeConfig = {
   monitoringReportDelete: Containers.MonitoringReportDeleteRoute,
   monitoringReportWorkflow: Containers.MonitoringReportWorkflowRoute,
   monitoringReportPreparePeriod: Containers.MonitoringReportPreparePeriodRoute,
+  partnerDetails: Containers.PartnerDetailsRoute,
+  partnerDetailsEdit: Containers.PartnerDetailsEditRoute,
   prepareClaim: Containers.PrepareClaimRoute,
   prepareClaimLineItems: Containers.EditClaimLineItemsRoute,
   projectChangeRequests: Containers.ProjectChangeRequestsRoute,

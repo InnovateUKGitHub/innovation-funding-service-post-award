@@ -5,4 +5,5 @@ interface IFeatureFlags {
   readonly contentHint: boolean;
   readonly customContent: boolean;
   readonly numberOfProjectsToSearch: number;
+  readonly editPartnerPostcode: boolean;
 }
