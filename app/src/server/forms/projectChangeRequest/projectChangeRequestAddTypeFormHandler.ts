@@ -11,6 +11,7 @@ import { UpdatePCRCommand } from "@server/features/pcrs/updatePcrCommand";
 import { GetPCRByIdQuery } from "@server/features/pcrs/getPCRByIdQuery";
 import { PCRItemStatus } from "@framework/constants";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
+import { Configuration } from "@server/features/common";
 
 export class ProjectChangeRequestAddTypeFormHandler extends StandardFormHandlerBase<ProjectChangeRequestAddTypeParams, "pcr"> {
   constructor() {
@@ -47,6 +48,6 @@ export class ProjectChangeRequestAddTypeFormHandler extends StandardFormHandlerB
   }
 
   protected createValidationResult(params: ProjectChangeRequestAddTypeParams, dto: PCRDto) {
-    return new PCRDtoValidator(dto, ProjectRole.Unknown, [], false, {} as ProjectDto, dto);
+    return new PCRDtoValidator(dto, ProjectRole.Unknown, [], false, {} as ProjectDto, Configuration.features, dto);
   }
 }
