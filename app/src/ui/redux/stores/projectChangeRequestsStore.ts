@@ -1,5 +1,6 @@
 import { StoreBase } from "./storeBase";
-import { PCRDto, PCRItemForTimeExtensionDto, PCRStandardItemDto, ProjectRole } from "@framework/dtos";
+import * as Dtos from "@framework/dtos";
+import { PCRDto, PCRItemForTimeExtensionDto, PCRStandardItemDto } from "@framework/dtos";
 import { PCRDtoValidator } from "@ui/validators";
 import { ProjectsStore } from "./projectsStore";
 import { RootState } from "../reducers";
@@ -7,12 +8,7 @@ import { ApiClient } from "@ui/apiClient";
 import { LoadingStatus, Pending } from "@shared/pending";
 import { dataLoadAction, messageSuccess } from "../actions";
 import { NotFoundError } from "@server/features/common";
-import * as Dtos from "@framework/dtos";
-import {
-  PCRItemStatus,
-  PCRItemType, PCRProjectRole,
-  PCRStatus
-} from "@framework/constants";
+import { PCRItemStatus, PCRItemType, PCRPartnerType, PCRProjectRole, PCRStatus } from "@framework/constants";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
 import { ConfigStore } from "@ui/redux/stores/configStore";
 
@@ -180,7 +176,7 @@ export class ProjectChangeRequestStore extends StoreBase {
           ...baseFields,
           type: itemType.type,
           projectRole: PCRProjectRole.Unknown,
-          partnerType: null
+          partnerType: PCRPartnerType.Unknown
         };
       case PCRItemType.PartnerWithdrawal:
         return {

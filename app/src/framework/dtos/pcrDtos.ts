@@ -1,6 +1,6 @@
 import {
   PCRItemStatus,
-  PCRItemType,
+  PCRItemType, PCRPartnerType,
   PCRProjectRole,
   PCRStatus
 } from "@framework/constants";
@@ -100,7 +100,7 @@ export interface PCRItemForProjectTerminationDto extends PCRItemBaseDto {
 export interface PCRItemForPartnerAdditionDto extends PCRItemBaseDto {
   type: PCRItemType.PartnerAddition;
   projectRole: PCRProjectRole;
-  partnerType: string | null; // TODO check this
+  partnerType: PCRPartnerType;
 }
 
 export interface PCRItemTypeDto {
