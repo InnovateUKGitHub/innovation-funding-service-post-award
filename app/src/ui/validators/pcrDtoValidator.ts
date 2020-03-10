@@ -2,11 +2,11 @@ import { DateTime } from "luxon";
 import { Result, Results } from "../validation";
 import * as Validation from "./common";
 import {
-  Option,
   PartnerDto,
   PCRDto,
   PCRItemDto,
   PCRItemForAccountNameChangeDto,
+  PCRItemForMultiplePartnerFinancialVirementDto,
   PCRItemForPartnerAdditionDto,
   PCRItemForPartnerWithdrawalDto,
   PCRItemForProjectSuspensionDto,
@@ -18,7 +18,7 @@ import {
   ProjectDto,
   ProjectRole
 } from "@framework/dtos";
-import { PCRItemStatus, PCRItemType, PCRPartnerType, PCRProjectRole, PCRStatus } from "@framework/constants";
+import { PCRItemStatus, PCRItemType, PCRStatus } from "@framework/constants";
 import { isNumber, periodInProject } from "@framework/util";
 
 export class PCRDtoValidator extends Results<PCRDto> {
@@ -149,7 +149,7 @@ export class PCRDtoValidator extends Results<PCRDto> {
     const originalItem = this.original && this.original.items.find(x => x.id === item.id);
     switch (item.type) {
       case PCRItemType.TimeExtension:
-        return new PCRTimeExtensionItemDtoValidator(item, canEdit, this.role, this.model.status, this.recordTypes, this.showValidationErrors,originalItem as PCRItemForTimeExtensionDto);
+        return new PCRTimeExtensionItemDtoValidator(item, canEdit, this.role, this.model.status, this.recordTypes, this.showValidationErrors, originalItem as PCRItemForTimeExtensionDto);
       case PCRItemType.ScopeChange:
         return new PCRScopeChangeItemDtoValidator(item, canEdit, this.role, this.model.status, this.recordTypes, this.showValidationErrors, originalItem as PCRItemForScopeChangeDto);
       case PCRItemType.ProjectSuspension:
@@ -164,10 +164,11 @@ export class PCRDtoValidator extends Results<PCRDto> {
         if (this.featureFlags.addPartnerWorkflow) {
           return new PCRPartnerAdditionItemDtoValidator(item, canEdit, this.role, this.model.status, this.recordTypes, this.showValidationErrors, originalItem as PCRItemForPartnerAdditionDto);
         }
-        // TODO remove once feature flag is removed
+         // TODO remove once feature flag is removed
         return new PCROldPartnerAdditionItemDtoValidator(item, canEdit, this.role, this.model.status, this.recordTypes, this.showValidationErrors, originalItem as PCRItemForPartnerAdditionDto);
       }
       case PCRItemType.MultiplePartnerFinancialVirement:
+        return new MultiplePartnerFinancialVirementDtoValidator(item, canEdit, this.role, this.model.status, this.recordTypes, this.showValidationErrors, originalItem as PCRItemForMultiplePartnerFinancialVirementDto);
       case PCRItemType.SinglePartnerFinancialVirement:
         return new PCRStandardItemDtoValidator(item, canEdit, this.role, this.model.status, this.recordTypes, this.showValidationErrors, originalItem as PCRStandardItemDto);
       default:
@@ -245,6 +246,24 @@ export class PCRStandardItemDtoValidator extends PCRBaseItemDtoValidator<PCRStan
 
 }
 
+export class MultiplePartnerFinancialVirementDtoValidator extends PCRBaseItemDtoValidator<PCRItemForMultiplePartnerFinancialVirementDto> {
+  private validateGrantMovingOverFinancialYear() {
+    if (!this.canEdit) {
+      return Validation.isUnchanged(this, this.model.grantMovingOverFinancialYear, this.original && this.original.grantMovingOverFinancialYear, "The value of a grant moving over financial year cannot be changed.");
+    }
+
+    const hasValue = this.model.grantMovingOverFinancialYear || this.model.grantMovingOverFinancialYear === 0;
+
+    return Validation.all(this,
+      () => this.model.status === PCRItemStatus.Complete ? Validation.required(this, this.model.grantMovingOverFinancialYear, "Grant moving over financial year is required"): Validation.valid(this),
+      () => Validation.number(this, this.model.grantMovingOverFinancialYear, "The value of a grant moving over financial year must be numerical."),
+      () => hasValue ? Validation.isTrue(this, this.model.grantMovingOverFinancialYear! >= 0, "The value can not be lower than 0.") : Validation.valid(this)
+    );
+  }
+
+  grantMovingOverFinancialYear = this.validateGrantMovingOverFinancialYear();
+}
+
 export class PCRTimeExtensionItemDtoValidator extends PCRBaseItemDtoValidator<PCRItemForTimeExtensionDto> {
   private validateAdditionalMonths() {
     if (!this.canEdit) {
@@ -255,8 +274,8 @@ export class PCRTimeExtensionItemDtoValidator extends PCRBaseItemDtoValidator<PC
     const hasValue = this.model.additionalMonths || this.model.additionalMonths === 0;
 
     return Validation.all(this,
-      () => isComplete ? Validation.required(this, this.model.additionalMonths , "Please enter the number of months you want to extend your project by") : Validation.valid(this),
-      () => Validation.number(this, this.model.additionalMonths , "Please enter a number of months you want to extend your project by"),
+      () => isComplete ? Validation.required(this, this.model.additionalMonths, "Please enter the number of months you want to extend your project by") : Validation.valid(this),
+      () => Validation.number(this, this.model.additionalMonths, "Please enter a number of months you want to extend your project by"),
       () => hasValue ? Validation.isTrue(this, this.model.additionalMonths! > 0, "Please enter a number that increases the project duration") : Validation.valid(this),
       () => hasValue ? Validation.isTrue(this, Number.isInteger(this.model.additionalMonths!), "Please enter a whole number of months") : Validation.valid(this)
     );
@@ -291,7 +310,7 @@ export class PCRProjectSuspensionItemDtoValidator extends PCRBaseItemDtoValidato
     }
     return Validation.all(this,
       () => Validation.isDate(this, this.model.suspensionEndDate, "Please enter a valid suspension end date"),
-      () => this.model.suspensionEndDate ? Validation.isTrue(this, DateTime.fromJSDate(this.model.suspensionEndDate).plus({days: 1}).day === 1, "The date must be at the end of the month") : Validation.valid(this)
+      () => this.model.suspensionEndDate ? Validation.isTrue(this, DateTime.fromJSDate(this.model.suspensionEndDate).plus({ days: 1 }).day === 1, "The date must be at the end of the month") : Validation.valid(this)
     );
   }
 
