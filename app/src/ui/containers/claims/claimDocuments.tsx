@@ -134,13 +134,13 @@ class ClaimDocumentsComponent extends ContainerBase<ClaimDocumentsPageParams, Da
       );
     }
 
-    const renderClaimValidationFormDocuments = documents.filter(x => x.description === DocumentDescription.ClaimValidationForm);
-    const renderClaimSupportingDocuments = documents.filter(x => x.description !== DocumentDescription.ClaimValidationForm);
+    const claimValidationFormDocuments = documents.filter(x => x.description === DocumentDescription.ClaimValidationForm);
+    const claimSupportingDocuments = documents.filter(x => x.description !== DocumentDescription.ClaimValidationForm);
 
     return (
       <ACC.Section subtitle="All documents open in a new window">
-        {renderClaimSupportingDocuments.length ? <ACC.DocumentListWithDelete onRemove={(document) => this.props.onDelete(editor.data, document)} documents={renderClaimSupportingDocuments} qa="claim-supporting-documents"/> : null}
-        {renderClaimValidationFormDocuments.length ? <ACC.DocumentList documents={renderClaimValidationFormDocuments} qa="claim-validation-form-documents"/> : null}
+        {claimSupportingDocuments.length ? <ACC.DocumentListWithDelete onRemove={(document) => this.props.onDelete(editor.data, document)} documents={claimSupportingDocuments} qa="claim-supporting-documents"/> : null}
+        {claimValidationFormDocuments.length ? <ACC.DocumentList documents={claimValidationFormDocuments} qa="claim-validation-form-documents"/> : null}
       </ACC.Section>
     );
   }
