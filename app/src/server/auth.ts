@@ -29,6 +29,7 @@ const shibConfig: passportSaml.SamlConfig = {
   entryPoint: Configuration.sso.providerUrl,
   issuer: Configuration.serverUrl,
   callbackUrl: `${Configuration.serverUrl}/auth/success`,
+  // the info we're asking for
   identifierFormat: `urn:oasis:names:tc:SAML:1.1:nameid-format:persistent`,
   disableRequestedAuthnContext: true,
   decryptionPvk: fs.readFileSync(Configuration.certificates.shibboleth, "utf-8"),
@@ -68,6 +69,7 @@ router.get("/logout", noCache, (req, res) => {
   return res.redirect(Configuration.sso.enabled && Configuration.sso.signoutUrl || "/");
 });
 
+// Shiboleth makes user browser post back to our app with creds
 router.post("/auth/success", (req, res, next) => passport.authenticate("shibboleth", (err, user) => {
   if (err) {
     new Logger().error("Authentication Error", err);

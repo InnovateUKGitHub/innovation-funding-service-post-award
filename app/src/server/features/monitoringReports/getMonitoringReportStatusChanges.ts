@@ -29,11 +29,11 @@ export class GetMonitoringReportStatusChanges extends QueryBase<MonitoringReport
       ;
   }
 
-  private mapItem(context: IContext, statusChange: ISalesforceMonitoringReportStatusChange, statusLookup: Map<MonitoringReportStatus, Option<MonitoringReportStatus>>): MonitoringReportStatusChangeDto {
+  private mapItem(context: IContext, statusChange: ISalesforceMonitoringReportStatusChange, statusLookup: Option<MonitoringReportStatus>[]): MonitoringReportStatusChangeDto {
     const newStatus = mapMonitoringReportStatus(statusChange.Acc_NewMonitoringReportStatus__c);
     const previousStatus = mapMonitoringReportStatus(statusChange.Acc_PreviousMonitoringReportStatus__c);
-    const newStatusLookup = statusLookup.get(newStatus);
-    const previousStatusLookup = statusLookup.get(previousStatus);
+    const newStatusLookup = statusLookup.find(x => x.value === newStatus);
+    const previousStatusLookup = statusLookup.find(x => x.value === previousStatus);
     return {
       id: statusChange.Id,
       monitoringReport: statusChange.Acc_MonitoringReport__c,
