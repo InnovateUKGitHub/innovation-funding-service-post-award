@@ -194,19 +194,17 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, Data, Callbacks> 
   private renderDocumentList(editor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>, documents: DocumentSummaryDto[]) {
     if (!documents.length) {
       return (
-        <React.Fragment>
-          <ACC.ValidationMessage messageContent={x => x.claimDocuments.documentMessages.noDocumentsUploaded()} messageType="info" />
-        </React.Fragment>
+        <ACC.ValidationMessage messageContent={x => x.claimDocuments.documentMessages.noDocumentsUploaded()} messageType="info" />
       );
     }
 
-    const renderClaimValidationFormDocuments = documents.filter(x => x.description === DocumentDescription.ClaimValidationForm);
-    const renderClaimSupportingDocuments = documents.filter(x => x.description !== DocumentDescription.ClaimValidationForm);
+    const claimValidationFormDocuments = documents.filter(x => x.description === DocumentDescription.ClaimValidationForm);
+    const claimSupportingDocuments = documents.filter(x => x.description !== DocumentDescription.ClaimValidationForm);
 
     return (
       <React.Fragment>
-        {renderClaimValidationFormDocuments.length ? <ACC.DocumentListWithDelete documents={renderClaimValidationFormDocuments} onRemove={(document) => this.props.onDelete(editor.data, document)} qa="claim-validation-form-documents"/> : null}
-        {renderClaimSupportingDocuments.length ? <ACC.DocumentList documents={renderClaimSupportingDocuments} qa="claim-supporting-documents" /> : null}
+        {claimValidationFormDocuments.length ? <ACC.DocumentListWithDelete documents={claimValidationFormDocuments} onRemove={(document) => this.props.onDelete(editor.data, document)} qa="claim-validation-form-documents"/> : null}
+        {claimSupportingDocuments.length ? <ACC.DocumentList documents={claimSupportingDocuments} qa="claim-supporting-documents" /> : null}
       </React.Fragment>
     );
   }
