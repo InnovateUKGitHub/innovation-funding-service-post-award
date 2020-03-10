@@ -5,6 +5,7 @@ import { Pending } from "@shared/pending";
 import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerBase";
 import { ContentConsumer, IEditorStore, StoresConsumer } from "@ui/redux";
 import { MultipleDocumentUpdloadDtoValidator } from "@ui/validators";
+import { DocumentDescription } from "@framework/constants";
 
 export interface ClaimDocumentsPageParams {
   projectId: string;
@@ -133,9 +134,13 @@ class ClaimDocumentsComponent extends ContainerBase<ClaimDocumentsPageParams, Da
       );
     }
 
+    const claimValidationFormDocuments = documents.filter(x => x.description === DocumentDescription.ClaimValidationForm);
+    const claimSupportingDocuments = documents.filter(x => x.description !== DocumentDescription.ClaimValidationForm);
+
     return (
       <ACC.Section subtitle="All documents open in a new window">
-        <ACC.DocumentListWithDelete onRemove={(document) => this.props.onDelete(editor.data, document)} documents={documents} qa="claim-documents"/>
+        {claimSupportingDocuments.length ? <ACC.DocumentListWithDelete onRemove={(document) => this.props.onDelete(editor.data, document)} documents={claimSupportingDocuments} qa="claim-supporting-documents"/> : null}
+        {claimValidationFormDocuments.length ? <ACC.DocumentList documents={claimValidationFormDocuments} qa="claim-validation-form-documents"/> : null}
       </ACC.Section>
     );
   }
