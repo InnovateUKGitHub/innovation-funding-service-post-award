@@ -26,22 +26,22 @@ export class GetProjectChangeRequestStatusChanges extends QueryBase<ProjectChang
     .map<ProjectChangeRequestStatusChangeDto>(x => this.mapItem(context, x, isMo, isPm, statusLookup)).sort((a, b) => dateComparator(b.createdDate, a.createdDate));
   }
 
-  protected mapItem(context: IContext, x: ProjectChangeRequestStatusChangeEntity, isMo: boolean, isPm: boolean, statusLookup: Map<PCRStatus, Option<PCRStatus>>): ProjectChangeRequestStatusChangeDto {
-    const newStatus = x.newStatus;
-    const previousStatus = x.previousStatus;
-    const newStatusLookup = statusLookup.get(newStatus);
-    const previousStatusLookup = statusLookup.get(previousStatus);
+  protected mapItem(context: IContext, entity: ProjectChangeRequestStatusChangeEntity, isMo: boolean, isPm: boolean, statusLookup: Option<PCRStatus>[]): ProjectChangeRequestStatusChangeDto {
+    const newStatus = entity.newStatus;
+    const previousStatus = entity.previousStatus;
+    const newStatusLookup = statusLookup.find(x => x.value === newStatus);
+    const previousStatusLookup = statusLookup.find(x => x.value === previousStatus);
     return {
-      id: x.id,
-      projectChangeRequest: x.pcrId,
+      id: entity.id,
+      projectChangeRequest: entity.pcrId,
       newStatus,
       newStatusLabel:  newStatusLookup && newStatusLookup.label || "Unknown",
       previousStatus,
       previousStatusLabel: previousStatusLookup && previousStatusLookup.label || "Unknown",
-      createdBy: x.createdBy,
-      createdDate: x.createdDate,
-      comments: isMo || (isPm && x.externalComments) ? x.externalComments : null,
-      participantVisibility: x.participantVisibility
+      createdBy: entity.createdBy,
+      createdDate: entity.createdDate,
+      comments: isMo || (isPm && entity.externalComments) ? entity.externalComments : null,
+      participantVisibility: entity.participantVisibility
     };
   }
 }

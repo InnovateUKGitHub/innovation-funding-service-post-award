@@ -4,7 +4,7 @@ import {
   ProjectChangeRequestItemEntity
 } from "@framework/entities";
 import { ISalesforcePCR } from "../projectChangeRequestRepository";
-import { PCRItemStatus, PCRStatus } from "@framework/constants";
+import { PCRItemStatus, PCRProjectRole, PCRStatus } from "@framework/constants";
 
 export const mapToPCRStatus = ((status: string) => {
   switch (status) {
@@ -37,6 +37,28 @@ export const mapToPCRStatus = ((status: string) => {
       return PCRStatus.Unknown;
   }
 });
+export class PcrProjectRoleMapper {
+  private roles = {
+    collaborator: "Collaborator",
+    projectLead: "Project Lead",
+  };
+
+  public mapFromSalesforcePCRProjectRole = ((role: string | null) => {
+    switch (role) {
+      case this.roles.collaborator: return PCRProjectRole.Collaborator;
+      case this.roles.projectLead: return PCRProjectRole.ProjectLead;
+      default: return PCRProjectRole.Unknown;
+    }
+  });
+
+  public mapToSalesforcePCRProjectRole = ((role: PCRProjectRole | undefined) => {
+    switch (role) {
+      case PCRProjectRole.Collaborator: return this.roles.collaborator;
+      case PCRProjectRole.ProjectLead: return this.roles.projectLead;
+      default: return null;
+    }
+  });
+}
 
 export class SalesforcePCRMapper extends SalesforceBaseMapper<ISalesforcePCR[], ProjectChangeRequestEntity[]> {
   constructor(private readonly headerRecordTypeId: string) {
@@ -85,6 +107,8 @@ export class SalesforcePCRMapper extends SalesforceBaseMapper<ISalesforcePCR[], 
       projectSummarySnapshot: pcrItem.Acc_ProjectSummarySnapshot__c,
       partnerNameSnapshot: pcrItem.Acc_ExistingPartnerName__c,
       shortName: pcrItem.Acc_Nickname__c || "",
+      // add partner fields
+      projectRole: new PcrProjectRoleMapper().mapFromSalesforcePCRProjectRole(pcrItem.Acc_ProjectRole__c),
     };
   }
 

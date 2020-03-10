@@ -18,6 +18,7 @@ import { GetMonitoringReportStatusesQuery } from "./features/monitoringReports/g
 import { GetPcrStatusesQuery } from "./features/pcrs/getPcrStatusesQuery";
 import { initInternationalisation, internationalisationRouter } from "./internationalisation";
 import { InitialiseContentCommand } from "./features/general/initialiseContentCommand";
+import { GetPcrProjectRolesQuery } from "@server/features/pcrs/getPcrProjectRolesQuery";
 
 export class Server {
   private app: express.Express;
@@ -119,6 +120,7 @@ export class Server {
       this.primeCache(context, "Claim Statuses cache", () => context.runQuery(new GetClaimStatusesQuery()));
       this.primeCache(context, "Monitoring Report Status cache", () => context.runQuery(new GetMonitoringReportStatusesQuery()));
       this.primeCache(context, "Project Change Request Status cache", () => context.runQuery(new GetPcrStatusesQuery()));
+      this.primeCache(context, "Project Change Request Project Roles cache", () => context.runQuery(new GetPcrProjectRolesQuery()));
     }
   }
 

@@ -13,6 +13,12 @@ export enum PCRStatus {
   Actioned = 11,
 }
 
+export enum PCRProjectRole {
+  Unknown = 0,
+  ProjectLead = 10,
+  Collaborator = 20,
+}
+
 export enum PCRItemStatus {
   Unknown = 0,
   ToDo = 1,
