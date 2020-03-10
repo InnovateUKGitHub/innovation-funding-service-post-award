@@ -13,30 +13,23 @@ export class TestCaches implements ICaches {
   contentStoreLastUpdated: Date|null = null;
 }
 
-class TestOptionsCache extends Cache<Map<any, Option<any>>> {
+class TestOptionsCache extends Cache<Option<any>[]> {
 
   constructor() {
     super(1);
   }
 
   public get monitoringReports() {
-    return new OptionsCacheMap<MonitoringReportStatus>(super.fetch("MonitoringReports", () => new Map()));
+    return super.fetch("MonitoringReports", () => []);
   }
-}
-
-class OptionsCacheMap<T> {
-  constructor(private map: Map<T, Option<T>>) {
-
-  }
-
-  addItem(enumValue: T, label: string) {
-    this.map.set(enumValue, {
+  public addMonitoringReportItem(key: MonitoringReportStatus, label: any ) {
+    const cache = super.fetch("MonitoringReports", () => []);
+    cache.push({
       active: true,
       defaultValue: false,
       label,
-      value: enumValue
+      value: key
     });
-
     return this;
   }
 }

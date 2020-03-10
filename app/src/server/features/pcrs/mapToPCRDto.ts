@@ -1,7 +1,4 @@
-import {
-  ProjectChangeRequestEntity,
-  ProjectChangeRequestItemEntity
-} from "@framework/entities";
+import { ProjectChangeRequestEntity, ProjectChangeRequestItemEntity } from "@framework/entities";
 import {
   PCRDto,
   PCRItemForAccountNameChangeDto,
@@ -12,9 +9,10 @@ import {
   PCRItemForScopeChangeDto,
   PCRItemForTimeExtensionDto,
   PCRItemTypeDto,
-  PCRStandardItemDto, ProjectChangeRequestStandardItemTypes
+  PCRStandardItemDto,
+  ProjectChangeRequestStandardItemTypes
 } from "@framework/dtos";
-import { PCRItemType } from "@framework/constants";
+import { PCRItemType, PCRProjectRole } from "@framework/constants";
 import { PCRRecordTypeMetaValues } from "@server/features/pcrs/getItemTypesQuery";
 
 export const mapToPcrDto = (pcr: ProjectChangeRequestEntity, itemTypes: PCRItemTypeDto[]): PCRDto => ({
@@ -121,7 +119,7 @@ const mapItemForPartnerWithdrawal = (pcr: ProjectChangeRequestItemEntity, typeNa
 
 const mapItemForPartnerAddition = (pcr: ProjectChangeRequestItemEntity, typeName: string, type: PCRItemType.PartnerAddition): PCRItemForPartnerAdditionDto => ({
   ...mapBaseItem(pcr, typeName, type),
-  projectRole: pcr.projectRole || null,
+  projectRole: pcr.projectRole || PCRProjectRole.Unknown,
   partnerType: pcr.partnerType || null,
   type
 });

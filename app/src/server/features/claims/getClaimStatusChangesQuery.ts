@@ -33,11 +33,11 @@ export class GetClaimStatusChangesQuery extends QueryBase<ClaimStatusChangeDto[]
     return mapped.sort((a, b) => dateComparator(a.createdDate, b.createdDate) * -1 || stringComparator(a.id, b.id) * -1);
   }
 
-  map(context: IContext, item: ISalesforceClaimStatusChange, claimStatuses: Map<ClaimStatus, Option<ClaimStatus>>, canSeeHidden: boolean, canSeePublic: boolean): ClaimStatusChangeDto {
+  map(context: IContext, item: ISalesforceClaimStatusChange, claimStatuses: Option<ClaimStatus>[], canSeeHidden: boolean, canSeePublic: boolean): ClaimStatusChangeDto {
     const previousStatus = mapToClaimStatus(item.Acc_PreviousClaimStatus__c);
     const newStatus = mapToClaimStatus(item.Acc_NewClaimStatus__c);
-    const prevClaimStatusOption = claimStatuses.get(previousStatus);
-    const newClaimStatusOption = claimStatuses.get(newStatus);
+    const prevClaimStatusOption = claimStatuses.find(x => x.value === previousStatus);
+    const newClaimStatusOption = claimStatuses.find(x => x.value === newStatus);
     return {
       claimId: item.Acc_Claim__c,
       id: item.Id,
