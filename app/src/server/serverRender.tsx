@@ -7,7 +7,17 @@ import { RouterProvider } from "react-router5";
 import { constants as routerConstants, Router, State } from "router5";
 
 import contextProvider from "./features/common/contextProvider";
-import { createStores, IStores, rootReducer, RootState, setupInitialState, setupMiddleware, StoresProvider } from "@ui/redux";
+import {
+  createStores,
+  IStores,
+  ModalProvider,
+  ModalRegister,
+  rootReducer,
+  RootState,
+  setupInitialState,
+  setupMiddleware,
+  StoresProvider
+} from "@ui/redux";
 import { App } from "@ui/containers/app";
 import * as Actions from "@ui/redux/actions";
 import { renderHtml } from "./html";
@@ -44,6 +54,7 @@ export async function serverRender(req: Request, res: Response, error?: IAppErro
     const initialState = setupInitialState(route, user, clientConfig);
     const middleware = setupMiddleware(router, false);
     const store = createStore(rootReducer, initialState, middleware);
+    const modalRegister = new ModalRegister();
 
     const stores = createStores(
       () => store.getState(),
@@ -59,15 +70,15 @@ export async function serverRender(req: Request, res: Response, error?: IAppErro
 
     await loadAllData(store, () => {
       // render the app to cause any other actions to go round the loop
-      renderApp(router, store, stores, routes, content);
+      renderApp(router, store, stores, routes, content, modalRegister);
     });
 
     onComplete(store, stores, content, matched, params, error);
 
-    res.send(renderApp(router, store, stores, routes, content));
+    res.send(renderApp(router, store, stores, routes, content, modalRegister));
   }
   catch (e) {
-
+    // TODO capture stask trace for logs
     new Logger(req.session && req.session.user).error("Unable to render", e);
 
     const routeState: State = {
@@ -94,7 +105,7 @@ export async function serverRender(req: Request, res: Response, error?: IAppErro
 
     store.dispatch(Actions.setPageTitle(matched.getTitle({ params: routeState.params, stores, content })));
 
-    res.status(getErrorStatus(e)).send(renderApp(router, store, stores, routes, content));
+    res.status(getErrorStatus(e)).send(renderApp(router, store, stores, routes, content, new ModalRegister()));
   }
 }
 
@@ -156,14 +167,16 @@ function startRouter(req: Request, router: Router): Promise<State> {
   });
 }
 
-function renderApp(router: Router, store: Store<RootState>, stores: IStores, routes: IRoutes, content: Content): string {
+function renderApp(router: Router, store: Store<RootState>, stores: IStores, routes: IRoutes, content: Content, modalRegister: ModalRegister): string {
 
   const html = renderToString(
     <Provider store={store}>
       <RouterProvider router={router}>
         <StoresProvider value={stores}>
           <ContentProvider value={content}>
-            <App store={store} routes={routes} />
+            <ModalProvider value={modalRegister}>
+              <App store={store} routes={routes} />
+            </ModalProvider>
           </ContentProvider>
         </StoresProvider>
       </RouterProvider>

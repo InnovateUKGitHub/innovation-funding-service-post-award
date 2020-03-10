@@ -8,7 +8,14 @@ import i18next from "i18next";
 import { Polyfill } from "./polyfill";
 
 import { configureRouter, routeConfig } from "@ui/routing";
-import { createStores, rootReducer, setupMiddleware, StoresProvider } from "@ui/redux";
+import {
+  createStores,
+  ModalProvider,
+  ModalRegister,
+  rootReducer,
+  setupMiddleware,
+  StoresProvider
+} from "@ui/redux";
 import { App } from "../ui/containers/app";
 import { processDto } from "../shared/processResponse";
 import * as Actions from "@ui/redux/actions";
@@ -38,6 +45,25 @@ const getStores = () => {
 // make sure middleware and reducers have run
 store.dispatch(Actions.initaliseAction());
 
+class Client extends React.Component<{}> {
+  render() {
+    return (
+      // @todo remove once react/redux connect can be removed
+      <Provider store={store}>
+        <RouterProvider router={router}>
+          <StoresProvider value={getStores()}>
+            <ContentProvider value={new Content()}>
+              <ModalProvider value={new ModalRegister()}>
+                <App store={store} routes={routes} />
+              </ModalProvider>
+            </ContentProvider>
+          </StoresProvider>
+        </RouterProvider>
+      </Provider>
+    );
+  }
+}
+
 Polyfill()
   .then(() => i18next.init({
     lng: "en",
@@ -61,16 +87,5 @@ Polyfill()
         i18next.addResourceBundle("en", "default", content, true, true);
       });
   })
-  .then(() => router.start(() => hydrate((
-    // @todo remove once react/redux connect can be removed
-    <Provider store={store}>
-      <RouterProvider router={router}>
-        <StoresProvider value={getStores()}>
-          <ContentProvider value={new Content()}>
-            <App store={store} routes={routes} />
-          </ContentProvider>
-        </StoresProvider>
-      </RouterProvider>
-    </Provider>),
-    document.getElementById("root")
+  .then(() => router.start(() => hydrate((<Client/>), document.getElementById("root")
   )));
