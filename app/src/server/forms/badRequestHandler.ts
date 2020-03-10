@@ -1,6 +1,6 @@
 import express from "express";
 import { IFormHandler } from "./formHandlerBase";
-import { BadRequestError } from "../features/common/appError";
+import { BadRequestError, NotFoundError } from "../features/common/appError";
 import { Logger } from "@server/features/common";
 
 export class BadRequestHandler implements IFormHandler {
@@ -13,8 +13,10 @@ export class BadRequestHandler implements IFormHandler {
       const buttons = Object.keys(req.body).filter(x => x.startsWith("button_"));
 
       new Logger().error("No handler for", req.url, buttons);
-      throw new BadRequestError();
+      next(new BadRequestError());
     }
-    return next();
+    else {
+      next(new NotFoundError());
+    }
   }
 }
