@@ -1,5 +1,5 @@
 import {
-  PCRItemStatus,
+  PCRItemStatus, PCRPartnerType,
   PCRProjectRole,
   PCRStatus
 } from "@framework/constants";
@@ -38,7 +38,7 @@ export interface ProjectChangeRequestItemForCreateEntity {
   withdrawalDate?: Date | null;
   removalPeriod?: number | null;
   projectRole?: PCRProjectRole;
-  partnerType?: string | null;
+  partnerType?: PCRPartnerType;
 }
 
 export interface ProjectChangeRequestItemEntity extends ProjectChangeRequestItemForCreateEntity {

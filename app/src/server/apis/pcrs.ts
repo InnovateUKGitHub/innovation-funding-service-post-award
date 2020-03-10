@@ -10,9 +10,10 @@ import { UpdatePCRCommand } from "@server/features/pcrs/updatePcrCommand";
 import { CreateProjectChangeRequestCommand } from "@server/features/pcrs/createProjectChangeRequestCommand";
 import { DeleteProjectChangeRequestCommand } from "@server/features/pcrs/deleteProjectChangeRequestCommand";
 import { GetProjectChangeRequestStatusChanges } from "@server/features/pcrs/getProjectChangeRequestStatusChanges";
-import { PCRProjectRole } from "@framework/constants";
+import { PCRPartnerType, PCRProjectRole } from "@framework/constants";
 import { GetPcrProjectRolesQuery } from "@server/features/pcrs/getPcrProjectRolesQuery";
 import { Option } from "@framework/dtos";
+import { GetPcrPartnerTypesQuery } from "@server/features/pcrs/getPcrPartnerTypesQuery";
 
 export interface IPCRsApi {
   create: (params: ApiParams<{ projectId: string, projectChangeRequestDto: PCRDto }>) => Promise<PCRDto>;
@@ -23,6 +24,7 @@ export interface IPCRsApi {
   delete: (params: ApiParams<{projectId: string; id: string; }>) => Promise<boolean>;
   getStatusChanges: (params: ApiParams<{projectId: string, projectChangeRequestId: string }>) => Promise<ProjectChangeRequestStatusChangeDto[]>;
   getPcrProjectRoles: (params: ApiParams<{}>) => Promise<Option<PCRProjectRole>[]>;
+  getPcrPartnerTypes: (params: ApiParams<{}>) => Promise<Option<PCRPartnerType>[]>;
 }
 
 class Controller extends ControllerBaseWithSummary<PCRSummaryDto, PCRDto> implements IPCRsApi {
@@ -37,6 +39,7 @@ class Controller extends ControllerBaseWithSummary<PCRSummaryDto, PCRDto> implem
     super.deleteItem("/:projectId/:id", (p, q) => ({ projectId: p.projectId, id: p.id }), (p) => this.delete(p));
     this.getCustom("/status-changes/:projectId/:projectChangeRequestId", (p) => ({projectId: p.projectId, projectChangeRequestId: p.projectChangeRequestId}), p => this.getStatusChanges(p));
     this.getCustom("/project-roles", () => ({}), (p) => this.getPcrProjectRoles(p));
+    this.getCustom("/partner-types", () => ({}), (p) => this.getPcrPartnerTypes(p));
   }
 
   getAll(params: ApiParams<{ projectId: string }>): Promise<PCRSummaryDto[]> {
@@ -78,8 +81,12 @@ class Controller extends ControllerBaseWithSummary<PCRSummaryDto, PCRDto> implem
 
   public async getPcrProjectRoles(params: ApiParams<{}>) {
     const query = new GetPcrProjectRolesQuery();
-    const result = await contextProvider.start(params).runQuery(query);
-    return [...result.values()];
+    return contextProvider.start(params).runQuery(query);
+  }
+
+  public async getPcrPartnerTypes(params: ApiParams<{}>) {
+    const query = new GetPcrPartnerTypesQuery();
+    return contextProvider.start(params).runQuery(query);
   }
 }
 
