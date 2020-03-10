@@ -174,6 +174,11 @@ export class ProjectChangeRequestStore extends StoreBase {
 
     switch (itemType.type) {
       case PCRItemType.MultiplePartnerFinancialVirement:
+        return {
+          ...baseFields,
+          type: itemType.type,
+          grantMovingOverFinancialYear: null
+        };
       case PCRItemType.SinglePartnerFinancialVirement:
         return {
           ...baseFields,

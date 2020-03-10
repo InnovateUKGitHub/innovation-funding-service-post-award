@@ -53,6 +53,8 @@ export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBa
         this.updatePartnerWithdrawal(item, body, stepName as removePartnerStepNames);
         break;
       case PCRItemType.MultiplePartnerFinancialVirement:
+        this.updateMultiplePartnerFinancialVirement(item, body, stepName);
+        break;
       case PCRItemType.SinglePartnerFinancialVirement:
       case PCRItemType.PartnerAddition:
         // nothing to update as only files
@@ -118,6 +120,13 @@ export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBa
     if (stepName === "partnerNameStep") {
       item.partnerId = body.partnerId;
       item.accountName = body.accountName;
+    }
+  }
+
+  private updateMultiplePartnerFinancialVirement(item: Dtos.PCRItemForMultiplePartnerFinancialVirementDto, body: IFormBody, stepName: string | null | undefined) {
+    // At the moment there are no "steps" in the FV workflow but checking here in case one is added so we don't clear out the grantMovingOverFinancialYear value
+    if (!stepName) {
+      item.grantMovingOverFinancialYear = Number(body.grantMovingOverFinancialYear);
     }
   }
 

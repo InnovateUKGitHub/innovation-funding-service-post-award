@@ -41,6 +41,7 @@ export interface ProjectChangeRequestItemForCreateEntity {
   projectRoleLabel?: string | null;
   partnerType?: PCRPartnerType;
   partnerTypeLabel?: string | null;
+  grantMovingOverFinancialYear?: number | null;
 }
 
 export interface ProjectChangeRequestItemEntity extends ProjectChangeRequestItemForCreateEntity {
