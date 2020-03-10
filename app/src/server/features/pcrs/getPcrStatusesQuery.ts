@@ -1,4 +1,3 @@
-import { QueryBase } from "../common/queryBase";
 import { IContext, PCRStatus } from "@framework/types";
 import { OptionsQueryBase } from "../common/optionsQueryBase";
 import { mapToPCRStatus } from "@server/repositories/mappers/projectChangeRequestMapper";
