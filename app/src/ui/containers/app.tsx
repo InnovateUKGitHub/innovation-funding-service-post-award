@@ -1,11 +1,10 @@
 import React from "react";
-import { IStores, StoresConsumer } from "@ui/redux";
+import { IStores, ModalConsumer, ModalRegister, StoresConsumer } from "@ui/redux";
 import { udpatePageTitle } from "@ui/redux/actions";
 import { IRoutes, MatchedRoute, matchRoute } from "@ui/routing";
-import { Footer, Header, PhaseBanner } from "@ui/components";
+import { Footer, Header, PhaseBanner, PrivateModal } from "@ui/components";
 import { StandardErrorPage } from "@ui/components/standardErrorPage";
 import { IClientConfig } from "@ui/redux/reducers/configReducer";
-import { Authorisation, IClientUser } from "@framework/types";
 import { BaseProps } from "./containerBase";
 import { Store } from "redux";
 import { State as RouteState } from "router5";
@@ -18,6 +17,7 @@ interface IAppProps {
   loadStatus: number;
   config: IClientConfig;
   messages: string[];
+  modalRegister: ModalRegister;
   isClient: boolean;
   stores: IStores;
   route: RouteState;
@@ -26,6 +26,12 @@ interface IAppProps {
 }
 
 class AppComponent extends React.Component<IAppProps, {}> {
+
+  constructor(props: IAppProps) {
+    super(props);
+    props.modalRegister.subscribe("app", () => this.setState({}));
+  }
+
   public componentDidUpdate(prevProps: Readonly<IAppProps>) {
     if (prevProps.route !== this.props.route || (this.props.loadStatus === 0 && prevProps.loadStatus !== 0)) {
       this.updateTitle();
@@ -64,6 +70,7 @@ class AppComponent extends React.Component<IAppProps, {}> {
           {pageContent}
         </div>
         <Footer />
+        { this.props.modalRegister.getModals().map(x => <PrivateModal key={`modal-${x.id}`} id={x.id}>{x.children}</PrivateModal>) }
       </div>
     );
   }
@@ -82,21 +89,24 @@ export class App extends React.Component<{ store: Store, routes: IRoutes }, { ma
       <StoresConsumer>
         {stores => (
           <ContentConsumer>
-            {
-              content => (
-                <AppComponent
-                  content={content}
-                  stores={stores}
-                  loadStatus={stores.navigation.getLoadStatus()}
-                  config={stores.config.getConfig()}
-                  isClient={stores.config.isClient()}
-                  messages={stores.messages.messages()}
-                  dispatch={this.props.store.dispatch}
-                  route={stores.navigation.getRoute()}
-                  routes={this.props.routes}
-                />
-              )
-            }
+            {content => (
+              <ModalConsumer>
+                {modalRegister => (
+                  <AppComponent
+                    content={content}
+                    stores={stores}
+                    loadStatus={stores.navigation.getLoadStatus()}
+                    config={stores.config.getConfig()}
+                    isClient={stores.config.isClient()}
+                    messages={stores.messages.messages()}
+                    modalRegister={modalRegister}
+                    dispatch={this.props.store.dispatch}
+                    route={stores.navigation.getRoute()}
+                    routes={this.props.routes}
+                  />
+                )}
+              </ModalConsumer>
+            )}
           </ContentConsumer>
         )}
       </StoresConsumer>

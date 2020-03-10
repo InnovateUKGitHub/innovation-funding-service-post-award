@@ -89,7 +89,8 @@ export class Guide extends React.Component<Props, {}> {
                 <Header ifsRoot={"https://apply-for-innovation-funding.service.gov.uk"} />
                 <div className="govuk-width-container" style={{ maxWidth: "100%" }}>
                     <main className="govuk-main-wrapper" id="main-content" role="main" style={{ paddingLeft: "20px", paddingRight: "20px" }}>
-                        <h1 className="govuk-heading-l">The Guide from the {this.props.source}?</h1>
+                        <h1 className="govuk-heading-l">Components guide</h1>
+                        <h2 className="govuk-heading-m">Rendered by the {this.props.source}</h2>
                         <div className="govuk-grid-row">
                             <div className="govuk-grid-column-one-quarter">
                                 {this.renderMenus()}

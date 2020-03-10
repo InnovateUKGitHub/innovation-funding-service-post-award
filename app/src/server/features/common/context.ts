@@ -38,6 +38,7 @@ const constructErrorResponse = <E extends Error>(error: E): AppError => {
     return new AppError(Framework.ErrorCode.BAD_REQUEST_ERROR, error.message, error);
   }
 
+  // TODO capture stack trace for logs
   return new AppError(Framework.ErrorCode.UNKNOWN_ERROR, error.message, error);
 };
 
