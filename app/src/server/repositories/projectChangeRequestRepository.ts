@@ -8,7 +8,7 @@ import {
 } from "@framework/entities";
 import SalesforceRepositoryBase from "./salesforceRepositoryBase";
 import { ILogger } from "@server/features/common/logger";
-import { PcrProjectRoleMapper, SalesforcePCRMapper } from "./mappers/projectChangeRequestMapper";
+import { PcrPartnerTypeMapper, PcrProjectRoleMapper, SalesforcePCRMapper } from "./mappers/projectChangeRequestMapper";
 import { NotFoundError } from "@server/features/common";
 import { PCRItemStatus, PCRStatus } from "@framework/constants";
 
@@ -23,6 +23,7 @@ export interface IProjectChangeRequestRepository {
   delete(pcr: ProjectChangeRequestEntity): Promise<void>;
   getPcrChangeStatuses(): Promise<PicklistEntry[]>;
   getProjectRoles(): Promise<PicklistEntry[]>;
+  getPartnerTypes(): Promise<PicklistEntry[]>;
 }
 
 export interface ISalesforcePCR {
@@ -168,7 +169,7 @@ export class ProjectChangeRequestRepository extends SalesforceRepositoryBase<ISa
       Acc_RemovalPeriod__c: x.removalPeriod,
       Acc_Project_Participant__c: x.partnerId,
       Acc_ProjectRole__c: new PcrProjectRoleMapper().mapToSalesforcePCRProjectRole(x.projectRole),
-      Acc_ParticipantType__c: x.partnerType,
+      Acc_ParticipantType__c: new PcrPartnerTypeMapper().mapToSalesforcePCRPartnerType(x.partnerType),
     })));
   }
 
@@ -205,6 +206,10 @@ export class ProjectChangeRequestRepository extends SalesforceRepositoryBase<ISa
 
   getProjectRoles(): Promise<PicklistEntry[]> {
     return super.getPicklist("Acc_ProjectRole__c");
+  }
+
+  async getPartnerTypes(): Promise<PicklistEntry[]> {
+    return super.getPicklist("Acc_ParticipantType__c");
   }
 
   private mapStatus(status: PCRStatus): string {
