@@ -2,6 +2,7 @@ import { DateTime } from "luxon";
 import { Result, Results } from "../validation";
 import * as Validation from "./common";
 import {
+  Option,
   PartnerDto,
   PCRDto,
   PCRItemDto,
@@ -17,7 +18,7 @@ import {
   ProjectDto,
   ProjectRole
 } from "@framework/dtos";
-import { PCRItemStatus, PCRItemType, PCRStatus } from "@framework/constants";
+import { PCRItemStatus, PCRItemType, PCRPartnerType, PCRProjectRole, PCRStatus } from "@framework/constants";
 import { isNumber, periodInProject } from "@framework/util";
 
 export class PCRDtoValidator extends Results<PCRDto> {
@@ -323,16 +324,24 @@ export class PCRPartnerAdditionItemDtoValidator extends PCRBaseItemDtoValidator<
     if (!this.model.id) {
       return Validation.valid(this);
     }
-    return Validation.required(this, this.model.projectRole, "Select a project role");
+    return Validation.required(this, this.model.projectRole || null, "Select a project role");
   }
   private validatePartnerTypeRequired() {
     if (!this.model.id) {
       return Validation.valid(this);
     }
-    return Validation.required(this, this.model.partnerType, "Select a partner type");
+    return Validation.required(this, this.model.partnerType || null, "Select a partner type");
   }
-  projectRole = Validation.all(this, () => this.validateProjectRoleRequired());
-  partnerType = Validation.all(this, () => this.validatePartnerTypeRequired());
+
+  projectRole = Validation.all(this,
+    () => this.validateProjectRoleRequired(),
+    () => !this.canEdit || this.original && this.original.projectRole ? Validation.isUnchanged(this, this.model.projectRole, this.original && this.original.projectRole, "Project role cannot be changed") : Validation.valid(this),
+    );
+
+  partnerType = Validation.all(this,
+    () => this.validatePartnerTypeRequired(),
+    () => !this.canEdit || this.original && this.original.partnerType ? Validation.isUnchanged(this, this.model.partnerType, this.original && this.original.partnerType, "Partner type cannot be changed") : Validation.valid(this),
+  );
 }
 
 export class PCRAccountNameChangeItemDtoValidator extends PCRBaseItemDtoValidator<PCRItemForAccountNameChangeDto> {

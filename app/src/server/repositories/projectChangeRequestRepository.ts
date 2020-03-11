@@ -62,7 +62,9 @@ export interface ISalesforcePCR {
 
   // Add partner
   Acc_ProjectRole__c: string|null;
+  ProjectRoleLabel: string|null;
   Acc_ParticipantType__c: string|null;
+  ParticipantTypeLabel: string|null;
 }
 
 /**
@@ -112,7 +114,9 @@ export class ProjectChangeRequestRepository extends SalesforceRepositoryBase<ISa
     "Acc_ExistingPartnerName__c",
     "Acc_Nickname__c",
     "Acc_ProjectRole__c",
+    "toLabel(Acc_ProjectRole__c) ProjectRoleLabel",
     "Acc_ParticipantType__c",
+    "toLabel(Acc_ParticipantType__c) ParticipantTypeLabel",
   ];
 
   async getAllByProjectId(projectId: string): Promise<ProjectChangeRequestEntity[]> {

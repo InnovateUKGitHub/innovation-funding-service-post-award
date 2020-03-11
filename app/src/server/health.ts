@@ -59,7 +59,8 @@ export const health = async (logger: ILogger) => {
     status: results.some(x => x === "Failed") ? 500 : 200,
     response: {
       salesforce: await salesforce,
-      googleAnalytics: await googleAnalytics
+      googleAnalytics: await googleAnalytics,
+      // TODO companies house
     }
   };
 };
