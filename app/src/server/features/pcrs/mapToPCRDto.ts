@@ -121,5 +121,7 @@ const mapItemForPartnerAddition = (pcr: ProjectChangeRequestItemEntity, typeName
   ...mapBaseItem(pcr, typeName, type),
   projectRole: pcr.projectRole || PCRProjectRole.Unknown,
   partnerType: pcr.partnerType || PCRPartnerType.Unknown,
+  projectRoleLabel: pcr.projectRoleLabel || null,
+  partnerTypeLabel: pcr.partnerTypeLabel || null,
   type
 });
