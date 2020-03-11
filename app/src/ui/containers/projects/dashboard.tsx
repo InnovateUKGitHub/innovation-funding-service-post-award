@@ -9,7 +9,7 @@ import {
 } from "@framework/types";
 import { StoresConsumer } from "@ui/redux";
 import { Pending } from "@shared/pending";
-import { BaseProps, ContainerBaseWithState, ContainerProps, defineRoute } from "../containerBase";
+import { BaseProps, ContainerBase, defineRoute } from "../containerBase";
 import { Content } from "@content/content";
 import { ContentResult } from "@content/contentBase";
 
@@ -35,17 +35,7 @@ interface ProjectData {
 
 type Section = "archived" | "open" | "awaiting" | "upcoming";
 
-class ProjectDashboardComponent extends ContainerBaseWithState<Params, Data, Callbacks, {}> {
-
-  constructor(props: ContainerProps<Params, Data, Callbacks>) {
-    super(props);
-    this.state = {
-      showRequestsToReview: false,
-      showClaimsToReview: false,
-      showClaimsWithParticipant: false,
-      projectSearchString: ""
-    };
-  }
+class ProjectDashboardComponent extends ContainerBase<Params, Data, Callbacks> {
 
   render() {
     const combined = Pending.combine({

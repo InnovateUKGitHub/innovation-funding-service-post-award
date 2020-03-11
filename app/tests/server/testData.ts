@@ -4,7 +4,7 @@ import * as Repositories from "@server/repositories";
 import * as Entites from "@framework/entities";
 import { PartnerFinancialVirement, ProjectChangeRequestStatusChangeEntity } from "@framework/entities";
 import { range } from "@shared/range";
-import { ClaimStatus, IClientUser, PCRProjectRole } from "@framework/types";
+import { ClaimStatus, IClientUser, PCRPartnerType, PCRProjectRole } from "@framework/types";
 import { ITestRepositories } from "./testRepositories";
 import { PCRRecordTypeMetaValues } from "@server/features/pcrs/getItemTypesQuery";
 import { PCRItemStatus, PCRStatus } from "@framework/constants";
@@ -653,7 +653,8 @@ export class TestData {
       publicDescriptionSnapshot: "",
       partnerNameSnapshot: "",
       shortName: "",
-      projectRole: PCRProjectRole.Unknown
+      projectRole: PCRProjectRole.Unknown,
+      partnerType: PCRPartnerType.Unknown
     };
 
     if (update) {

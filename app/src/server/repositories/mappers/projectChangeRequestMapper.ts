@@ -4,7 +4,7 @@ import {
   ProjectChangeRequestItemEntity
 } from "@framework/entities";
 import { ISalesforcePCR } from "../projectChangeRequestRepository";
-import { PCRItemStatus, PCRProjectRole, PCRStatus } from "@framework/constants";
+import { PCRItemStatus, PCRPartnerType, PCRProjectRole, PCRStatus } from "@framework/constants";
 
 export const mapToPCRStatus = ((status: string) => {
   switch (status) {
@@ -37,6 +37,7 @@ export const mapToPCRStatus = ((status: string) => {
       return PCRStatus.Unknown;
   }
 });
+
 export class PcrProjectRoleMapper {
   private roles = {
     collaborator: "Collaborator",
@@ -55,6 +56,35 @@ export class PcrProjectRoleMapper {
     switch (role) {
       case PCRProjectRole.Collaborator: return this.roles.collaborator;
       case PCRProjectRole.ProjectLead: return this.roles.projectLead;
+      default: return null;
+    }
+  });
+}
+
+export class PcrPartnerTypeMapper {
+  private partnerTypes = {
+    business: "Business",
+    research: "Research",
+    researchAndTechnology: "Research and Technology Organisation (RTO)",
+    other: "Public Sector, charity or non Je-S registered research organisation"
+  };
+
+  public mapFromSalesforcePCRPartnerType = ((partnerType: string | null) => {
+    switch (partnerType) {
+      case this.partnerTypes.business: return PCRPartnerType.Business;
+      case this.partnerTypes.research: return PCRPartnerType.Research;
+      case this.partnerTypes.researchAndTechnology: return PCRPartnerType.ResearchAndTechnology;
+      case this.partnerTypes.other: return PCRPartnerType.Other;
+      default: return PCRPartnerType.Unknown;
+    }
+  });
+
+  public mapToSalesforcePCRPartnerType = ((partnerType: PCRPartnerType | undefined) => {
+    switch (partnerType) {
+      case PCRPartnerType.Business: return this.partnerTypes.business;
+      case PCRPartnerType.Research: return this.partnerTypes.research;
+      case PCRPartnerType.ResearchAndTechnology: return this.partnerTypes.researchAndTechnology;
+      case PCRPartnerType.Other: return this.partnerTypes.other;
       default: return null;
     }
   });
@@ -109,6 +139,7 @@ export class SalesforcePCRMapper extends SalesforceBaseMapper<ISalesforcePCR[], 
       shortName: pcrItem.Acc_Nickname__c || "",
       // add partner fields
       projectRole: new PcrProjectRoleMapper().mapFromSalesforcePCRProjectRole(pcrItem.Acc_ProjectRole__c),
+      partnerType: new PcrPartnerTypeMapper().mapFromSalesforcePCRPartnerType(pcrItem.Acc_ParticipantType__c),
     };
   }
 

@@ -12,6 +12,7 @@ import { PCRStatusesPicklist } from "../server/features/pcrs/pcrStatusesPicklist
 import { ProjectChangeRequestStatusChangeEntity } from "@framework/entities";
 import { FileTypeNotAllowedError } from "@server/repositories";
 import { PCRProjectRolesPicklist } from "./features/pcrs/pcrProjectRolesPicklist";
+import { PCRPartnerTypesPicklist } from "./features/pcrs/pcrPartnerTypesPicklist";
 
 class ProjectsTestRepository extends TestRepository<Repositories.ISalesforceProject> implements Repositories.IProjectRepository {
   getById(id: string) {
@@ -531,6 +532,12 @@ class PCRTestRepository extends TestRepository<Entities.ProjectChangeRequestEnti
   getProjectRoles(): Promise<PicklistEntry[]> {
     const picklistEntry: PicklistEntry[] = new Array();
     PCRProjectRolesPicklist.forEach(x => picklistEntry.push(x));
+    return Promise.resolve(picklistEntry);
+  }
+
+  getPartnerTypes(): Promise<PicklistEntry[]> {
+    const picklistEntry: PicklistEntry[] = new Array();
+    PCRPartnerTypesPicklist.forEach(x => picklistEntry.push(x));
     return Promise.resolve(picklistEntry);
   }
 }
