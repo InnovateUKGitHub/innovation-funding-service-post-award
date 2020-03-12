@@ -87,6 +87,14 @@ export class ProjectChangeRequestStore extends StoreBase {
     return this.getData("pcrTypes", storeKeys.getPcrTypesKey(), p => ApiClient.pcrs.getTypes({ ...p }));
   }
 
+  public getPcrProjectRoles() {
+    return this.getData("pcrProjectRoles", storeKeys.getPcrProjectRolesKey(), p => ApiClient.pcrs.getPcrProjectRoles({ ...p }));
+  }
+
+  public getPcrPartnerTypes() {
+    return this.getData("pcrPartnerTypes", storeKeys.getPcrPartnerTypesKey(), p => ApiClient.pcrs.getPcrPartnerTypes({ ...p }));
+  }
+
   public getPcrTypeForItem(projectId: string, pcrId: string, itemId: string) {
     const data = Pending.combine({
       itemTypes: this.getAllPcrTypes(),
@@ -176,7 +184,9 @@ export class ProjectChangeRequestStore extends StoreBase {
           ...baseFields,
           type: itemType.type,
           projectRole: PCRProjectRole.Unknown,
-          partnerType: PCRPartnerType.Unknown
+          partnerType: PCRPartnerType.Unknown,
+          projectRoleLabel: null,
+          partnerTypeLabel: null
         };
       case PCRItemType.PartnerWithdrawal:
         return {

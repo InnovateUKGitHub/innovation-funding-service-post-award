@@ -1,4 +1,4 @@
-import { IConfig, QueryBase } from "../common";
+import { Configuration, IConfig, QueryBase } from "../common";
 import { PCRItemTypeDto } from "@framework/dtos/pcrDtos";
 import { IContext } from "@framework/types";
 import { GetAllRecordTypesQuery } from "../general/getAllRecordTypesQuery";
@@ -26,7 +26,7 @@ Your project summary should provide a clear overview of the whole project, inclu
 const nameChangeGuidance = `This will change the partner's name in all projects they are claiming funding for. You must upload a change of name certificate from Companies House as evidence of the change.
 `;
 
-const partnerAdditionGuidance = `If the new partner is a business you need to send them an industrial partner finance form to apply to take part. Tell them to complete it and email it to your monitoring officer. Innovate UK will decide whether to approve their application.
+const partnerAdditionGuidance = Configuration.features.addPartnerWorkflow ? undefined : `If the new partner is a business you need to send them an industrial partner finance form to apply to take part. Tell them to complete it and email it to your monitoring officer. Innovate UK will decide whether to approve their application.
 
 If the new partner is an academic, you need to tell them to complete a Je-S form and email it to your monitoring officer.
 

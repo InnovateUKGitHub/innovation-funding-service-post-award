@@ -11,6 +11,8 @@ const getMonitoringReportKey = (projectId: string, id?: string) => getKey("monit
 const getPcrKey = (projectId: string, id?: string) => getKey("pcrKey", "project", projectId, "request", id || "new");
 const getFinancialVirementKey = (projectId: string, pcrId: string, itemId: string) => getKey("financialVirementKey", "project", projectId, "request", pcrId, "itemId", itemId);
 const getPcrTypesKey = () => getKey("pcrTypesKey", "all");
+const getPcrProjectRolesKey = () => getKey("pcrProjectRolesKey", "all");
+const getPcrPartnerTypesKey = () => getKey("pcrPartnerTypesTypesKey", "all");
 
 export const storeKeys = {
   getProjectKey,
@@ -24,4 +26,6 @@ export const storeKeys = {
   getPcrKey,
   getFinancialVirementKey,
   getPcrTypesKey,
+  getPcrProjectRolesKey,
+  getPcrPartnerTypesKey,
 };
