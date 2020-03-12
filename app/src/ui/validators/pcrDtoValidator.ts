@@ -163,10 +163,12 @@ export class PCRDtoValidator extends Results<PCRDto> {
         if (this.featureFlags.addPartnerWorkflow) {
           return new PCRPartnerAdditionItemDtoValidator(item, canEdit, this.role, this.model.status, this.recordTypes, this.showValidationErrors, originalItem as PCRItemForPartnerAdditionDto);
         }
+        // TODO remove once feature flag is removed
+        return new PCROldPartnerAdditionItemDtoValidator(item, canEdit, this.role, this.model.status, this.recordTypes, this.showValidationErrors, originalItem as PCRItemForPartnerAdditionDto);
       }
       case PCRItemType.MultiplePartnerFinancialVirement:
       case PCRItemType.SinglePartnerFinancialVirement:
-        return new PCRStandardItemDtoValidator(item as PCRStandardItemDto, canEdit, this.role, this.model.status, this.recordTypes, this.showValidationErrors, originalItem as PCRStandardItemDto);
+        return new PCRStandardItemDtoValidator(item, canEdit, this.role, this.model.status, this.recordTypes, this.showValidationErrors, originalItem as PCRStandardItemDto);
       default:
         throw new Error("PCR Type not implemented");
     }
@@ -333,6 +335,9 @@ export class PCRPartnerAdditionItemDtoValidator extends PCRBaseItemDtoValidator<
   }
   projectRole = Validation.all(this, () => this.validateProjectRoleRequired());
   partnerType = Validation.all(this, () => this.validatePartnerTypeRequired());
+}
+
+export class PCROldPartnerAdditionItemDtoValidator extends PCRBaseItemDtoValidator<PCRItemForPartnerAdditionDto> {
 }
 
 export class PCRAccountNameChangeItemDtoValidator extends PCRBaseItemDtoValidator<PCRItemForAccountNameChangeDto> {
