@@ -544,7 +544,7 @@ export class TestData {
     partner = partner || this.createPartner();
 
     const newItem: Repositories.ISalesforceProfileTotalPeriod = {
-      Acc_PeriodInitialForecastCost__c: 100,
+      Acc_PeriodLatestForecastCost__c: 100,
       Acc_ProjectParticipant__c: partner.Id,
       Acc_ProjectPeriodNumber__c: periodId || 1,
       LastModifiedDate: new Date().toISOString()
