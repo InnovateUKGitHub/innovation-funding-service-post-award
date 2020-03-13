@@ -22,6 +22,8 @@ import { MonitoringReportsSummaryContent } from "./pages/monitoringReports/monit
 import { MonitoringReportsWorkflowContent } from "./pages/monitoringReports/monitoringReportsWorkflowContent";
 import { MonitoringReportsPeriodStepContent } from "./pages/monitoringReports/monitoringReportsPeriodStepContent";
 import { MonitoringReportsQuestionStepContent } from "./pages/monitoringReports/monitoringReportsQuestionStep";
+import { PartnerDetailsContent } from "./pages/partners/partnerDetailsContent";
+import { PartnerDetailsEditContent } from "./pages/partners/partnerDetailsEditContent";
 
 export type ContentSelector = (content: Content) => ContentResult;
 
@@ -57,6 +59,9 @@ export class Content extends ContentBase {
   public readonly monitoringReportsWorkflow = new MonitoringReportsWorkflowContent(this);
   public readonly monitoringReportsPeriodStep = new MonitoringReportsPeriodStepContent(this);
   public readonly monitoringReportsQuestionStep = new MonitoringReportsQuestionStepContent(this);
+
+  public readonly partnerDetails = new PartnerDetailsContent(this);
+  public readonly partnerDetailsEdit = new PartnerDetailsEditContent(this);
 
   public readonly errors = {
     notfound: new NotFoundContent(this),

@@ -4,6 +4,7 @@ import * as Claims from "./claims";
 import * as Inputs from "./inputs";
 import * as MonitoringReports from "./monitoringReports";
 import * as Forecasts from "./forecasts";
+import * as Partners from "./partners";
 
 export * from "./accordion";
 export * from "./accordionItem";
@@ -34,7 +35,6 @@ export * from "./taskList";
 export * from "./validationError";
 export * from "./validationMessage";
 export * from "./validationSummary";
-export * from "./partnersInformation";
 
 export {
   Claims,
@@ -43,4 +43,5 @@ export {
   MonitoringReports,
   Projects,
   Renderers,
+  Partners
 };

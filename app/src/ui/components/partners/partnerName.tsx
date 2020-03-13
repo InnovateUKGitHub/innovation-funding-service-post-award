@@ -6,7 +6,7 @@ interface Props {
   showIsLead?: boolean;
 }
 
-export const PartnerName: React.FunctionComponent<Props> = ({partner, showIsLead = false, showWithdrawn = true}) => {
+export const PartnerName: React.FunctionComponent<Props> = ({ partner, showIsLead = false, showWithdrawn = true }) => {
   if (!partner) return null;
   let name = partner.name;
   if (showWithdrawn && partner.isWithdrawn) {
