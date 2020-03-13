@@ -2,8 +2,9 @@ import React from "react";
 import { BaseProps, ContainerBase, defineRoute } from "../containerBase";
 import * as ACC from "../../components";
 import { Pending } from "../../../shared/pending";
-import { PartnerDto, ProjectDto, ProjectRole } from "@framework/types";
+import { ILinkInfo, PartnerDto, ProjectDto, ProjectRole } from "@framework/types";
 import { StoresConsumer } from "@ui/redux";
+import { PartnerName } from "../../components";
 
 interface Data {
     projectDetails: Pending<ProjectDto>;
@@ -70,11 +71,34 @@ class ProjectDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
                         <ACC.SummaryListItem labelContent={x => x.projectDetails.projectLabels.scope()} qa="scope" content={<ACC.Renderers.SimpleString multiline={true}>{project.summary}</ACC.Renderers.SimpleString>} />
                     </ACC.SummaryList>
                 </ACC.Section>
-
-                <ACC.Section titleContent={x => x.projectDetails.projectLabels.partners()}>
-                    <ACC.PartnersContactInformation partners={partners} projectContactLabels={x => x.projectDetails.contactLabels} />
-                </ACC.Section>
+                {this.renderPartnersContactInformationSummaryList(partners)}
             </ACC.Page>
+        );
+    }
+
+    private renderPartnersContactInformationSummaryList(partners: PartnerDto[]) {
+        const PartnersTable = ACC.TypedTable<PartnerDto>();
+
+        return (
+            <ACC.Section titleContent={x => x.projectDetails.projectLabels.partners()}>
+                <PartnersTable.Table qa="partner-information" data={partners}>
+                    <PartnersTable.Custom headerContent={x => x.partnerDetails.contactLabels.partnerName()} value={x => this.renderPartnerName(x)} qa="partner-name" />
+                    <PartnersTable.String headerContent={x => x.partnerDetails.contactLabels.partnerType()} value={x => x.type} qa="partner-type" />
+                    <PartnersTable.String headerContent={x => x.partnerDetails.contactLabels.partnerPostcode()} value={x => x.postcode} qa="partner-postcode" />
+                </PartnersTable.Table>
+            </ACC.Section>
+        );
+    }
+
+    private renderPartnerName(partner: PartnerDto) {
+        if (!this.props.config.features.editPartnerPostcode) {
+            return <PartnerName partner={partner} showIsLead={true} />;
+        }
+
+        return (
+            <ACC.Link route={this.props.routes.partnerDetails.getLink({ id: this.props.id, partnerId: partner.id })}>
+                <PartnerName partner={partner} showIsLead={true} />
+            </ACC.Link >
         );
     }
 }
