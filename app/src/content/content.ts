@@ -24,6 +24,7 @@ import { MonitoringReportsPeriodStepContent } from "./pages/monitoringReports/mo
 import { MonitoringReportsQuestionStepContent } from "./pages/monitoringReports/monitoringReportsQuestionStep";
 import { PartnerDetailsContent } from "./pages/partners/partnerDetailsContent";
 import { PartnerDetailsEditContent } from "./pages/partners/partnerDetailsEditContent";
+import { PCRCreateContent } from "./pages/pcrs/pcrCreateContent";
 
 export type ContentSelector = (content: Content) => ContentResult;
 
@@ -62,6 +63,8 @@ export class Content extends ContentBase {
 
   public readonly partnerDetails = new PartnerDetailsContent(this);
   public readonly partnerDetailsEdit = new PartnerDetailsEditContent(this);
+
+  public readonly pcrCreate = new PCRCreateContent(this);
 
   public readonly errors = {
     notfound: new NotFoundContent(this),

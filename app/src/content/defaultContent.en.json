@@ -212,6 +212,15 @@
         "display": "Partner details"
       },
       "save-and-return-partner-details-button": "Save and return to partner details"
+    },
+    "pcr-create":{
+      "title": "Start a new request",
+      "guidance-message": "Before you submit, you must:\n* ask all project partners to approve the changes\n* discuss this request with your monitoring officer",
+      "select-request-types-title": "Select request types",
+      "select-types-hint": "You can select more than one.",
+      "back-link": "Back to project change requests",
+      "button-create-request": "Create request",
+      "button-cancel-request": "Cancel"
     }
   },
   "claims-messages": {
