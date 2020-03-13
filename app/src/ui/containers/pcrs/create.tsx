@@ -33,12 +33,15 @@ class PCRCreateComponent extends ContainerBase<CreateProjectChangeRequestParams,
   private renderContents(project: Dtos.ProjectDto, editor: IEditorStore<Dtos.PCRDto, PCRDtoValidator>, itemTypes: Dtos.PCRItemTypeDto[]) {
     return (
       <ACC.Page
-        backLink={<ACC.BackLink route={this.props.routes.pcrsDashboard.getLink({ projectId: this.props.projectId })}>Back to project change requests</ACC.BackLink>}
+        backLink={<ACC.BackLink route={this.props.routes.pcrsDashboard.getLink({ projectId: this.props.projectId })}>
+          <ACC.Content value={x => x.pcrCreate.backLink()}/>
+        </ACC.BackLink>}
         pageTitle={<ACC.Projects.Title project={project} />}
         project={project}
         validator={editor.validator}
         error={editor.error}
       >
+        <ACC.Content value={x => x.pcrCreate.guidanceMessage()}/>
         <ACC.Section qa="pcr-create">
           {this.renderForm(editor, itemTypes)}
         </ACC.Section>
@@ -54,9 +57,9 @@ class PCRCreateComponent extends ContainerBase<CreateProjectChangeRequestParams,
     const selected = options.filter(x => pcrEditor.data.items.some(y => y.type.toString() === x.id));
     return (
       <PCRForm.Form editor={pcrEditor} onSubmit={() => this.props.onChange(true, pcrEditor.data)} onChange={dto => this.props.onChange(false, dto)} qa="pcr-create-form">
-        <PCRForm.Fieldset heading="Select request types">
+        <PCRForm.Fieldset headingContent={x => x.pcrCreate.selectRequestTypesTitle()}>
           <PCRForm.Checkboxes
-            hint="You can select more than one."
+            hintContent={x => x.pcrCreate.selectTypesHint()}
             options={options}
             name="types"
             validation={pcrEditor.validator.items}
@@ -69,8 +72,10 @@ class PCRCreateComponent extends ContainerBase<CreateProjectChangeRequestParams,
           />
         </PCRForm.Fieldset>
         <PCRForm.Fieldset>
-          <PCRForm.Submit>Create request</PCRForm.Submit>
-          <ACC.Link styling="SecondaryButton" route={this.props.routes.pcrsDashboard.getLink({ projectId: this.props.projectId })}>Cancel</ACC.Link>
+          <PCRForm.Submit><ACC.Content value={x => x.pcrCreate.createRequestButton()} /></PCRForm.Submit>
+          <ACC.Link styling="SecondaryButton" route={this.props.routes.pcrsDashboard.getLink({ projectId: this.props.projectId })}>
+            <ACC.Content value={x => x.pcrCreate.cancelRequestButton()}/>
+          </ACC.Link>
         </PCRForm.Fieldset>
       </PCRForm.Form>
     );
@@ -102,9 +107,6 @@ export const PCRCreateRoute = defineRoute({
   getParams: (route) => ({
     projectId: route.params.projectId,
   }),
-  getTitle: () => ({
-    htmlTitle: "Start a new request",
-    displayTitle: "Start a new request"
-  }),
+  getTitle: ({content}) => content.pcrCreate.title(),
   accessControl: (auth, { projectId }, config) => config.features.pcrsEnabled && auth.forProject(projectId).hasAnyRoles(Dtos.ProjectRole.ProjectManager)
 });
