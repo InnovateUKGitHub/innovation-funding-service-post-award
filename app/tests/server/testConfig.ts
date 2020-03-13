@@ -21,7 +21,7 @@ export class TestConfig implements IConfig {
   };
 
   public features = {
-    addPartnerWorkflow: false,
+    addPartnerWorkflow: true,
     financialVirements: true,
     pcrsEnabled: true,
     pcrRemovePartner: true,

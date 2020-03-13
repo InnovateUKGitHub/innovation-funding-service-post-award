@@ -4,12 +4,12 @@ import { GetPCRByIdQuery } from "@server/features/pcrs/getPCRByIdQuery";
 import { DateTime } from "luxon";
 import { PCRRecordTypeMetaValues } from "@server/features/pcrs/getItemTypesQuery";
 import {
-  PCRItemForAccountNameChangeDto,
+  PCRItemForAccountNameChangeDto, PCRItemForPartnerAdditionDto,
   PCRItemForProjectSuspensionDto,
   PCRItemForScopeChangeDto,
   PCRItemForTimeExtensionDto
 } from "@framework/dtos";
-import { PCRItemType } from "@framework/constants";
+import { PCRItemType, PCRPartnerType, PCRProjectRole } from "@framework/constants";
 
 describe("GetPCRByIdQuery", () => {
   test("when id not found then exception is thrown", async () => {
@@ -210,6 +210,27 @@ describe("GetPCRByIdQuery", () => {
     expect(result.id).toBe(item.id);
     expect(result.suspensionStartDate!.toISOString()).toBe(suspensionStartDate.toISOString());
     expect(result.suspensionEndDate!.toISOString()).toBe(suspensionEndDate.toISOString());
+  });
+
+  test("maps fields for partner addition", async () => {
+    const context = new TestContext();
+
+    const partnerAdditionType = PCRRecordTypeMetaValues.find(x => x.type === PCRItemType.PartnerAddition)!;
+    const recordType = context.testData.createPCRRecordTypes().find(x => x.type === partnerAdditionType.typeName);
+
+    const pcr = context.testData.createPCR();
+
+    const projectRole = PCRProjectRole.Collaborator;
+    const partnerType = PCRPartnerType.ResearchAndTechnology;
+
+    const item = context.testData.createPCRItem(pcr, recordType, { projectRole, partnerType });
+
+    const query = new GetPCRByIdQuery(pcr.projectId, pcr.id);
+    const result = await context.runQuery(query).then(x => x.items[0] as PCRItemForPartnerAdditionDto);
+
+    expect(result.id).toBe(item.id);
+    expect(result.projectRole).toBe(projectRole);
+    expect(result.partnerType).toBe(partnerType);
   });
 
   test("when project id not found then exception is thrown", async () => {
