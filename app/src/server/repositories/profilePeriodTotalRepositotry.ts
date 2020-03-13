@@ -4,17 +4,8 @@ export interface ISalesforceProfileTotalPeriod {
   LastModifiedDate: string;
   Acc_ProjectParticipant__c: string;
   Acc_ProjectPeriodNumber__c: number;
-  Acc_PeriodInitialForecastCost__c: number;
+  Acc_PeriodLatestForecastCost__c: number;
 }
-
-type FieldNames = keyof ISalesforceProfileTotalPeriod;
-
-const fields: FieldNames[] = [
-  "LastModifiedDate",
-  "Acc_ProjectParticipant__c",
-  "Acc_ProjectPeriodNumber__c",
-  "Acc_PeriodInitialForecastCost__c"
-];
 
 export interface IProfileTotalPeriodRepository {
   getAllByProjectId(projectId: string): Promise<ISalesforceProfileTotalPeriod[]>;
@@ -39,7 +30,7 @@ export class ProfileTotalPeriodRepository extends SalesforceRepositoryBase<ISale
     "LastModifiedDate",
     "Acc_ProjectParticipant__c",
     "Acc_ProjectPeriodNumber__c",
-    "Acc_PeriodInitialForecastCost__c"
+    "Acc_PeriodLatestForecastCost__c"
   ];
 
   getAllByProjectId(projectId: string): Promise<ISalesforceProfileTotalPeriod[]> {

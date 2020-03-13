@@ -23,7 +23,7 @@ export default (context: IContext) => (claim: ISalesforceClaim, forecast?: ISale
     periodEndDate: context.clock.parse(claim.Acc_ProjectPeriodEndDate__c, SALESFORCE_DATE_FORMAT)!,
     periodId: claim.Acc_ProjectPeriodNumber__c,
     totalCost: claim.Acc_ProjectPeriodCost__c,
-    forecastCost: forecast && forecast.Acc_PeriodInitialForecastCost__c || 0,
+    forecastCost: forecast && forecast.Acc_PeriodLatestForecastCost__c || 0,
     approvedDate: claim.Acc_ApprovedDate__c === null ? null : context.clock.parse(claim.Acc_ApprovedDate__c, SALESFORCE_DATE_FORMAT),
     paidDate: claim.Acc_PaidDate__c === null ? null : context.clock.parse(claim.Acc_PaidDate__c, SALESFORCE_DATE_FORMAT),
     comments: claim.Acc_ReasonForDifference__c,

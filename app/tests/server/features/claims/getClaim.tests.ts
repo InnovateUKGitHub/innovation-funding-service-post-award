@@ -190,7 +190,7 @@ describe("GetClaim", () => {
     expect(result.allowIarEdit).toBe(false);
   });
 
-  it("maps forecastCost from forecast PeriodInitialForecastCost", async () => {
+  it("maps forecastCost from forecast PeriodLatestForecastCost", async () => {
     const context  = new TestContext();
     const partner  = context.testData.createPartner();
     const testData = context.testData;
@@ -201,17 +201,17 @@ describe("GetClaim", () => {
     const query    = new GetClaim(partner.Id, period);
     const result   = await context.runQuery(query);
 
-    expect(result.forecastCost).toEqual(forecast.Acc_PeriodInitialForecastCost__c);
+    expect(result.forecastCost).toEqual(forecast.Acc_PeriodLatestForecastCost__c);
   });
 
-  it("maps forecastCost to 0 if forecast PeriodInitialForecastCost is falsy", async () => {
+  it("maps forecastCost to 0 if forecast PeriodLatestForecastCost is falsy", async () => {
     const context  = new TestContext();
     const partner  = context.testData.createPartner();
     const testData = context.testData;
     const period   = 1;
 
     testData.createClaim(partner, period);
-    testData.createProfileTotalPeriod(partner, period, x => x.Acc_PeriodInitialForecastCost__c = null!);
+    testData.createProfileTotalPeriod(partner, period, x => x.Acc_PeriodLatestForecastCost__c = null!);
     const query  = new GetClaim(partner.Id, period);
     const result = await context.runQuery(query);
 

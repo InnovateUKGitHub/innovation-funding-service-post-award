@@ -19,7 +19,7 @@ describe("getAllClaimsForProjectQuery", () => {
     });
 
     context.testData.createProfileTotalPeriod(partner, expectedPeriodId, x => {
-      x.Acc_PeriodInitialForecastCost__c = expectedForcastCost;
+      x.Acc_PeriodLatestForecastCost__c = expectedForcastCost;
     });
 
     const query = new GetAllClaimsForProjectQuery(project.Id);
@@ -45,7 +45,7 @@ describe("getAllClaimsForProjectQuery", () => {
         x.Acc_ClaimStatus__c = ClaimStatus.INNOVATE_QUERIED;
       });
       context.testData.createProfileTotalPeriod(partner, i, x => {
-        x.Acc_PeriodInitialForecastCost__c = i * 100;
+        x.Acc_PeriodLatestForecastCost__c = i * 100;
       });
     });
 
@@ -77,11 +77,11 @@ describe("getAllClaimsForProjectQuery", () => {
     });
 
     context.testData.createProfileTotalPeriod(partner1, 1, x => {
-      x.Acc_PeriodInitialForecastCost__c = 100;
+      x.Acc_PeriodLatestForecastCost__c = 100;
     });
 
     context.testData.createProfileTotalPeriod(partner2, 1, x => {
-      x.Acc_PeriodInitialForecastCost__c = 200;
+      x.Acc_PeriodLatestForecastCost__c = 200;
     });
 
     const query = new GetAllClaimsForProjectQuery(project.Id);
@@ -114,11 +114,11 @@ describe("getAllClaimsForProjectQuery", () => {
     });
 
     context.testData.createProfileTotalPeriod(partner1, 1, x => {
-      x.Acc_PeriodInitialForecastCost__c = 100;
+      x.Acc_PeriodLatestForecastCost__c = 100;
     });
 
     context.testData.createProfileTotalPeriod(partner2, 1, x => {
-      x.Acc_PeriodInitialForecastCost__c = 200;
+      x.Acc_PeriodLatestForecastCost__c = 200;
     });
 
     const query = new GetAllClaimsForProjectQuery(project2.Id);
