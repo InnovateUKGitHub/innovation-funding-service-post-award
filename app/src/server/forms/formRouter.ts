@@ -1,5 +1,5 @@
+import { ReviewClaimFormHandler } from "./reviewClaimFormHandler";
 import { ProjectChangeRequestItemDocumentDeleteHandler } from "@server/forms/projectChangeRequest/projectChangeRequestItemDocumentDeleteHandler";
-import { ProjectChangeRequestItemDocumentUploadHandler } from "@server/forms/projectChangeRequest/projectChangeRequestItemDocumentUploadHandler";
 import { ProjectChangeRequestItemUpdateHandler } from "@server/forms/projectChangeRequest/projectChangeRequestItemUpdateHandler";
 import { ProjectChangeRequestReasoningDocumentDeleteHandler } from "@server/forms/projectChangeRequest/projectChangeRequestReasoningDocumentDeleteHandler";
 import { ProjectChangeRequestReasoningDocumentUploadHandler } from "@server/forms/projectChangeRequest/projectChangeRequestReasoningDocumentUploadHandler";
@@ -10,14 +10,14 @@ import { ProjectChangeRequestPrepareFormHandler } from "./projectChangeRequest/p
 import { ProjectChangeRequestDeleteFormHandler } from "./projectChangeRequest/deleteProjectChangeRequestFormHandler";
 import { ProjectChangeRequestAddTypeFormHandler } from "@server/forms/projectChangeRequest/projectChangeRequestAddTypeFormHandler";
 import { BadRequestHandler } from "./badRequestHandler";
-import express from "express";
+import express, { RequestHandler } from "express";
 import { ClaimForecastFormHandler } from "./claimForecastFormHandler";
 import { EditClaimLineItemsFormHandler } from "./editClaimLineItemsFormHandler";
 import { HomeFormHandler } from "./homeFormHandler";
 import { PrepareClaimFormHandler } from "./prepareClaimFormHandler";
-import { ReviewClaimFormHandler } from "./reviewClaimFormHandler";
+import { ProjectChangeRequestItemDocumentUploadHandler } from "@server/forms/projectChangeRequest/projectChangeRequestItemDocumentUploadHandler";
 import { UpdateForecastFormHandler } from "./updateForecastFormHandler";
-import { IFormHandler } from "./formHandlerBase";
+import { IFormHandler, MultipleFileFormHandlerBase, SingleFileFormHandlerBase, StandardFormHandlerBase } from "./formHandlerBase";
 import { serverRender } from "../serverRender";
 import { ClaimDetailDocumentDeleteHandler } from "./claimDetailDocument/claimDetailDocumentDeleteHandler";
 import { ClaimDetailDocumentUploadHandler } from "./claimDetailDocument/claimDetailDocumentUploadHandler";
@@ -33,10 +33,11 @@ import { ClaimSummaryFormHandler } from "@server/forms/claimSummaryFormHandler";
 import { MonitoringReportPreparePeriodFormHandler } from "@server/forms/monitoringReport/monitoringReportPreparePeriodFormHandler";
 import { VirementCostsUpdateHandler } from "@server/forms/projectChangeRequest/virements/virementCostsUpdateHandler";
 import { VirementPartnerCostsUpdateHandler } from "./projectChangeRequest/virements/virementPartnerCostsUpdateHandler";
+import { EditorStateKeys } from "@ui/redux";
 
-export const formRouter = express.Router();
+import { upload } from "./memoryStorage";
 
-const handlers: IFormHandler[] = [
+export const standardFormHandlers: (StandardFormHandlerBase<{}, EditorStateKeys>)[] = [
   new ClaimForecastFormHandler(),
   new EditClaimLineItemsFormHandler(),
   new ClaimSummaryFormHandler(),
@@ -44,9 +45,7 @@ const handlers: IFormHandler[] = [
   new ReviewClaimFormHandler(),
   new UpdateForecastFormHandler(),
   new ClaimDetailDocumentDeleteHandler(),
-  new ClaimDetailDocumentUploadHandler(),
   new ClaimDocumentsDeleteHandler(),
-  new ClaimDocumentsUploadHandler(),
   new MonitoringReportCreateFormHandler(),
   new MonitoringReportDeleteFormHandler(),
   new MonitoringReportPrepareFormHandler(),
@@ -60,34 +59,61 @@ const handlers: IFormHandler[] = [
   new ProjectChangeRequestPrepareFormHandler(),
   new ProjectChangeRequestReviewFormHandler(),
   new ProjectChangeRequestReasoningDocumentDeleteHandler(),
-  new ProjectChangeRequestReasoningDocumentUploadHandler(),
   new ProjectChangeRequestItemUpdateHandler(),
   new ProjectChangeRequestItemDocumentDeleteHandler(),
-  new ProjectChangeRequestItemDocumentUploadHandler(),
   new VirementCostsUpdateHandler(),
   new VirementPartnerCostsUpdateHandler(),
-  new ProjectDocumentUploadHandler(),
 ];
 
-// @TODO remove once we have local sso in dev
-if (!Configuration.sso.enabled) {
-  handlers.push(new HomeFormHandler());
-}
+export const singleFileFormHandlers: (SingleFileFormHandlerBase<{}, EditorStateKeys>)[] = [
+];
 
-handlers.push(new BadRequestHandler());
+export const multiFileFormHandlers: (MultipleFileFormHandlerBase<{}, EditorStateKeys>)[] = [
+  new ClaimDetailDocumentUploadHandler(),
+  new ClaimDocumentsUploadHandler(),
+  new ProjectChangeRequestReasoningDocumentUploadHandler(),
+  new ProjectChangeRequestItemDocumentUploadHandler(),
+  new ProjectDocumentUploadHandler(),
+];
 
 const getRoute = (handler: IFormHandler) => {
   // map router 5 to express syntax - remove < & >
   return handler.routePath.replace(/(<|>)/g, "");
 };
 
-handlers.forEach(x => {
-  formRouter.post(getRoute(x), ...x.middleware, async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    try {
-      await x.handle(req, res, next);
-    } catch (e) {
-      console.log(e);
-      return serverRender(req, res, e);
-    }
+const handlePost = (handler: IFormHandler) => async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+  try {
+    await handler.handle(req, res, next);
+  } catch (e) {
+    console.log(e);
+    return serverRender(req, res, e);
+  }
+};
+
+const handleError = (error: any, req: express.Request, res: express.Response, next: express.NextFunction) => serverRender(req, res, error);
+
+export const configureFormRouter = (csrfProtection: RequestHandler) => {
+  const result = express.Router();
+  const badRequestHandler = new BadRequestHandler();
+
+  singleFileFormHandlers.forEach(x => {
+    result.post(getRoute(x), upload.single("attachment"), csrfProtection, handlePost(x));
   });
-});
+
+  multiFileFormHandlers.forEach(x => {
+    result.post(getRoute(x), upload.array("attachment"), csrfProtection, handlePost(x));
+  });
+
+  standardFormHandlers.forEach(x => {
+    result.post(getRoute(x), csrfProtection, handlePost(x));
+  });
+
+  if (!Configuration.sso.enabled) {
+    const homeFormHandler = new HomeFormHandler();
+    result.post(getRoute(homeFormHandler), csrfProtection, homeFormHandler.handle);
+  }
+
+  result.post("*", badRequestHandler.handle, handleError);
+
+  return result;
+};

@@ -7,4 +7,5 @@ export interface ISessionUser {
 export interface IClientUser {
   email: string;
   roleInfo: {[projectId: string]: IRoleInfo};
+  csrf: string;
 }
