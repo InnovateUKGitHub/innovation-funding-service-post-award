@@ -22,6 +22,8 @@ export class ReviewClaimFormHandler extends StandardFormHandlerBase<ReviewClaimP
             claim.status = ClaimStatus.AWAITING_IUK_APPROVAL;
         }
 
+        claim.comments = body.comments;
+
         return claim;
     }
 

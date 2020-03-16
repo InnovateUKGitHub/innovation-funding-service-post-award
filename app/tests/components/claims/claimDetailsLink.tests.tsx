@@ -32,7 +32,8 @@ const preloadedState: IClientUser = {
         a0B0Q000001eWRHUA2: 7
       }
     }
-  }
+  },
+  csrf: "CSFR"
 };
 
 describe("ClaimDetailsLink", () => {
