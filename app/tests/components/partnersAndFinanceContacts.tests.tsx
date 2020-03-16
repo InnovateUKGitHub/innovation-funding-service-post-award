@@ -103,7 +103,7 @@ const TestProviders: React.FunctionComponent = (props) => <StoresProvider value=
 describe("Partners Table", () => {
   const testForCorrectTableEntries = (expectedA: string, expectedB: string, expectedC: string, columnQA: string) => {
     const wrapper = mount(<TestProviders><PartnersAndFinanceContacts partners={testPartnerData} contacts={testContactData} projectContactLabels={labels} /></TestProviders>);
-    const columnValues = getColumnValues(wrapper, "partner-details", columnQA).map(x => x.text());
+    const columnValues = getColumnValues(wrapper, "finance-contact-details", columnQA).map(x => x.text());
     expect(columnValues[0]).toBe(expectedA);
     expect(columnValues[1]).toBe(expectedB);
     expect(columnValues[2]).toBe(expectedC);

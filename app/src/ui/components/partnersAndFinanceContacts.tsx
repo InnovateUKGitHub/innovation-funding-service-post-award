@@ -19,7 +19,7 @@ export const PartnersAndFinanceContacts: React.FunctionComponent<Props> = (props
   const PartnersTable = TypedTable<typeof partnersAndContactsData[0]>();
 
   return (
-    <PartnersTable.Table qa="partner-details" data={partnersAndContactsData}>
+    <PartnersTable.Table qa="finance-contact-details" data={partnersAndContactsData}>
       <PartnersTable.String headerContent={x => props.projectContactLabels(x).contactName()} value={x => x.financeContact && x.financeContact.name || ""} qa="fc-name" />
       <PartnersTable.Custom headerContent={x => props.projectContactLabels(x).partnerName()} value={x => <PartnerName partner={x.partner} showIsLead={true}/>} qa="partner-name"/>
       <PartnersTable.String headerContent={x => props.projectContactLabels(x).partnerType()} value={x => x.partner.type} qa="partner-type"/>
