@@ -92,14 +92,14 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, Data, Callbacks> 
 
   private renderClaimReviewSection(data: CombinedData) {
     return (
-        <ACC.Section title={this.getClaimPeriodTitle(data)}>
-          <ACC.Claims.ClaimReviewTable
-            {...data}
-            standardOverheadRate={this.props.config.standardOverheadRate}
-            validation={data.editor.validator.claimDetails.results}
-            getLink={costCategoryId => this.getClaimLineItemLink(costCategoryId)}
-          />
-        </ACC.Section>
+      <ACC.Section title={this.getClaimPeriodTitle(data)}>
+        <ACC.Claims.ClaimReviewTable
+          {...data}
+          standardOverheadRate={this.props.config.standardOverheadRate}
+          validation={data.editor.validator.claimDetails.results}
+          getLink={costCategoryId => this.getClaimLineItemLink(costCategoryId)}
+        />
+      </ACC.Section>
     );
   }
 
@@ -135,7 +135,6 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, Data, Callbacks> 
       { id: ClaimStatus.MO_QUERIED, value: <ACC.Content value={x => x.claimReview.queryClaimOption()} /> },
       { id: ClaimStatus.AWAITING_IUK_APPROVAL, value: <ACC.Content value={x => x.claimReview.approveClaimOption()} /> },
     ];
-    const submitButtonLabel = this.getSubmitButtonLabel(data);
 
     return (
       <Form.Form
@@ -153,8 +152,7 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, Data, Callbacks> 
             validation={data.editor.validator.status}
             inline={true}
           />
-          {this.renderCommentsSection(Form, data.editor)}
-          {!!submitButtonLabel ? <Form.Submit>{submitButtonLabel}</Form.Submit> : null}
+          {this.renderFormHiddenSection(data.editor, Form)}
         </Form.Fieldset>
       </Form.Form>
     );
@@ -166,11 +164,11 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, Data, Callbacks> 
     return (
       <ACC.AccordionItem titleContent={x => x.claimReview.uploadClaimValidationFormAccordionTitle()} qa="upload-claims-validation-form-accordion">
         <UploadForm.Form
-            enctype="multipart"
-            editor={data.documentsEditor}
-            onChange={dto => this.props.onUpload(false, {...dto, description: DocumentDescription.ClaimValidationForm})}
-            onSubmit={() => this.props.onUpload(true, {...data.documentsEditor.data, description: DocumentDescription.ClaimValidationForm})}
-            qa="projectDocumentUpload"
+          enctype="multipart"
+          editor={data.documentsEditor}
+          onChange={dto => this.props.onUpload(false, {...dto, description: DocumentDescription.ClaimValidationForm})}
+          onSubmit={() => this.props.onUpload(true, {...data.documentsEditor.data, description: DocumentDescription.ClaimValidationForm})}
+          qa="projectDocumentUpload"
         >
           <UploadForm.Fieldset>
             <ACC.Content value={x => x.claimReview.messages.uploadClaimValidationFormInstructions()} />
@@ -209,15 +207,19 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, Data, Callbacks> 
     );
   }
 
-  private renderCommentsSection(Form: ACC.FormBuilder<ClaimDto>, editor: IEditorStore<ClaimDto, ClaimDtoValidator>) {
+  private renderFormHiddenSection(editor: IEditorStore<ClaimDto, ClaimDtoValidator>, Form: ACC.FormBuilder<ClaimDto>) {
     // on client if the status hasn't yet been set by the radio buttons then don't show
     // if server rendering we need to always show
     if (!editor.data.status && this.props.isClient) {
       return null;
     }
 
-    return (
-      <Form.Fieldset headingContent={x => x.claimReview.additionalInfoSectionTitle()} qa="additional-info-form" headingQa="additional-info-heading">
+    const submitButtonLabel = this.getSubmitButtonLabel(editor);
+
+    return [
+      // Returning array here instead of React.Fragment as Fieldset data will not persist through Fragment,
+      (
+      <Form.Fieldset key="form" headingContent={x => x.claimReview.additionalInfoSectionTitle()} qa="additional-info-form" headingQa="additional-info-heading">
         <Form.MultilineString
           label="additional-info"
           labelHidden={true}
@@ -229,42 +231,48 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, Data, Callbacks> 
           qa="info-text-area"
         />
       </Form.Fieldset>
-    );
+      ),
+      (
+        <ACC.Renderers.SimpleString key="reminder">
+          <ACC.Content value={x => x.claimReview.monitoringReportReminder()} />
+        </ACC.Renderers.SimpleString>
+      ),
+      !!submitButtonLabel ? <Form.Submit key="button">{submitButtonLabel}</Form.Submit> : null
+    ];
+}
 
+  private getSubmitButtonLabel(editor: IEditorStore<ClaimDto, ClaimDtoValidator>) {
+  // If rendering from the server then always use "Submit"
+  if (!this.props.isClient || editor.data.status === ClaimStatus.AWAITING_IUK_APPROVAL) {
+    return <ACC.Content value={x => x.claimReview.submitButton()} />;
   }
 
-  private getSubmitButtonLabel(data: CombinedData) {
-    // If rendering from the server then always use "Submit"
-    if (!this.props.isClient || data.editor.data.status === ClaimStatus.AWAITING_IUK_APPROVAL) {
-      return <ACC.Content value={x => x.claimReview.submitButton()} />;
-    }
-
-    if (data.editor.data.status === ClaimStatus.MO_QUERIED) {
-      return <ACC.Content value={x => x.claimReview.sendQueryButton()} />;
-    }
-
-    return null;
+  if (editor.data.status === ClaimStatus.MO_QUERIED) {
+    return <ACC.Content value={x => x.claimReview.sendQueryButton()} />;
   }
+
+  return null;
+}
 
   private updateStatus(dto: ClaimDto, option: ACC.SelectOption | null | undefined) {
-    if (option && (option.id === ClaimStatus.MO_QUERIED || option.id === ClaimStatus.AWAITING_IUK_APPROVAL)) {
-      dto.status = option.id;
-    }
+  if (option && (option.id === ClaimStatus.MO_QUERIED || option.id === ClaimStatus.AWAITING_IUK_APPROVAL)) {
+    dto.status = option.id;
   }
+}
 
   private renderLogsItem() {
-    return (
-      <ACC.AccordionItem titleContent={x => x.claimReview.labels.claimLogAccordionTitle()} qa="log-accordion">
-        {/* Keeping logs inside loader because accordion defaults to closed*/}
-        <ACC.Loader
-          pending={this.props.statusChanges}
-          render={(statusChanges) => (
-            <ACC.Logs qa="claim-status-change-table" data={statusChanges} />
-          )}
-        />
-      </ACC.AccordionItem>
-    );
-  }
+  return (
+    <ACC.AccordionItem titleContent={x => x.claimReview.labels.claimLogAccordionTitle()} qa="log-accordion">
+      {/* Keeping logs inside loader because accordion defaults to closed*/}
+      <ACC.Loader
+        pending={this.props.statusChanges}
+        render={(statusChanges) => (
+          <ACC.Logs qa="claim-status-change-table" data={statusChanges} />
+        )}
+      />
+    </ACC.AccordionItem>
+  );
+}
 }
 
 const initEditor = (dto: ClaimDto) => {
