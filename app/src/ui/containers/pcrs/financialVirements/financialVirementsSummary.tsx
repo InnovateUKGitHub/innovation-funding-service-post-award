@@ -1,14 +1,20 @@
 import React from "react";
-import { StoresConsumer } from "@ui/redux";
+import { IEditorStore, StoresConsumer } from "@ui/redux";
 import { Pending } from "@shared/pending";
 import * as ACC from "@ui/components";
 import { PcrSummaryProps } from "@ui/containers/pcrs/pcrWorkflow";
-import { PCRStandardItemDtoValidator } from "@ui/validators";
-import { PartnerDto, PCRStandardItemDto } from "@framework/dtos";
+import { MultiplePartnerFinancialVirementDtoValidator, PCRDtoValidator, PCRStandardItemDtoValidator } from "@ui/validators";
+import { PartnerDto, PCRDto, PCRItemDto, PCRItemForMultiplePartnerFinancialVirementDto, PCRStandardItemDto } from "@framework/dtos";
+import { PCRItemType } from "@framework/types";
 
 interface Props extends PcrSummaryProps<PCRStandardItemDto, PCRStandardItemDtoValidator, ""> {
   virement: Pending<FinancialVirementDto>;
   partners: Pending<PartnerDto[]>;
+}
+
+interface PropsWithForm {
+  editor: IEditorStore<PCRDto, PCRDtoValidator>;
+  form: ACC.FormBuilder<PCRItemDto>;
 }
 
 class Component extends React.Component<Props> {
@@ -34,7 +40,7 @@ class Component extends React.Component<Props> {
           {this.renderPrepareTable(paired, virement)}
           <ACC.Section>
             <ACC.Renderers.SimpleString>If the new remaining project grant is higher as a result of the reallocation of costs, you can change the funding level of partners to lower the new project grant.</ACC.Renderers.SimpleString>
-            <ACC.Link route={this.props.routes.pcrFinancialVirementEditPartnerLevel.getLink({ itemId: this.props.pcrItem.id, pcrId: this.props.pcr.id, projectId: this.props.projectId })}>Change remaining grant</ACC.Link>
+            <ACC.Link styling={"SecondaryButton"} route={this.props.routes.pcrFinancialVirementEditPartnerLevel.getLink({ itemId: this.props.pcrItem.id, pcrId: this.props.pcr.id, projectId: this.props.projectId })}>Change remaining grant</ACC.Link>
           </ACC.Section>
         </React.Fragment>
       );
@@ -92,6 +98,28 @@ class Component extends React.Component<Props> {
       <ACC.Link preserveData={true} route={route}>
         <ACC.PartnerName partner={partner} showIsLead={true} />
       </ACC.Link>
+    );
+  }
+}
+
+export class GrantMovingOverFinancialYearForm extends React.Component<PropsWithForm> {
+  public render() {
+    const Form = this.props.form;
+    const itemPcr = this.props.editor.data.items.find(x => x.type === PCRItemType.MultiplePartnerFinancialVirement)! as PCRItemForMultiplePartnerFinancialVirementDto;
+    const itemValidator = this.props.editor.validator.items.results.find(x => x.model.type === PCRItemType.MultiplePartnerFinancialVirement) as MultiplePartnerFinancialVirementDtoValidator;
+
+    return (
+      <Form.Fieldset>
+        <ACC.Renderers.SimpleString>Grant value moving over the financial year end</ACC.Renderers.SimpleString>
+        <ACC.TextHint text={"The financial year ends on 31 March"} />
+        <Form.Numeric
+          name="grantMovingOverFinancialYear"
+          width={5}
+          value={() => itemPcr.grantMovingOverFinancialYear}
+          update={(m, val) => itemPcr.grantMovingOverFinancialYear = val!}
+          validation={itemValidator.grantMovingOverFinancialYear}
+        />
+      </Form.Fieldset>
     );
   }
 }

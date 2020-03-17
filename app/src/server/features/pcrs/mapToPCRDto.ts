@@ -2,6 +2,7 @@ import { ProjectChangeRequestEntity, ProjectChangeRequestItemEntity } from "@fra
 import {
   PCRDto,
   PCRItemForAccountNameChangeDto,
+  PCRItemForMultiplePartnerFinancialVirementDto,
   PCRItemForPartnerAdditionDto,
   PCRItemForPartnerWithdrawalDto,
   PCRItemForProjectSuspensionDto,
@@ -52,6 +53,7 @@ const mapItem = (pcr: ProjectChangeRequestItemEntity, itemType: PCRItemTypeDto) 
     case PCRItemType.PartnerAddition:
       return mapItemForPartnerAddition(pcr, itemType.displayName, itemType.type);
     case PCRItemType.MultiplePartnerFinancialVirement:
+      return mapItemForMultiplePartnerVirements(pcr, itemType.displayName, itemType.type);
     case PCRItemType.SinglePartnerFinancialVirement:
       return mapStandardItem(pcr, itemType.displayName, itemType.type);
     default:
@@ -124,4 +126,10 @@ const mapItemForPartnerAddition = (pcr: ProjectChangeRequestItemEntity, typeName
   projectRoleLabel: pcr.projectRoleLabel || null,
   partnerTypeLabel: pcr.partnerTypeLabel || null,
   type
+});
+
+const mapItemForMultiplePartnerVirements = (pcr: ProjectChangeRequestItemEntity, typeName: string, type: PCRItemType.MultiplePartnerFinancialVirement): PCRItemForMultiplePartnerFinancialVirementDto => ({
+  ...mapBaseItem(pcr, typeName, type),
+  type,
+  grantMovingOverFinancialYear: (!!pcr.grantMovingOverFinancialYear || pcr.grantMovingOverFinancialYear === 0) ? pcr.grantMovingOverFinancialYear : null
 });

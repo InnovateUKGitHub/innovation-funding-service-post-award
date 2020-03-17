@@ -48,15 +48,20 @@ export type PCRItemDto =
   PCRItemForAccountNameChangeDto |
   PCRItemForProjectTerminationDto |
   PCRItemForPartnerAdditionDto |
-  PCRItemForPartnerWithdrawalDto;
+  PCRItemForPartnerWithdrawalDto |
+  PCRItemForMultiplePartnerFinancialVirementDto;
 
 export type ProjectChangeRequestStandardItemTypes = (
-  PCRItemType.MultiplePartnerFinancialVirement|
   PCRItemType.SinglePartnerFinancialVirement
   );
 
 export interface PCRStandardItemDto extends PCRItemBaseDto {
   type: ProjectChangeRequestStandardItemTypes;
+}
+
+export interface PCRItemForMultiplePartnerFinancialVirementDto extends PCRItemBaseDto {
+  type: PCRItemType.MultiplePartnerFinancialVirement;
+  grantMovingOverFinancialYear: number | null;
 }
 
 export interface PCRItemForTimeExtensionDto extends PCRItemBaseDto {

@@ -59,7 +59,7 @@ export class UpdatePCRCommand extends CommandBase<boolean> {
     entityToUpdate.comments = originalDto.status === this.pcr.status ? this.pcr.comments : "";
     await context.repositories.projectChangeRequests.updateProjectChangeRequest(entityToUpdate);
 
-    if(originalDto.status !== this.pcr.status) {
+    if (originalDto.status !== this.pcr.status) {
       await this.insertStatusChange(context, this.projectChangeRequestId, this.pcr.comments, originalDto.status, this.pcr.status);
     }
 
@@ -134,6 +134,10 @@ export class UpdatePCRCommand extends CommandBase<boolean> {
           return { ...init, projectRole: dto.projectRole, partnerType: dto.partnerType };
         }
         break;
+      case PCRItemType.MultiplePartnerFinancialVirement:
+        if (item.grantMovingOverFinancialYear !== dto.grantMovingOverFinancialYear) {
+          return { ...init, grantMovingOverFinancialYear: dto.grantMovingOverFinancialYear };
+        }
     }
 
     return init;
