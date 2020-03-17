@@ -18,6 +18,7 @@ import { storeKeys } from "@ui/redux/stores/storeKeys";
 import { PcrWorkflow } from "@ui/containers/pcrs/pcrWorkflow";
 import { removePartnerStepNames } from "@ui/containers/pcrs/removePartner";
 import { scopeChangeStepNames } from "@ui/containers/pcrs/scopeChange/scopeChangeWorkflow";
+import { addPartnerStepNames } from "@ui/containers/pcrs/addPartner";
 
 export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBase<ProjectChangeRequestPrepareItemParams, "pcr"> {
   constructor() {
@@ -52,9 +53,14 @@ export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBa
       case PCRItemType.PartnerWithdrawal:
         this.updatePartnerWithdrawal(item, body, stepName as removePartnerStepNames);
         break;
+      case PCRItemType.PartnerAddition:
+        if (context.config.features.addPartnerWorkflow) {
+          this.updatePartnerAddition(item, body, stepName as addPartnerStepNames);
+        }
+        // nothing to update as only files
+        break;
       case PCRItemType.MultiplePartnerFinancialVirement:
       case PCRItemType.SinglePartnerFinancialVirement:
-      case PCRItemType.PartnerAddition:
         // nothing to update as only files
         break;
     }
@@ -129,6 +135,13 @@ export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBa
       }
 
       item.partnerId = body.partnerId;
+    }
+  }
+
+  private updatePartnerAddition(item: Dtos.PCRItemForPartnerAdditionDto, body: IFormBody, stepName: addPartnerStepNames | null) {
+    if (stepName === "roleAndOrganisationStep") {
+      item.projectRole = parseInt(body.projectRole, 10);
+      item.partnerType = parseInt(body.partnerType, 10);
     }
   }
 
