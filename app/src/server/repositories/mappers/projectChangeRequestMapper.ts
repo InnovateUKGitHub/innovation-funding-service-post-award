@@ -142,6 +142,7 @@ export class SalesforcePCRMapper extends SalesforceBaseMapper<ISalesforcePCR[], 
       projectRoleLabel: pcrItem.ProjectRoleLabel,
       partnerType: new PcrPartnerTypeMapper().mapFromSalesforcePCRPartnerType(pcrItem.Acc_ParticipantType__c),
       partnerTypeLabel: pcrItem.ParticipantTypeLabel,
+      grantMovingOverFinancialYear: pcrItem.Acc_GrantMovingOverFinancialYear__c
     };
   }
 

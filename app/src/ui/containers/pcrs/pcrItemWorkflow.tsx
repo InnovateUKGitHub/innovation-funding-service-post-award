@@ -13,11 +13,12 @@ import { Pending } from "@shared/pending";
 import { PCRDto, PCRItemTypeDto } from "@framework/dtos/pcrDtos";
 import { EditorStatus, IEditorStore, IStores, StoresConsumer } from "@ui/redux";
 import { MultipleDocumentUpdloadDtoValidator, PCRDtoValidator } from "@ui/validators";
-import { NavigationArrowsForPCRs } from "@ui/containers/pcrs/navigationArrows";
 import { Result } from "@ui/validation/result";
 import { PcrWorkflow } from "@ui/containers/pcrs/pcrWorkflow";
 import { Results } from "@ui/validation";
 import { PCRWorkflowValidator } from "@ui/validators/pcrWorkflowValidator";
+import { GrantMovingOverFinancialYearForm } from "./financialVirements/financialVirementsSummary";
+import { NavigationArrowsForPCRs } from "@ui/containers/pcrs/navigationArrows";
 
 export interface ProjectChangeRequestPrepareItemParams {
   projectId: string;
@@ -179,6 +180,7 @@ class Component extends ContainerBase<ProjectChangeRequestPrepareItemParams, Dat
 
     const pcrItem = editor.data.items.find(x => x.id === this.props.itemId)!;
 
+    const typeSpecificForm = pcrItem.type === PCRItemType.MultiplePartnerFinancialVirement ? <GrantMovingOverFinancialYearForm form={PCRForm} editor={editor}/> : null;
     return (
       <PCRForm.Form
         data={pcrItem}
@@ -186,6 +188,7 @@ class Component extends ContainerBase<ProjectChangeRequestPrepareItemParams, Dat
         onSubmit={() => this.onSave(workflow, editor.data)}
         isSaving={editor.status === EditorStatus.Saving}
       >
+        {typeSpecificForm}
         <PCRForm.Fieldset heading="Mark as complete">
           <PCRForm.Checkboxes
             name="itemStatus"
@@ -288,7 +291,7 @@ export const PCRViewItemRoute = defineRoute<ProjectChangeRequestPrepareItemParam
     pcrId: route.params.pcrId
   }),
   container: (props) => <PCRItemContainer mode="view" {...props} />,
-  getTitle: ({params, stores}) => getTitle("View project change request item", params, stores),
+  getTitle: ({ params, stores }) => getTitle("View project change request item", params, stores),
   accessControl: (auth, { projectId }, config) => config.features.pcrsEnabled && auth.forProject(projectId).hasAnyRoles(ProjectRole.ProjectManager, ProjectRole.MonitoringOfficer)
 });
 
@@ -301,7 +304,7 @@ export const PCRReviewItemRoute = defineRoute<ProjectChangeRequestPrepareItemPar
     itemId: route.params.itemId,
     pcrId: route.params.pcrId
   }),
-  getTitle: ({params, stores}) => getTitle("Review project change request item", params, stores),
+  getTitle: ({ params, stores }) => getTitle("Review project change request item", params, stores),
   accessControl: (auth, { projectId }, config) => config.features.pcrsEnabled && auth.forProject(projectId).hasAnyRoles(ProjectRole.MonitoringOfficer)
 });
 
@@ -315,6 +318,6 @@ export const PCRPrepareItemRoute = defineRoute<ProjectChangeRequestPrepareItemPa
     itemId: route.params.itemId,
     step: parseInt(route.params.step, 10)
   }),
-  getTitle: ({params, stores}) => getTitle("Prepare project change request item", params, stores),
+  getTitle: ({ params, stores }) => getTitle("Prepare project change request item", params, stores),
   accessControl: (auth, { projectId }, config) => config.features.pcrsEnabled && auth.forProject(projectId).hasRole(ProjectRole.ProjectManager)
 });

@@ -8,6 +8,7 @@ import {
   Authorisation,
   PCRDto,
   PCRItemForAccountNameChangeDto,
+  PCRItemForMultiplePartnerFinancialVirementDto,
   PCRItemForPartnerAdditionDto,
   PCRItemForPartnerWithdrawalDto,
   PCRItemForProjectSuspensionDto,
@@ -1040,5 +1041,30 @@ describe("UpdatePCRCommand", () => {
     dto.status = PCRStatus.Draft;
 
     await expect(context.runCommand(new UpdatePCRCommand(pcr.projectId, pcr.id, dto))).rejects.toThrow(ValidationError);
+  });
+  describe("PCR Multiple partner virement", () => {
+    test("Grant carried over financial year field gets created, validated, and updated properly", async () => {
+      const context = new TestContext();
+
+      const project = context.testData.createProject();
+      const partner = context.testData.createPartner(project);
+      context.testData.createCurrentUserAsProjectManager(project);
+      const projectChangeRequest = context.testData.createPCR(project, { status: PCRStatus.Draft });
+      const recordTypes = context.testData.createPCRRecordTypes();
+
+      const multiplePartnerFinancialVirement = PCRRecordTypeMetaValues.find(x => x.type === PCRItemType.MultiplePartnerFinancialVirement)!;
+
+      const recordType = recordTypes.find(x => x.type === multiplePartnerFinancialVirement.typeName);
+      context.testData.createPCRItem(projectChangeRequest, recordType, { status: PCRItemStatus.Complete });
+
+      const dto = await context.runQuery(new GetPCRByIdQuery(projectChangeRequest.projectId, projectChangeRequest.id));
+      const item = dto.items[0] as PCRItemForMultiplePartnerFinancialVirementDto;
+
+      item.grantMovingOverFinancialYear = -1;
+      await expect(context.runCommand(new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto))).rejects.toThrow(ValidationError);
+
+      item.grantMovingOverFinancialYear =  100;
+      await expect(context.runCommand(new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto))).resolves.toBe(true);
+    });
   });
 });
