@@ -7,6 +7,26 @@ interface Props {
   compressed?: boolean;
 }
 
+const prepareMessage = (errorMessage: string | null | undefined): React.ReactNode => {
+  if (errorMessage && errorMessage.indexOf("\n") === 0) {
+    return errorMessage;
+  }
+
+  if (errorMessage) {
+    return errorMessage.split("\n").reduce<React.ReactNode[]>((result, current, index) => {
+      if (index > 0) {
+        result.push(<br />);
+      }
+      result.push(current);
+      return result;
+    },
+      []
+    );
+  }
+
+  return null;
+};
+
 export const ValidationSummary: React.FunctionComponent<Props> = ({ validation, compressed }) => {
   const results: Result[] = [];
   if (validation && validation.errors) {
@@ -37,7 +57,7 @@ export const ValidationSummary: React.FunctionComponent<Props> = ({ validation, 
       <h2 className="govuk-error-summary__title" id="error-summary-title">There is a problem</h2>
       <div className="govuk-error-summary__body">
         <ul className="govuk-list govuk-error-summary__list">
-          {results.map(x => <li key={`error${x.key}`}><a href={`#${x.key}`}>{x.errorMessage}</a></li>)}
+          {results.map(x => <li key={`error${x.key}`}><a href={`#${x.key}`}>{prepareMessage(x.errorMessage)}</a></li>)}
         </ul>
       </div>
     </div>
