@@ -90,27 +90,34 @@ const handlePost = (handler: IFormHandler) => async (req: express.Request, res: 
   }
 };
 
-const handleError = (error: any, req: express.Request, res: express.Response, next: express.NextFunction) => serverRender(req, res, error);
+const handleError = (error: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
+  if (error) {
+    serverRender(req, res, error);
+  }
+  else {
+    next();
+  }
+};
 
 export const configureFormRouter = (csrfProtection: RequestHandler) => {
   const result = express.Router();
   const badRequestHandler = new BadRequestHandler();
 
   singleFileFormHandlers.forEach(x => {
-    result.post(getRoute(x), upload.single("attachment"), csrfProtection, handlePost(x));
+    result.post(getRoute(x), upload.single("attachment"), csrfProtection, handlePost(x), handleError);
   });
 
   multiFileFormHandlers.forEach(x => {
-    result.post(getRoute(x), upload.array("attachment"), csrfProtection, handlePost(x));
+    result.post(getRoute(x), upload.array("attachment"), csrfProtection, handlePost(x), handleError);
   });
 
   standardFormHandlers.forEach(x => {
-    result.post(getRoute(x), csrfProtection, handlePost(x));
+    result.post(getRoute(x), csrfProtection, handlePost(x), handleError);
   });
 
   if (!Configuration.sso.enabled) {
     const homeFormHandler = new HomeFormHandler();
-    result.post(getRoute(homeFormHandler), csrfProtection, homeFormHandler.handle);
+    result.post(getRoute(homeFormHandler), csrfProtection, homeFormHandler.handle, handleError);
   }
 
   result.post("*", badRequestHandler.handle, handleError);
