@@ -7,14 +7,14 @@ export class DeleteClaimDocumentCommand extends CommandBase<void> {
     }
 
     async accessControl(auth: Authorisation, context: IContext) {
-        const claim = await context.repositories.claims.get(this.claimKey.partnerId, this.claimKey.periodId);
+        const claim = await context.repositories.claims.getByProjectId(this.claimKey.projectId, this.claimKey.partnerId, this.claimKey.periodId);
         if (!claim) return false;
-
         const documentExists = await context.repositories.documents.isExistingDocument(this.documentId, claim.Id);
         if (!documentExists) return false;
 
         // If a project prole (e.g. MO or PM) is used for auth then the claim needs to be looked up by projectId as well as partner & period
-        return auth.forPartner(this.claimKey.projectId, this.claimKey.partnerId).hasRole(ProjectRole.FinancialContact);
+        return auth.forPartner(this.claimKey.projectId, this.claimKey.partnerId).hasRole(ProjectRole.FinancialContact)
+          || auth.forProject(this.claimKey.projectId).hasRole(ProjectRole.MonitoringOfficer);
     }
 
     protected async Run(context: IContext) {

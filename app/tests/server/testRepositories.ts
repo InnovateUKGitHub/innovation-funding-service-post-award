@@ -81,6 +81,10 @@ class ClaimsTestRepository extends TestRepository<Repositories.ISalesforceClaim>
     return super.getOne(x => x.Acc_ProjectParticipant__r.Id === partnerId && x.Acc_ProjectPeriodNumber__c === periodId);
   }
 
+  getByProjectId(projectId: string, partnerId: string, periodId: number) {
+    return super.getOne(x => x.Acc_ProjectParticipant__r.Id === partnerId && x.Acc_ProjectPeriodNumber__c === periodId);
+  }
+
   update(updatedClaim: Repositories.ISalesforceClaim) {
     const index = this.Items.findIndex(x => x.Id === updatedClaim.Id);
     if (index >= 0) {
