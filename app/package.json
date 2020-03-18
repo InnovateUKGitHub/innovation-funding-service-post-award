@@ -91,7 +91,7 @@
     "babel-plugin-transform-remove-console": "^6.9.4",
     "enzyme": "^3.8.0",
     "enzyme-adapter-react-16": "^1.9.1",
-    "jest": "^24.1.0",
+    "jest": "^24.9.0",
     "jest-bamboo-reporter": "^1.2.0",
     "jest-html-reporter": "^2.4.2",
     "nodemon": "^1.18.3",
@@ -105,7 +105,7 @@
     "tslint-react-a11y": "^1.0.0",
     "tslint-sonarts": "^1.7.0",
     "typescript": "^3.0.1",
-    "webpack": "^4.16.5",
+    "webpack": "^4.42.0",
     "webpack-command": "^0.4.1",
     "webpack-node-externals": "^1.7.2"
   },
