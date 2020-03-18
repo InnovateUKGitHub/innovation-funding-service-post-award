@@ -8,6 +8,7 @@ export interface ISalesforceClaim {
     Id: string;
     Acc_OverheadRate__c: number;
     Acc_ProjectRole__c: string;
+    Acc_ProjectId__c: string;
     Acc_AccountId__r: {
       Name: string;
     }
@@ -35,6 +36,7 @@ export interface IClaimRepository {
   getAllByProjectId(projectId: string): Promise<ISalesforceClaim[]>;
   getAllByPartnerId(partnerId: string): Promise<ISalesforceClaim[]>;
   get(partnerId: string, periodId: number): Promise<ISalesforceClaim>;
+  getByProjectId(projectId: string, partnerId: string, periodId: number): Promise<ISalesforceClaim>;
   getClaimStatuses(): Promise<PicklistEntry[]>;
   update(updatedClaim: Partial<ISalesforceClaim> & { Id: string }): Promise<boolean>;
 }
@@ -55,6 +57,7 @@ export class ClaimRepository extends SalesforceRepositoryBase<ISalesforceClaim> 
   protected readonly salesforceFieldNames = [
     "Id",
     "Acc_ProjectParticipant__r.Id",
+    "Acc_ProjectParticipant__r.Acc_ProjectId__c",
     "Acc_ProjectParticipant__r.Acc_OverheadRate__c",
     "Acc_ProjectParticipant__r.Acc_ProjectRole__c",
     "Acc_ProjectParticipant__r.Acc_AccountId__r.Name",
@@ -103,6 +106,22 @@ export class ClaimRepository extends SalesforceRepositoryBase<ISalesforceClaim> 
 
   public async get(partnerId: string, periodId: number) {
     const filter = this.getStandardFilter() + `
+      AND Acc_ProjectParticipant__c = '${partnerId}'
+      AND Acc_ProjectPeriodNumber__c = ${periodId}
+    `;
+
+    const claim = await super.filterOne(filter);
+
+    if (!claim) {
+      throw new NotFoundError("Claim does not exist");
+    }
+
+    return claim;
+  }
+
+  public async getByProjectId(projectId: string, partnerId: string, periodId: number) {
+    const filter = this.getStandardFilter() + `
+      AND Acc_ProjectParticipant__r.Acc_ProjectId__c = '${projectId}'
       AND Acc_ProjectParticipant__c = '${partnerId}'
       AND Acc_ProjectPeriodNumber__c = ${periodId}
     `;
