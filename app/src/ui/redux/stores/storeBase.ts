@@ -152,7 +152,15 @@ export class StoreBase {
     }));
   }
 
-  protected updateEditor<T extends EditorStateKeys, K extends string, TDto extends InferEditorStoreDto<EditorState[T][K]>, TVal extends InferEditorStoreValidator<EditorState[T][K]>, TResult>(submit: boolean, store: T, key: K, dto: TDto, getValidator: (showErrors: boolean) => Pending<TVal> | TVal, saveCall: (p: { user: IClientUser }) => Promise<TResult>, onComplete?: (result: TResult) => void, onError?: (e: any) => void) {
+  protected updateEditor<T extends EditorStateKeys, K extends string, TDto extends InferEditorStoreDto<EditorState[T][K]>, TVal extends InferEditorStoreValidator<EditorState[T][K]>, TResult>(
+    submit: boolean,
+    store: T,
+    key: K,
+    dto: TDto,
+    getValidator: (showErrors: boolean) => Pending<TVal> | TVal,
+    saveCall: (p: { user: IClientUser }) => Promise<TResult>,
+    onComplete?: (result: TResult) => void,
+    onError?: (e: any) => void) {
     this.queue(conditionalSave(submit, store, key, dto, getValidator, saveCall, onComplete, onError));
   }
 
