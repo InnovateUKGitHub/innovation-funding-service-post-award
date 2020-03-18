@@ -12,6 +12,30 @@ const alignTextLeftStyle: React.CSSProperties = {
   textAlign: "left",
 };
 
+const prepareMessage = (overrideMessage: string | null | undefined, errorMessage: string | null | undefined): React.ReactNode => {
+  if (overrideMessage) {
+    return overrideMessage;
+  }
+
+  if (errorMessage && errorMessage.indexOf("\n") === 0) {
+    return errorMessage;
+  }
+
+  if (errorMessage) {
+    return errorMessage.split("\n").reduce<React.ReactNode[]>((result, current, index) => {
+      if (index > 0) {
+        result.push(<br />);
+      }
+      result.push(current);
+      return result;
+    },
+      []
+    );
+  }
+
+  return null;
+};
+
 export const ValidationError: React.FunctionComponent<Props> = ({ error, hideMessage = false, overrideMessage }) => {
   if (!error || error.isValid || !error.showValidationErrors) {
     return null;
@@ -31,7 +55,7 @@ export const ValidationError: React.FunctionComponent<Props> = ({ error, hideMes
   return (
     <React.Fragment>
       {validations.map((r) => <ValidationErrorAnchor result={r} key={r.key} />)}
-      {!hideMessage ? <span style={alignTextLeftStyle} className="govuk-error-message">{overrideMessage || error.errorMessage}</span> : null}
+      {!hideMessage ? <span style={alignTextLeftStyle} className="govuk-error-message">{prepareMessage(overrideMessage, error.errorMessage)}</span> : null}
     </React.Fragment>
   );
 };

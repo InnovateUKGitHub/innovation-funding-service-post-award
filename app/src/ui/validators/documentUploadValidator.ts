@@ -4,6 +4,11 @@ import { Results } from "../validation/results";
 import { getFileExtension, getFileSize } from "@framework/util";
 import { FileTypeNotAllowedError } from "@server/repositories";
 import { NestedResult } from "@ui/validation";
+import { flatten } from "@framework/util/arrayHelpers";
+
+const permittedFileTypeErrorMessage = (file: IFileWrapper) => {
+  return `'${file.fileName}' is the wrong file type.\nYou can upload these file types: PDF (pdf, xps), text (doc, docx, rdf, txt, csv, odt), presentation (ppt, pptx, odp), spreadsheet (xls, xlsx, ods), or image (jpg, jpeg or png).`;
+};
 
 export class DocumentUploadDtoValidator extends Results<DocumentUploadDto> {
   constructor(model: DocumentUploadDto, config: { maxFileSize: number, permittedFileTypes: string[] }, showValidationErrors: boolean, private error: FileTypeNotAllowedError | null) {
@@ -16,7 +21,7 @@ export class DocumentUploadDtoValidator extends Results<DocumentUploadDto> {
       () => Validation.isTrue(this, !this.error, "File type is not allowed."),
       () => Validation.isTrue(this, model.file!.size <= config.maxFileSize, `The selected file must be smaller than ${maxMessage}.`),
       () => Validation.isFalse(this, model.file!.size === 0, `File is empty. Please check the file you have selected.`),
-      () => Validation.permitedValues(this, getFileExtension(model.file), config.permittedFileTypes, `${model.file!.fileName} is not a permitted file type`),
+      () => Validation.permitedValues(this, getFileExtension(model.file), config.permittedFileTypes, permittedFileTypeErrorMessage(model.file!)),
     );
   }
 
@@ -33,8 +38,11 @@ export class MultipleDocumentUpdloadDtoValidator extends Results<MultipleDocumen
   }
 
   private validateFiles(model: MultipleDocumentUploadDto, config: { maxFileSize: number, maxUploadFileCount: number, permittedFileTypes: string[] }, filesRequired: boolean, ) {
-    const filesMessage = model.files && model.files.length === 1 ? "The file is invalid." : "A file is invalid.";
-    const filteredFiles = model.files && model.files.filter(x => x.fileName || x.size);
+    const filteredFiles = model.files && model.files.filter(x => x.fileName || x.size) || [];
+
+    const childResults = filteredFiles.map(x => new FileDtoValidator(x, config.maxFileSize, config.permittedFileTypes, this.showValidationErrors));
+    const childError = childResults.filter(x => !x.isValid).map(x => x.file.errorMessage)[0] || (filteredFiles.length === 1 ? "You cannot upload this file" : "You cannot upload one or more of these files");
+
     const maxCountMessage = config.maxUploadFileCount === 1 ? "You can only select one file at a time." : `You can only select up to ${config.maxUploadFileCount} files at the same time.`;
 
     return Validation.child(
@@ -43,10 +51,10 @@ export class MultipleDocumentUpdloadDtoValidator extends Results<MultipleDocumen
       x => new FileDtoValidator(x, config.maxFileSize, config.permittedFileTypes, this.showValidationErrors),
       children => children.all(
         () => filesRequired ? children.isTrue(x => !!(filteredFiles && filteredFiles.length), "Select a file to upload.") : children.valid(),
-        () => children.isTrue(() => !this.error, "File type is not allowed."),
+        () => children.isTrue(() => !this.error, childError),
         () => children.isTrue(x => x.length <= config.maxUploadFileCount, maxCountMessage)
       ),
-      filesMessage
+      childError
     );
   }
 
@@ -65,9 +73,9 @@ export class FileDtoValidator extends Results<IFileWrapper> {
     else {
       this.file = Validation.all(this,
         () => Validation.required(this, model && model.fileName, "Select a file to upload."),
-        () => Validation.isTrue(this, model.size <= maxFileSize, `The file must be smaller than ${maxMessage}.`),
-        () => Validation.isFalse(this, model.size === 0, `The selected file is empty.`),
-        () => Validation.permitedValues(this, getFileExtension(model), permittedFileTypes, `${model.fileName} is not a permitted file type`),
+        () => Validation.isTrue(this, model.size <= maxFileSize, `'${model.fileName}' must be smaller than ${maxMessage}.`),
+        () => Validation.isFalse(this, model.size === 0, `'${model.fileName}' is empty.`),
+        () => Validation.permitedValues(this, getFileExtension(model), permittedFileTypes, permittedFileTypeErrorMessage(model)),
       );
     }
   }
