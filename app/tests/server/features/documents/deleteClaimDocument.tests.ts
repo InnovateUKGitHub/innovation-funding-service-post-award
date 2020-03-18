@@ -53,12 +53,25 @@ describe("DeleteClaimDocumentCommand", () => {
             expect(await context.runAccessControl(auth, command)).toBe(true);
         });
 
+        test("accessControl - Monitoring officer can delete an IAR", async () => {
+            const {command, project, partner, context} = setupAccessControlContext();
+
+            const auth = new Authorisation({
+                [project.Id]: {
+                    projectRoles: ProjectRole.MonitoringOfficer,
+                    partnerRoles: {[partner.Id]: ProjectRole.Unknown}
+                }
+            });
+
+            expect(await context.runAccessControl(auth, command)).toBe(true);
+        });
+
         test("accessControl - No other role can delete an IAR", async () => {
             const {command, project, partner, context} = setupAccessControlContext();
 
             const auth = new Authorisation({
                 [project.Id]: {
-                    projectRoles: ProjectRole.ProjectManager | ProjectRole.MonitoringOfficer | ProjectRole.FinancialContact,
+                    projectRoles: ProjectRole.ProjectManager | ProjectRole.FinancialContact,
                     partnerRoles: {[partner.Id]: ProjectRole.ProjectManager | ProjectRole.Unknown}
                 }
             });
