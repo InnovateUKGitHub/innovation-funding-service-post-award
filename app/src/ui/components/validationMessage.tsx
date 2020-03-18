@@ -52,6 +52,30 @@ const getMessageStyle = (messageType: MessageType): MessageStyle => {
   }
 };
 
+const prepareMessage = (overrideMessage: string | null | undefined, errorMessage: string | null | undefined): React.ReactNode => {
+  if (overrideMessage) {
+    return overrideMessage;
+  }
+
+  if (errorMessage && errorMessage.indexOf("\n") === 0) {
+    return errorMessage;
+  }
+
+  if (errorMessage) {
+    return errorMessage.split("\n").reduce<React.ReactNode[]>((result, current, index) => {
+      if (index > 0) {
+        result.push(<br />);
+      }
+      result.push(current);
+      return result;
+    },
+      []
+    );
+  }
+
+  return null;
+};
+
 export const ValidationMessage: React.FunctionComponent<Props> = ({ message, messageContent, messageType, qa = "validation-message" }) => {
     if (!message && !messageContent) return null;
 
