@@ -76,7 +76,9 @@ const InnerContainer = (props: PcrStepProps<PCRItemForPartnerAdditionDto, PCRPar
             validation={props.validator.partnerType}
           />
         </Form.Fieldset>
-        <Form.Submit>Save and continue</Form.Submit>
+        <Form.Fieldset qa="save-and-continue">
+          <Form.Submit>Save and continue</Form.Submit>
+        </Form.Fieldset>
       </Form.Form>
     </ACC.Section>
   );
