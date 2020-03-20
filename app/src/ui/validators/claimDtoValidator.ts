@@ -21,6 +21,27 @@ export class ClaimDtoValidator extends Results<ClaimDto>  {
         this.status = Validation.isTrue(this, !this.model.status || permittedStatus.indexOf(this.model.status) !== -1, `Set a valid status`);
     }
 
+    private iarRequiredStatus = new Map<ClaimStatus, ClaimStatus[]>([
+      [
+        ClaimStatus.DRAFT,
+        [
+          ClaimStatus.SUBMITTED,
+        ]
+      ],
+      [
+        ClaimStatus.MO_QUERIED,
+        [
+          ClaimStatus.SUBMITTED,
+        ]
+      ],
+      [
+        ClaimStatus.INNOVATE_QUERIED,
+        [
+          ClaimStatus.AWAITING_IUK_APPROVAL,
+        ]
+      ]
+    ]);
+
     public id = Validation.required(this, this.model.id, "Id is required");
 
     public comments = Validation.all(this,
@@ -31,8 +52,9 @@ export class ClaimDtoValidator extends Results<ClaimDto>  {
     public status: Result;
 
     private validateIar() {
-        const isIarRequired = this.model.isIarRequired && this.originalStatus === ClaimStatus.DRAFT && this.model.status === ClaimStatus.SUBMITTED;
-        return Validation.isTrue(this, !isIarRequired || this.documents.length > 0, "You must upload an independent accountant's report.");
+      const iarRequiredStatus = this.iarRequiredStatus.get(this.originalStatus);
+      const isIarRequired = this.model.isIarRequired && iarRequiredStatus && iarRequiredStatus.indexOf(this.model.status) !== -1;
+      return Validation.isTrue(this, !isIarRequired || this.documents.length > 0, "You must upload an independent accountant's report.");
     }
     public iar = this.validateIar();
 
