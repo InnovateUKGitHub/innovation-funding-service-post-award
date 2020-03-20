@@ -93,9 +93,10 @@ class ClaimSummaryComponent extends ContainerBase<ClaimSummaryParams, Data, Call
     const { editor, claim } = data;
 
     return (
-      <Form.Form qa="summary-form"
+      <Form.Form
         editor={editor}
         onSubmit={() => this.onSave(claim, editor, true, data.project)}
+        qa="summary-form"
       >
         <Form.Fieldset heading="Add comments">
           <Form.MultilineString
