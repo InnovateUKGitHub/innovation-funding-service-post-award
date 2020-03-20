@@ -41,7 +41,7 @@ class PartnerDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
         return (
             <ACC.Page
                 backLink={<ACC.BackLink route={this.props.routes.projectDetails.getLink({ id: this.props.id })}>Back to project details</ACC.BackLink>}
-                pageTitle={<ACC.PageTitle />}
+                pageTitle={<ACC.Projects.Title project={project} />}
                 project={project}
             >
                 <ACC.Section>

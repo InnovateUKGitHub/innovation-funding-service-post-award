@@ -195,10 +195,14 @@ const handleChange = <TDto extends {}, TValue extends {}>(props: ExternalFieldPr
   }
 };
 
-const StringField = <T extends {}>(props: ExternalFieldProps<T, string> & InternalFieldProps<T>) => {
+interface StringFieldProps<T> extends ExternalFieldProps<T, string> {
+  width?: FormInputWidths;
+}
+
+const StringField = <T extends {}>(props: StringFieldProps<T> & InternalFieldProps<T>) => {
   return (
     <FieldComponent
-      field={((data, disabled) => <TextInput name={props.name} value={props.value(data, disabled)} onChange={(val) => handleChange(props, val)} placeholder={props.placeholder} disabled={disabled} />)}
+      field={((data, disabled) => <TextInput width={props.width} name={props.name} value={props.value(data, disabled)} onChange={(val) => handleChange(props, val)} placeholder={props.placeholder} disabled={disabled} />)}
       {...props}
     />
   );
@@ -415,7 +419,7 @@ const CustomComponent = <T extends {}>(props: ExternalFieldProps<T, React.ReactN
 export interface FormBuilder<T> {
   Form: { new(): FormComponent<T> };
   Fieldset: { new(): FieldsetComponent<T> };
-  String: React.FunctionComponent<ExternalFieldProps<T, string>>;
+  String: React.FunctionComponent<StringFieldProps<T>>;
   Search: React.FunctionComponent<SearchFieldProps<T>>;
   MultilineString: React.FunctionComponent<MultiStringFieldProps<T>>;
   Numeric: React.FunctionComponent<NumericFieldProps<T>>;
@@ -435,7 +439,7 @@ export interface FormBuilder<T> {
 export const TypedForm = <T extends {}>(): FormBuilder<T> => ({
   Form: FormComponent as { new(): FormComponent<T> },
   Fieldset: FieldsetComponent as { new(): FieldsetComponent<T> },
-  String: StringField as React.FunctionComponent<ExternalFieldProps<T, string>>,
+  String: StringField as React.FunctionComponent<StringFieldProps<T>>,
   Search: SearchField as React.FunctionComponent<SearchFieldProps<T>>,
   MultilineString: MultiStringField as React.FunctionComponent<MultiStringFieldProps<T>>,
   Numeric: NumericField as React.FunctionComponent<NumericFieldProps<T>>,
