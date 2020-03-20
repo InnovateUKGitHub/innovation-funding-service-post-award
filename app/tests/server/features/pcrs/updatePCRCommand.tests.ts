@@ -521,7 +521,7 @@ describe("UpdatePCRCommand", () => {
     });
     it("should update item status", async () => {
       const {context, projectChangeRequest, recordType, project} = setup();
-      context.testData.createPCRItem(projectChangeRequest, recordType, { status: PCRItemStatus.Incomplete, projectRole: PCRProjectRole.Collaborator, partnerType: PCRPartnerType.Research });
+      context.testData.createPCRItem(projectChangeRequest, recordType, { status: PCRItemStatus.Incomplete, projectRole: PCRProjectRole.Collaborator, partnerType: PCRPartnerType.Research, projectCity: "Bristol", projectPostcode: "BS1 5UW" });
       const dto = await context.runQuery(new GetPCRByIdQuery(projectChangeRequest.projectId, projectChangeRequest.id));
       const item = dto.items[0] as PCRItemForPartnerAdditionDto;
       item.status = PCRItemStatus.Complete;
@@ -537,12 +537,16 @@ describe("UpdatePCRCommand", () => {
       const item = dto.items[0] as PCRItemForPartnerAdditionDto;
       item.projectRole = PCRProjectRole.ProjectLead;
       item.partnerType = PCRPartnerType.Other;
+      item.projectCity = "Bristol";
+      item.projectPostcode = "BS1 5UW";
       const command = new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto);
       await expect(await context.runCommand(command)).toBe(true);
       const updated = await context.runQuery(new GetPCRByIdQuery(projectChangeRequest.projectId, projectChangeRequest.id));
       const updatedItem = updated.items[0] as PCRItemForPartnerAdditionDto;
       expect(updatedItem.projectRole).toEqual(PCRProjectRole.ProjectLead);
       expect(updatedItem.partnerType).toEqual(PCRPartnerType.Other);
+      expect(updatedItem.projectCity).toEqual("Bristol");
+      expect(updatedItem.projectPostcode).toEqual("BS1 5UW");
     });
   });
 
