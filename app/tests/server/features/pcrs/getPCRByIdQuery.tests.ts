@@ -222,8 +222,10 @@ describe("GetPCRByIdQuery", () => {
 
     const projectRole = PCRProjectRole.Collaborator;
     const partnerType = PCRPartnerType.ResearchAndTechnology;
+    const projectCity = "Bristol";
+    const projectPostcode = "BS! 5UW";
 
-    const item = context.testData.createPCRItem(pcr, recordType, { projectRole, partnerType });
+    const item = context.testData.createPCRItem(pcr, recordType, { projectRole, partnerType, projectCity, projectPostcode });
 
     const query = new GetPCRByIdQuery(pcr.projectId, pcr.id);
     const result = await context.runQuery(query).then(x => x.items[0] as PCRItemForPartnerAdditionDto);
@@ -231,6 +233,8 @@ describe("GetPCRByIdQuery", () => {
     expect(result.id).toBe(item.id);
     expect(result.projectRole).toBe(projectRole);
     expect(result.partnerType).toBe(partnerType);
+    expect(result.projectCity).toBe(projectCity);
+    expect(result.projectPostcode).toBe(projectPostcode);
   });
 
   test("when project id not found then exception is thrown", async () => {
