@@ -62,7 +62,7 @@ describe("UpdateClaimCommand", () => {
 
   it("when status updated to draft expect item updated", async () => {
     const context = new TestContext();
-    const claim = context.testData.createClaim(null!, null!, x => x.Acc_ClaimStatus__c = "New" as any);
+    const claim = context.testData.createClaim(undefined, undefined, x => x.Acc_ClaimStatus__c = "New" as any);
     const dto = mapClaim(context)(claim);
     const project = context.testData.createProject();
 
@@ -76,7 +76,7 @@ describe("UpdateClaimCommand", () => {
 
   it("when status updated to submitted expect item updated", async () => {
     const context = new TestContext();
-    const claim = context.testData.createClaim(null!, null!, x => x.Acc_ClaimStatus__c = ClaimStatus.DRAFT);
+    const claim = context.testData.createClaim(undefined, undefined, x => x.Acc_ClaimStatus__c = ClaimStatus.DRAFT);
     const dto = mapClaim(context)(claim);
     const project = context.testData.createProject();
 
@@ -88,9 +88,9 @@ describe("UpdateClaimCommand", () => {
     expect(claim.Acc_ClaimStatus__c).toBe(ClaimStatus.SUBMITTED);
   });
 
-  it("throws a validation error if an iar is required when the claim is submitted", async () => {
+  it("throws a validation error if an iar is required when the claim is submitted and status is DRAFT", async () => {
     const context = new TestContext();
-    const claim = context.testData.createClaim(null!, null!, x => {
+    const claim = context.testData.createClaim(undefined, undefined, x => {
       x.Acc_ClaimStatus__c = ClaimStatus.DRAFT;
       x.Acc_IARRequired__c = true;
     });
@@ -103,9 +103,39 @@ describe("UpdateClaimCommand", () => {
     expect(context.runCommand(command)).rejects.toThrow(ValidationError);
   });
 
+  it("throws a validation error if an iar is required when the claim is submitted and status is MO_QUERIED", async () => {
+    const context = new TestContext();
+    const claim = context.testData.createClaim(undefined, undefined, x => {
+      x.Acc_ClaimStatus__c = ClaimStatus.MO_QUERIED;
+      x.Acc_IARRequired__c = true;
+    });
+    const dto = mapClaim(context)(claim);
+    const project = context.testData.createProject();
+
+    dto.status = ClaimStatus.SUBMITTED;
+
+    const command = new UpdateClaimCommand(project.Id, dto);
+    expect(context.runCommand(command)).rejects.toThrow(ValidationError);
+  });
+
+  it("throws a validation error if an iar is required when the claim is AWAITING_IUK_APPROVAL and status is INNOVATE_QUERIED", async () => {
+    const context = new TestContext();
+    const claim = context.testData.createClaim(undefined, undefined, x => {
+      x.Acc_ClaimStatus__c = ClaimStatus.INNOVATE_QUERIED;
+      x.Acc_IARRequired__c = true;
+    });
+    const dto = mapClaim(context)(claim);
+    const project = context.testData.createProject();
+
+    dto.status = ClaimStatus.AWAITING_IUK_APPROVAL;
+
+    const command = new UpdateClaimCommand(project.Id, dto);
+    expect(context.runCommand(command)).rejects.toThrow(ValidationError);
+  });
+
   it("updates the status to submitted if an iar is required and there are claim documents uploaded", async () => {
     const context = new TestContext();
-    const claim = context.testData.createClaim(null!, null!, x => {
+    const claim = context.testData.createClaim(undefined, undefined, x => {
       x.Acc_ClaimStatus__c = ClaimStatus.DRAFT;
       x.Acc_IARRequired__c = true;
     });
@@ -123,7 +153,7 @@ describe("UpdateClaimCommand", () => {
 
   it("when status updated to approved expect item updated", async () => {
     const context = new TestContext();
-    const claim = context.testData.createClaim(null!, null!, x => x.Acc_ClaimStatus__c = ClaimStatus.DRAFT);
+    const claim = context.testData.createClaim(undefined, undefined, x => x.Acc_ClaimStatus__c = ClaimStatus.DRAFT);
     const dto = mapClaim(context)(claim);
     const project = context.testData.createProject();
 
@@ -137,7 +167,7 @@ describe("UpdateClaimCommand", () => {
 
   it("when status updated to queried expect item updated", async () => {
     const context = new TestContext();
-    const claim = context.testData.createClaim(null!, null!, x => x.Acc_ClaimStatus__c = ClaimStatus.DRAFT);
+    const claim = context.testData.createClaim(undefined, undefined, x => x.Acc_ClaimStatus__c = ClaimStatus.DRAFT);
     const dto = mapClaim(context)(claim);
     const project = context.testData.createProject();
 
@@ -152,7 +182,7 @@ describe("UpdateClaimCommand", () => {
 
   it("when status updated to something other than draft or submitted expect error", async () => {
     const context = new TestContext();
-    const claim = context.testData.createClaim(null!, null!, x => x.Acc_ClaimStatus__c = ClaimStatus.DRAFT);
+    const claim = context.testData.createClaim(undefined, undefined, x => x.Acc_ClaimStatus__c = ClaimStatus.DRAFT);
     const dto = mapClaim(context)(claim);
     const project = context.testData.createProject();
 
@@ -164,7 +194,7 @@ describe("UpdateClaimCommand", () => {
 
   it("can update when status is Innovate Queried", async () => {
     const context = new TestContext();
-    const claim = context.testData.createClaim(null!, null!, x => x.Acc_ClaimStatus__c = ClaimStatus.INNOVATE_QUERIED);
+    const claim = context.testData.createClaim(undefined, undefined, x => x.Acc_ClaimStatus__c = ClaimStatus.INNOVATE_QUERIED);
     const dto = mapClaim(context)(claim);
     const project = context.testData.createProject();
     const command = new UpdateClaimCommand(project.Id, dto);
@@ -175,7 +205,7 @@ describe("UpdateClaimCommand", () => {
 
   it("when message updated expect item updated", async () => {
     const context = new TestContext();
-    const claim = context.testData.createClaim(null!, null!, x => x.Acc_ReasonForDifference__c = "Original Message");
+    const claim = context.testData.createClaim(undefined, undefined, x => x.Acc_ReasonForDifference__c = "Original Message");
     const dto = mapClaim(context)(claim);
     const project = context.testData.createProject();
 
