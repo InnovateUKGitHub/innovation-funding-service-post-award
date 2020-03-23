@@ -1,0 +1,3 @@
+.govuk-back-link{display: none;}
+a[href]:after {display: none;visibility: hidden;}
+footer.govuk-footer {display: none;}
