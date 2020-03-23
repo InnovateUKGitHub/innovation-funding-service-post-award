@@ -655,7 +655,9 @@ export class TestData {
       partnerNameSnapshot: "",
       shortName: "",
       projectRole: PCRProjectRole.Unknown,
-      partnerType: PCRPartnerType.Unknown
+      partnerType: PCRPartnerType.Unknown,
+      projectCity: "",
+      projectPostcode: ""
     };
 
     if (update) {

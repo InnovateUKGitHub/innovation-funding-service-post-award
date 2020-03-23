@@ -65,6 +65,8 @@ export interface ISalesforcePCR {
   ProjectRoleLabel: string|null;
   Acc_ParticipantType__c: string|null;
   ParticipantTypeLabel: string|null;
+  Acc_ProjectCity__c: string|null;
+  Acc_ProjectPostcode__c: string|null;
 
   // Virements related field
   Acc_GrantMovingOverFinancialYear__c: number| null;
@@ -121,6 +123,8 @@ export class ProjectChangeRequestRepository extends SalesforceRepositoryBase<ISa
     "Acc_ParticipantType__c",
     "toLabel(Acc_ParticipantType__c) ParticipantTypeLabel",
     "Acc_GrantMovingOverFinancialYear__c",
+    "Acc_ProjectCity__c",
+    "Acc_projectPostcode__c",
   ];
 
   async getAllByProjectId(projectId: string): Promise<ProjectChangeRequestEntity[]> {
@@ -178,7 +182,9 @@ export class ProjectChangeRequestRepository extends SalesforceRepositoryBase<ISa
       Acc_Project_Participant__c: x.partnerId,
       Acc_ProjectRole__c: new PcrProjectRoleMapper().mapToSalesforcePCRProjectRole(x.projectRole),
       Acc_ParticipantType__c: new PcrPartnerTypeMapper().mapToSalesforcePCRPartnerType(x.partnerType),
-      Acc_GrantMovingOverFinancialYear__c: x.grantMovingOverFinancialYear
+      Acc_GrantMovingOverFinancialYear__c: x.grantMovingOverFinancialYear,
+      Acc_ProjectCity__c: x.projectCity,
+      Acc_ProjectPostcode__c: x.projectPostcode,
     })));
   }
 

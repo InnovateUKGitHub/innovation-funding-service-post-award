@@ -61,7 +61,7 @@ class ProjectDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
                         <ACC.PartnersAndFinanceContacts contacts={contacts} partners={partners} projectContactLabels={x => x.projectDetails.contactLabels} />
                     </ACC.Section>
                 </ACC.Section>
-
+                {this.renderPartnersContactInformationSummaryList(partners)}
                 <ACC.Section title="Project information" qa="project-details">
                     <ACC.SummaryList qa="project-information">
                         <ACC.SummaryListItem labelContent={x => x.projectDetails.projectLabels.startDate()} qa="start-date" content={<ACC.Renderers.FullDate value={project.startDate} />} />
@@ -71,7 +71,6 @@ class ProjectDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
                         <ACC.SummaryListItem labelContent={x => x.projectDetails.projectLabels.scope()} qa="scope" content={<ACC.Renderers.SimpleString multiline={true}>{project.summary}</ACC.Renderers.SimpleString>} />
                     </ACC.SummaryList>
                 </ACC.Section>
-                {this.renderPartnersContactInformationSummaryList(partners)}
             </ACC.Page>
         );
     }

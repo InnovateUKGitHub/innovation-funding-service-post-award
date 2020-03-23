@@ -15,17 +15,12 @@ describe("ProjectMember", () => {
 
     it("should render partner name if present", () => {
         const wrapper = shallow(<ProjectContact contact={aProjectContact} partner={aPartner} qa="member-a" />);
-        expect(wrapper.html()).toContain(`<p class=\"govuk-body govuk-!-margin-bottom-0\" data-qa=\"member-a-partner\">aTestOrganisation</p>`);
+        expect(wrapper.html()).toContain(`aTestOrganisation`);
     });
 
-    it("should not render partner if partner is not present", () => {
+    it("should render role name if present", () => {
         const wrapper = shallow(<ProjectContact contact={aProjectContact} qa="member-a" />);
-        expect(wrapper.html()).toContain(`<p class=\"govuk-body govuk-!-margin-bottom-0\" data-qa=\"member-a-partner\"></p>`);
-    });
-
-    it("should render role name if resent", () => {
-        const wrapper = shallow(<ProjectContact contact={aProjectContact} qa="member-a" />);
-        expect(wrapper.html()).toContain(`<h3 class=\"govuk-heading-s govuk-!-margin-bottom-0\" data-qa=\"member-a-roleName\">aTestRole</h3>`);
+        expect(wrapper.html()).toContain("aTestRole");
     });
 
     it("should return null if aProjectContact is null", () => {
@@ -40,7 +35,7 @@ describe("ProjectMember", () => {
 
     it("should render member\'s name ", () => {
         const wrapper = shallow(<ProjectContact contact={aProjectContact} qa="member-a" />);
-        expect(wrapper.html()).toContain(`<p class=\"govuk-body govuk-!-margin-bottom-0\" data-qa=\"member-a-name\">aTestName</p>`);
+        expect(wrapper.html()).toContain(`aTestName`);
     });
 
     it("should render member\'s email ", () => {
