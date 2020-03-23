@@ -18,7 +18,7 @@ import {
   ProjectDto,
   ProjectRole
 } from "@framework/dtos";
-import { PCRItemStatus, PCRItemType, PCRStatus } from "@framework/constants";
+import { PCRItemStatus, PCRItemType, PCRPartnerType, PCRStatus } from "@framework/constants";
 import { isNumber, periodInProject } from "@framework/util";
 
 export class PCRDtoValidator extends Results<PCRDto> {
@@ -353,6 +353,12 @@ export class PCRPartnerAdditionItemDtoValidator extends PCRBaseItemDtoValidator<
     }
     return Validation.required(this, this.model.partnerType || null, "Select a partner type");
   }
+  private validateOrganisationNameRequired() {
+    if (!this.model.id) return Validation.valid(this);
+    if (this.model.partnerType !== PCRPartnerType.Research) return Validation.valid(this);
+    if (this.model.status !== PCRItemStatus.Complete) return Validation.valid(this);
+    return Validation.required(this, this.model.organisationName || null, "Enter an organisation name");
+  }
 
   projectRole = Validation.all(this,
     () => this.validateProjectRoleRequired(),
@@ -362,6 +368,11 @@ export class PCRPartnerAdditionItemDtoValidator extends PCRBaseItemDtoValidator<
   partnerType = Validation.all(this,
     () => this.validatePartnerTypeRequired(),
     () => !this.canEdit || this.original && this.original.partnerType ? Validation.isUnchanged(this, this.model.partnerType, this.original && this.original.partnerType, "Partner type cannot be changed") : Validation.valid(this),
+  );
+
+  organisationName = Validation.all(this,
+    () => this.validateOrganisationNameRequired(),
+    () => !this.canEdit ? Validation.isUnchanged(this, this.model.organisationName, this.original && this.original.organisationName, "Organisation name cannot be changed") : Validation.valid(this),
   );
 }
 

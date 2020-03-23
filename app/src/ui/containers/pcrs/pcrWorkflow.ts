@@ -14,7 +14,7 @@ import { BaseProps } from "../containerBase";
 import { IStepProps, ISummaryProps, IWorkflow, WorkflowBase } from "@framework/types/workflowBase";
 import { removePartnerWorkflow } from "@ui/containers/pcrs/removePartner";
 import { PCRWorkflowValidator } from "@ui/validators/pcrWorkflowValidator";
-import { addPartnerWorkflow } from "@ui/containers/pcrs/addPartner";
+import { getAddPartnerWorkflow } from "@ui/containers/pcrs/addPartner";
 
 export interface PcrStepProps<TDto, TVal> extends IStepProps {
   project: ProjectDto;
@@ -65,7 +65,7 @@ export class PcrWorkflow<T, TVal extends Results<T>> extends WorkflowBase<string
         return new PcrWorkflow(removePartnerWorkflow, step);
       case PCRItemType.PartnerAddition:
         // If feature not turned on let it fall through to standard workflow
-        if (features.addPartnerWorkflow) return new PcrWorkflow(addPartnerWorkflow, step);
+        if (features.addPartnerWorkflow) return new PcrWorkflow(getAddPartnerWorkflow(pcrItem), step);
       case PCRItemType.SinglePartnerFinancialVirement:
         return new PcrWorkflow(standardItemWorkflow, step);
       default:
