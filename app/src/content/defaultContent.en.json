@@ -202,15 +202,23 @@
     },
     "partner-details":{
       "title": {
-        "html": "View partner details",
-        "display": "Partner details"
+        "html": "View partner information",
+        "display": "Partner information"
+      },
+      "project-contact-labels" : {
+        "partnerName": "Name",
+        "partnerType": "Type"
       }
     },
     "partner-details-edit":{
       "title": {
-        "html": "Edit partner details",
-        "display": "Partner details"
+        "html": "Edit partner information",
+        "display": "Partner information"
       },
+      "section-title-postcode": "Edit location",
+      "label-current-postcode": "Current location",
+      "label-new-postcode": "New location",
+      "hint-new-postcode": "Enter the postcode, postal code or zip code. If the location does not have one of these, enter the town or city.",
       "save-and-return-partner-details-button": "Save and return to partner details"
     },
     "pcr-create":{

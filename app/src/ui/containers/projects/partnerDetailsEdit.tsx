@@ -44,8 +44,8 @@ class PartnerDetailsEditComponent extends ContainerBase<Params, Data, Callbacks>
 
         return (
             <ACC.Page
-                backLink={<ACC.BackLink route={this.props.routes.partnerDetails.getLink({ id: this.props.id, partnerId: this.props.partnerId })} >Back to partner details </ACC.BackLink>}
-                pageTitle={<ACC.PageTitle />}
+                backLink={<ACC.BackLink route={this.props.routes.partnerDetails.getLink({ id: this.props.id, partnerId: this.props.partnerId })} >Back to partner information</ACC.BackLink>}
+                pageTitle={<ACC.Projects.Title project={project} />}
                 error={editor.error}
                 validator={editor.validator}
                 project={project}
@@ -56,9 +56,16 @@ class PartnerDetailsEditComponent extends ContainerBase<Params, Data, Callbacks>
                     onSubmit={() => this.props.onUpdate(true, editor.data)}
                     qa="partnerDetailsForm"
                 >
-                    <Form.Fieldset heading="Update postcode">
-                        <Form.Custom name="current-partner-postcode-value" label="Current value" value={x => <ACC.Renderers.SimpleString>{x.postcode}</ACC.Renderers.SimpleString>} update={() => null} />
-                        <Form.Custom name="new-partner-postcode-value" label="New value" value={x => <Form.String name="changePostcode" value={(m) => editor.data.postcode} update={(m, val) => editor.data.postcode = val!} />} update={() => null} />
+                    <Form.Fieldset headingContent={x => x.partnerDetailsEdit.postcodeSectionTitle()}>
+                        <Form.Custom name="current-partner-postcode-value" labelContent={x => x.partnerDetailsEdit.currentPostcodeLabel()} value={x => <ACC.Renderers.SimpleString>{x.postcode}</ACC.Renderers.SimpleString>} update={() => null} />
+                        <Form.String
+                          name="new-partner-postcode-value"
+                          hintContent={x => x.partnerDetailsEdit.newPostcodeHint()}
+                          width="one-quarter"
+                          value={(m) => editor.data.postcode}
+                          labelContent={x => x.partnerDetailsEdit.newPostcodeLabel()}
+                          update={(m, val) => editor.data.postcode = val!}
+                        />
                     </Form.Fieldset>
                     <Form.Fieldset>
                         <Form.Submit><ACC.Content value={(content) => content.partnerDetailsEdit.buttonSaveAndReturnPartnerDetails()} /></Form.Submit>
