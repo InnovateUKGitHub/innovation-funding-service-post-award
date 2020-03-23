@@ -510,7 +510,7 @@ describe("UpdatePCRCommand", () => {
     });
     it("should require organisation name to be set when the partner type is Research", async () => {
       const {context, projectChangeRequest, recordType, project} = setup();
-      context.testData.createPCRItem(projectChangeRequest, recordType, { status: PCRItemStatus.Incomplete, partnerType: PCRPartnerType.Research, projectRole: PCRProjectRole.Collaborator });
+      context.testData.createPCRItem(projectChangeRequest, recordType, { status: PCRItemStatus.Incomplete, partnerType: PCRPartnerType.Research, projectRole: PCRProjectRole.Collaborator, projectCity: "Coventry" });
       const dto = await context.runQuery(new GetPCRByIdQuery(projectChangeRequest.projectId, projectChangeRequest.id));
       const item = dto.items[0] as PCRItemForPartnerAdditionDto;
       item.status = PCRItemStatus.Complete;
