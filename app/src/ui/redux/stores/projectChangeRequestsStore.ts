@@ -188,6 +188,7 @@ export class ProjectChangeRequestStore extends StoreBase {
         return {
           ...baseFields,
           type: itemType.type,
+          organisationName: null,
           projectRole: PCRProjectRole.Unknown,
           partnerType: PCRPartnerType.Unknown,
           projectRoleLabel: null,
