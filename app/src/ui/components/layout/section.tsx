@@ -70,8 +70,7 @@ export const Section: React.FunctionComponent<Props> = (props) => {
             "govuk-grid-row",
             "acc-section",
             {
-              "govuk-!-margin-bottom-6": header === "h2",
-              "govuk-!-margin-bottom-3": header === "h3",
+              "govuk-!-margin-bottom-6": header === "h2" || header === "h3",
             },
             className
           );
@@ -79,7 +78,7 @@ export const Section: React.FunctionComponent<Props> = (props) => {
             <div id={id} className={sectionClassName} data-qa={qa}>
               {renderTitles(props, !children, header)}
               {renderBadge(props)}
-              <SectionContext.Provider value={!props.title ? header : getNextHeader(header)}>
+              <SectionContext.Provider value={!title && !titleContent ? header : getNextHeader(header)}>
                 {renderContents(children)}
               </SectionContext.Provider>
             </div>

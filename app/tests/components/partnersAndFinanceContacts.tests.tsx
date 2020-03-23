@@ -16,7 +16,6 @@ Enzyme.configure({ adapter: new Adapter() });
 const testPartnerData: PartnerDto[] = [
   {
     id: "123",
-    type: "Industrial",
     isLead: true,
     projectId: "456",
     accountId: "321",
@@ -24,7 +23,6 @@ const testPartnerData: PartnerDto[] = [
   },
   {
     id: "912",
-    type: "Academic",
     isLead: false,
     projectId: "456",
     accountId: "312",
@@ -32,7 +30,6 @@ const testPartnerData: PartnerDto[] = [
   },
   {
     id: "431",
-    type: "Industrial",
     isLead: false,
     projectId: "456",
     accountId: "832",
@@ -85,7 +82,6 @@ const labels = () => ({
   contactEmail: createContentResult("Email"),
   contactName: createContentResult("Name"),
   partnerName: createContentResult("Partner"),
-  partnerType: createContentResult("Partner type"),
 }) as ProjectContactLabels;
 
 const testStores = {
@@ -111,10 +107,6 @@ describe("Partners Table", () => {
 
   it("should display partner names with Steel Manufacturing as the lead", () => {
     testForCorrectTableEntries("Steel Manufacturing (Lead)", "University of Life", "Driverless Cars", "col-partner-name");
-  });
-
-  it("partner type column should display \'Industrial\' followed by \'Academic\'", () => {
-    testForCorrectTableEntries("Industrial", "Academic", "Industrial", "col-partner-type");
   });
 
   it("should display the correct Finance Contact for each project", () => {
