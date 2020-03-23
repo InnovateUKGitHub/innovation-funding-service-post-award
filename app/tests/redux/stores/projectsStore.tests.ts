@@ -11,8 +11,8 @@ const createTestData = async (context: TestContext) => {
   });
 
   const partner1 = await testStore.createPartner(project1, x => {
-    x.Acc_AccountId__r.Name = "partner 1";
-    x.Acc_ProjectRole__c = SalesforceProjectRole.ProjectLead;
+    x.name = "partner 1";
+    x.projectRole = SalesforceProjectRole.ProjectLead;
   });
 
   const project2 = await testStore.createProject(x => {
@@ -21,16 +21,16 @@ const createTestData = async (context: TestContext) => {
   });
 
   const partner2 = await testStore.createPartner(project2, x => {
-    x.Acc_AccountId__r.Name = "partner 2";
-    x.Acc_ProjectRole__c = SalesforceProjectRole.ProjectLead;
+    x.name = "partner 2";
+    x.projectRole = SalesforceProjectRole.ProjectLead;
   });
   const project3 = await testStore.createProject(x => {
     x.Acc_ProjectTitle__c = "project 3";
     x.Acc_LeadParticipantName__c = "Barnie";
   });
   const partner3 = await testStore.createPartner(project3, x => {
-    x.Acc_AccountId__r.Name = "partner 3";
-    x.Acc_ProjectRole__c = SalesforceProjectRole.ProjectLead;
+    x.name = "partner 3";
+    x.projectRole = SalesforceProjectRole.ProjectLead;
   });
 
   return [

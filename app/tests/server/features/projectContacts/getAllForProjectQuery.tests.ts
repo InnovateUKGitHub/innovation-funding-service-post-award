@@ -25,7 +25,7 @@ describe("getAllForProjectQuery", () => {
         expect(result[0].name).toBe("ExpectedContactName");
         expect(result[0].role).toBe("Finance contact");
         expect(result[0].roleName).toBe("Finance Contact");
-        expect(result[0].accountId).toBe(partner.Acc_AccountId__r.Id);
+        expect(result[0].accountId).toBe(partner.accountId);
 
     });
 

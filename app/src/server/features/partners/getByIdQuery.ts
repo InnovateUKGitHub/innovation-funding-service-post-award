@@ -11,8 +11,8 @@ export class GetByIdQuery extends QueryBase<PartnerDto> {
   async Run(context: IContext) {
       const result = await context.repositories.partners.getById(this.partnerId);
       const roles = await context.runQuery(new GetAllProjectRolesForUser());
-      const projectRoleInfo = roles.forProject(result.Acc_ProjectId__r.Id).getRoles();
-      const partnerRoleInfo = roles.forPartner(result.Acc_ProjectId__r.Id, result.Id).getRoles();
+      const projectRoleInfo = roles.forProject(result.projectId).getRoles();
+      const partnerRoleInfo = roles.forPartner(result.projectId, result.id).getRoles();
       return context.runSyncCommand(new MapToPartnerDtoCommand(result, partnerRoleInfo, projectRoleInfo));
   }
 }
