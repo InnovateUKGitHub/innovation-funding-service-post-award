@@ -55,6 +55,9 @@ const renderGuide = (html: string) => {
             <link href="/govuk-frontend-ie8-3.0.0.min.css" rel="stylesheet" />
             <![endif]-->
 
+            <link href="/govuk-print.css?build=${Configuration.build}" rel="stylesheet" media="print"/>
+            <link href="/govuk-print-overrides.css?build=${Configuration.build}" rel="stylesheet" media="print"/>
+
             <meta property="og:image" content="/assets/images/govuk-opengraph-image.png">
         </head>
         <body class="govuk-template__body ">
