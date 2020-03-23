@@ -4,7 +4,7 @@ import { Authorisation, ProjectRole } from "@framework/types";
 import { mapClaimDetails } from "@server/features/claimDetails/mapClaimDetails";
 import { SaveClaimDetails } from "@server/features/claimDetails/saveClaimDetailsCommand";
 import { ISalesforceClaimDetails, ISalesforcePartner } from "@server/repositories";
-import { CostCategory } from "@framework/entities";
+import { CostCategory, Partner } from "@framework/entities";
 
 const createNewLineItemDto = (detail: ClaimDetailsDto, value?: number, description?: string): ClaimLineItemDto => {
   return ({
@@ -17,9 +17,9 @@ const createNewLineItemDto = (detail: ClaimDetailsDto, value?: number, descripti
   });
 };
 
-const createNewDto = (partner: ISalesforcePartner, periodId: number, costCategory: CostCategory): ClaimDetailsDto => {
+const createNewDto = (partner: Partner, periodId: number, costCategory: CostCategory): ClaimDetailsDto => {
   return {
-    partnerId: partner.Id,
+    partnerId: partner.id,
     comments: "",
     lineItems: [],
     costCategoryId: costCategory.id,
@@ -54,11 +54,11 @@ describe("SaveClaimDetails", () => {
     const dto = createDto(context, sfClaimDetails);
     dto.comments = "this is a comment";
 
-    const command = new SaveClaimDetails(project.Id, partner.Id, dto.periodId, dto.costCategoryId, dto);
+    const command = new SaveClaimDetails(project.Id, partner.id, dto.periodId, dto.costCategoryId, dto);
     await context.runCommand(command);
 
     expect(context.repositories.claimDetails.Items).toHaveLength(1);
-    expect(context.repositories.claimDetails.Items.find(x => x.Acc_CostCategory__c === costCategory.id && x.Acc_ProjectParticipant__r.Id === partner.Id && x.Acc_ProjectPeriodNumber__c === periodId)!.Acc_ReasonForDifference__c).toEqual("this is a comment");
+    expect(context.repositories.claimDetails.Items.find(x => x.Acc_CostCategory__c === costCategory.id && x.Acc_ProjectParticipant__r.Id === partner.id && x.Acc_ProjectPeriodNumber__c === periodId)!.Acc_ReasonForDifference__c).toEqual("this is a comment");
   });
 
   it("should return a validation error if the line items passed is missing a description", async () => {
@@ -76,7 +76,7 @@ describe("SaveClaimDetails", () => {
 
     dto.lineItems = [lineItem];
 
-    const command = new SaveClaimDetails(project.Id, partner.Id, claimDetails.Acc_ProjectPeriodNumber__c, costCategory.id, dto);
+    const command = new SaveClaimDetails(project.Id, partner.id, claimDetails.Acc_ProjectPeriodNumber__c, costCategory.id, dto);
     await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
     expect(context.repositories.claimLineItems.Items).toHaveLength(0);
   });
@@ -97,7 +97,7 @@ describe("SaveClaimDetails", () => {
 
     dto.lineItems = [lineItem];
 
-    const command = new SaveClaimDetails(project.Id, partner.Id, claimDetails.Acc_ProjectPeriodNumber__c, costCategory.id, dto);
+    const command = new SaveClaimDetails(project.Id, partner.id, claimDetails.Acc_ProjectPeriodNumber__c, costCategory.id, dto);
     await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
     expect(context.repositories.claimLineItems.Items).toHaveLength(0);
   });
@@ -116,7 +116,7 @@ describe("SaveClaimDetails", () => {
 
     expect(context.repositories.claimLineItems.Items).toHaveLength(0);
 
-    const command = new SaveClaimDetails(project.Id, partner.Id, claimDetails.Acc_ProjectPeriodNumber__c, costCategory.id, dto);
+    const command = new SaveClaimDetails(project.Id, partner.id, claimDetails.Acc_ProjectPeriodNumber__c, costCategory.id, dto);
     await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
     expect(context.repositories.claimLineItems.Items).toHaveLength(0);
   });
@@ -138,14 +138,14 @@ describe("SaveClaimDetails", () => {
     const lineItem = createNewLineItemDto(dto, expectedValue, expectedDescription);
     dto.lineItems = [lineItem];
 
-    const command = new SaveClaimDetails(project.Id, partner.Id, periodId, costCategory.id, dto);
+    const command = new SaveClaimDetails(project.Id, partner.id, periodId, costCategory.id, dto);
     await context.runCommand(command);
 
     expect(context.repositories.claimLineItems.Items).toHaveLength(1);
     expect(context.repositories.claimLineItems.Items[0].Acc_CostCategory__c).toEqual(costCategory.id);
     expect(context.repositories.claimLineItems.Items[0].Acc_LineItemCost__c).toEqual(expectedValue);
     expect(context.repositories.claimLineItems.Items[0].Acc_LineItemDescription__c).toEqual(expectedDescription);
-    expect(context.repositories.claimLineItems.Items[0].Acc_ProjectParticipant__c).toEqual(partner.Id);
+    expect(context.repositories.claimLineItems.Items[0].Acc_ProjectParticipant__c).toEqual(partner.id);
     expect(context.repositories.claimLineItems.Items[0].Acc_ProjectPeriodNumber__c).toEqual(periodId);
   });
 
@@ -163,7 +163,7 @@ describe("SaveClaimDetails", () => {
     dto.lineItems[0].description = "new description!";
     dto.lineItems[0].value = 1234;
 
-    const command = new SaveClaimDetails(project.Id, partner.Id, claimDetails.Acc_ProjectPeriodNumber__c, costCategory.id, dto);
+    const command = new SaveClaimDetails(project.Id, partner.id, claimDetails.Acc_ProjectPeriodNumber__c, costCategory.id, dto);
     await context.runCommand(command);
 
     expect(context.repositories.claimLineItems.Items).toHaveLength(1);
@@ -191,7 +191,7 @@ describe("SaveClaimDetails", () => {
     const dto = createDto(context, claimDetails);
     dto.lineItems.pop();
 
-    const command = new SaveClaimDetails(project.Id, partner.Id, periodId, costCategory.id, dto);
+    const command = new SaveClaimDetails(project.Id, partner.id, periodId, costCategory.id, dto);
     await context.runCommand(command);
     expect(context.repositories.claimLineItems.Items).toHaveLength(1);
     expect(context.repositories.claimLineItems.Items[0]).toEqual(claimLineItem1);
@@ -206,7 +206,7 @@ describe("SaveClaimDetails", () => {
     const dto = createDto(context, claimDetail);
     dto.comments = "A new message";
 
-    const command = new SaveClaimDetails(project.Id, partner.Id, 1, costCategory.id, dto);
+    const command = new SaveClaimDetails(project.Id, partner.id, 1, costCategory.id, dto);
     await context.runCommand(command);
 
     expect(claimDetail.Acc_ReasonForDifference__c).toBe("A new message");
@@ -221,7 +221,7 @@ describe("SaveClaimDetails", () => {
     const dto = createDto(context, claimDetail);
     dto.comments = null;
 
-    const command = new SaveClaimDetails(project.Id, partner.Id, 1, costCategory.id, dto);
+    const command = new SaveClaimDetails(project.Id, partner.id, 1, costCategory.id, dto);
     await context.runCommand(command);
 
     expect(claimDetail.Acc_ReasonForDifference__c).toBe(null);
@@ -240,7 +240,7 @@ describe("SaveClaimDetails", () => {
     expect(context.repositories.claimDetails.Items.length).toBe(0);
     expect(context.repositories.claimLineItems.Items.length).toBe(0);
 
-    const command = new SaveClaimDetails(partner.Acc_ProjectId__r.Id, partner.Id, periodId, costCategory.id, dto);
+    const command = new SaveClaimDetails(partner.projectId, partner.id, periodId, costCategory.id, dto);
     await context.runCommand(command);
 
     expect(context.repositories.claimDetails.Items.length).toBe(1);
@@ -266,7 +266,7 @@ describe("SaveClaimDetails", () => {
 
     expect(context.repositories.claimLineItems.Items.length).toBe(0);
 
-    const command = new SaveClaimDetails(partner.Acc_ProjectId__r.Id, partner.Id, periodId, costCategory.id, dto);
+    const command = new SaveClaimDetails(partner.projectId, partner.id, periodId, costCategory.id, dto);
     await context.runCommand(command);
 
     expect(context.repositories.claimLineItems.Items.length).toBe(2);
@@ -283,7 +283,7 @@ describe("SaveClaimDetails", () => {
       const claimDetail = context.testData.createClaimDetail(project, costCategory, partner, 1);
       const dto = createDto(context, claimDetail);
 
-      const command = new SaveClaimDetails(null as any, partner.Id, 1, costCategory.id, dto);
+      const command = new SaveClaimDetails(null as any, partner.id, 1, costCategory.id, dto);
       await expect(context.runCommand(command)).rejects.toThrow(BadRequestError);
     });
 
@@ -308,7 +308,7 @@ describe("SaveClaimDetails", () => {
       const dto = createDto(context, claimDetail);
       dto.partnerId = "Invalid";
 
-      const command = new SaveClaimDetails(project.Id, partner.Id, 1, costCategory.id, dto);
+      const command = new SaveClaimDetails(project.Id, partner.id, 1, costCategory.id, dto);
       await expect(context.runCommand(command)).rejects.toThrow(BadRequestError);
     });
 
@@ -320,7 +320,7 @@ describe("SaveClaimDetails", () => {
       const claimDetail = context.testData.createClaimDetail(project, costCategory, partner, 1);
       const dto = createDto(context, claimDetail);
 
-      const command = new SaveClaimDetails(project.Id, partner.Id, null as any, costCategory.id, dto);
+      const command = new SaveClaimDetails(project.Id, partner.id, null as any, costCategory.id, dto);
       await expect(context.runCommand(command)).rejects.toThrow(BadRequestError);
     });
 
@@ -332,7 +332,7 @@ describe("SaveClaimDetails", () => {
       const claimDetail = context.testData.createClaimDetail(project, costCategory, partner, 1);
       const dto = createDto(context, claimDetail);
 
-      const command = new SaveClaimDetails(project.Id, partner.Id, 1, null as any, dto);
+      const command = new SaveClaimDetails(project.Id, partner.id, 1, null as any, dto);
       await expect(context.runCommand(command)).rejects.toThrow(BadRequestError);
     });
 
@@ -349,7 +349,7 @@ describe("SaveClaimDetails", () => {
 
       dto.lineItems = [lineItem];
 
-      const command = new SaveClaimDetails(project.Id, partner.Id, 1, costCategory.id, dto);
+      const command = new SaveClaimDetails(project.Id, partner.id, 1, costCategory.id, dto);
       await expect(context.runCommand(command)).rejects.toThrow(BadRequestError);
     });
 
@@ -366,7 +366,7 @@ describe("SaveClaimDetails", () => {
 
       dto.lineItems = [lineItem];
 
-      const command = new SaveClaimDetails(project.Id, partner.Id, 1, costCategory.id, dto);
+      const command = new SaveClaimDetails(project.Id, partner.id, 1, costCategory.id, dto);
       await expect(context.runCommand(command)).rejects.toThrow(BadRequestError);
     });
 
@@ -382,7 +382,7 @@ describe("SaveClaimDetails", () => {
       lineItem.costCategoryId = "Invalid";
       dto.lineItems = [lineItem];
 
-      const command = new SaveClaimDetails(project.Id, partner.Id, 1, costCategory.id, dto);
+      const command = new SaveClaimDetails(project.Id, partner.id, 1, costCategory.id, dto);
       await expect(context.runCommand(command)).rejects.toThrow(BadRequestError);
     });
 
@@ -400,7 +400,7 @@ describe("SaveClaimDetails", () => {
         createNewLineItemDto(dto, 200, "Line 1"),
       ];
 
-      const command = new SaveClaimDetails(partner.Acc_ProjectId__r.Id, partner.Id, periodId, overheads.id, dto);
+      const command = new SaveClaimDetails(partner.projectId, partner.id, periodId, overheads.id, dto);
       await expect(context.runCommand(command)).rejects.toThrow(BadRequestError);
     });
   });
@@ -414,11 +414,11 @@ describe("SaveClaimDetails", () => {
 
       const dto = createNewDto(partner, 1, costCategory);
 
-      const command = new SaveClaimDetails(project.Id, partner.Id, 1, costCategory.id, dto);
+      const command = new SaveClaimDetails(project.Id, partner.id, 1, costCategory.id, dto);
       const auth = new Authorisation({
         [project.Id]: {
           projectRoles: ProjectRole.Unknown,
-          partnerRoles: { [partner.Id]: ProjectRole.FinancialContact }
+          partnerRoles: { [partner.id]: ProjectRole.FinancialContact }
         }
       });
 
@@ -433,11 +433,11 @@ describe("SaveClaimDetails", () => {
 
       const dto = createNewDto(partner, 1, costCategory);
 
-      const command = new SaveClaimDetails(project.Id, partner.Id, 1, costCategory.id, dto);
+      const command = new SaveClaimDetails(project.Id, partner.id, 1, costCategory.id, dto);
       const auth = new Authorisation({
         [project.Id]: {
           projectRoles: ProjectRole.FinancialContact | ProjectRole.MonitoringOfficer | ProjectRole.ProjectManager,
-          partnerRoles: { [partner.Id]: ProjectRole.MonitoringOfficer | ProjectRole.ProjectManager }
+          partnerRoles: { [partner.id]: ProjectRole.MonitoringOfficer | ProjectRole.ProjectManager }
         }
       });
 

@@ -15,7 +15,7 @@ export class GetAllForProjectQuery extends QueryBase<PartnerDto[]> {
         const projectRoles = roles.forProject(this.projectId).getRoles();
 
         const mapped = results.map(item => {
-            const partnerRoles = roles.forPartner(item.Acc_ProjectId__r.Id, item.Id).getRoles();
+            const partnerRoles = roles.forPartner(item.projectId, item.id).getRoles();
             return context.runSyncCommand(new MapToPartnerDtoCommand(item, partnerRoles, projectRoles));
         });
 

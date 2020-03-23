@@ -1,11 +1,12 @@
 import { DateTime } from "luxon";
 import { SyncCommandBase } from "../common/commandBase";
-import { ISalesforcePartner, SalesforceProjectRole } from "../../repositories/partnersRepository";
+import { SalesforceProjectRole } from "../../repositories/partnersRepository";
 import { PartnerClaimStatus, PartnerDto, PartnerStatus, ProjectRole } from "@framework/types";
+import { Partner } from "@framework/entities";
 
 export class MapToPartnerDtoCommand extends SyncCommandBase<PartnerDto> {
     constructor(
-        private readonly item: ISalesforcePartner,
+        private readonly item: Partner,
         private readonly partnerLevelRoles: ProjectRole,
         private readonly projectLevelRoles: ProjectRole
     ) {
@@ -18,38 +19,38 @@ export class MapToPartnerDtoCommand extends SyncCommandBase<PartnerDto> {
 
     Run(): PartnerDto {
         return {
-            id: this.item.Id,
-            name: this.item.Acc_AccountId__r.Name,
-            accountId: this.item.Acc_AccountId__r.Id,
-            type: this.item.Acc_ParticipantType__c,
-            postcode: this.item.Acc_Postcode__c,
-            organisationType: this.item.Acc_OrganisationType__c,
-            competitionType: this.item.Acc_ProjectId__r.Acc_CompetitionType__c,
-            isLead: this.item.Acc_ProjectRole__c === SalesforceProjectRole.ProjectLead,
-            projectRoleName: this.item.ProjectRoleName,
-            projectId: this.item.Acc_ProjectId__r.Id,
-            totalParticipantGrant: this.valueIfPermission(this.item.Acc_TotalParticipantCosts__c),
-            totalParticipantCostsClaimed: this.valueIfPermission(this.item.Acc_TotalApprovedCosts__c),
-            percentageParticipantCostsClaimed: this.valueIfPermission(this.calcPercentageClaimed(this.item.Acc_TotalParticipantCosts__c, this.item.Acc_TotalApprovedCosts__c)),
-            awardRate: this.valueIfPermission(this.item.Acc_Award_Rate__c),
-            capLimit: this.valueIfPermission(this.item.Acc_Cap_Limit__c),
-            totalPaidCosts: this.valueIfPermission(this.item.Acc_TotalPaidCosts__c),
-            totalFutureForecastsForParticipants: this.valueIfPermission(this.item.Acc_TotalFutureForecastsForParticipant__c),
-            totalCostsSubmitted: this.valueIfPermission(this.item.Acc_TotalCostsSubmitted__c),
+            id: this.item.id,
+            name: this.item.name,
+            accountId: this.item.accountId,
+            type: this.item.participantType,
+            postcode: this.item.postcode,
+            organisationType: this.item.organisationType,
+            competitionType: this.item.competitionType,
+            isLead: this.item.projectRole === SalesforceProjectRole.ProjectLead,
+            projectRoleName: this.item.projectRoleName,
+            projectId: this.item.projectId,
+            totalParticipantGrant: this.valueIfPermission(this.item.totalParticipantCosts),
+            totalParticipantCostsClaimed: this.valueIfPermission(this.item.totalApprovedCosts),
+            percentageParticipantCostsClaimed: this.valueIfPermission(this.calcPercentageClaimed(this.item.totalParticipantCosts, this.item.totalApprovedCosts)),
+            awardRate: this.valueIfPermission(this.item.awardRate),
+            capLimit: this.valueIfPermission(this.item.capLimit),
+            totalPaidCosts: this.valueIfPermission(this.item.totalPaidCosts),
+            totalFutureForecastsForParticipants: this.valueIfPermission(this.item.totalFutureForecastsForParticipant),
+            totalCostsSubmitted: this.valueIfPermission(this.item.totalCostsSubmitted),
             roles: this.partnerLevelRoles,
-            forecastLastModifiedDate: this.item.Acc_ForecastLastModifiedDate__c ? DateTime.fromISO(this.item.Acc_ForecastLastModifiedDate__c).toJSDate() : null,
-            claimsOverdue: this.valueIfPermission(this.item.Acc_ClaimsOverdue__c),
-            claimsWithParticipant: this.valueIfPermission(this.item.Acc_ClaimsUnderQuery__c),
-            claimStatus: this.getClaimStatus(this.item.Acc_TrackingClaims__c),
-            statusName: this.item.Acc_TrackingClaims__c || "",
-            overheadRate: this.valueIfPermission(this.item.Acc_OverheadRate__c) || null,
-            partnerStatus: this.getPartnerStatus(this.item.Acc_ParticipantStatus__c),
-            isWithdrawn: [PartnerStatus.VoluntaryWithdrawal, PartnerStatus.InvoluntaryWithdrawal].indexOf(this.getPartnerStatus(this.item.Acc_ParticipantStatus__c)) >= 0,
-            totalCostsAwarded: this.item.Acc_TotalCostsAwarded__c,
-            auditReportFrequencyName: this.item.AuditReportFrequencyName,
-            totalPrepayment: this.item.Acc_TotalPrepayment__c,
-            percentageParticipantCostsSubmitted: this.valueIfPermission(this.calcPercentageClaimed(this.item.Acc_TotalParticipantCosts__c, this.item.Acc_TotalCostsSubmitted__c)),
-            totalFundingDueToReceive: this.valueIfPermission(this.item.Acc_TotalParticipantCosts__c * (this.item.Acc_Award_Rate__c / 100))
+            forecastLastModifiedDate: this.item.forecastLastModifiedDate,
+            claimsOverdue: this.valueIfPermission(this.item.claimsOverdue),
+            claimsWithParticipant: this.valueIfPermission(this.item.claimsUnderQuery),
+            claimStatus: this.getClaimStatus(this.item.trackingClaims),
+            statusName: this.item.trackingClaims || "",
+            overheadRate: this.valueIfPermission(this.item.overheadRate) || null,
+            partnerStatus: this.getPartnerStatus(this.item.participantStatus),
+            isWithdrawn: [PartnerStatus.VoluntaryWithdrawal, PartnerStatus.InvoluntaryWithdrawal].indexOf(this.getPartnerStatus(this.item.participantStatus)) >= 0,
+            totalCostsAwarded: this.item.totalCostsAwarded,
+            auditReportFrequencyName: this.item.auditReportFrequencyName,
+            totalPrepayment: this.item.totalPrepayment,
+            percentageParticipantCostsSubmitted: this.valueIfPermission(this.calcPercentageClaimed(this.item.totalParticipantCosts, this.item.totalCostsSubmitted)),
+            totalFundingDueToReceive: this.valueIfPermission(this.item.totalParticipantCosts * (this.item.awardRate / 100))
         };
     }
 

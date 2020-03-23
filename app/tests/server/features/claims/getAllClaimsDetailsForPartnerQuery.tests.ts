@@ -10,7 +10,7 @@ describe("claimDetails/getAllByPartner", () => {
     const partner = context.testData.createPartner();
     context.testData.createClaimDetail(project, costCat, partner);
 
-    const query  = new GetAllClaimDetailsByPartner(partner.Id);
+    const query  = new GetAllClaimDetailsByPartner(partner.id);
     const result = await context.runQuery(query);
     const item   = result[0];
 
@@ -26,7 +26,7 @@ describe("claimDetails/getAllByPartner", () => {
     const partner = context.testData.createPartner();
     context.testData.createClaimDetail(project, costCat, partner);
 
-    const query  = new GetAllClaimDetailsByPartner(partner.Id);
+    const query  = new GetAllClaimDetailsByPartner(partner.id);
     const result = await context.runQuery(query);
 
     expect(result.length).toBe(1);
@@ -42,7 +42,7 @@ describe("claimDetails/getAllByPartner", () => {
     context.testData.createClaimDetail(project, costCat, partner);
     context.testData.createClaimDetail(project, costCat, partner);
 
-    const query  = new GetAllClaimDetailsByPartner(partner.Id);
+    const query  = new GetAllClaimDetailsByPartner(partner.id);
     const result = await context.runQuery(query);
 
     expect(result.length).toBe(3);

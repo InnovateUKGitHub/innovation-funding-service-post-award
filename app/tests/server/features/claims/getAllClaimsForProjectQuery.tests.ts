@@ -28,7 +28,7 @@ describe("getAllClaimsForProjectQuery", () => {
 
     expect(item.totalCost).toBe(expectedClaimCost);
     expect(item.forecastCost).toBe(expectedForcastCost);
-    expect(item.partnerId).toBe(partner.Id);
+    expect(item.partnerId).toBe(partner.id);
     expect(item.status).toBe("Innovate Queried");
     expect(item.periodId).toBe(expectedPeriodId);
   });
@@ -54,7 +54,7 @@ describe("getAllClaimsForProjectQuery", () => {
 
     expect(results.length).toBe(3);
     expect(results.map(x => x.periodId)).toEqual([3, 2, 1]);
-    expect(results.map(x => x.partnerId)).toEqual([partner.Id, partner.Id, partner.Id]);
+    expect(results.map(x => x.partnerId)).toEqual([partner.id, partner.id, partner.id]);
     expect(results.map(x => x.totalCost)).toEqual([30, 20, 10]);
     expect(results.map(x => x.forecastCost)).toEqual([300, 200, 100]);
   });
@@ -89,7 +89,7 @@ describe("getAllClaimsForProjectQuery", () => {
 
     expect(results.length).toBe(2);
     expect(results.map(x => x.periodId)).toEqual([1, 1]);
-    expect(results.map(x => x.partnerId)).toEqual([partner1.Id, partner2.Id]);
+    expect(results.map(x => x.partnerId)).toEqual([partner1.id, partner2.id]);
     expect(results.map(x => x.totalCost)).toEqual([10, 20]);
     expect(results.map(x => x.forecastCost)).toEqual([100, 200]);
   });
@@ -126,7 +126,7 @@ describe("getAllClaimsForProjectQuery", () => {
 
     expect(results.length).toBe(1);
     expect(results.map(x => x.periodId)).toEqual([1]);
-    expect(results.map(x => x.partnerId)).toEqual([partner2.Id]);
+    expect(results.map(x => x.partnerId)).toEqual([partner2.id]);
     expect(results.map(x => x.totalCost)).toEqual([20]);
     expect(results.map(x => x.forecastCost)).toEqual([200]);
   });
@@ -137,16 +137,16 @@ describe("getAllClaimsForProjectQuery", () => {
     const project = context.testData.createProject();
 
     const partner1 = context.testData.createPartner(project, p => {
-      p.Acc_ProjectRole__c = "";
-      p.Acc_AccountId__r.Name = "XXXXXX";
+      p.projectRole = "";
+      p.name = "XXXXXX";
     });
     const partner2 = context.testData.createPartner(project, p => {
-      p.Acc_ProjectRole__c = "Lead";
-      p.Acc_AccountId__r.Name = "ZZZZZZZZ";
+      p.projectRole = "Lead";
+      p.name = "ZZZZZZZZ";
     });
     const partner3 = context.testData.createPartner(project, p => {
-      p.Acc_ProjectRole__c = "";
-      p.Acc_AccountId__r.Name = "AAAAAA";
+      p.projectRole = "";
+      p.name = "AAAAAA";
     });
 
     context.testData.createClaim(partner1, 1);
@@ -156,19 +156,19 @@ describe("getAllClaimsForProjectQuery", () => {
     const query = new GetAllClaimsForProjectQuery(project.Id);
     const results = await context.runQuery(query);
 
-    expect(results.map(x => x.partnerId)).toEqual([partner2.Id, partner3.Id, partner1.Id]);
+    expect(results.map(x => x.partnerId)).toEqual([partner2.id, partner3.id, partner1.id]);
   });
 
   it("sorts period ids decending", async () => {
     const context = new TestContext();
     const project = context.testData.createProject();
     const partner1 = context.testData.createPartner(project, p => {
-      p.Acc_ProjectRole__c = "";
-      p.Acc_AccountId__r.Name = "XXXXXX";
+      p.projectRole = "";
+      p.name = "XXXXXX";
     });
     const partner2 = context.testData.createPartner(project, p => {
-      p.Acc_ProjectRole__c = "Lead";
-      p.Acc_AccountId__r.Name = "ZZZZZZZZ";
+      p.projectRole = "Lead";
+      p.name = "ZZZZZZZZ";
     });
 
     context.testData.createClaim(partner1, 1);
@@ -182,7 +182,7 @@ describe("getAllClaimsForProjectQuery", () => {
     const query = new GetAllClaimsForProjectQuery(project.Id);
     const results = await context.runQuery(query);
 
-    expect(results.map(x => x.partnerId)).toEqual([partner2.Id, partner2.Id, partner2.Id, partner2.Id, partner1.Id, partner1.Id, partner1.Id]);
+    expect(results.map(x => x.partnerId)).toEqual([partner2.id, partner2.id, partner2.id, partner2.id, partner1.id, partner1.id, partner1.id]);
     expect(results.map(x => x.periodId)).toEqual([3, 2, 1, 1, 3, 2, 1]);
   });
 });

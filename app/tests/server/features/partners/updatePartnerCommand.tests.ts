@@ -1,7 +1,6 @@
 import { TestContext } from "../../testContextProvider";
 import { UpdatePartnerCommand } from "../../../../src/server/features/partners/updatePartnerCommand";
-import { SalesforceProjectRole } from "@server/repositories";
-import { PartnerClaimStatus, PartnerDto, PartnerStatus, ProjectRole } from "@framework/dtos";
+import { PartnerDto } from "@framework/dtos";
 import { GetByIdQuery } from "@server/features/partners";
 
 describe("updatePartnerCommand", () => {
@@ -12,7 +11,7 @@ describe("updatePartnerCommand", () => {
 
     const partner = context.testData.createPartner(project);
 
-    const expected: PartnerDto =await context.runQuery(new GetByIdQuery(partner.Id));
+    const expected: PartnerDto =await context.runQuery(new GetByIdQuery(partner.id));
 
     expected.postcode = "BS2 2SS";
 
@@ -20,7 +19,7 @@ describe("updatePartnerCommand", () => {
 
     expect(command).toBe(true);
 
-    const result = await context.runQuery(new GetByIdQuery(partner.Id));
+    const result = await context.runQuery(new GetByIdQuery(partner.id));
 
     expect(result).not.toBe(null);
 
