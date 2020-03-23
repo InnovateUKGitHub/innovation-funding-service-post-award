@@ -191,7 +191,9 @@ export class ProjectChangeRequestStore extends StoreBase {
           projectRole: PCRProjectRole.Unknown,
           partnerType: PCRPartnerType.Unknown,
           projectRoleLabel: null,
-          partnerTypeLabel: null
+          partnerTypeLabel: null,
+          projectCity: "",
+          projectPostcode: ""
         };
       case PCRItemType.PartnerWithdrawal:
         return {

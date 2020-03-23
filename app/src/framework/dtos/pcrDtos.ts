@@ -108,6 +108,8 @@ export interface PCRItemForPartnerAdditionDto extends PCRItemBaseDto {
   partnerType: PCRPartnerType;
   projectRoleLabel: string | null;
   partnerTypeLabel: string | null;
+  projectCity: string | null;
+  projectPostcode: string | null;
 }
 
 export interface PCRItemTypeDto {

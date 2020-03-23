@@ -125,6 +125,8 @@ const mapItemForPartnerAddition = (pcr: ProjectChangeRequestItemEntity, typeName
   partnerType: pcr.partnerType || PCRPartnerType.Unknown,
   projectRoleLabel: pcr.projectRoleLabel || null,
   partnerTypeLabel: pcr.partnerTypeLabel || null,
+  projectCity: pcr.projectCity || null,
+  projectPostcode: pcr.projectPostcode || null,
   type
 });
 
