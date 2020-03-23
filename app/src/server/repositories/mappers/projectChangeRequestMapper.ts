@@ -138,6 +138,7 @@ export class SalesforcePCRMapper extends SalesforceBaseMapper<ISalesforcePCR[], 
       partnerNameSnapshot: pcrItem.Acc_ExistingPartnerName__c,
       shortName: pcrItem.Acc_Nickname__c || "",
       // add partner fields
+      organisationName: pcrItem.Acc_OrganisationName__c,
       projectRole: new PcrProjectRoleMapper().mapFromSalesforcePCRProjectRole(pcrItem.Acc_ProjectRole__c),
       projectRoleLabel: pcrItem.ProjectRoleLabel,
       partnerType: new PcrPartnerTypeMapper().mapFromSalesforcePCRPartnerType(pcrItem.Acc_ParticipantType__c),

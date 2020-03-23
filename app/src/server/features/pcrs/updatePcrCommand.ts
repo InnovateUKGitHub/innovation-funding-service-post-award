@@ -130,8 +130,8 @@ export class UpdatePCRCommand extends CommandBase<boolean> {
         }
         break;
       case PCRItemType.PartnerAddition:
-        if (item.projectRole !== dto.projectRole || item.partnerType !== dto.partnerType || item.projectCity !== dto.projectCity || item.projectPostcode !== dto.projectPostcode) {
-          return { ...init, projectRole: dto.projectRole, partnerType: dto.partnerType, projectCity: dto.projectCity, projectPostcode: dto.projectPostcode };
+        if (item.organisationName !== dto.organisationName || item.projectRole !== dto.projectRole || item.partnerType !== dto.partnerType || item.projectCity !== dto.projectCity || item.projectPostcode !== dto.projectPostcode) {
+          return { ...init, organisationName: dto.organisationName, projectRole: dto.projectRole, partnerType: dto.partnerType, projectCity: dto.projectCity, projectPostcode: dto.projectPostcode };
         }
         break;
       case PCRItemType.MultiplePartnerFinancialVirement:

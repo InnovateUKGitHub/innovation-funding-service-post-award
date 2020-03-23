@@ -121,6 +121,7 @@ const mapItemForPartnerWithdrawal = (pcr: ProjectChangeRequestItemEntity, typeNa
 
 const mapItemForPartnerAddition = (pcr: ProjectChangeRequestItemEntity, typeName: string, type: PCRItemType.PartnerAddition): PCRItemForPartnerAdditionDto => ({
   ...mapBaseItem(pcr, typeName, type),
+  organisationName: pcr.organisationName || null,
   projectRole: pcr.projectRole || PCRProjectRole.Unknown,
   partnerType: pcr.partnerType || PCRPartnerType.Unknown,
   projectRoleLabel: pcr.projectRoleLabel || null,
