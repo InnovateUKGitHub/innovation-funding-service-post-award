@@ -4,6 +4,7 @@ import { PcrSummaryProps } from "@ui/containers/pcrs/pcrWorkflow";
 import { PCRItemForPartnerAdditionDto } from "@framework/dtos";
 import { PCRPartnerAdditionItemDtoValidator } from "@ui/validators";
 import { addPartnerStepNames } from "@ui/containers/pcrs/addPartner/addPartnerWorkflow";
+import { PCRPartnerType } from "@framework/constants";
 
 export class AddPartnerSummary extends React.Component<PcrSummaryProps<PCRItemForPartnerAdditionDto, PCRPartnerAdditionItemDtoValidator, addPartnerStepNames>> {
   render() {
@@ -11,8 +12,9 @@ export class AddPartnerSummary extends React.Component<PcrSummaryProps<PCRItemFo
     return (
       <ACC.Section qa="add-partner-summary">
         <ACC.SummaryList qa="add-partner-summary-list">
-          <ACC.SummaryListItem label="Project role" content={pcrItem.projectRoleLabel} validation={validator.projectRole} qa="projectRole" />
-          <ACC.SummaryListItem label="PartnerType" content={pcrItem.partnerTypeLabel} validation={validator.partnerType} qa="partnerType" />
+          <ACC.SummaryListItem label="Role in project" content={pcrItem.projectRoleLabel} validation={validator.projectRole} qa="projectRole" />
+          <ACC.SummaryListItem label="Type" content={pcrItem.partnerTypeLabel} validation={validator.partnerType} qa="partnerType" />
+          {pcrItem.partnerType === PCRPartnerType.Research && <ACC.SummaryListItem label="Name" content={pcrItem.organisationName} validation={validator.organisationName} qa="organisationName" action={this.props.getEditLink("academicOrganisationStep", validator.organisationName)}/>}
         </ACC.SummaryList>
       </ACC.Section>
     );
