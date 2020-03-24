@@ -21,7 +21,7 @@ export class SalesforcePartnerMapper extends SalesforceBaseMapper<ISalesforcePar
       awardRate: item.Acc_Award_Rate__c,
       totalPaidCosts: item.Acc_TotalPaidCosts__c,
       totalFutureForecastsForParticipant: item.Acc_TotalFutureForecastsForParticipant__c,
-      forecastLastModifiedDate: super.clock.parseOptionalSalesforceDateTime(item.Acc_ForecastLastModifiedDate__c),
+      forecastLastModifiedDate: this.clock.parseOptionalSalesforceDateTime(item.Acc_ForecastLastModifiedDate__c),
       claimsForReview: item.Acc_ClaimsForReview__c,
       claimsOverdue: item.Acc_ClaimsOverdue__c,
       claimsUnderQuery: item.Acc_ClaimsUnderQuery__c,
