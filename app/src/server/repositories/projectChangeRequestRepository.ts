@@ -61,6 +61,7 @@ export interface ISalesforcePCR {
   Acc_Nickname__c: string|null;
 
   // Add partner
+  Acc_OrganisationName__c: string|null;
   Acc_ProjectRole__c: string|null;
   ProjectRoleLabel: string|null;
   Acc_ParticipantType__c: string|null;
@@ -118,6 +119,7 @@ export class ProjectChangeRequestRepository extends SalesforceRepositoryBase<ISa
     "Acc_ProjectSummarySnapshot__c",
     "Acc_ExistingPartnerName__c",
     "Acc_Nickname__c",
+    "Acc_OrganisationName__c",
     "Acc_ProjectRole__c",
     "toLabel(Acc_ProjectRole__c) ProjectRoleLabel",
     "Acc_ParticipantType__c",
@@ -180,6 +182,7 @@ export class ProjectChangeRequestRepository extends SalesforceRepositoryBase<ISa
       Acc_RemovalDate__c: this.toOptionalSFDate(x.withdrawalDate),
       Acc_RemovalPeriod__c: x.removalPeriod,
       Acc_Project_Participant__c: x.partnerId,
+      Acc_OrganisationName__c: x.organisationName,
       Acc_ProjectRole__c: new PcrProjectRoleMapper().mapToSalesforcePCRProjectRole(x.projectRole),
       Acc_ParticipantType__c: new PcrPartnerTypeMapper().mapToSalesforcePCRPartnerType(x.partnerType),
       Acc_GrantMovingOverFinancialYear__c: x.grantMovingOverFinancialYear,

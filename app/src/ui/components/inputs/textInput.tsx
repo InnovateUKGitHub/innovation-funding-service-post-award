@@ -1,10 +1,11 @@
 import * as React from "react";
 import classNames from "classnames";
-import { BaseInput } from "./baseInput";
+import { BaseInput, FormInputWidths } from "./baseInput";
 
 interface TextInputProps extends InputProps<string> {
   maxLength?: number;
   handleKeyTyped?: boolean;
+  width?: FormInputWidths;
 }
 
 export class TextInput extends BaseInput<TextInputProps, InputState> {
@@ -26,7 +27,12 @@ export class TextInput extends BaseInput<TextInputProps, InputState> {
       <input
         id={this.props.name}
         type="text"
-        className={classNames("govuk-input", { "govuk-input--error": this.props.hasError === true })}
+        className={classNames(
+          "govuk-input", {
+            "govuk-input--error": this.props.hasError === true,
+            [`govuk-input--width-${this.props.width}`]: typeof this.props.width === "number",
+            [`govuk-!-width-${this.props.width}`]: typeof this.props.width === "string",
+          })}
         name={this.props.name}
         value={this.state.value}
         disabled={!!this.props.disabled}

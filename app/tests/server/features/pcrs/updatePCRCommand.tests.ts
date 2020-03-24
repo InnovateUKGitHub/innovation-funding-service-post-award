@@ -508,6 +508,17 @@ describe("UpdatePCRCommand", () => {
       const command = new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto);
       await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
     });
+    it("should require organisation name to be set when the partner type is Research", async () => {
+      const {context, projectChangeRequest, recordType, project} = setup();
+      context.testData.createPCRItem(projectChangeRequest, recordType, { status: PCRItemStatus.Incomplete, partnerType: PCRPartnerType.Research, projectRole: PCRProjectRole.Collaborator });
+      const dto = await context.runQuery(new GetPCRByIdQuery(projectChangeRequest.projectId, projectChangeRequest.id));
+      const item = dto.items[0] as PCRItemForPartnerAdditionDto;
+      item.status = PCRItemStatus.Complete;
+      const command = new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto);
+      await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
+      item.organisationName = "Coventry University";
+      await expect(context.runCommand(command)).resolves.toBe(true);
+    });
     it("should not allow updates to project role & partner type fields once they are set", async () => {
       const {context, projectChangeRequest, recordType, project} = setup();
       context.testData.createPCRItem(projectChangeRequest, recordType, { status: PCRItemStatus.Incomplete, projectRole: PCRProjectRole.Collaborator, partnerType: PCRPartnerType.Research });
@@ -521,7 +532,7 @@ describe("UpdatePCRCommand", () => {
     });
     it("should update item status", async () => {
       const {context, projectChangeRequest, recordType, project} = setup();
-      context.testData.createPCRItem(projectChangeRequest, recordType, { status: PCRItemStatus.Incomplete, projectRole: PCRProjectRole.Collaborator, partnerType: PCRPartnerType.Research, projectCity: "Bristol", projectPostcode: "BS1 5UW" });
+      context.testData.createPCRItem(projectChangeRequest, recordType, { status: PCRItemStatus.Incomplete, projectRole: PCRProjectRole.Collaborator, partnerType: PCRPartnerType.Business, projectCity: "Bristol", projectPostcode: "BS1 5UW" });
       const dto = await context.runQuery(new GetPCRByIdQuery(projectChangeRequest.projectId, projectChangeRequest.id));
       const item = dto.items[0] as PCRItemForPartnerAdditionDto;
       item.status = PCRItemStatus.Complete;
@@ -535,6 +546,7 @@ describe("UpdatePCRCommand", () => {
       context.testData.createPCRItem(projectChangeRequest, recordType, { status: PCRItemStatus.Incomplete });
       const dto = await context.runQuery(new GetPCRByIdQuery(projectChangeRequest.projectId, projectChangeRequest.id));
       const item = dto.items[0] as PCRItemForPartnerAdditionDto;
+      item.organisationName = "Bristol University";
       item.projectRole = PCRProjectRole.ProjectLead;
       item.partnerType = PCRPartnerType.Other;
       item.projectCity = "Bristol";
@@ -543,6 +555,7 @@ describe("UpdatePCRCommand", () => {
       await expect(await context.runCommand(command)).toBe(true);
       const updated = await context.runQuery(new GetPCRByIdQuery(projectChangeRequest.projectId, projectChangeRequest.id));
       const updatedItem = updated.items[0] as PCRItemForPartnerAdditionDto;
+      expect(updatedItem.organisationName).toEqual("Bristol University");
       expect(updatedItem.projectRole).toEqual(PCRProjectRole.ProjectLead);
       expect(updatedItem.partnerType).toEqual(PCRPartnerType.Other);
       expect(updatedItem.projectCity).toEqual("Bristol");

@@ -152,6 +152,9 @@ export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBa
       item.projectRole = parseInt(body.projectRole, 10);
       item.partnerType = parseInt(body.partnerType, 10);
     }
+    if (stepName === "academicOrganisationStep") {
+      item.organisationName = body.organisationName;
+    }
   }
 
   protected getStoreKey(params: ProjectChangeRequestPrepareItemParams) {
