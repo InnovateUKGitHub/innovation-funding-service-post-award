@@ -1,6 +1,7 @@
 import { QueryBase } from "../common/queryBase";
 import { ISalesforcePartner, ISalesforceProjectContact, SalesforceProjectRole, SalesforceRole } from "../../repositories";
 import { Authorisation, IContext, ProjectRole } from "@framework/types";
+import { Partner } from "@framework/entities";
 
 export interface IRoleInfo {
   projectRoles: ProjectRole;
@@ -36,10 +37,10 @@ export class GetAllProjectRolesForUser extends QueryBase<Authorisation> {
       roleInfo.projectRoles = roleInfo.projectRoles | newRole;
 
       partners.forEach(partner => {
-        roleInfo.partnerRoles[partner.Id] = roleInfo.partnerRoles[partner.Id] | ProjectRole.Unknown;
+        roleInfo.partnerRoles[partner.id] = roleInfo.partnerRoles[partner.id] | ProjectRole.Unknown;
         // if this is a partner level contact then add it at the partner level too
         if (this.isPartnerContact(contact, partner) && this.isPartnerLevelRole(newRole, partner)) {
-          roleInfo.partnerRoles[partner.Id] = roleInfo.partnerRoles[partner.Id] | newRole;
+          roleInfo.partnerRoles[partner.id] = roleInfo.partnerRoles[partner.id] | newRole;
         }
       });
 
@@ -47,12 +48,12 @@ export class GetAllProjectRolesForUser extends QueryBase<Authorisation> {
     }, {});
   }
 
-  private isPartnerContact(contact: ISalesforceProjectContact, partner: ISalesforcePartner): boolean {
-    return !!contact.Acc_AccountId__c && partner.Acc_AccountId__r.Id === contact.Acc_AccountId__c;
+  private isPartnerContact(contact: ISalesforceProjectContact, partner: Partner): boolean {
+    return !!(contact.Acc_AccountId__c && partner.accountId === contact.Acc_AccountId__c);
   }
 
-  private isPartnerLevelRole(role: ProjectRole, partner: ISalesforcePartner): boolean {
-    return role === ProjectRole.FinancialContact || (role === ProjectRole.ProjectManager && partner.Acc_ProjectRole__c === SalesforceProjectRole.ProjectLead);
+  private isPartnerLevelRole(role: ProjectRole, partner: Partner): boolean {
+    return role === ProjectRole.FinancialContact || (role === ProjectRole.ProjectManager && partner.projectRole === SalesforceProjectRole.ProjectLead);
   }
 
   private async getServiceAccountRoles(context: IContext): Promise<{ [key: string]: IRoleInfo }> {
@@ -70,9 +71,9 @@ export class GetAllProjectRolesForUser extends QueryBase<Authorisation> {
 
     return partners.reduce((roles, partner) => {
       // get or create new project level roles record
-      const project = roles[partner.Acc_ProjectId__r.Id] || (roles[partner.Acc_ProjectId__r.Id] = { projectRoles: allRoles, partnerRoles: {}});
+      const project = roles[partner.projectId] || (roles[partner.projectId] = { projectRoles: allRoles, partnerRoles: {}});
       // set current partner level to all
-      project.partnerRoles[partner.Id] = allRoles;
+      project.partnerRoles[partner.id] = allRoles;
       return roles;
     }, projectRoles);
   }

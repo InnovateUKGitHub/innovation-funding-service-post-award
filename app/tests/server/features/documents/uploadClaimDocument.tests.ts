@@ -277,7 +277,7 @@ describe("UploadClaimDocumentCommand", () => {
 
           const claimKey = {
               projectId: project.Id,
-              partnerId: partner.Id,
+              partnerId: partner.id,
               periodId: 1,
           };
 
