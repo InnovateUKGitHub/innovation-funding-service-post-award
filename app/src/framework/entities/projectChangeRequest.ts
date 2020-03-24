@@ -1,5 +1,5 @@
 import {
-  PCRItemStatus, PCRPartnerType,
+  PCRItemStatus, PCRParticipantSize, PCRPartnerType,
   PCRProjectRole,
   PCRStatus
 } from "@framework/constants";
@@ -45,6 +45,8 @@ export interface ProjectChangeRequestItemForCreateEntity {
   grantMovingOverFinancialYear?: number | null;
   projectCity?: string | null;
   projectPostcode?: string | null;
+  participantSize?: PCRParticipantSize;
+  numberOfEmployees?: number | null;
 }
 
 export interface ProjectChangeRequestItemEntity extends ProjectChangeRequestItemForCreateEntity {

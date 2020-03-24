@@ -10,10 +10,11 @@ import { UpdatePCRCommand } from "@server/features/pcrs/updatePcrCommand";
 import { CreateProjectChangeRequestCommand } from "@server/features/pcrs/createProjectChangeRequestCommand";
 import { DeleteProjectChangeRequestCommand } from "@server/features/pcrs/deleteProjectChangeRequestCommand";
 import { GetProjectChangeRequestStatusChanges } from "@server/features/pcrs/getProjectChangeRequestStatusChanges";
-import { PCRPartnerType, PCRProjectRole } from "@framework/constants";
+import { PCRParticipantSize, PCRPartnerType, PCRProjectRole } from "@framework/constants";
 import { GetPcrProjectRolesQuery } from "@server/features/pcrs/getPcrProjectRolesQuery";
 import { Option } from "@framework/dtos";
 import { GetPcrPartnerTypesQuery } from "@server/features/pcrs/getPcrPartnerTypesQuery";
+import { GetPcrParticipantSizesQuery } from "@server/features/pcrs/getPcrParticipantSizesQuery";
 
 export interface IPCRsApi {
   create: (params: ApiParams<{ projectId: string, projectChangeRequestDto: PCRDto }>) => Promise<PCRDto>;
@@ -25,6 +26,7 @@ export interface IPCRsApi {
   getStatusChanges: (params: ApiParams<{projectId: string, projectChangeRequestId: string }>) => Promise<ProjectChangeRequestStatusChangeDto[]>;
   getPcrProjectRoles: (params: ApiParams<{}>) => Promise<Option<PCRProjectRole>[]>;
   getPcrPartnerTypes: (params: ApiParams<{}>) => Promise<Option<PCRPartnerType>[]>;
+  getParticipantSizes: (params: ApiParams<{}>) => Promise<Option<PCRParticipantSize>[]>;
 }
 
 class Controller extends ControllerBaseWithSummary<PCRSummaryDto, PCRDto> implements IPCRsApi {
@@ -40,6 +42,7 @@ class Controller extends ControllerBaseWithSummary<PCRSummaryDto, PCRDto> implem
     this.getCustom("/status-changes/:projectId/:projectChangeRequestId", (p) => ({projectId: p.projectId, projectChangeRequestId: p.projectChangeRequestId}), p => this.getStatusChanges(p));
     this.getCustom("/project-roles", () => ({}), (p) => this.getPcrProjectRoles(p));
     this.getCustom("/partner-types", () => ({}), (p) => this.getPcrPartnerTypes(p));
+    this.getCustom("/participant-sizes", () => ({}), (p) => this.getParticipantSizes(p));
   }
 
   getAll(params: ApiParams<{ projectId: string }>): Promise<PCRSummaryDto[]> {
@@ -86,6 +89,11 @@ class Controller extends ControllerBaseWithSummary<PCRSummaryDto, PCRDto> implem
 
   public async getPcrPartnerTypes(params: ApiParams<{}>) {
     const query = new GetPcrPartnerTypesQuery();
+    return contextProvider.start(params).runQuery(query);
+  }
+
+  public async getParticipantSizes(params: ApiParams<{}>) {
+    const query = new GetPcrParticipantSizesQuery();
     return contextProvider.start(params).runQuery(query);
   }
 }
