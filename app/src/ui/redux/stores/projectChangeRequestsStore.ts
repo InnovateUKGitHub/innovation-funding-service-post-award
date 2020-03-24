@@ -8,7 +8,15 @@ import { ApiClient } from "@ui/apiClient";
 import { LoadingStatus, Pending } from "@shared/pending";
 import { dataLoadAction, messageSuccess } from "../actions";
 import { NotFoundError } from "@server/features/common";
-import { PCRItemStatus, PCRItemType, PCRParticipantSize, PCRPartnerType, PCRProjectRole, PCRStatus } from "@framework/constants";
+import {
+  PCRContactRole,
+  PCRItemStatus,
+  PCRItemType,
+  PCRParticipantSize,
+  PCRPartnerType,
+  PCRProjectRole,
+  PCRStatus
+} from "@framework/constants";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
 import { ConfigStore } from "@ui/redux/stores/configStore";
 
@@ -188,6 +196,11 @@ export class ProjectChangeRequestStore extends StoreBase {
         return {
           ...baseFields,
           type: itemType.type,
+          contact1ProjectRole: PCRContactRole.Unknown,
+          contact1Forename: null,
+          contact1Surname: null,
+          contact1Phone: null,
+          contact1Email: null,
           organisationName: null,
           projectRole: PCRProjectRole.Unknown,
           partnerType: PCRPartnerType.Unknown,

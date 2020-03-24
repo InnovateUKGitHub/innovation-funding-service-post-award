@@ -1,4 +1,5 @@
 import {
+  PCRContactRole,
   PCRItemStatus,
   PCRItemType, PCRParticipantSize, PCRPartnerType,
   PCRProjectRole,
@@ -104,6 +105,11 @@ export interface PCRItemForProjectTerminationDto extends PCRItemBaseDto {
 
 export interface PCRItemForPartnerAdditionDto extends PCRItemBaseDto {
   type: PCRItemType.PartnerAddition;
+  contact1ProjectRole: PCRContactRole;
+  contact1Forename: string | null;
+  contact1Surname: string | null;
+  contact1Phone: string | null;
+  contact1Email: string | null;
   organisationName: string | null;
   projectRole: PCRProjectRole;
   partnerType: PCRPartnerType;

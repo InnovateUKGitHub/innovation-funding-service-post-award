@@ -82,6 +82,11 @@ export class CreateProjectChangeRequestCommand extends CommandBase<string> {
       case PCRItemType.PartnerAddition:
         return {
           ...init,
+          contact1ProjectRole: itemDto.contact1ProjectRole,
+          contact1Forename: itemDto.contact1Forename,
+          contact1Surname: itemDto.contact1Surname,
+          contact1Phone: itemDto.contact1Phone,
+          contact1Email: itemDto.contact1Email,
           organisationName: itemDto.organisationName,
           projectRole: itemDto.projectRole,
           partnerType: itemDto.partnerType,

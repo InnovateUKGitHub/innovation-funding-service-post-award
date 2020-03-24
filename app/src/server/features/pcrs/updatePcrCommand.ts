@@ -131,7 +131,12 @@ export class UpdatePCRCommand extends CommandBase<boolean> {
         break;
       case PCRItemType.PartnerAddition:
         if (
-          item.organisationName !== dto.organisationName
+          item.contact1ProjectRole !== dto.contact1ProjectRole
+          || item.contact1Forename !== dto.contact1Forename
+          || item.contact1Surname !== dto.contact1Surname
+          || item.contact1Phone !== dto.contact1Phone
+          || item.contact1Email !== dto.contact1Email
+          || item.organisationName !== dto.organisationName
           || item.projectRole !== dto.projectRole
           || item.partnerType !== dto.partnerType
           || item.projectCity !== dto.projectCity
@@ -141,6 +146,11 @@ export class UpdatePCRCommand extends CommandBase<boolean> {
         ) {
           return {
             ...init,
+            contact1ProjectRole: dto.contact1ProjectRole,
+            contact1Forename: dto.contact1Forename,
+            contact1Surname: dto.contact1Surname,
+            contact1Phone: dto.contact1Phone,
+            contact1Email: dto.contact1Email,
             organisationName: dto.organisationName,
             projectRole: dto.projectRole,
             partnerType: dto.partnerType,
