@@ -65,7 +65,7 @@ export class PcrWorkflow<T, TVal extends Results<T>> extends WorkflowBase<string
         return new PcrWorkflow(removePartnerWorkflow, step);
       case PCRItemType.PartnerAddition:
         // If feature not turned on let it fall through to standard workflow
-        if (features.addPartnerWorkflow) return new PcrWorkflow(getAddPartnerWorkflow(pcrItem), step);
+        if (features.addPartnerWorkflow) return new PcrWorkflow(getAddPartnerWorkflow(pcrItem, step), step);
       case PCRItemType.SinglePartnerFinancialVirement:
         return new PcrWorkflow(standardItemWorkflow, step);
       default:

@@ -155,6 +155,10 @@ export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBa
     if (stepName === "academicOrganisationStep") {
       item.organisationName = body.organisationName;
     }
+    if (stepName === "projectLocationStep") {
+      item.projectCity = body.projectCity;
+      item.projectPostcode = body.projectPostcode;
+    }
   }
 
   protected getStoreKey(params: ProjectChangeRequestPrepareItemParams) {

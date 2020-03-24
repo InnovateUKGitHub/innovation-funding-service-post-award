@@ -6,18 +6,19 @@ import { RoleAndOrganisationStep } from "@ui/containers/pcrs/addPartner/roleAndO
 import { AddPartnerSummary } from "@ui/containers/pcrs/addPartner/addPartnerSummary";
 import { PCRPartnerType } from "@framework/constants";
 import { AcademicOrganisationStep } from "@ui/containers/pcrs/addPartner/academicOrganisationStep";
+import { ProjectLocationStep } from "@ui/containers/pcrs/addPartner/projectLocationStep";
 
-export type addPartnerStepNames = "roleAndOrganisationStep" | "academicOrganisationStep";
+export type addPartnerStepNames = "roleAndOrganisationStep" | "academicOrganisationStep" | "projectLocationStep";
 
-export const getAddPartnerWorkflow = (item: PCRItemForPartnerAdditionDto): IPCRWorkflow<PCRItemForPartnerAdditionDto, PCRPartnerAdditionItemDtoValidator> => {
+export const getAddPartnerWorkflow = (item: PCRItemForPartnerAdditionDto, step: number | undefined): IPCRWorkflow<PCRItemForPartnerAdditionDto, PCRPartnerAdditionItemDtoValidator> => {
   const workflow: IPCRWorkflow<PCRItemForPartnerAdditionDto, PCRPartnerAdditionItemDtoValidator> = {
     steps: [
       {
-        stepName: "roleAndOrganisationStep",
-        displayName: "New partner information",
-        stepNumber: 1,
+        stepName: "projectLocationStep",
+        displayName: "Project location",
+        stepNumber: 3,
         validation: val => val.pcr,
-        stepRender: RoleAndOrganisationStep
+        stepRender: ProjectLocationStep,
       },
     ],
     summary: {
@@ -26,7 +27,7 @@ export const getAddPartnerWorkflow = (item: PCRItemForPartnerAdditionDto): IPCRW
     }
   };
 
-  if (!item.projectRole || !item.partnerType) {
+  if (step === 1 || !item.projectRole || !item.partnerType) {
     workflow.steps.push({
       stepName: "roleAndOrganisationStep",
       displayName: "New partner information",
@@ -34,16 +35,15 @@ export const getAddPartnerWorkflow = (item: PCRItemForPartnerAdditionDto): IPCRW
       validation: val => val.pcr,
       stepRender: RoleAndOrganisationStep
     });
-  } else {
-    if (item.partnerType === PCRPartnerType.Research) {
-      workflow.steps.push({
-        stepName: "academicOrganisationStep",
-        displayName: "Organisation name",
-        stepNumber: 2,
-        validation: val => val.pcr,
-        stepRender: AcademicOrganisationStep
-      });
-    }
+  }
+  if (item.partnerType === PCRPartnerType.Research) {
+    workflow.steps.push({
+      stepName: "academicOrganisationStep",
+      displayName: "Organisation name",
+      stepNumber: 2,
+      validation: val => val.pcr,
+      stepRender: AcademicOrganisationStep
+    });
   }
 
   return workflow;

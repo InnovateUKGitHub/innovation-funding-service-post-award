@@ -359,6 +359,13 @@ export class PCRPartnerAdditionItemDtoValidator extends PCRBaseItemDtoValidator<
     if (this.model.status !== PCRItemStatus.Complete) return Validation.valid(this);
     return Validation.required(this, this.model.organisationName || null, "Enter an organisation name");
   }
+  private validateProjectCityRequired() {
+    if (!this.model.id) {
+      return Validation.valid(this);
+    }
+    if (this.model.status !== PCRItemStatus.Complete) return Validation.valid(this);
+    return Validation.required(this, this.model.projectCity || null, "Select a project city");
+  }
 
   projectRole = Validation.all(this,
     () => this.validateProjectRoleRequired(),
@@ -373,6 +380,15 @@ export class PCRPartnerAdditionItemDtoValidator extends PCRBaseItemDtoValidator<
   organisationName = Validation.all(this,
     () => this.validateOrganisationNameRequired(),
     () => !this.canEdit ? Validation.isUnchanged(this, this.model.organisationName, this.original && this.original.organisationName, "Organisation name cannot be changed") : Validation.valid(this),
+  );
+
+  projectCity = Validation.all(this,
+    () => this.validateProjectCityRequired(),
+    () => !this.canEdit || this.original && this.original.projectCity ? Validation.isUnchanged(this, this.model.projectCity, this.original && this.original.projectCity, "Project city cannot be changed") : Validation.valid(this),
+  );
+
+  projectPostcode = Validation.all(this,
+    () => !this.canEdit || this.original && this.original.projectPostcode ? Validation.isUnchanged(this, this.model.projectPostcode, this.original && this.original.projectPostcode, "Project postcode cannot be changed") : Validation.valid(this),
   );
 }
 
