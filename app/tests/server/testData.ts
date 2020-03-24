@@ -1,7 +1,7 @@
 // tslint:disable:no-duplicate-string
 import { DateTime } from "luxon";
 import * as Repositories from "@server/repositories";
-import * as Entites from "@framework/entities";
+import * as Entities from "@framework/entities";
 import { PartnerFinancialVirement, ProjectChangeRequestStatusChangeEntity } from "@framework/entities";
 import { range } from "@shared/range";
 import { ClaimStatus, IClientUser, PCRPartnerType, PCRProjectRole } from "@framework/types";
@@ -18,10 +18,10 @@ export class TestData {
     return Array.from({ length: no }, (_, i) => create(i + 1, i));
   }
 
-  public createCostCategory(update?: Partial<Entites.CostCategory>): Entites.CostCategory {
+  public createCostCategory(update?: Partial<Entities.CostCategory>): Entities.CostCategory {
     const seed = this.repositories.costCategories.Items.length + 1;
 
-    const newItem: Entites.CostCategory = {
+    const newItem: Entities.CostCategory = {
       id: `CostCat${seed}`,
       name: `Cost Category ${seed}`,
       displayOrder: seed,
@@ -79,51 +79,47 @@ export class TestData {
     return newItem;
   }
 
-  public createLeadPartner(project?: Repositories.ISalesforceProject, update?: (item: Repositories.ISalesforcePartner) => void) {
+  public createLeadPartner(project?: Repositories.ISalesforceProject, update?: (item: Entities.Partner) => void) {
     return this.createPartner(project, x => {
-      x.Acc_ProjectRole__c = "Lead";
+      x.projectRole = "Lead";
       if (update) update(x);
     });
   }
 
-  public createPartner(project?: Repositories.ISalesforceProject, update?: (item: Repositories.ISalesforcePartner) => void) {
+  public createPartner(project?: Repositories.ISalesforceProject, update?: (item: Entities.Partner) => void) {
     const seed = this.repositories.partners.Items.length + 1;
     project = project || this.createProject();
 
-    const newItem: Repositories.ISalesforcePartner = {
-      Id: `Partner${seed}`,
-      Acc_AccountId__r: {
-        Id: `AccountId${seed}`,
-        Name: `Participant Name ${seed}`
-      },
-      Acc_ParticipantType__c: "Accedemic",
-      Acc_ParticipantSize__c: "Large",
-      Acc_ProjectId__r: {
-        Id: project.Id,
-        Acc_CompetitionType__c: project.Acc_CompetitionType__c,
-      },
-      Acc_TotalParticipantCosts__c: 125000,
-      Acc_TotalApprovedCosts__c: 17474,
-      Acc_TotalPaidCosts__c: 25000,
-      Acc_Cap_Limit__c: 50,
-      Acc_Award_Rate__c: 50,
-      Acc_ForecastLastModifiedDate__c: "",
-      Acc_OrganisationType__c: "Industrial",
-      Acc_OverheadRate__c: 20,
-      Acc_ClaimsForReview__c: 0,
-      Acc_ClaimsOverdue__c: 0,
-      Acc_ClaimsUnderQuery__c: 0,
-      Acc_ProjectRole__c: "Unknown",
-      ProjectRoleName: "Unknown",
-      Acc_TotalCostsSubmitted__c: 0,
-      Acc_ParticipantStatus__c: "On Hold",
-      Acc_TotalFutureForecastsForParticipant__c: 0,
-      Acc_TrackingClaims__c: "",
-      Acc_AuditReportFrequency__c: "Never, for this project",
-      AuditReportFrequencyName: "Never, for this project",
-      Acc_TotalCostsAwarded__c: 100000,
-      Acc_TotalPrepayment__c: 500,
-      Acc_Postcode__c: "BS1 1AA",
+    const newItem: Entities.Partner = {
+      id: `Partner${seed}`,
+      accountId: `AccountId${seed}`,
+      name: `Participant Name ${seed}`,
+      participantType: "Accedemic",
+      participantSize: "Large",
+      projectId: project.Id,
+      competitionType: project.Acc_CompetitionType__c,
+      totalParticipantCosts: 125000,
+      totalApprovedCosts: 17474,
+      totalPaidCosts: 25000,
+      capLimit: 50,
+      awardRate: 50,
+      forecastLastModifiedDate: null,
+      organisationType: "Industrial",
+      overheadRate: 20,
+      claimsForReview: 0,
+      claimsOverdue: 0,
+      claimsUnderQuery: 0,
+      projectRole: "Unknown",
+      projectRoleName: "Unknown",
+      totalCostsSubmitted: 0,
+      participantStatus: "On Hold",
+      totalFutureForecastsForParticipant: 0,
+      trackingClaims: "",
+      auditReportFrequency: "Never, for this project",
+      auditReportFrequencyName: "Never, for this project",
+      totalCostsAwarded: 100000,
+      totalPrepayment: 500,
+      postcode: "BS1 1AA",
     };
 
     if (!!update) update(newItem);
@@ -144,7 +140,7 @@ export class TestData {
     }
   }
 
-  private createProjectContact(project: Repositories.ISalesforceProject, partner: Repositories.ISalesforcePartner | null, role?: Repositories.SalesforceRole, update?: (item: Repositories.ISalesforceProjectContact) => void) {
+  private createProjectContact(project: Repositories.ISalesforceProject, partner: Entities.Partner | null, role?: Repositories.SalesforceRole, update?: (item: Repositories.ISalesforceProjectContact) => void) {
 
     role = role || "Monitoring officer";
     const roleName = this.getRoleName(role);
@@ -154,7 +150,7 @@ export class TestData {
     const newItem: Repositories.ISalesforceProjectContact = {
       Id: `ProjectContact${seed}`,
       Acc_ProjectId__c: project.Id,
-      Acc_AccountId__c: partner && partner.Acc_AccountId__r && partner.Acc_AccountId__r.Id || undefined,
+      Acc_AccountId__c: partner && partner.accountId || undefined,
       Acc_EmailOfSFContact__c: `projectcontact${seed}@text.com`,
       Acc_ContactId__r: {
         Id: "Contact" + seed,
@@ -178,13 +174,13 @@ export class TestData {
     item.Acc_ContactId__r.Email = this.getCurrentUser().email;
   }
 
-  public createFinanceContact(project?: Repositories.ISalesforceProject, partner?: Repositories.ISalesforcePartner, update?: (item: Repositories.ISalesforceProjectContact) => void) {
+  public createFinanceContact(project?: Repositories.ISalesforceProject, partner?: Entities.Partner, update?: (item: Repositories.ISalesforceProjectContact) => void) {
     project = project || this.createProject();
     partner = partner || this.createPartner(project);
     return this.createProjectContact(project, partner, "Finance contact", update);
   }
 
-  public createCurrentUserAsFinanceContact(project?: Repositories.ISalesforceProject, partner?: Repositories.ISalesforcePartner, update?: (item: Repositories.ISalesforceProjectContact) => void) {
+  public createCurrentUserAsFinanceContact(project?: Repositories.ISalesforceProject, partner?: Entities.Partner, update?: (item: Repositories.ISalesforceProjectContact) => void) {
     return this.createFinanceContact(project, partner, item => {
       this.assignToCurrentUser(item);
       if (update) update(item);
@@ -204,13 +200,13 @@ export class TestData {
   }
 
   // tslint:disable-next-line
-  public createProjectManager(project?: Repositories.ISalesforceProject, partner?: Repositories.ISalesforcePartner, update?: (item: Repositories.ISalesforceProjectContact) => void) {
+  public createProjectManager(project?: Repositories.ISalesforceProject, partner?: Entities.Partner, update?: (item: Repositories.ISalesforceProjectContact) => void) {
     project = project || this.createProject();
     partner = partner || this.createPartner(project);
     return this.createProjectContact(project, partner, "Project Manager", update);
   }
 
-  public createCurrentUserAsProjectManager(project?: Repositories.ISalesforceProject, partner?: Repositories.ISalesforcePartner, update?: (item: Repositories.ISalesforceProjectContact) => void) {
+  public createCurrentUserAsProjectManager(project?: Repositories.ISalesforceProject, partner?: Entities.Partner, update?: (item: Repositories.ISalesforceProjectContact) => void) {
     return this.createProjectManager(project, partner, item => {
       this.assignToCurrentUser(item);
       if (update) update(item);
@@ -295,7 +291,7 @@ export class TestData {
     return response;
   }
 
-  public createMonitoringReportStatusChange(header?: Repositories.ISalesforceMonitoringReportHeader, partner?: Repositories.ISalesforcePartner): Repositories.ISalesforceMonitoringReportStatusChange {
+  public createMonitoringReportStatusChange(header?: Repositories.ISalesforceMonitoringReportHeader, partner?: Entities.Partner): Repositories.ISalesforceMonitoringReportStatusChange {
     header = header || this.createMonitoringReportHeader();
 
     const seed = this.repositories.monitoringReportStatusChange.Items.length + 1;
@@ -313,7 +309,7 @@ export class TestData {
     return response;
   }
 
-  public createClaim(partner?: Repositories.ISalesforcePartner, periodId?: number, update?: (item: Repositories.ISalesforceClaim) => void): Repositories.ISalesforceClaim {
+  public createClaim(partner?: Entities.Partner, periodId?: number, update?: (item: Repositories.ISalesforceClaim) => void): Repositories.ISalesforceClaim {
 
     partner = partner || this.createPartner();
     periodId = periodId || 1;
@@ -330,11 +326,13 @@ export class TestData {
       Id: id,
       Acc_ProjectPeriodNumber__c: periodId,
       Acc_ProjectParticipant__r: {
-        Id: partner.Id,
+        Id: partner.id,
         Acc_OverheadRate__c: 0,
-        Acc_ProjectId__c: partner.Acc_ProjectId__r.Id,
-        Acc_ProjectRole__c: partner.Acc_ProjectRole__c,
-        Acc_AccountId__r: partner.Acc_AccountId__r
+        Acc_ProjectId__c: partner.projectId,
+        Acc_ProjectRole__c: partner.projectRole,
+        Acc_AccountId__r: {
+          Name: partner.name
+        }
       },
       Acc_ProjectPeriodStartDate__c: "2018-01-02",
       Acc_ProjectPeriodEndDate__c: "2018-03-04",
@@ -364,7 +362,7 @@ export class TestData {
 
   }
 
-  public createClaimDetail(project?: Repositories.ISalesforceProject, costCategory?: Entites.CostCategory, partner?: Repositories.ISalesforcePartner, periodId?: number, update?: (item: Repositories.ISalesforceClaimDetails) => void): Repositories.ISalesforceClaimDetails {
+  public createClaimDetail(project?: Repositories.ISalesforceProject, costCategory?: Entities.CostCategory, partner?: Entities.Partner, periodId?: number, update?: (item: Repositories.ISalesforceClaimDetails) => void): Repositories.ISalesforceClaimDetails {
 
     costCategory = costCategory || this.createCostCategory();
     partner = partner || this.createPartner();
@@ -372,11 +370,11 @@ export class TestData {
     periodId = periodId || 1;
 
     const newItem: Repositories.ISalesforceClaimDetails = {
-      Id: `${partner.Id}_${periodId}_${costCategory.id}`,
+      Id: `${partner.id}_${periodId}_${costCategory.id}`,
       Acc_CostCategory__c: costCategory.id,
       Acc_ProjectPeriodNumber__c: periodId,
       Acc_ProjectParticipant__r: {
-        Id: partner.Id,
+        Id: partner.id,
         Acc_ProjectId__c: project.Id
       },
       Acc_PeriodCostCategoryTotal__c: 1000,
@@ -394,8 +392,8 @@ export class TestData {
   }
 
   public createClaimLineItem(
-    costCategory?: Entites.CostCategory,
-    partner?: Repositories.ISalesforcePartner,
+    costCategory?: Entities.CostCategory,
+    partner?: Entities.Partner,
     periodId?: number,
     update?: (item: Partial<Repositories.ISalesforceClaimLineItem>) => void
   ): Repositories.ISalesforceClaimLineItem {
@@ -409,7 +407,7 @@ export class TestData {
       Id: `ClaimLineItem-${seed}`,
       Acc_CostCategory__c: costCategory.id,
       Acc_ProjectPeriodNumber__c: periodId,
-      Acc_ProjectParticipant__c: partner.Id,
+      Acc_ProjectParticipant__c: partner.id,
       Acc_LineItemCost__c: 200,
       Acc_LineItemDescription__c: "We hired a person to do a thing",
       RecordTypeId: "Claims Line Item"
@@ -445,8 +443,8 @@ export class TestData {
   }
 
   public createProfileDetail(
-    costCategory?: Entites.CostCategory,
-    partner?: Repositories.ISalesforcePartner,
+    costCategory?: Entities.CostCategory,
+    partner?: Entities.Partner,
     periodId?: number,
     update?: (item: Repositories.ISalesforceProfileDetails) => void
   ): Repositories.ISalesforceProfileDetails {
@@ -458,7 +456,7 @@ export class TestData {
     const newItem: Repositories.ISalesforceProfileDetails = {
       Id: `ProfileDetailsItem-${seed}`,
       Acc_CostCategory__c: costCategory.id,
-      Acc_ProjectParticipant__c: partner.Id,
+      Acc_ProjectParticipant__c: partner.id,
       Acc_ProjectPeriodNumber__c: periodId,
       Acc_LatestForecastCost__c: 1000,
       Acc_ProjectPeriodStartDate__c: "2018-01-02",
@@ -512,8 +510,8 @@ export class TestData {
   }
 
   public createProfileTotalCostCategory(
-    costCategory?: Entites.CostCategory,
-    partner?: Repositories.ISalesforcePartner,
+    costCategory?: Entities.CostCategory,
+    partner?: Entities.Partner,
     golCost?: number,
     update?: (item: Repositories.ISalesforceProfileTotalCostCategory) => void
   ): Repositories.ISalesforceProfileTotalCostCategory {
@@ -523,7 +521,7 @@ export class TestData {
 
     const newItem: Repositories.ISalesforceProfileTotalCostCategory = {
       Acc_CostCategory__c: costCategory.id,
-      Acc_ProjectParticipant__c: partner.Id,
+      Acc_ProjectParticipant__c: partner.id,
       Acc_CostCategoryGOLCost__c: golCost,
       Id: this.repositories.profileTotalCostCategory.Items.length + 1 + ""
     };
@@ -538,7 +536,7 @@ export class TestData {
   }
 
   public createProfileTotalPeriod(
-    partner?: Repositories.ISalesforcePartner,
+    partner?: Entities.Partner,
     periodId?: number,
     update?: (item: Repositories.ISalesforceProfileTotalPeriod) => void
   ): Repositories.ISalesforceProfileTotalPeriod {
@@ -546,7 +544,7 @@ export class TestData {
 
     const newItem: Repositories.ISalesforceProfileTotalPeriod = {
       Acc_PeriodLatestForecastCost__c: 100,
-      Acc_ProjectParticipant__c: partner.Id,
+      Acc_ProjectParticipant__c: partner.id,
       Acc_ProjectPeriodNumber__c: periodId || 1,
       LastModifiedDate: new Date().toISOString()
     };
@@ -564,11 +562,11 @@ export class TestData {
     return new TestFileWrapper(fileName, content);
   }
 
-  public createRecordType(update?: Partial<Entites.RecordType>) {
+  public createRecordType(update?: Partial<Entities.RecordType>) {
 
     const seed = this.repositories.recordTypes.Items.length + 1;
 
-    const newItem: Entites.RecordType = {
+    const newItem: Entities.RecordType = {
       id: "RecordType " + seed,
       type: "Type " + seed,
       parent: "Parent " + seed,
@@ -595,12 +593,12 @@ export class TestData {
     });
   }
 
-  public createPCR(project?: Repositories.ISalesforceProject, update?: Partial<Entites.ProjectChangeRequestEntity>) {
+  public createPCR(project?: Repositories.ISalesforceProject, update?: Partial<Entities.ProjectChangeRequestEntity>) {
     const seed = this.repositories.projectChangeRequests.Items.length + 1;
 
     project = project || this.createProject();
 
-    const newItem: Entites.ProjectChangeRequestEntity = {
+    const newItem: Entities.ProjectChangeRequestEntity = {
       id: `PCR_${seed}`,
       projectId: project.Id,
       comments: "",
@@ -624,7 +622,7 @@ export class TestData {
     return newItem;
   }
 
-  public createPCRItem(pcr?: Entites.ProjectChangeRequestEntity, recordType?: Entites.RecordType, update?: Partial<Entites.ProjectChangeRequestItemEntity>) {
+  public createPCRItem(pcr?: Entities.ProjectChangeRequestEntity, recordType?: Entities.RecordType, update?: Partial<Entities.ProjectChangeRequestItemEntity>) {
     const seed = this.repositories.projectChangeRequests.Items.reduce((c, x) => c + x.items.length, 0) + 1;
     pcr = pcr || this.createPCR();
 
@@ -635,7 +633,7 @@ export class TestData {
       throw new Error("Unable to create pcr item as pcr already has all the record types");
     }
 
-    const newItem: Entites.ProjectChangeRequestItemEntity = {
+    const newItem: Entities.ProjectChangeRequestItemEntity = {
       id: `PCR_Item_${seed}`,
       pcrId: pcr.id,
       accountName: "",
@@ -669,7 +667,7 @@ export class TestData {
     return newItem;
   }
 
-  public createProjectChangeRequestStatusChange(projectChangeRequest: Entites.ProjectChangeRequestEntity, participantVisibility: boolean): ProjectChangeRequestStatusChangeEntity {
+  public createProjectChangeRequestStatusChange(projectChangeRequest: Entities.ProjectChangeRequestEntity, participantVisibility: boolean): ProjectChangeRequestStatusChangeEntity {
     const seed = this.repositories.projectChangeRequestStatusChange.Items.length + 1;
 
     const response: ProjectChangeRequestStatusChangeEntity = {
@@ -688,12 +686,12 @@ export class TestData {
     return response;
   }
 
-  public createFinancialVirement(pcrItem: Entites.ProjectChangeRequestItemEntity, partner: Repositories.ISalesforcePartner, update?: Partial<PartnerFinancialVirement>): PartnerFinancialVirement {
+  public createFinancialVirement(pcrItem: Entities.ProjectChangeRequestItemEntity, partner: Entities.Partner, update?: Partial<PartnerFinancialVirement>): PartnerFinancialVirement {
     const seed = this.repositories.financialVirements.Items.length + 1;
     const response = {
       id: `FinancialVirement: ${seed}`,
       pcrItemId: pcrItem.id,
-      partnerId: partner.Id,
+      partnerId: partner.id,
       originalFundingLevel: 100,
       newFundingLevel: 100,
       virements:[],

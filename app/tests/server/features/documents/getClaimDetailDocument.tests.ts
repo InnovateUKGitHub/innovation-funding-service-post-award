@@ -11,7 +11,7 @@ describe("GetClaimDetailDocumentQuery", () => {
 
     const document = context.testData.createDocument(claimDetail.Id, "cat", "jpg", "","file content");
 
-    const query = new GetClaimDetailDocumentQuery({ projectId: project.Id, partnerId: partner.Id, periodId: claimDetail.Acc_ProjectPeriodNumber__c, costCategoryId: claimDetail.Acc_CostCategory__c }, document.Id);
+    const query = new GetClaimDetailDocumentQuery({ projectId: project.Id, partnerId: partner.id, periodId: claimDetail.Acc_ProjectPeriodNumber__c, costCategoryId: claimDetail.Acc_CostCategory__c }, document.Id);
     const result = await context.runQuery(query).then(x => x!);
 
     expect(result).not.toBeNull();
@@ -27,7 +27,7 @@ describe("GetClaimDetailDocumentQuery", () => {
     const partner = context.testData.createPartner(project);
     const claimDetail = context.testData.createClaimDetail(project, undefined, partner, 1);
 
-    const query = new GetClaimDetailDocumentQuery({ projectId: project.Id, partnerId: partner.Id, periodId: claimDetail.Acc_ProjectPeriodNumber__c, costCategoryId: claimDetail.Acc_CostCategory__c }, "FAKE ID");
+    const query = new GetClaimDetailDocumentQuery({ projectId: project.Id, partnerId: partner.id, periodId: claimDetail.Acc_ProjectPeriodNumber__c, costCategoryId: claimDetail.Acc_CostCategory__c }, "FAKE ID");
     const result = await context.runQuery(query);
 
     expect(result).toBe(null);
@@ -45,7 +45,7 @@ describe("GetClaimDetailDocumentQuery", () => {
 
     const document = context.testData.createDocument(claimDetail1.Id);
 
-    const query = new GetClaimDetailDocumentQuery({ projectId: project2.Id, partnerId: partner2.Id, periodId: claimDetail2.Acc_ProjectPeriodNumber__c, costCategoryId: claimDetail2.Acc_CostCategory__c }, document.Id);
+    const query = new GetClaimDetailDocumentQuery({ projectId: project2.Id, partnerId: partner2.id, periodId: claimDetail2.Acc_ProjectPeriodNumber__c, costCategoryId: claimDetail2.Acc_CostCategory__c }, document.Id);
     const result = await context.runQuery(query);
 
     expect(result).toBe(null);
@@ -62,7 +62,7 @@ describe("GetClaimDetailDocumentQuery", () => {
 
     const document = context.testData.createDocument(claimDetail1.Id);
 
-    const query = new GetClaimDetailDocumentQuery({ projectId: project.Id, partnerId: partner2.Id, periodId: claimDetail2.Acc_ProjectPeriodNumber__c, costCategoryId: claimDetail2.Acc_CostCategory__c }, document.Id);
+    const query = new GetClaimDetailDocumentQuery({ projectId: project.Id, partnerId: partner2.id, periodId: claimDetail2.Acc_ProjectPeriodNumber__c, costCategoryId: claimDetail2.Acc_CostCategory__c }, document.Id);
     const result = await context.runQuery(query);
 
     expect(result).toBe(null);
@@ -77,7 +77,7 @@ describe("GetClaimDetailDocumentQuery", () => {
 
     const document = context.testData.createDocument(claimDetail1.Id);
 
-    const query = new GetClaimDetailDocumentQuery({ projectId: project.Id, partnerId: partner.Id, periodId: claimDetail2.Acc_ProjectPeriodNumber__c, costCategoryId: claimDetail2.Acc_CostCategory__c }, document.Id);
+    const query = new GetClaimDetailDocumentQuery({ projectId: project.Id, partnerId: partner.id, periodId: claimDetail2.Acc_ProjectPeriodNumber__c, costCategoryId: claimDetail2.Acc_CostCategory__c }, document.Id);
     const result = await context.runQuery(query);
 
     expect(result).toBe(null);
@@ -93,7 +93,7 @@ describe("GetClaimDetailDocumentQuery", () => {
 
       const document = context.testData.createDocument(claimDetail.Id);
 
-      const query = new GetClaimDetailDocumentQuery({ projectId: project.Id, partnerId: partner.Id, periodId: claimDetail.Acc_ProjectPeriodNumber__c, costCategoryId: claimDetail.Acc_CostCategory__c }, document.Id);
+      const query = new GetClaimDetailDocumentQuery({ projectId: project.Id, partnerId: partner.id, periodId: claimDetail.Acc_ProjectPeriodNumber__c, costCategoryId: claimDetail.Acc_CostCategory__c }, document.Id);
 
       const auth = new Authorisation({ [project.Id]: { projectRoles: ProjectRole.MonitoringOfficer, partnerRoles: {} } });
       expect(await context.runAccessControl(auth, query)).toBe(true);
@@ -107,9 +107,9 @@ describe("GetClaimDetailDocumentQuery", () => {
       const claimDetail = context.testData.createClaimDetail(project, undefined, partner, 1);
       const document = context.testData.createDocument(claimDetail.Id);
 
-      const query = new GetClaimDetailDocumentQuery({ projectId: project.Id, partnerId: partner.Id, periodId: claimDetail.Acc_ProjectPeriodNumber__c, costCategoryId: claimDetail.Acc_CostCategory__c }, document.Id);
+      const query = new GetClaimDetailDocumentQuery({ projectId: project.Id, partnerId: partner.id, periodId: claimDetail.Acc_ProjectPeriodNumber__c, costCategoryId: claimDetail.Acc_CostCategory__c }, document.Id);
 
-      const auth = new Authorisation({ [project.Id]: { projectRoles: ProjectRole.ProjectManager, partnerRoles: { [partner.Id]: ProjectRole.ProjectManager } } });
+      const auth = new Authorisation({ [project.Id]: { projectRoles: ProjectRole.ProjectManager, partnerRoles: { [partner.id]: ProjectRole.ProjectManager } } });
       expect(await context.runAccessControl(auth, query)).toBe(true);
     });
 
@@ -122,9 +122,9 @@ describe("GetClaimDetailDocumentQuery", () => {
       const claimDetail = context.testData.createClaimDetail(project, undefined, partner1, 1);
       const document = context.testData.createDocument(claimDetail.Id);
 
-      const query = new GetClaimDetailDocumentQuery({ projectId: project.Id, partnerId: partner1.Id, periodId: claimDetail.Acc_ProjectPeriodNumber__c, costCategoryId: claimDetail.Acc_CostCategory__c }, document.Id);
+      const query = new GetClaimDetailDocumentQuery({ projectId: project.Id, partnerId: partner1.id, periodId: claimDetail.Acc_ProjectPeriodNumber__c, costCategoryId: claimDetail.Acc_CostCategory__c }, document.Id);
 
-      const auth = new Authorisation({ [project.Id]: { projectRoles: ProjectRole.ProjectManager, partnerRoles: { [partner2.Id] : ProjectRole.ProjectManager } } });
+      const auth = new Authorisation({ [project.Id]: { projectRoles: ProjectRole.ProjectManager, partnerRoles: { [partner2.id] : ProjectRole.ProjectManager } } });
       expect(await context.runAccessControl(auth, query)).toBe(false);
     });
 
@@ -136,9 +136,9 @@ describe("GetClaimDetailDocumentQuery", () => {
       const claimDetail = context.testData.createClaimDetail(project, undefined, partner, 1);
       const document = context.testData.createDocument(claimDetail.Id);
 
-      const query = new GetClaimDetailDocumentQuery({ projectId: project.Id, partnerId: partner.Id, periodId: claimDetail.Acc_ProjectPeriodNumber__c, costCategoryId: claimDetail.Acc_CostCategory__c }, document.Id);
+      const query = new GetClaimDetailDocumentQuery({ projectId: project.Id, partnerId: partner.id, periodId: claimDetail.Acc_ProjectPeriodNumber__c, costCategoryId: claimDetail.Acc_CostCategory__c }, document.Id);
 
-      const auth = new Authorisation({ [project.Id]: { projectRoles: ProjectRole.FinancialContact, partnerRoles: { [partner.Id]: ProjectRole.FinancialContact } } });
+      const auth = new Authorisation({ [project.Id]: { projectRoles: ProjectRole.FinancialContact, partnerRoles: { [partner.id]: ProjectRole.FinancialContact } } });
       expect(await context.runAccessControl(auth, query)).toBe(true);
     });
 
@@ -151,9 +151,9 @@ describe("GetClaimDetailDocumentQuery", () => {
       const claimDetail = context.testData.createClaimDetail(project, undefined, partner, 1);
       const document = context.testData.createDocument(claimDetail.Id);
 
-      const query = new GetClaimDetailDocumentQuery({ projectId: project.Id, partnerId: partner.Id, periodId: claimDetail.Acc_ProjectPeriodNumber__c, costCategoryId: claimDetail.Acc_CostCategory__c }, document.Id);
+      const query = new GetClaimDetailDocumentQuery({ projectId: project.Id, partnerId: partner.id, periodId: claimDetail.Acc_ProjectPeriodNumber__c, costCategoryId: claimDetail.Acc_CostCategory__c }, document.Id);
 
-      const auth = new Authorisation({ [project.Id]: { projectRoles: ProjectRole.FinancialContact, partnerRoles: { [partner2.Id]: ProjectRole.FinancialContact } } });
+      const auth = new Authorisation({ [project.Id]: { projectRoles: ProjectRole.FinancialContact, partnerRoles: { [partner2.id]: ProjectRole.FinancialContact } } });
       expect(await context.runAccessControl(auth, query)).toBe(false);
     });
 

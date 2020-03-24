@@ -14,7 +14,7 @@ describe("GetClaim", () => {
 
     testData.createProfileTotalPeriod(partner, period1);
     const claim  = testData.createClaim(partner, period1);
-    const query  = new GetClaim(partner.Id, period1);
+    const query  = new GetClaim(partner.id, period1);
     const result = await context.runQuery(query);
 
     expect(result.id).toBe(claim.Id);
@@ -44,7 +44,7 @@ describe("GetClaim", () => {
 
     testData.createProfileTotalPeriod(partner, period);
     testData.createClaim(partner, period, x => x.LastModifiedDate = lastModifiedISO);
-    const query  = new GetClaim(partner.Id, period);
+    const query  = new GetClaim(partner.id, period);
     const result = await context.runQuery(query);
 
     expect(result.lastModifiedDate).toEqual(lastModifiedDate);
@@ -58,7 +58,7 @@ describe("GetClaim", () => {
 
     testData.createProfileTotalPeriod(partner, period);
     const claim  = testData.createClaim(partner, period, x => x.Acc_ApprovedDate__c = "2018-02-21");
-    const query  = new GetClaim(partner.Id, period);
+    const query  = new GetClaim(partner.id, period);
     const result = await context.runQuery(query);
 
     expect(result.approvedDate).toEqual(context.clock.parse(claim.Acc_ApprovedDate__c!, SALESFORCE_DATE_FORMAT));
@@ -72,7 +72,7 @@ describe("GetClaim", () => {
 
     testData.createProfileTotalPeriod(partner, period);
     const claim  = testData.createClaim(partner, period, x => x.Acc_PaidDate__c = "2018-02-21");
-    const query  = new GetClaim(partner.Id, period);
+    const query  = new GetClaim(partner.id, period);
     const result = await context.runQuery(query);
 
     expect(result.paidDate).toEqual(context.clock.parse(claim.Acc_PaidDate__c!, SALESFORCE_DATE_FORMAT));
@@ -86,7 +86,7 @@ describe("GetClaim", () => {
 
     testData.createProfileTotalPeriod(partner, period);
     testData.createClaim(partner, period, x => x.Acc_ClaimStatus__c = ClaimStatus.APPROVED);
-    const query  = new GetClaim(partner.Id, period);
+    const query  = new GetClaim(partner.id, period);
     const result = await context.runQuery(query);
 
     expect(result.isApproved).toBe(true);
@@ -100,7 +100,7 @@ describe("GetClaim", () => {
 
     testData.createProfileTotalPeriod(partner, period);
     testData.createClaim(partner, period, x => x.Acc_ClaimStatus__c = ClaimStatus.PAID);
-    const query  = new GetClaim(partner.Id, period);
+    const query  = new GetClaim(partner.id, period);
     const result = await context.runQuery(query);
 
     expect(result.isApproved).toBe(true);
@@ -114,7 +114,7 @@ describe("GetClaim", () => {
 
     testData.createProfileTotalPeriod(partner, period);
     testData.createClaim(partner, period, x => x.Acc_ClaimStatus__c = ClaimStatus.DRAFT);
-    const query  = new GetClaim(partner.Id, period);
+    const query  = new GetClaim(partner.id, period);
     const result = await context.runQuery(query);
 
     expect(result.allowIarEdit).toBe(true);
@@ -128,7 +128,7 @@ describe("GetClaim", () => {
 
     testData.createProfileTotalPeriod(partner, period);
     testData.createClaim(partner, period, x => x.Acc_ClaimStatus__c = ClaimStatus.SUBMITTED);
-    const query  = new GetClaim(partner.Id, period);
+    const query  = new GetClaim(partner.id, period);
     const result = await context.runQuery(query);
 
     expect(result.allowIarEdit).toBe(true);
@@ -142,7 +142,7 @@ describe("GetClaim", () => {
 
     testData.createProfileTotalPeriod(partner, period);
     testData.createClaim(partner, period, x => x.Acc_ClaimStatus__c = ClaimStatus.MO_QUERIED);
-    const query  = new GetClaim(partner.Id, period);
+    const query  = new GetClaim(partner.id, period);
     const result = await context.runQuery(query);
 
     expect(result.allowIarEdit).toBe(true);
@@ -156,7 +156,7 @@ describe("GetClaim", () => {
 
     testData.createProfileTotalPeriod(partner, period);
     testData.createClaim(partner, period, x => x.Acc_ClaimStatus__c = ClaimStatus.AWAITING_IAR);
-    const query  = new GetClaim(partner.Id, period);
+    const query  = new GetClaim(partner.id, period);
     const result = await context.runQuery(query);
 
     expect(result.allowIarEdit).toBe(true);
@@ -170,7 +170,7 @@ describe("GetClaim", () => {
 
     testData.createProfileTotalPeriod(partner, period);
     testData.createClaim(partner, period, x => x.Acc_ClaimStatus__c = ClaimStatus.INNOVATE_QUERIED);
-    const query  = new GetClaim(partner.Id, period);
+    const query  = new GetClaim(partner.id, period);
     const result = await context.runQuery(query);
 
     expect(result.allowIarEdit).toBe(true);
@@ -184,7 +184,7 @@ describe("GetClaim", () => {
 
     testData.createProfileTotalPeriod(partner, period);
     testData.createClaim(partner, period, x => x.Acc_ClaimStatus__c = ClaimStatus.UNKNOWN);
-    const query  = new GetClaim(partner.Id, period);
+    const query  = new GetClaim(partner.id, period);
     const result = await context.runQuery(query);
 
     expect(result.allowIarEdit).toBe(false);
@@ -198,7 +198,7 @@ describe("GetClaim", () => {
 
     testData.createClaim(partner, period);
     const forecast = testData.createProfileTotalPeriod(partner, period);
-    const query    = new GetClaim(partner.Id, period);
+    const query    = new GetClaim(partner.id, period);
     const result   = await context.runQuery(query);
 
     expect(result.forecastCost).toEqual(forecast.Acc_PeriodLatestForecastCost__c);
@@ -212,7 +212,7 @@ describe("GetClaim", () => {
 
     testData.createClaim(partner, period);
     testData.createProfileTotalPeriod(partner, period, x => x.Acc_PeriodLatestForecastCost__c = null!);
-    const query  = new GetClaim(partner.Id, period);
+    const query  = new GetClaim(partner.id, period);
     const result = await context.runQuery(query);
 
     expect(result.forecastCost).toEqual(0);

@@ -12,7 +12,7 @@ describe("DeleteClaimDocumentCommand", () => {
 
         const claimKey = {
             projectId: project.Id,
-            partnerId: partner.Id,
+            partnerId: partner.id,
             periodId: 1
         };
 
@@ -32,7 +32,7 @@ describe("DeleteClaimDocumentCommand", () => {
 
             const claimKey = {
                 projectId: project.Id,
-                partnerId: partner.Id,
+                partnerId: partner.id,
                 periodId: 1
             };
             const command = new DeleteClaimDocumentCommand(document.ContentDocumentId, claimKey);
@@ -46,7 +46,7 @@ describe("DeleteClaimDocumentCommand", () => {
             const auth = new Authorisation({
                 [project.Id]: {
                     projectRoles: ProjectRole.FinancialContact,
-                    partnerRoles: {[partner.Id]: ProjectRole.FinancialContact}
+                    partnerRoles: {[partner.id]: ProjectRole.FinancialContact}
                 }
             });
 
@@ -59,7 +59,7 @@ describe("DeleteClaimDocumentCommand", () => {
             const auth = new Authorisation({
                 [project.Id]: {
                     projectRoles: ProjectRole.MonitoringOfficer,
-                    partnerRoles: {[partner.Id]: ProjectRole.Unknown}
+                    partnerRoles: {[partner.id]: ProjectRole.Unknown}
                 }
             });
 
@@ -72,7 +72,7 @@ describe("DeleteClaimDocumentCommand", () => {
             const auth = new Authorisation({
                 [project.Id]: {
                     projectRoles: ProjectRole.ProjectManager | ProjectRole.FinancialContact,
-                    partnerRoles: {[partner.Id]: ProjectRole.ProjectManager | ProjectRole.Unknown}
+                    partnerRoles: {[partner.id]: ProjectRole.ProjectManager | ProjectRole.Unknown}
                 }
             });
 

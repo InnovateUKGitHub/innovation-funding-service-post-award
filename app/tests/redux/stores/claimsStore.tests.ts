@@ -120,7 +120,7 @@ describe("claims by partner", () => {
       const costCategoriesStore = new CostCategoriesStore(partnerStore, context.testStore.getState, context.testStore.dispatch);
       const claimDocumemtsStore = new ClaimDocumentsStore(partnerStore, context.testStore.getState, context.testStore.dispatch);
       const claimsStore = new ClaimsStore(costSummariesStore, costCategoriesStore, claimDocumemtsStore, context.testStore.getState, context.testStore.dispatch);
-      const foundClaims = claimsStore.getAllClaimsForPartner(partner.Id).data!;
+      const foundClaims = claimsStore.getAllClaimsForPartner(partner.id).data!;
       expect(foundClaims[0].id).toEqual(claim.Id);
     });
 
@@ -154,7 +154,7 @@ describe("claims by partner", () => {
       const costCategoriesStore = new CostCategoriesStore(partnerStore, context.testStore.getState, context.testStore.dispatch);
       const claimDocumemtsStore = new ClaimDocumentsStore(partnerStore, context.testStore.getState, context.testStore.dispatch);
       const claimsStore = new ClaimsStore(costSummariesStore, costCategoriesStore, claimDocumemtsStore, context.testStore.getState, context.testStore.dispatch);
-      const foundClaim = claimsStore.getActiveClaimForPartner(partner.Id).data!;
+      const foundClaim = claimsStore.getActiveClaimForPartner(partner.id).data!;
       expect(foundClaim.id).toEqual(draftClaim.Id);
     });
 
@@ -169,7 +169,7 @@ describe("claims by partner", () => {
       const costCategoriesStore = new CostCategoriesStore(partnerStore, context.testStore.getState, context.testStore.dispatch);
       const claimDocumemtsStore = new ClaimDocumentsStore(partnerStore, context.testStore.getState, context.testStore.dispatch);
       const claimsStore = new ClaimsStore(costSummariesStore, costCategoriesStore, claimDocumemtsStore, context.testStore.getState, context.testStore.dispatch);
-      const foundClaim = claimsStore.getActiveClaimForPartner(partner.Id).data!;
+      const foundClaim = claimsStore.getActiveClaimForPartner(partner.id).data!;
       expect(foundClaim).toBeNull();
     });
   });
@@ -187,7 +187,7 @@ describe("claims by partner", () => {
       const costCategoriesStore = new CostCategoriesStore(partnerStore, context.testStore.getState, context.testStore.dispatch);
       const claimDocumemtsStore = new ClaimDocumentsStore(partnerStore, context.testStore.getState, context.testStore.dispatch);
       const claimsStore = new ClaimsStore(costSummariesStore, costCategoriesStore, claimDocumemtsStore, context.testStore.getState, context.testStore.dispatch);
-      const foundClaims = claimsStore.getInactiveClaimsForPartner(partner.Id).data!;
+      const foundClaims = claimsStore.getInactiveClaimsForPartner(partner.id).data!;
       expect(foundClaims).toHaveLength(1);
       expect(foundClaims[0].id).toEqual(approvedClaim.Id);
     });
@@ -203,7 +203,7 @@ describe("claims by partner", () => {
       const costCategoriesStore = new CostCategoriesStore(partnerStore, context.testStore.getState, context.testStore.dispatch);
       const claimDocumemtsStore = new ClaimDocumentsStore(partnerStore, context.testStore.getState, context.testStore.dispatch);
       const claimsStore = new ClaimsStore(costSummariesStore, costCategoriesStore, claimDocumemtsStore, context.testStore.getState, context.testStore.dispatch);
-      const foundClaims = claimsStore.getInactiveClaimsForPartner(partner.Id).data!;
+      const foundClaims = claimsStore.getInactiveClaimsForPartner(partner.id).data!;
       expect(foundClaims).toEqual([]);
     });
   });
