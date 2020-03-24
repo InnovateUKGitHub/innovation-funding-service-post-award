@@ -19,6 +19,12 @@ export enum PCRProjectRole {
   Collaborator = 20,
 }
 
+export enum PCRContactRole {
+  Unknown = 0,
+  ProjectManager = 10,
+  FinanceContact = 20,
+}
+
 export enum PCRPartnerType {
   Unknown = 0,
   Business = 10,

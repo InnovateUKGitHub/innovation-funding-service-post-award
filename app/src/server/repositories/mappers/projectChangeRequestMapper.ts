@@ -4,7 +4,7 @@ import {
   ProjectChangeRequestItemEntity
 } from "@framework/entities";
 import { ISalesforcePCR } from "../projectChangeRequestRepository";
-import { PCRItemStatus, PCRParticipantSize, PCRPartnerType, PCRProjectRole, PCRStatus } from "@framework/constants";
+import { PCRContactRole, PCRItemStatus, PCRParticipantSize, PCRPartnerType, PCRProjectRole, PCRStatus } from "@framework/constants";
 
 export const mapToPCRStatus = ((status: string) => {
   switch (status) {
@@ -44,7 +44,7 @@ export class PcrProjectRoleMapper {
     projectLead: "Project Lead",
   };
 
-  public mapFromSalesforcePCRProjectRole = ((role: string | null) => {
+  public mapFromSalesforcePCRProjectRole = ((role: string | null): PCRProjectRole => {
     switch (role) {
       case this.roles.collaborator: return PCRProjectRole.Collaborator;
       case this.roles.projectLead: return PCRProjectRole.ProjectLead;
@@ -56,6 +56,29 @@ export class PcrProjectRoleMapper {
     switch (role) {
       case PCRProjectRole.Collaborator: return this.roles.collaborator;
       case PCRProjectRole.ProjectLead: return this.roles.projectLead;
+      default: return null;
+    }
+  });
+}
+
+export class PcrContactRoleMapper {
+  private roles = {
+    projectManager: "Project Manager",
+    financeContact: "Finance Contact",
+  };
+
+  public mapFromSalesforcePCRProjectRole = ((role: string | null): PCRContactRole => {
+    switch (role) {
+      case this.roles.projectManager: return PCRContactRole.ProjectManager;
+      case this.roles.financeContact: return PCRContactRole.FinanceContact;
+      default: return PCRContactRole.Unknown;
+    }
+  });
+
+  public mapToSalesforcePCRProjectRole = ((role: PCRContactRole | undefined) => {
+    switch (role) {
+      case PCRContactRole.ProjectManager: return this.roles.projectManager;
+      case PCRContactRole.FinanceContact: return this.roles.financeContact;
       default: return null;
     }
   });
@@ -167,6 +190,11 @@ export class SalesforcePCRMapper extends SalesforceBaseMapper<ISalesforcePCR[], 
       partnerNameSnapshot: pcrItem.Acc_ExistingPartnerName__c,
       shortName: pcrItem.Acc_Nickname__c || "",
       // add partner fields
+      contact1ProjectRole: new PcrContactRoleMapper().mapFromSalesforcePCRProjectRole(pcrItem.Acc_Contact1ProjectRole__c),
+      contact1Forename: pcrItem.Acc_Contact1Forename__c,
+      contact1Surname: pcrItem.Acc_Contact1Surname__c,
+      contact1Phone: pcrItem.Acc_Contact1Phone__c,
+      contact1Email: pcrItem.Acc_Contact1EmailAddress__c,
       organisationName: pcrItem.Acc_OrganisationName__c,
       projectRole: new PcrProjectRoleMapper().mapFromSalesforcePCRProjectRole(pcrItem.Acc_ProjectRole__c),
       projectRoleLabel: pcrItem.ProjectRoleLabel,
