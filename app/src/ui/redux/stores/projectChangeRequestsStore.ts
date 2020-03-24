@@ -8,7 +8,7 @@ import { ApiClient } from "@ui/apiClient";
 import { LoadingStatus, Pending } from "@shared/pending";
 import { dataLoadAction, messageSuccess } from "../actions";
 import { NotFoundError } from "@server/features/common";
-import { PCRItemStatus, PCRItemType, PCRPartnerType, PCRProjectRole, PCRStatus } from "@framework/constants";
+import { PCRItemStatus, PCRItemType, PCRParticipantSize, PCRPartnerType, PCRProjectRole, PCRStatus } from "@framework/constants";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
 import { ConfigStore } from "@ui/redux/stores/configStore";
 
@@ -194,7 +194,9 @@ export class ProjectChangeRequestStore extends StoreBase {
           projectRoleLabel: null,
           partnerTypeLabel: null,
           projectCity: "",
-          projectPostcode: ""
+          projectPostcode: "",
+          participantSize: PCRParticipantSize.Unknown,
+          numberOfEmployees: null,
         };
       case PCRItemType.PartnerWithdrawal:
         return {

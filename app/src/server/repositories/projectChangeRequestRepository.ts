@@ -8,7 +8,7 @@ import {
 } from "@framework/entities";
 import SalesforceRepositoryBase from "./salesforceRepositoryBase";
 import { ILogger } from "@server/features/common/logger";
-import { PcrPartnerTypeMapper, PcrProjectRoleMapper, SalesforcePCRMapper } from "./mappers/projectChangeRequestMapper";
+import { PcrParticipantSizeMapper, PcrPartnerTypeMapper, PcrProjectRoleMapper, SalesforcePCRMapper } from "./mappers/projectChangeRequestMapper";
 import { NotFoundError } from "@server/features/common";
 import { PCRItemStatus, PCRStatus } from "@framework/constants";
 
@@ -24,6 +24,7 @@ export interface IProjectChangeRequestRepository {
   getPcrChangeStatuses(): Promise<PicklistEntry[]>;
   getProjectRoles(): Promise<PicklistEntry[]>;
   getPartnerTypes(): Promise<PicklistEntry[]>;
+  getParticipantSizes(): Promise<PicklistEntry[]>;
 }
 
 export interface ISalesforcePCR {
@@ -68,6 +69,8 @@ export interface ISalesforcePCR {
   ParticipantTypeLabel: string|null;
   Acc_ProjectCity__c: string|null;
   Acc_ProjectPostcode__c: string|null;
+  Acc_ParticipantSize__c: string|null;
+  Acc_Employees__c: number|null;
 
   // Virements related field
   Acc_GrantMovingOverFinancialYear__c: number| null;
@@ -127,6 +130,8 @@ export class ProjectChangeRequestRepository extends SalesforceRepositoryBase<ISa
     "Acc_GrantMovingOverFinancialYear__c",
     "Acc_ProjectCity__c",
     "Acc_projectPostcode__c",
+    "Acc_ParticipantSize__C",
+    "Acc_Employees__c",
   ];
 
   async getAllByProjectId(projectId: string): Promise<ProjectChangeRequestEntity[]> {
@@ -188,6 +193,8 @@ export class ProjectChangeRequestRepository extends SalesforceRepositoryBase<ISa
       Acc_GrantMovingOverFinancialYear__c: x.grantMovingOverFinancialYear,
       Acc_ProjectCity__c: x.projectCity,
       Acc_ProjectPostcode__c: x.projectPostcode,
+      Acc_ParticipantSize__c: new PcrParticipantSizeMapper().mapToSalesforcePCRParticipantSize(x.participantSize),
+      Acc_Employees__c: x.numberOfEmployees,
     })));
   }
 
@@ -228,6 +235,10 @@ export class ProjectChangeRequestRepository extends SalesforceRepositoryBase<ISa
 
   async getPartnerTypes(): Promise<PicklistEntry[]> {
     return super.getPicklist("Acc_ParticipantType__c");
+  }
+
+  getParticipantSizes(): Promise<PicklistEntry[]> {
+    return super.getPicklist("Acc_ParticipantSize__c");
   }
 
   private mapStatus(status: PCRStatus): string {
