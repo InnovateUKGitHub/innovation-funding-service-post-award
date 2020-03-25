@@ -24,19 +24,20 @@ class ProjectsTestRepository extends TestRepository<Repositories.ISalesforceProj
   }
 }
 
-class PartnerTestRepository extends TestRepository<Repositories.ISalesforcePartner> implements Repositories.IPartnerRepository {
+class PartnerTestRepository extends TestRepository<Entities.Partner> implements Repositories.IPartnerRepository {
   getAllByProjectId(projectId: string) {
-    return super.getWhere(x => x.Acc_ProjectId__r.Id === projectId);
+    return super.getWhere(x => x.projectId === projectId);
   }
 
   getById(partnerId: string) {
-    return super.getOne(x => x.Id === partnerId);
+    return super.getOne(x => x.id === partnerId);
   }
 
   update(updatedPartner: Repositories.ISalesforcePartner) {
-    const index = this.Items.findIndex(x => x.Id === updatedPartner.Id);
-    if (index >= 0) {
-      this.Items[index] = Object.assign(this.Items[index], updatedPartner);
+    const item = this.Items.find(x => x.id === updatedPartner.Id);
+    if (item) {
+      item.postcode = updatedPartner.Acc_Postcode__c !== undefined ? updatedPartner.Acc_Postcode__c : item.postcode;
+
       return Promise.resolve(true);
     }
     return Promise.resolve(false);
@@ -69,7 +70,7 @@ class ClaimsTestRepository extends TestRepository<Repositories.ISalesforceClaim>
   }
 
   getAllByProjectId(projectId: string) {
-    const partnerIds = this.partnerRepository.Items.filter(x => x.Acc_ProjectId__r.Id === projectId).map(x => x.Id);
+    const partnerIds = this.partnerRepository.Items.filter(x => x.projectId === projectId).map(x => x.id);
     return super.getWhere(x => partnerIds.indexOf(x.Acc_ProjectParticipant__r.Id) !== -1);
   }
 
@@ -380,7 +381,7 @@ class ProfileTotalPeriodTestRepository extends TestRepository<Repositories.ISale
   }
 
   getAllByProjectId(projectId: string): Promise<Repositories.ISalesforceProfileTotalPeriod[]> {
-    const partnerIds = this.partnerRepository.Items.filter(x => x.Acc_ProjectId__r.Id === projectId).map(x => x.Id);
+    const partnerIds = this.partnerRepository.Items.filter(x => x.projectId === projectId).map(x => x.id);
     return super.getWhere(x => partnerIds.indexOf(x.Acc_ProjectParticipant__c) !== -1);
   }
 
@@ -583,11 +584,11 @@ class FinancialVirementsTestRepository extends TestRepository<Entities.PartnerFi
 
   private updateVirement(item: Updatable<Repositories.ISalesforceFinancialVirement>) {
     this.Items.forEach(partnerVirement => {
-      if(partnerVirement.id === item.Id) {
+      if (partnerVirement.id === item.Id) {
         // nothing to update yet
       }
       partnerVirement.virements.forEach(costCategoryVirement => {
-        if(costCategoryVirement.id === item.Id) {
+        if (costCategoryVirement.id === item.Id) {
           costCategoryVirement.newEligibleCosts = item.Acc_NewCosts__c || costCategoryVirement.newEligibleCosts;
         }
       });

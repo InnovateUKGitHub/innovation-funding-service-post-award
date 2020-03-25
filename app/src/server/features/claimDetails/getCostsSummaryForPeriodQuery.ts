@@ -21,7 +21,7 @@ export class GetCostsSummaryForPeriodQuery extends QueryBase<CostsSummaryForPeri
     const allClaimDetails = await context.repositories.claimDetails.getAllByPartner(this.partnerId);
     const allForecastDetails = await context.repositories.profileDetails.getAllByPartner(this.partnerId);
     const totalForecastResults = await context.repositories.profileTotalCostCategory.getAllByPartnerId(this.partnerId);
-    const costCategories = await context.runQuery(new GetCostCategoriesQuery()).then(x => x.filter(y => y.organisationType === partner.Acc_OrganisationType__c && y.competitionType === partner.Acc_ProjectId__r.Acc_CompetitionType__c));
+    const costCategories = await context.runQuery(new GetCostCategoriesQuery()).then(x => x.filter(y => y.organisationType === partner.organisationType && y.competitionType === partner.competitionType));
 
     return costCategories.map(costCategory => {
 

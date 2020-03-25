@@ -175,7 +175,7 @@ describe("GetPCRByIdQuery", () => {
     const item = context.testData.createPCRItem(pcr, recordType, {
       accountName,
       partnerNameSnapshot,
-      partnerId: partner.Id,
+      partnerId: partner.id,
     });
 
     const query = new GetPCRByIdQuery(pcr.projectId, pcr.id);
@@ -184,7 +184,7 @@ describe("GetPCRByIdQuery", () => {
     expect(result.id).toBe(item.id);
     expect(result.accountName).toBe(accountName);
     expect(result.partnerNameSnapshot).toBe(partnerNameSnapshot);
-    expect(result.partnerId).toBe(partner.Id);
+    expect(result.partnerId).toBe(partner.id);
     expect(result.guidance).toBe((PCRRecordTypeMetaValues.find(x => x.type === PCRItemType.AccountNameChange)!.guidance));
   });
 

@@ -11,7 +11,7 @@ describe("DeleteClaimDetailDocumentCommand", () => {
     const document = context.testData.createDocument(claimDetail.Id, "hello", "txt", "hello");
     expect(context.repositories.documents.Items).toHaveLength(1);
 
-    const claimDetailKey = { projectId: project.Id, partnerId: partner.Id, costCategoryId: claimDetail.Acc_CostCategory__c, periodId: claimDetail.Acc_ProjectPeriodNumber__c};
+    const claimDetailKey = { projectId: project.Id, partnerId: partner.id, costCategoryId: claimDetail.Acc_CostCategory__c, periodId: claimDetail.Acc_ProjectPeriodNumber__c};
     const deleteCommand = new DeleteClaimDetailDocumentCommand(document.ContentDocumentId, claimDetailKey);
     await context.runCommand(deleteCommand);
     expect(context.repositories.documents.Items).toHaveLength(0);
@@ -27,7 +27,7 @@ describe("DeleteClaimDetailDocumentCommand", () => {
       const document = context.testData.createDocument(claimDetail.Id, "hello", "txt", "hello");
       expect(context.repositories.documents.Items).toHaveLength(1);
 
-      const claimDetailKey = { projectId: project.Id, partnerId: partner.Id, costCategoryId: claimDetail.Acc_CostCategory__c, periodId: claimDetail.Acc_ProjectPeriodNumber__c};
+      const claimDetailKey = { projectId: project.Id, partnerId: partner.id, costCategoryId: claimDetail.Acc_CostCategory__c, periodId: claimDetail.Acc_ProjectPeriodNumber__c};
       const command = new DeleteClaimDetailDocumentCommand(document.ContentDocumentId, claimDetailKey);
 
       return {command, project, partner, context};
@@ -39,7 +39,7 @@ describe("DeleteClaimDetailDocumentCommand", () => {
       const auth    = new Authorisation({
         [project.Id]: {
           projectRoles: ProjectRole.FinancialContact,
-          partnerRoles: { [partner.Id]: ProjectRole.FinancialContact }
+          partnerRoles: { [partner.id]: ProjectRole.FinancialContact }
         }
       });
 
@@ -52,7 +52,7 @@ describe("DeleteClaimDetailDocumentCommand", () => {
       const auth    = new Authorisation({
         [project.Id]: {
           projectRoles: ProjectRole.ProjectManager | ProjectRole.FinancialContact | ProjectRole.MonitoringOfficer,
-          partnerRoles: { [partner.Id]: ProjectRole.ProjectManager | ProjectRole.MonitoringOfficer }
+          partnerRoles: { [partner.id]: ProjectRole.ProjectManager | ProjectRole.MonitoringOfficer }
         }
       });
 

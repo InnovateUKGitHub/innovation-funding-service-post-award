@@ -250,11 +250,11 @@ describe("UpdateClaimCommand", () => {
     dto.status = ClaimStatus.MO_QUERIED;
     dto.comments = "";
 
-    await expect(context.runCommand(new UpdateClaimCommand(partner.Acc_ProjectId__r.Id, dto))).rejects.toThrow(ValidationError);
+    await expect(context.runCommand(new UpdateClaimCommand(partner.projectId, dto))).rejects.toThrow(ValidationError);
 
     dto.comments = "Some comments";
 
-    await expect(context.runCommand(new UpdateClaimCommand(partner.Acc_ProjectId__r.Id, dto))).resolves.toEqual(true);
+    await expect(context.runCommand(new UpdateClaimCommand(partner.projectId, dto))).resolves.toEqual(true);
   });
 
   it("when message is not set and claim status is already MO Quried expect no validation excetion", async () => {
@@ -267,7 +267,7 @@ describe("UpdateClaimCommand", () => {
     dto.status = ClaimStatus.MO_QUERIED;
     dto.comments = "";
 
-    await expect(context.runCommand(new UpdateClaimCommand(partner.Acc_ProjectId__r.Id, dto))).resolves.toEqual(true);
+    await expect(context.runCommand(new UpdateClaimCommand(partner.projectId, dto))).resolves.toEqual(true);
   });
 
   it("when claim is over limits for any cost category expect exception", async () => {
