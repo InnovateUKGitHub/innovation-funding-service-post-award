@@ -15,7 +15,7 @@ describe("GetClaimDetailDocumentsQuery", () => {
     const item = result[0];
 
     expect(item.fileName).toBe("cat.jpg");
-    expect(item.link).toBe(`/api/documents/claim-details/${project.Id}/${partner.Id}/${claimDetail.Acc_ProjectPeriodNumber__c}/${claimDetail.Acc_CostCategory__c}/${document.Id}/content`);
+    expect(item.link).toBe(`/api/documents/claim-details/${project.Id}/${partner.id}/${claimDetail.Acc_ProjectPeriodNumber__c}/${claimDetail.Acc_CostCategory__c}/${document.Id}/content`);
     expect(item.id).toBe(document.ContentDocumentId);
     expect(item.uploadedBy).toBe("The Big Show");
   });
@@ -66,7 +66,7 @@ describe("GetClaimDetailDocumentsQuery", () => {
       const auth = new Authorisation({
         [project.Id]: {
           projectRoles: ProjectRole.FinancialContact,
-          partnerRoles: { [partner2.Id]: ProjectRole.FinancialContact }
+          partnerRoles: { [partner2.id]: ProjectRole.FinancialContact }
         }
       });
 
@@ -95,7 +95,7 @@ describe("GetClaimDetailDocumentsQuery", () => {
       const auth     = new Authorisation({
         [project.Id]: {
           projectRoles: ProjectRole.ProjectManager,
-          partnerRoles: { [partner2.Id]: ProjectRole.ProjectManager }
+          partnerRoles: { [partner2.id]: ProjectRole.ProjectManager }
         }
       });
 

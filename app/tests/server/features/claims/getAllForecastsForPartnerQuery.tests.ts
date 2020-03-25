@@ -9,7 +9,7 @@ describe("GetAllForecastsForPartnerQuery", () => {
     const partner = context.testData.createPartner();
     context.testData.createProfileDetail(costCat, partner);
 
-    const query  = new GetAllForecastsForPartnerQuery(partner.Id);
+    const query  = new GetAllForecastsForPartnerQuery(partner.id);
     const result = await context.runQuery(query);
     const item   = result[0];
 
@@ -24,7 +24,7 @@ describe("GetAllForecastsForPartnerQuery", () => {
     const partner = context.testData.createPartner();
     context.testData.createProfileDetail(costCat, partner);
 
-    const query  = new GetAllForecastsForPartnerQuery(partner.Id);
+    const query  = new GetAllForecastsForPartnerQuery(partner.id);
     const result = await context.runQuery(query);
 
     expect(result.length).toBe(1);
@@ -38,7 +38,7 @@ describe("GetAllForecastsForPartnerQuery", () => {
     context.testData.createProfileDetail(costCat, partner);
     context.testData.createProfileDetail(costCat, partner);
 
-    const query  = new GetAllForecastsForPartnerQuery(partner.Id);
+    const query  = new GetAllForecastsForPartnerQuery(partner.id);
     const result = await context.runQuery(query);
 
     expect(result.length).toBe(3);

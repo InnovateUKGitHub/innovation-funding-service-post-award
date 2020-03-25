@@ -510,7 +510,7 @@ describe("UpdatePCRCommand", () => {
     });
     it("should require organisation name to be set when the partner type is Research", async () => {
       const {context, projectChangeRequest, recordType, project} = setup();
-      context.testData.createPCRItem(projectChangeRequest, recordType, { status: PCRItemStatus.Incomplete, partnerType: PCRPartnerType.Research, projectRole: PCRProjectRole.Collaborator });
+      context.testData.createPCRItem(projectChangeRequest, recordType, { status: PCRItemStatus.Incomplete, partnerType: PCRPartnerType.Research, projectRole: PCRProjectRole.Collaborator, projectCity: "Coventry" });
       const dto = await context.runQuery(new GetPCRByIdQuery(projectChangeRequest.projectId, projectChangeRequest.id));
       const item = dto.items[0] as PCRItemForPartnerAdditionDto;
       item.status = PCRItemStatus.Complete;
@@ -689,7 +689,7 @@ describe("UpdatePCRCommand", () => {
       const item = dto.items[0] as PCRItemForAccountNameChangeDto;
 
       item.accountName = null;
-      item.partnerId = partner.Id;
+      item.partnerId = partner.id;
       await expect(context.runCommand(new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto))).rejects.toThrow(ValidationError);
 
       item.accountName = "New Name Goes Here";
@@ -697,7 +697,7 @@ describe("UpdatePCRCommand", () => {
       await expect(context.runCommand(new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto))).rejects.toThrow(ValidationError);
 
       item.accountName = "New Name Goes Here";
-      item.partnerId = partner.Id;
+      item.partnerId = partner.id;
       await expect(context.runCommand(new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto))).resolves.toBe(true);
     });
 
@@ -720,11 +720,11 @@ describe("UpdatePCRCommand", () => {
       const item = dto.items[0] as PCRItemForAccountNameChangeDto;
 
       item.accountName = "New Name Goes Here";
-      item.partnerId = otherPartner.Id;
+      item.partnerId = otherPartner.id;
       await expect(context.runCommand(new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto))).rejects.toThrow(ValidationError);
 
       item.accountName = "New Name Goes Here";
-      item.partnerId = projectPartner.Id;
+      item.partnerId = projectPartner.id;
       await expect(context.runCommand(new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto))).resolves.toBe(true);
     });
 
@@ -746,13 +746,13 @@ describe("UpdatePCRCommand", () => {
       const item = dto.items[0] as PCRItemForAccountNameChangeDto;
 
       item.accountName = "New Name Goes Here";
-      item.partnerId = partner.Id;
+      item.partnerId = partner.id;
       await expect(context.runCommand(new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto))).resolves.toBe(true);
 
       const updated = await context.runQuery(new GetPCRByIdQuery(projectChangeRequest.projectId, projectChangeRequest.id));
       const updatedItem = updated.items[0] as PCRItemForAccountNameChangeDto;
       await expect(updatedItem.accountName).toEqual("New Name Goes Here");
-      await expect(updatedItem.partnerId).toEqual(partner.Id);
+      await expect(updatedItem.partnerId).toEqual(partner.id);
     });
 
     test("cannot rename withdrawn partner", async () => {
@@ -770,12 +770,12 @@ describe("UpdatePCRCommand", () => {
 
       const dto = await context.runQuery(new GetPCRByIdQuery(projectChangeRequest.projectId, projectChangeRequest.id));
       const item = dto.items[0] as PCRItemForAccountNameChangeDto;
-      item.partnerId = partner.Id;
+      item.partnerId = partner.id;
       item.accountName = "New account name";
 
       await expect(context.runCommand(new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto))).resolves.toBe(true);
 
-      partner.Acc_ParticipantStatus__c = "Involuntary Withdrawal";
+      partner.participantStatus = "Involuntary Withdrawal";
 
       await expect(context.runCommand(new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto))).rejects.toThrow(ValidationError);
 
@@ -802,7 +802,7 @@ describe("UpdatePCRCommand", () => {
       const item = dto.items[0] as PCRItemForPartnerWithdrawalDto;
 
       item.withdrawalDate = null;
-      item.partnerId = partner.Id;
+      item.partnerId = partner.id;
       await expect(context.runCommand(new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto))).rejects.toThrow(ValidationError);
 
       item.withdrawalDate = new Date();
@@ -810,7 +810,7 @@ describe("UpdatePCRCommand", () => {
       await expect(context.runCommand(new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto))).rejects.toThrow(ValidationError);
 
       item.withdrawalDate = new Date();
-      item.partnerId = partner.Id;
+      item.partnerId = partner.id;
       await expect(context.runCommand(new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto))).resolves.toBe(true);
     });
 
@@ -833,11 +833,11 @@ describe("UpdatePCRCommand", () => {
       const item = dto.items[0] as PCRItemForPartnerWithdrawalDto;
 
       item.withdrawalDate = new Date();
-      item.partnerId = otherPartner.Id;
+      item.partnerId = otherPartner.id;
       await expect(context.runCommand(new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto))).rejects.toThrow(ValidationError);
 
       item.withdrawalDate = new Date();
-      item.partnerId = projectPartner.Id;
+      item.partnerId = projectPartner.id;
       await expect(context.runCommand(new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto))).resolves.toBe(true);
     });
 
@@ -859,11 +859,11 @@ describe("UpdatePCRCommand", () => {
       const item = dto.items[0] as PCRItemForPartnerWithdrawalDto;
 
       item.withdrawalDate = new Date("58rd Augcember √-1992");
-      item.partnerId = partner.Id;
+      item.partnerId = partner.id;
       await expect(context.runCommand(new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto))).rejects.toThrow(ValidationError);
 
       item.withdrawalDate = new Date();
-      item.partnerId = partner.Id;
+      item.partnerId = partner.id;
       await expect(context.runCommand(new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto))).resolves.toBe(true);
     });
 
@@ -885,15 +885,15 @@ describe("UpdatePCRCommand", () => {
       const item = dto.items[0] as PCRItemForPartnerWithdrawalDto;
 
       item.withdrawalDate = new Date("01/01/2019");
-      item.partnerId = partner.Id;
+      item.partnerId = partner.id;
       await expect(context.runCommand(new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto))).rejects.toThrow(ValidationError);
 
       item.withdrawalDate = new Date("01/12/2019");
-      item.partnerId = partner.Id;
+      item.partnerId = partner.id;
       await expect(context.runCommand(new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto))).rejects.toThrow(ValidationError);
 
       item.withdrawalDate = new Date("01/05/2020");
-      item.partnerId = partner.Id;
+      item.partnerId = partner.id;
       await expect(context.runCommand(new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto))).resolves.toBe(true);
     });
 
@@ -917,13 +917,13 @@ describe("UpdatePCRCommand", () => {
       const date = new Date();
 
       item.withdrawalDate = date;
-      item.partnerId = partner.Id;
+      item.partnerId = partner.id;
       await expect(context.runCommand(new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto))).resolves.toBe(true);
 
       const update = await context.runQuery(new GetPCRByIdQuery(projectChangeRequest.projectId, projectChangeRequest.id));
       const updateItem = update.items[0] as PCRItemForPartnerWithdrawalDto;
       await expect(updateItem.withdrawalDate).toEqual(date);
-      await expect(updateItem.partnerId).toBe(partner.Id);
+      await expect(updateItem.partnerId).toBe(partner.id);
     });
 
     test("cannot withdraw withdrawn partner", async () => {
@@ -942,12 +942,12 @@ describe("UpdatePCRCommand", () => {
       const dto = await context.runQuery(new GetPCRByIdQuery(projectChangeRequest.projectId, projectChangeRequest.id));
       const item = dto.items[0] as PCRItemForPartnerWithdrawalDto;
       item.withdrawalDate = new Date();
-      item.partnerId = partner.Id;
+      item.partnerId = partner.id;
       item.status = PCRItemStatus.Complete;
 
       await expect(context.runCommand(new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto))).resolves.toBe(true);
 
-      partner.Acc_ParticipantStatus__c = "Involuntary Withdrawal";
+      partner.participantStatus = "Involuntary Withdrawal";
 
       await expect(context.runCommand(new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto))).rejects.toThrow(ValidationError);
 

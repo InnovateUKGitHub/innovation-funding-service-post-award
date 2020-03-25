@@ -14,12 +14,12 @@ describe("UpdateFinancialVirementCommand", () => {
     const partner = testData.createPartner();
 
     testData.createFinancialVirement(pcrItem, partner);
-    const dto = await testContext.runQuery(new GetFinancialVirementQuery(partner.Acc_ProjectId__r.Id, pcrItem.pcrId, pcrItem.id));
+    const dto = await testContext.runQuery(new GetFinancialVirementQuery(partner.projectId, pcrItem.pcrId, pcrItem.id));
 
     expect(dto).not.toBeNull();
     expect(dto.partners.length).toBe(1);
 
-    const result = await testContext.runCommand(new UpdateFinancialVirementCommand(partner.Acc_ProjectId__r.Id, pcrItem.pcrId, pcrItem.id, dto, true));
+    const result = await testContext.runCommand(new UpdateFinancialVirementCommand(partner.projectId, pcrItem.pcrId, pcrItem.id, dto, true));
 
     expect(result).toBe(true);
   });
@@ -44,13 +44,13 @@ describe("UpdateFinancialVirementCommand", () => {
       profileId: "profileId"
     });
 
-    const dto = await testContext.runQuery(new GetFinancialVirementQuery(partner.Acc_ProjectId__r.Id, pcrItem.pcrId, pcrItem.id));
+    const dto = await testContext.runQuery(new GetFinancialVirementQuery(partner.projectId, pcrItem.pcrId, pcrItem.id));
 
     dto.partners[0].virements[0].newEligibleCosts = 100;
 
     expect(dto).not.toBeNull();
 
-    const result = await testContext.runCommand(new UpdateFinancialVirementCommand(partner.Acc_ProjectId__r.Id, pcrItem.pcrId, pcrItem.id, dto, true));
+    const result = await testContext.runCommand(new UpdateFinancialVirementCommand(partner.projectId, pcrItem.pcrId, pcrItem.id, dto, true));
 
     expect(result).toBe(true);
 
@@ -77,12 +77,12 @@ describe("UpdateFinancialVirementCommand", () => {
       profileId: "profileId"
     });
 
-    const dto = await testContext.runQuery(new GetFinancialVirementQuery(partner.Acc_ProjectId__r.Id, pcrItem.pcrId, pcrItem.id));
+    const dto = await testContext.runQuery(new GetFinancialVirementQuery(partner.projectId, pcrItem.pcrId, pcrItem.id));
 
     dto.partners[0].virements[0].newEligibleCosts = 100;
     dto.partners[0].virements[0].costsClaimedToDate = 101;
 
-    await expect(testContext.runCommand(new UpdateFinancialVirementCommand(partner.Acc_ProjectId__r.Id, pcrItem.pcrId, pcrItem.id, dto, true))).rejects.toThrow(ValidationError);
+    await expect(testContext.runCommand(new UpdateFinancialVirementCommand(partner.projectId, pcrItem.pcrId, pcrItem.id, dto, true))).rejects.toThrow(ValidationError);
   });
 
 });

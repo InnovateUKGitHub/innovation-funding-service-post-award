@@ -64,7 +64,7 @@ describe("Create PCR Command", () => {
         type: itemType.type,
         status: PCRItemStatus.ToDo,
         accountName: "Pocahontas",
-        partnerId: partner.Id
+        partnerId: partner.id
       }]
     } as any as PCRDto);
 
@@ -87,7 +87,7 @@ describe("Create PCR Command", () => {
         type: itemType.type,
         status: PCRItemStatus.ToDo,
         accountName: "Frida",
-        partnerId: partner.Id
+        partnerId: partner.id
       }]
     } as any as PCRDto);
 
@@ -103,7 +103,7 @@ describe("Create PCR Command", () => {
       items: [{
         status: PCRItemStatus.ToDo,
         projectId: project.Id,
-        partnerId: partner.Id,
+        partnerId: partner.id,
         accountName: "Frida",
         recordTypeId: recordTypes.find(x => x.type === itemType.typeName)!.id,
       }]
@@ -150,7 +150,7 @@ describe("Create PCR Command", () => {
     const auth    = new Authorisation({
       [project.Id]: {
         projectRoles: ProjectRole.FinancialContact | ProjectRole.MonitoringOfficer | ProjectRole.Unknown,
-        partnerRoles: { [partner.Id]: ProjectRole.FinancialContact | ProjectRole.MonitoringOfficer | ProjectRole.Unknown }
+        partnerRoles: { [partner.id]: ProjectRole.FinancialContact | ProjectRole.MonitoringOfficer | ProjectRole.Unknown }
       }
     });
     expect(await context.runAccessControl(auth, command)).toBe(false);

@@ -13,7 +13,7 @@ describe("GetAllForPartnerQuery", () => {
         testData.createClaim(partner, period);
         testData.createProfileTotalPeriod(partner, period);
 
-        const query = new GetAllForPartnerQuery(partner.Id);
+        const query = new GetAllForPartnerQuery(partner.id);
         const result = await context.runQuery(query);
         const item = result[0];
 
@@ -34,7 +34,7 @@ describe("GetAllForPartnerQuery", () => {
         testData.createClaim(partner, period2);
         testData.createProfileTotalPeriod(partner, period2);
 
-        const query = new GetAllForPartnerQuery(partner.Id);
+        const query = new GetAllForPartnerQuery(partner.id);
         const result = await context.runQuery(query);
 
         expect(result.length).toBe(2);

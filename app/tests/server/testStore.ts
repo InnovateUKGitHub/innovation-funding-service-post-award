@@ -10,6 +10,7 @@ import { GetAllQuery as GetAllPartners, GetByIdQuery as GetPartnerById } from "@
 import { GetAllClaimsForProjectQuery, GetAllForPartnerQuery as GetAllClaimsForPartner } from "@server/features/claims";
 import thunk from "redux-thunk";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
+import * as Entities from "@framework/entities";
 
 export class TestStore {
 
@@ -33,21 +34,21 @@ export class TestStore {
     return project;
   }
 
-  public async createPartner(project?: Repositories.ISalesforceProject, update?: (item: Repositories.ISalesforcePartner) => void) {
+  public async createPartner(project?: Repositories.ISalesforceProject, update?: (item: Entities.Partner) => void) {
     const partner = this.context.testData.createPartner(project, update);
-    const partnerDto = await this.context.runQuery(new GetPartnerById(partner.Id));
+    const partnerDto = await this.context.runQuery(new GetPartnerById(partner.id));
     const partnerDtos = await this.context.runQuery(new GetAllPartners());
-    this.dispatch(dataLoadAction(storeKeys.getPartnerKey(partner.Id), "partner", LoadingStatus.Done, partnerDto));
+    this.dispatch(dataLoadAction(storeKeys.getPartnerKey(partner.id), "partner", LoadingStatus.Done, partnerDto));
     this.dispatch(dataLoadAction(storeKeys.getPartnersKey(), "partners", LoadingStatus.Done, partnerDtos));
     return partner;
   }
 
-  public async createClaim(partner: Repositories.ISalesforcePartner, periodId?: number, update?: (item: Repositories.ISalesforceClaim) => void) {
+  public async createClaim(partner: Entities.Partner, periodId?: number, update?: (item: Repositories.ISalesforceClaim) => void) {
     const claim = this.context.testData.createClaim(partner, periodId, update);
-    const partnerClaims = await this.context.runQuery(new GetAllClaimsForPartner(partner.Id));
-    const projectClaims = await this.context.runQuery(new GetAllClaimsForProjectQuery(partner.Acc_ProjectId__r.Id));
-    this.dispatch(dataLoadAction(storeKeys.getPartnerKey(partner.Id), "claims", LoadingStatus.Done, partnerClaims));
-    this.dispatch(dataLoadAction(storeKeys.getProjectKey(partner.Acc_ProjectId__r.Id), "claims", LoadingStatus.Done, projectClaims));
+    const partnerClaims = await this.context.runQuery(new GetAllClaimsForPartner(partner.id));
+    const projectClaims = await this.context.runQuery(new GetAllClaimsForProjectQuery(partner.projectId));
+    this.dispatch(dataLoadAction(storeKeys.getPartnerKey(partner.id), "claims", LoadingStatus.Done, partnerClaims));
+    this.dispatch(dataLoadAction(storeKeys.getProjectKey(partner.projectId), "claims", LoadingStatus.Done, projectClaims));
     return claim;
   }
 }

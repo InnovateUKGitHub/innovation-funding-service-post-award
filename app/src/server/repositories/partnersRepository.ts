@@ -1,4 +1,6 @@
-import SalesforceRepositoryBase, { Updatable } from "./salesforceRepositoryBase";
+import { SalesforceRepositoryBaseWithMapping, Updatable } from "./salesforceRepositoryBase";
+import { Partner } from "@framework/entities/partner";
+import { SalesforcePartnerMapper } from "./mappers/partnerMapper";
 
 export enum SalesforceProjectRole {
   ProjectLead = "Lead"
@@ -9,7 +11,7 @@ export interface ISalesforcePartner {
   Acc_AccountId__r: {
     Id: string;
     Name: string;
-  };
+  } | null;
   Acc_OrganisationType__c: string;
   Acc_ParticipantType__c: string;
   Acc_ParticipantSize__c: string;
@@ -41,10 +43,10 @@ export interface ISalesforcePartner {
 }
 
 export interface IPartnerRepository {
-  getAllByProjectId(projectId: string): Promise<ISalesforcePartner[]>;
-  getById(partnerId: string): Promise<ISalesforcePartner>;
+  getAllByProjectId(projectId: string): Promise<Partner[]>;
+  getById(partnerId: string): Promise<Partner>;
   update(updatedPartner: Updatable<ISalesforcePartner>): Promise<boolean>;
-  getAll(): Promise<ISalesforcePartner[]>;
+  getAll(): Promise<Partner[]>;
 }
 
 /**
@@ -56,7 +58,7 @@ export interface IPartnerRepository {
  * Total grant and approved costs etc are rolled up to this level
  * A Sum of the number of outstanding claims etc are also de-normalised at this level
  */
-export class PartnerRepository extends SalesforceRepositoryBase<ISalesforcePartner> implements IPartnerRepository {
+export class PartnerRepository extends SalesforceRepositoryBaseWithMapping<ISalesforcePartner, Partner> implements IPartnerRepository {
 
   protected readonly salesforceObjectName = "Acc_ProjectParticipant__c";
 
@@ -92,11 +94,13 @@ export class PartnerRepository extends SalesforceRepositoryBase<ISalesforcePartn
     "Acc_Postcode__c",
   ];
 
-  getAllByProjectId(projectId: string): Promise<ISalesforcePartner[]> {
+  mapper = new SalesforcePartnerMapper();
+
+  getAllByProjectId(projectId: string) {
     return super.where(`Acc_ProjectId__c = '${projectId}'`);
   }
 
-  getById(partnerId: string): Promise<ISalesforcePartner> {
+  getById(partnerId: string) {
     return super.loadItem({ Id: partnerId });
   }
 

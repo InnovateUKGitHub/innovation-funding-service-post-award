@@ -11,31 +11,31 @@ describe("getAllForProjectQuery", () => {
     const project = context.testData.createProject();
 
     const partner = context.testData.createPartner(project, x => {
-      x.Acc_AccountId__r.Name = "Expected name";
-      x.Acc_TotalParticipantCosts__c = 125000;
-      x.Acc_TotalApprovedCosts__c = 17474;
-      x.Acc_TotalPaidCosts__c = 25555;
-      x.Acc_Award_Rate__c = 50;
-      x.Acc_ProjectRole__c = SalesforceProjectRole.ProjectLead;
-      x.ProjectRoleName = SalesforceProjectRole.ProjectLead;
-      x.Acc_Cap_Limit__c = 50;
-      x.Acc_TotalFutureForecastsForParticipant__c = 1002;
-      x.Acc_ClaimsForReview__c = 10;
-      x.Acc_ClaimsUnderQuery__c = 20;
-      x.Acc_ClaimsOverdue__c = 30;
-      x.Acc_TrackingClaims__c = "Claim Due";
-      x.Acc_ParticipantStatus__c = "On Hold";
-      x.Acc_OverheadRate__c = 75;
-      x.Acc_TotalCostsSubmitted__c = 100;
-      x.AuditReportFrequencyName = "Never, for this project";
-      x.Acc_TotalCostsAwarded__c = 100000;
-      x.Acc_TotalPrepayment__c = 500;
+      x.name = "Expected name";
+      x.totalParticipantCosts = 125000;
+      x.totalApprovedCosts = 17474;
+      x.totalPaidCosts = 25555;
+      x.awardRate = 50;
+      x.projectRole = SalesforceProjectRole.ProjectLead;
+      x.projectRoleName = SalesforceProjectRole.ProjectLead;
+      x.capLimit = 50;
+      x.totalFutureForecastsForParticipant = 1002;
+      x.claimsForReview = 10;
+      x.claimsUnderQuery = 20;
+      x.claimsOverdue = 30;
+      x.trackingClaims = "Claim Due";
+      x.participantStatus = "On Hold";
+      x.overheadRate = 75;
+      x.totalCostsSubmitted = 100;
+      x.auditReportFrequencyName = "Never, for this project";
+      x.totalCostsAwarded = 100000;
+      x.totalPrepayment = 500;
     });
 
     const projectManger = context.testData.createProjectManager(project, partner);
     context.user.set({ email: projectManger.Acc_ContactId__r.Email });
 
-    const result = await context.runQuery(new GetByIdQuery(partner.Id));
+    const result = await context.runQuery(new GetByIdQuery(partner.id));
 
     expect(result).not.toBe(null);
 
@@ -80,12 +80,12 @@ describe("getAllForProjectQuery", () => {
   it("sets isWithdrawn correctly", async () => {
     const context = new TestContext();
     const project = context.testData.createProject();
-    const partnerInvoluntaryWithdrawal = context.testData.createPartner(project, x => {x.Acc_ParticipantStatus__c = "Involuntary Withdrawal";});
-    const partnerVoluntaryWithdrawal = context.testData.createPartner(project, x => {x.Acc_ParticipantStatus__c = "Voluntary Withdrawal";});
-    const partnerActive = context.testData.createPartner(project, x => {x.Acc_ParticipantStatus__c = "Active";});
-    expect((await context.runQuery(new GetByIdQuery(partnerInvoluntaryWithdrawal.Id))).isWithdrawn).toBe(true);
-    expect((await context.runQuery(new GetByIdQuery(partnerVoluntaryWithdrawal.Id))).isWithdrawn).toBe(true);
-    expect((await context.runQuery(new GetByIdQuery(partnerActive.Id))).isWithdrawn).toBe(false);
+    const partnerInvoluntaryWithdrawal = context.testData.createPartner(project, x => {x.participantStatus = "Involuntary Withdrawal";});
+    const partnerVoluntaryWithdrawal = context.testData.createPartner(project, x => {x.participantStatus = "Voluntary Withdrawal";});
+    const partnerActive = context.testData.createPartner(project, x => {x.participantStatus = "Active";});
+    expect((await context.runQuery(new GetByIdQuery(partnerInvoluntaryWithdrawal.id))).isWithdrawn).toBe(true);
+    expect((await context.runQuery(new GetByIdQuery(partnerVoluntaryWithdrawal.id))).isWithdrawn).toBe(true);
+    expect((await context.runQuery(new GetByIdQuery(partnerActive.id))).isWithdrawn).toBe(false);
   });
 
   it("calculated cost claimed percentage", async () => {
@@ -93,17 +93,17 @@ describe("getAllForProjectQuery", () => {
 
     const project = context.testData.createProject();
     const partner = context.testData.createPartner(project, x => {
-      x.Acc_AccountId__r.Name = "Expected name";
-      x.Acc_TotalParticipantCosts__c = 10000;
-      x.Acc_TotalApprovedCosts__c = 1000;
-      x.Acc_Award_Rate__c = 50;
-      x.Acc_Cap_Limit__c = 50;
+      x.name = "Expected name";
+      x.totalParticipantCosts = 10000;
+      x.totalApprovedCosts = 1000;
+      x.awardRate = 50;
+      x.capLimit = 50;
     });
 
     const projectManger = context.testData.createProjectManager(project);
     context.user.set({ email: projectManger.Acc_ContactId__r.Email });
 
-    const result = (await context.runQuery(new GetByIdQuery(partner.Id)));
+    const result = (await context.runQuery(new GetByIdQuery(partner.id)));
 
     expect(result.percentageParticipantCostsClaimed).toBe(10);
   });
@@ -113,17 +113,17 @@ describe("getAllForProjectQuery", () => {
 
     const project = context.testData.createProject();
     const partner = context.testData.createPartner(project, x => {
-      x.Acc_AccountId__r.Name = "Expected name";
-      x.Acc_TotalParticipantCosts__c = null!;
-      x.Acc_TotalApprovedCosts__c = 1000;
-      x.Acc_Award_Rate__c = 50;
-      x.Acc_Cap_Limit__c = 50;
+      x.name = "Expected name";
+      x.totalParticipantCosts = null!;
+      x.totalApprovedCosts = 1000;
+      x.awardRate = 50;
+      x.capLimit = 50;
     });
 
     const projectManger = context.testData.createProjectManager(project);
     context.user.set({ email: projectManger.Acc_ContactId__r.Email });
 
-    const result = (await context.runQuery(new GetByIdQuery(partner.Id)));
+    const result = (await context.runQuery(new GetByIdQuery(partner.id)));
 
     expect(result.percentageParticipantCostsClaimed).toBe(null);
   });
@@ -133,17 +133,17 @@ describe("getAllForProjectQuery", () => {
 
     const project = context.testData.createProject();
     const partner = context.testData.createPartner(project, x => {
-      x.Acc_AccountId__r.Name = "Expected name";
-      x.Acc_TotalParticipantCosts__c = 10000;
-      x.Acc_TotalApprovedCosts__c = null as any;
-      x.Acc_Award_Rate__c = 50;
-      x.Acc_Cap_Limit__c = 50;
+      x.name = "Expected name";
+      x.totalParticipantCosts = 10000;
+      x.totalApprovedCosts = null as any;
+      x.awardRate = 50;
+      x.capLimit = 50;
     });
 
     const projectManger = context.testData.createProjectManager(project);
     context.user.set({ email: projectManger.Acc_ContactId__r.Email });
 
-    const result = (await context.runQuery(new GetByIdQuery(partner.Id)));
+    const result = (await context.runQuery(new GetByIdQuery(partner.id)));
     expect(result.percentageParticipantCostsClaimed).toBe(0);
   });
 
@@ -157,8 +157,8 @@ describe("getAllForProjectQuery", () => {
     const context = new TestContext();
     const project = context.testData.createProject();
     const partner = context.testData.createPartner(project, x => {
-      x.Acc_ProjectRole__c = SalesforceProjectRole.ProjectLead;
-      x.ProjectRoleName = SalesforceProjectRole.ProjectLead;
+      x.projectRole = SalesforceProjectRole.ProjectLead;
+      x.projectRoleName = SalesforceProjectRole.ProjectLead;
     });
 
     const projectContact1 = context.testData.createFinanceContact(project, partner, x => x.Acc_ContactId__r.Email = "financecontact@test.com");
@@ -167,13 +167,13 @@ describe("getAllForProjectQuery", () => {
     // now set user to the finance contact
     context.user.set({ email: projectContact1.Acc_ContactId__r.Email });
 
-    const result1 = await context.runQuery(new GetByIdQuery(partner.Id));
+    const result1 = await context.runQuery(new GetByIdQuery(partner.id));
     expect(result1.roles).toBe(ProjectRole.FinancialContact);
 
     // now set user to the project manager
     context.user.set({ email: projectContact2.Acc_ContactId__r.Email });
 
-    const result2 = await context.runQuery(new GetByIdQuery(partner.Id));
+    const result2 = await context.runQuery(new GetByIdQuery(partner.id));
     expect(result2.roles).toBe(ProjectRole.ProjectManager);
   });
 });
