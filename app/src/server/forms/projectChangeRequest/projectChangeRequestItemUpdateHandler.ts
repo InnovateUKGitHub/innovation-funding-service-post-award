@@ -1,4 +1,4 @@
-import { IContext, ILinkInfo, ProjectDto, ProjectRole } from "@framework/types";
+import { IContext, ILinkInfo, PCRContactRole, ProjectDto, ProjectRole } from "@framework/types";
 import { BadRequestError, Configuration } from "@server/features/common";
 import { GetPCRByIdQuery } from "@server/features/pcrs/getPCRByIdQuery";
 import { UpdatePCRCommand } from "@server/features/pcrs/updatePcrCommand";
@@ -158,6 +158,13 @@ export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBa
     if (stepName === "projectLocationStep") {
       item.projectCity = body.projectCity;
       item.projectPostcode = body.projectPostcode;
+    }
+    if (stepName === "financeContactStep") {
+      item.contact1ProjectRole = parseInt(body.contact1ProjectRole, 10);
+      item.contact1Forename = body.contact1Forename;
+      item.contact1Surname = body.contact1Surname;
+      item.contact1Phone = body.contact1Phone;
+      item.contact1Email = body.contact1Email;
     }
   }
 

@@ -69,6 +69,7 @@ export interface ISalesforcePCR {
 
   // Add partner
   Acc_Contact1ProjectRole__c: string|null;
+  Contact1ProjectRoleLabel: string|null;
   Acc_Contact1Forename__c: string|null;
   Acc_Contact1Surname__c: string|null;
   Acc_Contact1Phone__c: string|null;
@@ -135,6 +136,7 @@ export class ProjectChangeRequestRepository extends SalesforceRepositoryBase<ISa
     "Acc_ExistingPartnerName__c",
     "Acc_Nickname__c",
     "Acc_Contact1ProjectRole__c",
+    "toLabel(Acc_Contact1ProjectRole__c) Contact1ProjectRoleLabel",
     "Acc_Contact1Forename__c",
     "Acc_Contact1Surname__c",
     "Acc_Contact1Phone__c",
