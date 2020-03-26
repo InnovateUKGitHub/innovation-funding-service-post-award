@@ -418,6 +418,17 @@ export class PCRPartnerAdditionItemDtoValidator extends PCRBaseItemDtoValidator<
   );
 
   projectPostcode = this.hasPermissionToEdit(this.model.projectPostcode, this.original && this.original.projectPostcode, "Project postcode cannot be changed");
+
+  participantSize = Validation.all(this,
+    () => this.requiredIfComplete(this.model.participantSize, "Select a participant size"),
+    () => this.hasPermissionToEdit(this.model.participantSize, this.original && this.original.projectCity, "Participant size cannot be changed"),
+  );
+
+  numberOfEmployees = Validation.all(this,
+    () => this.requiredIfComplete(this.model.numberOfEmployees, "Enter the number of employees"),
+    () => Validation.isPositiveInteger(this, this.model.numberOfEmployees, "Please enter a valid number of employees"),
+    () => this.hasPermissionToEdit(this.model.numberOfEmployees, this.original && this.original.numberOfEmployees, "Number of employees cannot be changed"),
+  );
 }
 
 export class PCROldPartnerAdditionItemDtoValidator extends PCRBaseItemDtoValidator<PCRItemForPartnerAdditionDto> {

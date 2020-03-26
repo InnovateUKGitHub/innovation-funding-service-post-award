@@ -155,6 +155,10 @@ export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBa
     if (stepName === "academicOrganisationStep") {
       item.organisationName = body.organisationName;
     }
+    if (stepName === "organisationDetailsStep") {
+      item.participantSize = parseInt(body.participantSize, 10);
+      item.numberOfEmployees = parseInt(body.numberOfEmployees, 10);
+    }
     if (stepName === "projectLocationStep") {
       item.projectCity = body.projectCity;
       item.projectPostcode = body.projectPostcode;

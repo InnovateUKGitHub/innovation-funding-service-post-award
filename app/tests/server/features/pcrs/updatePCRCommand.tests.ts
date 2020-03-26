@@ -523,7 +523,9 @@ describe("UpdatePCRCommand", () => {
         contact1Forename: "Homer",
         contact1Surname: "Of Iliad fame",
         contact1Phone: "112233",
-        contact1Email: "helen@troy.com"
+        contact1Email: "helen@troy.com",
+        participantSize: PCRParticipantSize.Medium,
+        numberOfEmployees: 15,
       });
       const dto = await context.runQuery(new GetPCRByIdQuery(projectChangeRequest.projectId, projectChangeRequest.id));
       const item = dto.items[0] as PCRItemForPartnerAdditionDto;
@@ -539,7 +541,9 @@ describe("UpdatePCRCommand", () => {
         status: PCRItemStatus.Incomplete,
         partnerType: PCRPartnerType.Business,
         projectRole: PCRProjectRole.Collaborator,
-        projectCity: "Coventry"
+        projectCity: "Coventry",
+        participantSize: PCRParticipantSize.Medium,
+        numberOfEmployees: 15,
       });
       const dto = await context.runQuery(new GetPCRByIdQuery(projectChangeRequest.projectId, projectChangeRequest.id));
       const item = dto.items[0] as PCRItemForPartnerAdditionDto;
@@ -553,6 +557,28 @@ describe("UpdatePCRCommand", () => {
       item.contact1Email = "helen@troy.com";
       await expect(context.runCommand(command)).resolves.toBe(true);
     });
+    it("should require organisation details to be set", async () => {
+      const {context, projectChangeRequest, recordType, project} = setup();
+      context.testData.createPCRItem(projectChangeRequest, recordType, {
+        status: PCRItemStatus.Incomplete,
+        partnerType: PCRPartnerType.Business,
+        projectRole: PCRProjectRole.Collaborator,
+        projectCity: "Coventry",
+        contact1ProjectRole: PCRContactRole.FinanceContact,
+        contact1Forename: "Homer",
+        contact1Surname: "Of Iliad fame",
+        contact1Phone: "112233",
+        contact1Email: "helen@troy.com",
+      });
+      const dto = await context.runQuery(new GetPCRByIdQuery(projectChangeRequest.projectId, projectChangeRequest.id));
+      const item = dto.items[0] as PCRItemForPartnerAdditionDto;
+      item.status = PCRItemStatus.Complete;
+      const command = new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto);
+      await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
+      item.participantSize = PCRParticipantSize.Medium;
+      item.numberOfEmployees = 15
+      await expect(context.runCommand(command)).resolves.toBe(true);
+    })
     it("should not allow updates to project role & partner type fields once they are set", async () => {
       const {context, projectChangeRequest, recordType, project} = setup();
       context.testData.createPCRItem(projectChangeRequest, recordType, { status: PCRItemStatus.Incomplete, projectRole: PCRProjectRole.Collaborator, partnerType: PCRPartnerType.Research });
@@ -576,7 +602,9 @@ describe("UpdatePCRCommand", () => {
         contact1Forename: "Marjorie",
         contact1Surname: "Evans",
         contact1Phone: "020000111",
-        contact1Email: "marj@evans.com"
+        contact1Email: "marj@evans.com",
+        participantSize: PCRParticipantSize.Large,
+        numberOfEmployees: 150,
       });
       const dto = await context.runQuery(new GetPCRByIdQuery(projectChangeRequest.projectId, projectChangeRequest.id));
       const item = dto.items[0] as PCRItemForPartnerAdditionDto;
@@ -605,7 +633,7 @@ describe("UpdatePCRCommand", () => {
       item.projectCity = "Bristol";
       item.projectPostcode = "BS1 5UW";
       item.participantSize = PCRParticipantSize.Medium;
-      item.numberOfEmployees = 15;
+      item.numberOfEmployees = 0;
 
       const command = new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto);
       await expect(await context.runCommand(command)).toBe(true);
@@ -624,7 +652,7 @@ describe("UpdatePCRCommand", () => {
       expect(updatedItem.projectCity).toEqual("Bristol");
       expect(updatedItem.projectPostcode).toEqual("BS1 5UW");
       expect(updatedItem.participantSize).toEqual(PCRParticipantSize.Medium);
-      expect(updatedItem.numberOfEmployees).toEqual(15);
+      expect(updatedItem.numberOfEmployees).toEqual(0);
     });
   });
 

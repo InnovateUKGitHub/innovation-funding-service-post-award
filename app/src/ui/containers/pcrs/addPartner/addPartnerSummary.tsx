@@ -16,6 +16,8 @@ export class AddPartnerSummary extends React.Component<PcrSummaryProps<PCRItemFo
             <ACC.SummaryListItem label="Role in project" content={pcrItem.projectRoleLabel} validation={validator.projectRole} qa="projectRole" />
             <ACC.SummaryListItem label="Type" content={pcrItem.partnerTypeLabel} validation={validator.partnerType} qa="partnerType" />
             {pcrItem.partnerType === PCRPartnerType.Research && <ACC.SummaryListItem label="Name" content={pcrItem.organisationName} validation={validator.organisationName} qa="organisationName" action={this.props.getEditLink("academicOrganisationStep", validator.organisationName)}/>}
+            {<ACC.SummaryListItem label="Participant size" content={pcrItem.participantSizeLabel} validation={validator.participantSize} qa="participantSize" action={this.props.getEditLink("organisationDetailsStep", validator.participantSize)}/>}
+            {<ACC.SummaryListItem label="Number of full time employees" content={pcrItem.numberOfEmployees} validation={validator.numberOfEmployees} qa="numberOfEmployees" action={this.props.getEditLink("organisationDetailsStep", validator.numberOfEmployees)}/>}
             {<ACC.SummaryListItem label="Project city" content={pcrItem.projectCity} validation={validator.projectCity} qa="projectCity" action={this.props.getEditLink("projectLocationStep", validator.projectCity)}/>}
             {<ACC.SummaryListItem label="Project postcode" content={pcrItem.projectPostcode} validation={validator.projectPostcode} qa="projectPostcode" action={this.props.getEditLink("projectLocationStep", validator.projectPostcode)}/>}
           </ACC.SummaryList>
