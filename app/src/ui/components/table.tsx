@@ -63,6 +63,7 @@ interface TableProps<T> {
   bodyRowClass?: (row: T, index: number) => string;
   bodyRowFlag?: (row: T, index: number) => "warning" | "info" | "error" | "edit" | null;
   headerRowClass?: string;
+  footerRowClass?: string;
 }
 
 export class TableColumn<T> extends React.Component<InternalColumnProps<T>> {
@@ -128,6 +129,7 @@ export class TableColumn<T> extends React.Component<InternalColumnProps<T>> {
 }
 
 const TableComponent = <T extends {}>(props: TableProps<T> & { data: T[]; validationResult?: Results<{}>[]; }) => {
+  const standardRowCssClass = "govuk-table__row";
   // loop through the colums cloning them and assigning the props required
   const children = React.Children.toArray(props.children).filter(x => !!x);
   const customHeaders = props.headers && props.headers.length ? props.headers : null;
@@ -137,7 +139,7 @@ const TableComponent = <T extends {}>(props: TableProps<T> & { data: T[]; valida
   const footerColumns = children.some((x: any) => x.props && x.props.footer)
     ? children.map((column, columnIndex) => React.cloneElement(column as React.ReactElement<any>, { mode: "footer", columnIndex }))
     : [];
-  const footers = footerColumns.length ? [<tr key="standardFooter" className="govuk-table__row">{footerColumns}</tr>] : [];
+  const footers = footerColumns.length ? [<tr key="standardFooter" className={classNames(standardRowCssClass, props.footerRowClass)}>{footerColumns}</tr>] : [];
   (props.footers || []).forEach(customFooter => footers.push(customFooter));
 
   const rowClass = props.data.map((dataItem, rowIndex) => (props.bodyRowClass && props.bodyRowClass(dataItem, rowIndex)) || "");
@@ -172,13 +174,13 @@ const TableComponent = <T extends {}>(props: TableProps<T> & { data: T[]; valida
         </colgroup>
         <thead className="govuk-table__head">
           {customHeaders}
-          <tr className={classNames("govuk-table__row", props.headerRowClass)}>
+          <tr className={classNames(standardRowCssClass, props.headerRowClass)}>
             {headers}
           </tr>
         </thead>
         <tbody className="govuk-table__body">
           {
-            contents.map((row, rowIndex) => <tr className={classNames("govuk-table__row", rowClass[rowIndex], rowClasses[rowIndex])} key={rowIndex}>{row}</tr>)
+            contents.map((row, rowIndex) => <tr className={classNames(standardRowCssClass, rowClass[rowIndex], rowClasses[rowIndex])} key={rowIndex}>{row}</tr>)
           }
         </tbody>
         {footers.length ? <tfoot>{footers}</tfoot> : null}

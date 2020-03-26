@@ -129,6 +129,11 @@
       "summary-title": "Summary of project costs",
       "save-button": "Save and return to reallocate project costs"
     },
+    "financial-virement-edit-partner-level":{
+      "title": "Change remaining grant",
+      "save-button": "Save and return to reallocate project costs",
+      "remaining-grant-info" :"You may change the new remaining grant for any partner, so the total new remaining grant is no more than the remaining grant already agreed for the project. The funding level will update to the new funding level for the remaining costs on the project."
+    },
     "monitoring-reports-dashboard":{
       "title": {
         "html": "Monitoring reports - View project",
@@ -338,6 +343,12 @@
     "cost-category-name": "Cost category",
     "original-funding-level":"Funding level",
     "new-funding-level":"New funding level",
+    "project-original-eligible-costs": "Total eligible costs",
+    "project-new-eligible-costs": "New total eligible costs",
+    "project-difference-costs": "Difference",
+    "project-original-grant": "Total grant",
+    "project-new-grant": "New total grant",
+    "project-difference-grant": "Difference",
     "partner-original-eligible-costs": "Total eligible costs",
     "partner-original-remaining-costs": "Remaining costs",
     "partner-original-remaining-grant": "Remaining grant",
@@ -352,7 +363,10 @@
     "cost-category-costs-claimed": "Costs claimed",
     "cost-category-new-eligible-costs": "New total eligible costs",
     "cost-category-difference-costs": "Costs reallocated",
-    "totals": "Total"
+    "project-totals": "Project totals",
+    "partner-totals": "Partner totals",
+    "grant-moving-over-year": "Grant value moving over the financial year end",
+    "year-end-information": "The financial year ends on March 31st."
   },
   "monitoring-reports-labels": {
   }
