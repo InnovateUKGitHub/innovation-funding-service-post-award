@@ -7,7 +7,7 @@ import { range } from "@shared/range";
 import { ClaimStatus, IClientUser, PCRPartnerType, PCRProjectRole } from "@framework/types";
 import { ITestRepositories } from "./testRepositories";
 import { PCRRecordTypeMetaValues } from "@server/features/pcrs/getItemTypesQuery";
-import { PCRItemStatus, PCRStatus } from "@framework/constants";
+import { PCRItemStatus, PCRParticipantSize, PCRStatus } from "@framework/constants";
 
 export class TestData {
   constructor(private repositories: ITestRepositories, private getCurrentUser: () => IClientUser) {
@@ -655,7 +655,9 @@ export class TestData {
       projectRole: PCRProjectRole.Unknown,
       partnerType: PCRPartnerType.Unknown,
       projectCity: "",
-      projectPostcode: ""
+      projectPostcode: "",
+      participantSize: PCRParticipantSize.Unknown,
+      numberOfEmployees: null,
     };
 
     if (update) {

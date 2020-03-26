@@ -46,3 +46,11 @@ export enum PCRItemType {
   ScopeChange = 80,
   TimeExtension = 90,
 }
+
+export enum PCRParticipantSize {
+  Unknown = 0,
+  Academic = 10,
+  Small = 20,
+  Medium = 30,
+  Large = 40,
+}
