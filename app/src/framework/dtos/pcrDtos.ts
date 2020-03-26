@@ -105,6 +105,7 @@ export interface PCRItemForProjectTerminationDto extends PCRItemBaseDto {
 
 export interface PCRItemForPartnerAdditionDto extends PCRItemBaseDto {
   type: PCRItemType.PartnerAddition;
+  contact1ProjectRoleLabel: string | null;
   contact1ProjectRole: PCRContactRole;
   contact1Forename: string | null;
   contact1Surname: string | null;
