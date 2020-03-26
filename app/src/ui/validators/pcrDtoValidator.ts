@@ -240,6 +240,20 @@ export class PCRBaseItemDtoValidator<T extends PCRItemDto> extends Results<T> {
   public status = this.validateStatus();
 
   public type = this.validateTypes();
+
+  protected requiredIfComplete(value: any, message?: string) {
+    if (this.model.status !== PCRItemStatus.Complete) {
+      return Validation.valid(this);
+    }
+    return Validation.required(this, value, message);
+  }
+
+  protected hasPermissionToEdit(value: any, originalValue: any, message?: string) {
+    if (this.canEdit) {
+      return Validation.valid(this);
+    }
+    return Validation.isUnchanged(this, value, originalValue, message);
+  }
 }
 
 export class PCRStandardItemDtoValidator extends PCRBaseItemDtoValidator<PCRStandardItemDto> {
@@ -355,32 +369,7 @@ export class PCRPartnerAdditionItemDtoValidator extends PCRBaseItemDtoValidator<
   }
   private validateOrganisationNameRequired() {
     if (this.model.partnerType !== PCRPartnerType.Research) return Validation.valid(this);
-    if (this.model.status !== PCRItemStatus.Complete) return Validation.valid(this);
-    return Validation.required(this, this.model.organisationName || null, "Enter an organisation name");
-  }
-  private validateProjectCityRequired() {
-    if (this.model.status !== PCRItemStatus.Complete) return Validation.valid(this);
-    return Validation.required(this, this.model.projectCity || null, "Enter a project city");
-  }
-  private validateContact1ProjectRoleRequired() {
-    if (this.model.status !== PCRItemStatus.Complete) return Validation.valid(this);
-    return Validation.required(this, this.model.contact1ProjectRole || null, "Select a project role");
-  }
-  private validateContact1ForenameRequired() {
-    if (this.model.status !== PCRItemStatus.Complete) return Validation.valid(this);
-    return Validation.required(this, this.model.contact1Forename || null, "Enter a name");
-  }
-  private validateContact1SurnameRequired() {
-    if (this.model.status !== PCRItemStatus.Complete) return Validation.valid(this);
-    return Validation.required(this, this.model.contact1Surname || null, "Enter a surname");
-  }
-  private validateContact1PhoneRequired() {
-    if (this.model.status !== PCRItemStatus.Complete) return Validation.valid(this);
-    return Validation.required(this, this.model.contact1Phone || null, "Enter a phone number");
-  }
-  private validateContact1EmailRequired() {
-    if (this.model.status !== PCRItemStatus.Complete) return Validation.valid(this);
-    return Validation.required(this, this.model.contact1Email || null, "Enter an email address");
+    return this.requiredIfComplete(this.model.organisationName, "Enter an organisation name");
   }
 
   projectRole = Validation.all(this,
@@ -395,40 +384,40 @@ export class PCRPartnerAdditionItemDtoValidator extends PCRBaseItemDtoValidator<
 
   organisationName = Validation.all(this,
     () => this.validateOrganisationNameRequired(),
-    () => !this.canEdit ? Validation.isUnchanged(this, this.model.organisationName, this.original && this.original.organisationName, "Organisation name cannot be changed") : Validation.valid(this),
+    () => this.hasPermissionToEdit(this.model.organisationName, this.original && this.original.organisationName, "Organisation name cannot be changed"),
   );
 
   contact1ProjectRole = Validation.all(this,
-    () => this.validateContact1ProjectRoleRequired(),
-    () => !this.canEdit ? Validation.isUnchanged(this, this.model.contact1ProjectRole, this.original && this.original.contact1ProjectRole, `Role cannot be changed`) : Validation.valid(this),
+    () => this.requiredIfComplete(this.model.contact1ProjectRole, "Select a project role"),
+    () => this.hasPermissionToEdit(this.model.contact1ProjectRole, this.original && this.original.contact1ProjectRole, `Role cannot be changed`),
   );
 
   contact1Forename = Validation.all(this,
-    () => this.validateContact1ForenameRequired(),
-    () => !this.canEdit ? Validation.isUnchanged(this, this.model.contact1Forename, this.original && this.original.contact1Forename, `Name cannot be changed`) : Validation.valid(this),
+    () => this.requiredIfComplete(this.model.contact1Forename, "Enter a name"),
+    () => this.hasPermissionToEdit(this.model.contact1Forename, this.original && this.original.contact1Forename, `Name cannot be changed`),
   );
 
   contact1Surname = Validation.all(this,
-    () => this.validateContact1SurnameRequired(),
-    () => !this.canEdit ? Validation.isUnchanged(this, this.model.contact1Surname, this.original && this.original.contact1Surname, `Surname cannot be changed`) : Validation.valid(this),
+    () => this.requiredIfComplete(this.model.contact1Surname, "Enter a surname"),
+    () => this.hasPermissionToEdit(this.model.contact1Surname, this.original && this.original.contact1Surname, `Surname cannot be changed`),
   );
 
   contact1Phone = Validation.all(this,
-    () => this.validateContact1PhoneRequired(),
-    () => !this.canEdit ? Validation.isUnchanged(this, this.model.contact1Phone, this.original && this.original.contact1Phone, `Phone number cannot be changed`) : Validation.valid(this),
+    () => this.requiredIfComplete(this.model.contact1Phone, "Enter a phone number"),
+    () => this.hasPermissionToEdit(this.model.contact1Phone, this.original && this.original.contact1Phone, `Phone number cannot be changed`),
   );
 
   contact1Email = Validation.all(this,
-    () => this.validateContact1EmailRequired(),
-    () => !this.canEdit ? Validation.isUnchanged(this, this.model.contact1Email, this.original && this.original.contact1Email, `Email address cannot be changed`) : Validation.valid(this),
+    () => this.requiredIfComplete(this.model.contact1Email, "Enter an email address"),
+    () => this.hasPermissionToEdit(this.model.contact1Email, this.original && this.original.contact1Email, `Email address cannot be changed`),
   );
 
   projectCity = Validation.all(this,
-    () => this.validateProjectCityRequired(),
-    () => !this.canEdit ? Validation.isUnchanged(this, this.model.projectCity, this.original && this.original.projectCity, "Project city cannot be changed") : Validation.valid(this),
+    () => this.requiredIfComplete(this.model.projectCity, "Enter a project city"),
+    () => this.hasPermissionToEdit(this.model.projectCity, this.original && this.original.projectCity, "Project city cannot be changed"),
   );
 
-  projectPostcode = !this.canEdit ? Validation.isUnchanged(this, this.model.projectPostcode, this.original && this.original.projectPostcode, "Project postcode cannot be changed") : Validation.valid(this);
+  projectPostcode = this.hasPermissionToEdit(this.model.projectPostcode, this.original && this.original.projectPostcode, "Project postcode cannot be changed");
 }
 
 export class PCROldPartnerAdditionItemDtoValidator extends PCRBaseItemDtoValidator<PCRItemForPartnerAdditionDto> {
