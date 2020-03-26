@@ -67,7 +67,7 @@ class Component extends ContainerBase<Params, Props, {}> {
       return null;
     }
     return (
-      <ACC.Info summary="Reasoning for the request">
+      <ACC.Info summary="Reasoning for the request" qa="reasoning_for_the_request">
         <ACC.Renderers.SimpleString multiline={true}>{pcr.reasoningComments}</ACC.Renderers.SimpleString>
       </ACC.Info>
     );
