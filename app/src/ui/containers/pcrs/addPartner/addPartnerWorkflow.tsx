@@ -8,12 +8,20 @@ import { PCRPartnerType } from "@framework/constants";
 import { AcademicOrganisationStep } from "@ui/containers/pcrs/addPartner/academicOrganisationStep";
 import { ProjectLocationStep } from "@ui/containers/pcrs/addPartner/projectLocationStep";
 import { FinanceContactStep } from "@ui/containers/pcrs/addPartner/financeContactStep";
+import { OrganisationDetailsStep } from "@ui/containers/pcrs/addPartner/organisationDetailsSteps";
 
-export type addPartnerStepNames = "roleAndOrganisationStep" | "academicOrganisationStep" | "projectLocationStep" | "financeContactStep";
+export type addPartnerStepNames = "roleAndOrganisationStep" | "academicOrganisationStep" | "organisationDetailsStep" | "projectLocationStep" | "financeContactStep";
 
 export const getAddPartnerWorkflow = (item: PCRItemForPartnerAdditionDto, step: number | undefined): IPCRWorkflow<PCRItemForPartnerAdditionDto, PCRPartnerAdditionItemDtoValidator> => {
   const workflow: IPCRWorkflow<PCRItemForPartnerAdditionDto, PCRPartnerAdditionItemDtoValidator> = {
     steps: [
+      {
+        stepName: "organisationDetailsStep",
+        displayName: "Organisation details",
+        stepNumber: 3,
+        validation: val => val.pcr,
+        stepRender: OrganisationDetailsStep,
+      },
       {
         stepName: "projectLocationStep",
         displayName: "Project location",
