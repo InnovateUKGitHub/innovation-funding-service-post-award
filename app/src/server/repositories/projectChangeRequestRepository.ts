@@ -8,7 +8,13 @@ import {
 } from "@framework/entities";
 import SalesforceRepositoryBase from "./salesforceRepositoryBase";
 import { ILogger } from "@server/features/common/logger";
-import { PcrParticipantSizeMapper, PcrPartnerTypeMapper, PcrProjectRoleMapper, SalesforcePCRMapper } from "./mappers/projectChangeRequestMapper";
+import {
+  PcrContactRoleMapper,
+  PcrParticipantSizeMapper,
+  PcrPartnerTypeMapper,
+  PcrProjectRoleMapper,
+  SalesforcePCRMapper
+} from "./mappers/projectChangeRequestMapper";
 import { NotFoundError } from "@server/features/common";
 import { PCRItemStatus, PCRStatus } from "@framework/constants";
 
@@ -62,6 +68,12 @@ export interface ISalesforcePCR {
   Acc_Nickname__c: string|null;
 
   // Add partner
+  Acc_Contact1ProjectRole__c: string|null;
+  Acc_Contact1Forename__c: string|null;
+  Acc_Contact1Surname__c: string|null;
+  Acc_Contact1Phone__c: string|null;
+  Acc_Contact1EmailAddress__c: string|null;
+
   Acc_OrganisationName__c: string|null;
   Acc_ProjectRole__c: string|null;
   ProjectRoleLabel: string|null;
@@ -122,6 +134,11 @@ export class ProjectChangeRequestRepository extends SalesforceRepositoryBase<ISa
     "Acc_ProjectSummarySnapshot__c",
     "Acc_ExistingPartnerName__c",
     "Acc_Nickname__c",
+    "Acc_Contact1ProjectRole__c",
+    "Acc_Contact1Forename__c",
+    "Acc_Contact1Surname__c",
+    "Acc_Contact1Phone__c",
+    "Acc_Contact1EmailAddress__c",
     "Acc_OrganisationName__c",
     "Acc_ProjectRole__c",
     "toLabel(Acc_ProjectRole__c) ProjectRoleLabel",
@@ -187,6 +204,11 @@ export class ProjectChangeRequestRepository extends SalesforceRepositoryBase<ISa
       Acc_RemovalDate__c: this.toOptionalSFDate(x.withdrawalDate),
       Acc_RemovalPeriod__c: x.removalPeriod,
       Acc_Project_Participant__c: x.partnerId,
+      Acc_Contact1ProjectRole__c: new PcrContactRoleMapper().mapToSalesforcePCRProjectRole(x.contact1ProjectRole),
+      Acc_Contact1Forename__c: x.contact1Forename,
+      Acc_Contact1Surname__c: x.contact1Surname,
+      Acc_Contact1Phone__c: x.contact1Phone,
+      Acc_Contact1EmailAddress__c: x.contact1Email,
       Acc_OrganisationName__c: x.organisationName,
       Acc_ProjectRole__c: new PcrProjectRoleMapper().mapToSalesforcePCRProjectRole(x.projectRole),
       Acc_ParticipantType__c: new PcrPartnerTypeMapper().mapToSalesforcePCRPartnerType(x.partnerType),

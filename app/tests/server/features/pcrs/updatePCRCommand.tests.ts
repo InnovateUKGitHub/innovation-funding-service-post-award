@@ -6,6 +6,7 @@ import { GetPCRByIdQuery } from "@server/features/pcrs/getPCRByIdQuery";
 import { ValidationError } from "@server/features/common";
 import {
   Authorisation,
+  PCRContactRole,
   PCRDto,
   PCRItemForAccountNameChangeDto,
   PCRItemForMultiplePartnerFinancialVirementDto,
@@ -547,6 +548,11 @@ describe("UpdatePCRCommand", () => {
       context.testData.createPCRItem(projectChangeRequest, recordType, { status: PCRItemStatus.Incomplete });
       const dto = await context.runQuery(new GetPCRByIdQuery(projectChangeRequest.projectId, projectChangeRequest.id));
       const item = dto.items[0] as PCRItemForPartnerAdditionDto;
+      item.contact1ProjectRole = PCRContactRole.FinanceContact;
+      item.contact1Forename = "Marjorie";
+      item.contact1Surname = "Evans";
+      item.contact1Phone = "020000111";
+      item.contact1Email = "marj@evans.com";
       item.organisationName = "Bristol University";
       item.projectRole = PCRProjectRole.ProjectLead;
       item.partnerType = PCRPartnerType.Other;
@@ -558,6 +564,11 @@ describe("UpdatePCRCommand", () => {
       await expect(await context.runCommand(command)).toBe(true);
       const updated = await context.runQuery(new GetPCRByIdQuery(projectChangeRequest.projectId, projectChangeRequest.id));
       const updatedItem = updated.items[0] as PCRItemForPartnerAdditionDto;
+      expect(updatedItem.contact1ProjectRole).toEqual(PCRContactRole.FinanceContact);
+      expect(updatedItem.contact1Forename).toEqual("Marjorie");
+      expect(updatedItem.contact1Surname).toEqual("Evans");
+      expect(updatedItem.contact1Phone).toEqual("020000111");
+      expect(updatedItem.contact1Email).toEqual("marj@evans.com");
       expect(updatedItem.organisationName).toEqual("Bristol University");
       expect(updatedItem.projectRole).toEqual(PCRProjectRole.ProjectLead);
       expect(updatedItem.partnerType).toEqual(PCRPartnerType.Other);
