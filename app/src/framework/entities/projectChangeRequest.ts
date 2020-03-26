@@ -1,5 +1,8 @@
 import {
-  PCRItemStatus, PCRPartnerType,
+  PCRContactRole,
+  PCRItemStatus,
+  PCRParticipantSize,
+  PCRPartnerType,
   PCRProjectRole,
   PCRStatus
 } from "@framework/constants";
@@ -37,6 +40,12 @@ export interface ProjectChangeRequestItemForCreateEntity {
   partnerId?: string | null;
   withdrawalDate?: Date | null;
   removalPeriod?: number | null;
+  contact1ProjectRole?: PCRContactRole;
+  contact1ProjectRoleLabel?: string | null;
+  contact1Forename?: string | null;
+  contact1Surname?: string | null;
+  contact1Phone?: string | null;
+  contact1Email?: string | null;
   organisationName?: string | null;
   projectRole?: PCRProjectRole;
   projectRoleLabel?: string | null;
@@ -45,6 +54,8 @@ export interface ProjectChangeRequestItemForCreateEntity {
   grantMovingOverFinancialYear?: number | null;
   projectCity?: string | null;
   projectPostcode?: string | null;
+  participantSize?: PCRParticipantSize;
+  numberOfEmployees?: number | null;
 }
 
 export interface ProjectChangeRequestItemEntity extends ProjectChangeRequestItemForCreateEntity {

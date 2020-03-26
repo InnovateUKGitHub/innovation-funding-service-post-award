@@ -1,9 +1,9 @@
-import { PCRStandardItemDto } from "@framework/dtos";
-import { PCRStandardItemDtoValidator } from "@ui/validators";
+import { PCRItemForMultiplePartnerFinancialVirementDto } from "@framework/dtos";
+import { MultiplePartnerFinancialVirementDtoValidator } from "@ui/validators";
 import { FinancialVirementSummary } from "./financialVirementsSummary";
 import { IPCRWorkflow } from "@ui/containers/pcrs/pcrWorkflow";
 
-export const financialVirementWorkflow: IPCRWorkflow<PCRStandardItemDto, PCRStandardItemDtoValidator> = {
+export const financialVirementWorkflow: IPCRWorkflow<PCRItemForMultiplePartnerFinancialVirementDto, MultiplePartnerFinancialVirementDtoValidator> = {
   steps: [],
   summary: {
     validation: val => val,

@@ -80,7 +80,21 @@ export class CreateProjectChangeRequestCommand extends CommandBase<string> {
       case PCRItemType.PartnerWithdrawal:
         return { ...init, removalPeriod: periodInProject(itemDto.withdrawalDate, project), partnerId: itemDto.partnerId, withdrawalDate: itemDto.withdrawalDate };
       case PCRItemType.PartnerAddition:
-        return { ...init, organisationName: itemDto.organisationName, projectRole: itemDto.projectRole, partnerType: itemDto.partnerType, projectCity: itemDto.projectCity, projectPostcode: itemDto.projectPostcode };
+        return {
+          ...init,
+          contact1ProjectRole: itemDto.contact1ProjectRole,
+          contact1Forename: itemDto.contact1Forename,
+          contact1Surname: itemDto.contact1Surname,
+          contact1Phone: itemDto.contact1Phone,
+          contact1Email: itemDto.contact1Email,
+          organisationName: itemDto.organisationName,
+          projectRole: itemDto.projectRole,
+          partnerType: itemDto.partnerType,
+          projectCity: itemDto.projectCity,
+          projectPostcode: itemDto.projectPostcode,
+          participantSize: itemDto.participantSize,
+          numberOfEmployees: itemDto.numberOfEmployees,
+         };
       case PCRItemType.MultiplePartnerFinancialVirement:
         return { ...init, grantMovingOverFinancialYear: itemDto.grantMovingOverFinancialYear };
       default:

@@ -3,11 +3,11 @@ import { IEditorStore, StoresConsumer } from "@ui/redux";
 import { Pending } from "@shared/pending";
 import * as ACC from "@ui/components";
 import { PcrSummaryProps } from "@ui/containers/pcrs/pcrWorkflow";
-import { MultiplePartnerFinancialVirementDtoValidator, PCRDtoValidator, PCRStandardItemDtoValidator } from "@ui/validators";
-import { PartnerDto, PCRDto, PCRItemDto, PCRItemForMultiplePartnerFinancialVirementDto, PCRStandardItemDto } from "@framework/dtos";
+import { MultiplePartnerFinancialVirementDtoValidator, PCRDtoValidator } from "@ui/validators";
+import { PartnerDto, PCRDto, PCRItemDto, PCRItemForMultiplePartnerFinancialVirementDto } from "@framework/dtos";
 import { PCRItemType } from "@framework/types";
 
-interface Props extends PcrSummaryProps<PCRStandardItemDto, PCRStandardItemDtoValidator, ""> {
+interface Props extends PcrSummaryProps<PCRItemForMultiplePartnerFinancialVirementDto, MultiplePartnerFinancialVirementDtoValidator, ""> {
   virement: Pending<FinancialVirementDto>;
   partners: Pending<PartnerDto[]>;
 }
@@ -46,14 +46,23 @@ class Component extends React.Component<Props> {
       );
     }
 
-    return this.renderReviewTable(paired, virement);
+    return (
+      <React.Fragment>
+        {this.renderReviewTable(paired, virement)}
+        <ACC.Section>
+          <ACC.SummaryList qa="pcr_financial-virement">
+            <ACC.SummaryListItem qa="grantValueYearEnd" label={<React.Fragment>Grant value moving over<br/>the financial year end</React.Fragment>} content={<ACC.Renderers.Currency value={this.props.pcrItem.grantMovingOverFinancialYear} />}/>
+          </ACC.SummaryList>
+        </ACC.Section>
+      </React.Fragment>
+    );
   }
 
   private renderPrepareTable(data: { partner: PartnerDto, partnerVirement: PartnerVirementsDto }[], dto: FinancialVirementDto) {
     const Table = ACC.TypedTable<typeof data[0]>();
     return (
       <Table.Table qa="partners" data={data}>
-        <Table.Custom qa="partner" headerContent={x => x.financialVirementSummary.labels.partnerName()} value={x => this.getPartnerLink(x.partnerVirement, x.partner)} footer={<ACC.Content value={x => x.financialVirementDetails.labels.totals()} />} isDivider="normal" />
+        <Table.Custom qa="partner" headerContent={x => x.financialVirementSummary.labels.partnerName()} value={x => this.getPartnerLink(x.partnerVirement, x.partner)} footer={<ACC.Content value={x => x.financialVirementDetails.labels.projectTotals()} />} isDivider="normal" />
         <Table.Currency qa="originalEligibleCosts" headerContent={x => x.financialVirementSummary.labels.partnerOriginalEligibleCosts()} value={x => x.partnerVirement.originalEligibleCosts} footer={<ACC.Renderers.Currency value={dto.originalEligibleCosts} />} />
         <Table.Currency qa="originalRemaining" headerContent={x => x.financialVirementSummary.labels.partnerOriginalRemainingCosts()} value={x => x.partnerVirement.originalRemainingCosts} footer={<ACC.Renderers.Currency value={dto.originalRemainingCosts} />} />
         <Table.Currency qa="originalRemainingGrant" headerContent={x => x.financialVirementSummary.labels.partnerOriginalRemainingGrant()} value={x => x.partnerVirement.originalRemainingGrant} footer={<ACC.Renderers.Currency value={dto.originalRemainingGrant} />} isDivider="normal" />
@@ -67,8 +76,8 @@ class Component extends React.Component<Props> {
   private renderReviewTable(data: { partner: PartnerDto, partnerVirement: PartnerVirementsDto }[], dto: FinancialVirementDto) {
     const Table = ACC.TypedTable<typeof data[0]>();
     return (
-      <Table.Table qa="partners" data={data}>
-        <Table.Custom qa="partner" headerContent={x => x.financialVirementSummary.labels.partnerName()} value={x => this.getPartnerLink(x.partnerVirement, x.partner)} footer={<ACC.Content value={x => x.financialVirementDetails.labels.totals()} />} isDivider="normal" />
+      <Table.Table qa="partners" data={data} headerRowClass="govuk-body-s" bodyRowClass={x => "govuk-body-s"} footerRowClass="govuk-body-s">
+        <Table.Custom qa="partner" headerContent={x => x.financialVirementSummary.labels.partnerName()} value={x => this.getPartnerLink(x.partnerVirement, x.partner)} footer={<ACC.Content value={x => x.financialVirementDetails.labels.projectTotals()} />} isDivider="normal" />
         <Table.Currency qa="originalEligibleCosts" headerContent={x => x.financialVirementSummary.labels.partnerOriginalEligibleCosts()} value={x => x.partnerVirement.originalEligibleCosts} footer={<ACC.Renderers.Currency value={dto.originalEligibleCosts} />} />
         <Table.Currency qa="newEligibleCosts" headerContent={x => x.financialVirementSummary.labels.partnerNewEligibleCosts()} value={x => x.partnerVirement.newEligibleCosts} footer={<ACC.Renderers.Currency value={dto.newEligibleCosts} />} />
         <Table.Currency qa="differenceEligibleCosts" headerContent={x => x.financialVirementSummary.labels.partnerDifferenceCosts()} value={x => x.partnerVirement.newEligibleCosts - x.partnerVirement.originalEligibleCosts} footer={<ACC.Renderers.Currency value={dto.newEligibleCosts - dto.originalEligibleCosts} />} isDivider="normal" />
@@ -109,9 +118,8 @@ export class GrantMovingOverFinancialYearForm extends React.Component<PropsWithF
     const itemValidator = this.props.editor.validator.items.results.find(x => x.model.type === PCRItemType.MultiplePartnerFinancialVirement) as MultiplePartnerFinancialVirementDtoValidator;
 
     return (
-      <Form.Fieldset>
-        <ACC.Renderers.SimpleString>Grant value moving over the financial year end</ACC.Renderers.SimpleString>
-        <ACC.TextHint text={"The financial year ends on 31 March"} />
+      <Form.Fieldset heading={"Grant value moving over the financial year end"}>
+        <ACC.TextHint text={"The financial year ends on 31 March."} />
         <Form.Numeric
           name="grantMovingOverFinancialYear"
           width={5}
@@ -124,7 +132,7 @@ export class GrantMovingOverFinancialYearForm extends React.Component<PropsWithF
   }
 }
 
-export const FinancialVirementSummary = (props: PcrSummaryProps<PCRStandardItemDto, PCRStandardItemDtoValidator, "">) => (
+export const FinancialVirementSummary = (props: PcrSummaryProps<PCRItemForMultiplePartnerFinancialVirementDto, MultiplePartnerFinancialVirementDtoValidator, "">) => (
   <StoresConsumer>
     {
       stores => (

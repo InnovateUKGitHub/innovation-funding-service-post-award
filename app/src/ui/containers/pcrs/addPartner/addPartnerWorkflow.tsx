@@ -7,8 +7,9 @@ import { AddPartnerSummary } from "@ui/containers/pcrs/addPartner/addPartnerSumm
 import { PCRPartnerType } from "@framework/constants";
 import { AcademicOrganisationStep } from "@ui/containers/pcrs/addPartner/academicOrganisationStep";
 import { ProjectLocationStep } from "@ui/containers/pcrs/addPartner/projectLocationStep";
+import { FinanceContactStep } from "@ui/containers/pcrs/addPartner/financeContactStep";
 
-export type addPartnerStepNames = "roleAndOrganisationStep" | "academicOrganisationStep" | "projectLocationStep";
+export type addPartnerStepNames = "roleAndOrganisationStep" | "academicOrganisationStep" | "projectLocationStep" | "financeContactStep";
 
 export const getAddPartnerWorkflow = (item: PCRItemForPartnerAdditionDto, step: number | undefined): IPCRWorkflow<PCRItemForPartnerAdditionDto, PCRPartnerAdditionItemDtoValidator> => {
   const workflow: IPCRWorkflow<PCRItemForPartnerAdditionDto, PCRPartnerAdditionItemDtoValidator> = {
@@ -16,9 +17,15 @@ export const getAddPartnerWorkflow = (item: PCRItemForPartnerAdditionDto, step: 
       {
         stepName: "projectLocationStep",
         displayName: "Project location",
-        stepNumber: 3,
+        stepNumber: 5,
         validation: val => val.pcr,
         stepRender: ProjectLocationStep,
+      },{
+        stepName: "financeContactStep",
+        displayName: "Finance contact",
+        stepNumber: 6,
+        validation: val => val.pcr,
+        stepRender: FinanceContactStep,
       },
     ],
     summary: {
@@ -36,6 +43,7 @@ export const getAddPartnerWorkflow = (item: PCRItemForPartnerAdditionDto, step: 
       stepRender: RoleAndOrganisationStep
     });
   }
+
   if (item.partnerType === PCRPartnerType.Research) {
     workflow.steps.push({
       stepName: "academicOrganisationStep",

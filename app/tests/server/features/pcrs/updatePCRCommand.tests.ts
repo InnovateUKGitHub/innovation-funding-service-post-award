@@ -6,6 +6,7 @@ import { GetPCRByIdQuery } from "@server/features/pcrs/getPCRByIdQuery";
 import { ValidationError } from "@server/features/common";
 import {
   Authorisation,
+  PCRContactRole,
   PCRDto,
   PCRItemForAccountNameChangeDto,
   PCRItemForMultiplePartnerFinancialVirementDto,
@@ -14,6 +15,7 @@ import {
   PCRItemForProjectSuspensionDto,
   PCRItemForScopeChangeDto,
   PCRItemForTimeExtensionDto,
+  PCRParticipantSize,
   PCRPartnerType,
   PCRProjectRole,
   PCRStandardItemDto,
@@ -510,13 +512,43 @@ describe("UpdatePCRCommand", () => {
     });
     it("should require organisation name to be set when the partner type is Research", async () => {
       const {context, projectChangeRequest, recordType, project} = setup();
-      context.testData.createPCRItem(projectChangeRequest, recordType, { status: PCRItemStatus.Incomplete, partnerType: PCRPartnerType.Research, projectRole: PCRProjectRole.Collaborator, projectCity: "Coventry" });
+      context.testData.createPCRItem(projectChangeRequest, recordType, {
+        status: PCRItemStatus.Incomplete,
+        partnerType: PCRPartnerType.Research,
+        projectRole: PCRProjectRole.Collaborator,
+        projectCity: "Coventry",
+        contact1ProjectRole: PCRContactRole.FinanceContact,
+        contact1Forename: "Homer",
+        contact1Surname: "Of Iliad fame",
+        contact1Phone: "112233",
+        contact1Email: "helen@troy.com"
+      });
       const dto = await context.runQuery(new GetPCRByIdQuery(projectChangeRequest.projectId, projectChangeRequest.id));
       const item = dto.items[0] as PCRItemForPartnerAdditionDto;
       item.status = PCRItemStatus.Complete;
       const command = new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto);
       await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
       item.organisationName = "Coventry University";
+      await expect(context.runCommand(command)).resolves.toBe(true);
+    });
+    it("should require finance contact details to be set", async () => {
+      const {context, projectChangeRequest, recordType, project} = setup();
+      context.testData.createPCRItem(projectChangeRequest, recordType, {
+        status: PCRItemStatus.Incomplete,
+        partnerType: PCRPartnerType.Business,
+        projectRole: PCRProjectRole.Collaborator,
+        projectCity: "Coventry"
+      });
+      const dto = await context.runQuery(new GetPCRByIdQuery(projectChangeRequest.projectId, projectChangeRequest.id));
+      const item = dto.items[0] as PCRItemForPartnerAdditionDto;
+      item.status = PCRItemStatus.Complete;
+      const command = new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto);
+      await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
+      item.contact1ProjectRole = PCRContactRole.FinanceContact;
+      item.contact1Forename = "Homer";
+      item.contact1Surname = "Of Iliad fame";
+      item.contact1Phone = "112233";
+      item.contact1Email = "helen@troy.com";
       await expect(context.runCommand(command)).resolves.toBe(true);
     });
     it("should not allow updates to project role & partner type fields once they are set", async () => {
@@ -532,7 +564,18 @@ describe("UpdatePCRCommand", () => {
     });
     it("should update item status", async () => {
       const {context, projectChangeRequest, recordType, project} = setup();
-      context.testData.createPCRItem(projectChangeRequest, recordType, { status: PCRItemStatus.Incomplete, projectRole: PCRProjectRole.Collaborator, partnerType: PCRPartnerType.Business, projectCity: "Bristol", projectPostcode: "BS1 5UW" });
+      context.testData.createPCRItem(projectChangeRequest, recordType, {
+        status: PCRItemStatus.Incomplete,
+        projectRole: PCRProjectRole.Collaborator,
+        partnerType: PCRPartnerType.Business,
+        projectCity: "Bristol",
+        projectPostcode: "BS1 5UW",
+        contact1ProjectRole: PCRContactRole.FinanceContact,
+        contact1Forename: "Marjorie",
+        contact1Surname: "Evans",
+        contact1Phone: "020000111",
+        contact1Email: "marj@evans.com"
+      });
       const dto = await context.runQuery(new GetPCRByIdQuery(projectChangeRequest.projectId, projectChangeRequest.id));
       const item = dto.items[0] as PCRItemForPartnerAdditionDto;
       item.status = PCRItemStatus.Complete;
@@ -546,20 +589,35 @@ describe("UpdatePCRCommand", () => {
       context.testData.createPCRItem(projectChangeRequest, recordType, { status: PCRItemStatus.Incomplete });
       const dto = await context.runQuery(new GetPCRByIdQuery(projectChangeRequest.projectId, projectChangeRequest.id));
       const item = dto.items[0] as PCRItemForPartnerAdditionDto;
+      item.contact1ProjectRole = PCRContactRole.FinanceContact;
+      item.contact1Forename = "Marjorie";
+      item.contact1Surname = "Evans";
+      item.contact1Phone = "020000111";
+      item.contact1Email = "marj@evans.com";
       item.organisationName = "Bristol University";
       item.projectRole = PCRProjectRole.ProjectLead;
       item.partnerType = PCRPartnerType.Other;
       item.projectCity = "Bristol";
       item.projectPostcode = "BS1 5UW";
+      item.participantSize = PCRParticipantSize.Medium;
+      item.numberOfEmployees = 15;
+
       const command = new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto);
       await expect(await context.runCommand(command)).toBe(true);
       const updated = await context.runQuery(new GetPCRByIdQuery(projectChangeRequest.projectId, projectChangeRequest.id));
       const updatedItem = updated.items[0] as PCRItemForPartnerAdditionDto;
+      expect(updatedItem.contact1ProjectRole).toEqual(PCRContactRole.FinanceContact);
+      expect(updatedItem.contact1Forename).toEqual("Marjorie");
+      expect(updatedItem.contact1Surname).toEqual("Evans");
+      expect(updatedItem.contact1Phone).toEqual("020000111");
+      expect(updatedItem.contact1Email).toEqual("marj@evans.com");
       expect(updatedItem.organisationName).toEqual("Bristol University");
       expect(updatedItem.projectRole).toEqual(PCRProjectRole.ProjectLead);
       expect(updatedItem.partnerType).toEqual(PCRPartnerType.Other);
       expect(updatedItem.projectCity).toEqual("Bristol");
       expect(updatedItem.projectPostcode).toEqual("BS1 5UW");
+      expect(updatedItem.participantSize).toEqual(PCRParticipantSize.Medium);
+      expect(updatedItem.numberOfEmployees).toEqual(15);
     });
   });
 

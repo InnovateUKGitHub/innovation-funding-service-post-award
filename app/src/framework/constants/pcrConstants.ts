@@ -19,6 +19,12 @@ export enum PCRProjectRole {
   Collaborator = 20,
 }
 
+export enum PCRContactRole {
+  Unknown = 0,
+  ProjectManager = 10,
+  FinanceContact = 20,
+}
+
 export enum PCRPartnerType {
   Unknown = 0,
   Business = 10,
@@ -45,4 +51,12 @@ export enum PCRItemType {
   SinglePartnerFinancialVirement = 70,
   ScopeChange = 80,
   TimeExtension = 90,
+}
+
+export enum PCRParticipantSize {
+  Unknown = 0,
+  Academic = 10,
+  Small = 20,
+  Medium = 30,
+  Large = 40,
 }

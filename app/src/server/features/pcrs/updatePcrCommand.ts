@@ -130,8 +130,35 @@ export class UpdatePCRCommand extends CommandBase<boolean> {
         }
         break;
       case PCRItemType.PartnerAddition:
-        if (item.organisationName !== dto.organisationName || item.projectRole !== dto.projectRole || item.partnerType !== dto.partnerType || item.projectCity !== dto.projectCity || item.projectPostcode !== dto.projectPostcode) {
-          return { ...init, organisationName: dto.organisationName, projectRole: dto.projectRole, partnerType: dto.partnerType, projectCity: dto.projectCity, projectPostcode: dto.projectPostcode };
+        if (
+          item.contact1ProjectRole !== dto.contact1ProjectRole
+          || item.contact1Forename !== dto.contact1Forename
+          || item.contact1Surname !== dto.contact1Surname
+          || item.contact1Phone !== dto.contact1Phone
+          || item.contact1Email !== dto.contact1Email
+          || item.organisationName !== dto.organisationName
+          || item.projectRole !== dto.projectRole
+          || item.partnerType !== dto.partnerType
+          || item.projectCity !== dto.projectCity
+          || item.projectPostcode !== dto.projectPostcode
+          || item.participantSize !== dto.participantSize
+          || item.numberOfEmployees !== dto.numberOfEmployees
+        ) {
+          return {
+            ...init,
+            contact1ProjectRole: dto.contact1ProjectRole,
+            contact1Forename: dto.contact1Forename,
+            contact1Surname: dto.contact1Surname,
+            contact1Phone: dto.contact1Phone,
+            contact1Email: dto.contact1Email,
+            organisationName: dto.organisationName,
+            projectRole: dto.projectRole,
+            partnerType: dto.partnerType,
+            projectCity: dto.projectCity,
+            projectPostcode: dto.projectPostcode,
+            participantSize: dto.participantSize,
+            numberOfEmployees: dto.numberOfEmployees,
+          };
         }
         break;
       case PCRItemType.MultiplePartnerFinancialVirement:
