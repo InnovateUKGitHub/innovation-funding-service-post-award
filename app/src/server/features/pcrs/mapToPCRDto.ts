@@ -127,6 +127,8 @@ const mapItemForPartnerAddition = (pcr: ProjectChangeRequestItemEntity, typeName
   contact1Surname: pcr.contact1Surname || null,
   contact1Phone: pcr.contact1Phone || null,
   contact1Email: pcr.contact1Email || null,
+  turnoverYearEnd: pcr.turnoverYearEnd || null,
+  turnover: pcr.turnover || null,
   organisationName: pcr.organisationName || null,
   projectRole: pcr.projectRole || PCRProjectRole.Unknown,
   partnerType: pcr.partnerType || PCRPartnerType.Unknown,
