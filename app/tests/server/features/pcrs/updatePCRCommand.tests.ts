@@ -14,6 +14,7 @@ import {
   PCRItemForProjectSuspensionDto,
   PCRItemForScopeChangeDto,
   PCRItemForTimeExtensionDto,
+  PCRParticipantSize,
   PCRPartnerType,
   PCRProjectRole,
   PCRStandardItemDto,
@@ -551,6 +552,8 @@ describe("UpdatePCRCommand", () => {
       item.partnerType = PCRPartnerType.Other;
       item.projectCity = "Bristol";
       item.projectPostcode = "BS1 5UW";
+      item.participantSize = PCRParticipantSize.Medium;
+      item.numberOfEmployees = 15;
       const command = new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto);
       await expect(await context.runCommand(command)).toBe(true);
       const updated = await context.runQuery(new GetPCRByIdQuery(projectChangeRequest.projectId, projectChangeRequest.id));
@@ -560,6 +563,8 @@ describe("UpdatePCRCommand", () => {
       expect(updatedItem.partnerType).toEqual(PCRPartnerType.Other);
       expect(updatedItem.projectCity).toEqual("Bristol");
       expect(updatedItem.projectPostcode).toEqual("BS1 5UW");
+      expect(updatedItem.participantSize).toEqual(PCRParticipantSize.Medium);
+      expect(updatedItem.numberOfEmployees).toEqual(15);
     });
   });
 

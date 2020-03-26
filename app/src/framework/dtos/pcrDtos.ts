@@ -1,6 +1,6 @@
 import {
   PCRItemStatus,
-  PCRItemType, PCRPartnerType,
+  PCRItemType, PCRParticipantSize, PCRPartnerType,
   PCRProjectRole,
   PCRStatus
 } from "@framework/constants";
@@ -111,6 +111,8 @@ export interface PCRItemForPartnerAdditionDto extends PCRItemBaseDto {
   partnerTypeLabel: string | null;
   projectCity: string | null;
   projectPostcode: string | null;
+  participantSize: PCRParticipantSize;
+  numberOfEmployees: number | null;
 }
 
 export interface PCRItemTypeDto {

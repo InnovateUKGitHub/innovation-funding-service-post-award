@@ -4,7 +4,7 @@ import {
   ProjectChangeRequestItemEntity
 } from "@framework/entities";
 import { ISalesforcePCR } from "../projectChangeRequestRepository";
-import { PCRItemStatus, PCRPartnerType, PCRProjectRole, PCRStatus } from "@framework/constants";
+import { PCRItemStatus, PCRParticipantSize, PCRPartnerType, PCRProjectRole, PCRStatus } from "@framework/constants";
 
 export const mapToPCRStatus = ((status: string) => {
   switch (status) {
@@ -90,6 +90,35 @@ export class PcrPartnerTypeMapper {
   });
 }
 
+export class PcrParticipantSizeMapper {
+  private participantSizes = {
+    academic: "Academic",
+    small: "Small",
+    medium: "Medium",
+    large: "Large",
+  };
+
+  public mapFromSalesforcePCRParticipantSize = ((participantSize: string | null): PCRParticipantSize => {
+    switch (participantSize) {
+      case this.participantSizes.academic: return PCRParticipantSize.Academic;
+      case this.participantSizes.small: return PCRParticipantSize.Small;
+      case this.participantSizes.medium: return PCRParticipantSize.Medium;
+      case this.participantSizes.large: return PCRParticipantSize.Large;
+      default: return PCRParticipantSize.Unknown;
+    }
+  });
+
+  public mapToSalesforcePCRParticipantSize = ((participantSize: PCRParticipantSize | undefined): string | null => {
+    switch (participantSize) {
+      case PCRParticipantSize.Academic: return this.participantSizes.academic;
+      case PCRParticipantSize.Small: return this.participantSizes.small;
+      case PCRParticipantSize.Medium: return this.participantSizes.medium;
+      case PCRParticipantSize.Large: return this.participantSizes.large;
+      default: return null;
+    }
+  });
+}
+
 export class SalesforcePCRMapper extends SalesforceBaseMapper<ISalesforcePCR[], ProjectChangeRequestEntity[]> {
   constructor(private readonly headerRecordTypeId: string) {
     super();
@@ -146,6 +175,8 @@ export class SalesforcePCRMapper extends SalesforceBaseMapper<ISalesforcePCR[], 
       grantMovingOverFinancialYear: pcrItem.Acc_GrantMovingOverFinancialYear__c,
       projectCity: pcrItem.Acc_ProjectCity__c,
       projectPostcode: pcrItem.Acc_ProjectPostcode__c,
+      participantSize: new PcrParticipantSizeMapper().mapFromSalesforcePCRParticipantSize(pcrItem.Acc_ParticipantSize__c),
+      numberOfEmployees: pcrItem.Acc_Employees__c,
     };
   }
 
