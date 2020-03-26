@@ -61,7 +61,7 @@ class FormComponent<T> extends React.Component<FormProps<T>, []> {
         {
           stores => (
             <form encType={this.mapEncType()} method={this.props.isGet ? "get" : "post"} action="" onSubmit={(e) => this.onSubmit(e)} data-qa={this.props.qa}>
-              <input type="hidden" name="_csrf" value={stores.users.getCurrentUser().csrf}/>
+              <input type="hidden" name="_csrf" value={stores && stores.users.getCurrentUser().csrf}/>
               {childrenWithData}
             </form>
           )
