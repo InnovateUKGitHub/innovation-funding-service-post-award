@@ -1,6 +1,7 @@
 import {
+  PCRContactRole,
   PCRItemStatus,
-  PCRItemType, PCRPartnerType,
+  PCRItemType, PCRParticipantSize, PCRPartnerType,
   PCRProjectRole,
   PCRStatus
 } from "@framework/constants";
@@ -104,6 +105,12 @@ export interface PCRItemForProjectTerminationDto extends PCRItemBaseDto {
 
 export interface PCRItemForPartnerAdditionDto extends PCRItemBaseDto {
   type: PCRItemType.PartnerAddition;
+  contact1ProjectRoleLabel: string | null;
+  contact1ProjectRole: PCRContactRole;
+  contact1Forename: string | null;
+  contact1Surname: string | null;
+  contact1Phone: string | null;
+  contact1Email: string | null;
   organisationName: string | null;
   projectRole: PCRProjectRole;
   partnerType: PCRPartnerType;
@@ -111,6 +118,8 @@ export interface PCRItemForPartnerAdditionDto extends PCRItemBaseDto {
   partnerTypeLabel: string | null;
   projectCity: string | null;
   projectPostcode: string | null;
+  participantSize: PCRParticipantSize;
+  numberOfEmployees: number | null;
 }
 
 export interface PCRItemTypeDto {

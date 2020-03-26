@@ -6,10 +6,17 @@ export class FinancialVirementLabels extends ContentBase {
   }
 
   public readonly partnerName = () => this.getContent("partner-name");
-  public readonly costCategoryName= () => this.getContent("cost-category-name");
+  public readonly costCategoryName = () => this.getContent("cost-category-name");
 
   public readonly originalFundingLevel = () => this.getContent("original-funding-level");
   public readonly newFundingLevel = () => this.getContent("new-funding-level");
+
+  public readonly projectOriginalEligibleCosts = () => this.getContent("project-original-eligible-costs");
+  public readonly projectNewEligibleCosts = () => this.getContent("project-new-eligible-costs");
+  public readonly projectDifferenceCosts = () => this.getContent("project-difference-costs");
+  public readonly projectOriginalGrant = () => this.getContent("project-original-grant");
+  public readonly projectNewGrant = () => this.getContent("project-new-grant");
+  public readonly projectDifferenceGrant = () => this.getContent("project-difference-grant");
 
   public readonly partnerOriginalEligibleCosts = () => this.getContent("partner-original-eligible-costs");
   public readonly partnerOriginalRemainingCosts = () => this.getContent("partner-original-remaining-costs");
@@ -27,5 +34,9 @@ export class FinancialVirementLabels extends ContentBase {
   public readonly costCategoryNewEligibleCosts = () => this.getContent("cost-category-new-eligible-costs");
   public readonly costCategoryDifferenceCosts = () => this.getContent("cost-category-difference-costs");
 
-  public readonly totals = () => this.getContent("totals");
+  public readonly projectTotals = () => this.getContent("project-totals");
+  public readonly partnerTotals = () => this.getContent("partner-totals");
+
+  public readonly grantMovingOverYear = () => this.getContent("grant-moving-over-year");
+  public readonly yearEndInformation = () => this.getContent("year-end-information");
 }
