@@ -13,6 +13,7 @@ import { ClaimDetailsContent } from "@content/pages/claims/claimDetailsContent";
 import { ClaimPrepareContent } from "@content/pages/claims/claimPrepareContent";
 import { FinancialVirementSummaryContent } from "./pages/financialVirementSummaryContent";
 import { FinancialVirementEditContent } from "./pages/financialVirementEditContent";
+import { FinancialVirementEditPartnerLevelContent } from "./pages/financialVirementEditPartnerLevelContent";
 import { FinancialVirementDetailsContent } from "./pages/financialVirementDetailsContent";
 import { ClaimReviewContent } from "@content/pages/claims/claimReviewContent";
 import { MonitoringReportsDashboardContent } from "./pages/monitoringReports/monitoringReportsDashboardContent";
@@ -51,6 +52,7 @@ export class Content extends ContentBase {
 
   public readonly financialVirementSummary = new FinancialVirementSummaryContent(this);
   public readonly financialVirementEdit = new FinancialVirementEditContent(this);
+  public readonly financialVirementEditPartnerLevel = new FinancialVirementEditPartnerLevelContent(this);
   public readonly financialVirementDetails = new FinancialVirementDetailsContent(this);
 
   public readonly monitoringReportsDashboard = new MonitoringReportsDashboardContent(this);
