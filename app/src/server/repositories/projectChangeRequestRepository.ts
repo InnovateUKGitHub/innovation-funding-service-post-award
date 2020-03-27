@@ -75,6 +75,9 @@ export interface ISalesforcePCR {
   Acc_Contact1Phone__c: string|null;
   Acc_Contact1EmailAddress__c: string|null;
 
+  Acc_TurnoverYearEnd__c: string|null;
+  Acc_Turnover__c: number|null;
+
   Acc_OrganisationName__c: string|null;
   Acc_ProjectRole__c: string|null;
   ProjectRoleLabel: string|null;
@@ -141,6 +144,8 @@ export class ProjectChangeRequestRepository extends SalesforceRepositoryBase<ISa
     "Acc_Contact1Surname__c",
     "Acc_Contact1Phone__c",
     "Acc_Contact1EmailAddress__c",
+    "Acc_TurnoverYearEnd__c",
+    "Acc_Turnover__c",
     "Acc_OrganisationName__c",
     "Acc_ProjectRole__c",
     "toLabel(Acc_ProjectRole__c) ProjectRoleLabel",
@@ -211,6 +216,8 @@ export class ProjectChangeRequestRepository extends SalesforceRepositoryBase<ISa
       Acc_Contact1Surname__c: x.contact1Surname,
       Acc_Contact1Phone__c: x.contact1Phone,
       Acc_Contact1EmailAddress__c: x.contact1Email,
+      Acc_TurnoverYearEnd__c: this.toOptionalSFDate(x.turnoverYearEnd),
+      Acc_Turnover__c: x.turnover,
       Acc_OrganisationName__c: x.organisationName,
       Acc_ProjectRole__c: new PcrProjectRoleMapper().mapToSalesforcePCRProjectRole(x.projectRole),
       Acc_ParticipantType__c: new PcrPartnerTypeMapper().mapToSalesforcePCRPartnerType(x.partnerType),

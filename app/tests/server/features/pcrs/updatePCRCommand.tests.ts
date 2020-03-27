@@ -517,6 +517,8 @@ describe("UpdatePCRCommand", () => {
         partnerType: PCRPartnerType.Research,
         projectRole: PCRProjectRole.Collaborator,
         projectCity: "Coventry",
+        turnover: 33,
+        turnoverYearEnd: new Date(),
         contact1ProjectRole: PCRContactRole.FinanceContact,
         contact1Forename: "Homer",
         contact1Surname: "Of Iliad fame",
@@ -589,11 +591,14 @@ describe("UpdatePCRCommand", () => {
       context.testData.createPCRItem(projectChangeRequest, recordType, { status: PCRItemStatus.Incomplete });
       const dto = await context.runQuery(new GetPCRByIdQuery(projectChangeRequest.projectId, projectChangeRequest.id));
       const item = dto.items[0] as PCRItemForPartnerAdditionDto;
+      const turnoverYearEnd = new Date();
       item.contact1ProjectRole = PCRContactRole.FinanceContact;
       item.contact1Forename = "Marjorie";
       item.contact1Surname = "Evans";
       item.contact1Phone = "020000111";
       item.contact1Email = "marj@evans.com";
+      item.turnoverYearEnd = turnoverYearEnd;
+      item.turnover = 45;
       item.organisationName = "Bristol University";
       item.projectRole = PCRProjectRole.ProjectLead;
       item.partnerType = PCRPartnerType.Other;
@@ -611,6 +616,8 @@ describe("UpdatePCRCommand", () => {
       expect(updatedItem.contact1Surname).toEqual("Evans");
       expect(updatedItem.contact1Phone).toEqual("020000111");
       expect(updatedItem.contact1Email).toEqual("marj@evans.com");
+      expect(updatedItem.turnoverYearEnd).toEqual(turnoverYearEnd);
+      expect(updatedItem.turnover).toEqual(45);
       expect(updatedItem.organisationName).toEqual("Bristol University");
       expect(updatedItem.projectRole).toEqual(PCRProjectRole.ProjectLead);
       expect(updatedItem.partnerType).toEqual(PCRPartnerType.Other);
