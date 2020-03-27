@@ -68,26 +68,28 @@ export interface ISalesforcePCR {
   Acc_Nickname__c: string|null;
 
   // Add partner
+  Acc_ProjectRole__c: string|null;
+  ProjectRoleLabel: string|null;
+  Acc_ParticipantType__c: string|null;
+  ParticipantTypeLabel: string|null;
+  Acc_OrganisationName__c: string|null;
+  Acc_ParticipantSize__c: string|null;
+  ParticipantSizeLabel: string|null;
+  Acc_Employees__c: number|null;
+  Acc_TurnoverYearEnd__c: string|null;
+  Acc_Turnover__c: number|null;
+  Acc_ProjectCity__c: string|null;
+  Acc_ProjectPostcode__c: string|null;
   Acc_Contact1ProjectRole__c: string|null;
   Contact1ProjectRoleLabel: string|null;
   Acc_Contact1Forename__c: string|null;
   Acc_Contact1Surname__c: string|null;
   Acc_Contact1Phone__c: string|null;
   Acc_Contact1EmailAddress__c: string|null;
-
-  Acc_TurnoverYearEnd__c: string|null;
-  Acc_Turnover__c: number|null;
-
-  Acc_OrganisationName__c: string|null;
-  Acc_ProjectRole__c: string|null;
-  ProjectRoleLabel: string|null;
-  Acc_ParticipantType__c: string|null;
-  ParticipantTypeLabel: string|null;
-  Acc_ProjectCity__c: string|null;
-  Acc_ProjectPostcode__c: string|null;
-  Acc_ParticipantSize__c: string|null;
-  ParticipantSizeLabel: string|null;
-  Acc_Employees__c: number|null;
+  Acc_Contact2Forename__c: string|null;
+  Acc_Contact2Surname__c: string|null;
+  Acc_Contact2Phone__c: string|null;
+  Acc_Contact2EmailAddress__c: string|null;
 
   // Virements related field
   Acc_GrantMovingOverFinancialYear__c: number| null;
@@ -139,25 +141,29 @@ export class ProjectChangeRequestRepository extends SalesforceRepositoryBase<ISa
     "Acc_ProjectSummarySnapshot__c",
     "Acc_ExistingPartnerName__c",
     "Acc_Nickname__c",
+    "Acc_ProjectRole__c",
+    "toLabel(Acc_ProjectRole__c) ProjectRoleLabel",
+    "Acc_ParticipantType__c",
+    "toLabel(Acc_ParticipantType__c) ParticipantTypeLabel",
+    "Acc_OrganisationName__c",
+    "Acc_ParticipantSize__c",
+    "toLabel(Acc_ParticipantSize__c) ParticipantSizeLabel",
+    "Acc_Employees__c",
+    "Acc_TurnoverYearEnd__c",
+    "Acc_Turnover__c",
+    "Acc_ProjectCity__c",
+    "Acc_projectPostcode__c",
     "Acc_Contact1ProjectRole__c",
     "toLabel(Acc_Contact1ProjectRole__c) Contact1ProjectRoleLabel",
     "Acc_Contact1Forename__c",
     "Acc_Contact1Surname__c",
     "Acc_Contact1Phone__c",
     "Acc_Contact1EmailAddress__c",
-    "Acc_TurnoverYearEnd__c",
-    "Acc_Turnover__c",
-    "Acc_OrganisationName__c",
-    "Acc_ProjectRole__c",
-    "toLabel(Acc_ProjectRole__c) ProjectRoleLabel",
-    "Acc_ParticipantType__c",
-    "toLabel(Acc_ParticipantType__c) ParticipantTypeLabel",
+    "Acc_Contact2Forename__c",
+    "Acc_Contact2Surname__c",
+    "Acc_Contact2Phone__c",
+    "Acc_Contact2EmailAddress__c",
     "Acc_GrantMovingOverFinancialYear__c",
-    "Acc_ProjectCity__c",
-    "Acc_projectPostcode__c",
-    "Acc_ParticipantSize__c",
-    "toLabel(Acc_ParticipantSize__c) ParticipantSizeLabel",
-    "Acc_Employees__c",
   ];
 
   async getAllByProjectId(projectId: string): Promise<ProjectChangeRequestEntity[]> {
@@ -213,21 +219,25 @@ export class ProjectChangeRequestRepository extends SalesforceRepositoryBase<ISa
       Acc_RemovalDate__c: this.toOptionalSFDate(x.withdrawalDate),
       Acc_RemovalPeriod__c: x.removalPeriod,
       Acc_Project_Participant__c: x.partnerId,
+      Acc_ProjectRole__c: new PcrProjectRoleMapper().mapToSalesforcePCRProjectRole(x.projectRole),
+      Acc_ParticipantType__c: new PcrPartnerTypeMapper().mapToSalesforcePCRPartnerType(x.partnerType),
+      Acc_OrganisationName__c: x.organisationName,
+      Acc_ParticipantSize__c: new PcrParticipantSizeMapper().mapToSalesforcePCRParticipantSize(x.participantSize),
+      Acc_Employees__c: x.numberOfEmployees,
+      Acc_TurnoverYearEnd__c: this.toOptionalSFDate(x.financialYearEndDate),
+      Acc_Turnover__c: x.financialYearEndTurnover,
+      Acc_ProjectCity__c: x.projectCity,
+      Acc_ProjectPostcode__c: x.projectPostcode,
       Acc_Contact1ProjectRole__c: new PcrContactRoleMapper().mapToSalesforcePCRProjectRole(x.contact1ProjectRole),
       Acc_Contact1Forename__c: x.contact1Forename,
       Acc_Contact1Surname__c: x.contact1Surname,
       Acc_Contact1Phone__c: x.contact1Phone,
       Acc_Contact1EmailAddress__c: x.contact1Email,
-      Acc_TurnoverYearEnd__c: this.toOptionalSFDate(x.financialYearEndDate),
-      Acc_Turnover__c: x.financialYearEndTurnover,
-      Acc_OrganisationName__c: x.organisationName,
-      Acc_ProjectRole__c: new PcrProjectRoleMapper().mapToSalesforcePCRProjectRole(x.projectRole),
-      Acc_ParticipantType__c: new PcrPartnerTypeMapper().mapToSalesforcePCRPartnerType(x.partnerType),
+      Acc_Contact2Forename__c: x.contact2Forename,
+      Acc_Contact2Surname__c: x.contact2Surname,
+      Acc_Contact2Phone__c: x.contact2Phone,
+      Acc_Contact2EmailAddress__c: x.contact2Email,
       Acc_GrantMovingOverFinancialYear__c: x.grantMovingOverFinancialYear,
-      Acc_ProjectCity__c: x.projectCity,
-      Acc_ProjectPostcode__c: x.projectPostcode,
-      Acc_ParticipantSize__c: new PcrParticipantSizeMapper().mapToSalesforcePCRParticipantSize(x.participantSize),
-      Acc_Employees__c: x.numberOfEmployees,
     })));
   }
 
