@@ -14,7 +14,7 @@ import { BaseProps } from "../containerBase";
 import { IStepProps, ISummaryProps, IWorkflow, WorkflowBase } from "@framework/types/workflowBase";
 import { removePartnerWorkflow } from "@ui/containers/pcrs/removePartner";
 import { PCRWorkflowValidator } from "@ui/validators/pcrWorkflowValidator";
-import { getAddPartnerWorkflow } from "@ui/containers/pcrs/addPartner";
+import { getAddPartnerWorkflow } from "@ui/containers/pcrs/addPartner/addPartnerWorkflow";
 
 export interface PcrStepProps<TDto, TVal> extends IStepProps {
   project: ProjectDto;

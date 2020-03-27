@@ -30,6 +30,7 @@ export enum DateFormat {
   SHORT_MONTH,
   DAY_AND_LONG_MONTH,
   LONG_YEAR,
+  MONTH_YEAR,
 }
 
 export const formatDate = (jsDate: Date | null | undefined, format: DateFormat) => {
@@ -59,6 +60,9 @@ export const formatDate = (jsDate: Date | null | undefined, format: DateFormat) 
     }
     case DateFormat.LONG_YEAR: {
       return date.toFormat("yyyy");
+    }
+    case DateFormat.MONTH_YEAR: {
+      return date.toFormat("MMMM yyyy");
     }
     default: return "INVALID DATE FORMAT";
   }

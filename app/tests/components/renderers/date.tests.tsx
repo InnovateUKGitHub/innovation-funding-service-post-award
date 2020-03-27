@@ -1,9 +1,22 @@
 // tslint:disable:no-duplicate-string no-identical-functions
 import "jest";
 import React from "react";
-import { CondensedDateRange, Duration, FullDate, FullDateTime, LongDateRange, Months, ShortDate, ShortDateRange, ShortDateRangeFromDuration, ShortDateTime } from "../../../src/ui/components/renderers/date";
+import {
+  CondensedDateRange,
+  Duration,
+  FullDate,
+  FullDateTime,
+  LongDateRange,
+  Months,
+  MonthYear,
+  ShortDate,
+  ShortDateRange,
+  ShortDateRangeFromDuration,
+  ShortDateTime
+} from "../../../src/ui/components/renderers/date";
 import Adapter from "enzyme-adapter-react-16";
 import Enzyme, { mount, shallow } from "enzyme";
+import { DateTime } from "luxon";
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -288,6 +301,23 @@ describe("Months", () => {
   it("should render 2 months", () => {
     const wrapper = mount(<Months months={2}/>);
     expect(wrapper.text()).toContain("2 months");
+  });
+});
+
+describe("MonthYear", () => {
+  it("should render null if date not provided", () => {
+    const wrapper = mount(<MonthYear value={null as any}/>);
+    expect(wrapper.text()).toBeNull();
+  });
+
+  it("should show that invalid date is provided", () => {
+    const wrapper = mount(<MonthYear value={"hello world" as any}/>);
+    expect(wrapper.text()).toEqual("INVALID DATE FORMAT");
+  });
+
+  it("should render the month and the year", () => {
+    const wrapper = mount(<MonthYear value={DateTime.local(2030, 2).toJSDate()}/>);
+    expect(wrapper.text()).toContain("February 2030");
   });
 });
 

@@ -57,6 +57,10 @@ export const LongYear: React.FunctionComponent<{ value: Date | null }> = ({value
     return render(value, DateFormat.LONG_YEAR);
 };
 
+export const MonthYear: React.FunctionComponent<{ value: Date | null }> = ({value}) => {
+    return render(value, DateFormat.MONTH_YEAR);
+};
+
 export const FullDate: React.FunctionComponent<{ value: Date | null }> = ({value}) => {
     return render(value, DateFormat.FULL_DATE);
 };
