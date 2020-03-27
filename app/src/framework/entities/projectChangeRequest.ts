@@ -40,25 +40,31 @@ export interface ProjectChangeRequestItemForCreateEntity {
   partnerId?: string | null;
   withdrawalDate?: Date | null;
   removalPeriod?: number | null;
+  // add partner
+  projectRole?: PCRProjectRole;
+  projectRoleLabel?: string | null;
+  partnerType?: PCRPartnerType;
+  partnerTypeLabel?: string | null;
+  organisationName?: string | null;
+  participantSize?: PCRParticipantSize;
+  participantSizeLabel?: string | null;
+  numberOfEmployees?: number | null;
+  financialYearEndDate?: Date | null;
+  financialYearEndTurnover?: number | null;
+  projectCity?: string | null;
+  projectPostcode?: string | null;
   contact1ProjectRole?: PCRContactRole;
   contact1ProjectRoleLabel?: string | null;
   contact1Forename?: string | null;
   contact1Surname?: string | null;
   contact1Phone?: string | null;
   contact1Email?: string | null;
-  financialYearEndDate?: Date | null;
-  financialYearEndTurnover?: number | null;
-  organisationName?: string | null;
-  projectRole?: PCRProjectRole;
-  projectRoleLabel?: string | null;
-  partnerType?: PCRPartnerType;
-  partnerTypeLabel?: string | null;
+  contact2Forename?: string | null;
+  contact2Surname?: string | null;
+  contact2Phone?: string | null;
+  contact2Email?: string | null;
+  // virements
   grantMovingOverFinancialYear?: number | null;
-  projectCity?: string | null;
-  projectPostcode?: string | null;
-  participantSize?: PCRParticipantSize;
-  participantSizeLabel?: string | null;
-  numberOfEmployees?: number | null;
 }
 
 export interface ProjectChangeRequestItemEntity extends ProjectChangeRequestItemForCreateEntity {

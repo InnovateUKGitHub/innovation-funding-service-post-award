@@ -218,6 +218,10 @@ export class ProjectChangeRequestStore extends StoreBase {
           participantSize: PCRParticipantSize.Unknown,
           participantSizeLabel: null,
           numberOfEmployees: null,
+          contact2Forename: null,
+          contact2Surname: null,
+          contact2Phone: null,
+          contact2Email: null,
         };
       case PCRItemType.PartnerWithdrawal:
         return {

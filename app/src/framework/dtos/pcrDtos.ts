@@ -105,24 +105,28 @@ export interface PCRItemForProjectTerminationDto extends PCRItemBaseDto {
 
 export interface PCRItemForPartnerAdditionDto extends PCRItemBaseDto {
   type: PCRItemType.PartnerAddition;
+  projectRole: PCRProjectRole;
+  partnerType: PCRPartnerType;
+  projectRoleLabel: string | null;
+  partnerTypeLabel: string | null;
+  organisationName: string | null;
+  participantSize: PCRParticipantSize;
+  participantSizeLabel: string | null;
+  numberOfEmployees: number | null;
+  financialYearEndDate: Date | null;
+  financialYearEndTurnover: number | null;
+  projectCity: string | null;
+  projectPostcode: string | null;
   contact1ProjectRoleLabel: string | null;
   contact1ProjectRole: PCRContactRole;
   contact1Forename: string | null;
   contact1Surname: string | null;
   contact1Phone: string | null;
   contact1Email: string | null;
-  financialYearEndDate: Date | null;
-  financialYearEndTurnover: number | null;
-  organisationName: string | null;
-  projectRole: PCRProjectRole;
-  partnerType: PCRPartnerType;
-  projectRoleLabel: string | null;
-  partnerTypeLabel: string | null;
-  projectCity: string | null;
-  projectPostcode: string | null;
-  participantSize: PCRParticipantSize;
-  participantSizeLabel: string | null;
-  numberOfEmployees: number | null;
+  contact2Forename: string | null;
+  contact2Surname: string | null;
+  contact2Phone: string | null;
+  contact2Email: string | null;
 }
 
 export interface PCRItemTypeDto {
