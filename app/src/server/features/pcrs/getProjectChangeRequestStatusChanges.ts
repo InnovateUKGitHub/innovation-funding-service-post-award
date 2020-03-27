@@ -35,7 +35,7 @@ export class GetProjectChangeRequestStatusChanges extends QueryBase<ProjectChang
       id: entity.id,
       projectChangeRequest: entity.pcrId,
       newStatus,
-      newStatusLabel:  newStatusLookup && newStatusLookup.label || "Unknown",
+      newStatusLabel: newStatusLookup && newStatusLookup.label || "Unknown",
       previousStatus,
       previousStatusLabel: previousStatusLookup && previousStatusLookup.label || "Unknown",
       createdBy: entity.createdBy,

@@ -2,15 +2,17 @@ import React from "react";
 import { PCRItemForPartnerAdditionDto } from "@framework/dtos";
 import { PCRPartnerAdditionItemDtoValidator } from "@ui/validators";
 import { IPCRWorkflow } from "@ui/containers/pcrs/pcrWorkflow";
-import { RoleAndOrganisationStep } from "@ui/containers/pcrs/addPartner/roleAndOrganisationStep";
-import { AddPartnerSummary } from "@ui/containers/pcrs/addPartner/addPartnerSummary";
 import { PCRPartnerType } from "@framework/constants";
-import { AcademicOrganisationStep } from "@ui/containers/pcrs/addPartner/academicOrganisationStep";
-import { ProjectLocationStep } from "@ui/containers/pcrs/addPartner/projectLocationStep";
-import { FinanceContactStep } from "@ui/containers/pcrs/addPartner/financeContactStep";
-import { OrganisationDetailsStep } from "@ui/containers/pcrs/addPartner/organisationDetailsSteps";
+import {
+  AcademicOrganisationStep, AddPartnerSummary,
+  FinanceContactStep,
+  FinanceDetailsStep,
+  OrganisationDetailsStep,
+  ProjectLocationStep,
+  RoleAndOrganisationStep
+} from "@ui/containers/pcrs/addPartner";
 
-export type addPartnerStepNames = "roleAndOrganisationStep" | "academicOrganisationStep" | "organisationDetailsStep" | "projectLocationStep" | "financeContactStep";
+export type addPartnerStepNames = "roleAndOrganisationStep" | "academicOrganisationStep" | "organisationDetailsStep" | "projectLocationStep" | "financeContactStep" | "financeDetailsStep";
 
 export const getAddPartnerWorkflow = (item: PCRItemForPartnerAdditionDto, step: number | undefined): IPCRWorkflow<PCRItemForPartnerAdditionDto, PCRPartnerAdditionItemDtoValidator> => {
   const workflow: IPCRWorkflow<PCRItemForPartnerAdditionDto, PCRPartnerAdditionItemDtoValidator> = {
@@ -23,12 +25,20 @@ export const getAddPartnerWorkflow = (item: PCRItemForPartnerAdditionDto, step: 
         stepRender: OrganisationDetailsStep,
       },
       {
+        stepName: "financeDetailsStep",
+        displayName: "Financial details",
+        stepNumber: 4,
+        validation: val => val.pcr,
+        stepRender: FinanceDetailsStep,
+      },
+      {
         stepName: "projectLocationStep",
         displayName: "Project location",
         stepNumber: 5,
         validation: val => val.pcr,
         stepRender: ProjectLocationStep,
-      },{
+      },
+      {
         stepName: "financeContactStep",
         displayName: "Finance contact",
         stepNumber: 6,

@@ -1,4 +1,4 @@
-import { IContext, ILinkInfo, PCRContactRole, ProjectDto, ProjectRole } from "@framework/types";
+import { IContext, ILinkInfo, ProjectDto, ProjectRole } from "@framework/types";
 import { BadRequestError, Configuration } from "@server/features/common";
 import { GetPCRByIdQuery } from "@server/features/pcrs/getPCRByIdQuery";
 import { UpdatePCRCommand } from "@server/features/pcrs/updatePcrCommand";
@@ -18,7 +18,7 @@ import { storeKeys } from "@ui/redux/stores/storeKeys";
 import { PcrWorkflow } from "@ui/containers/pcrs/pcrWorkflow";
 import { removePartnerStepNames } from "@ui/containers/pcrs/removePartner";
 import { scopeChangeStepNames } from "@ui/containers/pcrs/scopeChange/scopeChangeWorkflow";
-import { addPartnerStepNames } from "@ui/containers/pcrs/addPartner";
+import { addPartnerStepNames } from "@ui/containers/pcrs/addPartner/addPartnerWorkflow";
 
 export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBase<ProjectChangeRequestPrepareItemParams, "pcr"> {
   constructor() {
@@ -158,6 +158,16 @@ export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBa
     if (stepName === "organisationDetailsStep") {
       item.participantSize = parseInt(body.participantSize, 10);
       item.numberOfEmployees = parseInt(body.numberOfEmployees, 10);
+    }
+    if (stepName === "financeDetailsStep") {
+      const financialYearEndDate = body.financialYearEndDate_month && body.financialYearEndDate_year
+        ? DateTime.fromFormat(`${body.financialYearEndDate_month}/${body.financialYearEndDate_year}`, "M/yyyy")
+          .endOf("month")
+          .startOf("day")
+          .toJSDate()
+        : null;
+      item.financialYearEndDate = financialYearEndDate;
+      item.financialYearEndTurnover = Number(body.financialYearEndTurnover);
     }
     if (stepName === "projectLocationStep") {
       item.projectCity = body.projectCity;
