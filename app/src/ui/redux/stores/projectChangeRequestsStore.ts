@@ -103,6 +103,10 @@ export class ProjectChangeRequestStore extends StoreBase {
     return this.getData("pcrPartnerTypes", storeKeys.getPcrPartnerTypesKey(), p => ApiClient.pcrs.getPcrPartnerTypes({ ...p }));
   }
 
+  public getPcrParticipantSizes() {
+    return this.getData("pcrParticipantSizes", storeKeys.getPcrParticipantSizesKey(), p => ApiClient.pcrs.getParticipantSizes({ ...p }));
+  }
+
   public getPcrTypeForItem(projectId: string, pcrId: string, itemId: string) {
     const data = Pending.combine({
       itemTypes: this.getAllPcrTypes(),
@@ -212,6 +216,7 @@ export class ProjectChangeRequestStore extends StoreBase {
           projectCity: "",
           projectPostcode: "",
           participantSize: PCRParticipantSize.Unknown,
+          participantSizeLabel: null,
           numberOfEmployees: null,
         };
       case PCRItemType.PartnerWithdrawal:

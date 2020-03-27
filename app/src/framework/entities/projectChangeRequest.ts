@@ -57,6 +57,7 @@ export interface ProjectChangeRequestItemForCreateEntity {
   projectCity?: string | null;
   projectPostcode?: string | null;
   participantSize?: PCRParticipantSize;
+  participantSizeLabel?: string | null;
   numberOfEmployees?: number | null;
 }
 
