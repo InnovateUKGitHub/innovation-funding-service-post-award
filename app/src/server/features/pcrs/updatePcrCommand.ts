@@ -136,8 +136,8 @@ export class UpdatePCRCommand extends CommandBase<boolean> {
           || item.contact1Surname !== dto.contact1Surname
           || item.contact1Phone !== dto.contact1Phone
           || item.contact1Email !== dto.contact1Email
-          || item.turnover !== dto.turnover
-          || item.turnoverYearEnd !== dto.turnoverYearEnd
+          || item.financialYearEndTurnover !== dto.financialYearEndTurnover
+          || item.financialYearEndDate !== dto.financialYearEndDate
           || item.organisationName !== dto.organisationName
           || item.projectRole !== dto.projectRole
           || item.partnerType !== dto.partnerType
@@ -153,8 +153,8 @@ export class UpdatePCRCommand extends CommandBase<boolean> {
             contact1Surname: dto.contact1Surname,
             contact1Phone: dto.contact1Phone,
             contact1Email: dto.contact1Email,
-            turnover: dto.turnover,
-            turnoverYearEnd: dto.turnoverYearEnd,
+            financialYearEndTurnover: dto.financialYearEndTurnover,
+            financialYearEndDate: dto.financialYearEndDate,
             organisationName: dto.organisationName,
             projectRole: dto.projectRole,
             partnerType: dto.partnerType,

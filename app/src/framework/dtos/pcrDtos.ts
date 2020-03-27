@@ -111,8 +111,8 @@ export interface PCRItemForPartnerAdditionDto extends PCRItemBaseDto {
   contact1Surname: string | null;
   contact1Phone: string | null;
   contact1Email: string | null;
-  turnoverYearEnd: Date | null;
-  turnover: number | null;
+  financialYearEndDate: Date | null;
+  financialYearEndTurnover: number | null;
   organisationName: string | null;
   projectRole: PCRProjectRole;
   partnerType: PCRPartnerType;

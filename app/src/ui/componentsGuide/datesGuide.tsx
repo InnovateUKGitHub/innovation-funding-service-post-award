@@ -2,7 +2,7 @@ import React from "react";
 import {
     CondensedDateRange, DayAndLongMonth, Duration,
     FullDate, FullDateTime, LongDateRange,
-    LongYear, Months, ShortDate, ShortDateRange,
+    LongYear, Months, MonthYear, ShortDate, ShortDateRange,
     ShortDateRangeFromDuration, ShortDateTime, ShortMonth
 } from "../components/renderers/date";
 
@@ -47,6 +47,12 @@ export const datesGuide: IGuide = {
             comments: "Renders full year",
             example: `<LongYear value={startDate}/>`,
             render: () => <LongYear value={startDate}/>
+        },
+        {
+            name: "Month and year",
+            comments: "Renders month and year",
+            example: `<MonthYear value={new Date()}/>`,
+            render: () => <MonthYear value={new Date()}/>
         },
         {
             name: "Full date",
