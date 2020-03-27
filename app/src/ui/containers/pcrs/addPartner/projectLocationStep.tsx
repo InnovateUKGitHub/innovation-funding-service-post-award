@@ -39,6 +39,7 @@ export const ProjectLocationStep = (props: PcrStepProps<PCRItemForPartnerAdditio
         </Form.Fieldset>
         <Form.Fieldset qa="save-and-continue">
           <Form.Submit>Save and continue</Form.Submit>
+          <Form.Button name="saveAndReturnToSummary" onClick={() => props.onSave(true)}>Save and return to summary</Form.Button>
         </Form.Fieldset>
       </Form.Form>
     </ACC.Section>

@@ -137,7 +137,7 @@ class Component extends ContainerBase<ProjectChangeRequestPrepareItemParams, Dat
         status,
         isClient: this.props.isClient,
         onChange: itemDto => this.onChange(editor.data, itemDto),
-        onSave: () => this.onSave(workflow, editor.data),
+        onSave: (skipToSummary) => this.onSave(workflow, editor.data, skipToSummary),
         getRequiredToCompleteMessage: (message) => {
           const standardMessage = "This is required to complete this request.";
           if (message) {
@@ -222,7 +222,7 @@ class Component extends ContainerBase<ProjectChangeRequestPrepareItemParams, Dat
     this.props.onChange(dto);
   }
 
-  private onSave(workflow: PcrWorkflow<PCRItemDto, Results<PCRItemDto>>, dto: PCRDto) {
+  private onSave(workflow: PcrWorkflow<PCRItemDto, Results<PCRItemDto>>, dto: PCRDto, skipToSummary: boolean = false) {
 
     // If on the summary
     if (workflow.isOnSummary()) {
@@ -236,6 +236,14 @@ class Component extends ContainerBase<ProjectChangeRequestPrepareItemParams, Dat
     // If submitting from a step set the status to incomplete
     const item = dto.items.find(x => x.id === this.props.itemId)!;
     item.status = PCRItemStatus.Incomplete;
+
+    if (skipToSummary) {
+      return this.props.onSave(dto, this.props.routes.pcrPrepareItem.getLink({
+        projectId: this.props.projectId,
+        pcrId: this.props.pcrId,
+        itemId: this.props.itemId
+      }));
+    }
 
     const nextStep = workflow.getNextStepInfo();
 
