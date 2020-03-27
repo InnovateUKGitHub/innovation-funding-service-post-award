@@ -86,6 +86,7 @@ export interface ISalesforcePCR {
   Acc_ProjectCity__c: string|null;
   Acc_ProjectPostcode__c: string|null;
   Acc_ParticipantSize__c: string|null;
+  ParticipantSizeLabel: string|null;
   Acc_Employees__c: number|null;
 
   // Virements related field
@@ -154,7 +155,8 @@ export class ProjectChangeRequestRepository extends SalesforceRepositoryBase<ISa
     "Acc_GrantMovingOverFinancialYear__c",
     "Acc_ProjectCity__c",
     "Acc_projectPostcode__c",
-    "Acc_ParticipantSize__C",
+    "Acc_ParticipantSize__c",
+    "toLabel(Acc_ParticipantSize__c) ParticipantSizeLabel",
     "Acc_Employees__c",
   ];
 

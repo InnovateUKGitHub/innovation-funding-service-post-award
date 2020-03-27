@@ -3,7 +3,7 @@ import { ActionTransitionSuccess, actionTypes } from "redux-router5";
 import { DataLoadAction } from "../actions/common";
 import { LoadingStatus } from "../../../shared/pending";
 import * as Dtos from "@framework/dtos";
-import { IAppError, PCRPartnerType, PCRProjectRole } from "@framework/types";
+import { IAppError, PCRParticipantSize, PCRPartnerType, PCRProjectRole } from "@framework/types";
 import { State } from "router5";
 
 export interface IDataStore<T> {
@@ -78,6 +78,7 @@ export const dataReducer = combineReducers({
   pcrs: dataStoreReducer<Dtos.PCRSummaryDto[]>("pcrs"),
   pcr: dataStoreReducer<Dtos.PCRDto>("pcr"),
   pcrTypes: dataStoreReducer<Dtos.PCRItemTypeDto[]>("pcrTypes"),
+  pcrParticipantSizes: dataStoreReducer<Dtos.Option<PCRParticipantSize>[]>("pcrParticipantSizes"),
   pcrProjectRoles: dataStoreReducer<Dtos.Option<PCRProjectRole>[]>("pcrProjectRoles"),
   pcrPartnerTypes: dataStoreReducer<Dtos.Option<PCRPartnerType>[]>("pcrPartnerTypes"),
   project: dataStoreReducer<Dtos.ProjectDto>("project"),

@@ -11,6 +11,10 @@ function rule<T>(test: (value: T | null) => boolean, defaultMessage: string, isR
   };
 }
 
+function isValueWholeNumber(value: number): boolean {
+  return (isNumber(value) && Number.isInteger(value));
+}
+
 export function valid(resultSet: Results<{}>, isRequired?: boolean) {
   return new Result(resultSet, resultSet.showValidationErrors, true, null, isRequired || false);
 }
@@ -66,7 +70,11 @@ export function number(results: Results<{}>, value: number | undefined | null, m
 }
 
 export function integer(results: Results<{}>, value: number, message?: string) {
-  return isTrue(results, value === undefined || value === null || (isNumber(value) && Number.isInteger(value)), message || "Field must be a number.");
+  return isTrue(results, value === undefined || value === null || isValueWholeNumber(value), message || "Field must be a number.");
+}
+
+export function isPositiveInteger(results: Results<{}>, value: number | undefined | null, message?: string) {
+  return isTrue(results, value === undefined || value === null || (isValueWholeNumber(value) && value >= 0), message || "Field must be a positive number");
 }
 
 export function email(results: Results<{}>, value: string, message?: string) {

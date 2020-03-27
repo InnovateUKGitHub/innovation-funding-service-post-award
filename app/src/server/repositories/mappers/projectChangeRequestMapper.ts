@@ -207,6 +207,7 @@ export class SalesforcePCRMapper extends SalesforceBaseMapper<ISalesforcePCR[], 
       projectCity: pcrItem.Acc_ProjectCity__c,
       projectPostcode: pcrItem.Acc_ProjectPostcode__c,
       participantSize: new PcrParticipantSizeMapper().mapFromSalesforcePCRParticipantSize(pcrItem.Acc_ParticipantSize__c),
+      participantSizeLabel: pcrItem.ParticipantSizeLabel,
       numberOfEmployees: pcrItem.Acc_Employees__c,
     };
   }
