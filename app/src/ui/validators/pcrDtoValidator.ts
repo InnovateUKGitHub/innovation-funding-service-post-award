@@ -387,6 +387,18 @@ export class PCRPartnerAdditionItemDtoValidator extends PCRBaseItemDtoValidator<
     () => this.hasPermissionToEdit(this.model.organisationName, this.original && this.original.organisationName, "Organisation name cannot be changed"),
   );
 
+  financialYearEndDate = Validation.all(this,
+    () => this.requiredIfComplete(this.model.financialYearEndDate, "Enter a financial year end"),
+    () => Validation.isDate(this, this.model.financialYearEndDate, "Enter a real financial year end date"),
+    () => this.hasPermissionToEdit(this.model.financialYearEndDate, this.original && this.original.financialYearEndDate, "Turnover year end cannot be changed"),
+  );
+
+  financialYearEndTurnover = Validation.all(this,
+    () => this.requiredIfComplete(this.model.financialYearEndTurnover, "Enter a financial year end turnover"),
+    () => Validation.isPositiveCurrency(this, this.model.financialYearEndTurnover, "Enter a financial year end turnover amount equal to or greater than 0"),
+    () => this.hasPermissionToEdit(this.model.financialYearEndTurnover, this.original && this.original.financialYearEndTurnover, "Turnover cannot be changed"),
+  );
+
   contact1ProjectRole = Validation.all(this,
     () => this.requiredIfComplete(this.model.contact1ProjectRole, "Select a project role"),
     () => this.hasPermissionToEdit(this.model.contact1ProjectRole, this.original && this.original.contact1ProjectRole, `Role cannot be changed`),
