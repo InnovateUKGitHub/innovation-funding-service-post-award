@@ -25,7 +25,7 @@ export interface PcrStepProps<TDto, TVal> extends IStepProps {
   validator: TVal;
   status: EditorStatus;
   onChange: (dto: TDto) => void;
-  onSave: () => void;
+  onSave: (skipToSummary?: boolean) => void;
   getRequiredToCompleteMessage: (additionalMessage?: string) => React.ReactNode;
   isClient: boolean;
 }
