@@ -65,7 +65,7 @@ class Component extends ContainerBase<VirementCostsParams, Props, {}> {
         validator={partnerValidation}
       >
         <ACC.Section title={partner.name}>
-          <VirementForm.Form editor={editor} onChange={(dto) => this.props.onChange(false, dto)} onSubmit={() => this.props.onChange(true, editor.data)}qa="virementForm">
+          <VirementForm.Form editor={editor} onChange={(dto) => this.props.onChange(false, dto)} onSubmit={() => this.props.onChange(true, editor.data)} qa="virementForm">
             <VirementForm.Fieldset>
               <VirementTable.Table qa="partnerVirements" data={costCategoriesWithVirement} validationResult={validation}>
                 <VirementTable.String qa="costCategory" headerContent={x => x.financialVirementEdit.labels.costCategoryName()} value={x => x.costCategory.name} footer={<ACC.Content value={x => x.financialVirementEdit.labels.partnerTotals()} />} />
