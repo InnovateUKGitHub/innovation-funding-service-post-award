@@ -202,6 +202,8 @@ export class ProjectChangeRequestStore extends StoreBase {
           contact1Surname: null,
           contact1Phone: null,
           contact1Email: null,
+          turnoverYearEnd: null,
+          turnover: null,
           organisationName: null,
           projectRole: PCRProjectRole.Unknown,
           partnerType: PCRPartnerType.Unknown,
