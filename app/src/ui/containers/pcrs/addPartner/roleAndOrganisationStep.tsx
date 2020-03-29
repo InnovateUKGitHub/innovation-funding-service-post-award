@@ -33,7 +33,7 @@ const InnerContainer = (props: PcrStepProps<PCRItemForPartnerAdditionDto, PCRPar
     || defaultType && typeOptions.find(x => x.id === defaultType.value.toString());
 
   return (
-    <ACC.Section title={"New partner information"}>
+    <ACC.Section qa="role-and-partner-type" title={"New partner information"}>
       <Form.Form
         qa="addPartnerForm"
         data={props.pcrItem}
