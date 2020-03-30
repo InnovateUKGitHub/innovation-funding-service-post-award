@@ -22,7 +22,7 @@ import { addPartnerStepNames } from "@ui/containers/pcrs/addPartner/addPartnerWo
 
 export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBase<ProjectChangeRequestPrepareItemParams, "pcr"> {
   constructor() {
-    super(PCRPrepareItemRoute, ["default"], "pcr");
+    super(PCRPrepareItemRoute, ["default", "saveAndReturnToSummary"], "pcr");
   }
 
   protected async getDto(context: IContext, params: ProjectChangeRequestPrepareItemParams, button: IFormButton, body: IFormBody): Promise<Dtos.PCRDto> {
@@ -110,6 +110,14 @@ export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBa
 
     if (!workflow || workflow.isOnSummary()) {
       return ProjectChangeRequestPrepareRoute.getLink(params);
+    }
+
+    if (button.name === "saveAndReturnToSummary") {
+      return PCRPrepareItemRoute.getLink({
+        projectId: params.projectId,
+        pcrId: params.pcrId,
+        itemId: params.itemId
+      });
     }
 
     const step = workflow.getNextStepInfo();
