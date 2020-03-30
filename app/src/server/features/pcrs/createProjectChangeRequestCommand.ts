@@ -96,6 +96,10 @@ export class CreateProjectChangeRequestCommand extends CommandBase<string> {
           projectPostcode: itemDto.projectPostcode,
           participantSize: itemDto.participantSize,
           numberOfEmployees: itemDto.numberOfEmployees,
+          contact2Forename: itemDto.contact2Forename,
+          contact2Surname: itemDto.contact2Surname,
+          contact2Phone: itemDto.contact2Phone,
+          contact2Email: itemDto.contact2Email,
          };
       case PCRItemType.MultiplePartnerFinancialVirement:
         return { ...init, grantMovingOverFinancialYear: itemDto.grantMovingOverFinancialYear };
