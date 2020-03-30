@@ -34,11 +34,7 @@ export class GetFinancialVirementQuery extends QueryBase<FinancialVirementDto> {
     const newGrant = this.sum(partners, v => v.newGrant);
     const newRemainingGrant = this.sum(partners, v => v.newRemainingGrant);
 
-<<<<<<< HEAD
     const originalFundingLevel = originalRemainingCosts ? 100 * originalRemainingGrant / originalRemainingCosts : 0;
-=======
-    const originalFundingLevel = originalEligibleCosts ? 100 * originalGrant / originalEligibleCosts : 0;
->>>>>>> Amended calculation for new funding level
     const newFundingLevel = newRemainingCosts ? 100 * newRemainingGrant / newRemainingCosts : 0;
 
     return {
