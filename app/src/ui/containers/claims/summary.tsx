@@ -188,7 +188,7 @@ class ClaimSummaryComponent extends ContainerBase<ClaimSummaryParams, Data, Call
 
   private renderForecastSummary(data: CombinedData) {
     const totalEligibleCosts = (data.partner.totalParticipantGrant || 0);
-    const totalForecastsAndCosts = (data.partner.totalFutureForecastsForParticipants || 0) + (data.partner.totalCostsSubmitted || 0) + (data.claim.totalCost || 0);
+    const totalForecastsAndCosts = (data.partner.totalFutureForecastsForParticipants || 0) + (data.partner.totalParticipantCostsClaimed || 0) + (data.claim.totalCost || 0);
     const difference = totalEligibleCosts - totalForecastsAndCosts;
     const differencePercentage = (totalEligibleCosts > 0) ? (difference * 100) / totalEligibleCosts : 0;
 

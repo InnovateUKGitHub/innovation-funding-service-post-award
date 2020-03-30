@@ -29,7 +29,7 @@ class ProjectForecastComponent extends ContainerBase<Params, Data, Callbacks> {
     const getForecastsAndCosts = (partner: PartnerDto) => {
       const claim = activeClaims.find(x => x.partnerId === partner.id);
       const claimCost = claim ? claim.totalCost || 0 : 0;
-      return claimCost + (partner.totalFutureForecastsForParticipants || 0) + (partner.totalCostsSubmitted || 0);
+      return claimCost + (partner.totalFutureForecastsForParticipants || 0) + (partner.totalParticipantCostsClaimed || 0);
     };
 
     return (
