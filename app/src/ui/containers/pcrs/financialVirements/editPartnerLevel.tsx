@@ -46,10 +46,10 @@ class Component extends ContainerBase<FinancialVirementParams, Props, {}> {
       >
         <ACC.Section>
           <ACC.Renderers.SimpleString><ACC.Content value={x => x.financialVirementEditPartnerLevel.remainingGrantInfo()} /></ACC.Renderers.SimpleString>
-          <VirementForm.Form editor={editor} onChange={(dto) => this.props.onChange(false, dto)} onSubmit={() => this.props.onChange(true, editor.data)}>
+          <VirementForm.Form editor={editor} onChange={(dto) => this.props.onChange(false, dto)} onSubmit={() => this.props.onChange(true, editor.data)} qa="partner_level_form">
             <VirementForm.Fieldset>
               <VirementTable.Table qa="partnerVirements" data={data} validationResult={validation}>
-                <VirementTable.String qa="partner" headerContent={x => x.financialVirementEditPartnerLevel.labels.costCategoryName()} value={x => x.partner.name} footer={<ACC.Content value={x => x.financialVirementEditPartnerLevel.labels.projectTotals()} />} isDivider="normal" />
+                <VirementTable.String qa="partner" headerContent={x => x.financialVirementEditPartnerLevel.labels.partnerName()} value={x => x.partner.name} footer={<ACC.Content value={x => x.financialVirementEditPartnerLevel.labels.projectTotals()} />} isDivider="normal" />
                 <VirementTable.Currency qa="remainingCosts" headerContent={x => x.financialVirementEditPartnerLevel.labels.partnerOriginalRemainingCosts()} value={x => x.virement.originalRemainingCosts} footer={<ACC.Renderers.Currency value={editor.data.originalRemainingCosts} />} />
                 <VirementTable.Currency qa="remainingGrant" headerContent={x => x.financialVirementEditPartnerLevel.labels.partnerOriginalRemainingGrant()} value={x => x.virement.originalRemainingGrant} footer={<ACC.Renderers.Currency value={editor.data.originalRemainingGrant} />} />
                 <VirementTable.Percentage qa="fundingLevel" headerContent={x => x.financialVirementEditPartnerLevel.labels.originalFundingLevel()} value={(x, i) => x.virement.originalFundingLevel} footer={<ACC.Renderers.Percentage value={editor.data.originalFundingLevel} />} isDivider="normal" />
