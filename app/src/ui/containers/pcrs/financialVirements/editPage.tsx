@@ -168,6 +168,7 @@ const Container = (props: VirementCostsParams & BaseProps) => (
 );
 
 export const FinancialVirementEditRoute = defineRoute({
+  // pm reallocates costs for participant at cost category level
   routeName: "financial-virement-edit",
   routePath: "/projects/:projectId/pcrs/:pcrId/prepare/item/:itemId/financial/:partnerId",
   container: Container,
