@@ -4,7 +4,7 @@ import { PcrSummaryProps } from "@ui/containers/pcrs/pcrWorkflow";
 import { PCRItemForPartnerAdditionDto } from "@framework/dtos";
 import { PCRPartnerAdditionItemDtoValidator } from "@ui/validators";
 import { addPartnerStepNames } from "@ui/containers/pcrs/addPartner/addPartnerWorkflow";
-import { PCRPartnerType } from "@framework/constants";
+import { PCRPartnerType, PCRProjectRole } from "@framework/constants";
 
 export class AddPartnerSummary extends React.Component<PcrSummaryProps<PCRItemForPartnerAdditionDto, PCRPartnerAdditionItemDtoValidator, addPartnerStepNames>> {
   render() {
@@ -45,6 +45,14 @@ export class AddPartnerSummary extends React.Component<PcrSummaryProps<PCRItemFo
               <ACC.SummaryListItem label="Email" content={pcrItem.contact1Email} validation={validator.contact1Email} qa="contact1Email" action={this.props.getEditLink("financeContactStep", validator.contact1Email)}/>
             </ACC.SummaryList>
           </ACC.Section>
+          { pcrItem.projectRole === PCRProjectRole.ProjectLead && <ACC.Section title={pcrItem.contact2ProjectRoleLabel}>
+            <ACC.SummaryList qa="add-partner-summary-list-contacts-project-manager">
+              <ACC.SummaryListItem label="First name" content={pcrItem.contact2Forename} validation={validator.contact2Forename} qa="contact2Forename" action={this.props.getEditLink("projectManagerDetailsStep", validator.contact2Forename)}/>
+              <ACC.SummaryListItem label="Last name" content={pcrItem.contact2Surname} validation={validator.contact2Surname} qa="contact2Surname" action={this.props.getEditLink("projectManagerDetailsStep", validator.contact2Surname)}/>
+              <ACC.SummaryListItem label="Phone number" content={pcrItem.contact2Phone} validation={validator.contact2Phone} qa="contact2Phone" action={this.props.getEditLink("projectManagerDetailsStep", validator.contact2Phone)}/>
+              <ACC.SummaryListItem label="Email" content={pcrItem.contact2Email} validation={validator.contact2Email} qa="contact2Email" action={this.props.getEditLink("projectManagerDetailsStep", validator.contact2Email)}/>
+            </ACC.SummaryList>
+          </ACC.Section> }
         </ACC.Section>
       </React.Fragment>
     );
