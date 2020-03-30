@@ -72,7 +72,7 @@ export class ClaimsDetailsComponent extends ContainerBase<Params, Data, {}> {
   }
 
   private renderCostsAndGrantSummary(data: CombinedData) {
-    if (!(data.project.roles & ProjectRole.FinancialContact) || !data.claim) {
+    if (!(data.project.roles & ProjectRole.FinancialContact) || !data.claim || !data.claim.isApproved) {
       return null;
     }
 
