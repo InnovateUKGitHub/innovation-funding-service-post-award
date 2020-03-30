@@ -218,6 +218,8 @@ export class ProjectChangeRequestStore extends StoreBase {
           participantSize: PCRParticipantSize.Unknown,
           participantSizeLabel: null,
           numberOfEmployees: null,
+          contact2ProjectRole: PCRContactRole.Unknown,
+          contact2ProjectRoleLabel: null,
           contact2Forename: null,
           contact2Surname: null,
           contact2Phone: null,

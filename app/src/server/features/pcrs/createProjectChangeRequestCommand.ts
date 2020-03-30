@@ -96,6 +96,7 @@ export class CreateProjectChangeRequestCommand extends CommandBase<string> {
           projectPostcode: itemDto.projectPostcode,
           participantSize: itemDto.participantSize,
           numberOfEmployees: itemDto.numberOfEmployees,
+          contact2ProjectRole: itemDto.contact2ProjectRole,
           contact2Forename: itemDto.contact2Forename,
           contact2Surname: itemDto.contact2Surname,
           contact2Phone: itemDto.contact2Phone,
