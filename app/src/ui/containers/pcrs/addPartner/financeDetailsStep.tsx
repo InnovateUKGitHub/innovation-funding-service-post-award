@@ -16,7 +16,7 @@ export const FinanceDetailsStep = (props: PcrStepProps<PCRItemForPartnerAddition
         onSubmit={() => props.onSave()}
         onChange={dto => props.onChange(dto)}
       >
-        <Form.Fieldset heading="End of financial year">
+        <Form.Fieldset heading="End of financial year" qa="endOfFinancialYear">
           <Form.MonthYear
             name="financialYearEndDate"
             hint="This is the end of the last financial year for which you have your turnover."
@@ -28,7 +28,7 @@ export const FinanceDetailsStep = (props: PcrStepProps<PCRItemForPartnerAddition
             validation={props.validator.financialYearEndDate}
           />
         </Form.Fieldset>
-        <Form.Fieldset heading="Turnover (£)">
+        <Form.Fieldset heading="Turnover (£)" qa="turnover">
           <Form.Numeric
             width="one-third"
             name="financialYearEndTurnover"
