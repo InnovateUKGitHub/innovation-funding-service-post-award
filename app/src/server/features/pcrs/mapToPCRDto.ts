@@ -139,6 +139,10 @@ const mapItemForPartnerAddition = (pcr: ProjectChangeRequestItemEntity, typeName
   participantSize: pcr.participantSize || PCRParticipantSize.Unknown,
   participantSizeLabel: pcr.participantSizeLabel || null,
   numberOfEmployees: (!!pcr.numberOfEmployees || pcr.numberOfEmployees === 0) ? pcr.numberOfEmployees : null,
+  contact2Forename: pcr.contact2Forename || null,
+  contact2Surname: pcr.contact2Surname || null,
+  contact2Phone: pcr.contact2Phone || null,
+  contact2Email: pcr.contact2Email || null,
   type
 });
 

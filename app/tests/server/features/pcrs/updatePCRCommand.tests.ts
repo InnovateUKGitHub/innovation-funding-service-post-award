@@ -664,6 +664,10 @@ describe("UpdatePCRCommand", () => {
       item.projectPostcode = "BS1 5UW";
       item.participantSize = PCRParticipantSize.Medium;
       item.numberOfEmployees = 0;
+      item.contact2Forename = "Jon";
+      item.contact2Surname = "Doe";
+      item.contact2Phone = "18005552368";
+      item.contact2Email = "jon@doe.com";
 
       const command = new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto);
       await expect(await context.runCommand(command)).toBe(true);
@@ -683,6 +687,10 @@ describe("UpdatePCRCommand", () => {
       expect(updatedItem.projectPostcode).toEqual("BS1 5UW");
       expect(updatedItem.participantSize).toEqual(PCRParticipantSize.Medium);
       expect(updatedItem.numberOfEmployees).toEqual(0);
+      expect(updatedItem.contact2Forename).toEqual("Jon");
+      expect(updatedItem.contact2Surname).toEqual("Doe");
+      expect(updatedItem.contact2Phone).toEqual("18005552368");
+      expect(updatedItem.contact2Email).toEqual("jon@doe.com");
     });
   });
 
