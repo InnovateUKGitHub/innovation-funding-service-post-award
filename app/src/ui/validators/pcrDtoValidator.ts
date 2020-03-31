@@ -356,14 +356,14 @@ export class PCRScopeChangeItemDtoValidator extends PCRBaseItemDtoValidator<PCRI
 
 export class PCRPartnerAdditionItemDtoValidator extends PCRBaseItemDtoValidator<PCRItemForPartnerAdditionDto> {
   private validateProjectRoleRequired() {
-    if (!this.model.id) {
-      return Validation.valid(this);
+    if (!this.model.isProjectRoleAndPartnerTypeRequired) {
+      return this.requiredIfComplete(this.model.projectRole || null, "Select a project role");
     }
     return Validation.required(this, this.model.projectRole || null, "Select a project role");
   }
   private validatePartnerTypeRequired() {
-    if (!this.model.id) {
-      return Validation.valid(this);
+    if (!this.model.isProjectRoleAndPartnerTypeRequired) {
+      return this.requiredIfComplete(this.model.partnerType || null, "Select a partner type");
     }
     return Validation.required(this, this.model.partnerType || null, "Select a partner type");
   }

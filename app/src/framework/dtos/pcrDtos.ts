@@ -105,6 +105,8 @@ export interface PCRItemForProjectTerminationDto extends PCRItemBaseDto {
 
 export interface PCRItemForPartnerAdditionDto extends PCRItemBaseDto {
   type: PCRItemType.PartnerAddition;
+  // isProjectRoleAndPartnerTypeRequired is used to determine validation only. It is set by the client and not retrieved or saved to salesforce.
+  isProjectRoleAndPartnerTypeRequired?: boolean;
   projectRole: PCRProjectRole;
   partnerType: PCRPartnerType;
   projectRoleLabel: string | null;
