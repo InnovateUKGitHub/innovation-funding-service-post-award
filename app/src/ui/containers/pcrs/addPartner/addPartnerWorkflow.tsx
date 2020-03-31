@@ -2,17 +2,24 @@ import React from "react";
 import { PCRItemForPartnerAdditionDto } from "@framework/dtos";
 import { PCRPartnerAdditionItemDtoValidator } from "@ui/validators";
 import { IPCRWorkflow } from "@ui/containers/pcrs/pcrWorkflow";
-import { PCRPartnerType } from "@framework/constants";
+import { PCRPartnerType, PCRProjectRole } from "@framework/constants";
 import {
   AcademicOrganisationStep, AddPartnerSummary,
   FinanceContactStep,
   FinanceDetailsStep,
   OrganisationDetailsStep,
   ProjectLocationStep,
+  ProjectManagerDetailsStep,
   RoleAndOrganisationStep
 } from "@ui/containers/pcrs/addPartner";
 
-export type addPartnerStepNames = "roleAndOrganisationStep" | "academicOrganisationStep" | "organisationDetailsStep" | "projectLocationStep" | "financeContactStep" | "financeDetailsStep";
+export type addPartnerStepNames = "roleAndOrganisationStep"
+  | "academicOrganisationStep"
+  | "organisationDetailsStep"
+  | "financeDetailsStep"
+  | "projectLocationStep"
+  | "financeContactStep"
+  | "projectManagerDetailsStep";
 
 export const getAddPartnerWorkflow = (item: PCRItemForPartnerAdditionDto, step: number | undefined): IPCRWorkflow<PCRItemForPartnerAdditionDto, PCRPartnerAdditionItemDtoValidator> => {
   const workflow: IPCRWorkflow<PCRItemForPartnerAdditionDto, PCRPartnerAdditionItemDtoValidator> = {
@@ -69,6 +76,16 @@ export const getAddPartnerWorkflow = (item: PCRItemForPartnerAdditionDto, step: 
       stepNumber: 2,
       validation: val => val.pcr,
       stepRender: AcademicOrganisationStep
+    });
+  }
+
+  if (item.projectRole === PCRProjectRole.ProjectLead) {
+    workflow.steps.push({
+      stepName: "projectManagerDetailsStep",
+      displayName: "Project manager",
+      stepNumber: 7,
+      validation: val => val.pcr,
+      stepRender: ProjectManagerDetailsStep
     });
   }
 

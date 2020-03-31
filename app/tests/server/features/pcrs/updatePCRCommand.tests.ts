@@ -607,6 +607,34 @@ describe("UpdatePCRCommand", () => {
       item.financialYearEndTurnover = 20;
       await expect(context.runCommand(command)).resolves.toBe(true);
     });
+    it("should require project manager details to be set when the project role is Project Lead", async () => {
+      const {context, projectChangeRequest, recordType, project} = setup();
+      context.testData.createPCRItem(projectChangeRequest, recordType, {
+        status: PCRItemStatus.Incomplete,
+        partnerType: PCRPartnerType.Business,
+        projectRole: PCRProjectRole.ProjectLead,
+        projectCity: "Coventry",
+        financialYearEndTurnover: 33,
+        financialYearEndDate: new Date(),
+        contact1ProjectRole: PCRContactRole.FinanceContact,
+        contact1Forename: "Homer",
+        contact1Surname: "Of Iliad fame",
+        contact1Phone: "112233",
+        contact1Email: "helen@troy.com",
+        participantSize: PCRParticipantSize.Medium,
+        numberOfEmployees: 15,
+      });
+      const dto = await context.runQuery(new GetPCRByIdQuery(projectChangeRequest.projectId, projectChangeRequest.id));
+      const item = dto.items[0] as PCRItemForPartnerAdditionDto;
+      item.status = PCRItemStatus.Complete;
+      const command = new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto);
+      await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
+      item.contact2Forename = "Jon";
+      item.contact2Surname = "Doe";
+      item.contact2Phone = "332211";
+      item.contact2Email = "e@mail.com"
+      await expect(context.runCommand(command)).resolves.toBe(true);
+    });
     it("should not allow updates to project role & partner type fields once they are set", async () => {
       const {context, projectChangeRequest, recordType, project} = setup();
       context.testData.createPCRItem(projectChangeRequest, recordType, { status: PCRItemStatus.Incomplete, projectRole: PCRProjectRole.Collaborator, partnerType: PCRPartnerType.Research });
@@ -664,6 +692,7 @@ describe("UpdatePCRCommand", () => {
       item.projectPostcode = "BS1 5UW";
       item.participantSize = PCRParticipantSize.Medium;
       item.numberOfEmployees = 0;
+      item.contact2ProjectRole = PCRContactRole.ProjectManager;
       item.contact2Forename = "Jon";
       item.contact2Surname = "Doe";
       item.contact2Phone = "18005552368";
@@ -687,6 +716,7 @@ describe("UpdatePCRCommand", () => {
       expect(updatedItem.projectPostcode).toEqual("BS1 5UW");
       expect(updatedItem.participantSize).toEqual(PCRParticipantSize.Medium);
       expect(updatedItem.numberOfEmployees).toEqual(0);
+      expect(updatedItem.contact2ProjectRole).toEqual(PCRContactRole.ProjectManager);
       expect(updatedItem.contact2Forename).toEqual("Jon");
       expect(updatedItem.contact2Surname).toEqual("Doe");
       expect(updatedItem.contact2Phone).toEqual("18005552368");

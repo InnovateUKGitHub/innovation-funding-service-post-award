@@ -123,6 +123,8 @@ export interface PCRItemForPartnerAdditionDto extends PCRItemBaseDto {
   contact1Surname: string | null;
   contact1Phone: string | null;
   contact1Email: string | null;
+  contact2ProjectRoleLabel: string | null;
+  contact2ProjectRole: PCRContactRole;
   contact2Forename: string | null;
   contact2Surname: string | null;
   contact2Phone: string | null;

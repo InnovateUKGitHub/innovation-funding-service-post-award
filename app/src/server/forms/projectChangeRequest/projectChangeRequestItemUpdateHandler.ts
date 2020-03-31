@@ -188,6 +188,13 @@ export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBa
       item.contact1Phone = body.contact1Phone;
       item.contact1Email = body.contact1Email;
     }
+    if (stepName === "projectManagerDetailsStep") {
+      item.contact2ProjectRole = parseInt(body.contact2ProjectRole, 10);
+      item.contact2Forename = body.contact2Forename;
+      item.contact2Surname = body.contact2Surname;
+      item.contact2Phone = body.contact2Phone;
+      item.contact2Email = body.contact2Email;
+    }
   }
 
   protected getStoreKey(params: ProjectChangeRequestPrepareItemParams) {
