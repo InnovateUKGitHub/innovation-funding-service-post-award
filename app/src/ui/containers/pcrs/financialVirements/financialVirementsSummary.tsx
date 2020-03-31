@@ -38,7 +38,7 @@ class Component extends React.Component<Props> {
       return (
         <React.Fragment>
           {this.renderPrepareTable(paired, virement)}
-          <ACC.Section>
+          <ACC.Section qa="edit-partner-level">
             <ACC.Renderers.SimpleString>If the new remaining project grant is higher as a result of the reallocation of costs, you can change the funding level of partners to lower the new project grant.</ACC.Renderers.SimpleString>
             <ACC.Link styling={"SecondaryButton"} route={this.props.routes.pcrFinancialVirementEditPartnerLevel.getLink({ itemId: this.props.pcrItem.id, pcrId: this.props.pcr.id, projectId: this.props.projectId })}>Change remaining grant</ACC.Link>
           </ACC.Section>
@@ -118,7 +118,9 @@ export class GrantMovingOverFinancialYearForm extends React.Component<PropsWithF
     const itemValidator = this.props.editor.validator.items.results.find(x => x.model.type === PCRItemType.MultiplePartnerFinancialVirement) as MultiplePartnerFinancialVirementDtoValidator;
 
     return (
-      <Form.Fieldset heading={"Grant value moving over the financial year end"}>
+      <Form.Fieldset
+      qa="fieldset-grantMovingOverFinancialYear"
+      heading={"Grant value moving over the financial year end"}>
         <ACC.TextHint text={"The financial year ends on 31 March."} />
         <Form.Numeric
           name="grantMovingOverFinancialYear"
