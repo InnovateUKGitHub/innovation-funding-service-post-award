@@ -80,9 +80,9 @@ class Component extends ContainerBase<VirementCostsParams, Props, {}> {
                 <SummaryTable.Currency qa="originalEligibleCosts" headerContent={x => x.financialVirementEdit.labels.projectOriginalEligibleCosts()} value={x => x.originalEligibleCosts} />
                 <SummaryTable.Currency qa="newEligibleCosts" headerContent={x => x.financialVirementEdit.labels.projectNewEligibleCosts()} value={x => x.newEligibleCosts} />
                 <SummaryTable.Currency qa="differenceEligibleCosts" headerContent={x => x.financialVirementEdit.labels.projectDifferenceCosts()} value={x => x.newEligibleCosts - x.originalEligibleCosts} />
-                <SummaryTable.Currency qa="originalGrant" headerContent={x => x.financialVirementEdit.labels.projectOriginalGrant()} value={x => x.originalGrant} />
-                <SummaryTable.Currency qa="newGrant" headerContent={x => x.financialVirementEdit.labels.projectNewGrant()} value={x => x.newGrant} />
-                <SummaryTable.Currency qa="differenceGrant" headerContent={x => x.financialVirementEdit.labels.projectDifferenceGrant()} value={x => x.newGrant - x.originalGrant} />
+                <SummaryTable.Currency qa="originalRemainingGrant" headerContent={x => x.financialVirementEdit.labels.projectOriginalRemainingGrant()} value={x => x.originalRemainingGrant} />
+                <SummaryTable.Currency qa="newRemainingGrant" headerContent={x => x.financialVirementEdit.labels.projectNewRemainingGrant()} value={x => x.newRemainingGrant} />
+                <SummaryTable.Currency qa="differenceRemainingGrant" headerContent={x => x.financialVirementEdit.labels.projectDifferenceGrant()} value={x => x.newRemainingGrant - x.originalRemainingGrant} />
               </SummaryTable.Table>
             </VirementForm.Fieldset>
             <VirementForm.Fieldset>
@@ -132,9 +132,12 @@ class Component extends ContainerBase<VirementCostsParams, Props, {}> {
     }
 
     partnerLevel.newEligibleCosts = partnerLevel.virements.reduce((total, x) => total + x.newEligibleCosts, 0);
+    const newRemainingCosts = partnerLevel.newEligibleCosts - partnerLevel.costsClaimedToDate;
+    const newFundingPercentage = partnerLevel.newFundingLevel / 100;
+    partnerLevel.newRemainingGrant = newRemainingCosts * newFundingPercentage;
 
     dto.newEligibleCosts = dto.partners.filter(x => !!x.newEligibleCosts).reduce((total, x) => total + x.newEligibleCosts, 0);
-
+    dto.newRemainingGrant = dto.partners.reduce((total, p) => total + p.newRemainingGrant, 0);
     this.props.onChange(false, dto);
   }
 

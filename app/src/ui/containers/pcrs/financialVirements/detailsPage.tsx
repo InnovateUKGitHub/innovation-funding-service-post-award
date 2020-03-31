@@ -80,6 +80,9 @@ class Component extends ContainerBase<Params, Props, {}> {
       itemId: this.props.itemId
     };
 
+    if (this.props.mode === "review") {
+      return <ACC.BackLink route={this.props.routes.pcrReviewItem.getLink(params)} preserveData={true}>Back to summary</ACC.BackLink>;
+    }
     return <ACC.BackLink route={this.props.routes.pcrViewItem.getLink(params)} preserveData={true}>Back to summary</ACC.BackLink>;
   }
 }
