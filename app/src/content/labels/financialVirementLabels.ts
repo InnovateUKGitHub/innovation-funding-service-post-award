@@ -14,8 +14,8 @@ export class FinancialVirementLabels extends ContentBase {
   public readonly projectOriginalEligibleCosts = () => this.getContent("project-original-eligible-costs");
   public readonly projectNewEligibleCosts = () => this.getContent("project-new-eligible-costs");
   public readonly projectDifferenceCosts = () => this.getContent("project-difference-costs");
-  public readonly projectOriginalGrant = () => this.getContent("project-original-grant");
-  public readonly projectNewGrant = () => this.getContent("project-new-grant");
+  public readonly projectOriginalRemainingGrant = () => this.getContent("project-original-remaining-grant");
+  public readonly projectNewRemainingGrant = () => this.getContent("project-new-remaining-grant");
   public readonly projectDifferenceGrant = () => this.getContent("project-difference-grant");
 
   public readonly partnerOriginalEligibleCosts = () => this.getContent("partner-original-eligible-costs");
