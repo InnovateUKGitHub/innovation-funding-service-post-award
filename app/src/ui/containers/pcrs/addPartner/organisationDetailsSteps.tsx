@@ -4,7 +4,6 @@ import { Option, PCRItemForPartnerAdditionDto } from "@framework/dtos";
 import { EditorStatus, StoresConsumer } from "@ui/redux";
 import { PcrStepProps } from "@ui/containers/pcrs/pcrWorkflow";
 import { PCRPartnerAdditionItemDtoValidator } from "@ui/validators";
-import { Pending } from "@shared/pending";
 import { PCRParticipantSize } from "@framework/constants";
 import { SimpleString } from "@ui/components/renderers";
 

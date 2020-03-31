@@ -86,6 +86,8 @@ export interface ISalesforcePCR {
   Acc_Contact1Surname__c: string|null;
   Acc_Contact1Phone__c: string|null;
   Acc_Contact1EmailAddress__c: string|null;
+  Acc_Contact2ProjectRole__c: string|null;
+  Contact2ProjectRoleLabel: string|null;
   Acc_Contact2Forename__c: string|null;
   Acc_Contact2Surname__c: string|null;
   Acc_Contact2Phone__c: string|null;
@@ -159,6 +161,8 @@ export class ProjectChangeRequestRepository extends SalesforceRepositoryBase<ISa
     "Acc_Contact1Surname__c",
     "Acc_Contact1Phone__c",
     "Acc_Contact1EmailAddress__c",
+    "Acc_Contact2ProjectRole__c",
+    "toLabel(Acc_Contact2ProjectRole__c) Contact2ProjectRoleLabel",
     "Acc_Contact2Forename__c",
     "Acc_Contact2Surname__c",
     "Acc_Contact2Phone__c",
@@ -233,6 +237,7 @@ export class ProjectChangeRequestRepository extends SalesforceRepositoryBase<ISa
       Acc_Contact1Surname__c: x.contact1Surname,
       Acc_Contact1Phone__c: x.contact1Phone,
       Acc_Contact1EmailAddress__c: x.contact1Email,
+      Acc_Contact2ProjectRole__c: new PcrContactRoleMapper().mapToSalesforcePCRProjectRole(x.contact2ProjectRole),
       Acc_Contact2Forename__c: x.contact2Forename,
       Acc_Contact2Surname__c: x.contact2Surname,
       Acc_Contact2Phone__c: x.contact2Phone,
