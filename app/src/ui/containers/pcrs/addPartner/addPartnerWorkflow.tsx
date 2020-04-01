@@ -4,7 +4,8 @@ import { PCRPartnerAdditionItemDtoValidator } from "@ui/validators";
 import { IPCRWorkflow } from "@ui/containers/pcrs/pcrWorkflow";
 import { PCRPartnerType, PCRProjectRole } from "@framework/constants";
 import {
-  AcademicOrganisationStep, AddPartnerSummary,
+  AcademicOrganisationStep,
+  AddPartnerSummary,
   FinanceContactStep,
   FinanceDetailsStep,
   OrganisationDetailsStep,

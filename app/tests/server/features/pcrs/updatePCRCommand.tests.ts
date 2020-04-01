@@ -502,11 +502,22 @@ describe("UpdatePCRCommand", () => {
     };
     it("should require project role and partner type to be set", async () => {
       const {context, projectChangeRequest, recordType, project} = setup();
+      context.testData.createPCRItem(projectChangeRequest, recordType, { status: PCRItemStatus.Complete });
+      const dto = await context.runQuery(new GetPCRByIdQuery(projectChangeRequest.projectId, projectChangeRequest.id));
+      const item = dto.items[0] as PCRItemForPartnerAdditionDto;
+      item.projectRole = PCRProjectRole.Unknown;
+      item.partnerType = PCRPartnerType.Unknown;
+      const command = new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto);
+      await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
+    });
+    it("should require project role and partner type to be set if the flag is set to required", async () => {
+      const {context, projectChangeRequest, recordType, project} = setup();
       context.testData.createPCRItem(projectChangeRequest, recordType, { status: PCRItemStatus.Incomplete });
       const dto = await context.runQuery(new GetPCRByIdQuery(projectChangeRequest.projectId, projectChangeRequest.id));
       const item = dto.items[0] as PCRItemForPartnerAdditionDto;
       item.projectRole = PCRProjectRole.Unknown;
       item.partnerType = PCRPartnerType.Unknown;
+      item.isProjectRoleAndPartnerTypeRequired = true;
       const command = new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto);
       await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
     });

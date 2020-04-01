@@ -1,13 +1,6 @@
 import React from "react";
 import { BaseProps, ContainerBase, defineRoute } from "../containerBase";
-import {
-  ILinkInfo,
-  PCRItemDto,
-  PCRItemStatus,
-  PCRItemType,
-  ProjectDto,
-  ProjectRole
-} from "@framework/types";
+import { ILinkInfo, PCRItemDto, PCRItemStatus, PCRItemType, ProjectDto, ProjectRole } from "@framework/types";
 import * as ACC from "../../components";
 import { Pending } from "@shared/pending";
 import { PCRDto, PCRItemTypeDto } from "@framework/dtos/pcrDtos";
@@ -224,8 +217,12 @@ class Component extends ContainerBase<ProjectChangeRequestPrepareItemParams, Dat
 
   private onSave(workflow: PcrWorkflow<PCRItemDto, Results<PCRItemDto>>, dto: PCRDto, skipToSummary: boolean = false) {
 
+    const item = dto.items.find(x => x.id === this.props.itemId)!;
+
     // If on the summary
     if (workflow.isOnSummary()) {
+      // If submitting from the summary set the status to "Incomplete" only if it's in "To do" (i.e. if it's set to "Complete" then leave it as it is)
+      if (item.status === PCRItemStatus.ToDo) item.status = PCRItemStatus.Incomplete;
       // submit and go back to the prepare page
       return this.props.onSave(dto, this.props.routes.pcrPrepare.getLink({
         projectId: this.props.projectId,
@@ -234,7 +231,6 @@ class Component extends ContainerBase<ProjectChangeRequestPrepareItemParams, Dat
     }
 
     // If submitting from a step set the status to incomplete
-    const item = dto.items.find(x => x.id === this.props.itemId)!;
     item.status = PCRItemStatus.Incomplete;
 
     if (skipToSummary) {
