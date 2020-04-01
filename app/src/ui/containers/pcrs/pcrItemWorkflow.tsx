@@ -176,6 +176,7 @@ class Component extends ContainerBase<ProjectChangeRequestPrepareItemParams, Dat
     const typeSpecificForm = pcrItem.type === PCRItemType.MultiplePartnerFinancialVirement ? <GrantMovingOverFinancialYearForm form={PCRForm} editor={editor}/> : null;
     return (
       <PCRForm.Form
+        qa="pcr_complete_item_form"
         data={pcrItem}
         onChange={dto => this.onChange(editor.data, dto)}
         onSubmit={() => this.onSave(workflow, editor.data)}
