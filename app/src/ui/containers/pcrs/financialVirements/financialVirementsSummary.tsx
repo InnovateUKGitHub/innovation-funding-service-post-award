@@ -118,9 +118,7 @@ export class GrantMovingOverFinancialYearForm extends React.Component<PropsWithF
     const itemValidator = this.props.editor.validator.items.results.find(x => x.model.type === PCRItemType.MultiplePartnerFinancialVirement) as MultiplePartnerFinancialVirementDtoValidator;
 
     return (
-      <Form.Fieldset
-      qa="fieldset-grantMovingOverFinancialYear"
-      heading={"Grant value moving over the financial year end"}>
+      <Form.Fieldset qa="fieldset-grantMovingOverFinancialYear" heading={"Grant value moving over the financial year end"}>
         <ACC.TextHint text={"The financial year ends on 31 March."} />
         <Form.Numeric
           name="grantMovingOverFinancialYear"
