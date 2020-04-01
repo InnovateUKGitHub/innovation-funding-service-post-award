@@ -1,4 +1,3 @@
-import { DateTime } from "luxon";
 import { SyncCommandBase } from "../common/commandBase";
 import { SalesforceProjectRole } from "../../repositories/partnersRepository";
 import { PartnerClaimStatus, PartnerDto, PartnerStatus, ProjectRole } from "@framework/types";
