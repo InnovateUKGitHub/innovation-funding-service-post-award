@@ -26,6 +26,7 @@ import { MonitoringReportsQuestionStepContent } from "./pages/monitoringReports/
 import { PartnerDetailsContent } from "./pages/partners/partnerDetailsContent";
 import { PartnerDetailsEditContent } from "./pages/partners/partnerDetailsEditContent";
 import { PCRCreateContent } from "./pages/pcrs/pcrCreateContent";
+import { ClaimPrepareSummaryContent } from "@content/pages/claims/claimPrepareSummaryContent";
 
 export type ContentSelector = (content: Content) => ContentResult;
 
@@ -48,6 +49,7 @@ export class Content extends ContentBase {
   public readonly claimDocuments = new ClaimDocumentsContent(this);
   public readonly claimDetails = new ClaimDetailsContent(this);
   public readonly claimPrepare = new ClaimPrepareContent(this);
+  public readonly claimPrepareSummary = new ClaimPrepareSummaryContent(this);
   public readonly claimReview = new ClaimReviewContent(this);
 
   public readonly financialVirementSummary = new FinancialVirementSummaryContent(this);

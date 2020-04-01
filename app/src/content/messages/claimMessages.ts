@@ -7,6 +7,7 @@ export class ClaimMessages extends ContentBase {
   }
 
   public readonly guidanceMessage = () => this.getContent("guidance-message", {markdown: true});
+  public readonly submitClaimConfirmation = () => this.getContent("submit-claim-confirmation");
   public readonly noOpenClaimsMessage = (nextClaimStartDate: Date) => this.getContent("no-open-claims", {nextClaimStartDate: formatDate(nextClaimStartDate, DateFormat.FULL_DATE) });
   public readonly noRemainingClaims = () => this.getContent("no-remaining-claims");
   public readonly noClosedClaims = () => this.getContent("no-closed-claims");
