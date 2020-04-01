@@ -6,7 +6,6 @@ import { PcrStepProps } from "@ui/containers/pcrs/pcrWorkflow";
 import { PCRPartnerAdditionItemDtoValidator } from "@ui/validators";
 import { Pending } from "@shared/pending";
 import { PCRPartnerType, PCRProjectRole } from "@framework/constants";
-import { SimpleString } from "@ui/components/renderers";
 
 interface InnerProps {
   pcrProjectRoles: Option<PCRProjectRole>[];
@@ -22,7 +21,7 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
     const typeOptions = this.getOptions(this.props.pcrItem.partnerType, this.props.pcrPartnerTypes);
 
     return (
-      <ACC.Section qa="role-and-partner-type" title={"New partner information"}>
+      <ACC.Section qa="role-and-partner-type" titleContent={x => x.pcrAddPartnerRoleAndOrganisation.formSectionTitle()}>
         <Form.Form
           qa="addPartnerForm"
           data={this.props.pcrItem}
@@ -30,8 +29,8 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
           onSubmit={() => this.onSave(this.props.pcrItem)}
           onChange={dto => this.onChange(dto)}
         >
-          <ACC.ValidationMessage messageType="info" message="You cannot change this information after you continue."/>
-          <Form.Fieldset heading="Project role">
+          <ACC.ValidationMessage messageType="info" messageContent={x => x.pcrAddPartnerRoleAndOrganisation.validationMessage()}/>
+          <Form.Fieldset headingContent={x => x.pcrAddPartnerRoleAndOrganisation.labels.roleHeading()}>
             <Form.Radio
               name="projectRole"
               options={roleOptions.options}
@@ -44,17 +43,13 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
               validation={this.props.validator.projectRole}
             />
           </Form.Fieldset>
-          <Form.Fieldset heading="Organisation type">
-            <ACC.Info summary="What are the different types?">
-              {/* tslint:disable-next-line:no-duplicate-string TODO move this to content (so hardcoding class here doesn't matter)*/}
-              <SimpleString><span className={"govuk-!-font-weight-bold"}>Business</span> - a business based in the UK or overseas.</SimpleString>
-              <SimpleString><span className={"govuk-!-font-weight-bold"}>Research</span> - higher education and organisations registered with Je-S.</SimpleString>
-              <SimpleString><span className={"govuk-!-font-weight-bold"}>Research and technology organisation (RTO)</span> - organisations which solely promote and conduct collaborative research and innovation.</SimpleString>
-              <SimpleString><span className={"govuk-!-font-weight-bold"}>Public sector, charity or non Je-S registered research organisation</span> - a not-for-profit public sector body or charity working on innovation, not registered with Je-S.</SimpleString>
+          <Form.Fieldset headingContent={x => x.pcrAddPartnerRoleAndOrganisation.labels.organisationHeading()}>
+            <ACC.Info summary={<ACC.Content value={x => x.pcrAddPartnerRoleAndOrganisation.infoSummary()}/>}>
+              <ACC.Content value={x => x.pcrAddPartnerRoleAndOrganisation.organisationTypeInfo()}/>
             </ACC.Info>
             <Form.Radio
               name="partnerType"
-              hint="If the new partner's organisation type is not listed, contact your monitoring officer."
+              hintContent={x => x.pcrAddPartnerRoleAndOrganisation.organisationTypeHint()}
               options={typeOptions.options}
               inline={false}
               value={() => typeOptions.selected}
@@ -64,10 +59,10 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
               }}
               validation={this.props.validator.partnerType}
             />
-          </Form.Fieldset>
+        </Form.Fieldset>
           <Form.Fieldset qa="save-and-continue">
-            <Form.Submit>Save and continue</Form.Submit>
-            <Form.Button name="saveAndReturnToSummary" onClick={() => this.onSave(this.props.pcrItem, true)}>Save and return to summary</Form.Button>
+            <Form.Submit><ACC.Content value={x => x.pcrAddPartnerRoleAndOrganisation.pcrItem.submitButton()}/></Form.Submit>
+            <Form.Button name="saveAndReturnToSummary" onClick={() => this.onSave(this.props.pcrItem, true)}><ACC.Content value={x => x.pcrAddPartnerRoleAndOrganisation.pcrItem.returnToSummaryButton()}/></Form.Button>
           </Form.Fieldset>
         </Form.Form>
       </ACC.Section>

@@ -11,11 +11,12 @@ import { ClaimsDashboardContent } from "@content/pages/claims/claimsDashboardCon
 import { ClaimDocumentsContent } from "@content/pages/claims/claimDocumentsContent";
 import { ClaimDetailsContent } from "@content/pages/claims/claimDetailsContent";
 import { ClaimPrepareContent } from "@content/pages/claims/claimPrepareContent";
+import { ClaimPrepareSummaryContent } from "@content/pages/claims/claimPrepareSummaryContent";
+import { ClaimReviewContent } from "@content/pages/claims/claimReviewContent";
 import { FinancialVirementSummaryContent } from "./pages/financialVirementSummaryContent";
 import { FinancialVirementEditContent } from "./pages/financialVirementEditContent";
 import { FinancialVirementEditPartnerLevelContent } from "./pages/financialVirementEditPartnerLevelContent";
 import { FinancialVirementDetailsContent } from "./pages/financialVirementDetailsContent";
-import { ClaimReviewContent } from "@content/pages/claims/claimReviewContent";
 import { MonitoringReportsDashboardContent } from "./pages/monitoringReports/monitoringReportsDashboardContent";
 import { MonitoringReportsCreateContent } from "./pages/monitoringReports/monitoringReportsCreateContent";
 import { MonitoringReportsDeleteContent } from "./pages/monitoringReports/monitoringReportsDeleteContent";
@@ -26,7 +27,7 @@ import { MonitoringReportsQuestionStepContent } from "./pages/monitoringReports/
 import { PartnerDetailsContent } from "./pages/partners/partnerDetailsContent";
 import { PartnerDetailsEditContent } from "./pages/partners/partnerDetailsEditContent";
 import { PCRCreateContent } from "./pages/pcrs/pcrCreateContent";
-import { ClaimPrepareSummaryContent } from "@content/pages/claims/claimPrepareSummaryContent";
+import { PCRAddPartnerRoleAndOrganisationContent } from "./pages/pcrs/addPartner/roleAndOrganisationStepContent";
 
 export type ContentSelector = (content: Content) => ContentResult;
 
@@ -69,6 +70,8 @@ export class Content extends ContentBase {
   public readonly partnerDetailsEdit = new PartnerDetailsEditContent(this);
 
   public readonly pcrCreate = new PCRCreateContent(this);
+
+  public readonly pcrAddPartnerRoleAndOrganisation = new PCRAddPartnerRoleAndOrganisationContent(this);
 
   public readonly errors = {
     notfound: new NotFoundContent(this),
