@@ -112,6 +112,8 @@ export interface PCRItemForPartnerAdditionDto extends PCRItemBaseDto {
   projectRoleLabel: string | null;
   partnerTypeLabel: string | null;
   organisationName: string | null;
+  registeredAddress: string | null;
+  registrationNumber: string | null;
   participantSize: PCRParticipantSize;
   participantSizeLabel: string | null;
   numberOfEmployees: number | null;

@@ -130,6 +130,8 @@ const mapItemForPartnerAddition = (pcr: ProjectChangeRequestItemEntity, typeName
   financialYearEndDate: pcr.financialYearEndDate || null,
   financialYearEndTurnover: (!!pcr.financialYearEndTurnover || pcr.financialYearEndTurnover === 0) ? pcr.financialYearEndTurnover : null,
   organisationName: pcr.organisationName || null,
+  registeredAddress: pcr.registeredAddress || null,
+  registrationNumber: pcr.registrationNumber || null,
   projectRole: pcr.projectRole || PCRProjectRole.Unknown,
   partnerType: pcr.partnerType || PCRPartnerType.Unknown,
   projectRoleLabel: pcr.projectRoleLabel || null,
