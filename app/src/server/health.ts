@@ -5,6 +5,7 @@ import { CostCategoryRepository } from "./repositories";
 import { ILogger, Logger } from "../server/features/common/logger";
 import { AppError } from "./features/common";
 import { ErrorCode } from "@framework/types";
+import { CompaniesHouse } from "./resources/companiesHouse";
 
 export const router = express.Router();
 
@@ -47,11 +48,21 @@ const checkGoogleAnalytics = (logger: ILogger) => {
     });
 };
 
+const checkCompaniesHouse = (logger: ILogger) => {
+  return new CompaniesHouse().searchCompany("test")
+    .then<HealthCheckResult>(() => "Success")
+    .catch<HealthCheckResult>(e => {
+      logger.error("COMPANIES HOUSE HEALTH CHECK", new AppError(ErrorCode.UNKNOWN_ERROR, e.message, e));
+      return "Failed";
+    });
+};
+
 export const health = async (logger: ILogger) => {
   const salesforce = checkSalesforce(logger);
   const googleAnalytics = checkGoogleAnalytics(logger);
+  const companiesHouse = checkCompaniesHouse(logger);
 
-  const results = await Promise.all<HealthCheckResult>([salesforce, googleAnalytics]);
+  const results = await Promise.all<HealthCheckResult>([salesforce, googleAnalytics, companiesHouse]);
 
   // awaits in response are required to get result but will have already run in promise all
   // status calculated from if all results are true or null (ie not applied)
@@ -60,7 +71,7 @@ export const health = async (logger: ILogger) => {
     response: {
       salesforce: await salesforce,
       googleAnalytics: await googleAnalytics,
-      // TODO companies house
+      companiesHouse: await companiesHouse,
     }
   };
 };
