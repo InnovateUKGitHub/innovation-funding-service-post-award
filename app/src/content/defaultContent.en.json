@@ -227,7 +227,7 @@
   },
   "claims-messages": {
     "guidance-message": "All partners in this project must upload evidence for each expenditure with every claim made. These might include invoices, timesheets, receipts or spreadsheets for capital usage. This is part of Innovate UK's obligations under the [Managing Public Money government handbook](https://www.gov.uk/government/publications/managing-public-money?_ga=2.105018247.521318796.1576575366-1871284022.1544109966) in relation to assurance, financial management and control.",
-    "submit-claim-confirmation": "I confirm that the information I have provided in this claim is correct, complete and contains only eligible costs. I understand and accept that if I knowingly withhold information, or provide false or misleading information, this may result in my claim being rejected, termination of the contract, recovery of ineligible claims, civil action and where there is evidence of fraud, criminal prosecution.",
+    "submit-claim-confirmation": "I confirm that the information I have provided in this claim is correct, complete and contains only eligible costs on an actual basis, which we confirm have been incurred and defrayed. I understand and accept that if I knowingly withhold information, or provide false or misleading information, this may result in my claim being rejected, termination of the contract, recovery of ineligible claims, civil action and where there is evidence of fraud, criminal prosecution.",
     "no-open-claims": "There are no open claims. The next claim period begins {{nextClaimStartDate}}.",
     "no-closed-claims": "There are no closed claims for this partner.",
     "no-remaining-claims": "There are no claims. Innovate UK has approved the final claims.",
