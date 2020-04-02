@@ -236,6 +236,13 @@
       "back-link": "Back to project change requests",
       "button-create-request": "Create request",
       "button-cancel-request": "Cancel"
+    },
+    "pcr-add-partner-role-and-organisation":{
+      "form-section-title": "New partner information",
+      "validation-message": "You cannot change this information after you continue.",
+      "info-summary": "What are the different types?",
+      "organisation-type-info": "**Business** - a business based in the UK or overseas.\n\n **Research** - higher education and organisations registered with Je-S.\n\n **Research and technology organisation (RTO)** - organisations which solely promote and conduct collaborative research and innovation.\n\n **Public sector, charity or non Je-S registered research organisation** - a not-for-profit public sector body or charity working on innovation, not registered with Je-S.",
+      "organisation-type-hint": "If the new partner's organisation type is not listed, contact your monitoring officer."
     }
   },
   "claims-messages": {
@@ -372,5 +379,13 @@
     "year-end-information": "The financial year ends on March 31st."
   },
   "monitoring-reports-labels": {
+  },
+  "pcr-item":{
+    "submit-button": "Save and continue",
+    "return-to-summary-button": "Save and return to summary"
+  },
+  "pcr-add-partner-labels":{
+    "role-heading": "Project role",
+    "organisation-heading": "Organisation type"
   }
 }
