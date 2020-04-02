@@ -90,6 +90,8 @@ export class CreateProjectChangeRequestCommand extends CommandBase<string> {
           financialYearEndDate: itemDto.financialYearEndDate,
           financialYearEndTurnover: itemDto.financialYearEndTurnover,
           organisationName: itemDto.organisationName,
+          registeredAddress: itemDto.registeredAddress,
+          registrationNumber: itemDto.registrationNumber,
           projectRole: itemDto.projectRole,
           partnerType: itemDto.partnerType,
           projectCity: itemDto.projectCity,
