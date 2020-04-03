@@ -73,6 +73,8 @@ export interface ISalesforcePCR {
   Acc_ParticipantType__c: string|null;
   ParticipantTypeLabel: string|null;
   Acc_OrganisationName__c: string|null;
+  Acc_RegisteredAddress__c: string|null;
+  Acc_RegistrationNumber__c: string|null;
   Acc_ParticipantSize__c: string|null;
   ParticipantSizeLabel: string|null;
   Acc_Employees__c: number|null;
@@ -148,6 +150,8 @@ export class ProjectChangeRequestRepository extends SalesforceRepositoryBase<ISa
     "Acc_ParticipantType__c",
     "toLabel(Acc_ParticipantType__c) ParticipantTypeLabel",
     "Acc_OrganisationName__c",
+    "Acc_RegisteredAddress__c",
+    "Acc_RegistrationNumber__c",
     "Acc_ParticipantSize__c",
     "toLabel(Acc_ParticipantSize__c) ParticipantSizeLabel",
     "Acc_Employees__c",
@@ -226,6 +230,8 @@ export class ProjectChangeRequestRepository extends SalesforceRepositoryBase<ISa
       Acc_ProjectRole__c: new PcrProjectRoleMapper().mapToSalesforcePCRProjectRole(x.projectRole),
       Acc_ParticipantType__c: new PcrPartnerTypeMapper().mapToSalesforcePCRPartnerType(x.partnerType),
       Acc_OrganisationName__c: x.organisationName,
+      Acc_RegisteredAddress__c: x.registeredAddress,
+      Acc_RegistrationNumber__c: x.registrationNumber,
       Acc_ParticipantSize__c: new PcrParticipantSizeMapper().mapToSalesforcePCRParticipantSize(x.participantSize),
       Acc_Employees__c: x.numberOfEmployees,
       Acc_TurnoverYearEnd__c: this.toOptionalSFDate(x.financialYearEndDate),

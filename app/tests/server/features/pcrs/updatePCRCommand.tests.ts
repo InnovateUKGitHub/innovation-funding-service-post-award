@@ -697,6 +697,8 @@ describe("UpdatePCRCommand", () => {
       item.financialYearEndDate = financialYearEndDate;
       item.financialYearEndTurnover = 45;
       item.organisationName = "Bristol University";
+      item.registeredAddress = "1 Bristol Street, Bristol";
+      item.registrationNumber = "11223344";
       item.projectRole = PCRProjectRole.ProjectLead;
       item.partnerType = PCRPartnerType.Other;
       item.projectCity = "Bristol";
@@ -721,6 +723,8 @@ describe("UpdatePCRCommand", () => {
       expect(updatedItem.financialYearEndDate).toEqual(financialYearEndDate);
       expect(updatedItem.financialYearEndTurnover).toEqual(45);
       expect(updatedItem.organisationName).toEqual("Bristol University");
+      expect(updatedItem.registeredAddress).toEqual("1 Bristol Street, Bristol");
+      expect(updatedItem.registrationNumber).toEqual("11223344");
       expect(updatedItem.projectRole).toEqual(PCRProjectRole.ProjectLead);
       expect(updatedItem.partnerType).toEqual(PCRPartnerType.Other);
       expect(updatedItem.projectCity).toEqual("Bristol");

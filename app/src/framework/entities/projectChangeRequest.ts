@@ -46,6 +46,8 @@ export interface ProjectChangeRequestItemForCreateEntity {
   partnerType?: PCRPartnerType;
   partnerTypeLabel?: string | null;
   organisationName?: string | null;
+  registeredAddress?: string | null;
+  registrationNumber?: string | null;
   participantSize?: PCRParticipantSize;
   participantSizeLabel?: string | null;
   numberOfEmployees?: number | null;
