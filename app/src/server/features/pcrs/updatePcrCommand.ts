@@ -139,6 +139,8 @@ export class UpdatePCRCommand extends CommandBase<boolean> {
           || item.financialYearEndTurnover !== dto.financialYearEndTurnover
           || item.financialYearEndDate !== dto.financialYearEndDate
           || item.organisationName !== dto.organisationName
+          || item.registeredAddress !== dto.registeredAddress
+          || item.registrationNumber !== dto.registrationNumber
           || item.projectRole !== dto.projectRole
           || item.partnerType !== dto.partnerType
           || item.projectCity !== dto.projectCity
@@ -161,6 +163,8 @@ export class UpdatePCRCommand extends CommandBase<boolean> {
             financialYearEndTurnover: dto.financialYearEndTurnover,
             financialYearEndDate: dto.financialYearEndDate,
             organisationName: dto.organisationName,
+            registeredAddress: dto.registeredAddress,
+            registrationNumber: dto.registrationNumber,
             projectRole: dto.projectRole,
             partnerType: dto.partnerType,
             projectCity: dto.projectCity,

@@ -209,6 +209,8 @@ export class ProjectChangeRequestStore extends StoreBase {
           financialYearEndDate: null,
           financialYearEndTurnover: null,
           organisationName: null,
+          registeredAddress: null,
+          registrationNumber: null,
           projectRole: PCRProjectRole.Unknown,
           partnerType: PCRPartnerType.Unknown,
           projectRoleLabel: null,
