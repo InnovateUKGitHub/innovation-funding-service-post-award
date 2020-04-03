@@ -134,7 +134,7 @@ class Component extends ContainerBase<VirementCostsParams, Props, {}> {
     partnerLevel.newEligibleCosts = partnerLevel.virements.reduce((total, x) => total + x.newEligibleCosts, 0);
     const newRemainingCosts = partnerLevel.newEligibleCosts - partnerLevel.costsClaimedToDate;
     const newFundingPercentage = partnerLevel.newFundingLevel / 100;
-    partnerLevel.newRemainingGrant = newRemainingCosts * newFundingPercentage;
+    partnerLevel.newRemainingGrant = roundCurrency(newRemainingCosts * newFundingPercentage);
 
     dto.newEligibleCosts = dto.partners.filter(x => !!x.newEligibleCosts).reduce((total, x) => total + x.newEligibleCosts, 0);
     dto.newRemainingGrant = dto.partners.reduce((total, p) => total + p.newRemainingGrant, 0);

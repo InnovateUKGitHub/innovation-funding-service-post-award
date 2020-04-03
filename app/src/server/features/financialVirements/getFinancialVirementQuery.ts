@@ -27,11 +27,9 @@ export class GetFinancialVirementQuery extends QueryBase<FinancialVirementDto> {
     const costsClaimedToDate = this.sum(partners, v => v.costsClaimedToDate);
     const originalEligibleCosts = this.sum(partners, v => v.originalEligibleCosts);
     const originalRemainingCosts = this.sum(partners, v => v.originalRemainingCosts);
-    const originalGrant = this.sum(partners, v => v.originalGrant);
     const originalRemainingGrant = this.sum(partners, v => v.originalRemainingGrant);
     const newEligibleCosts = this.sum(partners, v => v.newEligibleCosts);
     const newRemainingCosts = this.sum(partners, v => v.newRemainingCosts);
-    const newGrant = this.sum(partners, v => v.newGrant);
     const newRemainingGrant = this.sum(partners, v => v.newRemainingGrant);
 
     const originalFundingLevel = originalRemainingCosts ? 100 * originalRemainingGrant / originalRemainingCosts : 0;
@@ -42,12 +40,10 @@ export class GetFinancialVirementQuery extends QueryBase<FinancialVirementDto> {
       costsClaimedToDate,
       originalEligibleCosts,
       originalRemainingCosts,
-      originalGrant,
       originalRemainingGrant,
       originalFundingLevel,
       newEligibleCosts,
       newRemainingCosts,
-      newGrant,
       newRemainingGrant,
       newFundingLevel,
       partners,
@@ -68,9 +64,7 @@ export class GetFinancialVirementQuery extends QueryBase<FinancialVirementDto> {
     const newEligibleCosts = this.sum(virements, v => v.newEligibleCosts);
     const newRemainingCosts = newEligibleCosts - costsClaimedToDate;
 
-    const originalGrant = originalEligibleCosts * originalFundingPercentage;
     const originalRemainingGrant = originalRemainingCosts * originalFundingPercentage;
-    const newGrant = newEligibleCosts * newFundingPercentage;
     const newRemainingGrant = newRemainingCosts * newFundingPercentage;
 
     return {
@@ -82,9 +76,7 @@ export class GetFinancialVirementQuery extends QueryBase<FinancialVirementDto> {
       newEligibleCosts,
       newRemainingCosts,
       newFundingLevel: partner.newFundingLevel,
-      originalGrant,
       originalRemainingGrant,
-      newGrant,
       newRemainingGrant,
       virements,
     };
