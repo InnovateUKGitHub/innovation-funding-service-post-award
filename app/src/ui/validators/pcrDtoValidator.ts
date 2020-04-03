@@ -377,6 +377,11 @@ export class PCRPartnerAdditionItemDtoValidator extends PCRBaseItemDtoValidator<
     return this.requiredIfComplete(value, message);
   }
 
+  private validateCompanyHouseDetailsRequired(value: any, message: string) {
+    if (this.model.partnerType === PCRPartnerType.Research) return Validation.valid(this);
+    return this.requiredIfComplete(value, message);
+  }
+
   projectRole = Validation.all(this,
     () => this.validateProjectRoleRequired(),
     () => !this.canEdit || this.original && this.original.projectRole ? Validation.isUnchanged(this, this.model.projectRole, this.original && this.original.projectRole, "Project role cannot be changed") : Validation.valid(this),
@@ -390,6 +395,21 @@ export class PCRPartnerAdditionItemDtoValidator extends PCRBaseItemDtoValidator<
   organisationName = Validation.all(this,
     () => this.validateOrganisationNameRequired(),
     () => this.hasPermissionToEdit(this.model.organisationName, this.original && this.original.organisationName, "Organisation name cannot be changed"),
+  );
+
+  companyHouseOrganisationName = Validation.all(this,
+    () => this.validateCompanyHouseDetailsRequired(this.model.organisationName, "Enter an organisation name"),
+    () => this.hasPermissionToEdit(this.model.organisationName, this.original && this.original.organisationName, "Organisation name cannot be changed"),
+  );
+
+  registeredAddress = Validation.all(this,
+    () => this.validateCompanyHouseDetailsRequired(this.model.registeredAddress, "Enter a registered address"),
+    () => this.hasPermissionToEdit(this.model.registeredAddress, this.original && this.original.registeredAddress, "Registered address cannot be changed"),
+  );
+
+  registrationNumber = Validation.all(this,
+    () => this.validateCompanyHouseDetailsRequired(this.model.registrationNumber, "Enter a registration number"),
+    () => this.hasPermissionToEdit(this.model.registrationNumber, this.original && this.original.registrationNumber, "Registration number cannot be changed"),
   );
 
   financialYearEndDate = Validation.all(this,
