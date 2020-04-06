@@ -1073,6 +1073,29 @@ describe("UpdatePCRCommand", () => {
       await expect(context.runCommand(new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto))).resolves.toBe(true);
     });
 
+    test("returns a bad request if withdrawal date after project end date", async () => {
+      const context = new TestContext();
+
+      const project = context.testData.createProject(x => {x.Acc_EndDate__c = "2020-01-01"; x.Acc_ClaimFrequency__c = "Monthly"});
+      const partner = context.testData.createPartner(project);
+      context.testData.createCurrentUserAsProjectManager(project);
+      const projectChangeRequest = context.testData.createPCR(project, { status: PCRStatus.Draft });
+      const recordTypes = context.testData.createPCRRecordTypes();
+
+      const partnerWithdrawalType = PCRRecordTypeMetaValues.find(x => x.type === PCRItemType.PartnerWithdrawal)!;
+
+      const recordType = recordTypes.find(x => x.type === partnerWithdrawalType.typeName);
+      context.testData.createPCRItem(projectChangeRequest, recordType, { status: PCRItemStatus.Complete, partnerId: partner.id });
+
+      const dto = await context.runQuery(new GetPCRByIdQuery(projectChangeRequest.projectId, projectChangeRequest.id));
+      const item = dto.items[0] as PCRItemForPartnerWithdrawalDto;
+
+      item.withdrawalDate = new Date("01/05/2020");
+      await expect(context.runCommand(new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto))).rejects.toThrow(ValidationError);
+      item.withdrawalDate = new Date("01/01/2019");
+      await expect(context.runCommand(new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto))).resolves.toBe(true);
+    });
+
     test("updates withdrawal date and partner", async () => {
       const context = new TestContext();
 

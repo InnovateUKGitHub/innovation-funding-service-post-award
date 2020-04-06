@@ -1,8 +1,9 @@
 // tslint:disable:no-duplicate-string
+import { DateTime } from "luxon";
 import { Results } from "../validation/results";
 import { Result } from "../validation/result";
 import { NestedResult } from "../validation/nestedResult";
-import { isNumber } from "@framework/util";
+import { dayComparator, isNumber } from "@framework/util";
 
 // A helper for creating validation rules
 function rule<T>(test: (value: T | null) => boolean, defaultMessage: string, isRequired?: boolean): (results: Results<{}>, value: T | null, message?: string) => Result {
@@ -42,6 +43,12 @@ export function isUnchanged(results: Results<{}>, value: number | string | Date 
 export const isTrue = rule<boolean>((value) => value === null || value === undefined || value === true, "Should be true");
 export const isFalse = rule<boolean>((value) => value === null || value === undefined || value === false, "Should be false");
 export const isDate = rule<Date>((value) => value === null || value === undefined || (value.getTime && !isNaN(value.getTime())), "Invalid date");
+
+// Tests that the day is before or on the test date. Disregards time of day.
+export function isBeforeOrSameDay(results: Results<{}>, value: Date | null, test: Date, message?: string) {
+  if (!value || !test) return valid(results);
+  return isTrue(results, dayComparator(value, test) <= 0, message || `Date must be on or before ${test && DateTime.fromJSDate(test).toFormat("d MMM yyyy")}`);
+}
 
 export function maxLength(results: Results<{}>, value: string | null, length: number, message?: string) {
   return isTrue(results, (!value) || value.length <= length, message || `Maximum of ${length} characters`);
