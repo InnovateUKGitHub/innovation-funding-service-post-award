@@ -1,3 +1,4 @@
+import { DateTime } from "luxon";
 import * as Validators from "@ui/validators/common";
 import { Results } from "@ui/validation";
 
@@ -6,6 +7,26 @@ describe("common validators", () => {
     const date = new Date("invalid date");
 
     expect(Validators.isDate(new Results({}, true), date).isValid).toBe(false);
+  });
+  describe("isBeforeOrSameDay", () => {
+    it("should be valid when a date is not entered", () => {
+      expect(Validators.isBeforeOrSameDay(new Results({}, true), null, new Date()).isValid).toBe(true);
+    });
+    it("should be valid when the date is before the test date", () => {
+      const date = DateTime.local().minus({day: 1}).toJSDate();
+      const test = DateTime.local().toJSDate();
+      expect(Validators.isBeforeOrSameDay(new Results({}, true), date, test).isValid).toBe(true);
+    });
+    it("should be invalid when the date is after the test date", () => {
+      const date = DateTime.local().plus({day: 1}).toJSDate();
+      const test = DateTime.local().toJSDate();
+      expect(Validators.isBeforeOrSameDay(new Results({}, true), date, test).isValid).toBe(false);
+    });
+    it("should be valid when the date is the same as the test date", () => {
+      const date = DateTime.local().toJSDate();
+      const test = DateTime.local().toJSDate();
+      expect(Validators.isBeforeOrSameDay(new Results({}, true), date, test).isValid).toBe(true);
+    });
   });
 
   describe("isUnchanged", () => {
