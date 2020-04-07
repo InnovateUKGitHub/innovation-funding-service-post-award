@@ -63,10 +63,20 @@ export class ForecastTable extends React.Component<Props> {
     });
   }
 
+  private getPeriodId(project: ProjectDto, claims: ClaimDto[], draftClaim: ClaimDto | null) {
+    // If there is a draft claim in progress then return the smallest of the claim period and the project period
+    if (!!draftClaim) return Math.min(project.periodId, draftClaim.periodId);
+    // Sort a copy of the claims array so the original array is not affected
+    const approvedClaims = [...claims].filter(x => x.isApproved).sort(x => x.periodId);
+    // If there are no approved claims then we must be in period 1 ie, claim period 0
+    if (approvedClaims.length === 0) return 0;
+    // If there are previously approved claims then return the period after the most recently approved
+    return approvedClaims[0].periodId + 1;
+  }
+
   public render() {
     const { data, hideValidation, isSubmitting, editor } = this.props;
-    // if there is no claim then we must be in period 1 ie, claim period 0
-    const periodId = !!data.claim ? Math.min(data.project.periodId, data.claim.periodId) : 0;
+    const periodId = this.getPeriodId(data.project, data.claims, data.claim);
     const parsed = this.parseClaimData(data, editor, periodId, data.project.totalPeriods);
     const Table = TypedTable<typeof parsed[0]>();
     const intervals = this.calculateClaimPeriods(data);
@@ -78,7 +88,7 @@ export class ForecastTable extends React.Component<Props> {
       <Table.Table
         data={parsed}
         qa="forecast-table"
-        headers={this.renderTableHeaders(periods, periodId)}
+        headers={this.renderTableHeaders(periods, periodId, data.claim)}
         footers={this.renderTableFooters(periods, parsed, this.props.hideValidation !== true && editor ? editor.validator: undefined)}
         headerRowClass="govuk-body-s govuk-table__header--light"
         bodyRowClass={x => classNames("govuk-body-s", {
@@ -93,7 +103,9 @@ export class ForecastTable extends React.Component<Props> {
           header={intervals[p]}
           value={x => x.claims[p]}
           qa={"category-claim" + i}
-          isDivider={i === claims.length - 1 || i === claims.length - 2 ? "normal" : undefined}
+          // always show a divider on the right hand side of the last claim
+          // only show a divider on the right hand side of the second to last claim if the last claim is in "currently claiming"
+          isDivider={i === claims.length - 1 || (!!data.claim && i === claims.length - 2) ? "normal" : undefined}
         />)}
 
         {forecasts.map((p, i) => <Table.Custom
@@ -245,8 +257,10 @@ export class ForecastTable extends React.Component<Props> {
     }
   }
 
-  private renderTableHeaders(periods: string[], claimPeriod: number) {
-    const previous = claimPeriod - 1;
+  private renderTableHeaders(periods: string[], claimPeriod: number, claim: ClaimDto | null) {
+    // If there is a draft claim then show "Costs you are claiming"
+    // If there isn't a draft claim then don't show "Costs you are claiming" and "Costs claimed" applies to all claims
+    const previous = claim ? claimPeriod - 1 : claimPeriod;
     const forecasts = periods.length > claimPeriod;
 
     return [(
@@ -255,7 +269,8 @@ export class ForecastTable extends React.Component<Props> {
           <AccessibilityText>Cost categories</AccessibilityText>
         </th>
         {previous > 0 ? <th className="govuk-table__header govuk-table__header--numeric" colSpan={previous}>Costs claimed</th> : null}
-        {claimPeriod > 0 ? <th className="govuk-table__header govuk-table__header--numeric">Costs you are claiming</th> : null}
+        {/*If there isn't a draft claim then don't show "Costs you are claiming"*/}
+        {!!claim && claimPeriod > 0 ? <th className="govuk-table__header govuk-table__header--numeric">Costs you are claiming</th> : null}
         {forecasts ? <th className="govuk-table__header govuk-table__header--numeric" colSpan={periods.length - claimPeriod}>Forecast</th> : null}
         <th className="govuk-table__header govuk-table__header--numeric sticky-col sticky-col-right-3">Total</th>
         <th className="govuk-table__header govuk-table__header--numeric sticky-col sticky-col-right-2">Total eligible costs</th>
