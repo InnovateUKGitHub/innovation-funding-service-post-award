@@ -538,6 +538,7 @@ export class PCRPartnerWithdrawalItemDtoValidator extends PCRBaseItemDtoValidato
     return Validation.all(this,
       () => isComplete ? Validation.required(this, this.model.withdrawalDate, "Enter a removal date") : Validation.valid(this),
       () => Validation.isDate(this, this.model.withdrawalDate, "Enter a real removal date"),
+      () => Validation.isBeforeOrSameDay(this, this.model.withdrawalDate, this.project.endDate, `Withdrawal date must be before project is due to finish.`),
       () => isNumber(removalPeriod) ? Validation.isTrue(this, removalPeriod > 0, "Withdrawal date must be after the project started") : Validation.valid(this)
     );
   }
