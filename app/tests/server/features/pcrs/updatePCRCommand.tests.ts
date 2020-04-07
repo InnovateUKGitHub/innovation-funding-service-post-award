@@ -546,12 +546,40 @@ describe("UpdatePCRCommand", () => {
       item.organisationName = "Coventry University";
       await expect(context.runCommand(command)).resolves.toBe(true);
     });
-    it("should require finance contact details to be set", async () => {
+    it('should require company house details to be set when the partner type is not Research', async () => {
       const {context, projectChangeRequest, recordType, project} = setup();
       context.testData.createPCRItem(projectChangeRequest, recordType, {
         status: PCRItemStatus.Incomplete,
         partnerType: PCRPartnerType.Business,
         projectRole: PCRProjectRole.Collaborator,
+        projectCity: "Coventry",
+        financialYearEndTurnover: 33,
+        financialYearEndDate: new Date(),
+        contact1ProjectRole: PCRContactRole.FinanceContact,
+        contact1Forename: "Homer",
+        contact1Surname: "Of Iliad fame",
+        contact1Phone: "112233",
+        contact1Email: "helen@troy.com",
+        participantSize: PCRParticipantSize.Medium,
+        numberOfEmployees: 15,
+      });
+      const dto = await context.runQuery(new GetPCRByIdQuery(projectChangeRequest.projectId, projectChangeRequest.id));
+      const item = dto.items[0] as PCRItemForPartnerAdditionDto;
+      item.status = PCRItemStatus.Complete;
+      const command = new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto);
+      await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
+      item.organisationName = "Business name";
+      item.registrationNumber = "12345";
+      item.registeredAddress = "1 Bristol Street, Bristol"
+      await expect(context.runCommand(command)).resolves.toBe(true);
+    })
+    it("should require finance contact details to be set", async () => {
+      const {context, projectChangeRequest, recordType, project} = setup();
+      context.testData.createPCRItem(projectChangeRequest, recordType, {
+        status: PCRItemStatus.Incomplete,
+        partnerType: PCRPartnerType.Research,
+        projectRole: PCRProjectRole.Collaborator,
+        organisationName: "Coventry University",
         projectCity: "Coventry",
         participantSize: PCRParticipantSize.Medium,
         numberOfEmployees: 15,
@@ -574,8 +602,9 @@ describe("UpdatePCRCommand", () => {
       const {context, projectChangeRequest, recordType, project} = setup();
       context.testData.createPCRItem(projectChangeRequest, recordType, {
         status: PCRItemStatus.Incomplete,
-        partnerType: PCRPartnerType.Business,
+        partnerType: PCRPartnerType.Research,
         projectRole: PCRProjectRole.Collaborator,
+        organisationName: "Coventry University",
         projectCity: "Coventry",
         contact1ProjectRole: PCRContactRole.FinanceContact,
         contact1Forename: "Homer",
@@ -598,8 +627,9 @@ describe("UpdatePCRCommand", () => {
       const {context, projectChangeRequest, recordType, project} = setup();
       context.testData.createPCRItem(projectChangeRequest, recordType, {
         status: PCRItemStatus.Incomplete,
-        partnerType: PCRPartnerType.Business,
+        partnerType: PCRPartnerType.Research,
         projectRole: PCRProjectRole.Collaborator,
+        organisationName: "Coventry University",
         projectCity: "Coventry",
         contact1ProjectRole: PCRContactRole.FinanceContact,
         contact1Forename: "Homer",
@@ -624,6 +654,9 @@ describe("UpdatePCRCommand", () => {
         status: PCRItemStatus.Incomplete,
         partnerType: PCRPartnerType.Business,
         projectRole: PCRProjectRole.ProjectLead,
+        organisationName: "Coventry business",
+        registrationNumber: "123345",
+        registeredAddress: "Coventry Street",
         projectCity: "Coventry",
         financialYearEndTurnover: 33,
         financialYearEndDate: new Date(),
@@ -663,6 +696,9 @@ describe("UpdatePCRCommand", () => {
         status: PCRItemStatus.Incomplete,
         projectRole: PCRProjectRole.Collaborator,
         partnerType: PCRPartnerType.Business,
+        organisationName: "Coventry business",
+        registrationNumber: "123345",
+        registeredAddress: "Coventry Street",
         projectCity: "Bristol",
         projectPostcode: "BS1 5UW",
         financialYearEndTurnover: 20,
