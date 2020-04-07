@@ -6,6 +6,7 @@ import { PCRPartnerType, PCRProjectRole } from "@framework/constants";
 import {
   AcademicOrganisationStep,
   AddPartnerSummary,
+  CompaniesHouseStep,
   FinanceContactStep,
   FinanceDetailsStep,
   OrganisationDetailsStep,
@@ -16,6 +17,7 @@ import {
 
 export type addPartnerStepNames = "roleAndOrganisationStep"
   | "academicOrganisationStep"
+  | "companiesHouseStep"
   | "organisationDetailsStep"
   | "financeDetailsStep"
   | "projectLocationStep"
@@ -77,6 +79,14 @@ export const getAddPartnerWorkflow = (item: PCRItemForPartnerAdditionDto, step: 
       stepNumber: 2,
       validation: val => val.pcr,
       stepRender: AcademicOrganisationStep
+    });
+  } else {
+    workflow.steps.push({
+      stepName: "companiesHouseStep",
+      displayName: "Companies house",
+      stepNumber: 2,
+      validation: val => val.pcr,
+      stepRender: CompaniesHouseStep
     });
   }
 
