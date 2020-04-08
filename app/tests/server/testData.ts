@@ -4,10 +4,11 @@ import * as Repositories from "@server/repositories";
 import * as Entities from "@framework/entities";
 import { PartnerFinancialVirement, ProjectChangeRequestStatusChangeEntity } from "@framework/entities";
 import { range } from "@shared/range";
-import { ClaimStatus, IClientUser, PCRPartnerType, PCRProjectRole } from "@framework/types";
+import { ClaimStatus, DocumentDescription, IClientUser, PCRPartnerType, PCRProjectRole } from "@framework/types";
 import { ITestRepositories } from "./testRepositories";
 import { PCRRecordTypeMetaValues } from "@server/features/pcrs/getItemTypesQuery";
 import { PCRItemStatus, PCRParticipantSize, PCRStatus } from "@framework/constants";
+import { ISalesforceDocument } from "@server/repositories/contentVersionRepository";
 
 export class TestData {
   constructor(private repositories: ITestRepositories, private getCurrentUser: () => IClientUser) {
@@ -479,10 +480,10 @@ export class TestData {
     uploadedBy: string = "Catwoman",
     content: string = "",
     description?: string,
-    update?: (item: Repositories.ISalesforceDocument) => void
+    update?: (item: ISalesforceDocument) => void
   ) {
     const id = "" + this.repositories.documents.Items.length + 1;
-    const item: Repositories.ISalesforceDocument = {
+    const item: ISalesforceDocument = {
       Id: id,
       ContentDocumentId: id,
       Title: title,
@@ -493,7 +494,7 @@ export class TestData {
       PathOnClient: fileType ? `${title}.${fileType}` : title,
       ContentLocation: "S",
       VersionData: content,
-      Description: description,
+      Description: description || null,
       Acc_LastModifiedByAlias__c: uploadedBy,
       CreatedDate: new Date().toISOString(),
       Owner: {
@@ -558,8 +559,8 @@ export class TestData {
     return newItem;
   }
 
-  public createFile(content: string = "Test File Content", fileName: string = "testFile.csv"): TestFileWrapper {
-    return new TestFileWrapper(fileName, content);
+  public createFile(content: string = "Test File Content", fileName: string = "testFile.csv", description?: DocumentDescription): TestFileWrapper {
+    return new TestFileWrapper(fileName, content, description);
   }
 
   public createRecordType(update?: Partial<Entities.RecordType>) {
@@ -709,7 +710,7 @@ export class TestData {
 
 export class TestFileWrapper implements IFileWrapper {
 
-  constructor(public fileName: string, public content: string) {
+  constructor(public fileName: string, public content: string, public description?: DocumentDescription) {
   }
 
   public get size(): number { return this.content && this.content.length || 0; }

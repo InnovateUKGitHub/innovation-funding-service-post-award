@@ -41,14 +41,14 @@ describe("Dropdown list", () => {
   it("Specifies empty option as selected if nothing selected", () => {
     const wrapper = mount(<DropdownList name="testName" hasEmptyOption={true} options={dropdownOptions} />);
 
-    expect(wrapper.find("select").first().props().value).toBeUndefined();
+    expect(wrapper.find("select").first().props().value).toBe("");
     expect(wrapper.find("option").first().getDOMNode().getAttribute("aria-selected")).toBe("true");
   });
 
   it("Specifies nothing as selected if nothing selected and no empty option", () => {
     const wrapper = mount(<DropdownList name="testName" options={dropdownOptions} />);
 
-    expect(wrapper.find("select").first().props().value).toBeUndefined();
+    expect(wrapper.find("select").first().props().value).toBe("");
     expect(wrapper.find("option").map(x => x.getDOMNode().getAttribute("aria-selected"))).toEqual(["false", "false", "false"]);
   });
 

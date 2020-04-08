@@ -4,6 +4,8 @@ import { IEditorStore, StoresConsumer } from "@ui/redux";
 import * as ACC from "@ui/components";
 import { PCRItemTypeDto, PCRStandardItemDto } from "@framework/dtos";
 import { PcrStepProps } from "@ui/containers/pcrs/pcrWorkflow";
+import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
+import { DocumentSummaryDto } from "@framework/dtos/documentDto";
 
 interface FileStepsProps {
   documents: DocumentSummaryDto[];

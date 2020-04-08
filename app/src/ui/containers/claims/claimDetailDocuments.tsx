@@ -3,10 +3,11 @@ import { BaseProps, ContainerBase, defineRoute } from "../containerBase";
 import * as ACC from "@ui/components";
 import { Pending } from "@shared/pending";
 import { ProjectDto, ProjectRole } from "@framework/types";
-import { getFileSize } from "@framework/util";
 import { IEditorStore } from "@ui/redux/reducers";
 import { MultipleDocumentUpdloadDtoValidator } from "@ui/validators/documentUploadValidator";
 import { StoresConsumer } from "@ui/redux";
+import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
+import { DocumentSummaryDto } from "@framework/dtos/documentDto";
 
 export interface ClaimDetailDocumentsPageParams {
   projectId: string;

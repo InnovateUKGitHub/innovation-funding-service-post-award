@@ -1,6 +1,6 @@
 import { TestContext } from "../../testContextProvider";
 import { GetProjectDocumentsQuery } from "@server/features/documents/getProjectDocumentsSummary";
-import { Authorisation, ProjectRole } from "@framework/types";
+import { Authorisation, DocumentDescription, ProjectRole } from "@framework/types";
 import { DateTime } from "luxon";
 
 describe("GetProjectDocumentsQuery", () => {
@@ -29,13 +29,13 @@ describe("GetProjectDocumentsQuery", () => {
     expect(docs).toHaveLength(0);
   });
 
-  it("should return corect properties", async () => {
+  it("should return correct properties", async () => {
     const context = new TestContext();
     const project = context.testData.createProject();
 
     const expectedFileName = "report1";
     const expectedExtention = "pdf";
-    const expectedDescription = "Expected Description";
+    const expectedDescription = "IAR";
     const expectedUploadedBy = "Chaka Khan";
 
     const document = context.testData.createDocument(project.Id, expectedFileName, expectedExtention, expectedUploadedBy);
@@ -48,7 +48,7 @@ describe("GetProjectDocumentsQuery", () => {
     expect(result.fileName).toBe(`${expectedFileName}.${expectedExtention}`);
     expect(result.fileSize).toBe(document.ContentSize);
     expect(result.uploadedBy).toBe(document.Acc_LastModifiedByAlias__c);
-    expect(result.description).toBe(document.Description);
+    expect(result.description).toBe(DocumentDescription.IAR);
   });
 
   it("should sort document in descending date order", async () => {

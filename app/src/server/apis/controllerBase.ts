@@ -6,6 +6,8 @@ import { IAppError, ISessionUser } from "@framework/types";
 import { NotFoundError } from "@server/features/common/appError";
 import { getErrorResponse, getErrorStatus } from "@server/errorHandlers";
 import { Configuration } from "@server/features/common";
+import { DocumentUploadDto, MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
+import { DocumentDto } from "@framework/dtos/documentDto";
 
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
@@ -73,7 +75,7 @@ export abstract class ControllerBaseWithSummary<TSummaryDto, TDto> {
       const p = getParams(params, query, body);
 
       const file: IFileWrapper | null = req.file && new ServerFileWrapper(req.file);
-      const document: DocumentUploadDto | null = file && { file, description: body.description };
+      const document: DocumentUploadDto | null = file && { file, description: parseInt(body.description, 10) };
 
       return { ...p, document };
     };
@@ -86,7 +88,7 @@ export abstract class ControllerBaseWithSummary<TSummaryDto, TDto> {
       const p = getParams(params, query, body);
 
       const files: IFileWrapper[] = Array.isArray(req.files) ? req.files.map(x => new ServerFileWrapper(x)) : [];
-      const documents: MultipleDocumentUploadDto = { files, description: body.description };
+      const documents: MultipleDocumentUploadDto = { files, description: parseInt(body.description, 10) };
 
       return { ...p, documents };
     };

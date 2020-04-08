@@ -1,3 +1,0 @@
-interface DocumentFilter {
-  description: string;
-}

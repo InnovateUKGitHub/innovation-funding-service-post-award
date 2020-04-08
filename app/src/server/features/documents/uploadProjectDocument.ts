@@ -1,6 +1,7 @@
 import { Authorisation, IContext, ProjectRole } from "@framework/types";
 import { CommandMultipleDocumentBase, ValidationError } from "@server/features/common";
 import { MultipleDocumentUpdloadDtoValidator } from "@ui/validators/documentUploadValidator";
+import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
 
 export class UploadProjectDocumentCommand extends CommandMultipleDocumentBase<string[]> {
 

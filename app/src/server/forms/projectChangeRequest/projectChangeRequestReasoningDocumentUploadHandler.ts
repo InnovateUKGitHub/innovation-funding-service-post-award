@@ -1,4 +1,4 @@
-import { IContext, ILinkInfo } from "@framework/types";
+import { DocumentDescription, IContext, ILinkInfo } from "@framework/types";
 import { Configuration } from "@server/features/common";
 import { UploadProjectChangeRequestDocumentOrItemDocumentCommand } from "@server/features/documents/uploadProjectChangeRequestDocumentOrItemDocument";
 import { IFormBody, IFormButton, MultipleFileFormHandlerBase } from "@server/forms/formHandlerBase";
@@ -6,6 +6,7 @@ import { PCRPrepareReasoningRoute, ProjectChangeRequestPrepareReasoningParams } 
 import { MultipleDocumentUpdloadDtoValidator } from "@ui/validators";
 import { reasoningWorkflowSteps } from "@ui/containers/pcrs/reasoning/workflowMetadata";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
+import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
 
 export class ProjectChangeRequestReasoningDocumentUploadHandler extends MultipleFileFormHandlerBase<ProjectChangeRequestPrepareReasoningParams, "multipleDocuments"> {
   constructor() {
@@ -15,7 +16,7 @@ export class ProjectChangeRequestReasoningDocumentUploadHandler extends Multiple
   protected async getDto(context: IContext, params: ProjectChangeRequestPrepareReasoningParams, button: IFormButton, body: IFormBody, files: IFileWrapper[]): Promise<MultipleDocumentUploadDto> {
     return {
       files,
-      description: body.description
+      description: parseInt(body.description, 10)
     };
   }
 

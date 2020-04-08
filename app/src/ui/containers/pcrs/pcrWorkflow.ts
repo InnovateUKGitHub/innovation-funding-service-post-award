@@ -15,6 +15,7 @@ import { IStepProps, ISummaryProps, IWorkflow, WorkflowBase } from "@framework/t
 import { removePartnerWorkflow } from "@ui/containers/pcrs/removePartner";
 import { PCRWorkflowValidator } from "@ui/validators/pcrWorkflowValidator";
 import { getAddPartnerWorkflow } from "@ui/containers/pcrs/addPartner/addPartnerWorkflow";
+import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
 
 export interface PcrStepProps<TDto, TVal> extends IStepProps {
   project: ProjectDto;

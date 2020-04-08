@@ -1,6 +1,7 @@
 import { Authorisation, IContext, ProjectRole } from "@framework/types";
 import { CommandMultipleDocumentBase, ValidationError } from "@server/features/common";
 import { MultipleDocumentUpdloadDtoValidator } from "@ui/validators";
+import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
 // Uses either project change request Id or project change request item Id, as both cn be used as the entity Id of the document
 
 export class UploadProjectChangeRequestDocumentOrItemDocumentCommand extends CommandMultipleDocumentBase<string[]> {

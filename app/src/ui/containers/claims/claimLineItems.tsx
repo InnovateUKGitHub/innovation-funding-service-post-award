@@ -7,6 +7,7 @@ import { State } from "router5";
 import { ClaimDto, ILinkInfo, PartnerDto, ProjectDto, ProjectRole } from "@framework/types";
 import classNames from "classnames";
 import { StoresConsumer } from "@ui/redux";
+import { DocumentSummaryDto } from "@framework/dtos/documentDto";
 
 interface Params {
   projectId: string;

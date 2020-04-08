@@ -331,6 +331,10 @@
     "contactEmail": "Email"
   },
   "document-labels" : {
+    "document-description-IAR": "IAR",
+    "document-description-Evidence": "Evidence",
+    "document-description-ClaimValidationForm": "Claim Validation Form",
+    "document-description-Unknown": "Unknown",
     "uploadButtonLabel" : "Upload",
     "uploadInputLabel": "Upload files",
     "fileNameLabel": "File name",

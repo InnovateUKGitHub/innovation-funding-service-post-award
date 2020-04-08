@@ -1,4 +1,5 @@
 export enum DocumentDescription {
-  IAR = "IAR",
-  ClaimValidationForm = "ClaimValidationForm"
+  IAR = 10 ,
+  ClaimValidationForm = 20,
+  Evidence = 30,
 }

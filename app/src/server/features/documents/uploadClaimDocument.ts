@@ -5,6 +5,7 @@ import { Authorisation, ClaimDto, ClaimStatus, DocumentDescription, IContext, Pr
 import mapClaim from "@server/features/claims/mapClaim";
 import { GetClaimDocumentsQuery } from "@server/features/documents/getClaimDocumentsSummary";
 import { UpdateClaimCommand } from "../claims";
+import { DocumentUploadDto } from "@framework/dtos/documentUploadDto";
 
 export class UploadClaimDocumentCommand extends CommandDocumentBase<string> {
 

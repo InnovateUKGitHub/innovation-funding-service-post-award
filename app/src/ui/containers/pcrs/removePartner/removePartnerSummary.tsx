@@ -6,6 +6,7 @@ import { PCRPartnerWithdrawalItemDtoValidator } from "@ui/validators";
 import { PcrSummaryProps } from "@ui/containers/pcrs/pcrWorkflow";
 import { removePartnerStepNames } from "@ui/containers/pcrs/removePartner/removePartnerWorkflow";
 import { periodInProject } from "@framework/util";
+import { DocumentSummaryDto } from "@framework/dtos/documentDto";
 
 interface InnerProps {
   documents: DocumentSummaryDto[];
