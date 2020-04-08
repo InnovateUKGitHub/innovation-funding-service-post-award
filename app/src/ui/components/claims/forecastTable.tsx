@@ -70,8 +70,8 @@ export class ForecastTable extends React.Component<Props> {
     const approvedClaims = [...claims].filter(x => x.isApproved).sort(x => x.periodId);
     // If there are no approved claims then we must be in period 1 ie, claim period 0
     if (approvedClaims.length === 0) return 0;
-    // If there are previously approved claims then return the period after the most recently approved
-    return approvedClaims[0].periodId + 1;
+    // If there are previously approved claims then return most recent
+    return approvedClaims[0].periodId;
   }
 
   public render() {
