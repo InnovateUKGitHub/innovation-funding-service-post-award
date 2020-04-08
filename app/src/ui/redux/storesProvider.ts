@@ -14,12 +14,14 @@ export const createStores = (getState: () => RootState, dispatch: (action: RootA
   const claimDetails = new Stores.ClaimsDetailsStore(getState, dispatch);
   const config = new Stores.ConfigStore(getState, dispatch);
   const forecastGolCosts = new Stores.ForecastGolCostsStore(getState, dispatch);
+  const companies = new Stores.CompaniesStore(partners, getState, dispatch);
 
   return {
     claimDetailDocuments: new Stores.ClaimDetailDocumentsStore(getState, dispatch),
     claimDetails,
     claimDocuments,
     claims,
+    companies,
     config: new Stores.ConfigStore(getState, dispatch),
     contacts: new Stores.ContactsStore(getState, dispatch),
     costCategories,
