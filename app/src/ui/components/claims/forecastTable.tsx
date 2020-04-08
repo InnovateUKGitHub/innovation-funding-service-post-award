@@ -9,6 +9,7 @@ import { NumberInput } from "../inputs/numberInput";
 import { AccessibilityText } from "../renderers/accessibilityText";
 import { Percentage } from "../renderers/percentage";
 import { ClaimDto, PartnerDto, ProjectDto } from "@framework/dtos";
+import { numberComparator } from "@framework/util/comparator";
 
 export interface ForecastData {
   project: ProjectDto;
@@ -67,7 +68,7 @@ export class ForecastTable extends React.Component<Props> {
     // If there is a draft claim in progress then return the smallest of the claim period and the project period
     if (!!draftClaim) return Math.min(project.periodId, draftClaim.periodId);
     // Sort a copy of the claims array so the original array is not affected
-    const approvedClaims = [...claims].filter(x => x.isApproved).sort(x => x.periodId);
+    const approvedClaims = [...claims].filter(x => x.isApproved).sort((a, b) => numberComparator(b.periodId, a.periodId));
     // If there are no approved claims then we must be in period 1 ie, claim period 0
     if (approvedClaims.length === 0) return 0;
     // If there are previously approved claims then return most recent
@@ -83,6 +84,15 @@ export class ForecastTable extends React.Component<Props> {
     const claims = Object.keys(parsed[0].claims);
     const forecasts = Object.keys(parsed[0].forecasts);
     const periods = claims.concat(forecasts);
+
+    const isDivider = (i: number) => {
+      // always show a divider on the right hand side of the last claim
+      if (i === claims.length - 1) {
+        return true;
+      }
+      // only show a divider on the right hand side of the second to last claim if the last claim is in "currently claiming"
+      return !!data.claim && i === claims.length - 2;
+    };
 
     return (
       <Table.Table
@@ -103,9 +113,7 @@ export class ForecastTable extends React.Component<Props> {
           header={intervals[p]}
           value={x => x.claims[p]}
           qa={"category-claim" + i}
-          // always show a divider on the right hand side of the last claim
-          // only show a divider on the right hand side of the second to last claim if the last claim is in "currently claiming"
-          isDivider={i === claims.length - 1 || (!!data.claim && i === claims.length - 2) ? "normal" : undefined}
+          isDivider={isDivider(i) ? "normal" : undefined}
         />)}
 
         {forecasts.map((p, i) => <Table.Custom
