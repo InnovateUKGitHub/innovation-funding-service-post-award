@@ -1,5 +1,6 @@
 import { IContext } from "@framework/types";
 import { QueryBase } from "../common";
+import { DocumentDto } from "@framework/dtos/documentDto";
 
 export abstract class DocumentQueryBase extends QueryBase<DocumentDto | null> {
   protected constructor(protected readonly documentId: string) {
@@ -18,10 +19,10 @@ export abstract class DocumentQueryBase extends QueryBase<DocumentDto | null> {
     if(!documentStream) return null;
 
     return {
-      fileType: metaData.FileType,
-      contentLength: metaData.ContentSize,
+      fileType: metaData.fileType,
+      contentLength: metaData.contentSize,
       stream: documentStream,
-      fileName: metaData.FileExtension ? `${metaData.Title}.${metaData.FileExtension}` : metaData.Title
+      fileName: metaData.fileExtension ? `${metaData.title}.${metaData.fileExtension}` : metaData.title
     };
   }
 

@@ -7,6 +7,8 @@ import { IEditorStore } from "../../redux";
 import { MultipleDocumentUpdloadDtoValidator } from "../../validators/documentUploadValidator";
 import { getFileSize } from "@framework/util";
 import { StoresConsumer } from "@ui/redux";
+import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
+import { DocumentSummaryDto } from "@framework/dtos/documentDto";
 
 export interface ProjectDocumentPageParams {
   projectId: string;

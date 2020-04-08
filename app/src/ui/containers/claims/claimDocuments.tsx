@@ -6,6 +6,10 @@ import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerB
 import { ContentConsumer, IEditorStore, StoresConsumer } from "@ui/redux";
 import { MultipleDocumentUpdloadDtoValidator } from "@ui/validators";
 import { DocumentDescription } from "@framework/constants";
+import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
+import { DocumentDescriptionDto, DocumentSummaryDto } from "@framework/dtos/documentDto";
+import { DropdownOption } from "@ui/components";
+import { getAllEnumValues } from "@shared/enumHelper";
 
 export interface ClaimDocumentsPageParams {
   projectId: string;
@@ -18,6 +22,7 @@ interface Data {
   editor: Pending<IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>>;
   documents: Pending<DocumentSummaryDto[]>;
   claim: Pending<ClaimDto>;
+  documentDescriptions: Pending<DocumentDescriptionDto[]>;
 }
 
 interface Callbacks {
@@ -32,13 +37,16 @@ class ClaimDocumentsComponent extends ContainerBase<ClaimDocumentsPageParams, Da
       editor: this.props.editor,
       documents: this.props.documents,
       claim: this.props.claim,
+      documentDescriptions: this.props.documentDescriptions,
     });
 
-    return <ACC.PageLoader pending={combined} render={x => this.renderContents(x.project, x.editor, x.documents, x.claim)} />;
+    return <ACC.PageLoader pending={combined} render={x => this.renderContents(x.project, x.editor, x.documents, x.claim, x.documentDescriptions)} />;
   }
 
-  renderContents(project: ProjectDto, editor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>, documents: DocumentSummaryDto[], claim: ClaimDto) {
+  renderContents(project: ProjectDto, editor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>, documents: DocumentSummaryDto[], claim: ClaimDto, documentDescriptions: DocumentDescriptionDto[]) {
     const UploadForm = ACC.TypedForm<MultipleDocumentUploadDto>();
+
+    const documentTypeOptions: DropdownOption[] = documentDescriptions.map(x => ({ id: x.id.toString(), value: x.label }));
 
     return (
       <ACC.Page
@@ -72,6 +80,17 @@ class ClaimDocumentsComponent extends ContainerBase<ClaimDocumentsPageParams, Da
                 validation={editor.validator.files}
                 value={data => data.files}
                 update={(dto, files) => dto.files = files || []}
+              />
+              <UploadForm.DropdownList
+                label="Description"
+                labelHidden={false}
+                hasEmptyOption={true}
+                placeholder="-- No description --"
+                name="description"
+                validation={editor.validator.description}
+                options={documentTypeOptions}
+                value={data => data.description ? documentTypeOptions.find(x => x.id === data.description!.toString()) : undefined}
+                update={(dto, value) => dto.description = value ? parseInt(value.id, 10) : undefined}
               />
             </UploadForm.Fieldset>
             {/*TODO @documents-content make button label consistent*/}
@@ -134,13 +153,9 @@ class ClaimDocumentsComponent extends ContainerBase<ClaimDocumentsPageParams, Da
       );
     }
 
-    const claimValidationFormDocuments = documents.filter(x => x.description === DocumentDescription.ClaimValidationForm);
-    const claimSupportingDocuments = documents.filter(x => x.description !== DocumentDescription.ClaimValidationForm);
-
     return (
       <ACC.Section subtitle="All documents open in a new window">
-        {claimSupportingDocuments.length ? <ACC.DocumentListWithDelete onRemove={(document) => this.props.onDelete(editor.data, document)} documents={claimSupportingDocuments} qa="claim-supporting-documents"/> : null}
-        {claimValidationFormDocuments.length ? <ACC.DocumentList documents={claimValidationFormDocuments} qa="claim-validation-form-documents"/> : null}
+        {documents.length ? <ACC.DocumentTable hideRemove={x => x.description === DocumentDescription.ClaimValidationForm} onRemove={(document) => this.props.onDelete(editor.data, document)} documents={documents} qa="claim-supporting-documents"/> : null}
       </ACC.Section>
     );
   }
@@ -156,6 +171,8 @@ const ClaimDocumentsContainer = (props: ClaimDocumentsPageParams & BaseProps) =>
               project={stores.projects.getById(props.projectId)}
               editor={stores.claimDocuments.getClaimDocumentsEditor(props.projectId, props.partnerId, props.periodId)}
               documents={stores.claimDocuments.getClaimDocuments(props.projectId, props.partnerId, props.periodId)}
+              // TODO temporary measure until we get the description types from SF
+              documentDescriptions={Pending.done( getAllEnumValues(DocumentDescription).map(x => ({ id: x, label: content.claimDocuments.documents.labels().documentDescriptionLabel(x).content })) )}
               claim={stores.claims.get(props.partnerId, props.periodId)}
               onChange={(saving, dto) => {
                 stores.messages.clearMessages();

@@ -1,6 +1,6 @@
 import { Authorisation, IContext, ProjectRole } from "@framework/types";
 import { DocumentsSummaryQueryBase } from "@server/features/documents/documentsSummaryQueryBase";
-import { ISalesforceDocument } from "@server/repositories";
+import { DocumentEntity } from "@framework/entities/document";
 // Uses either project change request Id or project change request item Id, as both cn be used as the entity Id of the document
 
 export class GetProjectChangeRequestDocumentOrItemDocumentsSummaryQuery extends DocumentsSummaryQueryBase {
@@ -19,7 +19,7 @@ export class GetProjectChangeRequestDocumentOrItemDocumentsSummaryQuery extends 
     return Promise.resolve(this.projectChangeRequestIdOrItemId);
   }
 
-  protected getUrl(document: ISalesforceDocument) {
-    return `/api/documents/projectChangeRequests/${this.projectId}/${this.projectChangeRequestIdOrItemId}/${document.Id}/content`;
+  protected getUrl(document: DocumentEntity) {
+    return `/api/documents/projectChangeRequests/${this.projectId}/${this.projectChangeRequestIdOrItemId}/${document.id}/content`;
   }
 }

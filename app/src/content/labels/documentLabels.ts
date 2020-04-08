@@ -1,10 +1,21 @@
 import { ContentBase } from "../contentBase";
+import { DocumentDescription } from "@framework/constants";
 
 export class DocumentLabels extends ContentBase {
   constructor(parent: ContentBase) {
     super(parent, "document-labels");
   }
 
+  private getDocumentDescriptionLabel(documentDescription: DocumentDescription | null) {
+    switch (documentDescription) {
+      case DocumentDescription.ClaimValidationForm: return this.getContent("document-description-ClaimValidationForm");
+      case DocumentDescription.Evidence: return this.getContent("document-description-Evidence");
+      case DocumentDescription.IAR: return this.getContent("document-description-IAR");
+      default: return this.getContent("document-description-Unknown");
+    }
+  }
+
+  public readonly documentDescriptionLabel = (documentDescription: DocumentDescription | null) => this.getDocumentDescriptionLabel(documentDescription);
   public readonly uploadInputLabel = () => this.getContent("uploadInputLabel");
   public readonly uploadButtonLabel = () => this.getContent("uploadButtonLabel");
   public readonly fileNameLabel = () => this.getContent("fileNameLabel");

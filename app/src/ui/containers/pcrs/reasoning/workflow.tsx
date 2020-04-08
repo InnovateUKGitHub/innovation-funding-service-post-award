@@ -10,6 +10,7 @@ import { IEditorStore, StoresConsumer } from "@ui/redux";
 import { MultipleDocumentUpdloadDtoValidator, PCRDtoValidator } from "@ui/validators";
 import { PCRReasoningSummary } from "@ui/containers/pcrs/reasoning/summary";
 import { IReasoningWorkflowMetadata, reasoningWorkflowSteps } from "@ui/containers/pcrs/reasoning/workflowMetadata";
+import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
 
 export interface ProjectChangeRequestPrepareReasoningParams {
   projectId: string;

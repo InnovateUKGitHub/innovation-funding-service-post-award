@@ -1,19 +1,23 @@
 import { Stream } from "stream";
 import { TestRepository } from "./testRepository";
 import * as Repositories from "@server/repositories";
+import { FileTypeNotAllowedError } from "@server/repositories";
 import { Updatable } from "@server/repositories/salesforceRepositoryBase";
-import { ClaimStatus, IRepositories, MonitoringReportStatus, PCRStatus } from "@framework/types";
+import { ClaimStatus, DocumentDescription, IRepositories, MonitoringReportStatus, PCRStatus } from "@framework/types";
 import { TestFileWrapper } from "./testData";
 import { PermissionGroupIdenfifier } from "@framework/types/permisionGroupIndentifier";
 import * as Entities from "@framework/entities";
+import { ProjectChangeRequestStatusChangeEntity } from "@framework/entities";
 import { PicklistEntry } from "jsforce";
 import { getAllEnumValues } from "@shared/enumHelper";
 import { PCRStatusesPicklist } from "../server/features/pcrs/pcrStatusesPicklist";
-import { ProjectChangeRequestStatusChangeEntity } from "@framework/entities";
-import { FileTypeNotAllowedError } from "@server/repositories";
 import { PCRProjectRolesPicklist } from "./features/pcrs/pcrProjectRolesPicklist";
 import { PCRPartnerTypesPicklist } from "./features/pcrs/pcrPartnerTypesPicklist";
 import { PCRParticipantSizePicklist } from "./features/pcrs/pcrParticipantSizePicklist";
+import { DocumentDescriptionMapper, SalesforceDocumentMapper } from "@server/repositories/mappers/documentMapper";
+import { DocumentEntity } from "@framework/entities/document";
+import { DocumentFilter } from "@framework/types/DocumentFilter";
+import { ISalesforceDocument } from "@server/repositories/contentVersionRepository";
 
 class ProjectsTestRepository extends TestRepository<Repositories.ISalesforceProject> implements Repositories.IProjectRepository {
   getById(id: string) {
@@ -140,8 +144,8 @@ class ClaimDetailsTestRepository extends TestRepository<Repositories.ISalesforce
   }
 }
 
-class DocumentsTestRepository extends TestRepository<[string, Repositories.ISalesforceDocument]> implements Repositories.IDocumentsRepository {
-  async insertDocument(file: TestFileWrapper, recordId: string, description: string): Promise<string> {
+class DocumentsTestRepository extends TestRepository<[string, ISalesforceDocument]> implements Repositories.IDocumentsRepository {
+  async insertDocument(file: TestFileWrapper, recordId: string, description: DocumentDescription): Promise<string> {
     const nameParts = file.fileName.split(".");
     const extension = nameParts.length > 1 ? nameParts[nameParts.length - 1] : null;
     if (extension === "zip") {
@@ -162,7 +166,7 @@ class DocumentsTestRepository extends TestRepository<[string, Repositories.ISale
       PathOnClient: file.fileName,
       ContentLocation: "S",
       VersionData: file.content,
-      Description: description,
+      Description: new DocumentDescriptionMapper().mapToSalesforceDocumentDescription(description),
       CreatedDate: new Date().toISOString(),
       Acc_LastModifiedByAlias__c: "User",
       Owner: {
@@ -191,20 +195,26 @@ class DocumentsTestRepository extends TestRepository<[string, Repositories.ISale
     });
   }
 
-  getDocumentMetadata(documentId: string): Promise<Repositories.ISalesforceDocument> {
-    return super.getOne(x => documentId === x[1].Id).then(x => x[1]);
+  async getDocumentMetadata(documentId: string): Promise<DocumentEntity> {
+    const document = await super.getOne(x => documentId === x[1].Id).then(x => x[1]);
+    return new SalesforceDocumentMapper().map(document);
   }
 
-  getDocumentMetadataForEntityDocument(entityId: string, documentId: string): Promise<Repositories.ISalesforceDocument | null> {
-    return super.filterOne(x => documentId === x[1].Id && x[0] === entityId).then(x => (x && x[1]));
+  async getDocumentMetadataForEntityDocument(entityId: string, documentId: string): Promise<DocumentEntity | null> {
+    const document = await super.filterOne(x => documentId === x[1].Id && x[0] === entityId).then(x => (x && x[1]));
+    return document ? new SalesforceDocumentMapper().map(document) : null;
   }
 
-  getDocumentsMetadata(documentIds: string[], filter?: DocumentFilter): Promise<Repositories.ISalesforceDocument[]> {
-    return super.getWhere(x => documentIds.indexOf(x[1].ContentDocumentId) > 1 && (!filter || filter.description === x[1].Description)).then(x => x.map(y => y[1]));
+  async getDocumentsMetadata(documentIds: string[], filter?: DocumentFilter): Promise<DocumentEntity[]> {
+    const sfDescription = filter && new DocumentDescriptionMapper().mapToSalesforceDocumentDescription(filter.description);
+    const documents = await super.getWhere(x => documentIds.indexOf(x[1].ContentDocumentId) > 1 && (!filter || sfDescription === x[1].Description)).then(x => x.map(y => y[1]));
+    return documents.map(x => new SalesforceDocumentMapper().map(x));
   }
 
-  getDocumentsMetedataByLinkedRecord(recordId: string, filter?: DocumentFilter): Promise<Repositories.ISalesforceDocument[]> {
-    return super.getWhere(x => x[0] === recordId && (!filter || x[1].Description === filter.description)).then(x => x.map(y => y[1]));
+  async getDocumentsMetedataByLinkedRecord(recordId: string, filter?: DocumentFilter): Promise<DocumentEntity[]> {
+    const sfDescription = filter && new DocumentDescriptionMapper().mapToSalesforceDocumentDescription(filter.description);
+    const documents = await super.getWhere(x => x[0] === recordId && (!filter || x[1].Description === sfDescription)).then(x => x.map(y => y[1]));
+    return documents.map(x => new SalesforceDocumentMapper().map(x));
   }
 }
 

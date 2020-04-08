@@ -1,8 +1,10 @@
 import { IContext } from "@framework/types";
 import { QueryBase } from "../common";
 import { mapToDocumentSummaryDto } from "./mapToDocumentSummaryDto";
-import { ISalesforceDocument } from "@server/repositories";
 import { dateComparator } from "@framework/util";
+import { DocumentSummaryDto } from "@framework/dtos/documentDto";
+import { DocumentEntity } from "@framework/entities/document";
+import { DocumentFilter } from "@framework/types/DocumentFilter";
 
 export abstract class DocumentsSummaryQueryBase extends QueryBase<DocumentSummaryDto[]> {
   constructor(protected readonly filter?: DocumentFilter) {
@@ -20,5 +22,5 @@ export abstract class DocumentsSummaryQueryBase extends QueryBase<DocumentSummar
   }
 
   protected abstract getRecordId(context: IContext): Promise<string|null>;
-  protected abstract getUrl(document: ISalesforceDocument): string;
+  protected abstract getUrl(document: DocumentEntity): string;
 }

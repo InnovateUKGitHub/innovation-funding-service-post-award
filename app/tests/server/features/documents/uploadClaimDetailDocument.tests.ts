@@ -27,8 +27,8 @@ describe("UploadClaimDetailDocumentCommand", () => {
     const documentId = await context.runCommand(command);
     const document = await context.repositories.documents.getDocumentMetadata(documentId[0]);
 
-    expect(document.VersionData).toEqual(file.content);
-    expect(document.PathOnClient).toEqual(file.fileName);
+    expect(document.versionData).toEqual(file.content);
+    expect(document.pathOnClient).toEqual(file.fileName);
   });
 
   it("should upload multiple documents", async () => {

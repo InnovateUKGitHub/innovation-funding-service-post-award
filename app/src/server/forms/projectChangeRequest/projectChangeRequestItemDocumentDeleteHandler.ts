@@ -8,6 +8,7 @@ import {
 } from "@ui/containers";
 import { MultipleDocumentUpdloadDtoValidator } from "@ui/validators";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
+import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
 
 interface Document extends MultipleDocumentUploadDto {
   id: string;
