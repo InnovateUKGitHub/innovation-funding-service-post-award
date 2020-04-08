@@ -14,6 +14,7 @@ const getPcrTypesKey = () => getKey("pcrTypesKey", "all");
 const getPcrProjectRolesKey = () => getKey("pcrProjectRolesKey", "all");
 const getPcrPartnerTypesKey = () => getKey("pcrPartnerTypesTypesKey", "all");
 const getPcrParticipantSizesKey = () => getKey("pcrParticipantSizesKey", "all");
+const getCompaniesKey = (searchString: string, itemsPerPage?: number, startIndex?: number) => getKey("companiesKey", "search", searchString, "items", itemsPerPage || "unspecified", "index", startIndex || "0");
 
 export const storeKeys = {
   getProjectKey,
@@ -30,4 +31,5 @@ export const storeKeys = {
   getPcrProjectRolesKey,
   getPcrPartnerTypesKey,
   getPcrParticipantSizesKey,
+  getCompaniesKey,
 };

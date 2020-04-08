@@ -64,17 +64,25 @@ export class CompaniesHouse implements ICompaniesHouse {
         }
         throw new Error(`Failed get request to ${url}`);
       })
-      .then(resp => resp.results.items.map(x => ({
-        address: {
-          addressLine1: x.address.address_line_1,
-          addressLine2: x.address.address_line_2,
-          locality: x.address.locality,
-          postalCode: x.address.postal_code,
-          premises: x.address.premises,
-          region: x.address.region
-        },
-        companyNumber: x.company_number,
-        title: x.title
-      })));
+      .then(resp => { if (resp.results) {
+        // SIL does not currently handle the itemsPerPage query param so this is a temp measure until it does
+        if (itemsPerPage) {
+          resp.results.items.splice(1, itemsPerPage);
+        }
+        return resp.results.items.map(x => ({
+          address: {
+            addressLine1: x.address.address_line_1,
+            addressLine2: x.address.address_line_2,
+            locality: x.address.locality,
+            postalCode: x.address.postal_code,
+            premises: x.address.premises,
+            region: x.address.region
+          },
+          companyNumber: x.company_number,
+          title: x.title
+        }));
+      } else {
+        return [];
+      }} );
   }
 }

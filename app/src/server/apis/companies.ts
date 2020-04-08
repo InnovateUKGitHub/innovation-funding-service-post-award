@@ -4,7 +4,7 @@ import { CompanyDto } from "@framework/dtos/companyDto";
 import { SearchCompaniesQuery } from "@server/features/companiesHouse/searchCompaniesQuery";
 
 export interface ICompaniesApi {
-  searchCompany: (params: ApiParams<{ searchString: string, itemsPerPage: number, startIndex: number }>) => Promise<CompanyDto[]>;
+  searchCompany: (params: ApiParams<{ searchString: string, itemsPerPage?: number, startIndex?: number }>) => Promise<CompanyDto[]>;
 }
 
 class Controller extends ControllerBase<CompanyDto> implements ICompaniesApi {
