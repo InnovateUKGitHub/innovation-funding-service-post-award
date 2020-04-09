@@ -112,7 +112,7 @@ export class ForecastTable extends React.Component<Props> {
           key={p}
           header={intervals[p]}
           value={x => x.claims[p]}
-          qa={"category-claim" + i}
+          qa={(!!data.claim && i === claims.length - 1) ? "current-claim" : "category-claim" + i}
           isDivider={isDivider(i) ? "normal" : undefined}
         />)}
 
