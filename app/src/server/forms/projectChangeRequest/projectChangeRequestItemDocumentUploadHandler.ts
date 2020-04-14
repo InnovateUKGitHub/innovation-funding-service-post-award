@@ -1,4 +1,4 @@
-import { IContext, ILinkInfo } from "@framework/types";
+import { DocumentDescription, IContext, ILinkInfo } from "@framework/types";
 import { Configuration } from "@server/features/common";
 import { UploadProjectChangeRequestDocumentOrItemDocumentCommand } from "@server/features/documents/uploadProjectChangeRequestDocumentOrItemDocument";
 import { GetPCRByIdQuery } from "@server/features/pcrs/getPCRByIdQuery";
@@ -10,6 +10,7 @@ import {
 import { MultipleDocumentUpdloadDtoValidator } from "@ui/validators";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
 import { PcrWorkflow } from "@ui/containers/pcrs/pcrWorkflow";
+import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
 
 export class ProjectChangeRequestItemDocumentUploadHandler extends MultipleFileFormHandlerBase<ProjectChangeRequestPrepareItemParams, "multipleDocuments"> {
   constructor() {
@@ -19,7 +20,7 @@ export class ProjectChangeRequestItemDocumentUploadHandler extends MultipleFileF
   protected async getDto(context: IContext, params: ProjectChangeRequestPrepareItemParams, button: IFormButton, body: IFormBody, files: IFileWrapper[]): Promise<MultipleDocumentUploadDto> {
     return {
       files,
-      description: body.description
+      description: parseInt(body.description, 10)
     };
   }
 

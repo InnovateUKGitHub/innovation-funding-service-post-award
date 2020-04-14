@@ -6,6 +6,7 @@ import { Configuration } from "@server/features/common";
 import { DeleteClaimDocumentCommand } from "@server/features/documents/deleteClaimDocument";
 import { MultipleDocumentUpdloadDtoValidator } from "@ui/validators";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
+import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
 
 interface Document extends MultipleDocumentUploadDto {
   id: string;

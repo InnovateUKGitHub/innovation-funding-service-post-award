@@ -3,7 +3,7 @@
 import { TestContext } from "../../testContextProvider";
 import { UploadProjectDocumentCommand } from "@server/features/documents/uploadProjectDocument";
 import { ValidationError } from "@server/features/common/appError";
-import { Authorisation, ProjectRole } from "@framework/types";
+import { Authorisation, DocumentDescription, ProjectRole } from "@framework/types";
 import { TestFileWrapper } from "../../testData";
 
 describe("UploadProjectDocumentCommand", () => {
@@ -20,8 +20,8 @@ describe("UploadProjectDocumentCommand", () => {
     const documentIds = await context.runCommand(command);
     const document = await context.repositories.documents.getDocumentMetadata(documentIds[0]);
 
-    expect(document.VersionData).toEqual(content);
-    expect(document.PathOnClient).toEqual(fileName);
+    expect(document.versionData).toEqual(content);
+    expect(document.pathOnClient).toEqual(fileName);
   });
 
   it("should throw a validation error if the file type is not allowed", async () => {
@@ -41,7 +41,7 @@ describe("UploadProjectDocumentCommand", () => {
     const context = new TestContext();
     const project = context.testData.createProject();
 
-    const expectedDescription = "Expected Description";
+    const expectedDescription = DocumentDescription.ClaimValidationForm;
 
     const file = context.testData.createFile();
 
@@ -49,7 +49,7 @@ describe("UploadProjectDocumentCommand", () => {
     const documentIds = await context.runCommand(command);
     const document = await context.repositories.documents.getDocumentMetadata(documentIds[0]);
 
-    expect(document.Description).toEqual(expectedDescription);
+    expect(document.description).toEqual(expectedDescription);
   });
 
   it("should upload muliple documents", async () => {
@@ -57,16 +57,16 @@ describe("UploadProjectDocumentCommand", () => {
     const project = context.testData.createProject();
 
     const files = context.testData.range(3, i => context.testData.createFile(`File ${i}`, `test${i}.txt`));
-    const expectedDescription = "Expected Description";
+    const expectedDescription = DocumentDescription.ClaimValidationForm;
 
     const command = new UploadProjectDocumentCommand(project.Id, { files, description: expectedDescription });
     const documentIds = await context.runCommand(command);
     expect(documentIds.length).toBe(3);
 
     const documents = await Promise.all(documentIds.map(x => context.repositories.documents.getDocumentMetadata(x)));
-    expect(documents.map(x => x.VersionData)).toEqual(files.map(f => f.content));
-    expect(documents.map(x => x.PathOnClient)).toEqual(files.map(f => f.fileName));
-    expect(documents.map(x => x.Description)).toEqual(files.map(f => expectedDescription));
+    expect(documents.map(x => x.versionData)).toEqual(files.map(f => f.content));
+    expect(documents.map(x => x.pathOnClient)).toEqual(files.map(f => f.fileName));
+    expect(documents.map(x => x.description)).toEqual(files.map(f => expectedDescription));
   });
 
   it("should upload throw validation error if file has no content", async () => {
@@ -109,8 +109,8 @@ describe("UploadProjectDocumentCommand", () => {
     const documentIds = await context.runCommand(command);
     const document = await context.repositories.documents.getDocumentMetadata(documentIds[0]);
 
-    expect(document.VersionData).toEqual(content);
-    expect(document.PathOnClient).toEqual(fileName);
+    expect(document.versionData).toEqual(content);
+    expect(document.pathOnClient).toEqual(fileName);
   });
 
   it("should handle empty document in array", async () => {

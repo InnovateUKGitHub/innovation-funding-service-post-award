@@ -4,6 +4,7 @@ import { UploadClaimDocumentCommand } from "@server/features/documents/uploadCla
 import { BadRequestError, ValidationError } from "@server/features/common/appError";
 import { ClaimStatus, DocumentDescription } from "@framework/constants";
 import { Authorisation, ProjectRole } from "@framework/types";
+import { DocumentUploadDto } from "@framework/dtos/documentUploadDto";
 
 const validStatus = [
   ClaimStatus.DRAFT,
@@ -84,13 +85,13 @@ describe("UploadClaimDocumentCommand", () => {
 
       const nonIARDocument = context.testData.createFile("test content", "fileName.txt");
 
-      const command = new UploadClaimDocumentCommand(claimKey, {file: nonIARDocument, description: "test description"});
+      const command = new UploadClaimDocumentCommand(claimKey, {file: nonIARDocument, description: DocumentDescription.ClaimValidationForm});
       const documentId = await context.runCommand(command);
       const document = await context.repositories.documents.getDocumentMetadata(documentId);
 
-      expect(document.VersionData).toEqual(nonIARDocument.content);
-      expect(document.PathOnClient).toEqual(nonIARDocument.fileName);
-      expect(document.Description).toEqual("test description");
+      expect(document.versionData).toEqual(nonIARDocument.content);
+      expect(document.pathOnClient).toEqual(nonIARDocument.fileName);
+      expect(document.description).toEqual(DocumentDescription.ClaimValidationForm);
     });
 
     it("should throw a validation error if the file type is not allowed", async () => {
@@ -108,6 +109,23 @@ describe("UploadClaimDocumentCommand", () => {
       const nonValidExtension = { file: context.testData.createFile("test", "file.zip")};
       await expect(context.runCommand(new UploadClaimDocumentCommand(claimKey, validExtension))).resolves.toBe("1");
       await expect(context.runCommand(new UploadClaimDocumentCommand(claimKey, nonValidExtension))).rejects.toThrow(ValidationError);
+    });
+
+    it("should throw a validation error if the file description is not allowed", async () => {
+      const context = new TestContext();
+      const partner = context.testData.createPartner();
+      const project = context.testData.createProject();
+      const claim = context.testData.createClaim(partner, 1);
+      const claimKey = {
+        projectId: project.Id,
+        partnerId: claim.Acc_ProjectParticipant__r.Id,
+        periodId: claim.Acc_ProjectPeriodNumber__c
+      };
+
+      const validDescription: DocumentUploadDto = { file: context.testData.createFile("test", "file.csv"), description: DocumentDescription.ClaimValidationForm};
+      const notValidDescription: DocumentUploadDto = { file: context.testData.createFile("test", "file.csv"), description: "invalid" as any as number};
+      await expect(context.runCommand(new UploadClaimDocumentCommand(claimKey, validDescription))).resolves.toBe("1");
+      await expect(context.runCommand(new UploadClaimDocumentCommand(claimKey, notValidDescription))).rejects.toThrow(ValidationError);
     });
 
     describe("When the claim status is AWAITING_IAR", () => {
@@ -197,7 +215,7 @@ describe("UploadClaimDocumentCommand", () => {
 
           const expectedContent = "The file";
           const expectedFileName = "testfile.txt";
-          const expectedDescription = "The description";
+          const expectedDescription = DocumentDescription.Evidence;
 
           const file = context.testData.createFile(expectedContent, expectedFileName);
 
@@ -205,9 +223,9 @@ describe("UploadClaimDocumentCommand", () => {
           const documentId = await context.runCommand(command);
           const document = await context.repositories.documents.getDocumentMetadata(documentId);
 
-          expect(document.VersionData).toEqual(expectedContent);
-          expect(document.PathOnClient).toEqual(expectedFileName);
-          expect(document.Description).toEqual(expectedDescription);
+          expect(document.versionData).toEqual(expectedContent);
+          expect(document.pathOnClient).toEqual(expectedFileName);
+          expect(document.description).toEqual(expectedDescription);
         });
       });
 
@@ -220,7 +238,7 @@ describe("UploadClaimDocumentCommand", () => {
           item.Id = claimId;
           item.Acc_IARRequired__c = true;
         });
-        const originalDocumentId = context.testData.createDocument("12345", "cat", "jpg", "","", DocumentDescription.IAR).ContentDocumentId;
+        const originalDocumentId = context.testData.createDocument("12345", "cat", "jpg", "","", "IAR").ContentDocumentId;
 
         const claimKey = {
           projectId: project.Id,

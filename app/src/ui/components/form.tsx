@@ -283,16 +283,21 @@ const CheckboxOptionsField = <T extends {}>(props: CheckboxFieldProps<T> & Inter
   );
 };
 
-interface DropdownFieldProps<T extends {}> extends ExternalFieldProps<T, SelectOption> {
-  options: SelectOption[];
+export interface DropdownOption {
+  id: string;
+  value: string | number;
+}
+
+interface DropdownFieldProps<T extends {}> extends ExternalFieldProps<T, DropdownOption> {
+  options: DropdownOption[];
   hasEmptyOption?: boolean;
 }
 
 const DropdownListField = <T extends {}>(props: DropdownFieldProps<T> & InternalFieldProps<T>) => {
-  const TypedFieldComponent = FieldComponent as { new(): FieldComponent<T, SelectOption> };
+  const TypedFieldComponent = FieldComponent as { new(): FieldComponent<T, DropdownOption> };
   return (
     <TypedFieldComponent
-      field={(data, disabled) => <DropdownList options={props.options} name={props.name} hasEmptyOption={props.hasEmptyOption} value={props.value(data, disabled)} onChange={(val) => handleChange(props, val)} disabled={disabled} />}
+      field={(data, disabled) => <DropdownList placeholder={props.placeholder} options={props.options} name={props.name} hasEmptyOption={props.hasEmptyOption} value={props.value(data, disabled)} onChange={(val) => handleChange(props, val)} disabled={disabled} />}
       {...props}
     />
   );

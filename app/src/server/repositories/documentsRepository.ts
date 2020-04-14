@@ -5,35 +5,20 @@ import { ContentDocumentRepository } from "@server/repositories/contentDocumentR
 import { ContentVersionRepository } from "@server/repositories/contentVersionRepository";
 import { ILogger } from "@server/features/common";
 import { ServerFileWrapper } from "@server/apis/controllerBase";
-
-export interface ISalesforceDocument {
-  Id: string;
-  Title: string;
-  FileExtension: string | null;
-  ContentDocumentId: string;
-  ContentSize: number;
-  FileType: string | null;
-  ReasonForChange: string;
-  PathOnClient: string;
-  ContentLocation: string;
-  VersionData: string;
-  Description?: string;
-  CreatedDate: string;
-  Acc_LastModifiedByAlias__c: string;
-  Owner: {
-    Username: string
-  };
-}
+import { DocumentEntity } from "@framework/entities/document";
+import { DocumentDescriptionMapper, SalesforceDocumentMapper } from "@server/repositories/mappers/documentMapper";
+import { DocumentDescription } from "@framework/constants";
+import { DocumentFilter } from "@framework/types/DocumentFilter";
 
 export interface IDocumentsRepository {
-  insertDocument(document: IFileWrapper, recordId: string, description?: string): Promise<string>;
+  insertDocument(document: IFileWrapper, recordId: string, description?: DocumentDescription): Promise<string>;
   deleteDocument(documentId: string): Promise<void>;
   isExistingDocument(documentId: string, recordId: string): Promise<boolean>;
   getDocumentContent(verionId: string): Promise<Stream>;
-  getDocumentMetadata(verionId: string): Promise<ISalesforceDocument>;
-  getDocumentMetadataForEntityDocument(entityId: string, verionId: string): Promise<ISalesforceDocument|null>;
-  getDocumentsMetadata(documentIds: string[], filter?: DocumentFilter): Promise<ISalesforceDocument[]>;
-  getDocumentsMetedataByLinkedRecord(recordId: string, filter?: DocumentFilter): Promise<ISalesforceDocument[]>;
+  getDocumentMetadata(verionId: string): Promise<DocumentEntity>;
+  getDocumentMetadataForEntityDocument(entityId: string, verionId: string): Promise<DocumentEntity|null>;
+  getDocumentsMetadata(documentIds: string[], filter?: DocumentFilter): Promise<DocumentEntity[]>;
+  getDocumentsMetedataByLinkedRecord(recordId: string, filter?: DocumentFilter): Promise<DocumentEntity[]>;
 }
 
 export class DocumentsRepository implements IDocumentsRepository {
@@ -51,8 +36,9 @@ export class DocumentsRepository implements IDocumentsRepository {
     this.contentDocumentRepository = new ContentDocumentRepository(getSalesforceConnection, logger);
   }
 
-  public async insertDocument(document: IFileWrapper, recordId: string, description?: string) {
-    const contentVersionId = await this.contentVersionRepository.insertDocument(document as ServerFileWrapper, description);
+  public async insertDocument(document: IFileWrapper, recordId: string, description?: DocumentDescription) {
+    const sfDescription = new DocumentDescriptionMapper().mapToSalesforceDocumentDescription(description);
+    const contentVersionId = await this.contentVersionRepository.insertDocument(document as ServerFileWrapper, sfDescription);
     const contentVersion = await this.contentVersionRepository.getDocument(contentVersionId);
     const documentId = contentVersion.ContentDocumentId;
 
@@ -64,12 +50,15 @@ export class DocumentsRepository implements IDocumentsRepository {
     return this.contentDocumentRepository.delete(documentId);
   }
 
-  public getDocumentsMetadata(documentIds: string[], filter?: DocumentFilter) {
-    return this.contentVersionRepository.getDocuments(documentIds, filter);
+  public async getDocumentsMetadata(documentIds: string[], filter?: DocumentFilter) {
+    const documents = await this.contentVersionRepository.getDocuments(documentIds, filter);
+    const mapper = new SalesforceDocumentMapper();
+    return documents.map(x => mapper.map(x));
   }
 
-  public getDocumentMetadata(versionId: string) {
-    return this.contentVersionRepository.getDocument(versionId);
+  public async getDocumentMetadata(versionId: string) {
+    const document = await this.contentVersionRepository.getDocument(versionId);
+    return new SalesforceDocumentMapper().map(document);
   }
 
   public async isExistingDocument(documentId: string, recordId: string): Promise<boolean> {
@@ -82,7 +71,8 @@ export class DocumentsRepository implements IDocumentsRepository {
     // however salesforce makes it difficult to do this !!!
     const docIds = await this.contentDocumentLinkRepository.getAllForEntity(entityId).then(x => x.map(y => y.ContentDocumentId));
     const versions = await this.contentVersionRepository.getDocuments(docIds);
-    return versions.find(x => x.Id === versionId) || null;
+    const document = versions.find(x => x.Id === versionId) || null;
+    return document ? new SalesforceDocumentMapper().map(document) : null;
   }
 
   public async getDocumentsMetedataByLinkedRecord(recordId: string, filter?: DocumentFilter) {

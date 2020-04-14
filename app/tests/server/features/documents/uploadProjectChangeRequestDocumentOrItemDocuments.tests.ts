@@ -23,8 +23,8 @@ describe("UploadProjectChangeRequestDocumentOrItemDocumentCommand", () => {
     const documentIds = await context.runCommand(command);
     const document = await context.repositories.documents.getDocumentMetadata(documentIds[0]);
 
-    expect(document.VersionData).toEqual("This is some content");
-    expect(document.PathOnClient).toEqual("testFile.txt");
+    expect(document.versionData).toEqual("This is some content");
+    expect(document.pathOnClient).toEqual("testFile.txt");
   });
 
   it("should upload a project change request document", async () => {
@@ -38,8 +38,8 @@ describe("UploadProjectChangeRequestDocumentOrItemDocumentCommand", () => {
     const documentIds = await context.runCommand(command);
     const document = await context.repositories.documents.getDocumentMetadata(documentIds[0]);
 
-    expect(document.VersionData).toEqual("This is some content");
-    expect(document.PathOnClient).toEqual("testFile.txt");
+    expect(document.versionData).toEqual("This is some content");
+    expect(document.pathOnClient).toEqual("testFile.txt");
   });
 
   it("should throw a validation error if the file type is not allowed", async () => {
@@ -71,8 +71,8 @@ describe("UploadProjectChangeRequestDocumentOrItemDocumentCommand", () => {
     expect(documentIds.length).toBe(5);
 
     const documents = await Promise.all(documentIds.map(x => context.repositories.documents.getDocumentMetadata(x)));
-    expect(documents.map(x => x.VersionData)).toEqual(files.map(f => f.content));
-    expect(documents.map(x => x.PathOnClient)).toEqual(files.map(f => f.fileName));
+    expect(documents.map(x => x.versionData)).toEqual(files.map(f => f.content));
+    expect(documents.map(x => x.pathOnClient)).toEqual(files.map(f => f.fileName));
   });
 
   it("should throw validation error if the file has no content", async () => {

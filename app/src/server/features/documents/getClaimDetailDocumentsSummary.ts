@@ -1,6 +1,6 @@
 import { Authorisation, IContext, ProjectRole } from "@framework/types";
 import { DocumentsSummaryQueryBase } from "./documentsSummaryQueryBase";
-import { ISalesforceDocument } from "@server/repositories";
+import { DocumentEntity } from "@framework/entities/document";
 
 export class GetClaimDetailDocumentsQuery extends DocumentsSummaryQueryBase {
   constructor(
@@ -28,7 +28,7 @@ export class GetClaimDetailDocumentsQuery extends DocumentsSummaryQueryBase {
     return context.repositories.claimDetails.get(key).then(x => x && x.Id);
   }
 
-  protected getUrl(document: ISalesforceDocument) {
-    return `/api/documents/claim-details/${this.projectId}/${this.partnerId}/${this.periodId}/${this.costCategoryId}/${document.Id}/content`;
+  protected getUrl(document: DocumentEntity) {
+    return `/api/documents/claim-details/${this.projectId}/${this.partnerId}/${this.periodId}/${this.costCategoryId}/${document.id}/content`;
   }
 }

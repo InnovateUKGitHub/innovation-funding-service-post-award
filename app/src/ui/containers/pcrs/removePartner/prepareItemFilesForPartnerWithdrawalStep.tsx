@@ -4,6 +4,8 @@ import { IEditorStore, StoresConsumer } from "@ui/redux";
 import { MultipleDocumentUpdloadDtoValidator, PCRPartnerWithdrawalItemDtoValidator } from "@ui/validators";
 import { PcrStepProps } from "@ui/containers/pcrs/pcrWorkflow";
 import { PCRItemForPartnerWithdrawalDto } from "@framework/dtos";
+import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
+import { DocumentSummaryDto } from "@framework/dtos/documentDto";
 
 interface InnerProps {
   documents: DocumentSummaryDto[];

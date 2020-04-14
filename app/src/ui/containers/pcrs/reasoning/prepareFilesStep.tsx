@@ -6,6 +6,8 @@ import { IEditorStore, StoresConsumer } from "@ui/redux";
 import { MultipleDocumentUpdloadDtoValidator } from "@ui/validators";
 import { Pending } from "@shared/pending";
 import { ReasoningStepProps } from "@ui/containers/pcrs/reasoning/workflowMetadata";
+import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
+import { DocumentSummaryDto } from "@framework/dtos/documentDto";
 
 interface InnerProps {
   documents: Pending<DocumentSummaryDto[]>;

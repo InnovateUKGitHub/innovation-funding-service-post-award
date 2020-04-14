@@ -3,8 +3,9 @@ import { ProjectDocumentPageParams, ProjectDocumentsRoute } from "../../ui/conta
 import { UploadProjectDocumentCommand } from "../features/documents/uploadProjectDocument";
 import { Configuration } from "@server/features/common";
 import { MultipleDocumentUpdloadDtoValidator } from "@ui/validators";
-import { IContext, ILinkInfo } from "@framework/types";
+import { DocumentDescription, IContext, ILinkInfo } from "@framework/types";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
+import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
 
 export class ProjectDocumentUploadHandler extends MultipleFileFormHandlerBase<ProjectDocumentPageParams, "multipleDocuments"> {
   constructor() {
@@ -14,7 +15,7 @@ export class ProjectDocumentUploadHandler extends MultipleFileFormHandlerBase<Pr
   protected getDto(context: IContext, params: ProjectDocumentPageParams, button: IFormButton, body: IFormBody, files: IFileWrapper[]): Promise<MultipleDocumentUploadDto> {
     return Promise.resolve({
       files,
-      description: body.description
+      description: parseInt(body.description, 10)
     });
   }
 

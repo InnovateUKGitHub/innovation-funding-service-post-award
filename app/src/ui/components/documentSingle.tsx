@@ -1,4 +1,5 @@
 import React from "react";
+import { DocumentSummaryDto } from "@framework/dtos/documentDto";
 
 interface Props {
     message?: string;

@@ -21,3 +21,4 @@ export * from "./profileTotalCostCategoryRepository";
 export * from "./projectContactsRepository";
 export * from "./projectsRepository";
 export * from "./recordTypeRepository";
+export * from "./contentVersionRepository";

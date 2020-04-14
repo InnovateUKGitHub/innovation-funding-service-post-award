@@ -4,6 +4,7 @@ import { DocumentUploadDtoValidator, MultipleDocumentUpdloadDtoValidator } from 
 import { messageSuccess } from "../actions";
 import { DataStateKeys, EditorStateKeys } from "../reducers";
 import { IClientUser } from "@framework/types";
+import { DocumentUploadDto, MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
 
 export abstract class DocumentsStoreBase extends StoreBase {
 

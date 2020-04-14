@@ -14,6 +14,7 @@ import {
   ProjectRole
 } from "@framework/types";
 import { StoresConsumer } from "@ui/redux";
+import { DocumentSummaryDto } from "@framework/dtos/documentDto";
 
 export interface ClaimSummaryParams {
   projectId: string;

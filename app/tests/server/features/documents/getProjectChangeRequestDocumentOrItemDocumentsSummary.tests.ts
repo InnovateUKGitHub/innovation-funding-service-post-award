@@ -1,6 +1,6 @@
 // tslint:disable no-duplicate-string
 import * as Entites from "@framework/entities";
-import { Authorisation, ProjectRole } from "@framework/types";
+import { Authorisation, DocumentDescription, ProjectRole } from "@framework/types";
 import { GetProjectChangeRequestDocumentOrItemDocumentsSummaryQuery } from "@server/features/documents/getProjectChangeRequestDocumentOrItemDocumentsSummary";
 import { TestContext } from "../../testContextProvider";
 
@@ -78,7 +78,7 @@ describe("GetProjectChangeRequestDocumentOrItemDocumentsSummaryQuery", () => {
     const expectedExtension = "txt";
     const expectedUploadedBy = "Indiana Jones";
     const expectedContent = "Expected content";
-    const expectedDescription = "This is a PCR";
+    const expectedDescription = "Evidence";
 
     const document = context.testData.createDocument(pcrItem.id, expectedFileName, expectedExtension, expectedUploadedBy, expectedContent, expectedDescription);
 
@@ -89,7 +89,7 @@ describe("GetProjectChangeRequestDocumentOrItemDocumentsSummaryQuery", () => {
     expect(result.fileName).toBe(`${expectedFileName}.${expectedExtension}`);
     expect(result.fileSize).toBe(document.ContentSize);
     expect(result.uploadedBy).toBe(document.Acc_LastModifiedByAlias__c);
-    expect(result.description).toBe(document.Description);
+    expect(result.description).toBe(DocumentDescription.Evidence);
   });
 
   it("should return correct URL", async () => {

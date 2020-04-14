@@ -9,6 +9,7 @@ import { IEditorStore, StoresConsumer } from "@ui/redux";
 import { PCRDtoValidator } from "@ui/validators";
 import { NavigationArrowsForPCRs } from "@ui/containers/pcrs/navigationArrows";
 import { IReasoningWorkflowMetadata } from "@ui/containers/pcrs/reasoning/workflowMetadata";
+import { DocumentSummaryDto } from "@framework/dtos/documentDto";
 
 export interface Props {
   projectId: string;

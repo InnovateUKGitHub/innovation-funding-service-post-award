@@ -5,6 +5,8 @@ import { PartnersStore } from "./partnersStore";
 import { RootState } from "../reducers";
 import { DocumentsStoreBase } from "./documentsStoreBase";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
+import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
+import { DocumentSummaryDto } from "@framework/dtos/documentDto";
 
 export class ClaimDocumentsStore extends DocumentsStoreBase {
 

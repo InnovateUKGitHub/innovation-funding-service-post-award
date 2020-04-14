@@ -4,6 +4,9 @@ import { Results } from "../validation/results";
 import { getFileExtension, getFileSize } from "@framework/util";
 import { FileTypeNotAllowedError } from "@server/repositories";
 import { NestedResult } from "@ui/validation";
+import { DocumentUploadDto, MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
+import { getAllEnumValues } from "@shared/enumHelper";
+import { DocumentDescription } from "@framework/constants";
 
 const permittedFileTypeErrorMessage = (file: IFileWrapper) => {
   return `You cannot upload '${file.fileName}' because it is the wrong file type.`;
@@ -19,6 +22,8 @@ const fileEmptyErrorMessage = (file: IFileWrapper) => {
 };
 
 export class DocumentUploadDtoValidator extends Results<DocumentUploadDto> {
+  public readonly description: Result;
+  public readonly file: Result;
   constructor(model: DocumentUploadDto, config: { maxFileSize: number, permittedFileTypes: string[] }, showValidationErrors: boolean, private error: FileTypeNotAllowedError | null) {
     // file is deliberately not a private field so it isn't logged....
     // model is empty object for this reason
@@ -30,18 +35,19 @@ export class DocumentUploadDtoValidator extends Results<DocumentUploadDto> {
       () => Validation.isFalse(this, model.file!.size === 0, fileEmptyErrorMessage(model.file!)),
       () => Validation.permitedValues(this, getFileExtension(model.file), config.permittedFileTypes, permittedFileTypeErrorMessage(model.file!)),
     );
+    this.description = model.description ? Validation.permitedValues(this, model.description, getAllEnumValues(DocumentDescription), "Not a valid description") : Validation.valid(this);
   }
-
-  public readonly file: Result;
 }
 
 export class MultipleDocumentUpdloadDtoValidator extends Results<MultipleDocumentUploadDto> {
+  public readonly description: Result;
   constructor(model: MultipleDocumentUploadDto, config: { maxFileSize: number, maxUploadFileCount: number, permittedFileTypes: string[] }, filesRequired: boolean, showValidationErrors: boolean, private error: FileTypeNotAllowedError | null) {
     // file is deliberately not a private field so it isn't logged....
     // model is empty object for this reason
     super(null as any, showValidationErrors);
 
     this.files = this.validateFiles(model, config, filesRequired);
+    this.description = model.description ? Validation.permitedValues(this, model.description, getAllEnumValues(DocumentDescription), "Not a valid description") : Validation.valid(this);
   }
 
   private validateFiles(model: MultipleDocumentUploadDto, config: { maxFileSize: number, maxUploadFileCount: number, permittedFileTypes: string[] }, filesRequired: boolean, ) {
