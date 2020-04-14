@@ -26,8 +26,8 @@ describe("UploadClaimDocumentsCommand", () => {
     const documentId = await context.runCommand(command);
     const document = await context.repositories.documents.getDocumentMetadata(documentId[0]);
 
-    expect(document.VersionData).toEqual(file.content);
-    expect(document.PathOnClient).toEqual(file.fileName);
+    expect(document.versionData).toEqual(file.content);
+    expect(document.pathOnClient).toEqual(file.fileName);
   });
 
   it("should upload multiple documents ", async () => {
@@ -72,6 +72,23 @@ describe("UploadClaimDocumentsCommand", () => {
     const file = context.testData.createFile(expectedContent, expectedFileName);
     const command = new UploadClaimDocumentsCommand(claimKey,{ files: [file] });
     await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
+  });
+
+  it("should throw a validation error if the file description is not allowed", async () => {
+    const context = new TestContext();
+    const partner = context.testData.createPartner();
+    const project = context.testData.createProject();
+    const claim = context.testData.createClaim(partner, 1);
+
+    const claimKey = {
+      projectId: project.Id,
+      partnerId: claim.Acc_ProjectParticipant__r.Id,
+      periodId: claim.Acc_ProjectPeriodNumber__c
+    };
+
+    const file = context.testData.createFile("Some other content", "fileName.csv");
+    await expect(context.runCommand(new UploadClaimDocumentsCommand(claimKey,{ files: [file], description: "not valid" as any as number }))).rejects.toThrow(ValidationError);
+    await expect(context.runCommand(new UploadClaimDocumentsCommand(claimKey,{ files: [file], description: DocumentDescription.IAR }))).resolves.toEqual(["1"]);
   });
 
   it("should throw an exception if file upload validation fails", async () => {

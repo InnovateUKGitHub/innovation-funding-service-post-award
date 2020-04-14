@@ -1,6 +1,6 @@
 import { Authorisation, IContext, ProjectRole } from "@framework/types";
-import { ISalesforceDocument } from "@server/repositories";
 import { DocumentsSummaryQueryBase } from "./documentsSummaryQueryBase";
+import { DocumentEntity } from "@framework/entities/document";
 
 export class GetProjectDocumentsQuery extends DocumentsSummaryQueryBase {
   constructor(private readonly projectId: string) {
@@ -15,7 +15,7 @@ export class GetProjectDocumentsQuery extends DocumentsSummaryQueryBase {
     return Promise.resolve(this.projectId);
   }
 
-  protected getUrl(document: ISalesforceDocument) {
-    return `/api/documents/projects/${this.projectId}/${document.Id}/content`;
+  protected getUrl(document: DocumentEntity) {
+    return `/api/documents/projects/${this.projectId}/${document.id}/content`;
   }
 }

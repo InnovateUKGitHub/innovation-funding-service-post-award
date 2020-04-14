@@ -6,6 +6,8 @@ import { ClaimDtoValidator } from "@ui/validators/claimDtoValidator";
 import { Pending } from "@shared/pending";
 import { ClaimDto, ClaimStatus, ClaimStatusChangeDto, DocumentDescription, PartnerDto, ProjectDto, ProjectRole } from "@framework/types";
 import { MultipleDocumentUpdloadDtoValidator } from "@ui/validators";
+import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
+import { DocumentSummaryDto } from "@framework/dtos/documentDto";
 
 export interface ReviewClaimParams {
   projectId: string;

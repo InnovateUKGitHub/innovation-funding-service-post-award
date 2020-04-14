@@ -5,6 +5,7 @@ import { PCRPrepareReasoningFilesStep } from "@ui/containers/pcrs/reasoning/prep
 import { IEditorStore } from "@ui/redux";
 import { MultipleDocumentUpdloadDtoValidator, PCRDtoValidator } from "@ui/validators";
 import { BaseProps } from "@ui/containers/containerBase";
+import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
 
 export interface ReasoningStepProps extends BaseProps {
   projectId: string;

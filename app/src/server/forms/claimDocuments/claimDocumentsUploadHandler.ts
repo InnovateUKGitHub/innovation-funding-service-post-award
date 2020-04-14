@@ -6,6 +6,8 @@ import { Configuration } from "@server/features/common";
 import { UploadClaimDocumentsCommand } from "@server/features/documents/uploadClaimDocuments";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
 import { MultipleDocumentUpdloadDtoValidator } from "@ui/validators";
+import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
+import { DocumentDescription } from "@framework/constants";
 
 export class ClaimDocumentsUploadHandler extends MultipleFileFormHandlerBase<ClaimDocumentsPageParams, "multipleDocuments"> {
   constructor() {
@@ -15,7 +17,7 @@ export class ClaimDocumentsUploadHandler extends MultipleFileFormHandlerBase<Cla
   protected async getDto(context: IContext, params: ClaimDocumentsPageParams, button: IFormButton, body: IFormBody, files: IFileWrapper[]): Promise<MultipleDocumentUploadDto> {
     return {
       files,
-      description: body.description
+      description: parseInt(body.description, 10)
     };
   }
 

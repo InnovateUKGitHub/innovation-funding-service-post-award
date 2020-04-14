@@ -6,6 +6,7 @@ import { EditorStatus, IEditorStore, StoresConsumer } from "@ui/redux";
 import { BaseProps, ContainerBaseWithState, ContainerProps, defineRoute } from "@ui/containers/containerBase";
 import { DocumentList, ValidationMessage } from "@ui/components";
 import { ClaimDetailsValidator, ClaimLineItemDtoValidator } from "@ui/validators/claimDetailsValidator";
+import { DocumentSummaryDto } from "@framework/dtos/documentDto";
 
 export interface EditClaimDetailsParams {
   projectId: string;

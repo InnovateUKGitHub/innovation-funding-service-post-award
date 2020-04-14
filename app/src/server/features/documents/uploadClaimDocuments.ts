@@ -1,6 +1,7 @@
 import { BadRequestError, CommandMultipleDocumentBase, ValidationError } from "@server/features/common";
 import { MultipleDocumentUpdloadDtoValidator } from "@ui/validators/documentUploadValidator";
 import { Authorisation, IContext, ProjectRole } from "@framework/types";
+import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
 
 export class UploadClaimDocumentsCommand extends CommandMultipleDocumentBase<string[]> {
   protected filesRequired = true;
@@ -30,7 +31,6 @@ export class UploadClaimDocumentsCommand extends CommandMultipleDocumentBase<str
     if (!result.isValid) {
       throw new ValidationError(result);
     }
-
     return Promise.all(
       this.documents.files.filter(x => x.fileName && x.size)
         .map(async (document) => await context.repositories.documents.insertDocument(document, claim.Id, this.documents.description))

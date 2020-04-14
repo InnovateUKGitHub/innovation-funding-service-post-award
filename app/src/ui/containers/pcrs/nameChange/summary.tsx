@@ -5,6 +5,7 @@ import { StoresConsumer } from "@ui/redux";
 import { PCRAccountNameChangeItemDtoValidator } from "@ui/validators";
 import { accountNameChangeStepNames } from "./accountNameChangeWorkflow";
 import { PcrSummaryProps } from "@ui/containers/pcrs/pcrWorkflow";
+import { DocumentSummaryDto } from "@framework/dtos/documentDto";
 
 interface InnerProps {
   documents: DocumentSummaryDto[];

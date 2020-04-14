@@ -5,6 +5,7 @@ import { LoadingStatus } from "../../../shared/pending";
 import * as Dtos from "@framework/dtos";
 import { IAppError, PCRParticipantSize, PCRPartnerType, PCRProjectRole } from "@framework/types";
 import { State } from "router5";
+import { DocumentSummaryDto } from "@framework/dtos/documentDto";
 
 export interface IDataStore<T> {
   status: LoadingStatus;

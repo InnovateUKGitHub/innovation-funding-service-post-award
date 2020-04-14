@@ -1,12 +1,12 @@
-import { DateTime } from "luxon";
-import { ISalesforceDocument } from "@server/repositories";
+import { DocumentSummaryDto } from "@framework/dtos/documentDto";
+import { DocumentEntity } from "@framework/entities/document";
 
-export const mapToDocumentSummaryDto = (doc: ISalesforceDocument, link: string): DocumentSummaryDto => ({
+export const mapToDocumentSummaryDto = (doc: DocumentEntity, link: string): DocumentSummaryDto => ({
   link,
-  fileName: doc.FileExtension ? `${doc.Title}.${doc.FileExtension}` : doc.Title,
-  id: doc.ContentDocumentId,
-  description: doc.Description,
-  fileSize: doc.ContentSize,
-  dateCreated: DateTime.fromISO(doc.CreatedDate).toJSDate(),
-  uploadedBy: doc.Acc_LastModifiedByAlias__c
+  fileName: doc.fileExtension ? `${doc.title}.${doc.fileExtension}` : doc.title,
+  id: doc.contentDocumentId,
+  description: doc.description,
+  fileSize: doc.contentSize,
+  dateCreated: doc.createdDate,
+  uploadedBy: doc.lastModifiedBy
 });
