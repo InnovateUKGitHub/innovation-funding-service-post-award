@@ -1,11 +1,15 @@
 import contextProvider from "@server/features/common/contextProvider";
-import { GetAllForecastsForPartnerQuery, GetForecastDetailQuery, UpdateForecastDetailsCommand } from "@server/features/forecastDetails";
+import {
+  GetAllForecastsForPartnerQuery,
+  GetForecastDetailQuery,
+  UpdateForecastDetailsCommand,
+} from "@server/features/forecastDetails";
 import { processDto } from "@shared/processResponse";
 import { ApiParams, ControllerBase } from "./controllerBase";
 
 export interface IForecastDetailsApi {
   getAllByPartnerId: (params: ApiParams<{ partnerId: string }>) => Promise<ForecastDetailsDTO[]>;
-  get: (params: ApiParams<{partnerId: string, periodId: number, costCategoryId: string }>) => Promise<ForecastDetailsDTO>;
+  get: (params: ApiParams<{partnerId: string, periodId: number, costCategoryId: string}>) => Promise<ForecastDetailsDTO>;
   update: (params: ApiParams<{projectId: string, partnerId: string, forecasts: ForecastDetailsDTO[], submit: boolean }>) => Promise<ForecastDetailsDTO[]>;
 }
 
