@@ -1,6 +1,6 @@
 import { StoreBase } from "./storeBase";
 import { ApiClient } from "@ui/apiClient";
-import { ForecastDetailsDtosValidator } from "@ui/validators";
+import { ForecastDetailsDtosValidator, InitialForecastDetailsDtosValidator } from "@ui/validators";
 import { Pending } from "@shared/pending";
 import { ClaimsStore } from "./claimsStore";
 import { ClaimsDetailsStore } from "./claimDetailsStore";
@@ -9,6 +9,7 @@ import { RootState } from "@ui/redux";
 import { messageSuccess, RootActionsOrThunk } from "@ui/redux/actions";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
 import { PartnersStore } from "@ui/redux/stores/partnersStore";
+import { Results } from "@ui/validation";
 
 export class ForecastDetailsStore extends StoreBase {
   constructor(
@@ -29,6 +30,10 @@ export class ForecastDetailsStore extends StoreBase {
     return this.getData("forecastDetails", storeKeys.getPartnerKey(partnerId), p => ApiClient.forecastDetails.getAllByPartnerId({ partnerId, ...p }));
   }
 
+  public getAllInitialByPartner(partnerId: string) {
+    return this.getData("initialForecastDetails", storeKeys.getPartnerKey(partnerId), p => ApiClient.initialForecastDetails.getAllByPartnerId({ partnerId, ...p }));
+  }
+
   private getValidator(partnerId: string, dto: ForecastDetailsDTO[], showValidationErrors: boolean) {
     const combined = Pending.combine({
       claims: this.claimsStore.getAllClaimsForPartner(partnerId),
@@ -37,6 +42,14 @@ export class ForecastDetailsStore extends StoreBase {
       partner: this.partnersStore.getById(partnerId)
     });
     return combined.then(x => new ForecastDetailsDtosValidator(dto, x.claims, x.claimDetails, x.golCosts, x.partner, showValidationErrors));
+  }
+
+  private getInitialValidator(partnerId: string, dto: ForecastDetailsDTO[], showValidationErrors: boolean) {
+    const combined = Pending.combine({
+      golCosts: this.golCostsStore.getAllByPartner(partnerId),
+      partner: this.partnersStore.getById(partnerId)
+    });
+    return combined.then(x => new InitialForecastDetailsDtosValidator(dto, x.golCosts, x.partner, showValidationErrors));
   }
 
   public getForecastEditor(partnerId: string, init?: (data: ForecastDetailsDTO[]) => void) {
@@ -49,6 +62,16 @@ export class ForecastDetailsStore extends StoreBase {
     );
   }
 
+  public getInitialForecastEditor(partnerId: string, init?: (data: ForecastDetailsDTO[]) => void) {
+    return this.getEditor(
+      "initialForecastDetails",
+      storeKeys.getPartnerKey(partnerId),
+      () => this.getAllInitialByPartner(partnerId),
+      init,
+      (dto) => this.getInitialValidator(partnerId, dto, false)
+    );
+  }
+
   public updateForcastEditor(saving: boolean, projectId: string, partnerId: string, dto: ForecastDetailsDTO[], submitClaim: boolean, message?: string, onComplete?: () => void) {
     super.updateEditor(
       saving,
@@ -57,6 +80,26 @@ export class ForecastDetailsStore extends StoreBase {
       dto,
       (show) => this.getValidator(partnerId, dto, show),
       (p) => ApiClient.forecastDetails.update({ projectId, partnerId, submit: submitClaim, forecasts: dto, ...p }),
+      () => {
+        if (message) {
+          this.queue(messageSuccess(message));
+        }
+        if (onComplete) {
+          onComplete();
+        }
+      }
+    );
+  }
+
+  public updateInitialForcastEditor(saving: boolean, projectId: string, partnerId: string, dto: ForecastDetailsDTO[], message?: string, onComplete?: () => void) {
+    super.updateEditor(
+      saving,
+      "initialForecastDetails",
+      storeKeys.getPartnerKey(partnerId),
+      dto,
+      (show) => this.getInitialValidator(partnerId, dto, show),
+      (p) => ApiClient.initialForecastDetails.update({ projectId, partnerId, forecasts: dto, ...p }),
+      // tslint:disable-next-line:no-identical-functions
       () => {
         if (message) {
           this.queue(messageSuccess(message));

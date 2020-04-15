@@ -49,5 +49,6 @@ export const routeConfig = {
   reviewClaimLineItems: Containers.ReviewClaimLineItemsRoute,
   forecastDashboard: Containers.ForecastDashboardRoute,
   forecastDetails: Containers.ForecastDetailsRoute,
+  forecastUpdateInitial: Containers.UpdateInitialForecastRoute,
   forecastUpdate: Containers.UpdateForecastRoute,
 };

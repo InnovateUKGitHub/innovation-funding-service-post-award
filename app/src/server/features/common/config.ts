@@ -105,6 +105,7 @@ const defaultFeatureFlag = getFeatureFlagValue(process.env.FEATURE_DEFAULT, fals
 
 const features: IFeatureFlags = {
     addPartnerWorkflow: getFeatureFlagValue(process.env.FEATURE_ADD_PARTNER, defaultFeatureFlag),
+    initialForecast: getFeatureFlagValue(process.env.FEATURE_INITIAL_FORECAST, defaultFeatureFlag),
     financialVirements: getFeatureFlagValue(process.env.FEATURE_FINANCIAL_VIREMENTS, defaultFeatureFlag),
     pcrsEnabled: getFeatureFlagValue(process.env.FEATURE_PCRS_ENABLED, defaultFeatureFlag),
     contentHint: getFeatureFlagValue(process.env.FEATURE_CONTENT_HINT, false),
