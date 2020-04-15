@@ -13,6 +13,7 @@ export class ProjectOverviewContent extends ContentPageBase {
     monitoringReport: () => this.getContent("monitoringReportLink"),
     forecast: () => this.getContent("forecastLink"),
     forecasts: () => this.getContent("forecastsLink"),
+    initialForecasts: () => this.getContent("initialForecastsLink"),
     projectChangeRequests: () => this.getContent("projectChangeRequestsLink"),
     documents: () => this.getContent("documentsLink"),
     details: () => this.getContent("detailsLink"),

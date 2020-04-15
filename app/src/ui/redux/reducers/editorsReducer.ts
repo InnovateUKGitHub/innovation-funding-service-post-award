@@ -111,6 +111,7 @@ export const editorReducer = combineReducers({
   claim: editorsReducer<ClaimDto, Validators.ClaimDtoValidator>("claim"),
   claimDetail: editorsReducer<ClaimDetailsDto, Validators.ClaimDetailsValidator>("claimDetail"),
   forecastDetails: editorsReducer<ForecastDetailsDTO[], Validators.ForecastDetailsDtosValidator>("forecastDetails"),
+  initialForecastDetails: editorsReducer<ForecastDetailsDTO[], Results<ForecastDetailsDTO[]>>("initialForecastDetails"),
   financialVirement: editorsReducer<FinancialVirementDto, Validators.FinancialVirementDtoValidator>("financialVirement"),
   documents: editorsReducer<DocumentUploadDto, Validators.DocumentUploadDtoValidator>("documents"),
   multipleDocuments: editorsReducer<MultipleDocumentUploadDto, Validators.MultipleDocumentUpdloadDtoValidator>("multipleDocuments"),
