@@ -49,6 +49,10 @@ const clientApi: IApiClient = {
     get: (params) => ajaxJson(`/api/forecast-details/${params.partnerId}/${params.periodId}/${params.costCategoryId}`),
     update: (params) => ajaxPut(`/api/forecast-details/?projectId=${params.projectId}&partnerId=${params.partnerId}&submit=${params.submit}`, params.forecasts),
   },
+  initialForecastDetails: {
+    getAllByPartnerId: (params) => ajaxJson(`/api/initial-forecast-details/?partnerId=${params.partnerId}`),
+    update: (params) => ajaxPut(`/api/initial-forecast-details/?projectId=${params.projectId}&partnerId=${params.partnerId}`, params.forecasts),
+  },
   forecastGolCosts: {
     getAllByPartnerId: (params) => ajaxJson(`/api/forecast-gol-costs/?partnerId=${params.partnerId}`)
   },

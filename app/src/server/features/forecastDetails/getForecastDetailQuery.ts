@@ -1,6 +1,6 @@
 import { QueryBase } from "../common";
 import { IContext } from "@framework/types";
-import mapForecastDetail from "./mapForecastDetail";
+import { mapLatestForecastDetail } from "@server/features/forecastDetails/mapForecastDetail";
 
 export class GetForecastDetailQuery extends QueryBase<ForecastDetailsDTO> {
   constructor(
@@ -14,7 +14,7 @@ export class GetForecastDetailQuery extends QueryBase<ForecastDetailsDTO> {
   protected async Run(context: IContext) {
     const result = await context.repositories.profileDetails.getById(this.partnerId, this.periodId, this.costCategoryId);
 
-    return result && mapForecastDetail(context)(result) || {
+    return result && mapLatestForecastDetail(context)(result) || {
       costCategoryId: this.costCategoryId,
       periodId: this.periodId,
       value: 0
