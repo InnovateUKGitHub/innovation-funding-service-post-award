@@ -39,6 +39,7 @@
       "claimsLink": "Claims",
       "forecastLink": "Forecast",
       "forecastsLink": "Forecasts",
+      "initialForecastsLink": "Initial Forecast",
       "projectChangeRequestsLink": "Project change requests",
       "documentsLink": "Documents",
       "detailsLink": "Project details",

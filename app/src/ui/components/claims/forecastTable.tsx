@@ -1,7 +1,10 @@
 import { CondensedDateRange } from "../renderers/date";
 import React from "react";
 import { EditorStatus, IEditorStore } from "@ui/redux";
-import { ForecastDetailsDtosValidator, ForecastDetailsDtoValidator } from "@ui/validators";
+import {
+  IForecastDetailsDtosValidator,
+  IForecastDetailsDtoValidator
+} from "@ui/validators";
 import { TypedTable } from "../table";
 import classNames from "classnames";
 import { Currency } from "../renderers/currency";
@@ -30,7 +33,7 @@ interface TableRow {
   golCosts: number;
   total: number;
   difference: number;
-  validators: ForecastDetailsDtoValidator[];
+  validators: IForecastDetailsDtoValidator[];
 }
 
 interface Index {
@@ -41,7 +44,7 @@ interface Index {
 interface Props {
   hideValidation?: boolean;
   data: ForecastData;
-  editor?: IEditorStore<ForecastDetailsDTO[], ForecastDetailsDtosValidator>;
+  editor?: IEditorStore<ForecastDetailsDTO[], IForecastDetailsDtosValidator>;
   onChange?: (data: ForecastDetailsDTO[]) => void;
   isSubmitting?: boolean;
 }
@@ -133,7 +136,7 @@ export class ForecastTable extends React.Component<Props> {
     );
   }
 
-  private parseClaimData(data: ForecastData, editor: IEditorStore<ForecastDetailsDTO[], ForecastDetailsDtosValidator>|undefined, periodId: number, totalPeriods: number | null) {
+  private parseClaimData(data: ForecastData, editor: IEditorStore<ForecastDetailsDTO[], IForecastDetailsDtosValidator>|undefined, periodId: number, totalPeriods: number | null) {
     const tableRows: TableRow[] = [];
     const forecasts = !!editor ? editor.data : data.forecastDetails;
     const costCategories = data.costCategories.filter(x => x.competitionType === data.project.competitionType && x.organisationType === data.partner.organisationType);
@@ -215,7 +218,7 @@ export class ForecastTable extends React.Component<Props> {
     return <CondensedDateRange start={details.periodStart} end={details.periodEnd}/>;
   }
 
-  private renderForecastCell(forecastRow: TableRow, periodId: number, index: Index, data: ForecastData, editor: IEditorStore<ForecastDetailsDTO[], ForecastDetailsDtosValidator>|undefined, isSubmitting: boolean) {
+  private renderForecastCell(forecastRow: TableRow, periodId: number, index: Index, data: ForecastData, editor: IEditorStore<ForecastDetailsDTO[], IForecastDetailsDtosValidator>|undefined, isSubmitting: boolean) {
     const value = forecastRow.forecasts[periodId];
     const costCategory = data.costCategories.find(x => x.id === forecastRow.categoryId);
     const validator = forecastRow.validators[index.column - 1];
@@ -302,7 +305,7 @@ export class ForecastTable extends React.Component<Props> {
     )];
   }
 
-  private renderTableFooters(periods: string[], parsed: TableRow[], validator: ForecastDetailsDtosValidator|undefined) {
+  private renderTableFooters(periods: string[], parsed: TableRow[], validator: IForecastDetailsDtosValidator|undefined) {
     const cells = [];
     const costTotal = parsed.reduce((total, item) => total + item.total, 0);
     const golTotal = parsed.reduce((total, item) => total + item.golCosts, 0);

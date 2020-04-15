@@ -13,7 +13,7 @@ import { AccessibilityText } from "./renderers/accessibilityText";
 import { ContentSelector } from "@content/content";
 import { Content } from "./content";
 
-type dividerTypes = "normal" | "bold";
+export type dividerTypes = "normal" | "bold";
 type columnMode = "cell" | "header" | "footer" | "col";
 interface InternalColumnProps<T> {
   header?: React.ReactNode;
