@@ -1,27 +1,15 @@
 import SalesforceRepositoryBase, { Updatable } from "./salesforceRepositoryBase";
-import { Connection } from "jsforce";
 
 export interface ISalesforceProfileDetails {
   Id: string;
   Acc_CostCategory__c: string;
+  Acc_InitialForecastCost__c: number;
   Acc_LatestForecastCost__c: number;
   Acc_ProjectParticipant__c: string;
   Acc_ProjectPeriodNumber__c: number;
   Acc_ProjectPeriodStartDate__c: string;
   Acc_ProjectPeriodEndDate__c: string;
 }
-
-type FieldNames = keyof ISalesforceProfileDetails;
-
-const fields: FieldNames[] = [
-  "Id",
-  "Acc_CostCategory__c",
-  "Acc_LatestForecastCost__c",
-  "Acc_ProjectParticipant__c",
-  "Acc_ProjectPeriodNumber__c",
-  "Acc_ProjectPeriodStartDate__c",
-  "Acc_ProjectPeriodEndDate__c",
-];
 
 export interface IProfileDetailsRepository {
   getAllByPartner(partnerId: string): Promise<ISalesforceProfileDetails[]>;
@@ -45,6 +33,7 @@ export class ProfileDetailsRepository extends SalesforceRepositoryBase<ISalesfor
   protected readonly salesforceFieldNames = [
     "Id",
     "Acc_CostCategory__c",
+    "Acc_InitialForecastCost__c",
     "Acc_LatestForecastCost__c",
     "Acc_ProjectParticipant__c",
     "Acc_ProjectPeriodNumber__c",

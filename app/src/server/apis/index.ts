@@ -7,6 +7,7 @@ import * as costCategories from "./costCategories";
 import * as documents from "./documents";
 import * as financialVirements from "./financialVirements";
 import * as forecastDetails from "./forecastDetails";
+import * as initialForecastDetails from "./initialForecastDetails";
 import * as forecastGolCosts from "./forecastGolCosts";
 import * as monitoringReports from "./monitoringReports";
 import * as pcrs from "./pcrs";
@@ -28,6 +29,7 @@ export interface IApiClient {
   documents: documents.IDocumentsApi;
   financialVirements: financialVirements.IFinancialVirement;
   forecastDetails: forecastDetails.IForecastDetailsApi;
+  initialForecastDetails: initialForecastDetails.IInitialForecastDetailsApi;
   forecastGolCosts: forecastGolCosts.IForecastGolCostsApi;
   monitoringReports: monitoringReports.IMonitoringReportsApi;
   pcrs: pcrs.IPCRsApi;
@@ -46,6 +48,7 @@ export const serverApis: IApiClient & { [key: string]: ControllerBase<{}> } = {
   documents: documents.controller,
   financialVirements: financialVirements.controller,
   forecastDetails: forecastDetails.controller,
+  initialForecastDetails: initialForecastDetails.controller,
   forecastGolCosts: forecastGolCosts.controller,
   monitoringReports: monitoringReports.controller,
   pcrs: pcrs.controller,
