@@ -6,6 +6,7 @@ import { PCRPartnerType, PCRProjectRole } from "@framework/constants";
 import {
   AcademicOrganisationStep,
   AddPartnerSummary,
+  AidEligibilityStep,
   CompaniesHouseStep,
   FinanceContactStep,
   FinanceDetailsStep,
@@ -16,6 +17,7 @@ import {
 } from "@ui/containers/pcrs/addPartner";
 
 export type addPartnerStepNames = "roleAndOrganisationStep"
+  | "aidEligibilityStep"
   | "academicOrganisationStep"
   | "companiesHouseStep"
   | "organisationDetailsStep"
@@ -28,37 +30,44 @@ export const getAddPartnerWorkflow = (item: PCRItemForPartnerAdditionDto, step: 
   const workflow: IPCRWorkflow<PCRItemForPartnerAdditionDto, PCRPartnerAdditionItemDtoValidator> = {
     steps: [
       {
+        stepName: "aidEligibilityStep",
+        displayName: "Aid eligibility",
+        stepNumber: 2,
+        validation: val => val.pcr,
+        stepRender: AidEligibilityStep,
+      },
+      {
         stepName: "organisationDetailsStep",
         displayName: "Organisation details",
-        stepNumber: 3,
+        stepNumber: 4,
         validation: val => val.pcr,
         stepRender: OrganisationDetailsStep,
       },
       {
         stepName: "financeDetailsStep",
         displayName: "Financial details",
-        stepNumber: 4,
+        stepNumber: 5,
         validation: val => val.pcr,
         stepRender: FinanceDetailsStep,
       },
       {
         stepName: "projectLocationStep",
         displayName: "Project location",
-        stepNumber: 5,
+        stepNumber: 6,
         validation: val => val.pcr,
         stepRender: ProjectLocationStep,
       },
       {
         stepName: "financeContactStep",
         displayName: "Finance contact",
-        stepNumber: 6,
+        stepNumber: 7,
         validation: val => val.pcr,
         stepRender: FinanceContactStep,
       },
     ],
     summary: {
       validation: val => val,
-      summaryRender: (props) => <AddPartnerSummary {...props}/>
+      summaryRender: AddPartnerSummary,
     }
   };
 
@@ -76,7 +85,7 @@ export const getAddPartnerWorkflow = (item: PCRItemForPartnerAdditionDto, step: 
     workflow.steps.push({
       stepName: "academicOrganisationStep",
       displayName: "Organisation name",
-      stepNumber: 2,
+      stepNumber: 3,
       validation: val => val.pcr,
       stepRender: AcademicOrganisationStep
     });
@@ -84,7 +93,7 @@ export const getAddPartnerWorkflow = (item: PCRItemForPartnerAdditionDto, step: 
     workflow.steps.push({
       stepName: "companiesHouseStep",
       displayName: "Companies house",
-      stepNumber: 2,
+      stepNumber: 3,
       validation: val => val.pcr,
       stepRender: CompaniesHouseStep
     });
@@ -94,7 +103,7 @@ export const getAddPartnerWorkflow = (item: PCRItemForPartnerAdditionDto, step: 
     workflow.steps.push({
       stepName: "projectManagerDetailsStep",
       displayName: "Project manager",
-      stepNumber: 7,
+      stepNumber: 8,
       validation: val => val.pcr,
       stepRender: ProjectManagerDetailsStep
     });
