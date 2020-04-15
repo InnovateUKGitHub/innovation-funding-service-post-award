@@ -30,7 +30,7 @@ export class UploadProjectChangeRequestDocumentOrItemDocumentCommand extends Com
     const results: string[] = [];
 
     for (const document of this.documents.files.filter(x => x.fileName && x.size)) {
-      const id = await context.repositories.documents.insertDocument(document, this.projectChangeRequestIdOrItemId);
+      const id = await context.repositories.documents.insertDocument(document, this.projectChangeRequestIdOrItemId, this.documents.description);
       results.push(id);
     }
 

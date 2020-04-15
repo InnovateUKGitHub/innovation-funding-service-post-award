@@ -335,6 +335,7 @@
     "document-description-IAR": "IAR",
     "document-description-Evidence": "Evidence",
     "document-description-ClaimValidationForm": "Claim Validation Form",
+    "document-description-DeMinimusDeclarationForm": "De Minimus Declaration Form",
     "document-description-Unknown": "Unknown",
     "uploadButtonLabel" : "Upload",
     "uploadInputLabel": "Upload files",

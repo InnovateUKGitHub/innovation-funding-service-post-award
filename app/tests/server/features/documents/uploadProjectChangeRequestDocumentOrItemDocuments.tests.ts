@@ -1,6 +1,7 @@
 // tslint:disable: no-identical-functions no-duplicate-string
 import * as Entites from "@framework/entities";
 import { Authorisation, ProjectRole } from "@framework/types";
+import { DocumentDescription } from "@framework/constants";
 import { ValidationError } from "@server/features/common";
 import { UploadProjectChangeRequestDocumentOrItemDocumentCommand } from "@server/features/documents/uploadProjectChangeRequestDocumentOrItemDocument";
 import { TestContext } from "../../testContextProvider";
@@ -169,6 +170,23 @@ describe("UploadProjectChangeRequestDocumentOrItemDocumentCommand", () => {
     const result = context.runCommand(command);
 
     await expect(result).rejects.toThrow(ValidationError);
+  });
+
+  it("should set a document description where one is provided", async () => {
+    const context = new TestContext();
+    const project = context.testData.createProject();
+    const projectChangeRequest = context.testData.createPCR(project);
+    const recordType: Entites.RecordType = {
+      id: "recordType_1",
+      parent: projectChangeRequest.id,
+      type: "Scope change"
+    };
+
+    const projectChangeRequestItem = context.testData.createPCRItem(projectChangeRequest, recordType);
+    const file = context.testData.createFile("Some other content", "fileName.csv");
+    const documentIds = await(context.runCommand(new UploadProjectChangeRequestDocumentOrItemDocumentCommand(project.Id, projectChangeRequestItem.id, {files: [file], description: DocumentDescription.DeMinimusDeclarationForm})));
+    const documents = await Promise.all(documentIds.map(x => context.repositories.documents.getDocumentMetadata(x)));
+    expect(documents.map(x => x.description)).toEqual([DocumentDescription.DeMinimusDeclarationForm]);
   });
 });
 
