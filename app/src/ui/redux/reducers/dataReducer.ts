@@ -68,6 +68,7 @@ export const dataReducer = combineReducers({
   documents: dataStoreReducer<DocumentSummaryDto[]>("documents"),
   financialVirement: dataStoreReducer<FinancialVirementDto>("financialVirement"),
   forecastDetails: dataStoreReducer<ForecastDetailsDTO[]>("forecastDetails"),
+  initialForecastDetails: dataStoreReducer<ForecastDetailsDTO[]>("initialForecastDetails"),
   forecastDetail: dataStoreReducer<ForecastDetailsDTO>("forecastDetail"),
   forecastGolCosts: dataStoreReducer<GOLCostDto[]>("forecastGolCosts"),
   monitoringReport: dataStoreReducer<Dtos.MonitoringReportDto>("monitoringReport"),
