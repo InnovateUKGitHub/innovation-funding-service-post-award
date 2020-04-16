@@ -413,13 +413,13 @@ export class PCRPartnerAdditionItemDtoValidator extends PCRBaseItemDtoValidator<
   );
 
   financialYearEndDate = Validation.all(this,
-    () => this.requiredIfComplete(this.model.financialYearEndDate, "Enter a financial year end"),
+    () => this.model.partnerType !== PCRPartnerType.Research ? this.requiredIfComplete(this.model.financialYearEndDate, "Enter a financial year end") : Validation.valid(this),
     () => Validation.isDate(this, this.model.financialYearEndDate, "Enter a real financial year end date"),
     () => this.hasPermissionToEdit(this.model.financialYearEndDate, this.original && this.original.financialYearEndDate, "Turnover year end cannot be changed"),
   );
 
   financialYearEndTurnover = Validation.all(this,
-    () => this.requiredIfComplete(this.model.financialYearEndTurnover, "Enter a financial year end turnover"),
+    () => this.model.partnerType !== PCRPartnerType.Research ? this.requiredIfComplete(this.model.financialYearEndTurnover, "Enter a financial year end turnover") : Validation.valid(this),
     () => Validation.isPositiveCurrency(this, this.model.financialYearEndTurnover, "Enter a financial year end turnover amount equal to or greater than 0"),
     () => this.hasPermissionToEdit(this.model.financialYearEndTurnover, this.original && this.original.financialYearEndTurnover, "Turnover cannot be changed"),
   );
@@ -482,12 +482,12 @@ export class PCRPartnerAdditionItemDtoValidator extends PCRBaseItemDtoValidator<
   projectPostcode = this.hasPermissionToEdit(this.model.projectPostcode, this.original && this.original.projectPostcode, "Project postcode cannot be changed");
 
   participantSize = Validation.all(this,
-    () => this.requiredIfComplete(this.model.participantSize, "Select a participant size"),
+    () => this.requiredIfComplete(this.model.participantSize || null, "Select a participant size"),
     () => this.hasPermissionToEdit(this.model.participantSize, this.original && this.original.projectCity, "Participant size cannot be changed"),
   );
 
   numberOfEmployees = Validation.all(this,
-    () => this.requiredIfComplete(this.model.numberOfEmployees, "Enter the number of employees"),
+    () => this.model.partnerType !== PCRPartnerType.Research ? this.requiredIfComplete(this.model.numberOfEmployees, "Enter the number of employees") : Validation.valid(this),
     () => Validation.isPositiveInteger(this, this.model.numberOfEmployees, "Please enter a valid number of employees"),
     () => this.hasPermissionToEdit(this.model.numberOfEmployees, this.original && this.original.numberOfEmployees, "Number of employees cannot be changed"),
   );
