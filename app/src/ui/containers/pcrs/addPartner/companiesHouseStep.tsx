@@ -119,7 +119,7 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
 
       return (
         <ACC.Section qa="company-house-search-results">
-          <Form.Fieldset heading="Companies house search results">
+          <Form.Fieldset heading="Companies house search results" qa="searchResults">
             <Form.Radio
               name="searchResults"
               inline={false}
