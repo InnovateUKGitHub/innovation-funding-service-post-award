@@ -1,5 +1,6 @@
 export * from "./academicOrganisationStep";
 export * from "./addPartnerSummary";
+export * from "./aidEligibilityStep";
 export * from "./companiesHouseStep";
 export * from "./financeContactStep";
 export * from "./financeDetailsStep";
