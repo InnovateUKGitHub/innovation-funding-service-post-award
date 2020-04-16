@@ -7,7 +7,7 @@ import { mapToPcrDto } from "./mapToPCRDto";
 import { GetPCRItemTypesQuery } from "./getItemTypesQuery";
 import { ProjectChangeRequestItemEntity, ProjectChangeRequestItemForCreateEntity } from "@framework/entities";
 import { GetAllForProjectQuery } from "@server/features/partners";
-import {PCRStatus } from "@framework/constants";
+import { PCRStatus } from "@framework/constants";
 import { periodInProject } from "@framework/util";
 
 export class UpdatePCRCommand extends CommandBase<boolean> {

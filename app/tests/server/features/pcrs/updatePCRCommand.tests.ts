@@ -623,7 +623,34 @@ describe("UpdatePCRCommand", () => {
       item.numberOfEmployees = 15
       await expect(context.runCommand(command)).resolves.toBe(true);
     });
-    it("should require financial details to be set", async () => {
+    it("should require financial details to be set when the partner type is not research", async () => {
+      const {context, projectChangeRequest, recordType, project} = setup();
+      context.testData.createPCRItem(projectChangeRequest, recordType, {
+        status: PCRItemStatus.Incomplete,
+        partnerType: PCRPartnerType.Business,
+        projectRole: PCRProjectRole.Collaborator,
+        organisationName: "Coventry University",
+        projectCity: "Coventry",
+        registeredAddress: "Landaaan",
+        registrationNumber: "1234",
+        contact1ProjectRole: PCRContactRole.FinanceContact,
+        contact1Forename: "Homer",
+        contact1Surname: "Of Iliad fame",
+        contact1Phone: "112233",
+        contact1Email: "helen@troy.com",
+        participantSize: PCRParticipantSize.Large,
+        numberOfEmployees: 150,
+      });
+      const dto = await context.runQuery(new GetPCRByIdQuery(projectChangeRequest.projectId, projectChangeRequest.id));
+      const item = dto.items[0] as PCRItemForPartnerAdditionDto;
+      item.status = PCRItemStatus.Complete;
+      const command = new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto);
+      await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
+      item.financialYearEndDate = new Date();
+      item.financialYearEndTurnover = 20;
+      await expect(context.runCommand(command)).resolves.toBe(true);
+    });
+    it("should not require financial details to be set when the partner type is research", async () => {
       const {context, projectChangeRequest, recordType, project} = setup();
       context.testData.createPCRItem(projectChangeRequest, recordType, {
         status: PCRItemStatus.Incomplete,
@@ -643,9 +670,6 @@ describe("UpdatePCRCommand", () => {
       const item = dto.items[0] as PCRItemForPartnerAdditionDto;
       item.status = PCRItemStatus.Complete;
       const command = new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto);
-      await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
-      item.financialYearEndDate = new Date();
-      item.financialYearEndTurnover = 20;
       await expect(context.runCommand(command)).resolves.toBe(true);
     });
     it("should require project manager details to be set when the project role is Project Lead", async () => {

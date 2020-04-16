@@ -5,7 +5,7 @@ import { EditorStatus, StoresConsumer } from "@ui/redux";
 import { PcrStepProps } from "@ui/containers/pcrs/pcrWorkflow";
 import { PCRPartnerAdditionItemDtoValidator } from "@ui/validators";
 import { Pending } from "@shared/pending";
-import { PCRPartnerType, PCRProjectRole } from "@framework/constants";
+import { PCRParticipantSize, PCRPartnerType, PCRProjectRole } from "@framework/constants";
 
 interface InnerProps {
   pcrProjectRoles: Option<PCRProjectRole>[];
@@ -54,8 +54,19 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
               inline={false}
               value={() => typeOptions.selected}
               update={(x, option) => {
-                if (!option) return x.partnerType === PCRPartnerType.Unknown;
-                x.partnerType = parseInt(option.id, 10);
+                // It's not possible to come back to this page after it's submitted
+                // so we can assume that the participant size hasn't explicitly been set by the user yet
+                // and it's safe for us to reset it
+                x.participantSize = PCRParticipantSize.Unknown;
+                if (!option) {
+                  return x.partnerType === PCRPartnerType.Unknown;
+                }
+                const selectedOption = parseInt(option.id, 10);
+                // If the partner type is academic then the organisation step is skipped and the participant size is set to "Academic"
+                if (selectedOption === PCRPartnerType.Research) {
+                  x.participantSize = PCRParticipantSize.Academic;
+                }
+                x.partnerType = selectedOption;
               }}
               validation={this.props.validator.partnerType}
             />

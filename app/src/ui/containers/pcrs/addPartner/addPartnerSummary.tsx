@@ -26,22 +26,22 @@ export class Component extends React.Component<PcrSummaryProps<PCRItemForPartner
             { pcrItem.partnerType !== PCRPartnerType.Research && <ACC.SummaryListItem label="Name" content={pcrItem.organisationName} validation={validator.companyHouseOrganisationName} qa="organisationName" action={this.props.getEditLink("companiesHouseStep", validator.companyHouseOrganisationName)}/> }
             { pcrItem.partnerType !== PCRPartnerType.Research && <ACC.SummaryListItem label="Registration number" content={pcrItem.registrationNumber} validation={validator.registrationNumber} qa="registrationNumber" action={this.props.getEditLink("companiesHouseStep", validator.registrationNumber)}/> }
             { pcrItem.partnerType !== PCRPartnerType.Research && <ACC.SummaryListItem label="Registered address" content={pcrItem.registeredAddress} validation={validator.registeredAddress} qa="registeredAddress" action={this.props.getEditLink("companiesHouseStep", validator.registeredAddress)}/> }
-            <ACC.SummaryListItem label="Size" content={pcrItem.participantSizeLabel} validation={validator.participantSize} qa="participantSize" action={this.props.getEditLink("organisationDetailsStep", validator.participantSize)}/>
-            <ACC.SummaryListItem label="Number of employees" content={pcrItem.numberOfEmployees} validation={validator.numberOfEmployees} qa="numberOfEmployees" action={this.props.getEditLink("organisationDetailsStep", validator.numberOfEmployees)}/>
-            <ACC.SummaryListItem
+            <ACC.SummaryListItem label="Size" content={pcrItem.participantSizeLabel} validation={validator.participantSize} qa="participantSize" action={ pcrItem.partnerType === PCRPartnerType.Research ? null : this.props.getEditLink("organisationDetailsStep", validator.participantSize)}/>
+            { pcrItem.partnerType !== PCRPartnerType.Research && <ACC.SummaryListItem label="Number of employees" content={pcrItem.numberOfEmployees} validation={validator.numberOfEmployees} qa="numberOfEmployees" action={this.props.getEditLink("organisationDetailsStep", validator.numberOfEmployees)}/> }
+            { pcrItem.partnerType !== PCRPartnerType.Research && <ACC.SummaryListItem
               label="End of financial year"
               content={<ACC.Renderers.MonthYear value={pcrItem.financialYearEndDate}/>}
               validation={validator.financialYearEndDate}
               qa="financialYearEndDate"
               action={this.props.getEditLink("financeDetailsStep", validator.financialYearEndDate)}
-            />
-            <ACC.SummaryListItem
+            /> }
+            { pcrItem.partnerType !== PCRPartnerType.Research && <ACC.SummaryListItem
               label="Turnover"
               content={<ACC.Renderers.Currency value={pcrItem.financialYearEndTurnover}/>}
               validation={validator.financialYearEndTurnover}
               qa="financialYearEndTurnover"
               action={this.props.getEditLink("financeDetailsStep", validator.financialYearEndTurnover)}
-            />
+            /> }
             <ACC.SummaryListItem label="Town or city" content={pcrItem.projectCity} validation={validator.projectCity} qa="projectCity" action={this.props.getEditLink("projectLocationStep", validator.projectCity)}/>
             <ACC.SummaryListItem label="Postcode, postal code or zipcode" content={pcrItem.projectPostcode} validation={validator.projectPostcode} qa="projectPostcode" action={this.props.getEditLink("projectLocationStep", validator.projectPostcode)}/>
           </ACC.SummaryList>
