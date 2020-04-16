@@ -1,4 +1,4 @@
-import { IContext, ILinkInfo, ProjectDto, ProjectRole } from "@framework/types";
+import { IContext, ILinkInfo, PCRParticipantSize, PCRPartnerType, ProjectDto, ProjectRole } from "@framework/types";
 import { BadRequestError, Configuration } from "@server/features/common";
 import { GetPCRByIdQuery } from "@server/features/pcrs/getPCRByIdQuery";
 import { UpdatePCRCommand } from "@server/features/pcrs/updatePcrCommand";
@@ -159,6 +159,9 @@ export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBa
     if (stepName === "roleAndOrganisationStep") {
       item.projectRole = parseInt(body.projectRole, 10);
       item.partnerType = parseInt(body.partnerType, 10);
+      if (item.partnerType === PCRPartnerType.Research) {
+        item.participantSize = PCRParticipantSize.Academic;
+      }
       item.isProjectRoleAndPartnerTypeRequired = true;
     }
     if (stepName === "academicOrganisationStep") {

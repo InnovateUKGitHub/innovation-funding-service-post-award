@@ -37,20 +37,6 @@ export const getAddPartnerWorkflow = (item: PCRItemForPartnerAdditionDto, step: 
         stepRender: AidEligibilityStep,
       },
       {
-        stepName: "organisationDetailsStep",
-        displayName: "Organisation details",
-        stepNumber: 4,
-        validation: val => val.pcr,
-        stepRender: OrganisationDetailsStep,
-      },
-      {
-        stepName: "financeDetailsStep",
-        displayName: "Financial details",
-        stepNumber: 5,
-        validation: val => val.pcr,
-        stepRender: FinanceDetailsStep,
-      },
-      {
         stepName: "projectLocationStep",
         displayName: "Project location",
         stepNumber: 6,
@@ -96,6 +82,20 @@ export const getAddPartnerWorkflow = (item: PCRItemForPartnerAdditionDto, step: 
       stepNumber: 3,
       validation: val => val.pcr,
       stepRender: CompaniesHouseStep
+    });
+    workflow.steps.push({
+      stepName: "organisationDetailsStep",
+      displayName: "Organisation details",
+      stepNumber: 4,
+      validation: val => val.pcr,
+      stepRender: OrganisationDetailsStep,
+    });
+    workflow.steps.push({
+      stepName: "financeDetailsStep",
+      displayName: "Financial details",
+      stepNumber: 5,
+      validation: val => val.pcr,
+      stepRender: FinanceDetailsStep,
     });
   }
 
