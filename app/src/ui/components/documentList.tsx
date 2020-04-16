@@ -84,7 +84,7 @@ export const DocumentTable: React.FunctionComponent<DocumentTableProps> = ({ doc
           <ProjectDocumentsTable.String header="Uploaded by" qa="uploadedBy" value={x => x.uploadedBy} />
           {onRemove ? <ProjectDocumentsTable.Custom
             qa="delete"
-            value={x => !hideRemove || !hideRemove(x) && <Form.Button
+            value={x => (!hideRemove || !hideRemove(x)) && <Form.Button
               name="delete"
               styling="Link"
               className="govuk-!-font-size-19"
