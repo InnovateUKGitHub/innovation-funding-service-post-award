@@ -7,6 +7,7 @@ import { BaseProps, ContainerBaseWithState, ContainerProps, defineRoute } from "
 import { DocumentList, ValidationMessage } from "@ui/components";
 import { ClaimDetailsValidator, ClaimLineItemDtoValidator } from "@ui/validators/claimDetailsValidator";
 import { DocumentSummaryDto } from "@framework/dtos/documentDto";
+import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 
 export interface EditClaimDetailsParams {
   projectId: string;

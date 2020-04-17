@@ -13,6 +13,7 @@ import {
 } from "@framework/types";
 
 import { StoresConsumer } from "@ui/redux";
+import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 
 interface Params {
   projectId: string;

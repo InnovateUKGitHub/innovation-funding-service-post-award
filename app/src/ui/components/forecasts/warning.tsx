@@ -4,6 +4,7 @@ import { ClaimDto, PartnerDto, ProjectDto, ProjectRole } from "@framework/dtos";
 import { IEditorStore } from "@ui/redux";
 import { ForecastDetailsDtosValidator } from "@ui/validators";
 import { AriaLive } from "../renderers/ariaLive";
+import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 
 interface Props {
   project: ProjectDto;

@@ -1,10 +1,7 @@
 import { CondensedDateRange } from "../renderers/date";
 import React from "react";
 import { EditorStatus, IEditorStore } from "@ui/redux";
-import {
-  IForecastDetailsDtosValidator,
-  IForecastDetailsDtoValidator
-} from "@ui/validators";
+import { IForecastDetailsDtosValidator, IForecastDetailsDtoValidator } from "@ui/validators";
 import { TypedTable } from "../table";
 import classNames from "classnames";
 import { Currency } from "../renderers/currency";
@@ -13,6 +10,8 @@ import { AccessibilityText } from "../renderers/accessibilityText";
 import { Percentage } from "../renderers/percentage";
 import { ClaimDto, PartnerDto, ProjectDto } from "@framework/dtos";
 import { numberComparator } from "@framework/util/comparator";
+import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
+import { CostCategoryType } from "@framework/entities";
 
 export interface ForecastData {
   project: ProjectDto;
@@ -251,7 +250,7 @@ export class ForecastTable extends React.Component<Props> {
       const updatedCategory = this.props.data.costCategories.find(x => x.id === categoryId);
       const overheadRate = this.props.data.partner.overheadRate;
 
-      if (updatedCategory && updatedCategory.name === "Labour" && overheadRate) {
+      if (updatedCategory && updatedCategory.type === CostCategoryType.Labour && overheadRate) {
         const overheadsCategory = this.props.data.costCategories
           .filter(x => x.competitionType === this.props.data.project.competitionType && x.organisationType === this.props.data.partner.organisationType)
           .find(x => x.isCalculated);

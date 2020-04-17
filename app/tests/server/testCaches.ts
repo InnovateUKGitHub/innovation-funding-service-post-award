@@ -3,6 +3,7 @@ import { Option } from "@framework/dtos";
 import { ICaches, MonitoringReportStatus } from "@framework/types";
 import { PermissionGroup, RecordType } from "@framework/entities";
 import { IRoleInfo } from "@server/features/projects";
+import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 
 export class TestCaches implements ICaches {
   readonly costCategories = new Cache<CostCategoryDto[]>(1);

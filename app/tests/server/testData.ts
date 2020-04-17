@@ -2,7 +2,11 @@
 import { DateTime } from "luxon";
 import * as Repositories from "@server/repositories";
 import * as Entities from "@framework/entities";
-import { PartnerFinancialVirement, ProjectChangeRequestStatusChangeEntity } from "@framework/entities";
+import {
+  CostCategoryType,
+  PartnerFinancialVirement,
+  ProjectChangeRequestStatusChangeEntity
+} from "@framework/entities";
 import { range } from "@shared/range";
 import { ClaimStatus, DocumentDescription, IClientUser, PCRPartnerType, PCRProjectRole } from "@framework/types";
 import { ITestRepositories } from "./testRepositories";
@@ -25,6 +29,7 @@ export class TestData {
     const newItem: Entities.CostCategory = {
       id: `CostCat${seed}`,
       name: `Cost Category ${seed}`,
+      type: CostCategoryType.Unknown,
       displayOrder: seed,
       competitionType: "SBRI",
       organisationType: "Industrial",
