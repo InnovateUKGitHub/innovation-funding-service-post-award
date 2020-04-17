@@ -8,6 +8,7 @@ import { MultipleDocumentUpdloadDtoValidator } from "@ui/validators/documentUplo
 import { StoresConsumer } from "@ui/redux";
 import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
 import { DocumentSummaryDto } from "@framework/dtos/documentDto";
+import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 
 export interface ClaimDetailDocumentsPageParams {
   projectId: string;

@@ -8,6 +8,7 @@ import { ClaimDto, ClaimStatus, ClaimStatusChangeDto, DocumentDescription, Partn
 import { MultipleDocumentUpdloadDtoValidator } from "@ui/validators";
 import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
 import { DocumentSummaryDto } from "@framework/dtos/documentDto";
+import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 
 export interface ReviewClaimParams {
   projectId: string;

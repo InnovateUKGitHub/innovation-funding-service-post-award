@@ -8,6 +8,7 @@ import { ClaimDto, ILinkInfo, PartnerDto, ProjectDto, ProjectRole } from "@frame
 import classNames from "classnames";
 import { StoresConsumer } from "@ui/redux";
 import { DocumentSummaryDto } from "@framework/dtos/documentDto";
+import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 
 interface Params {
   projectId: string;

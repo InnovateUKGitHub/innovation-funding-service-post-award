@@ -3,6 +3,7 @@ import { Results } from "../validation/results";
 import { Result } from "../validation/result";
 import { ClaimDto, ClaimStatus } from "@framework/types";
 import { DocumentSummaryDto } from "@framework/dtos/documentDto";
+import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 
 const COMMENTS_LENGTH_MAX = 1000;
 

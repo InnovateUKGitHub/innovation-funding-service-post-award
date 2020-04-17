@@ -6,6 +6,7 @@ import * as Dtos from "@framework/dtos";
 import { IAppError, PCRParticipantSize, PCRPartnerType, PCRProjectRole } from "@framework/types";
 import { State } from "router5";
 import { DocumentSummaryDto } from "@framework/dtos/documentDto";
+import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 
 export interface IDataStore<T> {
   status: LoadingStatus;

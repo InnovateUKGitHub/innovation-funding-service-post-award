@@ -1,9 +1,9 @@
 import React from "react";
-import { Link, Renderers, TypedTable } from "..";
+import { Link, TypedTable } from "..";
 import { ClaimDto, ILinkInfo, PartnerDto, ProjectDto } from "@framework/types";
 import { CostsSummaryForPeriodValidator } from "@ui/validators";
-import { AccessibilityText } from "../renderers/accessibilityText";
-import { Currency } from "../renderers/currency";
+import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
+import { CostCategoryType } from "@framework/entities";
 
 interface Props {
   project: ProjectDto;
@@ -30,6 +30,7 @@ export const ClaimTable: React.FunctionComponent<Props> = (props) => {
   combinedData.push({
     category: {
       name: "Total",
+      type: CostCategoryType.Unknown,
       id: "",
       isCalculated: true,
       hasRelated: false,

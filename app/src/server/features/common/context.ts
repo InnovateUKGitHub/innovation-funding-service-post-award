@@ -10,6 +10,7 @@ import { DefaultContentStore } from "@server/resources/defaultContentStore";
 import { IInternationalisation } from "@framework/types";
 import { CustomContentStore } from "@server/resources/customContentStore";
 import { CompaniesHouse } from "@server/resources/companiesHouse";
+import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 
 // obvs needs to be singleton
 const cachesImplementation: Framework.ICaches = {
