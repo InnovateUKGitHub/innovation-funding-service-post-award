@@ -74,6 +74,7 @@ export class Context implements Framework.IContext {
       costCategories: new Repositories.CostCategoryRepository(connectionCallback, this.logger),
       documents: new Repositories.DocumentsRepository(connectionCallback, this.logger),
       financialVirements: new Repositories.FinancialVirementRepository(recordTypeCallback, connectionCallback, this.logger),
+      pcrSpendProfile: new Repositories.PcrSpendProfileRepository(recordTypeCallback, connectionCallback, this.logger),
       monitoringReportResponse: new Repositories.MonitoringReportResponseRepository(recordTypeCallback, connectionCallback, this.logger),
       monitoringReportHeader: new Repositories.MonitoringReportHeaderRepository(recordTypeCallback, connectionCallback, this.logger),
       monitoringReportQuestions: new Repositories.MonitoringReportQuestionsRepository(connectionCallback, this.logger),
@@ -191,8 +192,8 @@ export class Context implements Framework.IContext {
     return this.runSync(runnable);
   }
 
-  // allows context to be esculated to the system user
-  // use with discression!!!
+  // allows context to be escalated to the system user
+  // use with discretion!!!
   public asSystemUser(): Framework.IContext {
     const serviceUser = this.config.salesforce.serivceUsername;
     if (this.user.email !== serviceUser) {
