@@ -18,6 +18,7 @@ import { DocumentDescriptionMapper, SalesforceDocumentMapper } from "@server/rep
 import { DocumentEntity } from "@framework/entities/document";
 import { DocumentFilter } from "@framework/types/DocumentFilter";
 import { ISalesforceDocument } from "@server/repositories/contentVersionRepository";
+import { PcrSpendProfileEntity } from "@framework/entities/pcrSpendProfile";
 
 class ProjectsTestRepository extends TestRepository<Repositories.ISalesforceProject> implements Repositories.IProjectRepository {
   getById(id: string) {
@@ -564,6 +565,12 @@ class PCRTestRepository extends TestRepository<Entities.ProjectChangeRequestEnti
   }
 }
 
+class PcrSpendProfileTestRepository extends TestRepository<PcrSpendProfileEntity> implements Repositories.IPcrSpendProfileRepository {
+  getAllForPcr(pcrItemId: string): Promise<Entities.PcrSpendProfileEntity[]> {
+    return super.getWhere(x => x.pcrItemId === pcrItemId);
+  }
+}
+
 class ProjectChangeRequestStatusChangeTestRepository extends TestRepository<ProjectChangeRequestStatusChangeEntity> implements Repositories.IProjectChangeRequestStatusChangeRepository {
   constructor(private pcrRepository: PCRTestRepository) {
     super();
@@ -662,6 +669,7 @@ export const createTestRepositories = (): ITestRepositories => {
     profileTotalCostCategory: new ProfileTotalCostCategoryTestRepository(),
     projects: new ProjectsTestRepository(),
     projectChangeRequests,
+    pcrSpendProfile: new PcrSpendProfileTestRepository(),
     projectChangeRequestStatusChange: new ProjectChangeRequestStatusChangeTestRepository(projectChangeRequests),
     partners: partnerRepository,
     projectContacts: new ProjectContactTestRepository(),

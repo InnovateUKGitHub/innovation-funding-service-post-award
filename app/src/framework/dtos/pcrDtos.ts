@@ -5,6 +5,7 @@ import {
   PCRProjectRole,
   PCRStatus
 } from "@framework/constants";
+import { PcrSpendProfileDto } from "@framework/dtos/pcrSpendProfileDto";
 
 interface PCRBaseDto {
   id: string;
@@ -27,7 +28,7 @@ export interface PCRSummaryDto extends PCRBaseDto {
 }
 
 export interface PCRDto extends PCRBaseDto {
-  items: (PCRItemDto)[];
+  items: PCRItemDto[];
   comments: string;
   reasoningStatus: PCRItemStatus;
   reasoningStatusName: string;
@@ -109,6 +110,7 @@ export interface PCRItemForPartnerAdditionDto extends PCRItemBaseDto {
   isProjectRoleAndPartnerTypeRequired?: boolean;
   projectRole: PCRProjectRole;
   partnerType: PCRPartnerType;
+  spendProfile: PcrSpendProfileDto;
   projectRoleLabel: string | null;
   partnerTypeLabel: string | null;
   organisationName: string | null;
