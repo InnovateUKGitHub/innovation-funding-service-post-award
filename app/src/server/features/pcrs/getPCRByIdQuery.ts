@@ -1,8 +1,9 @@
 import { QueryBase } from "../common";
-import { PCRDto } from "@framework/dtos/pcrDtos";
-import { Authorisation, IContext, ProjectRole } from "@framework/types";
+import { PCRDto, PCRItemForPartnerAdditionDto } from "@framework/dtos/pcrDtos";
+import { Authorisation, IContext, PCRItemType, ProjectRole } from "@framework/types";
 import { GetPCRItemTypesQuery } from "./getItemTypesQuery";
 import { mapToPcrDto } from "./mapToPCRDto";
+import { GetPcrSpendProfilesQuery } from "@server/features/pcrs/getPcrSpendProfiles";
 
 export class GetPCRByIdQuery extends QueryBase<PCRDto> {
   constructor(private projectId: string, private id: string) {
@@ -16,6 +17,12 @@ export class GetPCRByIdQuery extends QueryBase<PCRDto> {
   protected async Run(context: IContext): Promise<PCRDto> {
     const itemTypes = await context.runQuery(new GetPCRItemTypesQuery());
     const item = await context.repositories.projectChangeRequests.getById(this.projectId, this.id);
-    return mapToPcrDto(item, itemTypes);
+    const pcrDto = mapToPcrDto(item, itemTypes);
+    const addPartnerItem = pcrDto.items.find(x => x.type === PCRItemType.PartnerAddition);
+    if (!!addPartnerItem) {
+      const spendProfile = await context.runQuery(new GetPcrSpendProfilesQuery(addPartnerItem.id));
+      (addPartnerItem as PCRItemForPartnerAdditionDto).spendProfile = spendProfile;
+    }
+    return pcrDto;
   }
 }

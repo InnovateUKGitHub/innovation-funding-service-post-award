@@ -12,6 +12,7 @@ export * from "./monitoringReportQuestionsRepository";
 export * from "./monitoringReportResponseRepository";
 export * from "./monitoringReportStatusChangeRepository";
 export * from "./partnersRepository";
+export * from "./pcrSpendProfileRepository";
 export * from "./projectChangeRequestRepository";
 export * from "./projectChangeRequestStatusChangeRepository";
 export * from "./permissionGroupsRepository";
