@@ -5,6 +5,7 @@ import { Pending } from "@shared/pending";
 import * as ACC from "@ui/components";
 import { PartnerDto, PCRDto, ProjectDto, ProjectRole } from "@framework/dtos";
 import { createDto } from "@framework/util/dtoHelpers";
+import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 
 interface Params {
   projectId: string;

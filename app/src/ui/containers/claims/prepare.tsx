@@ -6,6 +6,7 @@ import { ClaimDtoValidator } from "@ui/validators/claimDtoValidator";
 import { Pending } from "@shared/pending";
 import { ClaimDto, ClaimStatusChangeDto, ILinkInfo, PartnerDto, ProjectDto, ProjectRole } from "@framework/types";
 import { StoresConsumer } from "@ui/redux";
+import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 
 export interface PrepareClaimParams {
   projectId: string;

@@ -2,6 +2,7 @@ import { QueryBase } from "@server/features/common";
 import { Authorisation, IContext, ProjectRole } from "@framework/types";
 import { CostCategoryFinancialVirement, PartnerFinancialVirement } from "@framework/entities";
 import { GetCostCategoriesQuery } from "../claims/getCostCategoriesQuery";
+import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 
 export class GetFinancialVirementQuery extends QueryBase<FinancialVirementDto> {
   constructor(private projectId: string, private pcrId: string, private pcrItemId: string) {

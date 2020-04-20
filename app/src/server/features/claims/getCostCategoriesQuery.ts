@@ -1,6 +1,7 @@
 import { QueryBase } from "../common/queryBase";
 import { IContext } from "@framework/types";
 import { numberComparator } from "@framework/util";
+import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 
 /**
  * Retrieves all cost categories from salesforce

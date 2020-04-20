@@ -11,6 +11,7 @@ import { Option } from "@framework/types";
 import { IDefaultContentStore } from "@server/resources/defaultContentStore";
 import { ICustomContentStore } from "@server/resources/customContentStore";
 import { CompaniesHouse, ICompaniesHouse } from "@server/resources/companiesHouse";
+import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 
 export interface IRepositories {
   readonly claims: Repositories.IClaimRepository;
