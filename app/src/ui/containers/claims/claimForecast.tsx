@@ -6,6 +6,7 @@ import { ClaimDto, ILinkInfo, PartnerDto, ProjectDto, ProjectRole } from "@frame
 import { Pending } from "@shared/pending";
 import { ForecastDetailsDtosValidator } from "@ui/validators";
 import { IEditorStore, StoresConsumer } from "@ui/redux";
+import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 
 export interface ClaimForecastParams {
   projectId: string;

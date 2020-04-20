@@ -10,6 +10,7 @@ import { createDto } from "../helpers/dtoHelpers";
 import { getColumnValues, getFooterValue } from "../helpers/tableHelpers";
 import { range } from "@shared/range";
 import { ILinkInfo } from "@framework/types";
+import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 
 Enzyme.configure({ adapter: new Adapter() });
 

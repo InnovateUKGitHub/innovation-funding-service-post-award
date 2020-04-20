@@ -4,6 +4,8 @@ import { ILinkInfo } from "@framework/types/ILinkInfo";
 import { CostsSummaryForPeriodValidator } from "@ui/validators";
 import { TypedTable } from "../table";
 import { Link } from "../links";
+import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
+import { CostCategoryType } from "@framework/entities";
 
 interface Props {
   project: ProjectDto;
@@ -29,6 +31,7 @@ export const ClaimReviewTable: React.FunctionComponent<Props> = (props) => {
   combinedData.push({
     category: {
       name: "Total",
+      type: CostCategoryType.Unknown,
       id: "",
       isCalculated: true,
       hasRelated: false,

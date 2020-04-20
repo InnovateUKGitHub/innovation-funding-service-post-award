@@ -7,6 +7,7 @@ import { PartnerDto, ProjectDto } from "@framework/dtos";
 import { CostCategoryVirementDtoValidator, FinancialVirementDtoValidator } from "@ui/validators";
 import { createDto } from "@framework/util/dtoHelpers";
 import { roundCurrency } from "@framework/util";
+import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 
 export interface VirementCostsParams {
   projectId: string;
