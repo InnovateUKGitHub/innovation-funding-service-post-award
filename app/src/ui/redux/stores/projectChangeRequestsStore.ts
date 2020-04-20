@@ -215,6 +215,9 @@ export class ProjectChangeRequestStore extends StoreBase {
           partnerType: PCRPartnerType.Unknown,
           projectRoleLabel: null,
           partnerTypeLabel: null,
+          spendProfile: {
+            costs: []
+          },
           projectCity: "",
           projectPostcode: "",
           participantSize: PCRParticipantSize.Unknown,

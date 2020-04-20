@@ -24,6 +24,7 @@ export interface IRepositories {
   readonly monitoringReportHeader: Repositories.IMonitoringReportHeaderRepository;
   readonly monitoringReportQuestions: Repositories.IMonitoringReportQuestionsRepository;
   readonly monitoringReportStatusChange: Repositories.IMonitoringReportStatusChangeRepository;
+  readonly pcrSpendProfile: Repositories.IPcrSpendProfileRepository;
   readonly projectChangeRequests: Repositories.IProjectChangeRequestRepository;
   readonly projectChangeRequestStatusChange: Repositories.IProjectChangeRequestStatusChangeRepository;
   readonly profileDetails: Repositories.IProfileDetailsRepository;
