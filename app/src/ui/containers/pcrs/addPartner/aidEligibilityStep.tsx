@@ -64,7 +64,7 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
             {this.renderTemplateLinks(this.props.pcrItemType)}
           </UploadForm.Fieldset>
           <UploadForm.Fieldset heading="Upload declaration form" qa="documentGuidance">
-            <UploadForm.Hidden name="description" value={x => DocumentDescription.DeMinimusDeclarationForm} />
+            <UploadForm.Hidden name="description" value={x => DocumentDescription.DeMinimisDeclarationForm} />
             <ACC.DocumentGuidance />
             <UploadForm.MulipleFileUpload
               label="Upload files"
@@ -73,7 +73,7 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
               value={data => data.files}
               update={(dto, files) => {
                 dto.files = files || [];
-                dto.description = DocumentDescription.DeMinimusDeclarationForm;
+                dto.description = DocumentDescription.DeMinimisDeclarationForm;
               }}
               validation={documentsEditor.validator.files}
             />
@@ -90,7 +90,7 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
     if (documents.length) {
       return (
         <ACC.Section title="Files uploaded" subtitle="All documents open in a new window.">
-          {documents.length ? <ACC.DocumentTable onRemove={(document) => this.props.onFileDelete(documentsEditor.data, document)} documents={documents} qa="de-minimus-document"/> : null}
+          {documents.length ? <ACC.DocumentTable onRemove={(document) => this.props.onFileDelete(documentsEditor.data, document)} documents={documents} qa="de-minimis-document"/> : null}
         </ACC.Section>
       );
     }
