@@ -630,6 +630,7 @@ export class TestData {
   }
 
   public createPCRItem(pcr?: Entities.ProjectChangeRequestEntity, recordType?: Entities.RecordType, update?: Partial<Entities.ProjectChangeRequestItemEntity>) {
+    // id is total of pcr items
     const seed = this.repositories.projectChangeRequests.Items.reduce((c, x) => c + x.items.length, 0) + 1;
     pcr = pcr || this.createPCR();
 
@@ -674,6 +675,18 @@ export class TestData {
     pcr.items.push(newItem);
 
     return newItem;
+  }
+
+  public async createPcrSpendProfile(options: {pcrItem?: Entities.ProjectChangeRequestItemEntity, costCategory?: Entities.CostCategory, update?: Partial<Entities.PcrSpendProfileEntityForCreate>}): Promise<string[]> {
+    const pcrItem = options.pcrItem ? options.pcrItem : this.createPCRItem();
+    const costCategory = options.costCategory ? options.costCategory : this.createCostCategory();
+    const newItem: Entities.PcrSpendProfileEntityForCreate = {
+      costOfRole: 0,
+      pcrItemId: pcrItem.id,
+      costCategoryId: costCategory.id,
+      ...options.update
+    };
+    return this.repositories.pcrSpendProfile.insertSpendProfiles([newItem]);
   }
 
   public createProjectChangeRequestStatusChange(projectChangeRequest: Entities.ProjectChangeRequestEntity, participantVisibility: boolean): ProjectChangeRequestStatusChangeEntity {

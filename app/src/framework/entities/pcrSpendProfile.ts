@@ -1,6 +1,9 @@
-export interface PcrSpendProfileEntity {
-  id: string;
+export interface PcrSpendProfileEntityForCreate {
   pcrItemId: string;
   costCategoryId: string;
-  costOfRole: number;
+  costOfRole?: number;
+}
+
+export interface PcrSpendProfileEntity extends PcrSpendProfileEntityForCreate {
+  id: string;
 }

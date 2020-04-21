@@ -4,12 +4,15 @@ import { GetPCRByIdQuery } from "@server/features/pcrs/getPCRByIdQuery";
 import { DateTime } from "luxon";
 import { PCRRecordTypeMetaValues } from "@server/features/pcrs/getItemTypesQuery";
 import {
-  PCRItemForAccountNameChangeDto, PCRItemForPartnerAdditionDto,
+  PCRItemForAccountNameChangeDto,
+  PCRItemForPartnerAdditionDto,
   PCRItemForProjectSuspensionDto,
   PCRItemForScopeChangeDto,
   PCRItemForTimeExtensionDto
 } from "@framework/dtos";
 import { PCRItemType, PCRPartnerType, PCRProjectRole } from "@framework/constants";
+import { CostCategoryType } from "@framework/entities";
+import { PCRSpendProfileLabourCostDto } from "@framework/dtos/pcrSpendProfileDto";
 
 describe("GetPCRByIdQuery", () => {
   test("when id not found then exception is thrown", async () => {
@@ -212,29 +215,64 @@ describe("GetPCRByIdQuery", () => {
     expect(result.suspensionEndDate!.toISOString()).toBe(suspensionEndDate.toISOString());
   });
 
-  test("maps fields for partner addition", async () => {
-    const context = new TestContext();
+  describe("partner addition", () => {
+    test("maps fields for partner addition pcr item", async () => {
+      const context = new TestContext();
 
-    const partnerAdditionType = PCRRecordTypeMetaValues.find(x => x.type === PCRItemType.PartnerAddition)!;
-    const recordType = context.testData.createPCRRecordTypes().find(x => x.type === partnerAdditionType.typeName);
+      const partnerAdditionType = PCRRecordTypeMetaValues.find(x => x.type === PCRItemType.PartnerAddition)!;
+      const recordType = context.testData.createPCRRecordTypes().find(x => x.type === partnerAdditionType.typeName);
 
-    const pcr = context.testData.createPCR();
+      const pcr = context.testData.createPCR();
 
-    const projectRole = PCRProjectRole.Collaborator;
-    const partnerType = PCRPartnerType.ResearchAndTechnology;
-    const projectCity = "Bristol";
-    const projectPostcode = "BS! 5UW";
+      const projectRole = PCRProjectRole.Collaborator;
+      const partnerType = PCRPartnerType.ResearchAndTechnology;
+      const projectCity = "Bristol";
+      const projectPostcode = "BS! 5UW";
 
-    const item = context.testData.createPCRItem(pcr, recordType, { projectRole, partnerType, projectCity, projectPostcode });
+      const item = context.testData.createPCRItem(pcr, recordType, { projectRole, partnerType, projectCity, projectPostcode });
 
-    const query = new GetPCRByIdQuery(pcr.projectId, pcr.id);
-    const result = await context.runQuery(query).then(x => x.items[0] as PCRItemForPartnerAdditionDto);
+      const query = new GetPCRByIdQuery(pcr.projectId, pcr.id);
+      const result = await context.runQuery(query).then(x => x.items[0] as PCRItemForPartnerAdditionDto);
 
-    expect(result.id).toBe(item.id);
-    expect(result.projectRole).toBe(projectRole);
-    expect(result.partnerType).toBe(partnerType);
-    expect(result.projectCity).toBe(projectCity);
-    expect(result.projectPostcode).toBe(projectPostcode);
+      expect(result.id).toBe(item.id);
+      expect(result.projectRole).toBe(projectRole);
+      expect(result.partnerType).toBe(partnerType);
+      expect(result.projectCity).toBe(projectCity);
+      expect(result.projectPostcode).toBe(projectPostcode);
+    });
+
+    test("maps fields for partner addition pcr spend profile for Labour", async () => {
+      const context = new TestContext();
+
+      const partnerAdditionType = PCRRecordTypeMetaValues.find(x => x.type === PCRItemType.PartnerAddition)!;
+      const recordType = context.testData.createPCRRecordTypes().find(x => x.type === partnerAdditionType.typeName);
+      const pcr = context.testData.createPCR();
+      const costCategoryLabour = context.testData.createCostCategory({name: "Labour", type: CostCategoryType.Labour});
+
+      const projectRole = PCRProjectRole.Collaborator;
+      const partnerType = PCRPartnerType.ResearchAndTechnology;
+
+      const item = context.testData.createPCRItem(pcr, recordType, { projectRole, partnerType });
+      context.testData.createPcrSpendProfile({
+        costCategory: costCategoryLabour,
+        pcrItem: item,
+        update: {
+          costOfRole: 50
+        }
+      });
+
+      const query = new GetPCRByIdQuery(pcr.projectId, pcr.id);
+      const result = await context.runQuery(query).then(x => x.items[0] as PCRItemForPartnerAdditionDto);
+
+      expect(result.id).toBe(item.id);
+      const spendProfile = result.spendProfile;
+      expect(spendProfile).toBeDefined();
+      expect(spendProfile.costs).toHaveLength(1);
+      const labourCost = spendProfile.costs[0] as PCRSpendProfileLabourCostDto;
+      expect(labourCost.costCategory).toBe(CostCategoryType.Labour);
+      expect(labourCost.costCategoryId).toBe(costCategoryLabour.id);
+      expect(labourCost.value).toBe(50);
+    });
   });
 
   test("when project id not found then exception is thrown", async () => {
