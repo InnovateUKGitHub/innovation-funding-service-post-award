@@ -11,7 +11,7 @@ export class DocumentLabels extends ContentBase {
       case DocumentDescription.ClaimValidationForm: return this.getContent("document-description-ClaimValidationForm");
       case DocumentDescription.Evidence: return this.getContent("document-description-Evidence");
       case DocumentDescription.IAR: return this.getContent("document-description-IAR");
-      case DocumentDescription.DeMinimusDeclarationForm: return this.getContent("document-description-DeMinimusDeclarationForm");
+      case DocumentDescription.DeMinimisDeclarationForm: return this.getContent("document-description-DeMinimisDeclarationForm");
       default: return this.getContent("document-description-Unknown");
     }
   }

@@ -28,7 +28,7 @@ export class DocumentDescriptionMapper {
     IAR: "IAR",
     Evidence: "Evidence",
     ClaimValidationForm: "ClaimValidationForm",
-    DeMinimusDeclartionForm: "DeMinimusDeclartionForm"
+    DeMinimisDeclartionForm: "DeMinimisDeclartionForm"
   };
 
   public mapFromSalesforceDocumentDescription = ((documentType: string | null | undefined): DocumentDescription | null => {
@@ -36,7 +36,7 @@ export class DocumentDescriptionMapper {
       case this.types.IAR: return DocumentDescription.IAR;
       case this.types.Evidence: return DocumentDescription.Evidence;
       case this.types.ClaimValidationForm: return DocumentDescription.ClaimValidationForm;
-      case this.types.DeMinimusDeclartionForm: return DocumentDescription.DeMinimusDeclarationForm;
+      case this.types.DeMinimisDeclartionForm: return DocumentDescription.DeMinimisDeclarationForm;
       default: return null;
     }
   });
@@ -46,7 +46,7 @@ export class DocumentDescriptionMapper {
       case DocumentDescription.IAR: return this.types.IAR;
       case DocumentDescription.Evidence: return this.types.Evidence;
       case DocumentDescription.ClaimValidationForm: return this.types.ClaimValidationForm;
-      case DocumentDescription.DeMinimusDeclarationForm: return this.types.DeMinimusDeclartionForm;
+      case DocumentDescription.DeMinimisDeclarationForm: return this.types.DeMinimisDeclartionForm;
       default: return null;
     }
   });
