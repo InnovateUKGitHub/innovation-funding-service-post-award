@@ -184,9 +184,9 @@ describe("UploadProjectChangeRequestDocumentOrItemDocumentCommand", () => {
 
     const projectChangeRequestItem = context.testData.createPCRItem(projectChangeRequest, recordType);
     const file = context.testData.createFile("Some other content", "fileName.csv");
-    const documentIds = await(context.runCommand(new UploadProjectChangeRequestDocumentOrItemDocumentCommand(project.Id, projectChangeRequestItem.id, {files: [file], description: DocumentDescription.DeMinimusDeclarationForm})));
+    const documentIds = await(context.runCommand(new UploadProjectChangeRequestDocumentOrItemDocumentCommand(project.Id, projectChangeRequestItem.id, {files: [file], description: DocumentDescription.DeMinimisDeclarationForm})));
     const documents = await Promise.all(documentIds.map(x => context.repositories.documents.getDocumentMetadata(x)));
-    expect(documents.map(x => x.description)).toEqual([DocumentDescription.DeMinimusDeclarationForm]);
+    expect(documents.map(x => x.description)).toEqual([DocumentDescription.DeMinimisDeclarationForm]);
   });
 });
 
