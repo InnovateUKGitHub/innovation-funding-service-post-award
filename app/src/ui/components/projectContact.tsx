@@ -23,8 +23,8 @@ export const ProjectContact: React.FunctionComponent<Props> = (props) => {
 
   return (
     <Section title={contact.roleName}>
-      <SimpleString className={"govuk-!-margin-bottom-0"} data-qa={`${props.qa}-roleName`}>{contact.name}</SimpleString>
-      <SimpleString className={"govuk-!-margin-bottom-0"} data-qa={`${props.qa}-name`}><PartnerName partner={partner}/></SimpleString>
+      <SimpleString className={"govuk-!-margin-bottom-0"} qa={`${props.qa}-roleName`}>{contact.name}</SimpleString>
+      <SimpleString className={"govuk-!-margin-bottom-0"} qa={`${props.qa}-name`}><PartnerName partner={partner}/></SimpleString>
       <Email value={contact.email} qa={props.qa + "-email"}/>
     </Section>
   );
