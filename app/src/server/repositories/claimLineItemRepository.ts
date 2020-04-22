@@ -1,5 +1,4 @@
 import SalesforceRepositoryBase, {Updatable} from "./salesforceRepositoryBase";
-import {IRecordTypeRepository, RecordTypeRepository} from "./recordTypeRepository";
 import { Connection } from "jsforce";
 import { ILogger } from "@server/features/common";
 

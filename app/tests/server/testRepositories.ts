@@ -7,7 +7,6 @@ import { ClaimStatus, DocumentDescription, IRepositories, MonitoringReportStatus
 import { TestFileWrapper } from "./testData";
 import { PermissionGroupIdenfifier } from "@framework/types/permisionGroupIndentifier";
 import * as Entities from "@framework/entities";
-import { ProjectChangeRequestStatusChangeEntity } from "@framework/entities";
 import { PicklistEntry } from "jsforce";
 import { getAllEnumValues } from "@shared/enumHelper";
 import { PCRStatusesPicklist } from "../server/features/pcrs/pcrStatusesPicklist";
@@ -19,6 +18,7 @@ import { DocumentEntity } from "@framework/entities/document";
 import { DocumentFilter } from "@framework/types/DocumentFilter";
 import { ISalesforceDocument } from "@server/repositories/contentVersionRepository";
 import { PcrSpendProfileEntity } from "@framework/entities/pcrSpendProfile";
+import { PcrSpendProfileEntityForCreate } from "@framework/entities";
 
 class ProjectsTestRepository extends TestRepository<Repositories.ISalesforceProject> implements Repositories.IProjectRepository {
   getById(id: string) {
@@ -569,9 +569,29 @@ class PcrSpendProfileTestRepository extends TestRepository<PcrSpendProfileEntity
   getAllForPcr(pcrItemId: string): Promise<Entities.PcrSpendProfileEntity[]> {
     return super.getWhere(x => x.pcrItemId === pcrItemId);
   }
+  insertSpendProfiles(items: PcrSpendProfileEntityForCreate[]) {
+    const newIds: string[] = [];
+    items.forEach((x) => {
+      const id = `PcrSpendProfile-${this.Items.length}`;
+      newIds.push(id);
+      this.Items.push({ ...x, id });
+    });
+    return Promise.resolve(newIds);
+  }
+  updateSpendProfiles(updates: PcrSpendProfileEntity[]) {
+    updates.forEach(update => {
+      const item = this.Items.find(x => x.id === update.id);
+      if (!!item) Object.assign(item, update);
+    });
+    return Promise.resolve(true);
+  }
+  deleteSpendProfiles(ids: string[]) {
+    ids.forEach(x => super.deleteItem({id: x} as PcrSpendProfileEntity));
+    return Promise.resolve();
+  }
 }
 
-class ProjectChangeRequestStatusChangeTestRepository extends TestRepository<ProjectChangeRequestStatusChangeEntity> implements Repositories.IProjectChangeRequestStatusChangeRepository {
+class ProjectChangeRequestStatusChangeTestRepository extends TestRepository<Entities.ProjectChangeRequestStatusChangeEntity> implements Repositories.IProjectChangeRequestStatusChangeRepository {
   constructor(private pcrRepository: PCRTestRepository) {
     super();
   }
@@ -591,7 +611,7 @@ class ProjectChangeRequestStatusChangeTestRepository extends TestRepository<Proj
     });
   }
 
-  getStatusChanges(projectId: string, projectChangeRequestId: string): Promise<ProjectChangeRequestStatusChangeEntity[]> {
+  getStatusChanges(projectId: string, projectChangeRequestId: string): Promise<Entities.ProjectChangeRequestStatusChangeEntity[]> {
     return super.getWhere(x => x.pcrId === projectChangeRequestId);
   }
 }
@@ -633,6 +653,7 @@ export interface ITestRepositories extends IRepositories {
   monitoringReportQuestions: MonitoringReportQuestionsRepository;
   monitoringReportStatusChange: MonitoringReportStatusChangeTestRepository;
   projectChangeRequests: PCRTestRepository;
+  pcrSpendProfile: PcrSpendProfileTestRepository;
   projectChangeRequestStatusChange: ProjectChangeRequestStatusChangeTestRepository;
   profileDetails: ProfileDetailsTestRepository;
   profileTotalCostCategory: ProfileTotalCostCategoryTestRepository;
