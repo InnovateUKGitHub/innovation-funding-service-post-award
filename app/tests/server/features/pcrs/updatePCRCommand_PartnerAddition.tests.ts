@@ -13,6 +13,7 @@ import {
 import { PCRRecordTypeMetaValues } from "@server/features/pcrs/getItemTypesQuery";
 import { PCRItemStatus, PCRItemType, PCRStatus } from "@framework/constants";
 import { CostCategoryType } from "@framework/entities";
+import { PCRSpendProfileLabourCostDto } from "@framework/dtos/pcrSpendProfileDto";
 
 // tslint:disable-next-line:no-big-function
 describe("UpdatePCRCommand - Partner addition", () => {
@@ -335,6 +336,10 @@ describe("UpdatePCRCommand - Partner addition", () => {
         value: 60,
         costCategoryId: costCategoryLabour.id,
         costCategory: CostCategoryType.Labour,
+        ratePerDay: 20,
+        daysSpentOnProject: 10,
+        role: "Queen",
+        grossCostOfRole: 200
       });
       const command = new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto);
       await expect(await context.runCommand(command)).toBe(true);
@@ -344,6 +349,10 @@ describe("UpdatePCRCommand - Partner addition", () => {
       expect(insertedSpendProfileCost.costOfRole).toBe(60);
       expect(insertedSpendProfileCost.costCategoryId).toBe(costCategoryLabour.id);
       expect(insertedSpendProfileCost.pcrItemId).toBe(item.id);
+      expect(insertedSpendProfileCost.grossCostOfRole).toBe(200);
+      expect(insertedSpendProfileCost.daysSpentOnProject).toBe(10);
+      expect(insertedSpendProfileCost.ratePerDay).toBe(20);
+      expect(insertedSpendProfileCost.role).toBe("Queen");
     });
     it("should update spend profile costs for labour", async () => {
       const {context, projectChangeRequest, recordType, project} = setup();
@@ -356,14 +365,26 @@ describe("UpdatePCRCommand - Partner addition", () => {
         value: 60,
         costCategoryId: costCategoryLabour.id,
         costCategory: CostCategoryType.Labour,
+        ratePerDay: 10,
+        daysSpentOnProject: 10,
+        role: "Queen",
+        grossCostOfRole: 100
       });
       await expect(await context.runCommand(new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto))).toBe(true);
       const insertedSpendProfileCost = context.repositories.pcrSpendProfile.Items[0];
-      item.spendProfile.costs[0].id = insertedSpendProfileCost.id;
-      item.spendProfile.costs[0].value = 70;
-      expect(insertedSpendProfileCost.costOfRole).toBe(60);
+      const cost = item.spendProfile.costs[0] as PCRSpendProfileLabourCostDto;
+      cost.id = insertedSpendProfileCost.id;
+      cost.value = 30;
+      cost.grossCostOfRole = 35;
+      cost.role = "Queenie";
+      cost.daysSpentOnProject = 5;
+      cost.ratePerDay = 6;
       await expect(await context.runCommand(new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto))).toBe(true);
-      expect(insertedSpendProfileCost.costOfRole).toBe(70);
+      expect(insertedSpendProfileCost.costOfRole).toBe(30);
+      expect(insertedSpendProfileCost.ratePerDay).toBe(6);
+      expect(insertedSpendProfileCost.daysSpentOnProject).toBe(5);
+      expect(insertedSpendProfileCost.role).toBe("Queenie");
+      expect(insertedSpendProfileCost.grossCostOfRole).toBe(35);
     });
     it("should delete spend profile costs", async () => {
       const {context, projectChangeRequest, recordType, project} = setup();
@@ -376,6 +397,10 @@ describe("UpdatePCRCommand - Partner addition", () => {
         value: 60,
         costCategoryId: costCategoryLabour.id,
         costCategory: CostCategoryType.Labour,
+        ratePerDay: 10,
+        daysSpentOnProject: 10,
+        role: "Queen",
+        grossCostOfRole: 100
       });
       const command = new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto);
       await expect(await context.runCommand(command)).toBe(true);
