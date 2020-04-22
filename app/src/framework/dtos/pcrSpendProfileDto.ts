@@ -15,6 +15,10 @@ interface PCRSpendProfileBaseCostDto {
 
 export interface PCRSpendProfileLabourCostDto extends PCRSpendProfileBaseCostDto {
   costCategory: CostCategoryType.Labour;
+  role: string | null;
+  grossCostOfRole: number | null;
+  ratePerDay: number | null;
+  daysSpentOnProject: number | null;
 }
 
 // TODO remove this once all are mapped
