@@ -8,6 +8,8 @@ export type Updatable<T> = Partial<T> & {
   Id: string
 };
 
+export type Insertable<T> = Pick<T, Exclude<keyof T, "Id">>;
+
 /**
  * Base class for all salesforce repositories
  */

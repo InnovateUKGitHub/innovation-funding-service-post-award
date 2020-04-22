@@ -5,7 +5,7 @@ import { GetCostCategoriesQuery } from "@server/features/claims";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 import {
   PCRSpendProfileCostDto,
-  PcrSpendProfileDto, PCRSpendProfileLabourCostDto, PCRSpendProfileStandardCostDto,
+  PcrSpendProfileDto, PCRSpendProfileLabourCostDto, PCRSpendProfileUnknownCostDto,
 } from "@framework/dtos/pcrSpendProfileDto";
 
 export class GetPcrSpendProfilesQuery extends QueryBase<PcrSpendProfileDto> {
@@ -33,8 +33,16 @@ export class GetPcrSpendProfilesQuery extends QueryBase<PcrSpendProfileDto> {
     }
   }
 
-  private mapUnknownCosts(spendProfiles: PcrSpendProfileEntity[], costCategory: CostCategoryType.Unknown): PCRSpendProfileStandardCostDto[] {
+  private mapBaseCostFields(spendProfile: PcrSpendProfileEntity) {
+    return {
+      id: spendProfile.id,
+      costCategoryId: spendProfile.costCategoryId,
+    };
+  }
+
+  private mapUnknownCosts(spendProfiles: PcrSpendProfileEntity[], costCategory: CostCategoryType.Unknown): PCRSpendProfileUnknownCostDto[] {
     return spendProfiles.map(x => ({
+      ...this.mapBaseCostFields(x),
       costCategory,
       value: 0,
     }));
@@ -42,8 +50,9 @@ export class GetPcrSpendProfilesQuery extends QueryBase<PcrSpendProfileDto> {
 
   private mapLabourCosts(spendProfiles: PcrSpendProfileEntity[], costCategory: CostCategoryType.Labour): PCRSpendProfileLabourCostDto[] {
     return spendProfiles.map(x => ({
+      ...this.mapBaseCostFields(x),
       costCategory,
-      value: x.costOfRole,
+      value: x.costOfRole || 0,
     }));
   }
 }
