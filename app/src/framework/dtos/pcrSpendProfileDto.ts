@@ -10,7 +10,7 @@ interface PCRSpendProfileBaseCostDto {
   id: string | null;
   costCategory: CostCategoryType;
   costCategoryId: string;
-  value: number;
+  value: number | null;
 }
 
 export interface PCRSpendProfileLabourCostDto extends PCRSpendProfileBaseCostDto {

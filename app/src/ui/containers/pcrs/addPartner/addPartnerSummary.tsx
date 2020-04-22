@@ -12,7 +12,7 @@ interface InnerProps {
   documents: DocumentSummaryDto[];
 }
 
-export class Component extends React.Component<PcrSummaryProps<PCRItemForPartnerAdditionDto, PCRPartnerAdditionItemDtoValidator, addPartnerStepNames> & InnerProps> {
+class Component extends React.Component<PcrSummaryProps<PCRItemForPartnerAdditionDto, PCRPartnerAdditionItemDtoValidator, addPartnerStepNames> & InnerProps> {
   render() {
     const { pcrItem, validator, documents } = this.props;
     return (

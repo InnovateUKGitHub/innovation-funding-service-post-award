@@ -44,7 +44,7 @@ export class UpdatePCRCommand extends CommandBase<boolean> {
     // tslint:disable-next-line:no-small-switch
     switch (costsDto.costCategory) {
       case CostCategoryType.Labour:
-        return { ...init, costOfRole: costsDto.value };
+        return { ...init, costOfRole: costsDto.value || undefined }; // TODO put in validation to check value is set
       default:
         return init;
     }
