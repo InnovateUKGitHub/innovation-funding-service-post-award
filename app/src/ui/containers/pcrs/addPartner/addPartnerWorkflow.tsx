@@ -15,8 +15,10 @@ import {
   ProjectManagerDetailsStep,
   RoleAndOrganisationStep
 } from "@ui/containers/pcrs/addPartner";
+import { SpendProfileStep } from "@ui/containers/pcrs/addPartner/spendProfileStep";
 
-export type addPartnerStepNames = "roleAndOrganisationStep"
+export type addPartnerStepNames =
+  "roleAndOrganisationStep"
   | "aidEligibilityStep"
   | "academicOrganisationStep"
   | "companiesHouseStep"
@@ -24,7 +26,9 @@ export type addPartnerStepNames = "roleAndOrganisationStep"
   | "financeDetailsStep"
   | "projectLocationStep"
   | "financeContactStep"
-  | "projectManagerDetailsStep";
+  | "projectManagerDetailsStep"
+  | "spendProfileStep"
+  ;
 
 export const getAddPartnerWorkflow = (item: PCRItemForPartnerAdditionDto, step: number | undefined): IPCRWorkflow<PCRItemForPartnerAdditionDto, PCRPartnerAdditionItemDtoValidator> => {
   const workflow: IPCRWorkflow<PCRItemForPartnerAdditionDto, PCRPartnerAdditionItemDtoValidator> = {
@@ -49,6 +53,13 @@ export const getAddPartnerWorkflow = (item: PCRItemForPartnerAdditionDto, step: 
         stepNumber: 7,
         validation: val => val.pcr,
         stepRender: FinanceContactStep,
+      },
+      {
+        stepName: "spendProfileStep",
+        displayName: "Project costs for new partner",
+        stepNumber: 10,
+        validation: val => val.pcr,
+        stepRender: SpendProfileStep,
       },
     ],
     summary: {
