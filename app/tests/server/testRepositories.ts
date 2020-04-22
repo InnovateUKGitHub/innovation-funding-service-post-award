@@ -586,7 +586,7 @@ class PcrSpendProfileTestRepository extends TestRepository<PcrSpendProfileEntity
     return Promise.resolve(true);
   }
   deleteSpendProfiles(ids: string[]) {
-    ids.forEach(x => super.deleteItem({id: x} as PcrSpendProfileEntity));
+    ids.forEach(x => this.Items = this.Items.filter(element => element.id !== x));
     return Promise.resolve();
   }
 }

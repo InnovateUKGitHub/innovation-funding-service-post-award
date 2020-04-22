@@ -1,14 +1,20 @@
 import { BadRequestError, CommandBase, ValidationError } from "../common";
-import { PCRDto, PCRItemDto, ProjectDto, ProjectRole } from "@framework/dtos";
+import { PCRDto, PCRItemDto, PCRItemForPartnerAdditionDto, ProjectDto, ProjectRole } from "@framework/dtos";
 import { PCRDtoValidator } from "@ui/validators/pcrDtoValidator";
 import { Authorisation, IContext, PCRItemType } from "@framework/types";
 import { GetAllProjectRolesForUser, GetByIdQuery } from "../projects";
 import { mapToPcrDto } from "./mapToPCRDto";
 import { GetPCRItemTypesQuery } from "./getItemTypesQuery";
-import { ProjectChangeRequestItemEntity, ProjectChangeRequestItemForCreateEntity } from "@framework/entities";
+import {
+  CostCategoryType, PcrSpendProfileEntity, PcrSpendProfileEntityForCreate,
+  ProjectChangeRequestItemEntity,
+  ProjectChangeRequestItemForCreateEntity
+} from "@framework/entities";
 import { GetAllForProjectQuery } from "@server/features/partners";
 import { PCRStatus } from "@framework/constants";
 import { periodInProject } from "@framework/util";
+import { GetPcrSpendProfilesQuery } from "@server/features/pcrs/getPcrSpendProfiles";
+import { PCRSpendProfileCostDto, PcrSpendProfileDto } from "@framework/dtos/pcrSpendProfileDto";
 
 export class UpdatePCRCommand extends CommandBase<boolean> {
   constructor(private projectId: string, private projectChangeRequestId: string, private pcr: PCRDto) {
@@ -31,6 +37,44 @@ export class UpdatePCRCommand extends CommandBase<boolean> {
       Acc_ExternalComment__c: comments,
       Acc_ParticipantVisibility__c: shouldPmSee
     });
+  }
+
+  private mapPcrSpendProfileDtoToCreateEntity(partnerAdditionItemDto: PCRItemForPartnerAdditionDto, costsDto: PCRSpendProfileCostDto): PcrSpendProfileEntityForCreate {
+    const init = { pcrItemId: partnerAdditionItemDto.id, costCategoryId: costsDto.costCategoryId, costCategory: costsDto.costCategory };
+    // tslint:disable-next-line:no-small-switch
+    switch (costsDto.costCategory) {
+      case CostCategoryType.Labour:
+        return { ...init, costOfRole: costsDto.value };
+      default:
+        return init;
+    }
+  }
+
+  private mapPcrSpendProfileDtoToEntity(partnerAdditionItemDto: PCRItemForPartnerAdditionDto, costsDto: PCRSpendProfileCostDto): PcrSpendProfileEntity {
+    return { ...this.mapPcrSpendProfileDtoToCreateEntity(partnerAdditionItemDto, costsDto), id: costsDto.id! };
+  }
+
+  private async updatePcrSpendProfile(context: IContext, partnerAdditionItemDto: PCRItemForPartnerAdditionDto, originalSpendProfileDto: PcrSpendProfileDto): Promise<void> {
+    const newCostItems = partnerAdditionItemDto.spendProfile.costs.filter(x => !x.id);
+    const persistedCostItems = partnerAdditionItemDto.spendProfile.costs.filter(x => x.id);
+    const deletedCostItems = originalSpendProfileDto.costs
+      // Cross-match repository values with dto values
+      .filter(x => persistedCostItems.every(p => p.id !== x.id))
+      // Can assume ID is present because values are from repository
+      .map(x => x.id!);
+
+    // Chose not to make following requests in parallel as SF has struggled in the past (esp if roll-ups become involved)
+    if (newCostItems.length > 0) {
+      await context.repositories.pcrSpendProfile.insertSpendProfiles(newCostItems.map(x => this.mapPcrSpendProfileDtoToCreateEntity(partnerAdditionItemDto, x)));
+    }
+
+    if (persistedCostItems.length > 0) {
+      await context.repositories.pcrSpendProfile.updateSpendProfiles(persistedCostItems.map(x => this.mapPcrSpendProfileDtoToEntity(partnerAdditionItemDto, x)));
+    }
+
+    if (deletedCostItems.length > 0) {
+      await context.repositories.pcrSpendProfile.deleteSpendProfiles(deletedCostItems);
+    }
   }
 
   protected async Run(context: IContext): Promise<boolean> {
@@ -94,6 +138,12 @@ export class UpdatePCRCommand extends CommandBase<boolean> {
 
     if (itemsToInsert.length) {
       await context.repositories.projectChangeRequests.insertItems(this.projectChangeRequestId, itemsToInsert);
+    }
+
+    const partnerAdditionItemDto = this.pcr.items.find(x => x.type === PCRItemType.PartnerAddition);
+    if (!!partnerAdditionItemDto) {
+      const spendProfileDto = await context.runQuery(new GetPcrSpendProfilesQuery(partnerAdditionItemDto.id));
+      this.updatePcrSpendProfile(context, partnerAdditionItemDto as PCRItemForPartnerAdditionDto, spendProfileDto);
     }
 
     return true;
