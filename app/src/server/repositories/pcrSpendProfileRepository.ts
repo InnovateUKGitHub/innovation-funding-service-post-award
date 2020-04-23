@@ -14,7 +14,13 @@ export interface ISalesforcePcrSpendProfile {
   Acc_ProjectChangeRequest__c: string;
   Acc_CostCategoryID__c: string;
   RecordTypeId: string;
+
+  // Labour fields
   Acc_CostOfRole__c?: number;
+  Acc_GrossCostOfRole__c?: number;
+  Acc_Role__c?: string;
+  Acc_Rate__c?: number;
+  Acc_DaysSpentOnProject__c?: number;
 }
 
 export interface IPcrSpendProfileRepository {
@@ -36,6 +42,10 @@ export class PcrSpendProfileRepository extends SalesforceRepositoryBase<ISalesfo
     "Acc_CostCategoryID__c",
     "RecordTypeId",
     "Acc_CostOfRole__c",
+    "Acc_GrossCostOfRole__c",
+    "Acc_Role__c",
+    "Acc_Rate__c",
+    "Acc_DaysSpentOnProject__c",
   ];
 
   private recordType = "PCR Spend Profile";
