@@ -130,6 +130,7 @@ class Component extends ContainerBase<ProjectChangeRequestPrepareItemParams, Dat
         validator,
         status,
         isClient: this.props.isClient,
+        routes: this.props.routes,
         onChange: itemDto => this.onChange(editor.data, itemDto),
         onSave: (skipToSummary) => this.onSave(workflow, editor.data, skipToSummary),
         getRequiredToCompleteMessage: (message) => {
