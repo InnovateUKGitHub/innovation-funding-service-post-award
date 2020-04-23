@@ -52,7 +52,11 @@ export class GetPcrSpendProfilesQuery extends QueryBase<PcrSpendProfileDto> {
     return spendProfiles.map(x => ({
       ...this.mapBaseCostFields(x),
       costCategory,
-      value: x.costOfRole || 0,
+      value: !!x.costOfRole || x.costOfRole === 0 ? x.costOfRole : null,
+      role: x.role || null,
+      grossCostOfRole: !!x.grossCostOfRole || x.grossCostOfRole === 0 ? x.grossCostOfRole : null,
+      daysSpentOnProject: !!x.daysSpentOnProject || x.daysSpentOnProject === 0 ? x.daysSpentOnProject : null,
+      ratePerDay: !!x.ratePerDay || x.ratePerDay === 0 ? x.ratePerDay : null,
     }));
   }
 }

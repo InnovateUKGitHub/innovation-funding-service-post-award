@@ -12,7 +12,7 @@ import {
 } from "@framework/entities";
 import { GetAllForProjectQuery } from "@server/features/partners";
 import { PCRStatus } from "@framework/constants";
-import { periodInProject } from "@framework/util";
+import { isNumber, periodInProject } from "@framework/util";
 import { GetPcrSpendProfilesQuery } from "@server/features/pcrs/getPcrSpendProfiles";
 import { PCRSpendProfileCostDto, PcrSpendProfileDto } from "@framework/dtos/pcrSpendProfileDto";
 
@@ -44,7 +44,14 @@ export class UpdatePCRCommand extends CommandBase<boolean> {
     // tslint:disable-next-line:no-small-switch
     switch (costsDto.costCategory) {
       case CostCategoryType.Labour:
-        return { ...init, costOfRole: costsDto.value || undefined }; // TODO put in validation to check value is set
+        return {
+          ...init,
+          costOfRole: isNumber(costsDto.value) ? costsDto.value : undefined,
+          ratePerDay: isNumber(costsDto.ratePerDay) ? costsDto.ratePerDay : undefined,
+          daysSpentOnProject: isNumber(costsDto.daysSpentOnProject) ? costsDto.daysSpentOnProject : undefined,
+          grossCostOfRole: isNumber(costsDto.grossCostOfRole) ? costsDto.grossCostOfRole : undefined,
+          role: costsDto.role || undefined
+        }; // TODO put in validation to check value is set
       default:
         return init;
     }
