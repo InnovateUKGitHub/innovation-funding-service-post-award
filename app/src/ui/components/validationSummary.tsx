@@ -1,5 +1,5 @@
 import React from "react";
-import { IValidationResult, NestedResult, Result, Results } from "../validation";
+import { IValidationResult, Nested, NestedResult, Result, Results } from "../validation";
 import { flatten } from "@framework/util/arrayHelpers";
 
 interface Props {

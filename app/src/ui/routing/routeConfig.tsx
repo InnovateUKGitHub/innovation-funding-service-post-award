@@ -34,6 +34,8 @@ export const routeConfig = {
   pcrFinancialVirementDetails: Containers.FinancialVirementDetailsRoute,
   pcrPrepare: Containers.ProjectChangeRequestPrepareRoute,
   pcrPrepareItem: Containers.PCRPrepareItemRoute,
+  pcrPrepareSpendProfileCosts: Containers.PCRPrepareSpendProfileCostsRoute,
+  pcrPrepareSpendProfileAddCost: Containers.PCRSpendProfileAddCostRoute,
   pcrPrepareReasoning: Containers.PCRPrepareReasoningRoute,
   pcrReview: Containers.PCRReviewRoute,
   pcrReviewItem: Containers.PCRReviewItemRoute,
