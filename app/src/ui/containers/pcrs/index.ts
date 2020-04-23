@@ -5,6 +5,8 @@ export * from "./details";
 export * from "./delete";
 export * from "./prepare";
 export * from "./pcrItemWorkflow";
+export * from "./addPartner/spendProfileCosts";
+export * from "./addPartner/spendProfileAddCost";
 export * from "./reasoning";
 export * from "./review";
 export * from "./financialVirements/detailsPage";

@@ -1,5 +1,5 @@
 import { DateTime } from "luxon";
-import { Result, Results } from "../validation";
+import { Nested, Result, Results } from "../validation";
 import * as Validation from "./common";
 import {
   PartnerDto,
@@ -20,6 +20,7 @@ import {
 } from "@framework/dtos";
 import { PCRItemStatus, PCRItemType, PCRPartnerType, PCRProjectRole, PCRStatus } from "@framework/constants";
 import { isNumber, periodInProject } from "@framework/util";
+import { PCRSpendProfileDtoValidator } from "@ui/validators/pcrSpendProfileDtoValidator";
 
 export class PCRDtoValidator extends Results<PCRDto> {
 
@@ -381,6 +382,8 @@ export class PCRPartnerAdditionItemDtoValidator extends PCRBaseItemDtoValidator<
     if (this.model.partnerType === PCRPartnerType.Research) return Validation.valid(this);
     return this.requiredIfComplete(value, message);
   }
+
+  spendProfile = Validation.nested(this, this.model.spendProfile, x => new PCRSpendProfileDtoValidator(x, this.showValidationErrors), "Summary message");
 
   projectRole = Validation.all(this,
     () => this.validateProjectRoleRequired(),

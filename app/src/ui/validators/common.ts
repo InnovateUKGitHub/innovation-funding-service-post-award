@@ -2,7 +2,7 @@
 import { DateTime } from "luxon";
 import { Results } from "../validation/results";
 import { Result } from "../validation/result";
-import { NestedResult } from "../validation/nestedResult";
+import { Nested, NestedResult } from "../validation/nestedResult";
 import { dayComparator, isNumber } from "@framework/util";
 
 // A helper for creating validation rules
@@ -118,6 +118,11 @@ export function all(resultSet: Results<{}>, ...results: (() => Result)[]): Resul
     }
   }
   return valid(resultSet, isRequired);
+}
+
+// Validating nested object
+export function nested<T, U extends Results<{}>>(parentResults: Results<{}>, model: T, validateModel: (model: T) => U, summaryMessage?: string) {
+  return new Nested(parentResults, validateModel(model), summaryMessage);
 }
 
 // Validating lists of things allowing for overall validation
