@@ -34,7 +34,6 @@ interface Data {
   project: Pending<ProjectDto>;
   costCategory: Pending<CostCategoryDto>;
   editor: Pending<IEditorStore<PCRDto, PCRDtoValidator>>;
-  documentsEditor: Pending<IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>>;
  }
 
 interface Callbacks {
@@ -48,13 +47,12 @@ class Component extends ContainerBase<PcrAddSpendProfileCostParams, Data, Callba
       project: this.props.project,
       costCategory: this.props.costCategory,
       editor: this.props.editor,
-      documentsEditor: this.props.documentsEditor,
     });
 
-    return <ACC.PageLoader pending={combined} render={x => this.renderContents(x.project, x.editor, x.documentsEditor, x.costCategory)} />;
+    return <ACC.PageLoader pending={combined} render={x => this.renderContents(x.project, x.editor, x.costCategory)} />;
   }
 
-  private renderContents(project: ProjectDto, editor: IEditorStore<PCRDto, PCRDtoValidator>, documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>, costCategory: CostCategoryDto) {
+  private renderContents(project: ProjectDto, editor: IEditorStore<PCRDto, PCRDtoValidator>, costCategory: CostCategoryDto) {
     const addPartnerItem = editor.data.items.find(x => x.id === this.props.itemId && x.type === PCRItemType.PartnerAddition) as PCRItemForPartnerAdditionDto;
     return (
       <ACC.Page
@@ -62,7 +60,7 @@ class Component extends ContainerBase<PcrAddSpendProfileCostParams, Data, Callba
         pageTitle={<ACC.Projects.Title project={project} />}
         project={project}
         validator={this.getValidator(editor, addPartnerItem)}
-        error={editor.error || documentsEditor.error}
+        error={editor.error}
       >
         <ACC.Renderers.Messages messages={this.props.messages} />
         <ACC.Section title={"New labour cost"}>
@@ -185,7 +183,6 @@ const Container = (props: PcrAddSpendProfileCostParams & BaseProps) => (
             const costs = addPartner.spendProfile.costs;
             costs.push(stores.projectChangeRequests.getInitialSpendProfileCost(costCategoryPending.data));
           })}
-          documentsEditor={stores.projectChangeRequestDocuments.getPcrOrPcrItemDocumentsEditor(props.projectId, props.itemId)}
           onSave={(dto, link) => {
             stores.messages.clearMessages();
             stores.projectChangeRequests.updatePcrEditor(true, props.projectId, dto, undefined, () =>
