@@ -383,7 +383,7 @@ export class PCRPartnerAdditionItemDtoValidator extends PCRBaseItemDtoValidator<
     return this.requiredIfComplete(value, message);
   }
 
-  spendProfile = Validation.nested(this, this.model.spendProfile, x => new PCRSpendProfileDtoValidator(x, this.showValidationErrors), "Summary message");
+  spendProfile = Validation.nested(this, this.model.spendProfile, x => new PCRSpendProfileDtoValidator(x, this.showValidationErrors), "Spend profile is not valid");
 
   projectRole = Validation.all(this,
     () => this.validateProjectRoleRequired(),
