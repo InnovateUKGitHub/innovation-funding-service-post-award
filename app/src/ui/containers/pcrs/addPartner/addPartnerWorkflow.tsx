@@ -37,7 +37,7 @@ export const getAddPartnerWorkflow = (item: PCRItemForPartnerAdditionDto, step: 
         stepName: "aidEligibilityStep",
         displayName: "Aid eligibility",
         stepNumber: 2,
-        validation: val => val.pcr,
+        validation: val => val.files,
         stepRender: AidEligibilityStep,
       },
       {
@@ -57,7 +57,7 @@ export const getAddPartnerWorkflow = (item: PCRItemForPartnerAdditionDto, step: 
       {
         stepName: "spendProfileStep",
         displayName: "Project costs for new partner",
-        stepNumber: 10,
+        stepNumber: 9,
         validation: val => val.pcr,
         stepRender: SpendProfileStep,
       },
