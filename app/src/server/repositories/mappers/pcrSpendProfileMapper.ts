@@ -16,7 +16,8 @@ export class SalesforcePcrSpendProfileMapper extends SalesforceBaseMapper<ISales
 
       // Labour
       costOfRole: x.Acc_CostOfRole__c,
-      daysSpentOnProject: x.Acc_DaysSpentOnProject__c,
+      // Can remove Number() wrapper when SF fix Acc_DaysSpentOnProject__c to be a number
+      daysSpentOnProject: Number(x.Acc_DaysSpentOnProject__c) || undefined,
       grossCostOfRole: x.Acc_GrossCostOfRole__c,
       ratePerDay: x.Acc_Rate__c,
       role: x.Acc_Role__c,
