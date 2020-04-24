@@ -15,13 +15,13 @@ import { EditorStatus, IEditorStore, StoresConsumer } from "@ui/redux";
 import {
   MultipleDocumentUpdloadDtoValidator,
   PCRDtoValidator,
+  PCRPartnerAdditionItemDtoValidator,
 } from "@ui/validators";
 import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
 import { PcrSpendProfileDto, PCRSpendProfileLabourCostDto } from "../../../../framework/dtos/pcrSpendProfileDto";
 import { CostCategoryType } from "../../../../framework/entities";
 import { CostCategoryDto } from "../../../../framework/dtos/costCategoryDto";
-import { PcrWorkflow } from "../pcrWorkflow";
-import { addPartnerStepNames } from "./addPartnerWorkflow";
+import { PCRLabourCostDtoValidator } from "@ui/validators/pcrSpendProfileDtoValidator";
 
 export interface PcrAddSpendProfileCostParams {
   projectId: string;
@@ -61,7 +61,7 @@ class Component extends ContainerBase<PcrAddSpendProfileCostParams, Data, Callba
         backLink={<ACC.BackLink route={this.props.routes.pcrPrepareSpendProfileCosts.getLink({itemId: this.props.itemId, pcrId: this.props.pcrId, projectId: this.props.projectId, costCategoryId: this.props.costCategoryId})}>Back to costs</ACC.BackLink>} // TODO customise for cost category
         pageTitle={<ACC.Projects.Title project={project} />}
         project={project}
-        validator={null}
+        validator={this.getValidator(editor, addPartnerItem)}
         error={editor.error || documentsEditor.error}
       >
         <ACC.Renderers.Messages messages={this.props.messages} />
@@ -70,17 +70,6 @@ class Component extends ContainerBase<PcrAddSpendProfileCostParams, Data, Callba
         </ACC.Section>
       </ACC.Page>
     );
-  }
-
-  private getWorkflow(addPartnerItem: PCRItemForPartnerAdditionDto) {
-    // You need to have a workflow to find a step number by name
-    // so getting a workflow with undefined step first
-    // allowing me to find the step name and get the workflow with the correct step
-    const summaryWorkflow = PcrWorkflow.getWorkflow(addPartnerItem, undefined, this.props.config.features);
-    if (!summaryWorkflow) return null;
-    const stepName: addPartnerStepNames = "spendProfileStep";
-    const spendProfileStep = summaryWorkflow.findStepNumberByName(stepName);
-    return PcrWorkflow.getWorkflow(addPartnerItem, spendProfileStep, this.props.config.features);
   }
 
   private onSave(dto: PCRDto) {
@@ -98,18 +87,20 @@ class Component extends ContainerBase<PcrAddSpendProfileCostParams, Data, Callba
   private renderForm(costCategory: CostCategoryDto, editor: IEditorStore<PCRDto, PCRDtoValidator>, addPartnerItem: PCRItemForPartnerAdditionDto) {
     // tslint:disable-next-line:no-small-switch
     switch(costCategory.type) {
-      case CostCategoryType.Labour: return this.renderLabourForm(addPartnerItem.spendProfile, editor);
+      case CostCategoryType.Labour: return this.renderLabourForm(addPartnerItem, editor);
       default: return null;
     }
   }
 
-  private renderLabourForm(spendProfile: PcrSpendProfileDto, editor: IEditorStore<PCRDto, PCRDtoValidator>) {
-    const data = this.getInitialLabourCost(spendProfile);
+  private renderLabourForm(addPartnerItem: PCRItemForPartnerAdditionDto, editor: IEditorStore<PCRDto, PCRDtoValidator>) {
+    const data = this.getInitialLabourCost(addPartnerItem.spendProfile);
+    if (!data) return null;
     const Form = ACC.TypedForm<PCRSpendProfileLabourCostDto>();
     const onChange = (dto: PCRSpendProfileLabourCostDto) => {
       dto.value = dto.daysSpentOnProject && dto.ratePerDay ? dto.daysSpentOnProject * dto.ratePerDay : 0;
       this.props.onChange(editor.data);
     };
+    const validator = this.getValidator(editor, addPartnerItem) as PCRLabourCostDtoValidator;
     return (
       <Form.Form
         qa="addPartnerForm"
@@ -125,7 +116,7 @@ class Component extends ContainerBase<PcrAddSpendProfileCostParams, Data, Callba
             name="role"
             value={dto => dto.role}
             update={(x, val) => x.role = val}
-            // validation={validator.role}
+            validation={validator && validator.role}
           />
           <Form.Numeric
             label={"Gross employee cost"}
@@ -133,7 +124,7 @@ class Component extends ContainerBase<PcrAddSpendProfileCostParams, Data, Callba
             width={"one-third"}
             value={dto => dto.grossCostOfRole }
             update={(dto, val) => dto.grossCostOfRole = val}
-            // validation={props.validator...} TODO
+            validation={validator && validator.grossCostOfRole}
           />
           <Form.Numeric
             label={"Rate (£/day)"}
@@ -142,7 +133,7 @@ class Component extends ContainerBase<PcrAddSpendProfileCostParams, Data, Callba
             width={"one-third"}
             value={dto => dto.ratePerDay }
             update={(dto, val) => dto.ratePerDay = val}
-            // validation={props.validator...} TODO
+            validation={validator && validator.ratePerDay}
           />
           <Form.Numeric
             label={"Days to be spent by all staff with this role"}
@@ -150,13 +141,14 @@ class Component extends ContainerBase<PcrAddSpendProfileCostParams, Data, Callba
             width={"one-third"}
             value={dto => dto.daysSpentOnProject }
             update={(dto, val) => dto.daysSpentOnProject = val}
-            // validation={props.validator...} TODO
+            validation={validator && validator.daysSpentOnProject}
           />
           {this.props.isClient && <Form.Custom
             label={"Total cost:"}
             labelBold={true}
             hint={"Total cost will update when saved."}
             name="totalCost"
+            validation={validator && validator.value}
             value={dto => <ACC.Renderers.SimpleString><ACC.Renderers.Currency value={dto.value} /></ACC.Renderers.SimpleString>}
             update={() => null}
           />}
@@ -168,45 +160,45 @@ class Component extends ContainerBase<PcrAddSpendProfileCostParams, Data, Callba
     );
   }
 
-  private getInitialLabourCost(spendProfile: PcrSpendProfileDto): PCRSpendProfileLabourCostDto {
+  private getInitialLabourCost(spendProfile: PcrSpendProfileDto): PCRSpendProfileLabourCostDto | undefined {
     const costs = spendProfile.costs.filter(x => x.costCategory === CostCategoryType.Labour) as PCRSpendProfileLabourCostDto[];
-    const costEdited = costs.find(x => x.id === null);
-    if (!!costEdited) return costEdited;
-    const newCost: PCRSpendProfileLabourCostDto = {
-      id: null,
-      value: null,
-      ratePerDay: null,
-      daysSpentOnProject: null,
-      role: null,
-      grossCostOfRole: null,
-      costCategory: CostCategoryType.Labour,
-      costCategoryId: this.props.costCategoryId
-    };
-    spendProfile.costs.push(newCost);
-    return newCost;
+    return costs.find(x => x.id === null);
+  }
+
+  private getValidator(editor: IEditorStore<PCRDto, PCRDtoValidator>, addPartnerItem: PCRItemForPartnerAdditionDto) {
+    const partnerAdditionValidator = editor.validator.items.results.find(x => x.model.id === addPartnerItem.id) as PCRPartnerAdditionItemDtoValidator;
+    return partnerAdditionValidator.spendProfile.results[0].costs.results.find(x => x.model.id === null && x.model.costCategoryId === this.props.costCategoryId);
   }
 }
 
 const Container = (props: PcrAddSpendProfileCostParams & BaseProps) => (
   <StoresConsumer>
-    {stores => (
-      <Component
-        project={stores.projects.getById(props.projectId)}
-        costCategory={stores.costCategories.get(props.costCategoryId)}
-        editor={stores.projectChangeRequests.getPcrUpdateEditor(props.projectId, props.pcrId)}
-        documentsEditor={stores.projectChangeRequestDocuments.getPcrOrPcrItemDocumentsEditor(props.projectId, props.itemId)}
-        onSave={(dto, link) => {
-          stores.messages.clearMessages();
-          stores.projectChangeRequests.updatePcrEditor(true, props.projectId, dto, undefined, () =>
-            stores.navigation.navigateTo(link));
-        }}
-        onChange={(dto) => {
-          stores.messages.clearMessages();
-          stores.projectChangeRequests.updatePcrEditor(false, props.projectId, dto);
-        }}
-        {...props}
-      />
-    )}
+    {stores => {
+      const costCategoryPending = stores.costCategories.get(props.costCategoryId);
+      return (
+        <Component
+          project={stores.projects.getById(props.projectId)}
+          costCategory={stores.costCategories.get(props.costCategoryId)}
+          editor={stores.projectChangeRequests.getPcrUpdateEditor(props.projectId, props.pcrId, (dto) => {
+            if (!costCategoryPending.data) return;
+            const addPartner = dto.items.find(x => x.type === PCRItemType.PartnerAddition) as PCRItemForPartnerAdditionDto;
+            const costs = addPartner.spendProfile.costs;
+            costs.push(stores.projectChangeRequests.getInitialSpendProfileCost(costCategoryPending.data));
+          })}
+          documentsEditor={stores.projectChangeRequestDocuments.getPcrOrPcrItemDocumentsEditor(props.projectId, props.itemId)}
+          onSave={(dto, link) => {
+            stores.messages.clearMessages();
+            stores.projectChangeRequests.updatePcrEditor(true, props.projectId, dto, undefined, () =>
+              stores.navigation.navigateTo(link));
+          }}
+          onChange={(dto) => {
+            stores.messages.clearMessages();
+            stores.projectChangeRequests.updatePcrEditor(false, props.projectId, dto);
+          }}
+          {...props}
+        />
+      );
+    }}
   </StoresConsumer>
 );
 

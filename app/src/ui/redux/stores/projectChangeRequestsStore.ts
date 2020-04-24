@@ -1,6 +1,6 @@
 import { StoreBase } from "./storeBase";
 import * as Dtos from "@framework/dtos";
-import { PCRDto, PCRItemForTimeExtensionDto, PCRStandardItemDto } from "@framework/dtos";
+import { PCRDto, PCRItemForPartnerAdditionDto, PCRItemForTimeExtensionDto, PCRStandardItemDto } from "@framework/dtos";
 import { PCRDtoValidator } from "@ui/validators";
 import { ProjectsStore } from "./projectsStore";
 import { RootState } from "../reducers";
@@ -19,6 +19,9 @@ import {
 } from "@framework/constants";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
 import { ConfigStore } from "@ui/redux/stores/configStore";
+import { CostCategoryType } from "@framework/entities";
+import { PCRSpendProfileCostDto, PCRSpendProfileLabourCostDto } from "@framework/dtos/pcrSpendProfileDto";
+import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 
 export class ProjectChangeRequestStore extends StoreBase {
   constructor(private projectStore: ProjectsStore, private readonly configStore: ConfigStore, getState: () => RootState, queue: (action: any) => void) {
@@ -152,6 +155,27 @@ export class ProjectChangeRequestStore extends StoreBase {
       init,
       (dto) => this.getValidator(projectId, dto, false)
     );
+  }
+
+  public getInitialSpendProfileCost(costCategory: CostCategoryDto): PCRSpendProfileCostDto {
+    // tslint:disable-next-line:no-small-switch
+   switch (costCategory.type) {
+     case CostCategoryType.Labour: return this.getInitialLabourCost(costCategory.id);
+     default: return {id: null, value: null, costCategory: CostCategoryType.Unknown, costCategoryId: costCategory.id};
+   }
+  }
+
+  private getInitialLabourCost(costCategoryId: string): PCRSpendProfileLabourCostDto {
+   return {
+      id: null,
+      value: null,
+      ratePerDay: null,
+      daysSpentOnProject: null,
+      role: null,
+      grossCostOfRole: null,
+      costCategory: CostCategoryType.Labour,
+      costCategoryId
+    };
   }
 
   public updatePcrEditor(saving: boolean, projectId: string, dto: PCRDto, message?: string, onComplete?: (result: PCRDto) => void) {
