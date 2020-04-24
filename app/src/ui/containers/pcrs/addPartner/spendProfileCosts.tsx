@@ -2,18 +2,24 @@ import React from "react";
 import { BaseProps, ContainerBase, defineRoute } from "../../containerBase";
 import {
   ILinkInfo,
-  PCRItemDto,
   PCRItemForPartnerAdditionDto,
+  PCRItemStatus,
   PCRItemType,
   ProjectDto,
   ProjectRole
 } from "@framework/types";
 import * as ACC from "../../../components";
+import { TypedForm, TypedTable } from "../../../components";
 import { Pending } from "@shared/pending";
-import { PCRDto, PCRItemTypeDto } from "@framework/dtos/pcrDtos";
-import { IEditorStore, StoresConsumer } from "@ui/redux";
-import { MultipleDocumentUpdloadDtoValidator, PCRDtoValidator } from "@ui/validators";
-import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
+import { PCRDto } from "@framework/dtos/pcrDtos";
+import { EditorStatus, IEditorStore, StoresConsumer } from "@ui/redux";
+import { PCRDtoValidator } from "@ui/validators";
+import { PcrWorkflow } from "@ui/containers/pcrs/pcrWorkflow";
+import { addPartnerStepNames } from "@ui/containers/pcrs/addPartner/addPartnerWorkflow";
+import { PCRSpendProfileCostDto, PCRSpendProfileLabourCostDto } from "@framework/dtos/pcrSpendProfileDto";
+import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
+import { CostCategoryType } from "@framework/entities";
+import classNames from "classnames";
 
 export interface PcrSpendProfileCostsParams {
   projectId: string;
@@ -24,12 +30,8 @@ export interface PcrSpendProfileCostsParams {
 
 interface Data {
   project: Pending<ProjectDto>;
-  pcr: Pending<PCRDto>;
-  pcrItem: Pending<PCRItemDto>;
-  pcrItemType: Pending<PCRItemTypeDto>;
+  costCategory: Pending<CostCategoryDto>;
   editor: Pending<IEditorStore<PCRDto, PCRDtoValidator>>;
-  documentsEditor: Pending<IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>>;
-  editableItemTypes: Pending<PCRItemType[]>;
  }
 
 interface Callbacks {
@@ -41,32 +43,128 @@ class Component extends ContainerBase<PcrSpendProfileCostsParams, Data, Callback
   render() {
     const combined = Pending.combine({
       project: this.props.project,
-      pcr: this.props.pcr,
-      pcrItem: this.props.pcrItem,
-      pcrItemType: this.props.pcrItemType,
       editor: this.props.editor,
-      documentsEditor: this.props.documentsEditor,
-      editableItemTypes: this.props.editableItemTypes,
+      costCategory: this.props.costCategory,
     });
 
-    return <ACC.PageLoader pending={combined} render={x => this.renderContents(x.project, x.editor, x.documentsEditor, x.pcr, x.pcrItem, x.pcrItemType, x.editableItemTypes)} />;
+    return <ACC.PageLoader pending={combined} render={x => this.renderContents(x.project, x.editor, x.costCategory)} />;
   }
 
-  private renderContents(project: ProjectDto, editor: IEditorStore<PCRDto, PCRDtoValidator>, documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>, pcr: PCRDto, pcrItem: PCRItemDto, pcrItemType: PCRItemTypeDto, editableItemTypes: PCRItemType[]) {
+  private renderContents(project: ProjectDto, editor: IEditorStore<PCRDto, PCRDtoValidator>, costCategory: CostCategoryDto) {
+    const addPartnerItem = editor.data.items.find(x => x.id === this.props.itemId && x.type === PCRItemType.PartnerAddition) as PCRItemForPartnerAdditionDto;
+    const addPartnerWorkflow = this.getWorkflow(addPartnerItem);
+    const spendProfileStep = addPartnerWorkflow && addPartnerWorkflow.getCurrentStepInfo();
+    const stepRoute = this.props.routes.pcrPrepareItem.getLink({itemId: this.props.itemId, pcrId: this.props.pcrId, projectId: this.props.projectId, step: spendProfileStep && spendProfileStep.stepNumber || undefined});
+    const Form = TypedForm<PCRDto>();
     return (
       <ACC.Page
-        backLink={"to do"}
+        backLink={<ACC.BackLink route={stepRoute}>Back to project costs</ACC.BackLink>}
         pageTitle={<ACC.Projects.Title project={project} />}
         project={project}
-        validator={null} // TODO
-        error={editor.error || documentsEditor.error}
+        validator={editor.validator}
+        error={editor.error}
       >
         <ACC.Renderers.Messages messages={this.props.messages} />
-        <ACC.Link route={this.props.routes.pcrPrepareSpendProfileAddCost.getLink({itemId: this.props.itemId, pcrId: this.props.pcrId, projectId: this.props.projectId, costCategoryId: this.props.costCategoryId})}>Add cost</ACC.Link>
-        {/*{(pcrItem as PCRItemForPartnerAdditionDto).spendProfile.costs.map(x => JSON.stringify(x))}*/}
+        <ACC.Section title={`${costCategory.name} costs`}>
+          {this.renderGuidance(costCategory)}
+          {this.renderTable(addPartnerItem.spendProfile.costs, costCategory)}
+          <Form.Form
+            qa="submit-costs"
+            data={editor.data}
+            isSaving={editor.status === EditorStatus.Saving}
+            onSubmit={() => this.props.onSave(editor.data, stepRoute)}
+            onChange={dto => this.props.onChange(dto)}
+          >
+            <Form.Fieldset>
+              <Form.Submit>Save and return to summary</Form.Submit>
+            </Form.Fieldset>
+          </Form.Form>
+        </ACC.Section>
       </ACC.Page>
     );
   }
+
+  private renderGuidance(costCategory: CostCategoryDto) {
+    return <ACC.Info summary={`${costCategory.name} costs guidance`}><ACC.Renderers.Markdown value={this.labourGuidance}/></ACC.Info>;
+  }
+
+  private renderTable(costs: PCRSpendProfileCostDto[], costCategory: CostCategoryDto) {
+    // tslint:disable-next-line:no-small-switch
+    switch(costCategory.type) {
+      case CostCategoryType.Labour: return this.renderLabourTable(costs.filter(x => x.costCategory === CostCategoryType.Labour) as PCRSpendProfileLabourCostDto[]);
+      default: return null;
+    }
+  }
+
+  private renderFooterRow(row: { key: string, title: string, value: React.ReactNode, qa: string, isBold?: boolean }) {
+    return (
+      <tr key={row.key} className="govuk-table__row" data-qa={row.qa}>
+        <th className="govuk-table__cell govuk-table__cell--numeric govuk-!-font-weight-bold">{row.title}</th>
+        <td className={classNames("govuk-table__cell", "govuk-table__cell--numeric", { "govuk-!-font-weight-bold": row.isBold })}>{row.value}</td>
+      </tr>
+    );
+  }
+
+  private renderLabourTable(costs: PCRSpendProfileLabourCostDto[]) {
+    const Table = TypedTable<PCRSpendProfileLabourCostDto>();
+    const total = costs.reduce((acc, cost) => acc + (cost.value || 0), 0);
+    const footers = [
+      (
+        <tr key={1} className="govuk-table__row">
+          <td className="govuk-table__cell" colSpan={3}>
+            <ACC.Link route={this.props.routes.pcrPrepareSpendProfileAddCost.getLink({itemId: this.props.itemId, pcrId: this.props.pcrId, projectId: this.props.projectId, costCategoryId: this.props.costCategoryId})}>Add a cost</ACC.Link>
+          </td>
+        </tr>
+      ),
+      this.renderFooterRow({
+        key: "1", title: "Total labour costs", qa: "total-costs", isBold: false, value: <ACC.Renderers.Currency value={total} />
+      }),
+    ];
+    return (
+      <Table.Table qa="costs" data={costs} footers={footers}>
+        <Table.String header="Description" value={x => x.role} qa={"role"}/>
+        <Table.Currency header="Cost (£)" value={x => x.value} qa={"cost"}/>
+      </Table.Table>
+    );
+  }
+
+  private getWorkflow(addPartnerItem: PCRItemForPartnerAdditionDto) {
+    // You need to have a workflow to find a step number by name
+    // so getting a workflow with undefined step first
+    // allowing me to find the step name and get the workflow with the correct step
+    const summaryWorkflow = PcrWorkflow.getWorkflow(addPartnerItem, undefined, this.props.config.features);
+    if (!summaryWorkflow) return null;
+    const stepName: addPartnerStepNames = "spendProfileStep";
+    const spendProfileStep = summaryWorkflow.findStepNumberByName(stepName);
+    return PcrWorkflow.getWorkflow(addPartnerItem, spendProfileStep, this.props.config.features);
+  }
+
+  // TODO put this somewhere sensible
+  private labourGuidance = `
+The new partner will need to account for all labour costs as they occur. For example, there must be timesheets and payroll records. These must show the actual hours worked by individuals and paid by the organisation.
+They can include the following labour costs, based on PAYE records:
+
+* gross salary
+* National Insurance
+* company pension contribution
+* life insurance
+* other non-discretionary package costs
+
+You cannot include:
+
+* discretionary bonuses
+* performance related payments of any kind
+
+You may include the total number of working days for staff but do not include:
+
+* sick days
+* waiting time
+* training days
+* non-productive time
+
+List the total days worked by all categories of staff on the project. Describe their roles.
+
+We will review the total amount of time and cost of labour before we approve this request. The terms and conditions of the grant include compliance with these points.`;
 }
 
 const Container = (props: PcrSpendProfileCostsParams & BaseProps) => (
@@ -74,12 +172,11 @@ const Container = (props: PcrSpendProfileCostsParams & BaseProps) => (
     {stores => (
       <Component
         project={stores.projects.getById(props.projectId)}
-        pcrItem={stores.projectChangeRequests.getItemById(props.projectId, props.pcrId, props.itemId)}
-        pcrItemType={stores.projectChangeRequests.getPcrTypeForItem(props.projectId, props.pcrId, props.itemId)}
-        pcr={stores.projectChangeRequests.getById(props.projectId, props.pcrId)}
-        editor={stores.projectChangeRequests.getPcrUpdateEditor(props.projectId, props.pcrId)}
-        documentsEditor={stores.projectChangeRequestDocuments.getPcrOrPcrItemDocumentsEditor(props.projectId, props.itemId)}
-        editableItemTypes={stores.projectChangeRequests.getEditableItemTypes(props.projectId, props.pcrId)}
+        costCategory={stores.costCategories.get(props.costCategoryId)}
+        editor={stores.projectChangeRequests.getPcrUpdateEditor(props.projectId, props.pcrId, (dto) => {
+          const addPartnerItem = dto.items.find(x => x.id === props.itemId)!;
+          addPartnerItem.status = PCRItemStatus.Incomplete;
+        })}
         onSave={(dto, link) => {
           stores.messages.clearMessages();
           stores.projectChangeRequests.updatePcrEditor(true, props.projectId, dto, undefined, () =>
@@ -105,6 +202,6 @@ export const PCRPrepareSpendProfileCostsRoute = defineRoute<PcrSpendProfileCosts
     itemId: route.params.itemId,
     costCategoryId: route.params.costCategoryId,
   }),
-  getTitle: ({ params, stores }) => ({displayTitle: "to do", htmlTitle: "to do"}),
+  getTitle: ({ params, stores }) => ({displayTitle: "Add partner", htmlTitle: "Add partner"}),
   accessControl: (auth, { projectId }, config) => config.features.pcrsEnabled && auth.forProject(projectId).hasRole(ProjectRole.ProjectManager)
 });
