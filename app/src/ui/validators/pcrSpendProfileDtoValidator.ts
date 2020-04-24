@@ -34,12 +34,24 @@ export class PCRBaseCostDtoValidator<T extends PCRSpendProfileCostDto> extends R
   ) {
     super(model, showValidationErrors);
   }
-  protected value = Validation.required(this, this.model.value, "Value is required");
+  protected value = Validation.all(this,
+    () => Validation.required(this, this.model.value, "Value is required"),
+    () => Validation.isCurrency(this, this.model.value, "Value must be a number")
+  );
 }
 
 export class PCRLabourCostDtoValidator extends PCRBaseCostDtoValidator<PCRSpendProfileLabourCostDto> {
   public role = Validation.required(this, this.model.role, "Role is required");
-  public grossCostOfRole = Validation.required(this, this.model.grossCostOfRole, "Gross cost of role is required");
-  public daysSpentOnProject = Validation.required(this, this.model.daysSpentOnProject, "Days spent on project is required");
-  public ratePerDay = Validation.required(this, this.model.ratePerDay, "Rate per day is required");
+  public grossCostOfRole = Validation.all(this,
+    () => Validation.required(this, this.model.grossCostOfRole, "Gross cost of role is required"),
+    () => Validation.isCurrency(this, this.model.grossCostOfRole, "Gross cost of role must be a number")
+  );
+  public daysSpentOnProject = Validation.all(this,
+    () => Validation.required(this, this.model.daysSpentOnProject, "Days spent on project is required"),
+    () => Validation.number(this, this.model.daysSpentOnProject, "Days spent on project must be a number")
+  );
+  public ratePerDay = Validation.all(this,
+    () => Validation.required(this, this.model.ratePerDay, "Rate per day is required"),
+    () => Validation.isCurrency(this, this.model.ratePerDay, "Rate per day must be a number")
+  );
 }

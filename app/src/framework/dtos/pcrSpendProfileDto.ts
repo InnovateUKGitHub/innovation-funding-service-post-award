@@ -6,14 +6,14 @@ export interface PcrSpendProfileDto {
 
 export type PCRSpendProfileCostDto = PCRSpendProfileLabourCostDto | PCRSpendProfileUnknownCostDto;
 
-interface PCRSpendProfileBaseCostDto {
+interface PCRSpendProfileBaseCostDto<T extends CostCategoryType> {
   id: string | null;
-  costCategory: CostCategoryType;
+  costCategory: T;
   costCategoryId: string;
   value: number | null;
 }
 
-export interface PCRSpendProfileLabourCostDto extends PCRSpendProfileBaseCostDto {
+export interface PCRSpendProfileLabourCostDto extends PCRSpendProfileBaseCostDto<CostCategoryType.Labour> {
   costCategory: CostCategoryType.Labour;
   role: string | null;
   grossCostOfRole: number | null;
@@ -22,6 +22,6 @@ export interface PCRSpendProfileLabourCostDto extends PCRSpendProfileBaseCostDto
 }
 
 // TODO remove this once all are mapped
-export interface PCRSpendProfileUnknownCostDto extends PCRSpendProfileBaseCostDto {
+export interface PCRSpendProfileUnknownCostDto extends PCRSpendProfileBaseCostDto<CostCategoryType.Unknown> {
   costCategory: CostCategoryType.Unknown;
 }

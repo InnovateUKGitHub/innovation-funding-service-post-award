@@ -22,7 +22,6 @@ import { CostCategoryType } from "../../../../framework/entities";
 import { CostCategoryDto } from "../../../../framework/dtos/costCategoryDto";
 import { PcrWorkflow } from "../pcrWorkflow";
 import { addPartnerStepNames } from "./addPartnerWorkflow";
-import { PCRSpendProfileDtoValidator } from "@ui/validators/pcrSpendProfileDtoValidator";
 
 export interface PcrAddSpendProfileCostParams {
   projectId: string;
@@ -57,13 +56,12 @@ class Component extends ContainerBase<PcrAddSpendProfileCostParams, Data, Callba
 
   private renderContents(project: ProjectDto, editor: IEditorStore<PCRDto, PCRDtoValidator>, documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>, costCategory: CostCategoryDto) {
     const addPartnerItem = editor.data.items.find(x => x.id === this.props.itemId && x.type === PCRItemType.PartnerAddition) as PCRItemForPartnerAdditionDto;
-    const validator = new PCRSpendProfileDtoValidator(addPartnerItem.spendProfile, true);
     return (
       <ACC.Page
         backLink={<ACC.BackLink route={this.props.routes.pcrPrepareSpendProfileCosts.getLink({itemId: this.props.itemId, pcrId: this.props.pcrId, projectId: this.props.projectId, costCategoryId: this.props.costCategoryId})}>Back to costs</ACC.BackLink>} // TODO customise for cost category
         pageTitle={<ACC.Projects.Title project={project} />}
         project={project}
-        validator={validator}
+        validator={null}
         error={editor.error || documentsEditor.error}
       >
         <ACC.Renderers.Messages messages={this.props.messages} />
@@ -131,7 +129,7 @@ class Component extends ContainerBase<PcrAddSpendProfileCostParams, Data, Callba
           />
           <Form.Numeric
             label={"Gross employee cost"}
-            name="numberOfEmployees"
+            name="grossCostOfRole"
             width={"one-third"}
             value={dto => dto.grossCostOfRole }
             update={(dto, val) => dto.grossCostOfRole = val}
@@ -181,8 +179,7 @@ class Component extends ContainerBase<PcrAddSpendProfileCostParams, Data, Callba
       daysSpentOnProject: null,
       role: null,
       grossCostOfRole: null,
-      // TODO no idea why it's not inferring the type
-      costCategory: CostCategoryType.Labour as CostCategoryType.Labour,
+      costCategory: CostCategoryType.Labour,
       costCategoryId: this.props.costCategoryId
     };
     spendProfile.costs.push(newCost);
