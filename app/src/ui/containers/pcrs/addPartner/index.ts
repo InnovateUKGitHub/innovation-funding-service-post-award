@@ -8,3 +8,5 @@ export * from "./organisationDetailsSteps";
 export * from "./projectLocationStep";
 export * from "./projectManagerDetailsStep";
 export * from "./roleAndOrganisationStep";
+export * from "./spendProfileStep";
+export * from "./spendProfileCosts";

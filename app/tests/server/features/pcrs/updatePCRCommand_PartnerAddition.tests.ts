@@ -6,12 +6,13 @@ import { ValidationError } from "@server/features/common";
 import {
   PCRContactRole,
   PCRItemForPartnerAdditionDto,
+  PCRItemType,
   PCRParticipantSize,
   PCRPartnerType,
   PCRProjectRole,
 } from "@framework/types";
 import { PCRRecordTypeMetaValues } from "@server/features/pcrs/getItemTypesQuery";
-import { PCRItemStatus, PCRItemType, PCRStatus } from "@framework/constants";
+import { PCRItemStatus, PCRStatus } from "@framework/constants";
 import { CostCategoryType } from "@framework/entities";
 import { PCRSpendProfileLabourCostDto } from "@framework/dtos/pcrSpendProfileDto";
 
@@ -325,6 +326,36 @@ describe("UpdatePCRCommand - Partner addition", () => {
     expect(updatedItem.contact2Email).toEqual("jon@doe.com");
   });
   describe("Spend Profile", () => {
+    it("should validate new spend profile costs for labour", async () => {
+      const {context, projectChangeRequest, recordType, project} = setup();
+      context.testData.createPCRItem(projectChangeRequest, recordType, { status: PCRItemStatus.Incomplete, projectRole: PCRProjectRole.Collaborator, partnerType: PCRPartnerType.Business });
+      const costCategoryLabour = context.testData.createCostCategory({name: "Labour", type: CostCategoryType.Labour});
+      const dto = await context.runQuery(new GetPCRByIdQuery(projectChangeRequest.projectId, projectChangeRequest.id));
+      const item = dto.items[0] as PCRItemForPartnerAdditionDto;
+      const cost: PCRSpendProfileLabourCostDto = {
+        id: null,
+        value: 60,
+        costCategoryId: costCategoryLabour.id,
+        costCategory: CostCategoryType.Labour,
+        ratePerDay: 20,
+        daysSpentOnProject: 10,
+        role: "Queen",
+        grossCostOfRole: 200
+      };
+      item.spendProfile.costs.push(cost);
+      const command = new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto);
+      await expect(context.runCommand(command)).resolves.toBe(true);
+      item.spendProfile.costs[0] = { ...cost, ratePerDay: null };
+      await expect(context.runCommand(new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto))).rejects.toThrow(ValidationError);
+      item.spendProfile.costs[0] = { ...cost, daysSpentOnProject: null };
+      await expect(context.runCommand(new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto))).rejects.toThrow(ValidationError);
+      item.spendProfile.costs[0] = { ...cost, grossCostOfRole: null };
+      await expect(context.runCommand(new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto))).rejects.toThrow(ValidationError);
+      item.spendProfile.costs[0] = { ...cost, value: null };
+      await expect(context.runCommand(new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto))).rejects.toThrow(ValidationError);
+      item.spendProfile.costs[0] = { ...cost, role: null };
+      await expect(context.runCommand(new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto))).rejects.toThrow(ValidationError);
+    });
     it("should save new spend profile costs for labour", async () => {
       const {context, projectChangeRequest, recordType, project} = setup();
       context.testData.createPCRItem(projectChangeRequest, recordType, { status: PCRItemStatus.Incomplete, projectRole: PCRProjectRole.Collaborator, partnerType: PCRPartnerType.Business });

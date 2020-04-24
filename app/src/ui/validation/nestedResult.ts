@@ -30,3 +30,28 @@ export class NestedResult<T extends Results<{}>> extends Result {
     return this.errorMessage! + "/n/t" + this.results.filter(x => !x.isValid).map(x => x.log()).join("/n/t");
   }
 }
+
+export class Nested<T extends Results<{}>> extends Result {
+  constructor(parentResults: Results<{}>, result: T, summaryMessage?: string) {
+
+    const isValid = result && result.isValid;
+    const message = summaryMessage || "Validation failed";
+
+    super(
+      parentResults,
+      parentResults.showValidationErrors,
+      isValid,
+      message,
+      result.isRequired
+    );
+
+    this.results = [result];
+  }
+
+  public readonly results: T[];
+
+  public log() {
+    if (this.isValid) return null;
+    return this.errorMessage! + "/n/t" + this.results.filter(x => !x.isValid).map(x => x.log()).join("/n/t");
+  }
+}
