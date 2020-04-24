@@ -34,7 +34,7 @@ export class PCRBaseCostDtoValidator<T extends PCRSpendProfileCostDto> extends R
   ) {
     super(model, showValidationErrors);
   }
-  protected value = Validation.all(this,
+  public value = Validation.all(this,
     () => Validation.required(this, this.model.value, "Value is required"),
     () => Validation.isCurrency(this, this.model.value, "Value must be a number")
   );

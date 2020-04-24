@@ -20,6 +20,7 @@ export interface ISalesforcePcrSpendProfile {
   Acc_GrossCostOfRole__c?: number;
   Acc_Role__c?: string;
   Acc_Rate__c?: number;
+  // Coming back as a string but should be a number. Handled in the entity mapper.
   Acc_DaysSpentOnProject__c?: number;
 }
 
