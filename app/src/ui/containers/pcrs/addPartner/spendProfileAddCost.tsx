@@ -13,11 +13,9 @@ import { Pending } from "@shared/pending";
 import { PCRDto } from "@framework/dtos/pcrDtos";
 import { EditorStatus, IEditorStore, StoresConsumer } from "@ui/redux";
 import {
-  MultipleDocumentUpdloadDtoValidator,
   PCRDtoValidator,
   PCRPartnerAdditionItemDtoValidator,
 } from "@ui/validators";
-import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
 import { PcrSpendProfileDto, PCRSpendProfileLabourCostDto } from "../../../../framework/dtos/pcrSpendProfileDto";
 import { CostCategoryType } from "../../../../framework/entities";
 import { CostCategoryDto } from "../../../../framework/dtos/costCategoryDto";
