@@ -167,6 +167,7 @@ export class SalesforcePCRMapper extends SalesforceBaseMapper<ISalesforcePCR[], 
   }
 
   private mapItem(header: ISalesforcePCR, pcrItem: ISalesforcePCR): ProjectChangeRequestItemEntity {
+    const partnerType = new PcrPartnerTypeMapper().mapFromSalesforcePCRPartnerType(pcrItem.Acc_ParticipantType__c);
     return {
       id: pcrItem.Id,
       pcrId: header.Id,
@@ -192,7 +193,8 @@ export class SalesforcePCRMapper extends SalesforceBaseMapper<ISalesforcePCR[], 
       // add partner fields
       projectRole: new PcrProjectRoleMapper().mapFromSalesforcePCRProjectRole(pcrItem.Acc_ProjectRole__c),
       projectRoleLabel: pcrItem.ProjectRoleLabel,
-      partnerType: new PcrPartnerTypeMapper().mapFromSalesforcePCRPartnerType(pcrItem.Acc_ParticipantType__c),
+      partnerType,
+      organisationType: partnerType === PCRPartnerType.Research ? "Academic" : "Industrial",
       partnerTypeLabel: pcrItem.ParticipantTypeLabel,
       organisationName: pcrItem.Acc_OrganisationName__c,
       registeredAddress: pcrItem.Acc_RegisteredAddress__c,
