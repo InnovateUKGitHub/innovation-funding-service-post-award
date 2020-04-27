@@ -1,7 +1,14 @@
 import { IFormBody, IFormButton, StandardFormHandlerBase } from "@server/forms/formHandlerBase";
 import { CreateProjectChangeRequestParams, PCRCreateRoute, ProjectChangeRequestPrepareRoute, } from "@ui/containers";
-import { PCRDto, PCRItemDto, PCRStandardItemDto, ProjectDto, ProjectRole } from "@framework/dtos";
-import { IContext, ILinkInfo } from "@framework/types";
+import {
+  PCRDto,
+  PCRItemDto,
+  PCRItemForPartnerAdditionDto,
+  PCRStandardItemDto,
+  ProjectDto,
+  ProjectRole
+} from "@framework/dtos";
+import { IContext, ILinkInfo, PCRItemType } from "@framework/types";
 import { CreateProjectChangeRequestCommand } from "@server/features/pcrs/createProjectChangeRequestCommand";
 import { PCRDtoValidator } from "@ui/validators";
 import { PCRItemStatus, PCRStatus } from "@framework/constants";
@@ -21,6 +28,11 @@ export class ProjectChangeRequestCreateFormHandler extends StandardFormHandlerBa
       type: parseInt(x, 10),
       status: PCRItemStatus.ToDo,
     }));
+
+    const addPartnerItem = items.find(x => x.type === PCRItemType.PartnerAddition) as PCRItemForPartnerAdditionDto;
+    if (!!addPartnerItem) {
+      addPartnerItem.spendProfile = { costs: [] };
+    }
 
     const dto: Partial<PCRDto> = {
       status: PCRStatus.Draft,

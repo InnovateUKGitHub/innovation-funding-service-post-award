@@ -36,6 +36,7 @@ import { VirementPartnerCostsUpdateHandler } from "./projectChangeRequest/vireme
 import { EditorStateKeys } from "@ui/redux";
 
 import { upload } from "./memoryStorage";
+import { ProjectChangeRequestSpendProfileAddCostHandler } from "@server/forms/projectChangeRequest/spendProfile/spendProfileAddCostHandler";
 
 export const standardFormHandlers: (StandardFormHandlerBase<{}, EditorStateKeys>)[] = [
   new ClaimForecastFormHandler(),
@@ -60,6 +61,7 @@ export const standardFormHandlers: (StandardFormHandlerBase<{}, EditorStateKeys>
   new ProjectChangeRequestReviewFormHandler(),
   new ProjectChangeRequestReasoningDocumentDeleteHandler(),
   new ProjectChangeRequestItemUpdateHandler(),
+  new ProjectChangeRequestSpendProfileAddCostHandler(),
   new ProjectChangeRequestItemDocumentDeleteHandler(),
   new VirementCostsUpdateHandler(),
   new VirementPartnerCostsUpdateHandler(),
