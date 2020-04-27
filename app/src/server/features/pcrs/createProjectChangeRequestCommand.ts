@@ -50,8 +50,8 @@ export class CreateProjectChangeRequestCommand extends CommandBase<string> {
 
     const itemTypes = await context.runQuery(new GetPCRItemTypesQuery());
     const projectRoles = await context.runQuery(new GetAllProjectRolesForUser()).then(x => x.forProject(this.projectId).getRoles());
-    const proejct = await context.runQuery(new GetByIdQuery(this.projectId));
-    const validationResult = new PCRDtoValidator(this.projectChangeRequestDto, projectRoles, itemTypes,true, proejct, context.config.features);
+    const projectDto = await context.runQuery(new GetByIdQuery(this.projectId));
+    const validationResult = new PCRDtoValidator(this.projectChangeRequestDto, projectRoles, itemTypes,true, projectDto, context.config.features);
 
     if (!validationResult.isValid) {
       throw new ValidationError(validationResult);
