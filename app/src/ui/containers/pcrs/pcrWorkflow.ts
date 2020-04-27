@@ -16,6 +16,7 @@ import { removePartnerWorkflow } from "@ui/containers/pcrs/removePartner";
 import { PCRWorkflowValidator } from "@ui/validators/pcrWorkflowValidator";
 import { getAddPartnerWorkflow } from "@ui/containers/pcrs/addPartner/addPartnerWorkflow";
 import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
+import { IRoutes } from "@ui/routing";
 
 export interface PcrStepProps<TDto, TVal> extends IStepProps {
   project: ProjectDto;
@@ -29,6 +30,7 @@ export interface PcrStepProps<TDto, TVal> extends IStepProps {
   onSave: (skipToSummary?: boolean) => void;
   getRequiredToCompleteMessage: (additionalMessage?: string) => React.ReactNode;
   isClient: boolean;
+  routes: IRoutes;
 }
 
 export interface PcrSummaryProps<TDto, TVal, TStepNames> extends ISummaryProps, BaseProps {

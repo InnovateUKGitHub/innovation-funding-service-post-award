@@ -54,13 +54,6 @@ export const getAddPartnerWorkflow = (item: PCRItemForPartnerAdditionDto, step: 
         validation: val => val.pcr,
         stepRender: FinanceContactStep,
       },
-      {
-        stepName: "spendProfileStep",
-        displayName: "Project costs for new partner",
-        stepNumber: 9,
-        validation: val => val.pcr,
-        stepRender: SpendProfileStep,
-      },
     ],
     summary: {
       validation: val => val,
@@ -107,6 +100,13 @@ export const getAddPartnerWorkflow = (item: PCRItemForPartnerAdditionDto, step: 
       stepNumber: 5,
       validation: val => val.pcr,
       stepRender: FinanceDetailsStep,
+    });
+    workflow.steps.push({
+      stepName: "spendProfileStep",
+      displayName: "Project costs for new partner",
+      stepNumber: 9,
+      validation: val => val.pcr,
+      stepRender: SpendProfileStep,
     });
   }
 
