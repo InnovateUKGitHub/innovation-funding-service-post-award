@@ -241,6 +241,7 @@ export class ProjectChangeRequestStore extends StoreBase {
           projectRoleLabel: null,
           partnerTypeLabel: null,
           spendProfile: {
+            pcrItemId: baseFields.id,
             costs: []
           },
           projectCity: "",
