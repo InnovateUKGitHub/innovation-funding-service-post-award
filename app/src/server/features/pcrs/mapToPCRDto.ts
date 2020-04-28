@@ -137,7 +137,7 @@ const mapItemForPartnerAddition = (pcr: ProjectChangeRequestItemEntity, typeName
   organisationType: pcr.organisationType || null,
   projectRoleLabel: pcr.projectRoleLabel || null,
   partnerTypeLabel: pcr.partnerTypeLabel || null,
-  spendProfile: { costs: [] },
+  spendProfile: { costs: [], pcrItemId: pcr.id },
   projectCity: pcr.projectCity || null,
   projectPostcode: pcr.projectPostcode || null,
   participantSize: pcr.participantSize || PCRParticipantSize.Unknown,

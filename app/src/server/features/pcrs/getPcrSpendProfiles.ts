@@ -17,6 +17,7 @@ export class GetPcrSpendProfilesQuery extends QueryBase<PcrSpendProfileDto> {
     const spendProfiles = await context.repositories.pcrSpendProfile.getAllForPcr(this.pcrItemId);
     const costCategories = await context.runQuery(new GetCostCategoriesQuery());
     return {
+      pcrItemId: this.pcrItemId,
       costs: costCategories
         // For each cost category filter and map costs
         .map(x => this.mapCosts(x, spendProfiles.filter(s => s.costCategoryId === x.id)))
