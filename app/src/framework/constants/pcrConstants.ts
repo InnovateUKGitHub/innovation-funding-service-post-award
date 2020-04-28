@@ -60,3 +60,9 @@ export enum PCRParticipantSize {
   Medium = 30,
   Large = 40,
 }
+
+export enum PCRProjectLocation {
+  Unknown = 0,
+  InsideTheUnitedKingdom = 10,
+  OutsideTheUnitedKingdom = 20,
+}

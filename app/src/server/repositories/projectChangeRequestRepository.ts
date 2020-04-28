@@ -31,6 +31,7 @@ export interface IProjectChangeRequestRepository {
   getProjectRoles(): Promise<PicklistEntry[]>;
   getPartnerTypes(): Promise<PicklistEntry[]>;
   getParticipantSizes(): Promise<PicklistEntry[]>;
+  getProjectLocations(): Promise<PicklistEntry[]>;
 }
 
 export interface ISalesforcePCR {
@@ -293,6 +294,10 @@ export class ProjectChangeRequestRepository extends SalesforceRepositoryBase<ISa
 
   getParticipantSizes(): Promise<PicklistEntry[]> {
     return super.getPicklist("Acc_ParticipantSize__c");
+  }
+
+  getProjectLocations(): Promise<PicklistEntry[]> {
+    return super.getPicklist("Acc_Location__c");
   }
 
   private mapStatus(status: PCRStatus): string {
