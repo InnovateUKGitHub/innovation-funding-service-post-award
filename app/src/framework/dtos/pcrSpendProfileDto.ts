@@ -2,6 +2,7 @@ import { CostCategoryType } from "@framework/entities";
 
 export interface PcrSpendProfileDto {
   costs: PCRSpendProfileCostDto[];
+  pcrItemId: string;
 }
 
 export type PCRSpendProfileCostDto = PCRSpendProfileLabourCostDto | PCRSpendProfileUnknownCostDto;
