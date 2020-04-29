@@ -12,6 +12,7 @@ import {
   PcrContactRoleMapper,
   PcrParticipantSizeMapper,
   PcrPartnerTypeMapper,
+  PCRProjectLocationMapper,
   PcrProjectRoleMapper,
   SalesforcePCRMapper
 } from "./mappers/projectChangeRequestMapper";
@@ -81,6 +82,8 @@ export interface ISalesforcePCR {
   Acc_Employees__c: number|null;
   Acc_TurnoverYearEnd__c: string|null;
   Acc_Turnover__c: number|null;
+  Acc_Location__c: string|null;
+  ProjectLocationLabel: string|null;
   Acc_ProjectCity__c: string|null;
   Acc_ProjectPostcode__c: string|null;
   Acc_Contact1ProjectRole__c: string|null;
@@ -158,6 +161,8 @@ export class ProjectChangeRequestRepository extends SalesforceRepositoryBase<ISa
     "Acc_Employees__c",
     "Acc_TurnoverYearEnd__c",
     "Acc_Turnover__c",
+    "Acc_Location__c",
+    "toLabel(Acc_Location__c) ProjectLocationLabel",
     "Acc_ProjectCity__c",
     "Acc_projectPostcode__c",
     "Acc_Contact1ProjectRole__c",
@@ -237,6 +242,7 @@ export class ProjectChangeRequestRepository extends SalesforceRepositoryBase<ISa
       Acc_Employees__c: x.numberOfEmployees,
       Acc_TurnoverYearEnd__c: this.toOptionalSFDate(x.financialYearEndDate),
       Acc_Turnover__c: x.financialYearEndTurnover,
+      Acc_Location__c: new PCRProjectLocationMapper().mapToSalesforcePCRProjectLocation(x.projectLocation),
       Acc_ProjectCity__c: x.projectCity,
       Acc_ProjectPostcode__c: x.projectPostcode,
       Acc_Contact1ProjectRole__c: new PcrContactRoleMapper().mapToSalesforcePCRProjectRole(x.contact1ProjectRole),
