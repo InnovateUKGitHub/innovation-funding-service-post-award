@@ -52,12 +52,12 @@ export class ProjectChangeRequestSpendProfileAddCostHandler extends StandardForm
 
   private mapBaseItem(params: PcrAddSpendProfileCostParams) {
     return {
-      id: null,
+      id: "",
       costCategoryId: params.costCategoryId,
     };
   }
 
-  private getLabourCost(baseCostDto: {id: null, costCategoryId: string},  body: IFormBody): PCRSpendProfileLabourCostDto {
+  private getLabourCost(baseCostDto: {id: string, costCategoryId: string},  body: IFormBody): PCRSpendProfileLabourCostDto {
     const daysSpentOnProject = Number(body.daysSpentOnProject);
     const ratePerDay = Number(body.ratePerDay);
     const value = daysSpentOnProject && ratePerDay ? daysSpentOnProject * ratePerDay : 0;

@@ -100,6 +100,7 @@ class Component extends ContainerBase<PcrSpendProfileCostsParams, Data, Callback
       <tr key={row.key} className="govuk-table__row" data-qa={row.qa}>
         <th className="govuk-table__cell govuk-table__cell--numeric govuk-!-font-weight-bold">{row.title}</th>
         <td className={classNames("govuk-table__cell", "govuk-table__cell--numeric", { "govuk-!-font-weight-bold": row.isBold })}>{row.value}</td>
+        <td className={classNames("govuk-table__cell")} />
       </tr>
     );
   }
@@ -123,6 +124,7 @@ class Component extends ContainerBase<PcrSpendProfileCostsParams, Data, Callback
       <Table.Table qa="costs" data={costs} footers={footers}>
         <Table.String header="Description" value={x => x.role} qa={"role"}/>
         <Table.Currency header="Cost (£)" value={x => x.value} qa={"cost"}/>
+        <Table.Link content="Edit" value={x => this.props.routes.pcrPrepareSpendProfileEditCost.getLink({itemId: this.props.itemId, costId: x.id, costCategoryId: this.props.costCategoryId, projectId: this.props.projectId, pcrId: this.props.pcrId})} qa={"edit"}/>
       </Table.Table>
     );
   }

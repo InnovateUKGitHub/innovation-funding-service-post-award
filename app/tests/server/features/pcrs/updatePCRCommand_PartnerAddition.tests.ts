@@ -333,7 +333,7 @@ describe("UpdatePCRCommand - Partner addition", () => {
       const dto = await context.runQuery(new GetPCRByIdQuery(projectChangeRequest.projectId, projectChangeRequest.id));
       const item = dto.items[0] as PCRItemForPartnerAdditionDto;
       item.spendProfile.costs.push({
-        id: null,
+        id: "",
         value: 60,
         costCategoryId: costCategoryLabour.id,
         costCategory: CostCategoryType.Labour,
