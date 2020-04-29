@@ -153,6 +153,7 @@ export class UpdatePCRCommand extends CommandBase<boolean> {
           || item.registrationNumber !== dto.registrationNumber
           || item.projectRole !== dto.projectRole
           || item.partnerType !== dto.partnerType
+          || item.projectLocation !== dto.projectLocation
           || item.projectCity !== dto.projectCity
           || item.projectPostcode !== dto.projectPostcode
           || item.participantSize !== dto.participantSize
@@ -177,6 +178,7 @@ export class UpdatePCRCommand extends CommandBase<boolean> {
             registrationNumber: dto.registrationNumber,
             projectRole: dto.projectRole,
             partnerType: dto.partnerType,
+            projectLocation: dto.projectLocation,
             projectCity: dto.projectCity,
             projectPostcode: dto.projectPostcode,
             participantSize: dto.participantSize,
