@@ -4,7 +4,15 @@ import {
   ProjectChangeRequestItemEntity
 } from "@framework/entities";
 import { ISalesforcePCR } from "../projectChangeRequestRepository";
-import { PCRContactRole, PCRItemStatus, PCRParticipantSize, PCRPartnerType, PCRProjectRole, PCRStatus } from "@framework/constants";
+import {
+  PCRContactRole,
+  PCRItemStatus,
+  PCRParticipantSize,
+  PCRPartnerType,
+  PCRProjectLocation,
+  PCRProjectRole,
+  PCRStatus
+} from "@framework/constants";
 
 export const mapToPCRStatus = ((status: string) => {
   switch (status) {
@@ -137,6 +145,29 @@ export class PcrParticipantSizeMapper {
       case PCRParticipantSize.Small: return this.participantSizes.small;
       case PCRParticipantSize.Medium: return this.participantSizes.medium;
       case PCRParticipantSize.Large: return this.participantSizes.large;
+      default: return null;
+    }
+  });
+}
+
+export class PCRProjectLocationMapper {
+  private projectLocations = {
+    insideTheUnitedKingdom: "Inside the United Kingdom",
+    outsideTheUnitedKingdom: "Outside the United Kingdom",
+  };
+
+  public mapFromSalesforecPCRProjectLocation = ((projectLocation: string | null): PCRProjectLocation => {
+    switch (projectLocation) {
+      case this.projectLocations.insideTheUnitedKingdom: return PCRProjectLocation.InsideTheUnitedKingdom;
+      case this.projectLocations.outsideTheUnitedKingdom: return PCRProjectLocation.OutsideTheUnitedKingdom;
+      default: return PCRProjectLocation.Unknown;
+    }
+  });
+
+  public mapToSalesforcePCRProjectLocation = ((projectLocation: PCRProjectLocation | undefined): string| null => {
+    switch (projectLocation) {
+      case PCRProjectLocation.InsideTheUnitedKingdom: return this.projectLocations.insideTheUnitedKingdom;
+      case PCRProjectLocation.OutsideTheUnitedKingdom: return this.projectLocations.outsideTheUnitedKingdom;
       default: return null;
     }
   });

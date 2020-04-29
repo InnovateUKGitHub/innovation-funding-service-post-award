@@ -19,6 +19,7 @@ import { DocumentFilter } from "@framework/types/DocumentFilter";
 import { ISalesforceDocument } from "@server/repositories/contentVersionRepository";
 import { PcrSpendProfileEntity } from "@framework/entities/pcrSpendProfile";
 import { PcrSpendProfileEntityForCreate } from "@framework/entities";
+import { PCRProjectLocationPicklist } from "./features/pcrs/pcrProjectLocationPicklist";
 
 class ProjectsTestRepository extends TestRepository<Repositories.ISalesforceProject> implements Repositories.IProjectRepository {
   getById(id: string) {
@@ -561,6 +562,12 @@ class PCRTestRepository extends TestRepository<Entities.ProjectChangeRequestEnti
   getParticipantSizes(): Promise<PicklistEntry[]> {
     const picklistEntry: PicklistEntry[] = new Array();
     PCRParticipantSizePicklist.forEach(x => picklistEntry.push(x));
+    return Promise.resolve(picklistEntry);
+  }
+
+  getProjectLocations(): Promise<PicklistEntry[]> {
+    const picklistEntry: PicklistEntry[] = new Array();
+    PCRProjectLocationPicklist.forEach(x => picklistEntry.push(x));
     return Promise.resolve(picklistEntry);
   }
 }
