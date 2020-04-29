@@ -3,6 +3,7 @@ import {
   PCRItemStatus,
   PCRParticipantSize,
   PCRPartnerType,
+  PCRProjectLocation,
   PCRProjectRole,
   PCRStatus
 } from "@framework/constants";
@@ -54,6 +55,8 @@ export interface ProjectChangeRequestItemForCreateEntity {
   numberOfEmployees?: number | null;
   financialYearEndDate?: Date | null;
   financialYearEndTurnover?: number | null;
+  projectLocation?: PCRProjectLocation;
+  projectLocationLabel?: string | null;
   projectCity?: string | null;
   projectPostcode?: string | null;
   contact1ProjectRole?: PCRContactRole;

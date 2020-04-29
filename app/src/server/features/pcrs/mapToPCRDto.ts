@@ -13,7 +13,14 @@ import {
   PCRStandardItemDto,
   ProjectChangeRequestStandardItemTypes
 } from "@framework/dtos";
-import { PCRContactRole, PCRItemType, PCRParticipantSize, PCRPartnerType, PCRProjectRole } from "@framework/constants";
+import {
+  PCRContactRole,
+  PCRItemType,
+  PCRParticipantSize,
+  PCRPartnerType,
+  PCRProjectLocation,
+  PCRProjectRole
+} from "@framework/constants";
 import { PCRRecordTypeMetaValues } from "@server/features/pcrs/getItemTypesQuery";
 
 export const mapToPcrDto = (pcr: ProjectChangeRequestEntity, itemTypes: PCRItemTypeDto[]): PCRDto => ({
@@ -138,6 +145,8 @@ const mapItemForPartnerAddition = (pcr: ProjectChangeRequestItemEntity, typeName
   projectRoleLabel: pcr.projectRoleLabel || null,
   partnerTypeLabel: pcr.partnerTypeLabel || null,
   spendProfile: { costs: [], pcrItemId: pcr.id },
+  projectLocation: pcr.projectLocation || PCRProjectLocation.Unknown,
+  projectLocationLabel: pcr.projectLocationLabel || null,
   projectCity: pcr.projectCity || null,
   projectPostcode: pcr.projectPostcode || null,
   participantSize: pcr.participantSize || PCRParticipantSize.Unknown,

@@ -14,8 +14,9 @@ import {
   PCRItemType,
   PCRParticipantSize,
   PCRPartnerType,
+  PCRProjectLocation,
   PCRProjectRole,
-  PCRStatus
+  PCRStatus,
 } from "@framework/constants";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
 import { ConfigStore } from "@ui/redux/stores/configStore";
@@ -244,6 +245,8 @@ export class ProjectChangeRequestStore extends StoreBase {
             pcrItemId: baseFields.id,
             costs: []
           },
+          projectLocation: PCRProjectLocation.Unknown,
+          projectLocationLabel: null,
           projectCity: "",
           projectPostcode: "",
           participantSize: PCRParticipantSize.Unknown,

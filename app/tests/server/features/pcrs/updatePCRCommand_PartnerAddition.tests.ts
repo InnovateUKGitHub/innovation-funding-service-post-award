@@ -9,12 +9,12 @@ import {
   PCRItemType,
   PCRParticipantSize,
   PCRPartnerType,
+  PCRProjectLocation,
   PCRProjectRole,
 } from "@framework/types";
 import { PCRRecordTypeMetaValues } from "@server/features/pcrs/getItemTypesQuery";
 import { PCRItemStatus, PCRStatus } from "@framework/constants";
 import { CostCategoryType } from "@framework/entities";
-import { PCRSpendProfileLabourCostDto } from "@framework/dtos/pcrSpendProfileDto";
 
 // tslint:disable-next-line:no-big-function
 describe("UpdatePCRCommand - Partner addition", () => {
@@ -289,6 +289,7 @@ describe("UpdatePCRCommand - Partner addition", () => {
     item.registrationNumber = "11223344";
     item.projectRole = PCRProjectRole.ProjectLead;
     item.partnerType = PCRPartnerType.Other;
+    item.projectLocation = PCRProjectLocation.InsideTheUnitedKingdom;
     item.projectCity = "Bristol";
     item.projectPostcode = "BS1 5UW";
     item.participantSize = PCRParticipantSize.Medium;
@@ -315,6 +316,7 @@ describe("UpdatePCRCommand - Partner addition", () => {
     expect(updatedItem.registrationNumber).toEqual("11223344");
     expect(updatedItem.projectRole).toEqual(PCRProjectRole.ProjectLead);
     expect(updatedItem.partnerType).toEqual(PCRPartnerType.Other);
+    expect(updatedItem.projectLocation).toEqual(PCRProjectLocation.InsideTheUnitedKingdom);
     expect(updatedItem.projectCity).toEqual("Bristol");
     expect(updatedItem.projectPostcode).toEqual("BS1 5UW");
     expect(updatedItem.participantSize).toEqual(PCRParticipantSize.Medium);
