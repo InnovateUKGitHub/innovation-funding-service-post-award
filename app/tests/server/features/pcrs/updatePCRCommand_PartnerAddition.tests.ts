@@ -55,6 +55,7 @@ describe("UpdatePCRCommand - Partner addition", () => {
       status: PCRItemStatus.Incomplete,
       partnerType: PCRPartnerType.Research,
       projectRole: PCRProjectRole.Collaborator,
+      projectLocation: PCRProjectLocation.InsideTheUnitedKingdom,
       projectCity: "Coventry",
       financialYearEndTurnover: 33,
       financialYearEndDate: new Date(),
@@ -80,6 +81,7 @@ describe("UpdatePCRCommand - Partner addition", () => {
       status: PCRItemStatus.Incomplete,
       partnerType: PCRPartnerType.Business,
       projectRole: PCRProjectRole.Collaborator,
+      projectLocation: PCRProjectLocation.InsideTheUnitedKingdom,
       projectCity: "Coventry",
       financialYearEndTurnover: 33,
       financialYearEndDate: new Date(),
@@ -108,6 +110,7 @@ describe("UpdatePCRCommand - Partner addition", () => {
       partnerType: PCRPartnerType.Research,
       projectRole: PCRProjectRole.Collaborator,
       organisationName: "Coventry University",
+      projectLocation: PCRProjectLocation.InsideTheUnitedKingdom,
       projectCity: "Coventry",
       participantSize: PCRParticipantSize.Medium,
       numberOfEmployees: 15,
@@ -133,6 +136,7 @@ describe("UpdatePCRCommand - Partner addition", () => {
       partnerType: PCRPartnerType.Research,
       projectRole: PCRProjectRole.Collaborator,
       organisationName: "Coventry University",
+      projectLocation: PCRProjectLocation.InsideTheUnitedKingdom,
       projectCity: "Coventry",
       contact1ProjectRole: PCRContactRole.FinanceContact,
       contact1Forename: "Homer",
@@ -158,6 +162,7 @@ describe("UpdatePCRCommand - Partner addition", () => {
       partnerType: PCRPartnerType.Business,
       projectRole: PCRProjectRole.Collaborator,
       organisationName: "Coventry University",
+      projectLocation: PCRProjectLocation.InsideTheUnitedKingdom,
       projectCity: "Coventry",
       registeredAddress: "Landaaan",
       registrationNumber: "1234",
@@ -185,6 +190,7 @@ describe("UpdatePCRCommand - Partner addition", () => {
       partnerType: PCRPartnerType.Research,
       projectRole: PCRProjectRole.Collaborator,
       organisationName: "Coventry University",
+      projectLocation: PCRProjectLocation.InsideTheUnitedKingdom,
       projectCity: "Coventry",
       contact1ProjectRole: PCRContactRole.FinanceContact,
       contact1Forename: "Homer",
@@ -209,6 +215,7 @@ describe("UpdatePCRCommand - Partner addition", () => {
       organisationName: "Coventry business",
       registrationNumber: "123345",
       registeredAddress: "Coventry Street",
+      projectLocation: PCRProjectLocation.InsideTheUnitedKingdom,
       projectCity: "Coventry",
       financialYearEndTurnover: 33,
       financialYearEndDate: new Date(),
@@ -231,6 +238,38 @@ describe("UpdatePCRCommand - Partner addition", () => {
     item.contact2Email = "e@mail.com";
     await expect(context.runCommand(command)).resolves.toBe(true);
   });
+  it("should require project location to be set", async () => {
+    const {context, projectChangeRequest, recordType, project} = setup();
+    context.testData.createPCRItem(projectChangeRequest, recordType, {
+      status: PCRItemStatus.Incomplete,
+      partnerType: PCRPartnerType.Business,
+      projectRole: PCRProjectRole.ProjectLead,
+      organisationName: "Coventry business",
+      registrationNumber: "123345",
+      registeredAddress: "Coventry Street",
+      projectCity: "Coventry",
+      financialYearEndTurnover: 33,
+      financialYearEndDate: new Date(),
+      contact1ProjectRole: PCRContactRole.FinanceContact,
+      contact1Forename: "Homer",
+      contact1Surname: "Of Iliad fame",
+      contact1Phone: "112233",
+      contact1Email: "helen@troy.com",
+      contact2Forename: "Jon",
+      contact2Surname: "Doe",
+      contact2Phone: "332211",
+      contact2Email: "e@mail.com",
+      participantSize: PCRParticipantSize.Medium,
+      numberOfEmployees: 15,
+    });
+    const dto = await context.runQuery(new GetPCRByIdQuery(projectChangeRequest.projectId, projectChangeRequest.id));
+    const item = dto.items[0] as PCRItemForPartnerAdditionDto;
+    item.status = PCRItemStatus.Complete;
+    const command = new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto);
+    await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
+    item.projectLocation = PCRProjectLocation.InsideTheUnitedKingdom;
+    await expect(context.runCommand(command)).resolves.toBe(true);
+  });
   it("should not allow updates to project role & partner type fields once they are set", async () => {
     const {context, projectChangeRequest, recordType, project} = setup();
     context.testData.createPCRItem(projectChangeRequest, recordType, { status: PCRItemStatus.Incomplete, projectRole: PCRProjectRole.Collaborator, partnerType: PCRPartnerType.Research });
@@ -251,6 +290,7 @@ describe("UpdatePCRCommand - Partner addition", () => {
       organisationName: "Coventry business",
       registrationNumber: "123345",
       registeredAddress: "Coventry Street",
+      projectLocation: PCRProjectLocation.InsideTheUnitedKingdom,
       projectCity: "Bristol",
       projectPostcode: "BS1 5UW",
       financialYearEndTurnover: 20,

@@ -477,6 +477,11 @@ export class PCRPartnerAdditionItemDtoValidator extends PCRBaseItemDtoValidator<
     () => this.hasPermissionToEdit(this.model.contact2Email, this.original && this.original.contact2Email, `Email address cannot be changed`),
   );
 
+  projectLocation = Validation.all(this,
+    () => this.requiredIfComplete(this.model.projectLocation || null, "Select a project location"),
+    () => this.hasPermissionToEdit(this.model.projectLocation, this.original && this.original.projectLocation, "Project location cannot be changed"),
+  );
+
   projectCity = Validation.all(this,
     () => this.requiredIfComplete(this.model.projectCity, "Enter a project city"),
     () => this.hasPermissionToEdit(this.model.projectCity, this.original && this.original.projectCity, "Project city cannot be changed"),
@@ -486,7 +491,7 @@ export class PCRPartnerAdditionItemDtoValidator extends PCRBaseItemDtoValidator<
 
   participantSize = Validation.all(this,
     () => this.requiredIfComplete(this.model.participantSize || null, "Select a participant size"),
-    () => this.hasPermissionToEdit(this.model.participantSize, this.original && this.original.projectCity, "Participant size cannot be changed"),
+    () => this.hasPermissionToEdit(this.model.participantSize, this.original && this.original.participantSize, "Participant size cannot be changed"),
   );
 
   numberOfEmployees = Validation.all(this,

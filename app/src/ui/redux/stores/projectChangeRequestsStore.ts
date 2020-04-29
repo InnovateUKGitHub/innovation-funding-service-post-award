@@ -111,6 +111,10 @@ export class ProjectChangeRequestStore extends StoreBase {
     return this.getData("pcrParticipantSizes", storeKeys.getPcrParticipantSizesKey(), p => ApiClient.pcrs.getParticipantSizes({ ...p }));
   }
 
+  public getPcrProjectLocations() {
+    return this.getData("pcrProjectLocations", storeKeys.getPcrProjectLocationsKey(), p => ApiClient.pcrs.getProjectLocations({ ...p }));
+  }
+
   public getPcrTypeForItem(projectId: string, pcrId: string, itemId: string) {
     const data = Pending.combine({
       itemTypes: this.getAllPcrTypes(),
