@@ -1,7 +1,10 @@
 import {
   PCRContactRole,
   PCRItemStatus,
-  PCRItemType, PCRParticipantSize, PCRPartnerType,
+  PCRItemType,
+  PCRParticipantSize,
+  PCRPartnerType,
+  PCRProjectLocation,
   PCRProjectRole,
   PCRStatus
 } from "@framework/constants";
@@ -122,6 +125,8 @@ export interface PCRItemForPartnerAdditionDto extends PCRItemBaseDto {
   numberOfEmployees: number | null;
   financialYearEndDate: Date | null;
   financialYearEndTurnover: number | null;
+  projectLocation: PCRProjectLocation;
+  projectLocationLabel: string | null;
   projectCity: string | null;
   projectPostcode: string | null;
   contact1ProjectRoleLabel: string | null;
