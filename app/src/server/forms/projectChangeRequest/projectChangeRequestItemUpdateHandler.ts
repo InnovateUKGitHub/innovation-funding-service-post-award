@@ -182,6 +182,7 @@ export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBa
       item.financialYearEndTurnover = Number(body.financialYearEndTurnover);
     }
     if (stepName === "projectLocationStep") {
+      item.projectLocation = parseInt(body.projectLocation, 10);
       item.projectCity = body.projectCity;
       item.projectPostcode = body.projectPostcode;
     }
