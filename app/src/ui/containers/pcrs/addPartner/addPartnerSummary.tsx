@@ -42,6 +42,7 @@ class Component extends React.Component<PcrSummaryProps<PCRItemForPartnerAdditio
               qa="financialYearEndTurnover"
               action={this.props.getEditLink("financeDetailsStep", validator.financialYearEndTurnover)}
             /> }
+            <ACC.SummaryListItem label="Project location" content={pcrItem.projectLocationLabel} validation={validator.projectLocation} qa="projectLocation" action={this.props.getEditLink("projectLocationStep", validator.projectLocation)}/>
             <ACC.SummaryListItem label="Town or city" content={pcrItem.projectCity} validation={validator.projectCity} qa="projectCity" action={this.props.getEditLink("projectLocationStep", validator.projectCity)}/>
             <ACC.SummaryListItem label="Postcode, postal code or zipcode" content={pcrItem.projectPostcode} validation={validator.projectPostcode} qa="projectPostcode" action={this.props.getEditLink("projectLocationStep", validator.projectPostcode)}/>
           </ACC.SummaryList>
