@@ -76,6 +76,7 @@ const clientApi: IApiClient = {
     getPcrProjectRoles: (params) => ajax("/api/pcrs/project-roles"),
     getPcrPartnerTypes: (params) => ajax("/api/pcrs/partner-types"),
     getParticipantSizes: (params) => ajax("/api/pcrs/participant-sizes"),
+    getProjectLocations: (params) => ajax("/api/pcrs/project-locations"),
   },
   projects: {
     get: (params) => ajaxJson(`/api/projects/${params.projectId}`),
