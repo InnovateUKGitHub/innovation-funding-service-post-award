@@ -35,7 +35,7 @@ export class UpdatePCRSpendProfileCommand extends CommandBase<boolean> {
   }
 
   private mapPcrSpendProfileDtoToEntity(costsDto: PCRSpendProfileCostDto): PcrSpendProfileEntity {
-    return { ...this.mapPcrSpendProfileDtoToCreateEntity(costsDto), id: costsDto.id! };
+    return { ...this.mapPcrSpendProfileDtoToCreateEntity(costsDto), id: costsDto.id };
   }
 
   protected async Run(context: IContext): Promise<boolean> {
@@ -57,7 +57,7 @@ export class UpdatePCRSpendProfileCommand extends CommandBase<boolean> {
     // Cross-match repository values with dto values
       .filter(x => persistedCostItems.every(p => p.id !== x.id))
       // Can assume ID is present because values are from repository
-      .map(x => x.id!);
+      .map(x => x.id);
 
     // Chose not to make following requests in parallel as SF has struggled in the past (esp if roll-ups become involved)
     if (newCostItems.length > 0) {
