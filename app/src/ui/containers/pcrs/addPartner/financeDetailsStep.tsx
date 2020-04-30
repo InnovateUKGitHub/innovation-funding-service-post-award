@@ -39,9 +39,6 @@ export const FinanceDetailsStep = (props: PcrStepProps<PCRItemForPartnerAddition
             validation={props.validator.financialYearEndTurnover}
           />
         </Form.Fieldset>
-        <Form.Fieldset heading="State aid eligibility">
-          <ACC.ValidationMessage message={"If we decide to award this organisation funding they must be eligible to receive State aid at the point of the award. If they are found to be ineligible, we will withdraw our offer."} messageType={"error"}/>
-        </Form.Fieldset>
         <Form.Fieldset qa="save-and-continue">
           <Form.Submit>Save and continue</Form.Submit>
           <Form.Button name="saveAndReturnToSummary" onClick={() => props.onSave(true)}>Save and return to summary</Form.Button>
