@@ -8,7 +8,7 @@ export interface PcrSpendProfileDto {
 export type PCRSpendProfileCostDto = PCRSpendProfileLabourCostDto | PCRSpendProfileUnknownCostDto;
 
 interface PCRSpendProfileBaseCostDto<T extends CostCategoryType> {
-  id: string | null;
+  id: string;
   costCategory: T;
   costCategoryId: string;
   value: number | null;
