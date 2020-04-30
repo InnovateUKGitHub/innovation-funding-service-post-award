@@ -30,6 +30,10 @@ export class LabourFormComponent extends Component<Props> {
           onChange={dto => this.onChange(dto)}
         >
           <Form.Fieldset qa="labour-costs">
+            <Form.Hidden
+              name="id"
+              value={dto => dto.id}
+            />
             <Form.String
               label="Role within project"
               width={"one-third"}
