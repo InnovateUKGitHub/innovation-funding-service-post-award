@@ -19,8 +19,10 @@ export class PCRSpendProfileDtoValidator extends Results<PcrSpendProfileDto> {
   private getCostValidator(cost: PCRSpendProfileCostDto) {
     // tslint:disable-next-line:no-small-switch
     switch(cost.costCategory) {
-      case CostCategoryType.Labour: return new PCRLabourCostDtoValidator(cost, this.showValidationErrors);
-      default: return new PCRUnknownCostDtoValidator(cost, this.showValidationErrors);
+      case CostCategoryType.Labour:
+        return new PCRLabourCostDtoValidator(cost, this.showValidationErrors);
+      default:
+        return new PCRUnknownCostDtoValidator(cost, this.showValidationErrors);
     }
   }
 

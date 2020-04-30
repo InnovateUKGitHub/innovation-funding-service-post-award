@@ -4,9 +4,9 @@ import { GetPCRByIdQuery } from "@server/features/pcrs/getPCRByIdQuery";
 import { UpdatePCRCommand } from "@server/features/pcrs/updatePcrCommand";
 import { IFormBody, IFormButton, StandardFormHandlerBase } from "@server/forms/formHandlerBase";
 import {
-  PcrAddSpendProfileCostParams,
+  PcrEditSpendProfileCostParams,
   PCRPrepareSpendProfileCostsRoute,
-  PCRSpendProfileAddCostRoute
+  PCRSpendProfileEditCostRoute
 } from "@ui/containers";
 import { PCRDtoValidator } from "@ui/validators";
 import { PCRItemStatus } from "@framework/constants";
@@ -16,12 +16,15 @@ import { CostCategoryType } from "@framework/entities";
 import { PCRSpendProfileLabourCostDto } from "@framework/dtos/pcrSpendProfileDto";
 import { isNumber } from "@framework/util";
 
-export class ProjectChangeRequestSpendProfileAddCostHandler extends StandardFormHandlerBase<PcrAddSpendProfileCostParams, "pcr"> {
+export class ProjectChangeRequestSpendProfileEditCostHandler extends StandardFormHandlerBase<PcrEditSpendProfileCostParams, "pcr"> {
   constructor() {
-    super(PCRSpendProfileAddCostRoute, ["default"], "pcr");
+    super(PCRSpendProfileEditCostRoute, ["default"], "pcr");
   }
 
-  protected async getDto(context: IContext, params: PcrAddSpendProfileCostParams, button: IFormButton, body: IFormBody): Promise<PCRDto> {
+  protected async getDto(context: IContext, params: PcrEditSpendProfileCostParams, button: IFormButton, body: IFormBody): Promise<PCRDto> {
+    if (!body.id) {
+      throw new BadRequestError("Cost not found");
+    }
     const dto = await context.runQuery(new GetPCRByIdQuery(params.projectId, params.pcrId));
 
     const item = dto.items.find(x => x.id === params.itemId) as PCRItemForPartnerAdditionDto;
@@ -39,42 +42,32 @@ export class ProjectChangeRequestSpendProfileAddCostHandler extends StandardForm
       throw new BadRequestError("Unknown cost category");
     }
 
-    const baseCostDto = this.mapBaseItem(params);
+    const cost = item.spendProfile.costs.find(x => x.id === body.id && x.costCategoryId === params.costCategoryId);
 
+    if (!cost) {
+      throw new BadRequestError("Cost not found");
+    }
     // tslint:disable-next-line:no-small-switch
     switch (costCategory.type) {
       case CostCategoryType.Labour:
-        item.spendProfile.costs.push(this.getLabourCost(baseCostDto, body));
+        this.updateLabourCost(cost as PCRSpendProfileLabourCostDto, body);
         break;
     }
-
     return dto;
   }
 
-  private mapBaseItem(params: PcrAddSpendProfileCostParams) {
-    return {
-      id: "",
-      costCategoryId: params.costCategoryId,
-    };
-  }
-
-  private getLabourCost(baseCostDto: {id: string, costCategoryId: string},  body: IFormBody): PCRSpendProfileLabourCostDto {
+  private updateLabourCost(cost: PCRSpendProfileLabourCostDto,  body: IFormBody) {
     const daysSpentOnProject = body.daysSpentOnProject ? Number(body.daysSpentOnProject) : null;
     const ratePerDay = body.ratePerDay ? Number(body.ratePerDay) : null;
-    const value = isNumber(daysSpentOnProject) && isNumber(ratePerDay) ? daysSpentOnProject * ratePerDay : null;
 
-    return {
-      ...baseCostDto,
-      costCategory: CostCategoryType.Labour,
-      role: body.role,
-      grossCostOfRole: body.grossCostOfRole ? Number(body.grossCostOfRole) : null,
-      daysSpentOnProject,
-      ratePerDay,
-      value,
-    };
+    cost.daysSpentOnProject = daysSpentOnProject;
+    cost.ratePerDay = ratePerDay;
+    cost.value = isNumber(daysSpentOnProject) && isNumber(ratePerDay) ? daysSpentOnProject * ratePerDay : null;
+    cost.role = body.role;
+    cost.grossCostOfRole = body.grossCostOfRole ? Number(body.grossCostOfRole) : null;
   }
 
-  protected async run(context: IContext, params: PcrAddSpendProfileCostParams, button: IFormButton, dto: PCRDto): Promise<ILinkInfo> {
+  protected async run(context: IContext, params: PcrEditSpendProfileCostParams, button: IFormButton, dto: PCRDto): Promise<ILinkInfo> {
     await context.runCommand(new UpdatePCRCommand(params.projectId, params.pcrId, dto));
 
     return PCRPrepareSpendProfileCostsRoute.getLink({
@@ -85,11 +78,11 @@ export class ProjectChangeRequestSpendProfileAddCostHandler extends StandardForm
     });
   }
 
-  protected getStoreKey(params: PcrAddSpendProfileCostParams) {
+  protected getStoreKey(params: PcrEditSpendProfileCostParams) {
     return storeKeys.getPcrKey(params.projectId, params.pcrId);
   }
 
-  protected createValidationResult(params: PcrAddSpendProfileCostParams, dto: PCRDto) {
+  protected createValidationResult(params: PcrEditSpendProfileCostParams, dto: PCRDto) {
     return new PCRDtoValidator(dto, ProjectRole.Unknown, [], false, {} as ProjectDto, Configuration.features, dto);
   }
 }
