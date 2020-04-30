@@ -1,5 +1,5 @@
 import React from "react";
-import { BaseProps, ContainerBase, defineRoute } from "../../containerBase";
+import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerBase";
 import {
   ILinkInfo,
   PCRItemForPartnerAdditionDto,
@@ -8,8 +8,7 @@ import {
   ProjectDto,
   ProjectRole
 } from "@framework/types";
-import * as ACC from "../../../components";
-import { TypedForm, TypedTable } from "../../../components";
+import * as ACC from "@ui/components";
 import { Pending } from "@shared/pending";
 import { PCRDto } from "@framework/dtos/pcrDtos";
 import { EditorStatus, IEditorStore, StoresConsumer } from "@ui/redux";
@@ -55,7 +54,7 @@ class Component extends ContainerBase<PcrSpendProfileCostsParams, Data, Callback
     const addPartnerWorkflow = this.getWorkflow(addPartnerItem);
     const spendProfileStep = addPartnerWorkflow && addPartnerWorkflow.getCurrentStepInfo();
     const stepRoute = this.props.routes.pcrPrepareItem.getLink({itemId: this.props.itemId, pcrId: this.props.pcrId, projectId: this.props.projectId, step: spendProfileStep && spendProfileStep.stepNumber || undefined});
-    const Form = TypedForm<PCRDto>();
+    const Form = ACC.TypedForm<PCRDto>();
     return (
       <ACC.Page
         backLink={<ACC.BackLink route={stepRoute}>Back to project costs</ACC.BackLink>}
@@ -106,7 +105,7 @@ class Component extends ContainerBase<PcrSpendProfileCostsParams, Data, Callback
   }
 
   private renderLabourTable(costs: PCRSpendProfileLabourCostDto[]) {
-    const Table = TypedTable<PCRSpendProfileLabourCostDto>();
+    const Table = ACC.TypedTable<PCRSpendProfileLabourCostDto>();
     const total = costs.reduce((acc, cost) => acc + (cost.value || 0), 0);
     const footers = [
       (

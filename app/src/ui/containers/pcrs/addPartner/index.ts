@@ -9,4 +9,4 @@ export * from "./projectLocationStep";
 export * from "./projectManagerDetailsStep";
 export * from "./roleAndOrganisationStep";
 export * from "./spendProfileStep";
-export * from "./spendProfileCosts";
+export * from "./spendProfile/spendProfileCosts";

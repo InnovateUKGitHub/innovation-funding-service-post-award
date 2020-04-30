@@ -39,6 +39,7 @@ export class PCRBaseCostDtoValidator<T extends PCRSpendProfileCostDto> extends R
     () => Validation.isCurrency(this, this.model.value, "Value must be a number")
   );
 }
+export type PCRSpendProfileCostDtoValidator = PCRLabourCostDtoValidator;
 
 export class PCRLabourCostDtoValidator extends PCRBaseCostDtoValidator<PCRSpendProfileLabourCostDto> {
   public role = Validation.required(this, this.model.role, "Role is required");

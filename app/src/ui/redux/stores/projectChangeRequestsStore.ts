@@ -1,9 +1,9 @@
 import { StoreBase } from "./storeBase";
 import * as Dtos from "@framework/dtos";
 import { PCRDto, PCRItemForPartnerAdditionDto, PCRItemForTimeExtensionDto, PCRStandardItemDto } from "@framework/dtos";
-import { PCRDtoValidator } from "@ui/validators";
+import { PCRDtoValidator, PCRPartnerAdditionItemDtoValidator } from "@ui/validators";
 import { ProjectsStore } from "./projectsStore";
-import { RootState } from "../reducers";
+import { IEditorStore, RootState } from "../reducers";
 import { ApiClient } from "@ui/apiClient";
 import { LoadingStatus, Pending } from "@shared/pending";
 import { dataLoadAction, messageSuccess } from "../actions";
@@ -23,6 +23,7 @@ import { ConfigStore } from "@ui/redux/stores/configStore";
 import { CostCategoryType } from "@framework/entities";
 import { PCRSpendProfileCostDto, PCRSpendProfileLabourCostDto } from "@framework/dtos/pcrSpendProfileDto";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
+import { PCRLabourCostDtoValidator } from "@ui/validators/pcrSpendProfileDtoValidator";
 
 export class ProjectChangeRequestStore extends StoreBase {
   constructor(private projectStore: ProjectsStore, private readonly configStore: ConfigStore, getState: () => RootState, queue: (action: any) => void) {
@@ -160,6 +161,20 @@ export class ProjectChangeRequestStore extends StoreBase {
       init,
       (dto) => this.getValidator(projectId, dto, false)
     );
+  }
+
+  public getNewSpendProfileCostValidator(editorPending: Pending<IEditorStore<PCRDto, PCRDtoValidator>>, pcrItemId: string, costCategoryPending: Pending<CostCategoryDto>): Pending<PCRLabourCostDtoValidator>  {
+    const data = Pending.combine({editor: editorPending, costCategory: costCategoryPending});
+    return data.then(({editor, costCategory}) => {
+      const partnerAdditionValidator = editor.validator.items.results.find(x => x.model.id === pcrItemId) as PCRPartnerAdditionItemDtoValidator;
+      const validator = partnerAdditionValidator.spendProfile.results[0].costs.results.find(x => x.model.id === null && x.model.costCategoryId === costCategory.id);
+      // tslint:disable-next-line:no-small-switch
+      switch(costCategory.type) {
+        case CostCategoryType.Labour: return validator as PCRLabourCostDtoValidator;
+      }
+      // Todo remove once all others in place
+      return validator as PCRLabourCostDtoValidator;
+    });
   }
 
   public getInitialSpendProfileCost(costCategory: CostCategoryDto): PCRSpendProfileCostDto {
