@@ -11,7 +11,7 @@ import {
 import * as ACC from "@ui/components";
 import { Pending } from "@shared/pending";
 import { PCRDto } from "@framework/dtos/pcrDtos";
-import { IEditorStore, StoresConsumer } from "@ui/redux";
+import { IEditorStore, IStores, StoresConsumer } from "@ui/redux";
 import { PCRDtoValidator } from "@ui/validators";
 import {
   PCRSpendProfileCostDto,
@@ -27,6 +27,10 @@ export interface PcrAddSpendProfileCostParams {
   pcrId: string;
   itemId: string;
   costCategoryId: string;
+}
+
+export interface PcrEditSpendProfileCostParams extends PcrAddSpendProfileCostParams {
+  costId: string;
 }
 
 interface Data {
@@ -85,7 +89,7 @@ class Component extends ContainerBase<PcrAddSpendProfileCostParams, Data, Callba
   private renderForm(costCategory: CostCategoryDto, editor: IEditorStore<PCRDto, PCRDtoValidator>, validator: PCRSpendProfileCostDtoValidator, cost: PCRSpendProfileCostDto) {
     // tslint:disable-next-line:no-small-switch
     switch(costCategory.type) {
-      case CostCategoryType.Labour: return this.renderLabourForm(editor, validator, cost as PCRSpendProfileLabourCostDto);
+      case CostCategoryType.Labour: return this.renderLabourForm(editor, validator as PCRLabourCostDtoValidator, cost as PCRSpendProfileLabourCostDto);
       default: return null;
     }
   }
@@ -104,16 +108,22 @@ class Component extends ContainerBase<PcrAddSpendProfileCostParams, Data, Callba
   }
 }
 
-const Container = (props: PcrAddSpendProfileCostParams & BaseProps) => (
+const onSave = (stores: IStores, dto: PCRDto, projectId: string, link: ILinkInfo) => {
+  stores.messages.clearMessages();
+  stores.projectChangeRequests.updatePcrEditor(true, projectId, dto, undefined, () =>
+    stores.navigation.navigateTo(link));
+};
+
+const ContainerAdd = (props: PcrAddSpendProfileCostParams & BaseProps) => (
   <StoresConsumer>
     {stores => {
       const costCategoryPending = stores.costCategories.get(props.costCategoryId);
-      const editorPending = stores.projectChangeRequests.getPcrUpdateEditor(props.projectId, props.pcrId, (dto) => {
-        if (!costCategoryPending.data) return;
+      const editorPending = costCategoryPending.chain(costCategory => stores.projectChangeRequests.getPcrUpdateEditor(props.projectId, props.pcrId, (dto) => {
         const addPartner = dto.items.find(x => x.type === PCRItemType.PartnerAddition) as PCRItemForPartnerAdditionDto;
         const costs = addPartner.spendProfile.costs;
-        costs.push(stores.projectChangeRequests.getInitialSpendProfileCost(costCategoryPending.data));
-      });
+        const cost = stores.projectChangeRequests.getInitialSpendProfileCost(costCategory);
+        costs.push(cost);
+      }));
       return (
         <Component
           project={stores.projects.getById(props.projectId)}
@@ -121,15 +131,38 @@ const Container = (props: PcrAddSpendProfileCostParams & BaseProps) => (
           editor={editorPending}
           cost={editorPending.then(editor => {
             const addPartnerItem = editor.data.items.find(x => x.id === props.itemId && x.type === PCRItemType.PartnerAddition) as PCRItemForPartnerAdditionDto;
-            const costs = addPartnerItem.spendProfile.costs.filter(x => x.costCategory === CostCategoryType.Labour) as PCRSpendProfileLabourCostDto[];
-            return costs.find(x => x.id === null)!;
+            const costs = addPartnerItem.spendProfile.costs.filter(x => x.costCategoryId === props.costCategoryId);
+            return costs.find(x => !x.id)!;
           })}
           validator={stores.projectChangeRequests.getNewSpendProfileCostValidator(editorPending, props.itemId, costCategoryPending)}
-          onSave={(dto, link) => {
+          onSave={(dto, link) => onSave(stores, dto, props.projectId, link)}
+          onChange={(dto) => {
             stores.messages.clearMessages();
-            stores.projectChangeRequests.updatePcrEditor(true, props.projectId, dto, undefined, () =>
-              stores.navigation.navigateTo(link));
+            stores.projectChangeRequests.updatePcrEditor(false, props.projectId, dto);
           }}
+          {...props}
+        />
+      );
+    }}
+  </StoresConsumer>
+);
+
+const ContainerEdit = (props: PcrEditSpendProfileCostParams & BaseProps) => (
+  <StoresConsumer>
+    {stores => {
+      const costCategoryPending = stores.costCategories.get(props.costCategoryId);
+      const editorPending = stores.projectChangeRequests.getPcrUpdateEditor(props.projectId, props.pcrId);
+      return (
+        <Component
+          project={stores.projects.getById(props.projectId)}
+          costCategory={costCategoryPending}
+          editor={editorPending}
+          cost={editorPending.then(editor => {
+            const addPartnerItem = editor.data.items.find(x => x.id === props.itemId && x.type === PCRItemType.PartnerAddition) as PCRItemForPartnerAdditionDto;
+            return addPartnerItem.spendProfile.costs.find(x => x.id === props.costId)!;
+          })}
+          validator={stores.projectChangeRequests.getSpendProfileCostValidator(editorPending, props.itemId, props.costId)}
+          onSave={(dto, link) => onSave(stores, dto, props.projectId, link)}
           onChange={(dto) => {
             stores.messages.clearMessages();
             stores.projectChangeRequests.updatePcrEditor(false, props.projectId, dto);
@@ -144,12 +177,28 @@ const Container = (props: PcrAddSpendProfileCostParams & BaseProps) => (
 export const PCRSpendProfileAddCostRoute = defineRoute<PcrAddSpendProfileCostParams>({
   routeName: "pcrPrepareSpendProfileAddCost",
   routePath: "/projects/:projectId/pcrs/:pcrId/prepare/item/:itemId/spendProfile/:costCategoryId/cost",
-  container: (props) => <Container {...props} />,
+  container: (props) => <ContainerAdd {...props} />,
   getParams: (route) => ({
     projectId: route.params.projectId,
     pcrId: route.params.pcrId,
     itemId: route.params.itemId,
     costCategoryId: route.params.costCategoryId,
+  }),
+  // tslint:disable-next-line:no-duplicate-string
+  getTitle: ({ params, stores }) => ({displayTitle: "Add partner", htmlTitle: "Add partner"}),
+  accessControl: (auth, { projectId }, config) => config.features.pcrsEnabled && auth.forProject(projectId).hasRole(ProjectRole.ProjectManager)
+});
+
+export const PCRSpendProfileEditCostRoute = defineRoute<PcrEditSpendProfileCostParams>({
+  routeName: "pcrPrepareSpendProfileEditCost",
+  routePath: "/projects/:projectId/pcrs/:pcrId/prepare/item/:itemId/spendProfile/:costCategoryId/cost/:costId",
+  container: (props) => <ContainerEdit {...props} />,
+  getParams: (route) => ({
+    projectId: route.params.projectId,
+    pcrId: route.params.pcrId,
+    itemId: route.params.itemId,
+    costCategoryId: route.params.costCategoryId,
+    costId: route.params.costId
   }),
   getTitle: ({ params, stores }) => ({displayTitle: "Add partner", htmlTitle: "Add partner"}),
   accessControl: (auth, { projectId }, config) => config.features.pcrsEnabled && auth.forProject(projectId).hasRole(ProjectRole.ProjectManager)
