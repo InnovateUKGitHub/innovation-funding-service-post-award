@@ -14,7 +14,7 @@ interface InnerProps {
 const InnerContainer = (props: PcrStepProps<PCRItemForPartnerAdditionDto, PCRPartnerAdditionItemDtoValidator> & InnerProps) => {
   const Form = ACC.TypedForm<PCRItemForPartnerAdditionDto>();
   const sizeOptions: ACC.SelectOption[] = props.pcrParticipantSize
-    .filter(x => x.active)
+    .filter(x => x.active && x.value !== PCRParticipantSize.Academic)
     .map(x => ({ id: x.value.toString(), value: x.label }));
 
   const defaultSize = props.pcrParticipantSize.find(x => x.defaultValue === true);
