@@ -114,7 +114,7 @@ class Component extends ContainerBase<PcrSpendProfileCostSummaryParams, Data, Ca
     ];
     return (
       <Table.Table qa="costs" data={costs} footers={footers}>
-        <Table.String header="Description" value={x => x.description} qa={"role"}/>
+        <Table.String header="Description" value={x => x.description} qa={"description"}/>
         <Table.Currency header="Cost (£)" value={x => x.value} qa={"cost"}/>
         <Table.Link content="Edit" value={x => this.props.routes.pcrPrepareSpendProfileEditCost.getLink({itemId: this.props.itemId, costId: x.id, costCategoryId: this.props.costCategoryId, projectId: this.props.projectId, pcrId: this.props.pcrId})} qa={"edit"}/>
       </Table.Table>
