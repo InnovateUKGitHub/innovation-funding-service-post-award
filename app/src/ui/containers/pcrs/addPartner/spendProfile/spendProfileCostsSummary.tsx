@@ -17,7 +17,6 @@ import { PcrWorkflow } from "@ui/containers/pcrs/pcrWorkflow";
 import { addPartnerStepNames } from "@ui/containers/pcrs/addPartner/addPartnerWorkflow";
 import { PCRSpendProfileCostDto } from "@framework/dtos/pcrSpendProfileDto";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
-import { CostCategoryType } from "@framework/entities";
 import classNames from "classnames";
 
 export interface PcrSpendProfileCostSummaryParams {
@@ -123,9 +122,17 @@ class Component extends ContainerBase<PcrSpendProfileCostSummaryParams, Data, Ca
       <Table.Table qa="costs" data={costs} footers={footers}>
         <Table.String header="Description" value={x => x.description} qa={"description"}/>
         <Table.Currency header="Cost (£)" value={x => x.value} qa={"cost"}/>
-        <Table.Link content={<ACC.Content value={x => x.pcrSpendProfileCostsSummaryContent.editCostButton()}/>} value={x => this.props.routes.pcrPrepareSpendProfileEditCost.getLink({itemId: this.props.itemId, costId: x.id, costCategoryId: this.props.costCategoryId, projectId: this.props.projectId, pcrId: this.props.pcrId})} qa={"edit"}/>
+        <Table.Custom qa="links" header="Links" hideHeader={true} value={x => this.renderLinks(this.props.itemId, x.id, this.props.costCategoryId, this.props.projectId, this.props.pcrId)} />
       </Table.Table>
     );
+  }
+
+  private renderLinks(itemId: string, costId: string, costCategoryId: string, projectId: string, pcrId: string) {
+    const links: { route: ILinkInfo, text: React.ReactNode, qa: string; }[] = [];
+    links.push({route: this.props.routes.pcrPrepareSpendProfileEditCost.getLink({itemId, costId, costCategoryId, projectId, pcrId}), text: <ACC.Content value={x => x.pcrSpendProfileCostsSummaryContent.editCostButton()} />, qa:"edit"});
+    links.push({route: this.props.routes.pcrPrepareSpendProfileDeleteCost.getLink({itemId, costId, costCategoryId, projectId, pcrId}), text: <ACC.Content value={x => x.pcrSpendProfileCostsSummaryContent.removeCostButton()} />, qa:"remove"});
+
+    return links.map((x, i) => <div key={i} data-qa={x.qa}><ACC.Link route={x.route}>{x.text}</ACC.Link></div>);
   }
 
   private getWorkflow(addPartnerItem: PCRItemForPartnerAdditionDto) {
