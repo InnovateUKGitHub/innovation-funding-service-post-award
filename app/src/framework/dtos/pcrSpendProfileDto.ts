@@ -11,12 +11,12 @@ interface PCRSpendProfileBaseCostDto<T extends CostCategoryType> {
   id: string;
   costCategory: T;
   costCategoryId: string;
+  description: string | null;
   value: number | null;
 }
 
 export interface PCRSpendProfileLabourCostDto extends PCRSpendProfileBaseCostDto<CostCategoryType.Labour> {
   costCategory: CostCategoryType.Labour;
-  role: string | null;
   grossCostOfRole: number | null;
   ratePerDay: number | null;
   daysSpentOnProject: number | null;
@@ -24,7 +24,6 @@ export interface PCRSpendProfileLabourCostDto extends PCRSpendProfileBaseCostDto
 
 export interface PCRSpendProfileMaterialsCostDto extends PCRSpendProfileBaseCostDto<CostCategoryType.Materials> {
   costCategory: CostCategoryType.Materials;
-  item: string | null;
   quantity: number | null;
   costPerItem: number | null;
 }

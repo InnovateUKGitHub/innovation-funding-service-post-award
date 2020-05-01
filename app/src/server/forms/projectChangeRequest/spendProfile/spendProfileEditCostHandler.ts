@@ -5,7 +5,7 @@ import { UpdatePCRCommand } from "@server/features/pcrs/updatePcrCommand";
 import { IFormBody, IFormButton, StandardFormHandlerBase } from "@server/forms/formHandlerBase";
 import {
   PcrEditSpendProfileCostParams,
-  PCRPrepareSpendProfileCostsRoute,
+  PCRSpendProfileCostsSummaryRoute,
   PCRSpendProfileEditCostRoute
 } from "@ui/containers";
 import { PCRDtoValidator } from "@ui/validators";
@@ -63,14 +63,14 @@ export class ProjectChangeRequestSpendProfileEditCostHandler extends StandardFor
     cost.daysSpentOnProject = daysSpentOnProject;
     cost.ratePerDay = ratePerDay;
     cost.value = isNumber(daysSpentOnProject) && isNumber(ratePerDay) ? daysSpentOnProject * ratePerDay : null;
-    cost.role = body.role;
+    cost.description = body.description;
     cost.grossCostOfRole = body.grossCostOfRole ? Number(body.grossCostOfRole) : null;
   }
 
   protected async run(context: IContext, params: PcrEditSpendProfileCostParams, button: IFormButton, dto: PCRDto): Promise<ILinkInfo> {
     await context.runCommand(new UpdatePCRCommand(params.projectId, params.pcrId, dto));
 
-    return PCRPrepareSpendProfileCostsRoute.getLink({
+    return PCRSpendProfileCostsSummaryRoute.getLink({
       projectId: params.projectId,
       pcrId: params.pcrId,
       itemId: params.itemId,

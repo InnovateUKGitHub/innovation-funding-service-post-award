@@ -37,10 +37,10 @@ export class LabourFormComponent extends Component<Props> {
             <Form.String
               label="Role within project"
               width={"one-third"}
-              name="role"
-              value={dto => dto.role}
-              update={(x, val) => x.role = val}
-              validation={validator && validator.role}
+              name="description"
+              value={dto => dto.description}
+              update={(x, val) => x.description = val}
+              validation={validator && validator.description}
             />
             <Form.Numeric
               label={"Gross employee cost"}

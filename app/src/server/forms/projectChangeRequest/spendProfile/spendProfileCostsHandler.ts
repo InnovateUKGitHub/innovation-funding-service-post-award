@@ -5,20 +5,20 @@ import { UpdatePCRCommand } from "@server/features/pcrs/updatePcrCommand";
 import { IFormBody, IFormButton, StandardFormHandlerBase } from "@server/forms/formHandlerBase";
 import {
   PCRPrepareItemRoute,
-  PCRPrepareSpendProfileCostsRoute,
-  PcrSpendProfileCostsParams
+  PCRSpendProfileCostsSummaryRoute,
+  PcrSpendProfileCostSummaryParams
 } from "@ui/containers";
 import { PCRDtoValidator } from "@ui/validators";
 import { PCRItemStatus } from "@framework/constants";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
 import { PcrWorkflow } from "@ui/containers/pcrs/pcrWorkflow";
 
-export class ProjectChangeRequestSpendProfileCostsHandler extends StandardFormHandlerBase<PcrSpendProfileCostsParams, "pcr"> {
+export class ProjectChangeRequestSpendProfileCostsSummaryHandler extends StandardFormHandlerBase<PcrSpendProfileCostSummaryParams, "pcr"> {
   constructor() {
-    super(PCRPrepareSpendProfileCostsRoute, ["default"], "pcr");
+    super(PCRSpendProfileCostsSummaryRoute, ["default"], "pcr");
   }
 
-  protected async getDto(context: IContext, params: PcrSpendProfileCostsParams, button: IFormButton, body: IFormBody): Promise<PCRDto> {
+  protected async getDto(context: IContext, params: PcrSpendProfileCostSummaryParams, button: IFormButton, body: IFormBody): Promise<PCRDto> {
     const dto = await context.runQuery(new GetPCRByIdQuery(params.projectId, params.pcrId));
 
     const item = dto.items.find(x => x.id === params.itemId) as PCRItemForPartnerAdditionDto;
@@ -32,7 +32,7 @@ export class ProjectChangeRequestSpendProfileCostsHandler extends StandardFormHa
     return dto;
   }
 
-  protected async run(context: IContext, params: PcrSpendProfileCostsParams, button: IFormButton, dto: PCRDto): Promise<ILinkInfo> {
+  protected async run(context: IContext, params: PcrSpendProfileCostSummaryParams, button: IFormButton, dto: PCRDto): Promise<ILinkInfo> {
     await context.runCommand(new UpdatePCRCommand(params.projectId, params.pcrId, dto));
 
     const addPartnerItem = dto.items.find(x => x.id === params.itemId) as PCRItemForPartnerAdditionDto;
@@ -50,11 +50,11 @@ export class ProjectChangeRequestSpendProfileCostsHandler extends StandardFormHa
     });
   }
 
-  protected getStoreKey(params: PcrSpendProfileCostsParams) {
+  protected getStoreKey(params: PcrSpendProfileCostSummaryParams) {
     return storeKeys.getPcrKey(params.projectId, params.pcrId);
   }
 
-  protected createValidationResult(params: PcrSpendProfileCostsParams, dto: PCRDto) {
+  protected createValidationResult(params: PcrSpendProfileCostSummaryParams, dto: PCRDto) {
     return new PCRDtoValidator(dto, ProjectRole.Unknown, [], false, {} as ProjectDto, Configuration.features, dto);
   }
 }
