@@ -389,7 +389,7 @@ describe("UpdatePCRCommand - Partner addition", () => {
       const insertedSpendProfileCost = context.repositories.pcrSpendProfile.Items[0];
       expect(insertedSpendProfileCost).toBeDefined();
       expect(insertedSpendProfileCost.id).toBeTruthy();
-      expect(insertedSpendProfileCost.costOfRole).toBe(insertedSpendProfileCost.daysSpentOnProject! * insertedSpendProfileCost.ratePerDay!);
+      expect(insertedSpendProfileCost.value).toBe(insertedSpendProfileCost.daysSpentOnProject! * insertedSpendProfileCost.ratePerDay!);
       expect(insertedSpendProfileCost.costCategoryId).toBe(costCategoryLabour.id);
       expect(insertedSpendProfileCost.pcrItemId).toBe(item.id);
       expect(insertedSpendProfileCost.grossCostOfRole).toBe(200);

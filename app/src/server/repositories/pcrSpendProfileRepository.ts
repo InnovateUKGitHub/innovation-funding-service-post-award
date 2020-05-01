@@ -15,13 +15,22 @@ export interface ISalesforcePcrSpendProfile {
   Acc_CostCategoryID__c: string;
   RecordTypeId: string;
 
-  // Labour fields
+  // Temporarily used to hold value for all cost categories. Will be changed next sprint.
   Acc_CostOfRole__c?: number;
+
+  // Labour fields
   Acc_GrossCostOfRole__c?: number;
   Acc_Role__c?: string;
   Acc_Rate__c?: number;
   // Coming back as a string but should be a number. Handled in the entity mapper.
   Acc_DaysSpentOnProject__c?: number;
+
+  // Materials
+  Acc_Item__c?: string;
+  // Coming back as a string but should be a number. Handled in the entity mapper.
+  Acc_Quantity__c?: number;
+  Acc_CostPerItem__c?: number;
+
 }
 
 export interface IPcrSpendProfileRepository {
@@ -43,10 +52,15 @@ export class PcrSpendProfileRepository extends SalesforceRepositoryBase<ISalesfo
     "Acc_CostCategoryID__c",
     "RecordTypeId",
     "Acc_CostOfRole__c",
+    // Labour
     "Acc_GrossCostOfRole__c",
     "Acc_Role__c",
     "Acc_Rate__c",
     "Acc_DaysSpentOnProject__c",
+    // Materials
+    "Acc_Item__c",
+    "Acc_Quantity__c",
+    "Acc_CostPerItem__c",
   ];
 
   private recordType = "PCR Spend Profile";

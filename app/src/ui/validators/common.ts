@@ -76,7 +76,7 @@ export function number(results: Results<{}>, value: number | undefined | null, m
   return isTrue(results, value === undefined || value === null || isNumber(value), message || "Field must be a number.");
 }
 
-export function integer(results: Results<{}>, value: number, message?: string) {
+export function integer(results: Results<{}>, value?: number | null, message?: string) {
   return isTrue(results, value === undefined || value === null || isValueWholeNumber(value), message || "Field must be a number.");
 }
 

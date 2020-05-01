@@ -5,7 +5,7 @@ export interface PcrSpendProfileDto {
   pcrItemId: string;
 }
 
-export type PCRSpendProfileCostDto = PCRSpendProfileLabourCostDto | PCRSpendProfileUnknownCostDto;
+export type PCRSpendProfileCostDto = PCRSpendProfileLabourCostDto | PCRSpendProfileMaterialsCostDto | PCRSpendProfileUnknownCostDto;
 
 interface PCRSpendProfileBaseCostDto<T extends CostCategoryType> {
   id: string;
@@ -20,6 +20,13 @@ export interface PCRSpendProfileLabourCostDto extends PCRSpendProfileBaseCostDto
   grossCostOfRole: number | null;
   ratePerDay: number | null;
   daysSpentOnProject: number | null;
+}
+
+export interface PCRSpendProfileMaterialsCostDto extends PCRSpendProfileBaseCostDto<CostCategoryType.Materials> {
+  costCategory: CostCategoryType.Materials;
+  item: string | null;
+  quantity: number | null;
+  costPerItem: number | null;
 }
 
 // TODO remove this once all are mapped
