@@ -15,12 +15,12 @@ import { EditorStatus, IEditorStore, StoresConsumer } from "@ui/redux";
 import { PCRDtoValidator } from "@ui/validators";
 import { PcrWorkflow } from "@ui/containers/pcrs/pcrWorkflow";
 import { addPartnerStepNames } from "@ui/containers/pcrs/addPartner/addPartnerWorkflow";
-import { PCRSpendProfileCostDto, PCRSpendProfileLabourCostDto } from "@framework/dtos/pcrSpendProfileDto";
+import { PCRSpendProfileCostDto } from "@framework/dtos/pcrSpendProfileDto";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 import { CostCategoryType } from "@framework/entities";
 import classNames from "classnames";
 
-export interface PcrSpendProfileCostsParams {
+export interface PcrSpendProfileCostSummaryParams {
   projectId: string;
   pcrId: string;
   itemId: string;
@@ -38,7 +38,7 @@ interface Callbacks {
   onSave: (dto: PCRDto, link: ILinkInfo) => void;
 }
 
-class Component extends ContainerBase<PcrSpendProfileCostsParams, Data, Callbacks> {
+class Component extends ContainerBase<PcrSpendProfileCostSummaryParams, Data, Callbacks> {
   render() {
     const combined = Pending.combine({
       project: this.props.project,
@@ -87,14 +87,6 @@ class Component extends ContainerBase<PcrSpendProfileCostsParams, Data, Callback
     return <ACC.Info summary={`${costCategory.name} costs guidance`}><ACC.Renderers.Markdown value={this.labourGuidance}/></ACC.Info>;
   }
 
-  private renderTable(costs: PCRSpendProfileCostDto[], costCategory: CostCategoryDto) {
-    // tslint:disable-next-line:no-small-switch
-    switch(costCategory.type) {
-      case CostCategoryType.Labour: return this.renderLabourTable(costs.filter(x => x.costCategory === CostCategoryType.Labour) as PCRSpendProfileLabourCostDto[]);
-      default: return null;
-    }
-  }
-
   private renderFooterRow(row: { key: string, title: string, value: React.ReactNode, qa: string, isBold?: boolean }) {
     return (
       <tr key={row.key} className="govuk-table__row" data-qa={row.qa}>
@@ -105,8 +97,8 @@ class Component extends ContainerBase<PcrSpendProfileCostsParams, Data, Callback
     );
   }
 
-  private renderLabourTable(costs: PCRSpendProfileLabourCostDto[]) {
-    const Table = ACC.TypedTable<PCRSpendProfileLabourCostDto>();
+  private renderTable(costs: PCRSpendProfileCostDto[], costCategory: CostCategoryDto) {
+    const Table = ACC.TypedTable<PCRSpendProfileCostDto>();
     const total = costs.reduce((acc, cost) => acc + (cost.value || 0), 0);
     const footers = [
       (
@@ -117,12 +109,12 @@ class Component extends ContainerBase<PcrSpendProfileCostsParams, Data, Callback
         </tr>
       ),
       this.renderFooterRow({
-        key: "1", title: "Total labour costs", qa: "total-costs", isBold: false, value: <ACC.Renderers.Currency value={total} />
+        key: "2", title: `Total ${costCategory.name.toLocaleLowerCase()} costs`, qa: "total-costs", isBold: false, value: <ACC.Renderers.Currency value={total} />
       }),
     ];
     return (
       <Table.Table qa="costs" data={costs} footers={footers}>
-        <Table.String header="Description" value={x => x.role} qa={"role"}/>
+        <Table.String header="Description" value={x => x.description} qa={"role"}/>
         <Table.Currency header="Cost (£)" value={x => x.value} qa={"cost"}/>
         <Table.Link content="Edit" value={x => this.props.routes.pcrPrepareSpendProfileEditCost.getLink({itemId: this.props.itemId, costId: x.id, costCategoryId: this.props.costCategoryId, projectId: this.props.projectId, pcrId: this.props.pcrId})} qa={"edit"}/>
       </Table.Table>
@@ -168,7 +160,7 @@ List the total days worked by all categories of staff on the project. Describe t
 We will review the total amount of time and cost of labour before we approve this request. The terms and conditions of the grant include compliance with these points.`;
 }
 
-const Container = (props: PcrSpendProfileCostsParams & BaseProps) => (
+const Container = (props: PcrSpendProfileCostSummaryParams & BaseProps) => (
   <StoresConsumer>
     {stores => (
       <Component
@@ -193,8 +185,8 @@ const Container = (props: PcrSpendProfileCostsParams & BaseProps) => (
   </StoresConsumer>
 );
 
-export const PCRPrepareSpendProfileCostsRoute = defineRoute<PcrSpendProfileCostsParams>({
-  routeName: "pcrPrepareSpendProfileCosts",
+export const PCRSpendProfileCostsSummaryRoute = defineRoute<PcrSpendProfileCostSummaryParams>({
+  routeName: "pcrSpendProfileCostsSummary",
   routePath: "/projects/:projectId/pcrs/:pcrId/prepare/item/:itemId/spendProfile/:costCategoryId",
   container: (props) => <Container {...props} />,
   getParams: (route) => ({

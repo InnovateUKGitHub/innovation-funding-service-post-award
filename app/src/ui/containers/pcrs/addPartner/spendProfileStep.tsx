@@ -54,7 +54,7 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
         <Table.Table qa="costsTable" data={data}>
           <Table.Custom header="Category" qa="category" value={x => x.costCategory.name} footer={<ACC.Renderers.SimpleString className={"govuk-!-font-weight-bold"}>Total costs (£)</ACC.Renderers.SimpleString>} />
           <Table.Currency header="Cost (£)" qa="cost" value={x => x.cost} footer={<ACC.Renderers.Currency value={total} />} />
-          <Table.Link value={x => this.props.routes.pcrPrepareSpendProfileCosts.getLink({ itemId: this.props.pcrItem.id, pcrId: this.props.pcr.id, projectId: this.props.project.id, costCategoryId: x.costCategory.id })} content="Edit" qa="edit-cost" />
+          <Table.Link value={x => this.props.routes.pcrSpendProfileCostsSummary.getLink({ itemId: this.props.pcrItem.id, pcrId: this.props.pcr.id, projectId: this.props.project.id, costCategoryId: x.costCategory.id })} content="Edit" qa="edit-cost" />
         </Table.Table>
       </ACC.Section>
     );

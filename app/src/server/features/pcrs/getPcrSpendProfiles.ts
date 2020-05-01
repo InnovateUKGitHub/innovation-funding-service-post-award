@@ -39,6 +39,7 @@ export class GetPcrSpendProfilesQuery extends QueryBase<PcrSpendProfileDto> {
       id: spendProfile.id,
       costCategoryId: spendProfile.costCategoryId,
       value: !!spendProfile.value || spendProfile.value === 0 ? spendProfile.value : null,
+      description: spendProfile.description || null,
     };
   }
 
@@ -46,7 +47,6 @@ export class GetPcrSpendProfilesQuery extends QueryBase<PcrSpendProfileDto> {
     return spendProfiles.map(x => ({
       ...this.mapBaseCostFields(x),
       costCategory,
-      value: 0,
     }));
   }
 
@@ -54,7 +54,6 @@ export class GetPcrSpendProfilesQuery extends QueryBase<PcrSpendProfileDto> {
     return spendProfiles.map(x => ({
       ...this.mapBaseCostFields(x),
       costCategory,
-      role: x.role || null,
       grossCostOfRole: !!x.grossCostOfRole || x.grossCostOfRole === 0 ? x.grossCostOfRole : null,
       daysSpentOnProject: !!x.daysSpentOnProject || x.daysSpentOnProject === 0 ? x.daysSpentOnProject : null,
       ratePerDay: !!x.ratePerDay || x.ratePerDay === 0 ? x.ratePerDay : null,
@@ -65,7 +64,6 @@ export class GetPcrSpendProfilesQuery extends QueryBase<PcrSpendProfileDto> {
     return spendProfiles.map(x => ({
       ...this.mapBaseCostFields(x),
       costCategory,
-      item: x.item || null,
       costPerItem: !!x.costPerItem || x.costPerItem === 0 ? x.costPerItem : null,
       quantity: !!x.quantity || x.quantity === 0 ? x.quantity : null,
     }));

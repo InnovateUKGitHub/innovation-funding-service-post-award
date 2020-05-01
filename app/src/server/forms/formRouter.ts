@@ -37,7 +37,7 @@ import { EditorStateKeys } from "@ui/redux";
 
 import { upload } from "./memoryStorage";
 import { ProjectChangeRequestSpendProfileAddCostHandler } from "@server/forms/projectChangeRequest/spendProfile/spendProfileAddCostHandler";
-import { ProjectChangeRequestSpendProfileCostsHandler } from "@server/forms/projectChangeRequest/spendProfile/spendProfileCostsHandler";
+import { ProjectChangeRequestSpendProfileCostsSummaryHandler } from "@server/forms/projectChangeRequest/spendProfile/spendProfileCostsHandler";
 import { ProjectChangeRequestSpendProfileEditCostHandler } from "@server/forms/projectChangeRequest/spendProfile/spendProfileEditCostHandler";
 
 export const standardFormHandlers: (StandardFormHandlerBase<{}, EditorStateKeys>)[] = [
@@ -65,7 +65,7 @@ export const standardFormHandlers: (StandardFormHandlerBase<{}, EditorStateKeys>
   new ProjectChangeRequestItemUpdateHandler(),
   new ProjectChangeRequestSpendProfileAddCostHandler(),
   new ProjectChangeRequestSpendProfileEditCostHandler(),
-  new ProjectChangeRequestSpendProfileCostsHandler(),
+  new ProjectChangeRequestSpendProfileCostsSummaryHandler(),
   new ProjectChangeRequestItemDocumentDeleteHandler(),
   new VirementCostsUpdateHandler(),
   new VirementPartnerCostsUpdateHandler(),
