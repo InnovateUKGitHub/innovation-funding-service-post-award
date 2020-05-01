@@ -5,7 +5,7 @@ import { GetCostCategoriesQuery } from "@server/features/claims";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 import {
   PCRSpendProfileCostDto,
-  PcrSpendProfileDto, PCRSpendProfileLabourCostDto, PCRSpendProfileUnknownCostDto,
+  PcrSpendProfileDto, PCRSpendProfileLabourCostDto, PCRSpendProfileMaterialsCostDto, PCRSpendProfileUnknownCostDto,
 } from "@framework/dtos/pcrSpendProfileDto";
 
 export class GetPcrSpendProfilesQuery extends QueryBase<PcrSpendProfileDto> {
@@ -27,9 +27,9 @@ export class GetPcrSpendProfilesQuery extends QueryBase<PcrSpendProfileDto> {
   }
 
   private mapCosts(costCategory: CostCategoryDto, spendProfiles: PcrSpendProfileEntity[]): PCRSpendProfileCostDto[] {
-    // tslint:disable-next-line:no-small-switch
     switch (costCategory.type) {
       case CostCategoryType.Labour: return this.mapLabourCosts(spendProfiles, costCategory.type);
+      case CostCategoryType.Materials: return this.mapMaterialsCosts(spendProfiles, costCategory.type);
       default: return this.mapUnknownCosts(spendProfiles, CostCategoryType.Unknown);
     }
   }
@@ -38,6 +38,7 @@ export class GetPcrSpendProfilesQuery extends QueryBase<PcrSpendProfileDto> {
     return {
       id: spendProfile.id,
       costCategoryId: spendProfile.costCategoryId,
+      value: !!spendProfile.value || spendProfile.value === 0 ? spendProfile.value : null,
     };
   }
 
@@ -53,11 +54,20 @@ export class GetPcrSpendProfilesQuery extends QueryBase<PcrSpendProfileDto> {
     return spendProfiles.map(x => ({
       ...this.mapBaseCostFields(x),
       costCategory,
-      value: !!x.costOfRole || x.costOfRole === 0 ? x.costOfRole : null,
       role: x.role || null,
       grossCostOfRole: !!x.grossCostOfRole || x.grossCostOfRole === 0 ? x.grossCostOfRole : null,
       daysSpentOnProject: !!x.daysSpentOnProject || x.daysSpentOnProject === 0 ? x.daysSpentOnProject : null,
       ratePerDay: !!x.ratePerDay || x.ratePerDay === 0 ? x.ratePerDay : null,
+    }));
+  }
+
+  private mapMaterialsCosts(spendProfiles: PcrSpendProfileEntity[], costCategory: CostCategoryType.Materials): PCRSpendProfileMaterialsCostDto[] {
+    return spendProfiles.map(x => ({
+      ...this.mapBaseCostFields(x),
+      costCategory,
+      item: x.item || null,
+      costPerItem: !!x.costPerItem || x.costPerItem === 0 ? x.costPerItem : null,
+      quantity: !!x.quantity || x.quantity === 0 ? x.quantity : null,
     }));
   }
 }
